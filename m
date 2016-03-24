@@ -1,57 +1,47 @@
-Return-path: <tthayer@opensource.altera.com>
-Reply-To: <tthayer@opensource.altera.com>
-Subject: Re: [RFC 5/8] ARM: socfpga: dts: Add Devkit A10-SR fields for Arria10
-References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
- <1459278791-3646-6-git-send-email-tthayer@opensource.altera.com>
- <alpine.DEB.2.02.1603301240250.21508@linux-builds1>
-To: Dinh Nguyen <dinguyen@opensource.altera.com>
-CC: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-	<pawell.moll@arm.com>, <mark.rutland@arm.com>,
-	<ijc+devicetree@hellion.org.uk>, <linux-gpio@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-From: Thor Thayer <tthayer@opensource.altera.com>
-Message-ID: <56FD6C33.8040907@opensource.altera.com>
-Date: Thu, 31 Mar 2016 13:28:03 -0500
-MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.02.1603301240250.21508@linux-builds1>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:47722 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750870AbcCXWmq (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Thu, 24 Mar 2016 18:42:46 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	lm-sensors@lm-sensors.org
+Subject: [GIT PULL] hwmon updates for v4.6 (take two)
+Date: Thu, 24 Mar 2016 15:42:44 -0700
+Message-Id: <1458859364-14172-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+Hi Linus,
 
+Please pull hwmon updates for Linux v4.6 from signed tag:
 
-On 03/30/2016 12:42 PM, Dinh Nguyen wrote:
-> On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
->
->> From: Thor Thayer <tthayer@opensource.altera.com>
->>
->> Add the Altera Arria10 System Resource node. This is a Multi-Function
->> device with GPIO and HWMON support.
->>
->> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
->>
->> +		spi1: spi@ffda5000 {
->> +			compatible = "snps,dw-apb-ssi";
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +			reg = <0xffda5000 0x100>;
->> +			interrupts = <0 102 4>;
->> +			num-chipselect = <4>;
->> +			bus-num = <0>;
->> +			/*32bit_access;*/
->> +			tx-dma-channel = <&pdma 16>;
->> +			rx-dma-channel = <&pdma 17>;
->> +			clocks = <&spi_m_clk>;
->> +			status = "disabled";
->> +		};
->> +
->
-> I think you need to split this into 2 patches, 1 for adding the SPI nodes, and
-> the 2nd for adding the slave device.
->
-> BR,
-> Dinh
->
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.6-2
 
-OK. Thanks for reviewing.
+Thanks,
+Guenter
+------
+
+The following changes since commit 01cde1538e1dff4254e340f606177a870131a01f:
+
+  Merge tag 'nfs-for-4.6-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs (2016-03-22 13:16:21 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.6-2
+
+for you to fetch changes up to 968ce1b1f45a7d76b5471b19bd035dbecc72f32d:
+
+  MAINTAINERS: Update mailing list and web page for hwmon subsystem (2016-03-24 15:22:52 -0700)
+
+----------------------------------------------------------------
+Update hwmon mailing list and web page
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      MAINTAINERS: Update mailing list and web page for hwmon subsystem
+
+ MAINTAINERS | 96 ++++++++++++++++++++++++++++++-------------------------------
+ 1 file changed, 48 insertions(+), 48 deletions(-)
