@@ -1,78 +1,88 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57359 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58190 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753916AbcC2Wa2 (ORCPT
+	with ESMTP id S1753855AbcCZTwW (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 29 Mar 2016 18:30:28 -0400
-Date: Tue, 29 Mar 2016 15:30:27 -0700
+	Sat, 26 Mar 2016 15:52:22 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: Thor Thayer <tthayer@opensource.altera.com>
-Cc: lee.jones@linaro.org, linus.walleij@linaro.org, gnurou@gmail.com,
-	jdelvare@suse.com, robh+dt@kernel.org, pawel.moll@arm.com,
-	mark.rutland@arm.com, ijc+devicetree@hellion.org.uk,
-	dinguyen@opensource.altera.com, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	lgirdwood@gmail.com, Mark Brown <broonie@kernel.org>
-Subject: Re: [RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
-Message-ID: <20160329223027.GA5495@roeck-us.net>
-References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
- <1459278791-3646-8-git-send-email-tthayer@opensource.altera.com>
- <20160329201648.GA30248@roeck-us.net>
- <56FAF70D.4010109@opensource.altera.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56FAF70D.4010109@opensource.altera.com>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
+Date: Sat, 26 Mar 2016 12:52:15 -0700
+Message-Id: <1459021935-30587-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 29, 2016 at 04:43:41PM -0500, Thor Thayer wrote:
-> 
-> 
-> On 03/29/2016 03:16 PM, Guenter Roeck wrote:
-> >On Tue, Mar 29, 2016 at 02:13:10PM -0500, tthayer@opensource.altera.com wrote:
-> >>From: Thor Thayer <tthayer@opensource.altera.com>
-> >>
-> >>This patch adds the hwmon functionality to the Arria10 System
-> >>Resource Chip. The hwmon encapsulates the PCIe Enable, USB Enable,
-> >>and all the Power Good signals on the System Controller.
-> >>
-> >
-> >I may be completely wrong, but a glance through the driver suggests
-> >that, if anything, this should be a regulator driver, not a hwmon driver.
-> >A hardware monitoring driver would be expected to report the voltages,
-> >not (just) the voltage status. Am I missing something ?
-> >
-> >Please have a look into Documentation/hwmon/sysfs-interface for
-> >acceptable hwmon attribute names and their meaning.
-> >
-> >Thanks,
-> >Guenter
-> >
-> 
-> Hi Guenter,
-> 
-> <adding voltage and current regulator framework moderators>
-> 
-> Yes, I see your point. In looking at the regulator drivers, I interpret
-> those as being controlled by the driver whereas this chip is passively
-> reporting status.
-> 
-> The success/fail indication seemed at first glance to fit the hwmon model. I
-> thought the fan indication would be a good analog but even it reports speed
-> and not success/fail.
-> 
-Yes, alarm and/or fault attributes are supposed to be secondary.
+arm:pxa_defconfig can result in the following crash if the max1111 driver
+is not instantiated.
 
-> After reading the referenced document, I agree that hwmon probably isn't
-> appropriate. However, the regulator doesn't seem appropriate either (the
-> only status appears to be tied to battery properties).
-> 
-Not really sure myself where this would fit if it is just status bits.
+Unhandled fault: page domain fault (0x01b) at 0x00000000
+pgd = c0004000
+[00000000] *pgd=00000000
+Internal error: : 1b [#1] PREEMPT ARM
+Modules linked in:
+CPU: 0 PID: 300 Comm: kworker/0:1 Not tainted 4.5.0-01301-g1701f680407c #10
+Hardware name: SHARP Akita
+Workqueue: events sharpsl_charge_toggle
+task: c390a000 ti: c391e000 task.ti: c391e000
+PC is at max1111_read_channel+0x20/0x30
+LR is at sharpsl_pm_pxa_read_max1111+0x2c/0x3c
+pc : [<c03aaab0>]    lr : [<c0024b50>]    psr: 20000013
+...
+[<c03aaab0>] (max1111_read_channel) from [<c0024b50>]
+					(sharpsl_pm_pxa_read_max1111+0x2c/0x3c)
+[<c0024b50>] (sharpsl_pm_pxa_read_max1111) from [<c00262e0>]
+					(spitzpm_read_devdata+0x5c/0xc4)
+[<c00262e0>] (spitzpm_read_devdata) from [<c0024094>]
+					(sharpsl_check_battery_temp+0x78/0x110)
+[<c0024094>] (sharpsl_check_battery_temp) from [<c0024f9c>]
+					(sharpsl_charge_toggle+0x48/0x110)
+[<c0024f9c>] (sharpsl_charge_toggle) from [<c004429c>]
+					(process_one_work+0x14c/0x48c)
+[<c004429c>] (process_one_work) from [<c0044618>] (worker_thread+0x3c/0x5d4)
+[<c0044618>] (worker_thread) from [<c004a238>] (kthread+0xd0/0xec)
+[<c004a238>] (kthread) from [<c000a670>] (ret_from_fork+0x14/0x24)
 
-Does the chip report anything else besides the status ? One of the attributes
-includes "pmbus", so one could conclude that there must be a PMBus compatible
-chip somewhere.
+This can occur because the SPI controller driver (SPI_PXA2XX) is built as
+module and thus not necessarily loaded. While building SPI_PXA2XX into the
+kernel would make the problem disappear, it appears prudent to ensure that
+the driver is instantiated before accessing its data structures.
 
-Thanks,
-Guenter
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+The means to read voltages from outside the driver seems broken,
+but that is a different issue.
+
+ drivers/hwmon/max1111.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/hwmon/max1111.c b/drivers/hwmon/max1111.c
+index 36544c4f653c..303d0c9df907 100644
+--- a/drivers/hwmon/max1111.c
++++ b/drivers/hwmon/max1111.c
+@@ -85,6 +85,9 @@ static struct max1111_data *the_max1111;
+ 
+ int max1111_read_channel(int channel)
+ {
++	if (!the_max1111 || !the_max1111->spi)
++		return -ENODEV;
++
+ 	return max1111_read(&the_max1111->spi->dev, channel);
+ }
+ EXPORT_SYMBOL(max1111_read_channel);
+@@ -258,6 +261,9 @@ static int max1111_remove(struct spi_device *spi)
+ {
+ 	struct max1111_data *data = spi_get_drvdata(spi);
+ 
++#ifdef CONFIG_SHARPSL_PM
++	the_max1111 = NULL;
++#endif
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	sysfs_remove_group(&spi->dev.kobj, &max1110_attr_group);
+ 	sysfs_remove_group(&spi->dev.kobj, &max1111_attr_group);
+-- 
+2.5.0
+
