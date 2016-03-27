@@ -1,62 +1,84 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from fallback2.mail.ru ([94.100.179.22]:54379 "EHLO
-	fallback2.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1755441AbcC1WBf (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 28 Mar 2016 18:01:35 -0400
-Received: from smtp41.i.mail.ru (smtp41.i.mail.ru [94.100.177.101])
-	by fallback2.mail.ru (mPOP.Fallback_MX) with ESMTP id 269366DD73CB
-	for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2016 00:05:44 +0300 (MSK)
-Date: Mon, 28 Mar 2016 23:04:55 +0200
-From: Trek <trek00@inbox.ru>
-To: Huang Rui <ray.huang@amd.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: fam15h_power on a4-4000?
-Message-ID: <20160328230455.3f7878ba@enterprise>
-In-Reply-To: <20160328021922.GA11559@hr-amur2>
-References: <20160327201340.152ff142@enterprise>
-	<20160327185131.GA32631@roeck-us.net>
-	<20160328021922.GA11559@hr-amur2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <linux@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+	Hardware Monitoring <lm-sensors@lm-sensors.org>
+Cc: Jean Delvare <jdelvare@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
+Date: Sun, 27 Mar 2016 12:03:33 -0700
+Message-Id: <1459105413-19372-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, 28 Mar 2016 10:19:23 +0800
-Huang Rui <ray.huang@amd.com> wrote:
+arm:pxa_defconfig can result in the following crash if the max1111 driver
+is not instantiated.
 
-> Trek, have you tested it on Fam15h Models 10h-1fh platforms? I seem to
-> remember I tried it on that type of platforms, but the test data was
-> not right. So I didn't expose it at that time.
+Unhandled fault: page domain fault (0x01b) at 0x00000000
+pgd = c0004000
+[00000000] *pgd=00000000
+Internal error: : 1b [#1] PREEMPT ARM
+Modules linked in:
+CPU: 0 PID: 300 Comm: kworker/0:1 Not tainted 4.5.0-01301-g1701f680407c #10
+Hardware name: SHARP Akita
+Workqueue: events sharpsl_charge_toggle
+task: c390a000 ti: c391e000 task.ti: c391e000
+PC is at max1111_read_channel+0x20/0x30
+LR is at sharpsl_pm_pxa_read_max1111+0x2c/0x3c
+pc : [<c03aaab0>]    lr : [<c0024b50>]    psr: 20000013
+...
+[<c03aaab0>] (max1111_read_channel) from [<c0024b50>]
+					(sharpsl_pm_pxa_read_max1111+0x2c/0x3c)
+[<c0024b50>] (sharpsl_pm_pxa_read_max1111) from [<c00262e0>]
+					(spitzpm_read_devdata+0x5c/0xc4)
+[<c00262e0>] (spitzpm_read_devdata) from [<c0024094>]
+					(sharpsl_check_battery_temp+0x78/0x110)
+[<c0024094>] (sharpsl_check_battery_temp) from [<c0024f9c>]
+					(sharpsl_charge_toggle+0x48/0x110)
+[<c0024f9c>] (sharpsl_charge_toggle) from [<c004429c>]
+					(process_one_work+0x14c/0x48c)
+[<c004429c>] (process_one_work) from [<c0044618>] (worker_thread+0x3c/0x5d4)
+[<c0044618>] (worker_thread) from [<c004a238>] (kthread+0xd0/0xec)
+[<c004a238>] (kthread) from [<c000a670>] (ret_from_fork+0x14/0x24)
 
-thanks for your replies, I have just compiled the module for my kernel
-version (3.16) with the patch applied and it returns these values:
+This can occur because the SPI controller driver (SPI_PXA2XX) is built as
+module and thus not necessarily loaded. While building SPI_PXA2XX into the
+kernel would make the problem disappear, it appears prudent to ensure that
+the driver is instantiated before accessing its data structures.
 
-fam15h_power-pci-00c4
-Adapter: PCI adapter
-power1:       10.56 W  (crit =  65.18 W)
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+The means to read voltages from outside the driver seems broken,
+but that is a different issue.
 
-the crit value is correct (the TDP of the a4-4000 is 65W) but the
-actual usage is "fixed", always the same even at 100% usage of all cpu
-cores and the integrated gpu
+Apologies if you get this twice; may have gotten lost the first time around.
 
-so the readings are incorrect and the patch is useless
+ drivers/hwmon/max1111.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-I have strange readings also for the other drivers concerned with
-monitoring my cpu/gpu:
-
-k10temp-pci-00c3
-Adapter: PCI adapter
-temp1:         +0.0 C  (high = +70.0 C)
-                       (crit = +70.0 C, hyst = +69.0 C)
-
-radeon-pci-0008
-Adapter: PCI adapter
-temp1:         -1.0 C  (crit = +120.0 C, hyst = +90.0 C)
-
-but at least they are incremented under full load and, reading the docs,
-they are not really physical degrees, but some other measuring unit
-
-thanks & c-ya!
+diff --git a/drivers/hwmon/max1111.c b/drivers/hwmon/max1111.c
+index 36544c4f653c..303d0c9df907 100644
+--- a/drivers/hwmon/max1111.c
++++ b/drivers/hwmon/max1111.c
+@@ -85,6 +85,9 @@ static struct max1111_data *the_max1111;
+ 
+ int max1111_read_channel(int channel)
+ {
++	if (!the_max1111 || !the_max1111->spi)
++		return -ENODEV;
++
+ 	return max1111_read(&the_max1111->spi->dev, channel);
+ }
+ EXPORT_SYMBOL(max1111_read_channel);
+@@ -258,6 +261,9 @@ static int max1111_remove(struct spi_device *spi)
+ {
+ 	struct max1111_data *data = spi_get_drvdata(spi);
+ 
++#ifdef CONFIG_SHARPSL_PM
++	the_max1111 = NULL;
++#endif
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	sysfs_remove_group(&spi->dev.kobj, &max1110_attr_group);
+ 	sysfs_remove_group(&spi->dev.kobj, &max1111_attr_group);
+-- 
+2.5.0
