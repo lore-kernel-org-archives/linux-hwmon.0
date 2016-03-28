@@ -1,47 +1,62 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47722 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750870AbcCXWmq (ORCPT
+Received: from fallback2.mail.ru ([94.100.179.22]:54379 "EHLO
+	fallback2.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1755441AbcC1WBf (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 24 Mar 2016 18:42:46 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	lm-sensors@lm-sensors.org
-Subject: [GIT PULL] hwmon updates for v4.6 (take two)
-Date: Thu, 24 Mar 2016 15:42:44 -0700
-Message-Id: <1458859364-14172-1-git-send-email-linux@roeck-us.net>
+	Mon, 28 Mar 2016 18:01:35 -0400
+Received: from smtp41.i.mail.ru (smtp41.i.mail.ru [94.100.177.101])
+	by fallback2.mail.ru (mPOP.Fallback_MX) with ESMTP id 269366DD73CB
+	for <linux-hwmon@vger.kernel.org>; Tue, 29 Mar 2016 00:05:44 +0300 (MSK)
+Date: Mon, 28 Mar 2016 23:04:55 +0200
+From: Trek <trek00@inbox.ru>
+To: Huang Rui <ray.huang@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: fam15h_power on a4-4000?
+Message-ID: <20160328230455.3f7878ba@enterprise>
+In-Reply-To: <20160328021922.GA11559@hr-amur2>
+References: <20160327201340.152ff142@enterprise>
+	<20160327185131.GA32631@roeck-us.net>
+	<20160328021922.GA11559@hr-amur2>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On Mon, 28 Mar 2016 10:19:23 +0800
+Huang Rui <ray.huang@amd.com> wrote:
 
-Please pull hwmon updates for Linux v4.6 from signed tag:
+> Trek, have you tested it on Fam15h Models 10h-1fh platforms? I seem to
+> remember I tried it on that type of platforms, but the test data was
+> not right. So I didn't expose it at that time.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.6-2
+thanks for your replies, I have just compiled the module for my kernel
+version (3.16) with the patch applied and it returns these values:
 
-Thanks,
-Guenter
-------
+fam15h_power-pci-00c4
+Adapter: PCI adapter
+power1:       10.56 W  (crit =  65.18 W)
 
-The following changes since commit 01cde1538e1dff4254e340f606177a870131a01f:
+the crit value is correct (the TDP of the a4-4000 is 65W) but the
+actual usage is "fixed", always the same even at 100% usage of all cpu
+cores and the integrated gpu
 
-  Merge tag 'nfs-for-4.6-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs (2016-03-22 13:16:21 -0700)
+so the readings are incorrect and the patch is useless
 
-are available in the git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.6-2
+I have strange readings also for the other drivers concerned with
+monitoring my cpu/gpu:
 
-for you to fetch changes up to 968ce1b1f45a7d76b5471b19bd035dbecc72f32d:
+k10temp-pci-00c3
+Adapter: PCI adapter
+temp1:         +0.0 C  (high = +70.0 C)
+                       (crit = +70.0 C, hyst = +69.0 C)
 
-  MAINTAINERS: Update mailing list and web page for hwmon subsystem (2016-03-24 15:22:52 -0700)
+radeon-pci-0008
+Adapter: PCI adapter
+temp1:         -1.0 C  (crit = +120.0 C, hyst = +90.0 C)
 
-----------------------------------------------------------------
-Update hwmon mailing list and web page
+but at least they are incremented under full load and, reading the docs,
+they are not really physical degrees, but some other measuring unit
 
-----------------------------------------------------------------
-Guenter Roeck (1):
-      MAINTAINERS: Update mailing list and web page for hwmon subsystem
-
- MAINTAINERS | 96 ++++++++++++++++++++++++++++++-------------------------------
- 1 file changed, 48 insertions(+), 48 deletions(-)
+thanks & c-ya!
