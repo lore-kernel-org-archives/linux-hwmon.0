@@ -1,126 +1,50 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-bl2on0081.outbound.protection.outlook.com ([65.55.169.81]:2286
-	"EHLO na01-bl2-obe.outbound.protection.outlook.com"
-	rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-	id S1754555AbcC1FcU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 28 Mar 2016 01:32:20 -0400
+Return-path: <Ray.Huang@amd.com>
 From: Huang Rui <ray.huang@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.de>
 CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<spg_linux_kernel@amd.com>, Borislav Petkov <bp@alien8.de>,
-	Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v5 5/6] hwmon: (fam15h_power) Add documentation for TDP and accumulated power algorithm
-Date: Mon, 28 Mar 2016 13:32:15 +0800
-Message-ID: <1459143136-2412-6-git-send-email-ray.huang@amd.com>
+	<spg_linux_kernel@amd.com>, Borislav Petkov <bp@alien8.de>, Huang Rui
+	<ray.huang@amd.com>
+Subject: [PATCH v5 1/6] hwmon: (fam15h_power) Add CPU_SUP_AMD as the dependence
+Date: Mon, 28 Mar 2016 13:32:11 +0800
+Message-ID: <1459143136-2412-2-git-send-email-ray.huang@amd.com>
 In-Reply-To: <1459143136-2412-1-git-send-email-ray.huang@amd.com>
 References: <1459143136-2412-1-git-send-email-ray.huang@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This patch adds the description to explain the TDP reporting mechanism
-and accumulated power algorithm.
+This patch adds CONFIG_CPU_SUP_AMD as the dependence of fam15h_power
+driver. Because the following patch will use the interface from
+x86/kernel/cpu/amd.c.
 
+Otherwise, the below error might be encountered:
+
+All errors (new ones prefixed by >>):
+
+   drivers/built-in.o: In function `fam15h_power_probe':
+>> fam15h_power.c:(.text+0x26e3a3): undefined reference to
+>> `amd_get_cores_per_cu'
+   fam15h_power.c:(.text+0x26e41e): undefined reference to
+`amd_get_cores_per_cu'
+
+Reported-by: build test robot <lkp@intel.com>
 Signed-off-by: Huang Rui <ray.huang@amd.com>
-Cc: Borislav Petkov <bp@alien8.de>
 ---
- Documentation/hwmon/fam15h_power | 57 +++++++++++++++++++++++++++++++++++++++-
- drivers/hwmon/fam15h_power.c     |  2 +-
- 2 files changed, 57 insertions(+), 2 deletions(-)
+ drivers/hwmon/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/fam15h_power b/Documentation/hwmon/fam15h_power
-index e2b1b69..2c4fbee 100644
---- a/Documentation/hwmon/fam15h_power
-+++ b/Documentation/hwmon/fam15h_power
-@@ -10,14 +10,22 @@ Supported chips:
-   Datasheets:
-   BIOS and Kernel Developer's Guide (BKDG) For AMD Family 15h Processors
-   BIOS and Kernel Developer's Guide (BKDG) For AMD Family 16h Processors
-+  AMD64 Architecture Programmer's Manual Volume 2: System Programming
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5c2d13a..4be3792 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -288,7 +288,7 @@ config SENSORS_K10TEMP
  
- Author: Andreas Herrmann <herrmann.der.user@googlemail.com>
- 
- Description
- -----------
- 
-+1) Processor TDP (Thermal design power)
-+
-+Given a fixed frequency and voltage, the power consumption of a
-+processor varies based on the workload being executed. Derated power
-+is the power consumed when running a specific application. Thermal
-+design power (TDP) is an example of derated power.
-+
- This driver permits reading of registers providing power information
--of AMD Family 15h and 16h processors.
-+of AMD Family 15h and 16h processors via TDP algorithm.
- 
- For AMD Family 15h and 16h processors the following power values can
- be calculated using different processor northbridge function
-@@ -37,3 +45,50 @@ This driver provides ProcessorPwrWatts and CurrPwrWatts:
- On multi-node processors the calculated value is for the entire
- package and not for a single node. Thus the driver creates sysfs
- attributes only for internal node0 of a multi-node processor.
-+
-+2) Accumulated Power Mechanism
-+
-+This driver also introduces an algorithm that should be used to
-+calculate the average power consumed by a processor during a
-+measurement interval Tm. The feature of accumulated power mechanism is
-+indicated by CPUID Fn8000_0007_EDX[12].
-+
-+* Tsample: compute unit power accumulator sample period
-+* Tref: the PTSC counter period
-+* PTSC: performance timestamp counter
-+* N: the ratio of compute unit power accumulator sample period to the
-+  PTSC period
-+* Jmax: max compute unit accumulated power which is indicated by
-+  MaxCpuSwPwrAcc MSR C001007b
-+* Jx/Jy: compute unit accumulated power which is indicated by
-+  CpuSwPwrAcc MSR C001007a
-+* Tx/Ty: the value of performance timestamp counter which is indicated
-+  by CU_PTSC MSR C0010280
-+* PwrCPUave: CPU average power
-+
-+i. Determine the ratio of Tsample to Tref by executing CPUID Fn8000_0007.
-+	N = value of CPUID Fn8000_0007_ECX[CpuPwrSampleTimeRatio[15:0]].
-+
-+ii. Read the full range of the cumulative energy value from the new
-+MSR MaxCpuSwPwrAcc.
-+	Jmax = value returned.
-+iii. At time x, SW reads CpuSwPwrAcc MSR and samples the PTSC.
-+	Jx = value read from CpuSwPwrAcc and Tx = value read from
-+PTSC.
-+
-+iv. At time y, SW reads CpuSwPwrAcc MSR and samples the PTSC.
-+	Jy = value read from CpuSwPwrAcc and Ty = value read from
-+PTSC.
-+
-+v. Calculate the average power consumption for a compute unit over
-+time period (y-x). Unit of result is uWatt.
-+	if (Jy < Jx) // Rollover has occurred
-+		Jdelta = (Jy + Jmax) - Jx
-+	else
-+		Jdelta = Jy - Jx
-+	PwrCPUave = N * Jdelta * 1000 / (Ty - Tx)
-+
-+This driver provides PwrCPUave and interval(default is 10 millisecond
-+and maximum is 1 second):
-+* power1_average (PwrCPUave)
-+* power1_average_interval (Interval)
-diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
-index 003564b..c1cad26 100644
---- a/drivers/hwmon/fam15h_power.c
-+++ b/drivers/hwmon/fam15h_power.c
-@@ -1,7 +1,7 @@
- /*
-  * fam15h_power.c - AMD Family 15h processor power monitoring
-  *
-- * Copyright (c) 2011 Advanced Micro Devices, Inc.
-+ * Copyright (c) 2011-2016 Advanced Micro Devices, Inc.
-  * Author: Andreas Herrmann <herrmann.der.user@googlemail.com>
-  *
-  *
+ config SENSORS_FAM15H_POWER
+ 	tristate "AMD Family 15h processor power"
+-	depends on X86 && PCI
++	depends on X86 && PCI && CPU_SUP_AMD
+ 	help
+ 	  If you say yes here you get support for processor power
+ 	  information of your AMD family 15h CPU.
 -- 
 1.9.1
-
