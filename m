@@ -1,42 +1,155 @@
-Return-path: <bp@alien8.de>
-Date: Mon, 28 Mar 2016 10:59:12 +0200
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail.skyhub.de ([78.46.96.112]:54326 "EHLO mail.skyhub.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1751854AbcC1J34 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Mon, 28 Mar 2016 05:29:56 -0400
+Date: Mon, 28 Mar 2016 11:29:52 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Huang Rui <ray.huang@amd.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.de>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	spg_linux_kernel@amd.com
-Subject: Re: [PATCH v5 1/6] hwmon: (fam15h_power) Add CPU_SUP_AMD as the
- dependence
-Message-ID: <20160328085912.GA26651@pd.tnic>
+To: Huang Rui <ray.huang@amd.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, spg_linux_kernel@amd.com
+Subject: Re: [PATCH v5 2/6] hwmon: (fam15h_power) Add compute unit
+ accumulated power
+Message-ID: <20160328092952.GB26651@pd.tnic>
 References: <1459143136-2412-1-git-send-email-ray.huang@amd.com>
- <1459143136-2412-2-git-send-email-ray.huang@amd.com>
+ <1459143136-2412-3-git-send-email-ray.huang@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1459143136-2412-2-git-send-email-ray.huang@amd.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <1459143136-2412-3-git-send-email-ray.huang@amd.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 28, 2016 at 01:32:11PM +0800, Huang Rui wrote:
-> This patch adds CONFIG_CPU_SUP_AMD as the dependence of fam15h_power
-> driver. Because the following patch will use the interface from
-> x86/kernel/cpu/amd.c.
+On Mon, Mar 28, 2016 at 01:32:12PM +0800, Huang Rui wrote:
+> This patch adds a member in fam15h_power_data which specifies the
+> compute unit accumulated power. It adds do_read_registers_on_cu to do
+> all the read to all MSRs and run it on one of the online cores on each
+> compute unit with smp_call_function_many(). This behavior can decrease
+> IPI numbers.
 > 
-> Otherwise, the below error might be encountered:
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/built-in.o: In function `fam15h_power_probe':
-> >> fam15h_power.c:(.text+0x26e3a3): undefined reference to
-> >> `amd_get_cores_per_cu'
->    fam15h_power.c:(.text+0x26e41e): undefined reference to
-> `amd_get_cores_per_cu'
-> 
-> Reported-by: build test robot <lkp@intel.com>
+> Suggested-by: Borislav Petkov <bp@alien8.de>
 > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> ---
+>  drivers/hwmon/fam15h_power.c | 65 +++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 64 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+> index 4f695d8..ccbc944 100644
+> --- a/drivers/hwmon/fam15h_power.c
+> +++ b/drivers/hwmon/fam15h_power.c
+> @@ -25,6 +25,8 @@
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+>  #include <linux/bitops.h>
+> +#include <linux/cpu.h>
+> +#include <linux/cpumask.h>
+>  #include <asm/processor.h>
+>  #include <asm/msr.h>
+>  
+> @@ -44,7 +46,9 @@ MODULE_LICENSE("GPL");
+>  
+>  #define FAM15H_MIN_NUM_ATTRS		2
+>  #define FAM15H_NUM_GROUPS		2
+> +#define MAX_CUS				8
+>  
+> +#define MSR_F15H_CU_PWR_ACCUMULATOR	0xc001007a
+>  #define MSR_F15H_CU_MAX_PWR_ACCUMULATOR	0xc001007b
+>  
+>  #define PCI_DEVICE_ID_AMD_15H_M70H_NB_F4 0x15b4
+> @@ -59,6 +63,8 @@ struct fam15h_power_data {
+>  	struct attribute_group group;
+>  	/* maximum accumulated power of a compute unit */
+>  	u64 max_cu_acc_power;
+> +	/* accumulated power of the compute units */
+> +	u64 cu_acc_power[MAX_CUS];
+>  };
+>  
+>  static ssize_t show_power(struct device *dev,
+> @@ -125,6 +131,63 @@ static ssize_t show_power_crit(struct device *dev,
+>  }
+>  static DEVICE_ATTR(power1_crit, S_IRUGO, show_power_crit, NULL);
+>  
+> +static void do_read_registers_on_cu(void *_data)
+> +{
+> +	struct fam15h_power_data *data = _data;
+> +	int cpu, cu;
+> +
+> +	cpu = smp_processor_id();
+> +
+> +	/*
+> +	 * With the new x86 topology modelling, cpu core id actually
+> +	 * is compute unit id.
+> +	 */
+> +	cu = cpu_data(cpu).cpu_core_id;
+> +
+> +	rdmsrl_safe(MSR_F15H_CU_PWR_ACCUMULATOR, &data->cu_acc_power[cu]);
+> +}
+> +
+> +/*
+> + * This function is only able to be called when CPUID
+> + * Fn8000_0007:EDX[12] is set.
+> + */
+> +static int read_registers(struct fam15h_power_data *data)
+> +{
+> +	int this_cpu, ret, cpu;
+> +	int target;
+> +	cpumask_var_t mask;
+> +
+> +	ret = zalloc_cpumask_var(&mask, GFP_KERNEL);
+> +	if (!ret)
+> +		return -ENOMEM;
+> +
+> +	get_online_cpus();
+> +	this_cpu = get_cpu();
 
-Acked-by: Borislav Petkov <bp@suse.de>
+What now?
 
-This can go in now, regardless of the rest.
+get_online_cpus() is enough.
+
+> +
+> +	/*
+> +	 * Choose the first online core of each compute unit, and then
+> +	 * read their MSR value of power and ptsc in a single IPI,
+> +	 * because the MSR value of CPU core represent the compute
+> +	 * unit's.
+> +	 */
+> +	for_each_online_cpu(cpu) {
+> +		target = cpumask_first(topology_sibling_cpumask(cpu));
+> +		if (!cpumask_test_cpu(target, mask))
+> +			cpumask_set_cpu(target, mask);
+> +	}
+
+I think you want something like this: iterate over each core and put one
+of them into the mask.
+
+	core = -1;
+
+	for_each_online_cpu(cpu) {
+		this_core = topology_core_id(cpu);
+
+		if (this_core == core)
+			continue;
+
+		core = this_core;
+
+		/* get any CPU on this compute unit */
+		cpumask_set_cpu(cpumask_any(topology_sibling_cpumask(cpu)), mask);
+	}
+
+
+Btw, tglx, peterz, do you guys think it would make sense to have a
+generic helper:
+
+	for_each_core(cpu)
+
+which would give you any of the threads on the core in the @cpu var when
+iterating?
+
+I see only arch/x86/events/intel/cstate.c doing any comparisons with
+topology_core_id() now but it might be useful...
 
 -- 
 Regards/Gruss,
