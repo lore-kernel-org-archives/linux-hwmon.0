@@ -6,9 +6,9 @@ To: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
 	<ijc+devicetree@hellion.org.uk>, <dinguyen@opensource.altera.com>
 CC: <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
 	<devicetree@vger.kernel.org>, Thor Thayer <tthayer@opensource.altera.com>
-Subject: [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource Chip
-Date: Tue, 29 Mar 2016 14:13:06 -0500
-Message-ID: <1459278791-3646-4-git-send-email-tthayer@opensource.altera.com>
+Subject: [RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
+Date: Tue, 29 Mar 2016 14:13:07 -0500
+Message-ID: <1459278791-3646-5-git-send-email-tthayer@opensource.altera.com>
 In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
 References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
 MIME-Version: 1.0
@@ -17,60 +17,59 @@ List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Thor Thayer <tthayer@opensource.altera.com>
 
-Add support for the Altera Arria10 Development Kit System Resource
-chip which is implemented using a MAX5 as a external gpio extender,
-and hardware monitor with the regmap framework over a SPI bus.
+Add the GPIO functionality for the Altera Arria10 MAX5 System Resource
+Chip. The A10 MAX5 has 12 bits of GPIO assigned to switches, buttons,
+and LEDs as a GPIO extender on the SPI bus.
 
 Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
 ---
- drivers/mfd/Kconfig              |   11 +++
- drivers/mfd/Makefile             |    2 +
- drivers/mfd/altera-a10sr.c       |  177 ++++++++++++++++++++++++++++++++++++++
- include/linux/mfd/altera-a10sr.h |  146 +++++++++++++++++++++++++++++++
- 4 files changed, 336 insertions(+)
- create mode 100644 drivers/mfd/altera-a10sr.c
- create mode 100644 include/linux/mfd/altera-a10sr.h
+ drivers/gpio/Kconfig             |    8 ++
+ drivers/gpio/Makefile            |    1 +
+ drivers/gpio/gpio-altera-a10sr.c |  158 ++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/altera-a10sr.c       |    4 +
+ include/linux/mfd/altera-a10sr.h |   22 ++++++
+ 5 files changed, 193 insertions(+)
+ create mode 100644 drivers/gpio/gpio-altera-a10sr.c
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index eea61e3..d1edf81 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -18,6 +18,17 @@ config MFD_CS5535
- 	  This is the core driver for CS5535/CS5536 MFD functions.  This is
-           necessary for using the board's GPIO and MFGPT functionality.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 5f3429f..7ea2d8f 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -767,6 +767,14 @@ config GPIO_ADP5520
+ 	  This option enables support for on-chip GPIO found
+ 	  on Analog Devices ADP5520 PMICs.
  
-+config MFD_ALTERA_A10SR
-+       bool "Altera Arria10 DevKit System Resource chip"
-+       depends on ARCH_SOCFPGA && SPI_MASTER=y
-+       select REGMAP_SPI
-+       select MFD_CORE
-+       help
-+         Support for the Altera Arria10 DevKit MAX5 System Resource chip
-+         using the SPI interface. This driver provides common support for
-+         accessing the external gpio extender (LEDs & buttons) and
-+         hw monitor.
++config GPIO_ALTERA_A10SR
++	tristate "Altera Arria10 System Resource GPIO"
++	depends on MFD_ALTERA_A10SR
++	help
++	  Driver for Arria10 Development Kit GPIO expansion which
++	  includes reads of pushbuttons and DIP switches as well
++	  as writes to LEDs.
 +
- config MFD_ACT8945A
- 	tristate "Active-semi ACT8945A"
- 	select MFD_CORE
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 5eaa6465d..4f1ff91 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -203,3 +203,5 @@ intel-soc-pmic-objs		:= intel_soc_pmic_core.o intel_soc_pmic_crc.o
- intel-soc-pmic-$(CONFIG_INTEL_PMC_IPC)	+= intel_soc_pmic_bxtwc.o
- obj-$(CONFIG_INTEL_SOC_PMIC)	+= intel-soc-pmic.o
- obj-$(CONFIG_MFD_MT6397)	+= mt6397-core.o
-+
-+obj-$(CONFIG_MFD_ALTERA_A10SR)	+= altera-a10sr.o
-diff --git a/drivers/mfd/altera-a10sr.c b/drivers/mfd/altera-a10sr.c
+ config GPIO_ARIZONA
+ 	tristate "Wolfson Microelectronics Arizona class devices"
+ 	depends on MFD_ARIZONA
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 1e0b74f..cc29464 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -21,6 +21,7 @@ obj-$(CONFIG_GPIO_ADNP)		+= gpio-adnp.o
+ obj-$(CONFIG_GPIO_ADP5520)	+= gpio-adp5520.o
+ obj-$(CONFIG_GPIO_ADP5588)	+= gpio-adp5588.o
+ obj-$(CONFIG_GPIO_ALTERA)  	+= gpio-altera.o
++obj-$(CONFIG_GPIO_ALTERA_A10SR)	+= gpio-altera-a10sr.o
+ obj-$(CONFIG_GPIO_AMD8111)	+= gpio-amd8111.o
+ obj-$(CONFIG_GPIO_AMDPT)	+= gpio-amdpt.o
+ obj-$(CONFIG_GPIO_ARIZONA)	+= gpio-arizona.o
+diff --git a/drivers/gpio/gpio-altera-a10sr.c b/drivers/gpio/gpio-altera-a10sr.c
 new file mode 100644
-index 0000000..13665d4
+index 0000000..be5308b
 --- /dev/null
-+++ b/drivers/mfd/altera-a10sr.c
-@@ -0,0 +1,177 @@
++++ b/drivers/gpio/gpio-altera-a10sr.c
+@@ -0,0 +1,158 @@
 +/*
-+ * Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
++ *  Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
 + *
 + * This program is free software; you can redistribute it and/or modify it
 + * under the terms and conditions of the GNU General Public License,
@@ -84,319 +83,199 @@ index 0000000..13665d4
 + * You should have received a copy of the GNU General Public License along with
 + * this program.  If not, see <http://www.gnu.org/licenses/>.
 + *
-+ * SPI access for Altera Arria10 MAX5 System Resource Chip
++ * GPIO driver for  Altera Arria10 MAX5 System Resource Chip
 + *
-+ * Adapted from DA9052
++ * Adapted from gpio-da9052.c
 + * Copyright(c) 2011 Dialog Semiconductor Ltd.
 + * Author: David Dajun Chen <dchen@diasemi.com>
 + */
 +
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/input.h>
++#include <linux/fs.h>
++#include <linux/gpio.h>
 +#include <linux/mfd/altera-a10sr.h>
-+#include <linux/mfd/core.h>
 +#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/spi/spi.h>
++#include <linux/platform_device.h>
++#include <linux/seq_file.h>
++#include <linux/syscalls.h>
++#include <linux/uaccess.h>
 +
-+static const struct mfd_cell altr_a10sr_subdev_info[] = {
++struct altr_a10sr_gpio {
++	struct altr_a10sr *a10sc;
++	struct gpio_chip gp;
 +};
 +
-+static bool altr_a10sr_reg_readable(struct device *dev, unsigned int reg)
++static inline struct altr_a10sr_gpio *to_altr_a10sr_gpio(struct gpio_chip *chip)
 +{
-+	switch (reg) {
-+	case ALTR_A10SR_VERSION_READ:
-+	case ALTR_A10SR_LED_RD_REG:
-+	case ALTR_A10SR_PBDSW_RD_REG:
-+	case ALTR_A10SR_PBDSW_IRQ_CLR_REG:
-+	case ALTR_A10SR_PBDSW_IRQ_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD1_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD2_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD3_RD_REG:
-+	case ALTR_A10SR_FMCAB_RD_REG:
-+	case ALTR_A10SR_HPS_RST_RD_REG:
-+	case ALTR_A10SR_USB_QSPI_RD_REG:
-+	case ALTR_A10SR_SFPA_RD_REG:
-+	case ALTR_A10SR_SFPB_RD_REG:
-+	case ALTR_A10SR_I2C_M_RD_REG:
-+	case ALTR_A10SR_WARM_RST_RD_REG:
-+	case ALTR_A10SR_WR_KEY_RD_REG:
-+	case ALTR_A10SR_PMBUS_RD_REG:
-+		return true;
-+	default:
-+		return false;
-+	}
++	return container_of(chip, struct altr_a10sr_gpio, gp);
 +}
 +
-+static bool altr_a10sr_reg_writeable(struct device *dev, unsigned int reg)
++static int altr_a10sr_gpio_get(struct gpio_chip *gc, unsigned int nr)
 +{
-+	switch (reg) {
-+	case ALTR_A10SR_LED_WR_REG:
-+	case ALTR_A10SR_PBDSW_IRQ_CLR_REG:
-+	case ALTR_A10SR_FMCAB_WR_REG:
-+	case ALTR_A10SR_HPS_RST_WR_REG:
-+	case ALTR_A10SR_USB_QSPI_WR_REG:
-+	case ALTR_A10SR_SFPA_WR_REG:
-+	case ALTR_A10SR_SFPB_WR_REG:
-+	case ALTR_A10SR_WARM_RST_WR_REG:
-+	case ALTR_A10SR_WR_KEY_WR_REG:
-+	case ALTR_A10SR_PMBUS_WR_REG:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool altr_a10sr_reg_volatile(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case ALTR_A10SR_PBDSW_RD_REG:
-+	case ALTR_A10SR_PBDSW_IRQ_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD1_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD2_RD_REG:
-+	case ALTR_A10SR_PWR_GOOD3_RD_REG:
-+	case ALTR_A10SR_HPS_RST_RD_REG:
-+	case ALTR_A10SR_I2C_M_RD_REG:
-+	case ALTR_A10SR_WARM_RST_RD_REG:
-+	case ALTR_A10SR_WR_KEY_RD_REG:
-+	case ALTR_A10SR_PMBUS_RD_REG:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+const struct regmap_config altr_a10sr_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.cache_type = REGCACHE_NONE,
-+
-+	.use_single_rw = true,
-+	.read_flag_mask = 1,
-+	.write_flag_mask = 0,
-+
-+	.max_register = ALTR_A10SR_WR_KEY_RD_REG,
-+	.readable_reg = altr_a10sr_reg_readable,
-+	.writeable_reg = altr_a10sr_reg_writeable,
-+	.volatile_reg = altr_a10sr_reg_volatile,
-+
-+};
-+
-+static int altr_a10sr_spi_probe(struct spi_device *spi)
-+{
++	struct altr_a10sr_gpio *gpio = to_altr_a10sr_gpio(gc);
 +	int ret;
-+	struct altr_a10sr *a10sr;
++	unsigned char reg = ALTR_A10SR_LED_RD_REG + ALTR_A10SR_REG_OFFSET(nr);
 +
-+	a10sr = devm_kzalloc(&spi->dev, sizeof(*a10sr),
-+			     GFP_KERNEL);
-+	if (!a10sr)
-+		return -ENOMEM;
++	ret = altr_a10sr_reg_read(gpio->a10sc, reg);
 +
-+	spi->mode = SPI_MODE_3;
-+	spi->bits_per_word = 8;
-+	spi_setup(spi);
-+
-+	a10sr->dev = &spi->dev;
-+
-+	spi_set_drvdata(spi, a10sr);
-+
-+	a10sr->regmap = devm_regmap_init_spi(spi, &altr_a10sr_regmap_config);
-+	if (IS_ERR(a10sr->regmap)) {
-+		ret = PTR_ERR(a10sr->regmap);
-+		dev_err(&spi->dev, "Allocate register map Failed: %d\n", ret);
++	if (ret < 0)
 +		return ret;
-+	}
 +
-+	ret = mfd_add_devices(a10sr->dev, PLATFORM_DEVID_AUTO,
-+			      altr_a10sr_subdev_info,
-+			      ARRAY_SIZE(altr_a10sr_subdev_info),
-+			      NULL, 0, NULL);
-+	if (ret)
-+		dev_err(a10sr->dev, "mfd_add_devices failed: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int altr_a10sr_spi_remove(struct spi_device *spi)
-+{
-+	mfd_remove_devices(&spi->dev);
++	if (ret & (1 << ALTR_A10SR_REG_BIT(nr)))
++		return 1;
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id altr_a10sr_spi_of_match[] = {
-+	{ .compatible = "altr,altr-a10sr" },
++static void altr_a10sr_gpio_set(struct gpio_chip *gc, unsigned int nr,
++				int value)
++{
++	struct altr_a10sr_gpio *gpio = to_altr_a10sr_gpio(gc);
++	int ret;
++	unsigned char reg = ALTR_A10SR_LED_WR_REG + ALTR_A10SR_REG_OFFSET(nr);
++
++	ret = altr_a10sr_reg_update(gpio->a10sc, reg,
++				    ALTR_A10SR_REG_BIT_MASK(nr),
++				    ALTR_A10SR_REG_BIT_CHG(value, nr));
++	if (ret != 0)
++		dev_err(gpio->a10sc->dev,
++			"Failed to update gpio reg : %d", ret);
++}
++
++static int altr_a10sr_gpio_direction_input(struct gpio_chip *gc,
++					   unsigned int nr)
++{
++	if ((nr >= ALTR_A10SR_IN_VALID_RANGE_LO) &&
++	    (nr <= ALTR_A10SR_IN_VALID_RANGE_HI))
++		return 0;
++	return -EINVAL;
++}
++
++static int altr_a10sr_gpio_direction_output(struct gpio_chip *gc,
++					    unsigned int nr, int value)
++{
++	if ((nr >= ALTR_A10SR_OUT_VALID_RANGE_LO) &&
++	    (nr <= ALTR_A10SR_OUT_VALID_RANGE_HI))
++		return 0;
++	return -EINVAL;
++}
++
++static struct gpio_chip altr_a10sr_gc = {
++	.label = "altr_a10sr_gpio",
++	.owner = THIS_MODULE,
++	.get = altr_a10sr_gpio_get,
++	.set = altr_a10sr_gpio_set,
++	.direction_input = altr_a10sr_gpio_direction_input,
++	.direction_output = altr_a10sr_gpio_direction_output,
++	.can_sleep = true,
++	.ngpio = 16,
++	.base = -1,
++};
++
++static int altr_a10sr_gpio_probe(struct platform_device *pdev)
++{
++	struct altr_a10sr_gpio *gpio;
++	int ret;
++
++	gpio = devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
++	if (!gpio)
++		return -ENOMEM;
++
++	gpio->a10sc = dev_get_drvdata(pdev->dev.parent);
++
++	gpio->gp = altr_a10sr_gc;
++
++	gpio->gp.of_node = pdev->dev.of_node;
++
++	ret = gpiochip_add(&gpio->gp);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Could not register gpiochip, %d\n", ret);
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, gpio);
++
++	return 0;
++}
++
++static int altr_a10sr_gpio_remove(struct platform_device *pdev)
++{
++	struct altr_a10sr_gpio *gpio = platform_get_drvdata(pdev);
++
++	gpiochip_remove(&gpio->gp);
++
++	return 0;
++}
++
++static const struct of_device_id altr_a10sr_gpio_of_match[] = {
++	{ .compatible = "altr,a10sr-gpio" },
 +	{ },
 +};
-+MODULE_DEVICE_TABLE(of, altr_a10sr_spi_of_match);
++MODULE_DEVICE_TABLE(of, altr_a10sr_gpio_of_match);
 +
-+static struct spi_driver altr_a10sr_spi_driver = {
-+	.probe = altr_a10sr_spi_probe,
-+	.remove = altr_a10sr_spi_remove,
++static struct platform_driver altr_a10sr_gpio_driver = {
++	.probe = altr_a10sr_gpio_probe,
++	.remove = altr_a10sr_gpio_remove,
 +	.driver = {
-+		.name = "altr_a10sr",
-+		.of_match_table = altr_a10sr_spi_of_match,
++		.name	= "altr_a10sr_gpio",
++		.of_match_table = altr_a10sr_gpio_of_match,
 +	},
 +};
 +
-+module_spi_driver(altr_a10sr_spi_driver);
++module_platform_driver(altr_a10sr_gpio_driver);
 +
 +MODULE_LICENSE("GPL v2");
 +MODULE_AUTHOR("Thor Thayer");
-+MODULE_DESCRIPTION("Altera Arria10 DevKit System Resource MFD Driver");
++MODULE_DESCRIPTION("Altera Arria10 System Resource Chip GPIO");
+diff --git a/drivers/mfd/altera-a10sr.c b/drivers/mfd/altera-a10sr.c
+index 13665d4..517b895 100644
+--- a/drivers/mfd/altera-a10sr.c
++++ b/drivers/mfd/altera-a10sr.c
+@@ -30,6 +30,10 @@
+ #include <linux/spi/spi.h>
+ 
+ static const struct mfd_cell altr_a10sr_subdev_info[] = {
++	{
++		.name = "altr_a10sr_gpio",
++		.of_compatible = "altr,a10sr-gpio",
++	},
+ };
+ 
+ static bool altr_a10sr_reg_readable(struct device *dev, unsigned int reg)
 diff --git a/include/linux/mfd/altera-a10sr.h b/include/linux/mfd/altera-a10sr.h
-new file mode 100644
-index 0000000..7087afc
---- /dev/null
+index 7087afc..6d254a1 100644
+--- a/include/linux/mfd/altera-a10sr.h
 +++ b/include/linux/mfd/altera-a10sr.h
-@@ -0,0 +1,146 @@
-+/*
-+ * Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
-+ *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms and conditions of the GNU General Public License,
-+ * version 2, as published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along with
-+ * this program.  If not, see <http://www.gnu.org/licenses/>.
-+ *
-+ * Declarations for Altera Arria10 MAX5 System Resource Chip
-+ *
-+ * Adapted from DA9052
-+ * Copyright(c) 2011 Dialog Semiconductor Ltd.
-+ * Author: David Dajun Chen <dchen@diasemi.com>
-+ */
+@@ -50,9 +50,31 @@
+ #define ALTR_A10SR_VERSION_READ       0x01    /* MAX5 Version Read */
+ #define ALTR_A10SR_LED_WR_REG         0x02    /* LED - Upper 4 bits */
+ #define ALTR_A10SR_LED_RD_REG         0x03    /* LED - Upper 4 bits */
++/* LED register Bit Definitions */
++#define ALTR_A10SR_LED_MASK               0xF0    /* LED - Mask Upper 4 bits */
++#define ALTR_A10SR_LED_VALID_SHIFT        4       /* LED - Upper 4 bits valid */
++#define ALTR_A10SR_LED_VALID_NUM          4       /* LED - # valid LEDs */
++#define ALTR_A10SR_OUT_VALID_RANGE_LO     ALTR_A10SR_LED_VALID_SHIFT
++#define ALTR_A10SR_OUT_VALID_RANGE_HI     7
 +
-+#ifndef __MFD_ALTERA_A10SR_H
-+#define __MFD_ALTERA_A10SR_H
+ #define ALTR_A10SR_PBDSW_RD_REG       0x05    /* PB & DIP SW - Input only */
+ #define ALTR_A10SR_PBDSW_IRQ_CLR_REG  0x06    /* PB & DIP SW Flag Clear */
+ #define ALTR_A10SR_PBDSW_IRQ_RD_REG   0x07    /* PB & DIP SW Flag Read */
++/* Pushbutton & DIP Switch Bit Definitions */
++#define ALTR_A10SR_PB_DWS_PB_MASK         0xF0    /* PB - Upper 4 bits */
++#define ALTR_A10SR_PB_DWS_DWS_MASK        0x0F    /* DWS - Lower 4 bits */
++#define ALTR_A10SR_PB_VALID_NUM           4       /* # valid PB */
++#define ALTR_A10SR_IRQ_PB_3_SHIFT         7       /* Pushbutton 4 */
++#define ALTR_A10SR_IRQ_PB_2_SHIFT         6       /* Pushbutton 3 */
++#define ALTR_A10SR_IRQ_PB_1_SHIFT         5       /* Pushbutton 2 */
++#define ALTR_A10SR_IRQ_PB_0_SHIFT         4       /* Pushbutton 1 */
++#define ALTR_A10SR_IRQ_DSW_3_SHIFT        3       /* DIP SW 3 */
++#define ALTR_A10SR_IRQ_DSW_2_SHIFT        2       /* DIP SW 2 */
++#define ALTR_A10SR_IRQ_DSW_1_SHIFT        1       /* DIP SW 1 */
++#define ALTR_A10SR_IRQ_DSW_O_SHIFT        0       /* DIP SW 0 */
++#define ALTR_A10SR_IN_VALID_RANGE_LO      8
++#define ALTR_A10SR_IN_VALID_RANGE_HI      15
 +
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/completion.h>
-+#include <linux/list.h>
-+#include <linux/mfd/core.h>
-+
-+/* Write registers are always on even addresses */
-+#define  WRITE_REG_MASK              0xFE
-+/* Odd registers are always on odd addresses */
-+#define  READ_REG_MASK               0x01
-+
-+#define ALTR_A10SR_BITS_PER_REGISTER  8
-+/*
-+ * To find the correct register, we divide the input GPIO by
-+ * the number of GPIO in each register. We then need to multiply
-+ * by 2 because the reads are at odd addresses.
-+ */
-+#define ALTR_A10SR_REG_OFFSET(X)     (((X) / ALTR_A10SR_BITS_PER_REGISTER) << 1)
-+#define ALTR_A10SR_REG_BIT(X)        ((X) % ALTR_A10SR_BITS_PER_REGISTER)
-+#define ALTR_A10SR_REG_BIT_CHG(X, Y) ((X) << ALTR_A10SR_REG_BIT(Y))
-+#define ALTR_A10SR_REG_BIT_MASK(X)   (1 << ALTR_A10SR_REG_BIT(X))
-+
-+/* Arria10 System Controller Register Defines */
-+#define ALTR_A10SR_NOP                0x00    /* No Change */
-+#define ALTR_A10SR_VERSION_READ       0x01    /* MAX5 Version Read */
-+#define ALTR_A10SR_LED_WR_REG         0x02    /* LED - Upper 4 bits */
-+#define ALTR_A10SR_LED_RD_REG         0x03    /* LED - Upper 4 bits */
-+#define ALTR_A10SR_PBDSW_RD_REG       0x05    /* PB & DIP SW - Input only */
-+#define ALTR_A10SR_PBDSW_IRQ_CLR_REG  0x06    /* PB & DIP SW Flag Clear */
-+#define ALTR_A10SR_PBDSW_IRQ_RD_REG   0x07    /* PB & DIP SW Flag Read */
-+#define ALTR_A10SR_PWR_GOOD1_RD_REG   0x09    /* Power Good1 Read */
-+#define ALTR_A10SR_PWR_GOOD2_RD_REG   0x0B    /* Power Good2 Read */
-+#define ALTR_A10SR_PWR_GOOD3_RD_REG   0x0D    /* Power Good3 Read */
-+#define ALTR_A10SR_FMCAB_WR_REG       0x0E    /* FMCA/B & PCIe Pwr Enable */
-+#define ALTR_A10SR_FMCAB_RD_REG       0x0F    /* FMCA/B & PCIe Pwr Enable */
-+#define ALTR_A10SR_HPS_RST_WR_REG     0x10    /* HPS Reset */
-+#define ALTR_A10SR_HPS_RST_RD_REG     0x11    /* HPS Reset */
-+#define ALTR_A10SR_USB_QSPI_WR_REG    0x12    /* USB, BQSPI, FILE Reset */
-+#define ALTR_A10SR_USB_QSPI_RD_REG    0x13    /* USB, BQSPI, FILE Reset */
-+#define ALTR_A10SR_SFPA_WR_REG        0x14    /* SFPA Control Reg */
-+#define ALTR_A10SR_SFPA_RD_REG        0x15    /* SFPA Control Reg */
-+#define ALTR_A10SR_SFPB_WR_REG        0x16    /* SFPB Control Reg */
-+#define ALTR_A10SR_SFPB_RD_REG        0x17    /* SFPB Control Reg */
-+#define ALTR_A10SR_I2C_M_RD_REG       0x19    /* I2C Master Select */
-+#define ALTR_A10SR_WARM_RST_WR_REG    0x1A    /* HPS Warm Reset */
-+#define ALTR_A10SR_WARM_RST_RD_REG    0x1B    /* HPS Warm Reset */
-+#define ALTR_A10SR_WR_KEY_WR_REG      0x1C    /* HPS Warm Reset Key */
-+#define ALTR_A10SR_WR_KEY_RD_REG      0x1D    /* HPS Warm Reset Key */
-+#define ALTR_A10SR_PMBUS_WR_REG       0x1E    /* HPS PM Bus */
-+#define ALTR_A10SR_PMBUS_RD_REG       0x1F    /* HPS PM Bus */
-+
-+struct altr_a10sr {
-+	struct device *dev;
-+	struct regmap *regmap;
-+};
-+
-+/* Device I/O API */
-+static inline int altr_a10sr_reg_read(struct altr_a10sr *a10sr,
-+				      unsigned char reg)
-+{
-+	int val, ret;
-+
-+	ret = regmap_read(a10sr->regmap, (reg | READ_REG_MASK), &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return val;
-+}
-+
-+static inline int altr_a10sr_reg_write(struct altr_a10sr *a10sr,
-+				       unsigned char reg, unsigned char val)
-+{
-+	int ret;
-+
-+	ret = regmap_write(a10sr->regmap, (reg & WRITE_REG_MASK), val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return ret;
-+}
-+
-+static inline int altr_a10sr_group_read(struct altr_a10sr *a10sr,
-+					unsigned char reg,
-+					unsigned int reg_cnt,
-+					unsigned char *val)
-+{
-+	return regmap_bulk_read(a10sr->regmap, reg, val, reg_cnt);
-+}
-+
-+static inline int altr_a10sr_group_write(struct altr_a10sr *a10sr,
-+					 unsigned char reg,
-+					 unsigned int reg_cnt,
-+					 unsigned char *val)
-+{
-+	return regmap_bulk_write(a10sr->regmap, reg, val, reg_cnt);
-+}
-+
-+static inline int altr_a10sr_reg_update(struct altr_a10sr *a10sr,
-+					unsigned char reg,
-+					unsigned char bit_mask,
-+					unsigned char reg_val)
-+{
-+	int rval, ret;
-+
-+	/*
-+	 * We can't use the standard regmap_update_bits function because
-+	 * the read register has a different address than the write register.
-+	 * Therefore, just do a read, modify, write operation here.
-+	 */
-+	ret = regmap_read(a10sr->regmap, (reg | READ_REG_MASK), &rval);
-+	if (ret < 0)
-+		return ret;
-+
-+	rval = ((rval & ~bit_mask) | (reg_val & bit_mask));
-+
-+	ret = regmap_write(a10sr->regmap, (reg & WRITE_REG_MASK), rval);
-+
-+	return ret;
-+}
-+
-+#endif /* __MFD_ALTERA_A10SR_H */
+ #define ALTR_A10SR_PWR_GOOD1_RD_REG   0x09    /* Power Good1 Read */
+ #define ALTR_A10SR_PWR_GOOD2_RD_REG   0x0B    /* Power Good2 Read */
+ #define ALTR_A10SR_PWR_GOOD3_RD_REG   0x0D    /* Power Good3 Read */
 -- 
 1.7.9.5
