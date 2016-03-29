@@ -1,101 +1,27 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.skyhub.de ([78.46.96.112]:35449 "EHLO mail.skyhub.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751867AbcC2H5w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 29 Mar 2016 03:57:52 -0400
-Date: Tue, 29 Mar 2016 09:57:49 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Huang Rui <ray.huang@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, spg_linux_kernel@amd.com
-Subject: Re: [PATCH v5 2/6] hwmon: (fam15h_power) Add compute unit
- accumulated power
-Message-ID: <20160329075749.GB3705@pd.tnic>
-References: <1459143136-2412-1-git-send-email-ray.huang@amd.com>
- <1459143136-2412-3-git-send-email-ray.huang@amd.com>
- <20160328092952.GB26651@pd.tnic>
- <20160329073158.GC3408@twins.programming.kicks-ass.net>
+Return-path: <tthayer@opensource.altera.com>
+From: <tthayer@opensource.altera.com>
+To: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+	<pawell.moll@arm.com>, <mark.rutland@arm.com>,
+	<ijc+devicetree@hellion.org.uk>, <dinguyen@opensource.altera.com>
+CC: <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>
+Subject: [RFC] Addition of Altera Arria10 System Resource Chip
+Date: Tue, 29 Mar 2016 14:13:03 -0500
+Message-ID: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20160329073158.GC3408@twins.programming.kicks-ass.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Mar 29, 2016 at 09:31:58AM +0200, Peter Zijlstra wrote:
-> This will not in fact work for Intel, nor if I manage to one day
-> randomize our CPU numbers on AMD.
+The Altera Arria10 Development Kit includes a system resource chip
+that fits under the Multi-Function Device framework. The chip has
+hardware monitoring functions and a GPIO expander over the SPI bus.
 
-Oh, I know why. I have this 64 CPUs box here:
-
-$ grep "core id" /proc/cpuinfo | uniq
-core id         : 0
-core id         : 8
-core id         : 2
-core id         : 10
-core id         : 1
-core id         : 9
-core id         : 3
-core id         : 11
-core id         : 0
-core id         : 8
-core id         : 2
-core id         : 10
-core id         : 1
-core id         : 9
-core id         : 3
-core id         : 11
-
-Those core IDs repeat and are almost random too :)
-
-I guess we'll need a mask. Maybe as a future exercise...
-
-That box's topology has other funsies like this:
-
-$ grep -E -B 2 "core id\s+: 0" /proc/cpuinfo
-physical id     : 0
-siblings        : 16
-core id         : 0
---
-physical id     : 1
-siblings        : 16
-core id         : 0
---
-physical id     : 2
-siblings        : 16
-core id         : 0
---
-physical id     : 3
-siblings        : 16
-core id         : 0
---
-physical id     : 0
-siblings        : 16
-core id         : 0
---
-physical id     : 1
-siblings        : 16
-core id         : 0
---
-physical id     : 2
-siblings        : 16
-core id         : 0
---
-physical id     : 3
-siblings        : 16
-core id         : 0
-
-So in order to dig out which HT threads belong together, I need to look
-at the (core id, physical id) pair.
-
-I guess this is how we "fix" the schedulers of other OSes - by playing
-topology games...
-
--- 
-Regards/Gruss,
-    Boris.
-
-ECO tip #101: Trim your mails when you reply.
+[RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource Chip
+[RFC 2/8] MAINTAINERS: Addition of Altera Arria10 System Resource
+[RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource
+[RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO
+[RFC 5/8] ARM: socfpga: dts: Add Devkit A10-SR fields for Arria10
+[RFC 6/8] ARM: socfpga: dts: Add LED framework to A10-SR GPIO
+[RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
+[RFC 8/8] ARM: socfpga: dts: Add Devkit Arria10-SR HWMON
