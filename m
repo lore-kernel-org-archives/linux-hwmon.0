@@ -1,84 +1,47 @@
-Return-Path: <linux@roeck-us.net>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:54720 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751972AbcC2OxK (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Tue, 29 Mar 2016 10:53:10 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-	Hardware Monitoring <lm-sensors@lm-sensors.org>
-Cc: Jean Delvare <jdelvare@suse.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
-Date: Sun, 27 Mar 2016 12:03:33 -0700
-Message-Id: <1459105413-19372-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	lm-sensors@lm-sensors.org
+Subject: [GIT PULL] hwmon fixes for v4.6-rc2
+Date: Tue, 29 Mar 2016 07:53:09 -0700
+Message-Id: <1459263189-14680-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-arm:pxa_defconfig can result in the following crash if the max1111 driver
-is not instantiated.
+Hi Linus,
 
-Unhandled fault: page domain fault (0x01b) at 0x00000000
-pgd = c0004000
-[00000000] *pgd=00000000
-Internal error: : 1b [#1] PREEMPT ARM
-Modules linked in:
-CPU: 0 PID: 300 Comm: kworker/0:1 Not tainted 4.5.0-01301-g1701f680407c #10
-Hardware name: SHARP Akita
-Workqueue: events sharpsl_charge_toggle
-task: c390a000 ti: c391e000 task.ti: c391e000
-PC is at max1111_read_channel+0x20/0x30
-LR is at sharpsl_pm_pxa_read_max1111+0x2c/0x3c
-pc : [<c03aaab0>]    lr : [<c0024b50>]    psr: 20000013
-...
-[<c03aaab0>] (max1111_read_channel) from [<c0024b50>]
-					(sharpsl_pm_pxa_read_max1111+0x2c/0x3c)
-[<c0024b50>] (sharpsl_pm_pxa_read_max1111) from [<c00262e0>]
-					(spitzpm_read_devdata+0x5c/0xc4)
-[<c00262e0>] (spitzpm_read_devdata) from [<c0024094>]
-					(sharpsl_check_battery_temp+0x78/0x110)
-[<c0024094>] (sharpsl_check_battery_temp) from [<c0024f9c>]
-					(sharpsl_charge_toggle+0x48/0x110)
-[<c0024f9c>] (sharpsl_charge_toggle) from [<c004429c>]
-					(process_one_work+0x14c/0x48c)
-[<c004429c>] (process_one_work) from [<c0044618>] (worker_thread+0x3c/0x5d4)
-[<c0044618>] (worker_thread) from [<c004a238>] (kthread+0xd0/0xec)
-[<c004a238>] (kthread) from [<c000a670>] (ret_from_fork+0x14/0x24)
+Please pull hwmon fixes for Linux v4.6-rc2 from signed tag:
 
-This can occur because the SPI controller driver (SPI_PXA2XX) is built as
-module and thus not necessarily loaded. While building SPI_PXA2XX into the
-kernel would make the problem disappear, it appears prudent to ensure that
-the driver is instantiated before accessing its data structures.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.6-rc2
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-The means to read voltages from outside the driver seems broken,
-but that is a different issue.
+Thanks,
+Guenter
+------
 
-Apologies if you get this twice; may have gotten lost the first time around.
+The following changes since commit f55532a0c0b8bb6148f4e07853b876ef73bc69ca:
+
+  Linux 4.6-rc1 (2016-03-26 16:03:24 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.6-rc2
+
+for you to fetch changes up to 3c2e2266a5bd2d1cef258e6e54dca1d99946379f:
+
+  hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated (2016-03-27 10:37:48 -0700)
+
+----------------------------------------------------------------
+Fix crash due to NULL pointer access in max1111 driver
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
 
  drivers/hwmon/max1111.c | 6 ++++++
  1 file changed, 6 insertions(+)
-
-diff --git a/drivers/hwmon/max1111.c b/drivers/hwmon/max1111.c
-index 36544c4f653c..303d0c9df907 100644
---- a/drivers/hwmon/max1111.c
-+++ b/drivers/hwmon/max1111.c
-@@ -85,6 +85,9 @@ static struct max1111_data *the_max1111;
- 
- int max1111_read_channel(int channel)
- {
-+	if (!the_max1111 || !the_max1111->spi)
-+		return -ENODEV;
-+
- 	return max1111_read(&the_max1111->spi->dev, channel);
- }
- EXPORT_SYMBOL(max1111_read_channel);
-@@ -258,6 +261,9 @@ static int max1111_remove(struct spi_device *spi)
- {
- 	struct max1111_data *data = spi_get_drvdata(spi);
- 
-+#ifdef CONFIG_SHARPSL_PM
-+	the_max1111 = NULL;
-+#endif
- 	hwmon_device_unregister(data->hwmon_dev);
- 	sysfs_remove_group(&spi->dev.kobj, &max1110_attr_group);
- 	sysfs_remove_group(&spi->dev.kobj, &max1111_attr_group);
--- 
-2.5.0
