@@ -1,61 +1,78 @@
-Return-path: <broonie@sirena.org.uk>
-Date: Tue, 29 Mar 2016 15:29:27 -0700
-From: Mark Brown <broonie@kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:57359 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753916AbcC2Wa2 (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Tue, 29 Mar 2016 18:30:28 -0400
+Date: Tue, 29 Mar 2016 15:30:27 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Thor Thayer <tthayer@opensource.altera.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, lee.jones@linaro.org,
-	linus.walleij@linaro.org, gnurou@gmail.com, jdelvare@suse.com,
-	robh+dt@kernel.org, pawel.moll@arm.com, mark.rutland@arm.com,
-	ijc+devicetree@hellion.org.uk, dinguyen@opensource.altera.com,
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, lgirdwood@gmail.com
-Message-ID: <20160329222927.GS2350@sirena.org.uk>
+Cc: lee.jones@linaro.org, linus.walleij@linaro.org, gnurou@gmail.com,
+	jdelvare@suse.com, robh+dt@kernel.org, pawel.moll@arm.com,
+	mark.rutland@arm.com, ijc+devicetree@hellion.org.uk,
+	dinguyen@opensource.altera.com, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	lgirdwood@gmail.com, Mark Brown <broonie@kernel.org>
+Subject: Re: [RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
+Message-ID: <20160329223027.GA5495@roeck-us.net>
 References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
  <1459278791-3646-8-git-send-email-tthayer@opensource.altera.com>
  <20160329201648.GA30248@roeck-us.net>
  <56FAF70D.4010109@opensource.altera.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wKbYzd8t8rt1PVqr"
-Content-Disposition: inline
-In-Reply-To: <56FAF70D.4010109@opensource.altera.com>
-Subject: Re: [RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
-List-ID: <linux-hwmon@vger.kernel.org>
-
-
---wKbYzd8t8rt1PVqr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <56FAF70D.4010109@opensource.altera.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
 On Tue, Mar 29, 2016 at 04:43:41PM -0500, Thor Thayer wrote:
-
+> 
+> 
+> On 03/29/2016 03:16 PM, Guenter Roeck wrote:
+> >On Tue, Mar 29, 2016 at 02:13:10PM -0500, tthayer@opensource.altera.com wrote:
+> >>From: Thor Thayer <tthayer@opensource.altera.com>
+> >>
+> >>This patch adds the hwmon functionality to the Arria10 System
+> >>Resource Chip. The hwmon encapsulates the PCIe Enable, USB Enable,
+> >>and all the Power Good signals on the System Controller.
+> >>
+> >
+> >I may be completely wrong, but a glance through the driver suggests
+> >that, if anything, this should be a regulator driver, not a hwmon driver.
+> >A hardware monitoring driver would be expected to report the voltages,
+> >not (just) the voltage status. Am I missing something ?
+> >
+> >Please have a look into Documentation/hwmon/sysfs-interface for
+> >acceptable hwmon attribute names and their meaning.
+> >
+> >Thanks,
+> >Guenter
+> >
+> 
+> Hi Guenter,
+> 
+> <adding voltage and current regulator framework moderators>
+> 
 > Yes, I see your point. In looking at the regulator drivers, I interpret
 > those as being controlled by the driver whereas this chip is passively
 > reporting status.
-
-If the device isn't doing regulation it's not a regulator.
+> 
+> The success/fail indication seemed at first glance to fit the hwmon model. I
+> thought the fan indication would be a good analog but even it reports speed
+> and not success/fail.
+> 
+Yes, alarm and/or fault attributes are supposed to be secondary.
 
 > After reading the referenced document, I agree that hwmon probably isn't
 > appropriate. However, the regulator doesn't seem appropriate either (the
 > only status appears to be tied to battery properties).
+> 
+Not really sure myself where this would fit if it is just status bits.
 
-We report status for regulators but that's tied to monitoring that's
-built into a device that does regulation.
+Does the chip report anything else besides the status ? One of the attributes
+includes "pmbus", so one could conclude that there must be a PMBus compatible
+chip somewhere.
 
-How about IIO or power supply?
-
---wKbYzd8t8rt1PVqr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQEcBAEBCAAGBQJW+wHGAAoJECTWi3JdVIfQU6EH/0lenHgC0Sa1yadZvkoLzETz
-n7bhGzHq9X9kXQ+s0F9GnKbzGJuK2bolxVm6+QaO37J6wzNAMtX9PDKpWHOZpzxn
-GEAPys0I++0cPCTsP08Rf6F+LGv3j7bjX+/GRGktjjf+aN7b8UKCD0OiiI8rpPFN
-90OfC2PQjQ86o9Mh2WcXfIkecqCF5qBLree3wrmAVJOjL+mFjyO5CER57SunYSuJ
-gtdguP6jwddoizhiOq0XhM6eKIhNqOgTwOWCnzAU65B1cSgbGE+jDecWHNAa2NaI
-shzw9eMgmahJ/LyV0wleV/i5d51LFMMFpJsQNGWLJqhSCG7iqKrNnaMf3WxJH+E=
-=4hgU
------END PGP SIGNATURE-----
-
---wKbYzd8t8rt1PVqr--
+Thanks,
+Guenter
