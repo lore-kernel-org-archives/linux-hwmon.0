@@ -1,9 +1,9 @@
 From: Lee Jones <lee.jones@linaro.org>
 To: linux-hwmon@vger.kernel.org
-Date: Wed, 30 Mar 2016 01:19:48 -0700
-Subject: Re: [RFC 2/8] MAINTAINERS: Addition of Altera Arria10 System Resource Chip
+Date: Wed, 30 Mar 2016 04:36:13 -0700
+Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource Chip bindings
 In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
-Message-ID: <20160330081908.GH3323@x1>
+Message-ID: <20160330113532.GI3323@x1>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -12,34 +12,84 @@ On Tue, 29 Mar 2016, ttha...@opensource.altera.com wrote:
 
 > From: Thor Thayer <ttha...@opensource.altera.com>
 > 
-> Add maintainer for the Altera Arria10 files.
+> The Altera Arria10 Devkit System Resource chip is a Multi-Function
+> Device, it has two subdevices:
+>      - GPIO
+>      - HWMON
+> 
+> This patch adds documentation for the Altera A10-SR DT bindings.
 > 
 > Signed-off-by: Thor Thayer <ttha...@opensource.altera.com>
 > ---
->  MAINTAINERS |    8 ++++++++
->  1 file changed, 8 insertions(+)
+>  .../devicetree/bindings/mfd/altera-a10sr.txt       |   35 
+> ++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 972f25d..567ce60 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -608,6 +608,14 @@ L:       linux-g...@vger.kernel.org
->  S:   Maintained
->  F:   drivers/gpio/gpio-altera.c
->  
-> +ALTERA SYSTEM RESOURCE DRIVER FOR ARRIA10 DEVKIT
-> +M:   Thor Thayer <ttha...@opensource.altera.com>
-> +S:   Maintained
-> +F:   drivers/mfd/altera-a10sr.c
-> +F:   include/linux/mfd/altera-a10sr.h
-> +F:   drivers/gpio/gpio-altera-a10sr.c
-> +F:   drivers/hwmon/altera-a10sr-hwmon.c
+> diff --git a/Documentation/devicetree/bindings/mfd/altera-a10sr.txt 
+> b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+> new file mode 100644
+> index 0000000..564c761
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+> @@ -0,0 +1,35 @@
+> +* Altera Arria10 Development Kit System Resource Chip
+> +
+> +Required parent device properties:
+> +- compatible : "altr,altr_a10sr"
+> +- spi-max-frequency : Maximum SPI frequency.
+> +- reg : the SPI Chip Select address for the Arria10 System Resource chip
 
-Alphabetical makes more sense.
+DT bindings are much easier to read in the following format:
 
->  ALTERA TRIPLE SPEED ETHERNET DRIVER
->  M:   Vince Bridgers <vbrid...@opensource.altera.com>
->  L:   net...@vger.kernel.org
+- compatible            : "altr,altr_a10sr"
+- spi-max-frequency     : Maximum SPI frequency.
+- reg                   : the SPI Chip Select address for the Arria10 System 
+Resource chip
+
+... also, sentences start with an uppercase char.
+
+> +The A10SR consists of this varied group of sub-devices:
+> +
+> +Device                   Description
+> +------                   ----------
+> +altr_a10sr_gpio          GPIO Controller
+> +altr_a10sr_hwmon         Hardware Monitor
+> +
+> +The LEDs are implemented entirely in the device tree using
+> +the gpio-led framework.
+
+This is a Linuxisum and should not live in DT bindings.
+
+> +Example:
+> +
+> +        a10-sr: a10-sr@0 {
+
+Nodes should be named after their device 'type'.
+
+Does this device really start a address 0?
+
+> +             compatible = "altr,altr-a10sr";
+> +             reg = <0>;
+> +             spi-max-frequency = <100000>;
+> +
+> +             a10sr_gpio: a10sr_gpio {
+
+Device type only please.
+
+> +                     compatible = "altr,a10sr-gpio";
+> +                     gpio-controller;
+> +                     #gpio-cells = <2>;
+> +                     ngpios = <16>;
+> +             };
+> +
+> +             a10sr_hwmon: a10sr_hwmon {
+
+Device type only please.
+
+> +                     compatible = "altr,a10sr-hwmon";
+> +             };
+> +     };
 
 -- 
 Lee Jones
