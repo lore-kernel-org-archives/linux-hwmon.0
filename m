@@ -1,9 +1,9 @@
 From: Lee Jones <lee.jones@linaro.org>
 To: linux-hwmon@vger.kernel.org
-Date: Wed, 30 Mar 2016 01:18:41 -0700
-Subject: Re: [RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
+Date: Wed, 30 Mar 2016 01:19:48 -0700
+Subject: Re: [RFC 2/8] MAINTAINERS: Addition of Altera Arria10 System Resource Chip
 In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
-Message-ID: <20160330081825.GG3323@x1>
+Message-ID: <20160330081908.GH3323@x1>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -12,23 +12,34 @@ On Tue, 29 Mar 2016, ttha...@opensource.altera.com wrote:
 
 > From: Thor Thayer <ttha...@opensource.altera.com>
 > 
-> Add the GPIO functionality for the Altera Arria10 MAX5 System Resource
-> Chip. The A10 MAX5 has 12 bits of GPIO assigned to switches, buttons,
-> and LEDs as a GPIO extender on the SPI bus.
+> Add maintainer for the Altera Arria10 files.
 > 
 > Signed-off-by: Thor Thayer <ttha...@opensource.altera.com>
 > ---
->  drivers/gpio/Kconfig             |    8 ++
->  drivers/gpio/Makefile            |    1 +
->  drivers/gpio/gpio-altera-a10sr.c |  158 
-> ++++++++++++++++++++++++++++++++++++++
->  drivers/mfd/altera-a10sr.c       |    4 +
+>  MAINTAINERS |    8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 972f25d..567ce60 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -608,6 +608,14 @@ L:       linux-g...@vger.kernel.org
+>  S:   Maintained
+>  F:   drivers/gpio/gpio-altera.c
+>  
+> +ALTERA SYSTEM RESOURCE DRIVER FOR ARRIA10 DEVKIT
+> +M:   Thor Thayer <ttha...@opensource.altera.com>
+> +S:   Maintained
+> +F:   drivers/mfd/altera-a10sr.c
+> +F:   include/linux/mfd/altera-a10sr.h
+> +F:   drivers/gpio/gpio-altera-a10sr.c
+> +F:   drivers/hwmon/altera-a10sr-hwmon.c
 
-Seperate patch please.
+Alphabetical makes more sense.
 
->  include/linux/mfd/altera-a10sr.h |   22 ++++++
->  5 files changed, 193 insertions(+)
->  create mode 100644 drivers/gpio/gpio-altera-a10sr.c
+>  ALTERA TRIPLE SPEED ETHERNET DRIVER
+>  M:   Vince Bridgers <vbrid...@opensource.altera.com>
+>  L:   net...@vger.kernel.org
 
 -- 
 Lee Jones
