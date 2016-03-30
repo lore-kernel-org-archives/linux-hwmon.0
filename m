@@ -1,101 +1,65 @@
-Return-path: <lee.jones@linaro.org>
-Date: Wed, 30 Mar 2016 15:52:39 +0100
-From: Lee Jones <lee.jones@linaro.org>
-To: Thor Thayer <tthayer@opensource.altera.com>, broonie@kernel.org
-Cc: linus.walleij@linaro.org, gnurou@gmail.com, jdelvare@suse.com,
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mezzanine.sirena.org.uk ([106.187.55.193]:56994 "EHLO
+	mezzanine.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752388AbcC3QLW (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Wed, 30 Mar 2016 12:11:22 -0400
+Date: Wed, 30 Mar 2016 09:10:48 -0700
+From: Mark Brown <broonie@kernel.org>
+To: Lee Jones <lee.jones@linaro.org>
+Cc: Thor Thayer <tthayer@opensource.altera.com>,
+	linus.walleij@linaro.org, gnurou@gmail.com, jdelvare@suse.com,
 	linux@roeck-us.net, robh+dt@kernel.org, pawell.moll@arm.com,
 	mark.rutland@arm.com, ijc+devicetree@hellion.org.uk,
 	dinguyen@opensource.altera.com, linux-gpio@vger.kernel.org,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System
- Resource Chip
-Message-ID: <20160330145239.GM3323@x1>
+Message-ID: <20160330161048.GB2350@sirena.org.uk>
 References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
  <1459278791-3646-4-git-send-email-tthayer@opensource.altera.com>
  <20160330115106.GJ3323@x1>
  <56FBE829.2000607@opensource.altera.com>
+ <20160330145239.GM3323@x1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="oMfk58fZ06Sy4zVm"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <56FBE829.2000607@opensource.altera.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <20160330145239.GM3323@x1>
+Subject: Re: [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System
+ Resource Chip
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Mr Brown,
 
-On Wed, 30 Mar 2016, Thor Thayer wrote:
-> On 03/30/2016 06:51 AM, Lee Jones wrote:
-> >On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
-> >
-> >>From: Thor Thayer <tthayer@opensource.altera.com>
-> >>
-> >>Add support for the Altera Arria10 Development Kit System Resource
-> >>chip which is implemented using a MAX5 as a external gpio extender,
-> >>and hardware monitor with the regmap framework over a SPI bus.
-> >>
-> >>Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
-> >>---
-> 
-> [...]
-> 
-> >>index 0000000..13665d4
-> >>--- /dev/null
-> >>+++ b/drivers/mfd/altera-a10sr.c
-> >>@@ -0,0 +1,177 @@
-> >>+/*
-> >>+ * Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
-> >>+ *
-> >>+ * This program is free software; you can redistribute it and/or modify it
-> >>+ * under the terms and conditions of the GNU General Public License,
-> >>+ * version 2, as published by the Free Software Foundation.
-> >>+ *
-> >>+ * This program is distributed in the hope it will be useful, but WITHOUT
-> >>+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> >>+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> >>+ * more details.
-> >>+ *
-> >>+ * You should have received a copy of the GNU General Public License along with
-> >>+ * this program.  If not, see <http://www.gnu.org/licenses/>.
-> >
-> >Any chance you can use the shorter copyright header?
-> >
-> 
-> This is the header that Altera has specified and that we're
-> operating under. We haven't received guidance on Intel's header yet
-> but it may change as a result of our acquisition by Intel.
+--oMfk58fZ06Sy4zVm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fair enough.
+On Wed, Mar 30, 2016 at 03:52:39PM +0100, Lee Jones wrote:
+> On Wed, 30 Mar 2016, Thor Thayer wrote:
 
-> >>+
-> >>+	/*
-> >>+	 * We can't use the standard regmap_update_bits function because
-> >>+	 * the read register has a different address than the write register.
-> >>+	 * Therefore, just do a read, modify, write operation here.
-> >>+	 */
-> >>+	ret = regmap_read(a10sr->regmap, (reg | READ_REG_MASK), &rval);
-> >>+	if (ret < 0)
-> >>+		return ret;
-> >>+
-> >>+	rval = ((rval & ~bit_mask) | (reg_val & bit_mask));
-> >>+
-> >>+	ret = regmap_write(a10sr->regmap, (reg & WRITE_REG_MASK), rval);
-> >>+
-> >>+	return ret;
-> >>+}
-> >
-> >Why can't you use the Regmap update function(s)?
-> 
-> The read register has a different address than the write register
-> which is handled in this function with the masks (read address is
-> odd, write address is even).
+> > The read register has a different address than the write register
+> > which is handled in this function with the masks (read address is
+> > odd, write address is even).
 
-Mark, do we have an API which handled such a configuration?
+> Mark, do we have an API which handled such a configuration?
 
-> Thank you for the review of my patch set. I will implement the
-> changes that you pointed out. Thank you for reviewing!
+No, but it sounds like this is a regmap with seven bit register values
+and a read/write bit which should be using read_flag_mask rather than
+trying to treat these as separate registers.
 
--- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+--oMfk58fZ06Sy4zVm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQEcBAEBCAAGBQJW+/qCAAoJECTWi3JdVIfQI3sH/Az4Q2ywkkR2AFD0jhZiIZ6V
+BmCgMvG1+V+sxyA6sITU13Y3rIjbZ67gp3Us3olwBAUeN0miAT5Gl54H+jwnGhCW
+q2Xd3nrR/fK3zDuWpE7RGZWo1T2DgyHNP7tL/3wj8ymk32o8KcR6HYgQMGoTHrif
+jRDXmiCoZe/Eli+pa9RjndoZ5Iupjs1zz1v57AXGGTvCuZK6RGsB5ZMhfLl2yhv6
+sQtiJUS7q+saPl+csirCgauNUPZ4wemJ2m01WM2FWVSli8wXT4PNrd+/U2SU4lrB
+MDySU2s4DS/CrkExBeNNwFXRbEcY3gGFrBv1lmSEwkyckjHNai1Aev+rpw0dMU0=
+=8x8q
+-----END PGP SIGNATURE-----
+
+--oMfk58fZ06Sy4zVm--
