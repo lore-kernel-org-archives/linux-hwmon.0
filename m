@@ -1,88 +1,95 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58190 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753855AbcCZTwW (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 26 Mar 2016 15:52:22 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
-Date: Sat, 26 Mar 2016 12:52:15 -0700
-Message-Id: <1459021935-30587-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <tthayer@opensource.altera.com>
+Reply-To: <tthayer@opensource.altera.com>
+Subject: Re: [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System
+ Resource Chip
+References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
+ <1459278791-3646-4-git-send-email-tthayer@opensource.altera.com>
+ <20160330115106.GJ3323@x1>
+To: Lee Jones <lee.jones@linaro.org>
+CC: <linus.walleij@linaro.org>, <gnurou@gmail.com>, <jdelvare@suse.com>,
+	<linux@roeck-us.net>, <robh+dt@kernel.org>, <pawell.moll@arm.com>,
+	<mark.rutland@arm.com>, <ijc+devicetree@hellion.org.uk>,
+	<dinguyen@opensource.altera.com>, <linux-gpio@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+From: Thor Thayer <tthayer@opensource.altera.com>
+Message-ID: <56FBE829.2000607@opensource.altera.com>
+Date: Wed, 30 Mar 2016 09:52:25 -0500
+MIME-Version: 1.0
+In-Reply-To: <20160330115106.GJ3323@x1>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-arm:pxa_defconfig can result in the following crash if the max1111 driver
-is not instantiated.
+Hi Lee,
 
-Unhandled fault: page domain fault (0x01b) at 0x00000000
-pgd = c0004000
-[00000000] *pgd=00000000
-Internal error: : 1b [#1] PREEMPT ARM
-Modules linked in:
-CPU: 0 PID: 300 Comm: kworker/0:1 Not tainted 4.5.0-01301-g1701f680407c #10
-Hardware name: SHARP Akita
-Workqueue: events sharpsl_charge_toggle
-task: c390a000 ti: c391e000 task.ti: c391e000
-PC is at max1111_read_channel+0x20/0x30
-LR is at sharpsl_pm_pxa_read_max1111+0x2c/0x3c
-pc : [<c03aaab0>]    lr : [<c0024b50>]    psr: 20000013
-...
-[<c03aaab0>] (max1111_read_channel) from [<c0024b50>]
-					(sharpsl_pm_pxa_read_max1111+0x2c/0x3c)
-[<c0024b50>] (sharpsl_pm_pxa_read_max1111) from [<c00262e0>]
-					(spitzpm_read_devdata+0x5c/0xc4)
-[<c00262e0>] (spitzpm_read_devdata) from [<c0024094>]
-					(sharpsl_check_battery_temp+0x78/0x110)
-[<c0024094>] (sharpsl_check_battery_temp) from [<c0024f9c>]
-					(sharpsl_charge_toggle+0x48/0x110)
-[<c0024f9c>] (sharpsl_charge_toggle) from [<c004429c>]
-					(process_one_work+0x14c/0x48c)
-[<c004429c>] (process_one_work) from [<c0044618>] (worker_thread+0x3c/0x5d4)
-[<c0044618>] (worker_thread) from [<c004a238>] (kthread+0xd0/0xec)
-[<c004a238>] (kthread) from [<c000a670>] (ret_from_fork+0x14/0x24)
+On 03/30/2016 06:51 AM, Lee Jones wrote:
+> On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
+>
+>> From: Thor Thayer <tthayer@opensource.altera.com>
+>>
+>> Add support for the Altera Arria10 Development Kit System Resource
+>> chip which is implemented using a MAX5 as a external gpio extender,
+>> and hardware monitor with the regmap framework over a SPI bus.
+>>
+>> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
+>> ---
 
-This can occur because the SPI controller driver (SPI_PXA2XX) is built as
-module and thus not necessarily loaded. While building SPI_PXA2XX into the
-kernel would make the problem disappear, it appears prudent to ensure that
-the driver is instantiated before accessing its data structures.
+[...]
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-The means to read voltages from outside the driver seems broken,
-but that is a different issue.
+>> index 0000000..13665d4
+>> --- /dev/null
+>> +++ b/drivers/mfd/altera-a10sr.c
+>> @@ -0,0 +1,177 @@
+>> +/*
+>> + * Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
+>> + *
+>> + * This program is free software; you can redistribute it and/or modify it
+>> + * under the terms and conditions of the GNU General Public License,
+>> + * version 2, as published by the Free Software Foundation.
+>> + *
+>> + * This program is distributed in the hope it will be useful, but WITHOUT
+>> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+>> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+>> + * more details.
+>> + *
+>> + * You should have received a copy of the GNU General Public License along with
+>> + * this program.  If not, see <http://www.gnu.org/licenses/>.
+>
+> Any chance you can use the shorter copyright header?
+>
 
- drivers/hwmon/max1111.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+This is the header that Altera has specified and that we're operating 
+under. We haven't received guidance on Intel's header yet but it may 
+change as a result of our acquisition by Intel.
 
-diff --git a/drivers/hwmon/max1111.c b/drivers/hwmon/max1111.c
-index 36544c4f653c..303d0c9df907 100644
---- a/drivers/hwmon/max1111.c
-+++ b/drivers/hwmon/max1111.c
-@@ -85,6 +85,9 @@ static struct max1111_data *the_max1111;
- 
- int max1111_read_channel(int channel)
- {
-+	if (!the_max1111 || !the_max1111->spi)
-+		return -ENODEV;
-+
- 	return max1111_read(&the_max1111->spi->dev, channel);
- }
- EXPORT_SYMBOL(max1111_read_channel);
-@@ -258,6 +261,9 @@ static int max1111_remove(struct spi_device *spi)
- {
- 	struct max1111_data *data = spi_get_drvdata(spi);
- 
-+#ifdef CONFIG_SHARPSL_PM
-+	the_max1111 = NULL;
-+#endif
- 	hwmon_device_unregister(data->hwmon_dev);
- 	sysfs_remove_group(&spi->dev.kobj, &max1110_attr_group);
- 	sysfs_remove_group(&spi->dev.kobj, &max1111_attr_group);
--- 
-2.5.0
+[...]
 
+>> +
+>> +	/*
+>> +	 * We can't use the standard regmap_update_bits function because
+>> +	 * the read register has a different address than the write register.
+>> +	 * Therefore, just do a read, modify, write operation here.
+>> +	 */
+>> +	ret = regmap_read(a10sr->regmap, (reg | READ_REG_MASK), &rval);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	rval = ((rval & ~bit_mask) | (reg_val & bit_mask));
+>> +
+>> +	ret = regmap_write(a10sr->regmap, (reg & WRITE_REG_MASK), rval);
+>> +
+>> +	return ret;
+>> +}
+>
+> Why can't you use the Regmap update function(s)?
+
+The read register has a different address than the write register which 
+is handled in this function with the masks (read address is odd, write 
+address is even).
+
+Thank you for the review of my patch set. I will implement the changes 
+that you pointed out. Thank you for reviewing!
+
+>
+>> +#endif /* __MFD_ALTERA_A10SR_H */
+>
