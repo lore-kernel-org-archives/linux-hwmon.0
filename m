@@ -1,47 +1,38 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54720 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751972AbcC2OxK (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 29 Mar 2016 10:53:10 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	lm-sensors@lm-sensors.org
-Subject: [GIT PULL] hwmon fixes for v4.6-rc2
-Date: Tue, 29 Mar 2016 07:53:09 -0700
-Message-Id: <1459263189-14680-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+From: Lee Jones <lee.jones@linaro.org>
+To: linux-hwmon@vger.kernel.org
+Date: Wed, 30 Mar 2016 01:14:43 -0700
+Subject: Re: [RFC] Addition of Altera Arria10 System Resource Chip
+In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
+Message-ID: <20160330081414.GE3323@x1>
+MIME-Version: 1.0
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Tue, 29 Mar 2016, ttha...@opensource.altera.com wrote:
 
-Please pull hwmon fixes for Linux v4.6-rc2 from signed tag:
+You need to submit this properly, using `git send-email`, since it
+will look after you by listing each patch, together with their author,
+and provide a nice diff-stat, which is very helpful to reviewers.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.6-rc2
+> The Altera Arria10 Development Kit includes a system resource chip
+> that fits under the Multi-Function Device framework. The chip has
+> hardware monitoring functions and a GPIO expander over the SPI bus.
+> 
+> [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource Chip
+> [RFC 2/8] MAINTAINERS: Addition of Altera Arria10 System Resource
+> [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource
+> [RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO
+> [RFC 5/8] ARM: socfpga: dts: Add Devkit A10-SR fields for Arria10
+> [RFC 6/8] ARM: socfpga: dts: Add LED framework to A10-SR GPIO
+> [RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
+> [RFC 8/8] ARM: socfpga: dts: Add Devkit Arria10-SR HWMON
 
-Thanks,
-Guenter
-------
-
-The following changes since commit f55532a0c0b8bb6148f4e07853b876ef73bc69ca:
-
-  Linux 4.6-rc1 (2016-03-26 16:03:24 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.6-rc2
-
-for you to fetch changes up to 3c2e2266a5bd2d1cef258e6e54dca1d99946379f:
-
-  hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated (2016-03-27 10:37:48 -0700)
-
-----------------------------------------------------------------
-Fix crash due to NULL pointer access in max1111 driver
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (max1111) Return -ENODEV from max1111_read_channel if not instantiated
-
- drivers/hwmon/max1111.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
+--
+To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+the body of a message to majord...@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
