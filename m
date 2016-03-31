@@ -1,56 +1,34 @@
-From: Thor Thayer <tthayer@opensource.altera.com>
+From: Lee Jones <lee.jones@linaro.org>
 To: linux-hwmon@vger.kernel.org
-Date: Wed, 30 Mar 2016 07:27:36 -0700
-Subject: Re: [RFC 7/8] hwmon: Altera Arria10 System Resource Chip - HW Monitor
+Date: Thu, 31 Mar 2016 02:11:05 -0700
+Subject: Re: [RFC 3/8] mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource Chip
 In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
-Message-ID: <56FBE345.5030806@opensource.altera.com>
+Message-ID: <20160331091001.GN3323@x1>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
+On Wed, 30 Mar 2016, Mark Brown wrote:
+> On Wed, Mar 30, 2016 at 03:52:39PM +0100, Lee Jones wrote:
+> > On Wed, 30 Mar 2016, Thor Thayer wrote:
+> 
+> > > The read register has a different address than the write register
+> > > which is handled in this function with the masks (read address is
+> > > odd, write address is even).
+> 
+> > Mark, do we have an API which handled such a configuration?
+> 
+> No, but it sounds like this is a regmap with seven bit register values
+> and a read/write bit which should be using read_flag_mask rather than
+> trying to treat these as separate registers.
 
+Nice one.  Thanks Mark.
 
-
-On 03/29/2016 05:29 PM, Mark Brown wrote:
-
-On Tue, Mar 29, 2016 at 04:43:41PM -0500, Thor Thayer wrote:
-
-
-Yes, I see your point. In looking at the regulator drivers, I interpret
-those as being controlled by the driver whereas this chip is passively
-reporting status.
-
-
-If the device isn't doing regulation it's not a regulator.
-
-
-After reading the referenced document, I agree that hwmon probably isn't
-appropriate. However, the regulator doesn't seem appropriate either (the
-only status appears to be tied to battery properties).
-
-
-We report status for regulators but that's tied to monitoring that's
-built into a device that does regulation.
-
-How about IIO or power supply?
-
-
-
-Hi Mark,
-
-Thanks for the clarification and for pointing out other frameworks to 
-look at.
-
-
-Yes, I think the iio may be a good place but I'll need to investigate 
-where it should go. I'm not sure it fits into the adc subdirectory. I 
-see similar functionality in the MAX1363 part but it's not actually an 
-ADC - it only has the supervisor compare functionality.
-
-
-Thank you!
-
-
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
 --
 To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
 the body of a message to majord...@vger.kernel.org
