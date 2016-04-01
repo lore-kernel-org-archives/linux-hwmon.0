@@ -1,134 +1,96 @@
-Return-path: <linus.walleij@linaro.org>
-MIME-Version: 1.0
-In-Reply-To: <1459278791-3646-5-git-send-email-tthayer@opensource.altera.com>
+Return-path: <tthayer@opensource.altera.com>
+Reply-To: <tthayer@opensource.altera.com>
+Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource
+ Chip bindings
 References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
-	<1459278791-3646-5-git-send-email-tthayer@opensource.altera.com>
-Date: Fri, 1 Apr 2016 14:17:42 +0200
-Message-ID: <CACRpkda8VTDGVsRqbCs6ESeokA3t_p2X91FUNiqA7YM=F-JXBQ@mail.gmail.com>
-Subject: Re: [RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
-From: Linus Walleij <linus.walleij@linaro.org>
-To: tthayer@opensource.altera.com
-Cc: Lee Jones <lee.jones@linaro.org>, Alexandre Courbot <gnurou@gmail.com>, jdelvare@suse.com,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, pawell.moll@arm.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	"ijc+devicetree@hellion.org.uk" <ijc+devicetree@hellion.org.uk>,
-	Dinh Nguyen <dinguyen@opensource.altera.com>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+ <1459278791-3646-2-git-send-email-tthayer@opensource.altera.com>
+ <20160330113532.GI3323@x1> <56FD6A8E.7030208@opensource.altera.com>
+ <20160401081426.GS3323@x1>
+To: Lee Jones <lee.jones@linaro.org>
+CC: <linus.walleij@linaro.org>, <gnurou@gmail.com>, <jdelvare@suse.com>,
+	<linux@roeck-us.net>, <robh+dt@kernel.org>, <pawell.moll@arm.com>,
+	<mark.rutland@arm.com>, <ijc+devicetree@hellion.org.uk>,
+	<dinguyen@opensource.altera.com>, <linux-gpio@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+From: Thor Thayer <tthayer@opensource.altera.com>
+Message-ID: <56FED830.6060902@opensource.altera.com>
+Date: Fri, 1 Apr 2016 15:21:04 -0500
+MIME-Version: 1.0
+In-Reply-To: <20160401081426.GS3323@x1>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Mar 29, 2016 at 9:13 PM,  <tthayer@opensource.altera.com> wrote:
 
-> From: Thor Thayer <tthayer@opensource.altera.com>
+
+On 04/01/2016 03:14 AM, Lee Jones wrote:
+> On Thu, 31 Mar 2016, Thor Thayer wrote:
+>> On 03/30/2016 06:35 AM, Lee Jones wrote:
+>>> On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
+>>>
+>>>> From: Thor Thayer <tthayer@opensource.altera.com>
 >
-> Add the GPIO functionality for the Altera Arria10 MAX5 System Resource
-> Chip. The A10 MAX5 has 12 bits of GPIO assigned to switches, buttons,
-> and LEDs as a GPIO extender on the SPI bus.
+> [...]
 >
-> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
+>>>> +The A10SR consists of this varied group of sub-devices:
+>>>> +
+>>>> +Device                   Description
+>>>> +------                   ----------
+>>>> +altr_a10sr_gpio          GPIO Controller
+>>>> +altr_a10sr_hwmon         Hardware Monitor
+>>>> +
+>>>> +The LEDs are implemented entirely in the device tree using
+>>>> +the gpio-led framework.
+>>>
+>>> This is a Linuxisum and should not live in DT bindings.
+>>
+>> I was following the format of other mfd binding documents such as
+>> Documentation/devicetree/bindings/mfd/da9055.txt so I'll need your
+>> help understanding this.
+>>
+>> I'm not familiar with the phrase Linuxisum. A Google search turns up
+>> several threads referencing Linuxisum but I can't seem to find the
+>> definition. One thread seems to imply that an existing driver such
+>> as GPIO is a Linuxisum and should not be re-defined. Am I
+>> understanding correctly?
+>
+> Linuxisum is a made up word.  Actually, it looks like I placed a
+> superfluous 'u' in there, but I assume most people would get the gist.
+> Some examples ending in "ism" which might push the point across are
+> "colloquialism" and "feminism", where the "ism" can probably be taken
+> to mean "pertaining to".  So in the example above, we might reasonably
+> conclude that I meant "pertaining to Linux", which I did.
+>
+> In other words "the gpio-led framework" is something we have in Linux,
+> but might not exist in other OSes.  And considering DT is supposed to
+> be OS agnostic and the documentation relevant to all OSes, you can not
+> and should not document Linuxisms.
+>
 
-OK...
+Got it. Thanks for the explanation! I'll make the changes.
 
-As Lee says: split off the MFD patch so it is a pure GPIO driver
-patch.
-
-> +#include <linux/gpio.h>
-
-You should instead #include <linux/gpio/driver.h>
-
-> +#include <linux/mfd/altera-a10sr.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/syscalls.h>
-> +#include <linux/uaccess.h>
-
-Syscalls and uaccess??? I don't think so.
-
-> +struct altr_a10sr_gpio {
-> +       struct altr_a10sr *a10sc;
-> +       struct gpio_chip gp;
-> +};
-
-Add some kerneldoc.
-
-> +static inline struct altr_a10sr_gpio *to_altr_a10sr_gpio(struct gpio_chip *chip)
-> +{
-> +       return container_of(chip, struct altr_a10sr_gpio, gp);
-> +}
-
-Don't use this old design pattern.
-
-Use [devm_]gpiochip_add_data() and use gpiochip_get_data(gc) to get
-a data pointer from the gpiochip.
-
-> +static int altr_a10sr_gpio_get(struct gpio_chip *gc, unsigned int nr)
-> +{
-> +       struct altr_a10sr_gpio *gpio = to_altr_a10sr_gpio(gc);
-
-So this becomes
-struct altr_a10sr_gpio *gpio = gpiochip_get_data(gc);
-
-> +       int ret;
-> +       unsigned char reg = ALTR_A10SR_LED_RD_REG + ALTR_A10SR_REG_OFFSET(nr);
-> +
-> +       ret = altr_a10sr_reg_read(gpio->a10sc, reg);
-> +
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (ret & (1 << ALTR_A10SR_REG_BIT(nr)))
-> +               return 1;
-
-Do this instead:
-
-return !!(ret & (1 << ALTR_A10SR_REG_BIT(nr)))
-
-It raises the question whether ALTR_A10SR_REG_BIT
-is just a reimplementation of the BIT() macro from
-<linux/bitops.h>, please check this.
-
-> +static int altr_a10sr_gpio_direction_input(struct gpio_chip *gc,
-> +                                          unsigned int nr)
-> +{
-> +       if ((nr >= ALTR_A10SR_IN_VALID_RANGE_LO) &&
-> +           (nr <= ALTR_A10SR_IN_VALID_RANGE_HI))
-> +               return 0;
-> +       return -EINVAL;
-> +}
-> +
-> +static int altr_a10sr_gpio_direction_output(struct gpio_chip *gc,
-> +                                           unsigned int nr, int value)
-> +{
-> +       if ((nr >= ALTR_A10SR_OUT_VALID_RANGE_LO) &&
-> +           (nr <= ALTR_A10SR_OUT_VALID_RANGE_HI))
-> +               return 0;
-> +       return -EINVAL;
-> +}
-
-Does this mean that all lines are *always* input and output
-at the same time?
-
-If there is no .set_direction() callback and all lines are both
-input and output it kind of implies that all lines are also
-implicitly open drain do you agree?
-
-Please check:
-- If there is really no direction setting anywhere
-- For example if some lines are hardwired as input and
-  some lines are hardwired as output
-- If that is not the case, verify that all lines are really
-  open drain, they should be if all are both input and
-  output at the same time.
-
-> +       ret = gpiochip_add(&gpio->gp);
-> +       if (ret < 0) {
-> +               dev_err(&pdev->dev, "Could not register gpiochip, %d\n", ret);
-> +               return ret;
-> +       }
-
-Use devm_gpiochip_add_data() instead.
-
-Yours,
-Linus Walleij
+>>>> +Example:
+>>>> +
+>>>> +        a10-sr: a10-sr@0 {
+>>>
+>>> Nodes should be named after their device 'type'.
+>>>
+>>> Does this device really start a address 0?
+>>
+>> OK. If I understand, this should be named after mfd then?
+>
+> MFDs are usually a little tougher, but in your case I think it should
+> be "resource-manager" or similar.
+>
+>>>> +		compatible = "altr,altr-a10sr";
+>>>> +		reg = <0>;
+>>>> +		spi-max-frequency = <100000>;
+>>>> +
+>>>> +		a10sr_gpio: a10sr_gpio {
+>>>
+>>> Device type only please.
+>>
+>> And this would be a gpio?
+>
+> Exactly.
+>
