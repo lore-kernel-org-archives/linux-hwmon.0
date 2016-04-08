@@ -1,102 +1,73 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f47.google.com ([74.125.82.47]:34471 "EHLO
-	mail-wm0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1758471AbcDAIOb (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Apr 2016 04:14:31 -0400
-Received: by mail-wm0-f47.google.com with SMTP id p65so15256596wmp.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 01 Apr 2016 01:14:30 -0700 (PDT)
-Date: Fri, 1 Apr 2016 09:14:26 +0100
-From: Lee Jones <lee.jones@linaro.org>
-To: Thor Thayer <tthayer@opensource.altera.com>
-Cc: linus.walleij@linaro.org, gnurou@gmail.com, jdelvare@suse.com,
-	linux@roeck-us.net, robh+dt@kernel.org, pawell.moll@arm.com,
-	mark.rutland@arm.com, ijc+devicetree@hellion.org.uk,
-	dinguyen@opensource.altera.com, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource
- Chip bindings
-Message-ID: <20160401081426.GS3323@x1>
-References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
- <1459278791-3646-2-git-send-email-tthayer@opensource.altera.com>
- <20160330113532.GI3323@x1>
- <56FD6A8E.7030208@opensource.altera.com>
+Received: from mail-ob0-f169.google.com ([209.85.214.169]:32798 "EHLO
+	mail-ob0-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753110AbcDHLjI (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Apr 2016 07:39:08 -0400
+Received: by mail-ob0-f169.google.com with SMTP id tz8so65446632obc.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 Apr 2016 04:39:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <56FD6A8E.7030208@opensource.altera.com>
+In-Reply-To: <56FEDB62.1010308@opensource.altera.com>
+References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
+	<1459278791-3646-5-git-send-email-tthayer@opensource.altera.com>
+	<CACRpkda8VTDGVsRqbCs6ESeokA3t_p2X91FUNiqA7YM=F-JXBQ@mail.gmail.com>
+	<56FEDB62.1010308@opensource.altera.com>
+Date: Fri, 8 Apr 2016 13:39:06 +0200
+Message-ID: <CACRpkdZu6ODbDaf1QCn8URSoJp=h3qDt2tzxxhpQ2oVO8Mb=QQ@mail.gmail.com>
+Subject: Re: [RFC 4/8] gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
+From: Linus Walleij <linus.walleij@linaro.org>
+To: tthayer@opensource.altera.com
+Cc: Lee Jones <lee.jones@linaro.org>,
+	Alexandre Courbot <gnurou@gmail.com>, jdelvare@suse.com,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>, pawell.moll@arm.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	"ijc+devicetree@hellion.org.uk" <ijc+devicetree@hellion.org.uk>,
+	Dinh Nguyen <dinguyen@opensource.altera.com>,
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, 31 Mar 2016, Thor Thayer wrote:
-> On 03/30/2016 06:35 AM, Lee Jones wrote:
-> >On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
-> >
-> >>From: Thor Thayer <tthayer@opensource.altera.com>
+On Fri, Apr 1, 2016 at 10:34 PM, Thor Thayer
+<tthayer@opensource.altera.com> wrote:
+> On 04/01/2016 07:17 AM, Linus Walleij wrote:
 
-[...]
+>>> +struct altr_a10sr_gpio {
+>>> +       struct altr_a10sr *a10sc;
+>>> +       struct gpio_chip gp;
+>>> +};
+>>
+>> Add some kerneldoc.
+>
+> OK. To clarify, is this comment referring to the bindings document or
+> something different?
 
-> >>+The A10SR consists of this varied group of sub-devices:
-> >>+
-> >>+Device                   Description
-> >>+------                   ----------
-> >>+altr_a10sr_gpio          GPIO Controller
-> >>+altr_a10sr_hwmon         Hardware Monitor
-> >>+
-> >>+The LEDs are implemented entirely in the device tree using
-> >>+the gpio-led framework.
-> >
-> >This is a Linuxisum and should not live in DT bindings.
-> 
-> I was following the format of other mfd binding documents such as
-> Documentation/devicetree/bindings/mfd/da9055.txt so I'll need your
-> help understanding this.
-> 
-> I'm not familiar with the phrase Linuxisum. A Google search turns up
-> several threads referencing Linuxisum but I can't seem to find the
-> definition. One thread seems to imply that an existing driver such
-> as GPIO is a Linuxisum and should not be re-defined. Am I
-> understanding correctly?
+Document the data structure.
+Documentation/kernel-doc-nano-HOWTO.txt
 
-Linuxisum is a made up word.  Actually, it looks like I placed a
-superfluous 'u' in there, but I assume most people would get the gist.
-Some examples ending in "ism" which might push the point across are
-"colloquialism" and "feminism", where the "ism" can probably be taken
-to mean "pertaining to".  So in the example above, we might reasonably
-conclude that I meant "pertaining to Linux", which I did.
+>> Please check:
+>> - If there is really no direction setting anywhere
+>> - For example if some lines are hardwired as input and
+>>    some lines are hardwired as output
+>> - If that is not the case, verify that all lines are really
+>>    open drain, they should be if all are both input and
+>>    output at the same time.
+>>
+>
+> I see your point. I'll investigate how to do this properly for your 2nd
+> check above. Registers are hard-wired as input or output so I'll need to
+> handle this properly and is why I didn't implement the .set_direction
+> callback. Thanks for the explanation.
+>
+> In my case, there are 12 valid GPIOs out of the 16 bits (the first 4 bits
+> are unused). Bits 4-7 are output and bits 8-15 are inputs. I was using the
+> IN_VALID range for the inputs and the OUT_VALID range for the outputs.
 
-In other words "the gpio-led framework" is something we have in Linux,
-but might not exist in other OSes.  And considering DT is supposed to
-be OS agnostic and the documentation relevant to all OSes, you can not
-and should not document Linuxisms.
+It sounds like should implement direction_[input|output]() callbacks
+and just return 0 if the user is asking for the hardwired direction and return
+error if it tries to set an input-only to output and vice versa.
 
-> >>+Example:
-> >>+
-> >>+        a10-sr: a10-sr@0 {
-> >
-> >Nodes should be named after their device 'type'.
-> >
-> >Does this device really start a address 0?
-> 
-> OK. If I understand, this should be named after mfd then?
-
-MFDs are usually a little tougher, but in your case I think it should
-be "resource-manager" or similar.
-
-> >>+		compatible = "altr,altr-a10sr";
-> >>+		reg = <0>;
-> >>+		spi-max-frequency = <100000>;
-> >>+
-> >>+		a10sr_gpio: a10sr_gpio {
-> >
-> >Device type only please.
-> 
-> And this would be a gpio?
-
-Exactly.
-
--- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Yours,
+Linus Walleij
