@@ -1,65 +1,140 @@
-Return-path: <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (ads7828) Enable internal reference
-To: Akshay Bhat <akshay.bhat@timesys.com>
-References: <1461008873-17694-1-git-send-email-akshay.bhat@timesys.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <571633DF.7050101@roeck-us.net>
-Date: Tue, 19 Apr 2016 06:34:23 -0700
+From: Thor Thayer <tthayer@opensource.altera.com>
+To: linux-hwmon@vger.kernel.org
+Date: Fri, 15 Apr 2016 09:57:40 -0700
+Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource Chip bindings
+In-Reply-To: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
+Message-ID: <57111E8B.1040503@opensource.altera.com>
 MIME-Version: 1.0
-In-Reply-To: <1461008873-17694-1-git-send-email-akshay.bhat@timesys.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/18/2016 12:47 PM, Akshay Bhat wrote:
-> On ads7828 the internal reference defaults to off upon power up. When
-> using internal reference, it needs to be turned on and the voltage needs
-> to settle before normal conversion cycle can be started. Hence perform a
-> dummy read in the probe to enable the internal reference allowing the
-> voltage to settle before performing a normal read.
->
-> Without this fix, the first read from the ADC when using internal
-> reference always returns incorrect data.
->
-> Signed-off-by: Akshay Bhat <akshay.bhat@timesys.com>
 
-Applied (after fixing 'volatage' in the comment below).
+Hi Lee
 
-Thanks,
-Guenter
+On 03/30/2016 06:35 AM, Lee Jones wrote:
 
-> ---
->   drivers/hwmon/ads7828.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-> index 6c99ee7..b15c9bd 100644
-> --- a/drivers/hwmon/ads7828.c
-> +++ b/drivers/hwmon/ads7828.c
-> @@ -120,6 +120,7 @@ static int ads7828_probe(struct i2c_client *client,
->   	unsigned int vref_mv = ADS7828_INT_VREF_MV;
->   	bool diff_input = false;
->   	bool ext_vref = false;
-> +	unsigned int regval;
->
->   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
->   	if (!data)
-> @@ -154,6 +155,15 @@ static int ads7828_probe(struct i2c_client *client,
->   	if (!diff_input)
->   		data->cmd_byte |= ADS7828_CMD_SD_SE;
->
-> +	/*
-> +	 * Datasheet specifies internal reference volatage is disabled by
-> +	 * default. The internal reference voltage needs to be enabled and
-> +	 * voltage needs to settle before getting valid ADC data. So perform a
-> +	 * dummy read to enable the internal reference voltage.
-> +	 */
-> +	if (!ext_vref)
-> +		regmap_read(data->regmap, data->cmd_byte, &regval);
-> +
->   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
->   							   data,
->   							   ads7828_groups);
->
+On Tue, 29 Mar 2016, ttha...@opensource.altera.com wrote:
+
+
+From: Thor Thayer <ttha...@opensource.altera.com>
+To: linux-hwmon@vger.kernel.org
+
+The Altera Arria10 Devkit System Resource chip is a Multi-Function
+Device, it has two subdevices:
+      - GPIO
+      - HWMON
+
+This patch adds documentation for the Altera A10-SR DT bindings.
+
+Signed-off-by: Thor Thayer <ttha...@opensource.altera.com>
+---
+  .../devicetree/bindings/mfd/altera-a10sr.txt       |   35 ++++++++++++++++++++
+  1 file changed, 35 insertions(+)
+  create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+
+diff --git a/Documentation/devicetree/bindings/mfd/altera-a10sr.txt 
+b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+new file mode 100644
+index 0000000..564c761
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+@@ -0,0 +1,35 @@
++* Altera Arria10 Development Kit System Resource Chip
++
++Required parent device properties:
++- compatible : "altr,altr_a10sr"
++- spi-max-frequency : Maximum SPI frequency.
++- reg : the SPI Chip Select address for the Arria10 System Resource chip
+
+
+DT bindings are much easier to read in the following format:
+
+- compatible            : "altr,altr_a10sr"
+- spi-max-frequency     : Maximum SPI frequency.
+- reg                   : the SPI Chip Select address for the Arria10 System 
+Resource chip
+
+... also, sentences start with an uppercase char.
+
+
++The A10SR consists of this varied group of sub-devices:
++
++Device                   Description
++------                   ----------
++altr_a10sr_gpio          GPIO Controller
++altr_a10sr_hwmon         Hardware Monitor
++
++The LEDs are implemented entirely in the device tree using
++the gpio-led framework.
+
+
+This is a Linuxisum and should not live in DT bindings.
+
+
++Example:
++
++        a10-sr: a10-sr@0 {
+
+
+Nodes should be named after their device 'type'.
+
+Does this device really start a address 0?
+
+
+
+I see in the documentation on device trees there are a number of 
+categories I can use. GPIO is easy because it is one of the categories 
+but I'm not sure about the new device I'm adding since the a10sr is a 
+new device.
+
+
+I believe I should only call out the name and address on the SPI bus like:
+
+a10sr@0 {
+
+
++               compatible = "altr,altr-a10sr";
++               reg = <0>;
++               spi-max-frequency = <100000>;
++
++               a10sr_gpio: a10sr_gpio {
+
+
+Device type only please.
+
+
+
+and this would be a10sr_gpio: gpio-controller {
+
+Does that seem correct?
+
+
++                       compatible = "altr,a10sr-gpio";
++                       gpio-controller;
++                       #gpio-cells = <2>;
++                       ngpios = <16>;
++               };
++
++               a10sr_hwmon: a10sr_hwmon {
+
+
+Device type only please.
+
+I need to revisit where this will live (hwmon does not seem to be the 
+correct place) so it will change but I can follow the format above if it 
+is correct.
+
+
+Thanks for reviewing.
+
+
++                       compatible = "altr,a10sr-hwmon";
++               };
++       };
+
+
+
+--
+To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+the body of a message to majord...@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
