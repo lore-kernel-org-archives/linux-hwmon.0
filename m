@@ -1,437 +1,119 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bear.ext.ti.com ([192.94.94.41]:53614 "EHLO bear.ext.ti.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S932106AbcDSPCv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 19 Apr 2016 11:02:51 -0400
-Subject: Re: [PATCH 1/1] hwmon: Add support for INA3221 Triple Current/Voltage
- Monitors
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>
-References: <1460407827-29177-1-git-send-email-afd@ti.com>
- <57163C1C.1060201@roeck-us.net>
-CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-From: "Andrew F. Davis" <afd@ti.com>
-Message-ID: <57164869.8000004@ti.com>
-Date: Tue, 19 Apr 2016 10:02:01 -0500
+Return-path: <tthayer@opensource.altera.com>
+Reply-To: <tthayer@opensource.altera.com>
+Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource
+ Chip bindings
+References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
+ <1459278791-3646-2-git-send-email-tthayer@opensource.altera.com>
+ <20160330113532.GI3323@x1> <57111E8B.1040503@opensource.altera.com>
+ <20160418074540.GB3346@x1> <5714F942.5040309@opensource.altera.com>
+ <20160419072358.GB3222@x1>
+To: Lee Jones <lee.jones@linaro.org>
+CC: <linus.walleij@linaro.org>, <gnurou@gmail.com>, <jdelvare@suse.com>,
+	<linux@roeck-us.net>, <robh+dt@kernel.org>, <pawel.moll@arm.com>,
+	<mark.rutland@arm.com>, <ijc+devicetree@hellion.org.uk>,
+	<dinguyen@opensource.altera.com>, <linux-gpio@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+From: Thor Thayer <tthayer@opensource.altera.com>
+Message-ID: <571642DA.2060903@opensource.altera.com>
+Date: Tue, 19 Apr 2016 09:38:18 -0500
 MIME-Version: 1.0
-In-Reply-To: <57163C1C.1060201@roeck-us.net>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <20160419072358.GB3222@x1>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/19/2016 09:09 AM, Guenter Roeck wrote:
-> On 04/11/2016 01:50 PM, Andrew F. Davis wrote:
->> Add support for the the INA3221 26v capable, Triple channel,
->> Bi-Directional, Zero-Drift, Low-/High-Side, Current/Voltage Monitor
->> with I2C interface.
+
+
+On 04/19/2016 02:23 AM, Lee Jones wrote:
+> On Mon, 18 Apr 2016, Thor Thayer wrote:
+>
+>> Hi Lee,
 >>
->> Signed-off-by: Andrew F. Davis <afd@ti.com>
->> ---
->>   Documentation/hwmon/ina3221 |  32 ++++
->>   drivers/hwmon/Kconfig       |  11 ++
->>   drivers/hwmon/Makefile      |   1 +
->>   drivers/hwmon/ina3221.c     | 398
->> ++++++++++++++++++++++++++++++++++++++++++++
->>   4 files changed, 442 insertions(+)
->>   create mode 100644 Documentation/hwmon/ina3221
->>   create mode 100644 drivers/hwmon/ina3221.c
+>> On 04/18/2016 02:45 AM, Lee Jones wrote:
+>>> On Fri, 15 Apr 2016, Thor Thayer wrote:
+>>>> On 03/30/2016 06:35 AM, Lee Jones wrote:
+>>>>> On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
+>>>>>
+>>>>>> From: Thor Thayer <tthayer@opensource.altera.com>
+>>>>>>
+>>>>>> The Altera Arria10 Devkit System Resource chip is a Multi-Function
+>>>>>> Device, it has two subdevices:
+>>>>>>       - GPIO
+>>>>>>       - HWMON
+>>>>>>
+>>>>>> This patch adds documentation for the Altera A10-SR DT bindings.
+>>>>>>
+>>>>>> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
+>>>>>> ---
+>>>>>>   .../devicetree/bindings/mfd/altera-a10sr.txt       |   35 ++++++++++++++++++++
+>>>>>>   1 file changed, 35 insertions(+)
+>>>>>>   create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/mfd/altera-a10sr.txt b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+>>>>>> new file mode 100644
+>>>>>> index 0000000..564c761
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+>>>>>> @@ -0,0 +1,35 @@
+>>>>>> +* Altera Arria10 Development Kit System Resource Chip
+>>>>>> +
+>>>>>> +Required parent device properties:
+>>>>>> +- compatible : "altr,altr_a10sr"
+>>>>>> +- spi-max-frequency : Maximum SPI frequency.
+>>>>>> +- reg : the SPI Chip Select address for the Arria10 System Resource chip
+>>>
+>>> [...]
+>>>
+>>>>>> +		a10sr_hwmon: a10sr_hwmon {
+>>>>>
+>>>>> Device type only please.
+>>>>>
+>>>> I need to revisit where this will live (hwmon does not seem to be
+>>>> the correct place) so it will change but I can follow the format
+>>>> above if it is correct.
+>>>
+>>> BTW, "hwmon" is a subsystem in Linux, therefore is a Linuxism and is
+>>> not allowed in DT.  What does the device *actually* do?
+>>>
 >>
->> diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
->> new file mode 100644
->> index 0000000..3de3814
->> --- /dev/null
->> +++ b/Documentation/hwmon/ina3221
->> @@ -0,0 +1,32 @@
->> +Kernel driver ina3221
->> +=====================
->> +
->> +Supported chips:
->> +  * Texas Instruments INA3221
->> +    Prefix: 'ina3221'
->> +    Addresses: I2C 0x40 - 0x43
->> +    Datasheet: Publicly available at the Texas Instruments website
->> +               http://www.ti.com/
->> +
->> +Author: Andrew F. Davis <afd@ti.com>
->> +
->> +Description
->> +-----------
->> +
->> +The Texas Instruments INA3221 monitors voltage, current, and power on
->> the high
->> +side of up to three D.C. power supplies. The INA3221 monitors both
->> shunt drop
->> +and supply voltage, with programmable conversion times and averaging,
->> current
->> +and power are calculated host-side from these.
->> +
->> +Sysfs entries
->> +-------------
->> +
->> +in[012]_input           Bus voltages(mV) for channels 1, 2, and 3
->> respectively
->> +in[345]_input           Shunt voltages(mV) for channels 1, 2, and 3
->> respectively
->> +curr[012]_input         Current(mA) measurement for channels 1, 2,
->> and 3 respectively
-> 
-> Numbering for currents is [123], not [012].
-> 
-
-Okay, I'm guessing I should then change in to match?
-
->> +power[012]_input        Power(uW) measurement for channels 1, 2, and
->> 3 respectively
-> 
-> hwmon only reports what is there, and doesn't do calculations. The chip
-> doesn't report
-> the power, so please drop the power attributes.
-> 
-
-Sure
-
->> +shunt[012]_resistor     Shunt resistance(uOhm) for channels 1, 2, and
->> 3 respectively
-> 
-> This should be a backup, if neither devicetree nor platform data are
-> provided,
-> not a primary means to provide the shunt resistor value. Also, there
-> should be a default,
-> to make sure the driver provides useful data even if nothing is configured.
-> See ina2xx.c for an example.
-> 
-
-I'll add DT support for this.
-
->> +critical[012]_alarm     Critical alert voltage(mV) setting, activated
->> when the
->> +                        respective shunt voltage is above this value.
->> +warning[012]_alarm      Warning alert voltage(mV) setting, activated
->> when the
->> +                        respective shunt voltage average is above
->> this value.
-> 
-> Alarm attributes report the alarm status, not voltages. Use in[012]_max and
-> in[012]_crit attributes to set the limits. Report the alarm status with
-> in[012]_max_alarm and in[012]_crit_alarm (from register 0x0f, bit 9-7 and
-> 5-3).
-> 
-
-Will fix.
-
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 5c2d13a..de08242 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1503,6 +1503,17 @@ config SENSORS_INA2XX
->>         This driver can also be built as a module.  If so, the module
->>         will be called ina2xx.
+>> OK. I'll be careful not to introduce the Linux subsystem name.
 >>
->> +config SENSORS_INA3221
->> +    tristate "Texas Instruments INA3221 Triple Power Monitor"
->> +    depends on I2C
->> +    select REGMAP_I2C
->> +    help
->> +      If you say yes here you get support for  the TI INA3221 Triple
->> Power
->> +      Monitor.
->> +
->> +      This driver can also be built as a module.  If so, the module
->> +      will be called ina3221.
->> +
->>   config SENSORS_TC74
->>       tristate "Microchip TC74"
->>       depends on I2C
->> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->> index 58cc3ac..83e8ab0 100644
->> --- a/drivers/hwmon/Makefile
->> +++ b/drivers/hwmon/Makefile
->> @@ -77,6 +77,7 @@ obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
->>   obj-$(CONFIG_SENSORS_IIO_HWMON) += iio_hwmon.o
->>   obj-$(CONFIG_SENSORS_INA209)    += ina209.o
->>   obj-$(CONFIG_SENSORS_INA2XX)    += ina2xx.o
->> +obj-$(CONFIG_SENSORS_INA3221)    += ina3221.o
->>   obj-$(CONFIG_SENSORS_IT87)    += it87.o
->>   obj-$(CONFIG_SENSORS_JC42)    += jc42.o
->>   obj-$(CONFIG_SENSORS_JZ4740)    += jz4740-hwmon.o
->> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
->> new file mode 100644
->> index 0000000..763e23b
->> --- /dev/null
->> +++ b/drivers/hwmon/ina3221.c
->> @@ -0,0 +1,398 @@
->> +/*
->> + * INA3221 Triple Current/Voltage Monitor
->> + *
->> + * Copyright (C) 2016 Texas Instruments Incorporated -
->> http://www.ti.com/
->> + *    Andrew F. Davis <afd@ti.com>
->> + *
->> + * This program is free software; you can redistribute it and/or modify
->> + * it under the terms of the GNU General Public License version 2 as
->> + * published by the Free Software Foundation.
->> + *
->> + * This program is distributed in the hope that it will be useful, but
->> + * WITHOUT ANY WARRANTY; without even the implied warranty of
->> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
->> + * General Public License for more details.
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/module.h>
->> +#include <linux/regmap.h>
->> +
->> +#include <linux/hwmon.h>
->> +#include <linux/hwmon-sysfs.h>
->> +
->> +#define INA3221_DRIVER_NAME        "ina3221"
->> +
->> +#define INA3221_CONFIG            0x00
->> +#define INA3221_SHUNT1            0x01
->> +#define INA3221_BUS1            0x02
->> +#define INA3221_SHUNT2            0x03
->> +#define INA3221_BUS2            0x04
->> +#define INA3221_SHUNT3            0x05
->> +#define INA3221_BUS3            0x06
->> +#define INA3221_CRIT1            0x07
->> +#define INA3221_WARN1            0x08
->> +#define INA3221_CRIT2            0x09
->> +#define INA3221_WARN2            0x0a
->> +#define INA3221_CRIT3            0x0b
->> +#define INA3221_WARN3            0x0c
->> +#define INA3221_SHUNT_SUM        0x0d
->> +#define INA3221_SHUNT_SUM_LIMIT        0x0e
->> +#define INA3221_MASK_ENABLE        0x0f
->> +#define INA3221_POWERV_HLIMIT        0x10
->> +#define INA3221_POWERV_LLIMIT        0x11
->> +
->> +#define INA3221_CONFIG_MODE_SHUNT    BIT(1)
->> +#define INA3221_CONFIG_MODE_BUS        BIT(2)
->> +#define INA3221_CONFIG_MODE_CONTINUOUS    BIT(3)
->> +
->> +enum ina3221_fields {
->> +    /* Configuration */
->> +    F_MODE, F_SHUNT_CT, F_BUS_CT, F_AVG,
->> +    F_CHAN3_EN, F_CHAN2_EN, F_CHAN1_EN, F_RST,
->> +
->> +    /* sentinel */
->> +    F_MAX_FIELDS
->> +};
->> +
->> +static const struct reg_field ina3221_reg_fields[] = {
->> +    [F_MODE]    = REG_FIELD(INA3221_CONFIG, 0, 2),
->> +    [F_SHUNT_CT]    = REG_FIELD(INA3221_CONFIG, 3, 5),
->> +    [F_BUS_CT]    = REG_FIELD(INA3221_CONFIG, 6, 8),
->> +    [F_AVG]        = REG_FIELD(INA3221_CONFIG, 9, 11),
->> +    [F_CHAN3_EN]    = REG_FIELD(INA3221_CONFIG, 12, 12),
->> +    [F_CHAN2_EN]    = REG_FIELD(INA3221_CONFIG, 13, 13),
->> +    [F_CHAN1_EN]    = REG_FIELD(INA3221_CONFIG, 14, 14),
->> +    [F_RST]        = REG_FIELD(INA3221_CONFIG, 15, 15),
->> +};
->> +
->> +enum ina3221_channels {
->> +    INA3221_CHANNEL1,
->> +    INA3221_CHANNEL2,
->> +    INA3221_CHANNEL3,
->> +    INA3221_NUM_CHANNELS
->> +};
->> +
->> +static const int shunt_registers[] = {
->> +    [INA3221_CHANNEL1] = INA3221_SHUNT1,
->> +    [INA3221_CHANNEL2] = INA3221_SHUNT2,
->> +    [INA3221_CHANNEL3] = INA3221_SHUNT3,
->> +};
->> +
->> +static const int bus_registers[] = {
->> +    [INA3221_CHANNEL1] = INA3221_BUS1,
->> +    [INA3221_CHANNEL2] = INA3221_BUS2,
->> +    [INA3221_CHANNEL3] = INA3221_BUS3,
->> +};
->> +
->> +/**
->> + * struct ina3221_data - device specific information
->> + * @dev: Device structure
->> + * @regmap: Register map of the device
->> + * @fields: Register fields of the device
->> + */
->> +struct ina3221_data {
->> +    struct device *dev;
->> +    struct regmap *regmap;
->> +    struct regmap_field *fields[F_MAX_FIELDS];
->> +    unsigned int shunt_resistors[INA3221_NUM_CHANNELS];
->> +};
->> +
->> +static int ina3221_read_value(struct ina3221_data *ina, unsigned int
->> reg,
->> +                  unsigned int *val)
->> +{
->> +    unsigned int regval;
->> +    int ret;
->> +
->> +    ret = regmap_read(ina->regmap, reg, &regval);
->> +    if (ret)
->> +        return ret;
->> +
->> +    *val = sign_extend32(regval >> 3, 12);
->> +
->> +    return 0;
->> +}
->> +
->> +static ssize_t ina3221_show_voltage(struct device *dev,
->> +                    struct device_attribute *attr, char *buf)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int reg = sd_attr->index;
->> +    int val, voltage_mv, ret;
->> +
->> +    ret = ina3221_read_value(ina, reg, &val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (reg == INA3221_BUS1 ||
->> +        reg == INA3221_BUS2 ||
->> +        reg == INA3221_BUS3)
->> +        voltage_mv = val * 8;
->> +    else
->> +        voltage_mv = DIV_ROUND_CLOSEST(val * 40, 1000);
->> +
->> +    return snprintf(buf, PAGE_SIZE, "%d\n", voltage_mv);
->> +}
->> +
->> +static ssize_t ina3221_set_voltage(struct device *dev,
->> +                   struct device_attribute *attr,
->> +                   const char *buf, size_t count)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int reg = sd_attr->index;
->> +    int val, ret;
->> +
->> +    ret = kstrtoint(buf, 10, &val);
->> +    if (ret)
->> +        return ret;
->> +
-> Please clamp the value to valid voltage range.
-> 
+>> This module indicates whether the power supplies are at the correct
+>> voltage. It uses a boolean instead of giving an actual voltage value
+>> as required by HWMON. In other words it is a comparator instead of
+>> an Analog-to-Digital Converter.
+>>
+>> I could call it a power supply supervisor or voltage status monitor
+>> but it only acts in a passive role. There is no output to trigger an
+>> error - only polling, so supervisor doesn't seem like a good name.
+>>
+>> Maybe something like this?
+>>
+>> 	power_supply_status {
+>> 		compatible = "altr,a10sr-hwmon";
+>> 	}
+>>
+>> Thanks for reviewing and helping me figure out the device tree naming.
+>
+> Does it have its own address space?  How complex is the device?  Not
+> very, by the sounds of it.  In which case, does it really need its own
+> driver?
+>
+Yes, you are correct that the voltage status is not very complex but I'd 
+need a driver to expose these signals.
 
-ACK
+I initially started with an MFD because it was similar to the other MFD 
+drivers. The device has GPI, GPO, voltage status, device enables, device 
+present indications, and device resets.
 
->> +    val = DIV_ROUND_CLOSEST(val, 40000) << 3;
->> +
->> +    ret = regmap_write(ina->regmap, reg, val);
->> +    if (ret)
->> +        return ret;
->> +
->> +    return count;
->> +}
->> +
->> +static ssize_t ina3221_show_current(struct device *dev,
->> +                    struct device_attribute *attr, char *buf)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int channel = sd_attr->index;
->> +    unsigned int shunt_reg, resistance_uo;
->> +    int val, current_ma, shunt_voltage_mv, ret;
->> +
->> +    shunt_reg = shunt_registers[channel];
->> +    resistance_uo = ina->shunt_resistors[channel];
->> +    if (resistance_uo == 0) {
->> +        current_ma = 0;
->> +        goto resistance_is_futile;
-> 
-> Please no funny label names.
+There is a discussion now on where the voltage status driver should live 
+(iio/ , hwmon/, misc/). It isn't clear to me where the device enables, 
+device present indications and voltage status would go. I'm leaning 
+toward a driver in the misc/ directory that would cover all of these. In 
+that case, this wouldn't be a MFD driver.
 
-http://i.imgur.com/2cZhiM4.jpg :)
-
-> Also, just make sure that shunt_resistors[]
-> is never 0 to avoid having to check the value here.
-> 
-
-That works, will fix.
-
->> +    }
->> +
->> +    ret = ina3221_read_value(ina, shunt_reg, &val);
->> +    if (ret)
->> +        return ret;
->> +    shunt_voltage_mv = val * 40000;
->> +
->> +    current_ma = DIV_ROUND_CLOSEST(shunt_voltage_mv, resistance_uo);
->> +resistance_is_futile:
->> +    return snprintf(buf, PAGE_SIZE, "%d\n", current_ma);
->> +}
->> +
->> +static ssize_t ina3221_show_power(struct device *dev,
->> +                  struct device_attribute *attr, char *buf)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int channel = sd_attr->index;
->> +    unsigned int shunt_reg, bus_reg, resistance_uo;
->> +    int val, power_uw, current_ma, shunt_voltage_mv, bus_voltage_mv,
->> ret;
->> +
->> +    shunt_reg = shunt_registers[channel];
->> +    bus_reg = bus_registers[channel];
->> +    resistance_uo = ina->shunt_resistors[channel];
->> +    if (resistance_uo == 0) {
->> +        power_uw = 0;
->> +        goto sorry_i_couldnt_resist;
->> +    }
->> +
->> +    ret = ina3221_read_value(ina, shunt_reg, &val);
->> +    if (ret)
->> +        return ret;
->> +    shunt_voltage_mv = val * 40000;
->> +
->> +    current_ma = DIV_ROUND_CLOSEST(shunt_voltage_mv, resistance_uo);
->> +
->> +    ret = ina3221_read_value(ina, bus_reg, &val);
->> +    if (ret)
->> +        return ret;
->> +    bus_voltage_mv = val * 8;
->> +
->> +    power_uw = current_ma * bus_voltage_mv;
->> +sorry_i_couldnt_resist:
->> +    return snprintf(buf, PAGE_SIZE, "%d\n", power_uw);
->> +}
->> +
->> +static ssize_t ina3221_show_shunt(struct device *dev,
->> +                  struct device_attribute *attr, char *buf)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int channel = sd_attr->index;
->> +    unsigned int resistance_uo;
->> +
->> +    resistance_uo = ina->shunt_resistors[channel];
->> +
->> +    return snprintf(buf, PAGE_SIZE, "%d\n", resistance_uo);
->> +}
->> +
->> +static ssize_t ina3221_set_shunt(struct device *dev,
->> +                 struct device_attribute *attr,
->> +                 const char *buf, size_t count)
->> +{
->> +    struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->> +    struct ina3221_data *ina = dev_get_drvdata(dev);
->> +    unsigned int channel = sd_attr->index;
->> +    int ret;
->> +
->> +    ret = kstrtouint(buf, 10, &ina->shunt_resistors[channel]);
->> +    if (ret)
->> +        return ret;
->> +
-> Please don't blindly accept values here. Wrong values should be rejected.
-> See ina2xx.c for an example.
-> 
-
-I'll fix that and post v2 here shortly.
+Any thoughts or suggestions?
 
 Thanks,
-Andrew
+
+Thor
