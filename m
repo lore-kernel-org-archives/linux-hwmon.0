@@ -1,49 +1,65 @@
-Return-Path: <linux@roeck-us.net>
-Subject: Re: [PATCH v3 00/25] hwmon: (it87) Various enhancements and fixes
-To: Jean Delvare <jdelvare@suse.de>
-References: <1453860229-23614-1-git-send-email-patchwork@patchwork.roeck-us.net>
- <loom.20160409T113101-533@post.gmane.org> <57091AAF.7030900@roeck-us.net>
- <20160412092125.17ab498c@endymion>
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- linux-hwmon@vger.kernel.org
+Return-path: <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (ads7828) Enable internal reference
+To: Akshay Bhat <akshay.bhat@timesys.com>
+References: <1461008873-17694-1-git-send-email-akshay.bhat@timesys.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <570CF43E.5050500@roeck-us.net>
-Date: Tue, 12 Apr 2016 06:12:30 -0700
+Message-ID: <571633DF.7050101@roeck-us.net>
+Date: Tue, 19 Apr 2016 06:34:23 -0700
 MIME-Version: 1.0
-In-Reply-To: <20160412092125.17ab498c@endymion>
+In-Reply-To: <1461008873-17694-1-git-send-email-akshay.bhat@timesys.com>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/12/2016 12:21 AM, Jean Delvare wrote:
-> Hi Guenter,
+On 04/18/2016 12:47 PM, Akshay Bhat wrote:
+> On ads7828 the internal reference defaults to off upon power up. When
+> using internal reference, it needs to be turned on and the voltage needs
+> to settle before normal conversion cycle can be started. Hence perform a
+> dummy read in the probe to enable the internal reference allowing the
+> voltage to settle before performing a normal read.
 >
-> On Sat, 9 Apr 2016 08:07:27 -0700, Guenter Roeck wrote:
->> Hi Martin,
->>
->> On 04/09/2016 02:33 AM, Martin Blumenstingl wrote:
->>> Guenter Roeck <patchwork <at> patchwork.roeck-us.net> writes:
->>>> From: Guenter Roeck <linux <at> roeck-us.net>
->>>>
->>>> This patch series builds on top of v4.5-rc1. The series was tested on
->>>> a system with IT8728F. Out-of-kernel versions were tested by various
->>>> people using a github repository.
->>> I've been running the whole series on top of v4.5 for the past two
->>> weeks on a system with IT8628E. I did not find any problems so far.
->>
->> thanks a lot for the feedback. It would be great if you can send me
->> an official Tested-by: that I can add into the series (or a permission
->> to do so).
->>
->> With the experience gained with the off-list driver, I think this series
->> is good to go for upstream, even without code review feedback. Otherwise
->> I fear we'll never get there. Jean, any objections ?
+> Without this fix, the first read from the ADC when using internal
+> reference always returns incorrect data.
 >
-> I am sorry that I do not have the time to review this patch series. But
-> I trust your judgment and I have no objection, if you think the series
-> is good to go upstream then please push it there.
->
-No need to be sorry. We are all busy.
+> Signed-off-by: Akshay Bhat <akshay.bhat@timesys.com>
 
-Thanks!
+Applied (after fixing 'volatage' in the comment below).
+
+Thanks,
 Guenter
+
+> ---
+>   drivers/hwmon/ads7828.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index 6c99ee7..b15c9bd 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -120,6 +120,7 @@ static int ads7828_probe(struct i2c_client *client,
+>   	unsigned int vref_mv = ADS7828_INT_VREF_MV;
+>   	bool diff_input = false;
+>   	bool ext_vref = false;
+> +	unsigned int regval;
+>
+>   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
+>   	if (!data)
+> @@ -154,6 +155,15 @@ static int ads7828_probe(struct i2c_client *client,
+>   	if (!diff_input)
+>   		data->cmd_byte |= ADS7828_CMD_SD_SE;
+>
+> +	/*
+> +	 * Datasheet specifies internal reference volatage is disabled by
+> +	 * default. The internal reference voltage needs to be enabled and
+> +	 * voltage needs to settle before getting valid ADC data. So perform a
+> +	 * dummy read to enable the internal reference voltage.
+> +	 */
+> +	if (!ext_vref)
+> +		regmap_read(data->regmap, data->cmd_byte, &regval);
+> +
+>   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+>   							   data,
+>   							   ads7828_groups);
+>
