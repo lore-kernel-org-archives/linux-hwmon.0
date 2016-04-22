@@ -1,119 +1,57 @@
 Return-path: <tthayer@opensource.altera.com>
-Reply-To: <tthayer@opensource.altera.com>
-Subject: Re: [RFC 1/8] dt-bindings: mfd: Add Altera Arria10 System Resource
- Chip bindings
-References: <1459278791-3646-1-git-send-email-tthayer@opensource.altera.com>
- <1459278791-3646-2-git-send-email-tthayer@opensource.altera.com>
- <20160330113532.GI3323@x1> <57111E8B.1040503@opensource.altera.com>
- <20160418074540.GB3346@x1> <5714F942.5040309@opensource.altera.com>
- <20160419072358.GB3222@x1>
-To: Lee Jones <lee.jones@linaro.org>
-CC: <linus.walleij@linaro.org>, <gnurou@gmail.com>, <jdelvare@suse.com>,
-	<linux@roeck-us.net>, <robh+dt@kernel.org>, <pawel.moll@arm.com>,
-	<mark.rutland@arm.com>, <ijc+devicetree@hellion.org.uk>,
-	<dinguyen@opensource.altera.com>, <linux-gpio@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-From: Thor Thayer <tthayer@opensource.altera.com>
-Message-ID: <571642DA.2060903@opensource.altera.com>
-Date: Tue, 19 Apr 2016 09:38:18 -0500
+From: <tthayer@opensource.altera.com>
+To: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+	<pawel.moll@arm.com>, <mark.rutland@arm.com>,
+	<ijc+devicetree@hellion.org.uk>, <dinguyen@opensource.altera.com>
+CC: <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, Thor Thayer <tthayer@opensource.altera.com>
+Subject: [PATCH 00/11] Addition of Altera Arria10 System Resource Chip
+Date: Fri, 22 Apr 2016 10:33:28 -0500
+Message-ID: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
 MIME-Version: 1.0
-In-Reply-To: <20160419072358.GB3222@x1>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
+From: Thor Thayer <tthayer@opensource.altera.com>
 
+This patch series adds the SPI MultiFunction Device for the Altera System
+Resource Chip for the Arria10 Developement Kit. The MFD implements GPIO
+expansion and power supply alarms on an Altera MAX5.
 
-On 04/19/2016 02:23 AM, Lee Jones wrote:
-> On Mon, 18 Apr 2016, Thor Thayer wrote:
->
->> Hi Lee,
->>
->> On 04/18/2016 02:45 AM, Lee Jones wrote:
->>> On Fri, 15 Apr 2016, Thor Thayer wrote:
->>>> On 03/30/2016 06:35 AM, Lee Jones wrote:
->>>>> On Tue, 29 Mar 2016, tthayer@opensource.altera.com wrote:
->>>>>
->>>>>> From: Thor Thayer <tthayer@opensource.altera.com>
->>>>>>
->>>>>> The Altera Arria10 Devkit System Resource chip is a Multi-Function
->>>>>> Device, it has two subdevices:
->>>>>>       - GPIO
->>>>>>       - HWMON
->>>>>>
->>>>>> This patch adds documentation for the Altera A10-SR DT bindings.
->>>>>>
->>>>>> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
->>>>>> ---
->>>>>>   .../devicetree/bindings/mfd/altera-a10sr.txt       |   35 ++++++++++++++++++++
->>>>>>   1 file changed, 35 insertions(+)
->>>>>>   create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/mfd/altera-a10sr.txt b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
->>>>>> new file mode 100644
->>>>>> index 0000000..564c761
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
->>>>>> @@ -0,0 +1,35 @@
->>>>>> +* Altera Arria10 Development Kit System Resource Chip
->>>>>> +
->>>>>> +Required parent device properties:
->>>>>> +- compatible : "altr,altr_a10sr"
->>>>>> +- spi-max-frequency : Maximum SPI frequency.
->>>>>> +- reg : the SPI Chip Select address for the Arria10 System Resource chip
->>>
->>> [...]
->>>
->>>>>> +		a10sr_hwmon: a10sr_hwmon {
->>>>>
->>>>> Device type only please.
->>>>>
->>>> I need to revisit where this will live (hwmon does not seem to be
->>>> the correct place) so it will change but I can follow the format
->>>> above if it is correct.
->>>
->>> BTW, "hwmon" is a subsystem in Linux, therefore is a Linuxism and is
->>> not allowed in DT.  What does the device *actually* do?
->>>
->>
->> OK. I'll be careful not to introduce the Linux subsystem name.
->>
->> This module indicates whether the power supplies are at the correct
->> voltage. It uses a boolean instead of giving an actual voltage value
->> as required by HWMON. In other words it is a comparator instead of
->> an Analog-to-Digital Converter.
->>
->> I could call it a power supply supervisor or voltage status monitor
->> but it only acts in a passive role. There is no output to trigger an
->> error - only polling, so supervisor doesn't seem like a good name.
->>
->> Maybe something like this?
->>
->> 	power_supply_status {
->> 		compatible = "altr,a10sr-hwmon";
->> 	}
->>
->> Thanks for reviewing and helping me figure out the device tree naming.
->
-> Does it have its own address space?  How complex is the device?  Not
-> very, by the sounds of it.  In which case, does it really need its own
-> driver?
->
-Yes, you are correct that the voltage status is not very complex but I'd 
-need a driver to expose these signals.
+Thor Thayer (11):
+  dt-bindings: mfd: Add Altera Arria10 System Resource Chip bindings
+  MAINTAINERS: Add Altera Arria10 System Resource Chip
+  mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource Chip
+  gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
+  ARM: socfpga: dts: Add SPI Master1 for Arria10 System Resource chip
+  ARM: socfpga: dts: Add Devkit A10-SR fields for Arria10
+  ARM: socfpga: dts: Add LED framework to A10-SR GPIO
+  dt-bindings: mfd: Add Altera A10-SR power supply alarm
+  mfd: altr_a10sr: Add Altera A10-SR power supply alarms
+  hwmon: Add Altera A10-SR power supply alarms
+  ARM: socfpga: dts: Add A10-SR Devkit power supply alarms
 
-I initially started with an MFD because it was similar to the other MFD 
-drivers. The device has GPI, GPO, voltage status, device enables, device 
-present indications, and device resets.
+ .../devicetree/bindings/mfd/altera-a10sr.txt       |   43 ++++
+ MAINTAINERS                                        |    8 +
+ arch/arm/boot/dts/socfpga_arria10.dtsi             |   15 ++
+ arch/arm/boot/dts/socfpga_arria10_socdk.dtsi       |   44 ++++
+ drivers/gpio/Kconfig                               |    8 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-altera-a10sr.c                   |  140 +++++++++++++
+ drivers/hwmon/Kconfig                              |    9 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/altera-a10sr-hwmon.c                 |  215 ++++++++++++++++++++
+ drivers/mfd/Kconfig                                |   11 +
+ drivers/mfd/Makefile                               |    2 +
+ drivers/mfd/altera-a10sr.c                         |  183 +++++++++++++++++
+ include/linux/mfd/altera-a10sr.h                   |  111 ++++++++++
+ 14 files changed, 791 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+ create mode 100644 drivers/gpio/gpio-altera-a10sr.c
+ create mode 100644 drivers/hwmon/altera-a10sr-hwmon.c
+ create mode 100644 drivers/mfd/altera-a10sr.c
+ create mode 100644 include/linux/mfd/altera-a10sr.h
 
-There is a discussion now on where the voltage status driver should live 
-(iio/ , hwmon/, misc/). It isn't clear to me where the device enables, 
-device present indications and voltage status would go. I'm leaning 
-toward a driver in the misc/ directory that would cover all of these. In 
-that case, this wouldn't be a MFD driver.
-
-Any thoughts or suggestions?
-
-Thanks,
-
-Thor
+-- 
+1.7.9.5
