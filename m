@@ -6,52 +6,68 @@ To: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
 	<ijc+devicetree@hellion.org.uk>, <dinguyen@opensource.altera.com>
 CC: <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
 	<devicetree@vger.kernel.org>, Thor Thayer <tthayer@opensource.altera.com>
-Subject: [PATCH 00/11] Addition of Altera Arria10 System Resource Chip
-Date: Fri, 22 Apr 2016 10:33:28 -0500
-Message-ID: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
+Subject: [PATCH 01/11] dt-bindings: mfd: Add Altera Arria10 System Resource Chip bindings
+Date: Fri, 22 Apr 2016 10:33:29 -0500
+Message-ID: <1461339219-15255-2-git-send-email-tthayer@opensource.altera.com>
+In-Reply-To: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
+References: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Thor Thayer <tthayer@opensource.altera.com>
 
-This patch series adds the SPI MultiFunction Device for the Altera System
-Resource Chip for the Arria10 Developement Kit. The MFD implements GPIO
-expansion and power supply alarms on an Altera MAX5.
+The Altera Arria10 Devkit System Resource chip is a Multi-Function
+Device with a GPIO expander and power supply alarm.
 
-Thor Thayer (11):
-  dt-bindings: mfd: Add Altera Arria10 System Resource Chip bindings
-  MAINTAINERS: Add Altera Arria10 System Resource Chip
-  mfd: altr_a10sr: Add Altera Arria10 DevKit System Resource Chip
-  gpio: altera-a10sr: Add A10 System Resource Chip GPIO support.
-  ARM: socfpga: dts: Add SPI Master1 for Arria10 System Resource chip
-  ARM: socfpga: dts: Add Devkit A10-SR fields for Arria10
-  ARM: socfpga: dts: Add LED framework to A10-SR GPIO
-  dt-bindings: mfd: Add Altera A10-SR power supply alarm
-  mfd: altr_a10sr: Add Altera A10-SR power supply alarms
-  hwmon: Add Altera A10-SR power supply alarms
-  ARM: socfpga: dts: Add A10-SR Devkit power supply alarms
+This patch adds documentation for the Altera A10-SR DT bindings.
 
- .../devicetree/bindings/mfd/altera-a10sr.txt       |   43 ++++
- MAINTAINERS                                        |    8 +
- arch/arm/boot/dts/socfpga_arria10.dtsi             |   15 ++
- arch/arm/boot/dts/socfpga_arria10_socdk.dtsi       |   44 ++++
- drivers/gpio/Kconfig                               |    8 +
- drivers/gpio/Makefile                              |    1 +
- drivers/gpio/gpio-altera-a10sr.c                   |  140 +++++++++++++
- drivers/hwmon/Kconfig                              |    9 +
- drivers/hwmon/Makefile                             |    1 +
- drivers/hwmon/altera-a10sr-hwmon.c                 |  215 ++++++++++++++++++++
- drivers/mfd/Kconfig                                |   11 +
- drivers/mfd/Makefile                               |    2 +
- drivers/mfd/altera-a10sr.c                         |  183 +++++++++++++++++
- include/linux/mfd/altera-a10sr.h                   |  111 ++++++++++
- 14 files changed, 791 insertions(+)
+Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
+---
+ .../devicetree/bindings/mfd/altera-a10sr.txt       |   35 ++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mfd/altera-a10sr.txt
- create mode 100644 drivers/gpio/gpio-altera-a10sr.c
- create mode 100644 drivers/hwmon/altera-a10sr-hwmon.c
- create mode 100644 drivers/mfd/altera-a10sr.c
- create mode 100644 include/linux/mfd/altera-a10sr.h
 
+diff --git a/Documentation/devicetree/bindings/mfd/altera-a10sr.txt b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+new file mode 100644
+index 0000000..8e17d05
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/altera-a10sr.txt
+@@ -0,0 +1,35 @@
++* Altera Arria10 Development Kit System Resource Chip
++
++Required parent device properties:
++- compatible	    : "altr,a10sr"
++- spi-max-frequency : Maximum SPI frequency.
++- reg		    : The SPI Chip Select address for the Arria10
++		      System Resource chip
++
++The A10SR consists of this varied group of sub-devices:
++
++Device                   Description
++------                   ----------
++a10sr_gpio               GPIO Controller
++
++Arria10 GPIO
++Required Properties:
++- compatible        : Should be "altr,a10sr-gpio"
++- gpio-controller   : Marks the device node as a GPIO Controller.
++- #gpio-cells       : Should be two.  The first cell is the pin number and
++                      the second cell is used to specify flags.
++                      See ../gpio/gpio.txt for more information.
++
++Example:
++
++        resource-manager@0 {
++		compatible = "altr,a10sr";
++		reg = <0>;
++		spi-max-frequency = <100000>;
++
++		a10sr_gpio: gpio-controller {
++			compatible = "altr,a10sr-gpio";
++			gpio-controller;
++			#gpio-cells = <2>;
++		};
++	};
 -- 
 1.7.9.5
