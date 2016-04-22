@@ -6,9 +6,9 @@ To: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
 	<ijc+devicetree@hellion.org.uk>, <dinguyen@opensource.altera.com>
 CC: <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
 	<devicetree@vger.kernel.org>, Thor Thayer <tthayer@opensource.altera.com>
-Subject: [PATCH 02/11] MAINTAINERS: Add Altera Arria10 System Resource Chip
-Date: Fri, 22 Apr 2016 10:33:30 -0500
-Message-ID: <1461339219-15255-3-git-send-email-tthayer@opensource.altera.com>
+Subject: [PATCH 05/11] ARM: socfpga: dts: Add SPI Master1 for Arria10 System Resource chip
+Date: Fri, 22 Apr 2016 10:33:33 -0500
+Message-ID: <1461339219-15255-6-git-send-email-tthayer@opensource.altera.com>
 In-Reply-To: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
 References: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
 MIME-Version: 1.0
@@ -17,31 +17,39 @@ List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Thor Thayer <tthayer@opensource.altera.com>
 
-Add maintainer for the Altera Arria10 Max5 System Resource chip files.
+Add the Altera Arria10 SPI Master Node in preparation for the A10SR
+MFD node.
 
 Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
 ---
- MAINTAINERS |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/boot/dts/socfpga_arria10.dtsi |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 724bb86..e5f2621 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -608,6 +608,14 @@ L:	linux-gpio@vger.kernel.org
- S:	Maintained
- F:	drivers/gpio/gpio-altera.c
+diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
+index 17e81dc..e7b6c4a 100644
+--- a/arch/arm/boot/dts/socfpga_arria10.dtsi
++++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
+@@ -567,6 +567,21 @@
+ 			status = "disabled";
+ 		};
  
-+ALTERA SYSTEM RESOURCE DRIVER FOR ARRIA10 DEVKIT
-+M:	Thor Thayer <tthayer@opensource.altera.com>
-+S:	Maintained
-+F:	drivers/gpio/gpio-altera-a10sr.c
-+F:	drivers/hwmon/altera-a10sr-hwmon.c
-+F:	drivers/mfd/altera-a10sr.c
-+F:	include/linux/mfd/altera-a10sr.h
++		spi1: spi@ffda5000 {
++			compatible = "snps,dw-apb-ssi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0xffda5000 0x100>;
++			interrupts = <0 102 4>;
++			num-chipselect = <4>;
++			bus-num = <0>;
++			/*32bit_access;*/
++			tx-dma-channel = <&pdma 16>;
++			rx-dma-channel = <&pdma 17>;
++			clocks = <&spi_m_clk>;
++			status = "disabled";
++		};
 +
- ALTERA TRIPLE SPEED ETHERNET DRIVER
- M:	Vince Bridgers <vbridger@opensource.altera.com>
- L:	netdev@vger.kernel.org
+ 		sdr: sdr@ffc25000 {
+ 			compatible = "syscon";
+ 			reg = <0xffcfb100 0x80>;
 -- 
 1.7.9.5
