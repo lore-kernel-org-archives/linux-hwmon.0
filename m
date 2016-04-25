@@ -1,418 +1,870 @@
-Return-path: <tthayer@opensource.altera.com>
-Reply-To: <tthayer@opensource.altera.com>
-Subject: Re: [PATCH 10/11] hwmon: Add Altera A10-SR power supply alarms
-References: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
- <1461339219-15255-11-git-send-email-tthayer@opensource.altera.com>
- <20160422222402.GA22294@roeck-us.net>
- <571E2CA2.3000900@opensource.altera.com> <571E3080.1020000@roeck-us.net>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: <lee.jones@linaro.org>, <linus.walleij@linaro.org>, <gnurou@gmail.com>,
-	<jdelvare@suse.com>, <robh+dt@kernel.org>, <pawel.moll@arm.com>,
-	<mark.rutland@arm.com>, <ijc+devicetree@hellion.org.uk>,
-	<dinguyen@opensource.altera.com>, <linux-gpio@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-From: Thor Thayer <tthayer@opensource.altera.com>
-Message-ID: <571E352F.1090606@opensource.altera.com>
-Date: Mon, 25 Apr 2016 10:18:07 -0500
-MIME-Version: 1.0
-In-Reply-To: <571E3080.1020000@roeck-us.net>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
+Return-path: <pascalsachs@gmail.com>
+From: Pascal Sachs <pascalsachs@gmail.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Frey <david.frey@sensirion.com>,
+	Pascal Sachs <pascal.sachs@sensirion.com>
+Subject: [PATCH 1/1 v2] hwmon: add support for Sensirion SHT3x sensors
+Date: Mon, 25 Apr 2016 10:42:26 +0200
+Message-Id: <1461573746-13767-1-git-send-email-pascalsachs@gmail.com>
+In-Reply-To: 157916ADD54A1D4ABFF27DDF0233870C956E1A93@S-EXCH01.sensirion.lokal
 List-ID: <linux-hwmon@vger.kernel.org>
 
+From: David Frey <david.frey@sensirion.com>
 
+This driver implements support for the Sensirion SHT3x-DIS chip,
+a humidity and temperature sensor. Temperature is measured
+in degrees celsius, relative humidity is expressed as a percentage.
+In the sysfs interface, all values are scaled by 1000,
+i.e. the value for 31.5 degrees celsius is 31500.
 
-On 04/25/2016 09:58 AM, Guenter Roeck wrote:
-> On 04/25/2016 07:41 AM, Thor Thayer wrote:
->>
->>
->> On 04/22/2016 05:24 PM, Guenter Roeck wrote:
->>> On Fri, Apr 22, 2016 at 10:33:38AM -0500,
->>> tthayer@opensource.altera.com wrote:
->>>> From: Thor Thayer <tthayer@opensource.altera.com>
->>>>
->>>> This patch adds the power supply alarms of the hwmon framework
->>>> to the Arria10 System Resource chip.
->>>>
->>>> Signed-off-by: Thor Thayer <tthayer@opensource.altera.com>
->>>> ---
->>>
->>> Please read and follow Documentation/hwmon/sysfs-interface
->>> as well as Documentation/hwmon/submitting-patches. At the very least,
->>> you are expected to document your driver, and you are expected to
->>> use standard attribute names.
->>>
->>
->> OK. I misunderstood. The standard attribute names would be
->> power[1-*]_alarm and the binding documentation the a10sr-hwmon portion
->> for MFD doesn't cover this.
->>
->
-> power ? Why power ? The names suggest those are voltages.
-> Also not sure why those names would be in the bindings.
->
-Yes, you are correct. I should be using in[0-*]_lcrit_alarm.
+Signed-off-by: Pascal Sachs <pascal.sachs@sensirion.com>
+---
+Patch was generated against kernel v4.6-rc5
 
-I didn't phrase my reply clearly. It was my initial understanding that 
-the binding documentation for the MFD would cover the documentation for 
-the driver. I missed that I needed to add the documentation into 
-Documentation/hwmon/altera-a10sr-hwmon.c but I will fix this oversight.
+ Documentation/hwmon/sht3x           |  66 ++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/sht3x.c               | 675 ++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/twl4030-madc-hwmon.c  |   1 +
+ include/linux/platform_data/sht3x.h |  25 ++
+ 6 files changed, 778 insertions(+)
+ create mode 100644 Documentation/hwmon/sht3x
+ create mode 100644 drivers/hwmon/sht3x.c
+ create mode 100644 include/linux/platform_data/sht3x.h
 
-Thanks.
-
->>>>   drivers/hwmon/Kconfig              |    9 ++
->>>>   drivers/hwmon/Makefile             |    1 +
->>>>   drivers/hwmon/altera-a10sr-hwmon.c |  215
->>>> ++++++++++++++++++++++++++++++++++++
->>>>   3 files changed, 225 insertions(+)
->>>>   create mode 100644 drivers/hwmon/altera-a10sr-hwmon.c
->>>>
->>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>> index ff94007..af08846 100644
->>>> --- a/drivers/hwmon/Kconfig
->>>> +++ b/drivers/hwmon/Kconfig
->>>> @@ -248,6 +248,15 @@ config SENSORS_ADT7475
->>>>         This driver can also be build as a module.  If so, the module
->>>>         will be called adt7475.
->>>>
->>>> +config SENSORS_ALTERA_A10SR
->>>> +    bool "Altera Arria10 System Status"
->>>> +    depends on MFD_ALTERA_A10SR
->>>> +    help
->>>> +      If you say yes here you get support for the power ready status
->>>> +      for the Arria10's external power supplies on the Arria10 DevKit.
->>>> +      These values are read over the SPI bus from the Arria10 System
->>>> +      Resource chip.
->>>> +
->>>>   config SENSORS_ASC7621
->>>>       tristate "Andigilog aSC7621"
->>>>       depends on I2C
->>>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->>>> index 2ef5b7c..17d72a7 100644
->>>> --- a/drivers/hwmon/Makefile
->>>> +++ b/drivers/hwmon/Makefile
->>>> @@ -43,6 +43,7 @@ obj-$(CONFIG_SENSORS_ADT7411)    += adt7411.o
->>>>   obj-$(CONFIG_SENSORS_ADT7462)    += adt7462.o
->>>>   obj-$(CONFIG_SENSORS_ADT7470)    += adt7470.o
->>>>   obj-$(CONFIG_SENSORS_ADT7475)    += adt7475.o
->>>> +obj-$(CONFIG_SENSORS_ALTERA_A10SR) += altera-a10sr-hwmon.o
->>>>   obj-$(CONFIG_SENSORS_APPLESMC)    += applesmc.o
->>>>   obj-$(CONFIG_SENSORS_ARM_SCPI)    += scpi-hwmon.o
->>>>   obj-$(CONFIG_SENSORS_ASC7621)    += asc7621.o
->>>> diff --git a/drivers/hwmon/altera-a10sr-hwmon.c
->>>> b/drivers/hwmon/altera-a10sr-hwmon.c
->>>> new file mode 100644
->>>> index 0000000..1eecc6b
->>>> --- /dev/null
->>>> +++ b/drivers/hwmon/altera-a10sr-hwmon.c
->>>> @@ -0,0 +1,215 @@
->>>> +/*
->>>> + *  Copyright Altera Corporation (C) 2014-2016. All Rights Reserved
->>>> + *
->>>> + * This program is free software; you can redistribute it and/or
->>>> modify it
->>>> + * under the terms and conditions of the GNU General Public License,
->>>> + * version 2, as published by the Free Software Foundation.
->>>> + *
->>>> + * This program is distributed in the hope it will be useful, but
->>>> WITHOUT
->>>> + * ANY WARRANTY; without even the implied warranty of
->>>> MERCHANTABILITY or
->>>> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
->>>> License for
->>>> + * more details.
->>>> + *
->>>> + * You should have received a copy of the GNU General Public
->>>> License along with
->>>> + * this program.  If not, see <http://www.gnu.org/licenses/>.
->>>> + *
->>>> + * HW Monitor driver for  Altera Arria10 MAX5 System Resource Chip
->>>> + * Adapted from DA9052
->>>> + */
->>>> +
->>>> +#include <linux/hwmon.h>
->>>> +#include <linux/hwmon-sysfs.h>
->>>> +#include <linux/mfd/altera-a10sr.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/of.h>
->>>
->>> Please list include files in alphabetic order.
->>>
->>
->> OK. I thought this was in alphabetical order. I'll update this after
->> figuring out where I was wrong.
->>
->
-> Sorry, PBKAC on my side.
->
-> Guenter
->
->>>> +
->>>> +#define ALTR_A10SR_1V0_BIT_POS          ALTR_A10SR_PG1_1V0_SHIFT
->>>> +#define ALTR_A10SR_0V95_BIT_POS         ALTR_A10SR_PG1_0V95_SHIFT
->>>> +#define ALTR_A10SR_0V9_BIT_POS          ALTR_A10SR_PG1_0V9_SHIFT
->>>> +#define ALTR_A10SR_10V_BIT_POS          ALTR_A10SR_PG1_10V_SHIFT
->>>> +#define ALTR_A10SR_5V0_BIT_POS          ALTR_A10SR_PG1_5V0_SHIFT
->>>> +#define ALTR_A10SR_3V3_BIT_POS          ALTR_A10SR_PG1_3V3_SHIFT
->>>> +#define ALTR_A10SR_2V5_BIT_POS          ALTR_A10SR_PG1_2V5_SHIFT
->>>> +#define ALTR_A10SR_1V8_BIT_POS          ALTR_A10SR_PG1_1V8_SHIFT
->>>> +#define ALTR_A10SR_OP_FLAG_BIT_POS      ALTR_A10SR_PG1_OP_FLAG_SHIFT
->>>> +/* 2nd register needs an offset of 8 to get to 2nd register */
->>>> +#define ALTR_A10SR_FBC2MP_BIT_POS       (8 +
->>>> ALTR_A10SR_PG2_FBC2MP_SHIFT)
->>>> +#define ALTR_A10SR_FAC2MP_BIT_POS       (8 +
->>>> ALTR_A10SR_PG2_FAC2MP_SHIFT)
->>>> +#define ALTR_A10SR_FMCBVADJ_BIT_POS     (8 +
->>>> ALTR_A10SR_PG2_FMCBVADJ_SHIFT)
->>>> +#define ALTR_A10SR_FMCAVADJ_BIT_POS     (8 +
->>>> ALTR_A10SR_PG2_FMCAVADJ_SHIFT)
->>>> +#define ALTR_A10SR_HL_VDDQ_BIT_POS      (8 +
->>>> ALTR_A10SR_PG2_HL_VDDQ_SHIFT)
->>>> +#define ALTR_A10SR_HL_VDD_BIT_POS       (8 +
->>>> ALTR_A10SR_PG2_HL_VDD_SHIFT)
->>>> +#define ALTR_A10SR_HL_HPS_BIT_POS       (8 +
->>>> ALTR_A10SR_PG2_HL_HPS_SHIFT)
->>>> +#define ALTR_A10SR_HPS_BIT_POS          (8 + ALTR_A10SR_PG2_HPS_SHIFT)
->>>> +/* 3rd register needs an offset of 16 to get to 3rd register */
->>>> +#define ALTR_A10SR_10V_FAIL_BIT_POS     (16 +
->>>> ALTR_A10SR_PG3_10V_FAIL_SHIFT)
->>>> +#define ALTR_A10SR_FAM2C_BIT_POS        (16 +
->>>> ALTR_A10SR_PG3_FAM2C_SHIFT)
->>>> +
->>>> +/**
->>>> + * struct altr_a10sr_hwmon - Altera Max5 HWMON device private data
->>>> structure
->>>> + * @device: hwmon class.
->>>> + * @regmap: the regmap from the parent device.
->>>> + */
->>>> +struct altr_a10sr_hwmon {
->>>> +    struct device        *class_device;
->>>> +    struct regmap        *regmap;
->>>> +};
->>>> +
->>>> +static ssize_t altr_a10sr_read_status(struct device *dev,
->>>> +                      struct device_attribute *devattr,
->>>> +                      char *buf)
->>>> +{
->>>> +    struct altr_a10sr_hwmon *hwmon = dev_get_drvdata(dev);
->>>> +    int val, ret, index = to_sensor_dev_attr(devattr)->index;
->>>> +    int mask = ALTR_A10SR_REG_BIT_MASK(index);
->>>> +    unsigned char reg = ALTR_A10SR_PWR_GOOD1_REG +
->>>> +                ALTR_A10SR_REG_OFFSET(index);
->>>> +
->>>> +    ret = regmap_read(hwmon->regmap, reg, &val);
->>>
->>> The pointer parameter to regmap_read() is unsigned int. I would suggest
->>> to use the same variable type to avoid surprises.
->>>
->> Understood. Thanks.
->>
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    return sprintf(buf, "%d\n", !!(~val & mask));
->>>
->>> Are alarms all active low ?
->>>
->> Yes, They are actually Power Good signals (Good = high) so I'm inverting.
->>
->>>> +}
->>>> +
->>>> +static ssize_t altr_a10sr_hwmon_show_name(struct device *dev,
->>>> +                      struct device_attribute *devattr,
->>>> +                      char *buf)
->>>> +{
->>>> +    return sprintf(buf, "altr_a10sr\n");
->>>> +}
->>>> +
->>>> +/* First Power Good Register Bits */
->>>> +static SENSOR_DEVICE_ATTR(1v0_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_1V0_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(0v95_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_0V95_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(0v9_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_0V9_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(5v0_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_5V0_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(3v3_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_3V3_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(2v5_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_2V5_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(1v8_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_1V8_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(opflag_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_OP_FLAG_BIT_POS);
->>>> +/* Second Power Good Register Bits */
->>>> +static SENSOR_DEVICE_ATTR(fbc2mp_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_FBC2MP_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(fac2mp_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_FAC2MP_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(fmcbvadj_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_FMCBVADJ_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(fmcavadj_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_FMCAVADJ_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(hl_vddq_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_HL_VDDQ_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(hl_vdd_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_HL_VDD_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(hlhps_vdd_alarm, S_IRUGO,
->>>> altr_a10sr_read_status,
->>>> +              NULL, ALTR_A10SR_HL_HPS_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(hps_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_HPS_BIT_POS);
->>>> +/* Third Power Good Register Bits */
->>>> +static SENSOR_DEVICE_ATTR(10v_alarm, S_IRUGO, altr_a10sr_read_status,
->>>> +              NULL, ALTR_A10SR_10V_FAIL_BIT_POS);
->>>> +static SENSOR_DEVICE_ATTR(fam2c_alarm, S_IRUGO,
->>>> altr_a10sr_read_status, NULL,
->>>> +              ALTR_A10SR_FAM2C_BIT_POS);
->>>> +
->>>> +static DEVICE_ATTR(name, S_IRUGO, altr_a10sr_hwmon_show_name, NULL);
->>>> +
->>>> +static struct attribute *altr_a10sr_attr[] = {
->>>> +    &dev_attr_name.attr,
->>>> +    /* First Power Good Register */
->>>> +    &sensor_dev_attr_opflag_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_1v8_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_2v5_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_1v0_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_3v3_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_5v0_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_0v9_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_0v95_alarm.dev_attr.attr,
->>>> +    /* Second Power Good Register */
->>>> +    &sensor_dev_attr_hps_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_hlhps_vdd_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_hl_vdd_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_hl_vddq_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_fmcavadj_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_fmcbvadj_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_fac2mp_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_fbc2mp_alarm.dev_attr.attr,
->>>> +    /* Third Power Good Register */
->>>> +    &sensor_dev_attr_10v_alarm.dev_attr.attr,
->>>> +    &sensor_dev_attr_fam2c_alarm.dev_attr.attr,
->>>
->>> Ultimately, this doesn't really make much sense, even with standard
->>> attribute
->>> names. The ABI assumes that _input attrributes exist. Not sure if
->>> that could
->>> be solved by providing 'dummy' unreadable input attributes
->>> (permission 0);
->>> that might be worth a try. If you want to attach names to the
->>> attributes,
->>> you would need to provide label attributes. Specifically you would need
->>>
->>>     inX_input (with permission 0) - not sure if that is even possible
->>>     inX_alarm
->>>     inX_label
->>>
->> Hmm. OK. I may need to rethink this.
->>
->>>> +    NULL
->>>> +};
->>>> +
->>>> +static const struct attribute_group altr_a10sr_attr_group = {
->>>> +    .attrs = altr_a10sr_attr
->>>> +};
->>>> +
->>>> +static int altr_a10sr_hwmon_probe(struct platform_device *pdev)
->>>> +{
->>>> +    struct altr_a10sr_hwmon *hwmon;
->>>> +    int ret;
->>>> +    struct altr_a10sr *a10sr = dev_get_drvdata(pdev->dev.parent);
->>>> +
->>>
->>> What if someone creates a stand-alone devicetree property for this
->>> driver,
->>> and there is no parent (or parent driver data) ?
->>>
->> I agree if this was a commercially available part. However, this is a
->> specific driver for a programmable logic device (PLD) that will always
->> be part of an MFD parent. The PLD only supports the Altera Development
->> Kit.
->>
->>>> +    hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
->>>> +    if (!hwmon)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    hwmon->regmap = a10sr->regmap;
->>>> +
->>>> +    platform_set_drvdata(pdev, hwmon);
->>>> +
->>>> +    ret = sysfs_create_group(&pdev->dev.kobj, &altr_a10sr_attr_group);
->>>> +    if (ret)
->>>> +        goto err_mem;
->>>> +
->>>> +    hwmon->class_device = hwmon_device_register(&pdev->dev);
->>>> +    if (IS_ERR(hwmon->class_device)) {
->>>> +        ret = PTR_ERR(hwmon->class_device);
->>>> +        goto err_sysfs;
->>>> +    }
->>>
->>> Please use devm_hwmon_device_register_with_groups().
->>>
->> Understood. Thanks.
->>
->> Thanks for reviewing.
->>
->>>> +
->>>> +    return 0;
->>>> +
->>>> +err_sysfs:
->>>> +    sysfs_remove_group(&pdev->dev.kobj, &altr_a10sr_attr_group);
->>>> +err_mem:
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +static int altr_a10sr_hwmon_remove(struct platform_device *pdev)
->>>> +{
->>>> +    struct altr_a10sr_hwmon *hwmon = platform_get_drvdata(pdev);
->>>> +
->>>> +    hwmon_device_unregister(hwmon->class_device);
->>>> +    sysfs_remove_group(&pdev->dev.kobj, &altr_a10sr_attr_group);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static const struct of_device_id altr_a10sr_hwmon_of_match[] = {
->>>> +    { .compatible = "altr,a10sr-hwmon" },
->>>> +    { },
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, altr_a10sr_hwmon_of_match);
->>>> +
->>>> +static struct platform_driver altr_a10sr_hwmon_driver = {
->>>> +    .probe = altr_a10sr_hwmon_probe,
->>>> +    .remove = altr_a10sr_hwmon_remove,
->>>> +    .driver = {
->>>> +        .name = "altr_a10sr_hwmon",
->>>> +        .of_match_table = of_match_ptr(altr_a10sr_hwmon_of_match),
->>>> +    },
->>>> +};
->>>> +
->>>> +module_platform_driver(altr_a10sr_hwmon_driver);
->>>> +
->>>> +MODULE_LICENSE("GPL v2");
->>>> +MODULE_AUTHOR("Thor Thayer <tthayer@opensource.altera.com>");
->>>> +MODULE_DESCRIPTION("HW Monitor driver for Altera Arria10 System
->>>> Resource Chip");
->>>> --
->>>> 1.7.9.5
->>>>
->>
->
+diff --git a/Documentation/hwmon/sht3x b/Documentation/hwmon/sht3x
+new file mode 100644
+index 0000000..c04748d
+--- /dev/null
++++ b/Documentation/hwmon/sht3x
+@@ -0,0 +1,66 @@
++Kernel driver sht3x
++===================
++
++Supported chips:
++  * Sensirion SHT3x-DIS
++    Prefix: 'sht3x'
++    Addresses scanned: none
++    Datasheet: http://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/Humidity/Sensirion_Humidity_Datasheet_SHT3x_DIS.pdf
++
++Author:
++  David Frey <david.frey@sensirion.com>
++  Pascal Sachs <pascal.sachs@sensirion.com>
++
++Description
++-----------
++
++This driver implements support for the Sensirion SHT3x-DIS chip, a humidity
++and temperature sensor. Temperature is measured in degrees celsius, relative
++humidity is expressed as a percentage. In the sysfs interface, all values are
++scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++
++The device communicates with the I2C protocol. Sensors can have the I2C
++addresses 0x44 or 0x45, depending on the wiring. See
++Documentation/i2c/instantiating-devices for methods to instantiate the device.
++
++There are two options configurable by means of sht3x_platform_data:
++1. blocking (pull the I2C clock line down while performing the measurement) or
++   non-blocking mode. Blocking mode will guarantee the fastest result but
++   the I2C bus will be busy during that time. By default, non-blocking mode
++   is used. Make sure clock-stretching works properly on your device if you
++   want to use blocking mode.
++2. high or low accuracy. High accuracy is used by default and using it is
++   strongly recommended.
++
++The sht3x sensor supports a single shot mode as well as 5 periodic measure
++modes, which can be controlled with the frequency sysfs interface.
++The allowed frequencies are as follows:
++  *     0  single shot mode
++  *   500   0.5 Hz periodic measurement
++  *  1000   1   Hz periodic measurement
++  *  2000   2   Hz periodic measurement
++  *  4000   4   Hz periodic measurement
++  * 10000  10   Hz periodic measurement
++
++While in periodic measure mode, read out of humidity and temperature values are
++not supported. Nevertheless it is possible to read out the values with maximal
++the same frequency as the periodic measure mode.
++
++sysfs-Interface
++---------------
++
++temp1_input:        temperature input
++humidity1_input:    humidity input
++temp1_max:          temperature max value
++temp1_max_hyst:     temperature hysteresis value for max limit
++humidity1_max:      humidity max value
++humidity1_max_hyst: humidity hysteresis value for max limit
++temp1_min:          temperature min value
++temp1_min_hyst:     temperature hysteresis value for min limit
++humidity1_min:      humidity min value
++humidity1_min_hyst: humidity hysteresis value for min limit
++frequency:          Measurement frequency, 0 for single shot, frequency in
++                    mHz for periodic measurement
++soft_reset:         Soft reset the internal state of the sensor, clear the
++                    status register, clear the alert and switch back to
++                    single shot mode
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5c2d13a..76f4c53 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1254,6 +1254,16 @@ config SENSORS_SHT21
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called sht21.
+ 
++config SENSORS_SHT3x
++	tristate "Sensiron humidity and temperature sensors. SHT3x and compat."
++	depends on I2C && CRC8
++	help
++	  If you say yes here you get support for the Sensiron SHT30 and SHT31
++	  humidity and temperature sensors.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called sht3x.
++
+ config SENSORS_SHTC1
+ 	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 58cc3ac..999ff2d 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -137,6 +137,7 @@ obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
+ obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
+ obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
+ obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
++obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
+ obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+ obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+new file mode 100644
+index 0000000..97f72b8
+--- /dev/null
++++ b/drivers/hwmon/sht3x.c
+@@ -0,0 +1,675 @@
++/* Sensirion SHT3x-DIS humidity and temperature sensor driver.
++ * The SHT3x comes in many different versions, this driver is for the
++ * I2C version only.
++ *
++ * Copyright (C) 2016 Sensirion AG, Switzerland
++ * Author: David Frey <david.frey@sensirion.com>
++ * Author: Pascal Sachs <pascal.sachs@sensirion.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++#include <asm/page.h>
++#include <linux/crc8.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/platform_data/sht3x.h>
++
++/* commands (high precision mode) */
++static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
++static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
++
++/* commands (low power mode) */
++static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
++static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
++
++/* commands for periodic mode */
++static const unsigned char sht3x_cmd_measure_periodic_mode[]   = { 0xe0, 0x00 };
++static const unsigned char sht3x_cmd_break[]                   = { 0x30, 0x93 };
++
++/* other commands */
++static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
++static const unsigned char sht3x_cmd_soft_reset[]              = { 0x30, 0xa2 };
++
++/* delays for non-blocking i2c commands, both in us */
++#define SHT3X_NONBLOCKING_WAIT_TIME_HPM  15000
++#define SHT3X_NONBLOCKING_WAIT_TIME_LPM   4000
++
++#define SHT3X_WORD_LEN         2
++#define SHT3X_CMD_LENGTH       2
++#define SHT3X_CRC8_LEN         1
++#define SHT3X_RESPONSE_LENGTH  6
++#define SHT3X_CRC8_LEN         1
++#define SHT3X_CRC8_POLYNOMIAL  0x31
++#define SHT3X_CRC8_INIT        0xFF
++#define SHT3X_ID_SHT           0
++#define SHT3X_ID_STS           1
++
++DECLARE_CRC8_TABLE(sht3x_crc8_table);
++
++/* periodic measure commands (high precision mode) */
++static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
++	/* 0.5 measurements per second */
++	{0x20, 0x32},
++	/* 1 measurements per second */
++	{0x21, 0x30},
++	/* 2 measurements per second */
++	{0x22, 0x36},
++	/* 4 measurements per second */
++	{0x23, 0x34},
++	/* 10 measurements per second */
++	{0x27, 0x37},
++};
++
++/* periodic measure commands (low power mode) */
++static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
++	/* 0.5 measurements per second */
++	{0x20, 0x2f},
++	/* 1 measurements per second */
++	{0x21, 0x2d},
++	/* 2 measurements per second */
++	{0x22, 0x2b},
++	/* 4 measurements per second */
++	{0x23, 0x29},
++	/* 10 measurements per second */
++	{0x27, 0x2a},
++};
++
++struct sht3x_alert_commands {
++	const char read_command[SHT3X_CMD_LENGTH];
++	const char write_command[SHT3X_CMD_LENGTH];
++};
++
++const struct sht3x_alert_commands alert_commands[] = {
++	/* temp1_max, humidity1_max */
++	{ {0xe1, 0x1f}, {0x61, 0x1d} },
++	/* temp_1_max_hyst, humidity1_max_hyst */
++	{ {0xe1, 0x14}, {0x61, 0x16} },
++	/* temp1_min, humidity1_min */
++	{ {0xe1, 0x02}, {0x61, 0x00} },
++	/* temp_1_min_hyst, humidity1_min_hyst */
++	{ {0xe1, 0x09}, {0x61, 0x0B} },
++};
++
++
++static const u16 mode_to_frequency[] = {
++	    0,
++	  500,
++	 1000,
++	 2000,
++	 4000,
++	10000,
++};
++
++struct sht3x_data {
++	struct i2c_client *client;
++	struct mutex update_lock;
++
++	u8 mode;
++	const unsigned char *command;
++	u32 wait_time;			/* in us*/
++
++	struct sht3x_platform_data setup;
++
++	int temperature;	/* 1000 * temperature in dgr C */
++	u32 humidity;		/* 1000 * relative humidity in %RH */
++};
++
++
++static int find_index(const u16 *list, size_t size, u16 value)
++{
++	size_t index = 0;
++
++	while (index < size && list[index] != value)
++		index++;
++
++	return index == size ? -1 : index;
++}
++
++static int sht3x_read_from_command(struct i2c_client *client,
++				   struct sht3x_data *data,
++				   const char *command,
++				   char *buf, int length, u32 wait_time)
++{
++	int ret;
++
++	mutex_lock(&data->update_lock);
++
++	ret = i2c_master_send(client, command, SHT3X_CMD_LENGTH);
++
++	if (ret != SHT3X_CMD_LENGTH) {
++		ret = ret < 0 ? ret : -EIO;
++		goto out;
++	}
++
++	if (wait_time)
++		usleep_range(wait_time, wait_time + 1000);
++
++	ret = i2c_master_recv(client, buf, length);
++	if (ret != length) {
++		ret = ret < 0 ? ret : -EIO;
++		goto out;
++	}
++
++	ret = 0;
++out:
++	mutex_unlock(&data->update_lock);
++	return ret;
++
++}
++
++static int sht3x_extract_temperature(u16 raw)
++{
++	/*
++	 * From datasheet:
++	 * T = -45 + 175 * ST / 2^16
++	 * Adapted for integer fixed point (3 digit) arithmetic.
++	 */
++	return ((21875 * (int)raw) >> 13) - 45000;
++}
++
++static u32 sht3x_extract_humidity(u16 raw)
++{
++	/*
++	 * From datasheet:
++	 * RH = 100 * SRH / 2^16
++	 * Adapted for integer fixed point (3 digit) arithmetic.
++	 */
++	return (12500 * (int)raw) >> 13;
++}
++
++/* sysfs attributes */
++static struct sht3x_data *sht3x_update_client(struct device *dev)
++{
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	unsigned char buf[SHT3X_RESPONSE_LENGTH];
++	u16 val;
++	int ret;
++
++	ret = sht3x_read_from_command(client, data,  data->command,
++				      buf, sizeof(buf), data->wait_time);
++	if (ret)
++		return ERR_PTR(ret);
++
++	val = be16_to_cpup((__be16 *) buf);
++	data->temperature = sht3x_extract_temperature(val);
++	val = be16_to_cpup((__be16 *) (buf + 3));
++	data->humidity = sht3x_extract_humidity(val);
++
++	return data;
++}
++
++static ssize_t temp1_input_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct sht3x_data *data = sht3x_update_client(dev);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	return sprintf(buf, "%d\n", data->temperature);
++}
++
++static ssize_t humidity1_input_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct sht3x_data *data = sht3x_update_client(dev);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	return sprintf(buf, "%d\n", data->humidity);
++}
++
++static int alert_read_raw(struct device *dev,
++			  struct device_attribute *attr,
++			  char *buffer, int length)
++{
++	int ret;
++	u8 index;
++	const struct sht3x_alert_commands *commands;
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++
++	index = to_sensor_dev_attr(attr)->index;
++	commands = &alert_commands[index];
++
++	ret = sht3x_read_from_command(client, data, commands->read_command,
++				      buffer, length, 0);
++
++	return ret;
++}
++
++static ssize_t temp1_alert_read(struct device *dev,
++				struct device_attribute *attr,
++				int *temperature)
++{
++	int ret;
++	u16 raw;
++	char buffer[SHT3X_RESPONSE_LENGTH];
++
++	ret = alert_read_raw(dev, attr, buffer, SHT3X_RESPONSE_LENGTH);
++	if (ret)
++		return ret;
++
++	raw = be16_to_cpup((__be16 *) buffer);
++
++	/*
++	 * lower 9 bits are temperature MSB
++	 */
++	*temperature = sht3x_extract_temperature((raw & 0x01ff) << 7);
++
++	return 0;
++}
++
++
++static ssize_t temp1_alert_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	int ret;
++	int temperature;
++
++	ret = temp1_alert_read(dev, attr, &temperature);
++	if (ret)
++		return ret;
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", temperature);
++}
++
++
++static ssize_t humidity1_alert_read(struct device *dev,
++				    struct device_attribute *attr,
++				    u32 *humidity)
++{
++	int ret;
++	u16 raw;
++	char buffer[SHT3X_RESPONSE_LENGTH];
++
++	ret = alert_read_raw(dev, attr, buffer, SHT3X_RESPONSE_LENGTH);
++	if (ret)
++		return ret;
++
++	raw = be16_to_cpup((__be16 *) buffer);
++
++	/*
++	 * top 7 bits are the humidity MSB,
++	 */
++	*humidity = sht3x_extract_humidity(raw & 0xfe00);
++
++	return 0;
++}
++
++static ssize_t humidity1_alert_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	int ret;
++	u32 humidity;
++
++	ret = humidity1_alert_read(dev, attr, &humidity);
++	if (ret)
++		return ret;
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", humidity);
++}
++
++static size_t alert_store(struct device *dev,
++			  struct device_attribute *attr,
++			  size_t count,
++			  int temperature,
++			  u32 humidity)
++{
++	char buffer[SHT3X_CMD_LENGTH + SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
++	char *position = buffer;
++	int ret;
++	u16 raw;
++	u8 index;
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	const struct sht3x_alert_commands *commands;
++
++	index = to_sensor_dev_attr(attr)->index;
++	commands = &alert_commands[index];
++
++	memcpy(position, commands->write_command, SHT3X_CMD_LENGTH);
++	position += SHT3X_CMD_LENGTH;
++	/*
++	 * ST = (T + 45) / 175 * 2^16
++	 * SRH = RH / 100 * 2^16
++	 * adapted for fixed point arithmetic and packed the same as
++	 * in alert_show()
++	 */
++	raw = ((u32)(temperature + 45000) * 24543) >> (16 + 7);
++	raw |= (((u32)humidity * 42950) >> 16) & 0xfe00;
++
++	*(__be16 *)(position) = cpu_to_be16(raw);
++	position += SHT3X_WORD_LEN;
++	*position = crc8(sht3x_crc8_table,
++			 (position - SHT3X_WORD_LEN),
++			 SHT3X_WORD_LEN,
++			 SHT3X_CRC8_INIT);
++
++
++	ret = i2c_master_send(client, buffer, sizeof(buffer));
++	if (ret != sizeof(buffer))
++		return ret < 0 ? ret : -EIO;
++
++	return count;
++
++}
++
++static ssize_t temp1_alert_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf,
++				 size_t count)
++{
++	int temperature;
++	u32 humidity;
++	int ret;
++
++	ret = kstrtoint(buf, 0, &temperature);
++
++	if (ret)
++		return -EINVAL;
++
++	temperature = clamp_val(temperature, -45000, 130000);
++
++	/*
++	 * use old humidity alert value since we can only update
++	 * temperature and humidity alerts together
++	 */
++	ret = humidity1_alert_read(dev, attr, &humidity);
++	if (ret)
++		return ret;
++
++	ret = alert_store(dev, attr, count, temperature, humidity);
++
++	return ret;
++}
++
++static ssize_t humidity1_alert_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf,
++				     size_t count)
++{
++	int temperature;
++	u32 humidity;
++	int ret;
++
++	ret = kstrtou32(buf, 0, &humidity);
++
++	if (ret)
++		return -EINVAL;
++
++	humidity = clamp_val(humidity, 0, 100000);
++
++	/*
++	 * use old temperature alert value since we can only update
++	 * temperature and humidity alerts together
++	 */
++	ret = temp1_alert_read(dev, attr, &temperature);
++	if (ret)
++		return ret;
++
++	ret = alert_store(dev, attr, count, temperature, humidity);
++
++	return ret;
++}
++
++static void sht3x_select_command(struct sht3x_data *data)
++{
++	/*
++	 * In blocking mode (clock stretching mode) the I2C bus
++	 * is blocked for other traffic, thus the call to i2c_master_recv()
++	 * will wait until the data is ready. For non blocking mode, we
++	 * have to wait ourselves.
++	 */
++	if (data->mode > 0) {
++		data->command = sht3x_cmd_measure_periodic_mode;
++		data->wait_time = 0;
++	} else if (data->setup.blocking_io) {
++		data->command = data->setup.high_precision ?
++				sht3x_cmd_measure_blocking_hpm :
++				sht3x_cmd_measure_blocking_lpm;
++		data->wait_time = 0;
++	} else {
++		if (data->setup.high_precision) {
++			data->command = sht3x_cmd_measure_nonblocking_hpm;
++			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
++		} else {
++			data->command = sht3x_cmd_measure_nonblocking_lpm;
++			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_LPM;
++		}
++	}
++}
++
++static ssize_t frequency_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf) {
++	struct sht3x_data *data = dev_get_drvdata(dev);
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", mode_to_frequency[data->mode]);
++}
++
++static ssize_t frequency_store(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf,
++			       size_t count) {
++	u16 frequency;
++	int mode;
++	int ret;
++	const char *command;
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++
++	ret = kstrtou16(buf, 0, &frequency);
++
++	if (ret)
++		return -EINVAL;
++
++	mode = find_index(mode_to_frequency, sizeof(mode_to_frequency),
++			  frequency);
++
++	/* invalid frequency */
++	if (mode < 0)
++		return -EINVAL;
++
++	/* mode did not change */
++	if (mode == data->mode)
++		return count;
++
++	/* abort periodic measure */
++	ret = i2c_master_send(client, sht3x_cmd_break, SHT3X_CMD_LENGTH);
++	if (ret != SHT3X_CMD_LENGTH)
++		return ret < 0 ? ret : -EIO;
++	data->mode = 0;
++
++	if (mode > 0) {
++		if (data->setup.high_precision)
++			command = periodic_measure_commands_hpm[mode - 1];
++		else
++			command = periodic_measure_commands_lpm[mode - 1];
++
++		/* select mode */
++		ret = i2c_master_send(client, command, SHT3X_CMD_LENGTH);
++		if (ret != SHT3X_CMD_LENGTH)
++			return ret < 0 ? ret : -EIO;
++	}
++
++	/* select mode and command */
++	data->mode = mode;
++	sht3x_select_command(data);
++
++	return count;
++}
++
++static ssize_t soft_reset(struct device *dev,
++			  struct device_attribute *attr,
++			  const char *buf,
++			  size_t count) {
++	int ret;
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++
++	/* break if in periodic measure mode */
++	if (data->mode > 0) {
++		ret = i2c_master_send(client, sht3x_cmd_break,
++				      SHT3X_CMD_LENGTH);
++		if (ret != SHT3X_CMD_LENGTH)
++			return ret < 0 ? ret : -EIO;
++		data->mode = 0;
++	}
++
++	/* clear status register */
++	ret = i2c_master_send(client, sht3x_cmd_clear_status_reg,
++			      SHT3X_CMD_LENGTH);
++	if (ret != SHT3X_CMD_LENGTH)
++		return ret < 0 ? ret : -EIO;
++
++	/* soft reset */
++	ret = i2c_master_send(client, sht3x_cmd_soft_reset, SHT3X_CMD_LENGTH);
++	if (ret != SHT3X_CMD_LENGTH)
++		return ret < 0 ? ret : -EIO;
++
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, temp1_input_show, NULL, 0);
++static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO, humidity1_input_show,
++			  NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_max, S_IRUGO | S_IWUSR, temp1_alert_show,
++			  temp1_alert_store, 0);
++static SENSOR_DEVICE_ATTR(humidity1_max, S_IRUGO | S_IWUSR,
++			  humidity1_alert_show, humidity1_alert_store, 0);
++static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO | S_IWUSR, temp1_alert_show,
++			  temp1_alert_store, 1);
++static SENSOR_DEVICE_ATTR(humidity1_max_hyst, S_IRUGO | S_IWUSR,
++			  humidity1_alert_show, humidity1_alert_store, 1);
++static SENSOR_DEVICE_ATTR(temp1_min, S_IRUGO | S_IWUSR, temp1_alert_show,
++			  temp1_alert_store, 2);
++static SENSOR_DEVICE_ATTR(humidity1_min, S_IRUGO | S_IWUSR,
++			  humidity1_alert_show, humidity1_alert_store, 2);
++static SENSOR_DEVICE_ATTR(temp1_min_hyst, S_IRUGO | S_IWUSR,
++			  temp1_alert_show, temp1_alert_store, 3);
++static SENSOR_DEVICE_ATTR(humidity1_min_hyst, S_IRUGO | S_IWUSR,
++			  humidity1_alert_show, humidity1_alert_store, 3);
++static SENSOR_DEVICE_ATTR(frequency, S_IRUGO | S_IWUSR, frequency_show,
++			  frequency_store, 0);
++static SENSOR_DEVICE_ATTR(soft_reset, S_IWUSR, NULL, soft_reset, 0);
++
++static struct attribute *sht3x_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_humidity1_input.dev_attr.attr,
++	&sensor_dev_attr_temp1_max.dev_attr.attr,
++	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
++	&sensor_dev_attr_humidity1_max.dev_attr.attr,
++	&sensor_dev_attr_humidity1_max_hyst.dev_attr.attr,
++	&sensor_dev_attr_temp1_min.dev_attr.attr,
++	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
++	&sensor_dev_attr_humidity1_min.dev_attr.attr,
++	&sensor_dev_attr_humidity1_min_hyst.dev_attr.attr,
++	&sensor_dev_attr_frequency.dev_attr.attr,
++	&sensor_dev_attr_soft_reset.dev_attr.attr,
++	NULL
++};
++
++static struct attribute *sts3x_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	NULL
++};
++
++ATTRIBUTE_GROUPS(sht3x);
++ATTRIBUTE_GROUPS(sts3x);
++
++static int sht3x_probe(struct i2c_client *client,
++		       const struct i2c_device_id *id)
++{
++	int ret;
++	struct sht3x_data *data;
++	struct device *hwmon_dev;
++	struct i2c_adapter *adap = client->adapter;
++	struct device *dev = &client->dev;
++	const struct attribute_group **attribute_groups;
++
++	/*
++	 * we require full i2c support since the sht3x uses multi-byte read and
++	 * writes as well as multi-byte commands which are not supported by
++	 * the smbus protocol
++	 */
++	if (!i2c_check_functionality(adap, I2C_FUNC_I2C))
++		return -ENODEV;
++
++	ret = i2c_master_send(client, sht3x_cmd_clear_status_reg,
++			      SHT3X_CMD_LENGTH);
++	if (ret != SHT3X_CMD_LENGTH)
++		return ret < 0 ? ret : -ENODEV;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->setup.blocking_io = false;
++	data->setup.high_precision = true;
++	data->mode = 0;
++	data->client = client;
++	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
++
++	if (client->dev.platform_data)
++		data->setup = *(struct sht3x_platform_data *)dev->platform_data;
++	sht3x_select_command(data);
++	mutex_init(&data->update_lock);
++
++	if (id->driver_data == SHT3X_ID_STS)
++		attribute_groups = sts3x_groups;
++	else
++		attribute_groups = sht3x_groups;
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
++			client->name,
++			data, attribute_groups);
++
++	if (IS_ERR(hwmon_dev))
++		dev_dbg(dev, "unable to register hwmon device\n");
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++/* device ID table */
++static const struct i2c_device_id sht3x_id[] = {
++	{"sht3x", SHT3X_ID_SHT},
++	{"sts3x", SHT3X_ID_STS},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, sht3x_id);
++
++static struct i2c_driver sht3x_i2c_driver = {
++	.driver.name = "sht3x",
++	.probe       = sht3x_probe,
++	.id_table    = sht3x_id,
++};
++
++module_i2c_driver(sht3x_i2c_driver);
++
++MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
++MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
++MODULE_DESCRIPTION("Sensirion SHT3x humidity and temperature sensor driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/twl4030-madc-hwmon.c b/drivers/hwmon/twl4030-madc-hwmon.c
+index b5caf7f..8201173 100644
+--- a/drivers/hwmon/twl4030-madc-hwmon.c
++++ b/drivers/hwmon/twl4030-madc-hwmon.c
+@@ -25,6 +25,7 @@
+  */
+ #include <linux/init.h>
+ #include <linux/module.h>
++//FIXME this is used for clamp_val
+ #include <linux/kernel.h>
+ #include <linux/i2c/twl.h>
+ #include <linux/device.h>
+diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+new file mode 100644
+index 0000000..46af9a0
+--- /dev/null
++++ b/include/linux/platform_data/sht3x.h
+@@ -0,0 +1,25 @@
++/*
++ * Copyright (C) 2015 Sensirion AG, Switzerland
++ * Author: David Frey <david.frey@sensirion.com>
++ * Author: Pascal Sachs <pascal.sachs@sensirion.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++
++#ifndef __SHT3X_H_
++#define __SHT3X_H_
++
++struct sht3x_platform_data {
++	bool blocking_io;
++	bool high_precision;
++};
++#endif /* __SHT3X_H_ */
+-- 
+1.9.1
