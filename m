@@ -1,56 +1,53 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:39742 "EHLO mx2.suse.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S932456AbcE0IS7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 27 May 2016 04:18:59 -0400
-Date: Fri, 27 May 2016 10:18:53 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [GIT PULL] hwmon updates for Linux 4.7
-Message-ID: <20160527101853.3da95450@endymion>
-In-Reply-To: <CA+55aFyA9VJ_=R_7VuPVbXtqV6Lig=YMMM-PohsxEhteKgfT2g@mail.gmail.com>
-References: <20160526111219.0f8c0341@endymion>
-	<CA+55aFwPAt66=C3OwqH4HJTv8DQeMjsiNaghNd5gMYdsx=ZyGg@mail.gmail.com>
-	<CA+55aFyA9VJ_=R_7VuPVbXtqV6Lig=YMMM-PohsxEhteKgfT2g@mail.gmail.com>
+From: Lee Jones <lee.jones@linaro.org>
+To: linux-hwmon@vger.kernel.org
+Date: Mon, 09 May 2016 08:37:41 -0700
+Subject: Re: [PATCH 02/11] MAINTAINERS: Add Altera Arria10 System Resource Chip
+In-Reply-To: <1461339219-15255-1-git-send-email-tthayer@opensource.altera.com>
+Message-ID: <20160509153652.GC19473@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Fri, 22 Apr 2016, ttha...@opensource.altera.com wrote:
 
-On Thu, 26 May 2016 09:50:46 -0700, Linus Torvalds wrote:
-> On Thu, May 26, 2016 at 9:46 AM, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> > On Thu, May 26, 2016 at 2:12 AM, Jean Delvare <jdelvare@suse.de> wrote:
-> >> Hi Linus,
-> >>
-> >> Please pull hwmon subsystem updates for Linux 4.7 from:
-> >>
-> >>  Documentation/hwmon/max34440 | 6 +++---
-> >>  drivers/hwmon/emc2103.c      | 2 +-
-> >>  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > From where?
+> From: Thor Thayer <ttha...@opensource.altera.com>
 > 
-> Ok, seems to be the usual place at
+> Add maintainer for the Altera Arria10 Max5 System Resource chip files.
 > 
->     git://git.kernel.org/pub/scm/linux/kernel/git/jdelvare/staging
-> hwmon-for-linus
+> Signed-off-by: Thor Thayer <ttha...@opensource.altera.com>
+> ---
+>  MAINTAINERS |    8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Thanks for figuring it out and fixing my mistake.
+For my own reference:
+  Acked-by: Lee Jones <lee.jo...@linaro.org>
 
-> however, please fix whatever workflow bug that made that not be part
-> of the pull request.
-
-I'd have to fix myself then, as the workflow is basically copy and past
-from my previous email ;-)
-
-I enhanced my script to also generate this part of the message
-automatically, so hopefully such a mistake will never happen again.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 724bb86..e5f2621 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -608,6 +608,14 @@ L:       linux-g...@vger.kernel.org
+>  S:   Maintained
+>  F:   drivers/gpio/gpio-altera.c
+>  
+> +ALTERA SYSTEM RESOURCE DRIVER FOR ARRIA10 DEVKIT
+> +M:   Thor Thayer <ttha...@opensource.altera.com>
+> +S:   Maintained
+> +F:   drivers/gpio/gpio-altera-a10sr.c
+> +F:   drivers/hwmon/altera-a10sr-hwmon.c
+> +F:   drivers/mfd/altera-a10sr.c
+> +F:   include/linux/mfd/altera-a10sr.h
+> +
+>  ALTERA TRIPLE SPEED ETHERNET DRIVER
+>  M:   Vince Bridgers <vbrid...@opensource.altera.com>
+>  L:   net...@vger.kernel.org
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
+--
+To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+the body of a message to majord...@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
