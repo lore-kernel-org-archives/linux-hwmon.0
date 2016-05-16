@@ -1,566 +1,107 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49294 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:38033 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753898AbcEOPhL (ORCPT
+	with ESMTP id S1751738AbcEPNsj (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 15 May 2016 11:37:11 -0400
-Subject: Re: [PATCH v3 2/2] hwmon: Add support for INA3221 Triple
- Current/Voltage Monitors
-To: "Andrew F. Davis" <afd@ti.com>, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>
-References: <1461613162-1606-1-git-send-email-afd@ti.com>
- <1461613162-1606-3-git-send-email-afd@ti.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	Mon, 16 May 2016 09:48:39 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5738979C.5060106@roeck-us.net>
-Date: Sun, 15 May 2016 08:37:00 -0700
-MIME-Version: 1.0
-In-Reply-To: <1461613162-1606-3-git-send-email-afd@ti.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v4.7
+Date: Mon, 16 May 2016 06:48:30 -0700
+Message-Id: <1463406510-19848-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 04/25/2016 12:39 PM, Andrew F. Davis wrote:
-> Add support for the the INA3221 26v capable, Triple channel,
-> Bi-Directional, Zero-Drift, Low-/High-Side, Current/Voltage Monitor
-> with I2C interface.
->
-> Signed-off-by: Andrew F. Davis <afd@ti.com>
-> ---
->   Documentation/hwmon/ina3221 |  35 ++++
->   drivers/hwmon/Kconfig       |  11 ++
->   drivers/hwmon/Makefile      |   1 +
->   drivers/hwmon/ina3221.c     | 423 ++++++++++++++++++++++++++++++++++++++++++++
->   4 files changed, 470 insertions(+)
->   create mode 100644 Documentation/hwmon/ina3221
->   create mode 100644 drivers/hwmon/ina3221.c
->
-> diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
-> new file mode 100644
-> index 0000000..0ff7485
-> --- /dev/null
-> +++ b/Documentation/hwmon/ina3221
-> @@ -0,0 +1,35 @@
-> +Kernel driver ina3221
-> +=====================
-> +
-> +Supported chips:
-> +  * Texas Instruments INA3221
-> +    Prefix: 'ina3221'
-> +    Addresses: I2C 0x40 - 0x43
-> +    Datasheet: Publicly available at the Texas Instruments website
-> +               http://www.ti.com/
-> +
-> +Author: Andrew F. Davis <afd@ti.com>
-> +
-> +Description
-> +-----------
-> +
-> +The Texas Instruments INA3221 monitors voltage, current, and power on the high
-> +side of up to three D.C. power supplies. The INA3221 monitors both shunt drop
-> +and supply voltage, with programmable conversion times and averaging, current
-> +and power are calculated host-side from these.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +in[123]_input           Bus voltage(mV) channels
-> +curr[123]_input         Current(mA) measurement channels
-> +shunt[123]_resistor     Shunt resistance(uOhm) channels
-> +curr[123]_crit          Critical alert current(mA) setting, activates the
-> +                          corresponding alarm when the respective current
-> +                          is above this value
-> +curr[123]_crit_alarm    Critical alert current limit exceeded
-> +curr[123]_max           Warning alert current(mA) setting, activates the
-> +                          corresponding alarm when the respective current
-> +                          average is above this value.
-> +curr[123]_max_alarm     Warning alert current limit exceeded
-> +in[456]_input           Shunt voltage(uV) for channels 1, 2, and 3 respectively
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 5c2d13a..de08242 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1503,6 +1503,17 @@ config SENSORS_INA2XX
->   	  This driver can also be built as a module.  If so, the module
->   	  will be called ina2xx.
->
-> +config SENSORS_INA3221
-> +	tristate "Texas Instruments INA3221 Triple Power Monitor"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  If you say yes here you get support for  the TI INA3221 Triple Power
-> +	  Monitor.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called ina3221.
-> +
->   config SENSORS_TC74
->   	tristate "Microchip TC74"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 58cc3ac..83e8ab0 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -77,6 +77,7 @@ obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
->   obj-$(CONFIG_SENSORS_IIO_HWMON) += iio_hwmon.o
->   obj-$(CONFIG_SENSORS_INA209)	+= ina209.o
->   obj-$(CONFIG_SENSORS_INA2XX)	+= ina2xx.o
-> +obj-$(CONFIG_SENSORS_INA3221)	+= ina3221.o
->   obj-$(CONFIG_SENSORS_IT87)	+= it87.o
->   obj-$(CONFIG_SENSORS_JC42)	+= jc42.o
->   obj-$(CONFIG_SENSORS_JZ4740)	+= jz4740-hwmon.o
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> new file mode 100644
-> index 0000000..389a6ba
-> --- /dev/null
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -0,0 +1,423 @@
-> +/*
-> + * INA3221 Triple Current/Voltage Monitor
-> + *
-> + * Copyright (C) 2016 Texas Instruments Incorporated - http://www.ti.com/
-> + *	Andrew F. Davis <afd@ti.com>
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope that it will be useful, but
-> + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * General Public License for more details.
-> + */
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/regmap.h>
-> +
-> +#define INA3221_DRIVER_NAME		"ina3221"
-> +
-> +#define INA3221_CONFIG			0x00
-> +#define INA3221_SHUNT1			0x01
-> +#define INA3221_BUS1			0x02
-> +#define INA3221_SHUNT2			0x03
-> +#define INA3221_BUS2			0x04
-> +#define INA3221_SHUNT3			0x05
-> +#define INA3221_BUS3			0x06
-> +#define INA3221_CRIT1			0x07
-> +#define INA3221_WARN1			0x08
-> +#define INA3221_CRIT2			0x09
-> +#define INA3221_WARN2			0x0a
-> +#define INA3221_CRIT3			0x0b
-> +#define INA3221_WARN3			0x0c
-> +#define INA3221_MASK_ENABLE		0x0f
-> +
-> +#define INA3221_CONFIG_MODE_SHUNT	BIT(1)
-> +#define INA3221_CONFIG_MODE_BUS		BIT(2)
-> +#define INA3221_CONFIG_MODE_CONTINUOUS	BIT(3)
-> +
-> +#define INA3221_RSHUNT_DEFAULT		10000
-> +
-> +enum ina3221_fields {
-> +	/* Configuration */
-> +	F_RST,
-> +
-> +	/* Alert Flags */
-> +	F_WF3, F_WF2, F_WF1,
-> +	F_CF3, F_CF2, F_CF1,
-> +
-> +	/* sentinel */
-> +	F_MAX_FIELDS
-> +};
-> +
-> +static const struct reg_field ina3221_reg_fields[] = {
-> +	[F_RST] = REG_FIELD(INA3221_CONFIG, 15, 15),
-> +
-> +	[F_WF3] = REG_FIELD(INA3221_MASK_ENABLE, 3, 3),
-> +	[F_WF2] = REG_FIELD(INA3221_MASK_ENABLE, 4, 4),
-> +	[F_WF1] = REG_FIELD(INA3221_MASK_ENABLE, 5, 5),
-> +	[F_CF3] = REG_FIELD(INA3221_MASK_ENABLE, 7, 7),
-> +	[F_CF2] = REG_FIELD(INA3221_MASK_ENABLE, 8, 8),
-> +	[F_CF1] = REG_FIELD(INA3221_MASK_ENABLE, 9, 9),
-> +};
-> +
-> +enum ina3221_channels {
-> +	INA3221_CHANNEL1,
-> +	INA3221_CHANNEL2,
-> +	INA3221_CHANNEL3,
-> +	INA3221_NUM_CHANNELS
-> +};
-> +
-> +static const unsigned int register_channel[] = {
-> +	[INA3221_SHUNT1] = INA3221_CHANNEL1,
-> +	[INA3221_SHUNT2] = INA3221_CHANNEL2,
-> +	[INA3221_SHUNT3] = INA3221_CHANNEL3,
-> +	[INA3221_CRIT1] = INA3221_CHANNEL1,
-> +	[INA3221_CRIT2] = INA3221_CHANNEL2,
-> +	[INA3221_CRIT3] = INA3221_CHANNEL3,
-> +	[INA3221_WARN1] = INA3221_CHANNEL1,
-> +	[INA3221_WARN2] = INA3221_CHANNEL2,
-> +	[INA3221_WARN3] = INA3221_CHANNEL3,
-> +};
-> +
-> +/**
-> + * struct ina3221_data - device specific information
-> + * @regmap: Register map of the device
-> + * @fields: Register fields of the device
-> + * @shunt_resistors: Array of resistor values per channel
-> + */
-> +struct ina3221_data {
-> +	struct regmap *regmap;
-> +	struct regmap_field *fields[F_MAX_FIELDS];
-> +	unsigned int shunt_resistors[INA3221_NUM_CHANNELS];
-> +};
-> +
-> +static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
-> +			      int *val)
-> +{
-> +	unsigned int regval;
-> +	int ret;
-> +
-> +	ret = regmap_read(ina->regmap, reg, &regval);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = sign_extend32(regval >> 3, 12);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t ina3221_show_bus_voltage(struct device *dev,
-> +					struct device_attribute *attr,
-> +					char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int reg = sd_attr->index;
-> +	int val, voltage_mv, ret;
-> +
-> +	ret = ina3221_read_value(ina, reg, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	voltage_mv = val * 8;
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", voltage_mv);
-> +}
-> +
-> +static ssize_t ina3221_show_shunt_voltage(struct device *dev,
-> +					  struct device_attribute *attr,
-> +					  char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int reg = sd_attr->index;
-> +	int val, voltage_uv, ret;
-> +
-> +	ret = ina3221_read_value(ina, reg, &val);
-> +	if (ret)
-> +		return ret;
-> +	voltage_uv = val * 40;
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", voltage_uv);
-> +}
-> +
-> +static ssize_t ina3221_show_current(struct device *dev,
-> +				    struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int reg = sd_attr->index;
-> +	unsigned int channel = register_channel[reg];
-> +	unsigned int resistance_uo = ina->shunt_resistors[channel];
-> +	int val, current_ma, voltage_nv, ret;
-> +
-> +	ret = ina3221_read_value(ina, reg, &val);
-> +	if (ret)
-> +		return ret;
-> +	voltage_nv = val * 40000;
-> +
-> +	current_ma = DIV_ROUND_CLOSEST(voltage_nv, resistance_uo);
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", current_ma);
-> +}
-> +
-> +static ssize_t ina3221_set_current(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int reg = sd_attr->index;
-> +	unsigned int channel = register_channel[reg];
-> +	unsigned int resistance_uo = ina->shunt_resistors[channel];
-> +	int val, current_ma, voltage_uv, ret;
-> +
-> +	ret = kstrtoint(buf, 0, &current_ma);
-> +	if (ret)
-> +		return ret;
-> +
-> +	voltage_uv = DIV_ROUND_CLOSEST(current_ma * resistance_uo, 1000);
+Hi Linus,
 
-This can easily overflow. Clamping the result after the overflow
-already occurred doesn't help much. To avoid this, you would either
-have to use 64 bit operations, or clamp current_ma first, to
-something like [0, U32_MAX/resistance_uo].
+Please pull hwmon updates for Linux v4.7 from signed tag:
 
-> +
-> +	/* clamp value */
-> +	voltage_uv = (voltage_uv > 163800) ? 163800 : voltage_uv;
-> +	voltage_uv = (voltage_uv < -163800) ? -163800 : voltage_uv;
-> +
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.7
 
-Please use clamp_val().
+Thanks,
+Guenter
+------
 
-> +	/* 1 / 40uV(scale) << 3(register shift) = 5 */
-> +	val = DIV_ROUND_CLOSEST(voltage_uv, 5) & 0xfff8;
-> +
-> +	ret = regmap_write(ina->regmap, reg, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t ina3221_show_shunt(struct device *dev,
-> +				  struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int channel = sd_attr->index;
-> +	unsigned int resistance_uo;
-> +
-> +	resistance_uo = ina->shunt_resistors[channel];
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", resistance_uo);
-> +}
-> +
-> +static ssize_t ina3221_set_shunt(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int channel = sd_attr->index;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	ret = kstrtouint(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val == 0)
-> +		return -EINVAL;
-> +
-> +	ina->shunt_resistors[channel] = val;
-> +
+The following changes since commit 9735a22799b9214d17d3c231fe377fc852f042e9:
 
-Accepting unlimited shunt resistor values can result in overflows elsewhere,
-whenever a 32 bit value is multiplied with it (ina3221_set_current is the one
-example I found). It might make sense to limit the range to something
-reasonable.
+  Linux 4.6-rc2 (2016-04-03 09:09:40 -0500)
 
-> +	return count;
-> +}
-> +
-> +static ssize_t ina3221_show_alert(struct device *dev,
-> +				  struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int field = sd_attr->index;
-> +	unsigned int regval;
-> +	int ret;
-> +
-> +	ret = regmap_field_read(ina->fields[field], &regval);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", regval);
-> +}
-> +
-> +/* bus voltage */
-> +static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ina3221_show_bus_voltage, NULL, INA3221_BUS1);
-> +static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ina3221_show_bus_voltage, NULL, INA3221_BUS2);
-> +static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, ina3221_show_bus_voltage, NULL, INA3221_BUS3);
-> +
-> +/* calculated current */
-> +static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ina3221_show_current, NULL, INA3221_SHUNT1);
-> +static SENSOR_DEVICE_ATTR(curr2_input, S_IRUGO, ina3221_show_current, NULL, INA3221_SHUNT2);
-> +static SENSOR_DEVICE_ATTR(curr3_input, S_IRUGO, ina3221_show_current, NULL, INA3221_SHUNT3);
-> +
-> +/* shunt resistance */
-> +static SENSOR_DEVICE_ATTR(shunt1_resistor, (S_IRUGO | S_IWUSR), ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL1);
-> +static SENSOR_DEVICE_ATTR(shunt2_resistor, (S_IRUGO | S_IWUSR), ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL2);
-> +static SENSOR_DEVICE_ATTR(shunt3_resistor, (S_IRUGO | S_IWUSR), ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL3);
-> +
+are available in the git repository at:
 
-Unnecessary ( )
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.7
 
-> +/* critical current */
-> +static SENSOR_DEVICE_ATTR(curr1_crit, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_CRIT1);
-> +static SENSOR_DEVICE_ATTR(curr2_crit, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_CRIT2);
-> +static SENSOR_DEVICE_ATTR(curr3_crit, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_CRIT3);
-> +
-> +/* critical current alert */
-> +static SENSOR_DEVICE_ATTR(curr1_crit_alarm, S_IRUGO, ina3221_show_alert, NULL, F_CF1);
-> +static SENSOR_DEVICE_ATTR(curr2_crit_alarm, S_IRUGO, ina3221_show_alert, NULL, F_CF2);
-> +static SENSOR_DEVICE_ATTR(curr3_crit_alarm, S_IRUGO, ina3221_show_alert, NULL, F_CF3);
-> +
-> +/* warning current */
-> +static SENSOR_DEVICE_ATTR(curr1_max, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_WARN1);
-> +static SENSOR_DEVICE_ATTR(curr2_max, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_WARN2);
-> +static SENSOR_DEVICE_ATTR(curr3_max, (S_IRUGO | S_IWUSR), ina3221_show_current, ina3221_set_current, INA3221_WARN3);
-> +
-> +/* warning current alert */
-> +static SENSOR_DEVICE_ATTR(curr1_max_alarm, S_IRUGO, ina3221_show_alert, NULL, F_WF1);
-> +static SENSOR_DEVICE_ATTR(curr2_max_alarm, S_IRUGO, ina3221_show_alert, NULL, F_WF2);
-> +static SENSOR_DEVICE_ATTR(curr3_max_alarm, S_IRUGO, ina3221_show_alert, NULL, F_WF3);
-> +
-> +/* shunt voltage */
-> +static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, ina3221_show_shunt_voltage, NULL, INA3221_SHUNT1);
-> +static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, ina3221_show_shunt_voltage, NULL, INA3221_SHUNT2);
-> +static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, ina3221_show_shunt_voltage, NULL, INA3221_SHUNT3);
-> +
+for you to fetch changes up to d6a442df63b2f0043c0b4fc05504ac4ded96ae80:
 
-Please avoid lines over 80 characters.
+  hwmon: (sch5636) trivial fix of spelling mistake on revision (2016-04-25 07:26:29 -0700)
 
-> +static struct attribute *ina3221_attrs[] = {
-> +	/* channel 1 */
-> +	&sensor_dev_attr_in1_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_input.dev_attr.attr,
-> +	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_crit.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_crit_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_max.dev_attr.attr,
-> +	&sensor_dev_attr_curr1_max_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_in4_input.dev_attr.attr,
-> +
-> +	/* channel 2 */
-> +	&sensor_dev_attr_in2_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_input.dev_attr.attr,
-> +	&sensor_dev_attr_shunt2_resistor.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_crit.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_crit_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_max.dev_attr.attr,
-> +	&sensor_dev_attr_curr2_max_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_in5_input.dev_attr.attr,
-> +
-> +	/* channel 3 */
-> +	&sensor_dev_attr_in3_input.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_input.dev_attr.attr,
-> +	&sensor_dev_attr_shunt3_resistor.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_crit.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_crit_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_max.dev_attr.attr,
-> +	&sensor_dev_attr_curr3_max_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_in6_input.dev_attr.attr,
-> +
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(ina3221);
-> +
-> +static const struct regmap_range ina3221_yes_ranges[] = {
-> +	regmap_reg_range(INA3221_SHUNT1, INA3221_BUS3),
-> +	regmap_reg_range(INA3221_MASK_ENABLE, INA3221_MASK_ENABLE),
-> +};
-> +
-> +static const struct regmap_access_table ina3221_volatile_table = {
-> +	.yes_ranges = ina3221_yes_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(ina3221_yes_ranges),
-> +};
-> +
-> +static const struct regmap_config ina3221_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +
-> +	.cache_type = REGCACHE_RBTREE,
-> +	.volatile_table = &ina3221_volatile_table,
-> +};
-> +
-> +static int ina3221_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct ina3221_data *ina;
-> +	struct device *hwmon_dev;
-> +	int i, ret;
-> +
-> +	ina = devm_kzalloc(dev, sizeof(*ina), GFP_KERNEL);
-> +	if (!ina)
-> +		return -ENOMEM;
-> +
-> +	ina->regmap = devm_regmap_init_i2c(client, &ina3221_regmap_config);
-> +	if (IS_ERR(ina->regmap)) {
-> +		dev_err(dev, "Unable to allocate register map\n");
-> +		return PTR_ERR(ina->regmap);
-> +	}
-> +
-> +	for (i = 0; i < F_MAX_FIELDS; i++) {
-> +		ina->fields[i] = devm_regmap_field_alloc(dev,
-> +							 ina->regmap,
-> +							 ina3221_reg_fields[i]);
-> +		if (IS_ERR(ina->fields[i])) {
-> +			dev_err(dev, "Unable to allocate regmap fields\n");
-> +			return PTR_ERR(ina->fields[i]);
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-> +		ret = of_property_read_u32_index(client->dev.of_node,
-> +						 "shunt-resistors", i,
-> +						 &ina->shunt_resistors[i]);
-> +		if (ret || ina->shunt_resistors[i] == 0)
-> +			ina->shunt_resistors[i] = INA3221_RSHUNT_DEFAULT;
-> +	}
-> +
-> +	ret = regmap_field_write(ina->fields[F_RST], true);
-> +	if (ret) {
-> +		dev_err(dev, "Unable to reset device\n");
-> +		return ret;
-> +	}
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
-> +							   client->name,
-> +							   ina, ina3221_groups);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		dev_err(dev, "Unable to register hwmon device\n");
-> +		return PTR_ERR(hwmon_dev);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id ina3221_of_match_table[] = {
-> +	{ .compatible = "ti,ina3221", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ina3221_of_match_table);
-> +
-> +static const struct i2c_device_id ina3221_ids[] = {
-> +	{ "ina3221", 0 },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ina3221_ids);
-> +
-> +static struct i2c_driver ina3221_i2c_driver = {
-> +	.probe = ina3221_probe,
-> +	.driver = {
-> +		.name = INA3221_DRIVER_NAME,
-> +		.of_match_table = ina3221_of_match_table,
-> +	},
-> +	.id_table = ina3221_ids,
-> +};
-> +module_i2c_driver(ina3221_i2c_driver);
-> +
-> +MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
-> +MODULE_DESCRIPTION("Texas Instruments INA3221 HWMon Driver");
-> +MODULE_LICENSE("GPL v2");
->
+----------------------------------------------------------------
+hwmon updates for v4.7
 
+- Major rework of it87 driver
+  cleanup, added support for additional attributes,
+  added support for two chips in the system, added support for IT8728E
+- fam17h_power driver now reports accumulated power consumption
+- New driver for MAX31722/MAX31723 temperature sensors
+- Minor fixes to sch5636 and ads7828 drivers
+
+----------------------------------------------------------------
+Akshay Bhat (1):
+      hwmon: (ads7828) Enable internal reference
+
+Colin Ian King (1):
+      hwmon: (sch5636) trivial fix of spelling mistake on revision
+
+Guenter Roeck (26):
+      hwmon: (ltc2978) Add missing devicetree binding for LTM4675
+      hwmon: (it87) Add feature flag for AVCC3 support
+      hwmon: (it87) Add support for all pwm channels on IT8620E
+      hwmon: (it87) Add support for second pwm frequency register
+      hwmon: (it87) Simplify error return in it87_device_add
+      hwmon: (it87) Don't use pdev as static driver variable
+      hwmon: (it87) Pass SIO base address as parameter to superio functions
+      hwmon: (it87) Add support for second Super-IO chip
+      hwmon: (it87) Rearrange code to avoid forward declarations
+      hwmon: (it87) Use is_visible for voltage sensors
+      hwmon: (it87) Use is_visible for temperature sensors
+      hwmon: (it87) Use is_visible for fan attributes
+      hwmon: (it87) Use is_visible for pwm attributes
+      hwmon: (it87) Use single group and is_visible for miscellaneous attributes
+      hwmon: (it87) Convert to use new hwmon API
+      hwmon: (it87) Support up to 6 temperature sensors on IT8620E
+      hwmon: (it87) Simplify reading voltage registers
+      hwmon: (it87) Add support for VIN7 to VIN10 on IT8620E
+      hwmon: (it87) Use BIT macro
+      hwmon: (it87) Use defines for array sizes and sensor counts
+      hwmon: (it87) Formatting cleanup
+      hwmon: (it87) Support disabling fan control for all pwm control and chips
+      hwmon: (it87) Enhance validation for fan4 and fan5
+      hwmon: (it87) Support automatic pwm control on newer chips
+      hwmon: (it87) Fix pwm_temp_map for system with 6 pwm channels
+      hwmon: (it87) Add support for IT8628E
+
+Huang Rui (6):
+      hwmon: (fam15h_power) Add CPU_SUP_AMD as the dependence
+      hwmon: (fam15h_power) Add compute unit accumulated power
+      hwmon: (fam15h_power) Add ptsc counter value for accumulated power
+      hwmon: (fam15h_power) Introduce a cpu accumulated power reporting algorithm
+      hwmon: (fam15h_power) Add documentation for TDP and accumulated power algorithm
+      hwmon: (fam15h_power) Add platform check function
+
+Tiberiu Breana (1):
+      hwmon: (max31722) Add support for MAX31722/MAX31723 temperature sensors
+
+ .../devicetree/bindings/hwmon/ltc2978.txt          |    1 +
+ Documentation/hwmon/fam15h_power                   |   65 +-
+ Documentation/hwmon/it87                           |   15 +-
+ Documentation/hwmon/max31722                       |   34 +
+ drivers/hwmon/Kconfig                              |   15 +-
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/ads7828.c                            |   10 +
+ drivers/hwmon/fam15h_power.c                       |  215 +-
+ drivers/hwmon/it87.c                               | 2281 +++++++++++---------
+ drivers/hwmon/max31722.c                           |  165 ++
+ drivers/hwmon/sch5636.c                            |    2 +-
+ 11 files changed, 1794 insertions(+), 1010 deletions(-)
+ create mode 100644 Documentation/hwmon/max31722
+ create mode 100644 drivers/hwmon/max31722.c
