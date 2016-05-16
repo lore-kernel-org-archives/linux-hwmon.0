@@ -1,55 +1,52 @@
-Return-path: <peteasa@gmail.com>
-Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use
- fan_status() for fan detection
-To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
- Thorsten Leemhuis <fedora@leemhuis.info>
-References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
- <201605271245.47383@pali>
- <01084692-618a-31db-76f8-60176d1cd2cc@leemhuis.info>
- <201605271521.10294@pali>
-Cc: Jan C Peters <jcpeters89@gmail.com>,
- =?UTF-8?Q?David_Santamar=c3=ada_Rogado?= <howl.nsp@gmail.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Tolga Cakir <cevelnet@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Peter Saunderson <peteasa@gmail.com>
-Message-ID: <574B4293.9010404@gmail.com>
-Date: Sun, 29 May 2016 20:27:15 +0100
+Return-path: <hotran@apm.com>
+From: Hoan Tran <hotran@apm.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh+dt@kernel.org>
+Cc: Jassi Brar <jassisinghbrar@gmail.com>,
+	Ashwin Chaugule <ashwin.chaugule@linaro.org>,
+	Duc Dang <dhdang@apm.com>,
+	lho@apm.com,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Hoan Tran <hotran@apm.com>
+Subject: [PATCH 0/3] Add support for X-Gene hwmon driver
+Date: Mon, 16 May 2016 09:17:24 -0700
+Message-Id: <1463415447-29903-1-git-send-email-hotran@apm.com>
 MIME-Version: 1.0
-In-Reply-To: <201605271521.10294@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-I have just tested removing i8k_get_fan_type() function from the 
-dell-smm-hwmon driver in the kernel on my Dell Inspiron 580 and the fan 
-speed problem goes away.  My patch simply replaced fan_type with 
-fan_status in i8k_init_hwmon and used the index as the type in 
-i8k_hwmon_show_fan_label since index and the type were the same 
-numerical value on my machine.
+This patch set adds hardware temperature and power reading support ​for
+APM X-Gene SoC's using the mailbox communication interface.
+For device tree, it is the standard DT mailbox.
+For ACPI, it is the PCC mailbox.
 
-Removing i8k_get_fan_type() function for Dell Inspiron 580 would be a 
-very good fix!  Well done for finding it!
+For ACPI, tested with this patch[1] which supports PCC subspace 2
+[1] https://lkml.org/lkml/2016/5/6/482
+ - [PATCH v2] mailbox: pcc: Support HW-Reduced Communication Subspace Type 2
 
-On 27/05/16 14:21, Pali Rohár wrote:
-> So, once kernel call i8k_get_fan_type() function, then fan speed going
-> up/down? Even if it was called only at once? Can you confirm it? Caching
-> patch cause that for each fan that function is called exactly one time.
-Yes even if the i8k_get_fan_type() function is called once I get the fan 
-speed problem.
-> If this is problem, we can probably create DMI list of machines which do
-> not like i8k_get_fan_type() call and disable it for them.
-Please add Dell Inspiron 580 to any blacklist that you create.  The 
-DMI_PRODUCT_NAME seems to have a white space at the end:
+Hoan Tran (3):
+  Documentation: dtb: xgene: Add hwmon dts binding documentation
+  hwmon: xgene: Adds hwmon driver
+  arm64: dts: apm: Add X-Gene SoC hwmon to device tree
 
-	{
-		/*
-		 * CPU fan speed going up and down on Dell Inspiron 580
-		 * for unknown reasons.
-		 */
-		.ident = "Dell Inspiron 580",
-		.matches = {
-			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
-		},
-	},
+ .../devicetree/bindings/hwmon/apm-xgene-hwmon.txt  |  14 +
+ Documentation/hwmon/xgene-hwmon                    |  32 +
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |   5 +
+ arch/arm64/boot/dts/apm/apm-storm.dtsi             |   5 +
+ drivers/hwmon/Kconfig                              |   7 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/xgene-hwmon.c                        | 801 +++++++++++++++++++++
+ 7 files changed, 865 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
+ create mode 100644 Documentation/hwmon/xgene-hwmon
+ create mode 100644 drivers/hwmon/xgene-hwmon.c
+
+-- 
+1.9.1
