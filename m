@@ -1,59 +1,29 @@
-Return-path: <>
-From: "Andrew F. Davis" <afd@ti.com>
-To: Rob Herring <robh+dt@kernel.org>, Pawel Moll <pawel.moll@arm.com>,
-        Mark
- Rutland <mark.rutland@arm.com>,
-        Ian Campbell <ijc+devicetree@hellion.org.uk>,
-        Kumar Gala <galak@codeaurora.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter
- Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
-CC: <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Andrew F .
- Davis" <afd@ti.com>
-Subject: [PATCH v4 0/2] Add support for INA3221 Triple Current/Voltage Monitors
-Date: Tue, 31 May 2016 13:37:09 -0500
-Message-ID: <20160531183711.9048-1-afd@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from plane.gmane.org ([80.91.229.3]:55998 "EHLO plane.gmane.org"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S933289AbcESVAI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Thu, 19 May 2016 17:00:08 -0400
+Received: from list by plane.gmane.org with local (Exim 4.69)
+	(envelope-from <glkh-linux-hwmon@m.gmane.org>)
+	id 1b3V38-0002oJ-6o
+	for linux-hwmon@vger.kernel.org; Thu, 19 May 2016 23:00:06 +0200
+Received: from ip56584689.direct-adsl.nl ([86.88.70.137])
+        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 May 2016 23:00:06 +0200
+Received: from simon.vanderveldt+linux-hwmon by ip56584689.direct-adsl.nl with local (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 May 2016 23:00:06 +0200
+To: linux-hwmon@vger.kernel.org
+From: Simon van der Veldt <simon.vanderveldt+linux-hwmon@gmail.com>
+Subject: RE: Problems with lm-sensors web site / Wiki
+Date: Thu, 19 May 2016 20:53:49 +0000 (UTC)
+Message-ID: <loom.20160519T225212-685@post.gmane.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hello all,
+R3VlbnRlciBSb2VjayA8bGludXggPGF0PiByb2Vjay11cy5uZXQ+IHdyaXRlczoKCj4gCj4gT24gMDEvMjcvMjAxNiAwMToxNyBBTSwgUGhpbGlwIEVkZWxicm9jayB3cm90ZToKPiA+Cj4gPj4gT24gSmFuIDI2LCAyMDE2LCBhdCA3OjMzIEFNLCBHdWVudGVyIFJvZWNrIDxsaW51eCA8YXQ+IHJvZWNrLXVzLm5ldD4gCndyb3RlOgo+ID4+Cj4gPj4gT24gMDEvMjYvMjAxNiAwNzowMiBBTSwgUGF1bCBDcmF3Zm9yZCB3cm90ZToKPiA+Pj4gSSB3YXMganVzdCBjaGVja2luZyB0aGUgd2lraSAodGhhdCB1c2VkIHRvIGJlKSBvbiB0aGUgd3d3LmxtLQpzZW5zb3JzLm9yZwo+ID4+PiBzaXRlIGFuZCBpdCBsb29rcyBhcyBpZiBzb21lb25lIGhhcyBtZXNzZWQgdXAgdGhlIEFwYWNoZSB3ZWIgc2VydmVyLCAKYXMKPiA+Pj4gaXQgb25seSBoYXMgYSBkaXJlY3RvcnkgJ2h0JyB3aXRoIGEgLnJwbSBmaWxlIGluIGl0Lgo+ID4+Pgo+ID4+PiBEb2VzIGFueW9uZSBrbm93IHdobyBpcyBsb29raW5nIGFmdGVyIHRoZSBzaXRlIGFuZC9vciBpZiB0aGlzIGlzIGJlaW5nCj4gPj4+IGZpeGVkPwo+ID4+Pgo+ID4+Cj4gPj4gVGhlIG1haW50YWluZXIgaXMgbm90IHJlYWNoYWJsZS4gSSB0aGluayB3ZSdsbCBoYXZlIHRvIHJlLWNyZWF0ZSB0aGUgCnNpdGUKPiA+PiBmcm9tIHNjcmF0Y2guCj4gPj4KPiA+PiBHdWVudGVyCj4gPgo+ID4KPiA+IFllcywgdW5mb3J0dW5hdGVseS4gIEkgc2VlIHd3dy5sbS1zZW5zb3JzLm9yZyBpcyBwb2ludGluZyB0byB0aGUgCmh0dHB0dW5uZWwgcHJvamVjdCwgd2hpY2ggaXMKPiBkZWZpbml0ZWx5IG5vdCB1cy4KPiA+Cj4gPiBJIGp1c3Qgd2lzaCB3ZSBoYWQgYSBjb3B5IG9mIHRoZSBUcmFjIGFuZCBkYXRhYmFzZSB3aXRoIGFsbCB0aGUgcGFnZXMgCmFuZCBzdWNo4oCmIHVnZ2dnLiAgVGhhdOKAmXMgYSBiaXQgdXBzZXR0aW5nLgo+ID4KPiBNb3N0IG9yIGF0IGxlYXN0IHNvbWUgb2YgaXQgY2FuIGJlIGZvdW5kIGluIHdlYiBjYWNoZXMsIHRob3VnaCBpdCB3aWxsIGJlIAphIGJpdCBvZiB3b3JrLgo+IAo+ID4gSSBjb3VsZCBzZXQgc29tZXRoaW5nIHVwIHdoZXJlIHRoZSB3ZWIgZmlsZXMgYXJlIG9uIEdpdGh1YiBhbmQgd2UgY2FuIApoYXZlIG11bHRpcGxlIGF1dGhvcnMuICBJZiBub3RoaW5nIGVsc2UsCj4gc29tZWJvZHkgY291bGQgYWx3YXlzIHRha2UgdGhlIEdpdGh1YiBmaWxlcyBhbmQgcnVuIHdpdGggdGhlbSB3aXRob3V0IApoYXZpbmcgdG8gdHJhY2sgZG93biBhIGZvcm1lciBNSUEgYWRtaW4uCj4gPgo+ID4gSXQgcHJvYmFibHkgd29u4oCZdCBiZSB0b28gc29vbiwgdGhvdWdoLCBJ4oCZbSBhIGJpdCBzd2FtcGVkIHdpdGggbXkgZGF5IGpvYiAKYnV0IEnigJlsbCB0cnkgdG8gZ2V0IHNvbWV0aGluZwo+IGdvaW5nIHNvb24gd2l0aCBtdWx0aXBsZSBhZG1pbnMuICBJ4oCZbSBvcGVuIHRvIG90aGVyIGlkZWFzLCB0b28uICBJIG93biBsbS0Kc2Vuc29ycy5vcmcgYW5kIGNhbiBnZXQgdGhlIEROUyB0bwo+IHBvaW50IGFueXdoZXJlLgo+ID4KPiAKPiBJcyBpdCBwb3NzaWJsZSB0byBzZXQgdXAgYSB3aWtpID8gTm8gaWRlYSBob3cgdGhlIGJhY2stZW5kIHN0b3JhZ2Ugd291bGQgCndvcmssIHRob3VnaC4KPiBXZSdsbCBkZWZpbml0ZWx5IHdhbnQgaXQgYmFja2VkIHVwIHRoaXMgdGltZS4KPiAKPiBHdWVudGVyCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsbS1zZW5zb3JzIG1haWxpbmcgbGlzdAo+IGxtLXNlbnNvcnMgPGF0PiBsbS1zZW5zb3JzLm9yZwo+IGh0dHA6Ly9saXN0cy5sbS1zZW5zb3JzLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xtLXNlbnNvcnMKPiAKPiAKCihwb3N0aW5nIGhlcmUgYXMgd2VsbCBiZWNhdXNlIHRoZSAib3RoZXIiL29sZCBsbS1zZW5zb3JzIG1haWxpbmcgbGlzdCBzZWVtcyAKdG8gYmUgbm8gbG9uZ2VyIHVzZWQ/CgoKSGkgYWxsLCBuZXZlciBwb3N0ZWQgdG8gdGhlIGxpc3QgYmVmb3JlLCBidXQgSSdtIGEgaGFwcHkgdXNlciBvZiB0aGUgCmZ1bmN0aW9uYWxpdHkgbG1fc2Vuc29ycyBwcm92aWRlcy4KSSBmZWVsIGxpa2UgdGhlIGxtX3NlbnNvcnMgc2l0ZSBiZWluZyBkb3duIGlzbid0IHRoZSBiZXN0IGV4cGVyaWVuY2UgZm9yIG5ldyAKKGFuZCBvbGQpIHVzZXJzIDspCkknZCBsaWtlIHRvIHN1Z2dlc3QgdG8gbWFrZSB1c2Ugb2YgdGhlIGZlYXR1cmVzIEdpdEh1YiBvZmZlcnMgdG8gCnNpbXBsaWZ5L3JlZHVjZSB0aGUgYW1vdW50IG9mIHdvcmsgYW5kIGNvc3QgbmVlZGVkIHRvIGZpeCB0aGlzIGFuZCBtYWtpbmcgCnN1cmUga2VlcGluZyBldmVyeXRoaW5nIHJ1bm5pbmcvYXZhaWxhYmxlIGRvZXNuJ3QgZGVwZW5kIG9uIGEgc2luZ2xlIHBlcnNvbi4gCkkgaGF2ZSBhIGZhaXIgYW1vdW50IG9mIGV4cGVyaWVuY2Ugd2l0aCBpdCBhbmQgd2FudCB0byBoZWxwIG91dC4KCk15IHN1Z2dlc3Rpb24gd291bGQgYmU6Ci0gQ3JlYXRlIGFuIGxtX3NlbnNvcnMgb3JnYW5pemF0aW9uIGFuZCBhZGQgdGhlIG5lY2Vzc2FyeSB1c2VyIGFzIApvd25lci9jb250cmlidXRvcgotIEFkZCBhIHJlcG8gZm9yIHRoZSBtYWluIHNvdXJjZXMKLSBBZGQgYSByZXBvIGZvciBib2FyZCBjb25maWd1cmF0aW9ucyAodGhpcyBpcyBzb21ldGhpbmcgSSB3YXMgYWxyZWFkeSAKd29ya2luZyBvbiwgY291bGQgZm9yIG5vdyBqdXN0IGhvc3QgdGhlIGNvbmZpZ3MgZnJvbSB0aGUgd2lraSkKLSBBZGQgYSByZXBvIHRvIGF1dG9tYXRpY2FsbHkgaG9zdCB0aGUgc2l0ZSBmcm9tIChnaXRodWIgcGFnZXMpCgpGb3IgZWFjaCByZXBvc2l0b3J5IHRoZXJlIGlzIGFuIGluY2x1ZGVkIHdpa2ksIHNvIEkgdGhpbmsgaXQncyBlYXNpZXN0IHRvIAphZGQgdGhlIGluaXRpYWwgZG9jcyB0aGVyZS4gT3B0aW9uYWxseSB0aGUgZG9jcyBjb3VsZCBiZSBwdWJsaXNoZWQgdG8gYSAKcHJvcGVyIHdlYnNpdGUgdXNpbmcgZ2l0aHViIHBhZ2VzIGFzIHdlbGwuCgpMZXQgbWUga25vdyBpZiB0aGlzIHNvdW5kcyBnb29kIHRvIGFsbCBvZiB5b3UsIGhvcGUgSSBjYW4gaGVscC9kbyBzb21ldGhpbmcgCmJhY2sgOikKClRoYW5rcyEKU2ltb24K
 
-This series adds support for the INA3221 Triple Current/Voltage Monitor.
-
-Changes from v3:
- - minor fixups from comments
- - rebased on v4.7-rc1
-
-Changes from v2:
- - changed alarms to work on current
- - added of_match_table
- - other small fixups/typos
-
-Changes from v1:
- - rearranged and renumbered sysfs enteries
- - added reading alert bits to sysfs
- - removed internal power calculation
- - added DT setting of shunt resistors
- - various other minor fixups
-
-Thanks,
-Andrew
-
-Andrew F. Davis (2):
-  hwmon: Define binding for the INA3221 hwmon driver
-  hwmon: Add support for INA3221 Triple Current/Voltage Monitors
-
- .../devicetree/bindings/hwmon/ina3221.txt          |  19 +
- Documentation/hwmon/ina3221                        |  35 ++
- drivers/hwmon/Kconfig                              |  11 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/ina3221.c                            | 451 +++++++++++++++++++++
- 5 files changed, 517 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
- create mode 100644 Documentation/hwmon/ina3221
- create mode 100644 drivers/hwmon/ina3221.c
-
--- 
-2.8.3
