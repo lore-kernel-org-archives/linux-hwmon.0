@@ -1,83 +1,188 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f66.google.com ([74.125.82.66]:35886 "EHLO
-	mail-wm0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752015AbcEVPTc (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52062 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752015AbcEVPEd (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 22 May 2016 11:19:32 -0400
-From: Pali =?utf-8?q?Roh=C3=A1r?= <pali.rohar@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dell-smm-hwmon: Detect fan with index=2
-Date: Sun, 22 May 2016 17:19:28 +0200
-Cc: Jean Delvare <jdelvare@suse.com>, Tolga Cakir <cevelnet@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1463842366-17964-1-git-send-email-pali.rohar@gmail.com> <201605220231.12951@pali> <5741CC16.1000909@roeck-us.net>
-In-Reply-To: <5741CC16.1000909@roeck-us.net>
+	Sun, 22 May 2016 11:04:33 -0400
+Subject: Re: [Experimental PATCH] dell-smm-hwmon: Add support for disabling
+ automatic BIOS fan control
+To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+	=?UTF-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
+	Andy Lutomirski <luto@kernel.org>, Jethro <xtompok@gmail.com>
+References: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <5741CA70.9070100@roeck-us.net>
+Date: Sun, 22 May 2016 08:04:16 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed;
-  boundary="nextPart1780021.j1l0nz3Tl0";
-  protocol="application/pgp-signature";
-  micalg=pgp-sha1
-Content-Transfer-Encoding: 7bit
-Message-Id: <201605221719.28263@pali>
+In-Reply-To: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
---nextPart1780021.j1l0nz3Tl0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+On 05/22/2016 04:50 AM, Pali Rohár wrote:
+> This patch exports standard hwmon pwmX_enable sysfs attribute for enabling
+> or disabling automatic fan control by BIOS. Standard value "1" is for
+> disabling automatic BIOS fan control and value "2" for enabling.
+>
+> Currently there is no way to check if BIOS auto mode is enabled (at least
+> it is not know how to do it), so hwmon sysfs attribute is write-only.
+>
+You could cache the mode and report it after it was set, and define '0'
+as read value for 'unknown'.
 
-On Sunday 22 May 2016 17:11:18 Guenter Roeck wrote:
-> On 05/21/2016 05:31 PM, Pali Roh=C3=A1r wrote:
-> > On Sunday 22 May 2016 02:21:46 Guenter Roeck wrote:
-> >> On 05/21/2016 07:52 AM, Pali Roh=C3=A1r wrote:
-> >>> Some Dell machines (e.g. Dell Precision M3800) have two fans,
-> >>> first with index=3D0 and second with index=3D2. So export also
-> >>> attributes for third fan device with index=3D2.
-> >>>=20
-> >>> Reported-by: Tolga Cakir <cevelnet@gmail.com>
-> >>> Signed-off-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
-> >>> ---
-> >>>=20
-> >>>    drivers/hwmon/dell-smm-hwmon.c |   20 +++++++++++++++++++-
-> >>>    1 file changed, 19 insertions(+), 1 deletion(-)
-> >>>=20
-> >>> ---
-> >>>=20
-> >>> Hi Tolga! Can you test this patch if sensors see fan device
-> >>> correctly?
-> >>=20
-> >> I assume this means I should wait for test results before applying
-> >> the patch ?
-> >=20
-> > Yes, testing should be done.
-> >=20
-> > Do you have some pending/testing/next tree/branch for such patches?
->=20
-> I have a hwmon-staging branch. I added your patches to it.
->=20
-> Please use "hwmon: (dell-smm)" in the subject line of your patches.
-> The subsystem name should come first, the driver name in () is a
-> hwmon idiosyncrasy, and we don't need to repeat the "hwmon".
+> By default BIOS auto mode is enabled by laptop firmware.
+>
+> When BIOS auto mode is enabled, custom fan speed value (set via hwmon pwmX
+> sysfs attribute) is overwritten by SMM in few seconds and therefore any
+> custom settings are without effect. So this is reason why implementing
+> option for disabling BIOS auto mode is needed.
+>
+> So finally this patch allows kernel to set and control fan speed on
+> laptops, but it can be dangerous (like setting speed of other fans).
+>
+> This new feature is highly experimental, uses Dell SMM calls, so does not
+> have to be supported by all laptops BIOSes. It was tested on Dell Latitude
+> E6440 with BIOS A5.
+>
+> Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
+> ---
+>   drivers/hwmon/dell-smm-hwmon.c |   64 ++++++++++++++++++++++++++++++++++------
+>   1 file changed, 55 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 8a66a42..7b5144a 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -45,6 +45,8 @@
+>   #define I8K_SMM_GET_SPEED	0x02a3
+>   #define I8K_SMM_GET_FAN_TYPE	0x03a3
+>   #define I8K_SMM_GET_NOM_SPEED	0x04a3
+> +#define I8K_SMM_MANUAL_FAN	0x34a3
+> +#define I8K_SMM_AUTO_FAN	0x35a3
+>   #define I8K_SMM_GET_TEMP	0x10a3
+>   #define I8K_SMM_GET_TEMP_TYPE	0x11a3
+>   #define I8K_SMM_GET_DELL_SIG1	0xfea3
+> @@ -284,6 +286,17 @@ static int i8k_get_fan_nominal_speed(int fan, int speed)
+>   }
+>
+>   /*
+> + * Enable or disable automatic BIOS fan control support
+> + */
+> +static int i8k_enable_fan_auto_mode(bool enable)
+> +{
+> +	struct smm_regs regs = { };
+> +
+> +	regs.eax = enable ? I8K_SMM_AUTO_FAN : I8K_SMM_MANUAL_FAN;
+> +	return i8k_smm(&regs);
+> +}
+> +
+> +/*
+>    * Set the fan speed (off, low, high). Returns the new fan status.
+>    */
+>   static int i8k_set_fan(int fan, int speed)
+> @@ -702,6 +715,30 @@ static ssize_t i8k_hwmon_set_pwm(struct device *dev,
+>   	return err < 0 ? -EIO : count;
+>   }
+>
+> +static ssize_t i8k_hwmon_set_pwm_enable(struct device *dev,
+> +					struct device_attribute *attr,
+> +					const char *buf, size_t count)
+> +{
+> +	int err;
+> +	bool enable;
+> +	unsigned long val;
+> +
+> +	err = kstrtoul(buf, 10, &val);
+> +	if (err)
+> +		return err;
+> +
+> +	if (val == 0)
+> +		return -EINVAL;
+> +
+> +	enable = (val != 1);
+> +
+Please accepted only explicit values (1 and 2).
 
-Ok, I use generic "driver_name: description" pattern as each subsystem=20
-use different format. But I can send in above format future hwmon=20
-patches...
+Thanks,
+Guenter
 
-=2D-=20
-Pali Roh=C3=A1r
-pali.rohar@gmail.com
+> +	mutex_lock(&i8k_mutex);
+> +	err = i8k_enable_fan_auto_mode(enable);
+> +	mutex_unlock(&i8k_mutex);
+> +
+> +	return err ? -EIO : count;
+> +}
+> +
+>   static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, i8k_hwmon_show_temp, NULL, 0);
+>   static SENSOR_DEVICE_ATTR(temp1_label, S_IRUGO, i8k_hwmon_show_temp_label, NULL,
+>   			  0);
+> @@ -719,18 +756,24 @@ static SENSOR_DEVICE_ATTR(fan1_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
+>   			  0);
+>   static SENSOR_DEVICE_ATTR(pwm1, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
+>   			  i8k_hwmon_set_pwm, 0);
+> +static SENSOR_DEVICE_ATTR(pwm1_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
+> +			  0);
+>   static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
+>   			  1);
+>   static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
+>   			  1);
+>   static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
+>   			  i8k_hwmon_set_pwm, 1);
+> +static SENSOR_DEVICE_ATTR(pwm2_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
+> +			  1);
+>   static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
+>   			  2);
+>   static SENSOR_DEVICE_ATTR(fan3_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
+>   			  2);
+>   static SENSOR_DEVICE_ATTR(pwm3, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
+>   			  i8k_hwmon_set_pwm, 2);
+> +static SENSOR_DEVICE_ATTR(pwm3_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
+> +			  2);
+>
+>   static struct attribute *i8k_attrs[] = {
+>   	&sensor_dev_attr_temp1_input.dev_attr.attr,	/* 0 */
+> @@ -744,12 +787,15 @@ static struct attribute *i8k_attrs[] = {
+>   	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 8 */
+>   	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 9 */
+>   	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 10 */
+> -	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
+> -	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
+> -	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
+> -	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 14 */
+> -	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 15 */
+> -	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 16 */
+> +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,	/* 11 */
+> +	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 12 */
+> +	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 13 */
+> +	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 14 */
+> +	&sensor_dev_attr_pwm2_enable.dev_attr.attr,	/* 15 */
+> +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 16 */
+> +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 17 */
+> +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 18 */
+> +	&sensor_dev_attr_pwm3_enable.dev_attr.attr,	/* 19 */
+>   	NULL
+>   };
+>
+> @@ -768,13 +814,13 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
+>   	if (index >= 6 && index <= 7 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP4))
+>   		return 0;
+> -	if (index >= 8 && index <= 10 &&
+> +	if (index >= 8 && index <= 11 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
+>   		return 0;
+> -	if (index >= 11 && index <= 13 &&
+> +	if (index >= 12 && index <= 15 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
+>   		return 0;
+> -	if (index >= 14 && index <= 16 &&
+> +	if (index >= 16 && index <= 19 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
+>   		return 0;
+>
+>
 
---nextPart1780021.j1l0nz3Tl0
-Content-Type: application/pgp-signature; name=signature.asc 
-Content-Description: This is a digitally signed message part.
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
-
-iEYEABECAAYFAldBzgAACgkQi/DJPQPkQ1K3iQCgiWklmLqlpIQu84cl5iFH5e3a
-w3AAoKmOIzRRc20NsjnE65TBZ707nh+3
-=tZOD
------END PGP SIGNATURE-----
-
---nextPart1780021.j1l0nz3Tl0--
