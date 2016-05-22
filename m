@@ -1,120 +1,110 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38479 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:39624 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751924AbcEVAUM (ORCPT
+	with ESMTP id S1751924AbcEVAWN (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 21 May 2016 20:20:12 -0400
-Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use
- fan_status() for fan detection
+	Sat, 21 May 2016 20:22:13 -0400
+Subject: Re: [PATCH] dell-smm-hwmon: Detect fan with index=2
 To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
-	Jan C Peters <jcpeters89@gmail.com>,
-	Thorsten Leemhuis <fedora@leemhuis.info>,
-	=?UTF-8?Q?David_Santamar=c3=ada_Rogado?= <howl.nsp@gmail.com>,
-	Peter Saunderson <peteasa@gmail.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Tolga Cakir <cevelnet@gmail.com>
-References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
+References: <1463842366-17964-1-git-send-email-pali.rohar@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5740FB24.80709@roeck-us.net>
-Date: Sat, 21 May 2016 17:19:48 -0700
+Message-ID: <5740FB9A.6060803@roeck-us.net>
+Date: Sat, 21 May 2016 17:21:46 -0700
 MIME-Version: 1.0
-In-Reply-To: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
+In-Reply-To: <1463842366-17964-1-git-send-email-pali.rohar@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 05/21/2016 07:46 AM, Pali Rohár wrote:
-> On more Dell machines (e.g. Dell Precision M3800) I8K_SMM_GET_FAN_TYPE call
-> is too expensive (CPU is too long in SMM mode) and cause kernel to hang.
-> This patch cache type for each fan (as it should not change) and change the
-> way how fan presense is detected. It revert and use function fan_status()
-> as was before commit f989e55452c7 ("i8k: Add support for fan labels").
+On 05/21/2016 07:52 AM, Pali Rohár wrote:
+> Some Dell machines (e.g. Dell Precision M3800) have two fans, first with
+> index=0 and second with index=2. So export also attributes for third fan
+> device with index=2.
 >
-> Moreover, kernel hangs for 2 - 3 seconds only sometimes and only on some
-> Dell machines. When kernel hangs fan speed is at max. So it was hard to
-> debug and bisect where is root of this problem. It looks like this is bug
-> in Dell BIOS which implement fan type SMM code... and there is no way how
-> to fix it in kernel.
->
+> Reported-by: Tolga Cakir <cevelnet@gmail.com>
 > Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> Reported-and-tested-by: Tolga Cakir <cevelnet@gmail.com>
-> Fixes: f989e55452c7 ("i8k: Add support for fan labels")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=112021
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=100121
-> Cc: stable@vger.kernel.org # v4.0+, will need backport
+> ---
+>   drivers/hwmon/dell-smm-hwmon.c |   20 +++++++++++++++++++-
+>   1 file changed, 19 insertions(+), 1 deletion(-)
+> ---
+>
+> Hi Tolga! Can you test this patch if sensors see fan device correctly?
+>
 
-Should this patch be applied, or do you wait for more testing ?
+I assume this means I should wait for test results before applying the patch ?
 
+Thanks,
 Guenter
 
-> ---
->   drivers/hwmon/dell-smm-hwmon.c |   21 ++++++++++++++++-----
->   1 file changed, 16 insertions(+), 5 deletions(-)
-> ---
->
-> Hi!
->
-> Jan C Peters, Thorsten Leemhuis, David Santamaría Rogado, Peter Saunderson
-> and others, can you test this patch if it fixes your freeze problem at
-> boottime and when using "sensors" program?
->
-> I need to know if this patch fixes problem on Dell Studio XPS 8000 and
-> Dell Studio XPS 8100 machines, so we can revert git commits:
->
-> 6220f4ebd7b4 ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8000")
-> a4b45b25f18d ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8100")
->
 > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index c43318d..577445f 100644
+> index 577445f..7a2764a 100644
 > --- a/drivers/hwmon/dell-smm-hwmon.c
 > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -235,7 +235,7 @@ static int i8k_get_fan_speed(int fan)
->   /*
->    * Read the fan type.
->    */
-> -static int i8k_get_fan_type(int fan)
-> +static int _i8k_get_fan_type(int fan)
+> @@ -78,6 +78,7 @@ static uint i8k_fan_max = I8K_FAN_HIGH;
+>   #define I8K_HWMON_HAVE_TEMP4	(1 << 3)
+>   #define I8K_HWMON_HAVE_FAN1	(1 << 4)
+>   #define I8K_HWMON_HAVE_FAN2	(1 << 5)
+> +#define I8K_HWMON_HAVE_FAN3	(1 << 6)
+>
+>   MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+>   MODULE_AUTHOR("Pali Rohár <pali.rohar@gmail.com>");
+> @@ -246,7 +247,7 @@ static int _i8k_get_fan_type(int fan)
+>   static int i8k_get_fan_type(int fan)
 >   {
->   	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
+>   	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
+> -	static int types[2] = { INT_MIN, INT_MIN };
+> +	static int types[3] = { INT_MIN, INT_MIN, INT_MIN };
 >
-> @@ -243,6 +243,17 @@ static int i8k_get_fan_type(int fan)
->   	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>   	if (types[fan] == INT_MIN)
+>   		types[fan] = _i8k_get_fan_type(fan);
+> @@ -707,6 +708,12 @@ static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
+>   			  1);
+>   static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
+>   			  i8k_hwmon_set_pwm, 1);
+> +static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
+> +			  2);
+> +static SENSOR_DEVICE_ATTR(fan3_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
+> +			  2);
+> +static SENSOR_DEVICE_ATTR(pwm3, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
+> +			  i8k_hwmon_set_pwm, 2);
+>
+>   static struct attribute *i8k_attrs[] = {
+>   	&sensor_dev_attr_temp1_input.dev_attr.attr,	/* 0 */
+> @@ -723,6 +730,9 @@ static struct attribute *i8k_attrs[] = {
+>   	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
+>   	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
+>   	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
+> +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 14 */
+> +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 15 */
+> +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 16 */
+>   	NULL
+>   };
+>
+> @@ -747,6 +757,9 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
+>   	if (index >= 11 && index <= 13 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
+>   		return 0;
+> +	if (index >= 14 && index <= 16 &&
+> +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
+> +		return 0;
+>
+>   	return attr->mode;
 >   }
->
-> +static int i8k_get_fan_type(int fan)
-> +{
-> +	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
-> +	static int types[2] = { INT_MIN, INT_MIN };
-> +
-> +	if (types[fan] == INT_MIN)
-> +		types[fan] = _i8k_get_fan_type(fan);
-> +
-> +	return types[fan];
-> +}
-> +
->   /*
->    * Read the fan nominal rpm for specific fan speed.
->    */
-> @@ -767,13 +778,13 @@ static int __init i8k_init_hwmon(void)
->   	if (err >= 0)
->   		i8k_hwmon_flags |= I8K_HWMON_HAVE_TEMP4;
->
-> -	/* First fan attributes, if fan type is OK */
-> -	err = i8k_get_fan_type(0);
-> +	/* First fan attributes, if fan status is OK */
-> +	err = i8k_get_fan_status(0);
->   	if (err >= 0)
->   		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN1;
->
-> -	/* Second fan attributes, if fan type is OK */
-> -	err = i8k_get_fan_type(1);
-> +	/* Second fan attributes, if fan status is OK */
-> +	err = i8k_get_fan_status(1);
+> @@ -788,6 +801,11 @@ static int __init i8k_init_hwmon(void)
 >   	if (err >= 0)
 >   		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN2;
 >
+> +	/* Third fan attributes, if fan status is OK */
+> +	err = i8k_get_fan_status(2);
+> +	if (err >= 0)
+> +		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN3;
+> +
+>   	i8k_hwmon_dev = hwmon_device_register_with_groups(NULL, "dell_smm",
+>   							  NULL, i8k_groups);
+>   	if (IS_ERR(i8k_hwmon_dev)) {
 >
 
