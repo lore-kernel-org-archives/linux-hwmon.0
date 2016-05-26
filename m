@@ -1,182 +1,38 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f65.google.com ([74.125.82.65]:33256 "EHLO
-	mail-wm0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750833AbcE0MLO (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 27 May 2016 08:11:14 -0400
-Subject: Re: [Experimental PATCH] dell-smm-hwmon: Add support for disabling
- automatic BIOS fan control
+Return-path: <fedora@leemhuis.info>
+From: Thorsten Leemhuis <fedora@leemhuis.info>
+Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use
+ fan_status() for fan detection
 To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	=?UTF-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
-	Andy Lutomirski <luto@kernel.org>, Jethro <xtompok@gmail.com>
-References: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
+ Jan C Peters <jcpeters89@gmail.com>,
+ =?UTF-8?Q?David_Santamar=c3=ada_Rogado?= <howl.nsp@gmail.com>,
+ Peter Saunderson <peteasa@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Tolga Cakir <cevelnet@gmail.com>
+References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Gabriele Mazzotta <gabriele.mzt@gmail.com>
-Message-ID: <830c86c9-af25-b31a-0526-4c1bc0232c53@gmail.com>
-Date: Fri, 27 May 2016 14:11:11 +0200
+Message-ID: <2fc3a0a0-950d-845c-200d-7a89b57270f6@leemhuis.info>
+Date: Thu, 26 May 2016 17:39:57 +0200
 MIME-Version: 1.0
-In-Reply-To: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
+In-Reply-To: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 22/05/2016 13:50, Pali Rohár wrote:
-> This patch exports standard hwmon pwmX_enable sysfs attribute for enabling
-> or disabling automatic fan control by BIOS. Standard value "1" is for
-> disabling automatic BIOS fan control and value "2" for enabling.
-> 
-> Currently there is no way to check if BIOS auto mode is enabled (at least
-> it is not know how to do it), so hwmon sysfs attribute is write-only.
-> 
-> By default BIOS auto mode is enabled by laptop firmware.
-> 
-> When BIOS auto mode is enabled, custom fan speed value (set via hwmon pwmX
-> sysfs attribute) is overwritten by SMM in few seconds and therefore any
-> custom settings are without effect. So this is reason why implementing
-> option for disabling BIOS auto mode is needed.
-> 
-> So finally this patch allows kernel to set and control fan speed on
-> laptops, but it can be dangerous (like setting speed of other fans).
-> 
-> This new feature is highly experimental, uses Dell SMM calls, so does not
-> have to be supported by all laptops BIOSes. It was tested on Dell Latitude
-> E6440 with BIOS A5.
+Lo!
 
-Tested on a Dell XPS13 9333. Changing the value of pwm1_enable appears
-to have no effect here.
+Pali Rohár wrote on 21.05.2016 16:46:
+> […] Thorsten […] can you test this patch if it fixes your freeze problem at
+> boottime and when using "sensors" program?
 
-> Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c |   64 ++++++++++++++++++++++++++++++++++------
->  1 file changed, 55 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 8a66a42..7b5144a 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -45,6 +45,8 @@
->  #define I8K_SMM_GET_SPEED	0x02a3
->  #define I8K_SMM_GET_FAN_TYPE	0x03a3
->  #define I8K_SMM_GET_NOM_SPEED	0x04a3
-> +#define I8K_SMM_MANUAL_FAN	0x34a3
-> +#define I8K_SMM_AUTO_FAN	0x35a3
->  #define I8K_SMM_GET_TEMP	0x10a3
->  #define I8K_SMM_GET_TEMP_TYPE	0x11a3
->  #define I8K_SMM_GET_DELL_SIG1	0xfea3
-> @@ -284,6 +286,17 @@ static int i8k_get_fan_nominal_speed(int fan, int speed)
->  }
->  
->  /*
-> + * Enable or disable automatic BIOS fan control support
-> + */
-> +static int i8k_enable_fan_auto_mode(bool enable)
-> +{
-> +	struct smm_regs regs = { };
-> +
-> +	regs.eax = enable ? I8K_SMM_AUTO_FAN : I8K_SMM_MANUAL_FAN;
-> +	return i8k_smm(&regs);
-> +}
-> +
-> +/*
->   * Set the fan speed (off, low, high). Returns the new fan status.
->   */
->  static int i8k_set_fan(int fan, int speed)
-> @@ -702,6 +715,30 @@ static ssize_t i8k_hwmon_set_pwm(struct device *dev,
->  	return err < 0 ? -EIO : count;
->  }
->  
-> +static ssize_t i8k_hwmon_set_pwm_enable(struct device *dev,
-> +					struct device_attribute *attr,
-> +					const char *buf, size_t count)
-> +{
-> +	int err;
-> +	bool enable;
-> +	unsigned long val;
-> +
-> +	err = kstrtoul(buf, 10, &val);
-> +	if (err)
-> +		return err;
-> +
-> +	if (val == 0)
-> +		return -EINVAL;
-> +
-> +	enable = (val != 1);
-> +
-> +	mutex_lock(&i8k_mutex);
-> +	err = i8k_enable_fan_auto_mode(enable);
-> +	mutex_unlock(&i8k_mutex);
-> +
-> +	return err ? -EIO : count;
-> +}
-> +
->  static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, i8k_hwmon_show_temp, NULL, 0);
->  static SENSOR_DEVICE_ATTR(temp1_label, S_IRUGO, i8k_hwmon_show_temp_label, NULL,
->  			  0);
-> @@ -719,18 +756,24 @@ static SENSOR_DEVICE_ATTR(fan1_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
->  			  0);
->  static SENSOR_DEVICE_ATTR(pwm1, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
->  			  i8k_hwmon_set_pwm, 0);
-> +static SENSOR_DEVICE_ATTR(pwm1_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
-> +			  0);
->  static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
->  			  1);
->  static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
->  			  1);
->  static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
->  			  i8k_hwmon_set_pwm, 1);
-> +static SENSOR_DEVICE_ATTR(pwm2_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
-> +			  1);
->  static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
->  			  2);
->  static SENSOR_DEVICE_ATTR(fan3_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
->  			  2);
->  static SENSOR_DEVICE_ATTR(pwm3, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
->  			  i8k_hwmon_set_pwm, 2);
-> +static SENSOR_DEVICE_ATTR(pwm3_enable, S_IWUSR, NULL, i8k_hwmon_set_pwm_enable,
-> +			  2);
->  
->  static struct attribute *i8k_attrs[] = {
->  	&sensor_dev_attr_temp1_input.dev_attr.attr,	/* 0 */
-> @@ -744,12 +787,15 @@ static struct attribute *i8k_attrs[] = {
->  	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 8 */
->  	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 9 */
->  	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 10 */
-> -	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
-> -	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
-> -	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
-> -	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 14 */
-> -	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 15 */
-> -	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 16 */
-> +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,	/* 11 */
-> +	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 12 */
-> +	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 13 */
-> +	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 14 */
-> +	&sensor_dev_attr_pwm2_enable.dev_attr.attr,	/* 15 */
-> +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 16 */
-> +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 17 */
-> +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 18 */
-> +	&sensor_dev_attr_pwm3_enable.dev_attr.attr,	/* 19 */
->  	NULL
->  };
->  
-> @@ -768,13 +814,13 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
->  	if (index >= 6 && index <= 7 &&
->  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP4))
->  		return 0;
-> -	if (index >= 8 && index <= 10 &&
-> +	if (index >= 8 && index <= 11 &&
->  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
->  		return 0;
-> -	if (index >= 11 && index <= 13 &&
-> +	if (index >= 12 && index <= 15 &&
->  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
->  		return 0;
-> -	if (index >= 14 && index <= 16 &&
-> +	if (index >= 16 && index <= 19 &&
->  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
->  		return 0;
->  
-> 
+FWIW, I never saw either of those problems. I only saw the third issue
+that was mentioned: the CPU fan speed is going up and down as described
+in https://bugzilla.kernel.org/show_bug.cgi?id=100121
+
+> I need to know if this patch fixes problem on Dell Studio XPS 8000 and
+> Dell Studio XPS 8100 machines, so we can revert git commits:
+> 6220f4ebd7b4 ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8000")
+> a4b45b25f18d ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8100")
+
+Just checked: Sorry, that patch did not fix the CPU fan speed issue on
+my XPS 8000, so there is afaics no reason to revert 6220f4ebd7b4 :-/
+
+HTH, CU, knurd
