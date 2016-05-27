@@ -1,135 +1,88 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from basicbox7.server-home.net ([195.137.212.29]:40969 "EHLO
-	basicbox7.server-home.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750828AbcE0NF6 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 27 May 2016 09:05:58 -0400
-Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use
- fan_status() for fan detection
-To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>
-References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
- <20160527094736.GL29844@pali>
- <10b66444-9405-9d4c-b1ec-ce57f7e8420f@leemhuis.info>
- <201605271245.47383@pali>
+Return-path: <pali.rohar@gmail.com>
+From: Pali =?utf-8?q?Roh=C3=A1r?= <pali.rohar@gmail.com>
+To: Thorsten Leemhuis <fedora@leemhuis.info>
+Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use fan_status() for fan detection
+Date: Fri, 27 May 2016 15:21:10 +0200
 Cc: Jan C Peters <jcpeters89@gmail.com>,
-	=?UTF-8?Q?David_Santamar=c3=ada_Rogado?= <howl.nsp@gmail.com>,
-	Peter Saunderson <peteasa@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Tolga Cakir <cevelnet@gmail.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-From: Thorsten Leemhuis <fedora@leemhuis.info>
-Message-ID: <01084692-618a-31db-76f8-60176d1cd2cc@leemhuis.info>
-Date: Fri, 27 May 2016 15:05:54 +0200
+ David
+ =?utf-8?q?Santamar=C3=ADa_Rogado?= <howl.nsp@gmail.com>,
+ Peter Saunderson <peteasa@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Tolga Cakir <cevelnet@gmail.com>,
+ linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com> <201605271245.47383@pali> <01084692-618a-31db-76f8-60176d1cd2cc@leemhuis.info>
+In-Reply-To: <01084692-618a-31db-76f8-60176d1cd2cc@leemhuis.info>
 MIME-Version: 1.0
-In-Reply-To: <201605271245.47383@pali>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: multipart/signed;
+  boundary="nextPart1642232.Jl8UzZsv1J";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
+Content-Transfer-Encoding: 7bit
+Message-Id: <201605271521.10294@pali>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Pali Rohár wrote on 27.05.2016 12:45:
-> […]
-> Looks like there are two different problems with dell-smm-hwmon driver:
-> 1) Fan speed going randomly up and down without system freeze
-> […]
-> So for problem 1) I need to know:
-> 
-> * Is it regression? […]
+--nextPart1642232.Jl8UzZsv1J
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yes, it is known to be a regression from f989e55452, as identified
-by Jan in https://bugzilla.kernel.org/show_bug.cgi?id=100121#c13
- 
-I just verified and reverted that change on top of 4.6; the
-problem with the fan speed indeed goes away. So I tried a few things
-and came to the conclusion: the problem shows up as soon as 
-i8k_get_fan_type() (introduced in f989e55452) is called somewhere.
-Find below the minimal patch I could come up to that makes the fan
-act normal on the Studio 8000 I have here (it's just meant as a 
-reference and not meant to be applied, as it leaves unused functions 
-around).
+On Friday 27 May 2016 15:05:54 Thorsten Leemhuis wrote:
+> Pali Roh=C3=A1r wrote on 27.05.2016 12:45:
+> > [=E2=80=A6]
+> > Looks like there are two different problems with dell-smm-hwmon
+> > driver: 1) Fan speed going randomly up and down without system
+> > freeze [=E2=80=A6]
+> > So for problem 1) I need to know:
+> >=20
+> > * Is it regression? [=E2=80=A6]
+>=20
+> Yes, it is known to be a regression from f989e55452, as identified
+> by Jan in https://bugzilla.kernel.org/show_bug.cgi?id=3D100121#c13
+>=20
+> I just verified and reverted that change on top of 4.6; the
+> problem with the fan speed indeed goes away.
 
-CU, knurd
+Ok, thanks for testing!
 
+> So I tried a few things
+> and came to the conclusion: the problem shows up as soon as
+> i8k_get_fan_type() (introduced in f989e55452) is called somewhere.
 
+So, once kernel call i8k_get_fan_type() function, then fan speed going=20
+up/down? Even if it was called only at once? Can you confirm it? Caching=20
+patch cause that for each fan that function is called exactly one time.
 
---- dell-smm-hwmon.c-unmodified	2016-05-27 13:05:58.441654144 +0200
-+++ dell-smm-hwmon.c	2016-05-27 14:49:31.896224380 +0200
-@@ -686,14 +686,10 @@
- static SENSOR_DEVICE_ATTR(temp4_label, S_IRUGO, i8k_hwmon_show_temp_label, NULL,
- 			  3);
- static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, i8k_hwmon_show_fan, NULL, 0);
--static SENSOR_DEVICE_ATTR(fan1_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
--			  0);
- static SENSOR_DEVICE_ATTR(pwm1, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
- 			  i8k_hwmon_set_pwm, 0);
- static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
- 			  1);
--static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
--			  1);
- static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
- 			  i8k_hwmon_set_pwm, 1);
- 
-@@ -707,11 +703,9 @@
- 	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 6 */
- 	&sensor_dev_attr_temp4_label.dev_attr.attr,	/* 7 */
- 	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 8 */
--	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 9 */
--	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 10 */
--	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
--	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
--	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
-+	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 9 */
-+	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 10 */
-+	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 11 */
- 	NULL
- };
- 
-@@ -730,10 +724,10 @@
- 	if (index >= 6 && index <= 7 &&
- 	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP4))
- 		return 0;
--	if (index >= 8 && index <= 10 &&
-+	if (index >= 8 && index <= 9 &&
- 	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
- 		return 0;
--	if (index >= 11 && index <= 13 &&
-+	if (index >= 10 && index <= 11 &&
- 	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
- 		return 0;
- 
-@@ -768,12 +762,14 @@
- 		i8k_hwmon_flags |= I8K_HWMON_HAVE_TEMP4;
- 
- 	/* First fan attributes, if fan type is OK */
--	err = i8k_get_fan_type(0);
-+	// err = i8k_get_fan_type(0);
-+	err = i8k_get_fan_status(0);
- 	if (err >= 0)
- 		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN1;
- 
- 	/* Second fan attributes, if fan type is OK */
--	err = i8k_get_fan_type(1);
-+	// err = i8k_get_fan_type(1);
-+	err = i8k_get_fan_status(1);
- 	if (err >= 0)
- 		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN2;
- 
-@@ -932,17 +928,6 @@
- static struct dmi_system_id i8k_blacklist_dmi_table[] __initdata = {
- 	{
- 		/*
--		 * CPU fan speed going up and down on Dell Studio XPS 8000
--		 * for unknown reasons.
--		 */
--		.ident = "Dell Studio XPS 8000",
--		.matches = {
--			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
--			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Studio XPS 8000"),
--		},
--	},
--	{
--		/*
- 		 * CPU fan speed going up and down on Dell Studio XPS 8100
- 		 * for unknown reasons.
- 		 */
+If this is problem, we can probably create DMI list of machines which do=20
+not like i8k_get_fan_type() call and disable it for them.
+
+To make sure that this is root of your problem, can you take some older=20
+kernel version (where is i8k working fine) and try to patch+call that=20
+i8k_get_fan_type() function? To check that something else cannot=20
+interference with it...
+
+> Find below the minimal patch I could come up to that makes the fan
+> act normal on the Studio 8000 I have here (it's just meant as a
+> reference and not meant to be applied, as it leaves unused functions
+> around).
+
+Patch just make sure that i8k_get_fan_type() is never called.
+
+=2D-=20
+Pali Roh=C3=A1r
+pali.rohar@gmail.com
+
+--nextPart1642232.Jl8UzZsv1J
+Content-Type: application/pgp-signature; name=signature.asc 
+Content-Description: This is a digitally signed message part.
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iEYEABECAAYFAldIScYACgkQi/DJPQPkQ1KDwQCgns3iN+KEW01C4tvfzKBPey/A
+IPMAnjM4NXZWkw8pNF0FwjpBxPp1I57P
+=H6mj
+-----END PGP SIGNATURE-----
+
+--nextPart1642232.Jl8UzZsv1J--
