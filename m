@@ -1,151 +1,239 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:53462 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750956AbcEaR0l (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 31 May 2016 13:26:41 -0400
-Date: Tue, 31 May 2016 10:26:26 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Pascal Sachs <pascalsachs@gmail.com>
-Cc: jdelvare@suse.com, corbet@lwn.net, pascal.sachs@sensirion.com,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, David Frey <david.frey@sensirion.com>
-Subject: Re: [PATCH 1/1 v4] hwmon: add support for Sensirion SHT3x sensors
-Message-ID: <20160531172626.GC14007@roeck-us.net>
-References: <1464619588-3354-1-git-send-email-pascalsachs@gmail.com>
- <574C602E.1070702@roeck-us.net>
- <574D386B.8020805@gmail.com>
+Return-path: <>
+From: "Andrew F. Davis" <afd@ti.com>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Andrew F . Davis" <afd@ti.com>
+Subject: [PATCH] hwmon: (tmp401) Add support for TI TMP461
+Date: Tue, 31 May 2016 11:27:20 -0500
+Message-ID: <20160531162720.460-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <574D386B.8020805@gmail.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, May 31, 2016 at 09:08:27AM +0200, Pascal Sachs wrote:
-> Hi Guenter
-> 
-> I want to thank you again for the fast and detailed code review.
-> I really appreciate it.
-> 
+Signed-off-by: Andrew F. Davis <afd@ti.com>
+---
+ Documentation/hwmon/tmp401 | 18 +++++++++--
+ drivers/hwmon/Kconfig      |  2 +-
+ drivers/hwmon/tmp401.c     | 81 ++++++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 92 insertions(+), 9 deletions(-)
 
-Sorry it took so long.
-
-[ ... ]
-
-> >>+static struct sht3x_data *sht3x_update_client(struct device *dev)
-> >>+{
-> >>+    struct sht3x_data *data = dev_get_drvdata(dev);
-> >>+    struct i2c_client *client = data->client;
-> >>+    u16 interval_ms = mode_to_update_interval[data->mode];
-> >
-> >If data->mode == 0, interval_ms == 0,
-> >
-> >>+    unsigned long interval_jiffies = msecs_to_jiffies(interval_ms);
-> >
-> >... interval_jiffies == 1,
-> >
-> >>+    unsigned char buf[SHT3X_RESPONSE_LENGTH];
-> >>+    u16 val;
-> >>+    int ret = 0;
-> >>+
-> >>+    mutex_lock(&data->data_lock);
-> >>+    /* only update once per interval in periodic mode */
-> >>+    if (time_after(jiffies, data->last_update + interval_jiffies)) {
-> >
-> >... and the command is executed every other timer tick. Is that
-> >intentional ?
-> Yes, this is how it should behave. In single shot mode the sensor measures
-> values on demand, which means every time the sysfs interface is called, a
-> measurement is triggered. In periodic mode however the measurement process
-> is handled internally by the sensor and read out only makes sense if a new
-> reading is available.
-
-Please add the explanation as comment into the code.
-
-[ ... ]
-
-> >>+    commands = &limit_commands[index];
-> >>+
-> >>+    memcpy(position, commands->write_command, SHT3X_CMD_LENGTH);
-> >>+    position += SHT3X_CMD_LENGTH;
-> >>+    /*
-> >>+     * ST = (T + 45) / 175 * 2^16
-> >>+     * SRH = RH / 100 * 2^16
-> >>+     * adapted for fixed point arithmetic and packed the same as
-> >>+     * in limit_show()
-> >>+     */
-> >>+    raw = ((u32)(temperature + 45000) * 24543) >> (16 + 7);
-> >>+    raw |= ((humidity * 42950) >> 16) & 0xfe00;
-> >>+
-> >>+    *((__be16 *)position) = cpu_to_be16(raw);
-> >>+    position += SHT3X_WORD_LEN;
-> >>+    *position = crc8(sht3x_crc8_table,
-> >>+             position - SHT3X_WORD_LEN,
-> >>+             SHT3X_WORD_LEN,
-> >>+             SHT3X_CRC8_INIT);
-> >>+
-> >>+    mutex_lock(&data->data_lock);
-> >>+    mutex_lock(&data->i2c_lock);
-> >>+    ret = i2c_master_send(client, buffer, sizeof(buffer));
-> >>+    mutex_unlock(&data->i2c_lock);
-> >>+
-> >>+    if (ret != sizeof(buffer))
-> >>+        goto out;
-> >>+
-> >>+    data->temperature_limits[index] = temperature;
-> >>+    data->humidity_limits[index] = humidity;
-> >>+
-> >>+out:
-> >>+    mutex_unlock(&data->data_lock);
-> >>+    if (ret != sizeof(buffer))
-> >>+        return  ret < 0 ? ret : -EIO;
-> >>+
-> >>+    return count;
-> >
-> >I would prefer something like
-> >
-> >        if (ret != sizeof(buffer)) {
-> >                if (ret >= 0)
-> >                        ret = -EIO;
-> >                goto out;
-> >        }
-> >
-> >        ret = count;
-> >        data->temperature_limits[index] = temperature;
-> >        data->humidity_limits[index] = humidity;
-> >out:
-> >        mutex_unlock(&data->data_lock);
-> >        return ret;
-> >
-> >which I think would be cleaner. See below though for locking issues.
-> OK, wasn't sure if it is appropriate to handle error and valid return in the
-> same variable
-
-Done all over the place.
-
-[ ... ]
-
-> >
-> >>+    mutex_lock(&data->i2c_lock);
-> >>+    mutex_lock(&data->data_lock);
-> >>+    /* abort periodic measure */
-> >>+    ret = i2c_master_send(client, sht3x_cmd_break, SHT3X_CMD_LENGTH);
-> >>+    if (ret != SHT3X_CMD_LENGTH)
-> >>+        goto out;
-> >>+    data->mode = 0;
-> >>+
-> >
-> >Can you explain why you set data->mode = 0 here ?
-> To do any changes to the configuration while in periodic mode we have to
-> send a break command to the sensor, which then falls back to single shot
-> mode (mode = 0). Therefore for consistency reasons we set the mode to
-> the value it actually is at this point.
-> If setting the new mode fails, we are still in single shot mode. Like this
-> we
-> ensure that the data->mode is always correct.
-
-Ok; please add the explanation as comment into the code.
-
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/tmp401 b/Documentation/hwmon/tmp401
+index 711f75e..eaa2d3b 100644
+--- a/Documentation/hwmon/tmp401
++++ b/Documentation/hwmon/tmp401
+@@ -22,6 +22,9 @@ Supported chips:
+     Prefix: 'tmp435'
+     Addresses scanned: I2C 0x48 - 0x4f
+     Datasheet: http://focus.ti.com/docs/prod/folders/print/tmp435.html
++  * Texas Instruments TMP461
++    Prefix: 'tmp461'
++    Datasheet: http://www.ti.com/product/tmp461
+ 
+ Authors:
+          Hans de Goede <hdegoede@redhat.com>
+@@ -31,8 +34,8 @@ Description
+ -----------
+ 
+ This driver implements support for Texas Instruments TMP401, TMP411,
+-TMP431, TMP432 and TMP435 chips. These chips implement one or two remote
+-and one local temperature sensors. Temperature is measured in degrees
++TMP431, TMP432, TMP435, and TMP461 chips. These chips implement one or two
++remote and one local temperature sensors. Temperature is measured in degrees
+ Celsius. Resolution of the remote sensor is 0.0625 degree. Local
+ sensor resolution can be set to 0.5, 0.25, 0.125 or 0.0625 degree (not
+ supported by the driver so far, so using the default resolution of 0.5
+@@ -55,3 +58,14 @@ some additional features.
+ 
+ TMP432 is compatible with TMP401 and TMP431. It supports two external
+ temperature sensors.
++
++TMP461 is compatible with TMP401. It supports offset and n-factor correction
++that is applied to the remote sensor.
++
++* Sensor offset values are temperature values
++
++  Exported via sysfs attribute tempX_offset
++
++* n-factor correction, values are in raw form as described in the datasheet
++
++  Exported via sysfs attribute tempX_nfactor
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index ff94007..c571dcf 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1561,7 +1561,7 @@ config SENSORS_TMP401
+ 	depends on I2C
+ 	help
+ 	  If you say yes here you get support for Texas Instruments TMP401,
+-	  TMP411, TMP431, TMP432 and TMP435 temperature sensor chips.
++	  TMP411, TMP431, TMP432, TMP435, and TMP461 temperature sensor chips.
+ 
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called tmp401.
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index ccf4cff..280065b 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -47,7 +47,8 @@
+ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4c, 0x4d,
+ 	0x4e, 0x4f, I2C_CLIENT_END };
+ 
+-enum chips { tmp401, tmp411, tmp431, tmp432, tmp435 };
++enum chips { tmp401, tmp411, tmp431, tmp432, tmp435, tmp461 };
++
+ 
+ /*
+  * The TMP401 registers, note some registers have different addresses for
+@@ -62,31 +63,37 @@ enum chips { tmp401, tmp411, tmp431, tmp432, tmp435 };
+ #define TMP401_MANUFACTURER_ID_REG		0xFE
+ #define TMP401_DEVICE_ID_REG			0xFF
+ 
+-static const u8 TMP401_TEMP_MSB_READ[6][2] = {
++static const u8 TMP401_TEMP_MSB_READ[8][2] = {
+ 	{ 0x00, 0x01 },	/* temp */
+ 	{ 0x06, 0x08 },	/* low limit */
+ 	{ 0x05, 0x07 },	/* high limit */
+ 	{ 0x20, 0x19 },	/* therm (crit) limit */
+ 	{ 0x30, 0x34 },	/* lowest */
+ 	{ 0x32, 0x36 },	/* highest */
++	{ 0, 0x11 },	/* offset */
++	{ 0, 0x23 },	/* nfactor */
+ };
+ 
+-static const u8 TMP401_TEMP_MSB_WRITE[6][2] = {
++static const u8 TMP401_TEMP_MSB_WRITE[8][2] = {
+ 	{ 0, 0 },	/* temp (unused) */
+ 	{ 0x0C, 0x0E },	/* low limit */
+ 	{ 0x0B, 0x0D },	/* high limit */
+ 	{ 0x20, 0x19 },	/* therm (crit) limit */
+ 	{ 0x30, 0x34 },	/* lowest */
+ 	{ 0x32, 0x36 },	/* highest */
++	{ 0, 0x11 },	/* offset */
++	{ 0, 0x23 },	/* nfactor */
+ };
+ 
+-static const u8 TMP401_TEMP_LSB[6][2] = {
++static const u8 TMP401_TEMP_LSB[8][2] = {
+ 	{ 0x15, 0x10 },	/* temp */
+ 	{ 0x17, 0x14 },	/* low limit */
+ 	{ 0x16, 0x13 },	/* high limit */
+ 	{ 0, 0 },	/* therm (crit) limit (unused) */
+ 	{ 0x31, 0x35 },	/* lowest */
+ 	{ 0x33, 0x37 },	/* highest */
++	{ 0, 0x12 },	/* offset */
++	{ 0, 0 },	/* nfactor (unused) */
+ };
+ 
+ static const u8 TMP432_TEMP_MSB_READ[4][3] = {
+@@ -149,6 +156,7 @@ static const struct i2c_device_id tmp401_id[] = {
+ 	{ "tmp431", tmp431 },
+ 	{ "tmp432", tmp432 },
+ 	{ "tmp435", tmp435 },
++	{ "tmp461", tmp461 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, tmp401_id);
+@@ -170,7 +178,7 @@ struct tmp401_data {
+ 	/* register values */
+ 	u8 status[4];
+ 	u8 config;
+-	u16 temp[6][3];
++	u16 temp[8][3];
+ 	u8 temp_crit_hyst;
+ };
+ 
+@@ -445,6 +453,44 @@ static ssize_t reset_temp_history(struct device *dev,
+ 	return count;
+ }
+ 
++static ssize_t show_nfactor(struct device *dev,
++			    struct device_attribute *devattr, char *buf)
++{
++	int nr = to_sensor_dev_attr_2(devattr)->nr;
++	int index = to_sensor_dev_attr_2(devattr)->index;
++	struct tmp401_data *data = tmp401_update_device(dev);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	return sprintf(buf, "%d\n", data->temp[nr][index]);
++}
++
++static ssize_t store_nfactor(struct device *dev,
++			     struct device_attribute *devattr,
++			     const char *buf, size_t count)
++{
++	int nr = to_sensor_dev_attr_2(devattr)->nr;
++	int index = to_sensor_dev_attr_2(devattr)->index;
++	struct tmp401_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long val;
++	u8 regaddr;
++
++	if (kstrtol(buf, 10, &val))
++		return -EINVAL;
++	val = clamp_val(val, -128, 127);
++
++	regaddr = TMP401_TEMP_MSB_WRITE[nr][index];
++
++	mutex_lock(&data->update_lock);
++	i2c_smbus_write_byte_data(client, regaddr, val);
++	data->temp[nr][index] = val;
++	mutex_unlock(&data->update_lock);
++
++	return count;
++}
++
+ static ssize_t show_update_interval(struct device *dev,
+ 				    struct device_attribute *attr, char *buf)
+ {
+@@ -613,6 +659,26 @@ static const struct attribute_group tmp432_group = {
+ };
+ 
+ /*
++ * Additional features of the TMP461 chip.
++ * The TMP461 η-factor correction and temperature offset
++ * for the remote channel.
++ */
++static SENSOR_DEVICE_ATTR_2(temp2_offset, S_IWUSR | S_IRUGO, show_temp,
++			    store_temp, 6, 1);
++static SENSOR_DEVICE_ATTR_2(temp2_nfactor, S_IWUSR | S_IRUGO, show_nfactor,
++			    store_nfactor, 7, 1);
++
++static struct attribute *tmp461_attributes[] = {
++	&sensor_dev_attr_temp2_offset.dev_attr.attr,
++	&sensor_dev_attr_temp2_nfactor.dev_attr.attr,
++	NULL
++};
++
++static const struct attribute_group tmp461_group = {
++	.attrs = tmp461_attributes,
++};
++
++/*
+  * Begin non sysfs callback code (aka Real code)
+  */
+ 
+@@ -714,7 +780,7 @@ static int tmp401_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+ {
+ 	static const char * const names[] = {
+-		"TMP401", "TMP411", "TMP431", "TMP432", "TMP435"
++		"TMP401", "TMP411", "TMP431", "TMP432", "TMP435", "TMP461"
+ 	};
+ 	struct device *dev = &client->dev;
+ 	struct device *hwmon_dev;
+@@ -745,6 +811,9 @@ static int tmp401_probe(struct i2c_client *client,
+ 	if (data->kind == tmp432)
+ 		data->groups[groups++] = &tmp432_group;
+ 
++	if (data->kind == tmp461)
++		data->groups[groups++] = &tmp461_group;
++
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+ 							   data, data->groups);
+ 	if (IS_ERR(hwmon_dev))
+-- 
+2.8.3
