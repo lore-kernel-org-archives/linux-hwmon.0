@@ -1,49 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43476 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751130AbcFASK7 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 14:10:59 -0400
-Date: Wed, 1 Jun 2016 11:10:49 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hoan Tran <hotran@apm.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ashwin Chaugule <ashwin.chaugule@linaro.org>,
-	Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [2/3] hwmon: xgene: Adds hwmon driver
-Message-ID: <20160601181049.GA10954@roeck-us.net>
-References: <1463415447-29903-3-git-send-email-hotran@apm.com>
- <20160530052507.GA25641@roeck-us.net>
- <CAFHUOYzWj_PbbpzCW5CjO7d3uc7x2h8UvHrYmDoKyttNQVDDZA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFHUOYzWj_PbbpzCW5CjO7d3uc7x2h8UvHrYmDoKyttNQVDDZA@mail.gmail.com>
+Received: from mail.skyhub.de ([78.46.96.112]:39547 "EHLO mail.skyhub.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1751718AbcFAKEl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Wed, 1 Jun 2016 06:04:41 -0400
+From: Borislav Petkov <bp@alien8.de>
+To: X86 ML <x86@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Rui Huang <ray.huang@amd.com>,
+	Sherry Hurwitz <sherry.hurwitz@amd.com>
+Subject: [PATCH] x86/cpu/AMD: Extend X86_FEATURE_TOPOEXT workaround to newer models
+Date: Wed,  1 Jun 2016 12:04:28 +0200
+Message-Id: <1464775468-23355-1-git-send-email-bp@alien8.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, May 31, 2016 at 11:00:05PM -0700, Hoan Tran wrote:
-> Hi Guenter,
-> 
-> >
-> > Overall, I have to say that the code is quite complex due to the repeated
-> > checks for ACPI. I am close to suggest having two separate drivers,
-> > one for ACPI and one for non-ACPI. Any chance to separate ACPI vs. non-ACPI
-> > code a bit better ?
-> 
-> How about create separate rx_cb functions for ACPI and non-ACPI ?
+From: Borislav Petkov <bp@suse.de>
 
-Yes, that would be great if it is possible.
+We need to reenable the topology extensions CPUID leafs on newer models
+too, if BIOS has disabled them, as we rely on them to get proper compute
+unit topology.
 
-> As almost functions are the same between ACPI and non-ACPI, I thought
-> keep the same driver is still OK, isn't it ?
-> 
-If you can separate the ACPI code from the non-ACPI code a bit better than
-right now, yes.
+Make the printk a once thing, while at it.
 
-Thanks,
-Guenter
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Rui Huang <ray.huang@amd.com>
+Cc: Sherry Hurwitz <sherry.hurwitz@amd.com>
+---
+ arch/x86/kernel/cpu/amd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index c343a54bed39..f5c69d8974e1 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -674,14 +674,14 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
+ 	u64 value;
+ 
+ 	/* re-enable TopologyExtensions if switched off by BIOS */
+-	if ((c->x86_model >= 0x10) && (c->x86_model <= 0x1f) &&
++	if ((c->x86_model >= 0x10) && (c->x86_model <= 0x6f) &&
+ 	    !cpu_has(c, X86_FEATURE_TOPOEXT)) {
+ 
+ 		if (msr_set_bit(0xc0011005, 54) > 0) {
+ 			rdmsrl(0xc0011005, value);
+ 			if (value & BIT_64(54)) {
+ 				set_cpu_cap(c, X86_FEATURE_TOPOEXT);
+-				pr_info(FW_INFO "CPU: Re-enabling disabled Topology Extensions Support.\n");
++				pr_info_once(FW_INFO "CPU: Re-enabling disabled Topology Extensions Support.\n");
+ 			}
+ 		}
+ 	}
+-- 
+2.7.3
+
