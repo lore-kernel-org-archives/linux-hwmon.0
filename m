@@ -1,45 +1,95 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.skyhub.de ([78.46.96.112]:44101 "EHLO mail.skyhub.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751455AbcFBH6o (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 2 Jun 2016 03:58:44 -0400
-Date: Thu, 2 Jun 2016 09:58:30 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Ingo Molnar <mingo@kernel.org>,
-	linux-hwmon@vger.kernel.org, X86 ML <x86@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Rui Huang <ray.huang@amd.com>,
-	Sherry Hurwitz <sherry.hurwitz@amd.com>
+Received: from mail-bn1on0081.outbound.protection.outlook.com ([157.56.110.81]:28664
+	"EHLO na01-bn1-obe.outbound.protection.outlook.com"
+	rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+	id S1752465AbcFAPlq convert rfc822-to-8bit (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 11:41:46 -0400
+From: "Huang, Ray" <Ray.Huang@amd.com>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Borislav Petkov <bp@alien8.de>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	"Hurwitz, Sherry" <sherry.hurwitz@amd.com>
 Subject: Re: [PATCH] hwmon: (fam15h_power) Disable preemption when reading
  registers
-Message-ID: <20160602075830.GC10803@pd.tnic>
-References: <1464775486-23446-1-git-send-email-bp@alien8.de>
- <574EE1B3.9010704@roeck-us.net>
- <20160601134126.GB22373@pd.tnic>
- <20160601181509.GB10954@roeck-us.net>
- <20160602072619.GB10803@pd.tnic>
- <alpine.DEB.2.11.1606020946430.3629@nanos>
+Date: Wed, 1 Jun 2016 15:26:59 +0000
+Message-ID: <5FE1E570-430B-4C0D-9100-E213D5B5ACFA@amd.com>
+References: <1464775486-23446-1-git-send-email-bp@alien8.de>,<574EE1B3.9010704@roeck-us.net>
+In-Reply-To: <574EE1B3.9010704@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.11.1606020946430.3629@nanos>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 02, 2016 at 09:47:54AM +0200, Thomas Gleixner wrote:
-> What's wrong with using:
+
+
+> On Jun 1, 2016, at 9:23 PM, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
->        on_each_cpu_mask()
+>> On 06/01/2016 03:04 AM, Borislav Petkov wrote:
+>> From: Borislav Petkov <bp@suse.de>
+>> 
+>> We need to read a bunch of registers on each compute unit and possibly
+>> on the current CPU too. Disable preemption around it.
 > 
-> Which does all that magic for you?
+> An explanation would be helpful. Is this a bug fix ? I would like to get
+> a confirmation from someone at AMD that this is really necessary.
+> 
 
-Ha, very nice! Let me try it.
+This change looks good for me. But I am in office this week, I will test it on CZ platform next week.   :-)
 
-Thanks!
+Thanks,
+Rui
 
--- 
-Regards/Gruss,
-    Boris.
-
-ECO tip #101: Trim your mails when you reply.
+> Thanks,
+> Guenter
+> 
+>> Signed-off-by: Borislav Petkov <bp@suse.de>
+>> Cc: Rui Huang <ray.huang@amd.com>
+>> Cc: Sherry Hurwitz <sherry.hurwitz@amd.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>  drivers/hwmon/fam15h_power.c | 10 ++++++----
+>>  1 file changed, 6 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+>> index eb97a9241d17..69bb810f528b 100644
+>> --- a/drivers/hwmon/fam15h_power.c
+>> +++ b/drivers/hwmon/fam15h_power.c
+>> @@ -172,9 +172,9 @@ static void do_read_registers_on_cu(void *_data)
+>>   */
+>>  static int read_registers(struct fam15h_power_data *data)
+>>  {
+>> -    int this_cpu, ret, cpu;
+>>      int core, this_core;
+>>      cpumask_var_t mask;
+>> +    int ret, cpu;
+>> 
+>>      ret = zalloc_cpumask_var(&mask, GFP_KERNEL);
+>>      if (!ret)
+>> @@ -183,7 +183,6 @@ static int read_registers(struct fam15h_power_data *data)
+>>      memset(data->cu_on, 0, sizeof(int) * MAX_CUS);
+>> 
+>>      get_online_cpus();
+>> -    this_cpu = smp_processor_id();
+>> 
+>>      /*
+>>       * Choose the first online core of each compute unit, and then
+>> @@ -205,10 +204,13 @@ static int read_registers(struct fam15h_power_data *data)
+>>          cpumask_set_cpu(cpumask_any(topology_sibling_cpumask(cpu)), mask);
+>>      }
+>> 
+>> -    if (cpumask_test_cpu(this_cpu, mask))
+>> +    preempt_disable();
+>> +    smp_call_function_many(mask, do_read_registers_on_cu, data, true);
+>> +
+>> +    if (cpumask_test_cpu(smp_processor_id(), mask))
+>>          do_read_registers_on_cu(data);
+>> 
+>> -    smp_call_function_many(mask, do_read_registers_on_cu, data, true);
+>> +    preempt_enable();
+>>      put_online_cpus();
+>> 
+>>      free_cpumask_var(mask);
+> 
