@@ -1,60 +1,39 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:51589 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752367AbcFCN3o (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jun 2016 09:29:44 -0400
-Subject: Re: [PATCH 2/3] iio: adc: ina3221: Add support for IIO ADC driver for
- TI INA3221
-To: Jonathan Cameron <jic23@kernel.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>, robh+dt@kernel.org,
-	corbet@lwn.net, lars@metafoo.de
-References: <1464784454-7988-1-git-send-email-ldewangan@nvidia.com>
- <1464784454-7988-2-git-send-email-ldewangan@nvidia.com>
- <44e28639-67b6-7586-5e6d-c0180ccded79@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Jean Delvare <khali@linux-fr.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5751863E.907@roeck-us.net>
-Date: Fri, 3 Jun 2016 06:29:34 -0700
-MIME-Version: 1.0
-In-Reply-To: <44e28639-67b6-7586-5e6d-c0180ccded79@kernel.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:33262 "EHLO
+	mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752036AbcFAJn2 (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 05:43:28 -0400
+From: Krzysztof Kozlowski <k.kozlowski@samsung.com>
+To: devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <k.kozlowski@samsung.com>,
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH] hwmon: ina2xx: Document compatible for INA231
+Date: Wed, 01 Jun 2016 11:43:12 +0200
+Message-id: <1464774192-21887-1-git-send-email-k.kozlowski@samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/03/2016 03:06 AM, Jonathan Cameron wrote:
-> On 01/06/16 13:34, Laxman Dewangan wrote:
->> The INA3221 is a three-channel, high-side current and bus voltage monitor
->> with an I2C interface from Texas Instruments. The INA3221 monitors both
->> shunt voltage drops and bus supply voltages in addition to having
->> programmable conversion times and averaging modes for these signals.
->> The INA3221 offers both critical and warning alerts to detect multiple
->> programmable out-of-range conditions for each channel.
->>
->> Add support for INA3221 SW driver via IIO ADC interface. The device is
->> register as iio-device and provides interface for voltage/current and power
->> monitor. Also provide interface for setting oneshot/continuous mode and
->> critical/warning threshold for the shunt voltage drop.
->>
->> Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
-> Hi Laxman,
->
-> As ever with any driver lying on the border of IIO and hwmon, please include
-> a short justification of why you need an IIO driver and also cc the
-> hwmon list + maintainers. (cc'd on this reply).
->
-> I simply won't take a driver where the hwmon maintainers aren't happy.
-> As it stands I'm not seeing obvious reasons in the code for why this
-> should be an IIO device.
->
+Document the compatible for INA231 sensor.
 
-Me not either.
+Signed-off-by: Krzysztof Kozlowski <k.kozlowski@samsung.com>
+---
+ Documentation/devicetree/bindings/hwmon/ina2xx.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have a hwmon driver for the same chip pending from Andrew Davis (TI)
-which I am just about to accept. We had directed Andrew back in April
-to write a hwmon driver for the chip, which he did.
-
-Guenter
+diff --git a/Documentation/devicetree/bindings/hwmon/ina2xx.txt b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+index 9bcd5e87830d..02af0d94e921 100644
+--- a/Documentation/devicetree/bindings/hwmon/ina2xx.txt
++++ b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+@@ -7,6 +7,7 @@ Required properties:
+ 	- "ti,ina220" for ina220
+ 	- "ti,ina226" for ina226
+ 	- "ti,ina230" for ina230
++	- "ti,ina231" for ina231
+ - reg: I2C address
+ 
+ Optional properties:
+-- 
+1.9.1
 
