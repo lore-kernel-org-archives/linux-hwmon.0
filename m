@@ -1,55 +1,84 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.skyhub.de ([78.46.96.112]:39547 "EHLO mail.skyhub.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751718AbcFAKEl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Wed, 1 Jun 2016 06:04:41 -0400
-From: Borislav Petkov <bp@alien8.de>
-To: X86 ML <x86@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+Received: from bh-25.webhostbox.net ([208.91.199.152]:53627 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752901AbcFANXK (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 09:23:10 -0400
+Subject: Re: [PATCH] hwmon: (fam15h_power) Disable preemption when reading
+ registers
+To: Borislav Petkov <bp@alien8.de>, linux-hwmon@vger.kernel.org
+References: <1464775486-23446-1-git-send-email-bp@alien8.de>
+Cc: X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
 	Rui Huang <ray.huang@amd.com>,
 	Sherry Hurwitz <sherry.hurwitz@amd.com>
-Subject: [PATCH] x86/cpu/AMD: Extend X86_FEATURE_TOPOEXT workaround to newer models
-Date: Wed,  1 Jun 2016 12:04:28 +0200
-Message-Id: <1464775468-23355-1-git-send-email-bp@alien8.de>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <574EE1B3.9010704@roeck-us.net>
+Date: Wed, 1 Jun 2016 06:22:59 -0700
+MIME-Version: 1.0
+In-Reply-To: <1464775486-23446-1-git-send-email-bp@alien8.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On 06/01/2016 03:04 AM, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+>
+> We need to read a bunch of registers on each compute unit and possibly
+> on the current CPU too. Disable preemption around it.
+>
 
-We need to reenable the topology extensions CPUID leafs on newer models
-too, if BIOS has disabled them, as we rely on them to get proper compute
-unit topology.
+An explanation would be helpful. Is this a bug fix ? I would like to get
+a confirmation from someone at AMD that this is really necessary.
 
-Make the printk a once thing, while at it.
+Thanks,
+Guenter
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Rui Huang <ray.huang@amd.com>
-Cc: Sherry Hurwitz <sherry.hurwitz@amd.com>
----
- arch/x86/kernel/cpu/amd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index c343a54bed39..f5c69d8974e1 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -674,14 +674,14 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
- 	u64 value;
- 
- 	/* re-enable TopologyExtensions if switched off by BIOS */
--	if ((c->x86_model >= 0x10) && (c->x86_model <= 0x1f) &&
-+	if ((c->x86_model >= 0x10) && (c->x86_model <= 0x6f) &&
- 	    !cpu_has(c, X86_FEATURE_TOPOEXT)) {
- 
- 		if (msr_set_bit(0xc0011005, 54) > 0) {
- 			rdmsrl(0xc0011005, value);
- 			if (value & BIT_64(54)) {
- 				set_cpu_cap(c, X86_FEATURE_TOPOEXT);
--				pr_info(FW_INFO "CPU: Re-enabling disabled Topology Extensions Support.\n");
-+				pr_info_once(FW_INFO "CPU: Re-enabling disabled Topology Extensions Support.\n");
- 			}
- 		}
- 	}
--- 
-2.7.3
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Cc: Rui Huang <ray.huang@amd.com>
+> Cc: Sherry Hurwitz <sherry.hurwitz@amd.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> ---
+>   drivers/hwmon/fam15h_power.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+> index eb97a9241d17..69bb810f528b 100644
+> --- a/drivers/hwmon/fam15h_power.c
+> +++ b/drivers/hwmon/fam15h_power.c
+> @@ -172,9 +172,9 @@ static void do_read_registers_on_cu(void *_data)
+>    */
+>   static int read_registers(struct fam15h_power_data *data)
+>   {
+> -	int this_cpu, ret, cpu;
+>   	int core, this_core;
+>   	cpumask_var_t mask;
+> +	int ret, cpu;
+>
+>   	ret = zalloc_cpumask_var(&mask, GFP_KERNEL);
+>   	if (!ret)
+> @@ -183,7 +183,6 @@ static int read_registers(struct fam15h_power_data *data)
+>   	memset(data->cu_on, 0, sizeof(int) * MAX_CUS);
+>
+>   	get_online_cpus();
+> -	this_cpu = smp_processor_id();
+>
+>   	/*
+>   	 * Choose the first online core of each compute unit, and then
+> @@ -205,10 +204,13 @@ static int read_registers(struct fam15h_power_data *data)
+>   		cpumask_set_cpu(cpumask_any(topology_sibling_cpumask(cpu)), mask);
+>   	}
+>
+> -	if (cpumask_test_cpu(this_cpu, mask))
+> +	preempt_disable();
+> +	smp_call_function_many(mask, do_read_registers_on_cu, data, true);
+> +
+> +	if (cpumask_test_cpu(smp_processor_id(), mask))
+>   		do_read_registers_on_cu(data);
+>
+> -	smp_call_function_many(mask, do_read_registers_on_cu, data, true);
+> +	preempt_enable();
+>   	put_online_cpus();
+>
+>   	free_cpumask_var(mask);
+>
 
