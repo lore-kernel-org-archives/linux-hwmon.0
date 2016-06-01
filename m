@@ -1,124 +1,72 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qg0-f68.google.com ([209.85.192.68]:35870 "EHLO
-	mail-qg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751197AbcFALes convert rfc822-to-8bit (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 07:34:48 -0400
-MIME-Version: 1.0
-In-Reply-To: <20160531110334.GD29844@pali>
-References: <1463842366-17964-1-git-send-email-pali.rohar@gmail.com>
-	<20160531110334.GD29844@pali>
-Date: Wed, 1 Jun 2016 13:34:47 +0200
-Message-ID: <CABcamCCmiuAGA_v3xf=wZy7wq9e1dgOsQbobiPX_BxwA_TOpzQ@mail.gmail.com>
-Subject: Re: [PATCH] dell-smm-hwmon: Detect fan with index=2
-From: Tolga Cakir <cevelnet@gmail.com>
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali.rohar@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
+Received: from mail.skyhub.de ([78.46.96.112]:39555 "EHLO mail.skyhub.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1757713AbcFAKE6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Wed, 1 Jun 2016 06:04:58 -0400
+From: Borislav Petkov <bp@alien8.de>
+To: linux-hwmon@vger.kernel.org
+Cc: X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	Rui Huang <ray.huang@amd.com>,
+	Sherry Hurwitz <sherry.hurwitz@amd.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Subject: [PATCH] hwmon: (fam15h_power) Disable preemption when reading registers
+Date: Wed,  1 Jun 2016 12:04:46 +0200
+Message-Id: <1464775486-23446-1-git-send-email-bp@alien8.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Pali,
+From: Borislav Petkov <bp@suse.de>
 
-thanks for the patch and sorry for the delay! I've checked out
-https://git.kernel.org/cgit/linux/kernel/git/groeck/linux-staging.git/commit/?h=hwmon-staging&id=86c050c82dd527b17cf47043831f03646f402a88
-and ran it on my Dell M3800. It correctly works for identifying 2
-fans, one listed as "Processor Fan" and the other as "Video Fan".
+We need to read a bunch of registers on each compute unit and possibly
+on the current CPU too. Disable preemption around it.
 
-The freeze only causes "Processor Fan" to run at maximum btw., "Video
-Fan" seems to be untouched. I don't get identical rpm values for both
-of them, so they are indeed 2 independent fans. E.g. at ~70°C, I get
-2300rpm for CPU and 2400rpm for Video. Looks good to me.
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Rui Huang <ray.huang@amd.com>
+Cc: Sherry Hurwitz <sherry.hurwitz@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/fam15h_power.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Cheers,
-Tolga Cakir
+diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+index eb97a9241d17..69bb810f528b 100644
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -172,9 +172,9 @@ static void do_read_registers_on_cu(void *_data)
+  */
+ static int read_registers(struct fam15h_power_data *data)
+ {
+-	int this_cpu, ret, cpu;
+ 	int core, this_core;
+ 	cpumask_var_t mask;
++	int ret, cpu;
+ 
+ 	ret = zalloc_cpumask_var(&mask, GFP_KERNEL);
+ 	if (!ret)
+@@ -183,7 +183,6 @@ static int read_registers(struct fam15h_power_data *data)
+ 	memset(data->cu_on, 0, sizeof(int) * MAX_CUS);
+ 
+ 	get_online_cpus();
+-	this_cpu = smp_processor_id();
+ 
+ 	/*
+ 	 * Choose the first online core of each compute unit, and then
+@@ -205,10 +204,13 @@ static int read_registers(struct fam15h_power_data *data)
+ 		cpumask_set_cpu(cpumask_any(topology_sibling_cpumask(cpu)), mask);
+ 	}
+ 
+-	if (cpumask_test_cpu(this_cpu, mask))
++	preempt_disable();
++	smp_call_function_many(mask, do_read_registers_on_cu, data, true);
++
++	if (cpumask_test_cpu(smp_processor_id(), mask))
+ 		do_read_registers_on_cu(data);
+ 
+-	smp_call_function_many(mask, do_read_registers_on_cu, data, true);
++	preempt_enable();
+ 	put_online_cpus();
+ 
+ 	free_cpumask_var(mask);
+-- 
+2.7.3
 
-2016-05-31 13:03 GMT+02:00 Pali Rohár <pali.rohar@gmail.com>:
-> Tolga, can you test this patch if is working for you correctly?
->
-> On Saturday 21 May 2016 16:52:46 Pali Rohár wrote:
->> Some Dell machines (e.g. Dell Precision M3800) have two fans, first with
->> index=0 and second with index=2. So export also attributes for third fan
->> device with index=2.
->>
->> Reported-by: Tolga Cakir <cevelnet@gmail.com>
->> Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
->> ---
->>  drivers/hwmon/dell-smm-hwmon.c |   20 +++++++++++++++++++-
->>  1 file changed, 19 insertions(+), 1 deletion(-)
->> ---
->>
->> Hi Tolga! Can you test this patch if sensors see fan device correctly?
->>
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
->> index 577445f..7a2764a 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -78,6 +78,7 @@ static uint i8k_fan_max = I8K_FAN_HIGH;
->>  #define I8K_HWMON_HAVE_TEMP4 (1 << 3)
->>  #define I8K_HWMON_HAVE_FAN1  (1 << 4)
->>  #define I8K_HWMON_HAVE_FAN2  (1 << 5)
->> +#define I8K_HWMON_HAVE_FAN3  (1 << 6)
->>
->>  MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
->>  MODULE_AUTHOR("Pali Rohár <pali.rohar@gmail.com>");
->> @@ -246,7 +247,7 @@ static int _i8k_get_fan_type(int fan)
->>  static int i8k_get_fan_type(int fan)
->>  {
->>       /* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
->> -     static int types[2] = { INT_MIN, INT_MIN };
->> +     static int types[3] = { INT_MIN, INT_MIN, INT_MIN };
->>
->>       if (types[fan] == INT_MIN)
->>               types[fan] = _i8k_get_fan_type(fan);
->> @@ -707,6 +708,12 @@ static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
->>                         1);
->>  static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
->>                         i8k_hwmon_set_pwm, 1);
->> +static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
->> +                       2);
->> +static SENSOR_DEVICE_ATTR(fan3_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
->> +                       2);
->> +static SENSOR_DEVICE_ATTR(pwm3, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
->> +                       i8k_hwmon_set_pwm, 2);
->>
->>  static struct attribute *i8k_attrs[] = {
->>       &sensor_dev_attr_temp1_input.dev_attr.attr,     /* 0 */
->> @@ -723,6 +730,9 @@ static struct attribute *i8k_attrs[] = {
->>       &sensor_dev_attr_fan2_input.dev_attr.attr,      /* 11 */
->>       &sensor_dev_attr_fan2_label.dev_attr.attr,      /* 12 */
->>       &sensor_dev_attr_pwm2.dev_attr.attr,            /* 13 */
->> +     &sensor_dev_attr_fan3_input.dev_attr.attr,      /* 14 */
->> +     &sensor_dev_attr_fan3_label.dev_attr.attr,      /* 15 */
->> +     &sensor_dev_attr_pwm3.dev_attr.attr,            /* 16 */
->>       NULL
->>  };
->>
->> @@ -747,6 +757,9 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
->>       if (index >= 11 && index <= 13 &&
->>           !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
->>               return 0;
->> +     if (index >= 14 && index <= 16 &&
->> +         !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
->> +             return 0;
->>
->>       return attr->mode;
->>  }
->> @@ -788,6 +801,11 @@ static int __init i8k_init_hwmon(void)
->>       if (err >= 0)
->>               i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN2;
->>
->> +     /* Third fan attributes, if fan status is OK */
->> +     err = i8k_get_fan_status(2);
->> +     if (err >= 0)
->> +             i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN3;
->> +
->>       i8k_hwmon_dev = hwmon_device_register_with_groups(NULL, "dell_smm",
->>                                                         NULL, i8k_groups);
->>       if (IS_ERR(i8k_hwmon_dev)) {
->
-> --
-> Pali Rohár
-> pali.rohar@gmail.com
