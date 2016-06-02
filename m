@@ -1,67 +1,57 @@
 Return-path: <pali.rohar@gmail.com>
-Date: Thu, 2 Jun 2016 15:09:51 +0200
+Date: Thu, 2 Jun 2016 15:06:08 +0200
 From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-To: Gabriele Mazzotta <gabriele.mzt@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	=?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
-	Andy Lutomirski <luto@kernel.org>, Jethro <xtompok@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Experimental PATCH] dell-smm-hwmon: Add support for disabling
- automatic BIOS fan control
-Message-ID: <20160602130951.GQ29844@pali>
-References: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
- <830c86c9-af25-b31a-0526-4c1bc0232c53@gmail.com>
- <20160530093204.GR29844@pali>
- <a7c67a4d-b234-d772-2035-9f854851608b@gmail.com>
+To: Peter Saunderson <peteasa@gmail.com>
+Cc: Thorsten Leemhuis <fedora@leemhuis.info>,
+	Jan C Peters <jcpeters89@gmail.com>,
+	David =?utf-8?Q?Santamar=C3=ADa?= Rogado <howl.nsp@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Tolga Cakir <cevelnet@gmail.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dell-smm-hwmon: Cache fan_type() calls and use
+ fan_status() for fan detection
+Message-ID: <20160602130608.GP29844@pali>
+References: <1463842001-17785-1-git-send-email-pali.rohar@gmail.com>
+ <201605271245.47383@pali>
+ <01084692-618a-31db-76f8-60176d1cd2cc@leemhuis.info>
+ <201605271521.10294@pali>
+ <574B4293.9010404@gmail.com>
+ <20160530093613.GS29844@pali>
+ <574C6976.6030302@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7c67a4d-b234-d772-2035-9f854851608b@gmail.com>
+In-Reply-To: <574C6976.6030302@gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Monday 30 May 2016 17:26:36 Gabriele Mazzotta wrote:
-> On 30/05/2016 11:32, Pali Rohár wrote:
-> > On Friday 27 May 2016 14:11:11 Gabriele Mazzotta wrote:
-> >> On 22/05/2016 13:50, Pali Rohár wrote:
-> >>> This patch exports standard hwmon pwmX_enable sysfs attribute for enabling
-> >>> or disabling automatic fan control by BIOS. Standard value "1" is for
-> >>> disabling automatic BIOS fan control and value "2" for enabling.
-> >>>
-> >>> Currently there is no way to check if BIOS auto mode is enabled (at least
-> >>> it is not know how to do it), so hwmon sysfs attribute is write-only.
-> >>>
-> >>> By default BIOS auto mode is enabled by laptop firmware.
-> >>>
-> >>> When BIOS auto mode is enabled, custom fan speed value (set via hwmon pwmX
-> >>> sysfs attribute) is overwritten by SMM in few seconds and therefore any
-> >>> custom settings are without effect. So this is reason why implementing
-> >>> option for disabling BIOS auto mode is needed.
-> >>>
-> >>> So finally this patch allows kernel to set and control fan speed on
-> >>> laptops, but it can be dangerous (like setting speed of other fans).
-> >>>
-> >>> This new feature is highly experimental, uses Dell SMM calls, so does not
-> >>> have to be supported by all laptops BIOSes. It was tested on Dell Latitude
-> >>> E6440 with BIOS A5.
-> >>
-> >> Tested on a Dell XPS13 9333. Changing the value of pwm1_enable appears
-> >> to have no effect here.
-> > 
-> > Can you check what i8k_enable_fan_auto_mode() returns? Error code or not?
+On Monday 30 May 2016 17:25:26 Peter Saunderson wrote:
+> On 30/05/16 10:36, Pali Rohár wrote:
+> >Hi Peter! Thank you for information! Are you able to try to call that
+> >function on some old kernel (e.g. 3.12 or 3.14) to verify that it is
+> >caused only and only by that function?
+> >
+> I have tried to use my old 3.19.0 kernel that did not have the problem but
+> now it will not boot.  The boot screen is left with
 > 
-> No error. However, independently on the value I set, the BIOS always
-> overrides the speed of the fan.
+> Loading Linux linux...
+> Loading initial ramdisk...
+> 
+> No logs etc.. I am guessing that some grub or ram disk change is giving me
+> the problem.  I have just upgraded to Ubuntu 16.04 and do not want to
+> downgrade so I am a bit stuck at the moment and doubt that I can do this
+> test.
+> 
+> Peter.
 
-Ok, looks like this is model or platform specific call...
+You can try to regenerate initramfs with ubuntu command:
 
-If you want, you can try to play with dellfan source code [1]. There is
-e.g. in comment specified two methods for disabling that BIOS thermal
-automode [2]. Looks like second method is that which I implemented in
-patch...
+$ sudo update-initramfs -u -k all
 
-[1] - https://github.com/clopez/dellfan
-[2] - https://github.com/clopez/dellfan/blob/master/dellfan.c#L64
+In case you modified or updated some initram files or kernel modules you
+need to regenerate it to take effect at boot... -k all tells to
+regenerate *all* initramfs images, not only for currently booted kernel.
 
 -- 
 Pali Rohár
