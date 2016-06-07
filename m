@@ -1,106 +1,151 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:53174 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S932116AbcF3OvH (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 30 Jun 2016 10:51:07 -0400
-Subject: Re: [3/3] hwmon: iio_hwmon: defer probe when no channel is found
-To: Jonathan Cameron <jic23@jic23.retrosnub.co.uk>,
-	Quentin Schulz <quentin.schulz@free-electrons.com>
-References: <1467101897-15946-4-git-send-email-quentin.schulz@free-electrons.com>
- <20160630034725.GA26484@roeck-us.net>
- <6FBFD60A-4D68-4B60-AB34-5077BE6BD586@jic23.retrosnub.co.uk>
-Cc: jdelvare@suse.com, jic23@kernel.org, knaack.h@gmx.de,
-	lars@metafoo.de, pmeerw@pmeerw.net,
-	maxime.ripard@free-electrons.com, wens@csie.org,
-	lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	thomas.petazzoni@free-electrons.com,
-	antoine.tenart@free-electrons.com
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <577531D4.1090106@roeck-us.net>
-Date: Thu, 30 Jun 2016 07:51:00 -0700
+Return-path: <thilo.cestonaro@ts.fujitsu.com>
+From: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
+To: "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] added kernel module for FTS sensor chip "Teutates"
+Date: Tue, 7 Jun 2016 07:39:21 +0000
+Message-ID: <1465284992.18490.4.camel@ts.fujitsu.com>
+References: <1464684950-31113-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
+	 <57526C5B.9000104@roeck-us.net> <1465204713.5580.25.camel@ts.fujitsu.com>
+	 <57563D00.3030005@roeck-us.net>
+In-Reply-To: <57563D00.3030005@roeck-us.net>
+Reply-To: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
+Content-Language: en-US
+Content-Type: multipart/signed; micalg=sha-1;
+	protocol="application/x-pkcs7-signature"; boundary="=-RqzO+ee7qkP/akC3MyAK"
 MIME-Version: 1.0
-In-Reply-To: <6FBFD60A-4D68-4B60-AB34-5077BE6BD586@jic23.retrosnub.co.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 06/30/2016 06:59 AM, Jonathan Cameron wrote:
->
->
-> On 30 June 2016 04:47:25 BST, Guenter Roeck <linux@roeck-us.net> wrote:
->> On Tue, Jun 28, 2016 at 10:18:17AM +0200, Quentin Schulz wrote:
->>> iio_channel_get_all returns -ENODEV when it cannot find either
->> phandles and
->>> properties in the Device Tree or channels whose consumer_dev_name
->> matches
->>> iio_hwmon in iio_map_list. The iio_map_list is filled in by iio
->> drivers
->>> which might be probed after iio_hwmon.
->>>
->>> It is better to defer the probe of iio_hwmon if such error is
->> returned by
->>> iio_channel_get_all in order to let a chance to iio drivers to expose
->>> channels in iio_map_list.
->>>
->>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
->>> ---
->>>   drivers/hwmon/iio_hwmon.c | 5 ++++-
->>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
->>> index b550ba5..c0da4d9 100644
->>> --- a/drivers/hwmon/iio_hwmon.c
->>> +++ b/drivers/hwmon/iio_hwmon.c
->>> @@ -73,8 +73,11 @@ static int iio_hwmon_probe(struct platform_device
->> *pdev)
->>>   		name = dev->of_node->name;
->>>
->>>   	channels = iio_channel_get_all(dev);
->>> -	if (IS_ERR(channels))
->>> +	if (IS_ERR(channels)) {
->>> +		if (PTR_ERR(channels) == -ENODEV)
->>> +			return -EPROBE_DEFER;
->>
->> The problem, as I see it, is with iio, which should return
->> -EPROBE_DEFER
->> in this situation.
-> Agreed. New fangled stuff this deferred probing :)
->>
->> We can not convert -ENODEV to -EPROBE_DEFER without risking that the
->> channels are _really_ not there, which would result in endless
->> "deferred"
->> messages.
-> Hmm not entirely sure how we prevent that happening wherever it is done..
->
+--=-RqzO+ee7qkP/akC3MyAK
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Outch. Better at the source, though. I didn't look at the iio code recently,
-but can you detect the defer situation at least with devicetree ?
+On Mo, 2016-06-06 at 20:18 -0700, Guenter Roeck wrote:
+> On 06/06/2016 02:21 AM, thilo.cestonaro@ts.fujitsu.com wrote:
+> >=20
+> > Hey Guenter!
+> >=20
+> > Thanks for your patience and very detailed review!
+> > I will change the code to address all you hints where no discussion is =
+needed.
+> > The others follow down here.
+> >=20
+> > On Fr, 2016-06-03 at 22:51 -0700, Guenter Roeck wrote:
+> > >=20
+> > > >=20
+> > > > +#define FTSTEUTATES_WATCHDOG_RESOLUTION		=C2=A0=C2=A0=C2=A060
+> > > > +
+> > > 60 seconds (minimum) resolution ? Really ? This is very unusual.
+> > Will double check and talk to the hw guy.
+There is a register which sets the resolution to 1sec. but it wasn't docume=
+nted :(.
+So next "version" will have 1sec. resolution.
 
-For non-devicetree situations, the only option I can think of would be
-to replace the module initcall with a later initcall. That should solve
-the problem if both iio_hwmon and and underlying drivers are built
-into the kernel. If iio_hwmon is modular, the only real option I can
-see is to make sure that all drivers it needs are loaded first.
 
-Does this make sense ?
+> > > > +static ssize_t show_fan_fault(struct device *dev,
+> > > > +	struct device_attribute *devattr, char *buf)
+> > > > +{
+> > > > +	int index =3D to_sensor_dev_attr(devattr)->index;
+> > > > +	struct ftsteutates_data *data =3D ftsteutates_update_device(dev);
+> > > > +
+> > > > +	return sprintf(buf, "%d\n", data->fan_present[index] =3D=3D 1 ? 0=
+ : 1);
+> > > A non-present fan does not indicate a fan fault.
+> > For me a fan fault was a not existing fan, as the alarm is handled via =
+fan_alarm.
+> > What is the understanding of fan_fault and fan_alarm?
+> >=20
+> Some fan controllers can detect if a fan is faulty, for example if it con=
+sumes
+> power but does not turn. Unless you know for sure that a fan is faulty, d=
+on't
+> report that it is. A non-existing fan is definitely not faulty.
+About the presence register from Teutates Spec:
+The present-detection is done by checking the Fan-Speed.
+If the fan-speed is 0 or below fan-fault-speed all the time,
+the fan will be handled as not present. If the fan-speed is
+greater than fan-fault-speed, the fan is handled as present.
 
-Guenter
+So the presence is the faulty fan detection?
 
->>
->> Guenter
->>
->>>   		return PTR_ERR(channels);
->>> +	}
->>>
->>>   	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
->>>   	if (st == NULL) {
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
 
+Cheers,
+Thilo
+
+--=-RqzO+ee7qkP/akC3MyAK
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIM6DCCA9Qw
+ggK8oAMCAQICEDTNElfINoNG4L/3PTADbgUwDQYJKoZIhvcNAQEFBQAwLzEtMCsGA1UEAxMkRnVq
+aXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBSb290IENBMB4XDTA5MDMxMjEyMjQ1OVoXDTE5MDMx
+MTEyMjQ1OVowLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsBtNf0fN8EkW9y6QqoQGS6LUwezenV2B
+nDzORdGanukRtpGzYMAPdyiwtlp0/zONa+jCJGzkX4iYCjTsiJvx01SPRNZ24fHaFGXpJBX599q6
+ZF0isu+h1aIas1tfyCBalAbKKLvNgIuQjnXhdffVk4vSuBytO3OGcULtJ2+lYVSEvxzGt9iTSwT5
+RnEvKpR0iOC+9/UNVOiPK9XCz5u7bg3iehP5gD+v5uu3YIRwV/5gyd7AZPcckTfYP/GZcybcAXfE
+l5nb/bZiSLHeZEjxMMM8YZqFKhH9xymIdjkcRK7NJ2j8OD708QFv4b4bme1mHGfTjSbxb1nOoUTs
+NtshZwIDAQABo4HrMIHoMB0GA1UdDgQWBBQI9chqv4Dje1DEOfQHmEbobX6XqDALBgNVHQ8EBAMC
+AYYwHwYDVR0jBBgwFoAUFHXiV7YVNxWAKpflUUhlrM+GkMswEgYDVR0TAQH/BAgwBgEB/wIBADBH
+BggrBgEFBQcBAQQ7MDkwNwYIKwYBBQUHMAKGK2h0dHA6Ly9haWEudHMuZnVqaXRzdS5jb20vYWlh
+L2Z0czAxcm9vdC5jZXIwPAYDVR0fBDUwMzAxoC+gLYYraHR0cDovL2NkcC50cy5mdWppdHN1LmNv
+bS9jZHAvZnRzMDFyb290LmNybDANBgkqhkiG9w0BAQUFAAOCAQEAQ7pQP9Lw9bcnt1DhvV5UWb1z
+mnACSo6n6x+bupckQzlrf3aJ7HQZigZuaCak+dexL18I86iNDDOJBBsrz0DcD4XPszcLTUezqqGl
+AyIbviBq5mwDHAWBA9F11GRx6LdrHMKNdHPwAWyC3r6qv4GO6A+z16KUZFSP4kvuaN5YHI481T7F
+FxEmntkylphndX+6mQ1NABApMMhX0aN5dVhPAMAP8nENJ1hGk81IG8gzkoHDPSoLCtffAnNhYAqh
+vrDO2ybXb/9x+Sf3DQuzBg3hpB1yJM3K8foQaS3uTpFITfdMprcQyrIdl4Jw26s/6vpIs0siLVTp
+3yAwgNaqQSgxSTCCBIQwggNsoAMCAQICCiWUlIAAAAACJH0wDQYJKoZIhvcNAQEFBQAwLzEtMCsG
+A1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENBMB4XDTE0MDMyMTEyMTM1
+M1oXDTE3MDMyMDEyMTM1M1owQjEZMBcGA1UEAwwQQ2VzdG9uYXJvLCBUaGlsbzElMCMGA1UECgwc
+RnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9uczCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA
+qP3ld/ylkJOTj2rXQ+VrRf/+YMgZS5CGDnMWk+sMoS5f6JqtwfGcfBU/DhfnLsePut2q+ex/RDZF
+M6yCraPS0vdnTKm2O3Q7/UhhAV1Mi4XzzGeY1Y0qm+85EgMBISPwB5mThLYPsun5UIFs6e8tvlwZ
+Rzp/jrv/AzAfsSbHGXcCAwEAAaOCAhEwggINMAsGA1UdDwQEAwIFoDByBgNVHREEazBpgR50aGls
+by5jZXN0b25hcm9AdHMuZnVqaXRzdS5jb22BI1RoaWxvLkNlc3RvbmFyb0BmdWppdHN1LXNpZW1l
+bnMuY29tgSIrNDk4MjE4MDQ4MjMyOEBpbmNvbWluZ2ZheC5mc2MubmV0MB0GA1UdDgQWBBSiHLgI
+jjo+7KxLJ4t1+YZxgBSn8TAfBgNVHSMEGDAWgBQI9chqv4Dje1DEOfQHmEbobX6XqDA8BgNVHR8E
+NTAzMDGgL6AthitodHRwOi8vY2RwLnRzLmZ1aml0c3UuY29tL2NkcC9mdHMwMXVzZXIuY3JsMEcG
+CCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAoYraHR0cDovL2FpYS50cy5mdWppdHN1LmNvbS9haWEv
+ZnRzMDF1c2VyLmNlcjAMBgNVHRMBAf8EAjAAMD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCIWF
+xDKBh/9hgYWBBIbsgiCBx4EaeYOIoHGH0vEvAgFkAgEIMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBsG
+CSsGAQQBgjcVCgQOMAwwCgYIKwYBBQUHAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0DAgIC
+AIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBBQUAA4IB
+AQAEGTAyHPmTyCR029H+P/u9xRezlfA2OVvV97Ls/oLCXGGr6EkMvpHodTc6n4EWSb2ul3VPSRQf
+uSmBgIcHQJykHdSChisaqkeOpHG0rjM9GXh2eQ7ECovpQIfdIbRZKNxlJihSDsDWHyZldBlPVbDh
+xMeT6xJ/ylF8UQ8FXKUir6W/BSPZF5kLdsmCeOpWC4jOGNPEMUAcuiHZPyqAhjlWk750I4oJJKvD
+bwO8/mkxmzOjpOsk8O3CdljCjYPoYtJPI/oNVsYdmiokzne4FusPYKDzv5i0dN74KLR48maXvi3/
+WsTFqwks45QeBJT/z+1sYy+dYWpv9XGN+jR1o4ImMIIEhDCCA2ygAwIBAgIKJZSUgAAAAAIkfTAN
+BgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVz
+ZXIgQ0EwHhcNMTQwMzIxMTIxMzUzWhcNMTcwMzIwMTIxMzUzWjBCMRkwFwYDVQQDDBBDZXN0b25h
+cm8sIFRoaWxvMSUwIwYDVQQKDBxGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQCo/eV3/KWQk5OPatdD5WtF//5gyBlLkIYOcxaT6wyhLl/omq3B
+8Zx8FT8OF+cux4+63ar57H9ENkUzrIKto9LS92dMqbY7dDv9SGEBXUyLhfPMZ5jVjSqb7zkSAwEh
+I/AHmZOEtg+y6flQgWzp7y2+XBlHOn+Ou/8DMB+xJscZdwIDAQABo4ICETCCAg0wCwYDVR0PBAQD
+AgWgMHIGA1UdEQRrMGmBHnRoaWxvLmNlc3RvbmFyb0B0cy5mdWppdHN1LmNvbYEjVGhpbG8uQ2Vz
+dG9uYXJvQGZ1aml0c3Utc2llbWVucy5jb22BIis0OTgyMTgwNDgyMzI4QGluY29taW5nZmF4LmZz
+Yy5uZXQwHQYDVR0OBBYEFKIcuAiOOj7srEsni3X5hnGAFKfxMB8GA1UdIwQYMBaAFAj1yGq/gON7
+UMQ59AeYRuhtfpeoMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jZHAudHMuZnVqaXRzdS5jb20v
+Y2RwL2Z0czAxdXNlci5jcmwwRwYIKwYBBQUHAQEEOzA5MDcGCCsGAQUFBzAChitodHRwOi8vYWlh
+LnRzLmZ1aml0c3UuY29tL2FpYS9mdHMwMXVzZXIuY2VyMAwGA1UdEwEB/wQCMAAwPQYJKwYBBAGC
+NxUHBDAwLgYmKwYBBAGCNxUIhYXEMoGH/2GBhYEEhuyCIIHHgRp5g4igcYfS8S8CAWQCAQgwEwYD
+VR0lBAwwCgYIKwYBBQUHAwQwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDBDBEBgkqhkiG9w0B
+CQ8ENzA1MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYIKoZIhvcN
+AwcwDQYJKoZIhvcNAQEFBQADggEBAAQZMDIc+ZPIJHTb0f4/+73FF7OV8DY5W9X3suz+gsJcYavo
+SQy+keh1NzqfgRZJva6XdU9JFB+5KYGAhwdAnKQd1IKGKxqqR46kcbSuMz0ZeHZ5DsQKi+lAh90h
+tFko3GUmKFIOwNYfJmV0GU9VsOHEx5PrEn/KUXxRDwVcpSKvpb8FI9kXmQt2yYJ46lYLiM4Y08Qx
+QBy6Idk/KoCGOVaTvnQjigkkq8NvA7z+aTGbM6Ok6yTw7cJ2WMKNg+hi0k8j+g1Wxh2aKiTOd7gW
+6w9goPO/mLR03vgotHjyZpe+Lf9axMWrCSzjlB4ElP/P7WxjL51ham/1cY36NHWjgiYxggHhMIIB
+3QIBATA9MC8xLTArBgNVBAMTJEZ1aml0c3UgVGVjaG5vbG9neSBTb2x1dGlvbnMgVXNlciBDQQIK
+JZSUgAAAAAIkfTAJBgUrDgMCGgUAoIH7MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTE2MDYwNzA3MzYzMlowIwYJKoZIhvcNAQkEMRYEFEYCP/ekW/T/ibEODUbisxbb
+NPohMEwGCSsGAQQBgjcQBDE/MD0wLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0
+aW9ucyBVc2VyIENBAgollJSAAAAAAiR9ME4GCyqGSIb3DQEJEAILMT+gPTAvMS0wKwYDVQQDEyRG
+dWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVzZXIgQ0ECCiWUlIAAAAACJH0wDQYJKoZIhvcN
+AQEBBQAEgYB2FBt+XMhhsnA92DGXooIx6FeX8laINb+F3l0i86JB1TLr5f+E24tFZI5ZwSQi/baR
+l6QalNAWNBq/eD161WN4ja+u5qjlTOZLSsgmho9nWCfb+lqz5lm1yGUtyeuVGoTjLG8H3GdA5v9X
+MC/j1XDMldSRV227TbDFWc7DRqulvwAAAAAAAA==
+
+
+--=-RqzO+ee7qkP/akC3MyAK--
