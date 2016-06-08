@@ -1,151 +1,68 @@
-Return-path: <thilo.cestonaro@ts.fujitsu.com>
-From: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
-To: "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] added kernel module for FTS sensor chip "Teutates"
-Date: Tue, 7 Jun 2016 07:39:21 +0000
-Message-ID: <1465284992.18490.4.camel@ts.fujitsu.com>
-References: <1464684950-31113-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
-	 <57526C5B.9000104@roeck-us.net> <1465204713.5580.25.camel@ts.fujitsu.com>
-	 <57563D00.3030005@roeck-us.net>
-In-Reply-To: <57563D00.3030005@roeck-us.net>
-Reply-To: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=sha-1;
-	protocol="application/x-pkcs7-signature"; boundary="=-RqzO+ee7qkP/akC3MyAK"
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52549 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753308AbcFHNYS (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jun 2016 09:24:18 -0400
+Subject: Re: dell-smm-hwmon: security problems
+To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, Mario_Limonciello@dell.com,
+	Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+	=?UTF-8?B?TWljaGHFgiBLxJlwaWU=?= =?UTF-8?B?xYQ=?=
+	<kernel@kempniu.pl>
+References: <201606081157.22900@pali>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <57581C7A.30308@roeck-us.net>
+Date: Wed, 8 Jun 2016 06:24:10 -0700
 MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <201606081157.22900@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
---=-RqzO+ee7qkP/akC3MyAK
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 06/08/2016 02:57 AM, Pali Rohár wrote:
+> Hello!
+>
+> Mario wrote me about two I think security problems in dell-smm-hwmon
+> driver and I would like to ask you, how to fix them.
+>
+> 1) File /proc/i8k (exists only when kernel is compiled with CONFIG_I8K)
+> exports DMI_PRODUCT_SERIAL and it can be read by ordinary user, without
+> root permission. Normally DMI_PRODUCT_SERIAL can be read from sysfs file
+> /sys/class/dmi/id/product_serial but only by root user.
+>
+> 2) Via /proc/i8k ordinary user can set fan speed. This is because how
+> "restricted" parameter and variable works. Setting fan speed by normal
+> non-root user can be dangerous, e.g. malicious application under user
+> "nobody" could take control of fans.
+>
+> Do you have idea how to fix these problems? Just to note that /proc/i8k
+> has stable kernel ABI and changing it will break all existing i8k*
+> applications. But /proc/i8k is there only for old legacy laptops (year
+> 2000).
+>
+> There is module parameter "restricted" with default value false and
+> description: "Allow fan control if SYS_ADMIN capability set". Current
+> code do:
+>
+> 	case I8K_SET_FAN:
+> 		if (restricted && !capable(CAP_SYS_ADMIN))
+> 			return -EPERM;
+>
+> For me description is a bit ambiguous. What about setting "restricted"
+> by default to true and updating description to something like this?
+>
+> "Disallow fan control when SYS_ADMIN capability is not set (default: 1)"
+>
 
-On Mo, 2016-06-06 at 20:18 -0700, Guenter Roeck wrote:
-> On 06/06/2016 02:21 AM, thilo.cestonaro@ts.fujitsu.com wrote:
-> >=20
-> > Hey Guenter!
-> >=20
-> > Thanks for your patience and very detailed review!
-> > I will change the code to address all you hints where no discussion is =
-needed.
-> > The others follow down here.
-> >=20
-> > On Fr, 2016-06-03 at 22:51 -0700, Guenter Roeck wrote:
-> > >=20
-> > > >=20
-> > > > +#define FTSTEUTATES_WATCHDOG_RESOLUTION		=C2=A0=C2=A0=C2=A060
-> > > > +
-> > > 60 seconds (minimum) resolution ? Really ? This is very unusual.
-> > Will double check and talk to the hw guy.
-There is a register which sets the resolution to 1sec. but it wasn't docume=
-nted :(.
-So next "version" will have 1sec. resolution.
+Sure. I am sure that someone will complain (we learned just recently
+that people still use the old commands, after all), but then the old
+behavior can be restored by setting the flag to 0.
 
+I would not use a double negative to describe it. Why not just
+something like "Allow fan control only if SYS_ADMIN capability set
+(default 1)" ?
 
-> > > > +static ssize_t show_fan_fault(struct device *dev,
-> > > > +	struct device_attribute *devattr, char *buf)
-> > > > +{
-> > > > +	int index =3D to_sensor_dev_attr(devattr)->index;
-> > > > +	struct ftsteutates_data *data =3D ftsteutates_update_device(dev);
-> > > > +
-> > > > +	return sprintf(buf, "%d\n", data->fan_present[index] =3D=3D 1 ? 0=
- : 1);
-> > > A non-present fan does not indicate a fan fault.
-> > For me a fan fault was a not existing fan, as the alarm is handled via =
-fan_alarm.
-> > What is the understanding of fan_fault and fan_alarm?
-> >=20
-> Some fan controllers can detect if a fan is faulty, for example if it con=
-sumes
-> power but does not turn. Unless you know for sure that a fan is faulty, d=
-on't
-> report that it is. A non-existing fan is definitely not faulty.
-About the presence register from Teutates Spec:
-The present-detection is done by checking the Fan-Speed.
-If the fan-speed is 0 or below fan-fault-speed all the time,
-the fan will be handled as not present. If the fan-speed is
-greater than fan-fault-speed, the fan is handled as present.
+Guenter
 
-So the presence is the faulty fan detection?
-
-
-Cheers,
-Thilo
-
---=-RqzO+ee7qkP/akC3MyAK
-Content-Type: application/x-pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIM6DCCA9Qw
-ggK8oAMCAQICEDTNElfINoNG4L/3PTADbgUwDQYJKoZIhvcNAQEFBQAwLzEtMCsGA1UEAxMkRnVq
-aXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBSb290IENBMB4XDTA5MDMxMjEyMjQ1OVoXDTE5MDMx
-MTEyMjQ1OVowLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENB
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsBtNf0fN8EkW9y6QqoQGS6LUwezenV2B
-nDzORdGanukRtpGzYMAPdyiwtlp0/zONa+jCJGzkX4iYCjTsiJvx01SPRNZ24fHaFGXpJBX599q6
-ZF0isu+h1aIas1tfyCBalAbKKLvNgIuQjnXhdffVk4vSuBytO3OGcULtJ2+lYVSEvxzGt9iTSwT5
-RnEvKpR0iOC+9/UNVOiPK9XCz5u7bg3iehP5gD+v5uu3YIRwV/5gyd7AZPcckTfYP/GZcybcAXfE
-l5nb/bZiSLHeZEjxMMM8YZqFKhH9xymIdjkcRK7NJ2j8OD708QFv4b4bme1mHGfTjSbxb1nOoUTs
-NtshZwIDAQABo4HrMIHoMB0GA1UdDgQWBBQI9chqv4Dje1DEOfQHmEbobX6XqDALBgNVHQ8EBAMC
-AYYwHwYDVR0jBBgwFoAUFHXiV7YVNxWAKpflUUhlrM+GkMswEgYDVR0TAQH/BAgwBgEB/wIBADBH
-BggrBgEFBQcBAQQ7MDkwNwYIKwYBBQUHMAKGK2h0dHA6Ly9haWEudHMuZnVqaXRzdS5jb20vYWlh
-L2Z0czAxcm9vdC5jZXIwPAYDVR0fBDUwMzAxoC+gLYYraHR0cDovL2NkcC50cy5mdWppdHN1LmNv
-bS9jZHAvZnRzMDFyb290LmNybDANBgkqhkiG9w0BAQUFAAOCAQEAQ7pQP9Lw9bcnt1DhvV5UWb1z
-mnACSo6n6x+bupckQzlrf3aJ7HQZigZuaCak+dexL18I86iNDDOJBBsrz0DcD4XPszcLTUezqqGl
-AyIbviBq5mwDHAWBA9F11GRx6LdrHMKNdHPwAWyC3r6qv4GO6A+z16KUZFSP4kvuaN5YHI481T7F
-FxEmntkylphndX+6mQ1NABApMMhX0aN5dVhPAMAP8nENJ1hGk81IG8gzkoHDPSoLCtffAnNhYAqh
-vrDO2ybXb/9x+Sf3DQuzBg3hpB1yJM3K8foQaS3uTpFITfdMprcQyrIdl4Jw26s/6vpIs0siLVTp
-3yAwgNaqQSgxSTCCBIQwggNsoAMCAQICCiWUlIAAAAACJH0wDQYJKoZIhvcNAQEFBQAwLzEtMCsG
-A1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENBMB4XDTE0MDMyMTEyMTM1
-M1oXDTE3MDMyMDEyMTM1M1owQjEZMBcGA1UEAwwQQ2VzdG9uYXJvLCBUaGlsbzElMCMGA1UECgwc
-RnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9uczCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA
-qP3ld/ylkJOTj2rXQ+VrRf/+YMgZS5CGDnMWk+sMoS5f6JqtwfGcfBU/DhfnLsePut2q+ex/RDZF
-M6yCraPS0vdnTKm2O3Q7/UhhAV1Mi4XzzGeY1Y0qm+85EgMBISPwB5mThLYPsun5UIFs6e8tvlwZ
-Rzp/jrv/AzAfsSbHGXcCAwEAAaOCAhEwggINMAsGA1UdDwQEAwIFoDByBgNVHREEazBpgR50aGls
-by5jZXN0b25hcm9AdHMuZnVqaXRzdS5jb22BI1RoaWxvLkNlc3RvbmFyb0BmdWppdHN1LXNpZW1l
-bnMuY29tgSIrNDk4MjE4MDQ4MjMyOEBpbmNvbWluZ2ZheC5mc2MubmV0MB0GA1UdDgQWBBSiHLgI
-jjo+7KxLJ4t1+YZxgBSn8TAfBgNVHSMEGDAWgBQI9chqv4Dje1DEOfQHmEbobX6XqDA8BgNVHR8E
-NTAzMDGgL6AthitodHRwOi8vY2RwLnRzLmZ1aml0c3UuY29tL2NkcC9mdHMwMXVzZXIuY3JsMEcG
-CCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAoYraHR0cDovL2FpYS50cy5mdWppdHN1LmNvbS9haWEv
-ZnRzMDF1c2VyLmNlcjAMBgNVHRMBAf8EAjAAMD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCIWF
-xDKBh/9hgYWBBIbsgiCBx4EaeYOIoHGH0vEvAgFkAgEIMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBsG
-CSsGAQQBgjcVCgQOMAwwCgYIKwYBBQUHAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0DAgIC
-AIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBBQUAA4IB
-AQAEGTAyHPmTyCR029H+P/u9xRezlfA2OVvV97Ls/oLCXGGr6EkMvpHodTc6n4EWSb2ul3VPSRQf
-uSmBgIcHQJykHdSChisaqkeOpHG0rjM9GXh2eQ7ECovpQIfdIbRZKNxlJihSDsDWHyZldBlPVbDh
-xMeT6xJ/ylF8UQ8FXKUir6W/BSPZF5kLdsmCeOpWC4jOGNPEMUAcuiHZPyqAhjlWk750I4oJJKvD
-bwO8/mkxmzOjpOsk8O3CdljCjYPoYtJPI/oNVsYdmiokzne4FusPYKDzv5i0dN74KLR48maXvi3/
-WsTFqwks45QeBJT/z+1sYy+dYWpv9XGN+jR1o4ImMIIEhDCCA2ygAwIBAgIKJZSUgAAAAAIkfTAN
-BgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVz
-ZXIgQ0EwHhcNMTQwMzIxMTIxMzUzWhcNMTcwMzIwMTIxMzUzWjBCMRkwFwYDVQQDDBBDZXN0b25h
-cm8sIFRoaWxvMSUwIwYDVQQKDBxGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zMIGfMA0GCSqG
-SIb3DQEBAQUAA4GNADCBiQKBgQCo/eV3/KWQk5OPatdD5WtF//5gyBlLkIYOcxaT6wyhLl/omq3B
-8Zx8FT8OF+cux4+63ar57H9ENkUzrIKto9LS92dMqbY7dDv9SGEBXUyLhfPMZ5jVjSqb7zkSAwEh
-I/AHmZOEtg+y6flQgWzp7y2+XBlHOn+Ou/8DMB+xJscZdwIDAQABo4ICETCCAg0wCwYDVR0PBAQD
-AgWgMHIGA1UdEQRrMGmBHnRoaWxvLmNlc3RvbmFyb0B0cy5mdWppdHN1LmNvbYEjVGhpbG8uQ2Vz
-dG9uYXJvQGZ1aml0c3Utc2llbWVucy5jb22BIis0OTgyMTgwNDgyMzI4QGluY29taW5nZmF4LmZz
-Yy5uZXQwHQYDVR0OBBYEFKIcuAiOOj7srEsni3X5hnGAFKfxMB8GA1UdIwQYMBaAFAj1yGq/gON7
-UMQ59AeYRuhtfpeoMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jZHAudHMuZnVqaXRzdS5jb20v
-Y2RwL2Z0czAxdXNlci5jcmwwRwYIKwYBBQUHAQEEOzA5MDcGCCsGAQUFBzAChitodHRwOi8vYWlh
-LnRzLmZ1aml0c3UuY29tL2FpYS9mdHMwMXVzZXIuY2VyMAwGA1UdEwEB/wQCMAAwPQYJKwYBBAGC
-NxUHBDAwLgYmKwYBBAGCNxUIhYXEMoGH/2GBhYEEhuyCIIHHgRp5g4igcYfS8S8CAWQCAQgwEwYD
-VR0lBAwwCgYIKwYBBQUHAwQwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDBDBEBgkqhkiG9w0B
-CQ8ENzA1MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYIKoZIhvcN
-AwcwDQYJKoZIhvcNAQEFBQADggEBAAQZMDIc+ZPIJHTb0f4/+73FF7OV8DY5W9X3suz+gsJcYavo
-SQy+keh1NzqfgRZJva6XdU9JFB+5KYGAhwdAnKQd1IKGKxqqR46kcbSuMz0ZeHZ5DsQKi+lAh90h
-tFko3GUmKFIOwNYfJmV0GU9VsOHEx5PrEn/KUXxRDwVcpSKvpb8FI9kXmQt2yYJ46lYLiM4Y08Qx
-QBy6Idk/KoCGOVaTvnQjigkkq8NvA7z+aTGbM6Ok6yTw7cJ2WMKNg+hi0k8j+g1Wxh2aKiTOd7gW
-6w9goPO/mLR03vgotHjyZpe+Lf9axMWrCSzjlB4ElP/P7WxjL51ham/1cY36NHWjgiYxggHhMIIB
-3QIBATA9MC8xLTArBgNVBAMTJEZ1aml0c3UgVGVjaG5vbG9neSBTb2x1dGlvbnMgVXNlciBDQQIK
-JZSUgAAAAAIkfTAJBgUrDgMCGgUAoIH7MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTE2MDYwNzA3MzYzMlowIwYJKoZIhvcNAQkEMRYEFEYCP/ekW/T/ibEODUbisxbb
-NPohMEwGCSsGAQQBgjcQBDE/MD0wLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0
-aW9ucyBVc2VyIENBAgollJSAAAAAAiR9ME4GCyqGSIb3DQEJEAILMT+gPTAvMS0wKwYDVQQDEyRG
-dWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVzZXIgQ0ECCiWUlIAAAAACJH0wDQYJKoZIhvcN
-AQEBBQAEgYB2FBt+XMhhsnA92DGXooIx6FeX8laINb+F3l0i86JB1TLr5f+E24tFZI5ZwSQi/baR
-l6QalNAWNBq/eD161WN4ja+u5qjlTOZLSsgmho9nWCfb+lqz5lm1yGUtyeuVGoTjLG8H3GdA5v9X
-MC/j1XDMldSRV227TbDFWc7DRqulvwAAAAAAAA==
-
-
---=-RqzO+ee7qkP/akC3MyAK--
