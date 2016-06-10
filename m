@@ -1,74 +1,58 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58495 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:46776 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751564AbcFXQqx (ORCPT
+	with ESMTP id S932248AbcFJQgl (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 24 Jun 2016 12:46:53 -0400
-Date: Fri, 24 Jun 2016 09:46:51 -0700
+	Fri, 10 Jun 2016 12:36:41 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: "Andrew F. Davis" <afd@ti.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] hwmon: Add support for INA3221 Triple
- Current/Voltage Monitors
-Message-ID: <20160624164651.GB21447@roeck-us.net>
-References: <20160610153233.6169-1-afd@ti.com>
- <20160610153233.6169-2-afd@ti.com>
- <20160610164435.GA9125@roeck-us.net>
- <5764860E.1040305@ti.com>
- <576565DB.5040007@roeck-us.net>
- <576D4B9B.8030503@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <576D4B9B.8030503@ti.com>
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.7-rc3
+Date: Fri, 10 Jun 2016 09:36:33 -0700
+Message-Id: <1465576593-8553-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 24, 2016 at 10:02:51AM -0500, Andrew F. Davis wrote:
-> On 06/18/2016 10:16 AM, Guenter Roeck wrote:
-> >
-> > The chip registers are 16 bit. Can you repeat the command using the "w"
-> > option ?
-> > 
-> 
-> # i2cdump -y 2 0x40 w
->      0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
-> 00: 2771 0000 0000 0000 0000 0000 0000 f87f
-> 08: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> 10: 1027 2823 ffff ffff ffff ffff ffff ffff
-> 18: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> 20: 2771 0000 0000 0000 0000 0000 0000 f87f
-> 28: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> 30: 1027 2823 ffff ffff ffff ffff ffff ffff
-> 38: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> 40: 2771 0000 0000 0000 0000 0000 0000 f87f
-> 48: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> 50: 1027 2823 ffff ffff ffff ffff ffff ffff
-> 58: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> 60: 2771 0000 0000 0000 0000 0000 0000 f87f
-> 68: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> 70: 1027 2823 ffff ffff ffff ffff ffff ffff
-> 78: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> 80: 2771 0000 0000 0000 0000 0000 0000 f87f
-> 88: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> 90: 1027 2823 ffff ffff ffff ffff ffff ffff
-> 98: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> a0: 2771 0000 0000 0000 0000 0000 0000 f87f
-> a8: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> b0: 1027 2823 ffff ffff ffff ffff ffff ffff
-> b8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> c0: 2771 0000 0000 0000 0000 0000 0000 f87f
-> c8: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> d0: 1027 2823 ffff ffff ffff ffff ffff ffff
-> d8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
-> e0: 2771 0000 0000 0000 0000 0000 0000 f87f
-> e8: f87f f87f f87f f87f f87f 0000 fe7f 0300
-> f0: 1027 2823 ffff ffff ffff ffff ffff ffff
-> f8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+Hi Linus,
 
-Thanks a lot!
+Please pull hwmon fixes for Linux v4.7-rc3 from signed tag:
 
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.7-rc3
+
+Thanks,
 Guenter
+------
+
+The following changes since commit af8c34ce6ae32addda3788d54a7e340cad22516b:
+
+  Linux 4.7-rc2 (2016-06-05 14:31:26 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.7-rc3
+
+for you to fetch changes up to 38bab98a8da4a2ff5c3f55b045b0c8bf6901362f:
+
+  hwmon: (lm90) use proper type for update_interval (2016-06-07 20:13:05 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v4.7-rc3
+
+Fix regression in fam15h_power driver
+Minor variable type fix in lm90 driver
+Document compatible statement for ina2xx driver
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      hwmon: (fam15h_power) Disable preemption when reading registers
+
+Krzysztof Kozlowski (1):
+      hwmon: (ina2xx) Document compatible for INA231
+
+Wolfram Sang (1):
+      hwmon: (lm90) use proper type for update_interval
+
+ Documentation/devicetree/bindings/hwmon/ina2xx.txt | 1 +
+ drivers/hwmon/fam15h_power.c                       | 8 ++------
+ drivers/hwmon/lm90.c                               | 2 +-
+ 3 files changed, 4 insertions(+), 7 deletions(-)
