@@ -1,53 +1,39 @@
-Return-path: <>
-From: "Andrew F. Davis" <afd@ti.com>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "Andrew F . Davis" <afd@ti.com>
-Subject: [PATCH v5 0/1] Add support for INA3221 Triple Current/Voltage Monitors
-Date: Fri, 10 Jun 2016 10:32:32 -0500
-Message-ID: <20160610153233.6169-1-afd@ti.com>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:54490 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750975AbcFJQom (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Fri, 10 Jun 2016 12:44:42 -0400
+Date: Fri, 10 Jun 2016 09:44:35 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Andrew F. Davis" <afd@ti.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] hwmon: Add support for INA3221 Triple
+ Current/Voltage Monitors
+Message-ID: <20160610164435.GA9125@roeck-us.net>
+References: <20160610153233.6169-1-afd@ti.com>
+ <20160610153233.6169-2-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160610153233.6169-2-afd@ti.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hello all,
+On Fri, Jun 10, 2016 at 10:32:33AM -0500, Andrew F. Davis wrote:
+> Add support for the the INA3221 26v capable, Triple channel,
+> Bi-Directional, Zero-Drift, Low-/High-Side, Current/Voltage Monitor
+> with I2C interface.
+> 
+> Signed-off-by: Andrew F. Davis <afd@ti.com>
 
-This series adds support for the INA3221 Triple Current/Voltage Monitor.
+Applied to -next.
 
-Changes from v4:
- - Drop DT support, will be added by Laxman in followup patches
-
-Changes from v3:
- - minor fixups from comments
- - rebased on v4.7-rc1
-
-Changes from v2:
- - changed alarms to work on current
- - added of_match_table
- - other small fixups/typos
-
-Changes from v1:
- - rearranged and renumbered sysfs enteries
- - added reading alert bits to sysfs
- - removed internal power calculation
- - added DT setting of shunt resistors
- - various other minor fixups
+Can you by any chance send me a register dump ? I would like to write
+module test code for the chip.
 
 Thanks,
-Andrew
-
-Andrew F. Davis (1):
-  hwmon: Add support for INA3221 Triple Current/Voltage Monitors
-
- Documentation/hwmon/ina3221 |  35 ++++
- drivers/hwmon/Kconfig       |  11 ++
- drivers/hwmon/Makefile      |   1 +
- drivers/hwmon/ina3221.c     | 446 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 493 insertions(+)
- create mode 100644 Documentation/hwmon/ina3221
- create mode 100644 drivers/hwmon/ina3221.c
-
--- 
-2.8.3
+Guenter
