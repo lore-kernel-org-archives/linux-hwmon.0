@@ -1,71 +1,100 @@
-Return-path: <kernel@kempniu.pl>
-Date: Wed, 22 Jun 2016 08:53:19 +0200
-From: =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
-To: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-Cc: Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andy Lutomirski <luto@kernel.org>, Jethro <xtompok@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Experimental PATCH] dell-smm-hwmon: Add support for disabling
- automatic BIOS fan control
-Message-ID: <20160622065319.GA3056@eudyptula.hq.kempniu.pl>
-References: <1463917836-12985-1-git-send-email-pali.rohar@gmail.com>
- <830c86c9-af25-b31a-0526-4c1bc0232c53@gmail.com>
- <20160530093204.GR29844@pali>
- <a7c67a4d-b234-d772-2035-9f854851608b@gmail.com>
- <20160602130951.GQ29844@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20160602130951.GQ29844@pali>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:35030 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750860AbcFKEDt (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Sat, 11 Jun 2016 00:03:49 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+	Hardware Monitoring <lm-sensors@lm-sensors.org>
+Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: Update guildelines for submitting patches
+Date: Fri, 10 Jun 2016 21:03:35 -0700
+Message-Id: <1465617815-23785-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-> > >> Tested on a Dell XPS13 9333. Changing the value of pwm1_enable appears
-> > >> to have no effect here.
-> > > 
-> > > Can you check what i8k_enable_fan_auto_mode() returns? Error code or not?
-> > 
-> > No error. However, independently on the value I set, the BIOS always
-> > overrides the speed of the fan.
-> 
-> Ok, looks like this is model or platform specific call...
-> 
-> If you want, you can try to play with dellfan source code [1]. There is
-> e.g. in comment specified two methods for disabling that BIOS thermal
-> automode [2]. Looks like second method is that which I implemented in
-> patch...
-> 
-> [1] - https://github.com/clopez/dellfan
-> [2] - https://github.com/clopez/dellfan/blob/master/dellfan.c#L64
+Add more details to the guidelines for submitting patches.
 
-Pali, I played around with your patch a bit on my Vostro V131 (BIOS A04)
-and the results are similar to Gabriele's:
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ Documentation/hwmon/submitting-patches | 40 +++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 6 deletions(-)
 
-  * I can write values 1 and 2 to pwm{1,2}_enable, which causes
-    i8k_enable_fan_auto_mode() to return 0, but the desired speed set
-    using pwm{1,2} is quickly overridden by the BIOS, no matter which
-    thermal control mode is set,
-    
-  * trying to set the BIOS thermal control mode to the same value it was
-    already set to causes i8k_enable_fan_auto_mode() to return -22:
-    
-        # echo 1 > /sys/class/hwmon/hwmon1/pwm1_enable
-        # echo 1 > /sys/class/hwmon/hwmon1/pwm1_enable
-        bash: echo: write error: Input/output error
-        # echo 2 > /sys/class/hwmon/hwmon1/pwm2_enable
-        # echo 2 > /sys/class/hwmon/hwmon1/pwm2_enable
-        bash: echo: write error: Input/output error
-        # echo 1 > /sys/class/hwmon/hwmon1/pwm1_enable
-        # echo 2 > /sys/class/hwmon/hwmon1/pwm2_enable
-        #
-    
-  * I tried changing I8K_SMM_MANUAL_FAN and I8K_SMM_AUTO_FAN to 0x30a3
-    and 0x31a3, respectively (according to [2]), but it hasn't changed
-    anything, i.e. BIOS is taking over shortly after any value is
-    written to pwm{1,2}.
-
+diff --git a/Documentation/hwmon/submitting-patches b/Documentation/hwmon/submitting-patches
+index d201828d202f..57f60307accc 100644
+--- a/Documentation/hwmon/submitting-patches
++++ b/Documentation/hwmon/submitting-patches
+@@ -15,10 +15,15 @@ increase the chances of your change being accepted.
+     Documentation/SubmittingPatches
+     Documentation/CodingStyle
+ 
+-* If your patch generates checkpatch warnings, please refrain from explanations
+-  such as "I don't like that coding style". Keep in mind that each unnecessary
+-  warning helps hiding a real problem. If you don't like the kernel coding
+-  style, don't write kernel drivers.
++* Please run your patch through 'checkpatch --strict'. There should be no
++  errors, no warnings, and few if any check messages. If there are any
++  messages, please be prepared to explain.
++
++* If your patch generates checkpatch errors, warnings, or check messages,
++  please refrain from explanations such as "I prefer that coding style".
++  Keep in mind that each unnecessary message helps hiding a real problem,
++  and a consistent coding style makes it easier for others to understand
++  and review the code.
+ 
+ * Please test your patch thoroughly. We are not your test group.
+   Sometimes a patch can not or not completely be tested because of missing
+@@ -61,15 +66,30 @@ increase the chances of your change being accepted.
+ 
+ * Make sure that all dependencies are listed in Kconfig.
+ 
++* Please list include files in alphabetic order.
++
++* Please align continuation lines with '(' on the previous line.
++
+ * Avoid forward declarations if you can. Rearrange the code if necessary.
+ 
++* Avoid macros to generate groups of sensor attributes. It not only confuses
++  checkpatch, but also makes it more difficult to review the code.
++
+ * Avoid calculations in macros and macro-generated functions. While such macros
+   may save a line or so in the source, it obfuscates the code and makes code
+   review more difficult. It may also result in code which is more complicated
+   than necessary. Use inline functions or just regular functions instead.
+ 
++* Limit the number of kernel log messages. In general, your driver should not
++  generate an error message just because a runtime operation failed. Report
++  errors to user space instead, using an appropriate error code. Keep in mind
++  that kernel error log messages not only fill up the kernel log, but also are
++  printed synchronously, most likely with interrupt disabled, often to a serial
++  console. Excessive logging can seriously affect system performance.
++
+ * Use devres functions whenever possible to allocate resources. For rationale
+   and supported functions, please see Documentation/driver-model/devres.txt.
++  If a function is not supported by devres, consider using devm_add_action().
+ 
+ * If the driver has a detect function, make sure it is silent. Debug messages
+   and messages printed after a successful detection are acceptable, but it
+@@ -96,8 +116,16 @@ increase the chances of your change being accepted.
+   writing to it might cause a bad misconfiguration.
+ 
+ * Make sure there are no race conditions in the probe function. Specifically,
+-  completely initialize your chip first, then create sysfs entries and register
+-  with the hwmon subsystem.
++  completely initialize your chip and your driver first, then register with
++  the hwmon subsystem.
++
++* Use devm_hwmon_device_register_with_groups() or, if your driver needs a remove
++  function, hwmon_device_register_with_groups() to register your driver with the
++  hwmon subsystem. Try using devm_add_action() instead of a remove function if
++  possible. Do not use hwmon_device_register().
++
++* Your driver should be buildable as module. If not, please be prepared to
++  explain why it has to be built into the kernel.
+ 
+ * Do not provide support for deprecated sysfs attributes.
+ 
 -- 
-Best regards,
-Michał Kępień
+2.5.0
+
