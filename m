@@ -1,86 +1,100 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43722 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58052 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751449AbcFYCLx (ORCPT
+	with ESMTP id S1751737AbcFOSlI (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 24 Jun 2016 22:11:53 -0400
-Subject: Re: MCP9808 iio or hwmon
-To: Alison Schofield <amsfield22@gmail.com>
-References: <20160613220843.GA4235@d830.WORKGROUP>
- <CAEnQRZBZcQZRYGbk-6Eh5sN7_D90HTZPPo=uOSSZF2obB5VD+w@mail.gmail.com>
- <CAEnQRZC9ES6dGyUdycW=nRuA=6yRa=i01BWBLt7uFsieE-74OQ@mail.gmail.com>
- <57600656.7030902@roeck-us.net> <20160621222609.GA2464@d830.WORKGROUP>
- <20160621234246.GA23912@roeck-us.net> <20160625003656.GA2726@d830.WORKGROUP>
-Cc: Daniel Baluta <daniel.baluta@intel.com>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
+	Wed, 15 Jun 2016 14:41:08 -0400
+Date: Wed, 15 Jun 2016 11:40:56 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <576DE861.8050905@roeck-us.net>
-Date: Fri, 24 Jun 2016 19:11:45 -0700
+To: Andrea Scopece <andrea.scopece@gmx.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: contact / hwmon
+Message-ID: <20160615184056.GA17538@roeck-us.net>
+References: <20160615140308.0afb61e6@gmx.com>
 MIME-Version: 1.0
-In-Reply-To: <20160625003656.GA2726@d830.WORKGROUP>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160615140308.0afb61e6@gmx.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/24/2016 05:36 PM, Alison Schofield wrote:
-> On Tue, Jun 21, 2016 at 04:42:46PM -0700, Guenter Roeck wrote:
->> On Tue, Jun 21, 2016 at 03:26:11PM -0700, Alison Schofield wrote:
->>> On Tue, Jun 14, 2016 at 06:27:50AM -0700, Guenter Roeck wrote:
->>>> On 06/14/2016 01:22 AM, Daniel Baluta wrote:
->>>>> [fixing IIO, hwmon lists emails]
->>>>>
->>>>> On Tue, Jun 14, 2016 at 11:20 AM, Daniel Baluta <daniel.baluta@gmail.com> wrote:
->>>>>> On Tue, Jun 14, 2016 at 1:08 AM, Alison Schofield <amsfield22@gmail.com> wrote:
->>>>>>>
->>>>>>> I was working on an iio driver for MCP9808 when Jonathan took notice
->>>>>>> and suggested we have the iio or hwmon discussion.
->>>>>>>
->>>>>>> So, where should this sensor driver reside?
->>>>>>>
->>>>>>> http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
->>>>>>>
->>>>>>> It's a digital temp sensor with user programmable registers for
->>>>>>> sensing applications.  Supports shutdown, low power modes,
->>>>>>> specifying of event & critical output boundaries.  Can support
->>>>>>> 8 sensors on a single serial bus. Touted as 'ideal for sophisticated
->>>>>>> multi-zone temperature-monitoring applications.'
->>>>>>
->>>>>> This is debatable, looking to the datasheet this driver could reside
->>>>>> in both places.
->>>>>>
->>>>>> Because this sensor has Industrial utility (e.g freezers, refrigerators) I
->>>>>> am inclined to say we should support it in IIO.
->>>>>>
->>>>
->>>> Literally every sensor has that utility.
->>>>
->>>> Alternatively, you might consider adding its device ID to the jc42 driver.
->>>> If you want to be fancy, you could add optional support for resolution
->>>> selection to the driver.
->>>>
->>>> Guenter
->>>
->>> Hi Guenter,
->>> I'm using the mcp9808 with the jc42 driver by instantiating it.
->>>
->>> I've added the device ID info so that the .detect callback can recognize
->>> it, but can't figure out how to test that.  When/how does that .detect
->>> get called?  I am using the Diolan.
->>>
->> Not sure if it works, but try to load the the jc42 driver using modprobe
->> first, and _then_ insert the diolan adapter.
->>
->> Guenter
->
-> Finally got it!  I had to add I2C_CLASS_SPD (jc42's class) to Diolan and
-> then follow the order you suggested.
->
+On Wed, Jun 15, 2016 at 02:03:08PM +0200, Andrea Scopece wrote:
+> 
+> Hello,
+> 
+> my system is afflicted from a small bug, from a long time, and I have no idea
+> where to report it.
+> 
+> Just found your email address on github, linked to hwmon related commits, so 
+> I decided to write to you directly, hope this is not much of problem.
+> If I did it wrong, my apologies, and if you can please direct me to the right
+> place.
+> 
+> 
+> The bug:
+> 
+> I'm using a "conky" panel to monitor some parameters, among them the CPU
+> temps.
+> 
+> What is happening is that upon reboot, sometimes the temps display correctly,
+> sometimes not. (by reboot, I mean also complete power off / power on
+> sequence).
+> 
+> I did a bit of research and found that the hwmon instance sometime is
+> enumerated as 0 and sometimes as 1 ... both works but obviously when I make a
+> constant reference in conky, say "hwmon 0" it work only half of the times.
+> 
+> These are the involved parameters:
+> sometimes as:
+> /sys/devices/virtual/hwmon/hwmon0/temp1_input
+> /sys/devices/virtual/hwmon/hwmon0/temp1_label
+> /sys/devices/virtual/hwmon/hwmon0/temp2_input
+> /sys/devices/virtual/hwmon/hwmon0/temp2_label
+> 
+> sometimes as:
+> /sys/devices/virtual/hwmon/hwmon1/temp1_input
+> /sys/devices/virtual/hwmon/hwmon1/temp1_label
+> /sys/devices/virtual/hwmon/hwmon1/temp2_input
+> /sys/devices/virtual/hwmon/hwmon1/temp2_label
+> 
+> 
+> coretemp enumeration show the same behavior:
+> /sys/devices/platform/coretemp.0
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_input
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_label
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_crit_alarm
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_crit
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_crit
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_crit_alarm
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_max
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_max
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_input
+> /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_label
+> 
+> sometimes as:
+> /sys/devices/platform/coretemp.0
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_input
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_label
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_crit_alarm
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_crit
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_crit
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_crit_alarm
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_max
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_max
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_input
+> /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_label
+> 
 
-Great. Can you send a patch for the jc42 driver ?
+Unfortunately, that is a "feature". Numbering is determined by the module
+load order. hwmon0 is the first registered hwmon device, hwmon1 is the next,
+and so on. Since the module load order is not fixed, device name assignments
+are not fixed either.
 
-Thanks,
+This is quite similar to network device naming problems; unfortunately
+the solution applied there (using udev to select fixed names) does not work
+with non-network devices.
+
+I know this is very annoying, but right now I don't have a good idea
+how to solve it.
+
 Guenter
-
-
