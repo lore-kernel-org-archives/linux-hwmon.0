@@ -1,112 +1,148 @@
-Return-path: <mranostay@gmail.com>
-MIME-Version: 1.0
-In-Reply-To: <f26e218318cd07bdb857f67b1357f36e@jic23.retrosnub.co.uk>
-References: <1465708397-19649-1-git-send-email-mranostay@gmail.com>
- <20160613222502.GA4376@d830.WORKGROUP> <CAKzfze_=URjXxePW4+P_Y8OUrgoMiC90Nzr=3ey+G=ZHKsRxCA@mail.gmail.com>
- <f26e218318cd07bdb857f67b1357f36e@jic23.retrosnub.co.uk>
-From: Matt Ranostay <mranostay@gmail.com>
-Date: Tue, 14 Jun 2016 12:01:06 -0700
-Message-ID: <CAKzfze_LfWnorv-SagS8+0HbUiTprDFfXdAWCcTzC61TeFriYw@mail.gmail.com>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42515 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750767AbcFOESe (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Wed, 15 Jun 2016 00:18:34 -0400
 Subject: Re: [PATCH 0/2] iio: humidity: sht31: add Sensirion SHT31 support
-To: Jonathan Cameron <jic23@jic23.retrosnub.co.uk>, Guenter Roeck <linux@roeck-us.net>,
+To: Matt Ranostay <mranostay@gmail.com>,
+	Jonathan Cameron <jic23@jic23.retrosnub.co.uk>,
 	linux-hwmon@vger.kernel.org, david.frey@sensirion.com
+References: <1465708397-19649-1-git-send-email-mranostay@gmail.com>
+ <20160613222502.GA4376@d830.WORKGROUP>
+ <CAKzfze_=URjXxePW4+P_Y8OUrgoMiC90Nzr=3ey+G=ZHKsRxCA@mail.gmail.com>
+ <f26e218318cd07bdb857f67b1357f36e@jic23.retrosnub.co.uk>
+ <CAKzfze_LfWnorv-SagS8+0HbUiTprDFfXdAWCcTzC61TeFriYw@mail.gmail.com>
 Cc: Alison Schofield <amsfield22@gmail.com>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>, Jonathan Cameron <jic23@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-List-ID: <linux-hwmon@vger.kernel.org>
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <5760D6FD.7050604@roeck-us.net>
+Date: Tue, 14 Jun 2016 21:18:05 -0700
+MIME-Version: 1.0
+In-Reply-To: <CAKzfze_LfWnorv-SagS8+0HbUiTprDFfXdAWCcTzC61TeFriYw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hello Guenter et al,
+On 06/14/2016 12:01 PM, Matt Ranostay wrote:
+> Hello Guenter et al,
+>
+> So seems I wrote an iio driver for the SHT31 chipset about the same
+> David Frey had his merged into hwmon tree. So was wondering per
+> Jonathan's comments what your input on this would be.
+>
+>>From what I can see the additional functionality of the hrtimer
+> trigger + rather fast update/integration time that a case could be
+> made because of the triggered buffer.
+>
+> Now there is some functionality missing from my iio driver than exists
+> in the hwmon.. like the thermal and humidity trip points (but that can
+> be handled in a userspace HAL anyway), and the non-clock skewing
+> read/write functionality (this can be easily added).
+>
 
-So seems I wrote an iio driver for the SHT31 chipset about the same
-David Frey had his merged into hwmon tree. So was wondering per
-Jonathan's comments what your input on this would be.
+I am quite sure that we had this discussion about this very driver before.
+One of the key reasons for going with hwmon was limit register support.
 
->From what I can see the additional functionality of the hrtimer
-trigger + rather fast update/integration time that a case could be
-made because of the triggered buffer.
+Guess you claim that is no longer relevant since it can be handled in user space ?
+If so, I would disagree; it seems to be difficult to generate an alert signal
+from user space.
 
-Now there is some functionality missing from my iio driver than exists
-in the hwmon.. like the thermal and humidity trip points (but that can
-be handled in a userspace HAL anyway), and the non-clock skewing
-read/write functionality (this can be easily added).
+I don't mind if you folks want drivers for chips like like this (ie chips supporting
+limits, or in other words typical hardware monitoring chips) in iio, but I would
+kindly ask to enhance the iio subsystem to support limits.
+
+It might be worth mentioning that at least for my part am not split on humidity
+sensors. They are supported in high end servers and thus used for hardware monitoring.
 
 Thanks,
+Guenter
 
-Matt
-
-
-
-On Tue, Jun 14, 2016 at 12:44 AM,  <jic23@jic23.retrosnub.co.uk> wrote:
-> On 14.06.2016 00:23, Matt Ranostay wrote:
+> Thanks,
+>
+> Matt
+>
+>
+>
+> On Tue, Jun 14, 2016 at 12:44 AM,  <jic23@jic23.retrosnub.co.uk> wrote:
+>> On 14.06.2016 00:23, Matt Ranostay wrote:
+>>>
+>>> Didn't notice that will till now, and looking at the timestamp I see why
+>>> :).
+>>> However this is more for the sw triggered buffer support which hwmon
+>>> lacks... there is a few examples of this already in the tree.
+>>>
+>>> Maybe Jonathan and Peter will have some input on this.
+>>>
+>> Thanks for highlighting this Alison.  Not the first time we have had
+>> simultaneous driver postings under review for both IIO and
+>> HWMON unfortunately.
 >>
->> Didn't notice that will till now, and looking at the timestamp I see why
->> :).
->> However this is more for the sw triggered buffer support which hwmon
->> lacks... there is a few examples of this already in the tree.
+>> The hwmon guys are fairly flexible iff there is a good reason to want stuff
+>> that is in IIO.  The original hwmon humidity driver was actually my fault
+>> as it slipped in when hwmon was effectively not maintained (Andrew Morton
+>> was
+>> babysitting).  People on their side have always been a bit split on humidity
+>> drivers and whether they are within their scope.
 >>
->> Maybe Jonathan and Peter will have some input on this.
+>> Anyhow, best bet is to email their list (perhaps reply to the driver thread)
+>> to make sure everyone knows this is going on (cc linux-iio as well).
+>> Then we can work out how to move forward.
 >>
-> Thanks for highlighting this Alison.  Not the first time we have had
-> simultaneous driver postings under review for both IIO and
-> HWMON unfortunately.
->
-> The hwmon guys are fairly flexible iff there is a good reason to want stuff
-> that is in IIO.  The original hwmon humidity driver was actually my fault
-> as it slipped in when hwmon was effectively not maintained (Andrew Morton
-> was
-> babysitting).  People on their side have always been a bit split on humidity
-> drivers and whether they are within their scope.
->
-> Anyhow, best bet is to email their list (perhaps reply to the driver thread)
-> to make sure everyone knows this is going on (cc linux-iio as well).
-> Then we can work out how to move forward.
->
-> Two drivers, one in each place is a non starter for new parts.  We have
-> ended up with a few instances, but it's mostly been a case of a driver
-> with much wider scope ending up covering parts that were already in hwmon.
-> Also a very small number of devices have moved across from hwmon to IIO.
->
-> In this particular case the sensor is reasonably fast so there is at
-> least some argument for IIO support. Note I tend to stay out of these
-> and let the driver author work on convincing Guenter / Jean
-> (they are very reasonable and responsive!) Only thing I'll say is that
-> I'm more than happy to have this in IIO if the hwmon guys don't mind.
->
-> Jonathan
->
->> On Mon, Jun 13, 2016 at 3:25 PM, Alison Schofield <amsfield22@gmail.com>
->> wrote:
->>>
->>> On Sat, Jun 11, 2016 at 10:13:15PM -0700, Matt Ranostay wrote:
+>> Two drivers, one in each place is a non starter for new parts.  We have
+>> ended up with a few instances, but it's mostly been a case of a driver
+>> with much wider scope ending up covering parts that were already in hwmon.
+>> Also a very small number of devices have moved across from hwmon to IIO.
+>>
+>> In this particular case the sensor is reasonably fast so there is at
+>> least some argument for IIO support. Note I tend to stay out of these
+>> and let the driver author work on convincing Guenter / Jean
+>> (they are very reasonable and responsive!) Only thing I'll say is that
+>> I'm more than happy to have this in IIO if the hwmon guys don't mind.
+>>
+>> Jonathan
+>>
+>>> On Mon, Jun 13, 2016 at 3:25 PM, Alison Schofield <amsfield22@gmail.com>
+>>> wrote:
 >>>>
->>>> Add support for the humidity and temperature functionally for the SHT31
->>>> chipset. In addition add support for using using software triggers.
->>>
->>>
->>> Now that I'm hwmon-aware ;)  I see this same driver under review in
->>> hwmon.
->>> Can support exist in 2 places?
->>>
->>> alisons
->>>
+>>>> On Sat, Jun 11, 2016 at 10:13:15PM -0700, Matt Ranostay wrote:
+>>>>>
+>>>>> Add support for the humidity and temperature functionally for the SHT31
+>>>>> chipset. In addition add support for using using software triggers.
 >>>>
->>>> Matt Ranostay (2):
->>>>   devicetree: add Sensirion AG vendor id
->>>>   iio: humidity: sht31: add Sensirion SHT31 support
 >>>>
->>>>  .../devicetree/bindings/i2c/trivial-devices.txt    |   1 +
->>>>  .../devicetree/bindings/vendor-prefixes.txt        |   1 +
->>>>  drivers/iio/humidity/Kconfig                       |  11 +
->>>>  drivers/iio/humidity/Makefile                      |   1 +
->>>>  drivers/iio/humidity/sht31.c                       | 416
->>>> +++++++++++++++++++++
->>>>  5 files changed, 430 insertions(+)
->>>>  create mode 100644 drivers/iio/humidity/sht31.c
+>>>> Now that I'm hwmon-aware ;)  I see this same driver under review in
+>>>> hwmon.
+>>>> Can support exist in 2 places?
 >>>>
->>>> --
->>>> 2.7.4
+>>>> alisons
 >>>>
->>>> --
->>>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
->>>> the body of a message to majordomo@vger.kernel.org
->>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>>>>
+>>>>> Matt Ranostay (2):
+>>>>>    devicetree: add Sensirion AG vendor id
+>>>>>    iio: humidity: sht31: add Sensirion SHT31 support
+>>>>>
+>>>>>   .../devicetree/bindings/i2c/trivial-devices.txt    |   1 +
+>>>>>   .../devicetree/bindings/vendor-prefixes.txt        |   1 +
+>>>>>   drivers/iio/humidity/Kconfig                       |  11 +
+>>>>>   drivers/iio/humidity/Makefile                      |   1 +
+>>>>>   drivers/iio/humidity/sht31.c                       | 416
+>>>>> +++++++++++++++++++++
+>>>>>   5 files changed, 430 insertions(+)
+>>>>>   create mode 100644 drivers/iio/humidity/sht31.c
+>>>>>
+>>>>> --
+>>>>> 2.7.4
+>>>>>
+>>>>> --
+>>>>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+>>>>> the body of a message to majordomo@vger.kernel.org
+>>>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+
