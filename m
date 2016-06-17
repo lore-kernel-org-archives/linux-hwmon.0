@@ -1,9 +1,9 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f67.google.com ([74.125.82.67]:33159 "EHLO
-	mail-wm0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753501AbcFQWzW (ORCPT
+Received: from mail-wm0-f66.google.com ([74.125.82.66]:34824 "EHLO
+	mail-wm0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753495AbcFQWzN (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 17 Jun 2016 18:55:22 -0400
+	Fri, 17 Jun 2016 18:55:13 -0400
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -20,9 +20,9 @@ To: Jean Delvare <jdelvare@suse.com>,
 	Leon Yu <leon@leonyu.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
-Subject: [PATCH 2/6] hwmon: (dell-smm) Restrict fan control and serial number to CAP_SYS_ADMIN by default
-Date: Sat, 18 Jun 2016 00:54:45 +0200
-Message-Id: <1466204089-17030-3-git-send-email-pali.rohar@gmail.com>
+Subject: [PATCH 1/6] hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios version is not a number
+Date: Sat, 18 Jun 2016 00:54:44 +0200
+Message-Id: <1466204089-17030-2-git-send-email-pali.rohar@gmail.com>
 In-Reply-To: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
 References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
 MIME-Version: 1.0
@@ -31,91 +31,39 @@ Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-For security reasons ordinary user must not be able to control fan speed
-via /proc/i8k by default. Some malicious software running under "nobody"
-user could be able to turn fan off and cause HW problems. So this patch
-changes default value of "restricted" parameter to 1.
-
-Also restrict reading of DMI_PRODUCT_SERIAL from /proc/i8k via "restricted"
-parameter. It is because non root user cannot read DMI_PRODUCT_SERIAL from
-sysfs file /sys/class/dmi/id/product_serial.
-
-Old non secure behaviour of file /proc/i8k can be achieved by loading this
-module with "restricted" parameter set to 0.
-
-Note that this patch has effects only for kernels compiled with CONFIG_I8K
-and only for file /proc/i8k. Hwmon interface provided by this driver was
-not changed and root access for setting fan speed was needed also before.
+ABI of I8K_BIOS_VERSION ioctl can return only number. But new BIOS versions
+contain also other characters, which does not fit into that ABI. So in case
+of non digit values return -EINVAL.
 
 Reported-by: Mario Limonciello <Mario_Limonciello@dell.com>
 Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
-Cc: stable@vger.kernel.org # will need backport
 ---
- drivers/hwmon/dell-smm-hwmon.c |   19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 480b2fa..c8bd3fdd 100644
+index c43318d..480b2fa 100644
 --- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -67,6 +67,7 @@
+@@ -35,6 +35,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/io.h>
+ #include <linux/sched.h>
++#include <linux/ctype.h>
  
- static DEFINE_MUTEX(i8k_mutex);
- static char bios_version[4];
-+static char bios_machineid[16];
- static struct device *i8k_hwmon_dev;
- static u32 i8k_hwmon_flags;
- static uint i8k_fan_mult = I8K_FAN_MULT;
-@@ -95,13 +96,13 @@ module_param(ignore_dmi, bool, 0);
- MODULE_PARM_DESC(ignore_dmi, "Continue probing hardware even if DMI data does not match");
+ #include <linux/i8k.h>
  
- #if IS_ENABLED(CONFIG_I8K)
--static bool restricted;
-+static bool restricted = true;
- module_param(restricted, bool, 0);
--MODULE_PARM_DESC(restricted, "Allow fan control if SYS_ADMIN capability set");
-+MODULE_PARM_DESC(restricted, "Restrict fan control and serial number to CAP_SYS_ADMIN (default: 1)");
+@@ -387,6 +388,10 @@ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
  
- static bool power_status;
- module_param(power_status, bool, 0600);
--MODULE_PARM_DESC(power_status, "Report power status in /proc/i8k");
-+MODULE_PARM_DESC(power_status, "Report power status in /proc/i8k (default: 0)");
- #endif
- 
- static uint fan_mult;
-@@ -397,9 +398,11 @@ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
- 		break;
- 
- 	case I8K_MACHINE_ID:
--		memset(buff, 0, 16);
--		strlcpy(buff, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
--			sizeof(buff));
-+		if (restricted && !capable(CAP_SYS_ADMIN))
-+			return -EPERM;
+ 	switch (cmd) {
+ 	case I8K_BIOS_VERSION:
++		if (!isdigit(bios_version[0]) || !isdigit(bios_version[1]) ||
++		    !isdigit(bios_version[2]))
++			return -EINVAL;
 +
-+		memset(buff, 0, sizeof(buff));
-+		strlcpy(buff, bios_machineid, sizeof(buff));
+ 		val = (bios_version[0] << 16) |
+ 				(bios_version[1] << 8) | bios_version[2];
  		break;
- 
- 	case I8K_FN_STATUS:
-@@ -516,7 +519,7 @@ static int i8k_proc_show(struct seq_file *seq, void *offset)
- 	seq_printf(seq, "%s %s %s %d %d %d %d %d %d %d\n",
- 		   I8K_PROC_FMT,
- 		   bios_version,
--		   i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-+		   (restricted && !capable(CAP_SYS_ADMIN)) ? "-1" : bios_machineid,
- 		   cpu_temp,
- 		   left_fan, right_fan, left_speed, right_speed,
- 		   ac_power, fn_key);
-@@ -985,6 +988,8 @@ static int __init i8k_probe(void)
- 
- 	strlcpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
- 		sizeof(bios_version));
-+	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-+		sizeof(bios_machineid));
- 
- 	/*
- 	 * Get SMM Dell signature
 -- 
 1.7.9.5
 
