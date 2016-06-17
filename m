@@ -1,9 +1,9 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f65.google.com ([74.125.82.65]:35034 "EHLO
-	mail-wm0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S964835AbcFQWzk (ORCPT
+Received: from mail-wm0-f67.google.com ([74.125.82.67]:33972 "EHLO
+	mail-wm0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753495AbcFQWzb (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 17 Jun 2016 18:55:40 -0400
+	Fri, 17 Jun 2016 18:55:31 -0400
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -20,9 +20,9 @@ To: Jean Delvare <jdelvare@suse.com>,
 	Leon Yu <leon@leonyu.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
-Subject: [PATCH 5/6] hwmon: (dell-smm) Detect fan with index=2
-Date: Sat, 18 Jun 2016 00:54:48 +0200
-Message-Id: <1466204089-17030-6-git-send-email-pali.rohar@gmail.com>
+Subject: [PATCH 4/6] hwmon: (dell-smm) Cache fan_type() calls and change fan detection
+Date: Sat, 18 Jun 2016 00:54:47 +0200
+Message-Id: <1466204089-17030-5-git-send-email-pali.rohar@gmail.com>
 In-Reply-To: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
 References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
 MIME-Version: 1.0
@@ -31,93 +31,78 @@ Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Some Dell machines (e.g. Dell Precision M3800) have two fans, first with
-index=0 and second with index=2. So export also attributes for third fan
-device with index=2.
+On more Dell machines (e.g. Dell Precision M3800) fan_type() call is too
+expensive (CPU is too long in SMM mode) and cause kernel to hang. This is
+bug in Dell SMM or BIOS.
+
+This patch caches type for each fan (as it should not change) and changes
+the way how fan presense is detected. First it try function fan_status()
+as was before commit f989e55452c7 ("i8k: Add support for fan labels"). And
+if that fails fallback to fan_type(). *_status() functions can fail in case
+fan is not currently accessible (e.g. present on GPU which is currently
+turned off).
 
 Reported-by: Tolga Cakir <cevelnet@gmail.com>
 Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=112021
+Cc: stable@vger.kernel.org # v4.0+, will need backport
 ---
- drivers/hwmon/dell-smm-hwmon.c |   24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c |   25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 2ac87d5..571d498 100644
+index 4bbc587..2ac87d5 100644
 --- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -81,6 +81,7 @@ static bool disallow_fan_type_call;
- #define I8K_HWMON_HAVE_TEMP4	(1 << 3)
- #define I8K_HWMON_HAVE_FAN1	(1 << 4)
- #define I8K_HWMON_HAVE_FAN2	(1 << 5)
-+#define I8K_HWMON_HAVE_FAN3	(1 << 6)
- 
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
- MODULE_AUTHOR("Pali Rohár <pali.rohar@gmail.com>");
-@@ -252,7 +253,7 @@ static int _i8k_get_fan_type(int fan)
- static int i8k_get_fan_type(int fan)
+@@ -238,7 +238,7 @@ static int i8k_get_fan_speed(int fan)
+ /*
+  * Read the fan type.
+  */
+-static int i8k_get_fan_type(int fan)
++static int _i8k_get_fan_type(int fan)
  {
- 	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
--	static int types[2] = { INT_MIN, INT_MIN };
-+	static int types[3] = { INT_MIN, INT_MIN, INT_MIN };
+ 	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
  
- 	if (types[fan] == INT_MIN)
- 		types[fan] = _i8k_get_fan_type(fan);
-@@ -719,6 +720,12 @@ static SENSOR_DEVICE_ATTR(fan2_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
- 			  1);
- static SENSOR_DEVICE_ATTR(pwm2, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
- 			  i8k_hwmon_set_pwm, 1);
-+static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, i8k_hwmon_show_fan, NULL,
-+			  2);
-+static SENSOR_DEVICE_ATTR(fan3_label, S_IRUGO, i8k_hwmon_show_fan_label, NULL,
-+			  2);
-+static SENSOR_DEVICE_ATTR(pwm3, S_IRUGO | S_IWUSR, i8k_hwmon_show_pwm,
-+			  i8k_hwmon_set_pwm, 2);
- 
- static struct attribute *i8k_attrs[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,	/* 0 */
-@@ -735,6 +742,9 @@ static struct attribute *i8k_attrs[] = {
- 	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
- 	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
- 	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
-+	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 14 */
-+	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 15 */
-+	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 16 */
- 	NULL
- };
- 
-@@ -742,7 +752,7 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
- 			      int index)
- {
- 	if (disallow_fan_type_call &&
--	    (index == 9 || index == 12))
-+	    (index == 9 || index == 12 || index == 15))
- 		return 0;
- 	if (index >= 0 && index <= 1 &&
- 	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP1))
-@@ -762,6 +772,9 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
- 	if (index >= 11 && index <= 13 &&
- 	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
- 		return 0;
-+	if (index >= 14 && index <= 16 &&
-+	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
-+		return 0;
- 
- 	return attr->mode;
+@@ -249,6 +249,17 @@ static int i8k_get_fan_type(int fan)
+ 	return i8k_smm(&regs) ? : regs.eax & 0xff;
  }
-@@ -807,6 +820,13 @@ static int __init i8k_init_hwmon(void)
+ 
++static int i8k_get_fan_type(int fan)
++{
++	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
++	static int types[2] = { INT_MIN, INT_MIN };
++
++	if (types[fan] == INT_MIN)
++		types[fan] = _i8k_get_fan_type(fan);
++
++	return types[fan];
++}
++
+ /*
+  * Read the fan nominal rpm for specific fan speed.
+  */
+@@ -782,13 +793,17 @@ static int __init i8k_init_hwmon(void)
+ 	if (err >= 0)
+ 		i8k_hwmon_flags |= I8K_HWMON_HAVE_TEMP4;
+ 
+-	/* First fan attributes, if fan type is OK */
+-	err = i8k_get_fan_type(0);
++	/* First fan attributes, if fan status or type is OK */
++	err = i8k_get_fan_status(0);
++	if (err < 0)
++		err = i8k_get_fan_type(0);
+ 	if (err >= 0)
+ 		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN1;
+ 
+-	/* Second fan attributes, if fan type is OK */
+-	err = i8k_get_fan_type(1);
++	/* Second fan attributes, if fan status or type is OK */
++	err = i8k_get_fan_status(1);
++	if (err < 0)
++		err = i8k_get_fan_type(1);
  	if (err >= 0)
  		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN2;
  
-+	/* Third fan attributes, if fan status or type is OK */
-+	err = i8k_get_fan_status(2);
-+	if (err < 0)
-+		err = i8k_get_fan_type(2);
-+	if (err >= 0)
-+		i8k_hwmon_flags |= I8K_HWMON_HAVE_FAN3;
-+
- 	i8k_hwmon_dev = hwmon_device_register_with_groups(NULL, "dell_smm",
- 							  NULL, i8k_groups);
- 	if (IS_ERR(i8k_hwmon_dev)) {
 -- 
 1.7.9.5
 
