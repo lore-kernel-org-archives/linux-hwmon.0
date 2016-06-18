@@ -1,11 +1,11 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54667 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:60738 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751144AbcFRUBU (ORCPT
+	with ESMTP id S1751200AbcFRUIa (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 18 Jun 2016 16:01:20 -0400
-Subject: Re: [PATCH 2/6] hwmon: (dell-smm) Restrict fan control and serial
- number to CAP_SYS_ADMIN by default
+	Sat, 18 Jun 2016 16:08:30 -0400
+Subject: Re: [PATCH 3/6] hwmon: (dell-smm) Disallow fan_type() calls on broken
+ machines
 To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Jan C Peters <jcpeters89@gmail.com>,
@@ -20,108 +20,144 @@ To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
 	<kernel@kempniu.pl>, Dakota Whipple <dakotajaywhipple@gmail.com>,
 	Leon Yu <leon@leonyu.net>
 References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
- <1466204089-17030-3-git-send-email-pali.rohar@gmail.com>
+ <1466204089-17030-4-git-send-email-pali.rohar@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5765A869.3050008@roeck-us.net>
-Date: Sat, 18 Jun 2016 13:00:41 -0700
+Message-ID: <5765AA31.8010202@roeck-us.net>
+Date: Sat, 18 Jun 2016 13:08:17 -0700
 MIME-Version: 1.0
-In-Reply-To: <1466204089-17030-3-git-send-email-pali.rohar@gmail.com>
+In-Reply-To: <1466204089-17030-4-git-send-email-pali.rohar@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 On 06/17/2016 03:54 PM, Pali Rohár wrote:
-> For security reasons ordinary user must not be able to control fan speed
-> via /proc/i8k by default. Some malicious software running under "nobody"
-> user could be able to turn fan off and cause HW problems. So this patch
-> changes default value of "restricted" parameter to 1.
+> Some Dell machines have especially broken SMM or BIOS which cause that once
+> fan_type() is called then CPU fan speed going randomly up and down. And for
+> fixing this behaviour reboot is required.
 >
-> Also restrict reading of DMI_PRODUCT_SERIAL from /proc/i8k via "restricted"
-> parameter. It is because non root user cannot read DMI_PRODUCT_SERIAL from
-> sysfs file /sys/class/dmi/id/product_serial.
+> So this patch creates fan_type blacklist of affected Dell machines and
+> disallow fan_type() call on them to prevent that erratic behaviour.
 >
-> Old non secure behaviour of file /proc/i8k can be achieved by loading this
-> module with "restricted" parameter set to 0.
+> Old blacklist which disabled loading driver on some machines added in
+> commits a4b45b25f18d ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8100")
+> and 6220f4ebd7b4 ("hwmon: (dell-smm) Blacklist Dell Studio XPS 8000") were
+> moved to FAN_TYPE blacklist.
 >
-> Note that this patch has effects only for kernels compiled with CONFIG_I8K
-> and only for file /proc/i8k. Hwmon interface provided by this driver was
-> not changed and root access for setting fan speed was needed also before.
->
-> Reported-by: Mario Limonciello <Mario_Limonciello@dell.com>
+> Reported-by: Jan C Peters <jcpeters89@gmail.com>
 > Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
-> Cc: stable@vger.kernel.org # will need backport
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=100121
+> Cc: stable@vger.kernel.org # v4.0+, will need backport
 
 Applied.
+
+It seemed worthwhile to apply this patch now, without waiting for further test
+feedback, since it at least reduces the impact of the observed problems.
+If follow-up changes are necessary, those will have to be applied in separate
+patches.
 
 Guenter
 
 > ---
->   drivers/hwmon/dell-smm-hwmon.c |   19 ++++++++++++-------
->   1 file changed, 12 insertions(+), 7 deletions(-)
+>   drivers/hwmon/dell-smm-hwmon.c |   36 +++++++++++++++++++++++++-----------
+>   1 file changed, 25 insertions(+), 11 deletions(-)
 >
 > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 480b2fa..c8bd3fdd 100644
+> index c8bd3fdd..4bbc587 100644
 > --- a/drivers/hwmon/dell-smm-hwmon.c
 > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -67,6 +67,7 @@
->
->   static DEFINE_MUTEX(i8k_mutex);
->   static char bios_version[4];
-> +static char bios_machineid[16];
->   static struct device *i8k_hwmon_dev;
->   static u32 i8k_hwmon_flags;
+> @@ -73,6 +73,7 @@ static u32 i8k_hwmon_flags;
 >   static uint i8k_fan_mult = I8K_FAN_MULT;
-> @@ -95,13 +96,13 @@ module_param(ignore_dmi, bool, 0);
->   MODULE_PARM_DESC(ignore_dmi, "Continue probing hardware even if DMI data does not match");
+>   static uint i8k_pwm_mult;
+>   static uint i8k_fan_max = I8K_FAN_HIGH;
+> +static bool disallow_fan_type_call;
 >
->   #if IS_ENABLED(CONFIG_I8K)
-> -static bool restricted;
-> +static bool restricted = true;
->   module_param(restricted, bool, 0);
-> -MODULE_PARM_DESC(restricted, "Allow fan control if SYS_ADMIN capability set");
-> +MODULE_PARM_DESC(restricted, "Restrict fan control and serial number to CAP_SYS_ADMIN (default: 1)");
+>   #define I8K_HWMON_HAVE_TEMP1	(1 << 0)
+>   #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
+> @@ -241,6 +242,9 @@ static int i8k_get_fan_type(int fan)
+>   {
+>   	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
 >
->   static bool power_status;
->   module_param(power_status, bool, 0600);
-> -MODULE_PARM_DESC(power_status, "Report power status in /proc/i8k");
-> +MODULE_PARM_DESC(power_status, "Report power status in /proc/i8k (default: 0)");
->   #endif
->
->   static uint fan_mult;
-> @@ -397,9 +398,11 @@ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
->   		break;
->
->   	case I8K_MACHINE_ID:
-> -		memset(buff, 0, 16);
-> -		strlcpy(buff, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-> -			sizeof(buff));
-> +		if (restricted && !capable(CAP_SYS_ADMIN))
-> +			return -EPERM;
+> +	if (disallow_fan_type_call)
+> +		return -EINVAL;
 > +
-> +		memset(buff, 0, sizeof(buff));
-> +		strlcpy(buff, bios_machineid, sizeof(buff));
->   		break;
+>   	regs.ebx = fan & 0xff;
+>   	return i8k_smm(&regs) ? : regs.eax & 0xff;
+>   }
+> @@ -726,6 +730,9 @@ static struct attribute *i8k_attrs[] = {
+>   static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
+>   			      int index)
+>   {
+> +	if (disallow_fan_type_call &&
+> +	    (index == 9 || index == 12))
+> +		return 0;
+>   	if (index >= 0 && index <= 1 &&
+>   	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP1))
+>   		return 0;
+> @@ -937,12 +944,14 @@ static struct dmi_system_id i8k_dmi_table[] __initdata = {
 >
->   	case I8K_FN_STATUS:
-> @@ -516,7 +519,7 @@ static int i8k_proc_show(struct seq_file *seq, void *offset)
->   	seq_printf(seq, "%s %s %s %d %d %d %d %d %d %d\n",
->   		   I8K_PROC_FMT,
->   		   bios_version,
-> -		   i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-> +		   (restricted && !capable(CAP_SYS_ADMIN)) ? "-1" : bios_machineid,
->   		   cpu_temp,
->   		   left_fan, right_fan, left_speed, right_speed,
->   		   ac_power, fn_key);
-> @@ -985,6 +988,8 @@ static int __init i8k_probe(void)
+>   MODULE_DEVICE_TABLE(dmi, i8k_dmi_table);
 >
+> -static struct dmi_system_id i8k_blacklist_dmi_table[] __initdata = {
+> +/*
+> + * On some machines once I8K_SMM_GET_FAN_TYPE is issued then CPU fan speed
+> + * randomly going up and down due to bug in Dell SMM or BIOS. Here is blacklist
+> + * of affected Dell machines for which we disallow I8K_SMM_GET_FAN_TYPE call.
+> + * See bug: https://bugzilla.kernel.org/show_bug.cgi?id=100121
+> + */
+> +static struct dmi_system_id i8k_blacklist_fan_type_dmi_table[] __initdata = {
+>   	{
+> -		/*
+> -		 * CPU fan speed going up and down on Dell Studio XPS 8000
+> -		 * for unknown reasons.
+> -		 */
+>   		.ident = "Dell Studio XPS 8000",
+>   		.matches = {
+>   			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> @@ -950,16 +959,19 @@ static struct dmi_system_id i8k_blacklist_dmi_table[] __initdata = {
+>   		},
+>   	},
+>   	{
+> -		/*
+> -		 * CPU fan speed going up and down on Dell Studio XPS 8100
+> -		 * for unknown reasons.
+> -		 */
+>   		.ident = "Dell Studio XPS 8100",
+>   		.matches = {
+>   			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+>   			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Studio XPS 8100"),
+>   		},
+>   	},
+> +	{
+> +		.ident = "Dell Inspiron 580",
+> +		.matches = {
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
+> +		},
+> +	},
+>   	{ }
+>   };
+>
+> @@ -974,8 +986,7 @@ static int __init i8k_probe(void)
+>   	/*
+>   	 * Get DMI information
+>   	 */
+> -	if (!dmi_check_system(i8k_dmi_table) ||
+> -	    dmi_check_system(i8k_blacklist_dmi_table)) {
+> +	if (!dmi_check_system(i8k_dmi_table)) {
+>   		if (!ignore_dmi && !force)
+>   			return -ENODEV;
+>
+> @@ -986,6 +997,9 @@ static int __init i8k_probe(void)
+>   			i8k_get_dmi_data(DMI_BIOS_VERSION));
+>   	}
+>
+> +	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table))
+> +		disallow_fan_type_call = true;
+> +
 >   	strlcpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
 >   		sizeof(bios_version));
-> +	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
-> +		sizeof(bios_machineid));
->
->   	/*
->   	 * Get SMM Dell signature
+>   	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
 >
 
