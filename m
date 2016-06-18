@@ -1,13 +1,13 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f67.google.com ([74.125.82.67]:36130 "EHLO
-	mail-wm0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751147AbcFRWrA (ORCPT
+Received: from mail-wm0-f46.google.com ([74.125.82.46]:38488 "EHLO
+	mail-wm0-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751062AbcFRWju (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 18 Jun 2016 18:47:00 -0400
+	Sat, 18 Jun 2016 18:39:50 -0400
 From: Pali =?utf-8?q?Roh=C3=A1r?= <pali.rohar@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 3/6] hwmon: (dell-smm) Disallow fan_type() calls on broken machines
-Date: Sun, 19 Jun 2016 00:46:57 +0200
+Subject: Re: [PATCH 0/6] dell-smm-hwmon fixes
+Date: Sun, 19 Jun 2016 00:39:47 +0200
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Jan C Peters <jcpeters89@gmail.com>,
 	Thorsten Leemhuis <fedora@leemhuis.info>,
@@ -21,69 +21,96 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	Dakota Whipple <dakotajaywhipple@gmail.com>,
 	Leon Yu <leon@leonyu.net>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com> <1466204089-17030-4-git-send-email-pali.rohar@gmail.com> <5765AA31.8010202@roeck-us.net>
-In-Reply-To: <5765AA31.8010202@roeck-us.net>
+References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com> <201606181726.01058@pali> <57657CE2.6040107@roeck-us.net>
+In-Reply-To: <57657CE2.6040107@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed;
-  boundary="nextPart5780907.ZJgZe51igl";
+  boundary="nextPart1813887.2yliFBRKkK";
   protocol="application/pgp-signature";
   micalg=pgp-sha1
 Content-Transfer-Encoding: 7bit
-Message-Id: <201606190046.57390@pali>
+Message-Id: <201606190039.47640@pali>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
---nextPart5780907.ZJgZe51igl
+--nextPart1813887.2yliFBRKkK
 Content-Type: Text/Plain;
   charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Saturday 18 June 2016 22:08:17 Guenter Roeck wrote:
-> On 06/17/2016 03:54 PM, Pali Roh=C3=A1r wrote:
-> > Some Dell machines have especially broken SMM or BIOS which cause
-> > that once fan_type() is called then CPU fan speed going randomly
-> > up and down. And for fixing this behaviour reboot is required.
+On Saturday 18 June 2016 18:54:58 Guenter Roeck wrote:
+> On 06/18/2016 08:26 AM, Pali Roh=C3=A1r wrote:
+> > On Saturday 18 June 2016 17:13:59 Guenter Roeck wrote:
+> >> On 06/17/2016 03:54 PM, Pali Roh=C3=A1r wrote:
+> >>> I'm sending all my dell-smm-hwmon patches in one series, because
+> >>> due to changes in code other patches depends on previous.
+> >>>=20
+> >>> First two patches fixes problem with old /proc/i8k file. Second
+> >>> is security fix and should be backported to all stable kernels
+> >>> (that problem was there always). I tested i8kctl tool (from
+> >>> i8kutils package) that it still works with these patches.
+> >>> Without root access for those security operations just showes
+> >>> '?' or '-1'.
+> >>>=20
+> >>> Third and fourth patches try to fix problem on machines with
+> >>> broken SMM/BIOS when calling function fan_type().
+> >>>=20
+> >>> Fifth is new feature and last sixth useful for debugging.
+> >>>=20
+> >>> Pali Roh=C3=A1r (6):
+> >>>     hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios
+> >>>     version is
+> >>>    =20
+> >>>       not a number
+> >>>    =20
+> >>>     hwmon: (dell-smm) Restrict fan control and serial number to
+> >>>    =20
+> >>>       CAP_SYS_ADMIN by default
+> >>>    =20
+> >>>     hwmon: (dell-smm) Disallow fan_type() calls on broken
+> >>>     machines hwmon: (dell-smm) Cache fan_type() calls and change
+> >>>     fan detection hwmon: (dell-smm) Detect fan with index=3D2
+> >>>     hwmon: (dell-smm) In debug mode log duration of SMM calls
+> >>>   =20
+> >>>    drivers/hwmon/dell-smm-hwmon.c |  122
+> >>>    ++++++++++++++++++++++++++++++++-------- 1 file changed, 99
+> >>>    insertions(+), 23 deletions(-)
+> >>=20
+> >> Pali,
+> >>=20
+> >> You asked for additional testing, so I am not sure what you expect
+> >> me to do.
+> >>=20
+> >> Which of the patches can/should I apply now ?
+> >>=20
+> >> Guenter
 > >=20
-> > So this patch creates fan_type blacklist of affected Dell machines
-> > and disallow fan_type() call on them to prevent that erratic
-> > behaviour.
+> > Test 3/6 and 4/6 patches on affected Dell machines. I CCed all
+> > people who tried to debug those bugs, so need confirmation from
+> > them that after applying 3/6 and 4/6 patches, erratic fan
+> > behaviour is not there...
 > >=20
-> > Old blacklist which disabled loading driver on some machines added
-> > in commits a4b45b25f18d ("hwmon: (dell-smm) Blacklist Dell Studio
-> > XPS 8100") and 6220f4ebd7b4 ("hwmon: (dell-smm) Blacklist Dell
-> > Studio XPS 8000") were moved to FAN_TYPE blacklist.
-> >=20
-> > Reported-by: Jan C Peters <jcpeters89@gmail.com>
-> > Signed-off-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D100121
-> > Cc: stable@vger.kernel.org # v4.0+, will need backport
+> > But because those two patches depends on previous, it is needed to
+> > test whole series...
 >=20
-> Applied.
->=20
-> It seemed worthwhile to apply this patch now, without waiting for
-> further test feedback, since it at least reduces the impact of the
-> observed problems. If follow-up changes are necessary, those will
-> have to be applied in separate patches.
->=20
-> Guenter
+> This doesn't tell me which patches to apply now. The first two ?
 
-Ok. Meanwhile patch was tested on Inspiron 580, so maybe it could be=20
-appended into commit message.
+Yes, 1/6 and 2/6 are OK.
 
 =2D-=20
 Pali Roh=C3=A1r
 pali.rohar@gmail.com
 
---nextPart5780907.ZJgZe51igl
+--nextPart1813887.2yliFBRKkK
 Content-Type: application/pgp-signature; name=signature.asc 
 Content-Description: This is a digitally signed message part.
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iEYEABECAAYFAldlz2EACgkQi/DJPQPkQ1L/DACfX7tv009c7ameStDyxCMQ4Vgt
-soEAoKiElMAmQXNm0aWVj0/OciWW1q1W
-=XEeL
+iEYEABECAAYFAldlzbMACgkQi/DJPQPkQ1KhqgCgiw6YZRBj9yYCjjJzNfu8622D
+OWEAn1GovmJMkL1cBEwT5qQMzDWbgCND
+=GJLp
 -----END PGP SIGNATURE-----
 
---nextPart5780907.ZJgZe51igl--
+--nextPart1813887.2yliFBRKkK--
