@@ -1,106 +1,51 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55059 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56705 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752638AbcFTNZk (ORCPT
+	with ESMTP id S1751483AbcFTGDx (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 20 Jun 2016 09:25:40 -0400
-Subject: Re: [PATCH 0/6] dell-smm-hwmon fixes
-To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>
-References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
- <201606181726.01058@pali> <57657CE2.6040107@roeck-us.net>
- <201606190039.47640@pali> <20160620091237.GH29844@pali>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Jan C Peters <jcpeters89@gmail.com>,
-	Thorsten Leemhuis <fedora@leemhuis.info>,
-	=?UTF-8?Q?David_Santamar=c3=ada_Rogado?= <howl.nsp@gmail.com>,
-	Peter Saunderson <peteasa@gmail.com>,
-	Tolga Cakir <cevelnet@gmail.com>,
-	"Austin S. Hemmelgarn" <ahferroin7@gmail.com>,
-	Mario_Limonciello@dell.com,
-	Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-	=?UTF-8?B?TWljaGHFgiBLxJlwaWU=?= =?UTF-8?B?xYQ=?=
-	<kernel@kempniu.pl>, Dakota Whipple <dakotajaywhipple@gmail.com>,
-	Leon Yu <leon@leonyu.net>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	Mon, 20 Jun 2016 02:03:53 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5767EEA9.1070104@roeck-us.net>
-Date: Mon, 20 Jun 2016 06:24:57 -0700
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.7-rc4
+Date: Sun, 19 Jun 2016 21:47:37 -0700
+Message-Id: <1466398057-12808-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20160620091237.GH29844@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/20/2016 02:12 AM, Pali Rohár wrote:
-> On Sunday 19 June 2016 00:39:47 Pali Rohár wrote:
->> On Saturday 18 June 2016 18:54:58 Guenter Roeck wrote:
->>> On 06/18/2016 08:26 AM, Pali Rohár wrote:
->>>> On Saturday 18 June 2016 17:13:59 Guenter Roeck wrote:
->>>>> On 06/17/2016 03:54 PM, Pali Rohár wrote:
->>>>>> I'm sending all my dell-smm-hwmon patches in one series, because
->>>>>> due to changes in code other patches depends on previous.
->>>>>>
->>>>>> First two patches fixes problem with old /proc/i8k file. Second
->>>>>> is security fix and should be backported to all stable kernels
->>>>>> (that problem was there always). I tested i8kctl tool (from
->>>>>> i8kutils package) that it still works with these patches.
->>>>>> Without root access for those security operations just showes
->>>>>> '?' or '-1'.
->>>>>>
->>>>>> Third and fourth patches try to fix problem on machines with
->>>>>> broken SMM/BIOS when calling function fan_type().
->>>>>>
->>>>>> Fifth is new feature and last sixth useful for debugging.
->>>>>>
->>>>>> Pali Rohár (6):
->>>>>>      hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios
->>>>>>      version is
->>>>>>
->>>>>>        not a number
->>>>>>
->>>>>>      hwmon: (dell-smm) Restrict fan control and serial number to
->>>>>>
->>>>>>        CAP_SYS_ADMIN by default
->>>>>>
->>>>>>      hwmon: (dell-smm) Disallow fan_type() calls on broken
->>>>>>      machines hwmon: (dell-smm) Cache fan_type() calls and change
->>>>>>      fan detection hwmon: (dell-smm) Detect fan with index=2
->>>>>>      hwmon: (dell-smm) In debug mode log duration of SMM calls
->>>>>>
->>>>>>     drivers/hwmon/dell-smm-hwmon.c |  122
->>>>>>     ++++++++++++++++++++++++++++++++-------- 1 file changed, 99
->>>>>>     insertions(+), 23 deletions(-)
->>>>>
->>>>> Pali,
->>>>>
->>>>> You asked for additional testing, so I am not sure what you expect
->>>>> me to do.
->>>>>
->>>>> Which of the patches can/should I apply now ?
->>>>>
->>>>> Guenter
->>>>
->>>> Test 3/6 and 4/6 patches on affected Dell machines. I CCed all
->>>> people who tried to debug those bugs, so need confirmation from
->>>> them that after applying 3/6 and 4/6 patches, erratic fan
->>>> behaviour is not there...
->>>>
->>>> But because those two patches depends on previous, it is needed to
->>>> test whole series...
->>>
->>> This doesn't tell me which patches to apply now. The first two ?
->>
->> Yes, 1/6 and 2/6 are OK.
->>
->
-> Guenter, now you can apply whole series + add all tested-by lines from
-> email threads. Looks like it is OK now.
->
-First three patches applied and sent to Linus last night.
+Hi Linus,
 
-Remaining three patches applied to -next.
+Please pull hwmon fixes for Linux v4.7-rc4 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.7-rc4
 
 Thanks,
 Guenter
+------
 
+The following changes since commit 5edb56491d4812c42175980759da53388e5d86f5:
+
+  Linux 4.7-rc3 (2016-06-12 07:20:35 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.7-rc4
+
+for you to fetch changes up to 2744d2fde00dc8bcc3679eb72c81a63058e90faa:
+
+  hwmon: (dell-smm) Disallow fan_type() calls on broken machines (2016-06-18 13:03:29 -0700)
+
+----------------------------------------------------------------
+Two stability fixes plus a security fix for the dell-smm driver
+
+----------------------------------------------------------------
+Pali Rohár (3):
+      hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios version is not a number
+      hwmon: (dell-smm) Restrict fan control and serial number to CAP_SYS_ADMIN by default
+      hwmon: (dell-smm) Disallow fan_type() calls on broken machines
+
+ drivers/hwmon/dell-smm-hwmon.c | 60 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 42 insertions(+), 18 deletions(-)
