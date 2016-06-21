@@ -1,51 +1,63 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56705 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751483AbcFTGDx (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 20 Jun 2016 02:03:53 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.7-rc4
-Date: Sun, 19 Jun 2016 21:47:37 -0700
-Message-Id: <1466398057-12808-1-git-send-email-linux@roeck-us.net>
+Return-path: <amsfield22@gmail.com>
+Date: Tue, 21 Jun 2016 15:26:11 -0700
+From: Alison Schofield <amsfield22@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Daniel Baluta <daniel.baluta@intel.com>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
+Subject: Re: MCP9808 iio or hwmon
+Message-ID: <20160621222609.GA2464@d830.WORKGROUP>
+References: <20160613220843.GA4235@d830.WORKGROUP>
+ <CAEnQRZBZcQZRYGbk-6Eh5sN7_D90HTZPPo=uOSSZF2obB5VD+w@mail.gmail.com>
+ <CAEnQRZC9ES6dGyUdycW=nRuA=6yRa=i01BWBLt7uFsieE-74OQ@mail.gmail.com>
+ <57600656.7030902@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57600656.7030902@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Tue, Jun 14, 2016 at 06:27:50AM -0700, Guenter Roeck wrote:
+> On 06/14/2016 01:22 AM, Daniel Baluta wrote:
+> >[fixing IIO, hwmon lists emails]
+> >
+> >On Tue, Jun 14, 2016 at 11:20 AM, Daniel Baluta <daniel.baluta@gmail.com> wrote:
+> >>On Tue, Jun 14, 2016 at 1:08 AM, Alison Schofield <amsfield22@gmail.com> wrote:
+> >>>
+> >>>I was working on an iio driver for MCP9808 when Jonathan took notice
+> >>>and suggested we have the iio or hwmon discussion.
+> >>>
+> >>>So, where should this sensor driver reside?
+> >>>
+> >>>http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
+> >>>
+> >>>It's a digital temp sensor with user programmable registers for
+> >>>sensing applications.  Supports shutdown, low power modes,
+> >>>specifying of event & critical output boundaries.  Can support
+> >>>8 sensors on a single serial bus. Touted as 'ideal for sophisticated
+> >>>multi-zone temperature-monitoring applications.'
+> >>
+> >>This is debatable, looking to the datasheet this driver could reside
+> >>in both places.
+> >>
+> >>Because this sensor has Industrial utility (e.g freezers, refrigerators) I
+> >>am inclined to say we should support it in IIO.
+> >>
+> 
+> Literally every sensor has that utility.
+> 
+> Alternatively, you might consider adding its device ID to the jc42 driver.
+> If you want to be fancy, you could add optional support for resolution
+> selection to the driver.
+> 
+> Guenter
 
-Please pull hwmon fixes for Linux v4.7-rc4 from signed tag:
+Hi Guenter,
+I'm using the mcp9808 with the jc42 driver by instantiating it.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.7-rc4
+I've added the device ID info so that the .detect callback can recognize
+it, but can't figure out how to test that.  When/how does that .detect
+get called?  I am using the Diolan.
 
 Thanks,
-Guenter
-------
-
-The following changes since commit 5edb56491d4812c42175980759da53388e5d86f5:
-
-  Linux 4.7-rc3 (2016-06-12 07:20:35 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.7-rc4
-
-for you to fetch changes up to 2744d2fde00dc8bcc3679eb72c81a63058e90faa:
-
-  hwmon: (dell-smm) Disallow fan_type() calls on broken machines (2016-06-18 13:03:29 -0700)
-
-----------------------------------------------------------------
-Two stability fixes plus a security fix for the dell-smm driver
-
-----------------------------------------------------------------
-Pali Rohár (3):
-      hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios version is not a number
-      hwmon: (dell-smm) Restrict fan control and serial number to CAP_SYS_ADMIN by default
-      hwmon: (dell-smm) Disallow fan_type() calls on broken machines
-
- drivers/hwmon/dell-smm-hwmon.c | 60 +++++++++++++++++++++++++++++-------------
- 1 file changed, 42 insertions(+), 18 deletions(-)
+alisons
