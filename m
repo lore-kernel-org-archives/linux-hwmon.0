@@ -1,73 +1,60 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:60533 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750731AbcFVAVF (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 21 Jun 2016 20:21:05 -0400
-Date: Tue, 21 Jun 2016 16:42:46 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alison Schofield <amsfield22@gmail.com>
-Cc: Daniel Baluta <daniel.baluta@intel.com>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Subject: Re: MCP9808 iio or hwmon
-Message-ID: <20160621234246.GA23912@roeck-us.net>
-References: <20160613220843.GA4235@d830.WORKGROUP>
- <CAEnQRZBZcQZRYGbk-6Eh5sN7_D90HTZPPo=uOSSZF2obB5VD+w@mail.gmail.com>
- <CAEnQRZC9ES6dGyUdycW=nRuA=6yRa=i01BWBLt7uFsieE-74OQ@mail.gmail.com>
- <57600656.7030902@roeck-us.net>
- <20160621222609.GA2464@d830.WORKGROUP>
+Return-path: <kernel@kempniu.pl>
+Date: Wed, 22 Jun 2016 10:02:57 +0200
+From: =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
+To: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Jan C Peters <jcpeters89@gmail.com>,
+	Thorsten Leemhuis <fedora@leemhuis.info>,
+	David =?utf-8?Q?Santamar=C3=ADa?= Rogado <howl.nsp@gmail.com>,
+	Peter Saunderson <peteasa@gmail.com>,
+	Tolga Cakir <cevelnet@gmail.com>,
+	"Austin S. Hemmelgarn" <ahferroin7@gmail.com>,
+	Mario_Limonciello@dell.com,
+	Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+	Dakota Whipple <dakotajaywhipple@gmail.com>,
+	Leon Yu <leon@leonyu.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] dell-smm-hwmon fixes
+Message-ID: <20160622080257.GE3056@eudyptula.hq.kempniu.pl>
+References: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20160621222609.GA2464@d830.WORKGROUP>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1466204089-17030-1-git-send-email-pali.rohar@gmail.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Jun 21, 2016 at 03:26:11PM -0700, Alison Schofield wrote:
-> On Tue, Jun 14, 2016 at 06:27:50AM -0700, Guenter Roeck wrote:
-> > On 06/14/2016 01:22 AM, Daniel Baluta wrote:
-> > >[fixing IIO, hwmon lists emails]
-> > >
-> > >On Tue, Jun 14, 2016 at 11:20 AM, Daniel Baluta <daniel.baluta@gmail.com> wrote:
-> > >>On Tue, Jun 14, 2016 at 1:08 AM, Alison Schofield <amsfield22@gmail.com> wrote:
-> > >>>
-> > >>>I was working on an iio driver for MCP9808 when Jonathan took notice
-> > >>>and suggested we have the iio or hwmon discussion.
-> > >>>
-> > >>>So, where should this sensor driver reside?
-> > >>>
-> > >>>http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
-> > >>>
-> > >>>It's a digital temp sensor with user programmable registers for
-> > >>>sensing applications.  Supports shutdown, low power modes,
-> > >>>specifying of event & critical output boundaries.  Can support
-> > >>>8 sensors on a single serial bus. Touted as 'ideal for sophisticated
-> > >>>multi-zone temperature-monitoring applications.'
-> > >>
-> > >>This is debatable, looking to the datasheet this driver could reside
-> > >>in both places.
-> > >>
-> > >>Because this sensor has Industrial utility (e.g freezers, refrigerators) I
-> > >>am inclined to say we should support it in IIO.
-> > >>
-> > 
-> > Literally every sensor has that utility.
-> > 
-> > Alternatively, you might consider adding its device ID to the jc42 driver.
-> > If you want to be fancy, you could add optional support for resolution
-> > selection to the driver.
-> > 
-> > Guenter
+> I'm sending all my dell-smm-hwmon patches in one series, because due to
+> changes in code other patches depends on previous.
 > 
-> Hi Guenter,
-> I'm using the mcp9808 with the jc42 driver by instantiating it.
+> First two patches fixes problem with old /proc/i8k file. Second is security
+> fix and should be backported to all stable kernels (that problem was there
+> always). I tested i8kctl tool (from i8kutils package) that it still works
+> with these patches. Without root access for those security operations just
+> showes '?' or '-1'.
 > 
-> I've added the device ID info so that the .detect callback can recognize
-> it, but can't figure out how to test that.  When/how does that .detect
-> get called?  I am using the Diolan.
+> Third and fourth patches try to fix problem on machines with broken
+> SMM/BIOS when calling function fan_type().
 > 
-Not sure if it works, but try to load the the jc42 driver using modprobe
-first, and _then_ insert the diolan adapter.
+> Fifth is new feature and last sixth useful for debugging.
+> 
+> Pali Rohár (6):
+>   hwmon: (dell-smm) Fail in ioctl I8K_BIOS_VERSION when bios version is
+>     not a number
+>   hwmon: (dell-smm) Restrict fan control and serial number to
+>     CAP_SYS_ADMIN by default
+>   hwmon: (dell-smm) Disallow fan_type() calls on broken machines
+>   hwmon: (dell-smm) Cache fan_type() calls and change fan detection
+>   hwmon: (dell-smm) Detect fan with index=2
+>   hwmon: (dell-smm) In debug mode log duration of SMM calls
+> 
+>  drivers/hwmon/dell-smm-hwmon.c |  122 ++++++++++++++++++++++++++++++++--------
+>  1 file changed, 99 insertions(+), 23 deletions(-)
 
-Guenter
+On a Vostro V131 (BIOS A04):
+
+Tested-by: Michał Kępień <kernel@kempniu.pl>
+
+-- 
+Best regards,
+Michał Kępień
