@@ -1,77 +1,38 @@
-Return-path: <linux@roeck-us.net>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"Andrew F. Davis" <afd@ti.com>
-Subject: [PATCH] hwmon: (ina3221) Fix negative limits
-Date: Fri, 24 Jun 2016 19:47:07 -0700
-Message-Id: <1466822827-31231-1-git-send-email-linux@roeck-us.net>
+Return-path: <nm@ti.com>
+Subject: Re: [PATCH 1/5] hwmon: (tmp102) Use devm_add_action to register
+ cleanup function
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+References: <1466728108-2512-1-git-send-email-linux@roeck-us.net>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From: Nishanth Menon <nm@ti.com>
+Message-ID: <576D401D.80700@ti.com>
+Date: Fri, 24 Jun 2016 09:13:49 -0500
+MIME-Version: 1.0
+In-Reply-To: <1466728108-2512-1-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-The result of an integer divide by an unsigned is undefined.
-This causes unexpected results when writing negative values
-into the limit registers.
+On 06/23/2016 07:28 PM, Guenter Roeck wrote:
+> By registering a cleanup function with devm_add_action(), we can
+> simplify the error path in the probe function and drop the remove
+> function entirely.
+>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Maintain the shunt_resistors variables as signed integer to avoid
-the problem. Also, for simplicity and ease of use, clamp shunt
-resistor value on writes instead of rejecting bad values.
+I dont seem to have a cover letter to reply to... but anyways..
 
-Cc: Andrew F. Davis <afd@ti.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/ina3221.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+Before: http://pastebin.ubuntu.com/17801376/
+After all 5 patches: http://pastebin.ubuntu.com/17801824/
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index d055b6a2266b..e6b49500c52a 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -95,7 +95,7 @@ static const unsigned int register_channel[] = {
- struct ina3221_data {
- 	struct regmap *regmap;
- 	struct regmap_field *fields[F_MAX_FIELDS];
--	unsigned int shunt_resistors[INA3221_NUM_CHANNELS];
-+	int shunt_resistors[INA3221_NUM_CHANNELS];
- };
- 
- static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
-@@ -155,7 +155,7 @@ static ssize_t ina3221_show_current(struct device *dev,
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	unsigned int reg = sd_attr->index;
- 	unsigned int channel = register_channel[reg];
--	unsigned int resistance_uo = ina->shunt_resistors[channel];
-+	int resistance_uo = ina->shunt_resistors[channel];
- 	int val, current_ma, voltage_nv, ret;
- 
- 	ret = ina3221_read_value(ina, reg, &val);
-@@ -176,7 +176,7 @@ static ssize_t ina3221_set_current(struct device *dev,
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	unsigned int reg = sd_attr->index;
- 	unsigned int channel = register_channel[reg];
--	unsigned int resistance_uo = ina->shunt_resistors[channel];
-+	int resistance_uo = ina->shunt_resistors[channel];
- 	int val, current_ma, voltage_uv, ret;
- 
- 	ret = kstrtoint(buf, 0, &current_ma);
-@@ -223,15 +223,14 @@ static ssize_t ina3221_set_shunt(struct device *dev,
- 	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	unsigned int channel = sd_attr->index;
--	unsigned int val;
-+	int val;
- 	int ret;
- 
--	ret = kstrtouint(buf, 0, &val);
-+	ret = kstrtoint(buf, 0, &val);
- 	if (ret)
- 		return ret;
- 
--	if (val == 0)
--		return -EINVAL;
-+	val = clamp_val(val, 1, INT_MAX);
- 
- 	ina->shunt_resistors[channel] = val;
- 
+Fails on beagleboard-X15 with:
+[   36.781509] tmp102 0-0048: No cache defaults, reading back from HW
+[   36.795940] tmp102 0-0048: unexpected config register value
+
+I have'nt bisected down on the specific patch in the series. Have you 
+had a chance to test the series?
+
+
 -- 
-2.5.0
+Regards,
+Nishanth Menon
