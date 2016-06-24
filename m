@@ -1,107 +1,102 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:34862 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752005AbcFXA26 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 23 Jun 2016 20:28:58 -0400
+Return-path: <linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Jean Delvare <jdelvare@suse.com>
-Cc: Nishanth Menon <nm@ti.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4/5] hwmon: (tmp102) Rework chip configuration
-Date: Thu, 23 Jun 2016 17:28:27 -0700
-Message-Id: <1466728108-2512-4-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1466728108-2512-1-git-send-email-linux@roeck-us.net>
-References: <1466728108-2512-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/4] hwmon: (lm75) Handle cleanup with devm_add_action
+Date: Thu, 23 Jun 2016 17:49:58 -0700
+Message-Id: <1466729401-27567-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-So far the chip was forced into polarity 0, even if it was preconfigured
-differently. Do not touch the polarity when configuring the chip.
-
-Also, the configuration register was read beack to check if the
-configuration 'sticks'. Ultimately, that is similar to checking if the
-chip is a tmp102 in the first place. Checking if a write into the
-configuration register was successful is really not the way to do it,
-and quite risky if the chip is not a tmp102, so drop that check.
-Instead, verify if the configuration register has unexpected bits set
-before writing into it.
+Use devm_add_action() to register the function to restore the original
+chip configuration. Use devm_hwmon_device_register_with_groups()
+to register the hwmon device, and drop the remove function as no
+longer needed.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/tmp102.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
+ drivers/hwmon/lm75.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index 615f9c176aaf..487b4ef5992c 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -47,6 +47,17 @@
- #define	TMP102_TLOW_REG			0x02
- #define	TMP102_THIGH_REG		0x03
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 69166ab3151d..0df745501a1f 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -76,7 +76,6 @@ static const u8 LM75_REG_TEMP[3] = {
+ /* Each client has this additional data */
+ struct lm75_data {
+ 	struct i2c_client	*client;
+-	struct device		*hwmon_dev;
+ 	struct mutex		update_lock;
+ 	u8			orig_conf;
+ 	u8			resolution;	/* In bits, between 9 and 12 */
+@@ -185,10 +184,19 @@ static const struct thermal_zone_of_device_ops lm75_of_thermal_ops = {
  
-+#define TMP102_CONFREG_MASK	(TMP102_CONF_SD | TMP102_CONF_TM | \
-+				 TMP102_CONF_POL | TMP102_CONF_F0 | \
-+				 TMP102_CONF_F1 | TMP102_CONF_OS | \
-+				 TMP102_CONF_EM | TMP102_CONF_AL | \
-+				 TMP102_CONF_CR0 | TMP102_CONF_CR1)
+ /* device probe and removal */
+ 
++static void lm75_remove(void *data)
++{
++	struct lm75_data *lm75 = data;
++	struct i2c_client *client = lm75->client;
 +
-+#define TMP102_CONFIG_CLEAR	(TMP102_CONF_SD | TMP102_CONF_OS | \
-+				 TMP102_CONF_CR0)
-+#define TMP102_CONFIG_SET	(TMP102_CONF_TM | TMP102_CONF_EM | \
-+				 TMP102_CONF_CR1)
++	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
++}
 +
- #define CONVERSION_TIME_MS		35	/* in milli-seconds */
+ static int
+ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
++	struct device *hwmon_dev;
+ 	struct lm75_data *data;
+ 	int status;
+ 	u8 set_mask, clr_mask;
+@@ -298,29 +306,22 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	new |= set_mask;
+ 	if (status != new)
+ 		lm75_write_value(client, LM75_REG_CONF, new);
+-	dev_dbg(dev, "Config %02x\n", new);
  
- struct tmp102 {
-@@ -163,9 +174,6 @@ static struct attribute *tmp102_attrs[] = {
- };
- ATTRIBUTE_GROUPS(tmp102);
+-	data->hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
+-							    data, lm75_groups);
+-	if (IS_ERR(data->hwmon_dev))
+-		return PTR_ERR(data->hwmon_dev);
++	devm_add_action(dev, lm75_remove, data);
  
--#define TMP102_CONFIG  (TMP102_CONF_TM | TMP102_CONF_EM | TMP102_CONF_CR1)
--#define TMP102_CONFIG_RD_ONLY (TMP102_CONF_R0 | TMP102_CONF_R1 | TMP102_CONF_AL)
--
- static const struct thermal_zone_of_device_ops tmp102_of_thermal_ops = {
- 	.get_temp = tmp102_read_temp,
- };
-@@ -206,26 +214,25 @@ static int tmp102_probe(struct i2c_client *client,
- 		dev_err(dev, "error reading config register\n");
- 		return status;
- 	}
-+
-+	if ((status & ~TMP102_CONFREG_MASK) !=
-+	    (TMP102_CONF_R0 | TMP102_CONF_R1)) {
-+		dev_err(dev, "unexpected config register value\n");
-+		return -ENODEV;
-+	}
-+
- 	tmp102->config_orig = status;
+-	devm_thermal_zone_of_sensor_register(data->hwmon_dev, 0,
+-					     data->hwmon_dev,
+-					     &lm75_of_thermal_ops);
++	dev_dbg(dev, "Config %02x\n", new);
  
- 	devm_add_action(dev, tmp102_restore_config, tmp102);
+-	dev_info(dev, "%s: sensor '%s'\n",
+-		 dev_name(data->hwmon_dev), client->name);
++	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
++							   data, lm75_groups);
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
  
--	status = i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
--					      TMP102_CONFIG);
-+	status &= ~TMP102_CONFIG_CLEAR;
-+	status |= TMP102_CONFIG_SET;
-+
-+	status = i2c_smbus_write_word_swapped(client, TMP102_CONF_REG, status);
- 	if (status < 0) {
- 		dev_err(dev, "error writing config register\n");
- 		return status;
- 	}
--	status = i2c_smbus_read_word_swapped(client, TMP102_CONF_REG);
--	if (status < 0) {
--		dev_err(dev, "error reading config register\n");
--		return status;
--	}
--	status &= ~TMP102_CONFIG_RD_ONLY;
--	if (status != TMP102_CONFIG) {
--		dev_err(dev, "config settings did not stick\n");
--		return -ENODEV;
--	}
+-	return 0;
+-}
++	devm_thermal_zone_of_sensor_register(hwmon_dev, 0,
++					     hwmon_dev,
++					     &lm75_of_thermal_ops);
  
- 	mutex_init(&tmp102->lock);
+-static int lm75_remove(struct i2c_client *client)
+-{
+-	struct lm75_data *data = i2c_get_clientdata(client);
++	dev_info(dev, "%s: sensor '%s'\n", dev_name(hwmon_dev), client->name);
  
+-	hwmon_device_unregister(data->hwmon_dev);
+-	lm75_write_value(client, LM75_REG_CONF, data->orig_conf);
+ 	return 0;
+ }
+ 
+@@ -489,7 +490,6 @@ static struct i2c_driver lm75_driver = {
+ 		.pm	= LM75_DEV_PM_OPS,
+ 	},
+ 	.probe		= lm75_probe,
+-	.remove		= lm75_remove,
+ 	.id_table	= lm75_ids,
+ 	.detect		= lm75_detect,
+ 	.address_list	= normal_i2c,
 -- 
 2.5.0
-
