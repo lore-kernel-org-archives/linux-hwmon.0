@@ -3,54 +3,132 @@ From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.de>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/4] hwmon: (lm75) Add update_interval attribute
-Date: Thu, 23 Jun 2016 17:50:00 -0700
-Message-Id: <1466729401-27567-3-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 2/4] hwmon: (lm75) Drop lm75_read_value and lm75_write_value
+Date: Thu, 23 Jun 2016 17:49:59 -0700
+Message-Id: <1466729401-27567-2-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1466729401-27567-1-git-send-email-linux@roeck-us.net>
 References: <1466729401-27567-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Since we know the chip's update interval, let's make it available
-to the user.
+lm75_read_value and lm75_write_value don't really add any value.
+Replace with direct smbus access functions.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm75.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/hwmon/lm75.c | 42 +++++++++---------------------------------
+ 1 file changed, 9 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 7b18cbd4a5ec..fe83f70ba62a 100644
+index 0df745501a1f..7b18cbd4a5ec 100644
 --- a/drivers/hwmon/lm75.c
 +++ b/drivers/hwmon/lm75.c
-@@ -159,16 +159,29 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *da,
+@@ -89,8 +89,6 @@ struct lm75_data {
+ 						   2 = hyst */
+ };
+ 
+-static int lm75_read_value(struct i2c_client *client, u8 reg);
+-static int lm75_write_value(struct i2c_client *client, u8 reg, u16 value);
+ static struct lm75_data *lm75_update_device(struct device *dev);
+ 
+ 
+@@ -156,7 +154,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *da,
+ 	temp = clamp_val(temp, LM75_TEMP_MIN, LM75_TEMP_MAX);
+ 	data->temp[nr] = DIV_ROUND_CLOSEST(temp  << (resolution - 8),
+ 					   1000) << (16 - resolution);
+-	lm75_write_value(client, LM75_REG_TEMP[nr], data->temp[nr]);
++	i2c_smbus_write_word_swapped(client, LM75_REG_TEMP[nr], data->temp[nr]);
+ 	mutex_unlock(&data->update_lock);
  	return count;
  }
+@@ -296,7 +294,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	}
  
-+static ssize_t show_update_interval(struct device *dev,
-+				    struct device_attribute *da, char *buf)
-+{
-+	struct lm75_data *data = lm75_update_device(dev);
-+
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	return sprintf(buf, "%u\n", jiffies_to_msecs(data->sample_time));
-+}
-+
- static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO,
- 			show_temp, set_temp, 1);
- static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IWUSR | S_IRUGO,
- 			show_temp, set_temp, 2);
- static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
-+static DEVICE_ATTR(update_interval, S_IRUGO, show_update_interval, NULL);
+ 	/* configure as specified */
+-	status = lm75_read_value(client, LM75_REG_CONF);
++	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+ 	if (status < 0) {
+ 		dev_dbg(dev, "Can't read config? %d\n", status);
+ 		return status;
+@@ -305,7 +303,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	new = status & ~clr_mask;
+ 	new |= set_mask;
+ 	if (status != new)
+-		lm75_write_value(client, LM75_REG_CONF, new);
++		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
  
- static struct attribute *lm75_attrs[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
- 	&sensor_dev_attr_temp1_max.dev_attr.attr,
- 	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
-+	&dev_attr_update_interval.attr,
+ 	devm_add_action(dev, lm75_remove, data);
  
- 	NULL
- };
+@@ -450,13 +448,13 @@ static int lm75_suspend(struct device *dev)
+ {
+ 	int status;
+ 	struct i2c_client *client = to_i2c_client(dev);
+-	status = lm75_read_value(client, LM75_REG_CONF);
++	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+ 	if (status < 0) {
+ 		dev_dbg(&client->dev, "Can't read config? %d\n", status);
+ 		return status;
+ 	}
+ 	status = status | LM75_SHUTDOWN;
+-	lm75_write_value(client, LM75_REG_CONF, status);
++	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
+ 	return 0;
+ }
+ 
+@@ -464,13 +462,13 @@ static int lm75_resume(struct device *dev)
+ {
+ 	int status;
+ 	struct i2c_client *client = to_i2c_client(dev);
+-	status = lm75_read_value(client, LM75_REG_CONF);
++	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+ 	if (status < 0) {
+ 		dev_dbg(&client->dev, "Can't read config? %d\n", status);
+ 		return status;
+ 	}
+ 	status = status & ~LM75_SHUTDOWN;
+-	lm75_write_value(client, LM75_REG_CONF, status);
++	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
+ 	return 0;
+ }
+ 
+@@ -497,29 +495,6 @@ static struct i2c_driver lm75_driver = {
+ 
+ /*-----------------------------------------------------------------------*/
+ 
+-/* register access */
+-
+-/*
+- * All registers are word-sized, except for the configuration register.
+- * LM75 uses a high-byte first convention, which is exactly opposite to
+- * the SMBus standard.
+- */
+-static int lm75_read_value(struct i2c_client *client, u8 reg)
+-{
+-	if (reg == LM75_REG_CONF)
+-		return i2c_smbus_read_byte_data(client, reg);
+-	else
+-		return i2c_smbus_read_word_swapped(client, reg);
+-}
+-
+-static int lm75_write_value(struct i2c_client *client, u8 reg, u16 value)
+-{
+-	if (reg == LM75_REG_CONF)
+-		return i2c_smbus_write_byte_data(client, reg, value);
+-	else
+-		return i2c_smbus_write_word_swapped(client, reg, value);
+-}
+-
+ static struct lm75_data *lm75_update_device(struct device *dev)
+ {
+ 	struct lm75_data *data = dev_get_drvdata(dev);
+@@ -536,7 +511,8 @@ static struct lm75_data *lm75_update_device(struct device *dev)
+ 		for (i = 0; i < ARRAY_SIZE(data->temp); i++) {
+ 			int status;
+ 
+-			status = lm75_read_value(client, LM75_REG_TEMP[i]);
++			status = i2c_smbus_read_word_swapped(client,
++							     LM75_REG_TEMP[i]);
+ 			if (unlikely(status < 0)) {
+ 				dev_dbg(dev,
+ 					"LM75: Failed to read value: reg %d, error %d\n",
 -- 
 2.5.0
