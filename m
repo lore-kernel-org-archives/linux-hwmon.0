@@ -1,100 +1,136 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35030 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750860AbcFKEDt (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 11 Jun 2016 00:03:49 -0400
+Return-path: <linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-	Hardware Monitoring <lm-sensors@lm-sensors.org>
-Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: Update guildelines for submitting patches
-Date: Fri, 10 Jun 2016 21:03:35 -0700
-Message-Id: <1465617815-23785-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Nishanth Menon <nm@ti.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/5] hwmon: (tmp102) Use devm_add_action to register cleanup function
+Date: Thu, 23 Jun 2016 17:28:24 -0700
+Message-Id: <1466728108-2512-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Add more details to the guidelines for submitting patches.
+By registering a cleanup function with devm_add_action(), we can
+simplify the error path in the probe function and drop the remove
+function entirely.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/submitting-patches | 40 +++++++++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 6 deletions(-)
+ drivers/hwmon/tmp102.c | 54 ++++++++++++++++++--------------------------------
+ 1 file changed, 19 insertions(+), 35 deletions(-)
 
-diff --git a/Documentation/hwmon/submitting-patches b/Documentation/hwmon/submitting-patches
-index d201828d202f..57f60307accc 100644
---- a/Documentation/hwmon/submitting-patches
-+++ b/Documentation/hwmon/submitting-patches
-@@ -15,10 +15,15 @@ increase the chances of your change being accepted.
-     Documentation/SubmittingPatches
-     Documentation/CodingStyle
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index f1e96fd7f445..befd06b6f3a5 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -52,7 +52,6 @@
  
--* If your patch generates checkpatch warnings, please refrain from explanations
--  such as "I don't like that coding style". Keep in mind that each unnecessary
--  warning helps hiding a real problem. If you don't like the kernel coding
--  style, don't write kernel drivers.
-+* Please run your patch through 'checkpatch --strict'. There should be no
-+  errors, no warnings, and few if any check messages. If there are any
-+  messages, please be prepared to explain.
+ struct tmp102 {
+ 	struct i2c_client *client;
+-	struct device *hwmon_dev;
+ 	struct mutex lock;
+ 	u16 config_orig;
+ 	unsigned long last_update;
+@@ -173,6 +172,15 @@ static const struct thermal_zone_of_device_ops tmp102_of_thermal_ops = {
+ 	.get_temp = tmp102_read_temp,
+ };
+ 
++static void tmp102_restore_config(void *data)
++{
++	struct tmp102 *tmp102 = data;
++	struct i2c_client *client = tmp102->client;
 +
-+* If your patch generates checkpatch errors, warnings, or check messages,
-+  please refrain from explanations such as "I prefer that coding style".
-+  Keep in mind that each unnecessary message helps hiding a real problem,
-+  and a consistent coding style makes it easier for others to understand
-+  and review the code.
- 
- * Please test your patch thoroughly. We are not your test group.
-   Sometimes a patch can not or not completely be tested because of missing
-@@ -61,15 +66,30 @@ increase the chances of your change being accepted.
- 
- * Make sure that all dependencies are listed in Kconfig.
- 
-+* Please list include files in alphabetic order.
++	i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
++				     tmp102->config_orig);
++}
 +
-+* Please align continuation lines with '(' on the previous line.
+ static int tmp102_probe(struct i2c_client *client,
+ 				  const struct i2c_device_id *id)
+ {
+@@ -201,66 +209,43 @@ static int tmp102_probe(struct i2c_client *client,
+ 		return status;
+ 	}
+ 	tmp102->config_orig = status;
 +
- * Avoid forward declarations if you can. Rearrange the code if necessary.
- 
-+* Avoid macros to generate groups of sensor attributes. It not only confuses
-+  checkpatch, but also makes it more difficult to review the code.
++	devm_add_action(dev, tmp102_restore_config, tmp102);
 +
- * Avoid calculations in macros and macro-generated functions. While such macros
-   may save a line or so in the source, it obfuscates the code and makes code
-   review more difficult. It may also result in code which is more complicated
-   than necessary. Use inline functions or just regular functions instead.
+ 	status = i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
+ 					      TMP102_CONFIG);
+ 	if (status < 0) {
+ 		dev_err(dev, "error writing config register\n");
+-		goto fail_restore_config;
++		return status;
+ 	}
+ 	status = i2c_smbus_read_word_swapped(client, TMP102_CONF_REG);
+ 	if (status < 0) {
+ 		dev_err(dev, "error reading config register\n");
+-		goto fail_restore_config;
++		return status;
+ 	}
+ 	status &= ~TMP102_CONFIG_RD_ONLY;
+ 	if (status != TMP102_CONFIG) {
+ 		dev_err(dev, "config settings did not stick\n");
+-		status = -ENODEV;
+-		goto fail_restore_config;
++		return -ENODEV;
+ 	}
+ 	tmp102->last_update = jiffies;
+ 	/* Mark that we are not ready with data until conversion is complete */
+ 	tmp102->first_time = true;
+ 	mutex_init(&tmp102->lock);
  
-+* Limit the number of kernel log messages. In general, your driver should not
-+  generate an error message just because a runtime operation failed. Report
-+  errors to user space instead, using an appropriate error code. Keep in mind
-+  that kernel error log messages not only fill up the kernel log, but also are
-+  printed synchronously, most likely with interrupt disabled, often to a serial
-+  console. Excessive logging can seriously affect system performance.
-+
- * Use devres functions whenever possible to allocate resources. For rationale
-   and supported functions, please see Documentation/driver-model/devres.txt.
-+  If a function is not supported by devres, consider using devm_add_action().
+-	hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
+-						      tmp102, tmp102_groups);
++	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
++							   tmp102,
++							   tmp102_groups);
+ 	if (IS_ERR(hwmon_dev)) {
+ 		dev_dbg(dev, "unable to register hwmon device\n");
+-		status = PTR_ERR(hwmon_dev);
+-		goto fail_restore_config;
++		return PTR_ERR(hwmon_dev);
+ 	}
+-	tmp102->hwmon_dev = hwmon_dev;
+ 	devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
+ 					     &tmp102_of_thermal_ops);
  
- * If the driver has a detect function, make sure it is silent. Debug messages
-   and messages printed after a successful detection are acceptable, but it
-@@ -96,8 +116,16 @@ increase the chances of your change being accepted.
-   writing to it might cause a bad misconfiguration.
+ 	dev_info(dev, "initialized\n");
  
- * Make sure there are no race conditions in the probe function. Specifically,
--  completely initialize your chip first, then create sysfs entries and register
--  with the hwmon subsystem.
-+  completely initialize your chip and your driver first, then register with
-+  the hwmon subsystem.
-+
-+* Use devm_hwmon_device_register_with_groups() or, if your driver needs a remove
-+  function, hwmon_device_register_with_groups() to register your driver with the
-+  hwmon subsystem. Try using devm_add_action() instead of a remove function if
-+  possible. Do not use hwmon_device_register().
-+
-+* Your driver should be buildable as module. If not, please be prepared to
-+  explain why it has to be built into the kernel.
+ 	return 0;
+-
+-fail_restore_config:
+-	i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
+-				     tmp102->config_orig);
+-	return status;
+-}
+-
+-static int tmp102_remove(struct i2c_client *client)
+-{
+-	struct tmp102 *tmp102 = i2c_get_clientdata(client);
+-
+-	hwmon_device_unregister(tmp102->hwmon_dev);
+-
+-	/* Stop monitoring if device was stopped originally */
+-	if (tmp102->config_orig & TMP102_CONF_SD) {
+-		int config;
+-
+-		config = i2c_smbus_read_word_swapped(client, TMP102_CONF_REG);
+-		if (config >= 0)
+-			i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
+-						     config | TMP102_CONF_SD);
+-	}
+-
+-	return 0;
+ }
  
- * Do not provide support for deprecated sysfs attributes.
+ #ifdef CONFIG_PM_SLEEP
+@@ -303,7 +288,6 @@ static struct i2c_driver tmp102_driver = {
+ 	.driver.name	= DRIVER_NAME,
+ 	.driver.pm	= &tmp102_dev_pm_ops,
+ 	.probe		= tmp102_probe,
+-	.remove		= tmp102_remove,
+ 	.id_table	= tmp102_id,
+ };
  
 -- 
 2.5.0
-
