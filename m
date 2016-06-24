@@ -1,49 +1,74 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-by2on0099.outbound.protection.outlook.com ([207.46.100.99]:33128
-	"EHLO na01-by2-obe.outbound.protection.outlook.com"
-	rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-	id S1750727AbcFAQJ4 convert rfc822-to-8bit (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jun 2016 12:09:56 -0400
-From: "Huang, Ray" <Ray.Huang@amd.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Borislav Petkov <bp@alien8.de>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	"Hurwitz, Sherry" <sherry.hurwitz@amd.com>
-Subject: Re: [PATCH] hwmon: (fam15h_power) Disable preemption when reading
- registers
-Date: Wed, 1 Jun 2016 15:35:23 +0000
-Message-ID: <A3FEFDCF-9AE5-4C0B-B36E-E46A87F7229C@amd.com>
-References: <1464775486-23446-1-git-send-email-bp@alien8.de>,<574EE1B3.9010704@roeck-us.net>,<5FE1E570-430B-4C0D-9100-E213D5B5ACFA@amd.com>
-In-Reply-To: <5FE1E570-430B-4C0D-9100-E213D5B5ACFA@amd.com>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58495 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751564AbcFXQqx (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Fri, 24 Jun 2016 12:46:53 -0400
+Date: Fri, 24 Jun 2016 09:46:51 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Andrew F. Davis" <afd@ti.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] hwmon: Add support for INA3221 Triple
+ Current/Voltage Monitors
+Message-ID: <20160624164651.GB21447@roeck-us.net>
+References: <20160610153233.6169-1-afd@ti.com>
+ <20160610153233.6169-2-afd@ti.com>
+ <20160610164435.GA9125@roeck-us.net>
+ <5764860E.1040305@ti.com>
+ <576565DB.5040007@roeck-us.net>
+ <576D4B9B.8030503@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <576D4B9B.8030503@ti.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-
-Sent from my iPad
-
-> On Jun 1, 2016, at 11:27 PM, Huang, Ray <Ray.Huang@amd.com> wrote:
+On Fri, Jun 24, 2016 at 10:02:51AM -0500, Andrew F. Davis wrote:
+> On 06/18/2016 10:16 AM, Guenter Roeck wrote:
+> >
+> > The chip registers are 16 bit. Can you repeat the command using the "w"
+> > option ?
+> > 
 > 
-> 
-> 
->>> On Jun 1, 2016, at 9:23 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->>> 
->>> On 06/01/2016 03:04 AM, Borislav Petkov wrote:
->>> From: Borislav Petkov <bp@suse.de>
->>> 
->>> We need to read a bunch of registers on each compute unit and possibly
->>> on the current CPU too. Disable preemption around it.
->> 
->> An explanation would be helpful. Is this a bug fix ? I would like to get
->> a confirmation from someone at AMD that this is really necessary.
->> 
-> 
-> This change looks good for me. But I am in office this week, I will test it on CZ platform next week.   :-)
+> # i2cdump -y 2 0x40 w
+>      0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
+> 00: 2771 0000 0000 0000 0000 0000 0000 f87f
+> 08: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> 10: 1027 2823 ffff ffff ffff ffff ffff ffff
+> 18: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> 20: 2771 0000 0000 0000 0000 0000 0000 f87f
+> 28: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> 30: 1027 2823 ffff ffff ffff ffff ffff ffff
+> 38: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> 40: 2771 0000 0000 0000 0000 0000 0000 f87f
+> 48: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> 50: 1027 2823 ffff ffff ffff ffff ffff ffff
+> 58: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> 60: 2771 0000 0000 0000 0000 0000 0000 f87f
+> 68: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> 70: 1027 2823 ffff ffff ffff ffff ffff ffff
+> 78: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> 80: 2771 0000 0000 0000 0000 0000 0000 f87f
+> 88: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> 90: 1027 2823 ffff ffff ffff ffff ffff ffff
+> 98: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> a0: 2771 0000 0000 0000 0000 0000 0000 f87f
+> a8: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> b0: 1027 2823 ffff ffff ffff ffff ffff ffff
+> b8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> c0: 2771 0000 0000 0000 0000 0000 0000 f87f
+> c8: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> d0: 1027 2823 ffff ffff ffff ffff ffff ffff
+> d8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
+> e0: 2771 0000 0000 0000 0000 0000 0000 f87f
+> e8: f87f f87f f87f f87f f87f 0000 fe7f 0300
+> f0: 1027 2823 ffff ffff ffff ffff ffff ffff
+> f8: ffff ffff XXXX f8f8 ffff ffff 4954 2032
 
-Sorry, fix typo. I am *not* in office this week.
+Thanks a lot!
 
-Rui
+Guenter
