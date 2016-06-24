@@ -1,80 +1,42 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f176.google.com ([209.85.192.176]:36721 "EHLO
-	mail-pf0-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751337AbcFYAhA (ORCPT
+Received: from youngberry.canonical.com ([91.189.89.112]:60950 "EHLO
+	youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751742AbcFXRbx (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 24 Jun 2016 20:37:00 -0400
-Date: Fri, 24 Jun 2016 17:36:57 -0700
-From: Alison Schofield <amsfield22@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Daniel Baluta <daniel.baluta@intel.com>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Subject: Re: MCP9808 iio or hwmon
-Message-ID: <20160625003656.GA2726@d830.WORKGROUP>
-References: <20160613220843.GA4235@d830.WORKGROUP>
- <CAEnQRZBZcQZRYGbk-6Eh5sN7_D90HTZPPo=uOSSZF2obB5VD+w@mail.gmail.com>
- <CAEnQRZC9ES6dGyUdycW=nRuA=6yRa=i01BWBLt7uFsieE-74OQ@mail.gmail.com>
- <57600656.7030902@roeck-us.net>
- <20160621222609.GA2464@d830.WORKGROUP>
- <20160621234246.GA23912@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20160621234246.GA23912@roeck-us.net>
+	Fri, 24 Jun 2016 13:31:53 -0400
+From: Colin King <colin.king@canonical.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jiri Kosina <trivial@kernel.org>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (emc6w201): trivial fix of spelling mistake "Unknwown" -> "Unknown"
+Date: Fri, 24 Jun 2016 18:31:32 +0100
+Message-Id: <1466789492-17928-1-git-send-email-colin.king@canonical.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 21, 2016 at 04:42:46PM -0700, Guenter Roeck wrote:
-> On Tue, Jun 21, 2016 at 03:26:11PM -0700, Alison Schofield wrote:
-> > On Tue, Jun 14, 2016 at 06:27:50AM -0700, Guenter Roeck wrote:
-> > > On 06/14/2016 01:22 AM, Daniel Baluta wrote:
-> > > >[fixing IIO, hwmon lists emails]
-> > > >
-> > > >On Tue, Jun 14, 2016 at 11:20 AM, Daniel Baluta <daniel.baluta@gmail.com> wrote:
-> > > >>On Tue, Jun 14, 2016 at 1:08 AM, Alison Schofield <amsfield22@gmail.com> wrote:
-> > > >>>
-> > > >>>I was working on an iio driver for MCP9808 when Jonathan took notice
-> > > >>>and suggested we have the iio or hwmon discussion.
-> > > >>>
-> > > >>>So, where should this sensor driver reside?
-> > > >>>
-> > > >>>http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
-> > > >>>
-> > > >>>It's a digital temp sensor with user programmable registers for
-> > > >>>sensing applications.  Supports shutdown, low power modes,
-> > > >>>specifying of event & critical output boundaries.  Can support
-> > > >>>8 sensors on a single serial bus. Touted as 'ideal for sophisticated
-> > > >>>multi-zone temperature-monitoring applications.'
-> > > >>
-> > > >>This is debatable, looking to the datasheet this driver could reside
-> > > >>in both places.
-> > > >>
-> > > >>Because this sensor has Industrial utility (e.g freezers, refrigerators) I
-> > > >>am inclined to say we should support it in IIO.
-> > > >>
-> > > 
-> > > Literally every sensor has that utility.
-> > > 
-> > > Alternatively, you might consider adding its device ID to the jc42 driver.
-> > > If you want to be fancy, you could add optional support for resolution
-> > > selection to the driver.
-> > > 
-> > > Guenter
-> > 
-> > Hi Guenter,
-> > I'm using the mcp9808 with the jc42 driver by instantiating it.
-> > 
-> > I've added the device ID info so that the .detect callback can recognize
-> > it, but can't figure out how to test that.  When/how does that .detect
-> > get called?  I am using the Diolan.
-> > 
-> Not sure if it works, but try to load the the jc42 driver using modprobe
-> first, and _then_ insert the diolan adapter.
-> 
-> Guenter
+From: Colin Ian King <colin.king@canonical.com>
 
-Finally got it!  I had to add I2C_CLASS_SPD (jc42's class) to Diolan and
-then follow the order you suggested.
+trivial fix to spelling mistake in dev_dbg message
 
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/hwmon/emc6w201.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/emc6w201.c b/drivers/hwmon/emc6w201.c
+index ada9071..f37fe201 100644
+--- a/drivers/hwmon/emc6w201.c
++++ b/drivers/hwmon/emc6w201.c
+@@ -464,7 +464,7 @@ static int emc6w201_detect(struct i2c_client *client,
+ 	if (verstep < 0 || (verstep & 0xF0) != 0xB0)
+ 		return -ENODEV;
+ 	if ((verstep & 0x0F) > 2) {
+-		dev_dbg(&client->dev, "Unknwown EMC6W201 stepping %d\n",
++		dev_dbg(&client->dev, "Unknown EMC6W201 stepping %d\n",
+ 			verstep & 0x0F);
+ 		return -ENODEV;
+ 	}
+-- 
+2.8.1
 
