@@ -1,60 +1,75 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:60627 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:40327 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752333AbcFZOCN (ORCPT
+	with ESMTP id S1752023AbcFZORl (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 26 Jun 2016 10:02:13 -0400
-Subject: Re: [PATCH v2 3/5] hwmon: (tmp102) Improve handling of initial read
- delay
+	Sun, 26 Jun 2016 10:17:41 -0400
+Subject: Re: [PATCH v2 5/5] hwmon: (tmp102) Convert to use regmap, and drop
+ local cache
 To: Nishanth Menon <nm@ti.com>, Jean Delvare <jdelvare@suse.com>
 References: <1466908825-14222-1-git-send-email-linux@roeck-us.net>
- <1466908825-14222-3-git-send-email-linux@roeck-us.net>
- <576FD940.4070102@ti.com>
+ <1466908825-14222-5-git-send-email-linux@roeck-us.net>
+ <576FD84E.6020204@ti.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Eduardo Valentin <edubezval@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>
+	Mark Brown <broonie@kernel.org>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <576FE062.1070605@roeck-us.net>
-Date: Sun, 26 Jun 2016 07:02:10 -0700
+Message-ID: <576FE3FE.5070406@roeck-us.net>
+Date: Sun, 26 Jun 2016 07:17:34 -0700
 MIME-Version: 1.0
-In-Reply-To: <576FD940.4070102@ti.com>
+In-Reply-To: <576FD84E.6020204@ti.com>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/26/2016 06:31 AM, Nishanth Menon wrote:
-> On 06/25/2016 09:40 PM, Guenter Roeck wrote:
-> [...]
->>   /* convert left adjusted 13-bit TMP102 register value to milliCelsius */
->> @@ -78,8 +82,16 @@ static struct tmp102 *tmp102_update_device(struct device *dev)
->>   	struct tmp102 *tmp102 = dev_get_drvdata(dev);
->>   	struct i2c_client *client = tmp102->client;
->>
->> +	/* Is it too early to return a conversion ? */
->> +	if (time_before(jiffies, tmp102->ready_time)) {
->> +		unsigned long sleeptime = tmp102->ready_time - jiffies;
->> +
->> +		msleep(jiffies_to_msecs(sleeptime));
->> +	}
->> +
->
-> While msleep can indeed work and simplify, in case of usage for
-> example with thermal framework, if the data is not ready and we return
-> -EAGAIN, it lets the thermal framework go and read other sensors
-> instead of being blocked on the tmp102 conversion of data.
->
+Hi Nishanth,
 
-My thought was that returning -EAGAIN was more appropriate for the
-1/3s wait time we had earlier. With 35ms, it is much more questionable
-if we hit this condition in the first place than it was before,
-and the impact if waiting is much less severe. Furthermore,
-it is no longer unconditional but only occurs if the sensor
-was in fact disabled.
+On 06/26/2016 06:27 AM, Nishanth Menon wrote:
+>
+> Note, at this point:
+> We have set CR0=0, CR1=1 (4HZ conversion rate). we do indeed have a
+> 26typical (worst case 35ms) conversion time, but if we read register
+> before 250 ms, we are not getting a new data, instead, we are just
+> reading the same old register data.
+>
+Yes, I know. As I said in the description of patch 5, there is a
+trade-off between caching provided by regmap for non-volatile
+registers and internally managed caching.
 
-But, yes, you have a point. I do prefer to wait, but if Rui and you
-both agree that we should return -EAGAIN, I'll be happy to change
-the code back to the old behavior.
+Question for me is the practical impact. It is quite uncommon for
+applications to actually read the attribute that often.
+
+> for lowering potential i2c ops, I suggest:
+> if < conversion_rate + CONVERSION_TIME_MS, provide a cached data, if
+> after that, do a read.
+>
+That would be a possibility (we could specifically cache only the
+temperature register), but I am not sure if it is worth it.
+
+Caching was more important when the driver kept reading all registers,
+which was more time consuming and also happened if only a single attribute
+was read. Since the non-volatile registers are now cached by regmap,
+this won't happen anymore, and reading a single register is not as
+expensive as reading four. In practice, that means the amount of i2c
+reads is only larger than before if an application polls the temperature
+more than 10 times per second.
+
+Do you think there is an application which does poll the temperature
+that often ?
+
+> we could do a patch over this ofcourse -> best will  be to let us do a
+> configurable conversion rate. We could get upto 8Hz conversion rate
+> with this chip (CR0,1=1).
+>
+Adding such an attribute might be worthwhile, if for nothing else to
+reduce power consumption if high speed conversions are not needed.
+I actually thought about it, but my ultimate goal was elsewhere -
+the series served as baseline to test the new registration API
+(http://www.spinics.net/lists/kernel/msg2288309.html), and I didn't
+want to get too distracted.
+
+If we add that attribute, it might be easier to do it on top of the
+driver converted to the new API, though.
 
 Thanks,
 Guenter
