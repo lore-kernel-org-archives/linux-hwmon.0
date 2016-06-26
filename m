@@ -1,131 +1,115 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39251 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751788AbcFZD0v (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 25 Jun 2016 23:26:51 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jean Delvare <jdelvare@suse.com>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Eduardo Valentin <edubezval@gmail.com>,
-	linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/7] hwmon: (core) Add voltage attribute support to new API
-Date: Sat, 25 Jun 2016 20:26:25 -0700
-Message-Id: <1466911590-26296-3-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
-References: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <nm@ti.com>
+Subject: Re: [PATCH v2 5/5] hwmon: (tmp102) Convert to use regmap, and drop
+ local cache
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+References: <1466908825-14222-1-git-send-email-linux@roeck-us.net>
+ <1466908825-14222-5-git-send-email-linux@roeck-us.net>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mark Brown
+	<broonie@kernel.org>
+From: Nishanth Menon <nm@ti.com>
+Message-ID: <576FD84E.6020204@ti.com>
+Date: Sun, 26 Jun 2016 08:27:42 -0500
+MIME-Version: 1.0
+In-Reply-To: <1466908825-14222-5-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/hwmon.c | 21 +++++++++++++++++++++
- include/linux/hwmon.h | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
+On 06/25/2016 09:40 PM, Guenter Roeck wrote:
+> By concerting the driver to regmap, we can use regmap to cache non-volatile
+> registers. Stop caching the temperature register; while potentially reading
+> it more often can result in reading it more often than necessary, this is
+> offset by the gain due to not re-reading the limit registers.
+> 
+> Cc: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: Set use_single_rw to indicate that the chip can not perform
+>     read operations crossing register boundaries.
+>     Use REGCACHE_RBTREE instead REGCACHE_FLAT. REGCACHE_FLAT does not
+>     initialize the cache from the chip unless num_reg_defaults_raw is
+>     provided. If it is provided without actual cache values, it complains
+>     with 'No cache defaults, reading back from HW'. REGCACHE_RBTREE
+>     automatically initializes register values from the chip if no
+>     defaults are provided, and does not complain about it.
+> 
+> Note: I'll drop the Cc: to Mark later.
+> 
+>  drivers/hwmon/tmp102.c | 156 +++++++++++++++++++++++++------------------------
+>  1 file changed, 79 insertions(+), 77 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+> index 487b4ef5992c..e4a2314a2c49 100644
+> --- a/drivers/hwmon/tmp102.c
+> +++ b/drivers/hwmon/tmp102.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/device.h>
+>  #include <linux/jiffies.h>
+> +#include <linux/regmap.h>
+>  #include <linux/thermal.h>
+>  #include <linux/of.h>
+>  
+> @@ -61,13 +62,9 @@
+>  #define CONVERSION_TIME_MS		35	/* in milli-seconds */
+>  
+>  struct tmp102 {
+> -	struct i2c_client *client;
+> -	struct mutex lock;
+> +	struct regmap *regmap;
+>  	u16 config_orig;
+> -	unsigned long last_update;
+>  	unsigned long ready_time;
+> -	bool valid;
+> -	int temp[3];
+>  };
+>  
+>  /* convert left adjusted 13-bit TMP102 register value to milliCelsius */
+> @@ -82,16 +79,11 @@ static inline u16 tmp102_mC_to_reg(int val)
+>  	return (val * 128) / 1000;
+>  }
+>  
+> -static const u8 tmp102_reg[] = {
+> -	TMP102_TEMP_REG,
+> -	TMP102_TLOW_REG,
+> -	TMP102_THIGH_REG,
+> -};
+> -
+> -static struct tmp102 *tmp102_update_device(struct device *dev)
+> +static int tmp102_read_temp(void *dev, int *temp)
+>  {
+>  	struct tmp102 *tmp102 = dev_get_drvdata(dev);
+> -	struct i2c_client *client = tmp102->client;
+> +	unsigned int reg;
+> +	int ret;
+>  
+>  	/* Is it too early to return a conversion ? */
+>  	if (time_before(jiffies, tmp102->ready_time)) {
+> @@ -100,28 +92,11 @@ static struct tmp102 *tmp102_update_device(struct device *dev)
+>  		msleep(jiffies_to_msecs(sleeptime));
+>  	}
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 9530644ae297..d2916074befd 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -250,6 +250,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
- 
- static const char * const hwmon_chip_attr_templates[] = {
- 	[hwmon_chip_temp_reset_history] = "temp_reset_history",
-+	[hwmon_chip_in_reset_history] = "in_reset_history",
- 	[hwmon_chip_update_interval] = "update_interval",
- 	[hwmon_chip_alarms] = "alarms",
- };
-@@ -281,14 +282,34 @@ static const char * const hwmon_temp_attr_templates[] = {
- 	[hwmon_temp_reset_history] = "temp%d_reset_history",
- };
- 
-+static const char * const hwmon_in_attr_templates[] = {
-+	[hwmon_in_input] = "in%d_input",
-+	[hwmon_in_min] = "in%d_min",
-+	[hwmon_in_max] = "in%d_max",
-+	[hwmon_in_lcrit] = "in%d_lcrit",
-+	[hwmon_in_crit] = "in%d_crit",
-+	[hwmon_in_average] = "in%d_average",
-+	[hwmon_in_lowest] = "in%d_lowest",
-+	[hwmon_in_highest] = "in%d_highest",
-+	[hwmon_in_reset_history] = "in%d_reset_history",
-+	[hwmon_in_label] = "in%d_label",
-+	[hwmon_in_alarm] = "in%d_alarm",
-+	[hwmon_in_min_alarm] = "in%d_min_alarm",
-+	[hwmon_in_max_alarm] = "in%d_max_alarm",
-+	[hwmon_in_lcrit_alarm] = "in%d_lcrit_alarm",
-+	[hwmon_in_crit_alarm] = "in%d_crit_alarm",
-+};
-+
- static const char * const *__templates[] = {
- 	[hwmon_chip] = hwmon_chip_attr_templates,
- 	[hwmon_temp] = hwmon_temp_attr_templates,
-+	[hwmon_in] = hwmon_in_attr_templates,
- };
- 
- static const int __templates_size[] = {
- 	[hwmon_chip] = ARRAY_SIZE(hwmon_chip_attr_templates),
- 	[hwmon_temp] = ARRAY_SIZE(hwmon_temp_attr_templates),
-+	[hwmon_in] = ARRAY_SIZE(hwmon_in_attr_templates),
- };
- 
- static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 99250ad092fd..5e632c0fcbf4 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -30,6 +30,7 @@ enum hwmon_sensor_types {
- 
- enum hwmon_chip_attributes {
- 	hwmon_chip_temp_reset_history,
-+	hwmon_chip_in_reset_history,
- 	hwmon_chip_register_tz,
- 	hwmon_chip_update_interval,
- 	hwmon_chip_alarms,
-@@ -91,6 +92,40 @@ enum hwmon_temp_attributes {
- #define HWMON_T_HIGHEST		BIT(hwmon_temp_highest)
- #define HWMON_T_RESET_HISTORY	BIT(hwmon_temp_reset_history)
- 
-+enum hwmon_in_attributes {
-+	hwmon_in_input,
-+	hwmon_in_min,
-+	hwmon_in_max,
-+	hwmon_in_lcrit,
-+	hwmon_in_crit,
-+	hwmon_in_average,
-+	hwmon_in_lowest,
-+	hwmon_in_highest,
-+	hwmon_in_reset_history,
-+	hwmon_in_label,
-+	hwmon_in_alarm,
-+	hwmon_in_min_alarm,
-+	hwmon_in_max_alarm,
-+	hwmon_in_lcrit_alarm,
-+	hwmon_in_crit_alarm,
-+};
-+
-+#define HWMON_I_INPUT		BIT(hwmon_in_input)
-+#define HWMON_I_MIN		BIT(hwmon_in_min)
-+#define HWMON_I_MAX		BIT(hwmon_in_max)
-+#define HWMON_I_LCRIT		BIT(hwmon_in_lcrit)
-+#define HWMON_I_CRIT		BIT(hwmon_in_crit)
-+#define HWMON_I_AVERAGE		BIT(hwmon_in_average)
-+#define HWMON_I_LOWEST		BIT(hwmon_in_lowest)
-+#define HWMON_I_HIGHEST		BIT(hwmon_in_highest)
-+#define HWMON_I_RESET_HISTORY	BIT(hwmon_in_reset_history)
-+#define HWMON_I_LABEL		BIT(hwmon_in_label)
-+#define HWMON_I_ALARM		BIT(hwmon_in_alarm)
-+#define HWMON_I_MIN_ALARM	BIT(hwmon_in_min_alarm)
-+#define HWMON_I_MAX_ALARM	BIT(hwmon_in_max_alarm)
-+#define HWMON_I_LCRIT_ALARM	BIT(hwmon_in_lcrit_alarm)
-+#define HWMON_I_CRIT_ALARM	BIT(hwmon_in_crit_alarm)
-+
- /**
-  * struct hwmon_ops - hwmon device operations
-  * @is_visible: Callback to return attribute visibility.
+
+Note, at this point:
+We have set CR0=0, CR1=1 (4HZ conversion rate). we do indeed have a
+26typical (worst case 35ms) conversion time, but if we read register
+before 250 ms, we are not getting a new data, instead, we are just
+reading the same old register data.
+
+for lowering potential i2c ops, I suggest:
+if < conversion_rate + CONVERSION_TIME_MS, provide a cached data, if
+after that, do a read.
+
+we could do a patch over this ofcourse -> best will  be to let us do a
+configurable conversion rate. We could get upto 8Hz conversion rate
+with this chip (CR0,1=1).
+
+
+
+Otherwise, this series worked just fine..
+http://pastebin.ubuntu.com/17907605/
+
 -- 
-2.5.0
-
+Regards,
+Nishanth Menon
