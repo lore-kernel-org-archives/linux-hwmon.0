@@ -1,109 +1,33 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35766 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751857AbcFZCkq (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sat, 25 Jun 2016 22:40:46 -0400
+Return-path: <linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jean Delvare <jdelvare@suse.com>
-Cc: Nishanth Menon <nm@ti.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 4/5] hwmon: (tmp102) Rework chip configuration
-Date: Sat, 25 Jun 2016 19:40:24 -0700
-Message-Id: <1466908825-14222-4-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1466908825-14222-1-git-send-email-linux@roeck-us.net>
-References: <1466908825-14222-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Eduardo Valentin <edubezval@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/5] hwmon: New hwmon registration API
+Date: Sat, 25 Jun 2016 20:26:23 -0700
+Message-Id: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-So far the chip was forced into polarity 0, even if it was preconfigured
-differently. Do not touch the polarity when configuring the chip.
+Up to now, each hwmon driver has to implement its own sysfs attributes.
+This requires a lot of template code, and distracts from the driver's
+core function to read and write chip registers.
 
-Also, the configuration register was read beack to check if the
-configuration 'sticks'. Ultimately, that is similar to checking if the
-chip is a tmp102 in the first place. Checking if a write into the
-configuration register was successful is really not the way to do it,
-and quite risky if the chip is not a tmp102, so drop that check.
-Instead, verify if the configuration register has unexpected bits set
-before writing into it.
+To be able to reduce driver complexity, move sensor attribute handling
+and thermal zone registration into the hwmon core. By using the new API,
+driver size is typically reduced by 20-50% depending on driver complexity
+and the number of sysfs attributes supported.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: No change
+The first patch of the series introduces the API as well as support
+for temperature sensors. Subsequent patches introduce support for
+voltage, current, power, energy, humidity, and fan speed sensors.
 
- drivers/hwmon/tmp102.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index 615f9c176aaf..487b4ef5992c 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -47,6 +47,17 @@
- #define	TMP102_TLOW_REG			0x02
- #define	TMP102_THIGH_REG		0x03
- 
-+#define TMP102_CONFREG_MASK	(TMP102_CONF_SD | TMP102_CONF_TM | \
-+				 TMP102_CONF_POL | TMP102_CONF_F0 | \
-+				 TMP102_CONF_F1 | TMP102_CONF_OS | \
-+				 TMP102_CONF_EM | TMP102_CONF_AL | \
-+				 TMP102_CONF_CR0 | TMP102_CONF_CR1)
-+
-+#define TMP102_CONFIG_CLEAR	(TMP102_CONF_SD | TMP102_CONF_OS | \
-+				 TMP102_CONF_CR0)
-+#define TMP102_CONFIG_SET	(TMP102_CONF_TM | TMP102_CONF_EM | \
-+				 TMP102_CONF_CR1)
-+
- #define CONVERSION_TIME_MS		35	/* in milli-seconds */
- 
- struct tmp102 {
-@@ -163,9 +174,6 @@ static struct attribute *tmp102_attrs[] = {
- };
- ATTRIBUTE_GROUPS(tmp102);
- 
--#define TMP102_CONFIG  (TMP102_CONF_TM | TMP102_CONF_EM | TMP102_CONF_CR1)
--#define TMP102_CONFIG_RD_ONLY (TMP102_CONF_R0 | TMP102_CONF_R1 | TMP102_CONF_AL)
--
- static const struct thermal_zone_of_device_ops tmp102_of_thermal_ops = {
- 	.get_temp = tmp102_read_temp,
- };
-@@ -206,26 +214,25 @@ static int tmp102_probe(struct i2c_client *client,
- 		dev_err(dev, "error reading config register\n");
- 		return status;
- 	}
-+
-+	if ((status & ~TMP102_CONFREG_MASK) !=
-+	    (TMP102_CONF_R0 | TMP102_CONF_R1)) {
-+		dev_err(dev, "unexpected config register value\n");
-+		return -ENODEV;
-+	}
-+
- 	tmp102->config_orig = status;
- 
- 	devm_add_action(dev, tmp102_restore_config, tmp102);
- 
--	status = i2c_smbus_write_word_swapped(client, TMP102_CONF_REG,
--					      TMP102_CONFIG);
-+	status &= ~TMP102_CONFIG_CLEAR;
-+	status |= TMP102_CONFIG_SET;
-+
-+	status = i2c_smbus_write_word_swapped(client, TMP102_CONF_REG, status);
- 	if (status < 0) {
- 		dev_err(dev, "error writing config register\n");
- 		return status;
- 	}
--	status = i2c_smbus_read_word_swapped(client, TMP102_CONF_REG);
--	if (status < 0) {
--		dev_err(dev, "error reading config register\n");
--		return status;
--	}
--	status &= ~TMP102_CONFIG_RD_ONLY;
--	if (status != TMP102_CONFIG) {
--		dev_err(dev, "config settings did not stick\n");
--		return -ENODEV;
--	}
- 
- 	mutex_init(&tmp102->lock);
- 
--- 
-2.5.0
-
+The series was tested by converting several drivers (lm75, lm90, tmp102,
+tmp421, ltc4245) to the new API. Testing was done with with real chips
+as well as with the hwmon driver module test code available at
+https://github.com/groeck/module-tests.
