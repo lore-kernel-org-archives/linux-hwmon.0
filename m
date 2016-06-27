@@ -1,89 +1,105 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from comal.ext.ti.com ([198.47.26.152]:44684 "EHLO comal.ext.ti.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751827AbcF0Ouz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 27 Jun 2016 10:50:55 -0400
-Subject: Re: [PATCH] hwmon: (ina3221) Fix negative limits
-To: Guenter Roeck <linux@roeck-us.net>,
-	Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <1466822827-31231-1-git-send-email-linux@roeck-us.net>
-CC: Jean Delvare <jdelvare@suse.de>
-From: "Andrew F. Davis" <afd@ti.com>
-Message-ID: <57713D16.6000701@ti.com>
-Date: Mon, 27 Jun 2016 09:49:58 -0500
+Return-path: <amsfield22@gmail.com>
+Date: Mon, 27 Jun 2016 12:13:19 -0700
+From: Alison Schofield <amsfield22@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Daniel Baluta <daniel.baluta@intel.com>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
+Subject: Re: MCP9808 iio or hwmon
+Message-ID: <20160627191317.GA4530@d830.WORKGROUP>
+References: <20160613220843.GA4235@d830.WORKGROUP>
+ <CAEnQRZBZcQZRYGbk-6Eh5sN7_D90HTZPPo=uOSSZF2obB5VD+w@mail.gmail.com>
+ <CAEnQRZC9ES6dGyUdycW=nRuA=6yRa=i01BWBLt7uFsieE-74OQ@mail.gmail.com>
+ <57600656.7030902@roeck-us.net>
+ <20160621222609.GA2464@d830.WORKGROUP>
+ <20160621234246.GA23912@roeck-us.net>
+ <20160625003656.GA2726@d830.WORKGROUP>
+ <576DE861.8050905@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1466822827-31231-1-git-send-email-linux@roeck-us.net>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <576DE861.8050905@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 06/24/2016 09:47 PM, Guenter Roeck wrote:
-> The result of an integer divide by an unsigned is undefined.
-> This causes unexpected results when writing negative values
-> into the limit registers.
+On Fri, Jun 24, 2016 at 07:11:45PM -0700, Guenter Roeck wrote:
+> On 06/24/2016 05:36 PM, Alison Schofield wrote:
+> >On Tue, Jun 21, 2016 at 04:42:46PM -0700, Guenter Roeck wrote:
+> >>On Tue, Jun 21, 2016 at 03:26:11PM -0700, Alison Schofield wrote:
+> >>>On Tue, Jun 14, 2016 at 06:27:50AM -0700, Guenter Roeck wrote:
+> >>>>On 06/14/2016 01:22 AM, Daniel Baluta wrote:
+> >>>>>[fixing IIO, hwmon lists emails]
+> >>>>>
+> >>>>>On Tue, Jun 14, 2016 at 11:20 AM, Daniel Baluta <daniel.baluta@gmail.com> wrote:
+> >>>>>>On Tue, Jun 14, 2016 at 1:08 AM, Alison Schofield <amsfield22@gmail.com> wrote:
+> >>>>>>>
+> >>>>>>>I was working on an iio driver for MCP9808 when Jonathan took notice
+> >>>>>>>and suggested we have the iio or hwmon discussion.
+> >>>>>>>
+> >>>>>>>So, where should this sensor driver reside?
+> >>>>>>>
+> >>>>>>>http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
+> >>>>>>>
+> >>>>>>>It's a digital temp sensor with user programmable registers for
+> >>>>>>>sensing applications.  Supports shutdown, low power modes,
+> >>>>>>>specifying of event & critical output boundaries.  Can support
+> >>>>>>>8 sensors on a single serial bus. Touted as 'ideal for sophisticated
+> >>>>>>>multi-zone temperature-monitoring applications.'
+> >>>>>>
+> >>>>>>This is debatable, looking to the datasheet this driver could reside
+> >>>>>>in both places.
+> >>>>>>
+> >>>>>>Because this sensor has Industrial utility (e.g freezers, refrigerators) I
+> >>>>>>am inclined to say we should support it in IIO.
+> >>>>>>
+> >>>>
+> >>>>Literally every sensor has that utility.
+> >>>>
+> >>>>Alternatively, you might consider adding its device ID to the jc42 driver.
+> >>>>If you want to be fancy, you could add optional support for resolution
+> >>>>selection to the driver.
+> >>>>
+> >>>>Guenter
+> >>>
+> >>>Hi Guenter,
+> >>>I'm using the mcp9808 with the jc42 driver by instantiating it.
+> >>>
+> >>>I've added the device ID info so that the .detect callback can recognize
+> >>>it, but can't figure out how to test that.  When/how does that .detect
+> >>>get called?  I am using the Diolan.
+> >>>
+> >>Not sure if it works, but try to load the the jc42 driver using modprobe
+> >>first, and _then_ insert the diolan adapter.
+> >>
+> >>Guenter
+> >
+> >Finally got it!  I had to add I2C_CLASS_SPD (jc42's class) to Diolan and
+> >then follow the order you suggested.
+> >
 > 
-> Maintain the shunt_resistors variables as signed integer to avoid
-> the problem. Also, for simplicity and ease of use, clamp shunt
-> resistor value on writes instead of rejecting bad values.
+> Great. Can you send a patch for the jc42 driver ?
 > 
-> Cc: Andrew F. Davis <afd@ti.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
+> Thanks,
+> Guenter
+> 
+Guenther,
 
-Acked-by: Andrew F. Davis <afd@ti.com>
+I have the patch, but am stumbling on the changelog.
 
->  drivers/hwmon/ina3221.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index d055b6a2266b..e6b49500c52a 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -95,7 +95,7 @@ static const unsigned int register_channel[] = {
->  struct ina3221_data {
->  	struct regmap *regmap;
->  	struct regmap_field *fields[F_MAX_FIELDS];
-> -	unsigned int shunt_resistors[INA3221_NUM_CHANNELS];
-> +	int shunt_resistors[INA3221_NUM_CHANNELS];
->  };
->  
->  static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
-> @@ -155,7 +155,7 @@ static ssize_t ina3221_show_current(struct device *dev,
->  	struct ina3221_data *ina = dev_get_drvdata(dev);
->  	unsigned int reg = sd_attr->index;
->  	unsigned int channel = register_channel[reg];
-> -	unsigned int resistance_uo = ina->shunt_resistors[channel];
-> +	int resistance_uo = ina->shunt_resistors[channel];
->  	int val, current_ma, voltage_nv, ret;
->  
->  	ret = ina3221_read_value(ina, reg, &val);
-> @@ -176,7 +176,7 @@ static ssize_t ina3221_set_current(struct device *dev,
->  	struct ina3221_data *ina = dev_get_drvdata(dev);
->  	unsigned int reg = sd_attr->index;
->  	unsigned int channel = register_channel[reg];
-> -	unsigned int resistance_uo = ina->shunt_resistors[channel];
-> +	int resistance_uo = ina->shunt_resistors[channel];
->  	int val, current_ma, voltage_uv, ret;
->  
->  	ret = kstrtoint(buf, 0, &current_ma);
-> @@ -223,15 +223,14 @@ static ssize_t ina3221_set_shunt(struct device *dev,
->  	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->  	struct ina3221_data *ina = dev_get_drvdata(dev);
->  	unsigned int channel = sd_attr->index;
-> -	unsigned int val;
-> +	int val;
->  	int ret;
->  
-> -	ret = kstrtouint(buf, 0, &val);
-> +	ret = kstrtoint(buf, 0, &val);
->  	if (ret)
->  		return ret;
->  
-> -	if (val == 0)
-> -		return -EINVAL;
-> +	val = clamp_val(val, 1, INT_MAX);
->  
->  	ina->shunt_resistors[channel] = val;
->  
-> 
+I hoped to simply state in the changelog that MCP9808 is a jc-42
+compliant sensor, but I don't think it's 100% true, and I'm not
+sure of where it falls short of compliance.
+
+jc42 currently supports these Microchip sensors:
+MCP9804, MCP9805, MCP98242, MCP98243, MCP98244, MCP9843
+
+All, with the exception of 9804 (and my 9808), clearly state they
+are jc-42 compliant in their datasheet.
+
+9804 is 9808's twin and I've tested with 9808.
+
+Wondering if the non-compliance has to do with the lack of a capability
+register for 9804 & 9808, which doesn't affect the drivers functioning.
+
+Appreciate your advice on how to submit this correctly. Thanks!
+
+alisons 
