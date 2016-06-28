@@ -1,92 +1,58 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from down.free-electrons.com ([37.187.137.238]:45418 "EHLO
+Received: from down.free-electrons.com ([37.187.137.238]:44792 "EHLO
 	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1752051AbcF1Ic2 (ORCPT
+	with ESMTP id S1751749AbcF1ISn (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 28 Jun 2016 04:32:28 -0400
-Date: Tue, 28 Jun 2016 10:32:26 +0200
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-To: Quentin Schulz <quentin.schulz@free-electrons.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
+	Tue, 28 Jun 2016 04:18:43 -0400
+From: Quentin Schulz <quentin.schulz@free-electrons.com>
+To: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
 	knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
 	maxime.ripard@free-electrons.com, wens@csie.org,
-	lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	lee.jones@linaro.org
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	thomas.petazzoni@free-electrons.com,
 	antoine.tenart@free-electrons.com
-Subject: Re: [PATCH 2/3] iio: adc: add support for Allwinner SoCs ADC
-Message-ID: <20160628083226.GD4472@kwain>
+Subject: [PATCH 3/3] hwmon: iio_hwmon: defer probe when no channel is found
+Date: Tue, 28 Jun 2016 10:18:17 +0200
+Message-Id: <1467101897-15946-4-git-send-email-quentin.schulz@free-electrons.com>
+In-Reply-To: <1467101897-15946-1-git-send-email-quentin.schulz@free-electrons.com>
 References: <1467101897-15946-1-git-send-email-quentin.schulz@free-electrons.com>
- <1467101897-15946-3-git-send-email-quentin.schulz@free-electrons.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+JUInw4efm7IfTNU"
-Content-Disposition: inline
-In-Reply-To: <1467101897-15946-3-git-send-email-quentin.schulz@free-electrons.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+iio_channel_get_all returns -ENODEV when it cannot find either phandles and
+properties in the Device Tree or channels whose consumer_dev_name matches
+iio_hwmon in iio_map_list. The iio_map_list is filled in by iio drivers
+which might be probed after iio_hwmon.
 
---+JUInw4efm7IfTNU
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It is better to defer the probe of iio_hwmon if such error is returned by
+iio_channel_get_all in order to let a chance to iio drivers to expose
+channels in iio_map_list.
 
-Hello Quentin!
+Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+---
+ drivers/hwmon/iio_hwmon.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-On Tue, Jun 28, 2016 at 10:18:16AM +0200, Quentin Schulz wrote:
->
-> diff --git a/drivers/iio/adc/sunxi-gpadc-iio.c b/drivers/iio/adc/sunxi-gp=
-adc-iio.c
-> new file mode 100644
-> index 0000000..5840f43
-> --- /dev/null
-> +++ b/drivers/iio/adc/sunxi-gpadc-iio.c
-> @@ -0,0 +1,371 @@
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index b550ba5..c0da4d9 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -73,8 +73,11 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 		name = dev->of_node->name;
+ 
+ 	channels = iio_channel_get_all(dev);
+-	if (IS_ERR(channels))
++	if (IS_ERR(channels)) {
++		if (PTR_ERR(channels) == -ENODEV)
++			return -EPROBE_DEFER;
+ 		return PTR_ERR(channels);
++	}
+ 
+ 	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+ 	if (st == NULL) {
+-- 
+2.5.0
 
-Same here, you can add a license statement :-)
-
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/clk.h>
-> +#include <linux/completion.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/iio/machine.h>
-> +#include <linux/iio/driver.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/mfd/sunxi-gpadc-mfd.h>
-> +#include <linux/regmap.h>
-
-Antoine
-
---=20
-Antoine T=E9nart, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
-
---+JUInw4efm7IfTNU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBCgAGBQJXcjYZAAoJEFxNi8it27zYt98P/1c/XBHeDLNzZGGa4LbIxoqx
-WtsC1ZgOrJVf+t772Qnw2htZ78CWB5R1xpO2sLUjkyY09WoMhskDifz+PiDfym2L
-qz0DaL1kq+zK3uOr4Z6WXKEdeqfTDB/7KLq0ZpbASq3YmGSe8IBxLc0vU5Rhr6/U
-DtfChTGGUfiCusotBJrWvgm4Sq+UlwYLSD463BuKGEwLe29rQCaWgtIxk/fpe1wL
-Cy7NeBe5aPuTmm290liwqXmQX5R/w/VDhh7MqzXS19dJmkMg/P7SdPYFyI20HnsF
-YvoFYD4OYtFSRK/4LJl51E61OXh03LiN5NfaSV1+0G8waDtPNWYHzA7QurH4iYGO
-rvuhioNzoqOj0W2oDF85KZR4bKuw5FcVUoF8UTXsaFs3klV1LOABfAU18JpTce3K
-Tr9WkGd4jY+P24majtrKOrdtG9JrzCQxjIuksTQR+UIADZ1CmsnG0DYmx9MZbW24
-nKaNPeqfJjiycgPBxMWJEB1oX2XAsCC7S3g4AKqustK6H7sG5z5+xBN6n7XMpzr6
-lGjXtynYvwGdcmflGWuci8akUrHRSnHLmmmy1w+58n7lg5gMahveWlRtnq9BbRUj
-HyvOdIJ2mWT6+84ppQ2RgxHB3fg37welwNkmDtWMH3GKEL/9+7cU/rD48LdPNRQ6
-MgO2rIre73/WqiopOfCq
-=vZD8
------END PGP SIGNATURE-----
-
---+JUInw4efm7IfTNU--
