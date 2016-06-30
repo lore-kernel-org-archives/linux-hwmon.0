@@ -1,143 +1,133 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:34144 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751831AbcF3Gpb (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 30 Jun 2016 02:45:31 -0400
+Return-path: <linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3 2/4] hwmon: (lm75) Drop lm75_read_value and lm75_write_value
-Date: Wed, 29 Jun 2016 23:45:26 -0700
-Message-Id: <1467269128-7448-2-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1467269128-7448-1-git-send-email-linux@roeck-us.net>
-References: <1467269128-7448-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Subject: [PATCH 1/6] hwmon: (lm90) Use devm_add_action for cleanup
+Date: Thu, 30 Jun 2016 06:50:56 -0700
+Message-Id: <1467294661-23879-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-lm75_read_value and lm75_write_value don't really add any value.
-Replace with direct smbus access functions.
+Use devm_add_action where possible to simplify error handling and
+cleanup on remove.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2, v3: No change
+ drivers/hwmon/lm90.c | 40 ++++++++++++++++++++++------------------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
- drivers/hwmon/lm75.c | 42 +++++++++---------------------------------
- 1 file changed, 9 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 0df745501a1f..7b18cbd4a5ec 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -89,8 +89,6 @@ struct lm75_data {
- 						   2 = hyst */
- };
- 
--static int lm75_read_value(struct i2c_client *client, u8 reg);
--static int lm75_write_value(struct i2c_client *client, u8 reg, u16 value);
- static struct lm75_data *lm75_update_device(struct device *dev);
- 
- 
-@@ -156,7 +154,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *da,
- 	temp = clamp_val(temp, LM75_TEMP_MIN, LM75_TEMP_MAX);
- 	data->temp[nr] = DIV_ROUND_CLOSEST(temp  << (resolution - 8),
- 					   1000) << (16 - resolution);
--	lm75_write_value(client, LM75_REG_TEMP[nr], data->temp[nr]);
-+	i2c_smbus_write_word_swapped(client, LM75_REG_TEMP[nr], data->temp[nr]);
- 	mutex_unlock(&data->update_lock);
- 	return count;
- }
-@@ -296,7 +294,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	}
- 
- 	/* configure as specified */
--	status = lm75_read_value(client, LM75_REG_CONF);
-+	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
- 	if (status < 0) {
- 		dev_dbg(dev, "Can't read config? %d\n", status);
- 		return status;
-@@ -305,7 +303,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	new = status & ~clr_mask;
- 	new |= set_mask;
- 	if (status != new)
--		lm75_write_value(client, LM75_REG_CONF, new);
-+		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
- 
- 	devm_add_action(dev, lm75_remove, data);
- 
-@@ -450,13 +448,13 @@ static int lm75_suspend(struct device *dev)
- {
- 	int status;
- 	struct i2c_client *client = to_i2c_client(dev);
--	status = lm75_read_value(client, LM75_REG_CONF);
-+	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
- 	if (status < 0) {
- 		dev_dbg(&client->dev, "Can't read config? %d\n", status);
- 		return status;
- 	}
- 	status = status | LM75_SHUTDOWN;
--	lm75_write_value(client, LM75_REG_CONF, status);
-+	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index e30a5939dc0d..4b530ef731aa 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -369,7 +369,6 @@ struct lm90_data {
+ 	struct device *hwmon_dev;
+ 	const struct attribute_group *groups[6];
+ 	struct mutex update_lock;
+-	struct regulator *regulator;
+ 	char valid; /* zero until following fields are valid */
+ 	unsigned long last_updated; /* in jiffies */
+ 	int kind;
+@@ -1404,8 +1403,11 @@ static int lm90_detect(struct i2c_client *client,
  	return 0;
  }
  
-@@ -464,13 +462,13 @@ static int lm75_resume(struct device *dev)
+-static void lm90_restore_conf(struct i2c_client *client, struct lm90_data *data)
++static void lm90_restore_conf(void *_data)
  {
- 	int status;
- 	struct i2c_client *client = to_i2c_client(dev);
--	status = lm75_read_value(client, LM75_REG_CONF);
-+	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
- 	if (status < 0) {
- 		dev_dbg(&client->dev, "Can't read config? %d\n", status);
- 		return status;
- 	}
- 	status = status & ~LM75_SHUTDOWN;
--	lm75_write_value(client, LM75_REG_CONF, status);
-+	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
- 	return 0;
++	struct lm90_data *data = _data;
++	struct i2c_client *client = data->client;
++
+ 	/* Restore initial configuration */
+ 	i2c_smbus_write_byte_data(client, LM90_REG_W_CONVRATE,
+ 				  data->convrate_orig);
+@@ -1456,6 +1458,8 @@ static void lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ 	config &= 0xBF;	/* run */
+ 	if (config != data->config_orig) /* Only write if changed */
+ 		i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1, config);
++
++	devm_add_action(&client->dev, lm90_restore_conf, data);
  }
  
-@@ -497,29 +495,6 @@ static struct i2c_driver lm75_driver = {
+ static bool lm90_is_tripped(struct i2c_client *client, u16 *status)
+@@ -1506,6 +1510,16 @@ static irqreturn_t lm90_irq_thread(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ }
  
- /*-----------------------------------------------------------------------*/
- 
--/* register access */
--
--/*
-- * All registers are word-sized, except for the configuration register.
-- * LM75 uses a high-byte first convention, which is exactly opposite to
-- * the SMBus standard.
-- */
--static int lm75_read_value(struct i2c_client *client, u8 reg)
--{
--	if (reg == LM75_REG_CONF)
--		return i2c_smbus_read_byte_data(client, reg);
--	else
--		return i2c_smbus_read_word_swapped(client, reg);
--}
--
--static int lm75_write_value(struct i2c_client *client, u8 reg, u16 value)
--{
--	if (reg == LM75_REG_CONF)
--		return i2c_smbus_write_byte_data(client, reg, value);
--	else
--		return i2c_smbus_write_word_swapped(client, reg, value);
--}
--
- static struct lm75_data *lm75_update_device(struct device *dev)
++static void lm90_remove_pec(void *dev)
++{
++	device_remove_file(dev, &dev_attr_pec);
++}
++
++static void lm90_regulator_disable(void *regulator)
++{
++	regulator_disable(regulator);
++}
++
+ static int lm90_probe(struct i2c_client *client,
+ 		      const struct i2c_device_id *id)
  {
- 	struct lm75_data *data = dev_get_drvdata(dev);
-@@ -536,7 +511,8 @@ static struct lm75_data *lm75_update_device(struct device *dev)
- 		for (i = 0; i < ARRAY_SIZE(data->temp); i++) {
- 			int status;
+@@ -1526,6 +1540,8 @@ static int lm90_probe(struct i2c_client *client,
+ 		return err;
+ 	}
  
--			status = lm75_read_value(client, LM75_REG_TEMP[i]);
-+			status = i2c_smbus_read_word_swapped(client,
-+							     LM75_REG_TEMP[i]);
- 			if (unlikely(status < 0)) {
- 				dev_dbg(dev,
- 					"LM75: Failed to read value: reg %d, error %d\n",
++	devm_add_action(dev, lm90_regulator_disable, regulator);
++
+ 	data = devm_kzalloc(dev, sizeof(struct lm90_data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+@@ -1534,8 +1550,6 @@ static int lm90_probe(struct i2c_client *client,
+ 	i2c_set_clientdata(client, data);
+ 	mutex_init(&data->update_lock);
+ 
+-	data->regulator = regulator;
+-
+ 	/* Set the device type */
+ 	data->kind = id->driver_data;
+ 	if (data->kind == adm1032) {
+@@ -1577,15 +1591,14 @@ static int lm90_probe(struct i2c_client *client,
+ 	if (client->flags & I2C_CLIENT_PEC) {
+ 		err = device_create_file(dev, &dev_attr_pec);
+ 		if (err)
+-			goto exit_restore;
++			return err;
++		devm_add_action(dev, lm90_remove_pec, dev);
+ 	}
+ 
+ 	data->hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
+ 							    data, data->groups);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		err = PTR_ERR(data->hwmon_dev);
+-		goto exit_remove_pec;
+-	}
++	if (IS_ERR(data->hwmon_dev))
++		return PTR_ERR(data->hwmon_dev);
+ 
+ 	if (client->irq) {
+ 		dev_dbg(dev, "IRQ: %d\n", client->irq);
+@@ -1603,12 +1616,6 @@ static int lm90_probe(struct i2c_client *client,
+ 
+ exit_unregister:
+ 	hwmon_device_unregister(data->hwmon_dev);
+-exit_remove_pec:
+-	device_remove_file(dev, &dev_attr_pec);
+-exit_restore:
+-	lm90_restore_conf(client, data);
+-	regulator_disable(data->regulator);
+-
+ 	return err;
+ }
+ 
+@@ -1617,9 +1624,6 @@ static int lm90_remove(struct i2c_client *client)
+ 	struct lm90_data *data = i2c_get_clientdata(client);
+ 
+ 	hwmon_device_unregister(data->hwmon_dev);
+-	device_remove_file(&client->dev, &dev_attr_pec);
+-	lm90_restore_conf(client, data);
+-	regulator_disable(data->regulator);
+ 
+ 	return 0;
+ }
 -- 
 2.5.0
-
