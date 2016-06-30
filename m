@@ -1,27 +1,22 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:37316 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751997AbcF3Dnv (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Wed, 29 Jun 2016 23:43:51 -0400
+Return-path: <linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 3/4] hwmon: (lm75) Add update_interval attribute
-Date: Wed, 29 Jun 2016 20:43:40 -0700
-Message-Id: <1467258221-3742-3-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1467258221-3742-1-git-send-email-linux@roeck-us.net>
-References: <1467258221-3742-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Subject: [PATCH v3 3/4] hwmon: (lm75) Add update_interval attribute
+Date: Wed, 29 Jun 2016 23:45:27 -0700
+Message-Id: <1467269128-7448-3-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1467269128-7448-1-git-send-email-linux@roeck-us.net>
+References: <1467269128-7448-1-git-send-email-linux@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
 Since we know the chip's update interval, let's make it available
 to the user.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: No change
+v2, v3: No change
 
  drivers/hwmon/lm75.c | 13 +++++++++++++
  1 file changed, 13 insertions(+)
@@ -62,4 +57,3 @@ index 7b18cbd4a5ec..fe83f70ba62a 100644
  };
 -- 
 2.5.0
-
