@@ -1,110 +1,68 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47396 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752639AbcGCPsx (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jul 2016 11:48:53 -0400
-Subject: Re: [3/3] hwmon: iio_hwmon: defer probe when no channel is found
-To: Jonathan Cameron <jic23@kernel.org>,
-	Jonathan Cameron <jic23@jic23.retrosnub.co.uk>,
-	Quentin Schulz <quentin.schulz@free-electrons.com>
-References: <1467101897-15946-4-git-send-email-quentin.schulz@free-electrons.com>
- <20160630034725.GA26484@roeck-us.net>
- <6FBFD60A-4D68-4B60-AB34-5077BE6BD586@jic23.retrosnub.co.uk>
- <577531D4.1090106@roeck-us.net>
- <b1ebf22d-389e-5d2e-93f2-f77728d28f28@kernel.org>
-Cc: jdelvare@suse.com, knaack.h@gmx.de, lars@metafoo.de,
-	pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
-	lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+Received: from down.free-electrons.com ([37.187.137.238]:38855 "EHLO
+	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+	with ESMTP id S1752529AbcGAJp0 (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2016 05:45:26 -0400
+Subject: Re: [PATCH 0/3] add support for Allwinner SoCs ADC
+To: Chen-Yu Tsai <wens@csie.org>
+References: <1467101897-15946-1-git-send-email-quentin.schulz@free-electrons.com>
+ <CAGb2v67pK1Gkqxy2LJ0MMVry4P5C0RTqVGPHhqq+4jOFvvEA7g@mail.gmail.com>
+Cc: jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
+	jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
+	pmeerw@pmeerw.net,
+	Maxime Ripard <maxime.ripard@free-electrons.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
 	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	thomas.petazzoni@free-electrons.com,
-	antoine.tenart@free-electrons.com
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <577933CD.60207@roeck-us.net>
-Date: Sun, 3 Jul 2016 08:48:29 -0700
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+	=?UTF-8?Q?Antoine_T=c3=a9nart?= <antoine.tenart@free-electrons.com>
+From: Quentin Schulz <quentin.schulz@free-electrons.com>
+Message-ID: <57763BB3.20706@free-electrons.com>
+Date: Fri, 1 Jul 2016 11:45:23 +0200
 MIME-Version: 1.0
-In-Reply-To: <b1ebf22d-389e-5d2e-93f2-f77728d28f28@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAGb2v67pK1Gkqxy2LJ0MMVry4P5C0RTqVGPHhqq+4jOFvvEA7g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/03/2016 03:47 AM, Jonathan Cameron wrote:
-> On 30/06/16 15:51, Guenter Roeck wrote:
->> On 06/30/2016 06:59 AM, Jonathan Cameron wrote:
->>>
->>>
->>> On 30 June 2016 04:47:25 BST, Guenter Roeck <linux@roeck-us.net> wrote:
->>>> On Tue, Jun 28, 2016 at 10:18:17AM +0200, Quentin Schulz wrote:
->>>>> iio_channel_get_all returns -ENODEV when it cannot find either
->>>> phandles and
->>>>> properties in the Device Tree or channels whose consumer_dev_name
->>>> matches
->>>>> iio_hwmon in iio_map_list. The iio_map_list is filled in by iio
->>>> drivers
->>>>> which might be probed after iio_hwmon.
->>>>>
->>>>> It is better to defer the probe of iio_hwmon if such error is
->>>> returned by
->>>>> iio_channel_get_all in order to let a chance to iio drivers to expose
->>>>> channels in iio_map_list.
->>>>>
->>>>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
->>>>> ---
->>>>>    drivers/hwmon/iio_hwmon.c | 5 ++++-
->>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
->>>>> index b550ba5..c0da4d9 100644
->>>>> --- a/drivers/hwmon/iio_hwmon.c
->>>>> +++ b/drivers/hwmon/iio_hwmon.c
->>>>> @@ -73,8 +73,11 @@ static int iio_hwmon_probe(struct platform_device
->>>> *pdev)
->>>>>            name = dev->of_node->name;
->>>>>
->>>>>        channels = iio_channel_get_all(dev);
->>>>> -    if (IS_ERR(channels))
->>>>> +    if (IS_ERR(channels)) {
->>>>> +        if (PTR_ERR(channels) == -ENODEV)
->>>>> +            return -EPROBE_DEFER;
->>>>
->>>> The problem, as I see it, is with iio, which should return
->>>> -EPROBE_DEFER
->>>> in this situation.
->>> Agreed. New fangled stuff this deferred probing :)
->>>>
->>>> We can not convert -ENODEV to -EPROBE_DEFER without risking that the
->>>> channels are _really_ not there, which would result in endless
->>>> "deferred"
->>>> messages.
->>> Hmm not entirely sure how we prevent that happening wherever it is done..
->>>
+On 29/06/2016 05:28, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> On Tue, Jun 28, 2016 at 4:45 PM, Quentin Schulz
+> <quentin.schulz@free-electrons.com> wrote:
+>> The Allwinner SoCs all have an ADC that can also act as a touchscreen controller
+>> and a thermal sensor. The first four channels can be used either for the ADC or
+>> the touchscreen and the fifth channel is used for the thermal sensor. We
+>> currently have a driver for the two latter functions in
+>> drivers/input/touchscreen/sun4i-ts.c but we don't have access to the ADC feature
+>> at all.
 >>
->> Outch. Better at the source, though. I didn't look at the iio code recently,
->> but can you detect the defer situation at least with devicetree ?
->>
->> For non-devicetree situations, the only option I can think of would be
->> to replace the module initcall with a later initcall. That should solve
->> the problem if both iio_hwmon and and underlying drivers are built
->> into the kernel. If iio_hwmon is modular, the only real option I can
->> see is to make sure that all drivers it needs are loaded first.
->>
->> Does this make sense ?
-> I think we need to look in a couple of directions.  Firstly, investigate doing
-> something similar to gpio and basically move the setup of maps much earlier.
-> This will replace drivers presenting their own maps
->
-> The other direction is to get userspace (i.e. configfs) setup of these maps
-> working so for cases where it's a bit less hardware defined (i.e. using an
-> accelerometer as an input device) we can do once we know all devices relevant
-> are present and instantiate new instances on the fly.
->
-> Anyhow, neither is trivial unfortunately.
->
+>> This adds initial support for Allwinner SoCs ADC with all features. Yet, the
+>> touchscreen is not implemented but will be added later. To switch between
+>> touchscreen and ADC modes, you need to poke few bits in registers and
+>> (de)activate an interrupt (pen-up).
+>> A MFD is provided to let the input driver activate the pen-up interrupt through
+>> virtual interrupt, poke few bits via regmap and read data from the ADC driver
+>> while both (and iio_hwmon) are probed by the MFD.
+> 
+> I take it that we are going to replace the original sun4i-ts driver
+> with this new mfd one, and various sub device drivers?
+> 
 
-On a higher level, I think it would be better if the iio-hwmon bridge was tied
-to chips (and thus to the chip driver), and not be an independent binding.
-No idea if/how we can do that, though.
+Yes, that's the spirit.
 
-Guenter
+[...]
 
+> One thing about iio-hwmon is that it doesn't support hwmon labels.
+> Any chance you could improve this, so we see the same names in userspace?
+
+Should be an easy patch: reading datasheet_name from iio_chan_spec of
+the iio_channel in iio_hwmon_probe, if none then fall back to current
+naming convention.
+
+I don't think it is linked to this serie of patches so I prefer to look
+at it later.
+
+Thanks!
