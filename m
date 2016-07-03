@@ -1,13 +1,13 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:58058 "EHLO
-	saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752572AbcGCMsz (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jul 2016 08:48:55 -0400
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42441 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752639AbcGCPne (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jul 2016 11:43:34 -0400
 Subject: Re: [PATCH 2/3] iio: adc: add support for Allwinner SoCs ADC
-To: Quentin Schulz <quentin.schulz@free-electrons.com>,
-	jdelvare@suse.com, linux@roeck-us.net, knaack.h@gmx.de,
-	lars@metafoo.de, pmeerw@pmeerw.net,
-	maxime.ripard@free-electrons.com, wens@csie.org,
+To: Jonathan Cameron <jic23@kernel.org>,
+	Quentin Schulz <quentin.schulz@free-electrons.com>,
+	jdelvare@suse.com, knaack.h@gmx.de, lars@metafoo.de,
+	pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
 	lee.jones@linaro.org
 References: <1467101897-15946-1-git-send-email-quentin.schulz@free-electrons.com>
  <1467101897-15946-3-git-send-email-quentin.schulz@free-electrons.com>
@@ -16,17 +16,17 @@ Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	thomas.petazzoni@free-electrons.com,
 	antoine.tenart@free-electrons.com
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <bdab1915-e5d5-7519-9b68-dc8f619ae11f@kernel.org>
-Date: Sun, 3 Jul 2016 13:48:51 +0100
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <57793294.4050009@roeck-us.net>
+Date: Sun, 3 Jul 2016 08:43:16 -0700
 MIME-Version: 1.0
 In-Reply-To: <9cdd20cd-8e73-762a-0684-4f42afe3d652@kernel.org>
-Content-Type: text/plain; charset=windows-1252
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 03/07/16 12:54, Jonathan Cameron wrote:
+On 07/03/2016 04:54 AM, Jonathan Cameron wrote:
 > On 28/06/16 09:18, Quentin Schulz wrote:
 >> The Allwinner SoCs all have an ADC that can also act as a touchscreen
 >> controller and a thermal sensor. This patch adds the ADC driver which is
@@ -40,25 +40,37 @@ On 03/07/16 12:54, Jonathan Cameron wrote:
 >>
 >> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
 > Hi Quentin.
-> 
+>
 > I'm a bit in two minds about some of this.  That temperature sensor is
 > so obviously meant for hwmon purposes, I'm tempted to suggest it might
 > actually make sense to put it directly in hwmon rather than using the
 > bridge.  That obviously makes it less flexible in some ways (i.e. for
 > use within the thermal subsystem at some point).
-> 
+>
 > Guenter, what do you think?
-> 
+>
+
+With the upcoming new hwmon API, thermal registration is handled in the
+hwmon core, so that should not be an issue. Besides, other hwmon sensors
+already register with the thermal subsystem as well.
+
+This is difficult to evaluate without datasheet; I am not sure if
+the chip supports limits or trip points. If it supports trip points,
+thermal may be a better target.
+
+Overall it does look like the temperature sensor would warrant
+a separate driver. Only question is thermal or hwmon.
+
+Guenter
+
 > I'm guessing detailed docs for this part aren't avaiable publicly? :(
-> 
+>
 > So the rest of my comments are kind of predicated on me having roughtly
 > understood how this device works from the structure of the driver.
-> 
+>
 > The temperature sensor is really effectively as separate ADC?
 > The main interest in this is for key detection?
-Ah, I'm talking garbage, wrong ADC for the chip...  I'd crossed the two
-threads.  Ignore that stuff.
-> 
+>
 > Anyhow, if the data flow for the temperatures sensor is not synced with
 > the other ADC channels, adding buffered (pushed) output from the driver in
 > future will be fiddly and with a 250Hz device you'll probably want it.
@@ -66,15 +78,15 @@ threads.  Ignore that stuff.
 > at a particular frequency. If channels are not synchronized in that fashion
 > then you have to register multiple devices or only pick a subset of channels
 > to export.
-> 
+>
 > For the key detection you have already observed that IIO needs some
 > additions to be able to have consumers of what we term 'events' e.g. threshold
 > interrupts.
-> 
+>
 > Looking at the lradc-keys driver in tree, it looks like we only really have
 > really simple threshold interrups - configured to detect a very low voltage?
 > + only one per channel.
-> 
+>
 > So not too nasty a case, but you are right some work is needed in IIO as
 > we simply don't have a means of passing these on as yet or configuring them
 > from in kernel consumers.
@@ -82,40 +94,40 @@ threads.  Ignore that stuff.
 > be too hard to add (demux can follow later).  Hence any client device can try
 > to enable events it wants, but may get events that other client devices wanted
 > as well.
-> 
+>
 > Config interface should be much the same as the write support for channels.
 > Data flow marginally harder, but pretty much a list of callbacks within
 > iio_push_event.
-> 
+>
 > Not trivial, but not too tricky either.
-> 
+>
 > The events subsystem has a few 'limitations' we need to address long term
 > but as this is in kernel interface only, we can do this now and fix stuff
 > up in future without any ABI breakage. (limitations are things like only
 > one event of a given type and direction per channel - main challenge on
 > that is finding a way of doing it without abi breakage).
-> 
+>
 > Anyhow, sounds fun - wish I had the time to do it myself!
-> 
+>
 > Otherwise, your remove is never going to work as indio_dev is always NULL.
-> 
+>
 > Jonathan
-> 
+>
 >> ---
->>  drivers/iio/adc/Kconfig           |  12 ++
->>  drivers/iio/adc/Makefile          |   1 +
->>  drivers/iio/adc/sunxi-gpadc-iio.c | 371 ++++++++++++++++++++++++++++++++++++++
->>  3 files changed, 384 insertions(+)
->>  create mode 100644 drivers/iio/adc/sunxi-gpadc-iio.c
+>>   drivers/iio/adc/Kconfig           |  12 ++
+>>   drivers/iio/adc/Makefile          |   1 +
+>>   drivers/iio/adc/sunxi-gpadc-iio.c | 371 ++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 384 insertions(+)
+>>   create mode 100644 drivers/iio/adc/sunxi-gpadc-iio.c
 >>
 >> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
 >> index 82c718c..b7b566a 100644
 >> --- a/drivers/iio/adc/Kconfig
 >> +++ b/drivers/iio/adc/Kconfig
 >> @@ -328,6 +328,18 @@ config NAU7802
->>  	  To compile this driver as a module, choose M here: the
->>  	  module will be called nau7802.
->>  
+>>   	  To compile this driver as a module, choose M here: the
+>>   	  module will be called nau7802.
+>>
 >> +config SUNXI_ADC
 >> +	tristate "ADC driver for sunxi platforms"
 >> +	depends on IIO
@@ -128,21 +140,21 @@ threads.  Ignore that stuff.
 >> +          To compile this driver as a module, choose M here: the
 >> +          module will be called sunxi-gpadc-iio.
 >> +
->>  config PALMAS_GPADC
->>  	tristate "TI Palmas General Purpose ADC"
->>  	depends on MFD_PALMAS
+>>   config PALMAS_GPADC
+>>   	tristate "TI Palmas General Purpose ADC"
+>>   	depends on MFD_PALMAS
 >> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
 >> index 0cb7921..2996a5b 100644
 >> --- a/drivers/iio/adc/Makefile
 >> +++ b/drivers/iio/adc/Makefile
 >> @@ -32,6 +32,7 @@ obj-$(CONFIG_MCP3422) += mcp3422.o
->>  obj-$(CONFIG_MEN_Z188_ADC) += men_z188_adc.o
->>  obj-$(CONFIG_MXS_LRADC) += mxs-lradc.o
->>  obj-$(CONFIG_NAU7802) += nau7802.o
+>>   obj-$(CONFIG_MEN_Z188_ADC) += men_z188_adc.o
+>>   obj-$(CONFIG_MXS_LRADC) += mxs-lradc.o
+>>   obj-$(CONFIG_NAU7802) += nau7802.o
 >> +obj-$(CONFIG_SUNXI_ADC) += sunxi-gpadc-iio.o
->>  obj-$(CONFIG_PALMAS_GPADC) += palmas_gpadc.o
->>  obj-$(CONFIG_QCOM_SPMI_IADC) += qcom-spmi-iadc.o
->>  obj-$(CONFIG_QCOM_SPMI_VADC) += qcom-spmi-vadc.o
+>>   obj-$(CONFIG_PALMAS_GPADC) += palmas_gpadc.o
+>>   obj-$(CONFIG_QCOM_SPMI_IADC) += qcom-spmi-iadc.o
+>>   obj-$(CONFIG_QCOM_SPMI_VADC) += qcom-spmi-vadc.o
 >> diff --git a/drivers/iio/adc/sunxi-gpadc-iio.c b/drivers/iio/adc/sunxi-gpadc-iio.c
 >> new file mode 100644
 >> index 0000000..5840f43
@@ -166,7 +178,7 @@ threads.  Ignore that stuff.
 > I'm fussy about this:  Please prefix all defines as some of these
 > are generic enough they may well end up defined in an included header
 > sometime in the future.
-> 
+>
 >> +#define TP_CTRL0			0x00
 >> +#define TP_CTRL1			0x04
 >> +#define TP_CTRL2			0x08
@@ -481,7 +493,7 @@ threads.  Ignore that stuff.
 > Chances are that some of those other adc channels are also going to be
 > in reality used for hwmon anyway so doing it in the device tree will give
 > you more flexibility.
-> 
+>
 >> +	if (ret < 0) {
 >> +		dev_err(&pdev->dev, "failed to register iio map array\n");
 >> +		return ret;
@@ -509,7 +521,7 @@ threads.  Ignore that stuff.
 > ?  If it's null the below isn't going to work as intended.
 > Missing a platform_get_drvdata which I'd just roll into the above
 > local variable definition.
-> 
+>
 >> +	struct sunxi_gpadc_dev *info = NULL;
 >> +
 >> +	iio_device_unregister(indio_dev);
@@ -518,7 +530,7 @@ threads.  Ignore that stuff.
 > I'd roll this into the local variable declaration above
 > (it's only a trivial bit of pointer arithemetic after all.
 > struct sunxi_gpadc_dev *info = iio_priv(indio_dev);
-> 
+>
 >> +	regmap_write(info->regmap, TP_INT_FIFOC, 0);
 >> +
 >> +	return 0;
@@ -546,10 +558,10 @@ threads.  Ignore that stuff.
 >> +MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
 >> +MODULE_LICENSE("GPL v2");
 >>
-> 
+>
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+>
 
