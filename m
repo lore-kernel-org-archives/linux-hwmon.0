@@ -1,68 +1,74 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from down.free-electrons.com ([37.187.137.238]:38855 "EHLO
-	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1752529AbcGAJp0 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jul 2016 05:45:26 -0400
-Subject: Re: [PATCH 0/3] add support for Allwinner SoCs ADC
-To: Chen-Yu Tsai <wens@csie.org>
-References: <1467101897-15946-1-git-send-email-quentin.schulz@free-electrons.com>
- <CAGb2v67pK1Gkqxy2LJ0MMVry4P5C0RTqVGPHhqq+4jOFvvEA7g@mail.gmail.com>
-Cc: jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
-	jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-	pmeerw@pmeerw.net,
-	Maxime Ripard <maxime.ripard@free-electrons.com>,
-	Lee Jones <lee.jones@linaro.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-	=?UTF-8?Q?Antoine_T=c3=a9nart?= <antoine.tenart@free-electrons.com>
-From: Quentin Schulz <quentin.schulz@free-electrons.com>
-Message-ID: <57763BB3.20706@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:45:23 +0200
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56920 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753856AbcGDVEl (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jul 2016 17:04:41 -0400
+Subject: Re: [RFC PATCH] hwmon: (jc42) Add I2C_CLASS_HWMON to detection class
+To: Alison Schofield <amsfield22@gmail.com>
+References: <20160704191908.GA9056@d830.WORKGROUP>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	"open list:JC42.4 TEMPERATURE SENSOR DRIVER"
+	<linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org,
+	daniel.baluta@gmail.com
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <577ACF62.9030109@roeck-us.net>
+Date: Mon, 4 Jul 2016 14:04:34 -0700
 MIME-Version: 1.0
-In-Reply-To: <CAGb2v67pK1Gkqxy2LJ0MMVry4P5C0RTqVGPHhqq+4jOFvvEA7g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20160704191908.GA9056@d830.WORKGROUP>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 29/06/2016 05:28, Chen-Yu Tsai wrote:
-> Hi,
-> 
-> On Tue, Jun 28, 2016 at 4:45 PM, Quentin Schulz
-> <quentin.schulz@free-electrons.com> wrote:
->> The Allwinner SoCs all have an ADC that can also act as a touchscreen controller
->> and a thermal sensor. The first four channels can be used either for the ADC or
->> the touchscreen and the fifth channel is used for the thermal sensor. We
->> currently have a driver for the two latter functions in
->> drivers/input/touchscreen/sun4i-ts.c but we don't have access to the ADC feature
->> at all.
->>
->> This adds initial support for Allwinner SoCs ADC with all features. Yet, the
->> touchscreen is not implemented but will be added later. To switch between
->> touchscreen and ADC modes, you need to poke few bits in registers and
->> (de)activate an interrupt (pen-up).
->> A MFD is provided to let the input driver activate the pen-up interrupt through
->> virtual interrupt, poke few bits via regmap and read data from the ADC driver
->> while both (and iio_hwmon) are probed by the MFD.
-> 
-> I take it that we are going to replace the original sun4i-ts driver
-> with this new mfd one, and various sub device drivers?
-> 
+On 07/04/2016 12:19 PM, Alison Schofield wrote:
+> In 2011, commit 774466add7c810fd7e4c8bcf41995b6799608880 changed
+> the detection class of these chips to I2C_CLASS_SPD based on this
+> premise: "makes more sense because these chips always live on
+> memory modules"
+>
+> Today these chips have applications beyond memory modules.
+>
 
-Yes, that's the spirit.
+Do you have a specific example ?
 
-[...]
+> Add I2C_CLASS_HWMON as an additional detection class to allow
+> detection by hwmon class i2c adapters.
+>
 
-> One thing about iio-hwmon is that it doesn't support hwmon labels.
-> Any chance you could improve this, so we see the same names in userspace?
+Practical impact should be limited, though. Most adapters have both
+I2C_CLASS_HWMON and I2C_CLASS_SPD flags set. Besides the Diolan adapters,
+which are experimental in nature anyway (and where it actually might make
+sense to add I2C_CLASS_SPD), do you have an example where a JC-42 compatible
+chip is used with an adapter which does not have I2C_CLASS_SPD set in
+its flags ?
 
-Should be an easy patch: reading datasheet_name from iio_chan_spec of
-the iio_channel in iio_hwmon_probe, if none then fall back to current
-naming convention.
+> Alternative is to replace the SPD w HWMON class, but that carries
+> risk for existing usage.
+>
+Yes, the driver would stop working on adapters which only have I2C_CLASS_SPD
+set. There are only two of those, but those two presumably _do_ have memory
+modules connected.
 
-I don't think it is linked to this serie of patches so I prefer to look
-at it later.
+Guenter
 
-Thanks!
+> Signed-off-by: Alison Schofield <amsfield22@gmail.com>
+> Cc: Daniel Baluta <daniel.baluta@gmail.com>
+> ---
+>   drivers/hwmon/jc42.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> index 9887d32..1537ba0 100644
+> --- a/drivers/hwmon/jc42.c
+> +++ b/drivers/hwmon/jc42.c
+> @@ -538,7 +538,7 @@ static const struct i2c_device_id jc42_id[] = {
+>   MODULE_DEVICE_TABLE(i2c, jc42_id);
+>
+>   static struct i2c_driver jc42_driver = {
+> -	.class		= I2C_CLASS_SPD,
+> +	.class		= I2C_CLASS_SPD | I2C_CLASS_HWMON,
+>   	.driver = {
+>   		.name	= "jc42",
+>   		.pm = JC42_DEV_PM_OPS,
+>
+
