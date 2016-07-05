@@ -1,154 +1,904 @@
-Return-path: <thilo.cestonaro@ts.fujitsu.com>
-From: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
-To: "linux@roeck-us.net" <linux@roeck-us.net>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "thilo@cestona.ro" <thilo@cestona.ro>
-Subject: Re: [PATCH v3] hwmon: added kernel module for FTS BMC chip "Teutates"
-Date: Tue, 5 Jul 2016 10:53:31 +0000
-Message-ID: <1467715839.7498.14.camel@ts.fujitsu.com>
-References: <20160704220402.GA8549@roeck-us.net>
-In-Reply-To: <20160704220402.GA8549@roeck-us.net>
-Reply-To: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=sha-1;
-	protocol="application/x-pkcs7-signature"; boundary="=-BWB+sMaL3Z2ZiIM30C/I"
-MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail1.bemta14.messagelabs.com ([193.109.254.114]:58389 "EHLO
+	mail1.bemta14.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+	by vger.kernel.org with ESMTP id S1755384AbcGENVK (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Tue, 5 Jul 2016 09:21:10 -0400
+Received: from abgdgate60u.abg.fsc.net ([172.25.138.90])
+	by mailhost1.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id u65DLWYS014257
+	for <linux-hwmon@vger.kernel.org>; Tue, 5 Jul 2016 14:21:36 +0100
+From: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+To: linux-hwmon <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Thilo Cestonaro <thilo@cestona.ro>
+Subject: [PATCH v4] hwmon: added kernel module for FTS BMC chip "Teutates"
+Date: Tue,  5 Jul 2016 15:18:01 +0200
+Message-Id: <1467724681-8790-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
---=-BWB+sMaL3Z2ZiIM30C/I
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: Thilo Cestonaro <thilo@cestona.ro>
 
-Hey Guenter!
+This driver implements support for the FTS BMC Chip "Teutates".
 
-> > +config SENSORS_FTSTEUTATES
-> > +	tristate "Fujitsu Technology Solutions sensor chip Teutates"
-> > +	depends on I2C
-> > +	help
-> > +	=C2=A0=C2=A0If you say yes here you get support for the Fujitsu Techn=
-ology
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Solutions (FTS) sensor chip "Teuta=
-tes" including support for
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0the integrated watchdog.
-> Did you try to enable this ? Probably not, because if I apply your patch
-> and try to run "make allmodconfig" I get
->=20
-> drivers/hwmon/Kconfig:495: syntax error
-> drivers/hwmon/Kconfig:494: unknown option "Solutions"
-> drivers/hwmon/Kconfig:495: unknown option "the"
-> drivers/hwmon/Kconfig:498: syntax error
->=20
-Sorry about that! Indention was wrong.
+Signed-off-by: Thilo Cestonaro <thilo@cestona.ro>
+---
+ Documentation/hwmon/ftsteutates |  23 ++
+ drivers/hwmon/Kconfig           |  11 +
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/ftsteutates.c     | 799 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 834 insertions(+)
+ create mode 100644 Documentation/hwmon/ftsteutates
+ create mode 100644 drivers/hwmon/ftsteutates.c
 
-> > +	unsigned char page =3D reg>>8;
-> 				reg << 8
->=20
-> checkpatch --strict helps finding such places.
->=20
-Thanks for the hint.
-Next patch will be checked with --strict, promise! :)
+diff --git a/Documentation/hwmon/ftsteutates b/Documentation/hwmon/ftsteutates
+new file mode 100644
+index 0000000..2a1bf69
+--- /dev/null
++++ b/Documentation/hwmon/ftsteutates
+@@ -0,0 +1,23 @@
++Kernel driver ftsteutates
++=====================
++
++Supported chips:
++  * FTS Teutates
++    Prefix: 'ftsteutates'
++    Addresses scanned: I2C 0x73 (7-Bit)
++
++Author: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
++
++
++Description
++-----------
++The BMC Teutates is the Eleventh generation of Superior System
++monitoring and thermal management solution. It is builds on the basic
++functionality of the BMC Theseus and contains several new features and
++enhancements. It can monitor up to 4 voltages, 16 temperatures and
++8 fans. It also contains an integrated watchdog which is currently
++implemented in this driver.
++
++Specification of the chip can be found here:
++ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
++ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index ff94007..fd6234c 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -486,6 +486,17 @@ config SENSORS_FSCHMD
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called fschmd.
+ 
++config SENSORS_FTSTEUTATES
++	tristate "Fujitsu Technology Solutions sensor chip Teutates"
++	depends on I2C
++	help
++	  If you say yes here you get support for the Fujitsu Technology
++	  Solutions (FTS) sensor chip "Teutates" including support for
++	  the integrated watchdog.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called ftsteutates.
++
+ config SENSORS_GL518SM
+ 	tristate "Genesys Logic GL518SM"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 2ef5b7c..dcad5f7 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -62,6 +62,7 @@ obj-$(CONFIG_SENSORS_F71882FG)	+= f71882fg.o
+ obj-$(CONFIG_SENSORS_F75375S)	+= f75375s.o
+ obj-$(CONFIG_SENSORS_FAM15H_POWER) += fam15h_power.o
+ obj-$(CONFIG_SENSORS_FSCHMD)	+= fschmd.o
++obj-$(CONFIG_SENSORS_FTSTEUTATES) += ftsteutates.o
+ obj-$(CONFIG_SENSORS_G760A)	+= g760a.o
+ obj-$(CONFIG_SENSORS_G762)	+= g762.o
+ obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+new file mode 100644
+index 0000000..2baccaa
+--- /dev/null
++++ b/drivers/hwmon/ftsteutates.c
+@@ -0,0 +1,799 @@
++/*
++ * fts.c, Support for the FTS Systemmonitoring Chip "Teutates"
++ *
++ * Copyright (C) 2016 Fujitsu Technology Solutions GmbH,
++ *		  Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ */
++#include <linux/err.h>
++#include <linux/fs.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++#include <linux/uaccess.h>
++#include <linux/version.h>
++#include <linux/watchdog.h>
++
++#define FTS_DEVICE_ID_REG		0x0000
++#define FTS_DEVICE_REVISION_REG	0x0001
++#define FTS_DEVICE_STATUS_REG		0x0004
++#define FTS_SATELLITE_STATUS_REG	0x0005
++#define FTS_EVENT_STATUS_REG		0x0006
++#define FTS_GLOBAL_CONTROL_REG		0x0007
++
++#define FTS_SENSOR_EVENT_REG		0x0010
++
++#define FTS_FAN_EVENT_REG		0x0014
++#define FTS_FAN_PRESENT_REG		0x0015
++
++#define FTS_POWER_ON_TIME_COUNTER_A	0x007A
++#define FTS_POWER_ON_TIME_COUNTER_B	0x007B
++#define FTS_POWER_ON_TIME_COUNTER_C	0x007C
++
++#define FTS_PAGE_SELECT_REG		0x007F
++
++#define FTS_WATCHDOG_TIME_PRESET	0x000B
++#define FTS_WATCHDOG_CONTROL		0x5081
++
++#define FTS_NO_FAN_SENSORS		0x08
++#define FTS_NO_TEMP_SENSORS		0x10
++#define FTS_NO_VOLT_SENSORS		0x04
++
++static struct i2c_device_id fts_id[] = {
++	{ "ftsteutates", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, fts_id);
++
++struct fts_data {
++	struct i2c_client *client;
++	/* update sensor data lock */
++	struct mutex update_lock;
++	/* read/write register lock */
++	struct mutex access_lock;
++	unsigned long last_updated; /* in jiffies */
++	struct watchdog_device wdd;
++	bool valid; /* false until following fields are valid */
++
++	u8 volt[FTS_NO_VOLT_SENSORS];
++
++	u8 temp_input[FTS_NO_TEMP_SENSORS];
++	u8 temp_alarm;
++
++	u8 fan_present;
++	u8 fan_input[FTS_NO_FAN_SENSORS]; /* in rps */
++	u8 fan_source[FTS_NO_FAN_SENSORS];
++	u8 fan_alarm;
++};
++
++#define FTS_REG_FAN_INPUT(idx) ((idx) + 0x20)
++#define FTS_REG_FAN_SOURCE(idx) ((idx) + 0x30)
++#define FTS_REG_FAN_CONTROL(idx) (((idx) << 16) + 0x4881)
++
++#define FTS_REG_TEMP_INPUT(idx) ((idx) + 0x40)
++#define FTS_REG_TEMP_CONTROL(idx) (((idx) << 16) + 0x0681)
++
++#define FTS_REG_VOLT(idx) ((idx) + 0x18)
++
++/*****************************************************************************/
++/* I2C Helper functions							     */
++/*****************************************************************************/
++static int fts_read_byte(struct i2c_client *client, unsigned short reg)
++{
++	int ret;
++	unsigned char page = reg >> 8;
++	struct fts_data *data = dev_get_drvdata(&client->dev);
++
++	mutex_lock(&data->access_lock);
++
++	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
++	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
++	if (ret < 0)
++		goto error;
++
++	reg &= 0xFF;
++	ret = i2c_smbus_read_byte_data(client, reg);
++	dev_dbg(&client->dev, "read - reg: 0x%.02x: val: 0x%.02x\n", reg, ret);
++
++error:
++	mutex_unlock(&data->access_lock);
++	return ret;
++}
++
++static int fts_write_byte(struct i2c_client *client, unsigned short reg,
++			  unsigned char value)
++{
++	int ret;
++	unsigned char page = reg >> 8;
++	struct fts_data *data = dev_get_drvdata(&client->dev);
++
++	mutex_lock(&data->access_lock);
++
++	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
++	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
++	if (ret < 0)
++		goto error;
++
++	reg &= 0xFF;
++	dev_dbg(&client->dev,
++		"write - reg: 0x%.02x: val: 0x%.02x\n", reg, value);
++	ret = i2c_smbus_write_byte_data(client, reg, value);
++
++error:
++	mutex_unlock(&data->access_lock);
++	return ret;
++}
++
++/*****************************************************************************/
++/* Data Updater Helper function						     */
++/*****************************************************************************/
++static int fts_update_device(struct fts_data *data)
++{
++	int i;
++	int err = 0;
++
++	mutex_lock(&data->update_lock);
++	if (!time_after(jiffies, data->last_updated + 2 * HZ) && data->valid)
++		goto exit;
++
++	err = fts_read_byte(data->client, FTS_DEVICE_STATUS_REG);
++	if (err < 0)
++		goto exit;
++
++	data->valid = !!(err & 0x02); /* Data not ready yet */
++	if (unlikely(!data->valid)) {
++		err = -EAGAIN;
++		goto exit;
++	}
++
++	err = fts_read_byte(data->client, FTS_FAN_PRESENT_REG);
++	if (err < 0)
++		goto exit;
++	data->fan_present = err;
++
++	err = fts_read_byte(data->client, FTS_FAN_EVENT_REG);
++	if (err < 0)
++		goto exit;
++	data->fan_alarm = err;
++
++	for (i = 0; i < FTS_NO_FAN_SENSORS; i++) {
++		if (data->fan_present & BIT(i)) {
++			err = fts_read_byte(data->client, FTS_REG_FAN_INPUT(i));
++			if (err < 0)
++				goto exit;
++			data->fan_input[i] = err;
++
++			err = fts_read_byte(data->client,
++					    FTS_REG_FAN_SOURCE(i));
++			if (err < 0)
++				goto exit;
++			data->fan_source[i] = err;
++		} else {
++			data->fan_input[i] = 0;
++			data->fan_source[i] = 0;
++		}
++	}
++
++	err = fts_read_byte(data->client, FTS_SENSOR_EVENT_REG);
++	if (err < 0)
++		goto exit;
++	data->temp_alarm = err;
++
++	for (i = 0; i < FTS_NO_TEMP_SENSORS; i++) {
++		err = fts_read_byte(data->client, FTS_REG_TEMP_INPUT(i));
++		if (err < 0)
++			goto exit;
++		data->temp_input[i] = err;
++	}
++
++	for (i = 0; i < FTS_NO_VOLT_SENSORS; i++) {
++		err = fts_read_byte(data->client, FTS_REG_VOLT(i));
++		if (err < 0)
++			goto exit;
++		data->volt[i] = err;
++	}
++	data->last_updated = jiffies;
++	err = 0;
++exit:
++	mutex_unlock(&data->update_lock);
++	return err;
++}
++
++/*****************************************************************************/
++/* Watchdog functions							     */
++/*****************************************************************************/
++static int fts_wd_set_resolution(struct fts_data *data, bool seconds)
++{
++	int ret;
++
++	ret = fts_read_byte(data->client, FTS_WATCHDOG_CONTROL);
++	if (ret < 0)
++		return ret;
++
++	ret = fts_write_byte(data->client, FTS_WATCHDOG_CONTROL,
++			     seconds ? ret | BIT(1) : ret & ~BIT(1));
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int fts_wd_set_timeout(struct watchdog_device *wdd, unsigned int timeout)
++{
++	struct fts_data *data;
++	bool seconds;
++
++	data = watchdog_get_drvdata(wdd);
++
++	/* switch watchdog resolution to minutes if timeout does not fit
++	 * into a byte
++	 */
++	if (timeout > 0xFF) {
++		wdd->timeout = DIV_ROUND_UP(timeout, 60);
++		if (wdd->timeout > wdd->max_timeout) {
++			dev_warn(wdd->parent,
++				 "given timeout to big, using max_timeout\n");
++			wdd->timeout = wdd->max_timeout / 60;
++		}
++		seconds = false;
++	} else {
++		wdd->timeout = timeout;
++		seconds = true;
++	}
++
++	return fts_wd_set_resolution(data, seconds);
++}
++
++static int fts_wd_start(struct watchdog_device *wdd)
++{
++	struct fts_data *data;
++
++	data = watchdog_get_drvdata(wdd);
++	return fts_write_byte(data->client, FTS_WATCHDOG_TIME_PRESET,
++			      wdd->timeout);
++}
++
++static int fts_wd_stop(struct watchdog_device *wdd)
++{
++	struct fts_data *data;
++
++	data = watchdog_get_drvdata(wdd);
++	return fts_write_byte(data->client, FTS_WATCHDOG_TIME_PRESET, 0);
++}
++
++static const struct watchdog_info fts_wd_info = {
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
++	.identity = "FTS Teutates Hardware Watchdog",
++};
++
++static const struct watchdog_ops fts_wd_ops = {
++	.owner = THIS_MODULE,
++	.start = fts_wd_start,
++	.stop = fts_wd_stop,
++	.set_timeout = fts_wd_set_timeout,
++};
++
++static int fts_watchdog_init(struct fts_data *data)
++{
++	int timeout, ret;
++
++	watchdog_set_drvdata(&data->wdd, data);
++
++	timeout = fts_read_byte(data->client, FTS_WATCHDOG_TIME_PRESET);
++	if (timeout < 0)
++		return timeout;
++
++	/* watchdog not running, set timeout to a default of 60 sec. */
++	if (timeout == 0) {
++		/* resolution = seconds */
++		ret = fts_wd_set_resolution(data, true);
++		if (ret < 0)
++			return ret;
++		data->wdd.timeout = 60;
++	} else {
++		ret = fts_read_byte(data->client, FTS_WATCHDOG_CONTROL);
++		if (ret < 0)
++			return ret;
++		data->wdd.timeout = (ret & BIT(1) ? 1 : 60) * timeout;
++		data->wdd.status |= BIT(WDOG_HW_RUNNING);
++	}
++
++	/* Register our watchdog part */
++	data->wdd.info = &fts_wd_info;
++	data->wdd.ops = &fts_wd_ops;
++	data->wdd.parent = &data->client->dev;
++	data->wdd.min_timeout = 1;
++	data->wdd.max_timeout = 0xFF * 60; /* max timeout 255 minutes. */
++	return watchdog_register_device(&data->wdd);
++}
++
++/*****************************************************************************/
++/* SysFS handler functions						     */
++/*****************************************************************************/
++static ssize_t show_in_value(struct device *dev,
++			     struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%u\n", data->volt[index]);
++}
++
++static ssize_t show_temp_value(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%u\n", data->temp_input[index]);
++}
++
++static ssize_t show_temp_fault(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	/* 00h Temperature = Sensor Error */
++	return sprintf(buf, "%d\n", data->temp_input[index] == 0);
++}
++
++static ssize_t show_temp_alarm(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%u\n", !!(data->temp_alarm & BIT(index)));
++}
++
++static ssize_t
++clear_temp_alarm(struct device *dev, struct device_attribute *devattr,
++		 const char *buf, size_t count)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	long ret;
++
++	ret = fts_update_device(data);
++	if (ret < 0)
++		return ret;
++
++	if (kstrtoul(buf, 10, &ret) || ret != 0)
++		return -EINVAL;
++
++	mutex_lock(&data->update_lock);
++	ret = fts_read_byte(data->client, FTS_REG_TEMP_CONTROL(index));
++	if (ret < 0)
++		goto error;
++
++	ret = fts_write_byte(data->client, FTS_REG_TEMP_CONTROL(index),
++			     ret | 0x1);
++	if (ret < 0)
++		goto error;
++
++	data->valid = false;
++error:
++	mutex_unlock(&data->update_lock);
++	return ret;
++}
++
++static ssize_t show_fan_value(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%u\n", data->fan_input[index]);
++}
++
++static ssize_t show_fan_source(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%u\n", data->fan_source[index]);
++}
++
++static ssize_t show_fan_alarm(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	int err;
++
++	err = fts_update_device(data);
++	if (err < 0)
++		return err;
++
++	return sprintf(buf, "%d\n", !!(data->fan_alarm & BIT(index)));
++}
++
++static ssize_t
++clear_fan_alarm(struct device *dev, struct device_attribute *devattr,
++		const char *buf, size_t count)
++{
++	struct fts_data *data = dev_get_drvdata(dev);
++	int index = to_sensor_dev_attr(devattr)->index;
++	long ret;
++
++	ret = fts_update_device(data);
++	if (ret < 0)
++		return ret;
++
++	if (kstrtoul(buf, 10, &ret) || ret != 0)
++		return -EINVAL;
++
++	mutex_lock(&data->update_lock);
++	ret = fts_read_byte(data->client, FTS_REG_FAN_CONTROL(index));
++	if (ret < 0)
++		goto error;
++
++	ret = fts_write_byte(data->client, FTS_REG_FAN_CONTROL(index),
++			     ret | 0x1);
++	if (ret < 0)
++		goto error;
++
++	data->valid = false;
++error:
++	mutex_unlock(&data->update_lock);
++	return ret;
++}
++
++/*****************************************************************************/
++/* SysFS structs							     */
++/*****************************************************************************/
++
++/* Temprature sensors */
++static SENSOR_DEVICE_ATTR(temp1_input,  S_IRUGO, show_temp_value, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp2_input,  S_IRUGO, show_temp_value, NULL, 1);
++static SENSOR_DEVICE_ATTR(temp3_input,  S_IRUGO, show_temp_value, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp4_input,  S_IRUGO, show_temp_value, NULL, 3);
++static SENSOR_DEVICE_ATTR(temp5_input,  S_IRUGO, show_temp_value, NULL, 4);
++static SENSOR_DEVICE_ATTR(temp6_input,  S_IRUGO, show_temp_value, NULL, 5);
++static SENSOR_DEVICE_ATTR(temp7_input,  S_IRUGO, show_temp_value, NULL, 6);
++static SENSOR_DEVICE_ATTR(temp8_input,  S_IRUGO, show_temp_value, NULL, 7);
++static SENSOR_DEVICE_ATTR(temp9_input,  S_IRUGO, show_temp_value, NULL, 8);
++static SENSOR_DEVICE_ATTR(temp10_input, S_IRUGO, show_temp_value, NULL, 9);
++static SENSOR_DEVICE_ATTR(temp11_input, S_IRUGO, show_temp_value, NULL, 10);
++static SENSOR_DEVICE_ATTR(temp12_input, S_IRUGO, show_temp_value, NULL, 11);
++static SENSOR_DEVICE_ATTR(temp13_input, S_IRUGO, show_temp_value, NULL, 12);
++static SENSOR_DEVICE_ATTR(temp14_input, S_IRUGO, show_temp_value, NULL, 13);
++static SENSOR_DEVICE_ATTR(temp15_input, S_IRUGO, show_temp_value, NULL, 14);
++static SENSOR_DEVICE_ATTR(temp16_input, S_IRUGO, show_temp_value, NULL, 15);
++
++static SENSOR_DEVICE_ATTR(temp1_fault,  S_IRUGO, show_temp_fault, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp2_fault,  S_IRUGO, show_temp_fault, NULL, 1);
++static SENSOR_DEVICE_ATTR(temp3_fault,  S_IRUGO, show_temp_fault, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp4_fault,  S_IRUGO, show_temp_fault, NULL, 3);
++static SENSOR_DEVICE_ATTR(temp5_fault,  S_IRUGO, show_temp_fault, NULL, 4);
++static SENSOR_DEVICE_ATTR(temp6_fault,  S_IRUGO, show_temp_fault, NULL, 5);
++static SENSOR_DEVICE_ATTR(temp7_fault,  S_IRUGO, show_temp_fault, NULL, 6);
++static SENSOR_DEVICE_ATTR(temp8_fault,  S_IRUGO, show_temp_fault, NULL, 7);
++static SENSOR_DEVICE_ATTR(temp9_fault,  S_IRUGO, show_temp_fault, NULL, 8);
++static SENSOR_DEVICE_ATTR(temp10_fault, S_IRUGO, show_temp_fault, NULL, 9);
++static SENSOR_DEVICE_ATTR(temp11_fault, S_IRUGO, show_temp_fault, NULL, 10);
++static SENSOR_DEVICE_ATTR(temp12_fault, S_IRUGO, show_temp_fault, NULL, 11);
++static SENSOR_DEVICE_ATTR(temp13_fault, S_IRUGO, show_temp_fault, NULL, 12);
++static SENSOR_DEVICE_ATTR(temp14_fault, S_IRUGO, show_temp_fault, NULL, 13);
++static SENSOR_DEVICE_ATTR(temp15_fault, S_IRUGO, show_temp_fault, NULL, 14);
++static SENSOR_DEVICE_ATTR(temp16_fault, S_IRUGO, show_temp_fault, NULL, 15);
++
++static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 0);
++static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 1);
++static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 2);
++static SENSOR_DEVICE_ATTR(temp4_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 3);
++static SENSOR_DEVICE_ATTR(temp5_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 4);
++static SENSOR_DEVICE_ATTR(temp6_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 5);
++static SENSOR_DEVICE_ATTR(temp7_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 6);
++static SENSOR_DEVICE_ATTR(temp8_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 7);
++static SENSOR_DEVICE_ATTR(temp9_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 8);
++static SENSOR_DEVICE_ATTR(temp10_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 9);
++static SENSOR_DEVICE_ATTR(temp11_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 10);
++static SENSOR_DEVICE_ATTR(temp12_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 11);
++static SENSOR_DEVICE_ATTR(temp13_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 12);
++static SENSOR_DEVICE_ATTR(temp14_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 13);
++static SENSOR_DEVICE_ATTR(temp15_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 14);
++static SENSOR_DEVICE_ATTR(temp16_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
++			  clear_temp_alarm, 15);
++
++static struct attribute *fts_temp_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_temp2_input.dev_attr.attr,
++	&sensor_dev_attr_temp3_input.dev_attr.attr,
++	&sensor_dev_attr_temp4_input.dev_attr.attr,
++	&sensor_dev_attr_temp5_input.dev_attr.attr,
++	&sensor_dev_attr_temp6_input.dev_attr.attr,
++	&sensor_dev_attr_temp7_input.dev_attr.attr,
++	&sensor_dev_attr_temp8_input.dev_attr.attr,
++	&sensor_dev_attr_temp9_input.dev_attr.attr,
++	&sensor_dev_attr_temp10_input.dev_attr.attr,
++	&sensor_dev_attr_temp11_input.dev_attr.attr,
++	&sensor_dev_attr_temp12_input.dev_attr.attr,
++	&sensor_dev_attr_temp13_input.dev_attr.attr,
++	&sensor_dev_attr_temp14_input.dev_attr.attr,
++	&sensor_dev_attr_temp15_input.dev_attr.attr,
++	&sensor_dev_attr_temp16_input.dev_attr.attr,
++
++	&sensor_dev_attr_temp1_fault.dev_attr.attr,
++	&sensor_dev_attr_temp2_fault.dev_attr.attr,
++	&sensor_dev_attr_temp3_fault.dev_attr.attr,
++	&sensor_dev_attr_temp4_fault.dev_attr.attr,
++	&sensor_dev_attr_temp5_fault.dev_attr.attr,
++	&sensor_dev_attr_temp6_fault.dev_attr.attr,
++	&sensor_dev_attr_temp7_fault.dev_attr.attr,
++	&sensor_dev_attr_temp8_fault.dev_attr.attr,
++	&sensor_dev_attr_temp9_fault.dev_attr.attr,
++	&sensor_dev_attr_temp10_fault.dev_attr.attr,
++	&sensor_dev_attr_temp11_fault.dev_attr.attr,
++	&sensor_dev_attr_temp12_fault.dev_attr.attr,
++	&sensor_dev_attr_temp13_fault.dev_attr.attr,
++	&sensor_dev_attr_temp14_fault.dev_attr.attr,
++	&sensor_dev_attr_temp15_fault.dev_attr.attr,
++	&sensor_dev_attr_temp16_fault.dev_attr.attr,
++
++	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp2_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp4_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp5_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp6_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp7_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp8_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp9_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp10_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp11_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp12_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp13_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp14_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp15_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp16_alarm.dev_attr.attr,
++	NULL
++};
++
++/* Fans */
++static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, show_fan_value, NULL, 0);
++static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, show_fan_value, NULL, 1);
++static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, show_fan_value, NULL, 2);
++static SENSOR_DEVICE_ATTR(fan4_input, S_IRUGO, show_fan_value, NULL, 3);
++static SENSOR_DEVICE_ATTR(fan5_input, S_IRUGO, show_fan_value, NULL, 4);
++static SENSOR_DEVICE_ATTR(fan6_input, S_IRUGO, show_fan_value, NULL, 5);
++static SENSOR_DEVICE_ATTR(fan7_input, S_IRUGO, show_fan_value, NULL, 6);
++static SENSOR_DEVICE_ATTR(fan8_input, S_IRUGO, show_fan_value, NULL, 7);
++
++static SENSOR_DEVICE_ATTR(fan1_source, S_IRUGO, show_fan_source, NULL, 0);
++static SENSOR_DEVICE_ATTR(fan2_source, S_IRUGO, show_fan_source, NULL, 1);
++static SENSOR_DEVICE_ATTR(fan3_source, S_IRUGO, show_fan_source, NULL, 2);
++static SENSOR_DEVICE_ATTR(fan4_source, S_IRUGO, show_fan_source, NULL, 3);
++static SENSOR_DEVICE_ATTR(fan5_source, S_IRUGO, show_fan_source, NULL, 4);
++static SENSOR_DEVICE_ATTR(fan6_source, S_IRUGO, show_fan_source, NULL, 5);
++static SENSOR_DEVICE_ATTR(fan7_source, S_IRUGO, show_fan_source, NULL, 6);
++static SENSOR_DEVICE_ATTR(fan8_source, S_IRUGO, show_fan_source, NULL, 7);
++
++static SENSOR_DEVICE_ATTR(fan1_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 0);
++static SENSOR_DEVICE_ATTR(fan2_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 1);
++static SENSOR_DEVICE_ATTR(fan3_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 2);
++static SENSOR_DEVICE_ATTR(fan4_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 3);
++static SENSOR_DEVICE_ATTR(fan5_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 4);
++static SENSOR_DEVICE_ATTR(fan6_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 5);
++static SENSOR_DEVICE_ATTR(fan7_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 6);
++static SENSOR_DEVICE_ATTR(fan8_alarm, S_IRUGO | S_IWUSR,
++			 show_fan_alarm, clear_fan_alarm, 7);
++
++static struct attribute *fts_fan_attrs[] = {
++	&sensor_dev_attr_fan1_input.dev_attr.attr,
++	&sensor_dev_attr_fan2_input.dev_attr.attr,
++	&sensor_dev_attr_fan3_input.dev_attr.attr,
++	&sensor_dev_attr_fan4_input.dev_attr.attr,
++	&sensor_dev_attr_fan5_input.dev_attr.attr,
++	&sensor_dev_attr_fan6_input.dev_attr.attr,
++	&sensor_dev_attr_fan7_input.dev_attr.attr,
++	&sensor_dev_attr_fan8_input.dev_attr.attr,
++
++	&sensor_dev_attr_fan1_source.dev_attr.attr,
++	&sensor_dev_attr_fan2_source.dev_attr.attr,
++	&sensor_dev_attr_fan3_source.dev_attr.attr,
++	&sensor_dev_attr_fan4_source.dev_attr.attr,
++	&sensor_dev_attr_fan5_source.dev_attr.attr,
++	&sensor_dev_attr_fan6_source.dev_attr.attr,
++	&sensor_dev_attr_fan7_source.dev_attr.attr,
++	&sensor_dev_attr_fan8_source.dev_attr.attr,
++
++	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan3_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan4_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan5_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan6_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan7_alarm.dev_attr.attr,
++	&sensor_dev_attr_fan8_alarm.dev_attr.attr,
++	NULL
++};
++
++/* Voltages */
++static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, show_in_value, NULL, 0);
++static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, show_in_value, NULL, 1);
++static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, show_in_value, NULL, 2);
++static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, show_in_value, NULL, 3);
++static struct attribute *fts_voltage_attrs[] = {
++	&sensor_dev_attr_in1_input.dev_attr.attr,
++	&sensor_dev_attr_in2_input.dev_attr.attr,
++	&sensor_dev_attr_in3_input.dev_attr.attr,
++	&sensor_dev_attr_in4_input.dev_attr.attr,
++	NULL
++};
++
++static const struct attribute_group fts_voltage_attr_group = {
++	.attrs = fts_voltage_attrs
++};
++
++static const struct attribute_group fts_temp_attr_group = {
++	.attrs = fts_temp_attrs
++};
++
++static const struct attribute_group fts_fan_attr_group = {
++	.attrs = fts_fan_attrs
++};
++
++static const struct attribute_group *fts_attr_groups[] = {
++	&fts_voltage_attr_group,
++	&fts_temp_attr_group,
++	&fts_fan_attr_group,
++	NULL
++};
++
++/*****************************************************************************/
++/* Module initialization / remove functions				     */
++/*****************************************************************************/
++static int fts_remove(struct i2c_client *client)
++{
++	struct fts_data *data = dev_get_drvdata(&client->dev);
++
++	watchdog_unregister_device(&data->wdd);
++	return 0;
++}
++
++static int fts_probe(struct i2c_client *client, const struct i2c_device_id *id)
++{
++	u8 revision;
++	struct fts_data *data;
++	int err;
++	s8 deviceid;
++	struct device *hwmon_dev;
++
++	if (client->addr != 0x73)
++		return -ENODEV;
++
++	/* Baseboard Management Controller check */
++	deviceid = i2c_smbus_read_byte_data(client, FTS_DEVICE_ID_REG);
++	if (deviceid > 0 && (deviceid & 0xF0) == 0x10) {
++		switch (deviceid & 0x0F) {
++		case 0x01:
++			break;
++		default:
++			dev_dbg(&client->dev,
++				"No Baseboard Management Controller\n");
++			return -ENODEV;
++		}
++	} else {
++		dev_dbg(&client->dev, "No fujitsu board\n");
++		return -ENODEV;
++	}
++
++	data = devm_kzalloc(&client->dev, sizeof(struct fts_data),
++			    GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	mutex_init(&data->update_lock);
++	mutex_init(&data->access_lock);
++	data->client = client;
++	dev_set_drvdata(&client->dev, data);
++
++	err = i2c_smbus_read_byte_data(client, FTS_DEVICE_REVISION_REG);
++	if (err < 0)
++		return err;
++	revision = err;
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
++							   "ftsteutates",
++							   data,
++							   fts_attr_groups);
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
++
++	err = fts_watchdog_init(data);
++	if (err)
++		return err;
++
++	dev_info(&client->dev, "Detected FTS Teutates chip, revision: %d.%d\n",
++		 (revision & 0xF0) >> 4, revision & 0x0F);
++	return 0;
++}
++
++/*****************************************************************************/
++/* Module Details							     */
++/*****************************************************************************/
++static struct i2c_driver fts_driver = {
++	.driver = {
++		.name = "ftsteutates",
++	},
++	.id_table = fts_id,
++	.probe = fts_probe,
++	.remove = fts_remove,
++};
++
++module_i2c_driver(fts_driver);
++
++MODULE_AUTHOR("Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>");
++MODULE_DESCRIPTION("FTS Teutates driver");
++MODULE_LICENSE("GPL");
+-- 
+2.8.1
 
-> >=C2=A0
-> > +		fts_wdt.status |=3D BIT(WDOG_ACTIVE);
-> WDOG_ACTIVE indicates that the watchdog device is opened. You need to set
-> WDOG_HW_RUNNING instead.
->=20
-Testing with Kernel 4.4 which has no HW_RUNNING. Forgot to switch it back w=
-hen
-creating the patch.
-
-> >=20
-> > +		count =3D reg;
-> > +		goto error;
-> > +	}
-> > +
-> > +	val =3D fts_write_byte(data->client, FTS_REG_FAN_CONTROL(index),
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg | 0x1);
-> > +	if (val < 0) {
-> val is unsigned long. Why not use ret here ?
->=20
-> Please build your code with W=3D1 to see (and hopefully eliminate) all th=
-ose
-> errors.
->=20
-Yes! Will use W=3D1 from now on!
-
-Cheers,
-Thilo
-
---=-BWB+sMaL3Z2ZiIM30C/I
-Content-Type: application/x-pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIM6DCCA9Qw
-ggK8oAMCAQICEDTNElfINoNG4L/3PTADbgUwDQYJKoZIhvcNAQEFBQAwLzEtMCsGA1UEAxMkRnVq
-aXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBSb290IENBMB4XDTA5MDMxMjEyMjQ1OVoXDTE5MDMx
-MTEyMjQ1OVowLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENB
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsBtNf0fN8EkW9y6QqoQGS6LUwezenV2B
-nDzORdGanukRtpGzYMAPdyiwtlp0/zONa+jCJGzkX4iYCjTsiJvx01SPRNZ24fHaFGXpJBX599q6
-ZF0isu+h1aIas1tfyCBalAbKKLvNgIuQjnXhdffVk4vSuBytO3OGcULtJ2+lYVSEvxzGt9iTSwT5
-RnEvKpR0iOC+9/UNVOiPK9XCz5u7bg3iehP5gD+v5uu3YIRwV/5gyd7AZPcckTfYP/GZcybcAXfE
-l5nb/bZiSLHeZEjxMMM8YZqFKhH9xymIdjkcRK7NJ2j8OD708QFv4b4bme1mHGfTjSbxb1nOoUTs
-NtshZwIDAQABo4HrMIHoMB0GA1UdDgQWBBQI9chqv4Dje1DEOfQHmEbobX6XqDALBgNVHQ8EBAMC
-AYYwHwYDVR0jBBgwFoAUFHXiV7YVNxWAKpflUUhlrM+GkMswEgYDVR0TAQH/BAgwBgEB/wIBADBH
-BggrBgEFBQcBAQQ7MDkwNwYIKwYBBQUHMAKGK2h0dHA6Ly9haWEudHMuZnVqaXRzdS5jb20vYWlh
-L2Z0czAxcm9vdC5jZXIwPAYDVR0fBDUwMzAxoC+gLYYraHR0cDovL2NkcC50cy5mdWppdHN1LmNv
-bS9jZHAvZnRzMDFyb290LmNybDANBgkqhkiG9w0BAQUFAAOCAQEAQ7pQP9Lw9bcnt1DhvV5UWb1z
-mnACSo6n6x+bupckQzlrf3aJ7HQZigZuaCak+dexL18I86iNDDOJBBsrz0DcD4XPszcLTUezqqGl
-AyIbviBq5mwDHAWBA9F11GRx6LdrHMKNdHPwAWyC3r6qv4GO6A+z16KUZFSP4kvuaN5YHI481T7F
-FxEmntkylphndX+6mQ1NABApMMhX0aN5dVhPAMAP8nENJ1hGk81IG8gzkoHDPSoLCtffAnNhYAqh
-vrDO2ybXb/9x+Sf3DQuzBg3hpB1yJM3K8foQaS3uTpFITfdMprcQyrIdl4Jw26s/6vpIs0siLVTp
-3yAwgNaqQSgxSTCCBIQwggNsoAMCAQICCiWUlIAAAAACJH0wDQYJKoZIhvcNAQEFBQAwLzEtMCsG
-A1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENBMB4XDTE0MDMyMTEyMTM1
-M1oXDTE3MDMyMDEyMTM1M1owQjEZMBcGA1UEAwwQQ2VzdG9uYXJvLCBUaGlsbzElMCMGA1UECgwc
-RnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9uczCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA
-qP3ld/ylkJOTj2rXQ+VrRf/+YMgZS5CGDnMWk+sMoS5f6JqtwfGcfBU/DhfnLsePut2q+ex/RDZF
-M6yCraPS0vdnTKm2O3Q7/UhhAV1Mi4XzzGeY1Y0qm+85EgMBISPwB5mThLYPsun5UIFs6e8tvlwZ
-Rzp/jrv/AzAfsSbHGXcCAwEAAaOCAhEwggINMAsGA1UdDwQEAwIFoDByBgNVHREEazBpgR50aGls
-by5jZXN0b25hcm9AdHMuZnVqaXRzdS5jb22BI1RoaWxvLkNlc3RvbmFyb0BmdWppdHN1LXNpZW1l
-bnMuY29tgSIrNDk4MjE4MDQ4MjMyOEBpbmNvbWluZ2ZheC5mc2MubmV0MB0GA1UdDgQWBBSiHLgI
-jjo+7KxLJ4t1+YZxgBSn8TAfBgNVHSMEGDAWgBQI9chqv4Dje1DEOfQHmEbobX6XqDA8BgNVHR8E
-NTAzMDGgL6AthitodHRwOi8vY2RwLnRzLmZ1aml0c3UuY29tL2NkcC9mdHMwMXVzZXIuY3JsMEcG
-CCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAoYraHR0cDovL2FpYS50cy5mdWppdHN1LmNvbS9haWEv
-ZnRzMDF1c2VyLmNlcjAMBgNVHRMBAf8EAjAAMD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCIWF
-xDKBh/9hgYWBBIbsgiCBx4EaeYOIoHGH0vEvAgFkAgEIMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBsG
-CSsGAQQBgjcVCgQOMAwwCgYIKwYBBQUHAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0DAgIC
-AIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBBQUAA4IB
-AQAEGTAyHPmTyCR029H+P/u9xRezlfA2OVvV97Ls/oLCXGGr6EkMvpHodTc6n4EWSb2ul3VPSRQf
-uSmBgIcHQJykHdSChisaqkeOpHG0rjM9GXh2eQ7ECovpQIfdIbRZKNxlJihSDsDWHyZldBlPVbDh
-xMeT6xJ/ylF8UQ8FXKUir6W/BSPZF5kLdsmCeOpWC4jOGNPEMUAcuiHZPyqAhjlWk750I4oJJKvD
-bwO8/mkxmzOjpOsk8O3CdljCjYPoYtJPI/oNVsYdmiokzne4FusPYKDzv5i0dN74KLR48maXvi3/
-WsTFqwks45QeBJT/z+1sYy+dYWpv9XGN+jR1o4ImMIIEhDCCA2ygAwIBAgIKJZSUgAAAAAIkfTAN
-BgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVz
-ZXIgQ0EwHhcNMTQwMzIxMTIxMzUzWhcNMTcwMzIwMTIxMzUzWjBCMRkwFwYDVQQDDBBDZXN0b25h
-cm8sIFRoaWxvMSUwIwYDVQQKDBxGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zMIGfMA0GCSqG
-SIb3DQEBAQUAA4GNADCBiQKBgQCo/eV3/KWQk5OPatdD5WtF//5gyBlLkIYOcxaT6wyhLl/omq3B
-8Zx8FT8OF+cux4+63ar57H9ENkUzrIKto9LS92dMqbY7dDv9SGEBXUyLhfPMZ5jVjSqb7zkSAwEh
-I/AHmZOEtg+y6flQgWzp7y2+XBlHOn+Ou/8DMB+xJscZdwIDAQABo4ICETCCAg0wCwYDVR0PBAQD
-AgWgMHIGA1UdEQRrMGmBHnRoaWxvLmNlc3RvbmFyb0B0cy5mdWppdHN1LmNvbYEjVGhpbG8uQ2Vz
-dG9uYXJvQGZ1aml0c3Utc2llbWVucy5jb22BIis0OTgyMTgwNDgyMzI4QGluY29taW5nZmF4LmZz
-Yy5uZXQwHQYDVR0OBBYEFKIcuAiOOj7srEsni3X5hnGAFKfxMB8GA1UdIwQYMBaAFAj1yGq/gON7
-UMQ59AeYRuhtfpeoMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jZHAudHMuZnVqaXRzdS5jb20v
-Y2RwL2Z0czAxdXNlci5jcmwwRwYIKwYBBQUHAQEEOzA5MDcGCCsGAQUFBzAChitodHRwOi8vYWlh
-LnRzLmZ1aml0c3UuY29tL2FpYS9mdHMwMXVzZXIuY2VyMAwGA1UdEwEB/wQCMAAwPQYJKwYBBAGC
-NxUHBDAwLgYmKwYBBAGCNxUIhYXEMoGH/2GBhYEEhuyCIIHHgRp5g4igcYfS8S8CAWQCAQgwEwYD
-VR0lBAwwCgYIKwYBBQUHAwQwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDBDBEBgkqhkiG9w0B
-CQ8ENzA1MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYIKoZIhvcN
-AwcwDQYJKoZIhvcNAQEFBQADggEBAAQZMDIc+ZPIJHTb0f4/+73FF7OV8DY5W9X3suz+gsJcYavo
-SQy+keh1NzqfgRZJva6XdU9JFB+5KYGAhwdAnKQd1IKGKxqqR46kcbSuMz0ZeHZ5DsQKi+lAh90h
-tFko3GUmKFIOwNYfJmV0GU9VsOHEx5PrEn/KUXxRDwVcpSKvpb8FI9kXmQt2yYJ46lYLiM4Y08Qx
-QBy6Idk/KoCGOVaTvnQjigkkq8NvA7z+aTGbM6Ok6yTw7cJ2WMKNg+hi0k8j+g1Wxh2aKiTOd7gW
-6w9goPO/mLR03vgotHjyZpe+Lf9axMWrCSzjlB4ElP/P7WxjL51ham/1cY36NHWjgiYxggHhMIIB
-3QIBATA9MC8xLTArBgNVBAMTJEZ1aml0c3UgVGVjaG5vbG9neSBTb2x1dGlvbnMgVXNlciBDQQIK
-JZSUgAAAAAIkfTAJBgUrDgMCGgUAoIH7MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTE2MDcwNTEwNTAzOVowIwYJKoZIhvcNAQkEMRYEFBAU4ob/9APpT0RMsnaPvdnd
-4aNxMEwGCSsGAQQBgjcQBDE/MD0wLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0
-aW9ucyBVc2VyIENBAgollJSAAAAAAiR9ME4GCyqGSIb3DQEJEAILMT+gPTAvMS0wKwYDVQQDEyRG
-dWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVzZXIgQ0ECCiWUlIAAAAACJH0wDQYJKoZIhvcN
-AQEBBQAEgYB0d64x9oozjkqgTi9KFG/mSUAGFCLRkfI/el2WLTlj1V6PJ7Fzp6jFtHXFiKHVulfd
-ITDtp09qtBArEFUi0D7evadl6uqFAxZE7NnH9poMvyNrM9SP+x83sYn9wsT98TgbFF93eyaT7J7n
-trg9yeCG4e9uZmaIkbXHx/2DwbymwQAAAAAAAA==
-
-
---=-BWB+sMaL3Z2ZiIM30C/I--
