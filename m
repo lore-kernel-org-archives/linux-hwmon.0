@@ -1,109 +1,154 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52441 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753366AbcGDX1J (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jul 2016 19:27:09 -0400
-Subject: Re: [RFC PATCH] hwmon: (jc42) Add I2C_CLASS_HWMON to detection class
-To: Alison Schofield <amsfield22@gmail.com>
-References: <20160704191908.GA9056@d830.WORKGROUP>
- <577ACF62.9030109@roeck-us.net> <20160704230414.GA10368@d830.WORKGROUP>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	"open list:JC42.4 TEMPERATURE SENSOR DRIVER"
-	<linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org,
-	daniel.baluta@gmail.com
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <577AF0CB.9020807@roeck-us.net>
-Date: Mon, 4 Jul 2016 16:27:07 -0700
+Return-path: <thilo.cestonaro@ts.fujitsu.com>
+From: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
+To: "linux@roeck-us.net" <linux@roeck-us.net>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "thilo@cestona.ro" <thilo@cestona.ro>
+Subject: Re: [PATCH v3] hwmon: added kernel module for FTS BMC chip "Teutates"
+Date: Tue, 5 Jul 2016 10:53:31 +0000
+Message-ID: <1467715839.7498.14.camel@ts.fujitsu.com>
+References: <20160704220402.GA8549@roeck-us.net>
+In-Reply-To: <20160704220402.GA8549@roeck-us.net>
+Reply-To: "thilo.cestonaro@ts.fujitsu.com" <thilo.cestonaro@ts.fujitsu.com>
+Content-Language: en-US
+Content-Type: multipart/signed; micalg=sha-1;
+	protocol="application/x-pkcs7-signature"; boundary="=-BWB+sMaL3Z2ZiIM30C/I"
 MIME-Version: 1.0
-In-Reply-To: <20160704230414.GA10368@d830.WORKGROUP>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 07/04/2016 04:04 PM, Alison Schofield wrote:
-> On Mon, Jul 04, 2016 at 02:04:34PM -0700, Guenter Roeck wrote:
->> On 07/04/2016 12:19 PM, Alison Schofield wrote:
->>> In 2011, commit 774466add7c810fd7e4c8bcf41995b6799608880 changed
->>> the detection class of these chips to I2C_CLASS_SPD based on this
->>> premise: "makes more sense because these chips always live on
->>> memory modules"
->>>
->>> Today these chips have applications beyond memory modules.
->>>
->>
->> Do you have a specific example ?
-> The mcp9808 is popular among hobbyists and makers in projects that
-> monitor everything from their fish pond to their wine cellar. Beyond
-> that I'm just referring to Microchips datasheet and marketing words
-> saying that they target it for a wide range of apps beyond memory
-> devices.  I guess the chance of one of them trying to use it, with a
-> Linux driver, and caring about auto detect are pretty slim.
->
+--=-BWB+sMaL3Z2ZiIM30C/I
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A better example would be the MCP9085, which is officially JC42.4 compliant
-but also suggested for use as general purpose temperature sensor in its
-datasheet.
+Hey Guenter!
 
-I'll add your patch to -next.
+> > +config SENSORS_FTSTEUTATES
+> > +	tristate "Fujitsu Technology Solutions sensor chip Teutates"
+> > +	depends on I2C
+> > +	help
+> > +	=C2=A0=C2=A0If you say yes here you get support for the Fujitsu Techn=
+ology
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Solutions (FTS) sensor chip "Teuta=
+tes" including support for
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0the integrated watchdog.
+> Did you try to enable this ? Probably not, because if I apply your patch
+> and try to run "make allmodconfig" I get
+>=20
+> drivers/hwmon/Kconfig:495: syntax error
+> drivers/hwmon/Kconfig:494: unknown option "Solutions"
+> drivers/hwmon/Kconfig:495: unknown option "the"
+> drivers/hwmon/Kconfig:498: syntax error
+>=20
+Sorry about that! Indention was wrong.
 
-Thanks,
-Guenter
+> > +	unsigned char page =3D reg>>8;
+> 				reg << 8
+>=20
+> checkpatch --strict helps finding such places.
+>=20
+Thanks for the hint.
+Next patch will be checked with --strict, promise! :)
 
-> As you've guessed, I changed the Diolan for my purposes. I just found
-> it odd that jc42 was the only driver in hwmon, without I2C_CLASS_HWMON,
-> so I thought it was worth a look and rethink.
->
-> So, no, nothing broken, nothing suspected incompatible.
->
-> alisons
->
->
->>
->>> Add I2C_CLASS_HWMON as an additional detection class to allow
->>> detection by hwmon class i2c adapters.
->>>
->>
->> Practical impact should be limited, though. Most adapters have both
->> I2C_CLASS_HWMON and I2C_CLASS_SPD flags set. Besides the Diolan adapters,
->> which are experimental in nature anyway (and where it actually might make
->> sense to add I2C_CLASS_SPD), do you have an example where a JC-42 compatible
->> chip is used with an adapter which does not have I2C_CLASS_SPD set in
->> its flags ?
->>
->>> Alternative is to replace the SPD w HWMON class, but that carries
->>> risk for existing usage.
->>>
->> Yes, the driver would stop working on adapters which only have I2C_CLASS_SPD
->> set. There are only two of those, but those two presumably _do_ have memory
->> modules connected.
->>
->> Guenter
->>
->>> Signed-off-by: Alison Schofield <amsfield22@gmail.com>
->>> Cc: Daniel Baluta <daniel.baluta@gmail.com>
->>> ---
->>>   drivers/hwmon/jc42.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
->>> index 9887d32..1537ba0 100644
->>> --- a/drivers/hwmon/jc42.c
->>> +++ b/drivers/hwmon/jc42.c
->>> @@ -538,7 +538,7 @@ static const struct i2c_device_id jc42_id[] = {
->>>   MODULE_DEVICE_TABLE(i2c, jc42_id);
->>>
->>>   static struct i2c_driver jc42_driver = {
->>> -	.class		= I2C_CLASS_SPD,
->>> +	.class		= I2C_CLASS_SPD | I2C_CLASS_HWMON,
->>>   	.driver = {
->>>   		.name	= "jc42",
->>>   		.pm = JC42_DEV_PM_OPS,
->>>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+> >=C2=A0
+> > +		fts_wdt.status |=3D BIT(WDOG_ACTIVE);
+> WDOG_ACTIVE indicates that the watchdog device is opened. You need to set
+> WDOG_HW_RUNNING instead.
+>=20
+Testing with Kernel 4.4 which has no HW_RUNNING. Forgot to switch it back w=
+hen
+creating the patch.
 
+> >=20
+> > +		count =3D reg;
+> > +		goto error;
+> > +	}
+> > +
+> > +	val =3D fts_write_byte(data->client, FTS_REG_FAN_CONTROL(index),
+> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg | 0x1);
+> > +	if (val < 0) {
+> val is unsigned long. Why not use ret here ?
+>=20
+> Please build your code with W=3D1 to see (and hopefully eliminate) all th=
+ose
+> errors.
+>=20
+Yes! Will use W=3D1 from now on!
+
+Cheers,
+Thilo
+
+--=-BWB+sMaL3Z2ZiIM30C/I
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIM6DCCA9Qw
+ggK8oAMCAQICEDTNElfINoNG4L/3PTADbgUwDQYJKoZIhvcNAQEFBQAwLzEtMCsGA1UEAxMkRnVq
+aXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBSb290IENBMB4XDTA5MDMxMjEyMjQ1OVoXDTE5MDMx
+MTEyMjQ1OVowLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsBtNf0fN8EkW9y6QqoQGS6LUwezenV2B
+nDzORdGanukRtpGzYMAPdyiwtlp0/zONa+jCJGzkX4iYCjTsiJvx01SPRNZ24fHaFGXpJBX599q6
+ZF0isu+h1aIas1tfyCBalAbKKLvNgIuQjnXhdffVk4vSuBytO3OGcULtJ2+lYVSEvxzGt9iTSwT5
+RnEvKpR0iOC+9/UNVOiPK9XCz5u7bg3iehP5gD+v5uu3YIRwV/5gyd7AZPcckTfYP/GZcybcAXfE
+l5nb/bZiSLHeZEjxMMM8YZqFKhH9xymIdjkcRK7NJ2j8OD708QFv4b4bme1mHGfTjSbxb1nOoUTs
+NtshZwIDAQABo4HrMIHoMB0GA1UdDgQWBBQI9chqv4Dje1DEOfQHmEbobX6XqDALBgNVHQ8EBAMC
+AYYwHwYDVR0jBBgwFoAUFHXiV7YVNxWAKpflUUhlrM+GkMswEgYDVR0TAQH/BAgwBgEB/wIBADBH
+BggrBgEFBQcBAQQ7MDkwNwYIKwYBBQUHMAKGK2h0dHA6Ly9haWEudHMuZnVqaXRzdS5jb20vYWlh
+L2Z0czAxcm9vdC5jZXIwPAYDVR0fBDUwMzAxoC+gLYYraHR0cDovL2NkcC50cy5mdWppdHN1LmNv
+bS9jZHAvZnRzMDFyb290LmNybDANBgkqhkiG9w0BAQUFAAOCAQEAQ7pQP9Lw9bcnt1DhvV5UWb1z
+mnACSo6n6x+bupckQzlrf3aJ7HQZigZuaCak+dexL18I86iNDDOJBBsrz0DcD4XPszcLTUezqqGl
+AyIbviBq5mwDHAWBA9F11GRx6LdrHMKNdHPwAWyC3r6qv4GO6A+z16KUZFSP4kvuaN5YHI481T7F
+FxEmntkylphndX+6mQ1NABApMMhX0aN5dVhPAMAP8nENJ1hGk81IG8gzkoHDPSoLCtffAnNhYAqh
+vrDO2ybXb/9x+Sf3DQuzBg3hpB1yJM3K8foQaS3uTpFITfdMprcQyrIdl4Jw26s/6vpIs0siLVTp
+3yAwgNaqQSgxSTCCBIQwggNsoAMCAQICCiWUlIAAAAACJH0wDQYJKoZIhvcNAQEFBQAwLzEtMCsG
+A1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9ucyBVc2VyIENBMB4XDTE0MDMyMTEyMTM1
+M1oXDTE3MDMyMDEyMTM1M1owQjEZMBcGA1UEAwwQQ2VzdG9uYXJvLCBUaGlsbzElMCMGA1UECgwc
+RnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0aW9uczCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA
+qP3ld/ylkJOTj2rXQ+VrRf/+YMgZS5CGDnMWk+sMoS5f6JqtwfGcfBU/DhfnLsePut2q+ex/RDZF
+M6yCraPS0vdnTKm2O3Q7/UhhAV1Mi4XzzGeY1Y0qm+85EgMBISPwB5mThLYPsun5UIFs6e8tvlwZ
+Rzp/jrv/AzAfsSbHGXcCAwEAAaOCAhEwggINMAsGA1UdDwQEAwIFoDByBgNVHREEazBpgR50aGls
+by5jZXN0b25hcm9AdHMuZnVqaXRzdS5jb22BI1RoaWxvLkNlc3RvbmFyb0BmdWppdHN1LXNpZW1l
+bnMuY29tgSIrNDk4MjE4MDQ4MjMyOEBpbmNvbWluZ2ZheC5mc2MubmV0MB0GA1UdDgQWBBSiHLgI
+jjo+7KxLJ4t1+YZxgBSn8TAfBgNVHSMEGDAWgBQI9chqv4Dje1DEOfQHmEbobX6XqDA8BgNVHR8E
+NTAzMDGgL6AthitodHRwOi8vY2RwLnRzLmZ1aml0c3UuY29tL2NkcC9mdHMwMXVzZXIuY3JsMEcG
+CCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAoYraHR0cDovL2FpYS50cy5mdWppdHN1LmNvbS9haWEv
+ZnRzMDF1c2VyLmNlcjAMBgNVHRMBAf8EAjAAMD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCIWF
+xDKBh/9hgYWBBIbsgiCBx4EaeYOIoHGH0vEvAgFkAgEIMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBsG
+CSsGAQQBgjcVCgQOMAwwCgYIKwYBBQUHAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0DAgIC
+AIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBBQUAA4IB
+AQAEGTAyHPmTyCR029H+P/u9xRezlfA2OVvV97Ls/oLCXGGr6EkMvpHodTc6n4EWSb2ul3VPSRQf
+uSmBgIcHQJykHdSChisaqkeOpHG0rjM9GXh2eQ7ECovpQIfdIbRZKNxlJihSDsDWHyZldBlPVbDh
+xMeT6xJ/ylF8UQ8FXKUir6W/BSPZF5kLdsmCeOpWC4jOGNPEMUAcuiHZPyqAhjlWk750I4oJJKvD
+bwO8/mkxmzOjpOsk8O3CdljCjYPoYtJPI/oNVsYdmiokzne4FusPYKDzv5i0dN74KLR48maXvi3/
+WsTFqwks45QeBJT/z+1sYy+dYWpv9XGN+jR1o4ImMIIEhDCCA2ygAwIBAgIKJZSUgAAAAAIkfTAN
+BgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVz
+ZXIgQ0EwHhcNMTQwMzIxMTIxMzUzWhcNMTcwMzIwMTIxMzUzWjBCMRkwFwYDVQQDDBBDZXN0b25h
+cm8sIFRoaWxvMSUwIwYDVQQKDBxGdWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQCo/eV3/KWQk5OPatdD5WtF//5gyBlLkIYOcxaT6wyhLl/omq3B
+8Zx8FT8OF+cux4+63ar57H9ENkUzrIKto9LS92dMqbY7dDv9SGEBXUyLhfPMZ5jVjSqb7zkSAwEh
+I/AHmZOEtg+y6flQgWzp7y2+XBlHOn+Ou/8DMB+xJscZdwIDAQABo4ICETCCAg0wCwYDVR0PBAQD
+AgWgMHIGA1UdEQRrMGmBHnRoaWxvLmNlc3RvbmFyb0B0cy5mdWppdHN1LmNvbYEjVGhpbG8uQ2Vz
+dG9uYXJvQGZ1aml0c3Utc2llbWVucy5jb22BIis0OTgyMTgwNDgyMzI4QGluY29taW5nZmF4LmZz
+Yy5uZXQwHQYDVR0OBBYEFKIcuAiOOj7srEsni3X5hnGAFKfxMB8GA1UdIwQYMBaAFAj1yGq/gON7
+UMQ59AeYRuhtfpeoMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jZHAudHMuZnVqaXRzdS5jb20v
+Y2RwL2Z0czAxdXNlci5jcmwwRwYIKwYBBQUHAQEEOzA5MDcGCCsGAQUFBzAChitodHRwOi8vYWlh
+LnRzLmZ1aml0c3UuY29tL2FpYS9mdHMwMXVzZXIuY2VyMAwGA1UdEwEB/wQCMAAwPQYJKwYBBAGC
+NxUHBDAwLgYmKwYBBAGCNxUIhYXEMoGH/2GBhYEEhuyCIIHHgRp5g4igcYfS8S8CAWQCAQgwEwYD
+VR0lBAwwCgYIKwYBBQUHAwQwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDBDBEBgkqhkiG9w0B
+CQ8ENzA1MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYIKoZIhvcN
+AwcwDQYJKoZIhvcNAQEFBQADggEBAAQZMDIc+ZPIJHTb0f4/+73FF7OV8DY5W9X3suz+gsJcYavo
+SQy+keh1NzqfgRZJva6XdU9JFB+5KYGAhwdAnKQd1IKGKxqqR46kcbSuMz0ZeHZ5DsQKi+lAh90h
+tFko3GUmKFIOwNYfJmV0GU9VsOHEx5PrEn/KUXxRDwVcpSKvpb8FI9kXmQt2yYJ46lYLiM4Y08Qx
+QBy6Idk/KoCGOVaTvnQjigkkq8NvA7z+aTGbM6Ok6yTw7cJ2WMKNg+hi0k8j+g1Wxh2aKiTOd7gW
+6w9goPO/mLR03vgotHjyZpe+Lf9axMWrCSzjlB4ElP/P7WxjL51ham/1cY36NHWjgiYxggHhMIIB
+3QIBATA9MC8xLTArBgNVBAMTJEZ1aml0c3UgVGVjaG5vbG9neSBTb2x1dGlvbnMgVXNlciBDQQIK
+JZSUgAAAAAIkfTAJBgUrDgMCGgUAoIH7MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTE2MDcwNTEwNTAzOVowIwYJKoZIhvcNAQkEMRYEFBAU4ob/9APpT0RMsnaPvdnd
+4aNxMEwGCSsGAQQBgjcQBDE/MD0wLzEtMCsGA1UEAxMkRnVqaXRzdSBUZWNobm9sb2d5IFNvbHV0
+aW9ucyBVc2VyIENBAgollJSAAAAAAiR9ME4GCyqGSIb3DQEJEAILMT+gPTAvMS0wKwYDVQQDEyRG
+dWppdHN1IFRlY2hub2xvZ3kgU29sdXRpb25zIFVzZXIgQ0ECCiWUlIAAAAACJH0wDQYJKoZIhvcN
+AQEBBQAEgYB0d64x9oozjkqgTi9KFG/mSUAGFCLRkfI/el2WLTlj1V6PJ7Fzp6jFtHXFiKHVulfd
+ITDtp09qtBArEFUi0D7evadl6uqFAxZE7NnH9poMvyNrM9SP+x83sYn9wsT98TgbFF93eyaT7J7n
+trg9yeCG4e9uZmaIkbXHx/2DwbymwQAAAAAAAA==
+
+
+--=-BWB+sMaL3Z2ZiIM30C/I--
