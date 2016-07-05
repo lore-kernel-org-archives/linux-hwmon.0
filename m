@@ -1,45 +1,64 @@
-Return-path: <linux@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:48551 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752524AbcGEQoh (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Jul 2016 12:44:37 -0400
 From: Guenter Roeck <linux@roeck-us.net>
 To: Rob Herring <robh+dt@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>,
 	Joachim Eastwood <manabian@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-hwmon@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Subject: [PATCH 3/3] ARM: dts: lpc4350-hitex-eval: Fix binding for SE97
-Date: Tue,  5 Jul 2016 09:44:33 -0700
-Message-Id: <1467737073-7949-3-git-send-email-linux@roeck-us.net>
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 2/3] hwmon: (jc42) Add support for generic JC-42.4 devicetree binding
+Date: Tue,  5 Jul 2016 09:44:32 -0700
+Message-Id: <1467737073-7949-2-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1467737073-7949-1-git-send-email-linux@roeck-us.net>
 References: <1467737073-7949-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The 'compatible = "nxp,jc42"' binding only happened to work because
-the Linux driver is named jc42. The driver now supports generic
-bindings for JC-42 compatible chips, so use the generic binding instead.
+With this change, JC-42.4 compatible temperature sensors can be configured
+in devicetree by providing a generic "jedec,jc-42.4-temp" binding.
 
-Cc: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Cc: Joachim Eastwood <manabian@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- arch/arm/boot/dts/lpc4350-hitex-eval.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/jc42.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/boot/dts/lpc4350-hitex-eval.dts b/arch/arm/boot/dts/lpc4350-hitex-eval.dts
-index 6c9048d4d03c..c97cba1d26a8 100644
---- a/arch/arm/boot/dts/lpc4350-hitex-eval.dts
-+++ b/arch/arm/boot/dts/lpc4350-hitex-eval.dts
-@@ -424,7 +424,7 @@
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index 9887d3224a86..374630bab137 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -31,6 +31,7 @@
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
+ #include <linux/mutex.h>
++#include <linux/of.h>
  
- 	/* NXP SE97BTP with temperature sensor + eeprom */
- 	sensor@18 {
--		compatible = "nxp,jc42";
-+		compatible = "nxp,se97", "jedec,jc-42.4-temp";
- 		reg = <0x18>;
- 	};
+ /* Addresses to scan */
+ static const unsigned short normal_i2c[] = {
+@@ -537,11 +538,20 @@ static const struct i2c_device_id jc42_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, jc42_id);
  
++#ifdef CONFIG_OF
++static const struct of_device_id jc42_of_ids[] = {
++	{ .compatible = "jedec,jc-42.4-temp", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, jc42_of_ids);
++#endif
++
+ static struct i2c_driver jc42_driver = {
+ 	.class		= I2C_CLASS_SPD,
+ 	.driver = {
+ 		.name	= "jc42",
+ 		.pm = JC42_DEV_PM_OPS,
++		.of_match_table = of_match_ptr(jc42_of_ids),
+ 	},
+ 	.probe		= jc42_probe,
+ 	.remove		= jc42_remove,
 -- 
 2.5.0
+
