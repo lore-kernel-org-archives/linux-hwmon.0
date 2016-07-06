@@ -1,74 +1,940 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56920 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:51926 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753856AbcGDVEl (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jul 2016 17:04:41 -0400
-Subject: Re: [RFC PATCH] hwmon: (jc42) Add I2C_CLASS_HWMON to detection class
-To: Alison Schofield <amsfield22@gmail.com>
-References: <20160704191908.GA9056@d830.WORKGROUP>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	"open list:JC42.4 TEMPERATURE SENSOR DRIVER"
-	<linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org,
-	daniel.baluta@gmail.com
+	with ESMTP id S932235AbcGFX7S (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Jul 2016 19:59:18 -0400
+Date: Wed, 6 Jul 2016 16:59:13 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <577ACF62.9030109@roeck-us.net>
-Date: Mon, 4 Jul 2016 14:04:34 -0700
+To: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+Cc: linux-hwmon <linux-hwmon@vger.kernel.org>,
+	Thilo Cestonaro <thilo@cestona.ro>
+Subject: Re: [PATCH v5] hwmon: added kernel module for FTS BMC chip "Teutates"
+Message-ID: <20160706235913.GA32628@roeck-us.net>
+References: <1467792426-17547-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <20160704191908.GA9056@d830.WORKGROUP>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1467792426-17547-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/04/2016 12:19 PM, Alison Schofield wrote:
-> In 2011, commit 774466add7c810fd7e4c8bcf41995b6799608880 changed
-> the detection class of these chips to I2C_CLASS_SPD based on this
-> premise: "makes more sense because these chips always live on
-> memory modules"
->
-> Today these chips have applications beyond memory modules.
->
+On Wed, Jul 06, 2016 at 10:07:06AM +0200, Thilo Cestonaro wrote:
+> From: Thilo Cestonaro <thilo@cestona.ro>
+> 
+> This driver implements support for the FTS BMC Chip "Teutates".
+> 
+> v5:
+> removed fts_wd_set_timeout
 
-Do you have a specific example ?
+Sorry, but you do need the function. Reason is that you need to adjust
+the timeout if it is larger than 255 seconds. Otherwise the core would
+set the timeout, say, to 301 seconds, but the real timeout would be
+360 seconds. If a timeout of 301 seconds is requested, the actually
+selected timeout (here 360 seconds) should be reported to user space.
 
-> Add I2C_CLASS_HWMON as an additional detection class to allow
-> detection by hwmon class i2c adapters.
->
+You don't have to actually _set_ the resolution from the set_timeout
+function; that can be handled in fts_wd_start().
 
-Practical impact should be limited, though. Most adapters have both
-I2C_CLASS_HWMON and I2C_CLASS_SPD flags set. Besides the Diolan adapters,
-which are experimental in nature anyway (and where it actually might make
-sense to add I2C_CLASS_SPD), do you have an example where a JC-42 compatible
-chip is used with an adapter which does not have I2C_CLASS_SPD set in
-its flags ?
-
-> Alternative is to replace the SPD w HWMON class, but that carries
-> risk for existing usage.
->
-Yes, the driver would stop working on adapters which only have I2C_CLASS_SPD
-set. There are only two of those, but those two presumably _do_ have memory
-modules connected.
-
-Guenter
-
-> Signed-off-by: Alison Schofield <amsfield22@gmail.com>
-> Cc: Daniel Baluta <daniel.baluta@gmail.com>
+> added switch between seconds and minutes to fts_wd_start.
+> added WDIOF_MAGICCLOSE
+> cleanup fts_wd_set_resolution return code
+> 
+> v4:
+> fixed Kconfig indention
+> removed watchdog_resolution var from fts_data struct
+> removed compile warnings (W=1)
+> fixed checkpatch --strict warnings and errors
+> WDOG_ACTIVE => WDOG_HW_RUNNING
+> watchdog max_timeout in seconds
+> removed unnecessary error checks
+> fts_remove cleanup
+> fts_probe removed unneeded gotos and cleanup code
+> 
+> Signed-off-by: Thilo Cestonaro <thilo@cestona.ro>
 > ---
->   drivers/hwmon/jc42.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-> index 9887d32..1537ba0 100644
-> --- a/drivers/hwmon/jc42.c
-> +++ b/drivers/hwmon/jc42.c
-> @@ -538,7 +538,7 @@ static const struct i2c_device_id jc42_id[] = {
->   MODULE_DEVICE_TABLE(i2c, jc42_id);
->
->   static struct i2c_driver jc42_driver = {
-> -	.class		= I2C_CLASS_SPD,
-> +	.class		= I2C_CLASS_SPD | I2C_CLASS_HWMON,
->   	.driver = {
->   		.name	= "jc42",
->   		.pm = JC42_DEV_PM_OPS,
->
 
+The changelog should be here, after '---', to be removed automatically
+when the patch is applied.
+
+>  Documentation/hwmon/ftsteutates |  23 ++
+>  drivers/hwmon/Kconfig           |  11 +
+>  drivers/hwmon/Makefile          |   1 +
+>  drivers/hwmon/ftsteutates.c     | 784 ++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 819 insertions(+)
+>  create mode 100644 Documentation/hwmon/ftsteutates
+>  create mode 100644 drivers/hwmon/ftsteutates.c
+> 
+> diff --git a/Documentation/hwmon/ftsteutates b/Documentation/hwmon/ftsteutates
+> new file mode 100644
+> index 0000000..2a1bf69
+> --- /dev/null
+> +++ b/Documentation/hwmon/ftsteutates
+> @@ -0,0 +1,23 @@
+> +Kernel driver ftsteutates
+> +=====================
+> +
+> +Supported chips:
+> +  * FTS Teutates
+> +    Prefix: 'ftsteutates'
+> +    Addresses scanned: I2C 0x73 (7-Bit)
+> +
+> +Author: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+> +
+> +
+> +Description
+> +-----------
+> +The BMC Teutates is the Eleventh generation of Superior System
+> +monitoring and thermal management solution. It is builds on the basic
+> +functionality of the BMC Theseus and contains several new features and
+> +enhancements. It can monitor up to 4 voltages, 16 temperatures and
+> +8 fans. It also contains an integrated watchdog which is currently
+> +implemented in this driver.
+> +
+> +Specification of the chip can be found here:
+> +ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
+> +ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index ff94007..fd6234c 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -486,6 +486,17 @@ config SENSORS_FSCHMD
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called fschmd.
+>  
+> +config SENSORS_FTSTEUTATES
+> +	tristate "Fujitsu Technology Solutions sensor chip Teutates"
+> +	depends on I2C
+> +	help
+> +	  If you say yes here you get support for the Fujitsu Technology
+> +	  Solutions (FTS) sensor chip "Teutates" including support for
+> +	  the integrated watchdog.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called ftsteutates.
+> +
+>  config SENSORS_GL518SM
+>  	tristate "Genesys Logic GL518SM"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 2ef5b7c..dcad5f7 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -62,6 +62,7 @@ obj-$(CONFIG_SENSORS_F71882FG)	+= f71882fg.o
+>  obj-$(CONFIG_SENSORS_F75375S)	+= f75375s.o
+>  obj-$(CONFIG_SENSORS_FAM15H_POWER) += fam15h_power.o
+>  obj-$(CONFIG_SENSORS_FSCHMD)	+= fschmd.o
+> +obj-$(CONFIG_SENSORS_FTSTEUTATES) += ftsteutates.o
+>  obj-$(CONFIG_SENSORS_G760A)	+= g760a.o
+>  obj-$(CONFIG_SENSORS_G762)	+= g762.o
+>  obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+> diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+> new file mode 100644
+> index 0000000..c0fac9e
+> --- /dev/null
+> +++ b/drivers/hwmon/ftsteutates.c
+> @@ -0,0 +1,784 @@
+> +/*
+> + * fts.c, Support for the FTS Systemmonitoring Chip "Teutates"
+
+Not really fts.c. I would suggest to drop the file name; it does not add
+value.
+
+> + *
+> + * Copyright (C) 2016 Fujitsu Technology Solutions GmbH,
+> + *		  Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; either version 2 of the License, or
+> + * (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + *
+> + */
+> +#include <linux/err.h>
+> +#include <linux/fs.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/slab.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/version.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define FTS_DEVICE_ID_REG		0x0000
+> +#define FTS_DEVICE_REVISION_REG		0x0001
+> +#define FTS_DEVICE_STATUS_REG		0x0004
+> +#define FTS_SATELLITE_STATUS_REG	0x0005
+> +#define FTS_EVENT_STATUS_REG		0x0006
+> +#define FTS_GLOBAL_CONTROL_REG		0x0007
+> +
+> +#define FTS_SENSOR_EVENT_REG		0x0010
+> +
+> +#define FTS_FAN_EVENT_REG		0x0014
+> +#define FTS_FAN_PRESENT_REG		0x0015
+> +
+> +#define FTS_POWER_ON_TIME_COUNTER_A	0x007A
+> +#define FTS_POWER_ON_TIME_COUNTER_B	0x007B
+> +#define FTS_POWER_ON_TIME_COUNTER_C	0x007C
+> +
+> +#define FTS_PAGE_SELECT_REG		0x007F
+> +
+> +#define FTS_WATCHDOG_TIME_PRESET	0x000B
+> +#define FTS_WATCHDOG_CONTROL		0x5081
+> +
+> +#define FTS_NO_FAN_SENSORS		0x08
+> +#define FTS_NO_TEMP_SENSORS		0x10
+> +#define FTS_NO_VOLT_SENSORS		0x04
+> +
+> +static struct i2c_device_id fts_id[] = {
+> +	{ "ftsteutates", 0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, fts_id);
+> +
+> +struct fts_data {
+> +	struct i2c_client *client;
+> +	/* update sensor data lock */
+> +	struct mutex update_lock;
+> +	/* read/write register lock */
+> +	struct mutex access_lock;
+> +	unsigned long last_updated; /* in jiffies */
+> +	struct watchdog_device wdd;
+> +	bool valid; /* false until following fields are valid */
+> +
+> +	u8 volt[FTS_NO_VOLT_SENSORS];
+> +
+> +	u8 temp_input[FTS_NO_TEMP_SENSORS];
+> +	u8 temp_alarm;
+> +
+> +	u8 fan_present;
+> +	u8 fan_input[FTS_NO_FAN_SENSORS]; /* in rps */
+> +	u8 fan_source[FTS_NO_FAN_SENSORS];
+> +	u8 fan_alarm;
+> +};
+> +
+> +#define FTS_REG_FAN_INPUT(idx) ((idx) + 0x20)
+> +#define FTS_REG_FAN_SOURCE(idx) ((idx) + 0x30)
+> +#define FTS_REG_FAN_CONTROL(idx) (((idx) << 16) + 0x4881)
+> +
+> +#define FTS_REG_TEMP_INPUT(idx) ((idx) + 0x40)
+> +#define FTS_REG_TEMP_CONTROL(idx) (((idx) << 16) + 0x0681)
+> +
+> +#define FTS_REG_VOLT(idx) ((idx) + 0x18)
+> +
+> +/*****************************************************************************/
+> +/* I2C Helper functions							     */
+> +/*****************************************************************************/
+> +static int fts_read_byte(struct i2c_client *client, unsigned short reg)
+> +{
+> +	int ret;
+> +	unsigned char page = reg >> 8;
+> +	struct fts_data *data = dev_get_drvdata(&client->dev);
+> +
+> +	mutex_lock(&data->access_lock);
+> +
+> +	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
+> +	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	reg &= 0xFF;
+> +	ret = i2c_smbus_read_byte_data(client, reg);
+> +	dev_dbg(&client->dev, "read - reg: 0x%.02x: val: 0x%.02x\n", reg, ret);
+> +
+> +error:
+> +	mutex_unlock(&data->access_lock);
+> +	return ret;
+> +}
+> +
+> +static int fts_write_byte(struct i2c_client *client, unsigned short reg,
+> +			  unsigned char value)
+> +{
+> +	int ret;
+> +	unsigned char page = reg >> 8;
+> +	struct fts_data *data = dev_get_drvdata(&client->dev);
+> +
+> +	mutex_lock(&data->access_lock);
+> +
+> +	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
+> +	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	reg &= 0xFF;
+> +	dev_dbg(&client->dev,
+> +		"write - reg: 0x%.02x: val: 0x%.02x\n", reg, value);
+> +	ret = i2c_smbus_write_byte_data(client, reg, value);
+> +
+> +error:
+> +	mutex_unlock(&data->access_lock);
+> +	return ret;
+> +}
+> +
+> +/*****************************************************************************/
+> +/* Data Updater Helper function						     */
+> +/*****************************************************************************/
+> +static int fts_update_device(struct fts_data *data)
+> +{
+> +	int i;
+> +	int err = 0;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	if (!time_after(jiffies, data->last_updated + 2 * HZ) && data->valid)
+> +		goto exit;
+> +
+> +	err = fts_read_byte(data->client, FTS_DEVICE_STATUS_REG);
+> +	if (err < 0)
+> +		goto exit;
+> +
+> +	data->valid = !!(err & 0x02); /* Data not ready yet */
+> +	if (unlikely(!data->valid)) {
+> +		err = -EAGAIN;
+> +		goto exit;
+> +	}
+> +
+> +	err = fts_read_byte(data->client, FTS_FAN_PRESENT_REG);
+> +	if (err < 0)
+> +		goto exit;
+> +	data->fan_present = err;
+> +
+> +	err = fts_read_byte(data->client, FTS_FAN_EVENT_REG);
+> +	if (err < 0)
+> +		goto exit;
+> +	data->fan_alarm = err;
+> +
+> +	for (i = 0; i < FTS_NO_FAN_SENSORS; i++) {
+> +		if (data->fan_present & BIT(i)) {
+> +			err = fts_read_byte(data->client, FTS_REG_FAN_INPUT(i));
+> +			if (err < 0)
+> +				goto exit;
+> +			data->fan_input[i] = err;
+> +
+> +			err = fts_read_byte(data->client,
+> +					    FTS_REG_FAN_SOURCE(i));
+> +			if (err < 0)
+> +				goto exit;
+> +			data->fan_source[i] = err;
+> +		} else {
+> +			data->fan_input[i] = 0;
+> +			data->fan_source[i] = 0;
+> +		}
+> +	}
+> +
+> +	err = fts_read_byte(data->client, FTS_SENSOR_EVENT_REG);
+> +	if (err < 0)
+> +		goto exit;
+> +	data->temp_alarm = err;
+> +
+> +	for (i = 0; i < FTS_NO_TEMP_SENSORS; i++) {
+> +		err = fts_read_byte(data->client, FTS_REG_TEMP_INPUT(i));
+> +		if (err < 0)
+> +			goto exit;
+> +		data->temp_input[i] = err;
+> +	}
+> +
+> +	for (i = 0; i < FTS_NO_VOLT_SENSORS; i++) {
+> +		err = fts_read_byte(data->client, FTS_REG_VOLT(i));
+> +		if (err < 0)
+> +			goto exit;
+> +		data->volt[i] = err;
+> +	}
+> +	data->last_updated = jiffies;
+> +	err = 0;
+> +exit:
+> +	mutex_unlock(&data->update_lock);
+> +	return err;
+> +}
+> +
+> +/*****************************************************************************/
+> +/* Watchdog functions							     */
+> +/*****************************************************************************/
+> +static int fts_wd_set_resolution(struct fts_data *data, bool seconds)
+> +{
+> +	int ret;
+> +
+> +	ret = fts_read_byte(data->client, FTS_WATCHDOG_CONTROL);
+> +	if (ret < 0)
+> +		return ret;
+> +
+
+This function is called from fts_wd_start(), ie for each ping. Given that it
+performs two i2c reads, followed by two i2c writes, it may be better
+to check if changing the bit is really necessary instead of setting/clearing
+it unconditionally, to avoid unnecessary i2c traffic.
+
+Options would be to call the function from the set_timeout function,
+not from fts_wd_start(), or to maintain a variable with the current
+control register content, and only write it after it changed.
+
+> +	return fts_write_byte(data->client, FTS_WATCHDOG_CONTROL,
+> +			     seconds ? ret | BIT(1) : ret & ~BIT(1));
+> +}
+> +
+> +static int fts_wd_start(struct watchdog_device *wdd)
+> +{
+> +	struct fts_data *data;
+> +	bool seconds;
+> +	int ret, timeout;
+> +
+> +	data = watchdog_get_drvdata(wdd);
+> +	timeout = wdd->timeout;
+> +	seconds = true;
+> +
+> +	/* switch watchdog resolution to minutes if timeout does not fit
+> +	 * into a byte
+> +	 */
+> +	if (timeout > 0xFF) {
+> +		timeout = DIV_ROUND_UP(timeout, 60);
+> +		seconds = false;
+> +	}
+> +
+> +	ret = fts_wd_set_resolution(data, seconds);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return fts_write_byte(data->client, FTS_WATCHDOG_TIME_PRESET, timeout);
+> +}
+> +
+> +static int fts_wd_stop(struct watchdog_device *wdd)
+> +{
+> +	struct fts_data *data;
+> +
+> +	data = watchdog_get_drvdata(wdd);
+> +	return fts_write_byte(data->client, FTS_WATCHDOG_TIME_PRESET, 0);
+> +}
+> +
+> +static const struct watchdog_info fts_wd_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	.identity = "FTS Teutates Hardware Watchdog",
+> +};
+> +
+> +static const struct watchdog_ops fts_wd_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = fts_wd_start,
+> +	.stop = fts_wd_stop,
+> +};
+> +
+> +static int fts_watchdog_init(struct fts_data *data)
+> +{
+> +	int timeout, ret;
+> +
+> +	watchdog_set_drvdata(&data->wdd, data);
+> +
+> +	timeout = fts_read_byte(data->client, FTS_WATCHDOG_TIME_PRESET);
+> +	if (timeout < 0)
+> +		return timeout;
+> +
+> +	/* watchdog not running, set timeout to a default of 60 sec. */
+> +	if (timeout == 0) {
+> +		/* resolution = seconds */
+> +		ret = fts_wd_set_resolution(data, true);
+> +		if (ret < 0)
+> +			return ret;
+> +		data->wdd.timeout = 60;
+> +	} else {
+> +		ret = fts_read_byte(data->client, FTS_WATCHDOG_CONTROL);
+> +		if (ret < 0)
+> +			return ret;
+> +		data->wdd.timeout = (ret & BIT(1) ? 1 : 60) * timeout;
+> +		data->wdd.status |= BIT(WDOG_HW_RUNNING);
+> +	}
+> +
+> +	/* Register our watchdog part */
+> +	data->wdd.info = &fts_wd_info;
+> +	data->wdd.ops = &fts_wd_ops;
+> +	data->wdd.parent = &data->client->dev;
+> +	data->wdd.min_timeout = 1;
+> +	data->wdd.max_timeout = 0xFF * 60; /* max timeout 255 minutes. */
+> +	return watchdog_register_device(&data->wdd);
+> +}
+> +
+> +/*****************************************************************************/
+> +/* SysFS handler functions						     */
+> +/*****************************************************************************/
+> +static ssize_t show_in_value(struct device *dev,
+> +			     struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%u\n", data->volt[index]);
+> +}
+> +
+> +static ssize_t show_temp_value(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%u\n", data->temp_input[index]);
+> +}
+> +
+> +static ssize_t show_temp_fault(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	/* 00h Temperature = Sensor Error */
+> +	return sprintf(buf, "%d\n", data->temp_input[index] == 0);
+> +}
+> +
+> +static ssize_t show_temp_alarm(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%u\n", !!(data->temp_alarm & BIT(index)));
+> +}
+> +
+> +static ssize_t
+> +clear_temp_alarm(struct device *dev, struct device_attribute *devattr,
+> +		 const char *buf, size_t count)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	long ret;
+> +
+> +	ret = fts_update_device(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (kstrtoul(buf, 10, &ret) || ret != 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	ret = fts_read_byte(data->client, FTS_REG_TEMP_CONTROL(index));
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	ret = fts_write_byte(data->client, FTS_REG_TEMP_CONTROL(index),
+> +			     ret | 0x1);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	data->valid = false;
+> +error:
+> +	mutex_unlock(&data->update_lock);
+> +	return ret;
+> +}
+> +
+> +static ssize_t show_fan_value(struct device *dev,
+> +			      struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%u\n", data->fan_input[index]);
+> +}
+> +
+> +static ssize_t show_fan_source(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%u\n", data->fan_source[index]);
+> +}
+> +
+> +static ssize_t show_fan_alarm(struct device *dev,
+> +			      struct device_attribute *devattr, char *buf)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	int err;
+> +
+> +	err = fts_update_device(data);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return sprintf(buf, "%d\n", !!(data->fan_alarm & BIT(index)));
+> +}
+> +
+> +static ssize_t
+> +clear_fan_alarm(struct device *dev, struct device_attribute *devattr,
+> +		const char *buf, size_t count)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(dev);
+> +	int index = to_sensor_dev_attr(devattr)->index;
+> +	long ret;
+> +
+> +	ret = fts_update_device(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (kstrtoul(buf, 10, &ret) || ret != 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->update_lock);
+> +	ret = fts_read_byte(data->client, FTS_REG_FAN_CONTROL(index));
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	ret = fts_write_byte(data->client, FTS_REG_FAN_CONTROL(index),
+> +			     ret | 0x1);
+> +	if (ret < 0)
+> +		goto error;
+> +
+> +	data->valid = false;
+> +error:
+> +	mutex_unlock(&data->update_lock);
+> +	return ret;
+> +}
+> +
+> +/*****************************************************************************/
+> +/* SysFS structs							     */
+> +/*****************************************************************************/
+> +
+> +/* Temprature sensors */
+> +static SENSOR_DEVICE_ATTR(temp1_input,  S_IRUGO, show_temp_value, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(temp2_input,  S_IRUGO, show_temp_value, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(temp3_input,  S_IRUGO, show_temp_value, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(temp4_input,  S_IRUGO, show_temp_value, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(temp5_input,  S_IRUGO, show_temp_value, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(temp6_input,  S_IRUGO, show_temp_value, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(temp7_input,  S_IRUGO, show_temp_value, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(temp8_input,  S_IRUGO, show_temp_value, NULL, 7);
+> +static SENSOR_DEVICE_ATTR(temp9_input,  S_IRUGO, show_temp_value, NULL, 8);
+> +static SENSOR_DEVICE_ATTR(temp10_input, S_IRUGO, show_temp_value, NULL, 9);
+> +static SENSOR_DEVICE_ATTR(temp11_input, S_IRUGO, show_temp_value, NULL, 10);
+> +static SENSOR_DEVICE_ATTR(temp12_input, S_IRUGO, show_temp_value, NULL, 11);
+> +static SENSOR_DEVICE_ATTR(temp13_input, S_IRUGO, show_temp_value, NULL, 12);
+> +static SENSOR_DEVICE_ATTR(temp14_input, S_IRUGO, show_temp_value, NULL, 13);
+> +static SENSOR_DEVICE_ATTR(temp15_input, S_IRUGO, show_temp_value, NULL, 14);
+> +static SENSOR_DEVICE_ATTR(temp16_input, S_IRUGO, show_temp_value, NULL, 15);
+> +
+> +static SENSOR_DEVICE_ATTR(temp1_fault,  S_IRUGO, show_temp_fault, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(temp2_fault,  S_IRUGO, show_temp_fault, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(temp3_fault,  S_IRUGO, show_temp_fault, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(temp4_fault,  S_IRUGO, show_temp_fault, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(temp5_fault,  S_IRUGO, show_temp_fault, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(temp6_fault,  S_IRUGO, show_temp_fault, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(temp7_fault,  S_IRUGO, show_temp_fault, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(temp8_fault,  S_IRUGO, show_temp_fault, NULL, 7);
+> +static SENSOR_DEVICE_ATTR(temp9_fault,  S_IRUGO, show_temp_fault, NULL, 8);
+> +static SENSOR_DEVICE_ATTR(temp10_fault, S_IRUGO, show_temp_fault, NULL, 9);
+> +static SENSOR_DEVICE_ATTR(temp11_fault, S_IRUGO, show_temp_fault, NULL, 10);
+> +static SENSOR_DEVICE_ATTR(temp12_fault, S_IRUGO, show_temp_fault, NULL, 11);
+> +static SENSOR_DEVICE_ATTR(temp13_fault, S_IRUGO, show_temp_fault, NULL, 12);
+> +static SENSOR_DEVICE_ATTR(temp14_fault, S_IRUGO, show_temp_fault, NULL, 13);
+> +static SENSOR_DEVICE_ATTR(temp15_fault, S_IRUGO, show_temp_fault, NULL, 14);
+> +static SENSOR_DEVICE_ATTR(temp16_fault, S_IRUGO, show_temp_fault, NULL, 15);
+> +
+> +static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 0);
+> +static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 1);
+> +static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 2);
+> +static SENSOR_DEVICE_ATTR(temp4_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 3);
+> +static SENSOR_DEVICE_ATTR(temp5_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 4);
+> +static SENSOR_DEVICE_ATTR(temp6_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 5);
+> +static SENSOR_DEVICE_ATTR(temp7_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 6);
+> +static SENSOR_DEVICE_ATTR(temp8_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 7);
+> +static SENSOR_DEVICE_ATTR(temp9_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 8);
+> +static SENSOR_DEVICE_ATTR(temp10_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 9);
+> +static SENSOR_DEVICE_ATTR(temp11_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 10);
+> +static SENSOR_DEVICE_ATTR(temp12_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 11);
+> +static SENSOR_DEVICE_ATTR(temp13_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 12);
+> +static SENSOR_DEVICE_ATTR(temp14_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 13);
+> +static SENSOR_DEVICE_ATTR(temp15_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 14);
+> +static SENSOR_DEVICE_ATTR(temp16_alarm, S_IRUGO | S_IWUSR, show_temp_alarm,
+> +			  clear_temp_alarm, 15);
+> +
+> +static struct attribute *fts_temp_attrs[] = {
+> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp2_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp3_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp4_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp5_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp6_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp7_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp8_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp9_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp10_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp11_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp12_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp13_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp14_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp15_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp16_input.dev_attr.attr,
+> +
+> +	&sensor_dev_attr_temp1_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp2_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp3_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp4_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp5_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp6_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp7_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp8_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp9_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp10_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp11_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp12_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp13_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp14_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp15_fault.dev_attr.attr,
+> +	&sensor_dev_attr_temp16_fault.dev_attr.attr,
+> +
+> +	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp2_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp4_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp5_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp6_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp7_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp8_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp9_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp10_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp11_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp12_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp13_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp14_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp15_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_temp16_alarm.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +/* Fans */
+> +static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, show_fan_value, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, show_fan_value, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, show_fan_value, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(fan4_input, S_IRUGO, show_fan_value, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(fan5_input, S_IRUGO, show_fan_value, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(fan6_input, S_IRUGO, show_fan_value, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(fan7_input, S_IRUGO, show_fan_value, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(fan8_input, S_IRUGO, show_fan_value, NULL, 7);
+> +
+> +static SENSOR_DEVICE_ATTR(fan1_source, S_IRUGO, show_fan_source, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(fan2_source, S_IRUGO, show_fan_source, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(fan3_source, S_IRUGO, show_fan_source, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(fan4_source, S_IRUGO, show_fan_source, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(fan5_source, S_IRUGO, show_fan_source, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(fan6_source, S_IRUGO, show_fan_source, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(fan7_source, S_IRUGO, show_fan_source, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(fan8_source, S_IRUGO, show_fan_source, NULL, 7);
+> +
+> +static SENSOR_DEVICE_ATTR(fan1_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 0);
+> +static SENSOR_DEVICE_ATTR(fan2_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 1);
+> +static SENSOR_DEVICE_ATTR(fan3_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 2);
+> +static SENSOR_DEVICE_ATTR(fan4_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 3);
+> +static SENSOR_DEVICE_ATTR(fan5_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 4);
+> +static SENSOR_DEVICE_ATTR(fan6_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 5);
+> +static SENSOR_DEVICE_ATTR(fan7_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 6);
+> +static SENSOR_DEVICE_ATTR(fan8_alarm, S_IRUGO | S_IWUSR,
+> +			 show_fan_alarm, clear_fan_alarm, 7);
+> +
+> +static struct attribute *fts_fan_attrs[] = {
+> +	&sensor_dev_attr_fan1_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan2_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan3_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan4_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan5_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan6_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan7_input.dev_attr.attr,
+> +	&sensor_dev_attr_fan8_input.dev_attr.attr,
+> +
+> +	&sensor_dev_attr_fan1_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan2_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan3_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan4_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan5_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan6_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan7_source.dev_attr.attr,
+> +	&sensor_dev_attr_fan8_source.dev_attr.attr,
+> +
+> +	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan3_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan4_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan5_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan6_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan7_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_fan8_alarm.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +/* Voltages */
+> +static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, show_in_value, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, show_in_value, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, show_in_value, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, show_in_value, NULL, 3);
+> +static struct attribute *fts_voltage_attrs[] = {
+> +	&sensor_dev_attr_in1_input.dev_attr.attr,
+> +	&sensor_dev_attr_in2_input.dev_attr.attr,
+> +	&sensor_dev_attr_in3_input.dev_attr.attr,
+> +	&sensor_dev_attr_in4_input.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group fts_voltage_attr_group = {
+> +	.attrs = fts_voltage_attrs
+> +};
+> +
+> +static const struct attribute_group fts_temp_attr_group = {
+> +	.attrs = fts_temp_attrs
+> +};
+> +
+> +static const struct attribute_group fts_fan_attr_group = {
+> +	.attrs = fts_fan_attrs
+> +};
+> +
+> +static const struct attribute_group *fts_attr_groups[] = {
+> +	&fts_voltage_attr_group,
+> +	&fts_temp_attr_group,
+> +	&fts_fan_attr_group,
+> +	NULL
+> +};
+> +
+> +/*****************************************************************************/
+> +/* Module initialization / remove functions				     */
+> +/*****************************************************************************/
+> +static int fts_remove(struct i2c_client *client)
+> +{
+> +	struct fts_data *data = dev_get_drvdata(&client->dev);
+> +
+> +	watchdog_unregister_device(&data->wdd);
+> +	return 0;
+> +}
+> +
+> +static int fts_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> +{
+> +	u8 revision;
+> +	struct fts_data *data;
+> +	int err;
+> +	s8 deviceid;
+> +	struct device *hwmon_dev;
+> +
+> +	if (client->addr != 0x73)
+> +		return -ENODEV;
+> +
+> +	/* Baseboard Management Controller check */
+> +	deviceid = i2c_smbus_read_byte_data(client, FTS_DEVICE_ID_REG);
+> +	if (deviceid > 0 && (deviceid & 0xF0) == 0x10) {
+> +		switch (deviceid & 0x0F) {
+> +		case 0x01:
+> +			break;
+> +		default:
+> +			dev_dbg(&client->dev,
+> +				"No Baseboard Management Controller\n");
+> +			return -ENODEV;
+> +		}
+> +	} else {
+> +		dev_dbg(&client->dev, "No fujitsu board\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct fts_data),
+> +			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	mutex_init(&data->update_lock);
+> +	mutex_init(&data->access_lock);
+> +	data->client = client;
+> +	dev_set_drvdata(&client->dev, data);
+> +
+> +	err = i2c_smbus_read_byte_data(client, FTS_DEVICE_REVISION_REG);
+> +	if (err < 0)
+> +		return err;
+> +	revision = err;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
+> +							   "ftsteutates",
+> +							   data,
+> +							   fts_attr_groups);
+> +	if (IS_ERR(hwmon_dev))
+> +		return PTR_ERR(hwmon_dev);
+> +
+> +	err = fts_watchdog_init(data);
+> +	if (err)
+> +		return err;
+> +
+> +	dev_info(&client->dev, "Detected FTS Teutates chip, revision: %d.%d\n",
+> +		 (revision & 0xF0) >> 4, revision & 0x0F);
+> +	return 0;
+> +}
+> +
+> +/*****************************************************************************/
+> +/* Module Details							     */
+> +/*****************************************************************************/
+> +static struct i2c_driver fts_driver = {
+> +	.driver = {
+> +		.name = "ftsteutates",
+> +	},
+> +	.id_table = fts_id,
+> +	.probe = fts_probe,
+> +	.remove = fts_remove,
+> +};
+> +
+> +module_i2c_driver(fts_driver);
+> +
+> +MODULE_AUTHOR("Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>");
+> +MODULE_DESCRIPTION("FTS Teutates driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.8.1
+> 
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
