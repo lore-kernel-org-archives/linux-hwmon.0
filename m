@@ -1,155 +1,45 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f68.google.com ([74.125.82.68]:34743 "EHLO
-	mail-wm0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751658AbcGHWz4 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jul 2016 18:55:56 -0400
-Received: by mail-wm0-f68.google.com with SMTP id w75so9804029wmd.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 Jul 2016 15:55:55 -0700 (PDT)
-MIME-Version: 1.0
-In-Reply-To: <20160708184907.GA26680@roeck-us.net>
-References: <1467948120-25304-1-git-send-email-mranostay@gmail.com> <20160708184907.GA26680@roeck-us.net>
+Received: from mail-pf0-f193.google.com ([209.85.192.193]:36459 "EHLO
+	mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753672AbcGHCqX (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2016 22:46:23 -0400
+Received: by mail-pf0-f193.google.com with SMTP id i123so3308434pfg.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 Jul 2016 19:46:23 -0700 (PDT)
 From: Matt Ranostay <mranostay@gmail.com>
-Date: Fri, 8 Jul 2016 15:55:14 -0700
-Message-ID: <CAKzfze9iXvMYYnt9Eob7MsA8UdA8wzH1zn87mjH21oFGG3eG1g@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: sht3x: add humidity heater element control
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, David Frey <david.frey@sensirion.com>
-Content-Type: text/plain; charset=UTF-8
+To: linux-hwmon@vger.kernel.org
+Cc: Matt Ranostay <mranostay@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	David Frey <david.frey@sensirion.com>
+Subject: [PATCH] hwmon: sht3x: set initial jiffies to last_update
+Date: Thu,  7 Jul 2016 19:46:11 -0700
+Message-Id: <1467945971-23798-1-git-send-email-mranostay@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 8, 2016 at 11:49 AM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On Thu, Jul 07, 2016 at 08:22:00PM -0700, Matt Ranostay wrote:
->> The enables control of the SHT31 sensors heating element that can turned
->> on to remove excess humidity.
->>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: David Frey <david.frey@sensirion.com>
->> Signed-off-by: Matt Ranostay <mranostay@gmail.com>
->> ---
->>  Documentation/hwmon/sht3x |  2 ++
->>  drivers/hwmon/sht3x.c     | 52 +++++++++++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 54 insertions(+)
->>
->> diff --git a/Documentation/hwmon/sht3x b/Documentation/hwmon/sht3x
->> index f5aa633ed383..fb1d3f1d641f 100644
->> --- a/Documentation/hwmon/sht3x
->> +++ b/Documentation/hwmon/sht3x
->> @@ -67,6 +67,8 @@ temp1_alarm:        alarm flag is set to 1 if the temperature is outside the
->>                      configured limits. Alarm only works in periodic measure mode
->>  humidity1_alarm:    alarm flag is set to 1 if the humidity is outside the
->>                      configured limits. Alarm only works in periodic measure mode
->> +heater_enable:      heater enable, 1 for heating element turned on. Heating
->> +                    element removes excess humidity from sensor
->
-> 0 for off
+Handling the wraparound requires the data->last_update to be set to an
+initial jiffies value. Otherwise you can start in a state where the
+sensor will never request a reading.
 
-Ok I'll add that note.
->
->>  update_interval:    update interval, 0 for single shot, interval in msec
->>                      for periodic measurement. If the interval is not supported
->>                      by the sensor, the next faster interval is chosen
->> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
->> index b2c655add70e..05a925257938 100644
->> --- a/drivers/hwmon/sht3x.c
->> +++ b/drivers/hwmon/sht3x.c
->> @@ -44,6 +44,10 @@ static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
->>  static const unsigned char sht3x_cmd_measure_periodic_mode[]   = { 0xe0, 0x00 };
->>  static const unsigned char sht3x_cmd_break[]                   = { 0x30, 0x93 };
->>
->> +/* commands for heater control */
->> +static const unsigned char sht3x_cmd_heater_on[]               = { 0x30, 0x6d };
->> +static const unsigned char sht3x_cmd_heater_off[]              = { 0x30, 0x66 };
->> +
->>  /* other commands */
->>  static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
->>  static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
->> @@ -507,6 +511,51 @@ static ssize_t humidity1_alarm_show(struct device *dev,
->>       return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x08));
->>  }
->>
->> +static ssize_t heater_enable_show(struct device *dev,
->> +                               struct device_attribute *attr,
->> +                               char *buf)
->> +{
->> +     char buffer[SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
->> +     int ret;
->> +
->> +     ret = status_register_read(dev, attr, buffer,
->> +                                SHT3X_WORD_LEN + SHT3X_CRC8_LEN);
->> +     if (ret)
->> +             return ret;
->> +
->> +     return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x20));
->> +}
->> +
->> +static ssize_t heater_enable_store(struct device *dev,
->> +                                struct device_attribute *attr,
->> +                                const char *buf,
->> +                                size_t count)
->> +{
->> +     struct sht3x_data *data = dev_get_drvdata(dev);
->> +     struct i2c_client *client = data->client;
->> +     int ret;
->> +     int status;
->> +
->> +     ret = kstrtoint(buf, 0, &status);
->
-> kstrtobool() might be more appropriate here. Otherwise it is 0 for off, any
-> other value (including negative values) for on, which would be a bit odd.
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: David Frey <david.frey@sensirion.com>
+Signed-off-by: Matt Ranostay <mranostay@gmail.com>
+---
+ drivers/hwmon/sht3x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah noted.
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index 450645b6053d..05a925257938 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -722,7 +722,7 @@ static int sht3x_probe(struct i2c_client *client,
+ 	data->setup.blocking_io = false;
+ 	data->setup.high_precision = true;
+ 	data->mode = 0;
+-	data->last_update = 0;
++	data->last_update = jiffies;
+ 	data->client = client;
+ 	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+ 
+-- 
+2.7.4
 
->
->> +     if (ret)
->> +             return ret;
->> +
->> +     mutex_lock(&data->data_lock);
->
-> I don't see why data_lock would be necessary here.
-
-Ah good point.
-
->
->> +     mutex_lock(&data->i2c_lock);
->> +
->> +     if (status)
->> +             ret = i2c_master_send(client, (char *) &sht3x_cmd_heater_on,
->> +                                   SHT3X_CMD_LENGTH);
->> +     else
->> +             ret = i2c_master_send(client, (char *) &sht3x_cmd_heater_off,
->> +                                   SHT3X_CMD_LENGTH);
->> +
->> +     mutex_unlock(&data->i2c_lock);
->> +     mutex_unlock(&data->data_lock);
->> +
->> +     return ret;
->> +}
->> +
->>  static ssize_t update_interval_show(struct device *dev,
->>                                   struct device_attribute *attr,
->>                                   char *buf)
->> @@ -612,6 +661,8 @@ static SENSOR_DEVICE_ATTR(humidity1_min_hyst, S_IRUGO | S_IWUSR,
->>  static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, temp1_alarm_show, NULL, 0);
->>  static SENSOR_DEVICE_ATTR(humidity1_alarm, S_IRUGO, humidity1_alarm_show,
->>                         NULL, 0);
->> +static SENSOR_DEVICE_ATTR(heater_enable, S_IRUGO | S_IWUSR,
->> +                       heater_enable_show, heater_enable_store, 0);
->>  static SENSOR_DEVICE_ATTR(update_interval, S_IRUGO | S_IWUSR,
->>                         update_interval_show, update_interval_store, 0);
->>
->> @@ -628,6 +679,7 @@ static struct attribute *sht3x_attrs[] = {
->>       &sensor_dev_attr_humidity1_min_hyst.dev_attr.attr,
->>       &sensor_dev_attr_temp1_alarm.dev_attr.attr,
->>       &sensor_dev_attr_humidity1_alarm.dev_attr.attr,
->> +     &sensor_dev_attr_heater_enable.dev_attr.attr,
->>       &sensor_dev_attr_update_interval.dev_attr.attr,
->>       NULL
->>  };
->> --
->> 2.7.4
->>
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
