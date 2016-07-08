@@ -1,108 +1,129 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57892 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754746AbcGHNsc (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jul 2016 09:48:32 -0400
-Subject: Re: [PATCH 0/5] hwmon: New hwmon registration API
-To: Punit Agrawal <punit.agrawal@arm.com>
-References: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
- <87d1mobhnm.fsf@e105922-lin.cambridge.arm.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Eduardo Valentin <edubezval@gmail.com>,
-	linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <577FAF18.7000408@roeck-us.net>
-Date: Fri, 8 Jul 2016 06:48:08 -0700
-MIME-Version: 1.0
-In-Reply-To: <87d1mobhnm.fsf@e105922-lin.cambridge.arm.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:33510 "EHLO
+	mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753600AbcGHDWO (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jul 2016 23:22:14 -0400
+Received: by mail-pf0-f196.google.com with SMTP id c74so3429494pfb.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 Jul 2016 20:22:14 -0700 (PDT)
+From: Matt Ranostay <mranostay@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Matt Ranostay <mranostay@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	David Frey <david.frey@sensirion.com>
+Subject: [PATCH] hwmon: sht3x: add humidity heater element control
+Date: Thu,  7 Jul 2016 20:22:00 -0700
+Message-Id: <1467948120-25304-1-git-send-email-mranostay@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Punit,
+The enables control of the SHT31 sensors heating element that can turned
+on to remove excess humidity.
 
-On 07/08/2016 02:31 AM, Punit Agrawal wrote:
-> Hi Guenter,
->
-> Guenter Roeck <linux@roeck-us.net> writes:
->
->> Up to now, each hwmon driver has to implement its own sysfs attributes.
->> This requires a lot of template code, and distracts from the driver's
->> core function to read and write chip registers.
->>
->> To be able to reduce driver complexity, move sensor attribute handling
->> and thermal zone registration into the hwmon core. By using the new API,
->> driver size is typically reduced by 20-50% depending on driver complexity
->> and the number of sysfs attributes supported.
->>
->> The first patch of the series introduces the API as well as support
->> for temperature sensors. Subsequent patches introduce support for
->> voltage, current, power, energy, humidity, and fan speed sensors.
->>
->> The series was tested by converting several drivers (lm75, lm90, tmp102,
->> tmp421, ltc4245) to the new API. Testing was done with with real chips
->> as well as with the hwmon driver module test code available at
->> https://github.com/groeck/module-tests.
->
-> I like this series - it takes all of the attributes' handling out of the
-> individual driver code and moving it to hwmon core.
->
-> Having attempted a port of scpi-hwmon.c, I think that driver will not
-> gain a big savings in line count. Though it'll help separate access to
-> sensors from sysfs related code - which I think is worth the change.
->
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: David Frey <david.frey@sensirion.com>
+Signed-off-by: Matt Ranostay <mranostay@gmail.com>
+---
+ Documentation/hwmon/sht3x |  2 ++
+ drivers/hwmon/sht3x.c     | 52 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
- From what I have seen, savings are for the most part on the binary image size.
-I have not seen much if any savings in terms of LOC, though that may in part
-be because of my coding style.
-
-Here is the result from the conversions I have done so far.
-
-Old:
-
-    text	   data	    bss	    dec	    hex	filename
-    5730	   4056	     64	   9850	   267a	drivers/hwmon/lm95245.o
-    5941	   4240	     64	  10245	   2805	drivers/hwmon/lm95241.o
-    5361	   3584	     64	   9009	   2331	drivers/hwmon/jc42.o
-    8609	  10872	     64	  19545	   4c59	drivers/hwmon/max31790.o
-    9080	  13232	     64	  22376	   5768	drivers/hwmon/nct7904.o
-    6574	   8498	     64	  15136	   3b20	drivers/hwmon/ltc4245.o
-    4516	   3464	     64	   8044	   1f6c	drivers/hwmon/tmp421.o
-    4223	   2744	     64	   7031	   1b77	drivers/hwmon/tmp102.o
-   21757	  13496	     64	  35317	   89f5	drivers/hwmon/lm90.o
-    6804	   3240	     64	  10108	   277c	drivers/hwmon/lm75.o
-
-New:
-
-    text	   data	    bss	    dec	    hex	filename
-    5166	   1568	    128	   6862	   1ace	drivers/hwmon/lm95245.o
-    4334	   1664	     64	   6062	   17ae	drivers/hwmon/lm95241.o
-    4579	   1456	     64	   6099	   17d3	drivers/hwmon/jc42.o
-    3687	   1312	     64	   5063	   13c7	drivers/hwmon/max31790.o
-    3905	   1720	     64	   5689	   1639	drivers/hwmon/nct7904.o
-    3989	   1658	     64	   5711	   164f	drivers/hwmon/ltc4245.o
-    3557	   1408	     64	   5029	   13a5	drivers/hwmon/tmp421.o
-    4037	   2200	     64	   6301	   189d	drivers/hwmon/tmp102.o
-   16485	   4288	     64	  20837	   5165	drivers/hwmon/lm90.o
-    5762	   2128	     64	   7954	   1f12	drivers/hwmon/lm75.o
-
-This is with x86_64.
-
-The largest savings are in drivers with simple access methods and
-a large number of attributes. The scpi driver is somewhat of an
-exception since it creates its attribute data structures dynamically;
-I would not expect to see much savings in that driver.
-
-> FWIW,
->
->          Acked-by: Punit Agrawal <punit.agrawal@arm.com>
->
-
-Thanks!
-
-Guenter
+diff --git a/Documentation/hwmon/sht3x b/Documentation/hwmon/sht3x
+index f5aa633ed383..fb1d3f1d641f 100644
+--- a/Documentation/hwmon/sht3x
++++ b/Documentation/hwmon/sht3x
+@@ -67,6 +67,8 @@ temp1_alarm:        alarm flag is set to 1 if the temperature is outside the
+                     configured limits. Alarm only works in periodic measure mode
+ humidity1_alarm:    alarm flag is set to 1 if the humidity is outside the
+                     configured limits. Alarm only works in periodic measure mode
++heater_enable:      heater enable, 1 for heating element turned on. Heating
++                    element removes excess humidity from sensor
+ update_interval:    update interval, 0 for single shot, interval in msec
+                     for periodic measurement. If the interval is not supported
+                     by the sensor, the next faster interval is chosen
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index b2c655add70e..05a925257938 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -44,6 +44,10 @@ static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
+ static const unsigned char sht3x_cmd_measure_periodic_mode[]   = { 0xe0, 0x00 };
+ static const unsigned char sht3x_cmd_break[]                   = { 0x30, 0x93 };
+ 
++/* commands for heater control */
++static const unsigned char sht3x_cmd_heater_on[]               = { 0x30, 0x6d };
++static const unsigned char sht3x_cmd_heater_off[]              = { 0x30, 0x66 };
++
+ /* other commands */
+ static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
+ static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
+@@ -507,6 +511,51 @@ static ssize_t humidity1_alarm_show(struct device *dev,
+ 	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x08));
+ }
+ 
++static ssize_t heater_enable_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
++{
++	char buffer[SHT3X_WORD_LEN + SHT3X_CRC8_LEN];
++	int ret;
++
++	ret = status_register_read(dev, attr, buffer,
++				   SHT3X_WORD_LEN + SHT3X_CRC8_LEN);
++	if (ret)
++		return ret;
++
++	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x20));
++}
++
++static ssize_t heater_enable_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf,
++				   size_t count)
++{
++	struct sht3x_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	int ret;
++	int status;
++
++	ret = kstrtoint(buf, 0, &status);
++	if (ret)
++		return ret;
++
++	mutex_lock(&data->data_lock);
++	mutex_lock(&data->i2c_lock);
++
++	if (status)
++		ret = i2c_master_send(client, (char *) &sht3x_cmd_heater_on,
++				      SHT3X_CMD_LENGTH);
++	else
++		ret = i2c_master_send(client, (char *) &sht3x_cmd_heater_off,
++				      SHT3X_CMD_LENGTH);
++
++	mutex_unlock(&data->i2c_lock);
++	mutex_unlock(&data->data_lock);
++
++	return ret;
++}
++
+ static ssize_t update_interval_show(struct device *dev,
+ 				    struct device_attribute *attr,
+ 				    char *buf)
+@@ -612,6 +661,8 @@ static SENSOR_DEVICE_ATTR(humidity1_min_hyst, S_IRUGO | S_IWUSR,
+ static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, temp1_alarm_show, NULL, 0);
+ static SENSOR_DEVICE_ATTR(humidity1_alarm, S_IRUGO, humidity1_alarm_show,
+ 			  NULL, 0);
++static SENSOR_DEVICE_ATTR(heater_enable, S_IRUGO | S_IWUSR,
++			  heater_enable_show, heater_enable_store, 0);
+ static SENSOR_DEVICE_ATTR(update_interval, S_IRUGO | S_IWUSR,
+ 			  update_interval_show, update_interval_store, 0);
+ 
+@@ -628,6 +679,7 @@ static struct attribute *sht3x_attrs[] = {
+ 	&sensor_dev_attr_humidity1_min_hyst.dev_attr.attr,
+ 	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_humidity1_alarm.dev_attr.attr,
++	&sensor_dev_attr_heater_enable.dev_attr.attr,
+ 	&sensor_dev_attr_update_interval.dev_attr.attr,
+ 	NULL
+ };
+-- 
+2.7.4
 
