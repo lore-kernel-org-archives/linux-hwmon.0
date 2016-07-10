@@ -1,475 +1,785 @@
-Return-path: <fengguang.wu@intel.com>
-Date: Sun, 17 Jul 2016 01:22:19 +0800
-From: kbuild test robot <lkp@intel.com>
-To: Joshua Clayton <stillcompiling@gmail.com>
-Cc: kbuild-all@01.org, Rob Herring <robh+dt@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <kernel@pengutronix.de>,
-	Fabio Estevam <fabio.estevam@nxp.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-hwmon@vger.kernel.org,
-	Joshua Clayton <stillcompiling@gmail.com>
-Subject: Re: [RCF 1/3] hwmon: Add ads1118 driver
-Message-ID: <201607170105.oInVODwB%fengguang.wu@intel.com>
+Return-path: <jic23@kernel.org>
+Subject: Re: [PATCH 1/7] hwmon: (core) New hwmon registration API
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+References: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
+ <1466911590-26296-2-git-send-email-linux@roeck-us.net>
+From: Jonathan Cameron <jic23@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Eduardo Valentin <edubezval@gmail.com>,
+ linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <286a9004-b40c-67d0-1408-4c601e43667f@kernel.org>
+Date: Sun, 10 Jul 2016 16:51:03 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="vtzGhvizbBRQ85DL"
-Content-Disposition: inline
-In-Reply-To: <0294fbcb211e8f14f4e68fed4d9375cf23c6a70e.1468626668.git.stillcompiling@gmail.com>
+In-Reply-To: <1466911590-26296-2-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
+On 26/06/16 04:26, Guenter Roeck wrote:
+> Up to now, each hwmon driver has to implement its own sysfs attributes.
+> This requires a lot of template code, and distracts from the driver's core
+> function to read and write chip registers.
+> 
+> To be able to reduce driver complexity, move sensor attribute handling
+> and thermal zone registration into hwmon core. By using the new API,
+> driver size is typically reduced by 20-50% depending on driver complexity
+> and the number of sysfs attributes supported.
+> 
+> With this patch, the new API only supports thermal sensors. Support for
+> other sensor types will be added with subsequent patches.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Hi Guenter.
 
---vtzGhvizbBRQ85DL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sorry it took me so long to get to this....
 
-Hi,
+Anyhow, mostly looks clean, effective and consise to me.
+Various bits and pieces inline.  There are a few bits I might (when time
+allows) lift over to iio as they are nicer than what we have.
 
-[auto build test WARNING on hwmon/hwmon-next]
-[also build test WARNING on v4.7-rc7 next-20160715]
-[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+My one lesson learned from IIO is always be wary of space in bitmaps.  We
+haven't run out yet but are getting close.  You may end up in a similar
+state here a few years down the line.
 
-url:    https://github.com/0day-ci/linux/commits/Joshua-Clayton/hwmon-add-driver-for-TI-ADS1118/20160716-082056
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: x86_64-randconfig-x001-201629 (attached as .config)
-compiler: gcc-6 (Debian 6.1.1-1) 6.1.1 20160430
-reproduce:
-        # save the attached .config to linux build tree
-        make ARCH=x86_64 
+Jonathan
+> ---
+>  drivers/hwmon/hwmon.c | 485 ++++++++++++++++++++++++++++++++++++++++++++++----
+>  include/linux/hwmon.h | 122 +++++++++++++
+>  2 files changed, 574 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index a26c385a435b..9530644ae297 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -12,17 +12,16 @@
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+> -#include <linux/module.h>
+> +#include <linux/bitops.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+> -#include <linux/slab.h>
+> -#include <linux/kdev_t.h>
+> -#include <linux/idr.h>
+>  #include <linux/hwmon.h>
+> -#include <linux/gfp.h>
+> -#include <linux/spinlock.h>
+> +#include <linux/idr.h>
+> +#include <linux/module.h>
+Some unconnected changes in this.  Arguably reordering is good and
+all but should be in a precursor patch so it's obvious what has
+been added or removed here.
 
-All warnings (new ones prefixed by >>):
+>  #include <linux/pci.h>
+> +#include <linux/slab.h>
+>  #include <linux/string.h>
+> +#include <linux/thermal.h>
+>  
+>  #define HWMON_ID_PREFIX "hwmon"
+>  #define HWMON_ID_FORMAT HWMON_ID_PREFIX "%d"
+> @@ -30,9 +29,33 @@
+>  struct hwmon_device {
+>  	const char *name;
+>  	struct device dev;
+> +	const struct hwmon_chip_info *chip;
+> +
+> +	struct attribute_group group;
+> +	const struct attribute_group **groups;
+>  };
+>  #define to_hwmon_device(d) container_of(d, struct hwmon_device, dev)
+>  
+> +struct hwmon_device_attribute {
+> +	struct device_attribute dev_attr;
+> +	const struct hwmon_ops *ops;
+> +	enum hwmon_sensor_types type;
+> +	u32 attr;
+> +	int index;
+> +};
+> +#define to_hwmon_attr(d) \
+> +	container_of(d, struct hwmon_device_attribute, dev_attr)
+> +
+> +/*
+> + * Thermal zone information
+> + * In addition to the reference to the hwmon device,
+> + * also provides the sensor index.
+> + */
+> +struct hwmon_thermal_data {
+> +	struct hwmon_device *hwdev;	/* Reference to hwmon device */
+> +	int index;			/* sensor index */
+> +};
+> +
+>  static ssize_t
+>  show_name(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> @@ -80,25 +103,280 @@ static struct class hwmon_class = {
+>  
+>  static DEFINE_IDA(hwmon_ida);
+>  
+> -/**
+> - * hwmon_device_register_with_groups - register w/ hwmon
+> - * @dev: the parent device
+> - * @name: hwmon name attribute
+> - * @drvdata: driver data to attach to created device
+> - * @groups: List of attribute groups to create
+> - *
+> - * hwmon_device_unregister() must be called when the device is no
+> - * longer needed.
+> - *
+> - * Returns the pointer to the new device.
+> - */
+> -struct device *
+> -hwmon_device_register_with_groups(struct device *dev, const char *name,
+> -				  void *drvdata,
+> -				  const struct attribute_group **groups)
+> +/* Thermal zone handling */
+> +
+> +static int hwmon_thermal_get_temp(void *data, int *temp)
+> +{
+> +	struct hwmon_thermal_data *tdata = data;
+> +	struct hwmon_device *hwdev = tdata->hwdev;
+> +	int ret;
+> +	long t;
+> +
+> +	ret = hwdev->chip->ops->read(&hwdev->dev, hwmon_temp, hwmon_temp_input,
+> +				     tdata->index, &t);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*temp = t;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct thermal_zone_of_device_ops hwmon_thermal_ops = {
+> +	.get_temp = hwmon_thermal_get_temp,
+> +};
+> +
+> +static int hwmon_thermal_add_sensor(struct device *dev,
+> +				    struct hwmon_device *hwdev,
+> +				    int index)
+> +{
+> +	struct hwmon_thermal_data *tdata;
+> +
+> +	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
+> +	if (!tdata)
+> +		return -ENOMEM;
+> +
+> +	tdata->hwdev = hwdev;
+> +	tdata->index = index;
+> +
+> +	devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
+> +					     &hwmon_thermal_ops);
+> +
+> +	return 0;
+> +}
+> +
+> +/* sysfs attribute management */
+> +
+> +static ssize_t hwmon_attr_show(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
+> +	long val;
+> +	int ret;
+> +
+> +	ret = hattr->ops->read(dev, hattr->type, hattr->attr, hattr->index,
+> +			       &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return sprintf(buf, "%ld\n", val);
+> +}
+> +
+> +static ssize_t hwmon_attr_store(struct device *dev,
+> +				struct device_attribute *devattr,
+> +				const char *buf, size_t count)
+> +{
+> +	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
+> +	long val;
+> +	int ret;
+> +
+> +	ret = kstrtol(buf, 10, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = hattr->ops->write(dev, hattr->type, hattr->attr, hattr->index,
+> +				val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static int hwmon_attr_base(enum hwmon_sensor_types type)
+> +{
+> +	if (type == hwmon_in)
+> +		return 0;
+> +	return 1;
+> +}
+> +
+> +static struct attribute *hwmon_genattr(struct device *dev,
+> +				       const void *drvdata,
+> +				       enum hwmon_sensor_types type,
+> +				       u32 attr,
+> +				       int index,
+> +				       const char *template,
+> +				       const struct hwmon_ops *ops)
+> +{
+> +	struct hwmon_device_attribute *hattr;
+> +	struct device_attribute *dattr;
+> +	struct attribute *a;
+> +	umode_t mode;
+> +	char *name;
+> +
+> +	if (!template)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	mode = ops->is_visible(drvdata, type, attr, index);
+> +	if (!mode)
+> +		return ERR_PTR(-ENOENT);
+> +
+I've been wondering about doing something similar to this in IIO for a while
+as our attributes are far to often rw when they should only be one or the
+other. This is much more elegant.  We could get away with it (nasty as it is)
+on the basis of no previous ABI to match where as you have to have this...
+Can see this is_visible callback might get a little messy in some cases.
 
-   drivers/hwmon/ads1118.c: In function 'ads1118_get_cfg':
->> drivers/hwmon/ads1118.c:421:22: warning: unused variable 'node' [-Wunused-variable]
-     struct device_node *node;
-                         ^~~~
+Actually, is is_visible a good name?  I'd think that would control whether
+we can see the attribute at all.  Perhaps something like
+get_filemode would be a better callback naming?
 
-vim +/node +421 drivers/hwmon/ads1118.c
+> +	if ((mode & S_IRUGO) && !ops->read)
+> +		return ERR_PTR(-EINVAL);
+> +	if ((mode & S_IWUGO) && !ops->write)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (type == hwmon_chip) {
+> +		name = (char *)template;
+> +	} else {
+> +		name = devm_kzalloc(dev, strlen(template) + 16, GFP_KERNEL);
+> +		if (!name)
+> +			return ERR_PTR(-ENOMEM);
+> +		scnprintf(name, strlen(template) + 16, template,
+> +			  index + hwmon_attr_base(type));
+> +	}
+> +
+> +	hattr = devm_kzalloc(dev, sizeof(*hattr), GFP_KERNEL);
+> +	if (!hattr)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	hattr->type = type;
+> +	hattr->attr = attr;
+> +	hattr->index = index;
+> +	hattr->ops = ops;
+> +
+> +	dattr = &hattr->dev_attr;
+> +	if (mode & S_IRUGO)
+> +		dattr->show = hwmon_attr_show;
+> +	if (mode & S_IWUGO)
+> +		dattr->store = hwmon_attr_store;
+Technically I think there is no need to worry about setting the store / show
+when they aren't needed.  Maybe, not worth the really small savings though...
+> +
+> +	a = &dattr->attr;
+> +	sysfs_attr_init(a);
+> +	a->name = name;
+> +	a->mode = mode;
+> +
+> +	return a;
+> +}
+> +
+> +static const char * const hwmon_chip_attr_templates[] = {
+> +	[hwmon_chip_temp_reset_history] = "temp_reset_history",
+> +	[hwmon_chip_update_interval] = "update_interval",
+> +	[hwmon_chip_alarms] = "alarms",
+> +};
+> +
+> +static const char * const hwmon_temp_attr_templates[] = {
+> +	[hwmon_temp_input] = "temp%d_input",
+> +	[hwmon_temp_type] = "temp%d_type",
+> +	[hwmon_temp_lcrit] = "temp%d_lcrit",
+> +	[hwmon_temp_lcrit_hyst] = "temp%d_lcrit_hyst",
+> +	[hwmon_temp_min] = "temp%d_min",
+> +	[hwmon_temp_min_hyst] = "temp%d_min_hyst",
+> +	[hwmon_temp_max] = "temp%d_max",
+> +	[hwmon_temp_max_hyst] = "temp%d_max_hyst",
+> +	[hwmon_temp_crit] = "temp%d_crit",
+> +	[hwmon_temp_crit_hyst] = "temp%d_crit_hyst",
+> +	[hwmon_temp_emergency] = "temp%d_emergency",
+> +	[hwmon_temp_emergency_hyst] = "temp%d_emergency_hyst",
+> +	[hwmon_temp_alarm] = "temp%d_alarm",
+> +	[hwmon_temp_lcrit_alarm] = "temp%d_lcrit_alarm",
+> +	[hwmon_temp_min_alarm] = "temp%d_min_alarm",
+> +	[hwmon_temp_max_alarm] = "temp%d_max_alarm",
+> +	[hwmon_temp_crit_alarm] = "temp%d_crit_alarm",
+> +	[hwmon_temp_emergency_alarm] = "temp%d_emergency_alarm",
+> +	[hwmon_temp_fault] = "temp%d_fault",
+> +	[hwmon_temp_offset] = "temp%d_offset",
+> +	[hwmon_temp_label] = "temp%d_label",
+> +	[hwmon_temp_lowest] = "temp%d_lowest",
+> +	[hwmon_temp_highest] = "temp%d_highest",
+> +	[hwmon_temp_reset_history] = "temp%d_reset_history",
+> +};
+> +
+> +static const char * const *__templates[] = {
+> +	[hwmon_chip] = hwmon_chip_attr_templates,
+> +	[hwmon_temp] = hwmon_temp_attr_templates,
+> +};
+> +
+> +static const int __templates_size[] = {
+> +	[hwmon_chip] = ARRAY_SIZE(hwmon_chip_attr_templates),
+> +	[hwmon_temp] = ARRAY_SIZE(hwmon_temp_attr_templates),
+> +};
+> +
+> +static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
+> +{
+> +	int i, n;
+> +
+> +	for (i = n = 0; info->config[i]; i++)
+> +		n += hweight32(info->config[i]);
+> +
+> +	return n;
+> +}
+> +
+> +static int hwmon_genattrs(struct device *dev,
+> +			  const void *drvdata,
+> +			  struct attribute **attrs,
+> +			  const struct hwmon_ops *ops,
+> +			  const struct hwmon_channel_info *info)
+> +{
+> +	const char * const *templates;
+> +	int template_size;
+> +	int i, aindex = 0;
+> +
+> +	if (info->type >= ARRAY_SIZE(__templates))
+> +		return -EINVAL;
+> +
+> +	templates = __templates[info->type];
+> +	template_size = __templates_size[info->type];
+> +
+> +	for (i = 0; info->config[i]; i++) {
+> +		u32 attr_mask = info->config[i];
+> +		u32 attr;
+> +
+> +		while (attr_mask) {
+> +			struct attribute *a;
+> +
+> +			attr = __ffs(attr_mask);
+> +			attr_mask &= ~BIT(attr);
+loop instead using the for_each_bit_set?  Tiny bit cleaner perhaps...
+> +			if (attr >= template_size)
+> +				return -EINVAL;
+> +			a = hwmon_genattr(dev, drvdata, info->type, attr, i,
+> +					  templates[attr], ops);
+> +			if (IS_ERR(a)) {
+> +				if (PTR_ERR(a) != -ENOENT)
+> +					return PTR_ERR(a);
+> +				continue;
+> +			}
+> +			attrs[aindex++] = a;
+> +		}
+> +	}
+> +	return aindex;
+> +}
+> +
+> +static struct attribute **
+> +__hwmon_create_attrs(struct device *dev, const void *drvdata,
+> +		     const struct hwmon_chip_info *chip)
+> +{
+> +	int ret, i, aindex = 0, nattrs = 0;
+> +	struct attribute **attrs;
+> +
+> +	for (i = 0; chip->info[i]; i++)
+> +		nattrs += hwmon_num_channel_attrs(chip->info[i]);
+> +
+> +	if (nattrs == 0)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	attrs = devm_kcalloc(dev, nattrs + 1, sizeof(*attrs), GFP_KERNEL);
+> +	if (attrs == NULL)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	for (i = 0; chip->info[i]; i++) {
+> +		ret = hwmon_genattrs(dev, drvdata, &attrs[aindex], chip->ops,
+> +				     chip->info[i]);
+> +		if (ret < 0)
+> +			return ERR_PTR(ret);
+> +		aindex += ret;
+> +	}
+> +
+> +	return attrs;
+> +}
+> +
+> +static struct device *
+> +__hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> +			const struct hwmon_chip_info *chip,
+> +			const struct attribute_group **groups)
+>  {
+>  	struct hwmon_device *hwdev;
+> -	int err, id;
+> +	struct device *hdev;
+> +	int i, j, err, id;
+>  
+>  	/* Do not accept invalid characters in hwmon name attribute */
+>  	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+> @@ -114,28 +392,128 @@ hwmon_device_register_with_groups(struct device *dev, const char *name,
+>  		goto ida_remove;
+>  	}
+>  
+> +	hdev = &hwdev->dev;
+> +
+> +	if (chip && chip->ops->is_visible) {
+> +		struct attribute **attrs;
+> +		int ngroups = 2;
+> +
+> +		if (groups)
+> +			for (i = 0; groups[i]; i++)
+> +				ngroups++;
+> +
+> +		hwdev->groups = devm_kcalloc(dev, ngroups, sizeof(*groups),
+> +					     GFP_KERNEL);
+> +		if (hwdev->groups == NULL)
+> +			return ERR_PTR(-ENOMEM);
+> +
+> +		attrs = __hwmon_create_attrs(dev, drvdata, chip);
+> +		if (IS_ERR(attrs)) {
+> +			err = PTR_ERR(attrs);
+> +			goto free_hwmon;
+> +		}
+> +
+> +		hwdev->group.attrs = attrs;
+> +		ngroups = 0;
+> +		hwdev->groups[ngroups++] = &hwdev->group;
+> +
+> +		if (groups) {
+> +			for (i = 0; groups[i]; i++)
+> +				hwdev->groups[ngroups++] = groups[i];
+> +		}
+> +
+> +		hdev->groups = hwdev->groups;
+> +	} else {
+> +		hdev->groups = groups;
+> +	}
+> +
+>  	hwdev->name = name;
+> -	hwdev->dev.class = &hwmon_class;
+> -	hwdev->dev.parent = dev;
+> -	hwdev->dev.groups = groups;
+> -	hwdev->dev.of_node = dev ? dev->of_node : NULL;
+> -	dev_set_drvdata(&hwdev->dev, drvdata);
+> -	dev_set_name(&hwdev->dev, HWMON_ID_FORMAT, id);
+> -	err = device_register(&hwdev->dev);
+> +	hdev->class = &hwmon_class;
+> +	hdev->parent = dev;
+> +	hdev->of_node = dev ? dev->of_node : NULL;
+> +	hwdev->chip = chip;
+> +	dev_set_drvdata(hdev, drvdata);
+> +	dev_set_name(hdev, HWMON_ID_FORMAT, id);
+> +	err = device_register(hdev);
+>  	if (err)
+> -		goto free;
+> +		goto free_hwmon;
+> +
+> +	if (chip && chip->ops->is_visible && chip->ops->read &&
+> +	    chip->info[0]->type == hwmon_chip &&
+> +	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+> +		const struct hwmon_channel_info **info = chip->info;
+> +
+> +		for (i = 1; info[i]; i++) {
+> +			if (info[i]->type != hwmon_temp)
+> +				continue;
+> +
+> +			for (j = 0; info[i]->config[j]; j++) {
+> +				if (!chip->ops->is_visible(drvdata, hwmon_temp,
+> +							   hwmon_temp_input, j))
+> +					continue;
+> +				if (info[i]->config[j] & HWMON_T_INPUT)
+> +					hwmon_thermal_add_sensor(dev, hwdev, j);
+> +			}
+> +		}
+> +	}
+>  
+> -	return &hwdev->dev;
+> +	return hdev;
+>  
+> -free:
+> +free_hwmon:
+>  	kfree(hwdev);
+>  ida_remove:
+>  	ida_simple_remove(&hwmon_ida, id);
+>  	return ERR_PTR(err);
+>  }
+> +
+> +/**
+> + * hwmon_device_register_with_groups - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @groups: List of attribute groups to create
+> + *
+> + * hwmon_device_unregister() must be called when the device is no
+> + * longer needed.
+> + *
+> + * Returns the pointer to the new device.
+> + */
+> +struct device *
+> +hwmon_device_register_with_groups(struct device *dev, const char *name,
+> +				  void *drvdata,
+> +				  const struct attribute_group **groups)
+> +{
+> +	return __hwmon_device_register(dev, name, drvdata, NULL, groups);
+> +}
+>  EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+>  
+>  /**
+> + * hwmon_device_register_with_info - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @info: Pointer to hwmon chip information
+> + * @groups - pointer to list of driver specific attribute groups
+> + *
+> + * hwmon_device_unregister() must be called when the device is no
+> + * longer needed.
+> + *
+> + * Returns the pointer to the new device.
+> + */
+> +struct device *
+> +hwmon_device_register_with_info(struct device *dev, const char *name,
+> +				  void *drvdata,
+> +				  const struct hwmon_chip_info *chip,
+> +				  const struct attribute_group **groups)
+> +{
+> +	if (chip && (!chip->ops || !chip->info))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	return __hwmon_device_register(dev, name, drvdata, chip, groups);
+> +}
+> +EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
+> +
+> +/**
+>   * hwmon_device_register - register w/ hwmon
+>   * @dev: the device to register
+>   *
+> @@ -213,6 +591,47 @@ error:
+>  }
+>  EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_groups);
+>  
+> +/**
+> + * devm_hwmon_device_register_with_info - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @info: Pointer to hwmon chip information
+> + * @groups - pointer to list of driver specific attribute groups
+> + *
+> + * Returns the pointer to the new device. The new device is automatically
+> + * unregistered with the parent device.
+> + */
+> +struct device *
+> +devm_hwmon_device_register_with_info(struct device *dev, const char *name,
+> +				     void *drvdata,
+> +				     const struct hwmon_chip_info *chip,
+> +				     const struct attribute_group **groups)
+> +{
+> +	struct device **ptr, *hwdev;
+> +
+> +	if (!dev)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	ptr = devres_alloc(devm_hwmon_release, sizeof(*ptr), GFP_KERNEL);
+> +	if (!ptr)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	hwdev = hwmon_device_register_with_info(dev, name, drvdata, chip,
+> +						groups);
+> +	if (IS_ERR(hwdev))
+> +		goto error;
+> +
+> +	*ptr = hwdev;
+> +	devres_add(dev, ptr);
+Perhaps a blank line here? (really tiny improvement in readability?
+> +	return hwdev;
+> +
+> +error:
+> +	devres_free(ptr);
+> +	return hwdev;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_info);
+> +
+>  static int devm_hwmon_match(struct device *dev, void *res, void *data)
+>  {
+>  	struct device **hwdev = res;
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index 09354f6c1d63..99250ad092fd 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -14,9 +14,121 @@
+>  #ifndef _HWMON_H_
+>  #define _HWMON_H_
+>  
+> +#include <linux/bitops.h>
+> +
+>  struct device;
+>  struct attribute_group;
+>  
+> +enum hwmon_sensor_types {
+> +	hwmon_chip,
+> +	hwmon_temp,
+> +	hwmon_in,
+> +	hwmon_curr,
+> +	hwmon_power,
+> +	hwmon_energy,
+> +};
+> +
+> +enum hwmon_chip_attributes {
+> +	hwmon_chip_temp_reset_history,
+> +	hwmon_chip_register_tz,
+> +	hwmon_chip_update_interval,
+> +	hwmon_chip_alarms,
+> +};
+> +
+> +#define HWMON_C_TEMP_RESET_HISTORY	BIT(hwmon_chip_temp_reset_history)
+> +#define HWMON_C_IN_RESET_HISTORY	BIT(hwmon_chip_in_reset_history)
+> +#define HWMON_C_REGISTER_TZ		BIT(hwmon_chip_register_tz)
+> +#define HWMON_C_UPDATE_INTERVAL		BIT(hwmon_chip_update_interval)
+> +#define HWMON_C_ALARMS			BIT(hwmon_chip_alarms)
+> +
+> +enum hwmon_temp_attributes {
+> +	hwmon_temp_input = 0,
+> +	hwmon_temp_type,
+> +	hwmon_temp_lcrit,
+> +	hwmon_temp_lcrit_hyst,
+> +	hwmon_temp_min,
+> +	hwmon_temp_min_hyst,
+> +	hwmon_temp_max,
+> +	hwmon_temp_max_hyst,
+> +	hwmon_temp_crit,
+> +	hwmon_temp_crit_hyst,
+> +	hwmon_temp_emergency,
+> +	hwmon_temp_emergency_hyst,
+> +	hwmon_temp_alarm,
+> +	hwmon_temp_lcrit_alarm,
+> +	hwmon_temp_min_alarm,
+> +	hwmon_temp_max_alarm,
+> +	hwmon_temp_crit_alarm,
+> +	hwmon_temp_emergency_alarm,
+> +	hwmon_temp_fault,
+> +	hwmon_temp_offset,
+> +	hwmon_temp_label,
+> +	hwmon_temp_lowest,
+> +	hwmon_temp_highest,
+> +	hwmon_temp_reset_history,
+> +};
+> +
+> +#define HWMON_T_INPUT		BIT(hwmon_temp_input)
+> +#define HWMON_T_TYPE		BIT(hwmon_temp_type)
+> +#define HWMON_T_LCRIT		BIT(hwmon_temp_lcrit)
+> +#define HWMON_T_LCRIT_HYST	BIT(hwmon_temp_lcrit_hyst)
+> +#define HWMON_T_MIN		BIT(hwmon_temp_min)
+> +#define HWMON_T_MIN_HYST	BIT(hwmon_temp_min_hyst)
+> +#define HWMON_T_MAX		BIT(hwmon_temp_max)
+> +#define HWMON_T_MAX_HYST	BIT(hwmon_temp_max_hyst)
+> +#define HWMON_T_CRIT		BIT(hwmon_temp_crit)
+> +#define HWMON_T_CRIT_HYST	BIT(hwmon_temp_crit_hyst)
+> +#define HWMON_T_EMERGENCY	BIT(hwmon_temp_emergency)
+> +#define HWMON_T_EMERGENCY_HYST	BIT(hwmon_temp_emergency_hyst)
+> +#define HWMON_T_MIN_ALARM	BIT(hwmon_temp_min_alarm)
+> +#define HWMON_T_MAX_ALARM	BIT(hwmon_temp_max_alarm)
+> +#define HWMON_T_CRIT_ALARM	BIT(hwmon_temp_crit_alarm)
+> +#define HWMON_T_EMERGENCY_ALARM	BIT(hwmon_temp_emergency_alarm)
+> +#define HWMON_T_FAULT		BIT(hwmon_temp_fault)
+> +#define HWMON_T_OFFSET		BIT(hwmon_temp_offset)
+> +#define HWMON_T_LABEL		BIT(hwmon_temp_label)
+> +#define HWMON_T_LOWEST		BIT(hwmon_temp_lowest)
+> +#define HWMON_T_HIGHEST		BIT(hwmon_temp_highest)
+> +#define HWMON_T_RESET_HISTORY	BIT(hwmon_temp_reset_history)
+> +
+> +/**
+> + * struct hwmon_ops - hwmon device operations
+> + * @is_visible: Callback to return attribute visibility.
+> + *		Optional.
+> + * @read:       Read callback. Optional.
+I'd like to see a little more expansion in this comment on the form of the
+callbacks.  What are the parameters etc?  I'd expect to look here first
+to find that out rather than diving into docs.
+> + * @write:	Write callback. Optional.
+> + */
+> +struct hwmon_ops {
+> +	umode_t (*is_visible)(const void *, enum hwmon_sensor_types type,
+> +			      u32 attr, int);
+> +	int (*read)(struct device *, enum hwmon_sensor_types type,
+> +		    u32 attr, int, long *);
+> +	int (*write)(struct device *, enum hwmon_sensor_types type,
+> +		     u32 attr, int, long);
+> +};
+> +
+> +/**
+> + * Channel information
+> + * @type:	Channel type.
+> + * @config:	Pointer to NULL-terminated list of channel parameters.
+> + *		Use for per-channel attributes.
+> + */
+> +struct hwmon_channel_info {
+> +	enum hwmon_sensor_types type;
+> +	const u32 *config;
+Hmm. Be very careful about running out of space. I did much the same
+in IIO as you know and am somewhat regretting it now a using a bitmap is
+lovely and efficient, but really annoying once you run out of bits
+if you've used a fixed (short) length..
 
-   405				ads->channel_data[i].cfg &= ~(BIT(ADS1118_PULL_UP));
-   406	}
-   407	#endif
-   408	
-   409	static void ads1118_temp_chan_enable(struct ads1118 *ads)
-   410	{
-   411		struct ads_channel *chan = &ads->channel_data[ADS1118_TEMP_CHAN];
-   412		unsigned int rate = ads->ref->rates[ADS1118_DEFAULT_DR];
-   413	
-   414		chan->cfg = ADS1118_TEMP_CFG;
-   415		ads1118_chan_set_rate(ads, chan, rate);
-   416		chan->enabled = true;
-   417	}
-   418	
-   419	static int ads1118_get_cfg(struct ads1118 *ads)
-   420	{
- > 421		struct device_node *node;
-   422	
-   423	#ifndef CONFIG_OF
-   424		return -EINVAL;
-   425	#else
-   426		if (!ads->dev->of_node
-   427		    || !of_get_next_child(ads->dev->of_node, NULL))
-   428			return -EINVAL;
-   429	
+Using a bitmap as defined in bitmap.h doesn't work as there is no elegant
+way of statically defining them beyond the first long.  I really wish
+there was a way of doing this but can't figure out how..
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+Maybe just go for a u64 from the start (though that then complicates the
+use of some of the bitops stuff) I suspect we'll be jumping to
+that in IIO fairly soon and it'd be a lot less painful to start there
+perhaps...
 
---vtzGhvizbBRQ85DL
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
 
-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
-5P8BPphdLu84AQA=
+> +};
+> +
+> +/**
+> + * Chip configuration
+> + * @ops:	Pointer to hwmon operations.
+> + * @info:	Null-terminated list of channel information.
+Drop the bonus blank line.
 
---vtzGhvizbBRQ85DL--
+We tossed up in IIO for a long time on whether to use a null terminated list
+of our equivalent info elements, or an explict count.  Ended up with count
+as it often allows sharing of the big array of channel info structures
+between different parts where one part adds more hardware over the other..
+
+I'm not saying that the gain by doing that was all that signficant, but
+I thought I'd mention the trade offs.
+Here I think you have made the right decision.
+> + *
+> + */
+> +struct hwmon_chip_info {
+> +	const struct hwmon_ops *ops;
+> +	const struct hwmon_channel_info **info;
+> +};
+> +
+>  struct device *hwmon_device_register(struct device *dev);
+>  struct device *
+>  hwmon_device_register_with_groups(struct device *dev, const char *name,
+> @@ -26,6 +138,16 @@ struct device *
+>  devm_hwmon_device_register_with_groups(struct device *dev, const char *name,
+>  				       void *drvdata,
+>  				       const struct attribute_group **groups);
+> +struct device *
+> +hwmon_device_register_with_info(struct device *dev,
+> +				const char *name, void *drvdata,
+> +				const struct hwmon_chip_info *info,
+> +				const struct attribute_group **groups);
+> +struct device *
+> +devm_hwmon_device_register_with_info(struct device *dev,
+> +				     const char *name, void *drvdata,
+> +				     const struct hwmon_chip_info *info,
+> +				     const struct attribute_group **groups);
+>  
+>  void hwmon_device_unregister(struct device *dev);
+>  void devm_hwmon_device_unregister(struct device *dev);
+> 
