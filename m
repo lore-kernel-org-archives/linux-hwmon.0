@@ -1,72 +1,30 @@
-Return-path: <mranostay@gmail.com>
+Return-path: <robherring2@gmail.com>
+Date: Mon, 11 Jul 2016 09:30:25 -0500
+From: Rob Herring <robh@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Joachim Eastwood <manabian@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt/bindings: Add bindings for JC-42.4 compatible
+ temperature sensors
+Message-ID: <20160711143025.GA6312@rob-hp-laptop>
+References: <1467737073-7949-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1467964564.3225.12.camel@chaos.suse>
-References: <1467945971-23798-1-git-send-email-mranostay@gmail.com> <1467964564.3225.12.camel@chaos.suse>
-From: Matt Ranostay <mranostay@gmail.com>
-Date: Fri, 8 Jul 2016 17:22:10 -0700
-Message-ID: <CAKzfze82xFRU6A09rXS3OhtLU99cZt_2waRcFGvTgWbx9huZLA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: sht3x: set initial jiffies to last_update
-To: Jean Delvare <jdelvare@suse.de>
-Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	David Frey <david.frey@sensirion.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1467737073-7949-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Jul 8, 2016 at 12:56 AM, Jean Delvare <jdelvare@suse.de> wrote:
-> Hi Matt,
->
-> On jeu., 2016-07-07 at 19:46 -0700, Matt Ranostay wrote:
->> Handling the wraparound requires the data->last_update to be set to an
->> initial jiffies value. Otherwise you can start in a state where the
->> sensor will never request a reading.
->
-> I can't see how. As I read the code, in the worst case, readings can be
-> blocked for interval_ms (2 seconds maximum.)
+On Tue, Jul 05, 2016 at 09:44:31AM -0700, Guenter Roeck wrote:
+> Provide generic bindings for all Jedec JC-42.4 compatible temperature
+> sensor chips.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  Documentation/devicetree/bindings/hwmon/jc42.txt | 42 ++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/jc42.txt
 
-On 64-bit systems this is never an issue because the jiffies counter
-will never wrap around.
-
-But my system is a 32-bit ARM core, so the the kernel sets the initial
-value to 0xfffb6c20 so it will wrap around in 5 minutes to find buggy
-code.
-
-So looking at time_after(0xfffb6c20, 0) will return false always till
-it finally rolls over.
-
->
->>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: David Frey <david.frey@sensirion.com>
->> Signed-off-by: Matt Ranostay <mranostay@gmail.com>
->> ---
->>  drivers/hwmon/sht3x.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
->> index 450645b6053d..05a925257938 100644
->> --- a/drivers/hwmon/sht3x.c
->> +++ b/drivers/hwmon/sht3x.c
->> @@ -722,7 +722,7 @@ static int sht3x_probe(struct i2c_client *client,
->>       data->setup.blocking_io = false;
->>       data->setup.high_precision = true;
->>       data->mode = 0;
->> -     data->last_update = 0;
->> +     data->last_update = jiffies;
->>       data->client = client;
->>       crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
->>
->
-> Both look equally wrong to me. With your proposal, accessing the sysfs
-> attributes right after loading the driver will not trigger a reading.
->
-> In order to guarantee that the first access will trigger a reading,
-> data->last_update should be initialized to jiffies -
-> msecs_to_jiffies(2000) (the maximum interval value.)
-
-Ok that is fine.  Rather do  jiffies + (2 * HZ)
-
->
-> --
-> Jean Delvare
-> SUSE L3 Support
->
+Acked-by: Rob Herring <robh@kernel.org>
