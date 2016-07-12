@@ -1,45 +1,44 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58723 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1758973AbcGKOsi (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 11 Jul 2016 10:48:38 -0400
-Subject: Re: [PATCH 1/3] dt/bindings: Add bindings for JC-42.4 compatible
- temperature sensors
-To: Rob Herring <robh@kernel.org>
-References: <1467737073-7949-1-git-send-email-linux@roeck-us.net>
- <20160711143025.GA6312@rob-hp-laptop>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Joachim Eastwood <manabian@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-hwmon@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5783B1AE.90400@roeck-us.net>
-Date: Mon, 11 Jul 2016 07:48:14 -0700
+Return-path: <nm@ti.com>
+Subject: Re: [PATCH v3 1/3] hwmon: (tmp102) Improve handling of initial read
+ delay
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+References: <1467258119-14071-1-git-send-email-linux@roeck-us.net>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From: Nishanth Menon <nm@ti.com>
+Message-ID: <578558BD.1000608@ti.com>
+Date: Tue, 12 Jul 2016 15:53:17 -0500
 MIME-Version: 1.0
-In-Reply-To: <20160711143025.GA6312@rob-hp-laptop>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <1467258119-14071-1-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 07/11/2016 07:30 AM, Rob Herring wrote:
-> On Tue, Jul 05, 2016 at 09:44:31AM -0700, Guenter Roeck wrote:
->> Provide generic bindings for all Jedec JC-42.4 compatible temperature
->> sensor chips.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>   Documentation/devicetree/bindings/hwmon/jc42.txt | 42 ++++++++++++++++++++++++
->>   1 file changed, 42 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/jc42.txt
+On 06/29/2016 10:41 PM, Guenter Roeck wrote:
+> If the chip was in shutdown mode when the driver was loaded, the first
+> conversion is ready no more than 35 milli-seconds after the chip was
+> taken out of shutdown. The driver delay was so far set to 333 ms (HZ / 3),
+> which is much higher than the maximum time needed by the chip.
+> Reduce the time to 35 milli-seconds.
 >
-> Acked-by: Rob Herring <robh@kernel.org>
-> --
+> Introduce a 'valid' flag to ensure that sensor data is actually read
+> even if requested less than 333 ms after the driver was loaded.
+>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v3: Don't go to sleep if sensor readings are not available;
+>      instead, return -EAGAIN (matching previous behavior)
+>      tmp102_update_device() is now a void function.
+> v2: No change
+>
+> Note: This series depends on the following two patches in -next.
 
-Thanks!
 
-Guenter
+a little too late perhaps.. Apologies, was on vacation.. tested and 
+for the series:
+
+Acked-by: Nishanth Menon <nm@ti.com>
 
 
+-- 
+Regards,
+Nishanth Menon
