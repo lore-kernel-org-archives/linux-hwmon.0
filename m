@@ -1,52 +1,96 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38696 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:32843 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751084AbcGLVYv (ORCPT
+	with ESMTP id S1751772AbcGNU4Q (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 12 Jul 2016 17:24:51 -0400
-Date: Tue, 12 Jul 2016 14:24:39 -0700
+	Thu, 14 Jul 2016 16:56:16 -0400
+Date: Thu, 14 Jul 2016 13:56:11 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Nishanth Menon <nm@ti.com>
+To: Michael Walle <michael@walle.cc>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] hwmon: (tmp102) Improve handling of initial read
- delay
-Message-ID: <20160712212439.GB21286@roeck-us.net>
-References: <1467258119-14071-1-git-send-email-linux@roeck-us.net>
- <578558BD.1000608@ti.com>
+	Rini <rini@arvoo.nl>, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: adt7411: add rev5 workaround
+Message-ID: <20160714205611.GB13933@roeck-us.net>
+References: <1468497127-6325-1-git-send-email-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <578558BD.1000608@ti.com>
+In-Reply-To: <1468497127-6325-1-git-send-email-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 12, 2016 at 03:53:17PM -0500, Nishanth Menon wrote:
-> On 06/29/2016 10:41 PM, Guenter Roeck wrote:
-> >If the chip was in shutdown mode when the driver was loaded, the first
-> >conversion is ready no more than 35 milli-seconds after the chip was
-> >taken out of shutdown. The driver delay was so far set to 333 ms (HZ / 3),
-> >which is much higher than the maximum time needed by the chip.
-> >Reduce the time to 35 milli-seconds.
+On Thu, Jul 14, 2016 at 01:52:07PM +0200, Michael Walle wrote:
+> Bit 3 in the CFG1 register has to be 1 to make AIN3 work properly since
+> silicon revision 5. Although otherwise stated in the datasheet, the default
+> value is not 1. Set it to 1 to make AIN3 work.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Cc: stable@vger.kernel.org
+> ---
+> 
+> There was already submission back in 2010.
+>   https://www.spinics.net/lists/lm-sensors/msg29973.html
+> 
+> I don't want to take the ownership, but there wasn't a reaction of the
+> original author. Anyway, I want to answer the raised questions.
+> 
+> > And what is the problem with this? And what's your hardware?
+> ADT7411 silicon rev5 either forgot to default this bit to 1 or any earlier
+> revision didn't care about it. But with rev5, this bit has to be set
+> otherwise the AIN3 input returns garbage.
+> 
+> > [two uses of adt7411_modify_bit()]
 > >
-> >Introduce a 'valid' flag to ensure that sensor data is actually read
-> >even if requested less than 333 ms after the driver was loaded.
-> >
-> >Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> >---
-> >v3: Don't go to sleep if sensor readings are not available;
-> >     instead, return -EAGAIN (matching previous behavior)
-> >     tmp102_update_device() is now a void function.
-> >v2: No change
-> >
-> >Note: This series depends on the following two patches in -next.
+> > This is inefficient: you read and write the same register twice in a
+> > row. It would be much better to read it once, modify all bits and write
+> > it once.
+> This patch does it the same way. IMHO the small size of the change
+> justifies the slight inefficiency in the one time probe. The other way you
+> have to take the lock, add extra code for unlock in error cases etc. But of
+> course its up to you to decide. I'm happy to provide another patch with
+> read, modify both bits and write back the value.
 > 
+>  drivers/hwmon/adt7411.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> a little too late perhaps.. Apologies, was on vacation.. tested and for the
-> series:
-> 
-> Acked-by: Nishanth Menon <nm@ti.com>
-> 
-Thanks!
+> diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
+> index 827c037..5ed9b11 100644
+> --- a/drivers/hwmon/adt7411.c
+> +++ b/drivers/hwmon/adt7411.c
+> @@ -30,6 +30,7 @@
+>  
+>  #define ADT7411_REG_CFG1			0x18
+>  #define ADT7411_CFG1_START_MONITOR		(1 << 0)
+> +#define ADT7411_CFG1_RESERVED_BIT3		(1 << 3)
+>  
+>  #define ADT7411_REG_CFG2			0x19
+>  #define ADT7411_CFG2_DISABLE_AVG		(1 << 5)
+> @@ -296,6 +297,16 @@ static int adt7411_probe(struct i2c_client *client,
+>  	mutex_init(&data->device_lock);
+>  	mutex_init(&data->update_lock);
+>  
+> +	/*
+> +	 * Silicon rev5 workaround, bit 3 has to be set, but unlike mentioned
+> +	 * in the datasheet, this is not set by default. If this bit is not
+> +	 * set, AIN3 won't work at all.
+
+The datasheet actually says "Write only 1 to this bit", period. While it
+_does_ say that its default is 1, it doesn't say that it is read-only
+(meaning any entity, such as the rommon, the BIOS, or a user having fun,
+may have set the bit to 0 on any chip revision).
+
+> +	 */
+> +	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
+> +				 ADT7411_CFG1_RESERVED_BIT3, 1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
+>  				 ADT7411_CFG1_START_MONITOR, 1);
+
+	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
+		ADT7411_CFG1_RESERVED_BIT3 | ADT7411_CFG1_START_MONITOR, 1);
+
+I don't really see why that would require a lock, much less an extra lock.
 
 Guenter
