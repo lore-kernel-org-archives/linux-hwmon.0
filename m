@@ -1,43 +1,49 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58716 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751758AbcGONuN (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 15 Jul 2016 09:50:13 -0400
-Subject: Re: [PATCH] hwmon: adt7411: add rev5 workaround
-To: Michael Walle <michael@walle.cc>
-References: <1468497127-6325-1-git-send-email-michael@walle.cc>
- <20160714205611.GB13933@roeck-us.net>
- <136b2f5f223ea8460edf3c2024f710d3@walle.cc>
- <20160714223755.GA18295@roeck-us.net>
- <ac55e7337e3a039e8cd72613c7ed1ebb@walle.cc>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	Rini <rini@arvoo.nl>, stable@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5788EA0E.8030700@roeck-us.net>
-Date: Fri, 15 Jul 2016 06:50:06 -0700
-MIME-Version: 1.0
-In-Reply-To: <ac55e7337e3a039e8cd72613c7ed1ebb@walle.cc>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <stillcompiling@gmail.com>
+From: Joshua Clayton <stillcompiling@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <kernel@pengutronix.de>,
+	Fabio Estevam <fabio.estevam@nxp.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org
+Cc: Joshua Clayton <stillcompiling@gmail.com>
+Subject: [RCF 0/3] hwmon: add driver for TI ADS1118
+Date: Fri, 15 Jul 2016 17:18:20 -0700
+Message-Id: <cover.1468626668.git.stillcompiling@gmail.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 07/15/2016 02:16 AM, Michael Walle wrote:
-> Am 2016-07-15 00:37, schrieb Guenter Roeck:
->> The latter. Strictly speaking, each write to CR1 should explicitly set bit 3
->> and clear bit 4, but that would be a bit too invasive. And the same really
->> applies to the reserved bits in CR3.
->
-> Should I address this issue, too? If so, I would like to provide a second patch, which isn't flagged for stable.
->
+This is a new driver for the TI ADS1118 and ADS1018.
+It works, and is somewhat based on the work that went into
+ads1015, except for the sysfs code, which I hope is more
+correct and up to date.
 
-If you like. On a side note, you should not tag patches for -stable yourself.
-Better would be to add a Fixes: tag and reference the patch introducing the problem.
-This reduces the noise on the stable mailing list, and gets it applied automatically
-to all affected stable releases.
+The main reason this is an RFC, rather than a submission
+is that I pulled several new dts properies out of the
+air, and I would like any thoughts on these in particular.
+The code is tested only against ads1118.
 
-Thanks,
-Guenter
+If anyone has an ads1018, I'd love to get testing from you
+as well.
 
+Joshua Clayton (3):
+  hwmon: Add ads1118 driver
+  hwmon: Document bindings for ads1118 adc driver
+  ARM: imx6q-evi: ads ads1118 support
 
+ .../devicetree/bindings/hwmon/ads1118.txt          |  81 ++++
+ arch/arm/boot/dts/imx6q-evi.dts                    |  90 ++++
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/ads1118.c                            | 516 +++++++++++++++++++++
+ 5 files changed, 699 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ads1118.txt
+ create mode 100644 drivers/hwmon/ads1118.c
+
+-- 
+2.7.4
