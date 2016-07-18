@@ -1,135 +1,94 @@
-Return-path: <stillcompiling@gmail.com>
-From: Joshua Clayton <stillcompiling@gmail.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <fabio.estevam@nxp.com>, Russell King <linux@armlinux.org.uk>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Subject: Re: [RCF 2/3] hwmon: Document bindings for ads1118 adc driver
-Date: Mon, 18 Jul 2016 05:51:41 -0700
-Message-ID: <1556647.eUdYm2AU5L@diplodocus>
-In-Reply-To: <20160717203425.GA10236@rob-hp-laptop>
-References: <cover.1468626668.git.stillcompiling@gmail.com> <49eddbb75c677db62701e229330f0f5c35983130.1468626668.git.stillcompiling@gmail.com> <20160717203425.GA10236@rob-hp-laptop>
+Return-path: <maxime.ripard@free-electrons.com>
+Date: Mon, 18 Jul 2016 12:02:32 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>, jdelvare@suse.com,
+	jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
+	pmeerw@pmeerw.net, wens@csie.org, lee.jones@linaro.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Subject: Re: [v2,1/4] hwmon: iio_hwmon: defer probe when no channel is found
+Message-ID: <20160718100232.GE4199@lukather>
+References: <1468576754-3273-2-git-send-email-quentin.schulz@free-electrons.com>
+ <20160716170013.GA27490@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="2hMgfIw2X+zgXrFs"
+Content-Disposition: inline
+In-Reply-To: <20160716170013.GA27490@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Sunday, July 17, 2016 03:34:25 PM Rob Herring wrote:
-> On Fri, Jul 15, 2016 at 05:18:22PM -0700, Joshua Clayton wrote:
-> > ads1118 is a 4 input 16 bit adc with a buit-in temperature gauge
-> > 
-> > Signed-off-by: Joshua Clayton <stillcompiling@gmail.com>
+
+--2hMgfIw2X+zgXrFs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Guenter,
+
+On Sat, Jul 16, 2016 at 10:00:13AM -0700, Guenter Roeck wrote:
+> On Fri, Jul 15, 2016 at 11:59:11AM +0200, Quentin Schulz wrote:
+> > iio_channel_get_all returns -ENODEV when it cannot find either phandles=
+ and
+> > properties in the Device Tree or channels whose consumer_dev_name match=
+es
+> > iio_hwmon in iio_map_list. The iio_map_list is filled in by iio drivers
+> > which might be probed after iio_hwmon.
+> >=20
+> > It is better to defer the probe of iio_hwmon if such error is returned =
+by
+> > iio_channel_get_all in order to let a chance to iio drivers to expose
+> > channels in iio_map_list.
+> >=20
+> > Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
 > > ---
-> >  .../devicetree/bindings/hwmon/ads1118.txt          | 81 ++++++++++++++++++++++
-> >  1 file changed, 81 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/ads1118.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/ads1118.txt b/Documentation/devicetree/bindings/hwmon/ads1118.txt
-> > new file mode 100644
-> > index 0000000..41c66dc
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/ads1118.txt
-> > @@ -0,0 +1,81 @@
-> > +ADS1118 (SPI)
-> > +
-> > +The ADS1118 is 16-bit analog to digital converter with 4 inputs and a
-> > +temperature sensor.
-> > +The ADS1018 is a 12-bit version of the chip.
-> > +
-> > +The inputs can be single ended or differential pair combinations.
-> > +
-> > +Each channel, 0 - 4 may be configured as a single ended adc input.
-> > +Channel 0 may be configured differentially with channel 1.
-> > +Channels 0, 1, or 2 may be configured differentially with channel 3.
-> > +
-> > +To set up a differential pair, the lower channel should be have
-> > +the ti,differential-endpoint property set to the higher channel in the pair.
-> > +
-> > +Each channel can be configured individually:
-> > + - fullscale voltage range values are +/- microvolts
-> > +    6144000, 4096000, 2048000, 1024000, 512000, or 256000
-> > +
-> > + - data_rate in samples per second
-> > +    - for the ads1018:
-> > +      128, 250, 490, 920, 1600, 2400, or 3300
-> > +    - for the ads1118:
-> > +      8, 16, 32, 64, 128, 250, or 860
-> 
-> Would be better if these are documented with the property itself.
-> 
-> > +
-> > +The sensor contains an internal pullup register to keep the data output
-> > +high when not in use. This may be disabled, but is enabled by default.
-> > +
-> > +1) The /ads1118 node
-> > +
-> > +  Required properties:
-> > +
-> > +   - compatible : must be "ti,ads1018" or "ti,ads1118"
-> > +   - spi-cpha : spi phase set to 1 (spi polarity is 0)
-> > +   - reg : the spi chipselect address
-> > +   - #address-cells : must be <1>
-> > +   - #size-cells : must be <0>
-> > +
-> > +  Optional properties:
-> > +
-> > +   - ti,tempsensor: enable the temperature sensor
-> > +   - ti,pullup-disable: disable the internal pullup resistor
-> 
-> Explicitly state these are boolean.
-> 
-> > +
-> > +  The node contains child nodes for each channel that the platform uses.
-> > +
-> > +2) channel nodes
-> > +
-> > +  Required properties:
-> > +
-> > +   - reg : the channel number (0, 1, 2, or 3)
-> > +
-> > +  Optional properties:
-> > +
-> > +   - ti,differential-endpoint: differential second endpoint.
-> 
-> Type?
-Hmm. the type is numeric input "channel number". 1, 3 or "none" are
-the only valid choices
-> 
-> > +   - ti,fullscale: fullscale range in +/- microvolts
-> 
-> Add standard unit suffix.
-Will do
-> 
-> > +   - ti,datarate : the converter data rate in samples / second
-> 
-> Perhaps "-hz" here?
-OK
-> 
-> > +
-> > +  Example ADS1118 node:
-> > +
-> > +	ads1118@0 {
-> > +		compatible = "ti,ads1118";
-> > +		spi-max-frequency = <2450000>;
-> > +		reg = <0>;
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		ti,tempsensor;
-> > +		voltage0@0 {
-> 
-> Perhaps channel@0. Either way, drop the first 0.
-Ah, thanks. I'll go with channel@0
-> 
-> > +			reg = <0>;
-> > +			ti,fullscale = <6144000>;
-> > +			ti,datarate = <860>;
-> > +			ti,differential-endpoint = <1>;
-> > +		};
-> > +		voltage1@3 {
-> > +			reg = <3>;
-> > +			ti,fullscale = <6144000>;
-> > +			ti,datarate = <475>;
-> > +		};
-> > +	};
-> > +
-> > +For the above example, The temperature sensor is enabled as well as
-> > +channels 0 and 1 in differential mode, and channel 3 single ended.
-> 
+> >=20
+> > No modifications for this patch since we did not settled for a solution.
+> > What should we do?
+> >=20
+> AFAICS the only thing we can do is to replace module_platform_driver() wi=
+th
+> its explicitly coded variant, and to use use late_initcall() instead of
+> module_init().
+
+I thought this kind of changes to the driver init time were
+discouraged these days?
+
+> Anything else would result in endless probe deferrals if there are
+> no channels.
+
+Well, technically, not endless. AFAIK, the kernel only retries when a
+new driver is probed, which should hopefully settle down rather
+quickly.
+
+Maxime
+
+--=20
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+
+--2hMgfIw2X+zgXrFs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJXjKk4AAoJEBx+YmzsjxAgf8wP+gICG/dhPEoqbs2mlIeQNnNY
+5EnySr0wli+gxNV3Ud3lCYUIGz9PmD3rWVDecrJInVCGw2VuQ5cFkEzfHWuuTMkS
+1+Hsi4UAsAiXhjAINgmzgZTEOrps0Jrs+C1/HQUT+bgMLAXA9J1IdYDSITGeH7Sc
+8T2R4BXjkhTPdsq8uwvTjdWDUTf+6BG0NQ5n+QAKpfUlug07W0xQ8TavWTvK3FQB
+mEP1u6xnGaw+w8WbprhQx9Pg0WfIXH+xf3H0iO5ZaJRpLXPRBL/RdF6Qbk7pdg31
+B9VXvG19bEJBxCgdzehn5diw0cVoeCpeO9TKZcoAJj+RVCh9VMcDt30WFLYr9mIO
+yK5ry25jZF/0yf3/cCfxRP6TKh/87EJ27D1n9Dj9Y4ISe1pIXWUFAlMY9VVBE+Ra
+iTW3urXzIjhIqNuDto835GDVcnFgCKDnsmZZrJG9LImz4/WhXEVKDQ7loawNN1WF
+45g01AC6k2FfmKmb5OQSuWlH4yj9OHBHJ2PqF5JzuOVQnNz/9jUmU+imEIcVJf19
+a3vmUGm200PSmthUhYDgdBcRH5UnCvlCaTRTzg2Xpl/arv4UfB8kOhNPsSBU7zib
+VccVQ3wXWKa5t/88AYoeZasR+dGQlNM3MXu+QrSrknRrGuhR8oE/bWIFx7zh++n2
+i+ej3tLaqRg+qrnPtGvm
+=+DCB
+-----END PGP SIGNATURE-----
+
+--2hMgfIw2X+zgXrFs--
