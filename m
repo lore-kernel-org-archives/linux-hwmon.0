@@ -1,57 +1,211 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:59482 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751244AbcGSDgH (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 18 Jul 2016 23:36:07 -0400
-Subject: Re: [PATCH] hwmon-ntc_thermistor: Delete an unnecessary check before
- the function call "iio_channel_release"
-To: SF Markus Elfring <elfring@users.sourceforge.net>,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-References: <5307CAA2.8060406@users.sourceforge.net>
- <alpine.DEB.2.02.1402212321410.2043@localhost6.localdomain6>
- <530A086E.8010901@users.sourceforge.net>
- <alpine.DEB.2.02.1402231635510.1985@localhost6.localdomain6>
- <530A72AA.3000601@users.sourceforge.net>
- <alpine.DEB.2.02.1402240658210.2090@localhost6.localdomain6>
- <530B5FB6.6010207@users.sourceforge.net>
- <alpine.DEB.2.10.1402241710370.2074@hadrien>
- <530C5E18.1020800@users.sourceforge.net>
- <alpine.DEB.2.10.1402251014170.2080@hadrien>
- <530CD2C4.4050903@users.sourceforge.net>
- <alpine.DEB.2.10.1402251840450.7035@hadrien>
- <530CF8FF.8080600@users.sourceforge.net>
- <alpine.DEB.2.02.1402252117150.2047@localhost6.localdomain6>
- <530DD06F.4090703@users.sourceforge.net>
- <alpine.DEB.2.02.1402262129250.2221@localhost6.localdomain6>
- <5317A59D.4@users.sourceforge.net>
- <60ce7b63-99f8-67c2-319c-21b2d4199263@users.sourceforge.net>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org,
-	Julia Lawall <julia.lawall@lip6.fr>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <578DA00B.2070207@roeck-us.net>
-Date: Mon, 18 Jul 2016 20:35:39 -0700
+Return-path: <jic23@kernel.org>
+Subject: Re: [PATCH v2 4/4] hwmon: iio: add label for channels read by
+ iio_hwmon
+To: Quentin Schulz <quentin.schulz@free-electrons.com>, jdelvare@suse.com,
+ linux@roeck-us.net, knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+ maxime.ripard@free-electrons.com, wens@csie.org, lee.jones@linaro.org
+References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1468576754-3273-5-git-send-email-quentin.schulz@free-electrons.com>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ thomas.petazzoni@free-electrons.com, antoine.tenart@free-electrons.com
+From: Jonathan Cameron <jic23@kernel.org>
+Message-ID: <aa889446-d68c-a05f-83c1-4d54fe814000@kernel.org>
+Date: Mon, 18 Jul 2016 13:24:23 +0100
 MIME-Version: 1.0
-In-Reply-To: <60ce7b63-99f8-67c2-319c-21b2d4199263@users.sourceforge.net>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <1468576754-3273-5-git-send-email-quentin.schulz@free-electrons.com>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 07/18/2016 11:54 AM, SF Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Mon, 18 Jul 2016 20:34:41 +0200
->
-> The iio_channel_release() function tests whether its argument is NULL
-> and then returns immediately. Thus the test around the call is not needed.
->
-> This issue was detected by using the Coccinelle software.
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+On 15/07/16 10:59, Quentin Schulz wrote:
+> Currently, iio_hwmon only exposes values of the IIO channels it can read
+> but no label by channel is exposed.
+> 
+> This adds exposition of sysfs files containing label for IIO channels it
+> can read based on extended_name field of the iio_chan_spec of the channel.
+> If the extended_name field is empty, the sysfs file is not created by
+> iio_hwmon.
+Hmm. This is not the intent of extended name at all.  That exists to add
+a small amount of information to an constructed IIO channel name.
+Typically it's used to indicate physically wired stuff like:
 
-A much better change would be to use devm_iio_channel_get() instead of
-iio_channel_get(), and to remove ntc_iio_channel_release() completely.
+in_voltage0_vdd_raw for cases where that channel of the ADC is hard wired
+to the vdd.  In this particular case the use might actually work as the
+vdd makes it clear it's a voltage - in general that's not the case.
 
-Guenter
+Use of extended_name at all in IIO is only done after extensive review.
+It adds nasty custom ABI to a device, so the gain has to be considerable
+to use it.
 
+When I read your original suggestion of adding labels, I was expecting the
+use of datasheet_name.  That has the advantage of being well defined by
+the datasheet (if not it should not be provided) + not being used in
+the construction of the IIO channel related attributes.  However, that
+may still not correspond well to the expected labelling in hwmon.
+Thinking more on this, the label is going to often be a function of how
+the board is wired up...  Perhaps it should be a characteristic of the
+channel_map (hence from DT or similar) rather than part of the IIO driver
+itself?
+
+At first glance hwmon labels appear to be pretty freeform...  However
+we need to be very careful here as this is effectively defining a large
+chunk of new ABI.
+
+This isn't a thing that I have a particularly clear view on (as you
+might be able to tell ;).  Other opinions sought!
+
+Jonathan
+> 
+> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> ---
+> 
+> patch added in v2
+> 
+>  drivers/hwmon/iio_hwmon.c | 77 +++++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 68 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+> index c0da4d9..28d15b2 100644
+> --- a/drivers/hwmon/iio_hwmon.c
+> +++ b/drivers/hwmon/iio_hwmon.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/of.h>
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/iio/consumer.h>
+> +#include <linux/iio/iio.h>
+>  #include <linux/iio/types.h>
+>  
+>  /**
+> @@ -57,12 +58,26 @@ static ssize_t iio_hwmon_read_val(struct device *dev,
+>  	return sprintf(buf, "%d\n", result);
+>  }
+>  
+> +static ssize_t iio_hwmon_read_label(struct device *dev,
+> +				    struct device_attribute *attr,
+> +				    char *buf)
+> +{
+> +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+> +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
+> +	const char *label = state->channels[sattr->index].channel->extend_name;
+> +
+> +	if (label)
+> +		return sprintf(buf, "%s\n", label);
+> +
+> +	return 0;
+> +}
+> +
+>  static int iio_hwmon_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct iio_hwmon_state *st;
+> -	struct sensor_device_attribute *a;
+> -	int ret, i;
+> +	struct sensor_device_attribute *a, *b;
+> +	int ret, i, j = 0;
+>  	int in_i = 1, temp_i = 1, curr_i = 1, humidity_i = 1;
+>  	enum iio_chan_type type;
+>  	struct iio_channel *channels;
+> @@ -92,7 +107,8 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+>  		st->num_channels++;
+>  
+>  	st->attrs = devm_kzalloc(dev,
+> -				 sizeof(*st->attrs) * (st->num_channels + 1),
+> +				 sizeof(*st->attrs) *
+> +				 (2 * st->num_channels + 1),
+>  				 GFP_KERNEL);
+>  	if (st->attrs == NULL) {
+>  		ret = -ENOMEM;
+> @@ -107,6 +123,18 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+>  		}
+>  
+>  		sysfs_attr_init(&a->dev_attr.attr);
+> +
+> +		b = NULL;
+> +		if (st->channels[i].channel->extend_name) {
+> +			b = devm_kzalloc(dev, sizeof(*b), GFP_KERNEL);
+> +			if (b == NULL) {
+> +				ret = -ENOMEM;
+> +				goto error_release_channels;
+> +			}
+> +
+> +			sysfs_attr_init(&b->dev_attr.attr);
+> +		}
+> +
+>  		ret = iio_get_channel_type(&st->channels[i], &type);
+>  		if (ret < 0)
+>  			goto error_release_channels;
+> @@ -115,35 +143,66 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+>  		case IIO_VOLTAGE:
+>  			a->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+>  							  "in%d_input",
+> -							  in_i++);
+> +							  in_i);
+> +			if (b)
+> +				b->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+> +								  "in%d_label",
+> +								  in_i);
+> +			in_i++;
+>  			break;
+>  		case IIO_TEMP:
+>  			a->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+>  							  "temp%d_input",
+> -							  temp_i++);
+> +							  temp_i);
+> +
+> +			if (b)
+> +				b->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+> +								  "temp%d_label",
+> +								  temp_i);
+> +			temp_i++;
+>  			break;
+>  		case IIO_CURRENT:
+>  			a->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+>  							  "curr%d_input",
+> -							  curr_i++);
+> +							  curr_i);
+> +
+> +			if (b)
+> +				b->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+> +								  "curr%d_label",
+> +								  curr_i);
+> +			curr_i++;
+>  			break;
+>  		case IIO_HUMIDITYRELATIVE:
+>  			a->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+>  							  "humidity%d_input",
+> -							  humidity_i++);
+> +							  humidity_i);
+> +
+> +			if (b)
+> +				b->dev_attr.attr.name = kasprintf(GFP_KERNEL,
+> +								  "humidity%d_label",
+> +								  humidity_i);
+> +			humidity_i++;
+>  			break;
+>  		default:
+>  			ret = -EINVAL;
+>  			goto error_release_channels;
+>  		}
+> -		if (a->dev_attr.attr.name == NULL) {
+> +		if (a->dev_attr.attr.name == NULL ||
+> +		    (b && b->dev_attr.attr.name == NULL)) {
+>  			ret = -ENOMEM;
+>  			goto error_release_channels;
+>  		}
+>  		a->dev_attr.show = iio_hwmon_read_val;
+>  		a->dev_attr.attr.mode = S_IRUGO;
+>  		a->index = i;
+> -		st->attrs[i] = &a->dev_attr.attr;
+> +		st->attrs[j++] = &a->dev_attr.attr;
+> +
+> +		if (b) {
+> +			b->dev_attr.show = iio_hwmon_read_label;
+> +			b->dev_attr.attr.mode = S_IRUGO;
+> +			b->index = i;
+> +			st->attrs[j++] = &b->dev_attr.attr;
+> +		}
+>  	}
+>  
+>  	st->attr_group.attrs = st->attrs;
+> 
