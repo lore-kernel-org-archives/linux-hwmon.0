@@ -1,154 +1,57 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from down.free-electrons.com ([37.187.137.238]:43440 "EHLO
-	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1753014AbcGSMlE (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 19 Jul 2016 08:41:04 -0400
-Date: Tue, 19 Jul 2016 14:40:51 +0200
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-To: Quentin Schulz <quentin.schulz@free-electrons.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
-	knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
-	lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	thomas.petazzoni@free-electrons.com,
-	antoine.tenart@free-electrons.com
-Subject: Re: [PATCH v2 2/4] iio: adc: add support for Allwinner SoCs ADC
-Message-ID: <20160719124051.GB4107@lukather>
-References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
- <1468576754-3273-3-git-send-email-quentin.schulz@free-electrons.com>
- <20160718125753.GF4199@lukather>
- <578DED17.7040309@free-electrons.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="Pk6IbRAofICFmK5e"
-Content-Disposition: inline
-In-Reply-To: <578DED17.7040309@free-electrons.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <michael@walle.cc>
+From: Michael Walle <michael@walle.cc>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	Rini <rini@arvoo.nl>,
+	Michael Walle <michael@walle.cc>
+Subject: [PATCH] hwmon: adt7411: set bit 3 in CFG1 register
+Date: Tue, 19 Jul 2016 16:43:26 +0200
+Message-Id: <1468939406-25461-1-git-send-email-michael@walle.cc>
+In-Reply-To: <1468497127-6325-1-git-send-email-michael@walle.cc>
+References: <1468497127-6325-1-git-send-email-michael@walle.cc>
+List-ID: <linux-hwmon@vger.kernel.org>
 
+According to the datasheet you should only write 1 to this bit. If it is
+not set, at least AIN3 will return bad values on newer silicon revisions.
 
---Pk6IbRAofICFmK5e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: d84ca5b345c2 ("hwmon: Add driver for ADT7411 voltage and temperature sensor")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
 
-On Tue, Jul 19, 2016 at 11:04:23AM +0200, Quentin Schulz wrote:
-> >> +/* TP_CTRL1 bits */
-> >> +#define SUNXI_GPADC_STYLUS_UP_DEBOUNCE(x)	((x) << 12) /* 8 bits */
-> >> +#define SUNXI_GPADC_STYLUS_UP_DEBOUNCE_EN	BIT(9)
-> >> +#define SUNXI_GPADC_TOUCH_PAN_CALI_EN		BIT(6)
-> >> +#define SUNXI_GPADC_TP_DUAL_EN			BIT(5)
-> >> +#define SUNXI_GPADC_TP_MODE_EN			BIT(4)
-> >> +#define SUNXI_GPADC_TP_ADC_SELECT		BIT(3)
-> >> +#define SUNXI_GPADC_ADC_CHAN_SELECT(x)		((x) << 0)  /* 3 bits */
-> >=20
-> > Usually the comments are on the line above. However, if you really
-> > want to enforce something, you should rather mask the
-> > value. Otherwise, that comment is pretty useless.
-> >=20
->=20
-> Do you mean something like that:
-> #define SUNXI_GPADC_ADC_CHAN_SELECT(x)		(GENMASK(2,0) & x) ?
+This is v2 of the previous patch "hwmon: adt7411: add rev5 workaround".
 
-Yes.
+Changes since v1:
+ - use adt7411_modify_bit once with a bitmask
+ - change wording of the commit message and the comment. Just mention
+   that the datasheet requires to set this bit on writes.
 
-> >> +/* TP_CTRL1 bits for sun6i SOCs */
-> >> +#define SUNXI_GPADC_SUN6I_TOUCH_PAN_CALI_EN	BIT(7)
-> >> +#define SUNXI_GPADC_SUN6I_TP_DUAL_EN		BIT(6)
-> >> +#define SUNXI_GPADC_SUN6I_TP_MODE_EN		BIT(5)
-> >> +#define SUNXI_GPADC_SUN6I_TP_ADC_SELECT		BIT(4)
-> >=20
-> > Shouldn't that go in either a common define or the touchscreen driver?
-> >=20
->=20
-> Then shouldn't I put all defines in a common header? (sunxi-gpadc-mfd.h)
+ drivers/hwmon/adt7411.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-You should :)
-
-> >> +	irq =3D regmap_irq_get_virq(sunxi_gpadc_mfd_dev->regmap_irqc, irq);
-> >> +	ret =3D devm_request_any_context_irq(&pdev->dev, irq,
-> >> +					   sunxi_gpadc_fifo_data_irq_handler,
-> >> +					   0, "fifo_data", info);
-> >> +	if (ret < 0) {
-> >> +		dev_err(&pdev->dev,
-> >> +			"could not request FIFO_DATA_PENDING interrupt: %d\n",
-> >> +			ret);
-> >> +		goto err;
-> >> +	}
-> >> +
-> >> +	info->fifo_data_irq =3D irq;
-> >> +	disable_irq(irq);
-> >=20
-> > request_irq starts with irq enabled, which means that you can have an
-> > interrupt showing up between your call to request_irq and the
-> > disable_irq.=20
-> >=20
-> > How would that work?
-> >=20
->=20
-> Same as what I answered in Jonathan's mail:
->=20
-> "Once the interrupt is activated, the IP performs continuous conversions
-> (temp_data_irq only periodically). I want these interrupts to be enabled
-> only when I read the sysfs file or we get useless interrupts.
-> In the current state of this driver's irq handlers, I only set values in
-> structures and all the needed structures are already initialized before
-> requesting irqs. So it does not look like a race. I can prevent races in
-> future versions by adding an atomic flag if wanted."
-
-Then please have a nice comment explaining that.
-
-> >> +static struct platform_driver sunxi_gpadc_driver =3D {
-> >> +	.driver =3D {
-> >> +		.name =3D "sunxi-gpadc-iio",
-> >> +	},
-> >> +	.id_table =3D sunxi_gpadc_id,
-> >> +	.probe =3D sunxi_gpadc_probe,
-> >> +	.remove =3D sunxi_gpadc_remove,
-> >> +};
-> >=20
-> > Having some runtime_pm support for this would be great too.
-> >=20
->=20
-> Basically disabling the ADC and interrupts (as in the remove) in
-> _suspend and _idle and reenabling everything in "before _suspend"-state
-> in _resume I guess?
-
-Well, yes and no. Your probe would not do any hardware
-initialisation. You can pm_runtime_get_sync before using it, which
-will call the suspend hook.
-
-Once you're done, call pm_runtime_put, and that will disable the
-hardware.
-
-Maxime
-
---=20
-Maxime Ripard, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
-
---Pk6IbRAofICFmK5e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJXjh/TAAoJEBx+YmzsjxAg/AMP/AsUHN5QCY7KKED59C4A+Mum
-O7VCTwHr7lGwcmbMYZ1k76GlwJMYDi/u3F1Or+iRYBefptmDsSH1Mxob/18lsmtS
-BqMyhkID6raPrj/xof7I4dEsMP6uELPAdPdcK9GwftCnnm/YluTAAwbYH/vCNDx+
-FeDaFS3OkvSwP+TwcyYywFX4oRoGNjPCq6l4OeZkYfBWJHIf3nVqfxRIO9wDHiWf
-lsG4CLokcw4AmTLSxVRm6MbdsEWP7cM70wrhzbx56mjXrQt8inaokhmKqIJC3mkL
-sBVyrcL79CPpAQ6RZkSBDdNESCaAtX8JvwkVybRO3hn0RRqPZP7cM0Hhv2pVJiBF
-0uOQZAQcFdxcG1aMxbxJEc1BbjS0/t/lCOJ5La3RsI4ObNHY/koOV5ds1JfKmDMv
-jL+BKX+uyVC6stsMIDN8A4fDf+WrKSC6rsMe/s+HKY3QK2+CK9/pKKryEwBzx9Xw
-Qdh8FfKJ7ME285S0vEOP9UJDR4vJV4yrLvVoPzAA0dD4brqbpLK2FKNboJVs8H9S
-VgjNwgAKyKKveccofx8QgCk80qVUpxlXfHnkYobC1nejP8G9f2yteGh2vzBvasdt
-rx4sS3/RUENTrh85YpmBlh3lcfQ+SCgl1tstfdgPf3/+KPXhBslcAFWKagWdejlh
-Kdj0+5rBhSzhZw4jtV64
-=N6AD
------END PGP SIGNATURE-----
-
---Pk6IbRAofICFmK5e--
+diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
+index 827c037..a7f8869 100644
+--- a/drivers/hwmon/adt7411.c
++++ b/drivers/hwmon/adt7411.c
+@@ -30,6 +30,7 @@
+ 
+ #define ADT7411_REG_CFG1			0x18
+ #define ADT7411_CFG1_START_MONITOR		(1 << 0)
++#define ADT7411_CFG1_RESERVED_BIT3		(1 << 3)
+ 
+ #define ADT7411_REG_CFG2			0x19
+ #define ADT7411_CFG2_DISABLE_AVG		(1 << 5)
+@@ -296,8 +297,10 @@ static int adt7411_probe(struct i2c_client *client,
+ 	mutex_init(&data->device_lock);
+ 	mutex_init(&data->update_lock);
+ 
++	/* According to the datasheet, we must only write 1 to bit 3 */
+ 	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
+-				 ADT7411_CFG1_START_MONITOR, 1);
++				 ADT7411_CFG1_RESERVED_BIT3
++				 | ADT7411_CFG1_START_MONITOR, 1);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.1.4
