@@ -1,81 +1,101 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from down.free-electrons.com ([37.187.137.238]:33624 "EHLO
-	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1752820AbcGSGza (ORCPT
+Received: from mail-wm0-f54.google.com ([74.125.82.54]:37323 "EHLO
+	mail-wm0-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752566AbcGSHaB (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 19 Jul 2016 02:55:30 -0400
-Subject: Re: [PATCH v2 4/4] hwmon: iio: add label for channels read by
- iio_hwmon
-To: Jonathan Cameron <jic23@kernel.org>, jdelvare@suse.com,
-	linux@roeck-us.net, knaack.h@gmx.de, lars@metafoo.de,
-	pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
-	lee.jones@linaro.org
-References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
- <1468576754-3273-5-git-send-email-quentin.schulz@free-electrons.com>
- <aa889446-d68c-a05f-83c1-4d54fe814000@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Tue, 19 Jul 2016 03:30:01 -0400
+Received: by mail-wm0-f54.google.com with SMTP id i5so15077107wmg.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 Jul 2016 00:30:01 -0700 (PDT)
+Date: Tue, 19 Jul 2016 08:31:09 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>,
+	jdelvare@suse.com, linux@roeck-us.net, knaack.h@gmx.de,
+	lars@metafoo.de, pmeerw@pmeerw.net,
+	maxime.ripard@free-electrons.com, wens@csie.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	thomas.petazzoni@free-electrons.com,
 	antoine.tenart@free-electrons.com
-From: Quentin Schulz <quentin.schulz@free-electrons.com>
-Message-ID: <578DCED5.6080408@free-electrons.com>
-Date: Tue, 19 Jul 2016 08:55:17 +0200
+Subject: Re: [PATCH v2 3/4] mfd: add support for Allwinner SoCs ADC
+Message-ID: <20160719073109.GD17074@dell>
+References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1468576754-3273-4-git-send-email-quentin.schulz@free-electrons.com>
+ <de8ebab2-cde9-d209-3c9a-e1868fafb84b@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aa889446-d68c-a05f-83c1-4d54fe814000@kernel.org>
-Content-Type: text/plain; charset=windows-1252
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <de8ebab2-cde9-d209-3c9a-e1868fafb84b@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 18/07/2016 14:24, Jonathan Cameron wrote:
+On Mon, 18 Jul 2016, Jonathan Cameron wrote:
+
 > On 15/07/16 10:59, Quentin Schulz wrote:
->> Currently, iio_hwmon only exposes values of the IIO channels it can read
->> but no label by channel is exposed.
->>
->> This adds exposition of sysfs files containing label for IIO channels it
->> can read based on extended_name field of the iio_chan_spec of the channel.
->> If the extended_name field is empty, the sysfs file is not created by
->> iio_hwmon.
-> Hmm. This is not the intent of extended name at all.  That exists to add
-> a small amount of information to an constructed IIO channel name.
-> Typically it's used to indicate physically wired stuff like:
+> > The Allwinner SoCs all have an ADC that can also act as a touchscreen
+> > controller and a thermal sensor. For now, only the ADC and the thermal
+> > sensor drivers are probed by the MFD, the touchscreen controller support
+> > will be added later.
+> > 
+> > Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> Hmm. Previous patch includes the header this one creates.  Ordering issue?
+> The depends kind of prevents build failures by ensuring that can't be built
+> until this one is in place, but it is certainly an ugly way to do it.
 > 
-> in_voltage0_vdd_raw for cases where that channel of the ADC is hard wired
-> to the vdd.  In this particular case the use might actually work as the
-> vdd makes it clear it's a voltage - in general that's not the case.
-> 
-> Use of extended_name at all in IIO is only done after extensive review.
-> It adds nasty custom ABI to a device, so the gain has to be considerable
-> to use it.
-> 
-> When I read your original suggestion of adding labels, I was expecting the
-> use of datasheet_name.  That has the advantage of being well defined by
-> the datasheet (if not it should not be provided) + not being used in
-> the construction of the IIO channel related attributes.  However, that
-> may still not correspond well to the expected labelling in hwmon.
-
-Good to know for extend_name use cases. While doing further testing, I
-noticed the extend_name is also appended to the sysfs filename.. which
-is definitely not what we want.
-
-I've checked for datasheet_name and it is only used to be compared to
-adc_channel_label from iio_map structure. Same for adc_channel_label
-(which has to be the same as datasheet_name of the iio_chan_spec it is
-linked to). So I could use this instead of extend_name to put a label on
-a channel.
-However, I thought of it to be more a way to identify the hardware in
-the datasheet more than giving users a hint on what it is. That's what
-"git grep adc_channel_label" told me. It's definitely better to use
-datasheet_name over extend_name for channel labeling but I don't know if
-it's really the good variable to use for labeling? In my understanding
-of datasheet_name, in my case it would be more "temp_gpadc" than "SoC
-temperature", that's what I mean.
-
-> Thinking more on this, the label is going to often be a function of how
-> the board is wired up...  Perhaps it should be a characteristic of the
-> channel_map (hence from DT or similar) rather than part of the IIO driver
-> itself?
-
-Hmm.. I would not put a property in the DT only for labeling.
+> Few little bits innline.
+> > ---
+> > 
+> > v2:
+> >  - add license headers,
+> >  - reorder alphabetically includes,
+> >  - add SUNXI_GPADC_ prefixes for defines,
+> > 
+> >  drivers/mfd/Kconfig                 |  14 +++
+> >  drivers/mfd/Makefile                |   2 +
+> >  drivers/mfd/sunxi-gpadc-mfd.c       | 197 ++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/sunxi-gpadc-mfd.h |  23 +++++
+> >  4 files changed, 236 insertions(+)
+> >  create mode 100644 drivers/mfd/sunxi-gpadc-mfd.c
+> >  create mode 100644 include/linux/mfd/sunxi-gpadc-mfd.h
 
 [...]
+
+> > +static struct mfd_cell sun6i_gpadc_mfd_cells[] = {
+> > +	{
+> > +		.name	= "sun6i-a31-gpadc-iio",
+> > +		.resources = adc_resources,
+> > +		.num_resources = ARRAY_SIZE(adc_resources),
+> > +	}, {
+> > +		.name = "iio_hwmon",
+> I still really dislike using this to force the probe of that driver but
+> kind of up to the hwmon / mfd guys on this.
+
+Can you at least say *why* you don't like it?
+
+How else would it get probed?
+
+> I don't have any better suggestions though..
+> > +	},
+> > +};
+
+[...]
+
+> > +	if (ret) {
+> > +		dev_err(&pdev->dev, "failed to add MFD devices: %d\n", ret);
+> > +		regmap_del_irq_chip(irq, sunxi_gpadc_mfd_dev->regmap_irqc);
+> > +		return ret;
+> > +	}
+> > +
+> > +	dev_info(&pdev->dev, "successfully loaded\n");
+> Seems like noise to me, but not my subsystem :)
+
+Agreed, I don't allow this either.
+
+[...]
+
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
