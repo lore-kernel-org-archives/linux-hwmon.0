@@ -1,55 +1,82 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55436 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753968AbcGTONs (ORCPT
+Received: from mail-lf0-f44.google.com ([209.85.215.44]:33925 "EHLO
+	mail-lf0-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753843AbcGTOQV (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Wed, 20 Jul 2016 10:13:48 -0400
-Subject: Re: [PATCH -next] hwmon: Remove unused including <linux/version.h>
-To: Wei Yongjun <weiyj_lk@163.com>, Jean Delvare <jdelvare@suse.com>
-References: <1469016376-20327-1-git-send-email-weiyj_lk@163.com>
-Cc: Wei Yongjun <weiyj.lk@gmail.com>, linux-hwmon@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <578F870B.3030405@roeck-us.net>
-Date: Wed, 20 Jul 2016 07:13:31 -0700
+	Wed, 20 Jul 2016 10:16:21 -0400
+Received: by mail-lf0-f44.google.com with SMTP id l69so39350236lfg.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Jul 2016 07:16:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1469016376-20327-1-git-send-email-weiyj_lk@163.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <f6e32bf0-f043-0d34-5190-18b89920bbfd@free-electrons.com>
+References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1468576754-3273-3-git-send-email-quentin.schulz@free-electrons.com>
+ <e24c8b63-7774-66d2-3317-43fd5598ecc9@kernel.org> <f6e32bf0-f043-0d34-5190-18b89920bbfd@free-electrons.com>
+From: Crt Mori <cmo@melexis.com>
+Date: Wed, 20 Jul 2016 16:15:39 +0200
+Message-ID: <CAKv63us_NoRq=B+koC823yCz_-7Dz8HerGLDbh3tkUW-zU4ecQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] iio: adc: add support for Allwinner SoCs ADC
+To: Quentin Schulz <quentin.schulz@free-electrons.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, jdelvare@suse.com,
+	Guenter Roeck <linux@roeck-us.net>,
+	Hartmut Knaack <knaack.h@gmx.de>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+	maxime.ripard@free-electrons.com, wens@csie.org,
+	lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Linux Iio <linux-iio@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/20/2016 05:06 AM, Wei Yongjun wrote:
-> From: Wei Yongjun <weiyj.lk@gmail.com>
+On 20 July 2016 at 14:37, Quentin Schulz
+<quentin.schulz@free-electrons.com> wrote:
+> On 18/07/2016 15:18, Jonathan Cameron wrote:
+> [...]
+>>> +
+>>> +    if (!wait_for_completion_timeout(&info->completion,
+>>> +                                     msecs_to_jiffies(100))) {
+>>> +            ret = -ETIMEDOUT;
+>>> +            goto out;
+>>> +    }
+>>> +
+>>> +    if (info->flags & SUNXI_GPADC_ARCH_SUN4I)
+>>> +            *val = info->temp_data * 133 - 257000;
+>> Why report as processed?  I'd just report them as raw with the scale
+>> and offset provided.  It's not a big thing, but if we can leave it so
+>> that the conversion only occurs when desired, why not?
+>>
+>> For in kernel users, this all happen 'automagically' anyway ;)
+>>
 >
-> Remove including <linux/version.h> that don't need it.
+> Mmmmh, in the code above we apply the scale on the raw value and then
+> the offset. While in iio_convert_raw_to_processed
+> (http://lxr.free-electrons.com/source/drivers/iio/inkern.c#L507), the
+> offset is applied before the scale.
 >
-> Signed-off-by: Wei Yongjun <weiyj.lk@gmail.com>
-
-Applied. Going forward, please remember to put the affected driver
-into the subject line.
-
-Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/ftsteutates.c | 1 -
->   1 file changed, 1 deletion(-)
+> The way would be to factorize the computation by scale:
+> Now: *val = raw * scale + offset
+> Then: *val = (raw + offset/scale) * scale
 >
-> diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-> index aaef5b5..2b2ff67 100644
-> --- a/drivers/hwmon/ftsteutates.c
-> +++ b/drivers/hwmon/ftsteutates.c
-> @@ -27,7 +27,6 @@
->   #include <linux/slab.h>
->   #include <linux/sysfs.h>
->   #include <linux/uaccess.h>
-> -#include <linux/version.h>
->   #include <linux/watchdog.h>
+> But the offset is an integer and offset/scale is therefore rounded.
+> Currently, we have the following values:
+> sun4i: -257000/133 = -1932.3308270676691
+> sun5i: -144700/100 = -1447
+> sun6i: -271000/167 = -1622.754491017964
 >
->   #define FTS_DEVICE_ID_REG		0x0000
+> Do we accept such rounding?
+How much does this rounding bring as mistake on end result and is this
+acceptable for you? You can always multiply it by 1000 or more to get
+the precision you want out.
 >
+> If not, we either stay with the processed value in read_raw or patch
+> inkern to add an offset to apply after having applied the scale to the
+> raw value (val2 from iio_channel_read is yet unused with
+> IIO_CHAN_INFO_OFFSET for example, we could use that to specify an
+> offset2 to apply after the switch(scale_type)-case).
 >
+> [...]
+> Quentin
 >
->
->
-
