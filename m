@@ -1,81 +1,107 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36200 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751721AbcGTSiH (ORCPT
+Received: from saturn.retrosnub.co.uk ([178.18.118.26]:39698 "EHLO
+	saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1754970AbcGTVl4 (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Wed, 20 Jul 2016 14:38:07 -0400
-Date: Wed, 20 Jul 2016 11:38:03 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Zhang Rui <rui.zhang@intel.com>,
-	Eduardo Valentin <edubezval@gmail.com>,
-	linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] hwmon: New hwmon registration API
-Message-ID: <20160720183803.GB19216@roeck-us.net>
-References: <1466911590-26296-1-git-send-email-linux@roeck-us.net>
- <d83c43cc-dfa3-684d-9315-e1eec5cd79fe@kernel.org>
- <5782EEBB.1040209@roeck-us.net>
- <af94ec36-b77d-96f8-ff15-2cfbbe89c3fa@kernel.org>
+	Wed, 20 Jul 2016 17:41:56 -0400
+Subject: Re: How to set Current register in IIO driver from sysfs
+To: Pratik Prajapati <pratik.prajapati12@gmail.com>
+References: <CAHNg1SoX_VFcKLYTmir9=Mh-UtLjGqJ_Q3xbfyxKv+HAAQGFCg@mail.gmail.com>
+ <CAHNg1Sqe4FRKSzxPsXni6xYCBLQovAYvGoeNQpzi531J6V+K0A@mail.gmail.com>
+ <0da0328b-c0a2-215e-64be-5c27aa58572f@kernel.org>
+ <CAHNg1SqMRgmtcfdkRmP3abSPLcphQL7rWxO8v5JUOJS0MfAAvQ@mail.gmail.com>
+Cc: linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+From: Jonathan Cameron <jic23@kernel.org>
+Message-ID: <f2811087-48f5-5868-2f81-8b7d48de15ea@kernel.org>
+Date: Wed, 20 Jul 2016 22:41:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af94ec36-b77d-96f8-ff15-2cfbbe89c3fa@kernel.org>
+In-Reply-To: <CAHNg1SqMRgmtcfdkRmP3abSPLcphQL7rWxO8v5JUOJS0MfAAvQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 20, 2016 at 04:11:04PM +0100, Jonathan Cameron wrote:
-> On 11/07/16 01:56, Guenter Roeck wrote:
-> > Hi Jonathan,
-> > 
-> > On 07/10/2016 09:00 AM, Jonathan Cameron wrote:
-> >> On 26/06/16 04:26, Guenter Roeck wrote:
-> >>> Up to now, each hwmon driver has to implement its own sysfs attributes.
-> >>> This requires a lot of template code, and distracts from the driver's
-> >>> core function to read and write chip registers.
-> >>>
-> >>> To be able to reduce driver complexity, move sensor attribute handling
-> >>> and thermal zone registration into the hwmon core. By using the new API,
-> >>> driver size is typically reduced by 20-50% depending on driver complexity
-> >>> and the number of sysfs attributes supported.
-> >>>
-> >>> The first patch of the series introduces the API as well as support
-> >>> for temperature sensors. Subsequent patches introduce support for
-> >>> voltage, current, power, energy, humidity, and fan speed sensors.
-> >>>
-> >>> The series was tested by converting several drivers (lm75, lm90, tmp102,
-> >>> tmp421, ltc4245) to the new API. Testing was done with with real chips
-> >>> as well as with the hwmon driver module test code available at
-> >>> https://github.com/groeck/module-tests.
-> >> Some cool stuff hiding in there :)
-> >>
-> >> I've only reviewed 1 and 7 and the intermediate ones are really either
-> >> correct or they aren't and they look fine to me.
-> >>
-> > Thanks a lot for your feedback - it is reassuring that it looks sane to you.
-> > 
-> >>
-> >> So what's next? (beyond presumably a lot of driver conversions).
-> >>
-> > Next steps will be to address your comments, re-test, submit a new series,
-> > add to -next after v4.8-rc1 is out, submit the conversions I have done
-> > and add to -next. Then, obviously, only accept new drivers using the
-> > new API.
-> > 
-> > Not sure if there is anything else we can or want to do do at this time.
-> > Do you have anything in mind ?
-> > 
-> Was wondering about the bridge to IIO (reverse of iio to hwmon bridge)
-> that you mentioned - for that you'd probably need some in kernel interfaces
-> for all this stuff.
+On 11/07/16 10:10, Pratik Prajapati wrote:
+> Hi Jonathan,
+> 
+> Thanks for the answers.
+> One more question:
+> What are volatile registers?
+Volatile registers can change without software interaction.
+Things like interrupt status registers, or the output register for
+an ADC.  Hence they can't be cached.
+
+Writable simply means that their value can be effected by a software
+write (not necessarily all of it).
+
+So it's perfectly possible to be both writeable and volatile.
+
+Often what you read from a register has very little resemblance to what
+you wrote to it!
+
+Jonathan
+> I couldn't understood the difference between volatile and writable
+> registers from max44000 driver.
+> 
+> Best Regards,
+> Pratik
+> 
+> On Sun, Jul 10, 2016 at 8:09 PM, Jonathan Cameron <jic23@kernel.org> wrote:
+>> On 10/07/16 14:11, Pratik Prajapati wrote:
+>>> Including more members.
+>>>
+>>> On Sat, Jul 9, 2016 at 5:22 PM, Pratik Prajapati
+>>> <pratik.prajapati12@gmail.com> wrote:
+>>>> Hi,
+>> hi Pratik,
+>>>>
+>>>> I am trying to add support of adjusting IR led current in vcnl4000
+>>>> driver (has IR led current register for doing the same).
+>> This is always a bit of a 'rough' corner when it comes to what interface
+>> to do it with.  Strictly speaking this is typically just a regulator that
+>> happens to be used for this special purpose.  Sometimes they are tightly
+>> tied together with the input and sometime (on devices with more than one)
+>> there is no explicit linkage at all.
+>>
+>> In this particular case we seem to actually have a high frequency modulated
+>> LED driver so it's pretty tightly tied to this use.
+>>>>
+>>>> Below is what I have done till now:
+>>>>
+>>>> 1) Added Current channel in the vcnl4000_channels structure with
+>>>> separate mask IIO_CHAN_INFO_RAW
+>>>> 2) Reading the LED current register inside IIO_CURRENT case in vcnl4010_read_raw
+>>>> 3) Writing to LED current register inside IIO_CURRENT case in vcnl4010_write_raw
+>>>>
+>>>> Is this the correct way of setting Current register in IIO subsystem?
+>> That's about the best option we currently have. This is exactly how it's done
+>> in the max44000 driver for example.
+>>
+>> It's not an interface anyone is terribly happy with so you are welcome to
+>> suggestion alternatives (easy to add them as an additional interface to
+>> existing cases - which is why we haven't been that worried about ending up
+>> with the current less than ideal interface)
+>> The tight coupling in this particular case might justify something more
+>> explicitly linked to the proximity channel but as noted above it's not
+>> always that obvious (see the health/afe parts for example which are way
+>> too flexible in my view!)
+>>
+>> Jonathan
+>>
+>>
+>>>>
+>>>> Best Regards,
+>>>> Pratik Prajapati
+>>> --
+>>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+>>> the body of a message to majordomo@vger.kernel.org
+>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>>
+>>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 > 
 
-Depends; maybe it would be sufficient to call devm_iio_device_register() with
-a minimum set of channel information. Looks like all we would need is .read_raw
-and .write_raw callbacks in struct iio_info, a channel description for each
-channel, and the number of channels. Implementing this would not be difficult.
-Only question would be if it would be sufficient for most or at least many
-use cases.
-
-Thanks,
-Guenter
