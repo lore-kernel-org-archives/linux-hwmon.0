@@ -1,107 +1,108 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:39698 "EHLO
-	saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754970AbcGTVl4 (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Wed, 20 Jul 2016 17:41:56 -0400
-Subject: Re: How to set Current register in IIO driver from sysfs
-To: Pratik Prajapati <pratik.prajapati12@gmail.com>
-References: <CAHNg1SoX_VFcKLYTmir9=Mh-UtLjGqJ_Q3xbfyxKv+HAAQGFCg@mail.gmail.com>
- <CAHNg1Sqe4FRKSzxPsXni6xYCBLQovAYvGoeNQpzi531J6V+K0A@mail.gmail.com>
- <0da0328b-c0a2-215e-64be-5c27aa58572f@kernel.org>
- <CAHNg1SqMRgmtcfdkRmP3abSPLcphQL7rWxO8v5JUOJS0MfAAvQ@mail.gmail.com>
-Cc: linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <f2811087-48f5-5868-2f81-8b7d48de15ea@kernel.org>
-Date: Wed, 20 Jul 2016 22:41:52 +0100
+Return-path: <lee.jones@linaro.org>
+Date: Thu, 21 Jul 2016 13:12:53 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>, jdelvare@suse.com,
+	linux@roeck-us.net, knaack.h@gmx.de, lars@metafoo.de,
+	pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Subject: Re: [PATCH v2 3/4] mfd: add support for Allwinner SoCs ADC
+Message-ID: <20160721121253.GE14925@dell>
+References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1468576754-3273-4-git-send-email-quentin.schulz@free-electrons.com>
+ <de8ebab2-cde9-d209-3c9a-e1868fafb84b@kernel.org>
+ <20160719073109.GD17074@dell>
+ <d64cf632-41a4-3e23-6239-7f854cbb0293@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHNg1SqMRgmtcfdkRmP3abSPLcphQL7rWxO8v5JUOJS0MfAAvQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d64cf632-41a4-3e23-6239-7f854cbb0293@kernel.org>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 11/07/16 10:10, Pratik Prajapati wrote:
-> Hi Jonathan,
+On Wed, 20 Jul 2016, Jonathan Cameron wrote:
+
+> On 19/07/16 08:31, Lee Jones wrote:
+> > On Mon, 18 Jul 2016, Jonathan Cameron wrote:
+> > 
+> >> On 15/07/16 10:59, Quentin Schulz wrote:
+> >>> The Allwinner SoCs all have an ADC that can also act as a touchscreen
+> >>> controller and a thermal sensor. For now, only the ADC and the thermal
+> >>> sensor drivers are probed by the MFD, the touchscreen controller support
+> >>> will be added later.
+> >>>
+> >>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> >> Hmm. Previous patch includes the header this one creates.  Ordering issue?
+> >> The depends kind of prevents build failures by ensuring that can't be built
+> >> until this one is in place, but it is certainly an ugly way to do it.
+> >>
+> >> Few little bits innline.
+> >>> ---
+> >>>
+> >>> v2:
+> >>>  - add license headers,
+> >>>  - reorder alphabetically includes,
+> >>>  - add SUNXI_GPADC_ prefixes for defines,
+> >>>
+> >>>  drivers/mfd/Kconfig                 |  14 +++
+> >>>  drivers/mfd/Makefile                |   2 +
+> >>>  drivers/mfd/sunxi-gpadc-mfd.c       | 197 ++++++++++++++++++++++++++++++++++++
+> >>>  include/linux/mfd/sunxi-gpadc-mfd.h |  23 +++++
+> >>>  4 files changed, 236 insertions(+)
+> >>>  create mode 100644 drivers/mfd/sunxi-gpadc-mfd.c
+> >>>  create mode 100644 include/linux/mfd/sunxi-gpadc-mfd.h
+> > 
+> > [...]
+> > 
+> >>> +static struct mfd_cell sun6i_gpadc_mfd_cells[] = {
+> >>> +	{
+> >>> +		.name	= "sun6i-a31-gpadc-iio",
+> >>> +		.resources = adc_resources,
+> >>> +		.num_resources = ARRAY_SIZE(adc_resources),
+> >>> +	}, {
+> >>> +		.name = "iio_hwmon",
+> >> I still really dislike using this to force the probe of that driver but
+> >> kind of up to the hwmon / mfd guys on this.
+> > 
+> > Can you at least say *why* you don't like it?
+> It just feels odd to have an mfd child that isn't really dependent
+> on the mfd hardware itself.
 > 
-> Thanks for the answers.
-> One more question:
-> What are volatile registers?
-Volatile registers can change without software interaction.
-Things like interrupt status registers, or the output register for
-an ADC.  Hence they can't be cached.
-
-Writable simply means that their value can be effected by a software
-write (not necessarily all of it).
-
-So it's perfectly possible to be both writeable and volatile.
-
-Often what you read from a register has very little resemblance to what
-you wrote to it!
-
-Jonathan
-> I couldn't understood the difference between volatile and writable
-> registers from max44000 driver.
+> Still if you are happy, mfd is your domain and my objections were
+> as you probably noticed not that strong - or well described!)
 > 
-> Best Regards,
-> Pratik
-> 
-> On Sun, Jul 10, 2016 at 8:09 PM, Jonathan Cameron <jic23@kernel.org> wrote:
->> On 10/07/16 14:11, Pratik Prajapati wrote:
->>> Including more members.
->>>
->>> On Sat, Jul 9, 2016 at 5:22 PM, Pratik Prajapati
->>> <pratik.prajapati12@gmail.com> wrote:
->>>> Hi,
->> hi Pratik,
->>>>
->>>> I am trying to add support of adjusting IR led current in vcnl4000
->>>> driver (has IR led current register for doing the same).
->> This is always a bit of a 'rough' corner when it comes to what interface
->> to do it with.  Strictly speaking this is typically just a regulator that
->> happens to be used for this special purpose.  Sometimes they are tightly
->> tied together with the input and sometime (on devices with more than one)
->> there is no explicit linkage at all.
->>
->> In this particular case we seem to actually have a high frequency modulated
->> LED driver so it's pretty tightly tied to this use.
->>>>
->>>> Below is what I have done till now:
->>>>
->>>> 1) Added Current channel in the vcnl4000_channels structure with
->>>> separate mask IIO_CHAN_INFO_RAW
->>>> 2) Reading the LED current register inside IIO_CURRENT case in vcnl4010_read_raw
->>>> 3) Writing to LED current register inside IIO_CURRENT case in vcnl4010_write_raw
->>>>
->>>> Is this the correct way of setting Current register in IIO subsystem?
->> That's about the best option we currently have. This is exactly how it's done
->> in the max44000 driver for example.
->>
->> It's not an interface anyone is terribly happy with so you are welcome to
->> suggestion alternatives (easy to add them as an additional interface to
->> existing cases - which is why we haven't been that worried about ending up
->> with the current less than ideal interface)
->> The tight coupling in this particular case might justify something more
->> explicitly linked to the proximity channel but as noted above it's not
->> always that obvious (see the health/afe parts for example which are way
->> too flexible in my view!)
->>
->> Jonathan
->>
->>
->>>>
->>>> Best Regards,
->>>> Pratik Prajapati
->>> --
->>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
->>> the body of a message to majordomo@vger.kernel.org
->>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> So I'm fine with this.
+
+I see.  So it's not actually part of the same IP/chip?
+
+> > How else would it get probed?
+> > 
+> >> I don't have any better suggestions though..
+> >>> +	},
+> >>> +};
+> > 
+> > [...]
+> > 
+> >>> +	if (ret) {
+> >>> +		dev_err(&pdev->dev, "failed to add MFD devices: %d\n", ret);
+> >>> +		regmap_del_irq_chip(irq, sunxi_gpadc_mfd_dev->regmap_irqc);
+> >>> +		return ret;
+> >>> +	}
+> >>> +
+> >>> +	dev_info(&pdev->dev, "successfully loaded\n");
+> >> Seems like noise to me, but not my subsystem :)
+> > 
+> > Agreed, I don't allow this either.
+> > 
+> > [...]
+> > 
 > 
 
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
