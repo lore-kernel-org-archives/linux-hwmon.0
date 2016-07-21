@@ -1,58 +1,93 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from down.free-electrons.com ([37.187.137.238]:47872 "EHLO
-	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1752038AbcGUMPv (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Thu, 21 Jul 2016 08:15:51 -0400
-Subject: Re: [PATCH v2 2/4] iio: adc: add support for Allwinner SoCs ADC
-To: Jonathan Cameron <jic23@kernel.org>, jdelvare@suse.com,
-	linux@roeck-us.net, knaack.h@gmx.de, lars@metafoo.de,
-	pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
-	lee.jones@linaro.org
-References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
- <1468576754-3273-3-git-send-email-quentin.schulz@free-electrons.com>
- <e24c8b63-7774-66d2-3317-43fd5598ecc9@kernel.org>
- <578DE5C9.8070502@free-electrons.com>
- <e763fba8-391f-f353-9ffe-354c08305dc5@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	thomas.petazzoni@free-electrons.com,
-	antoine.tenart@free-electrons.com
-From: Quentin Schulz <quentin.schulz@free-electrons.com>
-Message-ID: <26aa8f33-8525-6d82-ca17-b782c55c2c82@free-electrons.com>
-Date: Thu, 21 Jul 2016 14:15:38 +0200
-MIME-Version: 1.0
-In-Reply-To: <e763fba8-391f-f353-9ffe-354c08305dc5@kernel.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <vadimp@mellanox.com>
+From: Vadim Pasternak <vadimp@mellanox.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiri@resnulli.us,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [patch] Disable PMBus status check for DPS400 PSU controller
+Date: Thu, 21 Jul 2016 14:55:53 +0000
+Message-Id: <1469112953-77032-1-git-send-email-vadimp@mellanox.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 20/07/2016 16:57, Jonathan Cameron wrote:
-> On 19/07/16 09:33, Quentin Schulz wrote:
->> On 18/07/2016 15:18, Jonathan Cameron wrote:
->>> On 15/07/16 10:59, Quentin Schulz wrote:
-[...]
->>>> +	enable_irq(info->temp_data_irq);
->>> Is this hardware spitting out extra irqs?  If not, much better to just
->>> leave it enabled all the time and control whether it can occur or not
->>> by controlling the device state..
->>
->> The temp_data_irq occurs every SUNXI_GPADC_TEMP_PERIOD(x) periods (in
->> the current state of the driver: 2s). What do you mean by controlling
->> the device state? Enabling or disabling the hardware part of the IP
->> responsible of getting the temperature
->> (SUNXI_GPADC_TP_TPR_TEMP_ENABLE(x) here)?
-> Yes, or something along those lines if it wakes up fast enough.
+pmbus/dps400: disable PMBus status check through platform data structure to
+provide support for PSU DPS-460, DPS-800 from Delta Electronics, INC and for
+SGD009 from Acbel Polytech, INC.
+These devices do not support the STATUS_CML register, and reports communication
+error in response to this command.
+For this reason for these controllers, the status register check is disabled.
 
-The ADC wakes up fast enough but resets its internal time clock (I don't
-know if it's the right term to use). Note that the temperature interrupt
-occurs by period of X seconds in this IP.
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 
-This means that each time we disable the ADC on the hardware side, no
-temperature interrupt will occur within the first X seconds. I don't
-think this is what we want.
+Reviewed-by: Jiri Pirko <jiri@mellanox.com>
+---
+ drivers/hwmon/pmbus/pmbus.c      | 16 ++++++++++++++++
+ drivers/hwmon/pmbus/pmbus_core.c |  3 +++
+ 2 files changed, 19 insertions(+)
 
-[...]
-
-Quentin
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 0a74991..44c736a 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -25,6 +25,7 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ #include <linux/i2c.h>
++#include <linux/i2c/pmbus.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -167,14 +168,26 @@ static int pmbus_probe(struct i2c_client *client,
+ 		       const struct i2c_device_id *id)
+ {
+ 	struct pmbus_driver_info *info;
++	struct pmbus_platform_data *pdata = NULL;
++	struct device *dev = &client->dev;
+ 
+ 	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+ 			    GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
++	if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps460") ||
++	    !strcmp(id->name, "sgd009")) {
++		pdata = kzalloc(sizeof(struct pmbus_platform_data), GFP_KERNEL);
++		if (!pdata) {
++			kfree(info);
++			return -ENOMEM;
++		}
++		pdata->flags = PMBUS_SKIP_STATUS_CHECK;
++	}
+ 
+ 	info->pages = id->driver_data;
+ 	info->identify = pmbus_identify;
++	dev->platform_data = pdata;
+ 
+ 	return pmbus_do_probe(client, id, info);
+ }
+@@ -199,6 +212,9 @@ static const struct i2c_device_id pmbus_id[] = {
+ 	{"tps544c20", 1},
+ 	{"tps544c25", 1},
+ 	{"udt020", 1},
++	{"dps460", 1},
++	{"dps800", 1},
++	{"sgd009", 1},
+ 	{}
+ };
+ 
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ba59eae..3d98070 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1931,8 +1931,11 @@ EXPORT_SYMBOL_GPL(pmbus_do_probe);
+ int pmbus_do_remove(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
++	const struct pmbus_platform_data *pdata =
++				dev_get_platdata(&client->dev);
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	kfree(data->group.attrs);
++	kfree(pdata);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(pmbus_do_remove);
+-- 
+2.1.4
