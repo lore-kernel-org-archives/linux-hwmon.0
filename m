@@ -4,9 +4,9 @@ To: linux@roeck-us.net
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, jiri@resnulli.us,
         Vadim Pasternak <vadimp@mellanox.com>
-Subject: [patch] Disable PMBus status check for DPS400 PSU controller
-Date: Thu, 21 Jul 2016 14:55:53 +0000
-Message-Id: <1469112953-77032-1-git-send-email-vadimp@mellanox.com>
+Subject: [bd47e298a86a7d5547da1e64b134cfaa5d090526] Disable PMBus status check for DPS400 PSU controller
+Date: Thu, 21 Jul 2016 13:24:00 +0000
+Message-Id: <1469107440-72136-1-git-send-email-vadimp@mellanox.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 pmbus/dps400: disable PMBus status check through platform data structure to
@@ -17,7 +17,6 @@ error in response to this command.
 For this reason for these controllers, the status register check is disabled.
 
 Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-
 Reviewed-by: Jiri Pirko <jiri@mellanox.com>
 ---
  drivers/hwmon/pmbus/pmbus.c      | 16 ++++++++++++++++
