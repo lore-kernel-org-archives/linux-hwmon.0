@@ -1,103 +1,113 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-vk0-f51.google.com ([209.85.213.51]:33816 "EHLO
-	mail-vk0-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751244AbcGVQ1r (ORCPT
+Received: from ssl.serverraum.org ([213.133.101.245]:36289 "EHLO
+	ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751244AbcGVQLL (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 22 Jul 2016 12:27:47 -0400
-Received: by mail-vk0-f51.google.com with SMTP id s189so163817555vkh.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2016 09:27:47 -0700 (PDT)
-MIME-Version: 1.0
-In-Reply-To: <5791774C.4010804@roeck-us.net>
-References: <1469140653-2287-1-git-send-email-hotran@apm.com> <5791774C.4010804@roeck-us.net>
-From: Hoan Tran <hotran@apm.com>
-Date: Fri, 22 Jul 2016 09:27:46 -0700
-Message-ID: <CAFHUOYxfa-gvyNSXOSjWqskTqTQBOQ9PgdYFpR=WDhtL6SzjuQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] hwmon: xgene: Add support for X-Gene hwmon driver
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ashwin Chaugule <ashwin.chaugule@linaro.org>,
-	Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Devicetree List <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+	Fri, 22 Jul 2016 12:11:11 -0400
+From: Michael Walle <michael@walle.cc>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+	Michael Walle <michael@walle.cc>
+Subject: [PATCH 1/2] hwmon: adt7411: set sane values for CFG1 and CFG3
+Date: Fri, 22 Jul 2016 18:10:54 +0200
+Message-Id: <1469203855-18094-1-git-send-email-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+According to the datasheet we have to set some bits as 0 and others as 1.
+Make sure we do this for CFG1 and CFG3.
 
-On Thu, Jul 21, 2016 at 6:30 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On 07/21/2016 03:37 PM, Hoan Tran wrote:
->>
->> This patch set adds hardware temperature and power reading support for
->> APM X-Gene SoC using the mailbox communication interface.
->> For device tree, it is the standard DT mailbox.
->> For ACPI, it is the PCC mailbox.
->>
->> For ACPI, this patch is built on top and depends on patch[1]:
->> [1] http://www.spinics.net/lists/linux-acpi/msg66041.html
->>   - [PATCH v3] mailbox: pcc: Support HW-Reduced Communication Subspace
->> type 2
->>
->
-> One thought: You might consider taking ACPI support out of the driver for
-> now,
-> and add it back in after the dependent patch was accepted.
->
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/hwmon/adt7411.c | 53 +++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 49 insertions(+), 4 deletions(-)
 
-Thanks for your suggestion. Rafael agreed to apply this patch as the
-link below but he didn't do it yet.
-http://www.spinics.net/lists/linux-acpi/msg67100.html
-Let me check with him again.
+diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
+index a7f8869..410405b 100644
+--- a/drivers/hwmon/adt7411.c
++++ b/drivers/hwmon/adt7411.c
+@@ -30,6 +30,7 @@
+ 
+ #define ADT7411_REG_CFG1			0x18
+ #define ADT7411_CFG1_START_MONITOR		(1 << 0)
++#define ADT7411_CFG1_RESERVED_BIT1		(1 << 1)
+ #define ADT7411_CFG1_RESERVED_BIT3		(1 << 3)
+ 
+ #define ADT7411_REG_CFG2			0x19
+@@ -37,6 +38,9 @@
+ 
+ #define ADT7411_REG_CFG3			0x1a
+ #define ADT7411_CFG3_ADC_CLK_225		(1 << 0)
++#define ADT7411_CFG3_RESERVED_BIT1		(1 << 1)
++#define ADT7411_CFG3_RESERVED_BIT2		(1 << 2)
++#define ADT7411_CFG3_RESERVED_BIT3		(1 << 3)
+ #define ADT7411_CFG3_REF_VDD			(1 << 4)
+ 
+ #define ADT7411_REG_DEVICE_ID			0x4d
+@@ -280,6 +284,50 @@ static int adt7411_detect(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static int adt7411_init_device(struct adt7411_data *data)
++{
++	int ret;
++	u8 val;
++
++	mutex_lock(&data->device_lock);
++
++	ret = i2c_smbus_read_byte_data(data->client, ADT7411_REG_CFG3);
++	if (ret < 0)
++		goto exit_unlock;
++
++	/*
++	 * We must only write zero to bit 1 and bit 2 and only one to bit 3
++	 * according to the datasheet.
++	 */
++	val = ret;
++	val &= ~(ADT7411_CFG3_RESERVED_BIT1 | ADT7411_CFG3_RESERVED_BIT2);
++	val |= ADT7411_CFG3_RESERVED_BIT3;
++
++	ret = i2c_smbus_write_byte_data(data->client, ADT7411_REG_CFG3, val);
++	if (ret < 0)
++		goto exit_unlock;
++
++	ret = i2c_smbus_read_byte_data(data->client, ADT7411_REG_CFG1);
++	if (ret < 0)
++		goto exit_unlock;
++
++	/*
++	 * We must only write zero to bit 1 and only one to bit 3 according to
++	 * the datasheet.
++	 */
++	val = ret;
++	val &= ~ADT7411_CFG1_RESERVED_BIT1;
++	val |= ADT7411_CFG1_RESERVED_BIT3;
++
++	/* enable monitoring */
++	val |= ADT7411_CFG1_START_MONITOR;
++
++	ret = i2c_smbus_write_byte_data(data->client, ADT7411_REG_CFG1, val);
++ exit_unlock:
++	mutex_unlock(&data->device_lock);
++	return ret;
++}
++
+ static int adt7411_probe(struct i2c_client *client,
+ 				   const struct i2c_device_id *id)
+ {
+@@ -297,10 +345,7 @@ static int adt7411_probe(struct i2c_client *client,
+ 	mutex_init(&data->device_lock);
+ 	mutex_init(&data->update_lock);
+ 
+-	/* According to the datasheet, we must only write 1 to bit 3 */
+-	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
+-				 ADT7411_CFG1_RESERVED_BIT3
+-				 | ADT7411_CFG1_START_MONITOR, 1);
++	ret = adt7411_init_device(data);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.1.4
 
-Thanks
-Hoan
-
-> Guenter
->
->
->> v4
->>   - Return 0 if driver registers successfully
->>
->> v3
->>   - Order include files alphabetically
->>   - Use sign_extend32() to decode temperature
->>   - Use DEVICE_ATTR_RO() for temperature and power attributes
->>   - Temperature and power attributes start with index 1
->>   - Use !!amsg->param2
->>   - Fix checkpatch WARNING with --strict flag
->>   - Use hwmon_device_register_with_groups()
->>   - Check invalid sensor data
->>
->> v2
->>   - Increase power reading accurateness by using 2 registers
->> (a register for Watt, another for milli-Watt)
->>   - Remove power reading for SoC
->>   - Fix review comments from Guenter
->>
->> v1
->>   - Initial
->>
->> Hoan Tran (3):
->>    Documentation: dtb: xgene: Add hwmon dts binding documentation
->>    hwmon: xgene: Add hwmon driver
->>    arm64: dts: apm: Add X-Gene SoC hwmon to device tree
->>
->>   .../devicetree/bindings/hwmon/apm-xgene-hwmon.txt  |  14 +
->>   Documentation/hwmon/xgene-hwmon                    |  30 +
->>   arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |   5 +
->>   arch/arm64/boot/dts/apm/apm-storm.dtsi             |   5 +
->>   drivers/hwmon/Kconfig                              |   7 +
->>   drivers/hwmon/Makefile                             |   1 +
->>   drivers/hwmon/xgene-hwmon.c                        | 755
->> +++++++++++++++++++++
->>   7 files changed, 817 insertions(+)
->>   create mode 100644
->> Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
->>   create mode 100644 Documentation/hwmon/xgene-hwmon
->>   create mode 100644 drivers/hwmon/xgene-hwmon.c
->>
->
