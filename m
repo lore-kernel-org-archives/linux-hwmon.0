@@ -1,124 +1,108 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54655 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752805AbcGYDd1 (ORCPT
+Received: from mail-wm0-f45.google.com ([74.125.82.45]:36038 "EHLO
+	mail-wm0-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753854AbcGVNyt (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 24 Jul 2016 23:33:27 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jean Delvare <jdelvare@suse.com>
+	Fri, 22 Jul 2016 09:54:49 -0400
+Received: by mail-wm0-f45.google.com with SMTP id q128so58341040wma.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2016 06:54:48 -0700 (PDT)
+Date: Fri, 22 Jul 2016 14:55:56 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Maxime Ripard <maxime.ripard@free-electrons.com>
 Cc: Jonathan Cameron <jic23@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Eduardo Valentin <edubezval@gmail.com>,
-	Punit Agrawal <punit.agrawal@arm.com>,
-	linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3 9/9] hwmon: (core) Add basic pwm attribute support to new API
-Date: Sun, 24 Jul 2016 20:32:32 -0700
-Message-Id: <1469417552-9749-10-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
-References: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
+	Quentin Schulz <quentin.schulz@free-electrons.com>,
+	jdelvare@suse.com, linux@roeck-us.net, knaack.h@gmx.de,
+	lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Subject: Re: [PATCH v2 3/4] mfd: add support for Allwinner SoCs ADC
+Message-ID: <20160722135556.GG14925@dell>
+References: <1468576754-3273-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1468576754-3273-4-git-send-email-quentin.schulz@free-electrons.com>
+ <de8ebab2-cde9-d209-3c9a-e1868fafb84b@kernel.org>
+ <20160719073109.GD17074@dell>
+ <d64cf632-41a4-3e23-6239-7f854cbb0293@kernel.org>
+ <20160721121253.GE14925@dell>
+ <20160721200802.GL5993@lukather>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20160721200802.GL5993@lukather>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add basic pwm attribute support (no auto attributes) to new API.
+On Thu, 21 Jul 2016, Maxime Ripard wrote:
 
-Reviewed-by: Jonathan Cameron <jic23@kernel.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: No change
-v2: Added patch
+> 1;4205;0c
+> On Thu, Jul 21, 2016 at 01:12:53PM +0100, Lee Jones wrote:
+> > On Wed, 20 Jul 2016, Jonathan Cameron wrote:
+> > 
+> > > On 19/07/16 08:31, Lee Jones wrote:
+> > > > On Mon, 18 Jul 2016, Jonathan Cameron wrote:
+> > > > 
+> > > >> On 15/07/16 10:59, Quentin Schulz wrote:
+> > > >>> The Allwinner SoCs all have an ADC that can also act as a touchscreen
+> > > >>> controller and a thermal sensor. For now, only the ADC and the thermal
+> > > >>> sensor drivers are probed by the MFD, the touchscreen controller support
+> > > >>> will be added later.
+> > > >>>
+> > > >>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> > > >> Hmm. Previous patch includes the header this one creates.  Ordering issue?
+> > > >> The depends kind of prevents build failures by ensuring that can't be built
+> > > >> until this one is in place, but it is certainly an ugly way to do it.
+> > > >>
+> > > >> Few little bits innline.
+> > > >>> ---
+> > > >>>
+> > > >>> v2:
+> > > >>>  - add license headers,
+> > > >>>  - reorder alphabetically includes,
+> > > >>>  - add SUNXI_GPADC_ prefixes for defines,
+> > > >>>
+> > > >>>  drivers/mfd/Kconfig                 |  14 +++
+> > > >>>  drivers/mfd/Makefile                |   2 +
+> > > >>>  drivers/mfd/sunxi-gpadc-mfd.c       | 197 ++++++++++++++++++++++++++++++++++++
+> > > >>>  include/linux/mfd/sunxi-gpadc-mfd.h |  23 +++++
+> > > >>>  4 files changed, 236 insertions(+)
+> > > >>>  create mode 100644 drivers/mfd/sunxi-gpadc-mfd.c
+> > > >>>  create mode 100644 include/linux/mfd/sunxi-gpadc-mfd.h
+> > > > 
+> > > > [...]
+> > > > 
+> > > >>> +static struct mfd_cell sun6i_gpadc_mfd_cells[] = {
+> > > >>> +	{
+> > > >>> +		.name	= "sun6i-a31-gpadc-iio",
+> > > >>> +		.resources = adc_resources,
+> > > >>> +		.num_resources = ARRAY_SIZE(adc_resources),
+> > > >>> +	}, {
+> > > >>> +		.name = "iio_hwmon",
+> > > >> I still really dislike using this to force the probe of that driver but
+> > > >> kind of up to the hwmon / mfd guys on this.
+> > > > 
+> > > > Can you at least say *why* you don't like it?
+> > > It just feels odd to have an mfd child that isn't really dependent
+> > > on the mfd hardware itself.
+> > > 
+> > > Still if you are happy, mfd is your domain and my objections were
+> > > as you probably noticed not that strong - or well described!)
+> > > 
+> > > So I'm fine with this.
+> > 
+> > I see.  So it's not actually part of the same IP/chip?
+> 
+> The chip has a temperature sensor, and we want to expose that
+> temperature through IIO.
+> 
+> But we don't really have the choice on how we probe iio-hwmon
+> here. The binding was already there, and we have to keep it.
 
- Documentation/hwmon/hwmon-kernel-api.txt |  2 ++
- drivers/hwmon/hwmon.c                    |  9 +++++++++
- include/linux/hwmon.h                    | 13 +++++++++++++
- 3 files changed, 24 insertions(+)
+What binding?
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
-index f60a29ce7592..ef9d74947f5c 100644
---- a/Documentation/hwmon/hwmon-kernel-api.txt
-+++ b/Documentation/hwmon/hwmon-kernel-api.txt
-@@ -168,6 +168,7 @@ It contains following fields:
-   * hwmon_energy	Energy sensor
-   * hwmon_humidity	Humidity sensor
-   * hwmon_fan		Fan speed sensor
-+  * hwmon_pwm		PWM control
- 
- * config: Pointer to a 0-terminated list of configuration values for each
-   sensor of the given type. Each value is a combination of bit values
-@@ -230,6 +231,7 @@ HWMON_P_xxxx	Power attributes, for use with hwmon_power.
- HWMON_E_xxxx	Energy attributes, for use with hwmon_energy.
- HWMON_H_xxxx	Humidity attributes, for use with hwmon_humidity.
- HWMON_F_xxxx	Fan speed attributes, for use with hwmon_fan.
-+HWMON_PWM_xxxx	PWM control attributes, for use with hwmon_pwm.
- 
- Driver callback functions
- -------------------------
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 4729d4742ab7..fade170977e8 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -386,6 +386,13 @@ static const char * const hwmon_fan_attr_templates[] = {
- 	[hwmon_fan_fault] = "fan%d_fault",
- };
- 
-+static const char * const hwmon_pwm_attr_templates[] = {
-+	[hwmon_pwm_input] = "pwm%d",
-+	[hwmon_pwm_enable] = "pwm%d_enable",
-+	[hwmon_pwm_mode] = "pwm%d_mode",
-+	[hwmon_pwm_freq] = "pwm%d_freq",
-+};
-+
- static const char * const *__templates[] = {
- 	[hwmon_chip] = hwmon_chip_attr_templates,
- 	[hwmon_temp] = hwmon_temp_attr_templates,
-@@ -395,6 +402,7 @@ static const char * const *__templates[] = {
- 	[hwmon_energy] = hwmon_energy_attr_templates,
- 	[hwmon_humidity] = hwmon_humidity_attr_templates,
- 	[hwmon_fan] = hwmon_fan_attr_templates,
-+	[hwmon_pwm] = hwmon_pwm_attr_templates,
- };
- 
- static const int __templates_size[] = {
-@@ -406,6 +414,7 @@ static const int __templates_size[] = {
- 	[hwmon_energy] = ARRAY_SIZE(hwmon_energy_attr_templates),
- 	[hwmon_humidity] = ARRAY_SIZE(hwmon_humidity_attr_templates),
- 	[hwmon_fan] = ARRAY_SIZE(hwmon_fan_attr_templates),
-+	[hwmon_pwm] = ARRAY_SIZE(hwmon_pwm_attr_templates),
- };
- 
- static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 74e89d45ff67..9d2f8bde7d12 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -28,6 +28,7 @@ enum hwmon_sensor_types {
- 	hwmon_energy,
- 	hwmon_humidity,
- 	hwmon_fan,
-+	hwmon_pwm,
- };
- 
- enum hwmon_chip_attributes {
-@@ -272,6 +273,18 @@ enum hwmon_fan_attributes {
- #define HWMON_F_MAX_ALARM		BIT(hwmon_fan_max_alarm)
- #define HWMON_F_FAULT			BIT(hwmon_fan_fault)
- 
-+enum hwmon_pwm_attributes {
-+	hwmon_pwm_input,
-+	hwmon_pwm_enable,
-+	hwmon_pwm_mode,
-+	hwmon_pwm_freq,
-+};
-+
-+#define HWMON_PWM_INPUT			BIT(hwmon_pwm_input)
-+#define HWMON_PWM_ENABLE		BIT(hwmon_pwm_enable)
-+#define HWMON_PWM_MODE			BIT(hwmon_pwm_mode)
-+#define HWMON_PWM_FREQ			BIT(hwmon_pwm_freq)
-+
- /**
-  * struct hwmon_ops - hwmon device operations
-  * @is_visible: Callback to return attribute visibility. Mandatory.
 -- 
-2.5.0
-
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
