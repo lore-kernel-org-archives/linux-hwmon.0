@@ -1,41 +1,103 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:37840 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753543AbcGVNV4 (ORCPT
+Received: from mail-vk0-f51.google.com ([209.85.213.51]:33816 "EHLO
+	mail-vk0-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751244AbcGVQ1r (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 22 Jul 2016 09:21:56 -0400
-Subject: Re: adt7411: external thermal diode support
-To: Michael Walle <michael@walle.cc>
-References: <aac86af3ebfe30bf306955c62470d797@walle.cc>
-Cc: linux-hwmon@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <57921DF2.1040704@roeck-us.net>
-Date: Fri, 22 Jul 2016 06:21:54 -0700
+	Fri, 22 Jul 2016 12:27:47 -0400
+Received: by mail-vk0-f51.google.com with SMTP id s189so163817555vkh.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 Jul 2016 09:27:47 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <aac86af3ebfe30bf306955c62470d797@walle.cc>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <5791774C.4010804@roeck-us.net>
+References: <1469140653-2287-1-git-send-email-hotran@apm.com> <5791774C.4010804@roeck-us.net>
+From: Hoan Tran <hotran@apm.com>
+Date: Fri, 22 Jul 2016 09:27:46 -0700
+Message-ID: <CAFHUOYxfa-gvyNSXOSjWqskTqTQBOQ9PgdYFpR=WDhtL6SzjuQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] hwmon: xgene: Add support for X-Gene hwmon driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ashwin Chaugule <ashwin.chaugule@linaro.org>,
+	Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	lkml <linux-kernel@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Devicetree List <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/22/2016 04:09 AM, Michael Walle wrote:
-> Hi,
+Hi Guenter,
+
+On Thu, Jul 21, 2016 at 6:30 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 07/21/2016 03:37 PM, Hoan Tran wrote:
+>>
+>> This patch set adds hardware temperature and power reading support for
+>> APM X-Gene SoC using the mailbox communication interface.
+>> For device tree, it is the standard DT mailbox.
+>> For ACPI, it is the PCC mailbox.
+>>
+>> For ACPI, this patch is built on top and depends on patch[1]:
+>> [1] http://www.spinics.net/lists/linux-acpi/msg66041.html
+>>   - [PATCH v3] mailbox: pcc: Support HW-Reduced Communication Subspace
+>> type 2
+>>
 >
-> I'm looking into adding support for the external thermal diode. On the ADT7411 you can either use AIN1 and AIN2 to measure voltages or use the two input to measure temperature via a thermal diode. As far as I understand it, the sysfs attributes have to be created dynamically, eg. either create the in1_input and in2_input or temp2_input depending on the mode. All current drivers (besides coretemp) use devm_hwmon_device_register_with_groups() which has a static set of groups, but registers its attributes in /sys/class/hwmon/hwmonN/<attribute>. Drivers which use some kind of dynamic attributes use sysfs_create_group(<underlying device>) and hwmon_device_register(), where the attributes are visible at /sys/class/hwmon/hwmonN/device/<attribute>.
-
-Do not use hwmon_device_register().
-
+> One thought: You might consider taking ACPI support out of the driver for
+> now,
+> and add it back in after the dependent patch was accepted.
 >
-> /sys/class/hwmon/<attribute> is the preferred/new method, isn't it? If I add support for the the thermal diode I would have to switch the adt7411 driver to the old method, right? So, I guess this is a bad way to do it. Do you have any hints for me?
 
-Either use multiple groups, and select the groups to use in the probe function,
-or one group and the is_visible() callback.
+Thanks for your suggestion. Rafael agreed to apply this patch as the
+link below but he didn't do it yet.
+http://www.spinics.net/lists/linux-acpi/msg67100.html
+Let me check with him again.
 
+Thanks
+Hoan
+
+> Guenter
 >
-> What entity should configure the external mode? Eg. the bootloader might set the EXT_TDM bit or the linux kernel could enable it depending on some DTS property.
 >
-Both are fine, though it would not normally be the bootloader but the BIOS or ROMMON.
-Other possible methods would be to use platform data or ACPI.
-
-Guenter
-
+>> v4
+>>   - Return 0 if driver registers successfully
+>>
+>> v3
+>>   - Order include files alphabetically
+>>   - Use sign_extend32() to decode temperature
+>>   - Use DEVICE_ATTR_RO() for temperature and power attributes
+>>   - Temperature and power attributes start with index 1
+>>   - Use !!amsg->param2
+>>   - Fix checkpatch WARNING with --strict flag
+>>   - Use hwmon_device_register_with_groups()
+>>   - Check invalid sensor data
+>>
+>> v2
+>>   - Increase power reading accurateness by using 2 registers
+>> (a register for Watt, another for milli-Watt)
+>>   - Remove power reading for SoC
+>>   - Fix review comments from Guenter
+>>
+>> v1
+>>   - Initial
+>>
+>> Hoan Tran (3):
+>>    Documentation: dtb: xgene: Add hwmon dts binding documentation
+>>    hwmon: xgene: Add hwmon driver
+>>    arm64: dts: apm: Add X-Gene SoC hwmon to device tree
+>>
+>>   .../devicetree/bindings/hwmon/apm-xgene-hwmon.txt  |  14 +
+>>   Documentation/hwmon/xgene-hwmon                    |  30 +
+>>   arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |   5 +
+>>   arch/arm64/boot/dts/apm/apm-storm.dtsi             |   5 +
+>>   drivers/hwmon/Kconfig                              |   7 +
+>>   drivers/hwmon/Makefile                             |   1 +
+>>   drivers/hwmon/xgene-hwmon.c                        | 755
+>> +++++++++++++++++++++
+>>   7 files changed, 817 insertions(+)
+>>   create mode 100644
+>> Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
+>>   create mode 100644 Documentation/hwmon/xgene-hwmon
+>>   create mode 100644 drivers/hwmon/xgene-hwmon.c
+>>
+>
