@@ -1,123 +1,100 @@
-Return-path: <vadimp@mellanox.com>
-From: Vadim Pasternak <vadimp@mellanox.com>
-To: Jean Delvare <jdelvare@suse.de>
-CC: "linux@roeck-us.net" <linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "jiri@resnulli.us" <jiri@resnulli.us>
-Subject: RE: [patch] hwmon: (pmbus) Add explicit support for DPS-460, DPS-800,
- and SGD009
-Date: Mon, 25 Jul 2016 08:56:01 +0000
-Message-ID: <AM5PR0501MB2097A0CA3C70509C2F9949BAA20D0@AM5PR0501MB2097.eurprd05.prod.outlook.com>
-References: <1469434229-162391-1-git-send-email-vadimp@mellanox.com>
- <20160725103201.2c64653a@endymion>
-In-Reply-To: <20160725103201.2c64653a@endymion>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Return-path: <jdelvare@suse.de>
+Date: Mon, 25 Jul 2016 10:53:38 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Andrea Scopece <andrea.scopece@gmx.com>, linux-hwmon@vger.kernel.org
+Subject: Re: contact / hwmon
+Message-ID: <20160725105338.13b6d8ec@endymion>
+In-Reply-To: <20160615184056.GA17538@roeck-us.net>
+References: <20160615140308.0afb61e6@gmx.com>
+	<20160615184056.GA17538@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
+On Wed, 15 Jun 2016 11:40:56 -0700, Guenter Roeck wrote:
+> On Wed, Jun 15, 2016 at 02:03:08PM +0200, Andrea Scopece wrote:
+> > 
+> > Hello,
+> > 
+> > my system is afflicted from a small bug, from a long time, and I have no idea
+> > where to report it.
+> > 
+> > Just found your email address on github, linked to hwmon related commits, so 
+> > I decided to write to you directly, hope this is not much of problem.
+> > If I did it wrong, my apologies, and if you can please direct me to the right
+> > place.
+> > 
+> > 
+> > The bug:
+> > 
+> > I'm using a "conky" panel to monitor some parameters, among them the CPU
+> > temps.
+> > 
+> > What is happening is that upon reboot, sometimes the temps display correctly,
+> > sometimes not. (by reboot, I mean also complete power off / power on
+> > sequence).
+> > 
+> > I did a bit of research and found that the hwmon instance sometime is
+> > enumerated as 0 and sometimes as 1 ... both works but obviously when I make a
+> > constant reference in conky, say "hwmon 0" it work only half of the times.
+> > 
+> > These are the involved parameters:
+> > sometimes as:
+> > /sys/devices/virtual/hwmon/hwmon0/temp1_input
+> > /sys/devices/virtual/hwmon/hwmon0/temp1_label
+> > /sys/devices/virtual/hwmon/hwmon0/temp2_input
+> > /sys/devices/virtual/hwmon/hwmon0/temp2_label
+> > 
+> > sometimes as:
+> > /sys/devices/virtual/hwmon/hwmon1/temp1_input
+> > /sys/devices/virtual/hwmon/hwmon1/temp1_label
+> > /sys/devices/virtual/hwmon/hwmon1/temp2_input
+> > /sys/devices/virtual/hwmon/hwmon1/temp2_label
+> > 
+> > 
+> > coretemp enumeration show the same behavior:
+> > /sys/devices/platform/coretemp.0
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_input
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_label
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_crit_alarm
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_crit
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_crit
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_crit_alarm
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_max
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp3_max
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_input
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_label
+> > 
+> > sometimes as:
+> > /sys/devices/platform/coretemp.0
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_input
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_label
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_crit_alarm
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_crit
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_crit
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_crit_alarm
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_max
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp3_max
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_input
+> > /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp2_label
+> 
+> Unfortunately, that is a "feature". Numbering is determined by the module
+> load order. hwmon0 is the first registered hwmon device, hwmon1 is the next,
+> and so on. Since the module load order is not fixed, device name assignments
+> are not fixed either.
+> 
+> This is quite similar to network device naming problems; unfortunately
+> the solution applied there (using udev to select fixed names) does not work
+> with non-network devices.
+> 
+> I know this is very annoying, but right now I don't have a good idea
+> how to solve it.
 
+libsensors provides stable names for monitoring devices. conky should
+simply use it.
 
-> -----Original Message-----
-> From: Jean Delvare [mailto:jdelvare@suse.de]
-> Sent: Monday, July 25, 2016 11:32 AM
-> To: Vadim Pasternak <vadimp@mellanox.com>
-> Cc: linux@roeck-us.net; linux-hwmon@vger.kernel.org; linux-
-> kernel@vger.kernel.org; jiri@resnulli.us
-> Subject: Re: [patch] hwmon: (pmbus) Add explicit support for DPS-460, DPS=
--800,
-> and SGD009
->=20
-> Hi Vadim,
-
-Hi Jean,
-Thank you for your comments.
-Will resend modified patch.=20
-
->=20
-> On Mon, 25 Jul 2016 08:10:29 +0000, Vadim Pasternak wrote:
-> > Provide support for PSU DPS-460, DPS-800 from Delta Electronics, INC
-> > and for
-> > SGD009 from Acbel Polytech, INC.
-> > These devices do not support the STATUS_CML register, and reports a
-> > communication error in response to this command.
-> > For this reason, the status register check is disabled for these contro=
-llers.
-> >
-> > Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-> > Reviewed-by: Jiri Pirko <jiri@mellanox.com>
-> > ---
-> >  drivers/hwmon/pmbus/pmbus.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> > index 0a74991..f28de37 100644
-> > --- a/drivers/hwmon/pmbus/pmbus.c
-> > +++ b/drivers/hwmon/pmbus/pmbus.c
-> > @@ -25,6 +25,7 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/i2c.h>
-> > +#include <linux/i2c/pmbus.h>
-> >  #include "pmbus.h"
-> >
-> >  /*
-> > @@ -167,14 +168,27 @@ static int pmbus_probe(struct i2c_client *client,
-> >  		       const struct i2c_device_id *id)  {
-> >  	struct pmbus_driver_info *info;
-> > +	struct pmbus_platform_data *pdata =3D NULL;
-> > +	struct device *dev =3D &client->dev;
-> >
-> >  	info =3D devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
-> >  			    GFP_KERNEL);
-> >  	if (!info)
-> >  		return -ENOMEM;
->=20
-> A blank line here would improve readability IMHO.
->=20
-> > +	if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
-> > +	    !strcmp(id->name, "sgd009")) {
-> > +		pdata =3D devm_kzalloc(&client->dev,
->=20
-> You have defined dev, you might as well use it here, and also in the othe=
-r
-> devm_kzalloc call.
->=20
-> > +				     sizeof(struct pmbus_platform_data),
-> > +				     GFP_KERNEL);
-> > +		if (!pdata)
-> > +			return -ENOMEM;
-> > +
-> > +		pdata->flags =3D PMBUS_SKIP_STATUS_CHECK;
-> > +	}
-> >
-> >  	info->pages =3D id->driver_data;
-> >  	info->identify =3D pmbus_identify;
-> > +	dev->platform_data =3D pdata;
-> >
-> >  	return pmbus_do_probe(client, id, info);  } @@ -186,6 +200,8 @@
-> > static const struct i2c_device_id pmbus_id[] =3D {
-> >  	{"adp4000", 1},
-> >  	{"bmr453", 1},
-> >  	{"bmr454", 1},
-> > +	{"dps460", 1},
-> > +	{"dps800", 1},
-> >  	{"mdt040", 1},
-> >  	{"ncp4200", 1},
-> >  	{"ncp4208", 1},
-> > @@ -193,6 +209,7 @@ static const struct i2c_device_id pmbus_id[] =3D {
-> >  	{"pdt006", 1},
-> >  	{"pdt012", 1},
-> >  	{"pmbus", 0},
-> > +	{"sgd009", 1},
-> >  	{"tps40400", 1},
-> >  	{"tps544b20", 1},
-> >  	{"tps544b25", 1},
->=20
-> (non-authoritative)
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->=20
-> --
-> Jean Delvare
-> SUSE L3 Support
+-- 
+Jean Delvare
+SUSE L3 Support
