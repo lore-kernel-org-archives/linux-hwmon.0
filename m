@@ -1,77 +1,56 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:57670 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:58409 "EHLO mx2.suse.de"
 	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751953AbcGYImF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 25 Jul 2016 04:42:05 -0400
-Date: Mon, 25 Jul 2016 10:42:01 +0200
+	id S1752271AbcGYItj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Mon, 25 Jul 2016 04:49:39 -0400
+Date: Mon, 25 Jul 2016 10:49:36 +0200
 From: Jean Delvare <jdelvare@suse.de>
 To: Matt Ranostay <mranostay@gmail.com>
-Cc: linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
 	David Frey <david.frey@sensirion.com>
-Subject: Re: [PATCH] hwmon: sht3x: set initial jiffies to last_update
-Message-ID: <20160725104201.3b0430f1@endymion>
-In-Reply-To: <CAKzfze8Uc3FGG2+d-H3-=md_J2nwDdG6Tp=5KSTad6Pv+0iXeg@mail.gmail.com>
-References: <1467945971-23798-1-git-send-email-mranostay@gmail.com>
-	<1467964564.3225.12.camel@chaos.suse>
-	<CAKzfze82xFRU6A09rXS3OhtLU99cZt_2waRcFGvTgWbx9huZLA@mail.gmail.com>
-	<20160721081046.0f658c18@endymion>
-	<CAKzfze8Uc3FGG2+d-H3-=md_J2nwDdG6Tp=5KSTad6Pv+0iXeg@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (sht3x) set initial jiffies to last_update
+Message-ID: <20160725104936.3e940658@endymion>
+In-Reply-To: <1469405132-7044-1-git-send-email-mranostay@gmail.com>
+References: <1469405132-7044-1-git-send-email-mranostay@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Matt,
-
-On Sun, 24 Jul 2016 16:50:39 -0700, Matt Ranostay wrote:
-> On Wed, Jul 20, 2016 at 11:10 PM, Jean Delvare <jdelvare@suse.de> wrote:
-> > On Fri, 8 Jul 2016 17:22:10 -0700, Matt Ranostay wrote:
-> >> On Fri, Jul 8, 2016 at 12:56 AM, Jean Delvare <jdelvare@suse.de> wrote:
-> >> > On jeu., 2016-07-07 at 19:46 -0700, Matt Ranostay wrote:
-> >> >> Handling the wraparound requires the data->last_update to be set to an
-> >> >> initial jiffies value. Otherwise you can start in a state where the
-> >> >> sensor will never request a reading.
-> >> >
-> >> > I can't see how. As I read the code, in the worst case, readings can be
-> >> > blocked for interval_ms (2 seconds maximum.)
-> >>
-> >> On 64-bit systems this is never an issue because the jiffies counter
-> >> will never wrap around.
-> >>
-> >> But my system is a 32-bit ARM core, so the the kernel sets the initial
-> >> value to 0xfffb6c20 so it will wrap around in 5 minutes to find buggy
-> >> code.
-> >>
-> >> So looking at time_after(0xfffb6c20, 0) will return false always till
-> >> it finally rolls over.
-> >
-> > I've always been confused by how jiffies wrapping is handled. So I
-> > tested it, and you are correct.
+On Sun, 24 Jul 2016 17:05:32 -0700, Matt Ranostay wrote:
+> Handling the wraparound requires the data->last_update to be set to an
+> initial jiffies value. Otherwise on 32-bit systems you will not be able
+> to request a reading till the 5 minute jiffies rollover happens.
 > 
-> Yeah but of course on 64-bit systems most just use the lower 32-bits
-> of the jiffies counter.
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: David Frey <david.frey@sensirion.com>
+> Signed-off-by: Matt Ranostay <mranostay@gmail.com>
+> ---
+> 
+> Changes from v1:
+>  * document more in commit message the reason for the patch
+>  * mark last sample before driver load so initial reading can happen
+>    shortly after boot
+> 
+>  drivers/hwmon/sht3x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index b73a48832732..6ea99cd6ae79 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -720,7 +720,7 @@ static int sht3x_probe(struct i2c_client *client,
+>  	data->setup.blocking_io = false;
+>  	data->setup.high_precision = true;
+>  	data->mode = 0;
+> -	data->last_update = 0;
+> +	data->last_update = jiffies - msecs_to_jiffies(3000);
+>  	data->client = client;
+>  	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+>  
 
-Actually it seems the jiffies are initialized the same on 32-bit and
-64-bit systems, so on 64-bit systems you'll get 33-bit values after 5
-minutes, and 34-bit values after about 100 days (if HZ=1000.) But
-you'll never realistically wrap, you are right.
-
-> But since that could rollover, and the unlikely event no sensor data
-> was read for ~57 days you could be in the same state that couldn't get
-> a data sample ....
-
-At HZ=1000 the jiffies wrap after 49 days, IIRC, not 57. Not that it
-matters ;-)
-
-> Not sure if we want to check this edge case.. and also this effects a
-> few iio drivers (mostly mine :)) if we really care about this.
-
-All other hwmon drivers have the same problem. I can't think of a cheap
-way to solve this problem, nor do I think we need to. If you monitor
-your system, you are supposed to poll the device on a regular basis,
-not once every 49 days.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
 Jean Delvare
