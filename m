@@ -1,105 +1,151 @@
-Return-path: <michael@walle.cc>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from ssl.serverraum.org ([213.133.101.245]:54058 "EHLO
+	ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752481AbcGYJM0 (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Mon, 25 Jul 2016 05:12:26 -0400
 From: Michael Walle <michael@walle.cc>
 To: linux-hwmon@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-kernel@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 1/2] hwmon: adt7411: set sane values for CFG1 and CFG3
-Date: Mon, 25 Jul 2016 11:12:05 +0200
-Message-Id: <1469437926-3508-1-git-send-email-michael@walle.cc>
-List-ID: <linux-hwmon@vger.kernel.org>
+Subject: [PATCH v2 2/2] hwmon: adt7411: add external thermal diode support
+Date: Mon, 25 Jul 2016 11:12:06 +0200
+Message-Id: <1469437926-3508-2-git-send-email-michael@walle.cc>
+In-Reply-To: <1469437926-3508-1-git-send-email-michael@walle.cc>
+References: <1469437926-3508-1-git-send-email-michael@walle.cc>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-According to the datasheet we have to set some bits as 0 and others as 1.
-Make sure we do this for CFG1 and CFG3.
+If the EXT_TDM bit is set, the chip supports a second temperature sensor
+instead of two voltage sensors.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
 changes v2:
- - remove unnecessary locking in adt7411_init_device()
+ - correct commit message wording
+ - remove unnecessary parentheses
 
- drivers/hwmon/adt7411.c | 48 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 44 insertions(+), 4 deletions(-)
+ drivers/hwmon/adt7411.c | 51 +++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 43 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
-index a7f8869..fc1e65a 100644
+index fc1e65a..812fbc0 100644
 --- a/drivers/hwmon/adt7411.c
 +++ b/drivers/hwmon/adt7411.c
-@@ -30,6 +30,7 @@
+@@ -7,8 +7,7 @@
+  *  it under the terms of the GNU General Public License version 2 as
+  *  published by the Free Software Foundation.
+  *
+- *  TODO: SPI, support for external temperature sensor
+- *	  use power-down mode for suspend?, interrupt handling?
++ *  TODO: SPI, use power-down mode for suspend?, interrupt handling?
+  */
  
+ #include <linux/kernel.h>
+@@ -31,6 +30,7 @@
  #define ADT7411_REG_CFG1			0x18
  #define ADT7411_CFG1_START_MONITOR		(1 << 0)
-+#define ADT7411_CFG1_RESERVED_BIT1		(1 << 1)
+ #define ADT7411_CFG1_RESERVED_BIT1		(1 << 1)
++#define ADT7411_CFG1_EXT_TDM			(1 << 2)
  #define ADT7411_CFG1_RESERVED_BIT3		(1 << 3)
  
  #define ADT7411_REG_CFG2			0x19
-@@ -37,6 +38,9 @@
+@@ -57,6 +57,7 @@ struct adt7411_data {
+ 	unsigned long next_update;
+ 	int vref_cached;
+ 	struct i2c_client *client;
++	bool use_ext_temp;
+ };
  
- #define ADT7411_REG_CFG3			0x1a
- #define ADT7411_CFG3_ADC_CLK_225		(1 << 0)
-+#define ADT7411_CFG3_RESERVED_BIT1		(1 << 1)
-+#define ADT7411_CFG3_RESERVED_BIT2		(1 << 2)
-+#define ADT7411_CFG3_RESERVED_BIT3		(1 << 3)
- #define ADT7411_CFG3_REF_VDD			(1 << 4)
+ /*
+@@ -127,11 +128,20 @@ static ssize_t adt7411_show_vdd(struct device *dev,
+ static ssize_t adt7411_show_temp(struct device *dev,
+ 			struct device_attribute *attr, char *buf)
+ {
++	int nr = to_sensor_dev_attr(attr)->index;
+ 	struct adt7411_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+-	int val = adt7411_read_10_bit(client, ADT7411_REG_INT_TEMP_VDD_LSB,
+-			ADT7411_REG_INT_TEMP_MSB, 0);
+-
++	int val;
++	struct {
++		u8 low;
++		u8 high;
++	} reg[2] = {
++		{ ADT7411_REG_INT_TEMP_VDD_LSB, ADT7411_REG_INT_TEMP_MSB },
++		{ ADT7411_REG_EXT_TEMP_AIN14_LSB,
++		  ADT7411_REG_EXT_TEMP_AIN1_MSB },
++	};
++
++	val = adt7411_read_10_bit(client, reg[nr].low, reg[nr].high, 0);
+ 	if (val < 0)
+ 		return val;
  
- #define ADT7411_REG_DEVICE_ID			0x4d
-@@ -280,6 +284,45 @@ static int adt7411_detect(struct i2c_client *client,
- 	return 0;
+@@ -218,11 +228,13 @@ static ssize_t adt7411_set_bit(struct device *dev,
+ 	return ret < 0 ? ret : count;
  }
  
-+static int adt7411_init_device(struct adt7411_data *data)
++
+ #define ADT7411_BIT_ATTR(__name, __reg, __bit) \
+ 	SENSOR_DEVICE_ATTR_2(__name, S_IRUGO | S_IWUSR, adt7411_show_bit, \
+ 	adt7411_set_bit, __bit, __reg)
+ 
+-static DEVICE_ATTR(temp1_input, S_IRUGO, adt7411_show_temp, NULL);
++static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, adt7411_show_temp, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, adt7411_show_temp, NULL, 1);
+ static DEVICE_ATTR(in0_input, S_IRUGO, adt7411_show_vdd, NULL);
+ static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, adt7411_show_input, NULL, 0);
+ static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, adt7411_show_input, NULL, 1);
+@@ -237,7 +249,8 @@ static ADT7411_BIT_ATTR(fast_sampling, ADT7411_REG_CFG3, ADT7411_CFG3_ADC_CLK_22
+ static ADT7411_BIT_ATTR(adc_ref_vdd, ADT7411_REG_CFG3, ADT7411_CFG3_REF_VDD);
+ 
+ static struct attribute *adt7411_attrs[] = {
+-	&dev_attr_temp1_input.attr,
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_temp2_input.dev_attr.attr,
+ 	&dev_attr_in0_input.attr,
+ 	&sensor_dev_attr_in1_input.dev_attr.attr,
+ 	&sensor_dev_attr_in2_input.dev_attr.attr,
+@@ -253,7 +266,27 @@ static struct attribute *adt7411_attrs[] = {
+ 	NULL
+ };
+ 
+-ATTRIBUTE_GROUPS(adt7411);
++static umode_t adt7411_attrs_visible(struct kobject *kobj,
++				     struct attribute *attr, int index)
 +{
-+	int ret;
-+	u8 val;
++	struct device *dev = container_of(kobj, struct device, kobj);
++	struct adt7411_data *data = dev_get_drvdata(dev);
++	bool visible = true;
 +
-+	ret = i2c_smbus_read_byte_data(data->client, ADT7411_REG_CFG3);
-+	if (ret < 0)
-+		return ret;
++	if (attr == &sensor_dev_attr_temp2_input.dev_attr.attr)
++		visible = data->use_ext_temp;
++	else if (attr == &sensor_dev_attr_in1_input.dev_attr.attr ||
++		 attr == &sensor_dev_attr_in2_input.dev_attr.attr)
++		visible = !data->use_ext_temp;
 +
-+	/*
-+	 * We must only write zero to bit 1 and bit 2 and only one to bit 3
-+	 * according to the datasheet.
-+	 */
-+	val = ret;
-+	val &= ~(ADT7411_CFG3_RESERVED_BIT1 | ADT7411_CFG3_RESERVED_BIT2);
-+	val |= ADT7411_CFG3_RESERVED_BIT3;
-+
-+	ret = i2c_smbus_write_byte_data(data->client, ADT7411_REG_CFG3, val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_byte_data(data->client, ADT7411_REG_CFG1);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * We must only write zero to bit 1 and only one to bit 3 according to
-+	 * the datasheet.
-+	 */
-+	val = ret;
-+	val &= ~ADT7411_CFG1_RESERVED_BIT1;
-+	val |= ADT7411_CFG1_RESERVED_BIT3;
-+
-+	/* enable monitoring */
-+	val |= ADT7411_CFG1_START_MONITOR;
-+
-+	return i2c_smbus_write_byte_data(data->client, ADT7411_REG_CFG1, val);
++	return visible ? attr->mode : 0;
 +}
 +
- static int adt7411_probe(struct i2c_client *client,
- 				   const struct i2c_device_id *id)
- {
-@@ -297,10 +340,7 @@ static int adt7411_probe(struct i2c_client *client,
- 	mutex_init(&data->device_lock);
- 	mutex_init(&data->update_lock);
++static const struct attribute_group adt7411_group = {
++	.attrs = adt7411_attrs,
++	.is_visible = adt7411_attrs_visible,
++};
++__ATTRIBUTE_GROUPS(adt7411);
  
--	/* According to the datasheet, we must only write 1 to bit 3 */
--	ret = adt7411_modify_bit(client, ADT7411_REG_CFG1,
--				 ADT7411_CFG1_RESERVED_BIT3
--				 | ADT7411_CFG1_START_MONITOR, 1);
-+	ret = adt7411_init_device(data);
+ static int adt7411_detect(struct i2c_client *client,
+ 			  struct i2c_board_info *info)
+@@ -309,6 +342,8 @@ static int adt7411_init_device(struct adt7411_data *data)
  	if (ret < 0)
  		return ret;
  
++	data->use_ext_temp = ret & ADT7411_CFG1_EXT_TDM;
++
+ 	/*
+ 	 * We must only write zero to bit 1 and only one to bit 3 according to
+ 	 * the datasheet.
 -- 
 2.1.4
+
