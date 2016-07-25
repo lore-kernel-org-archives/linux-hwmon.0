@@ -1,109 +1,89 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from fudo.makrotopia.org ([185.142.180.71]:39365 "EHLO
-	fudo.makrotopia.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752503AbcGXUor (ORCPT
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:60144 "EHLO
+	mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+	with ESMTP id S1751999AbcGYGLP (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 24 Jul 2016 16:44:47 -0400
-Date: Sun, 24 Jul 2016 22:26:25 +0200
-From: Daniel Golle <daniel@makrotopia.org>
-To: linux-hwmon@vger.kernel.org
-Cc: devicetree@vger.kernel.org, Axel Lin <axel.lin@ingics.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Per =?iso-8859-1?Q?Dal=E9n?= <per.dalen@appeartv.com>
-Subject: [PATCH] hwmon: (ltc4151) Make shunt-resistor configurable
-Message-ID: <20160724202620.GA30245@makrotopia.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+	Mon, 25 Jul 2016 02:11:15 -0400
+From: Vadim Pasternak <vadimp@mellanox.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jiri@resnulli.us,
+	Vadim Pasternak <vadimp@mellanox.com>
+Subject: [patch] hwmon: (pmbus) Add explicit support for DPS-460, DPS-800, and SGD009
+Date: Mon, 25 Jul 2016 08:10:29 +0000
+Message-Id: <1469434229-162391-1-git-send-email-vadimp@mellanox.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Allow to specify the resistance of the attached shunt via DT by
-adding the shunt-resistor property. Fall-back to the previous
-default (1 mOhm) if unset.
+Provide support for PSU DPS-460, DPS-800 from Delta Electronics, INC and for
+SGD009 from Acbel Polytech, INC.
+These devices do not support the STATUS_CML register, and reports a
+communication error in response to this command.
+For this reason, the status register check is disabled for these controllers.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Reviewed-by: Jiri Pirko <jiri@mellanox.com>
 ---
- drivers/hwmon/ltc4151.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/pmbus.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/hwmon/ltc4151.c b/drivers/hwmon/ltc4151.c
-index c86a184..f856e44 100644
---- a/drivers/hwmon/ltc4151.c
-+++ b/drivers/hwmon/ltc4151.c
-@@ -30,6 +30,8 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/init.h>
- #include <linux/err.h>
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 0a74991..f28de37 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -25,6 +25,7 @@
  #include <linux/slab.h>
-@@ -52,6 +54,7 @@ struct ltc4151_data {
- 	struct mutex update_lock;
- 	bool valid;
- 	unsigned long last_updated; /* in jiffies */
-+	unsigned int shunt; /* in micro ohms */
+ #include <linux/mutex.h>
+ #include <linux/i2c.h>
++#include <linux/i2c/pmbus.h>
+ #include "pmbus.h"
  
- 	/* Registers */
- 	u8 regs[6];
-@@ -111,9 +114,9 @@ static int ltc4151_get_value(struct ltc4151_data *data, u8 reg)
- 	case LTC4151_SENSE_H:
- 		/*
- 		 * 20uV resolution. Convert to current as measured with
--		 * an 1 mOhm sense resistor, in mA.
-+		 * a given sense resistor, in mA.
- 		 */
--		val = val * 20;
-+		val = val * 20 * 1000 / data->shunt;
- 		break;
- 	case LTC4151_VIN_H:
- 		/* 25 mV per increment */
-@@ -176,6 +179,7 @@ static int ltc4151_probe(struct i2c_client *client,
- 	struct device *dev = &client->dev;
- 	struct ltc4151_data *data;
- 	struct device *hwmon_dev;
-+	u32 shunt;
+ /*
+@@ -167,14 +168,27 @@ static int pmbus_probe(struct i2c_client *client,
+ 		       const struct i2c_device_id *id)
+ {
+ 	struct pmbus_driver_info *info;
++	struct pmbus_platform_data *pdata = NULL;
++	struct device *dev = &client->dev;
  
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
- 		return -ENODEV;
-@@ -184,6 +188,14 @@ static int ltc4151_probe(struct i2c_client *client,
- 	if (!data)
+ 	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+ 			    GFP_KERNEL);
+ 	if (!info)
  		return -ENOMEM;
- 
-+#ifdef CONFIG_OF
-+	if (!of_property_read_u32(client->dev.of_node, "shunt-resistor", &shunt)
-+		&& shunt > 0 )
-+		data->shunt = shunt;
-+	else
-+#endif
-+		data->shunt = 1000; /* 1 mOhm if not set */
++	if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
++	    !strcmp(id->name, "sgd009")) {
++		pdata = devm_kzalloc(&client->dev,
++				     sizeof(struct pmbus_platform_data),
++				     GFP_KERNEL);
++		if (!pdata)
++			return -ENOMEM;
 +
- 	data->client = client;
- 	mutex_init(&data->update_lock);
++		pdata->flags = PMBUS_SKIP_STATUS_CHECK;
++	}
  
-@@ -199,10 +211,20 @@ static const struct i2c_device_id ltc4151_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, ltc4151_id);
+ 	info->pages = id->driver_data;
+ 	info->identify = pmbus_identify;
++	dev->platform_data = pdata;
  
-+#ifdef CONFIG_OF
-+static const struct of_device_id ltc4151_match[] = {
-+	{ .compatible = "lltc,ltc4151" },
-+	{},
-+};
-+#endif
-+
- /* This is the driver that will be inserted */
- static struct i2c_driver ltc4151_driver = {
-+	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "ltc4151",
-+		.owner  = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ltc4151_match),
- 	},
- 	.probe		= ltc4151_probe,
- 	.id_table	= ltc4151_id,
+ 	return pmbus_do_probe(client, id, info);
+ }
+@@ -186,6 +200,8 @@ static const struct i2c_device_id pmbus_id[] = {
+ 	{"adp4000", 1},
+ 	{"bmr453", 1},
+ 	{"bmr454", 1},
++	{"dps460", 1},
++	{"dps800", 1},
+ 	{"mdt040", 1},
+ 	{"ncp4200", 1},
+ 	{"ncp4208", 1},
+@@ -193,6 +209,7 @@ static const struct i2c_device_id pmbus_id[] = {
+ 	{"pdt006", 1},
+ 	{"pdt012", 1},
+ 	{"pmbus", 0},
++	{"sgd009", 1},
+ 	{"tps40400", 1},
+ 	{"tps544b20", 1},
+ 	{"tps544b25", 1},
 -- 
-2.9.0
+2.1.4
 
