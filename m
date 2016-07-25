@@ -1,53 +1,90 @@
-Return-path: <jdelvare@suse.de>
-Date: Tue, 26 Jul 2016 09:21:22 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: (lm90) Add missing assignment
-Message-ID: <20160726092122.64674f04@endymion>
-In-Reply-To: <1469483441-10702-1-git-send-email-linux@roeck-us.net>
-References: <1469483441-10702-1-git-send-email-linux@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48802 "EHLO
+	mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+	with ESMTP id S1751962AbcGYI4i (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Mon, 25 Jul 2016 04:56:38 -0400
+From: Vadim Pasternak <vadimp@mellanox.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jiri@resnulli.us,
+	Vadim Pasternak <vadimp@mellanox.com>
+Subject: [patch] hwmon: (pmbus) Add explicit support for DPS-460, DPS-800, and SGD009
+Date: Mon, 25 Jul 2016 10:55:53 +0000
+Message-Id: <1469444153-171240-1-git-send-email-vadimp@mellanox.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+Provide support for PSU DPS-460, DPS-800 from Delta Electronics, INC and for
+SGD009 from Acbel Polytech, INC.
+These devices do not support the STATUS_CML register, and reports a
+communication error in response to this command.
+For this reason, the status register check is disabled for these controllers.
 
-On Mon, 25 Jul 2016 14:50:41 -0700, Guenter Roeck wrote:
-> Coverity reports the following error.
-> 
-> >>>     CID 1364474:  Error handling issues  (CHECKED_RETURN)
-> >>>     Calling "lm90_read_reg" without checking return value (as is done
-> >>>     elsewhere 28 out of 29 times).
-> 532             lm90_read_reg(client, LM90_REG_R_REMOTE_LOWH);
-> 533             if (val < 0)
-> 534                     return val;
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/lm90.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index f51e758ba529..7b3eedf76c62 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -529,7 +529,7 @@ static int lm90_update_limits(struct device *dev)
->  		return val;
->  	data->temp_hyst = val;
->  
-> -	lm90_read_reg(client, LM90_REG_R_REMOTE_LOWH);
-> +	val = lm90_read_reg(client, LM90_REG_R_REMOTE_LOWH);
->  	if (val < 0)
->  		return val;
->  	data->temp11[REMOTE_LOW] = val << 8;
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Reviewed-by: Jiri Pirko <jiri@mellanox.com>
+---
+ drivers/hwmon/pmbus/pmbus.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-Good catch.
-
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-
-
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 0a74991..44ca8a9 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -25,6 +25,7 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ #include <linux/i2c.h>
++#include <linux/i2c/pmbus.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -167,14 +168,26 @@ static int pmbus_probe(struct i2c_client *client,
+ 		       const struct i2c_device_id *id)
+ {
+ 	struct pmbus_driver_info *info;
++	struct pmbus_platform_data *pdata = NULL;
++	struct device *dev = &client->dev;
+ 
+-	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+-			    GFP_KERNEL);
++	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+ 
++	if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
++	    !strcmp(id->name, "sgd009")) {
++		pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
++				     GFP_KERNEL);
++		if (!pdata)
++			return -ENOMEM;
++
++		pdata->flags = PMBUS_SKIP_STATUS_CHECK;
++	}
++
+ 	info->pages = id->driver_data;
+ 	info->identify = pmbus_identify;
++	dev->platform_data = pdata;
+ 
+ 	return pmbus_do_probe(client, id, info);
+ }
+@@ -186,6 +199,8 @@ static const struct i2c_device_id pmbus_id[] = {
+ 	{"adp4000", 1},
+ 	{"bmr453", 1},
+ 	{"bmr454", 1},
++	{"dps460", 1},
++	{"dps800", 1},
+ 	{"mdt040", 1},
+ 	{"ncp4200", 1},
+ 	{"ncp4208", 1},
+@@ -193,6 +208,7 @@ static const struct i2c_device_id pmbus_id[] = {
+ 	{"pdt006", 1},
+ 	{"pdt012", 1},
+ 	{"pmbus", 0},
++	{"sgd009", 1},
+ 	{"tps40400", 1},
+ 	{"tps544b20", 1},
+ 	{"tps544b25", 1},
 -- 
-Jean Delvare
-SUSE L3 Support
+2.1.4
+
