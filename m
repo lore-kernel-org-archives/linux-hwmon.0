@@ -1,42 +1,76 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:46024 "EHLO mx2.suse.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1754528AbcGZHSf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 26 Jul 2016 03:18:35 -0400
-Date: Tue, 26 Jul 2016 09:18:31 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Vadim Pasternak <vadimp@mellanox.com>
-Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jiri@resnulli.us
-Subject: Re: [patch] hwmon: (pmbus) Add explicit support for DPS-460,
- DPS-800, and SGD009
-Message-ID: <20160726091831.12ca477b@endymion>
-In-Reply-To: <1469444153-171240-1-git-send-email-vadimp@mellanox.com>
-References: <1469444153-171240-1-git-send-email-vadimp@mellanox.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <quentin.schulz@free-electrons.com>
+From: Quentin Schulz <quentin.schulz@free-electrons.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	jic23@kernel.org,
+	knaack.h@gmx.de,
+	lars@metafoo.de,
+	pmeerw@pmeerw.net,
+	maxime.ripard@free-electrons.com,
+	wens@csie.org,
+	lee.jones@linaro.org
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Subject: [PATCH v3 1/4] hwmon: iio_hwmon: delay probing with late_initcall
+Date: Tue, 26 Jul 2016 09:43:44 +0200
+Message-Id: <1469519027-11387-2-git-send-email-quentin.schulz@free-electrons.com>
+In-Reply-To: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
+References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, 25 Jul 2016 10:55:53 +0000, Vadim Pasternak wrote:
-> Provide support for PSU DPS-460, DPS-800 from Delta Electronics, INC and for
-> SGD009 from Acbel Polytech, INC.
-> These devices do not support the STATUS_CML register, and reports a
-> communication error in response to this command.
-> For this reason, the status register check is disabled for these controllers.
-> 
-> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-> Reviewed-by: Jiri Pirko <jiri@mellanox.com>
-> ---
->  drivers/hwmon/pmbus/pmbus.c | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> (...)
+iio_channel_get_all returns -ENODEV when it cannot find either phandles and
+properties in the Device Tree or channels whose consumer_dev_name matches
+iio_hwmon in iio_map_list. The iio_map_list is filled in by iio drivers
+which might be probed after iio_hwmon.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+This makes sure iio_hwmon is probed after all iio drivers which provides
+channels to iio_hwmon are probed, be they present in the DT or using
+iio_map_list.
 
-I leave the final ack to Guenter.
+This replaces module_platform_driver() by an explicit code variant which
+calls late_initcall() install of module_init(), meaning it probes after
+all the drivers using module_init() as their init.
 
+Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+---
+
+v3:
+ - use late_initcall instead of deferring probe,
+
+ drivers/hwmon/iio_hwmon.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index b550ba5..0a00bfb 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -192,7 +192,21 @@ static struct platform_driver __refdata iio_hwmon_driver = {
+ 	.remove = iio_hwmon_remove,
+ };
+ 
+-module_platform_driver(iio_hwmon_driver);
++static struct platform_driver * const drivers[] = {
++	&iio_hwmon_driver,
++};
++
++static int __init iio_hwmon_late_init(void)
++{
++	return platform_register_drivers(drivers, ARRAY_SIZE(drivers));
++}
++late_initcall(iio_hwmon_late_init);
++
++static void __exit iio_hwmon_exit(void)
++{
++	platform_unregister_drivers(drivers, ARRAY_SIZE(drivers));
++}
++module_exit(iio_hwmon_exit);
+ 
+ MODULE_AUTHOR("Jonathan Cameron <jic23@kernel.org>");
+ MODULE_DESCRIPTION("IIO to hwmon driver");
 -- 
-Jean Delvare
-SUSE L3 Support
+2.5.0
