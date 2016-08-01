@@ -1,149 +1,87 @@
-Return-path: <jic23@kernel.org>
-In-Reply-To: <20160815170730.GB32260@roeck-us.net>
-References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com> <5277864.qlyRKbC1Zy@ws-stein> <ed5c1761-bdc7-df9c-96c8-998e83c49c4c@free-electrons.com> <2324970.FJcTUYNoO2@ws-stein> <20160726160410.GE30628@roeck-us.net> <aa387c9c-8330-fd2a-67c1-0aa0b9a90794@kernel.org> <20160815170730.GB32260@roeck-us.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain;
- charset=UTF-8
-Subject: Re: [PATCH v3 1/4] hwmon: iio_hwmon: delay probing with late_initcall
-From: Jonathan Cameron <jic23@kernel.org>
-Date: Mon, 15 Aug 2016 22:35:54 +0100
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Alexander Stein <alexander.stein@systec-electronic.com>,Quentin Schulz <quentin.schulz@free-electrons.com>,linux-kernel@vger.kernel.org,jdelvare@suse.com,knaack.h@gmx.de,lars@metafoo.de,pmeerw@pmeerw.net,maxime.ripard@free-electrons.com,wens@csie.org,lee.jones@linaro.org,linux-hwmon@vger.kernel.org,linux-iio@vger.kernel.org,linux-arm-kernel@lists.infradead.org,thomas.petazzoni@free-electrons.com,antoine.tenart@free-electrons.com
-Message-ID: <ECA41B39-BCC0-44D0-8B3D-838C48D713D0@kernel.org>
+Return-Path: <linux-kernel-owner@vger.kernel.org>
+From: Kamil Debski <k.debski@samsung.com>
+To: linux-kernel@vger.kernel.org
+Cc: Kamil Debski <k.debski@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-hwmon@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
+        Lukasz Majewski <l.majewski@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Kamil Debski <kamil@wypas.org>
+Subject: [PATCH] MAINTAINERS: update email and list of Samsung HW driver
+ maintainers
+Date: Mon, 01 Aug 2016 16:11:43 +0200
+Message-id: <1470060703-20423-1-git-send-email-k.debski@samsung.com>
+Sender: linux-kernel-owner@vger.kernel.org
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
+Change my email address in the MAINTAINERS file.
+Add new maintainers of selected Samsung HW drivers.
 
+Signed-off-by: Kamil Debski <k.debski@samsung.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Andrzej Hajda <a.hajda@samsung.com>
+Cc: Lukasz Majewski <l.majewski@samsung.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc: Kamil Debski <kamil@wypas.org>
+---
+ MAINTAINERS | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-On 15 August 2016 18:07:30 BST, Guenter Roeck <linux@roeck-us.net> wrote:
->On Mon, Aug 15, 2016 at 04:40:21PM +0100, Jonathan Cameron wrote:
->> On 26/07/16 17:04, Guenter Roeck wrote:
->> > On Tue, Jul 26, 2016 at 12:00:33PM +0200, Alexander Stein wrote:
->> >> On Tuesday 26 July 2016 11:33:59, Quentin Schulz wrote:
->> >>> On 26/07/2016 11:05, Alexander Stein wrote:
->> >>>> On Tuesday 26 July 2016 10:24:48, Quentin Schulz wrote:
->> >>>>> On 26/07/2016 10:21, Alexander Stein wrote:
->> >>>>>> On Tuesday 26 July 2016 09:43:44, Quentin Schulz wrote:
->> >>>>>>> iio_channel_get_all returns -ENODEV when it cannot find
->either phandles
->> >>>>>>> and
->> >>>>>>> properties in the Device Tree or channels whose
->consumer_dev_name
->> >>>>>>> matches
->> >>>>>>> iio_hwmon in iio_map_list. The iio_map_list is filled in by
->iio drivers
->> >>>>>>> which might be probed after iio_hwmon.
->> >>>>>>
->> >>>>>> Would it work if iio_channel_get_all returning ENODEV is used
->for
->> >>>>>> returning
->> >>>>>> EPROBE_DEFER in iio_channel_get_all? Using late initcalls for
->> >>>>>> driver/device
->> >>>>>> dependencies seems not right for me at this place.
->> >>>>>
->> >>>>> Then what if the iio_channel_get_all is called outside of the
->probe of a
->> >>>>> driver? We'll have to change the error code, things we are
->apparently
->> >>>>> trying to avoid (see v2 patches' discussions).
->> >>>>
->> >>>> Maybe I didn't express my idea enough. I don't want to change
->the behavior
->> >>>> of iio_channel_get_all at all. Just the result evaluation of
->> >>>> iio_channel_get_all in iio_hwmon_probe. I have something link
->the patch
->> >>>> below in mind.
->> >>>>
->> >>>> Best regards,
->> >>>> Alexander
->> >>>> ---
->> >>>> diff --git a/drivers/hwmon/iio_hwmon.c
->b/drivers/hwmon/iio_hwmon.c
->> >>>> index b550ba5..e32d150 100644
->> >>>> --- a/drivers/hwmon/iio_hwmon.c
->> >>>> +++ b/drivers/hwmon/iio_hwmon.c
->> >>>> @@ -73,8 +73,12 @@ static int iio_hwmon_probe(struct
->platform_device
->> >>>> *pdev)
->> >>>>
->> >>>>                 name = dev->of_node->name;
->> >>>>         
->> >>>>         channels = iio_channel_get_all(dev);
->> >>>>
->> >>>> -       if (IS_ERR(channels))
->> >>>> -               return PTR_ERR(channels);
->> >>>> +       if (IS_ERR(channels)) {
->> >>>> +               if (PTR_ERR(channels) == -ENODEV)
->> >>>> +                       return -EPROBE_DEFER;
->> >>>> +               else
->> >>>> +                       return PTR_ERR(channels);
->> >>>> +       }
->> >>>>
->> >>>>         st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
->> >>>>         if (st == NULL) {
->> >>>
->> >>> Indeed, I misunderstood what you told me.
->> >>>
->> >>> Actually, the patch you proposed is part of my v1
->> >>> (https://lkml.org/lkml/2016/6/28/203) and v2
->> >>> (https://lkml.org/lkml/2016/7/15/215).
->> >>> Jonathan and Guenter didn't really like the idea of changing the
->-ENODEV
->> >>> in -EPROBE_DEFER.
->> >>
->> >> Thanks for the links.
->> >>
->> >>> What I thought you were proposing was to change the -ENODEV
->return code
->> >>> inside iio_channel_get_all. This cannot be an option since the
->function
->> >>> might be called outside of a probe (it is not yet, but might be
->in the
->> >>> future?).
->> >>
->> >> AFAICS this is a helper function not knowing about device probing
->itself. And 
->> >> it should stay at that.
->> >>
->> >>> Of what I understood, two possibilities are then possible
->(proposed
->> >>> either by Guenter or Jonathan): either rework the iio framework
->to
->> >>> register iio map array earlier or to use late_initcall instead of
->init
->> >>> for the driver consuming the iio channels.
->> >>
->> >> Interestingly using this problem would not arise due to module
->dependencies. 
->> >> But using late_initcall would mean this needs to be done on any
->driver using 
->> >> iio channels? I would rather keep those consumers simple.
->> >>
->> > Me too, but that would imply a solution in iio. The change you
->propose above
->> > isn't exactly simple either, and would also be needed in each
->consumer driver.
->> > 
->> > Just for the record, I dislike the late_initcall solution as well,
->but I prefer
->> > it over blindly converting ENODEV to EPROBE_DEFER.
->> I'm falling on the other side on this one right now. Though I'd be
->tempted
->> to renaming the function to something like
->iio_channel_get_all_or_defer
->> to make it explicit that it can result in deferred probing.
->> 
->Would this new function return -EPROBE_DEFER instead of -ENODEV ?
-Yes. Though whether it really adds much over doing that in drivers isn't clear.
-
-Hmm. Needs more thought...
->
->Thanks,
->Guenter
->--
->To unsubscribe from this list: send the line "unsubscribe linux-iio" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8c20323..76e5953 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1623,7 +1623,8 @@ F:	arch/arm/mach-s5pv210/
+ 
+ ARM/SAMSUNG S5P SERIES 2D GRAPHICS ACCELERATION (G2D) SUPPORT
+ M:	Kyungmin Park <kyungmin.park@samsung.com>
+-M:	Kamil Debski <k.debski@samsung.com>
++M:	Kamil Debski <kamil@wypas.org>
++M:	Andrzej Hajda <a.hajda@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+@@ -1631,8 +1632,9 @@ F:	drivers/media/platform/s5p-g2d/
+ 
+ ARM/SAMSUNG S5P SERIES Multi Format Codec (MFC) SUPPORT
+ M:	Kyungmin Park <kyungmin.park@samsung.com>
+-M:	Kamil Debski <k.debski@samsung.com>
++M:	Kamil Debski <kamil@wypas.org>
+ M:	Jeongtae Park <jtp.park@samsung.com>
++M:	Andrzej Hajda <a.hajda@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+@@ -9241,7 +9243,8 @@ S:	Maintained
+ F:	drivers/media/usb/pwc/*
+ 
+ PWM FAN DRIVER
+-M:	Kamil Debski <k.debski@samsung.com>
++M:	Kamil Debski <kamil@wypas.org>
++M:	Lukasz Majewski <l.majewski@samsung.com>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+@@ -9985,7 +9988,8 @@ T:	git https://github.com/lmajewski/linux-samsung-thermal.git
+ F:	drivers/thermal/samsung/
+ 
+ SAMSUNG USB2 PHY DRIVER
+-M:	Kamil Debski <k.debski@samsung.com>
++M:	Kamil Debski <kamil@wypas.org>
++M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/phy/samsung-phy.txt
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity.
+1.9.1
