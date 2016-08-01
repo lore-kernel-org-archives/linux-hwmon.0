@@ -1,63 +1,100 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55220 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752040AbcHMAhZ (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Fri, 12 Aug 2016 20:37:25 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Keerthy J <j-keerthy@ti.com>
-Subject: [PATCH] hwmon: (core) Avoid cyclic dependency between hwmon and thermal_sys
-Date: Fri, 12 Aug 2016 17:37:19 -0700
-Message-Id: <1471048639-9792-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <daniel@makrotopia.org>
+Date: Mon, 1 Aug 2016 12:07:18 +0200
+From: Daniel Golle <daniel@makrotopia.org>
+To: Guenter Roeck <linux@roeck-us.net>, Axel Lin <axel.lin@ingics.com>,
+	Per =?iso-8859-1?Q?Dal=E9n?= <per.dalen@appeartv.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 1/2] hwmon: (ltc4151) Make shunt-resistor configurable
+Message-ID: <20160801100714.GA4243@makrotopia.org>
+References: <20160727144859.GA18846@rob-hp-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160727144859.GA18846@rob-hp-laptop>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-If both hwmon and thermal_sys are built as modules, and
-CONFIG_THERMAL_HWMON is enabled, the following cyclic module dependency
-is reported.
+Allow to specify the resistance of the attached shunt via DT by
+adding the shunt-resistor property. Fall-back to the previous
+default (1 mOhm) if unset.
 
-depmod: ERROR: Found 2 modules in dependency cycles!
-depmod: ERROR: Cycle detected: hwmon -> thermal_sys -> hwmon
-
-Fixes: e4bce763adb2 ("hwmon: (core) New hwmon registration API")
-Reported-by: Vignesh R <vigneshr@ti.com>
-Cc: Keerthy J <j-keerthy@ti.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/hwmon/hwmon.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+v2: add -micro-ohms unit suffix
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index fade170977e8..adae6848ffb2 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -108,7 +108,13 @@ static DEFINE_IDA(hwmon_ida);
+ drivers/hwmon/ltc4151.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/ltc4151.c b/drivers/hwmon/ltc4151.c
+index c86a184..d36e5e1 100644
+--- a/drivers/hwmon/ltc4151.c
++++ b/drivers/hwmon/ltc4151.c
+@@ -30,6 +30,7 @@
  
- /* Thermal zone handling */
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/init.h>
+ #include <linux/err.h>
+ #include <linux/slab.h>
+@@ -52,6 +53,7 @@ struct ltc4151_data {
+ 	struct mutex update_lock;
+ 	bool valid;
+ 	unsigned long last_updated; /* in jiffies */
++	unsigned int shunt; /* in micro ohms */
  
--#if IS_REACHABLE(CONFIG_THERMAL) && defined(CONFIG_THERMAL_OF)
-+/*
-+ * The complex conditional is necessary to avoid a cyclic dependency
-+ * between hwmon and thermal_sys modules.
-+ */
-+#if IS_REACHABLE(CONFIG_THERMAL) && defined(CONFIG_THERMAL_OF) && \
-+	(!defined(CONFIG_THERMAL_HWMON) || \
-+	 !(defined(MODULE) && IS_MODULE(CONFIG_THERMAL)))
- static int hwmon_thermal_get_temp(void *data, int *temp)
- {
- 	struct hwmon_thermal_data *tdata = data;
-@@ -153,7 +159,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
- {
- 	return 0;
- }
--#endif /* IS_REACHABLE(CONFIG_THERMAL) && defined(CONFIG_THERMAL_OF) */
-+#endif /* IS_REACHABLE(CONFIG_THERMAL) && ... */
+ 	/* Registers */
+ 	u8 regs[6];
+@@ -111,9 +113,9 @@ static int ltc4151_get_value(struct ltc4151_data *data, u8 reg)
+ 	case LTC4151_SENSE_H:
+ 		/*
+ 		 * 20uV resolution. Convert to current as measured with
+-		 * an 1 mOhm sense resistor, in mA.
++		 * a given sense resistor, in mA.
+ 		 */
+-		val = val * 20;
++		val = val * 20 * 1000 / data->shunt;
+ 		break;
+ 	case LTC4151_VIN_H:
+ 		/* 25 mV per increment */
+@@ -176,6 +178,7 @@ static int ltc4151_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	struct ltc4151_data *data;
+ 	struct device *hwmon_dev;
++	u32 shunt;
  
- /* sysfs attribute management */
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+ 		return -ENODEV;
+@@ -184,6 +187,14 @@ static int ltc4151_probe(struct i2c_client *client,
+ 	if (!data)
+ 		return -ENOMEM;
  
++	if (of_property_read_u32(client->dev.of_node, "shunt-resistor-micro-ohms", &shunt))
++		shunt = 1000; /* 1 mOhm if not set via DT */
++
++	if (shunt == 0)
++		return -EINVAL;
++
++	data->shunt = shunt;
++
+ 	data->client = client;
+ 	mutex_init(&data->update_lock);
+ 
+@@ -199,10 +210,16 @@ static const struct i2c_device_id ltc4151_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, ltc4151_id);
+ 
++static const struct of_device_id ltc4151_match[] = {
++	{ .compatible = "lltc,ltc4151" },
++	{},
++};
++
+ /* This is the driver that will be inserted */
+ static struct i2c_driver ltc4151_driver = {
+ 	.driver = {
+ 		.name	= "ltc4151",
++		.of_match_table = of_match_ptr(ltc4151_match),
+ 	},
+ 	.probe		= ltc4151_probe,
+ 	.id_table	= ltc4151_id,
 -- 
-2.5.0
-
+2.9.2
