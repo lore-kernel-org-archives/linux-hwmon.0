@@ -1,668 +1,294 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:53179 "EHLO
-        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752011AbcHUT17 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Aug 2016 15:27:59 -0400
-Subject: Re: [PATCH v3 4/4] iio: adc: add support for Allwinner SoCs ADC
-To: Quentin Schulz <quentin.schulz@free-electrons.com>,
-        jdelvare@suse.com, linux@roeck-us.net, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net,
-        maxime.ripard@free-electrons.com, wens@csie.org,
-        lee.jones@linaro.org
-References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
- <1469519027-11387-5-git-send-email-quentin.schulz@free-electrons.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        thomas.petazzoni@free-electrons.com,
-        antoine.tenart@free-electrons.com
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <6b65b84a-d346-aa05-399d-2f22e2271e8b@kernel.org>
-Date: Sun, 21 Aug 2016 20:27:50 +0100
+Received: from bh-25.webhostbox.net ([208.91.199.152]:40834 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1754135AbcHBWps (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Aug 2016 18:45:48 -0400
+Date: Tue, 2 Aug 2016 15:44:29 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Joshua Scott <joshua.scott@alliedtelesis.co.nz>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] hwmon: adt7470: Expose PWM frequency to sysfs
+Message-ID: <20160802224429.GA9350@roeck-us.net>
+References: <20160801054151.27639-1-joshua.scott@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <1469519027-11387-5-git-send-email-quentin.schulz@free-electrons.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160801054151.27639-1-joshua.scott@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 26/07/16 08:43, Quentin Schulz wrote:
-> The Allwinner SoCs all have an ADC that can also act as a touchscreen
-> controller and a thermal sensor. This patch adds the ADC driver which is
-> based on the MFD for the same SoCs ADC.
+On Mon, Aug 01, 2016 at 05:41:51PM +1200, Joshua Scott wrote:
+> The ADT7470 supports a variety of PWM frequencies. This patch allows the
+> frequency to be configured and viewed through the sysfs entry pwm1_freq.
 > 
-> This also registers the thermal adc channel in the iio map array so
-> iio_hwmon could use it without modifying the Device Tree. This registers
-> the driver in the thermal framework.
-> 
-> This driver probes on three different platform_device_id to take into
-> account slight differences (registers bit and temperature computation)
-> between Allwinner SoCs ADCs.
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> Signed-off-by: Joshua Scott <joshua.scott@alliedtelesis.co.nz>
 > ---
+>  Documentation/hwmon/adt7470 |  17 +++++
+>  drivers/hwmon/adt7470.c     | 149 ++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 166 insertions(+)
 > 
-> I don't like how I get the temperature for the thermal framework
-> (sunxi_gpadc_get_temp). I am doing the exact same process as the iio_hwmon
-> but in this function. This is duplicated code. I could use
-> iio_read_channel_processed but it needs to have the iio_channel structure
-> of the thermal sensor which I can only get with iio_channel_get which
-> matches the device name with the consumer_dev_name in the iio_map array.
-> And frankly, I do not see myself declaring the driver both as the producer
-> and the consumer of IIO channels.
-I also can't see a clean way of reusing the value calculation code.  You
-could construct and iio_channel by hand easily enough, but that would be
-a pretty ugly bit of 'boundary crossing'.
-> 
-> Moreover, since the thermal sensor is configured to throw an interrupt
-> every X seconds, only the first request within these X seconds will not
-> time out. This means that because the thermal framework regularly poll the
-> thermal sensor, it is really difficult to get a value from sysfs without
-> getting first a tonne of times out. I don't know if we can do something
-> about that?
-Cache the value what ever read it? (thermal or sysfs) then return that
-until a new one shows up...
-
-Otherwise, I don't have anything to add to the other review comments.
-
-Jonathan
-> 
-> v3:
->  - correct wrapping,
->  - add comment about thermal sensor inner working,
->  - move defines in mfd header,
->  - use structure to define SoC specific registers or behaviour,
->  - attach this structure to the device according to of_device_id of the
->    platform device,
->  - use new mutex instead of iio_dev mutex,
->  - use atomic flags to avoid race between request_irq and disable_irq in
->    probe,
->  - switch from processed value to raw, offset and scale values for
->    temperature ADC channel,
->  - remove faulty sentinel in iio_chan_spec array,
->  - add pm_runtime support,
->  - register thermal sensor in thermal framework (forgotten since the
->    beginning whereas it is present in current sun4i-ts driver),
->  - remove useless ret variables to store return value of regmap_reads,
->  - move comments on thermal sensor acquisition period in code instead of
->    header,
->  - adding goto label to unregister iio_map_array when failing to register
->    iio_dev,
-> 
-> v2:
->  - add SUNXI_GPADC_ prefixes for defines,
->  - correct typo in Kconfig,
->  - reorder alphabetically includes, makefile,
->  - add license header,
->  - fix architecture variations not being handled in interrupt handlers or
->    read raw functions,
->  - fix unability to return negative values from thermal sensor,
->  - add gotos to reduce code repetition,
->  - fix irq variable being unsigned int instead of int,
->  - remove useless dev_err and dev_info,
->  - deactivate all interrupts if probe fails,
->  - fix iio_device_register on NULL variable,
->  - deactivate ADC in the IP when probe fails or when removing driver,
-> 
->  drivers/iio/adc/Kconfig           |  12 +
->  drivers/iio/adc/Makefile          |   1 +
->  drivers/iio/adc/sunxi-gpadc-iio.c | 513 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 526 insertions(+)
->  create mode 100644 drivers/iio/adc/sunxi-gpadc-iio.c
-> 
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 25378c5..429ef16 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -384,6 +384,18 @@ config ROCKCHIP_SARADC
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called rockchip_saradc.
+> diff --git a/Documentation/hwmon/adt7470 b/Documentation/hwmon/adt7470
+> index 8ce4aa0..fe68e18 100644
+> --- a/Documentation/hwmon/adt7470
+> +++ b/Documentation/hwmon/adt7470
+> @@ -65,6 +65,23 @@ from 0 (off) to 255 (full speed).  Fan speed will be set to maximum when the
+>  temperature sensor associated with the PWM control exceeds
+>  pwm#_auto_point2_temp.
 >  
-> +config SUN4I_GPADC
-> +	tristate "Support for the Allwinner SoCs GPADC"
-> +	depends on IIO
-> +	depends on MFD_SUN4I_GPADC
-> +	help
-> +	  Say yes here to build support for Allwinner (A10, A13 and A31) SoCs
-> +	  GPADC. This ADC provides 4 channels which can be used as an ADC or as
-> +	  a touchscreen input and one channel for thermal sensor.
+> +The driver also allows control of the PWM frequency:
 > +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called sunxi-gpadc-iio.
+> +* pwm1_freq
 > +
->  config TI_ADC081C
->  	tristate "Texas Instruments ADC081C/ADC101C/ADC121C family"
->  	depends on I2C
-> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-> index 38638d4..14d1739 100644
-> --- a/drivers/iio/adc/Makefile
-> +++ b/drivers/iio/adc/Makefile
-> @@ -37,6 +37,7 @@ obj-$(CONFIG_PALMAS_GPADC) += palmas_gpadc.o
->  obj-$(CONFIG_QCOM_SPMI_IADC) += qcom-spmi-iadc.o
->  obj-$(CONFIG_QCOM_SPMI_VADC) += qcom-spmi-vadc.o
->  obj-$(CONFIG_ROCKCHIP_SARADC) += rockchip_saradc.o
-> +obj-$(CONFIG_SUN4I_GPADC) += sunxi-gpadc-iio.o
->  obj-$(CONFIG_TI_ADC081C) += ti-adc081c.o
->  obj-$(CONFIG_TI_ADC0832) += ti-adc0832.o
->  obj-$(CONFIG_TI_ADC128S052) += ti-adc128s052.o
-> diff --git a/drivers/iio/adc/sunxi-gpadc-iio.c b/drivers/iio/adc/sunxi-gpadc-iio.c
-> new file mode 100644
-> index 0000000..5647688
-> --- /dev/null
-> +++ b/drivers/iio/adc/sunxi-gpadc-iio.c
-> @@ -0,0 +1,513 @@
-> +/* ADC driver for sunxi platforms' (A10, A13 and A31) GPADC
-> + *
-> + * Copyright (c) 2016 Quentin Schulz <quentin.schulz@free-electrons>
-> + *
-> + * This program is free software; you can redistribute it and/or modify it under
-> + * the terms of the GNU General Public License version 2 as published by the
-> + * Free Software Foundation.
-> + *
-> + * The Allwinner SoCs all have an ADC that can also act as a touchscreen
-> + * controller and a thermal sensor.
-> + * The thermal sensor works only when the ADC acts as a touchscreen controller
-> + * and is configured to throw an interrupt every fixed periods of time (let say
-> + * every X seconds).
-> + * One would be tempted to disable the IP on the hardware side rather than
-> + * disabling interrupts to save some power but that reset the internal clock of
-> + * the IP, resulting in having to wait X seconds every time we want to read the
-> + * value of the thermal sensor.
-> + * This is also the reason of using autosuspend in pm_runtime. If there were no
-> + * autosuspend, the thermal sensor would need X seconds after every
-> + * pm_runtime_get_sync to get a value from the ADC. The autosuspend allows the
-> + * thermal sensor to be requested again in a certain time span before it gets
-> + * shutdown for not being used.
+> +The PWM frequency is rounded to the nearest one of:
+> +
+> +* 11.0 Hz
+> +* 14.7 Hz
+> +* 22.1 Hz
+> +* 29.4 Hz
+> +* 35.3 Hz
+> +* 44.1 Hz
+> +* 58.8 Hz
+> +* 88.2 Hz
+> +* 1.4 kHz
+> +* 22.5 kHz
+> +
+>  Notes
+>  -----
+>  
+> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+> index f5da39a..f57026f 100644
+> --- a/drivers/hwmon/adt7470.c
+> +++ b/drivers/hwmon/adt7470.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/log2.h>
+>  #include <linux/kthread.h>
+>  #include <linux/slab.h>
+> +#include <linux/util_macros.h>
+>  
+>  /* Addresses to scan */
+>  static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+> @@ -83,6 +84,7 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+>  #define ADT7470_REG_PWM_MIN_MAX_ADDR		0x6D
+>  #define ADT7470_REG_PWM_TEMP_MIN_BASE_ADDR	0x6E
+>  #define ADT7470_REG_PWM_TEMP_MIN_MAX_ADDR	0x71
+> +#define ADT7470_REG_CFG_2			0x74
+>  #define ADT7470_REG_ACOUSTICS12			0x75
+>  #define ADT7470_REG_ACOUSTICS34			0x76
+>  #define ADT7470_REG_DEVICE			0x3D
+> @@ -142,6 +144,22 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+>  #define FAN_PERIOD_INVALID	65535
+>  #define FAN_DATA_VALID(x)	((x) && (x) != FAN_PERIOD_INVALID)
+>  
+> +/* The datasheet includes a table of available pwm frequencies
+> + * controlled by values in config registers 1 and 2.
 > + */
+> +#define ADT7470_CFG_LF		0x40
+> +#define ADT7470_FREQ_BITS	0x70
+> +#define ADT7470_CFG_LF_11_0_HZ	0x00
+> +#define ADT7470_CFG_LF_14_7_HZ	0x10
+> +#define ADT7470_CFG_LF_22_1_HZ	0x20
+> +#define ADT7470_CFG_LF_29_4_HZ	0x30
+> +#define ADT7470_CFG_LF_35_3_HZ	0x40
+> +#define ADT7470_CFG_LF_44_1_HZ	0x50
+> +#define ADT7470_CFG_LF_58_8_HZ	0x60
+> +#define ADT7470_CFG_LF_88_2_HZ	0x70
+> +#define ADT7470_CFG_HF_1_4_KHZ	0x00
+> +#define ADT7470_CFG_HF_22_5_KHZ	0x10
 > +
-> +#include <linux/completion.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +#include <linux/thermal.h>
-> +
-> +#include <linux/iio/iio.h>
-> +#include <linux/iio/driver.h>
-> +#include <linux/iio/machine.h>
-> +#include <linux/mfd/sunxi-gpadc-mfd.h>
-> +
-> +const unsigned int sun4i_gpadc_chan_select(unsigned int chan)
+>  struct adt7470_data {
+>  	struct i2c_client	*client;
+>  	struct mutex		lock;
+> @@ -688,6 +706,134 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *devattr,
+>  	return count;
+>  }
+>  
+> +static ssize_t show_pwm_freq(struct device *dev,
+> +			     struct device_attribute *devattr, char *buf)
 > +{
-> +	return SUNXI_GPADC_TP_CTRL1_ADC_CHAN_SELECT(chan);
-> +}
+> +	struct adt7470_data *data = adt7470_update_device(dev);
+> +	unsigned char cfg_reg_1;
+> +	unsigned char cfg_reg_2;
+> +	int freq = -EINVAL;
 > +
-> +const unsigned int sun6i_gpadc_chan_select(unsigned int chan)
-> +{
-> +	return SUNXI_GPADC_TP_CTRL1_SUN6I_ADC_CHAN_SELECT(chan);
-> +}
+> +	mutex_lock(&data->lock);
+> +	cfg_reg_1 = i2c_smbus_read_byte_data(data->client, ADT7470_REG_CFG);
+> +	cfg_reg_2 = i2c_smbus_read_byte_data(data->client, ADT7470_REG_CFG_2);
+
+[ Note: Lack of error checking accepted because the rest of the driver
+  doesn't check for errors either ]
+
+> +	mutex_unlock(&data->lock);
 > +
-> +struct sunxi_gpadc_soc_specific {
-> +	const int		temp_offset;
-> +	const int		temp_scale;
-> +	const unsigned int	tp_mode_en;
-> +	const unsigned int	tp_adc_select;
-> +	const unsigned int	(*adc_chan_select)(unsigned int chan);
-> +};
-> +
-> +static const struct sunxi_gpadc_soc_specific sun4i_gpadc_soc_specific = {
-> +	.temp_offset = -1932,
-> +	.temp_scale = 133,
-> +	.tp_mode_en = SUNXI_GPADC_TP_CTRL1_TP_MODE_EN,
-> +	.tp_adc_select = SUNXI_GPADC_TP_CTRL1_TP_ADC_SELECT,
-> +	.adc_chan_select = &sun4i_gpadc_chan_select,
-> +};
-> +
-> +static const struct sunxi_gpadc_soc_specific sun5i_gpadc_soc_specific = {
-> +	.temp_offset = -1447,
-> +	.temp_scale = 100,
-> +	.tp_mode_en = SUNXI_GPADC_TP_CTRL1_TP_MODE_EN,
-> +	.tp_adc_select = SUNXI_GPADC_TP_CTRL1_TP_ADC_SELECT,
-> +	.adc_chan_select = &sun4i_gpadc_chan_select,
-> +};
-> +
-> +static const struct sunxi_gpadc_soc_specific sun6i_gpadc_soc_specific = {
-> +	.temp_offset = -1623,
-> +	.temp_scale = 167,
-> +	.tp_mode_en = SUNXI_GPADC_TP_CTRL1_SUN6I_TP_MODE_EN,
-> +	.tp_adc_select = SUNXI_GPADC_TP_CTRL1_SUN6I_TP_ADC_SELECT,
-> +	.adc_chan_select = &sun6i_gpadc_chan_select,
-> +};
-> +
-> +struct sunxi_gpadc_dev {
-> +	struct iio_dev				*indio_dev;
-> +	void __iomem				*regs;
-> +	struct completion			completion;
-> +	int					temp_data;
-> +	u32					adc_data;
-> +	struct regmap				*regmap;
-> +	unsigned int				fifo_data_irq;
-> +	atomic_t				ignore_fifo_data_irq;
-> +	unsigned int				temp_data_irq;
-> +	atomic_t				ignore_temp_data_irq;
-> +	const struct sunxi_gpadc_soc_specific	*soc_specific;
-> +	struct mutex				mutex;
-> +};
-> +
-> +#define SUNXI_GPADC_ADC_CHANNEL(_channel, _name) {		\
-> +	.type = IIO_VOLTAGE,					\
-> +	.indexed = 1,						\
-> +	.channel = _channel,					\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-> +	.datasheet_name = _name,				\
-> +}
-> +
-> +static struct iio_map sunxi_gpadc_hwmon_maps[] = {
-> +	{
-> +		.adc_channel_label = "temp_adc",
-> +		.consumer_dev_name = "iio_hwmon.0",
-> +	},
-> +	{ /* sentinel */ },
-> +};
-> +
-> +static const struct iio_chan_spec sunxi_gpadc_channels[] = {
-> +	SUNXI_GPADC_ADC_CHANNEL(0, "adc_chan0"),
-> +	SUNXI_GPADC_ADC_CHANNEL(1, "adc_chan1"),
-> +	SUNXI_GPADC_ADC_CHANNEL(2, "adc_chan2"),
-> +	SUNXI_GPADC_ADC_CHANNEL(3, "adc_chan3"),
-> +	{
-> +		.type = IIO_TEMP,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> +				      BIT(IIO_CHAN_INFO_SCALE) |
-> +				      BIT(IIO_CHAN_INFO_OFFSET),
-> +		.datasheet_name = "temp_adc",
-> +	},
-> +};
-> +
-> +static int sunxi_gpadc_adc_read(struct iio_dev *indio_dev, int channel,
-> +				int *val)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(indio_dev);
-> +	int ret = 0;
-> +
-> +	pm_runtime_get_sync(indio_dev->dev.parent);
-> +	mutex_lock(&info->mutex);
-> +
-> +	reinit_completion(&info->completion);
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL1,
-> +		     info->soc_specific->tp_mode_en |
-> +		     info->soc_specific->tp_adc_select |
-> +		     info->soc_specific->adc_chan_select(channel));
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_INT_FIFOC,
-> +		     SUNXI_GPADC_TP_INT_FIFOC_TP_FIFO_TRIG_LEVEL(1) |
-> +		     SUNXI_GPADC_TP_INT_FIFOC_TP_FIFO_FLUSH);
-> +	enable_irq(info->fifo_data_irq);
-> +
-> +	if (!wait_for_completion_timeout(&info->completion,
-> +					 msecs_to_jiffies(100))) {
-> +		ret = -ETIMEDOUT;
-> +		goto out;
-> +	}
-> +
-> +	*val = info->adc_data;
-> +
-> +out:
-> +	disable_irq(info->fifo_data_irq);
-> +	mutex_unlock(&info->mutex);
-> +	pm_runtime_mark_last_busy(indio_dev->dev.parent);
-> +	pm_runtime_put_autosuspend(indio_dev->dev.parent);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunxi_gpadc_temp_read(struct iio_dev *indio_dev, int *val)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(indio_dev);
-> +	int ret = 0;
-> +
-> +	pm_runtime_get_sync(indio_dev->dev.parent);
-> +	mutex_lock(&info->mutex);
-> +
-> +	reinit_completion(&info->completion);
-> +
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_INT_FIFOC,
-> +		     SUNXI_GPADC_TP_INT_FIFOC_TP_FIFO_TRIG_LEVEL(1) |
-> +		     SUNXI_GPADC_TP_INT_FIFOC_TP_FIFO_FLUSH);
-> +	/*
-> +	 * The temperature sensor returns valid data only when the ADC operates
-> +	 * in touchscreen mode.
-> +	 */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL1,
-> +		     info->soc_specific->tp_mode_en);
-> +	enable_irq(info->temp_data_irq);
-> +
-> +	if (!wait_for_completion_timeout(&info->completion,
-> +					 msecs_to_jiffies(100))) {
-> +		ret = -ETIMEDOUT;
-> +		goto out;
-> +	}
-> +
-> +	*val = info->temp_data;
-> +
-> +out:
-> +	disable_irq(info->temp_data_irq);
-> +	mutex_unlock(&info->mutex);
-> +	pm_runtime_mark_last_busy(indio_dev->dev.parent);
-> +	pm_runtime_put_autosuspend(indio_dev->dev.parent);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunxi_gpadc_temp_offset(struct iio_dev *indio_dev, int *val)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(indio_dev);
-> +
-> +	*val = info->soc_specific->temp_offset;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sunxi_gpadc_temp_scale(struct iio_dev *indio_dev, int *val)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(indio_dev);
-> +
-> +	*val = info->soc_specific->temp_scale;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sunxi_gpadc_read_raw(struct iio_dev *indio_dev,
-> +				struct iio_chan_spec const *chan, int *val,
-> +				int *val2, long mask)
-> +{
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		ret = sunxi_gpadc_temp_offset(indio_dev, val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_RAW:
-> +		if (chan->type == IIO_VOLTAGE) {
-> +			ret = sunxi_gpadc_adc_read(indio_dev, chan->channel,
-> +						   val);
-> +			if (ret)
-> +				return ret;
-> +		} else {
-> +			ret = sunxi_gpadc_temp_read(indio_dev, val);
-> +			if (ret)
-> +				return ret;
+> +	if (cfg_reg_1 & ADT7470_CFG_LF)
+> +		switch (cfg_reg_2 & ADT7470_FREQ_BITS) {
+> +		case ADT7470_CFG_LF_11_0_HZ:
+> +			freq = 11;
+> +			break;
+> +		case ADT7470_CFG_LF_14_7_HZ:
+> +			freq = 15;
+> +			break;
+> +		case ADT7470_CFG_LF_22_1_HZ:
+> +			freq = 22;
+> +			break;
+> +		case ADT7470_CFG_LF_29_4_HZ:
+> +			freq = 29;
+> +			break;
+> +		case ADT7470_CFG_LF_35_3_HZ:
+> +			freq = 35;
+> +			break;
+> +		case ADT7470_CFG_LF_44_1_HZ:
+> +			freq = 44;
+> +			break;
+> +		case ADT7470_CFG_LF_58_8_HZ:
+> +			freq = 59;
+> +			break;
+> +		case ADT7470_CFG_LF_88_2_HZ:
+> +			freq = 88;
+> +			break;
 > +		}
+> +	else
+> +		switch (cfg_reg_2 & ADT7470_FREQ_BITS) {
+> +		case ADT7470_CFG_HF_1_4_KHZ:
+> +			freq = 1400;
+> +			break;
+> +		default:
+> +			freq = 22500;
+> +			break;
+> +		}
+> +	return scnprintf(buf, PAGE_SIZE, "%d\n", freq);
+> +}
+
+This can be implemented more easily by using adt7470_freq_map[].
+
+Something like
+	index = (cfg_reg_2 & ADT7470_FREQ_MASK) >> ADT7470_FREQ_SHIFT;
+	if (!(cfg_reg_1 & ADT7470_CFG_LF))
+		index += 8;
+	if (index >= ARRAY_SIZE(adt7470_freq_map))
+		index = ARRAY_SIZE(adt7470_freq_map) - 1;
+
+	return scnprintf(buf, PAGE_SIZE, "%d\n", adt7470_freq_map[index]);
+
+with
+
+#define ADT7470_FREQ_MASK       0x70
+#define ADT7470_FREQ_SHIFT      4
+
 > +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		ret = sunxi_gpadc_temp_scale(indio_dev, val);
-> +		if (ret)
-> +			return ret;
+> +/* These are the valid PWM frequencies to the nearest Hz */
+> +static const int adt7470_freq_map[] = {
+> +	11, 15, 22, 29, 35, 44, 59, 88, 1400, 22500
+> +};
 > +
-> +		return IIO_VAL_INT;
+> +static ssize_t set_pwm_freq(struct device *dev,
+> +			    struct device_attribute *devattr,
+> +			    const char *buf, size_t count)
+> +{
+> +	struct adt7470_data *data = dev_get_drvdata(dev);
+> +	struct i2c_client *client = data->client;
+> +	long freq;
+> +	int freq_index;
+> +	int low_freq = ADT7470_CFG_LF;
+> +	int freq_bits;
+> +	unsigned char val;
+> +
+> +	if (kstrtol(buf, 10, &freq))
+> +		return -EINVAL;
+> +
+> +	/* Round the user value given to the closest available frequency */
+> +	freq_index = find_closest(freq, adt7470_freq_map,
+> +				  ARRAY_SIZE(adt7470_freq_map));
+> +	freq = adt7470_freq_map[freq_index];
+> +
+> +	switch (freq) {
+> +	case 11:
+> +		freq_bits = ADT7470_CFG_LF_11_0_HZ;
+> +		break;
+> +	case 15:
+> +		freq_bits = ADT7470_CFG_LF_14_7_HZ;
+> +		break;
+> +	case 22:
+> +		freq_bits = ADT7470_CFG_LF_22_1_HZ;
+> +		break;
+> +	case 29:
+> +		freq_bits = ADT7470_CFG_LF_29_4_HZ;
+> +		break;
+> +	case 35:
+> +		freq_bits = ADT7470_CFG_LF_35_3_HZ;
+> +		break;
+> +	case 44:
+> +		freq_bits = ADT7470_CFG_LF_44_1_HZ;
+> +		break;
+> +	case 59:
+> +		freq_bits = ADT7470_CFG_LF_58_8_HZ;
+> +		break;
+> +	case 88:
+> +		freq_bits = ADT7470_CFG_LF_88_2_HZ;
+> +		break;
+> +	case 1400:
+> +		freq_bits = ADT7470_CFG_HF_1_4_KHZ;
+> +		low_freq = 0;
+> +		break;
+> +	case 22500:
+> +		freq_bits = ADT7470_CFG_HF_22_5_KHZ;
+> +		low_freq = 0;
+> +		break;
+
+freq_index can be used directly to calculate the register values
+without going through the switch statement.
+
+	if (freq_index >= 8) {
+		freq_index -= 8;
+		low_freq = 0;
+	}
+	...
+	/* Configuration Register 2 */
+	val = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG_2);
+	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG_2,
+		(val & ~ADT7470_FREQ_MASK) | (freq_index << ADT7470_FREQ_SHIFT);
+
 > +	default:
 > +		return -EINVAL;
 > +	}
 > +
-> +	return -EINVAL;
+> +	mutex_lock(&data->lock);
+> +	/* Configuration Register 1 */
+> +	val = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG);
+> +	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG,
+> +				  (val & ~ADT7470_CFG_LF) | low_freq);
+> +	/* Configuration Register 2 */
+> +	val = i2c_smbus_read_byte_data(client, ADT7470_REG_CFG_2);
+> +	i2c_smbus_write_byte_data(client, ADT7470_REG_CFG_2,
+> +				  (val & ~ADT7470_FREQ_BITS) | freq_bits);
+> +	mutex_unlock(&data->lock);
+> +
+> +	return count;
 > +}
 > +
-> +static const struct iio_info sunxi_gpadc_iio_info = {
-> +	.read_raw = sunxi_gpadc_read_raw,
-> +	.driver_module = THIS_MODULE,
-> +};
+>  static ssize_t show_pwm_max(struct device *dev,
+>  			    struct device_attribute *devattr,
+>  			    char *buf)
+> @@ -1038,6 +1184,8 @@ static SENSOR_DEVICE_ATTR(pwm2, S_IWUSR | S_IRUGO, show_pwm, set_pwm, 1);
+>  static SENSOR_DEVICE_ATTR(pwm3, S_IWUSR | S_IRUGO, show_pwm, set_pwm, 2);
+>  static SENSOR_DEVICE_ATTR(pwm4, S_IWUSR | S_IRUGO, show_pwm, set_pwm, 3);
+>  
+> +static DEVICE_ATTR(pwm1_freq, S_IWUSR | S_IRUGO, show_pwm_freq, set_pwm_freq);
 > +
-> +static irqreturn_t sunxi_gpadc_temp_data_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct sunxi_gpadc_dev *info = dev_id;
-> +
-> +	if (atomic_read(&info->ignore_temp_data_irq))
-> +		return IRQ_HANDLED;
-> +
-> +	if (!regmap_read(info->regmap, SUNXI_GPADC_TEMP_DATA, &info->temp_data))
-> +		complete(&info->completion);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t sunxi_gpadc_fifo_data_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct sunxi_gpadc_dev *info = dev_id;
-> +
-> +	if (atomic_read(&info->ignore_fifo_data_irq))
-> +		return IRQ_HANDLED;
-> +
-> +	if (!regmap_read(info->regmap, SUNXI_GPADC_TP_DATA, &info->adc_data))
-> +		complete(&info->completion);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int sunxi_gpadc_runtime_suspend(struct device *dev)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(dev_get_drvdata(dev));
-> +
-> +	mutex_lock(&info->mutex);
-> +
-> +	/* Disable the ADC on IP */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL1, 0);
-> +	/* Disable temperature sensor on IP */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_TPR, 0);
-> +
-> +	mutex_unlock(&info->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sunxi_gpadc_runtime_resume(struct device *dev)
-> +{
-> +	struct sunxi_gpadc_dev *info = iio_priv(dev_get_drvdata(dev));
-> +
-> +	mutex_lock(&info->mutex);
-> +
-> +	/* clkin = 6MHz */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL0,
-> +		     SUNXI_GPADC_TP_CTRL0_ADC_CLK_DIVIDER(2) |
-> +		     SUNXI_GPADC_TP_CTRL0_FS_DIV(7) |
-> +		     SUNXI_GPADC_TP_CTRL0_T_ACQ(63));
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL1,
-> +		     info->soc_specific->tp_mode_en);
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_CTRL3,
-> +		     SUNXI_GPADC_TP_CTRL3_FILTER_EN |
-> +		     SUNXI_GPADC_TP_CTRL3_FILTER_TYPE(1));
-> +	/* period = SUNXI_GPADC_TP_TPR_TEMP_PERIOD * 256 * 16 / clkin; ~1.3s */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_TPR,
-> +		     SUNXI_GPADC_TP_TPR_TEMP_ENABLE |
-> +		     SUNXI_GPADC_TP_TPR_TEMP_PERIOD(1953));
-> +
-> +	mutex_unlock(&info->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sunxi_gpadc_get_temp(void *data, int *temp)
-> +{
-> +	struct sunxi_gpadc_dev *info = (struct sunxi_gpadc_dev *)data;
-> +	int val, scale, offset;
-> +
-> +	/* If reading temperature times out, take stored previous value. */
-> +	if (sunxi_gpadc_temp_read(info->indio_dev, &val))
-> +		val = info->temp_data;
-> +	sunxi_gpadc_temp_scale(info->indio_dev, &scale);
-> +	sunxi_gpadc_temp_offset(info->indio_dev, &offset);
-> +
-> +	*temp = (val + offset) * scale;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops sunxi_ts_tz_ops = {
-> +	.get_temp = &sunxi_gpadc_get_temp,
-> +};
-> +
-> +static const struct dev_pm_ops sunxi_gpadc_pm_ops = {
-> +	.runtime_suspend = &sunxi_gpadc_runtime_suspend,
-> +	.runtime_resume = &sunxi_gpadc_runtime_resume,
-> +};
-> +
-> +static int sunxi_gpadc_probe(struct platform_device *pdev)
-> +{
-> +	struct sunxi_gpadc_dev *info;
-> +	struct iio_dev *indio_dev;
-> +	int ret, irq;
-> +	struct sunxi_gpadc_mfd_dev *sunxi_gpadc_mfd_dev;
-> +	struct thermal_zone_device *tzd;
-> +
-> +	sunxi_gpadc_mfd_dev = dev_get_drvdata(pdev->dev.parent);
-> +
-> +	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*info));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	info = iio_priv(indio_dev);
-> +
-> +	mutex_init(&info->mutex);
-> +	info->regmap = sunxi_gpadc_mfd_dev->regmap;
-> +	info->indio_dev = indio_dev;
-> +	atomic_set(&info->ignore_fifo_data_irq, 1);
-> +	atomic_set(&info->ignore_temp_data_irq, 1);
-> +	init_completion(&info->completion);
-> +	indio_dev->name = dev_name(&pdev->dev);
-> +	indio_dev->dev.parent = &pdev->dev;
-> +	indio_dev->dev.of_node = pdev->dev.of_node;
-> +	indio_dev->info = &sunxi_gpadc_iio_info;
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->num_channels = ARRAY_SIZE(sunxi_gpadc_channels);
-> +	indio_dev->channels = sunxi_gpadc_channels;
-> +
-> +	info->soc_specific = (struct sunxi_gpadc_soc_specific *)platform_get_device_id(pdev)->driver_data;
-> +
-> +	tzd = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, info,
-> +						   &sunxi_ts_tz_ops);
-> +	if (IS_ERR(tzd)) {
-> +		dev_err(&pdev->dev, "could not register thermal sensor: %ld\n",
-> +			PTR_ERR(tzd));
-> +		return PTR_ERR(tzd);
-> +	}
-> +
-> +	pm_runtime_set_autosuspend_delay(&pdev->dev,
-> +					 SUNXI_GPADC_AUTOSUSPEND_DELAY);
-> +	pm_runtime_use_autosuspend(&pdev->dev);
-> +	pm_runtime_set_suspended(&pdev->dev);
-> +	pm_runtime_enable(&pdev->dev);
-> +
-> +	irq = platform_get_irq_byname(pdev, "TEMP_DATA_PENDING");
-> +	if (irq < 0) {
-> +		dev_err(&pdev->dev,
-> +			"no TEMP_DATA_PENDING interrupt registered\n");
-> +		ret = irq;
-> +		goto err;
-> +	}
-> +
-> +	irq = regmap_irq_get_virq(sunxi_gpadc_mfd_dev->regmap_irqc, irq);
-> +	ret = devm_request_any_context_irq(&pdev->dev, irq,
-> +					   sunxi_gpadc_temp_data_irq_handler, 0,
-> +					   "temp_data", info);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev,
-> +			"could not request TEMP_DATA_PENDING interrupt: %d\n",
-> +			ret);
-> +		goto err;
-> +	}
-> +
-> +	disable_irq(irq);
-> +	info->temp_data_irq = irq;
-> +	atomic_set(&info->ignore_temp_data_irq, 0);
-> +
-> +	irq = platform_get_irq_byname(pdev, "FIFO_DATA_PENDING");
-> +	if (irq < 0) {
-> +		dev_err(&pdev->dev,
-> +			"no FIFO_DATA_PENDING interrupt registered\n");
-> +		ret = irq;
-> +		goto err;
-> +	}
-> +
-> +	irq = regmap_irq_get_virq(sunxi_gpadc_mfd_dev->regmap_irqc, irq);
-> +	ret = devm_request_any_context_irq(&pdev->dev, irq,
-> +					   sunxi_gpadc_fifo_data_irq_handler, 0,
-> +					   "fifo_data", info);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev,
-> +			"could not request FIFO_DATA_PENDING interrupt: %d\n",
-> +			ret);
-> +		goto err;
-> +	}
-> +
-> +	disable_irq(irq);
-> +	info->fifo_data_irq = irq;
-> +	atomic_set(&info->ignore_fifo_data_irq, 0);
-> +
-> +	ret = iio_map_array_register(indio_dev, sunxi_gpadc_hwmon_maps);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "failed to register iio map array\n");
-> +		goto err;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, indio_dev);
-> +
-> +	ret = iio_device_register(indio_dev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "could not register the device\n");
-> +		goto err_map;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_map:
-> +	iio_map_array_unregister(indio_dev);
-> +
-> +err:
-> +	pm_runtime_put(&pdev->dev);
-> +	/* Disable all hardware interrupts */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_INT_FIFOC, 0);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunxi_gpadc_remove(struct platform_device *pdev)
-> +{
-> +	struct sunxi_gpadc_dev *info;
-> +	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
-> +
-> +	info = iio_priv(indio_dev);
-> +	iio_device_unregister(indio_dev);
-> +	iio_map_array_unregister(indio_dev);
-> +	pm_runtime_put(&pdev->dev);
-> +	pm_runtime_disable(&pdev->dev);
-> +	/* Disable all hardware interrupts */
-> +	regmap_write(info->regmap, SUNXI_GPADC_TP_INT_FIFOC, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct platform_device_id sunxi_gpadc_id[] = {
-> +	{ "sun4i-a10-gpadc-iio", (kernel_ulong_t)&sun4i_gpadc_soc_specific },
-> +	{ "sun5i-a13-gpadc-iio", (kernel_ulong_t)&sun5i_gpadc_soc_specific },
-> +	{ "sun6i-a31-gpadc-iio", (kernel_ulong_t)&sun6i_gpadc_soc_specific },
-> +	{ /* sentinel */ },
-> +};
-> +
-> +static struct platform_driver sunxi_gpadc_driver = {
-> +	.driver = {
-> +		.name = "sunxi-gpadc-iio",
-> +		.pm = &sunxi_gpadc_pm_ops,
-> +	},
-> +	.id_table = sunxi_gpadc_id,
-> +	.probe = sunxi_gpadc_probe,
-> +	.remove = sunxi_gpadc_remove,
-> +};
-> +
-> +module_platform_driver(sunxi_gpadc_driver);
-> +
-> +MODULE_DESCRIPTION("ADC driver for sunxi platforms");
-> +MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
-> +MODULE_LICENSE("GPL v2");
-> 
+>  static SENSOR_DEVICE_ATTR(pwm1_auto_point1_pwm, S_IWUSR | S_IRUGO,
+>  		    show_pwm_min, set_pwm_min, 0);
+>  static SENSOR_DEVICE_ATTR(pwm2_auto_point1_pwm, S_IWUSR | S_IRUGO,
+> @@ -1096,6 +1244,7 @@ static struct attribute *adt7470_attrs[] = {
+>  	&dev_attr_alarm_mask.attr,
+>  	&dev_attr_num_temp_sensors.attr,
+>  	&dev_attr_auto_update_interval.attr,
+> +	&dev_attr_pwm1_freq.attr,
 
+Should be right after &sensor_dev_attr_pwm1.dev_attr.attr.
+
+>  	&sensor_dev_attr_temp1_max.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_max.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_max.dev_attr.attr,
+> -- 
+> 2.9.0
+> 
