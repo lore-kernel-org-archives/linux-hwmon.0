@@ -1,67 +1,46 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:33098 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753965AbcHAO2X (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Aug 2016 10:28:23 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v4.8 (take 2)
-Date: Mon,  1 Aug 2016 07:28:15 -0700
-Message-Id: <1470061695-22021-1-git-send-email-linux@roeck-us.net>
+Received: from mga14.intel.com ([192.55.52.115]:17530 "EHLO mga14.intel.com"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S932169AbcHBL3j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	Tue, 2 Aug 2016 07:29:39 -0400
+From: Baole Ni <baolex.ni@intel.com>
+To: hdegoede@redhat.com, jdelvare@suse.com, linux@roeck-us.net,
+	airlied@linux.ie, kgene@kernel.org, k.kozlowski@samsung.com,
+	dougthompson@xmission.com, bp@alien8.de
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chuansheng.liu@intel.com, baolex.ni@intel.com,
+	aduggan@synaptics.com, dianders@chromium.org
+Subject: [PATCH 0234/1285] Replace numeric parameter like 0444 with macro
+Date: Tue,  2 Aug 2016 18:51:58 +0800
+Message-Id: <20160802105158.29348-1-baolex.ni@intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+I find that the developers often just specified the numeric value
+when calling a macro which is defined with a parameter for access permission.
+As we know, these numeric value for access permission have had the corresponding macro,
+and that using macro can improve the robustness and readability of the code,
+thus, I suggest replacing the numeric parameter with the macro.
 
-Please pull hwmon updates for Linux v4.8 from signed tag:
+Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
+Signed-off-by: Baole Ni <baolex.ni@intel.com>
+---
+ drivers/hwmon/abituguru.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.8-2
+diff --git a/drivers/hwmon/abituguru.c b/drivers/hwmon/abituguru.c
+index 7a09c16..84d7070 100644
+--- a/drivers/hwmon/abituguru.c
++++ b/drivers/hwmon/abituguru.c
+@@ -194,7 +194,7 @@ MODULE_PARM_DESC(pwms, "Number of PWMs on the uGuru "
+ 
+ /* Default verbose is 2, since this driver is still in the testing phase */
+ static int verbose = 2;
+-module_param(verbose, int, 0644);
++module_param(verbose, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+ MODULE_PARM_DESC(verbose, "How verbose should the driver be? (0-3):\n"
+ 	"   0 normal output\n"
+ 	"   1 + verbose error reporting\n"
+-- 
+2.9.2
 
-Thanks,
-Guenter
-------
-
-The following changes since commit e65805251f2db69c9f67ed8062ab82526be5a374:
-
-  Merge branch 'irq-core-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2016-07-25 21:35:03 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.8-2
-
-for you to fetch changes up to 601807bbb7b422012492611b283bdf3647d3742c:
-
-  hwmon: (adt7411) set sane values for CFG1 and CFG3 (2016-07-31 15:02:52 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v4.8 (take 2)
-
-Improved error handling in  tmp102, lm75, and lm90 drivers
-Bug fixes in sht3x, ftsteutates, iio_hwmon, and adt7411 drivers
-
-----------------------------------------------------------------
-Guenter Roeck (5):
-      hwmon: (lm90) Add missing assignment
-      hwmon: (lm90) Improve error handling
-      hwmon: (lm75) Improve error handling
-      hwmon: (tmp102) Improve error handling
-      hwmon: (ftsteutates) Fix potential memory access error
-
-Matt Ranostay (1):
-      hwmon: (sht3x) set initial jiffies to last_update
-
-Michael Walle (1):
-      hwmon: (adt7411) set sane values for CFG1 and CFG3
-
-Quentin Schulz (1):
-      hwmon: (iio_hwmon) fix memory leak in name attribute
-
- drivers/hwmon/adt7411.c     | 48 +++++++++++++++++++++++++++++++++++++++++----
- drivers/hwmon/ftsteutates.c |  2 +-
- drivers/hwmon/iio_hwmon.c   | 24 +++++++++++------------
- drivers/hwmon/lm75.c        |  6 ++++--
- drivers/hwmon/lm90.c        | 14 +++++++------
- drivers/hwmon/sht3x.c       |  2 +-
- drivers/hwmon/tmp102.c      |  4 +++-
- 7 files changed, 73 insertions(+), 27 deletions(-)
