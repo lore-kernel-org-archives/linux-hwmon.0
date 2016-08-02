@@ -1,18 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga11.intel.com ([192.55.52.93]:50913 "EHLO mga11.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:41330 "EHLO mga02.intel.com"
 	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S932200AbcHBLaN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+	id S932198AbcHBLaN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
 	Tue, 2 Aug 2016 07:30:13 -0400
 From: Baole Ni <baolex.ni@intel.com>
-To: clemens@ladisch.de, jdelvare@suse.com, linux@roeck-us.net,
-	airlied@linux.ie, kgene@kernel.org, k.kozlowski@samsung.com,
+To: linux@roeck-us.net, jdelvare@suse.com, airlied@linux.ie,
+	kgene@kernel.org, k.kozlowski@samsung.com,
 	dougthompson@xmission.com, bp@alien8.de
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	chuansheng.liu@intel.com, baolex.ni@intel.com,
 	aduggan@synaptics.com, dianders@chromium.org
-Subject: [PATCH 0240/1285] Replace numeric parameter like 0444 with macro
-Date: Tue,  2 Aug 2016 18:52:26 +0800
-Message-Id: <20160802105226.29744-1-baolex.ni@intel.com>
+Subject: [PATCH 0241/1285] Replace numeric parameter like 0444 with macro
+Date: Tue,  2 Aug 2016 18:52:31 +0800
+Message-Id: <20160802105231.29810-1-baolex.ni@intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -25,22 +25,22 @@ thus, I suggest replacing the numeric parameter with the macro.
 Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
 Signed-off-by: Baole Ni <baolex.ni@intel.com>
 ---
- drivers/hwmon/k10temp.c | 2 +-
+ drivers/hwmon/pmbus/zl6100.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 9cdfde6..ffdef73 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -30,7 +30,7 @@ MODULE_AUTHOR("Clemens Ladisch <clemens@ladisch.de>");
- MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/pmbus/zl6100.c b/drivers/hwmon/pmbus/zl6100.c
+index 771802d..369d3b3 100644
+--- a/drivers/hwmon/pmbus/zl6100.c
++++ b/drivers/hwmon/pmbus/zl6100.c
+@@ -59,7 +59,7 @@ struct zl6100_data {
+ #define ZL6100_WAIT_TIME		1000	/* uS	*/
  
- static bool force;
--module_param(force, bool, 0444);
-+module_param(force, bool, S_IRUSR | S_IRGRP | S_IROTH);
- MODULE_PARM_DESC(force, "force loading on processors with erratum 319");
+ static ushort delay = ZL6100_WAIT_TIME;
+-module_param(delay, ushort, 0644);
++module_param(delay, ushort, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+ MODULE_PARM_DESC(delay, "Delay between chip accesses in uS");
  
- /* Provide lock for writing to NB_SMU_IND_ADDR */
+ /* Convert linear sensor value to milli-units */
 -- 
 2.9.2
 
