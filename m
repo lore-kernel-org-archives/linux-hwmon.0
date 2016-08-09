@@ -1,78 +1,91 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-ua0-f182.google.com ([209.85.217.182]:34809 "EHLO
-	mail-ua0-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754282AbcHAREt (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Aug 2016 13:04:49 -0400
-Received: by mail-ua0-f182.google.com with SMTP id 35so110706631uap.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Aug 2016 10:04:49 -0700 (PDT)
+Received: from mail-wm0-f50.google.com ([74.125.82.50]:33152 "EHLO
+	mail-wm0-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S932564AbcHINrV (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Aug 2016 09:47:21 -0400
+Received: by mail-wm0-f50.google.com with SMTP id d196so5181584wmd.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Aug 2016 06:47:20 -0700 (PDT)
+Date: Tue, 9 Aug 2016 14:48:47 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Quentin Schulz <quentin.schulz@free-electrons.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
+	knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+	maxime.ripard@free-electrons.com, wens@csie.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	thomas.petazzoni@free-electrons.com,
+	antoine.tenart@free-electrons.com
+Subject: Re: [PATCH v3 3/4] mfd: mfd-core: reattach mfd of_node to cells
+ without of_compatible
+Message-ID: <20160809134847.GJ5243@dell>
+References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1469519027-11387-4-git-send-email-quentin.schulz@free-electrons.com>
 MIME-Version: 1.0
-In-Reply-To: <201608012126.BWziGkjc%fengguang.wu@intel.com>
-References: <1469134557-26869-3-git-send-email-hotran@apm.com> <201608012126.BWziGkjc%fengguang.wu@intel.com>
-From: Hoan Tran <hotran@apm.com>
-Date: Mon, 1 Aug 2016 09:39:31 -0700
-Message-ID: <CAFHUOYzpD2J_uqdeFqVJk9jMw2J2fN5nGxqt2Xu-=0HXooHNdg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] hwmon: xgene: Add hwmon driver
-To: kbuild test robot <lkp@intel.com>
-Cc: kbuild-all@01.org, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ashwin Chaugule <ashwin.chaugule@linaro.org>,
-	Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Devicetree List <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1469519027-11387-4-git-send-email-quentin.schulz@free-electrons.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi,
+On Tue, 26 Jul 2016, Quentin Schulz wrote:
 
-On Mon, Aug 1, 2016 at 6:21 AM, kbuild test robot <lkp@intel.com> wrote:
-> Hi Hoan,
->
-> [auto build test ERROR on hwmon/hwmon-next]
-> [also build test ERROR on v4.7]
-> [cannot apply to next-20160801]
-> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
->
-> url:    https://github.com/0day-ci/linux/commits/Hoan-Tran/hwmon-xgene-Add-support-for-X-Gene-hwmon-driver/20160725-015356
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> config: arm64-allmodconfig (attached as .config)
-> compiler: aarch64-linux-gnu-gcc (Debian 5.4.0-6) 5.4.0 20160609
-> reproduce:
->         wget https://git.kernel.org/cgit/linux/kernel/git/wfg/lkp-tests.git/plain/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         make.cross ARCH=arm64
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/hwmon/xgene-hwmon.c:38:22: fatal error: acpi/pcc.h: No such file or directory
->    compilation terminated.
-
-This driver should be built with kernel 4.8 and above where the
-"pcc.h" file is available.
-
-Thanks
-Hoan
-
->
-> vim +38 drivers/hwmon/xgene-hwmon.c
->
->     32  #include <linux/mailbox_controller.h>
->     33  #include <linux/mailbox_client.h>
->     34  #include <linux/module.h>
->     35  #include <linux/of.h>
->     36  #include <linux/platform_device.h>
->     37  #include <acpi/acpi_io.h>
->   > 38  #include <acpi/pcc.h>
->     39
->     40  /* SLIMpro message defines */
->     41  #define MSG_TYPE_DBG                    0
->
+> When an MFD cell has an of_compatible (meaning it is present in the Device
+> Tree), other nodes can reference it using a phandle.
+> 
+> However when the MFD cell is not declared in the Device Tree, the only way
+> other nodes can reference it are by using a phandle to the MFD. Then when
+> this MFD cell tries to register itself in one framework, the registration
+> is denied by the framework because it is not matching the of_node of the
+> node which is referenced by the phandle in one of the other nodes.
+> 
+> This reattaches the of_node of the MFD to the MFD cell device structure
+> when the MFD cell has no of_compatible.
+> 
+> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
 > ---
-> 0-DAY kernel test infrastructure                Open Source Technology Center
-> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+> 
+> We need this modification to register the thermal sensor in the thermal
+> framework.
+> 
+> Added in v3.
+> 
+>  drivers/mfd/mfd-core.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+
+Can you show me the DT code where this is used?
+
+Is it used by a patch in this series?
+
+> diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+> index 3ac486a..0b19663 100644
+> --- a/drivers/mfd/mfd-core.c
+> +++ b/drivers/mfd/mfd-core.c
+> @@ -175,12 +175,16 @@ static int mfd_add_device(struct device *parent, int id,
+>  	if (ret < 0)
+>  		goto fail_res;
+>  
+> -	if (parent->of_node && cell->of_compatible) {
+> -		for_each_child_of_node(parent->of_node, np) {
+> -			if (of_device_is_compatible(np, cell->of_compatible)) {
+> -				pdev->dev.of_node = np;
+> -				break;
+> +	if (parent->of_node) {
+> +		if (cell->of_compatible) {
+> +			for_each_child_of_node(parent->of_node, np) {
+> +				if (of_device_is_compatible(np, cell->of_compatible)) {
+> +					pdev->dev.of_node = np;
+> +					break;
+> +				}
+>  			}
+> +		} else {
+> +			pdev->dev.of_node = parent->of_node;
+>  		}
+>  	}
+>  
+
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
