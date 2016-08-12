@@ -1,40 +1,40 @@
-Return-path: <linux@roeck-us.net>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (it87) Features mask must be 32 bit wide
-Date: Tue,  9 Aug 2016 22:33:21 -0700
-Message-Id: <1470807201-8612-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail1.bemta3.messagelabs.com ([195.245.230.162]:61835 "EHLO
+	mail1.bemta3.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+	by vger.kernel.org with ESMTP id S1752627AbcHLMmu (ORCPT
+	<rfc822;linux-hwmon@vger.kernel.org>);
+	Fri, 12 Aug 2016 08:42:50 -0400
+Received: from abgdgate60u.abg.fsc.net ([172.25.138.90])
+	by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id u7CCg6iY010203
+	for <linux-hwmon@vger.kernel.org>; Fri, 12 Aug 2016 13:42:07 +0100
+From: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Thilo Cestonaro <thilo@cestona.ro>
+Subject: [PATCH] hwmon: correct ftp urls in ftsteutates documentation
+Date: Fri, 12 Aug 2016 14:39:10 +0200
+Message-Id: <1471005550-5685-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Coverity reports:
+From: Thilo Cestonaro <thilo@cestona.ro>
 
-result_independent_of_operands: data->features & (65536UL /* 1UL << 16 */)
-is always 0 regardless of the values of its operands. This occurs as the
-logical operand of if.
-
-data->features needs to be 32 bit wide since there are more than 16 features.
-
-Fixes: cc18da79d9b7 ("hwmon: (it87) Support up to 6 temperature sensors ... ");
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Thilo Cestonaro <thilo@cestona.ro>
 ---
- drivers/hwmon/it87.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/hwmon/ftsteutates | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 730d84028260..d0203a115eff 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -491,7 +491,7 @@ struct it87_sio_data {
- struct it87_data {
- 	const struct attribute_group *groups[7];
- 	enum chips type;
--	u16 features;
-+	u32 features;
- 	u8 peci_mask;
- 	u8 old_peci_mask;
+diff --git a/Documentation/hwmon/ftsteutates b/Documentation/hwmon/ftsteutates
+index 2a1bf69..8c10a91 100644
+--- a/Documentation/hwmon/ftsteutates
++++ b/Documentation/hwmon/ftsteutates
+@@ -19,5 +19,5 @@ enhancements. It can monitor up to 4 voltages, 16 temperatures and
+ implemented in this driver.
  
+ Specification of the chip can be found here:
+-ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
+-ftp:///pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
++ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
++ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
 -- 
-2.5.0
+2.8.1
+
