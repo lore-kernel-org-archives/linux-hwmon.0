@@ -1,77 +1,37 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:48163 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753077AbcHOTnc (ORCPT
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:49764 "EHLO
+	gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751681AbcHNX41 (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 15 Aug 2016 15:43:32 -0400
-Date: Mon, 15 Aug 2016 12:43:27 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Florian Lobmaier <Florian.Lobmaier@ams.com>,
-	Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-	Elitsa Polizoeva <Elitsa.Polizoeva@ams.com>,
-	"knaack.h@gmx.de" <knaack.h@gmx.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH V4 1/1] iio: as6200: add AS6200 temperature sensor driver
- from ams AG
-Message-ID: <20160815194327.GA4400@roeck-us.net>
-References: <4ace1394d6064ab2b7dd4a5335cc1a7c@SUX5076.office.amsiag.com>
- <14a70eac-eed6-426f-d22d-ccc79ccf5ebb@kernel.org>
+	Sun, 14 Aug 2016 19:56:27 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 652B88023A
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Aug 2016 11:56:23 +1200 (NZST)
+From: Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: A question about masks in sysfs
+Date: Sun, 14 Aug 2016 23:56:22 +0000
+Message-ID: <57B10525.6030200@alliedtelesis.co.nz>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <16DD9492CE77F748A3DCBCD732D756D7@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14a70eac-eed6-426f-d22d-ccc79ccf5ebb@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 15, 2016 at 06:25:44PM +0100, Jonathan Cameron wrote:
-> On 04/08/16 09:35, Florian Lobmaier wrote:
-> > Hello Peter,
-> > 
-> > Thanks again for your valuable feedback. We use now IIO_EV_THRESH to
-> > set high and low limits for temperature. Also removed all the custom
-> > ABI as this are mainly settings which will be set one-time only. For
-> > the removed custom ABI init defines where introduced which will be
-> > written to the registers in the probe function. The remaining custom
-> > ABI is now documented as well as the device tree bindings.> 
-> > Br,
-> > Florian
-> > 
-> > Signed-off-by: Florian Lobmaier <florian.lobmaier@ams.com>
-> > Signed-off-by: Elitsa Polizoeva <elitsa.polizoeva@ams.com>
-> Please post as a fresh email thread with a clean title. Otherwise
-> people will assume it is simply a reply to a comment on an earlier
-> version.  Also don't include earlier versions as you have here!
-> 
-> i.e. drop the RE from the title as it's confusing!
-> 
-> Anyhow, right back at v1 Peter mentioned that this might be more
-> suitable as a hwmon driver than an IIO one.  If you have a good reason
-> for supporting this part via IIO you should put it in the patch
-> description. I'm afraid I've been more or less offline for the last
-> couple fo weeks or I'd have highlighted that this question was
-> important. A superficial look suggest to me that this is definitely
-> a part targeting hardware monitoring applications.
-> 
-Conversion time, conversion rate, the presence of limit registers,
-and the intended use cases suggest that this should be a hardware
-monitoring driver.
-
-Regarding the attributes, most of those would be standard attributes
-in a hwmon driver. "alarm polarity" should be a  devicetree / platform
-data configuration parameter, and interrupt vs. comparator mode could
-be determined based on the presence of an interrupt line.
-
-> I'll only take a border line part with agreement form Guenter / Jean
-> who are the hwmon maintainers.
-> 
-> I'll do a quick review ignoring this question.
-> Mostly pretty good though I really don't like the remaining
-> custom ABI. Can't see a reason for its existence.
-
-Me not either.
-
-Guenter
+SGksDQoNCkkgYW0gd2FudGluZyB0byBhZGQgd3JpdGUgc3VwcG9ydCB0byB0aGUgYWxhcm1zIG1h
+c2sgc3lzZnMgZW50cnkgZm9yIHRoZSANCmFkdDc0NzAgZHJpdmVyLg0KDQpCZWZvcmUgZ29pbmcg
+Zm9yd2FyZCB3aXRoIHRoaXMsIEkgaGFkIGEgcXVlc3Rpb24gYWJvdXQgY29uc2lzdGVuY3kgaW4g
+DQp0aGlzIGFyZWEuDQoNCkluIHRoZSBvdGhlciBkcml2ZXJzIEkgc2VlIHRoYXQgZXhwb3NlIG1h
+c2tzLCBpdCBsb29rcyBsaWtlIHRoZXkgZG8gdGhpcyANCmFzIGRlY2ltYWwgbnVtYmVycyAoYWRt
+MTAyNi5jLCB3ODM2MjdoZi5jLCB3ODM3ODFkLmMpLg0KDQpUaGUgYWR0NzQ3MCBkcml2ZXIgYWxy
+ZWFkeSBleHBvc2VzIHRoZSBhbGFybSBtYXNrLCBidXQgaW5zdGVhZCBvZiANCmRlY2ltYWwgaXQg
+dXNlcyBoZXguDQoNCldoYXQgd291bGQgYmUgdGhlIGNvcnJlY3Qgd2F5IG9mIGFkZGluZyB3cml0
+ZSBzdXBwb3J0IHRvIHRoaXM/IFNob3VsZCBpdCANCmJlIGNvbnZlcnRlZCB0byBkZWNpbWFsIHRv
+IGJlIGNvbnNpc3RlbnQgd2l0aCBvdGhlciBkcml2ZXJzLCBvciBzaG91bGQgDQppdCByZW1haW4g
+aW4gaGV4IHRvIHByZXZlbnQgYnJlYWtpbmcgYW55IHVzZXJzcGFjZSBjb2RlIHRoYXQgbWF5IGJl
+IA0KcmVseWluZyBvbiB0aGUgY3VycmVudCBiZWhhdmlvdXI/DQoNCg0KVGhhbmtzLA0KSm9zaHVh
+IFNjb3R0
