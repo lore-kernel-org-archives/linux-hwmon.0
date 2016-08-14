@@ -1,16 +1,16 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56133 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56151 "EHLO
 	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752797AbcHNJDm (ORCPT
+	with ESMTP id S1752783AbcHNJDt (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 14 Aug 2016 05:03:42 -0400
+	Sun, 14 Aug 2016 05:03:49 -0400
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5/9] hwmon: (ltc4245) Convert to use new hwmon registration API
-Date: Sat, 13 Aug 2016 22:51:47 -0700
-Message-Id: <1471153911-6536-5-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 7/9] hwmon: (max31790) Convert to use new hwmon registration API
+Date: Sat, 13 Aug 2016 22:51:49 -0700
+Message-Id: <1471153911-6536-7-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1471153911-6536-1-git-send-email-linux@roeck-us.net>
 References: <1471153911-6536-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -21,439 +21,617 @@ registration API.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc4245.c | 362 +++++++++++++++++++++++-------------------------
- 1 file changed, 175 insertions(+), 187 deletions(-)
+ drivers/hwmon/max31790.c | 521 ++++++++++++++++++++---------------------------
+ 1 file changed, 224 insertions(+), 297 deletions(-)
 
-diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
-index 681b5b7b3c3b..4680d89556ce 100644
---- a/drivers/hwmon/ltc4245.c
-+++ b/drivers/hwmon/ltc4245.c
-@@ -16,6 +16,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/init.h>
-+#include <linux/bitops.h>
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 69c0ac80a946..bef84e085973 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -17,7 +17,6 @@
+ 
  #include <linux/err.h>
- #include <linux/slab.h>
+ #include <linux/hwmon.h>
+-#include <linux/hwmon-sysfs.h>
  #include <linux/i2c.h>
-@@ -53,8 +54,6 @@ enum ltc4245_cmd {
- struct ltc4245_data {
- 	struct i2c_client *client;
- 
--	const struct attribute_group *groups[3];
--
- 	struct mutex update_lock;
- 	bool valid;
- 	unsigned long last_updated; /* in jiffies */
-@@ -162,7 +161,7 @@ static struct ltc4245_data *ltc4245_update_device(struct device *dev)
- 		ltc4245_update_gpios(dev);
- 
- 		data->last_updated = jiffies;
--		data->valid = 1;
-+		data->valid = true;
- 	}
- 
- 	mutex_unlock(&data->update_lock);
-@@ -256,213 +255,204 @@ static unsigned int ltc4245_get_current(struct device *dev, u8 reg)
- 	return curr;
+ #include <linux/init.h>
+ #include <linux/jiffies.h>
+@@ -169,362 +168,288 @@ static u8 bits_for_tach_period(int rpm)
+ 	return bits;
  }
  
--static ssize_t ltc4245_show_voltage(struct device *dev,
--				    struct device_attribute *da,
--				    char *buf)
--{
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	const int voltage = ltc4245_get_voltage(dev, attr->index);
-+/* Map from voltage channel index to voltage register */
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", voltage);
--}
-+static const s8 ltc4245_in_regs[] = {
-+	LTC4245_12VIN, LTC4245_5VIN, LTC4245_3VIN, LTC4245_VEEIN,
-+	LTC4245_12VOUT, LTC4245_5VOUT, LTC4245_3VOUT, LTC4245_VEEOUT,
-+};
-+
-+/* Map from current channel index to current register */
- 
--static ssize_t ltc4245_show_current(struct device *dev,
--				    struct device_attribute *da,
--				    char *buf)
-+static const s8 ltc4245_curr_regs[] = {
-+	LTC4245_12VSENSE, LTC4245_5VSENSE, LTC4245_3VSENSE, LTC4245_VEESENSE,
-+};
-+
-+static int ltc4245_read_curr(struct device *dev, u32 attr, int channel,
+-static ssize_t get_fan(struct device *dev,
+-		       struct device_attribute *devattr, char *buf)
++static int max31790_read_fan(struct device *dev, u32 attr, int channel,
 +			     long *val)
  {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	const unsigned int curr = ltc4245_get_current(dev, attr->index);
-+	struct ltc4245_data *data = ltc4245_update_device(dev);
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max31790_data *data = max31790_update_device(dev);
+ 	int sr, rpm;
  
--	return snprintf(buf, PAGE_SIZE, "%u\n", curr);
-+	switch (attr) {
-+	case hwmon_curr_input:
-+		*val = ltc4245_get_current(dev, ltc4245_curr_regs[channel]);
-+		return 0;
-+	case hwmon_curr_max_alarm:
-+		*val = !!(data->cregs[LTC4245_FAULT1] & BIT(channel + 4));
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- }
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
  
--static ssize_t ltc4245_show_power(struct device *dev,
--				  struct device_attribute *da,
--				  char *buf)
-+static int ltc4245_read_in(struct device *dev, u32 attr, int channel, long *val)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	const unsigned int curr = ltc4245_get_current(dev, attr->index);
--	const int output_voltage = ltc4245_get_voltage(dev, attr->index+1);
-+	struct ltc4245_data *data = ltc4245_update_device(dev);
- 
--	/* current in mA * voltage in mV == power in uW */
--	const unsigned int power = abs(output_voltage * curr);
-+	switch (attr) {
-+	case hwmon_in_input:
-+		if (channel < 8) {
-+			*val = ltc4245_get_voltage(dev,
-+						ltc4245_in_regs[channel]);
-+		} else {
-+			int regval = data->gpios[channel - 8];
-+
-+			if (regval < 0)
-+				return regval;
-+			*val = regval * 10;
-+		}
-+		return 0;
-+	case hwmon_in_min_alarm:
-+		if (channel < 4)
-+			*val = !!(data->cregs[LTC4245_FAULT1] & BIT(channel));
-+		else
-+			*val = !!(data->cregs[LTC4245_FAULT2] &
-+				  BIT(channel - 4));
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", power);
-+static int ltc4245_read_power(struct device *dev, u32 attr, int channel,
-+			      long *val)
-+{
-+	unsigned long curr;
-+	long voltage;
-+
-+	switch (attr) {
-+	case hwmon_power_input:
-+		(void)ltc4245_update_device(dev);
-+		curr = ltc4245_get_current(dev, ltc4245_curr_regs[channel]);
-+		voltage = ltc4245_get_voltage(dev, ltc4245_in_regs[channel]);
-+		*val = abs(curr * voltage);
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- }
- 
--static ssize_t ltc4245_show_alarm(struct device *dev,
--					  struct device_attribute *da,
--					  char *buf)
-+static int ltc4245_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
- {
--	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(da);
--	struct ltc4245_data *data = ltc4245_update_device(dev);
--	const u8 reg = data->cregs[attr->index];
--	const u32 mask = attr->nr;
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", (reg & mask) ? 1 : 0);
-+	switch (type) {
-+	case hwmon_curr:
-+		return ltc4245_read_curr(dev, attr, channel, val);
-+	case hwmon_power:
-+		return ltc4245_read_power(dev, attr, channel, val);
-+	case hwmon_in:
-+		return ltc4245_read_in(dev, attr, channel - 1, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- }
- 
--static ssize_t ltc4245_show_gpio(struct device *dev,
--				 struct device_attribute *da,
--				 char *buf)
-+static umode_t ltc4245_is_visible(const void *_data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	struct ltc4245_data *data = ltc4245_update_device(dev);
--	int val = data->gpios[attr->index];
-+	const struct ltc4245_data *data = _data;
-+
-+	switch (type) {
-+	case hwmon_in:
-+		if (channel == 0)
-+			return 0;
-+		switch (attr) {
-+		case hwmon_in_input:
-+			if (channel > 9 && !data->use_extra_gpios)
-+				return 0;
-+			return S_IRUGO;
-+		case hwmon_in_min_alarm:
-+			if (channel > 8)
-+				return 0;
-+			return S_IRUGO;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_curr:
-+		switch (attr) {
-+		case hwmon_curr_input:
-+		case hwmon_curr_max_alarm:
-+			return S_IRUGO;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			return S_IRUGO;
-+		default:
-+			return 0;
-+		}
-+	default:
-+		return 0;
-+	}
-+}
- 
--	/* handle stale GPIO's */
--	if (val < 0)
--		return val;
-+static const u32 ltc4245_in_config[] = {
-+	HWMON_I_INPUT,			/* dummy, skipped in is_visible */
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN_ALARM,
-+	HWMON_I_INPUT,
-+	HWMON_I_INPUT,
-+	HWMON_I_INPUT,
-+	0
-+};
- 
--	/* Convert to millivolts and print */
--	return snprintf(buf, PAGE_SIZE, "%u\n", val * 10);
+-	sr = get_tach_period(data->fan_dynamics[attr->index]);
+-	rpm = RPM_FROM_REG(data->tach[attr->index], sr);
+-
+-	return sprintf(buf, "%d\n", rpm);
 -}
-+static const struct hwmon_channel_info ltc4245_in = {
-+	.type = hwmon_in,
-+	.config = ltc4245_in_config,
-+};
- 
--/* Construct a sensor_device_attribute structure for each register */
 -
--/* Input voltages */
--static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_12VIN);
--static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_5VIN);
--static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_3VIN);
--static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_VEEIN);
--
--/* Input undervoltage alarms */
--static SENSOR_DEVICE_ATTR_2(in1_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 0, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(in2_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 1, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(in3_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 2, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(in4_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 3, LTC4245_FAULT1);
--
--/* Currents (via sense resistor) */
--static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ltc4245_show_current, NULL,
--			  LTC4245_12VSENSE);
--static SENSOR_DEVICE_ATTR(curr2_input, S_IRUGO, ltc4245_show_current, NULL,
--			  LTC4245_5VSENSE);
--static SENSOR_DEVICE_ATTR(curr3_input, S_IRUGO, ltc4245_show_current, NULL,
--			  LTC4245_3VSENSE);
--static SENSOR_DEVICE_ATTR(curr4_input, S_IRUGO, ltc4245_show_current, NULL,
--			  LTC4245_VEESENSE);
--
--/* Overcurrent alarms */
--static SENSOR_DEVICE_ATTR_2(curr1_max_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 4, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(curr2_max_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 5, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(curr3_max_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 6, LTC4245_FAULT1);
--static SENSOR_DEVICE_ATTR_2(curr4_max_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 7, LTC4245_FAULT1);
--
--/* Output voltages */
--static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_12VOUT);
--static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_5VOUT);
--static SENSOR_DEVICE_ATTR(in7_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_3VOUT);
--static SENSOR_DEVICE_ATTR(in8_input, S_IRUGO, ltc4245_show_voltage, NULL,
--			  LTC4245_VEEOUT);
--
--/* Power Bad alarms */
--static SENSOR_DEVICE_ATTR_2(in5_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 0, LTC4245_FAULT2);
--static SENSOR_DEVICE_ATTR_2(in6_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 1, LTC4245_FAULT2);
--static SENSOR_DEVICE_ATTR_2(in7_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 2, LTC4245_FAULT2);
--static SENSOR_DEVICE_ATTR_2(in8_min_alarm, S_IRUGO, ltc4245_show_alarm, NULL,
--			    1 << 3, LTC4245_FAULT2);
--
--/* GPIO voltages */
--static SENSOR_DEVICE_ATTR(in9_input, S_IRUGO, ltc4245_show_gpio, NULL, 0);
--static SENSOR_DEVICE_ATTR(in10_input, S_IRUGO, ltc4245_show_gpio, NULL, 1);
--static SENSOR_DEVICE_ATTR(in11_input, S_IRUGO, ltc4245_show_gpio, NULL, 2);
--
--/* Power Consumption (virtual) */
--static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ltc4245_show_power, NULL,
--			  LTC4245_12VSENSE);
--static SENSOR_DEVICE_ATTR(power2_input, S_IRUGO, ltc4245_show_power, NULL,
--			  LTC4245_5VSENSE);
--static SENSOR_DEVICE_ATTR(power3_input, S_IRUGO, ltc4245_show_power, NULL,
--			  LTC4245_3VSENSE);
--static SENSOR_DEVICE_ATTR(power4_input, S_IRUGO, ltc4245_show_power, NULL,
--			  LTC4245_VEESENSE);
-+static const u32 ltc4245_curr_config[] = {
-+	HWMON_C_INPUT | HWMON_C_MAX_ALARM,
-+	HWMON_C_INPUT | HWMON_C_MAX_ALARM,
-+	HWMON_C_INPUT | HWMON_C_MAX_ALARM,
-+	HWMON_C_INPUT | HWMON_C_MAX_ALARM,
-+	0
-+};
- 
--/*
-- * Finally, construct an array of pointers to members of the above objects,
-- * as required for sysfs_create_group()
-- */
--static struct attribute *ltc4245_std_attributes[] = {
--	&sensor_dev_attr_in1_input.dev_attr.attr,
--	&sensor_dev_attr_in2_input.dev_attr.attr,
--	&sensor_dev_attr_in3_input.dev_attr.attr,
--	&sensor_dev_attr_in4_input.dev_attr.attr,
--
--	&sensor_dev_attr_in1_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in2_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in3_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in4_min_alarm.dev_attr.attr,
--
--	&sensor_dev_attr_curr1_input.dev_attr.attr,
--	&sensor_dev_attr_curr2_input.dev_attr.attr,
--	&sensor_dev_attr_curr3_input.dev_attr.attr,
--	&sensor_dev_attr_curr4_input.dev_attr.attr,
--
--	&sensor_dev_attr_curr1_max_alarm.dev_attr.attr,
--	&sensor_dev_attr_curr2_max_alarm.dev_attr.attr,
--	&sensor_dev_attr_curr3_max_alarm.dev_attr.attr,
--	&sensor_dev_attr_curr4_max_alarm.dev_attr.attr,
--
--	&sensor_dev_attr_in5_input.dev_attr.attr,
--	&sensor_dev_attr_in6_input.dev_attr.attr,
--	&sensor_dev_attr_in7_input.dev_attr.attr,
--	&sensor_dev_attr_in8_input.dev_attr.attr,
--
--	&sensor_dev_attr_in5_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in6_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in7_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_in8_min_alarm.dev_attr.attr,
--
--	&sensor_dev_attr_in9_input.dev_attr.attr,
--
--	&sensor_dev_attr_power1_input.dev_attr.attr,
--	&sensor_dev_attr_power2_input.dev_attr.attr,
--	&sensor_dev_attr_power3_input.dev_attr.attr,
--	&sensor_dev_attr_power4_input.dev_attr.attr,
--
--	NULL,
-+static const struct hwmon_channel_info ltc4245_curr = {
-+	.type = hwmon_curr,
-+	.config = ltc4245_curr_config,
- };
- 
--static struct attribute *ltc4245_gpio_attributes[] = {
--	&sensor_dev_attr_in10_input.dev_attr.attr,
--	&sensor_dev_attr_in11_input.dev_attr.attr,
--	NULL,
-+static const u32 ltc4245_power_config[] = {
-+	HWMON_P_INPUT,
-+	HWMON_P_INPUT,
-+	HWMON_P_INPUT,
-+	HWMON_P_INPUT,
-+	0
- };
- 
--static const struct attribute_group ltc4245_std_group = {
--	.attrs = ltc4245_std_attributes,
-+static const struct hwmon_channel_info ltc4245_power = {
-+	.type = hwmon_power,
-+	.config = ltc4245_power_config,
- };
- 
--static const struct attribute_group ltc4245_gpio_group = {
--	.attrs = ltc4245_gpio_attributes,
-+static const struct hwmon_channel_info *ltc4245_info[] = {
-+	&ltc4245_in,
-+	&ltc4245_curr,
-+	&ltc4245_power,
-+	NULL
- };
- 
--static void ltc4245_sysfs_add_groups(struct ltc4245_data *data)
+-static ssize_t get_fan_target(struct device *dev,
+-			      struct device_attribute *devattr, char *buf)
 -{
--	/* standard sysfs attributes */
--	data->groups[0] = &ltc4245_std_group;
-+static const struct hwmon_ops ltc4245_hwmon_ops = {
-+	.is_visible = ltc4245_is_visible,
-+	.read = ltc4245_read,
-+};
- 
--	/* if we're using the extra gpio support, register it's attributes */
--	if (data->use_extra_gpios)
--		data->groups[1] = &ltc4245_gpio_group;
--}
-+static const struct hwmon_chip_info ltc4245_chip_info = {
-+	.ops = &ltc4245_hwmon_ops,
-+	.info = ltc4245_info,
-+};
- 
- static bool ltc4245_use_extra_gpios(struct i2c_client *client)
- {
-@@ -502,12 +492,10 @@ static int ltc4245_probe(struct i2c_client *client,
- 	i2c_smbus_write_byte_data(client, LTC4245_FAULT1, 0x00);
- 	i2c_smbus_write_byte_data(client, LTC4245_FAULT2, 0x00);
- 
--	/* Add sysfs hooks */
--	ltc4245_sysfs_add_groups(data);
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct max31790_data *data = max31790_update_device(dev);
+-	int sr, rpm;
 -
--	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
--							   client->name, data,
--							   data->groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
-+							 client->name, data,
-+							 &ltc4245_chip_info,
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
+-
+-	sr = get_tach_period(data->fan_dynamics[attr->index]);
+-	rpm = RPM_FROM_REG(data->target_count[attr->index], sr);
+-
+-	return sprintf(buf, "%d\n", rpm);
++	switch (attr) {
++	case hwmon_fan_input:
++		sr = get_tach_period(data->fan_dynamics[channel]);
++		rpm = RPM_FROM_REG(data->tach[channel], sr);
++		*val = rpm;
++		return 0;
++	case hwmon_fan_target:
++		sr = get_tach_period(data->fan_dynamics[channel]);
++		rpm = RPM_FROM_REG(data->target_count[channel], sr);
++		*val = rpm;
++		return 0;
++	case hwmon_fan_fault:
++		*val = !!(data->fault_status & (1 << channel));
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
+ }
+ 
+-static ssize_t set_fan_target(struct device *dev,
+-			      struct device_attribute *devattr,
+-			      const char *buf, size_t count)
++static int max31790_write_fan(struct device *dev, u32 attr, int channel,
++			      long val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
++	int target_count;
++	int err = 0;
+ 	u8 bits;
+ 	int sr;
+-	int target_count;
+-	unsigned long rpm;
+-	int err;
+-
+-	err = kstrtoul(buf, 10, &rpm);
+-	if (err)
+-		return err;
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+-	rpm = clamp_val(rpm, FAN_RPM_MIN, FAN_RPM_MAX);
+-	bits = bits_for_tach_period(rpm);
+-	data->fan_dynamics[attr->index] =
+-			((data->fan_dynamics[attr->index]
+-			  & ~MAX31790_FAN_DYN_SR_MASK)
+-			 | (bits << MAX31790_FAN_DYN_SR_SHIFT));
+-	err = i2c_smbus_write_byte_data(client,
+-			MAX31790_REG_FAN_DYNAMICS(attr->index),
+-			data->fan_dynamics[attr->index]);
+-
+-	if (err < 0) {
+-		mutex_unlock(&data->update_lock);
+-		return err;
++	switch (attr) {
++	case hwmon_fan_target:
++		val = clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
++		bits = bits_for_tach_period(val);
++		data->fan_dynamics[channel] =
++			((data->fan_dynamics[channel] &
++			  ~MAX31790_FAN_DYN_SR_MASK) |
++			 (bits << MAX31790_FAN_DYN_SR_SHIFT));
++		err = i2c_smbus_write_byte_data(client,
++					MAX31790_REG_FAN_DYNAMICS(channel),
++					data->fan_dynamics[channel]);
++		if (err < 0)
++			break;
++
++		sr = get_tach_period(data->fan_dynamics[channel]);
++		target_count = RPM_TO_REG(val, sr);
++		target_count = clamp_val(target_count, 0x1, 0x7FF);
++
++		data->target_count[channel] = target_count << 5;
++
++		err = i2c_smbus_write_word_swapped(client,
++					MAX31790_REG_TARGET_COUNT(channel),
++					data->target_count[channel]);
++		break;
++	default:
++		err = -EOPNOTSUPP;
++		break;
+ 	}
+ 
+-	sr = get_tach_period(data->fan_dynamics[attr->index]);
+-	target_count = RPM_TO_REG(rpm, sr);
+-	target_count = clamp_val(target_count, 0x1, 0x7FF);
+-
+-	data->target_count[attr->index] = target_count << 5;
+-
+-	err = i2c_smbus_write_word_swapped(client,
+-			MAX31790_REG_TARGET_COUNT(attr->index),
+-			data->target_count[attr->index]);
+-
+ 	mutex_unlock(&data->update_lock);
+ 
+-	if (err < 0)
+-		return err;
++	return err;
++}
+ 
+-	return count;
++static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
++{
++	const struct max31790_data *data = _data;
++	u8 fan_config = data->fan_config[channel % NR_CHANNEL];
++
++	switch (attr) {
++	case hwmon_fan_input:
++	case hwmon_fan_fault:
++		if (channel < NR_CHANNEL ||
++		    (fan_config & MAX31790_FAN_CFG_TACH_INPUT))
++			return S_IRUGO;
++		return 0;
++	case hwmon_fan_target:
++		if (channel < NR_CHANNEL &&
++		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
++			return S_IRUGO | S_IWUSR;
++		return 0;
++	default:
++		return 0;
++	}
+ }
+ 
+-static ssize_t get_pwm(struct device *dev,
+-		       struct device_attribute *devattr, char *buf)
++static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
++			     long *val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max31790_data *data = max31790_update_device(dev);
+-	int pwm;
++	u8 fan_config = data->fan_config[channel];
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	pwm = data->pwm[attr->index] >> 8;
+-
+-	return sprintf(buf, "%d\n", pwm);
++	switch (attr) {
++	case hwmon_pwm_input:
++		*val = data->pwm[channel] >> 8;
++		return 0;
++	case hwmon_pwm_enable:
++		if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
++			*val = 2;
++		else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
++			*val = 1;
++		else
++			*val = 0;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
+ }
+ 
+-static ssize_t set_pwm(struct device *dev,
+-		       struct device_attribute *devattr,
+-		       const char *buf, size_t count)
++static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
++			      long val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+-	unsigned long pwm;
+-	int err;
+-
+-	err = kstrtoul(buf, 10, &pwm);
+-	if (err)
+-		return err;
+-
+-	if (pwm > 255)
+-		return -EINVAL;
++	u8 fan_config;
++	int err = 0;
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+-	data->pwm[attr->index] = pwm << 8;
+-	err = i2c_smbus_write_word_swapped(client,
+-			MAX31790_REG_PWMOUT(attr->index),
+-			data->pwm[attr->index]);
++	switch (attr) {
++	case hwmon_pwm_input:
++		if (val < 0 || val > 255) {
++			err = -EINVAL;
++			break;
++		}
++		data->pwm[channel] = val << 8;
++		err = i2c_smbus_write_word_swapped(client,
++						   MAX31790_REG_PWMOUT(channel),
++						   val);
++		break;
++	case hwmon_pwm_enable:
++		fan_config = data->fan_config[channel];
++		if (val == 0) {
++			fan_config &= ~(MAX31790_FAN_CFG_TACH_INPUT_EN |
++					MAX31790_FAN_CFG_RPM_MODE);
++		} else if (val == 1) {
++			fan_config = (fan_config |
++				      MAX31790_FAN_CFG_TACH_INPUT_EN) &
++				     ~MAX31790_FAN_CFG_RPM_MODE;
++		} else if (val == 2) {
++			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN |
++				      MAX31790_FAN_CFG_RPM_MODE;
++		} else {
++			err = -EINVAL;
++			break;
++		}
++		data->fan_config[channel] = fan_config;
++		err = i2c_smbus_write_byte_data(client,
++					MAX31790_REG_FAN_CONFIG(channel),
++					fan_config);
++		break;
++	default:
++		err = -EOPNOTSUPP;
++		break;
++	}
+ 
+ 	mutex_unlock(&data->update_lock);
+ 
+-	if (err < 0)
+-		return err;
+-
+-	return count;
++	return err;
+ }
+ 
+-static ssize_t get_pwm_enable(struct device *dev,
+-			      struct device_attribute *devattr, char *buf)
++static umode_t max31790_pwm_is_visible(const void *_data, u32 attr, int channel)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct max31790_data *data = max31790_update_device(dev);
+-	int mode;
+-
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
+-
+-	if (data->fan_config[attr->index] & MAX31790_FAN_CFG_RPM_MODE)
+-		mode = 2;
+-	else if (data->fan_config[attr->index] & MAX31790_FAN_CFG_TACH_INPUT_EN)
+-		mode = 1;
+-	else
+-		mode = 0;
+-
+-	return sprintf(buf, "%d\n", mode);
++	const struct max31790_data *data = _data;
++	u8 fan_config = data->fan_config[channel];
++
++	switch (attr) {
++	case hwmon_pwm_input:
++	case hwmon_pwm_enable:
++		if (!(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
++			return S_IRUGO | S_IWUSR;
++		return 0;
++	default:
++		return 0;
++	}
+ }
+ 
+-static ssize_t set_pwm_enable(struct device *dev,
+-			      struct device_attribute *devattr,
+-			      const char *buf, size_t count)
++static int max31790_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+-	unsigned long mode;
+-	int err;
+-
+-	err = kstrtoul(buf, 10, &mode);
+-	if (err)
+-		return err;
+-
+-	switch (mode) {
+-	case 0:
+-		data->fan_config[attr->index] =
+-			data->fan_config[attr->index]
+-			& ~(MAX31790_FAN_CFG_TACH_INPUT_EN
+-			    | MAX31790_FAN_CFG_RPM_MODE);
+-		break;
+-	case 1:
+-		data->fan_config[attr->index] =
+-			(data->fan_config[attr->index]
+-			 | MAX31790_FAN_CFG_TACH_INPUT_EN)
+-			& ~MAX31790_FAN_CFG_RPM_MODE;
+-		break;
+-	case 2:
+-		data->fan_config[attr->index] =
+-			data->fan_config[attr->index]
+-			| MAX31790_FAN_CFG_TACH_INPUT_EN
+-			| MAX31790_FAN_CFG_RPM_MODE;
+-		break;
++	switch (type) {
++	case hwmon_fan:
++		return max31790_read_fan(dev, attr, channel, val);
++	case hwmon_pwm:
++		return max31790_read_pwm(dev, attr, channel, val);
+ 	default:
+-		return -EINVAL;
++		return -EOPNOTSUPP;
+ 	}
+-
+-	mutex_lock(&data->update_lock);
+-
+-	err = i2c_smbus_write_byte_data(client,
+-			MAX31790_REG_FAN_CONFIG(attr->index),
+-			data->fan_config[attr->index]);
+-
+-	mutex_unlock(&data->update_lock);
+-
+-	if (err < 0)
+-		return err;
+-
+-	return count;
+ }
+ 
+-static ssize_t get_fan_fault(struct device *dev,
+-			     struct device_attribute *devattr, char *buf)
++static int max31790_write(struct device *dev, enum hwmon_sensor_types type,
++			  u32 attr, int channel, long val)
+ {
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct max31790_data *data = max31790_update_device(dev);
+-	int fault;
+-
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
+-
+-	fault = !!(data->fault_status & (1 << attr->index));
++	switch (type) {
++	case hwmon_fan:
++		return max31790_write_fan(dev, attr, channel, val);
++	case hwmon_pwm:
++		return max31790_write_pwm(dev, attr, channel, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
+ 
+-	return sprintf(buf, "%d\n", fault);
++static umode_t max31790_is_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		return max31790_fan_is_visible(data, attr, channel);
++	case hwmon_pwm:
++		return max31790_pwm_is_visible(data, attr, channel);
++	default:
++		return 0;
++	}
+ }
+ 
+-static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, get_fan, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, get_fan, NULL, 1);
+-static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, get_fan, NULL, 2);
+-static SENSOR_DEVICE_ATTR(fan4_input, S_IRUGO, get_fan, NULL, 3);
+-static SENSOR_DEVICE_ATTR(fan5_input, S_IRUGO, get_fan, NULL, 4);
+-static SENSOR_DEVICE_ATTR(fan6_input, S_IRUGO, get_fan, NULL, 5);
+-
+-static SENSOR_DEVICE_ATTR(fan1_fault, S_IRUGO, get_fan_fault, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_fault, S_IRUGO, get_fan_fault, NULL, 1);
+-static SENSOR_DEVICE_ATTR(fan3_fault, S_IRUGO, get_fan_fault, NULL, 2);
+-static SENSOR_DEVICE_ATTR(fan4_fault, S_IRUGO, get_fan_fault, NULL, 3);
+-static SENSOR_DEVICE_ATTR(fan5_fault, S_IRUGO, get_fan_fault, NULL, 4);
+-static SENSOR_DEVICE_ATTR(fan6_fault, S_IRUGO, get_fan_fault, NULL, 5);
+-
+-static SENSOR_DEVICE_ATTR(fan7_input, S_IRUGO, get_fan, NULL, 6);
+-static SENSOR_DEVICE_ATTR(fan8_input, S_IRUGO, get_fan, NULL, 7);
+-static SENSOR_DEVICE_ATTR(fan9_input, S_IRUGO, get_fan, NULL, 8);
+-static SENSOR_DEVICE_ATTR(fan10_input, S_IRUGO, get_fan, NULL, 9);
+-static SENSOR_DEVICE_ATTR(fan11_input, S_IRUGO, get_fan, NULL, 10);
+-static SENSOR_DEVICE_ATTR(fan12_input, S_IRUGO, get_fan, NULL, 11);
+-
+-static SENSOR_DEVICE_ATTR(fan7_fault, S_IRUGO, get_fan_fault, NULL, 6);
+-static SENSOR_DEVICE_ATTR(fan8_fault, S_IRUGO, get_fan_fault, NULL, 7);
+-static SENSOR_DEVICE_ATTR(fan9_fault, S_IRUGO, get_fan_fault, NULL, 8);
+-static SENSOR_DEVICE_ATTR(fan10_fault, S_IRUGO, get_fan_fault, NULL, 9);
+-static SENSOR_DEVICE_ATTR(fan11_fault, S_IRUGO, get_fan_fault, NULL, 10);
+-static SENSOR_DEVICE_ATTR(fan12_fault, S_IRUGO, get_fan_fault, NULL, 11);
+-
+-static SENSOR_DEVICE_ATTR(fan1_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 0);
+-static SENSOR_DEVICE_ATTR(fan2_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 1);
+-static SENSOR_DEVICE_ATTR(fan3_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 2);
+-static SENSOR_DEVICE_ATTR(fan4_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 3);
+-static SENSOR_DEVICE_ATTR(fan5_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 4);
+-static SENSOR_DEVICE_ATTR(fan6_target, S_IWUSR | S_IRUGO,
+-		get_fan_target, set_fan_target, 5);
+-
+-static SENSOR_DEVICE_ATTR(pwm1, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 0);
+-static SENSOR_DEVICE_ATTR(pwm2, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 1);
+-static SENSOR_DEVICE_ATTR(pwm3, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 2);
+-static SENSOR_DEVICE_ATTR(pwm4, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 3);
+-static SENSOR_DEVICE_ATTR(pwm5, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 4);
+-static SENSOR_DEVICE_ATTR(pwm6, S_IWUSR | S_IRUGO, get_pwm, set_pwm, 5);
+-
+-static SENSOR_DEVICE_ATTR(pwm1_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 0);
+-static SENSOR_DEVICE_ATTR(pwm2_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 1);
+-static SENSOR_DEVICE_ATTR(pwm3_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 2);
+-static SENSOR_DEVICE_ATTR(pwm4_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 3);
+-static SENSOR_DEVICE_ATTR(pwm5_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 4);
+-static SENSOR_DEVICE_ATTR(pwm6_enable, S_IWUSR | S_IRUGO,
+-		get_pwm_enable, set_pwm_enable, 5);
+-
+-static struct attribute *max31790_attrs[] = {
+-	&sensor_dev_attr_fan1_input.dev_attr.attr,
+-	&sensor_dev_attr_fan2_input.dev_attr.attr,
+-	&sensor_dev_attr_fan3_input.dev_attr.attr,
+-	&sensor_dev_attr_fan4_input.dev_attr.attr,
+-	&sensor_dev_attr_fan5_input.dev_attr.attr,
+-	&sensor_dev_attr_fan6_input.dev_attr.attr,
+-
+-	&sensor_dev_attr_fan1_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan2_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan3_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan4_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan5_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan6_fault.dev_attr.attr,
+-
+-	&sensor_dev_attr_fan7_input.dev_attr.attr,
+-	&sensor_dev_attr_fan8_input.dev_attr.attr,
+-	&sensor_dev_attr_fan9_input.dev_attr.attr,
+-	&sensor_dev_attr_fan10_input.dev_attr.attr,
+-	&sensor_dev_attr_fan11_input.dev_attr.attr,
+-	&sensor_dev_attr_fan12_input.dev_attr.attr,
+-
+-	&sensor_dev_attr_fan7_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan8_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan9_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan10_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan11_fault.dev_attr.attr,
+-	&sensor_dev_attr_fan12_fault.dev_attr.attr,
+-
+-	&sensor_dev_attr_fan1_target.dev_attr.attr,
+-	&sensor_dev_attr_fan2_target.dev_attr.attr,
+-	&sensor_dev_attr_fan3_target.dev_attr.attr,
+-	&sensor_dev_attr_fan4_target.dev_attr.attr,
+-	&sensor_dev_attr_fan5_target.dev_attr.attr,
+-	&sensor_dev_attr_fan6_target.dev_attr.attr,
+-
+-	&sensor_dev_attr_pwm1.dev_attr.attr,
+-	&sensor_dev_attr_pwm2.dev_attr.attr,
+-	&sensor_dev_attr_pwm3.dev_attr.attr,
+-	&sensor_dev_attr_pwm4.dev_attr.attr,
+-	&sensor_dev_attr_pwm5.dev_attr.attr,
+-	&sensor_dev_attr_pwm6.dev_attr.attr,
+-
+-	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
+-	&sensor_dev_attr_pwm2_enable.dev_attr.attr,
+-	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
+-	&sensor_dev_attr_pwm4_enable.dev_attr.attr,
+-	&sensor_dev_attr_pwm5_enable.dev_attr.attr,
+-	&sensor_dev_attr_pwm6_enable.dev_attr.attr,
+-	NULL
++static const u32 max31790_fan_config[] = {
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	HWMON_F_INPUT | HWMON_F_FAULT,
++	0
+ };
+ 
+-static umode_t max31790_attrs_visible(struct kobject *kobj,
+-				     struct attribute *a, int n)
+-{
+-	struct device *dev = container_of(kobj, struct device, kobj);
+-	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct device_attribute *devattr =
+-			container_of(a, struct device_attribute, attr);
+-	int index = to_sensor_dev_attr(devattr)->index % NR_CHANNEL;
+-	u8 fan_config;
++static const struct hwmon_channel_info max31790_fan = {
++	.type = hwmon_fan,
++	.config = max31790_fan_config,
++};
+ 
+-	fan_config = data->fan_config[index];
++static const u32 max31790_pwm_config[] = {
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++	0
++};
+ 
+-	if (n >= NR_CHANNEL * 2 && n < NR_CHANNEL * 4 &&
+-	    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+-		return 0;
+-	if (n >= NR_CHANNEL * 4 && (fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+-		return 0;
++static const struct hwmon_channel_info max31790_pwm = {
++	.type = hwmon_pwm,
++	.config = max31790_pwm_config,
++};
+ 
+-	return a->mode;
+-}
++static const struct hwmon_channel_info *max31790_info[] = {
++	&max31790_fan,
++	&max31790_pwm,
++	NULL
++};
++
++static const struct hwmon_ops max31790_hwmon_ops = {
++	.is_visible = max31790_is_visible,
++	.read = max31790_read,
++	.write = max31790_write,
++};
+ 
+-static const struct attribute_group max31790_group = {
+-	.attrs = max31790_attrs,
+-	.is_visible = max31790_attrs_visible,
++static const struct hwmon_chip_info max31790_chip_info = {
++	.ops = &max31790_hwmon_ops,
++	.info = max31790_info,
+ };
+-__ATTRIBUTE_GROUPS(max31790);
+ 
+ static int max31790_init_client(struct i2c_client *client,
+ 				struct max31790_data *data)
+@@ -575,8 +500,10 @@ static int max31790_probe(struct i2c_client *client,
+ 	if (err)
+ 		return err;
+ 
+-	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+-			client->name, data, max31790_groups);
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
++							 data,
++							 &max31790_chip_info,
 +							 NULL);
+ 
  	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
- 
 -- 
 2.5.0
 
