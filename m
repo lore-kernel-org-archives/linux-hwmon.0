@@ -1,378 +1,641 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:46210 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752452AbcHNQEh (ORCPT
-	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 14 Aug 2016 12:04:37 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 8/9] hwmon: (jc42) Convert to use new hwmon registration API
-Date: Sat, 13 Aug 2016 22:51:50 -0700
-Message-Id: <1471153911-6536-8-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1471153911-6536-1-git-send-email-linux@roeck-us.net>
-References: <1471153911-6536-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <jic23@kernel.org>
+Subject: Re: [PATCH V4 1/1] iio: as6200: add AS6200 temperature sensor driver
+ from ams AG
+To: Florian Lobmaier <Florian.Lobmaier@ams.com>,
+ Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+References: <4ace1394d6064ab2b7dd4a5335cc1a7c@SUX5076.office.amsiag.com>
+From: Jonathan Cameron <jic23@kernel.org>
+Cc: Elitsa Polizoeva <Elitsa.Polizoeva@ams.com>,
+ "knaack.h@gmx.de" <knaack.h@gmx.de>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Guenter Roeck <linux@roeck-us.net>,
+ Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org
+Message-ID: <14a70eac-eed6-426f-d22d-ccc79ccf5ebb@kernel.org>
+Date: Mon, 15 Aug 2016 18:25:44 +0100
+MIME-Version: 1.0
+In-Reply-To: <4ace1394d6064ab2b7dd4a5335cc1a7c@SUX5076.office.amsiag.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Simplify code and reduce code size by using the new hwmon
-registration API.
+On 04/08/16 09:35, Florian Lobmaier wrote:
+> Hello Peter,
+> 
+> Thanks again for your valuable feedback. We use now IIO_EV_THRESH to
+> set high and low limits for temperature. Also removed all the custom
+> ABI as this are mainly settings which will be set one-time only. For
+> the removed custom ABI init defines where introduced which will be
+> written to the registers in the probe function. The remaining custom
+> ABI is now documented as well as the device tree bindings.> 
+> Br,
+> Florian
+> 
+> Signed-off-by: Florian Lobmaier <florian.lobmaier@ams.com>
+> Signed-off-by: Elitsa Polizoeva <elitsa.polizoeva@ams.com>
+Please post as a fresh email thread with a clean title. Otherwise
+people will assume it is simply a reply to a comment on an earlier
+version.  Also don't include earlier versions as you have here!
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/jc42.c | 293 ++++++++++++++++++++++++++-------------------------
- 1 file changed, 149 insertions(+), 144 deletions(-)
+i.e. drop the RE from the title as it's confusing!
 
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index 9d5f85f3384f..1bf22eff0b08 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -28,7 +28,6 @@
- #include <linux/jiffies.h>
- #include <linux/i2c.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-@@ -254,170 +253,148 @@ abort:
- 	return ret;
- }
- 
--/* sysfs functions */
--
--static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
--			 char *buf)
--{
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct jc42_data *data = jc42_update_device(dev);
--	if (IS_ERR(data))
--		return PTR_ERR(data);
--	return sprintf(buf, "%d\n",
--		       jc42_temp_from_reg(data->temp[attr->index]));
--}
--
--static ssize_t show_temp_hyst(struct device *dev,
--			      struct device_attribute *devattr, char *buf)
-+static int jc42_read(struct device *dev, enum hwmon_sensor_types type,
-+		     u32 attr, int channel, long *val)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct jc42_data *data = jc42_update_device(dev);
- 	int temp, hyst;
- 
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
--	temp = jc42_temp_from_reg(data->temp[attr->index]);
--	hyst = jc42_hysteresis[(data->config & JC42_CFG_HYST_MASK)
--			       >> JC42_CFG_HYST_SHIFT];
--	return sprintf(buf, "%d\n", temp - hyst);
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		*val = jc42_temp_from_reg(data->temp[t_input]);
-+		return 0;
-+	case hwmon_temp_min:
-+		*val = jc42_temp_from_reg(data->temp[t_min]);
-+		return 0;
-+	case hwmon_temp_max:
-+		*val = jc42_temp_from_reg(data->temp[t_max]);
-+		return 0;
-+	case hwmon_temp_crit:
-+		*val = jc42_temp_from_reg(data->temp[t_crit]);
-+		return 0;
-+	case hwmon_temp_max_hyst:
-+		temp = jc42_temp_from_reg(data->temp[t_max]);
-+		hyst = jc42_hysteresis[(data->config & JC42_CFG_HYST_MASK)
-+						>> JC42_CFG_HYST_SHIFT];
-+		*val = temp - hyst;
-+		return 0;
-+	case hwmon_temp_crit_hyst:
-+		temp = jc42_temp_from_reg(data->temp[t_crit]);
-+		hyst = jc42_hysteresis[(data->config & JC42_CFG_HYST_MASK)
-+						>> JC42_CFG_HYST_SHIFT];
-+		*val = temp - hyst;
-+		return 0;
-+	case hwmon_temp_min_alarm:
-+		*val = (data->temp[t_input] >> JC42_ALARM_MIN_BIT) & 1;
-+		return 0;
-+	case hwmon_temp_max_alarm:
-+		*val = (data->temp[t_input] >> JC42_ALARM_MAX_BIT) & 1;
-+		return 0;
-+	case hwmon_temp_crit_alarm:
-+		*val = (data->temp[t_input] >> JC42_ALARM_CRIT_BIT) & 1;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
- }
- 
--static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
--			const char *buf, size_t count)
-+static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
-+		      u32 attr, int channel, long val)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct jc42_data *data = dev_get_drvdata(dev);
--	int err, ret = count;
--	int nr = attr->index;
--	long val;
-+	struct i2c_client *client = data->client;
-+	int diff, hyst;
-+	int ret;
- 
--	if (kstrtol(buf, 10, &val) < 0)
--		return -EINVAL;
- 	mutex_lock(&data->update_lock);
--	data->temp[nr] = jc42_temp_to_reg(val, data->extended);
--	err = i2c_smbus_write_word_swapped(data->client, temp_regs[nr],
--					   data->temp[nr]);
--	if (err < 0)
--		ret = err;
--	mutex_unlock(&data->update_lock);
--	return ret;
--}
- 
--/*
-- * JC42.4 compliant chips only support four hysteresis values.
-- * Pick best choice and go from there.
-- */
--static ssize_t set_temp_crit_hyst(struct device *dev,
--				  struct device_attribute *attr,
--				  const char *buf, size_t count)
--{
--	struct jc42_data *data = dev_get_drvdata(dev);
--	long val;
--	int diff, hyst;
--	int err;
--	int ret = count;
--
--	if (kstrtol(buf, 10, &val) < 0)
--		return -EINVAL;
--
--	val = clamp_val(val, (data->extended ? JC42_TEMP_MIN_EXTENDED :
--			      JC42_TEMP_MIN) - 6000, JC42_TEMP_MAX);
--	diff = jc42_temp_from_reg(data->temp[t_crit]) - val;
--
--	hyst = 0;
--	if (diff > 0) {
--		if (diff < 2250)
--			hyst = 1;	/* 1.5 degrees C */
--		else if (diff < 4500)
--			hyst = 2;	/* 3.0 degrees C */
--		else
--			hyst = 3;	/* 6.0 degrees C */
-+	switch (attr) {
-+	case hwmon_temp_min:
-+		data->temp[t_min] = jc42_temp_to_reg(val, data->extended);
-+		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_min],
-+						   data->temp[t_min]);
-+		break;
-+	case hwmon_temp_max:
-+		data->temp[t_max] = jc42_temp_to_reg(val, data->extended);
-+		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_max],
-+						   data->temp[t_max]);
-+		break;
-+	case hwmon_temp_crit:
-+		data->temp[t_crit] = jc42_temp_to_reg(val, data->extended);
-+		ret = i2c_smbus_write_word_swapped(client, temp_regs[t_crit],
-+						   data->temp[t_crit]);
-+		break;
-+	case hwmon_temp_crit_hyst:
-+		/*
-+		 * JC42.4 compliant chips only support four hysteresis values.
-+		 * Pick best choice and go from there.
-+		 */
-+		val = clamp_val(val, (data->extended ? JC42_TEMP_MIN_EXTENDED
-+						     : JC42_TEMP_MIN) - 6000,
-+				JC42_TEMP_MAX);
-+		diff = jc42_temp_from_reg(data->temp[t_crit]) - val;
-+		hyst = 0;
-+		if (diff > 0) {
-+			if (diff < 2250)
-+				hyst = 1;	/* 1.5 degrees C */
-+			else if (diff < 4500)
-+				hyst = 2;	/* 3.0 degrees C */
-+			else
-+				hyst = 3;	/* 6.0 degrees C */
-+		}
-+		data->config = (data->config & ~JC42_CFG_HYST_MASK) |
-+				(hyst << JC42_CFG_HYST_SHIFT);
-+		ret = i2c_smbus_write_word_swapped(data->client,
-+						   JC42_REG_CONFIG,
-+						   data->config);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
- 	}
- 
--	mutex_lock(&data->update_lock);
--	data->config = (data->config & ~JC42_CFG_HYST_MASK)
--	  | (hyst << JC42_CFG_HYST_SHIFT);
--	err = i2c_smbus_write_word_swapped(data->client, JC42_REG_CONFIG,
--					   data->config);
--	if (err < 0)
--		ret = err;
- 	mutex_unlock(&data->update_lock);
--	return ret;
--}
- 
--static ssize_t show_alarm(struct device *dev,
--			  struct device_attribute *attr, char *buf)
--{
--	u16 bit = to_sensor_dev_attr(attr)->index;
--	struct jc42_data *data = jc42_update_device(dev);
--	u16 val;
--
--	if (IS_ERR(data))
--		return PTR_ERR(data);
--
--	val = data->temp[t_input];
--	if (bit != JC42_ALARM_CRIT_BIT && (data->config & JC42_CFG_CRIT_ONLY))
--		val = 0;
--	return sprintf(buf, "%u\n", (val >> bit) & 1);
-+	return ret;
- }
- 
--static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, t_input);
--static SENSOR_DEVICE_ATTR(temp1_crit, S_IRUGO, show_temp, set_temp, t_crit);
--static SENSOR_DEVICE_ATTR(temp1_min, S_IRUGO, show_temp, set_temp, t_min);
--static SENSOR_DEVICE_ATTR(temp1_max, S_IRUGO, show_temp, set_temp, t_max);
--
--static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IRUGO, show_temp_hyst,
--			  set_temp_crit_hyst, t_crit);
--static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO, show_temp_hyst, NULL, t_max);
--
--static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_alarm, NULL,
--			  JC42_ALARM_CRIT_BIT);
--static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_alarm, NULL,
--			  JC42_ALARM_MIN_BIT);
--static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL,
--			  JC42_ALARM_MAX_BIT);
--
--static struct attribute *jc42_attributes[] = {
--	&sensor_dev_attr_temp1_input.dev_attr.attr,
--	&sensor_dev_attr_temp1_crit.dev_attr.attr,
--	&sensor_dev_attr_temp1_min.dev_attr.attr,
--	&sensor_dev_attr_temp1_max.dev_attr.attr,
--	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
--	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
--	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
--	&sensor_dev_attr_temp1_min_alarm.dev_attr.attr,
--	&sensor_dev_attr_temp1_max_alarm.dev_attr.attr,
--	NULL
--};
--
--static umode_t jc42_attribute_mode(struct kobject *kobj,
--				  struct attribute *attr, int index)
-+static umode_t jc42_is_visible(const void *_data, enum hwmon_sensor_types type,
-+			       u32 attr, int channel)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
--	struct jc42_data *data = dev_get_drvdata(dev);
-+	const struct jc42_data *data = _data;
- 	unsigned int config = data->config;
--	bool readonly;
--
--	if (attr == &sensor_dev_attr_temp1_crit.dev_attr.attr)
--		readonly = config & JC42_CFG_TCRIT_LOCK;
--	else if (attr == &sensor_dev_attr_temp1_min.dev_attr.attr ||
--		 attr == &sensor_dev_attr_temp1_max.dev_attr.attr)
--		readonly = config & JC42_CFG_EVENT_LOCK;
--	else if (attr == &sensor_dev_attr_temp1_crit_hyst.dev_attr.attr)
--		readonly = config & (JC42_CFG_EVENT_LOCK | JC42_CFG_TCRIT_LOCK);
--	else
--		readonly = true;
--
--	return S_IRUGO | (readonly ? 0 : S_IWUSR);
-+	umode_t mode = S_IRUGO;
-+
-+	switch (attr) {
-+	case hwmon_temp_min:
-+	case hwmon_temp_max:
-+		if (!(config & JC42_CFG_EVENT_LOCK))
-+			mode |= S_IWUSR;
-+		break;
-+	case hwmon_temp_crit:
-+		if (!(config & JC42_CFG_TCRIT_LOCK))
-+			mode |= S_IWUSR;
-+		break;
-+	case hwmon_temp_crit_hyst:
-+		if (!(config & (JC42_CFG_EVENT_LOCK | JC42_CFG_TCRIT_LOCK)))
-+			mode |= S_IWUSR;
-+		break;
-+	case hwmon_temp_input:
-+	case hwmon_temp_max_hyst:
-+	case hwmon_temp_min_alarm:
-+	case hwmon_temp_max_alarm:
-+	case hwmon_temp_crit_alarm:
-+		break;
-+	default:
-+		mode = 0;
-+		break;
-+	}
-+	return mode;
- }
- 
--static const struct attribute_group jc42_group = {
--	.attrs = jc42_attributes,
--	.is_visible = jc42_attribute_mode,
--};
--__ATTRIBUTE_GROUPS(jc42);
--
- /* Return 0 if detection is successful, -ENODEV otherwise */
- static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
- {
-@@ -450,6 +427,34 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
- 	return -ENODEV;
- }
- 
-+static const u32 jc42_temp_config[] = {
-+	HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX | HWMON_T_CRIT |
-+	HWMON_T_MAX_HYST | HWMON_T_CRIT_HYST |
-+	HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM,
-+	0
-+};
-+
-+static const struct hwmon_channel_info jc42_temp = {
-+	.type = hwmon_temp,
-+	.config = jc42_temp_config,
-+};
-+
-+static const struct hwmon_channel_info *jc42_info[] = {
-+	&jc42_temp,
-+	NULL
-+};
-+
-+static const struct hwmon_ops jc42_hwmon_ops = {
-+	.is_visible = jc42_is_visible,
-+	.read = jc42_read,
-+	.write = jc42_write,
-+};
-+
-+static const struct hwmon_chip_info jc42_chip_info = {
-+	.ops = &jc42_hwmon_ops,
-+	.info = jc42_info,
-+};
-+
- static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-@@ -482,9 +487,9 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	}
- 	data->config = config;
- 
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
--							   data,
--							   jc42_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-+							 data, &jc42_chip_info,
-+							 NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
--- 
-2.5.0
+Anyhow, right back at v1 Peter mentioned that this might be more
+suitable as a hwmon driver than an IIO one.  If you have a good reason
+for supporting this part via IIO you should put it in the patch
+description. I'm afraid I've been more or less offline for the last
+couple fo weeks or I'd have highlighted that this question was
+important. A superficial look suggest to me that this is definitely
+a part targeting hardware monitoring applications.
 
+I'll only take a border line part with agreement form Guenter / Jean
+who are the hwmon maintainers.
+
+I'll do a quick review ignoring this question.
+Mostly pretty good though I really don't like the remaining
+custom ABI. Can't see a reason for its existence.
+
+Jonathan
+> ---
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-temperature-as6200.txt b/Documentation/ABI/testing/sysfs-bus-iio-temperature-as6200.txt
+> new file mode 100644
+> index 0000000..0dfad7e
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio-temperature-as6200.txt
+> @@ -0,0 +1,8 @@
+> +What		/sys/bus/iio/devices/iio:deviceX/al
+'alert' at the very least.
+> +Date:		August 2016
+> +KernelVersion:	4.3
+> +Contact:	Florian Lobmaier <florian.lobmaier@ams.com>
+> +Description:
+> +		Get the current status of the alert bit in the configuration
+> +		register of the AS6200.
+> +		on/off
+Why?  Just use the events accesses to wait for it.
+
+> diff --git a/Documentation/devicetree/bindings/iio/temperature/as6200.txt b/Documentation/devicetree/bindings/iio/temperature/as6200.txt
+> new file mode 100644
+> index 0000000..bfd2b5f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/temperature/as6200.txt
+> @@ -0,0 +1,20 @@
+> +ams AG AS6200 temperature sensor driver
+> +
+> +Required properties:
+> +	- compatible: must be "ams,as6200"
+> +	- reg: I2C 7-bit address for the device
+> +		possible values: 0x48, 0x49, 0x4a, 0x4b
+> +	- interrupt-parent: should be the phandle for the interrupt controller
+> +	- interrupts: the sole interrupt generated by the device
+> +
+> +	Refer to interrupt-controller/interrupts.txt for generic
+> +	interrupt client node bindings.
+> +
+> +Example:
+> +
+> +as6200@0x4b {
+> +	compatible = "ams,as6200";
+> +	reg = <0x4b>;
+> +	interrupt-parent = <&gpio>;
+> +	interrupts = <4 1>;
+> +};
+> diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
+> index 21feaa4..d82e80f 100644
+> --- a/drivers/iio/temperature/Kconfig
+> +++ b/drivers/iio/temperature/Kconfig
+> @@ -3,6 +3,17 @@
+>  #
+>  menu "Temperature sensors"
+>  
+> +config AS6200
+> +	tristate "ams AG AS6200 temperature sensor"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  If you say yes here you get support for the AS6200 temperature
+> +	  sensor from ams AG.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called as6200.
+> +
+>  config MLX90614
+>  	tristate "MLX90614 contact-less infrared sensor"
+>  	depends on I2C
+> diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
+> index 40710a8..c0c9a9a 100644
+> --- a/drivers/iio/temperature/Makefile
+> +++ b/drivers/iio/temperature/Makefile
+> @@ -2,5 +2,6 @@
+>  # Makefile for industrial I/O temperature drivers
+>  #
+>  
+> +obj-$(CONFIG_AS6200) += as6200.o
+>  obj-$(CONFIG_MLX90614) += mlx90614.o
+>  obj-$(CONFIG_TMP006) += tmp006.o
+> diff --git a/drivers/iio/temperature/as6200.c b/drivers/iio/temperature/as6200.c
+> new file mode 100644
+> index 0000000..9bcab1d
+> --- /dev/null
+> +++ b/drivers/iio/temperature/as6200.c
+> @@ -0,0 +1,492 @@
+> +/*
+> + * Driver for ams AS6200 temperature sensor.
+> + *
+> + * Sensor supports following 7-bit I2C addresses: 0x48, 0x49, 0x4A, 0x4B
+> + *
+> + * Copyright (c) 2016 ams AG. All rights reserved.
+> + *
+> + * Author: Florian Lobmaier <florian.lobmaier@ams.com>
+> + * Author: Elitsa Polizoeva <elitsa.polizoeva@ams.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; either version 2 of the License, or
+> + * (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU General Public License
+> + * along with this program; if not, write to the Free Software
+> + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/device.h>
+> +#include <linux/init.h>
+> +#include <linux/slab.h>
+> +#include <linux/i2c.h>
+> +#include <linux/err.h>
+> +#include <linux/types.h>
+> +#include <linux/irq.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/gpio.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/iio/sysfs.h>
+> +#include <linux/iio/events.h>
+> +#include <linux/regmap.h>
+> +
+> +static const int as6200_conv_rates[4][2] = { {4, 0}, {1, 0},
+> +					{0, 250000}, {0, 125000} };
+> +
+> +/* AS6200 registers */
+> +#define AS6200_REG_TVAL		0x00
+> +#define AS6200_REG_CONFIG	0x01
+> +#define AS6200_REG_TLOW		0x02
+> +#define AS6200_REG_THIGH	0x03
+> +#define AS6200_MAX_REGISTER	0x03
+> +
+> +#define AS6200_CONFIG_AL_MASK	BIT(5)
+> +#define AS6200_CONFIG_AL_SHIFT	5
+> +#define AS6200_CONFIG_CR_MASK	GENMASK(7, 6)
+> +#define AS6200_CONFIG_CR_SHIFT	6
+> +#define AS6200_CONFIG_SM_MASK   BIT(8)
+> +#define AS6200_CONFIG_SM_SHIFT  8
+> +#define AS6200_CONFIG_IM_MASK	BIT(9)
+> +#define AS6200_CONFIG_IM_SHIFT	9
+> +#define AS6200_CONFIG_POL_MASK	BIT(10)
+> +#define AS6200_CONFIG_POL_SHIFT	10
+> +#define AS6200_CONFIG_CF_MASK	GENMASK(12, 11)
+> +#define AS6200_CONFIG_CF_SHIFT	11
+> +
+> +/* AS6200 init configuration values */
+> +#define AS6200_CONFIG_INIT_IM		0x0
+> +#define AS6200_CONFIG_INIT_POL	0x0
+> +#define AS6200_CONFIG_INIT_CF		0x2
+> +
+> +struct as6200_data {
+> +	struct i2c_client *client;
+> +	struct regmap *regmap;
+> +};
+> +
+> +static const struct regmap_range as6200_readable_ranges[] = {
+> +	regmap_reg_range(AS6200_REG_TVAL, AS6200_REG_THIGH),
+> +};
+> +
+> +static const struct regmap_access_table as6200_readable_table = {
+> +	.yes_ranges = as6200_readable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(as6200_readable_ranges),
+> +};
+> +
+> +static const struct regmap_range as6200_writable_ranges[] = {
+> +	regmap_reg_range(AS6200_REG_CONFIG, AS6200_REG_THIGH),
+> +};
+> +
+> +static const struct regmap_access_table as6200_writable_table = {
+> +	.yes_ranges = as6200_writable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(as6200_writable_ranges),
+> +};
+> +
+> +static const struct regmap_range as6200_volatile_ranges[] = {
+> +	regmap_reg_range(AS6200_REG_TVAL, AS6200_REG_TVAL),
+> +};
+> +
+> +static const struct regmap_access_table as6200_volatile_table = {
+> +	.yes_ranges = as6200_volatile_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(as6200_volatile_ranges),
+> +};
+> +
+> +static const struct regmap_config as6200_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 16,
+> +	.max_register = AS6200_MAX_REGISTER,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.rd_table = &as6200_readable_table,
+> +	.wr_table = &as6200_writable_table,
+> +	.volatile_table = &as6200_volatile_table,
+> +};
+> +
+> +static int as6200_read_raw(struct iio_dev *indio_dev,
+> +			    struct iio_chan_spec const *channel, int *val,
+> +			    int *val2, long mask)
+> +{
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	unsigned int reg_val;
+> +	int cr, err;
+> +	s32 ret;
+> +
+> +	if (channel->type != IIO_TEMP)
+> +		return -EINVAL;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_RAW:
+> +	case IIO_CHAN_INFO_PROCESSED:
+> +		err = regmap_read(data->regmap, AS6200_REG_TVAL,
+> +					&reg_val);
+> +		if (err < 0)
+> +			return err;
+> +		ret = sign_extend32(reg_val, 15) >> 4;
+> +		if (mask == IIO_CHAN_INFO_PROCESSED)
+> +			*val = (ret * 625) / 10000;
+> +		else
+> +			*val = ret;
+> +		return IIO_VAL_INT;
+> +	case IIO_CHAN_INFO_SCALE:
+> +		*val = 62;
+> +		*val2 = 500000;
+> +		return IIO_VAL_INT_PLUS_MICRO;
+> +	case IIO_CHAN_INFO_SAMP_FREQ:
+> +		err = regmap_read(data->regmap, AS6200_REG_CONFIG,
+> +					&reg_val);
+> +		if (err < 0)
+> +			return err;
+> +		cr = (reg_val & AS6200_CONFIG_CR_MASK)
+> +			>> AS6200_CONFIG_CR_SHIFT;
+> +		*val = as6200_conv_rates[cr][0];
+> +		*val2 = as6200_conv_rates[cr][1];
+> +		return IIO_VAL_INT_PLUS_MICRO;
+> +	default:
+> +		break;
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+> +static int as6200_write_raw(struct iio_dev *indio_dev,
+> +			struct iio_chan_spec const *chan,
+> +			int val,
+> +			int val2,
+> +			long mask)
+> +{
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	int i;
+> +	unsigned int config_val;
+> +	int err;
+> +
+> +	if (mask != IIO_CHAN_INFO_SAMP_FREQ)
+> +		return -EINVAL;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(as6200_conv_rates); i++)
+> +		if ((val == as6200_conv_rates[i][0]) &&
+> +			(val2 == as6200_conv_rates[i][1])) {
+> +			err = regmap_read(data->regmap,
+> +				AS6200_REG_CONFIG, &config_val);
+> +			if (err < 0)
+> +				return err;
+> +			config_val &= ~AS6200_CONFIG_CR_MASK;
+> +			config_val |= i << AS6200_CONFIG_CR_SHIFT;
+> +
+> +			return regmap_write(data->regmap, AS6200_REG_CONFIG,
+> +							config_val);
+> +		}
+> +	return -EINVAL;
+> +}
+> +
+> +static int as6200_read_thresh(struct iio_dev *indio_dev,
+> +			const struct iio_chan_spec *chan,
+> +			enum iio_event_type type,
+> +			enum iio_event_direction dir,
+> +			enum iio_event_info info,
+> +			int *val, int *val2)
+> +{
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	int ret;
+> +	u32 reg_val;
+> +
+> +	dev_info(&data->client->dev, "read thresh called\n");
+> +	if (dir == IIO_EV_DIR_RISING)
+> +		ret = regmap_read(data->regmap, AS6200_REG_THIGH, &reg_val);
+> +	else
+> +		ret = regmap_read(data->regmap, AS6200_REG_TLOW, &reg_val);
+> +
+> +	*val = sign_extend32(reg_val, 15) >> 4;
+> +
+> +	if (ret)
+> +		return ret;
+> +	return IIO_VAL_INT;
+> +}
+> +
+> +static int as6200_write_thresh(struct iio_dev *indio_dev,
+> +			const struct iio_chan_spec *chan,
+> +			enum iio_event_type type,
+> +			enum iio_event_direction dir,
+> +			enum iio_event_info info,
+> +			int val, int val2)
+> +{
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	int ret;
+> +	s16 value = val << 4;
+> +
+> +	dev_info(&data->client->dev, "write thresh called %d\n", value);
+> +	if (dir == IIO_EV_DIR_RISING)
+> +		ret = regmap_write(data->regmap, AS6200_REG_THIGH, value);
+> +	else
+> +		ret = regmap_write(data->regmap, AS6200_REG_TLOW, value);
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t as6200_alert_isr(int irq, void *dev_id)
+> +{
+> +	struct iio_dev *indio_dev = dev_id;
+> +
+> +	iio_push_event(indio_dev,
+> +		IIO_UNMOD_EVENT_CODE(IIO_TEMP,
+> +					0,
+> +					IIO_EV_TYPE_THRESH,
+> +					IIO_EV_DIR_EITHER),
+> +					iio_get_time_ns());
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int as6200_init(struct iio_dev *indio_dev)
+> +{
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	int err;
+> +
+> +	err = regmap_update_bits(data->regmap, AS6200_REG_CONFIG,
+> +			AS6200_CONFIG_IM_MASK,
+> +			AS6200_CONFIG_INIT_IM << AS6200_CONFIG_IM_SHIFT);
+> +	if (err < 0)
+> +		return err;
+> +	err = regmap_update_bits(data->regmap, AS6200_REG_CONFIG,
+> +			AS6200_CONFIG_POL_MASK,
+> +			AS6200_CONFIG_INIT_POL << AS6200_CONFIG_POL_SHIFT);
+> +	if (err < 0)
+> +		return err;
+> +	err = regmap_update_bits(data->regmap, AS6200_REG_CONFIG,
+> +			AS6200_CONFIG_CF_MASK,
+> +			AS6200_CONFIG_INIT_CF << AS6200_CONFIG_CF_SHIFT);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return err;
+> +}
+> +
+> +static int as6200_setup_irq(struct iio_dev *indio_dev)
+> +{
+> +	int err;
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	struct device *dev = &data->client->dev;
+> +	int irq_trig;
+> +	unsigned int reg_val;
+> +	bool pol;
+> +
+> +	err = regmap_read(data->regmap, AS6200_REG_CONFIG, &reg_val);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	pol = (reg_val & AS6200_CONFIG_POL_MASK) >> AS6200_CONFIG_POL_SHIFT;
+> +	if (pol)
+> +		irq_trig = IRQF_TRIGGER_RISING;
+> +	else
+> +		irq_trig = IRQF_TRIGGER_FALLING;
+> +
+> +	err = request_irq(data->client->irq, as6200_alert_isr, irq_trig,
+> +			"as6200", dev);
+> +	if (err)
+> +		dev_err(dev, "error requesting irq %d\n", err);
+> +
+> +	return err;
+> +}
+> +
+> +static int as6200_sleep(struct as6200_data *data)
+> +{
+> +	return regmap_update_bits(data->regmap, AS6200_REG_CONFIG,
+> +			AS6200_CONFIG_SM_MASK,
+> +			1 << AS6200_CONFIG_SM_SHIFT);
+> +}
+> +
+> +static int as6200_wakeup(struct as6200_data *data)
+> +{
+> +	return regmap_update_bits(data->regmap, AS6200_REG_CONFIG,
+> +			AS6200_CONFIG_SM_MASK,
+> +			0 << AS6200_CONFIG_SM_SHIFT);
+> +}
+> +
+> +static ssize_t as6200_show_al(struct device *dev,
+> +	struct device_attribute *attr, char *buf)
+> +{
+> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +	unsigned int reg_val;
+> +	int err;
+> +	bool pol, al;
+> +
+> +	err = regmap_read(data->regmap, AS6200_REG_CONFIG, &reg_val);
+> +	if (err < 0)
+> +		return err;
+> +	pol = (reg_val & AS6200_CONFIG_POL_MASK) >> AS6200_CONFIG_POL_SHIFT;
+> +	al = (reg_val & AS6200_CONFIG_AL_MASK) >> AS6200_CONFIG_AL_SHIFT;
+> +	if (pol) {
+> +		if (al)
+> +			return sprintf(buf, "on\n");
+> +		else
+> +			return sprintf(buf, "off\n");
+> +	} else {
+> +		if (al)
+> +			return sprintf(buf, "off\n");
+> +		else
+> +			return sprintf(buf, "on\n");
+> +	}
+> +}
+> +
+> +static IIO_DEVICE_ATTR(al, S_IRUGO, as6200_show_al, NULL, 0);
+al? That's a somewhat brief name for an attibute!
+> +
+> +static IIO_CONST_ATTR(sampling_frequency_available, "4 1 0.25 0.125");
+> +
+> +static struct attribute *as6200_attrs[] = {
+> +	&iio_dev_attr_al.dev_attr.attr,
+> +	&iio_const_attr_sampling_frequency_available.dev_attr.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group as6200_attr_group = {
+> +	.attrs = as6200_attrs,
+> +};
+> +
+> +static const struct iio_event_spec as6200_events[] = {
+> +	{
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_RISING,
+> +		.mask_separate = BIT(IIO_EV_INFO_VALUE),
+> +	}, {
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_FALLING,
+> +		.mask_separate = BIT(IIO_EV_INFO_VALUE),
+Would expect to normally see an enable attribute here as well..
+Is it not possible to disable the events?
+> +	}
+> +};
+> +
+> +static const struct iio_chan_spec as6200_channels[] = {
+> +	{
+> +		.type = IIO_TEMP,
+> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+> +			BIT(IIO_CHAN_INFO_PROCESSED) |
+> +			BIT(IIO_CHAN_INFO_SCALE),
+> +		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> +		.event_spec = as6200_events,
+> +		.num_event_specs = ARRAY_SIZE(as6200_events),
+> +	}
+> +};
+> +
+> +static const struct iio_info as6200_info = {
+> +	.read_raw = as6200_read_raw,
+> +	.write_raw = as6200_write_raw,
+> +	.read_event_value = as6200_read_thresh,
+> +	.write_event_value = as6200_write_thresh,
+> +	.attrs = &as6200_attr_group,
+> +	.driver_module = THIS_MODULE,
+> +};
+> +
+> +static int as6200_i2c_probe(struct i2c_client *client,
+> +	const struct i2c_device_id *id)
+> +{
+> +	struct iio_dev *indio_dev;
+> +	struct as6200_data *data;
+> +	int ret;
+> +
+> +	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+> +	if (!indio_dev)
+> +		return -ENOMEM;
+> +
+> +	data = iio_priv(indio_dev);
+> +	i2c_set_clientdata(client, indio_dev);
+> +	data->client = client;
+> +
+> +	data->regmap = devm_regmap_init_i2c(client, &as6200_regmap_config);
+> +	if (IS_ERR(data->regmap)) {
+> +		ret = PTR_ERR(data->regmap);
+> +		dev_err(&client->dev, "regmap init failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	indio_dev->dev.parent = &client->dev;
+> +	indio_dev->name = id->name;
+> +	indio_dev->modes = INDIO_DIRECT_MODE;
+> +	indio_dev->info = &as6200_info;
+> +	indio_dev->channels = as6200_channels;
+> +	indio_dev->num_channels = ARRAY_SIZE(as6200_channels);
+> +
+> +	ret = as6200_init(indio_dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = as6200_setup_irq(indio_dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = iio_device_register(indio_dev);
+> +	if (ret < 0)
+> +		goto cleanup_irq;
+> +
+> +	return 0;
+> +
+> +cleanup_irq:
+> +	free_irq(client->irq, &client->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int as6200_i2c_remove(struct i2c_client *client)
+> +{
+> +	struct iio_dev *indio_dev = i2c_get_clientdata(client);
+> +
+> +	iio_device_unregister(indio_dev);
+> +	if (client->irq > 0)
+> +		free_irq(client->irq, &client->dev);
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id as6200_of_match[] = {
+> +	{ .compatible = "ams,as6200", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, as6200_of_match);
+> +
+> +static const struct i2c_device_id as6200_i2c_id[] = {
+> +	{ "as6200", 0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, as6200_i2c_id);
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static int as6200_pm_suspend(struct device *dev)
+> +{
+> +	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +
+> +	return as6200_sleep(data);
+The sleep function is only used here, I'd just have the content inline here
+and drop the separate function.
+> +}
+> +
+> +static int as6200_pm_resume(struct device *dev)
+> +{
+> +	struct iio_dev *indio_dev = i2c_get_clientdata(to_i2c_client(dev));
+> +	struct as6200_data *data = iio_priv(indio_dev);
+> +
+> +	return as6200_wakeup(data);
+Same suggestion as for sleep above.
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops as6200_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(as6200_pm_suspend, as6200_pm_resume)
+> +};
+> +
+> +static struct i2c_driver as6200_i2c_driver = {
+> +	.driver = {
+> +		.name = "as6200",
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = as6200_of_match,
+> +		.pm = &as6200_pm_ops,
+> +	},
+> +	.probe = as6200_i2c_probe,
+> +	.remove = as6200_i2c_remove,
+> +	.id_table = as6200_i2c_id,
+> +};
+> +
+> +module_i2c_driver(as6200_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("ams AS6200 temperature sensor");
+> +MODULE_AUTHOR("Florian Lobmaier <florian.lobmaier@ams.com>");
+> +MODULE_AUTHOR("Elitsa Polizoeva <elitsa.polizoeva@ams.com>");
+> +MODULE_LICENSE("GPL");
+> 
+
+<cut stuff that should never have been here>
