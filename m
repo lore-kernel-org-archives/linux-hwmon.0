@@ -1,50 +1,111 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58203 "EHLO
-	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753021AbcHPCzJ (ORCPT
+Received: from mail1.bemta3.messagelabs.com ([195.245.230.164]:34994 "EHLO
+	mail1.bemta3.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+	by vger.kernel.org with ESMTP id S1753182AbcHPLLr (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Mon, 15 Aug 2016 22:55:09 -0400
-Subject: Re: A question about masks in sysfs
-To: Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <57B10525.6030200@alliedtelesis.co.nz>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7d2af67a-f220-7ab2-e007-16b258fb2ed4@roeck-us.net>
-Date: Mon, 15 Aug 2016 19:55:07 -0700
-MIME-Version: 1.0
-In-Reply-To: <57B10525.6030200@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+	Tue, 16 Aug 2016 07:11:47 -0400
+Received: from abgdgate60u.abg.fsc.net ([172.25.138.90])
+	by mailhost1.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id u7GBC6Co002874
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 12:12:22 +0100
+From: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Thilo Cestonaro <thilo@cestona.ro>
+Subject: [PATCH] hwmon: add i2c detect functionality to fts teutates driver
+Date: Tue, 16 Aug 2016 13:07:53 +0200
+Message-Id: <1471345673-17729-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 08/14/2016 04:56 PM, Joshua Scott wrote:
-> Hi,
->
-> I am wanting to add write support to the alarms mask sysfs entry for the
-> adt7470 driver.
->
-> Before going forward with this, I had a question about consistency in
-> this area.
->
-> In the other drivers I see that expose masks, it looks like they do this
-> as decimal numbers (adm1026.c, w83627hf.c, w83781d.c).
->
-> The adt7470 driver already exposes the alarm mask, but instead of
-> decimal it uses hex.
->
-> What would be the correct way of adding write support to this? Should it
-> be converted to decimal to be consistent with other drivers, or should
-> it remain in hex to prevent breaking any userspace code that may be
-> relying on the current behaviour?
->
+From: Thilo Cestonaro <thilo@cestona.ro>
 
-For all of those, the attribute is non-standard (not part of the ABI), which
-is bad to start with. But either case, using hex without 0x annotation
-is _really_ bad, so you really picked the worst of the drivers to change.
-I'd suggest to leave the show part alone for backward compliance (shudder),
-and to use kstrtoul() with a base of 0 for write. This will accept an integer
-unless 0x is provided, which is what it should be.
+Signed-off-by: Thilo Cestonaro <thilo@cestona.ro>
+---
+ drivers/hwmon/ftsteutates.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-Guenter
+diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+index 48633e5..0f0277e 100644
+--- a/drivers/hwmon/ftsteutates.c
++++ b/drivers/hwmon/ftsteutates.c
+@@ -36,6 +36,10 @@
+ #define FTS_EVENT_STATUS_REG		0x0006
+ #define FTS_GLOBAL_CONTROL_REG		0x0007
+ 
++#define FTS_DEVICE_DETECT_REG_1		0x0C
++#define FTS_DEVICE_DETECT_REG_2		0x0D
++#define FTS_DEVICE_DETECT_REG_3		0x0E
++
+ #define FTS_SENSOR_EVENT_REG		0x0010
+ 
+ #define FTS_FAN_EVENT_REG		0x0014
+@@ -54,6 +58,8 @@
+ #define FTS_NO_TEMP_SENSORS		0x10
+ #define FTS_NO_VOLT_SENSORS		0x04
+ 
++static const unsigned short normal_i2c[] = { 0x73, I2C_CLIENT_END };
++
+ static struct i2c_device_id fts_id[] = {
+ 	{ "ftsteutates", 0 },
+ 	{ }
+@@ -734,6 +740,42 @@ static const struct attribute_group *fts_attr_groups[] = {
+ /*****************************************************************************/
+ /* Module initialization / remove functions				     */
+ /*****************************************************************************/
++static int fts_detect(struct i2c_client *client,
++		      struct i2c_board_info *info)
++{
++	int val;
++
++	/* detection works with revsion greater or equal to 0x2b */
++	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_REVISION_REG);
++	if (val < 0x2b)
++		return -ENODEV;
++
++	/* Device Detect Regs must have 0x17 0x34 and 0x54 */
++	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_1);
++	if (val != 0x17)
++		return -ENODEV;
++
++	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_2);
++	if (val != 0x34)
++		return -ENODEV;
++
++	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_3);
++	if (val != 0x54)
++		return -ENODEV;
++
++	/*
++	 * 0x10 == Baseboard Management Controller, 0x01 == Teutates
++	 * Device ID Reg needs to be 0x11
++	 */
++	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_ID_REG);
++	if (val != 0x11)
++		return -ENODEV;
++
++	strlcpy(info->type, fts_id[0].name, I2C_NAME_SIZE);
++	info->flags = 0;
++	return 0;
++}
++
+ static int fts_remove(struct i2c_client *client)
+ {
+ 	struct fts_data *data = dev_get_drvdata(&client->dev);
+@@ -804,12 +846,15 @@ static int fts_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ /* Module Details							     */
+ /*****************************************************************************/
+ static struct i2c_driver fts_driver = {
++	.class = I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name = "ftsteutates",
+ 	},
+ 	.id_table = fts_id,
+ 	.probe = fts_probe,
+ 	.remove = fts_remove,
++	.detect = fts_detect,
++	.address_list = normal_i2c,
+ };
+ 
+ module_i2c_driver(fts_driver);
+-- 
+2.8.1
 
