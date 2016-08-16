@@ -1,37 +1,50 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:49764 "EHLO
-	gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751681AbcHNX41 (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58203 "EHLO
+	bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753021AbcHPCzJ (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Sun, 14 Aug 2016 19:56:27 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 652B88023A
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Aug 2016 11:56:23 +1200 (NZST)
-From: Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>
-To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: A question about masks in sysfs
-Date: Sun, 14 Aug 2016 23:56:22 +0000
-Message-ID: <57B10525.6030200@alliedtelesis.co.nz>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16DD9492CE77F748A3DCBCD732D756D7@atlnz.lc>
-Content-Transfer-Encoding: base64
+	Mon, 15 Aug 2016 22:55:09 -0400
+Subject: Re: A question about masks in sysfs
+To: Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <57B10525.6030200@alliedtelesis.co.nz>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <7d2af67a-f220-7ab2-e007-16b258fb2ed4@roeck-us.net>
+Date: Mon, 15 Aug 2016 19:55:07 -0700
 MIME-Version: 1.0
+In-Reply-To: <57B10525.6030200@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-SGksDQoNCkkgYW0gd2FudGluZyB0byBhZGQgd3JpdGUgc3VwcG9ydCB0byB0aGUgYWxhcm1zIG1h
-c2sgc3lzZnMgZW50cnkgZm9yIHRoZSANCmFkdDc0NzAgZHJpdmVyLg0KDQpCZWZvcmUgZ29pbmcg
-Zm9yd2FyZCB3aXRoIHRoaXMsIEkgaGFkIGEgcXVlc3Rpb24gYWJvdXQgY29uc2lzdGVuY3kgaW4g
-DQp0aGlzIGFyZWEuDQoNCkluIHRoZSBvdGhlciBkcml2ZXJzIEkgc2VlIHRoYXQgZXhwb3NlIG1h
-c2tzLCBpdCBsb29rcyBsaWtlIHRoZXkgZG8gdGhpcyANCmFzIGRlY2ltYWwgbnVtYmVycyAoYWRt
-MTAyNi5jLCB3ODM2MjdoZi5jLCB3ODM3ODFkLmMpLg0KDQpUaGUgYWR0NzQ3MCBkcml2ZXIgYWxy
-ZWFkeSBleHBvc2VzIHRoZSBhbGFybSBtYXNrLCBidXQgaW5zdGVhZCBvZiANCmRlY2ltYWwgaXQg
-dXNlcyBoZXguDQoNCldoYXQgd291bGQgYmUgdGhlIGNvcnJlY3Qgd2F5IG9mIGFkZGluZyB3cml0
-ZSBzdXBwb3J0IHRvIHRoaXM/IFNob3VsZCBpdCANCmJlIGNvbnZlcnRlZCB0byBkZWNpbWFsIHRv
-IGJlIGNvbnNpc3RlbnQgd2l0aCBvdGhlciBkcml2ZXJzLCBvciBzaG91bGQgDQppdCByZW1haW4g
-aW4gaGV4IHRvIHByZXZlbnQgYnJlYWtpbmcgYW55IHVzZXJzcGFjZSBjb2RlIHRoYXQgbWF5IGJl
-IA0KcmVseWluZyBvbiB0aGUgY3VycmVudCBiZWhhdmlvdXI/DQoNCg0KVGhhbmtzLA0KSm9zaHVh
-IFNjb3R0
+On 08/14/2016 04:56 PM, Joshua Scott wrote:
+> Hi,
+>
+> I am wanting to add write support to the alarms mask sysfs entry for the
+> adt7470 driver.
+>
+> Before going forward with this, I had a question about consistency in
+> this area.
+>
+> In the other drivers I see that expose masks, it looks like they do this
+> as decimal numbers (adm1026.c, w83627hf.c, w83781d.c).
+>
+> The adt7470 driver already exposes the alarm mask, but instead of
+> decimal it uses hex.
+>
+> What would be the correct way of adding write support to this? Should it
+> be converted to decimal to be consistent with other drivers, or should
+> it remain in hex to prevent breaking any userspace code that may be
+> relying on the current behaviour?
+>
+
+For all of those, the attribute is non-standard (not part of the ABI), which
+is bad to start with. But either case, using hex without 0x annotation
+is _really_ bad, so you really picked the worst of the drivers to change.
+I'd suggest to leave the show part alone for backward compliance (shudder),
+and to use kstrtoul() with a base of 0 for write. This will accept an integer
+unless 0x is provided, which is what it should be.
+
+Guenter
+
