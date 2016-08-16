@@ -1,167 +1,66 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from atl4mhfb04.myregisteredsite.com ([209.17.115.120]:45368 "EHLO
+Received: from atl4mhfb04.myregisteredsite.com ([209.17.115.120]:45366 "EHLO
 	atl4mhfb04.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1751411AbcHPHZM (ORCPT
+	by vger.kernel.org with ESMTP id S1751123AbcHPHZM (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
 	Tue, 16 Aug 2016 03:25:12 -0400
-Received: from atl4mhob20.registeredsite.com (atl4mhob20.registeredsite.com [209.17.115.114])
-	by atl4mhfb04.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id u7G7K9Bv020740
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:20:10 -0400
-Received: from mailpod.hostingplatform.com ([10.30.71.209])
-	by atl4mhob20.registeredsite.com (8.14.4/8.14.4) with ESMTP id u7G7K6C1012416
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:20:06 -0400
+Received: from atl4mhob08.myregisteredsite.com (atl4mhob08.myregisteredsite.com [209.17.115.46])
+	by atl4mhfb04.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id u7G7NIBB021544
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:23:18 -0400
+Received: from mailpod.hostingplatform.com ([10.30.71.207])
+	by atl4mhob08.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id u7G7NDWN015660
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:23:14 -0400
 From: Mike Looijmans <mike.looijmans@topic.nl>
-To: hjk@hansjkoch.de, linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc: hjk@hansjkoch.de, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mark.rutland@arm.com,
 	Mike Looijmans <mike.looijmans@topic.nl>
-Subject: [PATCH v4] hwmon: (max6650.c) Add devicetree support
-Date: Tue, 16 Aug 2016 09:20:01 +0200
-Message-Id: <1471332001-14576-1-git-send-email-mike.looijmans@topic.nl>
+Subject: [PATCH] hwmon: (max6650.c) Add devicetree support documentation
+Date: Tue, 16 Aug 2016 09:23:10 +0200
+Message-Id: <1471332190-14638-1-git-send-email-mike.looijmans@topic.nl>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Parse devicetree parameters for voltage and prescaler setting. This allows
-using multiple max6550 devices with varying settings, and also makes it
-possible to instantiate and configure the device using devicetree.
+This adds the devicetree binding documentation for the max6650 fan
+controller.
 
 Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 ---
-v4: Vendor prefix "maxim," for devicetree properties and compatible string
-    Split documentation into separate patch
-v3: Resubmit because wrong mailing lists used
-    Fix style errors as reported by checkpatch.pl
-    Fix bug in DT parsing of fan-prescale
-v2: Add devicetree binding documentation
-    Code changes as suggested by Guenter
-    Reduce log info, output only a single line 
- drivers/hwmon/max6650.c | 47 ++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 11 deletions(-)
+Associated code changes sent as a separate patch as requested.
 
-diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 162a520..6beb62c 100644
---- a/drivers/hwmon/max6650.c
-+++ b/drivers/hwmon/max6650.c
-@@ -39,6 +39,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
-+#include <linux/of_device.h>
- 
- /*
-  * Insmod parameters
-@@ -48,7 +49,7 @@
- static int fan_voltage;
- /* prescaler: Possible values are 1, 2, 4, 8, 16 or 0 for don't change */
- static int prescaler;
--/* clock: The clock frequency of the chip the driver should assume */
-+/* clock: The clock frequency of the chip (max6651 can be clocked externally) */
- static int clock = 254000;
- 
- module_param(fan_voltage, int, S_IRUGO);
-@@ -133,6 +134,19 @@ static const u8 tach_reg[] = {
- 	MAX6650_REG_TACH3,
- };
- 
-+static const struct of_device_id max6650_dt_match[] = {
-+	{
-+		.compatible = "maxim,max6650",
-+		.data = (void *)1
-+	},
-+	{
-+		.compatible = "maxim,max6651",
-+		.data = (void *)4
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, max6650_dt_match);
+ .../devicetree/bindings/hwmon/max6650.txt          | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/max6650.txt
+
+diff --git a/Documentation/devicetree/bindings/hwmon/max6650.txt b/Documentation/devicetree/bindings/hwmon/max6650.txt
+new file mode 100644
+index 0000000..2e46e69
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/max6650.txt
+@@ -0,0 +1,23 @@
++Bindings for MAX6651 and MAX6650 I2C fan controllers
 +
- static struct max6650_data *max6650_update_device(struct device *dev)
- {
- 	struct max6650_data *data = dev_get_drvdata(dev);
-@@ -566,6 +580,17 @@ static int max6650_init_client(struct max6650_data *data,
- 	struct device *dev = &client->dev;
- 	int config;
- 	int err = -EIO;
-+	u32 voltage;
-+	u32 prescale;
++Reference:
++[1]	https://datasheets.maximintegrated.com/en/ds/MAX6650-MAX6651.pdf
 +
-+	if (of_property_read_u32(dev->of_node, "maxim,fan-microvolt",
-+				 &voltage))
-+		voltage = fan_voltage;
-+	else
-+		voltage = voltage > 5500000 ? 12 : 5;
-+	if (of_property_read_u32(dev->of_node, "maxim,fan-prescale",
-+				 &prescale))
-+		prescale = prescaler;
- 
- 	config = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
- 
-@@ -574,7 +599,7 @@ static int max6650_init_client(struct max6650_data *data,
- 		return err;
- 	}
- 
--	switch (fan_voltage) {
-+	switch (voltage) {
- 	case 0:
- 		break;
- 	case 5:
-@@ -584,14 +609,10 @@ static int max6650_init_client(struct max6650_data *data,
- 		config |= MAX6650_CFG_V12;
- 		break;
- 	default:
--		dev_err(dev, "illegal value for fan_voltage (%d)\n",
--			fan_voltage);
-+		dev_err(dev, "illegal value for fan_voltage (%d)\n", voltage);
- 	}
- 
--	dev_info(dev, "Fan voltage is set to %dV.\n",
--		 (config & MAX6650_CFG_V12) ? 12 : 5);
--
--	switch (prescaler) {
-+	switch (prescale) {
- 	case 0:
- 		break;
- 	case 1:
-@@ -614,10 +635,11 @@ static int max6650_init_client(struct max6650_data *data,
- 			 | MAX6650_CFG_PRESCALER_16;
- 		break;
- 	default:
--		dev_err(dev, "illegal value for prescaler (%d)\n", prescaler);
-+		dev_err(dev, "illegal value for prescaler (%d)\n", prescale);
- 	}
- 
--	dev_info(dev, "Prescaler is set to %d.\n",
-+	dev_info(dev, "Fan voltage: %dV, prescaler: %d.\n",
-+		 (config & MAX6650_CFG_V12) ? 12 : 5,
- 		 1 << (config & MAX6650_CFG_PRESCALER_MASK));
- 
- 	/*
-@@ -651,6 +673,8 @@ static int max6650_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-+	const struct of_device_id *of_id =
-+		of_match_device(of_match_ptr(max6650_dt_match), dev);
- 	struct max6650_data *data;
- 	struct device *hwmon_dev;
- 	int err;
-@@ -661,7 +685,7 @@ static int max6650_probe(struct i2c_client *client,
- 
- 	data->client = client;
- 	mutex_init(&data->update_lock);
--	data->nr_fans = id->driver_data;
-+	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data : id->driver_data;
- 
- 	/*
- 	 * Initialize the max6650 chip
-@@ -691,6 +715,7 @@ MODULE_DEVICE_TABLE(i2c, max6650_id);
- static struct i2c_driver max6650_driver = {
- 	.driver = {
- 		.name	= "max6650",
-+		.of_match_table = of_match_ptr(max6650_dt_match),
- 	},
- 	.probe		= max6650_probe,
- 	.id_table	= max6650_id,
++Required properties:
++- compatible : One of "maxim,max6650" or "maxim,max6651"
++- reg        : I2C address, one of 0x1b, 0x1f, 0x4b, 0x48.
++
++Optional properties, default is to retain the chip's current setting:
++- maxim,fan-microvolt : The supply voltage of the fan, sets the ADC range to
++			either 5V or 12V. Max value 13500000.
++- maxim,fan-prescale  : Pre-scaling value, as per datasheet [1]. Lower values
++			allow more fine-grained control of slower fans.
++			Valid: 1, 2, 4, 8, 16.
++
++Example:
++	fan-max6650: max6650@1b {
++		reg = <0x1b>;
++		compatible = "maxim,max6650";
++		maxim,fan-microvolt = <12000000>;
++		maxim,fan-prescale = <4>;
++	};
 -- 
 1.9.1
 
