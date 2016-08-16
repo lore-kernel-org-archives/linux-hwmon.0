@@ -1,111 +1,167 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail1.bemta3.messagelabs.com ([195.245.230.164]:34994 "EHLO
-	mail1.bemta3.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1753182AbcHPLLr (ORCPT
+Received: from atl4mhfb04.myregisteredsite.com ([209.17.115.120]:45368 "EHLO
+	atl4mhfb04.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
+	by vger.kernel.org with ESMTP id S1751411AbcHPHZM (ORCPT
 	<rfc822;linux-hwmon@vger.kernel.org>);
-	Tue, 16 Aug 2016 07:11:47 -0400
-Received: from abgdgate60u.abg.fsc.net ([172.25.138.90])
-	by mailhost1.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id u7GBC6Co002874
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 12:12:22 +0100
-From: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Thilo Cestonaro <thilo@cestona.ro>
-Subject: [PATCH] hwmon: add i2c detect functionality to fts teutates driver
-Date: Tue, 16 Aug 2016 13:07:53 +0200
-Message-Id: <1471345673-17729-1-git-send-email-thilo.cestonaro@ts.fujitsu.com>
+	Tue, 16 Aug 2016 03:25:12 -0400
+Received: from atl4mhob20.registeredsite.com (atl4mhob20.registeredsite.com [209.17.115.114])
+	by atl4mhfb04.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id u7G7K9Bv020740
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:20:10 -0400
+Received: from mailpod.hostingplatform.com ([10.30.71.209])
+	by atl4mhob20.registeredsite.com (8.14.4/8.14.4) with ESMTP id u7G7K6C1012416
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Aug 2016 03:20:06 -0400
+From: Mike Looijmans <mike.looijmans@topic.nl>
+To: hjk@hansjkoch.de, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH v4] hwmon: (max6650.c) Add devicetree support
+Date: Tue, 16 Aug 2016 09:20:01 +0200
+Message-Id: <1471332001-14576-1-git-send-email-mike.looijmans@topic.nl>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: Thilo Cestonaro <thilo@cestona.ro>
+Parse devicetree parameters for voltage and prescaler setting. This allows
+using multiple max6550 devices with varying settings, and also makes it
+possible to instantiate and configure the device using devicetree.
 
-Signed-off-by: Thilo Cestonaro <thilo@cestona.ro>
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 ---
- drivers/hwmon/ftsteutates.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+v4: Vendor prefix "maxim," for devicetree properties and compatible string
+    Split documentation into separate patch
+v3: Resubmit because wrong mailing lists used
+    Fix style errors as reported by checkpatch.pl
+    Fix bug in DT parsing of fan-prescale
+v2: Add devicetree binding documentation
+    Code changes as suggested by Guenter
+    Reduce log info, output only a single line 
+ drivers/hwmon/max6650.c | 47 ++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 36 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 48633e5..0f0277e 100644
---- a/drivers/hwmon/ftsteutates.c
-+++ b/drivers/hwmon/ftsteutates.c
-@@ -36,6 +36,10 @@
- #define FTS_EVENT_STATUS_REG		0x0006
- #define FTS_GLOBAL_CONTROL_REG		0x0007
+diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
+index 162a520..6beb62c 100644
+--- a/drivers/hwmon/max6650.c
++++ b/drivers/hwmon/max6650.c
+@@ -39,6 +39,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
++#include <linux/of_device.h>
  
-+#define FTS_DEVICE_DETECT_REG_1		0x0C
-+#define FTS_DEVICE_DETECT_REG_2		0x0D
-+#define FTS_DEVICE_DETECT_REG_3		0x0E
-+
- #define FTS_SENSOR_EVENT_REG		0x0010
+ /*
+  * Insmod parameters
+@@ -48,7 +49,7 @@
+ static int fan_voltage;
+ /* prescaler: Possible values are 1, 2, 4, 8, 16 or 0 for don't change */
+ static int prescaler;
+-/* clock: The clock frequency of the chip the driver should assume */
++/* clock: The clock frequency of the chip (max6651 can be clocked externally) */
+ static int clock = 254000;
  
- #define FTS_FAN_EVENT_REG		0x0014
-@@ -54,6 +58,8 @@
- #define FTS_NO_TEMP_SENSORS		0x10
- #define FTS_NO_VOLT_SENSORS		0x04
- 
-+static const unsigned short normal_i2c[] = { 0x73, I2C_CLIENT_END };
-+
- static struct i2c_device_id fts_id[] = {
- 	{ "ftsteutates", 0 },
- 	{ }
-@@ -734,6 +740,42 @@ static const struct attribute_group *fts_attr_groups[] = {
- /*****************************************************************************/
- /* Module initialization / remove functions				     */
- /*****************************************************************************/
-+static int fts_detect(struct i2c_client *client,
-+		      struct i2c_board_info *info)
-+{
-+	int val;
-+
-+	/* detection works with revsion greater or equal to 0x2b */
-+	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_REVISION_REG);
-+	if (val < 0x2b)
-+		return -ENODEV;
-+
-+	/* Device Detect Regs must have 0x17 0x34 and 0x54 */
-+	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_1);
-+	if (val != 0x17)
-+		return -ENODEV;
-+
-+	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_2);
-+	if (val != 0x34)
-+		return -ENODEV;
-+
-+	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_DETECT_REG_3);
-+	if (val != 0x54)
-+		return -ENODEV;
-+
-+	/*
-+	 * 0x10 == Baseboard Management Controller, 0x01 == Teutates
-+	 * Device ID Reg needs to be 0x11
-+	 */
-+	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_ID_REG);
-+	if (val != 0x11)
-+		return -ENODEV;
-+
-+	strlcpy(info->type, fts_id[0].name, I2C_NAME_SIZE);
-+	info->flags = 0;
-+	return 0;
-+}
-+
- static int fts_remove(struct i2c_client *client)
- {
- 	struct fts_data *data = dev_get_drvdata(&client->dev);
-@@ -804,12 +846,15 @@ static int fts_probe(struct i2c_client *client, const struct i2c_device_id *id)
- /* Module Details							     */
- /*****************************************************************************/
- static struct i2c_driver fts_driver = {
-+	.class = I2C_CLASS_HWMON,
- 	.driver = {
- 		.name = "ftsteutates",
- 	},
- 	.id_table = fts_id,
- 	.probe = fts_probe,
- 	.remove = fts_remove,
-+	.detect = fts_detect,
-+	.address_list = normal_i2c,
+ module_param(fan_voltage, int, S_IRUGO);
+@@ -133,6 +134,19 @@ static const u8 tach_reg[] = {
+ 	MAX6650_REG_TACH3,
  };
  
- module_i2c_driver(fts_driver);
++static const struct of_device_id max6650_dt_match[] = {
++	{
++		.compatible = "maxim,max6650",
++		.data = (void *)1
++	},
++	{
++		.compatible = "maxim,max6651",
++		.data = (void *)4
++	},
++	{ },
++};
++MODULE_DEVICE_TABLE(of, max6650_dt_match);
++
+ static struct max6650_data *max6650_update_device(struct device *dev)
+ {
+ 	struct max6650_data *data = dev_get_drvdata(dev);
+@@ -566,6 +580,17 @@ static int max6650_init_client(struct max6650_data *data,
+ 	struct device *dev = &client->dev;
+ 	int config;
+ 	int err = -EIO;
++	u32 voltage;
++	u32 prescale;
++
++	if (of_property_read_u32(dev->of_node, "maxim,fan-microvolt",
++				 &voltage))
++		voltage = fan_voltage;
++	else
++		voltage = voltage > 5500000 ? 12 : 5;
++	if (of_property_read_u32(dev->of_node, "maxim,fan-prescale",
++				 &prescale))
++		prescale = prescaler;
+ 
+ 	config = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
+ 
+@@ -574,7 +599,7 @@ static int max6650_init_client(struct max6650_data *data,
+ 		return err;
+ 	}
+ 
+-	switch (fan_voltage) {
++	switch (voltage) {
+ 	case 0:
+ 		break;
+ 	case 5:
+@@ -584,14 +609,10 @@ static int max6650_init_client(struct max6650_data *data,
+ 		config |= MAX6650_CFG_V12;
+ 		break;
+ 	default:
+-		dev_err(dev, "illegal value for fan_voltage (%d)\n",
+-			fan_voltage);
++		dev_err(dev, "illegal value for fan_voltage (%d)\n", voltage);
+ 	}
+ 
+-	dev_info(dev, "Fan voltage is set to %dV.\n",
+-		 (config & MAX6650_CFG_V12) ? 12 : 5);
+-
+-	switch (prescaler) {
++	switch (prescale) {
+ 	case 0:
+ 		break;
+ 	case 1:
+@@ -614,10 +635,11 @@ static int max6650_init_client(struct max6650_data *data,
+ 			 | MAX6650_CFG_PRESCALER_16;
+ 		break;
+ 	default:
+-		dev_err(dev, "illegal value for prescaler (%d)\n", prescaler);
++		dev_err(dev, "illegal value for prescaler (%d)\n", prescale);
+ 	}
+ 
+-	dev_info(dev, "Prescaler is set to %d.\n",
++	dev_info(dev, "Fan voltage: %dV, prescaler: %d.\n",
++		 (config & MAX6650_CFG_V12) ? 12 : 5,
+ 		 1 << (config & MAX6650_CFG_PRESCALER_MASK));
+ 
+ 	/*
+@@ -651,6 +673,8 @@ static int max6650_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
++	const struct of_device_id *of_id =
++		of_match_device(of_match_ptr(max6650_dt_match), dev);
+ 	struct max6650_data *data;
+ 	struct device *hwmon_dev;
+ 	int err;
+@@ -661,7 +685,7 @@ static int max6650_probe(struct i2c_client *client,
+ 
+ 	data->client = client;
+ 	mutex_init(&data->update_lock);
+-	data->nr_fans = id->driver_data;
++	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data : id->driver_data;
+ 
+ 	/*
+ 	 * Initialize the max6650 chip
+@@ -691,6 +715,7 @@ MODULE_DEVICE_TABLE(i2c, max6650_id);
+ static struct i2c_driver max6650_driver = {
+ 	.driver = {
+ 		.name	= "max6650",
++		.of_match_table = of_match_ptr(max6650_dt_match),
+ 	},
+ 	.probe		= max6650_probe,
+ 	.id_table	= max6650_id,
 -- 
-2.8.1
+1.9.1
 
