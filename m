@@ -5,69 +5,96 @@ Cc: linux@roeck-us.net,
 	jdelvare@suse.com,
 	Matt Weber <matthew.weber@rockwellcollins.com>,
 	Ronak Desai <ronak.desai@rockwellcollins.com>
-Subject: [PATCH 2/2] hwmon: (ucd9000) support for ucd90160 sensor
-Date: Thu, 18 Aug 2016 23:00:24 -0500
-Message-Id: <1471579224-16075-2-git-send-email-matthew.weber@rockwellcollins.com>
-In-Reply-To: <1471579224-16075-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1471579224-16075-1-git-send-email-matthew.weber@rockwellcollins.com>
+Subject: [PATCH 1/2] hwmon: (ucd9000) basic device tree support
+Date: Thu, 18 Aug 2016 23:00:23 -0500
+Message-Id: <1471579224-16075-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-ucd90160 sensor reused existing register layout so just a
-compatible id update was required.
+Enables basic enumeration of ucd9000 devices via device tree.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- drivers/hwmon/pmbus/Kconfig   | 4 ++--
- drivers/hwmon/pmbus/ucd9000.c | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/hwmon/pmbus/ucd9000.c | 38 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 054d3d8..4a5136f 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -126,11 +126,11 @@ config SENSORS_TPS40422
- 	  be called tps40422.
- 
- config SENSORS_UCD9000
--	tristate "TI UCD90120, UCD90124, UCD9090, UCD90910"
-+	tristate "TI UCD90120, UCD90124, UCD9090, UCD90910, UCD90160"
- 	default n
- 	help
- 	  If you say yes here you get hardware monitoring support for TI
--	  UCD90120, UCD90124, UCD9090, UCD90910 Sequencer and System Health
-+	  UCD90120, UCD90124, UCD9090, UCD90910, UCD90160 Sequencer and System Health
- 	  Controllers.
- 
- 	  This driver can also be built as a module. If so, the module will
 diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-index 207c30e..946f989 100644
+index fbb1479..207c30e 100644
 --- a/drivers/hwmon/pmbus/ucd9000.c
 +++ b/drivers/hwmon/pmbus/ucd9000.c
-@@ -31,7 +31,7 @@
- #include <linux/of.h>
- #endif
+@@ -27,6 +27,9 @@
+ #include <linux/i2c.h>
+ #include <linux/i2c/pmbus.h>
+ #include "pmbus.h"
++#ifdef CONFIG_OF
++#include <linux/of.h>
++#endif
  
--enum chips { ucd9000, ucd90120, ucd90124, ucd9090, ucd90910 };
-+enum chips { ucd9000, ucd90120, ucd90124, ucd9090, ucd90910, ucd90160 };
+ enum chips { ucd9000, ucd90120, ucd90124, ucd9090, ucd90910 };
  
- #define UCD9000_MONITOR_CONFIG		0xd5
- #define UCD9000_NUM_PAGES		0xd6
-@@ -118,6 +118,7 @@ static struct of_device_id ucd9000_dt_match[] = {
- 	{ .compatible = "ti,ucd90124", .data = (void *)ucd90124 },
- 	{ .compatible = "ti,ucd9090", .data = (void *)ucd9090 },
- 	{ .compatible = "ti,ucd90910", .data = (void *)ucd90910 },
-+	{ .compatible = "ti,ucd90160", .data = (void *)ucd90160 },
- 	{ }
- };
- #endif
-@@ -129,6 +130,7 @@ static const struct i2c_device_id ucd9000_id[] = {
- 	{"ucd90124", ucd90124},
- 	{"ucd9090", ucd9090},
- 	{"ucd90910", ucd90910},
-+	{"ucd90160", ucd90160},
- 	{}
+@@ -108,6 +111,18 @@ static int ucd9000_read_byte_data(struct i2c_client *client, int page, int reg)
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_OF
++static struct of_device_id ucd9000_dt_match[] = {
++	{ .compatible = "ti,ucd9000", .data = (void *)ucd9000 },
++	{ .compatible = "ti,ucd90120", .data = (void *)ucd90120 },
++	{ .compatible = "ti,ucd90124", .data = (void *)ucd90124 },
++	{ .compatible = "ti,ucd9090", .data = (void *)ucd9090 },
++	{ .compatible = "ti,ucd90910", .data = (void *)ucd90910 },
++	{ }
++};
++#endif
++
++
+ static const struct i2c_device_id ucd9000_id[] = {
+ 	{"ucd9000", ucd9000},
+ 	{"ucd90120", ucd90120},
+@@ -118,6 +133,20 @@ static const struct i2c_device_id ucd9000_id[] = {
  };
  MODULE_DEVICE_TABLE(i2c, ucd9000_id);
+ 
++static inline int ucd9000_get_driver_data(struct i2c_client *i2c,
++		const struct i2c_device_id *id)
++{
++#ifdef CONFIG_OF
++	if (i2c->dev.of_node) {
++		const struct of_device_id *match;
++		match = of_match_node(ucd9000_dt_match, i2c->dev.of_node);
++		return (int)match->data;
++	}
++#endif
++	return (int)id->driver_data;
++}
++
++
+ static int ucd9000_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -150,10 +179,10 @@ static int ucd9000_probe(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	if (id->driver_data != ucd9000 && id->driver_data != mid->driver_data)
++	if ((ucd9000_get_driver_data(client,id) != ucd9000) &&
++			(ucd9000_get_driver_data(client, id) != mid->driver_data))
+ 		dev_notice(&client->dev,
+-			   "Device mismatch: Configured %s, detected %s\n",
+-			   id->name, mid->name);
++			   "Device mismatch: Detected %s device\n", mid->name);
+ 
+ 	data = devm_kzalloc(&client->dev, sizeof(struct ucd9000_data),
+ 			    GFP_KERNEL);
+@@ -233,6 +262,9 @@ static int ucd9000_probe(struct i2c_client *client,
+ static struct i2c_driver ucd9000_driver = {
+ 	.driver = {
+ 		.name = "ucd9000",
++#ifdef CONFIG_OF
++		.of_match_table = of_match_ptr(ucd9000_dt_match),
++#endif
+ 	},
+ 	.probe = ucd9000_probe,
+ 	.remove = pmbus_do_remove,
 -- 
 1.9.1
