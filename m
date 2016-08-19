@@ -1,119 +1,188 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49363 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1755118AbcHSNPM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2016 09:15:12 -0400
-Subject: Re: [PATCH v4] hwmon: (max6650.c) Add devicetree support
-To: Mike Looijmans <mike.looijmans@topic.nl>, hjk@hansjkoch.de
-References: <1471332001-14576-1-git-send-email-mike.looijmans@topic.nl>
- <47fa9220-4393-7c76-7a81-4127635712e3@roeck-us.net>
- <57B6C9FD.2010709@topic.nl>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e20ed198-38c2-f764-486d-66f66f2c6db4@roeck-us.net>
-Date: Fri, 19 Aug 2016 06:13:35 -0700
+Return-path: <matthew.weber@rockwellcollins.com>
 MIME-Version: 1.0
-In-Reply-To: <57B6C9FD.2010709@topic.nl>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <51b82f69-d06e-8a3f-e142-cf1c45e2387e@roeck-us.net>
+References: <1471579867-16553-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <51b82f69-d06e-8a3f-e142-cf1c45e2387e@roeck-us.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 19 Aug 2016 11:15:37 -0500
+Message-ID: <CANQCQpZ1ZiwBaV7+83UvZ5E2KzSky0XRvVFGLeSArpR0GaJX=Q@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: Enabled device tree for generic pmbus devices
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+	Ronak Desai <ronak.desai@rockwellcollins.com>
+Content-Type: text/plain; charset=UTF-8
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 08/19/2016 01:57 AM, Mike Looijmans wrote:
-> (resent through different SMTP server, bounced as spam because of company server's unwanted modifications, sorry if you received this twice now)
->
-> On 19-08-16 04:43, Guenter Roeck wrote:
->> On 08/16/2016 12:20 AM, Mike Looijmans wrote:
->>> Parse devicetree parameters for voltage and prescaler setting. This allows
->>> using multiple max6550 devices with varying settings, and also makes it
->>> possible to instantiate and configure the device using devicetree.
->>>
->>> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
->>> ---
->>> v4: Vendor prefix "maxim," for devicetree properties and compatible string
->>>     Split documentation into separate patch
->>> v3: Resubmit because wrong mailing lists used
->>>     Fix style errors as reported by checkpatch.pl
->>>     Fix bug in DT parsing of fan-prescale
->>> v2: Add devicetree binding documentation
->>>     Code changes as suggested by Guenter
->>>     Reduce log info, output only a single line
->>>  drivers/hwmon/max6650.c | 47 ++++++++++++++++++++++++++++++++++++-----------
->>>  1 file changed, 36 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
->>> index 162a520..6beb62c 100644
->>> --- a/drivers/hwmon/max6650.c
->>> +++ b/drivers/hwmon/max6650.c
->>> @@ -39,6 +39,7 @@
->>>  #include <linux/hwmon.h>
->>>  #include <linux/hwmon-sysfs.h>
->>>  #include <linux/err.h>
->>> +#include <linux/of_device.h>
->>>
->>>  /*
->>>   * Insmod parameters
->>> @@ -48,7 +49,7 @@
->>>  static int fan_voltage;
->>>  /* prescaler: Possible values are 1, 2, 4, 8, 16 or 0 for don't change */
->>>  static int prescaler;
->>> -/* clock: The clock frequency of the chip the driver should assume */
->>> +/* clock: The clock frequency of the chip (max6651 can be clocked
->>> externally) */
->>>  static int clock = 254000;
->>>
->>>  module_param(fan_voltage, int, S_IRUGO);
->>> @@ -133,6 +134,19 @@ static const u8 tach_reg[] = {
->>>      MAX6650_REG_TACH3,
->>>  };
->>>
->>> +static const struct of_device_id max6650_dt_match[] = {
->>> +    {
->>> +        .compatible = "maxim,max6650",
->>> +        .data = (void *)1
->>> +    },
->>> +    {
->>> +        .compatible = "maxim,max6651",
->>> +        .data = (void *)4
->>> +    },
->>> +    { },
->>> +};
->>> +MODULE_DEVICE_TABLE(of, max6650_dt_match);
->>> +
->>>  static struct max6650_data *max6650_update_device(struct device *dev)
->>>  {
->>>      struct max6650_data *data = dev_get_drvdata(dev);
->>> @@ -566,6 +580,17 @@ static int max6650_init_client(struct max6650_data *data,
->>>      struct device *dev = &client->dev;
->>>      int config;
->>>      int err = -EIO;
->>> +    u32 voltage;
->>> +    u32 prescale;
->>> +
->>> +    if (of_property_read_u32(dev->of_node, "maxim,fan-microvolt",
->>> +                 &voltage))
->>> +        voltage = fan_voltage;
->>> +    else
->>> +        voltage = voltage > 5500000 ? 12 : 5;
+Guenter,
+
+On Thu, Aug 18, 2016 at 11:39 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 08/18/2016 09:11 PM, Matt Weber wrote:
 >>
->> I think this should only accept 5V or 12V.
+>> This patch adds device tree based enumeration support for generic pmbus
+>> sensors  ADP4000, BMR453, BMR454, MDT040, NCP4200, NCP4208,
+>> PDT003, PDT006, PDT012, TPS40400, TPS544B20, TPS544B25, TPS544C20,
+>> TPS544C25, and UDT020.
 >>
->> Guenter
 >
-> A 4V, 10V or 13V fan will also work just fine, the voltage register just sets the range of the feedback tachometer.
->
-> I don't have strong feelings either way, so if you feel the drive should bail out on anything but 5 or 12, that's fine with me too.
->
-Problem with above code is that it isn't clear when the 5V vs. the 12V limit is set.
-0V results in 5V, 5.5V results in 5V, 5.500001V results in 12V. That looks pretty
-arbitrary. On top of that, the datasheet only mentions 5V and 12V fans, and I am
-not aware of the others you are talking about. Per datasheet, the bit selects
-either 5V or 12V as fan voltage. So we should stick with that.
+> Are you sure this is needed ?
 
-> Should I change this and send a v5 patch?
+Good point, always thought it was and just tested and it works
+without.  Was there a point where this didn't work in the same way?
+
+I'll drop the patches in patchworks and submit a v2 for the ucd90160
+sensor addition patch.
+
 >
-Yes, please.
+> Guenter
+>
+>
+>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>> Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+>> ---
+>>  drivers/hwmon/pmbus/pmbus.c | 82
+>> ++++++++++++++++++++++++++++++++++-----------
+>>  1 file changed, 63 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+>> index 0a74991..d09c0bb 100644
+>> --- a/drivers/hwmon/pmbus/pmbus.c
+>> +++ b/drivers/hwmon/pmbus/pmbus.c
+>> @@ -26,6 +26,34 @@
+>>  #include <linux/mutex.h>
+>>  #include <linux/i2c.h>
+>>  #include "pmbus.h"
+>> +#ifdef CONFIG_OF
+>> +#include <linux/of.h>
+>> +#endif
+>> +
+>> +enum chips { pmbus, generic_sensor };
+>> +
+>> +#ifdef CONFIG_OF
+>> +static const struct of_device_id generic_pmbus_dt_match[] = {
+>> +       { .compatible = "on,adp4000", .data = (void *)generic_sensor },
+>> +       { .compatible = "ericsson,bmr453", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "ericsson,bmr454", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "lineage,mdt040", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "on,ncp4200", .data = (void *)generic_sensor },
+>> +       { .compatible = "on,ncp4208", .data = (void *)generic_sensor },
+>> +       { .compatible = "lineage,pdt003", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "lineage,pdt006", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "lineage,pdt012", .data = (void *)generic_sensor
+>> },
+>> +       { .compatible = "general,pmbus", .data = (void *)pmbus },
+>> +       { .compatible = "ti,tps40400", .data = (void *)generic_sensor },
+>> +       { .compatible = "ti,tps544b20", .data = (void *)generic_sensor },
+>> +       { .compatible = "ti,tps544b25", .data = (void *)generic_sensor },
+>> +       { .compatible = "ti,tps544c20", .data = (void *)generic_sensor },
+>> +       { .compatible = "ti,tps544c25", .data = (void *)generic_sensor },
+>> +       { .compatible = "lineage,udt020", .data = (void *)generic_sensor
+>> },
+>> +       { }
+>> +};
+>> +#endif
+>> +
+>>
+>>  /*
+>>   * Find sensor groups and status registers on each page.
+>> @@ -163,6 +191,19 @@ abort:
+>>         return ret;
+>>  }
+>>
+>> +static inline int generic_pmbus_get_driver_data(struct i2c_client *i2c,
+>> +               const struct i2c_device_id *id)
+>> +{
+>> +#ifdef CONFIG_OF
+>> +       if (i2c->dev.of_node) {
+>> +               const struct of_device_id *match;
+>> +               match = of_match_node(generic_pmbus_dt_match,
+>> i2c->dev.of_node);
+>> +               return (int)match->data;
+>> +       }
+>> +#endif
+>> +       return (int)id->driver_data;
+>> +}
+>> +
+>>  static int pmbus_probe(struct i2c_client *client,
+>>                        const struct i2c_device_id *id)
+>>  {
+>> @@ -173,7 +214,7 @@ static int pmbus_probe(struct i2c_client *client,
+>>         if (!info)
+>>                 return -ENOMEM;
+>>
+>> -       info->pages = id->driver_data;
+>> +       info->pages = generic_pmbus_get_driver_data(client, id);
+>>         info->identify = pmbus_identify;
+>>
+>>         return pmbus_do_probe(client, id, info);
+>> @@ -183,22 +224,22 @@ static int pmbus_probe(struct i2c_client *client,
+>>   * Use driver_data to set the number of pages supported by the chip.
+>>   */
+>>  static const struct i2c_device_id pmbus_id[] = {
+>> -       {"adp4000", 1},
+>> -       {"bmr453", 1},
+>> -       {"bmr454", 1},
+>> -       {"mdt040", 1},
+>> -       {"ncp4200", 1},
+>> -       {"ncp4208", 1},
+>> -       {"pdt003", 1},
+>> -       {"pdt006", 1},
+>> -       {"pdt012", 1},
+>> -       {"pmbus", 0},
+>> -       {"tps40400", 1},
+>> -       {"tps544b20", 1},
+>> -       {"tps544b25", 1},
+>> -       {"tps544c20", 1},
+>> -       {"tps544c25", 1},
+>> -       {"udt020", 1},
+>> +       {"adp4000", generic_sensor},
+>> +       {"bmr453", generic_sensor},
+>> +       {"bmr454", generic_sensor},
+>> +       {"mdt040", generic_sensor},
+>> +       {"ncp4200", generic_sensor},
+>> +       {"ncp4208", generic_sensor},
+>> +       {"pdt003", generic_sensor},
+>> +       {"pdt006", generic_sensor},
+>> +       {"pdt012", generic_sensor},
+>> +       {"pmbus", pmbus},
+>> +       {"tps40400", generic_sensor},
+>> +       {"tps544b20", generic_sensor},
+>> +       {"tps544b25", generic_sensor},
+>> +       {"tps544c20", generic_sensor},
+>> +       {"tps544c25", generic_sensor},
+>> +       {"udt020", generic_sensor},
+>>         {}
+>>  };
+>>
+>> @@ -207,8 +248,11 @@ MODULE_DEVICE_TABLE(i2c, pmbus_id);
+>>  /* This is the driver that will be inserted */
+>>  static struct i2c_driver pmbus_driver = {
+>>         .driver = {
+>> -                  .name = "pmbus",
+>> -                  },
+>> +               .name = "pmbus",
+>> +#ifdef CONFIG_OF
+>> +               .of_match_table = of_match_ptr(generic_pmbus_dt_match),
+>> +#endif
+>> +       },
+>>         .probe = pmbus_probe,
+>>         .remove = pmbus_do_remove,
+>>         .id_table = pmbus_id,
+>>
+>
 
-Guenter
 
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber@corp.rockwellcollins.com.
