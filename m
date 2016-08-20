@@ -1,44 +1,76 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39017 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754857AbcHSR50 (ORCPT
+Received: from ch3vs02.rockwellcollins.com ([205.175.226.29]:1929 "EHLO
+        ch3vs02.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1750838AbcHTCIs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Aug 2016 13:57:26 -0400
-Date: Fri, 19 Aug 2016 10:57:24 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        Fri, 19 Aug 2016 22:08:48 -0400
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux@roeck-us.net, jdelvare@suse.com,
+        Matt Weber <matthew.weber@rockwellcollins.com>,
         Ronak Desai <ronak.desai@rockwellcollins.com>
-Subject: Re: [PATCH] hwmon: Enabled device tree for generic pmbus devices
-Message-ID: <20160819175724.GA5470@roeck-us.net>
-References: <1471579867-16553-1-git-send-email-matthew.weber@rockwellcollins.com>
- <51b82f69-d06e-8a3f-e142-cf1c45e2387e@roeck-us.net>
- <CANQCQpZ1ZiwBaV7+83UvZ5E2KzSky0XRvVFGLeSArpR0GaJX=Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANQCQpZ1ZiwBaV7+83UvZ5E2KzSky0XRvVFGLeSArpR0GaJX=Q@mail.gmail.com>
+Subject: [PATCH v2] hwmon: (ucd9000) support for ucd90160 sensor
+Date: Fri, 19 Aug 2016 21:08:45 -0500
+Message-Id: <1471658925-43438-1-git-send-email-matthew.weber@rockwellcollins.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 19, 2016 at 11:15:37AM -0500, Matthew Weber wrote:
-> Guenter,
-> 
-> On Thu, Aug 18, 2016 at 11:39 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 08/18/2016 09:11 PM, Matt Weber wrote:
-> >>
-> >> This patch adds device tree based enumeration support for generic pmbus
-> >> sensors  ADP4000, BMR453, BMR454, MDT040, NCP4200, NCP4208,
-> >> PDT003, PDT006, PDT012, TPS40400, TPS544B20, TPS544B25, TPS544C20,
-> >> TPS544C25, and UDT020.
-> >>
-> >
-> > Are you sure this is needed ?
-> 
-> Good point, always thought it was and just tested and it works
-> without.  Was there a point where this didn't work in the same way?
-> 
-If so, it must have been a long time ago. See patch 9fd0499 ("of/i2c: Generalize
-OF support").
+ucd90160 sensor reused existing register layout so just a
+id addition was required.
 
-Guenter
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+---
+v1 -> v2
+[Guenter
+ - enumeration on a per driver basis isn't required, dropped
+   first patch as "Generalize OF support" covers it
+---
+ drivers/hwmon/pmbus/Kconfig   | 6 +++---
+ drivers/hwmon/pmbus/ucd9000.c | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 054d3d8..93cf6dd 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -126,12 +126,12 @@ config SENSORS_TPS40422
+ 	  be called tps40422.
+ 
+ config SENSORS_UCD9000
+-	tristate "TI UCD90120, UCD90124, UCD9090, UCD90910"
++	tristate "TI UCD90120, UCD90124, UCD9090, UCD90910, UCD90160"
+ 	default n
+ 	help
+ 	  If you say yes here you get hardware monitoring support for TI
+-	  UCD90120, UCD90124, UCD9090, UCD90910 Sequencer and System Health
+-	  Controllers.
++	  UCD90120, UCD90124, UCD9090, UCD90910, UCD90160 Sequencer and System
++	  Health Controllers.
+ 
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called ucd9000.
+diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+index fbb1479..5cf25f8 100644
+--- a/drivers/hwmon/pmbus/ucd9000.c
++++ b/drivers/hwmon/pmbus/ucd9000.c
+@@ -28,7 +28,7 @@
+ #include <linux/i2c/pmbus.h>
+ #include "pmbus.h"
+ 
+-enum chips { ucd9000, ucd90120, ucd90124, ucd9090, ucd90910 };
++enum chips { ucd9000, ucd90120, ucd90124, ucd9090, ucd90910, ucd90160 };
+ 
+ #define UCD9000_MONITOR_CONFIG		0xd5
+ #define UCD9000_NUM_PAGES		0xd6
+@@ -114,6 +114,7 @@ static const struct i2c_device_id ucd9000_id[] = {
+ 	{"ucd90124", ucd90124},
+ 	{"ucd9090", ucd9090},
+ 	{"ucd90910", ucd90910},
++	{"ucd90160", ucd90160},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, ucd9000_id);
+-- 
+1.9.1
+
