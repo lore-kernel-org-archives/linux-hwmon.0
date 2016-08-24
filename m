@@ -1,165 +1,249 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from atl4mhob14.myregisteredsite.com ([209.17.115.52]:56856 "EHLO
-        atl4mhob14.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1754398AbcHVGsH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Aug 2016 02:48:07 -0400
-Received: from mailpod.hostingplatform.com ([10.30.71.204])
-        by atl4mhob14.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id u7M6m1aE019867
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Aug 2016 02:48:01 -0400
+Return-path: <mike.looijmans@topic.nl>
 From: Mike Looijmans <mike.looijmans@topic.nl>
-To: linux-hwmon@vger.kernel.org
-Cc: linux@roeck-us.net, linux-kernel@vger.kernel.org, hjk@hansjkoch.de,
+To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Cc: linux@roeck-us.net, linux-kernel@vger.kernel.org,
         Mike Looijmans <mike.looijmans@topic.nl>
-Subject: [PATCH v5] hwmon: (max6650.c) Add devicetree support
-Date: Mon, 22 Aug 2016 08:47:51 +0200
-Message-Id: <1471848471-13144-1-git-send-email-mike.looijmans@topic.nl>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (max6650) Allow fan shutdown and initial rpm target
+Date: Wed, 24 Aug 2016 10:13:26 +0200
+Message-Id: <1472026407-3448-1-git-send-email-mike.looijmans@topic.nl>
+References: <1471334034-14894-1-git-send-email-mike.looijmans@topic.nl> <c47e4482-a8e0-6a38-cccb-062b667587ac@roeck-us.net> <57B6A8BF.2080508@topic.nl>
+In-Reply-To: <5f14ba10-60dd-0e0a-dcd0-f8bbbed33510@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Parse devicetree parameters for voltage and prescaler setting. This allows
-using multiple max6550 devices with varying settings, and also makes it
-possible to instantiate and configure the device using devicetree.
+The fan can be stopped by writing "3" to pwm1_enable in sysfs.
+
+Add devicetree property for early initialization of the fan controller
+to prevent overheating, for example when resetting the board while the
+fan was completely turned off.
+
+Also improve error reporting, I2C failures were ignored while writing
+new values.
 
 Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 ---
-v5: Accept only 12V or 5V supply voltage
-v4: Vendor prefix "maxim," for devicetree properties and compatible string
-    Split documentation into separate patch
-v3: Resubmit because wrong mailing lists used
-    Fix style errors as reported by checkpatch.pl
-    Fix bug in DT parsing of fan-prescale
-v2: Add devicetree binding documentation
-    Code changes as suggested by Guenter
-    Reduce log info, output only a single line
- drivers/hwmon/max6650.c | 47 ++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 11 deletions(-)
+ Documentation/hwmon/max6650 |   1 +
+ drivers/hwmon/max6650.c     | 108 +++++++++++++++++++++++++++-----------------
+ 2 files changed, 68 insertions(+), 41 deletions(-)
 
+diff --git a/Documentation/hwmon/max6650 b/Documentation/hwmon/max6650
+index 58d9644..dff1d29 100644
+--- a/Documentation/hwmon/max6650
++++ b/Documentation/hwmon/max6650
+@@ -34,6 +34,7 @@ fan3_input	ro	"
+ fan4_input	ro	"
+ fan1_target	rw	desired fan speed in RPM (closed loop mode only)
+ pwm1_enable	rw	regulator mode, 0=full on, 1=open loop, 2=closed loop
++			3=off
+ pwm1		rw	relative speed (0-255), 255=max. speed.
+ 			Used in open loop mode only.
+ fan1_div	rw	sets the speed range the inputs can handle. Legal
 diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 162a520..c87517a 100644
+index c87517a..a993b44 100644
 --- a/drivers/hwmon/max6650.c
 +++ b/drivers/hwmon/max6650.c
-@@ -39,6 +39,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
-+#include <linux/of_device.h>
+@@ -185,6 +185,30 @@ static struct max6650_data *max6650_update_device(struct device *dev)
+ 	return data;
+ }
+ 
++/*
++ * Change the operating mode of the chip (if needed).
++ * mode is one of the MAX6650_CFG_MODE_* values.
++ */
++static int max6650_set_operating_mode(struct max6650_data *data, u8 mode)
++{
++	int result;
++	u8 config = data->config;
++
++	if (mode == (config & MAX6650_CFG_MODE_MASK))
++		return 0;
++
++	config = (config & ~MAX6650_CFG_MODE_MASK) | mode;
++
++	result = i2c_smbus_write_byte_data(data->client, MAX6650_REG_CONFIG,
++					   config);
++	if (result < 0)
++		return result;
++
++	data->config = config;
++
++	return 0;
++}
++
+ static ssize_t get_fan(struct device *dev, struct device_attribute *devattr,
+ 		       char *buf)
+ {
+@@ -266,18 +290,12 @@ static ssize_t get_target(struct device *dev, struct device_attribute *devattr,
+ 	return sprintf(buf, "%d\n", rpm);
+ }
+ 
+-static ssize_t set_target(struct device *dev, struct device_attribute *devattr,
+-			 const char *buf, size_t count)
++static int max6650_set_target(struct max6650_data *data, unsigned long rpm)
+ {
+-	struct max6650_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+ 	int kscale, ktach;
+-	unsigned long rpm;
+-	int err;
+ 
+-	err = kstrtoul(buf, 10, &rpm);
+-	if (err)
+-		return err;
++	if (rpm == 0)
++		return max6650_set_operating_mode(data, MAX6650_CFG_MODE_OFF);
+ 
+ 	rpm = clamp_val(rpm, FAN_RPM_MIN, FAN_RPM_MAX);
+ 
+@@ -288,8 +306,6 @@ static ssize_t set_target(struct device *dev, struct device_attribute *devattr,
+ 	 *     KTACH = [(fCLK x KSCALE) / (256 x FanSpeed)] - 1
+ 	 */
+ 
+-	mutex_lock(&data->update_lock);
+-
+ 	kscale = DIV_FROM_REG(data->config);
+ 	ktach = ((clock * kscale) / (256 * rpm / 60)) - 1;
+ 	if (ktach < 0)
+@@ -298,10 +314,30 @@ static ssize_t set_target(struct device *dev, struct device_attribute *devattr,
+ 		ktach = 255;
+ 	data->speed = ktach;
+ 
+-	i2c_smbus_write_byte_data(client, MAX6650_REG_SPEED, data->speed);
++	return i2c_smbus_write_byte_data(data->client, MAX6650_REG_SPEED,
++					 data->speed);
++}
++
++static ssize_t set_target(struct device *dev, struct device_attribute *devattr,
++			 const char *buf, size_t count)
++{
++	struct max6650_data *data = dev_get_drvdata(dev);
++	unsigned long rpm;
++	int err;
++
++	err = kstrtoul(buf, 10, &rpm);
++	if (err)
++		return err;
++
++	mutex_lock(&data->update_lock);
++
++	err = max6650_set_target(data, rpm);
+ 
+ 	mutex_unlock(&data->update_lock);
+ 
++	if (err < 0)
++		return err;
++
+ 	return count;
+ }
+ 
+@@ -355,12 +391,11 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *devattr,
+ 		data->dac = 180 - (180 * pwm)/255;
+ 	else
+ 		data->dac = 76 - (76 * pwm)/255;
+-
+-	i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
++	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
+ 
+ 	mutex_unlock(&data->update_lock);
+ 
+-	return count;
++	return err < 0 ? err : count;
+ }
  
  /*
-  * Insmod parameters
-@@ -48,7 +49,7 @@
- static int fan_voltage;
- /* prescaler: Possible values are 1, 2, 4, 8, 16 or 0 for don't change */
- static int prescaler;
--/* clock: The clock frequency of the chip the driver should assume */
-+/* clock: The clock frequency of the chip (max6651 can be clocked externally) */
- static int clock = 254000;
+@@ -369,14 +404,14 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *devattr,
+  * 0 = Fan always on
+  * 1 = Open loop, Voltage is set according to speed, not regulated.
+  * 2 = Closed loop, RPM for all fans regulated by fan1 tachometer
++ * 3 = Fan off
+  */
+-
+ static ssize_t get_enable(struct device *dev, struct device_attribute *devattr,
+ 			  char *buf)
+ {
+ 	struct max6650_data *data = max6650_update_device(dev);
+ 	int mode = (data->config & MAX6650_CFG_MODE_MASK) >> 4;
+-	int sysfs_modes[4] = {0, 1, 2, 1};
++	int sysfs_modes[4] = {0, 3, 2, 1};
  
- module_param(fan_voltage, int, S_IRUGO);
-@@ -133,6 +134,19 @@ static const u8 tach_reg[] = {
- 	MAX6650_REG_TACH3,
- };
- 
-+static const struct of_device_id max6650_dt_match[] = {
-+	{
-+		.compatible = "maxim,max6650",
-+		.data = (void *)1
-+	},
-+	{
-+		.compatible = "maxim,max6651",
-+		.data = (void *)4
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, max6650_dt_match);
-+
- static struct max6650_data *max6650_update_device(struct device *dev)
+ 	return sprintf(buf, "%d\n", sysfs_modes[mode]);
+ }
+@@ -385,25 +420,25 @@ static ssize_t set_enable(struct device *dev, struct device_attribute *devattr,
+ 			  const char *buf, size_t count)
  {
  	struct max6650_data *data = dev_get_drvdata(dev);
-@@ -566,6 +580,17 @@ static int max6650_init_client(struct max6650_data *data,
- 	struct device *dev = &client->dev;
- 	int config;
- 	int err = -EIO;
-+	u32 voltage;
-+	u32 prescale;
-+
-+	if (of_property_read_u32(dev->of_node, "maxim,fan-microvolt",
-+				 &voltage))
-+		voltage = fan_voltage;
-+	else
-+		voltage /= 1000000; /* Microvolts to volts */
-+	if (of_property_read_u32(dev->of_node, "maxim,fan-prescale",
-+				 &prescale))
-+		prescale = prescaler;
+-	struct i2c_client *client = data->client;
+-	int max6650_modes[3] = {0, 3, 2};
+ 	unsigned long mode;
+ 	int err;
++	const u8 max6650_modes[] = {
++		MAX6650_CFG_MODE_ON,
++		MAX6650_CFG_MODE_OPEN_LOOP,
++		MAX6650_CFG_MODE_CLOSED_LOOP,
++		MAX6650_CFG_MODE_OFF,
++		};
  
- 	config = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
- 
-@@ -574,7 +599,7 @@ static int max6650_init_client(struct max6650_data *data,
+ 	err = kstrtoul(buf, 10, &mode);
+ 	if (err)
  		return err;
- 	}
  
--	switch (fan_voltage) {
-+	switch (voltage) {
- 	case 0:
- 		break;
- 	case 5:
-@@ -584,14 +609,10 @@ static int max6650_init_client(struct max6650_data *data,
- 		config |= MAX6650_CFG_V12;
- 		break;
- 	default:
--		dev_err(dev, "illegal value for fan_voltage (%d)\n",
--			fan_voltage);
-+		dev_err(dev, "illegal value for fan_voltage (%d)\n", voltage);
- 	}
+-	if (mode > 2)
++	if (mode >= ARRAY_SIZE(max6650_modes))
+ 		return -EINVAL;
  
--	dev_info(dev, "Fan voltage is set to %dV.\n",
--		 (config & MAX6650_CFG_V12) ? 12 : 5);
+ 	mutex_lock(&data->update_lock);
+ 
+-	data->config = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
+-	data->config = (data->config & ~MAX6650_CFG_MODE_MASK)
+-		       | (max6650_modes[mode] << 4);
 -
--	switch (prescaler) {
-+	switch (prescale) {
- 	case 0:
- 		break;
- 	case 1:
-@@ -614,10 +635,11 @@ static int max6650_init_client(struct max6650_data *data,
- 			 | MAX6650_CFG_PRESCALER_16;
- 		break;
- 	default:
--		dev_err(dev, "illegal value for prescaler (%d)\n", prescaler);
-+		dev_err(dev, "illegal value for prescaler (%d)\n", prescale);
- 	}
+-	i2c_smbus_write_byte_data(client, MAX6650_REG_CONFIG, data->config);
++	max6650_set_operating_mode(data, max6650_modes[mode]);
  
--	dev_info(dev, "Prescaler is set to %d.\n",
-+	dev_info(dev, "Fan voltage: %dV, prescaler: %d.\n",
-+		 (config & MAX6650_CFG_V12) ? 12 : 5,
+ 	mutex_unlock(&data->update_lock);
+ 
+@@ -582,6 +617,7 @@ static int max6650_init_client(struct max6650_data *data,
+ 	int err = -EIO;
+ 	u32 voltage;
+ 	u32 prescale;
++	u32 target_rpm;
+ 
+ 	if (of_property_read_u32(dev->of_node, "maxim,fan-microvolt",
+ 				 &voltage))
+@@ -642,22 +678,6 @@ static int max6650_init_client(struct max6650_data *data,
+ 		 (config & MAX6650_CFG_V12) ? 12 : 5,
  		 1 << (config & MAX6650_CFG_PRESCALER_MASK));
  
- 	/*
-@@ -651,6 +673,8 @@ static int max6650_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-+	const struct of_device_id *of_id =
-+		of_match_device(of_match_ptr(max6650_dt_match), dev);
- 	struct max6650_data *data;
- 	struct device *hwmon_dev;
- 	int err;
-@@ -661,7 +685,7 @@ static int max6650_probe(struct i2c_client *client,
+-	/*
+-	 * If mode is set to "full off", we change it to "open loop" and
+-	 * set DAC to 255, which has the same effect. We do this because
+-	 * there's no "full off" mode defined in hwmon specifications.
+-	 */
+-
+-	if ((config & MAX6650_CFG_MODE_MASK) == MAX6650_CFG_MODE_OFF) {
+-		dev_dbg(dev, "Change mode to open loop, full off.\n");
+-		config = (config & ~MAX6650_CFG_MODE_MASK)
+-			 | MAX6650_CFG_MODE_OPEN_LOOP;
+-		if (i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, 255)) {
+-			dev_err(dev, "DAC write error, aborting.\n");
+-			return err;
+-		}
+-	}
+-
+ 	if (i2c_smbus_write_byte_data(client, MAX6650_REG_CONFIG, config)) {
+ 		dev_err(dev, "Config write error, aborting.\n");
+ 		return err;
+@@ -666,6 +686,12 @@ static int max6650_init_client(struct max6650_data *data,
+ 	data->config = config;
+ 	data->count = i2c_smbus_read_byte_data(client, MAX6650_REG_COUNT);
  
- 	data->client = client;
- 	mutex_init(&data->update_lock);
--	data->nr_fans = id->driver_data;
-+	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data : id->driver_data;
++	if (!of_property_read_u32(client->dev.of_node, "maxim,fan-target-rpm",
++				  &target_rpm)) {
++		max6650_set_target(data, target_rpm);
++		max6650_set_operating_mode(data, MAX6650_CFG_MODE_CLOSED_LOOP);
++	}
++
+ 	return 0;
+ }
  
- 	/*
- 	 * Initialize the max6650 chip
-@@ -691,6 +715,7 @@ MODULE_DEVICE_TABLE(i2c, max6650_id);
- static struct i2c_driver max6650_driver = {
- 	.driver = {
- 		.name	= "max6650",
-+		.of_match_table = of_match_ptr(max6650_dt_match),
- 	},
- 	.probe		= max6650_probe,
- 	.id_table	= max6650_id,
 -- 
 1.9.1
-
