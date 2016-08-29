@@ -1,101 +1,47 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54938 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753979AbcHYUEY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Aug 2016 16:04:24 -0400
-Date: Thu, 25 Aug 2016 11:56:49 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Florian Lobmaier <Florian.Lobmaier@ams.com>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Elitsa Polizoeva <Elitsa.Polizoeva@ams.com>,
-        "knaack.h@gmx.de" <knaack.h@gmx.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH V4 1/1] iio: as6200: add AS6200 temperature sensor driver
- from ams AG
-Message-ID: <20160825185649.GA16420@roeck-us.net>
-References: <4ace1394d6064ab2b7dd4a5335cc1a7c@SUX5076.office.amsiag.com>
- <14a70eac-eed6-426f-d22d-ccc79ccf5ebb@kernel.org>
- <20160815194327.GA4400@roeck-us.net>
- <68bd71cf635849ba8bb80f34e09bddf0@SUX5076.office.amsiag.com>
+Received: from mx2.suse.de ([195.135.220.15]:46287 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1750909AbcH2LS1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Aug 2016 07:18:27 -0400
+Date: Mon, 29 Aug 2016 13:18:23 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: linux-hwmon@vger.kernel.org
+Cc: Alexander Kapshuk <alexander.kapshuk@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] hwmon: (it87) Add missing sysfs attribute group
+ terminator
+Message-ID: <20160829131823.776dd67b@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68bd71cf635849ba8bb80f34e09bddf0@SUX5076.office.amsiag.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 25, 2016 at 12:37:13PM +0000, Florian Lobmaier wrote:
-> Hello Guenter, hello Jonathan,
-> 
-> we went for developing an IIO driver as the intended use-cases for the AS6200 temperature sensor are biosensors as well as environmental sensors. It is currently designed-in in an Android wearable device to measure the skin temperature. So we did not think hwmon is the right place. Of course it may also be used for such purposes, but due to its tiny size its more intended for wearable devices and smartphones to measure skin- or outside air temperature.
-> 
-Thermal monitoring looks very much like a hwmon use case to me.
+Attribute array it87_attributes_in lacks its NULL terminator,
+causing random behavior when operating on the attribute group.
 
-Maybe it would make more sense for you to explain why you think that
-the hwmon ABI doesn't fit or meet your needs ?
+Fixes: 52929715634a ("hwmon: (it87) Use is_visible for voltage sensors")
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+---
+ drivers/hwmon/it87.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Guenter
+--- linux-4.7.orig/drivers/hwmon/it87.c	2016-07-04 08:01:00.000000000 +0200
++++ linux-4.7/drivers/hwmon/it87.c	2016-08-29 12:04:52.926911625 +0200
+@@ -2015,6 +2015,7 @@ static struct attribute *it87_attributes
+ 	&sensor_dev_attr_in10_input.dev_attr.attr,	/* 41 */
+ 	&sensor_dev_attr_in11_input.dev_attr.attr,	/* 41 */
+ 	&sensor_dev_attr_in12_input.dev_attr.attr,	/* 41 */
++	NULL
+ };
+ 
+ static const struct attribute_group it87_group_in = {
 
-> Regarding the remaining custom ABI you are right. We will move this setting to the device tree. Makes much more sense there ;)
-> 
-> Maybe you can give an answer regarding the hwmon/iio topic before we submit an update?
-> 
-> Thank you for your help,
-> Florian Lobmaier
-> 
-> -----Original Message-----
-> From: Guenter Roeck [mailto:linux@roeck-us.net] 
-> Sent: Montag, 15. August 2016 21:43
-> To: Jonathan Cameron <jic23@kernel.org>
-> Cc: Florian Lobmaier <Florian.Lobmaier@ams.com>; Peter Meerwald-Stadler <pmeerw@pmeerw.net>; Elitsa Polizoeva <Elitsa.Polizoeva@ams.com>; knaack.h@gmx.de; linux-kernel@vger.kernel.org; linux-iio@vger.kernel.org; Lars-Peter Clausen <lars@metafoo.de>; Jean Delvare <jdelvare@suse.de>; linux-hwmon@vger.kernel.org
-> Subject: Re: [PATCH V4 1/1] iio: as6200: add AS6200 temperature sensor driver from ams AG
-> 
-> On Mon, Aug 15, 2016 at 06:25:44PM +0100, Jonathan Cameron wrote:
-> > On 04/08/16 09:35, Florian Lobmaier wrote:
-> > > Hello Peter,
-> > > 
-> > > Thanks again for your valuable feedback. We use now IIO_EV_THRESH to 
-> > > set high and low limits for temperature. Also removed all the custom 
-> > > ABI as this are mainly settings which will be set one-time only. For 
-> > > the removed custom ABI init defines where introduced which will be 
-> > > written to the registers in the probe function. The remaining custom 
-> > > ABI is now documented as well as the device tree bindings.> Br, 
-> > > Florian
-> > > 
-> > > Signed-off-by: Florian Lobmaier <florian.lobmaier@ams.com>
-> > > Signed-off-by: Elitsa Polizoeva <elitsa.polizoeva@ams.com>
-> > Please post as a fresh email thread with a clean title. Otherwise 
-> > people will assume it is simply a reply to a comment on an earlier 
-> > version.  Also don't include earlier versions as you have here!
-> > 
-> > i.e. drop the RE from the title as it's confusing!
-> > 
-> > Anyhow, right back at v1 Peter mentioned that this might be more 
-> > suitable as a hwmon driver than an IIO one.  If you have a good reason 
-> > for supporting this part via IIO you should put it in the patch 
-> > description. I'm afraid I've been more or less offline for the last 
-> > couple fo weeks or I'd have highlighted that this question was 
-> > important. A superficial look suggest to me that this is definitely a 
-> > part targeting hardware monitoring applications.
-> > 
-> Conversion time, conversion rate, the presence of limit registers, and the intended use cases suggest that this should be a hardware monitoring driver.
-> 
-> Regarding the attributes, most of those would be standard attributes in a hwmon driver. "alarm polarity" should be a  devicetree / platform data configuration parameter, and interrupt vs. comparator mode could be determined based on the presence of an interrupt line.
-> 
-> > I'll only take a border line part with agreement form Guenter / Jean 
-> > who are the hwmon maintainers.
-> > 
-> > I'll do a quick review ignoring this question.
-> > Mostly pretty good though I really don't like the remaining custom 
-> > ABI. Can't see a reason for its existence.
-> 
-> Me not either.
-> 
-> Guenter
+
+-- 
+Jean Delvare
+SUSE L3 Support
