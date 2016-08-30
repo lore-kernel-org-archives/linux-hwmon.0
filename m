@@ -1,50 +1,48 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f66.google.com ([74.125.82.66]:35307 "EHLO
-        mail-wm0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1756538AbcH2KRU (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42038 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754321AbcH3CAZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2016 06:17:20 -0400
-MIME-Version: 1.0
-In-Reply-To: <20160829121140.38c10554@endymion>
-References: <CAJ1xhMXZNMYMew4N2SZdhJm9FaiRjr=T63+72UdYpYfC+api_A@mail.gmail.com>
- <20160829120634.039204a6@endymion> <20160829121140.38c10554@endymion>
-From: Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date: Mon, 29 Aug 2016 13:16:37 +0300
-Message-ID: <CAJ1xhMWgTJHUbn6B1QNKc=yi8pMZyg0DR+xUoNJAGaHhxKrEVw@mail.gmail.com>
-Subject: Re: [v4.7.2: Oops] When loading IT87 HARDWARE MONITORING DRIVER
-To: Jean Delvare <jdelvare@suse.de>
-Cc: linux-hwmon@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 29 Aug 2016 22:00:25 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.8-rc5
+Date: Mon, 29 Aug 2016 19:00:19 -0700
+Message-Id: <1472522419-6787-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 29, 2016 at 1:11 PM, Jean Delvare <jdelvare@suse.de> wrote:
-> On Mon, 29 Aug 2016 12:06:34 +0200, Jean Delvare wrote:
->> I'm trying to find when the bug was introduced. I have a hard time
->> believing it went unnoticed for long. If it fixes your problem I'll
->> send a clean patch.
->
-> Broken by:
->
-> commit 52929715634ad36782bd7018ab0bf59a6619c393
-> Author: Guenter Roeck <linux@roeck-us.net>
-> Date:   Sat Mar 30 14:00:08 2013 -0700
->
->     hwmon: (it87) Use is_visible for voltage sensors
->
-> Only kernel v4.7 is affected. I'll send a clean patch after my lunch.
->
-> --
-> Jean Delvare
-> SUSE L3 Support
+Hi Linus,
 
-Hello Jean,
+Please pull hwmon fixes for Linux v4.8-rc5 from signed tag:
 
-Thanks very much for your response.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.8-rc5
 
-I am away from my PC at the moment, so I cannot try out your proposed fix.
-I would be able to do so at my earliest convenience, and let you know
-how I went, i.e. if you still want me to try it out.
+Thanks,
+Guenter
+------
 
-Alexander.
+The following changes since commit fa8410b355251fd30341662a40ac6b22d3e38468:
+
+  Linux 4.8-rc3 (2016-08-21 16:14:10 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.8-rc5
+
+for you to fetch changes up to 3c3292634fc2de1ab97b6aa3222fee647f737adb:
+
+  hwmon: (it87) Add missing sysfs attribute group terminator (2016-08-29 05:31:31 -0700)
+
+----------------------------------------------------------------
+hwmon patch for v4.8-rc5
+
+Add missing sysfs attribute group terminator to it87 driver.
+
+----------------------------------------------------------------
+Jean Delvare (1):
+      hwmon: (it87) Add missing sysfs attribute group terminator
+
+ drivers/hwmon/it87.c | 1 +
+ 1 file changed, 1 insertion(+)
