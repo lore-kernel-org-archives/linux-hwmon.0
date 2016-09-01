@@ -1,70 +1,173 @@
-Return-path: <jdelvare@suse.de>
-Date: Fri, 2 Sep 2016 16:55:29 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: Guenter Roeck <linux@roeck-us.net>, Joshua Scott
- <Joshua.Scott@alliedtelesis.co.nz>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: adt7470: Allow faster removal
-Message-ID: <20160902165529.18aac4da@endymion>
-In-Reply-To: <c295f9ed1a744f35823c067b7434591b@svr-chch-ex1.atlnz.lc>
-References: <20160901051721.13806-1-joshua.scott@alliedtelesis.co.nz>
-	<61bb13ce-5040-40d8-c824-624a3cf08cf1@roeck-us.net>
-	<c295f9ed1a744f35823c067b7434591b@svr-chch-ex1.atlnz.lc>
+Return-path: <quentin.schulz@free-electrons.com>
+Subject: Re: [PATCH v3 1/4] hwmon: iio_hwmon: delay probing with late_initcall
+To: Jonathan Cameron <jic23@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
+ <5277864.qlyRKbC1Zy@ws-stein>
+ <ed5c1761-bdc7-df9c-96c8-998e83c49c4c@free-electrons.com>
+ <2324970.FJcTUYNoO2@ws-stein> <20160726160410.GE30628@roeck-us.net>
+ <aa387c9c-8330-fd2a-67c1-0aa0b9a90794@kernel.org>
+ <20160815170730.GB32260@roeck-us.net>
+ <ECA41B39-BCC0-44D0-8B3D-838C48D713D0@kernel.org>
+Cc: Alexander Stein <alexander.stein@systec-electronic.com>,
+ linux-kernel@vger.kernel.org, jdelvare@suse.com, knaack.h@gmx.de,
+ lars@metafoo.de, pmeerw@pmeerw.net, maxime.ripard@free-electrons.com,
+ wens@csie.org, lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ thomas.petazzoni@free-electrons.com, antoine.tenart@free-electrons.com
+From: Quentin Schulz <quentin.schulz@free-electrons.com>
+Message-ID: <3164bade-8022-8ad1-e327-f183128a3e88@free-electrons.com>
+Date: Thu, 1 Sep 2016 09:15:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <ECA41B39-BCC0-44D0-8B3D-838C48D713D0@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Chris,
-
-On Thu, 1 Sep 2016 21:08:54 +0000, Chris Packham wrote:
-> On 09/02/2016 12:12 AM, Guenter Roeck wrote:
-> > This puts a heavy burden on the system, forcing it to run every ms, just for
-> > the unlikely case of driver removal. Why is quick removal so important ?
-> > If it is, we'll have to find a better solution.
+On 15/08/2016 23:35, Jonathan Cameron wrote:
 > 
-> The particular use case we have is a chassis based system with an 
-> adt7470 on a removable fan-tray. The problem is that when the fan tray 
-> is removed it takes auto_update_interval/1000 seconds for the update 
-> thread to stop and the i2c device to be removed. In the intervening time 
-> a new fan-tray could have been installed.
-
-Thanks for the clarification. An actual use case makes it easier to
-think about solutions.
-
-> On 09/01/2016 08:18 PM, Jean Delvare wrote:
-> >
-> > This change looks terribly costly to me. In order to shorten the
-> > duration of a rare event (you don't "rmmod adt7470" on a regular basis,
-> > do you?)
 > 
-> It's worse than that. We're not doing rmmod, hardware is physically 
-> being removed.
-
-I wouldn't call it "worse", it's pretty much the same to me.
-
-> > you increase the cost of a kernel thread which runs all the
-> > time. I'm afraid this msleep_interruptible(1) is going to prevent the
-> > CPU from entering low power states at all, leading to an increased
-> > system temperature and power consumption. Have you compared the output
-> > of "powertop" (specifically the "Idle stats" section) before and after
-> > your patch?
-> >
-> > Is there no way to voluntarily interrupt this long msleep_interruptible?
+> On 15 August 2016 18:07:30 BST, Guenter Roeck <linux@roeck-us.net> wrote:
+>> On Mon, Aug 15, 2016 at 04:40:21PM +0100, Jonathan Cameron wrote:
+>>> On 26/07/16 17:04, Guenter Roeck wrote:
+>>>> On Tue, Jul 26, 2016 at 12:00:33PM +0200, Alexander Stein wrote:
+>>>>> On Tuesday 26 July 2016 11:33:59, Quentin Schulz wrote:
+>>>>>> On 26/07/2016 11:05, Alexander Stein wrote:
+>>>>>>> On Tuesday 26 July 2016 10:24:48, Quentin Schulz wrote:
+>>>>>>>> On 26/07/2016 10:21, Alexander Stein wrote:
+>>>>>>>>> On Tuesday 26 July 2016 09:43:44, Quentin Schulz wrote:
+>>>>>>>>>> iio_channel_get_all returns -ENODEV when it cannot find
+>> either phandles
+>>>>>>>>>> and
+>>>>>>>>>> properties in the Device Tree or channels whose
+>> consumer_dev_name
+>>>>>>>>>> matches
+>>>>>>>>>> iio_hwmon in iio_map_list. The iio_map_list is filled in by
+>> iio drivers
+>>>>>>>>>> which might be probed after iio_hwmon.
+>>>>>>>>>
+>>>>>>>>> Would it work if iio_channel_get_all returning ENODEV is used
+>> for
+>>>>>>>>> returning
+>>>>>>>>> EPROBE_DEFER in iio_channel_get_all? Using late initcalls for
+>>>>>>>>> driver/device
+>>>>>>>>> dependencies seems not right for me at this place.
+>>>>>>>>
+>>>>>>>> Then what if the iio_channel_get_all is called outside of the
+>> probe of a
+>>>>>>>> driver? We'll have to change the error code, things we are
+>> apparently
+>>>>>>>> trying to avoid (see v2 patches' discussions).
+>>>>>>>
+>>>>>>> Maybe I didn't express my idea enough. I don't want to change
+>> the behavior
+>>>>>>> of iio_channel_get_all at all. Just the result evaluation of
+>>>>>>> iio_channel_get_all in iio_hwmon_probe. I have something link
+>> the patch
+>>>>>>> below in mind.
+>>>>>>>
+>>>>>>> Best regards,
+>>>>>>> Alexander
+>>>>>>> ---
+>>>>>>> diff --git a/drivers/hwmon/iio_hwmon.c
+>> b/drivers/hwmon/iio_hwmon.c
+>>>>>>> index b550ba5..e32d150 100644
+>>>>>>> --- a/drivers/hwmon/iio_hwmon.c
+>>>>>>> +++ b/drivers/hwmon/iio_hwmon.c
+>>>>>>> @@ -73,8 +73,12 @@ static int iio_hwmon_probe(struct
+>> platform_device
+>>>>>>> *pdev)
+>>>>>>>
+>>>>>>>                 name = dev->of_node->name;
+>>>>>>>         
+>>>>>>>         channels = iio_channel_get_all(dev);
+>>>>>>>
+>>>>>>> -       if (IS_ERR(channels))
+>>>>>>> -               return PTR_ERR(channels);
+>>>>>>> +       if (IS_ERR(channels)) {
+>>>>>>> +               if (PTR_ERR(channels) == -ENODEV)
+>>>>>>> +                       return -EPROBE_DEFER;
+>>>>>>> +               else
+>>>>>>> +                       return PTR_ERR(channels);
+>>>>>>> +       }
+>>>>>>>
+>>>>>>>         st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+>>>>>>>         if (st == NULL) {
+>>>>>>
+>>>>>> Indeed, I misunderstood what you told me.
+>>>>>>
+>>>>>> Actually, the patch you proposed is part of my v1
+>>>>>> (https://lkml.org/lkml/2016/6/28/203) and v2
+>>>>>> (https://lkml.org/lkml/2016/7/15/215).
+>>>>>> Jonathan and Guenter didn't really like the idea of changing the
+>> -ENODEV
+>>>>>> in -EPROBE_DEFER.
+>>>>>
+>>>>> Thanks for the links.
+>>>>>
+>>>>>> What I thought you were proposing was to change the -ENODEV
+>> return code
+>>>>>> inside iio_channel_get_all. This cannot be an option since the
+>> function
+>>>>>> might be called outside of a probe (it is not yet, but might be
+>> in the
+>>>>>> future?).
+>>>>>
+>>>>> AFAICS this is a helper function not knowing about device probing
+>> itself. And 
+>>>>> it should stay at that.
+>>>>>
+>>>>>> Of what I understood, two possibilities are then possible
+>> (proposed
+>>>>>> either by Guenter or Jonathan): either rework the iio framework
+>> to
+>>>>>> register iio map array earlier or to use late_initcall instead of
+>> init
+>>>>>> for the driver consuming the iio channels.
+>>>>>
+>>>>> Interestingly using this problem would not arise due to module
+>> dependencies. 
+>>>>> But using late_initcall would mean this needs to be done on any
+>> driver using 
+>>>>> iio channels? I would rather keep those consumers simple.
+>>>>>
+>>>> Me too, but that would imply a solution in iio. The change you
+>> propose above
+>>>> isn't exactly simple either, and would also be needed in each
+>> consumer driver.
+>>>>
+>>>> Just for the record, I dislike the late_initcall solution as well,
+>> but I prefer
+>>>> it over blindly converting ENODEV to EPROBE_DEFER.
+>>> I'm falling on the other side on this one right now. Though I'd be
+>> tempted
+>>> to renaming the function to something like
+>> iio_channel_get_all_or_defer
+>>> to make it explicit that it can result in deferred probing.
+>>>
+>> Would this new function return -EPROBE_DEFER instead of -ENODEV ?
+> Yes. Though whether it really adds much over doing that in drivers isn't clear.
 > 
-> If there is I'd like to know. That would be the ideal solution for us.
+> Hmm. Needs more thought...
 
-I've never done that before myself so I don't know more than you.
-stackoverflow has a few promising pointers though:
+Either we do the exact same "hack" as in the v2[1] in what you call
+iio_channel_get_all_or_defer or we duplicate the code from
+iio_channel_get_all in iio_channel_get_all_or_defer. Both do not seem
+right to me but I really dislike the late_initcall method. With this
+method we can only have one level of "channel dependency".
 
-http://stackoverflow.com/questions/26050745/is-there-a-way-inside-the-kernel-of-killing-a-kernel-kthread-just-like-kill-9
-http://stackoverflow.com/questions/36344295/wakeup-a-kernel-thread-that-is-in-sleep-using-msleep
+This means if we ever create a new driver which depends on channels from
+the driver using late_initcall, we will also have to use late_initcall
+and we can't be sure the new driver will always be probed after the
+driver he depends on.
 
-My own research suggests that maybe calling
-wake_up_process(data->auto_update) right after kthread_stop() may work.
-Have you tried that? I only find it suspect that nobody else in the
-kernel is doing that.
+[1] https://lkml.org/lkml/2016/7/15/215
 
--- 
-Jean Delvare
-SUSE L3 Support
+Quentin
+>>
+>> Thanks,
+>> Guenter
+>> --
+>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+>> the body of a message to majordomo@vger.kernel.org
+>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
