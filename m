@@ -1,57 +1,199 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f66.google.com ([74.125.82.66]:34935 "EHLO
-        mail-wm0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933233AbcI0MI4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Sep 2016 08:08:56 -0400
-Received: by mail-wm0-f66.google.com with SMTP id b4so843621wmb.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Sep 2016 05:08:45 -0700 (PDT)
-From: Andrea Merello <andrea.merello@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Andrea Merello <andrea.merello@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v2 1/2] DT: add binding documentation for STTS751
-Date: Tue, 27 Sep 2016 14:07:26 +0200
-Message-Id: <1474978047-28290-2-git-send-email-andrea.merello@gmail.com>
-In-Reply-To: <1474978047-28290-1-git-send-email-andrea.merello@gmail.com>
-References: <1474978047-28290-1-git-send-email-andrea.merello@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from saturn.retrosnub.co.uk ([178.18.118.26]:46054 "EHLO
+        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753239AbcICTdJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Sep 2016 15:33:09 -0400
+Subject: Re: [PATCH v3 1/4] hwmon: iio_hwmon: delay probing with late_initcall
+To: Quentin Schulz <quentin.schulz@free-electrons.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <1469519027-11387-1-git-send-email-quentin.schulz@free-electrons.com>
+ <5277864.qlyRKbC1Zy@ws-stein>
+ <ed5c1761-bdc7-df9c-96c8-998e83c49c4c@free-electrons.com>
+ <2324970.FJcTUYNoO2@ws-stein> <20160726160410.GE30628@roeck-us.net>
+ <aa387c9c-8330-fd2a-67c1-0aa0b9a90794@kernel.org>
+ <20160815170730.GB32260@roeck-us.net>
+ <ECA41B39-BCC0-44D0-8B3D-838C48D713D0@kernel.org>
+ <3164bade-8022-8ad1-e327-f183128a3e88@free-electrons.com>
+ <394c711d-3c5b-01b2-9d4a-eb977653b5c2@free-electrons.com>
+Cc: Alexander Stein <alexander.stein@systec-electronic.com>,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net,
+        maxime.ripard@free-electrons.com, wens@csie.org,
+        lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        thomas.petazzoni@free-electrons.com,
+        antoine.tenart@free-electrons.com
+From: Jonathan Cameron <jic23@kernel.org>
+Message-ID: <26c87c13-bedb-3b4d-8ea0-8f4db9cadef8@kernel.org>
+Date: Sat, 3 Sep 2016 20:32:21 +0100
+MIME-Version: 1.0
+In-Reply-To: <394c711d-3c5b-01b2-9d4a-eb977653b5c2@free-electrons.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
----
- Documentation/devicetree/bindings/hwmon/stts751.txt | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/stts751.txt
+On 01/09/16 10:03, Quentin Schulz wrote:
+> On 01/09/2016 09:15, Quentin Schulz wrote:
+>> On 15/08/2016 23:35, Jonathan Cameron wrote:
+>>>
+>>>
+>>> On 15 August 2016 18:07:30 BST, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> On Mon, Aug 15, 2016 at 04:40:21PM +0100, Jonathan Cameron wrote:
+>>>>> On 26/07/16 17:04, Guenter Roeck wrote:
+>>>>>> On Tue, Jul 26, 2016 at 12:00:33PM +0200, Alexander Stein wrote:
+>>>>>>> On Tuesday 26 July 2016 11:33:59, Quentin Schulz wrote:
+>>>>>>>> On 26/07/2016 11:05, Alexander Stein wrote:
+>>>>>>>>> On Tuesday 26 July 2016 10:24:48, Quentin Schulz wrote:
+>>>>>>>>>> On 26/07/2016 10:21, Alexander Stein wrote:
+>>>>>>>>>>> On Tuesday 26 July 2016 09:43:44, Quentin Schulz wrote:
+>>>>>>>>>>>> iio_channel_get_all returns -ENODEV when it cannot find
+>>>> either phandles
+>>>>>>>>>>>> and
+>>>>>>>>>>>> properties in the Device Tree or channels whose
+>>>> consumer_dev_name
+>>>>>>>>>>>> matches
+>>>>>>>>>>>> iio_hwmon in iio_map_list. The iio_map_list is filled in by
+>>>> iio drivers
+>>>>>>>>>>>> which might be probed after iio_hwmon.
+>>>>>>>>>>>
+>>>>>>>>>>> Would it work if iio_channel_get_all returning ENODEV is used
+>>>> for
+>>>>>>>>>>> returning
+>>>>>>>>>>> EPROBE_DEFER in iio_channel_get_all? Using late initcalls for
+>>>>>>>>>>> driver/device
+>>>>>>>>>>> dependencies seems not right for me at this place.
+>>>>>>>>>>
+>>>>>>>>>> Then what if the iio_channel_get_all is called outside of the
+>>>> probe of a
+>>>>>>>>>> driver? We'll have to change the error code, things we are
+>>>> apparently
+>>>>>>>>>> trying to avoid (see v2 patches' discussions).
+>>>>>>>>>
+>>>>>>>>> Maybe I didn't express my idea enough. I don't want to change
+>>>> the behavior
+>>>>>>>>> of iio_channel_get_all at all. Just the result evaluation of
+>>>>>>>>> iio_channel_get_all in iio_hwmon_probe. I have something link
+>>>> the patch
+>>>>>>>>> below in mind.
+>>>>>>>>>
+>>>>>>>>> Best regards,
+>>>>>>>>> Alexander
+>>>>>>>>> ---
+>>>>>>>>> diff --git a/drivers/hwmon/iio_hwmon.c
+>>>> b/drivers/hwmon/iio_hwmon.c
+>>>>>>>>> index b550ba5..e32d150 100644
+>>>>>>>>> --- a/drivers/hwmon/iio_hwmon.c
+>>>>>>>>> +++ b/drivers/hwmon/iio_hwmon.c
+>>>>>>>>> @@ -73,8 +73,12 @@ static int iio_hwmon_probe(struct
+>>>> platform_device
+>>>>>>>>> *pdev)
+>>>>>>>>>
+>>>>>>>>>                 name = dev->of_node->name;
+>>>>>>>>>         
+>>>>>>>>>         channels = iio_channel_get_all(dev);
+>>>>>>>>>
+>>>>>>>>> -       if (IS_ERR(channels))
+>>>>>>>>> -               return PTR_ERR(channels);
+>>>>>>>>> +       if (IS_ERR(channels)) {
+>>>>>>>>> +               if (PTR_ERR(channels) == -ENODEV)
+>>>>>>>>> +                       return -EPROBE_DEFER;
+>>>>>>>>> +               else
+>>>>>>>>> +                       return PTR_ERR(channels);
+>>>>>>>>> +       }
+>>>>>>>>>
+>>>>>>>>>         st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+>>>>>>>>>         if (st == NULL) {
+>>>>>>>>
+>>>>>>>> Indeed, I misunderstood what you told me.
+>>>>>>>>
+>>>>>>>> Actually, the patch you proposed is part of my v1
+>>>>>>>> (https://lkml.org/lkml/2016/6/28/203) and v2
+>>>>>>>> (https://lkml.org/lkml/2016/7/15/215).
+>>>>>>>> Jonathan and Guenter didn't really like the idea of changing the
+>>>> -ENODEV
+>>>>>>>> in -EPROBE_DEFER.
+>>>>>>>
+>>>>>>> Thanks for the links.
+>>>>>>>
+>>>>>>>> What I thought you were proposing was to change the -ENODEV
+>>>> return code
+>>>>>>>> inside iio_channel_get_all. This cannot be an option since the
+>>>> function
+>>>>>>>> might be called outside of a probe (it is not yet, but might be
+>>>> in the
+>>>>>>>> future?).
+>>>>>>>
+>>>>>>> AFAICS this is a helper function not knowing about device probing
+>>>> itself. And 
+>>>>>>> it should stay at that.
+>>>>>>>
+>>>>>>>> Of what I understood, two possibilities are then possible
+>>>> (proposed
+>>>>>>>> either by Guenter or Jonathan): either rework the iio framework
+>>>> to
+>>>>>>>> register iio map array earlier or to use late_initcall instead of
+>>>> init
+>>>>>>>> for the driver consuming the iio channels.
+>>>>>>>
+>>>>>>> Interestingly using this problem would not arise due to module
+>>>> dependencies. 
+>>>>>>> But using late_initcall would mean this needs to be done on any
+>>>> driver using 
+>>>>>>> iio channels? I would rather keep those consumers simple.
+>>>>>>>
+>>>>>> Me too, but that would imply a solution in iio. The change you
+>>>> propose above
+>>>>>> isn't exactly simple either, and would also be needed in each
+>>>> consumer driver.
+>>>>>>
+>>>>>> Just for the record, I dislike the late_initcall solution as well,
+>>>> but I prefer
+>>>>>> it over blindly converting ENODEV to EPROBE_DEFER.
+>>>>> I'm falling on the other side on this one right now. Though I'd be
+>>>> tempted
+>>>>> to renaming the function to something like
+>>>> iio_channel_get_all_or_defer
+>>>>> to make it explicit that it can result in deferred probing.
+>>>>>
+>>>> Would this new function return -EPROBE_DEFER instead of -ENODEV ?
+>>> Yes. Though whether it really adds much over doing that in drivers isn't clear.
+>>>
+>>> Hmm. Needs more thought...
+>>
+>> Either we do the exact same "hack" as in the v2[1] in what you call
+>> iio_channel_get_all_or_defer or we duplicate the code from
+>> iio_channel_get_all in iio_channel_get_all_or_defer. Both do not seem
+>> right to me but I really dislike the late_initcall method. With this
+>> method we can only have one level of "channel dependency".
+>>
+>> This means if we ever create a new driver which depends on channels from
+>> the driver using late_initcall, we will also have to use late_initcall
+>> and we can't be sure the new driver will always be probed after the
+>> driver he depends on.
+>>
+>> [1] https://lkml.org/lkml/2016/7/15/215
+>>
+>> Quentin
+> 
+> Should I revert back to the hack introduced in v2 then?
+I think so.  Sorry I didn't see this until after you'd sent v4.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/stts751.txt b/Documentation/devicetree/bindings/hwmon/stts751.txt
-new file mode 100644
-index 0000000..277ad46
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/stts751.txt
-@@ -0,0 +1,19 @@
-+* STTS751 thermometer.
-+
-+Required node properties:
-+- compatible: "stts751"
-+- reg: I2C bus address of the device
-+
-+Optional properties:
-+- has-therm: specifies that the "therm" pin is wired
-+- has-event: specifies that the "event" pin is wired
-+- smbus-timeout-disable: when set, the smbus timeout function will be disabled
-+
-+Example stts751 node:
-+
-+temp-sensor {
-+	compatible = "stts751";
-+	reg = <0x48>;
-+	has-therm;
-+	has-event;
-+}
--- 
-2.7.4
+That hack had it's disadvantages but in many ways it was a least clean.
+
+Jonathan
+> 
+>>>>
+>>>> Thanks,
+>>>> Guenter
+>>>> --
+>>>> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+>>>> the body of a message to majordomo@vger.kernel.org
+>>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
 
