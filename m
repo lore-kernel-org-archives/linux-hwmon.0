@@ -1,169 +1,81 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:57926 "EHLO
-        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933623AbcIETvX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2016 15:51:23 -0400
-Subject: Re: [PATCH v4 3/3] iio: adc: add support for Allwinner SoCs ADC
-To: Quentin Schulz <quentin.schulz@free-electrons.com>,
-        jdelvare@suse.com, Guenter Roeck <linux@roeck-us.net>,
+Received: from down.free-electrons.com ([37.187.137.238]:58699 "EHLO
+        mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1754469AbcIEHHT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2016 03:07:19 -0400
+Date: Mon, 5 Sep 2016 09:07:16 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+To: Quentin Schulz <quentin.schulz@free-electrons.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
         knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
-        lee.jones@linaro.org
-References: <1472738705-20145-1-git-send-email-quentin.schulz@free-electrons.com>
- <1472738705-20145-4-git-send-email-quentin.schulz@free-electrons.com>
- <272fb672-602c-1757-be9f-eadf928b330c@kernel.org>
- <f085ee35-889f-58e3-15d6-e6f3c0d15a92@free-electrons.com>
-Cc: thomas.petazzoni@free-electrons.com,
+        lee.jones@linaro.org, thomas.petazzoni@free-electrons.com,
         antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-pm <linux-pm@vger.kernel.org>
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <f7d115a6-29e3-6157-60a1-0dd47cef79e3@kernel.org>
-Date: Mon, 5 Sep 2016 20:51:17 +0100
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 3/3] iio: adc: add support for Allwinner SoCs ADC
+Message-ID: <20160905070716.GA6322@lukather>
+References: <1472738705-20145-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1472738705-20145-4-git-send-email-quentin.schulz@free-electrons.com>
 MIME-Version: 1.0
-In-Reply-To: <f085ee35-889f-58e3-15d6-e6f3c0d15a92@free-electrons.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
+Content-Disposition: inline
+In-Reply-To: <1472738705-20145-4-git-send-email-quentin.schulz@free-electrons.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 05/09/16 07:29, Quentin Schulz wrote:
-> On 04/09/2016 16:35, Jonathan Cameron wrote:
->> On 01/09/16 15:05, Quentin Schulz wrote:
->>> The Allwinner SoCs all have an ADC that can also act as a touchscreen
->>> controller and a thermal sensor. This patch adds the ADC driver which is
->>> based on the MFD for the same SoCs ADC.
->>>
->>> This also registers the thermal adc channel in the iio map array so
->>> iio_hwmon could use it without modifying the Device Tree. This registers
->>> the driver in the thermal framework.
->>>
->>> This driver probes on three different platform_device_id to take into
->>> account slight differences (registers bit and temperature computation)
->>> between Allwinner SoCs ADCs.
->>>
->>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
->> One utterly trivial point about unrolling code ordering inline.
->>
->> Other than the bit about patch 1 I'm basically happy with this..
-> 
-> ACK. Will revert this patch in v5. Thanks.
-> 
->> However I would like some input (i.e. an Ack) from thermal given this
->> sets up a thermal zone.
->>
->> Zhang or Eduardo, could you take a quick look at this and confirm you
->> are happy with it?
->>
->> Thanks,
->>
->> Jonathan
-> [...]
->>> +
->>> +err_map:
->>> +	iio_map_array_unregister(indio_dev);
->>> +
->>> +err_fifo_irq:
->>> +	/* Disable FIFO_DATA_PENDING interrupt on hardware side. */
->>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->>> +			   SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
->>> +			   0);
->>> +
->>> +err_temp_irq:
->>> +	/* Disable TEMP_DATA_PENDING interrupt on hardware side. */
->>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->>> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN,
->>> +			   0);
->>> +
->>> +err:
->>> +	pm_runtime_put(&pdev->dev);
->>> +	pm_runtime_disable(&pdev->dev);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int sun4i_gpadc_remove(struct platform_device *pdev)
->>> +{
->>> +	struct sun4i_gpadc_dev *info;
->>> +	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
->>> +
->>> +	info = iio_priv(indio_dev);
->>> +	iio_device_unregister(indio_dev);
->>> +	iio_map_array_unregister(indio_dev);
->>> +	pm_runtime_put(&pdev->dev);
->>> +	pm_runtime_disable(&pdev->dev);
->> Its really minor but in the interests of 'obviously correct' making
->> review easy I'd rather everything in the remove was in the reverse order
->> of probe (and hence the same as the error path in probe for most of it).
->>
->> That would put the pm_runtime stuff last I think..
->>
->> If you weren't rerolling anyway over patch 1 I'd probably have just let
->> this go, but might as well make this trivial change as well.
->>
-> 
-> I'm going with the following order:
-> pm_runtime_put
-> pm_runtime_disable
-> regmap_update_bits
-> iio_map_array_unregister
-> iio_device_unregister
-> 
-> Is that okay? (I don't really know which one of iio_map_array_unregister
-> or iio_device_unregister to put first, if it matters in any way).
-Unless we have a really complex race condition involving a client driver
-coming up just as the provider is unregistered I doubt it matters.
 
-At some point we should probably chase down any paths through that
-with some carefully crafted tests but it's in the seriously unlikely
-category!
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Jonathan
-> 
-> Thanks!
-> Quentin
->>
->>> +	/*
->>> +	 * Disable TEMP_DATA_PENDING and FIFO_DATA_PENDING interrupts on
->>> +	 * hardware side.
->>> +	 */
->>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->>> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN |
->>> +				SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
->>> +			   0);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static const struct platform_device_id sun4i_gpadc_id[] = {
->>> +	{ "sun4i-a10-gpadc-iio", (kernel_ulong_t)&sun4i_gpadc_soc_specific },
->>> +	{ "sun5i-a13-gpadc-iio", (kernel_ulong_t)&sun5i_gpadc_soc_specific },
->>> +	{ "sun6i-a31-gpadc-iio", (kernel_ulong_t)&sun6i_gpadc_soc_specific },
->>> +	{ /* sentinel */ },
->>> +};
->>> +
->>> +static struct platform_driver sun4i_gpadc_driver = {
->>> +	.driver = {
->>> +		.name = "sun4i-gpadc-iio",
->>> +		.pm = &sun4i_gpadc_pm_ops,
->>> +	},
->>> +	.id_table = sun4i_gpadc_id,
->>> +	.probe = sun4i_gpadc_probe,
->>> +	.remove = sun4i_gpadc_remove,
->>> +};
->>> +
->>> +module_platform_driver(sun4i_gpadc_driver);
->>> +
->>> +MODULE_DESCRIPTION("ADC driver for sunxi platforms");
->>> +MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
->>> +MODULE_LICENSE("GPL v2");
->>>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+Hi,
 
+Nitpicks ahead.
+
+On Thu, Sep 01, 2016 at 04:05:05PM +0200, Quentin Schulz wrote:
+> +	info->soc_specific =3D (struct soc_specific *)platform_get_device_id(pd=
+ev)->driver_data;
+
+This line is still rather long. How about calling the field "data" and
+the structure gpadc_data?
+
+> +
+> +	tzd =3D devm_thermal_zone_of_sensor_register(pdev->dev.parent, 0, info,
+> +						   &sun4i_ts_tz_ops);
+
+A comment on why you put the parent device structure and not the
+device itself like you're doing on all the other calls in that probe
+would be nice.
+
+Thanks!
+Maxime
+
+--=20
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+
+--lrZ03NoBR/3+SXJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJXzRmkAAoJEBx+YmzsjxAgZZoQAJLcPr1UlajYkObtSAzJfUHJ
+Zv7w95wB5uaKd0MZjWoBYM42g3TujgseKVdLBwUdJP2HprgHytR3Hr8GIC4TJKcK
+r+rmdhpyhwQN8+ivYJTikehB/HXNxl9jR+o9isPCaWbtsiWDVC/mB6dYBo1Qarwc
+7YYaYbVJP8X8G3sClQL4vEH3SYVBJAUNHZ5HvVRJmKTkOJrjjtoBS9a9iEpLymkN
+mBZPYTKNuing60sLuyb1ywmi8EJvvy3JbiF+jbg2mU5MlUI8mC9tG4KsGsQWUqtT
+gK+6VO+0+JasoyYVtiPZNVzR7N1PvzGil3m6QyKpF1DCsjpXCTB5VYNYsWovEy5q
+suab4OnQgrSyqEsXX8N0i6gLU6nzWnjPcjmDwI2qUmu/2cIjK3RhzGKVJjgv4tHM
+JbWP3IkdeIHQLhFxihrWyJGy1q/D0lH3FPQ+e6krqQFQ9eIu2Cebgn3SrvJBXbSY
+jfQsba10cShGU/0vg6t1IfmkWz2k7u5cX7TT83p0f72PI6DhSDqXfHRL7Hx4NC+q
+HAf+I+ZxK9G54ksG46Uq7vRJpgFpJKBudumqSrYirWHHnsRG1w5vnrEn6P5hn/qS
+zu6dFpjpDWy9nDucjdzSKheNZ8K7E0zdABZJtBbFM3alJ5rO7UISeC8pd+OACjmQ
+8fOtk0P7x/tUUe2Gw0aw
+=93Jt
+-----END PGP SIGNATURE-----
+
+--lrZ03NoBR/3+SXJZ--
