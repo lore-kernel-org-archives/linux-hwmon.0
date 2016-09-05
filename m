@@ -1,48 +1,68 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42038 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754321AbcH3CAZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Aug 2016 22:00:25 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.8-rc5
-Date: Mon, 29 Aug 2016 19:00:19 -0700
-Message-Id: <1472522419-6787-1-git-send-email-linux@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:39468 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754115AbcIEFgW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2016 01:36:22 -0400
+From: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] hwmon: (lm87) Add channel data from the dts file.
+Date: Mon,  5 Sep 2016 17:36:14 +1200
+Message-Id: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Currently there is no method for setting the channel
+value from the DTS file. When, the driver uses a dts
+file to initialize the driver platform_data is not set.
+As a the result channel variable may not be set correctly.
 
-Please pull hwmon fixes for Linux v4.8-rc5 from signed tag:
+Without the channel variable set correctly, some of the
+sensors will not be initialized correctly. For example
+temp3 sensor sysfs entries.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.8-rc5
+This adds the required functionality to set the channel
+variable from the DTS file. This is done via reading the
+reading a property named "channel" from the lm87 driver.
 
-Thanks,
-Guenter
-------
+Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+---
+ drivers/hwmon/lm87.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-The following changes since commit fa8410b355251fd30341662a40ac6b22d3e38468:
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index a5e2958..ac0018b 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -858,14 +858,25 @@ static void lm87_remove_files(struct i2c_client *client)
+ static void lm87_init_client(struct i2c_client *client)
+ {
+ 	struct lm87_data *data = i2c_get_clientdata(client);
++	struct device_node *np = NULL;
++	const char *channel = NULL;
++	u8 val;
+ 
+-	if (dev_get_platdata(&client->dev)) {
++	np = client->dev.of_node;
++
++	/* Use value read from the dts file to setup channel value. */
++	if (np && of_property_read_u8(np, "channels", &val) == 0) {
++		data->channel = val;
++		lm87_write_value(client,
++				 LM87_REG_CHANNEL_MODE, data->channel);
++	} else if (dev_get_platdata(&client->dev)) {
+ 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+ 		lm87_write_value(client,
+ 				 LM87_REG_CHANNEL_MODE, data->channel);
+ 	} else {
+ 		data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
+ 	}
++
+ 	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
+ 
+ 	if (!(data->config & 0x01)) {
+-- 
+2.9.3
 
-  Linux 4.8-rc3 (2016-08-21 16:14:10 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.8-rc5
-
-for you to fetch changes up to 3c3292634fc2de1ab97b6aa3222fee647f737adb:
-
-  hwmon: (it87) Add missing sysfs attribute group terminator (2016-08-29 05:31:31 -0700)
-
-----------------------------------------------------------------
-hwmon patch for v4.8-rc5
-
-Add missing sysfs attribute group terminator to it87 driver.
-
-----------------------------------------------------------------
-Jean Delvare (1):
-      hwmon: (it87) Add missing sysfs attribute group terminator
-
- drivers/hwmon/it87.c | 1 +
- 1 file changed, 1 insertion(+)
