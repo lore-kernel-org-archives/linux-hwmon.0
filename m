@@ -1,196 +1,144 @@
-Return-path: <andrea.merello@gmail.com>
+Return-path: <linux-kernel-owner@vger.kernel.org>
+From: Quentin Schulz <quentin.schulz@free-electrons.com>
+Sender: <linux-kernel-owner@vger.kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>, <jdelvare@suse.com>, Guenter Roeck
+	<linux@roeck-us.net>, <knaack.h@gmx.de>, <lars@metafoo.de>,
+	<pmeerw@pmeerw.net>, <wens@csie.org>, <lee.jones@linaro.org>
+CC: <thomas.petazzoni@free-electrons.com>,
+	<antoine.tenart@free-electrons.com>, <linux-kernel@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, "Zhang, Rui" <rui.zhang@intel.com>,
+	Eduardo Valentin <edubezval@gmail.com>, linux-pm <linux-pm@vger.kernel.org>
+References: <1472738705-20145-1-git-send-email-quentin.schulz@free-electrons.com> <1472738705-20145-4-git-send-email-quentin.schulz@free-electrons.com> <272fb672-602c-1757-be9f-eadf928b330c@kernel.org>
+In-Reply-To: <272fb672-602c-1757-be9f-eadf928b330c@kernel.org>
+Subject: Re: [PATCH v4 3/3] iio: adc: add support for Allwinner SoCs ADC
+Date: Mon, 5 Sep 2016 00:29:20 -0600
+Message-ID: <f085ee35-889f-58e3-15d6-e6f3c0d15a92@free-electrons.com>
 MIME-Version: 1.0
-Reply-To: andrea.merello@gmail.com
-In-Reply-To: <4d369a94-2497-1404-70be-660fe13c7788@roeck-us.net>
-References: <1473251617-4107-1-git-send-email-andrea.merello@gmail.com>
- <20160907131651.GA18441@Red> <0b99d601-20a9-acaf-bf21-a2ea92061564@roeck-us.net>
- <CAN8YU5OAR4RyyK-qvVVXV_bSjEkj9bLRSxUF98ZSLdOxkZr=Vw@mail.gmail.com>
- <99597c50-c73e-26ea-1690-6ab323e8c87a@roeck-us.net> <CAN8YU5O+mn53PnfbjKUderXXzPiVBAtiFRe8-wTzQypDkjwwmA@mail.gmail.com>
- <4d369a94-2497-1404-70be-660fe13c7788@roeck-us.net>
-From: Andrea Merello <andrea.merello@gmail.com>
-Date: Thu, 8 Sep 2016 16:38:30 +0200
-Message-ID: <CAN8YU5PVrn04Bw5u5ndsCuJzGhC1Z1q=aGRMG7LpWqtoqTCv3w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: new driver for ST stts751 thermal sensor
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: LABBE Corentin <clabbe.montjoie@gmail.com>, linux-hwmon@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Sep 8, 2016 at 3:35 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 09/08/2016 12:42 AM, Andrea Merello wrote:
+On 04/09/2016 16:35, Jonathan Cameron wrote:
+> On 01/09/16 15:05, Quentin Schulz wrote:
+>> The Allwinner SoCs all have an ADC that can also act as a touchscreen
+>> controller and a thermal sensor. This patch adds the ADC driver which is
+>> based on the MFD for the same SoCs ADC.
 >>
+>> This also registers the thermal adc channel in the iio map array so
+>> iio_hwmon could use it without modifying the Device Tree. This registers
+>> the driver in the thermal framework.
 >>
-> [ ... ]
->
+>> This driver probes on three different platform_device_id to take into
+>> account slight differences (registers bit and temperature computation)
+>> between Allwinner SoCs ADCs.
 >>
->>         Will look if I can find another driver with similar issue to sno=
-op at..
->>
->>     Try lm90.c:lm90_read16().
->>
->>
->>
->> I see.. This is reasonable, and I will implement this trick in stts751 d=
-river.. This seems to have good chances to read correctly, but it can still=
- go racy for example if the converter ends a conversion between the first t=
-wo reads, and we get preempted in between the last two reads (so that the H=
-W ends another conversion). IMHO looking _also_  at time, and eventually re=
-try, makes things even more robust..
->>
-> As a general comment, please use a mailer which splits lines at 80 column=
-s or less.
+>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+> One utterly trivial point about unrolling code ordering inline.
+> 
+> Other than the bit about patch 1 I'm basically happy with this..
 
-Thanks for pointing this out. (Probably I just need to remember to
-switch gmail in plain text mode..)
+ACK. Will revert this patch in v5. Thanks.
 
->
->
-> While I understand your concern, the time check is complete overkill.
-> What is the probability for a double bad reading, and on top of that one =
-that
-> includes a change in the high temperature register ? One in a Million ?
-> With a downside of a wrong fraction in the "error" case ? And what does t=
-hat
-> really mean, on a chip with a specified accuracy of +/- 1 degrees C ?
+> However I would like some input (i.e. an Ack) from thermal given this
+> sets up a thermal zone.
+> 
+> Zhang or Eduardo, could you take a quick look at this and confirm you
+> are happy with it?
+> 
+> Thanks,
+> 
+> Jonathan
+[...]
+>> +
+>> +err_map:
+>> +	iio_map_array_unregister(indio_dev);
+>> +
+>> +err_fifo_irq:
+>> +	/* Disable FIFO_DATA_PENDING interrupt on hardware side. */
+>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
+>> +			   SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
+>> +			   0);
+>> +
+>> +err_temp_irq:
+>> +	/* Disable TEMP_DATA_PENDING interrupt on hardware side. */
+>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
+>> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN,
+>> +			   0);
+>> +
+>> +err:
+>> +	pm_runtime_put(&pdev->dev);
+>> +	pm_runtime_disable(&pdev->dev);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int sun4i_gpadc_remove(struct platform_device *pdev)
+>> +{
+>> +	struct sun4i_gpadc_dev *info;
+>> +	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
+>> +
+>> +	info = iio_priv(indio_dev);
+>> +	iio_device_unregister(indio_dev);
+>> +	iio_map_array_unregister(indio_dev);
+>> +	pm_runtime_put(&pdev->dev);
+>> +	pm_runtime_disable(&pdev->dev);
+> Its really minor but in the interests of 'obviously correct' making
+> review easy I'd rather everything in the remove was in the reverse order
+> of probe (and hence the same as the error path in probe for most of it).
+> 
+> That would put the pm_runtime stuff last I think..
+> 
+> If you weren't rerolling anyway over patch 1 I'd probably have just let
+> this go, but might as well make this trivial change as well.
+> 
 
-Yes, I see your point, and this is indeed true. Probably I have been
-too paranoid on this...
+I'm going with the following order:
+pm_runtime_put
+pm_runtime_disable
+regmap_update_bits
+iio_map_array_unregister
+iio_device_unregister
 
-> Even your solution to drop the fraction in some cases doesn't really solv=
-e anything.
-> It now reports, say, 30.0 degrees C instead of 30.875 degrees C. How is t=
-hat better
-> than a "wrong" 30.X degrees C, where X is any other value it might report=
- ?
+Is that okay? (I don't really know which one of iio_map_array_unregister
+or iio_device_unregister to put first, if it matters in any way).
 
-You're right, I could let the "wrong" fraction data. (but the point of
-my solution was not this indeed).
-
->> I'd say we could add time check and retry (with proper cpu_relax() to av=
-oid those hot loops) also to lm90 rather than removing it from stts651  :)
+Thanks!
+Quentin
+> 
+>> +	/*
+>> +	 * Disable TEMP_DATA_PENDING and FIFO_DATA_PENDING interrupts on
+>> +	 * hardware side.
+>> +	 */
+>> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
+>> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN |
+>> +				SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
+>> +			   0);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct platform_device_id sun4i_gpadc_id[] = {
+>> +	{ "sun4i-a10-gpadc-iio", (kernel_ulong_t)&sun4i_gpadc_soc_specific },
+>> +	{ "sun5i-a13-gpadc-iio", (kernel_ulong_t)&sun5i_gpadc_soc_specific },
+>> +	{ "sun6i-a31-gpadc-iio", (kernel_ulong_t)&sun6i_gpadc_soc_specific },
+>> +	{ /* sentinel */ },
+>> +};
+>> +
+>> +static struct platform_driver sun4i_gpadc_driver = {
+>> +	.driver = {
+>> +		.name = "sun4i-gpadc-iio",
+>> +		.pm = &sun4i_gpadc_pm_ops,
+>> +	},
+>> +	.id_table = sun4i_gpadc_id,
+>> +	.probe = sun4i_gpadc_probe,
+>> +	.remove = sun4i_gpadc_remove,
+>> +};
+>> +
+>> +module_platform_driver(sun4i_gpadc_driver);
+>> +
+>> +MODULE_DESCRIPTION("ADC driver for sunxi platforms");
+>> +MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
+>> +MODULE_LICENSE("GPL v2");
 >>
-> Only if you can show that the problem is seen in the real world.
->
->
->>
->>
->>
->>
->>                     +                       break;
->>                     +
->>                     +               /* if we are going on with a racy re=
-ad, don't pretend to be
->>                     +                * super-precise, just use the MSBs =
-..
->>                     +                */
->>                     +               frac =3D 0;
->>                     +       }
->>                     +
->>                     +exit:
->>                     +       mutex_unlock(&priv->access_lock);
->>                     +       if (ret)
->>                     +               return ret;
->>                     +
->>                     +       /* use integer2, because when we fallback to=
- the "MSB-only" compromise
->>                     +        * this is the more recent one
->>                     +        */
->>                     +       priv->temp =3D stts751_to_deg(integer2, frac=
-);
->>
->>
->>             All other drivers I am aware of manage to handle conversions=
- from 16 bit chip
->>             values to temperatures and from temperatures to chip values =
-with a single parameter.
->>
->>
->>         I'll check this.. BTW This chip wants two separated reads from t=
-wo registers, one for the integer and one for the fractional part. The purp=
-ose of this function is interpreting these two raw HW values to convert in =
-a number. Is this so bad ?
->>
->>     Again, have a look at lm90.c:lm90_read16() and the conversion functi=
-ons
->>     in drivers which have to read two registers to read the temperature.
->>
->>     Is it bad ? It makes the code more complicated than it has to be and
->>     increases code size, so, yes, I consider it bad.
->>
->>
->> It does not look like that the simple register combination that lm90 doe=
-s could also work for the integer/fractional format of the stts751.
->>
-> Why ? The register formats are exactly the same.
-
-Aah, I didn't saw temp_from_s16() in lm90.c that does the conversion
-afterwards, thus I assumed the data read from lm90 didn't need any
-conversion and that the reg format was different.. sorry.. Now I got
-what you meant :)
-
->> I'll check again more carefully to see if for some math trick the two th=
-ings eventually end up to produce the same result, but right now it seems t=
-o me that we need to do some math over the two read values in stts751. And =
-the same for the reverse direction conversion.
->>
->> If the point above turns out to be true, then I honestly can't see how d=
-ividing the two-registers read (with its trick to avoid races) and the math=
- calculations in two functions, as it is now,  could make things appearing =
-so complicated. Honestly I would say the opposite :) .. However if it's bet=
-ter for you, I can merge the two things in one single function..
->>
-> Two vs. one function isn't the question here. The lm90 driver combines th=
-e two register
-> values into a single variable. Using a single variable is what I asked fo=
-r.
-
-OK, I'll do the lm90 way :)
-
->>
->>
->>     To some degree I understand your concerns, but complex problems don'=
-t
->>     always mean that there has to be a complex solution. Unless you have=
- a good
->>     reason for the complexity, please keep the driver as simple as possi=
-ble.
->>     That not only reduces code size, it also reduces the probability to
->>     introduce bugs, and it reduces amount of time we have to spend revie=
-wing
->>     the code.
->>
->>
->> In general that's absolutely true :) But IMHO here we have neither compl=
-icated or simple solutions; we just have a certain degree of probability to=
- do a (slightly) wrong read (in lm90 also), and we can put less or more eff=
-ort (code) in trying to reduce this probability.
->>
->> If you feel that what lm90 does is enough, and that is the "standard" wa=
-y, I'll do the same.. Although I still would prefer to be more paranoid abo=
-ut races..
->>
-> I would say it is sufficient. Many sensors have the same problem, and it =
-would
-> really be up to the chip vendors to define better (ie 16 bit) register se=
-ts.
-> Until then, we have to find a trade-off between code complexity and avoid=
-ing
-> races like this.
-
-I see..
-
-Thank you very much for discussion and explanations :)
-
-Andrea
-
->>
->> BTW I will come back with a V2 as per your requirements, but unfortunate=
-ly it will not happen very soon ;(
->>
-> No problem.
->
-> Guenter
->
+> 
