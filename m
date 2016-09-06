@@ -1,66 +1,92 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pa0-f68.google.com ([209.85.220.68]:34932 "EHLO
-        mail-pa0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934889AbcIEQrS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Sep 2016 12:47:18 -0400
-From: Joshua Clayton <stillcompiling@gmail.com>
-To: Quentin Schulz <quentin.schulz@free-electrons.com>
-Cc: Maxime Ripard <maxime.ripard@free-electrons.com>,
-        jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
-        lee.jones@linaro.org, thomas.petazzoni@free-electrons.com,
-        antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 3/3] iio: adc: add support for Allwinner SoCs ADC
-Date: Mon, 05 Sep 2016 09:47:12 -0700
-Message-ID: <1957122.9eY1bPBcZc@diplodocus>
-In-Reply-To: <9219f76c-384a-a7c3-5b13-ebaec980ab41@free-electrons.com>
-References: <1472738705-20145-1-git-send-email-quentin.schulz@free-electrons.com> <20160905070716.GA6322@lukather> <9219f76c-384a-a7c3-5b13-ebaec980ab41@free-electrons.com>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:48944 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933502AbcIFRUp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2016 13:20:45 -0400
+Date: Tue, 6 Sep 2016 10:20:40 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] hwmon: (lm87) Add channel data from the dts file.
+Message-ID: <20160906172040.GA18235@roeck-us.net>
+References: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Monday, September 05, 2016 09:11:47 AM Quentin Schulz wrote:
-> On 05/09/2016 09:07, Maxime Ripard wrote:
-> > Hi,
-> > 
-> > Nitpicks ahead.
-> > 
-> > On Thu, Sep 01, 2016 at 04:05:05PM +0200, Quentin Schulz wrote:
-> >> +	info->soc_specific = (struct soc_specific *)platform_get_device_id(pdev)->driver_data;
-> > 
-> > This line is still rather long. How about calling the field "data" and
-> > the structure gpadc_data?
-> > 
+On Mon, Sep 05, 2016 at 05:36:14PM +1200, Mahoda Ratnayaka wrote:
+> Currently there is no method for setting the channel
+> value from the DTS file. When, the driver uses a dts
+> file to initialize the driver platform_data is not set.
+> As a the result channel variable may not be set correctly.
 > 
-> driver_data is coming from the platform_device_id
-> (http://lxr.free-electrons.com/source/include/linux/mod_devicetable.h#L498)
-> so can't really change that.
-> I could change the structure to gpadc_data, that would save me 2
-> characters, still 13 characters above the 80 characters limit however.
+> Without the channel variable set correctly, some of the
+> sensors will not be initialized correctly. For example
+> temp3 sensor sysfs entries.
 > 
-I think Maxime meant to change member "soc_specific" to "data" of type
-struct gpadc_data
+> This adds the required functionality to set the channel
+> variable from the DTS file. This is done via reading the
+> reading a property named "channel" from the lm87 driver.
+> 
+Devicetree properties need to be documented and approved by devicetree
+maintainers.
 
-> >> +
-> >> +	tzd = devm_thermal_zone_of_sensor_register(pdev->dev.parent, 0, info,
-> >> +						   &sun4i_ts_tz_ops);
-> > 
-> > A comment on why you put the parent device structure and not the
-> > device itself like you're doing on all the other calls in that probe
-> > would be nice.
-> > 
+> Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+> ---
+>  drivers/hwmon/lm87.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
-> Indeed.
-> 
-> Thanks,
-> Quentin
-> 
-> > Thanks!
-> > Maxime
-> > 
-> 
+> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+> index a5e2958..ac0018b 100644
+> --- a/drivers/hwmon/lm87.c
+> +++ b/drivers/hwmon/lm87.c
+> @@ -858,14 +858,25 @@ static void lm87_remove_files(struct i2c_client *client)
+>  static void lm87_init_client(struct i2c_client *client)
+>  {
+>  	struct lm87_data *data = i2c_get_clientdata(client);
+> +	struct device_node *np = NULL;
+> +	const char *channel = NULL;
+> +	u8 val;
+>  
+> -	if (dev_get_platdata(&client->dev)) {
+> +	np = client->dev.of_node;
+> +
+> +	/* Use value read from the dts file to setup channel value. */
 
+Isn't that obvious from the code ?
+
+> +	if (np && of_property_read_u8(np, "channels", &val) == 0) {
+
+When using a function, you need to include the file declaring it,
+in this case linux/of.h. of_property_read_u8( )already checks for
+np == NULL, so there is no need to check it here. Instead of "== 0",
+please use "!".
+
+> +		data->channel = val;
+> +		lm87_write_value(client,
+> +				 LM87_REG_CHANNEL_MODE, data->channel);
+> +	} else if (dev_get_platdata(&client->dev)) {
+>  		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+>  		lm87_write_value(client,
+>  				 LM87_REG_CHANNEL_MODE, data->channel);
+>  	} else {
+>  		data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
+>  	}
+> +
+
+Please no unnecessary whitespace changes.
+
+>  	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
+>  
+>  	if (!(data->config & 0x01)) {
+> -- 
+> 2.9.3
+> 
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
