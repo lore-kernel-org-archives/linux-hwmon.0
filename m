@@ -1,122 +1,30 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:59999 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933260AbcIGBf7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2016 21:35:59 -0400
-Subject: Re: [PATCH] hwmon: (lm87) Add channel data from the dts file.
-To: Mahoda Ratnayaka <Mahoda.Ratnayaka@alliedtelesis.co.nz>
-References: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
- <20160906172040.GA18235@roeck-us.net>
- <1473207421452.19824@alliedtelesis.co.nz>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <14779db5-8c7f-5e6e-b61c-9cfffa05ac73@roeck-us.net>
-Date: Tue, 6 Sep 2016 18:35:55 -0700
+Return-path: <arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
+To: Hoan Tran <hotran@apm.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, Ashwin Chaugule <ashwin.chaugule@linaro.org>, Duc Dang <dhdang@apm.com>, lho@apm.com, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: xgene: Add hwmon driver
+Date: Wed, 07 Sep 2016 23:41:44 +0200
+Message-ID: <13081573.BbD3TmEU5Y@wuerfel>
+In-Reply-To: <1469134557-26869-3-git-send-email-hotran@apm.com>
+References: <1469134557-26869-1-git-send-email-hotran@apm.com> <1469134557-26869-3-git-send-email-hotran@apm.com>
 MIME-Version: 1.0
-In-Reply-To: <1473207421452.19824@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 09/06/2016 05:17 PM, Mahoda Ratnayaka wrote:
-> Thanks Guenter for the comments, I'll first update the lm87 Documentation to include the
-> device tree information and then I'll update the documentation with my proposed update along
-> with the updated patch for reading the property in the driver.
->
+On Thursday, July 21, 2016 1:55:56 PM CEST Hoan Tran wrote:
+> +               ctx->comm_base_addr = cppc_ss->base_address;
+> +               if (ctx->comm_base_addr) {
+> +                       ctx->pcc_comm_addr =
+> +                                       acpi_os_ioremap(ctx->comm_base_addr,
+> +                                                       cppc_ss->length);
+> 
 
-Devicetree documentation needs to be a new file in Documentation/devicetree/bindings/hwmon/.
+This causes the arm64 allmodconfig build to fail now, according to
+kernelci:
 
-Thanks,
-Guenter
+      1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
 
-> Thanks,
-> Mahoda
-> ________________________________________
-> From: linux-hwmon-owner@vger.kernel.org <linux-hwmon-owner@vger.kernel.org> on behalf of Guenter Roeck <linux@roeck-us.net>
-> Sent: Wednesday, 7 September 2016 5:20 a.m.
-> To: Mahoda Ratnayaka
-> Cc: Jean Delvare; linux-hwmon@vger.kernel.org; Chris Packham
-> Subject: Re: [PATCH] hwmon: (lm87) Add channel data from the dts file.
->
-> On Mon, Sep 05, 2016 at 05:36:14PM +1200, Mahoda Ratnayaka wrote:
->> Currently there is no method for setting the channel
->> value from the DTS file. When, the driver uses a dts
->> file to initialize the driver platform_data is not set.
->> As a the result channel variable may not be set correctly.
->>
->> Without the channel variable set correctly, some of the
->> sensors will not be initialized correctly. For example
->> temp3 sensor sysfs entries.
->>
->> This adds the required functionality to set the channel
->> variable from the DTS file. This is done via reading the
->> reading a property named "channel" from the lm87 driver.
->>
-> Devicetree properties need to be documented and approved by devicetree
-> maintainers.
->
->> Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
->> ---
->>  drivers/hwmon/lm87.c | 13 ++++++++++++-
->>  1 file changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
->> index a5e2958..ac0018b 100644
->> --- a/drivers/hwmon/lm87.c
->> +++ b/drivers/hwmon/lm87.c
->> @@ -858,14 +858,25 @@ static void lm87_remove_files(struct i2c_client *client)
->>  static void lm87_init_client(struct i2c_client *client)
->>  {
->>       struct lm87_data *data = i2c_get_clientdata(client);
->> +     struct device_node *np = NULL;
->> +     const char *channel = NULL;
->> +     u8 val;
->>
->> -     if (dev_get_platdata(&client->dev)) {
->> +     np = client->dev.of_node;
->> +
->> +     /* Use value read from the dts file to setup channel value. */
->
-> Isn't that obvious from the code ?
->
->> +     if (np && of_property_read_u8(np, "channels", &val) == 0) {
->
-> When using a function, you need to include the file declaring it,
-> in this case linux/of.h. of_property_read_u8( )already checks for
-> np == NULL, so there is no need to check it here. Instead of "== 0",
-> please use "!".
->
->> +             data->channel = val;
->> +             lm87_write_value(client,
->> +                              LM87_REG_CHANNEL_MODE, data->channel);
->> +     } else if (dev_get_platdata(&client->dev)) {
->>               data->channel = *(u8 *)dev_get_platdata(&client->dev);
->>               lm87_write_value(client,
->>                                LM87_REG_CHANNEL_MODE, data->channel);
->>       } else {
->>               data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
->>       }
->> +
->
-> Please no unnecessary whitespace changes.
->
->>       data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
->>
->>       if (!(data->config & 0x01)) {
->> --
->> 2.9.3
->>
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+Should this perhaps call ioremap() or memremap() instead?
 
+	Arnd
