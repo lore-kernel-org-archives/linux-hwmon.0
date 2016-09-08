@@ -1,144 +1,49 @@
-Return-path: <linux-kernel-owner@vger.kernel.org>
-From: Quentin Schulz <quentin.schulz@free-electrons.com>
-Sender: <linux-kernel-owner@vger.kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>, <jdelvare@suse.com>, Guenter Roeck
-	<linux@roeck-us.net>, <knaack.h@gmx.de>, <lars@metafoo.de>,
-	<pmeerw@pmeerw.net>, <wens@csie.org>, <lee.jones@linaro.org>
-CC: <thomas.petazzoni@free-electrons.com>,
-	<antoine.tenart@free-electrons.com>, <linux-kernel@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, "Zhang, Rui" <rui.zhang@intel.com>,
-	Eduardo Valentin <edubezval@gmail.com>, linux-pm <linux-pm@vger.kernel.org>
-References: <1472738705-20145-1-git-send-email-quentin.schulz@free-electrons.com> <1472738705-20145-4-git-send-email-quentin.schulz@free-electrons.com> <272fb672-602c-1757-be9f-eadf928b330c@kernel.org>
-In-Reply-To: <272fb672-602c-1757-be9f-eadf928b330c@kernel.org>
-Subject: Re: [PATCH v4 3/3] iio: adc: add support for Allwinner SoCs ADC
-Date: Mon, 5 Sep 2016 00:29:20 -0600
-Message-ID: <f085ee35-889f-58e3-15d6-e6f3c0d15a92@free-electrons.com>
+Return-path: <arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hoan Tran <hotran@apm.com>, Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, Ashwin Chaugule <ashwin.chaugule@linaro.org>, Duc Dang <dhdang@apm.com>, lho@apm.com, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, James Morse <james.morse@arm.com>, AKASHI Takahiro <takahiro.akashi@linaro.org>, Will Deacon <will.deacon@arm.com>
+Subject: Re: [PATCH v3 2/3] hwmon: xgene: Add hwmon driver
+Date: Thu, 08 Sep 2016 10:14:42 +0200
+Message-ID: <2992356.ULGoZEEDZp@wuerfel>
+In-Reply-To: <20160907223705.GA31582@roeck-us.net>
+References: <1469134557-26869-1-git-send-email-hotran@apm.com> <13081573.BbD3TmEU5Y@wuerfel> <20160907223705.GA31582@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/09/2016 16:35, Jonathan Cameron wrote:
-> On 01/09/16 15:05, Quentin Schulz wrote:
->> The Allwinner SoCs all have an ADC that can also act as a touchscreen
->> controller and a thermal sensor. This patch adds the ADC driver which is
->> based on the MFD for the same SoCs ADC.
->>
->> This also registers the thermal adc channel in the iio map array so
->> iio_hwmon could use it without modifying the Device Tree. This registers
->> the driver in the thermal framework.
->>
->> This driver probes on three different platform_device_id to take into
->> account slight differences (registers bit and temperature computation)
->> between Allwinner SoCs ADCs.
->>
->> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
-> One utterly trivial point about unrolling code ordering inline.
-> 
-> Other than the bit about patch 1 I'm basically happy with this..
+On Wednesday, September 7, 2016 3:37:05 PM CEST Guenter Roeck wrote:
+> On Wed, Sep 07, 2016 at 11:41:44PM +0200, Arnd Bergmann wrote:
+> > On Thursday, July 21, 2016 1:55:56 PM CEST Hoan Tran wrote:
+> > > +               ctx->comm_base_addr = cppc_ss->base_address;
+> > > +               if (ctx->comm_base_addr) {
+> > > +                       ctx->pcc_comm_addr =
+> > > +                                       acpi_os_ioremap(ctx->comm_base_addr,
+> > > +                                                       cppc_ss->length);
+> > > 
+> > 
+> > This causes the arm64 allmodconfig build to fail now, according to
+> > kernelci:
+> > 
+> >       1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
+> > 
+> > Should this perhaps call ioremap() or memremap() instead?
+> > 
+> Hmmm ... almost sounds to me like blaming the messenger. e7cd190385d1 ("arm64:
+> mark reserved memblock regions explicitly in iomem") starts using a function
+> in acpi_os_ioremap() which is not exported. On top of that, memblock_is_memory()
+> is declared as __init_memblock, which makes me really uncomfortable.
+> If acpi_os_ioremap() must not be used by modules, and possibly only during
+> early (?) initialization, maybe its declaration should state those limitations ?
 
-ACK. Will revert this patch in v5. Thanks.
+Ah, I didn't notice that. I guess both patches were correct individually and
+got added to linux-next around the same time but caused allmodconfig to blow up
+when used together.
 
-> However I would like some input (i.e. an Ack) from thermal given this
-> sets up a thermal zone.
-> 
-> Zhang or Eduardo, could you take a quick look at this and confirm you
-> are happy with it?
-> 
-> Thanks,
-> 
-> Jonathan
-[...]
->> +
->> +err_map:
->> +	iio_map_array_unregister(indio_dev);
->> +
->> +err_fifo_irq:
->> +	/* Disable FIFO_DATA_PENDING interrupt on hardware side. */
->> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->> +			   SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
->> +			   0);
->> +
->> +err_temp_irq:
->> +	/* Disable TEMP_DATA_PENDING interrupt on hardware side. */
->> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN,
->> +			   0);
->> +
->> +err:
->> +	pm_runtime_put(&pdev->dev);
->> +	pm_runtime_disable(&pdev->dev);
->> +
->> +	return ret;
->> +}
->> +
->> +static int sun4i_gpadc_remove(struct platform_device *pdev)
->> +{
->> +	struct sun4i_gpadc_dev *info;
->> +	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
->> +
->> +	info = iio_priv(indio_dev);
->> +	iio_device_unregister(indio_dev);
->> +	iio_map_array_unregister(indio_dev);
->> +	pm_runtime_put(&pdev->dev);
->> +	pm_runtime_disable(&pdev->dev);
-> Its really minor but in the interests of 'obviously correct' making
-> review easy I'd rather everything in the remove was in the reverse order
-> of probe (and hence the same as the error path in probe for most of it).
-> 
-> That would put the pm_runtime stuff last I think..
-> 
-> If you weren't rerolling anyway over patch 1 I'd probably have just let
-> this go, but might as well make this trivial change as well.
-> 
+Adding everyone who was involved in the memblock patch to Cc here, maybe one
+of them has an idea what the correct fix is. There are only two other drivers
+using acpi_os_ioremap() and one of them is x86-specific, so it's still likely
+that drivers are not actually supposed to use this symbol. Making
+acpi_os_ioremap() an exported function in arm64 would also work.
 
-I'm going with the following order:
-pm_runtime_put
-pm_runtime_disable
-regmap_update_bits
-iio_map_array_unregister
-iio_device_unregister
-
-Is that okay? (I don't really know which one of iio_map_array_unregister
-or iio_device_unregister to put first, if it matters in any way).
-
-Thanks!
-Quentin
-> 
->> +	/*
->> +	 * Disable TEMP_DATA_PENDING and FIFO_DATA_PENDING interrupts on
->> +	 * hardware side.
->> +	 */
->> +	regmap_update_bits(info->regmap, SUN4I_GPADC_INT_FIFOC,
->> +			   SUN4I_GPADC_INT_FIFOC_TEMP_IRQ_EN |
->> +				SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN,
->> +			   0);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct platform_device_id sun4i_gpadc_id[] = {
->> +	{ "sun4i-a10-gpadc-iio", (kernel_ulong_t)&sun4i_gpadc_soc_specific },
->> +	{ "sun5i-a13-gpadc-iio", (kernel_ulong_t)&sun5i_gpadc_soc_specific },
->> +	{ "sun6i-a31-gpadc-iio", (kernel_ulong_t)&sun6i_gpadc_soc_specific },
->> +	{ /* sentinel */ },
->> +};
->> +
->> +static struct platform_driver sun4i_gpadc_driver = {
->> +	.driver = {
->> +		.name = "sun4i-gpadc-iio",
->> +		.pm = &sun4i_gpadc_pm_ops,
->> +	},
->> +	.id_table = sun4i_gpadc_id,
->> +	.probe = sun4i_gpadc_probe,
->> +	.remove = sun4i_gpadc_remove,
->> +};
->> +
->> +module_platform_driver(sun4i_gpadc_driver);
->> +
->> +MODULE_DESCRIPTION("ADC driver for sunxi platforms");
->> +MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
->> +MODULE_LICENSE("GPL v2");
->>
-> 
+	Arnd
