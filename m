@@ -1,11 +1,14 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mout.kundenserver.de ([217.72.192.73]:53007 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1756878AbcIHIRJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2016 04:17:09 -0400
-From: Arnd Bergmann <arnd@arndb.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hoan Tran <hotran@apm.com>, Jean Delvare <jdelvare@suse.com>,
+Received: from foss.arm.com ([217.140.101.70]:44616 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751284AbcIHKsR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 8 Sep 2016 06:48:17 -0400
+Message-ID: <57D141DF.2010603@arm.com>
+Date: Thu, 08 Sep 2016 11:47:59 +0100
+From: James Morse <james.morse@arm.com>
+MIME-Version: 1.0
+To: Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>
+CC: Hoan Tran <hotran@apm.com>, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Rob Herring <robh+dt@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
@@ -13,39 +16,64 @@ Cc: Hoan Tran <hotran@apm.com>, Jean Delvare <jdelvare@suse.com>,
         Duc Dang <dhdang@apm.com>, lho@apm.com,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
+        devicetree@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        Will Deacon <will.deacon@arm.com>
 Subject: Re: [PATCH v3 2/3] hwmon: xgene: Add hwmon driver
-Date: Thu, 08 Sep 2016 10:15:25 +0200
-Message-ID: <8664936.LICyesLN7G@wuerfel>
-In-Reply-To: <20160907222754.GA31475@roeck-us.net>
-References: <1469134557-26869-1-git-send-email-hotran@apm.com> <13081573.BbD3TmEU5Y@wuerfel> <20160907222754.GA31475@roeck-us.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+References: <1469134557-26869-1-git-send-email-hotran@apm.com> <13081573.BbD3TmEU5Y@wuerfel> <20160907223705.GA31582@roeck-us.net> <2992356.ULGoZEEDZp@wuerfel>
+In-Reply-To: <2992356.ULGoZEEDZp@wuerfel>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wednesday, September 7, 2016 3:27:54 PM CEST Guenter Roeck wrote:
-> On Wed, Sep 07, 2016 at 11:41:44PM +0200, Arnd Bergmann wrote:
-> > On Thursday, July 21, 2016 1:55:56 PM CEST Hoan Tran wrote:
-> > > +               ctx->comm_base_addr = cppc_ss->base_address;
-> > > +               if (ctx->comm_base_addr) {
-> > > +                       ctx->pcc_comm_addr =
-> > > +                                       acpi_os_ioremap(ctx->comm_base_addr,
-> > > +                                                       cppc_ss->length);
-> > > 
-> > 
-> > This causes the arm64 allmodconfig build to fail now, according to
-> > kernelci:
-> > 
-> >       1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
-> > 
-> How do you even get there ? arm64:allmodconfig fails for me in -next with
+Hi,
+
+On 08/09/16 09:14, Arnd Bergmann wrote:
+> On Wednesday, September 7, 2016 3:37:05 PM CEST Guenter Roeck wrote:
+>> On Wed, Sep 07, 2016 at 11:41:44PM +0200, Arnd Bergmann wrote:
+>>> On Thursday, July 21, 2016 1:55:56 PM CEST Hoan Tran wrote:
+>>>> +               ctx->comm_base_addr = cppc_ss->base_address;
+>>>> +               if (ctx->comm_base_addr) {
+>>>> +                       ctx->pcc_comm_addr =
+>>>> +                                       acpi_os_ioremap(ctx->comm_base_addr,
+>>>> +                                                       cppc_ss->length);
+>>>>
+>>>
+>>> This causes the arm64 allmodconfig build to fail now, according to
+>>> kernelci:
+>>>
+>>>       1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
+>>>
+>>> Should this perhaps call ioremap() or memremap() instead?
+>>>
+>> Hmmm ... almost sounds to me like blaming the messenger. e7cd190385d1 ("arm64:
+>> mark reserved memblock regions explicitly in iomem") starts using a function
+>> in acpi_os_ioremap() which is not exported. On top of that, memblock_is_memory()
+>> is declared as __init_memblock, which makes me really uncomfortable.
+>> If acpi_os_ioremap() must not be used by modules, and possibly only during
+>> early (?) initialization, maybe its declaration should state those limitations ?
 > 
-> drivers/pwm/pwm-berlin.c: In function ‘berlin_pwm_suspend’:
-> drivers/pwm/pwm-berlin.c:245:35: error: ‘struct berlin_pwm_chip’ has no member named ‘chips’
+> Ah, I didn't notice that. I guess both patches were correct individually and
+> got added to linux-next around the same time but caused allmodconfig to blow up
+> when used together.
+> 
+> Adding everyone who was involved in the memblock patch to Cc here, maybe one
+> of them has an idea what the correct fix is. There are only two other drivers
+> using acpi_os_ioremap() and one of them is x86-specific, so it's still likely
+> that drivers are not actually supposed to use this symbol. Making
+> acpi_os_ioremap() an exported function in arm64 would also work.
 
-That was fixed in yesterday's linux-next.
+You could use acpi_os_map_iomem()/acpi_os_unmap_iomem() from acpi/acpi_io.h.
+If there isn't an existing mapping these end up in acpi_os_ioremap(), and are
+already EXPORT_SYMBOL_GPL().
 
-	Arnd
+(I'm still waiting for allmodconfig on linux-next to finish building)
+
+
+Thanks,
+
+James
+
 
