@@ -1,61 +1,51 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52160 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753554AbcIIV45 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2016 17:56:57 -0400
-Date: Fri, 9 Sep 2016 14:56:53 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Hoan Tran <hotran@apm.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Ashwin Chaugule <ashwin.chaugule@linaro.org>,
-        Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Devicetree List <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: xgene: access mailbox as RAM
-Message-ID: <20160909215653.GA2362@roeck-us.net>
-References: <1469134557-26869-1-git-send-email-hotran@apm.com>
- <CAFHUOYzm4VH1fc3D0fLVv3bCU=2SHx7tZM4nFnCvWeuY+QfEFw@mail.gmail.com>
- <2852054.37zytD0HIa@wuerfel>
- <3475893.910N1IvcYZ@wuerfel>
+Return-path: <broonie@sirena.org.uk>
+Date: Fri, 9 Sep 2016 11:14:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Hoan Tran <hotran@apm.com>, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: kernel-build-reports@lists.linaro.org, linaro-kernel@lists.linaro.org,
+	linux-next@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org
+Message-ID: <20160909101407.GA27946@sirena.org.uk>
+References: <E1biHa1-0004JG-Om@optimist>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
+Content-Disposition: inline
+In-Reply-To: <E1biHa1-0004JG-Om@optimist>
+Subject: Re: next-20160909 build: 1 failures 0 warnings (next-20160909)
+List-ID: <linux-hwmon@vger.kernel.org>
+
+
+--qMm9M+Fa2AknHoGS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3475893.910N1IvcYZ@wuerfel>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 09, 2016 at 10:10:45PM +0200, Arnd Bergmann wrote:
-> The newly added hwmon driver fails to build in an allmodconfig
-> kernel:
-> 
->       ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
-> 
-> According to comments in the code, the mailbox is a shared memory region,
-> not a set of MMIO registers, so we should use memremap() for mapping it
-> instead of ioremap or acpi_os_ioremap, and pointer dereferences instead
-> of readl/writel.
-> 
-> The driver already uses plain kernel pointers, so it's a bit unusual
-> to work with functions that operate on __iomem pointers, and this
-> fixes that part too.
-> 
-> I'm using READ_ONCE/WRITE_ONCE here to keep the existing behavior
-> regarding the ordering of the accesses from the CPU, but note that
-> there are no barriers (also unchanged from before).
-> 
-> I'm also keeping the endianess behavior, though I'm unsure whether
-> the message data was supposed to be in LE32 format in the first
-> place, it's possible this was meant to be interpreted as a byte
-> stream instead.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Sep 09, 2016 at 09:54:37AM +0100, Build bot for Mark Brown wrote:
 
-Applied after 's/endianess/endianness/' to make checkpatch happy.
+Since yesterday -next has been failing to build an arm64 allmodconfig
+due to:
 
-Thanks,
-Guenter
+> 	arm64-allmodconfig
+> ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
+
+caused by 05dbf57876b97d2 (hwmon: Add xgene hwmon driver).  That symbol
+is not exported so can't be used from modules though I can't immediately
+see how that module acquired a reference to that symbol.
+
+--qMm9M+Fa2AknHoGS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQEcBAEBCAAGBQJX0otuAAoJECTWi3JdVIfQJi8H/i7elA+l4xsjvXcvWJuRSgDC
+8NwCycQeqFDXS0iBTO+etVNTuWzAjf2grABq3zhO5ddGt8cyV2PMXvZAc8G5UH0d
+o6loLz/cTKpF+1F7X4BTggIC+Dz52XcllDA+o2QX7Yl/HyQGT1y+lpm0TZfP3eOX
+TecdlSSAsBUOszMZfbqDwKCR30MNZh4D0RXXnX7PxKAlyE5n8jWDYjRsFsypbn3W
+crSClncDWnTJI5DUDu4IAc984XGUlEbqv1i8hW4sKUAACjblOpmeGWvn62xjx0Dw
+EmjA1U5QcMVpI74lS0fy3JAalqUoO76yQPa3dhmTB4qwf+Tf1lt9VT9hcT4DiGQ=
+=h3PP
+-----END PGP SIGNATURE-----
+
+--qMm9M+Fa2AknHoGS--
