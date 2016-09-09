@@ -1,61 +1,72 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:58348 "EHLO
-        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754237AbcIJPCf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2016 11:02:35 -0400
-Subject: Re: [PATCH v5 1/3] hwmon: iio_hwmon: defer probe when no channel is
- found
-To: Guenter Roeck <linux@roeck-us.net>,
-        Quentin Schulz <quentin.schulz@free-electrons.com>,
-        jdelvare@suse.com, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
-        lee.jones@linaro.org
-References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
- <1473344917-1524-2-git-send-email-quentin.schulz@free-electrons.com>
- <c29e256c-7bff-ac45-6ee5-1f21a33f22b2@roeck-us.net>
-Cc: thomas.petazzoni@free-electrons.com,
+Received: from down.free-electrons.com ([37.187.137.238]:39877 "EHLO
+        mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1751464AbcIIOic (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2016 10:38:32 -0400
+Date: Fri, 9 Sep 2016 16:38:24 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+To: Quentin Schulz <quentin.schulz@free-electrons.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
+        lee.jones@linaro.org, thomas.petazzoni@free-electrons.com,
         antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <f335adaf-b670-07f0-9578-b18016c3322d@kernel.org>
-Date: Sat, 10 Sep 2016 16:02:32 +0100
+Subject: Re: [PATCH v5 2/3] mfd: add support for Allwinner SoCs ADC
+Message-ID: <20160909143824.GD8881@lukather>
+References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
 MIME-Version: 1.0
-In-Reply-To: <c29e256c-7bff-ac45-6ee5-1f21a33f22b2@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="ZARJHfwaSJQLOEUz"
+Content-Disposition: inline
+In-Reply-To: <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 09/09/16 05:26, Guenter Roeck wrote:
-> On 09/08/2016 07:28 AM, Quentin Schulz wrote:
->> iio_channel_get_all returns -ENODEV when it cannot find either phandles and
->> properties in the Device Tree or channels whose consumer_dev_name matches
->> iio_hwmon in iio_map_list. The iio_map_list is filled in by iio drivers
->> which might be probed after iio_hwmon.
->>
->> It is better to defer the probe of iio_hwmon if such error is returned by
->> iio_channel_get_all in order to let a chance to iio drivers to expose
->> channels in iio_map_list.
->>
->> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
->> ---
->>
->> v5:
->>  - patch re-inserted,
->>
-> Grumble ... applied to -next anyway.
-> 
-> I'll direct any complaints your way ;-)
-> 
-> Guenter
-> 
-Thanks.  I'll try and squeeze some time to look at a more general
-solution (reworking how we set the maps up in the first place) if
-no one else gets to it first!
 
-It's on the list :)
+--ZARJHfwaSJQLOEUz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Jonathan
+On Thu, Sep 08, 2016 at 04:28:36PM +0200, Quentin Schulz wrote:
+> The Allwinner SoCs all have an ADC that can also act as a touchscreen
+> controller and a thermal sensor. For now, only the ADC and the thermal
+> sensor drivers are probed by the MFD, the touchscreen controller support
+> will be added later.
+>=20
+> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
 
+Acked-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+
+Thanks!
+Maxime
+
+--=20
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+
+--ZARJHfwaSJQLOEUz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJX0slgAAoJEBx+YmzsjxAgflwQALvx5SPJioKUeDtmjxLHljuB
+igHvYG8o7qSTViznlyOfnB4LRk1AekHEwu2UCR+jhzm2Xsku6uhArL9SJICRQwJr
+pbtOcGfOPCex0JA9Ud/wWBjlQlRqGmZnUwP8tKFuZNKOJyei1URUCUd0C4YMgomu
+XsgVGMzCdO6euBJIRVLnnC2YbAczLDXRuFdSFglfDP1GhddsMoJoDyZNlp8ZG+Yq
+AKNHlbJZjWMiJ5rg6xXeLZc45nWYWELjxfeBS0we3KF9NkfzhGMw3/JGkPtT+P6A
+IHiAgViGXuZPvO8e31EAft/B45F5GVePC/iFpMzVNYBe0e2WEuKZAUrlhG7p5MSL
+7TZdL2sxAiBaBxYE/uNibDbb9kkcMc8horwXewgXaQdB64fSC9uQsDaGl8gN2h3V
+8p7/rpj2Df5/whugweSHiMFf6Z5eYFMVlRIrVA2AWNd9vBmpySsv5q85GQJe4+kI
+G7IpYBOskKlmH2q/aNJb6kEysQhRD/aLWfrkb6GsHsZrcobRJXKwBwxOn0ESD9gf
+Z8zHQuxGiYc5pIUuXTktihTDvlD3AMHU69OZ3UAfYE5in3GWROLPAhLVZDjRcNWX
+eJT3hyLXfSsA+QrckX4O9/4xw8cZvWfEN2j4C+ZFMZpf1ZCHM9Yi200R9zvzWYML
+Tds+dUB1MUuNnbCqD+nW
+=8tRn
+-----END PGP SIGNATURE-----
+
+--ZARJHfwaSJQLOEUz--
