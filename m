@@ -1,109 +1,79 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f52.google.com ([74.125.82.52]:36299 "EHLO
-        mail-wm0-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750927AbcIMITa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Sep 2016 04:19:30 -0400
-Received: by mail-wm0-f52.google.com with SMTP id b187so173497084wme.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Sep 2016 01:19:29 -0700 (PDT)
-Date: Tue, 13 Sep 2016 09:21:26 +0100
-From: Lee Jones <lee.jones@linaro.org>
+Received: from down.free-electrons.com ([37.187.137.238]:40955 "EHLO
+        mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1750992AbcIIOur (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Sep 2016 10:50:47 -0400
+Date: Fri, 9 Sep 2016 16:50:34 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
 To: Quentin Schulz <quentin.schulz@free-electrons.com>
 Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        maxime.ripard@free-electrons.com, wens@csie.org,
-        thomas.petazzoni@free-electrons.com,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
+        lee.jones@linaro.org, thomas.petazzoni@free-electrons.com,
         antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 2/3] mfd: add support for Allwinner SoCs ADC
-Message-ID: <20160913082126.GA22903@dell>
+Subject: Re: [PATCH v5 3/3] iio: adc: add support for Allwinner SoCs ADC
+Message-ID: <20160909145034.GE8881@lukather>
 References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
- <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
- <20160912091829.GB1873@dell>
- <93bd339b-85ab-d0fc-5e80-e2aca290c0d7@free-electrons.com>
- <20160912095923.GD1873@dell>
- <5dec118f-45ae-4fb6-dd1e-2028947add53@free-electrons.com>
- <20160912135646.GB9789@dell>
- <a48580b4-1494-d474-b33c-007f898b29b7@free-electrons.com>
+ <1473344917-1524-4-git-send-email-quentin.schulz@free-electrons.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="orO6xySwJI16pVnm"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a48580b4-1494-d474-b33c-007f898b29b7@free-electrons.com>
+In-Reply-To: <1473344917-1524-4-git-send-email-quentin.schulz@free-electrons.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 13 Sep 2016, Quentin Schulz wrote:
-> On 12/09/2016 15:56, Lee Jones wrote:
-> > On Mon, 12 Sep 2016, Quentin Schulz wrote:
-> >> On 12/09/2016 11:59, Lee Jones wrote:
-> >>> On Mon, 12 Sep 2016, Quentin Schulz wrote:
-> >>>
-> >>>> On 12/09/2016 11:18, Lee Jones wrote:
-> >>>>> On Thu, 08 Sep 2016, Quentin Schulz wrote:
-> >>>>> [...]
-> >>>>>> +
-> >>>>>> +MODULE_DEVICE_TABLE(of, sun4i_gpadc_mfd_of_match);
-> >>>>>
-> >>>>> Place this directly under the table.
-> >>>>>
-> >>>>>> +static struct platform_driver sun4i_gpadc_mfd_driver = {
-> >>>>>> +	.driver = {
-> >>>>>> +		.name = "sun4i-adc-mfd",
-> >>>>>> +		.of_match_table = of_match_ptr(sun4i_gpadc_mfd_of_match),
-> >>>>>> +	},
-> >>>>>> +	.probe = sun4i_gpadc_mfd_probe,
-> >>>>>
-> >>>>> No .remove?
-> >>>>>
-> >>>>
-> >>>> No, everything in probe is handled with devm functions.
-> >>>
-> >>> Don't you need to undo the register write you did?
-> >>>
-> >>
-> >> The regmap_write I use is there to disable all interrupts on hardware
-> >> side before the irq_chip handles all interrupts by itself. The
-> >> interrupts are not used in the MFD driver.
-> >>
-> >> Thus, I chose to disable the hardware interrupts in the remove function
-> >> of drivers using the interrupts (only the IIO yet but the touchscreen
-> >> driver later also which will be using a third interrupt). When the MFD
-> >> driver is removed, the MFD cells will all be removed, thus calling their
-> >> own remove functions, thus disabling hardware interrupts used in each
-> >> driver. So the hardware interrupts disabling would be called twice.
-> > 
-> > This does send some little alarm bells ringing.  I'd normally expect
-> > the .remove function to undo everything you did in .probe.  So, if you
-> > are disabling the IRQs from within the leaf drivers, shouldn't you be
-> > initialising them in the leaf driver's respective .probes?
-> > 
-> 
-> I use the regmap_write in the MFD driver's probe to disable all
-> interrupts before requesting irq_chip to guarantee the interrupts are in
-> a known state, being disabled. It is to insure no interrupt will occur
-> unwittingly before we want the leaf drivers to handle them.
-> 
-> The disabling of irqs in the remove is handled rather by
-> devm_regmap_del_irq_chip than by an explicit regmap_write in the
-> driver's removal function. It performs the exact same thing.
-> 
-> I always use devm functions for requesting either an irq_chip or the
-> irqs themselves. In that case, when the device is removed, the irqs are
-> freed on leaf drivers' (where the irqs are requested) removal while the
-> removal of irq_chip in the MFD driver will also free all irqs mapped to
-> this irq_chip thanks to devm_regmap_del_irq_chip. Therefore, the
-> interrupts are disabled by devm functions.
-> 
-> The regmap_update_bits in probe and removal of the ADC driver to disable
-> irqs are actually redundant because the devm functions already handle
-> the irqs disabling.
 
-Okay.  So long as you've thought about it, I'm happy.
+--orO6xySwJI16pVnm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+On Thu, Sep 08, 2016 at 04:28:37PM +0200, Quentin Schulz wrote:
+> The Allwinner SoCs all have an ADC that can also act as a touchscreen
+> controller and a thermal sensor. This patch adds the ADC driver which is
+> based on the MFD for the same SoCs ADC.
+>=20
+> This also registers the thermal adc channel in the iio map array so
+> iio_hwmon could use it without modifying the Device Tree. This registers
+> the driver in the thermal framework.
+>=20
+> This driver probes on three different platform_device_id to take into
+> account slight differences (registers bit and temperature computation)
+> between Allwinner SoCs ADCs.
+>=20
+> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+
+Acked-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+
+Thanks!
+Maxime
+
+--=20
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+
+--orO6xySwJI16pVnm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJX0sw6AAoJEBx+YmzsjxAgoVMQAL6y2vn206zMDi51MhQUflZh
+3qpRwF54aluV3U+aJXdGfU8ObX1mxEMOPLhv+HC4WUfxpXyAZLTEeg8rRPIH5hnB
+50wRJ9eqzFa3be5kYKpzZeTWg+aewBxI26BMHC6mI7ZVFFPp/X8ZveFLMn9rHHeC
+U+chSNS6gRVL4XWLGuFgVeZl/xC/v1Pz2OXy6wUFiQJW59V/8pKSSVrujQ9Cfo8e
+GP9LhSiqEycyZcBbN369A0Q2qPrEyiT2FBtoRUQSNY+wkLJ8N8ebFaEJksxkdoYJ
+YZwbP8VSoJW6jM4kiBvtV+MMsxbmHleKFR7d1Jjop234PIXaSdsee7pEk+/7pVpk
+MeYXk+lCGaTYVQk6A2au7gw7vrlp9ReIJJQTMjEJ2B25NfOGWqWgSHVVrYJXi/Ab
+XPEJHB/2db5L/lKPwH+/zPJR58hhr/+N6Pt26QC4Os0sNvrOt9QlElPB1nBoR4Vk
+OwwkA8dO4ez8TadqVoIg3tzmDev99cN/ijat/HJ1l0Dj3GNDgz9m2tDdkvyNaDDq
+jPvKRBW5k0V123Oe5bQ3hTtcCqWYaklkNvXzK9kg8iCmHe0iZJmXIKgttqfag2Aj
+6TgjjmkEtYmZQAObxBl3cELAbvtHTUfu+674eljO00efTKvkO1YJCDRpbtB97HgV
+ZUXO67Afkj/rxAz4X7RL
+=X2cn
+-----END PGP SIGNATURE-----
+
+--orO6xySwJI16pVnm--
