@@ -1,144 +1,140 @@
 Return-path: <hotran@apm.com>
 MIME-Version: 1.0
-In-Reply-To: <20160909165855.GB18952@roeck-us.net>
+In-Reply-To: <2529114.aAikiSWl11@wuerfel>
 References: <1469134557-26869-1-git-send-email-hotran@apm.com>
- <13081573.BbD3TmEU5Y@wuerfel> <20160907223705.GA31582@roeck-us.net>
- <2529114.aAikiSWl11@wuerfel> <20160909165855.GB18952@roeck-us.net>
+ <13081573.BbD3TmEU5Y@wuerfel> <20160907223705.GA31582@roeck-us.net> <2529114.aAikiSWl11@wuerfel>
 From: Hoan Tran <hotran@apm.com>
-Date: Fri, 9 Sep 2016 10:05:13 -0700
-Message-ID: <CAFHUOYx=HPN+73WevyBpM_0v1npBHaeExt2Qu24qYT+eHvNacw@mail.gmail.com>
+Date: Fri, 9 Sep 2016 12:24:32 -0700
+Message-ID: <CAFHUOYzm4VH1fc3D0fLVv3bCU=2SHx7tZM4nFnCvWeuY+QfEFw@mail.gmail.com>
 Subject: Re: [PATCH] hwmon: xgene: access mailbox as RAM
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Rob Herring <robh+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
-	Ashwin Chaugule <ashwin.chaugule@linaro.org>, Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>, Ashwin Chaugule <ashwin.chaugule@linaro.org>,
+	Duc Dang <dhdang@apm.com>, Loc Ho <lho@apm.com>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
 	Devicetree List <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Sep 9, 2016 at 9:58 AM, Guenter Roeck <linux@roeck-us.net> wrote:
-> Hi Arnd,
->
-> On Fri, Sep 09, 2016 at 05:38:58PM +0200, Arnd Bergmann wrote:
->> The newly added hwmon driver fails to build in an allmodconfig
->> kernel:
->>
->>       1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
->>
->> According to comments in the code, the mailbox is a shared memory region,
->> not a set of MMIO registers, so we should use memremap() for mapping it
->> instead of ioremap or acpi_os_ioremap, and pointer dereferences instead
->> of readl/writel.
->>
->> The driver already uses plain kernel pointers, so it's a bit unusual
->> to work with functions that operate on __iomem pointers, and this
->> fixes that part too.
->>
->> I'm using READ_ONCE/WRITE_ONCE here to keep the existing behavior
->> regarding the ordering of the accesses from the CPU, but note that
->> there are no barriers (also unchanged from before).
->>
->> I'm also keeping the endianess behavior, though I'm unsure whether
->> the message data was supposed to be in LE32 format in the first
->> place, it's possible this was meant to be interpreted as a byte
->> stream instead.
->>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>
->
-> Thanks a lot for looking into this.
->
-> I'll apply this patch to address the build problem. Much better than
-> my rude "depends on BROKEN". It would be great to get a Tested-by:
-> from someone with access to the hardware.
->
+Hi Arnd,
 
-Hi Arnd and Guenter,
+On Fri, Sep 9, 2016 at 8:38 AM, Arnd Bergmann <arnd@arndb.de> wrote:
+> The newly added hwmon driver fails to build in an allmodconfig
+> kernel:
+>
+>       1  ERROR: "memblock_is_memory" [drivers/hwmon/xgene-hwmon.ko] undefined!
+>
+> According to comments in the code, the mailbox is a shared memory region,
+> not a set of MMIO registers, so we should use memremap() for mapping it
+> instead of ioremap or acpi_os_ioremap, and pointer dereferences instead
+> of readl/writel.
+>
+> The driver already uses plain kernel pointers, so it's a bit unusual
+> to work with functions that operate on __iomem pointers, and this
+> fixes that part too.
+>
+> I'm using READ_ONCE/WRITE_ONCE here to keep the existing behavior
+> regarding the ordering of the accesses from the CPU, but note that
+> there are no barriers (also unchanged from before).
+>
+> I'm also keeping the endianess behavior, though I'm unsure whether
+> the message data was supposed to be in LE32 format in the first
+> place, it's possible this was meant to be interpreted as a byte
+> stream instead.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+> index bc78a5d10182..e834dfb3acca 100644
+> --- a/drivers/hwmon/xgene-hwmon.c
+> +++ b/drivers/hwmon/xgene-hwmon.c
+> @@ -34,7 +34,8 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> -#include <acpi/acpi_io.h>
+> +#include <linux/io.h>
 
-Thanks for the patch. I'm testing it out.
+Alphabetical order.
 
+> +
+>  #include <acpi/pcc.h>
+>
+>  /* SLIMpro message defines */
+> @@ -126,10 +127,10 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
+>  {
+>         u16 ret, val;
+>
+> -       val = readw_relaxed(addr);
+> +       val = le16_to_cpu(READ_ONCE(*addr));
+>         ret = val & mask;
+>         val &= ~mask;
+> -       writew_relaxed(val, addr);
+> +       WRITE_ONCE(*addr, cpu_to_le16(val));
+>
+>         return ret;
+>  }
+> @@ -137,7 +138,7 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
+>  static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
+>  {
+>         struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
+> -       void *ptr = generic_comm_base + 1;
+> +       u32 *ptr = (void*)(generic_comm_base + 1);
+
+Space before "*".
+
+>         int rc, i;
+>         u16 val;
+>
+> @@ -146,21 +147,21 @@ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
+>         ctx->resp_pending = true;
+>
+>         /* Write signature for subspace */
+> -       writel_relaxed(PCC_SIGNATURE_MASK | ctx->mbox_idx,
+> -                      &generic_comm_base->signature);
+> +       WRITE_ONCE(generic_comm_base->signature,
+> +                  cpu_to_le32(PCC_SIGNATURE_MASK | ctx->mbox_idx));
+>
+>         /* Write to the shared command region */
+> -       writew_relaxed(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT,
+> -                      &generic_comm_base->command);
+> +       WRITE_ONCE(generic_comm_base->command,
+> +                  cpu_to_le16(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT));
+>
+>         /* Flip CMD COMPLETE bit */
+> -       val = readw_relaxed(&generic_comm_base->status);
+> +       val = le16_to_cpu(READ_ONCE(generic_comm_base->status));
+>         val &= ~PCCS_CMD_COMPLETE;
+> -       writew_relaxed(val, &generic_comm_base->status);
+> +       WRITE_ONCE(generic_comm_base->status, cpu_to_le16(val));
+>
+>         /* Copy the message to the PCC comm space */
+>         for (i = 0; i < sizeof(struct slimpro_resp_msg) / 4; i++)
+> -               writel_relaxed(msg[i], ptr + i * 4);
+> +               WRITE_ONCE(ptr[i], cpu_to_le32(msg[i]));
+>
+>         /* Ring the doorbell */
+>         rc = mbox_send_message(ctx->mbox_chan, msg);
+> @@ -652,9 +653,9 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+>                  */
+>                 ctx->comm_base_addr = cppc_ss->base_address;
+>                 if (ctx->comm_base_addr) {
+> -                       ctx->pcc_comm_addr =
+> -                                       acpi_os_ioremap(ctx->comm_base_addr,
+> -                                                       cppc_ss->length);
+> +                       ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
+> +                                                       cppc_ss->length,
+> +                                                       MEMREMAP_WT);
+
+It should be MEMREMAP_WB. As mailbox shared memory is on RAM and our
+co-processor is also in the coherency domain.
+
+Thanks
 Hoan
 
-> Guenter
+>                 } else {
+>                         dev_err(&pdev->dev, "Failed to get PCC comm region\n");
+>                         rc = -ENODEV;
 >
->> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
->> index bc78a5d10182..e834dfb3acca 100644
->> --- a/drivers/hwmon/xgene-hwmon.c
->> +++ b/drivers/hwmon/xgene-hwmon.c
->> @@ -34,7 +34,8 @@
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->>  #include <linux/platform_device.h>
->> -#include <acpi/acpi_io.h>
->> +#include <linux/io.h>
->> +
->>  #include <acpi/pcc.h>
->>
->>  /* SLIMpro message defines */
->> @@ -126,10 +127,10 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
->>  {
->>       u16 ret, val;
->>
->> -     val = readw_relaxed(addr);
->> +     val = le16_to_cpu(READ_ONCE(*addr));
->>       ret = val & mask;
->>       val &= ~mask;
->> -     writew_relaxed(val, addr);
->> +     WRITE_ONCE(*addr, cpu_to_le16(val));
->>
->>       return ret;
->>  }
->> @@ -137,7 +138,7 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
->>  static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
->>  {
->>       struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
->> -     void *ptr = generic_comm_base + 1;
->> +     u32 *ptr = (void*)(generic_comm_base + 1);
->>       int rc, i;
->>       u16 val;
->>
->> @@ -146,21 +147,21 @@ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
->>       ctx->resp_pending = true;
->>
->>       /* Write signature for subspace */
->> -     writel_relaxed(PCC_SIGNATURE_MASK | ctx->mbox_idx,
->> -                    &generic_comm_base->signature);
->> +     WRITE_ONCE(generic_comm_base->signature,
->> +                cpu_to_le32(PCC_SIGNATURE_MASK | ctx->mbox_idx));
->>
->>       /* Write to the shared command region */
->> -     writew_relaxed(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT,
->> -                    &generic_comm_base->command);
->> +     WRITE_ONCE(generic_comm_base->command,
->> +                cpu_to_le16(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT));
->>
->>       /* Flip CMD COMPLETE bit */
->> -     val = readw_relaxed(&generic_comm_base->status);
->> +     val = le16_to_cpu(READ_ONCE(generic_comm_base->status));
->>       val &= ~PCCS_CMD_COMPLETE;
->> -     writew_relaxed(val, &generic_comm_base->status);
->> +     WRITE_ONCE(generic_comm_base->status, cpu_to_le16(val));
->>
->>       /* Copy the message to the PCC comm space */
->>       for (i = 0; i < sizeof(struct slimpro_resp_msg) / 4; i++)
->> -             writel_relaxed(msg[i], ptr + i * 4);
->> +             WRITE_ONCE(ptr[i], cpu_to_le32(msg[i]));
->>
->>       /* Ring the doorbell */
->>       rc = mbox_send_message(ctx->mbox_chan, msg);
->> @@ -652,9 +653,9 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->>                */
->>               ctx->comm_base_addr = cppc_ss->base_address;
->>               if (ctx->comm_base_addr) {
->> -                     ctx->pcc_comm_addr =
->> -                                     acpi_os_ioremap(ctx->comm_base_addr,
->> -                                                     cppc_ss->length);
->> +                     ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
->> +                                                     cppc_ss->length,
->> +                                                     MEMREMAP_WT);
->>               } else {
->>                       dev_err(&pdev->dev, "Failed to get PCC comm region\n");
->>                       rc = -ENODEV;
->>
