@@ -1,92 +1,61 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:48944 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933502AbcIFRUp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Sep 2016 13:20:45 -0400
-Date: Tue, 6 Sep 2016 10:20:40 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH] hwmon: (lm87) Add channel data from the dts file.
-Message-ID: <20160906172040.GA18235@roeck-us.net>
-References: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
+Received: from saturn.retrosnub.co.uk ([178.18.118.26]:58348 "EHLO
+        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754237AbcIJPCf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 10 Sep 2016 11:02:35 -0400
+Subject: Re: [PATCH v5 1/3] hwmon: iio_hwmon: defer probe when no channel is
+ found
+To: Guenter Roeck <linux@roeck-us.net>,
+        Quentin Schulz <quentin.schulz@free-electrons.com>,
+        jdelvare@suse.com, knaack.h@gmx.de, lars@metafoo.de,
+        pmeerw@pmeerw.net, maxime.ripard@free-electrons.com, wens@csie.org,
+        lee.jones@linaro.org
+References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1473344917-1524-2-git-send-email-quentin.schulz@free-electrons.com>
+ <c29e256c-7bff-ac45-6ee5-1f21a33f22b2@roeck-us.net>
+Cc: thomas.petazzoni@free-electrons.com,
+        antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+From: Jonathan Cameron <jic23@kernel.org>
+Message-ID: <f335adaf-b670-07f0-9578-b18016c3322d@kernel.org>
+Date: Sat, 10 Sep 2016 16:02:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20160905053614.7135-1-mahoda.ratnayaka@alliedtelesis.co.nz>
+In-Reply-To: <c29e256c-7bff-ac45-6ee5-1f21a33f22b2@roeck-us.net>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 05, 2016 at 05:36:14PM +1200, Mahoda Ratnayaka wrote:
-> Currently there is no method for setting the channel
-> value from the DTS file. When, the driver uses a dts
-> file to initialize the driver platform_data is not set.
-> As a the result channel variable may not be set correctly.
+On 09/09/16 05:26, Guenter Roeck wrote:
+> On 09/08/2016 07:28 AM, Quentin Schulz wrote:
+>> iio_channel_get_all returns -ENODEV when it cannot find either phandles and
+>> properties in the Device Tree or channels whose consumer_dev_name matches
+>> iio_hwmon in iio_map_list. The iio_map_list is filled in by iio drivers
+>> which might be probed after iio_hwmon.
+>>
+>> It is better to defer the probe of iio_hwmon if such error is returned by
+>> iio_channel_get_all in order to let a chance to iio drivers to expose
+>> channels in iio_map_list.
+>>
+>> Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
+>> ---
+>>
+>> v5:
+>>  - patch re-inserted,
+>>
+> Grumble ... applied to -next anyway.
 > 
-> Without the channel variable set correctly, some of the
-> sensors will not be initialized correctly. For example
-> temp3 sensor sysfs entries.
+> I'll direct any complaints your way ;-)
 > 
-> This adds the required functionality to set the channel
-> variable from the DTS file. This is done via reading the
-> reading a property named "channel" from the lm87 driver.
+> Guenter
 > 
-Devicetree properties need to be documented and approved by devicetree
-maintainers.
+Thanks.  I'll try and squeeze some time to look at a more general
+solution (reworking how we set the maps up in the first place) if
+no one else gets to it first!
 
-> Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
-> ---
->  drivers/hwmon/lm87.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index a5e2958..ac0018b 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-> @@ -858,14 +858,25 @@ static void lm87_remove_files(struct i2c_client *client)
->  static void lm87_init_client(struct i2c_client *client)
->  {
->  	struct lm87_data *data = i2c_get_clientdata(client);
-> +	struct device_node *np = NULL;
-> +	const char *channel = NULL;
-> +	u8 val;
->  
-> -	if (dev_get_platdata(&client->dev)) {
-> +	np = client->dev.of_node;
-> +
-> +	/* Use value read from the dts file to setup channel value. */
+It's on the list :)
 
-Isn't that obvious from the code ?
+Jonathan
 
-> +	if (np && of_property_read_u8(np, "channels", &val) == 0) {
-
-When using a function, you need to include the file declaring it,
-in this case linux/of.h. of_property_read_u8( )already checks for
-np == NULL, so there is no need to check it here. Instead of "== 0",
-please use "!".
-
-> +		data->channel = val;
-> +		lm87_write_value(client,
-> +				 LM87_REG_CHANNEL_MODE, data->channel);
-> +	} else if (dev_get_platdata(&client->dev)) {
->  		data->channel = *(u8 *)dev_get_platdata(&client->dev);
->  		lm87_write_value(client,
->  				 LM87_REG_CHANNEL_MODE, data->channel);
->  	} else {
->  		data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
->  	}
-> +
-
-Please no unnecessary whitespace changes.
-
->  	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
->  
->  	if (!(data->config & 0x01)) {
-> -- 
-> 2.9.3
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
