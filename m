@@ -1,48 +1,41 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from saturn.retrosnub.co.uk ([178.18.118.26]:58382 "EHLO
-        saturn.retrosnub.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754237AbcIJPHg (ORCPT
+Received: from mail-wm0-f41.google.com ([74.125.82.41]:34851 "EHLO
+        mail-wm0-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1756825AbcILJQe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Sep 2016 11:07:36 -0400
-Subject: Re: [PATCH v5 2/3] mfd: add support for Allwinner SoCs ADC
-To: Quentin Schulz <quentin.schulz@free-electrons.com>,
-        jdelvare@suse.com, linux@roeck-us.net, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net,
+        Mon, 12 Sep 2016 05:16:34 -0400
+Received: by mail-wm0-f41.google.com with SMTP id a6so43068707wmc.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Sep 2016 02:16:33 -0700 (PDT)
+Date: Mon, 12 Sep 2016 10:18:29 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Quentin Schulz <quentin.schulz@free-electrons.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
         maxime.ripard@free-electrons.com, wens@csie.org,
-        lee.jones@linaro.org
-References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
- <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
-Cc: thomas.petazzoni@free-electrons.com,
+        thomas.petazzoni@free-electrons.com,
         antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <219154a2-7e3c-050c-be67-7a55f8dab587@kernel.org>
-Date: Sat, 10 Sep 2016 16:07:32 +0100
+Subject: Re: [PATCH v5 2/3] mfd: add support for Allwinner SoCs ADC
+Message-ID: <20160912091829.GB1873@dell>
+References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
+ <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 08/09/16 15:28, Quentin Schulz wrote:
+On Thu, 08 Sep 2016, Quentin Schulz wrote:
+
 > The Allwinner SoCs all have an ADC that can also act as a touchscreen
 > controller and a thermal sensor. For now, only the ADC and the thermal
 > sensor drivers are probed by the MFD, the touchscreen controller support
 > will be added later.
 > 
 > Signed-off-by: Quentin Schulz <quentin.schulz@free-electrons.com>
-I'm happy with this now.
-
-Lee, looking for an ack from you if you want me to take this through IIO.
-
-If you'd prefer to take this and the next patch through MFD that's
-fine with me.
-
-Acked-by: Jonathan Cameron <jic23@kernel.org>
-
-
 > ---
 > 
 > v5:
@@ -104,7 +97,9 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +
 > +	  To compile this driver as a module, choose M here: the module will be
 > +	  called sun4i-gpadc-mfd.
-> +
+
+Drop the -mfd.
+
 >  config MFD_AS3711
 >  	bool "AMS AS3711"
 >  	select MFD_CORE
@@ -123,6 +118,9 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > index 0000000..b499545
 > --- /dev/null
 > +++ b/drivers/mfd/sun4i-gpadc-mfd.c
+
+Drop the -mfd.
+
 > @@ -0,0 +1,174 @@
 > +/* ADC MFD core driver for sunxi platforms
 > + *
@@ -156,7 +154,9 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +		.flags	= IORESOURCE_IRQ,
 > +	},
 > +};
-> +
+
+Use the RES_IRQ_* defines.
+
 > +static const struct regmap_irq sun4i_gpadc_mfd_regmap_irq[] = {
 > +	REGMAP_IRQ_REG(SUN4I_GPADC_IRQ_FIFO_DATA, 0,
 > +		       SUN4I_GPADC_INT_FIFOC_TP_DATA_IRQ_EN),
@@ -184,6 +184,11 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +	}, {
 > +		.name = "iio_hwmon",
 > +	}
+
+Single line please
+
+{ .name = "iio_hwmon" }
+
 > +};
 > +
 > +static struct mfd_cell sun5i_gpadc_mfd_cells[] = {
@@ -195,7 +200,9 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +		.name = "iio_hwmon",
 > +	},
 > +};
-> +
+
+As above.
+
 > +static struct mfd_cell sun6i_gpadc_mfd_cells[] = {
 > +	{
 > +		.name	= "sun6i-a31-gpadc-iio",
@@ -205,7 +212,9 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +		.name = "iio_hwmon",
 > +	},
 > +};
-> +
+
+As above.
+
 > +static const struct regmap_config sun4i_gpadc_mfd_regmap_config = {
 > +	.reg_bits = 32,
 > +	.val_bits = 32,
@@ -225,8 +234,18 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +		.data = &sun6i_gpadc_mfd_cells,
 > +	}, { /* sentinel */ }
 > +};
-> +
+
+Don't mix OF and MFD functionality.
+
+Why don't you create a node for "iio_hwmon" and have
+platform_of_populate() do your bidding?
+
 > +static int sun4i_gpadc_mfd_probe(struct platform_device *pdev)
+
+Remove all mention of "mfd" from this file.
+
+(Accept the calls to the MFD API of course).
+
 > +{
 > +	struct sun4i_gpadc_mfd_dev *mfd_dev;
 > +	struct resource *mem;
@@ -284,13 +303,18 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +}
 > +
 > +MODULE_DEVICE_TABLE(of, sun4i_gpadc_mfd_of_match);
-> +
+
+Place this directly under the table.
+
 > +static struct platform_driver sun4i_gpadc_mfd_driver = {
 > +	.driver = {
 > +		.name = "sun4i-adc-mfd",
 > +		.of_match_table = of_match_ptr(sun4i_gpadc_mfd_of_match),
 > +	},
 > +	.probe = sun4i_gpadc_mfd_probe,
+
+No .remove?
+
 > +};
 > +
 > +module_platform_driver(sun4i_gpadc_mfd_driver);
@@ -395,8 +419,15 @@ Acked-by: Jonathan Cameron <jic23@kernel.org>
 > +	struct regmap			*regmap;
 > +	struct regmap_irq_chip_data	*regmap_irqc;
 > +	void __iomem			*regs;
+
+It's *much* more common to call this 'base'.
+
 > +};
 > +
 > +#endif
-> 
 
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
