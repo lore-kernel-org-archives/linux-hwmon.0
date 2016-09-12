@@ -1,137 +1,96 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f48.google.com ([74.125.82.48]:34443 "EHLO
-        mail-wm0-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1757430AbcILJ5a (ORCPT
+Received: from down.free-electrons.com ([37.187.137.238]:50937 "EHLO
+        mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S932756AbcILKHc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Sep 2016 05:57:30 -0400
-Received: by mail-wm0-f48.google.com with SMTP id a6so3095225wmc.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Sep 2016 02:57:29 -0700 (PDT)
-Date: Mon, 12 Sep 2016 10:59:23 +0100
-From: Lee Jones <lee.jones@linaro.org>
-To: Quentin Schulz <quentin.schulz@free-electrons.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        maxime.ripard@free-electrons.com, wens@csie.org,
+        Mon, 12 Sep 2016 06:07:32 -0400
+Date: Mon, 12 Sep 2016 12:07:19 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+To: Lee Jones <lee.jones@linaro.org>
+Cc: Quentin Schulz <quentin.schulz@free-electrons.com>,
+        jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, wens@csie.org,
         thomas.petazzoni@free-electrons.com,
         antoine.tenart@free-electrons.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v5 2/3] mfd: add support for Allwinner SoCs ADC
-Message-ID: <20160912095923.GD1873@dell>
+Message-ID: <20160912100719.GJ9449@lukather>
 References: <1473344917-1524-1-git-send-email-quentin.schulz@free-electrons.com>
  <1473344917-1524-3-git-send-email-quentin.schulz@free-electrons.com>
  <20160912091829.GB1873@dell>
  <93bd339b-85ab-d0fc-5e80-e2aca290c0d7@free-electrons.com>
+ <20160912095923.GD1873@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="M9pltayyoy9lWEMH"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <93bd339b-85ab-d0fc-5e80-e2aca290c0d7@free-electrons.com>
+In-Reply-To: <20160912095923.GD1873@dell>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, 12 Sep 2016, Quentin Schulz wrote:
 
-> On 12/09/2016 11:18, Lee Jones wrote:
-> > On Thu, 08 Sep 2016, Quentin Schulz wrote:
-> > 
-> [...]
+--M9pltayyoy9lWEMH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+On Mon, Sep 12, 2016 at 10:59:23AM +0100, Lee Jones wrote:
+> > >> +static const struct of_device_id sun4i_gpadc_mfd_of_match[] =3D {
+> > >> +	{
+> > >> +		.compatible =3D "allwinner,sun4i-a10-ts",
+> > >> +		.data =3D &sun4i_gpadc_mfd_cells,
+> > >> +	}, {
+> > >> +		.compatible =3D "allwinner,sun5i-a13-ts",
+> > >> +		.data =3D &sun5i_gpadc_mfd_cells,
+> > >> +	}, {
+> > >> +		.compatible =3D "allwinner,sun6i-a31-ts",
+> > >> +		.data =3D &sun6i_gpadc_mfd_cells,
+> > >> +	}, { /* sentinel */ }
+> > >> +};
+> > >=20
+> > > Don't mix OF and MFD functionality.
+> > >=20
+> > > Why don't you create a node for "iio_hwmon" and have
+> > > platform_of_populate() do your bidding?
+> > >=20
+> >=20
+> > We are using a stable binding which we cannot modify. This means, the DT
+> > in its current state can only be modified to add features, which is not
+> > the case of this driver (it is a rewriting of an existing driver which
+> > uses the rtp node).
+>=20
+> Then use .data =3D <defined model ID> and set up a switch() in .probe().
 
-> >> +++ b/drivers/mfd/sun4i-gpadc-mfd.c
+Uh? Why? It just adds a non-standard indirection, while using
+of_match_device is very standard, and used extensively in Linux.
 
-[...]
+Maxime
 
-> >> +static struct mfd_cell sun4i_gpadc_mfd_cells[] = {
-> >> +	{
-> >> +		.name	= "sun4i-a10-gpadc-iio",
-> >> +		.resources = adc_resources,
-> >> +		.num_resources = ARRAY_SIZE(adc_resources),
-> >> +	}, {
-> >> +		.name = "iio_hwmon",
-> >> +	}
-> > 
-> > Single line please
-> > 
-> > { .name = "iio_hwmon" }
-> >
-> 
-> +	{
-> +		.name	= "sun4i-a10-gpadc-iio",
-> +		.resources = adc_resources,
-> +		.num_resources = ARRAY_SIZE(adc_resources),
-> +	}, { .name = "iio_hwmon" }
-> 
-> or
-> 
-> +	{
-> +		.name	= "sun4i-a10-gpadc-iio",
-> +		.resources = adc_resources,
-> +		.num_resources = ARRAY_SIZE(adc_resources),
-> +	},
-> +	{ .name = "iio_hwmon" }
-> 
-> ?
+--=20
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
 
-The latter.
+--M9pltayyoy9lWEMH
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[...]
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-> >> +static const struct of_device_id sun4i_gpadc_mfd_of_match[] = {
-> >> +	{
-> >> +		.compatible = "allwinner,sun4i-a10-ts",
-> >> +		.data = &sun4i_gpadc_mfd_cells,
-> >> +	}, {
-> >> +		.compatible = "allwinner,sun5i-a13-ts",
-> >> +		.data = &sun5i_gpadc_mfd_cells,
-> >> +	}, {
-> >> +		.compatible = "allwinner,sun6i-a31-ts",
-> >> +		.data = &sun6i_gpadc_mfd_cells,
-> >> +	}, { /* sentinel */ }
-> >> +};
-> > 
-> > Don't mix OF and MFD functionality.
-> > 
-> > Why don't you create a node for "iio_hwmon" and have
-> > platform_of_populate() do your bidding?
-> > 
-> 
-> We are using a stable binding which we cannot modify. This means, the DT
-> in its current state can only be modified to add features, which is not
-> the case of this driver (it is a rewriting of an existing driver which
-> uses the rtp node).
+iQIcBAEBAgAGBQJX1n5XAAoJEBx+YmzsjxAgpNAP/jncdHrKYlSWR6YUCODSlLVJ
+DeSkHIIsvg6PDgFX1jGFtdXDoVcN7uHvhAZsBeKsN03/VUFS+/NmJ1VWy5SFqU/n
+PjxMzIYMe5etiiFeu6C9R7DjDoJnJsGwUVjNa/ZI4G1A+Wj6ZVxz1cu8WERe8JhZ
+eDyaDENj7t88HqaunsDs/94tiGpqBv+FtdqjXlZSeG8htGjjflNos00rHDUv1jIn
+QaEV6rMLkhT7XjHvzSCGU3zN03vzli66bmV82ztbodv1g/AOyWTvC2Q+nZKXRWWs
+SUdiP/EzqnerEnRAeF0dD3AOHl8S9GAh6fFkCdn9bNYL5zmaFxCp/pW9aqlV6FjA
+Hz+twnaXorxsN/S5AO+YK6R98wrtubqOfaCidmxoCvRq4ig+1PiEDiVztIzviseG
+MUTsJTmA4GQA3YrsjeTGFFAnxymRZW/GjglnQ8960lGRs+MksxynvjEJ65El73wK
+fihWoRFgFHTqPU9Qz3Kp/9yQLwvS/RocLktYAzpeAGw+D8iugmNSlufDa1KtYSoD
+XhohWc3yQSpbAqg3QBEX3vd9biyG3rqXMlf+zWofRUOe1d8WvubF7l7pBA2tljCh
+vqQGo17VmsAle+93B6GP8BKzxx9e+f2rOXvFJZpUkHREi3i9mvZpcOl803XDSUgo
+AvL/Rbu7/5JZ7crqOqvC
+=6/CP
+-----END PGP SIGNATURE-----
 
-Then use .data = <defined model ID> and set up a switch() in .probe().
-
-> >> +static int sun4i_gpadc_mfd_probe(struct platform_device *pdev)
-> > 
-> > Remove all mention of "mfd" from this file.
-> > 
-> > (Accept the calls to the MFD API of course).
-> > 
-> [...]
-> >> +
-> >> +MODULE_DEVICE_TABLE(of, sun4i_gpadc_mfd_of_match);
-> > 
-> > Place this directly under the table.
-> > 
-> >> +static struct platform_driver sun4i_gpadc_mfd_driver = {
-> >> +	.driver = {
-> >> +		.name = "sun4i-adc-mfd",
-> >> +		.of_match_table = of_match_ptr(sun4i_gpadc_mfd_of_match),
-> >> +	},
-> >> +	.probe = sun4i_gpadc_mfd_probe,
-> > 
-> > No .remove?
-> > 
-> 
-> No, everything in probe is handled with devm functions.
-
-Don't you need to undo the register write you did?
-
--- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+--M9pltayyoy9lWEMH--
