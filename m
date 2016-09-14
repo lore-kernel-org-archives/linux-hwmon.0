@@ -1,191 +1,137 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-vk0-f41.google.com ([209.85.213.41]:34901 "EHLO
-        mail-vk0-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753393AbcIHPdJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Sep 2016 11:33:09 -0400
-Received: by mail-vk0-f41.google.com with SMTP id 16so25032561vko.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 08 Sep 2016 08:33:09 -0700 (PDT)
+Received: from bombadil.infradead.org ([198.137.202.9]:46943 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1763711AbcINXGL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 14 Sep 2016 19:06:11 -0400
+From: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+To: Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@s-opensource.com>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Harry Wei <harryxiyou@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@zh-kernel.org,
+        Markus Heiser <markus.heiser@darmarit.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 07/17] SubmitChecklist: rename to RST and add to the development-proccess book
+Date: Wed, 14 Sep 2016 20:05:52 -0300
+Message-Id: <3955b817eeabc06c9088b4b59722c5e35c175e67.1473893776.git.mchehab@s-opensource.com>
+In-Reply-To: <cover.1473893776.git.mchehab@s-opensource.com>
+References: <cover.1473893776.git.mchehab@s-opensource.com>
 MIME-Version: 1.0
-In-Reply-To: <1473348664-24547-1-git-send-email-hotran@apm.com>
-References: <1473348664-24547-1-git-send-email-hotran@apm.com>
-From: Hoan Tran <hotran@apm.com>
-Date: Thu, 8 Sep 2016 08:33:07 -0700
-Message-ID: <CAFHUOYxSegkbX61ne6TP41oeEZtzxzmyRnbi2UkDFvtyvsNcQw@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: xgene: Fix crash when alarm occurs before
- driver probe
-To: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Itaru Kitayama <itaru.kitayama@riken.jp>, Loc Ho <lho@apm.com>,
-        Duc Dang <dhdang@apm.com>, Hoan Tran <hotran@apm.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <cover.1473893776.git.mchehab@s-opensource.com>
+References: <cover.1473893776.git.mchehab@s-opensource.com>
+Content-Type: text/plain; charset=true
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi All,
+Add it to the development-process book, by renaming it to
+SubmitChecklist.rst and move it to the development-process
+directory.
 
-Please discard this patch. I'll resend another one soon.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+---
+ .../{SubmitChecklist => development-process/SubmitChecklist.rst}      | 2 +-
+ Documentation/development-process/index.rst                           | 1 +
+ Documentation/hwmon/submitting-patches                                | 2 +-
+ Documentation/ja_JP/SubmitChecklist                                   | 4 ++--
+ Documentation/ja_JP/SubmittingPatches                                 | 2 +-
+ Documentation/zh_CN/SubmittingPatches                                 | 2 +-
+ 6 files changed, 7 insertions(+), 6 deletions(-)
+ rename Documentation/{SubmitChecklist => development-process/SubmitChecklist.rst} (98%)
 
-Thanks
-Hoan
+diff --git a/Documentation/SubmitChecklist b/Documentation/development-process/SubmitChecklist.rst
+similarity index 98%
+rename from Documentation/SubmitChecklist
+rename to Documentation/development-process/SubmitChecklist.rst
+index cf8559d6166f..71ad93ffd9d6 100644
+--- a/Documentation/SubmitChecklist
++++ b/Documentation/development-process/SubmitChecklist.rst
+@@ -54,7 +54,7 @@ and elsewhere regarding submitting Linux kernel patches.
+        but any one function that uses more than 512 bytes on the stack is a
+        candidate for change.
+ 
+-11: Include :ref:`kernel-doc <kernel_doc>` to document global  kernel APIs.
++11) Include :ref:`kernel-doc <kernel_doc>` to document global  kernel APIs.
+     (Not required for static functions, but OK there also.) Use
+     ``make htmldocs`` or ``make pdfdocs`` to check the
+     :ref:`kernel-doc <kernel_doc>` and fix any issues.
+diff --git a/Documentation/development-process/index.rst b/Documentation/development-process/index.rst
+index 2c314a34c5f4..243041af82c3 100644
+--- a/Documentation/development-process/index.rst
++++ b/Documentation/development-process/index.rst
+@@ -18,5 +18,6 @@ Contents:
+    stable_kernel_rules
+    kernel-docs
+    applying-patches
++   SubmitChecklist
+ 
+    development-process
+diff --git a/Documentation/hwmon/submitting-patches b/Documentation/hwmon/submitting-patches
+index 371baf7a43e2..04b1036f07c4 100644
+--- a/Documentation/hwmon/submitting-patches
++++ b/Documentation/hwmon/submitting-patches
+@@ -10,7 +10,7 @@ increase the chances of your change being accepted.
+ ----------
+ 
+ * It should be unnecessary to mention, but please read and follow
+-    Documentation/SubmitChecklist
++    Documentation/development-process/SubmitChecklist.rst
+     Documentation/development-process/SubmittingDrivers.rst
+     Documentation/development-process/SubmittingPatches.rst
+     Documentation/development-process/CodingStyle.rst
+diff --git a/Documentation/ja_JP/SubmitChecklist b/Documentation/ja_JP/SubmitChecklist
+index c0020797d6b9..a8e88eebc346 100644
+--- a/Documentation/ja_JP/SubmitChecklist
++++ b/Documentation/ja_JP/SubmitChecklist
+@@ -1,5 +1,5 @@
+ NOTE:
+-This is a version of Documentation/SubmitChecklist into Japanese.
++This is a version of Documentation/development-process/SubmitChecklist.rst into Japanese.
+ This document is maintained by Takenori Nagano <t-nagano@ah.jp.nec.com>
+ and the JF Project team <http://www.linux.or.jp/JF/>.
+ If you find any difference between this document and the original file
+@@ -14,7 +14,7 @@ to update the original English file first.
+ Last Updated: 2008/07/14
+ ==================================
+ これは、
+-linux-2.6.26/Documentation/SubmitChecklist の和訳です。
++linux-2.6.26/Documentation/development-process/SubmitChecklist.rst の和訳です。
+ 
+ 翻訳団体： JF プロジェクト < http://www.linux.or.jp/JF/ >
+ 翻訳日： 2008/07/14
+diff --git a/Documentation/ja_JP/SubmittingPatches b/Documentation/ja_JP/SubmittingPatches
+index aed86762a6d3..22dcc16b3b08 100644
+--- a/Documentation/ja_JP/SubmittingPatches
++++ b/Documentation/ja_JP/SubmittingPatches
+@@ -34,7 +34,7 @@ Linux カーネルに変更を加えたいと思っている個人又は会社
+ おじけづかせることもあります。この文章はあなたの変更を大いに受け入れ
+ てもらえやすくする提案を集めたものです。
+ 
+-コードを投稿する前に、Documentation/SubmitChecklist の項目リストに目
++コードを投稿する前に、Documentation/development-process/SubmitChecklist.rst の項目リストに目
+ を通してチェックしてください。もしあなたがドライバーを投稿しようとし
+ ているなら、Documentation/development-process/SubmittingDrivers.rst にも目を通してください。
+ 
+diff --git a/Documentation/zh_CN/SubmittingPatches b/Documentation/zh_CN/SubmittingPatches
+index 8b93acb3a75e..97bc8639cbfc 100644
+--- a/Documentation/zh_CN/SubmittingPatches
++++ b/Documentation/zh_CN/SubmittingPatches
+@@ -30,7 +30,7 @@ Documentation/development-process/SubmittingPatches.rst 的中文翻译
+ 对于想要将改动提交到 Linux 内核的个人或者公司来说，如果不熟悉“规矩”，
+ 提交的流程会让人畏惧。本文档收集了一系列建议，这些建议可以大大的提高你
+ 的改动被接受的机会。
+-阅读 Documentation/SubmitChecklist 来获得在提交代码前需要检查的项目的列
++阅读 Documentation/development-process/SubmitChecklist.rst 来获得在提交代码前需要检查的项目的列
+ 表。如果你在提交一个驱动程序，那么同时阅读一下
+ Documentation/development-process/SubmittingDrivers.rst 。
+ 
+-- 
+2.7.4
 
-On Thu, Sep 8, 2016 at 8:31 AM, Hoan Tran <hotran@apm.com> wrote:
-> The system crashes during probing xgene-hwmon driver when temperature
-> alarm interrupt occurs before.
-> It's because
->  - xgene_hwmon_probe() requests mailbox channel which also enables
-> the mailbox interrupt.
->  - As temperature alarm interrupt is pending, ISR runs and crashes when accesses
-> into invalid resourse as unmapped PCC shared memory.
->
-> This patch fixes this issue by saving this alarm message and scheduling a
-> bottom handler after xgene_hwmon_probe() finish.
->
-> Signed-off-by: Hoan Tran <hotran@apm.com>
-> Reported-by: Itaru Kitayama <itaru.kitayama@riken.jp>
-> ---
-> v2
->  * Check hwmon_dev and resp_pending to determine the driver is not ready
->  * Remove init_flag and rx_pending
->  * Replace EBUSY by ENODEV
->
-> v1
->  * Initial
->
->  drivers/hwmon/xgene-hwmon.c | 69 ++++++++++++++++++++++++++++++++-------------
->  1 file changed, 50 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> index bc78a5d..ea53537 100644
-> --- a/drivers/hwmon/xgene-hwmon.c
-> +++ b/drivers/hwmon/xgene-hwmon.c
-> @@ -465,13 +465,34 @@ static void xgene_hwmon_evt_work(struct work_struct *work)
->         }
->  }
->
-> +static int xgene_hwmon_rx_ready(struct xgene_hwmon_dev *ctx, void *msg)
-> +{
-> +       if (IS_ERR(ctx->hwmon_dev) && !ctx->resp_pending) {
-> +               /* Enqueue to the FIFO */
-> +               kfifo_in_spinlocked(&ctx->async_msg_fifo, msg,
-> +                                   sizeof(struct slimpro_resp_msg),
-> +                                   &ctx->kfifo_lock);
-> +               return -ENODEV;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  /*
->   * This function is called when the SLIMpro Mailbox received a message
->   */
->  static void xgene_hwmon_rx_cb(struct mbox_client *cl, void *msg)
->  {
->         struct xgene_hwmon_dev *ctx = to_xgene_hwmon_dev(cl);
-> -       struct slimpro_resp_msg amsg;
-> +
-> +       /*
-> +        * While the driver registers with the mailbox framework, an interrupt
-> +        * can be pending before the probe function completes its
-> +        * initialization. If such condition occurs, just queue up the message
-> +        * as the driver is not ready for servicing the callback.
-> +        */
-> +       if (xgene_hwmon_rx_ready(ctx, msg) < 0)
-> +               return;
->
->         /*
->          * Response message format:
-> @@ -500,12 +521,8 @@ static void xgene_hwmon_rx_cb(struct mbox_client *cl, void *msg)
->                 return;
->         }
->
-> -       amsg.msg   = ((u32 *)msg)[0];
-> -       amsg.param1 = ((u32 *)msg)[1];
-> -       amsg.param2 = ((u32 *)msg)[2];
-> -
->         /* Enqueue to the FIFO */
-> -       kfifo_in_spinlocked(&ctx->async_msg_fifo, &amsg,
-> +       kfifo_in_spinlocked(&ctx->async_msg_fifo, msg,
->                             sizeof(struct slimpro_resp_msg), &ctx->kfifo_lock);
->         /* Schedule the bottom handler */
->         schedule_work(&ctx->workq);
-> @@ -520,6 +537,15 @@ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
->         struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
->         struct slimpro_resp_msg amsg;
->
-> +       /*
-> +        * While the driver registers with the mailbox framework, an interrupt
-> +        * can be pending before the probe function completes its
-> +        * initialization. If such condition occurs, just queue up the message
-> +        * as the driver is not ready for servicing the callback.
-> +        */
-> +       if (xgene_hwmon_rx_ready(ctx, &amsg) < 0)
-> +               return;
-> +
->         msg = generic_comm_base + 1;
->         /* Check if platform sends interrupt */
->         if (!xgene_word_tst_and_clr(&generic_comm_base->status,
-> @@ -596,6 +622,17 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->         platform_set_drvdata(pdev, ctx);
->         cl = &ctx->mbox_client;
->
-> +       spin_lock_init(&ctx->kfifo_lock);
-> +       mutex_init(&ctx->rd_mutex);
-> +
-> +       rc = kfifo_alloc(&ctx->async_msg_fifo,
-> +                        sizeof(struct slimpro_resp_msg) * ASYNC_MSG_FIFO_SIZE,
-> +                        GFP_KERNEL);
-> +       if (rc)
-> +               goto out_mbox_free;
-> +
-> +       INIT_WORK(&ctx->workq, xgene_hwmon_evt_work);
-> +
->         /* Request mailbox channel */
->         cl->dev = &pdev->dev;
->         cl->tx_done = xgene_hwmon_tx_done;
-> @@ -676,17 +713,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->                 ctx->usecs_lat = PCC_NUM_RETRIES * cppc_ss->latency;
->         }
->
-> -       spin_lock_init(&ctx->kfifo_lock);
-> -       mutex_init(&ctx->rd_mutex);
-> -
-> -       rc = kfifo_alloc(&ctx->async_msg_fifo,
-> -                        sizeof(struct slimpro_resp_msg) * ASYNC_MSG_FIFO_SIZE,
-> -                        GFP_KERNEL);
-> -       if (rc)
-> -               goto out_mbox_free;
-> -
-> -       INIT_WORK(&ctx->workq, xgene_hwmon_evt_work);
-> -
->         ctx->hwmon_dev = hwmon_device_register_with_groups(ctx->dev,
->                                                            "apm_xgene",
->                                                            ctx,
-> @@ -697,17 +723,22 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->                 goto out;
->         }
->
-> +       /*
-> +        * Schedule the bottom handler if there is a pending message.
-> +        */
-> +       schedule_work(&ctx->workq);
-> +
->         dev_info(&pdev->dev, "APM X-Gene SoC HW monitor driver registered\n");
->
->         return 0;
->
->  out:
-> -       kfifo_free(&ctx->async_msg_fifo);
-> -out_mbox_free:
->         if (acpi_disabled)
->                 mbox_free_channel(ctx->mbox_chan);
->         else
->                 pcc_mbox_free_channel(ctx->mbox_chan);
-> +out_mbox_free:
-> +       kfifo_free(&ctx->async_msg_fifo);
->
->         return rc;
->  }
-> --
-> 1.9.1
->
+
