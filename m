@@ -1,35 +1,68 @@
-Return-path: <mikey@neuling.org>
-Message-ID: <1473815676.32111.64.camel@neuling.org>
-Subject: Re: [PATCH] hwmon: (ibmpowernv) Fix label for cores numbers not
- threads
-From: Michael Neuling <mikey@neuling.org>
-To: =?ISO-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>, Guenter Roeck
-	 <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>
-Date: Wed, 14 Sep 2016 11:14:36 +1000
-In-Reply-To: <f5dfed7e-9d43-42b9-fd44-baf0fafacdbc@kaod.org>
-References: <1473745661-11890-1-git-send-email-mikey@neuling.org>
-	 <f5dfed7e-9d43-42b9-fd44-baf0fafacdbc@kaod.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0
+Return-path: <wagi@monom.org>
+From: Daniel Wagner <wagi@monom.org>
+To: linux-kernel@vger.kernel.org
+Cc: Daniel Wagner <daniel.wagner@bmw-carit.de>,
+	"Darrick J . Wong" <djwong@us.ibm.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (adt7470) No need for additional synchronization on kthread_stop()
+Date: Fri, 16 Sep 2016 10:07:36 +0200
+Message-Id: <1474013256-9996-1-git-send-email-wagi@monom.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
+From: Daniel Wagner <daniel.wagner@bmw-carit.de>
 
-> > Signed-off-by: Michael Neuling <mikey@neuling.org>
-> Yes. This looks better. The DTS are related to the core so we don't=C2=A0
-> really care about the threads.
->=20
-> Acked-by: C=C3=A9dric Le Goater <clg@kaod.org>
+The kthread_stop() waits for the thread to exit. There is no need for an
+additional synchronization needed to join on the kthread.
 
-Thanks
+The completation was added by 89fac11cb3e7 ("adt7470: make automatic fan
+control really work").
 
->=20
-> Side question, should we use the Physical ID and not the Linux=C2=A0
-> logical one ? I don't know if it is exposed elsewhere in user space.
+Signed-off-by: Daniel Wagner <daniel.wagner@bmw-carit.de>
+Cc: Darrick J. Wong <djwong@us.ibm.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+---
+ drivers/hwmon/adt7470.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Yeah Linux logical is what the user sees for sysfs interfaces, /proc/cpuinf=
-o,
-taskset etc so that makes more sense than physical.
-
-Mikey
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index f5da39a..f5d618c 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -170,7 +170,6 @@ struct adt7470_data {
+ 	u8			pwm_auto_temp[ADT7470_PWM_COUNT];
+ 
+ 	struct task_struct	*auto_update;
+-	struct completion	auto_update_stop;
+ 	unsigned int		auto_update_interval;
+ };
+ 
+@@ -271,7 +270,6 @@ static int adt7470_update_thread(void *p)
+ 		msleep_interruptible(data->auto_update_interval);
+ 	}
+ 
+-	complete_all(&data->auto_update_stop);
+ 	return 0;
+ }
+ 
+@@ -1256,7 +1254,6 @@ static int adt7470_probe(struct i2c_client *client,
+ 	if (IS_ERR(hwmon_dev))
+ 		return PTR_ERR(hwmon_dev);
+ 
+-	init_completion(&data->auto_update_stop);
+ 	data->auto_update = kthread_run(adt7470_update_thread, client, "%s",
+ 					dev_name(hwmon_dev));
+ 	if (IS_ERR(data->auto_update)) {
+@@ -1271,7 +1268,6 @@ static int adt7470_remove(struct i2c_client *client)
+ 	struct adt7470_data *data = i2c_get_clientdata(client);
+ 
+ 	kthread_stop(data->auto_update);
+-	wait_for_completion(&data->auto_update_stop);
+ 	return 0;
+ }
+ 
+-- 
+2.7.4
