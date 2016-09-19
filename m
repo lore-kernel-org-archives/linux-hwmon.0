@@ -1,6 +1,6 @@
 Return-path: <tpearson@raptorengineering.com>
-Message-ID: <57E02B19.6010709@raptorengineeringinc.com>
-Date: Mon, 19 Sep 2016 13:14:49 -0500
+Message-ID: <57E03124.4030202@raptorengineeringinc.com>
+Date: Mon, 19 Sep 2016 13:40:36 -0500
 From: Timothy Pearson <tpearson@raptorengineering.com>
 MIME-Version: 1.0
 To: Guenter Roeck <linux@roeck-us.net>
@@ -16,35 +16,27 @@ List-ID: <linux-hwmon@vger.kernel.org>
 Hash: SHA1
 
 On 09/18/2016 08:41 PM, Guenter Roeck wrote:
-> On Sun, Sep 18, 2016 at 07:50:55PM -0500, Timothy Pearson wrote:
->> Add a basic driver for the MAX31785, focusing on the fan control
->> features but ignoring the temperature and voltage monitoring
->> features of the device.
->>
->> This driver supports all fan control modes and tachometer / PWM
->> readback where applicable.
->>
-> Could you try using hwmon_device_register_with_info() as available in
-> linux-next ? Hopefully that should reduce driver size (and give the new API
-> some test coverage).
-
-Ordinarily I'd be willing to try this, but in this case I wouldn't be
-able to test the module on real hardware; it's an embedded system and
-uses the 4.7 kernel at the moment.  Would you be OK with merging a fixed
-version of this patch and I can throw together an untested variant using
-hwmon_device_register_with_info() for future work?
-
-> Please run the patch through checkpatch --strict. I don't expect you to
-> fix all the problems is reports, but the following should be addressed.
+>> +Sysfs entries
+>> +-------------
+>> +
+>> +fan[1-6]_input           RO  fan tachometer speed in RPM
+>> +fan[1-6]_fault           RO  fan experienced fault
+>> +fan[1-6]_target          RW  desired fan speed in RPM
+>> +fan[1-6]_control_mode    RW  desired control mode: rpm, pwm, or auto
 > 
-> CHECK: Prefer kernel type 'u8' over 'uint8_t'
-> CHECK: Prefer kernel type 'u16' over 'uint16_t'
-> CHECK: Alignment should match open parenthesis
-> CHECK: Logical continuations should be on the previous line
-> WARNING: quoted string split across lines
+> Please use pwm[]_enable (see API)
+> 
+>> +pwm[1-6]_enable          RW  output enabled, 0=disabled, 1=enabled
+> 
+> Per API: 0 = no fan speed control (full speed), 1 = manual fan speed control
+> enabled (using pwm[1-*]), 2+: automatic fan speed control
+> 
+>> +pwm[1-6]                 RW  fan target duty cycle (0-255)
 
-My fault, I completely forgot to run checkpatch.  I'll get a V2 together
-shortly including addressing the inline comments.
+This particular device has a per-output PWM disable bit.  How should
+this be handled?  I don't want to globally enable outputs that are not
+connector or may possibly be incorrectly connected depending on hardware
+design.
 
 - -- 
 Timothy Pearson
@@ -56,11 +48,11 @@ https://www.raptorengineering.com
 Version: GnuPG v1.4.11 (GNU/Linux)
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iQEcBAEBAgAGBQJX4CsUAAoJEK+E3vEXDOFb++AH/i1FxEmOJmNVlSowpV5EHsgQ
-xcquFnmeF/pK6Oh00LbcI3WvTCgVRBkUl32WG7m5ktKXLDn5fU9DFEQYQVVhzRFU
-jz83JyD8HvDhOKubk9G9mqE518ZBIEnYiREHFI9fVuOnUTVemrZtYdKdoA7ez3wi
-5t7B7HJ4Gdcyi1FkNwLu+0/N7eLGyR9WfQAFqM0F64qRfQGOxWtwoi4lYgmbxHCg
-NFs7LAoJsj00K4DEPiK/3jjy5usfBpcIgkECAYK7+A/sUtDTq+TrBr1ADZY0mbV3
-zqDo85alN5XQEvLTjACWXmauMhCUsV4OqzurtlBAVMJQDW6ZKeCnhxv+iUaDxh8=
-=Rr2j
+iQEcBAEBAgAGBQJX4DEgAAoJEK+E3vEXDOFbAz4IAKFCx0Mu6Q5HlsA5IloV1YcP
+qj5je1vBONSTxM1cfaYjLmZzUBVecbJZojQjhkoUXxrAkrtmrM9otHfw7k0qs/0q
+ppoVevrfp2jKMzvoBp3VytHTZy3rK1Oyxko1dIuwBHMvfMNNk1S8tm132jhv34bK
+C1z2l16kU7e99NQV1i4HvB8FyrwotHfPXuZuM1ukO+CmfhLsUzXGYcOsXPApKtdg
+CHijAp9qa+YmcEqmcNksncJn769IEhKc1aKWkjcqHg2chmXtz1aR9STzNRnHZJO8
+RHivo6/9IGVNCOZSuup4HKhF1kle65W9tvS8D2eQnh/no+8rWHtMm+EZ+WEWFIs=
+=V8us
 -----END PGP SIGNATURE-----
