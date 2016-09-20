@@ -1,109 +1,54 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pa0-f65.google.com ([209.85.220.65]:36001 "EHLO
-        mail-pa0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1755226AbcITRZT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Sep 2016 13:25:19 -0400
-Subject: Re: [PATCH v2] lm87: Allow channel data to be set from dts file.
-To: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20160920052240.10242-1-mahoda.ratnayaka@alliedtelesis.co.nz>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-From: Frank Rowand <frowand.list@gmail.com>
-Message-ID: <57E170DA.3020006@gmail.com>
-Date: Tue, 20 Sep 2016 10:24:42 -0700
+Return-path: <tpearson@raptorengineering.com>
+Message-ID: <57E19104.6050907@raptorengineeringinc.com>
+Date: Tue, 20 Sep 2016 14:41:56 -0500
+From: Timothy Pearson <tpearson@raptorengineering.com>
 MIME-Version: 1.0
-In-Reply-To: <20160920052240.10242-1-mahoda.ratnayaka@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=windows-1252
+To: Guenter Roeck <linux@roeck-us.net>
+CC: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] Initial driver for the MAX31785 intelligent fan controller
+References: <20160919014104.GA30840@roeck-us.net> <57E03124.4030202@raptorengineeringinc.com> <20160919200413.GA29242@roeck-us.net> <57E04B25.4000001@raptorengineeringinc.com> <20160920005443.GB4064@roeck-us.net> <57E093DB.7030000@raptorengineeringinc.com>
+In-Reply-To: <57E093DB.7030000@raptorengineeringinc.com>
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 09/19/16 22:22, Mahoda Ratnayaka wrote:
-> Currently there is no method for setting the channel
-> value from the DTS file. When, the driver uses a dts
-> file to initialize the driver platform_data is not set.
-> As a the result channel variable may not be set correctly.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+On 09/19/2016 07:54 PM, Guenter Roeck wrote:
+>> On 09/19/2016 03:04 PM, Guenter Roeck wrote:
+>> And then you are using all pmbus commands ? Seems odd.
 > 
-> Without the channel variable set correctly, some of the
-> sensors will not be initialized correctly. For example
-> temp3 sensor sysfs entries.
+> I guess I'l buy an evaluation board if one is available and check if your claim
+> is correct. I am not inclined to accept a non-pmbus driver for a pmbus
+> device without good reason.
 > 
-> This adds the required functionality to set the channel
-> variable from the DTS file. This is done via reading the
-> reading a property named "channel" from the lm87 driver.
-> 
-> Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->      changes since v1:
->      Removed unncessary variables channel and np.
->      Update the code as per review comments.
-> 
->  Documentation/devicetree/bindings/hwmon/lm87.txt | 9 +++++++++
->  drivers/hwmon/lm87.c                             | 7 ++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
-> index fefcb48..1906e08 100644
-> --- a/Documentation/devicetree/bindings/hwmon/lm87.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/lm87.txt
+> Guenter
 
-I do not see the file Documentation/devicetree/bindings/hwmon/lm87.txt in
-Linux 4.8-rc7.  I am guessing that it might already be in a tree headed
-upstream.  Can you point me to it?
+Regarding the PMBus driver, I looked over the documentation available
+here: https://www.kernel.org/doc/Documentation/hwmon/pmbus
 
+- From what I can tell PMBus drivers do not support configuring the fan
+control parameters, only monitoring the fan status and speed.  Is this
+correct, and if not where would I find the correct documentation?
 
-> @@ -6,9 +6,18 @@ Required properties:
->  
->  - reg: I2C address
->  
-> +optional properties:
-> +- channels: Value for the channel mode register.
-> +            This allows configuration of pins with
-> +            selectable uses on the LM87 device (e.g.
-> +            choosing between voltage and temperature
-> +            inputs).
-> +            See hwmon/lm87 for further information
-> +
+Thank you,
 
-That is configuration information, not hardware description.
-Devicetree contains hardware description.
+- -- 
+Timothy Pearson
+Raptor Engineering
++1 (415) 727-8645 (direct line)
++1 (512) 690-0200 (switchboard)
+https://www.raptorengineering.com
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-Hardware description would instead be a property that said what
-is hooked up to the shared pins, eg temp3, fan1, fan2, VID, or
-IRQ.  The driver should know what value to place in channel for
-each of the different cases.
-
->  Example:
->  
->  lm87@2e {
->  	compatible = "ti,lm87";
->  	reg = <0x2e>;
-> +	channels=<0x4>;
->  };
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index a5e2958..358c1d4 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-> @@ -858,8 +858,13 @@ static void lm87_remove_files(struct i2c_client *client)
->  static void lm87_init_client(struct i2c_client *client)
->  {
->  	struct lm87_data *data = i2c_get_clientdata(client);
-> +	u8 val = 0;
->  
-> -	if (dev_get_platdata(&client->dev)) {
-> +	if (!of_property_read_u8(client->dev.of_node, "channels", &val)) {
-> +		data->channel = val;
-> +		lm87_write_value(client,
-> +				 LM87_REG_CHANNEL_MODE, data->channel);
-> +	} else if (dev_get_platdata(&client->dev)) {
->  		data->channel = *(u8 *)dev_get_platdata(&client->dev);
->  		lm87_write_value(client,
->  				 LM87_REG_CHANNEL_MODE, data->channel);
-> 
-
+iQEcBAEBAgAGBQJX4ZECAAoJEK+E3vEXDOFb4XsIALCbk+/dO2LdTvfjDCVMrs9J
+2IHDW3heUZn53v5evpMEvJCXEw8J0ARg2cYWxuzx8Ufu5hGzXNS40NW5mUHtkbXG
+FNWAqoSdeT1f9aOS8XIi/9+u27ZwJTuI5dZdb7nebfvsjlKc1CKw2FwtqUUBkyZA
+Ywa/kjSlEMTO2wGCea4xQXE8aO3UK3JHc0sUwzR3htEOp5nGIn7d8ScDaJvpzW+a
+xk0q97U4ezJEm2r3WmXpZGbUQqM2aaOdTSl9iiV7GZBAR6K50LGsacAcRBdanJaj
+FOuW9XZt0NjnrZOsMc2N9WIz9wXKYOuo/Y8d/0hVPp6SQ3po5d8coeNrSPDw1qw=
+=Q8So
+-----END PGP SIGNATURE-----
