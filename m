@@ -1,75 +1,132 @@
-Return-path: <tpearson@raptorengineering.com>
-Message-ID: <57E1F9CC.6000909@raptorengineeringinc.com>
-Date: Tue, 20 Sep 2016 22:09:00 -0500
-From: Timothy Pearson <tpearson@raptorengineering.com>
+Return-path: <Mahoda.Ratnayaka@alliedtelesis.co.nz>
+From: Mahoda Ratnayaka <Mahoda.Ratnayaka@alliedtelesis.co.nz>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>
+CC: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v2] lm87: Allow channel data to be set from dts file.
+Date: Wed, 21 Sep 2016 21:58:36 +0000
+Message-ID: <1474495115890.10563@alliedtelesis.co.nz>
+References: <20160920052240.10242-1-mahoda.ratnayaka@alliedtelesis.co.nz>,<d3258440-db4e-a4c2-cca1-9683d0da63a8@roeck-us.net>
+In-Reply-To: <d3258440-db4e-a4c2-cca1-9683d0da63a8@roeck-us.net>
+Content-Language: en-NZ
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-To: Guenter Roeck <linux@roeck-us.net>
-CC: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] Initial driver for the MAX31785 intelligent fan controller
-References: <20160919014104.GA30840@roeck-us.net> <57E03124.4030202@raptorengineeringinc.com> <20160919200413.GA29242@roeck-us.net> <57E04B25.4000001@raptorengineeringinc.com> <20160920005443.GB4064@roeck-us.net> <57E093DB.7030000@raptorengineeringinc.com> <57E19104.6050907@raptorengineeringinc.com> <20160920195902.GB1934@roeck-us.net> <57E195A3.5050703@raptorengineeringinc.com> <42772060-c1e0-0a2c-ea2d-0c4fbcc5c061@roeck-us.net>
-In-Reply-To: <42772060-c1e0-0a2c-ea2d-0c4fbcc5c061@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
-
-On 09/20/2016 10:04 PM, Guenter Roeck wrote:
-> On 09/20/2016 01:01 PM, Timothy Pearson wrote:
->> -----BEGIN PGP SIGNED MESSAGE-----
->> Hash: SHA1
->>
->> On 09/20/2016 02:59 PM, Guenter Roeck wrote:
->> OK, sounds good.  I looked back in the notes for this project and we had
->> originally considered using a PMBus driver but ran into the kernel
->> documentation, noted the missing control features, and I subsequently
-> 
-> It is always useful to talk with the maintainer.
-
-I'll keep that in mind next time.  This particular area of the kernel
-seems much more responsive than some of the others that we've had the
-misfortune of trying to work with; multiple weeks of delay for a
-response to a simple two line patch tends to turn one off of the mailing
-lists...
-
->> misinterpreted the datasheet using the kernel docs as a reference.  This
->> is why the hwmon driver was implemented.
->>
-> 
-> I am still not sure I understand what irked you off in the datasheet.
-> Is it the "supports a subset of the commands defined in the PMBus
-> Specfication" ? If so, please keep in mind that every single chip
-> supporting PMBus will only support a subset of PMBus commands.
-
-Yes, I definitely understand that now.  This was the line that, when
-taken out of context and compared against the kernel documentation,
-caused an incorrect assumption on my part.
-
->> Please let me know if I can be of any assistance.
->>
-> Sure, I'll let you know.
-> 
-> Thanks,
-> Guenter
-> 
-
-
-- -- 
-Timothy Pearson
-Raptor Engineering
-+1 (415) 727-8645 (direct line)
-+1 (512) 690-0200 (switchboard)
-https://www.raptorengineering.com
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJX4fnKAAoJEK+E3vEXDOFbyJEH/AqkLDgx6BgxcHRfl63G9YlE
-ln97m5X8NrWkGDQajzPHtv4g7imrli4ztTfJgjLnEPKu257clh1pEd32/gWKZYp5
-tnewbANOjOg4E/75bM7I1hFSN4LXylwiPGPtNdtPqmHDsKk3RDLSweFn2wuKIvuP
-rMJVmZHElbZdM5BenWWBEaqJxkUe8SkWfwb4CcIPNigETMZckvpzP+Db9qm2t5pq
-Go3lYbamLK2KcrMngRTtnH3EmJY7KXa0+GsgmQthkxYA7ZvDG9DRBLFpPECEWZfr
-HZrld5hwnzGwh2GkTTvO1JUQvv5wrtu1tXAxR5EPCWWDjqHW3dUzG1WgmsSJ+mI=
-=xXkP
------END PGP SIGNATURE-----
+Thanks Guenter for the reply, I'll update things as you suggested and send =
+the patches back again. I'll try to get the documentation approved first an=
+d then send back the lm87 driver update patch.=0A=
+=0A=
+Thanks,=0A=
+Mahoda=0A=
+________________________________________=0A=
+From: linux-hwmon-owner@vger.kernel.org <linux-hwmon-owner@vger.kernel.org>=
+ on behalf of Guenter Roeck <linux@roeck-us.net>=0A=
+Sent: Tuesday, 20 September 2016 9:55 p.m.=0A=
+To: Mahoda Ratnayaka; Jean Delvare; linux-hwmon@vger.kernel.org; devicetree=
+@vger.kernel.org; Rob Herring=0A=
+Cc: Chris Packham=0A=
+Subject: Re: [PATCH v2] lm87: Allow channel data to be set from dts file.=
+=0A=
+=0A=
+On 09/19/2016 10:22 PM, Mahoda Ratnayaka wrote:=0A=
+> Currently there is no method for setting the channel=0A=
+> value from the DTS file. When, the driver uses a dts=0A=
+> file to initialize the driver platform_data is not set.=0A=
+> As a the result channel variable may not be set correctly.=0A=
+>=0A=
+> Without the channel variable set correctly, some of the=0A=
+> sensors will not be initialized correctly. For example=0A=
+> temp3 sensor sysfs entries.=0A=
+>=0A=
+> This adds the required functionality to set the channel=0A=
+> variable from the DTS file. This is done via reading the=0A=
+> reading a property named "channel" from the lm87 driver.=0A=
+>=0A=
+> Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>=0A=
+> ---=0A=
+>=0A=
+> Notes:=0A=
+>      changes since v1:=0A=
+>      Removed unncessary variables channel and np.=0A=
+>      Update the code as per review comments.=0A=
+>=0A=
+>  Documentation/devicetree/bindings/hwmon/lm87.txt | 9 +++++++++=0A=
+>  drivers/hwmon/lm87.c                             | 7 ++++++-=0A=
+>  2 files changed, 15 insertions(+), 1 deletion(-)=0A=
+>=0A=
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documenta=
+tion/devicetree/bindings/hwmon/lm87.txt=0A=
+> index fefcb48..1906e08 100644=0A=
+> --- a/Documentation/devicetree/bindings/hwmon/lm87.txt=0A=
+> +++ b/Documentation/devicetree/bindings/hwmon/lm87.txt=0A=
+> @@ -6,9 +6,18 @@ Required properties:=0A=
+>=0A=
+>  - reg: I2C address=0A=
+>=0A=
+> +optional properties:=0A=
+> +- channels: Value for the channel mode register.=0A=
+> +            This allows configuration of pins with=0A=
+> +            selectable uses on the LM87 device (e.g.=0A=
+> +            choosing between voltage and temperature=0A=
+> +            inputs).=0A=
+> +            See hwmon/lm87 for further information=0A=
+=0A=
+Rob is the ultimate person to comment here, but I think the property descri=
+ption=0A=
+by itself should be complete and technically independent of the implementat=
+ion.=0A=
+Documentation/hwmon/lm87 describes the implementation, so an (incomplete)=
+=0A=
+reference to it seems inappropriate.=0A=
+=0A=
+> +=0A=
+>  Example:=0A=
+>=0A=
+>  lm87@2e {=0A=
+>       compatible =3D "ti,lm87";=0A=
+>       reg =3D <0x2e>;=0A=
+> +     channels=3D<0x4>;=0A=
+>  };=0A=
+=0A=
+Please move those property descriptions into the first patch. It is confusi=
+ng=0A=
+to have two patches touching the properties, and the first patch as it is r=
+ight now=0A=
+is really useless.=0A=
+=0A=
+> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c=0A=
+> index a5e2958..358c1d4 100644=0A=
+> --- a/drivers/hwmon/lm87.c=0A=
+> +++ b/drivers/hwmon/lm87.c=0A=
+> @@ -858,8 +858,13 @@ static void lm87_remove_files(struct i2c_client *cli=
+ent)=0A=
+>  static void lm87_init_client(struct i2c_client *client)=0A=
+>  {=0A=
+>       struct lm87_data *data =3D i2c_get_clientdata(client);=0A=
+> +     u8 val =3D 0;=0A=
+>=0A=
+> -     if (dev_get_platdata(&client->dev)) {=0A=
+> +     if (!of_property_read_u8(client->dev.of_node, "channels", &val)) {=
+=0A=
+=0A=
+This ignores property value errors (-ENODATA, -EOVERFLOW).=0A=
+Is this what you want ?=0A=
+=0A=
+> +             data->channel =3D val;=0A=
+> +             lm87_write_value(client,=0A=
+> +                              LM87_REG_CHANNEL_MODE, data->channel);=0A=
+> +     } else if (dev_get_platdata(&client->dev)) {=0A=
+>               data->channel =3D *(u8 *)dev_get_platdata(&client->dev);=0A=
+>               lm87_write_value(client,=0A=
+>                                LM87_REG_CHANNEL_MODE, data->channel);=0A=
+>=0A=
+=0A=
+--=0A=
+To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in=
+=0A=
+the body of a message to majordomo@vger.kernel.org=0A=
+More majordomo info at  http://vger.kernel.org/majordomo-info.html=0A=
