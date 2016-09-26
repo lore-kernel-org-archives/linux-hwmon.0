@@ -1,76 +1,55 @@
-Return-path: <robherring2@gmail.com>
-Date: Fri, 23 Sep 2016 13:10:48 -0500
-From: Rob Herring <robh@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v2] lm87: Allow channel data to be set from dts file.
-Message-ID: <20160923181048.GA10498@rob-hp-laptop>
-References: <20160920052240.10242-1-mahoda.ratnayaka@alliedtelesis.co.nz>
- <d3258440-db4e-a4c2-cca1-9683d0da63a8@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx2.suse.de ([195.135.220.15]:42178 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1758253AbcIZItR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 26 Sep 2016 04:49:17 -0400
+Received: from relay1.suse.de (charybdis-ext.suse.de [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id A3510AC9E
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Sep 2016 08:49:15 +0000 (UTC)
+Date: Mon, 26 Sep 2016 10:49:14 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: linux-hwmon@vger.kernel.org
+Subject: [PATCH] sensors-detect: Report proper processor information on ppc
+Message-ID: <20160926104914.554fb354@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3258440-db4e-a4c2-cca1-9683d0da63a8@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 20, 2016 at 02:55:42AM -0700, Guenter Roeck wrote:
-> On 09/19/2016 10:22 PM, Mahoda Ratnayaka wrote:
-> >Currently there is no method for setting the channel
-> >value from the DTS file. When, the driver uses a dts
-> >file to initialize the driver platform_data is not set.
-> >As a the result channel variable may not be set correctly.
-> >
-> >Without the channel variable set correctly, some of the
-> >sensors will not be initialized correctly. For example
-> >temp3 sensor sysfs entries.
-> >
-> >This adds the required functionality to set the channel
-> >variable from the DTS file. This is done via reading the
-> >reading a property named "channel" from the lm87 driver.
-> >
-> >Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
-> >---
-> >
-> >Notes:
-> >     changes since v1:
-> >     Removed unncessary variables channel and np.
-> >     Update the code as per review comments.
-> >
-> > Documentation/devicetree/bindings/hwmon/lm87.txt | 9 +++++++++
-> > drivers/hwmon/lm87.c                             | 7 ++++++-
-> > 2 files changed, 15 insertions(+), 1 deletion(-)
-> >
-> >diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
-> >index fefcb48..1906e08 100644
-> >--- a/Documentation/devicetree/bindings/hwmon/lm87.txt
-> >+++ b/Documentation/devicetree/bindings/hwmon/lm87.txt
-> >@@ -6,9 +6,18 @@ Required properties:
-> >
-> > - reg: I2C address
-> >
-> >+optional properties:
-> >+- channels: Value for the channel mode register.
-> >+            This allows configuration of pins with
-> >+            selectable uses on the LM87 device (e.g.
-> >+            choosing between voltage and temperature
-> >+            inputs).
-> >+            See hwmon/lm87 for further information
-> 
-> Rob is the ultimate person to comment here, but I think the property description
-> by itself should be complete and technically independent of the implementation.
-> Documentation/hwmon/lm87 describes the implementation, so an (incomplete)
-> reference to it seems inappropriate.
+The format of /proc/cpuinfo on ppc differs from the x86 format. Add
+the missing pieces to the parsing code so that ppc processor
+information is reported properly.
+---
+ prog/detect/sensors-detect |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Yes, please make the binding stand on its own. And please put all of the 
-binding in one patch. You're describing h/w, not adding s/w features.
+--- a/prog/detect/sensors-detect
++++ b/prog/detect/sensors-detect
+@@ -2864,7 +2864,7 @@ sub initialize_cpu_list
+ 			};
+ 			next;
+ 		}
+-		if (m/^(vendor_id|cpu family|model|model name|stepping|cpuid level)\s*:\s*(.+)$/) {
++		if (m/^(vendor_id|cpu family|model|model name|stepping|cpuid level|cpu|revision)\s*:\s*(.+)$/) {
+ 			my $k = $1;
+ 			my $v = $2;
+ 			$v =~ s/\s+/ /g;	# Merge multiple spaces
+@@ -2880,7 +2880,11 @@ sub initialize_cpu_list
+ sub print_cpu_info
+ {
+ 	my $cpu = $cpu[0];
+-	print "# Processor: $cpu->{'model name'} ($cpu->{'cpu family'}/$cpu->{model}/$cpu->{stepping})\n";
++	if (defined  $cpu->{'model name'}) {
++		print "# Processor: $cpu->{'model name'} ($cpu->{'cpu family'}/$cpu->{model}/$cpu->{stepping})\n";
++	} elsif (defined $cpu->{'cpu'}) {	# ppc
++		print "# Processor: $cpu->{'cpu'}, revision $cpu->{'revision'}\n";
++	}
+ }
+ 
+ # @i2c_adapters is a list of references to hashes, one hash per I2C/SMBus
 
-As far as whether this is configuration or h/w description, it depends 
-on what defines the configuration. If it is fixed by the h/w design then 
-this is okay. If it is a user choice, then no it should not be in DT. 
-Seems like this would be the former case as probably temperature 
-measurement requires a thermistor or something.
 
-Rob
+-- 
+Jean Delvare
+SUSE L3 Support
