@@ -1,993 +1,863 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50855 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752877AbcJDXvG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2016 19:51:06 -0400
-Date: Tue, 4 Oct 2016 16:51:02 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrea Merello <andrea.merello@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-        LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2 2/2] hwmon: new driver for ST stts751 thermal sensor
-Message-ID: <20161004235102.GA1055@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <jdelvare@suse.de>
+Message-ID: <1475570759.3052.22.camel@chaos.suse>
+Subject: Re: [PATCH v3 2/9] hwmon: (core) New hwmon registration API
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Eduardo Valentin <edubezval@gmail.com>, Punit Agrawal
+ <punit.agrawal@arm.com>, linux-pm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Tue, 04 Oct 2016 10:45:59 +0200
+In-Reply-To: <1469417552-9749-3-git-send-email-linux@roeck-us.net>
+References: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
+	 <1469417552-9749-3-git-send-email-linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Sep 27, 2016 at 02:07:27PM +0200, Andrea Merello wrote:
-> This patch adds a HWMON driver for ST Microelectronics STTS751
-> temperature sensors.
+Hi Guenter,
+
+I see this patch is upstream now, but I had started reviewing it and
+maybe some of my comments are still relevant.
+
+It's not meant to be a complete review, which is why I had not sent it
+yet :-(
+
+Also I did not follow the first iterations of this patchset so my
+apologies if I raise points which have already been discussed.
+
+May I ask if any other subsystem is already doing anything like that?
+
+FYI I gave a presentation about the hwmon device registration API
+evolution last week at Kernel Recipes [1] in Paris and mentioned this
+proposal.
+
+[1] https://kernel-recipes.org/en/2016/
+
+On dim., 2016-07-24 at 20:32 -0700, Guenter Roeck wrote:
+> Up to now, each hwmon driver has to implement its own sysfs attributes.
+> This requires a lot of template code, and distracts from the driver's core
+> function to read and write chip registers.
 > 
-> It does support temperature reading (of course), SMBUS alert
-> functionality and "therm" output.
+> To be able to reduce driver complexity, move sensor attribute handling
+> and thermal zone registration into hwmon core. By using the new API,
+> driver code and data size is typically reduced by 20-70%, depending
+> on driver complexity and the number of sysfs attributes supported.
+
+I looked at the diffstats for the drivers you have already converted and
+couldn't see any such huge improvement... Some drivers appear to be even
+larger after conversion?
+
+> With this patch, the new API only supports thermal sensors. Support for
+> other sensor types will be added with subsequent patches.
 > 
-> Thanks-to: LABBE Corentin [for suggestions]
-> Thanks-to: Guenter Roeck [for suggestions/discussions]
-> Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
-> Cc: LABBE Corentin <clabbe.montjoie@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
+> Acked-by: Punit Agrawal <punit.agrawal@arm.com>
+> Reviewed-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/hwmon/Kconfig   |  12 +-
->  drivers/hwmon/Makefile  |   2 +-
->  drivers/hwmon/stts751.c | 805 ++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 817 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/hwmon/stts751.c
+> v3:
+> - Thermal registration depends on IS_REACHABLE(CONFIG_THERMAL) and
+>   CONFIG_THERMAL_OF.
+> v2:
+> - Document callback function parameters of struct hwmon_ops in
+>   include/linux/hwmon.h.
+> - Clarify that the is_visible() callback is mandatory.
+> - Initialize device attribute read/write callback functions unconditionally.
+> - If an attribute has no template string, treat it as invisible, not as
+>   error. Affected are virtual attributes such as HWMON_C_REGISTER_TZ.
+> - Added newline to improve readability.
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index eaf2f91..4e70b42 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1448,6 +1448,16 @@ config SENSORS_SCH5636
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called sch5636.
+> Review comments not addressed:
+> - Stick with u32 for attribute masks. We could use u64, but it is currently
+>   not needed, and changing it later would be straightforward.
+> - Do not use for_each_set_bit() to walk attribute masks.
+>   for_each_set_bit() expects a pointer to an unsigned long as argument,
+>   which would make it difficult to switch to u64 attribute masks if/when
+>   needed.
+> 
+>  drivers/hwmon/hwmon.c | 485 +++++++++++++++++++++++++++++++++++++++++++++++---
+>  include/linux/hwmon.h | 148 +++++++++++++++
+>  2 files changed, 606 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 649a68d119b4..3e4cc442a089 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+
+I believe it would make sense to add you copyright at the top of the
+file. That's a pretty big change with lots of code.
+
+> @@ -12,6 +12,7 @@
 >  
-> +config SENSORS_STTS751
-> +	tristate "ST Microelectronics STTS751"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for STTS751
-> +	  temperature sensor chips.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called stts751.
-> +
->  config SENSORS_SMM665
->  	tristate "Summit Microelectronics SMM665"
->  	depends on I2C
-> @@ -1506,7 +1516,7 @@ config SENSORS_ADS7871
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 >  
->  config SENSORS_AMC6821
->  	tristate "Texas Instruments AMC6821"
-> -	depends on I2C 
-> +	depends on I2C
-
-???
-
->  	help
->  	  If you say yes here you get support for the Texas Instruments
->  	  AMC6821 hardware monitoring chips.
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index fe87d28..1114130 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -147,6 +147,7 @@ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
->  obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
->  obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
->  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
-> +obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
->  obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
->  obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
->  obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
-> @@ -169,4 +170,3 @@ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
->  obj-$(CONFIG_PMBUS)		+= pmbus/
->  
->  ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> -
-
-Looks like an unnecessary whitespace change.
-
-> diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
-> new file mode 100644
-> index 0000000..8358e04
-> --- /dev/null
-> +++ b/drivers/hwmon/stts751.c
-> @@ -0,0 +1,805 @@
-> +/*
-> + * STTS751 sensor driver
-> + *
-> + * Copyright (C) 2016 Istituto Italiano di Tecnologia - RBCS - EDL
-> + * Robotics, Brain and Cognitive Sciences department
-> + * Electronic Design Laboratory
-> + *
-> + * Written by Andrea Merello <andrea.merello@gmail.com>
-> + *
-> + * Based on  LM95241 driver and LM90 driver
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +
-No douple empty lines please.
-
 > +#include <linux/bitops.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/slab.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/util_macros.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/gfp.h>
+> @@ -21,6 +22,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> +#include <linux/thermal.h>
+>  
+>  #define HWMON_ID_PREFIX "hwmon"
+>  #define HWMON_ID_FORMAT HWMON_ID_PREFIX "%d"
+> @@ -28,9 +30,35 @@
+>  struct hwmon_device {
+>  	const char *name;
+>  	struct device dev;
+> +	const struct hwmon_chip_info *chip;
 > +
-> +#define DEVNAME "stts751"
+> +	struct attribute_group group;
+> +	const struct attribute_group **groups;
+>  };
 > +
-> +static const unsigned short normal_i2c[] = {
-> +	0x48, 0x49, 0x38, 0x39,  /* STTS751-0 */
-> +	0x4A, 0x4B, 0x3A, 0x3B,  /* STTS751-1 */
-> +	I2C_CLIENT_END };
-> +
-> +#define STTS751_REG_TEMP_H	0x00
-> +#define STTS751_REG_STATUS	0x01
-> +#define STTS751_STATUS_TRIPL	BIT(5)
-> +#define STTS751_STATUS_TRIPH	BIT(6)
-> +#define STTS751_STATUS_BUSY	BIT(8)
-> +#define STTS751_REG_TEMP_L	0x02
-> +#define STTS751_REG_CONF	0x03
-> +#define STTS751_CONF_RES_MASK	0x0C
-> +#define STTS751_CONF_RES_SHIFT  2
-> +#define STTS751_CONF_EVENT_DIS  BIT(7)
-> +#define STTS751_CONF_STOP	BIT(6)
-> +#define STTS751_REG_RATE	0x04
-> +#define STTS751_REG_HLIM_H	0x05
-> +#define STTS751_REG_HLIM_L	0x06
-> +#define STTS751_REG_LLIM_H	0x07
-> +#define STTS751_REG_LLIM_L	0x08
-> +#define STTS751_REG_ONESHOT	0x0F
-> +#define STTS751_REG_TLIM	0x20
-> +#define STTS751_REG_HYST	0x21
-> +#define STTS751_REG_SMBUS_TO	0x22
-> +
-> +#define STTS751_REG_PROD_ID	0xFD
-> +#define STTS751_REG_MAN_ID	0xFE
-> +#define STTS751_REG_REV_ID	0xFF
-> +
-> +#define STTS751_0_PROD_ID	0x00
-> +#define STTS751_1_PROD_ID	0x01
-> +#define ST_MAN_ID		0x53
-> +
-> +/* stick with HW defaults */
-> +#define STTS751_THERM_DEFAULT	85000
-> +#define STTS751_HYST_DEFAULT	10000
-> +#define STTS751_EVENT_MAX_DEFAULT 85000
-> +#define STTS751_EVENT_MIN_DEFAULT 0
-> +
-> +#define STTS751_RACE_RETRY	5
-> +#define STTS751_CONV_TIMEOUT	100 /* mS */
-> +#define STTS751_CACHE_TIME	100 /* mS */
-> +
-> +/*
-> + * Possible update intervals are (in mS):
-> + * 16000, 8000, 4000, 2000, 1000, 500, 250, 125, 62.5, 31.25
-> + * However we are not going to complicate things too much and we stick to the
-> + * approx value in mS.
-> + */
-> +static const int stts751_intervals[] = {
-> +	16000, 8000, 4000, 2000, 1000, 500, 250, 125, 63, 31
+>  #define to_hwmon_device(d) container_of(d, struct hwmon_device, dev)
+>  
+> +struct hwmon_device_attribute {
+> +	struct device_attribute dev_attr;
+> +	const struct hwmon_ops *ops;
+> +	enum hwmon_sensor_types type;
+> +	u32 attr;
+> +	int index;
 > +};
 > +
-> +struct stts751_priv {
-> +	struct device *dev;
-> +	struct i2c_client *client;
-> +	struct mutex access_lock;
-> +	unsigned long interval;
-> +	int res;
-> +	bool gen_therm, gen_event;
-> +	int event_max, event_min;
-> +	int therm;
-> +	int hyst;
-> +	bool smbus_timeout;
-> +	int temp;
-> +	unsigned long last_update;
-> +	u8 config;
-> +	bool min_alert, max_alert;
-> +	bool data_valid;
-> +
-> +	/*
-> +	 * Temperature/interval is always present.
-> +	 * Depending by DT therm and event are dynamically added.
-> +	 * There are max 4 entries plus the guard
-> +	 */
-> +	const struct attribute_group *groups[5];
-> +};
+> +#define to_hwmon_attr(d) \
+> +	container_of(d, struct hwmon_device_attribute, dev_attr)
 > +
 > +/*
-> + * These functions converts temperature from HW format to integer format and
-> + * vice-vers. They are (mostly) taken from lm90 driver. Unit is in mC.
+> + * Thermal zone information
+> + * In addition to the reference to the hwmon device,
+> + * also provides the sensor index.
 > + */
-> +static int stts751_to_deg(s32 hw_val)
+> +struct hwmon_thermal_data {
+> +	struct hwmon_device *hwdev;	/* Reference to hwmon device */
+> +	int index;			/* sensor index */
+> +};
+> +
+>  static ssize_t
+>  show_name(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> @@ -78,25 +106,286 @@ static struct class hwmon_class = {
+>  
+>  static DEFINE_IDA(hwmon_ida);
+>  
+> -/**
+> - * hwmon_device_register_with_groups - register w/ hwmon
+> - * @dev: the parent device
+> - * @name: hwmon name attribute
+> - * @drvdata: driver data to attach to created device
+> - * @groups: List of attribute groups to create
+> - *
+> - * hwmon_device_unregister() must be called when the device is no
+> - * longer needed.
+> - *
+> - * Returns the pointer to the new device.
+> - */
+> -struct device *
+> -hwmon_device_register_with_groups(struct device *dev, const char *name,
+> -				  void *drvdata,
+> -				  const struct attribute_group **groups)
+> +/* Thermal zone handling */
+> +
+> +#if IS_REACHABLE(CONFIG_THERMAL) && defined(CONFIG_THERMAL_OF)
+> +static int hwmon_thermal_get_temp(void *data, int *temp)
 > +{
-> +	return hw_val * 125 / 32;
-> +}
-> +
-> +static s16 stts751_to_hw(int val, s32 *hw_val)
-> +{
-> +	/* HW works in range -64C to +127C */
-> +	if ((val > 127000) || (val < -64000))
-
-Extra ( ). However, clamp_val(val, -64000, 127000) is preferred here
-instead of returning an error (we don't want to force users to guess
-valid ranges).
-
-The upper limit should probably be 127937, though, per datasheet.
-
-> +		return -EINVAL;
-> +
-> +	if (val < 0)
-> +		*hw_val = (val - 62) / 125 * 32;
-> +	else
-> +		*hw_val = (val + 62) / 125 * 32;
-> +
-By having this function return an int, you could combine the 16-bit return
-value with the error code, and the extra parameter would not be necessary
-(even more so since this function should not return an error in the first
-place).
-
-> +	return 0;
-> +}
-> +
-> +static int stts751_adjust_resolution(struct stts751_priv *priv)
-> +{
-> +	u8 res;
-> +
-> +	switch (priv->interval) {
-> +	case 9:
-> +		/* 10 bits */
-> +		res = 0;
-> +		break;
-> +	case 8:
-> +		/* 11 bits */
-> +		res = 1;
-> +		break;
-> +	default:
-> +		/* 12 bits */
-> +		res = 3;
-> +		break;
-> +	}
-> +
-> +	if (priv->res == res)
-> +		return 0;
-> +
-> +	priv->config &= ~STTS751_CONF_RES_MASK;
-> +	priv->config |= res << STTS751_CONF_RES_SHIFT;
-> +
-> +	return i2c_smbus_write_byte_data(priv->client,
-> +				STTS751_REG_CONF, priv->config);
-> +}
-> +
-> +static int stts751_update_temp(struct stts751_priv *priv)
-> +{
-> +	s32 integer1, integer2, frac;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&priv->access_lock);
-> +
-> +	/*
-> +	 * There is a trick here, like in the lm90 driver. We have to read two
-> +	 * registers to get the sensor temperature, but we have to beware a
-> +	 * conversion could occur between the readings. We could use the
-> +	 * one-shot conversion register, but we don't want to do this (disables
-> +	 * hardware monitoring). So the solution used here is to read the high
-> +	 * byte once, then the low byte, then the high byte again. If the new
-> +	 * high byte matches the old one, then we have a valid reading. Else we
-> +	 * have to read the low byte again, and now we believe we have a correct
-> +	 * reading.
-> +	 */
-> +	integer1 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
-> +	if (integer1 < 0) {
-> +		dev_dbg(&priv->client->dev,
-> +			"I2C read failed (temp H). ret: %x\n", ret);
-> +		ret = integer1;
-> +		goto exit;
-> +	}
-> +
-> +	frac = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_L);
-> +	if (frac < 0) {
-> +		dev_dbg(&priv->client->dev,
-> +			"I2C read failed (temp L). ret: %x\n", ret);
-> +		ret = frac;
-> +		goto exit;
-> +	}
-> +
-> +	integer2 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
-> +	if (integer2 < 0) {
-> +		dev_dbg(&priv->client->dev,
-> +			"I2C 2nd read failed (temp H). ret: %x\n", ret);
-> +		ret = integer2;
-> +		goto exit;
-> +	}
-> +
-> +	if (integer1 != integer2) {
-> +		frac = i2c_smbus_read_byte_data(priv->client,
-> +						STTS751_REG_TEMP_L);
-> +		if (frac < 0) {
-> +			dev_dbg(&priv->client->dev,
-> +				"I2C 2nd read failed (temp L). ret: %x\n", ret);
-> +			ret = frac;
-> +			goto exit;
-> +		}
-> +	}
-> +
-> +exit:
-> +	mutex_unlock(&priv->access_lock);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->temp = stts751_to_deg((integer1 << 8) | frac);
-> +	return ret;
-> +}
-> +
-> +static int stts751_set_temp_reg(struct stts751_priv *priv, int temp,
-> +				bool is_frac, u8 hreg, u8 lreg)
-> +{
-> +	s32 hwval;
+> +	struct hwmon_thermal_data *tdata = data;
+> +	struct hwmon_device *hwdev = tdata->hwdev;
 > +	int ret;
+> +	long t;
 > +
-> +	if (stts751_to_hw(temp, &hwval))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&priv->access_lock);
-> +	ret = i2c_smbus_write_byte_data(priv->client, hreg, hwval >> 8);
-> +	if (ret)
-> +		goto exit;
-> +	if (is_frac)
-> +		ret = i2c_smbus_write_byte_data(priv->client,
-> +						lreg, hwval & 0xff);
-> +exit:
-> +	mutex_unlock(&priv->access_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int stts751_update_alert(struct stts751_priv *priv)
-> +{
-> +	int ret;
-> +
-> +	/* not for us.. */
-> +	if (!priv->gen_event)
-> +		return 0;
-> +
-> +	ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_STATUS);
-> +
-Please no empty line between functions and checking of return values.
-
+> +	ret = hwdev->chip->ops->read(&hwdev->dev, hwmon_temp, hwmon_temp_input,
+> +				     tdata->index, &t);
 > +	if (ret < 0)
 > +		return ret;
 > +
-> +	priv->max_alert = priv->max_alert || !!(ret & STTS751_STATUS_TRIPH);
-> +	priv->min_alert = priv->min_alert || !!(ret & STTS751_STATUS_TRIPL);
+> +	*temp = t;
 > +
-I am not really happy about the caching of alert values. This isn't really
-common. Usually we report current alert values when reading. I don't really
-see why this driver should be different to all the others.
-
 > +	return 0;
 > +}
 > +
-> +static void stts751_alert(struct i2c_client *client,
-> +			enum i2c_alert_protocol type, unsigned int data)
-> +{
-> +	int ret;
-> +	struct stts751_priv *priv = i2c_get_clientdata(client);
-> +	bool prev_max = priv->max_alert;
-> +	bool prev_min = priv->min_alert;
-> +
-> +	if (type != I2C_PROTOCOL_SMBUS_ALERT)
-> +		return;
-> +
-> +	dev_dbg(&client->dev, "alert!");
-> +
-
-Any chance to make this a bit more generic and also support
-interrupts ?
-
-> +	mutex_lock(&priv->access_lock);
-> +	ret = stts751_update_alert(priv);
-> +	if (ret < 0) {
-> +		/* default to worst case */
-> +		priv->max_alert = true;
-> +		priv->min_alert = true;
-> +
-> +		if (!(prev_max && prev_min)) {
-> +			dev_warn(&priv->client->dev,
-> +				"Alert received, but can't communicate to the device. Something bad happening? Triggering all alarms!");
-> +		}
-> +	}
-> +
-> +	if (!prev_max && priv->max_alert) {
-> +		dev_notice(&client->dev, "got alert for HIGH temperature");
-> +
-> +		/* unblock alert poll */
-> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_event_max_alert");
-> +		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
-> +	}
-> +
-> +	if (!prev_min && priv->min_alert) {
-> +		dev_notice(&client->dev, "got alert for LOW temperature");
-> +
-> +		/* unblock alert poll */
-> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_event_min_alert");
-> +		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
-> +	}
-> +	mutex_unlock(&priv->access_lock);
-> +}
-> +
-> +static ssize_t show_max_alert(struct device *dev, struct device_attribute *attr,
-> +			  char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->max_alert);
-> +}
-> +
-> +static ssize_t set_max_alert(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&priv->access_lock);
-> +	priv->max_alert = false;
-> +	mutex_unlock(&priv->access_lock);
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t show_min_alert(struct device *dev, struct device_attribute *attr,
-> +			  char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->min_alert);
-> +}
-> +
-> +static ssize_t set_min_alert(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&priv->access_lock);
-> +	priv->min_alert = false;
-> +	mutex_unlock(&priv->access_lock);
-> +
-This is highly unusual. If the alert needs to be cleared, please auto-clear it
-when reading.
-
-> +	return count;
-> +}
-> +
-> +static ssize_t show_input(struct device *dev, struct device_attribute *attr,
-> +			  char *buf)
-> +{
-> +	int ret;
-> +	int cache_time = STTS751_CACHE_TIME * HZ / 1000;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	/*
-> +	 * Adjust the cache time wrt the sample rate. We do 4X in order to get
-> +	 * a new measure in no more than 1/4 of the sample time (that seemed
-> +	 * reasonable to me).
-> +	 */
-> +	cache_time = stts751_intervals[priv->interval] / 4 * HZ / 1000;
-> +
-> +	if (time_after(jiffies,	priv->last_update + cache_time) ||
-> +		!priv->data_valid) {
-> +		ret = stts751_update_temp(priv);
-> +		if (ret)
-> +			return ret;
-> +		priv->last_update = jiffies;
-> +		priv->data_valid = true;
-> +	}
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->temp);
-> +}
-> +
-> +static ssize_t show_therm(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm);
-> +}
-> +
-> +
-> +static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +	long temp;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (kstrtol(buf, 10, &temp) < 0)
-> +		return -EINVAL;
-> +
-> +	ret = stts751_set_temp_reg(priv, temp, false, STTS751_REG_TLIM, 0);
-> +	if (ret)
-> +		return ret;
-> +
-Does it really add value to use the same function for 8- and 16-bit registers ?
-Seems to me it just makes the code more complicated.
-
-> +	dev_dbg(dev, "setting therm %ld", temp);
-> +
-> +	priv->therm = temp;
-> +	return count;
-> +}
-> +
-> +static ssize_t show_hyst(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->hyst);
-> +}
-> +
-> +
-> +static ssize_t set_hyst(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +	long temp;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (kstrtol(buf, 10, &temp) < 0)
-> +		return -EINVAL;
-> +
-Per ABI, this is supposed to be an absolute temperature. For the chip,
-it is a delta. You'll have to do some calculation to convert the absolute
-value into a delta. Same for the show command.
-
-> +	ret = stts751_set_temp_reg(priv, temp, false, STTS751_REG_HYST, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(dev, "setting hyst %ld", temp);
-> +
-> +	priv->hyst = temp;
-> +	return count;
-> +}
-> +
-> +static ssize_t show_max(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_max);
-> +}
-> +
-> +static ssize_t set_max(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +	long temp;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (kstrtol(buf, 10, &temp) < 0)
-> +		return -EINVAL;
-> +
-> +	ret = stts751_set_temp_reg(priv, temp, true,
-> +				STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(dev, "setting event max %ld", temp);
-> +	priv->event_max = temp;
-> +	return count;
-> +}
-> +
-> +static ssize_t show_min(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_min);
-> +}
-> +
-> +
-
-Single empty line, please.
-
-> +static ssize_t set_min(struct device *dev, struct device_attribute *attr,
-> +		       const char *buf, size_t count)
-> +{
-> +	int ret;
-> +	long temp;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (kstrtol(buf, 10, &temp) < 0)
-> +		return -EINVAL;
-> +
-> +	ret = stts751_set_temp_reg(priv, temp, true,
-> +				STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(dev, "setting event min %ld", temp);
-> +
-> +	priv->event_min = temp;
-> +	return count;
-> +}
-> +
-> +static ssize_t show_interval(struct device *dev, struct device_attribute *attr,
-> +			     char *buf)
-> +{
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n",
-> +			stts751_intervals[priv->interval]);
-> +}
-> +
-> +static ssize_t set_interval(struct device *dev, struct device_attribute *attr,
-> +			    const char *buf, size_t count)
-> +{
-> +	unsigned long val;
-> +	int idx;
-> +	int ret = 0;
-> +	struct stts751_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (kstrtoul(buf, 10, &val) < 0)
-> +		return -EINVAL;
-> +
-> +	idx = find_closest_descending(val, stts751_intervals,
-> +				ARRAY_SIZE(stts751_intervals));
-> +
-> +	dev_dbg(dev, "setting interval. req:%lu, idx: %d, val: %d", val, idx,
-> +		stts751_intervals[idx]);
-> +
-> +	if (priv->interval == idx)
-> +		return count;
-> +
-> +	mutex_lock(&priv->access_lock);
-> +
-> +	/* speed up, lower the resolution, then modify convrate */
-> +	if (priv->interval < idx) {
-> +		priv->interval = idx;
-> +		ret = stts751_adjust_resolution(priv);
-> +		if (ret)
-> +			goto exit;
-> +	}
-> +
-> +	ret = i2c_smbus_write_byte_data(priv->client, STTS751_REG_RATE, idx);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	/* slow down, modify convrate, then raise resolution */
-> +	if (priv->interval != idx) {
-> +		priv->interval = idx;
-> +		ret = stts751_adjust_resolution(priv);
-> +		if (ret)
-> +			goto exit;
-> +
-Extra empty line. 
-
-Is it really necessary to have this code twice ? What is the harm in
-just doing it once, either before or after setting the conversion rate ?
-
-> +	}
-> +exit:
-> +	mutex_unlock(&priv->access_lock);
-> +
-> +	return count;
-> +}
-> +
-> +static int stts751_detect(struct i2c_client *new_client,
-> +			  struct i2c_board_info *info)
-> +{
-> +	struct i2c_adapter *adapter = new_client->adapter;
-> +	const char *name;
-> +	int mfg_id, prod_id, rev_id;
-> +
-> +	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
-> +		return -ENODEV;
-> +
-> +	mfg_id = i2c_smbus_read_byte_data(new_client, ST_MAN_ID);
-> +	if (mfg_id != ST_MAN_ID)
-> +		return -ENODEV;
-> +
-> +	prod_id = i2c_smbus_read_byte_data(new_client, STTS751_REG_PROD_ID);
-> +
-> +	switch (prod_id) {
-> +	case STTS751_0_PROD_ID:
-> +		name = "STTS751-0";
-> +		break;
-> +	case STTS751_1_PROD_ID:
-> +		name = "STTS751-1";
-> +		break;
-> +	default:
-> +		return -ENODEV;
-> +	}
-> +	dev_info(&new_client->dev, "Chip %s detected!", name);
-> +
-Is this noise necessary ?
-
-> +	rev_id = i2c_smbus_read_byte_data(new_client, STTS751_REG_REV_ID);
-> +
-> +	if (rev_id != 0x1) {
-
-You might want to check for an error here (and return -ENODEV if you get one).
-
-> +		dev_notice(&new_client->dev,
-> +			"Chip revision 0x%x is untested\nPlease report whether it works to andrea.merello@gmail.com",
-> +			rev_id);
-> +	}
-> +
-> +	strlcpy(info->type, name, I2C_NAME_SIZE);
-
-This doesn't match the driver name (or, rather, the values in
-stts751_id). Does this instantiate the driver ? That would surprise
-me.
-
-> +	return 0;
-> +}
-> +
-> +static int stts751_init_chip(struct stts751_priv *priv)
-> +{
-> +	int ret;
-> +
-> +	priv->config = STTS751_CONF_EVENT_DIS | STTS751_CONF_STOP;
-> +	ret = i2c_smbus_write_byte_data(priv->client, STTS751_REG_CONF,
-> +					priv->config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_write_byte_data(priv->client, STTS751_REG_RATE,
-> +					priv->interval);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* invalid, to force update */
-> +	priv->res = -1;
-> +	ret = stts751_adjust_resolution(priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = i2c_smbus_write_byte_data(priv->client,
-> +					STTS751_REG_SMBUS_TO,
-> +					priv->smbus_timeout ? 0x80 : 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +
-> +	if (priv->gen_event) {
-> +		ret = stts751_set_temp_reg(priv, priv->event_max, true,
-> +					STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = stts751_set_temp_reg(priv, priv->event_min, true,
-> +					STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
-
-Those registers all have power-up defaults. Unless there is a good reason,
-we should not overwrite them. In some applications, the values may be
-initialized from the BIOS/ROMMON.
-
-> +		if (ret)
-> +			return ret;
-> +		priv->config &= ~STTS751_CONF_EVENT_DIS;
-> +	}
-> +
-> +	if (priv->gen_therm) {
-> +		ret = stts751_set_temp_reg(priv, priv->therm, false,
-> +					STTS751_REG_TLIM, 0);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = stts751_set_temp_reg(priv, priv->hyst, false,
-> +					STTS751_REG_HYST, 0);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	priv->config &= ~STTS751_CONF_STOP;
-> +	ret = i2c_smbus_write_byte_data(priv->client,
-> +					STTS751_REG_CONF, priv->config);
-> +
-> +	return ret;
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_input, NULL, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_event_min, S_IWUSR | S_IRUGO,
-> +			show_min, set_min, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_event_max, S_IWUSR | S_IRUGO,
-> +			show_max, set_max, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_event_min_alert, S_IWUSR | S_IRUGO,
-> +			show_min_alert, set_min_alert, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_event_max_alert, S_IWUSR | S_IRUGO,
-> +			show_max_alert, set_max_alert, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_therm, S_IWUSR | S_IRUGO, show_therm,
-> +			set_therm, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_therm_hyst, S_IWUSR | S_IRUGO, show_hyst,
-> +			set_hyst, 0);
-
-Please use standard attribute names.
-
-> +static SENSOR_DEVICE_ATTR(update_interval, S_IWUSR | S_IRUGO,
-> +			show_interval, set_interval, 0);
-> +
-> +/* always present */
-> +static struct attribute *stts751_temp_attrs[] = {
-> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	NULL
+> +static struct thermal_zone_of_device_ops hwmon_thermal_ops = {
+> +	.get_temp = hwmon_thermal_get_temp,
 > +};
 > +
-> +static struct attribute_group stts751_temp_group = {
-> +	.attrs = stts751_temp_attrs,
-> +};
-> +
-> +/* present when therm pin or event pin are connected */
-> +static struct attribute *stts751_interval_attrs[] = {
-> +	&sensor_dev_attr_update_interval.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +static struct attribute_group stts751_interval_group = {
-> +	.attrs = stts751_interval_attrs,
-> +};
-> +
-> +/* present when event pin is connected */
-> +static struct attribute *stts751_event_attrs[] = {
-> +	&sensor_dev_attr_temp1_event_min.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_event_max.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_event_min_alert.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_event_max_alert.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +static struct attribute_group stts751_event_group = {
-> +	.attrs = stts751_event_attrs,
-> +};
-> +
-> +/* present when therm pin is connected */
-> +static struct attribute *stts751_therm_attrs[] = {
-> +	&sensor_dev_attr_temp1_therm.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_therm_hyst.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +static struct attribute_group stts751_therm_group = {
-> +	.attrs = stts751_therm_attrs,
-> +};
-> +
-> +static int stts751_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
+> +static int hwmon_thermal_add_sensor(struct device *dev,
+> +				    struct hwmon_device *hwdev, int index)
 > +{
-> +	struct stts751_priv *priv;
-> +	int ret;
-> +	int groups_idx = 0;
-> +	struct device_node *np = client->dev.of_node;
+> +	struct hwmon_thermal_data *tdata;
 > +
-> +	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
+> +	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
+> +	if (!tdata)
 > +		return -ENOMEM;
 > +
-> +	priv->client = client;
-> +	i2c_set_clientdata(client, priv);
-> +	mutex_init(&priv->access_lock);
+> +	tdata->hwdev = hwdev;
+> +	tdata->index = index;
 > +
-> +	/* default to 2 samples per second */
-> +	priv->interval = 5;
-> +	/* default to timeout enable, as per chip default */
-> +	priv->smbus_timeout = true;
-> +	priv->last_update = 0;
-> +	priv->data_valid = false;
-> +	priv->max_alert = false;
-> +	priv->min_alert = false;
-> +	priv->gen_therm = false;
-> +	priv->gen_event = false;
-
-Unnecessary initializations.
-
-> +	priv->therm = STTS751_THERM_DEFAULT;
-> +	priv->hyst = STTS751_HYST_DEFAULT;
-> +	priv->event_max = STTS751_EVENT_MAX_DEFAULT;
-> +	priv->event_min = STTS751_EVENT_MIN_DEFAULT;
+> +	devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
+> +					     &hwmon_thermal_ops);
 > +
-I think it would be better to read the initial values from the chip
-(also see above).
-
-> +	if (np) {
-> +		priv->gen_therm = of_property_read_bool(np, "has-therm");
-> +		priv->gen_event = of_property_read_bool(np, "has-event");
-> +		priv->smbus_timeout = !of_property_read_bool(np,
-> +						"smbus-timeout-disable");
-> +	} else {
-> +		dev_notice(&client->dev, "No DT data. Event/therm disabled\n");
-
-Seems to be quite rude to penaltize non-DT systems this way.
-
-> +	}
+> +	return 0;
+> +}
+> +#else
+> +static int hwmon_thermal_add_sensor(struct device *dev,
+> +				    struct hwmon_device *hwdev, int index)
+> +{
+> +	return 0;
+> +}
+> +#endif /* IS_REACHABLE(CONFIG_THERMAL) && defined(CONFIG_THERMAL_OF) */
 > +
-> +	dev_dbg(&client->dev, "gen_event: %s, gen_therm: %s",
-> +		priv->gen_event ? "YES" : "NO",
-> +		priv->gen_therm ? "YES" : "NO");
+> +/* sysfs attribute management */
 > +
-> +	priv->groups[groups_idx++] = &stts751_temp_group;
-> +	priv->groups[groups_idx++] = &stts751_interval_group;
-
-Any reason for having multiple groups here ?
-
+> +static ssize_t hwmon_attr_show(struct device *dev,
+> +			       struct device_attribute *devattr, char *buf)
+> +{
+> +	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
+> +	long val;
+> +	int ret;
 > +
-> +	if (priv->gen_therm)
-> +		priv->groups[groups_idx++] = &stts751_therm_group;
-> +
-> +	if (priv->gen_event)
-> +		priv->groups[groups_idx++] = &stts751_event_group;
-> +
-Why are those groups optional ? This is quite unusual. Even if the chip is not
-connected to alert or interrupt lines, it still supports limit registers and
-reports alerts. On top of that, at least interrupt support can be detected
-automatically (from client->irq) and would not need a devicetree property.
-
-I think you really only need a single group, and all attributes should always
-be available.
-
-> +	priv->groups[groups_idx] = NULL;
-
-Unnecessary initialization. devm_kzalloc() initializes priv with 0.
-
-> +
-> +	ret = stts751_init_chip(priv);
-> +	if (ret)
+> +	ret = hattr->ops->read(dev, hattr->type, hattr->attr, hattr->index,
+> +			       &val);
+> +	if (ret < 0)
 > +		return ret;
 > +
-> +	priv->dev = devm_hwmon_device_register_with_groups(&client->dev,
-> +							client->name, priv,
-> +							priv->groups);
-> +	return PTR_ERR_OR_ZERO(priv->dev);
+> +	return sprintf(buf, "%ld\n", val);
 > +}
 > +
-> +static const struct i2c_device_id stts751_id[] = {
-> +	{ "stts751", 0 },
-> +	{ }
+> +static ssize_t hwmon_attr_store(struct device *dev,
+> +				struct device_attribute *devattr,
+> +				const char *buf, size_t count)
+> +{
+> +	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
+> +	long val;
+> +	int ret;
+> +
+> +	ret = kstrtol(buf, 10, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = hattr->ops->write(dev, hattr->type, hattr->attr, hattr->index,
+> +				val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static int hwmon_attr_base(enum hwmon_sensor_types type)
+> +{
+> +	if (type == hwmon_in)
+> +		return 0;
+> +	return 1;
+> +}
+> +
+> +static struct attribute *hwmon_genattr(struct device *dev,
+> +				       const void *drvdata,
+> +				       enum hwmon_sensor_types type,
+> +				       u32 attr,
+> +				       int index,
+> +				       const char *template,
+> +				       const struct hwmon_ops *ops)
+> +{
+> +	struct hwmon_device_attribute *hattr;
+> +	struct device_attribute *dattr;
+> +	struct attribute *a;
+> +	umode_t mode;
+> +	char *name;
+> +
+> +	/* The attribute is invisible if there is no template string */
+> +	if (!template)
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	mode = ops->is_visible(drvdata, type, attr, index);
+
+Any reason why you don't simply attach the provided ->is_visible to the
+attribute group and let the driver core do the work?
+
+> +	if (!mode)
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	if ((mode & S_IRUGO) && !ops->read)
+> +		return ERR_PTR(-EINVAL);
+> +	if ((mode & S_IWUGO) && !ops->write)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (type == hwmon_chip) {
+
+This needs a comment. It's not obvious what "hwmon_chip" is supposed to
+represent. From what I understand, maybe "hwmon_unique" would be a more
+appropriate name.
+
+> +		name = (char *)template;
+> +	} else {
+> +		name = devm_kzalloc(dev, strlen(template) + 16, GFP_KERNEL);
+> +		if (!name)
+> +			return ERR_PTR(-ENOMEM);
+> +		scnprintf(name, strlen(template) + 16, template,
+> +			  index + hwmon_attr_base(type));
+> +	}
+> +
+> +	hattr = devm_kzalloc(dev, sizeof(*hattr), GFP_KERNEL);
+> +	if (!hattr)
+> +		return ERR_PTR(-ENOMEM);
+
+So basically you are doing 1 or 2 memory allocations for every
+attribute? Looks quite bad from a memory fragmentation
+perspective :-( Not to mention performance. Given that you have all the
+data at hand before you start, can't you preallocate an array with the
+right number of hattr and pick from it? That would at least solve half
+of the problem.
+
+Something similar for string allocation may work too, although it's
+somewhat more complex due to the variable length. But I think the
+abituguru3 driver is doing it right, so maybe you can too.
+
+> +
+> +	hattr->type = type;
+> +	hattr->attr = attr;
+> +	hattr->index = index;
+> +	hattr->ops = ops;
+> +
+> +	dattr = &hattr->dev_attr;
+> +	dattr->show = hwmon_attr_show;
+> +	dattr->store = hwmon_attr_store;
+> +
+> +	a = &dattr->attr;
+> +	sysfs_attr_init(a);
+> +	a->name = name;
+> +	a->mode = mode;
+> +
+> +	return a;
+> +}
+> +
+> +static const char * const hwmon_chip_attr_templates[] = {
+> +	[hwmon_chip_temp_reset_history] = "temp_reset_history",
+> +	[hwmon_chip_update_interval] = "update_interval",
+> +	[hwmon_chip_alarms] = "alarms",
 > +};
-> +MODULE_DEVICE_TABLE(i2c, stts751_id);
 > +
-> +static struct i2c_driver stts751_driver = {
-> +	.class		= I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name	= DEVNAME,
-> +	},
-> +	.probe		= stts751_probe,
-> +	.id_table	= stts751_id,
-> +	.detect		= stts751_detect,
-> +	.alert		= stts751_alert,
-> +	.address_list	= normal_i2c,
+> +static const char * const hwmon_temp_attr_templates[] = {
+> +	[hwmon_temp_input] = "temp%d_input",
+> +	[hwmon_temp_type] = "temp%d_type",
+> +	[hwmon_temp_lcrit] = "temp%d_lcrit",
+> +	[hwmon_temp_lcrit_hyst] = "temp%d_lcrit_hyst",
+> +	[hwmon_temp_min] = "temp%d_min",
+> +	[hwmon_temp_min_hyst] = "temp%d_min_hyst",
+> +	[hwmon_temp_max] = "temp%d_max",
+> +	[hwmon_temp_max_hyst] = "temp%d_max_hyst",
+> +	[hwmon_temp_crit] = "temp%d_crit",
+> +	[hwmon_temp_crit_hyst] = "temp%d_crit_hyst",
+> +	[hwmon_temp_emergency] = "temp%d_emergency",
+> +	[hwmon_temp_emergency_hyst] = "temp%d_emergency_hyst",
+> +	[hwmon_temp_alarm] = "temp%d_alarm",
+> +	[hwmon_temp_lcrit_alarm] = "temp%d_lcrit_alarm",
+> +	[hwmon_temp_min_alarm] = "temp%d_min_alarm",
+> +	[hwmon_temp_max_alarm] = "temp%d_max_alarm",
+> +	[hwmon_temp_crit_alarm] = "temp%d_crit_alarm",
+> +	[hwmon_temp_emergency_alarm] = "temp%d_emergency_alarm",
+> +	[hwmon_temp_fault] = "temp%d_fault",
+> +	[hwmon_temp_offset] = "temp%d_offset",
+> +	[hwmon_temp_label] = "temp%d_label",
+> +	[hwmon_temp_lowest] = "temp%d_lowest",
+> +	[hwmon_temp_highest] = "temp%d_highest",
+> +	[hwmon_temp_reset_history] = "temp%d_reset_history",
 > +};
 > +
-> +module_i2c_driver(stts751_driver);
+
+This starts looking a lot like libsensors' code ;-)
+
+> +static const char * const *__templates[] = {
+> +	[hwmon_chip] = hwmon_chip_attr_templates,
+> +	[hwmon_temp] = hwmon_temp_attr_templates,
+> +};
 > +
-> +MODULE_AUTHOR("Andrea Merello <andrea.merello@gmail.com>");
-> +MODULE_DESCRIPTION("STTS751 sensor driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.7.4
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> +static const int __templates_size[] = {
+> +	[hwmon_chip] = ARRAY_SIZE(hwmon_chip_attr_templates),
+> +	[hwmon_temp] = ARRAY_SIZE(hwmon_temp_attr_templates),
+> +};
+> +
+> +static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
+> +{
+> +	int i, n;
+> +
+> +	for (i = n = 0; info->config[i]; i++)
+> +		n += hweight32(info->config[i]);
+> +
+> +	return n;
+> +}
+> +
+> +static int hwmon_genattrs(struct device *dev,
+> +			  const void *drvdata,
+> +			  struct attribute **attrs,
+> +			  const struct hwmon_ops *ops,
+> +			  const struct hwmon_channel_info *info)
+> +{
+> +	const char * const *templates;
+> +	int template_size;
+> +	int i, aindex = 0;
+> +
+> +	if (info->type >= ARRAY_SIZE(__templates))
+> +		return -EINVAL;
+> +
+> +	templates = __templates[info->type];
+> +	template_size = __templates_size[info->type];
+> +
+> +	for (i = 0; info->config[i]; i++) {
+> +		u32 attr_mask = info->config[i];
+> +		u32 attr;
+> +
+> +		while (attr_mask) {
+> +			struct attribute *a;
+> +
+> +			attr = __ffs(attr_mask);
+> +			attr_mask &= ~BIT(attr);
+> +			if (attr >= template_size)
+> +				return -EINVAL;
+> +			a = hwmon_genattr(dev, drvdata, info->type, attr, i,
+> +					  templates[attr], ops);
+> +			if (IS_ERR(a)) {
+> +				if (PTR_ERR(a) != -ENOENT)
+> +					return PTR_ERR(a);
+> +				continue;
+> +			}
+> +			attrs[aindex++] = a;
+> +		}
+> +	}
+> +	return aindex;
+> +}
+> +
+> +static struct attribute **
+> +__hwmon_create_attrs(struct device *dev, const void *drvdata,
+> +		     const struct hwmon_chip_info *chip)
+> +{
+> +	int ret, i, aindex = 0, nattrs = 0;
+> +	struct attribute **attrs;
+> +
+> +	for (i = 0; chip->info[i]; i++)
+> +		nattrs += hwmon_num_channel_attrs(chip->info[i]);
+> +
+> +	if (nattrs == 0)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	attrs = devm_kcalloc(dev, nattrs + 1, sizeof(*attrs), GFP_KERNEL);
+> +	if (!attrs)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	for (i = 0; chip->info[i]; i++) {
+> +		ret = hwmon_genattrs(dev, drvdata, &attrs[aindex], chip->ops,
+> +				     chip->info[i]);
+> +		if (ret < 0)
+> +			return ERR_PTR(ret);
+> +		aindex += ret;
+> +	}
+> +
+> +	return attrs;
+> +}
+> +
+> +static struct device *
+> +__hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> +			const struct hwmon_chip_info *chip,
+> +			const struct attribute_group **groups)
+>  {
+>  	struct hwmon_device *hwdev;
+> -	int err, id;
+> +	struct device *hdev;
+> +	int i, j, err, id;
+>  
+>  	/* Do not accept invalid characters in hwmon name attribute */
+>  	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+> @@ -112,28 +401,128 @@ hwmon_device_register_with_groups(struct device *dev, const char *name,
+>  		goto ida_remove;
+>  	}
+>  
+> +	hdev = &hwdev->dev;
+> +
+> +	if (chip && chip->ops->is_visible) {
+
+is_visible is documented as mandatory, so why would this check be needed
+(and not result in an error if failed?)
+
+> +		struct attribute **attrs;
+> +		int ngroups = 2;
+
+I'd appreciate a comment here.
+
+> +
+> +		if (groups)
+> +			for (i = 0; groups[i]; i++)
+> +				ngroups++;
+> +
+> +		hwdev->groups = devm_kcalloc(dev, ngroups, sizeof(*groups),
+> +					     GFP_KERNEL);
+> +		if (!hwdev->groups)
+> +			return ERR_PTR(-ENOMEM);
+> +
+> +		attrs = __hwmon_create_attrs(dev, drvdata, chip);
+> +		if (IS_ERR(attrs)) {
+> +			err = PTR_ERR(attrs);
+> +			goto free_hwmon;
+> +		}
+> +
+> +		hwdev->group.attrs = attrs;
+> +		ngroups = 0;
+> +		hwdev->groups[ngroups++] = &hwdev->group;
+> +
+> +		if (groups) {
+> +			for (i = 0; groups[i]; i++)
+> +				hwdev->groups[ngroups++] = groups[i];
+> +		}
+> +
+> +		hdev->groups = hwdev->groups;
+> +	} else {
+> +		hdev->groups = groups;
+> +	}
+> +
+>  	hwdev->name = name;
+> -	hwdev->dev.class = &hwmon_class;
+> -	hwdev->dev.parent = dev;
+> -	hwdev->dev.groups = groups;
+> -	hwdev->dev.of_node = dev ? dev->of_node : NULL;
+> -	dev_set_drvdata(&hwdev->dev, drvdata);
+> -	dev_set_name(&hwdev->dev, HWMON_ID_FORMAT, id);
+> -	err = device_register(&hwdev->dev);
+> +	hdev->class = &hwmon_class;
+> +	hdev->parent = dev;
+> +	hdev->of_node = dev ? dev->of_node : NULL;
+> +	hwdev->chip = chip;
+> +	dev_set_drvdata(hdev, drvdata);
+> +	dev_set_name(hdev, HWMON_ID_FORMAT, id);
+> +	err = device_register(hdev);
+>  	if (err)
+> -		goto free;
+> +		goto free_hwmon;
+> +
+> +	if (chip && chip->ops->is_visible && chip->ops->read &&
+> +	    chip->info[0]->type == hwmon_chip &&
+> +	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+> +		const struct hwmon_channel_info **info = chip->info;
+> +
+> +		for (i = 1; info[i]; i++) {
+> +			if (info[i]->type != hwmon_temp)
+> +				continue;
+> +
+> +			for (j = 0; info[i]->config[j]; j++) {
+> +				if (!chip->ops->is_visible(drvdata, hwmon_temp,
+> +							   hwmon_temp_input, j))
+> +					continue;
+> +				if (info[i]->config[j] & HWMON_T_INPUT)
+> +					hwmon_thermal_add_sensor(dev, hwdev, j);
+> +			}
+> +		}
+> +	}
+>  
+> -	return &hwdev->dev;
+> +	return hdev;
+>  
+> -free:
+> +free_hwmon:
+>  	kfree(hwdev);
+>  ida_remove:
+>  	ida_simple_remove(&hwmon_ida, id);
+>  	return ERR_PTR(err);
+>  }
+> +
+> +/**
+> + * hwmon_device_register_with_groups - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @groups: List of attribute groups to create
+> + *
+> + * hwmon_device_unregister() must be called when the device is no
+> + * longer needed.
+> + *
+> + * Returns the pointer to the new device.
+> + */
+> +struct device *
+> +hwmon_device_register_with_groups(struct device *dev, const char *name,
+> +				  void *drvdata,
+> +				  const struct attribute_group **groups)
+> +{
+> +	return __hwmon_device_register(dev, name, drvdata, NULL, groups);
+> +}
+>  EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+>  
+>  /**
+> + * hwmon_device_register_with_info - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @info: Pointer to hwmon chip information
+> + * @groups - pointer to list of driver specific attribute groups
+
+I don't find this clear. "driver specific" doesn't really tell me what
+it is. My first reaction when reviewing the changes from an API
+perspective was "the attributes would be generated from the
+hwmon_chip_info, so why are we still passing them as a parameter?" Now I
+seem to understand that "groups" here is meant for extra attributes
+which aren't part of standard sysfs interface. This would be NULL for
+most drivers, right?
+
+To clear up the confusion, what about renaming this parameter to
+"extra_groups"? And maybe rewording "driver specific" to "non-standard"?
+
+As a side note I am wondering if it would be reasonable to limit it to a
+single group, instead of a NULL-terminated array of groups. This would
+make the code a little more efficient.
+
+> + *
+> + * hwmon_device_unregister() must be called when the device is no
+> + * longer needed.
+> + *
+> + * Returns the pointer to the new device.
+> + */
+> +struct device *
+> +hwmon_device_register_with_info(struct device *dev, const char *name,
+> +				void *drvdata,
+> +				const struct hwmon_chip_info *chip,
+> +				const struct attribute_group **groups)
+> +{
+> +	if (chip && (!chip->ops || !chip->info))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	return __hwmon_device_register(dev, name, drvdata, chip, groups);
+> +}
+> +EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
+> +
+> +/**
+>   * hwmon_device_register - register w/ hwmon
+>   * @dev: the device to register
+>   *
+> @@ -211,6 +600,48 @@ error:
+>  }
+>  EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_groups);
+>  
+> +/**
+> + * devm_hwmon_device_register_with_info - register w/ hwmon
+> + * @dev: the parent device
+> + * @name: hwmon name attribute
+> + * @drvdata: driver data to attach to created device
+> + * @info: Pointer to hwmon chip information
+> + * @groups - pointer to list of driver specific attribute groups
+> + *
+> + * Returns the pointer to the new device. The new device is automatically
+> + * unregistered with the parent device.
+> + */
+> +struct device *
+> +devm_hwmon_device_register_with_info(struct device *dev, const char *name,
+> +				     void *drvdata,
+> +				     const struct hwmon_chip_info *chip,
+> +				     const struct attribute_group **groups)
+> +{
+> +	struct device **ptr, *hwdev;
+> +
+> +	if (!dev)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	ptr = devres_alloc(devm_hwmon_release, sizeof(*ptr), GFP_KERNEL);
+> +	if (!ptr)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	hwdev = hwmon_device_register_with_info(dev, name, drvdata, chip,
+> +						groups);
+> +	if (IS_ERR(hwdev))
+> +		goto error;
+> +
+> +	*ptr = hwdev;
+> +	devres_add(dev, ptr);
+> +
+> +	return hwdev;
+> +
+> +error:
+> +	devres_free(ptr);
+> +	return hwdev;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_info);
+> +
+>  static int devm_hwmon_match(struct device *dev, void *res, void *data)
+>  {
+>  	struct device **hwdev = res;
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index 09354f6c1d63..52e56d71d742 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -14,9 +14,147 @@
+>  #ifndef _HWMON_H_
+>  #define _HWMON_H_
+>  
+> +#include <linux/bitops.h>
+> +
+>  struct device;
+>  struct attribute_group;
+>  
+> +enum hwmon_sensor_types {
+> +	hwmon_chip,
+> +	hwmon_temp,
+> +	hwmon_in,
+> +	hwmon_curr,
+> +	hwmon_power,
+> +	hwmon_energy,
+> +};
+> +
+> +enum hwmon_chip_attributes {
+> +	hwmon_chip_temp_reset_history,
+> +	hwmon_chip_register_tz,
+> +	hwmon_chip_update_interval,
+> +	hwmon_chip_alarms,
+> +};
+> +
+> +#define HWMON_C_TEMP_RESET_HISTORY	BIT(hwmon_chip_temp_reset_history)
+> +#define HWMON_C_IN_RESET_HISTORY	BIT(hwmon_chip_in_reset_history)
+
+Ideally this one should go in next patch ("Add voltage attribute support
+to new API".)
+
+> +#define HWMON_C_REGISTER_TZ		BIT(hwmon_chip_register_tz)
+> +#define HWMON_C_UPDATE_INTERVAL		BIT(hwmon_chip_update_interval)
+> +#define HWMON_C_ALARMS			BIT(hwmon_chip_alarms)
+> +
+> +enum hwmon_temp_attributes {
+> +	hwmon_temp_input = 0,
+> +	hwmon_temp_type,
+> +	hwmon_temp_lcrit,
+> +	hwmon_temp_lcrit_hyst,
+> +	hwmon_temp_min,
+> +	hwmon_temp_min_hyst,
+> +	hwmon_temp_max,
+> +	hwmon_temp_max_hyst,
+> +	hwmon_temp_crit,
+> +	hwmon_temp_crit_hyst,
+> +	hwmon_temp_emergency,
+> +	hwmon_temp_emergency_hyst,
+> +	hwmon_temp_alarm,
+> +	hwmon_temp_lcrit_alarm,
+> +	hwmon_temp_min_alarm,
+> +	hwmon_temp_max_alarm,
+> +	hwmon_temp_crit_alarm,
+> +	hwmon_temp_emergency_alarm,
+> +	hwmon_temp_fault,
+> +	hwmon_temp_offset,
+> +	hwmon_temp_label,
+> +	hwmon_temp_lowest,
+> +	hwmon_temp_highest,
+> +	hwmon_temp_reset_history,
+> +};
+> +
+> +#define HWMON_T_INPUT		BIT(hwmon_temp_input)
+> +#define HWMON_T_TYPE		BIT(hwmon_temp_type)
+> +#define HWMON_T_LCRIT		BIT(hwmon_temp_lcrit)
+> +#define HWMON_T_LCRIT_HYST	BIT(hwmon_temp_lcrit_hyst)
+> +#define HWMON_T_MIN		BIT(hwmon_temp_min)
+> +#define HWMON_T_MIN_HYST	BIT(hwmon_temp_min_hyst)
+> +#define HWMON_T_MAX		BIT(hwmon_temp_max)
+> +#define HWMON_T_MAX_HYST	BIT(hwmon_temp_max_hyst)
+> +#define HWMON_T_CRIT		BIT(hwmon_temp_crit)
+> +#define HWMON_T_CRIT_HYST	BIT(hwmon_temp_crit_hyst)
+> +#define HWMON_T_EMERGENCY	BIT(hwmon_temp_emergency)
+> +#define HWMON_T_EMERGENCY_HYST	BIT(hwmon_temp_emergency_hyst)
+> +#define HWMON_T_MIN_ALARM	BIT(hwmon_temp_min_alarm)
+> +#define HWMON_T_MAX_ALARM	BIT(hwmon_temp_max_alarm)
+> +#define HWMON_T_CRIT_ALARM	BIT(hwmon_temp_crit_alarm)
+> +#define HWMON_T_EMERGENCY_ALARM	BIT(hwmon_temp_emergency_alarm)
+> +#define HWMON_T_FAULT		BIT(hwmon_temp_fault)
+> +#define HWMON_T_OFFSET		BIT(hwmon_temp_offset)
+> +#define HWMON_T_LABEL		BIT(hwmon_temp_label)
+> +#define HWMON_T_LOWEST		BIT(hwmon_temp_lowest)
+> +#define HWMON_T_HIGHEST		BIT(hwmon_temp_highest)
+> +#define HWMON_T_RESET_HISTORY	BIT(hwmon_temp_reset_history)
+> +
+> +/**
+> + * struct hwmon_ops - hwmon device operations
+> + * @is_visible: Callback to return attribute visibility. Mandatory.
+> + *		Parameters are:
+> + *		@const void *drvdata:
+> + *			Pointer to driver-private data structure passed
+> + *			as argument to hwmon_device_register_with_info().
+> + *		@type:	Sensor type
+> + *		@attr:	Sensor attribute
+> + *		@channel:
+> + *			Channel number
+> + *		The function returns the file permissions.
+> + *		If the return value is 0, no attribute will be created.
+> + * @read:       Read callback. Optional. If not provided, attributes
+> + *		will not be readable.
+> + *		Parameters are:
+> + *		@dev:	Pointer to hardware monitoring device
+> + *		@type:	Sensor type
+> + *		@attr:	Sensor attribute
+> + *		@channel:
+> + *			Channel number
+> + *		@val:	Pointer to returned value
+> + *		The function returns 0 on success or a negative error number.
+> + * @write:	Write callback. Optional. If not provided, attributes
+> + *		will not be writable.
+> + *		Parameters are:
+> + *		@dev:	Pointer to hardware monitoring device
+> + *		@type:	Sensor type
+> + *		@attr:	Sensor attribute
+> + *		@channel:
+> + *			Channel number
+> + *		@val:	Value to write
+> + *		The function returns 0 on success or a negative error number.
+> + */
+> +struct hwmon_ops {
+> +	umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel);
+> +	int (*read)(struct device *dev, enum hwmon_sensor_types type,
+> +		    u32 attr, int channel, long *val);
+> +	int (*write)(struct device *dev, enum hwmon_sensor_types type,
+> +		     u32 attr, int channel, long val);
+> +};
+> +
+> +/**
+> + * Channel information
+> + * @type:	Channel type.
+> + * @config:	Pointer to NULL-terminated list of channel parameters.
+> + *		Use for per-channel attributes.
+> + */
+> +struct hwmon_channel_info {
+> +	enum hwmon_sensor_types type;
+> +	const u32 *config;
+> +};
+> +
+> +/**
+> + * Chip configuration
+> + * @ops:	Pointer to hwmon operations.
+> + * @info:	Null-terminated list of channel information.
+> + */
+> +struct hwmon_chip_info {
+> +	const struct hwmon_ops *ops;
+> +	const struct hwmon_channel_info **info;
+> +};
+> +
+>  struct device *hwmon_device_register(struct device *dev);
+>  struct device *
+>  hwmon_device_register_with_groups(struct device *dev, const char *name,
+> @@ -26,6 +164,16 @@ struct device *
+>  devm_hwmon_device_register_with_groups(struct device *dev, const char *name,
+>  				       void *drvdata,
+>  				       const struct attribute_group **groups);
+> +struct device *
+> +hwmon_device_register_with_info(struct device *dev,
+> +				const char *name, void *drvdata,
+> +				const struct hwmon_chip_info *info,
+> +				const struct attribute_group **groups);
+> +struct device *
+> +devm_hwmon_device_register_with_info(struct device *dev,
+> +				     const char *name, void *drvdata,
+> +				     const struct hwmon_chip_info *info,
+> +				     const struct attribute_group **groups);
+>  
+>  void hwmon_device_unregister(struct device *dev);
+>  void devm_hwmon_device_unregister(struct device *dev);
+
+This is adding a 4th and 5th way to register a hwmon device. Starts
+being a bit messy... Do you have any plans to get rid of some of the
+other functions to make things more consistent and efficient?
+
+-- 
+Jean Delvare
+SUSE L3 Support
