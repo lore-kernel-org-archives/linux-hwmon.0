@@ -1,68 +1,72 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36516 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751527AbcJEAZa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2016 20:25:30 -0400
-Date: Tue, 4 Oct 2016 17:25:27 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrea Merello <andrea.merello@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 1/2] DT: add binding documentation for STTS751
-Message-ID: <20161005002527.GA7857@roeck-us.net>
-References: <1474978047-28290-1-git-send-email-andrea.merello@gmail.com>
- <1474978047-28290-2-git-send-email-andrea.merello@gmail.com>
+Return-path: <Chris.Packham@alliedtelesis.co.nz>
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: "jdelvare@suse.com" <jdelvare@suse.com>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Michael Wang
+	<Michael.Wang@alliedtelesis.co.nz>
+Subject: adm9240 error handling (was Re: [PATCHv1] hwmon: adm9240: handle
+ temperature readings below 0)
+Date: Wed, 5 Oct 2016 05:00:52 +0000
+Message-ID: <56fa4053f8a448a38b9f1e0dd45a0092@svr-chch-ex1.atlnz.lc>
+References: <20161004040800.9689-1-chris.packham@alliedtelesis.co.nz>
+ <20161004205359.GA29531@roeck-us.net>
+ <3c7c751bd9d24856ace5866ffb94060a@svr-chch-ex1.atlnz.lc>
+ <20161004220938.GA4566@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1474978047-28290-2-git-send-email-andrea.merello@gmail.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Sep 27, 2016 at 02:07:26PM +0200, Andrea Merello wrote:
-> Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/stts751.txt | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/stts751.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/stts751.txt b/Documentation/devicetree/bindings/hwmon/stts751.txt
-> new file mode 100644
-> index 0000000..277ad46
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/stts751.txt
-> @@ -0,0 +1,19 @@
-> +* STTS751 thermometer.
-> +
-> +Required node properties:
-> +- compatible: "stts751"
-> +- reg: I2C bus address of the device
-> +
-> +Optional properties:
-> +- has-therm: specifies that the "therm" pin is wired
-> +- has-event: specifies that the "event" pin is wired
-
-As mentioned in the code patch, I don't think those properties are actually
-needed.
-
-Guenter
-
-> +- smbus-timeout-disable: when set, the smbus timeout function will be disabled
-> +
-> +Example stts751 node:
-> +
-> +temp-sensor {
-> +	compatible = "stts751";
-> +	reg = <0x48>;
-> +	has-therm;
-> +	has-event;
-> +}
-> -- 
-> 2.7.4
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Hi Guenter,=0A=
+=0A=
+On 10/05/2016 11:10 AM, Guenter Roeck wrote:=0A=
+> On Tue, Oct 04, 2016 at 09:09:10PM +0000, Chris Packham wrote:=0A=
+>>=0A=
+>>>=0A=
+>>> Of course, all that doesn't solve the real problem in this driver, whic=
+h is=0A=
+>>> that it ignores error codes from the smbus functions, but that is a dif=
+ferent=0A=
+>>> problem.=0A=
+>>=0A=
+>> Yeah I'd noted that too. This patch is actually a port of changes we've=
+=0A=
+>> made to a custom LM81 driver based on the original adm9240 driver which=
+=0A=
+>> included some error handling. I'll look at bringing more of that code in=
+=0A=
+>> for a future patch.=0A=
+>>=0A=
+> Sounds good...=0A=
+>=0A=
+=0A=
+So on this. The as-yet unpublished changes we have basically consist of =0A=
+changing adm9240_update_device() to do something like this=0A=
+=0A=
+=0A=
+                         || !data->valid) {=0A=
+=0A=
+                 for (i =3D 0; i < 6; i++) { /* read voltages */=0A=
+-                       data->in[i] =3D i2c_smbus_read_byte_data(client,=0A=
++                       ret =3D i2c_smbus_read_byte_data(client,=0A=
+                                         ADM9240_REG_IN(i));=0A=
++                       if (ret >=3D 0)=0A=
++                               data->in[i] =3D ret;=0A=
+=0A=
+The user is still none the wiser that there was an error but at least we =
+=0A=
+haven't just attempted to write a error code to the data. Is this the =0A=
+direction you want to head? Are there other hwmon drivers that do =0A=
+something saner?=0A=
+=0A=
+Another attempt we've made is to try to read something innocuous like =0A=
+the CONFIG register to check that the i2c bus is in a good state before =0A=
+reading the rest of the values.=0A=
+=0A=
+As you can guess these "fixes" have piled up over time and because =0A=
+they're hard to test we haven't been brave enough to remove them.=0A=
+=0A=
+Any thoughts?=0A=
+=0A=
