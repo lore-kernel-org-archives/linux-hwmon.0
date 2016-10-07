@@ -22,74 +22,64 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-i2c@vger.kernel.org,
 	linux-leds@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH 06/10] gpio: gpio-i2cs: Document bindings of I2CS FPGA GPIO block
-Date: Fri,  7 Oct 2016 18:21:05 +0300
-Message-Id: <1475853669-22480-7-git-send-email-pantelis.antoniou@konsulko.com>
+Subject: [PATCH 08/10] leds: Add binding for Juniper's I2CS FPGA
+Date: Fri,  7 Oct 2016 18:21:07 +0300
+Message-Id: <1475853669-22480-9-git-send-email-pantelis.antoniou@konsulko.com>
 In-Reply-To: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com>
 References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Georgi Vlaev <gvlaev@juniper.net>
 
-Add device tree bindings document for the GPIO driver of
-Juniper's I2CS FPGA.
+Document bindings for the I2CS FPGA leds.
 
 Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
 [Ported from Juniper kernel]
 Signed-off-by: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
 ---
- .../devicetree/bindings/gpio/jnx,gpio-i2cs.txt     | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/jnx,gpio-i2cs.txt
+ .../devicetree/bindings/leds/leds-i2cs.txt         | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-i2cs.txt
 
-diff --git a/Documentation/devicetree/bindings/gpio/jnx,gpio-i2cs.txt b/Documentation/devicetree/bindings/gpio/jnx,gpio-i2cs.txt
+diff --git a/Documentation/devicetree/bindings/leds/leds-i2cs.txt b/Documentation/devicetree/bindings/leds/leds-i2cs.txt
 new file mode 100644
-index 0000000..835b7fb4
+index 0000000..100e584
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/jnx,gpio-i2cs.txt
-@@ -0,0 +1,43 @@
-+Juniper I2CS FPGA GPIO presence block
++++ b/Documentation/devicetree/bindings/leds/leds-i2cs.txt
+@@ -0,0 +1,34 @@
++Juniper I2CS LED driver.
 +
-+This is virtual gpio driver, that maps each bit of the I2CS FPGA to
-+a gpio. It's used as a compatibility replacement for FRUs that use
-+I2CS FPGA to report presence, control and report power status in
-+the Juniper's driver infra that uses gpios. Compatible with any I2CS.
++This is present in Juniper platforms that use a I2CS Slave FPGA.
 +
 +Required properties:
++  - compatible: must be "jnx,leds-i2cs"
++  - #address-cells : must be 1.
++  - #size-cells : must be 0.
 +
-+Required properties:
-+- compatible: "jnx,gpio-i2cs"
++Each led is represented as a sub-node of the jnx,leds-i2cs device.
 +
-+- reg:
-+    Address on the I2C bus of the I2CS FPGA
-+
-+- gpio-controller: Marks the device node as a gpio controller.
-+
-+- interrupt-controller: Marks the device node as an interrupt
-+			controller.
-+
-+- i2c-gpio-map: Map of "I2CS register" and "direction". The registers
-+	are 8 bit wide, each bit of the register is mapped to either
-+	input or output depending on the bits of the "direction". If
-+	the bit in the direction is 1, then that bit from the I2CS
-+	register is mapped to gpio input, otherwise to gpio output.
-+
-+- #gpio-cells : Should be two.  The first cell is the pin number and
-+	the second cell is used to specify the gpio polarity:
-+	0 = active high
-+	1 = active low
-+
-+Optional properties:
++LED sub-node properties:
++- label : (optional) see Documentation/devicetree/bindings/leds/common.txt
++- reg : number of LED
++- linux,default-trigger : (optional)
++   see Documentation/devicetree/bindings/leds/common.txt
 +
 +Example:
 +
-+cb0_slave: i2c-slave@54 {
-+	compatible = "jnx,gpio-i2cs";
-+	reg = <0x54>;
-+	#gpio-cells = <2>;
-+	gpio-controller;
-+	interrupt-controller;
-+	i2c-gpio-map = <0x21 0xff>;	/* power status (bit 6) */
++leds_fpc0: leds-jnx-i2cs {
++	compatible = "jnx,leds-i2cs";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	fpc0-fail {
++		reg = <1>;
++		linux,default-trigger = "fpc0-fail";
++	};
++
++	fpc0-ok {
++		reg = <2>;
++		linux,default-trigger = "fpc0-ok";
++	};
 +};
 -- 
 1.9.1
