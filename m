@@ -22,98 +22,225 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-i2c@vger.kernel.org,
 	linux-leds@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH 02/10] mfd: dt-bindings: Add bindings for the Juniper I2CS MFD
-Date: Fri,  7 Oct 2016 18:21:01 +0300
-Message-Id: <1475853669-22480-3-git-send-email-pantelis.antoniou@konsulko.com>
+Subject: [PATCH 03/10] i2c/muxes: Juniper I2CS RE mux
+Date: Fri,  7 Oct 2016 18:21:02 +0300
+Message-Id: <1475853669-22480-4-git-send-email-pantelis.antoniou@konsulko.com>
 In-Reply-To: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com>
 References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Georgi Vlaev <gvlaev@juniper.net>
 
-Add device tree bindings for the Juniper I2CS MFD driver.
+Add support for Juniper I2C Slave RE multiplexer driver.
+
+This I2C multiplexer driver allows the RE to access some of
+the FPC I2C buses. It's compatible only with the FPC variant of the
+I2CS.
 
 Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
+Signed-off-by: Guenter Roeck <groeck@juniper.net>
 [Ported from Juniper kernel]
 Signed-off-by: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
 ---
- Documentation/devicetree/bindings/mfd/jnx-i2cs.txt | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/jnx-i2cs.txt
+ drivers/i2c/muxes/Kconfig        |  10 +++
+ drivers/i2c/muxes/Makefile       |   1 +
+ drivers/i2c/muxes/i2c-mux-i2cs.c | 155 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 166 insertions(+)
+ create mode 100644 drivers/i2c/muxes/i2c-mux-i2cs.c
 
-diff --git a/Documentation/devicetree/bindings/mfd/jnx-i2cs.txt b/Documentation/devicetree/bindings/mfd/jnx-i2cs.txt
+diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
+index f45a9cb..c95380d 100644
+--- a/drivers/i2c/muxes/Kconfig
++++ b/drivers/i2c/muxes/Kconfig
+@@ -30,6 +30,16 @@ config I2C_MUX_GPIO
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-mux-gpio.
+ 
++config I2C_MUX_I2CS
++	tristate "Juniper I2C Slave MFD client RE multiplexer"
++	depends on MFD_JUNIPER_I2CS
++	help
++	  Select this to enable the Juniper I2C Slave RE multiplexer driver
++	  on the relevant Juniper platforms.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called i2c-mux-i2cs.
++
+ config I2C_MUX_PCA9541
+ 	tristate "NXP PCA9541 I2C Master Selector"
+ 	help
+diff --git a/drivers/i2c/muxes/Makefile b/drivers/i2c/muxes/Makefile
+index 78d8cba..45b4287 100644
+--- a/drivers/i2c/muxes/Makefile
++++ b/drivers/i2c/muxes/Makefile
+@@ -6,6 +6,7 @@ obj-$(CONFIG_I2C_ARB_GPIO_CHALLENGE)	+= i2c-arb-gpio-challenge.o
+ obj-$(CONFIG_I2C_DEMUX_PINCTRL)		+= i2c-demux-pinctrl.o
+ 
+ obj-$(CONFIG_I2C_MUX_GPIO)	+= i2c-mux-gpio.o
++obj-$(CONFIG_I2C_MUX_I2CS)	+= i2c-mux-i2cs.o
+ obj-$(CONFIG_I2C_MUX_PCA9541)	+= i2c-mux-pca9541.o
+ obj-$(CONFIG_I2C_MUX_PCA954x)	+= i2c-mux-pca954x.o
+ obj-$(CONFIG_I2C_MUX_PINCTRL)	+= i2c-mux-pinctrl.o
+diff --git a/drivers/i2c/muxes/i2c-mux-i2cs.c b/drivers/i2c/muxes/i2c-mux-i2cs.c
 new file mode 100644
-index 0000000..0ec103b
+index 0000000..c498a44
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/jnx-i2cs.txt
-@@ -0,0 +1,68 @@
-+Device-Tree bindings for Juniper Networks I2CS FPGA MFD
++++ b/drivers/i2c/muxes/i2c-mux-i2cs.c
+@@ -0,0 +1,155 @@
++/*
++ * Juniper Networks I2CS RE mux driver
++ *
++ * Copyright (C) 2012, 2013, 2014 Juniper Networks. All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
 +
-+Required properties:
-+- compatible - Must be one of:
-+	"jnx,i2cs-rcb"	(Routing Engine or Control Board FRUs)
-+	"jnx,i2cs-fpc"	(Flexible Port Concentrator FRUs)
-+	"jnx,i2cs-sib"	(Switching Interface Board FRUs)
-+	"jnx,i2cs-fan"	(Fan Tray FRUs)
++#include <linux/init.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/i2c.h>
++#include <linux/i2c-mux.h>
++#include <linux/regmap.h>
++#include <linux/platform_device.h>
++#include <linux/mfd/jnx-i2cs-core.h>
 +
-+Optional properties:
++#define MISC_IO_RE_EN	0x01
 +
-+Depending on the FRU, the I2CS MFD has varied group of sub-devices:
++/*
++ * Read/write to mux register.
++ *   Don't use i2c_transfer()/i2c_smbus_xfer()
++ *   for this as they will try to lock adapter a second time
++ */
++static int i2cs_mux_read_byte(struct i2c_client *client,
++				  u8 offset, u8 *val)
++{
++	struct i2c_msg msg[2];
 +
-+Device                   Description
-+------                   -----------
-+jnx,i2cs-gpio		: Virtual gpio mapping driver
-+jnx,i2cs-fan-hwmon	: hwmon driver for fan trays
-+jnx,i2c-mux-i2cs	: I2C Mux driver for FPC FRUs
-+jnx,leds-i2cs		: Led driver
++	msg[0].addr = client->addr;
++	msg[0].flags = 0;
++	msg[0].len = 1;
++	msg[0].buf = &offset;
 +
-+All these optional nodes are described in their respective binding
-+documents.
++	msg[1].addr = client->addr;
++	msg[1].flags = I2C_M_RD;
++	msg[1].len = 1;
++	msg[1].buf = val;
 +
-+Example node:
++	return client->adapter->algo->master_xfer(client->adapter, msg, 2);
++}
 +
-+i2cs@54 {
-+	compatible = "jnx,i2cs-fpc";
-+	reg = <0x54>;
-+	#address-cells = <0>;
-+	#size-cells = <0>;
++static int i2cs_mux_write_byte(struct i2c_client *client, u8 offset, u8 val)
++{
++	struct i2c_msg msg;
++	char buf[2];
 +
-+	fpc2_mux {
-+		compatible = "jnx,i2c-mux-i2cs";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++	msg.addr = client->addr;
++	msg.flags = 0;
++	msg.len = 2;
++	buf[0] = offset;
++	buf[1] = val;
++	msg.buf = buf;
 +
-+		fpc2i2c0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+	};
++	return client->adapter->algo->master_xfer(client->adapter, &msg, 1);
++}
 +
-+	fpc2_gpiomap: gpio-jnx-i2cs {
-+		compatible = "jnx,gpio-i2cs";
-+		reg = <0x54>;
-+		#gpio-cells = <2>;
-+		gpio-controller;
-+		interrupt-controller;
++static int i2cs_mux_select(struct i2c_mux_core *muxc, u32 chan)
++{
++	int ret;
++	u8 val = 0;
++	struct i2c_client *client = i2c_mux_priv(muxc);
 +
-+		/*
-+		 * Map bits [0-3] of reg 0x21 as gpio inputs, bits [4-7]
-+		 * as gpio outputs
-+		 */
-+		i2c-gpio-map = <0x21 0x0f>;
-+	};
++	ret = i2cs_mux_read_byte(client, I2CS_MISC_IO, &val);
++	if (ret < 0)
++		return ret;
 +
-+	leds-jnx-i2cs {
-+		compatible = "jnx,leds-i2cs";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++	val |= MISC_IO_RE_EN;
++	ret = i2cs_mux_write_byte(client, I2CS_MISC_IO, val);
 +
-+		sib8-active {
-+			reg = <0>;
-+			linux,default-trigger = "sib8-active";
-+		};
-+	};
++	return ret;
++}
++
++static int i2cs_mux_deselect(struct i2c_mux_core *muxc, u32 chan)
++{
++	int ret;
++	u8 val = 0;
++	struct i2c_client *client = i2c_mux_priv(muxc);
++
++	ret = i2cs_mux_read_byte(client, I2CS_MISC_IO, &val);
++	if (ret < 0)
++		return ret;
++
++	val &= ~MISC_IO_RE_EN;
++	ret = i2cs_mux_write_byte(client, I2CS_MISC_IO, val);
++
++	return 0;
++}
++
++static int i2cs_mux_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct i2c_client *client;
++	struct i2c_mux_core *muxc;
++	int ret;
++
++	if (!dev->parent)
++		return -ENODEV;
++
++	client = i2c_verify_client(dev->parent);
++	if (!client)
++		return -ENODEV;
++
++	muxc = i2c_mux_alloc(client->adapter, &client->dev, 1, 0, 0,
++				i2cs_mux_select, i2cs_mux_deselect);
++	if (!muxc)
++		return -ENOMEM;
++	muxc->priv = client;
++
++	ret = i2c_mux_add_adapter(muxc, 0, 0, 0);
++	if (ret)
++		return ret;
++
++	platform_set_drvdata(pdev, muxc);
++
++	return 0;
++}
++
++static int i2cs_mux_remove(struct platform_device *pdev)
++{
++	i2c_mux_del_adapters(platform_get_drvdata(pdev));
++
++	return 0;
++}
++
++static const struct of_device_id i2cs_mux_of_match[] = {
++	{ .compatible = "jnx,i2c-mux-i2cs", },
++	{},
 +};
++MODULE_DEVICE_TABLE(of, i2cs_mux_of_match);
++
++static struct platform_driver i2cs_mux_driver = {
++	.driver = {
++		.name = "i2c-mux-i2cs",
++		.owner  = THIS_MODULE,
++		.of_match_table = of_match_ptr(i2cs_mux_of_match),
++	},
++	.probe = i2cs_mux_probe,
++	.remove = i2cs_mux_remove,
++};
++module_platform_driver(i2cs_mux_driver);
++
++MODULE_DESCRIPTION("Juniper Networks I2CS RE Mux driver");
++MODULE_AUTHOR("Georgi Vlaev <gvlaev@juniper.net>");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:i2c-mux-i2cs");
 -- 
 1.9.1
