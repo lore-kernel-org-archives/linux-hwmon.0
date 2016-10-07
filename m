@@ -1,675 +1,242 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36227 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752002AbcJJNVz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Oct 2016 09:21:55 -0400
-Subject: Re: [PATCHv3] hwmon: Add tc654 driver
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-hwmon@vger.kernel.org
-References: <20161007182939.GA9031@roeck-us.net>
- <20161009221222.29409-1-chris.packham@alliedtelesis.co.nz>
-Cc: iwamoto@allied-telesis.co.jp, Joshua.Scott@alliedtelesis.co.nz,
-        Kevin Tsai <ktsai@capellamicro.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b8294ac3-7bac-eeb3-8923-ed569a19cab2@roeck-us.net>
-Date: Mon, 10 Oct 2016 06:21:40 -0700
+Return-path: <jdelvare@suse.de>
+Date: Fri, 7 Oct 2016 14:32:13 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Eduardo Valentin <edubezval@gmail.com>, Punit Agrawal
+ <punit.agrawal@arm.com>, linux-pm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] hwmon: (core) New hwmon registration API
+Message-ID: <20161007143213.0ba633fe@endymion>
+In-Reply-To: <20161004193713.GA26304@roeck-us.net>
+References: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
+ <1469417552-9749-3-git-send-email-linux@roeck-us.net>
+ <1475570759.3052.22.camel@chaos.suse>
+ <20161004193713.GA26304@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20161009221222.29409-1-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/09/2016 03:12 PM, Chris Packham wrote:
-> Add support for the tc654 and tc655 fan controllers from Microchip.
+Hi Guenter,
+
+On Tue, 4 Oct 2016 12:37:13 -0700, Guenter Roeck wrote:
+> On Tue, Oct 04, 2016 at 10:45:59AM +0200, Jean Delvare wrote:
+> > I see this patch is upstream now, but I had started reviewing it and
+> > maybe some of my comments are still relevant.
+> > 
+> As always, I appreciate the feedback. I'll be happy to submit follow-up
+> patches to address any concerns.
+> 
+> > It's not meant to be a complete review, which is why I had not sent it
+> > yet :-(
+> > 
+> > Also I did not follow the first iterations of this patchset so my
+> > apologies if I raise points which have already been discussed.
+> > 
+> > May I ask if any other subsystem is already doing anything like that?
+> > 
+> Depends what you mean with "anything like that". The API is inspired by
+> the iio API and a little by the thermal API. The details are probably
+> unique, though.
+
+I meant the idea of describing the device capabilities and letting the
+core code generate the device attributes (or anything else) based on
+that data. The benefits are obvious, but it has a complexity and
+run-time cost so I am wondering how popular this approach is.
+
+> > FYI I gave a presentation about the hwmon device registration API
+> > evolution last week at Kernel Recipes [1] in Paris and mentioned this
+> > proposal.
+> > 
+> > [1] https://kernel-recipes.org/en/2016/
+> > 
+> > On dim., 2016-07-24 at 20:32 -0700, Guenter Roeck wrote:
+> > > Up to now, each hwmon driver has to implement its own sysfs attributes.
+> > > This requires a lot of template code, and distracts from the driver's core
+> > > function to read and write chip registers.
+> > > 
+> > > To be able to reduce driver complexity, move sensor attribute handling
+> > > and thermal zone registration into hwmon core. By using the new API,
+> > > driver code and data size is typically reduced by 20-70%, depending
+> > > on driver complexity and the number of sysfs attributes supported.
+> > 
+> > I looked at the diffstats for the drivers you have already converted and
+> > couldn't see any such huge improvement... Some drivers appear to be even
+> > larger after conversion?
+> > 
+> The above refers to code and data sizes.
+
+You mean at the binary level?
+
+Have you considered the case where several devices exist for the same
+driver? Static attributes are shared between devices, but with the
+generated ones this is no longer the case, right?
+
+> > > (...)
+> > > +static struct attribute *hwmon_genattr(struct device *dev,
+> > > +				       const void *drvdata,
+> > > +				       enum hwmon_sensor_types type,
+> > > +				       u32 attr,
+> > > +				       int index,
+> > > +				       const char *template,
+> > > +				       const struct hwmon_ops *ops)
+> > > +{
+> > > +	struct hwmon_device_attribute *hattr;
+> > > +	struct device_attribute *dattr;
+> > > +	struct attribute *a;
+> > > +	umode_t mode;
+> > > +	char *name;
+> > > +
+> > > +	/* The attribute is invisible if there is no template string */
+> > > +	if (!template)
+> > > +		return ERR_PTR(-ENOENT);
+> > > +
+> > > +	mode = ops->is_visible(drvdata, type, attr, index);
+> > 
+> > Any reason why you don't simply attach the provided ->is_visible to the
+> > attribute group and let the driver core do the work?
+> > 
+> Parameter are all different
+> 	umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
+> 	                              u32 attr, int channel);
+> vs.
+> 	umode_t (*is_visible)(struct kobject *, struct attribute *, int);
+
+But this is the consequence of how you implemented it, not the reason?
+
+Now I seem to understand that delegating the check to the driver core
+would make it happen later, which means you would have to instantiate
+all attributes, even if some are never going to be used? So this is an
+optimization?
+
+But this prevents sharing the attributes between devices, as pointed
+out above. Well, I guess you can't have it all. I don't know what is
+the more important.
+
+> > > +		return ERR_PTR(-ENOENT);
+> > > +
+> > > +	if ((mode & S_IRUGO) && !ops->read)
+> > > +		return ERR_PTR(-EINVAL);
+> > > +	if ((mode & S_IWUGO) && !ops->write)
+> > > +		return ERR_PTR(-EINVAL);
+> > > +
+> > > +	if (type == hwmon_chip) {
+> > 
+> > This needs a comment. It's not obvious what "hwmon_chip" is supposed to
+> > represent. From what I understand, maybe "hwmon_unique" would be a more
+> > appropriate name.
+> > 
+> Those are meant to be for attributes which apply to the entire chip.
+
+Not really. As you implemented it, it is meant for attributes which are
+not specific to an input or output in particular. That is, attributes
+which do not include a channel number. "update_interval" and
+"alarms" (which I'd like to get rid of, btw) apply to the entire chip,
+but "temp_reset_history" does not.
+
+> Not sure if 'hwmon_unique' would reflect that better.
+> From the documentation:
+> 	"A virtual sensor type, used to describe attributes
+> 	 which apply to the entire chip"
+> 
+> Do you have an idea for a better description ?
+
+For one thing I would rename hwmon_chip_attr_templates to
+hwmon_chip_attrs (or whatever, without _templates.) They are used
+directly, as opposed to all other hwmon_*_attr_templates strings which
+must be generated as needed.
+
+This is the reason why the term "unique" came to my mind: the absence
+of %d in the name makes this array special. If we can't find a name
+that expresses that, I think a comment should be added to explain it.
+
+As for the description in the documentation, what about:
+
+	"A virtual sensor type, used to describe attributes
+	which are not bound to a specific input or output"
+
+"input or output" could be shortened as "channel" but I think spelling
+it out is more explicit.
+
+> > > +		name = (char *)template;
+> > > +	} else {
+> > > +		name = devm_kzalloc(dev, strlen(template) + 16, GFP_KERNEL);
+> > > +		if (!name)
+> > > +			return ERR_PTR(-ENOMEM);
+> > > +		scnprintf(name, strlen(template) + 16, template,
+> > > +			  index + hwmon_attr_base(type));
+> > > +	}
+> > > +
+> > > +	hattr = devm_kzalloc(dev, sizeof(*hattr), GFP_KERNEL);
+> > > +	if (!hattr)
+> > > +		return ERR_PTR(-ENOMEM);
+> > 
+> > So basically you are doing 1 or 2 memory allocations for every
+> > attribute? Looks quite bad from a memory fragmentation
+> > perspective :-( Not to mention performance. Given that you have all the
+> > data at hand before you start, can't you preallocate an array with the
+> > right number of hattr and pick from it? That would at least solve half
+> > of the problem.
+
+FTR I took a quick look at the iio code and there seems to be something
+like the idea above implemented in iio_device_register_sysfs(). But
+attributes themselves as instantiated by iio_device_register_sysfs()
+are still allocated individually. But hey I'm not familiar with the iio
+code anyway, I'm sure you know it better than I do.
+
+> > Something similar for string allocation may work too, although it's
+> > somewhat more complex due to the variable length. But I think the
+> > abituguru3 driver is doing it right, so maybe you can too.
 >
-> http://ww1.microchip.com/downloads/en/DeviceDoc/20001734C.pdf
+> I'll look into it.
+
+> > (...)
+> > As a side note I am wondering if it would be reasonable to limit it to a
+> > single group, instead of a NULL-terminated array of groups. This would
+> > make the code a little more efficient.
+> > 
+> The underlying code is all the same; hwmon_device_register_with_groups()
+> also calls __hwmon_device_register(). I would prefer to keep the code as
+> common as possible.
+
+OK, that makes sense. Maybe it can be revisited when/if we manage to
+remove some of the old registration methods.
+
+> > > (...)
+> > > @@ -26,6 +164,16 @@ struct device *
+> > >  devm_hwmon_device_register_with_groups(struct device *dev, const char *name,
+> > >  				       void *drvdata,
+> > >  				       const struct attribute_group **groups);
+> > > +struct device *
+> > > +hwmon_device_register_with_info(struct device *dev,
+> > > +				const char *name, void *drvdata,
+> > > +				const struct hwmon_chip_info *info,
+> > > +				const struct attribute_group **groups);
+> > > +struct device *
+> > > +devm_hwmon_device_register_with_info(struct device *dev,
+> > > +				     const char *name, void *drvdata,
+> > > +				     const struct hwmon_chip_info *info,
+> > > +				     const struct attribute_group **groups);
+> > >  
+> > >  void hwmon_device_unregister(struct device *dev);
+> > >  void devm_hwmon_device_unregister(struct device *dev);
+> > 
+> > This is adding a 4th and 5th way to register a hwmon device. Starts
+> > being a bit messy... Do you have any plans to get rid of some of the
+> > other functions to make things more consistent and efficient?
 >
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> Changes in v3:
-> - typofix in documentation
-> - add missing value to tc654_pwm_map, re-generate based on datasheet.
-> - remove unnecessary hwmon_dev member from struct tc654_data
-> - bug fixes in set_fan_min() and show_pwm_mode()
-> - miscellaneous style fixes
->
-> Changes in v2:
-> - Add Documentation/hwmon/tc654
-> - Incorporate most of the review comments from Guenter. Additional error
->   handling is added. Unused/unnecessary code is removed. I decided not
->   to go down the regmap path yet. I may circle back to it when I look at
->   using regmap in the adm9240 driver.
->
->  .../devicetree/bindings/i2c/trivial-devices.txt    |   2 +
->  Documentation/hwmon/tc654                          |  31 ++
->  drivers/hwmon/Kconfig                              |  11 +
->  drivers/hwmon/Makefile                             |   1 +
->  drivers/hwmon/tc654.c                              | 509 +++++++++++++++++++++
->  5 files changed, 554 insertions(+)
->  create mode 100644 Documentation/hwmon/tc654
->  create mode 100644 drivers/hwmon/tc654.c
->
-> diff --git a/Documentation/devicetree/bindings/i2c/trivial-devices.txt b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
-> index 1416c6a0d2cd..833fb9f133d3 100644
-> --- a/Documentation/devicetree/bindings/i2c/trivial-devices.txt
-> +++ b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
-> @@ -122,6 +122,8 @@ microchip,mcp4662-502	Microchip 8-bit Dual I2C Digital Potentiometer with NV Mem
->  microchip,mcp4662-103	Microchip 8-bit Dual I2C Digital Potentiometer with NV Memory (10k)
->  microchip,mcp4662-503	Microchip 8-bit Dual I2C Digital Potentiometer with NV Memory (50k)
->  microchip,mcp4662-104	Microchip 8-bit Dual I2C Digital Potentiometer with NV Memory (100k)
-> +microchip,tc654		PWM Fan Speed Controller With Fan Fault Detection
-> +microchip,tc655		PWM Fan Speed Controller With Fan Fault Detection
->  national,lm63		Temperature sensor with integrated fan control
->  national,lm75		I2C TEMP SENSOR
->  national,lm80		Serial Interface ACPI-Compatible Microprocessor System Hardware Monitor
-> diff --git a/Documentation/hwmon/tc654 b/Documentation/hwmon/tc654
-> new file mode 100644
-> index 000000000000..91a2843f5f98
-> --- /dev/null
-> +++ b/Documentation/hwmon/tc654
-> @@ -0,0 +1,31 @@
-> +Kernel driver tc654
-> +===================
-> +
-> +Supported chips:
-> +  * Microship TC654 and TC655
-> +    Prefix: 'tc654'
-> +    Datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/20001734C.pdf
-> +
-> +Authors:
-> +        Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +        Masahiko Iwamoto <iwamoto@allied-telesis.co.jp>
-> +
-> +Description
-> +-----------
-> +This driver implements support for the Microchip TC654 and TC655.
-> +
-> +The TC654 uses the 2-wire interface compatible with the SMBUS 2.0
-> +specification. The TC654 has two (2) inputs for measuring fan RPM and
-> +one (1) PWM output which can be used for fan control.
-> +
-> +Configuration Notes
-> +-------------------
-> +Ordinarily the pwm1_mode ABI is used for controlling the pwm output
-> +mode.  However, for this chip the output is always pwm, and the
-> +pwm1_mode determines if the pwm output is controlled via the pwm1 value
-> +or via the Vin analog input.
-> +
-> +
-> +Setting pwm1_mode to 1 will cause the pwm output to be driven based on
-> +the pwm1 value. Setting pwm1_mode to 0 will cause the pwm output to be
-> +driven based on the Vin input.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 45cef3d2c75c..8681bc65cde5 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -907,6 +907,17 @@ config SENSORS_MCP3021
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called mcp3021.
->
-> +config SENSORS_TC654
-> +	tristate "Microchip TC654/TC655 and compatibles"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for TC654 and TC655.
-> +	  The TC654 and TC655 are PWM mode fan speed controllers with
-> +	  FanSense technology for use with brushless DC fans.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called tc654.
-> +
->  config SENSORS_MENF21BMC_HWMON
->  	tristate "MEN 14F021P00 BMC Hardware Monitoring"
->  	depends on MFD_MENF21BMC
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index aecf4ba17460..c651f0f1d047 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -122,6 +122,7 @@ obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
->  obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
->  obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
->  obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
-> +obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
->  obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
->  obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
->  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
-> diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
-> new file mode 100644
-> index 000000000000..456e0bb9f94f
-> --- /dev/null
-> +++ b/drivers/hwmon/tc654.c
-> @@ -0,0 +1,509 @@
-> +/*
-> + * tc654.c - Linux kernel modules for fan speed controller
-> + *
-> + * Copyright (C) 2016 Allied Telesis Labs NZ
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/slab.h>
-> +#include <linux/util_macros.h>
-> +
-> +enum tc654_regs {
-> +	TC654_REG_RPM1 = 0x00,	/* RPM Output 1 */
-> +	TC654_REG_RPM2 = 0x01,	/* RPM Output 2 */
-> +	TC654_REG_FAN_FAULT1 = 0x02,	/* Fan Fault 1 Threshold */
-> +	TC654_REG_FAN_FAULT2 = 0x03,	/* Fan Fault 2 Threshold */
-> +	TC654_REG_CONFIG = 0x04,	/* Configuration */
-> +	TC654_REG_STATUS = 0x05,	/* Status */
-> +	TC654_REG_DUTY_CYCLE = 0x06,	/* Fan Speed Duty Cycle */
-> +	TC654_REG_MFR_ID = 0x07,	/* Manufacturer Identification */
-> +	TC654_REG_VER_ID = 0x08,	/* Version Identification */
-> +};
-> +
-> +/* Macros to easily index the registers */
-> +#define TC654_REG_RPM(idx) (TC654_REG_RPM1 + (idx))
-> +#define TC654_REG_FAN_FAULT(idx) (TC654_REG_FAN_FAULT1 + (idx))
-> +
-> +/* Config register bits */
-> +#define TC654_REG_CONFIG_RES BIT(6)	/* Resolution Selection */
-> +#define TC654_REG_CONFIG_DUTYC BIT(5)	/* Duty Cycle Control Method */
-> +#define TC654_REG_CONFIG_SDM BIT(0)	/* Shutdown Mode */
-> +
-> +/* Status register bits */
-> +#define TC654_REG_STATUS_F2F BIT(1)	/* Fan 2 Fault */
-> +#define TC654_REG_STATUS_F1F BIT(0)	/* Fan 1 Fault */
-> +
-> +/* RPM resolution for RPM Output registers */
-> +#define TC654_HIGH_RPM_RESOLUTION 25	/* 25 RPM resolution */
-> +#define TC654_LOW_RPM_RESOLUTION 50	/* 50 RPM resolution */
-> +
-> +/* Convert to the fan fault RPM threshold from register value */
-> +#define TC654_FAN_FAULT_FROM_REG(val) ((val) * 50)	/* 50 RPM resolution */
-> +
-> +/* Convert to register value from the fan fault RPM threshold */
-> +#define TC654_FAN_FAULT_TO_REG(val) (((val) / 50) & 0xff)
-> +
+> Would be nice, but then someone would have to spend the time cleaning
+> up the old drivers to replace the old API, and for the most part we would
+> not be able to test the result. Are you sure that is worth the risk ?
 
-Nitpick, but the above defines are difficult to read. Can you tab-align the values ?
+What I had in mind was rather along the lines of marking the function
+as __deprecated, adding a run-time notice message when it is called,
+and let whoever uses these driver contribute the fix. Call me an
+optimistic :-) There are 54 drivers still using
+hwmon_device_register(), out of 157.
 
-> +/* Register data is read (and cached) at most once per second. */
-> +#define TC654_UPDATE_INTERVAL	HZ
-> +
-> +struct tc654_data {
-> +	struct i2c_client *client;
-> +
-> +	/* update mutex */
-> +	struct mutex update_lock;
-> +
-> +	/* tc654 register cache */
-> +	bool valid;
-> +	unsigned long last_updated;	/* in jiffies */
-> +
-> +	u8 rpm_output[2];	/* The fan RPM data for fans 1 and 2 is then
-> +				 * written to registers RPM1 and RPM2
-> +				 */
-> +	u8 fan_fault[2];	/* The Fan Fault Threshold Registers are used to
-> +				 * set the fan fault threshold levels for fan 1
-> +				 * and fan 2
-> +				 */
-> +	u8 config;	/* The Configuration Register is an 8-bit read/
-> +			 * writable multi-function control register
-> +			 *   7: Fan Fault Clear
-> +			 *      1 = Clear Fan Fault
-> +			 *      0 = Normal Operation (default)
-> +			 *   6: Resolution Selection for RPM Output Registers
-> +			 *      RPM Output Registers (RPM1 and RPM2) will be
-> +			 *      set for
-> +			 *      1 = 25 RPM (9-bit) resolution
-> +			 *      0 = 50 RPM (8-bit) resolution (default)
-> +			 *   5: Duty Cycle Control Method
-> +			 *      The V OUT duty cycle will be controlled via
-> +			 *      1 = the SMBus interface.
-> +			 *      0 = via the V IN analog input pin. (default)
-> +			 * 4,3: Fan 2 Pulses Per Rotation
-> +			 *      00 = 1
-> +			 *      01 = 2 (default)
-> +			 *      10 = 4
-> +			 *      11 = 8
-> +			 * 2,1: Fan 1 Pulses Per Rotation
-> +			 *      00 = 1
-> +			 *      01 = 2 (default)
-> +			 *      10 = 4
-> +			 *      11 = 8
-> +			 *   0: Shutdown Mode
-> +			 *      1 = Shutdown mode.
-> +			 *      0 = Normal operation. (default)
-> +			 */
-> +	u8 status;	/* The Status register provides all the information
-> +			 * about what is going on within the TC654/TC655
-> +			 * devices.
-> +			 * 7,6: Unimplemented, Read as '0'
-> +			 *   5: Over-Temperature Fault Condition
-> +			 *      1 = Over-Temperature condition has occurred
-> +			 *      0 = Normal operation. V IN is less than 2.6V
-> +			 *   4: RPM2 Counter Overflow
-> +			 *      1 = Fault condition
-> +			 *      0 = Normal operation
-> +			 *   3: RPM1 Counter Overflow
-> +			 *      1 = Fault condition
-> +			 *      0 = Normal operation
-> +			 *   2: V IN Input Status
-> +			 *      1 = V IN is open
-> +			 *      0 = Normal operation. voltage present at V IN
-> +			 *   1: Fan 2 Fault
-> +			 *      1 = Fault condition
-> +			 *      0 = Normal operation
-> +			 *   0: Fan 1 Fault
-> +			 *      1 = Fault condition
-> +			 *      0 = Normal operation
-> +			 */
-> +	u8 duty_cycle;	/* The DUTY_CYCLE register is a 4-bit read/
-> +			 * writable register used to control the duty
-> +			 * cycle of the V OUT output.
-> +			 */
-> +};
-> +
-> +/* helper to grab and cache data, at most one time per second */
-> +static struct tc654_data *tc654_update_client(struct device *dev)
-> +{
-> +	struct tc654_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	if (time_before(jiffies, data->last_updated + TC654_UPDATE_INTERVAL) &&
-> +	    likely(data->valid))
-> +		goto out;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_RPM(0));
-> +	if (ret < 0)
-> +		goto out;
-> +	data->rpm_output[0] = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_RPM(1));
-> +	if (ret < 0)
-> +		goto out;
-> +	data->rpm_output[1] = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_FAN_FAULT(0));
-> +	if (ret < 0)
-> +		goto out;
-> +	data->fan_fault[0] = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_FAN_FAULT(1));
-> +	if (ret < 0)
-> +		goto out;
-> +	data->fan_fault[1] = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_CONFIG);
-> +	if (ret < 0)
-> +		goto out;
-> +	data->config = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_STATUS);
-> +	if (ret < 0)
-> +		goto out;
-> +	data->status = ret;
-> +
-> +	ret = i2c_smbus_read_byte_data(client, TC654_REG_DUTY_CYCLE);
-> +	if (ret < 0)
-> +		goto out;
-> +	data->duty_cycle = ret & 0x0f;
-> +
-> +	data->last_updated = jiffies;
-> +	data->valid = true;
-> +out:
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	if (ret < 0)		/* upon error, encode it in return value */
-> +		data = ERR_PTR(ret);
-> +
-> +	return data;
-> +}
-> +
-> +/*
-> + * sysfs attributes
-> + */
-> +
-> +static ssize_t show_fan(struct device *dev, struct device_attribute *da,
-> +			char *buf)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +	int val;
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	if (data->config & TC654_REG_CONFIG_RES)
-> +		val = data->rpm_output[nr] * TC654_HIGH_RPM_RESOLUTION;
-> +	else
-> +		val = data->rpm_output[nr] * TC654_LOW_RPM_RESOLUTION;
-> +
-> +	return sprintf(buf, "%d\n", val);
-> +}
-> +
-> +static ssize_t show_fan_min(struct device *dev, struct device_attribute *da,
-> +			    char *buf)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	return sprintf(buf, "%d\n",
-> +		       TC654_FAN_FAULT_FROM_REG(data->fan_fault[nr]));
-> +}
-> +
-> +static ssize_t set_fan_min(struct device *dev, struct device_attribute *da,
-> +			   const char *buf, size_t count)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 10, &val))
-> +		return -EINVAL;
-> +
-> +	val = clamp_val(val, 0, 12750);
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-> +	data->fan_fault[nr] = TC654_FAN_FAULT_TO_REG(val);
-> +	ret = i2c_smbus_write_byte_data(client, TC654_REG_FAN_FAULT(nr),
-> +					data->fan_fault[nr]);
-> +
-> +	mutex_unlock(&data->update_lock);
-> +	return ret < 0 ? ret : count;
-> +}
-> +
-> +static ssize_t show_fan_alarm(struct device *dev, struct device_attribute *da,
-> +			      char *buf)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +	int val;
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	if (nr == 0)
-> +		val = !!(data->status & TC654_REG_STATUS_F1F);
-> +	else
-> +		val = !!(data->status & TC654_REG_STATUS_F2F);
-> +
-> +	return sprintf(buf, "%d\n", val);
-> +}
-> +
-> +static const u8 TC654_FAN_PULSE_SHIFT[] = { 1, 3 };
-> +
-> +static ssize_t show_fan_pulses(struct device *dev, struct device_attribute *da,
-> +			      char *buf)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +	u8 val;
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	val = BIT((data->config >> TC654_FAN_PULSE_SHIFT[nr]) & 0x03);
-> +	return sprintf(buf, "%d\n", val);
-> +}
-> +
-> +static ssize_t set_fan_pulses(struct device *dev, struct device_attribute *da,
-> +			     const char *buf, size_t count)
-> +{
-> +	int nr = to_sensor_dev_attr(da)->index;
-> +	struct tc654_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	u8 config;
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 10, &val))
-> +		return -EINVAL;
-> +
-> +	switch (val) {
-> +	case 1:
-> +		config = 0;
-> +		break;
-> +	case 2:
-> +		config = 1;
-> +		break;
-> +	case 4:
-> +		config = 2;
-> +		break;
-> +	case 8:
-> +		config = 3;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-> +	data->config &= ~(0x03 << TC654_FAN_PULSE_SHIFT[nr]);
-> +	data->config |= (config << TC654_FAN_PULSE_SHIFT[nr]);
-> +	ret = i2c_smbus_write_byte_data(client, TC654_REG_CONFIG, data->config);
-> +
-> +	mutex_unlock(&data->update_lock);
-> +	return ret < 0 ? ret : count;
-> +}
-> +
-> +static ssize_t show_pwm_mode(struct device *dev,
-> +			     struct device_attribute *da, char *buf)
-> +{
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	return sprintf(buf, "%d\n", !!(data->config & TC654_REG_CONFIG_DUTYC));
-> +}
-> +
-> +static ssize_t set_pwm_mode(struct device *dev,
-> +			    struct device_attribute *da,
-> +			    const char *buf, size_t count)
-> +{
-> +	struct tc654_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 10, &val))
-> +		return -EINVAL;
-> +
-> +	if (val != 0 && val != 1)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-> +	if (val)
-> +		data->config |= TC654_REG_CONFIG_DUTYC;
-> +	else
-> +		data->config &= ~TC654_REG_CONFIG_DUTYC;
-
-I just realized that this won't work as intended. Problem is that you
-only fill data->config when reading an attribute. So, if a set function
-is called prior to reading an attribute, data->config will be 0, and
-you end up overwriting the original configuration.
-
-> +
-> +	ret = i2c_smbus_write_byte_data(client, TC654_REG_CONFIG, data->config);
-> +
-> +	mutex_unlock(&data->update_lock);
-> +	return ret < 0 ? ret : count;
-> +}
-> +
-> +static const int tc654_pwm_map[16] = { 77,  88, 102, 112, 124, 136, 148, 160,
-> +				      172, 184, 196, 207, 219, 231, 243, 255};
-> +
-> +static ssize_t show_pwm(struct device *dev, struct device_attribute *da,
-> +			       char *buf)
-> +{
-> +	struct tc654_data *data = tc654_update_client(dev);
-> +	int pwm;
-> +
-> +	if (IS_ERR(data))
-> +		return PTR_ERR(data);
-> +
-> +	if (data->config & TC654_REG_CONFIG_SDM)
-> +		pwm = 0;
-> +	else
-> +		pwm = tc654_pwm_map[data->duty_cycle];
-> +
-> +	return sprintf(buf, "%d\n", pwm);
-> +}
-> +
-> +static ssize_t set_pwm(struct device *dev, struct device_attribute *da,
-> +			      const char *buf, size_t count)
-> +{
-> +	struct tc654_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
-> +	unsigned long val;
-> +	int ret;
-> +
-> +	if (kstrtoul(buf, 10, &val))
-> +		return -EINVAL;
-> +	if (val > 255)
-> +		return -EINVAL;
-> +
-> +	if (val == 0)
-> +		data->config |= TC654_REG_CONFIG_SDM;
-> +	else
-> +		data->config &= ~TC654_REG_CONFIG_SDM;
-> +
-> +	data->duty_cycle = find_closest(val, tc654_pwm_map,
-> +					ARRAY_SIZE(tc654_pwm_map));
-> +
-> +	mutex_lock(&data->update_lock);
-> +
-The lock has to be earlier, before writing duty_cycle.
-
-> +	ret = i2c_smbus_write_byte_data(client, TC654_REG_CONFIG, data->config);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	ret = i2c_smbus_write_byte_data(client, TC654_REG_DUTY_CYCLE,
-> +				  data->duty_cycle);
-> +	if (ret < 0)
-> +		goto out;
-
-This goto is not necessary.
-
-> +
-> +out:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret < 0 ? ret : count;
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, show_fan, NULL, 0);
-> +static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, show_fan, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(fan1_min, S_IWUSR | S_IRUGO, show_fan_min,
-> +			  set_fan_min, 0);
-> +static SENSOR_DEVICE_ATTR(fan2_min, S_IWUSR | S_IRUGO, show_fan_min,
-> +			  set_fan_min, 1);
-> +static SENSOR_DEVICE_ATTR(fan1_alarm, S_IRUGO, show_fan_alarm, NULL, 0);
-> +static SENSOR_DEVICE_ATTR(fan2_alarm, S_IRUGO, show_fan_alarm, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(fan1_pulses, S_IWUSR | S_IRUGO, show_fan_pulses,
-> +			  set_fan_pulses, 0);
-> +static SENSOR_DEVICE_ATTR(fan2_pulses, S_IWUSR | S_IRUGO, show_fan_pulses,
-> +			  set_fan_pulses, 1);
-> +static SENSOR_DEVICE_ATTR(pwm1_mode, S_IWUSR | S_IRUGO,
-> +			  show_pwm_mode, set_pwm_mode, 0);
-> +static SENSOR_DEVICE_ATTR(pwm1, S_IWUSR | S_IRUGO, show_pwm,
-> +			  set_pwm, 0);
-> +
-> +/* Driver data */
-> +static struct attribute *tc654_attrs[] = {
-> +	&sensor_dev_attr_fan1_input.dev_attr.attr,
-> +	&sensor_dev_attr_fan2_input.dev_attr.attr,
-> +	&sensor_dev_attr_fan1_min.dev_attr.attr,
-> +	&sensor_dev_attr_fan2_min.dev_attr.attr,
-> +	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_fan1_pulses.dev_attr.attr,
-> +	&sensor_dev_attr_fan2_pulses.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_mode.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(tc654);
-> +
-> +/*
-> + * device probe and removal
-> + */
-> +
-> +static int tc654_probe(struct i2c_client *client,
-> +		       const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct tc654_data *data;
-> +	struct device *hwmon_dev;
-> +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE_DATA))
-> +		return -ENODEV;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct tc654_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->update_lock);
-> +
-> +	hwmon_dev =
-> +	    devm_hwmon_device_register_with_groups(dev, client->name, data,
-> +						   tc654_groups);
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct i2c_device_id tc654_id[] = {
-> +	{"tc654", 0},
-> +	{"tc655", 0},
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, tc654_id);
-> +
-> +static struct i2c_driver tc654_driver = {
-> +	.driver = {
-> +		   .name = "tc654",
-> +		   },
-> +	.probe = tc654_probe,
-> +	.id_table = tc654_id,
-> +};
-> +
-> +module_i2c_driver(tc654_driver);
-> +
-> +MODULE_AUTHOR("Allied Telesis Labs");
-> +MODULE_DESCRIPTION("Microchip TC654/TC655 driver");
-> +MODULE_LICENSE("GPL");
->
-
+-- 
+Jean Delvare
+SUSE L3 Support
