@@ -1,68 +1,95 @@
-Return-path: <tpearson@raptorengineering.com>
-Message-ID: <57FCF9A5.1040703@raptorengineeringinc.com>
-Date: Tue, 11 Oct 2016 09:39:33 -0500
-From: Timothy Pearson <tpearson@raptorengineering.com>
-MIME-Version: 1.0
-To: Guenter Roeck <linux@roeck-us.net>
-CC: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] Initial driver for the MAX31785 intelligent fan controller
-References: <20160919014104.GA30840@roeck-us.net> <57E03124.4030202@raptorengineeringinc.com> <20160919200413.GA29242@roeck-us.net> <57E04B25.4000001@raptorengineeringinc.com> <20160920005443.GB4064@roeck-us.net> <57E093DB.7030000@raptorengineeringinc.com> <57E19104.6050907@raptorengineeringinc.com> <20160920195902.GB1934@roeck-us.net> <57E195A3.5050703@raptorengineeringinc.com> <42772060-c1e0-0a2c-ea2d-0c4fbcc5c061@roeck-us.net>
-In-Reply-To: <42772060-c1e0-0a2c-ea2d-0c4fbcc5c061@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+Return-path: <pantelis.antoniou@konsulko.com>
+From: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+To: Lee Jones <lee.jones@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Alexandre Courbot <gnurou@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Wolfram Sang <wsa@the-dreams.de>,
+	Richard Purdie <rpurdie@rpsys.net>,
+	Jacek Anaszewski <j.anaszewski@samsung.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Peter Rosin <peda@axentia.se>,
+	Avirup Banerjee <abanerjee@juniper.net>,
+	Georgi Vlaev <gvlaev@juniper.net>,
+	Guenter Roeck <linux@roeck-us.net>,
+	JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>,
+	Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH 00/10] Introduce Juniper I2CS FPGA driver
+Date: Fri,  7 Oct 2016 18:20:59 +0300
+Message-Id: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Add Juniper's I2CS FPGA driver. Those FPGAs
+are present in Juniper's PTX series of routers.
 
-On 09/20/2016 10:04 PM, Guenter Roeck wrote:
-> On 09/20/2016 01:01 PM, Timothy Pearson wrote:
->> On 09/20/2016 02:59 PM, Guenter Roeck wrote:
->>
->> OK, sounds good.  I looked back in the notes for this project and we had
->> originally considered using a PMBus driver but ran into the kernel
->> documentation, noted the missing control features, and I subsequently
-> 
-> It is always useful to talk with the maintainer.
-> 
->> misinterpreted the datasheet using the kernel docs as a reference.  This
->> is why the hwmon driver was implemented.
->>
-> 
-> I am still not sure I understand what irked you off in the datasheet.
-> Is it the "supports a subset of the commands defined in the PMBus
-> Specfication" ? If so, please keep in mind that every single chip
-> supporting PMBus will only support a subset of PMBus commands.
-> 
->> Please let me know if I can be of any assistance.
->>
-> Sure, I'll let you know.
-> 
-> Thanks,
-> Guenter
-> 
+The MFD driver provices i2c/gpio/leds/hwmon devices.
 
-Just checking back in to see how things are going with this driver.  I
-don't really know how involved the surgery to PMBus will be to get this
-device working; are we looking at weeks / months or something sooner?
+There are full device tree binding documents for the
+master mfd driver and for all slave drivers.
 
-Thanks again!
+This patchset is against mainline as of today: v4.8-9431-g3477d16
+and is dependent on the "Juniper prerequisites" and
+"Juniper infrastructure" patchsets sent earlier.
 
-- -- 
-Timothy Pearson
-Raptor Engineering
-+1 (415) 727-8645 (direct line)
-+1 (512) 690-0200 (switchboard)
-https://www.raptorengineering.com
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+Avirup Banerjee (1):
+  hwmon: Add driver for Fan Tray on Juniper I2CS FGPA
 
-iQEcBAEBAgAGBQJX/PmkAAoJEK+E3vEXDOFbYVQIAKhoDT+kU+fR2CML4S3wYRQP
-fjI/vJG6D3UPzb8M8IvCpGVSxR4bIl1uLC3pftT5TbF93XHXd6M39MUJYcoWRjnE
-iB//9KrYopFXcFxGY6wIKqJ9YwQLDHAMDFAd7GS852z6+gMRxU06L4vOWpCH+Xgv
-kNbU8vMuyie0a3SwgC6+gYn/hUyZNzVLUXMtM0AJZm4zpcMoTXXqsHINNc91d82D
-RZSHNZs+fHiEqWxAV2GPNGQ+ZnwE+rIYT4yXml6q13AywaUEkJTL45WN86ntt75G
-EbCsvzcfgaxz3tlis+UW/yqy6FEaHdVxFICq9FuawAfBjjgeC4rxP54ZD3BHOTM=
-=LJ5E
------END PGP SIGNATURE-----
+Georgi Vlaev (8):
+  mfd: Add Juniper I2CS MFD driver
+  mfd: dt-bindings: Add bindings for the Juniper I2CS MFD
+  i2c/muxes: Juniper I2CS RE mux
+  i2c: i2c-mux-i2cs: Add device tree bindings
+  gpio: gpio-i2cs: Document bindings of I2CS FPGA GPIO block
+  leds: i2cs: Add I2CS FPGA leds driver
+  leds: Add binding for Juniper's I2CS FPGA
+  hwmon: i2cs-fan: Add hwmon dts binding documentation
+
+Guenter Roeck (1):
+  gpio: i2cs: Juniper I2CS to GPIO pin mapping driver
+
+ .../devicetree/bindings/gpio/jnx,gpio-i2cs.txt     |  43 ++
+ .../devicetree/bindings/hwmon/i2cs-fan.txt         |  19 +
+ .../devicetree/bindings/i2c/jnx,i2c-mux-i2cs.txt   |  27 ++
+ .../devicetree/bindings/leds/leds-i2cs.txt         |  34 ++
+ Documentation/devicetree/bindings/mfd/jnx-i2cs.txt |  68 +++
+ drivers/gpio/Kconfig                               |  11 +
+ drivers/gpio/Makefile                              |   1 +
+ drivers/gpio/gpio-jnx-i2cs.c                       | 523 +++++++++++++++++++++
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/jnx-fan.c                            | 471 +++++++++++++++++++
+ drivers/i2c/muxes/Kconfig                          |  10 +
+ drivers/i2c/muxes/Makefile                         |   1 +
+ drivers/i2c/muxes/i2c-mux-i2cs.c                   | 155 ++++++
+ drivers/leds/Kconfig                               |   9 +
+ drivers/leds/Makefile                              |   1 +
+ drivers/leds/leds-jnx-i2cs.c                       | 219 +++++++++
+ drivers/mfd/Kconfig                                |  17 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/jnx-i2cs-core.c                        | 118 +++++
+ include/linux/mfd/jnx-i2cs-core.h                  |  96 ++++
+ include/linux/platform_data/jnx-i2cs-fan.h         |  13 +
+ 22 files changed, 1849 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/jnx,gpio-i2cs.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/i2cs-fan.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/jnx,i2c-mux-i2cs.txt
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-i2cs.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/jnx-i2cs.txt
+ create mode 100644 drivers/gpio/gpio-jnx-i2cs.c
+ create mode 100644 drivers/hwmon/jnx-fan.c
+ create mode 100644 drivers/i2c/muxes/i2c-mux-i2cs.c
+ create mode 100644 drivers/leds/leds-jnx-i2cs.c
+ create mode 100644 drivers/mfd/jnx-i2cs-core.c
+ create mode 100644 include/linux/mfd/jnx-i2cs-core.h
+ create mode 100644 include/linux/platform_data/jnx-i2cs-fan.h
+
+-- 
+1.9.1
