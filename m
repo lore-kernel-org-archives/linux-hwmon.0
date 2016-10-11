@@ -1,460 +1,137 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ssl.serverraum.org ([213.133.101.245]:60608 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753860AbcJNJxq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Oct 2016 05:53:46 -0400
-From: Michael Walle <michael@walle.cc>
-To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [RFC PATCH 2/2] hwmon: adt7411: add min, max and alarm attributes
-Date: Fri, 14 Oct 2016 11:43:35 +0200
-Message-Id: <1476438215-6654-2-git-send-email-michael@walle.cc>
-In-Reply-To: <1476438215-6654-1-git-send-email-michael@walle.cc>
-References: <1476438215-6654-1-git-send-email-michael@walle.cc>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <jdelvare@suse.de>
+Date: Tue, 11 Oct 2016 14:29:17 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Cameron <jic23@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Eduardo Valentin <edubezval@gmail.com>, Punit Agrawal
+ <punit.agrawal@arm.com>, linux-pm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] hwmon: (core) New hwmon registration API
+Message-ID: <20161011142917.26482970@endymion>
+In-Reply-To: <20161010234822.GA11563@roeck-us.net>
+References: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
+	<1469417552-9749-3-git-send-email-linux@roeck-us.net>
+	<1475570759.3052.22.camel@chaos.suse>
+	<20161004193713.GA26304@roeck-us.net>
+	<20161007143213.0ba633fe@endymion>
+	<20161010234822.GA11563@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This patch adds support for the min, max and alarm attributes of the
-voltage and temperature channels. Additionally, the temp2_fault attribute
-is supported which indicates a fault of the external temperature diode.
+Hi Guenter,
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/hwmon/adt7411.c | 306 ++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 271 insertions(+), 35 deletions(-)
+On Mon, 10 Oct 2016 16:48:22 -0700, Guenter Roeck wrote:
+> On Fri, Oct 07, 2016 at 02:32:13PM +0200, Jean Delvare wrote:
+> > On Tue, 4 Oct 2016 12:37:13 -0700, Guenter Roeck wrote:
+> > > On Tue, Oct 04, 2016 at 10:45:59AM +0200, Jean Delvare wrote:
+> > > > May I ask if any other subsystem is already doing anything like that?
+> > > > 
+> > > Depends what you mean with "anything like that". The API is inspired by
+> > > the iio API and a little by the thermal API. The details are probably
+> > > unique, though.
+> > 
+> > I meant the idea of describing the device capabilities and letting the
+> > core code generate the device attributes (or anything else) based on
+> > that data. The benefits are obvious, but it has a complexity and
+> > run-time cost so I am wondering how popular this approach is.
+> 
+> The goal of this patch series was to provide abstraction between driver
+> and userspace ABI. I think this is quite common in the kernel.
 
-diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
-index 2f44cdc..c6351b8 100644
---- a/drivers/hwmon/adt7411.c
-+++ b/drivers/hwmon/adt7411.c
-@@ -21,6 +21,21 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/slab.h>
- 
-+#define ADT7411_REG_STAT_1			0x00
-+#define ADT7411_STAT_1_INT_TEMP_HIGH		(1 << 0)
-+#define ADT7411_STAT_1_INT_TEMP_LOW		(1 << 1)
-+#define ADT7411_STAT_1_EXT_TEMP_HIGH_AIN1	(1 << 2)
-+#define ADT7411_STAT_1_EXT_TEMP_LOW		(1 << 3)
-+#define ADT7411_STAT_1_EXT_TEMP_FAULT		(1 << 4)
-+#define ADT7411_STAT_1_AIN2			(1 << 5)
-+#define ADT7411_STAT_1_AIN3			(1 << 6)
-+#define ADT7411_STAT_1_AIN4			(1 << 7)
-+#define ADT7411_REG_STAT_2			0x01
-+#define ADT7411_STAT_2_AIN5			(1 << 0)
-+#define ADT7411_STAT_2_AIN6			(1 << 1)
-+#define ADT7411_STAT_2_AIN7			(1 << 2)
-+#define ADT7411_STAT_2_AIN8			(1 << 3)
-+#define ADT7411_STAT_2_VDD			(1 << 4)
- #define ADT7411_REG_INT_TEMP_VDD_LSB		0x03
- #define ADT7411_REG_EXT_TEMP_AIN14_LSB		0x04
- #define ADT7411_REG_VDD_MSB			0x06
-@@ -43,6 +58,17 @@
- #define ADT7411_CFG3_RESERVED_BIT3		(1 << 3)
- #define ADT7411_CFG3_REF_VDD			(1 << 4)
- 
-+#define ADT7411_REG_VDD_HIGH			0x23
-+#define ADT7411_REG_VDD_LOW			0x24
-+#define ADT7411_REG_TEMP_HIGH(nr)		(0x25 + 2 * (nr))
-+#define ADT7411_REG_TEMP_LOW(nr)		(0x26 + 2 * (nr))
-+#define ADT7411_REG_IN_HIGH(nr)		((nr) > 1 \
-+						  ? 0x2b + 2 * ((nr)-2) \
-+						  : 0x27)
-+#define ADT7411_REG_IN_LOW(nr)			((nr) > 1 \
-+						  ? 0x2c + 2 * ((nr)-2) \
-+						  : 0x28)
-+
- #define ADT7411_REG_DEVICE_ID			0x4d
- #define ADT7411_REG_MANUFACTURER_ID		0x4e
- 
-@@ -51,6 +77,30 @@
- 
- static const unsigned short normal_i2c[] = { 0x48, 0x4a, 0x4b, I2C_CLIENT_END };
- 
-+static const u8 adt7411_in_alarm_reg[] = {
-+	ADT7411_REG_STAT_2,
-+	ADT7411_REG_STAT_1,
-+	ADT7411_REG_STAT_1,
-+	ADT7411_REG_STAT_1,
-+	ADT7411_REG_STAT_1,
-+	ADT7411_REG_STAT_2,
-+	ADT7411_REG_STAT_2,
-+	ADT7411_REG_STAT_2,
-+	ADT7411_REG_STAT_2,
-+};
-+
-+static const u8 adt7411_in_alarm_bits[] = {
-+	ADT7411_STAT_2_VDD,
-+	ADT7411_STAT_1_EXT_TEMP_HIGH_AIN1,
-+	ADT7411_STAT_1_AIN2,
-+	ADT7411_STAT_1_AIN3,
-+	ADT7411_STAT_1_AIN4,
-+	ADT7411_STAT_2_AIN5,
-+	ADT7411_STAT_2_AIN6,
-+	ADT7411_STAT_2_AIN7,
-+	ADT7411_STAT_2_AIN8,
-+};
-+
- struct adt7411_data {
- 	struct mutex device_lock;	/* for "atomic" device accesses */
- 	struct mutex update_lock;
-@@ -165,6 +215,19 @@ static struct attribute *adt7411_attrs[] = {
- };
- ATTRIBUTE_GROUPS(adt7411);
- 
-+static int adt7411_read_in_alarm(struct device *dev, int channel, long *val)
-+{
-+	struct adt7411_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
-+	int ret;
-+
-+	ret = i2c_smbus_read_byte_data(client, adt7411_in_alarm_reg[channel]);
-+	if (ret < 0)
-+		return ret;
-+	*val = !!(ret & adt7411_in_alarm_bits[channel]);
-+	return 0;
-+}
-+
- static int adt7411_read_in_vdd(struct device *dev, u32 attr, long *val)
- {
- 	struct adt7411_data *data = dev_get_drvdata(dev);
-@@ -179,32 +242,40 @@ static int adt7411_read_in_vdd(struct device *dev, u32 attr, long *val)
- 			return ret;
- 		*val = ret * 7000 / 1024;
- 		return 0;
-+	case hwmon_in_min:
-+		ret = i2c_smbus_read_byte_data(client, ADT7411_REG_VDD_LOW);
-+		if (ret < 0)
-+			return ret;
-+		*val = ret * 7000 / 256;
-+		return 0;
-+	case hwmon_in_max:
-+		ret = i2c_smbus_read_byte_data(client, ADT7411_REG_VDD_HIGH);
-+		if (ret < 0)
-+			return ret;
-+		*val = ret * 7000 / 256;
-+	case hwmon_in_alarm:
-+		return adt7411_read_in_alarm(dev, 0, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
- }
- 
--static int adt7411_read_in_chan(struct device *dev, u32 attr, int channel,
--				long *val)
-+static int adt7411_update_vref(struct device *dev)
- {
- 	struct adt7411_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-+	int val;
- 
--	int ret;
--	int lsb_reg, lsb_shift;
--	int nr = channel - 1;
--
--	mutex_lock(&data->update_lock);
- 	if (time_after_eq(jiffies, data->next_update)) {
--		ret = i2c_smbus_read_byte_data(client, ADT7411_REG_CFG3);
--		if (ret < 0)
--			goto exit_unlock;
-+		val = i2c_smbus_read_byte_data(client, ADT7411_REG_CFG3);
-+		if (val < 0)
-+			return val;
- 
--		if (ret & ADT7411_CFG3_REF_VDD) {
--			ret = adt7411_read_in_vdd(dev, hwmon_in_input,
-+		if (val & ADT7411_CFG3_REF_VDD) {
-+			val = adt7411_read_in_vdd(dev, hwmon_in_input,
- 						  &data->vref_cached);
--			if (ret < 0)
--				goto exit_unlock;
-+			if (val < 0)
-+				return val;
- 		} else {
- 			data->vref_cached = 2250;
- 		}
-@@ -212,6 +283,24 @@ static int adt7411_read_in_chan(struct device *dev, u32 attr, int channel,
- 		data->next_update = jiffies + HZ;
- 	}
- 
-+	return 0;
-+}
-+
-+static int adt7411_read_in_chan(struct device *dev, u32 attr, int channel,
-+				long *val)
-+{
-+	struct adt7411_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
-+
-+	int ret;
-+	int reg, lsb_reg, lsb_shift;
-+	int nr = channel - 1;
-+
-+	mutex_lock(&data->update_lock);
-+	ret = adt7411_update_vref(dev);
-+	if (ret < 0)
-+		goto exit_unlock;
-+
- 	switch (attr) {
- 	case hwmon_in_input:
- 		lsb_reg = ADT7411_REG_EXT_TEMP_AIN14_LSB + (nr >> 2);
-@@ -223,6 +312,20 @@ static int adt7411_read_in_chan(struct device *dev, u32 attr, int channel,
- 		*val = ret * data->vref_cached / 1024;
- 		ret = 0;
- 		break;
-+	case hwmon_in_min:
-+	case hwmon_in_max:
-+		reg = (attr == hwmon_in_min)
-+			? ADT7411_REG_IN_LOW(channel)
-+			: ADT7411_REG_IN_HIGH(channel);
-+		ret = i2c_smbus_read_byte_data(client, reg);
-+		if (ret < 0)
-+			goto exit_unlock;
-+		*val = ret * data->vref_cached / 256;
-+		ret = 0;
-+		break;
-+	case hwmon_in_alarm:
-+		ret = adt7411_read_in_alarm(dev, channel, val);
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
-@@ -241,12 +344,41 @@ static int adt7411_read_in(struct device *dev, u32 attr, int channel,
- 		return adt7411_read_in_chan(dev, attr, channel, val);
- }
- 
-+
-+static int adt7411_read_temp_alarm(struct device *dev, u32 attr, int channel,
-+				   long *val)
-+{
-+	struct adt7411_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
-+	int ret, bit;
-+
-+	ret = i2c_smbus_read_byte_data(client, ADT7411_REG_STAT_1);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_min_alarm:
-+		bit = channel ? ADT7411_STAT_1_EXT_TEMP_LOW
-+			      : ADT7411_STAT_1_INT_TEMP_LOW;
-+		break;
-+	case hwmon_temp_max_alarm:
-+		bit = channel ? ADT7411_STAT_1_EXT_TEMP_HIGH_AIN1
-+			      : ADT7411_STAT_1_INT_TEMP_HIGH;
-+		break;
-+	case hwmon_temp_fault:
-+		bit = ADT7411_STAT_1_EXT_TEMP_FAULT;
-+		break;
-+	}
-+	*val = !!(ret & bit);
-+	return 0;
-+}
-+
- static int adt7411_read_temp(struct device *dev, u32 attr, int channel,
- 			     long *val)
- {
- 	struct adt7411_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
--	int ret, regl, regh;
-+	int ret, reg, regl, regh;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
-@@ -260,6 +392,21 @@ static int adt7411_read_temp(struct device *dev, u32 attr, int channel,
- 		ret = ret & 0x200 ? ret - 0x400 : ret; /* 10 bit signed */
- 		*val = ret * 250;
- 		return 0;
-+	case hwmon_temp_min:
-+	case hwmon_temp_max:
-+		reg = (attr == hwmon_temp_min)
-+			? ADT7411_REG_TEMP_LOW(channel)
-+			: ADT7411_REG_TEMP_HIGH(channel);
-+		ret = i2c_smbus_read_byte_data(client, reg);
-+		if (ret < 0)
-+			return ret;
-+		ret = ret & 0x80 ? ret - 0x100 : ret; /* 8 bit signed */
-+		*val = ret * 1000;
-+		return 0;
-+	case hwmon_temp_min_alarm:
-+	case hwmon_temp_max_alarm:
-+	case hwmon_temp_fault:
-+		return adt7411_read_temp_alarm(dev, attr, channel, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -278,26 +425,112 @@ static int adt7411_read(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
-+static int adt7411_write_in(struct device *dev, u32 attr, int channel,
-+			    long val)
-+{
-+	struct adt7411_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
-+	int ret, reg;
-+
-+	mutex_lock(&data->update_lock);
-+	ret = adt7411_update_vref(dev);
-+	if (ret < 0)
-+		goto exit_unlock;
-+	val = DIV_ROUND_CLOSEST(val * 256, data->vref_cached);
-+	val = clamp_val(val, 0, 255);
-+
-+	switch (attr) {
-+	case hwmon_in_min:
-+		reg = ADT7411_REG_IN_LOW(channel);
-+		break;
-+	case hwmon_in_max:
-+		reg = ADT7411_REG_IN_HIGH(channel);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		goto exit_unlock;
-+	}
-+
-+	ret = i2c_smbus_write_byte_data(client, reg, val);
-+ exit_unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
-+static int adt7411_write_temp(struct device *dev, u32 attr, int channel,
-+			      long val)
-+{
-+	struct adt7411_data *data = dev_get_drvdata(dev);
-+	struct i2c_client *client = data->client;
-+	int reg;
-+
-+	val = DIV_ROUND_CLOSEST(val, 1000);
-+	val = clamp_val(val, -128, 127);
-+	val = val < 0 ? 0x100 + val : val;
-+
-+	switch (attr) {
-+	case hwmon_temp_min:
-+		reg = ADT7411_REG_TEMP_LOW(channel);
-+		break;
-+	case hwmon_temp_max:
-+		reg = ADT7411_REG_TEMP_HIGH(channel);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return i2c_smbus_write_byte_data(client, reg, val);
-+}
-+
-+static int adt7411_write(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long val)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		return adt7411_write_in(dev, attr, channel, val);
-+	case hwmon_temp:
-+		return adt7411_write_temp(dev, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static umode_t adt7411_is_visible(const void *_data,
- 				  enum hwmon_sensor_types type,
- 				  u32 attr, int channel)
- {
- 	const struct adt7411_data *data = _data;
-+	bool visible;
- 
- 	switch (type) {
- 	case hwmon_in:
--		if (channel > 0 && channel < 3)
--			return data->use_ext_temp ? 0 : S_IRUGO;
--		else
--			return S_IRUGO;
-+		visible = channel == 0 || channel >= 2 || !data->use_ext_temp;
-+		switch (attr) {
-+		case hwmon_in_input:
-+		case hwmon_in_alarm:
-+			return visible ? S_IRUGO : 0;
-+		case hwmon_in_min:
-+		case hwmon_in_max:
-+			return visible ? S_IRUGO | S_IWUSR : 0;
-+		}
-+		break;
- 	case hwmon_temp:
--		if (channel == 1)
--			return data->use_ext_temp ? S_IRUGO : 0;
--		else
--			return S_IRUGO;
-+		visible = channel == 0 || data->use_ext_temp;
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_min_alarm:
-+		case hwmon_temp_max_alarm:
-+		case hwmon_temp_fault:
-+			return visible ? S_IRUGO : 0;
-+		case hwmon_temp_min:
-+		case hwmon_temp_max:
-+			return visible ? S_IRUGO | S_IWUSR : 0;
-+		}
-+		break;
- 	default:
--		return 0;
-+		break;
- 	}
-+	return 0;
- }
- 
- static int adt7411_detect(struct i2c_client *client,
-@@ -371,15 +604,15 @@ static int adt7411_init_device(struct adt7411_data *data)
- }
- 
- static const u32 adt7411_in_config[] = {
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
--	HWMON_I_INPUT,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
-+	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_ALARM,
- 	0
- };
- 
-@@ -389,8 +622,10 @@ static const struct hwmon_channel_info adt7411_in = {
- };
- 
- static const u32 adt7411_temp_config[] = {
--	HWMON_T_INPUT,
--	HWMON_T_INPUT,
-+	HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MIN_ALARM |
-+		HWMON_T_MAX | HWMON_T_MAX_ALARM,
-+	HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MIN_ALARM |
-+		HWMON_T_MAX | HWMON_T_MAX_ALARM | HWMON_T_FAULT,
- 	0
- };
- 
-@@ -408,6 +643,7 @@ static const struct hwmon_channel_info *adt7411_info[] = {
- static const struct hwmon_ops adt7411_hwmon_ops = {
- 	.is_visible = adt7411_is_visible,
- 	.read = adt7411_read,
-+	.write = adt7411_write,
- };
- 
- static const struct hwmon_chip_info adt7411_chip_info = {
+Yes, you are right. I am so used to the (wrong) way hwmon did that I
+did not realize all other subsystems already provided some form of
+abstraction for their device drivers. Even i2c does, so I should know.
+
+> I am not sure I undersatand the run-time cost concern. The main run-time
+> cost occurs during device instantiation and only happens once. Other
+> abstraction APIs in the kernel have a much higher runtime cost, and
+> instantiation tends to be quite costly as well.
+
+I'm not too worried about this one, except for the memory allocations
+as mentioned previously.
+
+I am more concerned about the per-sysfs read overhead. Compared to the
+old model, you have another indirection call for each access. And for
+each driver, you end up with a single function to read from all
+attributes. You will inevitably end up with a huge switch/case
+statement to figure out what value to return. This smells like linear
+search? Not sure if the compiler can optimize it. I was also wondering
+how cache-friendly such a large function can be.
+
+But anyway, I didn't measure anything, it's pure speculation on my
+side. And it's probably irrelevant as your change has many benefits
+anyway. And I wouldn't even ask myself the question if things had been
+implemented right in the first place. So just ignore me ^^
+
+> The new API has the addd benefit of reducing driver size, in some cases
+> significantly. Maybe I am off, but I considered this important, which is
+> why I mentioned it. Maybe I should not have mentioned it at all, and
+> instead have focused on abstraction alone.
+
+You were very right mentioning it, I mention it every time a patch of
+mine reduces binary size. That's one of the actual benefits of the
+change, no reason to silent it.
+
+> > You mean at the binary level?
+> > 
+> > Have you considered the case where several devices exist for the same
+> > driver? Static attributes are shared between devices, but with the
+> > generated ones this is no longer the case, right?
+>
+> As mentioned above, I considered static sizes to be more important.
+> Sure, there are situations where multiple instances of a driver are
+> loaded, but those are not typically memory size limited. But, again,
+> I guess maybe I should not have mentioned driver size impact at all.
+
+I did not make any measurement, and I won't take the time to make them.
+So I have no idea how the various costs compare to each other. Which in
+turn means I don't have any point here, and we can go with what you
+have ;-)
+
+Really I was only commenting out loud while reviewing. Doesn't mean
+much...
+
+> > > > (...)
+> > > > This is adding a 4th and 5th way to register a hwmon device. Starts
+> > > > being a bit messy... Do you have any plans to get rid of some of the
+> > > > other functions to make things more consistent and efficient?
+> > >
+> > > Would be nice, but then someone would have to spend the time cleaning
+> > > up the old drivers to replace the old API, and for the most part we would
+> > > not be able to test the result. Are you sure that is worth the risk ?
+> > 
+> > What I had in mind was rather along the lines of marking the function
+> > as __deprecated, adding a run-time notice message when it is called,
+> > and let whoever uses these driver contribute the fix. Call me an
+> > optimistic :-) There are 54 drivers still using
+> > hwmon_device_register(), out of 157.
+>
+> For most of those testing was not possible, otherwise I would have converted
+> them by now.
+> 
+> I am not sure about deprecated; doesn't that mean a failure to compile with
+> -Werror ? That would not help much.
+
+It causes gcc to generate a warning, so I guess it would indeed break
+with -Werror. But this option isn't enabled by default, and I doubt
+anyone can actually build a general-purpose kernel with that option
+enabled. If it's a custom kernel then maybe there's one hwmon driver
+enabled, and if that one needs conversion, then you've just found your
+tester ;-)
+
+If you are worried about build-time __deprecated, you can also just
+spit a message in the logs when hwmon_device_register() is called.
+Won't break anything and may get you some tester, or even someone to
+convert the driver for you.
+
+But then again, you are pretty much in charge of the hwmon subsystem by
+now (and you are doing that very well, thank you very much) so I'm
+really only making suggestions, which you are totally free to ignore if
+they seem irrelevant to you.
+
 -- 
-2.1.4
-
+Jean Delvare
+SUSE L3 Support
