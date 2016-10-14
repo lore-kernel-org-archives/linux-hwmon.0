@@ -1,90 +1,78 @@
-Return-path: <pantelis.antoniou@konsulko.com>
-Subject: Re: [PATCH 10/10] hwmon: i2cs-fan: Add hwmon dts binding documentation
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:57923 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751393AbcJNRar (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 14 Oct 2016 13:30:47 -0400
+Date: Fri, 14 Oct 2016 10:06:01 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Joel Stanley <joel@jms.id.au>
+Cc: jdelvare@suse.com, Yi Li <adamliyi@msn.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adm1275) Enable adm1278 VOUT sampling
+Message-ID: <20161014170601.GC21425@roeck-us.net>
+References: <20161014100605.23887-1-joel@jms.id.au>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-From: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
-In-Reply-To: <20161010202903.GA9122@rob-hp-laptop>
-Date: Mon, 17 Oct 2016 22:12:58 +0300
-Cc: Lee Jones <lee.jones@linaro.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Alexandre Courbot <gnurou@gmail.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Frank Rowand <frowand.list@gmail.com>,
- Wolfram Sang <wsa@the-dreams.de>,
- Richard Purdie <rpurdie@rpsys.net>,
- Jacek Anaszewski <j.anaszewski@samsung.com>,
- Jean Delvare <jdelvare@suse.com>,
- Peter Rosin <peda@axentia.se>,
- Avirup Banerjee <abanerjee@juniper.net>,
- Georgi Vlaev <gvlaev@juniper.net>,
- Guenter Roeck <linux@roeck-us.net>,
- JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>,
- devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org,
- linux-leds@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E38D5F40-C626-4143-82C3-916ECFEE30C7@konsulko.com>
-References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com> <1475853669-22480-11-git-send-email-pantelis.antoniou@konsulko.com> <20161010202903.GA9122@rob-hp-laptop>
-To: Rob Herring <robh@kernel.org>
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20161014100605.23887-1-joel@jms.id.au>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+On Fri, Oct 14, 2016 at 08:36:05PM +1030, Joel Stanley wrote:
+> From: Yi Li <adamliyi@msn.com>
+> 
+> The adm1278 can optionally monitor the VOUT pin. This functionality is
+> not enabled at reset, so PMON_CONFIG needs to be modified in order to
+> enable it.
+> 
+> Signed-off-by: Yi Li <adamliyi@msn.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+> 
+> Guenter, I'm not sure if this is a valid thing to do in the probe function. If
+> not, can you suggest an alternative method for enabling this?
+> 
+Normally it would be set by the BIOS or ROMMON, though it doesn't seem to make
+much sense to not enable it with this chip. Another option would be to enable it
+through devicetree, but that would add quite some complexity which I'd rather
+avoid. So doing it here is fine.
 
-> On Oct 10, 2016, at 23:29 , Rob Herring <robh@kernel.org> wrote:
->=20
-> On Fri, Oct 07, 2016 at 06:21:09PM +0300, Pantelis Antoniou wrote:
->> From: Georgi Vlaev <gvlaev@juniper.net>
->>=20
->> Adds the I2CS Fan Tray hwmon device tree node documentation.
->>=20
->> Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
->> [Ported from Juniper kernel]
->> Signed-off-by: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
->> ---
->> Documentation/devicetree/bindings/hwmon/i2cs-fan.txt | 19 =
-+++++++++++++++++++
->> 1 file changed, 19 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/hwmon/i2cs-fan.txt
->>=20
->> diff --git a/Documentation/devicetree/bindings/hwmon/i2cs-fan.txt =
-b/Documentation/devicetree/bindings/hwmon/i2cs-fan.txt
->> new file mode 100644
->> index 0000000..4ef880c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/i2cs-fan.txt
->> @@ -0,0 +1,19 @@
->> +Hwmon driver for Juniper fan trays on I2CS Slave FPGA
->=20
-> This is a h/w description, not a driver.
->=20
->> +
->> +Required properties:
->> +
->> +- compatible: "i2cs-fan-hwmon"
->=20
-> I doubt any fan control h/w has "hwmon" in the name.
->=20
->> +
->> +Optional properties:
->> +
->> +- num-fans: fans per tray (default 14)
->> +
->> +- tach-factor: TACH count scaling factor (default 120)
->=20
-> vendor prefixes needed.
->=20
->> +
->> +Example:
->> +
->> +fan-hwmon {
->> +	compatible =3D "jnx,i2cs-fan-hwmon";
->> +	num-fans =3D <6>;
->> +	tach-factor =3D <33>;
->> +};
->> --=20
->> 1.9.1
+>  drivers/hwmon/pmbus/adm1275.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index 3baa4f4a8c5e..7d1f5f7891cc 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -500,6 +500,19 @@ static int adm1275_probe(struct i2c_client *client,
+>  		tindex = 3;
+>  
+>  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT;
+> +
+> +		/* By default when reset VOUT is not enabled */
+> +		if (!(config & ADM1278_VOUT_EN)) {
+> +			config |= ADM1278_VOUT_EN;
+> +			ret = i2c_smbus_write_byte_data(client,
+> +							ADM1275_PMON_CONFIG,
+> +							config);
+> +			if (ret < 0) {
+> +				dev_warn(&client->dev,
+> +					"Failed to enable VOUT monitoring\n");
 
-OK on all three.=
+Two options: Either abort in this case (after all, something _is_ wrong)
+and return an error (and always set PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT),
+or clear ADM1278_VOUT_EN in config to make sure it is not enabled further below.
+
+Thanks,
+Guenter
+
+> +			}
+> +		}
+> +
+>  		if (config & ADM1278_TEMP1_EN)
+>  			info->func[0] |=
+>  				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> -- 
+> 2.9.3
+> 
