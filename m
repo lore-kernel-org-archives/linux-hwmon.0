@@ -1,85 +1,72 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42278 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754834AbcJPSU0 (ORCPT
+Received: from mail-pa0-f65.google.com ([209.85.220.65]:33189 "EHLO
+        mail-pa0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1757584AbcJQIYX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Oct 2016 14:20:26 -0400
-Subject: Re: [PATCH v3 2/9] hwmon: (core) New hwmon registration API
-To: Jean Delvare <jdelvare@suse.de>
-References: <1469417552-9749-1-git-send-email-linux@roeck-us.net>
- <1469417552-9749-3-git-send-email-linux@roeck-us.net>
- <1475570759.3052.22.camel@chaos.suse> <20161004193713.GA26304@roeck-us.net>
- <20161007143213.0ba633fe@endymion>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Punit Agrawal <punit.agrawal@arm.com>,
-        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a3b080a0-c929-7e72-3540-e49991512be5@roeck-us.net>
-Date: Sun, 16 Oct 2016 11:20:21 -0700
-MIME-Version: 1.0
-In-Reply-To: <20161007143213.0ba633fe@endymion>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Oct 2016 04:24:23 -0400
+Received: by mail-pa0-f65.google.com with SMTP id hh10so8984334pac.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Oct 2016 01:23:48 -0700 (PDT)
+From: Joel Stanley <joel@jms.id.au>
+To: linux@roeck-us.net, jdelvare@suse.com
+Cc: Yi Li <adamliyi@msn.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (adm1275) Enable adm1278 VOUT sampling
+Date: Mon, 17 Oct 2016 18:38:53 +1030
+Message-Id: <20161017080853.7627-1-joel@jms.id.au>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Jean,
+From: Yi Li <adamliyi@msn.com>
 
-On 10/07/2016 05:32 AM, Jean Delvare wrote:
-[ ... ]
->
->>>> +		name = (char *)template;
->>>> +	} else {
->>>> +		name = devm_kzalloc(dev, strlen(template) + 16, GFP_KERNEL);
->>>> +		if (!name)
->>>> +			return ERR_PTR(-ENOMEM);
->>>> +		scnprintf(name, strlen(template) + 16, template,
->>>> +			  index + hwmon_attr_base(type));
->>>> +	}
->>>> +
->>>> +	hattr = devm_kzalloc(dev, sizeof(*hattr), GFP_KERNEL);
->>>> +	if (!hattr)
->>>> +		return ERR_PTR(-ENOMEM);
->>>
->>> So basically you are doing 1 or 2 memory allocations for every
->>> attribute? Looks quite bad from a memory fragmentation
->>> perspective :-( Not to mention performance. Given that you have all the
->>> data at hand before you start, can't you preallocate an array with the
->>> right number of hattr and pick from it? That would at least solve half
->>> of the problem.
->
-> FTR I took a quick look at the iio code and there seems to be something
-> like the idea above implemented in iio_device_register_sysfs(). But
-> attributes themselves as instantiated by iio_device_register_sysfs()
-> are still allocated individually. But hey I'm not familiar with the iio
-> code anyway, I'm sure you know it better than I do.
->
->>> Something similar for string allocation may work too, although it's
->>> somewhat more complex due to the variable length. But I think the
->>> abituguru3 driver is doing it right, so maybe you can too.
->>
->> I'll look into it.
->
+The adm1278 can optionally monitor the VOUT pin. This functioanltiy is
+not enabled at reset, so PMON_CONFIG needs to be modified in order to
+enable it.
 
-Merging name allocation and hattr allocation turned out to be easy by adding
-the name to struct hwmon_device_attribute. However, allocating an array of
-struct hwmon_device_attribute for all attributes in one go is more difficult.
-Main issue is that we _don't_ really know how many attributes are going to be
-created; we only know the ceiling, which is calculated in __hwmon_create_attrs().
-That number is currently used to allocate the array of attributes. The extra
-pointers did not seem that important there (to me). However, allocating an
-array of struct hwmon_device_attribute would result in memory being allocated
-for non-existing attributes as well (ie those for which is_visible returns 0),
-and that would at least potentially be much more. We can either accept that,
-or I would have to implement a second pass over the attributes to determine
-how many are actually implemented, or we could leave the per-attribute
-allocation unchanged.
+Signed-off-by: Yi Li <adamliyi@msn.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+v2:
+ Return an error when unable to enable VOUT monitoring as suggestd by Guenter
 
-Thoughts ?
+ drivers/hwmon/pmbus/adm1275.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 3baa4f4a8c5e..9940849351a1 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -499,15 +499,27 @@ static int adm1275_probe(struct i2c_client *client,
+ 		pindex = 2;
+ 		tindex = 3;
+ 
+-		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT;
++		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
++
++		/* By default when reset VOUT is not enabled */
++		if (!(config & ADM1278_VOUT_EN)) {
++			config |= ADM1278_VOUT_EN;
++			ret = i2c_smbus_write_byte_data(client,
++							ADM1275_PMON_CONFIG,
++							config);
++			if (ret < 0) {
++				dev_err(&client->dev,
++					"Failed to enable VOUT monitoring\n");
++				return -ENODEV;
++			}
++		}
++
+ 		if (config & ADM1278_TEMP1_EN)
+ 			info->func[0] |=
+ 				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+ 		if (config & ADM1278_VIN_EN)
+ 			info->func[0] |= PMBUS_HAVE_VIN;
+-		if (config & ADM1278_VOUT_EN)
+-			info->func[0] |=
+-				PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+ 		break;
+ 	case adm1293:
+ 	case adm1294:
+-- 
+2.9.3
 
