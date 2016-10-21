@@ -1,40 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:34303 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750892AbcJDWJl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Oct 2016 18:09:41 -0400
-Date: Tue, 4 Oct 2016 15:09:38 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Wang <Michael.Wang@alliedtelesis.co.nz>
-Subject: Re: [PATCHv1] hwmon: adm9240: handle temperature readings below 0
-Message-ID: <20161004220938.GA4566@roeck-us.net>
-References: <20161004040800.9689-1-chris.packham@alliedtelesis.co.nz>
- <20161004205359.GA29531@roeck-us.net>
- <3c7c751bd9d24856ace5866ffb94060a@svr-chch-ex1.atlnz.lc>
+Received: from mail-qk0-f175.google.com ([209.85.220.175]:35424 "EHLO
+        mail-qk0-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932185AbcJUIl6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Oct 2016 04:41:58 -0400
+Received: by mail-qk0-f175.google.com with SMTP id z190so137951648qkc.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2016 01:41:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c7c751bd9d24856ace5866ffb94060a@svr-chch-ex1.atlnz.lc>
+In-Reply-To: <1475853669-22480-6-git-send-email-pantelis.antoniou@konsulko.com>
+References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com> <1475853669-22480-6-git-send-email-pantelis.antoniou@konsulko.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 21 Oct 2016 10:41:56 +0200
+Message-ID: <CACRpkdbBECP=39sdVEfHmcFv70bzdgpN90-sVHqRyCZifAYRUg@mail.gmail.com>
+Subject: Re: [PATCH 05/10] gpio: i2cs: Juniper I2CS to GPIO pin mapping driver
+To: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+Cc: Lee Jones <lee.jones@linaro.org>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Richard Purdie <rpurdie@rpsys.net>,
+        Jacek Anaszewski <j.anaszewski@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Rosin <peda@axentia.se>,
+        Avirup Banerjee <abanerjee@juniper.net>,
+        Georgi Vlaev <gvlaev@juniper.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 04, 2016 at 09:09:10PM +0000, Chris Packham wrote:
-> 
-> >
-> > Of course, all that doesn't solve the real problem in this driver, which is
-> > that it ignores error codes from the smbus functions, but that is a different
-> > problem.
-> 
-> Yeah I'd noted that too. This patch is actually a port of changes we've 
-> made to a custom LM81 driver based on the original adm9240 driver which 
-> included some error handling. I'll look at bringing more of that code in 
-> for a future patch.
-> 
-Sounds good... 
+On Fri, Oct 7, 2016 at 5:21 PM, Pantelis Antoniou
+<pantelis.antoniou@konsulko.com> wrote:
 
-Thanks,
-Guenter
+> From: Guenter Roeck <groeck@juniper.net>
+>
+> This driver maps I2C slave register bits to GPIO pins. Registers
+> are supposed to be 8 bit wide. Interrupt support is optional.
+>
+> The driver is implemented as client of the I2CS MFD driver.
+>
+> Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
+> Signed-off-by: Guenter Roeck <groeck@juniper.net>
+> Signed-off-by: JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>
+> [Ported from Juniper kernel]
+> Signed-off-by: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+
+This driver again has the same review comments as the two first
+ones, GPIOLIB_IRQCHIP etc. Revise accordingly and repost
+and I will look at it again.
+
+(Interestingly this one uses BIT() properly.)
+
+Yours,
+Linus Walleij
