@@ -1,18 +1,19 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qk0-f175.google.com ([209.85.220.175]:35424 "EHLO
-        mail-qk0-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932185AbcJUIl6 (ORCPT
+Received: from mail-qt0-f182.google.com ([209.85.216.182]:36709 "EHLO
+        mail-qt0-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932392AbcJUI70 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Oct 2016 04:41:58 -0400
-Received: by mail-qk0-f175.google.com with SMTP id z190so137951648qkc.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2016 01:41:57 -0700 (PDT)
+        Fri, 21 Oct 2016 04:59:26 -0400
+Received: by mail-qt0-f182.google.com with SMTP id m5so77728883qtb.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Oct 2016 01:59:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1475853669-22480-6-git-send-email-pantelis.antoniou@konsulko.com>
-References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com> <1475853669-22480-6-git-send-email-pantelis.antoniou@konsulko.com>
+In-Reply-To: <1475853669-22480-7-git-send-email-pantelis.antoniou@konsulko.com>
+References: <1475853669-22480-1-git-send-email-pantelis.antoniou@konsulko.com> <1475853669-22480-7-git-send-email-pantelis.antoniou@konsulko.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 21 Oct 2016 10:41:56 +0200
-Message-ID: <CACRpkdbBECP=39sdVEfHmcFv70bzdgpN90-sVHqRyCZifAYRUg@mail.gmail.com>
-Subject: Re: [PATCH 05/10] gpio: i2cs: Juniper I2CS to GPIO pin mapping driver
+Date: Fri, 21 Oct 2016 10:59:25 +0200
+Message-ID: <CACRpkdZ=mWYJpBV_WmxYcAwA5TdHM4qv9k17Jb6TnoOL4YAPHA@mail.gmail.com>
+Subject: Re: [PATCH 06/10] gpio: gpio-i2cs: Document bindings of I2CS FPGA
+ GPIO block
 To: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
 Cc: Lee Jones <lee.jones@linaro.org>,
         Alexandre Courbot <gnurou@gmail.com>,
@@ -41,24 +42,36 @@ List-Id: linux-hwmon@vger.kernel.org
 On Fri, Oct 7, 2016 at 5:21 PM, Pantelis Antoniou
 <pantelis.antoniou@konsulko.com> wrote:
 
-> From: Guenter Roeck <groeck@juniper.net>
->
-> This driver maps I2C slave register bits to GPIO pins. Registers
-> are supposed to be 8 bit wide. Interrupt support is optional.
->
-> The driver is implemented as client of the I2CS MFD driver.
->
-> Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
-> Signed-off-by: Guenter Roeck <groeck@juniper.net>
-> Signed-off-by: JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>
-> [Ported from Juniper kernel]
-> Signed-off-by: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+> +This is virtual gpio driver, that maps each bit of the I2CS FPGA to
+> +a gpio. It's used as a compatibility replacement for FRUs that use
+> +I2CS FPGA to report presence, control and report power status in
+> +the Juniper's driver infra that uses gpios. Compatible with any I2CS.
 
-This driver again has the same review comments as the two first
-ones, GPIOLIB_IRQCHIP etc. Revise accordingly and repost
-and I will look at it again.
+What does "virtual" mean?
 
-(Interestingly this one uses BIT() properly.)
+I regularly NACK patches that try to shoehorn stuff into
+GPIO not because they are actually GPIO hardware drivers or
+general purpose at all, but because it is convenient. Don't do this.
+
+> +- i2c-gpio-map: Map of "I2CS register" and "direction". The registers
+> +       are 8 bit wide, each bit of the register is mapped to either
+> +       input or output depending on the bits of the "direction". If
+> +       the bit in the direction is 1, then that bit from the I2CS
+> +       register is mapped to gpio input, otherwise to gpio output.
+
+Does this mean that the hardware is synthesized so that some lines
+are hardwired as input and some hardwired as output?
+
+That again does not sound like "general purpose" at all.
+
+I think this happens in other hardware and should be a generic
+binding like
+
+gpio-lines-input-only = <0>, <4>;
+gpio-lines-output-only = <7>, <8>;
+
+And no bitmasking, use the local offset, parse and construct the
+mask.
 
 Yours,
 Linus Walleij
