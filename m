@@ -1,274 +1,303 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.pqgruber.com ([178.189.19.235]:42665 "EHLO
-        mail.pqgruber.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S941990AbcJSO2r (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Oct 2016 10:28:47 -0400
-From: Clemens Gruber <clemens.gruber@pqgruber.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Clemens Gruber <clemens.gruber@pqgruber.com>
-Subject: [PATCH 1/2] hwmon: (mcp3021) rework for DT support
-Date: Wed, 19 Oct 2016 11:38:24 +0200
-Message-Id: <20161019093824.24304-1-clemens.gruber@pqgruber.com>
+Received: from quartz.orcorp.ca ([184.70.90.242]:56471 "EHLO quartz.orcorp.ca"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752642AbcJZQ5D (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 26 Oct 2016 12:57:03 -0400
+Date: Wed, 26 Oct 2016 10:56:59 -0600
+From: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH v2] lm87: Use hwmon to create the sysfs groups
+Message-ID: <20161026165659.GA13461@obsidianresearch.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Support setting the reference voltage from the device tree.
-Rework of driver structure, put chip specific data in a separate
-structure and assign it depending on device id from platform data or
-DT match.
-Extend the device documentation and also change S_IRUGO to the better
-readable 0444, which fixes a checkpatch warning.
+This is the expected thing for a hwmon driver to do, this changes
+the sysfs paths from, say:
 
-Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
+  /sys/bus/i2c/devices/0-002c/temp1_input
+
+to:
+
+  /sys/bus/i2c/devices/0-002c/hwmon/hwmon0/temp1_input
+
+Signed-off-by: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
 ---
- Documentation/hwmon/mcp3021 |   5 ++
- drivers/hwmon/mcp3021.c     | 143 +++++++++++++++++++++++++++++++-------------
- 2 files changed, 107 insertions(+), 41 deletions(-)
+ drivers/hwmon/lm87.c | 134 +++++++++++++++++++--------------------------------
+ 1 file changed, 50 insertions(+), 84 deletions(-)
 
-diff --git a/Documentation/hwmon/mcp3021 b/Documentation/hwmon/mcp3021
-index 74a6b72..55792c3 100644
---- a/Documentation/hwmon/mcp3021
-+++ b/Documentation/hwmon/mcp3021
-@@ -12,6 +12,7 @@ Supported chips:
- Authors:
-    Mingkai Hu
-    Sven Schuchmann <schuchmann@schleissheimer.de>
-+   Clemens Gruber <clemens.gruber@pqgruber.com>
+v2 (from Guenter)
+ - Fix attr_groups length to 6
+ - Use devm and get rid of the remove function
  
- Description
- -----------
-@@ -27,3 +28,7 @@ Communication to the MCP3021/MCP3221  is performed using a 2-wire I2C
- compatible interface. Standard (100 kHz) and Fast (400 kHz) I2C modes are
- available. The default I2C device address is 0x4d (contact the Microchip
- factory for additional address options).
-+
-+The reference-voltage used in the conversion can be set via platform data or
-+device tree. Please refer to Documentation/devicetree/bindings/i2c/mcp3021.txt
-+for information about the bindings if the device tree is used.
-diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
-index 972444a..89b26fb 100644
---- a/drivers/hwmon/mcp3021.c
-+++ b/drivers/hwmon/mcp3021.c
-@@ -4,6 +4,7 @@
-  * Copyright (C) 2008-2009, 2012 Freescale Semiconductor, Inc.
-  * Author: Mingkai Hu <Mingkai.hu@freescale.com>
-  * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
-+ * Copyright (C) 2016 Clemens Gruber <clemens.gruber@pqgruber.com>
-  *
-  * This driver export the value of analog input voltage to sysfs, the
-  * voltage unit is mV. Through the sysfs interface, lm-sensors tool
-@@ -22,37 +23,56 @@
- #include <linux/i2c.h>
- #include <linux/err.h>
- #include <linux/device.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
- 
--/* Vdd info */
-+/* Vdd / reference voltage */
- #define MCP3021_VDD_MAX		5500
- #define MCP3021_VDD_MIN		2700
--#define MCP3021_VDD_REF		3300
--
--/* output format */
--#define MCP3021_SAR_SHIFT	2
--#define MCP3021_SAR_MASK	0x3ff
--#define MCP3021_OUTPUT_RES	10	/* 10-bit resolution */
--
--#define MCP3221_SAR_SHIFT	0
--#define MCP3221_SAR_MASK	0xfff
--#define MCP3221_OUTPUT_RES	12	/* 12-bit resolution */
-+#define MCP3021_VDD_DEFAULT	3300
- 
- enum chips {
- 	mcp3021,
- 	mcp3221
- };
- 
-+struct mcp3021_chip_info {
-+	u16 sar_shift;
-+	u16 sar_mask;
-+	u8 output_res;
-+};
-+
- /*
-  * Client data (each client gets its own)
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index a5e295826aea..81cb898245a1 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -154,7 +154,6 @@ static u8 LM87_REG_TEMP_LOW[3] = { 0x3A, 0x38, 0x2C };
   */
- struct mcp3021_data {
- 	struct device *hwmon_dev;
--	u32 vdd;	/* device power supply */
--	u16 sar_shift;
--	u16 sar_mask;
--	u8 output_res;
-+	const struct mcp3021_chip_info *chip_info;
-+	u32 vdd; /* device power supply and reference voltage */
+ 
+ struct lm87_data {
+-	struct device *hwmon_dev;
+ 	struct mutex update_lock;
+ 	char valid; /* zero until following fields are valid */
+ 	unsigned long last_updated; /* In jiffies */
+@@ -181,6 +180,8 @@ struct lm87_data {
+ 	u16 alarms;		/* register values, combined */
+ 	u8 vid;			/* register values, combined */
+ 	u8 vrm;
++
++	const struct attribute_group *attr_groups[6];
  };
  
-+static const struct mcp3021_chip_info mcp3021_chip_info_tbl[] = {
-+	[mcp3021] = {
-+		.sar_shift = 2,
-+		.sar_mask = 0x3ff,
-+		.output_res = 10,	/* 10-bit resolution */
-+	},
-+	[mcp3221] = {
-+		.sar_shift = 0,
-+		.sar_mask = 0xfff,
-+		.output_res = 12,	/* 12-bit resolution */
-+	},
-+};
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id of_mcp3021_match[] = {
-+	{ .compatible = "microchip,mcp3021", .data = (void *)mcp3021 },
-+	{ .compatible = "microchip,mcp3221", .data = (void *)mcp3221 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, of_mcp3021_match);
-+#endif
-+
- static int mcp3021_read16(struct i2c_client *client)
- {
- 	struct mcp3021_data *data = i2c_get_clientdata(client);
-@@ -73,14 +93,15 @@ static int mcp3021_read16(struct i2c_client *client)
- 	 * The ten-bit output code is composed of the lower 4-bit of the
- 	 * first byte and the upper 6-bit of the second byte.
- 	 */
--	reg = (reg >> data->sar_shift) & data->sar_mask;
-+	reg = (reg >> data->chip_info->sar_shift) & data->chip_info->sar_mask;
+ static inline int lm87_read_value(struct i2c_client *client, u8 reg)
+@@ -195,7 +196,7 @@ static inline int lm87_write_value(struct i2c_client *client, u8 reg, u8 value)
  
- 	return reg;
+ static struct lm87_data *lm87_update_device(struct device *dev)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 
+ 	mutex_lock(&data->update_lock);
+@@ -309,7 +310,7 @@ static ssize_t show_in_max(struct device *dev,
+ static ssize_t set_in_min(struct device *dev, struct device_attribute *attr,
+ 			  const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -330,7 +331,7 @@ static ssize_t set_in_min(struct device *dev, struct device_attribute *attr,
+ static ssize_t set_in_max(struct device *dev,  struct device_attribute *attr,
+ 			  const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -396,7 +397,7 @@ static ssize_t show_temp_high(struct device *dev,
+ static ssize_t set_temp_low(struct device *dev, struct device_attribute *attr,
+ 			    const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -416,7 +417,7 @@ static ssize_t set_temp_low(struct device *dev, struct device_attribute *attr,
+ static ssize_t set_temp_high(struct device *dev, struct device_attribute *attr,
+ 			     const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -495,7 +496,7 @@ static ssize_t show_fan_div(struct device *dev,
+ static ssize_t set_fan_min(struct device *dev, struct device_attribute *attr,
+ 			   const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -522,7 +523,7 @@ static ssize_t set_fan_min(struct device *dev, struct device_attribute *attr,
+ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 			   const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	long val;
+@@ -635,7 +636,7 @@ static ssize_t show_aout(struct device *dev, struct device_attribute *attr,
+ static ssize_t set_aout(struct device *dev, struct device_attribute *attr,
+ 			const char *buf, size_t count)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct i2c_client *client = dev_get_drvdata(dev);
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+ 	long val;
+ 	int err;
+@@ -841,23 +842,18 @@ static int lm87_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	return 0;
  }
  
- static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+-static void lm87_remove_files(struct i2c_client *client)
++static void lm87_restore_config(void *arg)
  {
--	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
-+	return DIV_ROUND_CLOSEST(data->vdd * val,
-+				 1 << data->chip_info->output_res);
- }
- 
- static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
-@@ -99,46 +120,83 @@ static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
- 	return sprintf(buf, "%d\n", in_input);
- }
- 
--static DEVICE_ATTR(in0_input, S_IRUGO, show_in_input, NULL);
-+static DEVICE_ATTR(in0_input, 0444, show_in_input, NULL);
- 
--static int mcp3021_probe(struct i2c_client *client,
-+#ifdef CONFIG_OF
-+static int mcp3021_probe_dt(struct i2c_client *client,
- 				const struct i2c_device_id *id)
- {
--	int err;
--	struct mcp3021_data *data = NULL;
-+	struct mcp3021_data *data = i2c_get_clientdata(client);
-+	struct device_node *np = client->dev.of_node;
-+	const struct of_device_id *match;
-+	int devid, ret;
- 
--	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+	match = of_match_device(of_mcp3021_match, &client->dev);
-+	if (!match)
- 		return -ENODEV;
- 
--	data = devm_kzalloc(&client->dev, sizeof(struct mcp3021_data),
--			    GFP_KERNEL);
--	if (!data)
--		return -ENOMEM;
+-	struct device *dev = &client->dev;
 -
--	i2c_set_clientdata(client, data);
-+	devid = (int)(uintptr_t)match->data;
-+	data->chip_info = &mcp3021_chip_info_tbl[devid];
+-	sysfs_remove_group(&dev->kobj, &lm87_group);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_in6);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_fan1);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_in7);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_fan2);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_temp3);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_in0_5);
+-	sysfs_remove_group(&dev->kobj, &lm87_group_vid);
++	struct i2c_client *client = arg;
++	struct lm87_data *data = i2c_get_clientdata(client);
++
++	lm87_write_value(client, LM87_REG_CONFIG, data->config);
+ }
  
--	switch (id->driver_data) {
--	case mcp3021:
--		data->sar_shift = MCP3021_SAR_SHIFT;
--		data->sar_mask = MCP3021_SAR_MASK;
--		data->output_res = MCP3021_OUTPUT_RES;
--		break;
--
--	case mcp3221:
--		data->sar_shift = MCP3221_SAR_SHIFT;
--		data->sar_mask = MCP3221_SAR_MASK;
--		data->output_res = MCP3221_OUTPUT_RES;
--		break;
-+	ret = of_property_read_u32(np, "reference-voltage", &data->vdd);
-+	if (ret) {
-+		/* fallback */
-+		data->vdd = MCP3021_VDD_DEFAULT;
-+		return 0;
- 	}
+-static void lm87_init_client(struct i2c_client *client)
++static int lm87_init_client(struct i2c_client *client)
+ {
+ 	struct lm87_data *data = i2c_get_clientdata(client);
++	int rc;
  
-+	if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+#else
-+static int mcp3021_probe_dt(struct i2c_client *client,
-+				const struct i2c_device_id *id)
-+{
-+	return 1;
-+}
-+#endif
-+
-+static int mcp3021_probe_pdata(struct i2c_client *client,
-+				const struct i2c_device_id *id)
-+{
-+	struct mcp3021_data *data = i2c_get_clientdata(client);
-+
-+	data->chip_info = &mcp3021_chip_info_tbl[id->driver_data];
-+
  	if (dev_get_platdata(&client->dev)) {
- 		data->vdd = *(u32 *)dev_get_platdata(&client->dev);
- 		if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
- 			return -EINVAL;
- 	} else {
--		data->vdd = MCP3021_VDD_REF;
-+		data->vdd = MCP3021_VDD_DEFAULT;
+ 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+@@ -868,6 +864,10 @@ static void lm87_init_client(struct i2c_client *client)
+ 	}
+ 	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
+ 
++	rc = devm_add_action(&client->dev, lm87_restore_config, client);
++	if (rc)
++		return rc;
++
+ 	if (!(data->config & 0x01)) {
+ 		int i;
+ 
+@@ -895,12 +895,15 @@ static void lm87_init_client(struct i2c_client *client)
+ 	if ((data->config & 0x09) != 0x01)
+ 		lm87_write_value(client, LM87_REG_CONFIG,
+ 				 (data->config & 0x77) | 0x01);
++	return 0;
+ }
+ 
+ static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ {
+ 	struct lm87_data *data;
++	struct device *hwmon_dev;
+ 	int err;
++	unsigned int group_tail = 0;
+ 
+ 	data = devm_kzalloc(&client->dev, sizeof(struct lm87_data), GFP_KERNEL);
+ 	if (!data)
+@@ -910,7 +913,9 @@ static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	mutex_init(&data->update_lock);
+ 
+ 	/* Initialize the LM87 chip */
+-	lm87_init_client(client);
++	err = lm87_init_client(client);
++	if (err)
++		return err;
+ 
+ 	data->in_scale[0] = 2500;
+ 	data->in_scale[1] = 2700;
+@@ -921,72 +926,34 @@ static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	data->in_scale[6] = 1875;
+ 	data->in_scale[7] = 1875;
+ 
+-	/* Register sysfs hooks */
+-	err = sysfs_create_group(&client->dev.kobj, &lm87_group);
+-	if (err)
+-		goto exit_stop;
+-
+-	if (data->channel & CHAN_NO_FAN(0)) {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in6);
+-		if (err)
+-			goto exit_remove;
+-	} else {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan1);
+-		if (err)
+-			goto exit_remove;
+-	}
+-
+-	if (data->channel & CHAN_NO_FAN(1)) {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in7);
+-		if (err)
+-			goto exit_remove;
+-	} else {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan2);
+-		if (err)
+-			goto exit_remove;
+-	}
+-
+-	if (data->channel & CHAN_TEMP3) {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_temp3);
+-		if (err)
+-			goto exit_remove;
+-	} else {
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in0_5);
+-		if (err)
+-			goto exit_remove;
+-	}
++	/*
++	 * Construct the list of attributes, the list depends on the
++	 * configuration of the chip
++	 */
++	data->attr_groups[group_tail++] = &lm87_group;
++	if (data->channel & CHAN_NO_FAN(0))
++		data->attr_groups[group_tail++] = &lm87_group_in6;
++	else
++		data->attr_groups[group_tail++] = &lm87_group_fan1;
++
++	if (data->channel & CHAN_NO_FAN(1))
++		data->attr_groups[group_tail++] = &lm87_group_in7;
++	else
++		data->attr_groups[group_tail++] = &lm87_group_fan2;
++
++	if (data->channel & CHAN_TEMP3)
++		data->attr_groups[group_tail++] = &lm87_group_temp3;
++	else
++		data->attr_groups[group_tail++] = &lm87_group_in0_5;
+ 
+ 	if (!(data->channel & CHAN_NO_VID)) {
+ 		data->vrm = vid_which_vrm();
+-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_vid);
+-		if (err)
+-			goto exit_remove;
+-	}
+-
+-	data->hwmon_dev = hwmon_device_register(&client->dev);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		err = PTR_ERR(data->hwmon_dev);
+-		goto exit_remove;
++		data->attr_groups[group_tail++] = &lm87_group_vid;
  	}
  
-+	return 0;
-+}
-+
-+static int mcp3021_probe(struct i2c_client *client,
-+				const struct i2c_device_id *id)
-+{
-+	struct mcp3021_data *data = NULL;
-+	int err;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENODEV;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	i2c_set_clientdata(client, data);
-+
-+	err = mcp3021_probe_dt(client, id);
-+	if (err > 0)
-+		mcp3021_probe_pdata(client, id);
-+	else if (err < 0)
-+		return err;
-+
- 	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
- 	if (err)
- 		return err;
-@@ -176,6 +234,9 @@ MODULE_DEVICE_TABLE(i2c, mcp3021_id);
- static struct i2c_driver mcp3021_driver = {
- 	.driver = {
- 		.name = "mcp3021",
-+#ifdef CONFIG_OF
-+		.of_match_table = of_match_ptr(of_mcp3021_match),
-+#endif
+-	return 0;
+-
+-exit_remove:
+-	lm87_remove_files(client);
+-exit_stop:
+-	lm87_write_value(client, LM87_REG_CONFIG, data->config);
+-	return err;
+-}
+-
+-static int lm87_remove(struct i2c_client *client)
+-{
+-	struct lm87_data *data = i2c_get_clientdata(client);
+-
+-	hwmon_device_unregister(data->hwmon_dev);
+-	lm87_remove_files(client);
+-
+-	lm87_write_value(client, LM87_REG_CONFIG, data->config);
+-	return 0;
++	hwmon_dev = devm_hwmon_device_register_with_groups(
++	    &client->dev, client->name, client, data->attr_groups);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+ 
+ /*
+@@ -1006,7 +973,6 @@ static struct i2c_driver lm87_driver = {
+ 		.name	= "lm87",
  	},
- 	.probe = mcp3021_probe,
- 	.remove = mcp3021_remove,
+ 	.probe		= lm87_probe,
+-	.remove		= lm87_remove,
+ 	.id_table	= lm87_id,
+ 	.detect		= lm87_detect,
+ 	.address_list	= normal_i2c,
 -- 
-2.10.0
-
+2.1.4
