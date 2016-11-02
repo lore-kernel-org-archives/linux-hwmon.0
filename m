@@ -1,43 +1,79 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.zhinst.com ([212.126.164.98]:49904 "EHLO mail.zhinst.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S964853AbcKXNfU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 24 Nov 2016 08:35:20 -0500
-From: Tobias Klauser <tklauser@distanz.ch>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (lm90) Mention support for TI TMP451 in Kconfig description
-Date: Thu, 24 Nov 2016 14:34:25 +0100
-Message-Id: <20161124133425.6475-1-tklauser@distanz.ch>
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:52345 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754605AbcKBC6M (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Nov 2016 22:58:12 -0400
+From: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+To: Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+Subject: [PATCH v4] Documentation: dtb: lm87: Add hwmon binding documentation.
+Date: Wed,  2 Nov 2016 15:58:04 +1300
+Message-Id: <20161102025804.9215-1-mahoda.ratnayaka@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The lm90 driver also supports the Texas Instruments TMP451 sensor chip.
-Since the Kconfig description for the driver includes a list of all
-compatible chips, mention the TI TMP451 there as well.
+This patch adds lm87 hwmon device tree node documentation.
 
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
 ---
- drivers/hwmon/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8681bc65cde5..1adda8a5adce 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1079,8 +1079,8 @@ config SENSORS_LM90
- 	  LM86, LM89 and LM99, Analog Devices ADM1032, ADT7461, and ADT7461A,
- 	  Maxim MAX6646, MAX6647, MAX6648, MAX6649, MAX6657, MAX6658, MAX6659,
- 	  MAX6680, MAX6681, MAX6692, MAX6695, MAX6696, ON Semiconductor NCT1008,
--	  Winbond/Nuvoton W83L771W/G/AWG/ASG, Philips SA56004, and GMT G781
--	  sensor chips.
-+	  Winbond/Nuvoton W83L771W/G/AWG/ASG, Philips SA56004, GMT G781, and
-+	  Texas Instruments TMP451 sensor chips.
- 
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called lm90.
+Notes:
+    Changes since v1:
+     As suggested include all the changes are moved in
+     to the same patch and the all the optional properties
+     are now defined instead of using a single variable to
+     indicate those properties.
+    
+    Changes since v2:
+     Changed has-vcc-5v to use regulator binding and fixed
+     a minor copy paste mistake.
+    
+    Changes since v3:
+     Update the vcc-supply description.
+
+ Documentation/devicetree/bindings/hwmon/lm87.txt | 30 ++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
+
+diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
+new file mode 100644
+index 0000000..e1b7990
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/lm87.txt
+@@ -0,0 +1,30 @@
++*LM87 hwmon sensor.
++
++Required properties:
++- compatible: Should be
++	"ti,lm87"
++
++- reg: I2C address
++
++optional properties:
++- has-temp3: This configures pins 18 and 19 to be used as a second
++             remote temperature sensing channel. By default the pins
++             are configured as voltage input pins in0 and in5.
++
++- has-in6: When set, pin 5 is configured to be used as voltage input
++           in6. Otherwise the pin is set as FAN1 input.
++
++- has-in7: When set, pin 6 is configured to be used as voltage input
++           in7. Otherwise the pin is set as FAN2 input.
++
++- vcc-supply: a Phandle for the regulator supplying power, can be
++              cofigured to measure 5.0V power supply. Default is 3.3V.
++
++Example:
++
++lm87@2e {
++	compatible = "ti,lm87";
++	reg = <0x2e>;
++	has-temp3;
++	vcc-supply = <&reg_5v0>;
++};
 -- 
-2.11.0.rc0.7.gbe5a750
-
+2.10.2
 
