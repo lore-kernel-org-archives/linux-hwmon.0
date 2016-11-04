@@ -1,218 +1,201 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-yb0-f193.google.com ([209.85.213.193]:34241 "EHLO
-        mail-yb0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934264AbcKDPoI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2016 11:44:08 -0400
-Received: by mail-yb0-f193.google.com with SMTP id f97so1516645ybi.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 04 Nov 2016 08:44:08 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: andrea.merello@gmail.com
-In-Reply-To: <20161104150942.GA12009@roeck-us.net>
-References: <20161004235102.GA1055@roeck-us.net> <CAN8YU5Oemez-ovyGhmWR0y7D7UUnzuGYjSLTO607U8wrg36F4Q@mail.gmail.com>
- <246c105a-1cad-6b58-dd43-cbfc6a9f87d6@roeck-us.net> <CAN8YU5N7NEg8DH8VGrwP1-AJhfHO_Mj_3NSJahZU08ZLthsDFA@mail.gmail.com>
- <41a63728-762b-8336-823a-17db3522aabd@roeck-us.net> <CAN8YU5PsUDCJ8MhQPusgUfgHg6cN25O2-BYc-KTYrbv6cHDfLw@mail.gmail.com>
- <20161102224807.GA5653@roeck-us.net> <CAN8YU5Pi0+m9d6maAYbmxn9wgkFg2hohjoHi32VCRk03YuEy_A@mail.gmail.com>
- <20161103211612.GB25939@roeck-us.net> <CAN8YU5P6po9drKjvGb=RLU=fKDNCAXeFp-9LuY5CF5jfnYW6Tg@mail.gmail.com>
- <20161104150942.GA12009@roeck-us.net>
-From: Andrea Merello <andrea.merello@gmail.com>
-Date: Fri, 4 Nov 2016 16:43:46 +0100
-Message-ID: <CAN8YU5O5n6b6r3DenzDf9BRDQ=9w=Q2+957nKTXjDhFsav=e=g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] hwmon: new driver for ST stts751 thermal sensor
-To: Guenter Roeck <linux@roeck-us.net>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:43370 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S935064AbcKDQBo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Nov 2016 12:01:44 -0400
+Date: Fri, 4 Nov 2016 09:01:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Andrea Merello <andrea.merello@gmail.com>
 Cc: linux-hwmon@vger.kernel.org,
         LABBE Corentin <clabbe.montjoie@gmail.com>,
         Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 2/2] hwmon: new driver for ST stts751 thermal sensor
+Message-ID: <20161104160141.GA28466@roeck-us.net>
+References: <246c105a-1cad-6b58-dd43-cbfc6a9f87d6@roeck-us.net>
+ <CAN8YU5N7NEg8DH8VGrwP1-AJhfHO_Mj_3NSJahZU08ZLthsDFA@mail.gmail.com>
+ <41a63728-762b-8336-823a-17db3522aabd@roeck-us.net>
+ <CAN8YU5PsUDCJ8MhQPusgUfgHg6cN25O2-BYc-KTYrbv6cHDfLw@mail.gmail.com>
+ <20161102224807.GA5653@roeck-us.net>
+ <CAN8YU5Pi0+m9d6maAYbmxn9wgkFg2hohjoHi32VCRk03YuEy_A@mail.gmail.com>
+ <20161103211612.GB25939@roeck-us.net>
+ <CAN8YU5P6po9drKjvGb=RLU=fKDNCAXeFp-9LuY5CF5jfnYW6Tg@mail.gmail.com>
+ <20161104150942.GA12009@roeck-us.net>
+ <CAN8YU5O5n6b6r3DenzDf9BRDQ=9w=Q2+957nKTXjDhFsav=e=g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAN8YU5O5n6b6r3DenzDf9BRDQ=9w=Q2+957nKTXjDhFsav=e=g@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 4, 2016 at 4:09 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On Fri, Nov 04, 2016 at 09:24:25AM +0100, Andrea Merello wrote:
->> On Thu, Nov 3, 2016 at 10:16 PM, Guenter Roeck <linux@roeck-us.net> wrot=
-e:
->> > On Thu, Nov 03, 2016 at 08:35:27AM +0100, Andrea Merello wrote:
->> >> On Wed, Nov 2, 2016 at 11:48 PM, Guenter Roeck <linux@roeck-us.net> w=
-rote:
->> >> > On Wed, Nov 02, 2016 at 09:11:35AM +0100, Andrea Merello wrote:
->> >> >> On Mon, Oct 31, 2016 at 5:18 PM, Guenter Roeck <linux@roeck-us.net=
-> wrote:
->> >> >> > On 10/31/2016 08:27 AM, Andrea Merello wrote:
->> >> >> >
->> >> >> >>>>
->> >> >> >>>>>> +     if (ret < 0)
->> >> >> >>>>>> +             return ret;
->> >> >> >>>>>> +
->> >> >> >>>>>> +     priv->max_alert =3D priv->max_alert || !!(ret &
->> >> >> >>>>>> STTS751_STATUS_TRIPH);
->> >> >> >>>>>> +     priv->min_alert =3D priv->min_alert || !!(ret &
->> >> >> >>>>>> STTS751_STATUS_TRIPL);
->> >> >> >>>>>> +
->> >> >> >>>>>
->> >> >> >>>>>
->> >> >> >>>>> I am not really happy about the caching of alert values. Thi=
-s isn't
->> >> >> >>>>> really
->> >> >> >>>>> common. Usually we report current alert values when reading.=
- I don't
->> >> >> >>>>> really
->> >> >> >>>>> see why this driver should be different to all the others.
->> >> >> >>>>
->> >> >> >>>>
->> >> >> >>>>
->> >> >> >>>> OK
->> >> >> >>
->> >> >> >>
->> >> >> >> I've tried to avoid caching, but as soon as I read the status r=
-egister
->> >> >> >> in the alert handler, the device clears that reg, and it will r=
-emain
->> >> >> >> cleared up to the next conversion.
->> >> >> >>
->> >> >> >> So for example if the reader is blocked on poll over the alert
->> >> >> >> attribute, it gets unblocked on alert, and it will very likely =
-read
->> >> >> >> zero..
->> >> >> >>
->> >> >> >> The only way I can see for avoiding caching, and for changing t=
-he API
->> >> >> >> about clearing events as you asked below, is performing a tempe=
-rature
->> >> >> >> read from the temperature registers and doing software compare =
-with
->> >> >> >> the limits in show_[max/min]_alert.
->> >> >> >>
->> >> >> >> Does this sounds OK for you ?
->> >> >> >>
->> >> >> >
->> >> >> > Not really. That could be done from user space by just reading t=
-he
->> >> >> > temperature
->> >> >> > and comparing it against limits.
->> >> >>
->> >> >> Sorry, I don't see the point here.. Why the fact that something co=
-uld
->> >> >> be done in userspace should suggest we don't want to do it in the
->> >> >> driver? We do, for example, a simple calculation to give an absolu=
-te
->> >> >> value for the hysteresis; we could do this also in userspace, but =
-we
->> >> >> do this in the driver in order to support the proper API..
->> >> >>
->> >> > Datasheet says:
->> >> >
->> >> > T HIGH : [6] Bit =3D 1 indicates temperature high limit has been ex=
-ceeded (T A >
->> >> > high limit). T HIGH is cleared when the status register is read, pr=
-ovided
->> >> > the condition no longer exists.
->> >> > T LOW : [5] Bit =3D 1 indicates the is at or below the low limit (T=
- A =E2=89=A4 low
->> >> > limit). T LOW is cleared when the status register is read, provided=
- the
->> >> > condition no longer exists.
->> >> >
->> >> > This isn't exactly what you are claiming, since it says "cleared ..=
-. provided
->> >> > that the condition no longer exists", which would be more in line w=
-ith other
->> >> > chips.
->> >>
->> >> Yes, I know.. I've also read that on the datasheet.. And I tried
->> >> reading the status register in both the alert handler and the show
->> >> function, but it didn't worked :/
->> >>
->> >> So I started to suspect the status register got actually clear after
->> >> reading up to the next conversion, and to test this, I simply read it
->> >> twice in the alert handler. The first read always read 1, as expected=
-;
->> >> the second time I always got zero, even if the temperature was still
->> >> over-limit.. And I soon got another event, that behaved in the same
->> >> manner.
->> >>
->> > Question is if the event bit is set again after the next conversion; t=
-his would
->> > be relatively easy to handle (cache the status register for one conver=
-sion
->> > time).
->>
->> Yes, I meant the HW does exactly this. But it seems to me that caching
->> could end up in subtle races here..
->>
->> For example suppose that user is reading the lower limit alarm file,
->> or therm, and this will trigger read of the status reg; but a
->> conversion is just ended and set the high limit alarm just before
->> reading the status reg. Then the event handler is invoked but it will
->> find out the status reg to be (incorrectly) zero, (or rely on a value
->> cached when reading the lower limit, that was zero); thus a thread
->> blocked on poll on the high alarm would not be woken up. (ok, this
->> probably will happen in next conversions, but this doesn't sound quite
->> sane to me..).
->>
-> Good catch and thinking, but there is a workaround. If the cache time
-> has not expired, just logically or the cached status value with the curre=
-nt
-> value in the alert function, and update the time stamp. This way nothing
-> gets lost.
+On Fri, Nov 04, 2016 at 04:43:46PM +0100, Andrea Merello wrote:
+> On Fri, Nov 4, 2016 at 4:09 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Fri, Nov 04, 2016 at 09:24:25AM +0100, Andrea Merello wrote:
+> >> On Thu, Nov 3, 2016 at 10:16 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> >> > On Thu, Nov 03, 2016 at 08:35:27AM +0100, Andrea Merello wrote:
+> >> >> On Wed, Nov 2, 2016 at 11:48 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> >> >> > On Wed, Nov 02, 2016 at 09:11:35AM +0100, Andrea Merello wrote:
+> >> >> >> On Mon, Oct 31, 2016 at 5:18 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> >> >> >> > On 10/31/2016 08:27 AM, Andrea Merello wrote:
+> >> >> >> >
+> >> >> >> >>>>
+> >> >> >> >>>>>> +     if (ret < 0)
+> >> >> >> >>>>>> +             return ret;
+> >> >> >> >>>>>> +
+> >> >> >> >>>>>> +     priv->max_alert = priv->max_alert || !!(ret &
+> >> >> >> >>>>>> STTS751_STATUS_TRIPH);
+> >> >> >> >>>>>> +     priv->min_alert = priv->min_alert || !!(ret &
+> >> >> >> >>>>>> STTS751_STATUS_TRIPL);
+> >> >> >> >>>>>> +
+> >> >> >> >>>>>
+> >> >> >> >>>>>
+> >> >> >> >>>>> I am not really happy about the caching of alert values. This isn't
+> >> >> >> >>>>> really
+> >> >> >> >>>>> common. Usually we report current alert values when reading. I don't
+> >> >> >> >>>>> really
+> >> >> >> >>>>> see why this driver should be different to all the others.
+> >> >> >> >>>>
+> >> >> >> >>>>
+> >> >> >> >>>>
+> >> >> >> >>>> OK
+> >> >> >> >>
+> >> >> >> >>
+> >> >> >> >> I've tried to avoid caching, but as soon as I read the status register
+> >> >> >> >> in the alert handler, the device clears that reg, and it will remain
+> >> >> >> >> cleared up to the next conversion.
+> >> >> >> >>
+> >> >> >> >> So for example if the reader is blocked on poll over the alert
+> >> >> >> >> attribute, it gets unblocked on alert, and it will very likely read
+> >> >> >> >> zero..
+> >> >> >> >>
+> >> >> >> >> The only way I can see for avoiding caching, and for changing the API
+> >> >> >> >> about clearing events as you asked below, is performing a temperature
+> >> >> >> >> read from the temperature registers and doing software compare with
+> >> >> >> >> the limits in show_[max/min]_alert.
+> >> >> >> >>
+> >> >> >> >> Does this sounds OK for you ?
+> >> >> >> >>
+> >> >> >> >
+> >> >> >> > Not really. That could be done from user space by just reading the
+> >> >> >> > temperature
+> >> >> >> > and comparing it against limits.
+> >> >> >>
+> >> >> >> Sorry, I don't see the point here.. Why the fact that something could
+> >> >> >> be done in userspace should suggest we don't want to do it in the
+> >> >> >> driver? We do, for example, a simple calculation to give an absolute
+> >> >> >> value for the hysteresis; we could do this also in userspace, but we
+> >> >> >> do this in the driver in order to support the proper API..
+> >> >> >>
+> >> >> > Datasheet says:
+> >> >> >
+> >> >> > T HIGH : [6] Bit = 1 indicates temperature high limit has been exceeded (T A >
+> >> >> > high limit). T HIGH is cleared when the status register is read, provided
+> >> >> > the condition no longer exists.
+> >> >> > T LOW : [5] Bit = 1 indicates the is at or below the low limit (T A ≤ low
+> >> >> > limit). T LOW is cleared when the status register is read, provided the
+> >> >> > condition no longer exists.
+> >> >> >
+> >> >> > This isn't exactly what you are claiming, since it says "cleared ... provided
+> >> >> > that the condition no longer exists", which would be more in line with other
+> >> >> > chips.
+> >> >>
+> >> >> Yes, I know.. I've also read that on the datasheet.. And I tried
+> >> >> reading the status register in both the alert handler and the show
+> >> >> function, but it didn't worked :/
+> >> >>
+> >> >> So I started to suspect the status register got actually clear after
+> >> >> reading up to the next conversion, and to test this, I simply read it
+> >> >> twice in the alert handler. The first read always read 1, as expected;
+> >> >> the second time I always got zero, even if the temperature was still
+> >> >> over-limit.. And I soon got another event, that behaved in the same
+> >> >> manner.
+> >> >>
+> >> > Question is if the event bit is set again after the next conversion; this would
+> >> > be relatively easy to handle (cache the status register for one conversion
+> >> > time).
+> >>
+> >> Yes, I meant the HW does exactly this. But it seems to me that caching
+> >> could end up in subtle races here..
+> >>
+> >> For example suppose that user is reading the lower limit alarm file,
+> >> or therm, and this will trigger read of the status reg; but a
+> >> conversion is just ended and set the high limit alarm just before
+> >> reading the status reg. Then the event handler is invoked but it will
+> >> find out the status reg to be (incorrectly) zero, (or rely on a value
+> >> cached when reading the lower limit, that was zero); thus a thread
+> >> blocked on poll on the high alarm would not be woken up. (ok, this
+> >> probably will happen in next conversions, but this doesn't sound quite
+> >> sane to me..).
+> >>
+> > Good catch and thinking, but there is a workaround. If the cache time
+> > has not expired, just logically or the cached status value with the current
+> > value in the alert function, and update the time stamp. This way nothing
+> > gets lost.
+> 
+> Hmm, it seems OK; thanks for suggesting this :) I'll try to go this way..
+> 
+> BTW I would say that the cache time for the alert should be
+> coservatively a bit longer than the conversion time (to avoid early
+> expiration when the status register has been not restored yet). On the
+> other hand for the temperature reading I'm using a cache time that is
+> shorter (I think it is 1/4) than the conversion interval, so that the
+> user gets a reasonably fresh value (becasue the chip sampling freq is
+> asyncrhronous wrt the reads we do). Do you think it's worth to keep
+> doing this (so we have two different cache time for alarms and temp
+> value), or do you think that it's pointless, and better to unify it
+> (at the longer one, I would say)?
+> 
 
-Hmm, it seems OK; thanks for suggesting this :) I'll try to go this way..
+I would suggest to use a single cache time, in line with the real cache time,
+using the maximum as per the datasheet and possibly rounded up. If the user
+wants faster readings, that can be made configurable using the 'update-interval'
+attribute. If the chip is configured to only read the temperature once per,
+say, 16 seconds, this is what the user wanted, and real-time accuracy is not
+guaranteed anyway.
 
-BTW I would say that the cache time for the alert should be
-coservatively a bit longer than the conversion time (to avoid early
-expiration when the status register has been not restored yet). On the
-other hand for the temperature reading I'm using a cache time that is
-shorter (I think it is 1/4) than the conversion interval, so that the
-user gets a reasonably fresh value (becasue the chip sampling freq is
-asyncrhronous wrt the reads we do). Do you think it's worth to keep
-doing this (so we have two different cache time for alarms and temp
-value), or do you think that it's pointless, and better to unify it
-(at the longer one, I would say)?
-
->>
->> >> (also I'm thinking about a way to mask events once we know that we ar=
-e
->> >> in a out-of-limit condition, to avoid having a lot of them, but simpl=
-y
->> >> disabling events and re-enabling them after userspace reads the alarm
->> >> and find it to be zero, like lm90 driver does, IMHO wouldn't be good
->> >> here, because we have a single bit to disable both high and low
->> >> limits..)
->> >>
->> >> > The THRM bit doesn't seem to self-clean either, at least not accord=
-ing to the
->> >> > datasheet.
->> >>
->> >> I need to test this.. But this doesn't generate any event, it seems
->> >> only inteded to drive an external circuit, say a fan, and not to
->> >> notify SW.. And currently I even have no show function to read it's
->> >> status (now that I'm on it, I think I should add it...)..
->> >>
->> > Yes. Note that this pin might be wired to an interrupt.
->>
->> IMHO it isn't straightforward to handle this..
->>
->> AFAIK what is done by the smbus code to allow handling smbus events
->> lines with regular interrupt lines is to briefly disabling the IRQ
->> line until the event can be acknowledged with the ARA (in non atomic
->> context).
->>
->> But here is even worse because there is no ARA; it seems that the
->> therm line can't be "cleared" at all.
->>
->> Maybe it's possible to do hacks similar to what the smbus code does,
->> but keeping the IRQ line disabled (given that it must not be shared)..
->> Maybe if the IRQ controller could be set in edge-triggered mode it
->> would be easier..
->>
->> But does it really worth struggling supporting this scenario? There's
->> the event pin explicitly designed for events, and there is code that
->> make it possible to use this even with regular IRQs.. Using also the
->> therm pin as interrupt seems honestly a bit pointless and
->> inappropriate..
->>
-> Correct, one would use an edge triggered interrupt in this case. But
-> you are right, this should only be implemented if that use case is
-> actually encountered.
->
-> Thanks,
-> Guenter
+> >>
+> >> >> (also I'm thinking about a way to mask events once we know that we are
+> >> >> in a out-of-limit condition, to avoid having a lot of them, but simply
+> >> >> disabling events and re-enabling them after userspace reads the alarm
+> >> >> and find it to be zero, like lm90 driver does, IMHO wouldn't be good
+> >> >> here, because we have a single bit to disable both high and low
+> >> >> limits..)
+> >> >>
+> >> >> > The THRM bit doesn't seem to self-clean either, at least not according to the
+> >> >> > datasheet.
+> >> >>
+> >> >> I need to test this.. But this doesn't generate any event, it seems
+> >> >> only inteded to drive an external circuit, say a fan, and not to
+> >> >> notify SW.. And currently I even have no show function to read it's
+> >> >> status (now that I'm on it, I think I should add it...)..
+> >> >>
+> >> > Yes. Note that this pin might be wired to an interrupt.
+> >>
+> >> IMHO it isn't straightforward to handle this..
+> >>
+> >> AFAIK what is done by the smbus code to allow handling smbus events
+> >> lines with regular interrupt lines is to briefly disabling the IRQ
+> >> line until the event can be acknowledged with the ARA (in non atomic
+> >> context).
+> >>
+> >> But here is even worse because there is no ARA; it seems that the
+> >> therm line can't be "cleared" at all.
+> >>
+> >> Maybe it's possible to do hacks similar to what the smbus code does,
+> >> but keeping the IRQ line disabled (given that it must not be shared)..
+> >> Maybe if the IRQ controller could be set in edge-triggered mode it
+> >> would be easier..
+> >>
+> >> But does it really worth struggling supporting this scenario? There's
+> >> the event pin explicitly designed for events, and there is code that
+> >> make it possible to use this even with regular IRQs.. Using also the
+> >> therm pin as interrupt seems honestly a bit pointless and
+> >> inappropriate..
+> >>
+> > Correct, one would use an edge triggered interrupt in this case. But
+> > you are right, this should only be implemented if that use case is
+> > actually encountered.
+> >
+> > Thanks,
+> > Guenter
