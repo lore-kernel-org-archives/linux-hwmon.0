@@ -1,59 +1,45 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54531 "EHLO
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58651 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934997AbcJXNJf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Oct 2016 09:09:35 -0400
-Subject: Re: [PATCH] hwmon: (core) fix resource leak on devm_kcalloc failure
-To: Colin King <colin.king@canonical.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20161023205608.11867-1-colin.king@canonical.com>
-Cc: linux-kernel@vger.kernel.org
+        with ESMTP id S1752144AbcKFPxW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2016 10:53:22 -0500
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5e1b6e81-c9a9-66dc-94c1-31c39def5129@roeck-us.net>
-Date: Mon, 24 Oct 2016 06:09:27 -0700
-MIME-Version: 1.0
-In-Reply-To: <20161023205608.11867-1-colin.king@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.9-rc5
+Date: Sun,  6 Nov 2016 07:53:20 -0800
+Message-Id: <1478447600-15256-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 10/23/2016 01:56 PM, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->
-> If dev_kcalloc fails to allocate hw_dev->groups then the current
-> exit path is a direct return, causing a leak of resources such
-> as hwdev and ida is not removed.  Fix this by exiting via the
-> free_hwmon exit path that performs the necessary resource cleanup.
->
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Hi Linus,
 
-Good catch! Applied.
+Please pull hwmon fixes for Linux v4.9-rc5 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.9-rc5
 
 Thanks,
 Guenter
+------
 
-> ---
->  drivers/hwmon/hwmon.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index adae684..a74c075 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -536,8 +536,10 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->
->  		hwdev->groups = devm_kcalloc(dev, ngroups, sizeof(*groups),
->  					     GFP_KERNEL);
-> -		if (!hwdev->groups)
-> -			return ERR_PTR(-ENOMEM);
-> +		if (!hwdev->groups) {
-> +			err = -ENOMEM;
-> +			goto free_hwmon;
-> +		}
->
->  		attrs = __hwmon_create_attrs(dev, drvdata, chip);
->  		if (IS_ERR(attrs)) {
->
+The following changes since commit 07d9a380680d1c0eb51ef87ff2eab5c994949e69:
 
+  Linux 4.9-rc2 (2016-10-23 17:10:14 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.9-rc5
+
+for you to fetch changes up to 38d8ed65092ed22f52a95f397855cace0260e110:
+
+  hwmon: (core) fix resource leak on devm_kcalloc failure (2016-10-24 06:05:13 -0700)
+
+----------------------------------------------------------------
+Fix resource leak on devm_kcalloc failure
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      hwmon: (core) fix resource leak on devm_kcalloc failure
+
+ drivers/hwmon/hwmon.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
