@@ -1,45 +1,316 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58651 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42529 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752144AbcKFPxW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Nov 2016 10:53:22 -0500
+        with ESMTP id S1751157AbcKILxa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Nov 2016 06:53:30 -0500
 From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.9-rc5
-Date: Sun,  6 Nov 2016 07:53:20 -0800
-Message-Id: <1478447600-15256-1-git-send-email-linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/3] hwmon: (mcp3021) rework for DT support
+To: Clemens Gruber <clemens.gruber@pqgruber.com>,
+        linux-hwmon@vger.kernel.org
+References: <20161027223345.16733-1-clemens.gruber@pqgruber.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-ID: <10e07b32-6b95-273f-683e-993612916dda@roeck-us.net>
+Date: Wed, 9 Nov 2016 03:53:23 -0800
+MIME-Version: 1.0
+In-Reply-To: <20161027223345.16733-1-clemens.gruber@pqgruber.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On 10/27/2016 03:33 PM, Clemens Gruber wrote:
+> Support setting the reference voltage from the device tree.
+> Rework of driver structure, put chip specific data in a separate
+> structure and assign it depending on device id from platform data or
+> DT match.
+>
+> Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
+> ---
+>  Documentation/hwmon/mcp3021 |   6 ++
+>  drivers/hwmon/mcp3021.c     | 145 ++++++++++++++++++++++++++++++++------------
+>  2 files changed, 111 insertions(+), 40 deletions(-)
+>
+> diff --git a/Documentation/hwmon/mcp3021 b/Documentation/hwmon/mcp3021
+> index 74a6b72..be252b7 100644
+> --- a/Documentation/hwmon/mcp3021
+> +++ b/Documentation/hwmon/mcp3021
+> @@ -12,6 +12,7 @@ Supported chips:
+>  Authors:
+>     Mingkai Hu
+>     Sven Schuchmann <schuchmann@schleissheimer.de>
+> +   Clemens Gruber <clemens.gruber@pqgruber.com>
+>
+>  Description
+>  -----------
+> @@ -27,3 +28,8 @@ Communication to the MCP3021/MCP3221  is performed using a 2-wire I2C
+>  compatible interface. Standard (100 kHz) and Fast (400 kHz) I2C modes are
+>  available. The default I2C device address is 0x4d (contact the Microchip
+>  factory for additional address options).
+> +
+> +The reference voltage used in the conversion can be set through platform data
+> +in millivolt (for backwards compatibility) or via device tree in microvolt.
+> +Please refer to Documentation/devicetree/bindings/i2c/mcp3021.txt for details
+> +about the device tree bindings.
+> diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
+> index 972444a..a8cf97f 100644
+> --- a/drivers/hwmon/mcp3021.c
+> +++ b/drivers/hwmon/mcp3021.c
+> @@ -4,6 +4,7 @@
+>   * Copyright (C) 2008-2009, 2012 Freescale Semiconductor, Inc.
+>   * Author: Mingkai Hu <Mingkai.hu@freescale.com>
+>   * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
+> + * Copyright (C) 2016 Clemens Gruber <clemens.gruber@pqgruber.com>
+>   *
+>   * This driver export the value of analog input voltage to sysfs, the
+>   * voltage unit is mV. Through the sysfs interface, lm-sensors tool
+> @@ -22,37 +23,56 @@
+>  #include <linux/i2c.h>
+>  #include <linux/err.h>
+>  #include <linux/device.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+>
+> -/* Vdd info */
+> +/* Vdd / reference voltage in millivolt */
+>  #define MCP3021_VDD_MAX		5500
+>  #define MCP3021_VDD_MIN		2700
+> -#define MCP3021_VDD_REF		3300
+> -
+> -/* output format */
+> -#define MCP3021_SAR_SHIFT	2
+> -#define MCP3021_SAR_MASK	0x3ff
+> -#define MCP3021_OUTPUT_RES	10	/* 10-bit resolution */
+> -
+> -#define MCP3221_SAR_SHIFT	0
+> -#define MCP3221_SAR_MASK	0xfff
+> -#define MCP3221_OUTPUT_RES	12	/* 12-bit resolution */
+> +#define MCP3021_VDD_DEFAULT	3300
+>
 
-Please pull hwmon fixes for Linux v4.9-rc5 from signed tag:
+There is no technical reason to drop / change those defines and use literals
+in the code instead. Please don't.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.9-rc5
+>  enum chips {
+>  	mcp3021,
+>  	mcp3221
+>  };
+>
+> +struct mcp3021_chip_info {
+> +	u16 sar_shift;
+> +	u16 sar_mask;
+> +	u8 output_res;
+> +};
+> +
+>  /*
+>   * Client data (each client gets its own)
+>   */
+>  struct mcp3021_data {
+>  	struct device *hwmon_dev;
+> -	u32 vdd;	/* device power supply */
+> -	u16 sar_shift;
+> -	u16 sar_mask;
+> -	u8 output_res;
+> +	const struct mcp3021_chip_info *chip_info;
+> +	u32 vdd; /* device power supply and reference voltage in millivolt */
+>  };
+>
+> +static const struct mcp3021_chip_info mcp3021_chip_info_tbl[] = {
+> +	[mcp3021] = {
+> +		.sar_shift = 2,
+> +		.sar_mask = 0x3ff,
+> +		.output_res = 10,	/* 10-bit resolution */
+> +	},
+> +	[mcp3221] = {
+> +		.sar_shift = 0,
+> +		.sar_mask = 0xfff,
+> +		.output_res = 12,	/* 12-bit resolution */
+> +	},
+> +};
+> +
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id of_mcp3021_match[] = {
+> +	{ .compatible = "microchip,mcp3021", .data = (void *)mcp3021 },
+> +	{ .compatible = "microchip,mcp3221", .data = (void *)mcp3221 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_mcp3021_match);
+> +#endif
+> +
+>  static int mcp3021_read16(struct i2c_client *client)
+>  {
+>  	struct mcp3021_data *data = i2c_get_clientdata(client);
+> @@ -73,14 +93,15 @@ static int mcp3021_read16(struct i2c_client *client)
+>  	 * The ten-bit output code is composed of the lower 4-bit of the
+>  	 * first byte and the upper 6-bit of the second byte.
+>  	 */
+> -	reg = (reg >> data->sar_shift) & data->sar_mask;
+> +	reg = (reg >> data->chip_info->sar_shift) & data->chip_info->sar_mask;
+>
+>  	return reg;
+>  }
+>
+>  static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+>  {
+> -	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
+> +	return DIV_ROUND_CLOSEST(data->vdd * val,
+> +				 1 << data->chip_info->output_res);
+>  }
+>
+>  static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
+> @@ -101,44 +122,85 @@ static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
+>
+>  static DEVICE_ATTR(in0_input, S_IRUGO, show_in_input, NULL);
+>
+> -static int mcp3021_probe(struct i2c_client *client,
+> +#ifdef CONFIG_OF
+> +static int mcp3021_probe_dt(struct i2c_client *client,
+>  				const struct i2c_device_id *id)
+>  {
+> -	int err;
+> -	struct mcp3021_data *data = NULL;
+> +	struct mcp3021_data *data = i2c_get_clientdata(client);
+> +	struct device_node *np = client->dev.of_node;
+> +	const struct of_device_id *match;
+> +	int devid, ret;
+>
+> -	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> +	match = of_match_device(of_mcp3021_match, &client->dev);
+> +	if (!match)
+>  		return -ENODEV;
+>
+> -	data = devm_kzalloc(&client->dev, sizeof(struct mcp3021_data),
+> -			    GFP_KERNEL);
+> -	if (!data)
+> -		return -ENOMEM;
+> -
+> -	i2c_set_clientdata(client, data);
+> +	devid = (int)(uintptr_t)match->data;
+> +	data->chip_info = &mcp3021_chip_info_tbl[devid];
+>
+> -	switch (id->driver_data) {
+> -	case mcp3021:
+> -		data->sar_shift = MCP3021_SAR_SHIFT;
+> -		data->sar_mask = MCP3021_SAR_MASK;
+> -		data->output_res = MCP3021_OUTPUT_RES;
+> -		break;
+> -
+> -	case mcp3221:
+> -		data->sar_shift = MCP3221_SAR_SHIFT;
+> -		data->sar_mask = MCP3221_SAR_MASK;
+> -		data->output_res = MCP3221_OUTPUT_RES;
+> -		break;
+> +	ret = of_property_read_u32(np, "reference-voltage-microvolt",
+> +				   &data->vdd);
+> +	if (ret) {
+> +		/* fallback */
+> +		data->vdd = MCP3021_VDD_DEFAULT;
+> +		return 0;
+>  	}
+>
+> +	/* Convert microvolt from DT to millivolt used in the formula */
+> +	data->vdd /= 1000;
+> +
+> +	if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +#else
+> +static int mcp3021_probe_dt(struct i2c_client *client,
+> +				const struct i2c_device_id *id)
+> +{
+> +	return 1;
+> +}
+> +#endif
+> +
+> +static int mcp3021_probe_pdata(struct i2c_client *client,
+> +				const struct i2c_device_id *id)
+> +{
+> +	struct mcp3021_data *data = i2c_get_clientdata(client);
+> +
+> +	data->chip_info = &mcp3021_chip_info_tbl[id->driver_data];
+> +
+>  	if (dev_get_platdata(&client->dev)) {
+>  		data->vdd = *(u32 *)dev_get_platdata(&client->dev);
+>  		if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
+>  			return -EINVAL;
+>  	} else {
+> -		data->vdd = MCP3021_VDD_REF;
+> +		data->vdd = MCP3021_VDD_DEFAULT;
+>  	}
+>
+> +	return 0;
+> +}
+> +
+> +static int mcp3021_probe(struct i2c_client *client,
+> +				const struct i2c_device_id *id)
+> +{
+> +	struct mcp3021_data *data = NULL;
+> +	int err;
+> +
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> +		return -ENODEV;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(client, data);
+> +
+> +	err = mcp3021_probe_dt(client, id);
+> +	if (err > 0)
+> +		mcp3021_probe_pdata(client, id);
+> +	else if (err < 0)
+> +		return err;
+> +
+Most other drivers generate the platform data from devicetree data.
 
-Thanks,
-Guenter
-------
+	if (of_match_device())
+		pdata = probe_dt();
+	else
+		pdata = dev_get_platdata();
 
-The following changes since commit 07d9a380680d1c0eb51ef87ff2eab5c994949e69:
+In this case, this is even simpler, since the only devicetree property is the reference
+voltage.
 
-  Linux 4.9-rc2 (2016-10-23 17:10:14 -0700)
+	if (np) {
+		if (of_property_read_u32(np, "reference-voltage-microvolt", &vdd))
+			vdd = MCP3021_VDD_REF * 1000;
+		vdd /= 1000;
+		devid = (int)(uintptr_t)match->data;
+	} else {
+		u32 *pdata = dev_get_platdata(&client->dev);
 
-are available in the git repository at:
+		if (pdata)
+			vdd = *pdata;
+		else
+			vdd = MCP3021_VDD_REF;
+		devid = id->driver_data;
+	}
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.9-rc5
+You should actually be able to use id->driver_data directly in both cases since it is
+always passed as parameter from the i2c core.
 
-for you to fetch changes up to 38d8ed65092ed22f52a95f397855cace0260e110:
+This would be much simpler than your suggested changes.
 
-  hwmon: (core) fix resource leak on devm_kcalloc failure (2016-10-24 06:05:13 -0700)
+>  	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+>  	if (err)
+>  		return err;
+> @@ -176,6 +238,9 @@ MODULE_DEVICE_TABLE(i2c, mcp3021_id);
+>  static struct i2c_driver mcp3021_driver = {
+>  	.driver = {
+>  		.name = "mcp3021",
+> +#ifdef CONFIG_OF
+> +		.of_match_table = of_match_ptr(of_mcp3021_match),
+> +#endif
 
-----------------------------------------------------------------
-Fix resource leak on devm_kcalloc failure
+of_match_ptr() is already protected with #ifdef CONFIG_OF and otherwise
+returns NULL, so this ifdef is unnecessary.
 
-----------------------------------------------------------------
-Colin Ian King (1):
-      hwmon: (core) fix resource leak on devm_kcalloc failure
+>  	},
+>  	.probe = mcp3021_probe,
+>  	.remove = mcp3021_remove,
+>
 
- drivers/hwmon/hwmon.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
