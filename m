@@ -1,316 +1,249 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42529 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751157AbcKILxa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Nov 2016 06:53:30 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/3] hwmon: (mcp3021) rework for DT support
-To: Clemens Gruber <clemens.gruber@pqgruber.com>,
-        linux-hwmon@vger.kernel.org
-References: <20161027223345.16733-1-clemens.gruber@pqgruber.com>
-Cc: Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-ID: <10e07b32-6b95-273f-683e-993612916dda@roeck-us.net>
-Date: Wed, 9 Nov 2016 03:53:23 -0800
+Return-path: <andrea.merello@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20161027223345.16733-1-clemens.gruber@pqgruber.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Reply-To: andrea.merello@gmail.com
+In-Reply-To: <20161104160141.GA28466@roeck-us.net>
+References: <246c105a-1cad-6b58-dd43-cbfc6a9f87d6@roeck-us.net>
+ <CAN8YU5N7NEg8DH8VGrwP1-AJhfHO_Mj_3NSJahZU08ZLthsDFA@mail.gmail.com>
+ <41a63728-762b-8336-823a-17db3522aabd@roeck-us.net> <CAN8YU5PsUDCJ8MhQPusgUfgHg6cN25O2-BYc-KTYrbv6cHDfLw@mail.gmail.com>
+ <20161102224807.GA5653@roeck-us.net> <CAN8YU5Pi0+m9d6maAYbmxn9wgkFg2hohjoHi32VCRk03YuEy_A@mail.gmail.com>
+ <20161103211612.GB25939@roeck-us.net> <CAN8YU5P6po9drKjvGb=RLU=fKDNCAXeFp-9LuY5CF5jfnYW6Tg@mail.gmail.com>
+ <20161104150942.GA12009@roeck-us.net> <CAN8YU5O5n6b6r3DenzDf9BRDQ=9w=Q2+957nKTXjDhFsav=e=g@mail.gmail.com>
+ <20161104160141.GA28466@roeck-us.net>
+From: Andrea Merello <andrea.merello@gmail.com>
+Date: Wed, 9 Nov 2016 08:09:44 +0100
+Message-ID: <CAN8YU5MzmauC8z+EqKxzZqsxCr2OGSku3Zt8AH6WY_wZvxvkJg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: new driver for ST stts751 thermal sensor
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, LABBE Corentin <clabbe.montjoie@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/27/2016 03:33 PM, Clemens Gruber wrote:
-> Support setting the reference voltage from the device tree.
-> Rework of driver structure, put chip specific data in a separate
-> structure and assign it depending on device id from platform data or
-> DT match.
+On Fri, Nov 4, 2016 at 5:01 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Fri, Nov 04, 2016 at 04:43:46PM +0100, Andrea Merello wrote:
+>> On Fri, Nov 4, 2016 at 4:09 PM, Guenter Roeck <linux@roeck-us.net> wrote=
+:
+>> > On Fri, Nov 04, 2016 at 09:24:25AM +0100, Andrea Merello wrote:
+>> >> On Thu, Nov 3, 2016 at 10:16 PM, Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>> >> > On Thu, Nov 03, 2016 at 08:35:27AM +0100, Andrea Merello wrote:
+>> >> >> On Wed, Nov 2, 2016 at 11:48 PM, Guenter Roeck <linux@roeck-us.net=
+> wrote:
+>> >> >> > On Wed, Nov 02, 2016 at 09:11:35AM +0100, Andrea Merello wrote:
+>> >> >> >> On Mon, Oct 31, 2016 at 5:18 PM, Guenter Roeck <linux@roeck-us.=
+net> wrote:
+>> >> >> >> > On 10/31/2016 08:27 AM, Andrea Merello wrote:
+>> >> >> >> >
+>> >> >> >> >>>>
+>> >> >> >> >>>>>> +     if (ret < 0)
+>> >> >> >> >>>>>> +             return ret;
+>> >> >> >> >>>>>> +
+>> >> >> >> >>>>>> +     priv->max_alert =3D priv->max_alert || !!(ret &
+>> >> >> >> >>>>>> STTS751_STATUS_TRIPH);
+>> >> >> >> >>>>>> +     priv->min_alert =3D priv->min_alert || !!(ret &
+>> >> >> >> >>>>>> STTS751_STATUS_TRIPL);
+>> >> >> >> >>>>>> +
+>> >> >> >> >>>>>
+>> >> >> >> >>>>>
+>> >> >> >> >>>>> I am not really happy about the caching of alert values. =
+This isn't
+>> >> >> >> >>>>> really
+>> >> >> >> >>>>> common. Usually we report current alert values when readi=
+ng. I don't
+>> >> >> >> >>>>> really
+>> >> >> >> >>>>> see why this driver should be different to all the others=
+.
+>> >> >> >> >>>>
+>> >> >> >> >>>>
+>> >> >> >> >>>>
+>> >> >> >> >>>> OK
+>> >> >> >> >>
+>> >> >> >> >>
+>> >> >> >> >> I've tried to avoid caching, but as soon as I read the statu=
+s register
+>> >> >> >> >> in the alert handler, the device clears that reg, and it wil=
+l remain
+>> >> >> >> >> cleared up to the next conversion.
+>> >> >> >> >>
+>> >> >> >> >> So for example if the reader is blocked on poll over the ale=
+rt
+>> >> >> >> >> attribute, it gets unblocked on alert, and it will very like=
+ly read
+>> >> >> >> >> zero..
+>> >> >> >> >>
+>> >> >> >> >> The only way I can see for avoiding caching, and for changin=
+g the API
+>> >> >> >> >> about clearing events as you asked below, is performing a te=
+mperature
+>> >> >> >> >> read from the temperature registers and doing software compa=
+re with
+>> >> >> >> >> the limits in show_[max/min]_alert.
+>> >> >> >> >>
+>> >> >> >> >> Does this sounds OK for you ?
+>> >> >> >> >>
+>> >> >> >> >
+>> >> >> >> > Not really. That could be done from user space by just readin=
+g the
+>> >> >> >> > temperature
+>> >> >> >> > and comparing it against limits.
+>> >> >> >>
+>> >> >> >> Sorry, I don't see the point here.. Why the fact that something=
+ could
+>> >> >> >> be done in userspace should suggest we don't want to do it in t=
+he
+>> >> >> >> driver? We do, for example, a simple calculation to give an abs=
+olute
+>> >> >> >> value for the hysteresis; we could do this also in userspace, b=
+ut we
+>> >> >> >> do this in the driver in order to support the proper API..
+>> >> >> >>
+>> >> >> > Datasheet says:
+>> >> >> >
+>> >> >> > T HIGH : [6] Bit =3D 1 indicates temperature high limit has been=
+ exceeded (T A >
+>> >> >> > high limit). T HIGH is cleared when the status register is read,=
+ provided
+>> >> >> > the condition no longer exists.
+>> >> >> > T LOW : [5] Bit =3D 1 indicates the is at or below the low limit=
+ (T A =E2=89=A4 low
+>> >> >> > limit). T LOW is cleared when the status register is read, provi=
+ded the
+>> >> >> > condition no longer exists.
+>> >> >> >
+>> >> >> > This isn't exactly what you are claiming, since it says "cleared=
+ ... provided
+>> >> >> > that the condition no longer exists", which would be more in lin=
+e with other
+>> >> >> > chips.
+>> >> >>
+>> >> >> Yes, I know.. I've also read that on the datasheet.. And I tried
+>> >> >> reading the status register in both the alert handler and the show
+>> >> >> function, but it didn't worked :/
+>> >> >>
+>> >> >> So I started to suspect the status register got actually clear aft=
+er
+>> >> >> reading up to the next conversion, and to test this, I simply read=
+ it
+>> >> >> twice in the alert handler. The first read always read 1, as expec=
+ted;
+>> >> >> the second time I always got zero, even if the temperature was sti=
+ll
+>> >> >> over-limit.. And I soon got another event, that behaved in the sam=
+e
+>> >> >> manner.
+>> >> >>
+>> >> > Question is if the event bit is set again after the next conversion=
+; this would
+>> >> > be relatively easy to handle (cache the status register for one con=
+version
+>> >> > time).
+>> >>
+>> >> Yes, I meant the HW does exactly this. But it seems to me that cachin=
+g
+>> >> could end up in subtle races here..
+>> >>
+>> >> For example suppose that user is reading the lower limit alarm file,
+>> >> or therm, and this will trigger read of the status reg; but a
+>> >> conversion is just ended and set the high limit alarm just before
+>> >> reading the status reg. Then the event handler is invoked but it will
+>> >> find out the status reg to be (incorrectly) zero, (or rely on a value
+>> >> cached when reading the lower limit, that was zero); thus a thread
+>> >> blocked on poll on the high alarm would not be woken up. (ok, this
+>> >> probably will happen in next conversions, but this doesn't sound quit=
+e
+>> >> sane to me..).
+>> >>
+>> > Good catch and thinking, but there is a workaround. If the cache time
+>> > has not expired, just logically or the cached status value with the cu=
+rrent
+>> > value in the alert function, and update the time stamp. This way nothi=
+ng
+>> > gets lost.
+>>
+>> Hmm, it seems OK; thanks for suggesting this :) I'll try to go this way.=
+.
+>>
+>> BTW I would say that the cache time for the alert should be
+>> coservatively a bit longer than the conversion time (to avoid early
+>> expiration when the status register has been not restored yet). On the
+>> other hand for the temperature reading I'm using a cache time that is
+>> shorter (I think it is 1/4) than the conversion interval, so that the
+>> user gets a reasonably fresh value (becasue the chip sampling freq is
+>> asyncrhronous wrt the reads we do). Do you think it's worth to keep
+>> doing this (so we have two different cache time for alarms and temp
+>> value), or do you think that it's pointless, and better to unify it
+>> (at the longer one, I would say)?
+>>
 >
-> Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
-> ---
->  Documentation/hwmon/mcp3021 |   6 ++
->  drivers/hwmon/mcp3021.c     | 145 ++++++++++++++++++++++++++++++++------------
->  2 files changed, 111 insertions(+), 40 deletions(-)
->
-> diff --git a/Documentation/hwmon/mcp3021 b/Documentation/hwmon/mcp3021
-> index 74a6b72..be252b7 100644
-> --- a/Documentation/hwmon/mcp3021
-> +++ b/Documentation/hwmon/mcp3021
-> @@ -12,6 +12,7 @@ Supported chips:
->  Authors:
->     Mingkai Hu
->     Sven Schuchmann <schuchmann@schleissheimer.de>
-> +   Clemens Gruber <clemens.gruber@pqgruber.com>
->
->  Description
->  -----------
-> @@ -27,3 +28,8 @@ Communication to the MCP3021/MCP3221  is performed using a 2-wire I2C
->  compatible interface. Standard (100 kHz) and Fast (400 kHz) I2C modes are
->  available. The default I2C device address is 0x4d (contact the Microchip
->  factory for additional address options).
-> +
-> +The reference voltage used in the conversion can be set through platform data
-> +in millivolt (for backwards compatibility) or via device tree in microvolt.
-> +Please refer to Documentation/devicetree/bindings/i2c/mcp3021.txt for details
-> +about the device tree bindings.
-> diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
-> index 972444a..a8cf97f 100644
-> --- a/drivers/hwmon/mcp3021.c
-> +++ b/drivers/hwmon/mcp3021.c
-> @@ -4,6 +4,7 @@
->   * Copyright (C) 2008-2009, 2012 Freescale Semiconductor, Inc.
->   * Author: Mingkai Hu <Mingkai.hu@freescale.com>
->   * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
-> + * Copyright (C) 2016 Clemens Gruber <clemens.gruber@pqgruber.com>
->   *
->   * This driver export the value of analog input voltage to sysfs, the
->   * voltage unit is mV. Through the sysfs interface, lm-sensors tool
-> @@ -22,37 +23,56 @@
->  #include <linux/i2c.h>
->  #include <linux/err.h>
->  #include <linux/device.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
->
-> -/* Vdd info */
-> +/* Vdd / reference voltage in millivolt */
->  #define MCP3021_VDD_MAX		5500
->  #define MCP3021_VDD_MIN		2700
-> -#define MCP3021_VDD_REF		3300
-> -
-> -/* output format */
-> -#define MCP3021_SAR_SHIFT	2
-> -#define MCP3021_SAR_MASK	0x3ff
-> -#define MCP3021_OUTPUT_RES	10	/* 10-bit resolution */
-> -
-> -#define MCP3221_SAR_SHIFT	0
-> -#define MCP3221_SAR_MASK	0xfff
-> -#define MCP3221_OUTPUT_RES	12	/* 12-bit resolution */
-> +#define MCP3021_VDD_DEFAULT	3300
->
+> I would suggest to use a single cache time, in line with the real cache t=
+ime,
+> using the maximum as per the datasheet and possibly rounded up. If the us=
+er
+> wants faster readings, that can be made configurable using the 'update-in=
+terval'
+> attribute. If the chip is configured to only read the temperature once pe=
+r,
+> say, 16 seconds, this is what the user wanted, and real-time accuracy is =
+not
+> guaranteed anyway.
 
-There is no technical reason to drop / change those defines and use literals
-in the code instead. Please don't.
+Ok, I'll come back with a new version of the patch changed as discussed.
 
->  enum chips {
->  	mcp3021,
->  	mcp3221
->  };
->
-> +struct mcp3021_chip_info {
-> +	u16 sar_shift;
-> +	u16 sar_mask;
-> +	u8 output_res;
-> +};
-> +
->  /*
->   * Client data (each client gets its own)
->   */
->  struct mcp3021_data {
->  	struct device *hwmon_dev;
-> -	u32 vdd;	/* device power supply */
-> -	u16 sar_shift;
-> -	u16 sar_mask;
-> -	u8 output_res;
-> +	const struct mcp3021_chip_info *chip_info;
-> +	u32 vdd; /* device power supply and reference voltage in millivolt */
->  };
->
-> +static const struct mcp3021_chip_info mcp3021_chip_info_tbl[] = {
-> +	[mcp3021] = {
-> +		.sar_shift = 2,
-> +		.sar_mask = 0x3ff,
-> +		.output_res = 10,	/* 10-bit resolution */
-> +	},
-> +	[mcp3221] = {
-> +		.sar_shift = 0,
-> +		.sar_mask = 0xfff,
-> +		.output_res = 12,	/* 12-bit resolution */
-> +	},
-> +};
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id of_mcp3021_match[] = {
-> +	{ .compatible = "microchip,mcp3021", .data = (void *)mcp3021 },
-> +	{ .compatible = "microchip,mcp3221", .data = (void *)mcp3221 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_mcp3021_match);
-> +#endif
-> +
->  static int mcp3021_read16(struct i2c_client *client)
->  {
->  	struct mcp3021_data *data = i2c_get_clientdata(client);
-> @@ -73,14 +93,15 @@ static int mcp3021_read16(struct i2c_client *client)
->  	 * The ten-bit output code is composed of the lower 4-bit of the
->  	 * first byte and the upper 6-bit of the second byte.
->  	 */
-> -	reg = (reg >> data->sar_shift) & data->sar_mask;
-> +	reg = (reg >> data->chip_info->sar_shift) & data->chip_info->sar_mask;
->
->  	return reg;
->  }
->
->  static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
->  {
-> -	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
-> +	return DIV_ROUND_CLOSEST(data->vdd * val,
-> +				 1 << data->chip_info->output_res);
->  }
->
->  static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
-> @@ -101,44 +122,85 @@ static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
->
->  static DEVICE_ATTR(in0_input, S_IRUGO, show_in_input, NULL);
->
-> -static int mcp3021_probe(struct i2c_client *client,
-> +#ifdef CONFIG_OF
-> +static int mcp3021_probe_dt(struct i2c_client *client,
->  				const struct i2c_device_id *id)
->  {
-> -	int err;
-> -	struct mcp3021_data *data = NULL;
-> +	struct mcp3021_data *data = i2c_get_clientdata(client);
-> +	struct device_node *np = client->dev.of_node;
-> +	const struct of_device_id *match;
-> +	int devid, ret;
->
-> -	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> +	match = of_match_device(of_mcp3021_match, &client->dev);
-> +	if (!match)
->  		return -ENODEV;
->
-> -	data = devm_kzalloc(&client->dev, sizeof(struct mcp3021_data),
-> -			    GFP_KERNEL);
-> -	if (!data)
-> -		return -ENOMEM;
-> -
-> -	i2c_set_clientdata(client, data);
-> +	devid = (int)(uintptr_t)match->data;
-> +	data->chip_info = &mcp3021_chip_info_tbl[devid];
->
-> -	switch (id->driver_data) {
-> -	case mcp3021:
-> -		data->sar_shift = MCP3021_SAR_SHIFT;
-> -		data->sar_mask = MCP3021_SAR_MASK;
-> -		data->output_res = MCP3021_OUTPUT_RES;
-> -		break;
-> -
-> -	case mcp3221:
-> -		data->sar_shift = MCP3221_SAR_SHIFT;
-> -		data->sar_mask = MCP3221_SAR_MASK;
-> -		data->output_res = MCP3221_OUTPUT_RES;
-> -		break;
-> +	ret = of_property_read_u32(np, "reference-voltage-microvolt",
-> +				   &data->vdd);
-> +	if (ret) {
-> +		/* fallback */
-> +		data->vdd = MCP3021_VDD_DEFAULT;
-> +		return 0;
->  	}
->
-> +	/* Convert microvolt from DT to millivolt used in the formula */
-> +	data->vdd /= 1000;
-> +
-> +	if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int mcp3021_probe_dt(struct i2c_client *client,
-> +				const struct i2c_device_id *id)
-> +{
-> +	return 1;
-> +}
-> +#endif
-> +
-> +static int mcp3021_probe_pdata(struct i2c_client *client,
-> +				const struct i2c_device_id *id)
-> +{
-> +	struct mcp3021_data *data = i2c_get_clientdata(client);
-> +
-> +	data->chip_info = &mcp3021_chip_info_tbl[id->driver_data];
-> +
->  	if (dev_get_platdata(&client->dev)) {
->  		data->vdd = *(u32 *)dev_get_platdata(&client->dev);
->  		if (data->vdd > MCP3021_VDD_MAX || data->vdd < MCP3021_VDD_MIN)
->  			return -EINVAL;
->  	} else {
-> -		data->vdd = MCP3021_VDD_REF;
-> +		data->vdd = MCP3021_VDD_DEFAULT;
->  	}
->
-> +	return 0;
-> +}
-> +
-> +static int mcp3021_probe(struct i2c_client *client,
-> +				const struct i2c_device_id *id)
-> +{
-> +	struct mcp3021_data *data = NULL;
-> +	int err;
-> +
-> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> +		return -ENODEV;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	i2c_set_clientdata(client, data);
-> +
-> +	err = mcp3021_probe_dt(client, id);
-> +	if (err > 0)
-> +		mcp3021_probe_pdata(client, id);
-> +	else if (err < 0)
-> +		return err;
-> +
-Most other drivers generate the platform data from devicetree data.
+Thanks
+Andrea
 
-	if (of_match_device())
-		pdata = probe_dt();
-	else
-		pdata = dev_get_platdata();
-
-In this case, this is even simpler, since the only devicetree property is the reference
-voltage.
-
-	if (np) {
-		if (of_property_read_u32(np, "reference-voltage-microvolt", &vdd))
-			vdd = MCP3021_VDD_REF * 1000;
-		vdd /= 1000;
-		devid = (int)(uintptr_t)match->data;
-	} else {
-		u32 *pdata = dev_get_platdata(&client->dev);
-
-		if (pdata)
-			vdd = *pdata;
-		else
-			vdd = MCP3021_VDD_REF;
-		devid = id->driver_data;
-	}
-
-You should actually be able to use id->driver_data directly in both cases since it is
-always passed as parameter from the i2c core.
-
-This would be much simpler than your suggested changes.
-
->  	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
->  	if (err)
->  		return err;
-> @@ -176,6 +238,9 @@ MODULE_DEVICE_TABLE(i2c, mcp3021_id);
->  static struct i2c_driver mcp3021_driver = {
->  	.driver = {
->  		.name = "mcp3021",
-> +#ifdef CONFIG_OF
-> +		.of_match_table = of_match_ptr(of_mcp3021_match),
-> +#endif
-
-of_match_ptr() is already protected with #ifdef CONFIG_OF and otherwise
-returns NULL, so this ifdef is unnecessary.
-
->  	},
->  	.probe = mcp3021_probe,
->  	.remove = mcp3021_remove,
 >
-
+>> >>
+>> >> >> (also I'm thinking about a way to mask events once we know that we=
+ are
+>> >> >> in a out-of-limit condition, to avoid having a lot of them, but si=
+mply
+>> >> >> disabling events and re-enabling them after userspace reads the al=
+arm
+>> >> >> and find it to be zero, like lm90 driver does, IMHO wouldn't be go=
+od
+>> >> >> here, because we have a single bit to disable both high and low
+>> >> >> limits..)
+>> >> >>
+>> >> >> > The THRM bit doesn't seem to self-clean either, at least not acc=
+ording to the
+>> >> >> > datasheet.
+>> >> >>
+>> >> >> I need to test this.. But this doesn't generate any event, it seem=
+s
+>> >> >> only inteded to drive an external circuit, say a fan, and not to
+>> >> >> notify SW.. And currently I even have no show function to read it'=
+s
+>> >> >> status (now that I'm on it, I think I should add it...)..
+>> >> >>
+>> >> > Yes. Note that this pin might be wired to an interrupt.
+>> >>
+>> >> IMHO it isn't straightforward to handle this..
+>> >>
+>> >> AFAIK what is done by the smbus code to allow handling smbus events
+>> >> lines with regular interrupt lines is to briefly disabling the IRQ
+>> >> line until the event can be acknowledged with the ARA (in non atomic
+>> >> context).
+>> >>
+>> >> But here is even worse because there is no ARA; it seems that the
+>> >> therm line can't be "cleared" at all.
+>> >>
+>> >> Maybe it's possible to do hacks similar to what the smbus code does,
+>> >> but keeping the IRQ line disabled (given that it must not be shared).=
+.
+>> >> Maybe if the IRQ controller could be set in edge-triggered mode it
+>> >> would be easier..
+>> >>
+>> >> But does it really worth struggling supporting this scenario? There's
+>> >> the event pin explicitly designed for events, and there is code that
+>> >> make it possible to use this even with regular IRQs.. Using also the
+>> >> therm pin as interrupt seems honestly a bit pointless and
+>> >> inappropriate..
+>> >>
+>> > Correct, one would use an edge triggered interrupt in this case. But
+>> > you are right, this should only be implemented if that use case is
+>> > actually encountered.
+>> >
+>> > Thanks,
+>> > Guenter
