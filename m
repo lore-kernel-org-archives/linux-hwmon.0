@@ -1,142 +1,79 @@
-Return-path: <clemens.gruber@pqgruber.com>
-Date: Wed, 9 Nov 2016 21:43:16 +0100
-From: Clemens Gruber <clemens.gruber@pqgruber.com>
+Return-path: <jgunthorpe@obsidianresearch.com>
+Date: Thu, 10 Nov 2016 10:19:36 -0700
+From: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] hwmon: (mcp3021) add devicetree support
-Message-ID: <20161109204316.GA21426@archie.localdomain>
-References: <20161109171614.9730-1-clemens.gruber@pqgruber.com>
- <20161109193206.GB22665@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH] lm87: Allow LM87_REG_CHANNEL_MODE to be set via DT
+Message-ID: <20161110171936.GA29537@obsidianresearch.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20161109193206.GB22665@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Nov 09, 2016 at 11:32:06AM -0800, Guenter Roeck wrote:
-> On Wed, Nov 09, 2016 at 06:16:13PM +0100, Clemens Gruber wrote:
-> > Support setting the reference voltage from the device tree.
-> > 
-> > Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
-> > ---
-> >  drivers/hwmon/mcp3021.c | 46 ++++++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 36 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
-> > index 972444a..81f4b7f 100644
-> > --- a/drivers/hwmon/mcp3021.c
-> > +++ b/drivers/hwmon/mcp3021.c
-> > @@ -4,6 +4,7 @@
-> >   * Copyright (C) 2008-2009, 2012 Freescale Semiconductor, Inc.
-> >   * Author: Mingkai Hu <Mingkai.hu@freescale.com>
-> >   * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
-> > + * Copyright (C) 2016 Clemens Gruber <clemens.gruber@pqgruber.com>
-> 
-> Sorry, I can't accept that for such a minor change. Feel free to add
-> something like "devicetree support added by ...", if you like.
+This compliments the existing scheme that lets it be set via
+platform_data.
 
-I understand, no problem. I'll use your suggestion then.
+Signed-off-by: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
+---
+ Documentation/devicetree/bindings/hwmon/lm87.txt | 27 ++++++++++++++++++++++++
+ drivers/hwmon/lm87.c                             |  8 ++++++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
 
-> 
-> >   *
-> >   * This driver export the value of analog input voltage to sysfs, the
-> >   * voltage unit is mV. Through the sysfs interface, lm-sensors tool
-> > @@ -22,11 +23,13 @@
-> >  #include <linux/i2c.h>
-> >  #include <linux/err.h>
-> >  #include <linux/device.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  
-> > -/* Vdd info */
-> > +/* Vdd / reference voltage in millivolt */
-> >  #define MCP3021_VDD_MAX		5500
-> >  #define MCP3021_VDD_MIN		2700
-> > -#define MCP3021_VDD_REF		3300
-> > +#define MCP3021_VDD_DEFAULT	3300
-> 
-> I don't really see the value of changing this, but if it makes you
-> feel better at least make it MCP3021_VDD_REF_DEFAULT.
-
-I changed it because all three defines are about the reference voltage,
-not only the last one, which is just the default value.
-
-Only changing the last one to MCP3021_VDD_REF_DEFAULT would not make it
-less confusing.
-Maybe replace MCP3021_VDD_ with MCP3021_VDD_REF_ for all three?
-
-> 
-> >  
-> >  /* output format */
-> >  #define MCP3021_SAR_SHIFT	2
-> > @@ -47,7 +50,7 @@ enum chips {
-> >   */
-> >  struct mcp3021_data {
-> >  	struct device *hwmon_dev;
-> > -	u32 vdd;	/* device power supply */
-> > +	u32 vdd;        /* supply and reference voltage in millivolt */
-> >  	u16 sar_shift;
-> >  	u16 sar_mask;
-> >  	u8 output_res;
-> > @@ -106,6 +109,7 @@ static int mcp3021_probe(struct i2c_client *client,
-> >  {
-> >  	int err;
-> >  	struct mcp3021_data *data = NULL;
-> > +	struct device_node *np = client->dev.of_node;
-> >  
-> >  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-> >  		return -ENODEV;
-> > @@ -117,6 +121,21 @@ static int mcp3021_probe(struct i2c_client *client,
-> >  
-> >  	i2c_set_clientdata(client, data);
-> >  
-> > +	if (np) {
-> > +		if (of_property_read_u32(np, "reference-voltage-microvolt",
-> > +					 &data->vdd))
-> > +			data->vdd = MCP3021_VDD_DEFAULT;
-> > +		else
-> > +			data->vdd /= 1000;
-> 
-> It would be slightly better to reverse the logic here to make the code easier
-> to read.
-> 
-> 		if (!of_property_read_u32(np, "reference-voltage-microvolt",
-> 					  &data->vdd))
-> 			data->vdd /= 1000;
-> 		else
-> 			data->vdd = MCP3021_VDD_DEFAULT;
-
-Yes, I'll change it.
-
-> 
-> Not worth arguing about it, though, so feel free to keep it as is.
-> 
-> > +	} else {
-> > +		u32 *pdata = dev_get_platdata(&client->dev);
-> > +
-> > +		if (pdata)
-> > +			data->vdd = *pdata;
-> > +		else
-> > +			data->vdd = MCP3021_VDD_DEFAULT;
-> > +	}
-> > +
-> >  	switch (id->driver_data) {
-> >  	case mcp3021:
-> >  		data->sar_shift = MCP3021_SAR_SHIFT;
-> > @@ -129,15 +148,12 @@ static int mcp3021_probe(struct i2c_client *client,
-> >  		data->sar_mask = MCP3221_SAR_MASK;
-> >  		data->output_res = MCP3221_OUTPUT_RES;
-> >  		break;
-> > +	default:
-> > +		return -ENODEV;
-> 
-> Hmm ... that is really an unrelated change (nor is it really needed
-> unless there is a bug in the code). Not worth arguing about it either,
-> but please keep in mind that this is one of the things making life
-> hard for maintainers.
-
-I see, I'll remove it then.
-
-Thank you for your feedback!
-
-Clemens
+diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
+new file mode 100644
+index 00000000000000..4ea2646ce8d2f0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/lm87.txt
+@@ -0,0 +1,27 @@
++* LM87 I2C Temperature and Fan sensor
++
++Required properties:
++- compatible: should contain one of
++		* "national,lm87"
++		* "ti,lm87"
++
++Optional properties:
++- channel-mode: Write the specified value to register 0x16. If not specified
++                the driver will read the value from the chip at startup.
++
++		The value controls how the driver operates certain multi-use
++		pins, eg bit 2 will select between temp_input3 or
++		in0&in5 operation.
++
++See Documentation/devicetree/bindings/i2c/i2c.txt for more required and
++optional properties.
++
++Example:
++
++i2c_master {
++	temperature-sensor@0 {
++		compatible = "ti,lm87";
++		channel-mode = <0x4>;
++		reg = <0>;
++	};
++};
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index 81cb898245a107..ccc0c913b4534e 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -853,9 +853,15 @@ static void lm87_restore_config(void *arg)
+ static int lm87_init_client(struct i2c_client *client)
+ {
+ 	struct lm87_data *data = i2c_get_clientdata(client);
++	u32 channel;
+ 	int rc;
+ 
+-	if (dev_get_platdata(&client->dev)) {
++	if (client->dev.of_node &&
++	    !of_property_read_u32(client->dev.of_node, "channel-mode",
++				  &channel)) {
++		data->channel = channel;
++		lm87_write_value(client, LM87_REG_CHANNEL_MODE, data->channel);
++	} else if (dev_get_platdata(&client->dev)) {
+ 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+ 		lm87_write_value(client,
+ 				 LM87_REG_CHANNEL_MODE, data->channel);
+-- 
+2.7.4
