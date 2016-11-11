@@ -1,66 +1,50 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f67.google.com ([74.125.83.67]:36350 "EHLO
-        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753112AbcK3Uil (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Nov 2016 15:38:41 -0500
-Received: by mail-pg0-f67.google.com with SMTP id x23so2292966pgx.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Nov 2016 12:38:40 -0800 (PST)
-From: John Muir <john@jmuir.com>
+Received: from quartz.orcorp.ca ([184.70.90.242]:33897 "EHLO quartz.orcorp.ca"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S965060AbcKKAb4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 10 Nov 2016 19:31:56 -0500
+Date: Thu, 10 Nov 2016 17:31:40 -0700
+From: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
 To: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Muir <john@jmuir.com>, John Muir <muirj@google.com>,
-        Anatol Pomazau <anatol@google.com>
-Subject: [PATCH 2/2] devicetree: hwmon: Add documentation for TMP108 driver.
-Date: Wed, 30 Nov 2016 12:36:19 -0800
-Message-Id: <1480538179-75901-3-git-send-email-john@jmuir.com>
-In-Reply-To: <1480538179-75901-1-git-send-email-john@jmuir.com>
-References: <1480209983-65915-1-git-send-email-john@jmuir.com>
- <1480538179-75901-1-git-send-email-john@jmuir.com>
+        Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] lm87: Allow LM87_REG_CHANNEL_MODE to be set via DT
+Message-ID: <20161111003140.GA7575@obsidianresearch.com>
+References: <20161110171936.GA29537@obsidianresearch.com>
+ <20161110234707.GA14199@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20161110234707.GA14199@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Simple hwmon binding documentation.
+On Thu, Nov 10, 2016 at 03:47:07PM -0800, Guenter Roeck wrote:
+> On Thu, Nov 10, 2016 at 10:19:36AM -0700, Jason Gunthorpe wrote:
+> > This compliments the existing scheme that lets it be set via
+> > platform_data.
+> > 
+> > Signed-off-by: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
+> 
+> I would prefer https://www.spinics.net/lists/devicetree/msg148819.html
+> which appears to address the same problem and is less cryptic.
 
-Signed-off-by: John Muir <john@jmuir.com>
----
- Documentation/devicetree/bindings/hwmon/tmp108.txt | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/tmp108.txt
+Is there a patch someplace that implements that proposed DT binding? I
+couldn't find anything.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/tmp108.txt b/Documentation/devicetree/bindings/hwmon/tmp108.txt
-new file mode 100644
-index 0000000..7ba08c4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/tmp108.txt
-@@ -0,0 +1,24 @@
-+TMP108 temperature sensor
-+-------------------------
-+
-+This device supports I2C only.
-+
-+Requires node properties:
-+- compatible : "ti,tmp108"
-+- reg : the I2C address of the device. This is 0x48, 0x49, 0x4a, or 0x4b.
-+
-+Optional node properties:
-+- ti,thermostat-mode-comparator : (boolean) select the comparator mode for the
-+      thermostat rather than the default interrupt-mode.
-+
-+Example:
-+	tmp108@48 {
-+		compatible = "ti,tmp108";
-+		reg = <0x48>;
-+		ti,thermostat-mode-comparator;
-+	};
-+
-+	tmp108@49 {
-+		compatible = "ti,tmp108";
-+		reg = <0x49>;
-+	};
--- 
-2.8.0.rc3.226.g39d4020
+> NACK unless someone convinces me otherwise.
 
+*shrug* both styles of definition seem to be used in various device
+tree bindings.
+
+The downside with Mahoda's proposal is that it only covers 3 of the 8
+configuration bits, and will require alot of code for parsing. It
+seems really clunky, and why is a regulator involved to set the A/D
+sensitivity? Weird.
+
+But I only need has-temp3, so if a patch appears please cc me and I'll
+review it here..
+
+Regards,
+Jason
