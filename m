@@ -1,79 +1,56 @@
-Return-path: <jgunthorpe@obsidianresearch.com>
-Date: Thu, 10 Nov 2016 10:19:36 -0700
-From: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] lm87: Allow LM87_REG_CHANNEL_MODE to be set via DT
-Message-ID: <20161110171936.GA29537@obsidianresearch.com>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from ms.trustica.cz ([82.208.32.68]:58627 "EHLO ms.trustica.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S933841AbcKMQhH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 13 Nov 2016 11:37:07 -0500
+Subject: Re: Changing PWM on Winbond W83627DHG-P
+To: Patrik Dufresne <info@patrikdufresne.com>
+References: <CAJ=kj5zud0RiV1nORXoX0Rop4TvsuAxd4vRZtRL-1ANMegkWTw@mail.gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+From: Rudolf Marek <r.marek@assembler.cz>
+Message-ID: <49f137d4-b50d-0642-6532-3097137d4c7d@assembler.cz>
+Date: Sun, 13 Nov 2016 17:27:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <CAJ=kj5zud0RiV1nORXoX0Rop4TvsuAxd4vRZtRL-1ANMegkWTw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-This compliments the existing scheme that lets it be set via
-platform_data.
+Hi Patrik
 
-Signed-off-by: Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
----
- Documentation/devicetree/bindings/hwmon/lm87.txt | 27 ++++++++++++++++++++++++
- drivers/hwmon/lm87.c                             |  8 ++++++-
- 2 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/lm87.txt
+Please read this:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm87.txt b/Documentation/devicetree/bindings/hwmon/lm87.txt
-new file mode 100644
-index 00000000000000..4ea2646ce8d2f0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/lm87.txt
-@@ -0,0 +1,27 @@
-+* LM87 I2C Temperature and Fan sensor
-+
-+Required properties:
-+- compatible: should contain one of
-+		* "national,lm87"
-+		* "ti,lm87"
-+
-+Optional properties:
-+- channel-mode: Write the specified value to register 0x16. If not specified
-+                the driver will read the value from the chip at startup.
-+
-+		The value controls how the driver operates certain multi-use
-+		pins, eg bit 2 will select between temp_input3 or
-+		in0&in5 operation.
-+
-+See Documentation/devicetree/bindings/i2c/i2c.txt for more required and
-+optional properties.
-+
-+Example:
-+
-+i2c_master {
-+	temperature-sensor@0 {
-+		compatible = "ti,lm87";
-+		channel-mode = <0x4>;
-+		reg = <0>;
-+	};
-+};
-diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-index 81cb898245a107..ccc0c913b4534e 100644
---- a/drivers/hwmon/lm87.c
-+++ b/drivers/hwmon/lm87.c
-@@ -853,9 +853,15 @@ static void lm87_restore_config(void *arg)
- static int lm87_init_client(struct i2c_client *client)
- {
- 	struct lm87_data *data = i2c_get_clientdata(client);
-+	u32 channel;
- 	int rc;
- 
--	if (dev_get_platdata(&client->dev)) {
-+	if (client->dev.of_node &&
-+	    !of_property_read_u32(client->dev.of_node, "channel-mode",
-+				  &channel)) {
-+		data->channel = channel;
-+		lm87_write_value(client, LM87_REG_CHANNEL_MODE, data->channel);
-+	} else if (dev_get_platdata(&client->dev)) {
- 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
- 		lm87_write_value(client,
- 				 LM87_REG_CHANNEL_MODE, data->channel);
--- 
-2.7.4
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/hwmon/w83627ehf?id=refs/tags/v4.9-rc4
+
+IIRC you need to set it to manual mode first via echo 1 > .../pwmX_enable
+and perhaps then it will accept your PWM values.
+
+I'm giving proper mailing list on CC, maybe someone will help.
+
+Thanks
+Rudolf
+
+
+Dne 13.11.2016 v 17:18 Patrik Dufresne napsal(a):
+> Hello,
+> 
+> Sorry to contact you directly, but I didn't find the proper mailing list to post
+> my question related to w83627ehf driver.
+> 
+> I own a Supermicro X8DTL-iF with a Winbond W83627DHG-P chipset. The chipset was
+> properly discovered and enabled by lm-sensors. In sysfs, I can see the path
+> /sys/devices/platform/w83627ehf.2576.
+> 
+> I've tried changing the value of pwm* according
+> to https://www.kernel.org/doc/Documentation/hwmon/w83627ehf. But it doesn't have
+> any effect on the actual fan speed. 
+> 
+> Any suggestions ?
+> 
+> --
+> Patrik Dufresne Service Logiciel inc.
+> http://www.patrikdufresne.com <http://patrikdufresne.com/>/
+> 514-971-6442
+> 1-114 rue des Hautbois,
+> St-Colomban, QC J5K 2H6
