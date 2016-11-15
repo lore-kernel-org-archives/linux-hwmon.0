@@ -1,73 +1,72 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38614 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751418AbcKMVIL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 13 Nov 2016 16:08:11 -0500
-Subject: Re: Changing PWM on Winbond W83627DHG-P
-To: Rudolf Marek <r.marek@assembler.cz>,
-        Patrik Dufresne <info@patrikdufresne.com>
-References: <CAJ=kj5zud0RiV1nORXoX0Rop4TvsuAxd4vRZtRL-1ANMegkWTw@mail.gmail.com>
- <49f137d4-b50d-0642-6532-3097137d4c7d@assembler.cz>
-Cc: linux-hwmon@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4d5e1bdb-0140-c8dd-7b95-fae6b3b7327d@roeck-us.net>
-Date: Sun, 13 Nov 2016 13:08:08 -0800
-MIME-Version: 1.0
-In-Reply-To: <49f137d4-b50d-0642-6532-3097137d4c7d@assembler.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <mahodar@alliedtelesis.co.nz>
+From: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>,
+	Jason Gunthorpe <jgunthorpe@obsidianresearch.com>
+Subject: [PATCH v3]  lm87: Allow channel data to be set from dts file.
+Date: Tue, 15 Nov 2016 17:00:06 +1300
+Message-Id: <20161115040006.7435-1-mahoda.ratnayaka@alliedtelesis.co.nz>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 11/13/2016 08:27 AM, Rudolf Marek wrote:
-> Hi Patrik
->
-> Please read this:
->
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/hwmon/w83627ehf?id=refs/tags/v4.9-rc4
->
-> IIRC you need to set it to manual mode first via echo 1 > .../pwmX_enable
-> and perhaps then it will accept your PWM values.
->
+ Currently there is no method for setting the channel
+ value from the DTS file. When, the driver uses a dts
+ file to initialize the driver platform_data is not set.
+ As a the result channel variable may not be set correctly.
 
-Correct.
+ Without the channel variable set correctly, some of the
+ sensors will not be initialized correctly. For example
+ temp3 sensor sysfs entries.
 
-In general, though, I would suggest to stick with automatic fan control.
+ This implements the schema agreed with the device tree
+ binding document.
 
-Guenter
+Signed-off-by: Mahoda Ratnayaka <mahoda.ratnayaka@alliedtelesis.co.nz>
+---
 
-> I'm giving proper mailing list on CC, maybe someone will help.
->
-> Thanks
-> Rudolf
->
->
-> Dne 13.11.2016 v 17:18 Patrik Dufresne napsal(a):
->> Hello,
->>
->> Sorry to contact you directly, but I didn't find the proper mailing list to post
->> my question related to w83627ehf driver.
->>
->> I own a Supermicro X8DTL-iF with a Winbond W83627DHG-P chipset. The chipset was
->> properly discovered and enabled by lm-sensors. In sysfs, I can see the path
->> /sys/devices/platform/w83627ehf.2576.
->>
->> I've tried changing the value of pwm* according
->> to https://www.kernel.org/doc/Documentation/hwmon/w83627ehf. But it doesn't have
->> any effect on the actual fan speed.
->>
->> Any suggestions ?
->>
->> --
->> Patrik Dufresne Service Logiciel inc.
->> http://www.patrikdufresne.com <http://patrikdufresne.com/>/
->> 514-971-6442
->> 1-114 rue des Hautbois,
->> St-Colomban, QC J5K 2H6
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+Notes:
+    changes since v1:
+    Removed unncessary variables channel and np.
+    Update the code as per review comments.
+    
+    changes since v2:
+    Update the implementation to reflect the
+    newly added lm87 binding document.
+    https://patchwork.kernel.org/patch/9408433/
 
+ drivers/hwmon/lm87.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index a5e2958..64ea57d4 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -858,8 +858,22 @@ static void lm87_remove_files(struct i2c_client *client)
+ static void lm87_init_client(struct i2c_client *client)
+ {
+ 	struct lm87_data *data = i2c_get_clientdata(client);
+-
+-	if (dev_get_platdata(&client->dev)) {
++	struct device_node *of_node = client->dev.of_node;
++	u8 val = 0;
++
++	if (of_node) {
++		if (of_property_read_bool(of_node, "has-temp3"))
++			val |= CHAN_TEMP3;
++		if (of_property_read_bool(of_node, "has-in6"))
++			val |= CHAN_NO_FAN(0);
++		if (of_property_read_bool(of_node, "has-in7"))
++			val |= CHAN_NO_FAN(1);
++		if (of_property_read_bool(of_node, "vcc-supply"))
++			val |= CHAN_VCC_5V;
++		data->channel = val;
++		lm87_write_value(client,
++				 LM87_REG_CHANNEL_MODE, data->channel);
++	} else if (dev_get_platdata(&client->dev)) {
+ 		data->channel = *(u8 *)dev_get_platdata(&client->dev);
+ 		lm87_write_value(client,
+ 				 LM87_REG_CHANNEL_MODE, data->channel);
+-- 
+2.10.2
