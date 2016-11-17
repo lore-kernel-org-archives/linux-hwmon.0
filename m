@@ -1,13 +1,12 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57046 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750998AbcKQXk2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2016 18:40:28 -0500
-Date: Thu, 17 Nov 2016 15:40:24 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tom Levens <tom.levens@cern.ch>
-Cc: Mike Looijmans <mike.looijmans@topic.nl>,
+Received: from mail-ve1eur01on0050.outbound.protection.outlook.com ([104.47.1.50]:44672
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1751495AbcKRA5W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 17 Nov 2016 19:57:22 -0500
+From: Tom Levens <tom.levens@cern.ch>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Mike Looijmans <mike.looijmans@topic.nl>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
@@ -15,139 +14,110 @@ Cc: Mike Looijmans <mike.looijmans@topic.nl>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Subject: Re: [PATCH v2 3/3] hwmon: ltc2990: support all measurement modes
-Message-ID: <20161117234024.GA26747@roeck-us.net>
+Date: Thu, 17 Nov 2016 23:25:30 +0000
+Message-ID: <09DCF2E6-3F08-4F0E-837B-55F591008AAB@cern.ch>
 References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
  <1479384616-12479-3-git-send-email-tom.levens@cern.ch>
  <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net>
- <582DEB81.6050806@topic.nl>
- <20161117185654.GA19338@roeck-us.net>
- <582E0A6C.5010307@topic.nl>
- <20161117215454.GA23571@roeck-us.net>
- <09DCF2E6-3F08-4F0E-837B-55F591008AAB@cern.ch>
+ <582DEB81.6050806@topic.nl> <20161117185654.GA19338@roeck-us.net>
+ <582E0A6C.5010307@topic.nl> <20161117215454.GA23571@roeck-us.net>
+In-Reply-To: <20161117215454.GA23571@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <06FCCBD77300374E9378EE3ECAA23FA6@cern.ch>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <09DCF2E6-3F08-4F0E-837B-55F591008AAB@cern.ch>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 17, 2016 at 11:25:30PM +0000, Tom Levens wrote:
-> On 17 Nov 2016, at 22:54, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On Thu, Nov 17, 2016 at 08:52:12PM +0100, Mike Looijmans wrote:
-> >> ﻿On 17-11-2016 19:56, Guenter Roeck wrote:
-> >>> On Thu, Nov 17, 2016 at 06:40:17PM +0100, Mike Looijmans wrote:
-> >>>> ﻿On 17-11-16 17:56, Guenter Roeck wrote:
-> >>>>> On 11/17/2016 04:10 AM, Tom Levens wrote:
-> >>>>>> Updated version of the ltc2990 driver which supports all measurement
-> >>>>>> modes available in the chip. The mode can be set through a devicetree
-> >>>>>> attribute.
-> >>>>> 
-> >>> [ ... ]
-> >>> 
-> >>>>>> 
-> >>>>>> static int ltc2990_i2c_probe(struct i2c_client *i2c,
-> >>>>>>                 const struct i2c_device_id *id)
-> >>>>>> {
-> >>>>>>    int ret;
-> >>>>>>    struct device *hwmon_dev;
-> >>>>>> +    struct ltc2990_data *data;
-> >>>>>> +    struct device_node *of_node = i2c->dev.of_node;
-> >>>>>> 
-> >>>>>>    if (!i2c_check_functionality(i2c->adapter,
-> >>>>>> I2C_FUNC_SMBUS_BYTE_DATA |
-> >>>>>>                     I2C_FUNC_SMBUS_WORD_DATA))
-> >>>>>>        return -ENODEV;
-> >>>>>> 
-> >>>>>> -    /* Setup continuous mode, current monitor */
-> >>>>>> +    data = devm_kzalloc(&i2c->dev, sizeof(struct ltc2990_data),
-> >>>>>> GFP_KERNEL);
-> >>>>>> +    if (unlikely(!data))
-> >>>>>> +        return -ENOMEM;
-> >>>>>> +    data->i2c = i2c;
-> >>>>>> +
-> >>>>>> +    if (!of_node || of_property_read_u32(of_node, "lltc,mode",
-> >>>>>> &data->mode))
-> >>>>>> +        data->mode = LTC2990_CONTROL_MODE_DEFAULT;
-> >>>>> 
-> >>>>> Iam arguing with myself if we should still do this or if we should read
-> >>>>> the mode
-> >>>>> from the chip instead if it isn't provided (after all, it may have been
-> >>>>> initialized
-> >>>>> by the BIOS/ROMMON).
-> >>>> 
-> >>>> I think the mode should be explicitly set, without default. There's no way
-> >>>> to tell whether the BIOS or bootloader has really set it up or whether the
-> >>>> chip is just reporting whatever it happened to default to. And given the
-> >>>> chip's function, it's unlikely a bootloader would want to initialize it.
-> >>>> 
-> >>> Unlikely but possible. Even if we all agree that the chip should be configured
-> >>> by the driver, I don't like imposing that view on everyone else.
-> >>> 
-> >>>> My advice would be to make it a required property. If not set, display an
-> >>>> error and bail out.
-> >>>> 
-> >>> It is not that easy, unfortunately. It also has to work on a non-devicetree
-> >>> system. I would not object to making the property mandatory, but we would
-> >>> still need to provide non-DT support.
-> >>> 
-> >>> My "use case" for taking the current mode from the chip if not specified
-> >>> is that it would enable me to run a module test with all modes. I consider
-> >>> this extremely valuable.
-> >> 
-> >> Good point.
-> >> 
-> >> The chip defaults to measuring internal temperature only, and the mode
-> >> defaults to "0".
-> >> 
-> >> Choosing a mode that doesn't match the actual circuitry could be bad for the
-> >> chip or the board (though unlikely, it'll probably just be useless) since it
-> >> will actively drive some of the inputs in the temperature modes (which is
-> >> default for V3/V4 pins).
-> >> 
-> >> Instead of failing, one could choose to set the default mode to "7", which
-> >> just measures the 4 voltages, which would be a harmless mode in all cases.
-> >> 
-> >> As a way to let a bootloader set things up, I think it would be a good check
-> >> to see if CONTROL register bits 4:3 are set. If "00", the chip is not
-> >> acquiring data at all, and probably needs configuration still. In that case,
-> >> the mode must be provided by the devicetree (or the default "7").
-> >> If bits 4:3 are "11", it has already been set up to measure its inputs, and
-> >> it's okay to continue doing just that and use the current value of 2:0
-> >> register as default mode (if the devicetree didn't specify any mode at all).
-> >> 
-> > 
-> > At first glance, agreed, though by default b[3:4] are 00, and only the
-> > internal temperature is measured. Actually, the 5 mode bits are all
-> > relevant to determine what is measured. Maybe it would be better to take
-> > all 5 bits into account instead of blindly setting b[34]:=11 and a specific
-> > setting of b[0:2]. Sure, that would make the mode table a bit larger,
-> > but then ltc2990_attrs_ena[] could be made an u16 array, and a table size
-> > of 64 bytes would not be that bad.
-> 
-> I would tend to agree that it should be possible to configure all 5 mode
-> bits through the devicetree. What I would propose is as follows.
-> 
-> If a devicetree node exists, the mode parameter(s?) are required and the 
-> chip is initialised.
-> 
-> If a devicetree node doesn't exist, it is assumed that the chip has 
-> already been configured (by the BIOS, etc). The mode is read from the 
-> chip to set the visibility of the sysfs attributes. In the worst case, where the 
-> chip has not been configured by another source, it would only be possible
-> to measure the internal temperature -- but I think this is an acceptable
-> limitation.
-> 
-SGTM.
-
-> The only case that this does not cover is if the device tree node 
-> exists but the chip is expected to be configured by some other source. 
-> Maybe I am wrong, but I would not expect this to be a terribly common
-> situation.
-> 
-> What do you think?
-> 
-I would not bother about this case. Just make the mode property mandatory.
-
-Thanks,
-Guenter
+T24gMTcgTm92IDIwMTYsIGF0IDIyOjU0LCBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5u
+ZXQ+IHdyb3RlOg0KPiBPbiBUaHUsIE5vdiAxNywgMjAxNiBhdCAwODo1MjoxMlBNICswMTAwLCBN
+aWtlIExvb2lqbWFucyB3cm90ZToNCj4+IO+7v09uIDE3LTExLTIwMTYgMTk6NTYsIEd1ZW50ZXIg
+Um9lY2sgd3JvdGU6DQo+Pj4gT24gVGh1LCBOb3YgMTcsIDIwMTYgYXQgMDY6NDA6MTdQTSArMDEw
+MCwgTWlrZSBMb29pam1hbnMgd3JvdGU6DQo+Pj4+IO+7v09uIDE3LTExLTE2IDE3OjU2LCBHdWVu
+dGVyIFJvZWNrIHdyb3RlOg0KPj4+Pj4gT24gMTEvMTcvMjAxNiAwNDoxMCBBTSwgVG9tIExldmVu
+cyB3cm90ZToNCj4+Pj4+PiBVcGRhdGVkIHZlcnNpb24gb2YgdGhlIGx0YzI5OTAgZHJpdmVyIHdo
+aWNoIHN1cHBvcnRzIGFsbCBtZWFzdXJlbWVudA0KPj4+Pj4+IG1vZGVzIGF2YWlsYWJsZSBpbiB0
+aGUgY2hpcC4gVGhlIG1vZGUgY2FuIGJlIHNldCB0aHJvdWdoIGEgZGV2aWNldHJlZQ0KPj4+Pj4+
+IGF0dHJpYnV0ZS4NCj4+Pj4+IA0KPj4+IFsgLi4uIF0NCj4+PiANCj4+Pj4+PiANCj4+Pj4+PiBz
+dGF0aWMgaW50IGx0YzI5OTBfaTJjX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICppMmMsDQo+Pj4+
+Pj4gICAgICAgICAgICAgICAgIGNvbnN0IHN0cnVjdCBpMmNfZGV2aWNlX2lkICppZCkNCj4+Pj4+
+PiB7DQo+Pj4+Pj4gICAgaW50IHJldDsNCj4+Pj4+PiAgICBzdHJ1Y3QgZGV2aWNlICpod21vbl9k
+ZXY7DQo+Pj4+Pj4gKyAgICBzdHJ1Y3QgbHRjMjk5MF9kYXRhICpkYXRhOw0KPj4+Pj4+ICsgICAg
+c3RydWN0IGRldmljZV9ub2RlICpvZl9ub2RlID0gaTJjLT5kZXYub2Zfbm9kZTsNCj4+Pj4+PiAN
+Cj4+Pj4+PiAgICBpZiAoIWkyY19jaGVja19mdW5jdGlvbmFsaXR5KGkyYy0+YWRhcHRlciwNCj4+
+Pj4+PiBJMkNfRlVOQ19TTUJVU19CWVRFX0RBVEEgfA0KPj4+Pj4+ICAgICAgICAgICAgICAgICAg
+ICAgSTJDX0ZVTkNfU01CVVNfV09SRF9EQVRBKSkNCj4+Pj4+PiAgICAgICAgcmV0dXJuIC1FTk9E
+RVY7DQo+Pj4+Pj4gDQo+Pj4+Pj4gLSAgICAvKiBTZXR1cCBjb250aW51b3VzIG1vZGUsIGN1cnJl
+bnQgbW9uaXRvciAqLw0KPj4+Pj4+ICsgICAgZGF0YSA9IGRldm1fa3phbGxvYygmaTJjLT5kZXYs
+IHNpemVvZihzdHJ1Y3QgbHRjMjk5MF9kYXRhKSwNCj4+Pj4+PiBHRlBfS0VSTkVMKTsNCj4+Pj4+
+PiArICAgIGlmICh1bmxpa2VseSghZGF0YSkpDQo+Pj4+Pj4gKyAgICAgICAgcmV0dXJuIC1FTk9N
+RU07DQo+Pj4+Pj4gKyAgICBkYXRhLT5pMmMgPSBpMmM7DQo+Pj4+Pj4gKw0KPj4+Pj4+ICsgICAg
+aWYgKCFvZl9ub2RlIHx8IG9mX3Byb3BlcnR5X3JlYWRfdTMyKG9mX25vZGUsICJsbHRjLG1vZGUi
+LA0KPj4+Pj4+ICZkYXRhLT5tb2RlKSkNCj4+Pj4+PiArICAgICAgICBkYXRhLT5tb2RlID0gTFRD
+Mjk5MF9DT05UUk9MX01PREVfREVGQVVMVDsNCj4+Pj4+IA0KPj4+Pj4gSWFtIGFyZ3Vpbmcgd2l0
+aCBteXNlbGYgaWYgd2Ugc2hvdWxkIHN0aWxsIGRvIHRoaXMgb3IgaWYgd2Ugc2hvdWxkIHJlYWQN
+Cj4+Pj4+IHRoZSBtb2RlDQo+Pj4+PiBmcm9tIHRoZSBjaGlwIGluc3RlYWQgaWYgaXQgaXNuJ3Qg
+cHJvdmlkZWQgKGFmdGVyIGFsbCwgaXQgbWF5IGhhdmUgYmVlbg0KPj4+Pj4gaW5pdGlhbGl6ZWQN
+Cj4+Pj4+IGJ5IHRoZSBCSU9TL1JPTU1PTikuDQo+Pj4+IA0KPj4+PiBJIHRoaW5rIHRoZSBtb2Rl
+IHNob3VsZCBiZSBleHBsaWNpdGx5IHNldCwgd2l0aG91dCBkZWZhdWx0LiBUaGVyZSdzIG5vIHdh
+eQ0KPj4+PiB0byB0ZWxsIHdoZXRoZXIgdGhlIEJJT1Mgb3IgYm9vdGxvYWRlciBoYXMgcmVhbGx5
+IHNldCBpdCB1cCBvciB3aGV0aGVyIHRoZQ0KPj4+PiBjaGlwIGlzIGp1c3QgcmVwb3J0aW5nIHdo
+YXRldmVyIGl0IGhhcHBlbmVkIHRvIGRlZmF1bHQgdG8uIEFuZCBnaXZlbiB0aGUNCj4+Pj4gY2hp
+cCdzIGZ1bmN0aW9uLCBpdCdzIHVubGlrZWx5IGEgYm9vdGxvYWRlciB3b3VsZCB3YW50IHRvIGlu
+aXRpYWxpemUgaXQuDQo+Pj4+IA0KPj4+IFVubGlrZWx5IGJ1dCBwb3NzaWJsZS4gRXZlbiBpZiB3
+ZSBhbGwgYWdyZWUgdGhhdCB0aGUgY2hpcCBzaG91bGQgYmUgY29uZmlndXJlZA0KPj4+IGJ5IHRo
+ZSBkcml2ZXIsIEkgZG9uJ3QgbGlrZSBpbXBvc2luZyB0aGF0IHZpZXcgb24gZXZlcnlvbmUgZWxz
+ZS4NCj4+PiANCj4+Pj4gTXkgYWR2aWNlIHdvdWxkIGJlIHRvIG1ha2UgaXQgYSByZXF1aXJlZCBw
+cm9wZXJ0eS4gSWYgbm90IHNldCwgZGlzcGxheSBhbg0KPj4+PiBlcnJvciBhbmQgYmFpbCBvdXQu
+DQo+Pj4+IA0KPj4+IEl0IGlzIG5vdCB0aGF0IGVhc3ksIHVuZm9ydHVuYXRlbHkuIEl0IGFsc28g
+aGFzIHRvIHdvcmsgb24gYSBub24tZGV2aWNldHJlZQ0KPj4+IHN5c3RlbS4gSSB3b3VsZCBub3Qg
+b2JqZWN0IHRvIG1ha2luZyB0aGUgcHJvcGVydHkgbWFuZGF0b3J5LCBidXQgd2Ugd291bGQNCj4+
+PiBzdGlsbCBuZWVkIHRvIHByb3ZpZGUgbm9uLURUIHN1cHBvcnQuDQo+Pj4gDQo+Pj4gTXkgInVz
+ZSBjYXNlIiBmb3IgdGFraW5nIHRoZSBjdXJyZW50IG1vZGUgZnJvbSB0aGUgY2hpcCBpZiBub3Qg
+c3BlY2lmaWVkDQo+Pj4gaXMgdGhhdCBpdCB3b3VsZCBlbmFibGUgbWUgdG8gcnVuIGEgbW9kdWxl
+IHRlc3Qgd2l0aCBhbGwgbW9kZXMuIEkgY29uc2lkZXINCj4+PiB0aGlzIGV4dHJlbWVseSB2YWx1
+YWJsZS4NCj4+IA0KPj4gR29vZCBwb2ludC4NCj4+IA0KPj4gVGhlIGNoaXAgZGVmYXVsdHMgdG8g
+bWVhc3VyaW5nIGludGVybmFsIHRlbXBlcmF0dXJlIG9ubHksIGFuZCB0aGUgbW9kZQ0KPj4gZGVm
+YXVsdHMgdG8gIjAiLg0KPj4gDQo+PiBDaG9vc2luZyBhIG1vZGUgdGhhdCBkb2Vzbid0IG1hdGNo
+IHRoZSBhY3R1YWwgY2lyY3VpdHJ5IGNvdWxkIGJlIGJhZCBmb3IgdGhlDQo+PiBjaGlwIG9yIHRo
+ZSBib2FyZCAodGhvdWdoIHVubGlrZWx5LCBpdCdsbCBwcm9iYWJseSBqdXN0IGJlIHVzZWxlc3Mp
+IHNpbmNlIGl0DQo+PiB3aWxsIGFjdGl2ZWx5IGRyaXZlIHNvbWUgb2YgdGhlIGlucHV0cyBpbiB0
+aGUgdGVtcGVyYXR1cmUgbW9kZXMgKHdoaWNoIGlzDQo+PiBkZWZhdWx0IGZvciBWMy9WNCBwaW5z
+KS4NCj4+IA0KPj4gSW5zdGVhZCBvZiBmYWlsaW5nLCBvbmUgY291bGQgY2hvb3NlIHRvIHNldCB0
+aGUgZGVmYXVsdCBtb2RlIHRvICI3Iiwgd2hpY2gNCj4+IGp1c3QgbWVhc3VyZXMgdGhlIDQgdm9s
+dGFnZXMsIHdoaWNoIHdvdWxkIGJlIGEgaGFybWxlc3MgbW9kZSBpbiBhbGwgY2FzZXMuDQo+PiAN
+Cj4+IEFzIGEgd2F5IHRvIGxldCBhIGJvb3Rsb2FkZXIgc2V0IHRoaW5ncyB1cCwgSSB0aGluayBp
+dCB3b3VsZCBiZSBhIGdvb2QgY2hlY2sNCj4+IHRvIHNlZSBpZiBDT05UUk9MIHJlZ2lzdGVyIGJp
+dHMgNDozIGFyZSBzZXQuIElmICIwMCIsIHRoZSBjaGlwIGlzIG5vdA0KPj4gYWNxdWlyaW5nIGRh
+dGEgYXQgYWxsLCBhbmQgcHJvYmFibHkgbmVlZHMgY29uZmlndXJhdGlvbiBzdGlsbC4gSW4gdGhh
+dCBjYXNlLA0KPj4gdGhlIG1vZGUgbXVzdCBiZSBwcm92aWRlZCBieSB0aGUgZGV2aWNldHJlZSAo
+b3IgdGhlIGRlZmF1bHQgIjciKS4NCj4+IElmIGJpdHMgNDozIGFyZSAiMTEiLCBpdCBoYXMgYWxy
+ZWFkeSBiZWVuIHNldCB1cCB0byBtZWFzdXJlIGl0cyBpbnB1dHMsIGFuZA0KPj4gaXQncyBva2F5
+IHRvIGNvbnRpbnVlIGRvaW5nIGp1c3QgdGhhdCBhbmQgdXNlIHRoZSBjdXJyZW50IHZhbHVlIG9m
+IDI6MA0KPj4gcmVnaXN0ZXIgYXMgZGVmYXVsdCBtb2RlIChpZiB0aGUgZGV2aWNldHJlZSBkaWRu
+J3Qgc3BlY2lmeSBhbnkgbW9kZSBhdCBhbGwpLg0KPj4gDQo+IA0KPiBBdCBmaXJzdCBnbGFuY2Us
+IGFncmVlZCwgdGhvdWdoIGJ5IGRlZmF1bHQgYlszOjRdIGFyZSAwMCwgYW5kIG9ubHkgdGhlDQo+
+IGludGVybmFsIHRlbXBlcmF0dXJlIGlzIG1lYXN1cmVkLiBBY3R1YWxseSwgdGhlIDUgbW9kZSBi
+aXRzIGFyZSBhbGwNCj4gcmVsZXZhbnQgdG8gZGV0ZXJtaW5lIHdoYXQgaXMgbWVhc3VyZWQuIE1h
+eWJlIGl0IHdvdWxkIGJlIGJldHRlciB0byB0YWtlDQo+IGFsbCA1IGJpdHMgaW50byBhY2NvdW50
+IGluc3RlYWQgb2YgYmxpbmRseSBzZXR0aW5nIGJbMzRdOj0xMSBhbmQgYSBzcGVjaWZpYw0KPiBz
+ZXR0aW5nIG9mIGJbMDoyXS4gU3VyZSwgdGhhdCB3b3VsZCBtYWtlIHRoZSBtb2RlIHRhYmxlIGEg
+Yml0IGxhcmdlciwNCj4gYnV0IHRoZW4gbHRjMjk5MF9hdHRyc19lbmFbXSBjb3VsZCBiZSBtYWRl
+IGFuIHUxNiBhcnJheSwgYW5kIGEgdGFibGUgc2l6ZQ0KPiBvZiA2NCBieXRlcyB3b3VsZCBub3Qg
+YmUgdGhhdCBiYWQuDQoNCkkgd291bGQgdGVuZCB0byBhZ3JlZSB0aGF0IGl0IHNob3VsZCBiZSBw
+b3NzaWJsZSB0byBjb25maWd1cmUgYWxsIDUgbW9kZQ0KYml0cyB0aHJvdWdoIHRoZSBkZXZpY2V0
+cmVlLiBXaGF0IEkgd291bGQgcHJvcG9zZSBpcyBhcyBmb2xsb3dzLg0KDQpJZiBhIGRldmljZXRy
+ZWUgbm9kZSBleGlzdHMsIHRoZSBtb2RlIHBhcmFtZXRlcihzPykgYXJlIHJlcXVpcmVkIGFuZCB0
+aGUgDQpjaGlwIGlzIGluaXRpYWxpc2VkLg0KDQpJZiBhIGRldmljZXRyZWUgbm9kZSBkb2Vzbid0
+IGV4aXN0LCBpdCBpcyBhc3N1bWVkIHRoYXQgdGhlIGNoaXAgaGFzIA0KYWxyZWFkeSBiZWVuIGNv
+bmZpZ3VyZWQgKGJ5IHRoZSBCSU9TLCBldGMpLiBUaGUgbW9kZSBpcyByZWFkIGZyb20gdGhlIA0K
+Y2hpcCB0byBzZXQgdGhlIHZpc2liaWxpdHkgb2YgdGhlIHN5c2ZzIGF0dHJpYnV0ZXMuIEluIHRo
+ZSB3b3JzdCBjYXNlLCB3aGVyZSB0aGUgDQpjaGlwIGhhcyBub3QgYmVlbiBjb25maWd1cmVkIGJ5
+IGFub3RoZXIgc291cmNlLCBpdCB3b3VsZCBvbmx5IGJlIHBvc3NpYmxlDQp0byBtZWFzdXJlIHRo
+ZSBpbnRlcm5hbCB0ZW1wZXJhdHVyZSAtLSBidXQgSSB0aGluayB0aGlzIGlzIGFuIGFjY2VwdGFi
+bGUNCmxpbWl0YXRpb24uDQoNClRoZSBvbmx5IGNhc2UgdGhhdCB0aGlzIGRvZXMgbm90IGNvdmVy
+IGlzIGlmIHRoZSBkZXZpY2UgdHJlZSBub2RlIA0KZXhpc3RzIGJ1dCB0aGUgY2hpcCBpcyBleHBl
+Y3RlZCB0byBiZSBjb25maWd1cmVkIGJ5IHNvbWUgb3RoZXIgc291cmNlLiANCk1heWJlIEkgYW0g
+d3JvbmcsIGJ1dCBJIHdvdWxkIG5vdCBleHBlY3QgdGhpcyB0byBiZSBhIHRlcnJpYmx5IGNvbW1v
+bg0Kc2l0dWF0aW9uLg0KDQpXaGF0IGRvIHlvdSB0aGluaz8NCg0KQ2hlZXJzLA0KVG9tDQoNCg==
