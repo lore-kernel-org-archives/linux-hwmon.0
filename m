@@ -4,56 +4,90 @@ To: <linux@roeck-us.net>
 CC: <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
 	<linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
 	<devicetree@vger.kernel.org>, Tom Levens <tom.levens@cern.ch>
-Subject: [PATCH v2 2/3] hwmon: ltc2990: add devicetree binding
-Date: Thu, 17 Nov 2016 13:10:15 +0100
-Message-ID: <1479384616-12479-2-git-send-email-tom.levens@cern.ch>
-In-Reply-To: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
+Subject: [PATCH v2 1/3] hwmon: ltc2990: refactor value conversion
+Date: Thu, 17 Nov 2016 13:10:14 +0100
+Message-ID: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Add a devicetree binding for the ltc2990 hwmon driver.
+Conversion from raw values to signed integers has been refactored using
+the macros in bitops.h.
 
 Signed-off-by: Tom Levens <tom.levens@cern.ch>
 ---
- .../devicetree/bindings/hwmon/ltc2990.txt          |   28 ++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ltc2990.txt
+ drivers/hwmon/ltc2990.c |   27 ++++++++++-----------------
+ 1 files changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ltc2990.txt b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
-new file mode 100644
-index 0000000..e4040e0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
-@@ -0,0 +1,28 @@
-+ltc2990
-+
-+Required properties:
-+- compatible: Must be "lltc,ltc2990"
-+- reg: I2C slave address
-+
-+Optional properties:
-+- lltc,mode:
-+	Sets the chip's measurement mode, defaults to <6> if unset.
-+
-+	The following measurements are available in each mode:
-+
-+	0: V1, V2, TR2
-+	1: V1-V2, TR2
-+	2: V1-V2, V3, V4
-+	3: TR1, V3, V4
-+	4: TR1, V3-V4
-+	5: TR1, TR2
-+	6: V1-V2, V3-V4
-+	7: V1, V2, V3, V4
-+
-+Example:
-+
-+ltc2990@4c {
-+	compatible = "lltc,ltc2990";
-+	reg = <0x4c>;
-+	lltc,mode = <7>;
-+};
+diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+index 8f8fe05..0ec4102 100644
+--- a/drivers/hwmon/ltc2990.c
++++ b/drivers/hwmon/ltc2990.c
+@@ -9,8 +9,12 @@
+  * This driver assumes the chip is wired as a dual current monitor, and
+  * reports the voltage drop across two series resistors. It also reports
+  * the chip's internal temperature and Vcc power supply voltage.
++ *
++ * Value conversion refactored
++ * by Tom Levens <tom.levens@cern.ch>
+  */
+ 
++#include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+@@ -34,19 +38,10 @@
+ #define LTC2990_CONTROL_MODE_CURRENT	0x06
+ #define LTC2990_CONTROL_MODE_VOLTAGE	0x07
+ 
+-/* convert raw register value to sign-extended integer in 16-bit range */
+-static int ltc2990_voltage_to_int(int raw)
+-{
+-	if (raw & BIT(14))
+-		return -(0x4000 - (raw & 0x3FFF)) << 2;
+-	else
+-		return (raw & 0x3FFF) << 2;
+-}
+-
+ /* Return the converted value from the given register in uV or mC */
+-static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
++static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, s32 *result)
+ {
+-	int val;
++	s32 val;
+ 
+ 	val = i2c_smbus_read_word_swapped(i2c, reg);
+ 	if (unlikely(val < 0))
+@@ -55,18 +50,16 @@ static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
+ 	switch (reg) {
+ 	case LTC2990_TINT_MSB:
+ 		/* internal temp, 0.0625 degrees/LSB, 13-bit  */
+-		val = (val & 0x1FFF) << 3;
+-		*result = (val * 1000) >> 7;
++		*result = sign_extend32(val, 12) * 1000 / 16;
+ 		break;
+ 	case LTC2990_V1_MSB:
+ 	case LTC2990_V3_MSB:
+ 		 /* Vx-Vy, 19.42uV/LSB. Depends on mode. */
+-		*result = ltc2990_voltage_to_int(val) * 1942 / (4 * 100);
++		*result = sign_extend32(val, 14) * 1942 / 100;
+ 		break;
+ 	case LTC2990_VCC_MSB:
+ 		/* Vcc, 305.18μV/LSB, 2.5V offset */
+-		*result = (ltc2990_voltage_to_int(val) * 30518 /
+-			   (4 * 100 * 1000)) + 2500;
++		*result = sign_extend32(val, 14) * 30518 / (100 * 1000) + 2500;
+ 		break;
+ 	default:
+ 		return -EINVAL; /* won't happen, keep compiler happy */
+@@ -79,7 +72,7 @@ static ssize_t ltc2990_show_value(struct device *dev,
+ 				  struct device_attribute *da, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+-	int value;
++	s32 value;
+ 	int ret;
+ 
+ 	ret = ltc2990_get_value(dev_get_drvdata(dev), attr->index, &value);
 -- 
 1.7.1
