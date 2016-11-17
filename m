@@ -1,135 +1,77 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43940 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934472AbcKQRGF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2016 12:06:05 -0500
-Subject: Re: [PATCH v2 1/3] hwmon: ltc2990: refactor value conversion
-To: Tom Levens <tom.levens@cern.ch>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
- <86c28b4f-c78b-8d3e-5c48-fa42ca614ba4@roeck-us.net>
- <alpine.LRH.2.20.1611171613250.12237@pcbe13573-vm.dyndns.cern.ch>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
-Date: Thu, 17 Nov 2016 08:36:07 -0800
+Return-path: <jared.bents@rockwellcollins.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.20.1611171613250.12237@pcbe13573-vm.dyndns.cern.ch>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20161116225103.GB11821@roeck-us.net>
+References: <1479335033-44479-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20161116225103.GB11821@roeck-us.net>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Thu, 17 Nov 2016 14:08:41 -0600
+Message-ID: <CAM=7fbfQTOeXG-8oaQ7YDwR+Ji_R3VWM6TDrs9sU+UQqkh11wQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (amc6821) sign extension temperature
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 11/17/2016 08:23 AM, Tom Levens wrote:
-> Hi Guenter,
->
-> Thanks for taking the time to review the patch.
->
-> On Thu, 17 Nov 2016, Guenter Roeck wrote:
->
->> Hi Tom,
+On Wed, Nov 16, 2016 at 4:51 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Wed, Nov 16, 2016 at 04:23:53PM -0600, Matt Weber wrote:
+>> From: Jared Bents <jared.bents@rockwellcollins.com>
 >>
->> On 11/17/2016 04:10 AM, Tom Levens wrote:
->>>  Conversion from raw values to signed integers has been refactored using
->>>  the macros in bitops.h.
->>>
->> Please also mention that this fixes a bug in negative temperature conversions.
->
-> Yes, of course, I will include the information in v3.
->
+>> Converts the unsigned temperature values from the i2c read
+>> to be sign extended as defined in the datasheet so that
+>> negative temperatures are properly read.
 >>
->>>  Signed-off-by: Tom Levens <tom.levens@cern.ch>
->>>  ---
->>>   drivers/hwmon/ltc2990.c |   27 ++++++++++-----------------
->>>   1 files changed, 10 insertions(+), 17 deletions(-)
->>>
->>>  diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
->>>  index 8f8fe05..0ec4102 100644
->>>  --- a/drivers/hwmon/ltc2990.c
->>>  +++ b/drivers/hwmon/ltc2990.c
->>>  @@ -9,8 +9,12 @@
->>>    * This driver assumes the chip is wired as a dual current monitor, and
->>>    * reports the voltage drop across two series resistors. It also reports
->>>    * the chip's internal temperature and Vcc power supply voltage.
->>>  + *
->>>  + * Value conversion refactored
->>>  + * by Tom Levens <tom.levens@cern.ch>
+>> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+>> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> ---
+>>  drivers/hwmon/amc6821.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> Kind of unusual to do that for minor changes like this. Imagine if everyone would do that.
->> The commit log is what gives you credit.
->
-> Good point, thanks for the hint. I will remove it from v3.
->
->>>    */
->>>
->>>  +#include <linux/bitops.h>
->>>   #include <linux/err.h>
->>>   #include <linux/hwmon.h>
->>>   #include <linux/hwmon-sysfs.h>
->>>  @@ -34,19 +38,10 @@
->>>   #define LTC2990_CONTROL_MODE_CURRENT    0x06
->>>   #define LTC2990_CONTROL_MODE_VOLTAGE    0x07
->>>
->>>  -/* convert raw register value to sign-extended integer in 16-bit range */
->>>  -static int ltc2990_voltage_to_int(int raw)
->>>  -{
->>>  -    if (raw & BIT(14))
->>>  -        return -(0x4000 - (raw & 0x3FFF)) << 2;
->>>  -    else
->>>  -        return (raw & 0x3FFF) << 2;
->>>  -}
->>>  -
->>>  /* Return the converted value from the given register in uV or mC */
->>>  -static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
->>>  +static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, s32 *result)
->>>  {
->>>  -    int val;
->>>  +    s32 val;
+>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+>> index 12e851a..d7368f7 100644
+>> --- a/drivers/hwmon/amc6821.c
+>> +++ b/drivers/hwmon/amc6821.c
+>> @@ -188,7 +188,7 @@ static struct amc6821_data *amc6821_update_device(struct device *dev)
+>>                       !data->valid) {
 >>
->> Please just leave the variable type alone. it is also used for the return value
->> from i2c_smbus_read_word_swapped(), which is an int, and changing it to s32 doesn't really make the code better.
+>>               for (i = 0; i < TEMP_IDX_LEN; i++)
+>> -                     data->temp[i] = i2c_smbus_read_byte_data(client,
+>> +                     data->temp[i] = (int8_t) i2c_smbus_read_byte_data(client,
 >
-> According to i2c.h the return type for i2c_smbus_read_word_swapped() is s32, which is why I modified it here. But it could be changed back if you think it is better to leave it as an int.
+> How does that fix anything ? The only difference is that errors reported from
+> i2c_smbus_read_byte_data() are now capped off and stored as 0xff and no longer
+> as negative numbers.  I don't see how a value of 0xff read from the chip would
+> now be reported as -1 degrees C; it should be reported as 255 degrees C as it
+> was all along. What am I missing here ?
 >
-Ah, ok. Good to know. Please leave it anyway, reason being that there is no real
-reason to change it. Effectively those are just whitespace changes (unlike the rest,
-which is part bug fix, part cleanup).
-
->> Can you send me a register map for the chip ? I would like to write a module test.
+> A real fix would be to actually check for errors either here or in the show
+> function (temp[] < 0 indicates a transfer error), and to use sign_extend()
+> to convert the 8-bit reading to a signed value.
 >
-> Here is an example register dump:
-
-I meant the output of i2cdump (something like "i2cdump -y -f <bus> <i2c-address> w").
-
-Thanks,
-Guenter
-
->
-> 00 00 00 00
-> 01 90 07 d0
-> 2c cd 7d 80
-> 7c 29 20 00
->
-> The expected values in this case are:
->
-> in0_input     5000
-> in1_input    610
-> in2_input    3500
-> in3_input    -195
-> in4_input    -299
-> temp1_input     25000
-> temp2_input     125000
-> temp3_input    -40000
-> curr1_input    38840
-> curr2_input    -12428
->
-> Testing with lltc,mode set to <5>, <6> and <7> should give you all measurements.
->
->> Thanks,
->> Guenter
->
-> Cheers,
+> Guenter
 >
 
+As stated in the patch note, the amc6821 uses signed numbers for the
+temperature values. 0xff is -1 Deg C and 0x80 is -128 Deg C via the
+temperature range table in the amc6821 datasheet.  This change does
+not break any error checking when reading the temperature over the i2c
+bus in this driver as this driver does not do any error checking for
+the temperature reads to begin with.  There are error checks in the
+driver but they are for some i2c writes and a few i2c reads for
+configuration settings.  None of those error checks are affected.
+Without this patch, the temperatures that are displayed in /sys/class
+when below 0 Deg C are 255 Deg C to 128 Deg C.  With the patch, the
+temperatures displayed below 0 Deg C are -1 Deg C to -128 Deg C as
+expected.
+
+Jared
+
+>>                               temp_reg[i]);
+>>
+>>               data->stat1 = i2c_smbus_read_byte_data(client,
+>> --
+>> 1.9.1
+>>
+>> --
+>> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+>> the body of a message to majordomo@vger.kernel.org
+>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
