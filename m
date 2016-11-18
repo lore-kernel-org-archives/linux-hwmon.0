@@ -1,58 +1,70 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54109 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752035AbcKROR5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Nov 2016 09:17:57 -0500
-Subject: Re: [PATCH v2 1/3] hwmon: ltc2990: refactor value conversion
+Return-path: <robherring2@gmail.com>
+Date: Fri, 18 Nov 2016 08:50:36 -0600
+From: Rob Herring <robh@kernel.org>
 To: Tom Levens <tom.levens@cern.ch>
+Cc: linux@roeck-us.net, jdelvare@suse.com, mark.rutland@arm.com,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] hwmon: ltc2990: add devicetree binding
+Message-ID: <20161118145035.ir46ohk5uqaln6kp@rob-hp-laptop>
 References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
- <86c28b4f-c78b-8d3e-5c48-fa42ca614ba4@roeck-us.net>
- <alpine.LRH.2.20.1611171613250.12237@pcbe13573-vm.dyndns.cern.ch>
- <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
- <alpine.LRH.2.20.1611171955330.14972@pcbe13573-vm.dyndns.cern.ch>
- <b0c20fac-9f4c-dff2-abef-cd79b1f1ae0a@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1f8995f1-6126-87b7-bcda-bee2cabbbf81@roeck-us.net>
-Date: Fri, 18 Nov 2016 06:17:53 -0800
+ <1479384616-12479-2-git-send-email-tom.levens@cern.ch>
 MIME-Version: 1.0
-In-Reply-To: <b0c20fac-9f4c-dff2-abef-cd79b1f1ae0a@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1479384616-12479-2-git-send-email-tom.levens@cern.ch>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 11/18/2016 06:09 AM, Guenter Roeck wrote:
+On Thu, Nov 17, 2016 at 01:10:15PM +0100, Tom Levens wrote:
+> Add a devicetree binding for the ltc2990 hwmon driver.
+> 
+> Signed-off-by: Tom Levens <tom.levens@cern.ch>
+> ---
+>  .../devicetree/bindings/hwmon/ltc2990.txt          |   28 ++++++++++++++++++++
+>  1 files changed, 28 insertions(+), 0 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ltc2990.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ltc2990.txt b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
+> new file mode 100644
+> index 0000000..e4040e0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
+> @@ -0,0 +1,28 @@
+> +ltc2990
+> +
+> +Required properties:
+> +- compatible: Must be "lltc,ltc2990"
+> +- reg: I2C slave address
+> +
+> +Optional properties:
+> +- lltc,mode:
 
->>
->> The register map wraps at 0x0F, so I only sent you the first 16 bytes. But the fully expanded form is:
->>
->>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->> 00: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 10: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 20: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 30: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 40: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 50: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 60: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 70: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 80: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> 90: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> a0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> b0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> c0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> d0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> e0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->> f0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
->
-> Sorry, I wasn't clear. The chip uses 16-bit registers, so the
-> "w" in the command would be important to report the entire
-> register content, not just the first 8 bit of each register.
->
-Too early, sorry. the above is fine.
+What determines the mode? If this is something a user will want to 
+control, then it should be a sysfs attr rather than DT prop. If the 
+board design dictates then DT is the right place.
 
-Guenter
+'mode' is a bit vague, 'lltc,meas-mode' perhaps.
 
+> +	Sets the chip's measurement mode, defaults to <6> if unset.
+> +
+> +	The following measurements are available in each mode:
+> +
+> +	0: V1, V2, TR2
+> +	1: V1-V2, TR2
+> +	2: V1-V2, V3, V4
+> +	3: TR1, V3, V4
+> +	4: TR1, V3-V4
+> +	5: TR1, TR2
+> +	6: V1-V2, V3-V4
+> +	7: V1, V2, V3, V4
+> +
+> +Example:
+> +
+> +ltc2990@4c {
+> +	compatible = "lltc,ltc2990";
+> +	reg = <0x4c>;
+> +	lltc,mode = <7>;
+> +};
+> -- 
+> 1.7.1
+> 
