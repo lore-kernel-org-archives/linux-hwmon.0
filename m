@@ -1,123 +1,172 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-ve1eur01on0050.outbound.protection.outlook.com ([104.47.1.50]:44672
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1751495AbcKRA5W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2016 19:57:22 -0500
+Return-path: <tom.levens@cern.ch>
+Date: Fri, 18 Nov 2016 09:18:44 +0100
 From: Tom Levens <tom.levens@cern.ch>
 To: Guenter Roeck <linux@roeck-us.net>
-CC: Mike Looijmans <mike.looijmans@topic.nl>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] hwmon: ltc2990: support all measurement modes
-Date: Thu, 17 Nov 2016 23:25:30 +0000
-Message-ID: <09DCF2E6-3F08-4F0E-837B-55F591008AAB@cern.ch>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
- <1479384616-12479-3-git-send-email-tom.levens@cern.ch>
- <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net>
- <582DEB81.6050806@topic.nl> <20161117185654.GA19338@roeck-us.net>
- <582E0A6C.5010307@topic.nl> <20161117215454.GA23571@roeck-us.net>
-In-Reply-To: <20161117215454.GA23571@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <06FCCBD77300374E9378EE3ECAA23FA6@cern.ch>
-Content-Transfer-Encoding: base64
+CC: Tom Levens <tom.levens@cern.ch>, <jdelvare@suse.com>,
+	<robh+dt@kernel.org>, <mark.rutland@arm.com>, <linux-kernel@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] hwmon: ltc2990: refactor value conversion
+In-Reply-To: <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
+Message-ID: <alpine.LRH.2.20.1611171955330.14972@pcbe13573-vm.dyndns.cern.ch>
+References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch> <86c28b4f-c78b-8d3e-5c48-fa42ca614ba4@roeck-us.net> <alpine.LRH.2.20.1611171613250.12237@pcbe13573-vm.dyndns.cern.ch> <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
 MIME-Version: 1.0
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="US-ASCII"; format=flowed
+List-ID: <linux-hwmon@vger.kernel.org>
 
-T24gMTcgTm92IDIwMTYsIGF0IDIyOjU0LCBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5u
-ZXQ+IHdyb3RlOg0KPiBPbiBUaHUsIE5vdiAxNywgMjAxNiBhdCAwODo1MjoxMlBNICswMTAwLCBN
-aWtlIExvb2lqbWFucyB3cm90ZToNCj4+IO+7v09uIDE3LTExLTIwMTYgMTk6NTYsIEd1ZW50ZXIg
-Um9lY2sgd3JvdGU6DQo+Pj4gT24gVGh1LCBOb3YgMTcsIDIwMTYgYXQgMDY6NDA6MTdQTSArMDEw
-MCwgTWlrZSBMb29pam1hbnMgd3JvdGU6DQo+Pj4+IO+7v09uIDE3LTExLTE2IDE3OjU2LCBHdWVu
-dGVyIFJvZWNrIHdyb3RlOg0KPj4+Pj4gT24gMTEvMTcvMjAxNiAwNDoxMCBBTSwgVG9tIExldmVu
-cyB3cm90ZToNCj4+Pj4+PiBVcGRhdGVkIHZlcnNpb24gb2YgdGhlIGx0YzI5OTAgZHJpdmVyIHdo
-aWNoIHN1cHBvcnRzIGFsbCBtZWFzdXJlbWVudA0KPj4+Pj4+IG1vZGVzIGF2YWlsYWJsZSBpbiB0
-aGUgY2hpcC4gVGhlIG1vZGUgY2FuIGJlIHNldCB0aHJvdWdoIGEgZGV2aWNldHJlZQ0KPj4+Pj4+
-IGF0dHJpYnV0ZS4NCj4+Pj4+IA0KPj4+IFsgLi4uIF0NCj4+PiANCj4+Pj4+PiANCj4+Pj4+PiBz
-dGF0aWMgaW50IGx0YzI5OTBfaTJjX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICppMmMsDQo+Pj4+
-Pj4gICAgICAgICAgICAgICAgIGNvbnN0IHN0cnVjdCBpMmNfZGV2aWNlX2lkICppZCkNCj4+Pj4+
-PiB7DQo+Pj4+Pj4gICAgaW50IHJldDsNCj4+Pj4+PiAgICBzdHJ1Y3QgZGV2aWNlICpod21vbl9k
-ZXY7DQo+Pj4+Pj4gKyAgICBzdHJ1Y3QgbHRjMjk5MF9kYXRhICpkYXRhOw0KPj4+Pj4+ICsgICAg
-c3RydWN0IGRldmljZV9ub2RlICpvZl9ub2RlID0gaTJjLT5kZXYub2Zfbm9kZTsNCj4+Pj4+PiAN
-Cj4+Pj4+PiAgICBpZiAoIWkyY19jaGVja19mdW5jdGlvbmFsaXR5KGkyYy0+YWRhcHRlciwNCj4+
-Pj4+PiBJMkNfRlVOQ19TTUJVU19CWVRFX0RBVEEgfA0KPj4+Pj4+ICAgICAgICAgICAgICAgICAg
-ICAgSTJDX0ZVTkNfU01CVVNfV09SRF9EQVRBKSkNCj4+Pj4+PiAgICAgICAgcmV0dXJuIC1FTk9E
-RVY7DQo+Pj4+Pj4gDQo+Pj4+Pj4gLSAgICAvKiBTZXR1cCBjb250aW51b3VzIG1vZGUsIGN1cnJl
-bnQgbW9uaXRvciAqLw0KPj4+Pj4+ICsgICAgZGF0YSA9IGRldm1fa3phbGxvYygmaTJjLT5kZXYs
-IHNpemVvZihzdHJ1Y3QgbHRjMjk5MF9kYXRhKSwNCj4+Pj4+PiBHRlBfS0VSTkVMKTsNCj4+Pj4+
-PiArICAgIGlmICh1bmxpa2VseSghZGF0YSkpDQo+Pj4+Pj4gKyAgICAgICAgcmV0dXJuIC1FTk9N
-RU07DQo+Pj4+Pj4gKyAgICBkYXRhLT5pMmMgPSBpMmM7DQo+Pj4+Pj4gKw0KPj4+Pj4+ICsgICAg
-aWYgKCFvZl9ub2RlIHx8IG9mX3Byb3BlcnR5X3JlYWRfdTMyKG9mX25vZGUsICJsbHRjLG1vZGUi
-LA0KPj4+Pj4+ICZkYXRhLT5tb2RlKSkNCj4+Pj4+PiArICAgICAgICBkYXRhLT5tb2RlID0gTFRD
-Mjk5MF9DT05UUk9MX01PREVfREVGQVVMVDsNCj4+Pj4+IA0KPj4+Pj4gSWFtIGFyZ3Vpbmcgd2l0
-aCBteXNlbGYgaWYgd2Ugc2hvdWxkIHN0aWxsIGRvIHRoaXMgb3IgaWYgd2Ugc2hvdWxkIHJlYWQN
-Cj4+Pj4+IHRoZSBtb2RlDQo+Pj4+PiBmcm9tIHRoZSBjaGlwIGluc3RlYWQgaWYgaXQgaXNuJ3Qg
-cHJvdmlkZWQgKGFmdGVyIGFsbCwgaXQgbWF5IGhhdmUgYmVlbg0KPj4+Pj4gaW5pdGlhbGl6ZWQN
-Cj4+Pj4+IGJ5IHRoZSBCSU9TL1JPTU1PTikuDQo+Pj4+IA0KPj4+PiBJIHRoaW5rIHRoZSBtb2Rl
-IHNob3VsZCBiZSBleHBsaWNpdGx5IHNldCwgd2l0aG91dCBkZWZhdWx0LiBUaGVyZSdzIG5vIHdh
-eQ0KPj4+PiB0byB0ZWxsIHdoZXRoZXIgdGhlIEJJT1Mgb3IgYm9vdGxvYWRlciBoYXMgcmVhbGx5
-IHNldCBpdCB1cCBvciB3aGV0aGVyIHRoZQ0KPj4+PiBjaGlwIGlzIGp1c3QgcmVwb3J0aW5nIHdo
-YXRldmVyIGl0IGhhcHBlbmVkIHRvIGRlZmF1bHQgdG8uIEFuZCBnaXZlbiB0aGUNCj4+Pj4gY2hp
-cCdzIGZ1bmN0aW9uLCBpdCdzIHVubGlrZWx5IGEgYm9vdGxvYWRlciB3b3VsZCB3YW50IHRvIGlu
-aXRpYWxpemUgaXQuDQo+Pj4+IA0KPj4+IFVubGlrZWx5IGJ1dCBwb3NzaWJsZS4gRXZlbiBpZiB3
-ZSBhbGwgYWdyZWUgdGhhdCB0aGUgY2hpcCBzaG91bGQgYmUgY29uZmlndXJlZA0KPj4+IGJ5IHRo
-ZSBkcml2ZXIsIEkgZG9uJ3QgbGlrZSBpbXBvc2luZyB0aGF0IHZpZXcgb24gZXZlcnlvbmUgZWxz
-ZS4NCj4+PiANCj4+Pj4gTXkgYWR2aWNlIHdvdWxkIGJlIHRvIG1ha2UgaXQgYSByZXF1aXJlZCBw
-cm9wZXJ0eS4gSWYgbm90IHNldCwgZGlzcGxheSBhbg0KPj4+PiBlcnJvciBhbmQgYmFpbCBvdXQu
-DQo+Pj4+IA0KPj4+IEl0IGlzIG5vdCB0aGF0IGVhc3ksIHVuZm9ydHVuYXRlbHkuIEl0IGFsc28g
-aGFzIHRvIHdvcmsgb24gYSBub24tZGV2aWNldHJlZQ0KPj4+IHN5c3RlbS4gSSB3b3VsZCBub3Qg
-b2JqZWN0IHRvIG1ha2luZyB0aGUgcHJvcGVydHkgbWFuZGF0b3J5LCBidXQgd2Ugd291bGQNCj4+
-PiBzdGlsbCBuZWVkIHRvIHByb3ZpZGUgbm9uLURUIHN1cHBvcnQuDQo+Pj4gDQo+Pj4gTXkgInVz
-ZSBjYXNlIiBmb3IgdGFraW5nIHRoZSBjdXJyZW50IG1vZGUgZnJvbSB0aGUgY2hpcCBpZiBub3Qg
-c3BlY2lmaWVkDQo+Pj4gaXMgdGhhdCBpdCB3b3VsZCBlbmFibGUgbWUgdG8gcnVuIGEgbW9kdWxl
-IHRlc3Qgd2l0aCBhbGwgbW9kZXMuIEkgY29uc2lkZXINCj4+PiB0aGlzIGV4dHJlbWVseSB2YWx1
-YWJsZS4NCj4+IA0KPj4gR29vZCBwb2ludC4NCj4+IA0KPj4gVGhlIGNoaXAgZGVmYXVsdHMgdG8g
-bWVhc3VyaW5nIGludGVybmFsIHRlbXBlcmF0dXJlIG9ubHksIGFuZCB0aGUgbW9kZQ0KPj4gZGVm
-YXVsdHMgdG8gIjAiLg0KPj4gDQo+PiBDaG9vc2luZyBhIG1vZGUgdGhhdCBkb2Vzbid0IG1hdGNo
-IHRoZSBhY3R1YWwgY2lyY3VpdHJ5IGNvdWxkIGJlIGJhZCBmb3IgdGhlDQo+PiBjaGlwIG9yIHRo
-ZSBib2FyZCAodGhvdWdoIHVubGlrZWx5LCBpdCdsbCBwcm9iYWJseSBqdXN0IGJlIHVzZWxlc3Mp
-IHNpbmNlIGl0DQo+PiB3aWxsIGFjdGl2ZWx5IGRyaXZlIHNvbWUgb2YgdGhlIGlucHV0cyBpbiB0
-aGUgdGVtcGVyYXR1cmUgbW9kZXMgKHdoaWNoIGlzDQo+PiBkZWZhdWx0IGZvciBWMy9WNCBwaW5z
-KS4NCj4+IA0KPj4gSW5zdGVhZCBvZiBmYWlsaW5nLCBvbmUgY291bGQgY2hvb3NlIHRvIHNldCB0
-aGUgZGVmYXVsdCBtb2RlIHRvICI3Iiwgd2hpY2gNCj4+IGp1c3QgbWVhc3VyZXMgdGhlIDQgdm9s
-dGFnZXMsIHdoaWNoIHdvdWxkIGJlIGEgaGFybWxlc3MgbW9kZSBpbiBhbGwgY2FzZXMuDQo+PiAN
-Cj4+IEFzIGEgd2F5IHRvIGxldCBhIGJvb3Rsb2FkZXIgc2V0IHRoaW5ncyB1cCwgSSB0aGluayBp
-dCB3b3VsZCBiZSBhIGdvb2QgY2hlY2sNCj4+IHRvIHNlZSBpZiBDT05UUk9MIHJlZ2lzdGVyIGJp
-dHMgNDozIGFyZSBzZXQuIElmICIwMCIsIHRoZSBjaGlwIGlzIG5vdA0KPj4gYWNxdWlyaW5nIGRh
-dGEgYXQgYWxsLCBhbmQgcHJvYmFibHkgbmVlZHMgY29uZmlndXJhdGlvbiBzdGlsbC4gSW4gdGhh
-dCBjYXNlLA0KPj4gdGhlIG1vZGUgbXVzdCBiZSBwcm92aWRlZCBieSB0aGUgZGV2aWNldHJlZSAo
-b3IgdGhlIGRlZmF1bHQgIjciKS4NCj4+IElmIGJpdHMgNDozIGFyZSAiMTEiLCBpdCBoYXMgYWxy
-ZWFkeSBiZWVuIHNldCB1cCB0byBtZWFzdXJlIGl0cyBpbnB1dHMsIGFuZA0KPj4gaXQncyBva2F5
-IHRvIGNvbnRpbnVlIGRvaW5nIGp1c3QgdGhhdCBhbmQgdXNlIHRoZSBjdXJyZW50IHZhbHVlIG9m
-IDI6MA0KPj4gcmVnaXN0ZXIgYXMgZGVmYXVsdCBtb2RlIChpZiB0aGUgZGV2aWNldHJlZSBkaWRu
-J3Qgc3BlY2lmeSBhbnkgbW9kZSBhdCBhbGwpLg0KPj4gDQo+IA0KPiBBdCBmaXJzdCBnbGFuY2Us
-IGFncmVlZCwgdGhvdWdoIGJ5IGRlZmF1bHQgYlszOjRdIGFyZSAwMCwgYW5kIG9ubHkgdGhlDQo+
-IGludGVybmFsIHRlbXBlcmF0dXJlIGlzIG1lYXN1cmVkLiBBY3R1YWxseSwgdGhlIDUgbW9kZSBi
-aXRzIGFyZSBhbGwNCj4gcmVsZXZhbnQgdG8gZGV0ZXJtaW5lIHdoYXQgaXMgbWVhc3VyZWQuIE1h
-eWJlIGl0IHdvdWxkIGJlIGJldHRlciB0byB0YWtlDQo+IGFsbCA1IGJpdHMgaW50byBhY2NvdW50
-IGluc3RlYWQgb2YgYmxpbmRseSBzZXR0aW5nIGJbMzRdOj0xMSBhbmQgYSBzcGVjaWZpYw0KPiBz
-ZXR0aW5nIG9mIGJbMDoyXS4gU3VyZSwgdGhhdCB3b3VsZCBtYWtlIHRoZSBtb2RlIHRhYmxlIGEg
-Yml0IGxhcmdlciwNCj4gYnV0IHRoZW4gbHRjMjk5MF9hdHRyc19lbmFbXSBjb3VsZCBiZSBtYWRl
-IGFuIHUxNiBhcnJheSwgYW5kIGEgdGFibGUgc2l6ZQ0KPiBvZiA2NCBieXRlcyB3b3VsZCBub3Qg
-YmUgdGhhdCBiYWQuDQoNCkkgd291bGQgdGVuZCB0byBhZ3JlZSB0aGF0IGl0IHNob3VsZCBiZSBw
-b3NzaWJsZSB0byBjb25maWd1cmUgYWxsIDUgbW9kZQ0KYml0cyB0aHJvdWdoIHRoZSBkZXZpY2V0
-cmVlLiBXaGF0IEkgd291bGQgcHJvcG9zZSBpcyBhcyBmb2xsb3dzLg0KDQpJZiBhIGRldmljZXRy
-ZWUgbm9kZSBleGlzdHMsIHRoZSBtb2RlIHBhcmFtZXRlcihzPykgYXJlIHJlcXVpcmVkIGFuZCB0
-aGUgDQpjaGlwIGlzIGluaXRpYWxpc2VkLg0KDQpJZiBhIGRldmljZXRyZWUgbm9kZSBkb2Vzbid0
-IGV4aXN0LCBpdCBpcyBhc3N1bWVkIHRoYXQgdGhlIGNoaXAgaGFzIA0KYWxyZWFkeSBiZWVuIGNv
-bmZpZ3VyZWQgKGJ5IHRoZSBCSU9TLCBldGMpLiBUaGUgbW9kZSBpcyByZWFkIGZyb20gdGhlIA0K
-Y2hpcCB0byBzZXQgdGhlIHZpc2liaWxpdHkgb2YgdGhlIHN5c2ZzIGF0dHJpYnV0ZXMuIEluIHRo
-ZSB3b3JzdCBjYXNlLCB3aGVyZSB0aGUgDQpjaGlwIGhhcyBub3QgYmVlbiBjb25maWd1cmVkIGJ5
-IGFub3RoZXIgc291cmNlLCBpdCB3b3VsZCBvbmx5IGJlIHBvc3NpYmxlDQp0byBtZWFzdXJlIHRo
-ZSBpbnRlcm5hbCB0ZW1wZXJhdHVyZSAtLSBidXQgSSB0aGluayB0aGlzIGlzIGFuIGFjY2VwdGFi
-bGUNCmxpbWl0YXRpb24uDQoNClRoZSBvbmx5IGNhc2UgdGhhdCB0aGlzIGRvZXMgbm90IGNvdmVy
-IGlzIGlmIHRoZSBkZXZpY2UgdHJlZSBub2RlIA0KZXhpc3RzIGJ1dCB0aGUgY2hpcCBpcyBleHBl
-Y3RlZCB0byBiZSBjb25maWd1cmVkIGJ5IHNvbWUgb3RoZXIgc291cmNlLiANCk1heWJlIEkgYW0g
-d3JvbmcsIGJ1dCBJIHdvdWxkIG5vdCBleHBlY3QgdGhpcyB0byBiZSBhIHRlcnJpYmx5IGNvbW1v
-bg0Kc2l0dWF0aW9uLg0KDQpXaGF0IGRvIHlvdSB0aGluaz8NCg0KQ2hlZXJzLA0KVG9tDQoNCg==
+Hi Guenter,
+
+On Thu, 17 Nov 2016, Guenter Roeck wrote:
+
+> On 11/17/2016 08:23 AM, Tom Levens wrote:
+>>  Hi Guenter,
+>>
+>>  Thanks for taking the time to review the patch.
+>>
+>>  On Thu, 17 Nov 2016, Guenter Roeck wrote:
+>> 
+>> >  Hi Tom,
+>> > 
+>> >  On 11/17/2016 04:10 AM, Tom Levens wrote:
+>> > >   Conversion from raw values to signed integers has been refactored 
+>> > >   using
+>> > >   the macros in bitops.h.
+>> > > 
+>> >  Please also mention that this fixes a bug in negative temperature 
+>> >  conversions.
+>>
+>>  Yes, of course, I will include the information in v3.
+>> 
+>> > 
+>> > >   Signed-off-by: Tom Levens <tom.levens@cern.ch>
+>> > >   ---
+>> > >    drivers/hwmon/ltc2990.c |   27 ++++++++++-----------------
+>> > >    1 files changed, 10 insertions(+), 17 deletions(-)
+>> > > 
+>> > >   diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+>> > >   index 8f8fe05..0ec4102 100644
+>> > >   --- a/drivers/hwmon/ltc2990.c
+>> > >   +++ b/drivers/hwmon/ltc2990.c
+>> > >   @@ -9,8 +9,12 @@
+>> > >     * This driver assumes the chip is wired as a dual current monitor, 
+>> > >     and
+>> > >     * reports the voltage drop across two series resistors. It also 
+>> > >     reports
+>> > >     * the chip's internal temperature and Vcc power supply voltage.
+>> > >   + *
+>> > >   + * Value conversion refactored
+>> > >   + * by Tom Levens <tom.levens@cern.ch>
+>> > 
+>> >  Kind of unusual to do that for minor changes like this. Imagine if 
+>> >  everyone would do that.
+>> >  The commit log is what gives you credit.
+>>
+>>  Good point, thanks for the hint. I will remove it from v3.
+>> 
+>> > >     */
+>> > > 
+>> > >   +#include <linux/bitops.h>
+>> > >    #include <linux/err.h>
+>> > >    #include <linux/hwmon.h>
+>> > >    #include <linux/hwmon-sysfs.h>
+>> > >   @@ -34,19 +38,10 @@
+>> > >    #define LTC2990_CONTROL_MODE_CURRENT    0x06
+>> > >    #define LTC2990_CONTROL_MODE_VOLTAGE    0x07
+>> > > 
+>> > >   -/* convert raw register value to sign-extended integer in 16-bit 
+>> > >   range */
+>> > >   -static int ltc2990_voltage_to_int(int raw)
+>> > >   -{
+>> > >   -    if (raw & BIT(14))
+>> > >   -        return -(0x4000 - (raw & 0x3FFF)) << 2;
+>> > >   -    else
+>> > >   -        return (raw & 0x3FFF) << 2;
+>> > >   -}
+>> > >   -
+>> > >   /* Return the converted value from the given register in uV or mC */
+>> > >   -static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int 
+>> > >   *result)
+>> > >   +static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, s32 
+>> > >   *result)
+>> > >   {
+>> > >   -    int val;
+>> > >   +    s32 val;
+>> > 
+>> >  Please just leave the variable type alone. it is also used for the 
+>> >  return value
+>> >  from i2c_smbus_read_word_swapped(), which is an int, and changing it to 
+>> >  s32 doesn't really make the code better.
+>>
+>>  According to i2c.h the return type for i2c_smbus_read_word_swapped() is
+>>  s32, which is why I modified it here. But it could be changed back if you
+>>  think it is better to leave it as an int.
+>> 
+> Ah, ok. Good to know. Please leave it anyway, reason being that there is no 
+> real
+> reason to change it. Effectively those are just whitespace changes (unlike 
+> the rest,
+> which is part bug fix, part cleanup).
+>
+>> >  Can you send me a register map for the chip ? I would like to write a 
+>> >  module test.
+>>
+>>  Here is an example register dump:
+>
+> I meant the output of i2cdump (something like "i2cdump -y -f <bus> 
+> <i2c-address> w").
+>
+
+The register map wraps at 0x0F, so I only sent you the first 16 bytes. But 
+the fully expanded form is:
+
+      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+10: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+20: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+30: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+40: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+50: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+60: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+70: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+80: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+90: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+a0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+b0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+c0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+d0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+e0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+f0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+
+Cheers,
+
+> Thanks,
+> Guenter
+>
+>>
+>>  00 00 00 00
+>>  01 90 07 d0
+>>  2c cd 7d 80
+>>  7c 29 20 00
+>>
+>>  The expected values in this case are:
+>>
+>>  in0_input     5000
+>>  in1_input    610
+>>  in2_input    3500
+>>  in3_input    -195
+>>  in4_input    -299
+>>  temp1_input     25000
+>>  temp2_input     125000
+>>  temp3_input    -40000
+>>  curr1_input    38840
+>>  curr2_input    -12428
+>>
+>>  Testing with lltc,mode set to <5>, <6> and <7> should give you all
+>>  measurements.
+>> 
+>> >  Thanks,
+>> >  Guenter
+>>
+>>  Cheers,
+>> 
+>
+>
