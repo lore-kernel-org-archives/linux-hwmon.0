@@ -1,172 +1,167 @@
-Return-path: <tom.levens@cern.ch>
-Date: Fri, 18 Nov 2016 09:18:44 +0100
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-db5eur01on0041.outbound.protection.outlook.com ([104.47.2.41]:42720
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1751689AbcKRMjX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 Nov 2016 07:39:23 -0500
+Date: Fri, 18 Nov 2016 13:23:36 +0100
 From: Tom Levens <tom.levens@cern.ch>
 To: Guenter Roeck <linux@roeck-us.net>
-CC: Tom Levens <tom.levens@cern.ch>, <jdelvare@suse.com>,
-	<robh+dt@kernel.org>, <mark.rutland@arm.com>, <linux-kernel@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] hwmon: ltc2990: refactor value conversion
-In-Reply-To: <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
-Message-ID: <alpine.LRH.2.20.1611171955330.14972@pcbe13573-vm.dyndns.cern.ch>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch> <86c28b4f-c78b-8d3e-5c48-fa42ca614ba4@roeck-us.net> <alpine.LRH.2.20.1611171613250.12237@pcbe13573-vm.dyndns.cern.ch> <1eff12d5-e0f9-aaa0-010d-1ddcccdd6ec9@roeck-us.net>
+CC: Tom Levens <tom.levens@cern.ch>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] hwmon: ltc2990: support all measurement modes
+In-Reply-To: <20161117234024.GA26747@roeck-us.net>
+Message-ID: <alpine.LRH.2.20.1611181316110.5613@pcbe13573-vm.dyndns.cern.ch>
+References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch> <1479384616-12479-3-git-send-email-tom.levens@cern.ch> <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net> <582DEB81.6050806@topic.nl> <20161117185654.GA19338@roeck-us.net> <582E0A6C.5010307@topic.nl>
+ <20161117215454.GA23571@roeck-us.net> <09DCF2E6-3F08-4F0E-837B-55F591008AAB@cern.ch> <20161117234024.GA26747@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"; format=flowed
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: multipart/mixed;
+        boundary="-1920950886-711264204-1479471820=:5613"
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+---1920950886-711264204-1479471820=:5613
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-On Thu, 17 Nov 2016, Guenter Roeck wrote:
 
-> On 11/17/2016 08:23 AM, Tom Levens wrote:
->>  Hi Guenter,
+
+On Fri, 18 Nov 2016, Guenter Roeck wrote:
+
+> On Thu, Nov 17, 2016 at 11:25:30PM +0000, Tom Levens wrote:
+>> On 17 Nov 2016, at 22:54, Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On Thu, Nov 17, 2016 at 08:52:12PM +0100, Mike Looijmans wrote:
+>>>> ﻿On 17-11-2016 19:56, Guenter Roeck wrote:
+>>>>> On Thu, Nov 17, 2016 at 06:40:17PM +0100, Mike Looijmans wrote:
+>>>>>> ﻿On 17-11-16 17:56, Guenter Roeck wrote:
+>>>>>>> On 11/17/2016 04:10 AM, Tom Levens wrote:
+>>>>>>>> Updated version of the ltc2990 driver which supports all measurement
+>>>>>>>> modes available in the chip. The mode can be set through a devicetree
+>>>>>>>> attribute.
+>>>>>>>
+>>>>> [ ... ]
+>>>>>
+>>>>>>>>
+>>>>>>>> static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>>>>>>>                 const struct i2c_device_id *id)
+>>>>>>>> {
+>>>>>>>>    int ret;
+>>>>>>>>    struct device *hwmon_dev;
+>>>>>>>> +    struct ltc2990_data *data;
+>>>>>>>> +    struct device_node *of_node = i2c->dev.of_node;
+>>>>>>>>
+>>>>>>>>    if (!i2c_check_functionality(i2c->adapter,
+>>>>>>>> I2C_FUNC_SMBUS_BYTE_DATA |
+>>>>>>>>                     I2C_FUNC_SMBUS_WORD_DATA))
+>>>>>>>>        return -ENODEV;
+>>>>>>>>
+>>>>>>>> -    /* Setup continuous mode, current monitor */
+>>>>>>>> +    data = devm_kzalloc(&i2c->dev, sizeof(struct ltc2990_data),
+>>>>>>>> GFP_KERNEL);
+>>>>>>>> +    if (unlikely(!data))
+>>>>>>>> +        return -ENOMEM;
+>>>>>>>> +    data->i2c = i2c;
+>>>>>>>> +
+>>>>>>>> +    if (!of_node || of_property_read_u32(of_node, "lltc,mode",
+>>>>>>>> &data->mode))
+>>>>>>>> +        data->mode = LTC2990_CONTROL_MODE_DEFAULT;
+>>>>>>>
+>>>>>>> Iam arguing with myself if we should still do this or if we should read
+>>>>>>> the mode
+>>>>>>> from the chip instead if it isn't provided (after all, it may have been
+>>>>>>> initialized
+>>>>>>> by the BIOS/ROMMON).
+>>>>>>
+>>>>>> I think the mode should be explicitly set, without default. There's no way
+>>>>>> to tell whether the BIOS or bootloader has really set it up or whether the
+>>>>>> chip is just reporting whatever it happened to default to. And given the
+>>>>>> chip's function, it's unlikely a bootloader would want to initialize it.
+>>>>>>
+>>>>> Unlikely but possible. Even if we all agree that the chip should be configured
+>>>>> by the driver, I don't like imposing that view on everyone else.
+>>>>>
+>>>>>> My advice would be to make it a required property. If not set, display an
+>>>>>> error and bail out.
+>>>>>>
+>>>>> It is not that easy, unfortunately. It also has to work on a non-devicetree
+>>>>> system. I would not object to making the property mandatory, but we would
+>>>>> still need to provide non-DT support.
+>>>>>
+>>>>> My "use case" for taking the current mode from the chip if not specified
+>>>>> is that it would enable me to run a module test with all modes. I consider
+>>>>> this extremely valuable.
+>>>>
+>>>> Good point.
+>>>>
+>>>> The chip defaults to measuring internal temperature only, and the mode
+>>>> defaults to "0".
+>>>>
+>>>> Choosing a mode that doesn't match the actual circuitry could be bad for the
+>>>> chip or the board (though unlikely, it'll probably just be useless) since it
+>>>> will actively drive some of the inputs in the temperature modes (which is
+>>>> default for V3/V4 pins).
+>>>>
+>>>> Instead of failing, one could choose to set the default mode to "7", which
+>>>> just measures the 4 voltages, which would be a harmless mode in all cases.
+>>>>
+>>>> As a way to let a bootloader set things up, I think it would be a good check
+>>>> to see if CONTROL register bits 4:3 are set. If "00", the chip is not
+>>>> acquiring data at all, and probably needs configuration still. In that case,
+>>>> the mode must be provided by the devicetree (or the default "7").
+>>>> If bits 4:3 are "11", it has already been set up to measure its inputs, and
+>>>> it's okay to continue doing just that and use the current value of 2:0
+>>>> register as default mode (if the devicetree didn't specify any mode at all).
+>>>>
+>>>
+>>> At first glance, agreed, though by default b[3:4] are 00, and only the
+>>> internal temperature is measured. Actually, the 5 mode bits are all
+>>> relevant to determine what is measured. Maybe it would be better to take
+>>> all 5 bits into account instead of blindly setting b[34]:=11 and a specific
+>>> setting of b[0:2]. Sure, that would make the mode table a bit larger,
+>>> but then ltc2990_attrs_ena[] could be made an u16 array, and a table size
+>>> of 64 bytes would not be that bad.
 >>
->>  Thanks for taking the time to review the patch.
+>> I would tend to agree that it should be possible to configure all 5 mode
+>> bits through the devicetree. What I would propose is as follows.
 >>
->>  On Thu, 17 Nov 2016, Guenter Roeck wrote:
->> 
->> >  Hi Tom,
->> > 
->> >  On 11/17/2016 04:10 AM, Tom Levens wrote:
->> > >   Conversion from raw values to signed integers has been refactored 
->> > >   using
->> > >   the macros in bitops.h.
->> > > 
->> >  Please also mention that this fixes a bug in negative temperature 
->> >  conversions.
+>> If a devicetree node exists, the mode parameter(s?) are required and the
+>> chip is initialised.
 >>
->>  Yes, of course, I will include the information in v3.
->> 
->> > 
->> > >   Signed-off-by: Tom Levens <tom.levens@cern.ch>
->> > >   ---
->> > >    drivers/hwmon/ltc2990.c |   27 ++++++++++-----------------
->> > >    1 files changed, 10 insertions(+), 17 deletions(-)
->> > > 
->> > >   diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
->> > >   index 8f8fe05..0ec4102 100644
->> > >   --- a/drivers/hwmon/ltc2990.c
->> > >   +++ b/drivers/hwmon/ltc2990.c
->> > >   @@ -9,8 +9,12 @@
->> > >     * This driver assumes the chip is wired as a dual current monitor, 
->> > >     and
->> > >     * reports the voltage drop across two series resistors. It also 
->> > >     reports
->> > >     * the chip's internal temperature and Vcc power supply voltage.
->> > >   + *
->> > >   + * Value conversion refactored
->> > >   + * by Tom Levens <tom.levens@cern.ch>
->> > 
->> >  Kind of unusual to do that for minor changes like this. Imagine if 
->> >  everyone would do that.
->> >  The commit log is what gives you credit.
+>> If a devicetree node doesn't exist, it is assumed that the chip has
+>> already been configured (by the BIOS, etc). The mode is read from the
+>> chip to set the visibility of the sysfs attributes. In the worst case, where the
+>> chip has not been configured by another source, it would only be possible
+>> to measure the internal temperature -- but I think this is an acceptable
+>> limitation.
 >>
->>  Good point, thanks for the hint. I will remove it from v3.
->> 
->> > >     */
->> > > 
->> > >   +#include <linux/bitops.h>
->> > >    #include <linux/err.h>
->> > >    #include <linux/hwmon.h>
->> > >    #include <linux/hwmon-sysfs.h>
->> > >   @@ -34,19 +38,10 @@
->> > >    #define LTC2990_CONTROL_MODE_CURRENT    0x06
->> > >    #define LTC2990_CONTROL_MODE_VOLTAGE    0x07
->> > > 
->> > >   -/* convert raw register value to sign-extended integer in 16-bit 
->> > >   range */
->> > >   -static int ltc2990_voltage_to_int(int raw)
->> > >   -{
->> > >   -    if (raw & BIT(14))
->> > >   -        return -(0x4000 - (raw & 0x3FFF)) << 2;
->> > >   -    else
->> > >   -        return (raw & 0x3FFF) << 2;
->> > >   -}
->> > >   -
->> > >   /* Return the converted value from the given register in uV or mC */
->> > >   -static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int 
->> > >   *result)
->> > >   +static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, s32 
->> > >   *result)
->> > >   {
->> > >   -    int val;
->> > >   +    s32 val;
->> > 
->> >  Please just leave the variable type alone. it is also used for the 
->> >  return value
->> >  from i2c_smbus_read_word_swapped(), which is an int, and changing it to 
->> >  s32 doesn't really make the code better.
->>
->>  According to i2c.h the return type for i2c_smbus_read_word_swapped() is
->>  s32, which is why I modified it here. But it could be changed back if you
->>  think it is better to leave it as an int.
->> 
-> Ah, ok. Good to know. Please leave it anyway, reason being that there is no 
-> real
-> reason to change it. Effectively those are just whitespace changes (unlike 
-> the rest,
-> which is part bug fix, part cleanup).
+> SGTM.
 >
->> >  Can you send me a register map for the chip ? I would like to write a 
->> >  module test.
+>> The only case that this does not cover is if the device tree node
+>> exists but the chip is expected to be configured by some other source.
+>> Maybe I am wrong, but I would not expect this to be a terribly common
+>> situation.
 >>
->>  Here is an example register dump:
->
-> I meant the output of i2cdump (something like "i2cdump -y -f <bus> 
-> <i2c-address> w").
->
+>> What do you think?
+>>
+> I would not bother about this case. Just make the mode property mandatory.
 
-The register map wraps at 0x0F, so I only sent you the first 16 bytes. But 
-the fully expanded form is:
+What do you think about making the devicetree property a list of two 
+integers? Something like
 
-      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-10: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-20: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-30: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-40: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-50: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-60: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-70: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-80: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-90: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-a0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-b0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-c0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-d0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-e0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
-f0: 00 00 00 00 01 90 07 d0 2c cd 7d 80 7c 29 20 00
+lltc,mode = <7 3>;
+
+which would set mode[2..0]=7 and mode[4..3]=3.
+
+To me, this is easier to setup from the datasheet than a single integer 
+value. The other option would be to split it into two properties, but I am 
+struggling to come up with suitable names for them -- the datasheet 
+helpfully calls both fields "mode".
 
 Cheers,
-
-> Thanks,
-> Guenter
->
->>
->>  00 00 00 00
->>  01 90 07 d0
->>  2c cd 7d 80
->>  7c 29 20 00
->>
->>  The expected values in this case are:
->>
->>  in0_input     5000
->>  in1_input    610
->>  in2_input    3500
->>  in3_input    -195
->>  in4_input    -299
->>  temp1_input     25000
->>  temp2_input     125000
->>  temp3_input    -40000
->>  curr1_input    38840
->>  curr2_input    -12428
->>
->>  Testing with lltc,mode set to <5>, <6> and <7> should give you all
->>  measurements.
->> 
->> >  Thanks,
->> >  Guenter
->>
->>  Cheers,
->> 
->
->
+---1920950886-711264204-1479471820=:5613--
