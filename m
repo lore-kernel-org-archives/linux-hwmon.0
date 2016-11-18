@@ -1,24 +1,19 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from Galois.linutronix.de ([146.0.238.70]:49678 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754694AbcKQSgZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Nov 2016 13:36:25 -0500
+Return-path: <bigeasy@linutronix.de>
+Date: Fri, 18 Nov 2016 16:09:50 +0100
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To: linux-kernel@vger.kernel.org
-Cc: rt@linuxtronix.de,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 06/20] hwmon/via-cputemp: Convert to hotplug state machine
-Date: Thu, 17 Nov 2016 19:35:27 +0100
-Message-Id: <20161117183541.8588-7-bigeasy@linutronix.de>
-In-Reply-To: <20161117183541.8588-1-bigeasy@linutronix.de>
+Cc: rt@linutronix.de, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH 06/20 v2] hwmon/via-cputemp: Convert to hotplug state machine
+Message-ID: <20161118150940.rkmluouwi5u4zt74@linutronix.de>
 References: <20161117183541.8588-1-bigeasy@linutronix.de>
+ <20161117183541.8588-7-bigeasy@linutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20161117183541.8588-7-bigeasy@linutronix.de>
+List-ID: <linux-hwmon@vger.kernel.org>
 
 Install the callbacks via the state machine and let the core invoke the
 callbacks on the already online CPUs. When the hotplug state is
@@ -30,12 +25,16 @@ Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/hwmon/via-cputemp.c | 61 ++++++++++++-----------------------------=
+v1=E2=80=A6v2: drop `i' in via_cputemp_init() because it is unused, reporte=
+d by
+       kbuild test robot <fengguang.wu@intel.com>=20
+
+ drivers/hwmon/via-cputemp.c | 63 ++++++++++++-----------------------------=
 ----
- 1 file changed, 16 insertions(+), 45 deletions(-)
+ 1 file changed, 17 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
-index 5b9866b1b437..ee5377ecd7a9 100644
+index 5b9866b1b437..d1f209a5feac 100644
 --- a/drivers/hwmon/via-cputemp.c
 +++ b/drivers/hwmon/via-cputemp.c
 @@ -220,7 +220,7 @@ struct pdev_entry {
@@ -93,8 +92,8 @@ u)
  static const struct x86_cpu_id __initconst cputemp_ids[] =3D {
  	{ X86_VENDOR_CENTAUR, 6, 0xa, }, /* C7 A */
  	{ X86_VENDOR_CENTAUR, 6, 0xd, }, /* C7 D */
-@@ -307,6 +287,8 @@ static const struct x86_cpu_id __initconst cputemp_ids[=
-] =3D {
+@@ -307,9 +287,11 @@ static const struct x86_cpu_id __initconst cputemp_ids=
+[] =3D {
  };
  MODULE_DEVICE_TABLE(x86cpu, cputemp_ids);
 =20
@@ -102,7 +101,11 @@ u)
 +
  static int __init via_cputemp_init(void)
  {
- 	int i, err;
+-	int i, err;
++	int err;
+=20
+ 	if (!x86_match_cpu(cputemp_ids))
+ 		return -ENODEV;
 @@ -318,44 +300,33 @@ static int __init via_cputemp_init(void)
  	if (err)
  		goto exit;
@@ -160,4 +163,3 @@ u)
 =20
 --=20
 2.10.2
-
