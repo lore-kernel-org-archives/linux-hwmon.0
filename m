@@ -1,99 +1,50 @@
-Return-path: <tom.levens@cern.ch>
-Date: Fri, 18 Nov 2016 16:36:53 +0100
-From: Tom Levens <tom.levens@cern.ch>
-To: Rob Herring <robh@kernel.org>
-CC: Tom Levens <tom.levens@cern.ch>, <linux@roeck-us.net>,
-	<jdelvare@suse.com>, <mark.rutland@arm.com>, <linux-kernel@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] hwmon: ltc2990: add devicetree binding
-In-Reply-To: <20161118145035.ir46ohk5uqaln6kp@rob-hp-laptop>
-Message-ID: <alpine.LRH.2.20.1611181604150.26466@pcbe13573-vm.dyndns.cern.ch>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch> <1479384616-12479-2-git-send-email-tom.levens@cern.ch> <20161118145035.ir46ohk5uqaln6kp@rob-hp-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"; format=flowed
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from secvs02.rockwellcollins.com ([205.175.225.241]:52317 "EHLO
+        secvs02.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1752174AbcKSEVP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 Nov 2016 23:21:15 -0500
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Jared Bents <jared.bents@rockwellcollins.com>,
+        Matt Weber <matthew.weber@rockwellcollins.com>
+Subject: [PATCH v2] hwmon: (amc6821) sign extension temperature
+Date: Fri, 18 Nov 2016 22:20:38 -0600
+Message-Id: <1479529238-9927-1-git-send-email-matthew.weber@rockwellcollins.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+From: Jared Bents <jared.bents@rockwellcollins.com>
 
-Thanks for taking the time to look at this patch.
+Converts the unsigned temperature values from the i2c read
+to be sign extended as defined in the datasheet so that
+negative temperatures are properly read.
 
-On Fri, 18 Nov 2016, Rob Herring wrote:
-> On Thu, Nov 17, 2016 at 01:10:15PM +0100, Tom Levens wrote:
->> Add a devicetree binding for the ltc2990 hwmon driver.
->>
->> Signed-off-by: Tom Levens <tom.levens@cern.ch>
->> ---
->>  .../devicetree/bindings/hwmon/ltc2990.txt          |   28 ++++++++++++++++++++
->>  1 files changed, 28 insertions(+), 0 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/hwmon/ltc2990.txt
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ltc2990.txt b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
->> new file mode 100644
->> index 0000000..e4040e0
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/ltc2990.txt
->> @@ -0,0 +1,28 @@
->> +ltc2990
->> +
->> +Required properties:
->> +- compatible: Must be "lltc,ltc2990"
->> +- reg: I2C slave address
->> +
->> +Optional properties:
->> +- lltc,mode:
->
-> What determines the mode? If this is something a user will want to
-> control, then it should be a sysfs attr rather than DT prop. If the
-> board design dictates then DT is the right place.
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+v1 -> v2
+ - checkpatch cleanup, removed space between cast
+   and function call.  truncated line over 80chars
 
-It is based on the external connections of the chip. So, I would say that 
-it is board specific.
+---
+ drivers/hwmon/amc6821.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 'mode' is a bit vague, 'lltc,meas-mode' perhaps.
+diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+index 12e851a..eb53e0b 100644
+--- a/drivers/hwmon/amc6821.c
++++ b/drivers/hwmon/amc6821.c
+@@ -188,7 +188,8 @@ static struct amc6821_data *amc6821_update_device(struct device *dev)
+ 			!data->valid) {
+ 
+ 		for (i = 0; i < TEMP_IDX_LEN; i++)
+-			data->temp[i] = i2c_smbus_read_byte_data(client,
++			data->temp[i] = (int8_t)i2c_smbus_read_byte_data(
++				client,
+ 				temp_reg[i]);
+ 
+ 		data->stat1 = i2c_smbus_read_byte_data(client,
+-- 
+1.9.1
 
-Sure thing.
-
-There is also one question which came up in the thread for the patch 3 of 
-this patchset. The full mode for this chip is actually made of two logical 
-values which are written to the bits 4..3 and 2..0 of the register. This 
-version of the patch only configures one of the values, but for the next 
-version we would like to configure both. While combining them into a 
-single integer value would be possible, they are defined as two values in 
-the datasheet. Therefore, I propose using an array, such as:
-
-lltc,meas-mode = <7 3>;
-
-This would set the mode[2..0]=7 and mode[4..3]=3.
-
-What do you think of this? Or should this be split into two properties? 
-However, in this case I struggle come up with names for the properties. 
-The datasheet, helpfully, calls both the fields "mode" and there is no 
-clear difference in their function as both control which measurements are 
-available.
-
-Thanks,
-
->> +A	Sets the chip's measurement mode, defaults to <6> if unset.
->> +
->> +	The following measurements are available in each mode:
->> +
->> +	0: V1, V2, TR2
->> +	1: V1-V2, TR2
->> +	2: V1-V2, V3, V4
->> +	3: TR1, V3, V4
->> +	4: TR1, V3-V4
->> +	5: TR1, TR2
->> +	6: V1-V2, V3-V4
->> +	7: V1, V2, V3, V4
->> +
->> +Example:
->> +
->> +ltc2990@4c {
->> +	compatible = "lltc,ltc2990";
->> +	reg = <0x4c>;
->> +	lltc,mode = <7>;
->> +};
->> --
->> 1.7.1
->>
->
