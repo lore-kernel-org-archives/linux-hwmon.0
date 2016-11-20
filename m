@@ -3,143 +3,74 @@ From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/7] hwmon: (core) Add support for string attributes to new API
-Date: Sun, 20 Nov 2016 09:36:23 -0800
-Message-Id: <1479663388-2000-2-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 3/7] hwmon: (core) Clarify use of chip attributes
+Date: Sun, 20 Nov 2016 09:36:24 -0800
+Message-Id: <1479663388-2000-3-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1479663388-2000-1-git-send-email-linux@roeck-us.net>
 References: <1479663388-2000-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-The new API is so far only suited for data attributes and does not work
-well for string attributes, specifically for the 'label' attributes.
-Provide a separate callback function for those.
+Describing chip attributes as "attributes which apply to the entire chip"
+is confusing. Rephrase to "attributes which are not bound to a specific
+input or output".
+
+Also rename hwmon_chip_attr_templates[] to hwmon_chip_attrs[] to indicate
+that the respective strings strings are not templates but actual attribute
+names.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-Yes, I know, S_IRUGO ran out of favor. However, instead of changing it
-in each file, I'd rather change it with a single patch in all files after
-things calmed down a bit and we can rest assured that this is not just
-a fluke.
+ Documentation/hwmon/hwmon-kernel-api.txt |  2 +-
+ drivers/hwmon/hwmon.c                    | 10 +++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
- drivers/hwmon/hwmon.c | 33 +++++++++++++++++++++++++++++++--
- include/linux/hwmon.h | 19 +++++++++++++++++--
- 2 files changed, 48 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
+index ef9d74947f5c..562ef44adb5e 100644
+--- a/Documentation/hwmon/hwmon-kernel-api.txt
++++ b/Documentation/hwmon/hwmon-kernel-api.txt
+@@ -160,7 +160,7 @@ It contains following fields:
+ * type: The hardware monitoring sensor type.
+   Supported sensor types are
+   * hwmon_chip		A virtual sensor type, used to describe attributes
+-			which apply to the entire chip.
++  *			which are not bound to a specific input or output
+   * hwmon_temp		Temperature sensor
+   * hwmon_in		Voltage sensor
+   * hwmon_curr		Current sensor
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index a74c075a30ec..491231fa0580 100644
+index 491231fa0580..112aae60f51f 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -178,6 +178,22 @@ static ssize_t hwmon_attr_show(struct device *dev,
- 	return sprintf(buf, "%ld\n", val);
+@@ -292,7 +292,11 @@ static struct attribute *hwmon_genattr(struct device *dev,
+ 	return a;
  }
  
-+static ssize_t hwmon_attr_show_string(struct device *dev,
-+				      struct device_attribute *devattr,
-+				      char *buf)
-+{
-+	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-+	char *s;
-+	int ret;
-+
-+	ret = hattr->ops->read_string(dev, hattr->type, hattr->attr,
-+				      hattr->index, &s);
-+	if (ret < 0)
-+		return ret;
-+
-+	return sprintf(buf, "%s\n", s);
-+}
-+
- static ssize_t hwmon_attr_store(struct device *dev,
- 				struct device_attribute *devattr,
- 				const char *buf, size_t count)
-@@ -205,6 +221,17 @@ static int hwmon_attr_base(enum hwmon_sensor_types type)
- 	return 1;
- }
- 
-+static bool is_string_attr(enum hwmon_sensor_types type, u32 attr)
-+{
-+	return (type == hwmon_temp && attr == hwmon_temp_label) ||
-+	       (type == hwmon_in && attr == hwmon_in_label) ||
-+	       (type == hwmon_curr && attr == hwmon_curr_label) ||
-+	       (type == hwmon_power && attr == hwmon_power_label) ||
-+	       (type == hwmon_energy && attr == hwmon_energy_label) ||
-+	       (type == hwmon_humidity && attr == hwmon_humidity_label) ||
-+	       (type == hwmon_fan && attr == hwmon_fan_label);
-+}
-+
- static struct attribute *hwmon_genattr(struct device *dev,
- 				       const void *drvdata,
- 				       enum hwmon_sensor_types type,
-@@ -218,6 +245,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
- 	struct attribute *a;
- 	umode_t mode;
- 	char *name;
-+	bool is_string = is_string_attr(type, attr);
- 
- 	/* The attribute is invisible if there is no template string */
- 	if (!template)
-@@ -227,7 +255,8 @@ static struct attribute *hwmon_genattr(struct device *dev,
- 	if (!mode)
- 		return ERR_PTR(-ENOENT);
- 
--	if ((mode & S_IRUGO) && !ops->read)
-+	if ((mode & S_IRUGO) && ((is_string && !ops->read_string) ||
-+				 (!is_string && !ops->read)))
- 		return ERR_PTR(-EINVAL);
- 	if ((mode & S_IWUGO) && !ops->write)
- 		return ERR_PTR(-EINVAL);
-@@ -252,7 +281,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
- 	hattr->ops = ops;
- 
- 	dattr = &hattr->dev_attr;
--	dattr->show = hwmon_attr_show;
-+	dattr->show = is_string ? hwmon_attr_show_string : hwmon_attr_show;
- 	dattr->store = hwmon_attr_store;
- 
- 	a = &dattr->attr;
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index b6a86aa4a9e2..e68334aede4c 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -298,7 +298,8 @@ enum hwmon_pwm_attributes {
-  *			Channel number
-  *		The function returns the file permissions.
-  *		If the return value is 0, no attribute will be created.
-- * @read:	Read callback. Mandatory if readable attributes are present.
-+ * @read:	Read callback for data attributes. Mandatory if readable
-+ *		data attributes are present.
-  *		Parameters are:
-  *		@dev:	Pointer to hardware monitoring device
-  *		@type:	Sensor type
-@@ -307,7 +308,19 @@ enum hwmon_pwm_attributes {
-  *			Channel number
-  *		@val:	Pointer to returned value
-  *		The function returns 0 on success or a negative error number.
-- * @write:	Write callback. Mandatory if writeable attributes are present.
-+ * @read_string:
-+ *		Read callback for string attributes. Mandatory if string
-+ *		attributes are present.
-+ *		Parameters are:
-+ *		@dev:	Pointer to hardware monitoring device
-+ *		@type:	Sensor type
-+ *		@attr:	Sensor attribute
-+ *		@channel:
-+ *			Channel number
-+ *		@str:	Pointer to returned string
-+ *		The function returns 0 on success or a negative error number.
-+ * @write:	Write callback for data attributes. Mandatory if writeable
-+ *		data attributes are present.
-  *		Parameters are:
-  *		@dev:	Pointer to hardware monitoring device
-  *		@type:	Sensor type
-@@ -322,6 +335,8 @@ struct hwmon_ops {
- 			      u32 attr, int channel);
- 	int (*read)(struct device *dev, enum hwmon_sensor_types type,
- 		    u32 attr, int channel, long *val);
-+	int (*read_string)(struct device *dev, enum hwmon_sensor_types type,
-+		    u32 attr, int channel, char **str);
- 	int (*write)(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long val);
+-static const char * const hwmon_chip_attr_templates[] = {
++/*
++ * Chip attributes are not attribute templates but actual sysfs attributes.
++ * See hwmon_genattr() for special handling.
++ */
++static const char * const hwmon_chip_attrs[] = {
+ 	[hwmon_chip_temp_reset_history] = "temp_reset_history",
+ 	[hwmon_chip_in_reset_history] = "in_reset_history",
+ 	[hwmon_chip_curr_reset_history] = "curr_reset_history",
+@@ -429,7 +433,7 @@ static const char * const hwmon_pwm_attr_templates[] = {
  };
+ 
+ static const char * const *__templates[] = {
+-	[hwmon_chip] = hwmon_chip_attr_templates,
++	[hwmon_chip] = hwmon_chip_attrs,
+ 	[hwmon_temp] = hwmon_temp_attr_templates,
+ 	[hwmon_in] = hwmon_in_attr_templates,
+ 	[hwmon_curr] = hwmon_curr_attr_templates,
+@@ -441,7 +445,7 @@ static const char * const *__templates[] = {
+ };
+ 
+ static const int __templates_size[] = {
+-	[hwmon_chip] = ARRAY_SIZE(hwmon_chip_attr_templates),
++	[hwmon_chip] = ARRAY_SIZE(hwmon_chip_attrs),
+ 	[hwmon_temp] = ARRAY_SIZE(hwmon_temp_attr_templates),
+ 	[hwmon_in] = ARRAY_SIZE(hwmon_in_attr_templates),
+ 	[hwmon_curr] = ARRAY_SIZE(hwmon_curr_attr_templates),
 -- 
 2.5.0
