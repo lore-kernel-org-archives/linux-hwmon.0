@@ -1,202 +1,103 @@
-Return-path: <tglx@linutronix.de>
-Message-Id: <20161122173731.596136623@linutronix.de>
-Date: Tue, 22 Nov 2016 17:42:02 -0000
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from Galois.linutronix.de ([146.0.238.70]:60370 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755568AbcKVRov (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 22 Nov 2016 12:44:51 -0500
+Message-Id: <20161122173731.839189942@linutronix.de>
+Date: Tue, 22 Nov 2016 17:42:05 -0000
 From: Thomas Gleixner <tglx@linutronix.de>
 To: LKML <linux-kernel@vger.kernel.org>
-Cc: Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- Sebastian Siewior <bigeasy@linutronix.de>,
- Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: [patch 2/6] hwmon/coretemp: Simplify sibling management
+Cc: Fenghua Yu <fenghua.yu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: [patch 5/6] hwmon/coretemp: Use proper error codes in cpu online
+ callback
 References: <20161122173622.771252945@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=ISO-8859-15
 Content-Disposition: inline;
- filename=hwmon-coretemp--Simplify-sibling-management.patch
-List-ID: <linux-hwmon@vger.kernel.org>
+ filename=hwmon-coretemp--Use-proper-error-codes-in-cpu-online-callback.patch
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The coretemp driver provides a sysfs interface per physical core. If
-hyperthreading is enabled and one of the siblings goes offline the sysfs
-interface is removed and then immeditately created again for the
-sibling. The only difference of them is the target cpu for the
-rdmsr_on_cpu() in the sysfs show functions.
+The cpu online callback returns success unconditionally even when the
+device has no support, micro code mismatches or device allocation fails.
+Only if CPU_HOTPLUG is disabled, the init function checks whether the
+device list is empty and removes the driver.
 
-It's way simpler to keep a cpumask of cpus which are active in a package
-and only remove the interface when the last sibling goes offline. Otherwise
-just move the target cpu for the sysfs show functions to the still online
-sibling.
+This does not make sense. If CPU HOTPLUG is enabled then there is no point
+to keep the driver around when it failed to initialize on the already
+online cpus. The chance that not yet online CPUs will provide a functional
+interface later is very close to zero.
+
+Add proper error return codes, so the setup of the cpu hotplug states fails
+when the device cannot be initialized and remove all the magic cruft.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- drivers/hwmon/coretemp.c |   95 ++++++++++++++++++-----------------------------
- 1 file changed, 38 insertions(+), 57 deletions(-)
+ drivers/hwmon/coretemp.c |   24 +++++-------------------
+ 1 file changed, 5 insertions(+), 19 deletions(-)
 
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
-@@ -103,9 +103,10 @@ struct temp_data {
- 
- /* Platform Data per Physical CPU */
- struct platform_data {
--	struct device *hwmon_dev;
--	u16 phys_proc_id;
--	struct temp_data *core_data[MAX_CORE_DATA];
-+	struct device		*hwmon_dev;
-+	u16			phys_proc_id;
-+	struct cpumask		cpumask;
-+	struct temp_data	*core_data[MAX_CORE_DATA];
- 	struct device_attribute name_attr;
- };
- 
-@@ -491,16 +492,6 @@ static int create_core_data(struct platf
- 	if (attr_no > MAX_CORE_DATA - 1)
- 		return -ERANGE;
- 
--	/*
--	 * Provide a single set of attributes for all HT siblings of a core
--	 * to avoid duplicate sensors (the processor ID and core ID of all
--	 * HT siblings of a core are the same).
--	 * Skip if a HT sibling of this core is already registered.
--	 * This is not an error.
--	 */
--	if (pdata->core_data[attr_no] != NULL)
+@@ -662,12 +662,12 @@ static int coretemp_cpu_online(unsigned
+ 	 * without thermal sensors will be filtered out.
+ 	 */
+ 	if (!cpu_has(c, X86_FEATURE_DTHERM))
 -		return 0;
--
- 	tdata = init_temp_data(cpu, pkg_flag);
- 	if (!tdata)
- 		return -ENOMEM;
-@@ -665,24 +656,11 @@ static void coretemp_device_remove(unsig
- 	mutex_unlock(&pdev_list_mutex);
- }
++		return -ENODEV;
  
--static int get_online_core_in_package(struct platform_data *pdata)
--{
--	int i;
--
--	/* Find online cores, except pkgtemp data */
--	for (i = MAX_CORE_DATA - 1; i >= 0; --i) {
--		if (pdata->core_data[i] &&
--			!pdata->core_data[i]->is_pkg_data) {
--			return pdata->core_data[i]->cpu;
--		}
--	}
--	return nr_cpu_ids;
--}
--
- static void get_core_online(unsigned int cpu)
- {
--	struct cpuinfo_x86 *c = &cpu_data(cpu);
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
-+	struct cpuinfo_x86 *c = &cpu_data(cpu);
-+	struct platform_data *pdata;
- 	int err;
+ 	if (!pdev) {
+ 		/* Check the microcode version of the CPU */
+ 		if (chk_ucode_version(cpu))
+-			return 0;
++			return -EINVAL;
  
- 	/*
-@@ -707,6 +685,8 @@ static void get_core_online(unsigned int
+ 		/*
+ 		 * Alright, we have DTS support.
+@@ -677,7 +677,7 @@ static int coretemp_cpu_online(unsigned
+ 		 */
  		err = coretemp_device_add(cpu);
  		if (err)
- 			return;
-+
-+		pdev = coretemp_get_pdev(cpu);
+-			return 0;
++			return err;
+ 
+ 		pdev = coretemp_get_pdev(cpu);
  		/*
- 		 * Check whether pkgtemp support is available.
- 		 * If so, add interfaces for pkgtemp.
-@@ -714,60 +694,60 @@ static void get_core_online(unsigned int
- 		if (cpu_has(c, X86_FEATURE_PTS))
- 			coretemp_add_core(cpu, 1);
- 	}
-+
-+	pdata = platform_get_drvdata(pdev);
- 	/*
--	 * Physical CPU device already exists.
--	 * So, just add interfaces for this core.
-+	 * Check whether a thread sibling is already online. If not add the
-+	 * interface for this CPU core.
- 	 */
--	coretemp_add_core(cpu, 0);
-+	if (!cpumask_intersects(&pdata->cpumask, topology_sibling_cpumask(cpu)))
-+		coretemp_add_core(cpu, 0);
-+
-+	cpumask_set_cpu(cpu, &pdata->cpumask);
+@@ -782,28 +782,14 @@ static int __init coretemp_init(void)
+ 	if (err)
+ 		return err;
+ 
+-	get_online_cpus();
+ 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
+ 				coretemp_cpu_online, coretemp_cpu_offline);
+ 	if (err < 0)
+-		goto exit_driver_unreg;
++		goto outdrv;
+ 	coretemp_hp_online = err;
+-
+-#ifndef CONFIG_HOTPLUG_CPU
+-	if (list_empty(&pdev_list)) {
+-		err = -ENODEV;
+-		goto exit_hp_unreg;
+-	}
+-#endif
+-	put_online_cpus();
+ 	return 0;
+ 
+-#ifndef CONFIG_HOTPLUG_CPU
+-exit_hp_unreg:
+-	cpuhp_remove_state(coretemp_hp_online);
+-	put_online_cpus();
+-#endif
+-exit_driver_unreg:
++outdrv:
+ 	platform_driver_unregister(&coretemp_driver);
+ 	return err;
  }
- 
- static void put_core_offline(unsigned int cpu)
- {
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
--	struct platform_data *pdata;
-+	struct platform_data *pd;
- 	struct temp_data *tdata;
--	int i, indx, target;
-+	int indx, target;
- 
- 	/* If the physical CPU device does not exist, just return */
- 	if (!pdev)
- 		return;
- 
--	pdata = platform_get_drvdata(pdev);
--
--	indx = TO_ATTR_NO(cpu);
--
- 	/* The core id is too big, just return */
-+	indx = TO_ATTR_NO(cpu);
- 	if (indx > MAX_CORE_DATA - 1)
- 		return;
- 
--	if (pdata->core_data[indx] && pdata->core_data[indx]->cpu == cpu)
--		coretemp_remove_core(pdata, indx);
-+	pd = platform_get_drvdata(pdev);
-+	tdata = pd->core_data[indx];
-+
-+	cpumask_clear_cpu(cpu, &pd->cpumask);
- 
- 	/*
--	 * If a HT sibling of a core is taken offline, but another HT sibling
--	 * of the same core is still online, register the alternate sibling.
--	 * This ensures that exactly one set of attributes is provided as long
--	 * as at least one HT sibling of a core is online.
--	 */
--	for_each_sibling(i, cpu) {
--		if (i != cpu) {
--			get_core_online(i);
--			/*
--			 * Display temperature sensor data for one HT sibling
--			 * per core only, so abort the loop after one such
--			 * sibling has been found.
--			 */
--			break;
--		}
-+	 * If this is the last thread sibling, remove the CPU core
-+	 * interface, If there is still a sibling online, transfer the
-+	 * target cpu of that core interface to it.
-+	 */
-+	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
-+	if (target >= nr_cpu_ids) {
-+		coretemp_remove_core(pd, indx);
-+	} else if (tdata && tdata->cpu == cpu) {
-+		mutex_lock(&tdata->update_lock);
-+		tdata->cpu = target;
-+		mutex_unlock(&tdata->update_lock);
- 	}
-+
- 	/*
- 	 * If all cores in this pkg are offline, remove the device.
- 	 * coretemp_device_remove calls unregister_platform_device,
- 	 * which in turn calls coretemp_remove. This removes the
- 	 * pkgtemp entry and does other clean ups.
- 	 */
--	target = get_online_core_in_package(pdata);
--	if (target >= nr_cpu_ids) {
-+	if (cpumask_empty(&pd->cpumask)) {
- 		coretemp_device_remove(cpu);
- 		return;
- 	}
-@@ -775,8 +755,9 @@ static void put_core_offline(unsigned in
- 	 * Check whether this core is the target for the package
- 	 * interface. We need to assign it to some other cpu.
- 	 */
--	tdata = pdata->core_data[PKG_SYSFS_ATTR_NO];
-+	tdata = pd->core_data[PKG_SYSFS_ATTR_NO];
- 	if (tdata && tdata->cpu == cpu) {
-+		target = cpumask_first(&pd->cpumask);
- 		mutex_lock(&tdata->update_lock);
- 		tdata->cpu = target;
- 		mutex_unlock(&tdata->update_lock);
+
+
