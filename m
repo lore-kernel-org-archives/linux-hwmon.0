@@ -1,35 +1,55 @@
-Return-path: <bigeasy@linutronix.de>
-Date: Mon, 21 Nov 2016 23:35:06 +0100
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, rt@linuxtronix.de,
-	Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [04/20] hwmon/coretemp: Convert to hotplug state machine
-Message-ID: <20161121223506.3lew5tk3rbrbiex2@linutronix.de>
-References: <20161117183541.8588-5-bigeasy@linutronix.de>
- <20161120223044.GA6350@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-qt0-f195.google.com ([209.85.216.195]:33969 "EHLO
+        mail-qt0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755618AbcKVRK5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 22 Nov 2016 12:10:57 -0500
+Received: by mail-qt0-f195.google.com with SMTP id l20so3338171qta.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Nov 2016 09:10:57 -0800 (PST)
+Received: from mail-qk0-f182.google.com (mail-qk0-f182.google.com. [209.85.220.182])
+        by smtp.gmail.com with ESMTPSA id 33sm14193840qtq.1.2016.11.22.09.10.55
+        for <linux-hwmon@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Nov 2016 09:10:55 -0800 (PST)
+Received: by mail-qk0-f182.google.com with SMTP id n204so34160115qke.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Nov 2016 09:10:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20161120223044.GA6350@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <CAJX_Q+1iPpLnbLYB6=9gWR2EEwek5VvioBCZB6gYsChOZ3EyVA@mail.gmail.com>
+References: <CAJX_Q+1iPpLnbLYB6=9gWR2EEwek5VvioBCZB6gYsChOZ3EyVA@mail.gmail.com>
+From: Lucas Tanure <tanure@linux.com>
+Date: Tue, 22 Nov 2016 17:10:54 +0000
+Message-ID: <CAJX_Q+0bDQmHYpfkK3RGTmWdJoi0RAB+u=5M9WtgyoKdeGXdrQ@mail.gmail.com>
+Subject: Re: IEEE-754 Float to int
+To: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 2016-11-20 14:30:55 [-0800], Guenter Roeck wrote:
-> Install, modprobe, modprobe -r, modprobe,
-> 
-> [24078.179118] ------------[ cut here ]------------
-> [24078.179124] WARNING: CPU: 0 PID: 14 at fs/sysfs/dir.c:31 sysfs_warn_dup+0x6e/0x80
-> [24078.179125] sysfs: cannot create duplicate filename
-> '/devices/platform/coretemp.0'
-> 
-> and many more of those.
-> 
-> I can not test the other hwmon drivers in this series, but I would assume
-> that they have the same problem.
+Hi,
 
-I managed to trigger this. I will take a look.
+My hardware gives me the board temperature as a float 32bits.
+So, at some point my hardware gives me a 32bit IEEE-754 float, like this :
 
-> Guenter
+regmap_read(device->regmap, ADDR0, &temp);
+value = temp << 16;
+regmap_read(device->regmap, ADDR1, &temp);
+value |= temp;
 
-Sebastian
+So, value has a 32bit float now, and I would like to print over hwmon
+sysfs API. Like :
+
+temp
+Current temperature as reported by thermal zone (sensor).
+Unit: millidegree Celsius
+RO, Required
+
+
+Read 26.92387 --> Read 26923 at /sys/class/hwmon/hwmon0/temp0_input
+Simple, no float operations.
+
+How I can do it ?
+
+Thanks!
+
+--
+Lucas Tanure
