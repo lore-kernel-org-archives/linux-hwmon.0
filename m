@@ -1,49 +1,72 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mailcluster2.itpays.net ([193.107.29.212]:45971 "EHLO
+Received: from mailcluster2.itpays.net ([193.107.29.212]:35665 "EHLO
         mailcluster2.itpays.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934759AbcKWJ1d (ORCPT
+        with ESMTP id S934582AbcKWLmd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Nov 2016 04:27:33 -0500
+        Wed, 23 Nov 2016 06:42:33 -0500
 Received: from [10.10.48.149] (unknown [195.159.183.42])
-        by mailcluster2.itpays.net (Postfix) with ESMTPA id DA3683199579
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Nov 2016 09:44:23 +0100 (CET)
-From: Martin Etnestad <martin.etnestad@appeartv.com>
-Subject: Concerns re: sensor count in adt7470_read_temperatures()
+        by mailcluster2.itpays.net (Postfix) with ESMTPA id 22FF03199579
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Nov 2016 12:34:58 +0100 (CET)
 To: linux-hwmon@vger.kernel.org
-Message-ID: <02d36c1c-0939-27fd-457c-ba07256bcb1f@appeartv.com>
-Date: Wed, 23 Nov 2016 09:44:23 +0100
+From: Martin Etnestad <martin.etnestad@appeartv.com>
+Subject: hwmon: (adt7470) fix checking of num_temp_sensors
+Message-ID: <b4aaa8a9-6a8b-6d5f-1aac-718e46fbcc7d@appeartv.com>
+Date: Wed, 23 Nov 2016 12:34:57 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi,
+The ADT7470 driver uses num_temp_sensors to check whether or not it
+actually needs to read the temperature registers. However, the check
+currently has a broken comparison: "num_temp_sensors >= 0" instead of
+"num_temp_sensors == 0".
 
-I believe I have found an issue with adt7470_read_temperatures() and am 
-looking for input from anyone familiar with the driver.
+This causes the driver to only read the temperature registers _once_
+because num_temp_sensors gets set to a non-negative number after the
+check, in the same function.
 
-The sensor counting in said function treats a temperature reading of 
-0x00 as meaning there is no sensor.
-It happens on this line:
-https://github.com/groeck/linux/blob/master/drivers/hwmon/adt7470.c#L253
+Additionally, the check is currently done _after_ the measurement
+sequence has been completed. The check should be done before the
+measurement sequence is initiated, as it can be skipped altogether if
+num_temp_sensors is 0.
 
-The device manual states that 0x00 is the default value for the 
-temperature registers, so I would indeed expect that value if there is 
-no corresponding sensor.
-But it also seems clear to me that 0x00 is in fact a valid temperature 
-reading, and one that we must allow for.
-For reference, see " TEMPERATURE DATA FORMAT" on page 14 of the device 
-manual here:
-http://www.analog.com/media/en/technical-documentation/data-sheets/ADT7470.pdf
+This patch fixes the comparison and moves the check.
 
-Hence, I think the safest approach is to _not_ attempt to count/detect 
-the number of sensors, but simply initialize the count to the maximum 
-(ADT7470_TEMP_COUNT) in adt7470_probe().
-The number of sensors can be explicitly set after probe.
+Signed-off-by: Martin Etnestad <martin.etnestad@appeartv.com>
+---
+  drivers/hwmon/adt7470.c | 8 ++++----
+  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Am I missing something?
-Would this be an acceptable change?
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index f5da39a..d1f9a54 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -201,6 +201,10 @@ static int adt7470_read_temperatures(struct 
+i2c_client *client,
+      int i;
+      u8 cfg, pwm[4], pwm_cfg[2];
 
-     -Martin
++    /* only read sensors if we have to */
++    if (data->num_temp_sensors == 0)
++        return 0;
++
+      /* save pwm[1-4] config register */
+      pwm_cfg[0] = i2c_smbus_read_byte_data(client, ADT7470_REG_PWM_CFG(0));
+      pwm_cfg[1] = i2c_smbus_read_byte_data(client, ADT7470_REG_PWM_CFG(2));
+@@ -243,10 +247,6 @@ static int adt7470_read_temperatures(struct 
+i2c_client *client,
+          return -EAGAIN;
+      }
+
+-    /* Only count fans if we have to */
+-    if (data->num_temp_sensors >= 0)
+-        return 0;
+-
+      for (i = 0; i < ADT7470_TEMP_COUNT; i++) {
+          data->temp[i] = i2c_smbus_read_byte_data(client,
+                          ADT7470_TEMP_REG(i));
+-- 
+2.7.4
 
