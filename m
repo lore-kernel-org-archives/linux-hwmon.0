@@ -1,50 +1,49 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49418 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751454AbcKVUdv (ORCPT
+Received: from mailcluster2.itpays.net ([193.107.29.212]:45971 "EHLO
+        mailcluster2.itpays.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S934759AbcKWJ1d (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Nov 2016 15:33:51 -0500
-Date: Tue, 22 Nov 2016 12:33:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Lucas Tanure <tanure@linux.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: IEEE-754 Float to int
-Message-ID: <20161122203349.GA26020@roeck-us.net>
-References: <CAJX_Q+1iPpLnbLYB6=9gWR2EEwek5VvioBCZB6gYsChOZ3EyVA@mail.gmail.com>
- <CAJX_Q+0bDQmHYpfkK3RGTmWdJoi0RAB+u=5M9WtgyoKdeGXdrQ@mail.gmail.com>
+        Wed, 23 Nov 2016 04:27:33 -0500
+Received: from [10.10.48.149] (unknown [195.159.183.42])
+        by mailcluster2.itpays.net (Postfix) with ESMTPA id DA3683199579
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Nov 2016 09:44:23 +0100 (CET)
+From: Martin Etnestad <martin.etnestad@appeartv.com>
+Subject: Concerns re: sensor count in adt7470_read_temperatures()
+To: linux-hwmon@vger.kernel.org
+Message-ID: <02d36c1c-0939-27fd-457c-ba07256bcb1f@appeartv.com>
+Date: Wed, 23 Nov 2016 09:44:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJX_Q+0bDQmHYpfkK3RGTmWdJoi0RAB+u=5M9WtgyoKdeGXdrQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 22, 2016 at 05:10:54PM +0000, Lucas Tanure wrote:
-> Hi,
-> 
-> My hardware gives me the board temperature as a float 32bits.
-> So, at some point my hardware gives me a 32bit IEEE-754 float, like this :
-> 
-> regmap_read(device->regmap, ADDR0, &temp);
-> value = temp << 16;
-> regmap_read(device->regmap, ADDR1, &temp);
-> value |= temp;
-> 
-> So, value has a 32bit float now, and I would like to print over hwmon
-> sysfs API. Like :
-> 
-> temp
-> Current temperature as reported by thermal zone (sensor).
-> Unit: millidegree Celsius
-> RO, Required
-> 
-> 
-> Read 26.92387 --> Read 26923 at /sys/class/hwmon/hwmon0/temp0_input
-> Simple, no float operations.
-> 
-> How I can do it ?
-> 
-Only idea I have is to write a conversion function.
-Note that the attribute name should be temp1_input.
+Hi,
 
-Guenter
+I believe I have found an issue with adt7470_read_temperatures() and am 
+looking for input from anyone familiar with the driver.
+
+The sensor counting in said function treats a temperature reading of 
+0x00 as meaning there is no sensor.
+It happens on this line:
+https://github.com/groeck/linux/blob/master/drivers/hwmon/adt7470.c#L253
+
+The device manual states that 0x00 is the default value for the 
+temperature registers, so I would indeed expect that value if there is 
+no corresponding sensor.
+But it also seems clear to me that 0x00 is in fact a valid temperature 
+reading, and one that we must allow for.
+For reference, see " TEMPERATURE DATA FORMAT" on page 14 of the device 
+manual here:
+http://www.analog.com/media/en/technical-documentation/data-sheets/ADT7470.pdf
+
+Hence, I think the safest approach is to _not_ attempt to count/detect 
+the number of sensors, but simply initialize the count to the maximum 
+(ADT7470_TEMP_COUNT) in adt7470_probe().
+The number of sensors can be explicitly set after probe.
+
+Am I missing something?
+Would this be an acceptable change?
+
+     -Martin
+
