@@ -1,899 +1,579 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:33666 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752434AbcKZW1A (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Nov 2016 17:27:00 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: Juerg Haefliger <juergh@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (dme1737) Convert to use devm_hwmon_device_register_with_groups
-Date: Sat, 26 Nov 2016 14:26:49 -0800
-Message-Id: <1480199209-28532-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <john@jmuir.com>
+From: John Muir <john@jmuir.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: John Muir <john@jmuir.com>
+Subject: [PATCH 1/3] hwmon: Add Texas Instruments TMP108 temperature sensor driver.
+Date: Sat, 26 Nov 2016 21:15:35 -0800
+Message-Id: <1480223737-82080-2-git-send-email-john@jmuir.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Reduce code size and simplify code.
+Add support for the TI TMP108 temperature sensor with some device
+configuration parameters.
 
-Before:
-text	   data	    bss	    dec	    hex	filename
-46341	  52528	   8064	 106933	  1a1b5	drivers/hwmon/dme1737.o
-
-After:
-text	   data	    bss	    dec	    hex	filename
-39167	  35768	    384	  75319	  12637	drivers/hwmon/dme1737.o
-
-A slight behavioral change is that the pwm attributes now always show
-write permissions, but still return -EPERM if an attempt is made to write
-into a pwm attribute but the pwm control is not in manual mode.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: John Muir <john@jmuir.com>
 ---
- drivers/hwmon/dme1737.c | 596 ++++++++++++------------------------------------
- 1 file changed, 152 insertions(+), 444 deletions(-)
+ Documentation/devicetree/bindings/hwmon/tmp108.txt |  27 ++
+ Documentation/hwmon/tmp108                         |  38 ++
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/tmp108.c                             | 429 +++++++++++++++++++++
+ 5 files changed, 506 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/tmp108.txt
+ create mode 100644 Documentation/hwmon/tmp108
+ create mode 100644 drivers/hwmon/tmp108.c
 
-diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
-index 8763c4a8280c..9f6ef9650eec 100644
---- a/drivers/hwmon/dme1737.c
-+++ b/drivers/hwmon/dme1737.c
-@@ -211,8 +211,6 @@ static const u8 DME1737_BIT_ALARM_FAN[] = {10, 11, 12, 13, 22, 23};
- 
- struct dme1737_data {
- 	struct i2c_client *client;	/* for I2C devices only */
--	struct device *hwmon_dev;
--	const char *name;
- 	unsigned int addr;		/* for ISA devices only */
- 
- 	struct mutex update_lock;
-@@ -222,6 +220,8 @@ struct dme1737_data {
- 	enum chips type;
- 	const int *in_nominal;		/* pointer to IN_NOMINAL array */
- 
-+	const struct attribute_group *groups[8];
+diff --git a/Documentation/devicetree/bindings/hwmon/tmp108.txt b/Documentation/devicetree/bindings/hwmon/tmp108.txt
+new file mode 100644
+index 0000000..210af63
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/tmp108.txt
+@@ -0,0 +1,27 @@
++TMP108 temperature sensor
++-------------------------
 +
- 	u8 vid;
- 	u8 pwm_rr_en;
- 	u32 has_features;
-@@ -1263,7 +1263,6 @@ static ssize_t show_pwm(struct device *dev, struct device_attribute *attr,
- }
++This device supports I2C only.
++
++Requires node properties:
++- compatible : "ti,tmp108"
++- reg : the I2C address of the device. This is 0x48, 0x49, 0x4a, or 0x4b.
++
++Optional node properties:
++- ti,thermostat-mode-comparitor : (boolean) select the comparitor mode for the
++      thermostat rather than the default interrupt-mode.
++- ti,alert-active-high : (boolean) make the alert pin active-high instead of
++      the default active-low.
++- ti,conversion-rate-cHz : (integer, cHz) select the conversion frequency for
++      continuous mode, in centi-Hz: 25, 100 (default), 400, or 1600.
++- ti,hysteresis : (integer, C) select the hysteresis value: 0, 1, 2, or 4
++      (celcius).
++
++Example:
++	tmp108@48 {
++		compatible = "ti,tmp108";
++		reg = <0x48>;
++		ti,alert-active-high;
++		ti,hysteresis = <2>;
++		ti,conversion-rate-cHz = <25>;
++	};
+diff --git a/Documentation/hwmon/tmp108 b/Documentation/hwmon/tmp108
+new file mode 100644
+index 0000000..ef2e9a3
+--- /dev/null
++++ b/Documentation/hwmon/tmp108
+@@ -0,0 +1,38 @@
++Kernel driver tmp108
++====================
++
++Supported chips:
++  * Texas Instruments TMP108
++    Prefix: 'tmp108'
++    Addresses scanned: none
++    Datasheet: http://www.ti.com/product/tmp108
++
++Author:
++	John Muir <john@jmuir.com>
++
++Description
++-----------
++
++The Texas Instruments TMP108 implements one temperature sensor. An alert pin
++can be set when temperatures exceed minimum or maximum values plus or minus a
++hysteresis value.
++
++The sensor is accurate to 0.75C over the range of -25 to +85 C, and to 1.0
++degree from -40 to +125 C. Resolution of the sensor is 0.0625 degree. The
++operating temperature has a minimum of -55 C and a maximum of +150 C.
++Hysteresis values can be set to 0, 1, 2, or 4C.
++
++The TMP108 has a programmable update rate that can select between 8, 4, 1, and
++0.5 Hz.
++
++By default the TMP108 reads the temperature continuously. To conserve power,
++the TMP108 has a one-shot mode where the device is normally shut-down. When a
++one shot is requested the temperature is read, the result can be retrieved,
++and then the device is shut down automatically. (This driver only supports
++continuous mode.)
++
++The driver provides the common sysfs-interface for temperatures (see
++Documentation/hwmon/sysfs-interface under Temperatures).
++
++See Documentation/devicetree/bindings/hwmon/tmp108.txt for configuration
++properties.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 45cef3d..4c173de 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1591,6 +1591,17 @@ config SENSORS_TMP103
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called tmp103.
  
- static struct attribute *dme1737_pwm_chmod_attr[];
--static void dme1737_chmod_file(struct device*, struct attribute*, umode_t);
- 
- static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- 		       const char *buf, size_t count)
-@@ -1283,6 +1282,11 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- 	mutex_lock(&data->update_lock);
- 	switch (fn) {
- 	case SYS_PWM:
-+		/* pwm value only writeable in manual mode */
-+		if (PWM_EN_FROM_REG(data->pwm_config[ix]) != 1) {
-+			count = -EPERM;
-+			break;
++config SENSORS_TMP108
++	tristate "Texas Instruments TMP108"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  If you say yes here you get support for Texas Instruments TMP108
++	  sensor chips.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called tmp108.
++
+ config SENSORS_TMP401
+ 	tristate "Texas Instruments TMP401 and compatibles"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index aecf4ba..51e5256 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -152,6 +152,7 @@ obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+ obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
+ obj-$(CONFIG_SENSORS_TMP102)	+= tmp102.o
+ obj-$(CONFIG_SENSORS_TMP103)	+= tmp103.o
++obj-$(CONFIG_SENSORS_TMP108)	+= tmp108.o
+ obj-$(CONFIG_SENSORS_TMP401)	+= tmp401.o
+ obj-$(CONFIG_SENSORS_TMP421)	+= tmp421.o
+ obj-$(CONFIG_SENSORS_TWL4030_MADC)+= twl4030-madc-hwmon.o
+diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+new file mode 100644
+index 0000000..da64517
+--- /dev/null
++++ b/drivers/hwmon/tmp108.c
+@@ -0,0 +1,429 @@
++/* Texas Instruments TMP108 SMBus temperature sensor driver
++ *
++ * Copyright (C) 2016 John Muir <john@jmuir.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/slab.h>
++#include <linux/i2c.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/err.h>
++#include <linux/mutex.h>
++#include <linux/device.h>
++#include <linux/jiffies.h>
++#include <linux/regmap.h>
++#include <linux/thermal.h>
++#include <linux/of.h>
++
++#define	DRIVER_NAME "tmp108"
++
++#define	TMP108_REG_TEMP		0x00
++#define	TMP108_REG_CONF		0x01
++#define	TMP108_REG_TLOW		0x02
++#define	TMP108_REG_THIGH	0x03
++
++#define TMP108_TEMP_REG_COUNT	3
++
++#define TMP108_TEMP_MIN_MC	-50000 /* Minimum millicelcius. */
++#define TMP108_TEMP_MAX_MC	127937 /* Maximum millicelcius. */
++
++/* Configuration register bits.
++ * Note: these bit definitions are byte swapped.
++ */
++#define TMP108_CONF_M0		0x0100 /* Sensor mode. */
++#define TMP108_CONF_M1		0x0200
++#define TMP108_CONF_TM		0x0400 /* Thermostat mode. */
++#define TMP108_CONF_FL		0x0800 /* Watchdog flag - TLOW */
++#define TMP108_CONF_FH		0x1000 /* Watchdog flag - THIGH */
++#define TMP108_CONF_CR0		0x2000 /* Conversion rate. */
++#define TMP108_CONF_CR1		0x4000
++#define TMP108_CONF_ID		0x8000
++#define TMP108_CONF_HYS0	0x0010 /* Hysteresis. */
++#define TMP108_CONF_HYS1	0x0020
++#define TMP108_CONF_POL		0x0080 /* Polarity of alert. */
++
++/* Defaults set by the hardware upon reset. */
++#define TMP108_CONF_DEFAULTS		(TMP108_CONF_CR0 | TMP108_CONF_TM |\
++					 TMP108_CONF_HYS0 | TMP108_CONF_M1)
++/* These bits are read-only. */
++#define TMP108_CONF_READ_ONLY		(TMP108_CONF_FL | TMP108_CONF_FH |\
++					 TMP108_CONF_ID)
++
++#define TMP108_CONF_MODE_MASK		(TMP108_CONF_M0|TMP108_CONF_M1)
++#define TMP108_MODE_SHUTDOWN		0x0000
++#define TMP108_MODE_ONE_SHOT		TMP108_CONF_M0
++#define TMP108_MODE_CONTINUOUS		TMP108_CONF_M1		/* Default */
++
++#define TMP108_CONF_CONVRATE_MASK	(TMP108_CONF_CR0|TMP108_CONF_CR1)
++#define TMP108_CONVRATE_0P25HZ		0x0000
++#define TMP108_CONVRATE_1HZ		TMP108_CONF_CR0		/* Default */
++#define TMP108_CONVRATE_4HZ		TMP108_CONF_CR1
++#define TMP108_CONVRATE_16HZ		(TMP108_CONF_CR0|TMP108_CONF_CR1)
++
++#define TMP108_CONF_HYSTERESIS_MASK	(TMP108_CONF_HYS0|TMP108_CONF_HYS1)
++#define TMP108_HYSTERESIS_0C		0x0000
++#define TMP108_HYSTERESIS_1C		TMP108_CONF_HYS0	/* Default */
++#define TMP108_HYSTERESIS_2C		TMP108_CONF_HYS1
++#define TMP108_HYSTERESIS_4C		(TMP108_CONF_HYS0|TMP108_CONF_HYS1)
++
++#define TMP108_CONVERSION_TIME_MS	30	/* in milli-seconds */
++
++struct tmp108 {
++	struct regmap *regmap;
++	struct device *hwmon_dev;
++	struct thermal_zone_device *tz;
++	u16 config;
++	unsigned long ready_time;
++};
++
++static const u8 tmp108_temp_reg[TMP108_TEMP_REG_COUNT] = {
++	TMP108_REG_TEMP,
++	TMP108_REG_TLOW,
++	TMP108_REG_THIGH,
++};
++
++/* convert 12-bit TMP108 register value to milliCelsius */
++static inline int tmp108_temp_reg_to_mC(s16 val)
++{
++	return (val & ~0x01) * 1000 / 256;
++}
++
++/* convert milliCelsius to left adjusted 12-bit TMP108 register value */
++static inline u16 tmp108_mC_to_temp_reg(int val)
++{
++	return (val * 256) / 1000;
++}
++
++static int tmp108_read_reg_temp(struct device *dev, int reg, int *temp)
++{
++	struct tmp108 *tmp108 = dev_get_drvdata(dev);
++	unsigned int regval;
++	int err;
++
++	switch (reg) {
++	case TMP108_REG_TEMP:
++		/* Is it too early to return a conversion ? */
++		if (time_before(jiffies, tmp108->ready_time)) {
++			dev_dbg(dev, "%s: Conversion not ready yet..\n",
++				__func__);
++			return -EAGAIN;
 +		}
- 		data->pwm[ix] = clamp_val(val, 0, 255);
- 		dme1737_write(data, DME1737_REG_PWM(ix), data->pwm[ix]);
- 		break;
-@@ -1329,9 +1333,6 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- 		/* Set the new PWM mode */
- 		switch (val) {
- 		case 0:
--			/* Change permissions of pwm[ix] to read-only */
--			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
--					   S_IRUGO);
- 			/* Turn fan fully on */
- 			data->pwm_config[ix] = PWM_EN_TO_REG(0,
- 							data->pwm_config[ix]);
-@@ -1344,14 +1345,8 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- 							data->pwm_config[ix]);
- 			dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
- 				      data->pwm_config[ix]);
--			/* Change permissions of pwm[ix] to read-writeable */
--			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
--					   S_IRUGO | S_IWUSR);
- 			break;
- 		case 2:
--			/* Change permissions of pwm[ix] to read-only */
--			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
--					   S_IRUGO);
- 			/*
- 			 * Turn on auto mode using the saved zone channel
- 			 * assignment
-@@ -1471,8 +1466,7 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- static ssize_t show_vrm(struct device *dev, struct device_attribute *attr,
- 			char *buf)
- {
--	struct i2c_client *client = to_i2c_client(dev);
--	struct dme1737_data *data = i2c_get_clientdata(client);
-+	struct dme1737_data *data = dev_get_drvdata(dev);
- 
- 	return sprintf(buf, "%d\n", data->vrm);
- }
-@@ -1503,14 +1497,6 @@ static ssize_t show_vid(struct device *dev, struct device_attribute *attr,
- 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
- }
- 
--static ssize_t show_name(struct device *dev, struct device_attribute *attr,
--			 char *buf)
--{
--	struct dme1737_data *data = dev_get_drvdata(dev);
--
--	return sprintf(buf, "%s\n", data->name);
--}
--
- /* ---------------------------------------------------------------------
-  * Sysfs device attribute defines and structs
-  * --------------------------------------------------------------------- */
-@@ -1609,7 +1595,7 @@ SENSOR_DEVICE_ATTR_FAN_5TO6(6);
- /* PWMs 1-3 */
- 
- #define SENSOR_DEVICE_ATTR_PWM_1TO3(ix) \
--static SENSOR_DEVICE_ATTR_2(pwm##ix, S_IRUGO, \
-+static SENSOR_DEVICE_ATTR_2(pwm##ix, S_IRUGO | S_IWUSR, \
- 	show_pwm, set_pwm, SYS_PWM, ix-1); \
- static SENSOR_DEVICE_ATTR_2(pwm##ix##_freq, S_IRUGO, \
- 	show_pwm, set_pwm, SYS_PWM_FREQ, ix-1); \
-@@ -1647,7 +1633,6 @@ SENSOR_DEVICE_ATTR_PWM_5TO6(6);
- 
- static DEVICE_ATTR(vrm, S_IRUGO | S_IWUSR, show_vrm, set_vrm);
- static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_vid, NULL);
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);   /* for ISA devices */
- 
- /*
-  * This struct holds all the attributes that are always present and need to be
-@@ -1701,15 +1686,6 @@ static struct attribute *dme1737_attr[] = {
- 	&sensor_dev_attr_temp3_max.dev_attr.attr,
- 	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp3_fault.dev_attr.attr,
--	/* Zones */
--	&sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
--	&sensor_dev_attr_zone1_auto_channels_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_channels_temp.dev_attr.attr,
- 	NULL
- };
- 
-@@ -1717,6 +1693,19 @@ static const struct attribute_group dme1737_group = {
- 	.attrs = dme1737_attr,
- };
- 
-+static umode_t dme1737_temp_offset_visible(struct kobject *kobj,
-+					   struct attribute *attr, int index)
-+{
-+	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct dme1737_data *data = dev_get_drvdata(dev);
-+
-+	/* Temperature offsets are writable unless chip is locked */
-+	if (!(data->config & 0x02))
-+		return attr->mode | S_IWUSR;
-+
-+	return attr->mode;
-+}
-+
- /*
-  * The following struct holds temp offset attributes, which are not available
-  * in all chips. The following chips support them:
-@@ -1731,6 +1720,7 @@ static struct attribute *dme1737_temp_offset_attr[] = {
- 
- static const struct attribute_group dme1737_temp_offset_group = {
- 	.attrs = dme1737_temp_offset_attr,
-+	.is_visible = dme1737_temp_offset_visible,
- };
- 
- /*
-@@ -1748,38 +1738,56 @@ static const struct attribute_group dme1737_vid_group = {
- 	.attrs = dme1737_vid_attr,
- };
- 
--/*
-- * The following struct holds temp zone 3 related attributes, which are not
-- * available in all chips. The following chips support them:
-- * DME1737, SCH311x, SCH5027
-- */
--static struct attribute *dme1737_zone3_attr[] = {
--	&sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
--	&sensor_dev_attr_zone3_auto_channels_temp.dev_attr.attr,
--	NULL
--};
-+static umode_t dme1737_zone_visible(struct kobject *kobj,
-+				    struct attribute *attr, int index)
-+{
-+	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct dme1737_data *data = dev_get_drvdata(dev);
-+	int nr = index / 5;
-+	int idx =  index % 5;
- 
--static const struct attribute_group dme1737_zone3_group = {
--	.attrs = dme1737_zone3_attr,
--};
-+	/*
-+	 * Zone 3 related attributes are not available in all chips.
-+	 * The following chips support them: DME1737, SCH311x, SCH5027
-+	 */
-+	if (nr == 3 && !(data->has_features & HAS_ZONE3))
-+		return 0;
-+	/*
-+	 * Temp zone hysteresis attributes are not available in all chips.
-+	 * The following chips support them: DME1737, SCH311x
-+	 */
-+	if (idx == 4 && !(data->has_features & HAS_ZONE_HYST))
-+		return 0;
- 
-+	/* Temperature auto points are writable unless chip is locked */
-+	if (idx != 3 && !(data->config & 0x02))
-+		return attr->mode | S_IWUSR;
- 
--/*
-- * The following struct holds temp zone hysteresis related attributes, which
-- * are not available in all chips. The following chips support them:
-- * DME1737, SCH311x
-- */
--static struct attribute *dme1737_zone_hyst_attr[] = {
-+	return attr->mode;
-+}
-+
-+static struct attribute *dme1737_zone_attr[] = {
-+	&sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone1_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_zone1_auto_point1_temp_hyst.dev_attr.attr,
-+	&sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone2_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_zone2_auto_point1_temp_hyst.dev_attr.attr,
-+	&sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
-+	&sensor_dev_attr_zone3_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_zone3_auto_point1_temp_hyst.dev_attr.attr,
- 	NULL
- };
- 
--static const struct attribute_group dme1737_zone_hyst_group = {
--	.attrs = dme1737_zone_hyst_attr,
-+static const struct attribute_group dme1737_zone_group = {
-+	.attrs = dme1737_zone_attr,
-+	.is_visible = dme1737_zone_visible,
- };
- 
- /*
-@@ -1799,12 +1807,49 @@ static const struct attribute_group dme1737_in7_group = {
- 	.attrs = dme1737_in7_attr,
- };
- 
-+static umode_t dme1737_pwm_visible(struct kobject *kobj, struct attribute *a,
-+				   int index)
-+{
-+	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct dme1737_data *data = dev_get_drvdata(dev);
-+	struct device_attribute *da =
-+				container_of(a, struct device_attribute, attr);
-+	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(da);
-+	int ix = attr->index;
-+	int fn = attr->nr;
-+
-+	if (!(data->has_features & HAS_PWM(ix)))
-+		return 0;
-+
-+	switch (fn) {
-+	case SYS_PWM:
-+	case SYS_PWM_AUTO_POINT2_PWM:
-+		return a->mode;
-+	case SYS_PWM_FREQ:
-+	case SYS_PWM_ENABLE:
-+	case SYS_PWM_RAMP_RATE:
-+	case SYS_PWM_AUTO_CHANNELS_ZONE:
-+	case SYS_PWM_AUTO_POINT1_PWM:
-+		if (!(data->config & 0x02))
-+			return a->mode | S_IWUSR;
-+		return a->mode;
-+	case SYS_PWM_AUTO_PWM_MIN:
-+		if (!(data->has_features & HAS_PWM_MIN))
-+			return 0;
-+		if (!(data->config & 0x02))
-+			return a->mode | S_IWUSR;
-+		return a->mode;
++		break;
++	case TMP108_REG_TLOW:
++	case TMP108_REG_THIGH:
++		break;
 +	default:
-+		return 0;
++		return -EOPNOTSUPP;
++	}
++
++	err = regmap_read(tmp108->regmap, reg, &regval);
++	if (err < 0)
++		return err;
++	*temp = tmp108_temp_reg_to_mC(regval);
++
++	return 0;
++}
++
++static ssize_t tmp108_show_temp(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
++	int temp;
++	int err;
++
++	if (sda->index >= ARRAY_SIZE(tmp108_temp_reg))
++		return -EINVAL;
++
++	err = tmp108_read_reg_temp(dev, tmp108_temp_reg[sda->index], &temp);
++	if (err)
++		return err;
++
++	return snprintf(buf, PAGE_SIZE, "%d\n", temp);
++}
++
++static ssize_t tmp108_set_temp(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf, size_t count)
++{
++	struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
++	struct tmp108 *tmp108 = dev_get_drvdata(dev);
++	long temp;
++	int err;
++
++	if (sda->index >= ARRAY_SIZE(tmp108_temp_reg))
++		return -EINVAL;
++
++	if (kstrtol(buf, 10, &temp) < 0)
++		return -EINVAL;
++
++	temp = clamp_val(temp, TMP108_TEMP_MIN_MC, TMP108_TEMP_MAX_MC);
++	err = regmap_write(tmp108->regmap, tmp108_temp_reg[sda->index],
++			   tmp108_mC_to_temp_reg(temp));
++	if (err)
++		return err;
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, tmp108_show_temp, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, tmp108_show_temp,
++			  tmp108_set_temp, 1);
++static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, tmp108_show_temp,
++			  tmp108_set_temp, 2);
++
++static struct attribute *tmp108_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_temp1_min.dev_attr.attr,
++	&sensor_dev_attr_temp1_max.dev_attr.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(tmp108);
++
++static int tmp108_get_temp(void *dev, int *temp)
++{
++	return tmp108_read_reg_temp(dev, TMP108_REG_TEMP, temp);
++}
++
++static const struct thermal_zone_of_device_ops tmp108_of_thermal_ops = {
++	.get_temp = tmp108_get_temp,
++};
++
++static void tmp108_update_ready_time(struct tmp108 *tmp108)
++{
++	tmp108->ready_time = jiffies;
++	if ((tmp108->config & TMP108_CONF_MODE_MASK)
++	    == TMP108_MODE_CONTINUOUS) {
++		tmp108->ready_time +=
++			msecs_to_jiffies(TMP108_CONVERSION_TIME_MS);
 +	}
 +}
 +
- /*
-  * The following structs hold the PWM attributes, some of which are optional.
-  * Their creation depends on the chip configuration which is determined during
-  * module load.
-  */
--static struct attribute *dme1737_pwm1_attr[] = {
-+static struct attribute *dme1737_pwm_attr[] = {
- 	&sensor_dev_attr_pwm1.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
-@@ -1812,9 +1857,7 @@ static struct attribute *dme1737_pwm1_attr[] = {
- 	&sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm2_attr[] = {
-+	&sensor_dev_attr_pwm1_auto_pwm_min.dev_attr.attr,
- 	&sensor_dev_attr_pwm2.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_enable.dev_attr.attr,
-@@ -1822,9 +1865,7 @@ static struct attribute *dme1737_pwm2_attr[] = {
- 	&sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point2_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm3_attr[] = {
-+	&sensor_dev_attr_pwm2_auto_pwm_min.dev_attr.attr,
- 	&sensor_dev_attr_pwm3.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
-@@ -1832,82 +1873,58 @@ static struct attribute *dme1737_pwm3_attr[] = {
- 	&sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm5_attr[] = {
-+	&sensor_dev_attr_pwm3_auto_pwm_min.dev_attr.attr,
- 	&sensor_dev_attr_pwm5.dev_attr.attr,
- 	&sensor_dev_attr_pwm5_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm5_enable.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm6_attr[] = {
- 	&sensor_dev_attr_pwm6.dev_attr.attr,
- 	&sensor_dev_attr_pwm6_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm6_enable.dev_attr.attr,
- 	NULL
- };
- 
--static const struct attribute_group dme1737_pwm_group[] = {
--	{ .attrs = dme1737_pwm1_attr },
--	{ .attrs = dme1737_pwm2_attr },
--	{ .attrs = dme1737_pwm3_attr },
--	{ .attrs = NULL },
--	{ .attrs = dme1737_pwm5_attr },
--	{ .attrs = dme1737_pwm6_attr },
-+static const struct attribute_group dme1737_pwm_group = {
-+	.attrs = dme1737_pwm_attr,
-+	.is_visible = dme1737_pwm_visible,
- };
- 
--/*
-- * The following struct holds auto PWM min attributes, which are not available
-- * in all chips. Their creation depends on the chip type which is determined
-- * during module load.
-- */
--static struct attribute *dme1737_auto_pwm_min_attr[] = {
--	&sensor_dev_attr_pwm1_auto_pwm_min.dev_attr.attr,
--	&sensor_dev_attr_pwm2_auto_pwm_min.dev_attr.attr,
--	&sensor_dev_attr_pwm3_auto_pwm_min.dev_attr.attr,
--};
-+static umode_t dme1737_fan_visible(struct kobject *kobj, struct attribute *a,
-+				   int index)
++static void tmp108_restore_config(void *data)
 +{
-+	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct dme1737_data *data = dev_get_drvdata(dev);
-+	struct device_attribute *da =
-+				container_of(a, struct device_attribute, attr);
-+	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-+	int ix = attr->index;
- 
--/*
-- * The following structs hold the fan attributes, some of which are optional.
-- * Their creation depends on the chip configuration which is determined during
-- * module load.
-- */
--static struct attribute *dme1737_fan1_attr[] = {
-+	if (!(data->has_features & HAS_FAN(ix)))
-+		return 0;
++	struct tmp108 *tmp108 = data;
 +
-+	return a->mode;
++	regmap_write(tmp108->regmap, TMP108_REG_CONF, tmp108->config);
++	tmp108_update_ready_time(tmp108);
 +}
 +
-+static struct attribute *dme1737_fan_attr[] = {
- 	&sensor_dev_attr_fan1_input.dev_attr.attr,
- 	&sensor_dev_attr_fan1_min.dev_attr.attr,
- 	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
- 	&sensor_dev_attr_fan1_type.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_fan2_attr[] = {
- 	&sensor_dev_attr_fan2_input.dev_attr.attr,
- 	&sensor_dev_attr_fan2_min.dev_attr.attr,
- 	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
- 	&sensor_dev_attr_fan2_type.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_fan3_attr[] = {
- 	&sensor_dev_attr_fan3_input.dev_attr.attr,
- 	&sensor_dev_attr_fan3_min.dev_attr.attr,
- 	&sensor_dev_attr_fan3_alarm.dev_attr.attr,
- 	&sensor_dev_attr_fan3_type.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_fan4_attr[] = {
- 	&sensor_dev_attr_fan4_input.dev_attr.attr,
- 	&sensor_dev_attr_fan4_min.dev_attr.attr,
- 	&sensor_dev_attr_fan4_alarm.dev_attr.attr,
- 	&sensor_dev_attr_fan4_type.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_fan5_attr[] = {
- 	&sensor_dev_attr_fan5_input.dev_attr.attr,
- 	&sensor_dev_attr_fan5_min.dev_attr.attr,
- 	&sensor_dev_attr_fan5_alarm.dev_attr.attr,
- 	&sensor_dev_attr_fan5_max.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_fan6_attr[] = {
- 	&sensor_dev_attr_fan6_input.dev_attr.attr,
- 	&sensor_dev_attr_fan6_min.dev_attr.attr,
- 	&sensor_dev_attr_fan6_alarm.dev_attr.attr,
-@@ -1915,106 +1932,9 @@ static struct attribute *dme1737_fan6_attr[] = {
- 	NULL
- };
- 
--static const struct attribute_group dme1737_fan_group[] = {
--	{ .attrs = dme1737_fan1_attr },
--	{ .attrs = dme1737_fan2_attr },
--	{ .attrs = dme1737_fan3_attr },
--	{ .attrs = dme1737_fan4_attr },
--	{ .attrs = dme1737_fan5_attr },
--	{ .attrs = dme1737_fan6_attr },
--};
--
--/*
-- * The permissions of the following zone attributes are changed to read-
-- * writeable if the chip is *not* locked. Otherwise they stay read-only.
-- */
--static struct attribute *dme1737_zone_chmod_attr[] = {
--	&sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group dme1737_zone_chmod_group = {
--	.attrs = dme1737_zone_chmod_attr,
--};
--
--
--/*
-- * The permissions of the following zone 3 attributes are changed to read-
-- * writeable if the chip is *not* locked. Otherwise they stay read-only.
-- */
--static struct attribute *dme1737_zone3_chmod_attr[] = {
--	&sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
--	&sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
--	&sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group dme1737_zone3_chmod_group = {
--	.attrs = dme1737_zone3_chmod_attr,
--};
--
--/*
-- * The permissions of the following PWM attributes are changed to read-
-- * writeable if the chip is *not* locked and the respective PWM is available.
-- * Otherwise they stay read-only.
-- */
--static struct attribute *dme1737_pwm1_chmod_attr[] = {
--	&sensor_dev_attr_pwm1_freq.dev_attr.attr,
--	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
--	&sensor_dev_attr_pwm1_ramp_rate.dev_attr.attr,
--	&sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
--	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm2_chmod_attr[] = {
--	&sensor_dev_attr_pwm2_freq.dev_attr.attr,
--	&sensor_dev_attr_pwm2_enable.dev_attr.attr,
--	&sensor_dev_attr_pwm2_ramp_rate.dev_attr.attr,
--	&sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
--	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm3_chmod_attr[] = {
--	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
--	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
--	&sensor_dev_attr_pwm3_ramp_rate.dev_attr.attr,
--	&sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
--	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm5_chmod_attr[] = {
--	&sensor_dev_attr_pwm5.dev_attr.attr,
--	&sensor_dev_attr_pwm5_freq.dev_attr.attr,
--	NULL
--};
--static struct attribute *dme1737_pwm6_chmod_attr[] = {
--	&sensor_dev_attr_pwm6.dev_attr.attr,
--	&sensor_dev_attr_pwm6_freq.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group dme1737_pwm_chmod_group[] = {
--	{ .attrs = dme1737_pwm1_chmod_attr },
--	{ .attrs = dme1737_pwm2_chmod_attr },
--	{ .attrs = dme1737_pwm3_chmod_attr },
--	{ .attrs = NULL },
--	{ .attrs = dme1737_pwm5_chmod_attr },
--	{ .attrs = dme1737_pwm6_chmod_attr },
--};
--
--/*
-- * Pwm[1-3] are read-writeable if the associated pwm is in manual mode and the
-- * chip is not locked. Otherwise they are read-only.
-- */
--static struct attribute *dme1737_pwm_chmod_attr[] = {
--	&sensor_dev_attr_pwm1.dev_attr.attr,
--	&sensor_dev_attr_pwm2.dev_attr.attr,
--	&sensor_dev_attr_pwm3.dev_attr.attr,
-+static const struct attribute_group dme1737_fan_group = {
-+	.attrs = dme1737_fan_attr,
-+	.is_visible = dme1737_fan_visible,
- };
- 
- /* ---------------------------------------------------------------------
-@@ -2049,193 +1969,29 @@ static inline void dme1737_sio_outb(int sio_cip, int reg, int val)
- 
- static int dme1737_i2c_get_features(int, struct dme1737_data*);
- 
--static void dme1737_chmod_file(struct device *dev,
--			       struct attribute *attr, umode_t mode)
--{
--	if (sysfs_chmod_file(&dev->kobj, attr, mode)) {
--		dev_warn(dev, "Failed to change permissions of %s.\n",
--			 attr->name);
--	}
--}
--
--static void dme1737_chmod_group(struct device *dev,
--				const struct attribute_group *group,
--				umode_t mode)
--{
--	struct attribute **attr;
--
--	for (attr = group->attrs; *attr; attr++)
--		dme1737_chmod_file(dev, *attr, mode);
--}
--
--static void dme1737_remove_files(struct device *dev)
-+static void dme1737_setup_groups(struct device *dev)
- {
- 	struct dme1737_data *data = dev_get_drvdata(dev);
--	int ix;
-+	int groups = 0;
- 
--	for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
--		if (data->has_features & HAS_FAN(ix)) {
--			sysfs_remove_group(&dev->kobj,
--					   &dme1737_fan_group[ix]);
--		}
--	}
--
--	for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
--		if (data->has_features & HAS_PWM(ix)) {
--			sysfs_remove_group(&dev->kobj,
--					   &dme1737_pwm_group[ix]);
--			if ((data->has_features & HAS_PWM_MIN) && ix < 3) {
--				sysfs_remove_file(&dev->kobj,
--						dme1737_auto_pwm_min_attr[ix]);
--			}
--		}
--	}
-+	data->groups[groups++] = &dme1737_group;
-+	data->groups[groups++] = &dme1737_zone_group;
- 
- 	if (data->has_features & HAS_TEMP_OFFSET)
--		sysfs_remove_group(&dev->kobj, &dme1737_temp_offset_group);
--	if (data->has_features & HAS_VID)
--		sysfs_remove_group(&dev->kobj, &dme1737_vid_group);
--	if (data->has_features & HAS_ZONE3)
--		sysfs_remove_group(&dev->kobj, &dme1737_zone3_group);
--	if (data->has_features & HAS_ZONE_HYST)
--		sysfs_remove_group(&dev->kobj, &dme1737_zone_hyst_group);
--	if (data->has_features & HAS_IN7)
--		sysfs_remove_group(&dev->kobj, &dme1737_in7_group);
--	sysfs_remove_group(&dev->kobj, &dme1737_group);
--
--	if (!data->client)
--		sysfs_remove_file(&dev->kobj, &dev_attr_name.attr);
--}
--
--static int dme1737_create_files(struct device *dev)
--{
--	struct dme1737_data *data = dev_get_drvdata(dev);
--	int err, ix;
-+		data->groups[groups++] = &dme1737_temp_offset_group;
- 
--	/* Create a name attribute for ISA devices */
--	if (!data->client) {
--		err = sysfs_create_file(&dev->kobj, &dev_attr_name.attr);
--		if (err)
--			goto exit;
--	}
--
--	/* Create standard sysfs attributes */
--	err = sysfs_create_group(&dev->kobj, &dme1737_group);
--	if (err)
--		goto exit_remove;
--
--	/* Create chip-dependent sysfs attributes */
--	if (data->has_features & HAS_TEMP_OFFSET) {
--		err = sysfs_create_group(&dev->kobj,
--					 &dme1737_temp_offset_group);
--		if (err)
--			goto exit_remove;
--	}
--	if (data->has_features & HAS_VID) {
--		err = sysfs_create_group(&dev->kobj, &dme1737_vid_group);
--		if (err)
--			goto exit_remove;
--	}
--	if (data->has_features & HAS_ZONE3) {
--		err = sysfs_create_group(&dev->kobj, &dme1737_zone3_group);
--		if (err)
--			goto exit_remove;
--	}
--	if (data->has_features & HAS_ZONE_HYST) {
--		err = sysfs_create_group(&dev->kobj, &dme1737_zone_hyst_group);
--		if (err)
--			goto exit_remove;
--	}
--	if (data->has_features & HAS_IN7) {
--		err = sysfs_create_group(&dev->kobj, &dme1737_in7_group);
--		if (err)
--			goto exit_remove;
--	}
-+	if (data->has_features & HAS_VID)
-+		data->groups[groups++] = &dme1737_vid_group;
- 
--	/* Create fan sysfs attributes */
--	for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
--		if (data->has_features & HAS_FAN(ix)) {
--			err = sysfs_create_group(&dev->kobj,
--						 &dme1737_fan_group[ix]);
--			if (err)
--				goto exit_remove;
--		}
--	}
-+	if (data->has_features & HAS_IN7)
-+		data->groups[groups++] = &dme1737_in7_group;
- 
--	/* Create PWM sysfs attributes */
--	for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
--		if (data->has_features & HAS_PWM(ix)) {
--			err = sysfs_create_group(&dev->kobj,
--						 &dme1737_pwm_group[ix]);
--			if (err)
--				goto exit_remove;
--			if ((data->has_features & HAS_PWM_MIN) && (ix < 3)) {
--				err = sysfs_create_file(&dev->kobj,
--						dme1737_auto_pwm_min_attr[ix]);
--				if (err)
--					goto exit_remove;
--			}
--		}
--	}
-+	data->groups[groups++] = &dme1737_fan_group;
-+	data->groups[groups++] = &dme1737_pwm_group;
- 
--	/*
--	 * Inform if the device is locked. Otherwise change the permissions of
--	 * selected attributes from read-only to read-writeable.
--	 */
--	if (data->config & 0x02) {
-+	if (data->config & 0x02)
- 		dev_info(dev,
- 			 "Device is locked. Some attributes will be read-only.\n");
--	} else {
--		/* Change permissions of zone sysfs attributes */
--		dme1737_chmod_group(dev, &dme1737_zone_chmod_group,
--				    S_IRUGO | S_IWUSR);
--
--		/* Change permissions of chip-dependent sysfs attributes */
--		if (data->has_features & HAS_TEMP_OFFSET) {
--			dme1737_chmod_group(dev, &dme1737_temp_offset_group,
--					    S_IRUGO | S_IWUSR);
--		}
--		if (data->has_features & HAS_ZONE3) {
--			dme1737_chmod_group(dev, &dme1737_zone3_chmod_group,
--					    S_IRUGO | S_IWUSR);
--		}
--		if (data->has_features & HAS_ZONE_HYST) {
--			dme1737_chmod_group(dev, &dme1737_zone_hyst_group,
--					    S_IRUGO | S_IWUSR);
--		}
--
--		/* Change permissions of PWM sysfs attributes */
--		for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_chmod_group); ix++) {
--			if (data->has_features & HAS_PWM(ix)) {
--				dme1737_chmod_group(dev,
--						&dme1737_pwm_chmod_group[ix],
--						S_IRUGO | S_IWUSR);
--				if ((data->has_features & HAS_PWM_MIN) &&
--				    ix < 3) {
--					dme1737_chmod_file(dev,
--						dme1737_auto_pwm_min_attr[ix],
--						S_IRUGO | S_IWUSR);
--				}
--			}
--		}
--
--		/* Change permissions of pwm[1-3] if in manual mode */
--		for (ix = 0; ix < 3; ix++) {
--			if ((data->has_features & HAS_PWM(ix)) &&
--			    (PWM_EN_FROM_REG(data->pwm_config[ix]) == 1)) {
--				dme1737_chmod_file(dev,
--						dme1737_pwm_chmod_attr[ix],
--						S_IRUGO | S_IWUSR);
--			}
--		}
--	}
--
--	return 0;
--
--exit_remove:
--	dme1737_remove_files(dev);
--exit:
--	return err;
- }
- 
- static int dme1737_init_device(struct device *dev)
-@@ -2475,6 +2231,7 @@ static int dme1737_i2c_probe(struct i2c_client *client,
- {
- 	struct dme1737_data *data;
- 	struct device *dev = &client->dev;
++static bool tmp108_is_writeable_reg(struct device *dev, unsigned int reg)
++{
++	return reg != TMP108_REG_TEMP;
++}
++
++static bool tmp108_is_volatile_reg(struct device *dev, unsigned int reg)
++{
++	return reg == TMP108_REG_TEMP;
++}
++
++static const struct regmap_config tmp108_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 16,
++	.max_register = TMP108_REG_THIGH,
++	.writeable_reg = tmp108_is_writeable_reg,
++	.volatile_reg = tmp108_is_volatile_reg,
++	.val_format_endian = REGMAP_ENDIAN_BIG,
++	.cache_type = REGCACHE_RBTREE,
++	.use_single_rw = true,
++};
++
++static int tmp108_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
 +	struct device *hwmon_dev;
- 	int err;
- 
- 	data = devm_kzalloc(dev, sizeof(struct dme1737_data), GFP_KERNEL);
-@@ -2484,7 +2241,6 @@ static int dme1737_i2c_probe(struct i2c_client *client,
- 	i2c_set_clientdata(client, data);
- 	data->type = id->driver_data;
- 	data->client = client;
--	data->name = client->name;
- 	mutex_init(&data->update_lock);
- 
- 	/* Initialize the DME1737 chip */
-@@ -2494,36 +2250,12 @@ static int dme1737_i2c_probe(struct i2c_client *client,
- 		return err;
- 	}
- 
--	/* Create sysfs files */
--	err = dme1737_create_files(dev);
--	if (err) {
--		dev_err(dev, "Failed to create sysfs files.\n");
--		return err;
--	}
-+	dme1737_setup_groups(dev);
- 
- 	/* Register device */
--	data->hwmon_dev = hwmon_device_register(dev);
--	if (IS_ERR(data->hwmon_dev)) {
--		dev_err(dev, "Failed to register device.\n");
--		err = PTR_ERR(data->hwmon_dev);
--		goto exit_remove;
--	}
--
--	return 0;
--
--exit_remove:
--	dme1737_remove_files(dev);
--	return err;
--}
--
--static int dme1737_i2c_remove(struct i2c_client *client)
--{
--	struct dme1737_data *data = i2c_get_clientdata(client);
--
--	hwmon_device_unregister(data->hwmon_dev);
--	dme1737_remove_files(&client->dev);
--
--	return 0;
-+	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-+							   data, data->groups);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static const struct i2c_device_id dme1737_id[] = {
-@@ -2539,7 +2271,6 @@ static struct i2c_driver dme1737_i2c_driver = {
- 		.name = "dme1737",
- 	},
- 	.probe = dme1737_i2c_probe,
--	.remove = dme1737_i2c_remove,
- 	.id_table = dme1737_id,
- 	.detect = dme1737_i2c_detect,
- 	.address_list = normal_i2c,
-@@ -2638,6 +2369,8 @@ static int dme1737_isa_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct dme1737_data *data;
- 	struct device *dev = &pdev->dev;
-+	struct device *hwmon_dev;
-+	const char *name;
- 	int err;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-@@ -2681,9 +2414,9 @@ static int dme1737_isa_probe(struct platform_device *pdev)
- 	}
- 
- 	if (data->type == sch5127)
--		data->name = "sch5127";
-+		name = "sch5127";
- 	else
--		data->name = "sch311x";
-+		name = "sch311x";
- 
- 	/* Initialize the mutex */
- 	mutex_init(&data->update_lock);
-@@ -2698,36 +2431,12 @@ static int dme1737_isa_probe(struct platform_device *pdev)
- 		return err;
- 	}
- 
--	/* Create sysfs files */
--	err = dme1737_create_files(dev);
--	if (err) {
--		dev_err(dev, "Failed to create sysfs files.\n");
--		return err;
--	}
-+	dme1737_setup_groups(dev);
- 
- 	/* Register device */
--	data->hwmon_dev = hwmon_device_register(dev);
--	if (IS_ERR(data->hwmon_dev)) {
--		dev_err(dev, "Failed to register device.\n");
--		err = PTR_ERR(data->hwmon_dev);
--		goto exit_remove_files;
--	}
--
--	return 0;
--
--exit_remove_files:
--	dme1737_remove_files(dev);
--	return err;
--}
--
--static int dme1737_isa_remove(struct platform_device *pdev)
--{
--	struct dme1737_data *data = platform_get_drvdata(pdev);
--
--	hwmon_device_unregister(data->hwmon_dev);
--	dme1737_remove_files(&pdev->dev);
--
--	return 0;
-+	hwmon_dev = hwmon_device_register_with_groups(dev, name, data,
-+						      data->groups);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static struct platform_driver dme1737_isa_driver = {
-@@ -2735,7 +2444,6 @@ static struct platform_driver dme1737_isa_driver = {
- 		.name = "dme1737",
- 	},
- 	.probe = dme1737_isa_probe,
--	.remove = dme1737_isa_remove,
- };
- 
- /* ---------------------------------------------------------------------
++	struct tmp108 *tmp108;
++	unsigned int regval;
++	int err;
++	u16 config;
++	u32 convrate = 100;
++	u32 hysteresis = 1;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_WORD_DATA)) {
++		dev_err(dev,
++			"adapter doesn't support SMBus word transactions\n");
++		return -ENODEV;
++	}
++
++	tmp108 = devm_kzalloc(dev, sizeof(*tmp108), GFP_KERNEL);
++	if (!tmp108)
++		return -ENOMEM;
++
++	i2c_set_clientdata(client, tmp108);
++
++	tmp108->regmap = devm_regmap_init_i2c(client, &tmp108_regmap_config);
++	if (IS_ERR(tmp108->regmap))
++		return PTR_ERR(tmp108->regmap);
++
++	err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &regval);
++	if (err < 0) {
++		dev_err(dev, "error reading config register\n");
++		return err;
++	}
++	tmp108->config = regval;
++	config = regval;
++
++	/* At this time, only continuous mode is supported. */
++	config &= ~TMP108_CONF_MODE_MASK;
++	config |= TMP108_MODE_CONTINUOUS;
++
++	if (device_property_read_bool(dev, "ti,thermostat-mode-comparitor"))
++		config &= ~TMP108_CONF_TM;
++	else
++		config |= TMP108_CONF_TM;
++
++	if (device_property_read_bool(dev, "ti,alert-active-high"))
++		config |= TMP108_CONF_POL;
++	else
++		config &= ~TMP108_CONF_POL;
++
++	if (device_property_read_u32(dev, "ti,conversion-rate-cHz", &convrate)
++	    >= 0) {
++		config &= ~TMP108_CONF_CONVRATE_MASK;
++		switch (convrate) {
++		case 25:
++			config |= TMP108_CONVRATE_0P25HZ;
++			break;
++		case 100:
++			config |= TMP108_CONVRATE_1HZ;
++			break;
++		case 400:
++			config |= TMP108_CONVRATE_4HZ;
++			break;
++		case 1600:
++			config |= TMP108_CONVRATE_16HZ;
++			break;
++		default:
++			dev_err(dev, "conversion rate %u invalid: defaulting to 1Hz.\n",
++				convrate);
++			convrate = 100;
++			config |= TMP108_CONVRATE_1HZ;
++			break;
++		}
++	}
++
++	if (device_property_read_u32(dev, "ti,hysteresis", &hysteresis) >= 0) {
++		config &= ~TMP108_CONF_HYSTERESIS_MASK;
++		switch (hysteresis) {
++		case 0:
++			config |= TMP108_HYSTERESIS_0C;
++			break;
++		case 1:
++			config |= TMP108_HYSTERESIS_1C;
++			break;
++		case 2:
++			config |= TMP108_HYSTERESIS_2C;
++			break;
++		case 4:
++			config |= TMP108_HYSTERESIS_4C;
++			break;
++		default:
++			dev_err(dev, "hysteresis value %u invalid: defaulting to 1C.\n",
++				hysteresis);
++			hysteresis = 1;
++			config |= TMP108_HYSTERESIS_1C;
++			break;
++		}
++	}
++
++	err = regmap_write(tmp108->regmap, TMP108_REG_CONF, config);
++	if (err < 0) {
++		dev_err(dev, "error writing config register\n");
++		return err;
++	}
++
++	tmp108->config = config;
++	tmp108_update_ready_time(tmp108);
++
++	err = devm_add_action_or_reset(dev, tmp108_restore_config, tmp108);
++	if (err)
++		return err;
++
++	hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
++						      tmp108, tmp108_groups);
++	if (IS_ERR(hwmon_dev)) {
++		dev_dbg(dev, "unable to register hwmon device\n");
++		return PTR_ERR(hwmon_dev);
++	}
++
++	tmp108->hwmon_dev = hwmon_dev;
++	tmp108->tz = thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
++						     &tmp108_of_thermal_ops);
++	if (IS_ERR(tmp108->tz))
++		return PTR_ERR(tmp108->tz);
++
++	dev_info(dev, "%s, alert: active %s, hyst: %uC, conv: %ucHz\n",
++		 (tmp108->config & TMP108_CONF_TM) != 0 ?
++			"interrupt" : "comparator",
++		 (tmp108->config & TMP108_CONF_POL) != 0 ? "high" : "low",
++		 hysteresis, convrate);
++	return 0;
++}
++
++static int tmp108_remove(struct i2c_client *client)
++{
++	struct tmp108 *tmp108 = i2c_get_clientdata(client);
++
++	thermal_zone_of_sensor_unregister(tmp108->hwmon_dev, tmp108->tz);
++	hwmon_device_unregister(tmp108->hwmon_dev);
++
++	return 0;
++}
++
++#ifdef CONFIG_PM_SLEEP
++static int tmp108_suspend(struct device *dev)
++{
++	struct tmp108 *tmp108 = dev_get_drvdata(dev);
++
++	return regmap_update_bits(tmp108->regmap, TMP108_REG_CONF,
++				  TMP108_CONF_MODE_MASK, TMP108_MODE_SHUTDOWN);
++}
++
++static int tmp108_resume(struct device *dev)
++{
++	struct tmp108 *tmp108 = dev_get_drvdata(dev);
++	int err;
++
++	err = regmap_write(tmp108->regmap, TMP108_REG_CONF, tmp108->config);
++
++	tmp108_update_ready_time(tmp108);
++
++	return err;
++}
++#endif /* CONFIG_PM */
++
++static SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
++
++static const struct i2c_device_id tmp108_id[] = {
++	{ "tmp108", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, tmp108_id);
++
++static struct i2c_driver tmp108_driver = {
++	.driver.name	= DRIVER_NAME,
++	.driver.pm	= &tmp108_dev_pm_ops,
++	.probe		= tmp108_probe,
++	.remove		= tmp108_remove,
++	.id_table	= tmp108_id,
++};
++
++module_i2c_driver(tmp108_driver);
++
++MODULE_AUTHOR("John Muir <john@jmuir.com>");
++MODULE_DESCRIPTION("Texas Instruments TMP108 temperature sensor driver");
++MODULE_LICENSE("GPL");
 -- 
-2.5.0
-
+2.8.0.rc3.226.g39d4020
