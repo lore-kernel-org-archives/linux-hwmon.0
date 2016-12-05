@@ -1,58 +1,54 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50963 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:51223 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751059AbcLEGD6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:03:58 -0500
+        with ESMTP id S1751039AbcLEGEM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:04:12 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 16/17] hwmon: (gl518sm) Fix overflows seen when writing into limit attributes
-Date: Sun,  4 Dec 2016 20:55:39 -0800
-Message-Id: <1480913740-5678-16-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 09/17] hwmon: (nct7802) Fix overflows seen when writing into limit attributes
+Date: Sun,  4 Dec 2016 20:55:32 -0800
+Message-Id: <1480913740-5678-9-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Writes into limit attributes can overflow due to additions and
-multiplications with unchecked parameters.
+Fix overflows seen when writing voltage and temperature limit attributes.
+
+The value passed to DIV_ROUND_CLOSEST() needs to be clamped.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/gl518sm.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/hwmon/nct7802.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/gl518sm.c b/drivers/hwmon/gl518sm.c
-index 0212c8317bca..0a11a550c2a2 100644
---- a/drivers/hwmon/gl518sm.c
-+++ b/drivers/hwmon/gl518sm.c
-@@ -86,9 +86,8 @@ enum chips { gl518sm_r00, gl518sm_r80 };
- #define BOOL_FROM_REG(val)	((val) ? 0 : 1)
- #define BOOL_TO_REG(val)	((val) ? 0 : 1)
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index 3ce33d244cc0..6fe71cfe0320 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -326,8 +326,9 @@ static int nct7802_write_voltage(struct nct7802_data *data, int nr, int index,
+ 	int shift = 8 - REG_VOLTAGE_LIMIT_MSB_SHIFT[index - 1][nr];
+ 	int err;
  
--#define TEMP_TO_REG(val)	clamp_val(((((val) < 0 ? \
--				(val) - 500 : \
--				(val) + 500) / 1000) + 119), 0, 255)
-+#define TEMP_TO_REG(val) (DIV_ROUND_CLOSEST(clamp_val(val, -119000, 136000), \
-+					    1000) + 119)
- #define TEMP_FROM_REG(val)	(((val) - 119) * 1000)
+-	voltage = DIV_ROUND_CLOSEST(voltage, nct7802_vmul[nr]);
+-	voltage = clamp_val(voltage, 0, 0x3ff);
++	voltage = DIV_ROUND_CLOSEST(clamp_val(voltage, 0,
++					      0x3ff * nct7802_vmul[nr]),
++				    nct7802_vmul[nr]);
  
- static inline u8 FAN_TO_REG(long rpm, int div)
-@@ -101,10 +100,11 @@ static inline u8 FAN_TO_REG(long rpm, int div)
- }
- #define FAN_FROM_REG(val, div)	((val) == 0 ? 0 : (480000 / ((val) * (div))))
+ 	mutex_lock(&data->access_lock);
+ 	err = regmap_write(data->regmap,
+@@ -402,7 +403,7 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *attr,
+ 	if (err < 0)
+ 		return err;
  
--#define IN_TO_REG(val)		clamp_val((((val) + 9) / 19), 0, 255)
-+#define IN_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 19), 19)
- #define IN_FROM_REG(val)	((val) * 19)
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, -127000, 127000), 1000);
  
--#define VDD_TO_REG(val)		clamp_val((((val) * 4 + 47) / 95), 0, 255)
-+#define VDD_TO_REG(val) \
-+	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 95 / 4) * 4, 95)
- #define VDD_FROM_REG(val)	(((val) * 95 + 2) / 4)
- 
- #define DIV_FROM_REG(val)	(1 << (val))
+ 	err = regmap_write(data->regmap, nr, val & 0xff);
+ 	return err ? : count;
 -- 
 2.5.0
 
