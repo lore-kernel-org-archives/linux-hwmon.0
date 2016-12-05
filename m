@@ -1,64 +1,96 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52324 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52335 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751039AbcLEGFG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:05:06 -0500
+        with ESMTP id S1751039AbcLEGFH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:05:07 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 14/17] hwmon: (emcw201) Fix overflows seen when writing into limit attributes
-Date: Sun,  4 Dec 2016 20:55:37 -0800
-Message-Id: <1480913740-5678-14-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 06/17] hwmon: (adm1026) Fix overflows seen when writing into limit attributes
+Date: Sun,  4 Dec 2016 20:55:29 -0800
+Message-Id: <1480913740-5678-6-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Writes into temperature and voltage limit attributes can overflow
-due to multiplications with unchecked parameters. Also, the input
-parameter to DIV_ROUND_CLOSEST() needis to be range checked.
+Fix overflows seen when writing large values into voltage limit,
+temperature limit, temperature offset, and DAC attributes.
+
+Overflows are seen due to unbound multiplications and additions.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/emc6w201.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/hwmon/adm1026.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hwmon/emc6w201.c b/drivers/hwmon/emc6w201.c
-index f37fe2011640..f8c776c49df9 100644
---- a/drivers/hwmon/emc6w201.c
-+++ b/drivers/hwmon/emc6w201.c
-@@ -215,12 +215,13 @@ static ssize_t set_in(struct device *dev, struct device_attribute *devattr,
- 	if (err < 0)
+diff --git a/drivers/hwmon/adm1026.c b/drivers/hwmon/adm1026.c
+index e67b9a50ac7c..b2a5d9e5c590 100644
+--- a/drivers/hwmon/adm1026.c
++++ b/drivers/hwmon/adm1026.c
+@@ -197,8 +197,9 @@ static int adm1026_scaling[] = { /* .001 Volts */
+ 	};
+ #define NEG12_OFFSET  16000
+ #define SCALE(val, from, to) (((val)*(to) + ((from)/2))/(from))
+-#define INS_TO_REG(n, val)  (clamp_val(SCALE(val, adm1026_scaling[n], 192),\
+-	0, 255))
++#define INS_TO_REG(n, val)	\
++		SCALE(clamp_val(val, 0, 255 * adm1026_scaling[n] / 192), \
++		      adm1026_scaling[n], 192)
+ #define INS_FROM_REG(n, val) (SCALE(val, 192, adm1026_scaling[n]))
+ 
+ /*
+@@ -215,11 +216,11 @@ static int adm1026_scaling[] = { /* .001 Volts */
+ #define DIV_TO_REG(val) ((val) >= 8 ? 3 : (val) >= 4 ? 2 : (val) >= 2 ? 1 : 0)
+ 
+ /* Temperature is reported in 1 degC increments */
+-#define TEMP_TO_REG(val) (clamp_val(((val) + ((val) < 0 ? -500 : 500)) \
+-					/ 1000, -127, 127))
++#define TEMP_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), \
++					   1000)
+ #define TEMP_FROM_REG(val) ((val) * 1000)
+-#define OFFSET_TO_REG(val) (clamp_val(((val) + ((val) < 0 ? -500 : 500)) \
+-					  / 1000, -127, 127))
++#define OFFSET_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), \
++					     1000)
+ #define OFFSET_FROM_REG(val) ((val) * 1000)
+ 
+ #define PWM_TO_REG(val) (clamp_val(val, 0, 255))
+@@ -233,7 +234,8 @@ static int adm1026_scaling[] = { /* .001 Volts */
+  *   indicates that the DAC could be used to drive the fans, but in our
+  *   example board (Arima HDAMA) it isn't connected to the fans at all.
+  */
+-#define DAC_TO_REG(val) (clamp_val(((((val) * 255) + 500) / 2500), 0, 255))
++#define DAC_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, 0, 2500) * 255, \
++					  2500)
+ #define DAC_FROM_REG(val) (((val) * 2500) / 255)
+ 
+ /*
+@@ -593,7 +595,10 @@ static ssize_t set_in16_min(struct device *dev, struct device_attribute *attr,
  		return err;
  
--	val = DIV_ROUND_CLOSEST(val * 0xC0, nominal_mv[nr]);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * nominal_mv[nr] / 192)
-+				* 192, nominal_mv[nr]);
- 	reg = (sf == min) ? EMC6W201_REG_IN_LOW(nr)
- 			  : EMC6W201_REG_IN_HIGH(nr);
- 
  	mutex_lock(&data->update_lock);
--	data->in[sf][nr] = clamp_val(val, 0, 255);
-+	data->in[sf][nr] = val;
- 	err = emc6w201_write8(client, reg, data->in[sf][nr]);
+-	data->in_min[16] = INS_TO_REG(16, val + NEG12_OFFSET);
++	data->in_min[16] = INS_TO_REG(16,
++				      clamp_val(val, INT_MIN,
++						INT_MAX - NEG12_OFFSET) +
++				      NEG12_OFFSET);
+ 	adm1026_write_value(client, ADM1026_REG_IN_MIN[16], data->in_min[16]);
  	mutex_unlock(&data->update_lock);
- 
-@@ -252,12 +253,12 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
- 	if (err < 0)
+ 	return count;
+@@ -618,7 +623,10 @@ static ssize_t set_in16_max(struct device *dev, struct device_attribute *attr,
  		return err;
  
--	val = DIV_ROUND_CLOSEST(val, 1000);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, -127000, 127000), 1000);
- 	reg = (sf == min) ? EMC6W201_REG_TEMP_LOW(nr)
- 			  : EMC6W201_REG_TEMP_HIGH(nr);
- 
  	mutex_lock(&data->update_lock);
--	data->temp[sf][nr] = clamp_val(val, -127, 127);
-+	data->temp[sf][nr] = val;
- 	err = emc6w201_write8(client, reg, data->temp[sf][nr]);
+-	data->in_max[16] = INS_TO_REG(16, val+NEG12_OFFSET);
++	data->in_max[16] = INS_TO_REG(16,
++				      clamp_val(val, INT_MIN,
++						INT_MAX - NEG12_OFFSET) +
++				      NEG12_OFFSET);
+ 	adm1026_write_value(client, ADM1026_REG_IN_MAX[16], data->in_max[16]);
  	mutex_unlock(&data->update_lock);
- 
+ 	return count;
 -- 
 2.5.0
 
