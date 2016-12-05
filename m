@@ -1,41 +1,63 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:51633 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:51785 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751039AbcLEGEd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:04:33 -0500
+        with ESMTP id S1751039AbcLEGEn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:04:43 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 10/17] hwmon: (lm87) Fix overflow seen when writing voltage limit attributes
-Date: Sun,  4 Dec 2016 20:55:33 -0800
-Message-Id: <1480913740-5678-10-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Juerg Haefliger <juergh@gmail.com>
+Subject: [PATCH 12/17] hwmon: (dme1737) Fix overflows seen when writing into limit attributes
+Date: Sun,  4 Dec 2016 20:55:35 -0800
+Message-Id: <1480913740-5678-12-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Writes into voltage limit attributes can overflow due to an unbound
-multiplication.
+Writes into voltage limit, temperature limit, and temperature zone
+attributes can overflow due to unchecked parameters to multiplications
+and additions.
 
+Cc: Juerg Haefliger <juergh@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm87.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/dme1737.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-index a5e295826aea..24f971b75e46 100644
---- a/drivers/hwmon/lm87.c
-+++ b/drivers/hwmon/lm87.c
-@@ -121,7 +121,7 @@ static u8 LM87_REG_TEMP_LOW[3] = { 0x3A, 0x38, 0x2C };
+diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+index 8763c4a8280c..29d082c12c74 100644
+--- a/drivers/hwmon/dme1737.c
++++ b/drivers/hwmon/dme1737.c
+@@ -279,7 +279,8 @@ static inline int IN_FROM_REG(int reg, int nominal, int res)
  
- #define IN_FROM_REG(reg, scale)	(((reg) * (scale) + 96) / 192)
- #define IN_TO_REG(val, scale)	((val) <= 0 ? 0 : \
--				 (val) * 192 >= (scale) * 255 ? 255 : \
-+				 (val) >= (scale) * 255 / 192 ? 255 : \
- 				 ((val) * 192 + (scale) / 2) / (scale))
+ static inline int IN_TO_REG(long val, int nominal)
+ {
+-	return clamp_val((val * 192 + nominal / 2) / nominal, 0, 255);
++	return DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * nominal / 192) * 192,
++				 nominal);
+ }
  
- #define TEMP_FROM_REG(reg)	((reg) * 1000)
+ /*
+@@ -295,7 +296,7 @@ static inline int TEMP_FROM_REG(int reg, int res)
+ 
+ static inline int TEMP_TO_REG(long val)
+ {
+-	return clamp_val((val < 0 ? val - 500 : val + 500) / 1000, -128, 127);
++	return DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
+ }
+ 
+ /* Temperature range */
+@@ -1028,6 +1029,8 @@ static ssize_t set_zone(struct device *dev, struct device_attribute *attr,
+ 	if (err)
+ 		return err;
+ 
++	val = clamp_val(val, -256000, 255000);
++
+ 	mutex_lock(&data->update_lock);
+ 	switch (fn) {
+ 	case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
 -- 
 2.5.0
 
