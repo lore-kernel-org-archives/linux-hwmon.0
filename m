@@ -1,50 +1,69 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50413 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:50593 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751039AbcLEGDa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:03:30 -0500
+        with ESMTP id S1751039AbcLEGDh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:03:37 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 15/17] hwmln: (g762) Fix overflows and crash seen when writing limit attributes
-Date: Sun,  4 Dec 2016 20:55:38 -0800
-Message-Id: <1480913740-5678-15-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 04/17] hwmon: (smsc47m192) Fix overflows seen when writing into limit attributes
+Date: Sun,  4 Dec 2016 20:55:27 -0800
+Message-Id: <1480913740-5678-4-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Fix overflows seen when writing into fan speed limit attributes.
-Also fix crash due to division by zero, seen when certain very
-large values (such as 4611686018427387904, or 0x4000000000000000)
-are written into fan speed limit attributes.
+Module test reports overflows when writing into temperature and voltage
+limit attributes
 
-Fixes: 594fbe713bf60 ("Add support for GMT G762/G763 PWM fan controllers")
+temp1_min: Suspected overflow: [127000 vs. 0]
+temp1_max: Suspected overflow: [127000 vs. 0]
+temp1_offset: Suspected overflow: [127000 vs. 0]
+temp2_min: Suspected overflow: [127000 vs. 0]
+temp2_max: Suspected overflow: [127000 vs. 0]
+temp2_offset: Suspected overflow: [127000 vs. 0]
+temp3_min: Suspected overflow: [127000 vs. 0]
+temp3_max: Suspected overflow: [127000 vs. 0]
+temp3_offset: Suspected overflow: [127000 vs. 0]
+in0_min: Suspected overflow: [3320 vs. 0]
+in0_max: Suspected overflow: [3320 vs. 0]
+in4_min: Suspected overflow: [15938 vs. 0]
+in4_max: Suspected overflow: [15938 vs. 0]
+in6_min: Suspected overflow: [1992 vs. 0]
+in6_max: Suspected overflow: [1992 vs. 0]
+in7_min: Suspected overflow: [2391 vs. 0]
+in7_max: Suspected overflow: [2391 vs. 0]
+
+The problem is caused by conversions from unsigned long to long and
+from long to int.
+
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/g762.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/hwmon/smsc47m192.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index b96a2a9e4df7..584f9f755a92 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -193,12 +193,13 @@ static inline unsigned int rpm_from_cnt(u8 cnt, u32 clk_freq, u16 p,
-  * Convert fan RPM value from sysfs into count value for fan controller
-  * register (FAN_SET_CNT).
-  */
--static inline unsigned char cnt_from_rpm(u32 rpm, u32 clk_freq, u16 p,
-+static inline unsigned char cnt_from_rpm(unsigned long rpm, u32 clk_freq, u16 p,
- 					 u8 clk_div, u8 gear_mult)
- {
--	if (!rpm)         /* to stop the fan, set cnt to 255 */
-+	if (!rpm || !p || !clk_div)	/* to stop the fan, set cnt to 255 */
- 		return 0xff;
+diff --git a/drivers/hwmon/smsc47m192.c b/drivers/hwmon/smsc47m192.c
+index 6ac7cda72d4c..202e167d6a59 100644
+--- a/drivers/hwmon/smsc47m192.c
++++ b/drivers/hwmon/smsc47m192.c
+@@ -77,6 +77,7 @@ static inline unsigned int IN_FROM_REG(u8 reg, int n)
  
-+	rpm = clamp_val(rpm, 1, ULONG_MAX / (p * clk_div));
- 	return clamp_val(((clk_freq * 30 * gear_mult) / (rpm * p * clk_div)),
- 			 0, 255);
+ static inline u8 IN_TO_REG(unsigned long val, int n)
+ {
++	val = clamp_val(val, 0, 65535);
+ 	return clamp_val(SCALE(val, 192, nom_mv[n]), 0, 255);
+ }
+ 
+@@ -84,7 +85,7 @@ static inline u8 IN_TO_REG(unsigned long val, int n)
+  * TEMP: 0.001 degC units (-128C to +127C)
+  * REG: 1C/bit, two's complement
+  */
+-static inline s8 TEMP_TO_REG(int val)
++static inline s8 TEMP_TO_REG(long val)
+ {
+ 	return SCALE(clamp_val(val, -128000, 127000), 1, 1000);
  }
 -- 
 2.5.0
