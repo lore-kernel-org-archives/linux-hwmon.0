@@ -1,57 +1,51 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:34741 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:50413 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751176AbcLEE5I (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Dec 2016 23:57:08 -0500
+        with ESMTP id S1751039AbcLEGDa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:03:30 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 17/17] hwmon: (gl520sm) Fix overflows seen when writing into limit attributes
-Date: Sun,  4 Dec 2016 20:55:40 -0800
-Message-Id: <1480913740-5678-17-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 15/17] hwmln: (g762) Fix overflows and crash seen when writing limit attributes
+Date: Sun,  4 Dec 2016 20:55:38 -0800
+Message-Id: <1480913740-5678-15-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Writes into limit attributes can overflow due to multplications
-and additions with unbound input values.
+Fix overflows seen when writing into fan speed limit attributes.
+Also fix crash due to division by zero, seen when certain very
+large values (such as 4611686018427387904, or 0x4000000000000000)
+are written into fan speed limit attributes.
 
+Fixes: 594fbe713bf60 ("Add support for GMT G762/G763 PWM fan controllers")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/gl520sm.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/hwmon/g762.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/gl520sm.c b/drivers/hwmon/gl520sm.c
-index dee93ec87d02..4bb37d7234b1 100644
---- a/drivers/hwmon/gl520sm.c
-+++ b/drivers/hwmon/gl520sm.c
-@@ -209,10 +209,11 @@ static ssize_t get_cpu_vid(struct device *dev, struct device_attribute *attr,
- static DEVICE_ATTR(cpu0_vid, S_IRUGO, get_cpu_vid, NULL);
+diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
+index b96a2a9e4df7..584f9f755a92 100644
+--- a/drivers/hwmon/g762.c
++++ b/drivers/hwmon/g762.c
+@@ -193,12 +193,13 @@ static inline unsigned int rpm_from_cnt(u8 cnt, u32 clk_freq, u16 p,
+  * Convert fan RPM value from sysfs into count value for fan controller
+  * register (FAN_SET_CNT).
+  */
+-static inline unsigned char cnt_from_rpm(u32 rpm, u32 clk_freq, u16 p,
++static inline unsigned char cnt_from_rpm(unsigned long rpm, u32 clk_freq, u16 p,
+ 					 u8 clk_div, u8 gear_mult)
+ {
+-	if (!rpm)         /* to stop the fan, set cnt to 255 */
++	if (!rpm || !p || !clk_div)	/* to stop the fan, set cnt to 255 */
+ 		return 0xff;
  
- #define VDD_FROM_REG(val) (((val) * 95 + 2) / 4)
--#define VDD_TO_REG(val) clamp_val((((val) * 4 + 47) / 95), 0, 255)
-+#define VDD_TO_REG(val) \
-+	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 95 / 4) * 4, 95)
- 
- #define IN_FROM_REG(val) ((val) * 19)
--#define IN_TO_REG(val) clamp_val((((val) + 9) / 19), 0, 255)
-+#define IN_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 19), 19)
- 
- static ssize_t get_in_input(struct device *dev, struct device_attribute *attr,
- 			    char *buf)
-@@ -514,8 +515,8 @@ static DEVICE_ATTR(fan1_off, S_IRUGO | S_IWUSR,
- 		get_fan_off, set_fan_off);
- 
- #define TEMP_FROM_REG(val) (((val) - 130) * 1000)
--#define TEMP_TO_REG(val) clamp_val(((((val) < 0 ? \
--			(val) - 500 : (val) + 500) / 1000) + 130), 0, 255)
-+#define TEMP_TO_REG(val) (DIV_ROUND_CLOSEST(clamp_val(val, -130000, 125000), \
-+					    1000) + 130)
- 
- static ssize_t get_temp_input(struct device *dev, struct device_attribute *attr,
- 			      char *buf)
++	rpm = clamp_val(rpm, 1, ULONG_MAX / (p * clk_div));
+ 	return clamp_val(((clk_freq * 30 * gear_mult) / (rpm * p * clk_div)),
+ 			 0, 255);
+ }
 -- 
 2.5.0
 
