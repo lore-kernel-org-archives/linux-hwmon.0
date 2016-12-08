@@ -1,113 +1,115 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42185 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752087AbcLHPSm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Dec 2016 10:18:42 -0500
-Subject: Re: [PATCH 01/17] hwmon: (adm9240) Fix overflows seen when writing
- into limit attributes
-To: Jean Delvare <jdelvare@suse.de>
-References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
- <20161208142910.425f1b0f@endymion>
+Return-path: <jdelvare@suse.de>
+Date: Thu, 8 Dec 2016 15:33:49 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <157c8cef-2628-3355-51d0-fb45672391f8@roeck-us.net>
-Date: Thu, 8 Dec 2016 07:18:37 -0800
+Subject: Re: [PATCH 06/17] hwmon: (adm1026) Fix overflows seen when writing
+ into limit attributes
+Message-ID: <20161208153349.2ce80f2f@endymion>
+In-Reply-To: <1480913740-5678-6-git-send-email-linux@roeck-us.net>
+References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
+	<1480913740-5678-6-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20161208142910.425f1b0f@endymion>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 12/08/2016 05:29 AM, Jean Delvare wrote:
-> Hi Guenter,
->
-> On Sun,  4 Dec 2016 20:55:24 -0800, Guenter Roeck wrote:
->> Module test reports:
->>
->> in0_min: Suspected overflow: [3320 vs. 0]
->> in0_max: Suspected overflow: [3320 vs. 0]
->> in4_min: Suspected overflow: [15938 vs. 0]
->> in4_max: Suspected overflow: [15938 vs. 0]
->> temp1_max: Suspected overflow: [127000 vs. 0]
->> temp1_max_hyst: Suspected overflow: [127000 vs. 0]
->> aout_output: Suspected overflow: [1250 vs. 0]
->>
->> Code analysis reveals that the overflows are caused by conversions
->> from unsigned long to long to int, combined with multiplications on
->> passed values.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>  drivers/hwmon/adm9240.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/hwmon/adm9240.c b/drivers/hwmon/adm9240.c
->> index 2fe1828bd10b..347afacedcf5 100644
->> --- a/drivers/hwmon/adm9240.c
->> +++ b/drivers/hwmon/adm9240.c
->> @@ -98,12 +98,14 @@ static inline unsigned int IN_FROM_REG(u8 reg, int n)
->>
->>  static inline u8 IN_TO_REG(unsigned long val, int n)
->>  {
->> +	val = clamp_val(val, 0, INT_MAX / 192 - 12000);
->>  	return clamp_val(SCALE(val, 192, nom_mv[n]), 0, 255);
->>  }
->
-> I understand the idea of clamping before the conversion to avoid the
-> overflow. However I would have hoped that clamping the input makes
-> clamping the output unneeded. Clamping is full of tests, which aren't
-> cheap as they break the CPU instruction prediction, so we should not
-> abuse it.
->
-I am not that much concerned about this here, since the limits are not
-usually set continuously. I agree though, since it is always better
-to keep the code as simple as possible.
+On Sun,  4 Dec 2016 20:55:29 -0800, Guenter Roeck wrote:
+> Fix overflows seen when writing large values into voltage limit,
+> temperature limit, temperature offset, and DAC attributes.
+>=20
+> Overflows are seen due to unbound multiplications and additions.
+>=20
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/adm1026.c | 26 +++++++++++++++++---------
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/adm1026.c b/drivers/hwmon/adm1026.c
+> index e67b9a50ac7c..b2a5d9e5c590 100644
+> --- a/drivers/hwmon/adm1026.c
+> +++ b/drivers/hwmon/adm1026.c
+> @@ -197,8 +197,9 @@ static int adm1026_scaling[] =3D { /* .001 Volts */
+>  	};
+>  #define NEG12_OFFSET  16000
+>  #define SCALE(val, from, to) (((val)*(to) + ((from)/2))/(from))
+> -#define INS_TO_REG(n, val)  (clamp_val(SCALE(val, adm1026_scaling[n], 19=
+2),\
+> -	0, 255))
+> +#define INS_TO_REG(n, val)	\
+> +		SCALE(clamp_val(val, 0, 255 * adm1026_scaling[n] / 192), \
+> +		      adm1026_scaling[n], 192)
+>  #define INS_FROM_REG(n, val) (SCALE(val, 192, adm1026_scaling[n]))
+> =20
+>  /*
+> @@ -215,11 +216,11 @@ static int adm1026_scaling[] =3D { /* .001 Volts */
+>  #define DIV_TO_REG(val) ((val) >=3D 8 ? 3 : (val) >=3D 4 ? 2 : (val) >=
+=3D 2 ? 1 : 0)
+> =20
+>  /* Temperature is reported in 1 degC increments */
+> -#define TEMP_TO_REG(val) (clamp_val(((val) + ((val) < 0 ? -500 : 500)) \
+> -					/ 1000, -127, 127))
+> +#define TEMP_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, -128000, 12700=
+0), \
+> +					   1000)
+>  #define TEMP_FROM_REG(val) ((val) * 1000)
+> -#define OFFSET_TO_REG(val) (clamp_val(((val) + ((val) < 0 ? -500 : 500))=
+ \
+> -					  / 1000, -127, 127))
+> +#define OFFSET_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127=
+000), \
+> +					     1000)
 
-> Would the following work?
->
-> static inline u8 IN_TO_REG(unsigned long val, int n)
-> {
-> 	val = clamp_val(val, 0, nom_mv[n] * 255 / 192);
-> 	return SCALE(val, 192, nom_mv[n]);
-> }
->
-> This should be more compact and faster.
->
->>
->>  /* temperature range: -40..125, 127 disables temperature alarm */
->>  static inline s8 TEMP_TO_REG(long val)
->>  {
->> +	val = clamp_val(val, INT_MIN + 1000, INT_MAX - 1000);
->>  	return clamp_val(SCALE(val, 1, 1000), -40, 127);
->>  }
->>
->> @@ -122,6 +124,7 @@ static inline unsigned int FAN_FROM_REG(u8 reg, u8 div)
->>  /* analog out 0..1250mV */
->>  static inline u8 AOUT_TO_REG(unsigned long val)
->>  {
->> +	val = clamp_val(val, 0, INT_MAX / 255 - 1250);
->>  	return clamp_val(SCALE(val, 255, 1250), 0, 255);
->>  }
->>
->
-> Same comment and same suggested solution for these two functions:
->
-> /* temperature range: -40..125, 127 disables temperature alarm */
-> static inline s8 TEMP_TO_REG(long val)
-> {
-> 	val = clamp_val(val, -40000, 127000);
-> 	return SCALE(val, 1, 1000);
-> }
->
-> /* analog out 0..1250mV */
-> static inline u8 AOUT_TO_REG(unsigned long val)
-> {
-> 	val = clamp_val(val, 0, 1250);
-> 	return SCALE(val, 255, 1250);
-> }
->
-Should work. I'll give it a try.
+Sorry for nitpicking but the original code had -127 =C2=B0C as the negative
+limit. You are changing it to -128 =C2=B0C without a justification. If it
+matters, it should be at least documented in the commit message. If
+not, it should be left as it was.
 
-Guenter
+>  #define OFFSET_FROM_REG(val) ((val) * 1000)
+> =20
+>  #define PWM_TO_REG(val) (clamp_val(val, 0, 255))
+> @@ -233,7 +234,8 @@ static int adm1026_scaling[] =3D { /* .001 Volts */
+>   *   indicates that the DAC could be used to drive the fans, but in our
+>   *   example board (Arima HDAMA) it isn't connected to the fans at all.
+>   */
+> -#define DAC_TO_REG(val) (clamp_val(((((val) * 255) + 500) / 2500), 0, 25=
+5))
+> +#define DAC_TO_REG(val) DIV_ROUND_CLOSEST(clamp_val(val, 0, 2500) * 255,=
+ \
+> +					  2500)
+>  #define DAC_FROM_REG(val) (((val) * 2500) / 255)
+> =20
+>  /*
+> @@ -593,7 +595,10 @@ static ssize_t set_in16_min(struct device *dev, stru=
+ct device_attribute *attr,
+>  		return err;
+> =20
+>  	mutex_lock(&data->update_lock);
+> -	data->in_min[16] =3D INS_TO_REG(16, val + NEG12_OFFSET);
+> +	data->in_min[16] =3D INS_TO_REG(16,
+> +				      clamp_val(val, INT_MIN,
+> +						INT_MAX - NEG12_OFFSET) +
+> +				      NEG12_OFFSET);
+>  	adm1026_write_value(client, ADM1026_REG_IN_MIN[16], data->in_min[16]);
+>  	mutex_unlock(&data->update_lock);
+>  	return count;
+> @@ -618,7 +623,10 @@ static ssize_t set_in16_max(struct device *dev, stru=
+ct device_attribute *attr,
+>  		return err;
+> =20
+>  	mutex_lock(&data->update_lock);
+> -	data->in_max[16] =3D INS_TO_REG(16, val+NEG12_OFFSET);
+> +	data->in_max[16] =3D INS_TO_REG(16,
+> +				      clamp_val(val, INT_MIN,
+> +						INT_MAX - NEG12_OFFSET) +
+> +				      NEG12_OFFSET);
+>  	adm1026_write_value(client, ADM1026_REG_IN_MAX[16], data->in_max[16]);
+>  	mutex_unlock(&data->update_lock);
+>  	return count;
 
+On these code paths, you end up calling clamp_val() twice. This could
+certainly be avoided, but I'm too lazy to do the math ;-)
+
+--=20
+Jean Delvare
+SUSE L3 Support
