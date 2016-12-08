@@ -1,86 +1,46 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:38204 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:39064 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751534AbcLHN5Z (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 8 Dec 2016 08:57:25 -0500
-Date: Thu, 8 Dec 2016 14:57:00 +0100
+        id S1752435AbcLHOE0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 8 Dec 2016 09:04:26 -0500
+Date: Thu, 8 Dec 2016 15:04:01 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 04/17] hwmon: (smsc47m192) Fix overflows seen when
- writing into limit attributes
-Message-ID: <20161208145700.2f97c256@endymion>
-In-Reply-To: <1480913740-5678-4-git-send-email-linux@roeck-us.net>
+Subject: Re: [PATCH 05/17] hwmon: (adm1025) Fix overflows seen when writing
+ voltage limits
+Message-ID: <20161208150401.2b55a79f@endymion>
+In-Reply-To: <1480913740-5678-5-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-        <1480913740-5678-4-git-send-email-linux@roeck-us.net>
+        <1480913740-5678-5-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun,  4 Dec 2016 20:55:27 -0800, Guenter Roeck wrote:
-> Module test reports overflows when writing into temperature and voltage
-> limit attributes
-> 
-> temp1_min: Suspected overflow: [127000 vs. 0]
-> temp1_max: Suspected overflow: [127000 vs. 0]
-> temp1_offset: Suspected overflow: [127000 vs. 0]
-> temp2_min: Suspected overflow: [127000 vs. 0]
-> temp2_max: Suspected overflow: [127000 vs. 0]
-> temp2_offset: Suspected overflow: [127000 vs. 0]
-> temp3_min: Suspected overflow: [127000 vs. 0]
-> temp3_max: Suspected overflow: [127000 vs. 0]
-> temp3_offset: Suspected overflow: [127000 vs. 0]
-> in0_min: Suspected overflow: [3320 vs. 0]
-> in0_max: Suspected overflow: [3320 vs. 0]
-> in4_min: Suspected overflow: [15938 vs. 0]
-> in4_max: Suspected overflow: [15938 vs. 0]
-> in6_min: Suspected overflow: [1992 vs. 0]
-> in6_max: Suspected overflow: [1992 vs. 0]
-> in7_min: Suspected overflow: [2391 vs. 0]
-> in7_max: Suspected overflow: [2391 vs. 0]
-> 
-> The problem is caused by conversions from unsigned long to long and
-> from long to int.
+On Sun,  4 Dec 2016 20:55:28 -0800, Guenter Roeck wrote:
+> Writes into voltage limit attributes can overflow due to an unbound
+> multiplication.
 > 
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/hwmon/smsc47m192.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/hwmon/adm1025.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/smsc47m192.c b/drivers/hwmon/smsc47m192.c
-> index 6ac7cda72d4c..202e167d6a59 100644
-> --- a/drivers/hwmon/smsc47m192.c
-> +++ b/drivers/hwmon/smsc47m192.c
-> @@ -77,6 +77,7 @@ static inline unsigned int IN_FROM_REG(u8 reg, int n)
+> diff --git a/drivers/hwmon/adm1025.c b/drivers/hwmon/adm1025.c
+> index d6c767ace916..1abb4609b412 100644
+> --- a/drivers/hwmon/adm1025.c
+> +++ b/drivers/hwmon/adm1025.c
+> @@ -93,7 +93,7 @@ static const int in_scale[6] = { 2500, 2250, 3300, 5000, 12000, 3300 };
 >  
->  static inline u8 IN_TO_REG(unsigned long val, int n)
->  {
-> +	val = clamp_val(val, 0, 65535);
->  	return clamp_val(SCALE(val, 192, nom_mv[n]), 0, 255);
->  }
-
-Same as for adm9240, I would suggest to remove the second clamp_val():
-
-static inline u8 IN_TO_REG(unsigned long val, int n)
-{
-	val = clamp_val(val, 0, nom_mv[n] * 255 / 192);
-	return SCALE(val, 192, nom_mv[n]);
-}
-
+>  #define IN_FROM_REG(reg, scale)	(((reg) * (scale) + 96) / 192)
+>  #define IN_TO_REG(val, scale)	((val) <= 0 ? 0 : \
+> -				 (val) * 192 >= (scale) * 255 ? 255 : \
+> +				 (val) >= (scale) * 255 / 192 ? 255 : \
+>  				 ((val) * 192 + (scale) / 2) / (scale))
 >  
-> @@ -84,7 +85,7 @@ static inline u8 IN_TO_REG(unsigned long val, int n)
->   * TEMP: 0.001 degC units (-128C to +127C)
->   * REG: 1C/bit, two's complement
->   */
-> -static inline s8 TEMP_TO_REG(int val)
-> +static inline s8 TEMP_TO_REG(long val)
->  {
->  	return SCALE(clamp_val(val, -128000, 127000), 1, 1000);
->  }
-
-Other than this:
+>  #define TEMP_FROM_REG(reg)	((reg) * 1000)
 
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
