@@ -1,48 +1,102 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:39064 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752435AbcLHOE0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 8 Dec 2016 09:04:26 -0500
-Date: Thu, 8 Dec 2016 15:04:01 +0100
+Return-path: <jdelvare@suse.de>
+Date: Thu, 8 Dec 2016 16:08:06 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 05/17] hwmon: (adm1025) Fix overflows seen when writing
- voltage limits
-Message-ID: <20161208150401.2b55a79f@endymion>
-In-Reply-To: <1480913740-5678-5-git-send-email-linux@roeck-us.net>
+Subject: Re: [PATCH 07/17] hwmon: (adt7462) Fix overflows seen when writing
+ into limit attributes
+Message-ID: <20161208160806.418fcf2b@endymion>
+In-Reply-To: <1480913740-5678-7-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-        <1480913740-5678-5-git-send-email-linux@roeck-us.net>
+	<1480913740-5678-7-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Sun,  4 Dec 2016 20:55:28 -0800, Guenter Roeck wrote:
-> Writes into voltage limit attributes can overflow due to an unbound
-> multiplication.
+On Sun,  4 Dec 2016 20:55:30 -0800, Guenter Roeck wrote:
+> Fix overflows seen when writing large values into temperature limit,
+> voltage limit, and pwm hysteresis attributes.
+> 
+> The input parameter to DIV_ROUND_CLOSEST() needs to be clamped to avoid
+> such overflows.
 > 
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/hwmon/adm1025.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/adt7462.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/hwmon/adm1025.c b/drivers/hwmon/adm1025.c
-> index d6c767ace916..1abb4609b412 100644
-> --- a/drivers/hwmon/adm1025.c
-> +++ b/drivers/hwmon/adm1025.c
-> @@ -93,7 +93,7 @@ static const int in_scale[6] = { 2500, 2250, 3300, 5000, 12000, 3300 };
+> diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
+> index 5929e126da63..0e9c8d3e8f5c 100644
+> --- a/drivers/hwmon/adt7462.c
+> +++ b/drivers/hwmon/adt7462.c
+> @@ -810,8 +810,7 @@ static ssize_t set_temp_min(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp) || !temp_enabled(data, attr->index))
+>  		return -EINVAL;
 >  
->  #define IN_FROM_REG(reg, scale)	(((reg) * (scale) + 96) / 192)
->  #define IN_TO_REG(val, scale)	((val) <= 0 ? 0 : \
-> -				 (val) * 192 >= (scale) * 255 ? 255 : \
-> +				 (val) >= (scale) * 255 / 192 ? 255 : \
->  				 ((val) * 192 + (scale) / 2) / (scale))
+> -	temp = DIV_ROUND_CLOSEST(temp, 1000) + 64;
+> -	temp = clamp_val(temp, 0, 255);
+> +	temp = DIV_ROUND_CLOSEST(clamp_val(temp, -64000, 191000), 1000) + 64;
 >  
->  #define TEMP_FROM_REG(reg)	((reg) * 1000)
+>  	mutex_lock(&data->lock);
+>  	data->temp_min[attr->index] = temp;
+> @@ -848,8 +847,7 @@ static ssize_t set_temp_max(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp) || !temp_enabled(data, attr->index))
+>  		return -EINVAL;
+>  
+> -	temp = DIV_ROUND_CLOSEST(temp, 1000) + 64;
+> -	temp = clamp_val(temp, 0, 255);
+> +	temp = DIV_ROUND_CLOSEST(clamp_val(temp, -64000, 191000), 1000) + 64;
+>  
+>  	mutex_lock(&data->lock);
+>  	data->temp_max[attr->index] = temp;
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+The original code had the division and the clamping on separate lines,
+and I believe it makes the code more readable. It would also make the
+patch smaller and more readable as well.
+
+> @@ -912,6 +910,7 @@ static ssize_t set_volt_max(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp) || !x)
+>  		return -EINVAL;
+>  
+> +	temp = clamp_val(temp, 0, INT_MAX / 1000 - x);
+>  	temp *= 1000; /* convert mV to uV */
+>  	temp = DIV_ROUND_CLOSEST(temp, x);
+>  	temp = clamp_val(temp, 0, 255);
+> @@ -954,6 +953,7 @@ static ssize_t set_volt_min(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp) || !x)
+>  		return -EINVAL;
+>  
+> +	temp = clamp_val(temp, 0, INT_MAX / 1000 - x);
+>  	temp *= 1000; /* convert mV to uV */
+>  	temp = DIV_ROUND_CLOSEST(temp, x);
+>  	temp = clamp_val(temp, 0, 255);
+
+Any chance to get the new clamp_val()s such that the second ones are no
+longer needed?
+
+> @@ -1220,8 +1220,7 @@ static ssize_t set_pwm_hyst(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp))
+>  		return -EINVAL;
+>  
+> -	temp = DIV_ROUND_CLOSEST(temp, 1000);
+> -	temp = clamp_val(temp, 0, 15);
+> +	temp = DIV_ROUND_CLOSEST(clamp_val(temp, 0, 15000), 1000);
+>  
+>  	/* package things up */
+>  	temp &= ADT7462_PWM_HYST_MASK;
+> @@ -1306,8 +1305,7 @@ static ssize_t set_pwm_tmin(struct device *dev,
+>  	if (kstrtol(buf, 10, &temp))
+>  		return -EINVAL;
+>  
+> -	temp = DIV_ROUND_CLOSEST(temp, 1000) + 64;
+> -	temp = clamp_val(temp, 0, 255);
+> +	temp = DIV_ROUND_CLOSEST(clamp_val(temp, -64000, 191000), 1000) + 64;
+>  
+>  	mutex_lock(&data->lock);
+>  	data->pwm_tmin[attr->index] = temp;
+
+Same comment as first 2.
 
 -- 
 Jean Delvare
