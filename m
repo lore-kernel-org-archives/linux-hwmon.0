@@ -1,17 +1,15 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52335 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52377 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751039AbcLEGFH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Dec 2016 01:05:07 -0500
+        with ESMTP id S1751302AbcLHT3b (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Dec 2016 14:29:31 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 06/17] hwmon: (adm1026) Fix overflows seen when writing into limit attributes
-Date: Sun,  4 Dec 2016 20:55:29 -0800
-Message-Id: <1480913740-5678-6-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
+Subject: [PATCH v2] hwmon: (adm1026) Fix overflows seen when writing into limit attributes
+Date: Thu,  8 Dec 2016 11:29:29 -0800
+Message-Id: <1481225369-13461-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -20,8 +18,13 @@ temperature limit, temperature offset, and DAC attributes.
 
 Overflows are seen due to unbound multiplications and additions.
 
+While at it, change the low temperature limit to -128 degrees C,
+since this is the minimum temperature accepted by the chip.
+
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
+v2: Provide reason for changing lower temperature range.
+
  drivers/hwmon/adm1026.c | 26 +++++++++++++++++---------
  1 file changed, 17 insertions(+), 9 deletions(-)
 
