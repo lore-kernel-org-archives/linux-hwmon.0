@@ -1,43 +1,35 @@
 Return-path: <jdelvare@suse.de>
-Date: Fri, 9 Dec 2016 16:07:01 +0100
+Date: Fri, 9 Dec 2016 16:25:48 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 10/17] hwmon: (lm87) Fix overflow seen when writing
- voltage limit attributes
-Message-ID: <20161209160701.202a52b7@endymion>
-In-Reply-To: <1480913740-5678-10-git-send-email-linux@roeck-us.net>
+Subject: Re: [PATCH 09/17] hwmon: (nct7802) Fix overflows seen when writing
+ into limit attributes
+Message-ID: <20161209162548.7841e144@endymion>
+In-Reply-To: <d7e6a458-3194-4230-7862-c15a1e6790d0@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-	<1480913740-5678-10-git-send-email-linux@roeck-us.net>
+	<1480913740-5678-9-git-send-email-linux@roeck-us.net>
+	<20161209104931.0f8ad01f@endymion>
+	<d7e6a458-3194-4230-7862-c15a1e6790d0@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Sun,  4 Dec 2016 20:55:33 -0800, Guenter Roeck wrote:
-> Writes into voltage limit attributes can overflow due to an unbound
-> multiplication.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/lm87.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index a5e295826aea..24f971b75e46 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-> @@ -121,7 +121,7 @@ static u8 LM87_REG_TEMP_LOW[3] = { 0x3A, 0x38, 0x2C };
->  
->  #define IN_FROM_REG(reg, scale)	(((reg) * (scale) + 96) / 192)
->  #define IN_TO_REG(val, scale)	((val) <= 0 ? 0 : \
-> -				 (val) * 192 >= (scale) * 255 ? 255 : \
-> +				 (val) >= (scale) * 255 / 192 ? 255 : \
->  				 ((val) * 192 + (scale) / 2) / (scale))
->  
->  #define TEMP_FROM_REG(reg)	((reg) * 1000)
+On Fri, 9 Dec 2016 06:22:43 -0800, Guenter Roeck wrote:
+> On 12/09/2016 01:49 AM, Jean Delvare wrote:
+> > Looking at function nct7802_write_fan_min() I think an overflow can
+> > happen here too, as DIV_ROUND_CLOSEST() is called before clamp_val().
+> > Any reason why you did not fix that one?
+> >
+> Not really. The call is
+> 	DIV_ROUND_CLOSEST(1350000U, limit);
+> and thus won't overflow.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Limit is originally parsed by kstrtoul into an unsigned long, however
+the nct7802_write_fan_min function parameter is an unsigned int, so it
+is implicitly cast to an unsigned int. On a 32-bit system, that may not
+fit?
 
 -- 
 Jean Delvare
