@@ -1,35 +1,49 @@
-Return-path: <jdelvare@suse.de>
-Date: Fri, 9 Dec 2016 16:25:48 +0100
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx2.suse.de ([195.135.220.15]:52847 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S933406AbcLIQHg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 9 Dec 2016 11:07:36 -0500
+Date: Fri, 9 Dec 2016 17:07:32 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 09/17] hwmon: (nct7802) Fix overflows seen when writing
- into limit attributes
-Message-ID: <20161209162548.7841e144@endymion>
-In-Reply-To: <d7e6a458-3194-4230-7862-c15a1e6790d0@roeck-us.net>
+Subject: Re: [PATCH 11/17] hwmon: (lm85) Fix overflows seen when writing
+ voltage limit attributes
+Message-ID: <20161209170732.2b6dc1f9@endymion>
+In-Reply-To: <1480913740-5678-11-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-	<1480913740-5678-9-git-send-email-linux@roeck-us.net>
-	<20161209104931.0f8ad01f@endymion>
-	<d7e6a458-3194-4230-7862-c15a1e6790d0@roeck-us.net>
+        <1480913740-5678-11-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, 9 Dec 2016 06:22:43 -0800, Guenter Roeck wrote:
-> On 12/09/2016 01:49 AM, Jean Delvare wrote:
-> > Looking at function nct7802_write_fan_min() I think an overflow can
-> > happen here too, as DIV_ROUND_CLOSEST() is called before clamp_val().
-> > Any reason why you did not fix that one?
-> >
-> Not really. The call is
-> 	DIV_ROUND_CLOSEST(1350000U, limit);
-> and thus won't overflow.
+On Sun,  4 Dec 2016 20:55:34 -0800, Guenter Roeck wrote:
+> Writes into voltage limit attributes can overflow due to an unbound
+> multiplication.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/lm85.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+> index 6ff773fcaefb..29c8136ce9c5 100644
+> --- a/drivers/hwmon/lm85.c
+> +++ b/drivers/hwmon/lm85.c
+> @@ -136,7 +136,8 @@ static const int lm85_scaling[] = {  /* .001 Volts */
+>  #define SCALE(val, from, to)	(((val) * (to) + ((from) / 2)) / (from))
+>  
+>  #define INS_TO_REG(n, val)	\
+> -		clamp_val(SCALE(val, lm85_scaling[n], 192), 0, 255)
+> +		SCALE(clamp_val(val, 0, 255 * lm85_scaling[n] / 192), \
+> +		      lm85_scaling[n], 192)
+>  
+>  #define INSEXT_FROM_REG(n, val, ext)	\
+>  		SCALE(((val) << 4) + (ext), 192 << 4, lm85_scaling[n])
 
-Limit is originally parsed by kstrtoul into an unsigned long, however
-the nct7802_write_fan_min function parameter is an unsigned int, so it
-is implicitly cast to an unsigned int. On a 32-bit system, that may not
-fit?
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
 Jean Delvare
