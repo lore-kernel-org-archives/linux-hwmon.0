@@ -1,68 +1,82 @@
-Return-path: <jdelvare@suse.de>
-Date: Mon, 12 Dec 2016 11:48:23 +0100
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx2.suse.de ([195.135.220.15]:48133 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S932272AbcLLJdR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Dec 2016 04:33:17 -0500
+Date: Mon, 12 Dec 2016 10:33:14 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 14/17] hwmon: (emcw201) Fix overflows seen when writing
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Juerg Haefliger <juergh@gmail.com>
+Subject: Re: [PATCH 12/17] hwmon: (dme1737) Fix overflows seen when writing
  into limit attributes
-Message-ID: <20161212114823.3e274048@endymion>
-In-Reply-To: <1480913740-5678-14-git-send-email-linux@roeck-us.net>
+Message-ID: <20161212103314.64598e40@endymion>
+In-Reply-To: <1480913740-5678-12-git-send-email-linux@roeck-us.net>
 References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
-	<1480913740-5678-14-git-send-email-linux@roeck-us.net>
+ <1480913740-5678-12-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Sun,  4 Dec 2016 20:55:37 -0800, Guenter Roeck wrote:
-> Writes into temperature and voltage limit attributes can overflow
-> due to multiplications with unchecked parameters. Also, the input
-> parameter to DIV_ROUND_CLOSEST() needis to be range checked.
+Hi Guenter,
+
+On Sun,  4 Dec 2016 20:55:35 -0800, Guenter Roeck wrote:
+> Writes into voltage limit, temperature limit, and temperature zone
+> attributes can overflow due to unchecked parameters to multiplications
+> and additions.
 > 
+> Cc: Juerg Haefliger <juergh@gmail.com>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/hwmon/emc6w201.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  drivers/hwmon/dme1737.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/emc6w201.c b/drivers/hwmon/emc6w201.c
-> index f37fe2011640..f8c776c49df9 100644
-> --- a/drivers/hwmon/emc6w201.c
-> +++ b/drivers/hwmon/emc6w201.c
-> @@ -215,12 +215,13 @@ static ssize_t set_in(struct device *dev, struct device_attribute *devattr,
->  	if (err < 0)
+> diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+> index 8763c4a8280c..29d082c12c74 100644
+> --- a/drivers/hwmon/dme1737.c
+> +++ b/drivers/hwmon/dme1737.c
+> @@ -279,7 +279,8 @@ static inline int IN_FROM_REG(int reg, int nominal, int res)
+>  
+>  static inline int IN_TO_REG(long val, int nominal)
+>  {
+> -	return clamp_val((val * 192 + nominal / 2) / nominal, 0, 255);
+> +	return DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * nominal / 192) * 192,
+> +				 nominal);
+>  }
+>  
+>  /*
+> @@ -295,7 +296,7 @@ static inline int TEMP_FROM_REG(int reg, int res)
+>  
+>  static inline int TEMP_TO_REG(long val)
+>  {
+> -	return clamp_val((val < 0 ? val - 500 : val + 500) / 1000, -128, 127);
+> +	return DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
+>  }
+>  
+>  /* Temperature range */
+> @@ -1028,6 +1029,8 @@ static ssize_t set_zone(struct device *dev, struct device_attribute *attr,
+>  	if (err)
 >  		return err;
 >  
-> -	val = DIV_ROUND_CLOSEST(val * 0xC0, nominal_mv[nr]);
-> +	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * nominal_mv[nr] / 192)
-> +				* 192, nominal_mv[nr]);
->  	reg = (sf == min) ? EMC6W201_REG_IN_LOW(nr)
->  			  : EMC6W201_REG_IN_HIGH(nr);
->  
->  	mutex_lock(&data->update_lock);
-> -	data->in[sf][nr] = clamp_val(val, 0, 255);
-> +	data->in[sf][nr] = val;
->  	err = emc6w201_write8(client, reg, data->in[sf][nr]);
->  	mutex_unlock(&data->update_lock);
->  
-> @@ -252,12 +253,12 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
->  	if (err < 0)
->  		return err;
->  
-> -	val = DIV_ROUND_CLOSEST(val, 1000);
-> +	val = DIV_ROUND_CLOSEST(clamp_val(val, -127000, 127000), 1000);
->  	reg = (sf == min) ? EMC6W201_REG_TEMP_LOW(nr)
->  			  : EMC6W201_REG_TEMP_HIGH(nr);
->  
->  	mutex_lock(&data->update_lock);
-> -	data->temp[sf][nr] = clamp_val(val, -127, 127);
-> +	data->temp[sf][nr] = val;
->  	err = emc6w201_write8(client, reg, data->temp[sf][nr]);
->  	mutex_unlock(&data->update_lock);
->  
+> +	val = clamp_val(val, -256000, 255000);
 
-Keep on separate lines? Other than this, looks good:
+Where do these values come from? I would have naively expected the
+auto-pwm temperature values to have the same range as the temperature
+channels themselves.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Also in the case of SYS_ZONE_AUTO_POINT1_TEMP and
+SYS_ZONE_AUTO_POINT3_TEMP, TEMP_TO_REG() is called, which already
+performs the clamping, so it is redundant. So maybe it would be better
+to have a "dedicated" clamp for the SYS_ZONE_AUTO_POINT1_TEMP_HYST and
+SYS_ZONE_AUTO_POINT2_TEMP cases?
+
+> +
+>  	mutex_lock(&data->update_lock);
+>  	switch (fn) {
+>  	case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
+
 
 -- 
 Jean Delvare
