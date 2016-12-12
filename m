@@ -1,77 +1,55 @@
-Return-path: <linux@roeck-us.net>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2] hwmon: (nct7802) Fix overflows seen when writing into limit attributes
-Date: Fri,  9 Dec 2016 12:41:02 -0800
-Message-Id: <1481316062-4999-1-git-send-email-linux@roeck-us.net>
+Return-path: <jdelvare@suse.de>
+Date: Mon, 12 Dec 2016 11:44:34 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, Steve Glendinning
+ <steve.glendinning@shawell.net>
+Subject: Re: [PATCH 13/17] hwmon: (emc2103) Fix overflows seen when
+ temperature limit attributes
+Message-ID: <20161212114434.38d7b103@endymion>
+In-Reply-To: <1480913740-5678-13-git-send-email-linux@roeck-us.net>
+References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
+	<1480913740-5678-13-git-send-email-linux@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Fix overflows seen when writing voltage and temperature limit attributes.
+On Sun,  4 Dec 2016 20:55:36 -0800, Guenter Roeck wrote:
+> Writes into temperature limit attributes can overflow due to unbound
+> values passed to DIV_ROUND_CLOSEST().
+> 
+> Cc: Steve Glendinning <steve.glendinning@shawell.net>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/emc2103.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/emc2103.c b/drivers/hwmon/emc2103.c
+> index 24e395c5907d..4b870ee9b0d3 100644
+> --- a/drivers/hwmon/emc2103.c
+> +++ b/drivers/hwmon/emc2103.c
+> @@ -251,7 +251,7 @@ static ssize_t set_temp_min(struct device *dev, struct device_attribute *da,
+>  	if (result < 0)
+>  		return result;
+>  
+> -	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -63, 127);
+> +	val = DIV_ROUND_CLOSEST(clamp_val(val, -63000, 127000), 1000);
+>  
+>  	mutex_lock(&data->update_lock);
+>  	data->temp_min[nr] = val;
+> @@ -273,7 +273,7 @@ static ssize_t set_temp_max(struct device *dev, struct device_attribute *da,
+>  	if (result < 0)
+>  		return result;
+>  
+> -	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -63, 127);
+> +	val = DIV_ROUND_CLOSEST(clamp_val(val, -63000, 127000), 1000);
+>  
+>  	mutex_lock(&data->update_lock);
+>  	data->temp_max[nr] = val;
 
-The value passed to DIV_ROUND_CLOSEST() needs to be clamped, and the
-value parameter passed to nct7802_write_fan_min() is an unsigned long.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Also, writing values larger than 2700000 into a limit attribute results
-in writing 0 into the chip's limit registers. The exact behavior when
-writing this value is unspecified. For consistency, report a limit of
-1350000 if the chip register reads 0.  This may be wrong, and the chip
-behavior should be verified with the actual chip, but it is better than
-reporting a value of 0 (which, if written, results in writing a value
-of 0x1fff into the chip register).
-
-Fixes: 3434f3783580 ("hwmon: Driver for Nuvoton NCT7802Y")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: When reading a register value of 0 from a limit register,
-    report it as speed of 1350000.
-    Avoid overflow due to different variable types passed to
-    nct7802_write_fan_min().
-    Fix low limit in store_temp (-128, not -127 as in v1).
-
- drivers/hwmon/nct7802.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
-index 3ce33d244cc0..12b94b094c0d 100644
---- a/drivers/hwmon/nct7802.c
-+++ b/drivers/hwmon/nct7802.c
-@@ -259,13 +259,15 @@ static int nct7802_read_fan_min(struct nct7802_data *data, u8 reg_fan_low,
- 		ret = 0;
- 	else if (ret)
- 		ret = DIV_ROUND_CLOSEST(1350000U, ret);
-+	else
-+		ret = 1350000U;
- abort:
- 	mutex_unlock(&data->access_lock);
- 	return ret;
- }
- 
- static int nct7802_write_fan_min(struct nct7802_data *data, u8 reg_fan_low,
--				 u8 reg_fan_high, unsigned int limit)
-+				 u8 reg_fan_high, unsigned long limit)
- {
- 	int err;
- 
-@@ -326,8 +328,8 @@ static int nct7802_write_voltage(struct nct7802_data *data, int nr, int index,
- 	int shift = 8 - REG_VOLTAGE_LIMIT_MSB_SHIFT[index - 1][nr];
- 	int err;
- 
-+	voltage = clamp_val(voltage, 0, 0x3ff * nct7802_vmul[nr]);
- 	voltage = DIV_ROUND_CLOSEST(voltage, nct7802_vmul[nr]);
--	voltage = clamp_val(voltage, 0, 0x3ff);
- 
- 	mutex_lock(&data->access_lock);
- 	err = regmap_write(data->regmap,
-@@ -402,7 +404,7 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
- 		return err;
- 
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
- 
- 	err = regmap_write(data->regmap, nr, val & 0xff);
- 	return err ? : count;
 -- 
-2.5.0
+Jean Delvare
+SUSE L3 Support
