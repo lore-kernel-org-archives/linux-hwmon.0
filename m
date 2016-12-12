@@ -1,95 +1,94 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:32967 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752633AbcLLOTe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Dec 2016 09:19:34 -0500
-Subject: Re: [PATCH 15/17] hwmln: (g762) Fix overflows and crash seen when
- writing limit attributes
-To: Jean Delvare <jdelvare@suse.de>
-References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
- <1480913740-5678-15-git-send-email-linux@roeck-us.net>
- <20161212121456.4fef646c@endymion>
+Return-path: <jdelvare@suse.de>
+Date: Mon, 12 Dec 2016 11:03:55 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <2f2590ff-d010-b293-2ee6-2f6433195908@roeck-us.net>
-Date: Mon, 12 Dec 2016 06:19:31 -0800
+Subject: Re: [PATCH v2] hwmon: (nct7802) Fix overflows seen when writing
+ into limit attributes
+Message-ID: <20161212110355.7907737e@endymion>
+In-Reply-To: <1481316062-4999-1-git-send-email-linux@roeck-us.net>
+References: <1481316062-4999-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20161212121456.4fef646c@endymion>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Jean,
+On Fri,  9 Dec 2016 12:41:02 -0800, Guenter Roeck wrote:
+> Fix overflows seen when writing voltage and temperature limit attributes.
+> 
+> The value passed to DIV_ROUND_CLOSEST() needs to be clamped, and the
+> value parameter passed to nct7802_write_fan_min() is an unsigned long.
+> 
+> Also, writing values larger than 2700000 into a limit attribute results
+> in writing 0 into the chip's limit registers.
 
-On 12/12/2016 03:14 AM, Jean Delvare wrote:
-> Hi Guenter,
->
-> There's a typo in the subject (hwmln -> hwmon.)
->
-> On Sun,  4 Dec 2016 20:55:38 -0800, Guenter Roeck wrote:
->> Fix overflows seen when writing into fan speed limit attributes.
->> Also fix crash due to division by zero, seen when certain very
->> large values (such as 4611686018427387904, or 0x4000000000000000)
->> are written into fan speed limit attributes.
->>
->> Fixes: 594fbe713bf60 ("Add support for GMT G762/G763 PWM fan controllers")
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>  drivers/hwmon/g762.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
->> index b96a2a9e4df7..584f9f755a92 100644
->> --- a/drivers/hwmon/g762.c
->> +++ b/drivers/hwmon/g762.c
->> @@ -193,12 +193,13 @@ static inline unsigned int rpm_from_cnt(u8 cnt, u32 clk_freq, u16 p,
->>   * Convert fan RPM value from sysfs into count value for fan controller
->>   * register (FAN_SET_CNT).
->>   */
->> -static inline unsigned char cnt_from_rpm(u32 rpm, u32 clk_freq, u16 p,
->> +static inline unsigned char cnt_from_rpm(unsigned long rpm, u32 clk_freq, u16 p,
->>  					 u8 clk_div, u8 gear_mult)
->>  {
->> -	if (!rpm)         /* to stop the fan, set cnt to 255 */
->> +	if (!rpm || !p || !clk_div)	/* to stop the fan, set cnt to 255 */
->>  		return 0xff;
->
-> Looking at the definitions of G762_PULSE_FROM_REG and
-> G762_CLKDIV_FROM_REG, I can't see how either p or clk_div would be 0.
-> So this change seems unneeded to me. The division by zero you have seen
-> would be the consequence of an overflow (fixed below.)
->
-Yes, you are right. I dropped that part.
+You are only talking about _fan_ limits, right?
 
->>
->> +	rpm = clamp_val(rpm, 1, ULONG_MAX / (p * clk_div));
->>  	return clamp_val(((clk_freq * 30 * gear_mult) / (rpm * p * clk_div)),
->>  			 0, 255);
->>  }
->
-> If my math is right, this can be simplified to:
->
-I wrote test code to compare the old calculation and the new one for the complete
-value range (I didn't trust my math skills :-), and it reports the same results.
-So it should be correct.
+> The exact behavior when
+> writing this value is unspecified. For consistency, report a limit of
+> 1350000 if the chip register reads 0.  This may be wrong, and the chip
+> behavior should be verified with the actual chip, but it is better than
+> reporting a value of 0 (which, if written, results in writing a value
+> of 0x1fff into the chip register).
 
-> 	rpm = clamp_val(rpm, 1, (clk_freq * 30 * gear_mult) / (255  * p * clk_div));
-> 	return (clk_freq * 30 * gear_mult) / (rpm * p * clk_div);
->
-> which may or may not actually be more simple ;-) as it avoids the
-> double clamping only at the cost of extra arithmetic. Probably only
-> worth it if we store the result of clk_freq * 30 * gear_mult and p *
-> clk_div locally so we don't have to compute them again.
->
-Excellent idea. I'll make that change.
+This fix is good by doesn't seem to be related with the overflows?
 
-Thanks,
-Guenter
+> 
+> Fixes: 3434f3783580 ("hwmon: Driver for Nuvoton NCT7802Y")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: When reading a register value of 0 from a limit register,
+>     report it as speed of 1350000.
+>     Avoid overflow due to different variable types passed to
+>     nct7802_write_fan_min().
+>     Fix low limit in store_temp (-128, not -127 as in v1).
+> 
+>  drivers/hwmon/nct7802.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+> index 3ce33d244cc0..12b94b094c0d 100644
+> --- a/drivers/hwmon/nct7802.c
+> +++ b/drivers/hwmon/nct7802.c
+> @@ -259,13 +259,15 @@ static int nct7802_read_fan_min(struct nct7802_data *data, u8 reg_fan_low,
+>  		ret = 0;
+>  	else if (ret)
+>  		ret = DIV_ROUND_CLOSEST(1350000U, ret);
+> +	else
+> +		ret = 1350000U;
+>  abort:
+>  	mutex_unlock(&data->access_lock);
+>  	return ret;
+>  }
+>  
+>  static int nct7802_write_fan_min(struct nct7802_data *data, u8 reg_fan_low,
+> -				 u8 reg_fan_high, unsigned int limit)
+> +				 u8 reg_fan_high, unsigned long limit)
+>  {
+>  	int err;
+>  
+> @@ -326,8 +328,8 @@ static int nct7802_write_voltage(struct nct7802_data *data, int nr, int index,
+>  	int shift = 8 - REG_VOLTAGE_LIMIT_MSB_SHIFT[index - 1][nr];
+>  	int err;
+>  
+> +	voltage = clamp_val(voltage, 0, 0x3ff * nct7802_vmul[nr]);
+>  	voltage = DIV_ROUND_CLOSEST(voltage, nct7802_vmul[nr]);
+> -	voltage = clamp_val(voltage, 0, 0x3ff);
+>  
+>  	mutex_lock(&data->access_lock);
+>  	err = regmap_write(data->regmap,
+> @@ -402,7 +404,7 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *attr,
+>  	if (err < 0)
+>  		return err;
+>  
+> -	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
+> +	val = DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
+>  
+>  	err = regmap_write(data->regmap, nr, val & 0xff);
+>  	return err ? : count;
 
-> Probably doesn't matter much in the end, so it's your call.
->
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
+-- 
+Jean Delvare
+SUSE L3 Support
