@@ -1,83 +1,151 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:45756 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56958 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750991AbcLMV5k (ORCPT
+        with ESMTP id S936053AbcLMSLt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Dec 2016 16:57:40 -0500
-Date: Tue, 13 Dec 2016 13:56:41 -0800
+        Tue, 13 Dec 2016 13:11:49 -0500
 From: Guenter Roeck <linux@roeck-us.net>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 16/17] hwmon: (gl518sm) Fix overflows seen when writing
- into limit attributes
-Message-ID: <20161213215641.GA13206@roeck-us.net>
-References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
- <1480913740-5678-16-git-send-email-linux@roeck-us.net>
- <20161213104829.47be4e91@endymion>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20161213104829.47be4e91@endymion>
+To: torvalds@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v4.10
+Date: Tue, 13 Dec 2016 10:11:47 -0800
+Message-Id: <1481652707-31273-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Jean,
+Hi Linus,
 
-On Tue, Dec 13, 2016 at 10:48:29AM +0100, Jean Delvare wrote:
-> Hi Guenter,
-> 
-> On Sun,  4 Dec 2016 20:55:39 -0800, Guenter Roeck wrote:
-> > Writes into limit attributes can overflow due to additions and
-> > multiplications with unchecked parameters.
-> > 
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/hwmon/gl518sm.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/gl518sm.c b/drivers/hwmon/gl518sm.c
-> > index 0212c8317bca..0a11a550c2a2 100644
-> > --- a/drivers/hwmon/gl518sm.c
-> > +++ b/drivers/hwmon/gl518sm.c
-> > @@ -86,9 +86,8 @@ enum chips { gl518sm_r00, gl518sm_r80 };
-> >  #define BOOL_FROM_REG(val)	((val) ? 0 : 1)
-> >  #define BOOL_TO_REG(val)	((val) ? 0 : 1)
-> >  
-> > -#define TEMP_TO_REG(val)	clamp_val(((((val) < 0 ? \
-> > -				(val) - 500 : \
-> > -				(val) + 500) / 1000) + 119), 0, 255)
-> > +#define TEMP_TO_REG(val) (DIV_ROUND_CLOSEST(clamp_val(val, -119000, 136000), \
-> > +					    1000) + 119)
-> >  #define TEMP_FROM_REG(val)	(((val) - 119) * 1000)
-> >  
-> >  static inline u8 FAN_TO_REG(long rpm, int div)
-> > @@ -101,10 +100,11 @@ static inline u8 FAN_TO_REG(long rpm, int div)
-> >  }
-> >  #define FAN_FROM_REG(val, div)	((val) == 0 ? 0 : (480000 / ((val) * (div))))
-> >  
-> > -#define IN_TO_REG(val)		clamp_val((((val) + 9) / 19), 0, 255)
-> > +#define IN_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 19), 19)
-> >  #define IN_FROM_REG(val)	((val) * 19)
-> >  
-> > -#define VDD_TO_REG(val)		clamp_val((((val) * 4 + 47) / 95), 0, 255)
-> > +#define VDD_TO_REG(val) \
-> > +	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 95 / 4) * 4, 95)
-> >  #define VDD_FROM_REG(val)	(((val) * 95 + 2) / 4)
-> >  
-> >  #define DIV_FROM_REG(val)	(1 << (val))
-> 
-> Code looks good. Alignment is a bit clumsy though. Also it feels
-> strange now that you are using DIV_ROUND_CLOSEST for VDD_TO_REG but not
-> VDD_FROM_REG.
-> 
-I cleaned up the alignment, and added DIV_ROUND_CLOSEST() to VDD_TO_REG().
-I'll resend an updated version.
+Please pull hwmon updates for Linux v4.10 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.10
 
 Thanks,
 Guenter
+------
 
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> 
-> -- 
-> Jean Delvare
-> SUSE L3 Support
+The following changes since commit e5517c2a5a49ed5e99047008629f1cd60246ea0e:
+
+  Linux 4.9-rc7 (2016-11-27 13:08:04 -0800)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.10
+
+for you to fetch changes up to 4fccd4a1e8944033bcd7693ea4e8fb478cd2059a:
+
+  hwmon: (g762) Fix overflows and crash seen when writing limit attributes (2016-12-12 11:33:44 -0800)
+
+----------------------------------------------------------------
+hwmon updates for v4.10
+
+- new drivers for TMP108 and TC654
+- hwmon core code cleanup
+- coretemp driver cleanup
+- fix overflow issues in several drivers
+- minor fixes, cleanups and enhancements in various drivers
+
+----------------------------------------------------------------
+Chris Packham (1):
+      hwmon: Add tc654 driver
+
+Clemens Gruber (3):
+      hwmon: (mcp3021) add devicetree bindings documentation
+      hwmon: (mcp3021) replace S_IRUGO with 0444
+      hwmon: (mcp3021) add devicetree support
+
+Guenter Roeck (21):
+      hwmon: (adm9240) Fix overflows seen when writing into limit attributes
+      hwmon: (ds620) Fix overflows seen when writing temperature limits
+      hwmon: (smsc47m192) Fix overflows seen when writing into limit attributes
+      hwmon: (core) Clarify when read and write callbacks are mandatory
+      hwmon: (core) Add support for string attributes to new API
+      hwmon: (core) Clarify use of chip attributes
+      hwmon: (core) Deprecate hwmon_device_register()
+      hwmon: (core) Make is_visible callback truly mandatory
+      hwmon: (core) Explain why at least two attribute groups are allocated
+      hwmon: (core) Rename groups parameter in API to extra_groups
+      hwmon: (core) Simplify sysfs attribute name allocation
+      hwmon: (adm1025) Fix overflows seen when writing voltage limits
+      hwmon: (adm1026) Fix overflows seen when writing into limit attributes
+      hwmon: (adt7462) Fix overflows seen when writing into limit attributes
+      hwmon: (adt7470) Fix overflows seen when writing into limit attributes
+      hwmon: (nct7802) Fix overflows seen when writing into limit attributes
+      hwmon: (lm87) Fix overflow seen when writing voltage limit attributes
+      hwmon: (lm85) Fix overflows seen when writing voltage limit attributes
+      hwmon: (emc2103) Fix overflows seen when temperature limit attributes
+      hwmon: (emcw201) Fix overflows seen when writing into limit attributes
+      hwmon: (g762) Fix overflows and crash seen when writing limit attributes
+
+Jared Bents (1):
+      hwmon: (amc6821) sign extension temperature
+
+Jason Gunthorpe (1):
+      hwmon: (lm87) Use hwmon to create the sysfs groups
+
+Javier Martinez Canillas (1):
+      hwmon: (scpi) Fix module autoload
+
+John Muir (2):
+      hwmon: Add Texas Instruments TMP108 temperature sensor driver.
+      devicetree: hwmon: Add documentation for TMP108 driver.
+
+Michael Walle (1):
+      hwmon: (adt7411) update to new hwmon registration API
+
+Sebastian Andrzej Siewior (1):
+      hwmon: (via-cputemp) Convert to hotplug state machine
+
+Thomas Gleixner (7):
+      hwmon: (via-cputemp) Remove pointless CPU check on each CPU
+      hwmon: (coretemp) Fixup target cpu for package when cpu is offlined
+      hwmon: (coretemp) Simplify sibling management
+      hwmon: (coretemp) Avoid redundant lookups
+      hwmon: (coretemp) Convert to hotplug state machine
+      hwmon: (coretemp) Use proper error codes in cpu online callback
+      hwmon: (coretemp) Simplify package management
+
+Tobias Klauser (1):
+      hwmon: (lm90) Mention support for TI TMP451 in Kconfig description
+
+Yi Li (1):
+      hwmon: (adm1275) Enable adm1278 VOUT sampling
+
+ .../devicetree/bindings/hwmon/mcp3021.txt          |  21 +
+ Documentation/devicetree/bindings/hwmon/tmp108.txt |  14 +
+ .../devicetree/bindings/i2c/trivial-devices.txt    |   2 +
+ Documentation/hwmon/hwmon-kernel-api.txt           |  58 ++-
+ Documentation/hwmon/tc654                          |  31 ++
+ Documentation/hwmon/tmp108                         |  36 ++
+ drivers/hwmon/Kconfig                              |  26 +-
+ drivers/hwmon/Makefile                             |   2 +
+ drivers/hwmon/adm1025.c                            |   2 +-
+ drivers/hwmon/adm1026.c                            |  26 +-
+ drivers/hwmon/adm9240.c                            |   9 +-
+ drivers/hwmon/adt7411.c                            | 301 +++++++-----
+ drivers/hwmon/adt7462.c                            |  12 +-
+ drivers/hwmon/adt7470.c                            |   6 +-
+ drivers/hwmon/amc6821.c                            |   4 +-
+ drivers/hwmon/coretemp.c                           | 321 +++++--------
+ drivers/hwmon/ds620.c                              |   2 +-
+ drivers/hwmon/emc2103.c                            |   4 +-
+ drivers/hwmon/emc6w201.c                           |   8 +-
+ drivers/hwmon/g762.c                               |  11 +-
+ drivers/hwmon/hwmon.c                              |  79 +++-
+ drivers/hwmon/lm85.c                               |   3 +-
+ drivers/hwmon/lm87.c                               | 136 ++----
+ drivers/hwmon/mcp3021.c                            |  50 +-
+ drivers/hwmon/nct7802.c                            |   8 +-
+ drivers/hwmon/pmbus/adm1275.c                      |  20 +-
+ drivers/hwmon/scpi-hwmon.c                         |   1 +
+ drivers/hwmon/smsc47m192.c                         |   5 +-
+ drivers/hwmon/tc654.c                              | 514 +++++++++++++++++++++
+ drivers/hwmon/tmp108.c                             | 469 +++++++++++++++++++
+ drivers/hwmon/via-cputemp.c                        |  77 +--
+ include/linux/hwmon.h                              |  31 +-
+ 32 files changed, 1695 insertions(+), 594 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/mcp3021.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/tmp108.txt
+ create mode 100644 Documentation/hwmon/tc654
+ create mode 100644 Documentation/hwmon/tmp108
+ create mode 100644 drivers/hwmon/tc654.c
+ create mode 100644 drivers/hwmon/tmp108.c
