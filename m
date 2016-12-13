@@ -1,56 +1,66 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:42835 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752280AbcLLPn1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Dec 2016 10:43:27 -0500
-Date: Mon, 12 Dec 2016 16:43:22 +0100
+Return-path: <jdelvare@suse.de>
+Date: Tue, 13 Dec 2016 10:48:29 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: (nct7802) Fix overflows seen when writing
+Subject: Re: [PATCH 16/17] hwmon: (gl518sm) Fix overflows seen when writing
  into limit attributes
-Message-ID: <20161212164322.0449bec2@endymion>
-In-Reply-To: <73ac82c8-8fc3-0def-aa5d-0bcab714cc4b@roeck-us.net>
-References: <1481316062-4999-1-git-send-email-linux@roeck-us.net>
-        <20161212110355.7907737e@endymion>
-        <73ac82c8-8fc3-0def-aa5d-0bcab714cc4b@roeck-us.net>
+Message-ID: <20161213104829.47be4e91@endymion>
+In-Reply-To: <1480913740-5678-16-git-send-email-linux@roeck-us.net>
+References: <1480913740-5678-1-git-send-email-linux@roeck-us.net>
+	<1480913740-5678-16-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, 12 Dec 2016 06:14:14 -0800, Guenter Roeck wrote:
-> Hi Jean,
-> 
-> On 12/12/2016 02:03 AM, Jean Delvare wrote:
-> > On Fri,  9 Dec 2016 12:41:02 -0800, Guenter Roeck wrote:
-> >> Fix overflows seen when writing voltage and temperature limit attributes.
-> >>
-> >> The value passed to DIV_ROUND_CLOSEST() needs to be clamped, and the
-> >> value parameter passed to nct7802_write_fan_min() is an unsigned long.
-> >>
-> >> Also, writing values larger than 2700000 into a limit attribute results
-> >> in writing 0 into the chip's limit registers.
-> >
-> > You are only talking about _fan_ limits, right?
-> >
-> Yes. I'll clarify.
-> 
-> >> The exact behavior when
-> >> writing this value is unspecified. For consistency, report a limit of
-> >> 1350000 if the chip register reads 0.  This may be wrong, and the chip
-> >> behavior should be verified with the actual chip, but it is better than
-> >> reporting a value of 0 (which, if written, results in writing a value
-> >> of 0x1fff into the chip register).
-> >
-> > This fix is good by doesn't seem to be related with the overflows?
-> >
-> Writing a limit larger than 2700000 results in writing 0 into the register,
-> which is reported back as 0. 2699999 -> 1 -> 1350000, 2700000 -> 0 -> 0.
-> I consider that an overflow situation.
+Hi Guenter,
 
-OK, I understand, you are right.
+On Sun,  4 Dec 2016 20:55:39 -0800, Guenter Roeck wrote:
+> Writes into limit attributes can overflow due to additions and
+> multiplications with unchecked parameters.
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/gl518sm.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/gl518sm.c b/drivers/hwmon/gl518sm.c
+> index 0212c8317bca..0a11a550c2a2 100644
+> --- a/drivers/hwmon/gl518sm.c
+> +++ b/drivers/hwmon/gl518sm.c
+> @@ -86,9 +86,8 @@ enum chips { gl518sm_r00, gl518sm_r80 };
+>  #define BOOL_FROM_REG(val)	((val) ? 0 : 1)
+>  #define BOOL_TO_REG(val)	((val) ? 0 : 1)
+>  
+> -#define TEMP_TO_REG(val)	clamp_val(((((val) < 0 ? \
+> -				(val) - 500 : \
+> -				(val) + 500) / 1000) + 119), 0, 255)
+> +#define TEMP_TO_REG(val) (DIV_ROUND_CLOSEST(clamp_val(val, -119000, 136000), \
+> +					    1000) + 119)
+>  #define TEMP_FROM_REG(val)	(((val) - 119) * 1000)
+>  
+>  static inline u8 FAN_TO_REG(long rpm, int div)
+> @@ -101,10 +100,11 @@ static inline u8 FAN_TO_REG(long rpm, int div)
+>  }
+>  #define FAN_FROM_REG(val, div)	((val) == 0 ? 0 : (480000 / ((val) * (div))))
+>  
+> -#define IN_TO_REG(val)		clamp_val((((val) + 9) / 19), 0, 255)
+> +#define IN_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 19), 19)
+>  #define IN_FROM_REG(val)	((val) * 19)
+>  
+> -#define VDD_TO_REG(val)		clamp_val((((val) * 4 + 47) / 95), 0, 255)
+> +#define VDD_TO_REG(val) \
+> +	DIV_ROUND_CLOSEST(clamp_val(val, 0, 255 * 95 / 4) * 4, 95)
+>  #define VDD_FROM_REG(val)	(((val) * 95 + 2) / 4)
+>  
+>  #define DIV_FROM_REG(val)	(1 << (val))
+
+Code looks good. Alignment is a bit clumsy though. Also it feels
+strange now that you are using DIV_ROUND_CLOSEST for VDD_TO_REG but not
+VDD_FROM_REG.
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
 Jean Delvare
