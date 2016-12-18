@@ -1,151 +1,219 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56958 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S936053AbcLMSLt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Dec 2016 13:11:49 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: torvalds@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v4.10
-Date: Tue, 13 Dec 2016 10:11:47 -0800
-Message-Id: <1481652707-31273-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <foxpeter@kabelbw.de>
+To: linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net
+From: Peter Fox <foxpeter@kabelbw.de>
+Subject: [Patch] hwmon (sht15) enabled device tree
+Message-ID: <f71c5c8b-5d2e-eae6-f8ec-748fa9fc74d0@kabelbw.de>
+Date: Mon, 19 Dec 2016 00:05:26 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+From: Peter Fox <FoxPeter@kabelbw.de>
 
-Please pull hwmon updates for Linux v4.10 from signed tag:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.10
+Attached is a patch which allows the sht15 module to read its 
+configuration from
 
-Thanks,
-Guenter
-------
+a device tree in addition to any platform data
 
-The following changes since commit e5517c2a5a49ed5e99047008629f1cd60246ea0e:
 
-  Linux 4.9-rc7 (2016-11-27 13:08:04 -0800)
+Signed-off-by: Peter Fox <FoxPeter@kabelbw.de>
 
-are available in the git repository at:
+---
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.10
 
-for you to fetch changes up to 4fccd4a1e8944033bcd7693ea4e8fb478cd2059a:
+--- linux/drivers/hwmon/sht15.c.orig    2016-12-18 23:23:43.431045129 +0100
++++ linux/drivers/hwmon/sht15.c    2016-12-18 23:40:27.924278262 +0100
+@@ -1,6 +1,8 @@
+  /*
+   * sht15.c - support for the SHT15 Temperature and Humidity Sensor
+   *
++ * Device tree ready (c) 2016 Peter Fox
++ *
+   * Portions Copyright (c) 2010-2012 Savoir-faire Linux Inc.
+   *          Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+   *          Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+@@ -26,6 +28,9 @@
+  #include <linux/mutex.h>
+  #include <linux/platform_data/sht15.h>
+  #include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/of_gpio.h>
+  #include <linux/sched.h>
+  #include <linux/delay.h>
+  #include <linux/jiffies.h>
+@@ -758,8 +763,7 @@ static ssize_t sht15_show_temp(struct de
+   * Returns number of bytes written into buffer, negative errno on error.
+   */
+  static ssize_t sht15_show_humidity(struct device *dev,
+-                   struct device_attribute *attr,
+-                   char *buf)
++                   struct device_attribute *attr, char *buf)
+  {
+      int ret;
+      struct sht15_data *data = dev_get_drvdata(dev);
+@@ -770,17 +774,15 @@ static ssize_t sht15_show_humidity(struc
+  }
 
-  hwmon: (g762) Fix overflows and crash seen when writing limit attributes (2016-12-12 11:33:44 -0800)
+  static ssize_t show_name(struct device *dev,
+-             struct device_attribute *attr,
+-             char *buf)
++    struct device_attribute *attr, char *buf)
+  {
+      struct platform_device *pdev = to_platform_device(dev);
+      return sprintf(buf, "%s\n", pdev->name);
+  }
 
-----------------------------------------------------------------
-hwmon updates for v4.10
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO,
+-              sht15_show_temp, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht15_show_temp, NULL, 0);
+  static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO,
+-              sht15_show_humidity, NULL, 0);
++    sht15_show_humidity, NULL, 0);
+  static SENSOR_DEVICE_ATTR(temp1_fault, S_IRUGO, sht15_show_status, NULL,
+                SHT15_STATUS_LOW_BATTERY);
+  static SENSOR_DEVICE_ATTR(humidity1_fault, S_IRUGO, sht15_show_status, 
+NULL,
+@@ -821,8 +823,7 @@ static void sht15_bh_read_data(struct wo
+      u8 dev_checksum = 0;
+      u8 checksum_vals[3];
+      struct sht15_data *data
+-        = container_of(work_s, struct sht15_data,
+-                   read_work);
++        = container_of(work_s, struct sht15_data, read_work);
 
-- new drivers for TMP108 and TC654
-- hwmon core code cleanup
-- coretemp driver cleanup
-- fix overflow issues in several drivers
-- minor fixes, cleanups and enhancements in various drivers
+      /* Firstly, verify the line is low */
+      if (gpio_get_value(data->pdata->gpio_data)) {
+@@ -884,8 +885,7 @@ wakeup:
+  static void sht15_update_voltage(struct work_struct *work_s)
+  {
+      struct sht15_data *data
+-        = container_of(work_s, struct sht15_data,
+-                   update_supply_work);
++        = container_of(work_s, struct sht15_data, update_supply_work);
+      data->supply_uv = regulator_get_voltage(data->reg);
+  }
 
-----------------------------------------------------------------
-Chris Packham (1):
-      hwmon: Add tc654 driver
+@@ -911,6 +911,50 @@ static int sht15_invalidate_voltage(stru
+      return NOTIFY_OK;
+  }
 
-Clemens Gruber (3):
-      hwmon: (mcp3021) add devicetree bindings documentation
-      hwmon: (mcp3021) replace S_IRUGO with 0444
-      hwmon: (mcp3021) add devicetree support
++
++#ifdef CONFIG_OF
++static const struct of_device_id sht15_of_match[] = {
++    { .compatible = "sht10" },
++    { .compatible = "sht11" },
++    { .compatible = "sht15" },
++    { .compatible = "sht71" },
++    { .compatible = "sht75" },
++    { },
++};
++MODULE_DEVICE_TABLE(of, sht15_of_match);
++
++static struct sht15_platform_data *sht15_parse_dt(struct device *dev)
++{
++    const struct of_device_id *of_id = of_match_device(sht15_of_match, 
+dev);
++    struct device_node *np = dev->of_node;
++    struct sht15_platform_data *pdata;
++
++    if (!of_id || !np)
++        return NULL;
++
++    pdata = kzalloc(sizeof(struct sht15_platform_data), GFP_KERNEL);
++    if (!pdata)
++        return ERR_PTR(-ENOMEM);
++
++    of_property_read_u32(np, "data", &pdata->gpio_data);
++    of_property_read_u32(np, "clock", &pdata->gpio_sck);
++    of_property_read_u32(np, "supply_mv", &pdata->supply_mv);
++    pdata->checksum =    of_property_read_bool(np, "checksum");
++    pdata->no_otp_reload =    of_property_read_bool(np, "no_otp_reload");
++    pdata->low_resolution =    of_property_read_bool(np, "low_resolution");
++
++    return pdata;
++}
++
++#else
++
++static inline struct sht15_platform_data *sht15_parse_dt(struct device 
+*dev)
++{
++    return NULL;
++}
++
++#endif
++
+  static int sht15_probe(struct platform_device *pdev)
+  {
+      int ret;
+@@ -928,11 +972,18 @@ static int sht15_probe(struct platform_d
+      data->dev = &pdev->dev;
+      init_waitqueue_head(&data->wait_queue);
 
-Guenter Roeck (21):
-      hwmon: (adm9240) Fix overflows seen when writing into limit attributes
-      hwmon: (ds620) Fix overflows seen when writing temperature limits
-      hwmon: (smsc47m192) Fix overflows seen when writing into limit attributes
-      hwmon: (core) Clarify when read and write callbacks are mandatory
-      hwmon: (core) Add support for string attributes to new API
-      hwmon: (core) Clarify use of chip attributes
-      hwmon: (core) Deprecate hwmon_device_register()
-      hwmon: (core) Make is_visible callback truly mandatory
-      hwmon: (core) Explain why at least two attribute groups are allocated
-      hwmon: (core) Rename groups parameter in API to extra_groups
-      hwmon: (core) Simplify sysfs attribute name allocation
-      hwmon: (adm1025) Fix overflows seen when writing voltage limits
-      hwmon: (adm1026) Fix overflows seen when writing into limit attributes
-      hwmon: (adt7462) Fix overflows seen when writing into limit attributes
-      hwmon: (adt7470) Fix overflows seen when writing into limit attributes
-      hwmon: (nct7802) Fix overflows seen when writing into limit attributes
-      hwmon: (lm87) Fix overflow seen when writing voltage limit attributes
-      hwmon: (lm85) Fix overflows seen when writing voltage limit attributes
-      hwmon: (emc2103) Fix overflows seen when temperature limit attributes
-      hwmon: (emcw201) Fix overflows seen when writing into limit attributes
-      hwmon: (g762) Fix overflows and crash seen when writing limit attributes
+-    if (dev_get_platdata(&pdev->dev) == NULL) {
+-        dev_err(&pdev->dev, "no platform data supplied\n");
+-        return -EINVAL;
+-    }
+      data->pdata = dev_get_platdata(&pdev->dev);
++    if (!data->pdata) {
++        data->pdata = sht15_parse_dt(&pdev->dev);
++        if (IS_ERR(data->pdata))
++            return PTR_ERR(data->pdata);
++
++        if (!data->pdata) {
++            dev_err(&pdev->dev, "no platform data supplied\n");
++            return -EINVAL;
++        }
++    }
++
+      data->supply_uv = data->pdata->supply_mv * 1000;
+      if (data->pdata->checksum)
+          data->checksumming = true;
+@@ -967,8 +1018,7 @@ static int sht15_probe(struct platform_d
+          data->nb.notifier_call = &sht15_invalidate_voltage;
+          ret = regulator_register_notifier(data->reg, &data->nb);
+          if (ret) {
+-            dev_err(&pdev->dev,
+-                "regulator notifier request failed\n");
++            dev_err(&pdev->dev, "regulator notifier request failed\n");
+              regulator_disable(data->reg);
+              return ret;
+          }
+@@ -1062,6 +1112,7 @@ static int sht15_remove(struct platform_
+      return 0;
+  }
 
-Jared Bents (1):
-      hwmon: (amc6821) sign extension temperature
++
+  static const struct platform_device_id sht15_device_ids[] = {
+      { "sht10", sht10 },
+      { "sht11", sht11 },
+@@ -1072,15 +1123,20 @@ static const struct platform_device_id s
+  };
+  MODULE_DEVICE_TABLE(platform, sht15_device_ids);
 
-Jason Gunthorpe (1):
-      hwmon: (lm87) Use hwmon to create the sysfs groups
++
+  static struct platform_driver sht15_driver = {
+-    .driver = {
+-        .name = "sht15",
+-    },
+      .probe = sht15_probe,
+      .remove = sht15_remove,
+      .id_table = sht15_device_ids,
++    .driver = {
++        .name = "sht15",
++        .of_match_table = of_match_ptr(sht15_of_match),
++    },
+  };
+  module_platform_driver(sht15_driver);
 
-Javier Martinez Canillas (1):
-      hwmon: (scpi) Fix module autoload
-
-John Muir (2):
-      hwmon: Add Texas Instruments TMP108 temperature sensor driver.
-      devicetree: hwmon: Add documentation for TMP108 driver.
-
-Michael Walle (1):
-      hwmon: (adt7411) update to new hwmon registration API
-
-Sebastian Andrzej Siewior (1):
-      hwmon: (via-cputemp) Convert to hotplug state machine
-
-Thomas Gleixner (7):
-      hwmon: (via-cputemp) Remove pointless CPU check on each CPU
-      hwmon: (coretemp) Fixup target cpu for package when cpu is offlined
-      hwmon: (coretemp) Simplify sibling management
-      hwmon: (coretemp) Avoid redundant lookups
-      hwmon: (coretemp) Convert to hotplug state machine
-      hwmon: (coretemp) Use proper error codes in cpu online callback
-      hwmon: (coretemp) Simplify package management
-
-Tobias Klauser (1):
-      hwmon: (lm90) Mention support for TI TMP451 in Kconfig description
-
-Yi Li (1):
-      hwmon: (adm1275) Enable adm1278 VOUT sampling
-
- .../devicetree/bindings/hwmon/mcp3021.txt          |  21 +
- Documentation/devicetree/bindings/hwmon/tmp108.txt |  14 +
- .../devicetree/bindings/i2c/trivial-devices.txt    |   2 +
- Documentation/hwmon/hwmon-kernel-api.txt           |  58 ++-
- Documentation/hwmon/tc654                          |  31 ++
- Documentation/hwmon/tmp108                         |  36 ++
- drivers/hwmon/Kconfig                              |  26 +-
- drivers/hwmon/Makefile                             |   2 +
- drivers/hwmon/adm1025.c                            |   2 +-
- drivers/hwmon/adm1026.c                            |  26 +-
- drivers/hwmon/adm9240.c                            |   9 +-
- drivers/hwmon/adt7411.c                            | 301 +++++++-----
- drivers/hwmon/adt7462.c                            |  12 +-
- drivers/hwmon/adt7470.c                            |   6 +-
- drivers/hwmon/amc6821.c                            |   4 +-
- drivers/hwmon/coretemp.c                           | 321 +++++--------
- drivers/hwmon/ds620.c                              |   2 +-
- drivers/hwmon/emc2103.c                            |   4 +-
- drivers/hwmon/emc6w201.c                           |   8 +-
- drivers/hwmon/g762.c                               |  11 +-
- drivers/hwmon/hwmon.c                              |  79 +++-
- drivers/hwmon/lm85.c                               |   3 +-
- drivers/hwmon/lm87.c                               | 136 ++----
- drivers/hwmon/mcp3021.c                            |  50 +-
- drivers/hwmon/nct7802.c                            |   8 +-
- drivers/hwmon/pmbus/adm1275.c                      |  20 +-
- drivers/hwmon/scpi-hwmon.c                         |   1 +
- drivers/hwmon/smsc47m192.c                         |   5 +-
- drivers/hwmon/tc654.c                              | 514 +++++++++++++++++++++
- drivers/hwmon/tmp108.c                             | 469 +++++++++++++++++++
- drivers/hwmon/via-cputemp.c                        |  77 +--
- include/linux/hwmon.h                              |  31 +-
- 32 files changed, 1695 insertions(+), 594 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/mcp3021.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/tmp108.txt
- create mode 100644 Documentation/hwmon/tc654
- create mode 100644 Documentation/hwmon/tmp108
- create mode 100644 drivers/hwmon/tc654.c
- create mode 100644 drivers/hwmon/tmp108.c
+-MODULE_LICENSE("GPL");
++
++MODULE_ALIAS("platform:sht15");
++MODULE_AUTHOR("Wouter Horre, Jonathan Cameron, Jerome Oufella, Vivien 
+Didelot, Peter Fox");
+  MODULE_DESCRIPTION("Sensirion SHT15 temperature and humidity sensor 
+driver");
++MODULE_LICENSE("GPL");
