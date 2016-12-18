@@ -1,219 +1,209 @@
-Return-path: <foxpeter@kabelbw.de>
-To: linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net
-From: Peter Fox <foxpeter@kabelbw.de>
-Subject: [Patch] hwmon (sht15) enabled device tree
-Message-ID: <f71c5c8b-5d2e-eae6-f8ec-748fa9fc74d0@kabelbw.de>
-Date: Mon, 19 Dec 2016 00:05:26 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from p3plsmtpa06-02.prod.phx3.secureserver.net ([173.201.192.103]:43672
+        "EHLO p3plsmtpa06-02.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S932260AbcLRMmP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 18 Dec 2016 07:42:15 -0500
+From: "Peter A. Bigot" <pab@pabigot.com>
+To: linux-hwmon@vger.kernel.org
+Cc: urs.fleisch@sensirion.com
+Subject: [PATCH] hwmon: (sht21) Add Electronic Identification Code retrieval
+Date: Sun, 18 Dec 2016 06:34:25 -0600
+Message-Id: <1482064465-9674-1-git-send-email-pab@pabigot.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-From: Peter Fox <FoxPeter@kabelbw.de>
+Expose the per-chip unique identifier so it can be used to identify the
+sensor producing the measurements.
 
-
-Attached is a patch which allows the sht15 module to read its 
-configuration from
-
-a device tree in addition to any platform data
-
-
-Signed-off-by: Peter Fox <FoxPeter@kabelbw.de>
-
+Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 ---
+ Documentation/hwmon/sht21 |  6 ++--
+ drivers/hwmon/sht21.c     | 92 +++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 94 insertions(+), 4 deletions(-)
 
-
---- linux/drivers/hwmon/sht15.c.orig    2016-12-18 23:23:43.431045129 +0100
-+++ linux/drivers/hwmon/sht15.c    2016-12-18 23:40:27.924278262 +0100
-@@ -1,6 +1,8 @@
-  /*
-   * sht15.c - support for the SHT15 Temperature and Humidity Sensor
-   *
-+ * Device tree ready (c) 2016 Peter Fox
+diff --git a/Documentation/hwmon/sht21 b/Documentation/hwmon/sht21
+index db17fda..a0db761 100644
+--- a/Documentation/hwmon/sht21
++++ b/Documentation/hwmon/sht21
+@@ -16,6 +16,7 @@ Supported chips:
+ 
+ Author:
+   Urs Fleisch <urs.fleisch@sensirion.com>
++  Peter A. Bigot <pab@pabigot.com>
+ 
+ Description
+ -----------
+@@ -35,6 +36,7 @@ sysfs-Interface
+ 
+ temp1_input - temperature input
+ humidity1_input - humidity input
++eic1_input - Electronic Identification Code
+ 
+ Notes
+ -----
+@@ -45,5 +47,5 @@ humidity and 66 ms for temperature. To keep self heating below 0.1 degree
+ Celsius, the device should not be active for more than 10% of the time,
+ e.g. maximum two measurements per second at the given resolution.
+ 
+-Different resolutions, the on-chip heater, using the CRC checksum and reading
+-the serial number are not supported yet.
++Different resolutions, the on-chip heater, and using the CRC checksum
++are not supported yet.
+diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
+index 84cdb1c..530350b 100644
+--- a/drivers/hwmon/sht21.c
++++ b/drivers/hwmon/sht21.c
+@@ -1,6 +1,7 @@
+ /* Sensirion SHT21 humidity and temperature sensor driver
+  *
+  * Copyright (C) 2010 Urs Fleisch <urs.fleisch@sensirion.com>
++ * Copyright (C) 2016 Peter A. Bigot <pab@pabigot.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -35,6 +36,10 @@
+ #define SHT21_TRIG_T_MEASUREMENT_HM  0xe3
+ #define SHT21_TRIG_RH_MEASUREMENT_HM 0xe5
+ 
++/* Valid flags */
++#define SHT21_MEASUREMENT_VALID 0x01
++#define SHT21_EIC_VALID 0x02
++
+ /**
+  * struct sht21 - SHT21 device specific data
+  * @hwmon_dev: device registered with hwmon
+@@ -43,6 +48,7 @@
+  * @last_update: time of last update (jiffies)
+  * @temperature: cached temperature measurement value
+  * @humidity: cached humidity measurement value
++ * @eic: cached electronic identification code
+  */
+ struct sht21 {
+ 	struct i2c_client *client;
+@@ -51,6 +57,7 @@ struct sht21 {
+ 	unsigned long last_update;
+ 	int temperature;
+ 	int humidity;
++	u8 eic[8];
+ };
+ 
+ /**
+@@ -101,7 +108,8 @@ static int sht21_update_measurements(struct device *dev)
+ 	 * SHT2x should not be active for more than 10% of the time - e.g.
+ 	 * maximum two measurements per second at 12bit accuracy shall be made.
+ 	 */
+-	if (time_after(jiffies, sht21->last_update + HZ / 2) || !sht21->valid) {
++	if (time_after(jiffies, sht21->last_update + HZ / 2)
++	    || !(SHT21_MEASUREMENT_VALID & sht21->valid)) {
+ 		ret = i2c_smbus_read_word_swapped(client,
+ 						  SHT21_TRIG_T_MEASUREMENT_HM);
+ 		if (ret < 0)
+@@ -113,7 +121,7 @@ static int sht21_update_measurements(struct device *dev)
+ 			goto out;
+ 		sht21->humidity = sht21_rh_ticks_to_per_cent_mille(ret);
+ 		sht21->last_update = jiffies;
+-		sht21->valid = 1;
++		sht21->valid |= SHT21_MEASUREMENT_VALID;
+ 	}
+ out:
+ 	mutex_unlock(&sht21->lock);
+@@ -165,15 +173,95 @@ static ssize_t sht21_show_humidity(struct device *dev,
+ 	return sprintf(buf, "%d\n", sht21->humidity);
+ }
+ 
++/**
++ * sht21_show_eic() - show Electronic Identification Code in sysfs
++ * @dev: device
++ * @attr: device attribute
++ * @buf: sysfs buffer (PAGE_SIZE) where measurement values are written to
 + *
-   * Portions Copyright (c) 2010-2012 Savoir-faire Linux Inc.
-   *          Jerome Oufella <jerome.oufella@savoirfairelinux.com>
-   *          Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-@@ -26,6 +28,9 @@
-  #include <linux/mutex.h>
-  #include <linux/platform_data/sht15.h>
-  #include <linux/platform_device.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/of_gpio.h>
-  #include <linux/sched.h>
-  #include <linux/delay.h>
-  #include <linux/jiffies.h>
-@@ -758,8 +763,7 @@ static ssize_t sht15_show_temp(struct de
-   * Returns number of bytes written into buffer, negative errno on error.
-   */
-  static ssize_t sht15_show_humidity(struct device *dev,
--                   struct device_attribute *attr,
--                   char *buf)
-+                   struct device_attribute *attr, char *buf)
-  {
-      int ret;
-      struct sht15_data *data = dev_get_drvdata(dev);
-@@ -770,17 +774,15 @@ static ssize_t sht15_show_humidity(struc
-  }
-
-  static ssize_t show_name(struct device *dev,
--             struct device_attribute *attr,
--             char *buf)
-+    struct device_attribute *attr, char *buf)
-  {
-      struct platform_device *pdev = to_platform_device(dev);
-      return sprintf(buf, "%s\n", pdev->name);
-  }
-
--static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO,
--              sht15_show_temp, NULL, 0);
-+static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht15_show_temp, NULL, 0);
-  static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO,
--              sht15_show_humidity, NULL, 0);
-+    sht15_show_humidity, NULL, 0);
-  static SENSOR_DEVICE_ATTR(temp1_fault, S_IRUGO, sht15_show_status, NULL,
-                SHT15_STATUS_LOW_BATTERY);
-  static SENSOR_DEVICE_ATTR(humidity1_fault, S_IRUGO, sht15_show_status, 
-NULL,
-@@ -821,8 +823,7 @@ static void sht15_bh_read_data(struct wo
-      u8 dev_checksum = 0;
-      u8 checksum_vals[3];
-      struct sht15_data *data
--        = container_of(work_s, struct sht15_data,
--                   read_work);
-+        = container_of(work_s, struct sht15_data, read_work);
-
-      /* Firstly, verify the line is low */
-      if (gpio_get_value(data->pdata->gpio_data)) {
-@@ -884,8 +885,7 @@ wakeup:
-  static void sht15_update_voltage(struct work_struct *work_s)
-  {
-      struct sht15_data *data
--        = container_of(work_s, struct sht15_data,
--                   update_supply_work);
-+        = container_of(work_s, struct sht15_data, update_supply_work);
-      data->supply_uv = regulator_get_voltage(data->reg);
-  }
-
-@@ -911,6 +911,50 @@ static int sht15_invalidate_voltage(stru
-      return NOTIFY_OK;
-  }
-
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id sht15_of_match[] = {
-+    { .compatible = "sht10" },
-+    { .compatible = "sht11" },
-+    { .compatible = "sht15" },
-+    { .compatible = "sht71" },
-+    { .compatible = "sht75" },
-+    { },
-+};
-+MODULE_DEVICE_TABLE(of, sht15_of_match);
-+
-+static struct sht15_platform_data *sht15_parse_dt(struct device *dev)
++ * Will be called on read access to eic1_input sysfs attribute.
++ * Returns number of bytes written into buffer, negative errno on error.
++ */
++static ssize_t sht21_show_eic(struct device *dev,
++	struct device_attribute *attr,
++	char *buf)
 +{
-+    const struct of_device_id *of_id = of_match_device(sht15_of_match, 
-dev);
-+    struct device_node *np = dev->of_node;
-+    struct sht15_platform_data *pdata;
++	struct sht21 *sht21 = dev_get_drvdata(dev);
++	struct i2c_client *client = sht21->client;
++	int ret = 0;
++	int i;
++	char *bp = buf;
++	mutex_lock(&sht21->lock);
++	if (!(SHT21_EIC_VALID & sht21->valid)) {
++		u8 tx[4];
++		u8 rx[8];
++		struct i2c_msg msgs[2] = {
++			{
++				.addr = client->addr,
++				.flags = 0,
++				.len = 0,
++				.buf = tx,
++			},
++			{
++				.addr = client->addr,
++				.flags = I2C_M_RD,
++				.len = 0,
++				.buf = rx,
++			},
++		};
++		u8 *dp = tx;
++		*dp++ = 0xFA;
++		*dp++ = 0x0F;
++		msgs[0].len = dp-tx;
++		msgs[1].len = 8;
++		ret = i2c_transfer(client->adapter, msgs, 2);
++		if (ret < 0)
++			goto out;
++		sht21->eic[2] = rx[0];
++		sht21->eic[3] = rx[2];
++		sht21->eic[4] = rx[4];
++		sht21->eic[5] = rx[6];
++		dp = tx;
++		*dp++ = 0xFC;
++		*dp++ = 0xC9;
++		msgs[0].len = dp-tx;
++		msgs[1].len = 6;
++		ret = i2c_transfer(client->adapter, msgs, 2);
++		if (ret < 0)
++			goto out;
++		sht21->eic[0] = rx[3];
++		sht21->eic[1] = rx[4];
++		sht21->eic[6] = rx[0];
++		sht21->eic[7] = rx[1];
++		sht21->valid |= SHT21_EIC_VALID;
++	}
 +
-+    if (!of_id || !np)
-+        return NULL;
-+
-+    pdata = kzalloc(sizeof(struct sht15_platform_data), GFP_KERNEL);
-+    if (!pdata)
-+        return ERR_PTR(-ENOMEM);
-+
-+    of_property_read_u32(np, "data", &pdata->gpio_data);
-+    of_property_read_u32(np, "clock", &pdata->gpio_sck);
-+    of_property_read_u32(np, "supply_mv", &pdata->supply_mv);
-+    pdata->checksum =    of_property_read_bool(np, "checksum");
-+    pdata->no_otp_reload =    of_property_read_bool(np, "no_otp_reload");
-+    pdata->low_resolution =    of_property_read_bool(np, "low_resolution");
-+
-+    return pdata;
++	for (i = 0; i < sizeof(sht21->eic); ++i) {
++		ret = sprintf(bp, "%02x", sht21->eic[i]);
++		if (ret < 0)
++			goto out;
++		bp += ret;
++	}
++out:
++	mutex_unlock(&sht21->lock);
++	if (ret >= 0) {
++		*bp++ = '\n';
++		ret = bp - buf;
++	}
++	return ret;
 +}
 +
-+#else
-+
-+static inline struct sht15_platform_data *sht15_parse_dt(struct device 
-*dev)
-+{
-+    return NULL;
-+}
-+
-+#endif
-+
-  static int sht15_probe(struct platform_device *pdev)
-  {
-      int ret;
-@@ -928,11 +972,18 @@ static int sht15_probe(struct platform_d
-      data->dev = &pdev->dev;
-      init_waitqueue_head(&data->wait_queue);
+ /* sysfs attributes */
+ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht21_show_temperature,
+ 	NULL, 0);
+ static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO, sht21_show_humidity,
+ 	NULL, 0);
++static SENSOR_DEVICE_ATTR(eic1_input, S_IRUGO, sht21_show_eic, NULL, 0);
+ 
+ static struct attribute *sht21_attrs[] = {
+ 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+ 	&sensor_dev_attr_humidity1_input.dev_attr.attr,
++	&sensor_dev_attr_eic1_input.dev_attr.attr,
+ 	NULL
+ };
+ 
+-- 
+2.7.4
 
--    if (dev_get_platdata(&pdev->dev) == NULL) {
--        dev_err(&pdev->dev, "no platform data supplied\n");
--        return -EINVAL;
--    }
-      data->pdata = dev_get_platdata(&pdev->dev);
-+    if (!data->pdata) {
-+        data->pdata = sht15_parse_dt(&pdev->dev);
-+        if (IS_ERR(data->pdata))
-+            return PTR_ERR(data->pdata);
-+
-+        if (!data->pdata) {
-+            dev_err(&pdev->dev, "no platform data supplied\n");
-+            return -EINVAL;
-+        }
-+    }
-+
-      data->supply_uv = data->pdata->supply_mv * 1000;
-      if (data->pdata->checksum)
-          data->checksumming = true;
-@@ -967,8 +1018,7 @@ static int sht15_probe(struct platform_d
-          data->nb.notifier_call = &sht15_invalidate_voltage;
-          ret = regulator_register_notifier(data->reg, &data->nb);
-          if (ret) {
--            dev_err(&pdev->dev,
--                "regulator notifier request failed\n");
-+            dev_err(&pdev->dev, "regulator notifier request failed\n");
-              regulator_disable(data->reg);
-              return ret;
-          }
-@@ -1062,6 +1112,7 @@ static int sht15_remove(struct platform_
-      return 0;
-  }
-
-+
-  static const struct platform_device_id sht15_device_ids[] = {
-      { "sht10", sht10 },
-      { "sht11", sht11 },
-@@ -1072,15 +1123,20 @@ static const struct platform_device_id s
-  };
-  MODULE_DEVICE_TABLE(platform, sht15_device_ids);
-
-+
-  static struct platform_driver sht15_driver = {
--    .driver = {
--        .name = "sht15",
--    },
-      .probe = sht15_probe,
-      .remove = sht15_remove,
-      .id_table = sht15_device_ids,
-+    .driver = {
-+        .name = "sht15",
-+        .of_match_table = of_match_ptr(sht15_of_match),
-+    },
-  };
-  module_platform_driver(sht15_driver);
-
--MODULE_LICENSE("GPL");
-+
-+MODULE_ALIAS("platform:sht15");
-+MODULE_AUTHOR("Wouter Horre, Jonathan Cameron, Jerome Oufella, Vivien 
-Didelot, Peter Fox");
-  MODULE_DESCRIPTION("Sensirion SHT15 temperature and humidity sensor 
-driver");
-+MODULE_LICENSE("GPL");
