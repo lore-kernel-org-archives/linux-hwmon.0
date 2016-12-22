@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3902 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3904 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965187AbcLVM04 (ORCPT
+        by vger.kernel.org with ESMTP id S965357AbcLVM1D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:26:56 -0500
+        Thu, 22 Dec 2016 07:27:03 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 16/66] hwmon: (core) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:45 +0100
-Message-Id: <1482408335-3435-17-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 34/66] hwmon: (pcf8591) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:03 +0100
+Message-Id: <1482408335-3435-35-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,25 +52,68 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/hwmon.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/pcf8591.c |   24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 3932f92..0c5660c 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -63,11 +63,11 @@ struct hwmon_thermal_data {
- };
+diff --git a/drivers/hwmon/pcf8591.c b/drivers/hwmon/pcf8591.c
+index 5740888..60e25c8 100644
+--- a/drivers/hwmon/pcf8591.c
++++ b/drivers/hwmon/pcf8591.c
+@@ -103,16 +103,16 @@ static DEVICE_ATTR(in##channel##_input, S_IRUGO,			\
+ show_in_channel(2);
+ show_in_channel(3);
  
- static ssize_t
--show_name(struct device *dev, struct device_attribute *attr, char *buf)
-+name_show(struct device *dev, struct device_attribute *attr, char *buf)
+-static ssize_t show_out0_ouput(struct device *dev,
+-			       struct device_attribute *attr, char *buf)
++static ssize_t out0_output_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
  {
- 	return sprintf(buf, "%s\n", to_hwmon_device(dev)->name);
+ 	struct pcf8591_data *data = i2c_get_clientdata(to_i2c_client(dev));
+ 	return sprintf(buf, "%d\n", data->aout * 10);
  }
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-+static DEVICE_ATTR_RO(name);
  
- static struct attribute *hwmon_dev_attrs[] = {
- 	&dev_attr_name.attr,
+-static ssize_t set_out0_output(struct device *dev,
+-			       struct device_attribute *attr,
+-			       const char *buf, size_t count)
++static ssize_t out0_output_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
+ {
+ 	unsigned long val;
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -132,19 +132,18 @@ static ssize_t set_out0_output(struct device *dev,
+ 	return count;
+ }
+ 
+-static DEVICE_ATTR(out0_output, S_IWUSR | S_IRUGO,
+-		   show_out0_ouput, set_out0_output);
++static DEVICE_ATTR_RW(out0_output);
+ 
+-static ssize_t show_out0_enable(struct device *dev,
++static ssize_t out0_enable_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+ 	struct pcf8591_data *data = i2c_get_clientdata(to_i2c_client(dev));
+ 	return sprintf(buf, "%u\n", !(!(data->control & PCF8591_CONTROL_AOEF)));
+ }
+ 
+-static ssize_t set_out0_enable(struct device *dev,
+-			       struct device_attribute *attr,
+-			       const char *buf, size_t count)
++static ssize_t out0_enable_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct pcf8591_data *data = i2c_get_clientdata(client);
+@@ -165,8 +164,7 @@ static ssize_t set_out0_enable(struct device *dev,
+ 	return count;
+ }
+ 
+-static DEVICE_ATTR(out0_enable, S_IWUSR | S_IRUGO,
+-		   show_out0_enable, set_out0_enable);
++static DEVICE_ATTR_RW(out0_enable);
+ 
+ static struct attribute *pcf8591_attributes[] = {
+ 	&dev_attr_out0_enable.attr,
 
