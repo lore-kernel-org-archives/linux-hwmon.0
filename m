@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3905 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31267 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S938940AbcLVM05 (ORCPT
+        by vger.kernel.org with ESMTP id S965055AbcLVM0z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:26:57 -0500
+        Thu, 22 Dec 2016 07:26:55 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 19/66] hwmon: (jz4740) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:48 +0100
-Message-Id: <1482408335-3435-20-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 09/66] hwmon: (ds1621) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:38 +0100
+Message-Id: <1482408335-3435-10-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,31 +52,53 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/jz4740-hwmon.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/ds1621.c |   16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/jz4740-hwmon.c b/drivers/hwmon/jz4740-hwmon.c
-index 0621ee1..2d40a2e 100644
---- a/drivers/hwmon/jz4740-hwmon.c
-+++ b/drivers/hwmon/jz4740-hwmon.c
-@@ -44,8 +44,8 @@ static irqreturn_t jz4740_hwmon_irq(int irq, void *data)
- 	return IRQ_HANDLED;
+diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
+index 8890870..5c317fc 100644
+--- a/drivers/hwmon/ds1621.c
++++ b/drivers/hwmon/ds1621.c
+@@ -263,7 +263,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *da,
+ 	return count;
  }
  
--static ssize_t jz4740_hwmon_read_adcin(struct device *dev,
--	struct device_attribute *dev_attr, char *buf)
-+static ssize_t in0_input_show(struct device *dev,
-+			      struct device_attribute *dev_attr, char *buf)
+-static ssize_t show_alarms(struct device *dev, struct device_attribute *da,
++static ssize_t alarms_show(struct device *dev, struct device_attribute *da,
+ 			   char *buf)
  {
- 	struct jz4740_hwmon *hwmon = dev_get_drvdata(dev);
- 	struct platform_device *pdev = hwmon->pdev;
-@@ -79,7 +79,7 @@ static ssize_t jz4740_hwmon_read_adcin(struct device *dev,
- 	return ret;
+ 	struct ds1621_data *data = ds1621_update_client(dev);
+@@ -278,15 +278,16 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", !!(data->conf & attr->index));
  }
  
--static DEVICE_ATTR(in0_input, S_IRUGO, jz4740_hwmon_read_adcin, NULL);
-+static DEVICE_ATTR_RO(in0_input);
+-static ssize_t show_convrate(struct device *dev, struct device_attribute *da,
+-			  char *buf)
++static ssize_t update_interval_show(struct device *dev,
++				    struct device_attribute *da, char *buf)
+ {
+ 	struct ds1621_data *data = dev_get_drvdata(dev);
+ 	return scnprintf(buf, PAGE_SIZE, "%hu\n", data->update_interval);
+ }
  
- static struct attribute *jz4740_attrs[] = {
- 	&dev_attr_in0_input.attr,
+-static ssize_t set_convrate(struct device *dev, struct device_attribute *da,
+-			    const char *buf, size_t count)
++static ssize_t update_interval_store(struct device *dev,
++				     struct device_attribute *da,
++				     const char *buf, size_t count)
+ {
+ 	struct ds1621_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+@@ -315,9 +316,8 @@ static ssize_t set_convrate(struct device *dev, struct device_attribute *da,
+ 	return count;
+ }
+ 
+-static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
+-static DEVICE_ATTR(update_interval, S_IWUSR | S_IRUGO, show_convrate,
+-		   set_convrate);
++static DEVICE_ATTR_RO(alarms);
++static DEVICE_ATTR_RW(update_interval);
+ 
+ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
+ static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp, set_temp, 1);
 
