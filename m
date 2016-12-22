@@ -1,14 +1,13 @@
 Return-path: <Julia.Lawall@lip6.fr>
 From: Julia Lawall <Julia.Lawall@lip6.fr>
-To: Rudolf Marek <r.marek@assembler.cz>
+To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 58/66] hwmon: (k8temp) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:27 +0100
-Message-Id: <1482408335-3435-59-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 64/66] hwmon: (adt7475) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:33 +0100
+Message-Id: <1482408335-3435-65-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -48,28 +47,78 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/k8temp.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/adt7475.c |   28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/hwmon/k8temp.c b/drivers/hwmon/k8temp.c
-index 734d55d..5a632bc 100644
---- a/drivers/hwmon/k8temp.c
-+++ b/drivers/hwmon/k8temp.c
-@@ -100,7 +100,7 @@ static struct k8temp_data *k8temp_update_device(struct device *dev)
-  * Sysfs stuff
-  */
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 3cefd1a..c646670 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -856,16 +856,17 @@ static ssize_t set_pwmfreq(struct device *dev, struct device_attribute *attr,
+ 	return count;
+ }
  
--static ssize_t show_name(struct device *dev, struct device_attribute
-+static ssize_t name_show(struct device *dev, struct device_attribute
- 			 *devattr, char *buf)
+-static ssize_t show_pwm_at_crit(struct device *dev,
+-				struct device_attribute *devattr, char *buf)
++static ssize_t pwm_use_point2_pwm_at_crit_show(struct device *dev,
++					struct device_attribute *devattr,
++					char *buf)
  {
- 	struct k8temp_data *data = dev_get_drvdata(dev);
-@@ -133,7 +133,7 @@ static ssize_t show_temp(struct device *dev,
- static SENSOR_DEVICE_ATTR_2(temp2_input, S_IRUGO, show_temp, NULL, 0, 1);
- static SENSOR_DEVICE_ATTR_2(temp3_input, S_IRUGO, show_temp, NULL, 1, 0);
- static SENSOR_DEVICE_ATTR_2(temp4_input, S_IRUGO, show_temp, NULL, 1, 1);
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-+static DEVICE_ATTR_RO(name);
+ 	struct adt7475_data *data = adt7475_update_device(dev);
+ 	return sprintf(buf, "%d\n", !!(data->config4 & CONFIG4_MAXDUTY));
+ }
  
- static const struct pci_device_id k8temp_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_K8_NB_MISC) },
+-static ssize_t set_pwm_at_crit(struct device *dev,
+-			       struct device_attribute *devattr,
+-			       const char *buf, size_t count)
++static ssize_t pwm_use_point2_pwm_at_crit_store(struct device *dev,
++					struct device_attribute *devattr,
++					const char *buf, size_t count)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct adt7475_data *data = i2c_get_clientdata(client);
+@@ -888,15 +889,15 @@ static ssize_t set_pwm_at_crit(struct device *dev,
+ 	return count;
+ }
+ 
+-static ssize_t show_vrm(struct device *dev, struct device_attribute *devattr,
++static ssize_t vrm_show(struct device *dev, struct device_attribute *devattr,
+ 			char *buf)
+ {
+ 	struct adt7475_data *data = dev_get_drvdata(dev);
+ 	return sprintf(buf, "%d\n", (int)data->vrm);
+ }
+ 
+-static ssize_t set_vrm(struct device *dev, struct device_attribute *devattr,
+-		       const char *buf, size_t count)
++static ssize_t vrm_store(struct device *dev, struct device_attribute *devattr,
++			 const char *buf, size_t count)
+ {
+ 	struct adt7475_data *data = dev_get_drvdata(dev);
+ 	long val;
+@@ -910,8 +911,8 @@ static ssize_t set_vrm(struct device *dev, struct device_attribute *devattr,
+ 	return count;
+ }
+ 
+-static ssize_t show_vid(struct device *dev, struct device_attribute *devattr,
+-			char *buf)
++static ssize_t cpu0_vid_show(struct device *dev,
++			     struct device_attribute *devattr, char *buf)
+ {
+ 	struct adt7475_data *data = adt7475_update_device(dev);
+ 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
+@@ -1057,11 +1058,10 @@ static SENSOR_DEVICE_ATTR_2(pwm3_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
+ 			    set_pwm, MAX, 2);
+ 
+ /* Non-standard name, might need revisiting */
+-static DEVICE_ATTR(pwm_use_point2_pwm_at_crit, S_IWUSR | S_IRUGO,
+-		   show_pwm_at_crit, set_pwm_at_crit);
++static DEVICE_ATTR_RW(pwm_use_point2_pwm_at_crit);
+ 
+-static DEVICE_ATTR(vrm, S_IWUSR | S_IRUGO, show_vrm, set_vrm);
+-static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_vid, NULL);
++static DEVICE_ATTR_RW(vrm);
++static DEVICE_ATTR_RO(cpu0_vid);
+ 
+ static struct attribute *adt7475_attrs[] = {
+ 	&sensor_dev_attr_in1_input.dev_attr.attr,
