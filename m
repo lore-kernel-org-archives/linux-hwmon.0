@@ -1,7 +1,7 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:63945 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3902 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965371AbcLVM1D (ORCPT
+        by vger.kernel.org with ESMTP id S965367AbcLVM1D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 22 Dec 2016 07:27:03 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
@@ -9,9 +9,9 @@ To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 25/66] hwmon: (lm92) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:54 +0100
-Message-Id: <1482408335-3435-26-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 37/66] hwmon: (smsc47m1) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:06 +0100
+Message-Id: <1482408335-3435-38-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,45 +52,42 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/lm92.c |   10 +++++-----
+ drivers/hwmon/smsc47m1.c |   10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
-index cfaf70b..2a91974 100644
---- a/drivers/hwmon/lm92.c
-+++ b/drivers/hwmon/lm92.c
-@@ -181,8 +181,8 @@ static ssize_t show_temp_hyst(struct device *dev,
- 		       - TEMP_FROM_REG(data->temp[t_hyst]));
+diff --git a/drivers/hwmon/smsc47m1.c b/drivers/hwmon/smsc47m1.c
+index 5d32318..c7b6a42 100644
+--- a/drivers/hwmon/smsc47m1.c
++++ b/drivers/hwmon/smsc47m1.c
+@@ -264,8 +264,8 @@ static ssize_t get_pwm_en(struct device *dev, struct device_attribute
+ 	return sprintf(buf, "%d\n", PWM_EN_FROM_REG(data->pwm[attr->index]));
  }
  
--static ssize_t show_temp_min_hyst(struct device *dev,
--				  struct device_attribute *attr, char *buf)
-+static ssize_t temp1_min_hyst_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
+-static ssize_t get_alarms(struct device *dev, struct device_attribute
+-			  *devattr, char *buf)
++static ssize_t alarms_show(struct device *dev,
++			   struct device_attribute *devattr, char *buf)
  {
- 	struct lm92_data *data = lm92_update_device(dev);
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[t_min])
-@@ -213,7 +213,7 @@ static ssize_t set_temp_hyst(struct device *dev,
- 	return count;
- }
+ 	struct smsc47m1_data *data = smsc47m1_update_device(dev, 0);
+ 	return sprintf(buf, "%d\n", data->alarms);
+@@ -440,16 +440,16 @@ static SENSOR_DEVICE_ATTR(pwm##offset##_enable, S_IRUGO | S_IWUSR,	\
+ fan_present(2);
+ fan_present(3);
  
--static ssize_t show_alarms(struct device *dev, struct device_attribute *attr,
-+static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
- 			   char *buf)
- {
- 	struct lm92_data *data = lm92_update_device(dev);
-@@ -235,11 +235,11 @@ static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IWUSR | S_IRUGO, show_temp_hyst,
- 			  set_temp_hyst, t_crit);
- static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp, set_temp,
- 			  t_min);
--static DEVICE_ATTR(temp1_min_hyst, S_IRUGO, show_temp_min_hyst, NULL);
-+static DEVICE_ATTR_RO(temp1_min_hyst);
- static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, show_temp, set_temp,
- 			  t_max);
- static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO, show_temp_hyst, NULL, t_max);
--static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
+-static DEVICE_ATTR(alarms, S_IRUGO, get_alarms, NULL);
 +static DEVICE_ATTR_RO(alarms);
- static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_alarm, NULL, 2);
- static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_alarm, NULL, 0);
- static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL, 1);
+ 
+-static ssize_t show_name(struct device *dev, struct device_attribute
++static ssize_t name_show(struct device *dev, struct device_attribute
+ 			 *devattr, char *buf)
+ {
+ 	struct smsc47m1_data *data = dev_get_drvdata(dev);
+ 
+ 	return sprintf(buf, "%s\n", data->name);
+ }
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
+ 
+ static struct attribute *smsc47m1_attributes_fan1[] = {
+ 	&sensor_dev_attr_fan1_input.dev_attr.attr,
 
