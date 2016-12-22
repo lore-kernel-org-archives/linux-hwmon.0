@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3904 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:63945 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S938981AbcLVM06 (ORCPT
+        by vger.kernel.org with ESMTP id S965371AbcLVM1D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:26:58 -0500
+        Thu, 22 Dec 2016 07:27:03 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 21/66] hwmon: (lm70) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:50 +0100
-Message-Id: <1482408335-3435-22-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 25/66] hwmon: (lm92) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:54 +0100
+Message-Id: <1482408335-3435-26-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,31 +52,45 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/lm70.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/lm92.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
-index 583f883..d6ecd1a 100644
---- a/drivers/hwmon/lm70.c
-+++ b/drivers/hwmon/lm70.c
-@@ -54,8 +54,8 @@ struct lm70 {
- };
- 
- /* sysfs hook function */
--static ssize_t lm70_sense_temp(struct device *dev,
--		struct device_attribute *attr, char *buf)
-+static ssize_t temp1_input_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
- {
- 	struct lm70 *p_lm70 = dev_get_drvdata(dev);
- 	struct spi_device *spi = p_lm70->spi;
-@@ -120,7 +120,7 @@ static ssize_t lm70_sense_temp(struct device *dev,
- 	return status;
+diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
+index cfaf70b..2a91974 100644
+--- a/drivers/hwmon/lm92.c
++++ b/drivers/hwmon/lm92.c
+@@ -181,8 +181,8 @@ static ssize_t show_temp_hyst(struct device *dev,
+ 		       - TEMP_FROM_REG(data->temp[t_hyst]));
  }
  
--static DEVICE_ATTR(temp1_input, S_IRUGO, lm70_sense_temp, NULL);
-+static DEVICE_ATTR_RO(temp1_input);
+-static ssize_t show_temp_min_hyst(struct device *dev,
+-				  struct device_attribute *attr, char *buf)
++static ssize_t temp1_min_hyst_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
+ {
+ 	struct lm92_data *data = lm92_update_device(dev);
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[t_min])
+@@ -213,7 +213,7 @@ static ssize_t set_temp_hyst(struct device *dev,
+ 	return count;
+ }
  
- static struct attribute *lm70_attrs[] = {
- 	&dev_attr_temp1_input.attr,
+-static ssize_t show_alarms(struct device *dev, struct device_attribute *attr,
++static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
+ 			   char *buf)
+ {
+ 	struct lm92_data *data = lm92_update_device(dev);
+@@ -235,11 +235,11 @@ static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IWUSR | S_IRUGO, show_temp_hyst,
+ 			  set_temp_hyst, t_crit);
+ static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp, set_temp,
+ 			  t_min);
+-static DEVICE_ATTR(temp1_min_hyst, S_IRUGO, show_temp_min_hyst, NULL);
++static DEVICE_ATTR_RO(temp1_min_hyst);
+ static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, show_temp, set_temp,
+ 			  t_max);
+ static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO, show_temp_hyst, NULL, t_max);
+-static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
++static DEVICE_ATTR_RO(alarms);
+ static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_alarm, NULL, 2);
+ static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_alarm, NULL, 0);
+ static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL, 1);
 
