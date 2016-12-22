@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3906 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3903 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965387AbcLVM1F (ORCPT
+        by vger.kernel.org with ESMTP id S965385AbcLVM1E (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:27:05 -0500
+        Thu, 22 Dec 2016 07:27:04 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 41/66] hwmon: (w83627ehf) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:10 +0100
-Message-Id: <1482408335-3435-42-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 39/66] hwmon: (via-cputemp) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:08 +0100
+Message-Id: <1482408335-3435-40-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,43 +52,31 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/w83627ehf.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/hwmon/via-cputemp.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 697007a..ab346ed 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1687,14 +1687,14 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
- 
- fan_time_functions(fan_stop_time, FAN_STOP_TIME)
- 
--static ssize_t show_name(struct device *dev, struct device_attribute *attr,
-+static ssize_t name_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
- 	struct w83627ehf_data *data = dev_get_drvdata(dev);
- 
- 	return sprintf(buf, "%s\n", data->name);
+diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
+index d1f209a..07a0cb0 100644
+--- a/drivers/hwmon/via-cputemp.c
++++ b/drivers/hwmon/via-cputemp.c
+@@ -88,8 +88,8 @@ static ssize_t show_temp(struct device *dev,
+ 	return sprintf(buf, "%lu\n", ((unsigned long)eax & 0xffffff) * 1000);
  }
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-+static DEVICE_ATTR_RO(name);
  
- static struct sensor_device_attribute sda_sf3_arrays_fan4[] = {
- 	SENSOR_ATTR(pwm4_stop_time, S_IWUSR | S_IRUGO, show_fan_stop_time,
-@@ -1754,12 +1754,12 @@ static ssize_t show_name(struct device *dev, struct device_attribute *attr,
+-static ssize_t show_cpu_vid(struct device *dev,
+-			    struct device_attribute *devattr, char *buf)
++static ssize_t cpu0_vid_show(struct device *dev,
++			     struct device_attribute *devattr, char *buf)
+ {
+ 	struct via_cputemp_data *data = dev_get_drvdata(dev);
+ 	u32 eax, edx;
+@@ -119,7 +119,7 @@ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL,
  };
  
- static ssize_t
--show_vid(struct device *dev, struct device_attribute *attr, char *buf)
-+cpu0_vid_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct w83627ehf_data *data = dev_get_drvdata(dev);
- 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
- }
--static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_vid, NULL);
+ /* Optional attributes */
+-static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_cpu_vid, NULL);
 +static DEVICE_ATTR_RO(cpu0_vid);
  
- 
- /* Case open detection */
+ static int via_cputemp_probe(struct platform_device *pdev)
+ {
 
