@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:60175 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31267 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965373AbcLVM1E (ORCPT
+        by vger.kernel.org with ESMTP id S965364AbcLVM1D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:27:04 -0500
+        Thu, 22 Dec 2016 07:27:03 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 26/66] hwmon: (lm93) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:55 +0100
-Message-Id: <1482408335-3435-27-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 36/66] hwmon: (sis5595) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:05 +0100
+Message-Id: <1482408335-3435-37-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,141 +52,108 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/lm93.c |   39 ++++++++++++++++-----------------------
- 1 file changed, 16 insertions(+), 23 deletions(-)
+ drivers/hwmon/sis5595.c |   36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hwmon/lm93.c b/drivers/hwmon/lm93.c
-index 90bb048..77a0a83 100644
---- a/drivers/hwmon/lm93.c
-+++ b/drivers/hwmon/lm93.c
-@@ -2156,7 +2156,7 @@ static SENSOR_DEVICE_ATTR(pwm2_auto_spinup_time, S_IWUSR | S_IRUGO,
- 			  show_pwm_auto_spinup_time,
- 			  store_pwm_auto_spinup_time, 1);
+diff --git a/drivers/hwmon/sis5595.c b/drivers/hwmon/sis5595.c
+index 45a028f..6d789aa 100644
+--- a/drivers/hwmon/sis5595.c
++++ b/drivers/hwmon/sis5595.c
+@@ -304,22 +304,23 @@ static SENSOR_DEVICE_ATTR(in##offset##_max, S_IRUGO | S_IWUSR,	\
+ show_in_offset(4);
  
--static ssize_t show_pwm_auto_prochot_ramp(struct device *dev,
-+static ssize_t pwm_auto_prochot_ramp_show(struct device *dev,
- 				struct device_attribute *attr, char *buf)
+ /* Temperature */
+-static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
+-			 char *buf)
++static ssize_t temp1_input_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
  {
- 	struct lm93_data *data = lm93_update_device(dev);
-@@ -2164,7 +2164,7 @@ static ssize_t show_pwm_auto_prochot_ramp(struct device *dev,
- 		       LM93_RAMP_FROM_REG(data->pwm_ramp_ctl >> 4 & 0x0f));
+ 	struct sis5595_data *data = sis5595_update_device(dev);
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp));
  }
  
--static ssize_t store_pwm_auto_prochot_ramp(struct device *dev,
-+static ssize_t pwm_auto_prochot_ramp_store(struct device *dev,
- 						struct device_attribute *attr,
- 						const char *buf, size_t count)
+-static ssize_t show_temp_over(struct device *dev, struct device_attribute *attr,
++static ssize_t temp1_max_show(struct device *dev, struct device_attribute *attr,
+ 			      char *buf)
  {
-@@ -2186,11 +2186,9 @@ static ssize_t store_pwm_auto_prochot_ramp(struct device *dev,
+ 	struct sis5595_data *data = sis5595_update_device(dev);
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_over));
+ }
+ 
+-static ssize_t set_temp_over(struct device *dev, struct device_attribute *attr,
+-			     const char *buf, size_t count)
++static ssize_t temp1_max_store(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
+ {
+ 	struct sis5595_data *data = dev_get_drvdata(dev);
+ 	long val;
+@@ -336,15 +337,16 @@ static ssize_t set_temp_over(struct device *dev, struct device_attribute *attr,
  	return count;
  }
  
--static DEVICE_ATTR(pwm_auto_prochot_ramp, S_IRUGO | S_IWUSR,
--			show_pwm_auto_prochot_ramp,
--			store_pwm_auto_prochot_ramp);
-+static DEVICE_ATTR_RW(pwm_auto_prochot_ramp);
- 
--static ssize_t show_pwm_auto_vrdhot_ramp(struct device *dev,
-+static ssize_t pwm_auto_vrdhot_ramp_show(struct device *dev,
- 				struct device_attribute *attr, char *buf)
+-static ssize_t show_temp_hyst(struct device *dev, struct device_attribute *attr,
+-			      char *buf)
++static ssize_t temp1_max_hyst_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
  {
- 	struct lm93_data *data = lm93_update_device(dev);
-@@ -2198,7 +2196,7 @@ static ssize_t show_pwm_auto_vrdhot_ramp(struct device *dev,
- 		       LM93_RAMP_FROM_REG(data->pwm_ramp_ctl & 0x0f));
+ 	struct sis5595_data *data = sis5595_update_device(dev);
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_hyst));
  }
  
--static ssize_t store_pwm_auto_vrdhot_ramp(struct device *dev,
-+static ssize_t pwm_auto_vrdhot_ramp_store(struct device *dev,
- 						struct device_attribute *attr,
- 						const char *buf, size_t count)
+-static ssize_t set_temp_hyst(struct device *dev, struct device_attribute *attr,
+-			     const char *buf, size_t count)
++static ssize_t temp1_max_hyst_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
  {
-@@ -2220,9 +2218,7 @@ static ssize_t store_pwm_auto_vrdhot_ramp(struct device *dev,
- 	return 0;
- }
- 
--static DEVICE_ATTR(pwm_auto_vrdhot_ramp, S_IRUGO | S_IWUSR,
--			show_pwm_auto_vrdhot_ramp,
--			store_pwm_auto_vrdhot_ramp);
-+static DEVICE_ATTR_RW(pwm_auto_vrdhot_ramp);
- 
- static ssize_t show_vid(struct device *dev, struct device_attribute *attr,
- 			char *buf)
-@@ -2378,7 +2374,7 @@ static SENSOR_DEVICE_ATTR(prochot1_interval, S_IWUSR | S_IRUGO,
- static SENSOR_DEVICE_ATTR(prochot2_interval, S_IWUSR | S_IRUGO,
- 			  show_prochot_interval, store_prochot_interval, 1);
- 
--static ssize_t show_prochot_override_duty_cycle(struct device *dev,
-+static ssize_t prochot_override_duty_cycle_show(struct device *dev,
- 						struct device_attribute *attr,
- 						char *buf)
- {
-@@ -2386,7 +2382,7 @@ static ssize_t show_prochot_override_duty_cycle(struct device *dev,
- 	return sprintf(buf, "%d\n", data->prochot_override & 0x0f);
- }
- 
--static ssize_t store_prochot_override_duty_cycle(struct device *dev,
-+static ssize_t prochot_override_duty_cycle_store(struct device *dev,
- 						struct device_attribute *attr,
- 						const char *buf, size_t count)
- {
-@@ -2408,18 +2404,16 @@ static ssize_t store_prochot_override_duty_cycle(struct device *dev,
+ 	struct sis5595_data *data = dev_get_drvdata(dev);
+ 	long val;
+@@ -361,11 +363,9 @@ static ssize_t set_temp_hyst(struct device *dev, struct device_attribute *attr,
  	return count;
  }
  
--static DEVICE_ATTR(prochot_override_duty_cycle, S_IRUGO | S_IWUSR,
--			show_prochot_override_duty_cycle,
--			store_prochot_override_duty_cycle);
-+static DEVICE_ATTR_RW(prochot_override_duty_cycle);
+-static DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL);
+-static DEVICE_ATTR(temp1_max, S_IRUGO | S_IWUSR,
+-		show_temp_over, set_temp_over);
+-static DEVICE_ATTR(temp1_max_hyst, S_IRUGO | S_IWUSR,
+-		show_temp_hyst, set_temp_hyst);
++static DEVICE_ATTR_RO(temp1_input);
++static DEVICE_ATTR_RW(temp1_max);
++static DEVICE_ATTR_RW(temp1_max_hyst);
  
--static ssize_t show_prochot_short(struct device *dev,
-+static ssize_t prochot_short_show(struct device *dev,
- 				struct device_attribute *attr, char *buf)
- {
- 	struct lm93_data *data = lm93_update_device(dev);
- 	return sprintf(buf, "%d\n", (data->config & 0x10) ? 1 : 0);
- }
+ /* 2 Fans */
+ static ssize_t show_fan(struct device *dev, struct device_attribute *da,
+@@ -492,13 +492,13 @@ static SENSOR_DEVICE_ATTR(fan##offset##_div, S_IRUGO | S_IWUSR,		\
+ show_fan_offset(2);
  
--static ssize_t store_prochot_short(struct device *dev,
-+static ssize_t prochot_short_store(struct device *dev,
- 					struct device_attribute *attr,
- 					const char *buf, size_t count)
- {
-@@ -2442,8 +2436,7 @@ static ssize_t store_prochot_short(struct device *dev,
- 	return count;
- }
- 
--static DEVICE_ATTR(prochot_short, S_IRUGO | S_IWUSR,
--		   show_prochot_short, store_prochot_short);
-+static DEVICE_ATTR_RW(prochot_short);
- 
- static ssize_t show_vrdhot(struct device *dev, struct device_attribute *attr,
- 				char *buf)
-@@ -2457,23 +2450,23 @@ static ssize_t show_vrdhot(struct device *dev, struct device_attribute *attr,
- static SENSOR_DEVICE_ATTR(vrdhot1, S_IRUGO, show_vrdhot, NULL, 0);
- static SENSOR_DEVICE_ATTR(vrdhot2, S_IRUGO, show_vrdhot, NULL, 1);
- 
--static ssize_t show_gpio(struct device *dev, struct device_attribute *attr,
-+static ssize_t gpio_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
- {
- 	struct lm93_data *data = lm93_update_device(dev);
- 	return sprintf(buf, "%d\n", LM93_GPI_FROM_REG(data->gpi));
- }
- 
--static DEVICE_ATTR(gpio, S_IRUGO, show_gpio, NULL);
-+static DEVICE_ATTR_RO(gpio);
- 
+ /* Alarms */
 -static ssize_t show_alarms(struct device *dev, struct device_attribute *attr,
 +static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
+ 			   char *buf)
  {
- 	struct lm93_data *data = lm93_update_device(dev);
- 	return sprintf(buf, "%d\n", LM93_ALARMS_FROM_REG(data->block1));
+ 	struct sis5595_data *data = sis5595_update_device(dev);
+ 	return sprintf(buf, "%d\n", data->alarms);
  }
- 
 -static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
 +static DEVICE_ATTR_RO(alarms);
  
- static struct attribute *lm93_attrs[] = {
- 	&sensor_dev_attr_in1_input.dev_attr.attr,
+ static ssize_t show_alarm(struct device *dev, struct device_attribute *da,
+ 			  char *buf)
+@@ -516,13 +516,13 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *da,
+ static SENSOR_DEVICE_ATTR(fan2_alarm, S_IRUGO, show_alarm, NULL, 7);
+ static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, show_alarm, NULL, 15);
+ 
+-static ssize_t show_name(struct device *dev, struct device_attribute *attr,
++static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+ 			 char *buf)
+ {
+ 	struct sis5595_data *data = dev_get_drvdata(dev);
+ 	return sprintf(buf, "%s\n", data->name);
+ }
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
+ 
+ static struct attribute *sis5595_attributes[] = {
+ 	&sensor_dev_attr_in0_input.dev_attr.attr,
 
