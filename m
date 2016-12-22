@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3906 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3903 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965410AbcLVM1G (ORCPT
+        by vger.kernel.org with ESMTP id S965408AbcLVM1G (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 22 Dec 2016 07:27:06 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
-To: Rudolf Marek <r.marek@assembler.cz>
-Cc: kernel-janitors@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+To: Jean Delvare <jdelvare@suse.com>
+Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 48/66] hwmon: (w83793) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:17 +0100
-Message-Id: <1482408335-3435-49-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 46/66] hwmon: (pc87427) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:15 +0100
+Message-Id: <1482408335-3435-47-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,38 +52,28 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/w83793.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/pc87427.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-index 816aa6c..dab5c51 100644
---- a/drivers/hwmon/w83793.c
-+++ b/drivers/hwmon/w83793.c
-@@ -324,7 +324,7 @@ static int w83793_detect(struct i2c_client *client,
+diff --git a/drivers/hwmon/pc87427.c b/drivers/hwmon/pc87427.c
+index cb9fdd3..dc5a9d5 100644
+--- a/drivers/hwmon/pc87427.c
++++ b/drivers/hwmon/pc87427.c
+@@ -943,14 +943,14 @@ static SENSOR_DEVICE_ATTR(temp6_crit_alarm, S_IRUGO,
+ 	{ .attrs = pc87427_attributes_temp[5] },
  };
  
- static ssize_t
--show_vrm(struct device *dev, struct device_attribute *attr, char *buf)
-+vrm_show(struct device *dev, struct device_attribute *attr, char *buf)
+-static ssize_t show_name(struct device *dev, struct device_attribute
++static ssize_t name_show(struct device *dev, struct device_attribute
+ 			 *devattr, char *buf)
  {
- 	struct w83793_data *data = dev_get_drvdata(dev);
- 	return sprintf(buf, "%d\n", data->vrm);
-@@ -342,7 +342,7 @@ static int w83793_detect(struct i2c_client *client,
+ 	struct pc87427_data *data = dev_get_drvdata(dev);
+ 
+ 	return sprintf(buf, "%s\n", data->name);
  }
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
  
- static ssize_t
--store_vrm(struct device *dev, struct device_attribute *attr,
-+vrm_store(struct device *dev, struct device_attribute *attr,
- 	  const char *buf, size_t count)
- {
- 	struct w83793_data *data = dev_get_drvdata(dev);
-@@ -1169,7 +1169,7 @@ static int w83793_detect(struct i2c_client *client,
- 	SENSOR_ATTR_2(cpu0_vid, S_IRUGO, show_vid, NULL, NOT_USED, 0),
- 	SENSOR_ATTR_2(cpu1_vid, S_IRUGO, show_vid, NULL, NOT_USED, 1),
- };
--static DEVICE_ATTR(vrm, S_IWUSR | S_IRUGO, show_vrm, store_vrm);
-+static DEVICE_ATTR_RW(vrm);
  
- static struct sensor_device_attribute_2 sda_single_files[] = {
- 	SENSOR_ATTR_2(intrusion0_alarm, S_IWUSR | S_IRUGO, show_alarm_beep,
+ /*
 
