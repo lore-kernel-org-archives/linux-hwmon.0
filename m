@@ -1,258 +1,243 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50562 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751171AbcLSAYl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 18 Dec 2016 19:24:41 -0500
-Subject: Re: [Patch] hwmon (sht15) enabled device tree
-To: Peter Fox <foxpeter@kabelbw.de>, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com
-References: <f71c5c8b-5d2e-eae6-f8ec-748fa9fc74d0@kabelbw.de>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <26d22d7e-625d-b8ec-9647-e5b21464a87a@roeck-us.net>
-Date: Sun, 18 Dec 2016 16:24:38 -0800
-MIME-Version: 1.0
-In-Reply-To: <f71c5c8b-5d2e-eae6-f8ec-748fa9fc74d0@kabelbw.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <Julia.Lawall@lip6.fr>
+From: Julia Lawall <Julia.Lawall@lip6.fr>
+To: linux-kernel@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 00/66] use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:29 +0100
+Message-Id: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 12/18/2016 03:05 PM, Peter Fox wrote:
-> From: Peter Fox <FoxPeter@kabelbw.de>
->
->
-> Attached is a patch which allows the sht15 module to read its configuration from
->
-> a device tree in addition to any platform data
->
->
-Why so many empty lines ?
+Use DEVICE_ATTR_RO etc. for read only attributes etc.  This simplifies the
+source code, improves readbility, and reduces the chance of
+inconsistencies.  A previous version of this semantic patch transformed
+only cases where the show and store functions followed particular naming
+conventions.  This semantic patch additionally renames functions as
+needed.  It can, however, fail to transform some occurrences where a single
+function is used for multiple attributes.  In that case, the first case is
+transformed an the others are left as is.
 
-Please drop _all_ whitespace changes, ie every change not directly related
-to the subject and description.
+The complete semantic patch is as follows:
+(http://coccinelle.lip6.fr/)
 
-Devicetree properties will need to be documented in a separate patch and
-will have to be approved by a devicetree maintainer.
+// <smpl>
+@initialize:ocaml@
+@@
 
-More comments inline.
+let taken = Hashtbl.create 101
 
-> Signed-off-by: Peter Fox <FoxPeter@kabelbw.de>
->
-> ---
->
->
-> --- linux/drivers/hwmon/sht15.c.orig    2016-12-18 23:23:43.431045129 +0100
-> +++ linux/drivers/hwmon/sht15.c    2016-12-18 23:40:27.924278262 +0100
-> @@ -1,6 +1,8 @@
->  /*
->   * sht15.c - support for the SHT15 Temperature and Humidity Sensor
->   *
-> + * Device tree ready (c) 2016 Peter Fox
-> + *
->   * Portions Copyright (c) 2010-2012 Savoir-faire Linux Inc.
->   *          Jerome Oufella <jerome.oufella@savoirfairelinux.com>
->   *          Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> @@ -26,6 +28,9 @@
->  #include <linux/mutex.h>
->  #include <linux/platform_data/sht15.h>
->  #include <linux/platform_device.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/of_gpio.h>
+// -------------------------------------------------------------------------
+// Easy case
 
-Why is this include needed ?
+@d@
+declarer name DEVICE_ATTR;
+identifier x;
+@@
 
->  #include <linux/sched.h>
->  #include <linux/delay.h>
->  #include <linux/jiffies.h>
-> @@ -758,8 +763,7 @@ static ssize_t sht15_show_temp(struct de
->   * Returns number of bytes written into buffer, negative errno on error.
->   */
->  static ssize_t sht15_show_humidity(struct device *dev,
-> -                   struct device_attribute *attr,
-> -                   char *buf)
-> +                   struct device_attribute *attr, char *buf)
->  {
->      int ret;
->      struct sht15_data *data = dev_get_drvdata(dev);
-> @@ -770,17 +774,15 @@ static ssize_t sht15_show_humidity(struc
->  }
->
->  static ssize_t show_name(struct device *dev,
-> -             struct device_attribute *attr,
-> -             char *buf)
-> +    struct device_attribute *attr, char *buf)
->  {
->      struct platform_device *pdev = to_platform_device(dev);
->      return sprintf(buf, "%s\n", pdev->name);
->  }
->
-> -static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO,
-> -              sht15_show_temp, NULL, 0);
-> +static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht15_show_temp, NULL, 0);
->  static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO,
-> -              sht15_show_humidity, NULL, 0);
-> +    sht15_show_humidity, NULL, 0);
->  static SENSOR_DEVICE_ATTR(temp1_fault, S_IRUGO, sht15_show_status, NULL,
->                SHT15_STATUS_LOW_BATTERY);
->  static SENSOR_DEVICE_ATTR(humidity1_fault, S_IRUGO, sht15_show_status, NULL,
-> @@ -821,8 +823,7 @@ static void sht15_bh_read_data(struct wo
->      u8 dev_checksum = 0;
->      u8 checksum_vals[3];
->      struct sht15_data *data
-> -        = container_of(work_s, struct sht15_data,
-> -                   read_work);
-> +        = container_of(work_s, struct sht15_data, read_work);
->
->      /* Firstly, verify the line is low */
->      if (gpio_get_value(data->pdata->gpio_data)) {
-> @@ -884,8 +885,7 @@ wakeup:
->  static void sht15_update_voltage(struct work_struct *work_s)
->  {
->      struct sht15_data *data
-> -        = container_of(work_s, struct sht15_data,
-> -                   update_supply_work);
-> +        = container_of(work_s, struct sht15_data, update_supply_work);
->      data->supply_uv = regulator_get_voltage(data->reg);
->  }
->
-> @@ -911,6 +911,50 @@ static int sht15_invalidate_voltage(stru
->      return NOTIFY_OK;
->  }
->
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id sht15_of_match[] = {
-> +    { .compatible = "sht10" },
-> +    { .compatible = "sht11" },
-> +    { .compatible = "sht15" },
-> +    { .compatible = "sht71" },
-> +    { .compatible = "sht75" },
-> +    { },
-> +};
-> +MODULE_DEVICE_TABLE(of, sht15_of_match);
-> +
-> +static struct sht15_platform_data *sht15_parse_dt(struct device *dev)
-> +{
-> +    const struct of_device_id *of_id = of_match_device(sht15_of_match, dev);
+DEVICE_ATTR(x,...);
 
-This is quite unnecessary; you don't do anything with it. The framework will
-already do a match.
+@script:ocaml depends on d@
+@@
 
-> +    struct device_node *np = dev->of_node;
-> +    struct sht15_platform_data *pdata;
-> +
-> +    if (!of_id || !np)
-> +        return NULL;
-> +
-> +    pdata = kzalloc(sizeof(struct sht15_platform_data), GFP_KERNEL);
-> +    if (!pdata)
-> +        return ERR_PTR(-ENOMEM);
-> +
-> +    of_property_read_u32(np, "data", &pdata->gpio_data);
-> +    of_property_read_u32(np, "clock", &pdata->gpio_sck);
-> +    of_property_read_u32(np, "supply_mv", &pdata->supply_mv);
-> +    pdata->checksum =    of_property_read_bool(np, "checksum");
-> +    pdata->no_otp_reload =    of_property_read_bool(np, "no_otp_reload");
-> +    pdata->low_resolution =    of_property_read_bool(np, "low_resolution");
+Hashtbl.clear taken
 
-I don't think those property names are acceptable. Property names usually don't have
-underscores.
+@script:ocaml expected@
+x << d.x;
+x_show;
+x_store;
+@@
+x_show := make_ident (x^"_show");
+x_store := make_ident (x^"_store")
 
-> +
-> +    return pdata;
-> +}
-> +
-> +#else
-> +
-> +static inline struct sht15_platform_data *sht15_parse_dt(struct device *dev)
-> +{
-> +    return NULL;
-> +}
-> +
-> +#endif
-> +
->  static int sht15_probe(struct platform_device *pdev)
->  {
->      int ret;
-> @@ -928,11 +972,18 @@ static int sht15_probe(struct platform_d
->      data->dev = &pdev->dev;
->      init_waitqueue_head(&data->wait_queue);
->
-> -    if (dev_get_platdata(&pdev->dev) == NULL) {
-> -        dev_err(&pdev->dev, "no platform data supplied\n");
-> -        return -EINVAL;
-> -    }
->      data->pdata = dev_get_platdata(&pdev->dev);
-> +    if (!data->pdata) {
-> +        data->pdata = sht15_parse_dt(&pdev->dev);
-> +        if (IS_ERR(data->pdata))
-> +            return PTR_ERR(data->pdata);
+@@
+declarer name DEVICE_ATTR_RO;
+identifier d.x,expected.x_show;
+@@
 
-This is overly complex and misleading. Returning NULL if there is no devicetree
-entry but -ENOMEM on memory failure is inconsistent.
+- DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL);
++ DEVICE_ATTR_RO(x);
 
-> +
-> +        if (!data->pdata) {
-> +            dev_err(&pdev->dev, "no platform data supplied\n");
-> +            return -EINVAL;
-> +        }
-> +    }
-> +
->      data->supply_uv = data->pdata->supply_mv * 1000;
->      if (data->pdata->checksum)
->          data->checksumming = true;
-> @@ -967,8 +1018,7 @@ static int sht15_probe(struct platform_d
->          data->nb.notifier_call = &sht15_invalidate_voltage;
->          ret = regulator_register_notifier(data->reg, &data->nb);
->          if (ret) {
-> -            dev_err(&pdev->dev,
-> -                "regulator notifier request failed\n");
-> +            dev_err(&pdev->dev, "regulator notifier request failed\n");
->              regulator_disable(data->reg);
->              return ret;
->          }
-> @@ -1062,6 +1112,7 @@ static int sht15_remove(struct platform_
->      return 0;
->  }
->
-> +
->  static const struct platform_device_id sht15_device_ids[] = {
->      { "sht10", sht10 },
->      { "sht11", sht11 },
-> @@ -1072,15 +1123,20 @@ static const struct platform_device_id s
->  };
->  MODULE_DEVICE_TABLE(platform, sht15_device_ids);
->
-> +
->  static struct platform_driver sht15_driver = {
-> -    .driver = {
-> -        .name = "sht15",
-> -    },
->      .probe = sht15_probe,
->      .remove = sht15_remove,
->      .id_table = sht15_device_ids,
-> +    .driver = {
-> +        .name = "sht15",
-> +        .of_match_table = of_match_ptr(sht15_of_match),
-> +    },
->  };
->  module_platform_driver(sht15_driver);
->
-> -MODULE_LICENSE("GPL");
-> +
-> +MODULE_ALIAS("platform:sht15");
+@@
+declarer name DEVICE_ATTR_WO;
+identifier d.x,expected.x_store;
+@@
 
-Unrelated.
+- DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store);
++ DEVICE_ATTR_WO(x);
 
-> +MODULE_AUTHOR("Wouter Horre, Jonathan Cameron, Jerome Oufella, Vivien Didelot, Peter Fox");
+@@
+declarer name DEVICE_ATTR_RW;
+identifier d.x,expected.x_show,expected.x_store;
+@@
 
-Please drop that.
+- DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\), x_show, x_store);
++ DEVICE_ATTR_RW(x);
 
->  MODULE_DESCRIPTION("Sensirion SHT15 temperature and humidity sensor driver");
-> +MODULE_LICENSE("GPL");
->
->
->
+// -------------------------------------------------------------------------
+// Other calls
 
+@o@
+declarer name DEVICE_ATTR;
+identifier d.x,show,store;
+@@
+
+DEVICE_ATTR(x,\(0444\|S_IRUGO\|0200\|S_IWUSR\|0644\|S_IRUGO|S_IWUSR\),
+            show,store);
+
+@script:ocaml@
+x << d.x;
+show << o.show;
+store << o.store;
+@@
+
+if (not(show = "NULL") && Hashtbl.mem taken show) ||
+   (not(store = "NULL") && Hashtbl.mem taken store)
+then Coccilib.include_match false
+else (Hashtbl.add taken show (); Hashtbl.add taken store ())
+
+// rename functions
+
+@show1@
+identifier o.show,expected.x_show;
+parameter list ps;
+@@
+
+static
+- show(ps)
++ x_show(ps)
+  { ... }
+
+@depends on show1@
+identifier o.show,expected.x_show;
+expression list es;
+@@
+- show(es)
++ x_show(es)
+
+@depends on show1@
+identifier o.show,expected.x_show;
+@@
+- show
++ x_show
+
+@store1@
+identifier o.store,expected.x_store;
+parameter list ps;
+@@
+
+static
+- store(ps)
++ x_store(ps)
+  { ... }
+
+@depends on store1@
+identifier o.store,expected.x_store;
+expression list es;
+@@
+- store(es)
++ x_store(es)
+
+@depends on store1@
+identifier o.store,expected.x_store;
+@@
+- store
++ x_store
+
+// try again
+
+@@
+declarer name DEVICE_ATTR_RO;
+identifier d.x,expected.x_show;
+@@
+
+- DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL);
++ DEVICE_ATTR_RO(x);
+
+@@
+declarer name DEVICE_ATTR_WO;
+identifier d.x,expected.x_store;
+@@
+
+- DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store);
++ DEVICE_ATTR_WO(x);
+
+@@
+declarer name DEVICE_ATTR_RW;
+identifier d.x,expected.x_show,expected.x_store;
+@@
+
+- DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\), x_show, x_store);
++ DEVICE_ATTR_RW(x);
+// </smpl>
+
+---
+
+ drivers/hwmon/adm1021.c      |   14 ++--
+ drivers/hwmon/adm1025.c      |   16 ++---
+ drivers/hwmon/adm1026.c      |  128 ++++++++++++++++++++++---------------------
+ drivers/hwmon/adm1031.c      |   15 ++---
+ drivers/hwmon/adm9240.c      |   28 ++++-----
+ drivers/hwmon/adt7470.c      |   48 +++++++---------
+ drivers/hwmon/adt7475.c      |   28 ++++-----
+ drivers/hwmon/adt7x10.c      |    7 +-
+ drivers/hwmon/asb100.c       |   36 ++++++------
+ drivers/hwmon/atxp1.c        |   35 +++++------
+ drivers/hwmon/dme1737.c      |   18 +++---
+ drivers/hwmon/ds1621.c       |   16 ++---
+ drivers/hwmon/emc2103.c      |   36 ++++++------
+ drivers/hwmon/f71805f.c      |   16 ++---
+ drivers/hwmon/f71882fg.c     |    6 +-
+ drivers/hwmon/fam15h_power.c |   34 +++++------
+ drivers/hwmon/fschmd.c       |    6 +-
+ drivers/hwmon/g760a.c        |   22 +++----
+ drivers/hwmon/g762.c         |   86 ++++++++++++++--------------
+ drivers/hwmon/gl520sm.c      |   48 ++++++++--------
+ drivers/hwmon/gpio-fan.c     |   54 +++++++++---------
+ drivers/hwmon/hwmon.c        |    4 -
+ drivers/hwmon/i5500_temp.c   |    6 +-
+ drivers/hwmon/i5k_amb.c      |    4 -
+ drivers/hwmon/it87.c         |   20 +++---
+ drivers/hwmon/jz4740-hwmon.c |    6 +-
+ drivers/hwmon/k10temp.c      |   12 ++--
+ drivers/hwmon/k8temp.c       |    4 -
+ drivers/hwmon/lm63.c         |   48 +++++++---------
+ drivers/hwmon/lm70.c         |    6 +-
+ drivers/hwmon/lm78.c         |   38 ++++++------
+ drivers/hwmon/lm80.c         |    4 -
+ drivers/hwmon/lm83.c         |    4 -
+ drivers/hwmon/lm85.c         |   22 +++----
+ drivers/hwmon/lm87.c         |   43 +++++++-------
+ drivers/hwmon/lm90.c         |    8 +-
+ drivers/hwmon/lm92.c         |   10 +--
+ drivers/hwmon/lm93.c         |   39 +++++--------
+ drivers/hwmon/lm95234.c      |   12 ++--
+ drivers/hwmon/max1111.c      |    4 -
+ drivers/hwmon/max1619.c      |    4 -
+ drivers/hwmon/max197.c       |    6 +-
+ drivers/hwmon/max6650.c      |   44 ++++++++------
+ drivers/hwmon/mc13783-adc.c  |    6 +-
+ drivers/hwmon/mcp3021.c      |    6 +-
+ drivers/hwmon/nct6683.c      |   17 ++---
+ drivers/hwmon/nct6775.c      |    4 -
+ drivers/hwmon/nsa320-hwmon.c |   12 ++--
+ drivers/hwmon/pc87360.c      |   26 ++++----
+ drivers/hwmon/pc87427.c      |    4 -
+ drivers/hwmon/pcf8591.c      |   24 +++-----
+ drivers/hwmon/sch5627.c      |    4 -
+ drivers/hwmon/sht15.c        |    4 -
+ drivers/hwmon/sis5595.c      |   36 ++++++------
+ drivers/hwmon/smsc47m1.c     |   10 +--
+ drivers/hwmon/smsc47m192.c   |   14 ++--
+ drivers/hwmon/tmp401.c       |   11 +--
+ drivers/hwmon/via-cputemp.c  |    6 +-
+ drivers/hwmon/via686a.c      |    8 +-
+ drivers/hwmon/vt8231.c       |   59 ++++++++++---------
+ drivers/hwmon/w83627ehf.c    |    8 +-
+ drivers/hwmon/w83627hf.c     |   53 +++++++++--------
+ drivers/hwmon/w83781d.c      |   34 +++++------
+ drivers/hwmon/w83791d.c      |   23 +++----
+ drivers/hwmon/w83792d.c      |   15 ++---
+ drivers/hwmon/w83793.c       |    6 +-
+ 66 files changed, 709 insertions(+), 726 deletions(-)
