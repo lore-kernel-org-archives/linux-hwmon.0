@@ -1,7 +1,7 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3903 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:60175 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965047AbcLVM0z (ORCPT
+        by vger.kernel.org with ESMTP id S965129AbcLVM0z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 22 Dec 2016 07:26:55 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
@@ -9,9 +9,9 @@ To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/66] hwmon: (atxp1) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:37 +0100
-Message-Id: <1482408335-3435-9-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 12/66] hwmon: (g760a) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:41 +0100
+Message-Id: <1482408335-3435-13-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,99 +52,67 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/atxp1.c |   35 ++++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
+ drivers/hwmon/g760a.c |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/atxp1.c b/drivers/hwmon/atxp1.c
-index f2f2f2f..b7eadb5 100644
---- a/drivers/hwmon/atxp1.c
-+++ b/drivers/hwmon/atxp1.c
-@@ -81,8 +81,8 @@ static struct atxp1_data *atxp1_update_device(struct device *dev)
+diff --git a/drivers/hwmon/g760a.c b/drivers/hwmon/g760a.c
+index ec6a77d..7be1371 100644
+--- a/drivers/hwmon/g760a.c
++++ b/drivers/hwmon/g760a.c
+@@ -107,8 +107,8 @@ static struct g760a_data *g760a_update_client(struct device *dev)
+ 	return data;
  }
  
- /* sys file functions for cpu0_vid */
--static ssize_t atxp1_showvcore(struct device *dev,
--			       struct device_attribute *attr, char *buf)
-+static ssize_t cpu0_vid_show(struct device *dev,
-+			     struct device_attribute *attr, char *buf)
+-static ssize_t show_fan(struct device *dev, struct device_attribute *da,
+-			char *buf)
++static ssize_t fan1_input_show(struct device *dev,
++			       struct device_attribute *da, char *buf)
  {
- 	int size;
- 	struct atxp1_data *data;
-@@ -95,9 +95,9 @@ static ssize_t atxp1_showvcore(struct device *dev,
- 	return size;
+ 	struct g760a_data *data = g760a_update_client(dev);
+ 	unsigned int rpm = 0;
+@@ -121,8 +121,8 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", rpm);
  }
  
--static ssize_t atxp1_storevcore(struct device *dev,
--				struct device_attribute *attr,
--				const char *buf, size_t count)
-+static ssize_t cpu0_vid_store(struct device *dev,
-+			      struct device_attribute *attr, const char *buf,
-+			      size_t count)
+-static ssize_t show_fan_alarm(struct device *dev, struct device_attribute *da,
+-			      char *buf)
++static ssize_t fan1_alarm_show(struct device *dev,
++			       struct device_attribute *da, char *buf)
  {
- 	struct atxp1_data *data = atxp1_update_device(dev);
+ 	struct g760a_data *data = g760a_update_client(dev);
+ 
+@@ -131,16 +131,16 @@ static ssize_t show_fan_alarm(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", fan_alarm);
+ }
+ 
+-static ssize_t get_pwm(struct device *dev, struct device_attribute *da,
+-		       char *buf)
++static ssize_t pwm1_show(struct device *dev, struct device_attribute *da,
++			 char *buf)
+ {
+ 	struct g760a_data *data = g760a_update_client(dev);
+ 
+ 	return sprintf(buf, "%d\n", PWM_FROM_CNT(data->set_cnt));
+ }
+ 
+-static ssize_t set_pwm(struct device *dev, struct device_attribute *da,
+-		       const char *buf, size_t count)
++static ssize_t pwm1_store(struct device *dev, struct device_attribute *da,
++			  const char *buf, size_t count)
+ {
+ 	struct g760a_data *data = g760a_update_client(dev);
  	struct i2c_client *client = data->client;
-@@ -154,12 +154,11 @@ static ssize_t atxp1_storevcore(struct device *dev,
-  * CPU core reference voltage
-  * unit: millivolt
-  */
--static DEVICE_ATTR(cpu0_vid, S_IRUGO | S_IWUSR, atxp1_showvcore,
--		   atxp1_storevcore);
-+static DEVICE_ATTR_RW(cpu0_vid);
- 
- /* sys file functions for GPIO1 */
--static ssize_t atxp1_showgpio1(struct device *dev,
--			       struct device_attribute *attr, char *buf)
-+static ssize_t gpio1_show(struct device *dev, struct device_attribute *attr,
-+			  char *buf)
- {
- 	int size;
- 	struct atxp1_data *data;
-@@ -171,9 +170,8 @@ static ssize_t atxp1_showgpio1(struct device *dev,
- 	return size;
+@@ -157,9 +157,9 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *da,
+ 	return count;
  }
  
--static ssize_t atxp1_storegpio1(struct device *dev,
--				struct device_attribute *attr, const char *buf,
--				size_t count)
-+static ssize_t gpio1_store(struct device *dev, struct device_attribute *attr,
-+			   const char *buf, size_t count)
- {
- 	struct atxp1_data *data = atxp1_update_device(dev);
- 	struct i2c_client *client = data->client;
-@@ -201,11 +199,11 @@ static ssize_t atxp1_storegpio1(struct device *dev,
-  * GPIO1 data register
-  * unit: Four bit as hex (e.g. 0x0f)
-  */
--static DEVICE_ATTR(gpio1, S_IRUGO | S_IWUSR, atxp1_showgpio1, atxp1_storegpio1);
-+static DEVICE_ATTR_RW(gpio1);
+-static DEVICE_ATTR(pwm1, S_IWUSR | S_IRUGO, get_pwm, set_pwm);
+-static DEVICE_ATTR(fan1_input, S_IRUGO, show_fan, NULL);
+-static DEVICE_ATTR(fan1_alarm, S_IRUGO, show_fan_alarm, NULL);
++static DEVICE_ATTR_RW(pwm1);
++static DEVICE_ATTR_RO(fan1_input);
++static DEVICE_ATTR_RO(fan1_alarm);
  
- /* sys file functions for GPIO2 */
--static ssize_t atxp1_showgpio2(struct device *dev,
--			       struct device_attribute *attr, char *buf)
-+static ssize_t gpio2_show(struct device *dev, struct device_attribute *attr,
-+			  char *buf)
- {
- 	int size;
- 	struct atxp1_data *data;
-@@ -217,9 +215,8 @@ static ssize_t atxp1_showgpio2(struct device *dev,
- 	return size;
- }
- 
--static ssize_t atxp1_storegpio2(struct device *dev,
--				struct device_attribute *attr,
--				const char *buf, size_t count)
-+static ssize_t gpio2_store(struct device *dev, struct device_attribute *attr,
-+			   const char *buf, size_t count)
- {
- 	struct atxp1_data *data = atxp1_update_device(dev);
- 	struct i2c_client *client = data->client;
-@@ -246,7 +243,7 @@ static ssize_t atxp1_storegpio2(struct device *dev,
-  * GPIO2 data register
-  * unit: Eight bit as hex (e.g. 0xff)
-  */
--static DEVICE_ATTR(gpio2, S_IRUGO | S_IWUSR, atxp1_showgpio2, atxp1_storegpio2);
-+static DEVICE_ATTR_RW(gpio2);
- 
- static struct attribute *atxp1_attrs[] = {
- 	&dev_attr_gpio1.attr,
+ static struct attribute *g760a_attrs[] = {
+ 	&dev_attr_pwm1.attr,
 
