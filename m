@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31267 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3902 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965055AbcLVM0z (ORCPT
+        by vger.kernel.org with ESMTP id S965187AbcLVM04 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:26:55 -0500
+        Thu, 22 Dec 2016 07:26:56 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 09/66] hwmon: (ds1621) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:38 +0100
-Message-Id: <1482408335-3435-10-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 16/66] hwmon: (core) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:45 +0100
+Message-Id: <1482408335-3435-17-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,53 +52,25 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/ds1621.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/hwmon/hwmon.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
-index 8890870..5c317fc 100644
---- a/drivers/hwmon/ds1621.c
-+++ b/drivers/hwmon/ds1621.c
-@@ -263,7 +263,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *da,
- 	return count;
- }
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 3932f92..0c5660c 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -63,11 +63,11 @@ struct hwmon_thermal_data {
+ };
  
--static ssize_t show_alarms(struct device *dev, struct device_attribute *da,
-+static ssize_t alarms_show(struct device *dev, struct device_attribute *da,
- 			   char *buf)
+ static ssize_t
+-show_name(struct device *dev, struct device_attribute *attr, char *buf)
++name_show(struct device *dev, struct device_attribute *attr, char *buf)
  {
- 	struct ds1621_data *data = ds1621_update_client(dev);
-@@ -278,15 +278,16 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *da,
- 	return sprintf(buf, "%d\n", !!(data->conf & attr->index));
+ 	return sprintf(buf, "%s\n", to_hwmon_device(dev)->name);
  }
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
  
--static ssize_t show_convrate(struct device *dev, struct device_attribute *da,
--			  char *buf)
-+static ssize_t update_interval_show(struct device *dev,
-+				    struct device_attribute *da, char *buf)
- {
- 	struct ds1621_data *data = dev_get_drvdata(dev);
- 	return scnprintf(buf, PAGE_SIZE, "%hu\n", data->update_interval);
- }
- 
--static ssize_t set_convrate(struct device *dev, struct device_attribute *da,
--			    const char *buf, size_t count)
-+static ssize_t update_interval_store(struct device *dev,
-+				     struct device_attribute *da,
-+				     const char *buf, size_t count)
- {
- 	struct ds1621_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -315,9 +316,8 @@ static ssize_t set_convrate(struct device *dev, struct device_attribute *da,
- 	return count;
- }
- 
--static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
--static DEVICE_ATTR(update_interval, S_IWUSR | S_IRUGO, show_convrate,
--		   set_convrate);
-+static DEVICE_ATTR_RO(alarms);
-+static DEVICE_ATTR_RW(update_interval);
- 
- static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
- static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp, set_temp, 1);
+ static struct attribute *hwmon_dev_attrs[] = {
+ 	&dev_attr_name.attr,
 
