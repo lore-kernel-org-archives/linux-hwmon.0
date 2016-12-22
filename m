@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31267 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3905 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965337AbcLVM1A (ORCPT
+        by vger.kernel.org with ESMTP id S965240AbcLVM07 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:27:00 -0500
+        Thu, 22 Dec 2016 07:26:59 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 33/66] hwmon: (nsa320) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:02 +0100
-Message-Id: <1482408335-3435-34-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 27/66] hwmon: (max1111) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:56 +0100
+Message-Id: <1482408335-3435-28-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,45 +52,29 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/nsa320-hwmon.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/hwmon/max1111.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/nsa320-hwmon.c b/drivers/hwmon/nsa320-hwmon.c
-index 0517a2657..5a16109 100644
---- a/drivers/hwmon/nsa320-hwmon.c
-+++ b/drivers/hwmon/nsa320-hwmon.c
-@@ -122,8 +122,8 @@ static ssize_t show_label(struct device *dev,
- 	return sprintf(buf, "%s\n", nsa320_input_names[channel]);
- }
- 
--static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
--			 char *buf)
-+static ssize_t temp1_input_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
+diff --git a/drivers/hwmon/max1111.c b/drivers/hwmon/max1111.c
+index 303d0c9..8ddd4d6 100644
+--- a/drivers/hwmon/max1111.c
++++ b/drivers/hwmon/max1111.c
+@@ -98,7 +98,7 @@ int max1111_read_channel(int channel)
+  * likely to be used by hwmon applications to distinguish between
+  * different devices, explicitly add a name attribute here.
+  */
+-static ssize_t show_name(struct device *dev,
++static ssize_t name_show(struct device *dev,
+ 			 struct device_attribute *attr, char *buf)
  {
- 	s32 mcu_data = nsa320_hwmon_update(dev);
+ 	return sprintf(buf, "%s\n", to_spi_device(dev)->modalias);
+@@ -125,7 +125,7 @@ static ssize_t show_adc(struct device *dev,
+ #define MAX1111_ADC_ATTR(_id)		\
+ 	SENSOR_DEVICE_ATTR(in##_id##_input, S_IRUGO, show_adc, NULL, _id)
  
-@@ -133,8 +133,8 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
- 	return sprintf(buf, "%d\n", (mcu_data & 0xffff) * 100);
- }
- 
--static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
--			char *buf)
-+static ssize_t fan1_input_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
- {
- 	s32 mcu_data = nsa320_hwmon_update(dev);
- 
-@@ -145,9 +145,9 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
- }
- 
- static SENSOR_DEVICE_ATTR(temp1_label, S_IRUGO, show_label, NULL, NSA320_TEMP);
--static DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL);
-+static DEVICE_ATTR_RO(temp1_input);
- static SENSOR_DEVICE_ATTR(fan1_label, S_IRUGO, show_label, NULL, NSA320_FAN);
--static DEVICE_ATTR(fan1_input, S_IRUGO, show_fan, NULL);
-+static DEVICE_ATTR_RO(fan1_input);
- 
- static struct attribute *nsa320_attrs[] = {
- 	&sensor_dev_attr_temp1_label.dev_attr.attr,
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
+ static MAX1111_ADC_ATTR(0);
+ static MAX1111_ADC_ATTR(1);
+ static MAX1111_ADC_ATTR(2);
 
