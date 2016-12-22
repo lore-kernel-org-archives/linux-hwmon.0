@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3906 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3905 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S965452AbcLVM1J (ORCPT
+        by vger.kernel.org with ESMTP id S965441AbcLVM1J (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 22 Dec 2016 07:27:09 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
-To: Jean Delvare <jdelvare@suse.com>
-Cc: kernel-janitors@vger.kernel.org,
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: kernel-janitors@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 60/66] hwmon: (lm83) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:29 +0100
-Message-Id: <1482408335-3435-61-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 57/66] hwmon: (sch5627) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:26 +0100
+Message-Id: <1482408335-3435-58-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,29 +52,29 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/lm83.c |    4 ++--
+ drivers/hwmon/sch5627.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/lm83.c b/drivers/hwmon/lm83.c
-index 9e4d0e1..cbfd0bb 100644
---- a/drivers/hwmon/lm83.c
-+++ b/drivers/hwmon/lm83.c
-@@ -188,7 +188,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
- 	return count;
+diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
+index 19f85c0..91544f2 100644
+--- a/drivers/hwmon/sch5627.c
++++ b/drivers/hwmon/sch5627.c
+@@ -205,7 +205,7 @@ static int reg_to_rpm(u16 reg)
+ 	return 5400540 / reg;
  }
  
--static ssize_t show_alarms(struct device *dev, struct device_attribute *dummy,
-+static ssize_t alarms_show(struct device *dev, struct device_attribute *dummy,
- 			   char *buf)
+-static ssize_t show_name(struct device *dev, struct device_attribute *devattr,
++static ssize_t name_show(struct device *dev, struct device_attribute *devattr,
+ 	char *buf)
  {
- 	struct lm83_data *data = lm83_update_device(dev);
-@@ -236,7 +236,7 @@ static SENSOR_DEVICE_ATTR(temp3_crit, S_IWUSR | S_IRUGO, show_temp,
- static SENSOR_DEVICE_ATTR(temp2_fault, S_IRUGO, show_alarm, NULL, 13);
- static SENSOR_DEVICE_ATTR(temp2_max_alarm, S_IRUGO, show_alarm, NULL, 15);
- /* Raw alarm file for compatibility */
--static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
-+static DEVICE_ATTR_RO(alarms);
+ 	return snprintf(buf, PAGE_SIZE, "%s\n", DEVNAME);
+@@ -326,7 +326,7 @@ static ssize_t show_in_label(struct device *dev, struct device_attribute
+ 			SCH5627_IN_LABELS[attr->index]);
+ }
  
- static struct attribute *lm83_attributes[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
+ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
+ static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, show_temp, NULL, 1);
+ static SENSOR_DEVICE_ATTR(temp3_input, S_IRUGO, show_temp, NULL, 2);
 
