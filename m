@@ -1,16 +1,21 @@
-Return-path: <Julia.Lawall@lip6.fr>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3904 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S965465AbcLVM1K (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 22 Dec 2016 07:27:10 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: kernel-janitors@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 66/66] hwmon: (tmp401) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:05:35 +0100
-Message-Id: <1482408335-3435-67-git-send-email-Julia.Lawall@lip6.fr>
+To: Marc Hulsman <m.hulsman@tudelft.nl>
+Cc: kernel-janitors@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 45/66] hwmon: (w83791d) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:05:14 +0100
+Message-Id: <1482408335-3435-46-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
 Use DEVICE_ATTR_RO etc. for read only attributes etc.  This simplifies the
 source code, improves readbility, and reduces the chance of
@@ -47,42 +52,71 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/tmp401.c |   11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/hwmon/w83791d.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index eeeed2c..6276003 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -449,7 +449,7 @@ static ssize_t reset_temp_history(struct device *dev,
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 001df85..8af6081 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -1041,14 +1041,14 @@ static ssize_t store_temp23(struct device *dev,
+ };
+ 
+ /* get realtime status of all sensors items: voltage, temp, fan */
+-static ssize_t show_alarms_reg(struct device *dev,
+-				struct device_attribute *attr, char *buf)
++static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
+ {
+ 	struct w83791d_data *data = w83791d_update_device(dev);
+ 	return sprintf(buf, "%u\n", data->alarms);
+ }
+ 
+-static DEVICE_ATTR(alarms, S_IRUGO, show_alarms_reg, NULL);
++static DEVICE_ATTR_RO(alarms);
+ 
+ /* Beep control */
+ 
+@@ -1147,25 +1147,24 @@ static ssize_t store_beep_enable(struct device *dev,
+ };
+ 
+ /* cpu voltage regulation information */
+-static ssize_t show_vid_reg(struct device *dev,
+-				struct device_attribute *attr, char *buf)
++static ssize_t cpu0_vid_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
+ {
+ 	struct w83791d_data *data = w83791d_update_device(dev);
+ 	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
+ }
+ 
+-static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_vid_reg, NULL);
++static DEVICE_ATTR_RO(cpu0_vid);
+ 
+-static ssize_t show_vrm_reg(struct device *dev,
+-				struct device_attribute *attr, char *buf)
++static ssize_t vrm_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
+ {
+ 	struct w83791d_data *data = dev_get_drvdata(dev);
+ 	return sprintf(buf, "%d\n", data->vrm);
+ }
+ 
+-static ssize_t store_vrm_reg(struct device *dev,
+-				struct device_attribute *attr,
+-				const char *buf, size_t count)
++static ssize_t vrm_store(struct device *dev, struct device_attribute *attr,
++			 const char *buf, size_t count)
+ {
+ 	struct w83791d_data *data = dev_get_drvdata(dev);
+ 	unsigned long val;
+@@ -1188,7 +1187,7 @@ static ssize_t store_vrm_reg(struct device *dev,
  	return count;
  }
  
--static ssize_t show_update_interval(struct device *dev,
-+static ssize_t update_interval_show(struct device *dev,
- 				    struct device_attribute *attr, char *buf)
- {
- 	struct tmp401_data *data = dev_get_drvdata(dev);
-@@ -457,9 +457,9 @@ static ssize_t show_update_interval(struct device *dev,
- 	return sprintf(buf, "%u\n", data->update_interval);
- }
+-static DEVICE_ATTR(vrm, S_IRUGO | S_IWUSR, show_vrm_reg, store_vrm_reg);
++static DEVICE_ATTR_RW(vrm);
  
--static ssize_t set_update_interval(struct device *dev,
--				   struct device_attribute *attr,
--				   const char *buf, size_t count)
-+static ssize_t update_interval_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
- {
- 	struct tmp401_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -521,8 +521,7 @@ static SENSOR_DEVICE_ATTR_2(temp2_max_alarm, S_IRUGO, show_status, NULL,
- static SENSOR_DEVICE_ATTR_2(temp2_crit_alarm, S_IRUGO, show_status, NULL,
- 			    3, TMP432_STATUS_REMOTE1);
- 
--static DEVICE_ATTR(update_interval, S_IRUGO | S_IWUSR, show_update_interval,
--		   set_update_interval);
-+static DEVICE_ATTR_RW(update_interval);
- 
- static struct attribute *tmp401_attributes[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+ #define IN_UNIT_ATTRS(X) \
+ 	&sda_in_input[X].dev_attr.attr,	\
+
