@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:63945 "EHLO
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3905 "EHLO
         mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S964860AbcLVM0y (ORCPT
+        by vger.kernel.org with ESMTP id S938940AbcLVM05 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Dec 2016 07:26:54 -0500
+        Thu, 22 Dec 2016 07:26:57 -0500
 From: Julia Lawall <Julia.Lawall@lip6.fr>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: kernel-janitors@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 06/66] hwmon: (adt7x10) use permission-specific DEVICE_ATTR variants
-Date: Thu, 22 Dec 2016 13:04:35 +0100
-Message-Id: <1482408335-3435-7-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 19/66] hwmon: (jz4740) use permission-specific DEVICE_ATTR variants
+Date: Thu, 22 Dec 2016 13:04:48 +0100
+Message-Id: <1482408335-3435-20-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -52,32 +52,31 @@ identifier ro.x,ro.x_show;
 Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 ---
- drivers/hwmon/adt7x10.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/hwmon/jz4740-hwmon.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 98141f4..0f538f8 100644
---- a/drivers/hwmon/adt7x10.c
-+++ b/drivers/hwmon/adt7x10.c
-@@ -331,9 +331,8 @@ static ssize_t adt7x10_show_alarm(struct device *dev,
- 	return sprintf(buf, "%d\n", !!(ret & attr->index));
+diff --git a/drivers/hwmon/jz4740-hwmon.c b/drivers/hwmon/jz4740-hwmon.c
+index 0621ee1..2d40a2e 100644
+--- a/drivers/hwmon/jz4740-hwmon.c
++++ b/drivers/hwmon/jz4740-hwmon.c
+@@ -44,8 +44,8 @@ static irqreturn_t jz4740_hwmon_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
  }
  
--static ssize_t adt7x10_show_name(struct device *dev,
--				 struct device_attribute *da,
--				 char *buf)
-+static ssize_t name_show(struct device *dev, struct device_attribute *da,
-+			 char *buf)
+-static ssize_t jz4740_hwmon_read_adcin(struct device *dev,
+-	struct device_attribute *dev_attr, char *buf)
++static ssize_t in0_input_show(struct device *dev,
++			      struct device_attribute *dev_attr, char *buf)
  {
- 	struct adt7x10_data *data = dev_get_drvdata(dev);
+ 	struct jz4740_hwmon *hwmon = dev_get_drvdata(dev);
+ 	struct platform_device *pdev = hwmon->pdev;
+@@ -79,7 +79,7 @@ static ssize_t jz4740_hwmon_read_adcin(struct device *dev,
+ 	return ret;
+ }
  
-@@ -359,7 +358,7 @@ static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, adt7x10_show_alarm,
- 			  NULL, ADT7X10_STAT_T_HIGH);
- static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, adt7x10_show_alarm,
- 			  NULL, ADT7X10_STAT_T_CRIT);
--static DEVICE_ATTR(name, S_IRUGO, adt7x10_show_name, NULL);
-+static DEVICE_ATTR_RO(name);
+-static DEVICE_ATTR(in0_input, S_IRUGO, jz4740_hwmon_read_adcin, NULL);
++static DEVICE_ATTR_RO(in0_input);
  
- static struct attribute *adt7x10_attributes[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+ static struct attribute *jz4740_attrs[] = {
+ 	&dev_attr_in0_input.attr,
 
