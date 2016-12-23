@@ -9,83 +9,133 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jiri Kosina <trivial@kernel.org>,
 	Alexander Koch <mail@alexanderkoch.net>
-Subject: [RFC PATCH v2 2/4] hwmon: adc128d818: Implement mode selection via dt
-Date: Fri, 23 Dec 2016 23:12:03 +0100
-Message-Id: <20161223221205.8825-3-mail@alexanderkoch.net>
+Subject: [RFC PATCH v2 3/4] hwmon: adc128d818: Trivial code style fixup
+Date: Fri, 23 Dec 2016 23:12:04 +0100
+Message-Id: <20161223221205.8825-4-mail@alexanderkoch.net>
 In-Reply-To: <20161223221205.8825-1-mail@alexanderkoch.net>
 References: <20161223221205.8825-1-mail@alexanderkoch.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Implement operation mode selection using the optional 'mode' devicetree
-property (see [1]). The ADC128D818 supports four operation modes differing
-in the number and type of input readings (see datasheet, sec. 8.4.1), of
-which mode 0 is the default.
-
-We only add handling of the 'mode' property here, the driver still supports
-nothing else than the default mode 0.
-
-[1] Documentation/devicetree/bindings/hwmon/adc128d818.txt
+Replace sysfs symbolic file permissions, e.g. 'S_IRUGO', by octal
+permissions. This fixes checkpatch.pl warnings.
 
 Signed-off-by: Alexander Koch <mail@alexanderkoch.net>
 ---
- drivers/hwmon/adc128d818.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/hwmon/adc128d818.c | 99 ++++++++++++++++++----------------------------
+ 1 file changed, 39 insertions(+), 60 deletions(-)
 
 diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-index ad2b47e40345..8667f454ea11 100644
+index 8667f454ea11..cbb3bc5e5229 100644
 --- a/drivers/hwmon/adc128d818.c
 +++ b/drivers/hwmon/adc128d818.c
-@@ -28,6 +28,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/mutex.h>
- #include <linux/bitops.h>
-+#include <linux/of.h>
+@@ -242,69 +242,48 @@ static ssize_t adc128_show_alarm(struct device *dev,
+ 	return sprintf(buf, "%u\n", !!(alarms & mask));
+ }
  
- /* Addresses to scan
-  * The chip also supports addresses 0x35..0x37. Don't scan those addresses
-@@ -63,6 +64,7 @@ struct adc128_data {
- 	struct regulator *regulator;
- 	int vref;		/* Reference voltage in mV */
- 	struct mutex update_lock;
-+	u8 mode;		/* Operation mode */
- 	bool valid;		/* true if following fields are valid */
- 	unsigned long last_updated;	/* In jiffies */
- 
-@@ -387,6 +389,15 @@ static int adc128_init_client(struct adc128_data *data)
- 	if (err)
- 		return err;
- 
-+	/* Set operation mode, if non-default */
-+	if (data->mode != 0) {
-+		err = i2c_smbus_write_byte_data(client,
-+						ADC128_REG_CONFIG_ADV,
-+						data->mode << 1);
-+		if (err)
-+			return err;
-+	}
+-static SENSOR_DEVICE_ATTR_2(in0_input, S_IRUGO,
+-			    adc128_show_in, NULL, 0, 0);
+-static SENSOR_DEVICE_ATTR_2(in0_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 0, 1);
+-static SENSOR_DEVICE_ATTR_2(in0_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 0, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in1_input, S_IRUGO,
+-			    adc128_show_in, NULL, 1, 0);
+-static SENSOR_DEVICE_ATTR_2(in1_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 1, 1);
+-static SENSOR_DEVICE_ATTR_2(in1_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 1, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in2_input, S_IRUGO,
+-			    adc128_show_in, NULL, 2, 0);
+-static SENSOR_DEVICE_ATTR_2(in2_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 2, 1);
+-static SENSOR_DEVICE_ATTR_2(in2_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 2, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in3_input, S_IRUGO,
+-			    adc128_show_in, NULL, 3, 0);
+-static SENSOR_DEVICE_ATTR_2(in3_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 3, 1);
+-static SENSOR_DEVICE_ATTR_2(in3_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 3, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in4_input, S_IRUGO,
+-			    adc128_show_in, NULL, 4, 0);
+-static SENSOR_DEVICE_ATTR_2(in4_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 4, 1);
+-static SENSOR_DEVICE_ATTR_2(in4_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 4, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in5_input, S_IRUGO,
+-			    adc128_show_in, NULL, 5, 0);
+-static SENSOR_DEVICE_ATTR_2(in5_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 5, 1);
+-static SENSOR_DEVICE_ATTR_2(in5_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 5, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in6_input, S_IRUGO,
+-			    adc128_show_in, NULL, 6, 0);
+-static SENSOR_DEVICE_ATTR_2(in6_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 6, 1);
+-static SENSOR_DEVICE_ATTR_2(in6_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 6, 2);
+-
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, adc128_show_temp, NULL, 0);
+-static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO,
++static SENSOR_DEVICE_ATTR_2(in0_input, 0444, adc128_show_in, NULL, 0, 0);
++static SENSOR_DEVICE_ATTR_2(in0_min, 0644, adc128_show_in, adc128_set_in, 0, 1);
++static SENSOR_DEVICE_ATTR_2(in0_max, 0644, adc128_show_in, adc128_set_in, 0, 2);
 +
- 	/* Start monitoring */
- 	err = i2c_smbus_write_byte_data(client, ADC128_REG_CONFIG, 0x01);
- 	if (err)
-@@ -433,6 +444,19 @@ static int adc128_probe(struct i2c_client *client,
- 		data->vref = 2560;	/* 2.56V, in mV */
- 	}
- 
-+	/* Operation mode is optional and defaults to mode 0 */
-+	if (of_property_read_u8(dev->of_node, "mode", &data->mode) == 0) {
-+		/* Currently only mode 0 supported */
-+		if (data->mode != 0) {
-+			dev_err(dev, "unsupported operation mode %d",
-+				data->mode);
-+			err = -EINVAL;
-+			goto error;
-+		}
-+	} else {
-+		data->mode = 0;
-+	}
++static SENSOR_DEVICE_ATTR_2(in1_input, 0444, adc128_show_in, NULL, 1, 0);
++static SENSOR_DEVICE_ATTR_2(in1_min, 0644, adc128_show_in, adc128_set_in, 1, 1);
++static SENSOR_DEVICE_ATTR_2(in1_max, 0644, adc128_show_in, adc128_set_in, 1, 2);
 +
- 	data->client = client;
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
++static SENSOR_DEVICE_ATTR_2(in2_input, 0444, adc128_show_in, NULL, 2, 0);
++static SENSOR_DEVICE_ATTR_2(in2_min, 0644, adc128_show_in, adc128_set_in, 2, 1);
++static SENSOR_DEVICE_ATTR_2(in2_max, 0644, adc128_show_in, adc128_set_in, 2, 2);
++
++static SENSOR_DEVICE_ATTR_2(in3_input, 0444, adc128_show_in, NULL, 3, 0);
++static SENSOR_DEVICE_ATTR_2(in3_min, 0644, adc128_show_in, adc128_set_in, 3, 1);
++static SENSOR_DEVICE_ATTR_2(in3_max, 0644, adc128_show_in, adc128_set_in, 3, 2);
++
++static SENSOR_DEVICE_ATTR_2(in4_input, 0444, adc128_show_in, NULL, 4, 0);
++static SENSOR_DEVICE_ATTR_2(in4_min, 0644, adc128_show_in, adc128_set_in, 4, 1);
++static SENSOR_DEVICE_ATTR_2(in4_max, 0644, adc128_show_in, adc128_set_in, 4, 2);
++
++static SENSOR_DEVICE_ATTR_2(in5_input, 0444, adc128_show_in, NULL, 5, 0);
++static SENSOR_DEVICE_ATTR_2(in5_min, 0644, adc128_show_in, adc128_set_in, 5, 1);
++static SENSOR_DEVICE_ATTR_2(in5_max, 0644, adc128_show_in, adc128_set_in, 5, 2);
++
++static SENSOR_DEVICE_ATTR_2(in6_input, 0444, adc128_show_in, NULL, 6, 0);
++static SENSOR_DEVICE_ATTR_2(in6_min, 0644, adc128_show_in, adc128_set_in, 6, 1);
++static SENSOR_DEVICE_ATTR_2(in6_max, 0644, adc128_show_in, adc128_set_in, 6, 2);
++
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, adc128_show_temp, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_max, 0644,
+ 			  adc128_show_temp, adc128_set_temp, 1);
+-static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IWUSR | S_IRUGO,
++static SENSOR_DEVICE_ATTR(temp1_max_hyst, 0644,
+ 			  adc128_show_temp, adc128_set_temp, 2);
+ 
+-static SENSOR_DEVICE_ATTR(in0_alarm, S_IRUGO, adc128_show_alarm, NULL, 0);
+-static SENSOR_DEVICE_ATTR(in1_alarm, S_IRUGO, adc128_show_alarm, NULL, 1);
+-static SENSOR_DEVICE_ATTR(in2_alarm, S_IRUGO, adc128_show_alarm, NULL, 2);
+-static SENSOR_DEVICE_ATTR(in3_alarm, S_IRUGO, adc128_show_alarm, NULL, 3);
+-static SENSOR_DEVICE_ATTR(in4_alarm, S_IRUGO, adc128_show_alarm, NULL, 4);
+-static SENSOR_DEVICE_ATTR(in5_alarm, S_IRUGO, adc128_show_alarm, NULL, 5);
+-static SENSOR_DEVICE_ATTR(in6_alarm, S_IRUGO, adc128_show_alarm, NULL, 6);
+-static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, adc128_show_alarm, NULL, 7);
++static SENSOR_DEVICE_ATTR(in0_alarm, 0444, adc128_show_alarm, NULL, 0);
++static SENSOR_DEVICE_ATTR(in1_alarm, 0444, adc128_show_alarm, NULL, 1);
++static SENSOR_DEVICE_ATTR(in2_alarm, 0444, adc128_show_alarm, NULL, 2);
++static SENSOR_DEVICE_ATTR(in3_alarm, 0444, adc128_show_alarm, NULL, 3);
++static SENSOR_DEVICE_ATTR(in4_alarm, 0444, adc128_show_alarm, NULL, 4);
++static SENSOR_DEVICE_ATTR(in5_alarm, 0444, adc128_show_alarm, NULL, 5);
++static SENSOR_DEVICE_ATTR(in6_alarm, 0444, adc128_show_alarm, NULL, 6);
++static SENSOR_DEVICE_ATTR(temp1_max_alarm, 0444, adc128_show_alarm, NULL, 7);
+ 
+ static struct attribute *adc128_attrs[] = {
+ 	&sensor_dev_attr_in0_min.dev_attr.attr,
 -- 
 2.11.0
