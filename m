@@ -9,67 +9,83 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jiri Kosina <trivial@kernel.org>,
 	Alexander Koch <mail@alexanderkoch.net>
-Subject: [RFC PATCH v2 1/4] devicetree: hwmon: Add bindings for ADC128D818
-Date: Fri, 23 Dec 2016 23:12:02 +0100
-Message-Id: <20161223221205.8825-2-mail@alexanderkoch.net>
+Subject: [RFC PATCH v2 2/4] hwmon: adc128d818: Implement mode selection via dt
+Date: Fri, 23 Dec 2016 23:12:03 +0100
+Message-Id: <20161223221205.8825-3-mail@alexanderkoch.net>
 In-Reply-To: <20161223221205.8825-1-mail@alexanderkoch.net>
 References: <20161223221205.8825-1-mail@alexanderkoch.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Add bindings documentation for the ADC128D818 driver, featuring default I2C
-properties along with the optional 'mode' property for chip operation mode
-selection (see datasheet, sec. 8.4.1).
+Implement operation mode selection using the optional 'mode' devicetree
+property (see [1]). The ADC128D818 supports four operation modes differing
+in the number and type of input readings (see datasheet, sec. 8.4.1), of
+which mode 0 is the default.
+
+We only add handling of the 'mode' property here, the driver still supports
+nothing else than the default mode 0.
+
+[1] Documentation/devicetree/bindings/hwmon/adc128d818.txt
 
 Signed-off-by: Alexander Koch <mail@alexanderkoch.net>
 ---
- .../devicetree/bindings/hwmon/adc128d818.txt       | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adc128d818.txt
+ drivers/hwmon/adc128d818.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adc128d818.txt b/Documentation/devicetree/bindings/hwmon/adc128d818.txt
-new file mode 100644
-index 000000000000..5e14aa36a696
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adc128d818.txt
-@@ -0,0 +1,39 @@
-+TI ADC128D818 ADC System Monitor With Temperature Sensor
-+--------------------------------------------------------
+diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+index ad2b47e40345..8667f454ea11 100644
+--- a/drivers/hwmon/adc128d818.c
++++ b/drivers/hwmon/adc128d818.c
+@@ -28,6 +28,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/mutex.h>
+ #include <linux/bitops.h>
++#include <linux/of.h>
+ 
+ /* Addresses to scan
+  * The chip also supports addresses 0x35..0x37. Don't scan those addresses
+@@ -63,6 +64,7 @@ struct adc128_data {
+ 	struct regulator *regulator;
+ 	int vref;		/* Reference voltage in mV */
+ 	struct mutex update_lock;
++	u8 mode;		/* Operation mode */
+ 	bool valid;		/* true if following fields are valid */
+ 	unsigned long last_updated;	/* In jiffies */
+ 
+@@ -387,6 +389,15 @@ static int adc128_init_client(struct adc128_data *data)
+ 	if (err)
+ 		return err;
+ 
++	/* Set operation mode, if non-default */
++	if (data->mode != 0) {
++		err = i2c_smbus_write_byte_data(client,
++						ADC128_REG_CONFIG_ADV,
++						data->mode << 1);
++		if (err)
++			return err;
++	}
 +
-+Operation modes:
+ 	/* Start monitoring */
+ 	err = i2c_smbus_write_byte_data(client, ADC128_REG_CONFIG, 0x01);
+ 	if (err)
+@@ -433,6 +444,19 @@ static int adc128_probe(struct i2c_client *client,
+ 		data->vref = 2560;	/* 2.56V, in mV */
+ 	}
+ 
++	/* Operation mode is optional and defaults to mode 0 */
++	if (of_property_read_u8(dev->of_node, "mode", &data->mode) == 0) {
++		/* Currently only mode 0 supported */
++		if (data->mode != 0) {
++			dev_err(dev, "unsupported operation mode %d",
++				data->mode);
++			err = -EINVAL;
++			goto error;
++		}
++	} else {
++		data->mode = 0;
++	}
 +
-+ - Mode 0:  7 single-ended voltage readings (IN0-IN6),
-+            1 temperature reading (internal)
-+ - Mode 1:  8 single-ended voltage readings (IN0-IN7),
-+            no temperature
-+ - Mode 2:  4 pseudo-differential voltage readings
-+              (IN0-IN1, IN3-IN2, IN4-IN5, IN7-IN6),
-+            1 temperature reading (internal)
-+ - Mode 3:  4 single-ended voltage readings (IN0-IN3),
-+            2 pseudo-differential voltage readings
-+              (IN4-IN5, IN7-IN6),
-+            1 temperature reading (internal)
-+
-+If no operation mode is configured via device tree, the driver defaults
-+to Mode 0.
-+
-+
-+Required node properties:
-+
-+ - compatible:  must be set to "ti,adc128d818"
-+ - reg:         I2C address of the device
-+
-+Optional node properties:
-+
-+ - mode:        Operation mode (see above).
-+
-+
-+Example (operation mode 2):
-+
-+	adc128d818@1d {
-+		compatible = "ti,adc128d818";
-+		reg = <0x1d>;
-+		mode = /bits/ 8 <2>;
-+	};
-+
+ 	data->client = client;
+ 	i2c_set_clientdata(client, data);
+ 	mutex_init(&data->update_lock);
 -- 
 2.11.0
