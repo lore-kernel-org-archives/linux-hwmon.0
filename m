@@ -9,49 +9,67 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jiri Kosina <trivial@kernel.org>,
 	Alexander Koch <mail@alexanderkoch.net>
-Subject: [RFC PATCH v2 0/4] hwmon: adc128d818: Support missing operation modes
-Date: Fri, 23 Dec 2016 23:12:01 +0100
-Message-Id: <20161223221205.8825-1-mail@alexanderkoch.net>
+Subject: [RFC PATCH v2 1/4] devicetree: hwmon: Add bindings for ADC128D818
+Date: Fri, 23 Dec 2016 23:12:02 +0100
+Message-Id: <20161223221205.8825-2-mail@alexanderkoch.net>
+In-Reply-To: <20161223221205.8825-1-mail@alexanderkoch.net>
+References: <20161223221205.8825-1-mail@alexanderkoch.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-The ADC128D818 offers four different chip operation modes which vary in the
-number and measurement types of the available input signals (see datasheet
-sec. 8.4.1).
+Add bindings documentation for the ADC128D818 driver, featuring default I2C
+properties along with the optional 'mode' property for chip operation mode
+selection (see datasheet, sec. 8.4.1).
 
-The current version of the driver only supports the default chip operation
-mode (mode 0), providing seven analog values and a temperature reading.
-
-This patch series adds support for operation modes 1-3, selectable through
-the device tree attribute 'mode':
-
-        adc1: adc128d818@1d {
-                compatible = "ti,adc128d818";
-                reg = <0x1d>;
-                mode = /bits/ 8 <1>;
-        };
-
-The changes are transparent as 'mode' defaults to mode 0 which yields the
-previous behaviour.
-
-
-Changes from v1:
- - Add bindings document as first patch
- - Preserve logical atomicity of code changes
- - Improve sysfs device node handling (use is_visible() instead of
-   duplicate attribute list)
- - Add trivial code refactoring stage for checkpatch.pl to succeed
-
-
-Alexander Koch (4):
-  devicetree: hwmon: Add bindings for ADC128D818
-  hwmon: adc128d818: Implement mode selection via dt
-  hwmon: adc128d818: Trivial code style fixup
-  hwmon: adc128d818: Support operation modes 1-3
-
- .../devicetree/bindings/hwmon/adc128d818.txt       |  39 ++++
- drivers/hwmon/adc128d818.c                         | 237 ++++++++++++---------
- 2 files changed, 179 insertions(+), 97 deletions(-)
+Signed-off-by: Alexander Koch <mail@alexanderkoch.net>
+---
+ .../devicetree/bindings/hwmon/adc128d818.txt       | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/adc128d818.txt
 
+diff --git a/Documentation/devicetree/bindings/hwmon/adc128d818.txt b/Documentation/devicetree/bindings/hwmon/adc128d818.txt
+new file mode 100644
+index 000000000000..5e14aa36a696
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adc128d818.txt
+@@ -0,0 +1,39 @@
++TI ADC128D818 ADC System Monitor With Temperature Sensor
++--------------------------------------------------------
++
++Operation modes:
++
++ - Mode 0:  7 single-ended voltage readings (IN0-IN6),
++            1 temperature reading (internal)
++ - Mode 1:  8 single-ended voltage readings (IN0-IN7),
++            no temperature
++ - Mode 2:  4 pseudo-differential voltage readings
++              (IN0-IN1, IN3-IN2, IN4-IN5, IN7-IN6),
++            1 temperature reading (internal)
++ - Mode 3:  4 single-ended voltage readings (IN0-IN3),
++            2 pseudo-differential voltage readings
++              (IN4-IN5, IN7-IN6),
++            1 temperature reading (internal)
++
++If no operation mode is configured via device tree, the driver defaults
++to Mode 0.
++
++
++Required node properties:
++
++ - compatible:  must be set to "ti,adc128d818"
++ - reg:         I2C address of the device
++
++Optional node properties:
++
++ - mode:        Operation mode (see above).
++
++
++Example (operation mode 2):
++
++	adc128d818@1d {
++		compatible = "ti,adc128d818";
++		reg = <0x1d>;
++		mode = /bits/ 8 <2>;
++	};
++
 -- 
 2.11.0
