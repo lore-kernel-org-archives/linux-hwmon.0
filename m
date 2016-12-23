@@ -1,150 +1,70 @@
-Return-path: <Ray.Huang@amd.com>
-Date: Fri, 23 Dec 2016 11:23:17 +0800
-From: Huang Rui <ray.huang@amd.com>
-To: Julia Lawall <Julia.Lawall@lip6.fr>
-CC: <kernel-janitors@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 65/66] hwmon: (fam15h_power) use permission-specific
- DEVICE_ATTR variants
-Message-ID: <20161223032316.GA11339@hr-amur2>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:41970 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S941808AbcLWCiL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 22 Dec 2016 21:38:11 -0500
+Subject: Re: [PATCH 00/66] use permission-specific DEVICE_ATTR variants
+To: Julia Lawall <Julia.Lawall@lip6.fr>, linux-kernel@vger.kernel.org
 References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
- <1482408335-3435-66-git-send-email-Julia.Lawall@lip6.fr>
+Cc: kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <42ae040d-9939-5e8e-2157-8f635a3f6ab4@roeck-us.net>
+Date: Thu, 22 Dec 2016 18:38:07 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1482408335-3435-66-git-send-email-Julia.Lawall@lip6.fr>
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 22, 2016 at 01:05:34PM +0100, Julia Lawall wrote:
+On 12/22/2016 04:04 AM, Julia Lawall wrote:
 > Use DEVICE_ATTR_RO etc. for read only attributes etc.  This simplifies the
 > source code, improves readbility, and reduces the chance of
-> inconsistencies.
-> 
-> The semantic patch for the RO case, in the case where the show function
-> already has the expected name, is as follows:
+> inconsistencies.  A previous version of this semantic patch transformed
+> only cases where the show and store functions followed particular naming
+> conventions.  This semantic patch additionally renames functions as
+> needed.  It can, however, fail to transform some occurrences where a single
+> function is used for multiple attributes.  In that case, the first case is
+> transformed an the others are left as is.
+>
+> The complete semantic patch is as follows:
 > (http://coccinelle.lip6.fr/)
-> 
-> // <smpl>
-> @ro@
-> declarer name DEVICE_ATTR;
-> identifier x,x_show;
-> @@
-> 
-> DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL);
-> 
-> @script:ocaml@
-> x << ro.x;
-> x_show << ro.x_show;
-> @@
-> 
-> if not (x^"_show" = x_show) then Coccilib.include_match false
-> 
-> @@
-> declarer name DEVICE_ATTR_RO;
-> identifier ro.x,ro.x_show;
-> @@
-> 
-> - DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL);
-> + DEVICE_ATTR_RO(x);
-> // </smpl>
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
-> 
+>
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+Hi Julia,
+
+I noticed that drivers/hwmon/gl518sm.c was not converted. Running your script
+on it does not do anything. Any idea what might cause that ?
+
+I noticed that I get a warning if I specify a debug file:
+
+File "devattr-new.cocci", line 36, characters 5-6:
+Warning 26: unused variable x.
+
+but that seems to have no impact and is always seen. I think it is caused
+by the following.
+
+...
+
+@script:ocaml@
+x << d.x;	<====
+show << o.show;
+store << o.store;
+@@
+
+if (not(show = "NULL") && Hashtbl.mem taken show) ||
+    (not(store = "NULL") && Hashtbl.mem taken store)
+then Coccilib.include_match false
+else (Hashtbl.add taken show (); Hashtbl.add taken store ())
+
+...
+
+How does one specify indentation preferences ? Also, how do I generate
+an actual patch (instead of getting the output on screen) ?
+Sorry for the maybe dumb questions ;-).
 
 Thanks,
-Rui
+Guenter
 
-> ---
->  drivers/hwmon/fam15h_power.c |   34 ++++++++++++++++------------------
->  1 file changed, 16 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
-> index 15aa49d..9545a34 100644
-> --- a/drivers/hwmon/fam15h_power.c
-> +++ b/drivers/hwmon/fam15h_power.c
-> @@ -83,8 +83,8 @@ static bool is_carrizo_or_later(void)
->  	return boot_cpu_data.x86 == 0x15 && boot_cpu_data.x86_model >= 0x60;
->  }
->  
-> -static ssize_t show_power(struct device *dev,
-> -			  struct device_attribute *attr, char *buf)
-> +static ssize_t power1_input_show(struct device *dev,
-> +				 struct device_attribute *attr, char *buf)
->  {
->  	u32 val, tdp_limit, running_avg_range;
->  	s32 running_avg_capture;
-> @@ -136,16 +136,16 @@ static ssize_t show_power(struct device *dev,
->  	curr_pwr_watts = (curr_pwr_watts * 15625) >> (10 + running_avg_range);
->  	return sprintf(buf, "%u\n", (unsigned int) curr_pwr_watts);
->  }
-> -static DEVICE_ATTR(power1_input, S_IRUGO, show_power, NULL);
-> +static DEVICE_ATTR_RO(power1_input);
->  
-> -static ssize_t show_power_crit(struct device *dev,
-> -			       struct device_attribute *attr, char *buf)
-> +static ssize_t power1_crit_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
->  {
->  	struct fam15h_power_data *data = dev_get_drvdata(dev);
->  
->  	return sprintf(buf, "%u\n", data->processor_pwr_watts);
->  }
-> -static DEVICE_ATTR(power1_crit, S_IRUGO, show_power_crit, NULL);
-> +static DEVICE_ATTR_RO(power1_crit);
->  
->  static void do_read_registers_on_cu(void *_data)
->  {
-> @@ -212,9 +212,8 @@ static int read_registers(struct fam15h_power_data *data)
->  	return 0;
->  }
->  
-> -static ssize_t acc_show_power(struct device *dev,
-> -			      struct device_attribute *attr,
-> -			      char *buf)
-> +static ssize_t power1_average_show(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
->  {
->  	struct fam15h_power_data *data = dev_get_drvdata(dev);
->  	u64 prev_cu_acc_power[MAX_CUS], prev_ptsc[MAX_CUS],
-> @@ -267,20 +266,20 @@ static ssize_t acc_show_power(struct device *dev,
->  
->  	return sprintf(buf, "%llu\n", (unsigned long long)avg_acc);
->  }
-> -static DEVICE_ATTR(power1_average, S_IRUGO, acc_show_power, NULL);
-> +static DEVICE_ATTR_RO(power1_average);
->  
-> -static ssize_t acc_show_power_period(struct device *dev,
-> -				     struct device_attribute *attr,
-> -				     char *buf)
-> +static ssize_t power1_average_interval_show(struct device *dev,
-> +					    struct device_attribute *attr,
-> +					    char *buf)
->  {
->  	struct fam15h_power_data *data = dev_get_drvdata(dev);
->  
->  	return sprintf(buf, "%lu\n", data->power_period);
->  }
->  
-> -static ssize_t acc_set_power_period(struct device *dev,
-> -				    struct device_attribute *attr,
-> -				    const char *buf, size_t count)
-> +static ssize_t power1_average_interval_store(struct device *dev,
-> +					     struct device_attribute *attr,
-> +					     const char *buf, size_t count)
->  {
->  	struct fam15h_power_data *data = dev_get_drvdata(dev);
->  	unsigned long temp;
-> @@ -301,8 +300,7 @@ static ssize_t acc_set_power_period(struct device *dev,
->  
->  	return count;
->  }
-> -static DEVICE_ATTR(power1_average_interval, S_IRUGO | S_IWUSR,
-> -		   acc_show_power_period, acc_set_power_period);
-> +static DEVICE_ATTR_RW(power1_average_interval);
->  
->  static int fam15h_power_init_attrs(struct pci_dev *pdev,
->  				   struct fam15h_power_data *data)
-> 
