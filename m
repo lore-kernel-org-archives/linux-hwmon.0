@@ -1,191 +1,83 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from p3plsmtpa08-09.prod.phx3.secureserver.net ([173.201.193.110]:39086
-        "EHLO p3plsmtpa08-09.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1754791AbcLXNXk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Dec 2016 08:23:40 -0500
-From: "Peter A. Bigot" <pab@pabigot.com>
-To: linux-hwmon@vger.kernel.org
-Cc: urs.fleisch@sensirion.com
-Subject: [PATCH v3] hwmon: (sht21) Add Electronic Identification Code retrieval
-Date: Sat, 24 Dec 2016 07:22:44 -0600
-Message-Id: <1482585764-21529-1-git-send-email-pab@pabigot.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <julia.lawall@lip6.fr>
+Date: Fri, 23 Dec 2016 07:39:20 +0100 (CET)
+From: Julia Lawall <julia.lawall@lip6.fr>
+To: Guenter Roeck <linux@roeck-us.net>
+cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+    linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH 00/66] use permission-specific DEVICE_ATTR variants
+In-Reply-To: <42ae040d-9939-5e8e-2157-8f635a3f6ab4@roeck-us.net>
+Message-ID: <alpine.DEB.2.20.1612230732030.1983@hadrien>
+References: <1482408335-3435-1-git-send-email-Julia.Lawall@lip6.fr> <42ae040d-9939-5e8e-2157-8f635a3f6ab4@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Expose the per-chip unique identifier so it can be used to identify the
-sensor producing the measurements.
+> Hi Julia,
+>
+> I noticed that drivers/hwmon/gl518sm.c was not converted. Running your script
+> on it does not do anything. Any idea what might cause that ?
 
-Signed-off-by: Peter A. Bigot <pab@pabigot.com>
----
-v3: Use permission-specific DEVICE_ATTR for new attribute
+I'll check.
 
-v2: Remove unnecessary copyright/authorship claims.
-    Define symbolic names for serial number read commands.
-    Provide separate function to read EIC.
-    Rearrange device data structure slightly to reduce alignment padding.
-    Store EIC in ASCII form and mark validity using non-NUL character.
-    Use hard-coded lengths and avoid redundant assignments.
-    Change attribute name.
+> I noticed that I get a warning if I specify a debug file:
+>
+> File "devattr-new.cocci", line 36, characters 5-6:
+> Warning 26: unused variable x.
+>
+> but that seems to have no impact and is always seen. I think it is caused
+> by the following.
 
- Documentation/hwmon/sht21 |  5 +--
- drivers/hwmon/sht21.c     | 92 +++++++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 93 insertions(+), 4 deletions(-)
+Yes, it has no impact.  You can change x << d.x; to _x << d.x;
 
-diff --git a/Documentation/hwmon/sht21 b/Documentation/hwmon/sht21
-index db17fda..47f4765 100644
---- a/Documentation/hwmon/sht21
-+++ b/Documentation/hwmon/sht21
-@@ -35,6 +35,7 @@ sysfs-Interface
- 
- temp1_input - temperature input
- humidity1_input - humidity input
-+eic - Electronic Identification Code
- 
- Notes
- -----
-@@ -45,5 +46,5 @@ humidity and 66 ms for temperature. To keep self heating below 0.1 degree
- Celsius, the device should not be active for more than 10% of the time,
- e.g. maximum two measurements per second at the given resolution.
- 
--Different resolutions, the on-chip heater, using the CRC checksum and reading
--the serial number are not supported yet.
-+Different resolutions, the on-chip heater, and using the CRC checksum
-+are not supported yet.
-diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
-index 84cdb1c..06706d2 100644
---- a/drivers/hwmon/sht21.c
-+++ b/drivers/hwmon/sht21.c
-@@ -34,23 +34,29 @@
- /* I2C command bytes */
- #define SHT21_TRIG_T_MEASUREMENT_HM  0xe3
- #define SHT21_TRIG_RH_MEASUREMENT_HM 0xe5
-+#define SHT21_READ_SNB_CMD1 0xFA
-+#define SHT21_READ_SNB_CMD2 0x0F
-+#define SHT21_READ_SNAC_CMD1 0xFC
-+#define SHT21_READ_SNAC_CMD2 0xC9
- 
- /**
-  * struct sht21 - SHT21 device specific data
-  * @hwmon_dev: device registered with hwmon
-  * @lock: mutex to protect measurement values
-- * @valid: only 0 before first measurement is taken
-  * @last_update: time of last update (jiffies)
-  * @temperature: cached temperature measurement value
-  * @humidity: cached humidity measurement value
-+ * @valid: only 0 before first measurement is taken
-+ * @eic: cached electronic identification code text
-  */
- struct sht21 {
- 	struct i2c_client *client;
- 	struct mutex lock;
--	char valid;
- 	unsigned long last_update;
- 	int temperature;
- 	int humidity;
-+	char valid;
-+	char eic[18];
- };
- 
- /**
-@@ -165,15 +171,97 @@ static ssize_t sht21_show_humidity(struct device *dev,
- 	return sprintf(buf, "%d\n", sht21->humidity);
- }
- 
-+static ssize_t eic_read(struct sht21 *sht21)
-+{
-+	struct i2c_client *client = sht21->client;
-+	u8 tx[2];
-+	u8 rx[8];
-+	u8 eic[8];
-+	struct i2c_msg msgs[2] = {
-+		{
-+			.addr = client->addr,
-+			.flags = 0,
-+			.len = 2,
-+			.buf = tx,
-+		},
-+		{
-+			.addr = client->addr,
-+			.flags = I2C_M_RD,
-+			.len = 8,
-+			.buf = rx,
-+		},
-+	};
-+	int ret;
-+
-+	tx[0] = SHT21_READ_SNB_CMD1;
-+	tx[1] = SHT21_READ_SNB_CMD2;
-+	ret = i2c_transfer(client->adapter, msgs, 2);
-+	if (ret < 0)
-+		goto out;
-+	eic[2] = rx[0];
-+	eic[3] = rx[2];
-+	eic[4] = rx[4];
-+	eic[5] = rx[6];
-+
-+	tx[0] = SHT21_READ_SNAC_CMD1;
-+	tx[1] = SHT21_READ_SNAC_CMD2;
-+	msgs[1].len = 6;
-+	ret = i2c_transfer(client->adapter, msgs, 2);
-+	if (ret < 0)
-+		goto out;
-+	eic[0] = rx[3];
-+	eic[1] = rx[4];
-+	eic[6] = rx[0];
-+	eic[7] = rx[1];
-+
-+	ret = snprintf(sht21->eic, sizeof(sht21->eic),
-+		       "%02x%02x%02x%02x%02x%02x%02x%02x\n",
-+		       eic[0], eic[1], eic[2], eic[3],
-+		       eic[4], eic[5], eic[6], eic[7]);
-+out:
-+	if (ret < 0)
-+		sht21->eic[0] = 0;
-+
-+	return ret;
-+}
-+
-+/**
-+ * eic_show() - show Electronic Identification Code in sysfs
-+ * @dev: device
-+ * @attr: device attribute
-+ * @buf: sysfs buffer (PAGE_SIZE) where EIC is written
-+ *
-+ * Will be called on read access to eic sysfs attribute.
-+ * Returns number of bytes written into buffer, negative errno on error.
-+ */
-+static ssize_t eic_show(struct device *dev,
-+	struct device_attribute *attr,
-+	char *buf)
-+{
-+	struct sht21 *sht21 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = sizeof(sht21->eic) - 1;
-+	mutex_lock(&sht21->lock);
-+	if (!sht21->eic[0])
-+		ret = eic_read(sht21);
-+	if (ret > 0)
-+		memcpy(buf, sht21->eic, ret);
-+	mutex_unlock(&sht21->lock);
-+	return ret;
-+}
-+
- /* sysfs attributes */
- static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht21_show_temperature,
- 	NULL, 0);
- static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO, sht21_show_humidity,
- 	NULL, 0);
-+static DEVICE_ATTR_RO(eic);
- 
- static struct attribute *sht21_attrs[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
- 	&sensor_dev_attr_humidity1_input.dev_attr.attr,
-+	&dev_attr_eic.attr,
- 	NULL
- };
- 
--- 
-2.7.4
+>
+> ...
+>
+> @script:ocaml@
+> x << d.x;	<====
+> show << o.show;
+> store << o.store;
+> @@
+>
+> if (not(show = "NULL") && Hashtbl.mem taken show) ||
+>    (not(store = "NULL") && Hashtbl.mem taken store)
+> then Coccilib.include_match false
+> else (Hashtbl.add taken show (); Hashtbl.add taken store ())
+>
+> ...
+>
+> How does one specify indentation preferences ?
 
+Actually, you are pretty much stuck with what Coccinelle provides you.
+What do you want to adjust?  Currently, it shouldn't have any impact on
+indentation if the new name is the same as the old one.  That function
+could be generalized to allow length changes of up to a few characters, for
+example, but I'm not sure that the result would always be satisfactory.
+When I made the patch, I had to adjust about 5 cases by hand, where it was
+sending all of the parameters past 80 characters, because the name of the
+function was long.
+
+> Also, how do I generate
+> an actual patch (instead of getting the output on screen) ?
+> Sorry for the maybe dumb questions ;-).
+
+The patch is on standard output.  All other messages are on standard error.
+You can also use the argument --in-place to change your code directly.
+
+If you want to only work on the hwmon directory, but to get a patch that is
+relative to the root directory, you can do:
+
+--dir linux/drivers/hwmon --patch linux
+
+That is, the argument to --patch is the directory that you want the patch
+to be relative to.
+
+julia
+
+> Thanks,
+> Guenter
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe kernel-janitors" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
