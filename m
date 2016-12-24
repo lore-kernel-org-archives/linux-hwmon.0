@@ -1,121 +1,294 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ms.trustica.cz ([82.208.32.68]:39924 "EHLO ms.trustica.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752656AbcL2OcJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Dec 2016 09:32:09 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by ms.trustica.cz (Postfix) with ESMTP id 273D69A77F
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Dec 2016 15:25:36 +0100 (CET)
-Received: from ms.trustica.cz ([127.0.0.1])
-        by localhost (ms.trustica.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xW6XmxcdpqOx for <linux-hwmon@vger.kernel.org>;
-        Thu, 29 Dec 2016 15:25:35 +0100 (CET)
-Received: from [192.168.88.62] (56.32.broadband3.iol.cz [85.70.32.56])
-        (Authenticated sender: r.marek@assembler.cz)
-        by ms.trustica.cz (Postfix) with ESMTPSA id 943179A759
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Dec 2016 15:25:35 +0100 (CET)
-To: linux-hwmon@vger.kernel.org
-From: Rudolf Marek <r.marek@assembler.cz>
-Subject: [PATCH] sensors-detect: Add Exar
-Message-ID: <5a915597-c5d5-9e0e-b1f1-043e8ae48043@assembler.cz>
-Date: Thu, 29 Dec 2016 15:25:34 +0100
+Return-path: <julia.lawall@lip6.fr>
+Date: Sat, 24 Dec 2016 07:05:57 +0100 (CET)
+From: Julia Lawall <julia.lawall@lip6.fr>
+To: Guenter Roeck <linux@roeck-us.net>
+cc: cocci@systeme.lip6.fr, Greg KH <gregkh@linuxfoundation.org>,
+    linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Converting DEVICE_ATTR to DEVICE_ATTR_{RO,RW,WO} and changing
+ function names at the same time
+In-Reply-To: <20161223231019.GA25609@roeck-us.net>
+Message-ID: <alpine.DEB.2.20.1612240650400.2122@hadrien>
+References: <0bcce41c-88ce-09a0-2ddd-5ba2e406d482@roeck-us.net> <alpine.DEB.2.20.1612211434221.3084@hadrien> <20161221162926.GB6188@roeck-us.net> <alpine.DEB.2.20.1612212039090.2005@hadrien> <20161221214425.GA2315@roeck-us.net> <alpine.DEB.2.20.1612221326060.14381@hadrien>
+ <83039af2-7b45-8b1f-d842-85a70b71ba11@roeck-us.net> <alpine.DEB.2.20.1612221634440.7817@hadrien> <20161222181948.GA20516@roeck-us.net> <alpine.DEB.2.20.1612231404050.4056@hadrien> <20161223231019.GA25609@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------433E93E5239EEF478C2F2410"
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This is a multi-part message in MIME format.
---------------433E93E5239EEF478C2F2410
-Content-Type: text/plain; charset=iso-8859-2
-Content-Transfer-Encoding: 8bit
 
-Hi,
 
-I stumbled across a new SuperIOs from Exar. They do not contain any hw sensors,
-but it could be useful to have them in sensors-detect
+On Fri, 23 Dec 2016, Guenter Roeck wrote:
 
-Funny is that those have configurable key sequence, which can clash with
-existing devices. Perhaps this can be improved and check for vendor ID?
+> Hi Julia,
+>
+> On Fri, Dec 23, 2016 at 04:54:41PM +0100, Julia Lawall wrote:
+> [ ... ]
+> >
+> > // -------------------------------------------------------------------------
+> > @ro@
+> > declarer name SENSOR_DEVICE_ATTR, SENSOR_DEVICE_ATTR_2;
+> > identifier x,show;
+> > @@
+> >
+> > \(SENSOR_DEVICE_ATTR\|SENSOR_DEVICE_ATTR_2\)
+> >         (x, \(0444\|S_IRUGO\), show, NULL, ...);
+> >
+>
+> my version of spatch (?) does not like this construct.
+>
+> $ spatch --version
+> spatch version 1.0.6-00036-gb62df17 compiled with OCaml version 4.02.3
+> Flags passed to the configure script: --prefix=/usr
+> Python scripting support: yes
+> Syntax of regular expresssions: PCRE
+>
+> Is this something new, or am I doing something wrong ?
 
-In the attached patch, I added just a default key sequence 0x67, 0x67
+Something new, sorry.  I think it should be available in the github
+version.  If not, the solution is just to split each case like this up
+into two rules.
 
-The datasheets can be found:
+> I played with it myself, and came up with the (less elegant) version
+> below. It isn't perfect (it does not handle the function-in-macro case
+> well), but it should give us a good comparison. Also, I might just get
+> rid of at least some of those macros; they just obfuscate the code anyway.
+>
+> Thanks,
+> Guenter
+>
+> ---
+> @initialize:python@
+> @@
+>
+> import re
+>
+> // -------------------------------------------------------------------------
+> // Easy case
+>
+> @d@
+> declarer name SENSOR_DEVICE_ATTR,SENSOR_DEVICE_ATTR_2;
+> identifier x,show,store;
+> expression p;
+> @@
+>
+> (
+>   SENSOR_DEVICE_ATTR(x,p,show,store,...);
+> |
+>   SENSOR_DEVICE_ATTR_2(x,p,show,store,...);
+> )
+>
+> @script:python expected@
+> show << d.show;
+> store << d.store;
+> x_show;
+> x_store;
+> func;
+> @@
+> coccinelle.func = re.sub('show_|get_|_show|_get|_read', '', show)
+> coccinelle.x_show = re.sub('show_|get_|_show|_get|_read', '', show) + "_show"
+> coccinelle.x_store = re.sub('show_|get_|_get|_show|_read', '', show) +
+"_store"
+>
+> if show == "NULL":
+>     coccinelle.x_store = re.sub('store_|set_|_set|_store|_write|_reset', '', store) + "_store"
+>     coccinelle.func = re.sub('store_|set_|_store|_set|_write|_reset', '', store)
 
-https://www.exar.com/products/interface/uarts/lpc-uarts
-https://www.exar.com/product/interface/uarts/lpc-uarts/xr28v384
-https://www.exar.com/product/interface/uarts/lpc-uarts/xr28v382
+OK, so you solve the incompatability between show and store by jut taking
+the show version.  There could be some danger that another call will only
+have the same store function and will rename it in a different way.  That
+is:
 
-The patch is completely untested, please check the datasheet for relevant
-information.
+SENSOR_DEVICE_ATTR(x, opt, get_one, set_two, 0)
 
-Thanks
-Rudolf
+will rename set_two to one_store, and
 
---------------433E93E5239EEF478C2F2410
-Content-Type: text/x-diff;
- name="exar.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename="exar.patch"
+SENSOR_DEVICE_ATTR(x, opt, NULL, set_two, 0)
 
-diff --git a/prog/detect/sensors-detect b/prog/detect/sensors-detect
-index 057cd96..b47595e 100755
---- a/prog/detect/sensors-detect
-+++ b/prog/detect/sensors-detect
-@@ -1582,7 +1582,7 @@ use vars qw(@i2c_adapter_names);
- #      * FEAT_FAN
- #      * FEAT_TEMP
- use vars qw(@superio_ids_natsemi @superio_ids_smsc @superio_ids_smsc_ns
--	    @superio_ids_winbond @superio_ids_ite @superio_ids);
-+	    @superio_ids_winbond @superio_ids_exar @superio_ids_ite @superio_id=
-s);
-=20
- use constant FEAT_IN	=3D> (1 << 0);
- use constant FEAT_FAN	=3D> (1 << 1);
-@@ -2022,6 +2022,18 @@ use constant FEAT_SMBUS	=3D> (1 << 7);
- 	}
- );
-=20
-+@superio_ids_exar =3D (
-+	{
-+		name =3D> "Exar XR28V384",
-+		driver =3D> "not-a-sensor",
-+		devid =3D> 0x0384,
-+	}, {
-+		name =3D> "Exar XR28V382",
-+		driver =3D> "not-a-sensor",
-+		devid =3D> 0x0382,
-+	}
-+);
-+
- @superio_ids_winbond =3D (
- 	{
- 		name =3D> "VIA VT1211 Super IO Sensors",
-@@ -2483,6 +2495,14 @@ use constant FEAT_SMBUS	=3D> (1 << 7);
- 		ns_detect =3D> \&smsc_ns_detect_superio,
- 		ns_chips =3D> \@superio_ids_smsc_ns,
- 	}, {
-+		family =3D> "Exar",
-+		enter =3D>
-+		{
-+			0x2e =3D> [0x67, 0x67], #The non-default key can be 0x87 0x87, 0x77 0=
-x77 or 0xa0, 0xa0
-+			0x4e =3D> [0x67, 0x67],
-+		},
-+		chips =3D> \@superio_ids_exar,
-+	}, {
- 		family =3D> "VIA/Winbond/Nuvoton/Fintek",
- 		guess =3D> 0x290,
- 		enter =3D>
-@@ -4081,7 +4101,7 @@ sub exit_superio
- {
- 	my ($addrreg, $datareg) =3D @_;
-=20
--	# Some chips (SMSC, Winbond) want this
-+	# Some chips (SMSC, Winbond, Exar) want this
- 	outb($addrreg, 0xaa);
-=20
- 	# Return to "Wait For Key" state (PNP-ISA spec)
+will rename set_two to two_store.
 
---------------433E93E5239EEF478C2F2410--
+Otherwise, it seems fine.  It is better than my version in that it chooses
+the new names all at once.  My version chose the new names for eg the WO
+and RW cases after the RO case, so it had to protect against rechanging
+names that it had already changed.  I also protect against renaming a name
+being used in a DEVICE_ATTR call.  I don't know if that can happen.
+
+You don't actually havce to repeat the declarer name declaration in every
+rule.  Once you have specified that once, it is valid forever.  New
+versions of Coccinelle allow the redeclaration, butold versions will
+break.
+
+julia
+
+
+> @@
+> declarer name SENSOR_DEVICE_ATTR_RO;
+> identifier d.x,expected.x_show,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL, e);
+> + SENSOR_DEVICE_ATTR_RO(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_WO;
+> identifier d.x,expected.x_store,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store, e);
+> + SENSOR_DEVICE_ATTR_WO(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_RW;
+> identifier d.x,expected.x_show,expected.x_store,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e);
+> + SENSOR_DEVICE_ATTR_RW(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_RO;
+> identifier d.x,expected.x_show,expected.func;
+> expression e1,e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0444\|S_IRUGO\), x_show, NULL, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_RO(x, func, e1, e2);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_WO;
+> identifier d.x,expected.x_store,expected.func;
+> expression e1,e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0200\|S_IWUSR\), NULL, x_store, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_WO(x, func, e1, e2);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_RW;
+> identifier d.x,expected.x_show,expected.x_store,expected.func;
+> expression e1, e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_RW(x, func, e1, e2);
+>
+> // -------------------------------------------------------------------------
+> // Other calls
+>
+> @o@
+> declarer name SENSOR_DEVICE_ATTR,SENSOR_DEVICE_ATTR_2;
+> identifier d.x,show,store;
+> expression list es;
+> @@
+>
+> (
+> SENSOR_DEVICE_ATTR(x,\(0444\|S_IRUGO\|0200\|S_IWUSR\|0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\),show,store,es);
+> |
+> SENSOR_DEVICE_ATTR_2(x,\(0444\|S_IRUGO\|0200\|S_IWUSR\|0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\),show,store,es);
+> )
+>
+> // rename functions
+>
+> @show1@
+> identifier o.show,expected.x_show;
+> parameter list ps;
+> @@
+>
+> static
+> - show(ps)
+> + x_show(ps)
+>   { ... }
+>
+> @depends on show1@
+> identifier o.show,expected.x_show;
+> expression list es;
+> @@
+> - show(es)
+> + x_show(es)
+>
+> @depends on show1@
+> identifier o.show,expected.x_show;
+> @@
+> - show
+> + x_show
+>
+> @store1@
+> identifier o.store,expected.x_store;
+> parameter list ps;
+> @@
+>
+> static
+> - store(ps)
+> + x_store(ps)
+>   { ... }
+>
+> @depends on store1@
+> identifier o.store,expected.x_store;
+> expression list es;
+> @@
+> - store(es)
+> + x_store(es)
+>
+> @depends on store1@
+> identifier o.store,expected.x_store;
+> @@
+> - store
+> + x_store
+>
+> // try again
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_RO;
+> identifier d.x,expected.x_show,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL, e);
+> + SENSOR_DEVICE_ATTR_RO(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_WO;
+> identifier d.x,expected.x_store,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store, e);
+> + SENSOR_DEVICE_ATTR_WO(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_RW;
+> identifier d.x,expected.x_show,expected.x_store,expected.func;
+> expression e;
+> @@
+>
+> - SENSOR_DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e);
+> + SENSOR_DEVICE_ATTR_RW(x, func, e);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_RO;
+> identifier d.x,expected.x_show,expected.func;
+> expression e1,e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0444\|S_IRUGO\), x_show, NULL, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_RO(x, func, e1, e2);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_WO;
+> identifier d.x,expected.x_store,expected.func;
+> expression e1, e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0200\|S_IWUSR\), NULL, x_store, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_WO(x, func, e1, e2);
+>
+> @@
+> declarer name SENSOR_DEVICE_ATTR_2_RW;
+> identifier d.x,expected.x_show,expected.x_store,expected.func;
+> expression e1, e2;
+> @@
+>
+> - SENSOR_DEVICE_ATTR_2(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e1, e2);
+> + SENSOR_DEVICE_ATTR_2_RW(x, func, e1, e2);
+>
