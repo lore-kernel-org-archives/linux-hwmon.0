@@ -1,272 +1,191 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43631 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1756549AbcLWXKW (ORCPT
+Received: from p3plsmtpa08-09.prod.phx3.secureserver.net ([173.201.193.110]:39086
+        "EHLO p3plsmtpa08-09.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1754791AbcLXNXk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Dec 2016 18:10:22 -0500
-Date: Fri, 23 Dec 2016 15:10:19 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Julia Lawall <julia.lawall@lip6.fr>
-Cc: cocci@systeme.lip6.fr, Greg KH <gregkh@linuxfoundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Converting DEVICE_ATTR to DEVICE_ATTR_{RO,RW,WO} and changing
- function names at the same time
-Message-ID: <20161223231019.GA25609@roeck-us.net>
-References: <0bcce41c-88ce-09a0-2ddd-5ba2e406d482@roeck-us.net>
- <alpine.DEB.2.20.1612211434221.3084@hadrien>
- <20161221162926.GB6188@roeck-us.net>
- <alpine.DEB.2.20.1612212039090.2005@hadrien>
- <20161221214425.GA2315@roeck-us.net>
- <alpine.DEB.2.20.1612221326060.14381@hadrien>
- <83039af2-7b45-8b1f-d842-85a70b71ba11@roeck-us.net>
- <alpine.DEB.2.20.1612221634440.7817@hadrien>
- <20161222181948.GA20516@roeck-us.net>
- <alpine.DEB.2.20.1612231404050.4056@hadrien>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.20.1612231404050.4056@hadrien>
+        Sat, 24 Dec 2016 08:23:40 -0500
+From: "Peter A. Bigot" <pab@pabigot.com>
+To: linux-hwmon@vger.kernel.org
+Cc: urs.fleisch@sensirion.com
+Subject: [PATCH v3] hwmon: (sht21) Add Electronic Identification Code retrieval
+Date: Sat, 24 Dec 2016 07:22:44 -0600
+Message-Id: <1482585764-21529-1-git-send-email-pab@pabigot.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Julia,
+Expose the per-chip unique identifier so it can be used to identify the
+sensor producing the measurements.
 
-On Fri, Dec 23, 2016 at 04:54:41PM +0100, Julia Lawall wrote:
-[ ... ]
-> 
-> // -------------------------------------------------------------------------
-> @ro@
-> declarer name SENSOR_DEVICE_ATTR, SENSOR_DEVICE_ATTR_2;
-> identifier x,show;
-> @@
-> 
-> \(SENSOR_DEVICE_ATTR\|SENSOR_DEVICE_ATTR_2\)
->         (x, \(0444\|S_IRUGO\), show, NULL, ...);
-> 
-
-my version of spatch (?) does not like this construct.
-
-$ spatch --version
-spatch version 1.0.6-00036-gb62df17 compiled with OCaml version 4.02.3
-Flags passed to the configure script: --prefix=/usr
-Python scripting support: yes
-Syntax of regular expresssions: PCRE
-
-Is this something new, or am I doing something wrong ?
-
-I played with it myself, and came up with the (less elegant) version
-below. It isn't perfect (it does not handle the function-in-macro case
-well), but it should give us a good comparison. Also, I might just get
-rid of at least some of those macros; they just obfuscate the code anyway.
-
-Thanks,
-Guenter
-
+Signed-off-by: Peter A. Bigot <pab@pabigot.com>
 ---
-@initialize:python@
-@@
+v3: Use permission-specific DEVICE_ATTR for new attribute
 
-import re
+v2: Remove unnecessary copyright/authorship claims.
+    Define symbolic names for serial number read commands.
+    Provide separate function to read EIC.
+    Rearrange device data structure slightly to reduce alignment padding.
+    Store EIC in ASCII form and mark validity using non-NUL character.
+    Use hard-coded lengths and avoid redundant assignments.
+    Change attribute name.
 
-// -------------------------------------------------------------------------
-// Easy case
+ Documentation/hwmon/sht21 |  5 +--
+ drivers/hwmon/sht21.c     | 92 +++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 93 insertions(+), 4 deletions(-)
 
-@d@
-declarer name SENSOR_DEVICE_ATTR,SENSOR_DEVICE_ATTR_2;
-identifier x,show,store;
-expression p;
-@@
+diff --git a/Documentation/hwmon/sht21 b/Documentation/hwmon/sht21
+index db17fda..47f4765 100644
+--- a/Documentation/hwmon/sht21
++++ b/Documentation/hwmon/sht21
+@@ -35,6 +35,7 @@ sysfs-Interface
+ 
+ temp1_input - temperature input
+ humidity1_input - humidity input
++eic - Electronic Identification Code
+ 
+ Notes
+ -----
+@@ -45,5 +46,5 @@ humidity and 66 ms for temperature. To keep self heating below 0.1 degree
+ Celsius, the device should not be active for more than 10% of the time,
+ e.g. maximum two measurements per second at the given resolution.
+ 
+-Different resolutions, the on-chip heater, using the CRC checksum and reading
+-the serial number are not supported yet.
++Different resolutions, the on-chip heater, and using the CRC checksum
++are not supported yet.
+diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
+index 84cdb1c..06706d2 100644
+--- a/drivers/hwmon/sht21.c
++++ b/drivers/hwmon/sht21.c
+@@ -34,23 +34,29 @@
+ /* I2C command bytes */
+ #define SHT21_TRIG_T_MEASUREMENT_HM  0xe3
+ #define SHT21_TRIG_RH_MEASUREMENT_HM 0xe5
++#define SHT21_READ_SNB_CMD1 0xFA
++#define SHT21_READ_SNB_CMD2 0x0F
++#define SHT21_READ_SNAC_CMD1 0xFC
++#define SHT21_READ_SNAC_CMD2 0xC9
+ 
+ /**
+  * struct sht21 - SHT21 device specific data
+  * @hwmon_dev: device registered with hwmon
+  * @lock: mutex to protect measurement values
+- * @valid: only 0 before first measurement is taken
+  * @last_update: time of last update (jiffies)
+  * @temperature: cached temperature measurement value
+  * @humidity: cached humidity measurement value
++ * @valid: only 0 before first measurement is taken
++ * @eic: cached electronic identification code text
+  */
+ struct sht21 {
+ 	struct i2c_client *client;
+ 	struct mutex lock;
+-	char valid;
+ 	unsigned long last_update;
+ 	int temperature;
+ 	int humidity;
++	char valid;
++	char eic[18];
+ };
+ 
+ /**
+@@ -165,15 +171,97 @@ static ssize_t sht21_show_humidity(struct device *dev,
+ 	return sprintf(buf, "%d\n", sht21->humidity);
+ }
+ 
++static ssize_t eic_read(struct sht21 *sht21)
++{
++	struct i2c_client *client = sht21->client;
++	u8 tx[2];
++	u8 rx[8];
++	u8 eic[8];
++	struct i2c_msg msgs[2] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = 2,
++			.buf = tx,
++		},
++		{
++			.addr = client->addr,
++			.flags = I2C_M_RD,
++			.len = 8,
++			.buf = rx,
++		},
++	};
++	int ret;
++
++	tx[0] = SHT21_READ_SNB_CMD1;
++	tx[1] = SHT21_READ_SNB_CMD2;
++	ret = i2c_transfer(client->adapter, msgs, 2);
++	if (ret < 0)
++		goto out;
++	eic[2] = rx[0];
++	eic[3] = rx[2];
++	eic[4] = rx[4];
++	eic[5] = rx[6];
++
++	tx[0] = SHT21_READ_SNAC_CMD1;
++	tx[1] = SHT21_READ_SNAC_CMD2;
++	msgs[1].len = 6;
++	ret = i2c_transfer(client->adapter, msgs, 2);
++	if (ret < 0)
++		goto out;
++	eic[0] = rx[3];
++	eic[1] = rx[4];
++	eic[6] = rx[0];
++	eic[7] = rx[1];
++
++	ret = snprintf(sht21->eic, sizeof(sht21->eic),
++		       "%02x%02x%02x%02x%02x%02x%02x%02x\n",
++		       eic[0], eic[1], eic[2], eic[3],
++		       eic[4], eic[5], eic[6], eic[7]);
++out:
++	if (ret < 0)
++		sht21->eic[0] = 0;
++
++	return ret;
++}
++
++/**
++ * eic_show() - show Electronic Identification Code in sysfs
++ * @dev: device
++ * @attr: device attribute
++ * @buf: sysfs buffer (PAGE_SIZE) where EIC is written
++ *
++ * Will be called on read access to eic sysfs attribute.
++ * Returns number of bytes written into buffer, negative errno on error.
++ */
++static ssize_t eic_show(struct device *dev,
++	struct device_attribute *attr,
++	char *buf)
++{
++	struct sht21 *sht21 = dev_get_drvdata(dev);
++	int ret;
++
++	ret = sizeof(sht21->eic) - 1;
++	mutex_lock(&sht21->lock);
++	if (!sht21->eic[0])
++		ret = eic_read(sht21);
++	if (ret > 0)
++		memcpy(buf, sht21->eic, ret);
++	mutex_unlock(&sht21->lock);
++	return ret;
++}
++
+ /* sysfs attributes */
+ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, sht21_show_temperature,
+ 	NULL, 0);
+ static SENSOR_DEVICE_ATTR(humidity1_input, S_IRUGO, sht21_show_humidity,
+ 	NULL, 0);
++static DEVICE_ATTR_RO(eic);
+ 
+ static struct attribute *sht21_attrs[] = {
+ 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+ 	&sensor_dev_attr_humidity1_input.dev_attr.attr,
++	&dev_attr_eic.attr,
+ 	NULL
+ };
+ 
+-- 
+2.7.4
 
-(
-  SENSOR_DEVICE_ATTR(x,p,show,store,...);
-|
-  SENSOR_DEVICE_ATTR_2(x,p,show,store,...);
-)
-
-@script:python expected@
-show << d.show;
-store << d.store;
-x_show;
-x_store;
-func;
-@@
-coccinelle.func = re.sub('show_|get_|_show|_get|_read', '', show)
-coccinelle.x_show = re.sub('show_|get_|_show|_get|_read', '', show) + "_show"
-coccinelle.x_store = re.sub('show_|get_|_get|_show|_read', '', show) + "_store"
-
-if show == "NULL":
-    coccinelle.x_store = re.sub('store_|set_|_set|_store|_write|_reset', '', store) + "_store"
-    coccinelle.func = re.sub('store_|set_|_store|_set|_write|_reset', '', store)
-
-@@
-declarer name SENSOR_DEVICE_ATTR_RO;
-identifier d.x,expected.x_show,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL, e);
-+ SENSOR_DEVICE_ATTR_RO(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_WO;
-identifier d.x,expected.x_store,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store, e);
-+ SENSOR_DEVICE_ATTR_WO(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_RW;
-identifier d.x,expected.x_show,expected.x_store,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e);
-+ SENSOR_DEVICE_ATTR_RW(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_RO;
-identifier d.x,expected.x_show,expected.func;
-expression e1,e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0444\|S_IRUGO\), x_show, NULL, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_RO(x, func, e1, e2);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_WO;
-identifier d.x,expected.x_store,expected.func;
-expression e1,e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0200\|S_IWUSR\), NULL, x_store, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_WO(x, func, e1, e2);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_RW;
-identifier d.x,expected.x_show,expected.x_store,expected.func;
-expression e1, e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_RW(x, func, e1, e2);
-
-// -------------------------------------------------------------------------
-// Other calls
-
-@o@
-declarer name SENSOR_DEVICE_ATTR,SENSOR_DEVICE_ATTR_2;
-identifier d.x,show,store;
-expression list es;
-@@
-
-(
-SENSOR_DEVICE_ATTR(x,\(0444\|S_IRUGO\|0200\|S_IWUSR\|0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\),show,store,es);
-|
-SENSOR_DEVICE_ATTR_2(x,\(0444\|S_IRUGO\|0200\|S_IWUSR\|0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\),show,store,es);
-)
-
-// rename functions
-
-@show1@
-identifier o.show,expected.x_show;
-parameter list ps;
-@@
-
-static
-- show(ps)
-+ x_show(ps)
-  { ... }
-
-@depends on show1@
-identifier o.show,expected.x_show;
-expression list es;
-@@
-- show(es)
-+ x_show(es)
-
-@depends on show1@
-identifier o.show,expected.x_show;
-@@
-- show
-+ x_show
-
-@store1@
-identifier o.store,expected.x_store;
-parameter list ps;
-@@
-
-static
-- store(ps)
-+ x_store(ps)
-  { ... }
-
-@depends on store1@
-identifier o.store,expected.x_store;
-expression list es;
-@@
-- store(es)
-+ x_store(es)
-
-@depends on store1@
-identifier o.store,expected.x_store;
-@@
-- store
-+ x_store
-
-// try again
-
-@@
-declarer name SENSOR_DEVICE_ATTR_RO;
-identifier d.x,expected.x_show,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0444\|S_IRUGO\), x_show, NULL, e);
-+ SENSOR_DEVICE_ATTR_RO(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_WO;
-identifier d.x,expected.x_store,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0200\|S_IWUSR\), NULL, x_store, e);
-+ SENSOR_DEVICE_ATTR_WO(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_RW;
-identifier d.x,expected.x_show,expected.x_store,expected.func;
-expression e;
-@@
-
-- SENSOR_DEVICE_ATTR(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e);
-+ SENSOR_DEVICE_ATTR_RW(x, func, e);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_RO;
-identifier d.x,expected.x_show,expected.func;
-expression e1,e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0444\|S_IRUGO\), x_show, NULL, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_RO(x, func, e1, e2);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_WO;
-identifier d.x,expected.x_store,expected.func;
-expression e1, e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0200\|S_IWUSR\), NULL, x_store, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_WO(x, func, e1, e2);
-
-@@
-declarer name SENSOR_DEVICE_ATTR_2_RW;
-identifier d.x,expected.x_show,expected.x_store,expected.func;
-expression e1, e2;
-@@
-
-- SENSOR_DEVICE_ATTR_2(x, \(0644\|S_IRUGO|S_IWUSR\|S_IWUSR|S_IRUGO\), x_show, x_store, e1, e2);
-+ SENSOR_DEVICE_ATTR_2_RW(x, func, e1, e2);
