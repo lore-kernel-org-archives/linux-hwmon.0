@@ -3,47 +3,79 @@ From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 10/10] hwmon: (adt7411) Replace macro generating sensor attributes
-Date: Tue, 27 Dec 2016 15:28:28 -0800
-Message-Id: <1482881308-13550-11-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 05/10] hwmon: (f75375s) Replace function macro with explicit code
+Date: Tue, 27 Dec 2016 15:28:23 -0800
+Message-Id: <1482881308-13550-6-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1482881308-13550-1-git-send-email-linux@roeck-us.net>
 References: <1482881308-13550-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Replace macro generating sensor attributes with explicit code to ease
-conversion to SENSOR_DEVICE_ATTR_{RO,RW}.
+Replace function macro with explicit code to to reduce code obfuscation
+and to enable auto-conversion to SENSOR_DEVICE_ATTR_{RO,RW}.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/adt7411.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/hwmon/f75375s.c | 48 +++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 35 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
-index b939f8a115ba..bc6e8cd80b68 100644
---- a/drivers/hwmon/adt7411.c
-+++ b/drivers/hwmon/adt7411.c
-@@ -199,13 +199,15 @@ static ssize_t adt7411_set_bit(struct device *dev,
- 	return ret < 0 ? ret : count;
+diff --git a/drivers/hwmon/f75375s.c b/drivers/hwmon/f75375s.c
+index 80c42bea90ed..652ca4b34137 100644
+--- a/drivers/hwmon/f75375s.c
++++ b/drivers/hwmon/f75375s.c
+@@ -655,19 +655,41 @@ static ssize_t set_temp_max_hyst(struct device *dev,
+ 	return count;
  }
  
--#define ADT7411_BIT_ATTR(__name, __reg, __bit) \
--	SENSOR_DEVICE_ATTR_2(__name, S_IRUGO | S_IWUSR, adt7411_show_bit, \
--	adt7411_set_bit, __bit, __reg)
+-#define show_fan(thing) \
+-static ssize_t show_##thing(struct device *dev, struct device_attribute *attr, \
+-			char *buf)\
+-{\
+-	int nr = to_sensor_dev_attr(attr)->index;\
+-	struct f75375_data *data = f75375_update_device(dev); \
+-	return sprintf(buf, "%d\n", rpm_from_reg(data->thing[nr])); \
+-}
 -
--static ADT7411_BIT_ATTR(no_average, ADT7411_REG_CFG2, ADT7411_CFG2_DISABLE_AVG);
--static ADT7411_BIT_ATTR(fast_sampling, ADT7411_REG_CFG3, ADT7411_CFG3_ADC_CLK_225);
--static ADT7411_BIT_ATTR(adc_ref_vdd, ADT7411_REG_CFG3, ADT7411_CFG3_REF_VDD);
-+static SENSOR_DEVICE_ATTR_2(no_average, S_IRUGO | S_IWUSR,
-+			    adt7411_show_bit, adt7411_set_bit,
-+			    ADT7411_CFG2_DISABLE_AVG, ADT7411_REG_CFG2);
-+static SENSOR_DEVICE_ATTR_2(fast_sampling, S_IRUGO | S_IWUSR,
-+			    adt7411_show_bit, adt7411_set_bit,
-+			    ADT7411_CFG3_ADC_CLK_225, ADT7411_REG_CFG3);
-+static SENSOR_DEVICE_ATTR_2(adc_ref_vdd, S_IRUGO | S_IWUSR,
-+			    adt7411_show_bit, adt7411_set_bit,
-+			    ADT7411_CFG3_REF_VDD, ADT7411_REG_CFG3);
+-show_fan(fan);
+-show_fan(fan_min);
+-show_fan(fan_max);
+-show_fan(fan_target);
++static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	int nr = to_sensor_dev_attr(attr)->index;
++	struct f75375_data *data = f75375_update_device(dev);
++
++	return sprintf(buf, "%d\n", rpm_from_reg(data->fan[nr]));
++}
++
++static ssize_t show_fan_min(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	int nr = to_sensor_dev_attr(attr)->index;
++	struct f75375_data *data = f75375_update_device(dev);
++
++	return sprintf(buf, "%d\n", rpm_from_reg(data->fan_min[nr]));
++}
++
++static ssize_t show_fan_max(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	int nr = to_sensor_dev_attr(attr)->index;
++	struct f75375_data *data = f75375_update_device(dev);
++
++	return sprintf(buf, "%d\n", rpm_from_reg(data->fan_max[nr]));
++}
++
++static ssize_t show_fan_target(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int nr = to_sensor_dev_attr(attr)->index;
++	struct f75375_data *data = f75375_update_device(dev);
++
++	return sprintf(buf, "%d\n", rpm_from_reg(data->fan_target[nr]));
++}
  
- static struct attribute *adt7411_attrs[] = {
- 	&sensor_dev_attr_no_average.dev_attr.attr,
+ static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, show_in, NULL, 0);
+ static SENSOR_DEVICE_ATTR(in0_max, S_IRUGO|S_IWUSR,
 -- 
 2.7.4
