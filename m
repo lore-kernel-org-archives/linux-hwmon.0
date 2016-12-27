@@ -3,133 +3,79 @@ From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 01/10] hwmon: Introduce SENSOR_DEVICE_ATTR_{RO,RW,WO} and variants
-Date: Tue, 27 Dec 2016 15:28:19 -0800
-Message-Id: <1482881308-13550-2-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 02/10] hwmon: (wm831x-hwmon) Replace macros generating sensor attributes
+Date: Tue, 27 Dec 2016 15:28:20 -0800
+Message-Id: <1482881308-13550-3-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1482881308-13550-1-git-send-email-linux@roeck-us.net>
 References: <1482881308-13550-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Introduce SENSOR_DEVICE_ATTR_{RO,RW,WO} and SENSOR_DEVICE_ATTR_2_{RO,RW,WO}
-as simplified variants of SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 to
-simplify the source code, improve readbility, and reduce the chance of
-inconsistencies.
+Replace macros generating sensor attributes with explicit code to ease
+conversion to SENSOR_DEVICE_ATTR_{RO,RW}.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/hwmon-kernel-api.txt | 24 +++++++++++++-------
- include/linux/hwmon-sysfs.h              | 39 ++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 8 deletions(-)
+ drivers/hwmon/wm831x-hwmon.c | 48 ++++++++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
-index 2505ae67e2b6..00b0341880e7 100644
---- a/Documentation/hwmon/hwmon-kernel-api.txt
-+++ b/Documentation/hwmon/hwmon-kernel-api.txt
-@@ -294,17 +294,25 @@ functions is used.
- The header file linux/hwmon-sysfs.h provides a number of useful macros to
- declare and use hardware monitoring sysfs attributes.
+diff --git a/drivers/hwmon/wm831x-hwmon.c b/drivers/hwmon/wm831x-hwmon.c
+index a16cce72e4e2..46d32ae94167 100644
+--- a/drivers/hwmon/wm831x-hwmon.c
++++ b/drivers/hwmon/wm831x-hwmon.c
+@@ -79,25 +79,35 @@ static ssize_t show_label(struct device *dev,
+ 	return sprintf(buf, "%s\n", input_names[channel]);
+ }
  
--In many cases, you can use the exsting define DEVICE_ATTR to declare such
--attributes. This is feasible if an attribute has no additional context. However,
--in many cases there will be additional information such as a sensor index which
--will need to be passed to the sysfs attribute handling function.
-+In many cases, you can use the exsting define DEVICE_ATTR or its variants
-+DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
-+attribute has no additional context. However, in many cases there will be
-+additional information such as a sensor index which will need to be passed
-+to the sysfs attribute handling function.
+-#define WM831X_VOLTAGE(id, name) \
+-	static SENSOR_DEVICE_ATTR(in##id##_input, S_IRUGO, show_voltage, \
+-				  NULL, name)
+-
+-#define WM831X_NAMED_VOLTAGE(id, name) \
+-	WM831X_VOLTAGE(id, name); \
+-	static SENSOR_DEVICE_ATTR(in##id##_label, S_IRUGO, show_label,	\
+-				  NULL, name)
+-
+-WM831X_VOLTAGE(0, WM831X_AUX_AUX1);
+-WM831X_VOLTAGE(1, WM831X_AUX_AUX2);
+-WM831X_VOLTAGE(2, WM831X_AUX_AUX3);
+-WM831X_VOLTAGE(3, WM831X_AUX_AUX4);
+-
+-WM831X_NAMED_VOLTAGE(4, WM831X_AUX_SYSVDD);
+-WM831X_NAMED_VOLTAGE(5, WM831X_AUX_USB);
+-WM831X_NAMED_VOLTAGE(6, WM831X_AUX_BATT);
+-WM831X_NAMED_VOLTAGE(7, WM831X_AUX_WALL);
+-WM831X_NAMED_VOLTAGE(8, WM831X_AUX_BKUP_BATT);
++static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_AUX1);
++static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_AUX2);
++static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_AUX3);
++static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_AUX4);
++static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_SYSVDD);
++static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_USB);
++static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_BATT);
++static SENSOR_DEVICE_ATTR(in7_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_WALL);
++static SENSOR_DEVICE_ATTR(in8_input, S_IRUGO, show_voltage, NULL,
++			  WM831X_AUX_BKUP_BATT);
++
++static SENSOR_DEVICE_ATTR(in4_label, S_IRUGO, show_label, NULL,
++			  WM831X_AUX_SYSVDD);
++static SENSOR_DEVICE_ATTR(in5_label, S_IRUGO, show_label, NULL,
++			  WM831X_AUX_USB);
++static SENSOR_DEVICE_ATTR(in6_label, S_IRUGO, show_label, NULL,
++			  WM831X_AUX_BATT);
++static SENSOR_DEVICE_ATTR(in7_label, S_IRUGO, show_label, NULL,
++			  WM831X_AUX_WALL);
++static SENSOR_DEVICE_ATTR(in8_label, S_IRUGO, show_label, NULL,
++			  WM831X_AUX_BKUP_BATT);
  
- SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 can be used to define attributes
- which need such additional context information. SENSOR_DEVICE_ATTR requires
- one additional argument, SENSOR_DEVICE_ATTR_2 requires two.
- 
--SENSOR_DEVICE_ATTR defines a struct sensor_device_attribute variable.
--This structure has the following fields.
-+Simplified variants of SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 are available
-+and should be used if standard attribute permissions and function names are
-+feasible. Standard permissions are 0644 for SENSOR_DEVICE_ATTR[_2]_RW,
-+0444 for SENSOR_DEVICE_ATTR[_2]_RO, and 0200 for SENSOR_DEVICE_ATTR[_2]_WO.
-+Standard functions, similar to DEVICE_ATTR_{RW,RO,WO}, have _show and _store
-+appended to the provided function name.
-+
-+SENSOR_DEVICE_ATTR and its variants define a struct sensor_device_attribute
-+variable. This structure has the following fields.
- 
- struct sensor_device_attribute {
- 	struct device_attribute dev_attr;
-@@ -315,8 +323,8 @@ You can use to_sensor_dev_attr to get the pointer to this structure from the
- attribute read or write function. Its parameter is the device to which the
- attribute is attached.
- 
--SENSOR_DEVICE_ATTR_2 defines a struct sensor_device_attribute_2 variable,
--which is defined as follows.
-+SENSOR_DEVICE_ATTR_2 and its variants define a struct sensor_device_attribute_2
-+variable, which is defined as follows.
- 
- struct sensor_device_attribute_2 {
- 	struct device_attribute dev_attr;
-diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
-index 1c7b89ae6bdc..473897bbd898 100644
---- a/include/linux/hwmon-sysfs.h
-+++ b/include/linux/hwmon-sysfs.h
-@@ -33,10 +33,28 @@ struct sensor_device_attribute{
- 	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
- 	  .index = _index }
- 
-+#define SENSOR_ATTR_RO(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0444, _func##_show, NULL, _index)
-+
-+#define SENSOR_ATTR_RW(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-+
-+#define SENSOR_ATTR_WO(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0200, NULL, _func##_store, _index)
-+
- #define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store, _index)	\
- struct sensor_device_attribute sensor_dev_attr_##_name		\
- 	= SENSOR_ATTR(_name, _mode, _show, _store, _index)
- 
-+#define SENSOR_DEVICE_ATTR_RO(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL, _index)
-+
-+#define SENSOR_DEVICE_ATTR_RW(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-+
-+#define SENSOR_DEVICE_ATTR_WO(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store, _index)
-+
- struct sensor_device_attribute_2 {
- 	struct device_attribute dev_attr;
- 	u8 index;
-@@ -50,8 +68,29 @@ struct sensor_device_attribute_2 {
- 	  .index = _index,					\
- 	  .nr = _nr }
- 
-+#define SENSOR_ATTR_2_RO(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0444, _func##_show, NULL, _nr, _index)
-+
-+#define SENSOR_ATTR_2_RW(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0644, _func##_show, _func##_store, _nr, _index)
-+
-+#define SENSOR_ATTR_2_WO(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0200, NULL, _func##_store, _nr, _index)
-+
- #define SENSOR_DEVICE_ATTR_2(_name,_mode,_show,_store,_nr,_index)	\
- struct sensor_device_attribute_2 sensor_dev_attr_##_name		\
- 	= SENSOR_ATTR_2(_name, _mode, _show, _store, _nr, _index)
- 
-+#define SENSOR_DEVICE_ATTR_2_RO(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0444, _func##_show, NULL,		\
-+			     _nr, _index)
-+
-+#define SENSOR_DEVICE_ATTR_2_RW(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0644, _func##_show, _func##_store,	\
-+			     _nr, _index)
-+
-+#define SENSOR_DEVICE_ATTR_2_WO(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0200, NULL, _func##_store,		\
-+			     _nr, _index)
-+
- #endif /* _LINUX_HWMON_SYSFS_H */
+ static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_chip_temp, NULL,
+ 			  WM831X_AUX_CHIP_TEMP);
 -- 
 2.7.4
