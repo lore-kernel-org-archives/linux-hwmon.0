@@ -1,78 +1,65 @@
-Return-path: <linux@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:53991 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932451AbcL0WPN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 27 Dec 2016 17:15:13 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 3/3] hwmon: (gl520sm) Fix overflows and crash seen when writing into limit attributes
-Date: Tue, 27 Dec 2016 14:15:07 -0800
-Message-Id: <1482876907-25289-3-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 2/3] hwmon: (gl518sm) Fix overflows seen when writing into limit attributes
+Date: Tue, 27 Dec 2016 14:15:06 -0800
+Message-Id: <1482876907-25289-2-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1482876907-25289-1-git-send-email-linux@roeck-us.net>
 References: <1482876907-25289-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Writes into limit attributes can overflow due to multplications and
-additions with unbound input values. Writing into fan limit attributes
-can result in a crash with a division by zero if very large values are
-written and the fan divider is larger than 1.
+Writes into limit attributes can overflow due to additions and
+multiplications with unchecked parameters.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Catch overflow (and resulting crash) seen when writing certain values
-    into fan limit attributes
+v2: Improve alignment
+    Use DIV_ROUND_CLOSEST() more consistently
 
- drivers/hwmon/gl520sm.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/hwmon/gl518sm.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/gl520sm.c b/drivers/hwmon/gl520sm.c
-index dee93ec87d02..84e0994aafdd 100644
---- a/drivers/hwmon/gl520sm.c
-+++ b/drivers/hwmon/gl520sm.c
-@@ -208,11 +208,13 @@ static ssize_t get_cpu_vid(struct device *dev, struct device_attribute *attr,
+diff --git a/drivers/hwmon/gl518sm.c b/drivers/hwmon/gl518sm.c
+index 0212c8317bca..b267510daeb2 100644
+--- a/drivers/hwmon/gl518sm.c
++++ b/drivers/hwmon/gl518sm.c
+@@ -86,9 +86,8 @@ enum chips { gl518sm_r00, gl518sm_r80 };
+ #define BOOL_FROM_REG(val)	((val) ? 0 : 1)
+ #define BOOL_TO_REG(val)	((val) ? 0 : 1)
+ 
+-#define TEMP_TO_REG(val)	clamp_val(((((val) < 0 ? \
+-				(val) - 500 : \
+-				(val) + 500) / 1000) + 119), 0, 255)
++#define TEMP_CLAMP(val)		clamp_val(val, -119000, 136000)
++#define TEMP_TO_REG(val)	(DIV_ROUND_CLOSEST(TEMP_CLAMP(val), 1000) + 119)
+ #define TEMP_FROM_REG(val)	(((val) - 119) * 1000)
+ 
+ static inline u8 FAN_TO_REG(long rpm, int div)
+@@ -101,11 +100,13 @@ static inline u8 FAN_TO_REG(long rpm, int div)
  }
- static DEVICE_ATTR(cpu0_vid, S_IRUGO, get_cpu_vid, NULL);
+ #define FAN_FROM_REG(val, div)	((val) == 0 ? 0 : (480000 / ((val) * (div))))
  
--#define VDD_FROM_REG(val) (((val) * 95 + 2) / 4)
--#define VDD_TO_REG(val) clamp_val((((val) * 4 + 47) / 95), 0, 255)
-+#define VDD_FROM_REG(val)	DIV_ROUND_CLOSEST((val) * 95, 4)
-+#define VDD_CLAMP(val)		clamp_val(val, 0, 255 * 95 / 4)
-+#define VDD_TO_REG(val)		DIV_ROUND_CLOSEST(VDD_CLAMP(val) * 4, 95)
- 
--#define IN_FROM_REG(val) ((val) * 19)
--#define IN_TO_REG(val) clamp_val((((val) + 9) / 19), 0, 255)
-+#define IN_FROM_REG(val)	((val) * 19)
+-#define IN_TO_REG(val)		clamp_val((((val) + 9) / 19), 0, 255)
 +#define IN_CLAMP(val)		clamp_val(val, 0, 255 * 19)
 +#define IN_TO_REG(val)		DIV_ROUND_CLOSEST(IN_CLAMP(val), 19)
+ #define IN_FROM_REG(val)	((val) * 19)
  
- static ssize_t get_in_input(struct device *dev, struct device_attribute *attr,
- 			    char *buf)
-@@ -349,8 +351,13 @@ static SENSOR_DEVICE_ATTR(in4_max, S_IRUGO | S_IWUSR,
+-#define VDD_TO_REG(val)		clamp_val((((val) * 4 + 47) / 95), 0, 255)
+-#define VDD_FROM_REG(val)	(((val) * 95 + 2) / 4)
++#define VDD_CLAMP(val)		clamp_val(val, 0, 255 * 95 / 4)
++#define VDD_TO_REG(val)		DIV_ROUND_CLOSEST(VDD_CLAMP(val) * 4, 95)
++#define VDD_FROM_REG(val)	DIV_ROUND_CLOSEST((val) * 95, 4)
  
- #define DIV_FROM_REG(val) (1 << (val))
- #define FAN_FROM_REG(val, div) ((val) == 0 ? 0 : (480000 / ((val) << (div))))
--#define FAN_TO_REG(val, div) ((val) <= 0 ? 0 : \
--	clamp_val((480000 + ((val) << ((div)-1))) / ((val) << (div)), 1, 255))
-+
-+#define FAN_BASE(div)		(480000 >> (div))
-+#define FAN_CLAMP(val, div)	clamp_val(val, FAN_BASE(div) / 255, \
-+					  FAN_BASE(div))
-+#define FAN_TO_REG(val, div)	((val) == 0 ? 0 : \
-+				 DIV_ROUND_CLOSEST(480000, \
-+						FAN_CLAMP(val, div) << (div)))
+ #define DIV_FROM_REG(val)	(1 << (val))
  
- static ssize_t get_fan_input(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
-@@ -513,9 +520,9 @@ static SENSOR_DEVICE_ATTR(fan2_div, S_IRUGO | S_IWUSR,
- static DEVICE_ATTR(fan1_off, S_IRUGO | S_IWUSR,
- 		get_fan_off, set_fan_off);
- 
--#define TEMP_FROM_REG(val) (((val) - 130) * 1000)
--#define TEMP_TO_REG(val) clamp_val(((((val) < 0 ? \
--			(val) - 500 : (val) + 500) / 1000) + 130), 0, 255)
-+#define TEMP_FROM_REG(val)	(((val) - 130) * 1000)
-+#define TEMP_CLAMP(val)		clamp_val(val, -130000, 125000)
-+#define TEMP_TO_REG(val)	(DIV_ROUND_CLOSEST(TEMP_CLAMP(val), 1000) + 130)
- 
- static ssize_t get_temp_input(struct device *dev, struct device_attribute *attr,
- 			      char *buf)
 -- 
 2.7.4
+
