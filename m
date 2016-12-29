@@ -1,67 +1,121 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43574 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750776AbcL3Az4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Dec 2016 19:55:56 -0500
-Subject: Re: [RFC PATCH v2 3/4] hwmon: adc128d818: Trivial code style fixup
-To: Alexander Koch <mail@alexanderkoch.net>
-References: <20161223221205.8825-1-mail@alexanderkoch.net>
- <20161223221205.8825-4-mail@alexanderkoch.net>
- <650d2371-57da-2494-7628-5a8bc5b756bf@roeck-us.net>
- <3b34c8aa-9d9a-cf88-0d84-8e0d47f9bf44@alexanderkoch.net>
- <20161229194646.GA1575@roeck-us.net>
- <3274026c-9575-b85e-54da-dd1cd3c3ce2f@alexanderkoch.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, jdelvare@suse.com, trivial@kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a49dc78b-cc66-43d8-57ff-57bdbc0f6dda@roeck-us.net>
-Date: Thu, 29 Dec 2016 16:55:52 -0800
+Received: from ms.trustica.cz ([82.208.32.68]:39924 "EHLO ms.trustica.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752656AbcL2OcJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 29 Dec 2016 09:32:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by ms.trustica.cz (Postfix) with ESMTP id 273D69A77F
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Dec 2016 15:25:36 +0100 (CET)
+Received: from ms.trustica.cz ([127.0.0.1])
+        by localhost (ms.trustica.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xW6XmxcdpqOx for <linux-hwmon@vger.kernel.org>;
+        Thu, 29 Dec 2016 15:25:35 +0100 (CET)
+Received: from [192.168.88.62] (56.32.broadband3.iol.cz [85.70.32.56])
+        (Authenticated sender: r.marek@assembler.cz)
+        by ms.trustica.cz (Postfix) with ESMTPSA id 943179A759
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Dec 2016 15:25:35 +0100 (CET)
+To: linux-hwmon@vger.kernel.org
+From: Rudolf Marek <r.marek@assembler.cz>
+Subject: [PATCH] sensors-detect: Add Exar
+Message-ID: <5a915597-c5d5-9e0e-b1f1-043e8ae48043@assembler.cz>
+Date: Thu, 29 Dec 2016 15:25:34 +0100
 MIME-Version: 1.0
-In-Reply-To: <3274026c-9575-b85e-54da-dd1cd3c3ce2f@alexanderkoch.net>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="------------433E93E5239EEF478C2F2410"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 12/29/2016 12:30 PM, Alexander Koch wrote:
-> On 12/29/2016 08:46 PM, Guenter Roeck wrote:
->> On Thu, Dec 29, 2016 at 07:22:12PM +0100, Alexander Koch wrote:
->>> On 12/26/2016 11:47 AM, Guenter Roeck wrote:
->>>> On 12/23/2016 02:12 PM, Alexander Koch wrote:
->>>>> Replace sysfs symbolic file permissions, e.g. 'S_IRUGO', by octal
->>>>> permissions. This fixes checkpatch.pl warnings.
->>>>>
->>>>> Signed-off-by: Alexander Koch <mail@alexanderkoch.net>
->>>> Please do not bother with those warnings and ignore checkpatch.
->>>> We are in the process of doing an automated conversion.
->>> Okay, so I shall create v3 of the patchset, without these changes. I've
->>> found a typo in the 4th patch so I thought about going v3 anyways.
->>>
->>> I've tested operation modes 1-3 on real hardware today and found no
->>> issues so far, so I hope v3 will have good chances of getting accepted.
->>>
->> Pretty much. One request, though: If there is no configuration data
->> from DT, I would like the driver to read the mode from the chip - if for
->> nothing else, this will let me test all modes, but it also supports the
->> case where the chip is configured by BIOS/ROMMON.
->
-> Aye, will add this as new fourth patch then. I assume the chip reset in
-> adc128_init_client() clears the chip mode as well, so I will read it in
-> the operation mode block in adc128_probe().
->
-> Just out of interest: how does this help you test the modes? Do you
-> configure the chip externally and test it on a platform without
-> devicetree support?
->
+This is a multi-part message in MIME format.
+--------------433E93E5239EEF478C2F2410
+Content-Type: text/plain; charset=iso-8859-2
+Content-Transfer-Encoding: 8bit
 
-I use the i2c test driver in the kernel and a module test script, on x86.
-See https://github.com/groeck/module-tests. That only works if the driver
-does not overwrite the register values on probe.
+Hi,
 
-Not really sure if resetting the chip during probe is such a good idea
-in the first place. It is quite unusual.
+I stumbled across a new SuperIOs from Exar. They do not contain any hw sensors,
+but it could be useful to have them in sensors-detect
 
-Guenter
+Funny is that those have configurable key sequence, which can clash with
+existing devices. Perhaps this can be improved and check for vendor ID?
 
+In the attached patch, I added just a default key sequence 0x67, 0x67
+
+The datasheets can be found:
+
+https://www.exar.com/products/interface/uarts/lpc-uarts
+https://www.exar.com/product/interface/uarts/lpc-uarts/xr28v384
+https://www.exar.com/product/interface/uarts/lpc-uarts/xr28v382
+
+The patch is completely untested, please check the datasheet for relevant
+information.
+
+Thanks
+Rudolf
+
+--------------433E93E5239EEF478C2F2410
+Content-Type: text/x-diff;
+ name="exar.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+ filename="exar.patch"
+
+diff --git a/prog/detect/sensors-detect b/prog/detect/sensors-detect
+index 057cd96..b47595e 100755
+--- a/prog/detect/sensors-detect
++++ b/prog/detect/sensors-detect
+@@ -1582,7 +1582,7 @@ use vars qw(@i2c_adapter_names);
+ #      * FEAT_FAN
+ #      * FEAT_TEMP
+ use vars qw(@superio_ids_natsemi @superio_ids_smsc @superio_ids_smsc_ns
+-	    @superio_ids_winbond @superio_ids_ite @superio_ids);
++	    @superio_ids_winbond @superio_ids_exar @superio_ids_ite @superio_id=
+s);
+=20
+ use constant FEAT_IN	=3D> (1 << 0);
+ use constant FEAT_FAN	=3D> (1 << 1);
+@@ -2022,6 +2022,18 @@ use constant FEAT_SMBUS	=3D> (1 << 7);
+ 	}
+ );
+=20
++@superio_ids_exar =3D (
++	{
++		name =3D> "Exar XR28V384",
++		driver =3D> "not-a-sensor",
++		devid =3D> 0x0384,
++	}, {
++		name =3D> "Exar XR28V382",
++		driver =3D> "not-a-sensor",
++		devid =3D> 0x0382,
++	}
++);
++
+ @superio_ids_winbond =3D (
+ 	{
+ 		name =3D> "VIA VT1211 Super IO Sensors",
+@@ -2483,6 +2495,14 @@ use constant FEAT_SMBUS	=3D> (1 << 7);
+ 		ns_detect =3D> \&smsc_ns_detect_superio,
+ 		ns_chips =3D> \@superio_ids_smsc_ns,
+ 	}, {
++		family =3D> "Exar",
++		enter =3D>
++		{
++			0x2e =3D> [0x67, 0x67], #The non-default key can be 0x87 0x87, 0x77 0=
+x77 or 0xa0, 0xa0
++			0x4e =3D> [0x67, 0x67],
++		},
++		chips =3D> \@superio_ids_exar,
++	}, {
+ 		family =3D> "VIA/Winbond/Nuvoton/Fintek",
+ 		guess =3D> 0x290,
+ 		enter =3D>
+@@ -4081,7 +4101,7 @@ sub exit_superio
+ {
+ 	my ($addrreg, $datareg) =3D @_;
+=20
+-	# Some chips (SMSC, Winbond) want this
++	# Some chips (SMSC, Winbond, Exar) want this
+ 	outb($addrreg, 0xaa);
+=20
+ 	# Return to "Wait For Key" state (PNP-ISA spec)
+
+--------------433E93E5239EEF478C2F2410--
