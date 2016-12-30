@@ -1,9 +1,9 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-io0-f196.google.com ([209.85.223.196]:36243 "EHLO
-        mail-io0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753810AbcL3R47 (ORCPT
+Received: from mail-io0-f195.google.com ([209.85.223.195]:33996 "EHLO
+        mail-io0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751690AbcL3R4q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Dec 2016 12:56:59 -0500
+        Fri, 30 Dec 2016 12:56:46 -0500
 From: eajames.ibm@gmail.com
 To: linux@roeck-us.net
 Cc: jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
@@ -12,9 +12,9 @@ Cc: jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
         linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH linux 5/6] hwmon: occ: Add hwmon implementation for the P8 OCC
-Date: Fri, 30 Dec 2016 11:56:07 -0600
-Message-Id: <1483120568-21082-6-git-send-email-eajames.ibm@gmail.com>
+Subject: [PATCH linux 4/6] hwmon: occ: Add callbacks for parsing P8 OCC datastructures
+Date: Fri, 30 Dec 2016 11:56:06 -0600
+Message-Id: <1483120568-21082-5-git-send-email-eajames.ibm@gmail.com>
 In-Reply-To: <1483120568-21082-1-git-send-email-eajames.ibm@gmail.com>
 References: <1483120568-21082-1-git-send-email-eajames.ibm@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -22,80 +22,52 @@ List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Add code to tie the hwmon sysfs code and the POWER8 OCC code together, as
-well as probe the entire driver from the I2C bus. I2C is the communication
-method between the BMC and the P8 OCC.
+Add functions to parse the data structures that are specific to the OCC on
+the POWER8 processor. These are the sensor data structures, including
+temperature, frequency, power, and "caps."
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
 Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
 ---
- .../devicetree/bindings/i2c/i2c-ibm-occ.txt        |  13 ++
- drivers/hwmon/occ/Kconfig                          |  14 ++
- drivers/hwmon/occ/Makefile                         |   1 +
- drivers/hwmon/occ/p8_occ_i2c.c                     | 141 +++++++++++++++++++++
- 4 files changed, 169 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-ibm-occ.txt
- create mode 100644 drivers/hwmon/occ/p8_occ_i2c.c
+ Documentation/hwmon/occ    |   9 ++
+ drivers/hwmon/occ/occ_p8.c | 217 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/occ/occ_p8.h |  30 +++++++
+ 3 files changed, 256 insertions(+)
+ create mode 100644 drivers/hwmon/occ/occ_p8.c
+ create mode 100644 drivers/hwmon/occ/occ_p8.h
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-ibm-occ.txt b/Documentation/devicetree/bindings/i2c/i2c-ibm-occ.txt
-new file mode 100644
-index 0000000..b0d2b36
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/i2c-ibm-occ.txt
-@@ -0,0 +1,13 @@
-+HWMON I2C driver for IBM POWER CPU OCC (On Chip Controller)
-+
-+Required properties:
-+ - compatible: must be "ibm,p8-occ-i2c"
-+ - reg: physical address
-+
-+Example:
-+i2c3: i2c-bus@100 {
-+	occ@50 {
-+		compatible = "ibm,p8-occ-i2c";
-+		reg = <0x50>;
-+	};
-+};
-diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
-index cdb64a7..3a5188f 100644
---- a/drivers/hwmon/occ/Kconfig
-+++ b/drivers/hwmon/occ/Kconfig
-@@ -13,3 +13,17 @@ menuconfig SENSORS_PPC_OCC
+diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
+index 1ee8689..a6b3dd6 100644
+--- a/Documentation/hwmon/occ
++++ b/Documentation/hwmon/occ
+@@ -25,6 +25,15 @@ Currently, all versions of the OCC support four types of sensor data: power,
+ temperature, frequency, and "caps," which indicate limits and thresholds used
+ internally on the OCC.
  
- 	  This driver can also be built as a module. If so, the module
- 	  will be called occ.
++The format for the POWER8 OCC sensor data can be found in the P8 OCC
++specification:
++github.com/open-power/docs/blob/master/occ/OCC_OpenPwr_FW_Interfaces.pdf
++This document provides the details of the OCC sensors: power, frequency,
++temperature, and caps. These sensor formats are specific to the POWER8 OCC. A
++number of data structures, such as command format, response headers, and the
++like, are also defined in this specification, and are common to both POWER8 and
++POWER9 OCCs.
 +
-+if SENSORS_PPC_OCC
-+
-+config SENSORS_PPC_OCC_P8_I2C
-+	tristate "POWER8 OCC hwmon support"
-+	depends on I2C
-+	help
-+	 Provide a hwmon sysfs interface for the POWER8 On-Chip Controller,
-+	 exposing temperature, frequency and power measurements.
-+
-+	 This driver can also be built as a module. If so, the module will be
-+	 called p8-occ-i2c.
-+
-+endif
-diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
-index a6881f9..9294b58 100644
---- a/drivers/hwmon/occ/Makefile
-+++ b/drivers/hwmon/occ/Makefile
-@@ -1 +1,2 @@
- obj-$(CONFIG_SENSORS_PPC_OCC) += occ.o occ_sysfs.o
-+obj-$(CONFIG_SENSORS_PPC_OCC_P8_I2C) += occ_scom_i2c.o occ_p8.o p8_occ_i2c.o
-diff --git a/drivers/hwmon/occ/p8_occ_i2c.c b/drivers/hwmon/occ/p8_occ_i2c.c
+ sysfs Entries
+ -------------
+ 
+diff --git a/drivers/hwmon/occ/occ_p8.c b/drivers/hwmon/occ/occ_p8.c
 new file mode 100644
-index 0000000..0c65894
+index 0000000..812df16
 --- /dev/null
-+++ b/drivers/hwmon/occ/p8_occ_i2c.c
-@@ -0,0 +1,141 @@
++++ b/drivers/hwmon/occ/occ_p8.c
+@@ -0,0 +1,217 @@
 +/*
-+ * p8_occ_i2c.c - hwmon OCC driver
++ * occ_p8.c - OCC hwmon driver
 + *
-+ * This file contains the i2c layer for accessing the P8 OCC over i2c bus.
++ * This file contains the Power8-specific methods and data structures for
++ * the OCC hwmon driver.
 + *
 + * Copyright 2016 IBM Corp.
 + *
@@ -110,129 +82,240 @@ index 0000000..0c65894
 + * GNU General Public License for more details.
 + */
 +
-+#include <linux/err.h>
 +#include <linux/module.h>
 +#include <linux/init.h>
 +#include <linux/slab.h>
-+#include <linux/i2c.h>
 +#include <linux/err.h>
 +#include <linux/of.h>
 +#include <linux/kernel.h>
 +#include <linux/device.h>
++#include <linux/platform_device.h>
++#include <asm/unaligned.h>
 +
-+#include "scom.h"
-+#include "occ_scom_i2c.h"
++#include "occ.h"
 +#include "occ_p8.h"
-+#include "occ_sysfs.h"
 +
-+#define P8_OCC_I2C_NAME	"p8-occ-i2c"
-+
-+static char *caps_sensor_names[] = {
-+	"curr_powercap",
-+	"curr_powerreading",
-+	"norm_powercap",
-+	"max_powercap",
-+	"min_powercap",
-+	"user_powerlimit"
++/* P8 OCC sensor data format */
++struct p8_occ_sensor {
++	u16 sensor_id;
++	u16 value;
 +};
 +
-+int p8_i2c_getscom(void *bus, u32 address, u64 *data)
-+{
-+	/* P8 i2c slave requires address to be shifted by 1 */
-+	address = address << 1;
++struct p8_power_sensor {
++	u16 sensor_id;
++	u32 update_tag;
++	u32 accumulator;
++	u16 value;
++};
 +
-+	return occ_i2c_getscom(bus, address, data);
++struct p8_caps_sensor {
++	u16 curr_powercap;
++	u16 curr_powerreading;
++	u16 norm_powercap;
++	u16 max_powercap;
++	u16 min_powercap;
++	u16 user_powerlimit;
++};
++
++void p8_parse_sensor(u8 *data, void *sensor, int sensor_type, int off,
++		     int snum)
++{
++	switch (sensor_type) {
++	case FREQ:
++	case TEMP:
++	{
++		struct p8_occ_sensor *os =
++			&(((struct p8_occ_sensor *)sensor)[snum]);
++
++		os->sensor_id = be16_to_cpu(get_unaligned((u16 *)&data[off]));
++		os->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 2]));
++	}
++		break;
++	case POWER:
++	{
++		struct p8_power_sensor *ps =
++			&(((struct p8_power_sensor *)sensor)[snum]);
++
++		ps->sensor_id = be16_to_cpu(get_unaligned((u16 *)&data[off]));
++		ps->update_tag =
++			be32_to_cpu(get_unaligned((u32 *)&data[off + 2]));
++		ps->accumulator =
++			be32_to_cpu(get_unaligned((u32 *)&data[off + 6]));
++		ps->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 10]));
++	}
++		break;
++	case CAPS:
++	{
++		struct p8_caps_sensor *cs =
++			&(((struct p8_caps_sensor *)sensor)[snum]);
++
++		cs->curr_powercap =
++			be16_to_cpu(get_unaligned((u16 *)&data[off]));
++		cs->curr_powerreading =
++			be16_to_cpu(get_unaligned((u16 *)&data[off + 2]));
++		cs->norm_powercap =
++			be16_to_cpu(get_unaligned((u16 *)&data[off + 4]));
++		cs->max_powercap =
++			be16_to_cpu(get_unaligned((u16 *)&data[off + 6]));
++		cs->min_powercap =
++			be16_to_cpu(get_unaligned((u16 *)&data[off + 8]));
++		cs->user_powerlimit =
++			be16_to_cpu(get_unaligned((u16 *)&data[off + 10]));
++	}
++		break;
++	};
 +}
 +
-+int p8_i2c_putscom(void *bus, u32 address, u32 data0, u32 data1)
++void *p8_alloc_sensor(int sensor_type, int num_sensors)
 +{
-+	/* P8 i2c slave requires address to be shifted by 1 */
-+	address = address << 1;
-+
-+	return occ_i2c_putscom(bus, address, data0, data1);
++	switch (sensor_type) {
++	case FREQ:
++	case TEMP:
++		return kcalloc(num_sensors, sizeof(struct p8_occ_sensor),
++			       GFP_KERNEL);
++	case POWER:
++		return kcalloc(num_sensors, sizeof(struct p8_power_sensor),
++			       GFP_KERNEL);
++	case CAPS:
++		return kcalloc(num_sensors, sizeof(struct p8_caps_sensor),
++			       GFP_KERNEL);
++	default:
++		return NULL;
++	}
 +}
 +
-+static struct occ_bus_ops p8_bus_ops = {
-+	.getscom = p8_i2c_getscom,
-+	.putscom = p8_i2c_putscom,
-+};
-+
-+static struct occ_sysfs_config p8_sysfs_config = {
-+	.num_caps_fields = ARRAY_SIZE(caps_sensor_names),
-+	.caps_names = caps_sensor_names,
-+};
-+
-+static int p8_occ_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
++int p8_get_sensor_value(struct occ *driver, int sensor_type, int snum)
 +{
-+	struct occ *occ;
-+	struct occ_sysfs *hwmon;
++	void *sensor;
 +
-+	occ = p8_occ_start(&client->dev, client, &p8_bus_ops);
-+	if (IS_ERR(occ))
-+		return PTR_ERR(occ);
++	if (sensor_type == CAPS)
++		return -EINVAL;
 +
-+	hwmon = occ_sysfs_start(&client->dev, occ, &p8_sysfs_config);
-+	if (IS_ERR(hwmon))
-+		return PTR_ERR(hwmon);
++	sensor = occ_get_sensor(driver, sensor_type);
++	if (!sensor)
++		return -ENODEV;
 +
-+	i2c_set_clientdata(client, hwmon);
-+
-+	return 0;
++	switch (sensor_type) {
++	case FREQ:
++	case TEMP:
++		return ((struct p8_occ_sensor *)sensor)[snum].value;
++	case POWER:
++		return ((struct p8_power_sensor *)sensor)[snum].value;
++	default:
++		return -EINVAL;
++	}
 +}
 +
-+static int p8_occ_remove(struct i2c_client *client)
++int p8_get_sensor_id(struct occ *driver, int sensor_type, int snum)
 +{
-+	int rc;
-+	struct occ_sysfs *hwmon = i2c_get_clientdata(client);
-+	struct occ *occ = hwmon->occ;
++	void *sensor;
++	int i = snum;
 +
-+	rc = occ_sysfs_stop(&client->dev, hwmon);
++	if (sensor_type == CAPS)
++		return -EINVAL;
 +
-+	rc = rc || p8_occ_stop(occ);
++	sensor = occ_get_sensor(driver, sensor_type);
++	if (!sensor)
++		return -ENODEV;
 +
-+	return rc;
++	switch (sensor_type) {
++	case FREQ:
++	case TEMP:
++		return ((struct p8_occ_sensor *)sensor)[i].sensor_id;
++	case POWER:
++		return ((struct p8_power_sensor *)sensor)[i].sensor_id;
++	default:
++		return -EINVAL;
++	}
 +}
 +
-+/* used by old-style board info. */
-+static const struct i2c_device_id occ_ids[] = {
-+	{ P8_OCC_I2C_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, occ_ids);
++int p8_get_caps_value(void *sensor, int snum, int caps_field)
++{
++	struct p8_caps_sensor *caps_sensor = sensor;
 +
-+/* used by device table */
-+static const struct of_device_id occ_of_match[] = {
-+	{ .compatible = "ibm,p8-occ-i2c" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, occ_of_match);
++	switch (caps_field) {
++	case 0:
++		return caps_sensor[snum].curr_powercap;
++	case 1:
++		return caps_sensor[snum].curr_powerreading;
++	case 2:
++		return caps_sensor[snum].norm_powercap;
++	case 3:
++		return caps_sensor[snum].max_powercap;
++	case 4:
++		return caps_sensor[snum].min_powercap;
++	case 5:
++		return caps_sensor[snum].user_powerlimit;
++	default:
++		return -EINVAL;
++	}
++}
 +
-+/*
-+ * i2c-core uses i2c-detect() to detect device in below address list.
-+ * If exists, address will be assigned to client.
-+ * It is also possible to read address from device table.
-+ */
-+static const unsigned short normal_i2c[] = {0x50, 0x51, I2C_CLIENT_END };
-+
-+static struct i2c_driver p8_occ_driver = {
-+	.class = I2C_CLASS_HWMON,
-+	.driver = {
-+		.name = P8_OCC_I2C_NAME,
-+		.pm = NULL,
-+		.of_match_table = occ_of_match,
-+	},
-+	.probe = p8_occ_probe,
-+	.remove = p8_occ_remove,
-+	.id_table = occ_ids,
-+	.address_list = normal_i2c,
++static const struct occ_ops p8_ops = {
++	.parse_sensor = p8_parse_sensor,
++	.alloc_sensor = p8_alloc_sensor,
++	.get_sensor_value = p8_get_sensor_value,
++	.get_sensor_id = p8_get_sensor_id,
++	.get_caps_value = p8_get_caps_value,
 +};
 +
-+module_i2c_driver(p8_occ_driver);
++static const struct occ_config p8_config = {
++	.command_addr = 0xFFFF6000,
++	.response_addr = 0xFFFF7000,
++};
++
++struct occ *p8_occ_start(struct device *dev, void *bus,
++			 struct occ_bus_ops *bus_ops)
++{
++	return occ_start(dev, bus, bus_ops, &p8_ops, &p8_config);
++}
++EXPORT_SYMBOL(p8_occ_start);
++
++int p8_occ_stop(struct occ *occ)
++{
++	return occ_stop(occ);
++}
++EXPORT_SYMBOL(p8_occ_stop);
 +
 +MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
-+MODULE_DESCRIPTION("BMC P8 OCC hwmon driver");
++MODULE_DESCRIPTION("P8 OCC sensors");
 +MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/occ/occ_p8.h b/drivers/hwmon/occ/occ_p8.h
+new file mode 100644
+index 0000000..b44cdd4
+--- /dev/null
++++ b/drivers/hwmon/occ/occ_p8.h
+@@ -0,0 +1,30 @@
++/*
++ * occ_p8.h - OCC hwmon driver
++ *
++ * This file contains Power8-specific function prototypes
++ *
++ * Copyright 2016 IBM Corp.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#ifndef __OCC_P8_H__
++#define __OCC_P8_H__
++
++#include "scom.h"
++
++struct device;
++
++struct occ *p8_occ_start(struct device *dev, void *bus,
++			 struct occ_bus_ops *bus_ops);
++int p8_occ_stop(struct occ *occ);
++
++#endif /* __OCC_P8_H__ */
 -- 
 1.9.1
 
