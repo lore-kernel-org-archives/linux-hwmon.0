@@ -1,33 +1,41 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ms.lwn.net ([45.79.88.28]:37974 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S934998AbdADVhf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 4 Jan 2017 16:37:35 -0500
-Date: Wed, 4 Jan 2017 14:37:32 -0700
-From: Jonathan Corbet <corbet@lwn.net>
-To: Colin King <colin.king@canonical.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: fix spelling mistakes of "Celcius" -- >
- "Celsius"
-Message-ID: <20170104143732.1030d6d6@lwn.net>
-In-Reply-To: <20161228215137.7675-1-colin.king@canonical.com>
-References: <20161228215137.7675-1-colin.king@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Received: from ssl.serverraum.org ([213.133.101.245]:49880 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1756494AbdABQx4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Jan 2017 11:53:56 -0500
+From: Michael Walle <michael@walle.cc>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] hwmon: (lm90) fix temp1_max_alarm attribute
+Date: Mon,  2 Jan 2017 17:53:39 +0100
+Message-Id: <1483376019-11788-1-git-send-email-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, 28 Dec 2016 21:51:37 +0000
-Colin King <colin.king@canonical.com> wrote:
+Since commit commit eb1c8f4325d5 ("hwmon: (lm90) Convert to use new hwmon
+registration API") the temp1_max_alarm and temp1_crit_alarm attributes are
+mapped to the same alarm bit. Fix the typo.
 
->  Documentation/hwmon/ds1621            | 8 ++++----
->  Documentation/thermal/nouveau_thermal | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Fixes: eb1c8f4325d5 ("hwmon: (lm90) Convert to use new hwmon registration API")
+Signed-off-by: Micehael Walle <michael@walle.cc>
+---
+ drivers/hwmon/lm90.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to the docs tree, thanks.
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 322ed92..841f242 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1036,7 +1036,7 @@ static const u8 lm90_temp_emerg_index[3] = {
+ };
+ 
+ static const u8 lm90_min_alarm_bits[3] = { 5, 3, 11 };
+-static const u8 lm90_max_alarm_bits[3] = { 0, 4, 12 };
++static const u8 lm90_max_alarm_bits[3] = { 6, 4, 12 };
+ static const u8 lm90_crit_alarm_bits[3] = { 0, 1, 9 };
+ static const u8 lm90_emergency_alarm_bits[3] = { 15, 13, 14 };
+ static const u8 lm90_fault_bits[3] = { 0, 2, 10 };
+-- 
+2.1.4
 
-jon
