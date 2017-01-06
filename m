@@ -9,46 +9,58 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Michael Hornung <mhornung.linux@gmail.com>,
 	devicetree@vger.kernel.org,
 	Alexander Koch <mail@alexanderkoch.net>
-Subject: [PATCH v3 4/4] hwmon: adc128d818: Preserve operation mode
-Date: Fri,  6 Jan 2017 11:38:17 +0100
-Message-Id: <20170106103817.11588-5-mail@alexanderkoch.net>
-In-Reply-To: <20170106103817.11588-1-mail@alexanderkoch.net>
-References: <20170106103817.11588-1-mail@alexanderkoch.net>
+Subject: [PATCH v3 0/4] hwmon: adc128d818: Support missing operation modes
+Date: Fri,  6 Jan 2017 11:38:13 +0100
+Message-Id: <20170106103817.11588-1-mail@alexanderkoch.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Preserve chip operation mode if no mode is specified via devicetree. This
-enables operation when chip configuration is done by BIOS/ROMMON.
+The ADC128D818 offers four different chip operation modes which vary in the
+number and measurement types of the available input signals (see datasheet
+sec. 8.4.1).
 
-Signed-off-by: Alexander Koch <mail@alexanderkoch.net>
-Acked-by: Michael Hornung <mhornung.linux@gmail.com>
----
- drivers/hwmon/adc128d818.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+The current version of the driver only supports the default chip operation
+mode (mode 0), providing seven analog values and a temperature reading.
 
-diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-index 0502af963f73..bbe3a5c5b3f5 100644
---- a/drivers/hwmon/adc128d818.c
-+++ b/drivers/hwmon/adc128d818.c
-@@ -491,7 +491,7 @@ static int adc128_probe(struct i2c_client *client,
- 		data->vref = 2560;	/* 2.56V, in mV */
- 	}
- 
--	/* Operation mode is optional and defaults to mode 0 */
-+	/* Operation mode is optional. If unspecified, keep current mode */
- 	if (of_property_read_u8(dev->of_node, "ti,mode", &data->mode) == 0) {
- 		if (data->mode > 3) {
- 			dev_err(dev, "invalid operation mode %d\n",
-@@ -500,7 +500,10 @@ static int adc128_probe(struct i2c_client *client,
- 			goto error;
- 		}
- 	} else {
--		data->mode = 0;
-+		err = i2c_smbus_read_byte_data(client, ADC128_REG_CONFIG_ADV);
-+		if (err < 0)
-+			goto error;
-+		data->mode = (err >> 1) & ADC128_REG_MASK;
- 	}
- 
- 	data->client = client;
+This patch series adds support for operation modes 1-3, selectable through
+the device tree attribute 'ti,mode':
+
+        adc1: adc128d818@1d {
+                compatible = "ti,adc128d818";
+                reg = <0x1d>;
+                mode = <1>;
+        };
+
+The changes are transparent as the driver defaults to keeping the currently
+active operation mode if no mode is specified via device tree (which is
+mode 0 on chip initialization).
+
+
+Changes from v2:
+ - Omit device attribute refactoring (for checkpatch.pl), as requested by
+   maintainer
+ - Add vendor prefix 'ti,' for mode property in device tree
+ - Drop size indication for mode property in device tree
+ - Preserve chip operation mode if none specified in devicetree
+ - Fix missing '\n' in dev_err() calls
+
+Changes from v1:
+ - Add bindings document as first patch
+ - Preserve logical atomicity of code changes
+ - Improve sysfs device node handling (use is_visible() instead of
+   duplicate attribute list)
+ - Add trivial code refactoring stage for checkpatch.pl to succeed
+
+
+Alexander Koch (4):
+  devicetree: hwmon: Add bindings for ADC128D818
+  hwmon: adc128d818: Implement mode selection via dt
+  hwmon: adc128d818: Support operation modes 1-3
+  hwmon: adc128d818: Preserve operation mode
+
+ .../devicetree/bindings/hwmon/adc128d818.txt       |  39 ++++++
+ drivers/hwmon/adc128d818.c                         | 147 +++++++++++++++------
+ 2 files changed, 149 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adc128d818.txt
+
 -- 
 2.11.0
