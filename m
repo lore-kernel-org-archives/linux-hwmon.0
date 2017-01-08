@@ -1,116 +1,165 @@
-Return-path: <jeroen.de_wachter.ext@nokia.com>
-From: <jeroen.de_wachter.ext@nokia.com>
-To: <linux@roeck-us.net>, <jdelvare@suse.com>
-CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jeroen De
- Wachter <jeroen.de_wachter.ext@nokia.com>
-Subject: [PATCH v2] hwmon/tmp401: use smb word operations instead of 2 smb byte operations
-Date: Mon, 9 Jan 2017 18:55:00 +0100
-Message-ID: <1483984500-19529-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
-In-Reply-To: <1483980458-28202-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
-References: <1483980458-28202-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+Return-path: <andrew@aj.id.au>
+Message-ID: <1483919532.2950.1.camel@aj.id.au>
+Subject: Re: [PATCH linux 2/6] hwmon: occ: Add sysfs interface
+From: Andrew Jeffery <andrew@aj.id.au>
+To: Guenter Roeck <linux@roeck-us.net>, Edward James <eajames@us.ibm.com>
+Cc: corbet@lwn.net, devicetree@vger.kernel.org, eajames.ibm@gmail.com,
+	jdelvare@suse.com, joel@jms.id.au, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
+	wsa@the-dreams.de
+Date: Mon, 09 Jan 2017 10:22:12 +1030
+In-Reply-To: <8b182766-32a0-9eb1-7917-14abf811cef5@roeck-us.net>
+References: <1483120568-21082-1-git-send-email-eajames.ibm@gmail.com>
+	 <1483120568-21082-3-git-send-email-eajames.ibm@gmail.com>
+	 <20161230193404.GB8516@roeck-us.net>
+	 <OFA812992D.D19B1368-ON002580A0.007A2966-862580A0.007A72F0@notes.na.collabserv.com>
+	 <8b182766-32a0-9eb1-7917-14abf811cef5@roeck-us.net>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-XBpeGEDaOSADCXVW28Vr"
+Mime-Version: 1.0
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
 
-tmp401 separately read/wrote high and low bytes of temperature values while
-the hardware supports reading/writing those values in one operation. Driver
-has been modified to use word operations where possible.
+--=-XBpeGEDaOSADCXVW28Vr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tested with a tmp432 sensor on a mips64 platform.
+On Sat, 2017-01-07 at 09:15 -0800, Guenter Roeck wrote:
+> On 01/06/2017 02:17 PM, Edward James wrote:
+>=20
+> [ ... ]
+>=20
+> > > > +}
+> > > > +
+> > > > +static DEVICE_ATTR(online, S_IWUSR | S_IRUGO, show_occ_online,
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0store_occ_on=
+line);
+> > > > +
+> > > > +struct occ_sysfs *occ_sysfs_start(struct device *dev, struct occ *=
+occ,
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0struct occ_sysfs_config *config)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0struct occ_sysfs *hwmon =3D devm_kzalloc(dev, si=
+zeof(struct occ_sysfs),
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0GFP_KERNE=
+L);
+> > > > +=C2=A0=C2=A0=C2=A0int rc;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0if (!hwmon)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(-ENOMEM);
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0hwmon->occ =3D occ;
+> > > > +=C2=A0=C2=A0=C2=A0hwmon->num_caps_fields =3D config->num_caps_fiel=
+ds;
+> > > > +=C2=A0=C2=A0=C2=A0hwmon->caps_names =3D config->caps_names;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0dev_set_drvdata(dev, hwmon);
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0rc =3D device_create_file(dev, &dev_attr_online)=
+;
+> > > > +=C2=A0=C2=A0=C2=A0if (rc)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(rc);
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0return hwmon;
+> > > > +}
+> > > > +EXPORT_SYMBOL(occ_sysfs_start);
+> > > > +
+> > > > +int occ_sysfs_stop(struct device *dev, struct occ_sysfs *driver)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0if (driver->dev) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0occ_remove_hwmon_attrs(driver)=
+;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0hwmon_device_unregister(driver=
+->dev);
+> > > > +=C2=A0=C2=A0=C2=A0}
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0device_remove_file(driver->dev, &dev_attr_online=
+);
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0devm_kfree(dev, driver);
+> > >=20
+> > > Thw point of using devm_ functions is not to require remove/free func=
+tions.
+> > > Something is completely wrong here if you need that call.
+> > >=20
+> > > Overall, this is architectually completely wrong. One does not regist=
+er
+> > > or instantiate drivers based on writing into sysfs attributes. Please
+> > > reconsider your approach.
+> >=20
+> > We had some trouble designing this driver because the BMC only has
+> > access to the OCC once the processor is powered on. This will happen
+> > sometime after the BMC boots (this driver runs only on the BMC). With
+> > no access to the OCC, we don't know what sensors are present on the
+> > system without a large static enumeration. Also any sysfs files created
+> > before we have OCC access won't be able to return any data.
+> >=20
+> > Instead of the "online" attribute, what do you think about using the
+> > "bind"/"unbind" API to probe the device from user space once the system
+> > is powered on? All the hwmon registration would take place in the probe
+> > function, it would just occur some time after boot.
+> >=20
+>=20
+> A more common approach would be to have a platform driver. That platform
+> driver would need a means to detect if the OCC is up and running, and
+> instantiate everything else once it is.
+>=20
+> A trigger from user space is problematic because there is no guarantee
+> that the OCC is really up (or that it even exists).
 
-Signed-off-by: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
----
- drivers/hwmon/tmp401.c | 49 ++++++++++++++-----------------------------------
- 1 file changed, 14 insertions(+), 35 deletions(-)
+This is true in general, but for the BMC case we have more information:
+The host CPU power supply is controlled by several GPIOs from
+userspace. Once we receive the "power-good" signal for the host CPU we
+can bind the OCC driver and trigger the probe.
 
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index eeeed2c..0af6b86 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -82,16 +82,6 @@
- 	{ 0, 0x11 },	/* offset */
- };
- 
--static const u8 TMP401_TEMP_LSB[7][2] = {
--	{ 0x15, 0x10 },	/* temp */
--	{ 0x17, 0x14 },	/* low limit */
--	{ 0x16, 0x13 },	/* high limit */
--	{ 0, 0 },	/* therm (crit) limit (unused) */
--	{ 0x31, 0x35 },	/* lowest */
--	{ 0x33, 0x37 },	/* highest */
--	{ 0, 0x12 },	/* offset */
--};
--
- static const u8 TMP432_TEMP_MSB_READ[4][3] = {
- 	{ 0x00, 0x01, 0x23 },	/* temp */
- 	{ 0x06, 0x08, 0x16 },	/* low limit */
-@@ -106,12 +96,6 @@
- 	{ 0x20, 0x19, 0x1A },	/* therm (crit) limit */
- };
- 
--static const u8 TMP432_TEMP_LSB[3][3] = {
--	{ 0x29, 0x10, 0x24 },	/* temp */
--	{ 0x3E, 0x14, 0x18 },	/* low limit */
--	{ 0x3D, 0x13, 0x17 },	/* high limit */
--};
--
- /* [0] = fault, [1] = low, [2] = high, [3] = therm/crit */
- static const u8 TMP432_STATUS_REG[] = {
- 	0x1b, 0x36, 0x35, 0x37 };
-@@ -213,25 +197,20 @@ static int tmp401_update_device_reg16(struct i2c_client *client,
- 	for (i = 0; i < num_sensors; i++) {		/* local / r1 / r2 */
- 		for (j = 0; j < num_regs; j++) {	/* temp / low / ... */
- 			u8 regaddr;
--			/*
--			 * High byte must be read first immediately followed
--			 * by the low byte
--			 */
-+
- 			regaddr = data->kind == tmp432 ?
- 						TMP432_TEMP_MSB_READ[j][i] :
- 						TMP401_TEMP_MSB_READ[j][i];
--			val = i2c_smbus_read_byte_data(client, regaddr);
--			if (val < 0)
--				return val;
--			data->temp[j][i] = val << 8;
--			if (j == 3)		/* crit is msb only */
--				continue;
--			regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[j][i]
--						       : TMP401_TEMP_LSB[j][i];
--			val = i2c_smbus_read_byte_data(client, regaddr);
-+			if (j == 3) { /* crit is msb only */
-+				val = i2c_smbus_read_byte_data(client, regaddr);
-+			} else {
-+				val = i2c_smbus_read_word_swapped(client,
-+								  regaddr);
-+			}
- 			if (val < 0)
- 				return val;
--			data->temp[j][i] |= val;
-+
-+			data->temp[j][i] = j == 3 ? val << 8 : val;
- 		}
- 	}
- 	return 0;
-@@ -373,11 +352,11 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *devattr,
- 
- 	regaddr = data->kind == tmp432 ? TMP432_TEMP_MSB_WRITE[nr][index]
- 				       : TMP401_TEMP_MSB_WRITE[nr][index];
--	i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
--	if (nr != 3) {
--		regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[nr][index]
--					       : TMP401_TEMP_LSB[nr][index];
--		i2c_smbus_write_byte_data(client, regaddr, reg & 0xFF);
-+	if (nr == 3) { /* crit is msb only */
-+		i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
-+	} else {
-+		/* Hardware expects big endian data --> use _swapped */
-+		i2c_smbus_write_word_swapped(client, regaddr, reg);
- 	}
- 	data->temp[nr][index] = reg;
- 
--- 
-1.8.3.1
+Alternatively, in the style of your first para, we could push the host
+CPU state management into the kernel and expose a boot/reboot/power-off=20
+API to userspace. That would give us a place to hook calls for
+configuring and cleaning up any host-dependent drivers on the BMC.
+
+The solution to the host-power-state problem is also applicable to the
+OpenFSI patches that were recently sent out:
+
+https://lkml.org/lkml/2016/12/6/732
+
+The OpenFSI infra needs to re-scan for CFAMs when the host is powered
+up.
+
+>=20
+> An alternative might be to have the hwmon driver poll for the OCC,
+> but that would be a bit more difficult and might require a kernel thread
+> or maybe asynchronous probing.
+
+This was our thought as a fallback solution.
+
+Andrew
+
+>=20
+> Guenter
+>=20
+--=-XBpeGEDaOSADCXVW28Vr
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAABCgAGBQJYctCsAAoJEJ0dnzgO5LT5z9MP/AhLhzP9udsCi8H/gcA42Wi/
+xEpQpFY1OMthJc7Sgwg9wDHSTlpunHsiUS37w1E95UjKXcOXVS/kAJYaHu8lBPtl
+O5S9i+G4ciuTbe7VslMc5elhnrDoGrz+BzahFGvspnAlgCe1Kp3sEiWNbDUTtrMV
+AdcmfSYFm2pRCt9vff+3fkRkFSrYNzbSQYVMpCOfBsXM6FBF+X8BZvP7DvnBqNpC
+XWDZuzLNSfD79ALXtqRSTby/QfgQmWivp3ykfDuCHTCqBrukMmDkFJ2zNbVo5XGa
+I27nAs8UvQ0BVX2GBfoDLNhXKYFI9elWVLucL4MFkXGdarz+HSeMavELIBrWieC5
+UXV1LQOtOFUNTiaB/x4DLv8Q+UvOvi3a20LICrY8Af/vWzakqA2uxcp1q9XhBHhg
+7hBcuEwowJAJvsf0KoOdiqz7NrWP53BGsBwonDYclczkiMoi/TRLz+qwQl5TxlwF
+65E0tJeP89tz95w2d58JsHmvWYrYV0lCGyt17DW7TPdsExkMowTuzo/4S9ZKrxQ0
+qWRndAuBq/knrHOs3ktSqJssXhiMHryjGDjRGl7XpEaBh092aayxhDxqNxWw7SDC
+EkRIz1mlxjYFr1mXRx1BQHmw6w5hVOGLjlaHsvy9rgG/T/GNLHuBZ53PHofur6ns
+354Qi5N7FCFkt2eQOiNi
+=Dhdn
+-----END PGP SIGNATURE-----
+
+--=-XBpeGEDaOSADCXVW28Vr--
