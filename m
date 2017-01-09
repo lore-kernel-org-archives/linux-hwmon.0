@@ -1,103 +1,99 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36476 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S936679AbdAGRQD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Jan 2017 12:16:03 -0500
-Subject: Re: [PATCH linux 2/6] hwmon: occ: Add sysfs interface
-To: Edward James <eajames@us.ibm.com>
-References: <1483120568-21082-1-git-send-email-eajames.ibm@gmail.com>
- <1483120568-21082-3-git-send-email-eajames.ibm@gmail.com>
- <20161230193404.GB8516@roeck-us.net>
- <OFA812992D.D19B1368-ON002580A0.007A2966-862580A0.007A72F0@notes.na.collabserv.com>
-Cc: andrew@aj.id.au, corbet@lwn.net, devicetree@vger.kernel.org,
-        eajames.ibm@gmail.com, jdelvare@suse.com, joel@jms.id.au,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, wsa@the-dreams.de
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8b182766-32a0-9eb1-7917-14abf811cef5@roeck-us.net>
-Date: Sat, 7 Jan 2017 09:15:57 -0800
+Return-path: <jeroen.de_wachter.ext@nokia.com>
+From: <jeroen.de_wachter.ext@nokia.com>
+To: <linux@roeck-us.net>, <jdelvare@suse.com>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jeroen De
+ Wachter <jeroen.de_wachter.ext@nokia.com>
+Subject: [PATCH 1/2] hwmon/tmp401: use smb word operations instead of 2 smb byte operations
+Date: Mon, 9 Jan 2017 17:47:37 +0100
+Message-ID: <1483980458-28202-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
 MIME-Version: 1.0
-In-Reply-To: <OFA812992D.D19B1368-ON002580A0.007A2966-862580A0.007A72F0@notes.na.collabserv.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 01/06/2017 02:17 PM, Edward James wrote:
+From: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
 
-[ ... ]
+tmp401 separately read/wrote high and low bytes of temperature values while
+the hardware supports reading/writing those values in one operation. Driver
+has been modified to use word operations where possible.
 
->> > +}
->> > +
->> > +static DEVICE_ATTR(online, S_IWUSR | S_IRUGO, show_occ_online,
->> > +         store_occ_online);
->> > +
->> > +struct occ_sysfs *occ_sysfs_start(struct device *dev, struct occ *occ,
->> > +              struct occ_sysfs_config *config)
->> > +{
->> > +   struct occ_sysfs *hwmon = devm_kzalloc(dev, sizeof(struct occ_sysfs),
->> > +                      GFP_KERNEL);
->> > +   int rc;
->> > +
->> > +   if (!hwmon)
->> > +      return ERR_PTR(-ENOMEM);
->> > +
->> > +   hwmon->occ = occ;
->> > +   hwmon->num_caps_fields = config->num_caps_fields;
->> > +   hwmon->caps_names = config->caps_names;
->> > +
->> > +   dev_set_drvdata(dev, hwmon);
->> > +
->> > +   rc = device_create_file(dev, &dev_attr_online);
->> > +   if (rc)
->> > +      return ERR_PTR(rc);
->> > +
->> > +   return hwmon;
->> > +}
->> > +EXPORT_SYMBOL(occ_sysfs_start);
->> > +
->> > +int occ_sysfs_stop(struct device *dev, struct occ_sysfs *driver)
->> > +{
->> > +   if (driver->dev) {
->> > +      occ_remove_hwmon_attrs(driver);
->> > +      hwmon_device_unregister(driver->dev);
->> > +   }
->> > +
->> > +   device_remove_file(driver->dev, &dev_attr_online);
->> > +
->> > +   devm_kfree(dev, driver);
->>
->> Thw point of using devm_ functions is not to require remove/free functions.
->> Something is completely wrong here if you need that call.
->>
->> Overall, this is architectually completely wrong. One does not register
->> or instantiate drivers based on writing into sysfs attributes. Please
->> reconsider your approach.
->
-> We had some trouble designing this driver because the BMC only has
-> access to the OCC once the processor is powered on. This will happen
-> sometime after the BMC boots (this driver runs only on the BMC). With
-> no access to the OCC, we don't know what sensors are present on the
-> system without a large static enumeration. Also any sysfs files created
-> before we have OCC access won't be able to return any data.
->
-> Instead of the "online" attribute, what do you think about using the
-> "bind"/"unbind" API to probe the device from user space once the system
-> is powered on? All the hwmon registration would take place in the probe
-> function, it would just occur some time after boot.
->
+Tested with a tmp432 sensor on a mips64 platform.
 
-A more common approach would be to have a platform driver. That platform
-driver would need a means to detect if the OCC is up and running, and
-instantiate everything else once it is.
+Signed-off-by: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
+---
+ drivers/hwmon/tmp401.c | 48 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
-A trigger from user space is problematic because there is no guarantee
-that the OCC is really up (or that it even exists).
-
-An alternative might be to have the hwmon driver poll for the OCC,
-but that would be a bit more difficult and might require a kernel thread
-or maybe asynchronous probing.
-
-Guenter
-
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index eeeed2c..88b17e4 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -213,25 +213,29 @@ static int tmp401_update_device_reg16(struct i2c_client *client,
+ 	for (i = 0; i < num_sensors; i++) {		/* local / r1 / r2 */
+ 		for (j = 0; j < num_regs; j++) {	/* temp / low / ... */
+ 			u8 regaddr;
+-			/*
+-			 * High byte must be read first immediately followed
+-			 * by the low byte
+-			 */
++
+ 			regaddr = data->kind == tmp432 ?
+ 						TMP432_TEMP_MSB_READ[j][i] :
+ 						TMP401_TEMP_MSB_READ[j][i];
+-			val = i2c_smbus_read_byte_data(client, regaddr);
+-			if (val < 0)
+-				return val;
+-			data->temp[j][i] = val << 8;
+-			if (j == 3)		/* crit is msb only */
+-				continue;
+-			regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[j][i]
+-						       : TMP401_TEMP_LSB[j][i];
+-			val = i2c_smbus_read_byte_data(client, regaddr);
++			if (j == 3) { /* crit is msb only */
++				val = i2c_smbus_read_byte_data(client, regaddr);
++			} else {
++				/*
++				 * Hardware provides big endian data. However,
++				 * the smbus protocol expects the LSB first in
++				 * I2C_SMBUS_WORD_DATA operations.
++				 * i2c_smbus_read_word_swapped swaps the bytes
++				 * in the value it receives from
++				 * i2c_smbus_read_word_data before returning the
++				 * data, so we get the correct value.
++				 */
++				val = i2c_smbus_read_word_swapped(client,
++								  regaddr);
++			}
+ 			if (val < 0)
+ 				return val;
+-			data->temp[j][i] |= val;
++
++			data->temp[j][i] = j == 3 ? val << 8 : val;
+ 		}
+ 	}
+ 	return 0;
+@@ -373,11 +377,17 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *devattr,
+ 
+ 	regaddr = data->kind == tmp432 ? TMP432_TEMP_MSB_WRITE[nr][index]
+ 				       : TMP401_TEMP_MSB_WRITE[nr][index];
+-	i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
+-	if (nr != 3) {
+-		regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[nr][index]
+-					       : TMP401_TEMP_LSB[nr][index];
+-		i2c_smbus_write_byte_data(client, regaddr, reg & 0xFF);
++	if (nr == 3) { /* crit is msb only */
++		i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
++	} else {
++		/*
++		 * Hardware expects big endian data. However, the smbus protocol
++		 * puts the LSB first in I2C_SMBUS_WORD_DATA operations.
++		 * i2c_smbus_write_word_data_swapped will swap the bytes before
++		 * passing them to i2c_smbus_write_word_data, so the hardware
++		 * will receive the MSB first, as expected.
++		 */
++		i2c_smbus_write_word_swapped(client, regaddr, reg);
+ 	}
+ 	data->temp[nr][index] = reg;
+ 
+-- 
+1.8.3.1
