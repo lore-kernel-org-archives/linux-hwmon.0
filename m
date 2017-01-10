@@ -1,11 +1,11 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-lf0-f42.google.com ([209.85.215.42]:34770 "EHLO
-        mail-lf0-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1758564AbdAJXsD (ORCPT
+Received: from mail-lf0-f46.google.com ([209.85.215.46]:34738 "EHLO
+        mail-lf0-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1758505AbdAJXrz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Jan 2017 18:48:03 -0500
-Received: by mail-lf0-f42.google.com with SMTP id v186so71897256lfa.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jan 2017 15:48:02 -0800 (PST)
+        Tue, 10 Jan 2017 18:47:55 -0500
+Received: by mail-lf0-f46.google.com with SMTP id v186so71895828lfa.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jan 2017 15:47:54 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
 To: Lee Jones <lee.jones@linaro.org>,
         Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
@@ -14,162 +14,120 @@ To: Lee Jones <lee.jones@linaro.org>,
 Cc: Mboumba Cedric Madianga <cedric.madianga@gmail.com>,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5/7] mfd: ab8500: augment DT bindings
-Date: Wed, 11 Jan 2017 00:47:43 +0100
-Message-Id: <20170110234745.29691-6-linus.walleij@linaro.org>
+Subject: [PATCH 1/7] power: supply: ab8500_btemp: convert to IIO ADC
+Date: Wed, 11 Jan 2017 00:47:39 +0100
+Message-Id: <20170110234745.29691-2-linus.walleij@linaro.org>
 In-Reply-To: <20170110234745.29691-1-linus.walleij@linaro.org>
 References: <20170110234745.29691-1-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-As we migrate the AB8500 GPADC driver to use IIO, we need to augment
-the bindings to account for defining the ADC channels in the device
-tree.
+This switches the AB8500 battery temperature driver to using
+the standard IIO ADC channel lookup and conversion routines.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- Documentation/devicetree/bindings/mfd/ab8500.txt | 119 +++++++++++++++++++++++
- 1 file changed, 119 insertions(+)
+ drivers/power/supply/ab8500_btemp.c | 41 ++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
-index cd9e90c5d171..05d4b473c7c8 100644
---- a/Documentation/devicetree/bindings/mfd/ab8500.txt
-+++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
-@@ -69,6 +69,18 @@ Required child device properties:
- - compatible             : "stericsson,ab8500-[bm|btemp|charger|fg|gpadc|gpio|ponkey|
-                                                pwm|regulator|rtc|sysctrl|usb]";
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 6ffdc18f2599..61161db5cffa 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -26,7 +26,7 @@
+ #include <linux/mfd/abx500.h>
+ #include <linux/mfd/abx500/ab8500.h>
+ #include <linux/mfd/abx500/ab8500-bm.h>
+-#include <linux/mfd/abx500/ab8500-gpadc.h>
++#include <linux/iio/consumer.h>
  
-+  A few child devices require ADC channels from the GPADC node. Those follow the
-+  standard bindings from iio/iio-bindings.txt
-+
-+  abx500-temp		 : io-channels "aux1" and "aux2" for measuring external
-+			   temperatures
-+  ab8500_fg		 : io-channel "main_bat_v" for measuring main battery voltage
-+  ab8500_btemp		 : io-channels "btemp_ball" and "bat_ctrl" for measuring the
-+			   battery voltage
-+  ab8500_charger	 : io-channels "main_charger_v", "main_charger_c", "vbus_v",
-+			   "usb_charger_c" for measuring voltage and current of the
-+			   different charging supplies
-+
- Optional child device properties:
- - interrupts             : contains the device IRQ(s) using the 2-cell format (see above)
- - interrupt-names        : contains names of IRQ resource in the order in which they were
-@@ -102,8 +114,115 @@ ab8500 {
-                               39 0x4>;
-                 interrupt-names = "HW_CONV_END", "SW_CONV_END";
-                 vddadc-supply = <&ab8500_ldo_tvout_reg>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		#io-channel-cells = <1>;
-+
-+		/* GPADC channels */
-+		bat_ctrl: adc-channel@01 {
-+			reg = <0x01>;
-+		};
-+		btemp_ball: adc-channel@02 {
-+			reg = <0x02>;
-+		};
-+		main_charger_v: adc-channel@03 {
-+			reg = <0x03>;
-+		};
-+		acc_detect1: adc-channel@04 {
-+			reg = <0x04>;
-+		};
-+		acc_detect2: adc-channel@05 {
-+			reg = <0x05>;
-+		};
-+		adc_aux1: adc-channel@06 {
-+			reg = <0x06>;
-+		};
-+		adc_aux2: adc-channel@07 {
-+			reg = <0x07>;
-+		};
-+		main_batt_v: adc-channel@08 {
-+			reg = <0x08>;
-+		};
-+		vbus_v: adc-channel@09 {
-+			reg = <0x09>;
-+		};
-+		main_charger_c: adc-channel@0a {
-+			reg = <0x0a>;
-+		};
-+		usb_charger_c: adc-channel@0b {
-+			reg = <0x0b>;
-+		};
-+		bk_bat_v: adc-channel@0c {
-+			reg = <0x0c>;
-+		};
-+		die_temp: adc-channel@0d {
-+			reg = <0x0d>;
-+		};
-+		usb_id: adc-channel@0e {
-+			reg = <0x0e>;
-+		};
-+		xtal_temp: adc-channel@12 {
-+			reg = <0x12>;
-+		};
-+		vbat_true_meas: adc-channel@13 {
-+			reg = <0x13>;
-+		};
-+		bat_ctrl_and_ibat: adc-channel@1c {
-+			reg = <0x1c>;
-+		};
-+		vbat_meas_and_ibat: adc-channel@1d {
-+			reg = <0x1d>;
-+		};
-+		vbat_true_meas_and_ibat: adc-channel@1e {
-+			reg = <0x1e>;
-+		};
-+		bat_temp_and_ibat: adc-channel@1f {
-+			reg = <0x1f>;
-+		};
-         };
+ #define VTVOUT_V			1800
  
-+	ab8500_temp {
-+		compatible = "stericsson,abx500-temp";
-+		io-channels = <&gpadc 0x06>,
-+			      <&gpadc 0x07>;
-+		io-channel-name = "aux1", "aux2";
-+	};
+@@ -79,7 +79,8 @@ struct ab8500_btemp_ranges {
+  * @bat_temp:		Dispatched battery temperature in degree Celcius
+  * @prev_bat_temp	Last measured battery temperature in degree Celcius
+  * @parent:		Pointer to the struct ab8500
+- * @gpadc:		Pointer to the struct gpadc
++ * @adc_btemp_ball:	ADC channel for the battery ball temperature
++ * @adc_bat_ctrl:	ADC channel for the battery control
+  * @fg:			Pointer to the struct fg
+  * @bm:           	Platform specific battery management information
+  * @btemp_psy:		Structure for BTEMP specific battery properties
+@@ -96,7 +97,8 @@ struct ab8500_btemp {
+ 	int bat_temp;
+ 	int prev_bat_temp;
+ 	struct ab8500 *parent;
+-	struct ab8500_gpadc *gpadc;
++	struct iio_channel *btemp_ball;
++	struct iio_channel *bat_ctrl;
+ 	struct ab8500_fg *fg;
+ 	struct abx500_bm_data *bm;
+ 	struct power_supply *btemp_psy;
+@@ -180,13 +182,13 @@ static int ab8500_btemp_batctrl_volt_to_res(struct ab8500_btemp *di,
+  */
+ static int ab8500_btemp_read_batctrl_voltage(struct ab8500_btemp *di)
+ {
+-	int vbtemp;
++	int vbtemp, ret;
+ 	static int prev;
+ 
+-	vbtemp = ab8500_gpadc_convert(di->gpadc, BAT_CTRL);
+-	if (vbtemp < 0) {
++	ret = iio_read_channel_processed(di->bat_ctrl, &vbtemp);
++	if (ret < 0) {
+ 		dev_err(di->dev,
+-			"%s gpadc conversion failed, using previous value",
++			"%s ADC conversion failed, using previous value",
+ 			__func__);
+ 		return prev;
+ 	}
+@@ -501,7 +503,7 @@ static int ab8500_btemp_res_to_temp(struct ab8500_btemp *di,
+  */
+ static int ab8500_btemp_measure_temp(struct ab8500_btemp *di)
+ {
+-	int temp;
++	int temp, ret;
+ 	static int prev;
+ 	int rbat, rntc, vntc;
+ 	u8 id;
+@@ -526,10 +528,10 @@ static int ab8500_btemp_measure_temp(struct ab8500_btemp *di)
+ 			di->bm->bat_type[id].r_to_t_tbl,
+ 			di->bm->bat_type[id].n_temp_tbl_elements, rbat);
+ 	} else {
+-		vntc = ab8500_gpadc_convert(di->gpadc, BTEMP_BALL);
+-		if (vntc < 0) {
++		ret = iio_read_channel_processed(di->btemp_ball, &vntc);
++		if (ret < 0) {
+ 			dev_err(di->dev,
+-				"%s gpadc conversion failed,"
++				"%s ADC conversion failed,"
+ 				" using previous value\n", __func__);
+ 			return prev;
+ 		}
+@@ -1085,7 +1087,22 @@ static int ab8500_btemp_probe(struct platform_device *pdev)
+ 	/* get parent data */
+ 	di->dev = &pdev->dev;
+ 	di->parent = dev_get_drvdata(pdev->dev.parent);
+-	di->gpadc = ab8500_gpadc_get("ab8500-gpadc.0");
 +
-+	ab8500_battery: ab8500_battery {
-+		stericsson,battery-type = "LIPO";
-+		thermistor-on-batctrl;
-+	};
-+
-+	ab8500_fg {
-+		compatible = "stericsson,ab8500-fg";
-+		battery	   = <&ab8500_battery>;
-+		io-channels = <&gpadc 0x08>;
-+		io-channel-name = "main_bat_v";
-+	};
-+
-+	ab8500_btemp {
-+		compatible = "stericsson,ab8500-btemp";
-+		battery	   = <&ab8500_battery>;
-+		io-channels = <&gpadc 0x02>,
-+			      <&gpadc 0x01>;
-+		io-channel-name = "btemp_ball",
-+				"bat_ctrl";
-+	};
-+
-+	ab8500_charger {
-+		compatible	= "stericsson,ab8500-charger";
-+		battery		= <&ab8500_battery>;
-+		vddadc-supply	= <&ab8500_ldo_tvout_reg>;
-+		io-channels = <&gpadc 0x03>,
-+			      <&gpadc 0x0a>,
-+			      <&gpadc 0x09>,
-+			      <&gpadc 0x0b>;
-+		io-channel-name = "main_charger_v",
-+				"main_charger_c",
-+				"vbus_v",
-+				"usb_charger_c";
-+	};
-+
-         ab8500-usb {
-                 compatible = "stericsson,ab8500-usb";
-                 interrupts = < 90 0x4
++	/* Get ADC channels */
++	di->btemp_ball = devm_iio_channel_get(&pdev->dev, "btemp_ball");
++	if (IS_ERR(di->btemp_ball)) {
++		if (PTR_ERR(di->btemp_ball) == -ENODEV)
++                        return -EPROBE_DEFER;
++		dev_err(&pdev->dev, "failed to get BTEMP BALL ADC channel\n");
++		return PTR_ERR(di->btemp_ball);
++	}
++	di->bat_ctrl = devm_iio_channel_get(&pdev->dev, "bat_ctrl");
++	if (IS_ERR(di->bat_ctrl)) {
++		if (PTR_ERR(di->bat_ctrl) == -ENODEV)
++                        return -EPROBE_DEFER;
++		dev_err(&pdev->dev, "failed to get BAT CTRL ADC channel\n");
++		return PTR_ERR(di->bat_ctrl);
++	}
+ 
+ 	di->initialized = false;
+ 
 -- 
 2.9.3
 
