@@ -1,121 +1,179 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:45851 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1763057AbdAIRJy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Jan 2017 12:09:54 -0500
-Date: Mon, 9 Jan 2017 09:09:52 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: jeroen.de_wachter.ext@nokia.com
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon/tmp401: use smb word operations instead of 2
- smb byte operations
-Message-ID: <20170109170952.GB16253@roeck-us.net>
-References: <1483980458-28202-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
+Received: from mail.kernel.org ([198.145.29.136]:41848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1750980AbdALDDQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Jan 2017 22:03:16 -0500
+Date: Thu, 12 Jan 2017 04:02:40 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Lee Jones <lee.jones@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mboumba Cedric Madianga <cedric.madianga@gmail.com>,
+        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/7] power: supply: ab8500_btemp: convert to IIO ADC
+Message-ID: <20170112030240.5vzyut7vqbtqnnvf@earth>
+References: <20170110234745.29691-1-linus.walleij@linaro.org>
+ <20170110234745.29691-2-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3crr2eiqgdupgn4w"
 Content-Disposition: inline
-In-Reply-To: <1483980458-28202-1-git-send-email-jeroen.de_wachter.ext@nokia.com>
+In-Reply-To: <20170110234745.29691-2-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 09, 2017 at 05:47:37PM +0100, jeroen.de_wachter.ext@nokia.com wrote:
-> From: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
-> 
-> tmp401 separately read/wrote high and low bytes of temperature values while
-> the hardware supports reading/writing those values in one operation. Driver
-> has been modified to use word operations where possible.
-> 
-> Tested with a tmp432 sensor on a mips64 platform.
-> 
-> Signed-off-by: Jeroen De Wachter <jeroen.de_wachter.ext@nokia.com>
-> ---
->  drivers/hwmon/tmp401.c | 48 +++++++++++++++++++++++++++++-------------------
->  1 file changed, 29 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-> index eeeed2c..88b17e4 100644
-> --- a/drivers/hwmon/tmp401.c
-> +++ b/drivers/hwmon/tmp401.c
-> @@ -213,25 +213,29 @@ static int tmp401_update_device_reg16(struct i2c_client *client,
->  	for (i = 0; i < num_sensors; i++) {		/* local / r1 / r2 */
->  		for (j = 0; j < num_regs; j++) {	/* temp / low / ... */
->  			u8 regaddr;
-> -			/*
-> -			 * High byte must be read first immediately followed
-> -			 * by the low byte
-> -			 */
-> +
->  			regaddr = data->kind == tmp432 ?
->  						TMP432_TEMP_MSB_READ[j][i] :
->  						TMP401_TEMP_MSB_READ[j][i];
-> -			val = i2c_smbus_read_byte_data(client, regaddr);
-> -			if (val < 0)
-> -				return val;
-> -			data->temp[j][i] = val << 8;
-> -			if (j == 3)		/* crit is msb only */
-> -				continue;
-> -			regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[j][i]
-> -						       : TMP401_TEMP_LSB[j][i];
-> -			val = i2c_smbus_read_byte_data(client, regaddr);
-> +			if (j == 3) { /* crit is msb only */
-> +				val = i2c_smbus_read_byte_data(client, regaddr);
-> +			} else {
-> +				/*
-> +				 * Hardware provides big endian data. However,
-> +				 * the smbus protocol expects the LSB first in
-> +				 * I2C_SMBUS_WORD_DATA operations.
-> +				 * i2c_smbus_read_word_swapped swaps the bytes
-> +				 * in the value it receives from
-> +				 * i2c_smbus_read_word_data before returning the
-> +				 * data, so we get the correct value.
-> +				 */
-Please drop the comment or make it shorter (such as "Hardware provides
-big endian data").
 
-> +				val = i2c_smbus_read_word_swapped(client,
-> +								  regaddr);
-> +			}
->  			if (val < 0)
->  				return val;
-> -			data->temp[j][i] |= val;
-> +
-> +			data->temp[j][i] = j == 3 ? val << 8 : val;
+--3crr2eiqgdupgn4w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Wed, Jan 11, 2017 at 12:47:39AM +0100, Linus Walleij wrote:
+> This switches the AB8500 battery temperature driver to using
+> the standard IIO ADC channel lookup and conversion routines.
+>=20
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+Acked-By: Sebastian Reichel <sre@kernel.org>
+
+-- Sebastian
+
+>  drivers/power/supply/ab8500_btemp.c | 41 ++++++++++++++++++++++++++-----=
+------
+>  1 file changed, 29 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/a=
+b8500_btemp.c
+> index 6ffdc18f2599..61161db5cffa 100644
+> --- a/drivers/power/supply/ab8500_btemp.c
+> +++ b/drivers/power/supply/ab8500_btemp.c
+> @@ -26,7 +26,7 @@
+>  #include <linux/mfd/abx500.h>
+>  #include <linux/mfd/abx500/ab8500.h>
+>  #include <linux/mfd/abx500/ab8500-bm.h>
+> -#include <linux/mfd/abx500/ab8500-gpadc.h>
+> +#include <linux/iio/consumer.h>
+> =20
+>  #define VTVOUT_V			1800
+> =20
+> @@ -79,7 +79,8 @@ struct ab8500_btemp_ranges {
+>   * @bat_temp:		Dispatched battery temperature in degree Celcius
+>   * @prev_bat_temp	Last measured battery temperature in degree Celcius
+>   * @parent:		Pointer to the struct ab8500
+> - * @gpadc:		Pointer to the struct gpadc
+> + * @adc_btemp_ball:	ADC channel for the battery ball temperature
+> + * @adc_bat_ctrl:	ADC channel for the battery control
+>   * @fg:			Pointer to the struct fg
+>   * @bm:           	Platform specific battery management information
+>   * @btemp_psy:		Structure for BTEMP specific battery properties
+> @@ -96,7 +97,8 @@ struct ab8500_btemp {
+>  	int bat_temp;
+>  	int prev_bat_temp;
+>  	struct ab8500 *parent;
+> -	struct ab8500_gpadc *gpadc;
+> +	struct iio_channel *btemp_ball;
+> +	struct iio_channel *bat_ctrl;
+>  	struct ab8500_fg *fg;
+>  	struct abx500_bm_data *bm;
+>  	struct power_supply *btemp_psy;
+> @@ -180,13 +182,13 @@ static int ab8500_btemp_batctrl_volt_to_res(struct =
+ab8500_btemp *di,
+>   */
+>  static int ab8500_btemp_read_batctrl_voltage(struct ab8500_btemp *di)
+>  {
+> -	int vbtemp;
+> +	int vbtemp, ret;
+>  	static int prev;
+> =20
+> -	vbtemp =3D ab8500_gpadc_convert(di->gpadc, BAT_CTRL);
+> -	if (vbtemp < 0) {
+> +	ret =3D iio_read_channel_processed(di->bat_ctrl, &vbtemp);
+> +	if (ret < 0) {
+>  		dev_err(di->dev,
+> -			"%s gpadc conversion failed, using previous value",
+> +			"%s ADC conversion failed, using previous value",
+>  			__func__);
+>  		return prev;
+>  	}
+> @@ -501,7 +503,7 @@ static int ab8500_btemp_res_to_temp(struct ab8500_bte=
+mp *di,
+>   */
+>  static int ab8500_btemp_measure_temp(struct ab8500_btemp *di)
+>  {
+> -	int temp;
+> +	int temp, ret;
+>  	static int prev;
+>  	int rbat, rntc, vntc;
+>  	u8 id;
+> @@ -526,10 +528,10 @@ static int ab8500_btemp_measure_temp(struct ab8500_=
+btemp *di)
+>  			di->bm->bat_type[id].r_to_t_tbl,
+>  			di->bm->bat_type[id].n_temp_tbl_elements, rbat);
+>  	} else {
+> -		vntc =3D ab8500_gpadc_convert(di->gpadc, BTEMP_BALL);
+> -		if (vntc < 0) {
+> +		ret =3D iio_read_channel_processed(di->btemp_ball, &vntc);
+> +		if (ret < 0) {
+>  			dev_err(di->dev,
+> -				"%s gpadc conversion failed,"
+> +				"%s ADC conversion failed,"
+>  				" using previous value\n", __func__);
+>  			return prev;
 >  		}
->  	}
->  	return 0;
-> @@ -373,11 +377,17 @@ static ssize_t store_temp(struct device *dev, struct device_attribute *devattr,
->  
->  	regaddr = data->kind == tmp432 ? TMP432_TEMP_MSB_WRITE[nr][index]
->  				       : TMP401_TEMP_MSB_WRITE[nr][index];
-> -	i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
-> -	if (nr != 3) {
-> -		regaddr = data->kind == tmp432 ? TMP432_TEMP_LSB[nr][index]
-> -					       : TMP401_TEMP_LSB[nr][index];
-> -		i2c_smbus_write_byte_data(client, regaddr, reg & 0xFF);
-> +	if (nr == 3) { /* crit is msb only */
-> +		i2c_smbus_write_byte_data(client, regaddr, reg >> 8);
-> +	} else {
-> +		/*
-> +		 * Hardware expects big endian data. However, the smbus protocol
-> +		 * puts the LSB first in I2C_SMBUS_WORD_DATA operations.
-> +		 * i2c_smbus_write_word_data_swapped will swap the bytes before
-> +		 * passing them to i2c_smbus_write_word_data, so the hardware
-> +		 * will receive the MSB first, as expected.
+> @@ -1085,7 +1087,22 @@ static int ab8500_btemp_probe(struct platform_devi=
+ce *pdev)
+>  	/* get parent data */
+>  	di->dev =3D &pdev->dev;
+>  	di->parent =3D dev_get_drvdata(pdev->dev.parent);
+> -	di->gpadc =3D ab8500_gpadc_get("ab8500-gpadc.0");
+> +
+> +	/* Get ADC channels */
+> +	di->btemp_ball =3D devm_iio_channel_get(&pdev->dev, "btemp_ball");
+> +	if (IS_ERR(di->btemp_ball)) {
+> +		if (PTR_ERR(di->btemp_ball) =3D=3D -ENODEV)
+> +                        return -EPROBE_DEFER;
+> +		dev_err(&pdev->dev, "failed to get BTEMP BALL ADC channel\n");
+> +		return PTR_ERR(di->btemp_ball);
+> +	}
+> +	di->bat_ctrl =3D devm_iio_channel_get(&pdev->dev, "bat_ctrl");
+> +	if (IS_ERR(di->bat_ctrl)) {
+> +		if (PTR_ERR(di->bat_ctrl) =3D=3D -ENODEV)
+> +                        return -EPROBE_DEFER;
+> +		dev_err(&pdev->dev, "failed to get BAT CTRL ADC channel\n");
+> +		return PTR_ERR(di->bat_ctrl);
+> +	}
+> =20
+>  	di->initialized =3D false;
+> =20
+> --=20
+> 2.9.3
+>=20
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Comment in one place is enough.
+--3crr2eiqgdupgn4w
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Unless I am missing something, TMP432_TEMP_LSB and TMP401_TEMP_LSB are now
-unused and can be removed.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Guenter
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlh28dAACgkQ2O7X88g7
++pp8ZhAAmw//2D87BKa+tpP7uJbhS8ZL50gnj/v1/iMiy5LYrKnm4B7XLScEZC6Z
+H3/duJ2c6Zjcj9NELg4siuswBuyWYPXVmadJ6KD9Q6wPm/v57yYcnKXQE9DCmM9F
+FmZ8zDIpQN65Ftji7D1Y64WVD6Pzkb9Z4IyMqmVNhLCJSO9lJ6fQtG4n/oHQiTYo
+O7jAGHfxNwm02VyizWBpkDW9dASzWar6rSilYS9IPRHc8cUUjggQgiyZiRD+lMU0
+tUtNxamxG38jYz9unGkcz2Oqsg2WVrTyACECRB3CiisIGgip7lm3LaLcYWOmUN9m
+MERfd1q1eGOaDK9Uuc/1oqq6ll+BisdSf2ZOCpJOEze3dDWh7DzRFl6AEj6K/ypO
+agD+38vA/k0ZG1+I/KhDoUfsg4KtTrWVyQByA1fmUql9e/ja1pLsuRXLM3lCZqxd
+dvMp1Kj9Xy6XkZDraQ1eKe3l5xlljUKewpqkrcc07+OXwHrQDghQpYo8/czdvBps
+gbemUBIvTmK/H7LebPyGirvk3ISjvcr12TCfn+uvBhuVCJC9lIi5Izm5Cqe55lYg
+DUCizAf5YjIniXD+974mx5juJEyJ9OhXRY41sdoh0RrNlaMfqE2ug0VMMdiPjTDv
+czkynEqBFM0CPRLX2B+rPLnfslqfwyTfFuxykqS9P1KdnwWbc+0=
+=AWWQ
+-----END PGP SIGNATURE-----
 
-> +		 */
-> +		i2c_smbus_write_word_swapped(client, regaddr, reg);
->  	}
->  	data->temp[nr][index] = reg;
->  
-> -- 
-> 1.8.3.1
-> 
+--3crr2eiqgdupgn4w--
