@@ -1,143 +1,189 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.136]:42388 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751210AbdALDDZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Jan 2017 22:03:25 -0500
-Date: Thu, 12 Jan 2017 04:03:20 +0100
-From: Sebastian Reichel <sre@kernel.org>
+Received: from mail-wm0-f43.google.com ([74.125.82.43]:34863 "EHLO
+        mail-wm0-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751826AbdAMPAI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 13 Jan 2017 10:00:08 -0500
+Received: by mail-wm0-f43.google.com with SMTP id r126so68726944wmr.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Jan 2017 07:00:07 -0800 (PST)
+Date: Fri, 13 Jan 2017 14:55:37 +0000
+From: Lee Jones <lee.jones@linaro.org>
 To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Lee Jones <lee.jones@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Mboumba Cedric Madianga <cedric.madianga@gmail.com>,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/7] power: supply: ab8500_fg: convert to IIO ADC
-Message-ID: <20170112030320.yozvhsu2m4lmq2vo@earth>
+Subject: Re: [PATCH 5/7] mfd: ab8500: augment DT bindings
+Message-ID: <20170113145537.GF6864@dell>
 References: <20170110234745.29691-1-linus.walleij@linaro.org>
- <20170110234745.29691-4-linus.walleij@linaro.org>
+ <20170110234745.29691-6-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7hksuxsxd5sezazi"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20170110234745.29691-4-linus.walleij@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20170110234745.29691-6-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+On Wed, 11 Jan 2017, Linus Walleij wrote:
 
---7hksuxsxd5sezazi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Jan 11, 2017 at 12:47:41AM +0100, Linus Walleij wrote:
-> This switches the AB8500 fuel gauge driver to using
-> the standard IIO ADC channel lookup and conversion routines.
->=20
+> As we migrate the AB8500 GPADC driver to use IIO, we need to augment
+> the bindings to account for defining the ADC channels in the device
+> tree.
+> 
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/ab8500.txt | 119 +++++++++++++++++++++++
+>  1 file changed, 119 insertions(+)
 
-Acked-By: Sebastian Reichel <sre@kernel.org>
+Looks okay to me, but we should wait for Rob to take a look.
 
--- Sebastian
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
->  drivers/power/supply/ab8500_fg.c | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
-00_fg.c
-> index c569f82a0071..b26122e1da51 100644
-> --- a/drivers/power/supply/ab8500_fg.c
-> +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -32,7 +32,7 @@
->  #include <linux/mfd/abx500.h>
->  #include <linux/mfd/abx500/ab8500.h>
->  #include <linux/mfd/abx500/ab8500-bm.h>
-> -#include <linux/mfd/abx500/ab8500-gpadc.h>
-> +#include <linux/iio/consumer.h>
->  #include <linux/kernel.h>
-> =20
->  #define MILLI_TO_MICRO			1000
-> @@ -182,7 +182,7 @@ struct inst_curr_result_list {
->   * @bat_cap:		Structure for battery capacity specific parameters
->   * @avg_cap:		Average capacity filter
->   * @parent:		Pointer to the struct ab8500
-> - * @gpadc:		Pointer to the struct gpadc
-> + * @main_bat_v:		ADC channel for the main battery voltage
->   * @bm:           	Platform specific battery management information
->   * @fg_psy:		Structure that holds the FG specific battery properties
->   * @fg_wq:		Work queue for running the FG algorithm
-> @@ -224,7 +224,7 @@ struct ab8500_fg {
->  	struct ab8500_fg_battery_capacity bat_cap;
->  	struct ab8500_fg_avg_cap avg_cap;
->  	struct ab8500 *parent;
-> -	struct ab8500_gpadc *gpadc;
-> +	struct iio_channel *main_bat_v;
->  	struct abx500_bm_data *bm;
->  	struct power_supply *fg_psy;
->  	struct workqueue_struct *fg_wq;
-> @@ -831,13 +831,13 @@ static void ab8500_fg_acc_cur_work(struct work_stru=
-ct *work)
->   */
->  static int ab8500_fg_bat_voltage(struct ab8500_fg *di)
->  {
-> -	int vbat;
-> +	int vbat, ret;
->  	static int prev;
-> =20
-> -	vbat =3D ab8500_gpadc_convert(di->gpadc, MAIN_BAT_V);
-> -	if (vbat < 0) {
-> +	ret =3D iio_read_channel_processed(di->main_bat_v, &vbat);
-> +	if (ret < 0) {
->  		dev_err(di->dev,
-> -			"%s gpadc conversion failed, using previous value\n",
-> +			"%s ADC conversion failed, using previous value\n",
->  			__func__);
->  		return prev;
->  	}
-> @@ -3072,7 +3072,14 @@ static int ab8500_fg_probe(struct platform_device =
-*pdev)
->  	/* get parent data */
->  	di->dev =3D &pdev->dev;
->  	di->parent =3D dev_get_drvdata(pdev->dev.parent);
-> -	di->gpadc =3D ab8500_gpadc_get("ab8500-gpadc.0");
+> diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> index cd9e90c5d171..05d4b473c7c8 100644
+> --- a/Documentation/devicetree/bindings/mfd/ab8500.txt
+> +++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> @@ -69,6 +69,18 @@ Required child device properties:
+>  - compatible             : "stericsson,ab8500-[bm|btemp|charger|fg|gpadc|gpio|ponkey|
+>                                                 pwm|regulator|rtc|sysctrl|usb]";
+>  
+> +  A few child devices require ADC channels from the GPADC node. Those follow the
+> +  standard bindings from iio/iio-bindings.txt
 > +
-> +	di->main_bat_v =3D devm_iio_channel_get(&pdev->dev, "main_bat_v");
-> +	if (IS_ERR(di->main_bat_v)) {
-> +		if (PTR_ERR(di->main_bat_v) =3D=3D -ENODEV)
-> +                        return -EPROBE_DEFER;
-> +		dev_err(&pdev->dev, "failed to get main battery ADC channel\n");
-> +		return PTR_ERR(di->main_bat_v);
-> +	}
-> =20
->  	psy_cfg.supplied_to =3D supply_interface;
->  	psy_cfg.num_supplicants =3D ARRAY_SIZE(supply_interface);
-> --=20
-> 2.9.3
->=20
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> +  abx500-temp		 : io-channels "aux1" and "aux2" for measuring external
+> +			   temperatures
+> +  ab8500_fg		 : io-channel "main_bat_v" for measuring main battery voltage
+> +  ab8500_btemp		 : io-channels "btemp_ball" and "bat_ctrl" for measuring the
+> +			   battery voltage
+> +  ab8500_charger	 : io-channels "main_charger_v", "main_charger_c", "vbus_v",
+> +			   "usb_charger_c" for measuring voltage and current of the
+> +			   different charging supplies
+> +
+>  Optional child device properties:
+>  - interrupts             : contains the device IRQ(s) using the 2-cell format (see above)
+>  - interrupt-names        : contains names of IRQ resource in the order in which they were
+> @@ -102,8 +114,115 @@ ab8500 {
+>                                39 0x4>;
+>                  interrupt-names = "HW_CONV_END", "SW_CONV_END";
+>                  vddadc-supply = <&ab8500_ldo_tvout_reg>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		#io-channel-cells = <1>;
+> +
+> +		/* GPADC channels */
+> +		bat_ctrl: adc-channel@01 {
+> +			reg = <0x01>;
+> +		};
+> +		btemp_ball: adc-channel@02 {
+> +			reg = <0x02>;
+> +		};
+> +		main_charger_v: adc-channel@03 {
+> +			reg = <0x03>;
+> +		};
+> +		acc_detect1: adc-channel@04 {
+> +			reg = <0x04>;
+> +		};
+> +		acc_detect2: adc-channel@05 {
+> +			reg = <0x05>;
+> +		};
+> +		adc_aux1: adc-channel@06 {
+> +			reg = <0x06>;
+> +		};
+> +		adc_aux2: adc-channel@07 {
+> +			reg = <0x07>;
+> +		};
+> +		main_batt_v: adc-channel@08 {
+> +			reg = <0x08>;
+> +		};
+> +		vbus_v: adc-channel@09 {
+> +			reg = <0x09>;
+> +		};
+> +		main_charger_c: adc-channel@0a {
+> +			reg = <0x0a>;
+> +		};
+> +		usb_charger_c: adc-channel@0b {
+> +			reg = <0x0b>;
+> +		};
+> +		bk_bat_v: adc-channel@0c {
+> +			reg = <0x0c>;
+> +		};
+> +		die_temp: adc-channel@0d {
+> +			reg = <0x0d>;
+> +		};
+> +		usb_id: adc-channel@0e {
+> +			reg = <0x0e>;
+> +		};
+> +		xtal_temp: adc-channel@12 {
+> +			reg = <0x12>;
+> +		};
+> +		vbat_true_meas: adc-channel@13 {
+> +			reg = <0x13>;
+> +		};
+> +		bat_ctrl_and_ibat: adc-channel@1c {
+> +			reg = <0x1c>;
+> +		};
+> +		vbat_meas_and_ibat: adc-channel@1d {
+> +			reg = <0x1d>;
+> +		};
+> +		vbat_true_meas_and_ibat: adc-channel@1e {
+> +			reg = <0x1e>;
+> +		};
+> +		bat_temp_and_ibat: adc-channel@1f {
+> +			reg = <0x1f>;
+> +		};
+>          };
+>  
+> +	ab8500_temp {
+> +		compatible = "stericsson,abx500-temp";
+> +		io-channels = <&gpadc 0x06>,
+> +			      <&gpadc 0x07>;
+> +		io-channel-name = "aux1", "aux2";
+> +	};
+> +
+> +	ab8500_battery: ab8500_battery {
+> +		stericsson,battery-type = "LIPO";
+> +		thermistor-on-batctrl;
+> +	};
+> +
+> +	ab8500_fg {
+> +		compatible = "stericsson,ab8500-fg";
+> +		battery	   = <&ab8500_battery>;
+> +		io-channels = <&gpadc 0x08>;
+> +		io-channel-name = "main_bat_v";
+> +	};
+> +
+> +	ab8500_btemp {
+> +		compatible = "stericsson,ab8500-btemp";
+> +		battery	   = <&ab8500_battery>;
+> +		io-channels = <&gpadc 0x02>,
+> +			      <&gpadc 0x01>;
+> +		io-channel-name = "btemp_ball",
+> +				"bat_ctrl";
+> +	};
+> +
+> +	ab8500_charger {
+> +		compatible	= "stericsson,ab8500-charger";
+> +		battery		= <&ab8500_battery>;
+> +		vddadc-supply	= <&ab8500_ldo_tvout_reg>;
+> +		io-channels = <&gpadc 0x03>,
+> +			      <&gpadc 0x0a>,
+> +			      <&gpadc 0x09>,
+> +			      <&gpadc 0x0b>;
+> +		io-channel-name = "main_charger_v",
+> +				"main_charger_c",
+> +				"vbus_v",
+> +				"usb_charger_c";
+> +	};
+> +
+>          ab8500-usb {
+>                  compatible = "stericsson,ab8500-usb";
+>                  interrupts = < 90 0x4
 
---7hksuxsxd5sezazi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlh28fgACgkQ2O7X88g7
-+ppc1hAApBDx66m1gAqFUcB91aeH4SwSNQF2CVLXKm9JHf9EoaKF4ajiUPDXq9Sd
-iQKRvNCc2/ZAnWBmI3noqaigp1cN/SvvtCJ2sXBKt5Ig8jiqfyZLIWV9AiBpuc08
-Z9IReZ3SWtiIkseWnrnsedyvJ47NtKa5+XM/KFUlanTXT9a5V2ywj6Sgtw1oWDL6
-aA4V5e/qFzq/caFccZUgNyOxZepVwwIlUgkOKl1OdRVkd9IEg/Meb+esD8fq5v6j
-uRybkbCXa5oQOiEf0LoFOGEB0BTs2Xd9NrWobTpaqqqGDyHWqzWqFb+EQhM07f95
-EtC7GPNCkasGhofnnGI7jHDIngtke7rpRZXcb+ZpBoKLqoxTfEBpFmTlXpdgu4Yq
-hZnUpncTTq4grEn9d5eiKkxzyk5jwVg8EcwMuRQUrBHwyqRbXnqe98wWkiIBUQDX
-sK88MDs5RQSa3UJv2dl7+//kDipHOlBrefwc5h1WF+3uNigWKt91m/cmICJPVLWE
-kfW3wQpHzIFkZIGn57+Rjyn2K0faj1NufEayd9oO3G4dzrsqliLUYCdfs8WtWNFT
-W6Sy358UMG0uwW8GVVXCXQtUxjCCDUKyQU9ZIUQIXaSlyCXrq7qGSFtpNK0EkyVB
-2aIKnTqWllfyQ0Zi6NdnvmaBjQTVJFvcui+wbGipA3gUUUpaJuU=
-=WstT
------END PGP SIGNATURE-----
-
---7hksuxsxd5sezazi--
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
