@@ -1,55 +1,82 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:58850
-        "EHLO osg.samsung.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1750831AbdAPOwk (ORCPT
+Received: from mail-io0-f193.google.com ([209.85.223.193]:34658 "EHLO
+        mail-io0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750834AbdAPVOA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 Jan 2017 09:52:40 -0500
-From: Javier Martinez Canillas <javier@osg.samsung.com>
-To: linux-kernel@vger.kernel.org
-Cc: Javier Martinez Canillas <javier@osg.samsung.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (ltc4151) Export OF device ID table as module aliases
-Date: Mon, 16 Jan 2017 11:52:27 -0300
-Message-Id: <1484578347-12352-1-git-send-email-javier@osg.samsung.com>
+        Mon, 16 Jan 2017 16:14:00 -0500
+From: eajames.ibm@gmail.com
+To: linux@roeck-us.net
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
+        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
+        joel@jms.id.au, benh@kernel.crashing.org,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH linux v3 0/6] drivers: hwmon: Add On-Chip Controller driver
+Date: Mon, 16 Jan 2017 15:13:33 -0600
+Message-Id: <1484601219-30196-1-git-send-email-eajames.ibm@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The I2C core always reports a MODALIAS of the form i2c:<foo> even if the
-device was registered via OF, this means that exporting the OF device ID
-table device aliases in the module is not needed. But in order to change
-how the core reports modaliases to user-space, it's better to export it.
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Before this patch:
+This patchset adds a hwmon driver to support the OCC (On-Chip Controller)
+on the IBM POWER8 and POWER9 processors, from a BMC (Baseboard Management
+Controller). The OCC is an embedded processor that provides real time
+power and thermal monitoring.
 
-$ modinfo drivers/hwmon/ltc4151.ko | grep alias
-alias:          i2c:ltc4151
+The driver provides an interface on a BMC to poll OCC sensor data, set
+user power caps, and perform some basic OCC error handling. It interfaces
+with userspace through hwmon.
 
-After this patch:
+The driver is currently functional only for the OCC on POWER8 chips.
+Communicating with the POWER9 OCC requries FSI support.
 
-$ modinfo drivers/hwmon/ltc4151.ko | grep alias
-alias:          i2c:ltc4151
-alias:          of:N*T*Clltc,ltc4151C*
-alias:          of:N*T*Clltc,ltc4151
+Edward A. James (6):
+  hwmon: Add core On-Chip Controller support for POWER CPUs
+  hwmon: occ: Add sysfs interface
+  hwmon: occ: Add I2C transport implementation for SCOM operations
+  hwmon: occ: Add callbacks for parsing P8 OCC datastructures
+  hwmon: occ: Add hwmon implementation for the P8 OCC
+  hwmon: occ: Add callbacks for parsing P9 OCC datastructures
 
-Signed-off-by: Javier Martinez Canillas <javier@osg.samsung.com>
----
+ Documentation/devicetree/bindings/hwmon/occ.txt |  13 +
+ Documentation/hwmon/occ                         | 114 ++++++
+ MAINTAINERS                                     |   7 +
+ drivers/hwmon/Kconfig                           |   2 +
+ drivers/hwmon/Makefile                          |   1 +
+ drivers/hwmon/occ/Kconfig                       |  29 ++
+ drivers/hwmon/occ/Makefile                      |   2 +
+ drivers/hwmon/occ/occ.c                         | 522 ++++++++++++++++++++++++
+ drivers/hwmon/occ/occ.h                         |  81 ++++
+ drivers/hwmon/occ/occ_p8.c                      | 247 +++++++++++
+ drivers/hwmon/occ/occ_p8.h                      |  30 ++
+ drivers/hwmon/occ/occ_p9.c                      | 308 ++++++++++++++
+ drivers/hwmon/occ/occ_p9.h                      |  30 ++
+ drivers/hwmon/occ/occ_scom_i2c.c                |  72 ++++
+ drivers/hwmon/occ/occ_scom_i2c.h                |  26 ++
+ drivers/hwmon/occ/occ_sysfs.c                   | 271 ++++++++++++
+ drivers/hwmon/occ/occ_sysfs.h                   |  44 ++
+ drivers/hwmon/occ/p8_occ_i2c.c                  | 104 +++++
+ drivers/hwmon/occ/scom.h                        |  47 +++
+ 19 files changed, 1950 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/occ.c
+ create mode 100644 drivers/hwmon/occ/occ.h
+ create mode 100644 drivers/hwmon/occ/occ_p8.c
+ create mode 100644 drivers/hwmon/occ/occ_p8.h
+ create mode 100644 drivers/hwmon/occ/occ_p9.c
+ create mode 100644 drivers/hwmon/occ/occ_p9.h
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.c
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.h
+ create mode 100644 drivers/hwmon/occ/p8_occ_i2c.c
+ create mode 100644 drivers/hwmon/occ/scom.h
 
- drivers/hwmon/ltc4151.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/ltc4151.c b/drivers/hwmon/ltc4151.c
-index 8445c9fd946b..b904cb547ffb 100644
---- a/drivers/hwmon/ltc4151.c
-+++ b/drivers/hwmon/ltc4151.c
-@@ -215,6 +215,7 @@ static const struct of_device_id ltc4151_match[] = {
- 	{ .compatible = "lltc,ltc4151" },
- 	{},
- };
-+MODULE_DEVICE_TABLE(of, ltc4151_match);
- 
- /* This is the driver that will be inserted */
- static struct i2c_driver ltc4151_driver = {
 -- 
-2.7.4
+1.9.1
 
