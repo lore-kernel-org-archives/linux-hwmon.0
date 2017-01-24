@@ -1,53 +1,53 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f65.google.com ([74.125.82.65]:34415 "EHLO
-        mail-wm0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751087AbdAXPC2 (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:47983 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750716AbdAXQ5T (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2017 10:02:28 -0500
-Received: by mail-wm0-f65.google.com with SMTP id c85so35181600wmi.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Jan 2017 07:02:28 -0800 (PST)
-From: Andrea Merello <andrea.merello@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Andrea Merello <andrea.merello@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v3 2/2] DT: add binding documentation for STTS751
-Date: Tue, 24 Jan 2017 16:02:21 +0100
-Message-Id: <1485270141-9222-2-git-send-email-andrea.merello@gmail.com>
-In-Reply-To: <1485270141-9222-1-git-send-email-andrea.merello@gmail.com>
-References: <1485270141-9222-1-git-send-email-andrea.merello@gmail.com>
+        Tue, 24 Jan 2017 11:57:19 -0500
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2] hwmon: Make name attribute mandatory for new APIs
+Date: Tue, 24 Jan 2017 08:57:14 -0800
+Message-Id: <1485277034-12364-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
----
- Documentation/devicetree/bindings/hwmon/stts751.txt | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/stts751.txt
+It does not make sense to use one of the the new APIs when not
+even providing a name attribute. Make it mandatory.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/stts751.txt b/Documentation/devicetree/bindings/hwmon/stts751.txt
-new file mode 100644
-index 0000000..3ee1dc3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/stts751.txt
-@@ -0,0 +1,15 @@
-+* STTS751 thermometer.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: One should use ERR_PTR where appropriate
+
+ drivers/hwmon/hwmon.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 0c5660ccdbf4..a408b10d9a86 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -651,6 +651,9 @@ hwmon_device_register_with_groups(struct device *dev, const char *name,
+ 				  void *drvdata,
+ 				  const struct attribute_group **groups)
+ {
++	if (!name)
++		return ERR_PTR(-EINVAL);
 +
-+Required node properties:
-+- compatible: "stts751"
-+- reg: I2C bus address of the device
+ 	return __hwmon_device_register(dev, name, drvdata, NULL, groups);
+ }
+ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
+@@ -674,6 +677,9 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+ 				const struct hwmon_chip_info *chip,
+ 				const struct attribute_group **extra_groups)
+ {
++	if (!name)
++		return ERR_PTR(-EINVAL);
 +
-+Optional properties:
-+- smbus-timeout-disable: when set, the smbus timeout function will be disabled
-+
-+Example stts751 node:
-+
-+temp-sensor {
-+	compatible = "stts751";
-+	reg = <0x48>;
-+}
+ 	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
+ 		return ERR_PTR(-EINVAL);
+ 
 -- 
 2.7.4
 
