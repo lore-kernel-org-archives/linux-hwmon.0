@@ -1,63 +1,83 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35375 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56869 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751565AbdAYJeq (ORCPT
+        with ESMTP id S1751565AbdAYJto (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Jan 2017 04:34:46 -0500
+        Wed, 25 Jan 2017 04:49:44 -0500
+Subject: Re: [PATCH] hwmon: Update documentation to clarify rules for the
+ 'name' attribute
+To: Jean Delvare <jdelvare@suse.de>
+References: <1485318394-24773-1-git-send-email-linux@roeck-us.net>
+ <20170125101459.7b092226@endymion>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3] hwmon: Make name attribute mandatory for new APIs
-Date: Wed, 25 Jan 2017 01:34:40 -0800
-Message-Id: <1485336880-16958-1-git-send-email-linux@roeck-us.net>
+Message-ID: <566913d7-01f2-61f9-8c31-37031804e7a0@roeck-us.net>
+Date: Wed, 25 Jan 2017 01:24:18 -0800
+MIME-Version: 1.0
+In-Reply-To: <20170125101459.7b092226@endymion>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-It does not make sense to use one of the the new APIs when not
-even providing a name attribute. Make it mandatory.
+On 01/25/2017 01:14 AM, Jean Delvare wrote:
+> Hi Guenter,
+>
+> On Tue, 24 Jan 2017 20:26:34 -0800, Guenter Roeck wrote:
+>> Clarify that the name attribute must report a valid name, and the rules
+>> for valid names. Also clarify that the name parameter must be provided
+>> for all supported API functions.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>  Documentation/hwmon/hwmon-kernel-api.txt | 4 ++++
+>>  Documentation/hwmon/sysfs-interface      | 5 +++--
+>>  2 files changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
+>> index 2505ae67e2b6..41bc15b34737 100644
+>> --- a/Documentation/hwmon/hwmon-kernel-api.txt
+>> +++ b/Documentation/hwmon/hwmon-kernel-api.txt
+>> @@ -89,6 +89,10 @@ the call to devm_hwmon_device_register_with_groups or
+>>  hwmon_device_register_with_info and if the automatic (device managed)
+>>  removal would be too late.
+>>
+>> +All supported hwmon device registration functions only accept valid device
+>> +names. Device names including invalid characters (whitespace, '.'. '*',
+>
+> Typo: should be , after '.' instead of . .
+>
+> I am confused as to why '.' is forbidden. The code in
+> __hwmon_device_register() does not reject that character, and I can't
+> see how this would cause any problem to libsensors.
+>
+Maybe I should read the code ;-).
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v3: hwmon_device_register() needs to call __hwmon_device_register() directly.
-v2: One should use ERR_PTR where appropriate
+Thanks, I'll send an update !
 
- drivers/hwmon/hwmon.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Guenter
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 0c5660ccdbf4..affff8195fff 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -651,6 +651,9 @@ hwmon_device_register_with_groups(struct device *dev, const char *name,
- 				  void *drvdata,
- 				  const struct attribute_group **groups)
- {
-+	if (!name)
-+		return ERR_PTR(-EINVAL);
-+
- 	return __hwmon_device_register(dev, name, drvdata, NULL, groups);
- }
- EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
-@@ -674,6 +677,9 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
- 				const struct hwmon_chip_info *chip,
- 				const struct attribute_group **extra_groups)
- {
-+	if (!name)
-+		return ERR_PTR(-EINVAL);
-+
- 	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
- 		return ERR_PTR(-EINVAL);
- 
-@@ -695,7 +701,7 @@ struct device *hwmon_device_register(struct device *dev)
- 	dev_warn(dev,
- 		 "hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().\n");
- 
--	return hwmon_device_register_with_groups(dev, NULL, NULL, NULL);
-+	return __hwmon_device_register(dev, NULL, NULL, NULL, NULL);
- }
- EXPORT_SYMBOL_GPL(hwmon_device_register);
- 
--- 
-2.7.4
+>> +or '-') will be rejected. The 'name' parameter is mandatory.
+>> +
+>>  Using devm_hwmon_device_register_with_info()
+>>  --------------------------------------------
+>>
+>> diff --git a/Documentation/hwmon/sysfs-interface b/Documentation/hwmon/sysfs-interface
+>> index 2cc95ad46604..89f0bcbcaa18 100644
+>> --- a/Documentation/hwmon/sysfs-interface
+>> +++ b/Documentation/hwmon/sysfs-interface
+>> @@ -86,8 +86,9 @@ given driver if the chip has the feature.
+>>
+>>  name		The chip name.
+>>  		This should be a short, lowercase string, not containing
+>> -		spaces nor dashes, representing the chip name. This is
+>> -		the only mandatory attribute.
+>> +		whitespace, dashes, or the wildcard characters '.' and '*'.
+>> +		This attribute represents the chip name. It is the only
+>> +		mandatory attribute.
+>>  		I2C devices get this attribute created automatically.
+>>  		RO
+>>
+>
+>
 
