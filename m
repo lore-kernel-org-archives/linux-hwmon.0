@@ -1,50 +1,56 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:37050 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:53343 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750759AbdAXUSw (ORCPT
+        with ESMTP id S1751215AbdA2SOk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Jan 2017 15:18:52 -0500
-Date: Tue, 24 Jan 2017 12:18:46 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrea Merello <andrea.merello@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-        LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Sun, 29 Jan 2017 13:14:40 -0500
+Subject: Re: [PATCH v4 1/2] hwmon: new driver for ST stts751 thermal sensor
+To: Andrea Merello <andrea.merello@gmail.com>,
+        linux-hwmon@vger.kernel.org
+References: <1485440263-26477-1-git-send-email-andrea.merello@gmail.com>
+Cc: LABBE Corentin <clabbe.montjoie@gmail.com>,
         Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v3 1/2] hwmon: new driver for ST stts751 thermal sensor
-Message-ID: <20170124201846.GA6788@roeck-us.net>
-References: <1485270141-9222-1-git-send-email-andrea.merello@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <737692a8-2ba2-0f7d-23ba-3daa2d0716a4@roeck-us.net>
+Date: Sun, 29 Jan 2017 10:13:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1485270141-9222-1-git-send-email-andrea.merello@gmail.com>
+In-Reply-To: <1485440263-26477-1-git-send-email-andrea.merello@gmail.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 24, 2017 at 04:02:20PM +0100, Andrea Merello wrote:
+On 01/26/2017 06:17 AM, Andrea Merello wrote:
 > This patch adds a HWMON driver for ST Microelectronics STTS751
 > temperature sensors.
-> 
-> It does support manual-triggered conversions as well as automatic
-> conversions. The latter is used when the "event" or "therm" function
-> is present (declaring the physical wire is attached in the DT).
-> 
+>
+> Changes since V3:
+> - fix sysfs_notify() filename
+> - simplify error exit path in stts751_update_temp(): kill useless goto
+> - fix set function were racy due to lock incorrectly placed
+> - use msecs_to_jiffies instead of manual calculation
+> - fix jiffies and msecs were mixed up
+> - don't mark cache as good unless reads really succeded to fill up it
+> - when updating therm, hyst keeps relative value rather than abs value
+> - don't should in dev_dbg when chip is detected
+> - don't ever generate two uevents
+> - clarify clear-on-read behaviour of status reg alarm flags
+> - simplify mDEG to HW conversion function
+> - fix chip stops due to incorrect resolution configuration
+> - fix incorrectly reading negative numbers from HW
+>
 > Thanks-to: LABBE Corentin [for suggestions]
 > Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
 > Cc: LABBE Corentin <clabbe.montjoie@gmail.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
 > Cc: Jean Delvare <jdelvare@suse.com>
 > ---
-
-No change log, meaning we have to review the entire driver again or look up
-older versions and comments ourselves. This will take a while. For now, just a
-few quick commnents. For the future, please consider providing a changelog.
-
 >  drivers/hwmon/Kconfig   |  10 +
 >  drivers/hwmon/Makefile  |   1 +
->  drivers/hwmon/stts751.c | 809 ++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 820 insertions(+)
+>  drivers/hwmon/stts751.c | 803 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 814 insertions(+)
 >  create mode 100644 drivers/hwmon/stts751.c
-> 
+>
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
 > index d1f82f2..8fdd241 100644
 > --- a/drivers/hwmon/Kconfig
@@ -52,7 +58,7 @@ few quick commnents. For the future, please consider providing a changelog.
 > @@ -1448,6 +1448,16 @@ config SENSORS_SCH5636
 >  	  This driver can also be built as a module.  If so, the module
 >  	  will be called sch5636.
->  
+>
 > +config SENSORS_STTS751
 > +	tristate "ST Microelectronics STTS751"
 > +	depends on I2C
@@ -80,10 +86,10 @@ few quick commnents. For the future, please consider providing a changelog.
 >  obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
 > diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
 > new file mode 100644
-> index 0000000..0d4716f
+> index 0000000..de7298f
 > --- /dev/null
 > +++ b/drivers/hwmon/stts751.c
-> @@ -0,0 +1,809 @@
+> @@ -0,0 +1,803 @@
 > +/*
 > + * STTS751 sensor driver
 > + *
@@ -192,24 +198,14 @@ few quick commnents. For the future, please consider providing a changelog.
 > + * These functions converts temperature from HW format to integer format and
 > + * vice-vers. They are (mostly) taken from lm90 driver. Unit is in mC.
 > + */
-> +static int stts751_to_deg(s32 hw_val)
+> +static int stts751_to_deg(s16 hw_val)
 > +{
 > +	return hw_val * 125 / 32;
 > +}
 > +
 > +static s32 stts751_to_hw(int val)
 > +{
-> +	s32 hw_val;
-> +
-> +	if (val < 0)
-> +		hw_val = (val - 62) / 125 * 32;
-> +	else
-> +		hw_val = (val + 62) / 125 * 32;
-> +
-
-How about "return DIV_ROUND_CLOSEST(val, 125) * 32;" ?
-
-> +	return hw_val;
+> +	return DIV_ROUND_CLOSEST(val, 125) * 32;
 > +}
 > +
 > +static int stts751_adjust_resolution(struct stts751_priv *priv)
@@ -236,15 +232,19 @@ How about "return DIV_ROUND_CLOSEST(val, 125) * 32;" ?
 > +
 > +	priv->config &= ~STTS751_CONF_RES_MASK;
 > +	priv->config |= res << STTS751_CONF_RES_SHIFT;
+> +	dev_dbg(priv->dev, "setting res %d. config %x", res, priv->config);
+> +	priv->res = res;
 > +
 > +	return i2c_smbus_write_byte_data(priv->client,
 > +				STTS751_REG_CONF, priv->config);
+
+Please align continuation lines with '('.
+
 > +}
 > +
 > +static int stts751_update_temp(struct stts751_priv *priv)
 > +{
 > +	s32 integer1, integer2, frac;
-> +	int ret = 0;
 > +
 > +	/*
 > +	 * There is a trick here, like in the lm90 driver. We have to read two
@@ -260,25 +260,22 @@ How about "return DIV_ROUND_CLOSEST(val, 125) * 32;" ?
 > +	integer1 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
 > +	if (integer1 < 0) {
 > +		dev_dbg(&priv->client->dev,
-> +			"I2C read failed (temp H). ret: %x\n", ret);
-> +		ret = integer1;
-> +		goto exit;
+> +			"I2C read failed (temp H). ret: %x\n", integer1);
+> +		return integer1;
 > +	}
 > +
 > +	frac = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_L);
 > +	if (frac < 0) {
 > +		dev_dbg(&priv->client->dev,
-> +			"I2C read failed (temp L). ret: %x\n", ret);
-> +		ret = frac;
-> +		goto exit;
+> +			"I2C read failed (temp L). ret: %x\n", frac);
+> +		return frac;
 > +	}
 > +
 > +	integer2 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
 > +	if (integer2 < 0) {
 > +		dev_dbg(&priv->client->dev,
-> +			"I2C 2nd read failed (temp H). ret: %x\n", ret);
-> +		ret = integer2;
-> +		goto exit;
+> +			"I2C 2nd read failed (temp H). ret: %x\n", integer2);
+> +		return integer2;
 > +	}
 > +
 > +	if (integer1 != integer2) {
@@ -286,21 +283,14 @@ How about "return DIV_ROUND_CLOSEST(val, 125) * 32;" ?
 > +						STTS751_REG_TEMP_L);
 > +		if (frac < 0) {
 > +			dev_dbg(&priv->client->dev,
-> +				"I2C 2nd read failed (temp L). ret: %x\n", ret);
-> +			ret = frac;
-> +			goto exit;
+> +				"I2C 2nd read failed (temp L). ret: %x\n",
+> +				frac);
+> +			return frac;
 > +		}
 > +	}
 > +
-> +exit:
-> +	if (ret)
-> +		return ret;
-
-If the code can return immediately, please do so.
-
-> +
 > +	priv->temp = stts751_to_deg((integer1 << 8) | frac);
-> +	return ret;
+> +	return 0;
 > +}
 > +
 > +static int stts751_set_temp_reg16(struct stts751_priv *priv, int temp,
@@ -311,33 +301,23 @@ If the code can return immediately, please do so.
 > +
 > +	hwval = stts751_to_hw(temp);
 > +
-> +	mutex_lock(&priv->access_lock);
 > +	ret = i2c_smbus_write_byte_data(priv->client, hreg, hwval >> 8);
-> +	if (!ret)
-> +		ret = i2c_smbus_write_byte_data(priv->client, lreg,
-> +						hwval & 0xff);
-> +	mutex_unlock(&priv->access_lock);
+> +	if (ret)
+> +		return ret;
 > +
-> +	return ret;
+> +	return i2c_smbus_write_byte_data(priv->client, lreg,
+> +						hwval & 0xff);
+
+This continuation line is unnecessary (there may be others, but I did not check).
+
 > +}
 > +
 > +static int stts751_set_temp_reg8(struct stts751_priv *priv, int temp, u8 reg)
 > +{
 > +	s32 hwval;
-> +	int ret;
 > +
 > +	hwval = stts751_to_hw(temp);
-> +
-> +	mutex_lock(&priv->access_lock);
-> +	ret = i2c_smbus_write_byte_data(priv->client, reg, hwval >> 8);
-> +	mutex_unlock(&priv->access_lock);
-
-The lock is in the wrong location. It needs to be in the calling code,
-since the calling code updates context variables. The same is true for
-stts751_set_temp_reg16().
-
-> +
-> +	return ret;
+> +	return i2c_smbus_write_byte_data(priv->client, reg, hwval >> 8);
 > +}
 > +
 > +static int stts751_read_reg16(struct stts751_priv *priv, int *temp,
@@ -374,23 +354,14 @@ stts751_set_temp_reg16().
 > +/*
 > + * Update alert flags without waiting for cache to expire. We detects alerts
 > + * immediately for the sake of the alert handler; we still need to deal with
-> + * caching to workaround the fact that the status register gets cleared when
-
-Did we have this before ? The datasheet claims that the status is only cleared
-if the condition no longer exists. If that is incorrect, please explain here,
-or it will come up again.
-
-> + * reading it.
+> + * caching to workaround the fact that alarm flags int the status register,
+> + * despite what the datasheet claims, gets always cleared on read.
 > + */
 > +static int stts751_update_alert(struct stts751_priv *priv)
 > +{
 > +	int ret;
 > +	bool conv_done;
-> +	int cache_time =
-> +		DIV_ROUND_UP(stts751_intervals[priv->interval] * HZ, 1000);
-
-How about using msecs_to_jiffies() ?
-
+> +	int cache_time = msecs_to_jiffies(stts751_intervals[priv->interval]);
 > +
 > +	/*
 > +	 * Add another 10% because if we run faster than the HW conversion
@@ -455,62 +426,49 @@ How about using msecs_to_jiffies() ?
 > +
 > +		dev_warn(&priv->client->dev,
 > +			"Alert received, but can't communicate to the device. Something bad happening? Triggering all alarms!");
+
+I would suggest to drop the "Something bad happening?". That should be obvious
+from the message.
+
 > +	}
 > +
 > +	if (priv->max_alert) {
 > +		dev_notice(&client->dev, "got alert for HIGH temperature");
 > +
 > +		/* unblock alert poll */
-> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_event_max_alert");
-> +		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
+> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_max_alarm");
 > +	}
 > +
 > +	if (priv->min_alert) {
 > +		dev_notice(&client->dev, "got alert for LOW temperature");
 > +
 > +		/* unblock alert poll */
-> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_event_min_alert");
-> +		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
-
-This way you can get two uevents, which is really undesirable.
-Maybe move uevent creation into a separate if().
-
+> +		sysfs_notify(&priv->dev->kobj, NULL, "temp1_min_alarm");
 > +	}
+> +
+> +	if (priv->min_alert || priv->max_alert)
+> +		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
+> +
 > +	mutex_unlock(&priv->access_lock);
 > +}
 > +
 > +static int stts751_update(struct stts751_priv *priv)
 > +{
 > +	int ret = 0;
-> +	int cache_time = stts751_intervals[priv->interval] / 1000;
-
-jiffies and the parameter for time_after() are in HZ. Does this
-assume that HZ=1000 ? msecs_to_jiffies() might be more appropriate.
-
+> +	int cache_time = msecs_to_jiffies(stts751_intervals[priv->interval]);
 > +
 > +	mutex_lock(&priv->access_lock);
 > +	if (time_after(jiffies,	priv->last_update + cache_time) ||
 > +		!priv->data_valid) {
-> +		priv->data_valid = true;
-
-Not really, only after stts751_update_temp() succeeded.
-
-> +		priv->last_update = jiffies;
-
-Same here.
-
-> +
 > +		ret = stts751_update_temp(priv);
 > +		if (ret)
 > +			goto exit;
 > +
 > +		ret = stts751_update_alert(priv);
-
-		if (!ret)
-			ret = stts751_update_alert(priv);
-
-would avoid the goto.
-
+> +		if (ret)
+> +			goto exit;
+> +		priv->data_valid = true;
+> +		priv->last_update = jiffies;
 > +	}
 > +exit:
 > +	mutex_unlock(&priv->access_lock);
@@ -565,17 +523,6 @@ would avoid the goto.
 > +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm);
 > +}
 > +
-> +static int do_set_hyst(struct stts751_priv *priv, int temp)
-> +{
-> +	/* HW works in range -64C to +127.937C */
-> +	temp = clamp_val(temp, -64000, priv->therm);
-> +	priv->hyst = temp;
-> +	dev_dbg(priv->dev, "setting hyst %d", temp);
-> +	temp = priv->therm - temp;
-> +
-> +	return stts751_set_temp_reg8(priv, temp, STTS751_REG_HYST);
-> +}
-> +
 > +static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
 > +		       const char *buf, size_t count)
 > +{
@@ -585,26 +532,25 @@ would avoid the goto.
 > +
 > +	if (kstrtol(buf, 10, &temp) < 0)
 > +		return -EINVAL;
+> +
 > +	/* HW works in range -64C to +127.937C */
 > +	temp = clamp_val(temp, -64000, 127937);
+> +	mutex_lock(&priv->access_lock);
 > +	ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_TLIM);
 > +	if (ret)
-> +		return ret;
+> +		goto exit;
 > +
 > +	dev_dbg(dev, "setting therm %ld", temp);
-> +	priv->therm = temp;
 > +
 > +	/*
-> +	 * hysteresis reg is relative to therm, so we need to update
-> +	 * it as well.
+> +	 * hysteresis reg is relative to therm, so the HW does not need to be
+> +	 * adjusted, we need to update our local copy only.
 > +	 */
-> +	ret = do_set_hyst(priv, priv->hyst);
-
-The basic expectation here is that the hysteresis value changes automatically.
-If the old hysteresis was 8 degrees below the limit, it should still be 8
-degrees below the new limit. This code tries to restore the old (absolute)
-value, which hardly ever makes any sense.
-
+> +	priv->hyst = temp - (priv->therm - priv->hyst);
+> +	priv->therm = temp;
+> +
+> +exit:
+> +	mutex_unlock(&priv->access_lock);
 > +	if (ret)
 > +		return ret;
 > +
@@ -629,9 +575,18 @@ value, which hardly ever makes any sense.
 > +
 > +	if (kstrtol(buf, 10, &temp) < 0)
 > +		return -EINVAL;
-> +	ret = do_set_hyst(priv, temp);
+> +
+> +	mutex_lock(&priv->access_lock);
+> +	/* HW works in range -64C to +127.937C */
+> +	temp = clamp_val(temp, -64000, priv->therm);
+> +	priv->hyst = temp;
+> +	dev_dbg(priv->dev, "setting hyst %ld", temp);
+> +	temp = priv->therm - temp;
+> +	ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_HYST);
+> +	mutex_unlock(&priv->access_lock);
 > +	if (ret)
 > +		return ret;
+> +
 > +	return count;
 > +}
 > +
@@ -665,20 +620,21 @@ value, which hardly ever makes any sense.
 > +
 > +	if (kstrtol(buf, 10, &temp) < 0)
 > +		return -EINVAL;
+> +
+> +	mutex_lock(&priv->access_lock);
 > +	/* HW works in range -64C to +127.937C */
 > +	temp = clamp_val(temp, priv->event_min, 127937);
 > +	ret = stts751_set_temp_reg16(priv, temp,
 > +				STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
 > +	if (ret)
-> +		return ret;
+> +		goto exit;
 > +
 > +	dev_dbg(dev, "setting event max %ld", temp);
 > +	priv->event_max = temp;
-
-As mentioned above, the writes are all racy. Two writes in parallel may
-result in inconsistent register values vs. values written into event_max etc.
-
-> +	return count;
+> +	ret = count;
+> +exit:
+> +	mutex_unlock(&priv->access_lock);
+> +	return ret;
 > +}
 > +
 > +static ssize_t show_min(struct device *dev, struct device_attribute *attr,
@@ -698,17 +654,21 @@ result in inconsistent register values vs. values written into event_max etc.
 > +
 > +	if (kstrtol(buf, 10, &temp) < 0)
 > +		return -EINVAL;
+> +
+> +	mutex_lock(&priv->access_lock);
 > +	/* HW works in range -64C to +127.937C */
 > +	temp = clamp_val(temp, -64000, priv->event_max);
 > +	ret = stts751_set_temp_reg16(priv, temp,
 > +				STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
 > +	if (ret)
-> +		return ret;
+> +		goto exit;
 > +
 > +	dev_dbg(dev, "setting event min %ld", temp);
-> +
 > +	priv->event_min = temp;
-> +	return count;
+> +	ret = count;
+> +exit:
+> +	mutex_unlock(&priv->access_lock);
+> +	return ret;
 > +}
 > +
 > +static ssize_t show_interval(struct device *dev, struct device_attribute *attr,
@@ -737,10 +697,9 @@ result in inconsistent register values vs. values written into event_max etc.
 > +	dev_dbg(dev, "setting interval. req:%lu, idx: %d, val: %d", val, idx,
 > +		stts751_intervals[idx]);
 > +
-> +	if (priv->interval == idx)
-> +		return count;
-> +
 > +	mutex_lock(&priv->access_lock);
+> +	if (priv->interval == idx)
+> +		goto exit;
 > +
 > +	/*
 > +	 * In early development stages I've become suspicious about the chip
@@ -752,6 +711,7 @@ result in inconsistent register values vs. values written into event_max etc.
 > +
 > +	/* speed up: lower the resolution, then modify convrate */
 > +	if (priv->interval < idx) {
+> +		dev_dbg(priv->dev, "lower resolution, then modify convrate");
 > +		priv->interval = idx;
 > +		ret = stts751_adjust_resolution(priv);
 > +		if (ret)
@@ -763,15 +723,31 @@ result in inconsistent register values vs. values written into event_max etc.
 > +		goto exit;
 > +	/* slow down: modify convrate, then raise resolution */
 > +	if (priv->interval != idx) {
+> +		dev_dbg(priv->dev, "modify convrate, then raise resolution");
 > +		priv->interval = idx;
 > +		ret = stts751_adjust_resolution(priv);
 > +		if (ret)
 > +			goto exit;
+
+All those gotos ignore the error. Is this really what you want ?
+
 > +	}
 > +exit:
 > +	mutex_unlock(&priv->access_lock);
 > +
 > +	return count;
+
+Should this be
+
+	return ret ? ret : count;
+
+instead ? Or maybe
+
+	ret = count;
+exit:
+	mutex_unlock(&priv->access_lock);
+	return ret;
+
 > +}
 > +
 > +static int stts751_detect(struct i2c_client *new_client,
@@ -800,10 +776,7 @@ result in inconsistent register values vs. values written into event_max etc.
 > +	default:
 > +		return -ENODEV;
 > +	}
-> +	dev_dbg(&new_client->dev, "Chip %s detected!", name);
-
-I'll never understand what the "!" in such messages is for ;-).
-
+> +	dev_dbg(&new_client->dev, "Chip %s detected", name);
 > +
 > +	rev_id = i2c_smbus_read_byte_data(new_client, STTS751_REG_REV_ID);
 > +	if (rev_id < 0)
@@ -813,6 +786,21 @@ I'll never understand what the "!" in such messages is for ;-).
 > +			"Chip revision 0x%x is untested\nPlease report whether it works to andrea.merello@gmail.com",
 > +			rev_id);
 > +	}
+
+You might consider moving the rev_id warning to the probe function.
+In many if not most cases, the detect function won't run at all
+(since the chip will be instantiated explicitly), and you won't get
+the warning.
+
+On the other side, do you really think the warning adds any real value ?
+I am a bit concerned that it will just create noise a few years down the road.
+
+On the other side, it might be useful to add a couple of additional registers
+to the check to improve its reliability and reduce possible false positives.
+The temperature low bytes (registers 0x02, 0x06, 0x08) would be good targets
+with the lower 4 bits being 0. An excellent target would be the SMBus timeout
+register, which has 7 bits known to be 0.
+
 > +
 > +	strlcpy(info->type, stts751_id[0].name, I2C_NAME_SIZE);
 > +	return 0;
@@ -854,6 +842,9 @@ I'll never understand what the "!" in such messages is for ;-).
 > +	priv->hyst = priv->therm - tmp;
 > +
 > +	return ret;
+
+	return 0;
+
 > +}
 > +
 > +static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_input, NULL, 0);
@@ -903,9 +894,14 @@ I'll never understand what the "!" in such messages is for ;-).
 > +		smbus_to = !device_property_read_bool(&client->dev,
 > +						"smbus-timeout-disable");
 > +
+This "!" is really unnecessary. Just name the variable differently,
+
 > +		ret = i2c_smbus_write_byte_data(priv->client,
 > +						STTS751_REG_SMBUS_TO,
 > +						smbus_to ? 0x80 : 0);
+
+and reverse the logic here.
+
 > +		if (ret)
 > +			return ret;
 > +	}
@@ -945,6 +941,5 @@ I'll never understand what the "!" in such messages is for ;-).
 > +MODULE_AUTHOR("Andrea Merello <andrea.merello@gmail.com>");
 > +MODULE_DESCRIPTION("STTS751 sensor driver");
 > +MODULE_LICENSE("GPL");
-> -- 
-> 2.7.4
-> 
+>
+
