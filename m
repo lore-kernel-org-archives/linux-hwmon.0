@@ -1,448 +1,1041 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:59284 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751568AbdA2U3d (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Jan 2017 15:29:33 -0500
-Subject: Re: [PATCH linux v4 2/6] hwmon: occ: Add sysfs interface
-To: eajames.ibm@gmail.com
-References: <1485472758-11003-1-git-send-email-eajames.ibm@gmail.com>
- <1485472758-11003-3-git-send-email-eajames.ibm@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
-        robh+dt@kernel.org, =wsa@the-dreams.de, andrew@aj.id.au,
-        joel@jms.id.au, benh@kernel.crashing.org,
-        "Edward A. James" <eajames@us.ibm.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c2dce65a-6e7a-0c5b-49e9-b50b4f4e91ea@roeck-us.net>
-Date: Sun, 29 Jan 2017 11:50:55 -0800
+Return-path: <andrea.merello@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1485472758-11003-3-git-send-email-eajames.ibm@gmail.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Reply-To: andrea.merello@gmail.com
+In-Reply-To: <737692a8-2ba2-0f7d-23ba-3daa2d0716a4@roeck-us.net>
+References: <1485440263-26477-1-git-send-email-andrea.merello@gmail.com> <737692a8-2ba2-0f7d-23ba-3daa2d0716a4@roeck-us.net>
+From: Andrea Merello <andrea.merello@gmail.com>
+Date: Mon, 30 Jan 2017 08:36:08 +0100
+Message-ID: <CAN8YU5PVWamMQysU+Ps4qP5-ABtGqNJJ7a_=JHKy0SxvKAp_9w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: new driver for ST stts751 thermal sensor
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, LABBE Corentin <clabbe.montjoie@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset=UTF-8
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 01/26/2017 03:19 PM, eajames.ibm@gmail.com wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
+On Sun, Jan 29, 2017 at 7:13 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 01/26/2017 06:17 AM, Andrea Merello wrote:
+>>
+>> This patch adds a HWMON driver for ST Microelectronics STTS751
+>> temperature sensors.
+>>
+>> Changes since V3:
+>> - fix sysfs_notify() filename
+>> - simplify error exit path in stts751_update_temp(): kill useless goto
+>> - fix set function were racy due to lock incorrectly placed
+>> - use msecs_to_jiffies instead of manual calculation
+>> - fix jiffies and msecs were mixed up
+>> - don't mark cache as good unless reads really succeded to fill up it
+>> - when updating therm, hyst keeps relative value rather than abs value
+>> - don't should in dev_dbg when chip is detected
+>> - don't ever generate two uevents
+>> - clarify clear-on-read behaviour of status reg alarm flags
+>> - simplify mDEG to HW conversion function
+>> - fix chip stops due to incorrect resolution configuration
+>> - fix incorrectly reading negative numbers from HW
+>>
+>> Thanks-to: LABBE Corentin [for suggestions]
+>> Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
+>> Cc: LABBE Corentin <clabbe.montjoie@gmail.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> ---
+>>  drivers/hwmon/Kconfig   |  10 +
+>>  drivers/hwmon/Makefile  |   1 +
+>>  drivers/hwmon/stts751.c | 803
+>> ++++++++++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 814 insertions(+)
+>>  create mode 100644 drivers/hwmon/stts751.c
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index d1f82f2..8fdd241 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1448,6 +1448,16 @@ config SENSORS_SCH5636
+>>           This driver can also be built as a module.  If so, the module
+>>           will be called sch5636.
+>>
+>> +config SENSORS_STTS751
+>> +       tristate "ST Microelectronics STTS751"
+>> +       depends on I2C
+>> +       help
+>> +         If you say yes here you get support for STTS751
+>> +         temperature sensor chips.
+>> +
+>> +         This driver can also be built as a module.  If so, the module
+>> +         will be called stts751.
+>> +
+>>  config SENSORS_SMM665
+>>         tristate "Summit Microelectronics SMM665"
+>>         depends on I2C
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 7476b22..1114130 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -147,6 +147,7 @@ obj-$(CONFIG_SENSORS_SMM665)        += smm665.o
+>>  obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
+>>  obj-$(CONFIG_SENSORS_SMSC47M1) += smsc47m1.o
+>>  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>> +obj-$(CONFIG_SENSORS_STTS751)  += stts751.o
+>>  obj-$(CONFIG_SENSORS_AMC6821)  += amc6821.o
+>>  obj-$(CONFIG_SENSORS_TC74)     += tc74.o
+>>  obj-$(CONFIG_SENSORS_THMC50)   += thmc50.o
+>> diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
+>> new file mode 100644
+>> index 0000000..de7298f
+>> --- /dev/null
+>> +++ b/drivers/hwmon/stts751.c
+>> @@ -0,0 +1,803 @@
+>> +/*
+>> + * STTS751 sensor driver
+>> + *
+>> + * Copyright (C) 2016-2017 Istituto Italiano di Tecnologia - RBCS - EDL
+>> + * Robotics, Brain and Cognitive Sciences department
+>> + * Electronic Design Laboratory
+>> + *
+>> + * Written by Andrea Merello <andrea.merello@gmail.com>
+>> + *
+>> + * Based on  LM95241 driver and LM90 driver
+>> + *
+>> + * This program is free software; you can redistribute it and/or modify
+>> + * it under the terms of the GNU General Public License as published by
+>> + * the Free Software Foundation; either version 2 of the License, or
+>> + * (at your option) any later version.
+>> + *
+>> + * This program is distributed in the hope that it will be useful,
+>> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>> + * GNU General Public License for more details.
+>> + */
+>> +
+>> +#include <linux/bitops.h>
+>> +#include <linux/err.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/hwmon-sysfs.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/init.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/jiffies.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/property.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/sysfs.h>
+>> +#include <linux/util_macros.h>
+>> +
+>> +#define DEVNAME "stts751"
+>> +
+>> +static const unsigned short normal_i2c[] = {
+>> +       0x48, 0x49, 0x38, 0x39,  /* STTS751-0 */
+>> +       0x4A, 0x4B, 0x3A, 0x3B,  /* STTS751-1 */
+>> +       I2C_CLIENT_END };
+>> +
+>> +#define STTS751_REG_TEMP_H     0x00
+>> +#define STTS751_REG_STATUS     0x01
+>> +#define STTS751_STATUS_TRIPT   BIT(0)
+>> +#define STTS751_STATUS_TRIPL   BIT(5)
+>> +#define STTS751_STATUS_TRIPH   BIT(6)
+>> +#define STTS751_REG_TEMP_L     0x02
+>> +#define STTS751_REG_CONF       0x03
+>> +#define STTS751_CONF_RES_MASK  0x0C
+>> +#define STTS751_CONF_RES_SHIFT  2
+>> +#define STTS751_CONF_EVENT_DIS  BIT(7)
+>> +#define STTS751_CONF_STOP      BIT(6)
+>> +#define STTS751_REG_RATE       0x04
+>> +#define STTS751_REG_HLIM_H     0x05
+>> +#define STTS751_REG_HLIM_L     0x06
+>> +#define STTS751_REG_LLIM_H     0x07
+>> +#define STTS751_REG_LLIM_L     0x08
+>> +#define STTS751_REG_TLIM       0x20
+>> +#define STTS751_REG_HYST       0x21
+>> +#define STTS751_REG_SMBUS_TO   0x22
+>> +
+>> +#define STTS751_REG_PROD_ID    0xFD
+>> +#define STTS751_REG_MAN_ID     0xFE
+>> +#define STTS751_REG_REV_ID     0xFF
+>> +
+>> +#define STTS751_0_PROD_ID      0x00
+>> +#define STTS751_1_PROD_ID      0x01
+>> +#define ST_MAN_ID              0x53
+>> +
+>> +/*
+>> + * Possible update intervals are (in mS):
+>> + * 16000, 8000, 4000, 2000, 1000, 500, 250, 125, 62.5, 31.25
+>> + * However we are not going to complicate things too much and we stick to
+>> the
+>> + * approx value in mS.
+>> + */
+>> +static const int stts751_intervals[] = {
+>> +       16000, 8000, 4000, 2000, 1000, 500, 250, 125, 63, 31
+>> +};
+>> +
+>> +static const struct i2c_device_id stts751_id[] = {
+>> +       { "stts751", 0 },
+>> +       { }
+>> +};
+>> +
+>> +struct stts751_priv {
+>> +       struct device *dev;
+>> +       struct i2c_client *client;
+>> +       struct mutex access_lock;
+>> +       u8 interval;
+>> +       int res;
+>> +       int event_max, event_min;
+>> +       int therm;
+>> +       int hyst;
+>> +       bool smbus_timeout;
+>> +       int temp;
+>> +       unsigned long last_update, last_alert_update;
+>> +       u8 config;
+>> +       bool min_alert, max_alert, therm_trip;
+>> +       bool data_valid, alert_valid;
+>> +};
+>> +
+>> +/*
+>> + * These functions converts temperature from HW format to integer format
+>> and
+>> + * vice-vers. They are (mostly) taken from lm90 driver. Unit is in mC.
+>> + */
+>> +static int stts751_to_deg(s16 hw_val)
+>> +{
+>> +       return hw_val * 125 / 32;
+>> +}
+>> +
+>> +static s32 stts751_to_hw(int val)
+>> +{
+>> +       return DIV_ROUND_CLOSEST(val, 125) * 32;
+>> +}
+>> +
+>> +static int stts751_adjust_resolution(struct stts751_priv *priv)
+>> +{
+>> +       u8 res;
+>> +
+>> +       switch (priv->interval) {
+>> +       case 9:
+>> +               /* 10 bits */
+>> +               res = 0;
+>> +               break;
+>> +       case 8:
+>> +               /* 11 bits */
+>> +               res = 1;
+>> +               break;
+>> +       default:
+>> +               /* 12 bits */
+>> +               res = 3;
+>> +               break;
+>> +       }
+>> +
+>> +       if (priv->res == res)
+>> +               return 0;
+>> +
+>> +       priv->config &= ~STTS751_CONF_RES_MASK;
+>> +       priv->config |= res << STTS751_CONF_RES_SHIFT;
+>> +       dev_dbg(priv->dev, "setting res %d. config %x", res,
+>> priv->config);
+>> +       priv->res = res;
+>> +
+>> +       return i2c_smbus_write_byte_data(priv->client,
+>> +                               STTS751_REG_CONF, priv->config);
 >
-> Add a generic mechanism to expose the sensors provided by the OCC in
-> sysfs.
 >
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> ---
->  Documentation/hwmon/occ       |  62 ++++++++++
->  drivers/hwmon/occ/Makefile    |   2 +-
->  drivers/hwmon/occ/occ_sysfs.c | 259 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/hwmon/occ/occ_sysfs.h |  30 +++++
->  4 files changed, 352 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/hwmon/occ/occ_sysfs.c
->  create mode 100644 drivers/hwmon/occ/occ_sysfs.h
+> Please align continuation lines with '('.
+
+OK
+
 >
-> diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
-> index 79d1642..d0bdf06 100644
-> --- a/Documentation/hwmon/occ
-> +++ b/Documentation/hwmon/occ
-> @@ -25,6 +25,68 @@ Currently, all versions of the OCC support four types of sensor data: power,
->  temperature, frequency, and "caps," which indicate limits and thresholds used
->  internally on the OCC.
+>> +}
+>> +
+>> +static int stts751_update_temp(struct stts751_priv *priv)
+>> +{
+>> +       s32 integer1, integer2, frac;
+>> +
+>> +       /*
+>> +        * There is a trick here, like in the lm90 driver. We have to read
+>> two
+>> +        * registers to get the sensor temperature, but we have to beware
+>> a
+>> +        * conversion could occur between the readings. We could use the
+>> +        * one-shot conversion register, but we don't want to do this
+>> (disables
+>> +        * hardware monitoring). So the solution used here is to read the
+>> high
+>> +        * byte once, then the low byte, then the high byte again. If the
+>> new
+>> +        * high byte matches the old one, then we have a valid reading.
+>> Else we
+>> +        * have to read the low byte again, and now we believe we have a
+>> correct
+>> +        * reading.
+>> +        */
+>> +       integer1 = i2c_smbus_read_byte_data(priv->client,
+>> STTS751_REG_TEMP_H);
+>> +       if (integer1 < 0) {
+>> +               dev_dbg(&priv->client->dev,
+>> +                       "I2C read failed (temp H). ret: %x\n", integer1);
+>> +               return integer1;
+>> +       }
+>> +
+>> +       frac = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_L);
+>> +       if (frac < 0) {
+>> +               dev_dbg(&priv->client->dev,
+>> +                       "I2C read failed (temp L). ret: %x\n", frac);
+>> +               return frac;
+>> +       }
+>> +
+>> +       integer2 = i2c_smbus_read_byte_data(priv->client,
+>> STTS751_REG_TEMP_H);
+>> +       if (integer2 < 0) {
+>> +               dev_dbg(&priv->client->dev,
+>> +                       "I2C 2nd read failed (temp H). ret: %x\n",
+>> integer2);
+>> +               return integer2;
+>> +       }
+>> +
+>> +       if (integer1 != integer2) {
+>> +               frac = i2c_smbus_read_byte_data(priv->client,
+>> +                                               STTS751_REG_TEMP_L);
+>> +               if (frac < 0) {
+>> +                       dev_dbg(&priv->client->dev,
+>> +                               "I2C 2nd read failed (temp L). ret: %x\n",
+>> +                               frac);
+>> +                       return frac;
+>> +               }
+>> +       }
+>> +
+>> +       priv->temp = stts751_to_deg((integer1 << 8) | frac);
+>> +       return 0;
+>> +}
+>> +
+>> +static int stts751_set_temp_reg16(struct stts751_priv *priv, int temp,
+>> +                               u8 hreg, u8 lreg)
+>> +{
+>> +       s32 hwval;
+>> +       int ret;
+>> +
+>> +       hwval = stts751_to_hw(temp);
+>> +
+>> +       ret = i2c_smbus_write_byte_data(priv->client, hreg, hwval >> 8);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return i2c_smbus_write_byte_data(priv->client, lreg,
+>> +                                               hwval & 0xff);
 >
-> +sysfs Entries
-> +-------------
-> +
-> +The OCC driver uses the hwmon sysfs framework to provide data to userspace.
-> +
-> +The driver exports a number of sysfs files for each type of sensor. The
-> +sensor-specific files vary depending on the processor type, though many of the
-> +attributes are common for both the POWER8 and POWER9.
-> +
-> +The hwmon interface cannot define every type of sensor that may be used.
-> +Therefore, the frequency sensor on the OCC uses the "input" type sensor defined
-> +by the hwmon interface, rather than defining a new type of custom sensor.
-> +
-> +Below are detailed the names and meaning of each sensor file for both types of
-> +processors. All sensors are read-only unless otherwise specified. <x> indicates
-> +the hwmon index. sensor id indicates the unique internal OCC identifer. Please
-> +see the POWER OCC specification for details on all these sensor values.
-> +
-> +frequency:
-> +	all processors:
-> +		in<x>_input - frequency value
-> +		in<x>_label - sensor id
-> +temperature:
-> +	POWER8:
-> +		temp<x>_input - temperature value
-> +		temp<x>_label - sensor id
-> +	POWER9 (in addition to above):
-> +		temp<x>_type - FRU type
-> +
-> +power:
-> +	POWER8:
-> +		power<x>_input - power value
-> +		power<x>_label - sensor id
-> +		power<x>_average - accumulator
-> +		power<x>_average_interval - update tag (number of samples in
-> +			accumulator)
-> +	POWER9:
-> +		power<x>_input - power value
-> +		power<x>_label - sensor id
-> +		power<x>_average_min - accumulator[0]
-> +		power<x>_average_max - accumulator[1] (64 bits total)
-> +		power<x>_average_interval - update tag
-> +		power<x>_reset_history - (function_id | (apss_channel << 8)
-> +
-> +caps:
-> +	POWER8:
-> +		power<x>_cap - current powercap
-> +		power<x>_cap_max - max powercap
-> +		power<x>_cap_min - min powercap
-> +		power<x>_max - normal powercap
-> +		power<x>_alarm - user powercap, r/w
-> +	POWER9:
-> +		power<x>_cap_alarm - user powercap source
-> +
-> +The driver also provides two sysfs entries through hwmon to better
-> +control the driver and monitor the master OCC. Though there may be multiple
-> +OCCs present on the system, these two files are only present for the "master"
-> +OCC.
-> +	name - read the name of the driver
-> +	update_interval - read or write the minimum interval for polling the
-> +		OCC.
-> +
->  BMC - Host Communications
->  -------------------------
 >
-> diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
-> index 93cb52f..a6881f9 100644
-> --- a/drivers/hwmon/occ/Makefile
-> +++ b/drivers/hwmon/occ/Makefile
-> @@ -1 +1 @@
-> -obj-$(CONFIG_SENSORS_PPC_OCC) += occ.o
-> +obj-$(CONFIG_SENSORS_PPC_OCC) += occ.o occ_sysfs.o
-> diff --git a/drivers/hwmon/occ/occ_sysfs.c b/drivers/hwmon/occ/occ_sysfs.c
-> new file mode 100644
-> index 0000000..ea2aa04
-> --- /dev/null
-> +++ b/drivers/hwmon/occ/occ_sysfs.c
-> @@ -0,0 +1,259 @@
-> +/*
-> + * occ_sysfs.c - OCC sysfs interface
-> + *
-> + * This file contains the methods and data structures for implementing the OCC
-> + * hwmon sysfs entries.
-> + *
-> + * Copyright 2016 IBM Corp.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/slab.h>
-> +#include "occ.h"
-> +#include "occ_sysfs.h"
-> +
-> +#define RESP_RETURN_CMD_INVAL	0x13
-> +#define OCC_HWMON_NAME_LENGTH	32
-> +
-> +struct occ_sysfs {
-> +	struct device *dev;
-> +	struct occ *occ;
-> +
-> +	char hwmon_name[OCC_HWMON_NAME_LENGTH + 1];
-> +	const u32 *sensor_hwmon_configs;
-> +	struct hwmon_channel_info **occ_sensors;
-> +	struct hwmon_chip_info occ_info;
-> +	u16 user_powercap;
-> +};
-> +
-> +static int occ_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +			  u32 attr, int channel, long *val)
-> +{
-> +	int rc;
-> +	struct occ_sysfs *driver = dev_get_drvdata(dev);
-> +	struct occ *occ = driver->occ;
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		rc = occ_get_sensor_field(occ, FREQ, channel, attr, val);
-> +		break;
-> +	case hwmon_temp:
-> +		rc = occ_get_sensor_field(occ, TEMP, channel, attr, val);
-> +		break;
-> +	case hwmon_power:
-> +		rc = occ_get_sensor_field(occ, POWER, channel, attr, val);
-> +		break;
-> +	default:
-> +		rc = -EOPNOTSUPP;
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static int occ_hwmon_read_string(struct device *dev,
-> +				 enum hwmon_sensor_types type, u32 attr,
-> +				 int channel, char **str)
-> +{
-> +	int rc;
-> +	unsigned long val = 0;
-> +
-> +	if (!((type == hwmon_in && attr == hwmon_in_label) ||
-> +	    (type == hwmon_temp && attr == hwmon_temp_label) ||
-> +	    (type == hwmon_power && attr == hwmon_power_label)))
-> +		return -EOPNOTSUPP;
-> +
-> +	/* will fetch the "label", the sensor_id */
-> +	rc = occ_hwmon_read(dev, type, attr, channel, &val);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	rc = snprintf(*str, PAGE_SIZE - 1, "%lu", val);
-> +	if (rc > 0)
-> +		rc = 0;
-> +
-> +	return rc;
-> +}
-> +
-> +static int occ_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> +			   u32 attr, int channel, long val)
-> +{
-> +	int rc = 0;
+> This continuation line is unnecessary (there may be others, but I did not
+> check).
 
-Unnecessary initialization.
+OK
 
-> +	struct occ_sysfs *driver = dev_get_drvdata(dev);
-> +
-> +	if (type == hwmon_power && attr == hwmon_power_alarm) {
-> +		rc = occ_set_user_powercap(driver->occ, val);
-> +		if (rc) {
-> +			if (rc == RESP_RETURN_CMD_INVAL) {
-
-Is the mix of private and public error codes necessary ? Any chance
-the called code can just return -EINVAL ?
-
-> +				dev_err(dev,
-> +					"set invalid powercap value: %ld\n",
-> +					val);
-> +				return -EINVAL;
-> +			}
-> +
-> +			dev_err(dev, "set user powercap failed: 0x:%x\n", rc);
-> +			return rc;
-> +		}
-> +
-> +		driver->user_powercap = val;
-> +
-> +		return rc;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t occ_is_visible(const void *data, enum hwmon_sensor_types type,
-> +			      u32 attr, int channel)
-> +{
-> +	const struct occ_sysfs *driver = data;
-> +
-> +	switch (type) {
-> +	case hwmon_chip:
-> +		if (attr == hwmon_chip_update_interval)
-> +			return S_IRUGO | S_IWUSR;
-
-It might be better to just use octals directly to avoid the annoying checkpatch
-warnings.
-
-> +		break;
-> +	case hwmon_in:
-> +		if (BIT(attr) & driver->sensor_hwmon_configs[0])
-> +			return S_IRUGO;
-> +		break;
-> +	case hwmon_temp:
-> +		if (BIT(attr) & driver->sensor_hwmon_configs[1])
-> +			return S_IRUGO;
-> +		break;
-> +	case hwmon_power:
-> +		/* user power limit */
-> +		if (attr == hwmon_power_alarm)
-> +			return S_IRUGO | S_IWUSR;
-> +		else if ((BIT(attr) & driver->sensor_hwmon_configs[2]) ||
-> +			 (BIT(attr) & driver->sensor_hwmon_configs[3]))
-> +			return S_IRUGO;
-> +		break;
-> +	default:
-> +		return 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops occ_hwmon_ops = {
-> +	.is_visible = occ_is_visible,
-> +	.read = occ_hwmon_read,
-> +	.read_string = occ_hwmon_read_string,
-> +	.write = occ_hwmon_write,
-> +};
-> +
-> +static const enum hwmon_sensor_types occ_sensor_types[MAX_OCC_SENSOR_TYPE] = {
-> +	hwmon_in,
-> +	hwmon_temp,
-> +	hwmon_power,
-> +	hwmon_power
-
-So you have two sets of power sensors, meaning you'll end up with two sets
-of hwmon_channel_info describing hwmon_power ? This kind of misuses the API.
-I hope that doesn't create duplicate attributes; I think it might if
-the actually supported attributes overlap. Also, this means that the attribute
-index association gets lost. For example, if the alarm attributes
-are in the second group, power1_alarm would not necessarily align with,
-say, power1_max.
-
-Is there any chance to avoid this ?
-
-> +};
-> +
-> +struct occ_sysfs *occ_sysfs_start(struct device *dev, struct occ *occ,
-> +				  const u32 *sensor_hwmon_configs,
-> +				  const char *name)
-> +{
-> +	int rc, i, j, num_sensors, index = 0, id;
-> +	char *brk;
-> +	struct occ_blocks *resp = NULL;
-> +	u32 *sensor_config;
-> +	struct occ_sysfs *hwmon = devm_kzalloc(dev, sizeof(struct occ_sysfs),
-> +					       GFP_KERNEL);
-> +	if (!hwmon)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	/* need space for null-termination */
-> +	hwmon->occ_sensors =
-> +		devm_kzalloc(dev, sizeof(struct hwmon_channel_info *) *
-> +			     (MAX_OCC_SENSOR_TYPE + 1), GFP_KERNEL);
-> +	if (!hwmon->occ_sensors)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	hwmon->occ = occ;
-> +	hwmon->sensor_hwmon_configs = sensor_hwmon_configs;
-> +	hwmon->occ_info.ops = &occ_hwmon_ops;
-> +	hwmon->occ_info.info =
-> +		(const struct hwmon_channel_info **)hwmon->occ_sensors;
-> +
-> +	occ_get_response_blocks(occ, &resp);
-> +
-> +	for (i = 0; i < MAX_OCC_SENSOR_TYPE; ++i)
-> +		resp->sensor_block_id[i] = -1;
-> +
-> +	/* read sensor data from occ */
-> +	rc = occ_update_device(occ);
-> +	if (rc)
-> +		return ERR_PTR(rc);
-> +
-> +	for (i = 0; i < MAX_OCC_SENSOR_TYPE; i++) {
-> +		id = resp->sensor_block_id[i];
-> +		if (id < 0)
-> +			continue;
-> +
-> +		num_sensors = resp->blocks[id].header.num_sensors;
-> +		/* need null-termination */
-> +		sensor_config = devm_kzalloc(dev,
-> +					     sizeof(u32) * (num_sensors + 1),
-> +					     GFP_KERNEL);
-> +		if (!sensor_config)
-> +			return ERR_PTR(-ENOMEM);
-> +
-> +		for (j = 0; j < num_sensors; j++)
-> +			sensor_config[j] = sensor_hwmon_configs[i];
-> +
-> +		hwmon->occ_sensors[index] =
-> +			devm_kzalloc(dev, sizeof(struct hwmon_channel_info),
-> +				     GFP_KERNEL);
-> +		if (!hwmon->occ_sensors[index])
-> +			return ERR_PTR(-ENOMEM);
-> +
-> +		hwmon->occ_sensors[index]->type = occ_sensor_types[i];
-> +		hwmon->occ_sensors[index]->config = sensor_config;
-> +		index++;
-> +	}
-> +
-> +	/* search for bad chars */
-> +	strncpy(hwmon->hwmon_name, name, OCC_HWMON_NAME_LENGTH);
-> +	brk = strpbrk(hwmon->hwmon_name, "-* \t\n");
-> +	while (brk) {
-> +		*brk = '_';
-> +		brk = strpbrk(brk,  "-* \t\n");
-> +	}
-> +
-> +	hwmon->dev = devm_hwmon_device_register_with_info(dev,
-> +							  hwmon->hwmon_name,
-> +							  hwmon,
-> +							  &hwmon->occ_info,
-> +							  NULL);
-> +	if (IS_ERR(hwmon->dev)) {
-> +		dev_err(dev, "cannot register hwmon device %s: %ld\n",
-> +			hwmon->hwmon_name, PTR_ERR(hwmon->dev));
-> +		return ERR_CAST(hwmon->dev);
-> +	}
-> +
-> +	return hwmon;
-> +}
-> +EXPORT_SYMBOL(occ_sysfs_start);
-> +
-> +MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
-> +MODULE_DESCRIPTION("OCC sysfs driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/hwmon/occ/occ_sysfs.h b/drivers/hwmon/occ/occ_sysfs.h
-> new file mode 100644
-> index 0000000..462f9d2
-> --- /dev/null
-> +++ b/drivers/hwmon/occ/occ_sysfs.h
-> @@ -0,0 +1,30 @@
-> +/*
-> + * occ_sysfs.h - OCC sysfs interface
-> + *
-> + * This file contains the data structures and function prototypes for the OCC
-> + * hwmon sysfs entries.
-> + *
-> + * Copyright 2016 IBM Corp.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +#ifndef __OCC_SYSFS_H__
-> +#define __OCC_SYSFS_H__
-> +
-> +struct occ;
-> +struct device;
-> +struct occ_sysfs;
-> +
-> +struct occ_sysfs *occ_sysfs_start(struct device *dev, struct occ *occ,
-> +				  const u32 *sensor_hwmon_configs,
-> +				  const char *name);
-> +#endif /* __OCC_SYSFS_H__ */
 >
+>> +}
+>> +
+>> +static int stts751_set_temp_reg8(struct stts751_priv *priv, int temp, u8
+>> reg)
+>> +{
+>> +       s32 hwval;
+>> +
+>> +       hwval = stts751_to_hw(temp);
+>> +       return i2c_smbus_write_byte_data(priv->client, reg, hwval >> 8);
+>> +}
+>> +
+>> +static int stts751_read_reg16(struct stts751_priv *priv, int *temp,
+>> +                               u8 hreg, u8 lreg)
+>> +{
+>> +       int integer, frac;
+>> +
+>> +       integer = i2c_smbus_read_byte_data(priv->client, hreg);
+>> +       if (integer < 0)
+>> +               return integer;
+>> +
+>> +       frac = i2c_smbus_read_byte_data(priv->client, lreg);
+>> +       if (frac < 0)
+>> +               return frac;
+>> +
+>> +       *temp = stts751_to_deg((integer << 8) | frac);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int stts751_read_reg8(struct stts751_priv *priv, int *temp, u8
+>> reg)
+>> +{
+>> +       int integer;
+>> +
+>> +       integer = i2c_smbus_read_byte_data(priv->client, reg);
+>> +       if (integer < 0)
+>> +               return integer;
+>> +
+>> +       *temp = stts751_to_deg(integer << 8);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +/*
+>> + * Update alert flags without waiting for cache to expire. We detects
+>> alerts
+>> + * immediately for the sake of the alert handler; we still need to deal
+>> with
+>> + * caching to workaround the fact that alarm flags int the status
+>> register,
+>> + * despite what the datasheet claims, gets always cleared on read.
+>> + */
+>> +static int stts751_update_alert(struct stts751_priv *priv)
+>> +{
+>> +       int ret;
+>> +       bool conv_done;
+>> +       int cache_time =
+>> msecs_to_jiffies(stts751_intervals[priv->interval]);
+>> +
+>> +       /*
+>> +        * Add another 10% because if we run faster than the HW conversion
+>> +        * rate we will end up in reporting incorrectly alarms.
+>> +        */
+>> +       cache_time += cache_time / 10;
+>> +
+>> +       ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_STATUS);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       dev_dbg(priv->dev, "status reg %x\n", ret);
+>> +       conv_done = ret & (STTS751_STATUS_TRIPH | STTS751_STATUS_TRIPL);
+>> +       /*
+>> +        * Reset the cache if the cache time expired, or if we are sure
+>> +        * we have valid data from a device conversion, or if we know
+>> +        * our cache has been never written.
+>> +        *
+>> +        * Note that when the cache has been never written the point is
+>> +        * to correctly initialize the timestamp, rather than clearing
+>> +        * the cache values.
+>> +        *
+>> +        * Note that updating the cache timestamp when we get an alarm
+>> flag
+>> +        * is required, otherwise we could incorrectly report alarms to be
+>> zero.
+>> +        */
+>> +       if (time_after(jiffies, priv->last_alert_update + cache_time) ||
+>> +               conv_done || !priv->alert_valid) {
+>> +               priv->max_alert = false;
+>> +               priv->min_alert = false;
+>> +               priv->alert_valid = true;
+>> +               priv->last_alert_update = jiffies;
+>> +               dev_dbg(priv->dev, "invalidating alert cache\n");
+>> +       }
+>> +
+>> +       priv->max_alert |= !!(ret & STTS751_STATUS_TRIPH);
+>> +       priv->min_alert |= !!(ret & STTS751_STATUS_TRIPL);
+>> +       priv->therm_trip = !!(ret & STTS751_STATUS_TRIPT);
+>> +
+>> +       dev_dbg(priv->dev, "max_alert: %d, min_alert: %d, therm_trip:
+>> %d\n",
+>> +               priv->max_alert, priv->min_alert, priv->therm_trip);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static void stts751_alert(struct i2c_client *client,
+>> +                       enum i2c_alert_protocol type, unsigned int data)
+>> +{
+>> +       int ret;
+>> +       struct stts751_priv *priv = i2c_get_clientdata(client);
+>> +
+>> +       if (type != I2C_PROTOCOL_SMBUS_ALERT)
+>> +               return;
+>> +
+>> +       dev_dbg(&client->dev, "alert!");
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       ret = stts751_update_alert(priv);
+>> +       if (ret < 0) {
+>> +               /* default to worst case */
+>> +               priv->max_alert = true;
+>> +               priv->min_alert = true;
+>> +
+>> +               dev_warn(&priv->client->dev,
+>> +                       "Alert received, but can't communicate to the
+>> device. Something bad happening? Triggering all alarms!");
+>
+>
+> I would suggest to drop the "Something bad happening?". That should be
+> obvious
+> from the message.
 
+OK
+
+>
+>> +       }
+>> +
+>> +       if (priv->max_alert) {
+>> +               dev_notice(&client->dev, "got alert for HIGH
+>> temperature");
+>> +
+>> +               /* unblock alert poll */
+>> +               sysfs_notify(&priv->dev->kobj, NULL, "temp1_max_alarm");
+>> +       }
+>> +
+>> +       if (priv->min_alert) {
+>> +               dev_notice(&client->dev, "got alert for LOW temperature");
+>> +
+>> +               /* unblock alert poll */
+>> +               sysfs_notify(&priv->dev->kobj, NULL, "temp1_min_alarm");
+>> +       }
+>> +
+>> +       if (priv->min_alert || priv->max_alert)
+>> +               kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
+>> +
+>> +       mutex_unlock(&priv->access_lock);
+>> +}
+>> +
+>> +static int stts751_update(struct stts751_priv *priv)
+>> +{
+>> +       int ret = 0;
+>> +       int cache_time =
+>> msecs_to_jiffies(stts751_intervals[priv->interval]);
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       if (time_after(jiffies, priv->last_update + cache_time) ||
+>> +               !priv->data_valid) {
+>> +               ret = stts751_update_temp(priv);
+>> +               if (ret)
+>> +                       goto exit;
+>> +
+>> +               ret = stts751_update_alert(priv);
+>> +               if (ret)
+>> +                       goto exit;
+>> +               priv->data_valid = true;
+>> +               priv->last_update = jiffies;
+>> +       }
+>> +exit:
+>> +       mutex_unlock(&priv->access_lock);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static ssize_t show_max_alarm(struct device *dev, struct device_attribute
+>> *attr,
+>> +                         char *buf)
+>> +{
+>> +       int ret;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       ret = stts751_update(priv);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->max_alert);
+>> +}
+>> +
+>> +static ssize_t show_min_alarm(struct device *dev, struct device_attribute
+>> *attr,
+>> +                         char *buf)
+>> +{
+>> +       int ret;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       ret = stts751_update(priv);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->min_alert);
+>> +}
+>> +
+>> +static ssize_t show_input(struct device *dev, struct device_attribute
+>> *attr,
+>> +                         char *buf)
+>> +{
+>> +       int ret;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       ret = stts751_update(priv);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->temp);
+>> +}
+>> +
+>> +static ssize_t show_therm(struct device *dev, struct device_attribute
+>> *attr,
+>> +                       char *buf)
+>> +{
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm);
+>> +}
+>> +
+>> +static ssize_t set_therm(struct device *dev, struct device_attribute
+>> *attr,
+>> +                      const char *buf, size_t count)
+>> +{
+>> +       int ret;
+>> +       long temp;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       if (kstrtol(buf, 10, &temp) < 0)
+>> +               return -EINVAL;
+>> +
+>> +       /* HW works in range -64C to +127.937C */
+>> +       temp = clamp_val(temp, -64000, 127937);
+>> +       mutex_lock(&priv->access_lock);
+>> +       ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_TLIM);
+>> +       if (ret)
+>> +               goto exit;
+>> +
+>> +       dev_dbg(dev, "setting therm %ld", temp);
+>> +
+>> +       /*
+>> +        * hysteresis reg is relative to therm, so the HW does not need to
+>> be
+>> +        * adjusted, we need to update our local copy only.
+>> +        */
+>> +       priv->hyst = temp - (priv->therm - priv->hyst);
+>> +       priv->therm = temp;
+>> +
+>> +exit:
+>> +       mutex_unlock(&priv->access_lock);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return count;
+>> +}
+>> +
+>> +static ssize_t show_hyst(struct device *dev, struct device_attribute
+>> *attr,
+>> +                       char *buf)
+>> +{
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->hyst);
+>> +}
+>> +
+>> +static ssize_t set_hyst(struct device *dev, struct device_attribute
+>> *attr,
+>> +                      const char *buf, size_t count)
+>> +{
+>> +       int ret;
+>> +       long temp;
+>> +
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       if (kstrtol(buf, 10, &temp) < 0)
+>> +               return -EINVAL;
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       /* HW works in range -64C to +127.937C */
+>> +       temp = clamp_val(temp, -64000, priv->therm);
+>> +       priv->hyst = temp;
+>> +       dev_dbg(priv->dev, "setting hyst %ld", temp);
+>> +       temp = priv->therm - temp;
+>> +       ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_HYST);
+>> +       mutex_unlock(&priv->access_lock);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return count;
+>> +}
+>> +
+>> +static ssize_t show_therm_trip(struct device *dev,
+>> +                               struct device_attribute *attr, char *buf)
+>> +{
+>> +       int ret;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       ret = stts751_update(priv);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm_trip);
+>> +}
+>> +
+>> +static ssize_t show_max(struct device *dev, struct device_attribute
+>> *attr,
+>> +                       char *buf)
+>> +{
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_max);
+>> +}
+>> +
+>> +static ssize_t set_max(struct device *dev, struct device_attribute *attr,
+>> +                      const char *buf, size_t count)
+>> +{
+>> +       int ret;
+>> +       long temp;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       if (kstrtol(buf, 10, &temp) < 0)
+>> +               return -EINVAL;
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       /* HW works in range -64C to +127.937C */
+>> +       temp = clamp_val(temp, priv->event_min, 127937);
+>> +       ret = stts751_set_temp_reg16(priv, temp,
+>> +                               STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
+>> +       if (ret)
+>> +               goto exit;
+>> +
+>> +       dev_dbg(dev, "setting event max %ld", temp);
+>> +       priv->event_max = temp;
+>> +       ret = count;
+>> +exit:
+>> +       mutex_unlock(&priv->access_lock);
+>> +       return ret;
+>> +}
+>> +
+>> +static ssize_t show_min(struct device *dev, struct device_attribute
+>> *attr,
+>> +                       char *buf)
+>> +{
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_min);
+>> +}
+>> +
+>> +static ssize_t set_min(struct device *dev, struct device_attribute *attr,
+>> +                      const char *buf, size_t count)
+>> +{
+>> +       int ret;
+>> +       long temp;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       if (kstrtol(buf, 10, &temp) < 0)
+>> +               return -EINVAL;
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       /* HW works in range -64C to +127.937C */
+>> +       temp = clamp_val(temp, -64000, priv->event_max);
+>> +       ret = stts751_set_temp_reg16(priv, temp,
+>> +                               STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
+>> +       if (ret)
+>> +               goto exit;
+>> +
+>> +       dev_dbg(dev, "setting event min %ld", temp);
+>> +       priv->event_min = temp;
+>> +       ret = count;
+>> +exit:
+>> +       mutex_unlock(&priv->access_lock);
+>> +       return ret;
+>> +}
+>> +
+>> +static ssize_t show_interval(struct device *dev, struct device_attribute
+>> *attr,
+>> +                            char *buf)
+>> +{
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       return snprintf(buf, PAGE_SIZE - 1, "%d\n",
+>> +                       stts751_intervals[priv->interval]);
+>> +}
+>> +
+>> +static ssize_t set_interval(struct device *dev, struct device_attribute
+>> *attr,
+>> +                           const char *buf, size_t count)
+>> +{
+>> +       unsigned long val;
+>> +       int idx;
+>> +       int ret = 0;
+>> +       struct stts751_priv *priv = dev_get_drvdata(dev);
+>> +
+>> +       if (kstrtoul(buf, 10, &val) < 0)
+>> +               return -EINVAL;
+>> +
+>> +       idx = find_closest_descending(val, stts751_intervals,
+>> +                               ARRAY_SIZE(stts751_intervals));
+>> +
+>> +       dev_dbg(dev, "setting interval. req:%lu, idx: %d, val: %d", val,
+>> idx,
+>> +               stts751_intervals[idx]);
+>> +
+>> +       mutex_lock(&priv->access_lock);
+>> +       if (priv->interval == idx)
+>> +               goto exit;
+>> +
+>> +       /*
+>> +        * In early development stages I've become suspicious about the
+>> chip
+>> +        * starting to misbehave if I ever set, even briefly, an invalid
+>> +        * configuration. While I'm not sure this is really needed, be
+>> +        * conservative and set rate/resolution in such an order that
+>> avoids
+>> +        * passing through an invalid configuration.
+>> +        */
+>> +
+>> +       /* speed up: lower the resolution, then modify convrate */
+>> +       if (priv->interval < idx) {
+>> +               dev_dbg(priv->dev, "lower resolution, then modify
+>> convrate");
+>> +               priv->interval = idx;
+>> +               ret = stts751_adjust_resolution(priv);
+>> +               if (ret)
+>> +                       goto exit;
+>> +       }
+>> +
+>> +       ret = i2c_smbus_write_byte_data(priv->client, STTS751_REG_RATE,
+>> idx);
+>> +       if (ret)
+>> +               goto exit;
+>> +       /* slow down: modify convrate, then raise resolution */
+>> +       if (priv->interval != idx) {
+>> +               dev_dbg(priv->dev, "modify convrate, then raise
+>> resolution");
+>> +               priv->interval = idx;
+>> +               ret = stts751_adjust_resolution(priv);
+>> +               if (ret)
+>> +                       goto exit;
+>
+>
+> All those gotos ignore the error. Is this really what you want ?
+
+You are right.. It was unintentional..
+
+>> +       }
+>> +exit:
+>> +       mutex_unlock(&priv->access_lock);
+>> +
+>> +       return count;
+>
+>
+> Should this be
+>
+>         return ret ? ret : count;
+>
+> instead ? Or maybe
+>
+>         ret = count;
+> exit:
+>         mutex_unlock(&priv->access_lock);
+>         return ret;
+
+going to use the latter one..
+
+>> +}
+>> +
+>>
+>> +static int stts751_detect(struct i2c_client *new_client,
+>> +                         struct i2c_board_info *info)
+>> +{
+>> +       struct i2c_adapter *adapter = new_client->adapter;
+>> +       const char *name;
+>> +       int mfg_id, prod_id, rev_id;
+>> +
+>> +       if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+>> +               return -ENODEV;
+>> +
+>> +       mfg_id = i2c_smbus_read_byte_data(new_client, ST_MAN_ID);
+>> +       if (mfg_id != ST_MAN_ID)
+>> +               return -ENODEV;
+>> +
+>> +       prod_id = i2c_smbus_read_byte_data(new_client,
+>> STTS751_REG_PROD_ID);
+>> +
+>> +       switch (prod_id) {
+>> +       case STTS751_0_PROD_ID:
+>> +               name = "STTS751-0";
+>> +               break;
+>> +       case STTS751_1_PROD_ID:
+>> +               name = "STTS751-1";
+>> +               break;
+>> +       default:
+>> +               return -ENODEV;
+>> +       }
+>> +       dev_dbg(&new_client->dev, "Chip %s detected", name);
+>> +
+>> +       rev_id = i2c_smbus_read_byte_data(new_client, STTS751_REG_REV_ID);
+>> +       if (rev_id < 0)
+>> +               return -ENODEV;
+>> +       if (rev_id != 0x1) {
+>> +               dev_notice(&new_client->dev,
+>> +                       "Chip revision 0x%x is untested\nPlease report
+>> whether it works to andrea.merello@gmail.com",
+>> +                       rev_id);
+>> +       }
+>
+>
+> You might consider moving the rev_id warning to the probe function.
+> In many if not most cases, the detect function won't run at all
+> (since the chip will be instantiated explicitly), and you won't get
+> the warning.
+>
+> On the other side, do you really think the warning adds any real value ?
+> I am a bit concerned that it will just create noise a few years down the
+> road.
+
+OK. I've moved this check to the probe function, and I've changed the
+dev_notice in dev_dbg: I would assume (hope) that different chip
+revisions are still register-compatible and should work, however if it
+happens that someone has trouble and he/she is debugging this driver,
+IMHO it's worth to eventually tell him/her that he/she is using an
+unknown chip revision. This way we will avoid noise during normal
+usage.
+
+> On the other side, it might be useful to add a couple of additional
+> registers
+> to the check to improve its reliability and reduce possible false positives.
+> The temperature low bytes (registers 0x02, 0x06, 0x08) would be good targets
+> with the lower 4 bits being 0. An excellent target would be the SMBus
+> timeout
+> register, which has 7 bits known to be 0.
+
+OK, good idea :)
+
+>
+>> +
+>> +       strlcpy(info->type, stts751_id[0].name, I2C_NAME_SIZE);
+>> +       return 0;
+>> +}
+>> +
+>> +static int stts751_read_chip_config(struct stts751_priv *priv)
+>> +{
+>> +       int ret;
+>> +       int tmp;
+>> +
+>> +       ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_CONF);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +       priv->config = ret;
+>> +       priv->res = (ret & STTS751_CONF_RES_MASK) >>
+>> STTS751_CONF_RES_SHIFT;
+>> +
+>> +       ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_RATE);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +       priv->interval = ret;
+>> +
+>> +       ret = stts751_read_reg16(priv, &priv->event_max,
+>> +                               STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = stts751_read_reg16(priv, &priv->event_min,
+>> +                               STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = stts751_read_reg8(priv, &priv->therm, STTS751_REG_TLIM);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = stts751_read_reg8(priv, &tmp, STTS751_REG_HYST);
+>> +       if (ret)
+>> +               return ret;
+>> +       priv->hyst = priv->therm - tmp;
+>> +
+>> +       return ret;
+>
+>
+>         return 0;
+
+OK
+
+>
+>> +}
+>> +
+>>
+>> +static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_input, NULL, 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_min,
+>> set_min, 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, show_max,
+>> set_max, 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_min_alarm, NULL,
+>> 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_max_alarm, NULL,
+>> 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_crit, S_IWUSR | S_IRUGO, show_therm,
+>> +                       set_therm, 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IWUSR | S_IRUGO, show_hyst,
+>> +                       set_hyst, 0);
+>> +static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_therm_trip,
+>> NULL, 0);
+>> +static SENSOR_DEVICE_ATTR(update_interval, S_IWUSR | S_IRUGO,
+>> +                       show_interval, set_interval, 0);
+>> +
+>> +static struct attribute *stts751_attrs[] = {
+>> +       &sensor_dev_attr_temp1_input.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_min.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_max.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_min_alarm.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_max_alarm.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_crit.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
+>> +       &sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
+>> +       &sensor_dev_attr_update_interval.dev_attr.attr,
+>> +       NULL
+>> +};
+>> +ATTRIBUTE_GROUPS(stts751);
+>> +
+>> +static int stts751_probe(struct i2c_client *client,
+>> +                        const struct i2c_device_id *id)
+>> +{
+>> +       struct stts751_priv *priv;
+>> +       int ret;
+>> +       bool smbus_to;
+>> +
+>> +       priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
+>> +       if (!priv)
+>> +               return -ENOMEM;
+>> +
+>> +       priv->client = client;
+>> +       i2c_set_clientdata(client, priv);
+>> +       mutex_init(&priv->access_lock);
+>> +
+>> +       if (device_property_present(&client->dev,
+>> +                                       "smbus-timeout-disable")) {
+>> +               smbus_to = !device_property_read_bool(&client->dev,
+>> +                                               "smbus-timeout-disable");
+>> +
+>
+> This "!" is really unnecessary. Just name the variable differently,
+>
+>> +               ret = i2c_smbus_write_byte_data(priv->client,
+>> +                                               STTS751_REG_SMBUS_TO,
+>> +                                               smbus_to ? 0x80 : 0);
+>
+>
+> and reverse the logic here.
+
+OK
+
+
+>
+>
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>> +
+>> +       ret = stts751_read_chip_config(priv);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       priv->config &= ~(STTS751_CONF_STOP | STTS751_CONF_EVENT_DIS);
+>> +       ret = i2c_smbus_write_byte_data(priv->client,
+>> +                                       STTS751_REG_CONF, priv->config);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       priv->dev = devm_hwmon_device_register_with_groups(&client->dev,
+>> +                                                       client->name,
+>> priv,
+>> +                                                       stts751_groups);
+>> +       return PTR_ERR_OR_ZERO(priv->dev);
+>> +}
+>> +
+>> +MODULE_DEVICE_TABLE(i2c, stts751_id);
+>> +
+>> +static struct i2c_driver stts751_driver = {
+>> +       .class          = I2C_CLASS_HWMON,
+>> +       .driver = {
+>> +               .name   = DEVNAME,
+>> +       },
+>> +       .probe          = stts751_probe,
+>> +       .id_table       = stts751_id,
+>> +       .detect         = stts751_detect,
+>> +       .alert          = stts751_alert,
+>> +       .address_list   = normal_i2c,
+>> +};
+>> +
+>> +module_i2c_driver(stts751_driver);
+>> +
+>> +MODULE_AUTHOR("Andrea Merello <andrea.merello@gmail.com>");
+>> +MODULE_DESCRIPTION("STTS751 sensor driver");
+>> +MODULE_LICENSE("GPL");
+>>
+>
