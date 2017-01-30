@@ -1,852 +1,923 @@
-Return-path: <eajames@us.ibm.com>
-MIME-Version: 1.0
-In-Reply-To: <c2dce65a-6e7a-0c5b-49e9-b50b4f4e91ea@roeck-us.net>
-Subject: Re: [PATCH linux v4 2/6] hwmon: occ: Add sysfs interface
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: andrew@aj.id.au, benh@kernel.crashing.org, corbet@lwn.net,
-        devicetree@vger.kernel.org, eajames.ibm@gmail.com, jdelvare@suse.com,
-        joel@jms.id.au, linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        wsa@the-dreams.de
-From: "Edward James" <eajames@us.ibm.com>
-Date: Mon, 30 Jan 2017 13:49:56 -0600
-References: <1485472758-11003-1-git-send-email-eajames.ibm@gmail.com>
- <1485472758-11003-3-git-send-email-eajames.ibm@gmail.com>
- <c2dce65a-6e7a-0c5b-49e9-b50b4f4e91ea@roeck-us.net>
-Content-type: multipart/alternative;
-	Boundary="0__=8FBB0A2BDFFF23608f9e8a93df938690918c8FBB0A2BDFFF2360"
-Content-Disposition: inline
-Message-Id: <OFA71A82F0.957F7772-ON002580B8.006CA5F0-862580B8.006CF128@notes.na.collabserv.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-wj0-f196.google.com ([209.85.210.196]:35654 "EHLO
+        mail-wj0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752671AbdA3JqA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 30 Jan 2017 04:46:00 -0500
+Received: by mail-wj0-f196.google.com with SMTP id i7so6989569wjf.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Jan 2017 01:45:59 -0800 (PST)
+From: Andrea Merello <andrea.merello@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Andrea Merello <andrea.merello@gmail.com>,
+        LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH v5 1/2] hwmon: new driver for ST stts751 thermal sensor
+Date: Mon, 30 Jan 2017 10:40:54 +0100
+Message-Id: <1485769255-27118-1-git-send-email-andrea.merello@gmail.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+This patch adds a HWMON driver for ST Microelectronics STTS751
+temperature sensors.
 
---0__=8FBB0A2BDFFF23608f9e8a93df938690918c8FBB0A2BDFFF2360
-Content-Transfer-Encoding: quoted-printable
-Content-type: text/plain; charset=US-ASCII
+Changes since V3:
+- fix sysfs_notify() filename
+- simplify error exit path in stts751_update_temp(): kill useless goto
+- fix set function were racy due to lock incorrectly placed
+- use msecs_to_jiffies instead of manual calculation
+- fix jiffies and msecs were mixed up
+- don't mark cache as good unless reads really succeded to fill up it
+- when updating therm, hyst keeps relative value rather than abs value
+- don't should in dev_dbg when chip is detected
+- don't ever generate two uevents
+- clarify clear-on-read behaviour of status reg alarm flags
+- simplify mDEG to HW conversion function
+- fix chip stops due to incorrect resolution configuration
+- fix incorrectly reading negative numbers from HW
 
+Changes since V4:
+- fix continuation lines (style, remove uncecessary, ..)
+- shorten a unnecessary verbose dev_warn() message
+- fix set_interval() exitpath didn't return error
+- change uncecesary neg-logic
+- change file symbolic permissions with octal
+- move chip revision test in probe(), change dev_notice() in dev_dbg()
+- use "return 0" on success (non functional change)
+- add further checks in i2c detect function
+- fix i2c detect function read wrong reg while checking for manufacturer ID
 
+Thanks-to: LABBE Corentin [for suggestions]
+Thanks-to: Guenter Roeck [for suggestion and discussions]
+Signed-off-by: Andrea Merello <andrea.merello@gmail.com>
+Cc: LABBE Corentin <clabbe.montjoie@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+---
+ drivers/hwmon/Kconfig   |  10 +
+ drivers/hwmon/Makefile  |   1 +
+ drivers/hwmon/stts751.c | 819 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 830 insertions(+)
+ create mode 100644 drivers/hwmon/stts751.c
 
-Guenter Roeck <linux@roeck-us.net> wrote on 01/29/2017 01:50:55 PM:
-> On 01/26/2017 03:19 PM, eajames.ibm@gmail.com wrote:
-> > From: "Edward A. James" <eajames@us.ibm.com>
-> >
-> > Add a generic mechanism to expose the sensors provided by the OCC in
-> > sysfs.
-> >
-> > Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> > ---
-> >  Documentation/hwmon/occ       |  62 ++++++++++
-> >  drivers/hwmon/occ/Makefile    |   2 +-
-> >  drivers/hwmon/occ/occ=5Fsysfs.c | 259 +++++++++++++++++++++++++++++
-> +++++++++++++
-> >  drivers/hwmon/occ/occ=5Fsysfs.h |  30 +++++
-> >  4 files changed, 352 insertions(+), 1 deletion(-)
-> >  create mode 100644 drivers/hwmon/occ/occ=5Fsysfs.c
-> >  create mode 100644 drivers/hwmon/occ/occ=5Fsysfs.h
-> >
-> > diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
-> > index 79d1642..d0bdf06 100644
-> > --- a/Documentation/hwmon/occ
-> > +++ b/Documentation/hwmon/occ
-> > @@ -25,6 +25,68 @@ Currently, all versions of the OCC support four
-> types of sensor data: power,
-> >  temperature, frequency, and "caps," which indicate limits and
-> thresholds used
-> >  internally on the OCC.
-> >
-> > +sysfs Entries
-> > +-------------
-> > +
-> > +The OCC driver uses the hwmon sysfs framework to provide data to
-userspace.
-> > +
-> > +The driver exports a number of sysfs files for each type of sensor.
-The
-> > +sensor-specific files vary depending on the processor type,
-> though many of the
-> > +attributes are common for both the POWER8 and POWER9.
-> > +
-> > +The hwmon interface cannot define every type of sensor that may be
-used.
-> > +Therefore, the frequency sensor on the OCC uses the "input" type
-> sensor defined
-> > +by the hwmon interface, rather than defining a new type of custom
-sensor.
-> > +
-> > +Below are detailed the names and meaning of each sensor file for
-> both types of
-> > +processors. All sensors are read-only unless otherwise specified.
-> <x> indicates
-> > +the hwmon index. sensor id indicates the unique internal OCC
-> identifer. Please
-> > +see the POWER OCC specification for details on all these sensor
-values.
-> > +
-> > +frequency:
-> > +   all processors:
-> > +      in<x>=5Finput - frequency value
-> > +      in<x>=5Flabel - sensor id
-> > +temperature:
-> > +   POWER8:
-> > +      temp<x>=5Finput - temperature value
-> > +      temp<x>=5Flabel - sensor id
-> > +   POWER9 (in addition to above):
-> > +      temp<x>=5Ftype - FRU type
-> > +
-> > +power:
-> > +   POWER8:
-> > +      power<x>=5Finput - power value
-> > +      power<x>=5Flabel - sensor id
-> > +      power<x>=5Faverage - accumulator
-> > +      power<x>=5Faverage=5Finterval - update tag (number of samples in
-> > +         accumulator)
-> > +   POWER9:
-> > +      power<x>=5Finput - power value
-> > +      power<x>=5Flabel - sensor id
-> > +      power<x>=5Faverage=5Fmin - accumulator[0]
-> > +      power<x>=5Faverage=5Fmax - accumulator[1] (64 bits total)
-> > +      power<x>=5Faverage=5Finterval - update tag
-> > +      power<x>=5Freset=5Fhistory - (function=5Fid | (apss=5Fchannel <<=
- 8)
-> > +
-> > +caps:
-> > +   POWER8:
-> > +      power<x>=5Fcap - current powercap
-> > +      power<x>=5Fcap=5Fmax - max powercap
-> > +      power<x>=5Fcap=5Fmin - min powercap
-> > +      power<x>=5Fmax - normal powercap
-> > +      power<x>=5Falarm - user powercap, r/w
-> > +   POWER9:
-> > +      power<x>=5Fcap=5Falarm - user powercap source
-> > +
-> > +The driver also provides two sysfs entries through hwmon to better
-> > +control the driver and monitor the master OCC. Though there may be
-multiple
-> > +OCCs present on the system, these two files are only present for
-> the "master"
-> > +OCC.
-> > +   name - read the name of the driver
-> > +   update=5Finterval - read or write the minimum interval for polling
-the
-> > +      OCC.
-> > +
-> >  BMC - Host Communications
-> >  -------------------------
-> >
-> > diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
-> > index 93cb52f..a6881f9 100644
-> > --- a/drivers/hwmon/occ/Makefile
-> > +++ b/drivers/hwmon/occ/Makefile
-> > @@ -1 +1 @@
-> > -obj-$(CONFIG=5FSENSORS=5FPPC=5FOCC) +=3D occ.o
-> > +obj-$(CONFIG=5FSENSORS=5FPPC=5FOCC) +=3D occ.o occ=5Fsysfs.o
-> > diff --git a/drivers/hwmon/occ/occ=5Fsysfs.c
-b/drivers/hwmon/occ/occ=5Fsysfs.c
-> > new file mode 100644
-> > index 0000000..ea2aa04
-> > --- /dev/null
-> > +++ b/drivers/hwmon/occ/occ=5Fsysfs.c
-> > @@ -0,0 +1,259 @@
-> > +/*
-> > + * occ=5Fsysfs.c - OCC sysfs interface
-> > + *
-> > + * This file contains the methods and data structures for
-> implementing the OCC
-> > + * hwmon sysfs entries.
-> > + *
-> > + * Copyright 2016 IBM Corp.
-> > + *
-> > + * This program is free software; you can redistribute it and/or
-modify
-> > + * it under the terms of the GNU General Public License as published
-by
-> > + * the Free Software Foundation; either version 2 of the License, or
-> > + * (at your option) any later version.
-> > + *
-> > + * This program is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> > + * GNU General Public License for more details.
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/device.h>
-> > +#include <linux/err.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/hwmon-sysfs.h>
-> > +#include <linux/init.h>
-> > +#include <linux/jiffies.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/slab.h>
-> > +#include "occ.h"
-> > +#include "occ=5Fsysfs.h"
-> > +
-> > +#define RESP=5FRETURN=5FCMD=5FINVAL   0x13
-> > +#define OCC=5FHWMON=5FNAME=5FLENGTH   32
-> > +
-> > +struct occ=5Fsysfs {
-> > +   struct device *dev;
-> > +   struct occ *occ;
-> > +
-> > +   char hwmon=5Fname[OCC=5FHWMON=5FNAME=5FLENGTH + 1];
-> > +   const u32 *sensor=5Fhwmon=5Fconfigs;
-> > +   struct hwmon=5Fchannel=5Finfo **occ=5Fsensors;
-> > +   struct hwmon=5Fchip=5Finfo occ=5Finfo;
-> > +   u16 user=5Fpowercap;
-> > +};
-> > +
-> > +static int occ=5Fhwmon=5Fread(struct device *dev, enum hwmon=5Fsensor=
-=5Ftypes
-type,
-> > +           u32 attr, int channel, long *val)
-> > +{
-> > +   int rc;
-> > +   struct occ=5Fsysfs *driver =3D dev=5Fget=5Fdrvdata(dev);
-> > +   struct occ *occ =3D driver->occ;
-> > +
-> > +   switch (type) {
-> > +   case hwmon=5Fin:
-> > +      rc =3D occ=5Fget=5Fsensor=5Ffield(occ, FREQ, channel, attr, val);
-> > +      break;
-> > +   case hwmon=5Ftemp:
-> > +      rc =3D occ=5Fget=5Fsensor=5Ffield(occ, TEMP, channel, attr, val);
-> > +      break;
-> > +   case hwmon=5Fpower:
-> > +      rc =3D occ=5Fget=5Fsensor=5Ffield(occ, POWER, channel, attr, val=
-);
-> > +      break;
-> > +   default:
-> > +      rc =3D -EOPNOTSUPP;
-> > +   }
-> > +
-> > +   return rc;
-> > +}
-> > +
-> > +static int occ=5Fhwmon=5Fread=5Fstring(struct device *dev,
-> > +             enum hwmon=5Fsensor=5Ftypes type, u32 attr,
-> > +             int channel, char **str)
-> > +{
-> > +   int rc;
-> > +   unsigned long val =3D 0;
-> > +
-> > +   if (!((type =3D=3D hwmon=5Fin && attr =3D=3D hwmon=5Fin=5Flabel) ||
-> > +       (type =3D=3D hwmon=5Ftemp && attr =3D=3D hwmon=5Ftemp=5Flabel) =
-||
-> > +       (type =3D=3D hwmon=5Fpower && attr =3D=3D hwmon=5Fpower=5Flabel=
-)))
-> > +      return -EOPNOTSUPP;
-> > +
-> > +   /* will fetch the "label", the sensor=5Fid */
-> > +   rc =3D occ=5Fhwmon=5Fread(dev, type, attr, channel, &val);
-> > +   if (rc < 0)
-> > +      return rc;
-> > +
-> > +   rc =3D snprintf(*str, PAGE=5FSIZE - 1, "%lu", val);
-> > +   if (rc > 0)
-> > +      rc =3D 0;
-> > +
-> > +   return rc;
-> > +}
-> > +
-> > +static int occ=5Fhwmon=5Fwrite(struct device *dev, enum
-> hwmon=5Fsensor=5Ftypes type,
-> > +            u32 attr, int channel, long val)
-> > +{
-> > +   int rc =3D 0;
->
-> Unnecessary initialization.
->
-> > +   struct occ=5Fsysfs *driver =3D dev=5Fget=5Fdrvdata(dev);
-> > +
-> > +   if (type =3D=3D hwmon=5Fpower && attr =3D=3D hwmon=5Fpower=5Falarm)=
- {
-> > +      rc =3D occ=5Fset=5Fuser=5Fpowercap(driver->occ, val);
-> > +      if (rc) {
-> > +         if (rc =3D=3D RESP=5FRETURN=5FCMD=5FINVAL) {
->
-> Is the mix of private and public error codes necessary ? Any chance
-> the called code can just return -EINVAL ?
->
-> > +            dev=5Ferr(dev,
-> > +               "set invalid powercap value: %ld\n",
-> > +               val);
-> > +            return -EINVAL;
-> > +         }
-> > +
-> > +         dev=5Ferr(dev, "set user powercap failed: 0x:%x\n", rc);
-> > +         return rc;
-> > +      }
-> > +
-> > +      driver->user=5Fpowercap =3D val;
-> > +
-> > +      return rc;
-> > +   }
-> > +
-> > +   return -EOPNOTSUPP;
-> > +}
-> > +
-> > +static umode=5Ft occ=5Fis=5Fvisible(const void *data, enum
-> hwmon=5Fsensor=5Ftypes type,
-> > +               u32 attr, int channel)
-> > +{
-> > +   const struct occ=5Fsysfs *driver =3D data;
-> > +
-> > +   switch (type) {
-> > +   case hwmon=5Fchip:
-> > +      if (attr =3D=3D hwmon=5Fchip=5Fupdate=5Finterval)
-> > +         return S=5FIRUGO | S=5FIWUSR;
->
-> It might be better to just use octals directly to avoid the
-annoyingcheckpatch
-> warnings.
->
-> > +      break;
-> > +   case hwmon=5Fin:
-> > +      if (BIT(attr) & driver->sensor=5Fhwmon=5Fconfigs[0])
-> > +         return S=5FIRUGO;
-> > +      break;
-> > +   case hwmon=5Ftemp:
-> > +      if (BIT(attr) & driver->sensor=5Fhwmon=5Fconfigs[1])
-> > +         return S=5FIRUGO;
-> > +      break;
-> > +   case hwmon=5Fpower:
-> > +      /* user power limit */
-> > +      if (attr =3D=3D hwmon=5Fpower=5Falarm)
-> > +         return S=5FIRUGO | S=5FIWUSR;
-> > +      else if ((BIT(attr) & driver->sensor=5Fhwmon=5Fconfigs[2]) ||
-> > +          (BIT(attr) & driver->sensor=5Fhwmon=5Fconfigs[3]))
-> > +         return S=5FIRUGO;
-> > +      break;
-> > +   default:
-> > +      return 0;
-> > +   }
-> > +
-> > +   return 0;
-> > +}
-> > +
-> > +static const struct hwmon=5Fops occ=5Fhwmon=5Fops =3D {
-> > +   .is=5Fvisible =3D occ=5Fis=5Fvisible,
-> > +   .read =3D occ=5Fhwmon=5Fread,
-> > +   .read=5Fstring =3D occ=5Fhwmon=5Fread=5Fstring,
-> > +   .write =3D occ=5Fhwmon=5Fwrite,
-> > +};
-> > +
-> > +static const enum hwmon=5Fsensor=5Ftypes occ=5Fsensor=5Ftypes
-> [MAX=5FOCC=5FSENSOR=5FTYPE] =3D {
-> > +   hwmon=5Fin,
-> > +   hwmon=5Ftemp,
-> > +   hwmon=5Fpower,
-> > +   hwmon=5Fpower
->
-> So you have two sets of power sensors, meaning you'll end up with two
-sets
-> of hwmon=5Fchannel=5Finfo describing hwmon=5Fpower ? This kind of misuses=
- the
-API.
-> I hope that doesn't create duplicate attributes; I think it might if
-> the actually supported attributes overlap. Also, this means that
-theattribute
-> index association gets lost. For example, if the alarm attributes
-> are in the second group, power1=5Falarm would not necessarily align with,
-> say, power1=5Fmax.
->
-> Is there any chance to avoid this ?
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index d1f82f2..8fdd241 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1448,6 +1448,16 @@ config SENSORS_SCH5636
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called sch5636.
+ 
++config SENSORS_STTS751
++	tristate "ST Microelectronics STTS751"
++	depends on I2C
++	help
++	  If you say yes here you get support for STTS751
++	  temperature sensor chips.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called stts751.
++
+ config SENSORS_SMM665
+ 	tristate "Summit Microelectronics SMM665"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 7476b22..1114130 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -147,6 +147,7 @@ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+ obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
+ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+ obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
++obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+ obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+ obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+ obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
+diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
+new file mode 100644
+index 0000000..4154294
+--- /dev/null
++++ b/drivers/hwmon/stts751.c
+@@ -0,0 +1,819 @@
++/*
++ * STTS751 sensor driver
++ *
++ * Copyright (C) 2016-2017 Istituto Italiano di Tecnologia - RBCS - EDL
++ * Robotics, Brain and Cognitive Sciences department
++ * Electronic Design Laboratory
++ *
++ * Written by Andrea Merello <andrea.merello@gmail.com>
++ *
++ * Based on  LM95241 driver and LM90 driver
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/bitops.h>
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/property.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++#include <linux/util_macros.h>
++
++#define DEVNAME "stts751"
++
++static const unsigned short normal_i2c[] = {
++	0x48, 0x49, 0x38, 0x39,  /* STTS751-0 */
++	0x4A, 0x4B, 0x3A, 0x3B,  /* STTS751-1 */
++	I2C_CLIENT_END };
++
++#define STTS751_REG_TEMP_H	0x00
++#define STTS751_REG_STATUS	0x01
++#define STTS751_STATUS_TRIPT	BIT(0)
++#define STTS751_STATUS_TRIPL	BIT(5)
++#define STTS751_STATUS_TRIPH	BIT(6)
++#define STTS751_REG_TEMP_L	0x02
++#define STTS751_REG_CONF	0x03
++#define STTS751_CONF_RES_MASK	0x0C
++#define STTS751_CONF_RES_SHIFT  2
++#define STTS751_CONF_EVENT_DIS  BIT(7)
++#define STTS751_CONF_STOP	BIT(6)
++#define STTS751_REG_RATE	0x04
++#define STTS751_REG_HLIM_H	0x05
++#define STTS751_REG_HLIM_L	0x06
++#define STTS751_REG_LLIM_H	0x07
++#define STTS751_REG_LLIM_L	0x08
++#define STTS751_REG_TLIM	0x20
++#define STTS751_REG_HYST	0x21
++#define STTS751_REG_SMBUS_TO	0x22
++
++#define STTS751_REG_PROD_ID	0xFD
++#define STTS751_REG_MAN_ID	0xFE
++#define STTS751_REG_REV_ID	0xFF
++
++#define STTS751_0_PROD_ID	0x00
++#define STTS751_1_PROD_ID	0x01
++#define ST_MAN_ID		0x53
++
++/*
++ * Possible update intervals are (in mS):
++ * 16000, 8000, 4000, 2000, 1000, 500, 250, 125, 62.5, 31.25
++ * However we are not going to complicate things too much and we stick to the
++ * approx value in mS.
++ */
++static const int stts751_intervals[] = {
++	16000, 8000, 4000, 2000, 1000, 500, 250, 125, 63, 31
++};
++
++static const struct i2c_device_id stts751_id[] = {
++	{ "stts751", 0 },
++	{ }
++};
++
++struct stts751_priv {
++	struct device *dev;
++	struct i2c_client *client;
++	struct mutex access_lock;
++	u8 interval;
++	int res;
++	int event_max, event_min;
++	int therm;
++	int hyst;
++	bool smbus_timeout;
++	int temp;
++	unsigned long last_update, last_alert_update;
++	u8 config;
++	bool min_alert, max_alert, therm_trip;
++	bool data_valid, alert_valid;
++};
++
++/*
++ * These functions converts temperature from HW format to integer format and
++ * vice-vers. They are (mostly) taken from lm90 driver. Unit is in mC.
++ */
++static int stts751_to_deg(s16 hw_val)
++{
++	return hw_val * 125 / 32;
++}
++
++static s32 stts751_to_hw(int val)
++{
++	return DIV_ROUND_CLOSEST(val, 125) * 32;
++}
++
++static int stts751_adjust_resolution(struct stts751_priv *priv)
++{
++	u8 res;
++
++	switch (priv->interval) {
++	case 9:
++		/* 10 bits */
++		res = 0;
++		break;
++	case 8:
++		/* 11 bits */
++		res = 1;
++		break;
++	default:
++		/* 12 bits */
++		res = 3;
++		break;
++	}
++
++	if (priv->res == res)
++		return 0;
++
++	priv->config &= ~STTS751_CONF_RES_MASK;
++	priv->config |= res << STTS751_CONF_RES_SHIFT;
++	dev_dbg(priv->dev, "setting res %d. config %x", res, priv->config);
++	priv->res = res;
++
++	return i2c_smbus_write_byte_data(priv->client,
++				STTS751_REG_CONF, priv->config);
++}
++
++static int stts751_update_temp(struct stts751_priv *priv)
++{
++	s32 integer1, integer2, frac;
++
++	/*
++	 * There is a trick here, like in the lm90 driver. We have to read two
++	 * registers to get the sensor temperature, but we have to beware a
++	 * conversion could occur between the readings. We could use the
++	 * one-shot conversion register, but we don't want to do this (disables
++	 * hardware monitoring). So the solution used here is to read the high
++	 * byte once, then the low byte, then the high byte again. If the new
++	 * high byte matches the old one, then we have a valid reading. Else we
++	 * have to read the low byte again, and now we believe we have a correct
++	 * reading.
++	 */
++	integer1 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
++	if (integer1 < 0) {
++		dev_dbg(&priv->client->dev,
++			"I2C read failed (temp H). ret: %x\n", integer1);
++		return integer1;
++	}
++
++	frac = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_L);
++	if (frac < 0) {
++		dev_dbg(&priv->client->dev,
++			"I2C read failed (temp L). ret: %x\n", frac);
++		return frac;
++	}
++
++	integer2 = i2c_smbus_read_byte_data(priv->client, STTS751_REG_TEMP_H);
++	if (integer2 < 0) {
++		dev_dbg(&priv->client->dev,
++			"I2C 2nd read failed (temp H). ret: %x\n", integer2);
++		return integer2;
++	}
++
++	if (integer1 != integer2) {
++		frac = i2c_smbus_read_byte_data(priv->client,
++						STTS751_REG_TEMP_L);
++		if (frac < 0) {
++			dev_dbg(&priv->client->dev,
++				"I2C 2nd read failed (temp L). ret: %x\n",
++				frac);
++			return frac;
++		}
++	}
++
++	priv->temp = stts751_to_deg((integer1 << 8) | frac);
++	return 0;
++}
++
++static int stts751_set_temp_reg16(struct stts751_priv *priv, int temp,
++				  u8 hreg, u8 lreg)
++{
++	s32 hwval;
++	int ret;
++
++	hwval = stts751_to_hw(temp);
++
++	ret = i2c_smbus_write_byte_data(priv->client, hreg, hwval >> 8);
++	if (ret)
++		return ret;
++
++	return i2c_smbus_write_byte_data(priv->client, lreg, hwval & 0xff);
++}
++
++static int stts751_set_temp_reg8(struct stts751_priv *priv, int temp, u8 reg)
++{
++	s32 hwval;
++
++	hwval = stts751_to_hw(temp);
++	return i2c_smbus_write_byte_data(priv->client, reg, hwval >> 8);
++}
++
++static int stts751_read_reg16(struct stts751_priv *priv, int *temp,
++			      u8 hreg, u8 lreg)
++{
++	int integer, frac;
++
++	integer = i2c_smbus_read_byte_data(priv->client, hreg);
++	if (integer < 0)
++		return integer;
++
++	frac = i2c_smbus_read_byte_data(priv->client, lreg);
++	if (frac < 0)
++		return frac;
++
++	*temp = stts751_to_deg((integer << 8) | frac);
++
++	return 0;
++}
++
++static int stts751_read_reg8(struct stts751_priv *priv, int *temp, u8 reg)
++{
++	int integer;
++
++	integer = i2c_smbus_read_byte_data(priv->client, reg);
++	if (integer < 0)
++		return integer;
++
++	*temp = stts751_to_deg(integer << 8);
++
++	return 0;
++}
++
++/*
++ * Update alert flags without waiting for cache to expire. We detects alerts
++ * immediately for the sake of the alert handler; we still need to deal with
++ * caching to workaround the fact that alarm flags int the status register,
++ * despite what the datasheet claims, gets always cleared on read.
++ */
++static int stts751_update_alert(struct stts751_priv *priv)
++{
++	int ret;
++	bool conv_done;
++	int cache_time = msecs_to_jiffies(stts751_intervals[priv->interval]);
++
++	/*
++	 * Add another 10% because if we run faster than the HW conversion
++	 * rate we will end up in reporting incorrectly alarms.
++	 */
++	cache_time += cache_time / 10;
++
++	ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_STATUS);
++	if (ret < 0)
++		return ret;
++
++	dev_dbg(priv->dev, "status reg %x\n", ret);
++	conv_done = ret & (STTS751_STATUS_TRIPH | STTS751_STATUS_TRIPL);
++	/*
++	 * Reset the cache if the cache time expired, or if we are sure
++	 * we have valid data from a device conversion, or if we know
++	 * our cache has been never written.
++	 *
++	 * Note that when the cache has been never written the point is
++	 * to correctly initialize the timestamp, rather than clearing
++	 * the cache values.
++	 *
++	 * Note that updating the cache timestamp when we get an alarm flag
++	 * is required, otherwise we could incorrectly report alarms to be zero.
++	 */
++	if (time_after(jiffies,	priv->last_alert_update + cache_time) ||
++	    conv_done || !priv->alert_valid) {
++		priv->max_alert = false;
++		priv->min_alert = false;
++		priv->alert_valid = true;
++		priv->last_alert_update = jiffies;
++		dev_dbg(priv->dev, "invalidating alert cache\n");
++	}
++
++	priv->max_alert |= !!(ret & STTS751_STATUS_TRIPH);
++	priv->min_alert |= !!(ret & STTS751_STATUS_TRIPL);
++	priv->therm_trip = !!(ret & STTS751_STATUS_TRIPT);
++
++	dev_dbg(priv->dev, "max_alert: %d, min_alert: %d, therm_trip: %d\n",
++		priv->max_alert, priv->min_alert, priv->therm_trip);
++
++	return 0;
++}
++
++static void stts751_alert(struct i2c_client *client,
++			  enum i2c_alert_protocol type, unsigned int data)
++{
++	int ret;
++	struct stts751_priv *priv = i2c_get_clientdata(client);
++
++	if (type != I2C_PROTOCOL_SMBUS_ALERT)
++		return;
++
++	dev_dbg(&client->dev, "alert!");
++
++	mutex_lock(&priv->access_lock);
++	ret = stts751_update_alert(priv);
++	if (ret < 0) {
++		/* default to worst case */
++		priv->max_alert = true;
++		priv->min_alert = true;
++
++		dev_warn(&priv->client->dev,
++			 "Alert received, but can't communicate to the device. Triggering all alarms!");
++	}
++
++	if (priv->max_alert) {
++		dev_notice(&client->dev, "got alert for HIGH temperature");
++
++		/* unblock alert poll */
++		sysfs_notify(&priv->dev->kobj, NULL, "temp1_max_alarm");
++	}
++
++	if (priv->min_alert) {
++		dev_notice(&client->dev, "got alert for LOW temperature");
++
++		/* unblock alert poll */
++		sysfs_notify(&priv->dev->kobj, NULL, "temp1_min_alarm");
++	}
++
++	if (priv->min_alert || priv->max_alert)
++		kobject_uevent(&priv->dev->kobj, KOBJ_CHANGE);
++
++	mutex_unlock(&priv->access_lock);
++}
++
++static int stts751_update(struct stts751_priv *priv)
++{
++	int ret = 0;
++	int cache_time = msecs_to_jiffies(stts751_intervals[priv->interval]);
++
++	mutex_lock(&priv->access_lock);
++	if (time_after(jiffies,	priv->last_update + cache_time) ||
++	    !priv->data_valid) {
++		ret = stts751_update_temp(priv);
++		if (ret)
++			goto exit;
++
++		ret = stts751_update_alert(priv);
++		if (ret)
++			goto exit;
++		priv->data_valid = true;
++		priv->last_update = jiffies;
++	}
++exit:
++	mutex_unlock(&priv->access_lock);
++
++	return ret;
++}
++
++static ssize_t show_max_alarm(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	int ret;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	ret = stts751_update(priv);
++	if (ret < 0)
++		return ret;
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->max_alert);
++}
++
++static ssize_t show_min_alarm(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	int ret;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	ret = stts751_update(priv);
++	if (ret < 0)
++		return ret;
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->min_alert);
++}
++
++static ssize_t show_input(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	int ret;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	ret = stts751_update(priv);
++	if (ret < 0)
++		return ret;
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->temp);
++}
++
++static ssize_t show_therm(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm);
++}
++
++static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
++			 const char *buf, size_t count)
++{
++	int ret;
++	long temp;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	if (kstrtol(buf, 10, &temp) < 0)
++		return -EINVAL;
++
++	/* HW works in range -64C to +127.937C */
++	temp = clamp_val(temp, -64000, 127937);
++	mutex_lock(&priv->access_lock);
++	ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_TLIM);
++	if (ret)
++		goto exit;
++
++	dev_dbg(dev, "setting therm %ld", temp);
++
++	/*
++	 * hysteresis reg is relative to therm, so the HW does not need to be
++	 * adjusted, we need to update our local copy only.
++	 */
++	priv->hyst = temp - (priv->therm - priv->hyst);
++	priv->therm = temp;
++
++exit:
++	mutex_unlock(&priv->access_lock);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++static ssize_t show_hyst(struct device *dev, struct device_attribute *attr,
++			 char *buf)
++{
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->hyst);
++}
++
++static ssize_t set_hyst(struct device *dev, struct device_attribute *attr,
++			const char *buf, size_t count)
++{
++	int ret;
++	long temp;
++
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	if (kstrtol(buf, 10, &temp) < 0)
++		return -EINVAL;
++
++	mutex_lock(&priv->access_lock);
++	/* HW works in range -64C to +127.937C */
++	temp = clamp_val(temp, -64000, priv->therm);
++	priv->hyst = temp;
++	dev_dbg(priv->dev, "setting hyst %ld", temp);
++	temp = priv->therm - temp;
++	ret = stts751_set_temp_reg8(priv, temp, STTS751_REG_HYST);
++	mutex_unlock(&priv->access_lock);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++static ssize_t show_therm_trip(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int ret;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	ret = stts751_update(priv);
++	if (ret < 0)
++		return ret;
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm_trip);
++}
++
++static ssize_t show_max(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_max);
++}
++
++static ssize_t set_max(struct device *dev, struct device_attribute *attr,
++		       const char *buf, size_t count)
++{
++	int ret;
++	long temp;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	if (kstrtol(buf, 10, &temp) < 0)
++		return -EINVAL;
++
++	mutex_lock(&priv->access_lock);
++	/* HW works in range -64C to +127.937C */
++	temp = clamp_val(temp, priv->event_min, 127937);
++	ret = stts751_set_temp_reg16(priv, temp,
++				     STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
++	if (ret)
++		goto exit;
++
++	dev_dbg(dev, "setting event max %ld", temp);
++	priv->event_max = temp;
++	ret = count;
++exit:
++	mutex_unlock(&priv->access_lock);
++	return ret;
++}
++
++static ssize_t show_min(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_min);
++}
++
++static ssize_t set_min(struct device *dev, struct device_attribute *attr,
++		       const char *buf, size_t count)
++{
++	int ret;
++	long temp;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	if (kstrtol(buf, 10, &temp) < 0)
++		return -EINVAL;
++
++	mutex_lock(&priv->access_lock);
++	/* HW works in range -64C to +127.937C */
++	temp = clamp_val(temp, -64000, priv->event_max);
++	ret = stts751_set_temp_reg16(priv, temp,
++				     STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
++	if (ret)
++		goto exit;
++
++	dev_dbg(dev, "setting event min %ld", temp);
++	priv->event_min = temp;
++	ret = count;
++exit:
++	mutex_unlock(&priv->access_lock);
++	return ret;
++}
++
++static ssize_t show_interval(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n",
++			stts751_intervals[priv->interval]);
++}
++
++static ssize_t set_interval(struct device *dev, struct device_attribute *attr,
++			    const char *buf, size_t count)
++{
++	unsigned long val;
++	int idx;
++	int ret = count;
++	struct stts751_priv *priv = dev_get_drvdata(dev);
++
++	if (kstrtoul(buf, 10, &val) < 0)
++		return -EINVAL;
++
++	idx = find_closest_descending(val, stts751_intervals,
++				      ARRAY_SIZE(stts751_intervals));
++
++	dev_dbg(dev, "setting interval. req:%lu, idx: %d, val: %d", val, idx,
++		stts751_intervals[idx]);
++
++	mutex_lock(&priv->access_lock);
++	if (priv->interval == idx)
++		goto exit;
++
++	/*
++	 * In early development stages I've become suspicious about the chip
++	 * starting to misbehave if I ever set, even briefly, an invalid
++	 * configuration. While I'm not sure this is really needed, be
++	 * conservative and set rate/resolution in such an order that avoids
++	 * passing through an invalid configuration.
++	 */
++
++	/* speed up: lower the resolution, then modify convrate */
++	if (priv->interval < idx) {
++		dev_dbg(priv->dev, "lower resolution, then modify convrate");
++		priv->interval = idx;
++		ret = stts751_adjust_resolution(priv);
++		if (ret)
++			goto exit;
++	}
++
++	ret = i2c_smbus_write_byte_data(priv->client, STTS751_REG_RATE, idx);
++	if (ret)
++		goto exit;
++	/* slow down: modify convrate, then raise resolution */
++	if (priv->interval != idx) {
++		dev_dbg(priv->dev, "modify convrate, then raise resolution");
++		priv->interval = idx;
++		ret = stts751_adjust_resolution(priv);
++		if (ret)
++			goto exit;
++	}
++	ret = count;
++exit:
++	mutex_unlock(&priv->access_lock);
++
++	return ret;
++}
++
++static int stts751_detect(struct i2c_client *new_client,
++			  struct i2c_board_info *info)
++{
++	struct i2c_adapter *adapter = new_client->adapter;
++	const char *name;
++	int tmp;
++
++	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
++		return -ENODEV;
++
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_MAN_ID);
++	if (tmp != ST_MAN_ID)
++		return -ENODEV;
++
++	/* lower temperaure registers always have bits 0-3 set to zero */
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_TEMP_L);
++	if (tmp & 0xf)
++		return -ENODEV;
++
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_HLIM_L);
++	if (tmp & 0xf)
++		return -ENODEV;
++
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_LLIM_L);
++	if (tmp & 0xf)
++		return -ENODEV;
++
++	/* smbus timeout register always have bits 0-7 set to zero */
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_SMBUS_TO);
++	if (tmp & 0x7f)
++		return -ENODEV;
++
++	tmp = i2c_smbus_read_byte_data(new_client, STTS751_REG_PROD_ID);
++
++	switch (tmp) {
++	case STTS751_0_PROD_ID:
++		name = "STTS751-0";
++		break;
++	case STTS751_1_PROD_ID:
++		name = "STTS751-1";
++		break;
++	default:
++		return -ENODEV;
++	}
++	dev_dbg(&new_client->dev, "Chip %s detected", name);
++
++	strlcpy(info->type, stts751_id[0].name, I2C_NAME_SIZE);
++	return 0;
++}
++
++static int stts751_read_chip_config(struct stts751_priv *priv)
++{
++	int ret;
++	int tmp;
++
++	ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_CONF);
++	if (ret < 0)
++		return ret;
++	priv->config = ret;
++	priv->res = (ret & STTS751_CONF_RES_MASK) >> STTS751_CONF_RES_SHIFT;
++
++	ret = i2c_smbus_read_byte_data(priv->client, STTS751_REG_RATE);
++	if (ret < 0)
++		return ret;
++	priv->interval = ret;
++
++	ret = stts751_read_reg16(priv, &priv->event_max,
++				 STTS751_REG_HLIM_H, STTS751_REG_HLIM_L);
++	if (ret)
++		return ret;
++
++	ret = stts751_read_reg16(priv, &priv->event_min,
++				 STTS751_REG_LLIM_H, STTS751_REG_LLIM_L);
++	if (ret)
++		return ret;
++
++	ret = stts751_read_reg8(priv, &priv->therm, STTS751_REG_TLIM);
++	if (ret)
++		return ret;
++
++	ret = stts751_read_reg8(priv, &tmp, STTS751_REG_HYST);
++	if (ret)
++		return ret;
++	priv->hyst = priv->therm - tmp;
++
++	return 0;
++}
++
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, show_input, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_min, 0644, show_min, set_min, 0);
++static SENSOR_DEVICE_ATTR(temp1_max, 0644, show_max, set_max, 0);
++static SENSOR_DEVICE_ATTR(temp1_min_alarm, 0444, show_min_alarm, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_max_alarm, 0444, show_max_alarm, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp1_crit, 0644, show_therm,	set_therm, 0);
++static SENSOR_DEVICE_ATTR(temp1_crit_hyst, 0644, show_hyst, set_hyst, 0);
++static SENSOR_DEVICE_ATTR(temp1_crit_alarm, 0444, show_therm_trip, NULL, 0);
++static SENSOR_DEVICE_ATTR(update_interval, 0644,
++			  show_interval, set_interval, 0);
++
++static struct attribute *stts751_attrs[] = {
++	&sensor_dev_attr_temp1_input.dev_attr.attr,
++	&sensor_dev_attr_temp1_min.dev_attr.attr,
++	&sensor_dev_attr_temp1_max.dev_attr.attr,
++	&sensor_dev_attr_temp1_min_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp1_max_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp1_crit.dev_attr.attr,
++	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
++	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
++	&sensor_dev_attr_update_interval.dev_attr.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(stts751);
++
++static int stts751_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct stts751_priv *priv;
++	int ret;
++	bool smbus_nto;
++	int rev_id;
++
++	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->client = client;
++	i2c_set_clientdata(client, priv);
++	mutex_init(&priv->access_lock);
++
++	if (device_property_present(&client->dev,
++				    "smbus-timeout-disable")) {
++		smbus_nto = device_property_read_bool(&client->dev,
++						      "smbus-timeout-disable");
++
++		ret = i2c_smbus_write_byte_data(priv->client,
++						STTS751_REG_SMBUS_TO,
++						smbus_nto ? 0 : 0x80);
++		if (ret)
++			return ret;
++	}
++
++	rev_id = i2c_smbus_read_byte_data(priv->client, STTS751_REG_REV_ID);
++	if (rev_id < 0)
++		return -ENODEV;
++	if (rev_id != 0x1) {
++		dev_dbg(&priv->client->dev, "Chip revision 0x%x is untested\n",
++			rev_id);
++	}
++
++	ret = stts751_read_chip_config(priv);
++	if (ret)
++		return ret;
++
++	priv->config &= ~(STTS751_CONF_STOP | STTS751_CONF_EVENT_DIS);
++	ret = i2c_smbus_write_byte_data(priv->client,
++					STTS751_REG_CONF, priv->config);
++	if (ret)
++		return ret;
++
++	priv->dev = devm_hwmon_device_register_with_groups(&client->dev,
++							client->name, priv,
++							stts751_groups);
++	return PTR_ERR_OR_ZERO(priv->dev);
++}
++
++MODULE_DEVICE_TABLE(i2c, stts751_id);
++
++static struct i2c_driver stts751_driver = {
++	.class		= I2C_CLASS_HWMON,
++	.driver = {
++		.name	= DEVNAME,
++	},
++	.probe		= stts751_probe,
++	.id_table	= stts751_id,
++	.detect		= stts751_detect,
++	.alert		= stts751_alert,
++	.address_list	= normal_i2c,
++};
++
++module_i2c_driver(stts751_driver);
++
++MODULE_AUTHOR("Andrea Merello <andrea.merello@gmail.com>");
++MODULE_DESCRIPTION("STTS751 sensor driver");
++MODULE_LICENSE("GPL");
+-- 
+2.7.4
 
-They will overlap if we use the attributes incorrectly. Those are defined
-in
-occ=5Fp8.c or occ=5Fp9.c, as they specific to the OCC version. But the curr=
-ent
-definitions I have cannot overlap.
-
-The problem is both the "caps" sensor and the "power" sensor coming off the
-OCC
-are relevant to the power hwmon type, so I didn't want to use another type.
-The
-problem is that for each OCC, there may be any number of power sensors, but
-only
-one caps sensor. So I can't combine the two, as I believe that would create
-all
-the hwmon power attributes specified (for both "caps" and "power" sensors)
-for
-each power sensor. However, this does mean the indexing is not an issue, as
-the
-caps sensor doesn't need to correspond to the power sensors at all.
-
-This current set up works pretty well for us, though I agree it is a little
-confusing. Not sure of any more ideal way to do it. Our sensors just don't
-line up
-well with the currently defined hwmon types.
-
-Thanks for the feedback,
-Eddie
-
->
-> > +};
-> > +
-> > +struct occ=5Fsysfs *occ=5Fsysfs=5Fstart(struct device *dev, struct occ=
- *occ,
-> > +              const u32 *sensor=5Fhwmon=5Fconfigs,
-> > +              const char *name)
-> > +{
-> > +   int rc, i, j, num=5Fsensors, index =3D 0, id;
-> > +   char *brk;
-> > +   struct occ=5Fblocks *resp =3D NULL;
-> > +   u32 *sensor=5Fconfig;
-> > +   struct occ=5Fsysfs *hwmon =3D devm=5Fkzalloc(dev, sizeof(struct
-occ=5Fsysfs),
-> > +                      GFP=5FKERNEL);
-> > +   if (!hwmon)
-> > +      return ERR=5FPTR(-ENOMEM);
-> > +
-> > +   /* need space for null-termination */
-> > +   hwmon->occ=5Fsensors =3D
-> > +      devm=5Fkzalloc(dev, sizeof(struct hwmon=5Fchannel=5Finfo *) *
-> > +              (MAX=5FOCC=5FSENSOR=5FTYPE + 1), GFP=5FKERNEL);
-> > +   if (!hwmon->occ=5Fsensors)
-> > +      return ERR=5FPTR(-ENOMEM);
-> > +
-> > +   hwmon->occ =3D occ;
-> > +   hwmon->sensor=5Fhwmon=5Fconfigs =3D sensor=5Fhwmon=5Fconfigs;
-> > +   hwmon->occ=5Finfo.ops =3D &occ=5Fhwmon=5Fops;
-> > +   hwmon->occ=5Finfo.info =3D
-> > +      (const struct hwmon=5Fchannel=5Finfo **)hwmon->occ=5Fsensors;
-> > +
-> > +   occ=5Fget=5Fresponse=5Fblocks(occ, &resp);
-> > +
-> > +   for (i =3D 0; i < MAX=5FOCC=5FSENSOR=5FTYPE; ++i)
-> > +      resp->sensor=5Fblock=5Fid[i] =3D -1;
-> > +
-> > +   /* read sensor data from occ */
-> > +   rc =3D occ=5Fupdate=5Fdevice(occ);
-> > +   if (rc)
-> > +      return ERR=5FPTR(rc);
-> > +
-> > +   for (i =3D 0; i < MAX=5FOCC=5FSENSOR=5FTYPE; i++) {
-> > +      id =3D resp->sensor=5Fblock=5Fid[i];
-> > +      if (id < 0)
-> > +         continue;
-> > +
-> > +      num=5Fsensors =3D resp->blocks[id].header.num=5Fsensors;
-> > +      /* need null-termination */
-> > +      sensor=5Fconfig =3D devm=5Fkzalloc(dev,
-> > +                    sizeof(u32) * (num=5Fsensors + 1),
-> > +                    GFP=5FKERNEL);
-> > +      if (!sensor=5Fconfig)
-> > +         return ERR=5FPTR(-ENOMEM);
-> > +
-> > +      for (j =3D 0; j < num=5Fsensors; j++)
-> > +         sensor=5Fconfig[j] =3D sensor=5Fhwmon=5Fconfigs[i];
-> > +
-> > +      hwmon->occ=5Fsensors[index] =3D
-> > +         devm=5Fkzalloc(dev, sizeof(struct hwmon=5Fchannel=5Finfo),
-> > +                 GFP=5FKERNEL);
-> > +      if (!hwmon->occ=5Fsensors[index])
-> > +         return ERR=5FPTR(-ENOMEM);
-> > +
-> > +      hwmon->occ=5Fsensors[index]->type =3D occ=5Fsensor=5Ftypes[i];
-> > +      hwmon->occ=5Fsensors[index]->config =3D sensor=5Fconfig;
-> > +      index++;
-> > +   }
-> > +
-> > +   /* search for bad chars */
-> > +   strncpy(hwmon->hwmon=5Fname, name, OCC=5FHWMON=5FNAME=5FLENGTH);
-> > +   brk =3D strpbrk(hwmon->hwmon=5Fname, "-* \t\n");
-> > +   while (brk) {
-> > +      *brk =3D '=5F';
-> > +      brk =3D strpbrk(brk,  "-* \t\n");
-> > +   }
-> > +
-> > +   hwmon->dev =3D devm=5Fhwmon=5Fdevice=5Fregister=5Fwith=5Finfo(dev,
-> > +                       hwmon->hwmon=5Fname,
-> > +                       hwmon,
-> > +                       &hwmon->occ=5Finfo,
-> > +                       NULL);
-> > +   if (IS=5FERR(hwmon->dev)) {
-> > +      dev=5Ferr(dev, "cannot register hwmon device %s: %ld\n",
-> > +         hwmon->hwmon=5Fname, PTR=5FERR(hwmon->dev));
-> > +      return ERR=5FCAST(hwmon->dev);
-> > +   }
-> > +
-> > +   return hwmon;
-> > +}
-> > +EXPORT=5FSYMBOL(occ=5Fsysfs=5Fstart);
-> > +
-> > +MODULE=5FAUTHOR("Eddie James <eajames@us.ibm.com>");
-> > +MODULE=5FDESCRIPTION("OCC sysfs driver");
-> > +MODULE=5FLICENSE("GPL");
-> > diff --git a/drivers/hwmon/occ/occ=5Fsysfs.h
-b/drivers/hwmon/occ/occ=5Fsysfs.h
-> > new file mode 100644
-> > index 0000000..462f9d2
-> > --- /dev/null
-> > +++ b/drivers/hwmon/occ/occ=5Fsysfs.h
-> > @@ -0,0 +1,30 @@
-> > +/*
-> > + * occ=5Fsysfs.h - OCC sysfs interface
-> > + *
-> > + * This file contains the data structures and function prototypes
-> for the OCC
-> > + * hwmon sysfs entries.
-> > + *
-> > + * Copyright 2016 IBM Corp.
-> > + *
-> > + * This program is free software; you can redistribute it and/or
-modify
-> > + * it under the terms of the GNU General Public License as published
-by
-> > + * the Free Software Foundation; either version 2 of the License, or
-> > + * (at your option) any later version.
-> > + *
-> > + * This program is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> > + * GNU General Public License for more details.
-> > + */
-> > +
-> > +#ifndef =5F=5FOCC=5FSYSFS=5FH=5F=5F
-> > +#define =5F=5FOCC=5FSYSFS=5FH=5F=5F
-> > +
-> > +struct occ;
-> > +struct device;
-> > +struct occ=5Fsysfs;
-> > +
-> > +struct occ=5Fsysfs *occ=5Fsysfs=5Fstart(struct device *dev, struct occ=
- *occ,
-> > +              const u32 *sensor=5Fhwmon=5Fconfigs,
-> > +              const char *name);
-> > +#endif /* =5F=5FOCC=5FSYSFS=5FH=5F=5F */
-> >
->
-
---0__=8FBB0A2BDFFF23608f9e8a93df938690918c8FBB0A2BDFFF2360
-Content-Transfer-Encoding: quoted-printable
-Content-type: text/html; charset=US-ASCII
-Content-Disposition: inline
-
-<html><body><p><tt>Guenter Roeck &lt;linux@roeck-us.net&gt; wrote on 01/29/=
-2017 01:50:55 PM:<br>&gt; On 01/26/2017 03:19 PM, eajames.ibm@gmail.com wro=
-te:<br>&gt; &gt; From: &quot;Edward A. James&quot; &lt;eajames@us.ibm.com&g=
-t;<br>&gt; &gt;<br>&gt; &gt; Add a generic mechanism to expose the sensors =
-provided by the OCC in<br>&gt; &gt; sysfs.<br>&gt; &gt;<br>&gt; &gt; Signed=
--off-by: Edward A. James &lt;eajames@us.ibm.com&gt;<br>&gt; &gt; Signed-off=
--by: Andrew Jeffery &lt;andrew@aj.id.au&gt;<br>&gt; &gt; ---<br>&gt; &gt; &=
-nbsp;Documentation/hwmon/occ &nbsp; &nbsp; &nbsp; | &nbsp;62 ++++++++++<br>=
-&gt; &gt; &nbsp;drivers/hwmon/occ/Makefile &nbsp; &nbsp;| &nbsp; 2 +-<br>&g=
-t; &gt; &nbsp;drivers/hwmon/occ/occ=5Fsysfs.c | 259 +++++++++++++++++++++++=
-++++++<br>&gt; +++++++++++++<br>&gt; &gt; &nbsp;drivers/hwmon/occ/occ=5Fsys=
-fs.h | &nbsp;30 +++++<br>&gt; &gt; &nbsp;4 files changed, 352 insertions(+)=
-, 1 deletion(-)<br>&gt; &gt; &nbsp;create mode 100644 drivers/hwmon/occ/occ=
-=5Fsysfs.c<br>&gt; &gt; &nbsp;create mode 100644 drivers/hwmon/occ/occ=5Fsy=
-sfs.h<br>&gt; &gt;<br>&gt; &gt; diff --git a/Documentation/hwmon/occ b/Docu=
-mentation/hwmon/occ<br>&gt; &gt; index 79d1642..d0bdf06 100644<br>&gt; &gt;=
- --- a/Documentation/hwmon/occ<br>&gt; &gt; +++ b/Documentation/hwmon/occ<b=
-r>&gt; &gt; @@ -25,6 +25,68 @@ Currently, all versions of the OCC support f=
-our<br>&gt; types of sensor data: power,<br>&gt; &gt; &nbsp;temperature, fr=
-equency, and &quot;caps,&quot; which indicate limits and <br>&gt; threshold=
-s used<br>&gt; &gt; &nbsp;internally on the OCC.<br>&gt; &gt;<br>&gt; &gt; =
-+sysfs Entries<br>&gt; &gt; +-------------<br>&gt; &gt; +<br>&gt; &gt; +The=
- OCC driver uses the hwmon sysfs framework to provide data to userspace.<br=
->&gt; &gt; +<br>&gt; &gt; +The driver exports a number of sysfs files for e=
-ach type of sensor. The<br>&gt; &gt; +sensor-specific files vary depending =
-on the processor type, <br>&gt; though many of the<br>&gt; &gt; +attributes=
- are common for both the POWER8 and POWER9.<br>&gt; &gt; +<br>&gt; &gt; +Th=
-e hwmon interface cannot define every type of sensor that may be used.<br>&=
-gt; &gt; +Therefore, the frequency sensor on the OCC uses the &quot;input&q=
-uot; type <br>&gt; sensor defined<br>&gt; &gt; +by the hwmon interface, rat=
-her than defining a new type of custom sensor.<br>&gt; &gt; +<br>&gt; &gt; =
-+Below are detailed the names and meaning of each sensor file for <br>&gt; =
-both types of<br>&gt; &gt; +processors. All sensors are read-only unless ot=
-herwise specified.<br>&gt; &lt;x&gt; indicates<br>&gt; &gt; +the hwmon inde=
-x. sensor id indicates the unique internal OCC <br>&gt; identifer. Please<b=
-r>&gt; &gt; +see the POWER OCC specification for details on all these senso=
-r values.<br>&gt; &gt; +<br>&gt; &gt; +frequency:<br>&gt; &gt; + &nbsp; all=
- processors:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;in&lt;x&gt;=5Finput - frequ=
-ency value<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;in&lt;x&gt;=5Flabel - sensor =
-id<br>&gt; &gt; +temperature:<br>&gt; &gt; + &nbsp; POWER8:<br>&gt; &gt; + =
-&nbsp; &nbsp; &nbsp;temp&lt;x&gt;=5Finput - temperature value<br>&gt; &gt; =
-+ &nbsp; &nbsp; &nbsp;temp&lt;x&gt;=5Flabel - sensor id<br>&gt; &gt; + &nbs=
-p; POWER9 (in addition to above):<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;temp&l=
-t;x&gt;=5Ftype - FRU type<br>&gt; &gt; +<br>&gt; &gt; +power:<br>&gt; &gt; =
-+ &nbsp; POWER8:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Finput =
-- power value<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Flabel - s=
-ensor id<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Faverage - accu=
-mulator<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Faverage=5Finter=
-val - update tag (number of samples in<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; =
-&nbsp; accumulator)<br>&gt; &gt; + &nbsp; POWER9:<br>&gt; &gt; + &nbsp; &nb=
-sp; &nbsp;power&lt;x&gt;=5Finput - power value<br>&gt; &gt; + &nbsp; &nbsp;=
- &nbsp;power&lt;x&gt;=5Flabel - sensor id<br>&gt; &gt; + &nbsp; &nbsp; &nbs=
-p;power&lt;x&gt;=5Faverage=5Fmin - accumulator[0]<br>&gt; &gt; + &nbsp; &nb=
-sp; &nbsp;power&lt;x&gt;=5Faverage=5Fmax - accumulator[1] (64 bits total)<b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Faverage=5Finterval - upd=
-ate tag<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Freset=5Fhistory=
- - (function=5Fid | (apss=5Fchannel &lt;&lt; 8)<br>&gt; &gt; +<br>&gt; &gt;=
- +caps:<br>&gt; &gt; + &nbsp; POWER8:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;po=
-wer&lt;x&gt;=5Fcap - current powercap<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;po=
-wer&lt;x&gt;=5Fcap=5Fmax - max powercap<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;=
-power&lt;x&gt;=5Fcap=5Fmin - min powercap<br>&gt; &gt; + &nbsp; &nbsp; &nbs=
-p;power&lt;x&gt;=5Fmax - normal powercap<br>&gt; &gt; + &nbsp; &nbsp; &nbsp=
-;power&lt;x&gt;=5Falarm - user powercap, r/w<br>&gt; &gt; + &nbsp; POWER9:<=
-br>&gt; &gt; + &nbsp; &nbsp; &nbsp;power&lt;x&gt;=5Fcap=5Falarm - user powe=
-rcap source<br>&gt; &gt; +<br>&gt; &gt; +The driver also provides two sysfs=
- entries through hwmon to better<br>&gt; &gt; +control the driver and monit=
-or the master OCC. Though there may be multiple<br>&gt; &gt; +OCCs present =
-on the system, these two files are only present for <br>&gt; the &quot;mast=
-er&quot;<br>&gt; &gt; +OCC.<br>&gt; &gt; + &nbsp; name - read the name of t=
-he driver<br>&gt; &gt; + &nbsp; update=5Finterval - read or write the minim=
-um interval for polling the<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;OCC.<br>&gt;=
- &gt; +<br>&gt; &gt; &nbsp;BMC - Host Communications<br>&gt; &gt; &nbsp;---=
-----------------------<br>&gt; &gt;<br>&gt; &gt; diff --git a/drivers/hwmon=
-/occ/Makefile b/drivers/hwmon/occ/Makefile<br>&gt; &gt; index 93cb52f..a688=
-1f9 100644<br>&gt; &gt; --- a/drivers/hwmon/occ/Makefile<br>&gt; &gt; +++ b=
-/drivers/hwmon/occ/Makefile<br>&gt; &gt; @@ -1 +1 @@<br>&gt; &gt; -obj-$(CO=
-NFIG=5FSENSORS=5FPPC=5FOCC) +=3D occ.o<br>&gt; &gt; +obj-$(CONFIG=5FSENSORS=
-=5FPPC=5FOCC) +=3D occ.o occ=5Fsysfs.o<br>&gt; &gt; diff --git a/drivers/hw=
-mon/occ/occ=5Fsysfs.c b/drivers/hwmon/occ/occ=5Fsysfs.c<br>&gt; &gt; new fi=
-le mode 100644<br>&gt; &gt; index 0000000..ea2aa04<br>&gt; &gt; --- /dev/nu=
-ll<br>&gt; &gt; +++ b/drivers/hwmon/occ/occ=5Fsysfs.c<br>&gt; &gt; @@ -0,0 =
-+1,259 @@<br>&gt; &gt; +/*<br>&gt; &gt; + * occ=5Fsysfs.c - OCC sysfs inter=
-face<br>&gt; &gt; + *<br>&gt; &gt; + * This file contains the methods and d=
-ata structures for <br>&gt; implementing the OCC<br>&gt; &gt; + * hwmon sys=
-fs entries.<br>&gt; &gt; + *<br>&gt; &gt; + * Copyright 2016 IBM Corp.<br>&=
-gt; &gt; + *<br>&gt; &gt; + * This program is free software; you can redist=
-ribute it and/or modify<br>&gt; &gt; + * it under the terms of the GNU Gene=
-ral Public License as published by<br>&gt; &gt; + * the Free Software Found=
-ation; either version 2 of the License, or<br>&gt; &gt; + * (at your option=
-) any later version.<br>&gt; &gt; + *<br>&gt; &gt; + * This program is dist=
-ributed in the hope that it will be useful,<br>&gt; &gt; + * but WITHOUT AN=
-Y WARRANTY; without even the implied warranty of<br>&gt; &gt; + * MERCHANTA=
-BILITY or FITNESS FOR A PARTICULAR PURPOSE. See the<br>&gt; &gt; + * GNU Ge=
-neral Public License for more details.<br>&gt; &gt; + */<br>&gt; &gt; +<br>=
-&gt; &gt; +#include &lt;linux/delay.h&gt;<br>&gt; &gt; +#include &lt;linux/=
-device.h&gt;<br>&gt; &gt; +#include &lt;linux/err.h&gt;<br>&gt; &gt; +#incl=
-ude &lt;linux/hwmon.h&gt;<br>&gt; &gt; +#include &lt;linux/hwmon-sysfs.h&gt=
-;<br>&gt; &gt; +#include &lt;linux/init.h&gt;<br>&gt; &gt; +#include &lt;li=
-nux/jiffies.h&gt;<br>&gt; &gt; +#include &lt;linux/kernel.h&gt;<br>&gt; &gt=
-; +#include &lt;linux/module.h&gt;<br>&gt; &gt; +#include &lt;linux/mutex.h=
-&gt;<br>&gt; &gt; +#include &lt;linux/slab.h&gt;<br>&gt; &gt; +#include &qu=
-ot;occ.h&quot;<br>&gt; &gt; +#include &quot;occ=5Fsysfs.h&quot;<br>&gt; &gt=
-; +<br>&gt; &gt; +#define RESP=5FRETURN=5FCMD=5FINVAL &nbsp; 0x13<br>&gt; &=
-gt; +#define OCC=5FHWMON=5FNAME=5FLENGTH &nbsp; 32<br>&gt; &gt; +<br>&gt; &=
-gt; +struct occ=5Fsysfs {<br>&gt; &gt; + &nbsp; struct device *dev;<br>&gt;=
- &gt; + &nbsp; struct occ *occ;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; char h=
-wmon=5Fname[OCC=5FHWMON=5FNAME=5FLENGTH + 1];<br>&gt; &gt; + &nbsp; const u=
-32 *sensor=5Fhwmon=5Fconfigs;<br>&gt; &gt; + &nbsp; struct hwmon=5Fchannel=
-=5Finfo **occ=5Fsensors;<br>&gt; &gt; + &nbsp; struct hwmon=5Fchip=5Finfo o=
-cc=5Finfo;<br>&gt; &gt; + &nbsp; u16 user=5Fpowercap;<br>&gt; &gt; +};<br>&=
-gt; &gt; +<br>&gt; &gt; +static int occ=5Fhwmon=5Fread(struct device *dev, =
-enum hwmon=5Fsensor=5Ftypes type,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp=
-; &nbsp; u32 attr, int channel, long *val)<br>&gt; &gt; +{<br>&gt; &gt; + &=
-nbsp; int rc;<br>&gt; &gt; + &nbsp; struct occ=5Fsysfs *driver =3D dev=5Fge=
-t=5Fdrvdata(dev);<br>&gt; &gt; + &nbsp; struct occ *occ =3D driver-&gt;occ;=
-<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; switch (type) {<br>&gt; &gt; + &nbsp;=
- case hwmon=5Fin:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;rc =3D occ=5Fget=5Fsen=
-sor=5Ffield(occ, FREQ, channel, attr, val);<br>&gt; &gt; + &nbsp; &nbsp; &n=
-bsp;break;<br>&gt; &gt; + &nbsp; case hwmon=5Ftemp:<br>&gt; &gt; + &nbsp; &=
-nbsp; &nbsp;rc =3D occ=5Fget=5Fsensor=5Ffield(occ, TEMP, channel, attr, val=
-);<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;break;<br>&gt; &gt; + &nbsp; case hwm=
-on=5Fpower:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;rc =3D occ=5Fget=5Fsensor=5F=
-field(occ, POWER, channel, attr, val);<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;b=
-reak;<br>&gt; &gt; + &nbsp; default:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;rc =
-=3D -EOPNOTSUPP;<br>&gt; &gt; + &nbsp; }<br>&gt; &gt; +<br>&gt; &gt; + &nbs=
-p; return rc;<br>&gt; &gt; +}<br>&gt; &gt; +<br>&gt; &gt; +static int occ=
-=5Fhwmon=5Fread=5Fstring(struct device *dev,<br>&gt; &gt; + &nbsp; &nbsp; &=
-nbsp; &nbsp; &nbsp; &nbsp; enum hwmon=5Fsensor=5Ftypes type, u32 attr,<br>&=
-gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; int channel, char **st=
-r)<br>&gt; &gt; +{<br>&gt; &gt; + &nbsp; int rc;<br>&gt; &gt; + &nbsp; unsi=
-gned long val =3D 0;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; if (!((type =3D=
-=3D hwmon=5Fin &amp;&amp; attr =3D=3D hwmon=5Fin=5Flabel) ||<br>&gt; &gt; +=
- &nbsp; &nbsp; &nbsp; (type =3D=3D hwmon=5Ftemp &amp;&amp; attr =3D=3D hwmo=
-n=5Ftemp=5Flabel) ||<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; (type =3D=3D hwmon=
-=5Fpower &amp;&amp; attr =3D=3D hwmon=5Fpower=5Flabel)))<br>&gt; &gt; + &nb=
-sp; &nbsp; &nbsp;return -EOPNOTSUPP;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; /=
-* will fetch the &quot;label&quot;, the sensor=5Fid */<br>&gt; &gt; + &nbsp=
-; rc =3D occ=5Fhwmon=5Fread(dev, type, attr, channel, &amp;val);<br>&gt; &g=
-t; + &nbsp; if (rc &lt; 0)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;return rc;<br=
->&gt; &gt; +<br>&gt; &gt; + &nbsp; rc =3D snprintf(*str, PAGE=5FSIZE - 1, &=
-quot;%lu&quot;, val);<br>&gt; &gt; + &nbsp; if (rc &gt; 0)<br>&gt; &gt; + &=
-nbsp; &nbsp; &nbsp;rc =3D 0;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; return rc=
-;<br>&gt; &gt; +}<br>&gt; &gt; +<br>&gt; &gt; +static int occ=5Fhwmon=5Fwri=
-te(struct device *dev, enum <br>&gt; hwmon=5Fsensor=5Ftypes type,<br>&gt; &=
-gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;u32 attr, int channel, long =
-val)<br>&gt; &gt; +{<br>&gt; &gt; + &nbsp; int rc =3D 0;<br>&gt; <br>&gt; U=
-nnecessary initialization.<br>&gt; <br>&gt; &gt; + &nbsp; struct occ=5Fsysf=
-s *driver =3D dev=5Fget=5Fdrvdata(dev);<br>&gt; &gt; +<br>&gt; &gt; + &nbsp=
-; if (type =3D=3D hwmon=5Fpower &amp;&amp; attr =3D=3D hwmon=5Fpower=5Falar=
-m) {<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;rc =3D occ=5Fset=5Fuser=5Fpowercap(=
-driver-&gt;occ, val);<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (rc) {<br>&gt; =
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; if (rc =3D=3D RESP=5FRETURN=5FCMD=5FINVA=
-L) {<br>&gt; <br>&gt; Is the mix of private and public error codes necessar=
-y ? Any chance<br>&gt; the called code can just return -EINVAL ?<br>&gt; <b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dev=5Ferr(dev,<br>&g=
-t; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;set invali=
-d powercap value: %ld\n&quot;,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &=
-nbsp; &nbsp; &nbsp; val);<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=
- &nbsp;return -EINVAL;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; }<br>&gt;=
- &gt; +<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; dev=5Ferr(dev, &quot;set=
- user powercap failed: 0x:%x\n&quot;, rc);<br>&gt; &gt; + &nbsp; &nbsp; &nb=
-sp; &nbsp; return rc;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;}<br>&gt; &gt; +<b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp;driver-&gt;user=5Fpowercap =3D val;<br>&g=
-t; &gt; +<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;return rc;<br>&gt; &gt; + &nbs=
-p; }<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; return -EOPNOTSUPP;<br>&gt; &gt; =
-+}<br>&gt; &gt; +<br>&gt; &gt; +static umode=5Ft occ=5Fis=5Fvisible(const v=
-oid *data, enum <br>&gt; hwmon=5Fsensor=5Ftypes type,<br>&gt; &gt; + &nbsp;=
- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; u32 attr, int channel)<br>&gt; &=
-gt; +{<br>&gt; &gt; + &nbsp; const struct occ=5Fsysfs *driver =3D data;<br>=
-&gt; &gt; +<br>&gt; &gt; + &nbsp; switch (type) {<br>&gt; &gt; + &nbsp; cas=
-e hwmon=5Fchip:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (attr =3D=3D hwmon=5F=
-chip=5Fupdate=5Finterval)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; return=
- S=5FIRUGO | S=5FIWUSR;<br>&gt; <br>&gt; It might be better to just use oct=
-als directly to avoid the annoyingcheckpatch<br>&gt; warnings.<br>&gt; <br>=
-&gt; &gt; + &nbsp; &nbsp; &nbsp;break;<br>&gt; &gt; + &nbsp; case hwmon=5Fi=
-n:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (BIT(attr) &amp; driver-&gt;sensor=
-=5Fhwmon=5Fconfigs[0])<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; return S=
-=5FIRUGO;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;break;<br>&gt; &gt; + &nbsp; c=
-ase hwmon=5Ftemp:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (BIT(attr) &amp; dr=
-iver-&gt;sensor=5Fhwmon=5Fconfigs[1])<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &=
-nbsp; return S=5FIRUGO;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;break;<br>&gt; &=
-gt; + &nbsp; case hwmon=5Fpower:<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;/* user=
- power limit */<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (attr =3D=3D hwmon=5F=
-power=5Falarm)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; return S=5FIRUGO =
-| S=5FIWUSR;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;else if ((BIT(attr) &amp; d=
-river-&gt;sensor=5Fhwmon=5Fconfigs[2]) ||<br>&gt; &gt; + &nbsp; &nbsp; &nbs=
-p; &nbsp; &nbsp;(BIT(attr) &amp; driver-&gt;sensor=5Fhwmon=5Fconfigs[3]))<b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; return S=5FIRUGO;<br>&gt; &gt; + =
-&nbsp; &nbsp; &nbsp;break;<br>&gt; &gt; + &nbsp; default:<br>&gt; &gt; + &n=
-bsp; &nbsp; &nbsp;return 0;<br>&gt; &gt; + &nbsp; }<br>&gt; &gt; +<br>&gt; =
-&gt; + &nbsp; return 0;<br>&gt; &gt; +}<br>&gt; &gt; +<br>&gt; &gt; +static=
- const struct hwmon=5Fops occ=5Fhwmon=5Fops =3D {<br>&gt; &gt; + &nbsp; .is=
-=5Fvisible =3D occ=5Fis=5Fvisible,<br>&gt; &gt; + &nbsp; .read =3D occ=5Fhw=
-mon=5Fread,<br>&gt; &gt; + &nbsp; .read=5Fstring =3D occ=5Fhwmon=5Fread=5Fs=
-tring,<br>&gt; &gt; + &nbsp; .write =3D occ=5Fhwmon=5Fwrite,<br>&gt; &gt; +=
-};<br>&gt; &gt; +<br>&gt; &gt; +static const enum hwmon=5Fsensor=5Ftypes oc=
-c=5Fsensor=5Ftypes<br>&gt; [MAX=5FOCC=5FSENSOR=5FTYPE] =3D {<br>&gt; &gt; +=
- &nbsp; hwmon=5Fin,<br>&gt; &gt; + &nbsp; hwmon=5Ftemp,<br>&gt; &gt; + &nbs=
-p; hwmon=5Fpower,<br>&gt; &gt; + &nbsp; hwmon=5Fpower<br>&gt; <br>&gt; So y=
-ou have two sets of power sensors, meaning you'll end up with two sets<br>&=
-gt; of hwmon=5Fchannel=5Finfo describing hwmon=5Fpower ? This kind of misus=
-es the API.<br>&gt; I hope that doesn't create duplicate attributes; I thin=
-k it might if<br>&gt; the actually supported attributes overlap. Also, this=
- means that theattribute<br>&gt; index association gets lost. For example, =
-if the alarm attributes<br>&gt; are in the second group, power1=5Falarm wou=
-ld not necessarily align with,<br>&gt; say, power1=5Fmax.<br>&gt; <br>&gt; =
-Is there any chance to avoid this ?</tt><br><br><tt>They will overlap if we=
- use the attributes incorrectly. </tt><tt>Those are defined in</tt><br><tt>=
-occ=5Fp8.c or occ=5Fp9.c, as they specific to the OCC version. But the curr=
-ent</tt><br><tt>definitions I have cannot overlap.</tt><br><br><tt>The prob=
-lem is both the &quot;caps&quot; sensor and the &quot;power&quot; sensor co=
-ming off the OCC</tt><br><tt>are relevant to the power hwmon type, so I did=
-n't want to use another type. The</tt><br><tt>problem is that for each OCC,=
- there may be any number of power sensors, but only</tt><br><tt>one caps se=
-nsor. So I can't combine the two, as I believe that would create all</tt><b=
-r><tt>the hwmon power attributes specified (for both &quot;caps&quot; and &=
-quot;power&quot; sensors) for</tt><br><tt>each power sensor. However, this =
-does mean the indexing is not an issue, as the</tt><br><tt>caps sensor does=
-n't need to correspond to the power sensors at all.</tt><br><br><tt>This cu=
-rrent set up works pretty well for us, though I agree it is a little</tt><b=
-r><tt>confusing. Not sure of any more ideal way to do it. Our sensors just =
-don't line up</tt><br><tt>well with the currently defined hwmon types.</tt>=
-<br><br><tt>Thanks for the feedback,</tt><br><tt>Eddie</tt><br><tt><br>&gt;=
- <br>&gt; &gt; +};<br>&gt; &gt; +<br>&gt; &gt; +struct occ=5Fsysfs *occ=5Fs=
-ysfs=5Fstart(struct device *dev, struct occ *occ,<br>&gt; &gt; + &nbsp; &nb=
-sp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const u32 *sensor=5Fhwmon=5Fconfigs,<=
-br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const char *=
-name)<br>&gt; &gt; +{<br>&gt; &gt; + &nbsp; int rc, i, j, num=5Fsensors, in=
-dex =3D 0, id;<br>&gt; &gt; + &nbsp; char *brk;<br>&gt; &gt; + &nbsp; struc=
-t occ=5Fblocks *resp =3D NULL;<br>&gt; &gt; + &nbsp; u32 *sensor=5Fconfig;<=
-br>&gt; &gt; + &nbsp; struct occ=5Fsysfs *hwmon =3D devm=5Fkzalloc(dev, siz=
-eof(struct occ=5Fsysfs),<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;GFP=5FKERNEL);<br>&gt; &gt; + &nbs=
-p; if (!hwmon)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;return ERR=5FPTR(-ENOMEM)=
-;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; /* need space for null-termination *=
-/<br>&gt; &gt; + &nbsp; hwmon-&gt;occ=5Fsensors =3D<br>&gt; &gt; + &nbsp; &=
-nbsp; &nbsp;devm=5Fkzalloc(dev, sizeof(struct hwmon=5Fchannel=5Finfo *) *<b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(MAX=5FOCC=5F=
-SENSOR=5FTYPE + 1), GFP=5FKERNEL);<br>&gt; &gt; + &nbsp; if (!hwmon-&gt;occ=
-=5Fsensors)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;return ERR=5FPTR(-ENOMEM);<b=
-r>&gt; &gt; +<br>&gt; &gt; + &nbsp; hwmon-&gt;occ =3D occ;<br>&gt; &gt; + &=
-nbsp; hwmon-&gt;sensor=5Fhwmon=5Fconfigs =3D sensor=5Fhwmon=5Fconfigs;<br>&=
-gt; &gt; + &nbsp; hwmon-&gt;occ=5Finfo.ops =3D &amp;occ=5Fhwmon=5Fops;<br>&=
-gt; &gt; + &nbsp; hwmon-&gt;occ=5Finfo.info =3D<br>&gt; &gt; + &nbsp; &nbsp=
-; &nbsp;(const struct hwmon=5Fchannel=5Finfo **)hwmon-&gt;occ=5Fsensors;<br=
->&gt; &gt; +<br>&gt; &gt; + &nbsp; occ=5Fget=5Fresponse=5Fblocks(occ, &amp;=
-resp);<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; for (i =3D 0; i &lt; MAX=5FOCC=
-=5FSENSOR=5FTYPE; ++i)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;resp-&gt;sensor=
-=5Fblock=5Fid[i] =3D -1;<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; /* read senso=
-r data from occ */<br>&gt; &gt; + &nbsp; rc =3D occ=5Fupdate=5Fdevice(occ);=
-<br>&gt; &gt; + &nbsp; if (rc)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;return ER=
-R=5FPTR(rc);<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; for (i =3D 0; i &lt; MAX=
-=5FOCC=5FSENSOR=5FTYPE; i++) {<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;id =3D re=
-sp-&gt;sensor=5Fblock=5Fid[i];<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (id &l=
-t; 0)<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; continue;<br>&gt; &gt; +<b=
-r>&gt; &gt; + &nbsp; &nbsp; &nbsp;num=5Fsensors =3D resp-&gt;blocks[id].hea=
-der.num=5Fsensors;<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;/* need null-terminat=
-ion */<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;sensor=5Fconfig =3D devm=5Fkzallo=
-c(dev,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbs=
-p; &nbsp; &nbsp;sizeof(u32) * (num=5Fsensors + 1),<br>&gt; &gt; + &nbsp; &n=
-bsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;GFP=5FKERNEL);<=
-br>&gt; &gt; + &nbsp; &nbsp; &nbsp;if (!sensor=5Fconfig)<br>&gt; &gt; + &nb=
-sp; &nbsp; &nbsp; &nbsp; return ERR=5FPTR(-ENOMEM);<br>&gt; &gt; +<br>&gt; =
-&gt; + &nbsp; &nbsp; &nbsp;for (j =3D 0; j &lt; num=5Fsensors; j++)<br>&gt;=
- &gt; + &nbsp; &nbsp; &nbsp; &nbsp; sensor=5Fconfig[j] =3D sensor=5Fhwmon=
-=5Fconfigs[i];<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;hwmon-&gt;=
-occ=5Fsensors[index] =3D<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; devm=5F=
-kzalloc(dev, sizeof(struct hwmon=5Fchannel=5Finfo),<br>&gt; &gt; + &nbsp; &=
-nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; GFP=5FKERNEL);<br>&gt; &gt;=
- + &nbsp; &nbsp; &nbsp;if (!hwmon-&gt;occ=5Fsensors[index])<br>&gt; &gt; + =
-&nbsp; &nbsp; &nbsp; &nbsp; return ERR=5FPTR(-ENOMEM);<br>&gt; &gt; +<br>&g=
-t; &gt; + &nbsp; &nbsp; &nbsp;hwmon-&gt;occ=5Fsensors[index]-&gt;type =3D o=
-cc=5Fsensor=5Ftypes[i];<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;hwmon-&gt;occ=5F=
-sensors[index]-&gt;config =3D sensor=5Fconfig;<br>&gt; &gt; + &nbsp; &nbsp;=
- &nbsp;index++;<br>&gt; &gt; + &nbsp; }<br>&gt; &gt; +<br>&gt; &gt; + &nbsp=
-; /* search for bad chars */<br>&gt; &gt; + &nbsp; strncpy(hwmon-&gt;hwmon=
-=5Fname, name, OCC=5FHWMON=5FNAME=5FLENGTH);<br>&gt; &gt; + &nbsp; brk =3D =
-strpbrk(hwmon-&gt;hwmon=5Fname, &quot;-* \t\n&quot;);<br>&gt; &gt; + &nbsp;=
- while (brk) {<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;*brk =3D '=5F';<br>&gt; &=
-gt; + &nbsp; &nbsp; &nbsp;brk =3D strpbrk(brk, &nbsp;&quot;-* \t\n&quot;);<=
-br>&gt; &gt; + &nbsp; }<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; hwmon-&gt;dev =
-=3D devm=5Fhwmon=5Fdevice=5Fregister=5Fwith=5Finfo(dev,<br>&gt; &gt; + &nbs=
-p; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; hw=
-mon-&gt;hwmon=5Fname,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nb=
-sp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; hwmon,<br>&gt; &gt; + &nbsp; &nbsp; =
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &amp;hwmon-&=
-gt;occ=5Finfo,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nb=
-sp; &nbsp; &nbsp; &nbsp; &nbsp; NULL);<br>&gt; &gt; + &nbsp; if (IS=5FERR(h=
-wmon-&gt;dev)) {<br>&gt; &gt; + &nbsp; &nbsp; &nbsp;dev=5Ferr(dev, &quot;ca=
-nnot register hwmon device %s: %ld\n&quot;,<br>&gt; &gt; + &nbsp; &nbsp; &n=
-bsp; &nbsp; hwmon-&gt;hwmon=5Fname, PTR=5FERR(hwmon-&gt;dev));<br>&gt; &gt;=
- + &nbsp; &nbsp; &nbsp;return ERR=5FCAST(hwmon-&gt;dev);<br>&gt; &gt; + &nb=
-sp; }<br>&gt; &gt; +<br>&gt; &gt; + &nbsp; return hwmon;<br>&gt; &gt; +}<br=
->&gt; &gt; +EXPORT=5FSYMBOL(occ=5Fsysfs=5Fstart);<br>&gt; &gt; +<br>&gt; &g=
-t; +MODULE=5FAUTHOR(&quot;Eddie James &lt;eajames@us.ibm.com&gt;&quot;);<br=
->&gt; &gt; +MODULE=5FDESCRIPTION(&quot;OCC sysfs driver&quot;);<br>&gt; &gt=
-; +MODULE=5FLICENSE(&quot;GPL&quot;);<br>&gt; &gt; diff --git a/drivers/hwm=
-on/occ/occ=5Fsysfs.h b/drivers/hwmon/occ/occ=5Fsysfs.h<br>&gt; &gt; new fil=
-e mode 100644<br>&gt; &gt; index 0000000..462f9d2<br>&gt; &gt; --- /dev/nul=
-l<br>&gt; &gt; +++ b/drivers/hwmon/occ/occ=5Fsysfs.h<br>&gt; &gt; @@ -0,0 +=
-1,30 @@<br>&gt; &gt; +/*<br>&gt; &gt; + * occ=5Fsysfs.h - OCC sysfs interfa=
-ce<br>&gt; &gt; + *<br>&gt; &gt; + * This file contains the data structures=
- and function prototypes<br>&gt; for the OCC<br>&gt; &gt; + * hwmon sysfs e=
-ntries.<br>&gt; &gt; + *<br>&gt; &gt; + * Copyright 2016 IBM Corp.<br>&gt; =
-&gt; + *<br>&gt; &gt; + * This program is free software; you can redistribu=
-te it and/or modify<br>&gt; &gt; + * it under the terms of the GNU General =
-Public License as published by<br>&gt; &gt; + * the Free Software Foundatio=
-n; either version 2 of the License, or<br>&gt; &gt; + * (at your option) an=
-y later version.<br>&gt; &gt; + *<br>&gt; &gt; + * This program is distribu=
-ted in the hope that it will be useful,<br>&gt; &gt; + * but WITHOUT ANY WA=
-RRANTY; without even the implied warranty of<br>&gt; &gt; + * MERCHANTABILI=
-TY or FITNESS FOR A PARTICULAR PURPOSE. See the<br>&gt; &gt; + * GNU Genera=
-l Public License for more details.<br>&gt; &gt; + */<br>&gt; &gt; +<br>&gt;=
- &gt; +#ifndef =5F=5FOCC=5FSYSFS=5FH=5F=5F<br>&gt; &gt; +#define =5F=5FOCC=
-=5FSYSFS=5FH=5F=5F<br>&gt; &gt; +<br>&gt; &gt; +struct occ;<br>&gt; &gt; +s=
-truct device;<br>&gt; &gt; +struct occ=5Fsysfs;<br>&gt; &gt; +<br>&gt; &gt;=
- +struct occ=5Fsysfs *occ=5Fsysfs=5Fstart(struct device *dev, struct occ *o=
-cc,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;const u3=
-2 *sensor=5Fhwmon=5Fconfigs,<br>&gt; &gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nb=
-sp; &nbsp; &nbsp;const char *name);<br>&gt; &gt; +#endif /* =5F=5FOCC=5FSYS=
-FS=5FH=5F=5F */<br>&gt; &gt;<br>&gt; <br></tt><BR>
-</body></html>
-
---0__=8FBB0A2BDFFF23608f9e8a93df938690918c8FBB0A2BDFFF2360--
