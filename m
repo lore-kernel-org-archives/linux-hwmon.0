@@ -1,83 +1,78 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:51930 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:36464 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751042AbdAaLx0 (ORCPT
+        with ESMTP id S1751240AbdAaMBV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2017 06:53:26 -0500
-Subject: Re: [PATCH] hwmon: Relax name attribute validation for new APIs
-To: Jean Delvare <jdelvare@suse.de>
-References: <1485575389-31616-1-git-send-email-linux@roeck-us.net>
- <20170131100711.4e8daaba@endymion>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org
+        Tue, 31 Jan 2017 07:01:21 -0500
+Subject: Re: [bug report] hwmon: (core) New hwmon registration API
+To: Dan Carpenter <dan.carpenter@oracle.com>
+References: <20170131104918.GA10541@mwanda>
+Cc: linux-hwmon@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <9d36eb30-6a4f-4ffd-5eaf-c11b34a5967c@roeck-us.net>
-Date: Tue, 31 Jan 2017 03:53:22 -0800
+Message-ID: <6e7e52af-a3c4-a08f-9052-f8944bc27023@roeck-us.net>
+Date: Tue, 31 Jan 2017 04:01:19 -0800
 MIME-Version: 1.0
-In-Reply-To: <20170131100711.4e8daaba@endymion>
+In-Reply-To: <20170131104918.GA10541@mwanda>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 01/31/2017 01:07 AM, Jean Delvare wrote:
-> Hi Guenter, Dmitry,
+On 01/31/2017 02:49 AM, Dan Carpenter wrote:
+> Hello Guenter Roeck,
 >
-> On Fri, 27 Jan 2017 19:49:49 -0800, Guenter Roeck wrote:
->> While invalid name attributes are really not desirable and do mess up
->> libsensors, enforcing valid names has the detrimental effect of driving
->> users away from using the new hardware monitoring API, especially those
->> registering name attributes violating the ABI restrictions. Another
->> undesirable side effect is that this violation and the resulting error
->> may only be discovered some time after a conversion to the new API,
->> which in turn may trigger a revert of that conversion.
->>
->> To solve the problem, relax validation and only issue a warning instead
->> of returning an error if a name attribute violating the ABI is provided.
->> This lets callers continue to provide invalid name attributes while
->> notifying them about it.
->>
->> Many thanks are due to Dmitry Torokhov for the idea.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>  drivers/hwmon/hwmon.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->> index affff8195fff..53c54a81f7ad 100644
->> --- a/drivers/hwmon/hwmon.c
->> +++ b/drivers/hwmon/hwmon.c
->> @@ -544,9 +544,10 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->>  	struct device *hdev;
->>  	int i, j, err, id;
->>
->> -	/* Do not accept invalid characters in hwmon name attribute */
->> +	/* Complain about invalid characters in hwmon name attribute */
->>  	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
->> -		return ERR_PTR(-EINVAL);
->> +		dev_warn(dev, "hwmon: '%s' is not a valid name attribute\n",
->> +			 name);
+> This is a semi-automatic email about new static checker warnings.
 >
-> May I suggest adding ", please fix"?
+> The patch d560168b5d0f: "hwmon: (core) New hwmon registration API"
+> from Aug 26, 2015, leads to the following Smatch complaint:
+>
+> drivers/hwmon/hwmon.c:624 __hwmon_device_register()
+> 	 error: we previously assumed 'dev' could be null (see line 602)
+>
+> drivers/hwmon/hwmon.c
+>    601		hdev->parent = dev;
+>    602		hdev->of_node = dev ? dev->of_node : NULL;
+>                                 ^^^
+> I gotta be honest, I have no idea why my scripts say this is a new
+> warning when it's 2 years old.  This check feels like it could be
+> deleted and perhaps that's why it didn't complain up to now.  It tries
+> to ignore extra harmless checks.
 >
 
-Ok, will do.
+Nevertheless it is a good warning. hwmon_thermal_add_sensor() calls devm_kzalloc()
+with dev as argument.
 
->>
->>  	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
->>  	if (id < 0)
->
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->
-> Do I understand correctly that in the long run we will make it a fatal
-> error again?
->
-
-Hopefully, after there are no more drivers to convert, and after all converted
-drivers fixed the problem.
-
-Thanks,
 Guenter
+
+>    603		hwdev->chip = chip;
+>    604		dev_set_drvdata(hdev, drvdata);
+>    605		dev_set_name(hdev, HWMON_ID_FORMAT, id);
+>    606		err = device_register(hdev);
+>    607		if (err)
+>    608			goto free_hwmon;
+>    609	
+>    610		if (chip && chip->ops->read &&
+>    611		    chip->info[0]->type == hwmon_chip &&
+>    612		    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+>    613			const struct hwmon_channel_info **info = chip->info;
+>    614	
+>    615			for (i = 1; info[i]; i++) {
+>    616				if (info[i]->type != hwmon_temp)
+>    617					continue;
+>    618	
+>    619				for (j = 0; info[i]->config[j]; j++) {
+>    620					if (!chip->ops->is_visible(drvdata, hwmon_temp,
+>    621								   hwmon_temp_input, j))
+>    622						continue;
+>    623					if (info[i]->config[j] & HWMON_T_INPUT)
+>    624						hwmon_thermal_add_sensor(dev, hwdev, j);
+>                                                                          ^^^
+> Dereference.
+>
+>    625				}
+>    626			}
+>
+> regards,
+> dan carpenter
+>
 
