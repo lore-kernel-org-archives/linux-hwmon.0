@@ -1,67 +1,61 @@
-Return-path: <jdelvare@suse.de>
-Date: Tue, 31 Jan 2017 10:07:11 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, Dmitry Torokhov
- <dmitry.torokhov@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Relax name attribute validation for new APIs
-Message-ID: <20170131100711.4e8daaba@endymion>
-In-Reply-To: <1485575389-31616-1-git-send-email-linux@roeck-us.net>
-References: <1485575389-31616-1-git-send-email-linux@roeck-us.net>
+Return-path: <dan.carpenter@oracle.com>
+Date: Tue, 31 Jan 2017 13:49:18 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (core) New hwmon registration API
+Message-ID: <20170131104918.GA10541@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Guenter, Dmitry,
+Hello Guenter Roeck,
 
-On Fri, 27 Jan 2017 19:49:49 -0800, Guenter Roeck wrote:
-> While invalid name attributes are really not desirable and do mess up
-> libsensors, enforcing valid names has the detrimental effect of driving
-> users away from using the new hardware monitoring API, especially those
-> registering name attributes violating the ABI restrictions. Another
-> undesirable side effect is that this violation and the resulting error
-> may only be discovered some time after a conversion to the new API,
-> which in turn may trigger a revert of that conversion.
-> 
-> To solve the problem, relax validation and only issue a warning instead
-> of returning an error if a name attribute violating the ABI is provided.
-> This lets callers continue to provide invalid name attributes while
-> notifying them about it.
-> 
-> Many thanks are due to Dmitry Torokhov for the idea.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/hwmon.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index affff8195fff..53c54a81f7ad 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -544,9 +544,10 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->  	struct device *hdev;
->  	int i, j, err, id;
->  
-> -	/* Do not accept invalid characters in hwmon name attribute */
-> +	/* Complain about invalid characters in hwmon name attribute */
->  	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
-> -		return ERR_PTR(-EINVAL);
-> +		dev_warn(dev, "hwmon: '%s' is not a valid name attribute\n",
-> +			 name);
+This is a semi-automatic email about new static checker warnings.
 
-May I suggest adding ", please fix"?
+The patch d560168b5d0f: "hwmon: (core) New hwmon registration API" 
+from Aug 26, 2015, leads to the following Smatch complaint:
 
->  
->  	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
->  	if (id < 0)
+drivers/hwmon/hwmon.c:624 __hwmon_device_register()
+	 error: we previously assumed 'dev' could be null (see line 602)
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+drivers/hwmon/hwmon.c
+   601		hdev->parent = dev;
+   602		hdev->of_node = dev ? dev->of_node : NULL;
+                                ^^^
+I gotta be honest, I have no idea why my scripts say this is a new
+warning when it's 2 years old.  This check feels like it could be
+deleted and perhaps that's why it didn't complain up to now.  It tries
+to ignore extra harmless checks.
 
-Do I understand correctly that in the long run we will make it a fatal
-error again?
+   603		hwdev->chip = chip;
+   604		dev_set_drvdata(hdev, drvdata);
+   605		dev_set_name(hdev, HWMON_ID_FORMAT, id);
+   606		err = device_register(hdev);
+   607		if (err)
+   608			goto free_hwmon;
+   609	
+   610		if (chip && chip->ops->read &&
+   611		    chip->info[0]->type == hwmon_chip &&
+   612		    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+   613			const struct hwmon_channel_info **info = chip->info;
+   614	
+   615			for (i = 1; info[i]; i++) {
+   616				if (info[i]->type != hwmon_temp)
+   617					continue;
+   618	
+   619				for (j = 0; info[i]->config[j]; j++) {
+   620					if (!chip->ops->is_visible(drvdata, hwmon_temp,
+   621								   hwmon_temp_input, j))
+   622						continue;
+   623					if (info[i]->config[j] & HWMON_T_INPUT)
+   624						hwmon_thermal_add_sensor(dev, hwdev, j);
+                                                                         ^^^
+Dereference.
 
--- 
-Jean Delvare
-SUSE L3 Support
+   625				}
+   626			}
+
+regards,
+dan carpenter
