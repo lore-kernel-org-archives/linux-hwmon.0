@@ -1,59 +1,82 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57460 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:51930 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750759AbdAaLsx (ORCPT
+        with ESMTP id S1751042AbdAaLx0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2017 06:48:53 -0500
-Subject: Re: [PATCH v5 1/2] hwmon: new driver for ST stts751 thermal sensor
-To: andrea.merello@gmail.com
-References: <1485769255-27118-1-git-send-email-andrea.merello@gmail.com>
- <1bb3b18c-d765-2180-7759-76d7dc76e6d6@roeck-us.net>
- <CAN8YU5O_xhD2Dbti-d9eBHMYyOHZG128G44QXpVt65WfBiXtEw@mail.gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-        LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
+        Tue, 31 Jan 2017 06:53:26 -0500
+Subject: Re: [PATCH] hwmon: Relax name attribute validation for new APIs
+To: Jean Delvare <jdelvare@suse.de>
+References: <1485575389-31616-1-git-send-email-linux@roeck-us.net>
+ <20170131100711.4e8daaba@endymion>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <625efd69-2cce-7029-0163-4353703e5a5e@roeck-us.net>
-Date: Tue, 31 Jan 2017 03:47:30 -0800
+Message-ID: <9d36eb30-6a4f-4ffd-5eaf-c11b34a5967c@roeck-us.net>
+Date: Tue, 31 Jan 2017 03:53:22 -0800
 MIME-Version: 1.0
-In-Reply-To: <CAN8YU5O_xhD2Dbti-d9eBHMYyOHZG128G44QXpVt65WfBiXtEw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20170131100711.4e8daaba@endymion>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 01/30/2017 11:11 PM, Andrea Merello wrote:
-> On Mon, Jan 30, 2017 at 3:24 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 01/30/2017 01:40 AM, Andrea Merello wrote:
->>>
->>> This patch adds a HWMON driver for ST Microelectronics STTS751
->>> temperature sensors.
->>>
+On 01/31/2017 01:07 AM, Jean Delvare wrote:
+> Hi Guenter, Dmitry,
+>
+> On Fri, 27 Jan 2017 19:49:49 -0800, Guenter Roeck wrote:
+>> While invalid name attributes are really not desirable and do mess up
+>> libsensors, enforcing valid names has the detrimental effect of driving
+>> users away from using the new hardware monitoring API, especially those
+>> registering name attributes violating the ABI restrictions. Another
+>> undesirable side effect is that this violation and the resulting error
+>> may only be discovered some time after a conversion to the new API,
+>> which in turn may trigger a revert of that conversion.
 >>
->> Overall looks good. One thing I noticed, though: In the log function calls,
->> you use a mix of priv->dev and &client->dev as log device. Also, you
->> sometimes
->> use &priv->client->dev even when a local client variable is available.
->> I can fix up the latter (no need to resend for that), but please have a
->> look at the overall use and either send a fixed up version or let me know
->> if the log devices are all intentional as-is.
+>> To solve the problem, relax validation and only issue a warning instead
+>> of returning an error if a name attribute violating the ABI is provided.
+>> This lets callers continue to provide invalid name attributes while
+>> notifying them about it.
+>>
+>> Many thanks are due to Dmitry Torokhov for the idea.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>  drivers/hwmon/hwmon.c | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+>> index affff8195fff..53c54a81f7ad 100644
+>> --- a/drivers/hwmon/hwmon.c
+>> +++ b/drivers/hwmon/hwmon.c
+>> @@ -544,9 +544,10 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>>  	struct device *hdev;
+>>  	int i, j, err, id;
+>>
+>> -	/* Do not accept invalid characters in hwmon name attribute */
+>> +	/* Complain about invalid characters in hwmon name attribute */
+>>  	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+>> -		return ERR_PTR(-EINVAL);
+>> +		dev_warn(dev, "hwmon: '%s' is not a valid name attribute\n",
+>> +			 name);
 >
-> Hmm, you are right: there is a bit of mess here. It's not intentional indeed..
+> May I suggest adding ", please fix"?
 >
-> I gave a look to lm90.c and lm63.c; it seems no one uses the hwmon
-> device for this purpose. We can probably stick to &client->dev or
-> &priv->client->dev when a local client variable is not already
-> available.
 
-It is really your call as the driver's author to make if you want to use
-the hwmon device or &client->dev.
+Ok, will do.
+
+>>
+>>  	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
+>>  	if (id < 0)
 >
-> Also, it looks like we can change some &priv->client->dev in
-> &client->dev in probe function when calling i2c read/write functions.
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
 >
-> If you ACK, I'll fix and resend.
+> Do I understand correctly that in the long run we will make it a fatal
+> error again?
 >
-SGTM.
+
+Hopefully, after there are no more drivers to convert, and after all converted
+drivers fixed the problem.
 
 Thanks,
 Guenter
