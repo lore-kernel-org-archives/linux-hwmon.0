@@ -1,41 +1,74 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39323 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751513AbdAaMA1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jan 2017 07:00:27 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: Register thermal zone only if 'dev' parameter was provided
-Date: Tue, 31 Jan 2017 03:59:53 -0800
-Message-Id: <1485863993-32711-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <eajames@linux.vnet.ibm.com>
+From: eajames@linux.vnet.ibm.com
+To: linux@roeck-us.net
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
+        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au, joel@jms.id.au,
+        benh@kernel.crashing.org, "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH linux v5 0/6] drivers: hwmon: Add On-Chip Controller driver
+Date: Tue, 31 Jan 2017 09:43:51 -0600
+Message-Id: <1485877437-13598-1-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Rgistering a thermal zone uses devm_kzalloc(), which requires
-a pointer to the parent device.
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patchset adds a hwmon driver to support the OCC (On-Chip Controller)
+on the IBM POWER8 and POWER9 processors, from a BMC (Baseboard Management
+Controller). The OCC is an embedded processor that provides real time
+power and thermal monitoring.
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 9a02c452f9e5..28375d59cc36 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -608,7 +608,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 	if (err)
- 		goto free_hwmon;
- 
--	if (chip && chip->ops->read &&
-+	if (dev && chip && chip->ops->read &&
- 	    chip->info[0]->type == hwmon_chip &&
- 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
- 		const struct hwmon_channel_info **info = chip->info;
+The driver provides an interface on a BMC to poll OCC sensor data, set
+user power caps, and perform some basic OCC error handling. It interfaces
+with userspace through hwmon.
+
+The driver is currently functional only for the OCC on POWER8 chips.
+Communicating with the POWER9 OCC requries FSI support.
+
+Edward A. James (6):
+  hwmon: Add core On-Chip Controller support for POWER CPUs
+  hwmon: occ: Add sysfs interface
+  hwmon: occ: Add I2C transport implementation for SCOM operations
+  hwmon: occ: Add callbacks for parsing P8 OCC datastructures
+  hwmon: occ: Add hwmon implementation for the P8 OCC
+  hwmon: occ: Add callbacks for parsing P9 OCC datastructures
+
+ Documentation/devicetree/bindings/hwmon/occ.txt |  13 +
+ Documentation/hwmon/occ                         | 114 ++++++
+ MAINTAINERS                                     |   7 +
+ drivers/hwmon/Kconfig                           |   2 +
+ drivers/hwmon/Makefile                          |   1 +
+ drivers/hwmon/occ/Kconfig                       |  29 ++
+ drivers/hwmon/occ/Makefile                      |   2 +
+ drivers/hwmon/occ/occ.c                         | 470 ++++++++++++++++++++++++
+ drivers/hwmon/occ/occ.h                         |  80 ++++
+ drivers/hwmon/occ/occ_p8.c                      | 247 +++++++++++++
+ drivers/hwmon/occ/occ_p8.h                      |  30 ++
+ drivers/hwmon/occ/occ_p9.c                      | 308 ++++++++++++++++
+ drivers/hwmon/occ/occ_p9.h                      |  30 ++
+ drivers/hwmon/occ/occ_scom_i2c.c                |  77 ++++
+ drivers/hwmon/occ/occ_scom_i2c.h                |  26 ++
+ drivers/hwmon/occ/occ_sysfs.c                   | 251 +++++++++++++
+ drivers/hwmon/occ/occ_sysfs.h                   |  30 ++
+ drivers/hwmon/occ/p8_occ_i2c.c                  | 104 ++++++
+ drivers/hwmon/occ/scom.h                        |  47 +++
+ 19 files changed, 1868 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/occ.c
+ create mode 100644 drivers/hwmon/occ/occ.h
+ create mode 100644 drivers/hwmon/occ/occ_p8.c
+ create mode 100644 drivers/hwmon/occ/occ_p8.h
+ create mode 100644 drivers/hwmon/occ/occ_p9.c
+ create mode 100644 drivers/hwmon/occ/occ_p9.h
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.c
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.h
+ create mode 100644 drivers/hwmon/occ/p8_occ_i2c.c
+ create mode 100644 drivers/hwmon/occ/scom.h
+
 -- 
-2.7.4
-
+1.8.3.1
