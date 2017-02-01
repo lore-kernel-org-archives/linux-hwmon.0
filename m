@@ -1,151 +1,93 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:59515 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751213AbdBDXmP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Feb 2017 18:42:15 -0500
-Subject: Re: [PATCH] hwmon: (w83791d) Make use of
- hwmon_device_register_with_groups
-To: Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Marc Hulsman <m.hulsman@tudelft.nl>,
-        Jean Delvare <jdelvare@suse.com>
-References: <1486249941-2142-1-git-send-email-khoroshilov@ispras.ru>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d6f7c06e-6f8d-9e3d-5290-e8d2f39f7136@roeck-us.net>
-Date: Sat, 4 Feb 2017 15:42:11 -0800
+Return-path: <robherring2@gmail.com>
+Date: Wed, 1 Feb 2017 08:58:37 -0600
+From: Rob Herring <robh@kernel.org>
+To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Cc: openbmc@lists.ozlabs.org, linux@roeck-us.net, joel@jms.id.au,
+	jdelvare@suse.com, linux-hwmon@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org, mark.rutland@arm.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux v2 1/2] Documentation: dt-bindings: Document
+ bindings for ASPEED AST2400/AST2500 PWM and Fan tach controller device
+ driver
+Message-ID: <20170201145837.ybfqvz4rdpaiw323@rob-hp-laptop>
+References: <20170127093400.28904-1-jaghu@google.com>
+ <20170127093400.28904-2-jaghu@google.com>
 MIME-Version: 1.0
-In-Reply-To: <1486249941-2142-1-git-send-email-khoroshilov@ispras.ru>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20170127093400.28904-2-jaghu@google.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/04/2017 03:12 PM, Alexey Khoroshilov wrote:
-> There is no remove of w83791d_group_fanpwm45 sysfs group.
-> Fix the problem by switching to hwmon_device_register_with_groups().
->
-> Found by Linux Driver Verification project (linuxtesting.org).
->
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+On Fri, Jan 27, 2017 at 01:33:59AM -0800, Jaghathiswari Rankappagounder Natarajan wrote:
+> This binding provides interface for adding values related to ASPEED
+> AST2400/2500 PWM and Fan tach controller support.
+> The PWM controller can support upto 8 PWM output ports.
+> The Fan tach controller can support upto 16 tachometer inputs.
+> Types M, N and 0 are three types just to have three independent
+> PWM/Fan Tach related settings.
+
+This still looks overly complicated to me and very specific to ASpeed. 
+You need to define a common structure that works for fans. To start 
+with, define a node for the fans themselves. This should use the 
+PWM binding and a -gpios property for the tach (when connected to a 
+GPIO). 
+
+Something like this:
+
+ctrl: fan-controller@1234 {
+	...
+	#pwm-cells = <3>;
+	fan@0 {
+		reg = <0>; /* 'Channel' of the controller */
+		pwms = <&ctrl 0 ...>;
+		tach-gpios = <&gpio 1>;
+		vcc-supply = <&reg_12V>;
+	};
+};
+
+We already have a pwm-fan binding. This should build on or possibly 
+replace that.
+
+> 
+> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
 > ---
->  drivers/hwmon/w83791d.c | 40 +++++++++++++++-------------------------
->  1 file changed, 15 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
-> index 001df856913f..14a19396785e 100644
-> --- a/drivers/hwmon/w83791d.c
-> +++ b/drivers/hwmon/w83791d.c
-> @@ -1211,7 +1211,7 @@ static DEVICE_ATTR(vrm, S_IRUGO | S_IWUSR, show_vrm_reg, store_vrm_reg);
->  	&sda_temp_beep[X].dev_attr.attr,	\
->  	&sda_temp_alarm[X].dev_attr.attr
->
-> -static struct attribute *w83791d_attributes[] = {
-> +static struct attribute *w83791d_attrs[] = {
->  	IN_UNIT_ATTRS(0),
->  	IN_UNIT_ATTRS(1),
->  	IN_UNIT_ATTRS(2),
-> @@ -1248,16 +1248,14 @@ static struct attribute *w83791d_attributes[] = {
->  	NULL
->  };
->
-> -static const struct attribute_group w83791d_group = {
-> -	.attrs = w83791d_attributes,
-> -};
-> +ATTRIBUTE_GROUPS(w83791d);
->
->  /*
->   * Separate group of attributes for fan/pwm 4-5. Their pins can also be
->   * in use for GPIO in which case their sysfs-interface should not be made
->   * available
->   */
-> -static struct attribute *w83791d_attributes_fanpwm45[] = {
-> +static struct attribute *w83791d_attrs_fanpwm45[] = {
->  	FAN_UNIT_ATTRS(3),
->  	FAN_UNIT_ATTRS(4),
->  	&sda_pwm[3].dev_attr.attr,
-> @@ -1266,7 +1264,13 @@ static struct attribute *w83791d_attributes_fanpwm45[] = {
->  };
->
->  static const struct attribute_group w83791d_group_fanpwm45 = {
-> -	.attrs = w83791d_attributes_fanpwm45,
-> +	.attrs = w83791d_attrs_fanpwm45,
-> +};
+> v2:
+> - Removed '_' in node or property names
+> - Gave some explanation for the properties used.
+> 
+>  .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt | 178 +++++++++++++++++++++
+>  1 file changed, 178 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+> new file mode 100644
+> index 000000000000..290122bfe170
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+> @@ -0,0 +1,178 @@
+> +ASPEED AST2400/AST2500 PWM and Fan Tacho controller device driver
 > +
-> +static const struct attribute_group *w83791d_groups_fanpwm45[] = {
-> +	&w83791d_group,
-> +	&w83791d_group_fanpwm45,
-> +	NULL
->  };
->
->  static int w83791d_detect_subclients(struct i2c_client *client)
-> @@ -1376,6 +1380,7 @@ static int w83791d_probe(struct i2c_client *client,
->  	struct device *dev = &client->dev;
->  	int i, err;
->  	u8 has_fanpwm45;
-> +	const struct attribute_group **groups;
->
->  #ifdef DEBUG
->  	int val1;
-> @@ -1406,34 +1411,20 @@ static int w83791d_probe(struct i2c_client *client,
->  	for (i = 0; i < NUMBER_OF_FANIN; i++)
->  		data->fan_min[i] = w83791d_read(client, W83791D_REG_FAN_MIN[i]);
->
-> -	/* Register sysfs hooks */
-> -	err = sysfs_create_group(&client->dev.kobj, &w83791d_group);
-> -	if (err)
-> -		goto error3;
-> -
->  	/* Check if pins of fan/pwm 4-5 are in use as GPIO */
->  	has_fanpwm45 = w83791d_read(client, W83791D_REG_GPIO) & 0x10;
-> -	if (has_fanpwm45) {
-> -		err = sysfs_create_group(&client->dev.kobj,
-> -					 &w83791d_group_fanpwm45);
-> -		if (err)
-> -			goto error4;
-> -	}
-> +	groups = has_fanpwm45 ? w83791d_groups_fanpwm45 : w83791d_groups;
->
->  	/* Everything is ready, now register the working device */
-> -	data->hwmon_dev = hwmon_device_register(dev);
-> +	data->hwmon_dev = hwmon_device_register_with_groups(dev, "w83791d",
-> +							    NULL, groups);
+> +The ASPEED PWM controller can support upto 8 PWM outputs. The ASPEED Fan Tacho
+> +controller can support upto 16 tachometer inputs.
 
-The new API attaches the hwmon attributes to the hwmon device, not to the
-i2c device. This means that one has to use dev_get_drvdata() in the
-access functions, and store the i2c device in the local data structure
-(here: struct w83791d_data). Also, one has to pass the local data
-structure as argument to hwmon_device_register_with_groups().
-You did not do any of that, which makes me wonder if you tested this
-code. Unless I am really missing something, it should crash quite nicely
-if you load the driver on a system with this chip and try to access
-any of the attributes.
+AIUI, each fan has a PWM and a tach input. How would you use more than 8 
+tach inputs?
 
-Guenter
+> +
+> +There are three different types M, N, O. These three types are just to have
+> +different PWM and Fan Tach settings. Each type can have the following settings:
+> +	PWM related:
+> +		1) PWM period
+> +		2) PWM clock division high
+> +		3) PWM clock division low
+> +	Fan Tach related:
+> +		1) Fan Tach type enable
+> +		2) Fan Tach clock division
+> +		3) Fan Tach mode selection
+> +		4) Fan Tach period
+> +
+> +Each PWM port should be assigned a type which can be type M, N or O.
 
->  	if (IS_ERR(data->hwmon_dev)) {
->  		err = PTR_ERR(data->hwmon_dev);
-> -		goto error5;
-> +		goto error3;
->  	}
->
->  	return 0;
->
-> -error5:
-> -	if (has_fanpwm45)
-> -		sysfs_remove_group(&client->dev.kobj, &w83791d_group_fanpwm45);
-> -error4:
-> -	sysfs_remove_group(&client->dev.kobj, &w83791d_group);
->  error3:
->  	if (data->lm75[0] != NULL)
->  		i2c_unregister_device(data->lm75[0]);
-> @@ -1447,7 +1438,6 @@ static int w83791d_remove(struct i2c_client *client)
->  	struct w83791d_data *data = i2c_get_clientdata(client);
->
->  	hwmon_device_unregister(data->hwmon_dev);
-> -	sysfs_remove_group(&client->dev.kobj, &w83791d_group);
->
->  	if (data->lm75[0] != NULL)
->  		i2c_unregister_device(data->lm75[0]);
->
+What is the definition of M, N, and O?
 
+Rob
