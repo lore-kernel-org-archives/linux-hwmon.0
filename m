@@ -1,200 +1,81 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-it0-f66.google.com ([209.85.214.66]:33908 "EHLO
-        mail-it0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751153AbdA3Xnp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Jan 2017 18:43:45 -0500
-From: eajames.ibm@gmail.com
-To: linux@roeck-us.net
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
-        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
-        joel@jms.id.au, benh@kernel.crashing.org,
-        eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH linux v5 5/6] hwmon: occ: Add hwmon implementation for the P8 OCC
-Date: Mon, 30 Jan 2017 17:42:17 -0600
-Message-Id: <1485819738-957-6-git-send-email-eajames.ibm@gmail.com>
-In-Reply-To: <1485819738-957-1-git-send-email-eajames.ibm@gmail.com>
-References: <1485819738-957-1-git-send-email-eajames.ibm@gmail.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <andrea.merello@gmail.com>
+MIME-Version: 1.0
+Reply-To: andrea.merello@gmail.com
+In-Reply-To: <625efd69-2cce-7029-0163-4353703e5a5e@roeck-us.net>
+References: <1485769255-27118-1-git-send-email-andrea.merello@gmail.com>
+ <1bb3b18c-d765-2180-7759-76d7dc76e6d6@roeck-us.net> <CAN8YU5O_xhD2Dbti-d9eBHMYyOHZG128G44QXpVt65WfBiXtEw@mail.gmail.com>
+ <625efd69-2cce-7029-0163-4353703e5a5e@roeck-us.net>
+From: Andrea Merello <andrea.merello@gmail.com>
+Date: Wed, 1 Feb 2017 08:31:35 +0100
+Message-ID: <CAN8YU5Ma_1c9xw==w5FL5WiPwA=C5ozLoBDWJ+c0Rcmb=_x-bA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] hwmon: new driver for ST stts751 thermal sensor
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, LABBE Corentin <clabbe.montjoie@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset=UTF-8
+List-ID: <linux-hwmon@vger.kernel.org>
 
-From: "Edward A. James" <eajames@us.ibm.com>
+On Tue, Jan 31, 2017 at 12:47 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 01/30/2017 11:11 PM, Andrea Merello wrote:
+>>
+>> On Mon, Jan 30, 2017 at 3:24 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>
+>>> On 01/30/2017 01:40 AM, Andrea Merello wrote:
+>>>>
+>>>>
+>>>> This patch adds a HWMON driver for ST Microelectronics STTS751
+>>>> temperature sensors.
+>>>>
+>>>
+>>> Overall looks good. One thing I noticed, though: In the log function
+>>> calls,
+>>> you use a mix of priv->dev and &client->dev as log device. Also, you
+>>> sometimes
+>>> use &priv->client->dev even when a local client variable is available.
+>>> I can fix up the latter (no need to resend for that), but please have a
+>>> look at the overall use and either send a fixed up version or let me know
+>>> if the log devices are all intentional as-is.
+>>
+>>
+>> Hmm, you are right: there is a bit of mess here. It's not intentional
+>> indeed..
+>>
+>> I gave a look to lm90.c and lm63.c; it seems no one uses the hwmon
+>> device for this purpose. We can probably stick to &client->dev or
+>> &priv->client->dev when a local client variable is not already
+>> available.
+>
+>
+> It is really your call as the driver's author to make if you want to use
+> the hwmon device or &client->dev.
 
-Add code to tie the hwmon sysfs code and the POWER8 OCC code together, as
-well as probe the entire driver from the I2C bus. I2C is the communication
-method between the BMC and the P8 OCC.
+I've decided to stick with &client->dev for all dev_dbg(), while I
+would use the hwmon device for dev_notice() and dev_warn(), that are
+supposed to be eventually read by the user.
 
-Signed-off-by: Edward A. James <eajames@us.ibm.com>
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
----
- Documentation/devicetree/bindings/hwmon/occ.txt |  13 +++
- drivers/hwmon/occ/Kconfig                       |  14 ++++
- drivers/hwmon/occ/Makefile                      |   1 +
- drivers/hwmon/occ/p8_occ_i2c.c                  | 104 ++++++++++++++++++++++++
- 4 files changed, 132 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
- create mode 100644 drivers/hwmon/occ/p8_occ_i2c.c
+However, while keeping an eye on the log messages I've realized that
+if the temperature remains out-of-limit for a lot of time, especially
+if the conversion rate is set fast, we tend to spam the log with alert
+messages.. I learned that you are usually concerned by noisy drivers,
+so I guess you might want to mitigate this..
 
-diff --git a/Documentation/devicetree/bindings/hwmon/occ.txt b/Documentation/devicetree/bindings/hwmon/occ.txt
-new file mode 100644
-index 0000000..b0d2b36
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/occ.txt
-@@ -0,0 +1,13 @@
-+HWMON I2C driver for IBM POWER CPU OCC (On Chip Controller)
-+
-+Required properties:
-+ - compatible: must be "ibm,p8-occ-i2c"
-+ - reg: physical address
-+
-+Example:
-+i2c3: i2c-bus@100 {
-+	occ@50 {
-+		compatible = "ibm,p8-occ-i2c";
-+		reg = <0x50>;
-+	};
-+};
-diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
-index cdb64a7..3a5188f 100644
---- a/drivers/hwmon/occ/Kconfig
-+++ b/drivers/hwmon/occ/Kconfig
-@@ -13,3 +13,17 @@ menuconfig SENSORS_PPC_OCC
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called occ.
-+
-+if SENSORS_PPC_OCC
-+
-+config SENSORS_PPC_OCC_P8_I2C
-+	tristate "POWER8 OCC hwmon support"
-+	depends on I2C
-+	help
-+	 Provide a hwmon sysfs interface for the POWER8 On-Chip Controller,
-+	 exposing temperature, frequency and power measurements.
-+
-+	 This driver can also be built as a module. If so, the module will be
-+	 called p8-occ-i2c.
-+
-+endif
-diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
-index a6881f9..9294b58 100644
---- a/drivers/hwmon/occ/Makefile
-+++ b/drivers/hwmon/occ/Makefile
-@@ -1 +1,2 @@
- obj-$(CONFIG_SENSORS_PPC_OCC) += occ.o occ_sysfs.o
-+obj-$(CONFIG_SENSORS_PPC_OCC_P8_I2C) += occ_scom_i2c.o occ_p8.o p8_occ_i2c.o
-diff --git a/drivers/hwmon/occ/p8_occ_i2c.c b/drivers/hwmon/occ/p8_occ_i2c.c
-new file mode 100644
-index 0000000..6273040
---- /dev/null
-+++ b/drivers/hwmon/occ/p8_occ_i2c.c
-@@ -0,0 +1,104 @@
-+/*
-+ * p8_occ_i2c.c - hwmon OCC driver
-+ *
-+ * This file contains the i2c layer for accessing the P8 OCC over i2c bus.
-+ *
-+ * Copyright 2016 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/slab.h>
-+#include "occ_p8.h"
-+#include "occ_scom_i2c.h"
-+#include "occ_sysfs.h"
-+#include "scom.h"
-+
-+#define P8_OCC_I2C_NAME	"p8-occ-i2c"
-+
-+int p8_i2c_getscom(void *bus, u32 address, u64 *data)
-+{
-+	/* P8 i2c slave requires address to be shifted by 1 */
-+	address = address << 1;
-+
-+	return occ_i2c_getscom(bus, address, data);
-+}
-+
-+int p8_i2c_putscom(void *bus, u32 address, u32 data0, u32 data1)
-+{
-+	/* P8 i2c slave requires address to be shifted by 1 */
-+	address = address << 1;
-+
-+	return occ_i2c_putscom(bus, address, data0, data1);
-+}
-+
-+static struct occ_bus_ops p8_bus_ops = {
-+	.getscom = p8_i2c_getscom,
-+	.putscom = p8_i2c_putscom,
-+};
-+
-+static int p8_occ_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
-+{
-+	struct occ *occ;
-+	struct occ_sysfs *hwmon;
-+	const u32 *sensor_hwmon_configs = p8_get_sensor_hwmon_configs();
-+
-+	occ = p8_occ_start(&client->dev, client, &p8_bus_ops);
-+	if (IS_ERR(occ))
-+		return PTR_ERR(occ);
-+
-+	hwmon = occ_sysfs_start(&client->dev, occ, sensor_hwmon_configs,
-+				P8_OCC_I2C_NAME);
-+	if (IS_ERR(hwmon))
-+		return PTR_ERR(hwmon);
-+
-+	i2c_set_clientdata(client, occ);
-+
-+	return 0;
-+}
-+
-+/* used by old-style board info. */
-+static const struct i2c_device_id occ_ids[] = {
-+	{ P8_OCC_I2C_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, occ_ids);
-+
-+/* used by device table */
-+static const struct of_device_id occ_of_match[] = {
-+	{ .compatible = "ibm,p8-occ-i2c" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, occ_of_match);
-+
-+static struct i2c_driver p8_occ_driver = {
-+	.class = I2C_CLASS_HWMON,
-+	.driver = {
-+		.name = P8_OCC_I2C_NAME,
-+		.of_match_table = occ_of_match,
-+	},
-+	.probe = p8_occ_probe,
-+	.id_table = occ_ids,
-+};
-+
-+module_i2c_driver(p8_occ_driver);
-+
-+MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
-+MODULE_DESCRIPTION("BMC P8 OCC hwmon driver");
-+MODULE_LICENSE("GPL");
--- 
-1.8.3.1
+I could use dev_notice_once(), but it seems inappropriate here, or I
+can silence the message at least until one reads the chip. Lm90 does
+even disable the alarm until that happen, but it has only one alarm;
+here we have two, so it seems not correct here.
 
+Any suggestion?
+
+
+>>
+>>
+>> Also, it looks like we can change some &priv->client->dev in
+>> &client->dev in probe function when calling i2c read/write functions.
+>>
+>> If you ACK, I'll fix and resend.
+>>
+> SGTM.
+>
+> Thanks,
+> Guenter
+>
