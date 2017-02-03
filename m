@@ -1,97 +1,76 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35723 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751512AbdBAOLS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Feb 2017 09:11:18 -0500
-Subject: Re: [PATCH v5 1/2] hwmon: new driver for ST stts751 thermal sensor
-To: andrea.merello@gmail.com
-References: <1485769255-27118-1-git-send-email-andrea.merello@gmail.com>
- <1bb3b18c-d765-2180-7759-76d7dc76e6d6@roeck-us.net>
- <CAN8YU5O_xhD2Dbti-d9eBHMYyOHZG128G44QXpVt65WfBiXtEw@mail.gmail.com>
- <625efd69-2cce-7029-0163-4353703e5a5e@roeck-us.net>
- <CAN8YU5Ma_1c9xw==w5FL5WiPwA=C5ozLoBDWJ+c0Rcmb=_x-bA@mail.gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-        LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <294659da-c500-36e7-e2e1-8fd6382ca98f@roeck-us.net>
-Date: Wed, 1 Feb 2017 06:11:16 -0800
+Return-path: <petr.cvek@tul.cz>
+Subject: Re: [RFC] w1: regression, remove need for ida and use
+ PLATFORM_DEVID_AUTO
+To: "Andrew F. Davis" <afd@ti.com>, zbr@ioremap.net,
+ Sebastian Reichel <sre@kernel.org>, philipp.zabel@gmail.com,
+ lost.distance@yahoo.com, daniel@caiaq.de, rui.zhang@intel.com,
+ edubezval@gmail.com, jdelvare@suse.com, linux@roeck-us.net
+References: <d0b52b94-0c87-61f8-32ff-99f2a354e500@tul.cz>
+ <308e185e-26eb-39ee-d82f-a0d210a41743@ti.com>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hwmon@vger.kernel.org
+From: Petr Cvek <petr.cvek@tul.cz>
+Message-ID: <cfa35897-383e-674a-f049-e45c4dfeb534@tul.cz>
+Date: Fri, 3 Feb 2017 02:31:44 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAN8YU5Ma_1c9xw==w5FL5WiPwA=C5ozLoBDWJ+c0Rcmb=_x-bA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <308e185e-26eb-39ee-d82f-a0d210a41743@ti.com>
+Content-Type: text/plain; charset=iso-8859-2
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 01/31/2017 11:31 PM, Andrea Merello wrote:
-> On Tue, Jan 31, 2017 at 12:47 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 01/30/2017 11:11 PM, Andrea Merello wrote:
->>>
->>> On Mon, Jan 30, 2017 at 3:24 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->>>>
->>>> On 01/30/2017 01:40 AM, Andrea Merello wrote:
->>>>>
->>>>>
->>>>> This patch adds a HWMON driver for ST Microelectronics STTS751
->>>>> temperature sensors.
->>>>>
->>>>
->>>> Overall looks good. One thing I noticed, though: In the log function
->>>> calls,
->>>> you use a mix of priv->dev and &client->dev as log device. Also, you
->>>> sometimes
->>>> use &priv->client->dev even when a local client variable is available.
->>>> I can fix up the latter (no need to resend for that), but please have a
->>>> look at the overall use and either send a fixed up version or let me know
->>>> if the log devices are all intentional as-is.
->>>
->>>
->>> Hmm, you are right: there is a bit of mess here. It's not intentional
->>> indeed..
->>>
->>> I gave a look to lm90.c and lm63.c; it seems no one uses the hwmon
->>> device for this purpose. We can probably stick to &client->dev or
->>> &priv->client->dev when a local client variable is not already
->>> available.
+Dne 2.2.2017 v 15:23 Andrew F. Davis napsal(a):
+> On 02/01/2017 07:05 PM, Petr Cvek wrote:
+>> Patch 
+>> 	w1: remove need for ida and use PLATFORM_DEVID_AUTO
+>> 	098f9fb0c962eb2fdba5f9d34f4cf7a938237184 
 >>
+>> causes a regression in the w1_ds2760 driver. Initialization creates a name "ds2760-battery.0.auto". It seems that name of that size will cause checking code in __thermal_cooling_device_register() from thermal_core.c to fail as it checks for names shorter than 20 chars:
 >>
->> It is really your call as the driver's author to make if you want to use
->> the hwmon device or &client->dev.
->
-> I've decided to stick with &client->dev for all dev_dbg(), while I
-> would use the hwmon device for dev_notice() and dev_warn(), that are
-> supposed to be eventually read by the user.
->
-> However, while keeping an eye on the log messages I've realized that
-> if the temperature remains out-of-limit for a lot of time, especially
-> if the conversion rate is set fast, we tend to spam the log with alert
-> messages.. I learned that you are usually concerned by noisy drivers,
-> so I guess you might want to mitigate this..
->
-> I could use dev_notice_once(), but it seems inappropriate here, or I
-> can silence the message at least until one reads the chip. Lm90 does
-> even disable the alarm until that happen, but it has only one alarm;
-> here we have two, so it seems not correct here.
->
-> Any suggestion?
->
-
-Use a flag that shows if the attribute in question was read ?
-
-Guenter
-
->
->>>
->>>
->>> Also, it looks like we can change some &priv->client->dev in
->>> &client->dev in probe function when calling i2c read/write functions.
->>>
->>> If you ACK, I'll fix and resend.
->>>
->> SGTM.
+>> 	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+>> 		return ERR_PTR(-EINVAL);
 >>
->> Thanks,
->> Guenter
+>> A second problem seems to be with magician_supplicants list as "ds2760-battery.0" does not match in a test power_supply_am_i_supplied() in ds2760_battery_update_status() from drivers/power/supply/ds2760_battery.c . This causes status flag to be forever in POWER_SUPPLY_STATUS_DISCHARGING state.
 >>
->
+>> Functionality returned after I hotfix changed (drivers/w1/slaves/w1_ds2760.c)
+>>
+>> 	pdev = platform_device_alloc("ds2760-battery", PLATFORM_DEVID_AUTO);
+>>
+>> to
+>>
+>> 	pdev = platform_device_alloc("ds2760-battery", 0);
+>>
+>> Which solution do you advise. Shortening the name let's say just to "ds2760" (with changes to arch files, w1 files and supply files), increasing THERMAL_NAME_LENGTH to let's say 32 (I don't know if this doesn't break something other) or just reverting to the old behavior?
+>>
+> 
+> If 20 is no longer the max thermal name then THERMAL_NAME_LENGTH should
+> be changed.
 
+Yes it is that ".auto" addition to "ds2760-battery.0" makes 21 chars long string. With higher number (".10" onwards) it is 22 chars. Load of the module then fails at test in thermal_zone_device_register():
+
+	https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/thermal_core.c?id=refs/tags/v4.10-rc6#n1158
+
+	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
+		return ERR_PTR(-EINVAL);
+
+I searched in code further and with THERMAL_NAME_LENGTH = 30 (enough space) the module load fails at another place in __hwmon_device_register():
+	
+	https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c?id=refs/tags/v4.10-rc6#n548
+
+	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
+		return ERR_PTR(-EINVAL);
+
+That's because there is "-" in "ds2760-battery.0.auto" (and that's why shortening to "ds2760.0" works). Is there some reason for disallowing "-" in a name? If not then I'm for removal (in other case we need to change ds2760-battery and others names). Increasing THERMAL_NAME_LENGTH to 22 should be just OK for ds2760 (but maybe not enough for others) I would increased it to 32 (nice number ;-) ).
+
+> 
+> As for the couple boards hard-coding "ds2760-battery.0", this is a
+> problem that should be fix regardless of any fix we chose here as IDA is
+> not guaranteed to return 0, so the battery could just as easily be
+> called ds2760-battery.7. (I've had this discussion before as the N900
+> user-space also make this mistake).
+> 
+
+I'm not familiar with power supply subsystem, so just a naive idea. Should suffice to change drivers/power/supply/power_supply_core.c __power_supply_is_supplied_by() for only first part of the string? (like "ds2760-battery" subset of "ds2760-battery.7").
+
+Do you have a link to discussion about N900?
+
+Petr
