@@ -1,180 +1,97 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f68.google.com ([74.125.82.68]:33229 "EHLO
-        mail-wm0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752057AbdBEVFa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Feb 2017 16:05:30 -0500
+Received: from mail-wm0-f65.google.com ([74.125.82.65]:34991 "EHLO
+        mail-wm0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752170AbdBEVFb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Feb 2017 16:05:31 -0500
 From: Christian Lamparter <chunkeey@googlemail.com>
 To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Cc: Christian Lamparter <chunkeey@googlemail.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>, Wei Ni <wni@nvidia.com>
-Subject: [RFC 2/2] hwmon: lm90: add thermal_zone temperature sensor support
-Date: Sun,  5 Feb 2017 22:03:16 +0100
-Message-Id: <0e28c2989f021bedaff3c8958ab8c1ef738182b7.1486327509.git.chunkeey@googlemail.com>
-In-Reply-To: <e2c150ce1312a524ea0a524f3d476f910333ae82.1486327509.git.chunkeey@googlemail.com>
-References: <e2c150ce1312a524ea0a524f3d476f910333ae82.1486327509.git.chunkeey@googlemail.com>
-In-Reply-To: <e2c150ce1312a524ea0a524f3d476f910333ae82.1486327509.git.chunkeey@googlemail.com>
-References: <e2c150ce1312a524ea0a524f3d476f910333ae82.1486327509.git.chunkeey@googlemail.com>
+Subject: [RFC 1/2] devicetree: add lm90 thermal_zone sensor support
+Date: Sun,  5 Feb 2017 22:03:15 +0100
+Message-Id: <e2c150ce1312a524ea0a524f3d476f910333ae82.1486327509.git.chunkeey@googlemail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This patch adds thermal_zone temperature sensor support
-to the lm90 module. The feature has to be enabled
-separately via the Kconfig option:
-	CONFIG_SENSORS_LM90_THERMAL_DEVICE
-
-The LM90 supports two (three for MAX6695 and MAX6696)
-temperature sensors. The local sensor is integrated
-into the LM90 chip. The remote sensors are connected
-to external temperature sensing diodes.
+This patch updates the LM90's devicetree definition to
+include the #thermal-sensor-cells property as well as
+the sensor constants in include/dt-bindings/thermal/lm90.h.
 
 Cc: Wei Ni <wni@nvidia.com>
 Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
 ---
----
- drivers/hwmon/Kconfig | 11 +++++++
- drivers/hwmon/lm90.c  | 91 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 102 insertions(+)
+I'm aware that there was atleast one previous attempt to add
+thermal_zone temperature sensors for the LM90 module. This was
+discussed on:
+<http://www.gossamer-threads.com/lists/linux/kernel/1992853>
+<https://lkml.org/lkml/2014/3/4/194>
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 190d270b20a2..9df70ad21a21 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1085,6 +1085,17 @@ config SENSORS_LM90
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called lm90.
+This RFC is meant to get it going again. As I would really
+like to have this functionality for the Netgear WNDR4700.
+This router uses a G781 to measure the SoCs temperature
+in order to regulate a TC654 fan-controller.
+<https://git.lede-project.org/?p=source.git;a=commit;h=9e0fd1b52ad1f805a308bf6a5a13236f352fd962>
+---
+ Documentation/devicetree/bindings/hwmon/lm90.txt |  6 ++++++
+ MAINTAINERS                                      |  1 +
+ include/dt-bindings/thermal/lm90.h               | 12 ++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 include/dt-bindings/thermal/lm90.h
+
+diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
+index e8632486b9ef..97581266e329 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm90.txt
++++ b/Documentation/devicetree/bindings/hwmon/lm90.txt
+@@ -33,6 +33,11 @@ Optional properties:
+               LM90 "-ALERT" pin output.
+               See interrupt-controller/interrupts.txt for the format.
  
-+config SENSORS_LM90_THERMAL_DEVICE
-+	bool "Support for thermal-zone temperature sensors"
-+	depends on SENSORS_LM90 && THERMAL_OF
-+	help
-+	  If you say yes here you get support for thermal-zone temperature
-+	  sensors for the lm90 module and all supported chips.
++- #thermal-sensor-cells: should be set to 1. See thermal/thermal.txt for
++	      details. See <include/dt-bindings/thermal/lm90.h> for the
++	      definition of the local, remote and 2nd remote sensor index
++	      constants.
 +
-+	  Refer to Documentation/devicetree/bindings/thermal/thermal.txt
-+	  and Documentation/devicetree/bindings/hwmon/lm90.txt on how to
-+	  use it for your platform.
-+
- config SENSORS_LM92
- 	tristate "National Semiconductor LM92 and compatibles"
- 	depends on I2C
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 841f2428e84a..584550c7336d 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -95,6 +95,9 @@
- #include <linux/sysfs.h>
- #include <linux/interrupt.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/of.h>
-+#include <linux/thermal.h>
-+#include <dt-bindings/thermal/lm90.h>
+ Example LM90 node:
  
- /*
-  * Addresses to scan
-@@ -1643,6 +1646,90 @@ static const struct hwmon_ops lm90_ops = {
- 	.write = lm90_write,
- };
+ temp-sensor {
+@@ -41,4 +46,5 @@ temp-sensor {
+ 	vcc-supply = <&palmas_ldo6_reg>;
+ 	interrupt-parent = <&gpio>;
+ 	interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
++	#thermal-sensor-cells = <1>;
+ }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5e637e2b3ff9..8c2ea8a18064 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7541,6 +7541,7 @@ S:	Maintained
+ F:	Documentation/hwmon/lm90
+ F:	Documentation/devicetree/bindings/hwmon/lm90.txt
+ F:	drivers/hwmon/lm90.c
++F:	include/dt-bindings/thermal/lm90.h
  
-+#ifdef CONFIG_SENSORS_LM90_THERMAL_DEVICE
+ LM95234 HARDWARE MONITOR DRIVER
+ M:	Guenter Roeck <linux@roeck-us.net>
+diff --git a/include/dt-bindings/thermal/lm90.h b/include/dt-bindings/thermal/lm90.h
+new file mode 100644
+index 000000000000..39d90f3e63ee
+--- /dev/null
++++ b/include/dt-bindings/thermal/lm90.h
+@@ -0,0 +1,12 @@
++/*
++ * This header provides constants for the LM90 thermal bindings.
++ */
 +
-+static int lm90_read_local_temp(void *data, int *temp)
-+{
-+	*temp = lm90_get_temp11(data, LOCAL_TEMP);
-+	return 0;
-+}
++#ifndef _DT_BINDINGS_THERMAL_LM90_H_
++#define _DT_BINDINGS_THERMAL_LM90_H_
 +
-+static int lm90_read_remote_temp(void *data, int *temp)
-+{
-+	*temp = lm90_get_temp11(data, REMOTE_TEMP);
-+	return 0;
-+}
++#define LM90_REMOTE_TEMPERATURE 0
++#define LM90_LOCAL_TEMPERATURE 1
++#define LM90_REMOTE2_TEMPERATURE 2
 +
-+static int lm90_read_remote2_temp(void *data, int *temp)
-+{
-+	*temp = lm90_get_temp11(data, REMOTE2_TEMP);
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops local_temp_sensor = {
-+	.get_temp = lm90_read_local_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops remote_temp_sensor = {
-+	.get_temp = lm90_read_remote_temp,
-+};
-+
-+static const struct thermal_zone_of_device_ops remote2_temp_sensor = {
-+	.get_temp = lm90_read_remote2_temp,
-+};
-+
-+static const struct thermal_zone_sensors_struct {
-+	int sensor_id;
-+	const char *name;
-+	const struct thermal_zone_of_device_ops *ops;
-+	u32 flag_mask;
-+	u32 flag_required;
-+} thermal_zone_sensors[] = {
-+	{ LM90_REMOTE_TEMPERATURE, "remote", &remote_temp_sensor },
-+	{ LM90_LOCAL_TEMPERATURE, "local", &local_temp_sensor },
-+	{ LM90_REMOTE2_TEMPERATURE, "second remote", &remote2_temp_sensor,
-+	  LM90_HAVE_TEMP3, LM90_HAVE_TEMP3 },
-+};
-+
-+static int lm90_setup_thermal_device(struct device *dev,
-+				     struct lm90_data *data)
-+{
-+	const struct thermal_zone_sensors_struct *entry;
-+	struct thermal_zone_device *therm_dev;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(thermal_zone_sensors); i++) {
-+		entry = &thermal_zone_sensors[i];
-+
-+		if ((data->flags & entry->flag_mask) != entry->flag_required)
-+			continue;
-+
-+		therm_dev = devm_thermal_zone_of_sensor_register(dev,
-+			entry->sensor_id, data, entry->ops);
-+
-+		/*
-+		 * if a sensor device isn't requested in a thermal-zone the
-+		 * call to devm_thermal_zone_of_sensor_register will fail
-+		 * with -ENODEV. In this case we can ignore/skip it.
-+		 */
-+
-+		if (IS_ERR(therm_dev) && (PTR_ERR(therm_dev) != -ENODEV)) {
-+			dev_err(dev, "Failed to register %s thermal_zone sensor device\n",
-+				entry->name);
-+			return PTR_ERR(therm_dev);
-+		}
-+	}
-+	return 0;
-+}
-+#else
-+static int lm90_setup_thermal_device(struct device __maybe_unused *dev,
-+				     struct lm90_data __maybe_unused *data)
-+{
-+	return 0;
-+}
 +#endif
-+
-+
- static int lm90_probe(struct i2c_client *client,
- 		      const struct i2c_device_id *id)
- {
-@@ -1765,6 +1852,10 @@ static int lm90_probe(struct i2c_client *client,
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
-+	err = lm90_setup_thermal_device(dev, data);
-+	if (err)
-+		return err;
-+
- 	if (client->irq) {
- 		dev_dbg(dev, "IRQ: %d\n", client->irq);
- 		err = devm_request_threaded_irq(dev, client->irq,
 -- 
 2.11.0
 
