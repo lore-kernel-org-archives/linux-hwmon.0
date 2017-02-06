@@ -1,94 +1,93 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from fllnx210.ext.ti.com ([198.47.19.17]:52986 "EHLO
-        fllnx210.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751408AbdBCPza (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Feb 2017 10:55:30 -0500
-Subject: Re: [RFC] w1: regression, remove need for ida and use
- PLATFORM_DEVID_AUTO
-To: Petr Cvek <petr.cvek@tul.cz>, <zbr@ioremap.net>,
-        Sebastian Reichel <sre@kernel.org>, <philipp.zabel@gmail.com>,
-        <lost.distance@yahoo.com>, <daniel@caiaq.de>,
-        <rui.zhang@intel.com>, <edubezval@gmail.com>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>
-References: <d0b52b94-0c87-61f8-32ff-99f2a354e500@tul.cz>
- <308e185e-26eb-39ee-d82f-a0d210a41743@ti.com>
- <cfa35897-383e-674a-f049-e45c4dfeb534@tul.cz>
-CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-hwmon@vger.kernel.org>
-From: "Andrew F. Davis" <afd@ti.com>
-Message-ID: <2f6c0042-c096-d315-b037-242fec3cd24d@ti.com>
-Date: Fri, 3 Feb 2017 09:53:51 -0600
-MIME-Version: 1.0
-In-Reply-To: <cfa35897-383e-674a-f049-e45c4dfeb534@tul.cz>
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: 7bit
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48886 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1752518AbdBFU1W (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Feb 2017 15:27:22 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v16KOgiT055734
+        for <linux-hwmon@vger.kernel.org>; Mon, 6 Feb 2017 15:27:21 -0500
+Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 28ew59ydv6-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Feb 2017 15:27:21 -0500
+Received: from localhost
+        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Mon, 6 Feb 2017 13:27:20 -0700
+From: eajames@linux.vnet.ibm.com
+To: linux@roeck-us.net
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
+        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
+        joel@jms.id.au, benh@kernel.crashing.org,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH linux v6 0/6] drivers: hwmon: Add On-Chip Controller driver
+Date: Mon,  6 Feb 2017 14:27:06 -0600
+Message-Id: <1486412832-21854-1-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 02/02/2017 07:31 PM, Petr Cvek wrote:
-> Dne 2.2.2017 v 15:23 Andrew F. Davis napsal(a):
->> On 02/01/2017 07:05 PM, Petr Cvek wrote:
->>> Patch 
->>> 	w1: remove need for ida and use PLATFORM_DEVID_AUTO
->>> 	098f9fb0c962eb2fdba5f9d34f4cf7a938237184 
->>>
->>> causes a regression in the w1_ds2760 driver. Initialization creates a name "ds2760-battery.0.auto". It seems that name of that size will cause checking code in __thermal_cooling_device_register() from thermal_core.c to fail as it checks for names shorter than 20 chars:
->>>
->>> 	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
->>> 		return ERR_PTR(-EINVAL);
->>>
->>> A second problem seems to be with magician_supplicants list as "ds2760-battery.0" does not match in a test power_supply_am_i_supplied() in ds2760_battery_update_status() from drivers/power/supply/ds2760_battery.c . This causes status flag to be forever in POWER_SUPPLY_STATUS_DISCHARGING state.
->>>
->>> Functionality returned after I hotfix changed (drivers/w1/slaves/w1_ds2760.c)
->>>
->>> 	pdev = platform_device_alloc("ds2760-battery", PLATFORM_DEVID_AUTO);
->>>
->>> to
->>>
->>> 	pdev = platform_device_alloc("ds2760-battery", 0);
->>>
->>> Which solution do you advise. Shortening the name let's say just to "ds2760" (with changes to arch files, w1 files and supply files), increasing THERMAL_NAME_LENGTH to let's say 32 (I don't know if this doesn't break something other) or just reverting to the old behavior?
->>>
->>
->> If 20 is no longer the max thermal name then THERMAL_NAME_LENGTH should
->> be changed.
-> 
-> Yes it is that ".auto" addition to "ds2760-battery.0" makes 21 chars long string. With higher number (".10" onwards) it is 22 chars. Load of the module then fails at test in thermal_zone_device_register():
-> 
-> 	https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/thermal_core.c?id=refs/tags/v4.10-rc6#n1158
-> 
-> 	if (type && strlen(type) >= THERMAL_NAME_LENGTH)
-> 		return ERR_PTR(-EINVAL);
-> 
-> I searched in code further and with THERMAL_NAME_LENGTH = 30 (enough space) the module load fails at another place in __hwmon_device_register():
-> 	
-> 	https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c?id=refs/tags/v4.10-rc6#n548
-> 
-> 	if (name && (!strlen(name) || strpbrk(name, "-* \t\n")))
-> 		return ERR_PTR(-EINVAL);
-> 
-> That's because there is "-" in "ds2760-battery.0.auto" (and that's why shortening to "ds2760.0" works). Is there some reason for disallowing "-" in a name? If not then I'm for removal (in other case we need to change ds2760-battery and others names). Increasing THERMAL_NAME_LENGTH to 22 should be just OK for ds2760 (but maybe not enough for others) I would increased it to 32 (nice number ;-) ).
-> 
->>
->> As for the couple boards hard-coding "ds2760-battery.0", this is a
->> problem that should be fix regardless of any fix we chose here as IDA is
->> not guaranteed to return 0, so the battery could just as easily be
->> called ds2760-battery.7. (I've had this discussion before as the N900
->> user-space also make this mistake).
->>
-> 
-> I'm not familiar with power supply subsystem, so just a naive idea. Should suffice to change drivers/power/supply/power_supply_core.c __power_supply_is_supplied_by() for only first part of the string? (like "ds2760-battery" subset of "ds2760-battery.7").
-> 
-> Do you have a link to discussion about N900?
-> 
+From: "Edward A. James" <eajames@us.ibm.com>
 
-The thread doesn't look to have happened on the lists, but the commit
-that reverted my change is: 9aafabc7fece. I argued against this revert
-as relying on sysfs names never changing should be considered ABI abuse
-and we should not hold back proper fixes for the sake of keeping a hack
-in user-space working.
+This patchset adds a hwmon driver to support the OCC (On-Chip Controller)
+on the IBM POWER8 and POWER9 processors, from a BMC (Baseboard Management
+Controller). The OCC is an embedded processor that provides real time
+power and thermal monitoring.
 
-Andrew
+The driver provides an interface on a BMC to poll OCC sensor data, set
+user power caps, and perform some basic OCC error handling. It interfaces
+with userspace through hwmon.
 
-> Petr
-> 
+The driver is currently functional only for the OCC on POWER8 chips.
+Communicating with the POWER9 OCC requries FSI support.
+
+Edward A. James (6):
+  hwmon: Add core On-Chip Controller support for POWER CPUs
+  hwmon: occ: Add sysfs interface
+  hwmon: occ: Add I2C transport implementation for SCOM operations
+  hwmon: occ: Add callbacks for parsing P8 OCC datastructures
+  hwmon: occ: Add hwmon implementation for the P8 OCC
+  hwmon: occ: Add callbacks for parsing P9 OCC datastructures
+
+ Documentation/devicetree/bindings/hwmon/occ.txt |  13 +
+ Documentation/hwmon/occ                         | 114 ++++++
+ MAINTAINERS                                     |   7 +
+ drivers/hwmon/Kconfig                           |   2 +
+ drivers/hwmon/Makefile                          |   1 +
+ drivers/hwmon/occ/Kconfig                       |  29 ++
+ drivers/hwmon/occ/Makefile                      |   2 +
+ drivers/hwmon/occ/occ.c                         | 450 ++++++++++++++++++++++++
+ drivers/hwmon/occ/occ.h                         |  81 +++++
+ drivers/hwmon/occ/occ_p8.c                      | 248 +++++++++++++
+ drivers/hwmon/occ/occ_p8.h                      |  30 ++
+ drivers/hwmon/occ/occ_p9.c                      | 309 ++++++++++++++++
+ drivers/hwmon/occ/occ_p9.h                      |  30 ++
+ drivers/hwmon/occ/occ_scom_i2c.c                |  77 ++++
+ drivers/hwmon/occ/occ_scom_i2c.h                |  26 ++
+ drivers/hwmon/occ/occ_sysfs.c                   | 251 +++++++++++++
+ drivers/hwmon/occ/occ_sysfs.h                   |  30 ++
+ drivers/hwmon/occ/p8_occ_i2c.c                  | 104 ++++++
+ drivers/hwmon/occ/scom.h                        |  47 +++
+ 19 files changed, 1851 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/occ.c
+ create mode 100644 drivers/hwmon/occ/occ.h
+ create mode 100644 drivers/hwmon/occ/occ_p8.c
+ create mode 100644 drivers/hwmon/occ/occ_p8.h
+ create mode 100644 drivers/hwmon/occ/occ_p9.c
+ create mode 100644 drivers/hwmon/occ/occ_p9.h
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.c
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.h
+ create mode 100644 drivers/hwmon/occ/p8_occ_i2c.c
+ create mode 100644 drivers/hwmon/occ/scom.h
+
+-- 
+1.8.3.1
+
