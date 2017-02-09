@@ -1,82 +1,84 @@
-Return-path: <linux@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56894 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752986AbdBIPMs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Feb 2017 10:12:48 -0500
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 7/7] hwmon: (it87) Add support for IT8792E
-Date: Thu,  9 Feb 2017 07:06:15 -0800
-Message-Id: <1486652775-3926-7-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 2/7] hwmon: (it87) Add support for IT8622E
+Date: Thu,  9 Feb 2017 07:06:10 -0800
+Message-Id: <1486652775-3926-2-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1486652775-3926-1-git-send-email-linux@roeck-us.net>
 References: <1486652775-3926-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The chip is similar to IT8732E, but supports only three fans
-and pwm outputs instead of four (the driver currently does not
-support the 4th fan and pwm output of IT8732E).
+IT8622E is similar to IT8620E, but only supports five pwm controls and
+five fan tachometers.
 
-Note that the chip ID is 0x8733, not 0x8792 as one would expect.
-
+Originally-from: Kevin Folz <kfolz@evertz.com>.
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/it87.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/hwmon/it87.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 37acb38b5e17..efb01c247e2d 100644
+index 3bfa866cc82f..4d9090f89401 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -32,6 +32,7 @@
-  *            IT8783E/F Super I/O chip w/LPC interface
-  *            IT8786E  Super I/O chip w/LPC interface
-  *            IT8790E  Super I/O chip w/LPC interface
-+ *            IT8792E  Super I/O chip w/LPC interface
-  *            Sis950   A clone of the IT8705F
+@@ -12,6 +12,7 @@
   *
-  *  Copyright (C) 2001 Chris Gauthron
-@@ -70,8 +71,8 @@
- #define DRVNAME "it87"
+  *  Supports: IT8603E  Super I/O chip w/LPC interface
+  *            IT8620E  Super I/O chip w/LPC interface
++ *            IT8622E  Super I/O chip w/LPC interface
+  *            IT8623E  Super I/O chip w/LPC interface
+  *            IT8628E  Super I/O chip w/LPC interface
+  *            IT8705F  Super I/O chip w/LPC interface
+@@ -70,7 +71,7 @@
  
  enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
--	     it8771, it8772, it8781, it8782, it8783, it8786, it8790, it8603,
--	     it8620, it8622, it8628 };
-+	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
-+	     it8792, it8603, it8620, it8622, it8628 };
+ 	     it8771, it8772, it8781, it8782, it8783, it8786, it8790, it8603,
+-	     it8620, it8628 };
++	     it8620, it8622, it8628 };
  
  static unsigned short force_id;
  module_param(force_id, ushort, 0);
-@@ -152,6 +153,7 @@ static inline void superio_exit(int ioreg)
- #define IT8726F_DEVID 0x8726
- #define IT8728F_DEVID 0x8728
- #define IT8732F_DEVID 0x8732
-+#define IT8792E_DEVID 0x8733
- #define IT8771E_DEVID 0x8771
- #define IT8772E_DEVID 0x8772
- #define IT8781F_DEVID 0x8781
-@@ -423,6 +425,15 @@ static const struct it87_devices it87_devices[] = {
- 		  | FEAT_PWM_FREQ2,
+@@ -160,6 +161,7 @@ static inline void superio_exit(int ioreg)
+ #define IT8790E_DEVID 0x8790
+ #define IT8603E_DEVID 0x8603
+ #define IT8620E_DEVID 0x8620
++#define IT8622E_DEVID 0x8622
+ #define IT8623E_DEVID 0x8623
+ #define IT8628E_DEVID 0x8628
+ #define IT87_ACT_REG  0x30
+@@ -437,6 +439,15 @@ static const struct it87_devices it87_devices[] = {
+ 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
  		.peci_mask = 0x07,
  	},
-+	[it8792] = {
-+		.name = "it8792",
++	[it8622] = {
++		.name = "it8622",
 +		.suffix = "E",
-+		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
-+		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
-+		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
++		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
++		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
++		  | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2 | FEAT_AVCC3
++		  | FEAT_VIN3_5V,
 +		.peci_mask = 0x07,
-+		.old_peci_mask = 0x02,	/* Actually reports PCH */
 +	},
- 	[it8603] = {
- 		.name = "it8603",
+ 	[it8628] = {
+ 		.name = "it8628",
  		.suffix = "E",
-@@ -2419,6 +2430,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	case IT8732F_DEVID:
- 		sio_data->type = it8732;
+@@ -2418,6 +2429,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 	case IT8620E_DEVID:
+ 		sio_data->type = it8620;
  		break;
-+	case IT8792E_DEVID:
-+		sio_data->type = it8792;
++	case IT8622E_DEVID:
++		sio_data->type = it8622;
 +		break;
- 	case IT8771E_DEVID:
- 		sio_data->type = it8771;
+ 	case IT8628E_DEVID:
+ 		sio_data->type = it8628;
  		break;
 -- 
 2.7.4
+
