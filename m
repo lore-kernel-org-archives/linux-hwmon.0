@@ -1,92 +1,69 @@
-Return-path: <eajames@linux.vnet.ibm.com>
-From: Eddie James <eajames@linux.vnet.ibm.com>
-Subject: Re: [PATCH linux v7 3/6] hwmon: occ: Add I2C transport implementation
- for SCOM operations
-To: Joel Stanley <joel@jms.id.au>
-References: <1486509056-25838-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1486509056-25838-4-git-send-email-eajames@linux.vnet.ibm.com>
- <CACPK8XcdsG83HsQW1Pv5zR339mgTzYjfuLQE+gE8yk8Z88MrTA@mail.gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
-        Mark Rutland <mark.rutland@arm.com>, Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "Edward A. James" <eajames@us.ibm.com>
-Date: Fri, 10 Feb 2017 15:05:05 -0600
-MIME-Version: 1.0
-In-Reply-To: <CACPK8XcdsG83HsQW1Pv5zR339mgTzYjfuLQE+gE8yk8Z88MrTA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Message-Id: <4224dbab-d48c-be48-154d-5ed14dd5231e@linux.vnet.ibm.com>
+Return-path: <linux@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/7] hwmon: (it87) Add feature flag indicating that VIN3 is connected to 5V
+Date: Thu,  9 Feb 2017 07:06:09 -0800
+Message-Id: <1486652775-3926-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
+On IT8622E and IT8628E, VIN3 is expected to be connected to +5V.
+Add feature flag and reflect in input label.
 
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/it87.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-On 02/09/2017 11:31 PM, Joel Stanley wrote:
-> On Wed, Feb 8, 2017 at 9:40 AM,<eajames@linux.vnet.ibm.com>  wrote:
->> From: "Edward A. James"<eajames@us.ibm.com>
->>
->> Add functions to send SCOM operations over I2C bus. The BMC can
->> communicate with the Power8 host processor over I2C, but needs to use SCOM
->> operations in order to access the OCC register space.
-> This doesn't need to be separate from the p8_occ_i2c.c file. You can
-> remove a layer of function calls by merging this in and having these
-> be your getscom putscom bus_ops callbacks.
-
-The purpose of having this separate was so that we could do the scom 
-address shift for p8 separately.
-
->> Signed-off-by: Edward A. James<eajames@us.ibm.com>
->> Signed-off-by: Andrew Jeffery<andrew@aj.id.au>
->> ---
->>   drivers/hwmon/occ/occ_scom_i2c.c | 77 ++++++++++++++++++++++++++++++++++++++++
->>   drivers/hwmon/occ/occ_scom_i2c.h | 26 ++++++++++++++
->>   2 files changed, 103 insertions(+)
->>   create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
->>   create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
->>
->> diff --git a/drivers/hwmon/occ/occ_scom_i2c.c b/drivers/hwmon/occ/occ_scom_i2c.c
->> new file mode 100644
->> index 0000000..74bd6ff
->> --- /dev/null
->> +++ b/drivers/hwmon/occ/occ_scom_i2c.c
->> @@ -0,0 +1,77 @@
->> +
->> +int occ_i2c_getscom(void *bus, u32 address, u64 *data)
->> +{
->> +       ssize_t rc;
->> +       u64 buf;
-> If you add endianness annotations sparse can check your types are
-> consistent. The warning looks like this:
->
-> make C=2 drivers/hwmon/occ/occ_scom_i2c.o
-> drivers/hwmon/occ/occ_scom_i2c.c:48:17: warning: cast to restricted __be64
->
-> Which tells you it expects the type you pass to be64_to_cpu to be __be64.
->
->
->> +       struct i2c_client *client = bus;
->> +       struct i2c_msg msgs[2];
->> +
->> +       msgs[0].addr = client->addr;
->> +       msgs[0].flags = client->flags & I2C_M_TEN;
->> +       msgs[0].len = sizeof(u32);
->> +       msgs[0].buf = (char *)&address;
->> +
->> +       msgs[1].addr = client->addr;
->> +       msgs[1].flags = client->flags & I2C_M_TEN;
->> +       msgs[1].flags |= I2C_M_RD;
-> I first thought you had made a mistake here. Instead you could do:
->
->         msgs[1].flags = client->flags & I2C_M_TEN | I2C_M_RD;
-
-Sure. Was just copying i2c_master_recv.
-
->> +       msgs[1].len = sizeof(u64);
->> +       msgs[1].buf = (char *)&buf;
->> +
->> +       rc = i2c_transfer(client->adapter, msgs, 2);
->> +       if (rc < 0)
->> +               return rc;
->> +
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index ef4e0527bd21..3bfa866cc82f 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -296,6 +296,7 @@ struct it87_devices {
+ #define FEAT_SIX_PWM		BIT(14)	/* Chip supports 6 pwm chn */
+ #define FEAT_PWM_FREQ2		BIT(15)	/* Separate pwm freq 2 */
+ #define FEAT_SIX_TEMP		BIT(16)	/* Up to 6 temp sensors */
++#define FEAT_VIN3_5V		BIT(17)	/* VIN3 connected to +5V */
+ 
+ static const struct it87_devices it87_devices[] = {
+ 	[it87] = {
+@@ -433,7 +434,7 @@ static const struct it87_devices it87_devices[] = {
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+ 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
+ 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+-		  | FEAT_SIX_TEMP,
++		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8628] = {
+@@ -442,7 +443,7 @@ static const struct it87_devices it87_devices[] = {
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+ 		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
+ 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+-		  | FEAT_SIX_TEMP,
++		  | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+ 		.peci_mask = 0x07,
+ 	},
+ };
+@@ -468,6 +469,7 @@ static const struct it87_devices it87_devices[] = {
+ #define has_six_pwm(data)	((data)->features & FEAT_SIX_PWM)
+ #define has_pwm_freq2(data)	((data)->features & FEAT_PWM_FREQ2)
+ #define has_six_temp(data)	((data)->features & FEAT_SIX_TEMP)
++#define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
+ 
+ struct it87_sio_data {
+ 	enum chips type;
+@@ -1926,7 +1928,9 @@ static ssize_t show_label(struct device *dev, struct device_attribute *attr,
+ 	int nr = to_sensor_dev_attr(attr)->index;
+ 	const char *label;
+ 
+-	if (has_12mv_adc(data) || has_10_9mv_adc(data))
++	if (has_vin3_5v(data) && nr == 0)
++		label = labels[0];
++	else if (has_12mv_adc(data) || has_10_9mv_adc(data))
+ 		label = labels_it8721[nr];
+ 	else
+ 		label = labels[nr];
+-- 
+2.7.4
