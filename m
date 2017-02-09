@@ -1,36 +1,74 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47089 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751210AbdBWTa6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Feb 2017 14:30:58 -0500
-Date: Thu, 23 Feb 2017 11:30:54 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Atsushi Nemoto <nemoto@toshiba-tops.co.jp>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        sato@toshiba-tops.co.jp
-Subject: Re: [PATCH v2] hwmon: (w83627ehf) Use request_muxed_region
-Message-ID: <20170223193054.GA26892@roeck-us.net>
-References: <20170222.133210.966396582369483976.nemoto@toshiba-tops.co.jp>
+To: linux-hwmon@vger.kernel.org
+Date: Thu, 09 Feb 2017 07:21:41 -0800
+Subject: [PATCH 1/7] hwmon: (it87) Add feature flag indicating that VIN3 is connected to 5V
+Message-ID: <1486651773-3103-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170222.133210.966396582369483976.nemoto@toshiba-tops.co.jp>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Feb 22, 2017 at 01:32:10PM +0900, Atsushi Nemoto wrote:
-> From: Katsumi Sato <sato@toshiba-tops.co.jp>
-> 
-> Serialize access to the hardware by using "request_muxed_region".
-> Call to this macro will hold off the requestor if the resource is
-> currently busy. "superio_enter" will return an error if call to
-> "request_muxed_region" fails.
-> 
-> Signed-off-by: Katsumi Sato <sato@toshiba-tops.co.jp>
-> Signed-off-by: Atsushi Nemoto <nemoto@toshiba-tops.co.jp>
+On IT8622E and IT8628E, VIN3 is expected to be connected to +5V.
+Add feature flag and reflect in input label.
 
-Applied to hwmon-next.
+Signed-off-by: Guenter Roeck <li...@roeck-us.net>
+---
+ drivers/hwmon/it87.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index ef4e0527bd21..3bfa866cc82f 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -296,6 +296,7 @@ struct it87_devices {
+ #define FEAT_SIX_PWM           BIT(14) /* Chip supports 6 pwm chn */
+ #define FEAT_PWM_FREQ2         BIT(15) /* Separate pwm freq 2 */
+ #define FEAT_SIX_TEMP          BIT(16) /* Up to 6 temp sensors */
++#define FEAT_VIN3_5V           BIT(17) /* VIN3 connected to +5V */
+ 
+ static const struct it87_devices it87_devices[] = {
+        [it87] = {
+@@ -433,7 +434,7 @@ static const struct it87_devices it87_devices[] = {
+                .features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+                  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
+                  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+-                 | FEAT_SIX_TEMP,
++                 | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+                .peci_mask = 0x07,
+        },
+        [it8628] = {
+@@ -442,7 +443,7 @@ static const struct it87_devices it87_devices[] = {
+                .features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+                  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
+                  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+-                 | FEAT_SIX_TEMP,
++                 | FEAT_SIX_TEMP | FEAT_VIN3_5V,
+                .peci_mask = 0x07,
+        },
+ };
+@@ -468,6 +469,7 @@ static const struct it87_devices it87_devices[] = {
+ #define has_six_pwm(data)      ((data)->features & FEAT_SIX_PWM)
+ #define has_pwm_freq2(data)    ((data)->features & FEAT_PWM_FREQ2)
+ #define has_six_temp(data)     ((data)->features & FEAT_SIX_TEMP)
++#define has_vin3_5v(data)      ((data)->features & FEAT_VIN3_5V)
+ 
+ struct it87_sio_data {
+        enum chips type;
+@@ -1926,7 +1928,9 @@ static ssize_t show_label(struct device *dev, struct 
+device_attribute *attr,
+        int nr = to_sensor_dev_attr(attr)->index;
+        const char *label;
+ 
+-       if (has_12mv_adc(data) || has_10_9mv_adc(data))
++       if (has_vin3_5v(data) && nr == 0)
++               label = labels[0];
++       else if (has_12mv_adc(data) || has_10_9mv_adc(data))
+                label = labels_it8721[nr];
+        else
+                label = labels[nr];
+-- 
+2.7.4
+
+--
+To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+the body of a message to majord...@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
