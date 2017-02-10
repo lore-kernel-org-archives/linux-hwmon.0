@@ -6,83 +6,147 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Jean Delvare <jdelvare@suse.com>,
 	Wei Ni <wni@nvidia.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] devicetree: add lm90 thermal_zone sensor support
-Date: Fri, 10 Feb 2017 17:12:29 +0100
-Message-Id: <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
-In-Reply-To: <2979642.2YCYMDeKdL@debian64>
-References: <2979642.2YCYMDeKdL@debian64>
+Subject: [PATCH 2/2] hwmon: lm90: integration of channel map in dt-bindings
+Date: Fri, 10 Feb 2017 17:12:30 +0100
+Message-Id: <bda1ec86d68fe6b78c04c7dec7eb3c63c0850a97.1486741517.git.chunkeey@googlemail.com>
+In-Reply-To: <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
+References: <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
+In-Reply-To: <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
+References: <2979642.2YCYMDeKdL@debian64> <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-This patch updates the LM90's devicetree definition to
-include the #thermal-sensor-cells property as well as
-the sensor constants in include/dt-bindings/thermal/lm90.h.
+This patch integrates the LOCAL, REMOTE and REMOTE2
+channel definitions into the lm90.c driver.
 
-Cc: Wei Ni <wni@nvidia.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
 ---
-I've reordered LM90_LOCAL_TEMPERATURE and LM90_REMOTE_TEMPERATURE.
-Everything else is the same as in the RFC. This is the only
-required patch and it only updates the documentation and binding.
-[PATCH 2/2] is optional (as I said I would look at it).
+This is an optional patch to showcase how the channel definition
+in the dt-bindings are mapped into the driver.
+In theory, this makes it possible to easily remap the channel
+indices. However, it does make the driver harder to read.
 ---
- Documentation/devicetree/bindings/hwmon/lm90.txt |  6 ++++++
- MAINTAINERS                                      |  1 +
- include/dt-bindings/thermal/lm90.h               | 12 ++++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 include/dt-bindings/thermal/lm90.h
+ drivers/hwmon/lm90.c | 61 ++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 40 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
-index e8632486b9ef..97581266e329 100644
---- a/Documentation/devicetree/bindings/hwmon/lm90.txt
-+++ b/Documentation/devicetree/bindings/hwmon/lm90.txt
-@@ -33,6 +33,11 @@ Optional properties:
-               LM90 "-ALERT" pin output.
-               See interrupt-controller/interrupts.txt for the format.
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 841f2428e84a..aa67810000f9 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -95,6 +95,7 @@
+ #include <linux/sysfs.h>
+ #include <linux/interrupt.h>
+ #include <linux/regulator/consumer.h>
++#include <dt-bindings/thermal/lm90.h>
  
-+- #thermal-sensor-cells: should be set to 1. See thermal/thermal.txt for
-+	      details. See <include/dt-bindings/thermal/lm90.h> for the
-+	      definition of the local, remote and 2nd remote sensor index
-+	      constants.
-+
- Example LM90 node:
- 
- temp-sensor {
-@@ -41,4 +46,5 @@ temp-sensor {
- 	vcc-supply = <&palmas_ldo6_reg>;
- 	interrupt-parent = <&gpio>;
- 	interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
-+	#thermal-sensor-cells = <1>;
+ /*
+  * Addresses to scan
+@@ -1016,23 +1017,33 @@ static int lm90_set_temphyst(struct lm90_data *data, long val)
  }
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2be620cea1ed..73972ccebc56 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7541,6 +7541,7 @@ S:	Maintained
- F:	Documentation/hwmon/lm90
- F:	Documentation/devicetree/bindings/hwmon/lm90.txt
- F:	drivers/hwmon/lm90.c
-+F:	include/dt-bindings/thermal/lm90.h
  
- LM95234 HARDWARE MONITOR DRIVER
- M:	Guenter Roeck <linux@roeck-us.net>
-diff --git a/include/dt-bindings/thermal/lm90.h b/include/dt-bindings/thermal/lm90.h
-new file mode 100644
-index 000000000000..8c2e3095f704
---- /dev/null
-+++ b/include/dt-bindings/thermal/lm90.h
-@@ -0,0 +1,12 @@
-+/*
-+ * This header provides constants for the LM90 thermal bindings.
-+ */
+ static const u8 lm90_temp_index[3] = {
+-	LOCAL_TEMP, REMOTE_TEMP, REMOTE2_TEMP
++	[LM90_LOCAL_TEMPERATURE] = LOCAL_TEMP,
++	[LM90_REMOTE_TEMPERATURE] = REMOTE_TEMP,
++	[LM90_REMOTE2_TEMPERATURE] =  REMOTE2_TEMP
+ };
+ 
+ static const u8 lm90_temp_min_index[3] = {
+-	LOCAL_LOW, REMOTE_LOW, REMOTE2_LOW
++	[LM90_LOCAL_TEMPERATURE] = LOCAL_LOW,
++	[LM90_REMOTE_TEMPERATURE] = REMOTE_LOW,
++	[LM90_REMOTE2_TEMPERATURE] = REMOTE2_LOW
+ };
+ 
+ static const u8 lm90_temp_max_index[3] = {
+-	LOCAL_HIGH, REMOTE_HIGH, REMOTE2_HIGH
++	[LM90_LOCAL_TEMPERATURE] = LOCAL_HIGH,
++	[LM90_REMOTE_TEMPERATURE] = REMOTE_HIGH,
++	[LM90_REMOTE2_TEMPERATURE] = REMOTE2_HIGH
+ };
+ 
+ static const u8 lm90_temp_crit_index[3] = {
+-	LOCAL_CRIT, REMOTE_CRIT, REMOTE2_CRIT
++	[LM90_LOCAL_TEMPERATURE] = LOCAL_CRIT,
++	[LM90_REMOTE_TEMPERATURE] = REMOTE_CRIT,
++	[LM90_REMOTE2_TEMPERATURE] = REMOTE2_CRIT
+ };
+ 
+ static const u8 lm90_temp_emerg_index[3] = {
+-	LOCAL_EMERG, REMOTE_EMERG, REMOTE2_EMERG
++	[LM90_LOCAL_TEMPERATURE] = LOCAL_EMERG,
++	[LM90_REMOTE_TEMPERATURE] = REMOTE_EMERG,
++	[LM90_REMOTE2_TEMPERATURE] = REMOTE2_EMERG
+ };
+ 
+ static const u8 lm90_min_alarm_bits[3] = { 5, 3, 11 };
+@@ -1654,6 +1665,10 @@ static int lm90_probe(struct i2c_client *client,
+ 	struct lm90_data *data;
+ 	int err;
+ 
++	BUILD_BUG_ON(LM90_LOCAL_TEMPERATURE == LM90_REMOTE_TEMPERATURE ||
++		     LM90_REMOTE_TEMPERATURE == LM90_REMOTE2_TEMPERATURE ||
++		     LM90_REMOTE2_TEMPERATURE == LM90_LOCAL_TEMPERATURE);
 +
-+#ifndef _DT_BINDINGS_THERMAL_LM90_H_
-+#define _DT_BINDINGS_THERMAL_LM90_H_
-+
-+#define LM90_LOCAL_TEMPERATURE 0
-+#define LM90_REMOTE_TEMPERATURE 1
-+#define LM90_REMOTE2_TEMPERATURE 2
-+
-+#endif
+ 	regulator = devm_regulator_get(dev, "vcc");
+ 	if (IS_ERR(regulator))
+ 		return PTR_ERR(regulator);
+@@ -1695,37 +1710,41 @@ static int lm90_probe(struct i2c_client *client,
+ 	data->chip.ops = &lm90_ops;
+ 	data->chip.info = data->info;
+ 
+-	data->info[0] = &lm90_chip_info;
+-	data->info[1] = &data->temp_info;
++	data->info[LM90_LOCAL_TEMPERATURE] = &lm90_chip_info;
++	data->info[LM90_REMOTE_TEMPERATURE] = &data->temp_info;
+ 
+ 	info = &data->temp_info;
+ 	info->type = hwmon_temp;
+ 	info->config = data->channel_config;
+ 
+-	data->channel_config[0] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+-		HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
+-		HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM;
+-	data->channel_config[1] = HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+-		HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
+-		HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM | HWMON_T_FAULT;
++	data->channel_config[LM90_LOCAL_TEMPERATURE] = HWMON_T_INPUT |
++		HWMON_T_MIN | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST |
++		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM;
++	data->channel_config[LM90_REMOTE_TEMPERATURE] = HWMON_T_INPUT |
++		HWMON_T_MIN | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST |
++		HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM |
++		HWMON_T_FAULT;
+ 
+ 	if (data->flags & LM90_HAVE_OFFSET)
+-		data->channel_config[1] |= HWMON_T_OFFSET;
++		data->channel_config[LM90_REMOTE_TEMPERATURE] |= HWMON_T_OFFSET;
+ 
+ 	if (data->flags & LM90_HAVE_EMERGENCY) {
+-		data->channel_config[0] |= HWMON_T_EMERGENCY |
+-			HWMON_T_EMERGENCY_HYST;
+-		data->channel_config[1] |= HWMON_T_EMERGENCY |
+-			HWMON_T_EMERGENCY_HYST;
++		data->channel_config[LM90_LOCAL_TEMPERATURE] |=
++			HWMON_T_EMERGENCY | HWMON_T_EMERGENCY_HYST;
++		data->channel_config[LM90_REMOTE_TEMPERATURE] |=
++			HWMON_T_EMERGENCY | HWMON_T_EMERGENCY_HYST;
+ 	}
+ 
+ 	if (data->flags & LM90_HAVE_EMERGENCY_ALARM) {
+-		data->channel_config[0] |= HWMON_T_EMERGENCY_ALARM;
+-		data->channel_config[1] |= HWMON_T_EMERGENCY_ALARM;
++		data->channel_config[LM90_LOCAL_TEMPERATURE] |=
++			HWMON_T_EMERGENCY_ALARM;
++		data->channel_config[LM90_REMOTE_TEMPERATURE] |=
++			HWMON_T_EMERGENCY_ALARM;
+ 	}
+ 
+ 	if (data->flags & LM90_HAVE_TEMP3) {
+-		data->channel_config[2] = HWMON_T_INPUT |
++		data->channel_config[LM90_REMOTE2_TEMPERATURE] =
++			HWMON_T_INPUT |
+ 			HWMON_T_MIN | HWMON_T_MAX |
+ 			HWMON_T_CRIT | HWMON_T_CRIT_HYST |
+ 			HWMON_T_EMERGENCY | HWMON_T_EMERGENCY_HYST |
 -- 
 2.11.0
