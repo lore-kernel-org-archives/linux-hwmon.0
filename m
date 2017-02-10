@@ -1,54 +1,105 @@
-Return-path: <chunkeey@googlemail.com>
-From: Christian Lamparter <chunkeey@googlemail.com>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, Wei Ni <wni@nvidia.com>
-Subject: Re: [PATCH 2/2] hwmon: lm90: integration of channel map in dt-bindings
-Date: Fri, 10 Feb 2017 21:44:53 +0100
-Message-ID: <1500345.XcJ59yDJ4W@debian64>
-In-Reply-To: <20170210172106.GA13576@roeck-us.net>
-References: <2979642.2YCYMDeKdL@debian64> <bda1ec86d68fe6b78c04c7dec7eb3c63c0850a97.1486741517.git.chunkeey@googlemail.com> <20170210172106.GA13576@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:43748 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750874AbdBJXvT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 10 Feb 2017 18:51:19 -0500
+Date: Fri, 10 Feb 2017 15:51:17 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Christian Lamparter <chunkeey@googlemail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Wei Ni <wni@nvidia.com>
+Subject: Re: [PATCH 1/2] devicetree: add lm90 thermal_zone sensor support
+Message-ID: <20170210235117.GA526@roeck-us.net>
+References: <2979642.2YCYMDeKdL@debian64>
+ <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d274e32ad09daa2f6f7f27f1c36d39da526b66d.1486741517.git.chunkeey@googlemail.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Friday, February 10, 2017 9:21:06 AM CET Guenter Roeck wrote:
-> On Fri, Feb 10, 2017 at 05:12:30PM +0100, Christian Lamparter wrote:
-> > This patch integrates the LOCAL, REMOTE and REMOTE2
-> > channel definitions into the lm90.c driver.
-> > 
-> > Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
-> > ---
-> > This is an optional patch to showcase how the channel definition
-> > in the dt-bindings are mapped into the driver.
-> > In theory, this makes it possible to easily remap the channel
-> > indices. However, it does make the driver harder to read.
+On Fri, Feb 10, 2017 at 05:12:29PM +0100, Christian Lamparter wrote:
+> This patch updates the LM90's devicetree definition to
+> include the #thermal-sensor-cells property as well as
+> the sensor constants in include/dt-bindings/thermal/lm90.h.
 > 
-> It also makes the driver dependent on external defines which are not controlled
-> by the driver. If anyone changes those defines to be non-sequential or to not
-> start with 0, we would be in trouble. Sure, that might and likely would result
-> in compile errors, but still ...
-Yes, gcc will complain with "array out of bounds errors" if any
-of the LM90_SENSORS_ defines are less than 0 or higher than 2.
-This is because of: static const u8 lm90_temp_index[3] and 
-lm90_temp_min_index, ...
+> Cc: Wei Ni <wni@nvidia.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
 
-The BUILD_BUG_ON(LOCAL == REMOTE || ... || REMOTE2 == LOCAL) will
-prevent duplicated values so LOCAL, REMOTE, REMOTE2 have to be
-different.
+I don't really know who would normally apply a patch like this,
+so I added it to hwmon-next.
 
-> Besides, it is not complete. Anyone changing channel index values would
-> (at least) mess up alarm bit association.
-Yes, that's true. I missed lm90_is_tripped. But...
+Thanks,
+Guenter
 
-> If we want to do that kind of thing, it might make more sense to add some code
-> to provide the desired mapping to the hwmon core, and to let the hwmon core
-> handle it. No idea if that is even possible, though.
+> ---
+> I've reordered LM90_LOCAL_TEMPERATURE and LM90_REMOTE_TEMPERATURE.
+> Everything else is the same as in the RFC. This is the only
+> required patch and it only updates the documentation and binding.
+> [PATCH 2/2] is optional (as I said I would look at it).
+> ---
+>  Documentation/devicetree/bindings/hwmon/lm90.txt |  6 ++++++
+>  MAINTAINERS                                      |  1 +
+>  include/dt-bindings/thermal/lm90.h               | 12 ++++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 include/dt-bindings/thermal/lm90.h
 > 
-> Is that really worth it ?
-No, it's not worth it ;-). But thank you for your in-depth
-analysis. So, let's leave it with just the first patch for
-4.12-ish.
-
-Regards,
-Christian
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
+> index e8632486b9ef..97581266e329 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm90.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/lm90.txt
+> @@ -33,6 +33,11 @@ Optional properties:
+>                LM90 "-ALERT" pin output.
+>                See interrupt-controller/interrupts.txt for the format.
+>  
+> +- #thermal-sensor-cells: should be set to 1. See thermal/thermal.txt for
+> +	      details. See <include/dt-bindings/thermal/lm90.h> for the
+> +	      definition of the local, remote and 2nd remote sensor index
+> +	      constants.
+> +
+>  Example LM90 node:
+>  
+>  temp-sensor {
+> @@ -41,4 +46,5 @@ temp-sensor {
+>  	vcc-supply = <&palmas_ldo6_reg>;
+>  	interrupt-parent = <&gpio>;
+>  	interrupts = <TEGRA_GPIO(O, 4) IRQ_TYPE_LEVEL_LOW>;
+> +	#thermal-sensor-cells = <1>;
+>  }
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2be620cea1ed..73972ccebc56 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7541,6 +7541,7 @@ S:	Maintained
+>  F:	Documentation/hwmon/lm90
+>  F:	Documentation/devicetree/bindings/hwmon/lm90.txt
+>  F:	drivers/hwmon/lm90.c
+> +F:	include/dt-bindings/thermal/lm90.h
+>  
+>  LM95234 HARDWARE MONITOR DRIVER
+>  M:	Guenter Roeck <linux@roeck-us.net>
+> diff --git a/include/dt-bindings/thermal/lm90.h b/include/dt-bindings/thermal/lm90.h
+> new file mode 100644
+> index 000000000000..8c2e3095f704
+> --- /dev/null
+> +++ b/include/dt-bindings/thermal/lm90.h
+> @@ -0,0 +1,12 @@
+> +/*
+> + * This header provides constants for the LM90 thermal bindings.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_THERMAL_LM90_H_
+> +#define _DT_BINDINGS_THERMAL_LM90_H_
+> +
+> +#define LM90_LOCAL_TEMPERATURE 0
+> +#define LM90_REMOTE_TEMPERATURE 1
+> +#define LM90_REMOTE2_TEMPERATURE 2
+> +
+> +#endif
+> -- 
+> 2.11.0
+> 
