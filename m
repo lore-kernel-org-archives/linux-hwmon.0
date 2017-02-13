@@ -1,175 +1,84 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42150 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751950AbdBMVFl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Feb 2017 16:05:41 -0500
-Date: Mon, 13 Feb 2017 13:05:38 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Marco Franchi <marco.franchi@nxp.com>
-Cc: robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, marcofrk@gmail.com,
-        FoxPeter@kabelbw.de
-Subject: Re: [PATCH 2/2] hwmon: (sht15) Add DTS support
-Message-ID: <20170213210538.GA11362@roeck-us.net>
-References: <1486737041-32014-1-git-send-email-marco.franchi@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1486737041-32014-1-git-send-email-marco.franchi@nxp.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <andrew@aj.id.au>
+Message-ID: <1486948333.3661.1.camel@aj.id.au>
+Subject: Re: [PATCH linux v7 3/6] hwmon: occ: Add I2C transport
+ implementation for SCOM operations
+From: Andrew Jeffery <andrew@aj.id.au>
+To: Eddie James <eajames@linux.vnet.ibm.com>, Joel Stanley <joel@jms.id.au>
+Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net, Mark Rutland
+	 <mark.rutland@arm.com>, Rob Herring <robh+dt@kernel.org>, Wolfram Sang
+	 <wsa@the-dreams.de>, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	"Edward A. James"
+	 <eajames@us.ibm.com>
+Date: Mon, 13 Feb 2017 11:42:13 +1030
+In-Reply-To: <4224dbab-d48c-be48-154d-5ed14dd5231e@linux.vnet.ibm.com>
+References: <1486509056-25838-1-git-send-email-eajames@linux.vnet.ibm.com>
+	 <1486509056-25838-4-git-send-email-eajames@linux.vnet.ibm.com>
+	 <CACPK8XcdsG83HsQW1Pv5zR339mgTzYjfuLQE+gE8yk8Z88MrTA@mail.gmail.com>
+	 <4224dbab-d48c-be48-154d-5ed14dd5231e@linux.vnet.ibm.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-ZWwyIWnQ1jk7xf+ytTbo"
+Mime-Version: 1.0
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Feb 10, 2017 at 12:30:41PM -0200, Marco Franchi wrote:
-> Allow the driver to work with dts support.
-> 
-> Based on initial patch submission from Peter Fox.
-> 
-> Tested on a imx7d-sdb board connected to a SHT15 board via Mikro Bus.
-> 
-> Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/sht15.txt | 25 ++++++++
->  drivers/hwmon/sht15.c                             | 69 +++++++++++++++++++++--
->  2 files changed, 90 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
-> new file mode 100644
-> index 0000000..6415f52
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sht15.txt
-> @@ -0,0 +1,25 @@
-> +Sensirion SHT15 Humidity and Temperature Sensor
-> +
-> +Required properties:
-> +
-> + - "compatible": must be "sensirion,sht15".
-> + - "data-gpios": GPIO connected to the data line.
-> + - "clk-gpios": GPIO connected to the clock line.
-> + - "vcc-supply": regulator that drives the VCC pin.
-> +
-> +Optional properties:
-> +
-> + - "checksum": boolean property that when present enables the CRC validation of the readings.
-> + - "no-otp-reload": boolean property that when present indicates not to reload from OTP.
-> + - "low-resolution": boolean property that when present indicates that the device operates in
-> + 		low-resolution mode.
-> +Example:
-> +
-> +	temp_humid_sensor: sht15 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_sensor>;
-> +		compatible = "sensirion,sht15";
-> +		clk-gpios = <&gpio4 12 0>;
-> +		data-gpios = <&gpio4 13 0>;
-> +		vcc-supply = <&reg_sht15>;
-> +	};
-> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> index f16687c..608ac9e 100644
-> --- a/drivers/hwmon/sht15.c
-> +++ b/drivers/hwmon/sht15.c
-> @@ -34,6 +34,7 @@
->  #include <linux/slab.h>
->  #include <linux/atomic.h>
->  #include <linux/bitrev.h>
-> +#include <linux/of_gpio.h>
->  
->  /* Commands */
->  #define SHT15_MEASURE_TEMP		0x03
-> @@ -911,6 +912,59 @@ static int sht15_invalidate_voltage(struct notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->  
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id sht15_dt_match[] = {
-> +	{ .compatible = "sensirion,sht15" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, sht15_dt_match);
-> +
-> +/*
-> + * This function returns 1 if pdev isn't a device instatiated by dt, 0 if it
-> + * could successfully get all information from dt or a negative error number.
-> + */
 
-Plese rework to not require negative/ 0 / 1 return. One possibility
-would be to return NULL if no dt, PTR_ERR on error, and a pointer
-to the data otherwise. More see below.
+--=-ZWwyIWnQ1jk7xf+ytTbo
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +static int sht15_probe_dt(struct sht15_data *data, struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	struct sht15_platform_data *pdata;
-> +
-> +	/* no device tree device */
-> +	if (!np)
-> +		return 1;
-> +
-> +	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-> +	if (!pdata)
-> +		return -ENOMEM;
-> +
-> +	data->pdata = pdata;
-> +
-> +	data->pdata->gpio_data = of_get_named_gpio(np, "data-gpios", 0);
+On Fri, 2017-02-10 at 15:05 -0600, Eddie James wrote:
+> On 02/09/2017 11:31 PM, Joel Stanley wrote:
+> > > On Wed, Feb 8, 2017 at 9:40 AM,<eajames@linux.vnet.ibm.com>=C2=A0 wro=
+te:
+> > >> From: "Edward A. James"<eajames@us.ibm.com>
+> >>
+> >> Add functions to send SCOM operations over I2C bus. The BMC can
+> >> communicate with the Power8 host processor over I2C, but needs to use =
+SCOM
+> >> operations in order to access the OCC register space.
+> > This doesn't need to be separate from the p8_occ_i2c.c file. You can
+> > remove a layer of function calls by merging this in and having these
+> > be your getscom putscom bus_ops callbacks.
+>=20
+> The purpose of having this separate was so that we could do the scom=C2=
+=A0
+> address shift for p8 separately.
 
-There is a local variable 'pdata'. Dereferencing data->pdata repeatedly
-is not necessary.
+Separation was my suggestion. It makes the I2C transport implementation
+independent of any P8 details, and having it separate* is no more
+abstract than the core performing SCOMs through the FSI interface when
+that's available. I feel like it's muddying the waters conceptually to
+bury P8 details in the implementation of a SCOM transport layer.
 
-> +	if (data->pdata->gpio_data < 0) {
-> +		dev_err(&pdev->dev, "data-gpios not found\n");
-> +		return data->pdata->gpio_data;
-> +	}
-> +
-> +	data->pdata->gpio_sck = of_get_named_gpio(np, "clk-gpios", 0);
-> +	if (data->pdata->gpio_sck < 0) {
-> +		dev_err(&pdev->dev, "clk-gpios not found\n");
-> +		return data->pdata->gpio_sck;
-> +	}
-> +
-> +	data->pdata->checksum = of_property_read_bool(np, "checksum");
-> +	data->pdata->no_otp_reload = of_property_read_bool(np, "no-otp-reload");
-> +	data->pdata->low_resolution = of_property_read_bool(np,
-> +					"low-resolution");
-> +
-> +	return 0;
-> +}
-> +#else
-> +static inline int sht15_probe_dt(struct sht15_data *data,
-> +					struct platform_device *pdev)
-> +{
-> +	return 1;
-> +}
-> +#endif
-> +
->  static int sht15_probe(struct platform_device *pdev)
->  {
->  	int ret;
-> @@ -928,11 +982,17 @@ static int sht15_probe(struct platform_device *pdev)
->  	data->dev = &pdev->dev;
->  	init_waitqueue_head(&data->wait_queue);
->  
-> -	if (dev_get_platdata(&pdev->dev) == NULL) {
-> -		dev_err(&pdev->dev, "no platform data supplied\n");
-> -		return -EINVAL;
-> +	ret = sht15_probe_dt(data, pdev);
+However, in our less abstract world the P8 will be the only system that
+uses the I2C transport, so while I don't think merging the functions is
+a good idea from an abstraction perspective it won't have a big impact.
 
-I would rather see a clear preference for dt or platform data.
-Also, passing 'data' to sht15_probe_dt() is really unnecessary,
-and sht15_probe_dt() doesn't really need a pointer to the
-platform device.
+Andrew
 
-Example, if DT is preferred:
-	data->pdata = sht15_probe_dt(&pdev->dev);
-	if (IS_ERR(data->pdata))
-		return PTR_ERR(data->pdata);
-	if (data->pdata == NULL) {
-		data->pdata = dev_get_platdata(&pdev->dev);
-		if (data->pdata == NULL) {
-			dev_err(&pdev->dev, "no platform data supplied\n");
-			return -EINVAL;
-		}
-	}
+* Maybe the I2C SCOM transport even deserves to live outside
+drivers/hwmon/occ?
+--=-ZWwyIWnQ1jk7xf+ytTbo
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Guenter
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAABCgAGBQJYoQftAAoJEJ0dnzgO5LT5bG8P/3DtJryiExcgApkmxLwIptly
+0iAY2DAj/xyhoyGOzXyOpcTsRuJSL7JAHoEx+CuMz9lzbdtvYkYKx0dWi6xCGAim
+Bas6Cxa200Bjh6kjrzff07hseUtu2OGNYfK81QxRJgvMCjvfAi7IAv7ERqPQf/Qu
+TbiNWR/iIaTOWe2eCDAdn1sg6P8SykmDaLHH3s8nciaoYF75723fpsX8NgSiTHe1
+aVFz++vSBtKKedmc0gMnE1ckQ0oGclDTeYQ5pu5ccTRglRoa/GdGoRMAD11g3/xS
+IEm3p9l8S+RYExWO6jworVvLkPImhmDsfGNAdPtypKRAXr83IB/kdKQA12AbsHJC
+IL1hlZEFCN/uE2b4EZt60iWSwzNvKXfzdAFzrXRMEthlFIGYYoTUCe//JksxBky/
+R5E7yFmlk1fW3GA9sLsaiWP9ggs+06yajhzEdDaK9Yax64jN0J90wlHZHpM82jRw
+ry3d9meazF7ZuFRRpF2GZfCAW0F0bAIZiDsow7fycMelEXqu5M2tKUzmCBXO826Q
+BfQPsz7TrJvtBvuqX3/M3h5uDtpyQ4VC159SjyUBdRMTmbKID7eLP/5K+rZWy07x
+u2T6Cd1GeaRzxmKZVYEzGrskcrwWsy9h21ud3l/WthSAVjjFmuFbBNj41NV/Cv46
+cgdkJMTmmz38ME0Y4nJ3
+=vq+A
+-----END PGP SIGNATURE-----
+
+--=-ZWwyIWnQ1jk7xf+ytTbo--
