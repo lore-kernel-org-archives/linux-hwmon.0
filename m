@@ -1,11 +1,11 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:45278 "EHLO
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:45459 "EHLO
         out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1751193AbdBMBRc (ORCPT
+        by vger.kernel.org with ESMTP id S1751193AbdBMB3k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Feb 2017 20:17:32 -0500
-Message-ID: <1486948642.3661.3.camel@aj.id.au>
-Subject: Re: [PATCH linux v7 4/6] hwmon: occ: Add callbacks for parsing P8
+        Sun, 12 Feb 2017 20:29:40 -0500
+Message-ID: <1486949370.3661.5.camel@aj.id.au>
+Subject: Re: [PATCH linux v7 6/6] hwmon: occ: Add callbacks for parsing P9
  OCC datastructures
 From: Andrew Jeffery <andrew@aj.id.au>
 To: Joel Stanley <joel@jms.id.au>, eajames <eajames@linux.vnet.ibm.com>
@@ -17,123 +17,66 @@ Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         Wolfram Sang <wsa@the-dreams.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         "Edward A. James" <eajames@us.ibm.com>
-Date: Mon, 13 Feb 2017 11:47:22 +1030
-In-Reply-To: <CACPK8Xf+YFuGydAMxcqD3eTYkgfgHtg743kkd-J_EshnYZ1J=Q@mail.gmail.com>
+Date: Mon, 13 Feb 2017 11:59:30 +1030
+In-Reply-To: <CACPK8XeX12cQgJ2HqHFqvZmFh7TNWMJq3ysaOOmnh-kp02D+YA@mail.gmail.com>
 References: <1486509056-25838-1-git-send-email-eajames@linux.vnet.ibm.com>
-         <1486509056-25838-5-git-send-email-eajames@linux.vnet.ibm.com>
-         <CACPK8Xf+YFuGydAMxcqD3eTYkgfgHtg743kkd-J_EshnYZ1J=Q@mail.gmail.com>
+         <1486509056-25838-7-git-send-email-eajames@linux.vnet.ibm.com>
+         <CACPK8XeX12cQgJ2HqHFqvZmFh7TNWMJq3ysaOOmnh-kp02D+YA@mail.gmail.com>
 Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-PbDYUlqBlra5YBlvSBW8"
+        protocol="application/pgp-signature"; boundary="=-IHV915ZTm41NOKvdHaxf"
 Mime-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 
---=-PbDYUlqBlra5YBlvSBW8
+--=-IHV915ZTm41NOKvdHaxf
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-T24gRnJpLCAyMDE3LTAyLTEwIGF0IDE2OjAxICsxMDMwLCBKb2VsIFN0YW5sZXkgd3JvdGU6Cj4g
-PiBPbiBXZWQsIEZlYiA4LCAyMDE3IGF0IDk6NDAgQU0swqDCoDxlYWphbWVzQGxpbnV4LnZuZXQu
-aWJtLmNvbT4gd3JvdGU6Cj4gPiA+ID4gRnJvbTogIkVkd2FyZCBBLiBKYW1lcyIgPGVhamFtZXNA
-dXMuaWJtLmNvbT4KPiA+IAo+ID4gQWRkIGZ1bmN0aW9ucyB0byBwYXJzZSB0aGUgZGF0YSBzdHJ1
-Y3R1cmVzIHRoYXQgYXJlIHNwZWNpZmljIHRvIHRoZSBPQ0Mgb24KPiA+IHRoZSBQT1dFUjggcHJv
-Y2Vzc29yLiBUaGVzZSBhcmUgdGhlIHNlbnNvciBkYXRhIHN0cnVjdHVyZXMsIGluY2x1ZGluZwo+
-ID4gdGVtcGVyYXR1cmUsIGZyZXF1ZW5jeSwgcG93ZXIsIGFuZCAiY2Fwcy4iCj4gPiAKPiA+ID4g
-PiBTaWduZWQtb2ZmLWJ5OiBFZHdhcmQgQS4gSmFtZXMgPGVhamFtZXNAdXMuaWJtLmNvbT4KPiA+
-ID4gPiBTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1Pgo+ID4g
-LS0tCj4gPiDCoERvY3VtZW50YXRpb24vaHdtb24vb2NjwqDCoMKgwqB8wqDCoMKgOSArKwo+ID4g
-wqBkcml2ZXJzL2h3bW9uL29jYy9vY2NfcDguYyB8IDI0OCArKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysKPiA+IMKgZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4Lmgg
-fMKgwqAzMCArKysrKysKPiA+IMKgMyBmaWxlcyBjaGFuZ2VkLCAyODcgaW5zZXJ0aW9ucygrKQo+
-ID4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4LmMKPiA+IMKg
-Y3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaHdtb24vb2NjL29jY19wOC5oCj4gPiAKPiA+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL29jYy9vY2NfcDguYyBiL2RyaXZlcnMvaHdtb24vb2Nj
-L29jY19wOC5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMC4uNWM2
-MWZjNAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4
-LmMKPiA+ICt2b2lkIHA4X3BhcnNlX3NlbnNvcih1OCAqZGF0YSwgdm9pZCAqc2Vuc29yLCBpbnQg
-c2Vuc29yX3R5cGUsIGludCBvZmYsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGludCBzbnVtKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN3aXRjaCAoc2Vu
-c29yX3R5cGUpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoGNhc2UgRlJFUToKPiA+ICvCoMKgwqDCoMKg
-wqDCoGNhc2UgVEVNUDoKPiA+ICvCoMKgwqDCoMKgwqDCoHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcDhfb2NjX3NlbnNvciAqb3MgPQo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAmKCgoc3RydWN0IHA4X29jY19zZW5z
-b3IgKilzZW5zb3IpW3NudW1dKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBvcy0+c2Vuc29yX2lkID0gYmUxNl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTE2ICopJmRh
-dGFbb2ZmXSkpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9zLT52YWx1ZSA9
-IGJlMTZfdG9fY3B1KGdldF91bmFsaWduZWQoKHUxNiAqKSZkYXRhW29mZiArIDJdKSk7Cj4gPiAr
-wqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7
-Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIFBPV0VSOgo+ID4gK8KgwqDCoMKgwqDCoMKgewo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBwOF9wb3dlcl9zZW5zb3IgKnBz
-ID0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgJigo
-KHN0cnVjdCBwOF9wb3dlcl9zZW5zb3IgKilzZW5zb3IpW3NudW1dKTsKPiA+ICsKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwcy0+c2Vuc29yX2lkID0gYmUxNl90b19jcHUoZ2V0
-X3VuYWxpZ25lZCgodTE2ICopJmRhdGFbb2ZmXSkpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHBzLT51cGRhdGVfdGFnID0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgYmUzMl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTMyICopJmRh
-dGFbb2ZmICsgMl0pKTsKPiAKPiBUaGlzIG1pZ2h0IGJlIG1vcmUgcmVhZGFibGUgaWYgeW91IHdy
-b3RlIGEKPiBjYXN0X2dldF91bmFsaWdlZF9iZTMyX3RvX2NwdSgpIG1hY3JvLgo+IAo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBzLT5hY2N1bXVsYXRvciA9Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJlMzJfdG9fY3B1KGdldF91
-bmFsaWduZWQoKHUzMiAqKSZkYXRhW29mZiArIDZdKSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgcHMtPnZhbHVlID0gYmUxNl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTE2ICop
-JmRhdGFbb2ZmICsgMTBdKSk7Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIENBUFM6Cj4g
-PiArwqDCoMKgwqDCoMKgwqB7Cj4gPiArY29uc3QgdTMyICpwOF9nZXRfc2Vuc29yX2h3bW9uX2Nv
-bmZpZ3MoKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHJldHVybiBwOF9zZW5zb3JfaHdtb25f
-Y29uZmlnczsKPiA+ICt9Cj4gPiArRVhQT1JUX1NZTUJPTChwOF9nZXRfc2Vuc29yX2h3bW9uX2Nv
-bmZpZ3MpOwo+ID4gKwo+ID4gK3N0cnVjdCBvY2MgKnA4X29jY19zdGFydChzdHJ1Y3QgZGV2aWNl
-ICpkZXYsIHZvaWQgKmJ1cywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBzdHJ1Y3Qgb2NjX2J1c19vcHMgKmJ1c19vcHMpCj4gPiArewo+ID4gK8Kg
-wqDCoMKgwqDCoMKgcmV0dXJuIG9jY19zdGFydChkZXYsIGJ1cywgYnVzX29wcywgJnA4X29wcywg
-JnA4X2NvbmZpZyk7Cj4gPiArfQo+ID4gK0VYUE9SVF9TWU1CT0wocDhfb2NjX3N0YXJ0KTsKPiAK
-PiBXZSBkb24ndCBuZWVkIHRvIGV4cG9ydCB0aGVzZSBzeW1ib2xzOyB0aGV5J3JlIG5vdCB1c2Vk
-IG91dHNpZGUgb2YgdGhlCj4gT0NDIG1vZHVsZS4gVGhlIHNhbWUgZ29lcyBmb3IgYWxsIG9mIHRo
-ZSBleHBvcnRzIHlvdSd2ZSBtYWRlIGluIHRoaXMKPiBzZXJpZXMuCgpTb3JyeSwgdGhpcyB3YXMg
-bXkgZG9pbmcgaW4gYW4gYXR0ZW1wdCB0byBnZXQgZXZlcnl0aGluZyB0byBidWlsZCBhcwptb2R1
-bGVzIHJhdGhlciB0aGFuIGp1c3QgYnVpbHQtaW4uIEkgc2hvdWxkIGhhdmUgc3R1ZGllZApEb2N1
-bWVudGF0aW9uL2tidWlsZC9tb2R1bGVzLnR4dCBhIGJpdCBtb3JlLgoKPiAKPiBJIHN1Z2dlc3Qg
-d2UgcmUtYXJjaGl0ZWN0IHRoZSBkcml2ZXJzIHNvIHdlIGJ1aWxkIGFsbCBvZiB0aGUgb2JqZWN0
-cwo+IGFuZCBsaW5rIHRoZW0gaW50byBvbmUgbW9kdWxlIGZvciBlYWNoIHBsYXRmb3JtLCBpbnN0
-ZWFkIG9mIGhhdmluZyBhbgo+IG9jYyBtb2R1bGUgYW5kIG9jYy1wOC9vY2MtcDkgbW9kdWxlcyBh
-bmQgaTJjIG1vZHVsZXMgdGhhdCBhbGwgZGVwZW5kCj4gb24gZWFjaCBvdGhlci4gVGhlIE1ha2Vm
-aWxlIGNvdWxkIGxvb2sgbGlrZSB0aGlzOgo+IAo+IG9iai0kKENPTkZJR19TRU5TT1JTX1BQQ19P
-Q0NfUDhfSTJDKSArPSBod21vbl9vY2NfcDgubwo+IG9iai0kKENPTkZJR19TRU5TT1JTX1BQQ19P
-Q0NfUDkpICs9IGh3bW9uX29jY19wOS5vCj4gCj4gaHdtb25fb2NjX3A4LSQoQ09ORklHX1NFTlNP
-UlNfUFBDX09DQ19QOF9JMkMpICs9IG9jY19zY29tX2kyYy5vCj4gb2NjX3A4Lm8gcDhfb2NjX2ky
-Yy5vIG9jY19zeXNmcy5vIG9jYy5vCj4gaHdtb25fb2NjX3A5LSQoQ09ORklHX1NFTlNPUlNfUFBD
-X09DQ19QOSkgKz0gb2NjX3A5Lm8gb2NjX3N5c2ZzLm8gb2NjLm8KPiAKPiBBbmQgdGhlIEtidWls
-ZCBsaWtlIHRoaXM6Cj4gCj4gbWVudWNvbmZpZyBTRU5TT1JTX1BQQ19PQ0MKPiDCoMKgwqDCoMKg
-wqDCoMKgYm9vbCAiUFBDIE9uLUNoaXAgQ29udHJvbGxlciIKPiAKPiBpZiBTRU5TT1JTX1BQQ19P
-Q0MKPiAKPiBjb25maWcgU0VOU09SU19QUENfT0NDX1A4X0kyQwo+IMKgwqDCoMKgwqDCoMKgwqBi
-b29sICJQT1dFUjggT0NDIGh3bW9uIHN1cHBvcnQiCj4gwqDCoMKgwqDCoMKgwqDCoGRlcGVuZHMg
-b24gSTJDCj4gCj4gY29uZmlnIFNFTlNPUlNfUFBDX09DQ19QOQo+IMKgwqDCoMKgwqDCoMKgwqBi
-b29sICJQT1dFUjkgT0NDIGh3bW9uIHN1cHBvcnQiCj4gCj4gZW5kaWYKCkdpdmVuIHdlIGNhbiBk
-cm9wIHRoZSBleHBvcnRzIHRoYXQncyBhIG11Y2ggbW9yZSBzZW5zaWJsZSBpZGVhLgoKQW5kcmV3
+On Fri, 2017-02-10 at 16:01 +1030, Joel Stanley wrote:
+> > +
+> > +#ifndef __OCC_P9_H__
+> > +#define __OCC_P9_H__
+> > +
+> > +#include "scom.h"
+> > +
+> > +struct device;
+>=20
+> Include the header for struct device instead.
+>=20
+> Did you consider the one header file for all of your shared functions?
+> I don't think there's much value in having a whole heap of small ones.
 
+My bias is against monolithic headers. While it would be no
+linux/sched.h[1] so the impact won't be great, I prefer keeping headers
+to only describing the abstract data type at hand. A collection of
+small, relevant headers makes it easier for me to understand the
+abstraction boundaries.
 
+Andrew
 
---=-PbDYUlqBlra5YBlvSBW8
+[1] https://lwn.net/Articles/713712/
+--=-IHV915ZTm41NOKvdHaxf
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIcBAABCgAGBQJYoQkiAAoJEJ0dnzgO5LT5RAYP/iAuxjjL1EaDwA1iSVkr5wA0
-HTi94SplFShPiHYWORuJIXXPp/7nn8MUq7MqMEWlK9vMyhCzY2h0quwp764xKESj
-37boVQWc60qZiwVp9ifcOtsnRTJRjN+tLOjQKxJF4R8UU8yPP7bfP9jnvGfGTPX2
-ggG95DACks0lDYohy3zMNiQMjI/Rg6JwTdYA5eNaXCHaDAUATjwSmREfkLKi3KlJ
-SXKFXEP6/VJqSIpt7iBIR3DCwRJ0rZah1JOI8QquhgiCjEMK/E6JkcqV+gS+M57h
-siMBhwMnW+fcEfLVogFHpCkpSCnIB0mC62tg7OCG3iBCSd/2miJoBfqplYT3TdcO
-con/BKdo5YppKsJCR54QDV3q0g0DfFqAlND2aLJZ6drIk+j1fQ+zC/eRWdVPRNhT
-EXrh8Jyx/Dhy1mBwmUo7PPSFcGfwF/QdEobrFPW9D6wU/1PAbQyjdyjU5jQ95wit
-f9EDgfN/3CNvZgsKu8JlTMKfEDX3uMblbSsNftxdtEOrkaeVfOGabLGv0AHpnBkj
-iszYExFJtfOVvEgvGCvaXKFnJ+RVtWU1fR9innh+sQietWTXZ8xM0R67j8PjS219
-pFyPEyPTOkms7fAJ2kkSBBd7pUtM0iCnihz7881ZjQ9GrbcQLfJ4DkQGzqCPEDsv
-2yZ+W7wlRXepo9U7pXN4
-=WsLu
+iQIcBAABCgAGBQJYoQv6AAoJEJ0dnzgO5LT5l4MP/RMFcsg2r/dBcRl7sT2uKdyS
+uJ+wHBSnQaS72BVdIWmmiALTObJ3leUiWHe5S+9ZQ/AfmKOJXgTQTbwxNoUPFncJ
+3h5/TJJjHZJV3hPlQJga50MOis40QfhOoxUbGOBfh1qVhhTkn4a+D0qF6cJqxdK3
+NfF4HELEgSoNYAY1Kam3MbZTMHgoXcKEChlRhNhFZsjvtzmCMqv4de9sXOxXiKmV
+sCujqSBHEkB7jc/wEgAbf1/0CgEdmq3ifRzPHhs0w3cUnz+QFNNtS89zLP2rCJp3
+tuKLCdQ0eLGyunUZ597xhPn6dQJ0fM9NSUhMqKSA+927Y2aeuPunnyYBUX+BHPjx
+/0atdL9MxBLoRn+dPcD4BIAYEJ8aNMTLApsZsaaFpkjYvl1h1/h8rzQ+0Mi/hhpQ
+2JUdMvS4tiwBW3WomXn0Dk3OGIzxuKaaFXbtqrR/3RKKW25U3El+/L8IqwUp6x8F
+fP1gL8LW1N9Bvy+SaQ2EmXSFoN5w4BJhw1X2xUEZILtMpdWbrE8Y+3pnR+lXSjvD
+3cPxtpJwQJBER7Anhb9RTDUJFZVIYv/USfn+WQh4mNNPwSrliHQ9QVJi9S0RRuN0
+76JN5uVpOzGlCk1MIloP7QxFfAlnFQpCKOPIEKxesDI6GBqWnQts2RIJYNawAcn+
+Wr9p63TXB2w3eTVgF9WO
+=F21f
 -----END PGP SIGNATURE-----
 
---=-PbDYUlqBlra5YBlvSBW8--
+--=-IHV915ZTm41NOKvdHaxf--
 
