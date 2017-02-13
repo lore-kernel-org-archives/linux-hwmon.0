@@ -1,84 +1,139 @@
-Return-path: <andrew@aj.id.au>
-Message-ID: <1486948333.3661.1.camel@aj.id.au>
-Subject: Re: [PATCH linux v7 3/6] hwmon: occ: Add I2C transport
- implementation for SCOM operations
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:45278 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751193AbdBMBRc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 12 Feb 2017 20:17:32 -0500
+Message-ID: <1486948642.3661.3.camel@aj.id.au>
+Subject: Re: [PATCH linux v7 4/6] hwmon: occ: Add callbacks for parsing P8
+ OCC datastructures
 From: Andrew Jeffery <andrew@aj.id.au>
-To: Eddie James <eajames@linux.vnet.ibm.com>, Joel Stanley <joel@jms.id.au>
+To: Joel Stanley <joel@jms.id.au>, eajames <eajames@linux.vnet.ibm.com>
 Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net, Mark Rutland
-	 <mark.rutland@arm.com>, Rob Herring <robh+dt@kernel.org>, Wolfram Sang
-	 <wsa@the-dreams.de>, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	"Edward A. James"
-	 <eajames@us.ibm.com>
-Date: Mon, 13 Feb 2017 11:42:13 +1030
-In-Reply-To: <4224dbab-d48c-be48-154d-5ed14dd5231e@linux.vnet.ibm.com>
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "Edward A. James" <eajames@us.ibm.com>
+Date: Mon, 13 Feb 2017 11:47:22 +1030
+In-Reply-To: <CACPK8Xf+YFuGydAMxcqD3eTYkgfgHtg743kkd-J_EshnYZ1J=Q@mail.gmail.com>
 References: <1486509056-25838-1-git-send-email-eajames@linux.vnet.ibm.com>
-	 <1486509056-25838-4-git-send-email-eajames@linux.vnet.ibm.com>
-	 <CACPK8XcdsG83HsQW1Pv5zR339mgTzYjfuLQE+gE8yk8Z88MrTA@mail.gmail.com>
-	 <4224dbab-d48c-be48-154d-5ed14dd5231e@linux.vnet.ibm.com>
+         <1486509056-25838-5-git-send-email-eajames@linux.vnet.ibm.com>
+         <CACPK8Xf+YFuGydAMxcqD3eTYkgfgHtg743kkd-J_EshnYZ1J=Q@mail.gmail.com>
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-ZWwyIWnQ1jk7xf+ytTbo"
+        protocol="application/pgp-signature"; boundary="=-PbDYUlqBlra5YBlvSBW8"
 Mime-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
 
---=-ZWwyIWnQ1jk7xf+ytTbo
+--=-PbDYUlqBlra5YBlvSBW8
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 
-On Fri, 2017-02-10 at 15:05 -0600, Eddie James wrote:
-> On 02/09/2017 11:31 PM, Joel Stanley wrote:
-> > > On Wed, Feb 8, 2017 at 9:40 AM,<eajames@linux.vnet.ibm.com>=C2=A0 wro=
-te:
-> > >> From: "Edward A. James"<eajames@us.ibm.com>
-> >>
-> >> Add functions to send SCOM operations over I2C bus. The BMC can
-> >> communicate with the Power8 host processor over I2C, but needs to use =
-SCOM
-> >> operations in order to access the OCC register space.
-> > This doesn't need to be separate from the p8_occ_i2c.c file. You can
-> > remove a layer of function calls by merging this in and having these
-> > be your getscom putscom bus_ops callbacks.
->=20
-> The purpose of having this separate was so that we could do the scom=C2=
-=A0
-> address shift for p8 separately.
+T24gRnJpLCAyMDE3LTAyLTEwIGF0IDE2OjAxICsxMDMwLCBKb2VsIFN0YW5sZXkgd3JvdGU6Cj4g
+PiBPbiBXZWQsIEZlYiA4LCAyMDE3IGF0IDk6NDAgQU0swqDCoDxlYWphbWVzQGxpbnV4LnZuZXQu
+aWJtLmNvbT4gd3JvdGU6Cj4gPiA+ID4gRnJvbTogIkVkd2FyZCBBLiBKYW1lcyIgPGVhamFtZXNA
+dXMuaWJtLmNvbT4KPiA+IAo+ID4gQWRkIGZ1bmN0aW9ucyB0byBwYXJzZSB0aGUgZGF0YSBzdHJ1
+Y3R1cmVzIHRoYXQgYXJlIHNwZWNpZmljIHRvIHRoZSBPQ0Mgb24KPiA+IHRoZSBQT1dFUjggcHJv
+Y2Vzc29yLiBUaGVzZSBhcmUgdGhlIHNlbnNvciBkYXRhIHN0cnVjdHVyZXMsIGluY2x1ZGluZwo+
+ID4gdGVtcGVyYXR1cmUsIGZyZXF1ZW5jeSwgcG93ZXIsIGFuZCAiY2Fwcy4iCj4gPiAKPiA+ID4g
+PiBTaWduZWQtb2ZmLWJ5OiBFZHdhcmQgQS4gSmFtZXMgPGVhamFtZXNAdXMuaWJtLmNvbT4KPiA+
+ID4gPiBTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1Pgo+ID4g
+LS0tCj4gPiDCoERvY3VtZW50YXRpb24vaHdtb24vb2NjwqDCoMKgwqB8wqDCoMKgOSArKwo+ID4g
+wqBkcml2ZXJzL2h3bW9uL29jYy9vY2NfcDguYyB8IDI0OCArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysKPiA+IMKgZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4Lmgg
+fMKgwqAzMCArKysrKysKPiA+IMKgMyBmaWxlcyBjaGFuZ2VkLCAyODcgaW5zZXJ0aW9ucygrKQo+
+ID4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4LmMKPiA+IMKg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaHdtb24vb2NjL29jY19wOC5oCj4gPiAKPiA+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL29jYy9vY2NfcDguYyBiL2RyaXZlcnMvaHdtb24vb2Nj
+L29jY19wOC5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMC4uNWM2
+MWZjNAo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvZHJpdmVycy9od21vbi9vY2Mvb2NjX3A4
+LmMKPiA+ICt2b2lkIHA4X3BhcnNlX3NlbnNvcih1OCAqZGF0YSwgdm9pZCAqc2Vuc29yLCBpbnQg
+c2Vuc29yX3R5cGUsIGludCBvZmYsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGludCBzbnVtKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN3aXRjaCAoc2Vu
+c29yX3R5cGUpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoGNhc2UgRlJFUToKPiA+ICvCoMKgwqDCoMKg
+wqDCoGNhc2UgVEVNUDoKPiA+ICvCoMKgwqDCoMKgwqDCoHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcDhfb2NjX3NlbnNvciAqb3MgPQo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAmKCgoc3RydWN0IHA4X29jY19zZW5z
+b3IgKilzZW5zb3IpW3NudW1dKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBvcy0+c2Vuc29yX2lkID0gYmUxNl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTE2ICopJmRh
+dGFbb2ZmXSkpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9zLT52YWx1ZSA9
+IGJlMTZfdG9fY3B1KGdldF91bmFsaWduZWQoKHUxNiAqKSZkYXRhW29mZiArIDJdKSk7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7
+Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIFBPV0VSOgo+ID4gK8KgwqDCoMKgwqDCoMKgewo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBwOF9wb3dlcl9zZW5zb3IgKnBz
+ID0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgJigo
+KHN0cnVjdCBwOF9wb3dlcl9zZW5zb3IgKilzZW5zb3IpW3NudW1dKTsKPiA+ICsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwcy0+c2Vuc29yX2lkID0gYmUxNl90b19jcHUoZ2V0
+X3VuYWxpZ25lZCgodTE2ICopJmRhdGFbb2ZmXSkpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHBzLT51cGRhdGVfdGFnID0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgYmUzMl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTMyICopJmRh
+dGFbb2ZmICsgMl0pKTsKPiAKPiBUaGlzIG1pZ2h0IGJlIG1vcmUgcmVhZGFibGUgaWYgeW91IHdy
+b3RlIGEKPiBjYXN0X2dldF91bmFsaWdlZF9iZTMyX3RvX2NwdSgpIG1hY3JvLgo+IAo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBzLT5hY2N1bXVsYXRvciA9Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJlMzJfdG9fY3B1KGdldF91
+bmFsaWduZWQoKHUzMiAqKSZkYXRhW29mZiArIDZdKSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgcHMtPnZhbHVlID0gYmUxNl90b19jcHUoZ2V0X3VuYWxpZ25lZCgodTE2ICop
+JmRhdGFbb2ZmICsgMTBdKSk7Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIENBUFM6Cj4g
+PiArwqDCoMKgwqDCoMKgwqB7Cj4gPiArY29uc3QgdTMyICpwOF9nZXRfc2Vuc29yX2h3bW9uX2Nv
+bmZpZ3MoKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHJldHVybiBwOF9zZW5zb3JfaHdtb25f
+Y29uZmlnczsKPiA+ICt9Cj4gPiArRVhQT1JUX1NZTUJPTChwOF9nZXRfc2Vuc29yX2h3bW9uX2Nv
+bmZpZ3MpOwo+ID4gKwo+ID4gK3N0cnVjdCBvY2MgKnA4X29jY19zdGFydChzdHJ1Y3QgZGV2aWNl
+ICpkZXYsIHZvaWQgKmJ1cywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBzdHJ1Y3Qgb2NjX2J1c19vcHMgKmJ1c19vcHMpCj4gPiArewo+ID4gK8Kg
+wqDCoMKgwqDCoMKgcmV0dXJuIG9jY19zdGFydChkZXYsIGJ1cywgYnVzX29wcywgJnA4X29wcywg
+JnA4X2NvbmZpZyk7Cj4gPiArfQo+ID4gK0VYUE9SVF9TWU1CT0wocDhfb2NjX3N0YXJ0KTsKPiAK
+PiBXZSBkb24ndCBuZWVkIHRvIGV4cG9ydCB0aGVzZSBzeW1ib2xzOyB0aGV5J3JlIG5vdCB1c2Vk
+IG91dHNpZGUgb2YgdGhlCj4gT0NDIG1vZHVsZS4gVGhlIHNhbWUgZ29lcyBmb3IgYWxsIG9mIHRo
+ZSBleHBvcnRzIHlvdSd2ZSBtYWRlIGluIHRoaXMKPiBzZXJpZXMuCgpTb3JyeSwgdGhpcyB3YXMg
+bXkgZG9pbmcgaW4gYW4gYXR0ZW1wdCB0byBnZXQgZXZlcnl0aGluZyB0byBidWlsZCBhcwptb2R1
+bGVzIHJhdGhlciB0aGFuIGp1c3QgYnVpbHQtaW4uIEkgc2hvdWxkIGhhdmUgc3R1ZGllZApEb2N1
+bWVudGF0aW9uL2tidWlsZC9tb2R1bGVzLnR4dCBhIGJpdCBtb3JlLgoKPiAKPiBJIHN1Z2dlc3Qg
+d2UgcmUtYXJjaGl0ZWN0IHRoZSBkcml2ZXJzIHNvIHdlIGJ1aWxkIGFsbCBvZiB0aGUgb2JqZWN0
+cwo+IGFuZCBsaW5rIHRoZW0gaW50byBvbmUgbW9kdWxlIGZvciBlYWNoIHBsYXRmb3JtLCBpbnN0
+ZWFkIG9mIGhhdmluZyBhbgo+IG9jYyBtb2R1bGUgYW5kIG9jYy1wOC9vY2MtcDkgbW9kdWxlcyBh
+bmQgaTJjIG1vZHVsZXMgdGhhdCBhbGwgZGVwZW5kCj4gb24gZWFjaCBvdGhlci4gVGhlIE1ha2Vm
+aWxlIGNvdWxkIGxvb2sgbGlrZSB0aGlzOgo+IAo+IG9iai0kKENPTkZJR19TRU5TT1JTX1BQQ19P
+Q0NfUDhfSTJDKSArPSBod21vbl9vY2NfcDgubwo+IG9iai0kKENPTkZJR19TRU5TT1JTX1BQQ19P
+Q0NfUDkpICs9IGh3bW9uX29jY19wOS5vCj4gCj4gaHdtb25fb2NjX3A4LSQoQ09ORklHX1NFTlNP
+UlNfUFBDX09DQ19QOF9JMkMpICs9IG9jY19zY29tX2kyYy5vCj4gb2NjX3A4Lm8gcDhfb2NjX2ky
+Yy5vIG9jY19zeXNmcy5vIG9jYy5vCj4gaHdtb25fb2NjX3A5LSQoQ09ORklHX1NFTlNPUlNfUFBD
+X09DQ19QOSkgKz0gb2NjX3A5Lm8gb2NjX3N5c2ZzLm8gb2NjLm8KPiAKPiBBbmQgdGhlIEtidWls
+ZCBsaWtlIHRoaXM6Cj4gCj4gbWVudWNvbmZpZyBTRU5TT1JTX1BQQ19PQ0MKPiDCoMKgwqDCoMKg
+wqDCoMKgYm9vbCAiUFBDIE9uLUNoaXAgQ29udHJvbGxlciIKPiAKPiBpZiBTRU5TT1JTX1BQQ19P
+Q0MKPiAKPiBjb25maWcgU0VOU09SU19QUENfT0NDX1A4X0kyQwo+IMKgwqDCoMKgwqDCoMKgwqBi
+b29sICJQT1dFUjggT0NDIGh3bW9uIHN1cHBvcnQiCj4gwqDCoMKgwqDCoMKgwqDCoGRlcGVuZHMg
+b24gSTJDCj4gCj4gY29uZmlnIFNFTlNPUlNfUFBDX09DQ19QOQo+IMKgwqDCoMKgwqDCoMKgwqBi
+b29sICJQT1dFUjkgT0NDIGh3bW9uIHN1cHBvcnQiCj4gCj4gZW5kaWYKCkdpdmVuIHdlIGNhbiBk
+cm9wIHRoZSBleHBvcnRzIHRoYXQncyBhIG11Y2ggbW9yZSBzZW5zaWJsZSBpZGVhLgoKQW5kcmV3
 
-Separation was my suggestion. It makes the I2C transport implementation
-independent of any P8 details, and having it separate* is no more
-abstract than the core performing SCOMs through the FSI interface when
-that's available. I feel like it's muddying the waters conceptually to
-bury P8 details in the implementation of a SCOM transport layer.
 
-However, in our less abstract world the P8 will be the only system that
-uses the I2C transport, so while I don't think merging the functions is
-a good idea from an abstraction perspective it won't have a big impact.
 
-Andrew
-
-* Maybe the I2C SCOM transport even deserves to live outside
-drivers/hwmon/occ?
---=-ZWwyIWnQ1jk7xf+ytTbo
+--=-PbDYUlqBlra5YBlvSBW8
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIcBAABCgAGBQJYoQftAAoJEJ0dnzgO5LT5bG8P/3DtJryiExcgApkmxLwIptly
-0iAY2DAj/xyhoyGOzXyOpcTsRuJSL7JAHoEx+CuMz9lzbdtvYkYKx0dWi6xCGAim
-Bas6Cxa200Bjh6kjrzff07hseUtu2OGNYfK81QxRJgvMCjvfAi7IAv7ERqPQf/Qu
-TbiNWR/iIaTOWe2eCDAdn1sg6P8SykmDaLHH3s8nciaoYF75723fpsX8NgSiTHe1
-aVFz++vSBtKKedmc0gMnE1ckQ0oGclDTeYQ5pu5ccTRglRoa/GdGoRMAD11g3/xS
-IEm3p9l8S+RYExWO6jworVvLkPImhmDsfGNAdPtypKRAXr83IB/kdKQA12AbsHJC
-IL1hlZEFCN/uE2b4EZt60iWSwzNvKXfzdAFzrXRMEthlFIGYYoTUCe//JksxBky/
-R5E7yFmlk1fW3GA9sLsaiWP9ggs+06yajhzEdDaK9Yax64jN0J90wlHZHpM82jRw
-ry3d9meazF7ZuFRRpF2GZfCAW0F0bAIZiDsow7fycMelEXqu5M2tKUzmCBXO826Q
-BfQPsz7TrJvtBvuqX3/M3h5uDtpyQ4VC159SjyUBdRMTmbKID7eLP/5K+rZWy07x
-u2T6Cd1GeaRzxmKZVYEzGrskcrwWsy9h21ud3l/WthSAVjjFmuFbBNj41NV/Cv46
-cgdkJMTmmz38ME0Y4nJ3
-=vq+A
+iQIcBAABCgAGBQJYoQkiAAoJEJ0dnzgO5LT5RAYP/iAuxjjL1EaDwA1iSVkr5wA0
+HTi94SplFShPiHYWORuJIXXPp/7nn8MUq7MqMEWlK9vMyhCzY2h0quwp764xKESj
+37boVQWc60qZiwVp9ifcOtsnRTJRjN+tLOjQKxJF4R8UU8yPP7bfP9jnvGfGTPX2
+ggG95DACks0lDYohy3zMNiQMjI/Rg6JwTdYA5eNaXCHaDAUATjwSmREfkLKi3KlJ
+SXKFXEP6/VJqSIpt7iBIR3DCwRJ0rZah1JOI8QquhgiCjEMK/E6JkcqV+gS+M57h
+siMBhwMnW+fcEfLVogFHpCkpSCnIB0mC62tg7OCG3iBCSd/2miJoBfqplYT3TdcO
+con/BKdo5YppKsJCR54QDV3q0g0DfFqAlND2aLJZ6drIk+j1fQ+zC/eRWdVPRNhT
+EXrh8Jyx/Dhy1mBwmUo7PPSFcGfwF/QdEobrFPW9D6wU/1PAbQyjdyjU5jQ95wit
+f9EDgfN/3CNvZgsKu8JlTMKfEDX3uMblbSsNftxdtEOrkaeVfOGabLGv0AHpnBkj
+iszYExFJtfOVvEgvGCvaXKFnJ+RVtWU1fR9innh+sQietWTXZ8xM0R67j8PjS219
+pFyPEyPTOkms7fAJ2kkSBBd7pUtM0iCnihz7881ZjQ9GrbcQLfJ4DkQGzqCPEDsv
+2yZ+W7wlRXepo9U7pXN4
+=WsLu
 -----END PGP SIGNATURE-----
 
---=-ZWwyIWnQ1jk7xf+ytTbo--
+--=-PbDYUlqBlra5YBlvSBW8--
+
