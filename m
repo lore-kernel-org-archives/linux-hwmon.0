@@ -1,158 +1,108 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38196 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752073AbdBMRBL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Feb 2017 12:01:11 -0500
-Date: Mon, 13 Feb 2017 09:01:06 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Jeffery <andrew@aj.id.au>
-Cc: Joel Stanley <joel@jms.id.au>,
-        eajames <eajames@linux.vnet.ibm.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH linux v7 4/6] hwmon: occ: Add callbacks for parsing P8
- OCC datastructures
-Message-ID: <20170213170106.GA14665@roeck-us.net>
-References: <1486509056-25838-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1486509056-25838-5-git-send-email-eajames@linux.vnet.ibm.com>
- <CACPK8Xf+YFuGydAMxcqD3eTYkgfgHtg743kkd-J_EshnYZ1J=Q@mail.gmail.com>
- <1486948642.3661.3.camel@aj.id.au>
+Return-path: <jaghu@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1486948642.3661.3.camel@aj.id.au>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20170201145837.ybfqvz4rdpaiw323@rob-hp-laptop>
+References: <20170127093400.28904-1-jaghu@google.com> <20170127093400.28904-2-jaghu@google.com>
+ <20170201145837.ybfqvz4rdpaiw323@rob-hp-laptop>
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Date: Mon, 13 Feb 2017 22:12:10 -0800
+Message-ID: <CANsWYUUXbQFsZsKwdXvQoeboO5U0QJJfz-Z-s3ymJ8a4n3hD0w@mail.gmail.com>
+Subject: Re: [PATCH linux v2 1/2] Documentation: dt-bindings: Document
+ bindings for ASPEED AST2400/AST2500 PWM and Fan tach controller device driver
+To: Rob Herring <robh@kernel.org>
+Cc: OpenBMC Maillist <openbmc@lists.ozlabs.org>, Guenter Roeck <linux@roeck-us.net>,
+	Joel Stanley <joel@jms.id.au>, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, mark.rutland@arm.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Feb 13, 2017 at 11:47:22AM +1030, Andrew Jeffery wrote:
-> On Fri, 2017-02-10 at 16:01 +1030, Joel Stanley wrote:
-> > > On Wed, Feb 8, 2017 at 9:40 AM,  <eajames@linux.vnet.ibm.com> wrote:
-> > > > > From: "Edward A. James" <eajames@us.ibm.com>
-> > > 
-> > > Add functions to parse the data structures that are specific to the OCC on
-> > > the POWER8 processor. These are the sensor data structures, including
-> > > temperature, frequency, power, and "caps."
-> > > 
-> > > > > Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> > > > > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> > > ---
-> > >  Documentation/hwmon/occ    |   9 ++
-> > >  drivers/hwmon/occ/occ_p8.c | 248 +++++++++++++++++++++++++++++++++++++++++++++
-> > >  drivers/hwmon/occ/occ_p8.h |  30 ++++++
-> > >  3 files changed, 287 insertions(+)
-> > >  create mode 100644 drivers/hwmon/occ/occ_p8.c
-> > >  create mode 100644 drivers/hwmon/occ/occ_p8.h
-> > > 
-> > > diff --git a/drivers/hwmon/occ/occ_p8.c b/drivers/hwmon/occ/occ_p8.c
-> > > new file mode 100644
-> > > index 0000000..5c61fc4
-> > > --- /dev/null
-> > > +++ b/drivers/hwmon/occ/occ_p8.c
-> > > +void p8_parse_sensor(u8 *data, void *sensor, int sensor_type, int off,
-> > > +                    int snum)
-> > > +{
-> > > +       switch (sensor_type) {
-> > > +       case FREQ:
-> > > +       case TEMP:
-> > > +       {
-> > > +               struct p8_occ_sensor *os =
-> > > +                       &(((struct p8_occ_sensor *)sensor)[snum]);
-> > > +
-> > > +               os->sensor_id = be16_to_cpu(get_unaligned((u16 *)&data[off]));
-> > > +               os->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 2]));
-> > > +       }
-> > > +               break;
-> > > +       case POWER:
-> > > +       {
-> > > +               struct p8_power_sensor *ps =
-> > > +                       &(((struct p8_power_sensor *)sensor)[snum]);
-> > > +
-> > > +               ps->sensor_id = be16_to_cpu(get_unaligned((u16 *)&data[off]));
-> > > +               ps->update_tag =
-> > > +                       be32_to_cpu(get_unaligned((u32 *)&data[off + 2]));
-> > 
-> > This might be more readable if you wrote a
-> > cast_get_unaliged_be32_to_cpu() macro.
-> > 
-> > > +               ps->accumulator =
-> > > +                       be32_to_cpu(get_unaligned((u32 *)&data[off + 6]));
-> > > +               ps->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 10]));
-> > > +       }
-> > > +               break;
-> > > +       case CAPS:
-> > > +       {
-> > > +const u32 *p8_get_sensor_hwmon_configs()
-> > > +{
-> > > +       return p8_sensor_hwmon_configs;
-> > > +}
-> > > +EXPORT_SYMBOL(p8_get_sensor_hwmon_configs);
-> > > +
-> > > +struct occ *p8_occ_start(struct device *dev, void *bus,
-> > > +                        struct occ_bus_ops *bus_ops)
-> > > +{
-> > > +       return occ_start(dev, bus, bus_ops, &p8_ops, &p8_config);
-> > > +}
-> > > +EXPORT_SYMBOL(p8_occ_start);
-> > 
-> > We don't need to export these symbols; they're not used outside of the
-> > OCC module. The same goes for all of the exports you've made in this
-> > series.
-> 
-> Sorry, this was my doing in an attempt to get everything to build as
-> modules rather than just built-in. I should have studied
-> Documentation/kbuild/modules.txt a bit more.
-> 
-> > 
-> > I suggest we re-architect the drivers so we build all of the objects
-> > and link them into one module for each platform, instead of having an
-> > occ module and occ-p8/occ-p9 modules and i2c modules that all depend
-> > on each other. The Makefile could look like this:
-> > 
-> > obj-$(CONFIG_SENSORS_PPC_OCC_P8_I2C) += hwmon_occ_p8.o
-> > obj-$(CONFIG_SENSORS_PPC_OCC_P9) += hwmon_occ_p9.o
-> > 
-> > hwmon_occ_p8-$(CONFIG_SENSORS_PPC_OCC_P8_I2C) += occ_scom_i2c.o
-> > occ_p8.o p8_occ_i2c.o occ_sysfs.o occ.o
-> > hwmon_occ_p9-$(CONFIG_SENSORS_PPC_OCC_P9) += occ_p9.o occ_sysfs.o occ.o
-> > 
-Please note that the above will still result in separate modules,
-one per object file. Is this really what you want ? I don't even
-know what happens if an object file is specified twice, so
-you may also have to make sure that CONFIG_SENSORS_PPC_OCC_P8_I2C
-and CONFIG_SENSORS_PPC_OCC_P9 are either-or configurations.
-Again, I am not really sure if that is what you want.
+On Wed, Feb 1, 2017 at 6:58 AM, Rob Herring <robh@kernel.org> wrote:
+> On Fri, Jan 27, 2017 at 01:33:59AM -0800, Jaghathiswari Rankappagounder Natarajan wrote:
+>> This binding provides interface for adding values related to ASPEED
+>> AST2400/2500 PWM and Fan tach controller support.
+>> The PWM controller can support upto 8 PWM output ports.
+>> The Fan tach controller can support upto 16 tachometer inputs.
+>> Types M, N and 0 are three types just to have three independent
+>> PWM/Fan Tach related settings.
+>
+> This still looks overly complicated to me and very specific to ASpeed.
+> You need to define a common structure that works for fans. To start
+> with, define a node for the fans themselves. This should use the
+> PWM binding and a -gpios property for the tach (when connected to a
+> GPIO).
+>
+> Something like this:
+>
+> ctrl: fan-controller@1234 {
+>         ...
+>         #pwm-cells = <3>;
+>         fan@0 {
+>                 reg = <0>; /* 'Channel' of the controller */
+>                 pwms = <&ctrl 0 ...>;
+>                 tach-gpios = <&gpio 1>;
+>                 vcc-supply = <&reg_12V>;
+>         };
+> };
+>
+> We already have a pwm-fan binding. This should build on or possibly
+> replace that.
+>
+I have rewritten the structure to be more common and sent the updated patch.
+There can be upto 8 fans. Each fan can have 1 PWM source and 1/2 Fan
+tach inputs.
+I think the pwm-binding may not be very relevant. The pwm-binding
+indicates that there can be a unique period value for each pwm(ie
+500000 in pwms = <&ctrl 0 500000>).
+But here each pwm can't have a unique period value.
+There can be only 3 settings (type m, type n, type o). Each setting
+includes values like pwm period,
+fan_tach_period, etc
+Each fan can be configured with one of the three settings.  So the pwm
+and the fan tach associated
+with the fan will inherit some values from the setting which the fan used.
+In the updated patch, I have used a default setting(type m) for the fans.
 
-> > And the Kbuild like this:
-> > 
-> > menuconfig SENSORS_PPC_OCC
-> >         bool "PPC On-Chip Controller"
-> > 
-> > if SENSORS_PPC_OCC
-> > 
-> > config SENSORS_PPC_OCC_P8_I2C
-> >         bool "POWER8 OCC hwmon support"
-> >         depends on I2C
-> > 
-> > config SENSORS_PPC_OCC_P9
-> >         bool "POWER9 OCC hwmon support"
-> > 
-If both are bool, ie there won't be any module support,
-I don't really see the point of specifying occ_sysfs.o and
-occ.o twice above.
-
-> > endif
-> 
-> Given we can drop the exports that's a much more sensible idea.
-> 
-Please make sure that both "allmodconfig" and "allyesconfig"
-still build after this change.
-
-Thanks,
-Guenter
+>>
+>> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+>> ---
+>> v2:
+>> - Removed '_' in node or property names
+>> - Gave some explanation for the properties used.
+>>
+>>  .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt | 178 +++++++++++++++++++++
+>>  1 file changed, 178 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+>> new file mode 100644
+>> index 000000000000..290122bfe170
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+>> @@ -0,0 +1,178 @@
+>> +ASPEED AST2400/AST2500 PWM and Fan Tacho controller device driver
+>> +
+>> +The ASPEED PWM controller can support upto 8 PWM outputs. The ASPEED Fan Tacho
+>> +controller can support upto 16 tachometer inputs.
+>
+> AIUI, each fan has a PWM and a tach input. How would you use more than 8
+> tach inputs?
+>
+Each fan can have 1 PWM source and 1/2 Fan tach inputs.
+>> +
+>> +There are three different types M, N, O. These three types are just to have
+>> +different PWM and Fan Tach settings. Each type can have the following settings:
+>> +     PWM related:
+>> +             1) PWM period
+>> +             2) PWM clock division high
+>> +             3) PWM clock division low
+>> +     Fan Tach related:
+>> +             1) Fan Tach type enable
+>> +             2) Fan Tach clock division
+>> +             3) Fan Tach mode selection
+>> +             4) Fan Tach period
+>> +
+>> +Each PWM port should be assigned a type which can be type M, N or O.
+>
+> What is the definition of M, N, and O?
+>
+> Rob
