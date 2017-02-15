@@ -1,417 +1,105 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40999 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1752688AbdBFU1i (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:40441 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751525AbdBOKsw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 6 Feb 2017 15:27:38 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v16KQmgd015232
-        for <linux-hwmon@vger.kernel.org>; Mon, 6 Feb 2017 15:27:38 -0500
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 28euph3qwh-1
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Feb 2017 15:27:37 -0500
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Mon, 6 Feb 2017 13:27:37 -0700
-From: eajames@linux.vnet.ibm.com
-To: linux@roeck-us.net
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
-        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
-        joel@jms.id.au, benh@kernel.crashing.org,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH linux v6 6/6] hwmon: occ: Add callbacks for parsing P9 OCC datastructures
-Date: Mon,  6 Feb 2017 14:27:12 -0600
-In-Reply-To: <1486412832-21854-1-git-send-email-eajames@linux.vnet.ibm.com>
-References: <1486412832-21854-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1486412832-21854-7-git-send-email-eajames@linux.vnet.ibm.com>
+        Wed, 15 Feb 2017 05:48:52 -0500
+Subject: Re: Fwd: coretemp seems to reset immediately
+To: Chris Tillman <toff.tillman@gmail.com>, linux-hwmon@vger.kernel.org
+References: <CAO299FuK1yX2JRE6E5a4G-8dcJ-RbOjZj_TPyCUJ+tZtM2NWgA@mail.gmail.com>
+ <CAO299Fu8T-zz27N3Vy4bAtUzz+wfSe_nOBXfWRO58eUP_PEziQ@mail.gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <0f23f434-e7f4-851d-ba45-ff0d6ed988c0@roeck-us.net>
+Date: Wed, 15 Feb 2017 02:48:49 -0800
+MIME-Version: 1.0
+In-Reply-To: <CAO299Fu8T-zz27N3Vy4bAtUzz+wfSe_nOBXfWRO58eUP_PEziQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: "Edward A. James" <eajames@us.ibm.com>
+On 02/15/2017 02:00 AM, Chris Tillman wrote:
+> Hi,
+>
+> I had the awful experience of having my computer fry before my eyes
+> the other day. It was running quite hot (building llvm), and it
+> stopped accepting mouse inputs. I tried to regain control, and after
+> 20 seconds or so it switched me to virtual console 1. But very shortly
+> after that it died, and now it won't even start to boot.
+>
+> Anyway, the reason I'm writing: I retrieved the disk out of it, and on
+> another machine, looked through the syslog. I saw that coretemp was
+> reporting over temps every five minutes, and claiming the cpu was
+> being throttled. But then the very next message in the log says the
+> temperature is normal. I'm wondering, does this mean the throttling
+> was also being cancelled immediately? If so it could explain how the
+> machine got so hot that it died on the spot.
+>
+> I've attached the log. Here's the final refrain of what was occurring
+> every 5 minutes for the fifty minutes previous:
+>
+> Feb 12 19:27:25 ctillman kernel: [137082.856603] CPU3: Core
+> temperature above threshold, cpu clock throttled (total events =
+> 804180)
+> Feb 12 19:27:25 ctillman kernel: [137082.856604] CPU2: Core
+> temperature above threshold, cpu clock throttled (total events =
+> 804180)
+> Feb 12 19:27:25 ctillman kernel: [137082.856607] CPU1: Package
+> temperature above threshold, cpu clock throttled (total events =
+> 862662)
+> Feb 12 19:27:25 ctillman kernel: [137082.856608] CPU0: Package
+> temperature above threshold, cpu clock throttled (total events =
+> 862662)
+> Feb 12 19:27:25 ctillman kernel: [137082.856610] CPU2: Package
+> temperature above threshold, cpu clock throttled (total events =
+> 862662)
+> Feb 12 19:27:25 ctillman kernel: [137082.856621] CPU3: Package
+> temperature above threshold, cpu clock throttled (total events =
+> 862662)
+> Feb 12 19:27:25 ctillman kernel: [137082.857603] CPU3: Core
+> temperature/speed normal
+> Feb 12 19:27:25 ctillman kernel: [137082.857604] CPU2: Core
+> temperature/speed normal
+> Feb 12 19:27:25 ctillman kernel: [137082.857606] CPU0: Package
+> temperature/speed normal
+> Feb 12 19:27:25 ctillman kernel: [137082.857608] CPU1: Package
+> temperature/speed normal
+> Feb 12 19:27:25 ctillman kernel: [137082.857609] CPU2: Package
+> temperature/speed normal
+> Feb 12 19:27:25 ctillman kernel: [137082.857612] CPU3: Package
+> temperature/speed normal
+>
+> Notice how each core gets flagged, and then in the same millisecond
+> gets cleared. For example
+>
+> [137082.856603] CPU3: Core temperature above threshold, cpu clock
+> throttled (total events = 804180)
+> [137082.857603] CPU3: Core temperature/speed normal
+>
+> The machine is an HP Probook 4530s, which I just bought second hand a
+> couple weeks ago. I'd really been enjoying its speed! compared to the
+> older computer I'm writing on now.
+>
+> I'd already had a run-in with overheating, and filed a bug against the
+> gpu because it apparently crashed during the previous event:
+>
+> [Bug 99611] GPU hang after over temperature
+>
+> That log also showed the same pattern.
+>
 
-Add functions to parse the data structures that are specific to the OCC on
-the POWER9 processor. These are the sensor data structures, including
-temperature, frequency, power, and "caps."
+That has nothing to do with coretemp, which is purely passive.
+Thermal throttling is supported as part of the machine check code.
 
-Signed-off-by: Edward A. James <eajames@us.ibm.com>
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
----
- Documentation/hwmon/occ    |   3 +
- drivers/hwmon/occ/occ_p9.c | 309 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/hwmon/occ/occ_p9.h |  30 +++++
- 3 files changed, 342 insertions(+)
- create mode 100644 drivers/hwmon/occ/occ_p9.c
- create mode 100644 drivers/hwmon/occ/occ_p9.h
+No idea where you filed the bug (not on bugzilla.kernel.org), but
+I don't really think you can blame software. My guess would be that
+the CPU fan was not operating properly; maybe the thermal paste
+between CPU and heatsink was getting old, or maybe the fan is just
+broken, or maybe there is just enough dust in the machine that it
+no longer cools properly.
 
-diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
-index 143951e..6cea853 100644
---- a/Documentation/hwmon/occ
-+++ b/Documentation/hwmon/occ
-@@ -34,6 +34,9 @@ number of data structures, such as command format, response headers, and the
- like, are also defined in this specification, and are common to both POWER8 and
- POWER9 OCCs.
- 
-+There is currently no public P9 OCC specification, and the data structures
-+defined in the POWER9 OCC driver are subject to change.
-+
- sysfs Entries
- -------------
- 
-diff --git a/drivers/hwmon/occ/occ_p9.c b/drivers/hwmon/occ/occ_p9.c
-new file mode 100644
-index 0000000..3ef0284
---- /dev/null
-+++ b/drivers/hwmon/occ/occ_p9.c
-@@ -0,0 +1,309 @@
-+/*
-+ * occ_p9.c - OCC hwmon driver
-+ *
-+ * This file contains the Power9-specific methods and data structures for
-+ * the OCC hwmon driver.
-+ *
-+ * Copyright 2016 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
-+
-+#include <asm/unaligned.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include "occ.h"
-+#include "occ_p9.h"
-+
-+/* P9 OCC sensor data format */
-+struct p9_temp_sensor {
-+	u32 sensor_id;
-+	u8 fru_type;
-+	u8 value;
-+};
-+
-+struct p9_freq_sensor {
-+	u32 sensor_id;
-+	u16 value;
-+};
-+
-+struct p9_power_sensor {
-+	u32 sensor_id;
-+	u8 function_id;
-+	u8 apss_channel;
-+	u16 reserved;
-+	u32 update_tag;
-+	u64 accumulator;
-+	u16 value;
-+};
-+
-+struct p9_caps_sensor {
-+	u16 curr_powercap;
-+	u16 curr_powerreading;
-+	u16 norm_powercap;
-+	u16 max_powercap;
-+	u16 min_powercap;
-+	u16 user_powerlimit;
-+	u8 user_powerlimit_source;
-+};
-+
-+static const u32 p9_sensor_hwmon_configs[MAX_OCC_SENSOR_TYPE] = {
-+	HWMON_I_INPUT | HWMON_I_LABEL,	/* freq: value | label */
-+	/* temp: value | label | fru_type */
-+	HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_TYPE,
-+	/* power: value | label | accum[0] | accum[1] | update_tag |
-+	 *	 (function_id | (apss_channel << 8))
-+	 */
-+	HWMON_P_INPUT | HWMON_P_LABEL | HWMON_P_AVERAGE_MIN |
-+		HWMON_P_AVERAGE_MAX | HWMON_P_AVERAGE_INTERVAL |
-+		HWMON_P_RESET_HISTORY,
-+	/* caps: curr | max | min | norm | user | source */
-+	HWMON_P_CAP | HWMON_P_CAP_MAX | HWMON_P_CAP_MIN | HWMON_P_MAX |
-+		HWMON_P_ALARM | HWMON_P_CAP_ALARM,
-+};
-+
-+void p9_parse_sensor(u8 *data, void *sensor, int sensor_type, int off,
-+		     int snum)
-+{
-+	switch (sensor_type) {
-+	case FREQ:
-+	{
-+		struct p9_freq_sensor *fs =
-+			&(((struct p9_freq_sensor *)sensor)[snum]);
-+
-+		fs->sensor_id = be32_to_cpu(get_unaligned((u32 *)&data[off]));
-+		fs->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 4]));
-+	}
-+		break;
-+	case TEMP:
-+	{
-+		struct p9_temp_sensor *ts =
-+			&(((struct p9_temp_sensor *)sensor)[snum]);
-+
-+		ts->sensor_id = be32_to_cpu(get_unaligned((u32 *)&data[off]));
-+		fs->fru_type = data[off + 4];
-+		fs->value = data[off + 5];
-+	}
-+		break;
-+	case POWER:
-+	{
-+		struct p9_power_sensor *ps =
-+			&(((struct p9_power_sensor *)sensor)[snum]);
-+
-+		ps->sensor_id = be32_to_cpu(get_unaligned((u32 *)&data[off]));
-+		ps->function_id = data[off + 4];
-+		ps->apss_channel = data[off + 5];
-+		ps->update_tag =
-+			be32_to_cpu(get_unaligned((u32 *)&data[off + 8]));
-+		ps->accumulator =
-+			be64_to_cpu(get_unaligned((u64 *)&data[off + 12]));
-+		ps->value = be16_to_cpu(get_unaligned((u16 *)&data[off + 20]));
-+	}
-+		break;
-+	case CAPS:
-+	{
-+		struct p9_caps_sensor *cs =
-+			&(((struct p9_caps_sensor *)sensor)[snum]);
-+
-+		cs->curr_powercap =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off]));
-+		cs->curr_powerreading =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off + 2]));
-+		cs->norm_powercap =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off + 4]));
-+		cs->max_powercap =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off + 6]));
-+		cs->min_powercap =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off + 8]));
-+		cs->user_powerlimit =
-+			be16_to_cpu(get_unaligned((u16 *)&data[off + 10]));
-+		cs->user_powerlimit_source = data[off + 12];
-+	}
-+		break;
-+	};
-+}
-+
-+void *p9_alloc_sensor(struct device *dev, int sensor_type, int num_sensors)
-+{
-+	switch (sensor_type) {
-+	case FREQ:
-+		return devm_kzalloc(dev, num_sensors *
-+				    sizeof(struct p9_freq_sensor), GFP_KERNEL);
-+	case TEMP:
-+		return devm_kzalloc(dev, num_sensors *
-+				    sizeof(struct p9_temp_sensor), GFP_KERNEL);
-+	case POWER:
-+		return devm_kzalloc(dev, num_sensors *
-+				    sizeof(struct p9_power_sensor),
-+				    GFP_KERNEL);
-+	case CAPS:
-+		return devm_kzalloc(dev, num_sensors *
-+				    sizeof(struct p9_caps_sensor), GFP_KERNEL);
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+int p9_get_sensor(struct occ *driver, int sensor_type, int sensor_num,
-+		  u32 hwmon, long *val)
-+{
-+	int rc = 0;
-+	void *sensor;
-+
-+	if (sensor_type == POWER) {
-+		if (hwmon == hwmon_power_cap || hwmon == hwmon_power_cap_max ||
-+		    hwmon == hwmon_power_cap_min || hwmon == hwmon_power_max ||
-+		    hwmon == hwmon_power_alarm ||
-+		    hwmon == hwmon_power_cap_alarm)
-+			sensor_type = CAPS;
-+	}
-+
-+	sensor = occ_get_sensor(driver, sensor_type);
-+	if (!sensor)
-+		return -ENODEV;
-+
-+	switch (sensor_type) {
-+	case FREQ:
-+	{
-+		struct p9_freq_sensor *fs =
-+			&(((struct p9_freq_sensor *)sensor)[sensor_num]);
-+
-+		switch (hwmon) {
-+		case hwmon_in_input:
-+			*val = fs->value;
-+			break;
-+		case hwmon_in_label:
-+			*val = fs->sensor_id;
-+			break;
-+		default:
-+			rc = -EOPNOTSUPP;
-+		}
-+	}
-+		break;
-+	case TEMP:
-+	{
-+		struct p9_temp_sensor *ts =
-+			&(((struct p9_temp_sensor *)sensor)[sensor_num]);
-+
-+		switch (hwmon) {
-+		case hwmon_temp_input:
-+			*val = ts->value;
-+			break;
-+		case hwmon_temp_type:
-+			*val = ts->fru_type;
-+			break;
-+		case hwmon_temp_label:
-+			*val = ts->sensor_id;
-+			break;
-+		default:
-+			rc = -EOPNOTSUPP;
-+		}
-+	}
-+		break;
-+	case POWER:
-+	{
-+		struct p9_power_sensor *ps =
-+			&(((struct p9_power_sensor *)sensor)[sensor_num]);
-+
-+		switch (hwmon) {
-+		case hwmon_power_input:
-+			*val = ps->value;
-+			break;
-+		case hwmon_power_label:
-+			*val = ps->sensor_id;
-+			break;
-+		case hwmon_power_average_min:
-+			*val = ((u32 *)(&ps->accumulator))[0];
-+			break;
-+		case hwmon_power_average_max:
-+			*val = ((u32 *)(&ps->accumulator))[1];
-+			break;
-+		case hwmon_power_average_interval:
-+			*val = ps->update_tag;
-+			break;
-+		case hwmon_power_reset_history:
-+			*val = ps->function_id | (ps->apss_channel << 8);
-+			break;
-+		default:
-+			rc = -EOPNOTSUPP;
-+		}
-+	}
-+		break;
-+	case CAPS:
-+	{
-+		struct p9_caps_sensor *cs =
-+			&(((struct p9_caps_sensor *)sensor)[sensor_num]);
-+
-+		switch (hwmon) {
-+		case hwmon_power_cap:
-+			*val = cs->curr_powercap;
-+			break;
-+		case hwmon_power_cap_max:
-+			*val = cs->max_powercap;
-+			break;
-+		case hwmon_power_cap_min:
-+			*val = cs->min_powercap;
-+			break;
-+		case hwmon_power_max:
-+			*val = cs->norm_powercap;
-+			break;
-+		case hwmon_power_alarm:
-+			*val = cs->user_powerlimit;
-+			break;
-+		case hwmon_power_cap_alarm:
-+			*val = cs->user_powerlimit_source;
-+			break;
-+		default:
-+			rc = -EOPNOTSUPP;
-+		}
-+	}
-+		break;
-+	default:
-+		rc = -EINVAL;
-+	}
-+
-+	return rc;
-+}
-+
-+static const struct occ_ops p9_ops = {
-+	.parse_sensor = p9_parse_sensor,
-+	.alloc_sensor = p9_alloc_sensor,
-+	.get_sensor = p9_get_sensor,
-+};
-+
-+static const struct occ_config p9_config = {
-+	.command_addr = 0xFFFBE000,
-+	.response_addr = 0xFFFBF000,
-+};
-+
-+const u32 *p9_get_sensor_hwmon_configs()
-+{
-+	return p9_sensor_hwmon_configs;
-+}
-+EXPORT_SYMBOL(p9_get_sensor_hwmon_configs);
-+
-+struct occ *p9_occ_start(struct device *dev, void *bus,
-+			 struct occ_bus_ops *bus_ops)
-+{
-+	return occ_start(dev, bus, bus_ops, &p9_ops, &p9_config);
-+}
-+EXPORT_SYMBOL(p9_occ_start);
-+
-+MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
-+MODULE_DESCRIPTION("P9 OCC sensors");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/hwmon/occ/occ_p9.h b/drivers/hwmon/occ/occ_p9.h
-new file mode 100644
-index 0000000..18ca16a
---- /dev/null
-+++ b/drivers/hwmon/occ/occ_p9.h
-@@ -0,0 +1,30 @@
-+/*
-+ * occ_p9.h - OCC hwmon driver
-+ *
-+ * This file contains Power9-specific function prototypes
-+ *
-+ * Copyright 2016 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ */
-+
-+#ifndef __OCC_P9_H__
-+#define __OCC_P9_H__
-+
-+#include "scom.h"
-+
-+struct device;
-+
-+const u32 *p9_get_sensor_hwmon_configs(void);
-+struct occ *p9_occ_start(struct device *dev, void *bus,
-+			 struct occ_bus_ops *bus_ops);
-+
-+#endif /* __OCC_P9_H__ */
--- 
-1.8.3.1
+There is also mention in some forums that a BIOS update helps with
+overheating issues on this laptop.
+
+Guenter
 
