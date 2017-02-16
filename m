@@ -1,80 +1,72 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42510 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750893AbdBSQd4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Feb 2017 11:33:56 -0500
-Subject: Re: How to add nano precision measurement to hwmon
-To: Lucas Tanure <tanureal@opensource.wolfsonmicro.com>,
-        linux-hwmon@vger.kernel.org
-References: <32c30882-2466-a992-158b-870cc8af5b40@opensource.cirrus.com>
- <3d1fd9fc-9b90-9bb7-3f5d-920c38c8c3c6@roeck-us.net>
- <11f62875-5d58-0282-f329-042f162e4ee6@opensource.cirrus.com>
-Cc: patches@opensource.cirrus.com
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e99ea167-3138-b555-ed62-b3a7b233c7ae@roeck-us.net>
-Date: Sun, 19 Feb 2017 08:33:52 -0800
+Return-path: <robherring2@gmail.com>
+Date: Wed, 15 Feb 2017 20:32:40 -0600
+From: Rob Herring <robh@kernel.org>
+To: Marco Franchi <marco.franchi@nxp.com>
+Cc: linux@roeck-us.net, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, marcofrk@gmail.com,
+	FoxPeter@kabelbw.de
+Subject: Re: [PATCH 2/2] hwmon: (sht15) Add DTS support
+Message-ID: <20170216023240.okcz6auvirjfihkc@rob-hp-laptop>
+References: <1486737041-32014-1-git-send-email-marco.franchi@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <11f62875-5d58-0282-f329-042f162e4ee6@opensource.cirrus.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1486737041-32014-1-git-send-email-marco.franchi@nxp.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/19/2017 12:53 AM, Lucas Tanure wrote:
-> On 19/02/2017 02:10, Guenter Roeck wrote:
->> Hi Lucas,
->>
->> On 02/17/2017 08:07 AM, Lucas Tanure wrote:
->>> Hi,
->>>
->>> We have here in our company an internal hardware platform for our linux development that can measure current in a few circuits with nanoamps precision.
->>> The measured values are exposed by a 32bit register that must read as a 32bit float.
->>>
->>> If we follow the hwmon sysfs interface we loss precision converting to milliamps, where the final value exposed is zero.
->>>
->>> Example :
->>> Measure 291nA becomes 0mA under sysfs curr1_input
->>>
->>> The best solution for me would be a file in sysfs that I could just expose the float from my register (like curr1_input_float), this solution has two benefits for me:
->>>
->>> - I wouldn't need to convert my internal float to int
->>> - This would give the best precision that I can have from my hardware
->>>
->>> The value could be exposed as a 32bit hex string, like 0x349c3abc.
->>>
->>> So, how should I proceed with this ?
->>>
->>
->> A hex string would be really bad; userspace (generic) would not know what to do with it.
->>
->> You could on purpose violate the ABI and report the current in nano-Amps with currX_input
->> (properly documented). This way the sensors command would still work after proper
->> adjustments in /etc/sensors3.conf. If the current sense resistor is configurable,
->> you could also not tell me at all and assume a current sense resistor which is
->> 1,000,000 times larger than the one you actually use (after all, currency is
->> usually measured as voltage loss over a current sense resistor).
->>
->> Another possibility would be to add a curr1_input_na attribute, but I would prefer
->> the above mechanism.
->>
->> Guenter
->
-> Hi Guenter,
->
-> You don't see any option to expose the 32bit float to user space ?
-> I would rather not deal with float conversion inside the kernel, as the numbers become too large to deal and I lose precision.
->
-I'd rather not have to deal with one of many float formats in a kernel ABI.
-After all, an ABI is expected to convert from internal formats to standardized
-formats.
+On Fri, Feb 10, 2017 at 12:30:41PM -0200, Marco Franchi wrote:
+> Allow the driver to work with dts support.
+> 
+> Based on initial patch submission from Peter Fox.
+> 
+> Tested on a imx7d-sdb board connected to a SHT15 board via Mikro Bus.
+> 
+> Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/sht15.txt | 25 ++++++++
+>  drivers/hwmon/sht15.c                             | 69 +++++++++++++++++++++--
+>  2 files changed, 90 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
+> new file mode 100644
+> index 0000000..6415f52
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sht15.txt
+> @@ -0,0 +1,25 @@
+> +Sensirion SHT15 Humidity and Temperature Sensor
+> +
+> +Required properties:
+> +
+> + - "compatible": must be "sensirion,sht15".
+> + - "data-gpios": GPIO connected to the data line.
+> + - "clk-gpios": GPIO connected to the clock line.
+> + - "vcc-supply": regulator that drives the VCC pin.
+> +
+> +Optional properties:
+> +
+> + - "checksum": boolean property that when present enables the CRC validation of the readings.
 
-Besides, u32 can report ~4 A in nano-Ampere, and u64 can report 18,446,744,073 A
-in nano-Ampere, so I am not entirely sure I can follow your argument about
-loosing precision.
+Seems more like a user setting than h/w setting?
 
-Do you plan to submit your driver upstream ? Maybe it would help to see the code.
+> + - "no-otp-reload": boolean property that when present indicates not to reload from OTP.
+> + - "low-resolution": boolean property that when present indicates that the device operates in
+> + 		low-resolution mode.
 
-Thanks,
-Guenter
+Same here.
 
+If they stay, these need vendor prefixes.
+
+> +Example:
+> +
+> +	temp_humid_sensor: sht15 {
+
+sensor {
+
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_sensor>;
+> +		compatible = "sensirion,sht15";
+> +		clk-gpios = <&gpio4 12 0>;
+> +		data-gpios = <&gpio4 13 0>;
+> +		vcc-supply = <&reg_sht15>;
+> +	};
