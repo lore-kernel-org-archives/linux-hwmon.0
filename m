@@ -1,164 +1,154 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49493 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750788AbdBPFRb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Feb 2017 00:17:31 -0500
-Subject: Re: Fwd: coretemp seems to reset immediately
-To: Chris Tillman <toff.tillman@gmail.com>
-References: <CAO299FuK1yX2JRE6E5a4G-8dcJ-RbOjZj_TPyCUJ+tZtM2NWgA@mail.gmail.com>
- <CAO299Fu8T-zz27N3Vy4bAtUzz+wfSe_nOBXfWRO58eUP_PEziQ@mail.gmail.com>
- <0f23f434-e7f4-851d-ba45-ff0d6ed988c0@roeck-us.net>
- <CAO299FsydTd2cGy768Gfworz1df3X7gCm-1s1bjKiyf6q_WjpQ@mail.gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f01234e9-72ee-2044-dba6-1e4e8b2b2b51@roeck-us.net>
-Date: Wed, 15 Feb 2017 21:17:29 -0800
+Return-path: <marco.franchi@nxp.com>
+From: Marco Franchi <marco.franchi@nxp.com>
+To: <linux@roeck-us.net>
+CC: <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <marcofrk@gmail.com>, <FoxPeter@kabelbw.de>,
+	Marco Franchi <marco.franchi@nxp.com>
+Subject: [PATCH v4 2/2] hwmon: (sht15) Add device tree support
+Date: Thu, 16 Feb 2017 10:23:43 -0200
+Message-ID: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <CAO299FsydTd2cGy768Gfworz1df3X7gCm-1s1bjKiyf6q_WjpQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/15/2017 09:12 AM, Chris Tillman wrote:
-> Thank you very much for your research and input as to the underlying
-> cause. I had also found those references, and when I opened it up it
-> looked like the fan had dust on it, so I agree that was the real issue
-> for my machine. However I also found some references to Linux having
-> problems with overheating on the machine when Windows did not.
->
+Allow the driver to work with device tree support.
 
-Yes, but that also said that a BIOS update improved or fixed the problem.
-On laptops, temperature control is typically handled by the BIOS or
-through an embedded controller, and the operating system is not even
-involved. Maybe Windows implements supplementary temperature control
-mechanisms - who knows. Hard to say without access to sources.
+Based on initial patch submission from Peter Fox.
 
-> The only reason I sent the mail to this list was that the log output
-> made it seem like coretemp was reporting a problem, and then reporting
+Tested on a imx7d-sdb board connected to a SHT15 board via Mikro Bus.
 
-Assuming that you refer to the 'coretemp' module - as mentioned before,
-this module is not involved. A log message "Core temperature..."
-does not mean that the coretemp module is involved.
+Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
+---
+Changes since v3:
+-Remove the optional properties because they are not hardware description
+-Change the sensor node name
 
-> no problem, in the same millisecond. If coretemp is saying there is no
-> problem, then machine check software will remain inactive. And the
-> machine will continue to get hotter.
->
+ Documentation/devicetree/bindings/hwmon/sht15.txt | 19 +++++++
+ drivers/hwmon/sht15.c                             | 64 +++++++++++++++++++++--
+ 2 files changed, 79 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
 
-Not really.
-
-> Do you know what kernel module would be involved for the machine check
-> which would rely on coretemp? I could forward it to them.
->
-
-None, which you can confirm easily by not loading the coretemp module
-at all (or blacklisting it)  and creating the same situation again;
-you'll still see the same messages.
-
-The messages are generated in arch/x86/kernel/cpu/mcheck/therm_throt.c,
-which is part of the x86 mce infrastructure. The mailing list address
-is linux-edac@vger.kernel.org.
-
-FWIW, I looked through that code. The most interesting information
-in the log messages below is "total events = 862662". This means there
-were a whopping 862662 thermal events. However, only a single set
-of messages is displayed every 5 minutes. From that one message one
-can not really draw a conclusion about what exactly happened in the
-5 minutes in between. It might be interesting to know under which
-circumstances the CPU generates that many thermal events, though.
-
-Guenter
-
-> On Wed, Feb 15, 2017 at 11:48 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 02/15/2017 02:00 AM, Chris Tillman wrote:
->>>
->>> Hi,
->>>
->>> I had the awful experience of having my computer fry before my eyes
->>> the other day. It was running quite hot (building llvm), and it
->>> stopped accepting mouse inputs. I tried to regain control, and after
->>> 20 seconds or so it switched me to virtual console 1. But very shortly
->>> after that it died, and now it won't even start to boot.
->>>
->>> Anyway, the reason I'm writing: I retrieved the disk out of it, and on
->>> another machine, looked through the syslog. I saw that coretemp was
->>> reporting over temps every five minutes, and claiming the cpu was
->>> being throttled. But then the very next message in the log says the
->>> temperature is normal. I'm wondering, does this mean the throttling
->>> was also being cancelled immediately? If so it could explain how the
->>> machine got so hot that it died on the spot.
->>>
->>> I've attached the log. Here's the final refrain of what was occurring
->>> every 5 minutes for the fifty minutes previous:
->>>
->>> Feb 12 19:27:25 ctillman kernel: [137082.856603] CPU3: Core
->>> temperature above threshold, cpu clock throttled (total events =
->>> 804180)
->>> Feb 12 19:27:25 ctillman kernel: [137082.856604] CPU2: Core
->>> temperature above threshold, cpu clock throttled (total events =
->>> 804180)
->>> Feb 12 19:27:25 ctillman kernel: [137082.856607] CPU1: Package
->>> temperature above threshold, cpu clock throttled (total events =
->>> 862662)
->>> Feb 12 19:27:25 ctillman kernel: [137082.856608] CPU0: Package
->>> temperature above threshold, cpu clock throttled (total events =
->>> 862662)
->>> Feb 12 19:27:25 ctillman kernel: [137082.856610] CPU2: Package
->>> temperature above threshold, cpu clock throttled (total events =
->>> 862662)
->>> Feb 12 19:27:25 ctillman kernel: [137082.856621] CPU3: Package
->>> temperature above threshold, cpu clock throttled (total events =
->>> 862662)
->>> Feb 12 19:27:25 ctillman kernel: [137082.857603] CPU3: Core
->>> temperature/speed normal
->>> Feb 12 19:27:25 ctillman kernel: [137082.857604] CPU2: Core
->>> temperature/speed normal
->>> Feb 12 19:27:25 ctillman kernel: [137082.857606] CPU0: Package
->>> temperature/speed normal
->>> Feb 12 19:27:25 ctillman kernel: [137082.857608] CPU1: Package
->>> temperature/speed normal
->>> Feb 12 19:27:25 ctillman kernel: [137082.857609] CPU2: Package
->>> temperature/speed normal
->>> Feb 12 19:27:25 ctillman kernel: [137082.857612] CPU3: Package
->>> temperature/speed normal
->>>
->>> Notice how each core gets flagged, and then in the same millisecond
->>> gets cleared. For example
->>>
->>> [137082.856603] CPU3: Core temperature above threshold, cpu clock
->>> throttled (total events = 804180)
->>> [137082.857603] CPU3: Core temperature/speed normal
->>>
->>> The machine is an HP Probook 4530s, which I just bought second hand a
->>> couple weeks ago. I'd really been enjoying its speed! compared to the
->>> older computer I'm writing on now.
->>>
->>> I'd already had a run-in with overheating, and filed a bug against the
->>> gpu because it apparently crashed during the previous event:
->>>
->>> [Bug 99611] GPU hang after over temperature
->>>
->>> That log also showed the same pattern.
->>>
->>
->> That has nothing to do with coretemp, which is purely passive.
->> Thermal throttling is supported as part of the machine check code.
->>
->> No idea where you filed the bug (not on bugzilla.kernel.org), but
->> I don't really think you can blame software. My guess would be that
->> the CPU fan was not operating properly; maybe the thermal paste
->> between CPU and heatsink was getting old, or maybe the fan is just
->> broken, or maybe there is just enough dust in the machine that it
->> no longer cools properly.
->>
->> There is also mention in some forums that a BIOS update helps with
->> overheating issues on this laptop.
->>
->> Guenter
->>
->
->
->
-
+diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
+new file mode 100644
+index 0000000..6a80277
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/sht15.txt
+@@ -0,0 +1,19 @@
++Sensirion SHT15 Humidity and Temperature Sensor
++
++Required properties:
++
++ - "compatible": must be "sensirion,sht15".
++ - "data-gpios": GPIO connected to the data line.
++ - "clk-gpios": GPIO connected to the clock line.
++ - "vcc-supply": regulator that drives the VCC pin.
++
++Example:
++
++	sensor {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sensor>;
++		compatible = "sensirion,sht15";
++		clk-gpios = <&gpio4 12 0>;
++		data-gpios = <&gpio4 13 0>;
++		vcc-supply = <&reg_sht15>;
++	};
+diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
+index f16687c..69141b2 100644
+--- a/drivers/hwmon/sht15.c
++++ b/drivers/hwmon/sht15.c
+@@ -34,6 +34,7 @@
+ #include <linux/slab.h>
+ #include <linux/atomic.h>
+ #include <linux/bitrev.h>
++#include <linux/of_gpio.h>
+ 
+ /* Commands */
+ #define SHT15_MEASURE_TEMP		0x03
+@@ -911,6 +912,54 @@ static int sht15_invalidate_voltage(struct notifier_block *nb,
+ 	return NOTIFY_OK;
+ }
+ 
++#ifdef CONFIG_OF
++static const struct of_device_id sht15_dt_match[] = {
++	{ .compatible = "sensirion,sht15" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, sht15_dt_match);
++
++/*
++ * This function returns NULL if pdev isn't a device instatiated by dt,
++ * a pointer to pdata if it could successfully get all information
++ * from dt or a negative ERR_PTR() on error.
++ */
++static struct sht15_platform_data *sht15_probe_dt(struct device *dev)
++{
++	struct device_node *np = dev->of_node;
++	struct sht15_platform_data *pdata;
++
++	/* no device tree device */
++	if (!np)
++		return NULL;
++
++	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return ERR_PTR(-ENOMEM);
++
++	pdata->gpio_data = of_get_named_gpio(np, "data-gpios", 0);
++	if (pdata->gpio_data < 0) {
++		if (pdata->gpio_data != -EPROBE_DEFER)
++			dev_err(dev, "data-gpios not found\n");
++		return ERR_PTR(pdata->gpio_data);
++	}
++
++	pdata->gpio_sck = of_get_named_gpio(np, "clk-gpios", 0);
++	if (pdata->gpio_sck < 0) {
++		if (pdata->gpio_sck != -EPROBE_DEFER)
++			dev_err(dev, "clk-gpios not found\n");
++		return ERR_PTR(pdata->gpio_sck);
++	}
++
++	return pdata;
++}
++#else
++static inline struct sht15_platform_data *sht15_probe_dt(struct device *dev)
++{
++	return NULL;
++}
++#endif
++
+ static int sht15_probe(struct platform_device *pdev)
+ {
+ 	int ret;
+@@ -928,11 +977,17 @@ static int sht15_probe(struct platform_device *pdev)
+ 	data->dev = &pdev->dev;
+ 	init_waitqueue_head(&data->wait_queue);
+ 
+-	if (dev_get_platdata(&pdev->dev) == NULL) {
+-		dev_err(&pdev->dev, "no platform data supplied\n");
+-		return -EINVAL;
++	data->pdata = sht15_probe_dt(&pdev->dev);
++	if (IS_ERR(data->pdata))
++		return PTR_ERR(data->pdata);
++	if (data->pdata == NULL) {
++		data->pdata = dev_get_platdata(&pdev->dev);
++		if (data->pdata == NULL) {
++			dev_err(&pdev->dev, "no platform data supplied\n");
++			return -EINVAL;
++		}
+ 	}
+-	data->pdata = dev_get_platdata(&pdev->dev);
++
+ 	data->supply_uv = data->pdata->supply_mv * 1000;
+ 	if (data->pdata->checksum)
+ 		data->checksumming = true;
+@@ -1075,6 +1130,7 @@ MODULE_DEVICE_TABLE(platform, sht15_device_ids);
+ static struct platform_driver sht15_driver = {
+ 	.driver = {
+ 		.name = "sht15",
++		.of_match_table = of_match_ptr(sht15_dt_match),
+ 	},
+ 	.probe = sht15_probe,
+ 	.remove = sht15_remove,
+-- 
+2.7.4
