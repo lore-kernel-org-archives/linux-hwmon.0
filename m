@@ -1,175 +1,55 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:60758 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754616AbdBPOsf (ORCPT
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:42502 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S934088AbdBQQHI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Feb 2017 09:48:35 -0500
-Subject: Re: [PATCH v4 2/2] hwmon: (sht15) Add device tree support
-To: Marco Franchi <marco.franchi@nxp.com>
-References: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
-Cc: robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, marcofrk@gmail.com,
-        FoxPeter@kabelbw.de
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <576171a2-a386-2b8f-335e-e41139833a55@roeck-us.net>
-Date: Thu, 16 Feb 2017 06:48:32 -0800
+        Fri, 17 Feb 2017 11:07:08 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v1HG3nOa013190
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2017 10:07:06 -0600
+Received: from mail2.cirrus.com (mail1.cirrus.com [141.131.3.20])
+        by mx0b-001ae601.pphosted.com with ESMTP id 28hywqh71y-1
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2017 10:07:06 -0600
+Received: from EX17.ad.cirrus.com (unknown [172.20.9.81])
+        by mail2.cirrus.com (Postfix) with ESMTP id 6A55E6121ACD
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Feb 2017 10:07:06 -0600 (CST)
+To: <linux-hwmon@vger.kernel.org>
+CC: <patches@opensource.cirrus.com>
+From: Lucas Tanure <tanureal@opensource.wolfsonmicro.com>
+Subject: How to add nano precision measurement to hwmon
+Message-ID: <32c30882-2466-a992-158b-870cc8af5b40@opensource.cirrus.com>
+Date: Fri, 17 Feb 2017 16:07:05 +0000
 MIME-Version: 1.0
-In-Reply-To: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 02/16/2017 04:23 AM, Marco Franchi wrote:
-> Allow the driver to work with device tree support.
->
-> Based on initial patch submission from Peter Fox.
->
-> Tested on a imx7d-sdb board connected to a SHT15 board via Mikro Bus.
->
-> Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
-> ---
-> Changes since v3:
-> -Remove the optional properties because they are not hardware description
+Hi,
 
-Yes but they are in platform data. I thought that kind of configuration data
-is fair game nowadays for devicetree data, but on the other side I must admit
-that I may not be up to date on what is permitted or not.
+We have here in our company an internal hardware platform for our linux 
+development that can measure current in a few circuits with nanoamps 
+precision.
+The measured values are exposed by a 32bit register that must read as a 
+32bit float.
 
-Either case, I'll queue this patch up for -next. Refinements can be made
-later if/when needed.
+If we follow the hwmon sysfs interface we loss precision converting to 
+milliamps, where the final value exposed is zero.
 
-Thanks,
-Guenter
+Example :
+Measure 291nA becomes 0mA under sysfs curr1_input
 
-> -Change the sensor node name
->
->  Documentation/devicetree/bindings/hwmon/sht15.txt | 19 +++++++
->  drivers/hwmon/sht15.c                             | 64 +++++++++++++++++++++--
->  2 files changed, 79 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
-> new file mode 100644
-> index 0000000..6a80277
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sht15.txt
-> @@ -0,0 +1,19 @@
-> +Sensirion SHT15 Humidity and Temperature Sensor
-> +
-> +Required properties:
-> +
-> + - "compatible": must be "sensirion,sht15".
-> + - "data-gpios": GPIO connected to the data line.
-> + - "clk-gpios": GPIO connected to the clock line.
-> + - "vcc-supply": regulator that drives the VCC pin.
-> +
-> +Example:
-> +
-> +	sensor {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_sensor>;
-> +		compatible = "sensirion,sht15";
-> +		clk-gpios = <&gpio4 12 0>;
-> +		data-gpios = <&gpio4 13 0>;
-> +		vcc-supply = <&reg_sht15>;
-> +	};
-> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> index f16687c..69141b2 100644
-> --- a/drivers/hwmon/sht15.c
-> +++ b/drivers/hwmon/sht15.c
-> @@ -34,6 +34,7 @@
->  #include <linux/slab.h>
->  #include <linux/atomic.h>
->  #include <linux/bitrev.h>
-> +#include <linux/of_gpio.h>
->
->  /* Commands */
->  #define SHT15_MEASURE_TEMP		0x03
-> @@ -911,6 +912,54 @@ static int sht15_invalidate_voltage(struct notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id sht15_dt_match[] = {
-> +	{ .compatible = "sensirion,sht15" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, sht15_dt_match);
-> +
-> +/*
-> + * This function returns NULL if pdev isn't a device instatiated by dt,
-> + * a pointer to pdata if it could successfully get all information
-> + * from dt or a negative ERR_PTR() on error.
-> + */
-> +static struct sht15_platform_data *sht15_probe_dt(struct device *dev)
-> +{
-> +	struct device_node *np = dev->of_node;
-> +	struct sht15_platform_data *pdata;
-> +
-> +	/* no device tree device */
-> +	if (!np)
-> +		return NULL;
-> +
-> +	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-> +	if (!pdata)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	pdata->gpio_data = of_get_named_gpio(np, "data-gpios", 0);
-> +	if (pdata->gpio_data < 0) {
-> +		if (pdata->gpio_data != -EPROBE_DEFER)
-> +			dev_err(dev, "data-gpios not found\n");
-> +		return ERR_PTR(pdata->gpio_data);
-> +	}
-> +
-> +	pdata->gpio_sck = of_get_named_gpio(np, "clk-gpios", 0);
-> +	if (pdata->gpio_sck < 0) {
-> +		if (pdata->gpio_sck != -EPROBE_DEFER)
-> +			dev_err(dev, "clk-gpios not found\n");
-> +		return ERR_PTR(pdata->gpio_sck);
-> +	}
-> +
-> +	return pdata;
-> +}
-> +#else
-> +static inline struct sht15_platform_data *sht15_probe_dt(struct device *dev)
-> +{
-> +	return NULL;
-> +}
-> +#endif
-> +
->  static int sht15_probe(struct platform_device *pdev)
->  {
->  	int ret;
-> @@ -928,11 +977,17 @@ static int sht15_probe(struct platform_device *pdev)
->  	data->dev = &pdev->dev;
->  	init_waitqueue_head(&data->wait_queue);
->
-> -	if (dev_get_platdata(&pdev->dev) == NULL) {
-> -		dev_err(&pdev->dev, "no platform data supplied\n");
-> -		return -EINVAL;
-> +	data->pdata = sht15_probe_dt(&pdev->dev);
-> +	if (IS_ERR(data->pdata))
-> +		return PTR_ERR(data->pdata);
-> +	if (data->pdata == NULL) {
-> +		data->pdata = dev_get_platdata(&pdev->dev);
-> +		if (data->pdata == NULL) {
-> +			dev_err(&pdev->dev, "no platform data supplied\n");
-> +			return -EINVAL;
-> +		}
->  	}
-> -	data->pdata = dev_get_platdata(&pdev->dev);
-> +
->  	data->supply_uv = data->pdata->supply_mv * 1000;
->  	if (data->pdata->checksum)
->  		data->checksumming = true;
-> @@ -1075,6 +1130,7 @@ MODULE_DEVICE_TABLE(platform, sht15_device_ids);
->  static struct platform_driver sht15_driver = {
->  	.driver = {
->  		.name = "sht15",
-> +		.of_match_table = of_match_ptr(sht15_dt_match),
->  	},
->  	.probe = sht15_probe,
->  	.remove = sht15_remove,
->
+The best solution for me would be a file in sysfs that I could just 
+expose the float from my register (like curr1_input_float), this 
+solution has two benefits for me:
 
+- I wouldn't need to convert my internal float to int
+- This would give the best precision that I can have from my hardware
+
+The value could be exposed as a 32bit hex string, like 0x349c3abc.
+
+So, how should I proceed with this ?
+
+Thanks
+
+Lucas Tanure
