@@ -1,23 +1,32 @@
-Return-path: <jic23@kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:57509 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750862AbdBSQLA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Feb 2017 11:11:00 -0500
 Subject: Re: [PATCH 1/3] iio: humidity: add sht21 relative humidity and
  temperature sensor driver
-To: Tomasz Duszynski <tduszyns@gmail.com>, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
+To: Jonathan Cameron <jic23@kernel.org>,
+        Tomasz Duszynski <tduszyns@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
 References: <20170219145827.22644-1-tduszyns@gmail.com>
  <32c2d99f-e861-c3f3-a63a-4c47f050c159@kernel.org>
-From: Jonathan Cameron <jic23@kernel.org>
 Cc: knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
- Guenter Roeck <linux@roeck-us.net>, Jean Delvare <khali@linux-fr.org>,
- linux-hwmon@vger.kernel.org
-Message-ID: <6148b3e6-eaf9-c158-660e-2a27b6796291@kernel.org>
-Date: Sun, 19 Feb 2017 16:00:41 +0000
+        Jean Delvare <khali@linux-fr.org>, linux-hwmon@vger.kernel.org,
+        "Peter A. Bigot" <pab@pabigot.com>,
+        David Frey <david.frey@sensirion.com>,
+        Pascal Sachs <pascal.sachs@sensirion.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <d63b8ca9-cead-2485-6f28-f5dcf37fed08@roeck-us.net>
+Date: Sun, 19 Feb 2017 08:10:54 -0800
 MIME-Version: 1.0
 In-Reply-To: <32c2d99f-e861-c3f3-a63a-4c47f050c159@kernel.org>
-Content-Type: text/plain; charset=windows-1252
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 19/02/17 15:04, Jonathan Cameron wrote:
+On 02/19/2017 07:04 AM, Jonathan Cameron wrote:
 > On 19/02/17 14:58, Tomasz Duszynski wrote:
 >> Add sht21 relative humidity and temperature sensor driver. There already
 >> exists an in-kernel driver under hwmon but with limited functionality
@@ -35,22 +44,35 @@ On 19/02/17 15:04, Jonathan Cameron wrote:
 >>
 >> Signed-off-by: Tomasz Duszynski <tduszyns@gmail.com>
 > Hi Tomasz,
-> 
+>
 > I haven't looked at this yet, but one thing we have to do whenever suggesting
 > replacement of an hwmon driver is to convince the hwmon guys that it is a
-> good idea.  
-> 
+> good idea.
+>
 > As such I've cc'd Guenter, Jean and the list.
-> 
+>
+
+I don't really have a strong opinion. The chip does not have limits,
+so no core functionality is lost. Hope replacing a 200 LOC driver with
+a 500 LOC driver is worth it. Point of concern may be that other Sensirion
+drivers are in hwmon, so moving only this one over is not really optimal.
+And newer chips (sht3x) _do_ have limits and alarms.
+
+Please make sure to keep me in the loop, and please also add the functionality
+currently being added to the hwmon driver (Electronic Identification Code
+retrieval), as available in linux-next. I would also suggest to keep Sensirion
+in the loop.
+
+At some point we may want to more seriously discuss a hwmon->iio bridge.
+Maybe it is just me, but it still seems to me that might make more sense
+than rewriting drivers from scratch.
+
+Guenter
+
 > Jonathan
-> 
+>
 > p.s Probably won't get to this today as running out of time.  Depending on
 > how mad the week is it might be next weekend before I get a chance.
-Very quick review follows so as not to leave you without feedback.
-
-I may well have missed stuff though as did this in a few minutes...
-
-J
 >> ---
 >>  drivers/iio/humidity/Kconfig  |  10 +
 >>  drivers/iio/humidity/Makefile |   1 +
@@ -262,8 +284,6 @@ J
 >> +static int sht21_write_data(struct sht21_state *state, int cmd, int *data)
 >> +{
 >> +	int ret;
-No point in wrapping these two up. Just use the functions where they
-are relevant directly. This just makes the code harder to follow.
 >> +
 >> +	if (!data)
 >> +		ret = i2c_smbus_write_byte(state->client, cmd);
@@ -290,8 +310,6 @@ are relevant directly. This just makes the code harder to follow.
 >> +
 >> +static int sht21_trigger_rh_measurement(struct sht21_state *state, int *data)
 >> +{
-This is doing more than just triggering the measurement.  The naming should reflect
-that.
 >> +	int ret = sht21_trigger_measurement(state, SHT21_TRIGGER_RH_MEASUREMENT, data);
 >> +	if (ret)
 >> +		return ret;
@@ -370,7 +388,6 @@ that.
 >> +	for_each_set_bit(i, indio_dev->active_scan_mask, indio_dev->masklength) {
 >> +		ret = i == 0 ? sht21_trigger_rh_measurement(state, &buf[j++]) :
 >> +			       sht21_trigger_t_measurement(state, &buf[j++]);
-This is a for loop that really just obscures what is going on. I'd open code it.
 >> +		if (ret)
 >> +			goto out;
 >> +	}
@@ -394,9 +411,6 @@ This is a for loop that really just obscures what is going on. I'd open code it.
 >> +	case IIO_CHAN_INFO_PROCESSED:
 >> +		if (iio_buffer_enabled(indio_dev))
 >> +			return -EBUSY;
-You've randomly mixed checking this by hand and using
-the claim_direct functions. Please use them everywhere.
-They aren't race prone (which this is).
 >> +
 >> +		switch (channel->type) {
 >> +		case IIO_HUMIDITYRELATIVE:
@@ -532,7 +546,6 @@ They aren't race prone (which this is).
 >> +	.scan_type = { \
 >> +		.sign = 's', \
 >> +		.realbits = 32, \
-Really?  does it provide true 32bit data?
 >> +		.storagebits = 32, \
 >> +		.endianness = IIO_CPU, \
 >> +	}, \
@@ -594,9 +607,6 @@ Really?  does it provide true 32bit data?
 >> +
 >> +	iio_device_unregister(indio_dev);
 >> +	iio_triggered_buffer_cleanup(indio_dev);
-There are devm versions of both of the thing for the
-two setup functions you are unwinding here.  Use them
-and you can drop the remove function entirely.
 >> +
 >> +	return 0;
 >> +}
@@ -630,9 +640,10 @@ and you can drop the remove function entirely.
 >> --
 >> 2.11.1
 >>
-> 
+>
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+>
+
