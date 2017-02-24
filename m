@@ -1,17 +1,17 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:54436
+Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:54432
         "EHLO osg.samsung.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1751659AbdBXNOz (ORCPT
+        with ESMTP id S1751602AbdBXNOw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Feb 2017 08:14:55 -0500
+        Fri, 24 Feb 2017 08:14:52 -0500
 From: Javier Martinez Canillas <javier@osg.samsung.com>
 To: linux-kernel@vger.kernel.org
 Cc: Javier Martinez Canillas <javier@osg.samsung.com>,
         linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 14/19] hwmon: (ucd9000) Add OF device ID table
-Date: Fri, 24 Feb 2017 10:13:07 -0300
-Message-Id: <20170224131313.953-15-javier@osg.samsung.com>
+Subject: [PATCH 10/19] hwmon: (lm85) Add OF device ID table
+Date: Fri, 24 Feb 2017 10:13:03 -0300
+Message-Id: <20170224131313.953-11-javier@osg.samsung.com>
 In-Reply-To: <20170224131313.953-1-javier@osg.samsung.com>
 References: <20170224131313.953-1-javier@osg.samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -28,87 +28,94 @@ OF device ID table if the devices are registered via OF.
 Signed-off-by: Javier Martinez Canillas <javier@osg.samsung.com>
 ---
 
- drivers/hwmon/pmbus/ucd9000.c | 39 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ drivers/hwmon/lm85.c | 56 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-index 3e3aa950277f..3518f0c08934 100644
---- a/drivers/hwmon/pmbus/ucd9000.c
-+++ b/drivers/hwmon/pmbus/ucd9000.c
-@@ -21,6 +21,7 @@
+diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+index 691469ffa24e..0a325878e8f5 100644
+--- a/drivers/hwmon/lm85.c
++++ b/drivers/hwmon/lm85.c
+@@ -25,6 +25,7 @@
+  */
  
- #include <linux/kernel.h>
  #include <linux/module.h>
 +#include <linux/of_device.h>
  #include <linux/init.h>
- #include <linux/err.h>
  #include <linux/slab.h>
-@@ -119,6 +120,35 @@ static const struct i2c_device_id ucd9000_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, ucd9000_id);
+ #include <linux/jiffies.h>
+@@ -1552,7 +1553,10 @@ static int lm85_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 		return -ENOMEM;
  
-+static const struct of_device_id ucd9000_of_match[] = {
+ 	data->client = client;
+-	data->type = id->driver_data;
++	if (client->dev.of_node)
++		data->type = (enum chips)of_device_get_match_data(&client->dev);
++	else
++		data->type = id->driver_data;
+ 	mutex_init(&data->update_lock);
+ 
+ 	/* Fill in the chip specific driver values */
+@@ -1623,10 +1627,60 @@ static const struct i2c_device_id lm85_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, lm85_id);
+ 
++static const struct of_device_id lm85_of_match[] = {
 +	{
-+		.compatible = "ti,ucd9000",
-+		.data = (void *)ucd9000
++		.compatible = "adi,adm1027",
++		.data = (void *)adm1027
 +	},
 +	{
-+		.compatible = "ti,ucd90120",
-+		.data = (void *)ucd90120
++		.compatible = "adi,adt7463",
++		.data = (void *)adt7463
 +	},
 +	{
-+		.compatible = "ti,ucd90124",
-+		.data = (void *)ucd90124
++		.compatible = "adi,adt7468",
++		.data = (void *)adt7468
 +	},
 +	{
-+		.compatible = "ti,ucd90160",
-+		.data = (void *)ucd90160
++		.compatible = "national,lm85",
++		.data = (void *)lm85
 +	},
 +	{
-+		.compatible = "ti,ucd9090",
-+		.data = (void *)ucd9090
++		.compatible = "national,lm85b",
++		.data = (void *)lm85
 +	},
 +	{
-+		.compatible = "ti,ucd90910",
-+		.data = (void *)ucd90910
++		.compatible = "national,lm85c",
++		.data = (void *)lm85
++	},
++	{
++		.compatible = "smsc,emc6d100",
++		.data = (void *)emc6d100
++	},
++	{
++		.compatible = "smsc,emc6d101",
++		.data = (void *)emc6d100
++	},
++	{
++		.compatible = "smsc,emc6d102",
++		.data = (void *)emc6d102
++	},
++	{
++		.compatible = "smsc,emc6d103",
++		.data = (void *)emc6d103
++	},
++	{
++		.compatible = "smsc,emc6d103s",
++		.data = (void *)emc6d103s
 +	},
 +	{ },
 +};
-+MODULE_DEVICE_TABLE(of, ucd9000_of_match);
++MODULE_DEVICE_TABLE(of, lm85_of_match);
 +
- static int ucd9000_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -126,6 +156,7 @@ static int ucd9000_probe(struct i2c_client *client,
- 	struct ucd9000_data *data;
- 	struct pmbus_driver_info *info;
- 	const struct i2c_device_id *mid;
-+	enum chips chip;
- 	int i, ret;
- 
- 	if (!i2c_check_functionality(client->adapter,
-@@ -151,7 +182,12 @@ static int ucd9000_probe(struct i2c_client *client,
- 		return -ENODEV;
- 	}
- 
--	if (id->driver_data != ucd9000 && id->driver_data != mid->driver_data)
-+	if (client->dev.of_node)
-+		chip = (enum chips)of_device_get_match_data(&client->dev);
-+	else
-+		chip = id->driver_data;
-+
-+	if (chip != ucd9000 && chip != mid->driver_data)
- 		dev_notice(&client->dev,
- 			   "Device mismatch: Configured %s, detected %s\n",
- 			   id->name, mid->name);
-@@ -234,6 +270,7 @@ static int ucd9000_probe(struct i2c_client *client,
- static struct i2c_driver ucd9000_driver = {
+ static struct i2c_driver lm85_driver = {
+ 	.class		= I2C_CLASS_HWMON,
  	.driver = {
- 		.name = "ucd9000",
-+		.of_match_table = of_match_ptr(ucd9000_of_match),
+ 		.name   = "lm85",
++		.of_match_table = of_match_ptr(lm85_of_match),
  	},
- 	.probe = ucd9000_probe,
- 	.remove = pmbus_do_remove,
+ 	.probe		= lm85_probe,
+ 	.id_table	= lm85_id,
 -- 
 2.9.3
 
