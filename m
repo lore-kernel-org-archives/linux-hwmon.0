@@ -1,7 +1,7 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:54427
+Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:54436
         "EHLO osg.samsung.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1751672AbdBXNOz (ORCPT
+        with ESMTP id S1751659AbdBXNOz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Fri, 24 Feb 2017 08:14:55 -0500
 From: Javier Martinez Canillas <javier@osg.samsung.com>
@@ -9,9 +9,9 @@ To: linux-kernel@vger.kernel.org
 Cc: Javier Martinez Canillas <javier@osg.samsung.com>,
         linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 05/19] hwmon: (adt7475) Add OF device ID table
-Date: Fri, 24 Feb 2017 10:12:58 -0300
-Message-Id: <20170224131313.953-6-javier@osg.samsung.com>
+Subject: [PATCH 14/19] hwmon: (ucd9000) Add OF device ID table
+Date: Fri, 24 Feb 2017 10:13:07 -0300
+Message-Id: <20170224131313.953-15-javier@osg.samsung.com>
 In-Reply-To: <20170224131313.953-1-javier@osg.samsung.com>
 References: <20170224131313.953-1-javier@osg.samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -28,80 +28,87 @@ OF device ID table if the devices are registered via OF.
 Signed-off-by: Javier Martinez Canillas <javier@osg.samsung.com>
 ---
 
- drivers/hwmon/adt7475.c | 31 ++++++++++++++++++++++++++++++-
- 1 file changed, 30 insertions(+), 1 deletion(-)
+ drivers/hwmon/pmbus/ucd9000.c | 39 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index c646670b9ea9..fcfa48222145 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -13,6 +13,7 @@
-  */
+diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+index 3e3aa950277f..3518f0c08934 100644
+--- a/drivers/hwmon/pmbus/ucd9000.c
++++ b/drivers/hwmon/pmbus/ucd9000.c
+@@ -21,6 +21,7 @@
  
+ #include <linux/kernel.h>
  #include <linux/module.h>
 +#include <linux/of_device.h>
  #include <linux/init.h>
+ #include <linux/err.h>
  #include <linux/slab.h>
- #include <linux/i2c.h>
-@@ -161,6 +162,27 @@ static const struct i2c_device_id adt7475_id[] = {
+@@ -119,6 +120,35 @@ static const struct i2c_device_id ucd9000_id[] = {
  };
- MODULE_DEVICE_TABLE(i2c, adt7475_id);
+ MODULE_DEVICE_TABLE(i2c, ucd9000_id);
  
-+static const struct of_device_id adt7475_of_match[] = {
++static const struct of_device_id ucd9000_of_match[] = {
 +	{
-+		.compatible = "adi,adt7473",
-+		.data = (void *)adt7473
++		.compatible = "ti,ucd9000",
++		.data = (void *)ucd9000
 +	},
 +	{
-+		.compatible = "adi,adt7475",
-+		.data = (void *)adt7475
++		.compatible = "ti,ucd90120",
++		.data = (void *)ucd90120
 +	},
 +	{
-+		.compatible = "adi,adt7476",
-+		.data = (void *)adt7476
++		.compatible = "ti,ucd90124",
++		.data = (void *)ucd90124
 +	},
 +	{
-+		.compatible = "adi,adt7490",
-+		.data = (void *)adt7490
++		.compatible = "ti,ucd90160",
++		.data = (void *)ucd90160
++	},
++	{
++		.compatible = "ti,ucd9090",
++		.data = (void *)ucd9090
++	},
++	{
++		.compatible = "ti,ucd90910",
++		.data = (void *)ucd90910
 +	},
 +	{ },
 +};
-+MODULE_DEVICE_TABLE(of, adt7475_of_match);
++MODULE_DEVICE_TABLE(of, ucd9000_of_match);
 +
- struct adt7475_data {
- 	struct device *hwmon_dev;
- 	struct mutex lock;
-@@ -1250,6 +1272,7 @@ static void adt7475_remove_files(struct i2c_client *client,
- static int adt7475_probe(struct i2c_client *client,
+ static int ucd9000_probe(struct i2c_client *client,
  			 const struct i2c_device_id *id)
  {
+@@ -126,6 +156,7 @@ static int ucd9000_probe(struct i2c_client *client,
+ 	struct ucd9000_data *data;
+ 	struct pmbus_driver_info *info;
+ 	const struct i2c_device_id *mid;
 +	enum chips chip;
- 	static const char * const names[] = {
- 		[adt7473] = "ADT7473",
- 		[adt7475] = "ADT7475",
-@@ -1268,8 +1291,13 @@ static int adt7475_probe(struct i2c_client *client,
- 	mutex_init(&data->lock);
- 	i2c_set_clientdata(client, data);
+ 	int i, ret;
  
+ 	if (!i2c_check_functionality(client->adapter,
+@@ -151,7 +182,12 @@ static int ucd9000_probe(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ 
+-	if (id->driver_data != ucd9000 && id->driver_data != mid->driver_data)
 +	if (client->dev.of_node)
 +		chip = (enum chips)of_device_get_match_data(&client->dev);
 +	else
 +		chip = id->driver_data;
 +
- 	/* Initialize device-specific values */
--	switch (id->driver_data) {
-+	switch (chip) {
- 	case adt7476:
- 		data->has_voltage = 0x0e;	/* in1 to in3 */
- 		revision = adt7475_read(REG_DEVID2) & 0x07;
-@@ -1428,6 +1456,7 @@ static struct i2c_driver adt7475_driver = {
- 	.class		= I2C_CLASS_HWMON,
++	if (chip != ucd9000 && chip != mid->driver_data)
+ 		dev_notice(&client->dev,
+ 			   "Device mismatch: Configured %s, detected %s\n",
+ 			   id->name, mid->name);
+@@ -234,6 +270,7 @@ static int ucd9000_probe(struct i2c_client *client,
+ static struct i2c_driver ucd9000_driver = {
  	.driver = {
- 		.name	= "adt7475",
-+		.of_match_table = of_match_ptr(adt7475_of_match),
+ 		.name = "ucd9000",
++		.of_match_table = of_match_ptr(ucd9000_of_match),
  	},
- 	.probe		= adt7475_probe,
- 	.remove		= adt7475_remove,
+ 	.probe = ucd9000_probe,
+ 	.remove = pmbus_do_remove,
 -- 
 2.9.3
 
