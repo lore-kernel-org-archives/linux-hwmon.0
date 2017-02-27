@@ -1,42 +1,37 @@
 Return-path: <robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAOMZO5D9UyKpxRB_bLrDFohyofTBu=sZArVynu--Fao6PewcKg@mail.gmail.com>
+In-Reply-To: <20170227155856.vqwzm2z6uvdfawee@rob-hp-laptop>
 References: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
- <20170227155752.b6yshpowa4ioty6a@rob-hp-laptop> <CAOMZO5D9UyKpxRB_bLrDFohyofTBu=sZArVynu--Fao6PewcKg@mail.gmail.com>
+ <1487247824-10005-2-git-send-email-marco.franchi@nxp.com> <336e0fa6-3d69-cd16-0480-b62ae68b2de2@roeck-us.net>
+ <20170227155856.vqwzm2z6uvdfawee@rob-hp-laptop>
 From: Rob Herring <robh@kernel.org>
-Date: Mon, 27 Feb 2017 11:31:36 -0600
-Message-ID: <CAL_JsqLakV0yjXe+WumN0XiEKDXYZHR+vnrbFh=wMbBTpBQ5Xg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] hwmon: (sht15) Add device tree support
-To: Fabio Estevam <festevam@gmail.com>
-Cc: Marco Franchi <marco.franchi@nxp.com>, Guenter Roeck <linux@roeck-us.net>,
+Date: Mon, 27 Feb 2017 11:32:35 -0600
+Message-ID: <CAL_JsqJYuTOZVhJYbPiXGrtHo6yXgpXLkSAdWnJR+2C3WFAztQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt: Add vendor prefix for Sensirion
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Marco Franchi <marco.franchi@nxp.com>,
 	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
 	Marco Antonio Franchi <marcofrk@gmail.com>, FoxPeter@kabelbw.de
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Feb 27, 2017 at 10:46 AM, Fabio Estevam <festevam@gmail.com> wrote:
-> Hi Rob,
->
-> On Mon, Feb 27, 2017 at 12:57 PM, Rob Herring <robh@kernel.org> wrote:
->
->>> +Required properties:
->>> +
->>> + - "compatible": must be "sensirion,sht15".
->>> + - "data-gpios": GPIO connected to the data line.
->>> + - "clk-gpios": GPIO connected to the clock line.
+On Mon, Feb 27, 2017 at 9:58 AM, Rob Herring <robh@kernel.org> wrote:
+> On Thu, Feb 16, 2017 at 06:43:51AM -0800, Guenter Roeck wrote:
+>> On 02/16/2017 04:23 AM, Marco Franchi wrote:
+>> > Sensirion is a sensor manufacturer, providing relative humidity sensors,
+>> > temperature sensor and flow sensor solutions.
+>> >
+>> > Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
 >>
->> Looks like this device is I2C perhaps? Though I'm not sure the waveforms
->> before and after transactions are compliant.
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> Wonder who should queue this up. Rob ?
 >
-> No, the SHT15 datasheet is very clear that the device does not operate
-> in I2C mode:
-> "The sensor cannot be addressed by I2C protocol".
+> You can apply with the rest of the series.
+>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-I missed that since it is under "Power Pins" section... As our "great"
-leader says: Sad.
-
-Acked-by: Rob Herring <robh@kernel.org>
-
-BTW, looks like they fixed that with the SHT20.
+Actually, looks like there are 2 different patches adding this, so
+I'll take this one.
 
 Rob
