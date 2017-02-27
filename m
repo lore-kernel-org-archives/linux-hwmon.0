@@ -1,42 +1,63 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:40433 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751163AbdBXSLK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Feb 2017 13:11:10 -0500
-Subject: Re: [PATCH 00/19] hwmon: Add OF device table to I2C drivers that are
- missing it
-To: Javier Martinez Canillas <javier@osg.samsung.com>,
-        linux-kernel@vger.kernel.org
-References: <20170224131313.953-1-javier@osg.samsung.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Dirk Eibach <eibach@gdsys.de>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4ac3e71b-448f-0995-4dd7-5bc9a70bca6b@roeck-us.net>
-Date: Fri, 24 Feb 2017 09:10:38 -0800
+Return-path: <robherring2@gmail.com>
+Date: Mon, 27 Feb 2017 09:57:52 -0600
+From: Rob Herring <robh@kernel.org>
+To: Marco Franchi <marco.franchi@nxp.com>
+Cc: linux@roeck-us.net, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, marcofrk@gmail.com,
+	FoxPeter@kabelbw.de
+Subject: Re: [PATCH v4 2/2] hwmon: (sht15) Add device tree support
+Message-ID: <20170227155752.b6yshpowa4ioty6a@rob-hp-laptop>
+References: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20170224131313.953-1-javier@osg.samsung.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1487247824-10005-1-git-send-email-marco.franchi@nxp.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/24/2017 05:12 AM, Javier Martinez Canillas wrote:
-> Hello,
->
-> This series add OF device ID tables to hwmon I2C drivers whose devices are
-> either used in Device Tree source files or are listed in binding docs as a
-> compatible string.
->
-> That's done because the plan is to change the I2C core to report proper OF
-> modaliases instead of always reporting a MODALIAS=i2c:<foo> regardless if
-> a device was registered via DT or using the legacy platform data.
->
-> So these patches will make sure that hwmon I2C drivers will continue to be
-> able to module auto-load oncethe I2C core is changed.
+On Thu, Feb 16, 2017 at 10:23:43AM -0200, Marco Franchi wrote:
+> Allow the driver to work with device tree support.
+> 
+> Based on initial patch submission from Peter Fox.
+> 
+> Tested on a imx7d-sdb board connected to a SHT15 board via Mikro Bus.
+> 
+> Signed-off-by: Marco Franchi <marco.franchi@nxp.com>
+> ---
+> Changes since v3:
+> -Remove the optional properties because they are not hardware description
+> -Change the sensor node name
+> 
+>  Documentation/devicetree/bindings/hwmon/sht15.txt | 19 +++++++
+>  drivers/hwmon/sht15.c                             | 64 +++++++++++++++++++++--
+>  2 files changed, 79 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sht15.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/sht15.txt b/Documentation/devicetree/bindings/hwmon/sht15.txt
+> new file mode 100644
+> index 0000000..6a80277
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sht15.txt
+> @@ -0,0 +1,19 @@
+> +Sensirion SHT15 Humidity and Temperature Sensor
+> +
+> +Required properties:
+> +
+> + - "compatible": must be "sensirion,sht15".
+> + - "data-gpios": GPIO connected to the data line.
+> + - "clk-gpios": GPIO connected to the clock line.
 
-Series applied to hwmon-next.
+Looks like this device is I2C perhaps? Though I'm not sure the waveforms 
+before and after transactions are compliant.
 
-Thanks,
-Guenter
-
+> + - "vcc-supply": regulator that drives the VCC pin.
+> +
+> +Example:
+> +
+> +	sensor {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_sensor>;
+> +		compatible = "sensirion,sht15";
+> +		clk-gpios = <&gpio4 12 0>;
+> +		data-gpios = <&gpio4 13 0>;
+> +		vcc-supply = <&reg_sht15>;
+> +	};
