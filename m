@@ -1,73 +1,115 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:59571 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:43252 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753710AbdCBADa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2017 19:03:30 -0500
-Date: Wed, 1 Mar 2017 12:04:44 -0800
+        with ESMTP id S1753579AbdCBAEM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Mar 2017 19:04:12 -0500
+Date: Wed, 1 Mar 2017 09:56:18 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Carlo Caione <carlo@caione.org>
-Cc: Punit Agrawal <punit.agrawal@arm.com>,
-        Carlo Caione <carlo@endlessm.com>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org,
+To: Punit Agrawal <punit.agrawal@arm.com>
+Cc: Carlo Caione <carlo@endlessm.com>, Carlo Caione <carlo@caione.org>,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-amlogic@lists.infradead.org,
         Linux Upstreaming Team <linux@endlessm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>, rui.zhang@intel.com,
-        edubezval@gmail.com
+        sudeep.holla@arm.com, rui.zhang@intel.com, edubezval@gmail.com
 Subject: Re: [PATCH] hwmon: (scpi) Add slope and offset to SCP sensor readings
-Message-ID: <20170301200444.GB20160@roeck-us.net>
+Message-ID: <20170301175618.GB15246@roeck-us.net>
 References: <20170301132028.25309-1-carlo@caione.org>
  <41f19cd3-5086-1da9-915a-8987cfc119f9@roeck-us.net>
  <CAL9uMOG5qEgyGTue=n7abbFROKGBpUrWDOPi5_bEDUWuiHEUKg@mail.gmail.com>
  <87inntorz7.fsf@e105922-lin.cambridge.arm.com>
- <20170301175618.GB15246@roeck-us.net>
- <CAOQ7t2Y1=fL9a4A_gPtvrrWR_uOOP_gGT-61Q+1B39t2gRJBmw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOQ7t2Y1=fL9a4A_gPtvrrWR_uOOP_gGT-61Q+1B39t2gRJBmw@mail.gmail.com>
+In-Reply-To: <87inntorz7.fsf@e105922-lin.cambridge.arm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 01, 2017 at 07:45:50PM +0100, Carlo Caione wrote:
-> On Wed, Mar 1, 2017 at 6:56 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On Wed, Mar 01, 2017 at 04:57:00PM +0000, Punit Agrawal wrote:
+On Wed, Mar 01, 2017 at 04:57:00PM +0000, Punit Agrawal wrote:
+> Carlo Caione <carlo@endlessm.com> writes:
 > 
-> >> Another way to fix this would be to add optional properties to the scpi
-> >> sensors binding and use them instead. This could then be used to fixup
-> >> values reported to both thermal and hwmon.
-> >>
+> > On Wed, Mar 1, 2017 at 4:01 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> >> On 03/01/2017 05:20 AM, Carlo Caione wrote:
+> >>>
+> >>> From: Carlo Caione <carlo@endlessm.com>
+> >>>
+> >>> The temperature provided by the SCP sensors not always is expressed in
+> >>> millicelsius, whereas this is required by the thermal framework. This is
+> >>> for example the case for the Amlogic devices, where the SCP sensor
+> >>> readings are expressed in degree (and not milli degree) Celsius.
+> >>>
+> >> Are you saying that SCPI does not specify or provide the units to be used
+> >> when reading values, and thus effectively just reports a more or less
+> >> random number ?
 > >
-> > Yes, this would be much more appropriate.
+> > AFAICT the standard does not specify the units to be used for the
+> > values or a way to get that information. For the Amlogic case the SCP
+> > returns the value of the temperature in degree celsius and I'm not
+> > sure how common is that.
 > 
-> What about something like:
+> The standard does specify the units, but the way it is written seems to
+> suggest that the units are part of the platform implementation rather
+> than part of the standard [0].
 > 
-> sensor-coefficients = <x1 y1 z1>,
->                                   <x2 y2 z2>,
->                                   ...;
+> [0] http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0922g/CABBCJGH.html
+> 
 
-As mentioned before, I don't think 'slope' and 'offset' are well enough
-defined, so I would rather not use that approach.
+Wow, that is pretty well hidden. Table 3.87 doesn't specify units.
+I agree, this appears to imply that the units are intentionally
+platform specific. Unfortunately it doesn't specify the data format,
+not even for the development platform, so I guess we'll have to
+brace ourselves for inventive new data formats. 
 
-I don't know if there are DT examples on how to specify a translation
-from an arbitrary value to well-defined units; we could use that
-if it exists. Otherwise, we might just go with a combination of
-sensor class and the unit scale used for that sensor class.
-A simple approach might be something like
-    scpi,sensor-scale =	// pick preferred property name 
-	<0 1000>,
-	<1 1000>,
-	<2 1000>,
-	<3 1000000>,
-	<4 1000000>;
-or even simpler
-	scpi,sensor-scale = <1000, 1000, 1000, 1000000, 1000000>;
-since the class index is really redundant.
+> >
+> > [cut]
+> >>> -       *temp = value;
+> >>> +       slope = thermal_zone_get_slope(zone->z);
+> >>> +       offset = thermal_zone_get_offset(zone->z);
+> >>
+> >>
+> >> This is conceptually wrong. The functions return -ENODEV if thermal is
+> >> disabled.
+> >> While a negative slope does not make sense, a negative offset does.
+> >
+> > Yeah, but in that case we would have already failed to register the
+> > thermal zone at all in devm_thermal_zone_of_sensor_register().
+> >
+> 
+> In addition to the thermal sub-subsystem, hwmon sysfs interface also
+> expects temperature in millidegree Celsius. Ideally, any change should
+> fix the reporting there as well. More below.
+> 
+> >> The code in the thermal subsystem does not clarify well how slope and offset
+> >> are supposed to be used. Since coming from the thermal subsystem, one would
+> >> think
+> >> that the thermal subsystem would apply any corrections if they are supposed
+> >> to be software correction values, but that does not appear to be the case,
+> >> leaving it up to drivers to use or not use the provided values.
+> >
+> > Yes, this is my understanding also considering this comment here:
+> > http://lxr.free-electrons.com/source/drivers/thermal/of-thermal.c#L1006
+> >
+> > So apparently the slope and offset values are left to be used by the
+> > driver, that's why I was changing the temperature driver to use those
+> > values.
+> >
+> >> This is kind of odd; the values are thermal subsystem attributes/properties,
+> >> and one would think that they are to be used there unless they are supposed
+> >> to be
+> >> written into hardware. Given that, I'd rather wait for the API to be
+> >> clarified
+> >> instead of jumping into using it.
+> >
+> > Zhang, Eduardo (+CC)
+> > can you clarify a bit this point?
+> >
+> 
+> Another way to fix this would be to add optional properties to the scpi
+> sensors binding and use them instead. This could then be used to fixup
+> values reported to both thermal and hwmon.
+> 
 
-This would describe the units for the Juno ARM development platform.
+Yes, this would be much more appropriate.
 
-In your case, that would be something like
-	scpi,sensor-scale = <1, 1000, 1000, 1000000, 1000000>;
-assuming that the other units are as expected (which may not be the case). 
-
+Thanks,
 Guenter
