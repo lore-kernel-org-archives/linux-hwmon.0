@@ -1,55 +1,58 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43521 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751767AbdCBRjM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Mar 2017 12:39:12 -0500
-Date: Thu, 2 Mar 2017 09:37:54 -0800
-From: Guenter Roeck <linux@roeck-us.net>
+Received: from foss.arm.com ([217.140.101.70]:35742 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751055AbdCBUJo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 2 Mar 2017 15:09:44 -0500
+From: Punit Agrawal <punit.agrawal@arm.com>
 To: Carlo Caione <carlo@caione.org>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux@endlessm.com,
-        punit.agrawal@arm.com, sudeep.holla@arm.com, robh+dt@kernel.org,
+        sudeep.holla@arm.com, robh+dt@kernel.org,
         Carlo Caione <carlo@endlessm.com>
 Subject: Re: [PATCH 2/2] hwmon: (scpi) Fix the scale of SCP sensor readings
-Message-ID: <20170302173754.GB28554@roeck-us.net>
 References: <20170302121500.8121-1-carlo@caione.org>
- <20170302121500.8121-3-carlo@caione.org>
+        <20170302121500.8121-3-carlo@caione.org>
+Date: Thu, 02 Mar 2017 19:17:04 +0000
+In-Reply-To: <20170302121500.8121-3-carlo@caione.org> (Carlo Caione's message
+        of "Thu, 2 Mar 2017 13:15:00 +0100")
+Message-ID: <87lgsno5e7.fsf@e105922-lin.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170302121500.8121-3-carlo@caione.org>
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 02, 2017 at 01:15:00PM +0100, Carlo Caione wrote:
+Hi Carlo,
+
+Carlo Caione <carlo@caione.org> writes:
+
 > From: Carlo Caione <carlo@endlessm.com>
-> 
+>
 > The implementation details for SCPI seems to suggest that the sensor
 > readings must be reported by SCP using a well defined scale
 > (millidegree Celsius for temperature, millivolts for voltage,
 > milliamperes for current, microwatts for power and microjoules for
 > energy).
-> 
+>
 > This is also important for the interaction with other subsystems: for
 > example both the thermal sub-system and the hwmon sysfs interface expect
 > the temperature expressed in millidegree Celsius.
-> 
+>
 > Unfortunately since this behaviour is dependent on the firmware
 > implementation there are cases where the sensor readings are reported
 > using a different scale. For example in the Amlogic SoCs the
 > temperature is reported in degree and not millidegree Celsius.
-> 
+>
 > To take into account this discrepancy and fixup the values reported by
 > SCP a new DT property `scpi,sensors-scale' is introduced and used in
 > this patch by the scpi-hwmon driver to convert the sensor readings to
 > the expected scale.
-> 
+>
 > Signed-off-by: Carlo Caione <carlo@endlessm.com>
 > ---
 >  drivers/hwmon/scpi-hwmon.c | 25 +++++++++++++++++++++++++
 >  1 file changed, 25 insertions(+)
-> 
+>
 > diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
 > index 094f948f99ff..64a51e06c8df 100644
 > --- a/drivers/hwmon/scpi-hwmon.c
@@ -67,6 +70,10 @@ On Thu, Mar 02, 2017 at 01:15:00PM +0100, Carlo Caione wrote:
 >  };
 >  
 > +static const unsigned int scpi_scale[] = {
+
+Following the device tree property, please change the array to u32 as
+well.
+
 > +	1000,		/* Temperature (millidegrees Celsius)	*/
 > +	1000,		/* Voltage     (millivolts)		*/
 > +	1000,		/* Current     (milliamperes)		*/
@@ -74,6 +81,19 @@ On Thu, Mar 02, 2017 at 01:15:00PM +0100, Carlo Caione wrote:
 > +	1000000,	/* Energy      (microjoules)		*/
 > +};
 > +
+
+Using the array initialiser notation, part of the comment could be moved
+to the element index. This'll also make the scale to sensor class
+association more explicit.
+
+static const u32 scpi_scale[] = {
+	[TEMPERATURE] 	= 1000,		/* (millidegrees Celsius) */
+	[VOLTAGE] 	= 1000,		/* (millivolts)		  */
+	[CURRENT]	= 1000,		/* (milliamperes)	  */
+	[POWER]		= 1000000,	/* (microwatts)		  */
+	[ENERGY]	= 1000000,	/* (microjoules)	  */
+};
+
 >  static int scpi_read_temp(void *dev, int *temp)
 >  {
 >  	struct scpi_thermal_zone *zone = dev;
@@ -84,9 +104,6 @@ On Thu, Mar 02, 2017 at 01:15:00PM +0100, Carlo Caione wrote:
 > +	if (scpi_scale[sensor->info.class] != sensor->scale) {
 > +		value *= scpi_scale[sensor->info.class];
 > +		do_div(value, sensor->scale);
-
-Pretty elegant, I like that solution.
-
 > +	}
 > +
 >  	*temp = value;
@@ -104,6 +121,13 @@ Pretty elegant, I like that solution.
 >  	return sprintf(buf, "%llu\n", value);
 >  }
 >  
+
+You add the exact same code twice - a helper to avoid the duplication
+would be nice.
+
+Thanks,
+Punit
+
 > @@ -97,6 +116,7 @@ static struct thermal_zone_of_device_ops scpi_sensor_ops = {
 >  static int scpi_hwmon_probe(struct platform_device *pdev)
 >  {
@@ -119,11 +143,6 @@ Pretty elegant, I like that solution.
 > +	of_property_read_u32_array(dev->of_node, "scpi,sensors-scale",
 > +				   scale, ARRAY_SIZE(scale));
 > +
-We'll need some validation here. Otherwise a provided scale of 0 would
-crash the system.
-
-Guenter
-
 >  	for (i = 0, idx = 0; i < nr_sensors; i++) {
 >  		struct sensor_data *sensor = &scpi_sensors->data[idx];
 >  
@@ -136,10 +155,3 @@ Guenter
 >  		sensor->dev_attr_input.attr.mode = S_IRUGO;
 >  		sensor->dev_attr_input.show = scpi_show_sensor;
 >  		sensor->dev_attr_input.attr.name = sensor->input;
-> -- 
-> 2.12.0
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
