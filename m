@@ -1,157 +1,45 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from foss.arm.com ([217.140.101.70]:35742 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751055AbdCBUJo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 2 Mar 2017 15:09:44 -0500
-From: Punit Agrawal <punit.agrawal@arm.com>
-To: Carlo Caione <carlo@caione.org>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux@endlessm.com,
-        sudeep.holla@arm.com, robh+dt@kernel.org,
-        Carlo Caione <carlo@endlessm.com>
-Subject: Re: [PATCH 2/2] hwmon: (scpi) Fix the scale of SCP sensor readings
-References: <20170302121500.8121-1-carlo@caione.org>
-        <20170302121500.8121-3-carlo@caione.org>
-Date: Thu, 02 Mar 2017 19:17:04 +0000
-In-Reply-To: <20170302121500.8121-3-carlo@caione.org> (Carlo Caione's message
-        of "Thu, 2 Mar 2017 13:15:00 +0100")
-Message-ID: <87lgsno5e7.fsf@e105922-lin.cambridge.arm.com>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:51939 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751518AbdCCC4q (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Mar 2017 21:56:46 -0500
+Subject: Re: Conversion of w83627ehf to hwmon_device_register_with_info ?
+To: =?UTF-8?Q?Peter_H=c3=bcwe?= <PeterHuewe@gmx.de>,
+        linux-hwmon@vger.kernel.org
+References: <201703030133.01363.PeterHuewe@gmx.de>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bb297d0e-e87a-83a9-7a2a-9cc0e6f51164@roeck-us.net>
+Date: Thu, 2 Mar 2017 18:56:01 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <201703030133.01363.PeterHuewe@gmx.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Carlo,
+Hi Peter,
 
-Carlo Caione <carlo@caione.org> writes:
-
-> From: Carlo Caione <carlo@endlessm.com>
+On 03/02/2017 04:33 PM, Peter Hüwe wrote:
+> Hi,
 >
-> The implementation details for SCPI seems to suggest that the sensor
-> readings must be reported by SCP using a well defined scale
-> (millidegree Celsius for temperature, millivolts for voltage,
-> milliamperes for current, microwatts for power and microjoules for
-> energy).
+> is anybody else working on the conversion of the w83627ehf to the new
+> hwmon_device_register_with_info interface?
 >
-> This is also important for the interaction with other subsystems: for
-> example both the thermal sub-system and the hwmon sysfs interface expect
-> the temperature expressed in millidegree Celsius.
+I don't think so.
+
+> Otherwise I will probably update the driver to this interface within the next
+> days - but since it's a lot of work I wanted to check for duplication first.
 >
-> Unfortunately since this behaviour is dependent on the firmware
-> implementation there are cases where the sensor readings are reported
-> using a different scale. For example in the Amlogic SoCs the
-> temperature is reported in degree and not millidegree Celsius.
+Go ahead. I would suggest to drop nct6775/nct6776 support to simplify the code
+when you do that. Maybe as separate commit, though.
+
+> Do you think it makes sense to introduce a hwmon_sensor_types for "intrusion"
+> as well? - there are currently 8 drivers who offer that interface.
 >
-> To take into account this discrepancy and fixup the values reported by
-> SCP a new DT property `scpi,sensors-scale' is introduced and used in
-> this patch by the scpi-hwmon driver to convert the sensor readings to
-> the expected scale.
->
-> Signed-off-by: Carlo Caione <carlo@endlessm.com>
-> ---
->  drivers/hwmon/scpi-hwmon.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-> index 094f948f99ff..64a51e06c8df 100644
-> --- a/drivers/hwmon/scpi-hwmon.c
-> +++ b/drivers/hwmon/scpi-hwmon.c
-> @@ -23,6 +23,7 @@
->  #include <linux/thermal.h>
->  
->  struct sensor_data {
-> +	unsigned int scale;
->  	struct scpi_sensor_info info;
->  	struct device_attribute dev_attr_input;
->  	struct device_attribute dev_attr_label;
-> @@ -44,6 +45,14 @@ struct scpi_sensors {
->  	const struct attribute_group *groups[2];
->  };
->  
-> +static const unsigned int scpi_scale[] = {
+I don't really like the idea of introducing another type for just one attribute,
+but it might be the easiest and most consistent approach. Feel free to submit
+a patch to add it.
 
-Following the device tree property, please change the array to u32 as
-well.
+Guenter
 
-> +	1000,		/* Temperature (millidegrees Celsius)	*/
-> +	1000,		/* Voltage     (millivolts)		*/
-> +	1000,		/* Current     (milliamperes)		*/
-> +	1000000,	/* Power       (microwatts)		*/
-> +	1000000,	/* Energy      (microjoules)		*/
-> +};
-> +
-
-Using the array initialiser notation, part of the comment could be moved
-to the element index. This'll also make the scale to sensor class
-association more explicit.
-
-static const u32 scpi_scale[] = {
-	[TEMPERATURE] 	= 1000,		/* (millidegrees Celsius) */
-	[VOLTAGE] 	= 1000,		/* (millivolts)		  */
-	[CURRENT]	= 1000,		/* (milliamperes)	  */
-	[POWER]		= 1000000,	/* (microwatts)		  */
-	[ENERGY]	= 1000000,	/* (microjoules)	  */
-};
-
->  static int scpi_read_temp(void *dev, int *temp)
->  {
->  	struct scpi_thermal_zone *zone = dev;
-> @@ -57,6 +66,11 @@ static int scpi_read_temp(void *dev, int *temp)
->  	if (ret)
->  		return ret;
->  
-> +	if (scpi_scale[sensor->info.class] != sensor->scale) {
-> +		value *= scpi_scale[sensor->info.class];
-> +		do_div(value, sensor->scale);
-> +	}
-> +
->  	*temp = value;
->  	return 0;
->  }
-> @@ -77,6 +91,11 @@ scpi_show_sensor(struct device *dev, struct device_attribute *attr, char *buf)
->  	if (ret)
->  		return ret;
->  
-> +	if (scpi_scale[sensor->info.class] != sensor->scale) {
-> +		value *= scpi_scale[sensor->info.class];
-> +		do_div(value, sensor->scale);
-> +	}
-> +
->  	return sprintf(buf, "%llu\n", value);
->  }
->  
-
-You add the exact same code twice - a helper to avoid the duplication
-would be nice.
-
-Thanks,
-Punit
-
-> @@ -97,6 +116,7 @@ static struct thermal_zone_of_device_ops scpi_sensor_ops = {
->  static int scpi_hwmon_probe(struct platform_device *pdev)
->  {
->  	u16 nr_sensors, i;
-> +	u32 scale[] = { 1000, 1000, 1000, 1000000, 1000000 };
->  	int num_temp = 0, num_volt = 0, num_current = 0, num_power = 0;
->  	int num_energy = 0;
->  	struct scpi_ops *scpi_ops;
-> @@ -131,6 +151,9 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
->  
->  	scpi_sensors->scpi_ops = scpi_ops;
->  
-> +	of_property_read_u32_array(dev->of_node, "scpi,sensors-scale",
-> +				   scale, ARRAY_SIZE(scale));
-> +
->  	for (i = 0, idx = 0; i < nr_sensors; i++) {
->  		struct sensor_data *sensor = &scpi_sensors->data[idx];
->  
-> @@ -178,6 +201,8 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
->  			continue;
->  		}
->  
-> +		sensor->scale = scale[sensor->info.class];
-> +
->  		sensor->dev_attr_input.attr.mode = S_IRUGO;
->  		sensor->dev_attr_input.show = scpi_show_sensor;
->  		sensor->dev_attr_input.attr.name = sensor->input;
