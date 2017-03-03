@@ -1,52 +1,55 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50341 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754078AbdCHAGm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Mar 2017 19:06:42 -0500
-Date: Tue, 7 Mar 2017 14:19:20 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alex Hemme <ahemme@cisco.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max31790) Set correct PWM value
-Message-ID: <20170307221920.GA14619@roeck-us.net>
-References: <1488915509-19547-1-git-send-email-ahemme@cisco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1488915509-19547-1-git-send-email-ahemme@cisco.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <carlo.caione@gmail.com>
+Sender: Carlo Caione <carlo.caione@gmail.com>
+From: Carlo Caione <carlo@caione.org>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux@endlessm.com,
+	punit.agrawal@arm.com,
+	sudeep.holla@arm.com,
+	robh+dt@kernel.org
+Cc: Carlo Caione <carlo@endlessm.com>
+Subject: [PATCH v2 0/2] scpi-sensors: Fix SCP sensor readings scale
+Date: Fri,  3 Mar 2017 10:14:47 +0100
+Message-Id: <20170303091449.3512-1-carlo@caione.org>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Mar 07, 2017 at 02:38:29PM -0500, Alex Hemme wrote:
-> Traced fans not spinning to incorrect PWM value being written.
-> The passed in value was written instead of the calulated value.
-> 
-> Fixes: 54187ff9d766 ("hwmon: (max31790) Convert to use new hwmon registration API")
-> 
-> Signed-off-by: Alex Hemme <ahemme@cisco.com>
+From: Carlo Caione <carlo@endlessm.com>
 
-Applied, and sorry for the trouble.
+The implementation details for SCPI seems to suggest that the sensor
+readings must be reported by SCP using a well defined scale
+(millidegree Celsius for temperature, millivolts for voltage,
+milliamperes for current, microwatts for power and microjoules for
+energy).
 
-Thanks,
-Guenter
+This is also important for the interaction with other subsystems: for
+example both the thermal sub-system and the hwmon sysfs interface expect
+the temperature expressed in millidegree Celsius.
 
-> ---
->  drivers/hwmon/max31790.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index c1b9275..281491c 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -311,7 +311,7 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
->  		data->pwm[channel] = val << 8;
->  		err = i2c_smbus_write_word_swapped(client,
->  						   MAX31790_REG_PWMOUT(channel),
-> -						   val);
-> +						   data->pwm[channel]);
->  		break;
->  	case hwmon_pwm_enable:
->  		fan_config = data->fan_config[channel];
-> --
-> 1.8.3.1
-> 
+Unfortunately since this behaviour is dependent on the firmware
+implementation there are cases where the sensor readings are reported
+using a different scale. For example in the Amlogic SoCs the
+temperature is reported in degree and not millidegree Celsius.
+
+In this patchset we introduce a new DT property `scpi,sensors-scale` that is
+used by the scpi-hwmon driver to convert the sensor readings to the expected
+scale.
+
+v2:
+ - Added data validation (scale != 0)
+ - s/unsigned int/u32/ for the array
+ - Switched to array initialiser notation
+ - Introduced scpi_scale_reading()
+
+Carlo Caione (2):
+  Documentation: bindings: Introduce scpi,sensors-scale
+  hwmon: (scpi) Fix the scale of SCP sensor readings
+
+ Documentation/devicetree/bindings/arm/arm,scpi.txt | 18 ++++++++++++
+ drivers/hwmon/scpi-hwmon.c                         | 34 ++++++++++++++++++++++
+ 2 files changed, 52 insertions(+)
+
+-- 
+2.12.0
