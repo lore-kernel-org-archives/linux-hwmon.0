@@ -1,55 +1,85 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43677 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58233 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752398AbdCEQPb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Mar 2017 11:15:31 -0500
-Subject: Re: [PATCH 2/2] hwmon: Aspeed AST2400/AST2500 ADC
-To: Rob Herring <robh@kernel.org>
-References: <20170228201404.32125-1-raltherr@google.com>
- <20170228201404.32125-2-raltherr@google.com>
- <CACPK8XfOZiNdrQJaDZcSZkJ4gSZZpGy-r9RQAeykeyUS0yzXMA@mail.gmail.com>
- <a512cd6c-972b-0a3b-0c2c-5eb18545798a@roeck-us.net>
- <20170303062133.dvt5g32n26gqio52@rob-hp-laptop>
-Cc: Joel Stanley <joel@jms.id.au>, Rick Altherr <raltherr@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        with ESMTP id S1752290AbdCEQDc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Mar 2017 11:03:32 -0500
+Subject: Re: pmbus platform flag PMBUS_SKIP_STATUS_CHECK
+To: Peter Hanson <peterh@google.com>
+References: <CAPozSNq2KVEJ3bNGMC6wzZotTE7JTEgx1yko5wkxepEq+PJKGw@mail.gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <adbb9c99-d4dc-d5d7-2f44-be835aa51f0a@roeck-us.net>
-Date: Sun, 5 Mar 2017 08:14:57 -0800
+Message-ID: <98f39408-2da1-0ef5-b122-7397012385ab@roeck-us.net>
+Date: Sun, 5 Mar 2017 07:07:22 -0800
 MIME-Version: 1.0
-In-Reply-To: <20170303062133.dvt5g32n26gqio52@rob-hp-laptop>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <CAPozSNq2KVEJ3bNGMC6wzZotTE7JTEgx1yko5wkxepEq+PJKGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 03/02/2017 10:21 PM, Rob Herring wrote:
-> On Tue, Feb 28, 2017 at 07:45:23PM -0800, Guenter Roeck wrote:
->> On 02/28/2017 04:49 PM, Joel Stanley wrote:
->>> On Wed, Mar 1, 2017 at 6:44 AM, Rick Altherr <raltherr@google.com> wrote:
->>>> Aspeed AST2400/AST2500 BMC SoCs include a 16 channel, 10-bit ADC. This
->>>> driver implements reading the ADC values, enabling channels via device
->>>> tree, and optionally providing channel labels via device tree.  Low and
->>>> high threshold interrupts are supported by the hardware but not
->>>> implemented.
->>>>
->>>> Signed-off-by: Rick Altherr <raltherr@google.com>
->>>
->>> Looks good. Some minor comments below.
->>>
->>> Is there a reason you wrote a hwmon driver instead of an iio driver? I
->>> wasn't sure what the recommended subsystem is.
->>
->> Excellent point. Question is really if there is a plan to add support for
->> thresholds. If not, an iio driver might be more appropriate.
+Hi Peter,
+
+On 03/03/2017 04:44 PM, Peter Hanson wrote:
+> Ahoy hwmon maintainers,
 >
-> Sigh. We have ADCs in 2 places? Fine for the kernel I guess, but not
-> bindings.
+> In studying up for some OpenBmc work, I have encountered a family of
+> parts for which the generic pmbus drivers will work, except that their
+> initial configuration silently ignores CLEAR_FAULTS.
 >
 
-Almost every {voltage, current, power, temperature} sensor chip is implemented
-as ADC. Given that, we have (at least) three places. hwmon, iio, thermal.
+Any chance to let us know more about this family of devices ?
+Pointers to datasheets would be most helpful.
 
+> So I'm sending this email for comments on top-level design for most useful fix.
+>
+
+I would prefer to know what devices we are dealing with first.
+
+> There are two classes of fix, and in general, both could be valuable:
+> a) Set PMBUS_SKIP_STATUS_CHECK flag
+>  - caveat: parts must generate I/O errors for unused functions in that case.
+
+and they don't ?
+
+> b) Preconfigure device to enable CLEAR_FAULTS
+>  - caveats: must happen before register checks, affects state of device
+>
+> Either can be accomplished in a special driver, but everything else
+> matches generic pmbus. Moreover, each could be supported with minor
+> adjustments to the generic driver and/or core.
+>
+The idea behind front-end drivers is to handle such inconsistencies.
+That is what the framework is for. Otherwise we could just (try to)
+incorporate all the special handling in the various pmbus drivers
+into the pmbus core.
+
+Small front-end drivers are not really hard to write. Just look at tps40422.c
+or max20751.c.
+
+> Conceptually simplest version of (a):
+> . In pmbus.c, add a new generic compatibility string such as
+> "pmbus-skipstatuscheck"
+> . Set the platform flag when that name is used (perhaps as 3rd parameter)
+>
+> Generic driver logic for (b) would be analogous, but would touch
+> device, not just platform flags.
+>
+> As a variation on (a), I have tested a patch to pmbus_core.c register
+> check logic that rechecks CML after the following CLEAR_FAULTS, and
+> sets PMBUS_SKIP_STATUS_CHECK only when it determines CML can't be
+> cleared.
+>
+I must be missing something. Current code in pmbus_core.c does not set
+PMBUS_SKIP_STATUS_CHECK at all.
+
+> Most platforms can accomplish (b) by scripting reconfiguration and
+> probe in startup. But this is a device quirk, so it seems simplest to
+> solve it by device.
+>
+It might really help to tell us about the affected devices, and maybe
+to publish your suggested changes as RFCs, to give us a better idea what you
+are talking about.
+
+Thanks,
 Guenter
 
