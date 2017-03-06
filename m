@@ -1,71 +1,45 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55628 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750770AbdCEQcI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Mar 2017 11:32:08 -0500
-Subject: Re: [PATCH 2/2] hwmon: Aspeed AST2400/AST2500 ADC
-To: Rick Altherr <raltherr@google.com>
-References: <20170228201404.32125-1-raltherr@google.com>
- <20170228201404.32125-2-raltherr@google.com>
- <CACPK8XfOZiNdrQJaDZcSZkJ4gSZZpGy-r9RQAeykeyUS0yzXMA@mail.gmail.com>
- <a512cd6c-972b-0a3b-0c2c-5eb18545798a@roeck-us.net>
- <CAPLgG==wCZn6Zx5eYdVRsRb6qBEU1g5176jn852EjKcZ9OUPtQ@mail.gmail.com>
-Cc: Joel Stanley <joel@jms.id.au>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <9a2c5522-9ff0-2ee2-af5b-0022b1fdff3a@roeck-us.net>
-Date: Sun, 5 Mar 2017 08:28:19 -0800
+Received: from mx2.suse.de ([195.135.220.15]:49640 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1753010AbdCFLdX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Mar 2017 06:33:23 -0500
+Date: Mon, 6 Mar 2017 12:33:18 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Vasile Dumitrescu <vasile.dumitrescu@undeva.eu>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell XPS 15 9560 into DMI list
+Message-ID: <20170306123318.00d46184@endymion>
+In-Reply-To: <CAHZJmOzdDhnts6-HUKBMoYC6FSj-Hkz=jpcfwV4gFTTEWdB7kg@mail.gmail.com>
+References: <1488580912-13578-1-git-send-email-pali.rohar@gmail.com>
+        <CAHp75Ve4NxQ8=GQGOdwnURRzvgDOGYs1LAwd_NQE=qzWnUVMEg@mail.gmail.com>
+        <CAHZJmOzdDhnts6-HUKBMoYC6FSj-Hkz=jpcfwV4gFTTEWdB7kg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAPLgG==wCZn6Zx5eYdVRsRb6qBEU1g5176jn852EjKcZ9OUPtQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 03/01/2017 07:29 PM, Rick Altherr wrote:
-> Resending in plain text.
->
-> On Tue, Feb 28, 2017 at 7:45 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 02/28/2017 04:49 PM, Joel Stanley wrote:
->>>
->>> On Wed, Mar 1, 2017 at 6:44 AM, Rick Altherr <raltherr@google.com> wrote:
->>>>
->>>> Aspeed AST2400/AST2500 BMC SoCs include a 16 channel, 10-bit ADC. This
->>>> driver implements reading the ADC values, enabling channels via device
->>>> tree, and optionally providing channel labels via device tree.  Low and
->>>> high threshold interrupts are supported by the hardware but not
->>>> implemented.
->>>>
->>>> Signed-off-by: Rick Altherr <raltherr@google.com>
->>>
->>>
->>> Looks good. Some minor comments below.
->>>
->>> Is there a reason you wrote a hwmon driver instead of an iio driver? I
->>> wasn't sure what the recommended subsystem is.
->>
->>
->> Excellent point. Question is really if there is a plan to add support for
->> thresholds. If not, an iio driver might be more appropriate.
->>
->> Guenter
->>
->
-> The hardware supports firing interrupts on high and low thresholds.
-> I'm not planning to use that feature yet so I didn't implement it.
-> Would you prefer that I leave it as is (maybe with a TODO), implement
-> the thresholding, or change to iio?
->
+Hi Vasile,
 
-Let's try to determine the intended use of the ADC. I don't find the datasheet
-online; all I can find is brief summaries which don't me tell much, but suggest
-that it is a general purpose ADC and not specifically intended for hardware
-monitoring. What is the minimum sampling rate ? That should give us an idea.
-If it is in the uS range, iio would be more appropriate (and the iio-hwmon
-bridge could be used if a channel is in fact used for hardware monitoring).
+On Sat, 4 Mar 2017 22:58:26 +0100, Vasile Dumitrescu wrote:
+> ok, but how? I am on Debian,  and I never in my life compiled a kernel...
+> 
+> What would I need to do?
 
-Thanks,
-Guenter
+If your Debian system has a kernel >= 3.13 and you are somewhat
+familiar with compiling from sources, you could give a try to this
+standalone driver:
 
+http://jdelvare.nerim.net/devel/lm-sensors/drivers/dell-smm-hwmon/
+
+Instructions are at:
+
+http://jdelvare.nerim.net/devel/lm-sensors/drivers/INSTALL
+
+-- 
+Jean Delvare
+SUSE L3 Support
