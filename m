@@ -1,103 +1,134 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57293 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:49041 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933174AbdCLO0i (ORCPT
+        with ESMTP id S934791AbdCLR5s (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Mar 2017 10:26:38 -0400
-Date: Sun, 12 Mar 2017 07:26:34 -0700
+        Sun, 12 Mar 2017 13:57:48 -0400
+Subject: Re: [PATCH v3] hwmon: ads7828 optional parameters from the device
+ tree
+To: Sam Povilus <kernel.development@povil.us>, wsa@the-dreams.de,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com
+References: <20170312144739.13276-1-kernel.development@povil.us>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Russell King - ARM Linux <linux@armlinux.org.uk>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: it87 causes VIA hardware to lockup
-Message-ID: <20170312142634.GA1917@roeck-us.net>
-References: <20170312103413.GJ21222@n2100.armlinux.org.uk>
- <20170312132544.GA17687@roeck-us.net>
- <20170312141522.GL21222@n2100.armlinux.org.uk>
+Message-ID: <14108694-9690-15fc-3087-5dbd1ffd5694@roeck-us.net>
+Date: Sun, 12 Mar 2017 10:57:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170312141522.GL21222@n2100.armlinux.org.uk>
+In-Reply-To: <20170312144739.13276-1-kernel.development@povil.us>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Mar 12, 2017 at 02:15:22PM +0000, Russell King - ARM Linux wrote:
-> On Sun, Mar 12, 2017 at 06:25:44AM -0700, Guenter Roeck wrote:
-> > I found some reference suggesting that The IT8705F may respond on
-> > both SIO addresses. Can you try the following patch ?
-> 
-> Thanks for the patch - it'll take about a week or so for me to test,
-> as I can only risk testing it when I'm physically at the machine.
-> 
+On 03/12/2017 07:47 AM, Sam Povilus wrote:
+> Adding the ability for the ads7828 and ads7830 to use the device tree to
+> get their optional parameters, instead of using platform devices. This
+> allows people using custom boards to also use the ads7828 in a non-default
+> manner.
+>
+> Also adding a note to the user if they misconfigure the device's external
+> reference.
+>
+> v2: conforming to coding style
+> v3: changing from "_" to "-" for device tree entries
+> Signed-off-by: Sam Povilus <kernel.development@povil.us>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ads7828.txt    | 18 ++++++++++++++++++
+>  .../devicetree/bindings/i2c/trivial-devices.txt        |  2 --
+>  drivers/hwmon/ads7828.c                                | 15 +++++++++++++++
+>  3 files changed, 33 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ads7828.txt
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/ads7828.txt b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+> new file mode 100644
+> index 000000000000..0d37cd3fd31b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+> @@ -0,0 +1,18 @@
+> +ads7828 properties
+> +
+> +Required properties:
+> +- compatible:
+> +	Should be one of
+> +	       ti,ads7828
+> +	       ti,ads7830
+> +- reg: I2C address
+> +
+> +Optional properties:
+> +
+> +- diff-input
+> +  Set to use the device in differential mode.
 
-My pleasure. Sorry for the trouble. I attached a more comprehensive version
-of the patch.
+I'll wait for Rob to comment, but "differential-input" sounds better to me,
+Also, it would have to have a "ti," prefix.
 
-Thanks,
-Guenter
+> +- ext-vref
+> +  Set to enable the external voltage reference on the device.
+> +- vref-mv
+> +  The external reference on the device is set to this as an unsigned integer in
+> +  milivolts. Must use "ext_vref" for this to have any meaning.
 
----
->From 5b3f92a9e0df49a111a96f43130d2cee370e4c7a Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Sun, 12 Mar 2017 06:18:58 -0700
-Subject: [PATCH] hwmon: (it87) Avoid registering the same chip on both SIO
- addresses
+ext_vref, though as suggested below I think it would be better to use a standard
+property. Also, it seems to me that ext-vref is really unnecessary; the presence
+of "vref" can imply that the reference voltage is external.
 
-IT8705F is known to respond on both SIO addresses. Other chips may have
-the same behavior. Add checks to avoid registering the same chip twice.
+> diff --git a/Documentation/devicetree/bindings/i2c/trivial-devices.txt b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
+> index cdd7b48826c3..87648909f6ce 100644
+> --- a/Documentation/devicetree/bindings/i2c/trivial-devices.txt
+> +++ b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
+> @@ -163,8 +163,6 @@ st,m41t00		Serial real-time clock (RTC)
+>  st,m41t62		Serial real-time clock (RTC) with alarm
+>  st,m41t80		M41T80 - SERIAL ACCESS RTC WITH ALARMS
+>  taos,tsl2550		Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+> -ti,ads7828		8-Channels, 12-bit ADC
+> -ti,ads7830		8-Channels, 8-bit ADC
+>  ti,tsc2003		I2C Touch-Screen Controller
+>  ti,tmp102		Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+>  ti,tmp103		Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index ee396ff167d9..d1f7ba5d7a2b 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -118,6 +118,7 @@ static int ads7828_probe(struct i2c_client *client,
+>  	struct ads7828_data *data;
+>  	struct device *hwmon_dev;
+>  	unsigned int vref_mv = ADS7828_INT_VREF_MV;
+> +	unsigned int vref_mv_tmp;
+>  	bool diff_input = false;
+>  	bool ext_vref = false;
+>  	unsigned int regval;
+> @@ -131,11 +132,25 @@ static int ads7828_probe(struct i2c_client *client,
+>  		ext_vref = pdata->ext_vref;
+>  		if (ext_vref && pdata->vref_mv)
+>  			vref_mv = pdata->vref_mv;
+> +	} else if (dev->of_node) {
+> +		if (of_get_property(dev->of_node, "diff-input", NULL))
+> +			diff_input = true;
+> +		if (of_get_property(dev->of_node, "ext-vref", NULL))
+> +			ext_vref = true;
+> +		if (!of_property_read_u32(dev->of_node, "vref-mv", &vref_mv_tmp)
+> +		   && ext_vref)
+> +			vref_mv = vref_mv_tmp;
 
-Fixes: e84bd9535e2b ("hwmon: (it87) Add support for second Super-IO chip")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/it87.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+Please consider using devm_regulator_get_optional() and thus standard properties.
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 3e57a6120551..7053968fe0d3 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -3197,7 +3197,7 @@ static int __init sm_it87_init(void)
- {
- 	int sioaddr[2] = { REG_2E, REG_4E };
- 	struct it87_sio_data sio_data;
--	unsigned short isa_address;
-+	unsigned short isa_address[2];
- 	bool found = false;
- 	int i, err;
- 
-@@ -3207,15 +3207,29 @@ static int __init sm_it87_init(void)
- 
- 	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
- 		memset(&sio_data, 0, sizeof(struct it87_sio_data));
--		isa_address = 0;
--		err = it87_find(sioaddr[i], &isa_address, &sio_data);
--		if (err || isa_address == 0)
-+		isa_address[i] = 0;
-+		err = it87_find(sioaddr[i], &isa_address[i], &sio_data);
-+		if (err || isa_address[i] == 0)
- 			continue;
-+		/*
-+		 * Don't register second chip if its ISA address matches
-+		 * the first chip's ISA address.
-+		 */
-+		if (i && isa_address[i] == isa_address[0])
-+			break;
- 
--		err = it87_device_add(i, isa_address, &sio_data);
-+		err = it87_device_add(i, isa_address[i], &sio_data);
- 		if (err)
- 			goto exit_dev_unregister;
-+
- 		found = true;
-+
-+		/*
-+		 * IT8705F may respond on both SIO addresses.
-+		 * Stop probing after finding one.
-+		 */
-+		if (sio_data.type == it87)
-+			break;
- 	}
- 
- 	if (!found) {
--- 
-2.7.4
+>  	}
+>
+>  	/* Bound Vref with min/max values */
+> +	vref_mv_tmp = vref_mv;
+>  	vref_mv = clamp_val(vref_mv, ADS7828_EXT_VREF_MV_MIN,
+>  			    ADS7828_EXT_VREF_MV_MAX);
+> +	if (vref_mv_tmp != vref_mv) {
+> +		pr_info("You used and invalid external vref,"
+> +			" it has been clamped to %u",
+> +			vref_mv);
+> +	}
+
+This is an unrelated change.
+
+>
+>  	/* ADS7828 uses 12-bit samples, while ADS7830 is 8-bit */
+>  	if (id->driver_data == ads7828) {
+>
 
