@@ -1,41 +1,107 @@
-Return-path: <linux@roeck-us.net>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (it87) Fix feature mask for IT8792E (IT8733E)
-Date: Sat, 11 Mar 2017 07:17:26 -0800
-Message-Id: <1489245446-6352-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-io0-f195.google.com ([209.85.223.195]:36693 "EHLO
+        mail-io0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933040AbdCLDdP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Mar 2017 22:33:15 -0500
+Received: by mail-io0-f195.google.com with SMTP id 68so10500405ioh.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Mar 2017 19:33:14 -0800 (PST)
+From: Sam Povilus <kernel.development@povil.us>
+To: wsa@the-dreams.de, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc: Sam Povilus <kernel.development@povil.us>
+Subject: [PATCH v2] Adding the ability for the ads7828 and ads7830 to use the device tree to get thier optional parameters, instead of using platform devices. This allows people using custom boards to also use the ads7828 in a non-default manner.
+Date: Sat, 11 Mar 2017 20:32:54 -0700
+Message-Id: <20170312033254.14799-1-kernel.development@povil.us>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The chip features match those of IT8790E. Most important is the
-ADC resolution, which is 12 mV, not 10.9 mV. It also uses the 'new'
-set of registers for PECI control, and has a second PWM frequency
-register.
+Also adding a note to the user if they misconfigure the device's external
+reference.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sam Povilus <kernel.development@povil.us>
 ---
- drivers/hwmon/it87.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/hwmon/ads7828.txt    | 18 ++++++++++++++++++
+ .../devicetree/bindings/i2c/trivial-devices.txt        |  2 --
+ drivers/hwmon/ads7828.c                                | 15 +++++++++++++++
+ 3 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ads7828.txt
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index efb01c247e2d..3e57a6120551 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -428,11 +428,10 @@ static const struct it87_devices it87_devices[] = {
- 	[it8792] = {
- 		.name = "it8792",
- 		.suffix = "E",
--		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
--		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
--		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL,
-+		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
-+		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
-+		  | FEAT_PWM_FREQ2,
- 		.peci_mask = 0x07,
--		.old_peci_mask = 0x02,	/* Actually reports PCH */
- 	},
- 	[it8603] = {
- 		.name = "it8603",
+diff --git a/Documentation/devicetree/bindings/hwmon/ads7828.txt b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+new file mode 100644
+index 000000000000..7cd786585b51
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+@@ -0,0 +1,18 @@
++ads7828 properties
++
++Required properties:
++- compatible:
++	Should be one of
++	       ti,ads7828
++	       ti,ads7830
++- reg: I2C address
++
++Optional properties:
++
++- diff_input
++  Set to use the device in differential mode.
++- ext_vref
++  Set to enable the external voltage reference on the device.
++- vref_mv
++  The external reference on the device is set to this as an unsigned integer in
++  milivolts. Must use "ext_vref" for this to have any meaning.
+diff --git a/Documentation/devicetree/bindings/i2c/trivial-devices.txt b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
+index cdd7b48826c3..87648909f6ce 100644
+--- a/Documentation/devicetree/bindings/i2c/trivial-devices.txt
++++ b/Documentation/devicetree/bindings/i2c/trivial-devices.txt
+@@ -163,8 +163,6 @@ st,m41t00		Serial real-time clock (RTC)
+ st,m41t62		Serial real-time clock (RTC) with alarm
+ st,m41t80		M41T80 - SERIAL ACCESS RTC WITH ALARMS
+ taos,tsl2550		Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+-ti,ads7828		8-Channels, 12-bit ADC
+-ti,ads7830		8-Channels, 8-bit ADC
+ ti,tsc2003		I2C Touch-Screen Controller
+ ti,tmp102		Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+ ti,tmp103		Low Power Digital Temperature Sensor with SMBUS/Two Wire Serial Interface
+diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+index ee396ff167d9..05fc0ac06c06 100644
+--- a/drivers/hwmon/ads7828.c
++++ b/drivers/hwmon/ads7828.c
+@@ -118,6 +118,7 @@ static int ads7828_probe(struct i2c_client *client,
+ 	struct ads7828_data *data;
+ 	struct device *hwmon_dev;
+ 	unsigned int vref_mv = ADS7828_INT_VREF_MV;
++	unsigned int vref_mv_tmp;
+ 	bool diff_input = false;
+ 	bool ext_vref = false;
+ 	unsigned int regval;
+@@ -131,11 +132,25 @@ static int ads7828_probe(struct i2c_client *client,
+ 		ext_vref = pdata->ext_vref;
+ 		if (ext_vref && pdata->vref_mv)
+ 			vref_mv = pdata->vref_mv;
++	} else if (dev->of_node) {
++		if (of_get_property(dev->of_node, "diff_input", NULL))
++			diff_input = true;
++		if (of_get_property(dev->of_node, "ext_vref", NULL))
++			ext_vref = true;
++		if (!of_property_read_u32(dev->of_node, "vref_mv", &vref_mv_tmp)
++		   && ext_vref)
++			vref_mv = vref_mv_tmp;
+ 	}
+ 
+ 	/* Bound Vref with min/max values */
++	vref_mv_tmp = vref_mv;
+ 	vref_mv = clamp_val(vref_mv, ADS7828_EXT_VREF_MV_MIN,
+ 			    ADS7828_EXT_VREF_MV_MAX);
++	if (vref_mv_tmp != vref_mv) {
++		pr_info("You used and invalid external vref,"
++			" it has been clamped to %u",
++			vref_mv);
++	}
+ 
+ 	/* ADS7828 uses 12-bit samples, while ADS7830 is 8-bit */
+ 	if (id->driver_data == ads7828) {
 -- 
-2.7.4
+2.11.0
+
