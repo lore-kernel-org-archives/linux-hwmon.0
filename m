@@ -1,133 +1,97 @@
-Return-path: <robherring2@gmail.com>
-Date: Thu, 30 Mar 2017 17:46:15 -0500
-From: Rob Herring <robh@kernel.org>
-To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Cc: joel@jms.id.au, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-	mark.rutland@arm.com, devicetree@vger.kernel.org
-Subject: Re: [PATCH linux v5 1/2] Documentation: dt-bindings: Document
- bindings for ASPEED AST2400/AST2500 PWM and Fan tach controller device
- driver
-Message-ID: <20170330224615.a3pxgigtk6v6ceyd@rob-hp-laptop>
-References: <20170324181723.29379-1-jaghu@google.com>
- <20170324181723.29379-2-jaghu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170324181723.29379-2-jaghu@google.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49715 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1752848AbdCNUzR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 14 Mar 2017 16:55:17 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v2EKreEl069800
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:16 -0400
+Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 296nfvxw9p-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:16 -0400
+Received: from localhost
+        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Tue, 14 Mar 2017 16:55:15 -0400
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux@roeck-us.net
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
+        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
+        benh@kernel.crashing.org, joel@jms.id.au,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH linux v9 0/5] drivers: hwmon: Add On-Chip Controller driver
+Date: Tue, 14 Mar 2017 15:55:01 -0500
+Message-Id: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 24, 2017 at 11:17:22AM -0700, Jaghathiswari Rankappagounder Natarajan wrote:
-> This binding provides interface for adding values related to ASPEED
-> AST2400/2500 PWM and Fan tach controller support.
-> The PWM controller can support upto 8 PWM output ports.
-> The Fan tach controller can support upto 16 tachometer inputs.
-> 
-> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-> ---
->  v5:
-> - Changed the naming scheme to aspeed,ast2400/2500-pwm-tacho
-> - Removed gpio pin muxing
-> - Added aspeed vendor prefix for fan-tach-ch
-> - Changed to fan@0/1
-> - Changed reg to 32 bits
-> 
->  v4:
-> - Used 'reg'
-> 
->  v3:
-> - Made the structure more common
-> 
->  v2:
-> - Removed '_' in node and property names
-> - Gave some explanation for the properties used
-> 
->  .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> new file mode 100644
-> index 000000000000..f96d32bfcdfa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> @@ -0,0 +1,68 @@
-> +ASPEED AST2400/AST2500 PWM and Fan Tacho controller device driver
-> +
-> +The ASPEED PWM controller can support upto 8 PWM outputs. The ASPEED Fan Tacho
-> +controller can support upto 16 Fan tachometer inputs.
-> +
-> +There can be upto 8 fans supported. Each fan can have one PWM output and
-> +one/two Fan tach inputs.
-> +
-> +Required properties for pwm-tacho node:
-> +- #address-cells : should be 1.
-> +
-> +- #size-cells : should be 1.
-> +
-> +- reg : address and length of the register set for the device.
-> +
-> +- pinctrl-names : a pinctrl state named "default" must be defined.
-> +
-> +- pinctrl-0 : phandle referencing pin configuration of the PWM ports.
-> +
-> +- compatible : should be "aspeed,ast2400-pwm-tacho" for AST2400 and
-> +	       "aspeed,ast2500-pwm-tacho" for AST2500.
-> +
-> +- clocks : a fixed clock providing input clock frequency(PWM
-> +	   and Fan Tach clock)
-> +
-> +fan subnode format:
-> +===================
-> +Under fan subnode there can upto 8 child nodes, with each child node
-> +representing a fan. If there are 8 fans each fan can have one PWM port and
-> +one/two Fan tach inputs.
-> +
-> +Required properties for each child node:
-> +- reg : should specify PWM source port.
-> +	integer value in the range 0 to 7 with 0 indicating PWM port A and
-> +	7 indicating PWM port H.
-> +
-> +- aspeed-fan-tach-ch : should specify the Fan tach input channel.
+From: "Edward A. James" <eajames@us.ibm.com>
 
-aspeed,fan-tach-ch
+This patchset adds a hwmon driver to support the OCC (On-Chip Controller)
+on the IBM POWER8 and POWER9 processors, from a BMC (Baseboard Management
+Controller). The OCC is an embedded processor that provides real time
+power and thermal monitoring.
 
-With that,
+The driver provides an interface on a BMC to poll OCC sensor data, set
+user power caps, and perform some basic OCC error handling. It interfaces
+with userspace through hwmon.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The driver is currently functional only for the OCC on POWER8 chips.
+Communicating with the POWER9 OCC requries FSI support.
 
-> +                integer value in the range 0 through 15, with 0 indicating
-> +		Fan tach channel 0 and 15 indicating Fan tach channel 15.
-> +		Atleast one Fan tach input channel is required.
-> +
-> +Examples:
-> +
-> +pwm_tacho_fixed_clk: fixedclk {
-> +	compatible = "fixed-clock";
-> +	#clock-cells = <0>;
-> +	clock-frequency = <24000000>;
-> +}
-> +
-> +pwm_tacho: pwmtachocontroller@1e786000 {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +	reg = <0x1E786000 0x1000>;
-> +	compatible = "aspeed,ast2500-pwm-tacho";
-> +	clocks = <&pwm_tacho_fixed_clk>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default>;
-> +
-> +	fan@0 {
-> +		reg = <0x00>;
-> +		aspeed-fan-tach-ch = /bits/ 8 <0x00>;
-> +	};
-> +
-> +	fan@1 {
-> +		reg = <0x01>;
-> +		aspeed-fan-tach-ch = /bits/ 8 <0x01 0x02>;
-> +	};
-> +};
-> --
-> 2.12.1.578.ge9c3154ca4-goog
-> 
+since v8:
+ * drop P9 sensors patch. This patch was mainly included to demonstrate
+why we abstracted out the sensor-specific code into the occ_p8 functions.
+However, since we haven't submitted the transfer protocol to the OCC for
+P9 yet, we shouldn't submit this unused P9 code yet.
+ * fix string access in hwmon read_string() function. Thanks Guenter.
+ * change parameter to const char ** in read_string() function to match
+upcoming hwmon code.
+
+Edward A. James (5):
+  hwmon: Add core On-Chip Controller support for POWER CPUs
+  hwmon: occ: Add sysfs interface
+  hwmon: occ: Add I2C transport implementation for SCOM operations
+  hwmon: occ: Add callbacks for parsing P8 OCC datastructures
+  hwmon: occ: Add hwmon implementation for the P8 OCC
+
+ Documentation/devicetree/bindings/hwmon/occ.txt |  13 +
+ Documentation/hwmon/occ                         | 113 ++++++
+ MAINTAINERS                                     |   7 +
+ drivers/hwmon/Kconfig                           |   2 +
+ drivers/hwmon/Makefile                          |   1 +
+ drivers/hwmon/occ/Kconfig                       |  28 ++
+ drivers/hwmon/occ/Makefile                      |   3 +
+ drivers/hwmon/occ/occ.c                         | 440 ++++++++++++++++++++++++
+ drivers/hwmon/occ/occ.h                         |  77 +++++
+ drivers/hwmon/occ/occ_p8.c                      | 256 ++++++++++++++
+ drivers/hwmon/occ/occ_p8.h                      |  25 ++
+ drivers/hwmon/occ/occ_p8_i2c.c                  |  99 ++++++
+ drivers/hwmon/occ/occ_scom_i2c.c                |  69 ++++
+ drivers/hwmon/occ/occ_scom_i2c.h                |  21 ++
+ drivers/hwmon/occ/occ_sysfs.c                   | 253 ++++++++++++++
+ drivers/hwmon/occ/occ_sysfs.h                   |  25 ++
+ drivers/hwmon/occ/scom.h                        |  42 +++
+ 17 files changed, 1474 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/occ.c
+ create mode 100644 drivers/hwmon/occ/occ.h
+ create mode 100644 drivers/hwmon/occ/occ_p8.c
+ create mode 100644 drivers/hwmon/occ/occ_p8.h
+ create mode 100644 drivers/hwmon/occ/occ_p8_i2c.c
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
+ create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.c
+ create mode 100644 drivers/hwmon/occ/occ_sysfs.h
+ create mode 100644 drivers/hwmon/occ/scom.h
+
+-- 
+1.8.3.1
+
