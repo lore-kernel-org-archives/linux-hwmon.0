@@ -1,20 +1,20 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49715 "EHLO
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50843 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1752848AbdCNUzR (ORCPT
+        by vger.kernel.org with ESMTP id S1753214AbdCNUzg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Mar 2017 16:55:17 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v2EKreEl069800
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:16 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 296nfvxw9p-1
+        Tue, 14 Mar 2017 16:55:36 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v2EKrZBc046523
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:29 -0400
+Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 296nna626q-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:16 -0400
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:29 -0400
 Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Tue, 14 Mar 2017 16:55:15 -0400
+        Tue, 14 Mar 2017 16:55:29 -0400
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux@roeck-us.net
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -23,75 +23,188 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
         benh@kernel.crashing.org, joel@jms.id.au,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH linux v9 0/5] drivers: hwmon: Add On-Chip Controller driver
-Date: Tue, 14 Mar 2017 15:55:01 -0500
-Message-Id: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
+Subject: [PATCH linux v9 5/5] hwmon: occ: Add hwmon implementation for the P8 OCC
+Date: Tue, 14 Mar 2017 15:55:06 -0500
+In-Reply-To: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1489524906-19411-6-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-This patchset adds a hwmon driver to support the OCC (On-Chip Controller)
-on the IBM POWER8 and POWER9 processors, from a BMC (Baseboard Management
-Controller). The OCC is an embedded processor that provides real time
-power and thermal monitoring.
+Add code to tie the hwmon sysfs code and the POWER8 OCC code together,
+as well as probe the entire driver from the I2C bus. I2C is the
+communication method between the BMC and the P8 OCC.
 
-The driver provides an interface on a BMC to poll OCC sensor data, set
-user power caps, and perform some basic OCC error handling. It interfaces
-with userspace through hwmon.
-
-The driver is currently functional only for the OCC on POWER8 chips.
-Communicating with the POWER9 OCC requries FSI support.
-
-since v8:
- * drop P9 sensors patch. This patch was mainly included to demonstrate
-why we abstracted out the sensor-specific code into the occ_p8 functions.
-However, since we haven't submitted the transfer protocol to the OCC for
-P9 yet, we shouldn't submit this unused P9 code yet.
- * fix string access in hwmon read_string() function. Thanks Guenter.
- * change parameter to const char ** in read_string() function to match
-upcoming hwmon code.
-
-Edward A. James (5):
-  hwmon: Add core On-Chip Controller support for POWER CPUs
-  hwmon: occ: Add sysfs interface
-  hwmon: occ: Add I2C transport implementation for SCOM operations
-  hwmon: occ: Add callbacks for parsing P8 OCC datastructures
-  hwmon: occ: Add hwmon implementation for the P8 OCC
-
- Documentation/devicetree/bindings/hwmon/occ.txt |  13 +
- Documentation/hwmon/occ                         | 113 ++++++
- MAINTAINERS                                     |   7 +
- drivers/hwmon/Kconfig                           |   2 +
- drivers/hwmon/Makefile                          |   1 +
- drivers/hwmon/occ/Kconfig                       |  28 ++
- drivers/hwmon/occ/Makefile                      |   3 +
- drivers/hwmon/occ/occ.c                         | 440 ++++++++++++++++++++++++
- drivers/hwmon/occ/occ.h                         |  77 +++++
- drivers/hwmon/occ/occ_p8.c                      | 256 ++++++++++++++
- drivers/hwmon/occ/occ_p8.h                      |  25 ++
- drivers/hwmon/occ/occ_p8_i2c.c                  |  99 ++++++
- drivers/hwmon/occ/occ_scom_i2c.c                |  69 ++++
- drivers/hwmon/occ/occ_scom_i2c.h                |  21 ++
- drivers/hwmon/occ/occ_sysfs.c                   | 253 ++++++++++++++
- drivers/hwmon/occ/occ_sysfs.h                   |  25 ++
- drivers/hwmon/occ/scom.h                        |  42 +++
- 17 files changed, 1474 insertions(+)
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
+Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/hwmon/occ.txt | 13 ++++
+ drivers/hwmon/occ/Kconfig                       | 15 ++++
+ drivers/hwmon/occ/Makefile                      |  4 +-
+ drivers/hwmon/occ/occ_p8_i2c.c                  | 99 +++++++++++++++++++++++++
+ 4 files changed, 130 insertions(+), 1 deletion(-)
  create mode 100644 Documentation/devicetree/bindings/hwmon/occ.txt
- create mode 100644 Documentation/hwmon/occ
- create mode 100644 drivers/hwmon/occ/Kconfig
- create mode 100644 drivers/hwmon/occ/Makefile
- create mode 100644 drivers/hwmon/occ/occ.c
- create mode 100644 drivers/hwmon/occ/occ.h
- create mode 100644 drivers/hwmon/occ/occ_p8.c
- create mode 100644 drivers/hwmon/occ/occ_p8.h
  create mode 100644 drivers/hwmon/occ/occ_p8_i2c.c
- create mode 100644 drivers/hwmon/occ/occ_scom_i2c.c
- create mode 100644 drivers/hwmon/occ/occ_scom_i2c.h
- create mode 100644 drivers/hwmon/occ/occ_sysfs.c
- create mode 100644 drivers/hwmon/occ/occ_sysfs.h
- create mode 100644 drivers/hwmon/occ/scom.h
 
+diff --git a/Documentation/devicetree/bindings/hwmon/occ.txt b/Documentation/devicetree/bindings/hwmon/occ.txt
+new file mode 100644
+index 0000000..b0d2b36
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/occ.txt
+@@ -0,0 +1,13 @@
++HWMON I2C driver for IBM POWER CPU OCC (On Chip Controller)
++
++Required properties:
++ - compatible: must be "ibm,p8-occ-i2c"
++ - reg: physical address
++
++Example:
++i2c3: i2c-bus@100 {
++	occ@50 {
++		compatible = "ibm,p8-occ-i2c";
++		reg = <0x50>;
++	};
++};
+diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
+index 61be588..d521720 100644
+--- a/drivers/hwmon/occ/Kconfig
++++ b/drivers/hwmon/occ/Kconfig
+@@ -11,3 +11,18 @@ menuconfig SENSORS_IBM_OCC
+ 
+ 	  Generally this is used by management controllers such as a BMC
+ 	  on an OpenPower system.
++
++if SENSORS_IBM_OCC
++
++config SENSORS_IBM_OCC_P8_I2C
++	tristate "POWER8 OCC hwmon support"
++	depends on I2C
++	help
++	  Provide a hwmon sysfs interface for the POWER8 On-Chip Controller,
++	  exposing temperature, frequency and power measurements. This
++	  interface runs on the service processor, not the POWER CPU.
++
++	  This driver can also be built as a module. If so, the module will be
++	  called hwmon_occ_p8.
++
++endif
+diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
+index f59cca4..864b044 100644
+--- a/drivers/hwmon/occ/Makefile
++++ b/drivers/hwmon/occ/Makefile
+@@ -1 +1,3 @@
+-obj-$(CONFIG_SENSORS_IBM_OCC) += occ.o occ_sysfs.o occ_scom_i2c.o occ_p8.o
++obj-$(CONFIG_SENSORS_IBM_OCC_P8_I2C) += hwmon_occ_p8.o
++
++hwmon_occ_p8-objs := occ.o occ_sysfs.o occ_scom_i2c.o occ_p8.o occ_p8_i2c.o
+diff --git a/drivers/hwmon/occ/occ_p8_i2c.c b/drivers/hwmon/occ/occ_p8_i2c.c
+new file mode 100644
+index 0000000..2b4f6dd
+--- /dev/null
++++ b/drivers/hwmon/occ/occ_p8_i2c.c
+@@ -0,0 +1,99 @@
++/*
++ * occ_p8_i2c.c - hwmon OCC driver
++ *
++ * This file contains the i2c layer for accessing the P8 OCC over i2c bus.
++ *
++ * Copyright 2017 IBM Corp.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ */
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/slab.h>
++#include "occ_p8.h"
++#include "occ_scom_i2c.h"
++#include "occ_sysfs.h"
++#include "scom.h"
++
++#define OCC_P8_I2C_NAME	"p8-occ-i2c"
++
++int p8_i2c_getscom(void *bus, u32 address, u64 *data)
++{
++	/* P8 i2c slave requires scom address to be shifted by 1 */
++	address = address << 1;
++
++	return occ_i2c_getscom(bus, address, data);
++}
++
++int p8_i2c_putscom(void *bus, u32 address, u32 data0, u32 data1)
++{
++	/* P8 i2c slave requires scom address to be shifted by 1 */
++	address = address << 1;
++
++	return occ_i2c_putscom(bus, address, data0, data1);
++}
++
++static const struct occ_bus_ops p8_bus_ops = {
++	.getscom = p8_i2c_getscom,
++	.putscom = p8_i2c_putscom,
++};
++
++static int p8_occ_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct occ *occ;
++	struct occ_sysfs *hwmon;
++	const u32 *sensor_hwmon_configs = p8_get_sensor_hwmon_configs();
++
++	occ = p8_occ_init(&client->dev, client, &p8_bus_ops);
++	if (IS_ERR(occ))
++		return PTR_ERR(occ);
++
++	hwmon = occ_sysfs_start(&client->dev, occ, sensor_hwmon_configs,
++				OCC_P8_I2C_NAME);
++	if (IS_ERR(hwmon))
++		return PTR_ERR(hwmon);
++
++	i2c_set_clientdata(client, occ);
++
++	return 0;
++}
++
++/* used by old-style board info. */
++static const struct i2c_device_id occ_ids[] = {
++	{ OCC_P8_I2C_NAME, 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, occ_ids);
++
++/* used by device table */
++static const struct of_device_id occ_of_match[] = {
++	{ .compatible = "ibm,p8-occ-i2c" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, occ_of_match);
++
++static struct i2c_driver p8_occ_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = OCC_P8_I2C_NAME,
++		.of_match_table = occ_of_match,
++	},
++	.probe = p8_occ_probe,
++	.id_table = occ_ids,
++};
++
++module_i2c_driver(p8_occ_driver);
++
++MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
++MODULE_DESCRIPTION("BMC P8 OCC hwmon driver");
++MODULE_LICENSE("GPL");
 -- 
 1.8.3.1
 
