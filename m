@@ -1,138 +1,55 @@
-Return-path: <carlo.caione@gmail.com>
-Sender: Carlo Caione <carlo.caione@gmail.com>
-From: Carlo Caione <carlo@caione.org>
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux@endlessm.com,
-	punit.agrawal@arm.com,
-	sudeep.holla@arm.com,
-	robh+dt@kernel.org,
-	devicetree@vger.kernel.org
-Cc: Carlo Caione <carlo@endlessm.com>
-Subject: [PATCH v3 2/2] hwmon: (scpi) Fix the scale of SCP sensor readings
-Date: Thu,  9 Mar 2017 11:17:59 +0100
-Message-Id: <20170309101759.18081-3-carlo@caione.org>
-In-Reply-To: <20170309101759.18081-1-carlo@caione.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from foss.arm.com ([217.140.101.70]:51194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751487AbdCOSa1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 15 Mar 2017 14:30:27 -0400
+Subject: Re: [PATCH v3 1/2] Documentation: bindings: Introduce
+ scpi,sensors-scale
+To: Carlo Caione <carlo@caione.org>, jdelvare@suse.com,
+        linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux@endlessm.com,
+        punit.agrawal@arm.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
 References: <20170309101759.18081-1-carlo@caione.org>
-List-ID: <linux-hwmon@vger.kernel.org>
+ <20170309101759.18081-2-carlo@caione.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+        Carlo Caione <carlo@endlessm.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
+Message-ID: <57ff035a-b462-6f5d-0100-051e99e9a2b6@arm.com>
+Date: Wed, 15 Mar 2017 18:20:33 +0000
+MIME-Version: 1.0
+In-Reply-To: <20170309101759.18081-2-carlo@caione.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-From: Carlo Caione <carlo@endlessm.com>
 
-The implementation details for SCPI seems to suggest that the sensor
-readings must be reported by SCP using a well defined scale
-(millidegree Celsius for temperature, millivolts for voltage,
-milliamperes for current, microwatts for power and microjoules for
-energy).
 
-This is also important for the interaction with other subsystems: for
-example both the thermal sub-system and the hwmon sysfs interface expect
-the temperature expressed in millidegree Celsius.
+On 09/03/17 10:17, Carlo Caione wrote:
+> From: Carlo Caione <carlo@endlessm.com>
+> 
+> Document the new property `scpi,sensors-scale` used by the hwmon-scpi
+> driver to convert the sensor readings to the correct / expected scale.
+> 
 
-Unfortunately since this behaviour is dependent on the firmware
-implementation there are cases where the sensor readings are reported
-using a different scale. For example in the Amlogic SoCs the
-temperature is reported in degree and not millidegree Celsius.
+I am fine with DT bindings if DT maintainers agree with having one but I
+would like to add couple of points to get their feedback:
 
-To take into account this discrepancy and fixup the values reported by
-SCP a new DT property `scpi,sensors-scale' is introduced and used in
-this patch by the scpi-hwmon driver to convert the sensor readings to
-the expected scale.
+1. ARM recognized the drawbacks of SCPI which started informally with
+   ARM Ltd platforms and got adopted by few vendors. It's now being
+   worked on and a much better and scalable replacement protocol is
+   being discussed with vendors now. So future enhancement to this SCPI
+   protocol is unlikely.
 
-Acked-by: Punit Agrawal <punit.agrawal@arm.com>
-Signed-off-by: Carlo Caione <carlo@endlessm.com>
----
- drivers/hwmon/scpi-hwmon.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+2. AmLogic has diverted from base protocol in many ways and most of them
+   are handled with just compatible so far without any need for
+   additional bindings. Can we avoid it ?
 
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 094f948..4a4b8a4 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -23,6 +23,7 @@
- #include <linux/thermal.h>
- 
- struct sensor_data {
-+	unsigned int scale;
- 	struct scpi_sensor_info info;
- 	struct device_attribute dev_attr_input;
- 	struct device_attribute dev_attr_label;
-@@ -44,6 +45,22 @@ struct scpi_sensors {
- 	const struct attribute_group *groups[2];
- };
- 
-+static const u32 scpi_scale[] = {
-+	[TEMPERATURE]	= 1000,		/* (millicelsius)	*/
-+	[VOLTAGE]	= 1000,		/* (millivolts)		*/
-+	[CURRENT]	= 1000,		/* (milliamperes)	*/
-+	[POWER]		= 1000000,	/* (microwatts)		*/
-+	[ENERGY]	= 1000000,	/* (microjoules)	*/
-+};
-+
-+static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
-+{
-+	if (scpi_scale[sensor->info.class] != sensor->scale) {
-+		*value *= scpi_scale[sensor->info.class];
-+		do_div(*value, sensor->scale);
-+	}
-+}
-+
- static int scpi_read_temp(void *dev, int *temp)
- {
- 	struct scpi_thermal_zone *zone = dev;
-@@ -57,6 +74,8 @@ static int scpi_read_temp(void *dev, int *temp)
- 	if (ret)
- 		return ret;
- 
-+	scpi_scale_reading(&value, sensor);
-+
- 	*temp = value;
- 	return 0;
- }
-@@ -77,6 +96,8 @@ scpi_show_sensor(struct device *dev, struct device_attribute *attr, char *buf)
- 	if (ret)
- 		return ret;
- 
-+	scpi_scale_reading(&value, sensor);
-+
- 	return sprintf(buf, "%llu\n", value);
- }
- 
-@@ -97,6 +118,7 @@ static struct thermal_zone_of_device_ops scpi_sensor_ops = {
- static int scpi_hwmon_probe(struct platform_device *pdev)
- {
- 	u16 nr_sensors, i;
-+	u32 scale[] = { 1000, 1000, 1000, 1000000, 1000000 };
- 	int num_temp = 0, num_volt = 0, num_current = 0, num_power = 0;
- 	int num_energy = 0;
- 	struct scpi_ops *scpi_ops;
-@@ -131,6 +153,16 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 
- 	scpi_sensors->scpi_ops = scpi_ops;
- 
-+	of_property_read_u32_array(dev->of_node, "scpi,sensors-scale",
-+				   scale, ARRAY_SIZE(scale));
-+
-+	for (i = 0; i < ARRAY_SIZE(scale); i++) {
-+		if (!scale[i]) {
-+			dev_err(dev, "%s: scale cannot be zero (%d)\n", __func__, i);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	for (i = 0, idx = 0; i < nr_sensors; i++) {
- 		struct sensor_data *sensor = &scpi_sensors->data[idx];
- 
-@@ -178,6 +210,8 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 			continue;
- 		}
- 
-+		sensor->scale = scale[sensor->info.class];
-+
- 		sensor->dev_attr_input.attr.mode = S_IRUGO;
- 		sensor->dev_attr_input.show = scpi_show_sensor;
- 		sensor->dev_attr_input.attr.name = sensor->input;
+So based on these, I prefer not to add more bindings to handle such
+deviations but make it just AmLogic specific.
+
 -- 
-2.9.3
+Regards,
+Sudeep
