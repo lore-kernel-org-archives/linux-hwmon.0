@@ -1,61 +1,40 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39020 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751042AbdCYVyA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Mar 2017 17:54:00 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.11-rc4
-Date: Sat, 25 Mar 2017 14:53:32 -0700
-Message-Id: <1490478812-13247-1-git-send-email-linux@roeck-us.net>
+Received: from mout.gmx.net ([212.227.17.22]:64772 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752075AbdCPX1j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Mar 2017 19:27:39 -0400
+From: Peter Huewe <peterhuewe@gmx.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>
+Subject: [PATCH] hwmon: Add missing HWMON_T_ALARM
+Date: Fri, 17 Mar 2017 00:28:56 +0100
+Message-Id: <1489706936-26535-1-git-send-email-peterhuewe@gmx.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Unfortunately the HWMON_T_ALARM define was missing,
+although the associated entry was present in hwmon_temp_attributes.
+This is needed to convert drivers to the new interface which use channel
+based alarms.
 
-Please pull hwmon fixes for Linux v4.11-rc4 from signed tag:
+Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
+---
+ include/linux/hwmon.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.11-rc4
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 78d59dba563e..88b673749121 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -88,6 +88,7 @@ enum hwmon_temp_attributes {
+ #define HWMON_T_CRIT_HYST	BIT(hwmon_temp_crit_hyst)
+ #define HWMON_T_EMERGENCY	BIT(hwmon_temp_emergency)
+ #define HWMON_T_EMERGENCY_HYST	BIT(hwmon_temp_emergency_hyst)
++#define HWMON_T_ALARM		BIT(hwmon_temp_alarm)
+ #define HWMON_T_MIN_ALARM	BIT(hwmon_temp_min_alarm)
+ #define HWMON_T_MAX_ALARM	BIT(hwmon_temp_max_alarm)
+ #define HWMON_T_CRIT_ALARM	BIT(hwmon_temp_crit_alarm)
+-- 
+2.7.3
 
-Thanks,
-Guenter
-------
-
-The following changes since commit 97da3854c526d3a6ee05c849c96e48d21527606c:
-
-  Linux 4.11-rc3 (2017-03-19 19:09:39 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.11-rc4
-
-for you to fetch changes up to a2125d02443e9a4e68bcfd9f8004fa23239e8329:
-
-  hwmon: (asus_atk0110) fix uninitialized data access (2017-03-23 12:01:57 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v4.11-rc4
-
-Bug fixes in asus_atk0110, it87, and max31790 drivers.
-Added missing API definition to hwmon core.
-
-----------------------------------------------------------------
-Alex Hemme (1):
-      hwmon: (max31790) Set correct PWM value
-
-Arnd Bergmann (1):
-      hwmon: (asus_atk0110) fix uninitialized data access
-
-Guenter Roeck (1):
-      hwmon: (it87) Avoid registering the same chip on both SIO addresses
-
-Peter Huewe (1):
-      hwmon: Add missing HWMON_T_ALARM
-
- drivers/hwmon/asus_atk0110.c |  3 +++
- drivers/hwmon/it87.c         | 24 +++++++++++++++++++-----
- drivers/hwmon/max31790.c     |  2 +-
- include/linux/hwmon.h        |  1 +
- 4 files changed, 24 insertions(+), 6 deletions(-)
