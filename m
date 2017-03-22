@@ -1,41 +1,77 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-io0-f196.google.com ([209.85.223.196]:33880 "EHLO
-        mail-io0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1759401AbdCVNGi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Mar 2017 09:06:38 -0400
-Received: by mail-io0-f196.google.com with SMTP id n76so10156342ioe.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Mar 2017 06:06:00 -0700 (PDT)
-Date: Wed, 22 Mar 2017 07:05:55 -0600
-From: Sam Povilus <kernel.development@povil.us>
-To: Wolfram Sang <wsa@the-dreams.de>
+Received: from www.zeus03.de ([194.117.254.33]:45148 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1753980AbdCVVgh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 22 Mar 2017 17:36:37 -0400
+Date: Wed, 22 Mar 2017 22:36:33 +0100
+From: Wolfram Sang <wsa@the-dreams.de>
+To: Sam Povilus <kernel.development@povil.us>
 Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         robh+dt@kernel.org, mark.rutland@arm.com
 Subject: Re: [PATCH v5] hwmon: ads7828 optional parameters from the device
  tree
-Message-ID: <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
+Message-ID: <20170322213632.GA1518@katana>
 References: <20170321032434.9268-1-kernel.development@povil.us>
  <20170322084240.xspj432z2mpyzykq@ninjato>
+ <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
 Content-Disposition: inline
-In-Reply-To: <20170322084240.xspj432z2mpyzykq@ninjato>
+In-Reply-To: <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 22, 2017 at 09:42:40AM +0100, Wolfram Sang wrote:
-> 
-> >  .../devicetree/bindings/i2c/trivial-devices.txt    |  2 --
-> 
-> This file is about to get moved one directory up:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=b7e252fcddfa573bb1ee275b53bba6cef85671d4
-> 
-> Just so you know already...
-> 
 
-Thanks! I'm a bit new to this, what's the best way for me to handle
-this? Submit against Linus' tree (presumably making a merge nightmare
-for someone) or rebase my branch off robh's (and presumably risking some
-other branch's patch conflicting)?
+--W/nzBZO5zC0uMSeA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 22, 2017 at 07:05:55AM -0600, Sam Povilus wrote:
+> On Wed, Mar 22, 2017 at 09:42:40AM +0100, Wolfram Sang wrote:
+> >=20
+> > >  .../devicetree/bindings/i2c/trivial-devices.txt    |  2 --
+> >=20
+> > This file is about to get moved one directory up:
+> >=20
+> > https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?=
+h=3Ddt/next&id=3Db7e252fcddfa573bb1ee275b53bba6cef85671d4
+> >=20
+> > Just so you know already...
+> >=20
+>=20
+> Thanks! I'm a bit new to this, what's the best way for me to handle
+> this?
+
+I mentioned this also for the HWMON maintainers. They will let you know
+their preference and if you need to do something.
+
+Regards,
+
+   Wolfram
+
+
+--W/nzBZO5zC0uMSeA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJY0u5gAAoJEBQN5MwUoCm2yDkP/3Af/evqYVdryTRDjaJOr1RZ
+oXTPvZrvE+1UB0lAVH8RYDdtAx+ROUIG+ioay7QYR0kQdQ5xCNk4m3/qZb3JWMqr
+xRltOPz7E32J4ULVjEOvkcYudKbTb8DoMjFiPxTUOEpc5bAtIKyjDwIDYKaLQSIl
+jDZgFnk7i+m80RWXKGEpWHVKFxkKEdxYj2npKv6UrDTg8bc0Fps9iP4hPfM8poS8
+8s1X6zN0vzAwRfbwD/WNWgoo+qFmVMj9hF15TUNrsoUGkJRPyZpJ24euU3BKQKt0
+FL6ttGqOFQ6QhP6aKP7/Gz48uhnpH7xsp4j1/RJh0FSx4Z1Ji9OtciqEEPXq2q58
+L/45OP5VN/UtmWCAOD8dKsAwixOZjn7Jne3qweofp3EEnXrPwwmYzu1pmgb9WYBa
+rCanp5GAj8FeAttUanQFzrLeycF5d1kT6az1c022IJe/nnM/IuvsHLIDQmZ7LaoO
+t7opxv/TB69dAXf1gOm2YP9o5rCzABv593XW0+GcYn4os/qnTPpTXx9b3E2bmZ7h
+Hyhg0tNvtefrHYEzFCufLRiO0/IuGYzMU2c4H2ukz/eYcqO/ASCyLOdU+RD15i10
+yc+birwHnc7byjZZanwh5dsL74XXMaD4NzN133gNwzXIv0w7Y0n0ovfLrvefQBgX
+3ZxctCHiVYLmEHOKQJQL
+=m4I2
+-----END PGP SIGNATURE-----
+
+--W/nzBZO5zC0uMSeA--
