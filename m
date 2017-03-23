@@ -1,68 +1,51 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52487 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751416AbdCOWkL (ORCPT
+Received: from mout.kundenserver.de ([217.72.192.73]:56807 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S934737AbdCWPEa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Mar 2017 18:40:11 -0400
-Date: Wed, 15 Mar 2017 15:40:07 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-        Carlo Caione <carlo@caione.org>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux@endlessm.com,
-        punit.agrawal@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@endlessm.com>
-Subject: Re: [PATCH v3 1/2] Documentation: bindings: Introduce
- scpi,sensors-scale
-Message-ID: <20170315224007.GA14084@roeck-us.net>
-References: <20170309101759.18081-1-carlo@caione.org>
- <20170309101759.18081-2-carlo@caione.org>
- <57ff035a-b462-6f5d-0100-051e99e9a2b6@arm.com>
- <CAFBinCAde0qWpJsYF8bm-5ex1q+TDZtL73bf5DNoUuFEDhPXpw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFBinCAde0qWpJsYF8bm-5ex1q+TDZtL73bf5DNoUuFEDhPXpw@mail.gmail.com>
+        Thu, 23 Mar 2017 11:04:30 -0400
+From: Arnd Bergmann <arnd@arndb.de>
+To: Luca Tettamanti <kronos.it@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: asus_atk0110.c fix uninitialized data access
+Date: Thu, 23 Mar 2017 16:03:11 +0100
+Message-Id: <20170323150323.271584-1-arnd@arndb.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 15, 2017 at 09:56:09PM +0100, Martin Blumenstingl wrote:
-> On Wed, Mar 15, 2017 at 7:20 PM, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> >
-> > On 09/03/17 10:17, Carlo Caione wrote:
-> >> From: Carlo Caione <carlo@endlessm.com>
-> >>
-> >> Document the new property `scpi,sensors-scale` used by the hwmon-scpi
-> >> driver to convert the sensor readings to the correct / expected scale.
-> >>
-> >
-> > I am fine with DT bindings if DT maintainers agree with having one but I
-> > would like to add couple of points to get their feedback:
-> >
-> > 1. ARM recognized the drawbacks of SCPI which started informally with
-> >    ARM Ltd platforms and got adopted by few vendors. It's now being
-> >    worked on and a much better and scalable replacement protocol is
-> >    being discussed with vendors now. So future enhancement to this SCPI
-> >    protocol is unlikely.
-> >
-> > 2. AmLogic has diverted from base protocol in many ways and most of them
-> >    are handled with just compatible so far without any need for
-> >    additional bindings. Can we avoid it ?
-> >
-> > So based on these, I prefer not to add more bindings to handle such
-> > deviations but make it just AmLogic specific.
-> could you please share your idea where this "Amlogic specific
-> implementation" fits best?
-> - in firmware/arm_scpi to keep a contract (for example: millicelsius)
-> to everyone who reads a temperature sensor for example
-> - or in hwmon/scpi-hwmon
-> 
+The latest gcc-7 snapshot adds a warning to point out that when
+atk_read_value_old or atk_read_value_new fails, we copy
+uninitialized data into sensor->cached_value:
 
-So far the assumption was that it would be in hwmon. I don't mind for it
-to be elsewhere, but I would think that the presence or non-presence
-of a devicetree property should not affect or change the implementation.
+drivers/hwmon/asus_atk0110.c: In function 'atk_input_show':
+drivers/hwmon/asus_atk0110.c:651:26: error: 'value' may be used uninitialized in this function [-Werror=maybe-uninitialized]
 
-Thanks,
-Guenter
+Adding an error check avoids this. All versions of the driver
+are affected.
+
+Fixes: 2c03d07ad54d ("hwmon: Add Asus ATK0110 support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/asus_atk0110.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
+index cccef87963e0..975c43d446f8 100644
+--- a/drivers/hwmon/asus_atk0110.c
++++ b/drivers/hwmon/asus_atk0110.c
+@@ -646,6 +646,9 @@ static int atk_read_value(struct atk_sensor_data *sensor, u64 *value)
+ 		else
+ 			err = atk_read_value_new(sensor, value);
+ 
++		if (err)
++			return err;
++
+ 		sensor->is_valid = true;
+ 		sensor->last_updated = jiffies;
+ 		sensor->cached_value = *value;
+-- 
+2.9.0
+
