@@ -1,48 +1,53 @@
-Return-path: <shidogra@cisco.com>
-Date: Mon, 27 Mar 2017 16:16:44 -0700
-From: Shikhar Dogra <shidogra@cisco.com>
-To: linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Cc: xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] driver: adm1275: set the m,b and R coefficients correctly
- for power
-Message-ID: <20170327231644.GA6121@sjc-ads-4188.cisco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Return-path: <jaghu@google.com>
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: joel@jms.id.au,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	robh+dt@kernel.org,
+	mark.rutland@arm.com,
+	devicetree@vger.kernel.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v5 0/2] Support for ASPEED AST2400/AST2500 PWM and Fan Tach driver
+Date: Fri, 24 Mar 2017 11:17:21 -0700
+Message-Id: <20170324181723.29379-1-jaghu@google.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Seems like coefficient values for m, b and R under power have been
-put in the wrong order. Rearranging them properly to get correct
-values of coefficients for power.
+Support for ASPEED AST2400/AST2500 PWM and Fan Tach driver.
+Patches based on the upstream tag 4.9. Changes made in Version 4 are indicated
+in the individual patches.
+The AST2400/AST2500 PWM controller can support 8 PWM output ports.
+The AST2400/AST2500 Fan Tach controller can support 16 tachometer inputs.
+The hwmon driver provides sysfs entries through which the user can configure the
+duty cycle for the particular PWM output port and read the fan rpm value for
+the particular tachometer input.
+Added devicetree binding documentation for AST2400/AST2500 PWM and Fan Tach
+support.
 
-For specs, please refer to table 7 (page 35) on
-http://www.analog.com/media/en/technical-documentation/data-sheets/ADM1075.pdf
+Tested on Zaius board (which has AST2500 chip) and observed that when
+duty cycle is lowered then the fan speed is lowered and lower fan rpm value(
+corresponding to the duty cycle) is reported and when the duty cycle is
+increased then the fan speed increases and higher fan rpm value(corresponding
+to the duty cycle) is reported.
 
-Fixes: 904b296f308d ("hwmon: (adm1275) Introduce configuration data structure for coeffcients")
-Signed-off-by: Shikhar Dogra <shidogra@cisco.com>
-Cc: xe-linux-external@cisco.com
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/hwmon/pmbus/adm1275.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Jaghathiswari Rankappagounder Natarajan (2):
+  Documentation: dt-bindings: Document bindings for ASPEED
+    AST2400/AST2500 PWM and Fan tach controller device driver
+  drivers: hwmon: Support for ASPEED PWM/Fan tach
 
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index 188af4c..18477dd 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -95,8 +95,8 @@ static const struct coefficients adm1075_coefficients[] = {
- 	[0] = { 27169, 0, -1 },		/* voltage */
- 	[1] = { 806, 20475, -1 },	/* current, irange25 */
- 	[2] = { 404, 20475, -1 },	/* current, irange50 */
--	[3] = { 0, -1, 8549 },		/* power, irange25 */
--	[4] = { 0, -1, 4279 },		/* power, irange50 */
-+	[3] = { 8549, 0, -1 },		/* power, irange25 */
-+	[4] = { 4279, 0, -1 },		/* power, irange50 */
- };
- 
- static const struct coefficients adm1275_coefficients[] = {
--- 
-2.5.0
+ .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt |  68 ++
+ Documentation/hwmon/aspeed-pwm-tacho               |  22 +
+ drivers/hwmon/Kconfig                              |  13 +-
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/aspeed-pwm-tacho.c                   | 854 +++++++++++++++++++++
+ 5 files changed, 956 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+ create mode 100644 Documentation/hwmon/aspeed-pwm-tacho
+ create mode 100644 drivers/hwmon/aspeed-pwm-tacho.c
+
+--
+2.12.1.578.ge9c3154ca4-goog
