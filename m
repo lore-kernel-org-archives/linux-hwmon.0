@@ -1,77 +1,81 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from www.zeus03.de ([194.117.254.33]:45148 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753980AbdCVVgh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Mar 2017 17:36:37 -0400
-Date: Wed, 22 Mar 2017 22:36:33 +0100
-From: Wolfram Sang <wsa@the-dreams.de>
+Return-path: <robherring2@gmail.com>
+Date: Fri, 24 Mar 2017 11:12:58 -0500
+From: Rob Herring <robh@kernel.org>
 To: Sam Povilus <kernel.development@povil.us>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, mark.rutland@arm.com
+Cc: wsa@the-dreams.de, jdelvare@suse.com, linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, mark.rutland@arm.com
 Subject: Re: [PATCH v5] hwmon: ads7828 optional parameters from the device
  tree
-Message-ID: <20170322213632.GA1518@katana>
+Message-ID: <20170324161258.m5wech6u6g7ezx7d@rob-hp-laptop>
 References: <20170321032434.9268-1-kernel.development@povil.us>
- <20170322084240.xspj432z2mpyzykq@ninjato>
- <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
-Content-Disposition: inline
-In-Reply-To: <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
-
-
---W/nzBZO5zC0uMSeA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20170321032434.9268-1-kernel.development@povil.us>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Mar 22, 2017 at 07:05:55AM -0600, Sam Povilus wrote:
-> On Wed, Mar 22, 2017 at 09:42:40AM +0100, Wolfram Sang wrote:
-> >=20
-> > >  .../devicetree/bindings/i2c/trivial-devices.txt    |  2 --
-> >=20
-> > This file is about to get moved one directory up:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?=
-h=3Ddt/next&id=3Db7e252fcddfa573bb1ee275b53bba6cef85671d4
-> >=20
-> > Just so you know already...
-> >=20
->=20
-> Thanks! I'm a bit new to this, what's the best way for me to handle
-> this?
+On Mon, Mar 20, 2017 at 09:24:34PM -0600, Sam Povilus wrote:
+> Adding the ability for the ads7828 and ads7830 to use the device tree to
+> get their optional parameters, instead of using platform devices. This
+> allows people using custom boards to also use the ads7828 in a non-default
+> manner.
+> 
+> v2: conforming to coding style
+> v3: changing from "_" to "-" for device tree entries
+> v4: using regulator subsystem for voltage source, renaming differential
+>     input property
+> v5: checking for invalid vref values sooner and returning error if they are
+>     bad, not warning user.
+> 
+> Signed-off-by: Sam Povilus <kernel.development@povil.us>
+> ---
+>  .../devicetree/bindings/hwmon/ads7828.txt          | 26 ++++++++++++++++++++++
+>  .../devicetree/bindings/i2c/trivial-devices.txt    |  2 --
+>  drivers/hwmon/ads7828.c                            | 21 +++++++++++++++++
+>  3 files changed, 47 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ads7828.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ads7828.txt b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+> new file mode 100644
+> index 000000000000..5a0c4a7c6144
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+> @@ -0,0 +1,26 @@
+> +ads7828 properties
+> +
+> +Required properties:
+> +- compatible: Should be one of
+> +	       ti,ads7828
+> +	       ti,ads7830
+> +- reg: I2C address
+> +
+> +Optional properties:
+> +
+> +- ti,differential-input
+> +  Set to use the device in differential mode.
+> +- vref
 
-I mentioned this also for the HWMON maintainers. They will let you know
-their preference and if you need to do something.
+What does this point to?
 
-Regards,
+Should be vref-supply?
 
-   Wolfram
+> +  The external reference on the device is set to this regulators output. If it
+> +  does not exists the internal reference will be used and output by the ads78xx
+> +  on the "external vref" pin.
+> +
+> +  Example ADS7828 node:
+> +
+> +  ads7828: ads@48 {
 
+adc@...
 
---W/nzBZO5zC0uMSeA
-Content-Type: application/pgp-signature; name="signature.asc"
+> +  	   comatible = "ti,ads7828";
+> +	   reg = <0x48>;
+> +	   vref = <&vref>;
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Add a vref node to the example.
 
-iQIcBAEBAgAGBQJY0u5gAAoJEBQN5MwUoCm2yDkP/3Af/evqYVdryTRDjaJOr1RZ
-oXTPvZrvE+1UB0lAVH8RYDdtAx+ROUIG+ioay7QYR0kQdQ5xCNk4m3/qZb3JWMqr
-xRltOPz7E32J4ULVjEOvkcYudKbTb8DoMjFiPxTUOEpc5bAtIKyjDwIDYKaLQSIl
-jDZgFnk7i+m80RWXKGEpWHVKFxkKEdxYj2npKv6UrDTg8bc0Fps9iP4hPfM8poS8
-8s1X6zN0vzAwRfbwD/WNWgoo+qFmVMj9hF15TUNrsoUGkJRPyZpJ24euU3BKQKt0
-FL6ttGqOFQ6QhP6aKP7/Gz48uhnpH7xsp4j1/RJh0FSx4Z1Ji9OtciqEEPXq2q58
-L/45OP5VN/UtmWCAOD8dKsAwixOZjn7Jne3qweofp3EEnXrPwwmYzu1pmgb9WYBa
-rCanp5GAj8FeAttUanQFzrLeycF5d1kT6az1c022IJe/nnM/IuvsHLIDQmZ7LaoO
-t7opxv/TB69dAXf1gOm2YP9o5rCzABv593XW0+GcYn4os/qnTPpTXx9b3E2bmZ7h
-Hyhg0tNvtefrHYEzFCufLRiO0/IuGYzMU2c4H2ukz/eYcqO/ASCyLOdU+RD15i10
-yc+birwHnc7byjZZanwh5dsL74XXMaD4NzN133gNwzXIv0w7Y0n0ovfLrvefQBgX
-3ZxctCHiVYLmEHOKQJQL
-=m4I2
------END PGP SIGNATURE-----
-
---W/nzBZO5zC0uMSeA--
+> +	   ti,differential-input;
+> +  };
+> +
