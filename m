@@ -1,51 +1,61 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39960 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:39020 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751832AbdCXTza (ORCPT
+        with ESMTP id S1751042AbdCYVyA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Mar 2017 15:55:30 -0400
-Date: Fri, 24 Mar 2017 12:55:26 -0700
+        Sat, 25 Mar 2017 17:54:00 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: Rob Herring <robh@kernel.org>
-Cc: Sam Povilus <kernel.development@povil.us>,
-        Wolfram Sang <wsa@the-dreams.de>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, mark.rutland@arm.com
-Subject: Re: [PATCH v5] hwmon: ads7828 optional parameters from the device
- tree
-Message-ID: <20170324195526.GA28270@roeck-us.net>
-References: <20170321032434.9268-1-kernel.development@povil.us>
- <20170322084240.xspj432z2mpyzykq@ninjato>
- <20170322130555.wgwrkeju43dvj232@irascible.povil.us>
- <20170324161003.hv2bqpyspjdkx5j4@rob-hp-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170324161003.hv2bqpyspjdkx5j4@rob-hp-laptop>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.11-rc4
+Date: Sat, 25 Mar 2017 14:53:32 -0700
+Message-Id: <1490478812-13247-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 24, 2017 at 11:10:03AM -0500, Rob Herring wrote:
-> On Wed, Mar 22, 2017 at 07:05:55AM -0600, Sam Povilus wrote:
-> > On Wed, Mar 22, 2017 at 09:42:40AM +0100, Wolfram Sang wrote:
-> > > 
-> > > >  .../devicetree/bindings/i2c/trivial-devices.txt    |  2 --
-> > > 
-> > > This file is about to get moved one directory up:
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=b7e252fcddfa573bb1ee275b53bba6cef85671d4
-> > > 
-> > > Just so you know already...
-> > > 
-> > 
-> > Thanks! I'm a bit new to this, what's the best way for me to handle
-> > this? Submit against Linus' tree (presumably making a merge nightmare
-> > for someone) or rebase my branch off robh's (and presumably risking some
-> > other branch's patch conflicting)?
-> 
-> Send me a separate patch for just this file and I'll pick it up.
-> 
-Agreed, that seems to be the best approach.
+Hi Linus,
+
+Please pull hwmon fixes for Linux v4.11-rc4 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.11-rc4
 
 Thanks,
 Guenter
+------
+
+The following changes since commit 97da3854c526d3a6ee05c849c96e48d21527606c:
+
+  Linux 4.11-rc3 (2017-03-19 19:09:39 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.11-rc4
+
+for you to fetch changes up to a2125d02443e9a4e68bcfd9f8004fa23239e8329:
+
+  hwmon: (asus_atk0110) fix uninitialized data access (2017-03-23 12:01:57 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v4.11-rc4
+
+Bug fixes in asus_atk0110, it87, and max31790 drivers.
+Added missing API definition to hwmon core.
+
+----------------------------------------------------------------
+Alex Hemme (1):
+      hwmon: (max31790) Set correct PWM value
+
+Arnd Bergmann (1):
+      hwmon: (asus_atk0110) fix uninitialized data access
+
+Guenter Roeck (1):
+      hwmon: (it87) Avoid registering the same chip on both SIO addresses
+
+Peter Huewe (1):
+      hwmon: Add missing HWMON_T_ALARM
+
+ drivers/hwmon/asus_atk0110.c |  3 +++
+ drivers/hwmon/it87.c         | 24 +++++++++++++++++++-----
+ drivers/hwmon/max31790.c     |  2 +-
+ include/linux/hwmon.h        |  1 +
+ 4 files changed, 24 insertions(+), 6 deletions(-)
