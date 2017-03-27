@@ -1,56 +1,48 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58724 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751037AbdCQNoD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Mar 2017 09:44:03 -0400
-Date: Fri, 17 Mar 2017 06:43:54 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Add missing HWMON_T_ALARM
-Message-ID: <20170317134354.GA16340@roeck-us.net>
-References: <1489706936-26535-1-git-send-email-peterhuewe@gmx.de>
+Return-path: <shidogra@cisco.com>
+Date: Mon, 27 Mar 2017 16:16:44 -0700
+From: Shikhar Dogra <shidogra@cisco.com>
+To: linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc: xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] driver: adm1275: set the m,b and R coefficients correctly
+ for power
+Message-ID: <20170327231644.GA6121@sjc-ads-4188.cisco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1489706936-26535-1-git-send-email-peterhuewe@gmx.de>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Mar 17, 2017 at 12:28:56AM +0100, Peter Huewe wrote:
-> Unfortunately the HWMON_T_ALARM define was missing,
-> although the associated entry was present in hwmon_temp_attributes.
-> This is needed to convert drivers to the new interface which use channel
-> based alarms.
-> 
-Good catch. Applied.
+Seems like coefficient values for m, b and R under power have been
+put in the wrong order. Rearranging them properly to get correct
+values of coefficients for power.
 
-Thanks,
-Guenter
+For specs, please refer to table 7 (page 35) on
+http://www.analog.com/media/en/technical-documentation/data-sheets/ADM1075.pdf
 
-> Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
-> ---
->  include/linux/hwmon.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index 78d59dba563e..88b673749121 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -88,6 +88,7 @@ enum hwmon_temp_attributes {
->  #define HWMON_T_CRIT_HYST	BIT(hwmon_temp_crit_hyst)
->  #define HWMON_T_EMERGENCY	BIT(hwmon_temp_emergency)
->  #define HWMON_T_EMERGENCY_HYST	BIT(hwmon_temp_emergency_hyst)
-> +#define HWMON_T_ALARM		BIT(hwmon_temp_alarm)
->  #define HWMON_T_MIN_ALARM	BIT(hwmon_temp_min_alarm)
->  #define HWMON_T_MAX_ALARM	BIT(hwmon_temp_max_alarm)
->  #define HWMON_T_CRIT_ALARM	BIT(hwmon_temp_crit_alarm)
-> -- 
-> 2.7.3
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Fixes: 904b296f308d ("hwmon: (adm1275) Introduce configuration data structure for coeffcients")
+Signed-off-by: Shikhar Dogra <shidogra@cisco.com>
+Cc: xe-linux-external@cisco.com
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/hwmon/pmbus/adm1275.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 188af4c..18477dd 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -95,8 +95,8 @@ static const struct coefficients adm1075_coefficients[] = {
+ 	[0] = { 27169, 0, -1 },		/* voltage */
+ 	[1] = { 806, 20475, -1 },	/* current, irange25 */
+ 	[2] = { 404, 20475, -1 },	/* current, irange50 */
+-	[3] = { 0, -1, 8549 },		/* power, irange25 */
+-	[4] = { 0, -1, 4279 },		/* power, irange50 */
++	[3] = { 8549, 0, -1 },		/* power, irange25 */
++	[4] = { 4279, 0, -1 },		/* power, irange50 */
+ };
+ 
+ static const struct coefficients adm1275_coefficients[] = {
+-- 
+2.5.0
