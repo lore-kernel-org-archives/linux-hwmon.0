@@ -1,755 +1,113 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50588 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1752154AbdCNUzT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Mar 2017 16:55:19 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v2EKrbm0046605
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:18 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 296nna620c-1
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Mar 2017 16:55:18 -0400
-Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Tue, 14 Mar 2017 16:55:17 -0400
-From: Eddie James <eajames@linux.vnet.ibm.com>
-To: linux@roeck-us.net
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
-        robh+dt@kernel.org, wsa@the-dreams.de, andrew@aj.id.au,
-        benh@kernel.crashing.org, joel@jms.id.au,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH linux v9 1/5] hwmon: Add core On-Chip Controller support for POWER CPUs
-Date: Tue, 14 Mar 2017 15:55:02 -0500
-In-Reply-To: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
-References: <1489524906-19411-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1489524906-19411-2-git-send-email-eajames@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <kernel.development@povil.us>
+From: Sam Povilus <kernel.development@povil.us>
+To: wsa@the-dreams.de,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	robh+dt@kernel.org,
+	mark.rutland@arm.com
+Cc: Sam Povilus <kernel.development@povil.us>
+Subject: [PATCH v6] hwmon: ads7828 optional parameters from the device tree
+Date: Wed, 29 Mar 2017 21:46:37 -0600
+Message-Id: <20170330034637.29708-1-kernel.development@povil.us>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-From: "Edward A. James" <eajames@us.ibm.com>
+Adding the ability for the ads7828 and ads7830 to use the device tree to
+get their optional parameters, instead of using platform devices. This
+allows people using custom boards to also use the ads7828 in a non-default
+manner.
 
-Add core support for polling the OCC for it's sensor data and parsing
-that data into sensor-specific information.
+v2: conforming to coding style
+v3: changing from "_" to "-" for device tree entries
+v4: using regulator subsystem for voltage source, renaming differential
+    input property
+v5: checking for invalid vref values sooner and returning error if they are
+    bad, not warning user.
+v6: optimization per Guenter Roeck
 
-Signed-off-by: Edward A. James <eajames@us.ibm.com>
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+Signed-off-by: Sam Povilus <kernel.development@povil.us>
 ---
- Documentation/hwmon/occ    |  42 +++++
- MAINTAINERS                |   7 +
- drivers/hwmon/Kconfig      |   2 +
- drivers/hwmon/Makefile     |   1 +
- drivers/hwmon/occ/Kconfig  |  13 ++
- drivers/hwmon/occ/Makefile |   1 +
- drivers/hwmon/occ/occ.c    | 440 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/hwmon/occ/occ.h    |  77 ++++++++
- drivers/hwmon/occ/scom.h   |  42 +++++
- 9 files changed, 625 insertions(+)
- create mode 100644 Documentation/hwmon/occ
- create mode 100644 drivers/hwmon/occ/Kconfig
- create mode 100644 drivers/hwmon/occ/Makefile
- create mode 100644 drivers/hwmon/occ/occ.c
- create mode 100644 drivers/hwmon/occ/occ.h
- create mode 100644 drivers/hwmon/occ/scom.h
+ .../devicetree/bindings/hwmon/ads7828.txt          | 26 ++++++++++++++++++++++
+ drivers/hwmon/ads7828.c                            | 15 +++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ads7828.txt
 
-diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
+diff --git a/Documentation/devicetree/bindings/hwmon/ads7828.txt b/Documentation/devicetree/bindings/hwmon/ads7828.txt
 new file mode 100644
-index 0000000..d1c863b
+index 000000000000..a1251b19079d
 --- /dev/null
-+++ b/Documentation/hwmon/occ
-@@ -0,0 +1,42 @@
-+=================
-+Kernel driver occ
-+=================
++++ b/Documentation/devicetree/bindings/hwmon/ads7828.txt
+@@ -0,0 +1,26 @@
++ads7828 properties
 +
-+Supported chips:
-+ * POWER8
-+ * POWER9
++Required properties:
++- compatible: Should be one of
++	       ti,ads7828
++	       ti,ads7830
++- reg: I2C address
 +
-+Please note that the driver does not run on these processors. Instead, the
-+driver runs on a connected service processor, such as an AST2400. (see the
-+BMC - Host Communications section).
++Optional properties:
 +
-+Author: Eddie James <eajames@us.ibm.com>
++- ti,differential-input
++  Set to use the device in differential mode.
++- vref
++  The external reference on the device is set to this regulators output. If it
++  does not exists the internal reference will be used and output by the ads78xx
++  on the "external vref" pin.
 +
-+Description
-+-----------
++  Example ADS7828 node:
 +
-+This driver implements support for the OCC (On-Chip Controller) on the IBM
-+POWER8 and POWER9 processors, from a BMC (Baseboard Management Controller). The
-+OCC is an embedded processor that provides real time power and thermal
-+monitoring.
++  ads7828: ads@48 {
++  	   comatible = "ti,ads7828";
++	   reg = <0x48>;
++	   vref-supply = <&vref>;
++	   ti,differential-input;
++  };
 +
-+This driver provides an interface on a BMC to poll OCC sensor data, set user
-+power caps, and perform some basic OCC error handling.
-+
-+Currently, all versions of the OCC support four types of sensor data: power,
-+temperature, frequency, and "caps," which indicate limits and thresholds used
-+internally on the OCC.
-+
-+BMC - Host Communications
-+-------------------------
-+
-+For the POWER8 application, the BMC can communicate with the P8 over I2C bus.
-+However, to access the OCC register space, any data transfer must use a SCOM
-+operation. SCOM is a procedure to initiate a data transfer, typically of 8
-+bytes. SCOMs consist of writing a 32-bit command register and then
-+reading/writing two 32-bit data registers. This driver implements these
-+SCOM operations over I2C bus in order to communicate with the OCC.
-+
-+For the POWER9 application, the BMC can communicate with the P9 over FSI bus
-+and SBE engine. Once again, SCOM operations are required. This driver will
-+implement SCOM ops over FSI/SBE. This will require the FSI driver.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c776906..4e929fc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9266,6 +9266,13 @@ T:	git git://linuxtv.org/media_tree.git
- S:	Maintained
- F:	drivers/media/i2c/ov7670.c
+diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+index ee396ff167d9..88330a233b1d 100644
+--- a/drivers/hwmon/ads7828.c
++++ b/drivers/hwmon/ads7828.c
+@@ -34,6 +34,7 @@
+ #include <linux/platform_data/ads7828.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
++#include <linux/regulator/consumer.h>
  
-+ON-CHIP CONTROLLER HWMON POWER8/POWER9 DRIVER
-+M:	Eddie James <eajames@us.ibm.com>
-+L:	openbmc@lists.ozlabs.org
-+S:	Maintained
-+F:	Documentation/hwmon/occ
-+F:	drivers/hwmon/occ/
-+
- ONENAND FLASH DRIVER
- M:	Kyungmin Park <kyungmin.park@samsung.com>
- L:	linux-mtd@lists.infradead.org
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 0649d53f3..6589933 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1240,6 +1240,8 @@ config SENSORS_NSA320
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nsa320-hwmon.
+ /* The ADS7828 registers */
+ #define ADS7828_CMD_SD_SE	0x80	/* Single ended inputs */
+@@ -118,9 +119,11 @@ static int ads7828_probe(struct i2c_client *client,
+ 	struct ads7828_data *data;
+ 	struct device *hwmon_dev;
+ 	unsigned int vref_mv = ADS7828_INT_VREF_MV;
++	unsigned int vref_uv;
+ 	bool diff_input = false;
+ 	bool ext_vref = false;
+ 	unsigned int regval;
++	struct regulator *reg;
  
-+source drivers/hwmon/occ/Kconfig
-+
- config SENSORS_PCF8591
- 	tristate "Philips PCF8591 ADC/DAC"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 5509edf..5b26067 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -170,6 +170,7 @@ obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
- obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
- obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+ 	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
+ 	if (!data)
+@@ -131,6 +134,18 @@ static int ads7828_probe(struct i2c_client *client,
+ 		ext_vref = pdata->ext_vref;
+ 		if (ext_vref && pdata->vref_mv)
+ 			vref_mv = pdata->vref_mv;
++	} else if (dev->of_node) {
++		diff_input = of_property_read_bool(dev->of_node,
++						   "ti,differential-input");
++		reg = devm_regulator_get_optional(dev, "vref");
++		if (!IS_ERR(reg)) {
++			vref_uv = regulator_get_voltage(reg);
++			vref_mv = DIV_ROUND_CLOSEST(vref_uv, 1000);
++			if (vref_mv < ADS7828_EXT_VREF_MV_MIN ||
++			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
++				return -EINVAL;
++			ext_vref = true;
++		}
+ 	}
  
-+obj-$(CONFIG_SENSORS_IBM_OCC)	+= occ/
- obj-$(CONFIG_PMBUS)		+= pmbus/
- 
- ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
-new file mode 100644
-index 0000000..61be588
---- /dev/null
-+++ b/drivers/hwmon/occ/Kconfig
-@@ -0,0 +1,13 @@
-+#
-+# On Chip Controller configuration
-+#
-+
-+menuconfig SENSORS_IBM_OCC
-+	bool "IBM On-Chip Controller"
-+	help
-+	  If you say yes here you get support to monitor IBM Power CPU
-+	  sensors via the On-Chip Controller (OCC), from a service
-+	  processor.
-+
-+	  Generally this is used by management controllers such as a BMC
-+	  on an OpenPower system.
-diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
-new file mode 100644
-index 0000000..3ed79a5
---- /dev/null
-+++ b/drivers/hwmon/occ/Makefile
-@@ -0,0 +1 @@
-+obj-$(CONFIG_SENSORS_IBM_OCC) += occ.o
-diff --git a/drivers/hwmon/occ/occ.c b/drivers/hwmon/occ/occ.c
-new file mode 100644
-index 0000000..afc21f8
---- /dev/null
-+++ b/drivers/hwmon/occ/occ.c
-@@ -0,0 +1,440 @@
-+/*
-+ * occ.c - OCC hwmon driver
-+ *
-+ * This file contains the methods and data structures for the OCC hwmon driver.
-+ *
-+ * Copyright 2017 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
-+
-+#include <asm/unaligned.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/jiffies.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include "occ.h"
-+
-+#define OCC_DATA_MAX		4096
-+#define OCC_DATA_MIN		40
-+#define OCC_BMC_TIMEOUT_MS	20000
-+
-+/* To generate attn to OCC */
-+#define ATTN_DATA		0x0006B035
-+
-+/* For BMC to read/write SRAM */
-+#define OCB_ADDRESS		0x0006B070
-+#define OCB_DATA		0x0006B075
-+#define OCB_STATUS_CONTROL_AND	0x0006B072
-+#define OCB_STATUS_CONTROL_OR	0x0006B073
-+
-+/* To init OCB */
-+#define OCB_AND_INIT0		0xFBFFFFFF
-+#define OCB_AND_INIT1		0xFFFFFFFF
-+#define OCB_OR_INIT0		0x08000000
-+#define OCB_OR_INIT1		0x00000000
-+
-+/* To generate attention on OCC */
-+#define ATTN0			0x01010000
-+#define ATTN1			0x00000000
-+
-+/* OCC return status */
-+#define RESP_RETURN_CMD_IN_PRG	0xFF
-+#define RESP_RETURN_SUCCESS	0
-+#define RESP_RETURN_CMD_INVAL	0x11
-+#define RESP_RETURN_CMD_LEN	0x12
-+#define RESP_RETURN_DATA_INVAL	0x13
-+#define RESP_RETURN_CHKSUM	0x14
-+#define RESP_RETURN_OCC_ERR	0x15
-+#define RESP_RETURN_STATE	0x16
-+
-+/* time interval to retry on "command in progress" return status */
-+#define CMD_IN_PRG_INT_MS	100
-+#define CMD_IN_PRG_RETRIES	(OCC_BMC_TIMEOUT_MS / CMD_IN_PRG_INT_MS)
-+
-+/* OCC command definitions */
-+#define OCC_POLL		0
-+#define OCC_SET_USER_POWR_CAP	0x22
-+
-+/* OCC poll command data */
-+#define OCC_POLL_STAT_SENSOR	0x10
-+
-+/* OCC response data offsets */
-+#define RESP_RETURN_STATUS		2
-+#define RESP_DATA_LENGTH		3
-+#define RESP_HEADER_OFFSET		5
-+#define SENSOR_STR_OFFSET		37
-+#define NUM_SENSOR_BLOCKS_OFFSET	43
-+#define SENSOR_BLOCK_OFFSET		45
-+
-+/* occ_poll_header
-+ * structure to match the raw occ poll response data
-+ */
-+struct occ_poll_header {
-+	u8 status;
-+	u8 ext_status;
-+	u8 occs_present;
-+	u8 config;
-+	u8 occ_state;
-+	u8 mode;
-+	u8 ips_status;
-+	u8 error_log_id;
-+	u32 error_log_addr_start;
-+	u16 error_log_length;
-+	u8 reserved2;
-+	u8 reserved3;
-+	u8 occ_code_level[16];
-+	u8 sensor_eye_catcher[6];
-+	u8 num_sensor_blocks;
-+	u8 sensor_data_version;
-+} __attribute__((packed, aligned(4)));
-+
-+struct occ_response {
-+	struct occ_poll_header header;
-+	struct occ_blocks data;
-+};
-+
-+struct occ {
-+	struct device *dev;
-+	void *bus;
-+	struct occ_bus_ops bus_ops;
-+	struct occ_ops ops;
-+	u32 command_addr;
-+	u32 response_addr;
-+	unsigned long last_updated;
-+	struct mutex update_lock;
-+	struct occ_response response;
-+	bool valid;
-+	u8 *raw_data;
-+};
-+
-+static int parse_occ_response(struct occ *driver, u16 num_bytes)
-+{
-+	int b;
-+	int s;
-+	unsigned int offset = SENSOR_BLOCK_OFFSET;
-+	int sensor_type;
-+	u8 num_sensor_blocks;
-+	struct sensor_data_block_header *block;
-+	void *sensors;
-+	struct device *dev = driver->dev;
-+	u8 *data = driver->raw_data;
-+	struct occ_response *resp = &driver->response;
-+
-+	/* check if the data is valid */
-+	if (strncmp(&data[SENSOR_STR_OFFSET], "SENSOR", 6) != 0) {
-+		dev_err(dev, "no SENSOR string in response\n");
-+		return -ENODATA;
-+	}
-+
-+	num_sensor_blocks = data[NUM_SENSOR_BLOCKS_OFFSET];
-+	if (num_sensor_blocks == 0) {
-+		dev_warn(dev, "no sensor blocks available\n");
-+		return -ENODATA;
-+	}
-+
-+	memcpy(&resp->header, &data[RESP_HEADER_OFFSET],
-+	       sizeof(struct occ_poll_header));
-+
-+	/* data length starts at actual data */
-+	num_bytes += RESP_HEADER_OFFSET;
-+
-+	/* translate fields > 1 byte */
-+	resp->header.error_log_addr_start =
-+		be32_to_cpu(resp->header.error_log_addr_start);
-+	resp->header.error_log_length =
-+		be16_to_cpu(resp->header.error_log_length);
-+
-+	for (b = 0; b < num_sensor_blocks && b < MAX_OCC_SENSOR_TYPE; b++) {
-+		if (offset + sizeof(struct sensor_data_block_header) >
-+		    num_bytes) {
-+			dev_warn(dev, "exceeded data length\n");
-+			return 0;
-+		}
-+
-+		block = (struct sensor_data_block_header *)&data[offset];
-+		offset += sizeof(struct sensor_data_block_header);
-+
-+		if (strncmp(block->sensor_type, "FREQ", 4) == 0)
-+			sensor_type = FREQ;
-+		else if (strncmp(block->sensor_type, "TEMP", 4) == 0)
-+			sensor_type = TEMP;
-+		else if (strncmp(block->sensor_type, "POWR", 4) == 0)
-+			sensor_type = POWER;
-+		else if (strncmp(block->sensor_type, "CAPS", 4) == 0)
-+			sensor_type = CAPS;
-+		else {
-+			dev_warn(dev, "sensor type not supported %.4s\n",
-+				block->sensor_type);
-+			continue;
-+		}
-+
-+		sensors = &resp->data.blocks[b].sensors;
-+		if (!sensors) {
-+			/* first poll response */
-+			sensors = driver->ops.alloc_sensor(dev, sensor_type,
-+							   block->num_sensors);
-+			if (!sensors)
-+				return -ENOMEM;
-+
-+			resp->data.blocks[b].sensors = sensors;
-+			resp->data.sensor_block_id[sensor_type] = b;
-+			resp->data.blocks[b].header = *block;
-+		} else if (block->sensor_length !=
-+			 resp->data.blocks[b].header.sensor_length) {
-+			dev_warn(dev,
-+				 "different sensor length than first poll\n");
-+			continue;
-+		}
-+
-+		for (s = 0; s < block->num_sensors &&
-+		     s < resp->data.blocks[b].header.num_sensors; s++) {
-+			if (offset + block->sensor_length > num_bytes) {
-+				dev_warn(dev, "exceeded data length\n");
-+				return 0;
-+			}
-+
-+			driver->ops.parse_sensor(data, sensors, sensor_type,
-+						 offset, s);
-+			offset += block->sensor_length;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static u8 occ_send_cmd(struct occ *driver, u8 seq, u8 type, u16 length,
-+		       const u8 *data, u8 *resp)
-+{
-+	u32 cmd1, cmd2 = 0;
-+	u16 checksum = 0;
-+	bool retry = false;
-+	int i, rc, tries = 0;
-+
-+	cmd1 = (seq << 24) | (type << 16) | length;
-+	memcpy(&cmd2, data, length);
-+	cmd2 <<= ((4 - length) * 8);
-+
-+	/* checksum: sum of every bytes of cmd1, cmd2 */
-+	for (i = 0; i < 4; i++) {
-+		checksum += (cmd1 >> (i * 8)) & 0xFF;
-+		checksum += (cmd2 >> (i * 8)) & 0xFF;
-+	}
-+
-+	cmd2 |= checksum << ((2 - length) * 8);
-+
-+	/* Init OCB, the on-chip bridge interface */
-+	rc = driver->bus_ops.putscom(driver->bus, OCB_STATUS_CONTROL_OR,
-+				     OCB_OR_INIT0, OCB_OR_INIT1);
-+	if (rc)
-+		goto err;
-+
-+	rc = driver->bus_ops.putscom(driver->bus, OCB_STATUS_CONTROL_AND,
-+				     OCB_AND_INIT0, OCB_AND_INIT1);
-+	if (rc)
-+		goto err;
-+
-+	/* Send command, 2nd half of the 64-bit addr is unused (write 0) */
-+	rc = driver->bus_ops.putscom(driver->bus, OCB_ADDRESS,
-+				     driver->command_addr, 0);
-+	if (rc)
-+		goto err;
-+
-+	rc = driver->bus_ops.putscom(driver->bus, OCB_DATA, cmd1, cmd2);
-+	if (rc)
-+		goto err;
-+
-+	/* Trigger attention */
-+	rc = driver->bus_ops.putscom(driver->bus, ATTN_DATA, ATTN0, ATTN1);
-+	if (rc)
-+		goto err;
-+
-+	/* Get response data */
-+	rc = driver->bus_ops.putscom(driver->bus, OCB_ADDRESS,
-+				     driver->response_addr, 0);
-+	if (rc)
-+		goto err;
-+
-+	do {
-+		if (retry) {
-+			set_current_state(TASK_INTERRUPTIBLE);
-+			schedule_timeout(msecs_to_jiffies(CMD_IN_PRG_INT_MS));
-+		}
-+
-+		rc = driver->bus_ops.getscom(driver->bus, OCB_DATA,
-+					     (u64 *)resp);
-+		if (rc)
-+			goto err;
-+
-+		/* retry if we get "command in progress" return status */
-+		retry = resp[RESP_RETURN_STATUS] == RESP_RETURN_CMD_IN_PRG &&
-+			tries++ < CMD_IN_PRG_RETRIES;
-+	} while (retry);
-+
-+	/* check the occ response */
-+	switch (resp[RESP_RETURN_STATUS]) {
-+	case RESP_RETURN_CMD_IN_PRG:
-+		rc = -EALREADY;
-+		break;
-+	case RESP_RETURN_SUCCESS:
-+		rc = 0;
-+		break;
-+	case RESP_RETURN_CMD_INVAL:
-+	case RESP_RETURN_CMD_LEN:
-+	case RESP_RETURN_DATA_INVAL:
-+	case RESP_RETURN_CHKSUM:
-+		rc = -EINVAL;
-+		break;
-+	case RESP_RETURN_OCC_ERR:
-+		rc = -EREMOTE;
-+		break;
-+	default:
-+		rc = -EFAULT;
-+	}
-+
-+	if (rc < 0)
-+		dev_warn(driver->dev, "occ bad response:%d\n",
-+			 resp[RESP_RETURN_STATUS]);
-+
-+	return rc;
-+
-+err:
-+	dev_err(driver->dev, "scom op failed rc:%d\n", rc);
-+	return rc;
-+}
-+
-+static int occ_get_all(struct occ *driver)
-+{
-+	int i = 0, rc;
-+	u8 *occ_data = driver->raw_data;
-+	u16 num_bytes;
-+	const u8 poll_cmd_data = OCC_POLL_STAT_SENSOR;
-+	struct device *dev = driver->dev;
-+
-+	memset(occ_data, 0, OCC_DATA_MAX);
-+
-+	rc = occ_send_cmd(driver, 0, OCC_POLL, 1, &poll_cmd_data, occ_data);
-+	if (rc)
-+		return rc;
-+
-+	num_bytes = get_unaligned((u16 *)&occ_data[RESP_DATA_LENGTH]);
-+	num_bytes = be16_to_cpu(num_bytes);
-+
-+	if (num_bytes > OCC_DATA_MAX || num_bytes < OCC_DATA_MIN) {
-+		dev_err(dev, "bad OCC data length:%d\n", num_bytes);
-+		return -EINVAL;
-+	}
-+
-+	/* read remaining data, 8 byte scoms at a time */
-+	for (i = 8; i < num_bytes + 8; i += 8) {
-+		rc = driver->bus_ops.getscom(driver->bus, OCB_DATA,
-+					     (u64 *)&occ_data[i]);
-+		if (rc) {
-+			dev_err(dev, "getscom op failed rc:%d\n", rc);
-+			return rc;
-+		}
-+	}
-+
-+	/* don't need more sanity checks; buffer is alloc'd for max response
-+	 * size so we just check for valid data in parse_occ_response
-+	 */
-+	rc = parse_occ_response(driver, num_bytes);
-+
-+	return rc;
-+}
-+
-+int occ_update_device(struct occ *driver)
-+{
-+	int rc = 0;
-+
-+	mutex_lock(&driver->update_lock);
-+
-+	if (time_after(jiffies, driver->last_updated + HZ) || !driver->valid) {
-+		driver->valid = true;
-+
-+		rc = occ_get_all(driver);
-+		if (rc)
-+			driver->valid = false;
-+
-+		driver->last_updated = jiffies;
-+	}
-+
-+	mutex_unlock(&driver->update_lock);
-+
-+	return rc;
-+}
-+
-+void *occ_get_sensor(struct occ *driver, int sensor_type)
-+{
-+	int rc;
-+	int type_id;
-+
-+	/* occ_update_device locks the update lock */
-+	rc = occ_update_device(driver);
-+	if (rc)
-+		return ERR_PTR(rc);
-+
-+	type_id = driver->response.data.sensor_block_id[sensor_type];
-+	if (type_id == -1)
-+		return ERR_PTR(-ENODATA);
-+
-+	return driver->response.data.blocks[type_id].sensors;
-+}
-+
-+int occ_get_sensor_field(struct occ *occ, int sensor_type, int sensor_num,
-+			 u32 hwmon, long *val)
-+{
-+	return occ->ops.get_sensor(occ, sensor_type, sensor_num, hwmon, val);
-+}
-+
-+void occ_get_response_blocks(struct occ *occ, struct occ_blocks **blocks)
-+{
-+	*blocks = &occ->response.data;
-+}
-+
-+int occ_set_user_powercap(struct occ *occ, u16 cap)
-+{
-+	u8 resp[8];
-+
-+	cap = cpu_to_be16(cap);
-+
-+	return occ_send_cmd(occ, 0, OCC_SET_USER_POWR_CAP, 2, (const u8 *)&cap,
-+			    resp);
-+}
-+
-+struct occ *occ_init(struct device *dev, void *bus,
-+		     const struct occ_bus_ops *bus_ops,
-+		     const struct occ_init_data *init)
-+{
-+	struct occ *driver = devm_kzalloc(dev, sizeof(struct occ), GFP_KERNEL);
-+
-+	if (!driver)
-+		return ERR_PTR(-ENOMEM);
-+
-+	driver->dev = dev;
-+	driver->bus = bus;
-+	driver->bus_ops = *bus_ops;
-+	driver->ops = *init->ops;
-+	driver->command_addr = init->command_addr;
-+	driver->response_addr = init->response_addr;
-+
-+	driver->raw_data = devm_kzalloc(dev, OCC_DATA_MAX, GFP_KERNEL);
-+	if (!driver->raw_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mutex_init(&driver->update_lock);
-+
-+	return driver;
-+}
-+
-+MODULE_AUTHOR("Eddie James <eajames@us.ibm.com>");
-+MODULE_DESCRIPTION("OCC hwmon core driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/hwmon/occ/occ.h b/drivers/hwmon/occ/occ.h
-new file mode 100644
-index 0000000..6732843
---- /dev/null
-+++ b/drivers/hwmon/occ/occ.h
-@@ -0,0 +1,77 @@
-+/*
-+ * occ.h - hwmon OCC driver
-+ *
-+ * This file contains data structures and function prototypes for common access
-+ * between different bus protocols and host systems.
-+ *
-+ * Copyright 2017 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
-+
-+#ifndef __OCC_H__
-+#define __OCC_H__
-+
-+#include "scom.h"
-+
-+struct device;
-+struct occ;
-+
-+enum sensor_type {
-+	FREQ = 0,
-+	TEMP,
-+	POWER,
-+	CAPS,
-+	MAX_OCC_SENSOR_TYPE
-+};
-+
-+/* sensor_data_block_header
-+ * structure to match the raw occ sensor block header
-+ */
-+struct sensor_data_block_header {
-+	u8 sensor_type[4];
-+	u8 reserved0;
-+	u8 sensor_format;
-+	u8 sensor_length;
-+	u8 num_sensors;
-+} __attribute__((packed, aligned(4)));
-+
-+struct sensor_data_block {
-+	struct sensor_data_block_header header;
-+	void *sensors;
-+};
-+
-+struct occ_blocks {
-+	int sensor_block_id[MAX_OCC_SENSOR_TYPE];
-+	struct sensor_data_block blocks[MAX_OCC_SENSOR_TYPE];
-+};
-+
-+struct occ_ops {
-+	void (*parse_sensor)(u8 *data, void *sensor, int sensor_type, int off,
-+			     int snum);
-+	void *(*alloc_sensor)(struct device *dev, int sensor_type,
-+			      int num_sensors);
-+	int (*get_sensor)(struct occ *driver, int sensor_type, int sensor_num,
-+			  u32 hwmon, long *val);
-+};
-+
-+struct occ_init_data {
-+	u32 command_addr;
-+	u32 response_addr;
-+	const struct occ_ops *ops;
-+};
-+
-+struct occ *occ_init(struct device *dev, void *bus,
-+		     const struct occ_bus_ops *bus_ops,
-+		     const struct occ_init_data *init);
-+void *occ_get_sensor(struct occ *occ, int sensor_type);
-+int occ_get_sensor_field(struct occ *occ, int sensor_type, int sensor_num,
-+			 u32 hwmon, long *val);
-+void occ_get_response_blocks(struct occ *occ, struct occ_blocks **blocks);
-+int occ_update_device(struct occ *driver);
-+int occ_set_user_powercap(struct occ *occ, u16 cap);
-+
-+#endif /* __OCC_H__ */
-diff --git a/drivers/hwmon/occ/scom.h b/drivers/hwmon/occ/scom.h
-new file mode 100644
-index 0000000..4a891c4
---- /dev/null
-+++ b/drivers/hwmon/occ/scom.h
-@@ -0,0 +1,42 @@
-+/*
-+ * scom.h - hwmon OCC driver
-+ *
-+ * This file contains data structures for scom operations to the OCC
-+ *
-+ * Copyright 2017 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
-+
-+#ifndef __SCOM_H__
-+#define __SCOM_H__
-+
-+/*
-+ * occ_bus_ops - represent the low-level transfer methods to communicate with
-+ * the OCC.
-+ *
-+ * getscom - OCC scom read 8 bytes
-+ * @bus: handle to slave device
-+ * @address: address
-+ * @data: where to store data read from slave; buffer size must be at least
-+ * eight bytes.
-+ *
-+ * Returns 0 on success or a negative errno on error
-+ *
-+ * putscom - OCC scom write
-+ * @bus: handle to slave device
-+ * @address: address
-+ * @data0: first data word to write
-+ * @data1: second data word to write
-+ *
-+ * Returns 0 on success or a negative errno on error
-+ */
-+struct occ_bus_ops {
-+	int (*getscom)(void *bus, u32 address, u64 *data);
-+	int (*putscom)(void *bus, u32 address, u32 data0, u32 data1);
-+};
-+
-+#endif /* __SCOM_H__ */
+ 	/* Bound Vref with min/max values */
 -- 
-1.8.3.1
-
+2.11.0
