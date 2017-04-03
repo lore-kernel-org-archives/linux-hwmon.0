@@ -1,90 +1,55 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.136]:42676 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751445AbdDNRri (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Apr 2017 13:47:38 -0400
-MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+OaMAdRLuC0BBDpOPapisaETaUZpEX10yJk=fYLQCCdg@mail.gmail.com>
-References: <1491602410-31518-1-git-send-email-moritz.fischer@ettus.com>
- <1491602410-31518-2-git-send-email-moritz.fischer@ettus.com>
- <20170413200140.lcynmsv255ktoiyl@rob-hp-laptop> <20170413210707.GA16304@roeck-us.net>
- <CAL_Jsq+OaMAdRLuC0BBDpOPapisaETaUZpEX10yJk=fYLQCCdg@mail.gmail.com>
-From: Moritz Fischer <mdf@kernel.org>
-Date: Fri, 14 Apr 2017 10:47:34 -0700
-Message-ID: <CAJYdmeMWaFqhmc8if4q53L=WO6fMw9eV_okF-BE-fWKp5wxzaw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add bindings for Google Chromium
- EC HWMON
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <b.zolnierkie@samsung.com>
+From: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+To: Thierry Reding <thierry.reding@gmail.com>, Jean Delvare
+	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Kamil Debski
+	<kamil@wypas.org>
+Cc: Tomasz Figa <tomasz.figa@gmail.com>, linux-pwm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, b.zolnierkie@samsung.com
+Subject: [PATCH 0/3] pwm: pwm-samsung: fix suspend/resume support
+Date: Mon, 03 Apr 2017 15:47:03 +0200
+Message-id: <1491227226-12972-1-git-send-email-b.zolnierkie@samsung.com>
+References: <CGME20170403134731epcas1p411267df663cda69eb32f382011fdda08@epcas1p4.samsung.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Apr 14, 2017 at 5:48 AM, Rob Herring <robh@kernel.org> wrote:
-> On Thu, Apr 13, 2017 at 4:07 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On Thu, Apr 13, 2017 at 03:01:40PM -0500, Rob Herring wrote:
->>> On Fri, Apr 07, 2017 at 03:00:09PM -0700, Moritz Fischer wrote:
->>> > From: Moritz Fischer <mdf@kernel.org>
->>> >
->>> > Add bindings for the Chromium EC HWMON. The Chromium EC HWMON
->>> > allows monitoring of temperature sensors and fans attached to the
->>> > EC.
->>> >
->>> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
->>> > ---
->>> >  .../devicetree/bindings/hwmon/cros-ec-hwmon.txt    | 25 ++++++++++++++++++++++
->>> >  1 file changed, 25 insertions(+)
->>> >  create mode 100644 Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
->>> >
->>> > diff --git a/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt b/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
->>> > new file mode 100644
->>> > index 0000000..4c94869
->>> > --- /dev/null
->>> > +++ b/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
->>> > @@ -0,0 +1,25 @@
->>> > +Chromium Embedded Controller EC temperature and fan control
->>> > +-----------------------------------------------------------
->>> > +
->>> > +Google's Chromium EC HWMON is a hwmon implemented byimplemented by the Chromium EC
->>> > +firmware attached to the Embedded Controller (EC) and controlled via a host-command
->>> > +interface.
->>> > +
->>> > +An EC HWMON node should be only found as a sub-node of the EC node (see
->>> > +Documentation/devicetree/bindings/mfd/cros-ec.txt).
->>> > +
->>> > +Required properties:
->>> > +- compatible: Must contain "google,cros-ec-hwmon"
->>> > +
->>> > +Example:
->>> > +   embedded-controller@1e {
->>> > +           reg = <0x1e>;
->>> > +           compatible = "google,cros-ec-i2c";
->>> > +           interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
->>> > +           interrupt-parent = <&gpio0>;
->>> > +
->>> > +           hwmon {
->>> > +                   compatible = "google,cros-ec-hwmon";
->>>
->>> This is sufficient for all devices? I don't see that DT provides
->>> anything here other than instantiating a device, but the parent device
->>> can just as easily do that.
->>>
->> The parent driver (drivers/mfd/cros_ec_i2c.c) calls cros_ec_register(),
->> which uses uses of_platform_populate() to populate all sub-devices.
->> There are various examples in the dts files (look for "google,cros-ec").
->> Does it really make sense to start a second method for instantiating
->> sub-devices ?
->
-> Okay, I suppose not. That wasn't clear from the example.
+Hi,
 
-Do you want me to clarify that in the example somehow?
+This patchset fixes suspend/resume support in pwm-samsung
+driver (which has an effect of fixing suspend/resume support
+for PWM client drivers such as pwm-fan one). Then it removes
+no longer needed suspend/resume code from pwm-fan driver.
 
-Moritz
+It was tested on Odroid-XU3 board (with few extra patches
+adding SoC/board suspend/resume support which are not in
+upstream yet).
+
+The initial issue that has been observed on this configuration
+was that after suspend/resume operation the fan was turned on
+(while the thermal code had explicitly disabled the fan by
+calling back into pwm-fan driver before the suspend/resume).
+
+Fixing this in the pwm-fan driver itself is not feasible since
+pwm_config()/pwm_disable() & co. API saves information about
+current state and doesn't pass the relevant values to PWM core
+if they are identical to the ones used previously (moreover PWM
+core itself does the same before calling into the PWM hardware
+driver).
+
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
+
+
+Bartlomiej Zolnierkiewicz (3):
+  pwm: pwm-samsung: remove redundant checks from pwm_samsung_config()
+  pwm: pwm-samsung: fix suspend/resume support
+  hwmon: pwm-fan: remove no longer needed suspend/resume code
+
+ drivers/hwmon/pwm-fan.c   | 32 ----------------------
+ drivers/pwm/pwm-samsung.c | 70 +++++++++++++++++++++++------------------------
+ 2 files changed, 35 insertions(+), 67 deletions(-)
+
+-- 
+1.9.1
