@@ -1,44 +1,53 @@
-Return-path: <robh@kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20170410154249.r77b6vf3ctzn4kua@rob-hp-laptop>
-References: <20170404192034.158901-1-john@jmuir.com> <20170404192034.158901-3-john@jmuir.com>
- <20170410154249.r77b6vf3ctzn4kua@rob-hp-laptop>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 10 Apr 2017 10:44:06 -0500
-Message-ID: <CAL_Jsq+J4g2JDFgdcrYbZ27jXV7_D3fCd_8doRW=rcKEQnmsCw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] devicetree: Document the max31760 device binding.
-To: John Muir <john@jmuir.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, Pawel Moll <pawel.moll@arm.com>,
-	Ian Campbell <ijc+devicetree@hellion.org.uk>, Kumar Gala <galak@codeaurora.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, Anatol Pomazau <anatol@google.com>,
-	Mark Segal <segal@google.com>
-Content-Type: text/plain; charset=UTF-8
+Return-path: <jaghu@google.com>
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: joel@jms.id.au,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	robh+dt@kernel.org,
+	mark.rutland@arm.com,
+	devicetree@vger.kernel.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v7 0/2] Support for ASPEED AST2400/AST2500 PWM and Fan Tach driver
+Date: Tue,  4 Apr 2017 17:52:39 -0700
+Message-Id: <20170405005241.8794-1-jaghu@google.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Apr 10, 2017 at 10:42 AM, Rob Herring <robh@kernel.org> wrote:
-> On Tue, Apr 04, 2017 at 12:20:34PM -0700, John Muir wrote:
->> Signed-off-by: John Muir <john@jmuir.com>
->> ---
->>  .../devicetree/bindings/hwmon/max31760.txt         | 58 ++++++++++++++++++++++
->>  1 file changed, 58 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/hwmon/max31760.txt
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/max31760.txt b/Documentation/devicetree/bindings/hwmon/max31760.txt
->> new file mode 100644
->> index 000000000000..43787a77c322
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/max31760.txt
->> @@ -0,0 +1,58 @@
->> +MAX31760 fan controller
->> +-----------------------
->> +
->> +This device supports I2C only. Many properties of this device are configurable
->> +thorugh the hwmon interface. See also Documentation/hwmon/max31760.
->
-> I really think we need to describe the fans as separate nodes and
-> preferably with a common binding. This is the second fan controller
-> binding recently[1].
+Support for ASPEED AST2400/AST2500 PWM and Fan Tach driver.
+Patches based on the upstream tag 4.9. Changes made in Version 4 are indicated
+in the individual patches.
+The AST2400/AST2500 PWM controller can support 8 PWM output ports.
+The AST2400/AST2500 Fan Tach controller can support 16 tachometer inputs.
+The hwmon driver provides sysfs entries through which the user can configure the
+duty cycle for the particular PWM output port and read the fan rpm value for
+the particular tachometer input.
+Added devicetree binding documentation for AST2400/AST2500 PWM and Fan Tach
+support.
 
-Forgot the link: https://patchwork.kernel.org/patch/9643643/
+Tested on Zaius board (which has AST2500 chip) and observed that when
+duty cycle is lowered then the fan speed is lowered and lower fan rpm value(
+corresponding to the duty cycle) is reported and when the duty cycle is
+increased then the fan speed increases and higher fan rpm value(corresponding
+to the duty cycle) is reported.
+
+Jaghathiswari Rankappagounder Natarajan (2):
+  Documentation: dt-bindings: Document bindings for ASPEED
+    AST2400/AST2500 PWM and Fan tach controller device driver
+  drivers: hwmon: Support for ASPEED PWM/Fan tach
+
+ .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt |  68 ++
+ Documentation/hwmon/aspeed-pwm-tacho               |  22 +
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/aspeed-pwm-tacho.c                   | 835 +++++++++++++++++++++
+ 5 files changed, 935 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+ create mode 100644 Documentation/hwmon/aspeed-pwm-tacho
+ create mode 100644 drivers/hwmon/aspeed-pwm-tacho.c
+
+--
+2.12.2.715.g7642488e1d-goog
