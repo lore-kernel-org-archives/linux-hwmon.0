@@ -1,39 +1,46 @@
-Return-path: <jdelvare@suse.de>
-Date: Sun, 9 Apr 2017 15:38:06 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
- linux-hwmon@vger.kernel.org
-Subject: Re: it87 causes VIA hardware to lockup
-Message-ID: <20170409153806.6dac6bbd@endymion>
-In-Reply-To: <20170321170503.GC13789@roeck-us.net>
-References: <20170312103413.GJ21222@n2100.armlinux.org.uk>
-	<20170312132544.GA17687@roeck-us.net>
-	<20170312141522.GL21222@n2100.armlinux.org.uk>
-	<20170312142634.GA1917@roeck-us.net>
-	<20170321134430.GA3177@roeck-us.net>
-	<20170321140812.GZ21222@n2100.armlinux.org.uk>
-	<20170321170503.GC13789@roeck-us.net>
+Return-path: <dan.carpenter@oracle.com>
+Date: Mon, 10 Apr 2017 16:46:21 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: Joel Stanley <joel@jms.id.au>,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (tacho) Fix a condition in
+ aspeed_get_fan_tach_ch_rpm()
+Message-ID: <20170410134621.GA1918@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Guenter,
+What we want is for regmap_read() to return zero meaning success and
+for RESULT_STATUS_MASK which is BIT(31) to be set set.
 
-On Tue, 21 Mar 2017 10:05:03 -0700, Guenter Roeck wrote:
-> I'll submit the patch as-is upstream; at least it doesn't break anything.
-> If it doesn't fix your problem, we'll have to look at it again at a later
-> point.
+The current code is buggy in two ways.  It requires both failure
+conditions should be met before it fails.  And if it times out then it
+returns zero instead of -EIO.
 
-Given that this patch fixes a regression in kernels v4.7 to v.4.10,
-shouldn't it go to stable@?
+Fixes: cc96f6f6d766 ("hwmon: Support for ASPEED PWM/Fan tach")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+Static analysis.  Not tested.
 
-As a side note, I think the second half of the patch is redundant, it
-only makes registration slightly faster on IT8705F, and could have bad
-side effects at least in theory. The first half seems sufficient to
-me...
-
--- 
-Jean Delvare
-SUSE L3 Support
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 29010ad94208..2f22add5c73b 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -512,11 +512,11 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 
+ 	msleep(sec);
+ 
+-	while (!(regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val))
+-			& !(val & RESULT_STATUS_MASK)) {
++	while (regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val) ||
++	       !(val & RESULT_STATUS_MASK)) {
+ 		timeout++;
+ 		if (timeout > 1)
+-			return 0;
++			return -EIO;
+ 		msleep(sec);
+ 	}
+ 
