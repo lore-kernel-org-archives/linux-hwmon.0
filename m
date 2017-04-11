@@ -1,134 +1,111 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f172.google.com ([209.85.192.172]:35074 "EHLO
-        mail-pf0-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754846AbdDEAws (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Apr 2017 20:52:48 -0400
-Received: by mail-pf0-f172.google.com with SMTP id i5so25910311pfc.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Apr 2017 17:52:47 -0700 (PDT)
-From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-To: joel@jms.id.au, jdelvare@suse.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, devicetree@vger.kernel.org
-Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Subject: [PATCH linux v7 1/2] Documentation: dt-bindings: Document bindings for ASPEED AST2400/AST2500 PWM and Fan tach controller device driver
-Date: Tue,  4 Apr 2017 17:52:40 -0700
-Message-Id: <20170405005241.8794-2-jaghu@google.com>
-In-Reply-To: <20170405005241.8794-1-jaghu@google.com>
-References: <20170405005241.8794-1-jaghu@google.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-path: <john@jmuir.com>
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH 2/2] devicetree: Document the max31760 device binding.
+From: John Muir <john@jmuir.com>
+In-Reply-To: <20170410154249.r77b6vf3ctzn4kua@rob-hp-laptop>
+Date: Tue, 11 Apr 2017 06:47:28 -0700
+Cc: Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Pawel Moll <pawel.moll@arm.com>,
+ Ian Campbell <ijc+devicetree@hellion.org.uk>,
+ Kumar Gala <galak@codeaurora.org>,
+ devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org,
+ Anatol Pomazau <anatol@google.com>,
+ Mark Segal <segal@google.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <996F9836-F468-4FB5-A16E-2E1FAE8752AD@jmuir.com>
+References: <20170404192034.158901-1-john@jmuir.com>
+ <20170404192034.158901-3-john@jmuir.com>
+ <20170410154249.r77b6vf3ctzn4kua@rob-hp-laptop>
+To: Rob Herring <robh@kernel.org>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This binding provides interface for adding values related to ASPEED
-AST2400/2500 PWM and Fan tach controller support.
-The PWM controller can support upto 8 PWM output ports.
-The Fan tach controller can support upto 16 tachometer inputs.
+> On Apr 10, 2017, at 8:42 AM, Rob Herring <robh@kernel.org> wrote:
+>=20
+> On Tue, Apr 04, 2017 at 12:20:34PM -0700, John Muir wrote:
+>> +MAX31760 fan controller
+>> +-----------------------
+>> +
+>> +This device supports I2C only. Many properties of this device are =
+configurable
+>> +thorugh the hwmon interface. See also Documentation/hwmon/max31760.
+>=20
+> I really think we need to describe the fans as separate nodes and=20
+> preferably with a common binding. This is the second fan controller=20
+> binding recently[1].
+>=20
+> Features of the "hwmon interface" are not relevant to the binding.=20
+> Bindings describe h/w.
 
-Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- v7:
-- Added a semicolon at the end of pwm_tacho_fixed_clk node in Examples section
+It seems to me that referring to the hwmon interface is only helpful. =
+You are suggesting removing those sentences? If so, can I add a link to =
+the data sheet?
 
- v6:
-- Changed to aspeed,fan-tach-ch
+>=20
+>> +Optional node properties:
+>> +- maxim,fan1-enabled		- 1 to enable, 0 to disable. =
+Default: 1.
+>> +- maxim,fan2-enabled		- 1 to enable, 0 to disable. =
+Default: 1.
+>> +- maxim,fan1-label		- String: Hwmon fan1_label.
+>> +- maxim,fan2-label		- String: Hwmon fan2_label.
+>=20
+> Perhaps 2 fan sub nodes. reg for fan number, status for enabled, and=20=
 
- v5:
-- Changed the naming scheme to aspeed,ast2400/2500-pwm-tacho
-- Removed gpio pin muxing
-- Added aspeed vendor prefix for fan-tach-ch
-- Changed to fan@0/1
-- Changed reg to 32 bits
+> label for label.
 
- v4:
-- Used 'reg'
+OK.
 
- v3:
-- Made the structure more common
+Right now a fan=E2=80=99s number of pulses and the PWM frequency are =
+configured using the hwmon sysfs interface (which defines standard =
+controls for those), but as those are characteristics of the hardware, =
+should they also be configured via the device tree binding?
 
- v2:
-- Removed '_' in node and property names
-- Gave some explanation for the properties used
+>> +- maxim,pwm-zero-fan-can-fail	- 0: Fan failure detection =
+disabled when PWM is
+>> +				     ramping to 0%.
+>> +				  1: Fan failure detection enabled for =
+all PWM
+>> +				     values.
+>> +				  Default: 0.
+>=20
+> All these can be boolean=E2=80=A6
 
- .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+OK. The only issue I see is when the default is =E2=80=98true=E2=80=99 =
+in the device, but I=E2=80=99ll try to avoid that. Sometimes I wish that =
+you could set a boolean to false in DTS files.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-new file mode 100644
-index 000000000000..cf4460564adb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-@@ -0,0 +1,68 @@
-+ASPEED AST2400/AST2500 PWM and Fan Tacho controller device driver
-+
-+The ASPEED PWM controller can support upto 8 PWM outputs. The ASPEED Fan Tacho
-+controller can support upto 16 Fan tachometer inputs.
-+
-+There can be upto 8 fans supported. Each fan can have one PWM output and
-+one/two Fan tach inputs.
-+
-+Required properties for pwm-tacho node:
-+- #address-cells : should be 1.
-+
-+- #size-cells : should be 1.
-+
-+- reg : address and length of the register set for the device.
-+
-+- pinctrl-names : a pinctrl state named "default" must be defined.
-+
-+- pinctrl-0 : phandle referencing pin configuration of the PWM ports.
-+
-+- compatible : should be "aspeed,ast2400-pwm-tacho" for AST2400 and
-+	       "aspeed,ast2500-pwm-tacho" for AST2500.
-+
-+- clocks : a fixed clock providing input clock frequency(PWM
-+	   and Fan Tach clock)
-+
-+fan subnode format:
-+===================
-+Under fan subnode there can upto 8 child nodes, with each child node
-+representing a fan. If there are 8 fans each fan can have one PWM port and
-+one/two Fan tach inputs.
-+
-+Required properties for each child node:
-+- reg : should specify PWM source port.
-+	integer value in the range 0 to 7 with 0 indicating PWM port A and
-+	7 indicating PWM port H.
-+
-+- aspeed,fan-tach-ch : should specify the Fan tach input channel.
-+                integer value in the range 0 through 15, with 0 indicating
-+		Fan tach channel 0 and 15 indicating Fan tach channel 15.
-+		Atleast one Fan tach input channel is required.
-+
-+Examples:
-+
-+pwm_tacho_fixed_clk: fixedclk {
-+	compatible = "fixed-clock";
-+	#clock-cells = <0>;
-+	clock-frequency = <24000000>;
-+};
-+
-+pwm_tacho: pwmtachocontroller@1e786000 {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	reg = <0x1E786000 0x1000>;
-+	compatible = "aspeed,ast2500-pwm-tacho";
-+	clocks = <&pwm_tacho_fixed_clk>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default>;
-+
-+	fan@0 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-+	};
-+
-+	fan@1 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x01 0x02>;
-+	};
-+};
---
-2.12.2.715.g7642488e1d-goog
+>=20
+>> +- maxim,temp1-label		- String: Hwmon temp1_label.
+>> +- maxim,temp2-label		- String: Hwmon temp2_label.
+>> +- maxim,temp2-ideality		- Set ideality factor for the =
+remote temperature
+>> +				  sensor. Integer with range 0 to 63,
+>> +				  representing a multiplication factor =
+of 0.9844
+>> +				  to 1.0489. Default: 24 (1.0080).
+>=20
+> No maxim,temp1-ideality?
+No - the device only lets you set the ideality of the =E2=80=98external' =
+temperature sensor. I guess if there is an ideality for the internal =
+temperature sensor, it would be hard-wired as a characteristic of the =
+part that was used.
 
+> Not sure what to do with these, but perhaps=20
+> also as sub-nodes. Surely we have some bindings already for devices =
+with=20
+> multiple temp sensors. Don't invent something custom here.
+
+I=E2=80=99ll look into it.
+
+What is the best way to distinguish between =E2=80=98fan=E2=80=99 and =
+=E2=80=98temp=E2=80=99 sub-nodes? Do I require a =E2=80=98compatible=E2=80=
+=99 string?
+
+Thanks!
+
+John.
