@@ -1,46 +1,51 @@
-Return-path: <tglx@linutronix.de>
-Date: Wed, 12 Apr 2017 16:53:39 +0200 (CEST)
-From: Thomas Gleixner <tglx@linutronix.de>
-To: Tommi Rantala <tt.rantala@gmail.com>
-cc: Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
-    Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
-    linux-hwmon@vger.kernel.org, Sebastian Siewior <bigeasy@linutronix.de>,
-    Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: Re: [patch 0/6] hwmon/coretemp: Hotplug fixes, cleanups and state
- machine conversion
-In-Reply-To: <CA+ydwtrc9E_xuaQSx=P_co3q9EPSyRq3yzSyTgN1kxp0gs35qw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.20.1704121643120.1874@nanos>
-References: <20161122173622.771252945@linutronix.de> <65310945-a720-5437-f7cb-9d8af1e5b53d@roeck-us.net> <CA+ydwtpYPP9xSTDfOmZSUamb1aadOoqCs18sWBanzFaSxJhWWQ@mail.gmail.com> <alpine.DEB.2.20.1704121124510.1874@nanos> <CA+ydwtqKqzjLDiaCEuvXfYp3Lkbh+z-+s=1JfwkuiVOWp3QfgA@mail.gmail.com>
- <alpine.DEB.2.20.1704121248150.1874@nanos> <CA+ydwtrc9E_xuaQSx=P_co3q9EPSyRq3yzSyTgN1kxp0gs35qw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Return-path: <javier@osg.samsung.com>
+From: Javier Martinez Canillas <javier@osg.samsung.com>
+To: linux-kernel@vger.kernel.org
+Cc: Javier Martinez Canillas <javier@osg.samsung.com>,
+	linux-hwmon@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 1/2] hwmon: (lm87) Remove unused I2C devices driver_data
+Date: Wed, 12 Apr 2017 21:21:38 -0300
+Message-Id: <20170413002139.5983-1-javier@osg.samsung.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, 12 Apr 2017, Tommi Rantala wrote:
-> 2017-04-12 13:52 GMT+03:00 Thomas Gleixner <tglx@linutronix.de>:
-> > Can you please try to offline/online CPUs from the console?
-> >
-> > # echo 0 >/sys/devices/system/cpu1/online
-> > # echo 1 >/sys/devices/system/cpu1/online
-> 
-> ok, that works.
-> 
-> > If that works, then try to offline all CPUs (except 0) in the same order as
-> > suspend (1 ... 7) and then online them again in the same order?
-> 
-> Seems to work without problems:
+The I2C device ID entries set a .driver_data but this data is never
+looked up by the driver. So don't set it and also remove the enum.
 
-Good.
+Signed-off-by: Javier Martinez Canillas <javier@osg.samsung.com>
 
-Can you please try the following:
+---
 
-# for STATE in freezer devices platform processors core; do \
-  echo $STATE; \
-  echo $STATE >/sys/power/pm_test; \
-  echo mem >/sys/power/state
+Changes in v2:
+- Use the correct driver in subject line.
 
-That should give us at least a hint in which area to dig.
+ drivers/hwmon/lm87.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Thanks,
-
-	tglx
+diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
+index 04a7a1ddb030..c0766e7392d3 100644
+--- a/drivers/hwmon/lm87.c
++++ b/drivers/hwmon/lm87.c
+@@ -75,8 +75,6 @@
+ 
+ static const unsigned short normal_i2c[] = { 0x2c, 0x2d, 0x2e, I2C_CLIENT_END };
+ 
+-enum chips { lm87, adm1024 };
+-
+ /*
+  * The LM87 registers
+  */
+@@ -981,8 +979,8 @@ static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
+  */
+ 
+ static const struct i2c_device_id lm87_id[] = {
+-	{ "lm87", lm87 },
+-	{ "adm1024", adm1024 },
++	{ "lm87", 0 },
++	{ "adm1024", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, lm87_id);
+-- 
+2.9.3
