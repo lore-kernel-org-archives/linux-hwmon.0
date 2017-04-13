@@ -1,19 +1,19 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:38054
+Received: from ec2-52-27-115-49.us-west-2.compute.amazonaws.com ([52.27.115.49]:38075
         "EHLO osg.samsung.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1755855AbdDMAPh (ORCPT
+        with ESMTP id S1755904AbdDMAWG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Apr 2017 20:15:37 -0400
+        Wed, 12 Apr 2017 20:22:06 -0400
 From: Javier Martinez Canillas <javier@osg.samsung.com>
 To: linux-kernel@vger.kernel.org
 Cc: Javier Martinez Canillas <javier@osg.samsung.com>,
         linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/2] hwmon: (lm85) Add OF device ID table
-Date: Wed, 12 Apr 2017 21:14:57 -0300
-Message-Id: <20170413001457.3918-2-javier@osg.samsung.com>
-In-Reply-To: <20170413001457.3918-1-javier@osg.samsung.com>
-References: <20170413001457.3918-1-javier@osg.samsung.com>
+Subject: [PATCH v2 2/2] hwmon: (lm87) Add OF device ID table
+Date: Wed, 12 Apr 2017 21:21:39 -0300
+Message-Id: <20170413002139.5983-2-javier@osg.samsung.com>
+In-Reply-To: <20170413002139.5983-1-javier@osg.samsung.com>
+References: <20170413002139.5983-1-javier@osg.samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -37,11 +37,15 @@ I should had included this patch in series [0] but it seems that I didn't.
 Best regards,
 Javier
 
+Changes in v2:
+- Use the correct driver in subject line.
+- Keep OF device ID table sorted in the same order than I2C device ID table.
+
  drivers/hwmon/lm87.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-index c0766e7392d3..85290c9aa46f 100644
+index c0766e7392d3..b48d30760388 100644
 --- a/drivers/hwmon/lm87.c
 +++ b/drivers/hwmon/lm87.c
 @@ -985,10 +985,18 @@ static const struct i2c_device_id lm87_id[] = {
@@ -49,8 +53,8 @@ index c0766e7392d3..85290c9aa46f 100644
  MODULE_DEVICE_TABLE(i2c, lm87_id);
  
 +static const struct of_device_id lm87_of_match[] = {
-+	{ .compatible = "adi,adm1024" },
 +	{ .compatible = "ti,lm87" },
++	{ .compatible = "adi,adm1024" },
 +	{ },
 +};
 +MODULE_DEVICE_TABLE(of, lm87_of_match);
