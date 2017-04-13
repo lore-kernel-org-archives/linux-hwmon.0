@@ -1,180 +1,72 @@
-Return-path: <mdf@kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-oi0-f67.google.com ([209.85.218.67]:34804 "EHLO
+        mail-oi0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755085AbdDMUBn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 13 Apr 2017 16:01:43 -0400
+Date: Thu, 13 Apr 2017 15:01:40 -0500
+From: Rob Herring <robh@kernel.org>
+To: Moritz Fischer <moritz.fischer@ettus.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, lee.jones@linaro.org, olof@lixom.net,
+        linux@roeck-us.net, jdelvare@suse.com, mark.rutland@arm.com,
+        Moritz Fischer <mdf@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add bindings for Google Chromium
+ EC HWMON
+Message-ID: <20170413200140.lcynmsv255ktoiyl@rob-hp-laptop>
+References: <1491602410-31518-1-git-send-email-moritz.fischer@ettus.com>
+ <1491602410-31518-2-git-send-email-moritz.fischer@ettus.com>
 MIME-Version: 1.0
-In-Reply-To: <4917fd01-8dd9-eb58-ee29-3ff4f11de0af@roeck-us.net>
-References: <1491602410-31518-1-git-send-email-moritz.fischer@ettus.com> <4917fd01-8dd9-eb58-ee29-3ff4f11de0af@roeck-us.net>
-From: Moritz Fischer <mdf@kernel.org>
-Date: Sun, 9 Apr 2017 17:40:35 -0700
-Message-ID: <CAJYdmeMFMpp5yE1d_55n90D=Q6Hd_-d-GjimnftEe9dw5Egvxg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mfd: cros-ec: Add functions to read mapped memory
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Moritz Fischer <moritz.fischer@ettus.com>, linux-hwmon@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Devicetree List <devicetree@vger.kernel.org>,
-	lee.jones@linaro.org, olof@lixom.net, jdelvare@suse.com,
-	Rob Herring <robh+dt@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Moritz Fischer <mdf@kernel.org>, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1491602410-31518-2-git-send-email-moritz.fischer@ettus.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 09, 2017 at 04:02:04PM -0700, Guenter Roeck wrote:
-> On 04/07/2017 03:00 PM, Moritz Fischer wrote:
-> > From: Moritz Fischer <mdf@kernel.org>
-> >
-> > The ChromeOS EC has mapped memory regions where things like temperature
-> > sensors and fan speed are stored. Provide access to those from the
-> > cros-ec mfd device.
-> >
-> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
->
-> I'll have to consult with others at Google if this is a good idea.
-> Benson, can you comment ?
+On Fri, Apr 07, 2017 at 03:00:09PM -0700, Moritz Fischer wrote:
+> From: Moritz Fischer <mdf@kernel.org>
+> 
+> Add bindings for the Chromium EC HWMON. The Chromium EC HWMON
+> allows monitoring of temperature sensors and fans attached to the
+> EC.
+> 
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>  .../devicetree/bindings/hwmon/cros-ec-hwmon.txt    | 25 ++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt b/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
+> new file mode 100644
+> index 0000000..4c94869
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/cros-ec-hwmon.txt
+> @@ -0,0 +1,25 @@
+> +Chromium Embedded Controller EC temperature and fan control
+> +-----------------------------------------------------------
+> +
+> +Google's Chromium EC HWMON is a hwmon implemented byimplemented by the Chromium EC
+> +firmware attached to the Embedded Controller (EC) and controlled via a host-command
+> +interface.
+> +
+> +An EC HWMON node should be only found as a sub-node of the EC node (see
+> +Documentation/devicetree/bindings/mfd/cros-ec.txt).
+> +
+> +Required properties:
+> +- compatible: Must contain "google,cros-ec-hwmon"
+> +
+> +Example:
+> +	embedded-controller@1e {
+> +		reg = <0x1e>;
+> +		compatible = "google,cros-ec-i2c";
+> +		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> +		interrupt-parent = <&gpio0>;
+> +
+> +		hwmon {
+> +			compatible = "google,cros-ec-hwmon";
 
-Well to my knowledge the only other way to get to it is the 'ectool'
-from userland
-via ioctl calls. The other option would be IIO ...
->
-> > ---
-> >  drivers/platform/chrome/cros_ec_proto.c | 55 +++++++++++++++++++++++++++++++++
-> >  include/linux/mfd/cros_ec.h             | 39 +++++++++++++++++++++++
-> >  2 files changed, 94 insertions(+)
-> >
-> > diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> > index ed5dee7..28063de 100644
-> > --- a/drivers/platform/chrome/cros_ec_proto.c
-> > +++ b/drivers/platform/chrome/cros_ec_proto.c
-> > @@ -494,3 +494,58 @@ int cros_ec_get_next_event(struct cros_ec_device *ec_dev)
-> >   return get_keyboard_state_event(ec_dev);
-> >  }
-> >  EXPORT_SYMBOL(cros_ec_get_next_event);
-> > +
-> > +static int __cros_ec_read_mapped_mem(struct cros_ec_device *ec, uint8_t offset,
-> > +     void *buf, size_t size)
-> > +{
-> > + int ret;
-> > + struct ec_params_read_memmap *params;
-> > + struct cros_ec_command *msg;
-> > +
-> > + msg = kzalloc(sizeof(*msg) + max(sizeof(*params), size), GFP_KERNEL);
-> > + if (!msg)
-> > + return -ENOMEM;
-> > +
->
-> I don't think using kzalloc here makes much sense. It is well known
-> that size is <= 4, so using a local buffer should not be a problem.
+This is sufficient for all devices? I don't see that DT provides 
+anything here other than instantiating a device, but the parent device 
+can just as easily do that.
 
-Good point, that was basically copy & paste from other cros-ec code ;-)
-I'll fix this.
-
->
-> > + msg->version = 0;
-> > + msg->command = EC_CMD_READ_MEMMAP;
-> > + msg->insize = size;
-> > + msg->outsize = sizeof(*params);
-> > +
-> > + params = (struct ec_params_read_memmap *)msg->data;
-> > + params->offset = offset;
-> > + params->size = size;
-> > +
-> > + ret = cros_ec_cmd_xfer(ec, msg);
-> > + if (ret < 0 || msg->result != EC_RES_SUCCESS) {
->
-> cros_ec_cmd_xfer_status() was introduced to be able to avoid the second check.
->
-
-Alright, cool. Will fix this.
-
-> > + dev_warn(ec->dev, "cannot read mapped reg: %d/%d\n",
-> > + ret, msg->result);
-> > + goto out_free;
-> > + }
-> > +
-> > + memcpy(buf, msg->data, size);
-> > +
-> > +out_free:
-> > + kfree(msg);
-> > + return ret;
-> > +}
-> > +
-> > +int cros_ec_read_mapped_mem32(struct cros_ec_device *ec, const uint8_t offset,
-> > +      uint32_t *data)
-> > +{
-> > + return __cros_ec_read_mapped_mem(ec, offset, data, sizeof(*data));
-> > +}
-> > +EXPORT_SYMBOL_GPL(cros_ec_read_mapped_mem32);
-> > +
-> > +int cros_ec_read_mapped_mem16(struct cros_ec_device *ec, const uint8_t offset,
-> > +      uint16_t *data)
-> > +{
-> > + return __cros_ec_read_mapped_mem(ec, offset, data, sizeof(*data));
-> > +}
-> > +EXPORT_SYMBOL_GPL(cros_ec_read_mapped_mem16);
-> > +
->
-> Either case, this assumes that EC endianness matches host endianness. I don't
-> think we can just assume that this is the case.
-
-Huh, yeah. Will need to figure out how to detect the EC endianness in
-that case.
-
->
-> > +int cros_ec_read_mapped_mem8(struct cros_ec_device *ec, const uint8_t offset,
-> > +     uint8_t *data)
-> > +{
-> > + return __cros_ec_read_mapped_mem(ec, offset, data, sizeof(*data));
-> > +}
-> > +EXPORT_SYMBOL_GPL(cros_ec_read_mapped_mem8);
-> > diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-> > index b3d04de..c2de878 100644
-> > --- a/include/linux/mfd/cros_ec.h
-> > +++ b/include/linux/mfd/cros_ec.h
-> > @@ -190,6 +190,45 @@ struct cros_ec_dev {
-> >  };
-> >
-> >  /**
-> > + * cros_ec_read_mapped_mem8 - Read mapped memory in the ChromeOS EC
-> > + *
-> > + * This can be called by drivers to access the mapped memory in the EC
-> > + *
-> > + * @ec_dev: Device to read from
-> > + * @offset: Offset to read
-> > + * @data: Return data
-> > + * @return: 0 if Ok, -ve on error
-> > + */
-> > +int cros_ec_read_mapped_mem8(struct cros_ec_device *ec, const uint8_t offset,
-> > +     uint8_t *data);
-> > +
-> > +/**
-> > + * cros_ec_read_mapped_mem16 - Read mapped memory in the ChromeOS EC
-> > + *
-> > + * This can be called by drivers to access the mapped memory in the EC
-> > + *
-> > + * @ec_dev: Device to read from
-> > + * @offset: Offset to read
-> > + * @data: Return data
-> > + * @return: 0 if Ok, -ve on error
-> > + */
-> > +int cros_ec_read_mapped_mem16(struct cros_ec_device *ec, const uint8_t offset,
-> > +      uint16_t *data);
-> > +
-> > +/**
-> > + * cros_ec_read_mapped_mem32 - Read mapped memory in the ChromeOS EC
-> > + *
-> > + * This can be called by drivers to access the mapped memory in the EC
-> > + *
-> > + * @ec_dev: Device to read from
-> > + * @offset: Offset to read
-> > + * @data: Return data
-> > + * @return: 0 if Ok, -ve on error
-> > + */
-> > +int cros_ec_read_mapped_mem32(struct cros_ec_device *ec, const uint8_t offset,
-> > +      uint32_t *data);
-> > +
-> > +/**
-> >   * cros_ec_suspend - Handle a suspend operation for the ChromeOS EC device
-> >   *
-> >   * This can be called by drivers to handle a suspend event.
-> >
->
-
-Thanks for the feedback,
-
-Moritz
+Rob
