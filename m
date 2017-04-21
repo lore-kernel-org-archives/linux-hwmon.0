@@ -1,77 +1,71 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35716 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:44909 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1042654AbdDUVss (ORCPT
+        with ESMTP id S1425285AbdDUTed (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Apr 2017 17:48:48 -0400
-Date: Fri, 21 Apr 2017 14:48:45 -0700
+        Fri, 21 Apr 2017 15:34:33 -0400
+Date: Fri, 21 Apr 2017 12:34:29 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Patrick Williams <patrick@stwcx.xyz>
-Cc: Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        linux-hwmon@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Subject: Re: [PATCH] hwmon (pmbus): Add client driver for IR35221
-Message-ID: <20170421214845.GA29008@roeck-us.net>
-References: <20170421042505.20403-1-sam@mendozajonas.com>
- <20170421205523.5jqqroooeqmfzl36@asimov>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: hwmon: (adt7475) set start bit in probe
+Message-ID: <20170421193429.GA22253@roeck-us.net>
+References: <20170421190810.30628-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20170421205523.5jqqroooeqmfzl36@asimov>
+In-Reply-To: <20170421190810.30628-1-chris.packham@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 21, 2017 at 03:55:23PM -0500, Patrick Williams wrote:
-> Sam,
+On Sat, Apr 22, 2017 at 07:08:09AM +1200, Chris Packham wrote:
+> The ADT7475 and ADT7476 have the STRT bit cleared by default[1]. Before any
+> monitoring activities the STRT bit needs to be set. Logically this needs
+> to happen before any of the sensors are read so the probe() function
+> seems the best place for it.
 > 
-> On Fri, Apr 21, 2017 at 02:25:05PM +1000, Samuel Mendoza-Jonas wrote:
-> > IR35221 is a Digital DC-DC Multiphase Converter
-> > 
-> > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> > ---
-> > - Tested on a ppc64 system which includes several of these devices.
-> > - This patch re-implements the linear reg2data/data2reg functions from
-> >   pmbus-core like some other drivers in order to scale some results. Is
-> >   this something that would be better off being made generic for pmbus
-> >   drivers to call?
-> > - The resolution of iout0 is apparently configurable between two values,
-> >   however the documentation I have access to does not specify how this is
-> >   actually configured - currently it is left at the default resolution in
-> >   the driver.
-> > 
-> >  Documentation/hwmon/ir35221   |  87 ++++++++++++
-> >  drivers/hwmon/pmbus/Kconfig   |  11 ++
-> >  drivers/hwmon/pmbus/Makefile  |   1 +
-> >  drivers/hwmon/pmbus/ir35221.c | 322 ++++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 421 insertions(+)
-> >  create mode 100644 Documentation/hwmon/ir35221
-> >  create mode 100644 drivers/hwmon/pmbus/ir35221.c
+> [1] - https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
 > 
-> Thanks for working on this.
-> 
-> Would it be possible to enhance it in a follow up to support an
-> 'inN_target' also?  I see this is not documented by the sysfs-interface
-> for hwmon but we likely need support for this.  There are voltage
-> slewing operations we do in system manufacturing.  Without an hwmon
-> interface for programming the target voltage we're going to have to
-> unbind the device and manually do the i2c operations.
-> 
-> 
-> Guenter,
-> 
-> I mention 'inN_target' to match 'fanN_target'.  Do you have
-> any opposition to either formally adding that as an option for voltage
-> readings or adding it to this specific driver?
-> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Please keep in mind that this is a hardware monitoring driver.
-Are you looking for regulator functionality ? If so, it might make sense
-to improve regulator support (ie support more than enable/disable
-when registering with the regulator subsystem) in the pmbus infrastructure.
-
-[ You don't have to unbind the driver to access the i2c interface directly.
-  If this is for manufacturing only, you can also access the i2c interface
-  directly using I2C_SLAVE_FORCE. ]
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/adt7475.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index fcfa48222145..c803e3c5fcd4 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -59,6 +59,8 @@
+>  #define REG_VENDID		0x3E
+>  #define REG_DEVID2		0x3F
+>  
+> +#define REG_CONFIG1		0x40
+> +
+>  #define REG_STATUS1		0x41
+>  #define REG_STATUS2		0x42
+>  
+> @@ -1371,6 +1373,17 @@ static int adt7475_probe(struct i2c_client *client,
+>  	for (i = 0; i < ADT7475_PWM_COUNT; i++)
+>  		adt7475_read_pwm(client, i);
+>  
+> +	/* Start monitoring */
+> +	switch (chip) {
+> +	case adt7475:
+> +	case adt7476:
+> +		i2c_smbus_write_byte_data(client, REG_CONFIG1,
+> +					  adt7475_read(REG_CONFIG1) | 0x01);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+>  	ret = sysfs_create_group(&client->dev.kobj, &adt7475_attr_group);
+>  	if (ret)
+>  		return ret;
