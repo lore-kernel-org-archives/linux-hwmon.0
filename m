@@ -1,57 +1,58 @@
-Return-path: <chrisp@alliedtelesis.co.nz>
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (adt7475) set start bit in probe
-Date: Sat, 22 Apr 2017 07:08:09 +1200
-Message-Id: <20170421190810.30628-1-chris.packham@alliedtelesis.co.nz>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:33761 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1424997AbdDUTas (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Apr 2017 15:30:48 -0400
+Date: Fri, 21 Apr 2017 12:30:45 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Joe Schaack <jschaack@xes-inc.com>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com, asierra@xes-inc.com
+Subject: Re: hwmon: ina209: Handled signed registers
+Message-ID: <20170421193045.GA22051@roeck-us.net>
+References: <1492517750-20701-1-git-send-email-jschaack@xes-inc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1492517750-20701-1-git-send-email-jschaack@xes-inc.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The ADT7475 and ADT7476 have the STRT bit cleared by default[1]. Before any
-monitoring activities the STRT bit needs to be set. Logically this needs
-to happen before any of the sensors are read so the probe() function
-seems the best place for it.
+On Tue, Apr 18, 2017 at 07:15:50AM -0500, Joe Schaack wrote:
+> The shunt voltage and current registers are signed 16-bit values so
+> handle them as such.
+> 
+> Signed-off-by: Joe Schaack <jschaack@xes-inc.com>
+> Reviewed-by: Aaron Sierra <asierra@xes-inc.com>
 
-[1] - https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
+Applied.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/hwmon/adt7475.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index fcfa48222145..c803e3c5fcd4 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -59,6 +59,8 @@
- #define REG_VENDID		0x3E
- #define REG_DEVID2		0x3F
- 
-+#define REG_CONFIG1		0x40
-+
- #define REG_STATUS1		0x41
- #define REG_STATUS2		0x42
- 
-@@ -1371,6 +1373,17 @@ static int adt7475_probe(struct i2c_client *client,
- 	for (i = 0; i < ADT7475_PWM_COUNT; i++)
- 		adt7475_read_pwm(client, i);
- 
-+	/* Start monitoring */
-+	switch (chip) {
-+	case adt7475:
-+	case adt7476:
-+		i2c_smbus_write_byte_data(client, REG_CONFIG1,
-+					  adt7475_read(REG_CONFIG1) | 0x01);
-+		break;
-+	default:
-+		break;
-+	}
-+
- 	ret = sysfs_create_group(&client->dev.kobj, &adt7475_attr_group);
- 	if (ret)
- 		return ret;
--- 
-2.11.0.24.ge6920cf
+> ---
+>  drivers/hwmon/ina209.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ina209.c b/drivers/hwmon/ina209.c
+> index 5378fde..9fa975d 100644
+> --- a/drivers/hwmon/ina209.c
+> +++ b/drivers/hwmon/ina209.c
+> @@ -117,7 +117,7 @@ static long ina209_from_reg(const u8 reg, const u16 val)
+>  	case INA209_SHUNT_VOLTAGE_POS_WARN:
+>  	case INA209_SHUNT_VOLTAGE_NEG_WARN:
+>  		/* LSB=10 uV. Convert to mV. */
+> -		return DIV_ROUND_CLOSEST(val, 100);
+> +		return DIV_ROUND_CLOSEST((s16)val, 100);
+>  
+>  	case INA209_BUS_VOLTAGE:
+>  	case INA209_BUS_VOLTAGE_MAX_PEAK:
+> @@ -146,7 +146,7 @@ static long ina209_from_reg(const u8 reg, const u16 val)
+>  
+>  	case INA209_CURRENT:
+>  		/* LSB=1 mA (selected). Is in mA */
+> -		return val;
+> +		return (s16)val;
+>  	}
+>  
+>  	/* programmer goofed */
