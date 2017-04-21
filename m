@@ -1,45 +1,57 @@
-Return-path: <jschaack@xes-inc.com>
-From: Joe Schaack <jschaack@xes-inc.com>
-To: linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	asierra@xes-inc.com,
-	jschaack@xes-inc.com
-Subject: [PATCH] hwmon: ina209: Handled signed registers
-Date: Tue, 18 Apr 2017 07:15:50 -0500
-Message-Id: <1492517750-20701-1-git-send-email-jschaack@xes-inc.com>
+Return-path: <chrisp@alliedtelesis.co.nz>
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Jean Delvare <jdelvare@suse.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (adt7475) set start bit in probe
+Date: Sat, 22 Apr 2017 07:08:09 +1200
+Message-Id: <20170421190810.30628-1-chris.packham@alliedtelesis.co.nz>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-The shunt voltage and current registers are signed 16-bit values so
-handle them as such.
+The ADT7475 and ADT7476 have the STRT bit cleared by default[1]. Before any
+monitoring activities the STRT bit needs to be set. Logically this needs
+to happen before any of the sensors are read so the probe() function
+seems the best place for it.
 
-Signed-off-by: Joe Schaack <jschaack@xes-inc.com>
-Reviewed-by: Aaron Sierra <asierra@xes-inc.com>
+[1] - https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
- drivers/hwmon/ina209.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/adt7475.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/hwmon/ina209.c b/drivers/hwmon/ina209.c
-index 5378fde..9fa975d 100644
---- a/drivers/hwmon/ina209.c
-+++ b/drivers/hwmon/ina209.c
-@@ -117,7 +117,7 @@ static long ina209_from_reg(const u8 reg, const u16 val)
- 	case INA209_SHUNT_VOLTAGE_POS_WARN:
- 	case INA209_SHUNT_VOLTAGE_NEG_WARN:
- 		/* LSB=10 uV. Convert to mV. */
--		return DIV_ROUND_CLOSEST(val, 100);
-+		return DIV_ROUND_CLOSEST((s16)val, 100);
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index fcfa48222145..c803e3c5fcd4 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -59,6 +59,8 @@
+ #define REG_VENDID		0x3E
+ #define REG_DEVID2		0x3F
  
- 	case INA209_BUS_VOLTAGE:
- 	case INA209_BUS_VOLTAGE_MAX_PEAK:
-@@ -146,7 +146,7 @@ static long ina209_from_reg(const u8 reg, const u16 val)
++#define REG_CONFIG1		0x40
++
+ #define REG_STATUS1		0x41
+ #define REG_STATUS2		0x42
  
- 	case INA209_CURRENT:
- 		/* LSB=1 mA (selected). Is in mA */
--		return val;
-+		return (s16)val;
- 	}
+@@ -1371,6 +1373,17 @@ static int adt7475_probe(struct i2c_client *client,
+ 	for (i = 0; i < ADT7475_PWM_COUNT; i++)
+ 		adt7475_read_pwm(client, i);
  
- 	/* programmer goofed */
++	/* Start monitoring */
++	switch (chip) {
++	case adt7475:
++	case adt7476:
++		i2c_smbus_write_byte_data(client, REG_CONFIG1,
++					  adt7475_read(REG_CONFIG1) | 0x01);
++		break;
++	default:
++		break;
++	}
++
+ 	ret = sysfs_create_group(&client->dev.kobj, &adt7475_attr_group);
+ 	if (ret)
+ 		return ret;
 -- 
-1.9.1
+2.11.0.24.ge6920cf
