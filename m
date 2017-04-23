@@ -1,98 +1,66 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47113 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753923AbdDCPwk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Apr 2017 11:52:40 -0400
-Date: Mon, 3 Apr 2017 08:52:31 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>, linux-pwm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: pwm-fan: remove no longer needed
- suspend/resume code
-Message-ID: <20170403155231.GA28014@roeck-us.net>
-References: <1491227226-12972-1-git-send-email-b.zolnierkie@samsung.com>
- <CGME20170403134742epcas1p42a7ea96e9c27d5752796ca9ff86d0f1e@epcas1p4.samsung.com>
- <1491227226-12972-4-git-send-email-b.zolnierkie@samsung.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from Galois.linutronix.de ([146.0.238.70]:44327 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1045710AbdDWPCK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 23 Apr 2017 11:02:10 -0400
+Date: Sun, 23 Apr 2017 17:01:53 +0200 (CEST)
+From: Thomas Gleixner <tglx@linutronix.de>
+To: Tommi Rantala <tt.rantala@gmail.com>
+cc: Guenter Roeck <linux@roeck-us.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: Re: [patch 0/6] hwmon/coretemp: Hotplug fixes, cleanups and state
+ machine conversion
+In-Reply-To: <CA+ydwtq9ebDGtWxZGfuxgJVgHgF06Lb3NPgOfA0X90RH=U_1ew@mail.gmail.com>
+Message-ID: <alpine.DEB.2.20.1704231657230.3041@nanos>
+References: <20161122173622.771252945@linutronix.de> <65310945-a720-5437-f7cb-9d8af1e5b53d@roeck-us.net> <CA+ydwtpYPP9xSTDfOmZSUamb1aadOoqCs18sWBanzFaSxJhWWQ@mail.gmail.com> <alpine.DEB.2.20.1704121124510.1874@nanos> <CA+ydwtqKqzjLDiaCEuvXfYp3Lkbh+z-+s=1JfwkuiVOWp3QfgA@mail.gmail.com>
+ <alpine.DEB.2.20.1704121248150.1874@nanos> <CA+ydwtrc9E_xuaQSx=P_co3q9EPSyRq3yzSyTgN1kxp0gs35qw@mail.gmail.com> <alpine.DEB.2.20.1704121643120.1874@nanos> <alpine.DEB.2.20.1704141935200.2327@nanos>
+ <CA+ydwtq9ebDGtWxZGfuxgJVgHgF06Lb3NPgOfA0X90RH=U_1ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1491227226-12972-4-git-send-email-b.zolnierkie@samsung.com>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 03, 2017 at 03:47:06PM +0200, Bartlomiej Zolnierkiewicz wrote:
-> The suspend/resume is now properly handled by pwm-samsung driver
-> (pwm-fan is currently only used by ARM Exynos boards) and the old
-> code only handles ctx->pwm_value != 0 case. Just remove it.
+On Sat, 15 Apr 2017, Tommi Rantala wrote:
+
+> 2017-04-14 20:35 GMT+03:00 Thomas Gleixner <tglx@linutronix.de>:
+> > On Wed, 12 Apr 2017, Thomas Gleixner wrote:
+> >>
+> >> Can you please try the following:
+> >>
+> >> # for STATE in freezer devices platform processors core; do \
+> >>   echo $STATE; \
+> >>   echo $STATE >/sys/power/pm_test; \
+> >>   echo mem >/sys/power/state
+> >>
+> >> That should give us at least a hint in which area to dig.
+> >
+> > Any news on that?
 > 
-> Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-I assume this will be picked up with the rest of the series.
-If not please let me know.
-
-Guenter
-
-> ---
->  drivers/hwmon/pwm-fan.c | 32 --------------------------------
->  1 file changed, 32 deletions(-)
+> Sorry, was traveling.
 > 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index f9af393..9dc40f3 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -302,37 +302,6 @@ static int pwm_fan_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
-> -static int pwm_fan_suspend(struct device *dev)
-> -{
-> -	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> -
-> -	if (ctx->pwm_value)
-> -		pwm_disable(ctx->pwm);
-> -	return 0;
-> -}
-> -
-> -static int pwm_fan_resume(struct device *dev)
-> -{
-> -	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> -	struct pwm_args pargs;
-> -	unsigned long duty;
-> -	int ret;
-> -
-> -	if (ctx->pwm_value == 0)
-> -		return 0;
-> -
-> -	pwm_get_args(ctx->pwm, &pargs);
-> -	duty = DIV_ROUND_UP(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
-> -	ret = pwm_config(ctx->pwm, duty, pargs.period);
-> -	if (ret)
-> -		return ret;
-> -	return pwm_enable(ctx->pwm);
-> -}
-> -#endif
-> -
-> -static SIMPLE_DEV_PM_OPS(pwm_fan_pm, pwm_fan_suspend, pwm_fan_resume);
-> -
->  static const struct of_device_id of_pwm_fan_match[] = {
->  	{ .compatible = "pwm-fan", },
->  	{},
-> @@ -344,7 +313,6 @@ static int pwm_fan_resume(struct device *dev)
->  	.remove		= pwm_fan_remove,
->  	.driver	= {
->  		.name		= "pwm-fan",
-> -		.pm		= &pwm_fan_pm,
->  		.of_match_table	= of_pwm_fan_match,
->  	},
->  };
-> -- 
-> 1.9.1
+> Testing with 4.10.8-200.fc25.x86_64: freezer, devices and platform are
+> OK, it breaks at "processors".
+> The screen stays off, and the machine no longer answers to ping.
 > 
+> (Without coretemp loaded, the machine survives all the states. There
+> are some graphics glitches and radeon error messages)
+
+That's odd. I tried on a similar machine (w/o a radeon card) and it just
+works with the coretemp module loaded.
+
+Can you please do a CPU hotplug cycle (just one CPU) with the cpuhp events
+in the tracer enabled. Send me the trace output so I might be able to spot
+whats different and what interdependencies between other callbacks might be
+there.
+
+I'm traveling for a week now. I come back to this after my travel; if I
+forget, please send me a reminder.
+
+Thanks,
+
+	tglx
