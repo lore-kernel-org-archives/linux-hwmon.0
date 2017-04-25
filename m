@@ -1,156 +1,59 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57707 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S972163AbdDXPps (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Apr 2017 11:45:48 -0400
-Date: Mon, 24 Apr 2017 08:45:40 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Heiko Schocher <hs@denx.de>
-Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: tmp103: use SIMPLE_DEV_PM_OPS helper macro
-Message-ID: <20170424154540.GB31126@roeck-us.net>
-References: <1492956651-15321-1-git-send-email-rahulbedarkar89@gmail.com>
- <6e36d265-294b-d700-3896-9f1a6d656a08@roeck-us.net>
- <58FD77DA.9000007@denx.de>
+Return-path: <jdelvare@suse.de>
+Date: Tue, 25 Apr 2017 15:30:45 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
+ linux-hwmon@vger.kernel.org
+Subject: Re: it87 causes VIA hardware to lockup
+Message-ID: <20170425153045.0c44641b@endymion>
+In-Reply-To: <20170409152407.GB23984@roeck-us.net>
+References: <20170312103413.GJ21222@n2100.armlinux.org.uk>
+	<20170312132544.GA17687@roeck-us.net>
+	<20170312141522.GL21222@n2100.armlinux.org.uk>
+	<20170312142634.GA1917@roeck-us.net>
+	<20170321134430.GA3177@roeck-us.net>
+	<20170321140812.GZ21222@n2100.armlinux.org.uk>
+	<20170321170503.GC13789@roeck-us.net>
+	<20170409153806.6dac6bbd@endymion>
+	<20170409152407.GB23984@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58FD77DA.9000007@denx.de>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Apr 24, 2017 at 05:58:18AM +0200, Heiko Schocher wrote:
-> Hello Guenter, Rahul,
-> 
-> Am 23.04.2017 um 17:43 schrieb Guenter Roeck:
-> >Hi Rahul,
-> >
-> >On 04/23/2017 07:10 AM, Rahul Bedarkar wrote:
-> >>Replace ifdefs with SIMPLE_DEV_PM_OPS helper macro.
-> >>
-> >>Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> >
-> >Thanks a lot for your patch.
-> >
-> >While I in general prefer code that avoids #ifdef, I have seen patches
-> >which do the opposite when handling PM code. It appears that it is
-> >unsettled if __maybe_unused or #ifdef should be used in such situations.
-> >Until that is the case, I won't accept patches changing one into another
-> >unless they are from the driver author or Acked by the driver author.
-> 
-> Hmm.. I like this patch too, but have also no idea, what is preffered.
-> 
-> Looking into drivers/hwmon
-> 
-> pollux:linux hs [master] $ grep -lr __maybe_unused drivers/hwmon/
-> drivers/hwmon/tmp108.c
-> drivers/hwmon/nct6775.c
-> drivers/hwmon/hwmon-vid.c
-> drivers/hwmon/max31722.c
-> 
-> Ok, there are hwmon drivers, which use this version already ...
-> 
-> pollux:linux hs [master] $ grep -lr CONFIG_PM drivers/hwmon/
-> drivers/hwmon/max6639.c
-> drivers/hwmon/jc42.c
-> drivers/hwmon/fam15h_power.c
-> drivers/hwmon/tmp102.c
-> drivers/hwmon/gpio-fan.c
-> drivers/hwmon/pwm-fan.c
-> drivers/hwmon/tmp103.c
-> drivers/hwmon/pmbus/Makefile
-> drivers/hwmon/lm75.c
-> drivers/hwmon/nct6683.c
-> drivers/hwmon/adt7x10.h
-> drivers/hwmon/w83627hf.c
-> drivers/hwmon/abituguru3.c
-> drivers/hwmon/Makefile
-> drivers/hwmon/acpi_power_meter.c
-> drivers/hwmon/adt7x10.c
-> drivers/hwmon/abituguru.c
-> drivers/hwmon/w83627ehf.c
-> 
-> May this conversion should be done in a patch, which touches more
-> devices?
-> 
-> Nevertheless, I like this approach, so:
-> 
-> Acked-by: Heiko Schocher <hs@denx.de>
-> 
-Thanks, applied to hwmon-next.
+Hi Guenter,
 
-Guenter
+On Sun, 9 Apr 2017 08:24:07 -0700, Guenter Roeck wrote:
+> On Sun, Apr 09, 2017 at 03:38:06PM +0200, Jean Delvare wrote:
+> > On Tue, 21 Mar 2017 10:05:03 -0700, Guenter Roeck wrote:
+> > > I'll submit the patch as-is upstream; at least it doesn't break anything.
+> > > If it doesn't fix your problem, we'll have to look at it again at a later
+> > > point.
+> > 
+> > Given that this patch fixes a regression in kernels v4.7 to v.4.10,
+> > shouldn't it go to stable@?
+>
+> The patch has a Fixes: tag, so that should happen automatically. 
+> I'll have to check if it applies cleanly to earlier kernels and if
+> necessary send backport(s) to Greg.
 
-> bye,
-> Heiko
-> 
-> >
-> >Thanks,
-> >Guenter
-> >
-> >>---
-> >> drivers/hwmon/tmp103.c | 17 ++++-------------
-> >> 1 file changed, 4 insertions(+), 13 deletions(-)
-> >>
-> >>diff --git a/drivers/hwmon/tmp103.c b/drivers/hwmon/tmp103.c
-> >>index d0bb28b..7f85b14 100644
-> >>--- a/drivers/hwmon/tmp103.c
-> >>+++ b/drivers/hwmon/tmp103.c
-> >>@@ -150,8 +150,7 @@ static int tmp103_probe(struct i2c_client *client,
-> >>     return PTR_ERR_OR_ZERO(hwmon_dev);
-> >> }
-> >>
-> >>-#ifdef CONFIG_PM
-> >>-static int tmp103_suspend(struct device *dev)
-> >>+static int __maybe_unused tmp103_suspend(struct device *dev)
-> >> {
-> >>     struct regmap *regmap = dev_get_drvdata(dev);
-> >>
-> >>@@ -159,7 +158,7 @@ static int tmp103_suspend(struct device *dev)
-> >>                   TMP103_CONF_SD_MASK, 0);
-> >> }
-> >>
-> >>-static int tmp103_resume(struct device *dev)
-> >>+static int __maybe_unused tmp103_resume(struct device *dev)
-> >> {
-> >>     struct regmap *regmap = dev_get_drvdata(dev);
-> >>
-> >>@@ -167,15 +166,7 @@ static int tmp103_resume(struct device *dev)
-> >>                   TMP103_CONF_SD_MASK, TMP103_CONF_SD);
-> >> }
-> >>
-> >>-static const struct dev_pm_ops tmp103_dev_pm_ops = {
-> >>-    .suspend    = tmp103_suspend,
-> >>-    .resume        = tmp103_resume,
-> >>-};
-> >>-
-> >>-#define TMP103_DEV_PM_OPS (&tmp103_dev_pm_ops)
-> >>-#else
-> >>-#define    TMP103_DEV_PM_OPS NULL
-> >>-#endif /* CONFIG_PM */
-> >>+static SIMPLE_DEV_PM_OPS(tmp103_dev_pm_ops, tmp103_suspend, tmp103_resume);
-> >>
-> >> static const struct i2c_device_id tmp103_id[] = {
-> >>     { "tmp103", 0 },
-> >>@@ -193,7 +184,7 @@ static struct i2c_driver tmp103_driver = {
-> >>     .driver = {
-> >>         .name    = "tmp103",
-> >>         .of_match_table = of_match_ptr(tmp103_of_match),
-> >>-        .pm    = TMP103_DEV_PM_OPS,
-> >>+        .pm    = &tmp103_dev_pm_ops,
-> >>     },
-> >>     .probe        = tmp103_probe,
-> >>     .id_table    = tmp103_id,
-> >>
-> >
-> 
-> -- 
-> DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+I took a look at stable branches v4.9 and v4.10 and I can't find this
+fix. Do you still plan to check if the fix applies and poke Greg about
+it? Or do you want me to do it?
+
+> > As a side note, I think the second half of the patch is redundant, it
+> > only makes registration slightly faster on IT8705F, and could have bad
+> > side effects at least in theory. The first half seems sufficient to
+> > me...
+>
+> It only affects systems with two Super-IO chips, and I wanted to play safe. The
+> worst side effect I can imagine would be that a second chip in a system with
+> IT8705 as first chip would not be accepted, which is not worse than before
+> when only one chip was supported.
+
+But isn't as good as doing the right thing, which would require less
+code. So I don't really follow your logic.
+
+-- 
+Jean Delvare
+SUSE L3 Support
