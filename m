@@ -1,77 +1,130 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43914 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751083AbdDMNKH (ORCPT
+Received: from mail-wr0-f179.google.com ([209.85.128.179]:35034 "EHLO
+        mail-wr0-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S947031AbdDYT3m (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Apr 2017 09:10:07 -0400
-Date: Thu, 13 Apr 2017 06:10:05 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Martinez Canillas <javier@osg.samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [v2,2/2] hwmon: (lm87) Add OF device ID table
-Message-ID: <20170413131005.GA23689@roeck-us.net>
-References: <20170413002139.5983-2-javier@osg.samsung.com>
+        Tue, 25 Apr 2017 15:29:42 -0400
+Received: by mail-wr0-f179.google.com with SMTP id z52so73003127wrc.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Apr 2017 12:29:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170413002139.5983-2-javier@osg.samsung.com>
+In-Reply-To: <20170418201702.57019-2-code@mmayer.net>
+References: <20170418201702.57019-1-code@mmayer.net> <20170418201702.57019-2-code@mmayer.net>
+From: Markus Mayer <markus.mayer@broadcom.com>
+Date: Tue, 25 Apr 2017 12:29:40 -0700
+Message-ID: <CAGt4E5susQWWNZPbNh8AoWtK-4yu50VL=GqOw+_2w_FA+2V68Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt/bindings: Add bindings for Broadcom STB DRAM Sensors
+To: Rob Herring <robh+dt@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Device Tree List <devicetree@vger.kernel.org>,
+        ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 12, 2017 at 09:21:39PM -0300, Javier Martinez Canillas wrote:
-> The driver doesn't have a struct of_device_id table but supported devices
-> are registered via Device Trees. This is working on the assumption that a
-> I2C device registered via OF will always match a legacy I2C device ID and
-> that the MODALIAS reported will always be of the form i2c:<device>.
-> 
-> But this could change in the future so the correct approach is to have an
-> OF device ID table if the devices are registered via OF.
-> 
-> Signed-off-by: Javier Martinez Canillas <javier@osg.samsung.com>
+Hi Rob,
 
-Applied.
+On 18 April 2017 at 13:17, Markus Mayer <code@mmayer.net> wrote:
+> From: Markus Mayer <mmayer@broadcom.com>
+>
+> Provide bindings for the Broadcom STB DDR PHY Front End (DPFE).
+
+Would you be able to have a look at this binding? The driver won't be
+upstreamed as hwmon driver (as per Guenter's comments). I am currently
+converting the driver to a "soc" driver instead, but the proposed
+binding remains unchanged.
+
+If you have comments or suggestions, I would like to incorporate them
+with the new series I will be sending out.
 
 Thanks,
-Guenter
+-Markus
 
+> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 > ---
-> Hello,
-> 
-> I should had included this patch in series [0] but it seems that I didn't.
-> 
-> [0]: https://lkml.org/lkml/2017/2/24/360
-> 
-> Best regards,
-> Javier
-> 
-> Changes in v2:
-> - Use the correct driver in subject line.
-> - Keep OF device ID table sorted in the same order than I2C device ID table.
-> 
->  drivers/hwmon/lm87.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index c0766e7392d3..b48d30760388 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-> @@ -985,10 +985,18 @@ static const struct i2c_device_id lm87_id[] = {
->  };
->  MODULE_DEVICE_TABLE(i2c, lm87_id);
->  
-> +static const struct of_device_id lm87_of_match[] = {
-> +	{ .compatible = "ti,lm87" },
-> +	{ .compatible = "adi,adm1024" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, lm87_of_match);
+>  .../devicetree/bindings/hwmon/brcmstb-dpfe.txt     | 68 ++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/brcmstb-dpfe.txt
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/brcmstb-dpfe.txt b/Documentation/devicetree/bindings/hwmon/brcmstb-dpfe.txt
+> new file mode 100644
+> index 0000000..3519197
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/brcmstb-dpfe.txt
+> @@ -0,0 +1,68 @@
+> +DDR PHY Front End (DPFE) for Broadcom STB
+> +=========================================
 > +
->  static struct i2c_driver lm87_driver = {
->  	.class		= I2C_CLASS_HWMON,
->  	.driver = {
->  		.name	= "lm87",
-> +		.of_match_table = lm87_of_match,
->  	},
->  	.probe		= lm87_probe,
->  	.id_table	= lm87_id,
+> +DPFE and the DPFE firmware provide an interface for the host CPU to
+> +communicate with the DCPU, which resides inside the DDR PHY.
+> +
+> +There are three memory regions for interacting with the DCPU.
+> +
+> +The DCPU Register Space
+> +-----------------------
+> +
+> +Required properties:
+> +  - compatible: must be one of brcm,bcm7271-dpfe-cpu, brcm,dpfe-cpu-v12.0.0.0
+> +    or brcm,dpfe-cpu
+> +  - reg: must reference the start address and length of the DCPU register
+> +    space
+> +
+> +Optional properties:
+> +  - cell-index: the index of the DPFE instance; will default to 0 if not set
+> +
+> +Example:
+> +       dpfe_cpu0: dpfe-cpu@f1132000 {
+> +               compatible = "brcm,bcm7271-dpfe-cpu",
+> +                       "brcm,dpfe-cpu-v12.0.0.0",
+> +                       "brcm,dpfe-cpu";
+> +               reg = <0xf1132000 0x180>;
+> +               cell-index = <0>;
+> +       };
+> +
+> +The DCPU Data Memory Space
+> +--------------------------
+> +
+> +Required properties:
+> +  - compatible: must be one of brcm,bcm7271-dpfe-dmem, brcm,dpfe-dmem-v12.0.0.0
+> +    or brcm,dpfe-dmem
+> +  - reg: must reference the start address and length of the DCPU DMEM space
+> +
+> +Optional properties:
+> +  - cell-index: the index of the DPFE instance; will default to 0 if not set
+> +
+> +Example:
+> +       dpfe_dmem0: dpfe-dmem@f1134000 {
+> +               compatible = "brcm,bcm7271-dpfe-dmem",
+> +                       "brcm,dpfe-dmem-v12.0.0.0",
+> +                       "brcm,dpfe-dmem";
+> +               reg = <0xf1134000 0x1000>;
+> +               cell-index = <0>;
+> +       };
+> +
+> +The DCPU Instruction Memory Space
+> +---------------------------------
+> +
+> +Required properties:
+> +  - compatible: must be one of brcm,bcm7271-dpfe-imem, brcm,dpfe-imem-v12.0.0.0
+> +    or brcm,dpfe-imem
+> +  - reg: must reference the start address and length of the DCPU IMEM space
+> +
+> +Optional properties:
+> +  - cell-index: the index of the DPFE instance; will default to 0 if not set
+> +
+> +Example:
+> +       dpfe_imem0: dpfe-imem@f1138000 {
+> +               compatible = "brcm,bcm7271-dpfe-imem",
+> +                       "brcm,dpfe-imem-v12.0.0.0",
+> +                       "brcm,dpfe-imem";
+> +               reg = <0xf1138000 0x4000>;
+> +               cell-index = <0>;
+> +       };
+> --
+> 2.7.4
+>
