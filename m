@@ -1,91 +1,50 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mout.web.de ([212.227.15.14]:62285 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1754604AbdD0JcS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Apr 2017 05:32:18 -0400
-Subject: [PATCH 4/4] hwmon-nct6775: Adjust seven checks for null pointers
-From: SF Markus Elfring <elfring@users.sourceforge.net>
-To: linux-hwmon@vger.kernel.org,
+Received: from mx2.suse.de ([195.135.220.15]:56791 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1032597AbdD0Muj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 27 Apr 2017 08:50:39 -0400
+Date: Thu, 27 Apr 2017 14:50:30 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: SF Markus Elfring <elfring@users.sourceforge.net>
+Cc: linux-hwmon@vger.kernel.org,
         =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         kernel-janitors@vger.kernel.org
-References: <2f58a509-4aba-5c44-bc79-568b260ab692@users.sourceforge.net>
-Message-ID: <7bf13cb6-55f3-c7d3-4b42-befb4a4e7d07@users.sourceforge.net>
-Date: Thu, 27 Apr 2017 11:31:21 +0200
-MIME-Version: 1.0
+Subject: Re: [PATCH 0/4] hwmon-NCT: Fine-tuning for four function
+ implementations
+Message-ID: <20170427145030.5507a32e@endymion>
 In-Reply-To: <2f58a509-4aba-5c44-bc79-568b260ab692@users.sourceforge.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+References: <2f58a509-4aba-5c44-bc79-568b260ab692@users.sourceforge.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Thu, 27 Apr 2017 10:55:24 +0200
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+On Thu, 27 Apr 2017 11:27:21 +0200, SF Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Thu, 27 Apr 2017 11:18:22 +0200
+> 
+> A few update suggestions were taken into account
+> from static source code analysis.
+> 
+> Markus Elfring (4):
+>   Use devm_kcalloc() in nct6683_create_attr_group()
+>   Adjust five checks for null pointers
+>   Use devm_kcalloc() in nct6775_create_attr_group()
+>   Adjust seven checks for null pointers
+> 
+>  drivers/hwmon/nct6683.c | 15 +++++++--------
+>  drivers/hwmon/nct6775.c | 19 +++++++++----------
+>  2 files changed, 16 insertions(+), 18 deletions(-)
 
-The script “checkpatch.pl” pointed information out like the following.
+Nack. You have proven in the past on various lists that 1* you have no
+understanding about the changes you are proposing and 2* you have no
+skills to discuss any problem that could be found in your patches.
 
-Comparison to NULL could be written …
+So I'll make it straight: we will not take any patch from you. You are
+an annoyance we don't need. Do not waste our time. Go away.
 
-Thus fix the affected source code places.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
----
- drivers/hwmon/nct6775.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index d552ab7901a7..fe8713fb548c 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -1070,16 +1070,16 @@ nct6775_create_attr_group(struct device *dev,
- 		return ERR_PTR(-EINVAL);
- 
- 	group = devm_kzalloc(dev, sizeof(*group), GFP_KERNEL);
--	if (group == NULL)
-+	if (!group)
- 		return ERR_PTR(-ENOMEM);
- 
- 	attrs = devm_kcalloc(dev, repeat * count + 1, sizeof(*attrs),
- 			     GFP_KERNEL);
--	if (attrs == NULL)
-+	if (!attrs)
- 		return ERR_PTR(-ENOMEM);
- 
- 	su = devm_kcalloc(dev, repeat * count, sizeof(*su), GFP_KERNEL);
--	if (su == NULL)
-+	if (!su)
- 		return ERR_PTR(-ENOMEM);
- 
- 	group->attrs = attrs;
-@@ -1087,7 +1087,7 @@ nct6775_create_attr_group(struct device *dev,
- 
- 	for (i = 0; i < repeat; i++) {
- 		t = tg->templates;
--		while (*t != NULL) {
-+		while (*t) {
- 			snprintf(su->name, sizeof(su->name),
- 				 (*t)->dev_attr.attr.name, tg->base + i);
- 			if ((*t)->s2) {
-@@ -3000,11 +3000,11 @@ static umode_t nct6775_pwm_is_visible(struct kobject *kobj,
- 	if ((nr >= 14 && nr <= 18) || nr == 21)   /* weight */
- 		if (!data->REG_WEIGHT_TEMP_SEL[pwm])
- 			return 0;
--	if (nr == 19 && data->REG_PWM[3] == NULL) /* pwm_max */
-+	if (nr == 19 && !data->REG_PWM[3]) /* pwm_max */
- 		return 0;
--	if (nr == 20 && data->REG_PWM[4] == NULL) /* pwm_step */
-+	if (nr == 20 && !data->REG_PWM[4]) /* pwm_step */
- 		return 0;
--	if (nr == 21 && data->REG_PWM[6] == NULL) /* weight_duty_base */
-+	if (nr == 21 && !data->REG_PWM[6]) /* weight_duty_base */
- 		return 0;
- 
- 	if (nr >= 22 && nr <= 35) {		/* auto point */
 -- 
-2.12.2
-
+Jean Delvare
+SUSE L3 Support
