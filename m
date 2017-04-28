@@ -1,227 +1,66 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:41849 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1426015AbdD1N3r (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Apr 2017 09:29:47 -0400
-Subject: Re: [PATCH V2] hwmon: (ibmpowernv) Add min/max attributes and current
- sensors
-To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        jdelvare@suse.com, paulus@samba.org, mpe@ellerman.id.au
-References: <1493359145-6143-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-Cc: linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
-        ego@linux.vnet.ibm.com, akshay.adiga@linux.vnet.ibm.com,
-        andrew@aj.id.au, clg@kaod.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8f9e7f79-e9ab-e0a6-d5c6-b805b42da2e5@roeck-us.net>
-Date: Fri, 28 Apr 2017 06:29:42 -0700
-MIME-Version: 1.0
-In-Reply-To: <1493359145-6143-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+Return-path: <sam@mendozajonas.com>
+Message-ID: <1493354043.32554.1.camel@mendozajonas.com>
+Subject: Re: [PATCH] hwmon (pmbus): Add client driver for IR35221
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Date: Fri, 28 Apr 2017 14:34:03 +1000
+In-Reply-To: <1493168635.1790.6.camel@mendozajonas.com>
+References: <20170421042505.20403-1-sam@mendozajonas.com>
+	 <248726f5-f1e7-4feb-1917-049173303aa6@roeck-us.net>
+	 <1493168635.1790.6.camel@mendozajonas.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/27/2017 10:59 PM, Shilpasri G Bhat wrote:
-> Add support for adding min/max values for the inband sensors copied by
-> OCC to main memory. And also add current(mA) sensors to the list.
->
-> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-> ---
-> Changes from V1:
-> - Add functions to get min and max attribute strings
-> - Add function 'populate_sensor' to fill in the 'struct sensor_data'
->   for each sensor.
->
->  drivers/hwmon/ibmpowernv.c | 96 +++++++++++++++++++++++++++++++++++++---------
->  1 file changed, 77 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-> index 6d2e660..d59262c 100644
-> --- a/drivers/hwmon/ibmpowernv.c
-> +++ b/drivers/hwmon/ibmpowernv.c
-> @@ -50,6 +50,7 @@ enum sensors {
->  	TEMP,
->  	POWER_SUPPLY,
->  	POWER_INPUT,
-> +	CURRENT,
->  	MAX_SENSOR_TYPE,
->  };
->
-> @@ -65,7 +66,8 @@ enum sensors {
->  	{"fan", "ibm,opal-sensor-cooling-fan"},
->  	{"temp", "ibm,opal-sensor-amb-temp"},
->  	{"in", "ibm,opal-sensor-power-supply"},
-> -	{"power", "ibm,opal-sensor-power"}
-> +	{"power", "ibm,opal-sensor-power"},
-> +	{"curr"}, /* Follows newer device tree compatible ibm,opal-sensor */
+On Wed, 2017-04-26 at 11:03 +1000, Samuel Mendoza-Jonas wrote:
+> On Fri, 2017-04-21 at 06:49 -0700, Guenter Roeck wrote:
+> > On 04/20/2017 09:25 PM, Samuel Mendoza-Jonas wrote:
+> > > IR35221 is a Digital DC-DC Multiphase Converter
+> > > 
+> > > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> > > ---
+> > > - Tested on a ppc64 system which includes several of these devices.
+> > > - This patch re-implements the linear reg2data/data2reg functions from
+> > >   pmbus-core like some other drivers in order to scale some results. Is
+> > >   this something that would be better off being made generic for pmbus
+> > >   drivers to call?
+> > 
+> > That might make sense. The only other driver is zl6100, or am I missing
+> > something ?
+> 
+> I believe ltc2978 has a small implementation as well.
+> 
+> > 
+> > Trying to understand the code, the data format seems to be linear11 with
+> > an added exponent on top of it. Is that correct ? If so, I wonder if we should
+> > make that configurable, ie store the additional exponent in R and handle it
+> > in the pmbus core. Would that help ?
+> 
+> Yes that's essentially what it is. Using R for the extra exponent would
+> be a neat solution, however at least for this chip commands in the same
+> class have different scaling exponents (eg VIN_UV_WARN_LIMIT vs
+> READ_VIN). I'll have a look though and see if I can cover this - maybe a
+> small wrapper function that updates the exponent in the data returned by
+> pmbus_read_word_data()/etc?
 
-Following up on a previous e-mail, this really _is_ odd. Any chance to fix it
-in the firmware and have current sensors return "ibm,opal-sensor-current" ?
+After thinking about this for a bit I don't think it's as straightforward
+ as I would like :)
 
->  };
->
->  struct sensor_data {
-> @@ -287,6 +289,7 @@ static int populate_attr_groups(struct platform_device *pdev)
->  	opal = of_find_node_by_path("/ibm,opal/sensors");
->  	for_each_child_of_node(opal, np) {
->  		const char *label;
-> +		int len;
->
->  		if (np->name == NULL)
->  			continue;
-> @@ -298,10 +301,14 @@ static int populate_attr_groups(struct platform_device *pdev)
->  		sensor_groups[type].attr_count++;
->
->  		/*
-> -		 * add a new attribute for labels
-> +		 * add attributes for labels, min and max
->  		 */
->  		if (!of_property_read_string(np, "label", &label))
->  			sensor_groups[type].attr_count++;
-> +		if (of_find_property(np, "sensor-data-min", &len))
-> +			sensor_groups[type].attr_count++;
-> +		if (of_find_property(np, "sensor-data-max", &len))
-> +			sensor_groups[type].attr_count++;
->  	}
->
->  	of_node_put(opal);
-> @@ -337,6 +344,49 @@ static void create_hwmon_attr(struct sensor_data *sdata, const char *attr_name,
->  	sdata->dev_attr.show = show;
->  }
->
-> +static void populate_sensor(struct sensor_data *sdata, int od, int hd, int sid,
-> +			    const char *attr_name, enum sensors type,
-> +			    const struct attribute_group *pgroup,
-> +			    ssize_t (*show)(struct device *dev,
-> +					    struct device_attribute *attr,
-> +					    char *buf))
-> +{
-> +	sdata->id = sid;
-> +	sdata->type = type;
-> +	sdata->opal_index = od;
-> +	sdata->hwmon_index = hd;
-> +	create_hwmon_attr(sdata, attr_name, show);
-> +	pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
-> +}
-> +
-> +static char *get_max_attr(enum sensors type)
-> +{
-> +	switch (type) {
-> +	case POWER_INPUT:
-> +		return "input_highest";
-> +	case TEMP:
-> +		return "max";
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return "highest";
+For ir35221 storing an exponent in R isn't quite enough since we have
+regs of the same class with different exponents. Perhaps we could have a
+simple array in pmbus_driver_info that gives an exponent for each reg,
+but then we have per-page scaling too just to be annoying.
+In zl6100 the main change is essentially (value * 9) / 10 which isn't a
+power of two anyway.
 
-This is a bit confusing. Why not 'return "highest";' in the default case above ?
+What the three mentioned drivers have in common are partial
+implementations of pmbus_reg2data_linear() - pmbus_reg2data() could be
+made public, but since that converts from sensor->data which we're meant
+to be updating in the first place it feels a little backwards even if we
+temporarily update it with the new (unscaled) value. Is it worth trying
+to split out some of the reg2data logic in order to simplify these
+drivers slightly?
 
-Also, is this correct for type == POWER_SUPPLY, ie is it "highest" vs. "max" ?
-
-Kind of odd that the firmware reports "highest/lowest" in some cases
-and "max/min" in others. Guess there is nothing we can do about that,
-just a note.
-
-> +}
-> +
-> +static char *get_min_attr(enum sensors type)
-> +{
-> +	switch (type) {
-> +	case POWER_INPUT:
-> +		return "input_lowest";
-> +	case TEMP:
-> +		return "min";
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return "lowest";
-
-Same here.
-
-> +}
-> +
->  /*
->   * Iterate through the device tree for each child of 'sensors' node, create
->   * a sysfs attribute file, the file is named by translating the DT node name
-> @@ -365,6 +415,7 @@ static int create_device_attrs(struct platform_device *pdev)
->  	for_each_child_of_node(opal, np) {
->  		const char *attr_name;
->  		u32 opal_index;
-> +		u32 hwmon_index;
->  		const char *label;
->
->  		if (np->name == NULL)
-> @@ -386,9 +437,6 @@ static int create_device_attrs(struct platform_device *pdev)
->  			continue;
->  		}
->
-> -		sdata[count].id = sensor_id;
-> -		sdata[count].type = type;
-> -
->  		/*
->  		 * If we can not parse the node name, it means we are
->  		 * running on a newer device tree. We can just forget
-> @@ -401,14 +449,12 @@ static int create_device_attrs(struct platform_device *pdev)
->  			opal_index = INVALID_INDEX;
->  		}
->
-> -		sdata[count].opal_index = opal_index;
-> -		sdata[count].hwmon_index =
-> -			get_sensor_hwmon_index(&sdata[count], sdata, count);
-> -
-> -		create_hwmon_attr(&sdata[count], attr_name, show_sensor);
-> -
-> -		pgroups[type]->attrs[sensor_groups[type].attr_count++] =
-> -				&sdata[count++].dev_attr.attr;
-> +		hwmon_index = get_sensor_hwmon_index(&sdata[count], sdata,
-> +						     count);
-> +		populate_sensor(&sdata[count], opal_index, hwmon_index,
-> +				sensor_id, attr_name, type, pgroups[type],
-> +				show_sensor);
-> +		count++;
->
->  		if (!of_property_read_string(np, "label", &label)) {
->  			/*
-> @@ -417,16 +463,28 @@ static int create_device_attrs(struct platform_device *pdev)
->  			 * attribute. They are related to the same
->  			 * sensor.
->  			 */
-> -			sdata[count].type = type;
-> -			sdata[count].opal_index = sdata[count - 1].opal_index;
-> -			sdata[count].hwmon_index = sdata[count - 1].hwmon_index;
->
->  			make_sensor_label(np, &sdata[count], label);
-> +			populate_sensor(&sdata[count], opal_index, hwmon_index,
-> +					sensor_id, "label", type, pgroups[type],
-> +					show_label);
-> +			count++;
-> +		}
->
-> -			create_hwmon_attr(&sdata[count], "label", show_label);
-> +		if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
-> +			attr_name = get_max_attr(type);
-> +			populate_sensor(&sdata[count], opal_index, hwmon_index,
-> +					sensor_id, attr_name, type,
-> +					pgroups[type], show_sensor);
-> +			count++;
-> +		}
->
-> -			pgroups[type]->attrs[sensor_groups[type].attr_count++] =
-> -				&sdata[count++].dev_attr.attr;
-> +		if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
-> +			attr_name = get_min_attr(type);
-> +			populate_sensor(&sdata[count], opal_index, hwmon_index,
-> +					sensor_id, attr_name, type,
-> +					pgroups[type], show_sensor);
-> +			count++;
->  		}
->  	}
->
->
-
+Sam
