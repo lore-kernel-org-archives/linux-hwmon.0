@@ -1,311 +1,221 @@
 Return-path: <jic23@kernel.org>
-Subject: Re: [PATCH 7/7] iio: adc: twl4030: Fold twl4030-madc.h into driver
-To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>,
- Sebastian Reichel <sre@kernel.org>, Hartmut Knaack <knaack.h@gmx.de>,
+Subject: Re: [PATCH 1/7] hwmon: twl4030-madc: drop driver
+To: Guenter Roeck <linux@roeck-us.net>,
+ Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>, Hartmut Knaack <knaack.h@gmx.de>,
  Lars-Peter Clausen <lars@metafoo.de>,
  Peter Meerwald-Stadler <pmeerw@pmeerw.net>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: J Keerthy <j-keerthy@ti.com>, linux-iio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+ <jdelvare@suse.com>, J Keerthy <j-keerthy@ti.com>,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
 References: <20170427153012.32310-1-sebastian.reichel@collabora.co.uk>
- <20170427153012.32310-8-sebastian.reichel@collabora.co.uk>
+ <20170427153012.32310-2-sebastian.reichel@collabora.co.uk>
+ <20170427165159.GB30189@roeck-us.net>
 From: Jonathan Cameron <jic23@kernel.org>
-Message-ID: <8139a4b1-92a9-02fa-c3fa-da4877e65ce4@kernel.org>
-Date: Sun, 30 Apr 2017 17:38:07 +0100
+Message-ID: <567f0680-abe9-790e-aea7-65c98ae0698a@kernel.org>
+Date: Sun, 30 Apr 2017 17:41:05 +0100
 MIME-Version: 1.0
-In-Reply-To: <20170427153012.32310-8-sebastian.reichel@collabora.co.uk>
+In-Reply-To: <20170427165159.GB30189@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GH
 Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 27/04/17 16:30, Sebastian Reichel wrote:
-> twl4030-madc.h is no longer used by anything outside of
-> the iio driver, so it can be merged into the driver.
+On 27/04/17 17:51, Guenter Roeck wrote:
+> On Thu, Apr 27, 2017 at 05:30:06PM +0200, Sebastian Reichel wrote:
+>> This driver is no longer needed:
+>>
+>>  * It has no mainline users
+>>  * It has no DT support and OMAP is DT only
+>>  * iio-hwmon can be used for madc, which also works with DT
+>>
+>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Acked-by: Jonathan Cameron <jic23@kernel.org>
-> ---
->  drivers/iio/adc/twl4030-madc.c   | 113 +++++++++++++++++++++++++++++++-
->  include/linux/i2c/twl4030-madc.h | 137 ---------------------------------------
->  2 files changed, 112 insertions(+), 138 deletions(-)
->  delete mode 100644 include/linux/i2c/twl4030-madc.h
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> diff --git a/drivers/iio/adc/twl4030-madc.c b/drivers/iio/adc/twl4030-madc.c
-> index 21df5b932bd1..bd3d37fc2144 100644
-> --- a/drivers/iio/adc/twl4030-madc.c
-> +++ b/drivers/iio/adc/twl4030-madc.c
-> @@ -36,7 +36,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/i2c/twl.h>
-> -#include <linux/i2c/twl4030-madc.h>
->  #include <linux/module.h>
->  #include <linux/stddef.h>
->  #include <linux/mutex.h>
-> @@ -49,9 +48,121 @@
->  
->  #include <linux/iio/iio.h>
->  
-> +#define TWL4030_MADC_MAX_CHANNELS 16
-> +
-> +#define TWL4030_MADC_CTRL1		0x00
-> +#define TWL4030_MADC_CTRL2		0x01
-> +
-> +#define TWL4030_MADC_RTSELECT_LSB	0x02
-> +#define TWL4030_MADC_SW1SELECT_LSB	0x06
-> +#define TWL4030_MADC_SW2SELECT_LSB	0x0A
-> +
-> +#define TWL4030_MADC_RTAVERAGE_LSB	0x04
-> +#define TWL4030_MADC_SW1AVERAGE_LSB	0x08
-> +#define TWL4030_MADC_SW2AVERAGE_LSB	0x0C
-> +
-> +#define TWL4030_MADC_CTRL_SW1		0x12
-> +#define TWL4030_MADC_CTRL_SW2		0x13
-> +
-> +#define TWL4030_MADC_RTCH0_LSB		0x17
-> +#define TWL4030_MADC_GPCH0_LSB		0x37
-> +
-> +#define TWL4030_MADC_MADCON	(1 << 0)	/* MADC power on */
-> +#define TWL4030_MADC_BUSY	(1 << 0)	/* MADC busy */
-> +/* MADC conversion completion */
-> +#define TWL4030_MADC_EOC_SW	(1 << 1)
-> +/* MADC SWx start conversion */
-> +#define TWL4030_MADC_SW_START	(1 << 5)
-> +#define TWL4030_MADC_ADCIN0	(1 << 0)
-> +#define TWL4030_MADC_ADCIN1	(1 << 1)
-> +#define TWL4030_MADC_ADCIN2	(1 << 2)
-> +#define TWL4030_MADC_ADCIN3	(1 << 3)
-> +#define TWL4030_MADC_ADCIN4	(1 << 4)
-> +#define TWL4030_MADC_ADCIN5	(1 << 5)
-> +#define TWL4030_MADC_ADCIN6	(1 << 6)
-> +#define TWL4030_MADC_ADCIN7	(1 << 7)
-> +#define TWL4030_MADC_ADCIN8	(1 << 8)
-> +#define TWL4030_MADC_ADCIN9	(1 << 9)
-> +#define TWL4030_MADC_ADCIN10	(1 << 10)
-> +#define TWL4030_MADC_ADCIN11	(1 << 11)
-> +#define TWL4030_MADC_ADCIN12	(1 << 12)
-> +#define TWL4030_MADC_ADCIN13	(1 << 13)
-> +#define TWL4030_MADC_ADCIN14	(1 << 14)
-> +#define TWL4030_MADC_ADCIN15	(1 << 15)
-> +
-> +/* Fixed channels */
-> +#define TWL4030_MADC_BTEMP	TWL4030_MADC_ADCIN1
-> +#define TWL4030_MADC_VBUS	TWL4030_MADC_ADCIN8
-> +#define TWL4030_MADC_VBKB	TWL4030_MADC_ADCIN9
-> +#define TWL4030_MADC_ICHG	TWL4030_MADC_ADCIN10
-> +#define TWL4030_MADC_VCHG	TWL4030_MADC_ADCIN11
-> +#define TWL4030_MADC_VBAT	TWL4030_MADC_ADCIN12
-> +
-> +/* Step size and prescaler ratio */
-> +#define TEMP_STEP_SIZE          147
-> +#define TEMP_PSR_R              100
-> +#define CURR_STEP_SIZE		147
-> +#define CURR_PSR_R1		44
-> +#define CURR_PSR_R2		88
-> +
-> +#define TWL4030_BCI_BCICTL1	0x23
-> +#define TWL4030_BCI_CGAIN	0x020
-> +#define TWL4030_BCI_MESBAT	(1 << 1)
-> +#define TWL4030_BCI_TYPEN	(1 << 4)
-> +#define TWL4030_BCI_ITHEN	(1 << 3)
-> +
-> +#define REG_BCICTL2             0x024
-> +#define TWL4030_BCI_ITHSENS	0x007
-> +
-> +/* Register and bits for GPBR1 register */
-> +#define TWL4030_REG_GPBR1		0x0c
-> +#define TWL4030_GPBR1_MADC_HFCLK_EN	(1 << 7)
-> +
->  #define TWL4030_USB_SEL_MADC_MCPC	(1<<3)
->  #define TWL4030_USB_CARKIT_ANA_CTRL	0xBB
->  
-> +struct twl4030_madc_conversion_method {
-> +	u8 sel;
-> +	u8 avg;
-> +	u8 rbase;
-> +	u8 ctrl;
-> +};
-> +
-> +/**
-> + * struct twl4030_madc_request - madc request packet for channel conversion
-> + * @channels:	16 bit bitmap for individual channels
-> + * @do_avg:	sample the input channel for 4 consecutive cycles
-> + * @method:	RT, SW1, SW2
-> + * @type:	Polling or interrupt based method
-> + * @active:	Flag if request is active
-> + * @result_pending: Flag from irq handler, that result is ready
-> + * @raw:	Return raw value, do not convert it
-> + * @rbuf:	Result buffer
-> + */
-> +struct twl4030_madc_request {
-> +	unsigned long channels;
-> +	bool do_avg;
-> +	u16 method;
-> +	u16 type;
-> +	bool active;
-> +	bool result_pending;
-> +	bool raw;
-> +	int rbuf[TWL4030_MADC_MAX_CHANNELS];
-> +};
-> +
-> +enum conversion_methods {
-> +	TWL4030_MADC_RT,
-> +	TWL4030_MADC_SW1,
-> +	TWL4030_MADC_SW2,
-> +	TWL4030_MADC_NUM_METHODS
-> +};
-> +
-> +enum sample_type {
-> +	TWL4030_MADC_WAIT,
-> +	TWL4030_MADC_IRQ_ONESHOT,
-> +	TWL4030_MADC_IRQ_REARM
-> +};
-> +
->  /**
->   * struct twl4030_madc_data - a container for madc info
->   * @dev:		Pointer to device structure for madc
-> diff --git a/include/linux/i2c/twl4030-madc.h b/include/linux/i2c/twl4030-madc.h
-> deleted file mode 100644
-> index 34e94747b61e..000000000000
-> --- a/include/linux/i2c/twl4030-madc.h
-> +++ /dev/null
-> @@ -1,137 +0,0 @@
-> -/*
-> - * twl4030_madc.h - Header for TWL4030 MADC
-> - *
-> - * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
-> - * J Keerthy <j-keerthy@ti.com>
-> - *
-> - * This program is free software; you can redistribute it and/or
-> - * modify it under the terms of the GNU General Public License
-> - * version 2 as published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful, but
-> - * WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> - * General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU General Public License
-> - * along with this program; if not, write to the Free Software
-> - * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-> - * 02110-1301 USA
-> - *
-> - */
-> -
-> -#ifndef _TWL4030_MADC_H
-> -#define _TWL4030_MADC_H
-> -
-> -struct twl4030_madc_conversion_method {
-> -	u8 sel;
-> -	u8 avg;
-> -	u8 rbase;
-> -	u8 ctrl;
-> -};
-> -
-> -#define TWL4030_MADC_MAX_CHANNELS 16
-> -
-> -
-> -/*
-> - * twl4030_madc_request- madc request packet for channel conversion
-> - * @channels:	16 bit bitmap for individual channels
-> - * @do_avgP:	sample the input channel for 4 consecutive cycles
-> - * @method:	RT, SW1, SW2
-> - * @type:	Polling or interrupt based method
-> - * @raw:	Return raw value, do not convert it
-> - */
-> -
-> -struct twl4030_madc_request {
-> -	unsigned long channels;
-> -	bool do_avg;
-> -	u16 method;
-> -	u16 type;
-> -	bool active;
-> -	bool result_pending;
-> -	bool raw;
-> -	int rbuf[TWL4030_MADC_MAX_CHANNELS];
-> -};
-> -
-> -enum conversion_methods {
-> -	TWL4030_MADC_RT,
-> -	TWL4030_MADC_SW1,
-> -	TWL4030_MADC_SW2,
-> -	TWL4030_MADC_NUM_METHODS
-> -};
-> -
-> -enum sample_type {
-> -	TWL4030_MADC_WAIT,
-> -	TWL4030_MADC_IRQ_ONESHOT,
-> -	TWL4030_MADC_IRQ_REARM
-> -};
-> -
-> -#define TWL4030_MADC_CTRL1		0x00
-> -#define TWL4030_MADC_CTRL2		0x01
-> -
-> -#define TWL4030_MADC_RTSELECT_LSB	0x02
-> -#define TWL4030_MADC_SW1SELECT_LSB	0x06
-> -#define TWL4030_MADC_SW2SELECT_LSB	0x0A
-> -
-> -#define TWL4030_MADC_RTAVERAGE_LSB	0x04
-> -#define TWL4030_MADC_SW1AVERAGE_LSB	0x08
-> -#define TWL4030_MADC_SW2AVERAGE_LSB	0x0C
-> -
-> -#define TWL4030_MADC_CTRL_SW1		0x12
-> -#define TWL4030_MADC_CTRL_SW2		0x13
-> -
-> -#define TWL4030_MADC_RTCH0_LSB		0x17
-> -#define TWL4030_MADC_GPCH0_LSB		0x37
-> -
-> -#define TWL4030_MADC_MADCON	(1 << 0)	/* MADC power on */
-> -#define TWL4030_MADC_BUSY	(1 << 0)	/* MADC busy */
-> -/* MADC conversion completion */
-> -#define TWL4030_MADC_EOC_SW	(1 << 1)
-> -/* MADC SWx start conversion */
-> -#define TWL4030_MADC_SW_START	(1 << 5)
-> -#define TWL4030_MADC_ADCIN0	(1 << 0)
-> -#define TWL4030_MADC_ADCIN1	(1 << 1)
-> -#define TWL4030_MADC_ADCIN2	(1 << 2)
-> -#define TWL4030_MADC_ADCIN3	(1 << 3)
-> -#define TWL4030_MADC_ADCIN4	(1 << 4)
-> -#define TWL4030_MADC_ADCIN5	(1 << 5)
-> -#define TWL4030_MADC_ADCIN6	(1 << 6)
-> -#define TWL4030_MADC_ADCIN7	(1 << 7)
-> -#define TWL4030_MADC_ADCIN8	(1 << 8)
-> -#define TWL4030_MADC_ADCIN9	(1 << 9)
-> -#define TWL4030_MADC_ADCIN10	(1 << 10)
-> -#define TWL4030_MADC_ADCIN11	(1 << 11)
-> -#define TWL4030_MADC_ADCIN12	(1 << 12)
-> -#define TWL4030_MADC_ADCIN13	(1 << 13)
-> -#define TWL4030_MADC_ADCIN14	(1 << 14)
-> -#define TWL4030_MADC_ADCIN15	(1 << 15)
-> -
-> -/* Fixed channels */
-> -#define TWL4030_MADC_BTEMP	TWL4030_MADC_ADCIN1
-> -#define TWL4030_MADC_VBUS	TWL4030_MADC_ADCIN8
-> -#define TWL4030_MADC_VBKB	TWL4030_MADC_ADCIN9
-> -#define TWL4030_MADC_ICHG	TWL4030_MADC_ADCIN10
-> -#define TWL4030_MADC_VCHG	TWL4030_MADC_ADCIN11
-> -#define TWL4030_MADC_VBAT	TWL4030_MADC_ADCIN12
-> -
-> -/* Step size and prescaler ratio */
-> -#define TEMP_STEP_SIZE          147
-> -#define TEMP_PSR_R              100
-> -#define CURR_STEP_SIZE		147
-> -#define CURR_PSR_R1		44
-> -#define CURR_PSR_R2		88
-> -
-> -#define TWL4030_BCI_BCICTL1	0x23
-> -#define TWL4030_BCI_CGAIN	0x020
-> -#define TWL4030_BCI_MESBAT	(1 << 1)
-> -#define TWL4030_BCI_TYPEN	(1 << 4)
-> -#define TWL4030_BCI_ITHEN	(1 << 3)
-> -
-> -#define REG_BCICTL2             0x024
-> -#define TWL4030_BCI_ITHSENS	0x007
-> -
-> -/* Register and bits for GPBR1 register */
-> -#define TWL4030_REG_GPBR1		0x0c
-> -#define TWL4030_GPBR1_MADC_HFCLK_EN	(1 << 7)
-> -
-> -#endif
+> ... assuming this will be pushed through the same tree as the rest
+> of the series. Let me know if I should queue it up in hwmon for v4.12.
+We are too late for the series to go through IIO for the 4.12 cycle, so I guess it
+makes sense to take this one through hwmon if you still have time.
+
+I can then pick up the rest once I have acks from Wolfram
+(who should have been cc'd as we are hoovering up things from the
+i2c directories in this series) + power supply side of things.
+
+Jonathan
+> 
+> Thanks,
+> Guenter
+> 
+>> ---
+>>  drivers/hwmon/Kconfig              |  10 ----
+>>  drivers/hwmon/Makefile             |   1 -
+>>  drivers/hwmon/twl4030-madc-hwmon.c | 118 -------------------------------------
+>>  3 files changed, 129 deletions(-)
+>>  delete mode 100644 drivers/hwmon/twl4030-madc-hwmon.c
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 0649d53f3d16..776d1ac2bfee 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1643,16 +1643,6 @@ config SENSORS_TMP421
+>>  	  This driver can also be built as a module.  If so, the module
+>>  	  will be called tmp421.
+>>  
+>> -config SENSORS_TWL4030_MADC
+>> -	tristate "Texas Instruments TWL4030 MADC Hwmon"
+>> -	depends on TWL4030_MADC
+>> -	help
+>> -	If you say yes here you get hwmon support for triton
+>> -	TWL4030-MADC.
+>> -
+>> -	This driver can also be built as a module. If so it will be called
+>> -	twl4030-madc-hwmon.
+>> -
+>>  config SENSORS_VEXPRESS
+>>  	tristate "Versatile Express"
+>>  	depends on VEXPRESS_CONFIG
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 5509edf6186a..c05530d6cb6e 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -157,7 +157,6 @@ obj-$(CONFIG_SENSORS_TMP103)	+= tmp103.o
+>>  obj-$(CONFIG_SENSORS_TMP108)	+= tmp108.o
+>>  obj-$(CONFIG_SENSORS_TMP401)	+= tmp401.o
+>>  obj-$(CONFIG_SENSORS_TMP421)	+= tmp421.o
+>> -obj-$(CONFIG_SENSORS_TWL4030_MADC)+= twl4030-madc-hwmon.o
+>>  obj-$(CONFIG_SENSORS_VEXPRESS)	+= vexpress-hwmon.o
+>>  obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
+>>  obj-$(CONFIG_SENSORS_VIA686A)	+= via686a.o
+>> diff --git a/drivers/hwmon/twl4030-madc-hwmon.c b/drivers/hwmon/twl4030-madc-hwmon.c
+>> deleted file mode 100644
+>> index b5caf7fdb487..000000000000
+>> --- a/drivers/hwmon/twl4030-madc-hwmon.c
+>> +++ /dev/null
+>> @@ -1,118 +0,0 @@
+>> -/*
+>> - *
+>> - * TWL4030 MADC Hwmon driver-This driver monitors the real time
+>> - * conversion of analog signals like battery temperature,
+>> - * battery type, battery level etc. User can ask for the conversion on a
+>> - * particular channel using the sysfs nodes.
+>> - *
+>> - * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
+>> - * J Keerthy <j-keerthy@ti.com>
+>> - *
+>> - * This program is free software; you can redistribute it and/or
+>> - * modify it under the terms of the GNU General Public License
+>> - * version 2 as published by the Free Software Foundation.
+>> - *
+>> - * This program is distributed in the hope that it will be useful, but
+>> - * WITHOUT ANY WARRANTY; without even the implied warranty of
+>> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+>> - * General Public License for more details.
+>> - *
+>> - * You should have received a copy of the GNU General Public License
+>> - * along with this program; if not, write to the Free Software
+>> - * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+>> - * 02110-1301 USA
+>> - *
+>> - */
+>> -#include <linux/init.h>
+>> -#include <linux/module.h>
+>> -#include <linux/kernel.h>
+>> -#include <linux/i2c/twl.h>
+>> -#include <linux/device.h>
+>> -#include <linux/platform_device.h>
+>> -#include <linux/i2c/twl4030-madc.h>
+>> -#include <linux/hwmon.h>
+>> -#include <linux/hwmon-sysfs.h>
+>> -#include <linux/stddef.h>
+>> -#include <linux/sysfs.h>
+>> -#include <linux/err.h>
+>> -#include <linux/types.h>
+>> -
+>> -/*
+>> - * sysfs hook function
+>> - */
+>> -static ssize_t madc_read(struct device *dev,
+>> -			 struct device_attribute *devattr, char *buf)
+>> -{
+>> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> -	struct twl4030_madc_request req = {
+>> -		.channels = 1 << attr->index,
+>> -		.method = TWL4030_MADC_SW2,
+>> -		.type = TWL4030_MADC_WAIT,
+>> -	};
+>> -	long val;
+>> -
+>> -	val = twl4030_madc_conversion(&req);
+>> -	if (val < 0)
+>> -		return val;
+>> -
+>> -	return sprintf(buf, "%d\n", req.rbuf[attr->index]);
+>> -}
+>> -
+>> -/* sysfs nodes to read individual channels from user side */
+>> -static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, madc_read, NULL, 0);
+>> -static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, madc_read, NULL, 1);
+>> -static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, madc_read, NULL, 2);
+>> -static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, madc_read, NULL, 3);
+>> -static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, madc_read, NULL, 4);
+>> -static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, madc_read, NULL, 5);
+>> -static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, madc_read, NULL, 6);
+>> -static SENSOR_DEVICE_ATTR(in7_input, S_IRUGO, madc_read, NULL, 7);
+>> -static SENSOR_DEVICE_ATTR(in8_input, S_IRUGO, madc_read, NULL, 8);
+>> -static SENSOR_DEVICE_ATTR(in9_input, S_IRUGO, madc_read, NULL, 9);
+>> -static SENSOR_DEVICE_ATTR(curr10_input, S_IRUGO, madc_read, NULL, 10);
+>> -static SENSOR_DEVICE_ATTR(in11_input, S_IRUGO, madc_read, NULL, 11);
+>> -static SENSOR_DEVICE_ATTR(in12_input, S_IRUGO, madc_read, NULL, 12);
+>> -static SENSOR_DEVICE_ATTR(in15_input, S_IRUGO, madc_read, NULL, 15);
+>> -
+>> -static struct attribute *twl4030_madc_attrs[] = {
+>> -	&sensor_dev_attr_in0_input.dev_attr.attr,
+>> -	&sensor_dev_attr_temp1_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in2_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in3_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in4_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in5_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in6_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in7_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in8_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in9_input.dev_attr.attr,
+>> -	&sensor_dev_attr_curr10_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in11_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in12_input.dev_attr.attr,
+>> -	&sensor_dev_attr_in15_input.dev_attr.attr,
+>> -	NULL
+>> -};
+>> -ATTRIBUTE_GROUPS(twl4030_madc);
+>> -
+>> -static int twl4030_madc_hwmon_probe(struct platform_device *pdev)
+>> -{
+>> -	struct device *hwmon;
+>> -
+>> -	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev,
+>> -						       "twl4030_madc", NULL,
+>> -						       twl4030_madc_groups);
+>> -	return PTR_ERR_OR_ZERO(hwmon);
+>> -}
+>> -
+>> -static struct platform_driver twl4030_madc_hwmon_driver = {
+>> -	.probe = twl4030_madc_hwmon_probe,
+>> -	.driver = {
+>> -		   .name = "twl4030_madc_hwmon",
+>> -		   },
+>> -};
+>> -
+>> -module_platform_driver(twl4030_madc_hwmon_driver);
+>> -
+>> -MODULE_DESCRIPTION("TWL4030 ADC Hwmon driver");
+>> -MODULE_LICENSE("GPL");
+>> -MODULE_AUTHOR("J Keerthy");
+>> -MODULE_ALIAS("platform:twl4030_madc_hwmon");
+>> -- 
+>> 2.11.0
+>>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 > 
