@@ -1,315 +1,90 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50200 "EHLO
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57463 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S968341AbdD0Paw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Apr 2017 11:30:52 -0400
+        with ESMTP id S376629AbdEAJ16 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 May 2017 05:27:58 -0400
+Date: Mon, 1 May 2017 11:27:54 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-To: Sebastian Reichel <sre@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: J Keerthy <j-keerthy@ti.com>, linux-iio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Subject: [PATCH 7/7] iio: adc: twl4030: Fold twl4030-madc.h into driver
-Date: Thu, 27 Apr 2017 17:30:12 +0200
-Message-Id: <20170427153012.32310-8-sebastian.reichel@collabora.co.uk>
-In-Reply-To: <20170427153012.32310-1-sebastian.reichel@collabora.co.uk>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH 1/7] hwmon: twl4030-madc: drop driver
+Message-ID: <20170501092754.wgwhbrjjigpc7xjf@earth>
 References: <20170427153012.32310-1-sebastian.reichel@collabora.co.uk>
+ <20170427153012.32310-2-sebastian.reichel@collabora.co.uk>
+ <20170427165159.GB30189@roeck-us.net>
+ <567f0680-abe9-790e-aea7-65c98ae0698a@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4mcfwyvdrigzennk"
+Content-Disposition: inline
+In-Reply-To: <567f0680-abe9-790e-aea7-65c98ae0698a@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-twl4030-madc.h is no longer used by anything outside of
-the iio driver, so it can be merged into the driver.
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
----
- drivers/iio/adc/twl4030-madc.c   | 113 +++++++++++++++++++++++++++++++-
- include/linux/i2c/twl4030-madc.h | 137 ---------------------------------------
- 2 files changed, 112 insertions(+), 138 deletions(-)
- delete mode 100644 include/linux/i2c/twl4030-madc.h
+--4mcfwyvdrigzennk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/iio/adc/twl4030-madc.c b/drivers/iio/adc/twl4030-madc.c
-index 21df5b932bd1..bd3d37fc2144 100644
---- a/drivers/iio/adc/twl4030-madc.c
-+++ b/drivers/iio/adc/twl4030-madc.c
-@@ -36,7 +36,6 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/i2c/twl.h>
--#include <linux/i2c/twl4030-madc.h>
- #include <linux/module.h>
- #include <linux/stddef.h>
- #include <linux/mutex.h>
-@@ -49,9 +48,121 @@
- 
- #include <linux/iio/iio.h>
- 
-+#define TWL4030_MADC_MAX_CHANNELS 16
-+
-+#define TWL4030_MADC_CTRL1		0x00
-+#define TWL4030_MADC_CTRL2		0x01
-+
-+#define TWL4030_MADC_RTSELECT_LSB	0x02
-+#define TWL4030_MADC_SW1SELECT_LSB	0x06
-+#define TWL4030_MADC_SW2SELECT_LSB	0x0A
-+
-+#define TWL4030_MADC_RTAVERAGE_LSB	0x04
-+#define TWL4030_MADC_SW1AVERAGE_LSB	0x08
-+#define TWL4030_MADC_SW2AVERAGE_LSB	0x0C
-+
-+#define TWL4030_MADC_CTRL_SW1		0x12
-+#define TWL4030_MADC_CTRL_SW2		0x13
-+
-+#define TWL4030_MADC_RTCH0_LSB		0x17
-+#define TWL4030_MADC_GPCH0_LSB		0x37
-+
-+#define TWL4030_MADC_MADCON	(1 << 0)	/* MADC power on */
-+#define TWL4030_MADC_BUSY	(1 << 0)	/* MADC busy */
-+/* MADC conversion completion */
-+#define TWL4030_MADC_EOC_SW	(1 << 1)
-+/* MADC SWx start conversion */
-+#define TWL4030_MADC_SW_START	(1 << 5)
-+#define TWL4030_MADC_ADCIN0	(1 << 0)
-+#define TWL4030_MADC_ADCIN1	(1 << 1)
-+#define TWL4030_MADC_ADCIN2	(1 << 2)
-+#define TWL4030_MADC_ADCIN3	(1 << 3)
-+#define TWL4030_MADC_ADCIN4	(1 << 4)
-+#define TWL4030_MADC_ADCIN5	(1 << 5)
-+#define TWL4030_MADC_ADCIN6	(1 << 6)
-+#define TWL4030_MADC_ADCIN7	(1 << 7)
-+#define TWL4030_MADC_ADCIN8	(1 << 8)
-+#define TWL4030_MADC_ADCIN9	(1 << 9)
-+#define TWL4030_MADC_ADCIN10	(1 << 10)
-+#define TWL4030_MADC_ADCIN11	(1 << 11)
-+#define TWL4030_MADC_ADCIN12	(1 << 12)
-+#define TWL4030_MADC_ADCIN13	(1 << 13)
-+#define TWL4030_MADC_ADCIN14	(1 << 14)
-+#define TWL4030_MADC_ADCIN15	(1 << 15)
-+
-+/* Fixed channels */
-+#define TWL4030_MADC_BTEMP	TWL4030_MADC_ADCIN1
-+#define TWL4030_MADC_VBUS	TWL4030_MADC_ADCIN8
-+#define TWL4030_MADC_VBKB	TWL4030_MADC_ADCIN9
-+#define TWL4030_MADC_ICHG	TWL4030_MADC_ADCIN10
-+#define TWL4030_MADC_VCHG	TWL4030_MADC_ADCIN11
-+#define TWL4030_MADC_VBAT	TWL4030_MADC_ADCIN12
-+
-+/* Step size and prescaler ratio */
-+#define TEMP_STEP_SIZE          147
-+#define TEMP_PSR_R              100
-+#define CURR_STEP_SIZE		147
-+#define CURR_PSR_R1		44
-+#define CURR_PSR_R2		88
-+
-+#define TWL4030_BCI_BCICTL1	0x23
-+#define TWL4030_BCI_CGAIN	0x020
-+#define TWL4030_BCI_MESBAT	(1 << 1)
-+#define TWL4030_BCI_TYPEN	(1 << 4)
-+#define TWL4030_BCI_ITHEN	(1 << 3)
-+
-+#define REG_BCICTL2             0x024
-+#define TWL4030_BCI_ITHSENS	0x007
-+
-+/* Register and bits for GPBR1 register */
-+#define TWL4030_REG_GPBR1		0x0c
-+#define TWL4030_GPBR1_MADC_HFCLK_EN	(1 << 7)
-+
- #define TWL4030_USB_SEL_MADC_MCPC	(1<<3)
- #define TWL4030_USB_CARKIT_ANA_CTRL	0xBB
- 
-+struct twl4030_madc_conversion_method {
-+	u8 sel;
-+	u8 avg;
-+	u8 rbase;
-+	u8 ctrl;
-+};
-+
-+/**
-+ * struct twl4030_madc_request - madc request packet for channel conversion
-+ * @channels:	16 bit bitmap for individual channels
-+ * @do_avg:	sample the input channel for 4 consecutive cycles
-+ * @method:	RT, SW1, SW2
-+ * @type:	Polling or interrupt based method
-+ * @active:	Flag if request is active
-+ * @result_pending: Flag from irq handler, that result is ready
-+ * @raw:	Return raw value, do not convert it
-+ * @rbuf:	Result buffer
-+ */
-+struct twl4030_madc_request {
-+	unsigned long channels;
-+	bool do_avg;
-+	u16 method;
-+	u16 type;
-+	bool active;
-+	bool result_pending;
-+	bool raw;
-+	int rbuf[TWL4030_MADC_MAX_CHANNELS];
-+};
-+
-+enum conversion_methods {
-+	TWL4030_MADC_RT,
-+	TWL4030_MADC_SW1,
-+	TWL4030_MADC_SW2,
-+	TWL4030_MADC_NUM_METHODS
-+};
-+
-+enum sample_type {
-+	TWL4030_MADC_WAIT,
-+	TWL4030_MADC_IRQ_ONESHOT,
-+	TWL4030_MADC_IRQ_REARM
-+};
-+
- /**
-  * struct twl4030_madc_data - a container for madc info
-  * @dev:		Pointer to device structure for madc
-diff --git a/include/linux/i2c/twl4030-madc.h b/include/linux/i2c/twl4030-madc.h
-deleted file mode 100644
-index 34e94747b61e..000000000000
---- a/include/linux/i2c/twl4030-madc.h
-+++ /dev/null
-@@ -1,137 +0,0 @@
--/*
-- * twl4030_madc.h - Header for TWL4030 MADC
-- *
-- * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
-- * J Keerthy <j-keerthy@ti.com>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Public License
-- * version 2 as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful, but
-- * WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-- * 02110-1301 USA
-- *
-- */
--
--#ifndef _TWL4030_MADC_H
--#define _TWL4030_MADC_H
--
--struct twl4030_madc_conversion_method {
--	u8 sel;
--	u8 avg;
--	u8 rbase;
--	u8 ctrl;
--};
--
--#define TWL4030_MADC_MAX_CHANNELS 16
--
--
--/*
-- * twl4030_madc_request- madc request packet for channel conversion
-- * @channels:	16 bit bitmap for individual channels
-- * @do_avgP:	sample the input channel for 4 consecutive cycles
-- * @method:	RT, SW1, SW2
-- * @type:	Polling or interrupt based method
-- * @raw:	Return raw value, do not convert it
-- */
--
--struct twl4030_madc_request {
--	unsigned long channels;
--	bool do_avg;
--	u16 method;
--	u16 type;
--	bool active;
--	bool result_pending;
--	bool raw;
--	int rbuf[TWL4030_MADC_MAX_CHANNELS];
--};
--
--enum conversion_methods {
--	TWL4030_MADC_RT,
--	TWL4030_MADC_SW1,
--	TWL4030_MADC_SW2,
--	TWL4030_MADC_NUM_METHODS
--};
--
--enum sample_type {
--	TWL4030_MADC_WAIT,
--	TWL4030_MADC_IRQ_ONESHOT,
--	TWL4030_MADC_IRQ_REARM
--};
--
--#define TWL4030_MADC_CTRL1		0x00
--#define TWL4030_MADC_CTRL2		0x01
--
--#define TWL4030_MADC_RTSELECT_LSB	0x02
--#define TWL4030_MADC_SW1SELECT_LSB	0x06
--#define TWL4030_MADC_SW2SELECT_LSB	0x0A
--
--#define TWL4030_MADC_RTAVERAGE_LSB	0x04
--#define TWL4030_MADC_SW1AVERAGE_LSB	0x08
--#define TWL4030_MADC_SW2AVERAGE_LSB	0x0C
--
--#define TWL4030_MADC_CTRL_SW1		0x12
--#define TWL4030_MADC_CTRL_SW2		0x13
--
--#define TWL4030_MADC_RTCH0_LSB		0x17
--#define TWL4030_MADC_GPCH0_LSB		0x37
--
--#define TWL4030_MADC_MADCON	(1 << 0)	/* MADC power on */
--#define TWL4030_MADC_BUSY	(1 << 0)	/* MADC busy */
--/* MADC conversion completion */
--#define TWL4030_MADC_EOC_SW	(1 << 1)
--/* MADC SWx start conversion */
--#define TWL4030_MADC_SW_START	(1 << 5)
--#define TWL4030_MADC_ADCIN0	(1 << 0)
--#define TWL4030_MADC_ADCIN1	(1 << 1)
--#define TWL4030_MADC_ADCIN2	(1 << 2)
--#define TWL4030_MADC_ADCIN3	(1 << 3)
--#define TWL4030_MADC_ADCIN4	(1 << 4)
--#define TWL4030_MADC_ADCIN5	(1 << 5)
--#define TWL4030_MADC_ADCIN6	(1 << 6)
--#define TWL4030_MADC_ADCIN7	(1 << 7)
--#define TWL4030_MADC_ADCIN8	(1 << 8)
--#define TWL4030_MADC_ADCIN9	(1 << 9)
--#define TWL4030_MADC_ADCIN10	(1 << 10)
--#define TWL4030_MADC_ADCIN11	(1 << 11)
--#define TWL4030_MADC_ADCIN12	(1 << 12)
--#define TWL4030_MADC_ADCIN13	(1 << 13)
--#define TWL4030_MADC_ADCIN14	(1 << 14)
--#define TWL4030_MADC_ADCIN15	(1 << 15)
--
--/* Fixed channels */
--#define TWL4030_MADC_BTEMP	TWL4030_MADC_ADCIN1
--#define TWL4030_MADC_VBUS	TWL4030_MADC_ADCIN8
--#define TWL4030_MADC_VBKB	TWL4030_MADC_ADCIN9
--#define TWL4030_MADC_ICHG	TWL4030_MADC_ADCIN10
--#define TWL4030_MADC_VCHG	TWL4030_MADC_ADCIN11
--#define TWL4030_MADC_VBAT	TWL4030_MADC_ADCIN12
--
--/* Step size and prescaler ratio */
--#define TEMP_STEP_SIZE          147
--#define TEMP_PSR_R              100
--#define CURR_STEP_SIZE		147
--#define CURR_PSR_R1		44
--#define CURR_PSR_R2		88
--
--#define TWL4030_BCI_BCICTL1	0x23
--#define TWL4030_BCI_CGAIN	0x020
--#define TWL4030_BCI_MESBAT	(1 << 1)
--#define TWL4030_BCI_TYPEN	(1 << 4)
--#define TWL4030_BCI_ITHEN	(1 << 3)
--
--#define REG_BCICTL2             0x024
--#define TWL4030_BCI_ITHSENS	0x007
--
--/* Register and bits for GPBR1 register */
--#define TWL4030_REG_GPBR1		0x0c
--#define TWL4030_GPBR1_MADC_HFCLK_EN	(1 << 7)
--
--#endif
--- 
-2.11.0
+Hi,
 
+On Sun, Apr 30, 2017 at 05:41:05PM +0100, Jonathan Cameron wrote:
+> On 27/04/17 17:51, Guenter Roeck wrote:
+> > On Thu, Apr 27, 2017 at 05:30:06PM +0200, Sebastian Reichel wrote:
+> >> This driver is no longer needed:
+> >>
+> >>  * It has no mainline users
+> >>  * It has no DT support and OMAP is DT only
+> >>  * iio-hwmon can be used for madc, which also works with DT
+> >>
+> >> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> >=20
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >=20
+> > ... assuming this will be pushed through the same tree as the rest
+> > of the series. Let me know if I should queue it up in hwmon for v4.12.
+> We are too late for the series to go through IIO for the 4.12 cycle, so I=
+ guess it
+> makes sense to take this one through hwmon if you still have time.
+>=20
+> I can then pick up the rest once I have acks from Wolfram
+> (who should have been cc'd as we are hoovering up things from the
+> i2c directories in this series)
+
+$ ./scripts/get_maintainer.pl -f include/linux/i2c/twl4030-madc.h
+linux-kernel@vger.kernel.org (open list)
+
+This directory contains headers for random i2c chips
+and Wolfram maintains the bus drivers (and is already
+overloaded with work afaik), so I did not Cc him.
+
+> + power supply side of things.
+
+I just send my pull-request for 4.12. I will queue this up for my
+early -rc/late merge window pull-request.
+
+-- Sebastian
+
+--4mcfwyvdrigzennk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlkG/5cACgkQ2O7X88g7
++ppyCQ/+OSbCHhn1A/HWU0qbgFUd0iNJt/M4pN0YxOMrdlgw1+KRnD0wK8G2R0KZ
+BQg9VmAEe1LdasNLvv3LgLTPKAyWD8wtr1dE5rNjVbZv8RRQdmLzjZhYr2v/8O0R
+EozadcpQDA1D4Srb1ixZcp3IX/RlTTcUGcF/pMZOD2ZjpVN7GvX36vZ1kFfu5ean
++YA6x3nbG0hbZPcrMutey8t70WTnlHgPx+24HzBV08taWjfekFs0dHpKZ1hjBMuj
+ZnjUNtqj2eNShQpeQpHM1pVokUDBFf3gVbWD66F4MzgYNBbNgMX3w93FztBkruEh
+eIpjYS51KFN20Mf1ubPdv0HG1cEoBMKCqD4Gv7N0JHb1s742456zp+8jY1ed3uMC
+rQU9BNQlQ5zzBFEGff5pDb/jD1mh/N90G1vMI8U21WFoeIGVv1L/tYmqAETZGFO8
+0ocgiMSGMh0R2ivkbbwmkDfwIQsD1xyY/rJ879Ox2j66usbvLUqddvds+5axtnxl
+1HOcXrUpTHXfAKt5FntJuUJSLkuArAoCSjIhfG95nMr0Gj1FITDxCiSjmoGLrB/U
+FYxcRyGgD3IymG2zoTzmSHfcX/n/Rn0GEfjHCp0UYR2J8dBix6pnOPyGSWPmtqt8
+gMUWh7N4SrH8457h0n+iQctVNooQsaOfuzk0FNZqR+H7q0AcKFA=
+=VcoC
+-----END PGP SIGNATURE-----
+
+--4mcfwyvdrigzennk--
