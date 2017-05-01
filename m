@@ -1,62 +1,76 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wr0-f174.google.com ([209.85.128.174]:34910 "EHLO
-        mail-wr0-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751198AbdECW3M (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 May 2017 18:29:12 -0400
-Received: by mail-wr0-f174.google.com with SMTP id z52so1578214wrc.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 03 May 2017 15:29:11 -0700 (PDT)
+Received: from www.zeus03.de ([194.117.254.33]:32858 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S3000661AbdEAKiT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 1 May 2017 06:38:19 -0400
+Date: Mon, 1 May 2017 12:38:16 +0200
+From: Wolfram Sang <wsa@the-dreams.de>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] hwmon: twl4030-madc: drop driver
+Message-ID: <20170501103816.GA4435@katana>
+References: <20170427153012.32310-1-sebastian.reichel@collabora.co.uk>
+ <20170427153012.32310-2-sebastian.reichel@collabora.co.uk>
+ <20170427165159.GB30189@roeck-us.net>
+ <567f0680-abe9-790e-aea7-65c98ae0698a@kernel.org>
+ <20170501092754.wgwhbrjjigpc7xjf@earth>
 MIME-Version: 1.0
-In-Reply-To: <90f011d6-9241-e860-7a0e-2fb52c2337ce@gmail.com>
-References: <20170418201702.57019-1-code@mmayer.net> <20170418201702.57019-2-code@mmayer.net>
- <CAGt4E5susQWWNZPbNh8AoWtK-4yu50VL=GqOw+_2w_FA+2V68Q@mail.gmail.com>
- <CAGt4E5uu1Ty0ReaiBZ0kcR_-jnqJQL8vgU4Y9mL64FP7f+=T7Q@mail.gmail.com>
- <20170427215737.dmnj4u2e4tfc6vfv@rob-hp-laptop> <90f011d6-9241-e860-7a0e-2fb52c2337ce@gmail.com>
-From: Markus Mayer <markus.mayer@broadcom.com>
-Date: Wed, 3 May 2017 15:29:10 -0700
-Message-ID: <CAGt4E5s0uoLjeEhk_srxbr=f_sf-NSVXbW_HEJfjnSiAQU8o=Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt/bindings: Add bindings for Broadcom STB DRAM Sensors
-To: Rob Herring <robh+dt@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Device Tree List <devicetree@vger.kernel.org>,
-        ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Nq2Wo0NMKNjxTN9z"
+Content-Disposition: inline
+In-Reply-To: <20170501092754.wgwhbrjjigpc7xjf@earth>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Rob,
 
-On 27 April 2017 at 15:00, Florian Fainelli <f.fainelli@gmail.com> wrote:
-> On 04/27/2017 02:57 PM, Rob Herring wrote:
->>>>> +Optional properties:
->>>>> +  - cell-index: the index of the DPFE instance; will default to 0 if not set
->>
->> Don't use cell-index. It's not a valid property for FDT (only real
->> OpenFirmware).
->
-> My bad, I was advising Markus to use this property since it was largely
-> used throughout Documentation/devicetree/bindings/. What would be a more
-> appropriate way to have the same information? Aliases?
+--Nq2Wo0NMKNjxTN9z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hopefully this will be the last time we need to pester you about this.
-What should we be using instead of cell-index to identify multiple
-instances of a device?
 
-To give you an idea of what the code looks like right now:
+> > I can then pick up the rest once I have acks from Wolfram
+> > (who should have been cc'd as we are hoovering up things from the
+> > i2c directories in this series)
+>=20
+> $ ./scripts/get_maintainer.pl -f include/linux/i2c/twl4030-madc.h
+> linux-kernel@vger.kernel.org (open list)
+>=20
+> This directory contains headers for random i2c chips
+> and Wolfram maintains the bus drivers (and is already
+> overloaded with work afaik), so I did not Cc him.
 
-ret = of_property_read_u32(dev->of_node, "cell-index", &index);
-if (ret)
-    index = 0;
-[...]
-dev_set_name(dpfe_dev, "dpfe%u", index);
-ret = device_register(dpfe_dev);
+You both have a point :) I should maintain include/linux/i2c but as it
+is mainly cruft at the moment, I don't do it very actively.
 
-Enumerating the devices like this is what we are after.
+That being said, I now noticed the patchset and am super happy for the
+move of the include file to the proper place. So, for all patches
+touching include/linux/i2c:
 
-Thanks,
--Markus
+Acked-by: Wolfram Sang <wsa@the-dreams.de>
+
+Thanks!
+
+
+--Nq2Wo0NMKNjxTN9z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlkHEBMACgkQFA3kzBSg
+KbYoiA//c5FX8zb4cfMlukUKXTCsZJTzJKfjfQy+FakqnnBGUsf2rwOJRMLef2gx
+juff9RxvE8YDSHeMdmc5N2ROop5c5X8vAfY3mIaR286nJ7gSWKSKwbyBUarA2NFP
+rw3dlGjIQ2M7xaKi5ntLsAECIhduSrn73yqYG95oZapncLxXgu7pBEb3hnzF8tmK
+JHisj7fEt1kC73/R2EUX8uPfq5giuwoterZe+H9VUy9bHtkqAXK06GoWeriLDnJL
+/49SdZelKmwB3mT4p5b9W0F2JnitL7HQy+7BMKYaCw+1mS2S5d2zTiAxoezWSkRv
+h2boxcfQANUuJ7MjR+/RB/3713fw5IGc0jyAf+LjxORQQDQaQ9QGilhPN3O6sCUL
+9NjKqaLVYwEWM8oaik7aZoyo7DNeFHYelVk6NPvojHh+8VTttBF6R0uSRPnSQ7DB
+tkSvnT/pAUFznDbd7J6N0Sz1O5PH58akcgFN5lvs5jj07L1kUqa9QxL0HCJkXnSj
+RTXnmtf01XyCWVDzA680Xtzmj+iFaVK+AWzdhbYMkvSu8aoV14F1b5ad+cLhrvgn
+tOncDMuDztSH4vuRQtR0qgmSZsQuhjefHElbNg7k76UPTV0/Kkr/vxHaq1hz1Ezw
+ELzhiyHHTKqDqo84dHSCqtoLUwCIlWYu4l4lj4hIoSD/0Cpq9ZE=
+=5x9x
+-----END PGP SIGNATURE-----
+
+--Nq2Wo0NMKNjxTN9z--
