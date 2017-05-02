@@ -1,272 +1,192 @@
-Return-path: <Chris.Packham@alliedtelesis.co.nz>
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 3/3] hwmon: (adt7475) temperature smoothing
-Date: Thu, 4 May 2017 01:28:17 +0000
-Message-ID: <ce2dcbd7c0634240b23e7f5950f3cfc8@svr-chch-ex1.atlnz.lc>
-References: <20170503004009.23769-1-chris.packham@alliedtelesis.co.nz>
- <20170503004009.23769-4-chris.packham@alliedtelesis.co.nz>
- <20170503163041.GB9471@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37630 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1751135AbdEBLhr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 2 May 2017 07:37:47 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v42Bb6Dm142073
+        for <linux-hwmon@vger.kernel.org>; Tue, 2 May 2017 07:37:46 -0400
+Received: from e23smtp09.au.ibm.com (e23smtp09.au.ibm.com [202.81.31.142])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2a6g76k1b8-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Tue, 02 May 2017 07:37:46 -0400
+Received: from localhost
+        by e23smtp09.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
+        Tue, 2 May 2017 21:37:43 +1000
+From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+To: jdelvare@suse.com, linux@roeck-us.net, paulus@samba.org,
+        mpe@ellerman.id.au
+Cc: linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
+        ego@linux.vnet.ibm.com, akshay.adiga@linux.vnet.ibm.com,
+        andrew@aj.id.au, clg@kaod.org,
+        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Subject: [PATCH V3] hwmon: (ibmpowernv) Add highest/lowest attributes to sensors
+Date: Tue,  2 May 2017 17:06:42 +0530
+Message-Id: <1493725002-15231-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 04/05/17 04:30, Guenter Roeck wrote:=0A=
-> On Wed, May 03, 2017 at 12:40:09PM +1200, Chris Packham wrote:=0A=
->> When enabled temperature smoothing allows ramping the fan speed over a=
-=0A=
->> configurable period of time instead of jumping to the new speed=0A=
->> instantaneously.=0A=
->>=0A=
->> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
->> ---=0A=
->> Changes in v2:=0A=
->> - use a single tempN_smoothing attribute=0A=
->>=0A=
->>  Documentation/hwmon/adt7475 |  4 ++=0A=
->>  drivers/hwmon/adt7475.c     | 99 ++++++++++++++++++++++++++++++++++++++=
-+++++++=0A=
->>  2 files changed, 103 insertions(+)=0A=
->>=0A=
->> diff --git a/Documentation/hwmon/adt7475 b/Documentation/hwmon/adt7475=
-=0A=
->> index 63507402cd4f..dd6433d819d0 100644=0A=
->> --- a/Documentation/hwmon/adt7475=0A=
->> +++ b/Documentation/hwmon/adt7475=0A=
->> @@ -114,6 +114,10 @@ minimum (i.e. auto_point1_pwm). This behaviour be c=
-onfigured using the=0A=
->>  pwm[1-*]_stall_dis sysfs attribute. A value of 0 means the fans will sh=
-ut off.=0A=
->>  A value of 1 means the fans will run at auto_point1_pwm.=0A=
->>=0A=
->> +The responsiveness of the ADT747x to temperature changes can be configu=
-red.=0A=
->> +This allows smoothing of the fan speed transition. To set the transitio=
-n time=0A=
->> +set the value in ms in the temp[1-*]_smoothing sysfs attribute.=0A=
->> +=0A=
->>  Notes=0A=
->>  -----=0A=
->>=0A=
->> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c=0A=
->> index 85957324cd85..41342de6e20c 100644=0A=
->> --- a/drivers/hwmon/adt7475.c=0A=
->> +++ b/drivers/hwmon/adt7475.c=0A=
->> @@ -526,6 +526,96 @@ static ssize_t set_temp(struct device *dev, struct =
-device_attribute *attr,=0A=
->>  	return count;=0A=
->>  }=0A=
->>=0A=
->> +/* Assuming CONFIG6[SLOW] is 0 */=0A=
->=0A=
-> Can you take that into account and calculate a "best fit" based on the=0A=
-> available options ?=0A=
-=0A=
-Do you mean check CONFIG6[SLOW] and choose between 1 of 2 possible maps? =
-=0A=
-Or have a unified map and choose both the SLOW and ACOU values?=0A=
-=0A=
-I briefly considered the latter but things soon started to get =0A=
-complicated. It would look something like this (please excuse using a =0A=
-MUA as a code editor).=0A=
-=0A=
-static const int ad7475_st_map[] =3D {=0A=
-	52200, 37500, 26100, 18800, 17400, 12500, 10400, 7500,=0A=
-	6500, 4700, 4400, 3100, 2200, 1600, 1100, 800,=0A=
-};=0A=
-=0A=
-i =3D find_closest_descending(val, ad7475_st_map,=0A=
-			    ARRAY_SIZE(ad7475_st_map));=0A=
-acou =3D i / 2;=0A=
-slow =3D i % 2;=0A=
-=0A=
-Going in reverse then gets really fun=0A=
-=0A=
-slow =3D !!(i2c_smbus_read_byte_data(client, REG_CONFIG6) & BIT(PWMx))=0A=
-acou =3D data->enh_acou[idx];=0A=
-=0A=
-i =3D (acou * 2) + slow;=0A=
-=0A=
-return sprintf(buf, "%d\n", ad7475_st_map[i]);=0A=
-=0A=
-I could probably make the above work I just wasn't sure it was worth the =
-=0A=
-hassle. Only the higher ranges would really be noticeable to anyone.=0A=
-=0A=
->=0A=
->> +static const int ad7475_st_map[] =3D {=0A=
->> +	37500, 18800, 12500, 7500, 4700, 3100, 1600, 800,=0A=
->> +};=0A=
->> +=0A=
->> +static ssize_t show_temp_st(struct device *dev, struct device_attribute=
- *attr,=0A=
->> +				  char *buf)=0A=
->> +{=0A=
->> +	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr)=
-;=0A=
->> +	struct i2c_client *client =3D to_i2c_client(dev);=0A=
->> +	struct adt7475_data *data =3D i2c_get_clientdata(client);=0A=
->> +	int shift, idx;=0A=
->> +	long val;=0A=
->> +=0A=
->> +	switch (sattr->index) {=0A=
->> +	case 0:=0A=
->> +		shift =3D 0;=0A=
->> +		idx =3D 0;=0A=
->> +		break;=0A=
->> +	case 1:=0A=
->> +		shift =3D 4;=0A=
->> +		idx =3D 1;=0A=
->> +		break;=0A=
->> +	case 2:=0A=
->> +		shift =3D 0;=0A=
->> +		idx =3D 1;=0A=
->> +		break;=0A=
->> +	default:=0A=
->> +		return -EINVAL;=0A=
->> +	}=0A=
->> +=0A=
->> +	val =3D data->enh_acou[idx] >> shift;=0A=
->> +	if (val & 0x8) {=0A=
->> +		return sprintf(buf, "%d\n", ad7475_st_map[val & 0x7]);=0A=
->> +	} else {=0A=
->> +		return sprintf(buf, "0\n");=0A=
->> +	}=0A=
->> +}=0A=
->> +=0A=
->> +static ssize_t set_temp_st(struct device *dev, struct device_attribute =
-*attr,=0A=
->> +				 const char *buf, size_t count)=0A=
->> +{=0A=
->> +	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr)=
-;=0A=
->> +	struct i2c_client *client =3D to_i2c_client(dev);=0A=
->> +	struct adt7475_data *data =3D i2c_get_clientdata(client);=0A=
->> +	unsigned char reg;=0A=
->> +	int shift, idx;=0A=
->> +	ulong val;=0A=
->> +=0A=
->> +	if (kstrtoul(buf, 10, &val))=0A=
->> +		return -EINVAL;=0A=
->> +=0A=
->> +	switch (sattr->index) {=0A=
->> +	case 0:=0A=
->> +		reg =3D REG_ENHANCE_ACOUSTICS1;=0A=
->> +		shift =3D 0;=0A=
->> +		idx =3D 0;=0A=
->> +		break;=0A=
->> +	case 1:=0A=
->> +		reg =3D REG_ENHANCE_ACOUSTICS2;=0A=
->> +		shift =3D 4;=0A=
->> +		idx =3D 1;=0A=
->> +		break;=0A=
->> +	case 2:=0A=
->> +		reg =3D REG_ENHANCE_ACOUSTICS2;=0A=
->> +		shift =3D 0;=0A=
->> +		idx =3D 1;=0A=
->> +		break;=0A=
->> +	default:=0A=
->> +		return -EINVAL;=0A=
->> +	}=0A=
->> +=0A=
->> +	if (val > 0) {=0A=
->> +		val =3D find_closest_descending(val, ad7475_st_map,=0A=
->> +					      ARRAY_SIZE(ad7475_st_map));=0A=
->> +		val |=3D 0x8;=0A=
->> +	}=0A=
->> +=0A=
->> +	mutex_lock(&data->lock);=0A=
->> +=0A=
->> +	data->enh_acou[idx] &=3D ~(0xf << shift);=0A=
->> +	data->enh_acou[idx] |=3D (val << shift);=0A=
->> +=0A=
->> +	i2c_smbus_write_byte_data(client, reg, data->enh_acou[idx]);=0A=
->> +=0A=
->> +	mutex_unlock(&data->lock);=0A=
->> +=0A=
->> +	return count;=0A=
->> +}=0A=
->> +=0A=
->>  /*=0A=
->>   * Table of autorange values - the user will write the value in millide=
-grees,=0A=
->>   * and we'll convert it=0A=
->> @@ -1008,6 +1098,8 @@ static SENSOR_DEVICE_ATTR_2(temp1_crit, S_IRUGO | =
-S_IWUSR, show_temp, set_temp,=0A=
->>  			    THERM, 0);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp1_crit_hyst, S_IRUGO | S_IWUSR, show_te=
-mp,=0A=
->>  			    set_temp, HYSTERSIS, 0);=0A=
->> +static SENSOR_DEVICE_ATTR_2(temp1_smoothing, S_IRUGO | S_IWUSR, show_te=
-mp_st,=0A=
->> +			    set_temp_st, 0, 0);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp2_input, S_IRUGO, show_temp, NULL, INPU=
-T, 1);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp2_alarm, S_IRUGO, show_temp, NULL, ALAR=
-M, 1);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp2_max, S_IRUGO | S_IWUSR, show_temp, se=
-t_temp,=0A=
->> @@ -1024,6 +1116,8 @@ static SENSOR_DEVICE_ATTR_2(temp2_crit, S_IRUGO | =
-S_IWUSR, show_temp, set_temp,=0A=
->>  			    THERM, 1);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp2_crit_hyst, S_IRUGO | S_IWUSR, show_te=
-mp,=0A=
->>  			    set_temp, HYSTERSIS, 1);=0A=
->> +static SENSOR_DEVICE_ATTR_2(temp2_smoothing, S_IRUGO | S_IWUSR, show_te=
-mp_st,=0A=
->> +			    set_temp_st, 0, 1);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp3_input, S_IRUGO, show_temp, NULL, INPU=
-T, 2);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp3_alarm, S_IRUGO, show_temp, NULL, ALAR=
-M, 2);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp3_fault, S_IRUGO, show_temp, NULL, FAUL=
-T, 2);=0A=
->> @@ -1041,6 +1135,8 @@ static SENSOR_DEVICE_ATTR_2(temp3_crit, S_IRUGO | =
-S_IWUSR, show_temp, set_temp,=0A=
->>  			    THERM, 2);=0A=
->>  static SENSOR_DEVICE_ATTR_2(temp3_crit_hyst, S_IRUGO | S_IWUSR, show_te=
-mp,=0A=
->>  			    set_temp, HYSTERSIS, 2);=0A=
->> +static SENSOR_DEVICE_ATTR_2(temp3_smoothing, S_IRUGO | S_IWUSR, show_te=
-mp_st,=0A=
->> +			    set_temp_st, 0, 2);=0A=
->>  static SENSOR_DEVICE_ATTR_2(fan1_input, S_IRUGO, show_tach, NULL, INPUT=
-, 0);=0A=
->>  static SENSOR_DEVICE_ATTR_2(fan1_min, S_IRUGO | S_IWUSR, show_tach, set=
-_tach,=0A=
->>  			    MIN, 0);=0A=
->> @@ -1125,6 +1221,7 @@ static struct attribute *adt7475_attrs[] =3D {=0A=
->>  	&sensor_dev_attr_temp1_auto_point2_temp.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp1_crit.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,=0A=
->> +	&sensor_dev_attr_temp1_smoothing.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp2_input.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp2_alarm.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp2_max.dev_attr.attr,=0A=
->> @@ -1134,6 +1231,7 @@ static struct attribute *adt7475_attrs[] =3D {=0A=
->>  	&sensor_dev_attr_temp2_auto_point2_temp.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp2_crit.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp2_crit_hyst.dev_attr.attr,=0A=
->> +	&sensor_dev_attr_temp2_smoothing.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp3_input.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp3_fault.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp3_alarm.dev_attr.attr,=0A=
->> @@ -1144,6 +1242,7 @@ static struct attribute *adt7475_attrs[] =3D {=0A=
->>  	&sensor_dev_attr_temp3_auto_point2_temp.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp3_crit.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_temp3_crit_hyst.dev_attr.attr,=0A=
->> +	&sensor_dev_attr_temp3_smoothing.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_fan1_input.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_fan1_min.dev_attr.attr,=0A=
->>  	&sensor_dev_attr_fan1_alarm.dev_attr.attr,=0A=
->> --=0A=
->> 2.11.0.24.ge6920cf=0A=
->>=0A=
->=0A=
-=0A=
+OCC provides historical minimum and maximum value for the sensor
+readings. This patch exports them as highest and lowest attributes
+for the inband sensors copied by OCC to main memory.
+
+Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+---
+Changes from V2:
+- Dropped "curr" type of sensors to fix the compatible string in
+  skiboot
+- Renamed the sensor attributes to indicate highest/lowest
+
+ drivers/hwmon/ibmpowernv.c | 84 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 66 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index 6d2e660..5462c16 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -287,6 +287,7 @@ static int populate_attr_groups(struct platform_device *pdev)
+ 	opal = of_find_node_by_path("/ibm,opal/sensors");
+ 	for_each_child_of_node(opal, np) {
+ 		const char *label;
++		int len;
+ 
+ 		if (np->name == NULL)
+ 			continue;
+@@ -298,10 +299,14 @@ static int populate_attr_groups(struct platform_device *pdev)
+ 		sensor_groups[type].attr_count++;
+ 
+ 		/*
+-		 * add a new attribute for labels
++		 * add attributes for labels, min and max
+ 		 */
+ 		if (!of_property_read_string(np, "label", &label))
+ 			sensor_groups[type].attr_count++;
++		if (of_find_property(np, "sensor-data-min", &len))
++			sensor_groups[type].attr_count++;
++		if (of_find_property(np, "sensor-data-max", &len))
++			sensor_groups[type].attr_count++;
+ 	}
+ 
+ 	of_node_put(opal);
+@@ -337,6 +342,41 @@ static void create_hwmon_attr(struct sensor_data *sdata, const char *attr_name,
+ 	sdata->dev_attr.show = show;
+ }
+ 
++static void populate_sensor(struct sensor_data *sdata, int od, int hd, int sid,
++			    const char *attr_name, enum sensors type,
++			    const struct attribute_group *pgroup,
++			    ssize_t (*show)(struct device *dev,
++					    struct device_attribute *attr,
++					    char *buf))
++{
++	sdata->id = sid;
++	sdata->type = type;
++	sdata->opal_index = od;
++	sdata->hwmon_index = hd;
++	create_hwmon_attr(sdata, attr_name, show);
++	pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
++}
++
++static char *get_max_attr(enum sensors type)
++{
++	switch (type) {
++	case POWER_INPUT:
++		return "input_highest";
++	default:
++		return "highest";
++	}
++}
++
++static char *get_min_attr(enum sensors type)
++{
++	switch (type) {
++	case POWER_INPUT:
++		return "input_lowest";
++	default:
++		return "lowest";
++	}
++}
++
+ /*
+  * Iterate through the device tree for each child of 'sensors' node, create
+  * a sysfs attribute file, the file is named by translating the DT node name
+@@ -365,6 +405,7 @@ static int create_device_attrs(struct platform_device *pdev)
+ 	for_each_child_of_node(opal, np) {
+ 		const char *attr_name;
+ 		u32 opal_index;
++		u32 hwmon_index;
+ 		const char *label;
+ 
+ 		if (np->name == NULL)
+@@ -386,9 +427,6 @@ static int create_device_attrs(struct platform_device *pdev)
+ 			continue;
+ 		}
+ 
+-		sdata[count].id = sensor_id;
+-		sdata[count].type = type;
+-
+ 		/*
+ 		 * If we can not parse the node name, it means we are
+ 		 * running on a newer device tree. We can just forget
+@@ -401,14 +439,12 @@ static int create_device_attrs(struct platform_device *pdev)
+ 			opal_index = INVALID_INDEX;
+ 		}
+ 
+-		sdata[count].opal_index = opal_index;
+-		sdata[count].hwmon_index =
+-			get_sensor_hwmon_index(&sdata[count], sdata, count);
+-
+-		create_hwmon_attr(&sdata[count], attr_name, show_sensor);
+-
+-		pgroups[type]->attrs[sensor_groups[type].attr_count++] =
+-				&sdata[count++].dev_attr.attr;
++		hwmon_index = get_sensor_hwmon_index(&sdata[count], sdata,
++						     count);
++		populate_sensor(&sdata[count], opal_index, hwmon_index,
++				sensor_id, attr_name, type, pgroups[type],
++				show_sensor);
++		count++;
+ 
+ 		if (!of_property_read_string(np, "label", &label)) {
+ 			/*
+@@ -417,16 +453,28 @@ static int create_device_attrs(struct platform_device *pdev)
+ 			 * attribute. They are related to the same
+ 			 * sensor.
+ 			 */
+-			sdata[count].type = type;
+-			sdata[count].opal_index = sdata[count - 1].opal_index;
+-			sdata[count].hwmon_index = sdata[count - 1].hwmon_index;
+ 
+ 			make_sensor_label(np, &sdata[count], label);
++			populate_sensor(&sdata[count], opal_index, hwmon_index,
++					sensor_id, "label", type, pgroups[type],
++					show_label);
++			count++;
++		}
+ 
+-			create_hwmon_attr(&sdata[count], "label", show_label);
++		if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
++			attr_name = get_max_attr(type);
++			populate_sensor(&sdata[count], opal_index, hwmon_index,
++					sensor_id, attr_name, type,
++					pgroups[type], show_sensor);
++			count++;
++		}
+ 
+-			pgroups[type]->attrs[sensor_groups[type].attr_count++] =
+-				&sdata[count++].dev_attr.attr;
++		if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
++			attr_name = get_min_attr(type);
++			populate_sensor(&sdata[count], opal_index, hwmon_index,
++					sensor_id, attr_name, type,
++					pgroups[type], show_sensor);
++			count++;
+ 		}
+ 	}
+ 
+-- 
+1.8.3.1
+
