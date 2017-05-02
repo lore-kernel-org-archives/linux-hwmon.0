@@ -1,185 +1,232 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:40613 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52154 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751361AbdEBSHl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 May 2017 14:07:41 -0400
-Date: Tue, 2 May 2017 11:07:31 -0700
+        with ESMTP id S1751224AbdEBTN7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 May 2017 15:13:59 -0400
+Date: Tue, 2 May 2017 12:13:54 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (adt7475) fan stall prevention
-Message-ID: <20170502180731.GA12773@roeck-us.net>
+Subject: Re: [RFC PATCH 3/3] hwmon: (adt7475) temperature smoothing
+Message-ID: <20170502191354.GB11901@roeck-us.net>
 References: <20170502054536.21147-1-chris.packham@alliedtelesis.co.nz>
- <20170502054536.21147-3-chris.packham@alliedtelesis.co.nz>
+ <20170502054536.21147-4-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20170502054536.21147-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20170502054536.21147-4-chris.packham@alliedtelesis.co.nz>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, May 02, 2017 at 05:45:35PM +1200, Chris Packham wrote:
-> By default adt7475 will stop the fans (pwm duty cycle 0%) when the
-> temperature drops past Tmin - hysteresis. Some systems want to keep the
-> fans moving even when the temperature drops so add new sysfs attributes
-> that configure the enhanced acoustics min 1-3 which allows the fans to
-> run at the minimum configure pwm duty cycle.
+On Tue, May 02, 2017 at 05:45:36PM +1200, Chris Packham wrote:
+> When enabled temperature smoothing allows ramping the fan speed over a
+> configurable period of time instead of jumping to the new speed
+> instantaneously.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
-> pwmN_min is a horrible name but I really can't think of anything better.
-> I'm biased a little because that is essentially the name of the bits in
-> the datasheet. I'm open to suggestions.
-
-pwmX_min is also traditionally the mimimum permitted pwm value,
-not a boolean. This would be more appropriate to reflect the PWMmin
-register values (0x64 to 0x66). Similar for pwmX_max if you want to
-add support for it.
-It might make sense to combine pwmX_min==0 with clearing the
-respective bit in the REG_ENHANCE_ACOUSTICS[12] register. This way
-we would only need one attribute to support both.
-
-Guenter
-
-> 
->  Documentation/hwmon/adt7475 |  5 +++++
->  drivers/hwmon/adt7475.c     | 50 +++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 55 insertions(+)
+>  Documentation/hwmon/adt7475 |   5 ++
+>  drivers/hwmon/adt7475.c     | 121 ++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 126 insertions(+)
 > 
 > diff --git a/Documentation/hwmon/adt7475 b/Documentation/hwmon/adt7475
-> index 0502f2b464e1..85dc9e17bdee 100644
+> index 85dc9e17bdee..31b15cb910ea 100644
 > --- a/Documentation/hwmon/adt7475
 > +++ b/Documentation/hwmon/adt7475
-> @@ -109,6 +109,11 @@ fan speed) is applied. PWM values range from 0 (off) to 255 (full speed).
->  Fan speed may be set to maximum when the temperature sensor associated with
->  the PWM control exceeds temp#_max.
+> @@ -114,6 +114,11 @@ at the minimum (i.e. auto_point1_pwm). This can be configured using the
+>  pwm[1-*]_min sysfs attribute. A value of 0 means the fans will shut off. A
+>  value of 1 means the fans will run at auto_point1_pwm.
 >  
-> +At Tmin - hysteresis the PWM output can either be off (0% duty cycle) or
-> +at the minimum (i.e. auto_point1_pwm). This can be configured using the
-> +pwm[1-*]_min sysfs attribute. A value of 0 means the fans will shut off. A
-> +value of 1 means the fans will run at auto_point1_pwm.
+> +The responsiveness of the ADT747x to temperature changes can be configured.
+> +This allows smoothing of the fan speed transition. To enable temperature
+> +smoothing used the temp[1-*]_smoothing_enable sysfs attribute. To set the
+> +transition time set the value in ms in the temp[1-*]_smoothing sysfs attribute.
 > +
+Does this require two attributes, or can setting '0' for temp[1-*]_smoothing
+be used to disable it ?
+
+Thanks,
+Guenter
+
 >  Notes
 >  -----
 >  
 > diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index ec0c43fbcdce..53f25bda0919 100644
+> index 53f25bda0919..e1299eef7c51 100644
 > --- a/drivers/hwmon/adt7475.c
 > +++ b/drivers/hwmon/adt7475.c
-> @@ -79,6 +79,9 @@
+> @@ -526,6 +526,109 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *attr,
+>  	return count;
+>  }
 >  
->  #define REG_TEMP_TRANGE_BASE	0x5F
->  
-> +#define REG_ENHANCE_ACOUSTICS1	0x62
-> +#define REG_ENHANCE_ACOUSTICS2	0x63
+> +/* Assuming CONFIG6[SLOW] is 0 */
+> +static const int ad7475_st_map[] = {
+> +	37500, 18800, 12500, 7500, 4700, 3100, 1600, 800,
+> +};
 > +
->  #define REG_PWM_MIN_BASE	0x64
->  
->  #define REG_TEMP_TMIN_BASE	0x67
-> @@ -209,6 +212,7 @@ struct adt7475_data {
->  	u8 range[3];
->  	u8 pwmctl[3];
->  	u8 pwmchan[3];
-> +	u8 enh_acou[2];
->  
->  	u8 vid;
->  	u8 vrm;
-> @@ -700,6 +704,43 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
->  	data->pwm[sattr->nr][sattr->index] = clamp_val(val, 0, 0xFF);
->  	i2c_smbus_write_byte_data(client, reg,
->  				  data->pwm[sattr->nr][sattr->index]);
+> +static ssize_t show_temp_st(struct device *dev, struct device_attribute *attr,
+> +				  char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct adt7475_data *data = i2c_get_clientdata(client);
+> +	int shift, idx;
+> +	long val;
+> +
+> +	switch (sattr->index) {
+> +	case 0:
+> +		shift = 0;
+> +		idx = 0;
+> +		break;
+> +	case 1:
+> +		shift = 4;
+> +		idx = 1;
+> +		break;
+> +	case 2:
+> +		shift = 0;
+> +		idx = 1;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	switch (sattr->nr) {
+> +	case CONTROL:
+> +		val = (data->enh_acou[idx] >> shift) & 0x8;
+> +		return sprintf(buf, "%d\n", !!val);
+> +	case MIN:
+> +		val = (data->enh_acou[idx] >> shift) & 0x7;
+> +		return sprintf(buf, "%d\n", ad7475_st_map[val]);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static ssize_t set_temp_st(struct device *dev, struct device_attribute *attr,
+> +				 const char *buf, size_t count)
+> +{
+> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct adt7475_data *data = i2c_get_clientdata(client);
+> +	unsigned char reg;
+> +	int shift, idx;
+> +	int mask;
+> +	long val;
+> +
+> +	if (kstrtol(buf, 10, &val))
+> +		return -EINVAL;
+> +
+> +	switch (sattr->index) {
+> +	case 0:
+> +		reg = REG_ENHANCE_ACOUSTICS1;
+> +		shift = 0;
+> +		idx = 0;
+> +		break;
+> +	case 1:
+> +		reg = REG_ENHANCE_ACOUSTICS2;
+> +		shift = 4;
+> +		idx = 1;
+> +		break;
+> +	case 2:
+> +		reg = REG_ENHANCE_ACOUSTICS2;
+> +		shift = 0;
+> +		idx = 1;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	switch (sattr->nr) {
+> +	case CONTROL:
+> +		val = !!val << 3;
+> +		mask = 0x8;
+> +		break;
+> +	case MIN:
+> +		val = find_closest_descending(val, ad7475_st_map,
+> +					      ARRAY_SIZE(ad7475_st_map));
+> +		mask = 0x7;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	mutex_lock(&data->lock);
+> +
+> +	data->enh_acou[idx] &= ~(mask << shift);
+> +	data->enh_acou[idx] |= (val << shift);
+> +
+> +	i2c_smbus_write_byte_data(client, reg, data->enh_acou[idx]);
+> +
 > +	mutex_unlock(&data->lock);
 > +
 > +	return count;
 > +}
 > +
-> +
-> +static ssize_t show_pwm_min(struct device *dev, struct device_attribute *attr,
-> +			    char *buf)
-> +{
-> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	u8 mask = BIT(5 + sattr->index);
-> +
-> +	return sprintf(buf, "%d\n", !!(data->enh_acou[0] & mask));
-> +}
-> +
-> +static ssize_t set_pwm_min(struct device *dev, struct device_attribute *attr,
-> +			    const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	long val;
-> +	u8 mask = BIT(5 + sattr->index);
-> +
-> +	if (kstrtol(buf, 10, &val))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&data->lock);
-> +
-> +	data->enh_acou[0] &= ~mask;
-> +	if (val)
-> +		data->enh_acou[0] |= mask;
-> +
-> +	i2c_smbus_write_byte_data(client, REG_ENHANCE_ACOUSTICS1,
-> +				  data->enh_acou[0]);
->  
->  	mutex_unlock(&data->lock);
->  
-> @@ -1028,6 +1069,8 @@ static SENSOR_DEVICE_ATTR_2(pwm1_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MIN, 0);
->  static SENSOR_DEVICE_ATTR_2(pwm1_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MAX, 0);
-> +static SENSOR_DEVICE_ATTR_2(pwm1_min, S_IRUGO | S_IWUSR, show_pwm_min,
-> +			    set_pwm_min, 0, 0);
->  static SENSOR_DEVICE_ATTR_2(pwm2, S_IRUGO | S_IWUSR, show_pwm, set_pwm, INPUT,
->  			    1);
->  static SENSOR_DEVICE_ATTR_2(pwm2_freq, S_IRUGO | S_IWUSR, show_pwmfreq,
-> @@ -1040,6 +1083,8 @@ static SENSOR_DEVICE_ATTR_2(pwm2_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MIN, 1);
->  static SENSOR_DEVICE_ATTR_2(pwm2_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MAX, 1);
-> +static SENSOR_DEVICE_ATTR_2(pwm2_min, S_IRUGO | S_IWUSR, show_pwm_min,
-> +			    set_pwm_min, 0, 1);
->  static SENSOR_DEVICE_ATTR_2(pwm3, S_IRUGO | S_IWUSR, show_pwm, set_pwm, INPUT,
->  			    2);
->  static SENSOR_DEVICE_ATTR_2(pwm3_freq, S_IRUGO | S_IWUSR, show_pwmfreq,
-> @@ -1052,6 +1097,8 @@ static SENSOR_DEVICE_ATTR_2(pwm3_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MIN, 2);
->  static SENSOR_DEVICE_ATTR_2(pwm3_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  			    set_pwm, MAX, 2);
-> +static SENSOR_DEVICE_ATTR_2(pwm3_min, S_IRUGO | S_IWUSR, show_pwm_min,
-> +			    set_pwm_min, 0, 2);
->  
->  /* Non-standard name, might need revisiting */
->  static DEVICE_ATTR_RW(pwm_use_point2_pwm_at_crit);
-> @@ -1112,12 +1159,14 @@ static struct attribute *adt7475_attrs[] = {
->  	&sensor_dev_attr_pwm1_auto_channels_temp.dev_attr.attr,
->  	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
->  	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_min.dev_attr.attr,
->  	&sensor_dev_attr_pwm3.dev_attr.attr,
->  	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
->  	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
->  	&sensor_dev_attr_pwm3_auto_channels_temp.dev_attr.attr,
->  	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
->  	&sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm3_min.dev_attr.attr,
->  	&dev_attr_pwm_use_point2_pwm_at_crit.attr,
->  	NULL,
->  };
-> @@ -1136,6 +1185,7 @@ static struct attribute *pwm2_attrs[] = {
->  	&sensor_dev_attr_pwm2_auto_channels_temp.dev_attr.attr,
->  	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
->  	&sensor_dev_attr_pwm2_auto_point2_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm2_min.dev_attr.attr,
->  	NULL
->  };
->  
+>  /*
+>   * Table of autorange values - the user will write the value in millidegrees,
+>   * and we'll convert it
+> @@ -1008,6 +1111,10 @@ static SENSOR_DEVICE_ATTR_2(temp1_crit, S_IRUGO | S_IWUSR, show_temp, set_temp,
+>  			    THERM, 0);
+>  static SENSOR_DEVICE_ATTR_2(temp1_crit_hyst, S_IRUGO | S_IWUSR, show_temp,
+>  			    set_temp, HYSTERSIS, 0);
+> +static SENSOR_DEVICE_ATTR_2(temp1_smoothing, S_IRUGO | S_IWUSR, show_temp_st,
+> +			    set_temp_st, MIN, 0);
+> +static SENSOR_DEVICE_ATTR_2(temp1_smoothing_enable, S_IRUGO | S_IWUSR,
+> +			    show_temp_st, set_temp_st, CONTROL, 0);
+>  static SENSOR_DEVICE_ATTR_2(temp2_input, S_IRUGO, show_temp, NULL, INPUT, 1);
+>  static SENSOR_DEVICE_ATTR_2(temp2_alarm, S_IRUGO, show_temp, NULL, ALARM, 1);
+>  static SENSOR_DEVICE_ATTR_2(temp2_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
+> @@ -1024,6 +1131,10 @@ static SENSOR_DEVICE_ATTR_2(temp2_crit, S_IRUGO | S_IWUSR, show_temp, set_temp,
+>  			    THERM, 1);
+>  static SENSOR_DEVICE_ATTR_2(temp2_crit_hyst, S_IRUGO | S_IWUSR, show_temp,
+>  			    set_temp, HYSTERSIS, 1);
+> +static SENSOR_DEVICE_ATTR_2(temp2_smoothing, S_IRUGO | S_IWUSR, show_temp_st,
+> +			    set_temp_st, MIN, 1);
+> +static SENSOR_DEVICE_ATTR_2(temp2_smoothing_enable, S_IRUGO | S_IWUSR,
+> +			    show_temp_st, set_temp_st, CONTROL, 1);
+>  static SENSOR_DEVICE_ATTR_2(temp3_input, S_IRUGO, show_temp, NULL, INPUT, 2);
+>  static SENSOR_DEVICE_ATTR_2(temp3_alarm, S_IRUGO, show_temp, NULL, ALARM, 2);
+>  static SENSOR_DEVICE_ATTR_2(temp3_fault, S_IRUGO, show_temp, NULL, FAULT, 2);
+> @@ -1041,6 +1152,10 @@ static SENSOR_DEVICE_ATTR_2(temp3_crit, S_IRUGO | S_IWUSR, show_temp, set_temp,
+>  			    THERM, 2);
+>  static SENSOR_DEVICE_ATTR_2(temp3_crit_hyst, S_IRUGO | S_IWUSR, show_temp,
+>  			    set_temp, HYSTERSIS, 2);
+> +static SENSOR_DEVICE_ATTR_2(temp3_smoothing, S_IRUGO | S_IWUSR, show_temp_st,
+> +			    set_temp_st, MIN, 2);
+> +static SENSOR_DEVICE_ATTR_2(temp3_smoothing_enable, S_IRUGO | S_IWUSR,
+> +			    show_temp_st, set_temp_st, CONTROL, 2);
+>  static SENSOR_DEVICE_ATTR_2(fan1_input, S_IRUGO, show_tach, NULL, INPUT, 0);
+>  static SENSOR_DEVICE_ATTR_2(fan1_min, S_IRUGO | S_IWUSR, show_tach, set_tach,
+>  			    MIN, 0);
+> @@ -1125,6 +1240,8 @@ static struct attribute *adt7475_attrs[] = {
+>  	&sensor_dev_attr_temp1_auto_point2_temp.dev_attr.attr,
+>  	&sensor_dev_attr_temp1_crit.dev_attr.attr,
+>  	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_smoothing.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_smoothing_enable.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_input.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_alarm.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_max.dev_attr.attr,
+> @@ -1134,6 +1251,8 @@ static struct attribute *adt7475_attrs[] = {
+>  	&sensor_dev_attr_temp2_auto_point2_temp.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_crit.dev_attr.attr,
+>  	&sensor_dev_attr_temp2_crit_hyst.dev_attr.attr,
+> +	&sensor_dev_attr_temp2_smoothing.dev_attr.attr,
+> +	&sensor_dev_attr_temp2_smoothing_enable.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_input.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_fault.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
+> @@ -1144,6 +1263,8 @@ static struct attribute *adt7475_attrs[] = {
+>  	&sensor_dev_attr_temp3_auto_point2_temp.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_crit.dev_attr.attr,
+>  	&sensor_dev_attr_temp3_crit_hyst.dev_attr.attr,
+> +	&sensor_dev_attr_temp3_smoothing.dev_attr.attr,
+> +	&sensor_dev_attr_temp3_smoothing_enable.dev_attr.attr,
+>  	&sensor_dev_attr_fan1_input.dev_attr.attr,
+>  	&sensor_dev_attr_fan1_min.dev_attr.attr,
+>  	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
 > -- 
 > 2.11.0.24.ge6920cf
 > 
