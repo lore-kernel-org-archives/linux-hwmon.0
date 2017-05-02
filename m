@@ -1,259 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37982 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1751118AbdEBEgc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 2 May 2017 00:36:32 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v424Soib143407
-        for <linux-hwmon@vger.kernel.org>; Tue, 2 May 2017 00:36:31 -0400
-Received: from e23smtp09.au.ibm.com (e23smtp09.au.ibm.com [202.81.31.142])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2a6frwgjd1-1
-        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 May 2017 00:36:31 -0400
-Received: from localhost
-        by e23smtp09.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
-        Tue, 2 May 2017 14:36:28 +1000
-Subject: Re: [PATCH V2] hwmon: (ibmpowernv) Add min/max attributes and current
- sensors
-To: Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com,
-        paulus@samba.org, mpe@ellerman.id.au
-References: <1493359145-6143-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <8f9e7f79-e9ab-e0a6-d5c6-b805b42da2e5@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
-        ego@linux.vnet.ibm.com, akshay.adiga@linux.vnet.ibm.com,
-        andrew@aj.id.au, clg@kaod.org
-From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Date: Tue, 2 May 2017 10:05:30 +0530
+Received: from bh-25.webhostbox.net ([208.91.199.152]:50783 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750794AbdEBE5v (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 May 2017 00:57:51 -0400
+Subject: Re: Enabling enhanced acoustics on adt7475
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+References: <5b96df9d2ea649daa5f5b8a3896280c4@svr-chch-ex1.atlnz.lc>
+ <20170501191605.GA17410@roeck-us.net>
+ <007150d629ad4ace84b81466ed08ec63@svr-chch-ex1.atlnz.lc>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <9184b01f-4586-57e3-b31d-f4b48f3335c8@roeck-us.net>
+Date: Mon, 1 May 2017 21:57:47 -0700
 MIME-Version: 1.0
-In-Reply-To: <8f9e7f79-e9ab-e0a6-d5c6-b805b42da2e5@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <007150d629ad4ace84b81466ed08ec63@svr-chch-ex1.atlnz.lc>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <4426ae06-eca8-835c-1956-69fbe6a9ddc0@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+On 05/01/2017 08:45 PM, Chris Packham wrote:
+> On 02/05/17 07:16, Guenter Roeck wrote:
+>> On Mon, May 01, 2017 at 08:45:14AM +0000, Chris Packham wrote:
+>>> Hi,
+>>>
+>>> I'm looking at adding code to configure the enhanced acoustics on the
+>>> ADT7475 and compatible devices.
+>>>
+>>> I'm wondering if I should be adding these as device-tree properties or
+>>> as sysfs attributes. And in either case how these properties/attributes
+>>> should behave. The main impact of this would be to provide a mechanism
+>>> for configuring how fast the pwm output will change.
+>>>
+>>> The fact that I wrote "configuring" above makes me lean towards sysfs
+>>> attributes. Nothing in Documentation/hwmon/sysfs-interface really covers
+>>
+>> Definitely. This does not describe hardware.
+>>
+>>> this. dme1737.c has a pwmN_ramp_rate which would seem close to what I
+>>> want. Is there any other precedent I should follow?
+>>>
+>> There is pwmX_step but that does not describe a ramp rate in time.
+>> dme1737.c indeed seems to be the closest match. Nothing else I can think of.
+>>
+>
+> I also found tempN_smoothing_enable and tempN_smoothing_time in
+> asc7621.c which lines up quite closely with the adt7475.
+>
 
-On 04/28/2017 06:59 PM, Guenter Roeck wrote:
-> On 04/27/2017 10:59 PM, Shilpasri G Bhat wrote:
->> Add support for adding min/max values for the inband sensors copied by
->> OCC to main memory. And also add current(mA) sensors to the list.
->>
->> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
->> ---
->> Changes from V1:
->> - Add functions to get min and max attribute strings
->> - Add function 'populate_sensor' to fill in the 'struct sensor_data'
->>   for each sensor.
->>
->>  drivers/hwmon/ibmpowernv.c | 96 +++++++++++++++++++++++++++++++++++++---------
->>  1 file changed, 77 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
->> index 6d2e660..d59262c 100644
->> --- a/drivers/hwmon/ibmpowernv.c
->> +++ b/drivers/hwmon/ibmpowernv.c
->> @@ -50,6 +50,7 @@ enum sensors {
->>      TEMP,
->>      POWER_SUPPLY,
->>      POWER_INPUT,
->> +    CURRENT,
->>      MAX_SENSOR_TYPE,
->>  };
->>
->> @@ -65,7 +66,8 @@ enum sensors {
->>      {"fan", "ibm,opal-sensor-cooling-fan"},
->>      {"temp", "ibm,opal-sensor-amb-temp"},
->>      {"in", "ibm,opal-sensor-power-supply"},
->> -    {"power", "ibm,opal-sensor-power"}
->> +    {"power", "ibm,opal-sensor-power"},
->> +    {"curr"}, /* Follows newer device tree compatible ibm,opal-sensor */
-> 
-> Following up on a previous e-mail, this really _is_ odd. Any chance to fix it
-> in the firmware and have current sensors return "ibm,opal-sensor-current" ?
+Your call.
 
-Okay will drop "curr' sensor till we resolve this in the firmware.
+Guenter
 
-> 
->>  };
->>
->>  struct sensor_data {
->> @@ -287,6 +289,7 @@ static int populate_attr_groups(struct platform_device *pdev)
->>      opal = of_find_node_by_path("/ibm,opal/sensors");
->>      for_each_child_of_node(opal, np) {
->>          const char *label;
->> +        int len;
->>
->>          if (np->name == NULL)
->>              continue;
->> @@ -298,10 +301,14 @@ static int populate_attr_groups(struct platform_device
->> *pdev)
->>          sensor_groups[type].attr_count++;
->>
->>          /*
->> -         * add a new attribute for labels
->> +         * add attributes for labels, min and max
->>           */
->>          if (!of_property_read_string(np, "label", &label))
->>              sensor_groups[type].attr_count++;
->> +        if (of_find_property(np, "sensor-data-min", &len))
->> +            sensor_groups[type].attr_count++;
->> +        if (of_find_property(np, "sensor-data-max", &len))
->> +            sensor_groups[type].attr_count++;
->>      }
->>
->>      of_node_put(opal);
->> @@ -337,6 +344,49 @@ static void create_hwmon_attr(struct sensor_data *sdata,
->> const char *attr_name,
->>      sdata->dev_attr.show = show;
->>  }
->>
->> +static void populate_sensor(struct sensor_data *sdata, int od, int hd, int sid,
->> +                const char *attr_name, enum sensors type,
->> +                const struct attribute_group *pgroup,
->> +                ssize_t (*show)(struct device *dev,
->> +                        struct device_attribute *attr,
->> +                        char *buf))
->> +{
->> +    sdata->id = sid;
->> +    sdata->type = type;
->> +    sdata->opal_index = od;
->> +    sdata->hwmon_index = hd;
->> +    create_hwmon_attr(sdata, attr_name, show);
->> +    pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
->> +}
->> +
->> +static char *get_max_attr(enum sensors type)
->> +{
->> +    switch (type) {
->> +    case POWER_INPUT:
->> +        return "input_highest";
->> +    case TEMP:
->> +        return "max";
->> +    default:
->> +        break;
->> +    }
->> +
->> +    return "highest";
-> 
-> This is a bit confusing. Why not 'return "highest";' in the default case above ?
-> 
-> Also, is this correct for type == POWER_SUPPLY, ie is it "highest" vs. "max" ?
-> 
-> Kind of odd that the firmware reports "highest/lowest" in some cases
-> and "max/min" in others. Guess there is nothing we can do about that,
-> just a note.
-
-Firmware has min/max values for all sensors, but I had mapped them as
-highest/lowest to add reset_history attribute in the later patches.
-
-Will change "TEMP" to highest/lowest to keep consistency.
-
-Thanks and Regards,
-Shilpa
-
-> 
->> +}
->> +
->> +static char *get_min_attr(enum sensors type)
->> +{
->> +    switch (type) {
->> +    case POWER_INPUT:
->> +        return "input_lowest";
->> +    case TEMP:
->> +        return "min";
->> +    default:
->> +        break;
->> +    }
->> +
->> +    return "lowest";
-> 
-> Same here.
-> 
->> +}
->> +
->>  /*
->>   * Iterate through the device tree for each child of 'sensors' node, create
->>   * a sysfs attribute file, the file is named by translating the DT node name
->> @@ -365,6 +415,7 @@ static int create_device_attrs(struct platform_device *pdev)
->>      for_each_child_of_node(opal, np) {
->>          const char *attr_name;
->>          u32 opal_index;
->> +        u32 hwmon_index;
->>          const char *label;
->>
->>          if (np->name == NULL)
->> @@ -386,9 +437,6 @@ static int create_device_attrs(struct platform_device *pdev)
->>              continue;
->>          }
->>
->> -        sdata[count].id = sensor_id;
->> -        sdata[count].type = type;
->> -
->>          /*
->>           * If we can not parse the node name, it means we are
->>           * running on a newer device tree. We can just forget
->> @@ -401,14 +449,12 @@ static int create_device_attrs(struct platform_device
->> *pdev)
->>              opal_index = INVALID_INDEX;
->>          }
->>
->> -        sdata[count].opal_index = opal_index;
->> -        sdata[count].hwmon_index =
->> -            get_sensor_hwmon_index(&sdata[count], sdata, count);
->> -
->> -        create_hwmon_attr(&sdata[count], attr_name, show_sensor);
->> -
->> -        pgroups[type]->attrs[sensor_groups[type].attr_count++] =
->> -                &sdata[count++].dev_attr.attr;
->> +        hwmon_index = get_sensor_hwmon_index(&sdata[count], sdata,
->> +                             count);
->> +        populate_sensor(&sdata[count], opal_index, hwmon_index,
->> +                sensor_id, attr_name, type, pgroups[type],
->> +                show_sensor);
->> +        count++;
->>
->>          if (!of_property_read_string(np, "label", &label)) {
->>              /*
->> @@ -417,16 +463,28 @@ static int create_device_attrs(struct platform_device
->> *pdev)
->>               * attribute. They are related to the same
->>               * sensor.
->>               */
->> -            sdata[count].type = type;
->> -            sdata[count].opal_index = sdata[count - 1].opal_index;
->> -            sdata[count].hwmon_index = sdata[count - 1].hwmon_index;
->>
->>              make_sensor_label(np, &sdata[count], label);
->> +            populate_sensor(&sdata[count], opal_index, hwmon_index,
->> +                    sensor_id, "label", type, pgroups[type],
->> +                    show_label);
->> +            count++;
->> +        }
->>
->> -            create_hwmon_attr(&sdata[count], "label", show_label);
->> +        if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
->> +            attr_name = get_max_attr(type);
->> +            populate_sensor(&sdata[count], opal_index, hwmon_index,
->> +                    sensor_id, attr_name, type,
->> +                    pgroups[type], show_sensor);
->> +            count++;
->> +        }
->>
->> -            pgroups[type]->attrs[sensor_groups[type].attr_count++] =
->> -                &sdata[count++].dev_attr.attr;
->> +        if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
->> +            attr_name = get_min_attr(type);
->> +            populate_sensor(&sdata[count], opal_index, hwmon_index,
->> +                    sensor_id, attr_name, type,
->> +                    pgroups[type], show_sensor);
->> +            count++;
->>          }
->>      }
->>
->>
-> 
 
