@@ -1,55 +1,44 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50783 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750794AbdEBE5v (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 May 2017 00:57:51 -0400
-Subject: Re: Enabling enhanced acoustics on adt7475
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-References: <5b96df9d2ea649daa5f5b8a3896280c4@svr-chch-ex1.atlnz.lc>
- <20170501191605.GA17410@roeck-us.net>
- <007150d629ad4ace84b81466ed08ec63@svr-chch-ex1.atlnz.lc>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <9184b01f-4586-57e3-b31d-f4b48f3335c8@roeck-us.net>
-Date: Mon, 1 May 2017 21:57:47 -0700
+Received: from userp1040.oracle.com ([156.151.31.81]:26112 "EHLO
+        userp1040.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754361AbdECTdn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 May 2017 15:33:43 -0400
+Date: Wed, 3 May 2017 22:31:40 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus) Add missing break statements
+Message-ID: <20170503193140.zbxcdgda7k3rnr2m@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <007150d629ad4ace84b81466ed08ec63@svr-chch-ex1.atlnz.lc>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 05/01/2017 08:45 PM, Chris Packham wrote:
-> On 02/05/17 07:16, Guenter Roeck wrote:
->> On Mon, May 01, 2017 at 08:45:14AM +0000, Chris Packham wrote:
->>> Hi,
->>>
->>> I'm looking at adding code to configure the enhanced acoustics on the
->>> ADT7475 and compatible devices.
->>>
->>> I'm wondering if I should be adding these as device-tree properties or
->>> as sysfs attributes. And in either case how these properties/attributes
->>> should behave. The main impact of this would be to provide a mechanism
->>> for configuring how fast the pwm output will change.
->>>
->>> The fact that I wrote "configuring" above makes me lean towards sysfs
->>> attributes. Nothing in Documentation/hwmon/sysfs-interface really covers
->>
->> Definitely. This does not describe hardware.
->>
->>> this. dme1737.c has a pwmN_ramp_rate which would seem close to what I
->>> want. Is there any other precedent I should follow?
->>>
->> There is pwmX_step but that does not describe a ramp rate in time.
->> dme1737.c indeed seems to be the closest match. Nothing else I can think of.
->>
->
-> I also found tempN_smoothing_enable and tempN_smoothing_time in
-> asc7621.c which lines up quite closely with the adt7475.
->
+Static checkers complain about these missing break statements.
 
-Your call.
+Fixes: 6eaaea144dc5 ("hwmon: (pmbus) Add client driver for IR35221")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Guenter
-
-
+diff --git a/drivers/hwmon/pmbus/ir35221.c b/drivers/hwmon/pmbus/ir35221.c
+index cc7b3b542531..00e4a1e264e2 100644
+--- a/drivers/hwmon/pmbus/ir35221.c
++++ b/drivers/hwmon/pmbus/ir35221.c
+@@ -129,6 +129,7 @@ static int ir35221_read_word_data(struct i2c_client *client, int page, int reg)
+ 	case PMBUS_IIN_OC_WARN_LIMIT:
+ 		ret = pmbus_read_word_data(client, page, reg);
+ 		ret = ir35221_scale_result(ret, -1, PSC_CURRENT_IN);
++		break;
+ 	case PMBUS_READ_VIN:
+ 		ret = pmbus_read_word_data(client, page, PMBUS_READ_VIN);
+ 		ret = ir35221_scale_result(ret, -5, PSC_VOLTAGE_IN);
+@@ -222,6 +223,7 @@ static int ir35221_write_word_data(struct i2c_client *client, int page, int reg,
+ 	case PMBUS_IIN_OC_WARN_LIMIT:
+ 		val = ir35221_scale_result(word, 1, PSC_CURRENT_IN);
+ 		ret = pmbus_write_word_data(client, page, reg, val);
++		break;
+ 	default:
+ 		ret = -ENODATA;
+ 		break;
