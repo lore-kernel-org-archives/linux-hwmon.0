@@ -1,60 +1,62 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from Galois.linutronix.de ([146.0.238.70]:38646 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751230AbdEIHRC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 May 2017 03:17:02 -0400
-Date: Tue, 9 May 2017 09:16:15 +0200 (CEST)
-From: Thomas Gleixner <tglx@linutronix.de>
-To: Tommi Rantala <tt.rantala@gmail.com>
-cc: Guenter Roeck <linux@roeck-us.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: Re: [patch 0/6] hwmon/coretemp: Hotplug fixes, cleanups and state
- machine conversion
-In-Reply-To: <CA+ydwtrW28-H9MkYcj44QoGzKuRRRY3+gsjcs8=oNU8HxPcM+Q@mail.gmail.com>
-Message-ID: <alpine.DEB.2.20.1705090914100.1798@nanos>
-References: <20161122173622.771252945@linutronix.de> <65310945-a720-5437-f7cb-9d8af1e5b53d@roeck-us.net> <CA+ydwtpYPP9xSTDfOmZSUamb1aadOoqCs18sWBanzFaSxJhWWQ@mail.gmail.com> <alpine.DEB.2.20.1704121124510.1874@nanos> <CA+ydwtqKqzjLDiaCEuvXfYp3Lkbh+z-+s=1JfwkuiVOWp3QfgA@mail.gmail.com>
- <alpine.DEB.2.20.1704121248150.1874@nanos> <CA+ydwtrc9E_xuaQSx=P_co3q9EPSyRq3yzSyTgN1kxp0gs35qw@mail.gmail.com> <alpine.DEB.2.20.1704121643120.1874@nanos> <alpine.DEB.2.20.1704141935200.2327@nanos> <CA+ydwtq9ebDGtWxZGfuxgJVgHgF06Lb3NPgOfA0X90RH=U_1ew@mail.gmail.com>
- <alpine.DEB.2.20.1704231657230.3041@nanos> <CA+ydwtrW28-H9MkYcj44QoGzKuRRRY3+gsjcs8=oNU8HxPcM+Q@mail.gmail.com>
+Received: from mail-wr0-f174.google.com ([209.85.128.174]:34910 "EHLO
+        mail-wr0-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751198AbdECW3M (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 May 2017 18:29:12 -0400
+Received: by mail-wr0-f174.google.com with SMTP id z52so1578214wrc.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 03 May 2017 15:29:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <90f011d6-9241-e860-7a0e-2fb52c2337ce@gmail.com>
+References: <20170418201702.57019-1-code@mmayer.net> <20170418201702.57019-2-code@mmayer.net>
+ <CAGt4E5susQWWNZPbNh8AoWtK-4yu50VL=GqOw+_2w_FA+2V68Q@mail.gmail.com>
+ <CAGt4E5uu1Ty0ReaiBZ0kcR_-jnqJQL8vgU4Y9mL64FP7f+=T7Q@mail.gmail.com>
+ <20170427215737.dmnj4u2e4tfc6vfv@rob-hp-laptop> <90f011d6-9241-e860-7a0e-2fb52c2337ce@gmail.com>
+From: Markus Mayer <markus.mayer@broadcom.com>
+Date: Wed, 3 May 2017 15:29:10 -0700
+Message-ID: <CAGt4E5s0uoLjeEhk_srxbr=f_sf-NSVXbW_HEJfjnSiAQU8o=Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt/bindings: Add bindings for Broadcom STB DRAM Sensors
+To: Rob Herring <robh+dt@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Device Tree List <devicetree@vger.kernel.org>,
+        ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, 4 May 2017, Tommi Rantala wrote:
-> 2017-04-23 18:01 GMT+03:00 Thomas Gleixner <tglx@linutronix.de>:
-> > On Sat, 15 Apr 2017, Tommi Rantala wrote:
-> >
-> >> Testing with 4.10.8-200.fc25.x86_64: freezer, devices and platform are
-> >> OK, it breaks at "processors".
-> >> The screen stays off, and the machine no longer answers to ping.
-> >>
-> >> (Without coretemp loaded, the machine survives all the states. There
-> >> are some graphics glitches and radeon error messages)
-> >
-> > That's odd. I tried on a similar machine (w/o a radeon card) and it just
-> > works with the coretemp module loaded.
-> >
-> > Can you please do a CPU hotplug cycle (just one CPU) with the cpuhp events
-> > in the tracer enabled. Send me the trace output so I might be able to spot
-> > whats different and what interdependencies between other callbacks might be
-> > there.
-> 
-> Hi,
-> 
-> Here's the trace output, does it help?
+Hi Rob,
 
-Not much. Can you please try the following:
+On 27 April 2017 at 15:00, Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 04/27/2017 02:57 PM, Rob Herring wrote:
+>>>>> +Optional properties:
+>>>>> +  - cell-index: the index of the DPFE instance; will default to 0 if not set
+>>
+>> Don't use cell-index. It's not a valid property for FDT (only real
+>> OpenFirmware).
+>
+> My bad, I was advising Markus to use this property since it was largely
+> used throughout Documentation/devicetree/bindings/. What would be a more
+> appropriate way to have the same information? Aliases?
 
-1) Offline all CPUs except CPU0 before suspend/resume
+Hopefully this will be the last time we need to pester you about this.
+What should we be using instead of cell-index to identify multiple
+instances of a device?
 
-2) Offline all CPUs except CPU0 and CPU1 before suspend/resume
+To give you an idea of what the code looks like right now:
 
-3) Offline all CPUs except CPU0 and CPU2 before suspend/resume
+ret = of_property_read_u32(dev->of_node, "cell-index", &index);
+if (ret)
+    index = 0;
+[...]
+dev_set_name(dpfe_dev, "dpfe%u", index);
+ret = device_register(dpfe_dev);
+
+Enumerating the devices like this is what we are after.
 
 Thanks,
-
-	tglx
+-Markus
