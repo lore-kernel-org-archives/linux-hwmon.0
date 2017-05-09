@@ -1,91 +1,68 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:41656 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751344AbdEVDCL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 May 2017 23:02:11 -0400
-Subject: Re: [PATCH 0/5] hwmon: move include files out of include/linux/i2c
-To: Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Cc: linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20170521203443.6387-1-wsa@the-dreams.de>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b876bed9-38dc-233f-053a-4b0d4ad990b2@roeck-us.net>
-Date: Sun, 21 May 2017 20:02:07 -0700
+Received: from butterbrot.org ([176.9.106.16]:52031 "EHLO butterbrot.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751203AbdEIJeZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 9 May 2017 05:34:25 -0400
+To: linux-hwmon@vger.kernel.org, rydberg@bitmath.org,
+        rydberg@euromail.se
+From: Florian Echtler <floe@butterbrot.org>
+Subject: [RFC] adding TDM support to applesmc module?
+Message-ID: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
+Date: Tue, 9 May 2017 11:26:57 +0200
 MIME-Version: 1.0
-In-Reply-To: <20170521203443.6387-1-wsa@the-dreams.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="013lbUpTdgLD00IAxANLMjrRILlrDVhr8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 05/21/2017 01:34 PM, Wolfram Sang wrote:
-> It doesn't make sense to use include/linux/i2c for client drivers which may in
-> fact rather be hwmon or input or whatever devices. As a result, I want to
-> deprecate include/linux/i2c for good. This series moves the include files to a
-> better location, largely include/platform_data because that is what most of th > moved include files contain. Note that some files don't seem to have upstream
-> users in board code, so they maybe could even be removed? I didn't check for
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--013lbUpTdgLD00IAxANLMjrRILlrDVhr8
+Content-Type: multipart/mixed; boundary="pVKMRfv9qaOm9NOG8hr45DJgprWS37Kim";
+ protected-headers="v1"
+From: Florian Echtler <floe@butterbrot.org>
+To: linux-hwmon@vger.kernel.org, rydberg@bitmath.org, rydberg@euromail.se
+Message-ID: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
+Subject: [RFC] adding TDM support to applesmc module?
 
-While I understand where you are coming from, I am not typically that aggressive.
-Such removals force vendors who are not really forthcoming with upstreaming to
-deviate even further from upstream. It makes them even less likely to submit their
-code upstream, and it may result in enforcing their belief that upstream doesn't
-really care about vendors struggling to release boards and systems to their
-customers.
+--pVKMRfv9qaOm9NOG8hr45DJgprWS37Kim
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> that now, but I did it for one i2c master driver recently. So, it may be
-> possible. pmbus.h got moved just one layer upwards, see the patch description
-> there.
-> 
-> I prefer the series to go upstream via the subsystem tree; if you prefer that I
-> take it via I2C, just let me know.
-> 
-Series applied to hwmon-next.
+Hello everyone,
 
-Thanks,
-Guenter
+a brief question: I've recently found out how to enable Target Display Mo=
+de
+(i.e., use the iMac as a display for an external video source) when runni=
+ng
+Linux, namely by writing to some specific SMC keys.
 
-> No runtime testing because of no HW, but buildbot is happy with this series at
-> least. A branch can be found here:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/platform_data
-> 
-> Thanks and kind regards,
-> 
->     Wolfram
-> 
-> 
-> Wolfram Sang (5):
->    hwmon: ads1015: move header file out of I2C realm
->    hwmon: ds620: move header file out of I2C realm
->    hwmon: ltc4245: move header file out of I2C realm
->    hwmon: max6639: move header file out of I2C realm
->    hwmon: pmbus: move header file out of I2C realm
-> 
->   Documentation/hwmon/ads1015                    | 2 +-
->   Documentation/hwmon/ltc4245                    | 2 +-
->   Documentation/hwmon/pmbus-core                 | 2 +-
->   MAINTAINERS                                    | 4 ++--
->   drivers/hwmon/ads1015.c                        | 2 +-
->   drivers/hwmon/ds620.c                          | 2 +-
->   drivers/hwmon/ltc4245.c                        | 2 +-
->   drivers/hwmon/max6639.c                        | 2 +-
->   drivers/hwmon/pmbus/pmbus.c                    | 2 +-
->   drivers/hwmon/pmbus/pmbus_core.c               | 2 +-
->   drivers/hwmon/pmbus/ucd9000.c                  | 2 +-
->   drivers/hwmon/pmbus/ucd9200.c                  | 2 +-
->   drivers/iio/adc/ti-ads1015.c                   | 2 +-
->   include/linux/{i2c => platform_data}/ads1015.h | 0
->   include/linux/{i2c => platform_data}/ds620.h   | 0
->   include/linux/{i2c => platform_data}/ltc4245.h | 0
->   include/linux/{i2c => platform_data}/max6639.h | 0
->   include/linux/{i2c => }/pmbus.h                | 0
->   18 files changed, 14 insertions(+), 14 deletions(-)
->   rename include/linux/{i2c => platform_data}/ads1015.h (100%)
->   rename include/linux/{i2c => platform_data}/ds620.h (100%)
->   rename include/linux/{i2c => platform_data}/ltc4245.h (100%)
->   rename include/linux/{i2c => platform_data}/max6639.h (100%)
->   rename include/linux/{i2c => }/pmbus.h (100%)
-> 
+Right now, this involves an ugly hacked userspace tool that can't coexist=
+ with
+applesmc, so I'd like to do this "properly" and integrate support for the=
+se keys
+in applesmc as a sysfs node.
 
+Would this be the correct route, although applesmc is a hwmon module?
+
+Best, Florian
+--=20
+SENT FROM MY DEC VT50 TERMINAL
+
+
+--pVKMRfv9qaOm9NOG8hr45DJgprWS37Kim--
+
+--013lbUpTdgLD00IAxANLMjrRILlrDVhr8
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iEYEARECAAYFAlkRi2EACgkQ7CzyshGvatjiTQCcDJ7Kv2afuU1aK8XZ/paTmHEw
+JawAoIBSWihW+Kxy2sfvgz78ilCv7IN0
+=yubV
+-----END PGP SIGNATURE-----
+
+--013lbUpTdgLD00IAxANLMjrRILlrDVhr8--
