@@ -1,51 +1,44 @@
-Return-path: <jdelvare@suse.de>
-Date: Thu, 4 May 2017 10:49:58 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
- linux-hwmon@vger.kernel.org
-Subject: Re: it87 causes VIA hardware to lockup
-Message-ID: <20170504104958.45cd6364@endymion>
-In-Reply-To: <89d6fe8b-206e-9354-498c-bd5e1e44d3cd@roeck-us.net>
-References: <20170312103413.GJ21222@n2100.armlinux.org.uk>
-	<20170312132544.GA17687@roeck-us.net>
-	<20170312141522.GL21222@n2100.armlinux.org.uk>
-	<20170312142634.GA1917@roeck-us.net>
-	<20170321134430.GA3177@roeck-us.net>
-	<20170321140812.GZ21222@n2100.armlinux.org.uk>
-	<20170321170503.GC13789@roeck-us.net>
-	<20170409153806.6dac6bbd@endymion>
-	<20170409152407.GB23984@roeck-us.net>
-	<20170425153045.0c44641b@endymion>
-	<89d6fe8b-206e-9354-498c-bd5e1e44d3cd@roeck-us.net>
+Return-path: <tt.rantala@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <alpine.DEB.2.20.1705090914100.1798@nanos>
+References: <20161122173622.771252945@linutronix.de> <65310945-a720-5437-f7cb-9d8af1e5b53d@roeck-us.net>
+ <CA+ydwtpYPP9xSTDfOmZSUamb1aadOoqCs18sWBanzFaSxJhWWQ@mail.gmail.com>
+ <alpine.DEB.2.20.1704121124510.1874@nanos> <CA+ydwtqKqzjLDiaCEuvXfYp3Lkbh+z-+s=1JfwkuiVOWp3QfgA@mail.gmail.com>
+ <alpine.DEB.2.20.1704121248150.1874@nanos> <CA+ydwtrc9E_xuaQSx=P_co3q9EPSyRq3yzSyTgN1kxp0gs35qw@mail.gmail.com>
+ <alpine.DEB.2.20.1704121643120.1874@nanos> <alpine.DEB.2.20.1704141935200.2327@nanos>
+ <CA+ydwtq9ebDGtWxZGfuxgJVgHgF06Lb3NPgOfA0X90RH=U_1ew@mail.gmail.com>
+ <alpine.DEB.2.20.1704231657230.3041@nanos> <CA+ydwtrW28-H9MkYcj44QoGzKuRRRY3+gsjcs8=oNU8HxPcM+Q@mail.gmail.com>
+ <alpine.DEB.2.20.1705090914100.1798@nanos>
+From: Tommi Rantala <tt.rantala@gmail.com>
+Date: Wed, 10 May 2017 16:52:30 +0300
+Message-ID: <CA+ydwtprNbXLo-kF3gKvcYJSu=cxVYHFXAW6uyC6voCj1g3KDw@mail.gmail.com>
+Subject: Re: [patch 0/6] hwmon/coretemp: Hotplug fixes, cleanups and state
+ machine conversion
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
+	Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	Sebastian Siewior <bigeasy@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Guenter,
+2017-05-09 10:16 GMT+03:00 Thomas Gleixner <tglx@linutronix.de>:
+> On Thu, 4 May 2017, Tommi Rantala wrote:
+>> Here's the trace output, does it help?
+>
+> Not much. Can you please try the following:
+>
+> 1) Offline all CPUs except CPU0 before suspend/resume
 
-On Tue, 25 Apr 2017 06:49:27 -0700, Guenter Roeck wrote:
-> On 04/25/2017 06:30 AM, Jean Delvare wrote:
-> > I took a look at stable branches v4.9 and v4.10 and I can't find this
-> > fix. Do you still plan to check if the fix applies and poke Greg about
-> > it? Or do you want me to do it?
-> 
-> Severe lack of time on my side, sorry. Feel free to do it if you have some slack.
+it works!
 
-I finally found some time to look into this. The fix applies just fine
-to kernel branches 4.9 and 4.10, so I asked stable@ to pick it.
+> 2) Offline all CPUs except CPU0 and CPU1 before suspend/resume
 
-> > (...)
-> > But isn't as good as doing the right thing, which would require less
-> > code. So I don't really follow your logic.
-> 
-> Call it paranoia. I have not received feedback if the patch is actually working,
-> and I am unable to test it myself. Feel free to send a patch to remove the redundant
-> part if you think it should be dropped.
+now it breaks.
 
-Yes I think, and yes I will.
+> 3) Offline all CPUs except CPU0 and CPU2 before suspend/resume
 
--- 
-Jean Delvare
-SUSE L3 Support
+works again!
+
+(Also works with CPUs 0,2,4,6 onlined.)
+
+-Tommi
