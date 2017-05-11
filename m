@@ -1,177 +1,84 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:52016 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753303AbdEKDp6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 May 2017 23:45:58 -0400
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: linux-hwmon@vger.kernel.org, linux@roeck-us.net
-Cc: Tobi Wulff <tobi.wulff@alliedtelesis.co.nz>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/4] hwmon: (adt7475) fan stall prevention
-Date: Thu, 11 May 2017 15:45:22 +1200
-Message-Id: <20170511034524.22698-3-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20170511034524.22698-1-chris.packham@alliedtelesis.co.nz>
+Return-path: <Chris.Packham@alliedtelesis.co.nz>
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux@roeck-us.net" <linux@roeck-us.net>
+CC: Tobi Wulff <Tobi.Wulff@alliedtelesis.co.nz>, Jean Delvare
+	<jdelvare@suse.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] hwmon: (adt7475) add high frequency support
+Date: Thu, 11 May 2017 21:31:56 +0000
+Message-ID: <f5ac03eee3f54a04a73f08c16e68af52@svr-chch-ex1.atlnz.lc>
 References: <20170511034524.22698-1-chris.packham@alliedtelesis.co.nz>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+ <20170511034524.22698-5-chris.packham@alliedtelesis.co.nz>
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+List-ID: <linux-hwmon@vger.kernel.org>
 
-By default adt7475 will stop the fans (pwm duty cycle 0%) when the
-temperature drops past Tmin - hysteresis. Some systems want to keep the
-fans moving even when the temperature drops so add new sysfs attributes
-that configure the enhanced acoustics min 1-3 which allows the fans to
-run at the minimum configure pwm duty cycle.
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-
-Changes in v2:
-- use pwmN_stall_dis as the attribute name. I think this describes the purpose
-  pretty well. I went with a new attribute instead of overloading
-  pwmN_auto_point1_pwm so this doesn't affect existing users.
-Changes in v3:
-- Fix grammar.
-- change enh_acou to enh_acoustics
-
- Documentation/hwmon/adt7475 |  5 +++++
- drivers/hwmon/adt7475.c     | 50 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
-
-diff --git a/Documentation/hwmon/adt7475 b/Documentation/hwmon/adt7475
-index 0502f2b464e1..3990bae60e78 100644
---- a/Documentation/hwmon/adt7475
-+++ b/Documentation/hwmon/adt7475
-@@ -109,6 +109,11 @@ fan speed) is applied. PWM values range from 0 (off) to 255 (full speed).
- Fan speed may be set to maximum when the temperature sensor associated with
- the PWM control exceeds temp#_max.
- 
-+At Tmin - hysteresis the PWM output can either be off (0% duty cycle) or at the
-+minimum (i.e. auto_point1_pwm). This behaviour can be configured using the
-+pwm[1-*]_stall_dis sysfs attribute. A value of 0 means the fans will shut off.
-+A value of 1 means the fans will run at auto_point1_pwm.
-+
- Notes
- -----
- 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index ec0c43fbcdce..4d6c625fec70 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -79,6 +79,9 @@
- 
- #define REG_TEMP_TRANGE_BASE	0x5F
- 
-+#define REG_ENHANCE_ACOUSTICS1	0x62
-+#define REG_ENHANCE_ACOUSTICS2	0x63
-+
- #define REG_PWM_MIN_BASE	0x64
- 
- #define REG_TEMP_TMIN_BASE	0x67
-@@ -209,6 +212,7 @@ struct adt7475_data {
- 	u8 range[3];
- 	u8 pwmctl[3];
- 	u8 pwmchan[3];
-+	u8 enh_acoustics[2];
- 
- 	u8 vid;
- 	u8 vrm;
-@@ -700,6 +704,43 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
- 	data->pwm[sattr->nr][sattr->index] = clamp_val(val, 0, 0xFF);
- 	i2c_smbus_write_byte_data(client, reg,
- 				  data->pwm[sattr->nr][sattr->index]);
-+	mutex_unlock(&data->lock);
-+
-+	return count;
-+}
-+
-+
-+static ssize_t show_stall_dis(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct adt7475_data *data = i2c_get_clientdata(client);
-+	u8 mask = BIT(5 + sattr->index);
-+
-+	return sprintf(buf, "%d\n", !!(data->enh_acoustics[0] & mask));
-+}
-+
-+static ssize_t set_stall_dis(struct device *dev, struct device_attribute *attr,
-+			     const char *buf, size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct adt7475_data *data = i2c_get_clientdata(client);
-+	long val;
-+	u8 mask = BIT(5 + sattr->index);
-+
-+	if (kstrtol(buf, 10, &val))
-+		return -EINVAL;
-+
-+	mutex_lock(&data->lock);
-+
-+	data->enh_acoustics[0] &= ~mask;
-+	if (val)
-+		data->enh_acoustics[0] |= mask;
-+
-+	i2c_smbus_write_byte_data(client, REG_ENHANCE_ACOUSTICS1,
-+				  data->enh_acoustics[0]);
- 
- 	mutex_unlock(&data->lock);
- 
-@@ -1028,6 +1069,8 @@ static SENSOR_DEVICE_ATTR_2(pwm1_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MIN, 0);
- static SENSOR_DEVICE_ATTR_2(pwm1_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MAX, 0);
-+static SENSOR_DEVICE_ATTR_2(pwm1_stall_dis, S_IRUGO | S_IWUSR, show_stall_dis,
-+			    set_stall_dis, 0, 0);
- static SENSOR_DEVICE_ATTR_2(pwm2, S_IRUGO | S_IWUSR, show_pwm, set_pwm, INPUT,
- 			    1);
- static SENSOR_DEVICE_ATTR_2(pwm2_freq, S_IRUGO | S_IWUSR, show_pwmfreq,
-@@ -1040,6 +1083,8 @@ static SENSOR_DEVICE_ATTR_2(pwm2_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MIN, 1);
- static SENSOR_DEVICE_ATTR_2(pwm2_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MAX, 1);
-+static SENSOR_DEVICE_ATTR_2(pwm2_stall_dis, S_IRUGO | S_IWUSR, show_stall_dis,
-+			    set_stall_dis, 0, 1);
- static SENSOR_DEVICE_ATTR_2(pwm3, S_IRUGO | S_IWUSR, show_pwm, set_pwm, INPUT,
- 			    2);
- static SENSOR_DEVICE_ATTR_2(pwm3_freq, S_IRUGO | S_IWUSR, show_pwmfreq,
-@@ -1052,6 +1097,8 @@ static SENSOR_DEVICE_ATTR_2(pwm3_auto_point1_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MIN, 2);
- static SENSOR_DEVICE_ATTR_2(pwm3_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
- 			    set_pwm, MAX, 2);
-+static SENSOR_DEVICE_ATTR_2(pwm3_stall_dis, S_IRUGO | S_IWUSR, show_stall_dis,
-+			    set_stall_dis, 0, 2);
- 
- /* Non-standard name, might need revisiting */
- static DEVICE_ATTR_RW(pwm_use_point2_pwm_at_crit);
-@@ -1112,12 +1159,14 @@ static struct attribute *adt7475_attrs[] = {
- 	&sensor_dev_attr_pwm1_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm1_stall_dis.dev_attr.attr,
- 	&sensor_dev_attr_pwm3.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_stall_dis.dev_attr.attr,
- 	&dev_attr_pwm_use_point2_pwm_at_crit.attr,
- 	NULL,
- };
-@@ -1136,6 +1185,7 @@ static struct attribute *pwm2_attrs[] = {
- 	&sensor_dev_attr_pwm2_auto_channels_temp.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point2_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm2_stall_dis.dev_attr.attr,
- 	NULL
- };
- 
--- 
-2.11.0.24.ge6920cf
-
+On 11/05/17 15:45, Chris Packham wrote:=0A=
+> Systems using 4-wire fans usually require high frequency (22.5kHz)=0A=
+> output on the pwm. Add 22500 as a valid option in the pwmfreq_table. In=
+=0A=
+> high frequency mode the low-order bit are ignored so they can safely be=
+=0A=
+> set to 0.=0A=
+>=0A=
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
+> ---=0A=
+> Changes in v3:=0A=
+> - New=0A=
+>=0A=
+>  drivers/hwmon/adt7475.c | 9 +++++----=0A=
+>  1 file changed, 5 insertions(+), 4 deletions(-)=0A=
+>=0A=
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c=0A=
+> index f7322330789c..f5a65d1166cd 100644=0A=
+> --- a/drivers/hwmon/adt7475.c=0A=
+> +++ b/drivers/hwmon/adt7475.c=0A=
+> @@ -936,7 +936,7 @@ static ssize_t set_pwmctrl(struct device *dev, struct=
+ device_attribute *attr,=0A=
+>=0A=
+>  /* List of frequencies for the PWM */=0A=
+>  static const int pwmfreq_table[] =3D {=0A=
+> -	11, 14, 22, 29, 35, 44, 58, 88=0A=
+> +	11, 14, 22, 29, 35, 44, 58, 88, 22500=0A=
+>  };=0A=
+>=0A=
+>  static ssize_t show_pwmfreq(struct device *dev, struct device_attribute =
+*attr,=0A=
+> @@ -944,9 +944,10 @@ static ssize_t show_pwmfreq(struct device *dev, stru=
+ct device_attribute *attr,=0A=
+>  {=0A=
+>  	struct adt7475_data *data =3D adt7475_update_device(dev);=0A=
+>  	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);=
+=0A=
+> +	int i =3D clamp_val(data->range[sattr->index] & 0xf, 0,=0A=
+> +			  sizeof(pwmfreq_table));=0A=
+=0A=
+Oops that should probably be=0A=
+=0A=
++			  ARRAY_SIZE(pwmfreq_table) - 1);=0A=
+=0A=
+Guenter, do you want me to send a v4 or can you fix it up at your end?=0A=
+=0A=
+>=0A=
+> -	return sprintf(buf, "%d\n",=0A=
+> -		       pwmfreq_table[data->range[sattr->index] & 7]);=0A=
+> +	return sprintf(buf, "%d\n", pwmfreq_table[i]);=0A=
+>  }=0A=
+>=0A=
+>  static ssize_t set_pwmfreq(struct device *dev, struct device_attribute *=
+attr,=0A=
+> @@ -967,7 +968,7 @@ static ssize_t set_pwmfreq(struct device *dev, struct=
+ device_attribute *attr,=0A=
+>=0A=
+>  	data->range[sattr->index] =3D=0A=
+>  		adt7475_read(TEMP_TRANGE_REG(sattr->index));=0A=
+> -	data->range[sattr->index] &=3D ~7;=0A=
+> +	data->range[sattr->index] &=3D ~0xf;=0A=
+>  	data->range[sattr->index] |=3D out;=0A=
+>=0A=
+>  	i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(sattr->index),=0A=
+>=0A=
+=0A=
