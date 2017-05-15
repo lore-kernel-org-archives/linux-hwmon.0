@@ -1,81 +1,37 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56070 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933582AbdEON0W (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 May 2017 09:26:22 -0400
+Return-path: <Chris.Packham@alliedtelesis.co.nz>
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Guenter Roeck <linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "jdelvare@suse.com" <jdelvare@suse.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v4 3/3] hwmon: (adt7475) add high frequency support
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com
+Date: Mon, 15 May 2017 21:02:36 +0000
+Message-ID: <24c6296e7e074cdc8148b4535be315bf@svr-chch-ex1.atlnz.lc>
 References: <20170515013029.31397-1-chris.packham@alliedtelesis.co.nz>
  <20170515013029.31397-4-chris.packham@alliedtelesis.co.nz>
-Cc: linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <606da904-b6ab-f9fd-45e5-e60632eafc72@roeck-us.net>
-Date: Mon, 15 May 2017 06:26:18 -0700
+ <606da904-b6ab-f9fd-45e5-e60632eafc72@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20170515013029.31397-4-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 05/14/2017 06:30 PM, Chris Packham wrote:
-> Systems using 4-wire fans usually require high frequency (22.5kHz)
-> output on the pwm. Add 22500 as a valid option in the pwmfreq_table. In
-> high frequency mode the low-order bit are ignored so they can safely be
-> set to 0.
->
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
-> ---
-> Changes in v3:
-> - New
-> Changes in v4:
-> - Fix pwmfreq_table array indexing
->
->  drivers/hwmon/adt7475.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 3056076fae27..1baa213a60bd 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -934,7 +934,7 @@ static ssize_t set_pwmctrl(struct device *dev, struct device_attribute *attr,
->
->  /* List of frequencies for the PWM */
->  static const int pwmfreq_table[] = {
-> -	11, 14, 22, 29, 35, 44, 58, 88
-> +	11, 14, 22, 29, 35, 44, 58, 88, 22500
->  };
->
->  static ssize_t show_pwmfreq(struct device *dev, struct device_attribute *attr,
-> @@ -942,9 +942,10 @@ static ssize_t show_pwmfreq(struct device *dev, struct device_attribute *attr,
->  {
->  	struct adt7475_data *data = adt7475_update_device(dev);
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> +	int i = clamp_val(data->range[sattr->index] & 0xf, 0,
-> +			  ARRAY_SIZE(pwmfreq_table) - 1);
->
-> -	return sprintf(buf, "%d\n",
-> -		       pwmfreq_table[data->range[sattr->index] & 7]);
-> +	return sprintf(buf, "%d\n", pwmfreq_table[i]);
->  }
->
->  static ssize_t set_pwmfreq(struct device *dev, struct device_attribute *attr,
-> @@ -965,7 +966,7 @@ static ssize_t set_pwmfreq(struct device *dev, struct device_attribute *attr,
->
->  	data->range[sattr->index] =
->  		adt7475_read(TEMP_TRANGE_REG(sattr->index));
-> -	data->range[sattr->index] &= ~7;
-> +	data->range[sattr->index] &= ~0xf;
->  	data->range[sattr->index] |= out;
->
->  	i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(sattr->index),
->
-
+On 16/05/17 01:26, Guenter Roeck wrote:=0A=
+> On 05/14/2017 06:30 PM, Chris Packham wrote:=0A=
+>> Systems using 4-wire fans usually require high frequency (22.5kHz)=0A=
+>> output on the pwm. Add 22500 as a valid option in the pwmfreq_table. In=
+=0A=
+>> high frequency mode the low-order bit are ignored so they can safely be=
+=0A=
+>> set to 0.=0A=
+>>=0A=
+>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
+>=0A=
+> Applied to hwmon-next.=0A=
+>=0A=
+> Thanks,=0A=
+> Guenter=0A=
+>=0A=
+=0A=
+Thank you for your feedback (and patience).=0A=
+=0A=
+=0A=
