@@ -1,98 +1,73 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:34650 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750949AbdEQD0Z (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 May 2017 23:26:25 -0400
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Ye Xiaolong <xiaolong.ye@intel.com>
-CC: kbuild test robot <lkp@intel.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kbuild-all@01.org" <kbuild-all@01.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>
-Subject: Re: [kbuild-all] [PATCH v4 2/3] hwmon: (adt7475) temperature
- smoothing
-Date: Wed, 17 May 2017 03:26:21 +0000
-Message-ID: <c571900e0f534ca892cc3e374183a0f0@svr-chch-ex1.atlnz.lc>
-References: <201705161614.nmuA5Qiv%fengguang.wu@intel.com>
- <247018ef273f4af9bedd77e63417daf0@svr-chch-ex1.atlnz.lc>
- <20170517030640.GD568@yexl-desktop>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Return-path: <alexander.sverdlin@gmail.com>
+Subject: Re: [1/5] w83627ehf: Use hwmon_device_register_with_info and sensor
+ groups
+To: Peter Huewe <PeterHuewe@gmx.de>, Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20170323130308.29166-1-peterhuewe@gmx.de>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Message-ID: <727d1d2f-6b2c-893e-7e4c-f93f83cce160@gmail.com>
+Date: Wed, 17 May 2017 21:34:55 +0200
 MIME-Version: 1.0
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20170323130308.29166-1-peterhuewe@gmx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 17/05/17 15:09, Ye Xiaolong wrote:=0A=
-> On 05/16, Chris Packham wrote:=0A=
->> On 16/05/17 20:23, kbuild test robot wrote:=0A=
->>> Hi Chris,=0A=
->>>=0A=
->>> [auto build test ERROR on hwmon/hwmon-next]=0A=
->>> [also build test ERROR on v4.12-rc1 next-20170516]=0A=
->>> [if your patch is applied to the wrong git tree, please drop us a note =
-to help improve the system]=0A=
->>>=0A=
->>> url:    https://github.com/0day-ci/linux/commits/Chris-Packham/hwmon-ad=
-t7475-fan-stall-prevention/20170515-093530=0A=
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-st=
-aging.git hwmon-next=0A=
->>> config: x86_64-rhel (attached as .config)=0A=
->>> compiler: gcc-6 (Debian 6.2.0-3) 6.2.0 20160901=0A=
->>> reproduce:=0A=
->>>         # save the attached .config to linux build tree=0A=
->>>         make ARCH=3Dx86_64=0A=
->>>=0A=
->>> All errors (new ones prefixed by >>):=0A=
->>>=0A=
->>>    drivers/hwmon/adt7475.c: In function 'set_temp_st':=0A=
->>>>> drivers/hwmon/adt7475.c:622:9: error: implicit declaration of functio=
-n 'find_closest_descending' [-Werror=3Dimplicit-function-declaration]=0A=
->>>       val =3D find_closest_descending(val, ad7475_st_map,=0A=
->>>             ^~~~~~~~~~~~~~~~~~~~~~~=0A=
->>>    cc1: some warnings being treated as errors=0A=
->>>=0A=
->>> vim +/find_closest_descending +622 drivers/hwmon/adt7475.c=0A=
->>>=0A=
->>>    616			shift =3D 4;=0A=
->>>    617			idx =3D 1;=0A=
->>>    618			break;=0A=
->>>    619		}=0A=
->>>    620	=0A=
->>>    621		if (val > 0) {=0A=
->>>  > 622			val =3D find_closest_descending(val, ad7475_st_map,=0A=
->>>    623						      ARRAY_SIZE(ad7475_st_map));=0A=
->>>    624			val |=3D 0x8;=0A=
->>>    625		}=0A=
->>>=0A=
->>> ---=0A=
->>> 0-DAY kernel test infrastructure                Open Source Technology =
-Center=0A=
->>> https://lists.01.org/pipermail/kbuild-all                   Intel Corpo=
-ration=0A=
->>>=0A=
->>=0A=
->> I'm not sure how this is failing. find_closest_descending() is a macro=
-=0A=
->> defined in linux/util_macros.h which is explicitly included in=0A=
->> drivers/hwmon/adt7475.c. Aside from the include guards there's nothing=
-=0A=
->> conditional about it.=0A=
->=0A=
-> Hi,=0A=
->=0A=
-> 0day bot applied your patchset on top of commit 6eaaea1 ("hwmon: (pmbus) =
-Add client driver for IR35221"),=0A=
-> is it wrong or you have some prerequisite patches?=0A=
->=0A=
-=0A=
-Looks like it's missing =0A=
-https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/co=
-mmit/?h=3Dhwmon-next&id=3Dbbb4dd0ff =0A=
-which was part of the series but was applied after v3 so I didn't send =0A=
-it out with v4.=0A=
+Hello Peter!
+
+On 23/03/17 14:03, Peter Huewe wrote:
+> This patch replaces the old, deprecated call to hwmon_device_register
+> with the new hwmon_device_register_with_info and converts the whole
+> driver to the new hwmon interface using the hwmon_chip_info methods
+> and the attribute_group method.
+> 
+> All standard attributes were converted to the corresponding
+> hwmon_chip_info methods.
+> For some functions a hwmon channel to device channel conversion had to
+> be performed, e.g. hwmon_in_alarm has the info for alert_5 in channel 8.
+> 
+> All non-standard attributes are converted to the attribute_group method,
+> by
+> - adding them statically to the attribute_group if they are available
+> for all variants of devices supported by this driver
+> - adding them at probe time to the attribute_group if the availability
+> is depending on the actual chip type.
+> The appropriate count of entries was reserved.
+> 
+> As a pre-condition a reference to the sio_data structure was moved into
+> w83627ehf_data for easier retrieval of the information, since this is
+> much easier than trying to access the platform_data.
+> 
+> The driver is now much more "checkpatch clean" than it used to be, but
+> still not completely.
+> The conversion saves about 20k in the resulting .ko
+> 
+> Tested with a NCT6776F chip.
+> 
+> v2:
+> - converted to proper is_visible methods
+> - applied minor feedback of v1
+> 
+> Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
+
+I've applied the whole series (5 of 5 patches) on top of hwmon-next
+and tested on Intel D525MW, where the module finds "W83627DHG-P chip at 0x290".
+
+The values of all the inputs are exactly the same as back in Linux v4.7.x
+(when the used HWMON API wasn't deprecated).
+
+Therefore, feel free to add
+
+Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+
+to the whole series when you re-spin.
+Thanks for fixing this!
+
+> ---
+>  drivers/hwmon/w83627ehf.c | 1536 +++++++++++++++++++++++----------------------
+>  1 file changed, 778 insertions(+), 758 deletions(-)
+
+--
+Alexander.
