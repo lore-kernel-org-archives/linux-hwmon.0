@@ -6,8 +6,8 @@ Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20170323130308.29166-1-peterhuewe@gmx.de>
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Message-ID: <727d1d2f-6b2c-893e-7e4c-f93f83cce160@gmail.com>
-Date: Wed, 17 May 2017 21:34:55 +0200
+Message-ID: <3e0dd0a4-0e88-a11d-a0b4-f75ecdbd8e9f@gmail.com>
+Date: Wed, 17 May 2017 21:35:52 +0200
 MIME-Version: 1.0
 In-Reply-To: <20170323130308.29166-1-peterhuewe@gmx.de>
 Content-Type: text/plain; charset=utf-8
