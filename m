@@ -1,46 +1,87 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57783 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751558AbdEQXfc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 May 2017 19:35:32 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.12-rc2
-Date: Wed, 17 May 2017 16:35:29 -0700
-Message-Id: <1495064129-7547-1-git-send-email-linux@roeck-us.net>
+Received: from www.zeus03.de ([194.117.254.33]:33014 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751512AbdEVGht (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 May 2017 02:37:49 -0400
+Date: Mon, 22 May 2017 08:37:46 +0200
+From: Wolfram Sang <wsa@the-dreams.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] hwmon: move include files out of include/linux/i2c
+Message-ID: <20170522063746.GA1454@katana>
+References: <20170521203443.6387-1-wsa@the-dreams.de>
+ <b876bed9-38dc-233f-053a-4b0d4ad990b2@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
+Content-Disposition: inline
+In-Reply-To: <b876bed9-38dc-233f-053a-4b0d4ad990b2@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
 
-Please pull hwmon fixes for Linux v4.12-rc2 from signed tag:
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.12-rc2
+Hi Guenter,
 
-Thanks,
-Guenter
-------
+> > Note that some files don't seem to have upstream
+> > users in board code, so they maybe could even be removed? I didn't chec=
+k for
+>=20
+> While I understand where you are coming from, I am not typically that agg=
+ressive.
+> Such removals force vendors who are not really forthcoming with upstreami=
+ng to
+> deviate even further from upstream. It makes them even less likely to sub=
+mit their
+> code upstream, and it may result in enforcing their belief that upstream =
+doesn't
+> really care about vendors struggling to release boards and systems to the=
+ir
+> customers.
 
-The following changes since commit 2ea659a9ef488125eb46da6eb571de5eae5c43f6:
+I clearly see your point. I meant more the case where platform_data
+became cruft because platforms moved to DT. I agree this is not so much
+the case for HWMON but it was true for the I2C master driver where I
+could remove the platform data and could save the include file and some
+code. That was just a nice cleanup.
 
-  Linux 4.12-rc1 (2017-05-13 13:19:49 -0700)
+> >I prefer the series to go upstream via the subsystem tree; if you prefer=
+ that I
+> >take it via I2C, just let me know.
+> >
+> Series applied to hwmon-next.
 
-are available in the git repository at:
+Super, thanks!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.12-rc2
+Regards,
 
-for you to fetch changes up to 90b4f30b6d15222a509dacf47f29efef2b22571e:
+   Wolfram
 
-  hwmon: (coretemp) Handle frozen hotplug state correctly (2017-05-14 07:49:32 -0700)
 
-----------------------------------------------------------------
-Fix problem with hotplug state machine in coretemp driver
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-Thomas Gleixner (1):
-      hwmon: (coretemp) Handle frozen hotplug state correctly
+-----BEGIN PGP SIGNATURE-----
 
- drivers/hwmon/coretemp.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+iQIzBAEBCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlkihzUACgkQFA3kzBSg
+Kbbssw/+JuPK0Vq4fgoKu9Br2Gb7W2JiG94K9sK8r17E7w7/B2clgdg3pR+sLt4H
+1N6wBWYqW4ESH4Wh9vzCYJ3PB8UvDVupft0wgTqHXgvHwQg9ktm4xXU4NG7TmpWq
+sLPw879p7oq97vFaI4vXUrJSgwyKFph/ry4Cawga6Ze3jLZQGtcG2MsyCl325ZB4
+nG3FEo/kvrzSjKZZX/LcMZwrux5VJO2jhVESGPRVgaksjPTazVB/qQib3kkLs2AW
+XXv097JS+qDkVpKFKRCbarbYQjevy1YrRZkaYid27eUzRpiJho6kUswI9X16Hr8x
+QE6Hmw3N6x1Im85rXvI8pJT6VkPEJMQ1AJLTgYiYK4PvRkH/PZMYiQPPIxhYFFQ9
+a3j6aDRV8VKtP2kkdC/4l1hlB9mkX4HQzPPQb6ikCbiAApp2XaLOyFqvRLWibh/V
+yPR3DSJqnZEb4Sj6bPWKFIl3bSYect0tJPbj6O3W4UGGNCCnLuAQ69rgBFxddu+0
+HUh2grKkiytRXAC6hc7julq/Awx8INyVpH9GzUgGykU84Ysb1+Au+HpJ7nHzX64D
+JGYQ0ryhlhF2NYpjy8n9KvQ/Z0JWzItbGE6NpuR2M982sQRxKpNYxtV1ZdXhpdMm
+Nxci52OaqbgGiu391KLBpCta4yszf17oLrRLgKeZNHnBhitSf2I=
+=ObKu
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
