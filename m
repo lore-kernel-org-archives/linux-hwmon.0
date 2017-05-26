@@ -1,43 +1,96 @@
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38838 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1161788AbdEYBC4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 May 2017 21:02:56 -0400
-Subject: Re: [RFC] adding TDM support to applesmc module?
-To: Florian Echtler <floe@butterbrot.org>, linux-hwmon@vger.kernel.org,
-        rydberg@bitmath.org, rydberg@euromail.se
-References: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c88c2d6f-2ed0-0fbf-fc90-6fd113021b8d@roeck-us.net>
-Date: Wed, 24 May 2017 18:02:53 -0700
+Return-path: <venture@google.com>
 MIME-Version: 1.0
-In-Reply-To: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+From: Patrick Venture <venture@google.com>
+Date: Fri, 26 May 2017 07:48:31 -0700
+Message-ID: <CAO=notz8jvazWfN47GNAEO-crvnbEAwVGPXRumZHxhS-0hPfgg@mail.gmail.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) On read failure return -EAGAIN
+To: Joel Stanley <joel@jms.id.au>, jdelvare@suse.com, linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org
+Content-Type: multipart/alternative; boundary="f403045c5d628cb4f205506e6fb3"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 05/09/2017 02:26 AM, Florian Echtler wrote:
-> Hello everyone,
-> 
-> a brief question: I've recently found out how to enable Target Display Mode
-> (i.e., use the iMac as a display for an external video source) when running
-> Linux, namely by writing to some specific SMC keys.
-> 
-> Right now, this involves an ugly hacked userspace tool that can't coexist with
-> applesmc, so I'd like to do this "properly" and integrate support for these keys
-> in applesmc as a sysfs node.
-> 
-> Would this be the correct route, although applesmc is a hwmon module?
-> 
-> Best, Florian
-> 
-Just stumbled over this and realized I never answered. I don't really have
-a strong opinion either way; the driver seems to be pretty much messed up as-is
-and might ask for a rework as mfd driver. Adding another attribute would not make
-that any worse. I'd expect Henrik to agree to any changes, though.
+--f403045c5d628cb4f205506e6fb3
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks,
-Guenter
+When the controller fails to provide an RPM reading within the allotted
+time; the driver returns -EAGAIN instead of 0.
+
+Signed-off-by: Patrick Venture <venture@google.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c
+b/drivers/hwmon/aspeed-pwm-tacho.c
+index 48403a2115be..ec57be4a4a55 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -7,6 +7,7 @@
+  */
+
+ #include <linux/clk.h>
++#include <linux/errno.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/hwmon.h>
+@@ -516,7 +517,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct
+aspeed_pwm_tacho_data *priv,
+  clk_source = priv->clk_freq;
+
+  if (raw_data == 0)
+- return 0;
++ return -EAGAIN;
+
+  return (clk_source * 60) / (2 * raw_data * tach_div);
+ }
+@@ -566,7 +567,7 @@ static ssize_t show_rpm(struct device *dev, struct
+device_attribute *attr,
+
+  rpm = aspeed_get_fan_tach_ch_rpm(priv, index);
+
+- return sprintf(buf, "%u\n", rpm);
++ return sprintf(buf, "%d\n", rpm);
+ }
+
+ static umode_t pwm_is_visible(struct kobject *kobj,
+-- 
+2.13.0.219.gdb65acc882-goog
+
+--f403045c5d628cb4f205506e6fb3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>When the controller fails to provide an RPM reading w=
+ithin the allotted</div><div>time; the driver returns -EAGAIN instead of 0.=
+<br></div><div><br></div><div>Signed-off-by: Patrick Venture &lt;<a href=3D=
+"mailto:venture@google.com">venture@google.com</a>&gt;</div><div>---</div><=
+div>=C2=A0drivers/hwmon/aspeed-pwm-tacho.c | 5 +++--</div><div>=C2=A01 file=
+ changed, 3 insertions(+), 2 deletions(-)</div><div><br></div><div>diff --g=
+it a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c</d=
+iv><div>index 48403a2115be..ec57be4a4a55 100644</div><div>--- a/drivers/hwm=
+on/aspeed-pwm-tacho.c</div><div>+++ b/drivers/hwmon/aspeed-pwm-tacho.c</div=
+><div>@@ -7,6 +7,7 @@</div><div>=C2=A0 */</div><div>=C2=A0</div><div>=C2=A0=
+#include &lt;linux/clk.h&gt;</div><div>+#include &lt;linux/errno.h&gt;</div=
+><div>=C2=A0#include &lt;linux/gpio/consumer.h&gt;</div><div>=C2=A0#include=
+ &lt;linux/delay.h&gt;</div><div>=C2=A0#include &lt;linux/hwmon.h&gt;</div>=
+<div>@@ -516,7 +517,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspee=
+d_pwm_tacho_data *priv,</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span=
+" style=3D"white-space:pre">	</span>clk_source =3D priv-&gt;clk_freq;</div>=
+<div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span" style=3D"w=
+hite-space:pre">	</span>if (raw_data =3D=3D 0)</div><div>-<span class=3D"gm=
+ail-Apple-tab-span" style=3D"white-space:pre">		</span>return 0;</div><div>=
++<span class=3D"gmail-Apple-tab-span" style=3D"white-space:pre">		</span>re=
+turn -EAGAIN;</div><div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-t=
+ab-span" style=3D"white-space:pre">	</span>return (clk_source * 60) / (2 * =
+raw_data * tach_div);</div><div>=C2=A0}</div><div>@@ -566,7 +567,7 @@ stati=
+c ssize_t show_rpm(struct device *dev, struct device_attribute *attr,</div>=
+<div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span" style=3D"w=
+hite-space:pre">	</span>rpm =3D aspeed_get_fan_tach_ch_rpm(priv, index);</d=
+iv><div>=C2=A0</div><div>-<span class=3D"gmail-Apple-tab-span" style=3D"whi=
+te-space:pre">	</span>return sprintf(buf, &quot;%u\n&quot;, rpm);</div><div=
+>+<span class=3D"gmail-Apple-tab-span" style=3D"white-space:pre">	</span>re=
+turn sprintf(buf, &quot;%d\n&quot;, rpm);</div><div>=C2=A0}</div><div>=C2=
+=A0</div><div>=C2=A0static umode_t pwm_is_visible(struct kobject *kobj,</di=
+v><div>--=C2=A0</div><div>2.13.0.219.gdb65acc882-goog</div></div>
+
+--f403045c5d628cb4f205506e6fb3--
