@@ -1,96 +1,82 @@
-Return-path: <venture@google.com>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58617 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750724AbdE0Fyy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 27 May 2017 01:54:54 -0400
+Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) On read failure return -EAGAIN
+To: Patrick Venture <venture@google.com>,
+        Joel Stanley <joel@jms.id.au>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+References: <CAO=notz8jvazWfN47GNAEO-crvnbEAwVGPXRumZHxhS-0hPfgg@mail.gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bdc84318-434a-f40f-0d84-d4e261baea38@roeck-us.net>
+Date: Fri, 26 May 2017 22:54:52 -0700
 MIME-Version: 1.0
-From: Patrick Venture <venture@google.com>
-Date: Fri, 26 May 2017 07:48:31 -0700
-Message-ID: <CAO=notz8jvazWfN47GNAEO-crvnbEAwVGPXRumZHxhS-0hPfgg@mail.gmail.com>
-Subject: [PATCH] hwmon: (aspeed-pwm-tacho) On read failure return -EAGAIN
-To: Joel Stanley <joel@jms.id.au>, jdelvare@suse.com, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org
-Content-Type: multipart/alternative; boundary="f403045c5d628cb4f205506e6fb3"
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <CAO=notz8jvazWfN47GNAEO-crvnbEAwVGPXRumZHxhS-0hPfgg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
---f403045c5d628cb4f205506e6fb3
-Content-Type: text/plain; charset="UTF-8"
+On 05/26/2017 07:48 AM, Patrick Venture wrote:
+> When the controller fails to provide an RPM reading within the allotted
+> time; the driver returns -EAGAIN instead of 0.
+> 
+> Signed-off-by: Patrick Venture <venture@google.com <mailto:venture@google.com>>
+> ---
+>   drivers/hwmon/aspeed-pwm-tacho.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+> index 48403a2115be..ec57be4a4a55 100644
+> --- a/drivers/hwmon/aspeed-pwm-tacho.c
+> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
+> @@ -7,6 +7,7 @@
+>    */
+>   #include <linux/clk.h>
+> +#include <linux/errno.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/delay.h>
+>   #include <linux/hwmon.h>
+> @@ -516,7 +517,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+> clk_source = priv->clk_freq;
+> if (raw_data == 0)
+> -return 0;
+> +return -EAGAIN;
 
-When the controller fails to provide an RPM reading within the allotted
-time; the driver returns -EAGAIN instead of 0.
+We don't know why the value reported is 0. Maybe it is because no fan is connected.
+We can not just return -EAGAIN; this might result in a tight loop if the problem is
+permanent. A retry loop which returns -ETIMEOUT after some reasonable timeout
+might be more appropriate if the controller just needs more time, and if reading "0"
+is an indication that the controller is not ready.
 
-Signed-off-by: Patrick Venture <venture@google.com>
----
- drivers/hwmon/aspeed-pwm-tacho.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Note that you can not just return an error without changing the function type to int.
 
-diff --git a/drivers/hwmon/aspeed-pwm-tacho.c
-b/drivers/hwmon/aspeed-pwm-tacho.c
-index 48403a2115be..ec57be4a4a55 100644
---- a/drivers/hwmon/aspeed-pwm-tacho.c
-+++ b/drivers/hwmon/aspeed-pwm-tacho.c
-@@ -7,6 +7,7 @@
-  */
+> return (clk_source * 60) / (2 * raw_data * tach_div);
+>   }
+> @@ -566,7 +567,7 @@ static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
+> rpm = aspeed_get_fan_tach_ch_rpm(priv, index);
+> -return sprintf(buf, "%u\n", rpm);
+> +return sprintf(buf, "%d\n", rpm);
 
- #include <linux/clk.h>
-+#include <linux/errno.h>
- #include <linux/gpio/consumer.h>
- #include <linux/delay.h>
- #include <linux/hwmon.h>
-@@ -516,7 +517,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct
-aspeed_pwm_tacho_data *priv,
-  clk_source = priv->clk_freq;
+rpm is u32. This is incorrect. This would also return a negative speed to the user,
+not an error. To return an error, the variable would have to be an int, and the
+code would have to be something like
 
-  if (raw_data == 0)
-- return 0;
-+ return -EAGAIN;
+	int rpm;
+	...
+	rpm = aspeed_get_fan_tach_ch_rpm(priv, index);
+	if (rpm < 0)
+		return rpm;
 
-  return (clk_source * 60) / (2 * raw_data * tach_div);
- }
-@@ -566,7 +567,7 @@ static ssize_t show_rpm(struct device *dev, struct
-device_attribute *attr,
+	return sprintf(...);
 
-  rpm = aspeed_get_fan_tach_ch_rpm(priv, index);
+Guenter
 
-- return sprintf(buf, "%u\n", rpm);
-+ return sprintf(buf, "%d\n", rpm);
- }
+>   }
+>   static umode_t pwm_is_visible(struct kobject *kobj,
+> -- 
+> 2.13.0.219.gdb65acc882-goog
 
- static umode_t pwm_is_visible(struct kobject *kobj,
--- 
-2.13.0.219.gdb65acc882-goog
-
---f403045c5d628cb4f205506e6fb3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>When the controller fails to provide an RPM reading w=
-ithin the allotted</div><div>time; the driver returns -EAGAIN instead of 0.=
-<br></div><div><br></div><div>Signed-off-by: Patrick Venture &lt;<a href=3D=
-"mailto:venture@google.com">venture@google.com</a>&gt;</div><div>---</div><=
-div>=C2=A0drivers/hwmon/aspeed-pwm-tacho.c | 5 +++--</div><div>=C2=A01 file=
- changed, 3 insertions(+), 2 deletions(-)</div><div><br></div><div>diff --g=
-it a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c</d=
-iv><div>index 48403a2115be..ec57be4a4a55 100644</div><div>--- a/drivers/hwm=
-on/aspeed-pwm-tacho.c</div><div>+++ b/drivers/hwmon/aspeed-pwm-tacho.c</div=
-><div>@@ -7,6 +7,7 @@</div><div>=C2=A0 */</div><div>=C2=A0</div><div>=C2=A0=
-#include &lt;linux/clk.h&gt;</div><div>+#include &lt;linux/errno.h&gt;</div=
-><div>=C2=A0#include &lt;linux/gpio/consumer.h&gt;</div><div>=C2=A0#include=
- &lt;linux/delay.h&gt;</div><div>=C2=A0#include &lt;linux/hwmon.h&gt;</div>=
-<div>@@ -516,7 +517,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspee=
-d_pwm_tacho_data *priv,</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span=
-" style=3D"white-space:pre">	</span>clk_source =3D priv-&gt;clk_freq;</div>=
-<div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span" style=3D"w=
-hite-space:pre">	</span>if (raw_data =3D=3D 0)</div><div>-<span class=3D"gm=
-ail-Apple-tab-span" style=3D"white-space:pre">		</span>return 0;</div><div>=
-+<span class=3D"gmail-Apple-tab-span" style=3D"white-space:pre">		</span>re=
-turn -EAGAIN;</div><div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-t=
-ab-span" style=3D"white-space:pre">	</span>return (clk_source * 60) / (2 * =
-raw_data * tach_div);</div><div>=C2=A0}</div><div>@@ -566,7 +567,7 @@ stati=
-c ssize_t show_rpm(struct device *dev, struct device_attribute *attr,</div>=
-<div>=C2=A0</div><div>=C2=A0<span class=3D"gmail-Apple-tab-span" style=3D"w=
-hite-space:pre">	</span>rpm =3D aspeed_get_fan_tach_ch_rpm(priv, index);</d=
-iv><div>=C2=A0</div><div>-<span class=3D"gmail-Apple-tab-span" style=3D"whi=
-te-space:pre">	</span>return sprintf(buf, &quot;%u\n&quot;, rpm);</div><div=
->+<span class=3D"gmail-Apple-tab-span" style=3D"white-space:pre">	</span>re=
-turn sprintf(buf, &quot;%d\n&quot;, rpm);</div><div>=C2=A0}</div><div>=C2=
-=A0</div><div>=C2=A0static umode_t pwm_is_visible(struct kobject *kobj,</di=
-v><div>--=C2=A0</div><div>2.13.0.219.gdb65acc882-goog</div></div>
-
---f403045c5d628cb4f205506e6fb3--
