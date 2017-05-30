@@ -1,71 +1,143 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55974 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:49792 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751149AbdE3WJx (ORCPT
+        with ESMTP id S1750821AbdE3WL5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 May 2017 18:09:53 -0400
-Date: Tue, 30 May 2017 15:09:51 -0700
+        Tue, 30 May 2017 18:11:57 -0400
+Date: Tue, 30 May 2017 15:11:53 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Joel Stanley <joel@jms.id.au>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) Select REGMAP
-Message-ID: <20170530220951.GA9139@roeck-us.net>
-References: <1495893275-32017-1-git-send-email-linux@roeck-us.net>
- <CACPK8XdMask2f_Ewoo54+FPAjPbGJMxp2E5YeJHC-r-aokPkCg@mail.gmail.com>
+To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Cc: jdelvare@suse.com, paulus@samba.org, mpe@ellerman.id.au,
+        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
+        ego@linux.vnet.ibm.com, akshay.adiga@linux.vnet.ibm.com,
+        andrew@aj.id.au, clg@kaod.org
+Subject: Re: [V5] hwmon: (ibmpowernv) Add highest/lowest attributes to sensors
+Message-ID: <20170530221153.GA9428@roeck-us.net>
+References: <1496033161-9244-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACPK8XdMask2f_Ewoo54+FPAjPbGJMxp2E5YeJHC-r-aokPkCg@mail.gmail.com>
+In-Reply-To: <1496033161-9244-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, May 30, 2017 at 03:48:22PM +0930, Joel Stanley wrote:
-> On Sat, May 27, 2017 at 11:24 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > The driver uses regmap and thus has to select it to avoid build
-> > errors such as the following.
-> >
-> > drivers/hwmon/aspeed-pwm-tacho.c:337:21: error: variable
-> >         'aspeed_pwm_tacho_regmap_config' has initializer but incomplete type
+On Mon, May 29, 2017 at 10:16:01AM +0530, Shilpasri G Bhat wrote:
+> OCC provides historical minimum and maximum value for the sensor
+> readings. This patch exports them as highest and lowest attributes
+> for the inband sensors copied by OCC to main memory.
 > 
-> While we're at it the driver should also depend on OF.
-> 
-The driver compiles without it, so that isn't strictly necessary.
+> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Acked-by: Joel Stanley <joel@jms.id.au>
-> 
+Applied to hwmon-next.
+
 Thanks,
-
 Guenter
 
-> Cheers,
+> ---
+> Changes from V4:
+> - Got rid of 'len' variable in populate_attr_groups
 > 
-> Joel
+>  drivers/hwmon/ibmpowernv.c | 68 +++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 61 insertions(+), 7 deletions(-)
 > 
-> 
-> > ---
-> >  drivers/hwmon/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 22d5eafd6815..5ef2814345ef 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -343,6 +343,7 @@ config SENSORS_ASB100
-> >
-> >  config SENSORS_ASPEED
-> >         tristate "ASPEED AST2400/AST2500 PWM and Fan tach driver"
-> > +       select REGMAP
-> >         help
-> >           This driver provides support for ASPEED AST2400/AST2500 PWM
-> >           and Fan Tacho controllers.
-> > --
-> > 2.7.4
-> >
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+> index 6d2e660..b562323 100644
+> --- a/drivers/hwmon/ibmpowernv.c
+> +++ b/drivers/hwmon/ibmpowernv.c
+> @@ -298,10 +298,14 @@ static int populate_attr_groups(struct platform_device *pdev)
+>  		sensor_groups[type].attr_count++;
+>  
+>  		/*
+> -		 * add a new attribute for labels
+> +		 * add attributes for labels, min and max
+>  		 */
+>  		if (!of_property_read_string(np, "label", &label))
+>  			sensor_groups[type].attr_count++;
+> +		if (of_find_property(np, "sensor-data-min", NULL))
+> +			sensor_groups[type].attr_count++;
+> +		if (of_find_property(np, "sensor-data-max", NULL))
+> +			sensor_groups[type].attr_count++;
+>  	}
+>  
+>  	of_node_put(opal);
+> @@ -337,6 +341,41 @@ static void create_hwmon_attr(struct sensor_data *sdata, const char *attr_name,
+>  	sdata->dev_attr.show = show;
+>  }
+>  
+> +static void populate_sensor(struct sensor_data *sdata, int od, int hd, int sid,
+> +			    const char *attr_name, enum sensors type,
+> +			    const struct attribute_group *pgroup,
+> +			    ssize_t (*show)(struct device *dev,
+> +					    struct device_attribute *attr,
+> +					    char *buf))
+> +{
+> +	sdata->id = sid;
+> +	sdata->type = type;
+> +	sdata->opal_index = od;
+> +	sdata->hwmon_index = hd;
+> +	create_hwmon_attr(sdata, attr_name, show);
+> +	pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
+> +}
+> +
+> +static char *get_max_attr(enum sensors type)
+> +{
+> +	switch (type) {
+> +	case POWER_INPUT:
+> +		return "input_highest";
+> +	default:
+> +		return "highest";
+> +	}
+> +}
+> +
+> +static char *get_min_attr(enum sensors type)
+> +{
+> +	switch (type) {
+> +	case POWER_INPUT:
+> +		return "input_lowest";
+> +	default:
+> +		return "lowest";
+> +	}
+> +}
+> +
+>  /*
+>   * Iterate through the device tree for each child of 'sensors' node, create
+>   * a sysfs attribute file, the file is named by translating the DT node name
+> @@ -417,16 +456,31 @@ static int create_device_attrs(struct platform_device *pdev)
+>  			 * attribute. They are related to the same
+>  			 * sensor.
+>  			 */
+> -			sdata[count].type = type;
+> -			sdata[count].opal_index = sdata[count - 1].opal_index;
+> -			sdata[count].hwmon_index = sdata[count - 1].hwmon_index;
+>  
+>  			make_sensor_label(np, &sdata[count], label);
+> +			populate_sensor(&sdata[count], opal_index,
+> +					sdata[count - 1].hwmon_index,
+> +					sensor_id, "label", type, pgroups[type],
+> +					show_label);
+> +			count++;
+> +		}
+>  
+> -			create_hwmon_attr(&sdata[count], "label", show_label);
+> +		if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
+> +			attr_name = get_max_attr(type);
+> +			populate_sensor(&sdata[count], opal_index,
+> +					sdata[count - 1].hwmon_index,
+> +					sensor_id, attr_name, type,
+> +					pgroups[type], show_sensor);
+> +			count++;
+> +		}
+>  
+> -			pgroups[type]->attrs[sensor_groups[type].attr_count++] =
+> -				&sdata[count++].dev_attr.attr;
+> +		if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
+> +			attr_name = get_min_attr(type);
+> +			populate_sensor(&sdata[count], opal_index,
+> +					sdata[count - 1].hwmon_index,
+> +					sensor_id, attr_name, type,
+> +					pgroups[type], show_sensor);
+> +			count++;
+>  		}
+>  	}
+>  
