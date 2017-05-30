@@ -1,143 +1,76 @@
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49792 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750821AbdE3WL5 (ORCPT
+Received: from mail-pf0-f174.google.com ([209.85.192.174]:36665 "EHLO
+        mail-pf0-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750855AbdE3TmG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 May 2017 18:11:57 -0400
-Date: Tue, 30 May 2017 15:11:53 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Cc: jdelvare@suse.com, paulus@samba.org, mpe@ellerman.id.au,
-        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
-        ego@linux.vnet.ibm.com, akshay.adiga@linux.vnet.ibm.com,
-        andrew@aj.id.au, clg@kaod.org
-Subject: Re: [V5] hwmon: (ibmpowernv) Add highest/lowest attributes to sensors
-Message-ID: <20170530221153.GA9428@roeck-us.net>
-References: <1496033161-9244-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1496033161-9244-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+        Tue, 30 May 2017 15:42:06 -0400
+Received: by mail-pf0-f174.google.com with SMTP id m17so81085006pfg.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 May 2017 12:42:06 -0700 (PDT)
+From: Patrick Venture <venture@google.com>
+To: venture@google.com, joel@jms.id.au, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH v3] hwmon: (aspeed-pwm-tacho) On read failure return -ETIMEDOUT
+Date: Tue, 30 May 2017 12:42:01 -0700
+Message-Id: <20170530194201.4540-1-venture@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, May 29, 2017 at 10:16:01AM +0530, Shilpasri G Bhat wrote:
-> OCC provides historical minimum and maximum value for the sensor
-> readings. This patch exports them as highest and lowest attributes
-> for the inband sensors copied by OCC to main memory.
-> 
-> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+When the controller fails to provide an RPM reading within the alloted
+time; the driver returns -ETIMEDOUT and no file contents.
 
-Applied to hwmon-next.
+Signed-off-by: Patrick Venture <venture@google.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 48403a2115be..12b716b70ead 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/clk.h>
++#include <linux/errno.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/hwmon.h>
+@@ -494,7 +495,7 @@ static u32 aspeed_get_fan_tach_ch_measure_period(struct aspeed_pwm_tacho_data
+ 	return clk / (clk_unit * div_h * div_l * tacho_div * tacho_unit);
+ }
+ 
+-static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
++static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 				      u8 fan_tach_ch)
+ {
+ 	u32 raw_data, tach_div, clk_source, sec, val;
+@@ -510,6 +511,9 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 	msleep(sec);
+ 
+ 	regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
++	if (!(val & RESULT_STATUS_MASK))
++		return -ETIMEDOUT;
++
+ 	raw_data = val & RESULT_VALUE_MASK;
+ 	tach_div = priv->type_fan_tach_clock_division[type];
+ 	tach_div = 0x4 << (tach_div * 2);
+@@ -561,12 +565,14 @@ static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+ 	int index = sensor_attr->index;
+-	u32 rpm;
++	int rpm;
+ 	struct aspeed_pwm_tacho_data *priv = dev_get_drvdata(dev);
+ 
+ 	rpm = aspeed_get_fan_tach_ch_rpm(priv, index);
++	if (rpm < 0)
++		return rpm;
+ 
+-	return sprintf(buf, "%u\n", rpm);
++	return sprintf(buf, "%d\n", rpm);
+ }
+ 
+ static umode_t pwm_is_visible(struct kobject *kobj,
+-- 
+2.13.0.219.gdb65acc882-goog
 
-> ---
-> Changes from V4:
-> - Got rid of 'len' variable in populate_attr_groups
-> 
->  drivers/hwmon/ibmpowernv.c | 68 +++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 61 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-> index 6d2e660..b562323 100644
-> --- a/drivers/hwmon/ibmpowernv.c
-> +++ b/drivers/hwmon/ibmpowernv.c
-> @@ -298,10 +298,14 @@ static int populate_attr_groups(struct platform_device *pdev)
->  		sensor_groups[type].attr_count++;
->  
->  		/*
-> -		 * add a new attribute for labels
-> +		 * add attributes for labels, min and max
->  		 */
->  		if (!of_property_read_string(np, "label", &label))
->  			sensor_groups[type].attr_count++;
-> +		if (of_find_property(np, "sensor-data-min", NULL))
-> +			sensor_groups[type].attr_count++;
-> +		if (of_find_property(np, "sensor-data-max", NULL))
-> +			sensor_groups[type].attr_count++;
->  	}
->  
->  	of_node_put(opal);
-> @@ -337,6 +341,41 @@ static void create_hwmon_attr(struct sensor_data *sdata, const char *attr_name,
->  	sdata->dev_attr.show = show;
->  }
->  
-> +static void populate_sensor(struct sensor_data *sdata, int od, int hd, int sid,
-> +			    const char *attr_name, enum sensors type,
-> +			    const struct attribute_group *pgroup,
-> +			    ssize_t (*show)(struct device *dev,
-> +					    struct device_attribute *attr,
-> +					    char *buf))
-> +{
-> +	sdata->id = sid;
-> +	sdata->type = type;
-> +	sdata->opal_index = od;
-> +	sdata->hwmon_index = hd;
-> +	create_hwmon_attr(sdata, attr_name, show);
-> +	pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
-> +}
-> +
-> +static char *get_max_attr(enum sensors type)
-> +{
-> +	switch (type) {
-> +	case POWER_INPUT:
-> +		return "input_highest";
-> +	default:
-> +		return "highest";
-> +	}
-> +}
-> +
-> +static char *get_min_attr(enum sensors type)
-> +{
-> +	switch (type) {
-> +	case POWER_INPUT:
-> +		return "input_lowest";
-> +	default:
-> +		return "lowest";
-> +	}
-> +}
-> +
->  /*
->   * Iterate through the device tree for each child of 'sensors' node, create
->   * a sysfs attribute file, the file is named by translating the DT node name
-> @@ -417,16 +456,31 @@ static int create_device_attrs(struct platform_device *pdev)
->  			 * attribute. They are related to the same
->  			 * sensor.
->  			 */
-> -			sdata[count].type = type;
-> -			sdata[count].opal_index = sdata[count - 1].opal_index;
-> -			sdata[count].hwmon_index = sdata[count - 1].hwmon_index;
->  
->  			make_sensor_label(np, &sdata[count], label);
-> +			populate_sensor(&sdata[count], opal_index,
-> +					sdata[count - 1].hwmon_index,
-> +					sensor_id, "label", type, pgroups[type],
-> +					show_label);
-> +			count++;
-> +		}
->  
-> -			create_hwmon_attr(&sdata[count], "label", show_label);
-> +		if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
-> +			attr_name = get_max_attr(type);
-> +			populate_sensor(&sdata[count], opal_index,
-> +					sdata[count - 1].hwmon_index,
-> +					sensor_id, attr_name, type,
-> +					pgroups[type], show_sensor);
-> +			count++;
-> +		}
->  
-> -			pgroups[type]->attrs[sensor_groups[type].attr_count++] =
-> -				&sdata[count++].dev_attr.attr;
-> +		if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
-> +			attr_name = get_min_attr(type);
-> +			populate_sensor(&sdata[count], opal_index,
-> +					sdata[count - 1].hwmon_index,
-> +					sensor_id, attr_name, type,
-> +					pgroups[type], show_sensor);
-> +			count++;
->  		}
->  	}
->  
