@@ -1,87 +1,104 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from www.zeus03.de ([194.117.254.33]:33014 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751512AbdEVGht (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 May 2017 02:37:49 -0400
-Date: Mon, 22 May 2017 08:37:46 +0200
-From: Wolfram Sang <wsa@the-dreams.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] hwmon: move include files out of include/linux/i2c
-Message-ID: <20170522063746.GA1454@katana>
-References: <20170521203443.6387-1-wsa@the-dreams.de>
- <b876bed9-38dc-233f-053a-4b0d4ad990b2@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
-Content-Disposition: inline
-In-Reply-To: <b876bed9-38dc-233f-053a-4b0d4ad990b2@roeck-us.net>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-it0-f49.google.com ([209.85.214.49]:37780 "EHLO
+        mail-it0-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751090AbdFAOZx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Jun 2017 10:25:53 -0400
+Received: by mail-it0-f49.google.com with SMTP id m47so21348085iti.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Jun 2017 07:25:53 -0700 (PDT)
+From: Patrick Venture <venture@google.com>
+To: joel@jms.id.au, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org
+Cc: Patrick Venture <venture@google.com>
+Subject: [PATCH v2] hwmon: (aspeed-pwm-tacho) Enable both edge measurement.
+Date: Thu,  1 Jun 2017 07:25:33 -0700
+Message-Id: <20170601142533.164496-1-venture@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+The aspeed-pwm-tacho controller supports measuring the fan tach by using
+leading, falling, or both edges.  This change allows the driver to
+support either of the three configurations and will appropriately modify
+the returned tach data.
 
---SLDf9lqlvOQaIe6s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If the controller is measuring with both edges it can return a value more
+quickly to the requestor.  This version of the driver should still take ~1s
+to return with an RPM value per fan, however, it can be tuned faster with
+double edge counting enabled than without.
 
-Hi Guenter,
+I tested this and found the number returned matched what I expected.
 
-> > Note that some files don't seem to have upstream
-> > users in board code, so they maybe could even be removed? I didn't chec=
-k for
->=20
-> While I understand where you are coming from, I am not typically that agg=
-ressive.
-> Such removals force vendors who are not really forthcoming with upstreami=
-ng to
-> deviate even further from upstream. It makes them even less likely to sub=
-mit their
-> code upstream, and it may result in enforcing their belief that upstream =
-doesn't
-> really care about vendors struggling to release boards and systems to the=
-ir
-> customers.
+Signed-off-by: Patrick Venture <venture@google.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-I clearly see your point. I meant more the case where platform_data
-became cruft because platforms moved to DT. I agree this is not so much
-the case for HWMON but it was true for the I2C master driver where I
-could remove the platform data and could save the include file and some
-code. That was just a nice cleanup.
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 48403a2115be..f288928b5e8a 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -145,11 +145,20 @@
+ 
+ #define PWM_MAX 255
+ 
++#define BOTH_EDGES 0x02 /* 10b */
++
+ #define M_PWM_DIV_H 0x00
+ #define M_PWM_DIV_L 0x05
+ #define M_PWM_PERIOD 0x5F
+ #define M_TACH_CLK_DIV 0x00
+-#define M_TACH_MODE 0x00
++/*
++ * 5:4 Type N fan tach mode selection bit:
++ * 00: falling
++ * 01: rising
++ * 10: both
++ * 11: reserved.
++ */
++#define M_TACH_MODE 0x02 /* 10b */
+ #define M_TACH_UNIT 0x1000
+ #define INIT_FAN_CTRL 0xFF
+ 
+@@ -162,6 +171,7 @@ struct aspeed_pwm_tacho_data {
+ 	u8 type_pwm_clock_division_h[3];
+ 	u8 type_pwm_clock_division_l[3];
+ 	u8 type_fan_tach_clock_division[3];
++	u8 type_fan_tach_mode[3];
+ 	u16 type_fan_tach_unit[3];
+ 	u8 pwm_port_type[8];
+ 	u8 pwm_port_fan_ctrl[8];
+@@ -498,7 +508,7 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 				      u8 fan_tach_ch)
+ {
+ 	u32 raw_data, tach_div, clk_source, sec, val;
+-	u8 fan_tach_ch_source, type;
++	u8 fan_tach_ch_source, type, mode, both;
+ 
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0);
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0x1 << fan_tach_ch);
+@@ -512,7 +522,14 @@ static u32 aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 	regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
+ 	raw_data = val & RESULT_VALUE_MASK;
+ 	tach_div = priv->type_fan_tach_clock_division[type];
+-	tach_div = 0x4 << (tach_div * 2);
++	/*
++	 * We need the mode to determine if the raw_data is double (from
++	 * counting both edges).
++	 */
++	mode = priv->type_fan_tach_mode[type];
++	both = (mode & BOTH_EDGES) ? 1 : 0;
++
++	tach_div = (0x4 << both) << (tach_div * 2);
+ 	clk_source = priv->clk_freq;
+ 
+ 	if (raw_data == 0)
+@@ -696,6 +713,7 @@ static void aspeed_create_type(struct aspeed_pwm_tacho_data *priv)
+ 	aspeed_set_tacho_type_enable(priv->regmap, TYPEM, true);
+ 	priv->type_fan_tach_clock_division[TYPEM] = M_TACH_CLK_DIV;
+ 	priv->type_fan_tach_unit[TYPEM] = M_TACH_UNIT;
++	priv->type_fan_tach_mode[TYPEM] = M_TACH_MODE;
+ 	aspeed_set_tacho_type_values(priv->regmap, TYPEM, M_TACH_MODE,
+ 				     M_TACH_UNIT, M_TACH_CLK_DIV);
+ }
+-- 
+2.13.0.219.gdb65acc882-goog
 
-> >I prefer the series to go upstream via the subsystem tree; if you prefer=
- that I
-> >take it via I2C, just let me know.
-> >
-> Series applied to hwmon-next.
-
-Super, thanks!
-
-Regards,
-
-   Wolfram
-
-
---SLDf9lqlvOQaIe6s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlkihzUACgkQFA3kzBSg
-Kbbssw/+JuPK0Vq4fgoKu9Br2Gb7W2JiG94K9sK8r17E7w7/B2clgdg3pR+sLt4H
-1N6wBWYqW4ESH4Wh9vzCYJ3PB8UvDVupft0wgTqHXgvHwQg9ktm4xXU4NG7TmpWq
-sLPw879p7oq97vFaI4vXUrJSgwyKFph/ry4Cawga6Ze3jLZQGtcG2MsyCl325ZB4
-nG3FEo/kvrzSjKZZX/LcMZwrux5VJO2jhVESGPRVgaksjPTazVB/qQib3kkLs2AW
-XXv097JS+qDkVpKFKRCbarbYQjevy1YrRZkaYid27eUzRpiJho6kUswI9X16Hr8x
-QE6Hmw3N6x1Im85rXvI8pJT6VkPEJMQ1AJLTgYiYK4PvRkH/PZMYiQPPIxhYFFQ9
-a3j6aDRV8VKtP2kkdC/4l1hlB9mkX4HQzPPQb6ikCbiAApp2XaLOyFqvRLWibh/V
-yPR3DSJqnZEb4Sj6bPWKFIl3bSYect0tJPbj6O3W4UGGNCCnLuAQ69rgBFxddu+0
-HUh2grKkiytRXAC6hc7julq/Awx8INyVpH9GzUgGykU84Ysb1+Au+HpJ7nHzX64D
-JGYQ0ryhlhF2NYpjy8n9KvQ/Z0JWzItbGE6NpuR2M982sQRxKpNYxtV1ZdXhpdMm
-Nxci52OaqbgGiu391KLBpCta4yszf17oLrRLgKeZNHnBhitSf2I=
-=ObKu
------END PGP SIGNATURE-----
-
---SLDf9lqlvOQaIe6s--
