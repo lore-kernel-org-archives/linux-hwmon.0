@@ -1,50 +1,169 @@
-Return-path: <sudeep.holla@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Carlo Caione <carlo@endlessm.com>
-Subject: Re: [PATCH v4 1/2] Documentation: bindings: add
- amlogic,meson-gxbb-scpi-sensors compatible
-To: Guenter Roeck <linux@roeck-us.net>, Carlo Caione <carlo@caione.org>,
- jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
- linux@endlessm.com, punit.agrawal@arm.com, robh+dt@kernel.org,
- devicetree@vger.kernel.org
-References: <20170530090507.16611-1-carlo@caione.org>
- <20170530090507.16611-2-carlo@caione.org>
- <8d0c867e-2b78-63fa-f422-709e515012ca@roeck-us.net>
-From: Sudeep Holla <sudeep.holla@arm.com>
-Message-ID: <e915f000-66a3-f36b-b0cb-09f2d7a91a6b@arm.com>
-Date: Fri, 2 Jun 2017 14:26:43 +0100
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:58942 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751138AbdFBNX4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Jun 2017 09:23:56 -0400
+Date: Fri, 2 Jun 2017 06:23:53 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>, linux-pwm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: hwmon: pwm-fan: switch to new atomic PWM API
+Message-ID: <20170602132353.GA12690@roeck-us.net>
+References: <1493039598-25881-1-git-send-email-b.zolnierkie@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <8d0c867e-2b78-63fa-f422-709e515012ca@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1493039598-25881-1-git-send-email-b.zolnierkie@samsung.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-
-
-On 02/06/17 14:14, Guenter Roeck wrote:
-> On 05/30/2017 02:05 AM, Carlo Caione wrote:
->> From: Carlo Caione <carlo@endlessm.com>
->>
->> Introduce a new Amlogic specific compatible to handle how Amlogic reports
->> the sensor readings from SCPI using a different scale.
->>
->> Signed-off-by: Carlo Caione <carlo@endlessm.com>
+On Mon, Apr 24, 2017 at 03:13:17PM +0200, Bartlomiej Zolnierkiewicz wrote:
+> Switch pwm-fan driver to new atomic PWM API.
 > 
-> Formally waiting for DT approval. However, I don't see any problems with
-> it,
-> so
-> 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Not sure what branch this is supposed to go through. For now I assume it
-> will be arm/arm64.
-> 
+> Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> ---
+> Depends on "[PATCH v2 0/3] pwm: pwm-samsung: fix suspend/resume support"
+> patchset (https://www.spinics.net/lists/kernel/msg2495209.html).
 
-Initially I submitted it via arm-soc. But I think you can take it along
-with the driver change in your tree as I don't see any other patch
-touching arm,scpi.txt in time around.
+I lost track where we are with this patch. The above series set did not make
+it, as far as I can see. Is this patch truly dependent on that series, or
+can it be applied separately ? It does apply cleanly.
 
--- 
-Regards,
-Sudeep
+Thanks,
+Guenter
+
+> 
+>  drivers/hwmon/pwm-fan.c | 68 +++++++++++++++++++------------------------------
+>  1 file changed, 26 insertions(+), 42 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 9dc40f3..4ac7700 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -40,31 +40,22 @@ struct pwm_fan_ctx {
+>  
+>  static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+>  {
+> -	struct pwm_args pargs;
+> -	unsigned long duty;
+> +	unsigned long period;
+>  	int ret = 0;
+> -
+> -	pwm_get_args(ctx->pwm, &pargs);
+> +	struct pwm_state state = { };
+>  
+>  	mutex_lock(&ctx->lock);
+>  	if (ctx->pwm_value == pwm)
+>  		goto exit_set_pwm_err;
+>  
+> -	duty = DIV_ROUND_UP(pwm * (pargs.period - 1), MAX_PWM);
+> -	ret = pwm_config(ctx->pwm, duty, pargs.period);
+> -	if (ret)
+> -		goto exit_set_pwm_err;
+> -
+> -	if (pwm == 0)
+> -		pwm_disable(ctx->pwm);
+> +	pwm_init_state(ctx->pwm, &state);
+> +	period = ctx->pwm->args.period;
+> +	state.duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+> +	state.enabled = pwm ? true : false;
+>  
+> -	if (ctx->pwm_value == 0) {
+> -		ret = pwm_enable(ctx->pwm);
+> -		if (ret)
+> -			goto exit_set_pwm_err;
+> -	}
+> -
+> -	ctx->pwm_value = pwm;
+> +	ret = pwm_apply_state(ctx->pwm, &state);
+> +	if (!ret)
+> +		ctx->pwm_value = pwm;
+>  exit_set_pwm_err:
+>  	mutex_unlock(&ctx->lock);
+>  	return ret;
+> @@ -218,10 +209,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  {
+>  	struct thermal_cooling_device *cdev;
+>  	struct pwm_fan_ctx *ctx;
+> -	struct pwm_args pargs;
+>  	struct device *hwmon;
+> -	int duty_cycle;
+>  	int ret;
+> +	struct pwm_state state = { };
+>  
+>  	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+>  	if (!ctx)
+> @@ -237,28 +227,16 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, ctx);
+>  
+> -	/*
+> -	 * FIXME: pwm_apply_args() should be removed when switching to the
+> -	 * atomic PWM API.
+> -	 */
+> -	pwm_apply_args(ctx->pwm);
+> -
+> -	/* Set duty cycle to maximum allowed */
+> -	pwm_get_args(ctx->pwm, &pargs);
+> -
+> -	duty_cycle = pargs.period - 1;
+>  	ctx->pwm_value = MAX_PWM;
+>  
+> -	ret = pwm_config(ctx->pwm, duty_cycle, pargs.period);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Failed to configure PWM\n");
+> -		return ret;
+> -	}
+> +	/* Set duty cycle to maximum allowed and enable PWM output */
+> +	pwm_init_state(ctx->pwm, &state);
+> +	state.duty_cycle = ctx->pwm->args.period - 1;
+> +	state.enabled = true;
+>  
+> -	/* Enbale PWM output */
+> -	ret = pwm_enable(ctx->pwm);
+> +	ret = pwm_apply_state(ctx->pwm, &state);
+>  	if (ret) {
+> -		dev_err(&pdev->dev, "Failed to enable PWM\n");
+> +		dev_err(&pdev->dev, "Failed to configure PWM\n");
+>  		return ret;
+>  	}
+>  
+> @@ -266,8 +244,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  						       ctx, pwm_fan_groups);
+>  	if (IS_ERR(hwmon)) {
+>  		dev_err(&pdev->dev, "Failed to register hwmon device\n");
+> -		pwm_disable(ctx->pwm);
+> -		return PTR_ERR(hwmon);
+> +		ret = PTR_ERR(hwmon);
+> +		goto err_pwm_disable;
+>  	}
+>  
+>  	ret = pwm_fan_of_get_cooling_data(&pdev->dev, ctx);
+> @@ -282,14 +260,20 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  		if (IS_ERR(cdev)) {
+>  			dev_err(&pdev->dev,
+>  				"Failed to register pwm-fan as cooling device");
+> -			pwm_disable(ctx->pwm);
+> -			return PTR_ERR(cdev);
+> +			ret = PTR_ERR(cdev);
+> +			goto err_pwm_disable;
+>  		}
+>  		ctx->cdev = cdev;
+>  		thermal_cdev_update(cdev);
+>  	}
+>  
+>  	return 0;
+> +
+> +err_pwm_disable:
+> +	state.enabled = false;
+> +	pwm_apply_state(ctx->pwm, &state);
+> +
+> +	return ret;
+>  }
+>  
+>  static int pwm_fan_remove(struct platform_device *pdev)
