@@ -1,59 +1,99 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:46413 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752271AbdF1QAw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Jun 2017 12:00:52 -0400
-Date: Wed, 28 Jun 2017 09:00:48 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tom Levens <tom.levens@cern.ch>
-Cc: Mike Looijmans <mike.looijmans@topic.nl>, jdelvare@suse.com,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: ltc2990: support all measurement modes
-Message-ID: <20170628160048.GA8915@roeck-us.net>
-References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
- <1479384616-12479-3-git-send-email-tom.levens@cern.ch>
- <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net>
- <97eb089f-e0e2-1146-6e17-8f9f790433d8@topic.nl>
- <20170628150130.GC30968@roeck-us.net>
- <alpine.LRH.2.20.1706281723170.31209@lxplus022.cern.ch>
+Received: from mail.kernel.org ([198.145.29.99]:44234 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1750765AbdFCJni (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 3 Jun 2017 05:43:38 -0400
+Date: Sat, 3 Jun 2017 10:36:49 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: J Keerthy <j-keerthy@ti.com>, linux-iio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] iio: adc: twl4030: Drop
+ twl4030_get_madc_conversion()
+Message-ID: <20170603103649.19f6a61d@kernel.org>
+In-Reply-To: <4cb8938c-69c2-4881-3061-565a6f479b39@kernel.org>
+References: <20170427153012.32310-1-sebastian.reichel@collabora.co.uk>
+        <20170427153012.32310-4-sebastian.reichel@collabora.co.uk>
+        <4cb8938c-69c2-4881-3061-565a6f479b39@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.20.1706281723170.31209@lxplus022.cern.ch>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 28, 2017 at 05:29:38PM +0200, Tom Levens wrote:
+On Sun, 30 Apr 2017 17:35:04 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
+
+> On 27/04/17 16:30, Sebastian Reichel wrote:
+> > Drop legacy twl4030_get_madc_conversion() method. It has been
+> > used by drivers to get madc data before it conversion to IIO
+> > API. There are no users in the mainline kernel anymore.
+> > 
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>  
+> Acked-by: Jonathan Cameron <jic23@kernel.org>
+Applied to the togreg branch of iio.git and pushed out as testing
+for the autobuilders to play with it.
+
+Thanks,
+
+Jonathan
+> > ---
+> >  drivers/iio/adc/twl4030-madc.c   | 21 ---------------------
+> >  include/linux/i2c/twl4030-madc.h |  1 -
+> >  2 files changed, 22 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/twl4030-madc.c b/drivers/iio/adc/twl4030-madc.c
+> > index 0c74869a540a..88e44066ef82 100644
+> > --- a/drivers/iio/adc/twl4030-madc.c
+> > +++ b/drivers/iio/adc/twl4030-madc.c
+> > @@ -642,27 +642,6 @@ int twl4030_madc_conversion(struct twl4030_madc_request *req)
+> >  }
+> >  EXPORT_SYMBOL_GPL(twl4030_madc_conversion);
+> >  
+> > -int twl4030_get_madc_conversion(int channel_no)
+> > -{
+> > -	struct twl4030_madc_request req;
+> > -	int temp = 0;
+> > -	int ret;
+> > -
+> > -	req.channels = (1 << channel_no);
+> > -	req.method = TWL4030_MADC_SW2;
+> > -	req.active = 0;
+> > -	req.raw = 0;
+> > -	req.func_cb = NULL;
+> > -	ret = twl4030_madc_conversion(&req);
+> > -	if (ret < 0)
+> > -		return ret;
+> > -	if (req.rbuf[channel_no] > 0)
+> > -		temp = req.rbuf[channel_no];
+> > -
+> > -	return temp;
+> > -}
+> > -EXPORT_SYMBOL_GPL(twl4030_get_madc_conversion);
+> > -
+> >  /**
+> >   * twl4030_madc_set_current_generator() - setup bias current
+> >   *
+> > diff --git a/include/linux/i2c/twl4030-madc.h b/include/linux/i2c/twl4030-madc.h
+> > index 1c0134dd3271..0c919ebb31e0 100644
+> > --- a/include/linux/i2c/twl4030-madc.h
+> > +++ b/include/linux/i2c/twl4030-madc.h
+> > @@ -143,5 +143,4 @@ struct twl4030_madc_user_parms {
+> >  };
+> >  
+> >  int twl4030_madc_conversion(struct twl4030_madc_request *conv);
+> > -int twl4030_get_madc_conversion(int channel_no);
+> >  #endif
+> >   
 > 
-[ ... ]
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-> >
-> >>Whatever happened to this patch though? It didn't make it to mainline,
-> >>otherwise I'd have found it sooner...
-> >>
-> >I'll have to look it up, but I guess I didn't get an updated version.
-> 
-> As far as I remember I had a working V3 of this patch, but it is entirely
-> possible that it was never submitted as I have been busy with other projects
-> recently. I'll dig it out and check that it is complete.
-> 
-FWIW, I don't see it at
-https://patchwork.kernel.org/project/linux-hwmon/list/?submitter=171225&state=*
-
-Maybe you were waiting for a reply from Rob. Either case, it might make
-sense to only provide valid modes, ie to abstract the mode bits from the
-hardware, such as
-
-0 - internal temp only
-1 - Tr1
-2 - V1
-3 - V1-V2
-4 - Tr2
-5 - V3
-6 - V3-V4
-7 to 14 - per bit 0..2
-
-Guenter
