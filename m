@@ -1,51 +1,81 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47514 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:43378 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751299AbdFGVHE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Jun 2017 17:07:04 -0400
-Date: Wed, 7 Jun 2017 14:07:02 -0700
+        with ESMTP id S1750788AbdFHMhJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Jun 2017 08:37:09 -0400
+Subject: Re: [PATCH v3] hwmon: Add support for MAX31785 intelligent fan
+ controller
+To: Andrew Jeffery <andrew@aj.id.au>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@jms.id.au, msbarth@linux.vnet.ibm.com,
+        tpearson@raptorengineering.com, openbmc@lists.ozlabs.org
+References: <20170606070230.32669-1-andrew@aj.id.au>
+ <20170607155526.GA18946@roeck-us.net> <1496908393.23335.3.camel@aj.id.au>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>, linux-pwm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: hwmon: pwm-fan: switch to new atomic PWM API
-Message-ID: <20170607210057.GA29962@roeck-us.net>
-References: <1493039598-25881-1-git-send-email-b.zolnierkie@samsung.com>
- <CGME20170602132359epcas4p113157cdf641dae2e186c4ccd75432e00@epcas4p1.samsung.com>
- <20170602132353.GA12690@roeck-us.net>
- <2730680.la1ZiRyv91@amdc3058>
+Message-ID: <9358484b-ceb2-6fe4-deef-54372a3f12da@roeck-us.net>
+Date: Thu, 8 Jun 2017 05:37:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2730680.la1ZiRyv91@amdc3058>
+In-Reply-To: <1496908393.23335.3.camel@aj.id.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 07, 2017 at 03:38:44PM +0200, Bartlomiej Zolnierkiewicz wrote:
-> On Friday, June 02, 2017 06:23:53 AM Guenter Roeck wrote:
-> > On Mon, Apr 24, 2017 at 03:13:17PM +0200, Bartlomiej Zolnierkiewicz wrote:
-> > > Switch pwm-fan driver to new atomic PWM API.
-> > > 
-> > > Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> > > ---
-> > > Depends on "[PATCH v2 0/3] pwm: pwm-samsung: fix suspend/resume support"
-> > > patchset (https://www.spinics.net/lists/kernel/msg2495209.html).
-> > 
-> > I lost track where we are with this patch. The above series set did not make
-> > it, as far as I can see. Is this patch truly dependent on that series, or
-> > can it be applied separately ? It does apply cleanly.
+On 06/08/2017 12:53 AM, Andrew Jeffery wrote:
+> On Wed, 2017-06-07 at 08:55 -0700, Guenter Roeck wrote:
+>> On Tue, Jun 06, 2017 at 04:32:30PM +0930, Andrew Jeffery wrote:
+>>> Add a basic driver for the MAX31785, focusing on the fan control
+>>> features but ignoring the temperature and voltage monitoring
+>>> features of the device.
+>>>
+>>> This driver supports all fan control modes and tachometer / PWM
+>>> readback where applicable.
+>>>
+>>>>> Signed-off-by: Timothy Pearson <tpearson@raptorengineering.com>
+>>>>> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+>>> ---
+>>> Hello,
+>>>
+>>> This is a rework of Timothy Pearson's original patch:
+>>>
+>>>      https://www.mail-archive.com/linux-hwmon@vger.kernel.org/msg00868.html
+>>>
+>>> I've labelled it as v3 to differentiate from Timothy's postings.
+>>>
+>>> The original thread had some discussion about the MAX31785 being a PMBus device
+>>> and that it should thus be a PMBus driver. The implementation still makes use
+>>
+>> After thinking about it, that is what it should be. If I accept it as non-PMBus
+>> driver, it will be all but impossible to convert it to a PMBus driver later on,
+>> and that just doesn't make any sense.
 > 
-> I think that it can be applied separately (the broken suspend/resume code
-> will continue to use the old API until the previous patchset is finally
-> merged and the code in question is removed altogether).
+> Hopefully not being too ignorant here, but can you expand on why it
+> would be all but impossible to convert?
 > 
 
-Ok. Applied to hwmon-next.
+I've got a lot of noise recently just for converting a driver from the old to the
+new API (which changes the attribute location). Changing the driver from non-PMBus
+to PMBus would very quite likely change some attributes as well.
 
-Thanks,
+Besides that, I think it is a bad idea to bypass an infrastructure just because
+it may require a few tweaks. That generates a bad precedent, and people _would_
+use that to argue that the next PMBus chip driver should not use the infrastructure
+either.
+
 Guenter
+
+>>
+>> With no one interested in writing that driver, I'll try to give it some more
+>> priority myself. I do have an evaluation board somewhere, which should help.
+>>
+>> Note that the second fan reading should be implemented as just that, not with
+>> a non-standard attribute.
+> 
+> Agreed.
+> 
+> Andrew
+> 
+
