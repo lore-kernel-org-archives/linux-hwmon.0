@@ -1,116 +1,118 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f181.google.com ([209.85.192.181]:34392 "EHLO
-        mail-pf0-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752628AbdFNV7z (ORCPT
+Received: from mail-pg0-f41.google.com ([74.125.83.41]:34568 "EHLO
+        mail-pg0-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752546AbdFNWAC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2017 17:59:55 -0400
-Received: by mail-pf0-f181.google.com with SMTP id s66so6543343pfs.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jun 2017 14:59:55 -0700 (PDT)
+        Wed, 14 Jun 2017 18:00:02 -0400
+Received: by mail-pg0-f41.google.com with SMTP id v18so5851068pgb.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jun 2017 15:00:01 -0700 (PDT)
 From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
 To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
         jdelvare@suse.com, linux-hwmon@vger.kernel.org
 Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Subject: [PATCH linux v1 3/3] drivers: w1: add hwmon temp support for w1_therm
-Date: Wed, 14 Jun 2017 14:59:44 -0700
-Message-Id: <20170614215944.24984-4-jaghu@google.com>
+Subject: [PATCH linux v1 1/3] drivers: w1: add hwmon support structures
+Date: Wed, 14 Jun 2017 14:59:42 -0700
+Message-Id: <20170614215944.24984-2-jaghu@google.com>
 In-Reply-To: <20170614215944.24984-1-jaghu@google.com>
 References: <20170614215944.24984-1-jaghu@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This change adds hwmon temp support for w1_therm.
+This patch has changes to w1.h/w1.c/w1_family.h generic files to
+add (optional) hwmon support structures
 
 Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Change-Id: I66c0837d63b5a5839227319608eb8061b917f5fa
+Change-Id: I17f7c670e5cd7a3826add720ffa928c3e1aa0abc
 ---
- drivers/w1/slaves/w1_therm.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/w1/w1.c        | 20 +++++++++++++++++++-
+ drivers/w1/w1.h        |  2 ++
+ drivers/w1/w1_family.h |  2 ++
+ 3 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
-index 88f4cc8c3908..dba2d21fa731 100644
---- a/drivers/w1/slaves/w1_therm.c
-+++ b/drivers/w1/slaves/w1_therm.c
-@@ -105,8 +105,12 @@ static ssize_t w1_slave_store(struct device *device,
- static ssize_t w1_seq_show(struct device *device,
- 	struct device_attribute *attr, char *buf);
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index e213c678bbfe..e3efabccd284 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -32,6 +32,7 @@
+ #include <linux/sched.h>
+ #include <linux/kthread.h>
+ #include <linux/freezer.h>
++#include <linux/hwmon.h>
 
-+static ssize_t temp1_input_show(struct device *device,
-+	struct device_attribute *attr, char *buf);
-+
- static DEVICE_ATTR_RW(w1_slave);
- static DEVICE_ATTR_RO(w1_seq);
-+static DEVICE_ATTR_RO(temp1_input);
+ #include <linux/atomic.h>
 
- static struct attribute *w1_therm_attrs[] = {
- 	&dev_attr_w1_slave.attr,
-@@ -118,19 +122,27 @@ static struct attribute *w1_ds28ea00_attrs[] = {
- 	&dev_attr_w1_seq.attr,
- 	NULL,
+@@ -659,13 +660,30 @@ static int w1_family_notify(unsigned long action, struct w1_slave *sl)
+ 				return err;
+ 			}
+ 		}
+-
++#ifdef CONFIG_HWMON
++		if (fops->hwmon_groups && sl->hwmon) {
++			struct device *hwmon
++				= hwmon_device_register_with_groups(&sl->dev,
++						"w1_slave_temp", sl,
++						fops->hwmon_groups);
++			if (IS_ERR(hwmon)) {
++				dev_warn(&sl->dev,
++					 "could not create hwmon device\n");
++			} else {
++				sl->hwmon = hwmon;
++			}
++		}
++#endif
+ 		break;
+ 	case BUS_NOTIFY_DEL_DEVICE:
+ 		if (fops->remove_slave)
+ 			sl->family->fops->remove_slave(sl);
+ 		if (fops->groups)
+ 			sysfs_remove_groups(&sl->dev.kobj, fops->groups);
++#ifdef CONFIG_HWMON
++		if (fops->hwmon_groups && sl->hwmon)
++			hwmon_device_unregister(sl->hwmon);
++#endif
+ 		break;
+ 	}
+ 	return 0;
+diff --git a/drivers/w1/w1.h b/drivers/w1/w1.h
+index 129895f562b0..74ef1a543856 100644
+--- a/drivers/w1/w1.h
++++ b/drivers/w1/w1.h
+@@ -83,6 +83,7 @@ struct w1_reg_num
+  * @family: module for device family type
+  * @family_data: pointer for use by the family module
+  * @dev: kernel device identifier
++ * @hwmon: pointer to hwmon device
+  *
+  */
+ struct w1_slave
+@@ -99,6 +100,7 @@ struct w1_slave
+ 	struct w1_family	*family;
+ 	void			*family_data;
+ 	struct device		dev;
++	struct device		*hwmon;
  };
-+static struct attribute *w1_therm_hwmon_attrs[] = {
-+	&dev_attr_temp1_input.attr,
-+	NULL,
-+};
-+
- ATTRIBUTE_GROUPS(w1_therm);
- ATTRIBUTE_GROUPS(w1_ds28ea00);
-+ATTRIBUTE_GROUPS(w1_therm_hwmon);
 
- static struct w1_family_ops w1_therm_fops = {
- 	.add_slave	= w1_therm_add_slave,
- 	.remove_slave	= w1_therm_remove_slave,
- 	.groups		= w1_therm_groups,
-+	.hwmon_groups   = w1_therm_hwmon_groups,
+ typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
+diff --git a/drivers/w1/w1_family.h b/drivers/w1/w1_family.h
+index 10a7a0767187..fc582df5c28e 100644
+--- a/drivers/w1/w1_family.h
++++ b/drivers/w1/w1_family.h
+@@ -55,12 +55,14 @@ struct w1_slave;
+  * @add_slave: add_slave
+  * @remove_slave: remove_slave
+  * @groups: sysfs group
++ * @hwmon_groups: hwmon sysfs group
+  */
+ struct w1_family_ops
+ {
+ 	int  (* add_slave)(struct w1_slave *);
+ 	void (* remove_slave)(struct w1_slave *);
+ 	const struct attribute_group **groups;
++	const struct attribute_group **hwmon_groups;
  };
 
- static struct w1_family_ops w1_ds28ea00_fops = {
- 	.add_slave	= w1_therm_add_slave,
- 	.remove_slave	= w1_therm_remove_slave,
- 	.groups		= w1_ds28ea00_groups,
-+	.hwmon_groups   = w1_therm_hwmon_groups,
- };
-
- static struct w1_family w1_therm_family_DS18S20 = {
-@@ -559,6 +571,38 @@ static ssize_t w1_slave_show(struct device *device,
- 	return ret;
- }
-
-+static ssize_t temp1_input_show(struct device *device,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct w1_slave *sl = dev_get_drvdata(device);
-+	u8 *family_data = sl->family_data;
-+	struct therm_info info;
-+	int ret;
-+
-+	if (!sl->family_data)
-+		return -ENODEV;
-+
-+	/* prevent the slave from going away in sleep */
-+	atomic_inc(THERM_REFCNT(family_data));
-+
-+	ret = read_therm(device, sl, &info);
-+	if (ret)
-+		goto dec_refcnt;
-+
-+	if (!info.verdict) {
-+		dev_warn(device, "Read failed CRC check\n");
-+		ret = -EIO;
-+		goto dec_refcnt;
-+	}
-+
-+	ret = sprintf(buf, "%d\n",
-+			w1_convert_temp(info.rom, sl->family->fid));
-+
-+dec_refcnt:
-+	atomic_dec(THERM_REFCNT(family_data));
-+	return ret;
-+}
-+
- #define W1_42_CHAIN	0x99
- #define W1_42_CHAIN_OFF	0x3C
- #define W1_42_CHAIN_OFF_INV	0xC3
+ /**
 --
 2.13.1.508.gb3defc5cc-goog
 
