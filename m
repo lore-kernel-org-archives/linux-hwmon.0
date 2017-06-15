@@ -1,126 +1,43 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57254 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751600AbdFNWip (ORCPT
+Received: from mail.redfish-solutions.com ([66.232.79.143]:43852 "EHLO
+        mail.redfish-solutions.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1750820AbdFOWus (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Jun 2017 18:38:45 -0400
-Date: Wed, 14 Jun 2017 15:38:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Cc: zbr@ioremap.net, linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH linux v1 1/3] drivers: w1: add hwmon support structures
-Message-ID: <20170614223843.GB19172@roeck-us.net>
-References: <20170614215944.24984-1-jaghu@google.com>
- <20170614215944.24984-2-jaghu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170614215944.24984-2-jaghu@google.com>
+        Thu, 15 Jun 2017 18:50:48 -0400
+From: Philip Prindeville <philipp_subx@redfish-solutions.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Question about nct6775 and w83627ehf
+Message-Id: <48F7D8C9-21F9-4439-9069-34C05FBCF6A7@redfish-solutions.com>
+Date: Thu, 15 Jun 2017 16:34:45 -0600
+Cc: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 14, 2017 at 02:59:42PM -0700, Jaghathiswari Rankappagounder Natarajan wrote:
-> This patch has changes to w1.h/w1.c/w1_family.h generic files to
-> add (optional) hwmon support structures
-> 
-> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-> Change-Id: I17f7c670e5cd7a3826add720ffa928c3e1aa0abc
-> ---
->  drivers/w1/w1.c        | 20 +++++++++++++++++++-
->  drivers/w1/w1.h        |  2 ++
->  drivers/w1/w1_family.h |  2 ++
->  3 files changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> index e213c678bbfe..e3efabccd284 100644
-> --- a/drivers/w1/w1.c
-> +++ b/drivers/w1/w1.c
-> @@ -32,6 +32,7 @@
->  #include <linux/sched.h>
->  #include <linux/kthread.h>
->  #include <linux/freezer.h>
-> +#include <linux/hwmon.h>
-> 
->  #include <linux/atomic.h>
-> 
-> @@ -659,13 +660,30 @@ static int w1_family_notify(unsigned long action, struct w1_slave *sl)
->  				return err;
->  			}
->  		}
-> -
-> +#ifdef CONFIG_HWMON
-> +		if (fops->hwmon_groups && sl->hwmon) {
-> +			struct device *hwmon
-> +				= hwmon_device_register_with_groups(&sl->dev,
+Hi.
 
-You should really use hwmon_device_register_with_info().
+I’m working on a platform that uses the nct6775, and if I load a generic “everything and the kitchen since” kernel on it, then the w83627ehf module ends up claiming the nct6775 chipset.
 
-Also, would devm_hwmon_device_register_with_info() work ?
+My understanding was that the nct6775 driver supplants the w83627ehf for supporting the nct6775/6.
 
-> +						"w1_slave_temp", sl,
-> +						fops->hwmon_groups);
-> +			if (IS_ERR(hwmon)) {
-> +				dev_warn(&sl->dev,
-> +					 "could not create hwmon device\n");
-> +			} else {
-> +				sl->hwmon = hwmon;
-> +			}
-> +		}
-> +#endif
->  		break;
->  	case BUS_NOTIFY_DEL_DEVICE:
->  		if (fops->remove_slave)
->  			sl->family->fops->remove_slave(sl);
->  		if (fops->groups)
->  			sysfs_remove_groups(&sl->dev.kobj, fops->groups);
-> +#ifdef CONFIG_HWMON
-> +		if (fops->hwmon_groups && sl->hwmon)
-> +			hwmon_device_unregister(sl->hwmon);
-> +#endif
->  		break;
->  	}
->  	return 0;
-> diff --git a/drivers/w1/w1.h b/drivers/w1/w1.h
-> index 129895f562b0..74ef1a543856 100644
-> --- a/drivers/w1/w1.h
-> +++ b/drivers/w1/w1.h
-> @@ -83,6 +83,7 @@ struct w1_reg_num
->   * @family: module for device family type
->   * @family_data: pointer for use by the family module
->   * @dev: kernel device identifier
-> + * @hwmon: pointer to hwmon device
->   *
->   */
->  struct w1_slave
-> @@ -99,6 +100,7 @@ struct w1_slave
->  	struct w1_family	*family;
->  	void			*family_data;
->  	struct device		dev;
-> +	struct device		*hwmon;
->  };
-> 
->  typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
-> diff --git a/drivers/w1/w1_family.h b/drivers/w1/w1_family.h
-> index 10a7a0767187..fc582df5c28e 100644
-> --- a/drivers/w1/w1_family.h
-> +++ b/drivers/w1/w1_family.h
-> @@ -55,12 +55,14 @@ struct w1_slave;
->   * @add_slave: add_slave
->   * @remove_slave: remove_slave
->   * @groups: sysfs group
-> + * @hwmon_groups: hwmon sysfs group
->   */
->  struct w1_family_ops
->  {
->  	int  (* add_slave)(struct w1_slave *);
->  	void (* remove_slave)(struct w1_slave *);
->  	const struct attribute_group **groups;
-> +	const struct attribute_group **hwmon_groups;
->  };
-> 
->  /**
-> --
-> 2.13.1.508.gb3defc5cc-goog
-> 
+But if that’s the case, shouldn’t ec3e5a16446fef1891611fe3bdfa5954d1ddf5e4 have been partially backed out?
+
+Well, there would have been a few others, too, I guess:
+
+d42e869acf0da4502c452b786dee35f0ecf4cbc8
+
+ad77c3e1808f07fa70f707b1c92a683b7c7d3f85
+
+585c0fd8216e0c9f98e2434092af7ec0f999522d
+
+33fa9b620409edfc71aa6cf01a51f990fbe46ab8
+
+What’s the chance of the nct6775 stuff all getting scrubbed out?
+
+Thanks,
+
+-Philip
+
