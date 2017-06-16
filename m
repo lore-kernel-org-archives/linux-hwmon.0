@@ -1,38 +1,53 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from forward1j.cmail.yandex.net ([5.255.227.19]:49905 "EHLO
-        forward1j.cmail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1752027AbdFQOms (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:35847 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750803AbdFPAfY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 17 Jun 2017 10:42:48 -0400
-From: Evgeniy Polyakov <zbr@ioremap.net>
-To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-In-Reply-To: <20170614215944.24984-1-jaghu@google.com>
-References: <20170614215944.24984-1-jaghu@google.com>
-Subject: Re: [PATCH linux v1 0/3] Export 1-wire thermal sensors as hwmon device
+        Thu, 15 Jun 2017 20:35:24 -0400
+Subject: Re: Question about nct6775 and w83627ehf
+To: Philip Prindeville <philipp_subx@redfish-solutions.com>,
+        linux-hwmon@vger.kernel.org
+References: <48F7D8C9-21F9-4439-9069-34C05FBCF6A7@redfish-solutions.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <0d70a41e-1b14-1f30-067e-c7d6085179ac@roeck-us.net>
+Date: Thu, 15 Jun 2017 17:35:22 -0700
 MIME-Version: 1.0
-Message-Id: <3137281497710254@web33j.yandex.ru>
-Date: Sat, 17 Jun 2017 17:37:34 +0300
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
+In-Reply-To: <48F7D8C9-21F9-4439-9069-34C05FBCF6A7@redfish-solutions.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi
+On 06/15/2017 03:34 PM, Philip Prindeville wrote:
+> Hi.
+> 
+> I’m working on a platform that uses the nct6775, and if I load a generic “everything and the kitchen since” kernel on it, then the w83627ehf module ends up claiming the nct6775 chipset.
+> 
+> My understanding was that the nct6775 driver supplants the w83627ehf for supporting the nct6775/6.
+> 
+> But if that’s the case, shouldn’t ec3e5a16446fef1891611fe3bdfa5954d1ddf5e4 have been partially backed out?
+> 
+> Well, there would have been a few others, too, I guess:
+> 
+> d42e869acf0da4502c452b786dee35f0ecf4cbc8
+> 
+> ad77c3e1808f07fa70f707b1c92a683b7c7d3f85
+> 
+> 585c0fd8216e0c9f98e2434092af7ec0f999522d
+> 
+> 33fa9b620409edfc71aa6cf01a51f990fbe46ab8
+> 
+> What’s the chance of the nct6775 stuff all getting scrubbed out?
+> 
 
-15.06.2017, 00:59, "Jaghathiswari Rankappagounder Natarajan" <jaghu@google.com>:
-> Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
-> sensor under it is already configured against the Linux 1-wire driver
-> (called w1). They have a sysfs file(e.g.
-> /sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
-> runs code to read the temperature. We'd like the temperatures to show up in
-> hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
->
-> This patchset is based on linux mainline version v4.10.
+Yes, we had a patch in the works to do that but right now it is stalled.
+Feel free to submit a patch yourself to do it.
 
-Looks good to me, thank you.
+Normally though those drivers are built as modules and loaded explicitly
+from /etc/modules or a similar configuration file. In other words, it is
+the user's choice. Building a Super-IO chip driver into the kernel is in
+general a bad idea since they all try to instantiate themselves. Worst
+case that may result in misdetection and even crashes.
 
-Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
+Guenter
