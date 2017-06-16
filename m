@@ -1,43 +1,93 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.redfish-solutions.com ([66.232.79.143]:43852 "EHLO
-        mail.redfish-solutions.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1750820AbdFOWus (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Jun 2017 18:50:48 -0400
-From: Philip Prindeville <philipp_subx@redfish-solutions.com>
+Return-Path: <floe@butterbrot.org>
+Return-path: <floe@butterbrot.org>
+Subject: Re: [RFC] adding TDM support to applesmc module?
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ rydberg@bitmath.org, rydberg@euromail.se
+References: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
+ <c88c2d6f-2ed0-0fbf-fc90-6fd113021b8d@roeck-us.net>
+From: Florian Echtler <floe@butterbrot.org>
+Message-ID: <0612a141-845f-c233-bfe3-5e6b0caa757a@butterbrot.org>
+Date: Fri, 16 Jun 2017 10:17:06 +0200
+MIME-Version: 1.0
+In-Reply-To: <c88c2d6f-2ed0-0fbf-fc90-6fd113021b8d@roeck-us.net>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="bu7p76iJUwF9xtbTdSFxwxC2LuLpn4J93"
+List-ID: <linux-hwmon@vger.kernel.org>
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--bu7p76iJUwF9xtbTdSFxwxC2LuLpn4J93
+Content-Type: multipart/mixed; boundary="AExWweVufJfgHIjf9bR8DVNoMxCB50KlW";
+ protected-headers="v1"
+From: Florian Echtler <floe@butterbrot.org>
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ rydberg@bitmath.org, rydberg@euromail.se
+Message-ID: <0612a141-845f-c233-bfe3-5e6b0caa757a@butterbrot.org>
+Subject: Re: [RFC] adding TDM support to applesmc module?
+References: <e6b44662-8b05-fb8d-660e-77153680d11b@butterbrot.org>
+ <c88c2d6f-2ed0-0fbf-fc90-6fd113021b8d@roeck-us.net>
+In-Reply-To: <c88c2d6f-2ed0-0fbf-fc90-6fd113021b8d@roeck-us.net>
+
+--AExWweVufJfgHIjf9bR8DVNoMxCB50KlW
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Question about nct6775 and w83627ehf
-Message-Id: <48F7D8C9-21F9-4439-9069-34C05FBCF6A7@redfish-solutions.com>
-Date: Thu, 15 Jun 2017 16:34:45 -0600
-Cc: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
 
-Hi.
+On 25.05.2017 03:02, Guenter Roeck wrote:
+> On 05/09/2017 02:26 AM, Florian Echtler wrote:
+>> a brief question: I've recently found out how to enable Target Display=
+ Mode
+>> (i.e., use the iMac as a display for an external video source) when ru=
+nning
+>> Linux, namely by writing to some specific SMC keys.
+>>
+>> Right now, this involves an ugly hacked userspace tool that can't coex=
+ist with
+>> applesmc, so I'd like to do this "properly" and integrate support for =
+these keys
+>> in applesmc as a sysfs node.
+>>
+> Just stumbled over this and realized I never answered. I don't really h=
+ave
+> a strong opinion either way; the driver seems to be pretty much messed =
+up as-is
+> and might ask for a rework as mfd driver. Adding another attribute woul=
+d not make
+> that any worse. I'd expect Henrik to agree to any changes, though.
 
-I’m working on a platform that uses the nct6775, and if I load a generic “everything and the kitchen since” kernel on it, then the w83627ehf module ends up claiming the nct6775 chipset.
+After a bit more research, I've found that we will probably need a separa=
+te ACPI
+platform driver anyway. So my current approach would be to modify applesm=
+c only
+minimally to export the applesmc_{read,write,has}_key functions, and then=
+ call
+those functions from the platform driver when the display hotplug event h=
+appens.
 
-My understanding was that the nct6775 driver supplants the w83627ehf for supporting the nct6775/6.
+Would this be feasible? AFAICT the applesmc functions already perform pro=
+per
+locking internally, so it shouldn't be an issue to call them from another=
 
-But if that’s the case, shouldn’t ec3e5a16446fef1891611fe3bdfa5954d1ddf5e4 have been partially backed out?
+driver, correct?
 
-Well, there would have been a few others, too, I guess:
+Best, Florian
+--=20
+SENT FROM MY DEC VT50 TERMINAL
 
-d42e869acf0da4502c452b786dee35f0ecf4cbc8
 
-ad77c3e1808f07fa70f707b1c92a683b7c7d3f85
+--AExWweVufJfgHIjf9bR8DVNoMxCB50KlW--
 
-585c0fd8216e0c9f98e2434092af7ec0f999522d
+--bu7p76iJUwF9xtbTdSFxwxC2LuLpn4J93
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-33fa9b620409edfc71aa6cf01a51f990fbe46ab8
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
 
-What’s the chance of the nct6775 stuff all getting scrubbed out?
+iEYEARECAAYFAllDlAIACgkQ7CzyshGvatigVwCdETvodZ/lOYV8ILTJGdaIMHFG
+0PAAoMXzBk7ZdCoX+l3Ht5acDWGT2lIz
+=1HXg
+-----END PGP SIGNATURE-----
 
-Thanks,
-
--Philip
-
+--bu7p76iJUwF9xtbTdSFxwxC2LuLpn4J93--
