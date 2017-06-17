@@ -1,53 +1,38 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:44311 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750765AbdFCNxK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Jun 2017 09:53:10 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.12-rc4
-Date: Sat,  3 Jun 2017 06:53:08 -0700
-Message-Id: <1496497988-12638-1-git-send-email-linux@roeck-us.net>
+Received: from forward1j.cmail.yandex.net ([5.255.227.19]:49905 "EHLO
+        forward1j.cmail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1752027AbdFQOms (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 17 Jun 2017 10:42:48 -0400
+From: Evgeniy Polyakov <zbr@ioremap.net>
+To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+In-Reply-To: <20170614215944.24984-1-jaghu@google.com>
+References: <20170614215944.24984-1-jaghu@google.com>
+Subject: Re: [PATCH linux v1 0/3] Export 1-wire thermal sensors as hwmon device
+MIME-Version: 1.0
+Message-Id: <3137281497710254@web33j.yandex.ru>
+Date: Sat, 17 Jun 2017 17:37:34 +0300
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Hi
 
-Please pull hwmon fixes for Linux v4.12-rc4 from signed tag:
+15.06.2017, 00:59, "Jaghathiswari Rankappagounder Natarajan" <jaghu@google.com>:
+> Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
+> sensor under it is already configured against the Linux 1-wire driver
+> (called w1). They have a sysfs file(e.g.
+> /sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
+> runs code to read the temperature. We'd like the temperatures to show up in
+> hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
+>
+> This patchset is based on linux mainline version v4.10.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.12-rc4
+Looks good to me, thank you.
 
-Thanks,
-Guenter
-------
-
-The following changes since commit 08332893e37af6ae779367e78e444f8f9571511d:
-
-  Linux 4.12-rc2 (2017-05-21 19:30:23 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.12-rc4
-
-for you to fetch changes up to 5f348fa35a28b19cf7ee1eaa420757341a724c86:
-
-  hwmon: (aspeed-pwm-tacho) make fan/pwm names start with index 1 (2017-06-03 03:55:43 -0700)
-
-----------------------------------------------------------------
-Couple of patches for the aspeed pwm fan driver
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (aspeed-pwm-tacho) Select REGMAP
-
-Patrick Venture (1):
-      hwmon: (aspeed-pwm-tacho) On read failure return -ETIMEDOUT
-
-Stefan Schaeckeler (2):
-      hwmon: (aspeed-pwm-tacho) Call of_node_put() on a node not claimed
-      hwmon: (aspeed-pwm-tacho) make fan/pwm names start with index 1
-
- drivers/hwmon/Kconfig            |  1 +
- drivers/hwmon/aspeed-pwm-tacho.c | 65 +++++++++++++++++++++-------------------
- 2 files changed, 36 insertions(+), 30 deletions(-)
+Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
