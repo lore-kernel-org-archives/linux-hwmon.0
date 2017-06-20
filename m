@@ -7,26 +7,46 @@ Cc: jdelvare@suse.com, benh@kernel.crashing.org, paulus@samba.org,
         linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
         ego@linux.vnet.ibm.com, linux-hwmon@vger.kernel.org,
         Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Subject: [PATCH V2 0/2] hwmon: (ibmpowernv) Add support for current(A) sensors
-Date: Tue, 20 Jun 2017 10:38:11 +0530
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <1497935293-31618-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+Subject: [PATCH V2 2/2] hwmon: (ibmpowernv) Add current(A) sensor
+Date: Tue, 20 Jun 2017 10:38:13 +0530
+In-Reply-To: <1497935293-31618-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+References: <1497935293-31618-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+Message-Id: <1497935293-31618-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-The first patch from Cedric in the patchset cleans up the driver to
-provide a neater way to define new sensor types. The second patch adds
-current sensor.
+This patch exports current(A) sensors in inband sensors copied to
+main memory by OCC.
 
-Cédric Le Goater (1):
-  hwmon: (ibmpowernv) introduce a legacy_compatibles array
+Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+---
+Changes from V1:
+- Rebased on top of Cedric's patch to remove legay-compatible type for
+  the current(A) sensor.
 
-Shilpasri G Bhat (1):
-  hwmon: (ibmpowernv) Add current(A) sensor
+ drivers/hwmon/ibmpowernv.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- drivers/hwmon/ibmpowernv.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index 6d8909c..9b11b13 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -50,6 +50,7 @@ enum sensors {
+ 	TEMP,
+ 	POWER_SUPPLY,
+ 	POWER_INPUT,
++	CURRENT,
+ 	MAX_SENSOR_TYPE,
+ };
+ 
+@@ -75,7 +76,8 @@ enum sensors {
+ 	{ "fan"   },
+ 	{ "temp"  },
+ 	{ "in"    },
+-	{ "power" }
++	{ "power" },
++	{ "curr"  },
+ };
+ 
+ struct sensor_data {
 -- 
 1.8.3.1
