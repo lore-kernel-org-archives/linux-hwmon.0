@@ -1,114 +1,43 @@
-Return-Path: <clg@kaod.org>
-Return-path: <clg@kaod.org>
-Subject: Re: [PATCH V2 1/2] hwmon: (ibmpowernv) introduce a legacy_compatibles
- array
-To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>, linux@roeck-us.net,
- stewart@linux.vnet.ibm.com
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:59162 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751144AbdFTUx1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 20 Jun 2017 16:53:27 -0400
+Date: Tue, 20 Jun 2017 13:53:24 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Cc: clg@kaod.org, stewart@linux.vnet.ibm.com, jdelvare@suse.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        svaidy@linux.vnet.ibm.com, ego@linux.vnet.ibm.com,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH V2 0/2] hwmon: (ibmpowernv) Add support for current(A)
+ sensors
+Message-ID: <20170620205324.GA28761@roeck-us.net>
 References: <1497935293-31618-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <1497935293-31618-2-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <3b82267d-c647-d523-12d8-496378ab240b@kaod.org>
- <5cc575c8-246c-9559-e990-348b13e9ddd3@linux.vnet.ibm.com>
-Cc: jdelvare@suse.com, benh@kernel.crashing.org, paulus@samba.org,
- mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, svaidy@linux.vnet.ibm.com,
- ego@linux.vnet.ibm.com, linux-hwmon@vger.kernel.org
-From: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-Message-ID: <568198ed-78e4-bd9d-3dad-0a8954bb97d1@kaod.org>
-Date: Tue, 20 Jun 2017 09:55:58 +0200
 MIME-Version: 1.0
-In-Reply-To: <5cc575c8-246c-9559-e990-348b13e9ddd3@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <1497935293-31618-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 06/20/2017 09:15 AM, Shilpasri G Bhat wrote:
+On Tue, Jun 20, 2017 at 10:38:11AM +0530, Shilpasri G Bhat wrote:
+> The first patch from Cedric in the patchset cleans up the driver to
+> provide a neater way to define new sensor types. The second patch adds
+> current sensor.
 > 
+> C�dric Le Goater (1):
+>   hwmon: (ibmpowernv) introduce a legacy_compatibles array
 > 
-> On 06/20/2017 11:36 AM, Cédric Le Goater wrote:
->> On 06/20/2017 07:08 AM, Shilpasri G Bhat wrote:
->>> From: Cédric Le Goater <clg@kaod.org>
->>>
->>> Today, the type of a PowerNV sensor system is determined with the
->>> "compatible" property for legacy Firmwares and with the "sensor-type"
->>> for newer ones. The same array of strings is used for both to do the
->>> matching and this raises some issue to introduce new sensor types.
->>>
->>> Let's introduce two different arrays (legacy and current) to make
->>> things easier for new sensor types.
->>>
->>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->>> Tested-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
->>
->> Did you test on a Tuleta (IBM Power) system ? 
+> Shilpasri G Bhat (1):
+>   hwmon: (ibmpowernv) Add current(A) sensor
 > 
-> I have tested this patch on P9 FSP and Firestone.
 
-OK. I just gave it a try on a Tuleta, P8 FSP, IBM Power system
-Looks good.
+Series applied to hwmon-next.
 
 Thanks,
-
-C.
-
-> 
->>
->> Thanks,
->>
->> C. 
->>
->>> ---
->>>  drivers/hwmon/ibmpowernv.c | 26 ++++++++++++++++++--------
->>>  1 file changed, 18 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
->>> index 862b832..6d8909c 100644
->>> --- a/drivers/hwmon/ibmpowernv.c
->>> +++ b/drivers/hwmon/ibmpowernv.c
->>> @@ -55,17 +55,27 @@ enum sensors {
->>>  
->>>  #define INVALID_INDEX (-1U)
->>>  
->>> +/*
->>> + * 'compatible' string properties for sensor types as defined in old
->>> + * PowerNV firmware (skiboot). These are ordered as 'enum sensors'.
->>> + */
->>> +static const char * const legacy_compatibles[] = {
->>> +	"ibm,opal-sensor-cooling-fan",
->>> +	"ibm,opal-sensor-amb-temp",
->>> +	"ibm,opal-sensor-power-supply",
->>> +	"ibm,opal-sensor-power"
->>> +};
->>> +
->>>  static struct sensor_group {
->>> -	const char *name;
->>> -	const char *compatible;
->>> +	const char *name; /* matches property 'sensor-type' */
->>>  	struct attribute_group group;
->>>  	u32 attr_count;
->>>  	u32 hwmon_index;
->>>  } sensor_groups[] = {
->>> -	{"fan", "ibm,opal-sensor-cooling-fan"},
->>> -	{"temp", "ibm,opal-sensor-amb-temp"},
->>> -	{"in", "ibm,opal-sensor-power-supply"},
->>> -	{"power", "ibm,opal-sensor-power"}
->>> +	{ "fan"   },
->>> +	{ "temp"  },
->>> +	{ "in"    },
->>> +	{ "power" }
->>>  };
->>>  
->>>  struct sensor_data {
->>> @@ -239,8 +249,8 @@ static int get_sensor_type(struct device_node *np)
->>>  	enum sensors type;
->>>  	const char *str;
->>>  
->>> -	for (type = 0; type < MAX_SENSOR_TYPE; type++) {
->>> -		if (of_device_is_compatible(np, sensor_groups[type].compatible))
->>> +	for (type = 0; type < ARRAY_SIZE(legacy_compatibles); type++) {
->>> +		if (of_device_is_compatible(np, legacy_compatibles[type]))
->>>  			return type;
->>>  	}
->>>  
->>>
->>
-> 
+Guenter
