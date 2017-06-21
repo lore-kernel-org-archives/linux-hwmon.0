@@ -1,136 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55986 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752999AbdFUBwJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Jun 2017 21:52:09 -0400
-Subject: Re: [PATCH 2/2] hwmon: (aspeed-pwm-tacho) Poll for fan_tach instead
- of sleep
-To: Patrick Venture <venture@google.com>
-Cc: Joel Stanley <joel@jms.id.au>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, Rick Altherr <raltherr@google.com>,
-        Emily Shaffer <emilyshaffer@google.com>,
-        Peter Hanson <peterh@google.com>
-References: <20170621011228.25128-1-venture@google.com>
- <20170621011228.25128-2-venture@google.com>
- <9643df56-af69-ea5e-ce94-0609e6a9d70f@roeck-us.net>
- <CAO=notzKsE_vASYJDTtKtC4gGdDbtjWAweZf9wXgt49MmjmUnA@mail.gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <640351ac-2a23-031a-c54e-bfeafecc22af@roeck-us.net>
-Date: Tue, 20 Jun 2017 18:52:07 -0700
+Received: from ewout01.mycci.net ([66.60.130.50]:44596 "EHLO ewout01.mycci.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752068AbdFUVwA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Jun 2017 17:52:00 -0400
+Received: from mail.cpinternet.com ([209.240.224.81])
+          by ewout01.mycci.net ({dfaaa318-551d-4a0a-8038-7c31cf31c4f6})
+          via TCP (outbound) with ESMTP id 20170621211559951_0000
+          for <linux-hwmon@vger.kernel.org>;
+          Wed, 21 Jun 2017 14:15:59 -0700
+Received: from [10.4.0.103] (unverified [73.164.78.214])
+        by cpinternet.com (SurgeMail 3.8t) with ESMTP id 2421718-1881964
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Jun 2017 16:15:56 -0500 CDT
+Subject: [PATCH] w83627hf.c removed deprecated
+References: <f7bf84dc-5645-17f2-a3f0-7283373229ff@isd.net>
+To: linux-hwmon@vger.kernel.org
+From: Chris Sorenson <csoren@isd.net>
+Message-ID: <fd80e0df-cf35-fcfc-4d9d-fd6351f79b69@isd.net>
+Date: Wed, 21 Jun 2017 16:08:03 -0500
 MIME-Version: 1.0
-In-Reply-To: <CAO=notzKsE_vASYJDTtKtC4gGdDbtjWAweZf9wXgt49MmjmUnA@mail.gmail.com>
+In-Reply-To: <f7bf84dc-5645-17f2-a3f0-7283373229ff@isd.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/20/2017 06:42 PM, Patrick Venture wrote:
-> On Tue, Jun 20, 2017 at 6:32 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 06/20/2017 06:12 PM, Patrick Venture wrote:
->>>
->>> The reference driver polled but mentioned it was possible to sleep
->>> for a computed period to know when it's ready to read.  However, polling
->>> is quick and works.  This also improves responsiveness from the driver.
->>>
->>> Testing: tested on ast2400 on quanta-q71l
->>>
->>> Signed-off-by: Patrick Venture <venture@google.com>
->>> ---
->>>    drivers/hwmon/aspeed-pwm-tacho.c | 23 +++++++++++++++++------
->>>    1 file changed, 17 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c
->>> b/drivers/hwmon/aspeed-pwm-tacho.c
->>> index b2ab5612d8a4..a31d2648fb3a 100644
->>> --- a/drivers/hwmon/aspeed-pwm-tacho.c
->>> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
->>> @@ -163,6 +163,9 @@
->>>    #define M_TACH_UNIT 0x00c0
->>>    #define INIT_FAN_CTRL 0xFF
->>>    +/* How many times we poll the fan_tach controller for rpm data. */
->>> +#define FAN_TACH_RPM_TIMEOUT 25
->>> +
->>
->>
->> Not such a good idea. It means that the poll timeout depends on the local
->> CPU speed.
->> At some point, with some CPUs, this is going to fail.
->>
->>
->>>    struct aspeed_pwm_tacho_data {
->>>          struct regmap *regmap;
->>>          unsigned long clk_freq;
->>> @@ -508,7 +511,7 @@ static u32
->>> aspeed_get_fan_tach_ch_measure_period(struct aspeed_pwm_tacho_data
->>>    static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data
->>> *priv,
->>>                                        u8 fan_tach_ch)
->>>    {
->>> -       u32 raw_data, tach_div, clk_source, sec, val;
->>> +       u32 raw_data, tach_div, clk_source, sec, val, timeout;
->>>          u8 fan_tach_ch_source, type, mode, both;
->>>          regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0);
->>> @@ -517,12 +520,20 @@ static int aspeed_get_fan_tach_ch_rpm(struct
->>> aspeed_pwm_tacho_data *priv,
->>>          fan_tach_ch_source = priv->fan_tach_ch_source[fan_tach_ch];
->>>          type = priv->pwm_port_type[fan_tach_ch_source];
->>>    -     sec = (1000 / aspeed_get_fan_tach_ch_measure_period(priv, type));
->>> -       msleep(sec);
->>> -
->>>          regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
->>> -       if (!(val & RESULT_STATUS_MASK))
->>> -               return -ETIMEDOUT;
->>> +       /*
->>> +        * Instead of sleeping first, poll register for result.
->>> +        * This is based on the reference driver's approach which expects
->>> to
->>> +        * receive a value quickly.
->>> +        */
->>> +       timeout = 0;
->>> +       while (!(val & RESULT_STATUS_MASK)) {
->>> +               timeout++;
->>> +               if (timeout > FAN_TACH_RPM_TIMEOUT)
->>> +                       return -ETIMEDOUT;
->>> +
->>> +               regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
->>> +       }
->>
->>
->> No hot loop, please. Please use usleep_range() or similar within the loop,
->> and a well defined timeout.
->>
-> 
-> Thanks, that's a good call.
-> 
-> I'll implement a variation in the morning and test it to see if there
-> are any subtle changes required and try to pick good ranges or
-> something similar.  We need responsiveness down to under 0.0125s so
+Replaces a call to deprecated function hwmon_device_register() -----
 
-That is forever ;-). 12.5 ms -> picking something like a 500 uS sleep period
-for regmap_read_poll_timeout() and the old maximum sleep time for its
-timeout_us parameter should do it.
+Signed-off-by: Chris Sorenson <csoren@isd.net>
 
-Guenter
+Changed to call hwmon_device_register_with_info() instead of
+hwmon_device_register(), which is deprecated.
 
-> eight can be read sequentially ten times per second.  The controller
-> itself actually seems to internally cache a value and only gets
-> updated once ever 0.08s.  Just as an aside.
-> 
-> I'll check out "regmap_read_poll_timeout" as well per follow-on email.
-> 
->> Guenter
->>
->>
->>>          raw_data = val & RESULT_VALUE_MASK;
->>>          tach_div = priv->type_fan_tach_clock_division[type];
->>>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+modified:   drivers/hwmon/w83627hf.c
+
+diff --git a/drivers/hwmon/w83627hf.c b/drivers/hwmon/w83627hf.c
+index 8ac89d0..fbc5d18 100644
+--- a/drivers/hwmon/w83627hf.c
++++ b/drivers/hwmon/w83627hf.c
+@@ -1569,7 +1569,8 @@ static int w83627hf_probe(struct platform_device
+*pdev)
+                         goto error;
+         }
+
+-       data->hwmon_dev = hwmon_device_register(dev);
++       data->hwmon_dev =
++               hwmon_device_register_with_info(dev, NULL, NULL, NULL,
+NULL);
+         if (IS_ERR(data->hwmon_dev)) {
+                 err = PTR_ERR(data->hwmon_dev);
+                 goto error;
+
 
