@@ -1,21 +1,21 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51036 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1754007AbdFVWs6 (ORCPT
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34247 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1753991AbdFVWsu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Jun 2017 18:48:58 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v5MMhmwu049646
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:56 -0400
-Received: from e31.co.us.ibm.com (e31.co.us.ibm.com [32.97.110.149])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2b8pc5s852-1
+        Thu, 22 Jun 2017 18:48:50 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v5MMhm0s067596
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:50 -0400
+Received: from e35.co.us.ibm.com (e35.co.us.ibm.com [32.97.110.153])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2b8mcb5wa9-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:56 -0400
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:49 -0400
 Received: from localhost
-        by e31.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Thu, 22 Jun 2017 16:48:55 -0600
+        Thu, 22 Jun 2017 16:48:48 -0600
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
@@ -24,569 +24,316 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
         andrew@aj.id.au, eajames@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH 5/7] drivers/hwmon/occ: Add sensor attributes and register hwmon device
-Date: Thu, 22 Jun 2017 17:48:34 -0500
+Subject: [PATCH 2/7] drivers/hwmon/occ: Add command transport method for P8 and P9
+Date: Thu, 22 Jun 2017 17:48:31 -0500
 In-Reply-To: <1498171716-26620-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1498171716-26620-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1498171716-26620-6-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1498171716-26620-3-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Setup the sensor attributes for every OCC sensor found by the first poll
-response. Register the attributes with hwmon. Add hwmon documentation
-for the driver.
+For the P8 OCC, add the procedure to send a command to the OCC over I2C
+bus. This involves writing the OCC command registers with serial
+communication operations (SCOMs) interpreted by the I2C slave. For the
+P9 OCC, add a procedure to use the OCC in-kernel API to send a command
+to the OCC through the SBE engine.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- Documentation/hwmon/occ    |  84 ++++++++++
- drivers/hwmon/occ/common.c | 395 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/hwmon/occ/common.h |  14 ++
- 3 files changed, 493 insertions(+)
- create mode 100644 Documentation/hwmon/occ
+ drivers/hwmon/occ/common.h |  13 ++++
+ drivers/hwmon/occ/p8_i2c.c | 166 ++++++++++++++++++++++++++++++++++++++++++++-
+ drivers/hwmon/occ/p9_sbe.c |  66 +++++++++++++++++-
+ 3 files changed, 243 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/occ b/Documentation/hwmon/occ
-new file mode 100644
-index 0000000..85173f2
---- /dev/null
-+++ b/Documentation/hwmon/occ
-@@ -0,0 +1,84 @@
-+Kernel driver occ-hwmon
-+=======================
-+
-+Supported chips:
-+  * POWER8
-+  * POWER9
-+
-+Author: Eddie James <eajames@us.ibm.com>
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for the On-Chip Controller (OCC)
-+embedded on POWER processors. The OCC is a device that collects and aggregates
-+sensor data from the processor and the system. The OCC can provide the raw
-+sensor data as well as perform thermal and power management on the system.
-+
-+The P8 version of this driver is a client driver of I2C. It will be probed
-+automatically if an "ibm,p8-occ-hwmon" compatible device is found under the
-+appropriate I2C bus node in the device-tree.
-+
-+The P9 version of this driver is a client driver of the FSI-based OCC driver.
-+It will be probed automatically if an "ibm,p9-occ-hwmon" compatible device is
-+found under the appropriate OCC device node in the device-tree. However, due
-+to the way FSI bus probes it's client device drivers, the probe during FSI
-+scan may fail by design. In that case, the P9 OCC hwmon driver must be
-+instantiated explicitly.
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. All attributes are read-only unless
-+specified.
-+
-+temp[1-n]_label		OCC sensor id.
-+temp[1-n]_input		Measured temperature in millidegrees C.
-+[with temperature sensor version 2+]
-+    temp[1-n]_fru_type		Given FRU (Field Replaceable Unit) type.
-+
-+freq[1-n]_label		OCC sensor id.
-+freq[1-n]_input		Measured frequency.
-+
-+power[1-n]_label	OCC sensor id.
-+power[1-n]_input	Measured power in watts.
-+power[1-n]_update_tag	Number of 250us samples represented in accumulator.
-+power[1-n]_accumulator	Accumulation of 250us power readings.
-+[with power sensor version 2+]
-+    power[1-n]_function_id	Identifies what the power reading is for.
-+    power[1-n]_apss_channel	Indicates APSS channel.
-+
-+[power version 0xa0 only]
-+power1_label			OCC sensor id.
-+power1_system_update_time	Time in us that the system power is read.
-+power1_system_input		Most recent system power reading in watts.
-+power1_system_update_tag	Number of samples in system accumulator.
-+power1_system_accumulator	Accumulation of system power readings.
-+power1_proc_update_time		Time in us that the processor power is read.
-+power1_proc_input		Most recent processor power reading in watts.
-+power1_proc_update_tag		Number of samples in processor accumulator.
-+power1_proc_accumulator		Accumulation of processor power readings.
-+power1_vdd_input		Most recent proc Vdd power reading in watts.
-+power1_vdd_update_tag		Number of samples in processor Vdd accumulator.
-+power1_vdd_accumulator		Accumulation of processor Vdd power readings.
-+power1_vdn_input		Most recent proc Vdn power reading in watts.
-+power1_vdn_update_tag		Number of samples in processor Vdn accumulator.
-+power1_vnd_accumulator		Accumulation of processor Vdn power readings.
-+
-+caps1_current		Current OCC power cap in watts.
-+caps1_reading		Current system output power in watts.
-+caps1_norm		Power cap without redundant power.
-+caps1_max		Maximum power cap.
-+[caps version 1 and 2 only]
-+    caps1_min		Minimum power cap.
-+[caps version 3+]
-+    caps1_min_hard		Hard minimum cap that can be set and held.
-+    caps1_min_soft		Soft minimum cap below hard, not guaranteed.
-+caps1_user		The powercap specified by the user. Will be 0 if no
-+			user powercap exists. This attribute is read-write.
-+[caps version 1+]
-+    caps1_user_source	Indicates how the user power limit was set.
-+
-+extn[1-n]_label		ASCII id or sensor id.
-+extn[1-n]_flags		Indicates type of label attribute.
-+extn[1-n]_input		Data.
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index b55813a3..eb1f1a1 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -615,6 +615,384 @@ static ssize_t occ_show_extended(struct device *dev,
- 	return rc;
- }
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index dca642a..0c3f26f 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -15,6 +15,19 @@
  
-+/* Some helper macros to make it easier to define an occ_attribute. Since these
-+ * are dynamically allocated, we shouldn't use the existing kernel macros which
-+ * stringify the name argument.
-+ */
-+#define ATTR_OCC(_name, _mode, _show, _store) {				\
-+	.attr	= {							\
-+		.name = _name,						\
-+		.mode = VERIFY_OCTAL_PERMISSIONS(_mode),		\
-+	},								\
-+	.show	= _show,						\
-+	.store	= _store,						\
-+}
+ #define OCC_RESP_DATA_BYTES		4089
+ 
++#define OCC_TIMEOUT_MS			5000
++#define OCC_CMD_IN_PRG_MS		100
 +
-+#define SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index) {	\
-+	.dev_attr	= ATTR_OCC(_name, _mode, _show, _store),	\
-+	.index		= _index,					\
-+	.nr		= _nr,						\
-+}
++/* OCC return codes */
++#define RESP_RETURN_CMD_IN_PRG		0xFF
++#define RESP_RETURN_SUCCESS		0
++#define RESP_RETURN_CMD_INVAL		0x11
++#define RESP_RETURN_CMD_LEN		0x12
++#define RESP_RETURN_DATA_INVAL		0x13
++#define RESP_RETURN_CHKSUM		0x14
++#define RESP_RETURN_OCC_ERR		0x15
++#define RESP_RETURN_STATE		0x16
 +
-+#define OCC_INIT_ATTR(_name, _mode, _show, _store, _nr, _index)		\
-+	((struct sensor_device_attribute_2)				\
-+		SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index))
-+
-+/* Allocate and instatiate sensor_device_attribute_2s. It's most efficient to
-+ * use our own instead of the built-in hwmon attribute types.
-+ */
-+static int occ_setup_sensor_attrs(struct occ *occ)
+ /* Same response format for all OCC versions.
+  * Allocate the largest possible response.
+  */
+diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+index 5075146..d6d70ce 100644
+--- a/drivers/hwmon/occ/p8_i2c.c
++++ b/drivers/hwmon/occ/p8_i2c.c
+@@ -7,6 +7,7 @@
+  * (at your option) any later version.
+  */
+ 
++#include <asm/unaligned.h>
+ #include "common.h"
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+@@ -19,9 +20,172 @@ struct p8_i2c_occ {
+ 
+ #define to_p8_i2c_occ(x)	container_of((x), struct p8_i2c_occ, occ)
+ 
++static int p8_i2c_occ_getscom(struct i2c_client *client, u32 address, u8 *data)
 +{
-+	unsigned int i, s;
-+	struct device *dev = occ->bus_dev;
-+	struct occ_sensors *sensors = &occ->sensors;
-+	struct occ_attribute *attr;
-+	ssize_t (*show_temp)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_temp_1;
-+	ssize_t (*show_freq)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_freq_1;
-+	ssize_t (*show_power)(struct device *, struct device_attribute *,
-+			      char *) = occ_show_power_1;
-+	ssize_t (*show_caps)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_caps_1;
++	ssize_t rc;
++	__be64 buf_be;
++	u64 buf;
++	struct i2c_msg msgs[2];
 +
-+	occ->num_attrs = 0;
++	/* p8 i2c slave requires shift */
++	address <<= 1;
 +
-+	switch (sensors->temp.version) {
-+	case 1:
-+		occ->num_attrs += (sensors->temp.num_sensors * 2);
-+		break;
-+	case 2:
-+		occ->num_attrs += (sensors->temp.num_sensors * 3);
-+		show_temp = occ_show_temp_2;
-+		break;
-+	default:
-+		sensors->temp.num_sensors = 0;
-+	}
++	msgs[0].addr = client->addr;
++	msgs[0].flags = client->flags & I2C_M_TEN;
++	msgs[0].len = sizeof(u32);
++	msgs[0].buf = (char *)&address;
 +
-+	switch (sensors->freq.version) {
-+	case 2:
-+		show_freq = occ_show_freq_2;
-+		/* fall through */
-+	case 1:
-+		occ->num_attrs += (sensors->freq.num_sensors * 2);
-+		break;
-+	default:
-+		sensors->freq.num_sensors = 0;
-+	}
 +
-+	switch (sensors->power.version) {
-+	case 1:
-+		occ->num_attrs += (sensors->power.num_sensors * 4);
-+		break;
-+	case 2:
-+		occ->num_attrs += (sensors->power.num_sensors * 6);
-+		show_power = occ_show_power_2;
-+		break;
-+	case 0xA0:
-+		occ->num_attrs += (sensors->power.num_sensors * 15);
-+		show_power = occ_show_power_a0;
-+		break;
-+	default:
-+		sensors->power.num_sensors = 0;
-+	}
++	msgs[1].addr = client->addr;
++	msgs[1].flags = (client->flags & I2C_M_TEN) | I2C_M_RD;
++	msgs[1].len = sizeof(u64);
++	msgs[1].buf = (char *)&buf_be;
 +
-+	switch (sensors->caps.version) {
-+	case 1:
-+		occ->num_attrs += (sensors->caps.num_sensors * 6);
-+		break;
-+	case 2:
-+		occ->num_attrs += (sensors->caps.num_sensors * 7);
-+		show_caps = occ_show_caps_2;
-+		break;
-+	case 3:
-+		occ->num_attrs += (sensors->caps.num_sensors * 8);
-+		show_caps = occ_show_caps_3;
-+		break;
-+	default:
-+		sensors->caps.num_sensors = 0;
-+	}
++	rc = i2c_transfer(client->adapter, msgs, 2);
++	if (rc < 0)
++		return rc;
 +
-+	switch (sensors->extended.version) {
-+	case 1:
-+		occ->num_attrs += sensors->extended.num_sensors;
-+		break;
-+	default:
-+		sensors->extended.num_sensors = 0;
-+	}
-+
-+	occ->attrs = devm_kzalloc(dev, sizeof(*occ->attrs) * occ->num_attrs,
-+				  GFP_KERNEL);
-+	if (!occ->attrs)
-+		return -ENOMEM;
-+
-+	/* null-terminated list */
-+	occ->group.attrs = devm_kzalloc(dev, sizeof(*occ->group.attrs) *
-+					occ->num_attrs + 1, GFP_KERNEL);
-+	if (!occ->group.attrs)
-+		return -ENOMEM;
-+
-+	attr = occ->attrs;
-+
-+	for (i = 0; i < sensors->temp.num_sensors; ++i) {
-+		s = i + 1;
-+
-+		snprintf(attr->name, sizeof(attr->name), "temp%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
-+					     0, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "temp%d_input", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
-+					     1, i);
-+		attr++;
-+
-+		if (sensors->temp.version > 1) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "temp%d_fru_type", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_temp, NULL, 2, i);
-+			attr++;
-+		}
-+	}
-+
-+	for (i = 0; i < sensors->freq.num_sensors; ++i) {
-+		s = i + 1;
-+
-+		snprintf(attr->name, sizeof(attr->name), "freq%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
-+					     0, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "freq%d_input", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
-+					     1, i);
-+		attr++;
-+	}
-+
-+	if (sensors->power.version == 0xA0) {
-+		for (i = 0; i < sensors->power.num_sensors; ++i) {
-+			s = i + 1;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 0, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_system_update_time", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 1, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_system_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 2, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_system_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 3, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_system_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 4, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_proc_update_time", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 5, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_proc_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 6, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_proc_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 7, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_proc_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 8, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdd_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 9, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdd_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 10, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdd_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 11, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdn_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 12, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdn_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 13, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_vdn_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 14, i);
-+			attr++;
-+		}
-+	} else {
-+		for (i = 0; i < sensors->power.num_sensors; ++i) {
-+			s = i + 1;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 0, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 1, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 2, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 3, i);
-+			attr++;
-+
-+			if (sensors->power.version > 1) {
-+				snprintf(attr->name, sizeof(attr->name),
-+					 "power%d_function_id", s);
-+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+							     show_power, NULL,
-+							     4, i);
-+				attr++;
-+
-+				snprintf(attr->name, sizeof(attr->name),
-+					 "power%d_apss_channel", s);
-+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+							     show_power, NULL,
-+							     5, i);
-+				attr++;
-+			}
-+		}
-+	}
-+
-+	for (i = 0; i < sensors->caps.num_sensors; ++i) {
-+		s = i + 1;
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_current", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     0, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_reading", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     1, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_norm", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     2, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_max", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     3, i);
-+		attr++;
-+
-+		if (sensors->caps.version > 2) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_min_hard", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 4, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_min_soft", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 7, i);
-+			attr++;
-+		} else {
-+			snprintf(attr->name, sizeof(attr->name), "caps%d_min",
-+				 s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 4, i);
-+			attr++;
-+		}
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_user", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0644, show_caps,
-+					     occ_store_caps_user, 5, i);
-+		attr++;
-+
-+		if (sensors->caps.version > 1) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_user_source", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 6, i);
-+			attr++;
-+		}
-+	}
-+
-+	for (i = 0; i < sensors->extended.num_sensors; ++i) {
-+		s = i + 1;
-+
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 0, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_flags", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 1, i);
-+		attr++;
-+
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_input", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 2, i);
-+		attr++;
-+	}
-+
-+	/* put the sensors in the group */
-+	for (i = 0; i < occ->num_attrs; ++i)
-+		occ->group.attrs[i] = &occ->attrs[i].sensor.dev_attr.attr;
++	buf = be64_to_cpu(buf_be);
++	memcpy(data, &buf, sizeof(u64));
 +
 +	return 0;
 +}
 +
- /* only need to do this once at startup, as OCC won't change sensors on us */
- static void occ_parse_poll_response(struct occ *occ)
++static int p8_i2c_occ_putscom(struct i2c_client *client, u32 address, u8 *data)
++{
++	u32 buf[3];
++	ssize_t rc;
++
++	/* p8 i2c slave requires shift */
++	address <<= 1;
++
++	buf[0] = address;
++	memcpy(&buf[1], &data[4], sizeof(u32));
++	memcpy(&buf[2], data, sizeof(u32));
++
++	rc = i2c_master_send(client, (const char *)buf, sizeof(buf));
++	if (rc < 0)
++		return rc;
++	else if (rc != sizeof(buf))
++		return -EIO;
++
++	return 0;
++}
++
++static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
++				  u32 data0, u32 data1)
++{
++	u8 buf[8];
++
++	memcpy(buf, &data0, 4);
++	memcpy(buf + 4, &data1, 4);
++
++	return p8_i2c_occ_putscom(client, address, buf);
++}
++
++static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
++				 u8 *data)
++{
++	__be32 data0, data1;
++
++	memcpy(&data0, data, 4);
++	memcpy(&data1, data + 4, 4);
++
++	return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
++				      be32_to_cpu(data1));
++}
++
+ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
  {
-@@ -667,6 +1045,7 @@ int occ_setup(struct occ *occ, const char *name)
- 	int rc;
- 
- 	mutex_init(&occ->lock);
-+	occ->groups[0] = &occ->group;
- 
- 	/* no need to lock */
- 	rc = occ_poll(occ);
-@@ -678,5 +1057,21 @@ int occ_setup(struct occ *occ, const char *name)
- 
- 	occ_parse_poll_response(occ);
- 
-+	rc = occ_setup_sensor_attrs(occ);
-+	if (rc) {
-+		dev_err(occ->bus_dev, "failed to setup sensor attrs: %d\n",
-+			rc);
+-	return -EOPNOTSUPP;
++	int i, rc;
++	unsigned long start;
++	u16 data_length;
++	struct p8_i2c_occ *p8_i2c_occ = to_p8_i2c_occ(occ);
++	struct i2c_client *client = p8_i2c_occ->client;
++	struct occ_response *resp = &occ->resp;
++
++	start = jiffies;
++
++	/* set sram address for command */
++	rc = p8_i2c_occ_putscom_u32(client, 0x6B070, 0xFFFF6000, 0);
++	if (rc)
++		goto err;
++
++	/* write command (must already be BE), i2c expects cpu-endian */
++	rc = p8_i2c_occ_putscom_be(client, 0x6B075, cmd);
++	if (rc)
++		goto err;
++
++	/* trigger OCC attention */
++	rc = p8_i2c_occ_putscom_u32(client, 0x6B035, 0x20010000, 0);
++	if (rc)
++		goto err;
++
++retry:
++	/* set sram address for response */
++	rc = p8_i2c_occ_putscom_u32(client, 0x6B070, 0xFFFF7000, 0);
++	if (rc)
++		goto err;
++
++	/* read response */
++	rc = p8_i2c_occ_getscom(client, 0x6B075, (u8 *)resp);
++	if (rc)
++		goto err;
++
++	/* check the OCC response */
++	switch (resp->return_status) {
++	case RESP_RETURN_CMD_IN_PRG:
++		if (time_after(jiffies,
++			       start + msecs_to_jiffies(OCC_TIMEOUT_MS)))
++			rc = -EALREADY;
++		else {
++			set_current_state(TASK_INTERRUPTIBLE);
++			schedule_timeout(msecs_to_jiffies(OCC_CMD_IN_PRG_MS));
++
++			goto retry;
++		}
++		break;
++	case RESP_RETURN_SUCCESS:
++		rc = 0;
++		break;
++	case RESP_RETURN_CMD_INVAL:
++	case RESP_RETURN_CMD_LEN:
++	case RESP_RETURN_DATA_INVAL:
++	case RESP_RETURN_CHKSUM:
++		rc = -EINVAL;
++		break;
++	case RESP_RETURN_OCC_ERR:
++		rc = -EREMOTE;
++		break;
++	default:
++		rc = -EFAULT;
++	}
++
++	if (rc < 0) {
++		dev_warn(&client->dev, "occ bad response: %d\n",
++			 resp->return_status);
 +		return rc;
 +	}
 +
-+	occ->hwmon = devm_hwmon_device_register_with_groups(occ->bus_dev, name,
-+							    occ, occ->groups);
-+	if (IS_ERR(occ->hwmon)) {
-+		rc = PTR_ERR(occ->hwmon);
-+		dev_err(occ->bus_dev, "failed to register hwmon device: %d\n",
-+			rc);
-+		return rc;
++	data_length = get_unaligned_be16(&resp->data_length_be);
++	if (data_length > OCC_RESP_DATA_BYTES) {
++		dev_warn(&client->dev, "occ bad data length: %d\n",
++			 data_length);
++		return -EDOM;
 +	}
 +
- 	return 0;
++	/* read remaining response */
++	for (i = 8; i < data_length + 7; i += 8) {
++		rc = p8_i2c_occ_getscom(client, 0x6B075, ((u8 *)resp) + i);
++		if (rc)
++			goto err;
++	}
++
++	return data_length + 7;
++
++err:
++	dev_err(&client->dev, "i2c scom op failed rc: %d\n", rc);
++	return rc;
  }
-diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index f4e1df0..4bcf3ca 100644
---- a/drivers/hwmon/occ/common.h
-+++ b/drivers/hwmon/occ/common.h
-@@ -94,6 +94,14 @@ struct occ_sensors {
- 	struct occ_sensor extended;
- };
  
-+/* Use our own attribute struct so we can dynamically allocate space for the
-+ * name.
-+ */
-+struct occ_attribute {
-+	char name[32];
-+	struct sensor_device_attribute_2 sensor;
-+};
+ static int p8_i2c_occ_probe(struct i2c_client *client,
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index 0cef428..981c53f 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -22,7 +22,71 @@ struct p9_sbe_occ {
+ 
+ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
+ {
+-	return -EOPNOTSUPP;
++	int rc;
++	unsigned long start;
++	struct occ_client *client;
++	struct occ_response *resp = &occ->resp;
++	struct p9_sbe_occ *p9_sbe_occ = to_p9_sbe_occ(occ);
 +
- struct occ {
- 	struct device *bus_dev;
- 
-@@ -105,6 +113,12 @@ struct occ {
- 
- 	unsigned long last_update;
- 	struct mutex lock;
++	start = jiffies;
 +
-+	struct device *hwmon;
-+	unsigned int num_attrs;
-+	struct occ_attribute *attrs;
-+	struct attribute_group group;
-+	const struct attribute_group *groups[2];
- };
++retry:
++	client = occ_drv_open(p9_sbe_occ->sbe, 0);
++	if (!client)
++		return -ENODEV;
++
++	/* skip first byte (sequence number), OCC driver handles it */
++	rc = occ_drv_write(client, (const char *)&cmd[1], 7);
++	if (rc < 0)
++		goto err;
++
++	rc = occ_drv_read(client, (char *)resp, sizeof(*resp));
++	if (rc < 0)
++		goto err;
++
++	occ_drv_release(client);
++
++	/* check the OCC response */
++	switch (resp->return_status) {
++	case RESP_RETURN_CMD_IN_PRG:
++		if (time_after(jiffies,
++			       start + msecs_to_jiffies(OCC_TIMEOUT_MS)))
++			rc = -EALREADY;
++		else {
++			set_current_state(TASK_INTERRUPTIBLE);
++			schedule_timeout(msecs_to_jiffies(OCC_CMD_IN_PRG_MS));
++
++			goto retry;
++		}
++		break;
++	case RESP_RETURN_SUCCESS:
++		rc = 0;
++		break;
++	case RESP_RETURN_CMD_INVAL:
++	case RESP_RETURN_CMD_LEN:
++	case RESP_RETURN_DATA_INVAL:
++	case RESP_RETURN_CHKSUM:
++		rc = -EINVAL;
++		break;
++	case RESP_RETURN_OCC_ERR:
++		rc = -EREMOTE;
++		break;
++	default:
++		rc = -EFAULT;
++	}
++
++	if (rc < 0) {
++		dev_warn(occ->bus_dev, "occ bad response: %d\n",
++			 resp->return_status);
++		return rc;
++	}
++
++	return 0;
++
++err:
++	occ_drv_release(client);
++	dev_err(occ->bus_dev, "occ bus op failed rc: %d\n", rc);
++	return rc;
+ }
  
- int occ_setup(struct occ *occ, const char *name);
+ static int p9_sbe_occ_probe(struct platform_device *pdev)
 -- 
 1.8.3.1
 
