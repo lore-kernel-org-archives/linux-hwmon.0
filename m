@@ -1,21 +1,21 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43748 "EHLO
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39360 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1754022AbdFVWtA (ORCPT
+        by vger.kernel.org with ESMTP id S1753840AbdFVWt2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Jun 2017 18:49:00 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v5MMhn4W020264
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:59 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2b8n9ekg6d-1
+        Thu, 22 Jun 2017 18:49:28 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.20/8.16.0.20) with SMTP id v5MMnHKo172879
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:49:18 -0400
+Received: from e37.co.us.ibm.com (e37.co.us.ibm.com [32.97.110.158])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2b8kjhqqs5-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:48:59 -0400
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jun 2017 18:49:17 -0400
 Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e37.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Thu, 22 Jun 2017 16:48:58 -0600
+        Thu, 22 Jun 2017 16:49:10 -0600
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
@@ -24,325 +24,281 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
         andrew@aj.id.au, eajames@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH 6/7] drivers/hwmon/occ: Add non-hwmon attributes
-Date: Thu, 22 Jun 2017 17:48:35 -0500
+Subject: [PATCH 7/7] drivers/hwmon/occ: Add error handling
+Date: Thu, 22 Jun 2017 17:48:36 -0500
 In-Reply-To: <1498171716-26620-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1498171716-26620-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1498171716-26620-7-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1498171716-26620-8-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Create device attributes for additional OCC properties that do not
-belong as hwmon sensors. These provide additional information as to the
-state of the processor and system.
+Add logic to detect a number of error scenarios on the OCC. Export any
+error through an additional non-hwmon device attribute.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- Documentation/ABI/testing/sysfs-driver-occ-hwmon |  65 +++++++++++++
- drivers/hwmon/occ/common.c                       | 114 +++++++++++++++++++++++
- drivers/hwmon/occ/common.h                       |  14 +++
- drivers/hwmon/occ/p8_i2c.c                       |   8 ++
- drivers/hwmon/occ/p9_sbe.c                       |   8 ++
- 5 files changed, 209 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-occ-hwmon
+ Documentation/ABI/testing/sysfs-driver-occ-hwmon | 12 ++++++
+ drivers/hwmon/occ/common.c                       | 53 +++++++++++++++++++++++-
+ drivers/hwmon/occ/common.h                       | 13 +++++-
+ drivers/hwmon/occ/p8_i2c.c                       | 10 ++++-
+ drivers/hwmon/occ/p9_sbe.c                       |  9 +++-
+ 5 files changed, 93 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-driver-occ-hwmon b/Documentation/ABI/testing/sysfs-driver-occ-hwmon
-new file mode 100644
-index 0000000..ddf6cd7
---- /dev/null
+index ddf6cd7..9e2be27 100644
+--- a/Documentation/ABI/testing/sysfs-driver-occ-hwmon
 +++ b/Documentation/ABI/testing/sysfs-driver-occ-hwmon
-@@ -0,0 +1,65 @@
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_active
+@@ -24,6 +24,18 @@ Description:
+ 		respectively) whether or not this OCC has limited the processor
+ 		frequency due to power usage.
+ 
++What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_error
 +Date:		June 2017
 +KernelVersion:	4.14
 +Contact:	eajames@us.ibm.com
 +Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC is in the "active" state.
++		A read-only attribute that indicates any error condition
++		observed by the OCC or detected by the driver. Reading the
++		attribute will return an integer. A positive integer indicates
++		an error response from the OCC. A negative integer indicates a
++		possible bus error or other error condition detected by the
++		driver. A "0" indicates no error.
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_dvfs_ot
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has limited the processor
-+		frequency due to over-temperature.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_dvfs_power
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has limited the processor
-+		frequency due to power usage.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_master
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC is the "master" OCC.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_mem_throttle
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not the OCC has throttled memory due
-+		to over-temperature.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_quick_drop
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has asserted the "quick
-+		power drop" signal.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_status
-+Date:		June 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates the current OCC state. The
-+		value of the attribute will be one of the following states:
-+		0: Reserved
-+		1: Standby
-+		2: Observation
-+		3: Active
-+		4: Safe
-+		5: Characterization
+ What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_master
+ Date:		June 2017
+ KernelVersion:	4.14
 diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index eb1f1a1..1645776 100644
+index 1645776..f124f87 100644
 --- a/drivers/hwmon/occ/common.c
 +++ b/drivers/hwmon/occ/common.c
-@@ -993,6 +993,102 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+@@ -11,6 +11,9 @@
+ #include "common.h"
+ #include <linux/hwmon.h>
+ 
++/* counter so we can verify against count from OCC response */
++static atomic_t occ_num_occs = ATOMIC_INIT(0);
++
+ /* OCC sensor type and version definitions */
+ 
+ struct temp_sensor_1 {
+@@ -112,6 +115,9 @@ struct extended_sensor {
+ 
+ static int occ_poll(struct occ *occ)
+ {
++	int rc;
++	struct occ_poll_response_header *header =
++		(struct occ_poll_response_header *)occ->resp.data;
+ 	u16 checksum = occ->poll_cmd_data + 1;
+ 	u8 cmd[8];
+ 
+@@ -126,7 +132,32 @@ static int occ_poll(struct occ *occ)
+ 	cmd[7] = 0;
+ 
+ 	/* mutex should already be locked if necessary */
+-	return occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd);
++	if (rc < 0)
++		return rc;
++
++	/* check for "safe" state */
++	if (header->occ_state == OCC_STATE_SAFE) {
++		if (occ->last_safe) {
++			if (time_after(jiffies,
++				       occ->last_safe + OCC_SAFE_TIMEOUT))
++				occ->error = -EHOSTDOWN;
++		} else
++			occ->last_safe = jiffies;
++	} else
++		occ->last_safe = 0;
++
++	/* verify number of present OCCs */
++	if (header->status & OCC_STAT_MASTER) {
++		if (hweight8(header->occs_present) !=
++		    atomic_read(&occ_num_occs)) {
++			occ->error = -EXDEV;
++			occ->bad_present_count++;
++		} else
++			occ->bad_present_count = 0;
++	}
++
++	return rc;
+ }
+ 
+ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+@@ -993,6 +1024,19 @@ static int occ_setup_sensor_attrs(struct occ *occ)
  	return 0;
  }
  
-+static ssize_t occ_show_status(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
++static ssize_t occ_show_error(struct device *dev,
++			      struct device_attribute *attr, char *buf)
 +{
-+	int rc;
-+	int val;
++	int error = 0;
 +	struct occ *occ = dev_get_drvdata(dev);
-+	struct occ_poll_response_header *header;
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
 +
-+	rc = occ_update_response(occ);
-+	if (rc)
-+		return rc;
++	if (occ->error_count > OCC_ERROR_COUNT_THRESHOLD || occ->last_safe ||
++	    occ->bad_present_count > OCC_ERROR_COUNT_THRESHOLD)
++		error = occ->error;
 +
-+	header = (struct occ_poll_response_header *)occ->resp.data;
-+
-+	switch (sattr->index) {
-+	case 0:
-+		val = (header->status & OCC_STAT_MASTER) ? 1 : 0;
-+		break;
-+	case 1:
-+		val = (header->status & OCC_STAT_ACTIVE) ? 1 : 0;
-+		break;
-+	case 2:
-+		val = (header->ext_status & OCC_EXT_STAT_DVFS_OT) ? 1 : 0;
-+		break;
-+	case 3:
-+		val = (header->ext_status & OCC_EXT_STAT_DVFS_POWER) ? 1 : 0;
-+		break;
-+	case 4:
-+		val = (header->ext_status & OCC_EXT_STAT_MEM_THROTTLE) ? 1 : 0;
-+		break;
-+	case 5:
-+		val = (header->ext_status & OCC_EXT_STAT_QUICK_DROP) ? 1 : 0;
-+		break;
-+	case 6:
-+		val = header->occ_state;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return snprintf(buf, PAGE_SIZE - 1, "%d\n", val);
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", error);
 +}
 +
-+static int occ_create_status_attrs(struct occ *occ)
-+{
-+	int rc, i;
-+	struct device *dev = occ->bus_dev;
-+
-+	occ->status_attrs = devm_kzalloc(dev, sizeof(*occ->status_attrs) *
-+					 OCC_NUM_STATUS_ATTRS, GFP_KERNEL);
-+	if (!occ->status_attrs)
-+		return -ENOMEM;
-+
-+	occ->status_attrs[0] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_master, 0444,
-+							    occ_show_status,
-+							    NULL, 0);
-+	occ->status_attrs[1] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_active, 0444,
-+							    occ_show_status,
-+							    NULL, 1);
-+	occ->status_attrs[2] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_dvfs_ot, 0444,
-+							    occ_show_status,
-+							    NULL, 2);
-+	occ->status_attrs[3] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_dvfs_power,
-+							    0444,
-+							    occ_show_status,
-+							    NULL, 3);
-+	occ->status_attrs[4] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_mem_throttle,
-+							    0444,
-+							    occ_show_status,
-+							    NULL, 4);
-+	occ->status_attrs[5] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_quick_drop,
-+							    0444,
-+							    occ_show_status,
-+							    NULL, 5);
-+	occ->status_attrs[6] =
-+		(struct sensor_device_attribute)SENSOR_ATTR(occ_status, 0444,
-+							    occ_show_status,
-+							    NULL, 6);
-+
-+	for (i = 0; i < OCC_NUM_STATUS_ATTRS; ++i) {
-+		rc = device_create_file(dev, &occ->status_attrs[i].dev_attr);
-+		if (rc)
-+			dev_warn(dev, "error %d creating status attr %d\n", rc,
-+				 i);
-+	}
-+
-+	return 0;
-+}
-+
- /* only need to do this once at startup, as OCC won't change sensors on us */
- static void occ_parse_poll_response(struct occ *occ)
+ static ssize_t occ_show_status(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
  {
-@@ -1073,5 +1169,23 @@ int occ_setup(struct occ *occ, const char *name)
- 		return rc;
- 	}
+@@ -1078,6 +1122,10 @@ static int occ_create_status_attrs(struct occ *occ)
+ 		(struct sensor_device_attribute)SENSOR_ATTR(occ_status, 0444,
+ 							    occ_show_status,
+ 							    NULL, 6);
++	occ->status_attrs[7] =
++		(struct sensor_device_attribute)SENSOR_ATTR(occ_error, 0444,
++							    occ_show_error,
++							    NULL, 0);
  
-+	rc = occ_create_status_attrs(occ);
-+	if (rc) {
-+		dev_err(occ->bus_dev, "failed to setup status attrs: %d\n",
-+			rc);
-+		return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+int occ_shutdown(struct occ *occ)
-+{
-+	int i;
-+
-+	for (i = 0; i < OCC_NUM_STATUS_ATTRS; ++i)
-+		device_remove_file(occ->bus_dev,
-+				   &occ->status_attrs[i].dev_attr);
+ 	for (i = 0; i < OCC_NUM_STATUS_ATTRS; ++i) {
+ 		rc = device_create_file(dev, &occ->status_attrs[i].dev_attr);
+@@ -1140,6 +1188,7 @@ int occ_setup(struct occ *occ, const char *name)
+ {
+ 	int rc;
+ 
++	atomic_inc(&occ_num_occs);
+ 	mutex_init(&occ->lock);
+ 	occ->groups[0] = &occ->group;
+ 
+@@ -1187,5 +1236,7 @@ int occ_shutdown(struct occ *occ)
+ 		device_remove_file(occ->bus_dev,
+ 				   &occ->status_attrs[i].dev_attr);
+ 
++	atomic_dec(&occ_num_occs);
 +
  	return 0;
  }
 diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index 4bcf3ca..dd23eac 100644
+index dd23eac..cd04ee0 100644
 --- a/drivers/hwmon/occ/common.h
 +++ b/drivers/hwmon/occ/common.h
-@@ -13,6 +13,8 @@
+@@ -13,10 +13,13 @@
  #include <linux/hwmon-sysfs.h>
  #include <linux/sysfs.h>
  
-+#define OCC_NUM_STATUS_ATTRS		7
+-#define OCC_NUM_STATUS_ATTRS		7
++#define OCC_ERROR_COUNT_THRESHOLD	2
 +
++#define OCC_NUM_STATUS_ATTRS		8
+ 
  #define OCC_RESP_DATA_BYTES		4089
  
++#define OCC_SAFE_TIMEOUT		msecs_to_jiffies(60000) /* 1 min */
  #define OCC_UPDATE_FREQUENCY		msecs_to_jiffies(1000)
-@@ -29,6 +31,14 @@
- #define RESP_RETURN_OCC_ERR		0x15
- #define RESP_RETURN_STATE		0x16
+ #define OCC_TIMEOUT_MS			5000
+ #define OCC_CMD_IN_PRG_MS		100
+@@ -39,6 +42,9 @@
+ #define OCC_EXT_STAT_MEM_THROTTLE	0x20
+ #define OCC_EXT_STAT_QUICK_DROP		0x10
  
-+/* OCC status bits */
-+#define OCC_STAT_MASTER			0x80
-+#define OCC_STAT_ACTIVE			0x01
-+#define OCC_EXT_STAT_DVFS_OT		0x80
-+#define OCC_EXT_STAT_DVFS_POWER		0x40
-+#define OCC_EXT_STAT_MEM_THROTTLE	0x20
-+#define OCC_EXT_STAT_QUICK_DROP		0x10
++/* OCC state enumeration */
++#define OCC_STATE_SAFE			4
 +
  /* Same response format for all OCC versions.
   * Allocate the largest possible response.
   */
-@@ -119,8 +129,12 @@ struct occ {
- 	struct occ_attribute *attrs;
- 	struct attribute_group group;
- 	const struct attribute_group *groups[2];
+@@ -132,6 +138,11 @@ struct occ {
+ 
+ 	/* non-hwmon attributes for more OCC properties */
+ 	struct sensor_device_attribute *status_attrs;
 +
-+	/* non-hwmon attributes for more OCC properties */
-+	struct sensor_device_attribute *status_attrs;
++	int error;
++	unsigned int error_count;		/* num errors observed */
++	unsigned int bad_present_count;		/* num polls w/bad num occs */
++	unsigned long last_safe;		/* time entered safe state */
  };
  
  int occ_setup(struct occ *occ, const char *name);
-+int occ_shutdown(struct occ *occ);
- 
- #endif /* OCC_COMMON_H */
 diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-index d6d70ce..cab4448 100644
+index cab4448..a915b79 100644
 --- a/drivers/hwmon/occ/p8_i2c.c
 +++ b/drivers/hwmon/occ/p8_i2c.c
-@@ -209,6 +209,13 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
- 	return occ_setup(occ, "p8_occ");
+@@ -161,7 +161,10 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 		rc = -EFAULT;
+ 	}
+ 
++	occ->error = resp->return_status;
++
+ 	if (rc < 0) {
++		occ->error_count++;
+ 		dev_warn(&client->dev, "occ bad response: %d\n",
+ 			 resp->return_status);
+ 		return rc;
+@@ -169,9 +172,11 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 
+ 	data_length = get_unaligned_be16(&resp->data_length_be);
+ 	if (data_length > OCC_RESP_DATA_BYTES) {
++		occ->error_count++;
++		occ->error = -EDOM;
+ 		dev_warn(&client->dev, "occ bad data length: %d\n",
+ 			 data_length);
+-		return -EDOM;
++		return occ->error;
+ 	}
+ 
+ 	/* read remaining response */
+@@ -181,9 +186,12 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 			goto err;
+ 	}
+ 
++	occ->error_count = 0;
+ 	return data_length + 7;
+ 
+ err:
++	occ->error_count++;
++	occ->error = rc;
+ 	dev_err(&client->dev, "i2c scom op failed rc: %d\n", rc);
+ 	return rc;
  }
- 
-+static int p8_i2c_occ_remove(struct i2c_client *client)
-+{
-+	struct occ *occ = dev_get_drvdata(&client->dev);
-+
-+	return occ_shutdown(occ);
-+}
-+
- static const struct of_device_id p8_i2c_occ_of_match[] = {
- 	{ .compatible = "ibm,p8-occ-hwmon" },
- 	{}
-@@ -224,6 +231,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
- 		.of_match_table = p8_i2c_occ_of_match,
- 	},
- 	.probe = p8_i2c_occ_probe,
-+	.remove = p8_i2c_occ_remove,
- 	.address_list = p8_i2c_occ_addr,
- };
- 
 diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 981c53f..72ee9b4 100644
+index 72ee9b4..5b5885e 100644
 --- a/drivers/hwmon/occ/p9_sbe.c
 +++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -109,6 +109,13 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
- 	return occ_setup(occ, "p9_occ");
- }
+@@ -9,6 +9,7 @@
  
-+static int p9_sbe_occ_remove(struct platform_device *pdev)
-+{
-+	struct occ *occ = platform_get_drvdata(pdev);
-+
-+	return occ_shutdown(occ);
-+}
-+
- static const struct of_device_id p9_sbe_occ_of_match[] = {
- 	{ .compatible = "ibm,p9-occ-hwmon" },
- 	{ },
-@@ -120,6 +127,7 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
- 		.of_match_table	= p9_sbe_occ_of_match,
- 	},
- 	.probe	= p9_sbe_occ_probe,
-+	.remove = p9_sbe_occ_remove,
- };
+ #include "common.h"
+ #include <linux/init.h>
++#include <linux/hwmon.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/occ.h>
+@@ -33,7 +34,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
+ retry:
+ 	client = occ_drv_open(p9_sbe_occ->sbe, 0);
+ 	if (!client)
+-		return -ENODEV;
++		return -ENODEV;		/* don't increment error counter */
  
- module_platform_driver(p9_sbe_occ_driver);
+ 	/* skip first byte (sequence number), OCC driver handles it */
+ 	rc = occ_drv_write(client, (const char *)&cmd[1], 7);
+@@ -75,15 +76,21 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
+ 		rc = -EFAULT;
+ 	}
+ 
++	occ->error = resp->return_status;
++
+ 	if (rc < 0) {
++		occ->error_count++;
+ 		dev_warn(occ->bus_dev, "occ bad response: %d\n",
+ 			 resp->return_status);
+ 		return rc;
+ 	}
+ 
++	occ->error_count = 0;
+ 	return 0;
+ 
+ err:
++	occ->error_count++;
++	occ->error = rc;
+ 	occ_drv_release(client);
+ 	dev_err(occ->bus_dev, "occ bus op failed rc: %d\n", rc);
+ 	return rc;
 -- 
 1.8.3.1
 
