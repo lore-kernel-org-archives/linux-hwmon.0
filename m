@@ -1,89 +1,66 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f177.google.com ([209.85.192.177]:34479 "EHLO
-        mail-pf0-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754933AbdFXDj7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Jun 2017 23:39:59 -0400
-Received: by mail-pf0-f177.google.com with SMTP id s66so31339207pfs.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jun 2017 20:39:59 -0700 (PDT)
-From: Patrick Venture <venture@google.com>
-To: venture@google.com, joel@jms.id.au, linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, emilyshaffer@google.com,
-        peterh@google.com
-Subject: [PATCH 2/2 v4] hwmon: (aspeed-pwm-tacho) Poll with short sleeps.
-Date: Fri, 23 Jun 2017 20:39:56 -0700
-Message-Id: <20170624033956.120552-1-venture@google.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
+        andrew@aj.id.au, eajames@linux.vnet.ibm.com,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH 0/7] drivers/hwmon: Add On-Chip Controller (OCC) hwmon driver
+Date: Thu, 22 Jun 2017 17:48:29 -0500
+Message-Id: <1498171716-26620-1-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-The reference driver polled but mentioned it was possible to sleep
-for a computed period to know when it's ready to read.  However, polling
-with minimal sleeps is quick and works.  This also improves responsiveness
-from the driver.
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Testing: tested on ast2400 on quanta-q71l
+This series adds a hwmon driver to support the OCC on POWER8 and POWER9
+processors. The OCC is an embedded processor that provides realtime power and
+thermal monitoring and management.
 
-Signed-off-by: Patrick Venture <venture@google.com>
----
-v4: Added missing change log
-v3: Added missing return value check
-v2: Fixed poll to sleep instead of an increment loop
----
- drivers/hwmon/aspeed-pwm-tacho.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+This driver has two different platform drivers as a "base" for the
+hwmon stuff, as the means of communicating with the OCC on P8 and P9 is
+completely different. For P8, the driver is an I2C client driver. For P9 the
+driver is an FSI-based OCC client driver, and uses the OCC driver in-kernel
+API.
 
-diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-index b2ab5612d8a4..cfcd769175e6 100644
---- a/drivers/hwmon/aspeed-pwm-tacho.c
-+++ b/drivers/hwmon/aspeed-pwm-tacho.c
-@@ -163,6 +163,9 @@
- #define M_TACH_UNIT 0x00c0
- #define INIT_FAN_CTRL 0xFF
- 
-+/* How long we sleep in us while waiting for an RPM result. */
-+#define ASPEED_RPM_STATUS_SLEEP_USEC	500
-+
- struct aspeed_pwm_tacho_data {
- 	struct regmap *regmap;
- 	unsigned long clk_freq;
-@@ -508,8 +511,9 @@ static u32 aspeed_get_fan_tach_ch_measure_period(struct aspeed_pwm_tacho_data
- static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
- 				      u8 fan_tach_ch)
- {
--	u32 raw_data, tach_div, clk_source, sec, val;
-+	u32 raw_data, tach_div, clk_source, msec, usec, val;
- 	u8 fan_tach_ch_source, type, mode, both;
-+	int ret;
- 
- 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0);
- 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0x1 << fan_tach_ch);
-@@ -517,12 +521,20 @@ static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
- 	fan_tach_ch_source = priv->fan_tach_ch_source[fan_tach_ch];
- 	type = priv->pwm_port_type[fan_tach_ch_source];
- 
--	sec = (1000 / aspeed_get_fan_tach_ch_measure_period(priv, type));
--	msleep(sec);
-+	msec = (1000 / aspeed_get_fan_tach_ch_measure_period(priv, type));
-+	usec = msec * 1000;
-+
-+	ret = regmap_read_poll_timeout(
-+		priv->regmap,
-+		ASPEED_PTCR_RESULT,
-+		val,
-+		(val & RESULT_STATUS_MASK),
-+		ASPEED_RPM_STATUS_SLEEP_USEC,
-+		usec);
- 
--	regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
--	if (!(val & RESULT_STATUS_MASK))
--		return -ETIMEDOUT;
-+	/* return -ETIMEDOUT if we didn't get an answer. */
-+	if (ret)
-+		return ret;
- 
- 	raw_data = val & RESULT_VALUE_MASK;
- 	tach_div = priv->type_fan_tach_clock_division[type];
+There was a previous version of this driver that wasn't written with the
+differences in communication methods between the two versions in mind. This
+driver has been considerably simplified.
+
+Edward A. James (7):
+  drivers/hwmon: Add On-Chip Controller (OCC) hwmon driver
+  drivers/hwmon/occ: Add command transport method for P8 and P9
+  drivers/hwmon/occ: Parse OCC poll response
+  drivers/hwmon/occ: Add sensor types and versions
+  drivers/hwmon/occ: Add sensor attributes and register hwmon device
+  drivers/hwmon/occ: Add non-hwmon attributes
+  drivers/hwmon/occ: Add error handling
+
+ Documentation/ABI/testing/sysfs-driver-occ-hwmon   |   77 ++
+ .../devicetree/bindings/fsi/ibm,p9-occ-hwmon.txt   |   18 +
+ .../devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt   |   25 +
+ Documentation/hwmon/occ                            |   84 ++
+ drivers/hwmon/Kconfig                              |    2 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/occ/Kconfig                          |   28 +
+ drivers/hwmon/occ/Makefile                         |   11 +
+ drivers/hwmon/occ/common.c                         | 1242 ++++++++++++++++++++
+ drivers/hwmon/occ/common.h                         |  151 +++
+ drivers/hwmon/occ/p8_i2c.c                         |  250 ++++
+ drivers/hwmon/occ/p9_sbe.c                         |  144 +++
+ 12 files changed, 2033 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-occ-hwmon
+ create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ-hwmon.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/common.c
+ create mode 100644 drivers/hwmon/occ/common.h
+ create mode 100644 drivers/hwmon/occ/p8_i2c.c
+ create mode 100644 drivers/hwmon/occ/p9_sbe.c
+
 -- 
-2.13.1.611.g7e3b11ae1-goog
-
+1.8.3.1
