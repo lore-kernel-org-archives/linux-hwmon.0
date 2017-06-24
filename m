@@ -1,48 +1,89 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f179.google.com ([209.85.192.179]:34463 "EHLO
-        mail-pf0-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753313AbdFXDju (ORCPT
+Received: from mail-pf0-f177.google.com ([209.85.192.177]:34479 "EHLO
+        mail-pf0-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754933AbdFXDj7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Jun 2017 23:39:50 -0400
-Received: by mail-pf0-f179.google.com with SMTP id s66so31338307pfs.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jun 2017 20:39:50 -0700 (PDT)
+        Fri, 23 Jun 2017 23:39:59 -0400
+Received: by mail-pf0-f177.google.com with SMTP id s66so31339207pfs.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jun 2017 20:39:59 -0700 (PDT)
 From: Patrick Venture <venture@google.com>
 To: venture@google.com, joel@jms.id.au, linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org, emilyshaffer@google.com,
         peterh@google.com
-Subject: [PATCH 1/2 v3] hwmon: (aspeed-pwm-tacho) reduce fan_tach period
-Date: Fri, 23 Jun 2017 20:39:46 -0700
-Message-Id: <20170624033946.120501-1-venture@google.com>
+Subject: [PATCH 2/2 v4] hwmon: (aspeed-pwm-tacho) Poll with short sleeps.
+Date: Fri, 23 Jun 2017 20:39:56 -0700
+Message-Id: <20170624033956.120552-1-venture@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Reduce the fan_tach period such that the fan controller uses a shorter
-period to measure the rpm.
+The reference driver polled but mentioned it was possible to sleep
+for a computed period to know when it's ready to read.  However, polling
+with minimal sleeps is quick and works.  This also improves responsiveness
+from the driver.
 
-Testing: Tested on an ast2400 sitting on a quanta-q71l.
+Testing: tested on ast2400 on quanta-q71l
 
 Signed-off-by: Patrick Venture <venture@google.com>
 ---
-v3: Added missing change log
-v2: Updated commit message language
+v4: Added missing change log
+v3: Added missing return value check
+v2: Fixed poll to sleep instead of an increment loop
 ---
- drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/aspeed-pwm-tacho.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-index 86e2ea8287a7..b2ab5612d8a4 100644
+index b2ab5612d8a4..cfcd769175e6 100644
 --- a/drivers/hwmon/aspeed-pwm-tacho.c
 +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-@@ -160,7 +160,7 @@
-  * 11: reserved.
-  */
- #define M_TACH_MODE 0x02 /* 10b */
--#define M_TACH_UNIT 0x1000
-+#define M_TACH_UNIT 0x00c0
+@@ -163,6 +163,9 @@
+ #define M_TACH_UNIT 0x00c0
  #define INIT_FAN_CTRL 0xFF
  
++/* How long we sleep in us while waiting for an RPM result. */
++#define ASPEED_RPM_STATUS_SLEEP_USEC	500
++
  struct aspeed_pwm_tacho_data {
+ 	struct regmap *regmap;
+ 	unsigned long clk_freq;
+@@ -508,8 +511,9 @@ static u32 aspeed_get_fan_tach_ch_measure_period(struct aspeed_pwm_tacho_data
+ static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 				      u8 fan_tach_ch)
+ {
+-	u32 raw_data, tach_div, clk_source, sec, val;
++	u32 raw_data, tach_div, clk_source, msec, usec, val;
+ 	u8 fan_tach_ch_source, type, mode, both;
++	int ret;
+ 
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0);
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TRIGGER, 0x1 << fan_tach_ch);
+@@ -517,12 +521,20 @@ static int aspeed_get_fan_tach_ch_rpm(struct aspeed_pwm_tacho_data *priv,
+ 	fan_tach_ch_source = priv->fan_tach_ch_source[fan_tach_ch];
+ 	type = priv->pwm_port_type[fan_tach_ch_source];
+ 
+-	sec = (1000 / aspeed_get_fan_tach_ch_measure_period(priv, type));
+-	msleep(sec);
++	msec = (1000 / aspeed_get_fan_tach_ch_measure_period(priv, type));
++	usec = msec * 1000;
++
++	ret = regmap_read_poll_timeout(
++		priv->regmap,
++		ASPEED_PTCR_RESULT,
++		val,
++		(val & RESULT_STATUS_MASK),
++		ASPEED_RPM_STATUS_SLEEP_USEC,
++		usec);
+ 
+-	regmap_read(priv->regmap, ASPEED_PTCR_RESULT, &val);
+-	if (!(val & RESULT_STATUS_MASK))
+-		return -ETIMEDOUT;
++	/* return -ETIMEDOUT if we didn't get an answer. */
++	if (ret)
++		return ret;
+ 
+ 	raw_data = val & RESULT_VALUE_MASK;
+ 	tach_div = priv->type_fan_tach_clock_division[type];
 -- 
 2.13.1.611.g7e3b11ae1-goog
 
