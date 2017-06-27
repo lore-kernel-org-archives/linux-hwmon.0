@@ -1,101 +1,61 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wr0-f176.google.com ([209.85.128.176]:35558 "EHLO
-        mail-wr0-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751453AbdF0MTL (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:49282 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752841AbdF0Mwr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Jun 2017 08:19:11 -0400
-Received: by mail-wr0-f176.google.com with SMTP id k67so157713753wrc.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Jun 2017 05:19:10 -0700 (PDT)
-Received: from jupiter.localnet (WVS-BR01-41-182-134-55.ipb.na. [41.182.134.55])
-        by smtp.gmail.com with ESMTPSA id r5sm1703910wmr.9.2017.06.27.05.19.07
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Jun 2017 05:19:08 -0700 (PDT)
-From: Rigo Reddig <rigo.reddig@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Subject: sensor config for (nct6779D) ASRock X370 Gaming K4
-Date: Tue, 27 Jun 2017 13:19:04 +0100
-Message-ID: <12723808.ig1cY2DeaI@jupiter>
+        Tue, 27 Jun 2017 08:52:47 -0400
+Subject: Re: userspace regression with hwmon
+To: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.de>, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-hwmon@vger.kernel.org
+References: <20170626143320.GA1976@sudip-tp>
+ <20170626170611.GC20491@roeck-us.net> <20170627122300.GA14227@sudip-tp>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <5ce4bea5-008a-8a86-cdf4-83d0f427126c@roeck-us.net>
+Date: Tue, 27 Jun 2017 05:52:39 -0700
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="nextPart2564039.0a2ZArHxf7"
-Content-Transfer-Encoding: 7Bit
+In-Reply-To: <20170627122300.GA14227@sudip-tp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This is a multi-part message in MIME format.
+On 06/27/2017 05:23 AM, Sudip Mukherjee wrote:
+> On Mon, Jun 26, 2017 at 10:06:11AM -0700, Guenter Roeck wrote:
+>> On Mon, Jun 26, 2017 at 03:33:20PM +0100, Sudip Mukherjee wrote:
+>>> Hi Guenter, Jean,
+>>>
+>>> The patch d72d19c26c41 ("hwmon: (coretemp) Convert to use
+>>> devm_hwmon_device_register_with_groups") has changed the location of the
+>>> sysfs nodes from /sys/devices/platform/coretemp.0/ to
+>>> /sys/devices/platform/coretemp.0/hwmon/hwmon0/ and that has broken
+>>> some of our usespace applications when we have updated the kernel from
+>>> v3.8 to v4.4. For now I am reverting that said patch in our production
+>>> kernel (based on v4.4) but that is not an elegant solution.
+>>> Do you have any other reports like this? I am sure changing the paths
+>>> upstream will now break some other userspace. So, what can be an elegant
+>>> solution to our problem? or do we always need to carry an out-of-tree
+>>> patch for our production kernel?
+>>>
+>>
+>> The problem only occurs if attributes are accessed using the raw path,
+>> and if user space does not take into account that attributes may reside
+>> in the hwmon directory (/sys/class/hwmon/hwmonX) _or_ in the device
+>> directory (/sys/class/hwmon/hwmonX/device). There is no guarantee that
+>> the raw path doesn't change from release to release; that is what the
+>> symlinks are for. Actually, I have seen the raw platform device path
+>> change over time, so I am surprised that this never affected you.
+> 
+> Well, using the raw platform device path was a bad design decision.
+> But I still see a difference. In v3.8 all the temp* nodes were in
+> /sys/class/hwmon/hwmon0/device/ but in v4.4 I can see that they are in
+> /sys/class/hwmon/hwmon0/. So if we do modify the code, then we still
+> need to have two versions of userspace code based on the kernel.
+> 
 
---nextPart2564039.0a2ZArHxf7
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Your code should check for the 'name' attribute in both locations.
 
-I recently puzzled out the scalars and inputs for my mainboard and was told to 
-submit the config here for others that might find it useful.
-
-These may apply to other nct6779D boards but so far this is purely specific to 
-the ASRock X370 Gaming K4.
-
-I have linked to and attached the file.
-https://gist.github.com/rigred/000cb8486dfae1972154ec9bf8355ac0
-
-
---nextPart2564039.0a2ZArHxf7
-Content-Disposition: attachment; filename="ASRock-X370-Gaming-K4"
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; name="ASRock-X370-Gaming-K4"
-
-chip "nct6779-isa-0290"
-
-        # Fans
-        label fan1 "Chassis Fan 3 Speed"
-        label fan2 "CPU Fan 1 Speed"
-        label fan3 "CPU Optional Fan Speed"
-        label fan4 "Chassis Fan 1 Speed"
-        label fan5 "Chassis Fan 2 Speed"
-
-        #Fan minimums
-        #set fan2_min 950
-        #set fan2_target 30000
-
-        # Temperatures
-        label temp1 "Motherboard"
-        label temp2 "CPU"
-        label temp3 "Auxillary"
-        label temp4 "VRM"
-        label temp5 "AUXTIN2"
-        label temp6 "CPU (PECI)" #Needs scalar sits at -25
-
-        # Voltages
-
-        label in0 "VCore"
-        label in1 "VPPM" #scalar
-        label in2 "AVCC"
-        label in3 "3VCC"
-        label in4 "+12V" #scalar
-        label in5 "VDDCR_SOC"
-        label in6 "DRAM"
-        label in7 "3VSB"
-        label in8 "VBat"
-        label in9 "Null"
-        label in10 "VIIN10"
-        label in11 "Chipset 1.05V"
-        label in12 "+5V" #scalar
-        label in13 "VDDP"
-        label in14 "1.8V+"
-
-        # Compute Inputs
-        # The nct6779D uses a 2.048V input range, all inputs above that are scaled using a voltage divider.
-        # Specific inputs like the ADC, AVCC, VBAT, 3VSB and 3VCC utilize an integrated voltage divider 
-        #
-        # values as per nuvoton nct6779D datasheet
-        # Section 8.5 Analog Inputs (Page 54,55)
-        # #       Vs     R1,Rin   R2,Rf    Vin
-        # in4  +12.0     56       10     ~+1.84
-        # in12  +5.0     20       10     ~+1.67
-        #
-        compute in1 @*2, @/2
-        compute in4 ((56/10)+1)*@, @/((56/10)+1)
-        compute in12 ((20/10)+1)*@, @/((20/10)+1)
-
---nextPart2564039.0a2ZArHxf7--
+Guenter
 
