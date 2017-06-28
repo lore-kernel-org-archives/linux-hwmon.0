@@ -1,518 +1,457 @@
-Return-Path: <stwiss.opensource@diasemi.com>
-Return-path: <stwiss.opensource@diasemi.com>
-From: Steve Twiss <stwiss.opensource@diasemi.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>, Sebastian Reichel
-	<sre@kernel.org>, Support Opensource <Support.Opensource@diasemi.com>, "Lee
- Jones" <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>, Mark Rutland
-	<mark.rutland@arm.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
-	<linux@roeck-us.net>, Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] hwmon: da9052: add support for TSI channel
-Date: Wed, 28 Jun 2017 17:03:40 +0000
-Message-ID: <6ED8E3B22081A4459DAC7699F3695FB7018CD984A3@SW-EX-MBX02.diasemi.com>
-References: <20170626144832.32322-1-sebastian.reichel@collabora.co.uk>
- <20170626144832.32322-3-sebastian.reichel@collabora.co.uk>
-In-Reply-To: <20170626144832.32322-3-sebastian.reichel@collabora.co.uk>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Return-Path: <prvs=0352536eba=mike.looijmans@topicproducts.com>
+Return-path: <prvs=0352536eba=mike.looijmans@topicproducts.com>
+Subject: Re: [PATCH v2 3/3] hwmon: ltc2990: support all measurement modes
+To: Guenter Roeck <linux@roeck-us.net>, Tom Levens <tom.levens@cern.ch>
+CC: <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+	<linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>
+References: <1479384616-12479-1-git-send-email-tom.levens@cern.ch>
+ <1479384616-12479-3-git-send-email-tom.levens@cern.ch>
+ <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net>
+From: Mike Looijmans <mike.looijmans@topic.nl>
+Message-ID: <97eb089f-e0e2-1146-6e17-8f9f790433d8@topic.nl>
+Date: Wed, 28 Jun 2017 16:24:03 +0200
 MIME-Version: 1.0
+In-Reply-To: <410de6c9-a13e-51f7-4d66-6f4e2537c574@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: nl
+Content-Transfer-Encoding: quoted-printable
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Sebastian,
-
-On 26 June 2017 15:49 Sebastian Reichel wrote:
-> Subject: [PATCH 2/2] hwmon: da9052: add support for TSI channel
+=EF=BB=BFOn 17-11-16 17:56, Guenter Roeck wrote:
+> On 11/17/2016 04:10 AM, Tom Levens wrote:
+>> Updated version of the ltc2990 driver which supports all measurement
+>> modes available in the chip. The mode can be set through a devicetree
+>> attribute.
 >=20
-> TSI channel has a 4 channel mux connected to it and is normally
-> used for touchscreen support. The hardware may alternatively
-> use it as general purpose adc.
+> property
 >=20
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-> ---
->  .../devicetree/bindings/mfd/da9052-i2c.txt         |   8 +
->  drivers/hwmon/da9052-hwmon.c                       | 229
-> ++++++++++++++++++++-
->  drivers/input/touchscreen/da9052_tsi.c             |   5 +
->  include/linux/mfd/da9052/da9052.h                  |   6 +
->  4 files changed, 244 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/mfd/da9052-i2c.txt
-> b/Documentation/devicetree/bindings/mfd/da9052-i2c.txt
-> index 9554292dc6cb..94f3bb1d9a0a 100644
-> --- a/Documentation/devicetree/bindings/mfd/da9052-i2c.txt
-> +++ b/Documentation/devicetree/bindings/mfd/da9052-i2c.txt
-> @@ -4,6 +4,14 @@ Required properties:
->  - compatible : Should be "dlg,da9052", "dlg,da9053-aa",
->  			 "dlg,da9053-ab", or "dlg,da9053-bb"
->=20
-> +Optional properties:
-> +- diag,tsi-as-adc : Boolean, if set the X+, X-, Y+, Y- touchscreen
-> +                    input lines are used as general purpose analogue
-> +					input.
-> +- diag,tsiref-microvolt: Voltage applied to the TSIREF pin, which is
-> +                         used as reference voltage when reading TSI
-> +						 pins as ADC. Defaults to 2500000.
-> +
-
-"dlg" is the standard vendor prefix we are using for Dialog Semiconductor
-bindings. You can find this definition in the kernel file:
-./Documentation/devicetree/bindings/vendor-prefixes.txt
-
->  Sub-nodes:
->  - regulators : Contain the regulator nodes. The DA9052/53 regulators are
->    bound using their names as listed below:
-> diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-
-> hwmon.c
-> index c9832bfacfe5..a0b9d5498ba4 100644
-> --- a/drivers/hwmon/da9052-hwmon.c
-> +++ b/drivers/hwmon/da9052-hwmon.c
-> @@ -20,13 +20,17 @@
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->=20
->  #include <linux/mfd/da9052/da9052.h>
->  #include <linux/mfd/da9052/reg.h>
->=20
->  struct da9052_hwmon {
-> -	struct da9052	*da9052;
-> -	struct mutex	hwmon_lock;
-> +	struct da9052		*da9052;
-> +	struct mutex		hwmon_lock;
-> +	bool			tsi_as_adc;
-> +	int			tsiref_mv;
-> +	struct completion	tsidone;
->  };
->=20
->  static const char * const input_names[] =3D {
-> @@ -37,6 +41,10 @@ static const char * const input_names[] =3D {
->  	[DA9052_ADC_IN4]	=3D	"ADC IN4",
->  	[DA9052_ADC_IN5]	=3D	"ADC IN5",
->  	[DA9052_ADC_IN6]	=3D	"ADC IN6",
-> +	[DA9052_ADC_TSI_XP]	=3D	"ADC TS X+",
-> +	[DA9052_ADC_TSI_YP]	=3D	"ADC TS Y+",
-> +	[DA9052_ADC_TSI_XN]	=3D	"ADC TS X-",
-> +	[DA9052_ADC_TSI_YN]	=3D	"ADC TS Y-",
->  	[DA9052_ADC_TJUNC]	=3D	"BATTERY JUNCTION TEMP",
->  	[DA9052_ADC_VBBAT]	=3D	"BACK-UP BATTERY VOLTAGE",
->  };
-> @@ -59,6 +67,11 @@ static inline int vbbat_reg_to_mv(int value)
->  	return DIV_ROUND_CLOSEST(value * 5000, 1023);
->  }
->=20
-> +static inline int input_tsireg_to_mv(struct da9052_hwmon *hwmon, int
-> value)
-> +{
-> +	return DIV_ROUND_CLOSEST(value * hwmon->tsiref_mv, 1023);
-> +}
-> +
->  static inline int da9052_enable_vddout_channel(struct da9052 *da9052)
->  {
->  	return da9052_reg_update(da9052, DA9052_ADC_CONT_REG,
-> @@ -154,6 +167,103 @@ static ssize_t da9052_read_misc_channel(struct
-> device *dev,
->  	return sprintf(buf, "%d\n", input_reg_to_mv(ret));
->  }
->=20
-> +static int da9052_request_tsi_read(struct da9052_hwmon *hwmon, int
-> channel)
-> +{
-> +	u8 val =3D BIT(6); /* TSI_MAN */
-
-There is an explicit #define for bit 6 from the TSI control register B, in =
-the
-file include/linux/mfd/da9052/reg.h #define DA9052_TSICONTB_TSIMAN 0X40
-
-> +
-> +	switch (channel) {
-> +	case DA9052_ADC_TSI_XP:
-> +		val |=3D (0 << 4); /* TSI_MUX */
-> +		break;
-> +	case DA9052_ADC_TSI_YP:
-> +		val |=3D (1 << 4); /* TSI_MUX */
-> +		break;
-> +	case DA9052_ADC_TSI_XN:
-> +		val |=3D (2 << 4); /* TSI_MUX */
-> +		break;
-> +	case DA9052_ADC_TSI_YN:
-> +		val |=3D (3 << 4); /* TSI_MUX */
-> +		break;
-> +	}
-
-Same for these magic numbers.
-Although I don't find any entries for these in the reg.h file.
-
-The datasheet for DA9053, Revision 2.1, says
-(http://www.dialog-semiconductor.com/products/da9053)
-
-bits (5:4)  R/W TSI_MUX
-Direct setting of MUX selecting which XY pin is routed to ADC_IN7 input.
-
-00: X+ (results will be stored in TSI_XM)
-01: Y+ (results will be stored in TSI_YM)
-10: X- (results will be stored in TSI_XM)
-11: Y- (results will be stored in TSI_YM)
-
-May I suggest adding explicit entries to the reg.h file, somewhere near the=
-=20
-TSI CONTROL REGISTER B BITS line. Something like this:
-
-#define DA9052_TSICONTB_TSIMUX_XP_XM	0x00
-#define DA9052_TSICONTB_TSIMUX_YP_YM	0x10
-#define DA9052_TSICONTB_TSIMUX_XN_XM	0x20
-#define DA9052_TSICONTB_TSIMUX_YN_YM	0x30
-
-> +
-> +	return da9052_reg_write(hwmon->da9052, DA9052_TSI_CONT_B_REG, val);
-> +}
-> +
-> +static int da9052_get_tsi_result(struct da9052_hwmon *hwmon, int
-> channel)
-> +{
-> +	int msb, lsb;
-> +
-> +	switch (channel) {
-> +	case DA9052_ADC_TSI_XP:
-> +	case DA9052_ADC_TSI_XN:
-> +		msb =3D da9052_reg_read(hwmon->da9052, DA9052_TSI_X_MSB_REG);
-> +		if (msb < 0)
-> +			return msb;
-> +
-> +		lsb =3D da9052_reg_read(hwmon->da9052, DA9052_TSI_LSB_REG);
-> +		if (lsb < 0)
-> +			return lsb;
-
-It seems you will risk having non-synchronous data reads by separating the =
-MSB
-and LSB read operations in this case.
-
-Reading the datasheet on this, the TSI_X_MSB register latches the TSI_Y_MSB=
- and
-TSI_LSB registers, which in turn should allow for a single read operation a=
-cross
-these registers instead of four separate reads. The switch could then be
-completed on the calculation instead across the four register reads.
-
-da9052_group_read()?
-
-> +
-> +		break;
-> +	case DA9052_ADC_TSI_YP:
-> +	case DA9052_ADC_TSI_YN:
-> +		msb =3D da9052_reg_read(hwmon->da9052, DA9052_TSI_Y_MSB_REG);
-> +		if (msb < 0)
-> +			return msb;
-> +
-> +		lsb =3D da9052_reg_read(hwmon->da9052, DA9052_TSI_LSB_REG);
-> +		if (lsb < 0)
-> +			return lsb;
-> +		lsb >>=3D 2;
-
-The header file does contain some symbols to access the bits in the registe=
+>>
+>> Signed-off-by: Tom Levens <tom.levens@cern.ch>
+>> ---
+>>
+>> Changes since v1:
+>>   * Refactored value conversion (patch 1/3)
+>>   * Split the devicetree binding into separate patch (patch 2/3)
+>>   * Specifying an invalid mode now returns -EINVAL, previously this
+>>     only issued a warning and used the default value
+>>   * Removed the "mode" sysfs attribute, as the mode of the chip is
+>>     hardware specific and should not be user configurable. This allows m=
+uch
+>>     simpler code as a result.
+>>
+>>  Documentation/hwmon/ltc2990 |   24 ++++---
+>>  drivers/hwmon/Kconfig       |    7 +--
+>>  drivers/hwmon/ltc2990.c     |  167 ++++++++++++++++++++++++++++++++++++=
+-------
+>>  3 files changed, 159 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/Documentation/hwmon/ltc2990 b/Documentation/hwmon/ltc2990
+>> index c25211e..3ed68f6 100644
+>> --- a/Documentation/hwmon/ltc2990
+>> +++ b/Documentation/hwmon/ltc2990
+>> @@ -8,6 +8,7 @@ Supported chips:
+>>      Datasheet: http://www.linear.com/product/ltc2990
+>>
+>>  Author: Mike Looijmans <mike.looijmans@topic.nl>
+>> +        Tom Levens <tom.levens@cern.ch>
+>>
+>>
+>>  Description
+>> @@ -16,10 +17,8 @@ Description
+>>  LTC2990 is a Quad I2C Voltage, Current and Temperature Monitor.
+>>  The chip's inputs can measure 4 voltages, or two inputs together (1+2 a=
+nd 3+4)
+>>  can be combined to measure a differential voltage, which is typically u=
+sed to
+>> -measure current through a series resistor, or a temperature.
+>> -
+>> -This driver currently uses the 2x differential mode only. In order to s=
+upport
+>> -other modes, the driver will need to be expanded.
+>> +measure current through a series resistor, or a temperature with an ext=
+ernal
+>> +diode.
+>>
+>>
+>>  Usage Notes
+>> @@ -32,12 +31,19 @@ devices explicitly.
+>>  Sysfs attributes
+>>  ----------------
+>>
+>> +in0_input     Voltage at Vcc pin in millivolt (range 2.5V to 5V)
+>> +temp1_input   Internal chip temperature in millidegrees Celcius
+>> +
+>> +A subset of the following attributes are visible, depending on the meas=
+urement
+>> +mode of the chip.
+>> +
+>> +in[1-4]_input Voltage at V[1-4] pin in millivolt
+>> +temp2_input   External temperature sensor TR1 in millidegrees Celcius
+>> +temp3_input   External temperature sensor TR2 in millidegrees Celcius
+>> +curr1_input   Current in mA across V1-V2 assuming a 1mOhm sense resisto=
 r
-fields for these MSB X/Y and LSB registers.
-
-/* TSI X CO-ORDINATE MSB RESULT REGISTER BITS */
-#define DA9052_TSIXMSB_TSIXM	0XFF
-
-/* TSI Y CO-ORDINATE MSB RESULT REGISTER BITS */
-#define DA9052_TSIYMSB_TSIYM	0XFF
-
-/* TSI CO-ORDINATE LSB RESULT REGISTER BITS */
-#define DA9052_TSILSB_PENDOWN	0X40
-#define DA9052_TSILSB_TSIZL		0X30
-#define DA9052_TSILSB_TSIYL		0X0C
-#define DA9052_TSILSB_TSIXL		0X03
-
-> +
-> +		break;
-> +	default:
-> +		return -ENXIO;
-
-Is this a function argument error and should be, EINVAL?
-
-> +	}
-> +
-> +	return (msb << 2) | (lsb & 0x3);
-> +}
-
-Although the reg.h register header file does not explicitly label MASK defi=
-nes,
-and there do not seem to be any SHIFT defines in the TSI X/Y CO-ORDINATE bi=
-ts,
-new entries can be added if necessary.
-
-> +
-> +
-> +static ssize_t __da9052_read_tsi(struct device *dev, int channel)
-> +{
-> +	struct da9052_hwmon *hwmon =3D dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	reinit_completion(&hwmon->tsidone);
-> +
-> +	ret =3D da9052_request_tsi_read(hwmon, channel);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Wait for an conversion done interrupt */
-> +	if (!wait_for_completion_timeout(&hwmon->tsidone,
-> +					 msecs_to_jiffies(500))) {
-> +		dev_err(dev, "timeout waiting for TSI conversion interrupt\n");
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	return da9052_get_tsi_result(hwmon, channel);
-> +}
-> +
-> +static ssize_t da9052_read_tsi(struct device *dev,
-> +			       struct device_attribute *devattr,
-> +			       char *buf)
-> +{
-> +	struct da9052_hwmon *hwmon =3D dev_get_drvdata(dev);
-> +	int channel =3D to_sensor_dev_attr(devattr)->index;
-> +	int ret;
-> +
-> +	mutex_lock(&hwmon->hwmon_lock);
-> +	ret =3D __da9052_read_tsi(dev, channel);
-> +	mutex_unlock(&hwmon->hwmon_lock);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +	else
-> +		return sprintf(buf, "%d\n", input_tsireg_to_mv(hwmon, ret));
-> +}
-> +
->  static ssize_t da9052_read_tjunc(struct device *dev,
->  				 struct device_attribute *devattr, char *buf)
->  {
-> @@ -196,6 +306,28 @@ static ssize_t show_label(struct device *dev,
->  		       input_names[to_sensor_dev_attr(devattr)->index]);
->  }
+>> +curr2_input   Current in mA across V3-V4 assuming a 1mOhm sense resisto=
+r
+>> +
+>>  The "curr*_input" measurements actually report the voltage drop across =
+the
+>>  input pins in microvolts. This is equivalent to the current through a 1=
+mOhm
+>>  sense resistor. Divide the reported value by the actual sense resistor =
+value
+>>  in mOhm to get the actual value.
+>> -
+>> -in0_input     Voltage at Vcc pin in millivolt (range 2.5V to 5V)
+>> -temp1_input   Internal chip temperature in millidegrees Celcius
+>> -curr1_input   Current in mA across v1-v2 assuming a 1mOhm sense resisto=
+r.
+>> -curr2_input   Current in mA across v3-v4 assuming a 1mOhm sense resisto=
+r.
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 45cef3d..f7096ca 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -699,15 +699,12 @@ config SENSORS_LTC2945
+>>        be called ltc2945.
+>>
+>>  config SENSORS_LTC2990
+>> -    tristate "Linear Technology LTC2990 (current monitoring mode only)"
+>> +    tristate "Linear Technology LTC2990"
+>>      depends on I2C
+>>      help
+>>        If you say yes here you get support for Linear Technology LTC2990
+>>        I2C System Monitor. The LTC2990 supports a combination of voltage=
+,
+>> -      current and temperature monitoring, but in addition to the Vcc su=
+pply
+>> -      voltage and chip temperature, this driver currently only supports
+>> -      reading two currents by measuring two differential voltages acros=
+s
+>> -      series resistors.
+>> +      current and temperature monitoring.
+>>
+>>        This driver can also be built as a module. If so, the module will
+>>        be called ltc2990.
+>> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+>> index 0ec4102..e8d36f5 100644
+>> --- a/drivers/hwmon/ltc2990.c
+>> +++ b/drivers/hwmon/ltc2990.c
+>> @@ -6,11 +6,7 @@
+>>   *
+>>   * License: GPLv2
+>>   *
+>> - * This driver assumes the chip is wired as a dual current monitor, and
+>> - * reports the voltage drop across two series resistors. It also report=
+s
+>> - * the chip's internal temperature and Vcc power supply voltage.
+>> - *
+>> - * Value conversion refactored
+>> + * Value conversion refactored and support for all measurement modes ad=
+ded
+>>   * by Tom Levens <tom.levens@cern.ch>
+>>   */
+>>
+>> @@ -21,6 +17,7 @@
+>>  #include <linux/i2c.h>
+>>  #include <linux/kernel.h>
+>>  #include <linux/module.h>
+>> +#include <linux/of.h>
+>>
+>>  #define LTC2990_STATUS    0x00
+>>  #define LTC2990_CONTROL    0x01
+>> @@ -35,32 +32,96 @@
+>>  #define LTC2990_CONTROL_KELVIN        BIT(7)
+>>  #define LTC2990_CONTROL_SINGLE        BIT(6)
+>>  #define LTC2990_CONTROL_MEASURE_ALL    (0x3 << 3)
+>> -#define LTC2990_CONTROL_MODE_CURRENT    0x06
+>> -#define LTC2990_CONTROL_MODE_VOLTAGE    0x07
+>> +#define LTC2990_CONTROL_MODE_DEFAULT    0x06
 >=20
-> +static umode_t da9052_channel_is_visible(struct kobject *kobj,
-> +					 struct attribute *a, int index)
-> +{
-> +	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct da9052_hwmon *hwmon =3D dev_get_drvdata(dev);
-> +
-> +	switch (index) {
-> +	case DA9052_ADC_TSI_XP:
-> +	case DA9052_ADC_TSI_YP:
-> +	case DA9052_ADC_TSI_XN:
-> +	case DA9052_ADC_TSI_YN:
-> +		break;
-> +	default:
-> +		return a->mode;
-> +	}
-> +
-> +	if (!hwmon->tsi_as_adc)
-> +		return 0;
-> +
-> +	return a->mode;
-> +}
-> +
->  static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, da9052_read_vddout,
-> NULL,
->  			  DA9052_ADC_VDDOUT);
->  static SENSOR_DEVICE_ATTR(in0_label, S_IRUGO, show_label, NULL,
-> @@ -221,6 +353,23 @@ static SENSOR_DEVICE_ATTR(in9_input, S_IRUGO,
-> da9052_read_vbbat, NULL,
->  static SENSOR_DEVICE_ATTR(in9_label, S_IRUGO, show_label, NULL,
->  			  DA9052_ADC_VBBAT);
+> I think LTC2990_CONTROL_MODE_CURRENT was better - it describes the actual=
+ mode.
+> Changing the define to _DEFAULT does not really improve code readability.
 >=20
-> +static SENSOR_DEVICE_ATTR(in70_input, S_IRUGO, da9052_read_tsi, NULL,
-> +			  DA9052_ADC_TSI_XP);
-> +static SENSOR_DEVICE_ATTR(in70_label, S_IRUGO, show_label, NULL,
-> +			  DA9052_ADC_TSI_XP);
-> +static SENSOR_DEVICE_ATTR(in71_input, S_IRUGO, da9052_read_tsi, NULL,
-> +			  DA9052_ADC_TSI_XN);
-> +static SENSOR_DEVICE_ATTR(in71_label, S_IRUGO, show_label, NULL,
-> +			  DA9052_ADC_TSI_XN);
-> +static SENSOR_DEVICE_ATTR(in72_input, S_IRUGO, da9052_read_tsi, NULL,
-> +			  DA9052_ADC_TSI_YP);
-> +static SENSOR_DEVICE_ATTR(in72_label, S_IRUGO, show_label, NULL,
-> +			  DA9052_ADC_TSI_YP);
-> +static SENSOR_DEVICE_ATTR(in73_input, S_IRUGO, da9052_read_tsi, NULL,
-> +			  DA9052_ADC_TSI_YN);
-> +static SENSOR_DEVICE_ATTR(in73_label, S_IRUGO, show_label, NULL,
-> +			  DA9052_ADC_TSI_YN);
-> +
->  static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, da9052_read_ich,
-> NULL,
->  			  DA9052_ADC_ICH);
->  static SENSOR_DEVICE_ATTR(curr1_label, S_IRUGO, show_label, NULL,
-> @@ -246,6 +395,14 @@ static struct attribute *da9052_attrs[] =3D {
->  	&sensor_dev_attr_in5_label.dev_attr.attr,
->  	&sensor_dev_attr_in6_input.dev_attr.attr,
->  	&sensor_dev_attr_in6_label.dev_attr.attr,
-> +	&sensor_dev_attr_in70_input.dev_attr.attr,
-> +	&sensor_dev_attr_in70_label.dev_attr.attr,
-> +	&sensor_dev_attr_in71_input.dev_attr.attr,
-> +	&sensor_dev_attr_in71_label.dev_attr.attr,
-> +	&sensor_dev_attr_in72_input.dev_attr.attr,
-> +	&sensor_dev_attr_in72_label.dev_attr.attr,
-> +	&sensor_dev_attr_in73_input.dev_attr.attr,
-> +	&sensor_dev_attr_in73_label.dev_attr.attr,
->  	&sensor_dev_attr_in9_input.dev_attr.attr,
->  	&sensor_dev_attr_in9_label.dev_attr.attr,
->  	&sensor_dev_attr_curr1_input.dev_attr.attr,
-> @@ -257,29 +414,93 @@ static struct attribute *da9052_attrs[] =3D {
->  	NULL
->  };
+>> +#define LTC2990_CONTROL_MODE_MAX    0x07
+>> +
+>> +#define LTC2990_IN0    BIT(0)
+>> +#define LTC2990_IN1    BIT(1)
+>> +#define LTC2990_IN2    BIT(2)
+>> +#define LTC2990_IN3    BIT(3)
+>> +#define LTC2990_IN4    BIT(4)
+>> +#define LTC2990_CURR1    BIT(5)
+>> +#define LTC2990_CURR2    BIT(6)
+>> +#define LTC2990_TEMP1    BIT(7)
+>> +#define LTC2990_TEMP2    BIT(8)
+>> +#define LTC2990_TEMP3    BIT(9)
+>> +
+>> +static const int ltc2990_attrs_ena[] =3D {
+>> +    LTC2990_IN1 | LTC2990_IN2 | LTC2990_TEMP3,
+>> +    LTC2990_CURR1 | LTC2990_TEMP3,
+>> +    LTC2990_CURR1 | LTC2990_IN3 | LTC2990_IN4,
+>> +    LTC2990_TEMP2 | LTC2990_IN3 | LTC2990_IN4,
+>> +    LTC2990_TEMP2 | LTC2990_CURR2,
+>> +    LTC2990_TEMP2 | LTC2990_TEMP3,
+>> +    LTC2990_CURR1 | LTC2990_CURR2,
+>> +    LTC2990_IN1 | LTC2990_IN2 | LTC2990_IN3 | LTC2990_IN4
+>> +};
+>> +
+>> +struct ltc2990_data {
+>> +    struct i2c_client *i2c;
+>> +    u32 mode;
+>> +};
+>>
+>>  /* Return the converted value from the given register in uV or mC */
+>> -static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, s32 *resul=
+t)
+>> +static int ltc2990_get_value(struct i2c_client *i2c, int index, s32 *re=
+sult)
+>>  {
+>>      s32 val;
+>> +    u8 reg;
+>> +
+>> +    switch (index) {
+>> +    case LTC2990_IN0:
+>> +        reg =3D LTC2990_VCC_MSB;
+>> +        break;
+>> +    case LTC2990_IN1:
+>> +    case LTC2990_CURR1:
+>> +    case LTC2990_TEMP2:
+>> +        reg =3D LTC2990_V1_MSB;
+>> +        break;
+>> +    case LTC2990_IN2:
+>> +        reg =3D LTC2990_V2_MSB;
+>> +        break;
+>> +    case LTC2990_IN3:
+>> +    case LTC2990_CURR2:
+>> +    case LTC2990_TEMP3:
+>> +        reg =3D LTC2990_V3_MSB;
+>> +        break;
+>> +    case LTC2990_IN4:
+>> +        reg =3D LTC2990_V4_MSB;
+>> +        break;
+>> +    case LTC2990_TEMP1:
+>> +        reg =3D LTC2990_TINT_MSB;
+>> +        break;
+>> +    default:
+>> +        return -EINVAL;
+>> +    }
+>>
+>>      val =3D i2c_smbus_read_word_swapped(i2c, reg);
+>>      if (unlikely(val < 0))
+>>          return val;
+>>
+>> -    switch (reg) {
+>> -    case LTC2990_TINT_MSB:
+>> -        /* internal temp, 0.0625 degrees/LSB, 13-bit  */
+>> +    switch (index) {
+>> +    case LTC2990_TEMP1:
+>> +    case LTC2990_TEMP2:
+>> +    case LTC2990_TEMP3:
+>> +        /* temp, 0.0625 degrees/LSB, 13-bit  */
+>>          *result =3D sign_extend32(val, 12) * 1000 / 16;
+>>          break;
+>> -    case LTC2990_V1_MSB:
+>> -    case LTC2990_V3_MSB:
+>> -         /* Vx-Vy, 19.42uV/LSB. Depends on mode. */
+>> +    case LTC2990_CURR1:
+>> +    case LTC2990_CURR2:
+>> +         /* Vx-Vy, 19.42uV/LSB */
+>>          *result =3D sign_extend32(val, 14) * 1942 / 100;
+>>          break;
+>> -    case LTC2990_VCC_MSB:
+>> -        /* Vcc, 305.18=C3=8E=C2=BCV/LSB, 2.5V offset */
+>> +    case LTC2990_IN0:
+>> +        /* Vcc, 305.18uV/LSB, 2.5V offset */
+>>          *result =3D sign_extend32(val, 14) * 30518 / (100 * 1000) + 250=
+0;
+>>          break;
+>> +    case LTC2990_IN1:
+>> +    case LTC2990_IN2:
+>> +    case LTC2990_IN3:
+>> +    case LTC2990_IN4:
+>> +        /* Vx: 305.18uV/LSB */
+>> +        *result =3D sign_extend32(val, 14) * 30518 / (100 * 1000);
+>> +        break;
+>>      default:
+>>          return -EINVAL; /* won't happen, keep compiler happy */
+>>      }
+>> @@ -72,48 +133,104 @@ static ssize_t ltc2990_show_value(struct device *d=
+ev,
+>>                    struct device_attribute *da, char *buf)
+>>  {
+>>      struct sensor_device_attribute *attr =3D to_sensor_dev_attr(da);
+>> +    struct ltc2990_data *data =3D dev_get_drvdata(dev);
+>>      s32 value;
+>>      int ret;
+>>
+>> -    ret =3D ltc2990_get_value(dev_get_drvdata(dev), attr->index, &value=
+);
+>> +    ret =3D ltc2990_get_value(data->i2c, attr->index, &value);
+>>      if (unlikely(ret < 0))
+>>          return ret;
+>>
+>>      return snprintf(buf, PAGE_SIZE, "%d\n", value);
+>>  }
+>>
+>> +static umode_t ltc2990_attrs_visible(struct kobject *kobj,
+>> +                     struct attribute *a, int n)
+>> +{
+>> +    struct device *dev =3D container_of(kobj, struct device, kobj);
+>> +    struct ltc2990_data *data =3D dev_get_drvdata(dev);
+>> +    struct device_attribute *da =3D
+>> +            container_of(a, struct device_attribute, attr);
+>> +    struct sensor_device_attribute *attr =3D to_sensor_dev_attr(da);
+>> +
+>> +    if (attr->index =3D=3D LTC2990_TEMP1 ||
+>> +        attr->index =3D=3D LTC2990_IN0 ||
+>> +        attr->index & ltc2990_attrs_ena[data->mode])
+>> +        return a->mode;
+>> +    else
 >=20
-> -ATTRIBUTE_GROUPS(da9052);
-> +static const struct attribute_group da9052_group =3D {
-> +	.attrs =3D da9052_attrs,
-> +	.is_visible =3D da9052_channel_is_visible,
-> +};
-> +__ATTRIBUTE_GROUPS(da9052);
-> +
-> +static irqreturn_t da9052_tsi_datardy_irq(int irq, void *data)
-> +{
-> +	struct da9052_hwmon *hwmon =3D data;
-> +	complete(&hwmon->tsidone);
-> +	return IRQ_HANDLED;
-> +}
+> Unnecessary else
 >=20
->  static int da9052_hwmon_probe(struct platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
->  	struct da9052_hwmon *hwmon;
->  	struct device *hwmon_dev;
-> +	int err;
+>> +        return 0;
+>> +}
+>> +
+>>  static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, ltc2990_show_value, NUL=
+L,
+>> -              LTC2990_TINT_MSB);
+>> +              LTC2990_TEMP1);
+>> +static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, ltc2990_show_value, NUL=
+L,
+>> +              LTC2990_TEMP2);
+>> +static SENSOR_DEVICE_ATTR(temp3_input, S_IRUGO, ltc2990_show_value, NUL=
+L,
+>> +              LTC2990_TEMP3);
+>>  static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ltc2990_show_value, NUL=
+L,
+>> -              LTC2990_V1_MSB);
+>> +              LTC2990_CURR1);
+>>  static SENSOR_DEVICE_ATTR(curr2_input, S_IRUGO, ltc2990_show_value, NUL=
+L,
+>> -              LTC2990_V3_MSB);
+>> +              LTC2990_CURR2);
+>>  static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, ltc2990_show_value, NULL,
+>> -              LTC2990_VCC_MSB);
+>> +              LTC2990_IN0);
+>> +static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ltc2990_show_value, NULL,
+>> +              LTC2990_IN1);
+>> +static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ltc2990_show_value, NULL,
+>> +              LTC2990_IN2);
+>> +static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, ltc2990_show_value, NULL,
+>> +              LTC2990_IN3);
+>> +static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, ltc2990_show_value, NULL,
+>> +              LTC2990_IN4);
+>>
+>>  static struct attribute *ltc2990_attrs[] =3D {
+>>      &sensor_dev_attr_temp1_input.dev_attr.attr,
+>> +    &sensor_dev_attr_temp2_input.dev_attr.attr,
+>> +    &sensor_dev_attr_temp3_input.dev_attr.attr,
+>>      &sensor_dev_attr_curr1_input.dev_attr.attr,
+>>      &sensor_dev_attr_curr2_input.dev_attr.attr,
+>>      &sensor_dev_attr_in0_input.dev_attr.attr,
+>> +    &sensor_dev_attr_in1_input.dev_attr.attr,
+>> +    &sensor_dev_attr_in2_input.dev_attr.attr,
+>> +    &sensor_dev_attr_in3_input.dev_attr.attr,
+>> +    &sensor_dev_attr_in4_input.dev_attr.attr,
+>>      NULL,
+>>  };
+>> -ATTRIBUTE_GROUPS(ltc2990);
+>> +
+>> +static const struct attribute_group ltc2990_group =3D {
+>> +    .attrs =3D ltc2990_attrs,
+>> +    .is_visible =3D ltc2990_attrs_visible,
+>> +};
+>> +__ATTRIBUTE_GROUPS(ltc2990);
+>>
+>>  static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>                   const struct i2c_device_id *id)
+>>  {
+>>      int ret;
+>>      struct device *hwmon_dev;
+>> +    struct ltc2990_data *data;
+>> +    struct device_node *of_node =3D i2c->dev.of_node;
+>>
+>>      if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA=
+ |
+>>                       I2C_FUNC_SMBUS_WORD_DATA))
+>>          return -ENODEV;
+>>
+>> -    /* Setup continuous mode, current monitor */
+>> +    data =3D devm_kzalloc(&i2c->dev, sizeof(struct ltc2990_data), GFP_K=
+ERNEL);
+>> +    if (unlikely(!data))
+>> +        return -ENOMEM;
+>> +    data->i2c =3D i2c;
+>> +
+>> +    if (!of_node || of_property_read_u32(of_node, "lltc,mode", &data->m=
+ode))
+>> +        data->mode =3D LTC2990_CONTROL_MODE_DEFAULT;
 >=20
->  	hwmon =3D devm_kzalloc(dev, sizeof(struct da9052_hwmon),
-> GFP_KERNEL);
->  	if (!hwmon)
->  		return -ENOMEM;
+> Iam arguing with myself if we should still do this or if we should read t=
+he mode
+> from the chip instead if it isn't provided (after all, it may have been=20
+> initialized
+> by the BIOS/ROMMON).
 >=20
-> +	platform_set_drvdata(pdev, hwmon);
-> +
->  	mutex_init(&hwmon->hwmon_lock);
->  	hwmon->da9052 =3D dev_get_drvdata(pdev->dev.parent);
->=20
-> +	init_completion(&hwmon->tsidone);
-> +
-> +	hwmon->tsi_as_adc =3D
-> +		device_property_read_bool(pdev->dev.parent, "diag,tsi-as-adc");
+> Mike, would that break your application, or can you specify the mode in=20
+> devicetree ?
 
-Dialog device tree bindings should be "dlg" not "diag".
+OMFG, I just spent half the day implementing the exact same thing, and only=
+=20
+after sumbmitting it, I stumbled upon this thread. I must be getting old.
 
-> +
-> +	/* get tsiref from DT, default to 2.5 Volt (typ. value in datasheet) */
-> +	hwmon->tsiref_mv =3D 2500000;
-> +	device_property_read_u32(pdev->dev.parent, "diag,tsiref-microvolt",
-> +				 &hwmon->tsiref_mv);
-> +
-> +	/* convert from microvolt (DT) to millivolt (hwmon) */
-> +	hwmon->tsiref_mv /=3D 1000;
-> +
-> +	/* TSIREF must be between 1.8 and 2.6 Volt according to datasheet */
-> +	if (hwmon->tsiref_mv < 1800 || hwmon->tsiref_mv > 2600) {
-> +		dev_err(hwmon->da9052->dev, "invalid TSIREF voltage: %d\n",
-> +			hwmon->tsiref_mv);
-> +		return -ENXIO;
-> +	}
-> +
-> +	if (hwmon->tsi_as_adc) {
-> +		/* disable touchscreen features */
-> +		da9052_reg_write(hwmon->da9052, DA9052_TSI_CONT_A_REG, 0x00);
-> +
-> +		err =3D da9052_request_irq(hwmon->da9052, DA9052_IRQ_TSIREADY,
-> +					 "tsiready-irq" da9052_tsi_datardy_irq,
-> +					 hwmon);
-> +		if (err) {
-> +			dev_err(hwmon->da9052->dev,
-> +				"Failed to register TSIRDY IRQ: %d\n", err);
-> +			return err;
-> +		}
-> +	}
-> +
->  	hwmon_dev =3D devm_hwmon_device_register_with_groups(dev, "da9052",
->  							   hwmon,
->  							   da9052_groups);
-> -	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +	err =3D PTR_ERR_OR_ZERO(hwmon_dev);
-> +	if (err) {
-> +		if (hwmon->tsi_as_adc)
-> +			da9052_free_irq(hwmon->da9052, DA9052_IRQ_TSIREADY, hwmon);
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int da9052_hwmon_remove(struct platform_device *pdev)
-> +{
-> +	struct da9052_hwmon *hwmon =3D platform_get_drvdata(pdev);
-> +	if (hwmon->tsi_as_adc)
-> +		da9052_free_irq(hwmon->da9052, DA9052_IRQ_TSIREADY, hwmon);
-> +	return 0;
->  }
->=20
->  static struct platform_driver da9052_hwmon_driver =3D {
->  	.probe =3D da9052_hwmon_probe,
-> +	.remove =3D da9052_hwmon_remove,
->  	.driver =3D {
->  		.name =3D "da9052-hwmon",
->  	},
-> diff --git a/drivers/input/touchscreen/da9052_tsi.c
-> b/drivers/input/touchscreen/da9052_tsi.c
-> index 5a013bb7bcad..f0cb239546a9 100644
-> --- a/drivers/input/touchscreen/da9052_tsi.c
-> +++ b/drivers/input/touchscreen/da9052_tsi.c
-> @@ -16,6 +16,7 @@
->  #include <linux/delay.h>
->  #include <linux/platform_device.h>
->  #include <linux/interrupt.h>
-> +#include <linux/property.h>
->=20
->  #include <linux/mfd/da9052/reg.h>
->  #include <linux/mfd/da9052/da9052.h>
-> @@ -238,6 +239,10 @@ static int da9052_ts_probe(struct platform_device
-> *pdev)
->  	if (!da9052)
->  		return -EINVAL;
->=20
-> +	/* check if pins are used as general purpose ADC input */
-> +	if (device_property_read_bool(pdev->dev.parent, "diag,tsi-as-adc"))
-> +		return -ENODEV;
-> +
+A well, seems I implemented things a bit differently, so you get to pick an=
+d=20
+choose which patch was better.
 
-Doesn't this presume the hwmon driver is being used?
-If this "tsi-as-adc" exists in the DT binary blob and the hwmon driver is n=
-ot
-added, would this still disable the TS?
+Whatever happened to this patch though? It didn't make it to mainline,=20
+otherwise I'd have found it sooner...
 
->  	tsi =3D kzalloc(sizeof(struct da9052_tsi), GFP_KERNEL);
->  	input_dev =3D input_allocate_device();
->  	if (!tsi || !input_dev) {
-> diff --git a/include/linux/mfd/da9052/da9052.h
-> b/include/linux/mfd/da9052/da9052.h
-> index ce9230af09c2..ae5b663836d0 100644
-> --- a/include/linux/mfd/da9052/da9052.h
-> +++ b/include/linux/mfd/da9052/da9052.h
-> @@ -45,6 +45,12 @@
->  #define DA9052_ADC_TJUNC	8
->  #define DA9052_ADC_VBBAT	9
+
 >=20
-> +/* TSI channel has its own 4 channel mux */
-> +#define DA9052_ADC_TSI_XP	70
-> +#define DA9052_ADC_TSI_XN	71
-> +#define DA9052_ADC_TSI_YP	72
-> +#define DA9052_ADC_TSI_YN	73
-> +
->  #define DA9052_IRQ_DCIN	0
->  #define DA9052_IRQ_VBUS	1
->  #define DA9052_IRQ_DCINREM	2
-> --
-> 2.11.0
+> Thanks,
+> Guenter
+>=20
+>> +
+>> +    if (data->mode > LTC2990_CONTROL_MODE_MAX) {
+>> +        dev_err(&i2c->dev, "Error: Invalid mode %d.\n", data->mode);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    /* Setup continuous mode */
+>>      ret =3D i2c_smbus_write_byte_data(i2c, LTC2990_CONTROL,
+>>                      LTC2990_CONTROL_MEASURE_ALL |
+>> -                    LTC2990_CONTROL_MODE_CURRENT);
+>> +                    data->mode);
+>>      if (ret < 0) {
+>>          dev_err(&i2c->dev, "Error: Failed to set control mode.\n");
+>>          return ret;
+>> @@ -127,7 +244,7 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>
+>>      hwmon_dev =3D devm_hwmon_device_register_with_groups(&i2c->dev,
+>>                                 i2c->name,
+>> -                               i2c,
+>> +                               data,
+>>                                 ltc2990_groups);
+>>
+>>      return PTR_ERR_OR_ZERO(hwmon_dev);
+>>
+>=20
 
-Regards,
-Steve
+
+
+Kind regards,
+
+Mike Looijmans
+System Expert
+
+TOPIC Products
+Materiaalweg 4, NL-5681 RJ Best
+Postbus 440, NL-5680 AK Best
+Telefoon: +31 (0) 499 33 69 79
+E-mail: mike.looijmans@topicproducts.com
+Website: www.topicproducts.com
+
+Please consider the environment before printing this e-mail
