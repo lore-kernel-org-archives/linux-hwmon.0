@@ -1,72 +1,207 @@
-Return-Path: <b.zolnierkie@samsung.com>
-Return-path: <b.zolnierkie@samsung.com>
-From: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Kamil Debski <kamil@wypas.org>, Tomasz Figa <tomasz.figa@gmail.com>,
-	linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] pwm: pwm-samsung: fix suspend/resume support
-Date: Thu, 29 Jun 2017 13:14:09 +0200
-Message-id: <2433336.l2BTX0BETK@amdc3058>
-In-reply-to: <1493028069-32003-1-git-send-email-b.zolnierkie@samsung.com>
-MIME-version: 1.0
-Content-transfer-encoding: 7Bit
-Content-type: text/plain; charset="us-ascii"
-References: <CGME20170424100128epcas5p20396f75d5626a320a9eb11d89ae87ac5@epcas5p2.samsung.com>
-	<1493028069-32003-1-git-send-email-b.zolnierkie@samsung.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from atl4mhfb02.myregisteredsite.com ([209.17.115.118]:58140 "EHLO
+        atl4mhfb02.myregisteredsite.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751725AbdF2Kve (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 29 Jun 2017 06:51:34 -0400
+Received: from atl4mhob21.registeredsite.com (atl4mhob21.registeredsite.com [209.17.115.115])
+        by atl4mhfb02.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id v5TAk70p019104
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jun 2017 06:46:07 -0400
+Received: from mailpod.hostingplatform.com ([10.30.71.209])
+        by atl4mhob21.registeredsite.com (8.14.4/8.14.4) with ESMTP id v5TAk3PX031028
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL)
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jun 2017 06:46:04 -0400
+From: Mike Looijmans <mike.looijmans@topic.nl>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH] hwmon: Add LTC2471/LTC2473 driver
+Date: Thu, 29 Jun 2017 12:45:35 +0200
+Message-Id: <1498733135-4729-1-git-send-email-mike.looijmans@topic.nl>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+The LTC2741 and LTC2473 are single voltage monitoring chips. The LTC2473
+is similar to the LTC2471 but outputs a signed differential value.
 
-ping. Could this patchset be merged for 4.13, please?
+Datasheet:
+  http://cds.linear.com/docs/en/datasheet/24713fb.pdf
 
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
-Samsung Electronics
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+---
+ drivers/hwmon/Kconfig   |  10 ++++
+ drivers/hwmon/Makefile  |   1 +
+ drivers/hwmon/ltc2471.c | 127 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 138 insertions(+)
+ create mode 100644 drivers/hwmon/ltc2471.c
 
-On Monday, April 24, 2017 12:01:06 PM Bartlomiej Zolnierkiewicz wrote:
-> Hi,
-> 
-> This patchset fixes suspend/resume support in pwm-samsung
-> driver (which has an effect of fixing suspend/resume support
-> for PWM client drivers such as pwm-fan one). Then it removes
-> no longer needed suspend/resume code from pwm-fan driver.
-> 
-> It was tested on Odroid-XU3 board (with few extra patches
-> adding SoC/board suspend/resume support which are not in
-> upstream yet).
-> 
-> The initial issue that has been observed on this configuration
-> was that after suspend/resume operation the fan was turned on
-> (while the thermal code had explicitly disabled the fan by
-> calling back into pwm-fan driver before the suspend/resume).
-> 
-> Fixing this in the pwm-fan driver itself is not feasible since
-> pwm_config()/pwm_disable() & co. API saves information about
-> current state and doesn't pass the relevant values to PWM core
-> if they are identical to the ones used previously (moreover PWM
-> core itself does the same before calling into the PWM hardware
-> driver).
-> 
-> Changes since v1
-> (https://www.spinics.net/lists/kernel/msg2480445.html):
-> - added Acked-by from Guenter to patch #3
-> - fixed patch #2 to use the right variable (chip -> our_chip)
-> 
-> Best regards,
-> --
-> Bartlomiej Zolnierkiewicz
-> Samsung R&D Institute Poland
-> Samsung Electronics
-> 
-> 
-> Bartlomiej Zolnierkiewicz (3):
->   pwm: pwm-samsung: remove redundant checks from pwm_samsung_config()
->   pwm: pwm-samsung: fix suspend/resume support
->   hwmon: pwm-fan: remove no longer needed suspend/resume code
-> 
->  drivers/hwmon/pwm-fan.c   | 32 ----------------------
->  drivers/pwm/pwm-samsung.c | 70 +++++++++++++++++++++++------------------------
->  2 files changed, 35 insertions(+), 67 deletions(-)
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index fbde226..c9a2a87 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -673,6 +673,16 @@ config SENSORS_LINEAGE
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called lineage-pem.
+ 
++config SENSORS_LTC2471
++	tristate "Linear Technology LTC2471 and LTC2473"
++	depends on I2C
++	help
++	  If you say yes here you get support for Linear Technology LTC2471
++	  and LTC2473 voltage monitors.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called ltc2471.
++
+ config SENSORS_LTC2945
+ 	tristate "Linear Technology LTC2945"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 58cc3ac..6f60fe7 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -99,6 +99,7 @@ obj-$(CONFIG_SENSORS_LM93)	+= lm93.o
+ obj-$(CONFIG_SENSORS_LM95234)	+= lm95234.o
+ obj-$(CONFIG_SENSORS_LM95241)	+= lm95241.o
+ obj-$(CONFIG_SENSORS_LM95245)	+= lm95245.o
++obj-$(CONFIG_SENSORS_LTC2471)	+= ltc2471.o
+ obj-$(CONFIG_SENSORS_LTC2945)	+= ltc2945.o
+ obj-$(CONFIG_SENSORS_LTC2990)	+= ltc2990.o
+ obj-$(CONFIG_SENSORS_LTC4151)	+= ltc4151.o
+diff --git a/drivers/hwmon/ltc2471.c b/drivers/hwmon/ltc2471.c
+new file mode 100644
+index 0000000..17eaad8
+--- /dev/null
++++ b/drivers/hwmon/ltc2471.c
+@@ -0,0 +1,127 @@
++/*
++ * Driver for Linear Technology LTC2471 and LTC2473 voltage monitors
++ * The LTC2473 is identical to the 2471, but reports a differential signal.
++ *
++ * Copyright (C) 2017 Topic Embedded Products
++ * Author: Mike Looijmans <mike.looijmans@topic.nl>
++ *
++ * License: GPLv2
++ */
++
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++
++enum chips {
++	ltc2471,
++	ltc2473
++};
++
++struct ltc2471_data {
++	struct i2c_client *i2c;
++	bool differential;
++};
++
++/* Reference voltage is 1.25V */
++#define LTC2471_VREF 1250
++
++/* Read two bytes from the I2C bus to obtain the ADC result */
++static int ltc2471_get_value(struct i2c_client *i2c)
++{
++	int ret;
++	__be16 buf;
++
++	ret = i2c_master_recv(i2c, (char *)&buf, 2);
++	if (ret < 0)
++		return ret;
++	if (ret != 2)
++		return -EIO;
++
++	/* MSB first */
++	return be16_to_cpu(buf);
++}
++
++static ssize_t ltc2471_show_value(struct device *dev,
++				  struct device_attribute *da, char *buf)
++{
++	struct ltc2471_data *data = dev_get_drvdata(dev);
++	int value;
++
++	value = ltc2471_get_value(data->i2c);
++	if (unlikely(value < 0))
++		return value;
++
++	if (data->differential)
++		/* Ranges from -VREF to +VREF with "0" at 0x8000 */
++		value = ((s32)LTC2471_VREF * (s32)(value - 0x8000)) >> 15;
++	else
++		/* Ranges from 0 to +VREF */
++		value = ((u32)LTC2471_VREF * (u32)value) >> 16;
++
++	return snprintf(buf, PAGE_SIZE, "%d\n", value);
++}
++
++static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, ltc2471_show_value, NULL, 0);
++
++static struct attribute *ltc2471_attrs[] = {
++	&sensor_dev_attr_in0_input.dev_attr.attr,
++	NULL
++};
++
++ATTRIBUTE_GROUPS(ltc2471);
++
++static int ltc2471_i2c_probe(struct i2c_client *i2c,
++			     const struct i2c_device_id *id)
++{
++	int ret;
++	struct device *hwmon_dev;
++	struct ltc2471_data *data;
++
++	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
++		return -ENODEV;
++
++	data = devm_kzalloc(&i2c->dev, sizeof(struct ltc2471_data), GFP_KERNEL);
++	if (unlikely(!data))
++		return -ENOMEM;
++
++	data->i2c = i2c;
++	data->differential = (id->driver_data == ltc2473);
++
++	/* Trigger once to start conversion and check if chip is there */
++	ret = ltc2471_get_value(i2c);
++	if (ret < 0) {
++		dev_err(&i2c->dev, "Cannot read from device.\n");
++		return ret;
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(&i2c->dev,
++							   i2c->name,
++							   data,
++							   ltc2471_groups);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id ltc2471_i2c_id[] = {
++	{ "ltc2471", ltc2471 },
++	{ "ltc2473", ltc2473 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, ltc2471_i2c_id);
++
++static struct i2c_driver ltc2471_i2c_driver = {
++	.driver = {
++		.name = "ltc2471",
++	},
++	.probe    = ltc2471_i2c_probe,
++	.id_table = ltc2471_i2c_id,
++};
++
++module_i2c_driver(ltc2471_i2c_driver);
++
++MODULE_DESCRIPTION("LTC2471/LTC2473 Sensor Driver");
++MODULE_AUTHOR("Topic Embedded Products");
++MODULE_LICENSE("GPL v2");
+-- 
+1.9.1
+
