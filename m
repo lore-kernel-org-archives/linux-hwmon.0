@@ -1,68 +1,219 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:48719 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751356AbdFXP6r (ORCPT
+Received: from mail-ua0-f194.google.com ([209.85.217.194]:34795 "EHLO
+        mail-ua0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752627AbdF2LSC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 24 Jun 2017 11:58:47 -0400
-Subject: Re: [PATCH 1/2 v4] hwmon: (aspeed-pwm-tacho) reduce fan_tach period
-To: Patrick Venture <venture@google.com>, joel@jms.id.au
-Cc: linux-hwmon@vger.kernel.org, emilyshaffer@google.com,
-        peterh@google.com
-References: <20170624153932.8895-1-venture@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <25244af5-84b9-c4c0-1960-86fffa47d4f5@roeck-us.net>
-Date: Sat, 24 Jun 2017 08:58:44 -0700
+        Thu, 29 Jun 2017 07:18:02 -0400
 MIME-Version: 1.0
-In-Reply-To: <20170624153932.8895-1-venture@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1498733135-4729-1-git-send-email-mike.looijmans@topic.nl>
+References: <1498733135-4729-1-git-send-email-mike.looijmans@topic.nl>
+From: Frans Klaver <fransklaver@gmail.com>
+Date: Thu, 29 Jun 2017 13:18:00 +0200
+Message-ID: <CAH6sp9PPO1W3Km7-YbayrP=rbHtVDr4NCu-o4ZvC0UsCEXgyxQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: Add LTC2471/LTC2473 driver
+To: Mike Looijmans <mike.looijmans@topic.nl>
+Cc: linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/24/2017 08:39 AM, Patrick Venture wrote:
-> Reduce the fan_tach period such that the fan controller uses a shorter
-> period to measure the rpm.
-> 
-> The original period of 0x1000 was chosen as a conversative value from the
-> reference implementation.  Through experimentation on the quanta-q71l
-> board, I was able to drive the number down which ultimately reduced the
-> time the controller would use to determine the fan_tach.  This value was
-> recently tested and accepted downstream on the IBM Zaius board which uses
-> the ast2500.
-> 
-> Future work: It may be worthwhile as this is a tunable parameter to the
-> system, to allow overriding it through the device tree.
-> 
-> Testing: Tested on an ast2400 sitting on a quanta-q71l and ast2500 on
-> power9.
-> 
-> Signed-off-by: Patrick Venture <venture@google.com>
-
-Applied, thanks.
-
-Guenter
-
+On Thu, Jun 29, 2017 at 12:45 PM, Mike Looijmans
+<mike.looijmans@topic.nl> wrote:
+> The LTC2741 and LTC2473 are single voltage monitoring chips. The LTC2473
+> is similar to the LTC2471 but outputs a signed differential value.
+>
+> Datasheet:
+>   http://cds.linear.com/docs/en/datasheet/24713fb.pdf
+>
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
 > ---
-> v4: Added explanation for value.
-> v3: Added missing change log
-> v2: Updated commit message language
-> ---
->   drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-> index 86e2ea8287a7..b2ab5612d8a4 100644
-> --- a/drivers/hwmon/aspeed-pwm-tacho.c
-> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-> @@ -160,7 +160,7 @@
->    * 11: reserved.
->    */
->   #define M_TACH_MODE 0x02 /* 10b */
-> -#define M_TACH_UNIT 0x1000
-> +#define M_TACH_UNIT 0x00c0
->   #define INIT_FAN_CTRL 0xFF
->   
->   struct aspeed_pwm_tacho_data {
-> 
+>  drivers/hwmon/Kconfig   |  10 ++++
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/ltc2471.c | 127 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 138 insertions(+)
+>  create mode 100644 drivers/hwmon/ltc2471.c
+>
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index fbde226..c9a2a87 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -673,6 +673,16 @@ config SENSORS_LINEAGE
+>           This driver can also be built as a module.  If so, the module
+>           will be called lineage-pem.
+>
+> +config SENSORS_LTC2471
+> +       tristate "Linear Technology LTC2471 and LTC2473"
+> +       depends on I2C
+> +       help
+> +         If you say yes here you get support for Linear Technology LTC2471
+> +         and LTC2473 voltage monitors.
+> +
+> +         This driver can also be built as a module. If so, the module will
+> +         be called ltc2471.
+> +
+>  config SENSORS_LTC2945
+>         tristate "Linear Technology LTC2945"
+>         depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 58cc3ac..6f60fe7 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -99,6 +99,7 @@ obj-$(CONFIG_SENSORS_LM93)    += lm93.o
+>  obj-$(CONFIG_SENSORS_LM95234)  += lm95234.o
+>  obj-$(CONFIG_SENSORS_LM95241)  += lm95241.o
+>  obj-$(CONFIG_SENSORS_LM95245)  += lm95245.o
+> +obj-$(CONFIG_SENSORS_LTC2471)  += ltc2471.o
+>  obj-$(CONFIG_SENSORS_LTC2945)  += ltc2945.o
+>  obj-$(CONFIG_SENSORS_LTC2990)  += ltc2990.o
+>  obj-$(CONFIG_SENSORS_LTC4151)  += ltc4151.o
+> diff --git a/drivers/hwmon/ltc2471.c b/drivers/hwmon/ltc2471.c
+> new file mode 100644
+> index 0000000..17eaad8
+> --- /dev/null
+> +++ b/drivers/hwmon/ltc2471.c
+> @@ -0,0 +1,127 @@
+> +/*
+> + * Driver for Linear Technology LTC2471 and LTC2473 voltage monitors
+> + * The LTC2473 is identical to the 2471, but reports a differential signal.
+> + *
+> + * Copyright (C) 2017 Topic Embedded Products
+> + * Author: Mike Looijmans <mike.looijmans@topic.nl>
+> + *
+> + * License: GPLv2
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +
+> +enum chips {
+> +       ltc2471,
+> +       ltc2473
+> +};
+> +
+> +struct ltc2471_data {
+> +       struct i2c_client *i2c;
+> +       bool differential;
+> +};
 
+I haven't checked if there are similar drivers, but how about
+ltc247x_data? It's a bit odd to tie all naming in this driver to one
+chip and then support another one as well.
+
+> +
+> +/* Reference voltage is 1.25V */
+> +#define LTC2471_VREF 1250
+> +
+> +/* Read two bytes from the I2C bus to obtain the ADC result */
+> +static int ltc2471_get_value(struct i2c_client *i2c)
+> +{
+> +       int ret;
+> +       __be16 buf;
+> +
+> +       ret = i2c_master_recv(i2c, (char *)&buf, 2);
+> +       if (ret < 0)
+> +               return ret;
+> +       if (ret != 2)
+> +               return -EIO;
+> +
+> +       /* MSB first */
+> +       return be16_to_cpu(buf);
+> +}
+> +
+> +static ssize_t ltc2471_show_value(struct device *dev,
+> +                                 struct device_attribute *da, char *buf)
+> +{
+> +       struct ltc2471_data *data = dev_get_drvdata(dev);
+> +       int value;
+> +
+> +       value = ltc2471_get_value(data->i2c);
+> +       if (unlikely(value < 0))
+> +               return value;
+> +
+> +       if (data->differential)
+> +               /* Ranges from -VREF to +VREF with "0" at 0x8000 */
+> +               value = ((s32)LTC2471_VREF * (s32)(value - 0x8000)) >> 15;
+> +       else
+> +               /* Ranges from 0 to +VREF */
+> +               value = ((u32)LTC2471_VREF * (u32)value) >> 16;
+> +
+> +       return snprintf(buf, PAGE_SIZE, "%d\n", value);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, ltc2471_show_value, NULL, 0);
+
+Octal permissions are preferred over S_IRUGO and such.
+
+> +
+> +static struct attribute *ltc2471_attrs[] = {
+> +       &sensor_dev_attr_in0_input.dev_attr.attr,
+> +       NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(ltc2471);
+> +
+> +static int ltc2471_i2c_probe(struct i2c_client *i2c,
+> +                            const struct i2c_device_id *id)
+> +{
+> +       int ret;
+> +       struct device *hwmon_dev;
+> +       struct ltc2471_data *data;
+> +
+> +       if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
+> +               return -ENODEV;
+> +
+> +       data = devm_kzalloc(&i2c->dev, sizeof(struct ltc2471_data), GFP_KERNEL);
+
+sizeof(*data)
+
+> +       if (unlikely(!data))
+> +               return -ENOMEM;
+> +
+> +       data->i2c = i2c;
+> +       data->differential = (id->driver_data == ltc2473);
+> +
+> +       /* Trigger once to start conversion and check if chip is there */
+> +       ret = ltc2471_get_value(i2c);
+> +       if (ret < 0) {
+> +               dev_err(&i2c->dev, "Cannot read from device.\n");
+> +               return ret;
+> +       }
+> +
+> +       hwmon_dev = devm_hwmon_device_register_with_groups(&i2c->dev,
+> +                                                          i2c->name,
+> +                                                          data,
+> +                                                          ltc2471_groups);
+> +
+> +       return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct i2c_device_id ltc2471_i2c_id[] = {
+> +       { "ltc2471", ltc2471 },
+> +       { "ltc2473", ltc2473 },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ltc2471_i2c_id);
+> +
+> +static struct i2c_driver ltc2471_i2c_driver = {
+> +       .driver = {
+> +               .name = "ltc2471",
+> +       },
+> +       .probe    = ltc2471_i2c_probe,
+> +       .id_table = ltc2471_i2c_id,
+> +};
+> +
+> +module_i2c_driver(ltc2471_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("LTC2471/LTC2473 Sensor Driver");
+> +MODULE_AUTHOR("Topic Embedded Products");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 1.9.1
+>
+
+Frans
