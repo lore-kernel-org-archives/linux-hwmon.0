@@ -1,51 +1,67 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:46775 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752684AbdF2NlO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Jun 2017 09:41:14 -0400
+Return-Path: <prvs=0353794c29=mike.looijmans@topicproducts.com>
+Return-path: <prvs=0353794c29=mike.looijmans@topicproducts.com>
 Subject: Re: [PATCH v2] hwmon: Add LTC2471/LTC2473 driver
-To: Mike Looijmans <mike.looijmans@topic.nl>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>, Lars-Peter Clausen <lars@metafoo.de>,
+	<linux-hwmon@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <jdelvare@suse.com>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>, Jonathan Cameron
+	<jic23@kernel.org>
 References: <1498733135-4729-1-git-send-email-mike.looijmans@topic.nl>
  <1498738434-18252-1-git-send-email-mike.looijmans@topic.nl>
  <db17f447-3c2e-1dbe-147e-34114554205c@metafoo.de>
- <7c14b49d-5878-b665-fd4f-0582058cedd5@topic.nl>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1fdc6985-f6ca-2751-3503-a6de67b517e0@roeck-us.net>
-Date: Thu, 29 Jun 2017 06:41:11 -0700
+ <c2f1b4c1-91b2-f3af-e76f-66d7d0633239@roeck-us.net>
+From: Mike Looijmans <mike.looijmans@topic.nl>
+Message-ID: <26126017-55d8-3d38-f5de-c764ca9ec699@topic.nl>
+Date: Thu, 29 Jun 2017 16:11:42 +0200
 MIME-Version: 1.0
-In-Reply-To: <7c14b49d-5878-b665-fd4f-0582058cedd5@topic.nl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <c2f1b4c1-91b2-f3af-e76f-66d7d0633239@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: nl
+Content-Transfer-Encoding: quoted-printable
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 06/29/2017 06:22 AM, Mike Looijmans wrote:
-> On 29-06-17 14:30, Lars-Peter Clausen wrote:
+=EF=BB=BFOn 29-06-17 15:40, Guenter Roeck wrote:
+> On 06/29/2017 05:30 AM, Lars-Peter Clausen wrote:
 >> On 06/29/2017 02:13 PM, Mike Looijmans wrote:
->>> The LTC2741 and LTC2473 are single voltage monitoring chips. The LTC2473
+>>> The LTC2741 and LTC2473 are single voltage monitoring chips. The LTC247=
+3
 >>> is similar to the LTC2471 but outputs a signed differential value.
 >>>
 >>> Datasheet:
 >>>    http://cds.linear.com/docs/en/datasheet/24713fb.pdf
 >>
->> This looks more like a general purpose ADC rather than a specialized voltage
->> monitoring chip. In my opinion this driver would be better suited for the
->> IIO framework. But before you start working on that lets try to hear what
+>> This looks more like a general purpose ADC rather than a specialized vol=
+tage
+>> monitoring chip. In my opinion this driver would be better suited for th=
+e
+>> IIO framework. But before you start working on that lets try to hear wha=
+t
 >> others think about this.
-> 
-> I'm neutral on it, it's being used as a hardware monitor on the board I have, but it's indeed a generic I2C ADC.
-> 
-> Do you have a suggestion for a similar device (simple I2C ADC) that I could base the IIO driver on? I've come across the AD799x which seems a good starting point.
-> 
+>>
+>=20
+> Agreed (I just replied to that on another thread).
 
-ltc2485, ltc2497 ? No idea how close they are.
+Took a peek at the IIO drivers, looks simple enough, so I suggest to drop t=
+his=20
+patch and I'll create an IIO driver instead.
 
-Guenter
+The ltc2485 (as suggested by Guenter on that other thread) is pretty simila=
+r=20
+indeed, it might be feasible to join the two and have one driver handle the=
+m=20
+both. That would be preferred over a separat driver, right?
+
+
+Kind regards,
+
+Mike Looijmans
+System Expert
+
+TOPIC Products
+Materiaalweg 4, NL-5681 RJ Best
+Postbus 440, NL-5680 AK Best
+Telefoon: +31 (0) 499 33 69 79
+E-mail: mike.looijmans@topicproducts.com
+Website: www.topicproducts.com
+
+Please consider the environment before printing this e-mail
