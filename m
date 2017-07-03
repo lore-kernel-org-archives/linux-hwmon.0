@@ -1,54 +1,126 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:43252 "EHLO
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:36703 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751333AbdF2WpB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Jun 2017 18:45:01 -0400
-Date: Thu, 29 Jun 2017 15:44:57 -0700
+        with ESMTP id S1754307AbdGCQAH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Jul 2017 12:00:07 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.co.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 4/4] hwmon: da9052: add support for TSI channel
-Message-ID: <20170629224457.GA4360@roeck-us.net>
-References: <20170629124346.22325-1-sebastian.reichel@collabora.co.uk>
- <20170629124346.22325-5-sebastian.reichel@collabora.co.uk>
- <20170629184521.GA38388@dtor-ws>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v4.13
+Date: Mon,  3 Jul 2017 09:00:04 -0700
+Message-Id: <1499097604-4316-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170629184521.GA38388@dtor-ws>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 29, 2017 at 11:45:21AM -0700, Dmitry Torokhov wrote:
-> Hi Sebastian,
-> 
-> On Thu, Jun 29, 2017 at 02:43:46PM +0200, Sebastian Reichel wrote:
-> > @@ -238,6 +239,14 @@ static int da9052_ts_probe(struct platform_device *pdev)
-> >  	if (!da9052)
-> >  		return -EINVAL;
-> >  
-> > +	/*
-> > +	 * Check if touchscreen pins are used are analogue input instead
-> > +	 * of having a touchscreen connected to them. The analogue input
-> > +	 * functionality will be provided by hwmon driver (if enabled).
-> > +	 */
-> > +	if (device_property_read_bool(pdev->dev.parent, "dlg,tsi-as-adc"))
-> > +		return -ENODEV;
-> > +
-> 
-> I believe this is not the right way of doing this. da9052-core should
-> simply forgo creating da9052-tsi platform device when this property is
-> present.
-> 
-Agreed.
+Hi Linus,
 
+Please pull hwmon updates for Linux v4.13 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.13-rc1
+
+Thanks,
 Guenter
+------
+
+The following changes since commit 32c1431eea4881a6b17bd7c639315010aeefa452:
+
+  Linux 4.12-rc5 (2017-06-11 16:48:20 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.13-rc1
+
+for you to fetch changes up to 44b413661b57cbbb7e4c3adf7b087fada42a443e:
+
+  hwmon: (aspeed-pwm-tacho) Poll with short sleeps. (2017-06-24 08:58:06 -0700)
+
+----------------------------------------------------------------
+hwmon updates for v4.13:
+
+- Add PMBus client driver for IR35221
+- Add support for NCT6795D to nct6775 driver
+- Functional improvements to adt7475, aspeed-pwm-tacho, and ibmpowernv drivers
+- Minor fixes and cleanups in various drivers
+
+----------------------------------------------------------------
+Bartlomiej Zolnierkiewicz (1):
+      hwmon: (pwm-fan) Switch to new atomic PWM API
+
+Carlo Caione (1):
+      hwmon: (scpi) Fix the scale of SCP sensor readings
+
+Chris Packham (4):
+      hwmon: (adt7475) replace find_nearest() with find_closest()
+      hwmon: (adt7475) fan stall prevention
+      hwmon: (adt7475) add high frequency support
+      hwmon: (adt7475) temperature smoothing
+
+Cédric Le Goater (1):
+      hwmon: (ibmpowernv) introduce a legacy_compatibles array
+
+Guenter Roeck (4):
+      hwmon: (nct6775) Use bitops
+      hwmon: (nct6775) Rework temperature source and label handling
+      hwmon: (nct6775) Improve fan detection
+      hwmon: (nct6775) Add support for NCT6795D
+
+Patrick Venture (3):
+      hwmon: (aspeed-pwm-tacho) Enable both edge measurement.
+      hwmon: (aspeed-pwm-tacho) reduce fan_tach period
+      hwmon: (aspeed-pwm-tacho) Poll with short sleeps.
+
+Samuel Mendoza-Jonas (1):
+      hwmon: (pmbus) Add client driver for IR35221
+
+Shilpasri G Bhat (2):
+      hwmon: (ibmpowernv) Add highest/lowest attributes to sensors
+      hwmon: (ibmpowernv) Add current(A) sensor
+
+Wolfram Sang (5):
+      hwmon: (ads1015) move header file out of I2C realm
+      hwmon: (ds620) move header file out of I2C realm
+      hwmon: (ltc4245) move header file out of I2C realm
+      hwmon: (max6639) move header file out of I2C realm
+      hwmon: (pmbus) move header file out of I2C realm
+
+ Documentation/hwmon/ads1015                    |   2 +-
+ Documentation/hwmon/adt7475                    |   9 +
+ Documentation/hwmon/ir35221                    |  87 +++++++
+ Documentation/hwmon/ltc4245                    |   2 +-
+ Documentation/hwmon/pmbus-core                 |   2 +-
+ MAINTAINERS                                    |   4 +-
+ drivers/hwmon/ads1015.c                        |   2 +-
+ drivers/hwmon/adt7475.c                        | 184 +++++++++++---
+ drivers/hwmon/aspeed-pwm-tacho.c               |  50 +++-
+ drivers/hwmon/ds620.c                          |   2 +-
+ drivers/hwmon/ibmpowernv.c                     |  96 +++++--
+ drivers/hwmon/ltc4245.c                        |   2 +-
+ drivers/hwmon/max6639.c                        |   2 +-
+ drivers/hwmon/nct6775.c                        | 325 ++++++++++++++++--------
+ drivers/hwmon/pmbus/Kconfig                    |  10 +
+ drivers/hwmon/pmbus/Makefile                   |   1 +
+ drivers/hwmon/pmbus/ir35221.c                  | 337 +++++++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.c                    |   2 +-
+ drivers/hwmon/pmbus/pmbus_core.c               |   2 +-
+ drivers/hwmon/pmbus/ucd9000.c                  |   2 +-
+ drivers/hwmon/pmbus/ucd9200.c                  |   2 +-
+ drivers/hwmon/pwm-fan.c                        |  68 ++---
+ drivers/hwmon/scpi-hwmon.c                     |  54 +++-
+ drivers/iio/adc/ti-ads1015.c                   |   2 +-
+ include/linux/{i2c => platform_data}/ads1015.h |   0
+ include/linux/{i2c => platform_data}/ds620.h   |   0
+ include/linux/{i2c => platform_data}/ltc4245.h |   0
+ include/linux/{i2c => platform_data}/max6639.h |   0
+ include/linux/{i2c => }/pmbus.h                |   0
+ 29 files changed, 1025 insertions(+), 224 deletions(-)
+ create mode 100644 Documentation/hwmon/ir35221
+ create mode 100644 drivers/hwmon/pmbus/ir35221.c
+ rename include/linux/{i2c => platform_data}/ads1015.h (100%)
+ rename include/linux/{i2c => platform_data}/ds620.h (100%)
+ rename include/linux/{i2c => platform_data}/ltc4245.h (100%)
+ rename include/linux/{i2c => platform_data}/max6639.h (100%)
+ rename include/linux/{i2c => }/pmbus.h (100%)
