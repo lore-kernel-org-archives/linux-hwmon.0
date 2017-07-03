@@ -1,100 +1,75 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57509 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752715AbdGHPpT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Jul 2017 11:45:19 -0400
-Date: Sat, 8 Jul 2017 08:45:15 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tom Levens <tom.levens@cern.ch>
-Cc: Rob Herring <robh+dt@kernel.org>,
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50686 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752378AbdGCIkJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Jul 2017 04:40:09 -0400
+From: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+To: Sebastian Reichel <sre@kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [v3,1/3] hwmon: ltc2990: refactor value conversion
-Message-ID: <20170708154515.GA6358@roeck-us.net>
-References: <1499056140-6064-1-git-send-email-tom.levens@cern.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1499056140-6064-1-git-send-email-tom.levens@cern.ch>
+        Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Subject: [PATCHv5 0/6] DA9052 hardware monitoring improvements
+Date: Mon,  3 Jul 2017 10:39:57 +0200
+Message-Id: <20170703084003.31184-1-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 03, 2017 at 06:28:58AM +0200, Tom Levens wrote:
-> Conversion from raw values to signed integers has been refactored using
-> bitops.h. This also fixes a bug where negative temperatures were
-> converted incorrectly.
-> 
+Hi,
 
-Documentation/process/submitting-patches.rst, chapter 2: "Solve only one
-problem per patch.".
+GE Healthcare's PPD [0] uses DA9053's touchscreen pins
+for hardware monitoring purposes. This adds support for
+the feature and fixes a bug, which came up during
+stress-testing of the driver.
 
-I can understand the urge to merge two sets of changes here. However,
-that creates a problem for me: The fix should be applied to stable kernels,
-but not the refactoring.
+[0] https://patchwork.kernel.org/patch/9809681/
 
-Please split the patch in two, one for the bug fix and one for the
-refactoring.
+Changes since PATCHv4:
+ - split mfd changes from main hwmon patch
 
-Thanks,
-Guenter
+Changes since PATCHv3:
+ - use correct index in da9052_channel_is_visible()
+ - disable touchscreen in mfd instead of in ts driver
 
-> Signed-off-by: Tom Levens <tom.levens@cern.ch>
-> ---
->  drivers/hwmon/ltc2990.c | 18 ++++--------------
->  1 file changed, 4 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
-> index 8f8fe05..e320d21 100644
-> --- a/drivers/hwmon/ltc2990.c
-> +++ b/drivers/hwmon/ltc2990.c
-> @@ -11,6 +11,7 @@
->   * the chip's internal temperature and Vcc power supply voltage.
->   */
->  
-> +#include <linux/bitops.h>
->  #include <linux/err.h>
->  #include <linux/hwmon.h>
->  #include <linux/hwmon-sysfs.h>
-> @@ -34,15 +35,6 @@
->  #define LTC2990_CONTROL_MODE_CURRENT	0x06
->  #define LTC2990_CONTROL_MODE_VOLTAGE	0x07
->  
-> -/* convert raw register value to sign-extended integer in 16-bit range */
-> -static int ltc2990_voltage_to_int(int raw)
-> -{
-> -	if (raw & BIT(14))
-> -		return -(0x4000 - (raw & 0x3FFF)) << 2;
-> -	else
-> -		return (raw & 0x3FFF) << 2;
-> -}
-> -
->  /* Return the converted value from the given register in uV or mC */
->  static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
->  {
-> @@ -55,18 +47,16 @@ static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
->  	switch (reg) {
->  	case LTC2990_TINT_MSB:
->  		/* internal temp, 0.0625 degrees/LSB, 13-bit  */
-> -		val = (val & 0x1FFF) << 3;
-> -		*result = (val * 1000) >> 7;
-> +		*result = sign_extend32(val, 12) * 1000 / 16;
->  		break;
->  	case LTC2990_V1_MSB:
->  	case LTC2990_V3_MSB:
->  		 /* Vx-Vy, 19.42uV/LSB. Depends on mode. */
-> -		*result = ltc2990_voltage_to_int(val) * 1942 / (4 * 100);
-> +		*result = sign_extend32(val, 14) * 1942 / 100;
->  		break;
->  	case LTC2990_VCC_MSB:
->  		/* Vcc, 305.18μV/LSB, 2.5V offset */
-> -		*result = (ltc2990_voltage_to_int(val) * 30518 /
-> -			   (4 * 100 * 1000)) + 2500;
-> +		*result = sign_extend32(val, 14) * 30518 / (100 * 1000) + 2500;
->  		break;
->  	default:
->  		return -EINVAL; /* won't happen, keep compiler happy */
+Changes since PATCHv2:
+ - switch from "diag," to "dlg," prefix
+ - add/use defines for accessing bits in registers
+ - provide more details in the comment above early exit
+   in touchscreen driver
+ - switch to da9052_group_read() to ensure MSB and LSB
+   are in sync
+ - move binding update into its own patch
+ - rename patch
+
+Changes since PATCHv1:
+ - convert tsiref-microvolt property into proper regulator
+ - drop error message for timeout
+ - simplify da9052_channel_is_visible()
+ - fix checkpatch warnings
+
+-- Sebastian
+
+Sebastian Reichel (6):
+  mfd: da9052: fix manual ADC read after timed out read
+  dt-bindings: mfd: da9052: support TSI as ADC
+  mfd: da9052: add register details for TSI
+  mfd: da9052: make touchscreen registration optional
+  hwmon: da9052: replace S_IRUGO with 0444
+  hwmon: da9052: add support for TSI channel
+
+ .../devicetree/bindings/mfd/da9052-i2c.txt         |   8 +
+ drivers/hwmon/da9052-hwmon.c                       | 285 +++++++++++++++++++--
+ drivers/mfd/da9052-core.c                          |  30 ++-
+ include/linux/mfd/da9052/da9052.h                  |   6 +
+ include/linux/mfd/da9052/reg.h                     |  11 +-
+ 5 files changed, 314 insertions(+), 26 deletions(-)
+
+-- 
+2.11.0
+
