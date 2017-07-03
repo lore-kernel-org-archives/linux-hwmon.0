@@ -1,72 +1,86 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:33520 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752000AbdGGSSa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Jul 2017 14:18:30 -0400
-Date: Fri, 7 Jul 2017 11:18:28 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Cengiz Can <cengizc@gmail.com>
-Cc: Henrik Rydberg <rydberg@bitmath.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: applesmc: fix deprecated hwmon_device_register
- call
-Message-ID: <20170707181828.GB25433@roeck-us.net>
-References: <20170702000505.2650-1-cengizc@gmail.com>
+Received: from mail-eopbgr00043.outbound.protection.outlook.com ([40.107.0.43]:26624
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1750776AbdGCE3K (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 3 Jul 2017 00:29:10 -0400
+From: Tom Levens <tom.levens@cern.ch>
+To: Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Mike Looijmans" <mike.looijmans@topic.nl>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+Subject: [PATCH v3 1/3] hwmon: ltc2990: refactor value conversion
+Date: Mon, 3 Jul 2017 06:28:58 +0200
+Message-ID: <1499056140-6064-1-git-send-email-tom.levens@cern.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170702000505.2650-1-cengizc@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 02, 2017 at 03:05:05AM +0300, Cengiz Can wrote:
-> Hello.
-> 
-> This is my first patch attempt on drivers so I might be completely wrong.
-> 
-> applesmc driver was using the deprecated `hwmon_device_register` call for
-> some reason. And that causes a deprecation warning in dmesg.
-> 
-> I've replaced the call with `hwmon_device_register_with_info` and booted
-> my MBP 11,2 with it.
-> 
-> The warning is no longer shown. And the functionality doesn't seem to be
-> broken.
-> 
-> Thank you for reading this.
-> 
+Conversion from raw values to signed integers has been refactored using
+bitops.h. This also fixes a bug where negative temperatures were
+converted incorrectly.
 
-Do you really want all of the above in the change log ?
+Signed-off-by: Tom Levens <tom.levens@cern.ch>
+---
+ drivers/hwmon/ltc2990.c | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-> Signed-off-by: Cengiz Can <cengizc@gmail.com>
-> ---
->  drivers/hwmon/applesmc.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 0af7fd311979..6e897310151a 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-> @@ -1326,7 +1326,11 @@ static int __init applesmc_init(void)
->  	if (ret)
->  		goto out_light_sysfs;
->  
-> -	hwmon_dev = hwmon_device_register(&pdev->dev);
-> +	hwmon_dev = hwmon_device_register_with_info(&pdev->dev,
-> +						   "applesmcbacklight",
-> +						   NULL,
-> +						   NULL,
-> +						   NULL);
+diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+index 8f8fe05..e320d21 100644
+--- a/drivers/hwmon/ltc2990.c
++++ b/drivers/hwmon/ltc2990.c
+@@ -11,6 +11,7 @@
+  * the chip's internal temperature and Vcc power supply voltage.
+  */
+ 
++#include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+@@ -34,15 +35,6 @@
+ #define LTC2990_CONTROL_MODE_CURRENT	0x06
+ #define LTC2990_CONTROL_MODE_VOLTAGE	0x07
+ 
+-/* convert raw register value to sign-extended integer in 16-bit range */
+-static int ltc2990_voltage_to_int(int raw)
+-{
+-	if (raw & BIT(14))
+-		return -(0x4000 - (raw & 0x3FFF)) << 2;
+-	else
+-		return (raw & 0x3FFF) << 2;
+-}
+-
+ /* Return the converted value from the given register in uV or mC */
+ static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
+ {
+@@ -55,18 +47,16 @@ static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int *result)
+ 	switch (reg) {
+ 	case LTC2990_TINT_MSB:
+ 		/* internal temp, 0.0625 degrees/LSB, 13-bit  */
+-		val = (val & 0x1FFF) << 3;
+-		*result = (val * 1000) >> 7;
++		*result = sign_extend32(val, 12) * 1000 / 16;
+ 		break;
+ 	case LTC2990_V1_MSB:
+ 	case LTC2990_V3_MSB:
+ 		 /* Vx-Vy, 19.42uV/LSB. Depends on mode. */
+-		*result = ltc2990_voltage_to_int(val) * 1942 / (4 * 100);
++		*result = sign_extend32(val, 14) * 1942 / 100;
+ 		break;
+ 	case LTC2990_VCC_MSB:
+ 		/* Vcc, 305.18μV/LSB, 2.5V offset */
+-		*result = (ltc2990_voltage_to_int(val) * 30518 /
+-			   (4 * 100 * 1000)) + 2500;
++		*result = sign_extend32(val, 14) * 30518 / (100 * 1000) + 2500;
+ 		break;
+ 	default:
+ 		return -EINVAL; /* won't happen, keep compiler happy */
+-- 
+1.8.3.1
 
-I am not in favor of changes like this. It doesn't solve the problem
-with the old API, which is that it maintains sysfs nodes locally.
-Besides, this patch changes the name from "applesmc" to "applesmcbacklight",
-it creates a name attribute in the hwmon device directory while
-keeping the actual hwmon attributes in the platform device directory,
-and the driver has another name attribute in the platform device directory.
-
-Given that, sorry, I can not accept this patch.
-
-Guenter
