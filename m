@@ -1,118 +1,83 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f53.google.com ([74.125.82.53]:35106 "EHLO
-        mail-wm0-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751300AbdGQOfA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jul 2017 10:35:00 -0400
-Received: by mail-wm0-f53.google.com with SMTP id w126so78015825wme.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2017 07:34:59 -0700 (PDT)
-Date: Mon, 17 Jul 2017 15:34:44 +0100
-From: Lee Jones <lee.jones@linaro.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Cc: Sebastian Reichel <sre@kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 4/6] mfd: da9052: make touchscreen registration optional
-Message-ID: <20170717143444.i5zlzwrbd76bhq4z@dell>
-References: <20170703084003.31184-1-sebastian.reichel@collabora.co.uk>
- <20170703084003.31184-5-sebastian.reichel@collabora.co.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20170703084003.31184-5-sebastian.reichel@collabora.co.uk>
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:34744 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750871AbdGEFGu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jul 2017 01:06:50 -0400
+From: Arvind Yadav <arvind.yadav.cs@gmail.com>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: nct7802: constify attribute_group structures.
+Date: Wed,  5 Jul 2017 10:36:33 +0530
+Message-Id: <7a32d92ba635b2c14442ce2df8d82cd9e32e42a2.1499231145.git.arvind.yadav.cs@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, 03 Jul 2017, Sebastian Reichel wrote:
+attribute_groups are not supposed to change at runtime. All functions
+working with attribute_groups provided by <linux/sysfs.h> work with const
+attribute_group. So mark the non-const structs as const.
 
-> If the touchscreen pins are used as general purpose analogue
-> input, the touchscreen driver should not be used. The pins
-> will be handled by the existing hwmon driver instead.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-> ---
->  drivers/mfd/da9052-core.c | 28 +++++++++++++++++++++++++---
->  1 file changed, 25 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
-> index 977418ca9117..a671c18381d7 100644
-> --- a/drivers/mfd/da9052-core.c
-> +++ b/drivers/mfd/da9052-core.c
-> @@ -18,6 +18,7 @@
->  #include <linux/mfd/core.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
-> +#include <linux/property.h>
->  
->  #include <linux/mfd/da9052/da9052.h>
->  #include <linux/mfd/da9052/pdata.h>
-> @@ -521,9 +522,6 @@ static const struct mfd_cell da9052_subdev_info[] = {
->  		.name = "da9052-wled3",
->  	},
->  	{
-> -		.name = "da9052-tsi",
-> -	},
-> -	{
->  		.name = "da9052-bat",
->  	},
->  	{
-> @@ -531,6 +529,12 @@ static const struct mfd_cell da9052_subdev_info[] = {
->  	},
->  };
->  
-> +static const struct mfd_cell da9052_tsi_subdev_info[] = {
-> +	{
-> +		.name = "da9052-tsi",
-> +	},
-> +};
+File size before:
+   text	   data	    bss	    dec	    hex	filename
+   6655	    304	      0	   6959	   1b2f	drivers/hwmon/hwmon.o
 
-I normally prefer these one a single line.
+File size After adding 'const':
+   text	   data	    bss	    dec	    hex	filename
+   6703	    240	      0	   6943	   1b1f	drivers/hwmon/hwmon.o
 
-Once fixed:
+Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
+---
+ drivers/hwmon/nct7802.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-For my own reference:
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-
->  const struct regmap_config da9052_regmap_config = {
->  	.reg_bits = 8,
->  	.val_bits = 8,
-> @@ -621,9 +625,27 @@ int da9052_device_init(struct da9052 *da9052, u8 chip_id)
->  		goto err;
->  	}
->  
-> +	/*
-> +	 * Check if touchscreen pins are used are analogue input instead
-> +	 * of having a touchscreen connected to them. The analogue input
-> +	 * functionality will be provided by hwmon driver (if enabled).
-> +	 */
-> +	if (!device_property_read_bool(da9052->dev, "dlg,tsi-as-adc")) {
-> +		ret = mfd_add_devices(da9052->dev, PLATFORM_DEVID_AUTO,
-> +				      da9052_tsi_subdev_info,
-> +				      ARRAY_SIZE(da9052_tsi_subdev_info),
-> +				      NULL, 0, NULL);
-> +		if (ret) {
-> +			dev_err(da9052->dev, "failed to add TSI subdev: %d\n",
-> +				ret);
-> +			goto err;
-> +		}
-> +	}
-> +
->  	return 0;
->  
->  err:
-> +	mfd_remove_devices(da9052->dev);
->  	da9052_irq_exit(da9052);
->  
->  	return ret;
-
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index 12b94b0..2876c18 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -704,7 +704,7 @@ static umode_t nct7802_temp_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_temp_group = {
++static const struct attribute_group nct7802_temp_group = {
+ 	.attrs = nct7802_temp_attrs,
+ 	.is_visible = nct7802_temp_is_visible,
+ };
+@@ -802,7 +802,7 @@ static umode_t nct7802_in_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_in_group = {
++static const struct attribute_group nct7802_in_group = {
+ 	.attrs = nct7802_in_attrs,
+ 	.is_visible = nct7802_in_is_visible,
+ };
+@@ -880,7 +880,7 @@ static umode_t nct7802_fan_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_fan_group = {
++static const struct attribute_group nct7802_fan_group = {
+ 	.attrs = nct7802_fan_attrs,
+ 	.is_visible = nct7802_fan_is_visible,
+ };
+@@ -898,7 +898,7 @@ static umode_t nct7802_fan_is_visible(struct kobject *kobj,
+ 	NULL
+ };
+ 
+-static struct attribute_group nct7802_pwm_group = {
++static const struct attribute_group nct7802_pwm_group = {
+ 	.attrs = nct7802_pwm_attrs,
+ };
+ 
+@@ -1011,7 +1011,7 @@ static SENSOR_DEVICE_ATTR(pwm3_auto_point4_pwm, S_IRUGO | S_IWUSR,
+ 	NULL
+ };
+ 
+-static struct attribute_group nct7802_auto_point_group = {
++static const struct attribute_group nct7802_auto_point_group = {
+ 	.attrs = nct7802_auto_point_attrs,
+ };
+ 
 -- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+1.9.1
+
