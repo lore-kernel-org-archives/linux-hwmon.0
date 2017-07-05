@@ -1,72 +1,87 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:44482 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752935AbdGHP5e (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 8 Jul 2017 11:57:34 -0400
-Date: Sat, 8 Jul 2017 08:57:31 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arvind Yadav <arvind.yadav.cs@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: hwmon: adt7475: constify attribute_group structures.
-Message-ID: <20170708155731.GA13516@roeck-us.net>
-References: <6f75a80453097e5f05f26782b42ab48f0da8e502.1499232764.git.arvind.yadav.cs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f75a80453097e5f05f26782b42ab48f0da8e502.1499232764.git.arvind.yadav.cs@gmail.com>
+Received: from mail-pg0-f66.google.com ([74.125.83.66]:35694 "EHLO
+        mail-pg0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750796AbdGEFLi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jul 2017 01:11:38 -0400
+From: Arvind Yadav <arvind.yadav.cs@gmail.com>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: nct7802: constify attribute_group structures.
+Date: Wed,  5 Jul 2017 10:41:18 +0530
+Message-Id: <ff70f97b4eff56164bb164efcf2df2ef8ab6bf65.1499231308.git.arvind.yadav.cs@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 05, 2017 at 11:04:04AM +0530, Arvind Yadav wrote:
-> attribute_groups are not supposed to change at runtime. All functions
-> working with attribute_groups provided by <linux/sysfs.h> work with const
-> attribute_group. So mark the non-const structs as const.
-> 
-> File size before:
->    text	   data	    bss	    dec	    hex	filename
->   10055	   7032	      0	  17087	   42bf	drivers/hwmon/adt7475.o
-> 
-> File size After adding 'const':
->    text	   data	    bss	    dec	    hex	filename
->   10567	   6520	      0	  17087	   42bf	drivers/hwmon/adt7475.o
-> 
-> Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
+attribute_groups are not supposed to change at runtime. All functions
+working with attribute_groups provided by <linux/sysfs.h> work with const
+attribute_group. So mark the non-const structs as const.
 
-Applied to hwmon-next.
+File size before:
+   text	   data	    bss	    dec	    hex	filename
+   6161	   9400	      0	  15561	   3cc9	drivers/hwmon/nct7802.o
 
-Thanks,
-Guenter
+File size After adding 'const':
+   text	   data	    bss	    dec	    hex	filename
+   6465	   9080	      0	  15545	   3cb9	drivers/hwmon/nct7802.o
 
-> ---
->  drivers/hwmon/adt7475.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index c803e3c..973f17a 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1205,14 +1205,14 @@ static SENSOR_DEVICE_ATTR_2(pwm3_auto_point2_pwm, S_IRUGO | S_IWUSR, show_pwm,
->  	NULL
->  };
->  
-> -static struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
-> -static struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
-> -static struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
-> -static struct attribute_group in0_attr_group = { .attrs = in0_attrs };
-> -static struct attribute_group in3_attr_group = { .attrs = in3_attrs };
-> -static struct attribute_group in4_attr_group = { .attrs = in4_attrs };
-> -static struct attribute_group in5_attr_group = { .attrs = in5_attrs };
-> -static struct attribute_group vid_attr_group = { .attrs = vid_attrs };
-> +static const struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
-> +static const struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
-> +static const struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
-> +static const struct attribute_group in0_attr_group = { .attrs = in0_attrs };
-> +static const struct attribute_group in3_attr_group = { .attrs = in3_attrs };
-> +static const struct attribute_group in4_attr_group = { .attrs = in4_attrs };
-> +static const struct attribute_group in5_attr_group = { .attrs = in5_attrs };
-> +static const struct attribute_group vid_attr_group = { .attrs = vid_attrs };
->  
->  static int adt7475_detect(struct i2c_client *client,
->  			  struct i2c_board_info *info)
+Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
+---
+Changes in v1:
+              Subject was not correct. Now comparing size of nct7802.c
+
+ drivers/hwmon/nct7802.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index 12b94b0..2876c18 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -704,7 +704,7 @@ static umode_t nct7802_temp_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_temp_group = {
++static const struct attribute_group nct7802_temp_group = {
+ 	.attrs = nct7802_temp_attrs,
+ 	.is_visible = nct7802_temp_is_visible,
+ };
+@@ -802,7 +802,7 @@ static umode_t nct7802_in_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_in_group = {
++static const struct attribute_group nct7802_in_group = {
+ 	.attrs = nct7802_in_attrs,
+ 	.is_visible = nct7802_in_is_visible,
+ };
+@@ -880,7 +880,7 @@ static umode_t nct7802_fan_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static struct attribute_group nct7802_fan_group = {
++static const struct attribute_group nct7802_fan_group = {
+ 	.attrs = nct7802_fan_attrs,
+ 	.is_visible = nct7802_fan_is_visible,
+ };
+@@ -898,7 +898,7 @@ static umode_t nct7802_fan_is_visible(struct kobject *kobj,
+ 	NULL
+ };
+ 
+-static struct attribute_group nct7802_pwm_group = {
++static const struct attribute_group nct7802_pwm_group = {
+ 	.attrs = nct7802_pwm_attrs,
+ };
+ 
+@@ -1011,7 +1011,7 @@ static SENSOR_DEVICE_ATTR(pwm3_auto_point4_pwm, S_IRUGO | S_IWUSR,
+ 	NULL
+ };
+ 
+-static struct attribute_group nct7802_auto_point_group = {
++static const struct attribute_group nct7802_auto_point_group = {
+ 	.attrs = nct7802_auto_point_attrs,
+ };
+ 
+-- 
+1.9.1
+
