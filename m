@@ -1,355 +1,473 @@
-Return-Path: <c_mykolak@mellanox.com>
-Return-path: <c_mykolak@mellanox.com>
-From: Mykola Kostenok <c_mykolak@mellanox.com>
+Return-Path: <tom.levens@cern.ch>
+Return-path: <tom.levens@cern.ch>
+Date: Wed, 12 Jul 2017 00:00:31 +0200
+From: Tom Levens <tom.levens@cern.ch>
 To: Guenter Roeck <linux@roeck-us.net>
-CC: Jean Delvare <jdelvare@suse.com>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, Jaghathiswari Rankappagounder Natarajan
-	<jaghu@google.com>, "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	Patrick Venture <venture@google.com>, Vadim Pasternak <vadimp@mellanox.com>
-Subject: RE: [patch v1] hwmon: (aspeed-pwm-tacho) cooling device support.
-Date: Mon, 10 Jul 2017 14:36:17 +0000
-Message-ID: <DB5PR05MB1224342E024F68EE43790E53EFA90@DB5PR05MB1224.eurprd05.prod.outlook.com>
-References: <20170706142338.32732-1-c_mykolak@mellanox.com>
- <20170707180844.GA25433@roeck-us.net>
-In-Reply-To: <20170707180844.GA25433@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+CC: Mike Looijmans <mike.looijmans@topic.nl>, Tom Levens <tom.levens@cern.ch>,
+	Rob Herring <robh+dt@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Jean
+ Delvare" <jdelvare@suse.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] hwmon: ltc2990: support all measurement modes
+In-Reply-To: <080a2b76-7c9d-d8f2-c8f2-be1a513e2daa@roeck-us.net>
+Message-ID: <alpine.LRH.2.20.1707112354020.28469@lxplus091.cern.ch>
+References: <1499056140-6064-1-git-send-email-tom.levens@cern.ch> <1499056140-6064-3-git-send-email-tom.levens@cern.ch> <341b5c67-c013-5a7c-54b5-e8c2a7c168e7@topic.nl> <080a2b76-7c9d-d8f2-c8f2-be1a513e2daa@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="-1195575205-201736693-1499810435=:28469"
 List-ID: <linux-hwmon@vger.kernel.org>
 
-> -----Original Message-----
-> From: Guenter Roeck [mailto:linux@roeck-us.net]
-> Sent: Friday, July 7, 2017 9:09 PM
-> To: Mykola Kostenok <c_mykolak@mellanox.com>
-> Cc: Jean Delvare <jdelvare@suse.com>; linux-hwmon@vger.kernel.org;
-> Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>;
-> openbmc@lists.ozlabs.org; Patrick Venture <venture@google.com>; Vadim
-> Pasternak <vadimp@mellanox.com>
-> Subject: Re: [patch v1] hwmon: (aspeed-pwm-tacho) cooling device support.
->=20
-> On Thu, Jul 06, 2017 at 05:23:38PM +0300, Mykola Kostenok wrote:
-> > Add support in aspeed-pwm-tacho driver for cooling device creation.
-> > This cooling device could be bound to a thermal zone for the thermal
-> > control. Device will appear in /sys/class/thermal folder as
-> > cooling_deviceX. Then it could be bound to particular thermal zones.
-> > Allow specification of the cooling levels vector - PWM duty cycle
-> > values in a range from 0 to 255 which correspond to thermal cooling
-> > states.
-> >
-> > Signed-off-by: Mykola Kostenok <c_mykolak@mellanox.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt |  52 ++++++--
->=20
-> You'll need devicetree maintainer approval for any devicetree changes.
->=20
-> >  drivers/hwmon/aspeed-pwm-tacho.c                   | 141
-> ++++++++++++++++++++-
-> >  2 files changed, 179 insertions(+), 14 deletions(-)
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> > b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> > index cf44605..293a994 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> > +++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-
-> tacho.txt
-> > @@ -23,9 +23,14 @@ Required properties for pwm-tacho node:
-> >  - clocks : a fixed clock providing input clock frequency(PWM
-> >  	   and Fan Tach clock)
-> >
-> > -fan subnode format:
-> > +tach-channels subnode format:
->=20
-> I don't like the notion of renaming "fan subnode" to "tach-channels
-> subnode". To me that is just a personal preference. Tomorrow I might get
-> another patch changing it back or changing it to something else.
->=20
-> But, as mentioned above, you'll need DT maintaier approval for those
-> changes in the first place.
->=20
+---1195575205-201736693-1499810435=:28469
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8BIT
+
+
+
+On Mon, 3 Jul 2017, Guenter Roeck wrote:
+
+> On 07/02/2017 11:29 PM, Mike Looijmans wrote:
+>>  Applied, and tested on my board, so you have my
+>>
+>>  Tested-By: mike.looijmans@topic.nl
+>>
+>>  Probably the maintainers will like to see a patch header mail with a "v3"
+>>  summary for what you've changed ("git send-email --cover-letter" or
+>>  something similar to that)
+>> 
+>
+> ... and without it, the patch series tends to end up at the end of my review
+> list since I'll have to spend time tracking down the changes myself or, per
+> my choice, start all over and hope I catch all the problems found earlier.
+>
+> In other words, if people would like their patch series handled with
+> priority, making life easy for maintainers is a good start.
+
+Apologies, it seems the change summary got lost when sending the patches. 
+Here it is:
+
+Changes since v2:
+  * If a devicetree node does not exist, do not initialise the chip. In
+    this case it is assumed that the initialisation has been done by
+    another source.
+  * Allow configuration of both of the "mode" fields in the control
+    register.
+  * Rename the devicetree property lltc->mode to lltc->meas-mode.
+  * Specifying the mode in the devicetree node is now mandatory.
+  * Small documentation updates.
+  * Revert some unnecessary change of types.
+
 > Guenter
->=20
+>
+>>  On 03-07-17 06:29, Tom Levens wrote:
+>> >  Updated version of the ltc2990 driver which supports all measurement
+>> >  modes (current, voltage, temperature) available in the chip.
+>> > 
+>> >  If devicetree is used, the mode must be specified with the property
+>> >  "lltc,meas-mode". The format and possible values of the property are
+>
+> AFAIK, DT maintainers are not much into abbreviations.
 
-Hi, Guenter.
-Thank you for reply.
+As far as I recall, this change was the suggestion of Rob as "mode" was 
+too vague.
 
-Actually we didn't rename fan subnode. We add one more level hierarchy
-tach-channels and put fan subnodes inside it.
-And also we add pwm-channels subnode with pwm subnodes inside=20
-for cooling device.
-
-We found issue with of_node_put in this patch, so we want to send=20
-you patch v2.
-
-Do we need send this changes in 2 separated patches,=20
-one with driver aspeed-pwm-tacho.c to you, and another=20
-with doc aspeed-pwm-tacho.txt to DT maintainer?
-
-Best regards. Mykola Kostenok.
-
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > -Under fan subnode there can upto 8 child nodes, with each child node
-> > +Required properties for tach-channels node:
-> > +- #address-cells : should be 1.
-> > +
-> > +- #size-cells : should be 0.
-> > +
-> > +Under tach-channels subnode there can be upto 8 child nodes, with
-> > +each child node
-> >  representing a fan. If there are 8 fans each fan can have one PWM
-> > port and  one/two Fan tach inputs.
-> >
-> > @@ -39,6 +44,22 @@ Required properties for each child node:
-> >  		Fan tach channel 0 and 15 indicating Fan tach channel 15.
-> >  		Atleast one Fan tach input channel is required.
-> >
-> > +pwm-channels subnode format:
-> > +Under pwm-channels subnode there can be pwm child nodes.
-> > +Required properties for tach-channels node:
-> > +- #address-cells : should be 1.
-> > +
-> > +- #size-cells : should be 0.
-> > +
-> > +- #cooling-cells : should be 2;
-> > +
-> > +pwm subnode format:
-> > +- reg : should be <0x00>.
-> > +
-> > +- cooling-levels      : PWM duty cycle values in a range from 0 to 255
-> > +			which correspond to thermal cooling states.
-> > +
-> > +
-> >  Examples:
-> >
-> >  pwm_tacho_fixed_clk: fixedclk {
-> > @@ -55,14 +76,25 @@ pwm_tacho: pwmtachocontroller@1e786000 {
-> >  	clocks =3D <&pwm_tacho_fixed_clk>;
-> >  	pinctrl-names =3D "default";
-> >  	pinctrl-0 =3D <&pinctrl_pwm0_default &pinctrl_pwm1_default>;
-> > -
-> > -	fan@0 {
-> > -		reg =3D <0x00>;
-> > -		aspeed,fan-tach-ch =3D /bits/ 8 <0x00>;
-> > +	tach-channels {
-> > +		#address-cells =3D <1>;
-> > +		#size-cells =3D <0>;
-> > +		fan@0 {
-> > +			reg =3D <0x00>;
-> > +			aspeed,fan-tach-ch =3D /bits/ 8 <0x00>;
-> > +		};
-> > +		fan@1 {
-> > +			reg =3D <0x01>;
-> > +			aspeed,fan-tach-ch =3D /bits/ 8 <0x01 0x02>;
-> > +		};
-> >  	};
-> > -
-> > -	fan@1 {
-> > -		reg =3D <0x01>;
-> > -		aspeed,fan-tach-ch =3D /bits/ 8 <0x01 0x02>;
-> > +	pwm-channels {
-> > +		#address-cells =3D <1>;
-> > +		#size-cells =3D <0>;
-> > +		#cooling-cells =3D <2>;
-> > +		pwm@0 {
-> > +			reg =3D <0x00>;
-> > +			cooling-levels =3D /bits/ 8 <125 151 177 203 229 255>;
-> > +		};
-> >  	};
-> >  };
-> > diff --git a/drivers/hwmon/aspeed-pwm-tacho.c
-> > b/drivers/hwmon/aspeed-pwm-tacho.c
-> > index ddfe66b..c10a37e 100644
-> > --- a/drivers/hwmon/aspeed-pwm-tacho.c
-> > +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/platform_device.h>
-> >  #include <linux/sysfs.h>
-> >  #include <linux/regmap.h>
-> > +#include <linux/thermal.h>
-> >
-> >  /* ASPEED PWM & FAN Tach Register Definition */
-> >  #define ASPEED_PTCR_CTRL		0x00
-> > @@ -166,6 +167,16 @@
-> >  /* How long we sleep in us while waiting for an RPM result. */
-> >  #define ASPEED_RPM_STATUS_SLEEP_USEC	500
-> >
-> > +struct aspeed_cooling_device {
-> > +	char name[16];
-> > +	struct aspeed_pwm_tacho_data *priv;
-> > +	struct thermal_cooling_device *tcdev;
-> > +	int pwm_port;
-> > +	u8 *cooling_levels;
-> > +	u8 max_state;
-> > +	u8 cur_state;
-> > +};
-> > +
-> >  struct aspeed_pwm_tacho_data {
-> >  	struct regmap *regmap;
-> >  	unsigned long clk_freq;
-> > @@ -180,6 +191,7 @@ struct aspeed_pwm_tacho_data {
-> >  	u8 pwm_port_type[8];
-> >  	u8 pwm_port_fan_ctrl[8];
-> >  	u8 fan_tach_ch_source[16];
-> > +	struct aspeed_cooling_device *cdev[8];
-> >  	const struct attribute_group *groups[3];  };
-> >
-> > @@ -794,10 +806,111 @@ static int aspeed_create_fan(struct device *dev,
-> >  	return 0;
-> >  }
-> >
-> > +static int
-> > +aspeed_pwm_cz_get_max_state(struct thermal_cooling_device *tcdev,
-> > +			    unsigned long *state)
-> > +{
-> > +	struct aspeed_cooling_device *cdev =3D
-> > +				(struct aspeed_cooling_device *)tcdev-
-> >devdata;
-> > +
-> > +	*state =3D cdev->max_state;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +aspeed_pwm_cz_get_cur_state(struct thermal_cooling_device *tcdev,
-> > +			    unsigned long *state)
-> > +{
-> > +	struct aspeed_cooling_device *cdev =3D
-> > +				(struct aspeed_cooling_device *)tcdev-
-> >devdata;
-> > +
-> > +	*state =3D cdev->cur_state;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +aspeed_pwm_cz_set_cur_state(struct thermal_cooling_device *tcdev,
-> > +			    unsigned long state)
-> > +{
-> > +	struct aspeed_cooling_device *cdev =3D
-> > +				(struct aspeed_cooling_device *)tcdev-
-> >devdata;
-> > +
-> > +	if (state > cdev->max_state)
-> > +		return -EINVAL;
-> > +
-> > +	cdev->cur_state =3D state;
-> > +	cdev->priv->pwm_port_fan_ctrl[cdev->pwm_port] =3D *(cdev-
-> >cooling_levels
-> > +							  + cdev->cur_state);
-> > +	aspeed_set_pwm_port_fan_ctrl(cdev->priv, cdev->pwm_port,
-> > +				     *(cdev->cooling_levels +
-> > +				       cdev->cur_state));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct thermal_cooling_device_ops aspeed_pwm_cool_ops =3D
-> {
-> > +	.get_max_state =3D aspeed_pwm_cz_get_max_state,
-> > +	.get_cur_state =3D aspeed_pwm_cz_get_cur_state,
-> > +	.set_cur_state =3D aspeed_pwm_cz_set_cur_state, };
-> > +
-> > +static int aspeed_create_pwm_cooling(struct device *dev,
-> > +				     struct device_node *child,
-> > +				     struct aspeed_pwm_tacho_data *priv) {
-> > +	u32 pwm_port;
-> > +	int ret;
-> > +
-> > +	ret =3D of_property_read_u32(child, "reg", &pwm_port);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D of_property_count_u8_elems(child, "cooling-levels");
-> > +	if (ret <=3D 0) {
-> > +		dev_err(dev, "Wrong cooling-levels data.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	priv->cdev[pwm_port] =3D devm_kzalloc(dev, sizeof(*priv-
-> >cdev[pwm_port]),
-> > +					    GFP_KERNEL);
-> > +	if (!priv->cdev[pwm_port])
-> > +		return -ENOMEM;
-> > +
-> > +	priv->cdev[pwm_port]->cooling_levels =3D devm_kzalloc(dev, ret *
-> > +							    sizeof(u8),
-> > +							    GFP_KERNEL);
-> > +	if (!priv->cdev[pwm_port]->cooling_levels)
-> > +		return -ENOMEM;
-> > +
-> > +	priv->cdev[pwm_port]->max_state =3D ret - 1;
-> > +	ret =3D of_property_read_u8_array(child, "cooling-levels",
-> > +					priv->cdev[pwm_port]-
-> >cooling_levels,
-> > +					ret);
-> > +	if (ret) {
-> > +		dev_err(dev, "Property 'cooling-levels' cannot be read.\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	sprintf(priv->cdev[pwm_port]->name, "%s%d", child->name,
-> pwm_port);
-> > +	priv->cdev[pwm_port]->tcdev =3D
-> thermal_of_cooling_device_register(child,
-> > +						priv->cdev[pwm_port]-
-> >name,
-> > +						priv->cdev[pwm_port],
-> > +						&aspeed_pwm_cool_ops);
-> > +	if (PTR_ERR_OR_ZERO(priv->cdev[pwm_port]->tcdev))
-> > +		return PTR_ERR(priv->cdev[pwm_port]->tcdev);
-> > +
-> > +	priv->cdev[pwm_port]->priv =3D priv;
-> > +	priv->cdev[pwm_port]->pwm_port =3D pwm_port;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int aspeed_pwm_tacho_probe(struct platform_device *pdev)  {
-> >  	struct device *dev =3D &pdev->dev;
-> > -	struct device_node *np, *child;
-> > +	struct device_node *np, *child, *grandchild;
-> >  	struct aspeed_pwm_tacho_data *priv;
-> >  	void __iomem *regs;
-> >  	struct resource *res;
-> > @@ -833,10 +946,30 @@ static int aspeed_pwm_tacho_probe(struct
-> platform_device *pdev)
-> >  	aspeed_create_type(priv);
-> >
-> >  	for_each_child_of_node(np, child) {
-> > -		ret =3D aspeed_create_fan(dev, child, priv);
-> > +		if (!of_node_cmp(child->name, "tach-channels")) {
-> > +			for_each_child_of_node(child, grandchild) {
-> > +				ret =3D aspeed_create_fan(dev, grandchild,
-> priv);
-> > +				of_node_put(grandchild);
-> > +				if (ret) {
-> > +					of_node_put(child);
-> > +					return ret;
-> > +				}
-> > +			}
-> > +		}
-> > +
-> > +		if (!of_node_cmp(child->name, "pwm-channels")) {
-> > +			for_each_child_of_node(child, grandchild) {
-> > +				ret =3D aspeed_create_pwm_cooling(dev,
-> > +								grandchild,
-> > +								priv);
-> > +				of_node_put(grandchild);
-> > +				if (ret) {
-> > +					of_node_put(child);
-> > +					return ret;
-> > +				}
-> > +			}
-> > +		}
-> >  		of_node_put(child);
-> > -		if (ret)
-> > -			return ret;
-> >  	}
-> >
-> >  	priv->groups[0] =3D &pwm_dev_group;
-> > --
-> > 2.8.4
-> >
+>> >  described in the binding.
+>> > 
+>> >  If devicetree is not used, the mode of the chip will not be configured.
+>> >  Unless the chip is configured by another source, only the internal
+>> >  temperature and supply voltage will be measured.
+>> > 
+>> >  Signed-off-by: Tom Levens <tom.levens@cern.ch>
+>> >  ---
+>> >    Documentation/hwmon/ltc2990 |  24 ++++--
+>> >    drivers/hwmon/Kconfig       |   7 +-
+>> >    drivers/hwmon/ltc2990.c     | 196 
+>> >    +++++++++++++++++++++++++++++++++++++-------
+>> >    3 files changed, 185 insertions(+), 42 deletions(-)
+>> > 
+>> >  diff --git a/Documentation/hwmon/ltc2990 b/Documentation/hwmon/ltc2990
+>> >  index c25211e..3ed68f6 100644
+>> >  --- a/Documentation/hwmon/ltc2990
+>> >  +++ b/Documentation/hwmon/ltc2990
+>> >  @@ -8,6 +8,7 @@ Supported chips:
+>> >        Datasheet: http://www.linear.com/product/ltc2990
+>> >    Author: Mike Looijmans <mike.looijmans@topic.nl>
+>> >  +        Tom Levens <tom.levens@cern.ch>
+>> >    Description
+>> >  @@ -16,10 +17,8 @@ Description
+>> >    LTC2990 is a Quad I2C Voltage, Current and Temperature Monitor.
+>> >    The chip's inputs can measure 4 voltages, or two inputs together (1+2 
+>> >    and 3+4)
+>> >    can be combined to measure a differential voltage, which is typically 
+>> >    used to
+>> >  -measure current through a series resistor, or a temperature.
+>> >  -
+>> >  -This driver currently uses the 2x differential mode only. In order to 
+>> >  support
+>> >  -other modes, the driver will need to be expanded.
+>> >  +measure current through a series resistor, or a temperature with an 
+>> >  external
+>> >  +diode.
+>> >    Usage Notes
+>> >  @@ -32,12 +31,19 @@ devices explicitly.
+>> >    Sysfs attributes
+>> >    ----------------
+>> >  +in0_input     Voltage at Vcc pin in millivolt (range 2.5V to 5V)
+>> >  +temp1_input   Internal chip temperature in millidegrees Celcius
+>> >  +
+>> >  +A subset of the following attributes are visible, depending on the 
+>> >  measurement
+>> >  +mode of the chip.
+>> >  +
+>> >  +in[1-4]_input Voltage at V[1-4] pin in millivolt
+>> >  +temp2_input   External temperature sensor TR1 in millidegrees Celcius
+>> >  +temp3_input   External temperature sensor TR2 in millidegrees Celcius
+>> >  +curr1_input   Current in mA across V1-V2 assuming a 1mOhm sense 
+>> >  resistor
+>> >  +curr2_input   Current in mA across V3-V4 assuming a 1mOhm sense 
+>> >  resistor
+>> >  +
+>> >    The "curr*_input" measurements actually report the voltage drop across 
+>> >    the
+>> >    input pins in microvolts. This is equivalent to the current through a 
+>> >    1mOhm
+>> >    sense resistor. Divide the reported value by the actual sense resistor 
+>> >    value
+>> >    in mOhm to get the actual value.
+>> >  -
+>> >  -in0_input     Voltage at Vcc pin in millivolt (range 2.5V to 5V)
+>> >  -temp1_input   Internal chip temperature in millidegrees Celcius
+>> >  -curr1_input   Current in mA across v1-v2 assuming a 1mOhm sense 
+>> >  resistor.
+>> >  -curr2_input   Current in mA across v3-v4 assuming a 1mOhm sense 
+>> >  resistor.
+>> >  diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> >  index 5ef2814..578e5a9 100644
+>> >  --- a/drivers/hwmon/Kconfig
+>> >  +++ b/drivers/hwmon/Kconfig
+>> >  @@ -709,15 +709,12 @@ config SENSORS_LTC2945
+>> >          be called ltc2945.
+>> >    config SENSORS_LTC2990
+>> >  -    tristate "Linear Technology LTC2990 (current monitoring mode only)"
+>> >  +    tristate "Linear Technology LTC2990"
+>> >        depends on I2C
+>> >        help
+>> >          If you say yes here you get support for Linear Technology 
+>> >          LTC2990
+>> >          I2C System Monitor. The LTC2990 supports a combination of 
+>> >          voltage,
+>> >  -      current and temperature monitoring, but in addition to the Vcc 
+>> >  supply
+>> >  -      voltage and chip temperature, this driver currently only supports
+>> >  -      reading two currents by measuring two differential voltages 
+>> >  across
+>> >  -      series resistors.
+>> >  +      current and temperature monitoring.
+>> >          This driver can also be built as a module. If so, the module 
+>> >          will
+>> >          be called ltc2990.
+>> >  diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+>> >  index e320d21..32f3a8d 100644
+>> >  --- a/drivers/hwmon/ltc2990.c
+>> >  +++ b/drivers/hwmon/ltc2990.c
+>> >  @@ -5,10 +5,6 @@
+>> >     * Author: Mike Looijmans <mike.looijmans@topic.nl>
+>> >     *
+>> >     * License: GPLv2
+>> >  - *
+>> >  - * This driver assumes the chip is wired as a dual current monitor, and
+>> >  - * reports the voltage drop across two series resistors. It also 
+>> >  reports
+>> >  - * the chip's internal temperature and Vcc power supply voltage.
+>> >    */
+>> >    #include <linux/bitops.h>
+>> >  @@ -18,6 +14,7 @@
+>> >    #include <linux/i2c.h>
+>> >    #include <linux/kernel.h>
+>> >    #include <linux/module.h>
+>> >  +#include <linux/of.h>
+>> >    #define LTC2990_STATUS    0x00
+>> >    #define LTC2990_CONTROL    0x01
+>> >  @@ -29,35 +26,109 @@
+>> >    #define LTC2990_V4_MSB    0x0C
+>> >    #define LTC2990_VCC_MSB    0x0E
+>> >  -#define LTC2990_CONTROL_KELVIN        BIT(7)
+>> >  -#define LTC2990_CONTROL_SINGLE        BIT(6)
+>> >  -#define LTC2990_CONTROL_MEASURE_ALL    (0x3 << 3)
+>> >  -#define LTC2990_CONTROL_MODE_CURRENT    0x06
+>> >  -#define LTC2990_CONTROL_MODE_VOLTAGE    0x07
+>> >  +#define LTC2990_IN0    BIT(0)
+>> >  +#define LTC2990_IN1    BIT(1)
+>> >  +#define LTC2990_IN2    BIT(2)
+>> >  +#define LTC2990_IN3    BIT(3)
+>> >  +#define LTC2990_IN4    BIT(4)
+>> >  +#define LTC2990_CURR1    BIT(5)
+>> >  +#define LTC2990_CURR2    BIT(6)
+>> >  +#define LTC2990_TEMP1    BIT(7)
+>> >  +#define LTC2990_TEMP2    BIT(8)
+>> >  +#define LTC2990_TEMP3    BIT(9)
+>> >  +#define LTC2990_NONE    0
+>> >  +#define LTC2990_ALL    GENMASK(9, 0)
+>> >  +
+>> >  +#define LTC2990_MODE0_SHIFT    0
+>> >  +#define LTC2990_MODE0_MASK    GENMASK(2, 0)
+>> >  +#define LTC2990_MODE1_SHIFT    3
+>> >  +#define LTC2990_MODE1_MASK    GENMASK(1, 0)
+>> >  +
+>> >  +/* Enabled measurements for mode bits 2..0 */
+>> >  +static const int ltc2990_attrs_ena_0[] = {
+>> >  +    LTC2990_IN1 | LTC2990_IN2 | LTC2990_TEMP3,
+>> >  +    LTC2990_CURR1 | LTC2990_TEMP3,
+>> >  +    LTC2990_CURR1 | LTC2990_IN3 | LTC2990_IN4,
+>> >  +    LTC2990_TEMP2 | LTC2990_IN3 | LTC2990_IN4,
+>> >  +    LTC2990_TEMP2 | LTC2990_CURR2,
+>> >  +    LTC2990_TEMP2 | LTC2990_TEMP3,
+>> >  +    LTC2990_CURR1 | LTC2990_CURR2,
+>> >  +    LTC2990_IN1 | LTC2990_IN2 | LTC2990_IN3 | LTC2990_IN4
+>> >  +};
+>> >  +
+>> >  +/* Enabled measurements for mode bits 4..3 */
+>> >  +static const int ltc2990_attrs_ena_1[] = {
+>> >  +    LTC2990_NONE,
+>> >  +    LTC2990_TEMP2 | LTC2990_IN1 | LTC2990_CURR1,
+>> >  +    LTC2990_TEMP3 | LTC2990_IN3 | LTC2990_CURR2,
+>> >  +    LTC2990_ALL
+>> >  +};
+>> >  +
+>> >  +struct ltc2990_data {
+>> >  +    struct i2c_client *i2c;
+>> >  +    u32 mode[2];
+>> >  +};
+>> >    /* Return the converted value from the given register in uV or mC */
+>> >  -static int ltc2990_get_value(struct i2c_client *i2c, u8 reg, int 
+>> >  *result)
+>> >  +static int ltc2990_get_value(struct i2c_client *i2c, int index, int 
+>> >  *result)
+>> >    {
+>> >        int val;
+>> >  +    u8 reg;
+>> >  +
+>> >  +    switch (index) {
+>> >  +    case LTC2990_IN0:
+>> >  +        reg = LTC2990_VCC_MSB;
+>> >  +        break;
+>> >  +    case LTC2990_IN1:
+>> >  +    case LTC2990_CURR1:
+>> >  +    case LTC2990_TEMP2:
+>> >  +        reg = LTC2990_V1_MSB;
+>> >  +        break;
+>> >  +    case LTC2990_IN2:
+>> >  +        reg = LTC2990_V2_MSB;
+>> >  +        break;
+>> >  +    case LTC2990_IN3:
+>> >  +    case LTC2990_CURR2:
+>> >  +    case LTC2990_TEMP3:
+>> >  +        reg = LTC2990_V3_MSB;
+>> >  +        break;
+>> >  +    case LTC2990_IN4:
+>> >  +        reg = LTC2990_V4_MSB;
+>> >  +        break;
+>> >  +    case LTC2990_TEMP1:
+>> >  +        reg = LTC2990_TINT_MSB;
+>> >  +        break;
+>> >  +    default:
+>> >  +        return -EINVAL;
+>> >  +    }
+>> >        val = i2c_smbus_read_word_swapped(i2c, reg);
+>> >        if (unlikely(val < 0))
+>> >            return val;
+>> >  -    switch (reg) {
+>> >  -    case LTC2990_TINT_MSB:
+>> >  -        /* internal temp, 0.0625 degrees/LSB, 13-bit  */
+>> >  +    switch (index) {
+>> >  +    case LTC2990_TEMP1:
+>> >  +    case LTC2990_TEMP2:
+>> >  +    case LTC2990_TEMP3:
+>> >  +        /* temp, 0.0625 degrees/LSB */
+>> >            *result = sign_extend32(val, 12) * 1000 / 16;
+>> >            break;
+>> >  -    case LTC2990_V1_MSB:
+>> >  -    case LTC2990_V3_MSB:
+>> >  -         /* Vx-Vy, 19.42uV/LSB. Depends on mode. */
+>> >  +    case LTC2990_CURR1:
+>> >  +    case LTC2990_CURR2:
+>> >  +         /* Vx-Vy, 19.42uV/LSB */
+>> >            *result = sign_extend32(val, 14) * 1942 / 100;
+>> >            break;
+>> >  -    case LTC2990_VCC_MSB:
+>> >  -        /* Vcc, 305.18μV/LSB, 2.5V offset */
+>> >  +    case LTC2990_IN0:
+>> >  +        /* Vcc, 305.18uV/LSB, 2.5V offset */
+>> >            *result = sign_extend32(val, 14) * 30518 / (100 * 1000) + 
+>> >            2500;
+>> >            break;
+>> >  +    case LTC2990_IN1:
+>> >  +    case LTC2990_IN2:
+>> >  +    case LTC2990_IN3:
+>> >  +    case LTC2990_IN4:
+>> >  +        /* Vx, 305.18uV/LSB */
+>> >  +        *result = sign_extend32(val, 14) * 30518 / (100 * 1000);
+>> >  +        break;
+>> >        default:
+>> >            return -EINVAL; /* won't happen, keep compiler happy */
+>> >        }
+>> >  @@ -69,48 +140,117 @@ static ssize_t ltc2990_show_value(struct device 
+>> >  *dev,
+>> >                      struct device_attribute *da, char *buf)
+>> >    {
+>> >        struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+>> >  +    struct ltc2990_data *data = dev_get_drvdata(dev);
+>> >        int value;
+>> >        int ret;
+>> >  -    ret = ltc2990_get_value(dev_get_drvdata(dev), attr->index, &value);
+>> >  +    ret = ltc2990_get_value(data->i2c, attr->index, &value);
+>> >        if (unlikely(ret < 0))
+>> >            return ret;
+>> >        return snprintf(buf, PAGE_SIZE, "%d\n", value);
+>> >    }
+>> >  +static umode_t ltc2990_attrs_visible(struct kobject *kobj,
+>> >  +                     struct attribute *a, int n)
+>> >  +{
+>> >  +    struct device *dev = container_of(kobj, struct device, kobj);
+>> >  +    struct ltc2990_data *data = dev_get_drvdata(dev);
+>> >  +    struct device_attribute *da =
+>> >  +            container_of(a, struct device_attribute, attr);
+>> >  +    struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+>> >  +
+>> >  +    int attrs_mask = LTC2990_IN0 | LTC2990_TEMP1 |
+>> >  +             ltc2990_attrs_ena_0[data->mode[0]] &
+>> >  +             ltc2990_attrs_ena_1[data->mode[1]];
+>> >  +
+>> >  +    if (attr->index & attrs_mask)
+>> >  +        return a->mode;
+>> >  +
+>> >  +    return 0;
+>> >  +}
+>> >  +
+>> >    static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  -              LTC2990_TINT_MSB);
+>> >  +              LTC2990_TEMP1);
+>> >  +static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  +              LTC2990_TEMP2);
+>> >  +static SENSOR_DEVICE_ATTR(temp3_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  +              LTC2990_TEMP3);
+>> >    static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  -              LTC2990_V1_MSB);
+>> >  +              LTC2990_CURR1);
+>> >    static SENSOR_DEVICE_ATTR(curr2_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  -              LTC2990_V3_MSB);
+>> >  +              LTC2990_CURR2);
+>> >    static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, ltc2990_show_value, 
+>> >  NULL,
+>> >  -              LTC2990_VCC_MSB);
+>> >  +              LTC2990_IN0);
+>> >  +static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ltc2990_show_value, NULL,
+>> >  +              LTC2990_IN1);
+>> >  +static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ltc2990_show_value, NULL,
+>> >  +              LTC2990_IN2);
+>> >  +static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, ltc2990_show_value, NULL,
+>> >  +              LTC2990_IN3);
+>> >  +static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, ltc2990_show_value, NULL,
+>> >  +              LTC2990_IN4);
+>> >    static struct attribute *ltc2990_attrs[] = {
+>> > & sensor_dev_attr_temp1_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_temp2_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_temp3_input.dev_attr.attr,
+>> > & sensor_dev_attr_curr1_input.dev_attr.attr,
+>> > & sensor_dev_attr_curr2_input.dev_attr.attr,
+>> > & sensor_dev_attr_in0_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_in1_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_in2_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_in3_input.dev_attr.attr,
+>> >  +    &sensor_dev_attr_in4_input.dev_attr.attr,
+>> >        NULL,
+>> >    };
+>> >  -ATTRIBUTE_GROUPS(ltc2990);
+>> >  +
+>> >  +static const struct attribute_group ltc2990_group = {
+>> >  +    .attrs = ltc2990_attrs,
+>> >  +    .is_visible = ltc2990_attrs_visible,
+>> >  +};
+>> >  +__ATTRIBUTE_GROUPS(ltc2990);
+>> >    static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>> >                     const struct i2c_device_id *id)
+>> >    {
+>> >        int ret;
+>> >        struct device *hwmon_dev;
+>> >  +    struct ltc2990_data *data;
+>> >  +    struct device_node *of_node = i2c->dev.of_node;
+>> >        if (!i2c_check_functionality(i2c->adapter, 
+>> >        I2C_FUNC_SMBUS_BYTE_DATA |
+>> >                         I2C_FUNC_SMBUS_WORD_DATA))
+>> >            return -ENODEV;
+>> >  -    /* Setup continuous mode, current monitor */
+>> >  +    data = devm_kzalloc(&i2c->dev, sizeof(struct ltc2990_data), 
+>> >  GFP_KERNEL);
+>> >  +    if (unlikely(!data))
+>> >  +        return -ENOMEM;
+>> >  +
+>> >  +    data->i2c = i2c;
+>> >  +
+>> >  +    if (of_node) {
+>> >  +        ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
+>> >  +                         data->mode, 2);
+>> >  +        if (ret < 0)
+>> >  +            return ret;
+>> >  +
+>> >  +        if (data->mode[0] & ~LTC2990_MODE0_MASK ||
+>> >  +            data->mode[1] & ~LTC2990_MODE1_MASK)
+>> >  +            return -EINVAL;
+>> >  +    } else {
+>> >  +        ret = i2c_smbus_read_byte_data(i2c, LTC2990_CONTROL);
+>> >  +        if (ret < 0)
+>> >  +            return ret;
+>> >  +
+>> >  +        data->mode[0] = ret >> LTC2990_MODE0_SHIFT & 
+>> >  LTC2990_MODE0_MASK;
+>> >  +        data->mode[1] = ret >> LTC2990_MODE1_SHIFT & 
+>> >  LTC2990_MODE1_MASK;
+>> >  +    }
+>> >  +
+>> >  +    /* Setup continuous mode */
+>> >        ret = i2c_smbus_write_byte_data(i2c, LTC2990_CONTROL,
+>> >  -                    LTC2990_CONTROL_MEASURE_ALL |
+>> >  -                    LTC2990_CONTROL_MODE_CURRENT);
+>> >  +                    data->mode[0] << LTC2990_MODE0_SHIFT |
+>> >  +                    data->mode[1] << LTC2990_MODE1_SHIFT);
+>> >        if (ret < 0) {
+>> >            dev_err(&i2c->dev, "Error: Failed to set control mode.\n");
+>> >            return ret;
+>> >  @@ -124,7 +264,7 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>> >        hwmon_dev = devm_hwmon_device_register_with_groups(&i2c->dev,
+>> >                                   i2c->name,
+>> >  -                               i2c,
+>> >  +                               data,
+>> >                                   ltc2990_groups);
+>> >        return PTR_ERR_OR_ZERO(hwmon_dev);
+>> >
+>>
+>>
+>>
+>>  Kind regards,
+>>
+>>  Mike Looijmans
+>>  System Expert
+>>
+>>  TOPIC Products
+>>  Materiaalweg 4, NL-5681 RJ Best
+>>  Postbus 440, NL-5680 AK Best
+>>  Telefoon: +31 (0) 499 33 69 79
+>>  E-mail: mike.looijmans@topicproducts.com
+>>  Website: www.topicproducts.com
+>>
+>>  Please consider the environment before printing this e-mail
+>>
+>>
+>>
+>> 
+>
+>
+---1195575205-201736693-1499810435=:28469--
