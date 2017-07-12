@@ -1,70 +1,68 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55301 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753127AbdGLPKs (ORCPT
+Received: from mail-pf0-f177.google.com ([209.85.192.177]:35545 "EHLO
+        mail-pf0-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754228AbdGLVlW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Jul 2017 11:10:48 -0400
-Date: Wed, 12 Jul 2017 08:10:45 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Jeffery <andrew@aj.id.au>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, joel@jms.id.au,
-        openbmc@lists.ozlabs.org, msbarth@linux.vnet.ibm.com,
-        mspinler@linux.vnet.ibm.com
-Subject: Re: [RFC PATCH 2/4] pmbus: Add fan configuration support
-Message-ID: <20170712151045.GA19238@roeck-us.net>
-References: <20170710135618.13661-1-andrew@aj.id.au>
- <20170710135618.13661-3-andrew@aj.id.au>
- <196d7c83-c5fd-cb85-e7bb-2f1a5ba189ae@roeck-us.net>
- <1499819983.4935.7.camel@aj.id.au>
- <208cece7-ee95-c162-82aa-09f35a8d384f@roeck-us.net>
- <1499842869.4935.11.camel@aj.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1499842869.4935.11.camel@aj.id.au>
+        Wed, 12 Jul 2017 17:41:22 -0400
+Received: by mail-pf0-f177.google.com with SMTP id c73so19010416pfk.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Jul 2017 14:41:22 -0700 (PDT)
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v2 0/3] Export 1-wire thermal sensors as hwmon device
+Date: Wed, 12 Jul 2017 14:41:15 -0700
+Message-Id: <20170712214118.4306-1-jaghu@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 12, 2017 at 04:31:09PM +0930, Andrew Jeffery wrote:
-> 
-> Indeed. Hence RFC in case I had overlooked something :) Clearly I have.
-> 
-Not surprising. It isn't exceptionally well documented :-)
+Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
+sensor under it is already configured against the Linux 1-wire driver
+(called w1). They have a sysfs file(e.g.
+/sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
+runs code to read the temperature. We'd like the temperatures to show up in
+hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
 
-> > 
-> > > However, the addition of the callbacks was driven by the behaviour of
-> > > the MAX31785, where some values written to PMBUS_FAN_COMMAND_1 trigger
-> > > automated control, while others retain manual control. Patch 4/4 should
-> > > provide a bit more context, though I've also outlined the behaviour in
-> > > the commit message for this patch. I don't have a lot of experience
-> > > with PMBus devices so I don't have a good idea if there's a better way
-> > > to capture the behaviour that isn't so unconstrained in its approach.
-> > > 
-> > 
-> > Many pmbus commands have side effects. I don't see how an explicit callback
-> > would be different to overloading a standard register or to providing a virtual
-> > register/command, whichever is more convenient.
-> 
-> I'm going to experiment with the virtual registers. From your
-> description above and looking at the comments in pmbus.h I think I can
-> make something work (and drop the callbacks).
-> 
-Excellent.
+The changes in version 2 are mentioned in the individual patches.
 
-> 
-> Sure. FWIW I plan on sending a follow-up RFC based on the feedback
-> you've given here, and I'll look to chop out pmbus_fan_ctrl. I was
-> suspicious of needing it as well, but was after your input on the
-> general approach and figured sending the patches was better than
-> guessing at your potential feedback.
-> 
-> If a follow-up isn't of interest and you'd definitely rather take on
-> the work up yourself, let me know.
-> 
+This patchset is based on linux mainline version v4.10.
 
-By all means, please go ahead. I got way too much on my plate already.
+Tested:
+Yes; On a board with 4 DS18B20 1-wire temperature sensors:
+root@zaius:/sys/class/hwmon# ls
+hwmon0  hwmon1  hwmon2  hwmon3  hwmon4  hwmon5
+root@zaius:/sys/class/hwmon# cd hwmon0
+root@zaius:/sys/class/hwmon/hwmon0# ls
+device       name         subsystem    temp1_input  uevent
+root@zaius:/sys/class/hwmon/hwmon0# cat temp1_input
+24500
+root@zaius:/sys/class/hwmon/hwmon0# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon1
+root@zaius:/sys/class/hwmon/hwmon1# cat temp1_input
+26562
+root@zaius:/sys/class/hwmon/hwmon1# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon2
+root@zaius:/sys/class/hwmon/hwmon2# cat temp1_input
+27250
+root@zaius:/sys/class/hwmon/hwmon2# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon3
+root@zaius:/sys/class/hwmon/hwmon3# cat temp1_input
+22250
+root@zaius:/sys/class/hwmon/hwmon3#
 
-Thanks,
-Guenter
+Jaghathiswari Rankappagounder Natarajan (3):
+  drivers: w1: add hwmon support structures
+  drivers: w1: refactor w1_slave_show to make the temp reading
+    functionality separate
+  drivers: w1: add hwmon temp support for w1_therm
+
+ drivers/w1/slaves/w1_therm.c | 197 ++++++++++++++++++++++++++++++++++++-------
+ drivers/w1/w1.c              |  21 ++++-
+ drivers/w1/w1.h              |   2 +
+ drivers/w1/w1_family.h       |   2 +
+ 4 files changed, 191 insertions(+), 31 deletions(-)
+
+--
+2.13.2.932.g7449e964c-goog
+
