@@ -1,85 +1,104 @@
-Return-Path: <linux@roeck-us.net>
-Return-path: <linux@roeck-us.net>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Henrik Rydberg <rydberg@bitmath.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [RESEND PATCH] hwmon: (applesmc) Avoid buffer overruns
-Date: Wed, 12 Jul 2017 08:14:49 -0700
-Message-Id: <1499872489-25773-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:44178 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932973AbdGLCwq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 11 Jul 2017 22:52:46 -0400
+From: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+To: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (lm75) Add a basic interrupt handler
+Date: Wed, 12 Jul 2017 14:52:37 +1200
+Message-Id: <20170712025237.24163-1-tony.obrien@alliedtelesis.co.nz>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-gcc 7.1 complains that the driver uses sprintf() and thus does not validate
-the length of output buffers.
+The LM75 interrupt cannot be masked in the device so an over-temperature
+event can cause an interrupt that cannot be cleared.
+Add an interrupt handler if an interrupt node exists in the DTS for an
+LM75.  The handler simply reads a device register to clear the interrupt
+and returns.
 
-drivers/hwmon/applesmc.c: In function 'applesmc_show_fan_position':
-drivers/hwmon/applesmc.c:82:21: warning:
-	'%d' directive writing between 1 and 5 bytes into a region of size 4
-
-Fix the problem by using scnprintf() instead of sprintf() throughout the
-driver. Also explicitly limit the number of supported fans to avoid actual
-buffer overruns and thus invalid keys.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
-Resent with corrected hwmon e-mail address. Sorry for the noise.
+ drivers/hwmon/lm75.c | 28 ++++++++++++++++++++++++++++
+ drivers/hwmon/lm75.h |  1 +
+ 2 files changed, 29 insertions(+)
 
- drivers/hwmon/applesmc.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 0af7fd311979..76c34f4fde13 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -566,6 +566,8 @@ static int applesmc_init_smcreg_try(void)
- 	if (ret)
- 		return ret;
- 	s->fan_count = tmp[0];
-+	if (s->fan_count > 10)
-+		s->fan_count = 10;
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 005ffb5ffa92..08a833e960aa 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -22,6 +22,7 @@
+ #include <linux/init.h>
+ #include <linux/slab.h>
+ #include <linux/jiffies.h>
++#include <linux/interrupt.h>
+ #include <linux/i2c.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+@@ -265,6 +266,17 @@ static void lm75_remove(void *data)
+ 	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
+ }
  
- 	ret = applesmc_get_lower_bound(&s->temp_begin, "T");
- 	if (ret)
-@@ -811,7 +813,8 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
- 	char newkey[5];
- 	u8 buffer[2];
++static irqreturn_t lm75_process_interrupt(int irq, void *data)
++{
++	struct i2c_client *client = (struct i2c_client *)data;
++	int val;
++
++	/* Do a read to clear the interrupt */
++	val = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
++
++	return IRQ_HANDLED;
++}
++
+ static int
+ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ {
+@@ -275,6 +287,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	u8 set_mask, clr_mask;
+ 	int new;
+ 	enum lm75_type kind;
++	int ret;
  
--	sprintf(newkey, fan_speed_fmt[to_option(attr)], to_index(attr));
-+	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
-+		  to_index(attr));
+ 	if (client->dev.of_node)
+ 		kind = (enum lm75_type)of_device_get_match_data(&client->dev);
+@@ -375,6 +388,21 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 		break;
+ 	}
  
- 	ret = applesmc_read_key(newkey, buffer, 2);
- 	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
-@@ -834,7 +837,8 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
- 	if (kstrtoul(sysfsbuf, 10, &speed) < 0 || speed >= 0x4000)
- 		return -EINVAL;		/* Bigger than a 14-bit value */
++	if (client->irq) {
++		/* If requesting an interrupt then set to interrupt mode */
++		set_mask |= LM75_MODE_INTERRUPT;
++		ret = devm_request_threaded_irq(dev, client->irq, NULL,
++						lm75_process_interrupt,
++						IRQF_TRIGGER_LOW | IRQF_ONESHOT |
++							IRQF_SHARED,
++						dev_name(dev),
++						client);
++		if (ret) {
++			dev_err(dev, "Error requesting irq\n");
++			return ret;
++		}
++	}
++
+ 	/* configure as specified */
+ 	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+ 	if (status < 0) {
+diff --git a/drivers/hwmon/lm75.h b/drivers/hwmon/lm75.h
+index 5cde94e56f17..82a71d870331 100644
+--- a/drivers/hwmon/lm75.h
++++ b/drivers/hwmon/lm75.h
+@@ -31,6 +31,7 @@
+ #define LM75_TEMP_MIN (-55000)
+ #define LM75_TEMP_MAX 125000
+ #define LM75_SHUTDOWN 0x01
++#define LM75_MODE_INTERRUPT 0x02
  
--	sprintf(newkey, fan_speed_fmt[to_option(attr)], to_index(attr));
-+	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
-+		  to_index(attr));
- 
- 	buffer[0] = (speed >> 6) & 0xff;
- 	buffer[1] = (speed << 2) & 0xff;
-@@ -903,7 +907,7 @@ static ssize_t applesmc_show_fan_position(struct device *dev,
- 	char newkey[5];
- 	u8 buffer[17];
- 
--	sprintf(newkey, FAN_ID_FMT, to_index(attr));
-+	scnprintf(newkey, sizeof(newkey), FAN_ID_FMT, to_index(attr));
- 
- 	ret = applesmc_read_key(newkey, buffer, 16);
- 	buffer[16] = 0;
-@@ -1116,7 +1120,8 @@ static int applesmc_create_nodes(struct applesmc_node_group *groups, int num)
- 		}
- 		for (i = 0; i < num; i++) {
- 			node = &grp->nodes[i];
--			sprintf(node->name, grp->format, i + 1);
-+			scnprintf(node->name, sizeof(node->name), grp->format,
-+				  i + 1);
- 			node->sda.index = (grp->option << 16) | (i & 0xffff);
- 			node->sda.dev_attr.show = grp->show;
- 			node->sda.dev_attr.store = grp->store;
+ /* TEMP: 0.001C/bit (-55C to +125C)
+    REG: (0.5C/bit, two's complement) << 7 */
 -- 
-2.7.4
+2.13.0
+
