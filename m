@@ -1,69 +1,122 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f51.google.com ([74.125.83.51]:35787 "EHLO
-        mail-pg0-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752298AbdGMWlN (ORCPT
+Received: from mail-pf0-f169.google.com ([209.85.192.169]:35617 "EHLO
+        mail-pf0-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753009AbdGMWlP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Jul 2017 18:41:13 -0400
-Received: by mail-pg0-f51.google.com with SMTP id j186so36144713pge.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 13 Jul 2017 15:41:13 -0700 (PDT)
+        Thu, 13 Jul 2017 18:41:15 -0400
+Received: by mail-pf0-f169.google.com with SMTP id c73so36034733pfk.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Jul 2017 15:41:15 -0700 (PDT)
 From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
 To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
         jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         gregkh@linuxfoundation.org
 Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Subject: [PATCH linux v4 0/3] Export 1-wire thermal sensors as hwmon device
-Date: Thu, 13 Jul 2017 15:41:04 -0700
-Message-Id: <20170713224107.12789-1-jaghu@google.com>
+Subject: [PATCH linux v4 1/3] drivers: w1: add hwmon support structures
+Date: Thu, 13 Jul 2017 15:41:05 -0700
+Message-Id: <20170713224107.12789-2-jaghu@google.com>
+In-Reply-To: <20170713224107.12789-1-jaghu@google.com>
+References: <20170713224107.12789-1-jaghu@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
-sensor under it is already configured against the Linux 1-wire driver
-(called w1). They have a sysfs file(e.g.
-/sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
-runs code to read the temperature. We'd like the temperatures to show up in
-hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
+This patch has changes to w1.h/w1.c/w1_family.h generic files to
+add (optional) hwmon support structures.
 
-This patch(version 4) is to address the comments provided by Guenter for
-version 3. The changes in version 4 are mentioned in the individual patches.
+Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
+---
+v2
+- made changes to support hwmon_device_register_with_info mentioned by Guenter.
 
-This patchset is based on linux mainline version v4.10.
+v3
+- used IS_REACHABLE(CONFIG_HWMON).
+- removed hwmon device first before removing slave.
 
-Tested:
-Yes; On a board with 4 DS18B20 1-wire temperature sensors:
-root@zaius:/sys/class/hwmon# ls
-hwmon0  hwmon1  hwmon2  hwmon3  hwmon4  hwmon5
-root@zaius:/sys/class/hwmon# cd hwmon0
-root@zaius:/sys/class/hwmon/hwmon0# ls
-device       name         subsystem    temp1_input  uevent
-root@zaius:/sys/class/hwmon/hwmon0# cat temp1_input
-24500
-root@zaius:/sys/class/hwmon/hwmon0# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon1
-root@zaius:/sys/class/hwmon/hwmon1# cat temp1_input
-26562
-root@zaius:/sys/class/hwmon/hwmon1# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon2
-root@zaius:/sys/class/hwmon/hwmon2# cat temp1_input
-27250
-root@zaius:/sys/class/hwmon/hwmon2# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon3
-root@zaius:/sys/class/hwmon/hwmon3# cat temp1_input
-22250
-root@zaius:/sys/class/hwmon/hwmon3#
+v4
+- moved && to be in the previous line.
 
-Jaghathiswari Rankappagounder Natarajan (3):
-  drivers: w1: add hwmon support structures
-  drivers: w1: refactor w1_slave_show to make the temp reading
-    functionality separate
-  drivers: w1: add hwmon temp support for w1_therm
+ drivers/w1/w1.c        | 18 +++++++++++++++++-
+ drivers/w1/w1.h        |  2 ++
+ drivers/w1/w1_family.h |  2 ++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
- drivers/w1/slaves/w1_therm.c | 164 +++++++++++++++++++++++++++++++++++--------
- drivers/w1/w1.c              |  18 ++++-
- drivers/w1/w1.h              |   2 +
- drivers/w1/w1_family.h       |   2 +
- 4 files changed, 156 insertions(+), 30 deletions(-)
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index e213c678bbfe..6485603131e8 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -32,6 +32,7 @@
+ #include <linux/sched.h>
+ #include <linux/kthread.h>
+ #include <linux/freezer.h>
++#include <linux/hwmon.h>
 
+ #include <linux/atomic.h>
+
+@@ -659,9 +660,24 @@ static int w1_family_notify(unsigned long action, struct w1_slave *sl)
+ 				return err;
+ 			}
+ 		}
+-
++		if (IS_REACHABLE(CONFIG_HWMON) && fops->chip_info) {
++			struct device *hwmon
++				= hwmon_device_register_with_info(&sl->dev,
++						"w1_slave_temp", sl,
++						fops->chip_info,
++						NULL);
++			if (IS_ERR(hwmon)) {
++				dev_warn(&sl->dev,
++					 "could not create hwmon device\n");
++			} else {
++				sl->hwmon = hwmon;
++			}
++		}
+ 		break;
+ 	case BUS_NOTIFY_DEL_DEVICE:
++		if (IS_REACHABLE(CONFIG_HWMON) && fops->chip_info &&
++			    sl->hwmon)
++			hwmon_device_unregister(sl->hwmon);
+ 		if (fops->remove_slave)
+ 			sl->family->fops->remove_slave(sl);
+ 		if (fops->groups)
+diff --git a/drivers/w1/w1.h b/drivers/w1/w1.h
+index 129895f562b0..74ef1a543856 100644
+--- a/drivers/w1/w1.h
++++ b/drivers/w1/w1.h
+@@ -83,6 +83,7 @@ struct w1_reg_num
+  * @family: module for device family type
+  * @family_data: pointer for use by the family module
+  * @dev: kernel device identifier
++ * @hwmon: pointer to hwmon device
+  *
+  */
+ struct w1_slave
+@@ -99,6 +100,7 @@ struct w1_slave
+ 	struct w1_family	*family;
+ 	void			*family_data;
+ 	struct device		dev;
++	struct device		*hwmon;
+ };
+
+ typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
+diff --git a/drivers/w1/w1_family.h b/drivers/w1/w1_family.h
+index 10a7a0767187..9001851e1316 100644
+--- a/drivers/w1/w1_family.h
++++ b/drivers/w1/w1_family.h
+@@ -55,12 +55,14 @@ struct w1_slave;
+  * @add_slave: add_slave
+  * @remove_slave: remove_slave
+  * @groups: sysfs group
++ * @chip_info: pointer to struct hwmon_chip_info
+  */
+ struct w1_family_ops
+ {
+ 	int  (* add_slave)(struct w1_slave *);
+ 	void (* remove_slave)(struct w1_slave *);
+ 	const struct attribute_group **groups;
++	const struct hwmon_chip_info *chip_info;
+ };
+
+ /**
 --
 2.13.2.932.g7449e964c-goog
 
