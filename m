@@ -1,137 +1,202 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:49229 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752849AbdGNCq6 (ORCPT
+Received: from mail-pf0-f172.google.com ([209.85.192.172]:32999 "EHLO
+        mail-pf0-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753081AbdGMWlR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Jul 2017 22:46:58 -0400
-Subject: Re: [PATCH linux v4 1/3] drivers: w1: add hwmon support structures
-To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
-        zbr@ioremap.net, linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, gregkh@linuxfoundation.org
+        Thu, 13 Jul 2017 18:41:17 -0400
+Received: by mail-pf0-f172.google.com with SMTP id e7so36029560pfk.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Jul 2017 15:41:16 -0700 (PDT)
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v4 2/3] drivers: w1: refactor w1_slave_show to make the temp reading functionality separate
+Date: Thu, 13 Jul 2017 15:41:06 -0700
+Message-Id: <20170713224107.12789-3-jaghu@google.com>
+In-Reply-To: <20170713224107.12789-1-jaghu@google.com>
 References: <20170713224107.12789-1-jaghu@google.com>
- <20170713224107.12789-2-jaghu@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b552112d-fc32-4bba-c8f2-1427e0902c34@roeck-us.net>
-Date: Thu, 13 Jul 2017 19:46:55 -0700
-MIME-Version: 1.0
-In-Reply-To: <20170713224107.12789-2-jaghu@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/13/2017 03:41 PM, Jaghathiswari Rankappagounder Natarajan wrote:
-> This patch has changes to w1.h/w1.c/w1_family.h generic files to
-> add (optional) hwmon support structures.
-> 
-> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-> Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
+Inside the w1_slave_show function refactor the code to read the temp
+into a separate function.
 
-I think I Acked this one already. Please keep unless you are making
-substantial changes.
-
+Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
 Acked-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2
+- no changes
 
-> ---
-> v2
-> - made changes to support hwmon_device_register_with_info mentioned by Guenter.
-> 
-> v3
-> - used IS_REACHABLE(CONFIG_HWMON).
-> - removed hwmon device first before removing slave.
-> 
-> v4
-> - moved && to be in the previous line.
-> 
->   drivers/w1/w1.c        | 18 +++++++++++++++++-
->   drivers/w1/w1.h        |  2 ++
->   drivers/w1/w1_family.h |  2 ++
->   3 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> index e213c678bbfe..6485603131e8 100644
-> --- a/drivers/w1/w1.c
-> +++ b/drivers/w1/w1.c
-> @@ -32,6 +32,7 @@
->   #include <linux/sched.h>
->   #include <linux/kthread.h>
->   #include <linux/freezer.h>
-> +#include <linux/hwmon.h>
-> 
->   #include <linux/atomic.h>
-> 
-> @@ -659,9 +660,24 @@ static int w1_family_notify(unsigned long action, struct w1_slave *sl)
->   				return err;
->   			}
->   		}
-> -
-> +		if (IS_REACHABLE(CONFIG_HWMON) && fops->chip_info) {
-> +			struct device *hwmon
-> +				= hwmon_device_register_with_info(&sl->dev,
-> +						"w1_slave_temp", sl,
-> +						fops->chip_info,
-> +						NULL);
-> +			if (IS_ERR(hwmon)) {
-> +				dev_warn(&sl->dev,
-> +					 "could not create hwmon device\n");
-> +			} else {
-> +				sl->hwmon = hwmon;
-> +			}
-> +		}
->   		break;
->   	case BUS_NOTIFY_DEL_DEVICE:
-> +		if (IS_REACHABLE(CONFIG_HWMON) && fops->chip_info &&
-> +			    sl->hwmon)
-> +			hwmon_device_unregister(sl->hwmon);
->   		if (fops->remove_slave)
->   			sl->family->fops->remove_slave(sl);
->   		if (fops->groups)
-> diff --git a/drivers/w1/w1.h b/drivers/w1/w1.h
-> index 129895f562b0..74ef1a543856 100644
-> --- a/drivers/w1/w1.h
-> +++ b/drivers/w1/w1.h
-> @@ -83,6 +83,7 @@ struct w1_reg_num
->    * @family: module for device family type
->    * @family_data: pointer for use by the family module
->    * @dev: kernel device identifier
-> + * @hwmon: pointer to hwmon device
->    *
->    */
->   struct w1_slave
-> @@ -99,6 +100,7 @@ struct w1_slave
->   	struct w1_family	*family;
->   	void			*family_data;
->   	struct device		dev;
-> +	struct device		*hwmon;
->   };
-> 
->   typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
-> diff --git a/drivers/w1/w1_family.h b/drivers/w1/w1_family.h
-> index 10a7a0767187..9001851e1316 100644
-> --- a/drivers/w1/w1_family.h
-> +++ b/drivers/w1/w1_family.h
-> @@ -55,12 +55,14 @@ struct w1_slave;
->    * @add_slave: add_slave
->    * @remove_slave: remove_slave
->    * @groups: sysfs group
-> + * @chip_info: pointer to struct hwmon_chip_info
->    */
->   struct w1_family_ops
->   {
->   	int  (* add_slave)(struct w1_slave *);
->   	void (* remove_slave)(struct w1_slave *);
->   	const struct attribute_group **groups;
-> +	const struct hwmon_chip_info *chip_info;
->   };
-> 
->   /**
-> --
-> 2.13.2.932.g7449e964c-goog
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+v3
+- changed code so that the refcount is incremented with the bus mutex locked.
+
+v4
+- no changes
+
+ drivers/w1/slaves/w1_therm.c | 82 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 51 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
+index 82611f197b0a..64e6a8f38410 100644
+--- a/drivers/w1/slaves/w1_therm.c
++++ b/drivers/w1/slaves/w1_therm.c
+@@ -64,6 +64,12 @@ struct w1_therm_family_data {
+ 	atomic_t refcnt;
+ };
+
++struct therm_info {
++	u8 rom[9];
++	u8 crc;
++	u8 verdict;
++};
++
+ /* return the address of the refcnt in the family data */
+ #define THERM_REFCNT(family_data) \
+ 	(&((struct w1_therm_family_data *)family_data)->refcnt)
+@@ -427,33 +433,31 @@ static ssize_t w1_slave_store(struct device *device,
+ 	return ret ? : size;
+ }
+
+-static ssize_t w1_slave_show(struct device *device,
+-	struct device_attribute *attr, char *buf)
++static ssize_t read_therm(struct device *device,
++			  struct w1_slave *sl, struct therm_info *info)
+ {
+-	struct w1_slave *sl = dev_to_w1_slave(device);
+ 	struct w1_master *dev = sl->master;
+-	u8 rom[9], crc, verdict, external_power;
+-	int i, ret, max_trying = 10;
+-	ssize_t c = PAGE_SIZE;
++	u8 external_power;
++	int ret, max_trying = 10;
+ 	u8 *family_data = sl->family_data;
+
+ 	ret = mutex_lock_interruptible(&dev->bus_mutex);
+ 	if (ret != 0)
+-		goto post_unlock;
++		goto error;
+
+-	if (!sl->family_data) {
++	if (!family_data) {
+ 		ret = -ENODEV;
+-		goto pre_unlock;
++		goto mt_unlock;
+ 	}
+
+ 	/* prevent the slave from going away in sleep */
+ 	atomic_inc(THERM_REFCNT(family_data));
+-	memset(rom, 0, sizeof(rom));
++	memset(info->rom, 0, sizeof(info->rom));
+
+ 	while (max_trying--) {
+
+-		verdict = 0;
+-		crc = 0;
++		info->verdict = 0;
++		info->crc = 0;
+
+ 		if (!w1_reset_select_slave(sl)) {
+ 			int count = 0;
+@@ -479,47 +483,69 @@ static ssize_t w1_slave_show(struct device *device,
+ 				sleep_rem = msleep_interruptible(tm);
+ 				if (sleep_rem != 0) {
+ 					ret = -EINTR;
+-					goto post_unlock;
++					goto dec_refcnt;
+ 				}
+
+ 				ret = mutex_lock_interruptible(&dev->bus_mutex);
+ 				if (ret != 0)
+-					goto post_unlock;
++					goto dec_refcnt;
+ 			} else if (!w1_strong_pullup) {
+ 				sleep_rem = msleep_interruptible(tm);
+ 				if (sleep_rem != 0) {
+ 					ret = -EINTR;
+-					goto pre_unlock;
++					goto dec_refcnt;
+ 				}
+ 			}
+
+ 			if (!w1_reset_select_slave(sl)) {
+
+ 				w1_write_8(dev, W1_READ_SCRATCHPAD);
+-				count = w1_read_block(dev, rom, 9);
++				count = w1_read_block(dev, info->rom, 9);
+ 				if (count != 9) {
+ 					dev_warn(device, "w1_read_block() "
+ 						"returned %u instead of 9.\n",
+ 						count);
+ 				}
+
+-				crc = w1_calc_crc8(rom, 8);
++				info->crc = w1_calc_crc8(info->rom, 8);
+
+-				if (rom[8] == crc)
+-					verdict = 1;
++				if (info->rom[8] == info->crc)
++					info->verdict = 1;
+ 			}
+ 		}
+
+-		if (verdict)
++		if (info->verdict)
+ 			break;
+ 	}
+
++dec_refcnt:
++	atomic_dec(THERM_REFCNT(family_data));
++mt_unlock:
++	mutex_unlock(&dev->bus_mutex);
++error:
++	return ret;
++}
++
++static ssize_t w1_slave_show(struct device *device,
++			     struct device_attribute *attr, char *buf)
++{
++	struct w1_slave *sl = dev_to_w1_slave(device);
++	struct therm_info info;
++	u8 *family_data = sl->family_data;
++	int ret, i;
++	ssize_t c = PAGE_SIZE;
++	u8 fid = sl->family->fid;
++
++	ret = read_therm(device, sl, &info);
++	if (ret)
++		return ret;
++
+ 	for (i = 0; i < 9; ++i)
+-		c -= snprintf(buf + PAGE_SIZE - c, c, "%02x ", rom[i]);
++		c -= snprintf(buf + PAGE_SIZE - c, c, "%02x ", info.rom[i]);
+ 	c -= snprintf(buf + PAGE_SIZE - c, c, ": crc=%02x %s\n",
+-		      crc, (verdict) ? "YES" : "NO");
+-	if (verdict)
+-		memcpy(family_data, rom, sizeof(rom));
++		      info.crc, (info.verdict) ? "YES" : "NO");
++	if (info.verdict)
++		memcpy(family_data, info.rom, sizeof(info.rom));
+ 	else
+ 		dev_warn(device, "Read failed CRC check\n");
+
+@@ -528,14 +554,8 @@ static ssize_t w1_slave_show(struct device *device,
+ 			      ((u8 *)family_data)[i]);
+
+ 	c -= snprintf(buf + PAGE_SIZE - c, c, "t=%d\n",
+-		w1_convert_temp(rom, sl->family->fid));
++			w1_convert_temp(info.rom, fid));
+ 	ret = PAGE_SIZE - c;
+-
+-pre_unlock:
+-	mutex_unlock(&dev->bus_mutex);
+-
+-post_unlock:
+-	atomic_dec(THERM_REFCNT(family_data));
+ 	return ret;
+ }
+
+--
+2.13.2.932.g7449e964c-goog
 
