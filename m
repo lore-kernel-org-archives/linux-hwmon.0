@@ -1,63 +1,75 @@
-Return-Path: <jaghu@google.com>
-Return-path: <jaghu@google.com>
-From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-To: zbr@ioremap.net,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org
-Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Subject: [PATCH linux v3 0/3] Export 1-wire thermal sensors as hwmon device
-Date: Thu, 13 Jul 2017 14:06:46 -0700
-Message-Id: <20170713210649.16188-1-jaghu@google.com>
+Return-Path: <linux@roeck-us.net>
+Return-path: <linux@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (jc42) Add support for GT30TS00, GT34TS02, and CAT34TS04
+Date: Sat, 15 Jul 2017 17:02:00 -0700
+Message-Id: <1500163320-26254-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
-sensor under it is already configured against the Linux 1-wire driver
-(called w1). They have a sysfs file(e.g.
-/sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
-runs code to read the temperature. We'd like the temperatures to show up in
-hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
+Giantec GT30TS00 GT30TS00 and GT34TS02 as well as ONS CAT34TS04
+are used on DDR4 DIMMs.
 
-This patch(version 3) is to address the comments provided by Guenter for
-version 2. The changes in version 3 are mentioned in the individual patches.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/jc42.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-This patchset is based on linux mainline version v4.10.
-
-Tested:
-Yes; On a board with 4 DS18B20 1-wire temperature sensors:
-root@zaius:/sys/class/hwmon# ls
-hwmon0  hwmon1  hwmon2  hwmon3  hwmon4  hwmon5
-root@zaius:/sys/class/hwmon# cd hwmon0
-root@zaius:/sys/class/hwmon/hwmon0# ls
-device       name         subsystem    temp1_input  uevent
-root@zaius:/sys/class/hwmon/hwmon0# cat temp1_input
-24500
-root@zaius:/sys/class/hwmon/hwmon0# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon1
-root@zaius:/sys/class/hwmon/hwmon1# cat temp1_input
-26562
-root@zaius:/sys/class/hwmon/hwmon1# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon2
-root@zaius:/sys/class/hwmon/hwmon2# cat temp1_input
-27250
-root@zaius:/sys/class/hwmon/hwmon2# cd ..
-root@zaius:/sys/class/hwmon# cd hwmon3
-root@zaius:/sys/class/hwmon/hwmon3# cat temp1_input
-22250
-root@zaius:/sys/class/hwmon/hwmon3#
-
-Jaghathiswari Rankappagounder Natarajan (3):
-  drivers: w1: add hwmon support structures
-  drivers: w1: refactor w1_slave_show to make the temp reading
-    functionality separate
-  drivers: w1: add hwmon temp support for w1_therm
-
- drivers/w1/slaves/w1_therm.c | 169 +++++++++++++++++++++++++++++++++++--------
- drivers/w1/w1.c              |  18 ++++-
- drivers/w1/w1.h              |   2 +
- drivers/w1/w1_family.h       |   2 +
- 4 files changed, 161 insertions(+), 30 deletions(-)
-
---
-2.13.2.932.g7449e964c-goog
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index 1bf22eff0b08..edb6a81a0e10 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -72,6 +72,8 @@ static const unsigned short normal_i2c[] = {
+ #define NXP_MANID		0x1131  /* NXP Semiconductors */
+ #define ONS_MANID		0x1b09  /* ON Semiconductor */
+ #define STM_MANID		0x104a  /* ST Microelectronics */
++#define GT_MANID		0x1c68	/* Giantec */
++#define GT_MANID2		0x132d	/* Giantec, 2nd mfg ID */
+ 
+ /* Supported chips */
+ 
+@@ -86,6 +88,13 @@ static const unsigned short normal_i2c[] = {
+ #define AT30TSE004_DEVID	0x2200
+ #define AT30TSE004_DEVID_MASK	0xffff
+ 
++/* Giantec */
++#define GT30TS00_DEVID		0x2200
++#define GT30TS00_DEVID_MASK	0xff00
++
++#define GT34TS02_DEVID		0x3300
++#define GT34TS02_DEVID_MASK	0xff00
++
+ /* IDT */
+ #define TSE2004_DEVID		0x2200
+ #define TSE2004_DEVID_MASK	0xff00
+@@ -130,6 +139,9 @@ static const unsigned short normal_i2c[] = {
+ #define CAT6095_DEVID		0x0800	/* Also matches CAT34TS02 */
+ #define CAT6095_DEVID_MASK	0xffe0
+ 
++#define CAT34TS04_DEVID		0x2200
++#define CAT34TS04_DEVID_MASK	0xfff0
++
+ /* ST Microelectronics */
+ #define STTS424_DEVID		0x0101
+ #define STTS424_DEVID_MASK	0xffff
+@@ -158,6 +170,8 @@ static struct jc42_chips jc42_chips[] = {
+ 	{ ADT_MANID, ADT7408_DEVID, ADT7408_DEVID_MASK },
+ 	{ ATMEL_MANID, AT30TS00_DEVID, AT30TS00_DEVID_MASK },
+ 	{ ATMEL_MANID2, AT30TSE004_DEVID, AT30TSE004_DEVID_MASK },
++	{ GT_MANID, GT30TS00_DEVID, GT30TS00_DEVID_MASK },
++	{ GT_MANID2, GT34TS02_DEVID, GT34TS02_DEVID_MASK },
+ 	{ IDT_MANID, TSE2004_DEVID, TSE2004_DEVID_MASK },
+ 	{ IDT_MANID, TS3000_DEVID, TS3000_DEVID_MASK },
+ 	{ IDT_MANID, TS3001_DEVID, TS3001_DEVID_MASK },
+@@ -170,6 +184,7 @@ static struct jc42_chips jc42_chips[] = {
+ 	{ MCP_MANID, MCP9843_DEVID, MCP9843_DEVID_MASK },
+ 	{ NXP_MANID, SE97_DEVID, SE97_DEVID_MASK },
+ 	{ ONS_MANID, CAT6095_DEVID, CAT6095_DEVID_MASK },
++	{ ONS_MANID, CAT34TS04_DEVID, CAT34TS04_DEVID_MASK },
+ 	{ NXP_MANID, SE98_DEVID, SE98_DEVID_MASK },
+ 	{ STM_MANID, STTS424_DEVID, STTS424_DEVID_MASK },
+ 	{ STM_MANID, STTS424E_DEVID, STTS424E_DEVID_MASK },
+-- 
+2.7.4
