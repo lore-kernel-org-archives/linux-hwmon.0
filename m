@@ -1,59 +1,115 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wr0-f182.google.com ([209.85.128.182]:33946 "EHLO
-        mail-wr0-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751026AbdGRHIz (ORCPT
+Received: from mail-wm0-f53.google.com ([74.125.82.53]:35106 "EHLO
+        mail-wm0-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751300AbdGQOfA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2017 03:08:55 -0400
-Received: by mail-wr0-f182.google.com with SMTP id 12so15051030wrb.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Jul 2017 00:08:54 -0700 (PDT)
-Date: Tue, 18 Jul 2017 08:08:50 +0100
+        Mon, 17 Jul 2017 10:35:00 -0400
+Received: by mail-wm0-f53.google.com with SMTP id w126so78015825wme.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2017 07:34:59 -0700 (PDT)
+Date: Mon, 17 Jul 2017 15:34:44 +0100
 From: Lee Jones <lee.jones@linaro.org>
 To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Cc: Support Opensource <support.opensource@diasemi.com>,
+Cc: Sebastian Reichel <sre@kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 3/6] mfd: da9052: add register details for TSI
-Message-ID: <20170718070850.rvu2iq4nsdwtnrb2@dell>
+Subject: Re: [PATCHv5 4/6] mfd: da9052: make touchscreen registration optional
+Message-ID: <20170717143444.i5zlzwrbd76bhq4z@dell>
 References: <20170703084003.31184-1-sebastian.reichel@collabora.co.uk>
- <20170703084003.31184-4-sebastian.reichel@collabora.co.uk>
- <20170717143245.qvcshsnodtk7pi2h@dell>
- <20170717152017.gtqa6g657k232z5k@earth>
+ <20170703084003.31184-5-sebastian.reichel@collabora.co.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20170717152017.gtqa6g657k232z5k@earth>
+In-Reply-To: <20170703084003.31184-5-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, 17 Jul 2017, Sebastian Reichel wrote:
+On Mon, 03 Jul 2017, Sebastian Reichel wrote:
 
-> Hi,
+> If the touchscreen pins are used as general purpose analogue
+> input, the touchscreen driver should not be used. The pins
+> will be handled by the existing hwmon driver instead.
 > 
-> On Mon, Jul 17, 2017 at 03:32:45PM +0100, Lee Jones wrote:
-> > On Mon, 03 Jul 2017, Sebastian Reichel wrote:
-> > 
-> > > Add register details an channels definition for using the TSI
-> > > registers in the hwmon driver.
-> > > 
-> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-> > > ---
-> > >  include/linux/mfd/da9052/da9052.h |  6 ++++++
-> > >  include/linux/mfd/da9052/reg.h    | 11 ++++++++++-
-> > >  2 files changed, 16 insertions(+), 1 deletion(-)
-> > 
-> > Do other patches in this set depend on this change?
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> ---
+>  drivers/mfd/da9052-core.c | 28 +++++++++++++++++++++++++---
+>  1 file changed, 25 insertions(+), 3 deletions(-)
 > 
-> Patch 6 has a compile-time dependency on 3 (this one) + 5
-> and a runtime-dependency on patch 4. My proposed merge
-> solution would be an immutable branch for the mfd changes,
-> that can be pulled by hwmon.
+> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
+> index 977418ca9117..a671c18381d7 100644
+> --- a/drivers/mfd/da9052-core.c
+> +++ b/drivers/mfd/da9052-core.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/mfd/core.h>
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+> +#include <linux/property.h>
+>  
+>  #include <linux/mfd/da9052/da9052.h>
+>  #include <linux/mfd/da9052/pdata.h>
+> @@ -521,9 +522,6 @@ static const struct mfd_cell da9052_subdev_info[] = {
+>  		.name = "da9052-wled3",
+>  	},
+>  	{
+> -		.name = "da9052-tsi",
+> -	},
+> -	{
+>  		.name = "da9052-bat",
+>  	},
+>  	{
+> @@ -531,6 +529,12 @@ static const struct mfd_cell da9052_subdev_info[] = {
+>  	},
+>  };
+>  
+> +static const struct mfd_cell da9052_tsi_subdev_info[] = {
+> +	{
+> +		.name = "da9052-tsi",
+> +	},
+> +};
 
-I'm happy to do that.  Please fix patch 4 and I'll take them in.
+I normally prefer these one a single line.
+
+Once fixed:
+
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+>  const struct regmap_config da9052_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+> @@ -621,9 +625,27 @@ int da9052_device_init(struct da9052 *da9052, u8 chip_id)
+>  		goto err;
+>  	}
+>  
+> +	/*
+> +	 * Check if touchscreen pins are used are analogue input instead
+> +	 * of having a touchscreen connected to them. The analogue input
+> +	 * functionality will be provided by hwmon driver (if enabled).
+> +	 */
+> +	if (!device_property_read_bool(da9052->dev, "dlg,tsi-as-adc")) {
+> +		ret = mfd_add_devices(da9052->dev, PLATFORM_DEVID_AUTO,
+> +				      da9052_tsi_subdev_info,
+> +				      ARRAY_SIZE(da9052_tsi_subdev_info),
+> +				      NULL, 0, NULL);
+> +		if (ret) {
+> +			dev_err(da9052->dev, "failed to add TSI subdev: %d\n",
+> +				ret);
+> +			goto err;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  
+>  err:
+> +	mfd_remove_devices(da9052->dev);
+>  	da9052_irq_exit(da9052);
+>  
+>  	return ret;
 
 -- 
 Lee Jones
