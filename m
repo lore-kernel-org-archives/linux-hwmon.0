@@ -1,47 +1,59 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:44556 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750760AbdGVOap (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Jul 2017 10:30:45 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.13-rc2
-Date: Sat, 22 Jul 2017 07:30:43 -0700
-Message-Id: <1500733843-22721-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <lee.jones@linaro.org>
+Return-path: <lee.jones@linaro.org>
+Date: Mon, 17 Jul 2017 11:49:16 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 1/4] mfd: da9052: fix manual ADC read after timed out
+ read
+Message-ID: <20170717104916.exhaspyska4okclc@dell>
+References: <20170630143506.10541-1-sebastian.reichel@collabora.co.uk>
+ <20170630143506.10541-2-sebastian.reichel@collabora.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20170630143506.10541-2-sebastian.reichel@collabora.co.uk>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Fri, 30 Jun 2017, Sebastian Reichel wrote:
 
-Please pull hwmon fixes for Linux v4.13-rc2 from signed tag:
+> It is possible that under heavy system load, the counter in the completion
+> struct, used for waiting for end of AD conversion, gets incremented twice.
+> To make sure the driver recovers from this situation, the completion struct
+> should be reinitialized.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> ---
+>  drivers/mfd/da9052-core.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.13-rcX
+Applied, thanks.
 
-Thanks,
-Guenter
-------
+> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
+> index a88c2065d8ab..977418ca9117 100644
+> --- a/drivers/mfd/da9052-core.c
+> +++ b/drivers/mfd/da9052-core.c
+> @@ -386,6 +386,8 @@ int da9052_adc_manual_read(struct da9052 *da9052, unsigned char channel)
+>  
+>  	mutex_lock(&da9052->auxadc_lock);
+>  
+> +	reinit_completion(&da9052->done);
+> +
+>  	/* Channel gets activated on enabling the Conversion bit */
+>  	mux_sel = chan_mux[channel] | DA9052_ADC_MAN_MAN_CONV;
+>  
 
-The following changes since commit 5771a8c08880cdca3bfb4a3fc6d309d6bba20877:
-
-  Linux v4.13-rc1 (2017-07-15 15:22:10 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.13-rc2
-
-for you to fetch changes up to 1009ccdc64ee2c8451f76b548589f6b989d13412:
-
-  hwmon: (applesmc) Avoid buffer overruns (2017-07-15 16:38:56 -0700)
-
-----------------------------------------------------------------
-Avoid buffer overruns in applesmc driver
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (applesmc) Avoid buffer overruns
-
- drivers/hwmon/applesmc.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+-- 
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
