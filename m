@@ -1,118 +1,72 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:48319 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751198AbdGPAm0 (ORCPT
+Received: from mail-pf0-f171.google.com ([209.85.192.171]:35253 "EHLO
+        mail-pf0-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751550AbdGQXJK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Jul 2017 20:42:26 -0400
-Subject: Re: [PATCH] hwmon: (lm75) Add a basic interrupt handler
-To: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20170712025237.24163-1-tony.obrien@alliedtelesis.co.nz>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <fa3c3cb3-c71d-7118-9d48-7002e1788f99@roeck-us.net>
-Date: Sat, 15 Jul 2017 17:42:21 -0700
-MIME-Version: 1.0
-In-Reply-To: <20170712025237.24163-1-tony.obrien@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Jul 2017 19:09:10 -0400
+Received: by mail-pf0-f171.google.com with SMTP id e199so1957750pfh.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jul 2017 16:09:10 -0700 (PDT)
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v5 0/3] Export 1-wire thermal sensors as hwmon device
+Date: Mon, 17 Jul 2017 16:09:03 -0700
+Message-Id: <20170717230906.4084-1-jaghu@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/11/2017 07:52 PM, Tony O'Brien wrote:
-> The LM75 interrupt cannot be masked in the device so an over-temperature
-> event can cause an interrupt that cannot be cleared.
-> Add an interrupt handler if an interrupt node exists in the DTS for an
-> LM75.  The handler simply reads a device register to clear the interrupt
-> and returns.
-> 
+Hi Greg,
+Please pull in this patchset into the tree. Thanks!
 
-Is this an actual problem ? If no interrupt handler is registered, the interrupt
-should be disabled by the interrupt controller, and it should not matter if
-the interrupt line from the chip is active or not.
+Summary of what this patchset does:
 
-Thanks,
-Guenter
+Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
+sensor under it is already configured against the Linux 1-wire driver
+(called w1). They have a sysfs file(e.g.
+/sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
+runs code to read the temperature. We'd like the temperatures to show up in
+hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
 
-> Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->   drivers/hwmon/lm75.c | 28 ++++++++++++++++++++++++++++
->   drivers/hwmon/lm75.h |  1 +
->   2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 005ffb5ffa92..08a833e960aa 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -22,6 +22,7 @@
->   #include <linux/init.h>
->   #include <linux/slab.h>
->   #include <linux/jiffies.h>
-> +#include <linux/interrupt.h>
->   #include <linux/i2c.h>
->   #include <linux/hwmon.h>
->   #include <linux/hwmon-sysfs.h>
-> @@ -265,6 +266,17 @@ static void lm75_remove(void *data)
->   	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
->   }
->   
-> +static irqreturn_t lm75_process_interrupt(int irq, void *data)
-> +{
-> +	struct i2c_client *client = (struct i2c_client *)data;
-> +	int val;
-> +
-> +	/* Do a read to clear the interrupt */
-> +	val = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->   static int
->   lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->   {
-> @@ -275,6 +287,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->   	u8 set_mask, clr_mask;
->   	int new;
->   	enum lm75_type kind;
-> +	int ret;
->   
->   	if (client->dev.of_node)
->   		kind = (enum lm75_type)of_device_get_match_data(&client->dev);
-> @@ -375,6 +388,21 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->   		break;
->   	}
->   
-> +	if (client->irq) {
-> +		/* If requesting an interrupt then set to interrupt mode */
-> +		set_mask |= LM75_MODE_INTERRUPT;
-> +		ret = devm_request_threaded_irq(dev, client->irq, NULL,
-> +						lm75_process_interrupt,
-> +						IRQF_TRIGGER_LOW | IRQF_ONESHOT |
-> +							IRQF_SHARED,
-> +						dev_name(dev),
-> +						client);
-> +		if (ret) {
-> +			dev_err(dev, "Error requesting irq\n");
-> +			return ret;
-> +		}
-> +	}
-> +
->   	/* configure as specified */
->   	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
->   	if (status < 0) {
-> diff --git a/drivers/hwmon/lm75.h b/drivers/hwmon/lm75.h
-> index 5cde94e56f17..82a71d870331 100644
-> --- a/drivers/hwmon/lm75.h
-> +++ b/drivers/hwmon/lm75.h
-> @@ -31,6 +31,7 @@
->   #define LM75_TEMP_MIN (-55000)
->   #define LM75_TEMP_MAX 125000
->   #define LM75_SHUTDOWN 0x01
-> +#define LM75_MODE_INTERRUPT 0x02
->   
->   /* TEMP: 0.001C/bit (-55C to +125C)
->      REG: (0.5C/bit, two's complement) << 7 */
-> 
+This patchset is based on linux mainline version v4.10.
+
+Tested:
+Yes; On a board with 4 DS18B20 1-wire temperature sensors:
+root@zaius:/sys/class/hwmon# ls
+hwmon0  hwmon1  hwmon2  hwmon3  hwmon4  hwmon5
+root@zaius:/sys/class/hwmon# cd hwmon0
+root@zaius:/sys/class/hwmon/hwmon0# ls
+device       name         subsystem    temp1_input  uevent
+root@zaius:/sys/class/hwmon/hwmon0# cat temp1_input
+24500
+root@zaius:/sys/class/hwmon/hwmon0# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon1
+root@zaius:/sys/class/hwmon/hwmon1# cat temp1_input
+26562
+root@zaius:/sys/class/hwmon/hwmon1# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon2
+root@zaius:/sys/class/hwmon/hwmon2# cat temp1_input
+27250
+root@zaius:/sys/class/hwmon/hwmon2# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon3
+root@zaius:/sys/class/hwmon/hwmon3# cat temp1_input
+22250
+root@zaius:/sys/class/hwmon/hwmon3#
+
+Jaghathiswari Rankappagounder Natarajan (3):
+  drivers: w1: add hwmon support structures
+  drivers: w1: refactor w1_slave_show to make the temp reading
+    functionality separate
+  drivers: w1: add hwmon temp support for w1_therm
+
+ drivers/w1/slaves/w1_therm.c | 164 +++++++++++++++++++++++++++++++++++--------
+ drivers/w1/w1.c              |  18 ++++-
+ drivers/w1/w1.h              |   2 +
+ drivers/w1/w1_family.h       |   2 +
+ 4 files changed, 156 insertions(+), 30 deletions(-)
+
+--
+2.13.2.932.g7449e964c-goog
 
