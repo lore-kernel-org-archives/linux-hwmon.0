@@ -1,39 +1,37 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:37402 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:48048 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753199AbdGSBtp (ORCPT
+        with ESMTP id S1753039AbdGSBrY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Jul 2017 21:49:45 -0400
-Subject: Re: [PATCH] hwmon: i5k_amb: constify pci_device_id.
-To: Arvind Yadav <arvind.yadav.cs@gmail.com>, jdelvare@suse.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <f6ecfc5c18a47e7b16d58ab55c562b0414595a8c.1500308632.git.arvind.yadav.cs@gmail.com>
+        Tue, 18 Jul 2017 21:47:24 -0400
+Subject: Re: [PATCH] hwmon: Convert to using %pOF instead of full_name
+To: Rob Herring <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Dirk Eibach <eibach@gdsys.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20170718214339.7774-25-robh@kernel.org>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <96bb044d-469a-8ea2-8213-992493a06b43@roeck-us.net>
-Date: Tue, 18 Jul 2017 18:49:42 -0700
+Message-ID: <b96d4243-03fa-08b8-fa53-8d0e4db9bc68@roeck-us.net>
+Date: Tue, 18 Jul 2017 18:47:20 -0700
 MIME-Version: 1.0
-In-Reply-To: <f6ecfc5c18a47e7b16d58ab55c562b0414595a8c.1500308632.git.arvind.yadav.cs@gmail.com>
+In-Reply-To: <20170718214339.7774-25-robh@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/17/2017 09:25 AM, Arvind Yadav wrote:
-> pci_device_id are not supposed to change at runtime. All functions
-> working with pci_device_id provided by <linux/pci.h> work with
-> const pci_device_id. So mark the non-const structs as const.
+On 07/18/2017 02:43 PM, Rob Herring wrote:
+> Now that we have a custom printf format specifier, convert users of
+> full_name to use %pOF instead. This is preparation to remove storing
+> of the full path string for each node.
 > 
-> File size before:
->     text	   data	    bss	    dec	    hex	filename
->     3562	    320	      8	   3890	    f32	drivers/hwmon/i5k_amb.o
-> 
-> File size After adding 'const':
->     text	   data	    bss	    dec	    hex	filename
->     3658	    224	      8	   3890	    f32	drivers/hwmon/i5k_amb.o
-> 
-> Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> Cc: Dirk Eibach <eibach@gdsys.de>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
 
 Applied to hwmon-next.
 
@@ -41,21 +39,55 @@ Thanks,
 Guenter
 
 > ---
->   drivers/hwmon/i5k_amb.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/hwmon/ads1015.c | 14 ++++++--------
+>   1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
-> index a5a9f45..9397d2f 100644
-> --- a/drivers/hwmon/i5k_amb.c
-> +++ b/drivers/hwmon/i5k_amb.c
-> @@ -495,7 +495,7 @@ static struct {
->   };
->   
->   #ifdef MODULE
-> -static struct pci_device_id i5k_amb_ids[] = {
-> +static const struct pci_device_id i5k_amb_ids[] = {
->   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
->   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
->   	{ 0, }
+> diff --git a/drivers/hwmon/ads1015.c b/drivers/hwmon/ads1015.c
+> index 357b42607164..98c704d3366a 100644
+> --- a/drivers/hwmon/ads1015.c
+> +++ b/drivers/hwmon/ads1015.c
+> @@ -191,24 +191,23 @@ static int ads1015_get_channels_config_of(struct i2c_client *client)
+>   		unsigned int data_rate = ADS1015_DEFAULT_DATA_RATE;
+> 
+>   		if (of_property_read_u32(node, "reg", &pval)) {
+> -			dev_err(&client->dev, "invalid reg on %s\n",
+> -				node->full_name);
+> +			dev_err(&client->dev, "invalid reg on %pOF\n", node);
+>   			continue;
+>   		}
+> 
+>   		channel = pval;
+>   		if (channel >= ADS1015_CHANNELS) {
+>   			dev_err(&client->dev,
+> -				"invalid channel index %d on %s\n",
+> -				channel, node->full_name);
+> +				"invalid channel index %d on %pOF\n",
+> +				channel, node);
+>   			continue;
+>   		}
+> 
+>   		if (!of_property_read_u32(node, "ti,gain", &pval)) {
+>   			pga = pval;
+>   			if (pga > 6) {
+> -				dev_err(&client->dev, "invalid gain on %s\n",
+> -					node->full_name);
+> +				dev_err(&client->dev, "invalid gain on %pOF\n",
+> +					node);
+>   				return -EINVAL;
+>   			}
+>   		}
+> @@ -217,8 +216,7 @@ static int ads1015_get_channels_config_of(struct i2c_client *client)
+>   			data_rate = pval;
+>   			if (data_rate > 7) {
+>   				dev_err(&client->dev,
+> -					"invalid data_rate on %s\n",
+> -					node->full_name);
+> +					"invalid data_rate on %pOF\n", node);
+>   				return -EINVAL;
+>   			}
+>   		}
+> --
+> 2.11.0
+> 
 > 
 
