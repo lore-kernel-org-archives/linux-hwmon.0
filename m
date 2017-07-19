@@ -1,534 +1,515 @@
-Return-Path: <joel.stan@gmail.com>
-Return-path: <joel.stan@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-yw0-f195.google.com ([209.85.161.195]:35507 "EHLO
+        mail-yw0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755178AbdGSPFb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 19 Jul 2017 11:05:31 -0400
 MIME-Version: 1.0
-Sender: joel.stan@gmail.com
-In-Reply-To: <20170718033653.10298-2-andrew@aj.id.au>
-References: <20170718033653.10298-1-andrew@aj.id.au> <20170718033653.10298-2-andrew@aj.id.au>
+In-Reply-To: <20170718033653.10298-4-andrew@aj.id.au>
+References: <20170718033653.10298-1-andrew@aj.id.au> <20170718033653.10298-4-andrew@aj.id.au>
 From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 20 Jul 2017 00:35:01 +0930
-Message-ID: <CACPK8XdSwHHziOFGhMn9n9NJk0dWnkqMBKuO0tNrYh72W8e4dg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] hwmon: pmbus: Add fan control support
+Date: Thu, 20 Jul 2017 00:35:09 +0930
+Message-ID: <CACPK8XewOXhT4bvUHhhSoPu1t2=DefeutkrLRnVhhu2+B7nLSw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] pmbus: Add MAX31785 driver
 To: Andrew Jeffery <andrew@aj.id.au>
 Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-	msbarth <msbarth@linux.vnet.ibm.com>, Matt Spinler <mspinler@linux.vnet.ibm.com>
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        msbarth <msbarth@linux.vnet.ibm.com>,
+        Matt Spinler <mspinler@linux.vnet.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
 On Tue, Jul 18, 2017 at 1:06 PM, Andrew Jeffery <andrew@aj.id.au> wrote:
-> Expose fanX_target, pwmX and pwmX_enable hwmon sysfs attributes.
+> The driver features fan control and basic dual-tachometer support.
 
-Nice! I had a bit of a read. I'm not a pmbus expert, so most of the
-review is nitpicks about types, etc.
+Say something about the hardware?
 
-I'll defer to Guenter for the real stuff.
+ max31785 is a fancy fan controller with temp measurement, pwm, tach,
+breakfast making from Maxim.
+
 
 >
-> Fans in a PMBus device are driven by the configuration of two registers:
-> FAN_CONFIG_x_y and FAN_COMMAND_x: FAN_CONFIG_x_y dictates how the fan
-> and the tacho operate (if installed), while FAN_COMMAND_x sets the
-> desired fan rate. The unit of FAN_COMMAND_x is dependent on the
-> operational fan mode, RPM or PWM percent duty, as determined by the
-> corresponding FAN_CONFIG_x_y.
+> The fan control makes use of the new virtual registers exposed by the
+> pmbus core, mixing use of the default implementations with some
+> overrides via the read/write handlers. FAN_COMMAND_1 on the MAX31785
+> breaks the values into bands that depend on the RPM or PWM control mode.
 >
-> The mapping of fanX_target, pwmX and pwmX_enable onto FAN_CONFIG_x_y and
-> FAN_COMMAND_x is implemented with the addition of virtual registers and
-> generic implementations in the core:
+> The dual tachometer feature is implemented in hardware with a TACHSEL
+> input to indicate the rotor under measurement, and exposed on the bus by
+> extending the READ_FAN_SPEED_1 word with two extra bytes*.
+> The need to read the non-standard four-byte response leads to a cut-down
+> implementation of i2c_smbus_xfer_emulated() included in the driver.
+> Further, to expose the second rotor tachometer value to userspace,
+> virtual fans are implemented by re-routing the FAN_CONFIG_1_2 register
+> from the undefined (in hardware) pages 23-28 to the same register on
+> pages 0-5, and similarly re-routing READ_FAN_SPEED_1 requests on 23-28
+> to pages 0-5 but extracting the second word of the four-byte response.
 >
-> 1. PMBUS_VIRT_FAN_TARGET_x
-> 2. PMBUS_VIRT_PWM_x
-> 3. PMBUS_VIRT_PWM_ENABLE_x
->
-> The facilitate the necessary side-effects of each access. Examples of
-> the read case, assuming m = 1, b = 0, R = 0:
->
->              Read     |              With              || Gives
->          -------------------------------------------------------
->            Attribute  | FAN_CONFIG_x_y | FAN_COMMAND_y || Value
->          ----------------------------------------------++-------
->           fanX_target | ~PB_FAN_z_RPM  | 0x0001        || 1
->           pwm1        | ~PB_FAN_z_RPM  | 0x0064        || 255
->           pwmX_enable | ~PB_FAN_z_RPM  | 0x0001        || 1
->           fanX_target |  PB_FAN_z_RPM  | 0x0001        || 1
->           pwm1        |  PB_FAN_z_RPM  | 0x0064        || 0
->           pwmX_enable |  PB_FAN_z_RPM  | 0x0001        || 1
->
-> And the write case:
->
->              Write    | With  ||               Sets
->          -------------+-------++----------------+---------------
->            Attribute  | Value || FAN_CONFIG_x_y | FAN_COMMAND_x
->          -------------+-------++----------------+---------------
->           fanX_target | 1     ||  PB_FAN_z_RPM  | 0x0001
->           pwmX        | 255   || ~PB_FAN_z_RPM  | 0x0064
->           pwmX_enable | 1     || ~PB_FAN_z_RPM  | 0x0064
->
-> Also, the DIRECT mode scaling of some controllers is different between
-> RPM and PWM percent duty control modes, so PSC_PWM is introduced to
-> capture the necessary coefficients.
+> * The documentation recommends the slower rotor be associated with
+> TACHSEL=0, which is the input used by the controller's closed-loop fan
+> management.
 >
 > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
 > ---
->
 > v1 -> v2:
-> * Convert to using virtual registers
-> * Drop struct pmbus_fan_ctrl
-> * Introduce PSC_PWM
-> * Drop struct pmbus_coeffs
-> * Drop additional callbacks
 >
->  drivers/hwmon/pmbus/pmbus.h      |  19 ++++
->  drivers/hwmon/pmbus/pmbus_core.c | 215 +++++++++++++++++++++++++++++++++++----
->  2 files changed, 217 insertions(+), 17 deletions(-)
+> * Implement in terms of virtual registers
+> * Add support for dual-tachometer readings through 'virtual fans' (unused pages)
 >
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index bfcb13bae34b..226a37bd525f 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -190,6 +190,20 @@ enum pmbus_regs {
->         PMBUS_VIRT_VMON_UV_FAULT_LIMIT,
->         PMBUS_VIRT_VMON_OV_FAULT_LIMIT,
->         PMBUS_VIRT_STATUS_VMON,
+>  drivers/hwmon/pmbus/Kconfig    |  10 ++
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/max31785.c | 372 +++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 383 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/max31785.c
+>
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index cad1229b7e17..5f2f3c6c7499 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -95,6 +95,16 @@ config SENSORS_MAX20751
+>           This driver can also be built as a module. If so, the module will
+>           be called max20751.
+>
+> +config SENSORS_MAX31785
+> +       tristate "Maxim MAX31785 and compatibles"
+> +       default n
+> +       help
+> +         If you say yes here you get hardware monitoring support for Maxim
+> +         MAX31785.
 > +
-> +       /* Fan control */
-> +       PMBUS_VIRT_FAN_TARGET_1,
-> +       PMBUS_VIRT_FAN_TARGET_2,
-> +       PMBUS_VIRT_FAN_TARGET_3,
-> +       PMBUS_VIRT_FAN_TARGET_4,
-> +       PMBUS_VIRT_PWM_1,
-> +       PMBUS_VIRT_PWM_2,
-> +       PMBUS_VIRT_PWM_3,
-> +       PMBUS_VIRT_PWM_4,
-> +       PMBUS_VIRT_PWM_ENABLE_1,
-> +       PMBUS_VIRT_PWM_ENABLE_2,
-> +       PMBUS_VIRT_PWM_ENABLE_3,
-> +       PMBUS_VIRT_PWM_ENABLE_4,
->  };
->
->  /*
-> @@ -223,6 +237,8 @@ enum pmbus_regs {
->  #define PB_FAN_1_RPM                   BIT(6)
->  #define PB_FAN_1_INSTALLED             BIT(7)
->
-> +enum pmbus_fan_mode { percent = 0, rpm };
+> +         This driver can also be built as a module. If so, the module will
+> +         be called max31785.
 > +
->  /*
->   * STATUS_BYTE, STATUS_WORD (lower)
->   */
-> @@ -313,6 +329,7 @@ enum pmbus_sensor_classes {
->         PSC_POWER,
->         PSC_TEMPERATURE,
->         PSC_FAN,
-> +       PSC_PWM,
->         PSC_NUM_CLASSES         /* Number of power sensor classes */
->  };
->
-> @@ -413,6 +430,8 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg,
->                           u8 value);
->  int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
->                            u8 mask, u8 value);
-> +int pmbus_update_fan(struct i2c_client *client, int page, int id,
-> +                    int config, int mask, int command);
->  void pmbus_clear_faults(struct i2c_client *client);
->  bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
->  bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index ba59eaef2e07..712a8b6c4bd6 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -63,6 +63,7 @@ struct pmbus_sensor {
->         u16 reg;                /* register */
->         enum pmbus_sensor_classes class;        /* sensor class */
->         bool update;            /* runtime sensor update needed */
-> +       bool convert;           /* Whether or not to apply linear/vid/direct */
->         int data;               /* Sensor data.
->                                    Negative if there was a read error */
->  };
-> @@ -118,6 +119,27 @@ struct pmbus_data {
->         u8 currpage;
->  };
->
-> +static const int pmbus_fan_rpm_mask[] = {
-> +       PB_FAN_1_RPM,
-> +       PB_FAN_2_RPM,
-> +       PB_FAN_1_RPM,
-> +       PB_FAN_2_RPM,
+>  config SENSORS_MAX34440
+>         tristate "Maxim MAX34440 and compatibles"
+>         default n
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 562132054aaf..4ea548a8af46 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_SENSORS_LTC2978) += ltc2978.o
+>  obj-$(CONFIG_SENSORS_LTC3815)  += ltc3815.o
+>  obj-$(CONFIG_SENSORS_MAX16064) += max16064.o
+>  obj-$(CONFIG_SENSORS_MAX20751) += max20751.o
+> +obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)  += max8688.o
+>  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
+> diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
+> new file mode 100644
+> index 000000000000..1baa961f2eb1
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/max31785.c
+> @@ -0,0 +1,372 @@
+> +/*
+> + * Copyright (C) 2017 IBM Corp.
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; either version 2 of the License, or
+> + * (at your option) any later version.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include "pmbus.h"
+> +
+> +#define MFR_FAN_CONFIG_DUAL_TACH       BIT(12)
+> +#define MFR_FAN_CONFIG_TSFO            BIT(9)
+> +#define MFR_FAN_CONFIG_TACHO           BIT(8)
+> +
+> +#define MAX31785_CAP_DUAL_TACH         BIT(0)
+> +
+> +struct max31785 {
+> +       struct pmbus_driver_info info;
+> +
+> +       u32 capabilities;
 > +};
 > +
-> +static const int pmbus_fan_config_registers[] = {
-
-u8?
-
-> +       PMBUS_FAN_CONFIG_12,
-> +       PMBUS_FAN_CONFIG_12,
-> +       PMBUS_FAN_CONFIG_34,
-> +       PMBUS_FAN_CONFIG_34
+> +enum max31785_regs {
+> +       PMBUS_MFR_FAN_CONFIG            = 0xF1,
+> +       PMBUS_MFR_READ_FAN_PWM          = 0xF3,
+> +       PMBUS_MFR_FAN_FAULT_LIMIT       = 0xF5,
+> +       PMBUS_MFR_FAN_WARN_LIMIT        = 0xF6,
+> +       PMBUS_MFR_FAN_PWM_AVG           = 0xF8,
 > +};
 > +
-> +static const int pmbus_fan_command_registers[] = {
-
-u8?
-
-> +       PMBUS_FAN_COMMAND_1,
-> +       PMBUS_FAN_COMMAND_2,
-> +       PMBUS_FAN_COMMAND_3,
-> +       PMBUS_FAN_COMMAND_4,
-> +};
+> +#define to_max31785(_c) container_of(pmbus_get_info(_c), struct max31785, info)
 > +
->  void pmbus_clear_cache(struct i2c_client *client)
->  {
->         struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -188,6 +210,29 @@ int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word)
->  }
->  EXPORT_SYMBOL_GPL(pmbus_write_word_data);
->
-> +int pmbus_update_fan(struct i2c_client *client, int page, int id,
-> +                              int config, int mask, int command)
+> +static int max31785_read_byte_data(struct i2c_client *client, int page,
+> +                                  int reg)
 > +{
-> +       int from, to;
-> +       int rv;
-> +
-> +       from = pmbus_read_byte_data(client, page,
-> +                                   pmbus_fan_config_registers[id]);
-> +       if (from < 0)
-> +               return from;
-> +
-> +       to = (from & ~mask) | (config & mask);
-> +
-> +       rv = pmbus_write_byte_data(client, page,
-> +                                  pmbus_fan_config_registers[id], to);
+> +       struct max31785 *chip = to_max31785(client);
+> +       int rv = -ENODATA;
 
-to is a u8. Perhaps define it as such?
+I'd drop this.
 
-> +       if (rv < 0)
-> +               return rv;
 > +
-> +       return pmbus_write_word_data(client, page,
-> +                                    pmbus_fan_command_registers[id], command);
+> +       switch (reg) {
+> +       case PMBUS_VOUT_MODE:
+> +               if (page < 23)
+> +                       return -ENODATA;
+> +
+> +               return -ENOTSUPP;
+> +       case PMBUS_FAN_CONFIG_12:
+> +               if (page < 23)
+> +                       return -ENODATA;
+> +
+> +               if (WARN_ON(!(chip->capabilities & MAX31785_CAP_DUAL_TACH)))
 
-Similar with command - it's a u16. This would help the definition of
-pmbus_update_fan match the others in the pmbus header, which mostly
-deal with explicitly sized types. mask and config could be u8 as well
-I think.
+Not sure about the WARN_ON here - won't users get spammed every time
+someone reads a byte of data? When do we expect this case to happen?
+
+> +                       return -ENOTSUPP;
+> +
+> +               rv = pmbus_read_byte_data(client, page - 23, reg);
+
+return pmbus_read_byte_data(client, page - 23, reg);
+> +               break;
+> +       }
+> +
+> +       return rv;
+
+return -ENODATA;
+
+Or something like ESUPP or EINVAL?
+
+Interestingly max34440_read_byte_data (may) return zero in this case.
 
 > +}
-> +EXPORT_SYMBOL_GPL(pmbus_update_fan);
 > +
->  /*
->   * _pmbus_write_word_data() is similar to pmbus_write_word_data(), but checks if
->   * a device specific mapping function exists and calls it if necessary.
-> @@ -197,15 +242,47 @@ static int _pmbus_write_word_data(struct i2c_client *client, int page, int reg,
->  {
->         struct pmbus_data *data = i2c_get_clientdata(client);
->         const struct pmbus_driver_info *info = data->info;
-> -       int status;
-> +       int status = -ENODATA;
+> +static long max31785_read_long_data(struct i2c_client *client, int page,
+> +                                   int reg)
+> +{
+> +       unsigned char cmdbuf[1];
+> +       unsigned char rspbuf[4];
+> +       s64 rc;
 
-It looks like you modify this value in all of the code paths (except
-the one I suggest you remove below).
+This should be the same type as the function returns.
 
->
->         if (info->write_word_data) {
->                 status = info->write_word_data(client, page, reg, word);
->                 if (status != -ENODATA)
->                         return status;
->         }
-> -       if (reg >= PMBUS_VIRT_BASE)
-> -               return -ENXIO;
-> +       if (status == -ENODATA && reg >= PMBUS_VIRT_BASE) {
-
-status will always be -ENODATA if we get down here. I don't think you
-need to make this change.
-
-> +               int id, bit;
 > +
-> +               switch (reg) {
-> +               case PMBUS_VIRT_FAN_TARGET_1:
-> +               case PMBUS_VIRT_FAN_TARGET_2:
-> +               case PMBUS_VIRT_FAN_TARGET_3:
-> +               case PMBUS_VIRT_FAN_TARGET_4:
-
-I haven't read the pmbus spec (feel free to point me to a page in the
-PDF if you think it will help). Can you educate me why we have 1..4?
-for all of these virtual registers? Why not 5, or 3?
-
-> +                       id = reg - PMBUS_VIRT_FAN_TARGET_1;
-> +                       bit = pmbus_fan_rpm_mask[id];
-> +                       status = pmbus_update_fan(client, page, id, bit, bit,
-> +                                               word);
-> +                       break;
-> +               case PMBUS_VIRT_PWM_1:
-> +               case PMBUS_VIRT_PWM_2:
-> +               case PMBUS_VIRT_PWM_3:
-> +               case PMBUS_VIRT_PWM_4:
+> +       struct i2c_msg msg[2] = {
 > +               {
-> +                       long command = word;
-
-long seems a bit... long. And we don't need the sign. Perhaps u32?
-
-> +
-> +                       id = reg - PMBUS_VIRT_PWM_1;
-> +                       bit = pmbus_fan_rpm_mask[id];
-> +                       command *= 100;
-> +                       command /= 255;
-> +                       status = pmbus_update_fan(client, page, id, 0, bit,
-> +                                               command);
-> +                       break;
-> +               }
-> +               default:
-> +                       status = -ENXIO;
-> +                       break;
-> +               }
-> +               return status;
-> +       }
->         return pmbus_write_word_data(client, page, reg, word);
->  }
->
-> @@ -221,6 +298,9 @@ int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg)
->  }
->  EXPORT_SYMBOL_GPL(pmbus_read_word_data);
->
-> +static int pmbus_get_fan_command(struct i2c_client *client, int page, int id,
-> +                                enum pmbus_fan_mode mode);
-> +
->  /*
->   * _pmbus_read_word_data() is similar to pmbus_read_word_data(), but checks if
->   * a device specific mapping function exists and calls it if necessary.
-> @@ -229,15 +309,49 @@ static int _pmbus_read_word_data(struct i2c_client *client, int page, int reg)
->  {
->         struct pmbus_data *data = i2c_get_clientdata(client);
->         const struct pmbus_driver_info *info = data->info;
-> -       int status;
-> +       int status = -ENODATA;
->
->         if (info->read_word_data) {
->                 status = info->read_word_data(client, page, reg);
->                 if (status != -ENODATA)
->                         return status;
->         }
-> -       if (reg >= PMBUS_VIRT_BASE)
-> -               return -ENXIO;
-> +       if (status == -ENODATA && reg >= PMBUS_VIRT_BASE) {
-
-Same comments as the write case.
-
-> +               int id;
-> +
-> +               switch (reg) {
-> +               case PMBUS_VIRT_FAN_TARGET_1:
-> +               case PMBUS_VIRT_FAN_TARGET_2:
-> +               case PMBUS_VIRT_FAN_TARGET_3:
-> +               case PMBUS_VIRT_FAN_TARGET_4:
-> +                       id = reg - PMBUS_VIRT_FAN_TARGET_1;
-> +                       status = pmbus_get_fan_command(client, page, id, rpm);
-> +                       break;
-> +               case PMBUS_VIRT_PWM_1:
-> +               case PMBUS_VIRT_PWM_2:
-> +               case PMBUS_VIRT_PWM_3:
-> +               case PMBUS_VIRT_PWM_4:
+> +                       .addr = client->addr,
+> +                       .flags = 0,
+> +                       .len = sizeof(cmdbuf),
+> +                       .buf = cmdbuf,
+> +               },
 > +               {
-> +                       long rv;
+> +                       .addr = client->addr,
+> +                       .flags = I2C_M_RD,
+> +                       .len = sizeof(rspbuf),
+> +                       .buf = rspbuf,
+> +               },
+> +       };
 > +
-> +                       id = reg - PMBUS_VIRT_PWM_1;
-> +                       rv = pmbus_get_fan_command(client, page, id, percent);
-> +                       if (rv < 0)
-> +                               return rv;
+> +       cmdbuf[0] = reg;
 > +
-> +                       rv *= 255;
-> +                       rv /= 100;
+> +       rc = pmbus_set_page(client, page);
+> +       if (rc < 0)
+> +               return rc;
 > +
-> +                       status = rv;
-> +                       break;
-> +               }
-> +               default:
-> +                       status = -ENXIO;
-> +                       break;
-> +               }
+> +       rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
+> +       if (rc < 0)
+> +               return rc;
 > +
-> +               return status;
-> +       }
->         return pmbus_read_word_data(client, page, reg);
->  }
->
-> @@ -304,6 +418,23 @@ static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
->         return pmbus_read_byte_data(client, page, reg);
->  }
->
-> +static int pmbus_get_fan_command(struct i2c_client *client, int page, int id,
-> +                                enum pmbus_fan_mode mode)
+> +       rc = (rspbuf[0] << (0 * 8)) | (rspbuf[1] << (1 * 8)) |
+> +            (rspbuf[2] << (2 * 8)) | (rspbuf[3] << (3 * 8));
+
+It's getting late, so I might have confused myself. But can you just do:
+
+rc = le32_to_cpup(rspbuf);
+
+> +
+> +       return rc;
+> +}
+> +
+> +static int max31785_get_pwm(struct i2c_client *client, int page)
 > +{
 > +       int config;
+> +       int command;
 > +
-> +       config = _pmbus_read_byte_data(client, page,
-> +                                      pmbus_fan_config_registers[id]);
+> +       config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
 > +       if (config < 0)
 > +               return config;
 > +
-> +       if ((mode == rpm) != (!!(config & pmbus_fan_rpm_mask[id])))
+> +       command = pmbus_read_word_data(client, page, PMBUS_FAN_COMMAND_1);
+> +       if (command < 0)
+> +               return command;
+> +
+> +       if (!(config & PB_FAN_1_RPM)) {
+> +               if (command >= 0x8000)
+> +                       return 0;
+> +               else if (command >= 0x2711)
+> +                       return 0x2710;
 
-What's (config & mask[id]) testing? Perhaps give it a variable so it's
-obvious. Avoids the ((())) too.
+What are the magic numbers?
 
-This looks like it's testing for an error case. Should you be
-returning a negative value instead of zero?
-
-> +               return 0;
-> +
-> +       return _pmbus_read_word_data(client, page,
-> +                                    pmbus_fan_command_registers[id]);
-> +}
-> +
->  static void pmbus_clear_fault_page(struct i2c_client *client, int page)
->  {
->         _pmbus_write_byte(client, page, PMBUS_CLEAR_FAULTS);
-> @@ -489,7 +620,7 @@ static long pmbus_reg2data_direct(struct pmbus_data *data,
->         /* X = 1/m * (Y * 10^-R - b) */
->         R = -R;
->         /* scale result to milli-units for everything but fans */
-
-Does this comment need updating?
-
-> -       if (sensor->class != PSC_FAN) {
-> +       if (!(sensor->class == PSC_FAN || sensor->class == PSC_PWM)) {
->                 R += 3;
->                 b *= 1000;
->         }
-> @@ -539,6 +670,9 @@ static long pmbus_reg2data(struct pmbus_data *data, struct pmbus_sensor *sensor)
->  {
->         long val;
->
-> +       if (!sensor->convert)
-> +               return sensor->data;
-> +
->         switch (data->info->format[sensor->class]) {
->         case direct:
->                 val = pmbus_reg2data_direct(data, sensor);
-> @@ -642,7 +776,7 @@ static u16 pmbus_data2reg_direct(struct pmbus_data *data,
->         }
->
->         /* Calculate Y = (m * X + b) * 10^R */
-> -       if (sensor->class != PSC_FAN) {
-> +       if (!(sensor->class == PSC_FAN || sensor->class == PSC_PWM)) {
->                 R -= 3;         /* Adjust R and b for data in milli-units */
->                 b *= 1000;
->         }
-> @@ -673,6 +807,9 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
->  {
->         u16 regval;
->
-> +       if (!sensor->convert)
-> +               return val;
-> +
->         switch (data->info->format[sensor->class]) {
->         case direct:
->                 regval = pmbus_data2reg_direct(data, sensor, val);
-> @@ -895,12 +1032,13 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
->                 return NULL;
->         a = &sensor->attribute;
->
-> -       snprintf(sensor->name, sizeof(sensor->name), "%s%d_%s",
-> -                name, seq, type);
-> +       snprintf(sensor->name, sizeof(sensor->name), "%s%d%s%s",
-> +                name, seq, type ? "_" : "", type ? type : "");
-
-Perhaps something like this would be more readable:
-
-if (type)
-       snprintf(sensor->name, sizeof(sensor->name), "%s%d_%s,
-                name, seq, type);
-else
-       snprintf(sensor->name, sizeof(sensor->name), "%s%d,
-                name, seq);
-
-
-
->         sensor->page = page;
->         sensor->reg = reg;
->         sensor->class = class;
->         sensor->update = update;
-> +       sensor->convert = true;
->         pmbus_dev_attr_init(a, sensor->name,
->                             readonly ? S_IRUGO : S_IRUGO | S_IWUSR,
->                             pmbus_show_sensor, pmbus_set_sensor);
-> @@ -1558,13 +1696,6 @@ static const int pmbus_fan_registers[] = {
->         PMBUS_READ_FAN_SPEED_4
->  };
->
-> -static const int pmbus_fan_config_registers[] = {
-> -       PMBUS_FAN_CONFIG_12,
-> -       PMBUS_FAN_CONFIG_12,
-> -       PMBUS_FAN_CONFIG_34,
-> -       PMBUS_FAN_CONFIG_34
-> -};
-> -
->  static const int pmbus_fan_status_registers[] = {
->         PMBUS_STATUS_FAN_12,
->         PMBUS_STATUS_FAN_12,
-> @@ -1587,6 +1718,47 @@ static const u32 pmbus_fan_status_flags[] = {
->  };
->
->  /* Fans */
-> +static int pmbus_add_fan_ctrl(struct i2c_client *client,
-> +               struct pmbus_data *data, int index, int page, int id,
-> +               u8 config)
-> +{
-> +       struct pmbus_sensor *sensor;
-> +       int rv;
-> +
-> +       rv = _pmbus_read_word_data(client, page,
-> +                                  pmbus_fan_command_registers[id]);
-> +       if (rv < 0)
-> +               return rv;
-> +
-> +       sensor = pmbus_add_sensor(data, "fan", "target", index, page,
-> +                                 PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
-> +                                 true, false);
-> +
-> +       if (!sensor)
-> +               return -ENOMEM;
-> +
-> +       if (!data->info->m[PSC_PWM])
-> +               return 0;
-> +
-> +       sensor = pmbus_add_sensor(data, "pwm", NULL, index, page,
-> +                                 PMBUS_VIRT_PWM_1 + id, PSC_PWM,
-> +                                 true, false);
-> +
-> +       if (!sensor)
-> +               return -ENOMEM;
-> +
-> +       sensor = pmbus_add_sensor(data, "pwm", "enable", index, page,
-> +                                 PMBUS_VIRT_PWM_ENABLE_1 + id, PSC_PWM,
-> +                                 true, false);
-> +
-> +       if (!sensor)
-> +               return -ENOMEM;
-> +
-> +       sensor->convert = false;
+> +               else
+> +                       return command;
+> +       }
 > +
 > +       return 0;
 > +}
 > +
->  static int pmbus_add_fan_attributes(struct i2c_client *client,
->                                     struct pmbus_data *data)
->  {
-> @@ -1624,6 +1796,15 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
->                                              PSC_FAN, true, true) == NULL)
->                                 return -ENOMEM;
->
-> +                       /* Fan control */
-> +                       if (pmbus_check_word_register(client, page,
-> +                                       pmbus_fan_command_registers[f])) {
-> +                               ret = pmbus_add_fan_ctrl(client, data, index,
-> +                                                        page, f, regval);
-> +                               if (ret < 0)
-> +                                       return ret;
-> +                       }
+> +static int max31785_get_pwm_mode(struct i2c_client *client, int page)
+> +{
+> +       int config;
+> +       int command;
 > +
->                         /*
->                          * Each fan status register covers multiple fans,
->                          * so we have to do some magic.
+> +       config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
+> +       if (config < 0)
+> +               return config;
+> +
+> +       command = pmbus_read_word_data(client, page, PMBUS_FAN_COMMAND_1);
+> +       if (command < 0)
+> +               return command;
+> +
+> +       if (!(config & PB_FAN_1_RPM)) {
+> +               if (command >= 0x8000)
+> +                       return 2;
+> +               else if (command >= 0x2711)
+> +                       return 0;
+> +               else
+> +                       return 1;
+> +       }
+> +
+> +       return (command >= 0x8000) ? 2 : 1;
+> +}
+> +
+> +static int max31785_read_word_data(struct i2c_client *client, int page,
+> +                                  int reg)
+> +{
+> +       struct max31785 *chip = to_max31785(client);
+> +       long rv = -ENODATA;
+> +
+> +       switch (reg) {
+> +       case PMBUS_READ_FAN_SPEED_1:
+> +               if (likely(page < 23))
+> +                       return -ENODATA;
+> +
+> +               if (WARN_ON(!(chip->capabilities & MAX31785_CAP_DUAL_TACH)))
+> +                       return -ENOTSUPP;
+> +
+> +               rv = max31785_read_long_data(client, page - 23, reg);
+> +               if (rv < 0)
+> +                       return rv;
+> +
+> +               rv = (rv >> 16) & 0xffff;
+> +               break;
+> +       case PMBUS_VIRT_PWM_1:
+> +               rv = max31785_get_pwm(client, page);
+> +               rv *= 255;
+> +               rv /= 100;
+> +               break;
+> +       case PMBUS_VIRT_PWM_ENABLE_1:
+> +               rv = max31785_get_pwm_mode(client, page);
+> +               break;
+> +       }
+> +
+> +       if (rv == -ENODATA && page >= 23)
+> +               return -ENXIO;
+> +
+> +       return rv;
+> +}
+> +
+> +static const int max31785_pwm_modes[] = { 0x7fff, 0x2710, 0xffff };
+> +
+> +static int max31785_write_word_data(struct i2c_client *client, int page,
+> +                                   int reg, u16 word)
+> +{
+> +       int rv = -ENODATA;
+> +
+> +       if (page >= 23)
+> +               return -ENXIO;
+> +
+> +       switch (reg) {
+> +       case PMBUS_VIRT_PWM_ENABLE_1:
+> +               if (word >= ARRAY_SIZE(max31785_pwm_modes))
+> +                       return -ENOTSUPP;
+> +
+> +               rv = pmbus_update_fan(client, page, 0, 0, PB_FAN_1_RPM,
+> +                                        max31785_pwm_modes[word]);
+> +               break;
+> +       }
+> +
+> +       return rv;
+> +}
+> +
+> +static int max31785_write_byte(struct i2c_client *client, int page, u8 value)
+> +{
+> +       if (page < 23)
+> +               return -ENODATA;
+> +
+> +       return -ENOTSUPP;
+> +}
+> +
+> +static struct pmbus_driver_info max31785_info = {
+> +       .pages = 23,
+> +
+> +       .write_word_data = max31785_write_word_data,
+> +       .read_byte_data = max31785_read_byte_data,
+> +       .read_word_data = max31785_read_word_data,
+> +       .write_byte = max31785_write_byte,
+> +
+> +       /* RPM */
+> +       .format[PSC_FAN] = direct,
+> +       .m[PSC_FAN] = 1,
+> +       .b[PSC_FAN] = 0,
+> +       .R[PSC_FAN] = 0,
+> +       /* PWM */
+> +       .format[PSC_PWM] = direct,
+> +       .m[PSC_PWM] = 1,
+> +       .b[PSC_PWM] = 0,
+> +       .R[PSC_PWM] = 2,
+> +       .func[0] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +       .func[1] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +       .func[2] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +       .func[3] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +       .func[4] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +       .func[5] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+> +
+> +       .format[PSC_TEMPERATURE] = direct,
+> +       .m[PSC_TEMPERATURE] = 1,
+> +       .b[PSC_TEMPERATURE] = 0,
+> +       .R[PSC_TEMPERATURE] = 2,
+> +       .func[6]  = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[7]  = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[8]  = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[9]  = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[10] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[11] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[12] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[13] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[14] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[15] = PMBUS_HAVE_STATUS_TEMP,
+> +       .func[16] = PMBUS_HAVE_STATUS_TEMP,
+> +
+> +       .format[PSC_VOLTAGE_OUT] = direct,
+> +       .m[PSC_VOLTAGE_OUT] = 1,
+> +       .b[PSC_VOLTAGE_OUT] = 0,
+> +       .R[PSC_VOLTAGE_OUT] = 0,
+> +       .func[17] = PMBUS_HAVE_STATUS_VOUT,
+> +       .func[18] = PMBUS_HAVE_STATUS_VOUT,
+> +       .func[19] = PMBUS_HAVE_STATUS_VOUT,
+> +       .func[20] = PMBUS_HAVE_STATUS_VOUT,
+> +       .func[21] = PMBUS_HAVE_STATUS_VOUT,
+> +       .func[22] = PMBUS_HAVE_STATUS_VOUT,
+> +};
+> +
+> +static int max31785_probe(struct i2c_client *client,
+> +                         const struct i2c_device_id *id)
+> +{
+> +       struct max31785 *chip;
+> +       int rv;
+> +       int i;
+> +
+> +       chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+> +       if (!chip)
+> +               return -ENOMEM;
+> +
+> +       chip->info = max31785_info;
+> +
+> +       /*
+> +        * Identify the chip firmware and configure capabilities.
+> +        *
+> +        * Bootstrap with i2c_smbus_*() calls as we need to understand the chip
+> +        * capabilities for before invoking pmbus_do_probe(). The pmbus_*()
+> +        * calls need access to memory that is only valid after
+> +        * pmbus_do_probe().
+
+I think this is common enough in pmbus drivers that the comment is redundant.
+
+> +        */
+> +       rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 255);
+> +       if (rv < 0)
+> +               return rv;
+> +
+> +       rv = i2c_smbus_read_word_data(client, PMBUS_MFR_REVISION);
+> +       if (rv < 0)
+> +               return rv;
+> +
+> +       if ((rv & 0xff) == 0x40) {
+
+DUAL_TACH_REV? Or a better name from the docs we have?
+
+> +               chip->capabilities |= MAX31785_CAP_DUAL_TACH;
+> +
+> +               /*
+> +                * Punt the dual tach virtual fans to non-existent pages. This
+> +                * ensures the pwm attributes appear in a contiguous block
+> +                */
+> +               chip->info.pages = 29;
+> +               chip->info.func[23] = PMBUS_HAVE_FAN12;
+> +               chip->info.func[24] = PMBUS_HAVE_FAN12;
+> +               chip->info.func[25] = PMBUS_HAVE_FAN12;
+> +               chip->info.func[26] = PMBUS_HAVE_FAN12;
+> +               chip->info.func[27] = PMBUS_HAVE_FAN12;
+> +               chip->info.func[28] = PMBUS_HAVE_FAN12;
+> +       }
+> +
+> +       rv = pmbus_do_probe(client, id, &chip->info);
+> +       if (rv < 0)
+> +               return rv;
+> +
+> +       for (i = 0; i < max31785_info.pages; i++) {
+> +               int reg;
+> +
+> +               if (!(max31785_info.func[i] & (PMBUS_HAVE_FAN12)))
+> +                       continue;
+> +
+> +               reg = pmbus_read_word_data(client, i, PMBUS_MFR_FAN_CONFIG);
+> +               if (reg < 0)
+> +                       continue;
+> +
+> +               /*
+> +                * XXX: Purely for RFC/testing purposes, don't ramp fans on fan
+> +                * or temperature sensor fault, or a failure to write
+> +                * FAN_COMMAND_1 inside a 10s window (watchdog mode).
+> +                *
+> +                * The TSFO bit controls both ramping on temp sensor failure
+> +                * AND whether FAN_COMMAND_1 is in watchdog mode.
+> +                */
+> +               reg |= MFR_FAN_CONFIG_TSFO | MFR_FAN_CONFIG_TACHO;
+> +               if (chip->capabilities & MAX31785_CAP_DUAL_TACH)
+> +                       reg |= MFR_FAN_CONFIG_DUAL_TACH;
+> +               reg &= 0xffff;
+> +
+> +               rv = pmbus_write_word_data(client, i, PMBUS_MFR_FAN_CONFIG,
+> +                                          reg);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct i2c_device_id max31785_id[] = {
+> +       { "max31785", 0 },
+> +       { },
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, max31785_id);
+> +
+> +static struct i2c_driver max31785_driver = {
+> +       .driver = {
+> +               .name = "max31785",
+> +       },
+> +       .probe = max31785_probe,
+> +       .remove = pmbus_do_remove,
+> +       .id_table = max31785_id,
+> +};
+> +
+> +module_i2c_driver(max31785_driver);
+> +
+> +MODULE_AUTHOR("Andrew Jeffery <andrew@aj.id.au>");
+> +MODULE_DESCRIPTION("PMBus driver for the Maxim MAX31785");
+> +MODULE_LICENSE("GPL");
 > --
 > 2.11.0
 >
