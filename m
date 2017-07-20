@@ -1,569 +1,522 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36512 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753502AbdGSSLH (ORCPT
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:53573 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1753996AbdGTAuL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jul 2017 14:11:07 -0400
-Date: Wed, 19 Jul 2017 11:11:03 -0700
-From: Guenter Roeck <linux@roeck-us.net>
+        Wed, 19 Jul 2017 20:50:11 -0400
+Message-ID: <1500511800.500.9.camel@aj.id.au>
+Subject: Re: [RFC PATCH v2 1/3] hwmon: pmbus: Add fan control support
+From: Andrew Jeffery <andrew@aj.id.au>
 To: Joel Stanley <joel@jms.id.au>
-Cc: Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         msbarth <msbarth@linux.vnet.ibm.com>,
         Matt Spinler <mspinler@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH v2 3/3] pmbus: Add MAX31785 driver
-Message-ID: <20170719181103.GE11439@roeck-us.net>
+Date: Thu, 20 Jul 2017 10:20:00 +0930
+In-Reply-To: <CACPK8XdSwHHziOFGhMn9n9NJk0dWnkqMBKuO0tNrYh72W8e4dg@mail.gmail.com>
 References: <20170718033653.10298-1-andrew@aj.id.au>
- <20170718033653.10298-4-andrew@aj.id.au>
- <CACPK8XewOXhT4bvUHhhSoPu1t2=DefeutkrLRnVhhu2+B7nLSw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8XewOXhT4bvUHhhSoPu1t2=DefeutkrLRnVhhu2+B7nLSw@mail.gmail.com>
+         <20170718033653.10298-2-andrew@aj.id.au>
+         <CACPK8XdSwHHziOFGhMn9n9NJk0dWnkqMBKuO0tNrYh72W8e4dg@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-Ii0z5um4pkvoRPmLsxAV"
+Mime-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 20, 2017 at 12:35:09AM +0930, Joel Stanley wrote:
-> On Tue, Jul 18, 2017 at 1:06 PM, Andrew Jeffery <andrew@aj.id.au> wrote:
-> > The driver features fan control and basic dual-tachometer support.
-> 
-> Say something about the hardware?
-> 
->  max31785 is a fancy fan controller with temp measurement, pwm, tach,
-> breakfast making from Maxim.
-> 
-> 
-> >
-> > The fan control makes use of the new virtual registers exposed by the
-> > pmbus core, mixing use of the default implementations with some
-> > overrides via the read/write handlers. FAN_COMMAND_1 on the MAX31785
-> > breaks the values into bands that depend on the RPM or PWM control mode.
-> >
-> > The dual tachometer feature is implemented in hardware with a TACHSEL
-> > input to indicate the rotor under measurement, and exposed on the bus by
-> > extending the READ_FAN_SPEED_1 word with two extra bytes*.
-> > The need to read the non-standard four-byte response leads to a cut-down
-> > implementation of i2c_smbus_xfer_emulated() included in the driver.
-> > Further, to expose the second rotor tachometer value to userspace,
-> > virtual fans are implemented by re-routing the FAN_CONFIG_1_2 register
-> > from the undefined (in hardware) pages 23-28 to the same register on
-> > pages 0-5, and similarly re-routing READ_FAN_SPEED_1 requests on 23-28
-> > to pages 0-5 but extracting the second word of the four-byte response.
-> >
-> > * The documentation recommends the slower rotor be associated with
-> > TACHSEL=0, which is the input used by the controller's closed-loop fan
-> > management.
-> >
-> > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> > ---
-> > v1 -> v2:
-> >
-> > * Implement in terms of virtual registers
-> > * Add support for dual-tachometer readings through 'virtual fans' (unused pages)
-> >
-> >  drivers/hwmon/pmbus/Kconfig    |  10 ++
-> >  drivers/hwmon/pmbus/Makefile   |   1 +
-> >  drivers/hwmon/pmbus/max31785.c | 372 +++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 383 insertions(+)
-> >  create mode 100644 drivers/hwmon/pmbus/max31785.c
-> >
-> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > index cad1229b7e17..5f2f3c6c7499 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -95,6 +95,16 @@ config SENSORS_MAX20751
-> >           This driver can also be built as a module. If so, the module will
-> >           be called max20751.
-> >
-> > +config SENSORS_MAX31785
-> > +       tristate "Maxim MAX31785 and compatibles"
-> > +       default n
-> > +       help
-> > +         If you say yes here you get hardware monitoring support for Maxim
-> > +         MAX31785.
-> > +
-> > +         This driver can also be built as a module. If so, the module will
-> > +         be called max31785.
-> > +
-> >  config SENSORS_MAX34440
-> >         tristate "Maxim MAX34440 and compatibles"
-> >         default n
-> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> > index 562132054aaf..4ea548a8af46 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -10,6 +10,7 @@ obj-$(CONFIG_SENSORS_LTC2978) += ltc2978.o
-> >  obj-$(CONFIG_SENSORS_LTC3815)  += ltc3815.o
-> >  obj-$(CONFIG_SENSORS_MAX16064) += max16064.o
-> >  obj-$(CONFIG_SENSORS_MAX20751) += max20751.o
-> > +obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
-> >  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
-> >  obj-$(CONFIG_SENSORS_MAX8688)  += max8688.o
-> >  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
-> > diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
-> > new file mode 100644
-> > index 000000000000..1baa961f2eb1
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/max31785.c
-> > @@ -0,0 +1,372 @@
-> > +/*
-> > + * Copyright (C) 2017 IBM Corp.
-> > + *
-> > + * This program is free software; you can redistribute it and/or modify
-> > + * it under the terms of the GNU General Public License as published by
-> > + * the Free Software Foundation; either version 2 of the License, or
-> > + * (at your option) any later version.
-> > + */
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/init.h>
-> > +#include <linux/err.h>
-> > +#include <linux/i2c.h>
-> > +#include "pmbus.h"
-> > +
-> > +#define MFR_FAN_CONFIG_DUAL_TACH       BIT(12)
-> > +#define MFR_FAN_CONFIG_TSFO            BIT(9)
-> > +#define MFR_FAN_CONFIG_TACHO           BIT(8)
-> > +
-> > +#define MAX31785_CAP_DUAL_TACH         BIT(0)
-> > +
-> > +struct max31785 {
-> > +       struct pmbus_driver_info info;
-> > +
-> > +       u32 capabilities;
-> > +};
-> > +
-> > +enum max31785_regs {
-> > +       PMBUS_MFR_FAN_CONFIG            = 0xF1,
-> > +       PMBUS_MFR_READ_FAN_PWM          = 0xF3,
-> > +       PMBUS_MFR_FAN_FAULT_LIMIT       = 0xF5,
-> > +       PMBUS_MFR_FAN_WARN_LIMIT        = 0xF6,
-> > +       PMBUS_MFR_FAN_PWM_AVG           = 0xF8,
-> > +};
-> > +
-> > +#define to_max31785(_c) container_of(pmbus_get_info(_c), struct max31785, info)
-> > +
-> > +static int max31785_read_byte_data(struct i2c_client *client, int page,
-> > +                                  int reg)
-> > +{
-> > +       struct max31785 *chip = to_max31785(client);
-> > +       int rv = -ENODATA;
-> 
-> I'd drop this.
-> 
-> > +
-> > +       switch (reg) {
-> > +       case PMBUS_VOUT_MODE:
-> > +               if (page < 23)
-> > +                       return -ENODATA;
-> > +
-> > +               return -ENOTSUPP;
-> > +       case PMBUS_FAN_CONFIG_12:
-> > +               if (page < 23)
-> > +                       return -ENODATA;
-> > +
-> > +               if (WARN_ON(!(chip->capabilities & MAX31785_CAP_DUAL_TACH)))
-> 
-> Not sure about the WARN_ON here - won't users get spammed every time
-> someone reads a byte of data? When do we expect this case to happen?
-> 
-Presumably this would be an implementation error (there is no page numbered 23
-or larger if the bit is not set). This can't happen, thus the check is really
-unnecessary and just bloats the code.
 
-This also means that the 'capabilities' variable is also unecessary, since it
-is only used to verify that the PMBus core really understood that there are
-only 24 pages if MAX31785_CAP_DUAL_TACH is not set (and, to be _really_ sure,
-it keeps verifying it over and over again).
+--=-Ii0z5um4pkvoRPmLsxAV
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-> > +                       return -ENOTSUPP;
-> > +
-> > +               rv = pmbus_read_byte_data(client, page - 23, reg);
-> 
-> return pmbus_read_byte_data(client, page - 23, reg);
-> > +               break;
-> > +       }
-> > +
-> > +       return rv;
-> 
-> return -ENODATA;
-> 
+T24gVGh1LCAyMDE3LTA3LTIwIGF0IDAwOjM1ICswOTMwLCBKb2VsIFN0YW5sZXkgd3JvdGU6Cj4g
+PiBPbiBUdWUsIEp1bCAxOCwgMjAxNyBhdCAxOjA2IFBNLCBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3
+QGFqLmlkLmF1PiB3cm90ZToKPiA+IEV4cG9zZSBmYW5YX3RhcmdldCwgcHdtWCBhbmQgcHdtWF9l
+bmFibGUgaHdtb24gc3lzZnMgYXR0cmlidXRlcy4KPiAKPiBOaWNlISBJIGhhZCBhIGJpdCBvZiBh
+IHJlYWQuIEknbSBub3QgYSBwbWJ1cyBleHBlcnQsIHNvIG1vc3Qgb2YgdGhlCj4gcmV2aWV3IGlz
+IG5pdHBpY2tzIGFib3V0IHR5cGVzLCBldGMuCj4gCj4gSSdsbCBkZWZlciB0byBHdWVudGVyIGZv
+ciB0aGUgcmVhbCBzdHVmZi4KClRoYW5rcyBmb3IgdGFraW5nIGEgbG9vay4KCkEgbG90IG9mIHRo
+ZSBpc3N1ZXMgYXJlIGEgY2FzZSBvZiBvdmVyemVhbG91cyBjYXV0aW9uIHNvIEkgZGlkbid0IHRy
+aXAKbXlzZWxmIHVwIGR1cmluZyBkZXZlbG9wbWVudC4gQSBsb3Qgb2YgaXQgY2FuIGJlIGNsZWFu
+ZWQgdXAuIEkgd29uJ3QKcmVzcG9uZCB0byBhbGwgb2YgdGhlbS4KCj4gCj4gPiAKPiA+IEZhbnMg
+aW4gYSBQTUJ1cyBkZXZpY2UgYXJlIGRyaXZlbiBieSB0aGUgY29uZmlndXJhdGlvbiBvZiB0d28g
+cmVnaXN0ZXJzOgo+ID4gRkFOX0NPTkZJR194X3kgYW5kIEZBTl9DT01NQU5EX3g6IEZBTl9DT05G
+SUdfeF95IGRpY3RhdGVzIGhvdyB0aGUgZmFuCj4gPiBhbmQgdGhlIHRhY2hvIG9wZXJhdGUgKGlm
+IGluc3RhbGxlZCksIHdoaWxlIEZBTl9DT01NQU5EX3ggc2V0cyB0aGUKPiA+IGRlc2lyZWQgZmFu
+IHJhdGUuIFRoZSB1bml0IG9mIEZBTl9DT01NQU5EX3ggaXMgZGVwZW5kZW50IG9uIHRoZQo+ID4g
+b3BlcmF0aW9uYWwgZmFuIG1vZGUsIFJQTSBvciBQV00gcGVyY2VudCBkdXR5LCBhcyBkZXRlcm1p
+bmVkIGJ5IHRoZQo+ID4gY29ycmVzcG9uZGluZyBGQU5fQ09ORklHX3hfeS4KPiA+IAo+ID4gVGhl
+IG1hcHBpbmcgb2YgZmFuWF90YXJnZXQsIHB3bVggYW5kIHB3bVhfZW5hYmxlIG9udG8gRkFOX0NP
+TkZJR194X3kgYW5kCj4gPiBGQU5fQ09NTUFORF94IGlzIGltcGxlbWVudGVkIHdpdGggdGhlIGFk
+ZGl0aW9uIG9mIHZpcnR1YWwgcmVnaXN0ZXJzIGFuZAo+ID4gZ2VuZXJpYyBpbXBsZW1lbnRhdGlv
+bnMgaW4gdGhlIGNvcmU6Cj4gPiAKPiA+IDEuIFBNQlVTX1ZJUlRfRkFOX1RBUkdFVF94Cj4gPiAy
+LiBQTUJVU19WSVJUX1BXTV94Cj4gPiAzLiBQTUJVU19WSVJUX1BXTV9FTkFCTEVfeAo+ID4gCj4g
+PiBUaGUgZmFjaWxpdGF0ZSB0aGUgbmVjZXNzYXJ5IHNpZGUtZWZmZWN0cyBvZiBlYWNoIGFjY2Vz
+cy4gRXhhbXBsZXMgb2YKPiA+IHRoZSByZWFkIGNhc2UsIGFzc3VtaW5nIG0gPSAxLCBiID0gMCwg
+UiA9IDA6Cj4gPiAKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgUmVhZMKgwqDCoMKgwqB8
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFdpdGjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgfHwgR2l2ZXMKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBBdHRyaWJ1dGXCoMKgfCBGQU5fQ09ORklHX3hfeSB8IEZBTl9DT01NQU5EX3kgfHwgVmFsdWUK
+PiA+IMKgwqDCoMKgwqDCoMKgwqDCoC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0rKy0tLS0tLS0KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgZmFuWF90YXJnZXQg
+fCB+UEJfRkFOX3pfUlBNwqDCoHwgMHgwMDAxwqDCoMKgwqDCoMKgwqDCoHx8IDEKPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcHdtMcKgwqDCoMKgwqDCoMKgwqB8IH5QQl9GQU5fel9SUE3CoMKgfCAw
+eDAwNjTCoMKgwqDCoMKgwqDCoMKgfHwgMjU1Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoHB3bVhf
+ZW5hYmxlIHwgflBCX0ZBTl96X1JQTcKgwqB8IDB4MDAwMcKgwqDCoMKgwqDCoMKgwqB8fCAxCj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoGZhblhfdGFyZ2V0IHzCoMKgUEJfRkFOX3pfUlBNwqDCoHwg
+MHgwMDAxwqDCoMKgwqDCoMKgwqDCoHx8IDEKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgcHdtMcKg
+wqDCoMKgwqDCoMKgwqB8wqDCoFBCX0ZBTl96X1JQTcKgwqB8IDB4MDA2NMKgwqDCoMKgwqDCoMKg
+wqB8fCAwCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoHB3bVhfZW5hYmxlIHzCoMKgUEJfRkFOX3pf
+UlBNwqDCoHwgMHgwMDAxwqDCoMKgwqDCoMKgwqDCoHx8IDEKPiA+IAo+ID4gQW5kIHRoZSB3cml0
+ZSBjYXNlOgo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFdyaXRlwqDCoMKgwqB8
+IFdpdGjCoMKgfHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBTZXRzCj4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqAtLS0tLS0tLS0tLS0tKy0tLS0tLS0rKy0tLS0tLS0tLS0tLS0tLS0rLS0tLS0t
+LS0tLS0tLS0tCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgQXR0cmlidXRlwqDCoHwgVmFsdWUg
+fHwgRkFOX0NPTkZJR194X3kgfCBGQU5fQ09NTUFORF94Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqAt
+LS0tLS0tLS0tLS0tKy0tLS0tLS0rKy0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tCj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoGZhblhfdGFyZ2V0IHwgMcKgwqDCoMKgwqB8fMKgwqBQQl9G
+QU5fel9SUE3CoMKgfCAweDAwMDEKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgcHdtWMKgwqDCoMKg
+wqDCoMKgwqB8IDI1NcKgwqDCoHx8IH5QQl9GQU5fel9SUE3CoMKgfCAweDAwNjQKPiA+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcHdtWF9lbmFibGUgfCAxwqDCoMKgwqDCoHx8IH5QQl9GQU5fel9SUE3C
+oMKgfCAweDAwNjQKPiA+IAo+ID4gQWxzbywgdGhlIERJUkVDVCBtb2RlIHNjYWxpbmcgb2Ygc29t
+ZSBjb250cm9sbGVycyBpcyBkaWZmZXJlbnQgYmV0d2Vlbgo+ID4gUlBNIGFuZCBQV00gcGVyY2Vu
+dCBkdXR5IGNvbnRyb2wgbW9kZXMsIHNvIFBTQ19QV00gaXMgaW50cm9kdWNlZCB0bwo+ID4gY2Fw
+dHVyZSB0aGUgbmVjZXNzYXJ5IGNvZWZmaWNpZW50cy4KPiA+IAo+ID4gPiA+IFNpZ25lZC1vZmYt
+Ynk6IEFuZHJldyBKZWZmZXJ5IDxhbmRyZXdAYWouaWQuYXU+Cj4gPiAtLS0KPiA+IAo+ID4gdjEg
+LT4gdjI6Cj4gPiAqIENvbnZlcnQgdG8gdXNpbmcgdmlydHVhbCByZWdpc3RlcnMKPiA+ICogRHJv
+cCBzdHJ1Y3QgcG1idXNfZmFuX2N0cmwKPiA+ICogSW50cm9kdWNlIFBTQ19QV00KPiA+ICogRHJv
+cCBzdHJ1Y3QgcG1idXNfY29lZmZzCj4gPiAqIERyb3AgYWRkaXRpb25hbCBjYWxsYmFja3MKPiA+
+IAo+ID4gwqBkcml2ZXJzL2h3bW9uL3BtYnVzL3BtYnVzLmjCoMKgwqDCoMKgwqB8wqDCoDE5ICsr
+KysKPiA+IMKgZHJpdmVycy9od21vbi9wbWJ1cy9wbWJ1c19jb3JlLmMgfCAyMTUgKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKystLS0tCj4gPiDCoDIgZmlsZXMgY2hhbmdlZCwgMjE3
+IGluc2VydGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9od21vbi9wbWJ1cy9wbWJ1cy5oIGIvZHJpdmVycy9od21vbi9wbWJ1cy9wbWJ1cy5oCj4g
+PiBpbmRleCBiZmNiMTNiYWUzNGIuLjIyNmEzN2JkNTI1ZiAxMDA2NDQKPiA+IC0tLSBhL2RyaXZl
+cnMvaHdtb24vcG1idXMvcG1idXMuaAo+ID4gKysrIGIvZHJpdmVycy9od21vbi9wbWJ1cy9wbWJ1
+cy5oCj4gPiBAQCAtMTkwLDYgKzE5MCwyMCBAQCBlbnVtIHBtYnVzX3JlZ3Mgewo+ID4gwqDCoMKg
+wqDCoMKgwqDCoFBNQlVTX1ZJUlRfVk1PTl9VVl9GQVVMVF9MSU1JVCwKPiA+IMKgwqDCoMKgwqDC
+oMKgwqBQTUJVU19WSVJUX1ZNT05fT1ZfRkFVTFRfTElNSVQsCj4gPiDCoMKgwqDCoMKgwqDCoMKg
+UE1CVVNfVklSVF9TVEFUVVNfVk1PTiwKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoC8qIEZhbiBj
+b250cm9sICovCj4gPiArwqDCoMKgwqDCoMKgwqBQTUJVU19WSVJUX0ZBTl9UQVJHRVRfMSwKPiA+
+ICvCoMKgwqDCoMKgwqDCoFBNQlVTX1ZJUlRfRkFOX1RBUkdFVF8yLAo+ID4gK8KgwqDCoMKgwqDC
+oMKgUE1CVVNfVklSVF9GQU5fVEFSR0VUXzMsCj4gPiArwqDCoMKgwqDCoMKgwqBQTUJVU19WSVJU
+X0ZBTl9UQVJHRVRfNCwKPiA+ICvCoMKgwqDCoMKgwqDCoFBNQlVTX1ZJUlRfUFdNXzEsCj4gPiAr
+wqDCoMKgwqDCoMKgwqBQTUJVU19WSVJUX1BXTV8yLAo+ID4gK8KgwqDCoMKgwqDCoMKgUE1CVVNf
+VklSVF9QV01fMywKPiA+ICvCoMKgwqDCoMKgwqDCoFBNQlVTX1ZJUlRfUFdNXzQsCj4gPiArwqDC
+oMKgwqDCoMKgwqBQTUJVU19WSVJUX1BXTV9FTkFCTEVfMSwKPiA+ICvCoMKgwqDCoMKgwqDCoFBN
+QlVTX1ZJUlRfUFdNX0VOQUJMRV8yLAo+ID4gK8KgwqDCoMKgwqDCoMKgUE1CVVNfVklSVF9QV01f
+RU5BQkxFXzMsCj4gPiArwqDCoMKgwqDCoMKgwqBQTUJVU19WSVJUX1BXTV9FTkFCTEVfNCwKPiA+
+IMKgfTsKPiA+IAo+ID4gwqAvKgo+ID4gQEAgLTIyMyw2ICsyMzcsOCBAQCBlbnVtIHBtYnVzX3Jl
+Z3Mgewo+ID4gwqAjZGVmaW5lIFBCX0ZBTl8xX1JQTcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgQklUKDYpCj4gPiDCoCNkZWZpbmUgUEJfRkFOXzFfSU5TVEFMTEVEwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBCSVQoNykKPiA+IAo+ID4gK2VudW0gcG1idXNfZmFuX21vZGUg
+eyBwZXJjZW50ID0gMCwgcnBtIH07Cj4gPiArCj4gPiDCoC8qCj4gPiDCoCAqIFNUQVRVU19CWVRF
+LCBTVEFUVVNfV09SRCAobG93ZXIpCj4gPiDCoCAqLwo+ID4gQEAgLTMxMyw2ICszMjksNyBAQCBl
+bnVtIHBtYnVzX3NlbnNvcl9jbGFzc2VzIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBQU0NfUE9XRVIs
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgUFNDX1RFTVBFUkFUVVJFLAo+ID4gwqDCoMKgwqDCoMKgwqDC
+oFBTQ19GQU4sCj4gPiArwqDCoMKgwqDCoMKgwqBQU0NfUFdNLAo+ID4gwqDCoMKgwqDCoMKgwqDC
+oFBTQ19OVU1fQ0xBU1NFU8KgwqDCoMKgwqDCoMKgwqDCoC8qIE51bWJlciBvZiBwb3dlciBzZW5z
+b3IgY2xhc3NlcyAqLwo+ID4gwqB9Owo+ID4gCj4gPiBAQCAtNDEzLDYgKzQzMCw4IEBAIGludCBw
+bWJ1c193cml0ZV9ieXRlX2RhdGEoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgaW50IHBhZ2Us
+IHU4IHJlZywKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqB1OCB2YWx1ZSk7Cj4gPiDCoGludCBwbWJ1c191cGRhdGVfYnl0ZV9kYXRhKHN0cnVj
+dCBpMmNfY2xpZW50ICpjbGllbnQsIGludCBwYWdlLCB1OCByZWcsCj4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB1OCBtYXNrLCB1OCB2YWx1
+ZSk7Cj4gPiAraW50IHBtYnVzX3VwZGF0ZV9mYW4oc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwg
+aW50IHBhZ2UsIGludCBpZCwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaW50IGNvbmZpZywgaW50IG1hc2ssIGludCBjb21tYW5kKTsKPiA+IMKgdm9pZCBwbWJ1
+c19jbGVhcl9mYXVsdHMoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCk7Cj4gPiDCoGJvb2wgcG1i
+dXNfY2hlY2tfYnl0ZV9yZWdpc3RlcihzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCBpbnQgcGFn
+ZSwgaW50IHJlZyk7Cj4gPiDCoGJvb2wgcG1idXNfY2hlY2tfd29yZF9yZWdpc3RlcihzdHJ1Y3Qg
+aTJjX2NsaWVudCAqY2xpZW50LCBpbnQgcGFnZSwgaW50IHJlZyk7Cj4gPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9od21vbi9wbWJ1cy9wbWJ1c19jb3JlLmMgYi9kcml2ZXJzL2h3bW9uL3BtYnVzL3Bt
+YnVzX2NvcmUuYwo+ID4gaW5kZXggYmE1OWVhZWYyZTA3Li43MTJhOGI2YzRiZDYgMTAwNjQ0Cj4g
+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVzL3BtYnVzX2NvcmUuYwo+ID4gKysrIGIvZHJpdmVy
+cy9od21vbi9wbWJ1cy9wbWJ1c19jb3JlLmMKPiA+IEBAIC02Myw2ICs2Myw3IEBAIHN0cnVjdCBw
+bWJ1c19zZW5zb3Igewo+ID4gwqDCoMKgwqDCoMKgwqDCoHUxNiByZWc7wqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAvKiByZWdpc3RlciAqLwo+ID4gwqDCoMKgwqDCoMKgwqDCoGVudW0g
+cG1idXNfc2Vuc29yX2NsYXNzZXMgY2xhc3M7wqDCoMKgwqDCoMKgwqDCoC8qIHNlbnNvciBjbGFz
+cyAqLwo+ID4gwqDCoMKgwqDCoMKgwqDCoGJvb2wgdXBkYXRlO8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoC8qIHJ1bnRpbWUgc2Vuc29yIHVwZGF0ZSBuZWVkZWQgKi8KPiA+ICvCoMKgwqDCoMKgwqDC
+oGJvb2wgY29udmVydDvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLyogV2hldGhlciBvciBub3QgdG8g
+YXBwbHkgbGluZWFyL3ZpZC9kaXJlY3QgKi8KPiA+IMKgwqDCoMKgwqDCoMKgwqBpbnQgZGF0YTvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBTZW5zb3IgZGF0YS4KPiA+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBOZWdhdGl2ZSBpZiB0aGVyZSB3YXMgYSByZWFkIGVycm9yICovCj4gPiDCoH07Cj4gPiBA
+QCAtMTE4LDYgKzExOSwyNyBAQCBzdHJ1Y3QgcG1idXNfZGF0YSB7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgdTggY3VycnBhZ2U7Cj4gPiDCoH07Cj4gPiAKPiA+ICtzdGF0aWMgY29uc3QgaW50IHBtYnVz
+X2Zhbl9ycG1fbWFza1tdID0gewo+ID4gK8KgwqDCoMKgwqDCoMKgUEJfRkFOXzFfUlBNLAo+ID4g
+K8KgwqDCoMKgwqDCoMKgUEJfRkFOXzJfUlBNLAo+ID4gK8KgwqDCoMKgwqDCoMKgUEJfRkFOXzFf
+UlBNLAo+ID4gK8KgwqDCoMKgwqDCoMKgUEJfRkFOXzJfUlBNLAo+ID4gK307Cj4gPiArCj4gPiAr
+c3RhdGljIGNvbnN0IGludCBwbWJ1c19mYW5fY29uZmlnX3JlZ2lzdGVyc1tdID0gewo+IAo+IHU4
+Pwo+IAo+ID4gK8KgwqDCoMKgwqDCoMKgUE1CVVNfRkFOX0NPTkZJR18xMiwKPiA+ICvCoMKgwqDC
+oMKgwqDCoFBNQlVTX0ZBTl9DT05GSUdfMTIsCj4gPiArwqDCoMKgwqDCoMKgwqBQTUJVU19GQU5f
+Q09ORklHXzM0LAo+ID4gK8KgwqDCoMKgwqDCoMKgUE1CVVNfRkFOX0NPTkZJR18zNAo+ID4gK307
+Cj4gPiArCj4gPiArc3RhdGljIGNvbnN0IGludCBwbWJ1c19mYW5fY29tbWFuZF9yZWdpc3RlcnNb
+XSA9IHsKPiAKPiB1OD8KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoFBNQlVTX0ZBTl9DT01NQU5EXzEs
+Cj4gPiArwqDCoMKgwqDCoMKgwqBQTUJVU19GQU5fQ09NTUFORF8yLAo+ID4gK8KgwqDCoMKgwqDC
+oMKgUE1CVVNfRkFOX0NPTU1BTkRfMywKPiA+ICvCoMKgwqDCoMKgwqDCoFBNQlVTX0ZBTl9DT01N
+QU5EXzQsCj4gPiArfTsKPiA+ICsKPiA+IMKgdm9pZCBwbWJ1c19jbGVhcl9jYWNoZShzdHJ1Y3Qg
+aTJjX2NsaWVudCAqY2xpZW50KQo+ID4gwqB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHBt
+YnVzX2RhdGEgKmRhdGEgPSBpMmNfZ2V0X2NsaWVudGRhdGEoY2xpZW50KTsKPiA+IEBAIC0xODgs
+NiArMjEwLDI5IEBAIGludCBwbWJ1c193cml0ZV93b3JkX2RhdGEoc3RydWN0IGkyY19jbGllbnQg
+KmNsaWVudCwgdTggcGFnZSwgdTggcmVnLCB1MTYgd29yZCkKPiA+IMKgfQo+ID4gwqBFWFBPUlRf
+U1lNQk9MX0dQTChwbWJ1c193cml0ZV93b3JkX2RhdGEpOwo+ID4gCj4gPiAraW50IHBtYnVzX3Vw
+ZGF0ZV9mYW4oc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgaW50IHBhZ2UsIGludCBpZCwKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBpbnQgY29uZmlnLCBpbnQgbWFzaywgaW50IGNvbW1hbmQpCj4gPiArewo+ID4gK8KgwqDC
+oMKgwqDCoMKgaW50IGZyb20sIHRvOwo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IHJ2Owo+ID4gKwo+
+ID4gK8KgwqDCoMKgwqDCoMKgZnJvbSA9IHBtYnVzX3JlYWRfYnl0ZV9kYXRhKGNsaWVudCwgcGFn
+ZSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgcG1idXNfZmFuX2NvbmZpZ19yZWdpc3RlcnNbaWRdKTsKPiA+
+ICvCoMKgwqDCoMKgwqDCoGlmIChmcm9tIDwgMCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZXR1cm4gZnJvbTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHRvID0gKGZyb20g
+JiB+bWFzaykgfCAoY29uZmlnICYgbWFzayk7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBydiA9
+IHBtYnVzX3dyaXRlX2J5dGVfZGF0YShjbGllbnQsIHBhZ2UsCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwbWJ1
+c19mYW5fY29uZmlnX3JlZ2lzdGVyc1tpZF0sIHRvKTsKPiAKPiB0byBpcyBhIHU4LiBQZXJoYXBz
+IGRlZmluZSBpdCBhcyBzdWNoPwo+IAo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKHJ2IDwgMCkKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcnY7Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqByZXR1cm4gcG1idXNfd3JpdGVfd29yZF9kYXRhKGNsaWVudCwgcGFnZSwKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBwbWJ1c19mYW5fY29tbWFuZF9yZWdpc3RlcnNbaWRdLCBjb21tYW5k
+KTsKPiAKPiBTaW1pbGFyIHdpdGggY29tbWFuZCAtIGl0J3MgYSB1MTYuIFRoaXMgd291bGQgaGVs
+cCB0aGUgZGVmaW5pdGlvbiBvZgo+IHBtYnVzX3VwZGF0ZV9mYW4gbWF0Y2ggdGhlIG90aGVycyBp
+biB0aGUgcG1idXMgaGVhZGVyLCB3aGljaCBtb3N0bHkKPiBkZWFsIHdpdGggZXhwbGljaXRseSBz
+aXplZCB0eXBlcy4gbWFzayBhbmQgY29uZmlnIGNvdWxkIGJlIHU4IGFzIHdlbGwKPiBJIHRoaW5r
+Lgo+IAo+ID4gK30KPiA+ICtFWFBPUlRfU1lNQk9MX0dQTChwbWJ1c191cGRhdGVfZmFuKTsKPiA+
+ICsKPiA+IMKgLyoKPiA+IMKgICogX3BtYnVzX3dyaXRlX3dvcmRfZGF0YSgpIGlzIHNpbWlsYXIg
+dG8gcG1idXNfd3JpdGVfd29yZF9kYXRhKCksIGJ1dCBjaGVja3MgaWYKPiA+IMKgICogYSBkZXZp
+Y2Ugc3BlY2lmaWMgbWFwcGluZyBmdW5jdGlvbiBleGlzdHMgYW5kIGNhbGxzIGl0IGlmIG5lY2Vz
+c2FyeS4KPiA+IEBAIC0xOTcsMTUgKzI0Miw0NyBAQCBzdGF0aWMgaW50IF9wbWJ1c193cml0ZV93
+b3JkX2RhdGEoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgaW50IHBhZ2UsIGludCByZWcsCj4g
+PiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcG1idXNfZGF0YSAqZGF0YSA9IGkyY19n
+ZXRfY2xpZW50ZGF0YShjbGllbnQpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGNvbnN0IHN0cnVjdCBw
+bWJ1c19kcml2ZXJfaW5mbyAqaW5mbyA9IGRhdGEtPmluZm87Cj4gPiAtwqDCoMKgwqDCoMKgwqBp
+bnQgc3RhdHVzOwo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IHN0YXR1cyA9IC1FTk9EQVRBOwo+IAo+
+IEl0IGxvb2tzIGxpa2UgeW91IG1vZGlmeSB0aGlzIHZhbHVlIGluIGFsbCBvZiB0aGUgY29kZSBw
+YXRocyAoZXhjZXB0Cj4gdGhlIG9uZSBJIHN1Z2dlc3QgeW91IHJlbW92ZSBiZWxvdykuCj4gCj4g
+PiAKPiA+IMKgwqDCoMKgwqDCoMKgwqBpZiAoaW5mby0+d3JpdGVfd29yZF9kYXRhKSB7Cj4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0YXR1cyA9IGluZm8tPndyaXRlX3dvcmRf
+ZGF0YShjbGllbnQsIHBhZ2UsIHJlZywgd29yZCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGlmIChzdGF0dXMgIT0gLUVOT0RBVEEpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gc3RhdHVzOwo+ID4gwqDCoMKgwqDC
+oMKgwqDCoH0KPiA+IC3CoMKgwqDCoMKgwqDCoGlmIChyZWcgPj0gUE1CVVNfVklSVF9CQVNFKQo+
+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5YSU87Cj4gPiArwqDC
+oMKgwqDCoMKgwqBpZiAoc3RhdHVzID09IC1FTk9EQVRBICYmIHJlZyA+PSBQTUJVU19WSVJUX0JB
+U0UpIHsKPiAKPiBzdGF0dXMgd2lsbCBhbHdheXMgYmUgLUVOT0RBVEEgaWYgd2UgZ2V0IGRvd24g
+aGVyZS4gSSBkb24ndCB0aGluayB5b3UKPiBuZWVkIHRvIG1ha2UgdGhpcyBjaGFuZ2UuCgpJIGFn
+cmVlLgoKPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnQgaWQsIGJpdDsK
+PiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzd2l0Y2ggKHJlZykgewo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNhc2UgUE1CVVNfVklSVF9GQU5fVEFS
+R0VUXzE6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2FzZSBQTUJVU19WSVJU
+X0ZBTl9UQVJHRVRfMjoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjYXNlIFBN
+QlVTX1ZJUlRfRkFOX1RBUkdFVF8zOgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNhc2UgUE1CVVNfVklSVF9GQU5fVEFSR0VUXzQ6Cj4gCj4gSSBoYXZlbid0IHJlYWQgdGhlIHBt
+YnVzIHNwZWMgKGZlZWwgZnJlZSB0byBwb2ludCBtZSB0byBhIHBhZ2UgaW4gdGhlCj4gUERGIGlm
+IHlvdSB0aGluayBpdCB3aWxsIGhlbHApLiBDYW4geW91IGVkdWNhdGUgbWUgd2h5IHdlIGhhdmUg
+MS4uND8KPiBmb3IgYWxsIG9mIHRoZXNlIHZpcnR1YWwgcmVnaXN0ZXJzPyBXaHkgbm90IDUsIG9y
+IDM/CgpDdXJyZW50IHJldmlzaW9ucyBvZiB0aGUgUE1CdXMgc3BlYyBhcmUgb25seSBhdmFpbGFi
+bGUgdG8gbWVtYmVycyBpbgpnb29kIHN0YW5kaW5nLiBPbGRlciByZXZpc2lvbnMgb2YgdGhlIFBN
+QnVzIHNwZWMgY2FuIGJlIGZvdW5kIGF0OgoKaHR0cDovL3BtYnVzLm9yZy9TcGVjaWZpY2F0aW9u
+cy9PbGRlclNwZWNpZmljYXRpb25zCgpUaGUgY3VycmVudCBvbGQgcmV2aXNpb24gaXMgMS4yLCBo
+b3dldmVyIHRoZSBNQVgzMTc4NSBkYXRhc2hlZXQgKHBhZ2UKMTksIFBNQnVzIFByb3RvY29sIFN1
+cHBvcnQpIGNsYWltcyBpdCBpcyBpbXBsZW1lbnRlZCBpbiBjb21wbGlhbmNlIHdpdGgKcmV2aXNp
+b24gMS4xLiBZb3Ugd2FudCBQTUJ1cyBTcGVjaWZpY2F0aW9uIFBhcnQgSUkgKENvbW1hbmQgTGFu
+Z3VhZ2UpOgoKaHR0cDovL3BtYnVzLm9yZy9Bc3NldHMvUERGUy9QdWJsaWMvUE1CdXNfU3BlY2lm
+aWNhdGlvbl9QYXJ0X0lJX1Jldl8xLTFfMjAwNzAyMDUucGRmCgpTZWN0aW9ucyAxNC4xMCwgMTQu
+MTEgYW5kIDE0LjEyIChwYWdlcyA1OC02MCkgb3V0bGluZSB0aGUgcmVhc29uIGZvciAxCi0gNCBo
+ZXJlLiBCdXQgdG8gc3VtbWFyaXNlOiBQTUJ1cyBjb21tYW5kcyBhcmUgcGFnZWTCoChlYWNoIHBh
+Z2UgZXhwb3NlcwphbiBpbmRlcGVuZGVudCBzZXQgb2YgdGhlIFBNQnVzIHJlZ2lzdGVycyksIHNv
+IGRldmljZXMgYXJlbid0IGxpbWl0ZWQKdG8gZm91ciBmYW5zLiBSYXRoZXIsIGVhY2ggcGFnZSBj
+YW4gc3VwcG9ydCB1cCB0byBmb3VyIGZhbnMsIGFuZCB0aGUKUE1CdXMgc3BlYyBhbGxvd3MgdXAg
+dG8gMzIgcGFnZXMgdG8gYmUgZGVmaW5lZCBieSBhIGRldmljZSwgZm9yIGEKbWF4aW11bSBvZiAx
+MjggZmFucy4KCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGlkID0gcmVnIC0gUE1CVVNfVklSVF9GQU5fVEFSR0VUXzE7Cj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJpdCA9IHBtYnVzX2Zhbl9ycG1f
+bWFza1tpZF07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoHN0YXR1cyA9IHBtYnVzX3VwZGF0ZV9mYW4oY2xpZW50LCBwYWdlLCBpZCwgYml0LCBiaXQs
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHdvcmQpOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjYXNlIFBNQlVTX1ZJUlRfUFdNXzE6Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2FzZSBQTUJVU19WSVJUX1BXTV8yOgo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNhc2UgUE1CVVNfVklSVF9QV01fMzoKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjYXNlIFBNQlVTX1ZJUlRfUFdNXzQ6Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBsb25nIGNvbW1hbmQgPSB3b3JkOwo+IAo+IGxv
+bmcgc2VlbXMgYSBiaXQuLi4gbG9uZy4gQW5kIHdlIGRvbid0IG5lZWQgdGhlIHNpZ24uIFBlcmhh
+cHMgdTMyPwo+IAo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBpZCA9IHJlZyAtIFBNQlVTX1ZJUlRfUFdNXzE7Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJpdCA9IHBtYnVzX2Zhbl9ycG1fbWFz
+a1tpZF07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNvbW1hbmQgKj0gMTAwOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBjb21tYW5kIC89IDI1NTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gcG1idXNfdXBkYXRlX2ZhbihjbGllbnQsIHBh
+Z2UsIGlkLCAwLCBiaXQsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNvbW1hbmQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBicmVhazsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdDoKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gLUVOWElPOwo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuIHN0YXR1czsKPiA+ICvCoMKgwqDCoMKgwqDCoH0KPiA+IMKgwqDCoMKgwqDC
+oMKgwqByZXR1cm4gcG1idXNfd3JpdGVfd29yZF9kYXRhKGNsaWVudCwgcGFnZSwgcmVnLCB3b3Jk
+KTsKPiA+IMKgfQo+ID4gCj4gPiBAQCAtMjIxLDYgKzI5OCw5IEBAIGludCBwbWJ1c19yZWFkX3dv
+cmRfZGF0YShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCB1OCBwYWdlLCB1OCByZWcpCj4gPiDC
+oH0KPiA+IMKgRVhQT1JUX1NZTUJPTF9HUEwocG1idXNfcmVhZF93b3JkX2RhdGEpOwo+ID4gCj4g
+PiArc3RhdGljIGludCBwbWJ1c19nZXRfZmFuX2NvbW1hbmQoc3RydWN0IGkyY19jbGllbnQgKmNs
+aWVudCwgaW50IHBhZ2UsIGludCBpZCwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZW51bSBwbWJ1c19mYW5fbW9kZSBt
+b2RlKTsKPiA+ICsKPiA+IMKgLyoKPiA+IMKgICogX3BtYnVzX3JlYWRfd29yZF9kYXRhKCkgaXMg
+c2ltaWxhciB0byBwbWJ1c19yZWFkX3dvcmRfZGF0YSgpLCBidXQgY2hlY2tzIGlmCj4gPiDCoCAq
+IGEgZGV2aWNlIHNwZWNpZmljIG1hcHBpbmcgZnVuY3Rpb24gZXhpc3RzIGFuZCBjYWxscyBpdCBp
+ZiBuZWNlc3NhcnkuCj4gPiBAQCAtMjI5LDE1ICszMDksNDkgQEAgc3RhdGljIGludCBfcG1idXNf
+cmVhZF93b3JkX2RhdGEoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgaW50IHBhZ2UsIGludCBy
+ZWcpCj4gPiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcG1idXNfZGF0YSAqZGF0YSA9
+IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGNvbnN0IHN0
+cnVjdCBwbWJ1c19kcml2ZXJfaW5mbyAqaW5mbyA9IGRhdGEtPmluZm87Cj4gPiAtwqDCoMKgwqDC
+oMKgwqBpbnQgc3RhdHVzOwo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IHN0YXR1cyA9IC1FTk9EQVRB
+Owo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGluZm8tPnJlYWRfd29yZF9kYXRhKSB7Cj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0YXR1cyA9IGluZm8tPnJlYWRfd29y
+ZF9kYXRhKGNsaWVudCwgcGFnZSwgcmVnKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaWYgKHN0YXR1cyAhPSAtRU5PREFUQSkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBzdGF0dXM7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgfQo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKHJlZyA+PSBQTUJVU19WSVJUX0JBU0UpCj4gPiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTlhJTzsKPiA+ICvCoMKgwqDC
+oMKgwqDCoGlmIChzdGF0dXMgPT0gLUVOT0RBVEEgJiYgcmVnID49IFBNQlVTX1ZJUlRfQkFTRSkg
+ewo+IAo+IFNhbWUgY29tbWVudHMgYXMgdGhlIHdyaXRlIGNhc2UuCj4gCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50IGlkOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHN3aXRjaCAocmVnKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY2FzZSBQTUJVU19WSVJUX0ZBTl9UQVJHRVRfMToKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBjYXNlIFBNQlVTX1ZJUlRfRkFOX1RBUkdFVF8yOgo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNhc2UgUE1CVVNfVklSVF9GQU5fVEFSR0VUXzM6Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2FzZSBQTUJVU19WSVJUX0ZBTl9UQVJHRVRf
+NDoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWQg
+PSByZWcgLSBQTUJVU19WSVJUX0ZBTl9UQVJHRVRfMTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gcG1idXNfZ2V0X2Zhbl9jb21tYW5k
+KGNsaWVudCwgcGFnZSwgaWQsIHJwbSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGNhc2UgUE1CVVNfVklSVF9QV01fMToKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBjYXNlIFBNQlVTX1ZJUlRfUFdNXzI6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY2FzZSBQTUJVU19WSVJUX1BXTV8zOgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGNhc2UgUE1CVVNfVklSVF9QV01fNDoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGxvbmcgcnY7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGlkID0gcmVnIC0gUE1CVVNfVklSVF9QV01fMTsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcnYgPSBwbWJ1c19nZXRfZmFuX2Nv
+bW1hbmQoY2xpZW50LCBwYWdlLCBpZCwgcGVyY2VudCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChydiA8IDApCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+cnY7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoHJ2ICo9IDI1NTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcnYgLz0gMTAwOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSBydjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRlZmF1bHQ6
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0YXR1
+cyA9IC1FTlhJTzsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gKwo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBzdGF0dXM7Cj4gPiArwqDC
+oMKgwqDCoMKgwqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHBtYnVzX3JlYWRfd29yZF9k
+YXRhKGNsaWVudCwgcGFnZSwgcmVnKTsKPiA+IMKgfQo+ID4gCj4gPiBAQCAtMzA0LDYgKzQxOCwy
+MyBAQCBzdGF0aWMgaW50IF9wbWJ1c19yZWFkX2J5dGVfZGF0YShzdHJ1Y3QgaTJjX2NsaWVudCAq
+Y2xpZW50LCBpbnQgcGFnZSwgaW50IHJlZykKPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcG1i
+dXNfcmVhZF9ieXRlX2RhdGEoY2xpZW50LCBwYWdlLCByZWcpOwo+ID4gwqB9Cj4gPiAKPiA+ICtz
+dGF0aWMgaW50IHBtYnVzX2dldF9mYW5fY29tbWFuZChzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50
+LCBpbnQgcGFnZSwgaW50IGlkLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlbnVtIHBtYnVzX2Zhbl9tb2RlIG1vZGUp
+Cj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IGNvbmZpZzsKPiA+ICsKPiA+ICvCoMKgwqDC
+oMKgwqDCoGNvbmZpZyA9IF9wbWJ1c19yZWFkX2J5dGVfZGF0YShjbGllbnQsIHBhZ2UsCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoHBtYnVzX2Zhbl9jb25maWdfcmVnaXN0ZXJzW2lkXSk7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqBpZiAoY29uZmlnIDwgMCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZXR1cm4gY29uZmlnOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKChtb2Rl
+ID09IHJwbSkgIT0gKCEhKGNvbmZpZyAmIHBtYnVzX2Zhbl9ycG1fbWFza1tpZF0pKSkKPiAKPiBX
+aGF0J3MgKGNvbmZpZyAmIG1hc2tbaWRdKSB0ZXN0aW5nPyBQZXJoYXBzIGdpdmUgaXQgYSB2YXJp
+YWJsZSBzbyBpdCdzCj4gb2J2aW91cy4gQXZvaWRzIHRoZSAoKCgpKSkgdG9vLgoKSSBmZWVsIGxp
+a2UgdGhhdCdzIHJoZXRvcmljYWwsIGhvd2V2ZXIgaXQncyB0ZXN0aW5nIHdoZXRoZXIgdGhlCmFj
+Y2Vzc2VkIGF0dHJpYnV0ZSdzIG1vZGUgKGZhblhfdGFyZ2V0OiBtb2RlID09IGZhbiwgcHdtWDog
+bW9kZSA9PSBwd20sCmNhcHR1cmVkIGluIHRoZSAnbW9kZScgdmFyaWFibGUpIG1hdGNoZXMgdGhl
+IFJQTS9QV00gY29uZmlndXJhdGlvbiBvZgp0aGUgaGFyZHdhcmUuIFBNQnVzIG9ubHkgc3BlY2lm
+aWVzIGEgbmliYmxlJ3Mtd29ydGggb2YgY29uZmlndXJhdGlvbgpmb3IgZWFjaCBmYW4sIGFuZCBz
+byBwYWNrcyB0d28gZmFuIGNvbmZpZ3VyYXRpb25zIGludG8gb25lIGJ5dGUtd2lkZQpyZWdpc3Rl
+ciAoYWdhaW4gc2VlIHNlY3Rpb25zIDE0LjEwLCAxNC4xMSkuIFRodXMgdGhlIG1hc2sgZm9yIHRo
+ZQpjb25maWd1cmF0aW9uIHJlZ2lzdGVyIGlzIGRlcGVuZGVudCBvbiB0aGUgZmFuIGluZGV4IGlu
+IHRoZSBwYWdlIChhcwpvcHBvc2VkIHRvIGFjY2Vzc2luZyBhIGRpZmZlcmVudCBjb25maWd1cmF0
+aW9uIHJlZ2lzdGVyKS4gSWYgdGhlCmF0dHJpYnV0ZSBtb2RlIGRvZXNuJ3QgbWF0Y2ggdGhlIGhh
+cmR3YXJlIGNvbmZpZ3VyYXRpb24gdGhlbiB3ZSBjYW4ndApzZW5zaWJseSBpbnRlcnByZXQgdGhl
+IHZhbHVlIGluIEZBTl9DT01NQU5EX3guCgo+IAo+IFRoaXMgbG9va3MgbGlrZSBpdCdzIHRlc3Rp
+bmcgZm9yIGFuIGVycm9yIGNhc2UuIFNob3VsZCB5b3UgYmUKPiByZXR1cm5pbmcgYSBuZWdhdGl2
+ZSB2YWx1ZSBpbnN0ZWFkIG9mIHplcm8/CgpZZXMgaXQgaXMgYW4gZXJyb3IgY2FzZSwgYnV0IG5v
+IC0gc2VlIEd1ZW50ZXIncyByZXBseSBhYm91dCBicmVha2luZwpgc2Vuc29yc2Agb24gdGhlIHBy
+ZXZpb3VzIFJGQy4gVGhlIGNvbW1pdCBtZXNzYWdlIG91dGxpbmVzIHRoaXMKYmVoYXZpb3VyIGlu
+IHRoZSBhdHRyaWJ1dGUgcmVhZC93cml0ZSB0YWJsZXMuCgo+IAo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJu
+IF9wbWJ1c19yZWFkX3dvcmRfZGF0YShjbGllbnQsIHBhZ2UsCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+cG1idXNfZmFuX2NvbW1hbmRfcmVnaXN0ZXJzW2lkXSk7Cj4gPiArfQo+ID4gKwo+ID4gwqBzdGF0
+aWMgdm9pZCBwbWJ1c19jbGVhcl9mYXVsdF9wYWdlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQs
+IGludCBwYWdlKQo+ID4gwqB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgX3BtYnVzX3dyaXRlX2J5dGUo
+Y2xpZW50LCBwYWdlLCBQTUJVU19DTEVBUl9GQVVMVFMpOwo+ID4gQEAgLTQ4OSw3ICs2MjAsNyBA
+QCBzdGF0aWMgbG9uZyBwbWJ1c19yZWcyZGF0YV9kaXJlY3Qoc3RydWN0IHBtYnVzX2RhdGEgKmRh
+dGEsCj4gPiDCoMKgwqDCoMKgwqDCoMKgLyogWCA9IDEvbSAqIChZICogMTBeLVIgLSBiKSAqLwo+
+ID4gwqDCoMKgwqDCoMKgwqDCoFIgPSAtUjsKPiA+IMKgwqDCoMKgwqDCoMKgwqAvKiBzY2FsZSBy
+ZXN1bHQgdG8gbWlsbGktdW5pdHMgZm9yIGV2ZXJ5dGhpbmcgYnV0IGZhbnMgKi8KPiAKPiBEb2Vz
+IHRoaXMgY29tbWVudCBuZWVkIHVwZGF0aW5nPwoKSSBkb24ndCB0aGluayBzbywgYmVjYXVzZSB0
+aGUgUFdNIGNsYXNzIGlzIHN0aWxsIGNvbnRyb2xsaW5nIGEgZmFuLiBBdApsZWFzdCwgaW4gdGhl
+b3J5LiBJIHJlcGxpZWQgdG8gdGhlIHByZXZpb3VzIFJGQyBhYm91dCBQU0NfRkFOLCBSUE0gYW5k
+ClBXTSBtb2RlIHdpdGggcmVzcGVjdCB0byBQU0NfRkFOIHZzIFBTQ19QV00gYmVpbmcgYSBzbGln
+aHQgb2RkaXR5LAp3aGljaCBpcyB3aGF0IHlvdSd2ZSBwaWNrZWQgb24gaGVyZS4KCj4gCj4gPiAt
+wqDCoMKgwqDCoMKgwqBpZiAoc2Vuc29yLT5jbGFzcyAhPSBQU0NfRkFOKSB7Cj4gPiArwqDCoMKg
+wqDCoMKgwqBpZiAoIShzZW5zb3ItPmNsYXNzID09IFBTQ19GQU4gfHwgc2Vuc29yLT5jbGFzcyA9
+PSBQU0NfUFdNKSkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBSICs9IDM7
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGIgKj0gMTAwMDsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqB9Cj4gPiBAQCAtNTM5LDYgKzY3MCw5IEBAIHN0YXRpYyBsb25nIHBtYnVzX3Jl
+ZzJkYXRhKHN0cnVjdCBwbWJ1c19kYXRhICpkYXRhLCBzdHJ1Y3QgcG1idXNfc2Vuc29yICpzZW5z
+b3IpCj4gPiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBsb25nIHZhbDsKPiA+IAo+ID4gK8KgwqDC
+oMKgwqDCoMKgaWYgKCFzZW5zb3ItPmNvbnZlcnQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgcmV0dXJuIHNlbnNvci0+ZGF0YTsKPiA+ICsKPiA+IMKgwqDCoMKgwqDCoMKgwqBz
+d2l0Y2ggKGRhdGEtPmluZm8tPmZvcm1hdFtzZW5zb3ItPmNsYXNzXSkgewo+ID4gwqDCoMKgwqDC
+oMKgwqDCoGNhc2UgZGlyZWN0Ogo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2
+YWwgPSBwbWJ1c19yZWcyZGF0YV9kaXJlY3QoZGF0YSwgc2Vuc29yKTsKPiA+IEBAIC02NDIsNyAr
+Nzc2LDcgQEAgc3RhdGljIHUxNiBwbWJ1c19kYXRhMnJlZ19kaXJlY3Qoc3RydWN0IHBtYnVzX2Rh
+dGEgKmRhdGEsCj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKg
+LyogQ2FsY3VsYXRlIFkgPSAobSAqIFggKyBiKSAqIDEwXlIgKi8KPiA+IC3CoMKgwqDCoMKgwqDC
+oGlmIChzZW5zb3ItPmNsYXNzICE9IFBTQ19GQU4pIHsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmICgh
+KHNlbnNvci0+Y2xhc3MgPT0gUFNDX0ZBTiB8fCBzZW5zb3ItPmNsYXNzID09IFBTQ19QV00pKSB7
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFIgLT0gMzvCoMKgwqDCoMKgwqDC
+oMKgwqAvKiBBZGp1c3QgUiBhbmQgYiBmb3IgZGF0YSBpbiBtaWxsaS11bml0cyAqLwo+ID4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBiICo9IDEwMDA7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgfQo+ID4gQEAgLTY3Myw2ICs4MDcsOSBAQCBzdGF0aWMgdTE2IHBtYnVzX2RhdGEycmVnKHN0
+cnVjdCBwbWJ1c19kYXRhICpkYXRhLAo+ID4gwqB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgdTE2IHJl
+Z3ZhbDsKPiA+IAo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKCFzZW5zb3ItPmNvbnZlcnQpCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHZhbDsKPiA+ICsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqBzd2l0Y2ggKGRhdGEtPmluZm8tPmZvcm1hdFtzZW5zb3ItPmNsYXNzXSkgewo+
+ID4gwqDCoMKgwqDCoMKgwqDCoGNhc2UgZGlyZWN0Ogo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqByZWd2YWwgPSBwbWJ1c19kYXRhMnJlZ19kaXJlY3QoZGF0YSwgc2Vuc29yLCB2
+YWwpOwo+ID4gQEAgLTg5NSwxMiArMTAzMiwxMyBAQCBzdGF0aWMgc3RydWN0IHBtYnVzX3NlbnNv
+ciAqcG1idXNfYWRkX3NlbnNvcihzdHJ1Y3QgcG1idXNfZGF0YSAqZGF0YSwKPiA+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIE5VTEw7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+YSA9ICZzZW5zb3ItPmF0dHJpYnV0ZTsKPiA+IAo+ID4gLcKgwqDCoMKgwqDCoMKgc25wcmludGYo
+c2Vuc29yLT5uYW1lLCBzaXplb2Yoc2Vuc29yLT5uYW1lKSwgIiVzJWRfJXMiLAo+ID4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbmFtZSwgc2VxLCB0eXBlKTsKPiA+ICvCoMKgwqDC
+oMKgwqDCoHNucHJpbnRmKHNlbnNvci0+bmFtZSwgc2l6ZW9mKHNlbnNvci0+bmFtZSksICIlcyVk
+JXMlcyIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBuYW1lLCBzZXEsIHR5
+cGUgPyAiXyIgOiAiIiwgdHlwZSA/IHR5cGUgOiAiIik7Cj4gCj4gUGVyaGFwcyBzb21ldGhpbmcg
+bGlrZSB0aGlzIHdvdWxkIGJlIG1vcmUgcmVhZGFibGU6Cj4gCj4gaWYgKHR5cGUpCj4gwqDCoMKg
+wqDCoMKgwqBzbnByaW50ZihzZW5zb3ItPm5hbWUsIHNpemVvZihzZW5zb3ItPm5hbWUpLCAiJXMl
+ZF8lcywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG5hbWUsIHNlcSwgdHlwZSk7
+Cj4gZWxzZQo+IMKgwqDCoMKgwqDCoMKgc25wcmludGYoc2Vuc29yLT5uYW1lLCBzaXplb2Yoc2Vu
+c29yLT5uYW1lKSwgIiVzJWQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBuYW1l
+LCBzZXEpOwo+IAoKVGhhdCB3YXMgYSBxdWljayBoYWNrLCBhbmQgSSBpbnRlbmRlZCB0byBwb2xp
+c2ggaXQgYSBiaXQgZm9yIHRoZSBub24tClJGQyBzZXJpZXMuIFlvdXIgc3VnZ2VzdGlvbiBpcyB3
+aGF0IEkgd2FzIGludGVuZGluZyB0byBnbyB3aXRoLgoKQ2hlZXJzLAoKQW5kcmV3Cgo+IAo+IAo+
+ID4gwqDCoMKgwqDCoMKgwqDCoHNlbnNvci0+cGFnZSA9IHBhZ2U7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgc2Vuc29yLT5yZWcgPSByZWc7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc2Vuc29yLT5jbGFzcyA9
+IGNsYXNzOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHNlbnNvci0+dXBkYXRlID0gdXBkYXRlOwo+ID4g
+K8KgwqDCoMKgwqDCoMKgc2Vuc29yLT5jb252ZXJ0ID0gdHJ1ZTsKPiA+IMKgwqDCoMKgwqDCoMKg
+wqBwbWJ1c19kZXZfYXR0cl9pbml0KGEsIHNlbnNvci0+bmFtZSwKPiA+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVhZG9ubHkgPyBTX0lS
+VUdPIDogU19JUlVHTyB8IFNfSVdVU1IsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBtYnVzX3Nob3dfc2Vuc29yLCBwbWJ1c19zZXRf
+c2Vuc29yKTsKPiA+IEBAIC0xNTU4LDEzICsxNjk2LDYgQEAgc3RhdGljIGNvbnN0IGludCBwbWJ1
+c19mYW5fcmVnaXN0ZXJzW10gPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgUE1CVVNfUkVBRF9GQU5f
+U1BFRURfNAo+ID4gwqB9Owo+ID4gCj4gPiAtc3RhdGljIGNvbnN0IGludCBwbWJ1c19mYW5fY29u
+ZmlnX3JlZ2lzdGVyc1tdID0gewo+ID4gLcKgwqDCoMKgwqDCoMKgUE1CVVNfRkFOX0NPTkZJR18x
+MiwKPiA+IC3CoMKgwqDCoMKgwqDCoFBNQlVTX0ZBTl9DT05GSUdfMTIsCj4gPiAtwqDCoMKgwqDC
+oMKgwqBQTUJVU19GQU5fQ09ORklHXzM0LAo+ID4gLcKgwqDCoMKgwqDCoMKgUE1CVVNfRkFOX0NP
+TkZJR18zNAo+ID4gLX07Cj4gPiAtCj4gPiDCoHN0YXRpYyBjb25zdCBpbnQgcG1idXNfZmFuX3N0
+YXR1c19yZWdpc3RlcnNbXSA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBQTUJVU19TVEFUVVNfRkFO
+XzEyLAo+ID4gwqDCoMKgwqDCoMKgwqDCoFBNQlVTX1NUQVRVU19GQU5fMTIsCj4gPiBAQCAtMTU4
+Nyw2ICsxNzE4LDQ3IEBAIHN0YXRpYyBjb25zdCB1MzIgcG1idXNfZmFuX3N0YXR1c19mbGFnc1td
+ID0gewo+ID4gwqB9Owo+ID4gCj4gPiDCoC8qIEZhbnMgKi8KPiA+ICtzdGF0aWMgaW50IHBtYnVz
+X2FkZF9mYW5fY3RybChzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LAo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBwbWJ1c19kYXRhICpkYXRhLCBpbnQgaW5kZXgsIGlu
+dCBwYWdlLCBpbnQgaWQsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdTggY29u
+ZmlnKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBwbWJ1c19zZW5zb3IgKnNlbnNv
+cjsKPiA+ICvCoMKgwqDCoMKgwqDCoGludCBydjsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHJ2
+ID0gX3BtYnVzX3JlYWRfd29yZF9kYXRhKGNsaWVudCwgcGFnZSwKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBt
+YnVzX2Zhbl9jb21tYW5kX3JlZ2lzdGVyc1tpZF0pOwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKHJ2
+IDwgMCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcnY7Cj4gPiAr
+Cj4gPiArwqDCoMKgwqDCoMKgwqBzZW5zb3IgPSBwbWJ1c19hZGRfc2Vuc29yKGRhdGEsICJmYW4i
+LCAidGFyZ2V0IiwgaW5kZXgsIHBhZ2UsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgUE1CVVNfVklSVF9GQU5fVEFS
+R0VUXzEgKyBpZCwgUFNDX0ZBTiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cnVlLCBmYWxzZSk7Cj4gPiArCj4g
+PiArwqDCoMKgwqDCoMKgwqBpZiAoIXNlbnNvcikKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZXR1cm4gLUVOT01FTTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmICghZGF0
+YS0+aW5mby0+bVtQU0NfUFdNXSkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
+ZXR1cm4gMDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHNlbnNvciA9IHBtYnVzX2FkZF9zZW5z
+b3IoZGF0YSwgInB3bSIsIE5VTEwsIGluZGV4LCBwYWdlLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFBNQlVTX1ZJ
+UlRfUFdNXzEgKyBpZCwgUFNDX1BXTSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cnVlLCBmYWxzZSk7Cj4gPiAr
+Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIXNlbnNvcikKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqByZXR1cm4gLUVOT01FTTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHNlbnNv
+ciA9IHBtYnVzX2FkZF9zZW5zb3IoZGF0YSwgInB3bSIsICJlbmFibGUiLCBpbmRleCwgcGFnZSwK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBQTUJVU19WSVJUX1BXTV9FTkFCTEVfMSArIGlkLCBQU0NfUFdNLAo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHRydWUsIGZhbHNlKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmICghc2Vu
+c29yKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PTUVNOwo+
+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgc2Vuc29yLT5jb252ZXJ0ID0gZmFsc2U7Cj4gPiArCj4g
+PiArwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICt9Cj4gPiArCj4gPiDCoHN0YXRpYyBpbnQg
+cG1idXNfYWRkX2Zhbl9hdHRyaWJ1dGVzKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQsCj4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcG1idXNfZGF0YSAqZGF0YSkKPiA+IMKgewo+ID4gQEAgLTE2
+MjQsNiArMTc5NiwxNSBAQCBzdGF0aWMgaW50IHBtYnVzX2FkZF9mYW5fYXR0cmlidXRlcyhzdHJ1
+Y3QgaTJjX2NsaWVudCAqY2xpZW50LAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgUFNDX0ZBTiwgdHJ1ZSwgdHJ1ZSkgPT0gTlVMTCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVOT01F
+TTsKPiA+IAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAvKiBGYW4gY29udHJvbCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBpZiAocG1idXNfY2hlY2tfd29yZF9yZWdpc3RlcihjbGllbnQsIHBhZ2Us
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcG1idXNfZmFuX2NvbW1hbmRfcmVnaXN0ZXJzW2Zd
+KSkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcmV0ID0gcG1idXNfYWRkX2Zhbl9jdHJsKGNsaWVudCwgZGF0YSwgaW5k
+ZXgsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHBhZ2UsIGYsIHJlZ3ZhbCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAocmV0IDwgMCkKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAqIEVhY2ggZmFuIHN0YXR1cyByZWdpc3RlciBjb3Zl
+cnMgbXVsdGlwbGUgZmFucywKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgKiBzbyB3ZSBoYXZlIHRvIGRvIHNvbWUgbWFnaWMuCj4gPiAtLQo+ID4g
+Mi4xMS4wCj4gPiA=
 
--ENODATA: Calling code is expected to handle the command.
 
-> Or something like ESUPP or EINVAL?
-> 
+--=-Ii0z5um4pkvoRPmLsxAV
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Only if you want to redefine the entire internal PMBus driver API.
+-----BEGIN PGP SIGNATURE-----
 
-> Interestingly max34440_read_byte_data (may) return zero in this case.
-> 
+iQIcBAABCgAGBQJZb/44AAoJEJ0dnzgO5LT5kekP/0dOtEpMEU0iHRqbKJ63q2SE
+Av40HyW9HsmbBdvnTDYJfGZ1tmqgGjmtXI+SOLr9GrDAJAFV0WzrGu2nIJCadeWS
+nhySix1JF4LQJaT24Bme4c1A88zjqHzq5JyyIZDX4OK0wNkLFoutTLw2yfF03doh
+arpMQxJ2CyJpPL7Hv1gtEOTjfWEZecBBgCU8TOz8cITAVZWEuGtjSoLhdADBpokO
+0GhcOo1GD0aGL+5eVtwGXYwXdJoZgP4AZr5Qk1og4JPn8uVs5o96GpiQNqVdWmtS
+99OCpLW2UTWawHpHYSTpygbXWJdVFxjIJ5MBQZBqH+0pSyulyTeNpgdt4jiFolXG
+2JRpH/KrdFF4LtxEMpk/XdNxdZUNDLalUuUyQPRdQ1QmXAjNZnh06dKQ15FtN6Fk
+ik/ZEK/lR2kIw+/ayNJwoVyBm0XFFR6kd7AVW0rgcuyBkeaRyWHrirUr4+GwF0AY
+yWlS1I3JmEmf3EclQ83jTxojqKkjeB9/B7DeXBEzVoW1LiM9NLyr4lgJbJ3maFu7
+Uy64AliqYeGZD4bNlkJs8RXicTeYng+UPOdrUTjqaTgdHX4uTyV06NjwJkkZ1DsQ
+DGaIPYQRMHEqqa8U8M537NwOWv+udhl4rdq62LDcudbCuAA73qYgWHmNmOUNY0Kc
+WPXUr76iDUZArA5jFYIZ
+=KE8v
+-----END PGP SIGNATURE-----
 
-zero: No error. Command has been handled.
+--=-Ii0z5um4pkvoRPmLsxAV--
 
-> > +}
-> > +
-> > +static long max31785_read_long_data(struct i2c_client *client, int page,
-> > +                                   int reg)
-> > +{
-> > +       unsigned char cmdbuf[1];
-> > +       unsigned char rspbuf[4];
-> > +       s64 rc;
-> 
-> This should be the same type as the function returns.
-> 
-
-Also, long is likely s32 on 32-bit architectures, making it quite pointless
-as return type. In this case, it may be better to handle data and error return
-as separate parameters, such as in
-
-static init max31785_read32(struct i2c_client *client, int page, int reg,
-			    u32 *data)
-
-> > +
-> > +       struct i2c_msg msg[2] = {
-> > +               {
-> > +                       .addr = client->addr,
-> > +                       .flags = 0,
-> > +                       .len = sizeof(cmdbuf),
-> > +                       .buf = cmdbuf,
-> > +               },
-> > +               {
-> > +                       .addr = client->addr,
-> > +                       .flags = I2C_M_RD,
-> > +                       .len = sizeof(rspbuf),
-> > +                       .buf = rspbuf,
-> > +               },
-> > +       };
-> > +
-> > +       cmdbuf[0] = reg;
-> > +
-> > +       rc = pmbus_set_page(client, page);
-> > +       if (rc < 0)
-> > +               return rc;
-> > +
-> > +       rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-> > +       if (rc < 0)
-> > +               return rc;
-> > +
-> > +       rc = (rspbuf[0] << (0 * 8)) | (rspbuf[1] << (1 * 8)) |
-> > +            (rspbuf[2] << (2 * 8)) | (rspbuf[3] << (3 * 8));
-> 
-> It's getting late, so I might have confused myself. But can you just do:
-> 
-> rc = le32_to_cpup(rspbuf);
-> 
-> > +
-> > +       return rc;
-> > +}
-> > +
-> > +static int max31785_get_pwm(struct i2c_client *client, int page)
-> > +{
-> > +       int config;
-> > +       int command;
-> > +
-> > +       config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
-> > +       if (config < 0)
-> > +               return config;
-> > +
-> > +       command = pmbus_read_word_data(client, page, PMBUS_FAN_COMMAND_1);
-> > +       if (command < 0)
-> > +               return command;
-> > +
-> > +       if (!(config & PB_FAN_1_RPM)) {
-> > +               if (command >= 0x8000)
-> > +                       return 0;
-> > +               else if (command >= 0x2711)
-> > +                       return 0x2710;
-> 
-> What are the magic numbers?
-> 
-> > +               else
-
-unnecessary else
-
-> > +                       return command;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int max31785_get_pwm_mode(struct i2c_client *client, int page)
-> > +{
-> > +       int config;
-> > +       int command;
-> > +
-> > +       config = pmbus_read_byte_data(client, page, PMBUS_FAN_CONFIG_12);
-> > +       if (config < 0)
-> > +               return config;
-> > +
-> > +       command = pmbus_read_word_data(client, page, PMBUS_FAN_COMMAND_1);
-> > +       if (command < 0)
-> > +               return command;
-> > +
-> > +       if (!(config & PB_FAN_1_RPM)) {
-> > +               if (command >= 0x8000)
-> > +                       return 2;
-> > +               else if (command >= 0x2711)
-> > +                       return 0;
-> > +               else
-
-Unecessary else
-
-> > +                       return 1;
-> > +       }
-> > +
-> > +       return (command >= 0x8000) ? 2 : 1;
-> > +}
-> > +
-> > +static int max31785_read_word_data(struct i2c_client *client, int page,
-> > +                                  int reg)
-> > +{
-> > +       struct max31785 *chip = to_max31785(client);
-> > +       long rv = -ENODATA;
-> > +
-> > +       switch (reg) {
-> > +       case PMBUS_READ_FAN_SPEED_1:
-> > +               if (likely(page < 23))
-> > +                       return -ENODATA;
-> > +
-> > +               if (WARN_ON(!(chip->capabilities & MAX31785_CAP_DUAL_TACH)))
-> > +                       return -ENOTSUPP;
-> > +
-> > +               rv = max31785_read_long_data(client, page - 23, reg);
-> > +               if (rv < 0)
-> > +                       return rv;
-> > +
-> > +               rv = (rv >> 16) & 0xffff;
-> > +               break;
-> > +       case PMBUS_VIRT_PWM_1:
-> > +               rv = max31785_get_pwm(client, page);
-
-And ignore the error ?
-
-> > +               rv *= 255;
-> > +               rv /= 100;
-
-max31785_get_pwm() returns 0..0x2710 (or 10000). This is translated to 0..25500.
-Not really sure if that makes sense. We don't report pwm values in fractions of
-100 to user space.
-
-> > +               break;
-> > +       case PMBUS_VIRT_PWM_ENABLE_1:
-> > +               rv = max31785_get_pwm_mode(client, page);
-> > +               break;
-
-Not sure if PMBUS_VIRT_PWM_1 and PMBUS_VIRT_PWM_ENABLE_1 should return
--ENOTSUPP for pages 23+.
-
-> > +       }
-> > +
-> > +       if (rv == -ENODATA && page >= 23)
-> > +               return -ENXIO;
-
-That looks like another verification. Please drop.
-
-> > +
-> > +       return rv;
-> > +}
-> > +
-> > +static const int max31785_pwm_modes[] = { 0x7fff, 0x2710, 0xffff };
-> > +
-> > +static int max31785_write_word_data(struct i2c_client *client, int page,
-> > +                                   int reg, u16 word)
-> > +{
-> > +       int rv = -ENODATA;
-> > +
-> > +       if (page >= 23)
-> > +               return -ENXIO;
-> > +
-> > +       switch (reg) {
-> > +       case PMBUS_VIRT_PWM_ENABLE_1:
-> > +               if (word >= ARRAY_SIZE(max31785_pwm_modes))
-> > +                       return -ENOTSUPP;
-
-That doesn't look correct. -EINVAL, possibly.
-
-> > +
-> > +               rv = pmbus_update_fan(client, page, 0, 0, PB_FAN_1_RPM,
-> > +                                        max31785_pwm_modes[word]);
-> > +               break;
-> > +       }
-> > +
-> > +       return rv;
-> > +}
-> > +
-> > +static int max31785_write_byte(struct i2c_client *client, int page, u8 value)
-> > +{
-> > +       if (page < 23)
-> > +               return -ENODATA;
-> > +
-> > +       return -ENOTSUPP;
-> > +}
-> > +
-> > +static struct pmbus_driver_info max31785_info = {
-> > +       .pages = 23,
-> > +
-> > +       .write_word_data = max31785_write_word_data,
-> > +       .read_byte_data = max31785_read_byte_data,
-> > +       .read_word_data = max31785_read_word_data,
-> > +       .write_byte = max31785_write_byte,
-> > +
-> > +       /* RPM */
-> > +       .format[PSC_FAN] = direct,
-> > +       .m[PSC_FAN] = 1,
-> > +       .b[PSC_FAN] = 0,
-> > +       .R[PSC_FAN] = 0,
-> > +       /* PWM */
-> > +       .format[PSC_PWM] = direct,
-> > +       .m[PSC_PWM] = 1,
-> > +       .b[PSC_PWM] = 0,
-> > +       .R[PSC_PWM] = 2,
-> > +       .func[0] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +       .func[1] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +       .func[2] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +       .func[3] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +       .func[4] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +       .func[5] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-> > +
-> > +       .format[PSC_TEMPERATURE] = direct,
-> > +       .m[PSC_TEMPERATURE] = 1,
-> > +       .b[PSC_TEMPERATURE] = 0,
-> > +       .R[PSC_TEMPERATURE] = 2,
-> > +       .func[6]  = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[7]  = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[8]  = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[9]  = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[10] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[11] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[12] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[13] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[14] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[15] = PMBUS_HAVE_STATUS_TEMP,
-> > +       .func[16] = PMBUS_HAVE_STATUS_TEMP,
-> > +
-> > +       .format[PSC_VOLTAGE_OUT] = direct,
-> > +       .m[PSC_VOLTAGE_OUT] = 1,
-> > +       .b[PSC_VOLTAGE_OUT] = 0,
-> > +       .R[PSC_VOLTAGE_OUT] = 0,
-> > +       .func[17] = PMBUS_HAVE_STATUS_VOUT,
-> > +       .func[18] = PMBUS_HAVE_STATUS_VOUT,
-> > +       .func[19] = PMBUS_HAVE_STATUS_VOUT,
-> > +       .func[20] = PMBUS_HAVE_STATUS_VOUT,
-> > +       .func[21] = PMBUS_HAVE_STATUS_VOUT,
-> > +       .func[22] = PMBUS_HAVE_STATUS_VOUT,
-> > +};
-> > +
-> > +static int max31785_probe(struct i2c_client *client,
-> > +                         const struct i2c_device_id *id)
-> > +{
-> > +       struct max31785 *chip;
-> > +       int rv;
-> > +       int i;
-> > +
-> > +       chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-> > +       if (!chip)
-> > +               return -ENOMEM;
-> > +
-> > +       chip->info = max31785_info;
-> > +
-> > +       /*
-> > +        * Identify the chip firmware and configure capabilities.
-> > +        *
-> > +        * Bootstrap with i2c_smbus_*() calls as we need to understand the chip
-> > +        * capabilities for before invoking pmbus_do_probe(). The pmbus_*()
-> > +        * calls need access to memory that is only valid after
-> > +        * pmbus_do_probe().
-> 
-> I think this is common enough in pmbus drivers that the comment is redundant.
-> 
-> > +        */
-> > +       rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 255);
-> > +       if (rv < 0)
-> > +               return rv;
-> > +
-> > +       rv = i2c_smbus_read_word_data(client, PMBUS_MFR_REVISION);
-> > +       if (rv < 0)
-> > +               return rv;
-> > +
-> > +       if ((rv & 0xff) == 0x40) {
-> 
-> DUAL_TACH_REV? Or a better name from the docs we have?
-> 
-> > +               chip->capabilities |= MAX31785_CAP_DUAL_TACH;
-> > +
-> > +               /*
-> > +                * Punt the dual tach virtual fans to non-existent pages. This
-> > +                * ensures the pwm attributes appear in a contiguous block
-> > +                */
-> > +               chip->info.pages = 29;
-> > +               chip->info.func[23] = PMBUS_HAVE_FAN12;
-> > +               chip->info.func[24] = PMBUS_HAVE_FAN12;
-> > +               chip->info.func[25] = PMBUS_HAVE_FAN12;
-> > +               chip->info.func[26] = PMBUS_HAVE_FAN12;
-> > +               chip->info.func[27] = PMBUS_HAVE_FAN12;
-> > +               chip->info.func[28] = PMBUS_HAVE_FAN12;
-> > +       }
-> > +
-> > +       rv = pmbus_do_probe(client, id, &chip->info);
-> > +       if (rv < 0)
-> > +               return rv;
-> > +
-> > +       for (i = 0; i < max31785_info.pages; i++) {
-> > +               int reg;
-> > +
-> > +               if (!(max31785_info.func[i] & (PMBUS_HAVE_FAN12)))
-> > +                       continue;
-> > +
-> > +               reg = pmbus_read_word_data(client, i, PMBUS_MFR_FAN_CONFIG);
-> > +               if (reg < 0)
-> > +                       continue;
-> > +
-> > +               /*
-> > +                * XXX: Purely for RFC/testing purposes, don't ramp fans on fan
-> > +                * or temperature sensor fault, or a failure to write
-> > +                * FAN_COMMAND_1 inside a 10s window (watchdog mode).
-> > +                *
-> > +                * The TSFO bit controls both ramping on temp sensor failure
-> > +                * AND whether FAN_COMMAND_1 is in watchdog mode.
-> > +                */
-> > +               reg |= MFR_FAN_CONFIG_TSFO | MFR_FAN_CONFIG_TACHO;
-> > +               if (chip->capabilities & MAX31785_CAP_DUAL_TACH)
-> > +                       reg |= MFR_FAN_CONFIG_DUAL_TACH;
-> > +               reg &= 0xffff;
-> > +
-> > +               rv = pmbus_write_word_data(client, i, PMBUS_MFR_FAN_CONFIG,
-> > +                                          reg);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static const struct i2c_device_id max31785_id[] = {
-> > +       { "max31785", 0 },
-> > +       { },
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(i2c, max31785_id);
-> > +
-> > +static struct i2c_driver max31785_driver = {
-> > +       .driver = {
-> > +               .name = "max31785",
-> > +       },
-> > +       .probe = max31785_probe,
-> > +       .remove = pmbus_do_remove,
-> > +       .id_table = max31785_id,
-> > +};
-> > +
-> > +module_i2c_driver(max31785_driver);
-> > +
-> > +MODULE_AUTHOR("Andrew Jeffery <andrew@aj.id.au>");
-> > +MODULE_DESCRIPTION("PMBus driver for the Maxim MAX31785");
-> > +MODULE_LICENSE("GPL");
-> > --
-> > 2.11.0
-> >
