@@ -1,48 +1,40 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:46519 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753891AbdGSOCJ (ORCPT
+Received: from mail-oi0-f67.google.com ([209.85.218.67]:37526 "EHLO
+        mail-oi0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750864AbdGVQ0R (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Jul 2017 10:02:09 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (jc42) Add support for CAT34TS02C
-Date: Wed, 19 Jul 2017 07:01:58 -0700
-Message-Id: <1500472918-32331-1-git-send-email-linux@roeck-us.net>
+        Sat, 22 Jul 2017 12:26:17 -0400
+MIME-Version: 1.0
+In-Reply-To: <1500733843-22721-1-git-send-email-linux@roeck-us.net>
+References: <1500733843-22721-1-git-send-email-linux@roeck-us.net>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 22 Jul 2017 09:26:16 -0700
+Message-ID: <CA+55aFxr-PfDKrCT49sJ7hRpRvz9q-ZAXyhTN3+V3NnT8wLx-A@mail.gmail.com>
+Subject: Re: [GIT PULL] hwmon fixes for v4.13-rc2
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-CAT34TS02C is similar to CAT34TS02 but has a different device ID.
+On Sat, Jul 22, 2017 at 7:30 AM, Guenter Roeck <linux@roeck-us.net> wrote:
+> Hi Linus,
+>
+> Please pull hwmon fixes for Linux v4.13-rc2 from signed tag:
+>
+>     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.13-rcX
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/jc42.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Please fix whatever broken script it is that generates this.
 
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index edb6a81a0e10..5f11dc014ed6 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -139,6 +139,9 @@ static const unsigned short normal_i2c[] = {
- #define CAT6095_DEVID		0x0800	/* Also matches CAT34TS02 */
- #define CAT6095_DEVID_MASK	0xffe0
- 
-+#define CAT34TS02C_DEVID	0x0a00
-+#define CAT34TS02C_DEVID_MASK	0xfff0
-+
- #define CAT34TS04_DEVID		0x2200
- #define CAT34TS04_DEVID_MASK	0xfff0
- 
-@@ -184,6 +187,7 @@ static struct jc42_chips jc42_chips[] = {
- 	{ MCP_MANID, MCP9843_DEVID, MCP9843_DEVID_MASK },
- 	{ NXP_MANID, SE97_DEVID, SE97_DEVID_MASK },
- 	{ ONS_MANID, CAT6095_DEVID, CAT6095_DEVID_MASK },
-+	{ ONS_MANID, CAT34TS02C_DEVID, CAT34TS02C_DEVID_MASK },
- 	{ ONS_MANID, CAT34TS04_DEVID, CAT34TS04_DEVID_MASK },
- 	{ NXP_MANID, SE98_DEVID, SE98_DEVID_MASK },
- 	{ STM_MANID, STTS424_DEVID, STTS424_DEVID_MASK },
--- 
-2.7.4
+The real tag name comes later in the email:
 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.13-rc2
+
+See the difference?
+
+One works, one does not.
+
+Please don't add a non-working thing just to confuse and annoy people, ok?
+
+                Linus
