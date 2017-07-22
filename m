@@ -1,73 +1,120 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:55447 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:49895 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754426AbdGNOHB (ORCPT
+        with ESMTP id S1751328AbdGVOxU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Jul 2017 10:07:01 -0400
-Subject: Re: [PATCH 15/22] hwmon: applesmc: fix format string overflow
-To: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, x86@kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20170714120720.906842-1-arnd@arndb.de>
- <20170714120720.906842-16-arnd@arndb.de>
+        Sat, 22 Jul 2017 10:53:20 -0400
+Date: Sat, 22 Jul 2017 07:53:17 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f2e1e06c-3dc3-a3cd-9e93-c9e197ff4cc4@roeck-us.net>
-Date: Fri, 14 Jul 2017 07:06:54 -0700
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv6,3/4] hwmon: da9052: replace S_IRUGO with 0444
+Message-ID: <20170722145317.GA12511@roeck-us.net>
+References: <20170718092024.22552-4-sebastian.reichel@collabora.co.uk>
 MIME-Version: 1.0
-In-Reply-To: <20170714120720.906842-16-arnd@arndb.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20170718092024.22552-4-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/14/2017 05:07 AM, Arnd Bergmann wrote:
-> gcc-7 warns that the key might exceed five bytes for lage index
-> values:
-> 
-> drivers/hwmon/applesmc.c: In function 'applesmc_show_fan_position':
-> drivers/hwmon/applesmc.c:906:18: error: '%d' directive writing between 1 and 5 bytes into a region of size 4 [-Werror=format-overflow=]
-> sprintf(newkey, FAN_ID_FMT, to_index(attr));
->                  ^~~~~~~
-> drivers/hwmon/applesmc.c:906:18: note: directive argument in the range [0, 65535]
-> drivers/hwmon/applesmc.c:906:2: note: 'sprintf' output between 5 and 9 bytes into a destination of size 5
-> 
-> As the key is required to be four characters plus trailing zero,
-> we know that the index has to be small here. I'm using snprintf()
-> to avoid the warning. This would truncate the string instead of
-> overflowing.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Sebastian,
 
-I submitted a more comprehensive patch a couple of days ago. There are other similar
-sprintf() calls in the driver which gcc doesn't report.
+On Tue, Jul 18, 2017 at 11:20:23AM +0200, Sebastian Reichel wrote:
+> Fix checkpatch warnings about S_IRUGO being less readable than
+> providing the permissions octal as '0444'.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
 
+Again:
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+If you don't make changes, please don't drop already provided Reviewed-by:
+or Acked-by: tags. You are making it unnecessarily hard on us, forcing us
+to re-review your patches.
+
+Sure, it only takes a few minutes to track down the previous version of your
+patches, compare it to this version, and send another Ack. But it is a few
+minutes of _my_ time.
+
+Thanks,
 Guenter
 
 > ---
->   drivers/hwmon/applesmc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/da9052-hwmon.c | 36 ++++++++++++++++++------------------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 0af7fd311979..515163b9a89f 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-> @@ -903,7 +903,7 @@ static ssize_t applesmc_show_fan_position(struct device *dev,
->   	char newkey[5];
->   	u8 buffer[17];
->   
-> -	sprintf(newkey, FAN_ID_FMT, to_index(attr));
-> +	snprintf(newkey, sizeof(newkey), FAN_ID_FMT, to_index(attr));
->   
->   	ret = applesmc_read_key(newkey, buffer, 16);
->   	buffer[16] = 0;
-> 
-
+> diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
+> index c9832bfacfe5..708c91ac601f 100644
+> --- a/drivers/hwmon/da9052-hwmon.c
+> +++ b/drivers/hwmon/da9052-hwmon.c
+> @@ -196,43 +196,43 @@ static ssize_t show_label(struct device *dev,
+>  		       input_names[to_sensor_dev_attr(devattr)->index]);
+>  }
+>  
+> -static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, da9052_read_vddout, NULL,
+> +static SENSOR_DEVICE_ATTR(in0_input, 0444, da9052_read_vddout, NULL,
+>  			  DA9052_ADC_VDDOUT);
+> -static SENSOR_DEVICE_ATTR(in0_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in0_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_VDDOUT);
+> -static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, da9052_read_vbat, NULL,
+> +static SENSOR_DEVICE_ATTR(in3_input, 0444, da9052_read_vbat, NULL,
+>  			  DA9052_ADC_VBAT);
+> -static SENSOR_DEVICE_ATTR(in3_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in3_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_VBAT);
+> -static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, da9052_read_misc_channel, NULL,
+> +static SENSOR_DEVICE_ATTR(in4_input, 0444, da9052_read_misc_channel, NULL,
+>  			  DA9052_ADC_IN4);
+> -static SENSOR_DEVICE_ATTR(in4_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in4_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_IN4);
+> -static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, da9052_read_misc_channel, NULL,
+> +static SENSOR_DEVICE_ATTR(in5_input, 0444, da9052_read_misc_channel, NULL,
+>  			  DA9052_ADC_IN5);
+> -static SENSOR_DEVICE_ATTR(in5_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in5_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_IN5);
+> -static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, da9052_read_misc_channel, NULL,
+> +static SENSOR_DEVICE_ATTR(in6_input, 0444, da9052_read_misc_channel, NULL,
+>  			  DA9052_ADC_IN6);
+> -static SENSOR_DEVICE_ATTR(in6_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in6_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_IN6);
+> -static SENSOR_DEVICE_ATTR(in9_input, S_IRUGO, da9052_read_vbbat, NULL,
+> +static SENSOR_DEVICE_ATTR(in9_input, 0444, da9052_read_vbbat, NULL,
+>  			  DA9052_ADC_VBBAT);
+> -static SENSOR_DEVICE_ATTR(in9_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(in9_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_VBBAT);
+>  
+> -static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, da9052_read_ich, NULL,
+> +static SENSOR_DEVICE_ATTR(curr1_input, 0444, da9052_read_ich, NULL,
+>  			  DA9052_ADC_ICH);
+> -static SENSOR_DEVICE_ATTR(curr1_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(curr1_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_ICH);
+>  
+> -static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, da9052_read_tbat, NULL,
+> +static SENSOR_DEVICE_ATTR(temp2_input, 0444, da9052_read_tbat, NULL,
+>  			  DA9052_ADC_TBAT);
+> -static SENSOR_DEVICE_ATTR(temp2_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(temp2_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_TBAT);
+> -static SENSOR_DEVICE_ATTR(temp8_input, S_IRUGO, da9052_read_tjunc, NULL,
+> +static SENSOR_DEVICE_ATTR(temp8_input, 0444, da9052_read_tjunc, NULL,
+>  			  DA9052_ADC_TJUNC);
+> -static SENSOR_DEVICE_ATTR(temp8_label, S_IRUGO, show_label, NULL,
+> +static SENSOR_DEVICE_ATTR(temp8_label, 0444, show_label, NULL,
+>  			  DA9052_ADC_TJUNC);
+>  
+>  static struct attribute *da9052_attrs[] = {
