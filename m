@@ -1,17 +1,23 @@
-Return-Path: <mail@maciej.szmigiero.name>
-Return-path: <mail@maciej.szmigiero.name>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from vps-vb.mhejs.net ([37.28.154.113]:56760 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1750824AbdGXThs (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jul 2017 15:37:48 -0400
 From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: [PATCH] hwmon: (it87) Reapply probe path chip registers settings
+Subject: [PATCH v2] hwmon: (it87) Reapply probe path chip registers settings
  after resume
-Message-ID: <363dba2e-c228-4b85-897c-e74eb33aed90@maciej.szmigiero.name>
-Date: Sun, 23 Jul 2017 18:12:23 +0200
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <ff384622-ed3d-836f-c18e-5b962103634f@maciej.szmigiero.name>
+Date: Mon, 24 Jul 2017 21:37:43 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
 After a suspend / resume cycle we possibly need to reapply chip registers
 settings that we had set or fixed in a probe path, since they might have
@@ -22,11 +28,15 @@ to in7 (and had it wrong again on resume from S3).
 
 Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
 ---
- drivers/hwmon/it87.c | 148 ++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 112 insertions(+), 36 deletions(-)
+Changes from v1: Move code of common probe / resume steps to new functions
+so we don't need to make large parts of probe function conditional on a
+newly added 'resume' parameter.
+
+ drivers/hwmon/it87.c | 214 +++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 163 insertions(+), 51 deletions(-)
 
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 4dfc7238313e..e33af2e5f4ce 100644
+index 4dfc7238313e..b565e29c405c 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
 @@ -497,6 +497,7 @@ static const struct it87_devices it87_devices[] = {
@@ -58,129 +68,189 @@ index 4dfc7238313e..e33af2e5f4ce 100644
  	u16 chip_type;
  	const char *board_vendor, *board_name;
  	const struct it87_devices *config;
-@@ -2828,13 +2831,13 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+@@ -2828,13 +2831,89 @@ static int __init it87_find(int sioaddr, unsigned short *address,
  	return err;
  }
  
--/* Called when we have found a new IT87. */
--static void it87_init_device(struct platform_device *pdev)
-+/* Called when we have found a new IT87 or on resume. */
-+static void it87_init_device(struct platform_device *pdev, bool resume)
++/*
++ * Some chips seem to have default value 0xff for all limit
++ * registers. For low voltage limits it makes no sense and triggers
++ * alarms, so change to 0 instead. For high temperature limits, it
++ * means -1 degree C, which surprisingly doesn't trigger an alarm,
++ * but is still confusing, so change to 127 degrees C.
++ */
++static void it87_check_limit_regs(struct it87_data *data)
++{
++	int i, reg;
++
++	for (i = 0; i < NUM_VIN_LIMIT; i++) {
++		reg = it87_read_value(data, IT87_REG_VIN_MIN(i));
++		if (reg == 0xff)
++			it87_write_value(data, IT87_REG_VIN_MIN(i), 0);
++	}
++	for (i = 0; i < NUM_TEMP_LIMIT; i++) {
++		reg = it87_read_value(data, IT87_REG_TEMP_HIGH(i));
++		if (reg == 0xff)
++			it87_write_value(data, IT87_REG_TEMP_HIGH(i), 127);
++	}
++}
++
++/* Check if voltage monitors are reset manually or by some reason */
++static void it87_check_voltage_monitors_reset(struct it87_data *data)
++{
++	int reg;
++
++	reg = it87_read_value(data, IT87_REG_VIN_ENABLE);
++	if ((reg & 0xff) == 0) {
++		/* Enable all voltage monitors */
++		it87_write_value(data, IT87_REG_VIN_ENABLE, 0xff);
++	}
++}
++
++/* Check if tachometers are reset manually or by some reason */
++static void it87_check_tachometers_reset(struct platform_device *pdev)
++{
++	struct it87_sio_data *sio_data = dev_get_platdata(&pdev->dev);
++	struct it87_data *data = platform_get_drvdata(pdev);
++	u8 mask, fan_main_ctrl;
++
++	mask = 0x70 & ~(sio_data->skip_fan << 4);
++	fan_main_ctrl = it87_read_value(data, IT87_REG_FAN_MAIN_CTRL);
++	if ((fan_main_ctrl & mask) == 0) {
++		/* Enable all fan tachometers */
++		fan_main_ctrl |= mask;
++		it87_write_value(data, IT87_REG_FAN_MAIN_CTRL,
++				 fan_main_ctrl);
++	}
++}
++
++/* Set tachometers to 16-bit mode if needed */
++static void it87_check_tachometers_16bit_mode(struct platform_device *pdev)
++{
++	struct it87_data *data = platform_get_drvdata(pdev);
++	int reg;
++
++	if (!has_fan16_config(data))
++		return;
++
++	reg = it87_read_value(data, IT87_REG_FAN_16BIT);
++	if (~reg & 0x07 & data->has_fan) {
++		dev_dbg(&pdev->dev,
++			"Setting fan1-3 to 16-bit mode\n");
++		it87_write_value(data, IT87_REG_FAN_16BIT,
++				 reg | 0x07);
++	}
++}
++
++static void it87_start_monitoring(struct it87_data *data)
++{
++	it87_write_value(data, IT87_REG_CONFIG,
++			 (it87_read_value(data, IT87_REG_CONFIG) & 0x3e)
++			 | (update_vbat ? 0x41 : 0x01));
++}
++
+ /* Called when we have found a new IT87. */
+ static void it87_init_device(struct platform_device *pdev)
  {
  	struct it87_sio_data *sio_data = dev_get_platdata(&pdev->dev);
  	struct it87_data *data = platform_get_drvdata(pdev);
  	int tmp, i;
 -	u8 mask;
-+	u8 mask, fan_main_ctrl;
  
  	/*
  	 * For each PWM channel:
-@@ -2849,7 +2852,7 @@ static void it87_init_device(struct platform_device *pdev)
- 	 * these have separate registers for the temperature mapping and the
- 	 * manual duty cycle.
- 	 */
--	for (i = 0; i < NUM_AUTO_PWM; i++) {
-+	for (i = 0; !resume && i < NUM_AUTO_PWM; i++) {
- 		data->pwm_temp_map[i] = i;
- 		data->pwm_duty[i] = 0x7f;	/* Full speed */
+@@ -2855,23 +2934,7 @@ static void it87_init_device(struct platform_device *pdev)
  		data->auto_pwm[i][3] = 0x7f;	/* Full speed, hard-coded */
-@@ -2889,14 +2892,18 @@ static void it87_init_device(struct platform_device *pdev)
- 
- 	/* Check if tachometers are reset manually or by some reason */
- 	mask = 0x70 & ~(sio_data->skip_fan << 4);
--	data->fan_main_ctrl = it87_read_value(data, IT87_REG_FAN_MAIN_CTRL);
--	if ((data->fan_main_ctrl & mask) == 0) {
-+	fan_main_ctrl = it87_read_value(data, IT87_REG_FAN_MAIN_CTRL);
-+	if ((fan_main_ctrl & mask) == 0) {
- 		/* Enable all fan tachometers */
--		data->fan_main_ctrl |= mask;
-+		fan_main_ctrl |= mask;
- 		it87_write_value(data, IT87_REG_FAN_MAIN_CTRL,
--				 data->fan_main_ctrl);
-+				 fan_main_ctrl);
-+	}
-+
-+	if (!resume) {
-+		data->fan_main_ctrl = fan_main_ctrl;
-+		data->has_fan = (fan_main_ctrl >> 4) & 0x07;
- 	}
--	data->has_fan = (data->fan_main_ctrl >> 4) & 0x07;
- 
- 	tmp = it87_read_value(data, IT87_REG_FAN_16BIT);
- 
-@@ -2910,27 +2917,29 @@ static void it87_init_device(struct platform_device *pdev)
- 		}
  	}
  
--	/* Check for additional fans */
--	if (has_five_fans(data)) {
--		if (tmp & BIT(4))
--			data->has_fan |= BIT(3); /* fan4 enabled */
--		if (tmp & BIT(5))
--			data->has_fan |= BIT(4); /* fan5 enabled */
--		if (has_six_fans(data) && (tmp & BIT(2)))
--			data->has_fan |= BIT(5); /* fan6 enabled */
+-	/*
+-	 * Some chips seem to have default value 0xff for all limit
+-	 * registers. For low voltage limits it makes no sense and triggers
+-	 * alarms, so change to 0 instead. For high temperature limits, it
+-	 * means -1 degree C, which surprisingly doesn't trigger an alarm,
+-	 * but is still confusing, so change to 127 degrees C.
+-	 */
+-	for (i = 0; i < NUM_VIN_LIMIT; i++) {
+-		tmp = it87_read_value(data, IT87_REG_VIN_MIN(i));
+-		if (tmp == 0xff)
+-			it87_write_value(data, IT87_REG_VIN_MIN(i), 0);
 -	}
--
--	/* Fan input pins may be used for alternative functions */
--	data->has_fan &= ~sio_data->skip_fan;
-+	if (!resume) {
-+		/* Check for additional fans */
-+		if (has_five_fans(data)) {
-+			if (tmp & BIT(4))
-+				data->has_fan |= BIT(3); /* fan4 enabled */
-+			if (tmp & BIT(5))
-+				data->has_fan |= BIT(4); /* fan5 enabled */
-+			if (has_six_fans(data) && (tmp & BIT(2)))
-+				data->has_fan |= BIT(5); /* fan6 enabled */
-+		}
+-	for (i = 0; i < NUM_TEMP_LIMIT; i++) {
+-		tmp = it87_read_value(data, IT87_REG_TEMP_HIGH(i));
+-		if (tmp == 0xff)
+-			it87_write_value(data, IT87_REG_TEMP_HIGH(i), 127);
+-	}
++	it87_check_limit_regs(data);
  
--	/* Check if pwm5, pwm6 are enabled */
--	if (has_six_pwm(data)) {
--		/* The following code may be IT8620E specific */
--		tmp = it87_read_value(data, IT87_REG_FAN_DIV);
--		if ((tmp & 0xc0) == 0xc0)
--			sio_data->skip_pwm |= BIT(4);
--		if (!(tmp & BIT(3)))
--			sio_data->skip_pwm |= BIT(5);
-+		/* Fan input pins may be used for alternative functions */
-+		data->has_fan &= ~sio_data->skip_fan;
+ 	/*
+ 	 * Temperature channels are not forcibly enabled, as they can be
+@@ -2880,38 +2943,19 @@ static void it87_init_device(struct platform_device *pdev)
+ 	 * run-time through the temp{1-3}_type sysfs accessors if needed.
+ 	 */
+ 
+-	/* Check if voltage monitors are reset manually or by some reason */
+-	tmp = it87_read_value(data, IT87_REG_VIN_ENABLE);
+-	if ((tmp & 0xff) == 0) {
+-		/* Enable all voltage monitors */
+-		it87_write_value(data, IT87_REG_VIN_ENABLE, 0xff);
+-	}
++	it87_check_voltage_monitors_reset(data);
 +
-+		/* Check if pwm5, pwm6 are enabled */
-+		if (has_six_pwm(data)) {
-+			/* The following code may be IT8620E specific */
-+			tmp = it87_read_value(data, IT87_REG_FAN_DIV);
-+			if ((tmp & 0xc0) == 0xc0)
-+				sio_data->skip_pwm |= BIT(4);
-+			if (!(tmp & BIT(3)))
-+				sio_data->skip_pwm |= BIT(5);
-+		}
++	it87_check_tachometers_reset(pdev);
+ 
+-	/* Check if tachometers are reset manually or by some reason */
+-	mask = 0x70 & ~(sio_data->skip_fan << 4);
+ 	data->fan_main_ctrl = it87_read_value(data, IT87_REG_FAN_MAIN_CTRL);
+-	if ((data->fan_main_ctrl & mask) == 0) {
+-		/* Enable all fan tachometers */
+-		data->fan_main_ctrl |= mask;
+-		it87_write_value(data, IT87_REG_FAN_MAIN_CTRL,
+-				 data->fan_main_ctrl);
+-	}
+ 	data->has_fan = (data->fan_main_ctrl >> 4) & 0x07;
+ 
+-	tmp = it87_read_value(data, IT87_REG_FAN_16BIT);
+-
+-	/* Set tachometers to 16-bit mode if needed */
+-	if (has_fan16_config(data)) {
+-		if (~tmp & 0x07 & data->has_fan) {
+-			dev_dbg(&pdev->dev,
+-				"Setting fan1-3 to 16-bit mode\n");
+-			it87_write_value(data, IT87_REG_FAN_16BIT,
+-					 tmp | 0x07);
+-		}
+-	}
++	it87_check_tachometers_16bit_mode(pdev);
+ 
+ 	/* Check for additional fans */
+ 	if (has_five_fans(data)) {
++		tmp = it87_read_value(data, IT87_REG_FAN_16BIT);
++
+ 		if (tmp & BIT(4))
+ 			data->has_fan |= BIT(3); /* fan4 enabled */
+ 		if (tmp & BIT(5))
+@@ -2933,10 +2977,7 @@ static void it87_init_device(struct platform_device *pdev)
+ 			sio_data->skip_pwm |= BIT(5);
  	}
  
- 	/* Start monitoring */
-@@ -2940,7 +2949,7 @@ static void it87_init_device(struct platform_device *pdev)
+-	/* Start monitoring */
+-	it87_write_value(data, IT87_REG_CONFIG,
+-			 (it87_read_value(data, IT87_REG_CONFIG) & 0x3e)
+-			 | (update_vbat ? 0x41 : 0x01));
++	it87_start_monitoring(data);
  }
  
  /* Return 1 if and only if the PWM interface is safe to use */
--static int it87_check_pwm(struct device *dev)
-+static int it87_check_pwm(struct device *dev, bool resume)
- {
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	/*
-@@ -2986,8 +2995,10 @@ static int it87_check_pwm(struct device *dev)
+@@ -2986,8 +3027,6 @@ static int it87_check_pwm(struct device *dev)
  				 "PWM configuration is too broken to be fixed\n");
  		}
  
 -		dev_info(dev,
 -			 "Detected broken BIOS defaults, disabling PWM interface\n");
-+		if (!resume)
-+			dev_info(dev,
-+				 "Detected broken BIOS defaults, disabling PWM interface\n");
-+
  		return 0;
  	} else if (fix_pwm_polarity) {
  		dev_info(dev,
-@@ -3020,6 +3031,7 @@ static int it87_probe(struct platform_device *pdev)
+@@ -3020,6 +3059,7 @@ static int it87_probe(struct platform_device *pdev)
  		return -ENOMEM;
  
  	data->addr = res->start;
@@ -188,25 +258,17 @@ index 4dfc7238313e..e33af2e5f4ce 100644
  	data->type = sio_data->type;
  	data->features = it87_devices[sio_data->type].features;
  	data->peci_mask = it87_devices[sio_data->type].peci_mask;
-@@ -3057,7 +3069,7 @@ static int it87_probe(struct platform_device *pdev)
- 	mutex_init(&data->update_lock);
+@@ -3058,6 +3098,9 @@ static int it87_probe(struct platform_device *pdev)
  
  	/* Check PWM configuration */
--	enable_pwm_interface = it87_check_pwm(dev);
-+	enable_pwm_interface = it87_check_pwm(dev, false);
+ 	enable_pwm_interface = it87_check_pwm(dev);
++	if (!enable_pwm_interface)
++		dev_info(dev,
++			 "Detected broken BIOS defaults, disabling PWM interface\n");
  
  	/* Starting with IT8721F, we handle scaling of internal voltages */
  	if (has_12mv_adc(data)) {
-@@ -3110,7 +3122,7 @@ static int it87_probe(struct platform_device *pdev)
- 	data->has_beep = !!sio_data->beep_pin;
- 
- 	/* Initialize the IT87 chip */
--	it87_init_device(pdev);
-+	it87_init_device(pdev, false);
- 
- 	if (!sio_data->skip_vid) {
- 		data->has_vid = true;
-@@ -3140,9 +3152,72 @@ static int it87_probe(struct platform_device *pdev)
+@@ -3140,9 +3183,77 @@ static int it87_probe(struct platform_device *pdev)
  	return PTR_ERR_OR_ZERO(hwmon_dev);
  }
  
@@ -257,8 +319,13 @@ index 4dfc7238313e..e33af2e5f4ce 100644
 +
 +	mutex_lock(&data->update_lock);
 +
-+	it87_check_pwm(dev, true);
-+	it87_init_device(pdev, true);
++	it87_check_pwm(dev);
++	it87_check_limit_regs(data);
++	it87_check_voltage_monitors_reset(data);
++	it87_check_tachometers_reset(pdev);
++	it87_check_tachometers_16bit_mode(pdev);
++
++	it87_start_monitoring(data);
 +
 +	/* force update */
 +	data->valid = 0;
@@ -279,7 +346,7 @@ index 4dfc7238313e..e33af2e5f4ce 100644
  	},
  	.probe	= it87_probe,
  };
-@@ -3208,8 +3283,9 @@ static int __init sm_it87_init(void)
+@@ -3208,8 +3319,9 @@ static int __init sm_it87_init(void)
  
  	for (i = 0; i < ARRAY_SIZE(sioaddr); i++) {
  		memset(&sio_data, 0, sizeof(struct it87_sio_data));
@@ -290,3 +357,4 @@ index 4dfc7238313e..e33af2e5f4ce 100644
  		if (err || isa_address[i] == 0)
  			continue;
  		/*
+
