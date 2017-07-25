@@ -1,39 +1,212 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56854 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750921AbdGVVVn (ORCPT
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:33064 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1752241AbdGYORs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Jul 2017 17:21:43 -0400
-Date: Sat, 22 Jul 2017 14:21:41 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] hwmon fixes for v4.13-rc2
-Message-ID: <20170722212141.GA2969@roeck-us.net>
-References: <1500733843-22721-1-git-send-email-linux@roeck-us.net>
- <CA+55aFxr-PfDKrCT49sJ7hRpRvz9q-ZAXyhTN3+V3NnT8wLx-A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+55aFxr-PfDKrCT49sJ7hRpRvz9q-ZAXyhTN3+V3NnT8wLx-A@mail.gmail.com>
+        Tue, 25 Jul 2017 10:17:48 -0400
+From: Mykola Kostenok <c_mykolak@mellanox.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc: Mykola Kostenok <c_mykolak@mellanox.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
+        openbmc@lists.ozlabs.org, Patrick Venture <venture@google.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Ohad Oz <ohado@mellanox.com>
+Subject: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device support.
+Date: Tue, 25 Jul 2017 17:17:27 +0300
+Message-Id: <20170725141727.13105-1-c_mykolak@mellanox.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sat, Jul 22, 2017 at 09:26:16AM -0700, Linus Torvalds wrote:
-> On Sat, Jul 22, 2017 at 7:30 AM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > Hi Linus,
-> >
-> > Please pull hwmon fixes for Linux v4.13-rc2 from signed tag:
-> >
-> >     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.13-rcX
-> 
-> Please fix whatever broken script it is that generates this.
-> 
+Add support in aspeed-pwm-tacho driver for cooling device creation.
+This cooling device could be bound to a thermal zone
+for the thermal control. Device will appear in /sys/class/thermal
+folder as cooling_deviceX. Then it could be bound to particular
+thermal zones. Allow specification of the cooling levels
+vector - PWM duty cycle values in a range from 0 to 255
+which correspond to thermal cooling states.
 
-That part wasn't from a script, it was manually edited. The breakage
-was in my brain. I took your hint and made it part of the script.
+v1 -> v2:
+ - Remove device tree binding file from the patch.
+ - Move of_node_put out of cycle because of_get_next_child
+   already do of_put_node on previous child.
 
-Sorry.
+v2 -> v3:
+ Pointed out by Rob Herring:
+ - Put cooling-levels under fan subnodes.
 
-Guenter
+Signed-off-by: Mykola Kostenok <c_mykolak@mellanox.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 118 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 116 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index ddfe66b..ae8dfee 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -20,6 +20,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/sysfs.h>
+ #include <linux/regmap.h>
++#include <linux/thermal.h>
+ 
+ /* ASPEED PWM & FAN Tach Register Definition */
+ #define ASPEED_PTCR_CTRL		0x00
+@@ -166,6 +167,16 @@
+ /* How long we sleep in us while waiting for an RPM result. */
+ #define ASPEED_RPM_STATUS_SLEEP_USEC	500
+ 
++struct aspeed_cooling_device {
++	char name[16];
++	struct aspeed_pwm_tacho_data *priv;
++	struct thermal_cooling_device *tcdev;
++	int pwm_port;
++	u8 *cooling_levels;
++	u8 max_state;
++	u8 cur_state;
++};
++
+ struct aspeed_pwm_tacho_data {
+ 	struct regmap *regmap;
+ 	unsigned long clk_freq;
+@@ -180,6 +191,7 @@ struct aspeed_pwm_tacho_data {
+ 	u8 pwm_port_type[8];
+ 	u8 pwm_port_fan_ctrl[8];
+ 	u8 fan_tach_ch_source[16];
++	struct aspeed_cooling_device *cdev[8];
+ 	const struct attribute_group *groups[3];
+ };
+ 
+@@ -765,6 +777,97 @@ static void aspeed_create_fan_tach_channel(struct aspeed_pwm_tacho_data *priv,
+ 	}
+ }
+ 
++static int
++aspeed_pwm_cz_get_max_state(struct thermal_cooling_device *tcdev,
++			    unsigned long *state)
++{
++	struct aspeed_cooling_device *cdev =
++				(struct aspeed_cooling_device *)tcdev->devdata;
++
++	*state = cdev->max_state;
++
++	return 0;
++}
++
++static int
++aspeed_pwm_cz_get_cur_state(struct thermal_cooling_device *tcdev,
++			    unsigned long *state)
++{
++	struct aspeed_cooling_device *cdev =
++				(struct aspeed_cooling_device *)tcdev->devdata;
++
++	*state = cdev->cur_state;
++
++	return 0;
++}
++
++static int
++aspeed_pwm_cz_set_cur_state(struct thermal_cooling_device *tcdev,
++			    unsigned long state)
++{
++	struct aspeed_cooling_device *cdev =
++				(struct aspeed_cooling_device *)tcdev->devdata;
++
++	if (state > cdev->max_state)
++		return -EINVAL;
++
++	cdev->cur_state = state;
++	cdev->priv->pwm_port_fan_ctrl[cdev->pwm_port] = *(cdev->cooling_levels
++							  + cdev->cur_state);
++	aspeed_set_pwm_port_fan_ctrl(cdev->priv, cdev->pwm_port,
++				     *(cdev->cooling_levels +
++				       cdev->cur_state));
++
++	return 0;
++}
++
++static const struct thermal_cooling_device_ops aspeed_pwm_cool_ops = {
++	.get_max_state = aspeed_pwm_cz_get_max_state,
++	.get_cur_state = aspeed_pwm_cz_get_cur_state,
++	.set_cur_state = aspeed_pwm_cz_set_cur_state,
++};
++
++static int aspeed_create_pwm_cooling(struct device *dev,
++			     struct device_node *child,
++			     struct aspeed_pwm_tacho_data *priv,
++			     u32 pwm_port, u8 num_level)
++{
++	int ret;
++
++	priv->cdev[pwm_port] = devm_kzalloc(dev, sizeof(*priv->cdev[pwm_port]),
++					    GFP_KERNEL);
++	if (!priv->cdev[pwm_port])
++		return -ENOMEM;
++
++	priv->cdev[pwm_port]->cooling_levels = devm_kzalloc(dev, num_level *
++							    sizeof(u8),
++							    GFP_KERNEL);
++	if (!priv->cdev[pwm_port]->cooling_levels)
++		return -ENOMEM;
++
++	priv->cdev[pwm_port]->max_state = num_level - 1;
++	ret = of_property_read_u8_array(child, "cooling-levels",
++					priv->cdev[pwm_port]->cooling_levels,
++					num_level);
++	if (ret) {
++		dev_err(dev, "Property 'cooling-levels' cannot be read.\n");
++		return ret;
++	}
++	sprintf(priv->cdev[pwm_port]->name, "%s%d", child->name, pwm_port);
++
++	priv->cdev[pwm_port]->tcdev = thermal_of_cooling_device_register(child,
++						priv->cdev[pwm_port]->name,
++						priv->cdev[pwm_port],
++						&aspeed_pwm_cool_ops);
++	if (PTR_ERR_OR_ZERO(priv->cdev[pwm_port]->tcdev))
++		return PTR_ERR(priv->cdev[pwm_port]->tcdev);
++
++	priv->cdev[pwm_port]->priv = priv;
++	priv->cdev[pwm_port]->pwm_port = pwm_port;
++
++	return 0;
++}
++
+ static int aspeed_create_fan(struct device *dev,
+ 			     struct device_node *child,
+ 			     struct aspeed_pwm_tacho_data *priv)
+@@ -778,6 +881,15 @@ static int aspeed_create_fan(struct device *dev,
+ 		return ret;
+ 	aspeed_create_pwm_port(priv, (u8)pwm_port);
+ 
++	ret = of_property_count_u8_elems(child, "cooling-levels");
++
++	if (ret > 0) {
++		ret = aspeed_create_pwm_cooling(dev, child, priv, pwm_port,
++						ret);
++		if (ret)
++			return ret;
++	}
++
+ 	count = of_property_count_u8_elems(child, "aspeed,fan-tach-ch");
+ 	if (count < 1)
+ 		return -EINVAL;
+@@ -834,10 +946,12 @@ static int aspeed_pwm_tacho_probe(struct platform_device *pdev)
+ 
+ 	for_each_child_of_node(np, child) {
+ 		ret = aspeed_create_fan(dev, child, priv);
+-		of_node_put(child);
+-		if (ret)
++		if (ret) {
++			of_node_put(child);
+ 			return ret;
++		}
+ 	}
++	of_node_put(child);
+ 
+ 	priv->groups[0] = &pwm_dev_group;
+ 	priv->groups[1] = &fan_dev_group;
+-- 
+2.8.4
+
