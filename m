@@ -1,275 +1,223 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-yw0-f194.google.com ([209.85.161.194]:33752 "EHLO
-        mail-yw0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751365AbdGZGsl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jul 2017 02:48:41 -0400
-Received: by mail-yw0-f194.google.com with SMTP id u207so4165172ywc.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Jul 2017 23:48:41 -0700 (PDT)
-MIME-Version: 1.0
-In-Reply-To: <20170725141727.13105-1-c_mykolak@mellanox.com>
-References: <20170725141727.13105-1-c_mykolak@mellanox.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 26 Jul 2017 16:18:20 +0930
-Message-ID: <CACPK8XeidChD_LT6o8MQBmyJ4r3mPCPfwEX_1REmQJkMNGELeQ@mail.gmail.com>
-Subject: Re: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device support.
-To: Mykola Kostenok <c_mykolak@mellanox.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
+Received: from mail-eopbgr20044.outbound.protection.outlook.com ([40.107.2.44]:10812
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1751034AbdGZLIn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 26 Jul 2017 07:08:43 -0400
+From: Mykola Kostenok <c_mykolak@mellanox.com>
+To: Joel Stanley <joel@jms.id.au>
+CC: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Jaghathiswari Rankappagounder Natarajan" <jaghu@google.com>,
         Ohad Oz <ohado@mellanox.com>,
         Vadim Pasternak <vadimp@mellanox.com>,
         Patrick Venture <venture@google.com>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device support.
+Date: Wed, 26 Jul 2017 11:08:38 +0000
+Message-ID: <DB5PR05MB1224F329AA1C5BA4B37B4B86EFB90@DB5PR05MB1224.eurprd05.prod.outlook.com>
+References: <20170725141727.13105-1-c_mykolak@mellanox.com>
+ <CACPK8XeidChD_LT6o8MQBmyJ4r3mPCPfwEX_1REmQJkMNGELeQ@mail.gmail.com>
+In-Reply-To: <CACPK8XeidChD_LT6o8MQBmyJ4r3mPCPfwEX_1REmQJkMNGELeQ@mail.gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Mykola,
-
-On Tue, Jul 25, 2017 at 11:47 PM, Mykola Kostenok
-<c_mykolak@mellanox.com> wrote:
-> Add support in aspeed-pwm-tacho driver for cooling device creation.
-> This cooling device could be bound to a thermal zone
-> for the thermal control. Device will appear in /sys/class/thermal
-> folder as cooling_deviceX. Then it could be bound to particular
-> thermal zones. Allow specification of the cooling levels
-> vector - PWM duty cycle values in a range from 0 to 255
-> which correspond to thermal cooling states.
->
-> v1 -> v2:
->  - Remove device tree binding file from the patch.
->  - Move of_node_put out of cycle because of_get_next_child
->    already do of_put_node on previous child.
->
-> v2 -> v3:
->  Pointed out by Rob Herring:
->  - Put cooling-levels under fan subnodes.
-
-Looking better! I have a few comments below. Some are nits (small
-issues that aren't a big deal), but I chose to point them out so you
-learn for next time. If you have any questions then please ask.
-
->
-> Signed-off-by: Mykola Kostenok <c_mykolak@mellanox.com>
-> ---
-
-Convention is to stick the changes between versions (the v2-> v3 bits)
-down here, so that it doesn't end up in the final commit message.
-
-
->  drivers/hwmon/aspeed-pwm-tacho.c | 118 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 116 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-> index ddfe66b..ae8dfee 100644
-> --- a/drivers/hwmon/aspeed-pwm-tacho.c
-> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-> @@ -20,6 +20,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/sysfs.h>
->  #include <linux/regmap.h>
-> +#include <linux/thermal.h>
->
->  /* ASPEED PWM & FAN Tach Register Definition */
->  #define ASPEED_PTCR_CTRL               0x00
-> @@ -166,6 +167,16 @@
->  /* How long we sleep in us while waiting for an RPM result. */
->  #define ASPEED_RPM_STATUS_SLEEP_USEC   500
->
-> +struct aspeed_cooling_device {
-> +       char name[16];
-> +       struct aspeed_pwm_tacho_data *priv;
-> +       struct thermal_cooling_device *tcdev;
-> +       int pwm_port;
-> +       u8 *cooling_levels;
-> +       u8 max_state;
-> +       u8 cur_state;
-> +};
-> +
->  struct aspeed_pwm_tacho_data {
->         struct regmap *regmap;
->         unsigned long clk_freq;
-> @@ -180,6 +191,7 @@ struct aspeed_pwm_tacho_data {
->         u8 pwm_port_type[8];
->         u8 pwm_port_fan_ctrl[8];
->         u8 fan_tach_ch_source[16];
-> +       struct aspeed_cooling_device *cdev[8];
->         const struct attribute_group *groups[3];
->  };
->
-> @@ -765,6 +777,97 @@ static void aspeed_create_fan_tach_channel(struct aspeed_pwm_tacho_data *priv,
->         }
->  }
->
-> +static int
-> +aspeed_pwm_cz_get_max_state(struct thermal_cooling_device *tcdev,
-> +                           unsigned long *state)
-> +{
-> +       struct aspeed_cooling_device *cdev =
-> +                               (struct aspeed_cooling_device *)tcdev->devdata;
-> +
-> +       *state = cdev->max_state;
-> +
-> +       return 0;
-> +}
-> +
-> +static int
-> +aspeed_pwm_cz_get_cur_state(struct thermal_cooling_device *tcdev,
-> +                           unsigned long *state)
-> +{
-> +       struct aspeed_cooling_device *cdev =
-> +                               (struct aspeed_cooling_device *)tcdev->devdata;
-> +
-> +       *state = cdev->cur_state;
-> +
-> +       return 0;
-> +}
-> +
-> +static int
-> +aspeed_pwm_cz_set_cur_state(struct thermal_cooling_device *tcdev,
-> +                           unsigned long state)
-> +{
-> +       struct aspeed_cooling_device *cdev =
-> +                               (struct aspeed_cooling_device *)tcdev->devdata;
-
-You can drop the cast, as devdata is a void *:
-
-      struct aspeed_cooling_device *cdev = tcdev->devdata;
-
-> +
-> +       if (state > cdev->max_state)
-> +               return -EINVAL;
-> +
-> +       cdev->cur_state = state;
-> +       cdev->priv->pwm_port_fan_ctrl[cdev->pwm_port] = *(cdev->cooling_levels
-> +                                                         + cdev->cur_state);
-
-That pointer maths looks scary :) How about this instead?
-
-       cdev->priv->pwm_port_fan_ctrl[cdev->pwm_port] =
-cdev->cooling_levels[cdev->cur_state]
-
-
-> +       aspeed_set_pwm_port_fan_ctrl(cdev->priv, cdev->pwm_port,
-> +                                    *(cdev->cooling_levels +
-> +                                      cdev->cur_state));
-
-Same here:
-
-       aspeed_set_pwm_port_fan_ctrl(cdev->priv, cdev->pwm_port,
-
-cdev->cooling_levels[cdev->cur_state]);
-
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct thermal_cooling_device_ops aspeed_pwm_cool_ops = {
-> +       .get_max_state = aspeed_pwm_cz_get_max_state,
-> +       .get_cur_state = aspeed_pwm_cz_get_cur_state,
-> +       .set_cur_state = aspeed_pwm_cz_set_cur_state,
-> +};
-> +
-> +static int aspeed_create_pwm_cooling(struct device *dev,
-> +                            struct device_node *child,
-> +                            struct aspeed_pwm_tacho_data *priv,
-> +                            u32 pwm_port, u8 num_level)
-
-Can we call this num_levels instead of num_level?
-
-> +{
-> +       int ret;
-> +
-> +       priv->cdev[pwm_port] = devm_kzalloc(dev, sizeof(*priv->cdev[pwm_port]),
-> +                                           GFP_KERNEL);
-
-This function would be easier to read if we used a local variable:
-
-struct pwm_port *port;
-port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
-
-Then at the bottom of the function, do
-
-priv->cdev[pwm_port] = port;
-
-
-> +       if (!priv->cdev[pwm_port])
-> +               return -ENOMEM;
-> +
-> +       priv->cdev[pwm_port]->cooling_levels = devm_kzalloc(dev, num_level *
-
-The sizeof(8) isn't useful, you could drop it.
-
-> +                                                           sizeof(u8),
-> +                                                           GFP_KERNEL);
-> +       if (!priv->cdev[pwm_port]->cooling_levels)
-> +               return -ENOMEM;
-> +
-> +       priv->cdev[pwm_port]->max_state = num_level - 1;
-> +       ret = of_property_read_u8_array(child, "cooling-levels",
-> +                                       priv->cdev[pwm_port]->cooling_levels,
-> +                                       num_level);
-> +       if (ret) {
-> +               dev_err(dev, "Property 'cooling-levels' cannot be read.\n");
-> +               return ret;
-> +       }
-> +       sprintf(priv->cdev[pwm_port]->name, "%s%d", child->name, pwm_port);
-> +
-> +       priv->cdev[pwm_port]->tcdev = thermal_of_cooling_device_register(child,
-> +                                               priv->cdev[pwm_port]->name,
-> +                                               priv->cdev[pwm_port],
-> +                                               &aspeed_pwm_cool_ops);
-> +       if (PTR_ERR_OR_ZERO(priv->cdev[pwm_port]->tcdev))
-> +               return PTR_ERR(priv->cdev[pwm_port]->tcdev);
-
-I think you meant this:
-
-if (IS_ERR(priv->cdev[pwm_port]->tcdev))
-   return PTR_ERR(priv->cdev[pwm_port]->tcdev);
-
-> +
-> +       priv->cdev[pwm_port]->priv = priv;
-> +       priv->cdev[pwm_port]->pwm_port = pwm_port;
-> +
-> +       return 0;
-> +}
-> +
->  static int aspeed_create_fan(struct device *dev,
->                              struct device_node *child,
->                              struct aspeed_pwm_tacho_data *priv)
-> @@ -778,6 +881,15 @@ static int aspeed_create_fan(struct device *dev,
->                 return ret;
->         aspeed_create_pwm_port(priv, (u8)pwm_port);
->
-> +       ret = of_property_count_u8_elems(child, "cooling-levels");
-> +
-> +       if (ret > 0) {
-> +               ret = aspeed_create_pwm_cooling(dev, child, priv, pwm_port,
-> +                                               ret);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
->         count = of_property_count_u8_elems(child, "aspeed,fan-tach-ch");
->         if (count < 1)
->                 return -EINVAL;
-> @@ -834,10 +946,12 @@ static int aspeed_pwm_tacho_probe(struct platform_device *pdev)
->
->         for_each_child_of_node(np, child) {
->                 ret = aspeed_create_fan(dev, child, priv);
-> -               of_node_put(child);
-> -               if (ret)
-> +               if (ret) {
-> +                       of_node_put(child);
->                         return ret;
-> +               }
->         }
-> +       of_node_put(child);
-
-I'm not sure about these.
-
-Cheers,
-
-Joel
+SGksIEpvZWwuDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogam9lbC5z
+dGFuQGdtYWlsLmNvbSBbbWFpbHRvOmpvZWwuc3RhbkBnbWFpbC5jb21dIE9uIEJlaGFsZiBPZiBK
+b2VsDQo+IFN0YW5sZXkNCj4gU2VudDogV2VkbmVzZGF5LCBKdWx5IDI2LCAyMDE3IDk6NDggQU0N
+Cj4gVG86IE15a29sYSBLb3N0ZW5vayA8Y19teWtvbGFrQG1lbGxhbm94LmNvbT4NCj4gQ2M6IEd1
+ZW50ZXIgUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5ldD47IEplYW4gRGVsdmFyZQ0KPiA8amRlbHZh
+cmVAc3VzZS5jb20+OyBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5vcmc7IEphZ2hhdGhpc3dhcmkN
+Cj4gUmFua2FwcGFnb3VuZGVyIE5hdGFyYWphbiA8amFnaHVAZ29vZ2xlLmNvbT47IE9oYWQgT3oN
+Cj4gPG9oYWRvQG1lbGxhbm94LmNvbT47IFZhZGltIFBhc3Rlcm5hayA8dmFkaW1wQG1lbGxhbm94
+LmNvbT47DQo+IFBhdHJpY2sgVmVudHVyZSA8dmVudHVyZUBnb29nbGUuY29tPjsgT3BlbkJNQyBN
+YWlsbGlzdA0KPiA8b3BlbmJtY0BsaXN0cy5vemxhYnMub3JnPjsgUm9iIEhlcnJpbmcgPHJvYmgr
+ZHRAa2VybmVsLm9yZz4NCj4gU3ViamVjdDogUmU6IFtwYXRjaCB2M10gaHdtb246IChhc3BlZWQt
+cHdtLXRhY2hvKSBjb29saW5nIGRldmljZSBzdXBwb3J0Lg0KPiANCj4gSGkgTXlrb2xhLA0KPiAN
+Cj4gT24gVHVlLCBKdWwgMjUsIDIwMTcgYXQgMTE6NDcgUE0sIE15a29sYSBLb3N0ZW5vaw0KPiA8
+Y19teWtvbGFrQG1lbGxhbm94LmNvbT4gd3JvdGU6DQo+ID4gQWRkIHN1cHBvcnQgaW4gYXNwZWVk
+LXB3bS10YWNobyBkcml2ZXIgZm9yIGNvb2xpbmcgZGV2aWNlIGNyZWF0aW9uLg0KPiA+IFRoaXMg
+Y29vbGluZyBkZXZpY2UgY291bGQgYmUgYm91bmQgdG8gYSB0aGVybWFsIHpvbmUgZm9yIHRoZSB0
+aGVybWFsDQo+ID4gY29udHJvbC4gRGV2aWNlIHdpbGwgYXBwZWFyIGluIC9zeXMvY2xhc3MvdGhl
+cm1hbCBmb2xkZXIgYXMNCj4gPiBjb29saW5nX2RldmljZVguIFRoZW4gaXQgY291bGQgYmUgYm91
+bmQgdG8gcGFydGljdWxhciB0aGVybWFsIHpvbmVzLg0KPiA+IEFsbG93IHNwZWNpZmljYXRpb24g
+b2YgdGhlIGNvb2xpbmcgbGV2ZWxzIHZlY3RvciAtIFBXTSBkdXR5IGN5Y2xlDQo+ID4gdmFsdWVz
+IGluIGEgcmFuZ2UgZnJvbSAwIHRvIDI1NSB3aGljaCBjb3JyZXNwb25kIHRvIHRoZXJtYWwgY29v
+bGluZw0KPiA+IHN0YXRlcy4NCj4gPg0KPiA+IHYxIC0+IHYyOg0KPiA+ICAtIFJlbW92ZSBkZXZp
+Y2UgdHJlZSBiaW5kaW5nIGZpbGUgZnJvbSB0aGUgcGF0Y2guDQo+ID4gIC0gTW92ZSBvZl9ub2Rl
+X3B1dCBvdXQgb2YgY3ljbGUgYmVjYXVzZSBvZl9nZXRfbmV4dF9jaGlsZA0KPiA+ICAgIGFscmVh
+ZHkgZG8gb2ZfcHV0X25vZGUgb24gcHJldmlvdXMgY2hpbGQuDQo+ID4NCj4gPiB2MiAtPiB2MzoN
+Cj4gPiAgUG9pbnRlZCBvdXQgYnkgUm9iIEhlcnJpbmc6DQo+ID4gIC0gUHV0IGNvb2xpbmctbGV2
+ZWxzIHVuZGVyIGZhbiBzdWJub2Rlcy4NCj4gDQo+IExvb2tpbmcgYmV0dGVyISBJIGhhdmUgYSBm
+ZXcgY29tbWVudHMgYmVsb3cuIFNvbWUgYXJlIG5pdHMgKHNtYWxsIGlzc3Vlcw0KPiB0aGF0IGFy
+ZW4ndCBhIGJpZyBkZWFsKSwgYnV0IEkgY2hvc2UgdG8gcG9pbnQgdGhlbSBvdXQgc28geW91IGxl
+YXJuIGZvciBuZXh0DQo+IHRpbWUuIElmIHlvdSBoYXZlIGFueSBxdWVzdGlvbnMgdGhlbiBwbGVh
+c2UgYXNrLg0KPiANCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IE15a29sYSBLb3N0ZW5vayA8Y19t
+eWtvbGFrQG1lbGxhbm94LmNvbT4NCj4gPiAtLS0NCj4gDQo+IENvbnZlbnRpb24gaXMgdG8gc3Rp
+Y2sgdGhlIGNoYW5nZXMgYmV0d2VlbiB2ZXJzaW9ucyAodGhlIHYyLT4gdjMgYml0cykgZG93bg0K
+PiBoZXJlLCBzbyB0aGF0IGl0IGRvZXNuJ3QgZW5kIHVwIGluIHRoZSBmaW5hbCBjb21taXQgbWVz
+c2FnZS4NCj4gDQoNCkFjay4NCg0KPiANCj4gPiAgZHJpdmVycy9od21vbi9hc3BlZWQtcHdtLXRh
+Y2hvLmMgfCAxMTgNCj4gPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0N
+Cj4gPiAgMSBmaWxlIGNoYW5nZWQsIDExNiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0K
+PiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vYXNwZWVkLXB3bS10YWNoby5jDQo+
+ID4gYi9kcml2ZXJzL2h3bW9uL2FzcGVlZC1wd20tdGFjaG8uYw0KPiA+IGluZGV4IGRkZmU2NmIu
+LmFlOGRmZWUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9od21vbi9hc3BlZWQtcHdtLXRhY2hv
+LmMNCj4gPiArKysgYi9kcml2ZXJzL2h3bW9uL2FzcGVlZC1wd20tdGFjaG8uYw0KPiA+IEBAIC0y
+MCw2ICsyMCw3IEBADQo+ID4gICNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybV9kZXZpY2UuaD4NCj4g
+PiAgI2luY2x1ZGUgPGxpbnV4L3N5c2ZzLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9yZWdtYXAu
+aD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L3RoZXJtYWwuaD4NCj4gPg0KPiA+ICAvKiBBU1BFRUQg
+UFdNICYgRkFOIFRhY2ggUmVnaXN0ZXIgRGVmaW5pdGlvbiAqLw0KPiA+ICAjZGVmaW5lIEFTUEVF
+RF9QVENSX0NUUkwgICAgICAgICAgICAgICAweDAwDQo+ID4gQEAgLTE2Niw2ICsxNjcsMTYgQEAN
+Cj4gPiAgLyogSG93IGxvbmcgd2Ugc2xlZXAgaW4gdXMgd2hpbGUgd2FpdGluZyBmb3IgYW4gUlBN
+IHJlc3VsdC4gKi8NCj4gPiAgI2RlZmluZSBBU1BFRURfUlBNX1NUQVRVU19TTEVFUF9VU0VDICAg
+NTAwDQo+ID4NCj4gPiArc3RydWN0IGFzcGVlZF9jb29saW5nX2RldmljZSB7DQo+ID4gKyAgICAg
+ICBjaGFyIG5hbWVbMTZdOw0KPiA+ICsgICAgICAgc3RydWN0IGFzcGVlZF9wd21fdGFjaG9fZGF0
+YSAqcHJpdjsNCj4gPiArICAgICAgIHN0cnVjdCB0aGVybWFsX2Nvb2xpbmdfZGV2aWNlICp0Y2Rl
+djsNCj4gPiArICAgICAgIGludCBwd21fcG9ydDsNCj4gPiArICAgICAgIHU4ICpjb29saW5nX2xl
+dmVsczsNCj4gPiArICAgICAgIHU4IG1heF9zdGF0ZTsNCj4gPiArICAgICAgIHU4IGN1cl9zdGF0
+ZTsNCj4gPiArfTsNCj4gPiArDQo+ID4gIHN0cnVjdCBhc3BlZWRfcHdtX3RhY2hvX2RhdGEgew0K
+PiA+ICAgICAgICAgc3RydWN0IHJlZ21hcCAqcmVnbWFwOw0KPiA+ICAgICAgICAgdW5zaWduZWQg
+bG9uZyBjbGtfZnJlcTsNCj4gPiBAQCAtMTgwLDYgKzE5MSw3IEBAIHN0cnVjdCBhc3BlZWRfcHdt
+X3RhY2hvX2RhdGEgew0KPiA+ICAgICAgICAgdTggcHdtX3BvcnRfdHlwZVs4XTsNCj4gPiAgICAg
+ICAgIHU4IHB3bV9wb3J0X2Zhbl9jdHJsWzhdOw0KPiA+ICAgICAgICAgdTggZmFuX3RhY2hfY2hf
+c291cmNlWzE2XTsNCj4gPiArICAgICAgIHN0cnVjdCBhc3BlZWRfY29vbGluZ19kZXZpY2UgKmNk
+ZXZbOF07DQo+ID4gICAgICAgICBjb25zdCBzdHJ1Y3QgYXR0cmlidXRlX2dyb3VwICpncm91cHNb
+M107ICB9Ow0KPiA+DQo+ID4gQEAgLTc2NSw2ICs3NzcsOTcgQEAgc3RhdGljIHZvaWQNCj4gYXNw
+ZWVkX2NyZWF0ZV9mYW5fdGFjaF9jaGFubmVsKHN0cnVjdCBhc3BlZWRfcHdtX3RhY2hvX2RhdGEg
+KnByaXYsDQo+ID4gICAgICAgICB9DQo+ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgaW50DQo+ID4g
+K2FzcGVlZF9wd21fY3pfZ2V0X21heF9zdGF0ZShzdHJ1Y3QgdGhlcm1hbF9jb29saW5nX2Rldmlj
+ZSAqdGNkZXYsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcg
+KnN0YXRlKSB7DQo+ID4gKyAgICAgICBzdHJ1Y3QgYXNwZWVkX2Nvb2xpbmdfZGV2aWNlICpjZGV2
+ID0NCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChzdHJ1Y3QgYXNwZWVkX2Nv
+b2xpbmdfZGV2aWNlDQo+ID4gKyopdGNkZXYtPmRldmRhdGE7DQo+ID4gKw0KPiA+ICsgICAgICAg
+KnN0YXRlID0gY2Rldi0+bWF4X3N0YXRlOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiAwOw0K
+PiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50DQo+ID4gK2FzcGVlZF9wd21fY3pfZ2V0X2N1
+cl9zdGF0ZShzdHJ1Y3QgdGhlcm1hbF9jb29saW5nX2RldmljZSAqdGNkZXYsDQo+ID4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcgKnN0YXRlKSB7DQo+ID4gKyAgICAg
+ICBzdHJ1Y3QgYXNwZWVkX2Nvb2xpbmdfZGV2aWNlICpjZGV2ID0NCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIChzdHJ1Y3QgYXNwZWVkX2Nvb2xpbmdfZGV2aWNlDQo+ID4gKyop
+dGNkZXYtPmRldmRhdGE7DQo+ID4gKw0KPiA+ICsgICAgICAgKnN0YXRlID0gY2Rldi0+Y3VyX3N0
+YXRlOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtz
+dGF0aWMgaW50DQo+ID4gK2FzcGVlZF9wd21fY3pfc2V0X2N1cl9zdGF0ZShzdHJ1Y3QgdGhlcm1h
+bF9jb29saW5nX2RldmljZSAqdGNkZXYsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHVuc2lnbmVkIGxvbmcgc3RhdGUpIHsNCj4gPiArICAgICAgIHN0cnVjdCBhc3BlZWRfY29vbGlu
+Z19kZXZpY2UgKmNkZXYgPQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKHN0
+cnVjdCBhc3BlZWRfY29vbGluZ19kZXZpY2UNCj4gPiArKil0Y2Rldi0+ZGV2ZGF0YTsNCj4gDQo+
+IFlvdSBjYW4gZHJvcCB0aGUgY2FzdCwgYXMgZGV2ZGF0YSBpcyBhIHZvaWQgKjoNCj4gDQo+ICAg
+ICAgIHN0cnVjdCBhc3BlZWRfY29vbGluZ19kZXZpY2UgKmNkZXYgPSB0Y2Rldi0+ZGV2ZGF0YTsN
+Cj4gDQoNCkFjay4NCg0KPiA+ICsNCj4gPiArICAgICAgIGlmIChzdGF0ZSA+IGNkZXYtPm1heF9z
+dGF0ZSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+ID4gKw0KPiA+ICsg
+ICAgICAgY2Rldi0+Y3VyX3N0YXRlID0gc3RhdGU7DQo+ID4gKyAgICAgICBjZGV2LT5wcml2LT5w
+d21fcG9ydF9mYW5fY3RybFtjZGV2LT5wd21fcG9ydF0gPSAqKGNkZXYtDQo+ID5jb29saW5nX2xl
+dmVscw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICArDQo+ID4gKyBjZGV2LT5jdXJfc3RhdGUpOw0KPiANCj4gVGhhdCBwb2ludGVy
+IG1hdGhzIGxvb2tzIHNjYXJ5IDopIEhvdyBhYm91dCB0aGlzIGluc3RlYWQ/DQo+IA0KPiAgICAg
+ICAgY2Rldi0+cHJpdi0+cHdtX3BvcnRfZmFuX2N0cmxbY2Rldi0+cHdtX3BvcnRdID0NCj4gY2Rl
+di0+Y29vbGluZ19sZXZlbHNbY2Rldi0+Y3VyX3N0YXRlXQ0KPiANCj4gDQoNCkFjay4NCg0KPiA+
+ICsgICAgICAgYXNwZWVkX3NldF9wd21fcG9ydF9mYW5fY3RybChjZGV2LT5wcml2LCBjZGV2LT5w
+d21fcG9ydCwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKihjZGV2
+LT5jb29saW5nX2xldmVscyArDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgY2Rldi0+Y3VyX3N0YXRlKSk7DQo+IA0KPiBTYW1lIGhlcmU6DQo+IA0KPiAgICAgICAg
+YXNwZWVkX3NldF9wd21fcG9ydF9mYW5fY3RybChjZGV2LT5wcml2LCBjZGV2LT5wd21fcG9ydCwN
+Cj4gDQoNCkFjay4NCg0KPiBjZGV2LT5jb29saW5nX2xldmVsc1tjZGV2LT5jdXJfc3RhdGVdKTsN
+Cj4gDQo+ID4gKw0KPiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0
+YXRpYyBjb25zdCBzdHJ1Y3QgdGhlcm1hbF9jb29saW5nX2RldmljZV9vcHMgYXNwZWVkX3B3bV9j
+b29sX29wcyA9DQo+IHsNCj4gPiArICAgICAgIC5nZXRfbWF4X3N0YXRlID0gYXNwZWVkX3B3bV9j
+el9nZXRfbWF4X3N0YXRlLA0KPiA+ICsgICAgICAgLmdldF9jdXJfc3RhdGUgPSBhc3BlZWRfcHdt
+X2N6X2dldF9jdXJfc3RhdGUsDQo+ID4gKyAgICAgICAuc2V0X2N1cl9zdGF0ZSA9IGFzcGVlZF9w
+d21fY3pfc2V0X2N1cl9zdGF0ZSwgfTsNCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgYXNwZWVkX2Ny
+ZWF0ZV9wd21fY29vbGluZyhzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBzdHJ1Y3QgZGV2aWNlX25vZGUgKmNoaWxkLA0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgc3RydWN0IGFzcGVlZF9wd21fdGFjaG9fZGF0YSAqcHJpdiwNCj4g
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgIHUzMiBwd21fcG9ydCwgdTggbnVtX2xldmVs
+KQ0KPiANCj4gQ2FuIHdlIGNhbGwgdGhpcyBudW1fbGV2ZWxzIGluc3RlYWQgb2YgbnVtX2xldmVs
+Pw0KPiANCg0KQWNrLg0KDQo+ID4gK3sNCj4gPiArICAgICAgIGludCByZXQ7DQo+ID4gKw0KPiA+
+ICsgICAgICAgcHJpdi0+Y2Rldltwd21fcG9ydF0gPSBkZXZtX2t6YWxsb2MoZGV2LCBzaXplb2Yo
+KnByaXYtDQo+ID5jZGV2W3B3bV9wb3J0XSksDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBHRlBfS0VSTkVMKTsNCj4gDQo+IFRoaXMgZnVuY3Rpb24gd291
+bGQgYmUgZWFzaWVyIHRvIHJlYWQgaWYgd2UgdXNlZCBhIGxvY2FsIHZhcmlhYmxlOg0KPiANCj4g
+c3RydWN0IHB3bV9wb3J0ICpwb3J0Ow0KPiBwb3J0ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9m
+KCpwb3J0KSwgR0ZQX0tFUk5FTCk7DQo+IA0KPiBUaGVuIGF0IHRoZSBib3R0b20gb2YgdGhlIGZ1
+bmN0aW9uLCBkbw0KPiANCj4gcHJpdi0+Y2Rldltwd21fcG9ydF0gPSBwb3J0Ow0KPiANCj4gDQoN
+CkxvY2FsIHZhcmlhYmxlIGl0IG9rLiBCdXQgaXQncyBub3QgcHdtX3BvcnQgKnBvcnQsIGl0IHdp
+bGwgYmUgIGFzcGVlZF9jb29saW5nX2RldmljZSAqY2Rldi4NCg0KPiA+ICsgICAgICAgaWYgKCFw
+cml2LT5jZGV2W3B3bV9wb3J0XSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9NRU07
+DQo+ID4gKw0KPiA+ICsgICAgICAgcHJpdi0+Y2Rldltwd21fcG9ydF0tPmNvb2xpbmdfbGV2ZWxz
+ID0gZGV2bV9remFsbG9jKGRldiwNCj4gPiArIG51bV9sZXZlbCAqDQo+IA0KPiBUaGUgc2l6ZW9m
+KDgpIGlzbid0IHVzZWZ1bCwgeW91IGNvdWxkIGRyb3AgaXQuDQo+IA0KDQpBY2suDQoNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBzaXplb2YodTgpLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIEdGUF9LRVJORUwpOw0KPiA+ICsgICAgICAgaWYgKCFwcml2
+LT5jZGV2W3B3bV9wb3J0XS0+Y29vbGluZ19sZXZlbHMpDQo+ID4gKyAgICAgICAgICAgICAgIHJl
+dHVybiAtRU5PTUVNOw0KPiA+ICsNCj4gPiArICAgICAgIHByaXYtPmNkZXZbcHdtX3BvcnRdLT5t
+YXhfc3RhdGUgPSBudW1fbGV2ZWwgLSAxOw0KPiA+ICsgICAgICAgcmV0ID0gb2ZfcHJvcGVydHlf
+cmVhZF91OF9hcnJheShjaGlsZCwgImNvb2xpbmctbGV2ZWxzIiwNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgcHJpdi0+Y2Rldltwd21fcG9ydF0tPmNvb2xpbmdf
+bGV2ZWxzLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBudW1f
+bGV2ZWwpOw0KPiA+ICsgICAgICAgaWYgKHJldCkgew0KPiA+ICsgICAgICAgICAgICAgICBkZXZf
+ZXJyKGRldiwgIlByb3BlcnR5ICdjb29saW5nLWxldmVscycgY2Fubm90IGJlIHJlYWQuXG4iKTsN
+Cj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArICAgICAgIH0NCj4gPiArICAg
+ICAgIHNwcmludGYocHJpdi0+Y2Rldltwd21fcG9ydF0tPm5hbWUsICIlcyVkIiwgY2hpbGQtPm5h
+bWUsDQo+ID4gKyBwd21fcG9ydCk7DQo+ID4gKw0KPiA+ICsgICAgICAgcHJpdi0+Y2Rldltwd21f
+cG9ydF0tPnRjZGV2ID0NCj4gdGhlcm1hbF9vZl9jb29saW5nX2RldmljZV9yZWdpc3RlcihjaGls
+ZCwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBw
+cml2LT5jZGV2W3B3bV9wb3J0XS0+bmFtZSwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBwcml2LT5jZGV2W3B3bV9wb3J0XSwNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmYXNwZWVkX3B3bV9jb29s
+X29wcyk7DQo+ID4gKyAgICAgICBpZiAoUFRSX0VSUl9PUl9aRVJPKHByaXYtPmNkZXZbcHdtX3Bv
+cnRdLT50Y2RldikpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKHByaXYtPmNk
+ZXZbcHdtX3BvcnRdLT50Y2Rldik7DQo+IA0KPiBJIHRoaW5rIHlvdSBtZWFudCB0aGlzOg0KPiAN
+Cj4gaWYgKElTX0VSUihwcml2LT5jZGV2W3B3bV9wb3J0XS0+dGNkZXYpKQ0KPiAgICByZXR1cm4g
+UFRSX0VSUihwcml2LT5jZGV2W3B3bV9wb3J0XS0+dGNkZXYpOw0KPiANCg0KQWNrLg0KDQo+ID4g
+Kw0KPiA+ICsgICAgICAgcHJpdi0+Y2Rldltwd21fcG9ydF0tPnByaXYgPSBwcml2Ow0KPiA+ICsg
+ICAgICAgcHJpdi0+Y2Rldltwd21fcG9ydF0tPnB3bV9wb3J0ID0gcHdtX3BvcnQ7DQo+ID4gKw0K
+PiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gIHN0YXRpYyBpbnQgYXNw
+ZWVkX2NyZWF0ZV9mYW4oc3RydWN0IGRldmljZSAqZGV2LA0KPiA+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgc3RydWN0IGRldmljZV9ub2RlICpjaGlsZCwNCj4gPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHN0cnVjdCBhc3BlZWRfcHdtX3RhY2hvX2RhdGEgKnByaXYpIEBADQo+
+ID4gLTc3OCw2ICs4ODEsMTUgQEAgc3RhdGljIGludCBhc3BlZWRfY3JlYXRlX2ZhbihzdHJ1Y3Qg
+ZGV2aWNlICpkZXYsDQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ID4gICAgICAg
+ICBhc3BlZWRfY3JlYXRlX3B3bV9wb3J0KHByaXYsICh1OClwd21fcG9ydCk7DQo+ID4NCj4gPiAr
+ICAgICAgIHJldCA9IG9mX3Byb3BlcnR5X2NvdW50X3U4X2VsZW1zKGNoaWxkLCAiY29vbGluZy1s
+ZXZlbHMiKTsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAocmV0ID4gMCkgew0KPiA+ICsgICAgICAg
+ICAgICAgICByZXQgPSBhc3BlZWRfY3JlYXRlX3B3bV9jb29saW5nKGRldiwgY2hpbGQsIHByaXYs
+IHB3bV9wb3J0LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHJldCk7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArICAgICAgIH0NCj4gPiArDQo+ID4gICAg
+ICAgICBjb3VudCA9IG9mX3Byb3BlcnR5X2NvdW50X3U4X2VsZW1zKGNoaWxkLCAiYXNwZWVkLGZh
+bi10YWNoLWNoIik7DQo+ID4gICAgICAgICBpZiAoY291bnQgPCAxKQ0KPiA+ICAgICAgICAgICAg
+ICAgICByZXR1cm4gLUVJTlZBTDsNCj4gPiBAQCAtODM0LDEwICs5NDYsMTIgQEAgc3RhdGljIGlu
+dCBhc3BlZWRfcHdtX3RhY2hvX3Byb2JlKHN0cnVjdA0KPiA+IHBsYXRmb3JtX2RldmljZSAqcGRl
+dikNCj4gPg0KPiA+ICAgICAgICAgZm9yX2VhY2hfY2hpbGRfb2Zfbm9kZShucCwgY2hpbGQpIHsN
+Cj4gPiAgICAgICAgICAgICAgICAgcmV0ID0gYXNwZWVkX2NyZWF0ZV9mYW4oZGV2LCBjaGlsZCwg
+cHJpdik7DQo+ID4gLSAgICAgICAgICAgICAgIG9mX25vZGVfcHV0KGNoaWxkKTsNCj4gPiAtICAg
+ICAgICAgICAgICAgaWYgKHJldCkNCj4gPiArICAgICAgICAgICAgICAgaWYgKHJldCkgew0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgICAgIG9mX25vZGVfcHV0KGNoaWxkKTsNCj4gPiAgICAgICAg
+ICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4g
+ICAgICAgICB9DQo+ID4gKyAgICAgICBvZl9ub2RlX3B1dChjaGlsZCk7DQo+IA0KPiBJJ20gbm90
+IHN1cmUgYWJvdXQgdGhlc2UuDQo+IA0KPiBDaGVlcnMsDQo+IA0KPiBKb2VsDQoNCklmIENPTkZJ
+R19PRl9VTklUVEVTVCBpcyBzZXQsIHN5c3RlbSBpbml0aWFsaXphdGlvbiAgZmFpbHMgb24gdGhp
+cyBvZl9ub2RlX3B1dC4NCkkgY2hlY2tlZCBhbmQgZm91bmQgdGhhdCBmb3JfZWFjaF9jaGlsZF9v
+Zl9ub2RlIGlzIG1hY3JvIHdpdGNoIHVzZSBfX29mX2dldF9uZXh0X2NoaWxkDQogaW4gY3ljbGUu
+IF9fb2ZfZ2V0X25leHRfY2hpbGQgZG8gb2Zfbm9kZV9wdXQgcHJldmlvdXMgY2hpbGQgYnV0IG5v
+dCBsYXN0Lg0KDQpzdGF0aWMgc3RydWN0IGRldmljZV9ub2RlICpfX29mX2dldF9uZXh0X2NoaWxk
+KGNvbnN0IHN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSwNCgkJCQkJCXN0cnVjdCBkZXZpY2Vfbm9k
+ZSAqcHJldikNCnsNCglzdHJ1Y3QgZGV2aWNlX25vZGUgKm5leHQ7DQoNCglpZiAoIW5vZGUpDQoJ
+CXJldHVybiBOVUxMOw0KDQoJbmV4dCA9IHByZXYgPyBwcmV2LT5zaWJsaW5nIDogbm9kZS0+Y2hp
+bGQ7DQoJZm9yICg7IG5leHQ7IG5leHQgPSBuZXh0LT5zaWJsaW5nKQ0KCQlpZiAob2Zfbm9kZV9n
+ZXQobmV4dCkpDQoJCQlicmVhazsNCglvZl9ub2RlX3B1dChwcmV2KTsNCglyZXR1cm4gbmV4dDsN
+Cn0NCiNkZWZpbmUgX19mb3JfZWFjaF9jaGlsZF9vZl9ub2RlKHBhcmVudCwgY2hpbGQpIFwNCglm
+b3IgKGNoaWxkID0gX19vZl9nZXRfbmV4dF9jaGlsZChwYXJlbnQsIE5VTEwpOyBjaGlsZCAhPSBO
+VUxMOyBcDQoJICAgICBjaGlsZCA9IF9fb2ZfZ2V0X25leHRfY2hpbGQocGFyZW50LCBjaGlsZCkp
+DQoNClNvIGluc2lkZSBjeWNsZSB3ZSBzaG91bGQgbm90IHVzZSBvZl9ub2RlX3B1dCBvbiBlYWNo
+IGNoaWxkLiBXZSBtdXN0IHVzZSBpdCBvbmx5IG9uIGxhc3QgY2hpbGQgaW4gY3ljbGUuDQoNCkFm
+dGVyIHRoaXMgcGF0Y2ggaXMgYWNjZXB0ZWQsIHdlJ2QgbGlrZSB0byBhZGQgQ09ORklHX09GX0RZ
+TkFNSUMgKHdoaWNoIHJlcXVpcmVzIGFkZGluZyBvZiBDT05GSUdfT0ZfVU5JVFRFU1QpIHRvIGFz
+cGVlZF9nNV9kZWZjb25maWcuDQpXZSBuZWVkIENPTkZJR19PRl9EWU5BTUlDIGZvciBob3RwbHVn
+IG9wZXJhdGlvbnMuDQoNCkJlc3QgcmVnYXJkcy4gTXlrb2xhIEtvc3Rlbm9rLg0K
