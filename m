@@ -1,143 +1,269 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-ve1eur01on0055.outbound.protection.outlook.com ([104.47.1.55]:50722
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1750965AbdG0IgZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Jul 2017 04:36:25 -0400
-From: Mykola Kostenok <c_mykolak@mellanox.com>
-To: Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Jaghathiswari Rankappagounder Natarajan" <jaghu@google.com>,
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:46309 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751747AbdG0Iti (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 27 Jul 2017 04:49:38 -0400
+Message-ID: <1501145366.5179.20.camel@aj.id.au>
+Subject: Re: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device support.
+From: Andrew Jeffery <andrew@aj.id.au>
+To: Mykola Kostenok <c_mykolak@mellanox.com>,
+        Joel Stanley <joel@jms.id.au>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
         Jean Delvare <jdelvare@suse.com>, Ohad Oz <ohado@mellanox.com>,
         Vadim Pasternak <vadimp@mellanox.com>,
         Patrick Venture <venture@google.com>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: RE: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device support.
-Date: Thu, 27 Jul 2017 08:36:21 +0000
-Message-ID: <DB5PR05MB1224E9363B110E787E3C16C3EFBE0@DB5PR05MB1224.eurprd05.prod.outlook.com>
+Date: Thu, 27 Jul 2017 18:19:26 +0930
+In-Reply-To: <DB5PR05MB1224E9363B110E787E3C16C3EFBE0@DB5PR05MB1224.eurprd05.prod.outlook.com>
 References: <20170725141727.13105-1-c_mykolak@mellanox.com>
          <CACPK8XeidChD_LT6o8MQBmyJ4r3mPCPfwEX_1REmQJkMNGELeQ@mail.gmail.com>
          <DB5PR05MB1224F329AA1C5BA4B37B4B86EFB90@DB5PR05MB1224.eurprd05.prod.outlook.com>
- <1501135285.5179.16.camel@aj.id.au>
-In-Reply-To: <1501135285.5179.16.camel@aj.id.au>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+         <1501135285.5179.16.camel@aj.id.au>
+         <DB5PR05MB1224E9363B110E787E3C16C3EFBE0@DB5PR05MB1224.eurprd05.prod.outlook.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-BHQe427awUl6Z8UYIvjx"
+Mime-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbmRyZXcgSmVmZmVyeSBbbWFp
-bHRvOmFuZHJld0Bhai5pZC5hdV0NCj4gU2VudDogVGh1cnNkYXksIEp1bHkgMjcsIDIwMTcgOTow
-MSBBTQ0KPiBUbzogTXlrb2xhIEtvc3Rlbm9rIDxjX215a29sYWtAbWVsbGFub3guY29tPjsgSm9l
-bCBTdGFubGV5DQo+IDxqb2VsQGptcy5pZC5hdT4NCj4gQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2Vy
-bmVsLm9yZzsgSmFnaGF0aGlzd2FyaSBSYW5rYXBwYWdvdW5kZXINCj4gTmF0YXJhamFuIDxqYWdo
-dUBnb29nbGUuY29tPjsgSmVhbiBEZWx2YXJlIDxqZGVsdmFyZUBzdXNlLmNvbT47IE9oYWQNCj4g
-T3ogPG9oYWRvQG1lbGxhbm94LmNvbT47IFZhZGltIFBhc3Rlcm5hayA8dmFkaW1wQG1lbGxhbm94
-LmNvbT47DQo+IFBhdHJpY2sgVmVudHVyZSA8dmVudHVyZUBnb29nbGUuY29tPjsgT3BlbkJNQyBN
-YWlsbGlzdA0KPiA8b3BlbmJtY0BsaXN0cy5vemxhYnMub3JnPjsgUm9iIEhlcnJpbmcgPHJvYmgr
-ZHRAa2VybmVsLm9yZz47IEd1ZW50ZXINCj4gUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5ldD4NCj4g
-U3ViamVjdDogUmU6IFtwYXRjaCB2M10gaHdtb246IChhc3BlZWQtcHdtLXRhY2hvKSBjb29saW5n
-IGRldmljZSBzdXBwb3J0Lg0KPiANCj4gSGkgTXlrb2xhLA0KPiANCj4gSSBrbm93IHlvdSd2ZSBz
-ZW50IG91dCBzdWJzZXF1ZW50IHZlcnNpb25zLCBidXQgSSB3YW50ZWQgdG8gYWRkcmVzcyBvbmUg
-b2YNCj4geW91ciBhcmd1bWVudHMgaGVyZToNCj4gDQo+IE9uIFdlZCwgMjAxNy0wNy0yNiBhdCAx
-MTowOCArMDAwMCwgTXlrb2xhIEtvc3Rlbm9rIHdyb3RlOg0KPiA+ID4gPiBAQCAtODM0LDEwICs5
-NDYsMTIgQEAgc3RhdGljIGludCBhc3BlZWRfcHdtX3RhY2hvX3Byb2JlKHN0cnVjdA0KPiA+ID4g
-PiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gPiA+DQo+ID4gPiA+IMKgwqDCoMKgwqDCoMKg
-wqAgZm9yX2VhY2hfY2hpbGRfb2Zfbm9kZShucCwgY2hpbGQpIHsNCj4gPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0ID0gYXNwZWVkX2NyZWF0ZV9mYW4oZGV2LCBjaGls
-ZCwgcHJpdik7DQo+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG9mX25vZGVf
-cHV0KGNoaWxkKTsNCj4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHJl
-dCkNCj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHJldCkgew0KPiA+
-ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgb2Zfbm9k
-ZV9wdXQoY2hpbGQpOw0KPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsNCj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgfQ0KPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgIH0NCj4gPiA+ID4gK8KgwqDCoMKg
-wqDCoCBvZl9ub2RlX3B1dChjaGlsZCk7DQo+ID4gPg0KPiA+ID4gSSdtIG5vdCBzdXJlIGFib3V0
-IHRoZXNlLg0KPiA+ID4NCj4gPiA+IENoZWVycywNCj4gPiA+DQo+ID4gPiBKb2VsDQo+ID4NCj4g
-PiBJZiBDT05GSUdfT0ZfVU5JVFRFU1QgaXMgc2V0LCBzeXN0ZW0gaW5pdGlhbGl6YXRpb27CoCBm
-YWlscyBvbiB0aGlzDQo+IG9mX25vZGVfcHV0Lg0KPiA+IEkgY2hlY2tlZCBhbmQgZm91bmQgdGhh
-dCBmb3JfZWFjaF9jaGlsZF9vZl9ub2RlIGlzIG1hY3JvIHdpdGNoIHVzZQ0KPiA+IF9fb2ZfZ2V0
-X25leHRfY2hpbGQNCj4gPiDCoGluIGN5Y2xlLiBfX29mX2dldF9uZXh0X2NoaWxkIGRvIG9mX25v
-ZGVfcHV0IHByZXZpb3VzIGNoaWxkIGJ1dCBub3QgbGFzdC4NCj4gPg0KPiA+IHN0YXRpYyBzdHJ1
-Y3QgZGV2aWNlX25vZGUgKl9fb2ZfZ2V0X25leHRfY2hpbGQoY29uc3Qgc3RydWN0DQo+ID4gZGV2
-aWNlX25vZGUgKm5vZGUsDQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgc3RydWN0IGRldmljZV9ub2RlDQo+ID4gKnByZXYpIHsNCj4gPiDCoMKgwqDCoMKgwqDCoMKg
-c3RydWN0IGRldmljZV9ub2RlICpuZXh0Ow0KPiA+DQo+ID4gwqDCoMKgwqDCoMKgwqDCoGlmICgh
-bm9kZSkNCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBOVUxMOw0K
-PiA+DQo+ID4gwqDCoMKgwqDCoMKgwqDCoG5leHQgPSBwcmV2ID8gcHJldi0+c2libGluZyA6IG5v
-ZGUtPmNoaWxkOw0KPiA+IMKgwqDCoMKgwqDCoMKgwqBmb3IgKDsgbmV4dDsgbmV4dCA9IG5leHQt
-PnNpYmxpbmcpDQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAob2Zfbm9k
-ZV9nZXQobmV4dCkpDQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgYnJlYWs7DQo+ID4gwqDCoMKgwqDCoMKgwqDCoG9mX25vZGVfcHV0KHByZXYpOw0K
-PiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gbmV4dDsNCj4gPiB9DQo+ID4gI2RlZmluZSBfX2Zv
-cl9lYWNoX2NoaWxkX29mX25vZGUocGFyZW50LCBjaGlsZCkgXA0KPiA+IMKgwqDCoMKgwqDCoMKg
-wqBmb3IgKGNoaWxkID0gX19vZl9nZXRfbmV4dF9jaGlsZChwYXJlbnQsIE5VTEwpOyBjaGlsZCAh
-PSBOVUxMOw0KPiA+IFwNCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2hpbGQgPSBfX29m
-X2dldF9uZXh0X2NoaWxkKHBhcmVudCwgY2hpbGQpKQ0KPiA+DQo+ID4gU28gaW5zaWRlIGN5Y2xl
-IHdlIHNob3VsZCBub3QgdXNlIG9mX25vZGVfcHV0IG9uIGVhY2ggY2hpbGQuIFdlIG11c3QgdXNl
-DQo+IGl0IG9ubHkgb24gbGFzdCBjaGlsZCBpbiBjeWNsZS4NCj4gDQo+IEkgd2FzIGp1c3QgbG9v
-a2luZyBhdCB0aGlzIG15c2VsZiBmb3IgYSBkaWZmZXJlbnQgZHJpdmVyLCBhbmQgSSBkb24ndCB0
-aGluayB0aGlzDQo+IGFyZ3VtZW50IGlzIHJpZ2h0LiBUaGUgbmF0dXJhbCB0ZXJtaW5hdGluZyBj
-b25kaXRpb24gb2YgdGhlIGxvb3AgaXMgY2hpbGQgPT0NCj4gTlVMTC4gY2hpbGQgPT0gTlVMTCBv
-Y2N1cnMgaWYgd2UgaGF2ZSB6ZXJvLW9yLW1vcmUtIGNoaWxkcmVuOyB0aGUgY2hpbGQgaXMNCj4g
-YWx3YXlzIGluaXRpYWxpc2VkIGFzIHBhcnQgb2YgdGhlIGxvb3AgaGVhZGVyIGFuZCB3b3VsZCBi
-ZSBOVUxMIGlmIHRoZXJlIGFyZQ0KPiBubyBjaGlsZHJlbi4gSWYgd2UgaGF2ZSBtb3JlIHRoYW4g
-b25lIGNoaWxkLCB0aGUgcmVmZXJlbmNlIHRvIHRoZSBsYXN0IHZhbGlkDQo+IGNoaWxkIGlzIHBh
-c3NlZCB0byBvZl9ub2RlX3B1dCgpIGluIF9fb2ZfZ2V0X25leHRfY2hpbGQoKSBpbiBvcmRlciB0
-byByZXR1cm4NCj4gdGhlIHRlcm1pbmF0aW5nIE5VTEwuIEdpdmVuDQo+IF9fb2ZfZ2V0X25leHRf
-Y2hpbGQoKSBpcyBwYXNzZWQgdGhlIGxhc3Qgbm9kZSBhbmQgdGhlIHJlc3VsdCBpcyBOVUxMLCB0
-aGUgY2FsbA0KPiB0byBvZl9ub2RlX3B1dCgpIGFmdGVyIHRoZSBsb29wIGlzIGFsd2F5cyBpbnZv
-a2VkIG9uIE5VTEwsIHdoaWNoIHBlcmZvcm1zDQo+IGFuIGVhcmx5IHJldHVybi4NCj4gDQo+IEFz
-IHN1Y2ggSSB0aGluayBpdCBpcyB1bm5lY2Vzc2FyeS4NCj4gDQo+IENoZWVycywNCj4gDQo+IEFu
-ZHJldw0KDQpPaywgSSBhZ3JlZSB0aGF0IHdlIGRvbuKAmXQgbmVlZCBvZl9ub2RlX3B1dCBhZnRl
-ciBsb29wLiANCldlIG11c3QgZG8gb2Zfbm9kZV9wdXQgb25seSBpbiBjYXNlIG9mIGVycm9yLg0K
-DQpTbyBJIHdpbGwgc2VuZCBuZXh0IHBhdGNoIHY2IHdpdGggdGhpczoNCiAgICAgICAgICAgZm9y
-X2VhY2hfY2hpbGRfb2Zfbm9kZShucCwgY2hpbGQpIHsNCiAgICAgICAgICAgICAgICAgICByZXQg
-PSBhc3BlZWRfY3JlYXRlX2ZhbihkZXYsIGNoaWxkLCBwcml2KTsNCiAgLSAgICAgICAgICAgICAg
-IG9mX25vZGVfcHV0KGNoaWxkKTsNCiAgLSAgICAgICAgICAgICAgIGlmIChyZXQpDQogKyAgICAg
-ICAgICAgICAgIGlmIChyZXQpIHsNCiArICAgICAgICAgICAgICAgICAgICAgICBvZl9ub2RlX3B1
-dChjaGlsZCk7DQogICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQogKyAgICAg
-ICAgICAgICAgIH0NCiAgICAgICAgICB9DQoNCldpdGhvdXQgaXQgYW5kIHdpdGggQ09ORklHX09G
-X1VOSVRURVNUIHdlIHNlZSB0aGlzOg0KWyAgICAzLjAwMDAwMF0gWzw4MDAxMDA4MD5dICh1bndp
-bmRfYmFja3RyYWNlKSBmcm9tIFs8ODAwMGQ5MzQ+XSAoc2hvd19zdGFjaysweDIwLzB4MjQpDQpb
-ICAgIDMuMDAwMDAwXSBbPDgwMDBkOTM0Pl0gKHNob3dfc3RhY2spIGZyb20gWzw4MDFkYmY4Yz5d
-IChkdW1wX3N0YWNrKzB4MjAvMHgyOCkNClsgICAgMy4wMDAwMDBdIFs8ODAxZGJmOGM+XSAoZHVt
-cF9zdGFjaykgZnJvbSBbPDgwMzBhZDE0Pl0gKG9mX25vZGVfcmVsZWFzZSsweDk4LzB4YTApDQpb
-ICAgIDMuMDAwMDAwXSBbPDgwMzBhZDE0Pl0gKG9mX25vZGVfcmVsZWFzZSkgZnJvbSBbPDgwMWRl
-MGVjPl0gKGtvYmplY3RfcHV0KzB4ZjgvMHgxZWMpDQpbICAgIDMuMDAwMDAwXSBbPDgwMWRlMGVj
-Pl0gKGtvYmplY3RfcHV0KSBmcm9tIFs8ODAzMGEzNDA+XSAob2Zfbm9kZV9wdXQrMHgyNC8weDI4
-KQ0KWyAgICAzLjAwMDAwMF0gWzw4MDMwYTM0MD5dIChvZl9ub2RlX3B1dCkgZnJvbSBbPDgwMzA1
-ZmU0Pl0gKF9fb2ZfZ2V0X25leHRfY2hpbGQrMHg1OC8weDcwKQ0KWyAgICAzLjAwMDAwMF0gWzw4
-MDMwNWZlND5dIChfX29mX2dldF9uZXh0X2NoaWxkKSBmcm9tIFs8ODAzMDY2OGM+XSAob2ZfZ2V0
-X25leHRfY2hpbGQrMHgyMC8weDI4KQ0KWyAgICAzLjAwMDAwMF0gWzw4MDMwNjY4Yz5dIChvZl9n
-ZXRfbmV4dF9jaGlsZCkgZnJvbSBbPDgwMmUzOWFjPl0gKGFzcGVlZF9wd21fdGFjaG9fcHJvYmUr
-MHg0OTAvMHg1NzQpDQpbICAgIDMuMDAwMDAwXSBbPDgwMmUzOWFjPl0gKGFzcGVlZF9wd21fdGFj
-aG9fcHJvYmUpIGZyb20gWzw4MDI0NDA5MD5dIChwbGF0Zm9ybV9kcnZfcHJvYmUrMHg2MC8weGMw
-KQ0KWyAgICAzLjAwMDAwMF0gWzw4MDI0NDA5MD5dIChwbGF0Zm9ybV9kcnZfcHJvYmUpIGZyb20g
-Wzw4MDI0MjQwOD5dIChkcml2ZXJfcHJvYmVfZGV2aWNlKzB4MjgwLzB4NDRjKQ0KWyAgICAzLjAw
-MDAwMF0gWzw4MDI0MjQwOD5dIChkcml2ZXJfcHJvYmVfZGV2aWNlKSBmcm9tIFs8ODAyNDI2YzQ+
-XSAoX19kcml2ZXJfYXR0YWNoKzB4ZjAvMHgxMDQpDQpbICAgIDMuMDAwMDAwXSBbPDgwMjQyNmM0
-Pl0gKF9fZHJpdmVyX2F0dGFjaCkgZnJvbSBbPDgwMjQwM2Q4Pl0gKGJ1c19mb3JfZWFjaF9kZXYr
-MHg3Yy8weGIwKQ0KWyAgICAzLjAwMDAwMF0gWzw4MDI0MDNkOD5dIChidXNfZm9yX2VhY2hfZGV2
-KSBmcm9tIFs8ODAyNDI4NmM+XSAoZHJpdmVyX2F0dGFjaCsweDI4LzB4MzApDQpbICAgIDMuMDAw
-MDAwXSBbPDgwMjQyODZjPl0gKGRyaXZlcl9hdHRhY2gpIGZyb20gWzw4MDI0MGUzOD5dIChidXNf
-YWRkX2RyaXZlcisweDE0Yy8weDI2OCkNClsgICAgMy4wMDAwMDBdIFs8ODAyNDBlMzg+XSAoYnVz
-X2FkZF9kcml2ZXIpIGZyb20gWzw4MDI0MzJmOD5dIChkcml2ZXJfcmVnaXN0ZXIrMHg4OC8weDEw
-NCkNClsgICAgMy4wMDAwMDBdIFs8ODAyNDMyZjg+XSAoZHJpdmVyX3JlZ2lzdGVyKSBmcm9tIFs8
-ODAyNDRjZDA+XSAoX19wbGF0Zm9ybV9kcml2ZXJfcmVnaXN0ZXIrMHg0MC8weDU0KQ0KWyAgICAz
-LjAwMDAwMF0gWzw4MDI0NGNkMD5dIChfX3BsYXRmb3JtX2RyaXZlcl9yZWdpc3RlcikgZnJvbSBb
-PDgwNWJmYzY0Pl0gKGFzcGVlZF9wd21fdGFjaG9fZHJpdmVyX2luaXQrMHgxOC8weDIwKQ0KWyAg
-ICAzLjAwMDAwMF0gWzw4MDViZmM2ND5dIChhc3BlZWRfcHdtX3RhY2hvX2RyaXZlcl9pbml0KSBm
-cm9tIFs8ODA1OWRlNzA+XSAoZG9fb25lX2luaXRjYWxsKzB4YWMvMHgxNjgpDQpbICAgIDMuMDAw
-MDAwXSBbPDgwNTlkZTcwPl0gKGRvX29uZV9pbml0Y2FsbCkgZnJvbSBbPDgwNTllMDQwPl0gKGtl
-cm5lbF9pbml0X2ZyZWVhYmxlKzB4MTE0LzB4MWNjKQ0KWyAgICAzLjAwMDAwMF0gWzw4MDU5ZTA0
-MD5dIChrZXJuZWxfaW5pdF9mcmVlYWJsZSkgZnJvbSBbPDgwNDA3MmEwPl0gKGtlcm5lbF9pbml0
-KzB4MTgvMHgxMDQpDQpbICAgIDMuMDAwMDAwXSBbPDgwNDA3MmEwPl0gKGtlcm5lbF9pbml0KSBm
-cm9tIFs8ODAwMGE1ZTg+XSAocmV0X2Zyb21fZm9yaysweDE0LzB4MmMpDQpbICAgIDMuMjAwMDAw
-XSBPRjogRVJST1I6IEJhZCBvZl9ub2RlX3B1dCgpIG9uIC9haGIvYXBiL3B3bS10YWNoby1jb250
-cm9sbGVyQDFlNzg2MDAwL2ZhbkAxDQpBbmQga2VybmVsIHBhbmljIGF0IHRoZSBlbmQuDQoNCkJl
-c3QgcmVnYXJkcy4gTXlrb2xhIEtvc3Rlbm9rLg0K
+
+--=-BHQe427awUl6Z8UYIvjx
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, 2017-07-27 at 08:36 +0000, Mykola Kostenok wrote:
+> > -----Original Message-----
+> > > > From: Andrew Jeffery [mailto:andrew@aj.id.au]
+> > Sent: Thursday, July 27, 2017 9:01 AM
+> > > > To: Mykola Kostenok <c_mykolak@mellanox.com>; Joel Stanley
+> > > > <joel@jms.id.au>
+> > > > Cc: linux-hwmon@vger.kernel.org; Jaghathiswari Rankappagounder
+> > > > > > Natarajan <jaghu@google.com>; Jean Delvare <jdelvare@suse.com>;=
+ Ohad
+> > > > > > Oz <ohado@mellanox.com>; Vadim Pasternak <vadimp@mellanox.com>;
+> > > > Patrick Venture <venture@google.com>; OpenBMC Maillist
+> > > > > > <openbmc@lists.ozlabs.org>; Rob Herring <robh+dt@kernel.org>; G=
+uenter
+> > > > Roeck <linux@roeck-us.net>
+> > Subject: Re: [patch v3] hwmon: (aspeed-pwm-tacho) cooling device suppor=
+t.
+> >=20
+> > Hi Mykola,
+> >=20
+> > I know you've sent out subsequent versions, but I wanted to address one=
+ of
+> > your arguments here:
+> >=20
+> > On Wed, 2017-07-26 at 11:08 +0000, Mykola Kostenok wrote:
+> > > > > @@ -834,10 +946,12 @@ static int aspeed_pwm_tacho_probe(struct
+> > > > > platform_device *pdev)
+> > > > >=20
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for_each_child_o=
+f_node(np, child) {
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D aspeed_create_fan(dev, child, pri=
+v);
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 of_node_put(child);
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 if (ret) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_no=
+de_put(child);
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 return ret;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_node_put(child);
+> > > >=20
+> > > > I'm not sure about these.
+> > > >=20
+> > > > Cheers,
+> > > >=20
+> > > > Joel
+> > >=20
+> > > If CONFIG_OF_UNITTEST is set, system initialization=C2=A0 fails on th=
+is
+> >=20
+> > of_node_put.
+> > > I checked and found that for_each_child_of_node is macro witch use
+> > > __of_get_next_child
+> > > =C2=A0in cycle. __of_get_next_child do of_node_put previous child but=
+ not last.
+> > >=20
+> > > static struct device_node *__of_get_next_child(const struct
+> > > device_node *node,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=
+ device_node
+> > > *prev) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device_node *n=
+ext;
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!node)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return NULL;
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0next =3D prev ? prev-=
+>sibling : node->child;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (; next; next =3D=
+ next->sibling)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (of_node_get(next))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+break;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0of_node_put(prev);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return next;
+> > > }
+> > > #define __for_each_child_of_node(parent, child) \
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (child =3D __of_g=
+et_next_child(parent, NULL); child !=3D NULL;
+> > > \
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 child =3D __of_get_next_child(parent, child))
+> > >=20
+> > > So inside cycle we should not use of_node_put on each child. We must =
+use
+> >=20
+> > it only on last child in cycle.
+> >=20
+> > I was just looking at this myself for a different driver, and I don't t=
+hink this
+> > argument is right. The natural terminating condition of the loop is chi=
+ld =3D=3D
+> > NULL. child =3D=3D NULL occurs if we have zero-or-more- children; the c=
+hild is
+> > always initialised as part of the loop header and would be NULL if ther=
+e are
+> > no children. If we have more than one child, the reference to the last =
+valid
+> > child is passed to of_node_put() in __of_get_next_child() in order to r=
+eturn
+> > the terminating NULL. Given
+> > __of_get_next_child() is passed the last node and the result is NULL, t=
+he call
+> > to of_node_put() after the loop is always invoked on NULL, which perfor=
+ms
+> > an early return.
+> >=20
+> > As such I think it is unnecessary.
+> >=20
+> > Cheers,
+> >=20
+> > Andrew
+>=20
+> Ok, I agree that we don=E2=80=99t need of_node_put after loop.=C2=A0
+> We must do of_node_put only in case of error.
+
+Yep, this is the right approach as far as I can see.
+
+Thanks,
+
+Andrew
+
+>=20
+> So I will send next patch v6 with this:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for_eac=
+h_child_of_node(np, child) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D aspeed_create_fan(dev, ch=
+ild, priv);
+> =C2=A0 -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0of_node_put(child);
+> =C2=A0 -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
+> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (ret) {
+> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0of_=
+node_put(child);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0return ret;
+> =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0}
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>=20
+> Without it and with CONFIG_OF_UNITTEST we see this:
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80010080>] (unwind_backtrace) from [=
+<8000d934>] (show_stack+0x20/0x24)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8000d934>] (show_stack) from [<801db=
+f8c>] (dump_stack+0x20/0x28)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<801dbf8c>] (dump_stack) from [<8030a=
+d14>] (of_node_release+0x98/0xa0)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8030ad14>] (of_node_release) from [<=
+801de0ec>] (kobject_put+0xf8/0x1ec)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<801de0ec>] (kobject_put) from [<8030=
+a340>] (of_node_put+0x24/0x28)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8030a340>] (of_node_put) from [<8030=
+5fe4>] (__of_get_next_child+0x58/0x70)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80305fe4>] (__of_get_next_child) fro=
+m [<8030668c>] (of_get_next_child+0x20/0x28)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8030668c>] (of_get_next_child) from =
+[<802e39ac>] (aspeed_pwm_tacho_probe+0x490/0x574)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<802e39ac>] (aspeed_pwm_tacho_probe) =
+from [<80244090>] (platform_drv_probe+0x60/0xc0)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80244090>] (platform_drv_probe) from=
+ [<80242408>] (driver_probe_device+0x280/0x44c)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80242408>] (driver_probe_device) fro=
+m [<802426c4>] (__driver_attach+0xf0/0x104)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<802426c4>] (__driver_attach) from [<=
+802403d8>] (bus_for_each_dev+0x7c/0xb0)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<802403d8>] (bus_for_each_dev) from [=
+<8024286c>] (driver_attach+0x28/0x30)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8024286c>] (driver_attach) from [<80=
+240e38>] (bus_add_driver+0x14c/0x268)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80240e38>] (bus_add_driver) from [<8=
+02432f8>] (driver_register+0x88/0x104)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<802432f8>] (driver_register) from [<=
+80244cd0>] (__platform_driver_register+0x40/0x54)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<80244cd0>] (__platform_driver_regist=
+er) from [<805bfc64>] (aspeed_pwm_tacho_driver_init+0x18/0x20)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<805bfc64>] (aspeed_pwm_tacho_driver_=
+init) from [<8059de70>] (do_one_initcall+0xac/0x168)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8059de70>] (do_one_initcall) from [<=
+8059e040>] (kernel_init_freeable+0x114/0x1cc)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<8059e040>] (kernel_init_freeable) fr=
+om [<804072a0>] (kernel_init+0x18/0x104)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.000000] [<804072a0>] (kernel_init) from [<8000=
+a5e8>] (ret_from_fork+0x14/0x2c)
+> [=C2=A0=C2=A0=C2=A0=C2=A03.200000] OF: ERROR: Bad of_node_put() on /ahb/a=
+pb/pwm-tacho-controller@1e786000/fan@1
+> And kernel panic at the end.
+>=20
+> Best regards. Mykola Kostenok.
+--=-BHQe427awUl6Z8UYIvjx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAABCgAGBQJZeakWAAoJEJ0dnzgO5LT5ofEQAK3DCqUmtAcreW3pj7ALIbh7
+MP3sTzaNCB1oGvKbgOSKGwkwDm9EH5FwkABdFmhuUssLpcJFwMGQcIfXOz7FYhT5
+zdLnus4pp8aWw6e39boiflo10fFVbxXqJ/wNPN0ozpx6+xqHpX4C2TT25jTZBECl
+OKDZxHC7pzhuTXy/freN1lRZf97DAL36CeXfpS5DRlIzIAQ1LLubEXgsqQln6FO6
+N556jfNDF6iCDh+e7Zo9GhaejUtu69SxbJFFFpls/srtRYyUoXvtIo+J/0/ecJd7
+HB9f6J4YkcktOAt0IChM/0abfufPyQSOQ3mGe6QBsIZYxN6IzvbXUaKQz41ANI46
+6VAcFg2k+GrbhYKkuvBs6TuwvBch50NpEfDf7h+SiGP2ps8szhUXql1W25p+AhlQ
+AE6hPiiV7d1BhMPrOVVBY6BoqgKGLUvtymau6binmULJZIXHmXfZTg46hyERDcv/
+2gJjXvIGfsZ3DFup/de1eGqolbAOijNCy9DOCUoeAjOUlI60r90VfJymKD/gptQO
+wexikp96+XEGrlsPZmVuAquwAjM2Q0kBcw5d7cisZy4Lc6BHBxYTNC/eEJpbSMz/
+lmWTMVhzu6CfC9m7GV4QdWNgSE8J5X9/B5SCT2XNZE2ju7m44dhZcSyjSPWnrX19
+LvgqjHwHjE/6Ds/xi0Cd
+=EIyH
+-----END PGP SIGNATURE-----
+
+--=-BHQe427awUl6Z8UYIvjx--
+
