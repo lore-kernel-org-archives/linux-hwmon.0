@@ -8,301 +8,170 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
         andrew@aj.id.au, eajames@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH v2 02/10] drivers/hwmon/occ: Add command transport method for P8 and P9
-Date: Thu, 27 Jul 2017 09:30:21 -0500
+Subject: [PATCH v2 03/10] drivers/hwmon/occ: Parse OCC poll response
+Date: Thu, 27 Jul 2017 09:30:22 -0500
 In-Reply-To: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1501165829-12395-3-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1501165829-12395-4-git-send-email-eajames@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-For the P8 OCC, add the procedure to send a command to the OCC over I2C
-bus. This involves writing the OCC command registers with serial
-communication operations (SCOMs) interpreted by the I2C slave. For the
-P9 OCC, add a procedure to use the OCC in-kernel API to send a command
-to the OCC through the SBE engine.
+Add method to parse the response from the OCC poll command. This only
+needs to be done during probe(), since the OCC shouldn't change the
+number or format of sensors while it's running. The parsed response
+allows quick access to sensor data, as well as information on the
+number and version of sensors, which we need to instantiate hwmon
+attributes.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- drivers/hwmon/occ/p8_i2c.c | 184 ++++++++++++++++++++++++++++++++++++++++++++-
- drivers/hwmon/occ/p9_sbe.c |  50 +++++++++++-
- 2 files changed, 232 insertions(+), 2 deletions(-)
+ drivers/hwmon/occ/common.c | 50 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/occ/common.h | 54 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
-diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-index 025471f..745fb52 100644
---- a/drivers/hwmon/occ/p8_i2c.c
-+++ b/drivers/hwmon/occ/p8_i2c.c
-@@ -11,9 +11,26 @@
- #include <linux/errno.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
-+#include <linux/occ.h>
-+#include <linux/sched.h>
-+#include <asm/unaligned.h>
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 92f06ae..c55aec0 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -8,6 +8,7 @@
+  */
  
- #include "common.h"
- 
-+#define OCC_TIMEOUT_MS			1000
-+#define OCC_CMD_IN_PRG_WAIT_MS		50
-+
-+/* OCB (on-chip control bridge - interface to OCC) registers */
-+#define OCB_DATA1			0x6B035
-+#define OCB_ADDR			0x6B070
-+#define OCB_DATA3			0x6B075
-+
-+/* OCC SRAM address space */
-+#define OCC_SRAM_ADDR_CMD		0xFFFF6000
-+#define OCC_SRAM_ADDR_RESP		0xFFFF7000
-+
-+#define OCC_DATA_ATTN			0x20010000
-+
- struct p8_i2c_occ {
- 	struct occ occ;
- 	struct i2c_client *client;
-@@ -21,9 +38,174 @@ struct p8_i2c_occ {
- 
- #define to_p8_i2c_occ(x)	container_of((x), struct p8_i2c_occ, occ)
- 
-+static int p8_i2c_occ_getscom(struct i2c_client *client, u32 address, u8 *data)
-+{
-+	ssize_t rc;
-+	__be64 buf;
-+	struct i2c_msg msgs[2];
-+
-+	/* p8 i2c slave requires shift */
-+	address <<= 1;
-+
-+	msgs[0].addr = client->addr;
-+	msgs[0].flags = client->flags & I2C_M_TEN;
-+	msgs[0].len = sizeof(u32);
-+	/* address is a scom address; bus-endian */
-+	msgs[0].buf = (char *)&address;
-+
-+	/* data from OCC is big-endian */
-+	msgs[1].addr = client->addr;
-+	msgs[1].flags = (client->flags & I2C_M_TEN) | I2C_M_RD;
-+	msgs[1].len = sizeof(u64);
-+	msgs[1].buf = (char *)&buf;
-+
-+	rc = i2c_transfer(client->adapter, msgs, 2);
-+	if (rc < 0)
-+		return rc;
-+
-+	*(u64 *)data = be64_to_cpu(buf);
-+
-+	return 0;
-+}
-+
-+static int p8_i2c_occ_putscom(struct i2c_client *client, u32 address, u8 *data)
-+{
-+	u32 buf[3];
-+	ssize_t rc;
-+
-+	/* p8 i2c slave requires shift */
-+	address <<= 1;
-+
-+	/* address is bus-endian; data passed through from user as-is */
-+	buf[0] = address;
-+	memcpy(&buf[1], &data[4], sizeof(u32));
-+	memcpy(&buf[2], data, sizeof(u32));
-+
-+	rc = i2c_master_send(client, (const char *)buf, sizeof(buf));
-+	if (rc < 0)
-+		return rc;
-+	else if (rc != sizeof(buf))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int p8_i2c_occ_putscom_u32(struct i2c_client *client, u32 address,
-+				  u32 data0, u32 data1)
-+{
-+	u8 buf[8];
-+
-+	memcpy(buf, &data0, 4);
-+	memcpy(buf + 4, &data1, 4);
-+
-+	return p8_i2c_occ_putscom(client, address, buf);
-+}
-+
-+static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
-+				 u8 *data)
-+{
-+	__be32 data0, data1;
-+
-+	memcpy(&data0, data, 4);
-+	memcpy(&data1, data + 4, 4);
-+
-+	return p8_i2c_occ_putscom_u32(client, address, be32_to_cpu(data0),
-+				      be32_to_cpu(data1));
-+}
-+
- static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd)
- {
--	return -EOPNOTSUPP;
-+	int i, rc;
-+	unsigned long start;
-+	u16 data_length;
-+	const unsigned long timeout = msecs_to_jiffies(OCC_TIMEOUT_MS);
-+	const long int wait_time = msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
-+	struct p8_i2c_occ *p8_i2c_occ = to_p8_i2c_occ(occ);
-+	struct i2c_client *client = p8_i2c_occ->client;
-+	struct occ_response *resp = &occ->resp;
-+
-+	start = jiffies;
-+
-+	/* set sram address for command */
-+	rc = p8_i2c_occ_putscom_u32(client, OCB_ADDR, OCC_SRAM_ADDR_CMD, 0);
-+	if (rc)
-+		return rc;
-+
-+	/* write command (expected to already be BE), we need bus-endian... */
-+	rc = p8_i2c_occ_putscom_be(client, OCB_DATA3, cmd);
-+	if (rc)
-+		return rc;
-+
-+	/* trigger OCC attention */
-+	rc = p8_i2c_occ_putscom_u32(client, OCB_DATA1, OCC_DATA_ATTN, 0);
-+	if (rc)
-+		return rc;
-+
-+	do {
-+		/* set sram address for response */
-+		rc = p8_i2c_occ_putscom_u32(client, OCB_ADDR,
-+					    OCC_SRAM_ADDR_RESP, 0);
-+		if (rc)
-+			return rc;
-+
-+		rc = p8_i2c_occ_getscom(client, OCB_DATA3, (u8 *)resp);
-+		if (rc)
-+			return rc;
-+
-+		/* wait for OCC */
-+		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
-+			rc = -EALREADY;
-+
-+			if (time_after(jiffies, start + timeout))
-+				break;
-+
-+			set_current_state(TASK_INTERRUPTIBLE);
-+			schedule_timeout(wait_time);
-+		}
-+	} while (rc);
-+
-+	/* check the OCC response */
-+	switch (resp->return_status) {
-+	case OCC_RESP_CMD_IN_PRG:
-+		rc = -ETIMEDOUT;
-+		break;
-+	case OCC_RESP_SUCCESS:
-+		rc = 0;
-+		break;
-+	case OCC_RESP_CMD_INVAL:
-+	case OCC_RESP_CMD_LEN_INVAL:
-+	case OCC_RESP_DATA_INVAL:
-+	case OCC_RESP_CHKSUM_ERR:
-+		rc = -EINVAL;
-+		break;
-+	case OCC_RESP_INT_ERR:
-+	case OCC_RESP_BAD_STATE:
-+	case OCC_RESP_CRIT_EXCEPT:
-+	case OCC_RESP_CRIT_INIT:
-+	case OCC_RESP_CRIT_WATCHDOG:
-+	case OCC_RESP_CRIT_OCB:
-+	case OCC_RESP_CRIT_HW:
-+		rc = -EREMOTEIO;
-+		break;
-+	default:
-+		rc = -EPROTO;
-+	}
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	data_length = get_unaligned_be16(&resp->data_length);
-+	if (data_length > OCC_RESP_DATA_BYTES)
-+		return -EMSGSIZE;
-+
-+	/* fetch the rest of the response data */
-+	for (i = 8; i < data_length + 7; i += 8) {
-+		rc = p8_i2c_occ_getscom(client, OCB_DATA3, ((u8 *)resp) + i);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	return 0;
- }
- 
- static int p8_i2c_occ_probe(struct i2c_client *client,
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 58c3bb2..667d190 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -10,6 +10,7 @@
  #include <linux/device.h>
- #include <linux/errno.h>
- #include <linux/module.h>
-+#include <linux/occ.h>
- #include <linux/platform_device.h>
++#include <linux/kernel.h>
  
  #include "common.h"
-@@ -23,7 +24,54 @@ struct p9_sbe_occ {
  
- static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd)
- {
--	return -EOPNOTSUPP;
-+	int rc;
-+	struct occ_client *client;
-+	struct occ_response *resp = &occ->resp;
-+	struct p9_sbe_occ *p9_sbe_occ = to_p9_sbe_occ(occ);
-+
-+	client = occ_drv_open(p9_sbe_occ->sbe, 0);
-+	if (!client)
-+		return -ENODEV;
-+
-+	/* skip first byte (sequence number), OCC driver handles it */
-+	rc = occ_drv_write(client, (const char *)&cmd[1], 7);
-+	if (rc < 0)
-+		goto err;
-+
-+	rc = occ_drv_read(client, (char *)resp, sizeof(*resp));
-+	if (rc < 0)
-+		goto err;
-+
-+	/* check the OCC response */
-+	switch (resp->return_status) {
-+	case OCC_RESP_CMD_IN_PRG:
-+		rc = -ETIMEDOUT;
-+		break;
-+	case OCC_RESP_SUCCESS:
-+		rc = 0;
-+		break;
-+	case OCC_RESP_CMD_INVAL:
-+	case OCC_RESP_CMD_LEN_INVAL:
-+	case OCC_RESP_DATA_INVAL:
-+	case OCC_RESP_CHKSUM_ERR:
-+		rc = -EINVAL;
-+		break;
-+	case OCC_RESP_INT_ERR:
-+	case OCC_RESP_BAD_STATE:
-+	case OCC_RESP_CRIT_EXCEPT:
-+	case OCC_RESP_CRIT_INIT:
-+	case OCC_RESP_CRIT_WATCHDOG:
-+	case OCC_RESP_CRIT_OCB:
-+	case OCC_RESP_CRIT_HW:
-+		rc = -EREMOTEIO;
-+		break;
-+	default:
-+		rc = -EPROTO;
-+	}
-+
-+err:
-+	occ_drv_release(client);
-+	return rc;
+@@ -29,6 +30,53 @@ static int occ_poll(struct occ *occ)
+ 	return occ->send_cmd(occ, cmd);
  }
  
- static int p9_sbe_occ_probe(struct platform_device *pdev)
++/* only need to do this once at startup, as OCC won't change sensors on us */
++static void occ_parse_poll_response(struct occ *occ)
++{
++	unsigned int i, offset = 0, size = 0;
++	struct occ_sensor *sensor;
++	struct occ_sensors *sensors = &occ->sensors;
++	struct occ_response *resp = &occ->resp;
++	struct occ_poll_response *poll =
++		(struct occ_poll_response *)&resp->data[0];
++	struct occ_poll_response_header *header = &poll->header;
++	struct occ_sensor_data_block *block = &poll->block;
++
++	for (i = 0; i < header->num_sensor_data_blocks; ++i) {
++		block = (struct occ_sensor_data_block *)((u8 *)block + offset);
++		offset = (block->header.num_sensors *
++			  block->header.sensor_length) + sizeof(block->header);
++		size += offset;
++
++		/* validate all the length/size fields */
++		if ((size + sizeof(*header)) >= OCC_RESP_DATA_BYTES) {
++			dev_warn(occ->bus_dev, "exceeded response buffer\n");
++			return;
++		}
++
++		/* match sensor block type */
++		if (strncmp(block->header.eye_catcher, "TEMP", 4) == 0)
++			sensor = &sensors->temp;
++		else if (strncmp(block->header.eye_catcher, "FREQ", 4) == 0)
++			sensor = &sensors->freq;
++		else if (strncmp(block->header.eye_catcher, "POWR", 4) == 0)
++			sensor = &sensors->power;
++		else if (strncmp(block->header.eye_catcher, "CAPS", 4) == 0)
++			sensor = &sensors->caps;
++		else if (strncmp(block->header.eye_catcher, "EXTN", 4) == 0)
++			sensor = &sensors->extended;
++		else {
++			dev_warn(occ->bus_dev, "sensor not supported %.4s\n",
++				 block->header.eye_catcher);
++			continue;
++		}
++
++		sensor->num_sensors = block->header.num_sensors;
++		sensor->version = block->header.sensor_format;
++		sensor->data = &block->data;
++	}
++}
++
+ int occ_setup(struct occ *occ, const char *name)
+ {
+ 	int rc;
+@@ -40,5 +88,7 @@ int occ_setup(struct occ *occ, const char *name)
+ 		return rc;
+ 	}
+ 
++	occ_parse_poll_response(occ);
++
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index 705dfe3..f52d45a 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -26,10 +26,64 @@ struct occ_response {
+ 	__be16 checksum;
+ } __packed;
+ 
++struct occ_sensor_data_block_header {
++	u8 eye_catcher[4];
++	u8 reserved;
++	u8 sensor_format;
++	u8 sensor_length;
++	u8 num_sensors;
++} __packed;
++
++struct occ_sensor_data_block {
++	struct occ_sensor_data_block_header header;
++	u32 data;
++} __packed;
++
++struct occ_poll_response_header {
++	u8 status;
++	u8 ext_status;
++	u8 occs_present;
++	u8 config_data;
++	u8 occ_state;
++	u8 mode;
++	u8 ips_status;
++	u8 error_log_id;
++	__be32 error_log_start_address;
++	__be16 error_log_length;
++	u16 reserved;
++	u8 occ_code_level[16];
++	u8 eye_catcher[6];
++	u8 num_sensor_data_blocks;
++	u8 sensor_data_block_header_version;
++} __packed;
++
++struct occ_poll_response {
++	struct occ_poll_response_header header;
++	struct occ_sensor_data_block block;
++} __packed;
++
++struct occ_sensor {
++	u8 num_sensors;
++	u8 version;
++	void *data;	/* pointer to sensor data start within response */
++};
++
++/* OCC only provides one sensor data block of each type, but any number of
++ * sensors within that block.
++ */
++struct occ_sensors {
++	struct occ_sensor temp;
++	struct occ_sensor freq;
++	struct occ_sensor power;
++	struct occ_sensor caps;
++	struct occ_sensor extended;
++};
++
+ struct occ {
+ 	struct device *bus_dev;
+ 
+ 	struct occ_response resp;
++	struct occ_sensors sensors;
+ 
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+ 	int (*send_cmd)(struct occ *occ, u8 *cmd);
 -- 
 1.8.3.1
