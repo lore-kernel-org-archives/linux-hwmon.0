@@ -8,105 +8,53 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
         andrew@aj.id.au, eajames@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH v2 09/10] Documentation: ABI: Add occ-hwmon driver sysfs documentation
-Date: Thu, 27 Jul 2017 09:30:28 -0500
+Subject: [PATCH v2 10/10] dt-bindings: i2c: Add P8 OCC hwmon driver documentation
+Date: Thu, 27 Jul 2017 09:30:29 -0500
 In-Reply-To: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1501165829-12395-10-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1501165829-12395-11-git-send-email-eajames@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Detail the sysfs attributes provided by the occ-hwmon driver.
+Document the bindings for I2C-based OCC hwmon driver.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- Documentation/ABI/testing/sysfs-driver-occ-hwmon | 77 ++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-occ-hwmon
+ .../devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt   | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-occ-hwmon b/Documentation/ABI/testing/sysfs-driver-occ-hwmon
+diff --git a/Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt b/Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt
 new file mode 100644
-index 0000000..5563128
+index 0000000..8c765d0
 --- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-occ-hwmon
-@@ -0,0 +1,77 @@
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_active
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC is in the "active" state.
++++ b/Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt
+@@ -0,0 +1,25 @@
++Device-tree bindings for I2C-based On-Chip Controller hwmon driver
++------------------------------------------------------------------
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_dvfs_ot
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has limited the processor
-+		frequency due to over-temperature.
++Required properties:
++ - compatible = "ibm,p8-occ-hwmon";
++ - reg = <I2C address>;			: I2C bus address
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_dvfs_power
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has limited the processor
-+		frequency due to power usage.
++Examples:
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_error
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates any error condition
-+		observed by the OCC or detected by the driver. Reading the
-+		attribute will return an integer. A negative integer indicates
-+		either an error response from the OCC or bus error or other
-+		error condition detected by the driver. A "0" indicates no
-+		error.
++    i2c-bus@100 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        clock-frequency = <100000>;
++        < more properties >
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_master
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC is the "master" OCC.
++        occ-hwmon@1 {
++            compatible = "ibm,p8-occ-hwmon";
++            reg = <0x50>;
++        };
 +
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_mem_throttle
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not the OCC has throttled memory due
-+		to over-temperature.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_quick_drop
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates (with a "1" or a "0",
-+		respectively) whether or not this OCC has asserted the "quick
-+		power drop" signal.
-+
-+What:		/sys/bus/platform/drivers/occ-hwmon/<dev>/occ_status
-+Date:		July 2017
-+KernelVersion:	4.14
-+Contact:	eajames@us.ibm.com
-+Description:
-+		A read-only attribute that indicates the current OCC state. The
-+		value of the attribute will be one of the following states:
-+		0: Reserved
-+		1: Standby
-+		2: Observation
-+		3: Active
-+		4: Safe
-+		5: Characterization
++        occ-hwmon@2 {
++            compatible = "ibm,p8-occ-hwmon";
++            reg = <0x51>;
++        };
++    };
 -- 
 1.8.3.1
