@@ -8,200 +8,181 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         cbostic@linux.vnet.ibm.com, jk@ozlabs.org, joel@jms.id.au,
         andrew@aj.id.au, eajames@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH v2 06/10] drivers/hwmon/occ: Add non-hwmon attributes
-Date: Thu, 27 Jul 2017 09:30:25 -0500
+Subject: [PATCH v2 07/10] drivers/hwmon/occ: Add error handling
+Date: Thu, 27 Jul 2017 09:30:26 -0500
 In-Reply-To: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1501165829-12395-7-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1501165829-12395-8-git-send-email-eajames@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Create device attributes for additional OCC properties that do not
-belong as hwmon sensors. These provide additional information as to the
-state of the processor and system.
+Add logic to detect a number of error scenarios on the OCC. Export any
+errors through an additional non-hwmon device attribute. The error
+counting and state verification are required by the OCC hardware
+specification.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- drivers/hwmon/occ/common.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++
- drivers/hwmon/occ/common.h |  1 +
- drivers/hwmon/occ/p8_i2c.c | 10 ++++++
- drivers/hwmon/occ/p9_sbe.c | 10 ++++++
- 4 files changed, 104 insertions(+)
+ drivers/hwmon/occ/common.c | 82 ++++++++++++++++++++++++++++++++++++++++++++--
+ drivers/hwmon/occ/common.h |  4 +++
+ 2 files changed, 84 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index bad7f4b..2459e12 100644
+index 2459e12..970b31f 100644
 --- a/drivers/hwmon/occ/common.c
 +++ b/drivers/hwmon/occ/common.c
-@@ -19,6 +19,14 @@
+@@ -17,6 +17,11 @@
  
+ #include "common.h"
+ 
++#define OCC_ERROR_COUNT_THRESHOLD	2	/* OCC HW defined */
++
++#define OCC_STATE_SAFE			4
++#define OCC_SAFE_TIMEOUT		msecs_to_jiffies(60000) /* 1 min */
++
  #define OCC_UPDATE_FREQUENCY		msecs_to_jiffies(1000)
  
-+/* OCC status bits */
-+#define OCC_STAT_MASTER			0x80
-+#define OCC_STAT_ACTIVE			0x01
-+#define OCC_EXT_STAT_DVFS_OT		0x80
-+#define OCC_EXT_STAT_DVFS_POWER		0x40
-+#define OCC_EXT_STAT_MEM_THROTTLE	0x20
-+#define OCC_EXT_STAT_QUICK_DROP		0x10
+ /* OCC status bits */
+@@ -126,10 +131,33 @@ struct extended_sensor {
+ 	u8 data[6];
+ } __packed;
+ 
++static atomic_t occs_present = ATOMIC_INIT(0);
 +
- /* OCC sensor type and version definitions */
- 
- struct temp_sensor_1 {
-@@ -1044,6 +1052,71 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 	return 0;
- }
- 
-+static ssize_t occ_show_status(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
++static ssize_t occ_show_error(struct device *dev,
++			      struct device_attribute *attr, char *buf)
 +{
-+	int rc;
-+	int val = 0;
 +	struct occ *occ = dev_get_drvdata(dev);
-+	struct occ_poll_response_header *header;
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
 +
-+	rc = occ_update_response(occ);
-+	if (rc)
-+		return rc;
-+
-+	header = (struct occ_poll_response_header *)occ->resp.data;
-+
-+	switch (sattr->index) {
-+	case 0:
-+		val = (header->status & OCC_STAT_MASTER) ? 1 : 0;
-+		break;
-+	case 1:
-+		val = (header->status & OCC_STAT_ACTIVE) ? 1 : 0;
-+		break;
-+	case 2:
-+		val = (header->ext_status & OCC_EXT_STAT_DVFS_OT) ? 1 : 0;
-+		break;
-+	case 3:
-+		val = (header->ext_status & OCC_EXT_STAT_DVFS_POWER) ? 1 : 0;
-+		break;
-+	case 4:
-+		val = (header->ext_status & OCC_EXT_STAT_MEM_THROTTLE) ? 1 : 0;
-+		break;
-+	case 5:
-+		val = (header->ext_status & OCC_EXT_STAT_QUICK_DROP) ? 1 : 0;
-+		break;
-+	case 6:
-+		val = header->occ_state;
-+		break;
-+	}
-+
-+	return snprintf(buf, PAGE_SIZE - 1, "%d\n", val);
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", occ->error);
 +}
 +
-+static SENSOR_DEVICE_ATTR(occ_master, 0444, occ_show_status, NULL, 0);
-+static SENSOR_DEVICE_ATTR(occ_active, 0444, occ_show_status, NULL, 1);
-+static SENSOR_DEVICE_ATTR(occ_dvfs_ot, 0444, occ_show_status, NULL, 2);
-+static SENSOR_DEVICE_ATTR(occ_dvfs_power, 0444, occ_show_status, NULL, 3);
-+static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_show_status, NULL, 4);
-+static SENSOR_DEVICE_ATTR(occ_quick_drop, 0444, occ_show_status, NULL, 5);
-+static SENSOR_DEVICE_ATTR(occ_status, 0444, occ_show_status, NULL, 6);
++static DEVICE_ATTR(occ_error, 0444, occ_show_error, NULL);
 +
-+static struct attribute *occ_attributes[] = {
-+	&sensor_dev_attr_occ_master.dev_attr.attr,
-+	&sensor_dev_attr_occ_active.dev_attr.attr,
-+	&sensor_dev_attr_occ_dvfs_ot.dev_attr.attr,
-+	&sensor_dev_attr_occ_dvfs_power.dev_attr.attr,
-+	&sensor_dev_attr_occ_mem_throttle.dev_attr.attr,
-+	&sensor_dev_attr_occ_quick_drop.dev_attr.attr,
-+	&sensor_dev_attr_occ_status.dev_attr.attr,
-+	NULL
-+};
++/* Notify user if we have an error and a change in error state. */
++static void occ_notify_error(struct occ *occ, int old_error)
++{
++	/* check hwmon pointer to verify error attribute has been added */
++	if (occ->error != old_error && occ->error && occ->hwmon)
++		sysfs_notify(&occ->bus_dev->kobj, NULL,
++			     dev_attr_occ_error.attr.name);
++}
 +
-+static const struct attribute_group occ_attr_group = {
-+	.attrs = occ_attributes,
-+};
-+
- /* only need to do this once at startup, as OCC won't change sensors on us */
- static void occ_parse_poll_response(struct occ *occ)
+ static int occ_poll(struct occ *occ)
  {
-@@ -1124,5 +1197,15 @@ int occ_setup(struct occ *occ, const char *name)
++	struct occ_poll_response_header *header;
+ 	u16 checksum = occ->poll_cmd_data + 1;
+ 	u8 cmd[8];
++	int rc, old_error = occ->error;
+ 
+ 	/* big endian */
+ 	cmd[0] = 0;			/* sequence number */
+@@ -142,12 +170,47 @@ static int occ_poll(struct occ *occ)
+ 	cmd[7] = 0;
+ 
+ 	/* mutex should already be locked if necessary */
+-	return occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd);
++	if (rc) {
++		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
++			occ->error = rc;
++
++		goto done;
++	}
++
++	/* clear error since communication was successful */
++	occ->error_count = 0;
++	occ->error = 0;
++
++	header = (struct occ_poll_response_header *)occ->resp.data;
++	/* check for safe state */
++	if (header->occ_state == OCC_STATE_SAFE) {
++		if (occ->last_safe) {
++			if (time_after(jiffies,
++				       occ->last_safe + OCC_SAFE_TIMEOUT))
++				occ->error = -EHOSTDOWN;
++		} else {
++			occ->last_safe = jiffies;
++		}
++	} else {
++		occ->last_safe = 0;
++	}
++
++	if (header->status & OCC_STAT_MASTER) {
++		/* check if we're missing any OCCs */
++		if (hweight8(header->occs_present) !=
++		    atomic_read(&occs_present))
++			occ->error = -ENXIO;
++	}
++
++done:
++	occ_notify_error(occ, old_error);
++	return rc;
+ }
+ 
+ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ {
+-	int rc;
++	int rc, old_error = occ->error;
+ 	u8 cmd[8];
+ 	u16 checksum = 0x24;
+ 	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
+@@ -171,6 +234,16 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ 
+ 	mutex_unlock(&occ->lock);
+ 
++	if (rc) {
++		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
++			occ->error = rc;
++	} else {
++		/* successful communication so clear the error */
++		occ->error_count = 0;
++		occ->error = 0;
++	}
++
++	occ_notify_error(occ, old_error);
+ 	return rc;
+ }
+ 
+@@ -1110,6 +1183,7 @@ static ssize_t occ_show_status(struct device *dev,
+ 	&sensor_dev_attr_occ_mem_throttle.dev_attr.attr,
+ 	&sensor_dev_attr_occ_quick_drop.dev_attr.attr,
+ 	&sensor_dev_attr_occ_status.dev_attr.attr,
++	&dev_attr_occ_error.attr,
+ 	NULL
+ };
+ 
+@@ -1197,6 +1271,8 @@ int occ_setup(struct occ *occ, const char *name)
  		return rc;
  	}
  
-+	rc = sysfs_create_group(&occ->bus_dev->kobj, &occ_attr_group);
-+	if (rc)
-+		dev_warn(occ->bus_dev, "failed to create status attrs: %d\n",
-+			 rc);
++	atomic_inc(&occs_present);
 +
- 	return 0;
+ 	rc = sysfs_create_group(&occ->bus_dev->kobj, &occ_attr_group);
+ 	if (rc)
+ 		dev_warn(occ->bus_dev, "failed to create status attrs: %d\n",
+@@ -1208,4 +1284,6 @@ int occ_setup(struct occ *occ, const char *name)
+ void occ_shutdown(struct occ *occ)
+ {
+ 	sysfs_remove_group(&occ->bus_dev->kobj, &occ_attr_group);
++
++	atomic_dec(&occs_present);
  }
-+
-+void occ_shutdown(struct occ *occ)
-+{
-+	sysfs_remove_group(&occ->bus_dev->kobj, &occ_attr_group);
-+}
 diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index 049c3b4..dc9e06d 100644
+index dc9e06d..cef2174 100644
 --- a/drivers/hwmon/occ/common.h
 +++ b/drivers/hwmon/occ/common.h
-@@ -110,5 +110,6 @@ struct occ {
+@@ -107,6 +107,10 @@ struct occ {
+ 	struct occ_attribute *attrs;
+ 	struct attribute_group group;
+ 	const struct attribute_group *groups[2];
++
++	int error;
++	unsigned int error_count;	/* number of errors observed */
++	unsigned long last_safe;	/* time OCC entered safe state */
  };
  
  int occ_setup(struct occ *occ, const char *name);
-+void occ_shutdown(struct occ *occ);
- 
- #endif /* OCC_COMMON_H */
-diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-index 745fb52..ee9cef7 100644
---- a/drivers/hwmon/occ/p8_i2c.c
-+++ b/drivers/hwmon/occ/p8_i2c.c
-@@ -229,6 +229,15 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
- 	return occ_setup(occ, "p8_occ");
- }
- 
-+static int p8_i2c_occ_remove(struct i2c_client *client)
-+{
-+	struct occ *occ = dev_get_drvdata(&client->dev);
-+
-+	occ_shutdown(occ);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id p8_i2c_occ_of_match[] = {
- 	{ .compatible = "ibm,p8-occ-hwmon" },
- 	{}
-@@ -242,6 +251,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
- 		.of_match_table = p8_i2c_occ_of_match,
- 	},
- 	.probe = p8_i2c_occ_probe,
-+	.remove = p8_i2c_occ_remove,
- };
- 
- module_i2c_driver(p8_i2c_occ_driver);
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 667d190..d36ce0b 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -94,6 +94,15 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
- 	return occ_setup(occ, "p9_occ");
- }
- 
-+static int p9_sbe_occ_remove(struct platform_device *pdev)
-+{
-+	struct occ *occ = platform_get_drvdata(pdev);
-+
-+	occ_shutdown(occ);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id p9_sbe_occ_of_match[] = {
- 	{ .compatible = "ibm,p9-occ-hwmon" },
- 	{ },
-@@ -105,6 +114,7 @@ static int p9_sbe_occ_probe(struct platform_device *pdev)
- 		.of_match_table	= p9_sbe_occ_of_match,
- 	},
- 	.probe	= p9_sbe_occ_probe,
-+	.remove = p9_sbe_occ_remove,
- };
- 
- module_platform_driver(p9_sbe_occ_driver);
 -- 
 1.8.3.1
