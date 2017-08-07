@@ -1,101 +1,56 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:41354 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751972AbdHJO4U (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2017 10:56:20 -0400
-Date: Thu, 10 Aug 2017 07:56:18 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, joel@jms.id.au,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH 4/4] Documentation: ABI: Add IBM power supply sysfs
- documentation
-Message-ID: <20170810145618.GC4945@roeck-us.net>
-References: <1501708633-2964-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1501708633-2964-5-git-send-email-eajames@linux.vnet.ibm.com>
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:47986 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1753228AbdHGMY5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Aug 2017 08:24:57 -0400
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+        ALKML <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Roy Franz <roy.franz@cavium.com>,
+        Harb Abdulhamid <harba@codeaurora.org>,
+        Nishanth Menon <nm@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Loc Ho <lho@apm.com>, Alexey Klimov <alexey.klimov@arm.com>,
+        Ryan Harkin <Ryan.Harkin@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 16/18] hwmon: add support for sensors exported via ARM
+ SCMI
+To: Guenter Roeck <linux@roeck-us.net>
+References: <1501857104-11279-1-git-send-email-sudeep.holla@arm.com>
+ <1501857104-11279-17-git-send-email-sudeep.holla@arm.com>
+ <20170804193231.GA18153@roeck-us.net>
+From: Sudeep Holla <sudeep.holla@arm.com>
+Message-ID: <20e0a388-79a1-a7f1-57b4-fa5993eed9bf@arm.com>
+Date: Mon, 7 Aug 2017 13:25:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1501708633-2964-5-git-send-email-eajames@linux.vnet.ibm.com>
+In-Reply-To: <20170804193231.GA18153@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 02, 2017 at 04:17:13PM -0500, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> ---
->  Documentation/ABI/testing/sysfs-driver-ibmps | 49 ++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-ibmps
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-ibmps b/Documentation/ABI/testing/sysfs-driver-ibmps
-> new file mode 100644
-> index 0000000..1645685
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-ibmps
-> @@ -0,0 +1,49 @@
-> +What:		/sys/bus/i2c/devices/<dev>/clear_faults
 
-Please, no. If we do add driver-specific attributes, those should be added to
-the hwmon device, not to the i2c device.
 
-Guenter
+On 04/08/17 20:32, Guenter Roeck wrote:
+> On Fri, Aug 04, 2017 at 03:31:42PM +0100, Sudeep Holla wrote:
 
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Clears pmbus faults for this power supply.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_word
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_WORD register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_vout
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_VOUT register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_iout
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_IOUT register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_input
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_INPUT register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_temp
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_TEMPERATURE register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_cml
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_CML register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_other
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_OTHER register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_mfr
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_MFR_SPECIFIC register.
-> +
-> +What:		/sys/bus/i2c/devices/<dev>/status_fan
-> +KernelVersion:	4.13
-> +Contact:	eajames@us.ibm.com
-> +Description:	Displays the STATUS_FAN register.
-> -- 
-> 1.8.3.1
+[...]
+
+>> +	platform_set_drvdata(pdev, scmi_sensors);
+>> +
+>> +	hwdev = devm_hwmon_device_register_with_groups(dev, "scmi_sensors",
+>> +						       scmi_sensors,
+>> +						       scmi_sensors->groups);
 > 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> Can you rework this to use devm_hwmon_device_register_with_info(),
+> and if possible let it handle the thermal registration ? 
+> 
+
+Thanks for the pointers. I will check on the possibility and use it if
+possible.
+
+-- 
+Regards,
+Sudeep
