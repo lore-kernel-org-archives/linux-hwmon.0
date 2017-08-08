@@ -1,64 +1,103 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56617 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752491AbdHICCB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 22:02:01 -0400
-Date: Tue, 8 Aug 2017 19:02:00 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Julia Lawall <Julia.Lawall@lip6.fr>
-Cc: Jean Delvare <jdelvare@suse.com>, bhumirks@gmail.com,
-        kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [9/9, v2] hwmon: (scpi) constify thermal_zone_of_device_ops
- structures
-Message-ID: <20170809020200.GA508@roeck-us.net>
-References: <1502204943-20075-10-git-send-email-Julia.Lawall@lip6.fr>
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+Subject: Re: [RFC 0/3] drivers/hwmon/pmbus: Use STATUS_WORD and add status
+ sensors
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        jk@ozlabs.org, cbostic@linux.vnet.ibm.com,
+        "Edward A. James" <eajames@us.ibm.com>
+References: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
+ <7484a66c-4f3c-5d76-7c8a-5992d2c1d3ea@roeck-us.net>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+Date: Tue, 8 Aug 2017 11:12:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1502204943-20075-10-git-send-email-Julia.Lawall@lip6.fr>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <7484a66c-4f3c-5d76-7c8a-5992d2c1d3ea@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+Message-Id: <9b62b070-28ed-3de6-41f2-6910555bbc4d@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Aug 08, 2017 at 05:09:03PM +0200, Julia Lawall wrote:
-> The thermal_zone_of_device_ops structure is only passed as the fourth
-> argument to devm_thermal_zone_of_sensor_register, which is declared
-> as const.  Thus the thermal_zone_of_device_ops structure itself can
-> be const.
-> 
-> Done with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
-Applied to hwmon-next.
 
-Thanks,
-Guenter
+On 08/07/2017 11:00 PM, Guenter Roeck wrote:
+> On 08/07/2017 08:25 PM, Eddie James wrote:
+>> From: "Edward A. James" <eajames@us.ibm.com>
+>>
+>> Hi Guenter,
+>>
+>> I'm looking for some feedback for some extensions to the pmbus core. 
+>> We're
+>> looking for some additional functionality, particularly with 
+>> STATUS_WORD and
+>> obtaining raw status data.
+>>
+>> The first two patches enable the use of the STATUS_WORD register in 
+>> the pmbus
+>> core. This allows the use of more default alarm/fault attributes for 
+>> default
+>> pmbus sensors by allowing the use of the higher byte status bits.
+>>
+>> The third patch adds "status" attributes to each class of hwmon 
+>> sensor created
+>> by pmbus. For example, in1_status and temp1_status. These will 
+>> display the
+>> associated raw status register (e.g. STATUS_INPUT and 
+>> STATUS_TEMPERATURE). I
+>> realize this is not really "normal" for hwmon or pmbus. These are 
+>> potentially
+>> very useful in hardware diagnostic situations where it might be 
+>> impossible
+>> to tell the origin of a failure from a simple alarm or fault bit set. 
+>> We really
+>> want to access the status registers, and for a multi-page pmbus 
+>> device, this is
+>> pretty tricky from userspace.
+>>
+>> Please let me know your thoughts,
+>> Thanks,
+>
+> I don't mind providing such data with debugfs, for example, but I 
+> don't see
+> the point in providing it as part of the ABI. Which, in part, since it 
+> requires
+> a lot of thought on my side, is part of the reason why I didn't provide
+> feedback to your earlier patches yet. Sorry, I've been exceptionally busy
+> lately, and non-standard requests tend to end up at the end of the 
+> queue :-(.
 
-> ---
-> 
-> v2: New patch
-> 
->  drivers/hwmon/scpi-hwmon.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-> index a586480..7e49da5 100644
-> --- a/drivers/hwmon/scpi-hwmon.c
-> +++ b/drivers/hwmon/scpi-hwmon.c
-> @@ -120,7 +120,7 @@ static int scpi_read_temp(void *dev, int *temp)
->  	return sprintf(buf, "%s\n", sensor->info.name);
->  }
->  
-> -static struct thermal_zone_of_device_ops scpi_sensor_ops = {
-> +static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
->  	.get_temp = scpi_read_temp,
->  };
->  
+No problem! Thanks for the quick response on this.
+
+>
+> Any reason why debugfs is not sufficient and/or acceptable for your 
+> use case ?
+> You _are_ talking about diagnostic situations, which seems to be an 
+> exact fit
+> for debugfs.
+
+Agreed, great idea, I think debugfs will work perfectly. I probably 
+should have thought of that sooner...
+
+How about the first two patches in the series? They are unrelated to 
+adding any attributes. Mainly I would
+like to have the PB_STATUS_INPUT bit available to trigger the default 
+boolean alarm attribute, as our hardware doesn't support any limits.
+
+Thanks again,
+Eddie
+
+>
+> Guenter
+>
+>>
+>> Edward A. James (3):
+>>    drivers/hwmon/pmbus: Access word data for STATUS_WORD and use it by
+>>      default
+>>    drivers/hmwon/pmbus: store STATUS_WORD in status registers
+>>    drivers/hwmon/pmbus: Add sensor status to pmbus attributes
+>>
+>>   drivers/hwmon/pmbus/pmbus_core.c | 153 
+>> +++++++++++++++++++++++++++++++++------
+>>   1 file changed, 130 insertions(+), 23 deletions(-)
+>>
+>
