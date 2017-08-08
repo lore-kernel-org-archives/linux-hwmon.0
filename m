@@ -1,169 +1,157 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60611 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1751834AbdHHDZ5 (ORCPT
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33366 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751834AbdHHD0A (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 7 Aug 2017 23:25:57 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v783NlN3038174
-        for <linux-hwmon@vger.kernel.org>; Mon, 7 Aug 2017 23:25:56 -0400
-Received: from e15.ny.us.ibm.com (e15.ny.us.ibm.com [129.33.205.205])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2c71m6qe5u-1
+        Mon, 7 Aug 2017 23:26:00 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v783PB91036377
+        for <linux-hwmon@vger.kernel.org>; Mon, 7 Aug 2017 23:26:00 -0400
+Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2c6weear4v-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Mon, 07 Aug 2017 23:25:56 -0400
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Aug 2017 23:26:00 -0400
 Received: from localhost
-        by e15.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Mon, 7 Aug 2017 23:25:56 -0400
+        Mon, 7 Aug 2017 23:25:59 -0400
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
         jk@ozlabs.org, cbostic@linux.vnet.ibm.com,
         eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
-Subject: [RFC 1/3] drivers/hwmon/pmbus: Access word data for STATUS_WORD and use it by default
-Date: Mon,  7 Aug 2017 22:25:46 -0500
+Subject: [RFC 2/3] drivers/hmwon/pmbus: store STATUS_WORD in status registers
+Date: Mon,  7 Aug 2017 22:25:47 -0500
 In-Reply-To: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1502162748-16372-2-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1502162748-16372-3-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Pmbus core always reads byte data from the status register, even if
-configured to use STATUS_WORD. Use a function pointer so we always do
-either byte or word access depending on which register we're trying to
-access. Also switch to use STATUS_WORD by default.
+Higher byte of the status register wasn't available for boolean alarms.
+Store the STATUS_WORD register if it's available, and read it out when
+queried by boolean attributes.
+
+The method of storing and retrieving the status reg is a bit hacky but
+I couldn't work out another way without doubling the storage requirement
+of every pmbus device or tearing up more of the pmbus core code.
 
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 69 +++++++++++++++++++++++++++++++---------
- 1 file changed, 54 insertions(+), 15 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 37 +++++++++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index f1eff6b..8511aba 100644
+index 8511aba..3b53fa7 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -113,7 +113,8 @@ struct pmbus_data {
- 	 * so we keep them all together.
- 	 */
- 	u8 status[PB_NUM_STATUS_REG];
--	u8 status_register;
-+
-+	int (*read_status)(struct i2c_client *client, int page);
+@@ -43,7 +43,7 @@
+  * Index into status register array, per status register group
+  */
+ #define PB_STATUS_BASE		0
+-#define PB_STATUS_VOUT_BASE	(PB_STATUS_BASE + PMBUS_PAGES)
++#define PB_STATUS_VOUT_BASE	(PB_STATUS_BASE + (PMBUS_PAGES * 2))
+ #define PB_STATUS_IOUT_BASE	(PB_STATUS_VOUT_BASE + PMBUS_PAGES)
+ #define PB_STATUS_FAN_BASE	(PB_STATUS_IOUT_BASE + PMBUS_PAGES)
+ #define PB_STATUS_FAN34_BASE	(PB_STATUS_FAN_BASE + PMBUS_PAGES)
+@@ -421,11 +421,14 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
  
- 	u8 currpage;
- };
-@@ -324,7 +325,7 @@ static int pmbus_check_status_cml(struct i2c_client *client)
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 	int status, status2;
- 
--	status = _pmbus_read_byte_data(client, -1, data->status_register);
-+	status = data->read_status(client, -1);
- 	if (status < 0 || (status & PB_STATUS_CML)) {
- 		status2 = _pmbus_read_byte_data(client, -1, PMBUS_STATUS_CML);
- 		if (status2 < 0 || (status2 & PB_CML_FAULT_INVALID_COMMAND))
-@@ -348,6 +349,36 @@ static bool pmbus_check_register(struct i2c_client *client,
- 	return rv >= 0;
- }
- 
-+/* Check specified page status register accessibility. Need a separate
-+ * function rather than the two above so we can use the correct status
-+ * register, and we can optimize out the second status register read.
-+ */
-+static bool pmbus_check_status_register(struct i2c_client *client, int page)
-+{
-+	int status, rc = 0;
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+
-+	status = data->read_status(client, page);
-+	if (status < 0)
-+		goto out;
-+
-+	if (!(data->flags & PMBUS_SKIP_STATUS_CHECK)) {
-+		if (status & PB_STATUS_CML) {
-+			status = _pmbus_read_byte_data(client, -1,
-+						       PMBUS_STATUS_CML);
-+			if (status < 0 ||
-+			    (status & PB_CML_FAULT_INVALID_COMMAND))
-+				goto out;
-+		}
-+	}
-+
-+	rc = 1;
-+
-+out:
-+	pmbus_clear_fault_page(client, -1);
-+	return rc;
-+}
-+
- bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg)
- {
- 	return pmbus_check_register(client, _pmbus_read_byte_data, page, reg);
-@@ -393,9 +424,8 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
- 		int i, j;
+ 	mutex_lock(&data->update_lock);
+ 	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		int i, j;
++		int i, j, status;
  
  		for (i = 0; i < info->pages; i++) {
--			data->status[PB_STATUS_BASE + i]
--			    = _pmbus_read_byte_data(client, i,
--						    data->status_register);
-+			data->status[PB_STATUS_BASE + i] =
-+				data->read_status(client, i);
+-			data->status[PB_STATUS_BASE + i] =
+-				data->read_status(client, i);
++			status = data->read_status(client, i);
++			data->status[PB_STATUS_BASE + (i * 2)] = status;
++			data->status[PB_STATUS_BASE + (i * 2) + 1] =
++				status >> 8;
++
  			for (j = 0; j < ARRAY_SIZE(pmbus_status); j++) {
  				struct _pmbus_status *s = &pmbus_status[j];
  
-@@ -1051,8 +1081,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
- 		 * the generic status register for this page is accessible.
- 		 */
- 		if (!ret && attr->gbit &&
--		    pmbus_check_byte_register(client, page,
--					      data->status_register)) {
-+		    pmbus_check_status_register(client, page)) {
- 			ret = pmbus_add_boolean(data, name, "alarm", index,
- 						NULL, NULL,
- 						PB_STATUS_BASE + page,
-@@ -1729,6 +1758,16 @@ static int pmbus_identify_common(struct i2c_client *client,
- 	return 0;
+@@ -718,6 +721,18 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
+ 	return regval;
  }
  
-+static int pmbus_read_status_word(struct i2c_client *client, int page)
++static int pmbus_get_status(struct pmbus_data *data, int reg)
 +{
-+	return _pmbus_read_word_data(client, page, PMBUS_STATUS_WORD);
++	int ret;
++
++	if (reg < PB_STATUS_BASE + PMBUS_PAGES)
++		ret = data->status[reg * 2] | (data->status[(reg * 2) + 1] << 8);
++	else
++		ret = data->status[reg];
++
++	return ret;
 +}
 +
-+static int pmbus_read_status_byte(struct i2c_client *client, int page)
-+{
-+	return _pmbus_read_byte_data(client, page, PMBUS_STATUS_BYTE);
-+}
-+
- static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 			     struct pmbus_driver_info *info)
+ /*
+  * Return boolean calculated from converted data.
+  * <index> defines a status register index and mask.
+@@ -746,12 +761,12 @@ static int pmbus_get_boolean(struct pmbus_data *data, struct pmbus_boolean *b,
  {
-@@ -1736,16 +1775,16 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	int page, ret;
+ 	struct pmbus_sensor *s1 = b->s1;
+ 	struct pmbus_sensor *s2 = b->s2;
+-	u16 reg = (index >> 8) & 0xffff;
+-	u8 mask = index & 0xff;
++	u16 reg = index >> 16;
++	u16 mask = index & 0xffff;
+ 	int ret, status;
+ 	u8 regval;
  
- 	/*
--	 * Some PMBus chips don't support PMBUS_STATUS_BYTE, so try
--	 * to use PMBUS_STATUS_WORD instead if that is the case.
-+	 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
-+	 * to use PMBUS_STATUS_BYTE instead if that is the case.
- 	 * Bail out if both registers are not supported.
- 	 */
--	data->status_register = PMBUS_STATUS_BYTE;
--	ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
--	if (ret < 0 || ret == 0xff) {
--		data->status_register = PMBUS_STATUS_WORD;
--		ret = i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
--		if (ret < 0 || ret == 0xffff) {
-+	data->read_status = pmbus_read_status_word;
-+	ret = i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
-+	if (ret < 0 || ret == 0xffff) {
-+		data->read_status = pmbus_read_status_byte;
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
-+		if (ret < 0 || ret == 0xff) {
- 			dev_err(dev, "PMBus status register not found\n");
- 			return -ENODEV;
- 		}
+-	status = data->status[reg];
++	status = pmbus_get_status(data, reg);
+ 	if (status < 0)
+ 		return status;
+ 
+@@ -890,7 +905,7 @@ static int pmbus_add_boolean(struct pmbus_data *data,
+ 			     const char *name, const char *type, int seq,
+ 			     struct pmbus_sensor *s1,
+ 			     struct pmbus_sensor *s2,
+-			     u16 reg, u8 mask)
++			     u16 reg, u16 mask)
+ {
+ 	struct pmbus_boolean *boolean;
+ 	struct sensor_device_attribute *a;
+@@ -906,7 +921,7 @@ static int pmbus_add_boolean(struct pmbus_data *data,
+ 	boolean->s1 = s1;
+ 	boolean->s2 = s2;
+ 	pmbus_attr_init(a, boolean->name, S_IRUGO, pmbus_show_boolean, NULL,
+-			(reg << 8) | mask);
++			(reg << 16) | mask);
+ 
+ 	return pmbus_add_attribute(data, &a->dev_attr.attr);
+ }
+@@ -992,7 +1007,7 @@ struct pmbus_limit_attr {
+  */
+ struct pmbus_sensor_attr {
+ 	u16 reg;			/* sensor register */
+-	u8 gbit;			/* generic status bit */
++	u16 gbit;			/* generic status bit */
+ 	u8 nlimit;			/* # of limit registers */
+ 	enum pmbus_sensor_classes class;/* sensor class */
+ 	const char *label;		/* sensor label */
+@@ -1337,6 +1352,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
+ 		.func = PMBUS_HAVE_IIN,
+ 		.sfunc = PMBUS_HAVE_STATUS_INPUT,
+ 		.sbase = PB_STATUS_INPUT_BASE,
++		.gbit = PB_STATUS_INPUT,
+ 		.limit = iin_limit_attrs,
+ 		.nlimit = ARRAY_SIZE(iin_limit_attrs),
+ 	}, {
+@@ -1421,6 +1437,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
+ 		.func = PMBUS_HAVE_PIN,
+ 		.sfunc = PMBUS_HAVE_STATUS_INPUT,
+ 		.sbase = PB_STATUS_INPUT_BASE,
++		.gbit = PB_STATUS_INPUT,
+ 		.limit = pin_limit_attrs,
+ 		.nlimit = ARRAY_SIZE(pin_limit_attrs),
+ 	}, {
 -- 
 1.8.3.1
 
