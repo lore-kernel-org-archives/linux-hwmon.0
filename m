@@ -1,72 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:36179 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752489AbdHGJ3g (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Aug 2017 05:29:36 -0400
-Subject: Re: [PATCH] hwmon: adt7475: wusbhc: constify attribute_group
- structures.
-To: Jean Delvare <jdelvare@suse.de>, linux@roeck-us.net
-References: <b4f5a71ff727f2bbd16aee1494ecf07e208830d2.1502086709.git.arvind.yadav.cs@gmail.com>
- <1502097950.4007.82.camel@suse.de>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-From: Arvind Yadav <arvind.yadav.cs@gmail.com>
-Message-ID: <776b8628-fed1-4cd9-d5dc-60f340203393@gmail.com>
-Date: Mon, 7 Aug 2017 14:59:18 +0530
-MIME-Version: 1.0
-In-Reply-To: <1502097950.4007.82.camel@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57087 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1751834AbdHHDZ4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Aug 2017 23:25:56 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v783Nlc6073039
+        for <linux-hwmon@vger.kernel.org>; Mon, 7 Aug 2017 23:25:55 -0400
+Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2c72v54y3s-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Aug 2017 23:25:55 -0400
+Received: from localhost
+        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Mon, 7 Aug 2017 23:25:55 -0400
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        jk@ozlabs.org, cbostic@linux.vnet.ibm.com,
+        eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
+Subject: [RFC 0/3] drivers/hwmon/pmbus: Use STATUS_WORD and add status sensors
+Date: Mon,  7 Aug 2017 22:25:45 -0500
+Message-Id: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi,
+From: "Edward A. James" <eajames@us.ibm.com>
 
+Hi Guenter,
 
-On Monday 07 August 2017 02:55 PM, Jean Delvare wrote:
-> Hi Arvind,
->
-> On lun., 2017-08-07 at 11:49 +0530, Arvind Yadav wrote:
->> attribute_group are not supposed to change at runtime. All functions
->> working with attribute_group provided by <linux/sysfs.h> work with
->> const attribute_group. So mark the non-const structs as const.
-> Confused by the subject. What is "wusbhc:"?
->
-> Also please avoid trailing dot in mail subjects.
-Thanks for review, I will update.
->> Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
->> ---
->>   drivers/hwmon/adt7475.c | 16 ++++++++--------
->>   1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
->> index 1baa213..9ef8499 100644
->> --- a/drivers/hwmon/adt7475.c
->> +++ b/drivers/hwmon/adt7475.c
->> @@ -1319,14 +1319,14 @@ static SENSOR_DEVICE_ATTR_2(pwm3_stall_disable, S_IRUGO | S_IWUSR,
->>   	NULL
->>   };
->>   
->> -static struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
->> -static struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
->> -static struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
->> -static struct attribute_group in0_attr_group = { .attrs = in0_attrs };
->> -static struct attribute_group in3_attr_group = { .attrs = in3_attrs };
->> -static struct attribute_group in4_attr_group = { .attrs = in4_attrs };
->> -static struct attribute_group in5_attr_group = { .attrs = in5_attrs };
->> -static struct attribute_group vid_attr_group = { .attrs = vid_attrs };
->> +static const struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
->> +static const struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
->> +static const struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
->> +static const struct attribute_group in0_attr_group = { .attrs = in0_attrs };
->> +static const struct attribute_group in3_attr_group = { .attrs = in3_attrs };
->> +static const struct attribute_group in4_attr_group = { .attrs = in4_attrs };
->> +static const struct attribute_group in5_attr_group = { .attrs = in5_attrs };
->> +static const struct attribute_group vid_attr_group = { .attrs = vid_attrs };
->>   
->>   static int adt7475_detect(struct i2c_client *client,
->>   			  struct i2c_board_info *info)
-> Looks good to me.
->
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->
-~arvind
+I'm looking for some feedback for some extensions to the pmbus core. We're
+looking for some additional functionality, particularly with STATUS_WORD and
+obtaining raw status data.
+
+The first two patches enable the use of the STATUS_WORD register in the pmbus
+core. This allows the use of more default alarm/fault attributes for default
+pmbus sensors by allowing the use of the higher byte status bits.
+
+The third patch adds "status" attributes to each class of hwmon sensor created
+by pmbus. For example, in1_status and temp1_status. These will display the
+associated raw status register (e.g. STATUS_INPUT and STATUS_TEMPERATURE). I
+realize this is not really "normal" for hwmon or pmbus. These are potentially
+very useful in hardware diagnostic situations where it might be impossible
+to tell the origin of a failure from a simple alarm or fault bit set. We really
+want to access the status registers, and for a multi-page pmbus device, this is
+pretty tricky from userspace.
+
+Please let me know your thoughts,
+Thanks,
+
+Edward A. James (3):
+  drivers/hwmon/pmbus: Access word data for STATUS_WORD and use it by
+    default
+  drivers/hmwon/pmbus: store STATUS_WORD in status registers
+  drivers/hwmon/pmbus: Add sensor status to pmbus attributes
+
+ drivers/hwmon/pmbus/pmbus_core.c | 153 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 130 insertions(+), 23 deletions(-)
+
+-- 
+1.8.3.1
+
