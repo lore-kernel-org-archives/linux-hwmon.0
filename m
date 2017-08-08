@@ -1,96 +1,72 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-yw0-f194.google.com ([209.85.161.194]:37064 "EHLO
-        mail-yw0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751613AbdGZOJS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jul 2017 10:09:18 -0400
-Received: by mail-yw0-f194.google.com with SMTP id s143so2842144ywg.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Jul 2017 07:09:18 -0700 (PDT)
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:44649 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750727AbdHHEAf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 00:00:35 -0400
+Subject: Re: [RFC 0/3] drivers/hwmon/pmbus: Use STATUS_WORD and add status
+ sensors
+To: Eddie James <eajames@linux.vnet.ibm.com>
+Cc: linux-hwmon@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        jk@ozlabs.org, cbostic@linux.vnet.ibm.com,
+        "Edward A. James" <eajames@us.ibm.com>
+References: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <7484a66c-4f3c-5d76-7c8a-5992d2c1d3ea@roeck-us.net>
+Date: Mon, 7 Aug 2017 21:00:32 -0700
 MIME-Version: 1.0
-In-Reply-To: <20170726112435.32575-1-c_mykolak@mellanox.com>
-References: <20170726112435.32575-1-c_mykolak@mellanox.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 26 Jul 2017 23:38:57 +0930
-Message-ID: <CACPK8XcgN2-X_LyTn+KJZ-fsibdCjwkGJocBRGK4U3qsYa1BWA@mail.gmail.com>
-Subject: Re: [patch v4] hwmon: (aspeed-pwm-tacho) cooling device support.
-To: Mykola Kostenok <c_mykolak@mellanox.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Patrick Venture <venture@google.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Ohad Oz <ohado@mellanox.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1502162748-16372-1-git-send-email-eajames@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 26, 2017 at 8:54 PM, Mykola Kostenok <c_mykolak@mellanox.com> wrote:
-> Add support in aspeed-pwm-tacho driver for cooling device creation.
-> This cooling device could be bound to a thermal zone
-> for the thermal control. Device will appear in /sys/class/thermal
-> folder as cooling_deviceX. Then it could be bound to particular
-> thermal zones. Allow specification of the cooling levels
-> vector - PWM duty cycle values in a range from 0 to 255
-> which correspond to thermal cooling states.
->
-> Signed-off-by: Mykola Kostenok <c_mykolak@mellanox.com>
->
-> v1 -> v2:
->  - Remove device tree binding file from the patch.
->  - Move of_node_put out of cycle because of_get_next_child
->    already do of_put_node on previous child.
->
-> v2 -> v3:
->  Pointed out by Rob Herring:
->  - Put cooling-levels under fan subnodes.
->
-> v3 -> v4:
->  Pointed out by Joel Stanley:
->  - Move patch history after Signoff.
->  - Remove unnecessary type cast.
->  - Use array instead of pointers for colling_levels.
->  - Rename num_level to num_levels.
->  - Use local variable to make function easier to read.
->  - Drop unnesesary sizeof(u8).
->  - Use IS_ERR instead of PTR_ERR_OR_ZERO.
+On 08/07/2017 08:25 PM, Eddie James wrote:
+> From: "Edward A. James" <eajames@us.ibm.com>
+> 
+> Hi Guenter,
+> 
+> I'm looking for some feedback for some extensions to the pmbus core. We're
+> looking for some additional functionality, particularly with STATUS_WORD and
+> obtaining raw status data.
+> 
+> The first two patches enable the use of the STATUS_WORD register in the pmbus
+> core. This allows the use of more default alarm/fault attributes for default
+> pmbus sensors by allowing the use of the higher byte status bits.
+> 
+> The third patch adds "status" attributes to each class of hwmon sensor created
+> by pmbus. For example, in1_status and temp1_status. These will display the
+> associated raw status register (e.g. STATUS_INPUT and STATUS_TEMPERATURE). I
+> realize this is not really "normal" for hwmon or pmbus. These are potentially
+> very useful in hardware diagnostic situations where it might be impossible
+> to tell the origin of a failure from a simple alarm or fault bit set. We really
+> want to access the status registers, and for a multi-page pmbus device, this is
+> pretty tricky from userspace.
+> 
+> Please let me know your thoughts,
+> Thanks,
 
-Changes look good!
+I don't mind providing such data with debugfs, for example, but I don't see
+the point in providing it as part of the ABI. Which, in part, since it requires
+a lot of thought on my side, is part of the reason why I didn't provide
+feedback to your earlier patches yet. Sorry, I've been exceptionally busy
+lately, and non-standard requests tend to end up at the end of the queue :-(.
 
-> +static int aspeed_create_pwm_cooling(struct device *dev,
-> +                                    struct device_node *child,
-> +                                    struct aspeed_pwm_tacho_data *priv,
-> +                                    u32 pwm_port, u8 num_levels)
-> +{
-> +       int ret;
-> +       struct aspeed_cooling_device *cdev;
-> +
-> +       cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
-> +
-> +       if (!cdev)
-> +               return -ENOMEM;
-> +
-> +       cdev->cooling_levels = devm_kzalloc(dev, num_levels, GFP_KERNEL);
-> +       if (!cdev->cooling_levels)
-> +               return -ENOMEM;
-> +
-> +       cdev->max_state = num_levels - 1;
-> +       ret = of_property_read_u8_array(child, "cooling-levels",
-> +                                       cdev->cooling_levels,
-> +                                       num_levels);
-> +       if (ret) {
-> +               dev_err(dev, "Property 'cooling-levels' cannot be read.\n");
-> +               return ret;
-> +       }
-> +       sprintf(cdev->name, "%s%d", child->name, pwm_port);
+Any reason why debugfs is not sufficient and/or acceptable for your use case ?
+You _are_ talking about diagnostic situations, which seems to be an exact fit
+for debugfs.
 
-Oops, I missed this one. It looks like if child->name is too long then
-this will overflow name[16]. You could dynamically allocate
-cdev->name[16], or use snprintf.
+Guenter
 
-Once you've fixed that I will add my reviewed-by.
+> 
+> Edward A. James (3):
+>    drivers/hwmon/pmbus: Access word data for STATUS_WORD and use it by
+>      default
+>    drivers/hmwon/pmbus: store STATUS_WORD in status registers
+>    drivers/hwmon/pmbus: Add sensor status to pmbus attributes
+> 
+>   drivers/hwmon/pmbus/pmbus_core.c | 153 +++++++++++++++++++++++++++++++++------
+>   1 file changed, 130 insertions(+), 23 deletions(-)
+> 
 
-Cheers,
-
-Joel
