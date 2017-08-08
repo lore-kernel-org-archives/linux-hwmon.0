@@ -7,9 +7,9 @@ Cc: bhumirks@gmail.com,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 8/9 v2] hwmon: (core) constify thermal_zone_of_device_ops structures
-Date: Tue,  8 Aug 2017 17:09:02 +0200
-Message-Id: <1502204943-20075-9-git-send-email-Julia.Lawall@lip6.fr>
+Subject: [PATCH 9/9 v2] hwmon: (scpi) constify thermal_zone_of_device_ops structures
+Date: Tue,  8 Aug 2017 17:09:03 +0200
+Message-Id: <1502204943-20075-10-git-send-email-Julia.Lawall@lip6.fr>
 In-Reply-To: <1502204943-20075-1-git-send-email-Julia.Lawall@lip6.fr>
 References: <1502204943-20075-1-git-send-email-Julia.Lawall@lip6.fr>
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -27,19 +27,19 @@ Signed-off-by: Julia Lawall <Julia.Lawall@lip6.fr>
 
 v2: New patch
 
- drivers/hwmon/hwmon.c |    2 +-
+ drivers/hwmon/scpi-hwmon.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 2ac578a..c9790e2 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -135,7 +135,7 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
- 	return 0;
+diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+index a586480..7e49da5 100644
+--- a/drivers/hwmon/scpi-hwmon.c
++++ b/drivers/hwmon/scpi-hwmon.c
+@@ -120,7 +120,7 @@ static int scpi_read_temp(void *dev, int *temp)
+ 	return sprintf(buf, "%s\n", sensor->info.name);
  }
  
--static struct thermal_zone_of_device_ops hwmon_thermal_ops = {
-+static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
- 	.get_temp = hwmon_thermal_get_temp,
+-static struct thermal_zone_of_device_ops scpi_sensor_ops = {
++static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
+ 	.get_temp = scpi_read_temp,
  };
  
