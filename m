@@ -1,97 +1,359 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38485 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752469AbdHIWx1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Aug 2017 18:53:27 -0400
-Date: Wed, 9 Aug 2017 15:53:24 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48818 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1752233AbdHIWTk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 9 Aug 2017 18:19:40 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v79MJThJ091923
+        for <linux-hwmon@vger.kernel.org>; Wed, 9 Aug 2017 18:19:39 -0400
+Received: from e35.co.us.ibm.com (e35.co.us.ibm.com [32.97.110.153])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2c86dyxaac-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Aug 2017 18:19:39 -0400
+Received: from localhost
+        by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Wed, 9 Aug 2017 16:19:38 -0600
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux@roeck-us.net
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, joel@jms.id.au, jk@ozlabs.org,
         andrew@aj.id.au, cbostic@linux.vnet.ibm.com,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH 3/4] drivers/hwmon/pmbus: Add generic alarm bit for iin
- and pin
-Message-ID: <20170809225324.GA8549@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH 4/4] drivers/hwmon/pmbus: Add debugfs for status registers
+Date: Wed,  9 Aug 2017 17:19:17 -0500
+In-Reply-To: <1502317157-12648-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1502317157-12648-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1502317157-12648-5-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 09, 2017 at 05:19:16PM -0500, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Add PB_STATUS_INPUT as the generic alarm bit for iin and pin. We also
-> need to redo the status register checking before setting up the boolean
-> attribute, since it won't necessarily check STATUS_WORD if the device
-> doesn't support it, which we need for this bit.
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
+From: "Edward A. James" <eajames@us.ibm.com>
 
-For the entire series: subject should start with "hwmon: (pmbus)".
+Export all the available status registers through debugfs, if the client
+driver wants them.
 
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 277d170..1a51f8f 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -1045,6 +1045,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
->  				      const struct pmbus_sensor_attr *attr)
->  {
->  	struct pmbus_sensor *base;
-> +	bool upper = !!(attr->gbit & 0xff00);	/* need to check STATUS_WORD */
->  	int ret;
->  
->  	if (attr->label) {
-> @@ -1065,10 +1066,13 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
->  		/*
->  		 * Add generic alarm attribute only if there are no individual
->  		 * alarm attributes, if there is a global alarm bit, and if
-> -		 * the generic status register for this page is accessible.
-> +		 * the generic status register (word or byte, depending on
-> +		 * which global bit is set) for this page is accessible.
->  		 */
->  		if (!ret && attr->gbit &&
-> -		    pmbus_check_status_register(client, page)) {
-> +		    ((upper && pmbus_check_word_register(client, page,
-> +							 PMBUS_STATUS_WORD)) ||
-> +		     (!upper && pmbus_check_status_register(client, page)))) {
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
+---
+ drivers/hwmon/pmbus/pmbus.c      |  24 +++++-
+ drivers/hwmon/pmbus/pmbus.h      |  11 +++
+ drivers/hwmon/pmbus/pmbus_core.c | 175 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 209 insertions(+), 1 deletion(-)
 
-We already know if PMBUS_STATUS_WORD is supported or not, since
-pmbus_check_status_register() will use it. Just store that knowledge
-in a flag when discovered and make this something like
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 7718e58..fc27417 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#include <linux/debugfs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -230,7 +231,28 @@ static int pmbus_probe(struct i2c_client *client,
+ 	.id_table = pmbus_id,
+ };
+ 
+-module_i2c_driver(pmbus_driver);
++struct dentry *pmbus_debugfs_dir;
++EXPORT_SYMBOL_GPL(pmbus_debugfs_dir);
++
++static int __init pmbus_init(void)
++{
++	pmbus_debugfs_dir = debugfs_create_dir(pmbus_driver.driver.name, NULL);
++	if (IS_ERR(pmbus_debugfs_dir))
++		/* Don't fail out if we don't have debugfs support. */
++		pmbus_debugfs_dir = NULL;
++
++	return i2c_add_driver(&pmbus_driver);
++}
++
++static void __exit pmbus_exit(void)
++{
++	debugfs_remove_recursive(pmbus_debugfs_dir);
++
++	i2c_del_driver(&pmbus_driver);
++}
++
++module_init(pmbus_init);
++module_exit(pmbus_exit);
+ 
+ MODULE_AUTHOR("Guenter Roeck");
+ MODULE_DESCRIPTION("Generic PMBus driver");
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index bfcb13b..c772b83 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -25,6 +25,8 @@
+ #include <linux/bitops.h>
+ #include <linux/regulator/driver.h>
+ 
++struct dentry;
++
+ /*
+  * Registers
+  */
+@@ -383,6 +385,12 @@ struct pmbus_driver_info {
+ 	/* Regulator functionality, if supported by this chip driver. */
+ 	int num_regulators;
+ 	const struct regulator_desc *reg_desc;
++
++	/*
++	 * Controls whether or not to create debugfs entries for this driver's
++	 * devices.
++	 */
++	bool debugfs;
+ };
+ 
+ /* Regulator ops */
+@@ -401,6 +409,9 @@ struct pmbus_driver_info {
+ 		.owner = THIS_MODULE,				\
+ 	}
+ 
++/* Handle for debugfs directory */
++extern struct dentry *pmbus_debugfs_dir;
++
+ /* Function declarations */
+ 
+ void pmbus_clear_cache(struct i2c_client *client);
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 1a51f8f..afbd364 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#include <linux/debugfs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -49,6 +50,9 @@
+ #define PB_STATUS_FAN34_BASE	(PB_STATUS_FAN_BASE + PMBUS_PAGES)
+ #define PB_STATUS_TEMP_BASE	(PB_STATUS_FAN34_BASE + PMBUS_PAGES)
+ #define PB_STATUS_INPUT_BASE	(PB_STATUS_TEMP_BASE + PMBUS_PAGES)
++#define PB_STATUS_CML_BASE	(PB_STATUS_INPUT_BASE + PMBUS_PAGES)
++#define PB_STATUS_OTHER_BASE	(PB_STATUS_CML_BASE + PMBUS_PAGES)
++#define PB_STATUS_MFR_BASE	(PB_STATUS_OTHER_BASE + PMBUS_PAGES)
+ #define PB_STATUS_VMON_BASE	(PB_STATUS_INPUT_BASE + 1)
+ 
+ #define PB_NUM_STATUS_REG	(PB_STATUS_VMON_BASE + 1)
+@@ -101,6 +105,7 @@ struct pmbus_data {
+ 	int num_attributes;
+ 	struct attribute_group group;
+ 	const struct attribute_group *groups[2];
++	struct dentry *debugfs;		/* debugfs device directory */
+ 
+ 	struct pmbus_sensor *sensors;
+ 
+@@ -119,6 +124,11 @@ struct pmbus_data {
+ 	u8 currpage;
+ };
+ 
++struct pmbus_debugfs_entry {
++	struct device *dev;
++	int index;
++};
++
+ void pmbus_clear_cache(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -422,6 +432,19 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
+ 					= _pmbus_read_byte_data(client, i,
+ 								s->reg);
+ 			}
++
++			if (!data->debugfs)
++				continue;
++
++			data->status[PB_STATUS_CML_BASE + i]
++				= _pmbus_read_byte_data(client, i,
++							PMBUS_STATUS_CML);
++			data->status[PB_STATUS_OTHER_BASE + i]
++				= _pmbus_read_byte_data(client, i,
++							PMBUS_STATUS_OTHER);
++			data->status[PB_STATUS_MFR_BASE + i]
++			    = _pmbus_read_byte_data(client, i,
++						    PMBUS_STATUS_MFR_SPECIFIC);
+ 		}
+ 
+ 		if (info->func[0] & PMBUS_HAVE_STATUS_INPUT)
+@@ -1891,6 +1914,151 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ }
+ #endif
+ 
++static int pmbus_debugfs_get(void *data, u64 *val)
++{
++	struct pmbus_debugfs_entry *entry = data;
++	struct pmbus_data *pdata = pmbus_update_device(entry->dev);
++
++	*val = pdata->status[entry->index];
++
++	return 0;
++}
++
++DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops8, pmbus_debugfs_get, NULL,
++			 "0x%02llx\n");
++DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops16, pmbus_debugfs_get, NULL,
++			 "0x%04llx\n");
++
++static int pmbus_init_debugfs(struct i2c_client *client,
++			      struct pmbus_data *data)
++{
++	int i, idx = 0;
++	struct dentry *dbg;
++	char name[PMBUS_NAME_SIZE];
++	struct pmbus_debugfs_entry *entries;
++
++	/*
++	 * Either user didn't request debugfs or debugfs is not enabled in
++	 * kernel. Exit but don't throw an error in these cases.
++	 */
++	if (!data->info->debugfs || !pmbus_debugfs_dir)
++		return 0;
++
++	/*
++	 * Create the debugfs directory for this device. Use the hwmon device
++	 * name to avoid conflicts (hwmon numbers are globally unique).
++	 */
++	data->debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
++					   pmbus_debugfs_dir);
++	if (IS_ERR_OR_NULL(data->debugfs)) {
++		data->debugfs = NULL;
++		return -ENODEV;
++	}
++
++	/* Allocate the max possible entries we need. */
++	entries = devm_kzalloc(data->dev,
++			       sizeof(*entries) * (data->info->pages * 10),
++			       GFP_KERNEL);
++	if (!entries)
++		return -ENOMEM;
++
++	for (i = 0; i < data->info->pages; ++i) {
++		/* check accessibility of status register if it's not page 0 */
++		if (!i || pmbus_check_status_register(client, i)) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops16);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_VOUT) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_VOUT_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_vout", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_IOUT) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_IOUT_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_iout", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_INPUT) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_INPUT_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_input", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_TEMP) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_TEMP_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_temp", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_CML)) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_CML_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_cml", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_OTHER)) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_OTHER_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_other", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (pmbus_check_byte_register(client, i,
++					      PMBUS_STATUS_MFR_SPECIFIC)) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_MFR_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_mfr", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN12) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_FAN_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_fan12", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN34) {
++			entries[idx].dev = data->hwmon_dev;
++			entries[idx].index = PB_STATUS_FAN34_BASE + i;
++			snprintf(name, PMBUS_NAME_SIZE, "status%d_fan34", i);
++			dbg = debugfs_create_file(name, 0444, data->debugfs,
++						  &entries[idx++],
++						  &pmbus_debugfs_ops8);
++		}
++	}
++
++	return 0;
++}
++
+ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 		   struct pmbus_driver_info *info)
+ {
+@@ -1950,6 +2118,10 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 	if (ret)
+ 		goto out_unregister;
+ 
++	ret = pmbus_init_debugfs(client, data);
++	if (ret)
++		dev_warn(dev, "Failed to register debugfs\n");
++
+ 	return 0;
+ 
+ out_unregister:
+@@ -1963,6 +2135,9 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ int pmbus_do_remove(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
++
++	debugfs_remove_recursive(data->debugfs);
++
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	kfree(data->group.attrs);
+ 	return 0;
+-- 
+1.8.3.1
 
-		if (!ret && attr->gbit &&
-		    (!upper || (upper && data->has_word_status)) &&
-		    pmbus_check_status_register(client, page)) {
-
->  			ret = pmbus_add_boolean(data, name, "alarm", index,
->  						NULL, NULL,
->  						PB_STATUS_BASE + page,
-> @@ -1324,6 +1328,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
->  		.func = PMBUS_HAVE_IIN,
->  		.sfunc = PMBUS_HAVE_STATUS_INPUT,
->  		.sbase = PB_STATUS_INPUT_BASE,
-> +		.gbit = PB_STATUS_INPUT,
->  		.limit = iin_limit_attrs,
->  		.nlimit = ARRAY_SIZE(iin_limit_attrs),
->  	}, {
-> @@ -1408,6 +1413,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
->  		.func = PMBUS_HAVE_PIN,
->  		.sfunc = PMBUS_HAVE_STATUS_INPUT,
->  		.sbase = PB_STATUS_INPUT_BASE,
-> +		.gbit = PB_STATUS_INPUT,
->  		.limit = pin_limit_attrs,
->  		.nlimit = ARRAY_SIZE(pin_limit_attrs),
->  	}, {
-> -- 
-> 1.8.3.1
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
