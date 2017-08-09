@@ -1,68 +1,67 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:46110 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:52838 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752059AbdHHNy7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 09:54:59 -0400
-Date: Tue, 8 Aug 2017 06:54:57 -0700
+        with ESMTP id S1752301AbdHICFL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 22:05:11 -0400
+Date: Tue, 8 Aug 2017 19:05:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: ftsteutates: fix clear alarm sysfs entries
-Message-ID: <20170808135457.GA15751@roeck-us.net>
-References: <20170803094351.10325-1-thilo.cestonaro@ts.fujitsu.com>
+To: Arvind Yadav <arvind.yadav.cs@gmail.com>
+Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [v2] hwmon: adt7475: constify attribute_group structures
+Message-ID: <20170809020510.GA22544@roeck-us.net>
+References: <a067ef24035b924b03137a2e4dfa93eba6f6d080.1502098447.git.arvind.yadav.cs@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20170803094351.10325-1-thilo.cestonaro@ts.fujitsu.com>
+In-Reply-To: <a067ef24035b924b03137a2e4dfa93eba6f6d080.1502098447.git.arvind.yadav.cs@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 03, 2017 at 11:43:51AM +0200, Thilo Cestonaro wrote:
-> sysfs store functions should return the "written" bytes.
-> Returning zero ends in an endless loop, so fix this by
-> returning the count of bytes got.
+On Mon, Aug 07, 2017 at 03:06:29PM +0530, Arvind Yadav wrote:
+> attribute_group are not supposed to change at runtime. All functions
+> working with attribute_group provided by <linux/sysfs.h> work with
+> const attribute_group. So mark the non-const structs as const.
 > 
-> Signed-off-by: Thilo Cestonaro <thilo.cestonaro@ts.fujitsu.com>
+> Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
 
-Applied, thanks (fixed documentation change and description).
+Kind of confused by this one. I applied a similar patch from you
+back in July ??
 
 Guenter
 
 > ---
->  Documentation/hwmon/ftsteutates | 4 ++++
->  drivers/hwmon/ftsteutates.c     | 2 ++
->  2 files changed, 6 insertions(+)
+> change in v2:
+>             subject was not correct. Removed 'wusbhc' and '.'.
 > 
-> diff --git a/Documentation/hwmon/ftsteutates b/Documentation/hwmon/ftsteutates
-> index 8c10a916de20..6b5992f6072a 100644
-> --- a/Documentation/hwmon/ftsteutates
-> +++ b/Documentation/hwmon/ftsteutates
-> @@ -21,3 +21,7 @@ implemented in this driver.
->  Specification of the chip can be found here:
->  ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/BMC-Teutates_Specification_V1.21.pdf
->  ftp://ftp.ts.fujitsu.com/pub/Mainboard-OEM-Sales/Services/Software&Tools/Linux_SystemMonitoring&Watchdog&GPIO/Fujitsu_mainboards-1-Sensors_HowTo-en-US.pdf
-> +
-> +to clear a temprature or fan alarm execute the following command with the
-> +correct path to the alarm file:
-> +echo 0 >XXXX_alarm
-> diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-> index 0f0277e7aae5..a0fb9e9291f0 100644
-> --- a/drivers/hwmon/ftsteutates.c
-> +++ b/drivers/hwmon/ftsteutates.c
-> @@ -435,6 +435,7 @@ clear_temp_alarm(struct device *dev, struct device_attribute *devattr,
->  		goto error;
+>  drivers/hwmon/adt7475.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 1baa213..9ef8499 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1319,14 +1319,14 @@ static SENSOR_DEVICE_ATTR_2(pwm3_stall_disable, S_IRUGO | S_IWUSR,
+>  	NULL
+>  };
 >  
->  	data->valid = false;
-> +	ret = count;
->  error:
->  	mutex_unlock(&data->update_lock);
->  	return ret;
-> @@ -508,6 +509,7 @@ clear_fan_alarm(struct device *dev, struct device_attribute *devattr,
->  		goto error;
+> -static struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
+> -static struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
+> -static struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
+> -static struct attribute_group in0_attr_group = { .attrs = in0_attrs };
+> -static struct attribute_group in3_attr_group = { .attrs = in3_attrs };
+> -static struct attribute_group in4_attr_group = { .attrs = in4_attrs };
+> -static struct attribute_group in5_attr_group = { .attrs = in5_attrs };
+> -static struct attribute_group vid_attr_group = { .attrs = vid_attrs };
+> +static const struct attribute_group adt7475_attr_group = { .attrs = adt7475_attrs };
+> +static const struct attribute_group fan4_attr_group = { .attrs = fan4_attrs };
+> +static const struct attribute_group pwm2_attr_group = { .attrs = pwm2_attrs };
+> +static const struct attribute_group in0_attr_group = { .attrs = in0_attrs };
+> +static const struct attribute_group in3_attr_group = { .attrs = in3_attrs };
+> +static const struct attribute_group in4_attr_group = { .attrs = in4_attrs };
+> +static const struct attribute_group in5_attr_group = { .attrs = in5_attrs };
+> +static const struct attribute_group vid_attr_group = { .attrs = vid_attrs };
 >  
->  	data->valid = false;
-> +	ret = count;
->  error:
->  	mutex_unlock(&data->update_lock);
->  	return ret;
+>  static int adt7475_detect(struct i2c_client *client,
+>  			  struct i2c_board_info *info)
