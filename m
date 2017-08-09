@@ -1,163 +1,130 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:42262 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:60238 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751971AbdHIB6m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 21:58:42 -0400
-Date: Tue, 8 Aug 2017 18:58:40 -0700
+        with ESMTP id S1752265AbdHICAE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Aug 2017 22:00:04 -0400
+Date: Tue, 8 Aug 2017 19:00:02 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: eajames@linux.vnet.ibm.com
 Cc: linux-hwmon@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
         jk@ozlabs.org, cbostic@linux.vnet.ibm.com,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [RFC,2/3] drivers/hmwon/pmbus: store STATUS_WORD in status
- registers
-Message-ID: <20170809015840.GA15108@roeck-us.net>
-References: <1502162748-16372-3-git-send-email-eajames@linux.vnet.ibm.com>
+Subject: Re: [RFC,3/3] drivers/hwmon/pmbus: Add sensor status to pmbus
+ attributes
+Message-ID: <20170809020002.GA19465@roeck-us.net>
+References: <1502162748-16372-4-git-send-email-eajames@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1502162748-16372-3-git-send-email-eajames@linux.vnet.ibm.com>
+In-Reply-To: <1502162748-16372-4-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 07, 2017 at 10:25:47PM -0500, eajames@linux.vnet.ibm.com wrote:
+On Mon, Aug 07, 2017 at 10:25:48PM -0500, eajames@linux.vnet.ibm.com wrote:
 > From: "Edward A. James" <eajames@us.ibm.com>
 > 
-> Higher byte of the status register wasn't available for boolean alarms.
-> Store the STATUS_WORD register if it's available, and read it out when
-> queried by boolean attributes.
-> 
-> The method of storing and retrieving the status reg is a bit hacky but
-> I couldn't work out another way without doubling the storage requirement
-> of every pmbus device or tearing up more of the pmbus core code.
+> Extend the pmbus core to provide status registers for attributes.
 > 
 > Signed-off-by: Edward A. James <eajames@us.ibm.com>
+
+NACK, sorry. As mentioned separately, please consider adding debugfs
+support instead.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 37 +++++++++++++++++++++++++++----------
->  1 file changed, 27 insertions(+), 10 deletions(-)
+>  drivers/hwmon/pmbus/pmbus_core.c | 51 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
 > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 8511aba..3b53fa7 100644
+> index 3b53fa7..00ce145 100644
 > --- a/drivers/hwmon/pmbus/pmbus_core.c
 > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -43,7 +43,7 @@
->   * Index into status register array, per status register group
->   */
->  #define PB_STATUS_BASE		0
-> -#define PB_STATUS_VOUT_BASE	(PB_STATUS_BASE + PMBUS_PAGES)
-> +#define PB_STATUS_VOUT_BASE	(PB_STATUS_BASE + (PMBUS_PAGES * 2))
->  #define PB_STATUS_IOUT_BASE	(PB_STATUS_VOUT_BASE + PMBUS_PAGES)
->  #define PB_STATUS_FAN_BASE	(PB_STATUS_IOUT_BASE + PMBUS_PAGES)
->  #define PB_STATUS_FAN34_BASE	(PB_STATUS_FAN_BASE + PMBUS_PAGES)
-> @@ -421,11 +421,14 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
+> @@ -86,6 +86,14 @@ struct pmbus_label {
+>  #define to_pmbus_label(_attr) \
+>  	container_of(_attr, struct pmbus_label, attribute)
 >  
->  	mutex_lock(&data->update_lock);
->  	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-> -		int i, j;
-> +		int i, j, status;
->  
->  		for (i = 0; i < info->pages; i++) {
-> -			data->status[PB_STATUS_BASE + i] =
-> -				data->read_status(client, i);
-> +			status = data->read_status(client, i);
-> +			data->status[PB_STATUS_BASE + (i * 2)] = status;
-> +			data->status[PB_STATUS_BASE + (i * 2) + 1] =
-> +				status >> 8;
+> +struct pmbus_status {
+> +	char name[PMBUS_NAME_SIZE];	/* sysfs status name */
+> +	struct device_attribute attribute;
+> +	int reg;
+> +};
+> +#define to_pmbus_status(_attr) \
+> +	container_of(_attr, struct pmbus_status, attribute)
 > +
-
-As mentioned before, I don't think the "waste" of some 200 bytes of memory
-warrants the added complexity here.
-
->  			for (j = 0; j < ARRAY_SIZE(pmbus_status); j++) {
->  				struct _pmbus_status *s = &pmbus_status[j];
->  
-> @@ -718,6 +721,18 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
->  	return regval;
+>  struct pmbus_data {
+>  	struct device *dev;
+>  	struct device *hwmon_dev;
+> @@ -851,6 +859,16 @@ static ssize_t pmbus_show_label(struct device *dev,
+>  	return snprintf(buf, PAGE_SIZE, "%s\n", label->label);
 >  }
 >  
-> +static int pmbus_get_status(struct pmbus_data *data, int reg)
+> +static ssize_t pmbus_show_status(struct device *dev,
+> +				 struct device_attribute *da, char *buf)
 > +{
-> +	int ret;
+> +	struct pmbus_status *status = to_pmbus_status(da);
+> +	struct pmbus_data *data = pmbus_update_device(dev);
 > +
-> +	if (reg < PB_STATUS_BASE + PMBUS_PAGES)
-> +		ret = data->status[reg * 2] | (data->status[(reg * 2) + 1] << 8);
-> +	else
-> +		ret = data->status[reg];
-> +
-> +	return ret;
+> +	return snprintf(buf, PAGE_SIZE, "%02x\n",
+> +			pmbus_get_status(data, status->reg) & 0xFF);
 > +}
-
-... and much less here. How much additional code does this generate ?
-How much execution time does it add to save some 200 bytes of data ?
-
+> +
+>  static int pmbus_add_attribute(struct pmbus_data *data, struct attribute *attr)
+>  {
+>  	if (data->num_attributes >= data->max_attributes - 1) {
+> @@ -983,6 +1001,25 @@ static int pmbus_add_label(struct pmbus_data *data,
+>  	return pmbus_add_attribute(data, &a->attr);
+>  }
+>  
+> +static int pmbus_add_status(struct pmbus_data *data, const char *name, int seq,
+> +			    int reg)
+> +{
+> +	struct pmbus_status *status;
+> +	struct device_attribute *a;
+> +
+> +	status = devm_kzalloc(data->dev, sizeof(*status), GFP_KERNEL);
+> +	if (!status)
+> +		return -ENOMEM;
+> +
+> +	a = &status->attribute;
+> +
+> +	snprintf(status->name, sizeof(status->name), "%s%d_status", name, seq);
+> +	status->reg = reg;
+> +
+> +	pmbus_dev_attr_init(a, status->name, S_IRUGO, pmbus_show_status, NULL);
+> +	return pmbus_add_attribute(data, &a->attr);
+> +}
 > +
 >  /*
->   * Return boolean calculated from converted data.
->   * <index> defines a status register index and mask.
-> @@ -746,12 +761,12 @@ static int pmbus_get_boolean(struct pmbus_data *data, struct pmbus_boolean *b,
->  {
->  	struct pmbus_sensor *s1 = b->s1;
->  	struct pmbus_sensor *s2 = b->s2;
-> -	u16 reg = (index >> 8) & 0xffff;
-> -	u8 mask = index & 0xff;
-> +	u16 reg = index >> 16;
-> +	u16 mask = index & 0xffff;
->  	int ret, status;
->  	u8 regval;
->  
-> -	status = data->status[reg];
-> +	status = pmbus_get_status(data, reg);
->  	if (status < 0)
->  		return status;
->  
-> @@ -890,7 +905,7 @@ static int pmbus_add_boolean(struct pmbus_data *data,
->  			     const char *name, const char *type, int seq,
->  			     struct pmbus_sensor *s1,
->  			     struct pmbus_sensor *s2,
-> -			     u16 reg, u8 mask)
-> +			     u16 reg, u16 mask)
->  {
->  	struct pmbus_boolean *boolean;
->  	struct sensor_device_attribute *a;
-> @@ -906,7 +921,7 @@ static int pmbus_add_boolean(struct pmbus_data *data,
->  	boolean->s1 = s1;
->  	boolean->s2 = s2;
->  	pmbus_attr_init(a, boolean->name, S_IRUGO, pmbus_show_boolean, NULL,
-> -			(reg << 8) | mask);
-> +			(reg << 16) | mask);
->  
->  	return pmbus_add_attribute(data, &a->dev_attr.attr);
->  }
-> @@ -992,7 +1007,7 @@ struct pmbus_limit_attr {
+>   * Search for attributes. Allocate sensors, booleans, and labels as needed.
 >   */
->  struct pmbus_sensor_attr {
->  	u16 reg;			/* sensor register */
-> -	u8 gbit;			/* generic status bit */
-> +	u16 gbit;			/* generic status bit */
->  	u8 nlimit;			/* # of limit registers */
->  	enum pmbus_sensor_classes class;/* sensor class */
->  	const char *label;		/* sensor label */
-> @@ -1337,6 +1352,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
->  		.func = PMBUS_HAVE_IIN,
->  		.sfunc = PMBUS_HAVE_STATUS_INPUT,
->  		.sbase = PB_STATUS_INPUT_BASE,
-> +		.gbit = PB_STATUS_INPUT,
-
-The problem with this is that it assumes that the generic status bit is always
-available, which is not the case. You would have to add more conditionals
-when generating the attributes: An attribute must only be generated based
-on the generic status if the generic status bit is available. It is not
-available if (gbit & 0xff00) and there is no STATUS_WORD register.
-
->  		.limit = iin_limit_attrs,
->  		.nlimit = ARRAY_SIZE(iin_limit_attrs),
->  	}, {
-> @@ -1421,6 +1437,7 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
->  		.func = PMBUS_HAVE_PIN,
->  		.sfunc = PMBUS_HAVE_STATUS_INPUT,
->  		.sbase = PB_STATUS_INPUT_BASE,
-> +		.gbit = PB_STATUS_INPUT,
->  		.limit = pin_limit_attrs,
->  		.nlimit = ARRAY_SIZE(pin_limit_attrs),
->  	}, {
+> @@ -1105,6 +1142,16 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+>  				return ret;
+>  		}
+>  	}
+> +	if (attr->sbase > 0 && attr->sbase < PB_STATUS_VMON_BASE) {
+> +		/* Add "status" attribute for physical status registers to dump
+> +		 * the contents. This is pretty useful for hardware diagnostic
+> +		 * purposes, as an alarm or fault bit doesn't necessarily
+> +		 * provide all the info available.
+> +		 */
+> +		ret = pmbus_add_status(data, name, index, attr->sbase + page);
+> +		if (ret)
+> +			return ret;
+> +	}
+>  	return 0;
+>  }
+>  
+> @@ -1693,6 +1740,10 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+>  					PB_FAN_FAN1_FAULT >> (f & 1));
+>  				if (ret)
+>  					return ret;
+> +				ret = pmbus_add_status(data, "fan", index,
+> +						       base);
+> +				if (ret)
+> +					return ret;
+>  			}
+>  			index++;
+>  		}
