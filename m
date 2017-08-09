@@ -1,228 +1,239 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from vps-vb.mhejs.net ([37.28.154.113]:60495 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751864AbdHIPPu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 9 Aug 2017 11:15:50 -0400
-From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: [PATCH v7] hwmon: (it87) Reapply probe path chip registers settings
- after resume
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
+Received: from bh-25.webhostbox.net ([208.91.199.152]:53668 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751862AbdHIRju (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Aug 2017 13:39:50 -0400
+Date: Wed, 9 Aug 2017 10:39:48 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <b3457edb-9753-0d6b-a51b-201083964374@maciej.szmigiero.name>
-Date: Wed, 9 Aug 2017 17:15:46 +0200
+Subject: Re: [PATCH v7] hwmon: (it87) Reapply probe path chip registers
+ settings after resume
+Message-ID: <20170809173948.GA11562@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-After a suspend / resume cycle we possibly need to reapply chip registers
-settings that we had set or fixed in a probe path, since they might have
-been reset to default values or set incorrectly by a BIOS again.
+On Wed, Aug 09, 2017 at 05:15:46PM +0200, Maciej S. Szmigiero wrote:
+> After a suspend / resume cycle we possibly need to reapply chip registers
+> settings that we had set or fixed in a probe path, since they might have
+> been reset to default values or set incorrectly by a BIOS again.
+> 
+> Tested on a Gigabyte M720-US3 board, which requires routing internal VCCH5V
+> to in7 (and had it wrong again on resume from S3).
+> 
+> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+> ---
+> Changes from v1: Move code of common probe / resume steps to new functions
+> so we don't need to make large parts of probe function conditional on a
+> newly added 'resume' parameter.
+> 
+> Changes from v2: Code move of common probe / resume steps to new functions
+> and actual resume functionality split into two, separate patches.
+> 
+> Changed message level about VCCH5V being routed to in7 again on resume to
+> debug.
+> 
+> Added a "need_in7_reroute" flag and made VCCH5V to in7 rerouting on resume
+> explicitly conditional on it.
+> 
+> Didn't finally add check for enable_pwm_interface being set before calling
+> it87_check_pwm() in the resume function since this variable is it87_probe()
+> function local and so adding this check would require adding it to device
+> instance structure.
+> 
+> Changes from v3, v4: Fix patch formatting.
+> 
+> Changes from v5: Use 'bool' for on / off variables, don't change it87_find()
+> function arguments to minimize the changes.
+> 
+> Changes from v6: Add __maybe_unused to it87_resume_sio(), move a message
+> about failure to enter Super I/O on resume to this function, make it clear
+> what had actually failed and downgrade it to a warning.
+> 
+Return value from it87_resume_sio() is now unused, thus it is pointless
+to have it return an error.
 
-Tested on a Gigabyte M720-US3 board, which requires routing internal VCCH5V
-to in7 (and had it wrong again on resume from S3).
+No need to resend; applied after making that change.
 
-Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
----
-Changes from v1: Move code of common probe / resume steps to new functions
-so we don't need to make large parts of probe function conditional on a
-newly added 'resume' parameter.
+Thanks,
+Guenter
 
-Changes from v2: Code move of common probe / resume steps to new functions
-and actual resume functionality split into two, separate patches.
-
-Changed message level about VCCH5V being routed to in7 again on resume to
-debug.
-
-Added a "need_in7_reroute" flag and made VCCH5V to in7 rerouting on resume
-explicitly conditional on it.
-
-Didn't finally add check for enable_pwm_interface being set before calling
-it87_check_pwm() in the resume function since this variable is it87_probe()
-function local and so adding this check would require adding it to device
-instance structure.
-
-Changes from v3, v4: Fix patch formatting.
-
-Changes from v5: Use 'bool' for on / off variables, don't change it87_find()
-function arguments to minimize the changes.
-
-Changes from v6: Add __maybe_unused to it87_resume_sio(), move a message
-about failure to enter Super I/O on resume to this function, make it clear
-what had actually failed and downgrade it to a warning.
-
- drivers/hwmon/it87.c | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 76 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 818f123ac475..a36d5947c1f6 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -497,12 +497,14 @@ static const struct it87_devices it87_devices[] = {
- #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
- 
- struct it87_sio_data {
-+	int sioaddr;
- 	enum chips type;
- 	/* Values read from Super-I/O config space */
- 	u8 revision;
- 	u8 vid_value;
- 	u8 beep_pin;
- 	u8 internal;	/* Internal sensors can be labeled */
-+	bool need_in7_reroute;
- 	/* Features skipped based on config or DMI */
- 	u16 skip_in;
- 	u8 skip_vid;
-@@ -517,6 +519,7 @@ struct it87_sio_data {
-  */
- struct it87_data {
- 	const struct attribute_group *groups[7];
-+	int sioaddr;
- 	enum chips type;
- 	u32 features;
- 	u8 peci_mask;
-@@ -532,6 +535,7 @@ struct it87_data {
- 	u16 in_internal;	/* Bitfield, internal sensors (for labels) */
- 	u16 has_in;		/* Bitfield, voltage sensors enabled */
- 	u8 in[NUM_VIN][3];		/* [nr][0]=in, [1]=min, [2]=max */
-+	bool need_in7_reroute;
- 	u8 has_fan;		/* Bitfield, fans enabled */
- 	u16 fan[NUM_FAN][2];	/* Register values, [nr][0]=fan, [1]=min */
- 	u8 has_temp;		/* Bitfield, temp sensors enabled */
-@@ -2487,6 +2491,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	}
- 
- 	err = 0;
-+	sio_data->sioaddr = sioaddr;
- 	sio_data->revision = superio_inb(sioaddr, DEVREV) & 0x0f;
- 	pr_info("Found IT%04x%s chip at 0x%x, revision %d\n", chip_type,
- 		it87_devices[sio_data->type].suffix,
-@@ -2575,6 +2580,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 				reg2c |= BIT(1);
- 				superio_outb(sioaddr, IT87_SIO_PINX2_REG,
- 					     reg2c);
-+				sio_data->need_in7_reroute = true;
- 				pr_notice("Routing internal VCCH5V to in7.\n");
- 			}
- 			pr_notice("in7 routed to internal voltage divider, with external pin disabled.\n");
-@@ -2777,6 +2783,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 		if ((sio_data->type == it8720 || uart6) && !(reg & BIT(1))) {
- 			reg |= BIT(1);
- 			superio_outb(sioaddr, IT87_SIO_PINX2_REG, reg);
-+			sio_data->need_in7_reroute = true;
- 			pr_notice("Routing internal VCCH5V to in7\n");
- 		}
- 		if (reg & BIT(0))
-@@ -3024,8 +3031,6 @@ static int it87_check_pwm(struct device *dev)
- 				 "PWM configuration is too broken to be fixed\n");
- 		}
- 
--		dev_info(dev,
--			 "Detected broken BIOS defaults, disabling PWM interface\n");
- 		return 0;
- 	} else if (fix_pwm_polarity) {
- 		dev_info(dev,
-@@ -3058,6 +3063,7 @@ static int it87_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	data->addr = res->start;
-+	data->sioaddr = sio_data->sioaddr;
- 	data->type = sio_data->type;
- 	data->features = it87_devices[sio_data->type].features;
- 	data->peci_mask = it87_devices[sio_data->type].peci_mask;
-@@ -3096,6 +3102,9 @@ static int it87_probe(struct platform_device *pdev)
- 
- 	/* Check PWM configuration */
- 	enable_pwm_interface = it87_check_pwm(dev);
-+	if (!enable_pwm_interface)
-+		dev_info(dev,
-+			 "Detected broken BIOS defaults, disabling PWM interface\n");
- 
- 	/* Starting with IT8721F, we handle scaling of internal voltages */
- 	if (has_12mv_adc(data)) {
-@@ -3123,6 +3132,7 @@ static int it87_probe(struct platform_device *pdev)
- 	}
- 
- 	data->in_internal = sio_data->internal;
-+	data->need_in7_reroute = sio_data->need_in7_reroute;
- 	data->has_in = 0x3ff & ~sio_data->skip_in;
- 
- 	if (has_six_temp(data)) {
-@@ -3178,9 +3188,73 @@ static int it87_probe(struct platform_device *pdev)
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
-+static int __maybe_unused it87_resume_sio(struct platform_device *pdev)
-+{
-+	struct it87_data *data = dev_get_drvdata(&pdev->dev);
-+	int err;
-+	int reg2c;
-+
-+	if (!data->need_in7_reroute)
-+		return 0;
-+
-+	err = superio_enter(data->sioaddr);
-+	if (err) {
-+		dev_warn(&pdev->dev,
-+			 "Unable to enter Super I/O to reroute in7 (%d)",
-+			 err);
-+		return err;
-+	}
-+
-+	superio_select(data->sioaddr, GPIO);
-+
-+	reg2c = superio_inb(data->sioaddr, IT87_SIO_PINX2_REG);
-+	if (!(reg2c & BIT(1))) {
-+		dev_dbg(&pdev->dev,
-+			"Routing internal VCCH5V to in7 again");
-+
-+		reg2c |= BIT(1);
-+		superio_outb(data->sioaddr, IT87_SIO_PINX2_REG,
-+			     reg2c);
-+	}
-+
-+	superio_exit(data->sioaddr);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused it87_resume(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct it87_data *data = dev_get_drvdata(dev);
-+
-+	it87_resume_sio(pdev);
-+
-+	mutex_lock(&data->update_lock);
-+
-+	it87_check_pwm(dev);
-+	it87_check_limit_regs(data);
-+	it87_check_voltage_monitors_reset(data);
-+	it87_check_tachometers_reset(pdev);
-+	it87_check_tachometers_16bit_mode(pdev);
-+
-+	it87_start_monitoring(data);
-+
-+	/* force update */
-+	data->valid = 0;
-+
-+	mutex_unlock(&data->update_lock);
-+
-+	it87_update_device(dev);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(it87_dev_pm_ops, NULL, it87_resume);
-+
- static struct platform_driver it87_driver = {
- 	.driver = {
- 		.name	= DRVNAME,
-+		.pm     = &it87_dev_pm_ops,
- 	},
- 	.probe	= it87_probe,
- };
+>  drivers/hwmon/it87.c | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 76 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 818f123ac475..a36d5947c1f6 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -497,12 +497,14 @@ static const struct it87_devices it87_devices[] = {
+>  #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
+>  
+>  struct it87_sio_data {
+> +	int sioaddr;
+>  	enum chips type;
+>  	/* Values read from Super-I/O config space */
+>  	u8 revision;
+>  	u8 vid_value;
+>  	u8 beep_pin;
+>  	u8 internal;	/* Internal sensors can be labeled */
+> +	bool need_in7_reroute;
+>  	/* Features skipped based on config or DMI */
+>  	u16 skip_in;
+>  	u8 skip_vid;
+> @@ -517,6 +519,7 @@ struct it87_sio_data {
+>   */
+>  struct it87_data {
+>  	const struct attribute_group *groups[7];
+> +	int sioaddr;
+>  	enum chips type;
+>  	u32 features;
+>  	u8 peci_mask;
+> @@ -532,6 +535,7 @@ struct it87_data {
+>  	u16 in_internal;	/* Bitfield, internal sensors (for labels) */
+>  	u16 has_in;		/* Bitfield, voltage sensors enabled */
+>  	u8 in[NUM_VIN][3];		/* [nr][0]=in, [1]=min, [2]=max */
+> +	bool need_in7_reroute;
+>  	u8 has_fan;		/* Bitfield, fans enabled */
+>  	u16 fan[NUM_FAN][2];	/* Register values, [nr][0]=fan, [1]=min */
+>  	u8 has_temp;		/* Bitfield, temp sensors enabled */
+> @@ -2487,6 +2491,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>  	}
+>  
+>  	err = 0;
+> +	sio_data->sioaddr = sioaddr;
+>  	sio_data->revision = superio_inb(sioaddr, DEVREV) & 0x0f;
+>  	pr_info("Found IT%04x%s chip at 0x%x, revision %d\n", chip_type,
+>  		it87_devices[sio_data->type].suffix,
+> @@ -2575,6 +2580,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>  				reg2c |= BIT(1);
+>  				superio_outb(sioaddr, IT87_SIO_PINX2_REG,
+>  					     reg2c);
+> +				sio_data->need_in7_reroute = true;
+>  				pr_notice("Routing internal VCCH5V to in7.\n");
+>  			}
+>  			pr_notice("in7 routed to internal voltage divider, with external pin disabled.\n");
+> @@ -2777,6 +2783,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>  		if ((sio_data->type == it8720 || uart6) && !(reg & BIT(1))) {
+>  			reg |= BIT(1);
+>  			superio_outb(sioaddr, IT87_SIO_PINX2_REG, reg);
+> +			sio_data->need_in7_reroute = true;
+>  			pr_notice("Routing internal VCCH5V to in7\n");
+>  		}
+>  		if (reg & BIT(0))
+> @@ -3024,8 +3031,6 @@ static int it87_check_pwm(struct device *dev)
+>  				 "PWM configuration is too broken to be fixed\n");
+>  		}
+>  
+> -		dev_info(dev,
+> -			 "Detected broken BIOS defaults, disabling PWM interface\n");
+>  		return 0;
+>  	} else if (fix_pwm_polarity) {
+>  		dev_info(dev,
+> @@ -3058,6 +3063,7 @@ static int it87_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	data->addr = res->start;
+> +	data->sioaddr = sio_data->sioaddr;
+>  	data->type = sio_data->type;
+>  	data->features = it87_devices[sio_data->type].features;
+>  	data->peci_mask = it87_devices[sio_data->type].peci_mask;
+> @@ -3096,6 +3102,9 @@ static int it87_probe(struct platform_device *pdev)
+>  
+>  	/* Check PWM configuration */
+>  	enable_pwm_interface = it87_check_pwm(dev);
+> +	if (!enable_pwm_interface)
+> +		dev_info(dev,
+> +			 "Detected broken BIOS defaults, disabling PWM interface\n");
+>  
+>  	/* Starting with IT8721F, we handle scaling of internal voltages */
+>  	if (has_12mv_adc(data)) {
+> @@ -3123,6 +3132,7 @@ static int it87_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	data->in_internal = sio_data->internal;
+> +	data->need_in7_reroute = sio_data->need_in7_reroute;
+>  	data->has_in = 0x3ff & ~sio_data->skip_in;
+>  
+>  	if (has_six_temp(data)) {
+> @@ -3178,9 +3188,73 @@ static int it87_probe(struct platform_device *pdev)
+>  	return PTR_ERR_OR_ZERO(hwmon_dev);
+>  }
+>  
+> +static int __maybe_unused it87_resume_sio(struct platform_device *pdev)
+> +{
+> +	struct it87_data *data = dev_get_drvdata(&pdev->dev);
+> +	int err;
+> +	int reg2c;
+> +
+> +	if (!data->need_in7_reroute)
+> +		return 0;
+> +
+> +	err = superio_enter(data->sioaddr);
+> +	if (err) {
+> +		dev_warn(&pdev->dev,
+> +			 "Unable to enter Super I/O to reroute in7 (%d)",
+> +			 err);
+> +		return err;
+> +	}
+> +
+> +	superio_select(data->sioaddr, GPIO);
+> +
+> +	reg2c = superio_inb(data->sioaddr, IT87_SIO_PINX2_REG);
+> +	if (!(reg2c & BIT(1))) {
+> +		dev_dbg(&pdev->dev,
+> +			"Routing internal VCCH5V to in7 again");
+> +
+> +		reg2c |= BIT(1);
+> +		superio_outb(data->sioaddr, IT87_SIO_PINX2_REG,
+> +			     reg2c);
+> +	}
+> +
+> +	superio_exit(data->sioaddr);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused it87_resume(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct it87_data *data = dev_get_drvdata(dev);
+> +
+> +	it87_resume_sio(pdev);
+> +
+> +	mutex_lock(&data->update_lock);
+> +
+> +	it87_check_pwm(dev);
+> +	it87_check_limit_regs(data);
+> +	it87_check_voltage_monitors_reset(data);
+> +	it87_check_tachometers_reset(pdev);
+> +	it87_check_tachometers_16bit_mode(pdev);
+> +
+> +	it87_start_monitoring(data);
+> +
+> +	/* force update */
+> +	data->valid = 0;
+> +
+> +	mutex_unlock(&data->update_lock);
+> +
+> +	it87_update_device(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(it87_dev_pm_ops, NULL, it87_resume);
+> +
+>  static struct platform_driver it87_driver = {
+>  	.driver = {
+>  		.name	= DRVNAME,
+> +		.pm     = &it87_dev_pm_ops,
+>  	},
+>  	.probe	= it87_probe,
+>  };
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
