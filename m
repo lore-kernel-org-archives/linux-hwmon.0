@@ -1,11 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:57126 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:47275 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752413AbdHJOtN (ORCPT
+        with ESMTP id S1751456AbdHJPA3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2017 10:49:13 -0400
-Date: Thu, 10 Aug 2017 07:49:09 -0700
+        Thu, 10 Aug 2017 11:00:29 -0400
+Date: Thu, 10 Aug 2017 08:00:27 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Eddie James <eajames@linux.vnet.ibm.com>
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -13,7 +13,7 @@ Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         "Edward A. James" <eajames@us.ibm.com>
 Subject: Re: [PATCH 1/4] drivers/hwmon/pmbus: Add IBM power supply hwmon
  driver
-Message-ID: <20170810144909.GA4945@roeck-us.net>
+Message-ID: <20170810150027.GE4945@roeck-us.net>
 References: <1501708633-2964-1-git-send-email-eajames@linux.vnet.ibm.com>
  <1501708633-2964-2-git-send-email-eajames@linux.vnet.ibm.com>
 MIME-Version: 1.0
@@ -46,11 +46,6 @@ On Wed, Aug 02, 2017 at 04:17:10PM -0500, Eddie James wrote:
 >  
 > +config SENSORS_IBMPS
 > +	tristate "IBM Power Supply"
-
-What if IBM ever produces another power supply ?
-I think this should be more specific. Similar, ibmps/IBMPS is way
-too generic.
-
 > +	default n
 > +	help
 > +	  If you say yes here you get hardware monitoring support for IBM
@@ -107,18 +102,12 @@ too generic.
 > +
 > +static int ibmps_read_word_data(struct i2c_client *client, int page, int reg);
 > +
-I don't see why this would require a forward declaration.
-Why not just move the function ?
-
 > +static int ibmps_read_byte_data(struct i2c_client *client, int page, int reg)
 > +{
 > +	int rc, mfr;
 > +
 > +	switch (reg) {
 > +	case PMBUS_STATUS_BYTE:
-
-Is the byte part still needed with the upcoming core changes ?
-
 > +	case PMBUS_STATUS_WORD:
 > +		rc = ibmps_read_word_data(client, page, PMBUS_STATUS_WORD);
 > +		break;
@@ -151,9 +140,6 @@ Is the byte part still needed with the upcoming core changes ?
 > +				rc |= PB_IOUT_OC_FAULT;
 > +			if (mfr & IBMPS_MFR_CURRENT_SHARE_WARNING)
 > +				rc |= PB_CURRENT_SHARE_FAULT;
-
-Is changing a warning to a fault a good idea ?
-
 > +		}
 > +		break;
 > +	default:
@@ -162,10 +148,6 @@ Is changing a warning to a fault a good idea ?
 > +
 > +		rc = pmbus_read_byte_data(client, page, reg);
 > +		break;
-
-The idea here is to return -ENODATA to let the core handle it.
-Please see similar drivers.
-
 > +	}
 > +
 > +	return rc;
@@ -196,16 +178,10 @@ Please see similar drivers.
 > +	default:
 > +		if (reg >= PMBUS_VIRT_BASE)
 > +			return -ENXIO;
-
--ENODATA
-
 > +
 > +		rc = pmbus_read_word_data(client, page, reg);
 > +		if (rc < 0)
 > +			rc = ibmps_read_byte_data(client, page, reg);
-
-I am a bit at loss here. Why ?
-
 > +		break;
 > +	}
 > +
@@ -238,9 +214,6 @@ I am a bit at loss here. Why ?
 > +
 > +static const struct i2c_device_id ibmps_id[] = {
 > +	{ "witherspoon", witherspoon },
-
-This is confusing. ibmps everywhere but witherspoon here ?
-
 > +	{ }
 > +};
 > +MODULE_DEVICE_TABLE(i2c, ibmps_id);
@@ -250,6 +223,13 @@ This is confusing. ibmps everywhere but witherspoon here ?
 > +	{}
 > +};
 > +MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
+
+Ah yes, as 0day points out, this won't compile.
+Hmmm ..... makes me wonder if and how you tested this.
+Can you provide output from the "sensors" command ?
+
+Guenter
+
 > +
 > +static struct i2c_driver ibmps_driver = {
 > +	.driver = {
