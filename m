@@ -1,186 +1,264 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:34840 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751914AbdHJQNe (ORCPT
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:56621 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751592AbdHNCG2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2017 12:13:34 -0400
-Date: Thu, 10 Aug 2017 11:13:31 -0500
-From: Rob Herring <robh@kernel.org>
-To: Andrew Jeffery <andrew@aj.id.au>
+        Sun, 13 Aug 2017 22:06:28 -0400
+Message-ID: <1502675753.14932.3.camel@aj.id.au>
+Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: pmbus: Add Maxim MAX31785
+ documentation
+From: Andrew Jeffery <andrew@aj.id.au>
+To: Rob Herring <robh@kernel.org>
 Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         mark.rutland@arm.com, jdelvare@suse.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         joel@jms.id.au, mspinler@linux.vnet.ibm.com,
         msbarth@linux.vnet.ibm.com, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: pmbus: Add Maxim MAX31785
- documentation
-Message-ID: <20170810161331.ygoevpqmb4l3rvsy@rob-hp-laptop>
+Date: Mon, 14 Aug 2017 11:25:53 +0930
+In-Reply-To: <20170810161331.ygoevpqmb4l3rvsy@rob-hp-laptop>
 References: <20170802071541.3121-1-andrew@aj.id.au>
- <20170802071541.3121-2-andrew@aj.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170802071541.3121-2-andrew@aj.id.au>
+         <20170802071541.3121-2-andrew@aj.id.au>
+         <20170810161331.ygoevpqmb4l3rvsy@rob-hp-laptop>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-CNLJyIjgagPXTo5NDwwS"
+Mime-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 02, 2017 at 04:45:38PM +0930, Andrew Jeffery wrote:
-> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> ---
->  .../devicetree/bindings/hwmon/pmbus/max31785.txt   | 126 +++++++++++++++++++++
->  1 file changed, 126 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/max31785.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/max31785.txt b/Documentation/devicetree/bindings/hwmon/pmbus/max31785.txt
-> new file mode 100644
-> index 000000000000..8ddc4ea1958d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/max31785.txt
-> @@ -0,0 +1,126 @@
-> +Bindings for the Maxim MAX31785 Intelligent Fan Controller
-> +==========================================================
 
-This is the second fan controller binding I've seen recently. The other 
-being hwmon/aspeed-pwm-tacho.txt. I think some of this needs to be 
-common. There's only so many types of fans, right?
+--=-CNLJyIjgagPXTo5NDwwS
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-And we have the thermal binding which you don't appear to tie into.
+T24gVGh1LCAyMDE3LTA4LTEwIGF0IDExOjEzIC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToKPiBP
+biBXZWQsIEF1ZyAwMiwgMjAxNyBhdCAwNDo0NTozOFBNICswOTMwLCBBbmRyZXcgSmVmZmVyeSB3
+cm90ZToKPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlk
+LmF1Pgo+ID4gLS0tCj4gPiDCoC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL3BtYnVzL21h
+eDMxNzg1LnR4dMKgwqDCoHwgMTI2ICsrKysrKysrKysrKysrKysrKysrKwo+ID4gwqAxIGZpbGUg
+Y2hhbmdlZCwgMTI2IGluc2VydGlvbnMoKykKPiA+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9wbWJ1cy9tYXgzMTc4NS50eHQKPiA+
+wqAKPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdt
+b24vcG1idXMvbWF4MzE3ODUudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L2h3bW9uL3BtYnVzL21heDMxNzg1LnR4dAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGlu
+ZGV4IDAwMDAwMDAwMDAwMC4uOGRkYzRlYTE5NThkCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysg
+Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vcG1idXMvbWF4MzE3ODUu
+dHh0Cj4gPiBAQCAtMCwwICsxLDEyNiBAQAo+ID4gK0JpbmRpbmdzIGZvciB0aGUgTWF4aW0gTUFY
+MzE3ODUgSW50ZWxsaWdlbnQgRmFuIENvbnRyb2xsZXIKPiA+ICs9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj7CoAo+IFRoaXMgaXMgdGhl
+IHNlY29uZCBmYW4gY29udHJvbGxlciBiaW5kaW5nIEkndmUgc2VlbiByZWNlbnRseS4gVGhlIG90
+aGVywqAKPiBiZWluZyBod21vbi9hc3BlZWQtcHdtLXRhY2hvLnR4dC4gSSB0aGluayBzb21lIG9m
+IHRoaXMgbmVlZHMgdG8gYmXCoAo+IGNvbW1vbi4gVGhlcmUncyBvbmx5IHNvIG1hbnkgdHlwZXMg
+b2YgZmFucywgcmlnaHQ/CgpIZWgsIHlvdSdkIHRoaW5rIHNvLCBJJ2xsIHRha2UgYSBsb29rLiBI
+b3dldmVyIG11Y2ggb2YgdGhpcyBpcyBkcml2ZW4gYnkgdGhlClBNQnVzIHNwZWNpZmljYXRpb24g
+YW5kIHRoZSBBc3BlZWQgUFdNL1RhY2hvIGlzbid0IGEgUE1CdXMtYmFzZWQgZGV2aWNlLgoKSSB3
+YXMgaGVzaXRhbnQgdG8gc3RhcnQgYSBnZW5lcmljIFBNQnVzIGJpbmRpbmdzIGRvY3VtZW50IHdp
+dGhvdXQgaGF2aW5nIG1vcmUKUE1CdXMgZGV2aWNlcyB3aXRoIGJpbmRpbmdzLCBidXQgbWF5YmUg
+dGhhdCdzIHRoZSB3YXkgSSBzaG91bGQgZ28/IEl0IHdvdWxkCm1ha2UgY2xlYXIgd2hhdCdzIGZy
+b20gdGhlIGZhbi1jb250cm9sIHBhcnRzIG9mIHRoZSBQTUJ1cyBzcGVjaWZpY2F0aW9uIGFuZAp3
+aGF0J3MgaGVyZSBmb3IgdGhlIHB1cnBvc2Ugb2Ygc3VwcG9ydGluZyB0aGUgTUFYMzE3ODUuCgo+
+wqAKPiBBbmQgd2UgaGF2ZSB0aGUgdGhlcm1hbCBiaW5kaW5nIHdoaWNoIHlvdSBkb24ndCBhcHBl
+YXIgdG8gdGllIGludG8uCgpJJ2xsIGxvb2sgaW50byB0aGF0IGFsc28uCgo+wqAKPiA+ICsKPiA+
+ICtSZWZlcmVuY2U6Cj4gPiArWzFdIGh0dHBzOi8vZGF0YXNoZWV0cy5tYXhpbWludGVncmF0ZWQu
+Y29tL2VuL2RzL01BWDMxNzg1LnBkZgo+ID4gKwo+ID4gK1JlcXVpcmVkIHByb3BlcnRpZXM6Cj4g
+PiArLSBjb21wYXRpYmxlwqDCoMKgwqDCoDogT25lIG9mICJtYXhpbSxtYXgzMTc4NSIgb3IgIm1h
+eGltLG1heDMxNzg1YSIKPiA+ICstIHJlZ8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDogSTJDIGFk
+ZHJlc3MsIG9uZSBvZiAweDUyLCAweDUzLCAweDU0LCAweDU1Lgo+ID4gKy0gI2FkZHJlc3MtY2Vs
+bHMgOiBNdXN0IGJlIDEKPiA+ICstICNzaXplLWNlbGxzwqDCoMKgwqA6IE11c3QgYmUgMAo+ID4g
+Kwo+ID4gK09wdGlvbmFsIHByb3BlcnRpZXM6Cj4gPiArLSB1c2Utc3RvcmVkLXByZXNlbmNlwqDC
+oMKgwqA6IERvIG5vdCB0cmVhdCB0aGUgZGV2aWNldHJlZSBkZXNjcmlwdGlvbiBhcyBjYW5vbiBm
+b3IKPsKgCj4gSXMgdGhpcyBtYXhpbSBzcGVjaWZpYz8gSWYgc28sIG5lZWRzIGEgdmVuZG9yIHBy
+ZWZpeC4KClBNQnVzIHNwZWNpZmllcyB0d28gOC1iaXQgcmVnaXN0ZXJzIG9mIHRoZSBzYW1lIHN0
+cnVjdHVyZTogRkFOX0NPTkZJR18xXzIKYW5kIEZBTl9DT05GSUdfM180LiBJdCdzIG5vdCBpbnRl
+bmRlZCB0byBiZSBtYW51ZmFjdHVyZXItc3BlY2lmaWMuCgpBIGJpdCBpbiBlYWNoIG5pYmJsZSBv
+ZiBGQU5fQ09ORklHXyogaXMgc3BlY2lmaWVkIGFzIG1hcmtpbmcgd2hldGhlciBvciBub3QgdGhl
+CmZhbiBpcyBpbnN0YWxsZWQuIFRoZSBpbnRlbnQgb2YgdGhpcyBwcm9wZXJ0eSBpcyB0byBkZWZp
+bmUgd2hldGhlciB0aGUgY29uc3VtZXIKc2hvdWxkIGNvbnNpZGVyIHRoZSBkZXZpY2V0cmVlIGFz
+IGNhbm9uaWNhbCwgb3IgdGhlIGRldmljZS4gSW4gdGhlIGFic2VuY2Ugb2YKdGhlIHByb3BlcnR5
+IGNvbnN1bWVyIG9mIHRoZSBub2RlIHNob3VsZCBtYXJrIGZhbnMgZGVzY3JpYmVkIGluIHRoZSBk
+ZXZpY2V0cmVlCmFzIGluc3RhbGxlZCAoc2V0IHRoZSBiaXQsIGFuZCBjbGVhciB0aGUgYml0IGZv
+ciBhbnkgZmFuIHBhZ2VzIHRoYXQgYXJlIG5vdApkZXNjcmliZWQgaW4gdGhlIGRldmljZXRyZWUp
+LiBBbHRlcm5hdGl2ZWx5LCB0aGUgZGV2aWNlIG1heSBiZSBwcmUtcHJvZ3JhbW1lZAp3aXRoIGEg
+ZGVmYXVsdCByZWdpc3RlciB2YWx1ZSB0aGF0IGlzIHN1aXRhYmxlIGZvciB0aGUgc3lzdGVtIHRo
+ZSBjb250cm9sbGVyCnJlc2lkZXMgaW4sIGluIHdoaWNoIGNhc2UgdGhlIGRldmljZXRyZWUgY29u
+c3VtZXIgc2hvdWxkIGl0c2VsZiBjb25zdW1lIHRoZQppbnN0YWxsZWQgYml0IGZyb20gdGhlIGRl
+dmljZSByYXRoZXIgdGhhbiBzZXQvY2xlYXIgaXQuCgpUaGUgdHdvIHJlbWFpbmluZyBmaWVsZHMg
+aW4gRkFOX0NPTkZJR18qLCBmYW4gbW9kZSAoUlBNL1BXTSkgYW5kCnRhY2gtcHVsc2VzLXBlci1y
+ZXZvbHV0aW9uICgxLTQpLCBhcmUgY292ZXJlZCBieSBvcHRpb25hbCBwcm9wZXJ0aWVzIGJlbG93
+LgoKPsKgCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgZmFuIHByZXNlbmNlICh0aGUgJ2luc3RhbGxlZCcgYml0IG9mIEZBTl9DT05GSUdf
+KikuCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgSW5zdGVhZCwgcmVseSBvbiB0aGUgb24gdGhlIGRlZmF1bHQgdmFsdWUgc3RvcmUgb2YK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqB0aGUgZGV2aWNlIHRvIHBvcHVsYXRlIGl0Lgo+ID4gKwo+ID4gK0NhcGFiaWxpdGllcyBhcmUg
+Y29uZmlndXJlZCB0aHJvdWdoIHN1Ym5vZGVzIG9mIHRoZSBjb250cm9sbGVyJ3Mgbm9kZS4KPiA+
+ICsKPiA+ICtGYW5zCj4gPiArLS0tLQo+ID4gKwo+ID4gK09ubHkgZmFucyB3aXRoIHN1Ym5vZGVz
+IHByZXNlbnQgd2lsbCBiZSBjb25zaWRlcmVkIGFzIGluc3RhbGxlZC4gSWYKPiA+ICt1c2Utc3Rv
+cmVkLXByZXNlbmNlIGlzIHByZXNlbnQgaW4gdGhlIHBhcmVudCBub2RlLCB0aGVuIG9ubHkgZmFu
+cyB0aGF0IGFyZSBib3RoCj4gPiArZGVmaW5lZCBpbiB0aGUgZGV2aWNldHJlZSBhbmQgaGF2ZSB0
+aGVpciBpbnN0YWxsZWQgYml0IHNldCBhcmUgY29uc2lkZXJlZAo+ID4gK2luc3RhbGxlZC4KPiA+
+ICsKPiA+ICtSZXF1aXJlZCBzdWJub2RlIHByb3BlcnRpZXM6Cj4gPiArLSBjb21wYXRpYmxlwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA6IE11c3QgYmUgInBtYnVzLWZhbiIKPsKgCj4gV2hhdCBk
+ZWZpbmVzIGEgcG1idXMtZmFuPyBTb3VuZHMgZ2VuZXJpYywgYnV0IHRoZW4geW91IGhhdmUgYWxs
+IHRoZXNlwqAKPiBtYXhpbSBzcGVjaWZpYyBwcm9wZXJ0aWVzLgoKSXQncyBkcml2ZW4gYnkgdGhl
+IHR3byBvcHRpb25hbCBwcm9wZXJ0aWVzLCBmYW4tbW9kZSBhbmQgdGFjaC1wdWxzZXMsIHdoaWNo
+Cm1ha2UgdXAgdGhlIHJlbWFpbmluZyBmaWVsZHMgb2YgdGhlIEZBTl9DT05GSUdfKiByZWdpc3Rl
+cnMgZnJvbSB0aGUgUE1CdXMKc3BlY2lmaWNhdGlvbi4gUE1CdXMgcmVzZXJ2ZXMgY29tbWFuZCBy
+YW5nZXMgZm9yIG1hbnVmYWN0dXJlci1zcGVjaWZpYyB1c2UsIGFuZApNYXhpbSBjaG9zZSB0byB1
+c2Ugb25lIG9mIHRoZXNlIHJlc2VydmVkIGNvbW1hbmRzIGFzIE1GUl9GQU5fQ09ORklHCihNYW51
+ZmFjdHVyZXItc3BlY2lmaWMgRmFuIENvbmZpZ3VyYXRpb24pLiBUaGUgdmVuZG9yLXByZWZpeGVk
+IHByb3BlcnRpZXMgZGVhbAp3aXRoIHRoZSBwcm9wZXJ0aWVzIGRlc2NyaWJlZCBpbiB0aGUgMTYt
+Yml0IE1GUl9GQU5fQ09ORklHIHJlZ2lzdGVyLgoKPsKgCj4gPiArLSByZWfCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgOiBUaGUgUE1CdXMgcGFnZSB0aGUgcHJvcGVydGll
+cyBhcHBseSB0by4KPiA+ICstIG1heGltLGZhbi1yb3Rvci1pbnB1dMKgwqA6IFRoZSB0eXBlIG9m
+IHJvdG9yIG1lYXN1cmVtZW50IHByb3ZpZGVkIHRvIHRoZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRyb2xsZXIuIE11c3QgYmUg
+ZWl0aGVyICJ0YWNoIiBmb3IgdGFjaG9tZXRlcgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHB1bHNlcyBvciAibG9jayIgZm9yIGEgbG9j
+a2VkLXJvdG9yIHNpZ25hbC4KPiA+ICstIG1heGltLGZhbi1sb2NrLXBvbGFyaXR5OiBSZXF1aXJl
+ZCBpZmYgbWF4aW0sZmFuLXJvdG9yLWlucHV0IGlzICJsb2NrIi4gVmFsaWQKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2YWx1ZXMgYXJl
+ICJsb3ciIGZvciBhY3RpdmUgbG93LCAiaGlnaCIgZm9yIGFjdGl2ZQo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGhpZ2guCj4gPiArCj4g
+PiArT3B0aW9uYWwgc3Vibm9kZSBwcm9wZXJ0aWVzOgo+ID4gKy0gZmFuLW1vZGXCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqA6ICJycG0iIG9yICJwd20iLiBEZWZhdWx0IHZhbHVlIGlzICJw
+d20iLgo+ID4gKy0gdGFjaC1wdWxzZXPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA6IFRhY2hvbWV0
+ZXIgcHVsc2VzIHBlciByZXZvbHV0aW9uLiBWYWxpZCB2YWx1ZXMgYXJlCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgMSwgMiwgMyBvciA0
+LiBUaGUgZGVmYXVsdCBpcyAxLgo+ID4gKy0gbWF4aW0sZmFuLW5vLWZhdWx0LXJhbXA6IERvIG5v
+dCByYW1wIHRoZSBmYW4gdG8gMTAwJSBQV00gZHV0eSBvbiBkZXRlY3RpbmcgYQo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZhbiBmYXVs
+dAo+ID4gKy0gbWF4aW0sZmFuLXN0YXJ0dXDCoMKgwqDCoMKgwqA6IFRoZSBudW1iZXIgb2Ygcm90
+YXRpb25zIHJlcXVpcmVkIGJlZm9yZSB0YWtpbmcKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlbWVyZ2VuY3kgYWN0aW9uIGZvciBhbiB1
+bnJlc3BvbnNpdmUgZmFuIGFuZCBkcml2aW5nCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaXQgd2l0aCAxMDAlIG9yIDAlIFBXTSBkdXR5
+LCBkZXBlbmRpbmcgb24gdGhlIHN0YXRlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgb2YgbWF4aW0sZmFuLW5vLWZhdWx0LXJhbXAuIFZh
+bGlkIHZhbHVlcyBhcmUgMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoChhdXRvbWF0aWMgc3Bpbi11cCBkaXNhYmxlZCksIDIsIDQsIG9y
+IDguIERlZmF1bHQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB2YWx1ZSBpcyAwLgo+ID4gKy0gbWF4aW0sZmFuLWhlYWx0aMKgwqDCoMKg
+wqDCoMKgOiBFbmFibGUgYXV0b21hdGVkIGZhbiBoZWFsdGggY2hlY2sKPiA+ICstIG1heGltLGZh
+bi1yYW1wwqDCoMKgwqDCoMKgwqDCoMKgOiBDb25maWd1cmVzIGhvdyBmYXN0IHRoZSBkZXZpY2Ug
+cmFtcHMgdGhlIFBXTSBkdXR5Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgY3ljbGUgZnJvbSBvbmUgdmFsdWUgdG8gYW5vdGhlci4gVmFs
+aWQgdmFsdWVzIGFyZSAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgdG8gNyBpbmNsdXNpdmUsIHdpdGggdmFsdWVzIDAgLSAyIGNvbmZp
+Z3VyaW5nIGEKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAxMDAwbXMgdXBkYXRlIHJhdGUgYW5kIDEgLSAzJSBkdXR5IHJlc3BlY3RpdmUg
+ZHV0eQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGluY3JlYXNlLCBhbmQgMyAtIDcgYSAyMDBtcyB1cGRhdGUgcmF0ZSB3aXRoIGEgMSAt
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgNSUgcmVzcGVjdGl2ZSBkdXR5IGluY3JlYXNlLiBEZWZhdWx0IHZhbHVlIGlzIDAuCj4gPiAr
+LSBtYXhpbSxmYW4tbm8td2F0Y2hkb2fCoMKgOiBEbyBub3QgcmFtcCBmYW4gdG8gMTAwJSBQV00g
+ZHV0eSBvbiBmYWlsdXJlIHRvCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgdXBkYXRlIGRlc2lyZWQgZmFuIHJhdGUgaW5zaWRlIDEwcy4g
+VGhpcyBpbXBsaWVzCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgbWF4aW0sdG1wLW5vLWZhdWx0LXJhbXAKPiA+ICstIG1heGltLHRtcC1u
+by1mYXVsdC1yYW1wOiBEbyBub3QgcmFtcCBmYW4gdG8gMTAwJSBQV00gZHV0eSBvbiB0ZW1wZXJh
+dHVyZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHNlbnNvciBmYXVsdCBkZXRlY3Rpb24uIFRoaXMgaW1wbGllcwo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1heGltLGZhbi1u
+by13YXRjaGRvZwo+ID4gKy0gbWF4aW0sdG1wLWh5c3RlcmVzaXPCoMKgwqA6IFRoZSB0ZW1wZXJh
+dHVyZSBoeXN0ZXJlc2lzIHVzZWQgdG8gZGV0ZXJtaW5lCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdHJhbnNpdGlvbnMgdG8gbG93ZXIg
+ZmFuIHNwZWVkIGJhbmRzIGluIHRoZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRlbXBlcmF0dXJlL2ZhbiByYXRlIGxvb2t1cCB0YWJs
+ZS4gVmFsaWQgdmFsdWVzIGFyZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoDIsIDQsIDYgb3IgOCAoZGVncmVlcyBjZWxjaXVzKS4gRGVm
+YXVsdCB2YWx1ZSBpcyAyLgo+ID4gKy0gbWF4aW0sZmFuLWR1YWwtdGFjaMKgwqDCoMKgOiBFbmFi
+bGUgZHVhbCB0YWNob21ldGVyIGZ1bmN0aW9uYWxpdHkKPiA+ICstIG1heGltLGZhbi1wd20tZnJl
+ccKgwqDCoMKgwqA6IFRoZSBQV00gZnJlcXVlbmN5LiBWYWxpZCB2YWx1ZXMgYXJlIDMwLCA1MCwg
+MTAwLCAxNTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBhbmQgMjUwMDAgKEh6KS4gRGVmYXVsdCB2YWx1ZSBpcyAzMEh6Lgo+ID4gKy0g
+bWF4aW0sZmFuLWxvb2t1cC10YWJsZSA6IEEgMTYtZWxlbWVudCBjZWxsIGFycmF5IG9mIGFsdGVy
+bmF0aW5nIHRlbXBlcmF0dXJlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgYW5kIHJhdGUgdmFsdWVzIHJlcHJlc2VudGluZyB0aGUgbG9v
+ayB1cCB0YWJsZS4gVGhlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgcmF0ZSB1bml0cyBhcmUgc2V0IHRocm91Z2ggdGhlIGZhbi1tb2Rl
+IHByb3BlcnR5Lgo+ID4gKy0gbWF4aW0sZmFuLWZhdWx0LXBpbi1tb246IFJhbXAgZmFucyB0byAx
+MDAlIFBXTSBkdXR5IHdoZW4gdGhlIEZBVUxUIHBpbiBpcwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFzc2VydGVkCj4gPiArCj4gPiAr
+VGVtcGVyYXR1cmUKPiA+ICstLS0tLS0tLS0tLQo+ID4gKwo+ID4gK1JlcXVpcmVkIHN1Ym5vZGUg
+cHJvcGVydGllczoKPiA+ICstIGNvbXBhdGlibGXCoMKgwqDCoDogTXVzdCBiZSAicG1idXMtdGVt
+cGVyYXR1cmUiCj4gPiArLSByZWfCoMKgwqDCoMKgwqDCoMKgwqDCoMKgOiBUaGUgUE1CdXMgcGFn
+ZSB0aGUgcHJvcGVydGllcyBhcHBseSB0by4KPiA+ICsKPiA+ICtPcHRpb25hbCBzdWJub2RlIHBy
+b3BlcnRpZXM6Cj4gPiArLSBtYXhpbSx0bXAtb2Zmc2V0wqDCoMKgwqDCoMKgOiBWYWxpZCB2YWx1
+ZXMgYXJlIDAgLSAzMCAoZGVncmVlcyBjZWxjaXVzKSBpbmNsdXNpdmUuCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoERlZmF1bHQgdmFsdWUg
+aXMgMC4KPiA+ICstIG1heGltLHRtcC1mYW5zwqDCoMKgwqDCoMKgwqDCoDogQW4gYXJyYXkgb2Yg
+ZmFuIGluZGV4ZXMgd2hvc2UgZmFucyBhcmUgY29udHJvbGxlZCBieQo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0aGUgY3VycmVudCB0ZW1w
+ZXJhdHVyZSBzZW5zb3IuIEZhbnMgYXJlIGluZGV4ZWQgZnJvbQo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB6ZXJvLiBUaGUgdmFsaWQgdmFs
+dWVzIGFyZSAwIC0gNSBpbmNsdXNpdmUuCj7CoAo+IFdoeSBub3QgdXNlIGEgcGhhbmRsZSBoZXJl
+LgoKSSB0aGluayB0aGF0J3MgYSBiZXR0ZXIgYXBwcm9hY2guIEknbGwgcmV3b3JrIGl0LgoKVGhh
+bmtzIGZvciB0aGUgZmVlZGJhY2suCgpBbmRyZXcKCj7CoAo+ID4gKwo+ID4gK0V4YW1wbGU6Cj4g
+PiA+ID4gPiA+ICsJZmFuLW1heDMxNzg1OiBtYXgzMTc4NUA1MiB7Cj4gPiA+ID4gKwkJcmVnID0g
+PDB4NTI+Owo+ID4gPiA+ICsJCWNvbXBhdGlibGUgPSAibWF4aW0sbWF4MzE3ODUiOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2FkZHJlc3MtY2VsbHMgPSA8MT47Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc2l6ZS1jZWxscyA9IDwwPjsKPiA+ICsK
+PiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBmYW5AMCB7Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9
+ICJwbWJ1cy1mYW4iOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHJlZyA9IDwwPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBtb2RlID0gInJwbSI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGFjaC1wdWxzZXMgPSA8MT47Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWF4aW0sZmFuLXJvdG9y
+LWlucHV0ID0gInRhY2giOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoG1heGltLGZhbi1kdWFsLXRhY2g7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB9Owo+ID4gKwo+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGZhbkAxIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInBtYnVzLWZhbiI7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVnID0gPDE+Owo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1vZGUgPSAicnBtIjsKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0YWNoLXB1
+bHNlcyA9IDwxPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBtYXhpbSxmYW4tcm90b3ItaW5wdXQgPSAidGFjaCI7Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWF4aW0sdG1wLWh5c3RlcmVzaXMg
+PSA8Mj47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgbWF4aW0sZmFuLWxvb2t1cC10YWJsZSA9IDwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKsKgwqBUZW1wZXJhdHVyZcKgwqDCoMKgUlBNwqDC
+oCovCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgMMKgwqDCoMKgwqDCoMKgwqAxMDAwCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDEwwqDC
+oMKgwqDCoMKgwqDCoDIwMDAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgMjDCoMKgwqDCoMKgwqDCoMKgMzAwMAo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAzMMKgwqDCoMKgwqDCoMKgwqA0MDAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDQwwqDCoMKgwqDCoMKg
+wqDCoDUwMDAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgNTDCoMKgwqDCoMKgwqDCoMKgNjAwMAo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA2
+MMKgwqDCoMKgwqDCoMKgwqA3MDAwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDcwwqDCoMKgwqDCoMKgwqDCoDgwMDAK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA+Owo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ID4gPiArCX07Cj4gPiAt
+LcKgCj4gPiAyLjExLjAKPiA+wqA=
 
-> +
-> +Reference:
-> +[1] https://datasheets.maximintegrated.com/en/ds/MAX31785.pdf
-> +
-> +Required properties:
-> +- compatible     : One of "maxim,max31785" or "maxim,max31785a"
-> +- reg            : I2C address, one of 0x52, 0x53, 0x54, 0x55.
-> +- #address-cells : Must be 1
-> +- #size-cells    : Must be 0
-> +
-> +Optional properties:
-> +- use-stored-presence    : Do not treat the devicetree description as canon for
 
-Is this maxim specific? If so, needs a vendor prefix.
+--=-CNLJyIjgagPXTo5NDwwS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-> +                           fan presence (the 'installed' bit of FAN_CONFIG_*).
-> +                           Instead, rely on the on the default value store of
-> +                           the device to populate it.
-> +
-> +Capabilities are configured through subnodes of the controller's node.
-> +
-> +Fans
-> +----
-> +
-> +Only fans with subnodes present will be considered as installed. If
-> +use-stored-presence is present in the parent node, then only fans that are both
-> +defined in the devicetree and have their installed bit set are considered
-> +installed.
-> +
-> +Required subnode properties:
-> +- compatible             : Must be "pmbus-fan"
+-----BEGIN PGP SIGNATURE-----
 
-What defines a pmbus-fan? Sounds generic, but then you have all these 
-maxim specific properties.
+iQIcBAABCgAGBQJZkQMpAAoJEJ0dnzgO5LT5CkcP/AmmRYYe0B48HCa4N0cJFFt2
+G5c8Kg0LT4VTcBKJzNXqJumFPnc1KnRcy39kucUfPj4CGudMcIonTh3Gyuxr9lzV
+0v2p9Hhs7m3QbYa16DH1NSMHhOnN9mYzWX9MMeMGL6yc3AYVqatjH6QhseO4P4qr
+ZygWUEOP+/1JhseFjGqR6FrpB8hrYeIBjIR9OvBTJXFF2xv3t+ovYWseO30WyrSy
+YwHnAIKTlMSevTPf/GODRJi4i6d8CruzsY+OBTC9mDadoHHBMEu9KeIsTLXwYoAJ
+exb1SRkdUT1Br4II56g8JqdsHjL5u1E7ov5Or0auZt4/1vYKBDhXZ21arIwAPn9k
+YMtGLFqjrJoL+shyyCQGfAfQITIM6xE+Qw4Ce2x5lrCBMhiIwCsPym0KOLKXrg0Q
+x2kdRorz9prsKDi4oP5ob4qEj0+MRCuvNRfLQzaE3wjYbJP4Wo2q2E8L2t1s3fz7
+aNkvKfxMY8VdX3xEFam6own+A3+PyZRpmyz2k9Xkr6huPEgzidEVj89XLFA8FsIe
+M3FzGvaxxuZRURXTFkc8rfNFBZYxRFPKseIZuMEj18Z7OTReyhBnOw0A75AWTWyY
+8xwzFEVP4Tt3mSUVGFhSguCMk1jAbH1ATwnCS81rQXDX+nmqlEHfvB2vsXtDxBir
+JXaxZFeXtI/BRS/ZJloZ
+=tcOu
+-----END PGP SIGNATURE-----
 
-> +- reg                    : The PMBus page the properties apply to.
-> +- maxim,fan-rotor-input  : The type of rotor measurement provided to the
-> +                           controller. Must be either "tach" for tachometer
-> +                           pulses or "lock" for a locked-rotor signal.
-> +- maxim,fan-lock-polarity: Required iff maxim,fan-rotor-input is "lock". Valid
-> +                           values are "low" for active low, "high" for active
-> +                           high.
-> +
-> +Optional subnode properties:
-> +- fan-mode               : "rpm" or "pwm". Default value is "pwm".
-> +- tach-pulses            : Tachometer pulses per revolution. Valid values are
-> +                           1, 2, 3 or 4. The default is 1.
-> +- maxim,fan-no-fault-ramp: Do not ramp the fan to 100% PWM duty on detecting a
-> +                           fan fault
-> +- maxim,fan-startup      : The number of rotations required before taking
-> +                           emergency action for an unresponsive fan and driving
-> +                           it with 100% or 0% PWM duty, depending on the state
-> +                           of maxim,fan-no-fault-ramp. Valid values are 0
-> +                           (automatic spin-up disabled), 2, 4, or 8. Default
-> +                           value is 0.
-> +- maxim,fan-health       : Enable automated fan health check
-> +- maxim,fan-ramp         : Configures how fast the device ramps the PWM duty
-> +                           cycle from one value to another. Valid values are 0
-> +                           to 7 inclusive, with values 0 - 2 configuring a
-> +                           1000ms update rate and 1 - 3% duty respective duty
-> +                           increase, and 3 - 7 a 200ms update rate with a 1 -
-> +                           5% respective duty increase. Default value is 0.
-> +- maxim,fan-no-watchdog  : Do not ramp fan to 100% PWM duty on failure to
-> +                           update desired fan rate inside 10s. This implies
-> +                           maxim,tmp-no-fault-ramp
-> +- maxim,tmp-no-fault-ramp: Do not ramp fan to 100% PWM duty on temperature
-> +                           sensor fault detection. This implies
-> +                           maxim,fan-no-watchdog
-> +- maxim,tmp-hysteresis   : The temperature hysteresis used to determine
-> +                           transitions to lower fan speed bands in the
-> +                           temperature/fan rate lookup table. Valid values are
-> +                           2, 4, 6 or 8 (degrees celcius). Default value is 2.
-> +- maxim,fan-dual-tach    : Enable dual tachometer functionality
-> +- maxim,fan-pwm-freq     : The PWM frequency. Valid values are 30, 50, 100, 150
-> +                           and 25000 (Hz). Default value is 30Hz.
-> +- maxim,fan-lookup-table : A 16-element cell array of alternating temperature
-> +                           and rate values representing the look up table. The
-> +                           rate units are set through the fan-mode property.
-> +- maxim,fan-fault-pin-mon: Ramp fans to 100% PWM duty when the FAULT pin is
-> +                           asserted
-> +
-> +Temperature
-> +-----------
-> +
-> +Required subnode properties:
-> +- compatible    : Must be "pmbus-temperature"
-> +- reg           : The PMBus page the properties apply to.
-> +
-> +Optional subnode properties:
-> +- maxim,tmp-offset      : Valid values are 0 - 30 (degrees celcius) inclusive.
-> +                          Default value is 0.
-> +- maxim,tmp-fans        : An array of fan indexes whose fans are controlled by
-> +                          the current temperature sensor. Fans are indexed from
-> +                          zero. The valid values are 0 - 5 inclusive.
+--=-CNLJyIjgagPXTo5NDwwS--
 
-Why not use a phandle here.
-
-> +
-> +Example:
-> +	fan-max31785: max31785@52 {
-> +		reg = <0x52>;
-> +		compatible = "maxim,max31785";
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                fan@0 {
-> +                        compatible = "pmbus-fan";
-> +                        reg = <0>;
-> +                        mode = "rpm";
-> +                        tach-pulses = <1>;
-> +                        maxim,fan-rotor-input = "tach";
-> +                        maxim,fan-dual-tach;
-> +                };
-> +
-> +                fan@1 {
-> +                        compatible = "pmbus-fan";
-> +                        reg = <1>;
-> +                        mode = "rpm";
-> +                        tach-pulses = <1>;
-> +                        maxim,fan-rotor-input = "tach";
-> +                        maxim,tmp-hysteresis = <2>;
-> +                        maxim,fan-lookup-table = <
-> +                        /*  Temperature    RPM  */
-> +                                 0        1000
-> +                                10        2000
-> +                                20        3000
-> +                                30        4000
-> +                                40        5000
-> +                                50        6000
-> +                                60        7000
-> +                                70        8000
-> +                        >;
-> +                };
-> +	};
-> -- 
-> 2.11.0
-> 
