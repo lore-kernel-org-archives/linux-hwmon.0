@@ -1,175 +1,314 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52903 "EHLO
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53807 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1752130AbdHOUhD (ORCPT
+        by vger.kernel.org with ESMTP id S1750771AbdHNSzt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2017 16:37:03 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v7FKT6AO073977
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:37:02 -0400
-Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2cc6f2vdd9-1
+        Mon, 14 Aug 2017 14:55:49 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v7EIsCtJ123089
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Aug 2017 14:55:48 -0400
+Received: from e31.co.us.ibm.com (e31.co.us.ibm.com [32.97.110.149])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2cbe819pxv-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:37:02 -0400
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Aug 2017 14:55:48 -0400
 Received: from localhost
-        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e31.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Tue, 15 Aug 2017 16:37:02 -0400
-Subject: Re: [PATCH v3 3/3] Documentation: hwmon: Document the IBM CFF power
- supply
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: robh+dt@kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        mark.rutland@arm.com, devicetree@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, "Edward A. James" <eajames@us.ibm.com>
-References: <1502724390-17411-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1502724390-17411-4-git-send-email-eajames@linux.vnet.ibm.com>
- <20170814185308.GA11090@roeck-us.net>
- <0d016c77-4e3e-b9df-b131-604ab6f15e4c@linux.vnet.ibm.com>
- <20170814223717.GA21561@roeck-us.net>
+        Mon, 14 Aug 2017 12:55:47 -0600
 From: Eddie James <eajames@linux.vnet.ibm.com>
-Date: Tue, 15 Aug 2017 15:36:55 -0500
-MIME-Version: 1.0
-In-Reply-To: <20170814223717.GA21561@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Message-Id: <93f288f8-56b1-5a44-bc3b-5efedbfba171@linux.vnet.ibm.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au,
+        eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH v4] hwmon: (pmbus): Add debugfs for status registers
+Date: Mon, 14 Aug 2017 13:55:41 -0500
+Message-Id: <1502736941-17279-1-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+From: "Edward A. James" <eajames@us.ibm.com>
 
+Export all the available status registers through debugfs. This is
+useful for hardware diagnostics, especially on multi-page pmbus devices,
+as user-space access of the i2c space could corrupt the pmbus page
+accounting.
 
-On 08/14/2017 05:37 PM, Guenter Roeck wrote:
-> On Mon, Aug 14, 2017 at 02:26:20PM -0500, Eddie James wrote:
->>
->> On 08/14/2017 01:53 PM, Guenter Roeck wrote:
->>> On Mon, Aug 14, 2017 at 10:26:30AM -0500, Eddie James wrote:
->>>> From: "Edward A. James" <eajames@us.ibm.com>
->>>>
->>>> Signed-off-by: Edward A. James <eajames@us.ibm.com>
->>>> ---
->>>>   Documentation/hwmon/ibm-cffps | 54 +++++++++++++++++++++++++++++++++++++++++++
->>>>   1 file changed, 54 insertions(+)
->>>>   create mode 100644 Documentation/hwmon/ibm-cffps
->>>>
->>>> diff --git a/Documentation/hwmon/ibm-cffps b/Documentation/hwmon/ibm-cffps
->>>> new file mode 100644
->>>> index 0000000..e091ff2
->>>> --- /dev/null
->>>> +++ b/Documentation/hwmon/ibm-cffps
->>>> @@ -0,0 +1,54 @@
->>>> +Kernel driver ibm-cffps
->>>> +=======================
->>>> +
->>>> +Supported chips:
->>>> +  * IBM Common Form Factor power supply
->>>> +
->>>> +Author: Eddie James <eajames@us.ibm.com>
->>>> +
->>>> +Description
->>>> +-----------
->>>> +
->>>> +This driver supports IBM Common Form Factor (CFF) power supplies. This driver
->>>> +is a client to the core PMBus driver.
->>>> +
->>>> +Usage Notes
->>>> +-----------
->>>> +
->>>> +This driver does not auto-detect devices. You will have to instantiate the
->>>> +devices explicitly. Please see Documentation/i2c/instantiating-devices for
->>>> +details.
->>>> +
->>>> +Sysfs entries
->>>> +-------------
->>>> +
->>>> +The following attributes are supported:
->>>> +
->>>> +curr1_alarm		Output current over-current fault.
->>>> +curr1_input		Measured output current in mA.
->>>> +curr1_label		"iout1"
->>>> +
->>>> +fan1_alarm		Fan 1 warning.
->>>> +fan1_fault		Fan 1 fault.
->>>> +fan1_input		Fan 1 speed in RPM.
->>>> +fan2_alarm		Fan 2 warning.
->>>> +fan2_fault		Fan 2 fault.
->>>> +fan2_input		Fan 2 speed in RPM.
->>>> +
->>>> +in1_alarm		Input voltage under-voltage fault.
->>> Just noticed. Are you sure you mean 'fault' here and below ?
->>> 'alarm' attributes normally report an over- or under- condition,
->>> but not a fault. Faults should be reported with 'fault' attributes.
->>> In PMBus lingo (which doesn't distinguish a real 'fault' from
->>> a critical over- or under- condition), the "FAULT" condition
->>> usually maps with the 'crit_alarm' or 'lcrit_alarm' attributes.
->>> Also, under-voltages would normally be reported as min_alarm
->>> or clrit_alarm, not in_alarm.
->> Thanks, I better change this doc to "alarm." The spec reports all these as
->> "faults" but many of them are merely over-temp or over-voltage, etc, and
->> should be "alarm" to be consistent with PMBus.
->>
->> The problem with this power supply is that it doesn't report any "limits."
->> So unless I set up my read_byte function to return some limits, we can't get
->> any lower or upper limits and therefore won't get the crit_alarm,
->> lcrit_alarm, etc. Do you think I should "fake" the limits in the driver?
->>
-> Good question. Are the limits documented ? If yes, that would make sense.
-> I am quite sure that limits are word registers, though.
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
 
-No, no documentation on any limits... I'll leave it as is, as it it's 
-meeting our requirements for now. I'll just change "fault" to "alarm" in 
-the doc here.
+Changes since v3:
+ * Check for error in debugfs get functions.
 
-Thanks,
-Eddie
+Changes since v2:
+ * Remove client driver conditional debugfs - add it for all devices.
+ * Use scnprintf instead of snprintf.
+ * Add module_init and module_exit to create root pmbus debugfs
+   directory.
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 210 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 210 insertions(+)
 
->
-> Guenter
->
->>>> +in1_input		Measured input voltage in mV.
->>>> +in1_label		"vin"
->>>> +in2_alarm		Output voltage over-voltage fault.
->>>> +in2_input		Measured output voltage in mV.
->>>> +in2_label		"vout1"
->>>> +
->>>> +power1_alarm		Input fault.
->>> Another example; this maps to PMBUS_PIN_OP_WARN_LIMIT which is an
->>> input power alarm, not an indication of a fault condition.
->> Hm, with my latest changes to look at the higher byte of STATUS_WORD, it
->> looks like we now have the same name for both the pin generic alarm
->> attribute and the pin_limit_attr... So in this device's case, it would map
->> to PB_STATUS_INPUT bit of STATUS_WORD. Didn't think about that... any
->> suggestions? Can't really change the name of the limit one without breaking
->> people's code...
->>
->>>> +power1_input		Measured input power in uW.
->>>> +power1_label		"pin"
->>>> +
->>>> +temp1_alarm		PSU inlet ambient temperature over-temperature fault.
->>>> +temp1_input		Measured PSU inlet ambient temp in millidegrees C.
->>>> +temp2_alarm		Secondary rectifier temp over-temperature fault.
->>> Interestingly, PMBus does not distinguish between a critical temperature
->>> alarm and an actual "fault". Makes me wonder if the IBM PS reports
->>> CFFPS_MFR_THERMAL_FAULT if there is an actual fault (chip or sensor failure),
->>> or if it has the same meaning as PB_TEMP_OT_FAULT, ie an excessively high
->>> temperature.
->> Will change these to "alarm" in the doc too.
->>
->>> If it is a real fault (a detected sensor failure), we should possibly
->>> consider adding a respective "virtual" temperature status flag. The same
->>> is true for other status bits reported in the manufacturer status
->>> register if any of those reflect a "real" fault, ie a chip failure.
->> Yea, that would probably be helpful. The CFFPS_MFR_THERMAL_FAULT bit is a
->> fault (so the spec says), but I'm not sure what is triggering it.
->>
->> Thanks,
->> Eddie
->>
->>>> +temp2_input		Measured secondary rectifier temp in millidegrees C.
->>>> +temp3_alarm		ORing FET temperature over-temperature fault.
->>>> +temp3_input		Measured ORing FET temperature in millidegrees C.
->>>> -- 
->>>> 1.8.3.1
->>>>
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ef135d8..6ac89c9 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#include <linux/debugfs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -101,6 +102,7 @@ struct pmbus_data {
+ 	int num_attributes;
+ 	struct attribute_group group;
+ 	const struct attribute_group *groups[2];
++	struct dentry *debugfs;		/* debugfs device directory */
+ 
+ 	struct pmbus_sensor *sensors;
+ 
+@@ -120,6 +122,12 @@ struct pmbus_data {
+ 	u8 currpage;
+ };
+ 
++struct pmbus_debugfs_entry {
++	struct i2c_client *client;
++	u8 page;
++	u8 reg;
++};
++
+ void pmbus_clear_cache(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -1893,6 +1901,184 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ }
+ #endif
+ 
++static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
++
++#if IS_ENABLED(CONFIG_DEBUG_FS)
++static int pmbus_debugfs_get(void *data, u64 *val)
++{
++	int rc;
++	struct pmbus_debugfs_entry *entry = data;
++
++	rc = _pmbus_read_byte_data(entry->client, entry->page, entry->reg);
++	if (rc < 0)
++		return rc;
++
++	*val = rc;
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops, pmbus_debugfs_get, NULL,
++			 "0x%02llx\n");
++
++static int pmbus_debugfs_get_status(void *data, u64 *val)
++{
++	int rc;
++	struct pmbus_debugfs_entry *entry = data;
++	struct pmbus_data *pdata = i2c_get_clientdata(entry->client);
++
++	rc = pdata->read_status(entry->client, entry->page);
++	if (rc < 0)
++		return rc;
++
++	*val = rc;
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
++			 NULL, "0x%04llx\n");
++
++static int pmbus_init_debugfs(struct i2c_client *client,
++			      struct pmbus_data *data)
++{
++	int i, idx = 0;
++	char name[PMBUS_NAME_SIZE];
++	struct pmbus_debugfs_entry *entries;
++
++	if (!pmbus_debugfs_dir)
++		return -ENODEV;
++
++	/*
++	 * Create the debugfs directory for this device. Use the hwmon device
++	 * name to avoid conflicts (hwmon numbers are globally unique).
++	 */
++	data->debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
++					   pmbus_debugfs_dir);
++	if (IS_ERR_OR_NULL(data->debugfs)) {
++		data->debugfs = NULL;
++		return -ENODEV;
++	}
++
++	/* Allocate the max possible entries we need. */
++	entries = devm_kzalloc(data->dev,
++			       sizeof(*entries) * (data->info->pages * 10),
++			       GFP_KERNEL);
++	if (!entries)
++		return -ENOMEM;
++
++	for (i = 0; i < data->info->pages; ++i) {
++		/* Check accessibility of status register if it's not page 0 */
++		if (!i || pmbus_check_status_register(client, i)) {
++			/* No need to set reg as we have special read op. */
++			entries[idx].client = client;
++			entries[idx].page = i;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops_status);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_VOUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_VOUT;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_vout", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_IOUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_IOUT;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_iout", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_INPUT) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_INPUT;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_input", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_TEMP) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_TEMPERATURE;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_temp", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_CML)) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_CML;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_cml", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_OTHER)) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_OTHER;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_other", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (pmbus_check_byte_register(client, i,
++					      PMBUS_STATUS_MFR_SPECIFIC)) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_MFR_SPECIFIC;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_mfr", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN12) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_FAN_12;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan12", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++
++		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN34) {
++			entries[idx].client = client;
++			entries[idx].page = i;
++			entries[idx].reg = PMBUS_STATUS_FAN_34;
++			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan34", i);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_ops);
++		}
++	}
++
++	return 0;
++}
++#else
++static int pmbus_init_debugfs(struct i2c_client *client,
++			      struct pmbus_data *data)
++{
++	return 0;
++}
++#endif	/* IS_ENABLED(CONFIG_DEBUG_FS) */
++
+ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 		   struct pmbus_driver_info *info)
+ {
+@@ -1952,6 +2138,10 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 	if (ret)
+ 		goto out_unregister;
+ 
++	ret = pmbus_init_debugfs(client, data);
++	if (ret)
++		dev_warn(dev, "Failed to register debugfs\n");
++
+ 	return 0;
+ 
+ out_unregister:
+@@ -1965,12 +2155,32 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ int pmbus_do_remove(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
++
++	debugfs_remove_recursive(data->debugfs);
++
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	kfree(data->group.attrs);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(pmbus_do_remove);
+ 
++static int __init pmbus_core_init(void)
++{
++	pmbus_debugfs_dir = debugfs_create_dir("pmbus", NULL);
++	if (IS_ERR(pmbus_debugfs_dir))
++		pmbus_debugfs_dir = NULL;
++
++	return 0;
++}
++
++static void __exit pmbus_core_exit(void)
++{
++	debugfs_remove_recursive(pmbus_debugfs_dir);
++}
++
++module_init(pmbus_core_init);
++module_exit(pmbus_core_exit);
++
+ MODULE_AUTHOR("Guenter Roeck");
+ MODULE_DESCRIPTION("PMBus core driver");
+ MODULE_LICENSE("GPL");
+-- 
+1.8.3.1
 
