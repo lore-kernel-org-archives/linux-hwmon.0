@@ -6,40 +6,47 @@ Cc: robh+dt@kernel.org, jdelvare@suse.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
         devicetree@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
         eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH v3 0/3] hwmon: (pmbus): Add IBM Common Form Factor (CFF) power supply driver
-Date: Mon, 14 Aug 2017 10:26:27 -0500
-Message-Id: <1502724390-17411-1-git-send-email-eajames@linux.vnet.ibm.com>
+Subject: [PATCH v3 1/3] dt-bindings: i2c: Document the IBM CCF power supply version 1
+Date: Mon, 14 Aug 2017 10:26:28 -0500
+In-Reply-To: <1502724390-17411-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1502724390-17411-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1502724390-17411-2-git-send-email-eajames@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-This series adds a hwmon pmbus driver for a POWER System power supply. The
-core monitoring functionality is provided by pmbus.
-
-Changes since v2:
- * Renamed the driver again...
- * Remove debugfs bool from pmbus_driver_info.
- * Add comment for returning rc when reading STATUS_MFR_SPECIFIC fails.
-
-Since v1:
- * Renamed the driver.
- * Removed non-hwmon attributes.
- * Simplified word and byte data reads.
-
-Edward A. James (3):
-  dt-bindings: i2c: Document the IBM CCF power supply version 1
-  hwmon: (pmbus): Add IBM Common Form Factor (CFF) power supply driver
-  Documentation: hwmon: Document the IBM CFF power supply
-
- .../devicetree/bindings/i2c/ibm,cffps1.txt         |  21 +++
- Documentation/hwmon/ibm-cffps                      |  54 ++++++++
- drivers/hwmon/pmbus/Kconfig                        |  10 ++
- drivers/hwmon/pmbus/Makefile                       |   1 +
- drivers/hwmon/pmbus/ibm-cffps.c                    | 151 +++++++++++++++++++++
- 5 files changed, 237 insertions(+)
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
+---
+ .../devicetree/bindings/i2c/ibm,cffps1.txt          | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
- create mode 100644 Documentation/hwmon/ibm-cffps
- create mode 100644 drivers/hwmon/pmbus/ibm-cffps.c
 
+diff --git a/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt b/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
+new file mode 100644
+index 0000000..f68a0a6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
+@@ -0,0 +1,21 @@
++Device-tree bindings for IBM Common Form Factor Power Supply Version 1
++----------------------------------------------------------------------
++
++Required properties:
++ - compatible = "ibm,cffps1";
++ - reg = < I2C bus address >;		: Address of the power supply on the
++					  I2C bus.
++
++Example:
++
++    i2c-bus@100 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        #interrupt-cells = <1>;
++        < more properties >
++
++        power-supply@68 {
++            compatible = "ibm,cffps1";
++            reg = <0x68>;
++        };
++    };
 -- 
 1.8.3.1
