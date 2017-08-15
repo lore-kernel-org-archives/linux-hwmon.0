@@ -1,323 +1,49 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:35264 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751752AbdHNTXP (ORCPT
+Received: from mout.kundenserver.de ([212.227.126.187]:54051 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751847AbdHOOuw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Aug 2017 15:23:15 -0400
-Date: Mon, 14 Aug 2017 12:23:13 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH v4] hwmon: (pmbus): Add debugfs for status registers
-Message-ID: <20170814192313.GB11090@roeck-us.net>
-References: <1502736941-17279-1-git-send-email-eajames@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1502736941-17279-1-git-send-email-eajames@linux.vnet.ibm.com>
+        Tue, 15 Aug 2017 10:50:52 -0400
+From: Arnd Bergmann <arnd@arndb.de>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: aspeed: add THERMAL dependency
+Date: Tue, 15 Aug 2017 16:47:47 +0200
+Message-Id: <20170815144856.2059759-1-arnd@arndb.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 14, 2017 at 01:55:41PM -0500, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Export all the available status registers through debugfs. This is
-> useful for hardware diagnostics, especially on multi-page pmbus devices,
-> as user-space access of the i2c space could corrupt the pmbus page
-> accounting.
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
+With CONFIG_THERMAL=m, a built-in aspeed pwm tacho driver causes
+a link error:
 
-Applied to hwmon-next.
+drivers/hwmon/aspeed-pwm-tacho.o: In function `aspeed_pwm_tacho_probe':
+aspeed-pwm-tacho.c:(.text+0x7f0): undefined reference to `thermal_of_cooling_device_register'
 
-> 
-> Changes since v3:
->  * Check for error in debugfs get functions.
-> 
-> Changes since v2:
->  * Remove client driver conditional debugfs - add it for all devices.
->  * Use scnprintf instead of snprintf.
->  * Add module_init and module_exit to create root pmbus debugfs
->    directory.
+This adds a dependency similar to what other hwmon drivers use,
+ensuring that the aspeed driver cannot be built-in in this
+case but has to be a module. With THERMAL=n, we still allow building it.
 
-Note that the changelog should be after the '---'; we don't want it in the
-commit description.
+Fixes: 2d7a548a3eff ("drivers: hwmon: Support for ASPEED PWM/Fan tach")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5ef2814345ef..5b9a61f766ac 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -343,6 +343,7 @@ config SENSORS_ASB100
+ 
+ config SENSORS_ASPEED
+ 	tristate "ASPEED AST2400/AST2500 PWM and Fan tach driver"
++	depends on THERMAL || THERMAL=n
+ 	select REGMAP
+ 	help
+ 	  This driver provides support for ASPEED AST2400/AST2500 PWM
+-- 
+2.9.0
 
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 210 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 210 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index ef135d8..6ac89c9 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -19,6 +19,7 @@
->   * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
->   */
->  
-> +#include <linux/debugfs.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/init.h>
-> @@ -101,6 +102,7 @@ struct pmbus_data {
->  	int num_attributes;
->  	struct attribute_group group;
->  	const struct attribute_group *groups[2];
-> +	struct dentry *debugfs;		/* debugfs device directory */
->  
->  	struct pmbus_sensor *sensors;
->  
-> @@ -120,6 +122,12 @@ struct pmbus_data {
->  	u8 currpage;
->  };
->  
-> +struct pmbus_debugfs_entry {
-> +	struct i2c_client *client;
-> +	u8 page;
-> +	u8 reg;
-> +};
-> +
->  void pmbus_clear_cache(struct i2c_client *client)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -1893,6 +1901,184 @@ static int pmbus_regulator_register(struct pmbus_data *data)
->  }
->  #endif
->  
-> +static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
-> +
-> +#if IS_ENABLED(CONFIG_DEBUG_FS)
-> +static int pmbus_debugfs_get(void *data, u64 *val)
-> +{
-> +	int rc;
-> +	struct pmbus_debugfs_entry *entry = data;
-> +
-> +	rc = _pmbus_read_byte_data(entry->client, entry->page, entry->reg);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	*val = rc;
-> +
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops, pmbus_debugfs_get, NULL,
-> +			 "0x%02llx\n");
-> +
-> +static int pmbus_debugfs_get_status(void *data, u64 *val)
-> +{
-> +	int rc;
-> +	struct pmbus_debugfs_entry *entry = data;
-> +	struct pmbus_data *pdata = i2c_get_clientdata(entry->client);
-> +
-> +	rc = pdata->read_status(entry->client, entry->page);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	*val = rc;
-> +
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
-> +			 NULL, "0x%04llx\n");
-> +
-> +static int pmbus_init_debugfs(struct i2c_client *client,
-> +			      struct pmbus_data *data)
-> +{
-> +	int i, idx = 0;
-> +	char name[PMBUS_NAME_SIZE];
-> +	struct pmbus_debugfs_entry *entries;
-> +
-> +	if (!pmbus_debugfs_dir)
-> +		return -ENODEV;
-> +
-> +	/*
-> +	 * Create the debugfs directory for this device. Use the hwmon device
-> +	 * name to avoid conflicts (hwmon numbers are globally unique).
-> +	 */
-> +	data->debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
-> +					   pmbus_debugfs_dir);
-> +	if (IS_ERR_OR_NULL(data->debugfs)) {
-> +		data->debugfs = NULL;
-> +		return -ENODEV;
-> +	}
-> +
-> +	/* Allocate the max possible entries we need. */
-> +	entries = devm_kzalloc(data->dev,
-> +			       sizeof(*entries) * (data->info->pages * 10),
-> +			       GFP_KERNEL);
-> +	if (!entries)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < data->info->pages; ++i) {
-> +		/* Check accessibility of status register if it's not page 0 */
-> +		if (!i || pmbus_check_status_register(client, i)) {
-> +			/* No need to set reg as we have special read op. */
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops_status);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_VOUT) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_VOUT;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_vout", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_IOUT) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_IOUT;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_iout", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_INPUT) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_INPUT;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_input", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_TEMP) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_TEMPERATURE;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_temp", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_CML)) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_CML;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_cml", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_OTHER)) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_OTHER;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_other", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (pmbus_check_byte_register(client, i,
-> +					      PMBUS_STATUS_MFR_SPECIFIC)) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_MFR_SPECIFIC;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_mfr", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN12) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_FAN_12;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan12", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +
-> +		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN34) {
-> +			entries[idx].client = client;
-> +			entries[idx].page = i;
-> +			entries[idx].reg = PMBUS_STATUS_FAN_34;
-> +			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan34", i);
-> +			debugfs_create_file(name, 0444, data->debugfs,
-> +					    &entries[idx++],
-> +					    &pmbus_debugfs_ops);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int pmbus_init_debugfs(struct i2c_client *client,
-> +			      struct pmbus_data *data)
-> +{
-> +	return 0;
-> +}
-> +#endif	/* IS_ENABLED(CONFIG_DEBUG_FS) */
-> +
->  int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  		   struct pmbus_driver_info *info)
->  {
-> @@ -1952,6 +2138,10 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  	if (ret)
->  		goto out_unregister;
->  
-> +	ret = pmbus_init_debugfs(client, data);
-> +	if (ret)
-> +		dev_warn(dev, "Failed to register debugfs\n");
-> +
->  	return 0;
->  
->  out_unregister:
-> @@ -1965,12 +2155,32 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  int pmbus_do_remove(struct i2c_client *client)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	debugfs_remove_recursive(data->debugfs);
-> +
->  	hwmon_device_unregister(data->hwmon_dev);
->  	kfree(data->group.attrs);
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(pmbus_do_remove);
->  
-> +static int __init pmbus_core_init(void)
-> +{
-> +	pmbus_debugfs_dir = debugfs_create_dir("pmbus", NULL);
-> +	if (IS_ERR(pmbus_debugfs_dir))
-> +		pmbus_debugfs_dir = NULL;
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit pmbus_core_exit(void)
-> +{
-> +	debugfs_remove_recursive(pmbus_debugfs_dir);
-> +}
-> +
-> +module_init(pmbus_core_init);
-> +module_exit(pmbus_core_exit);
-> +
->  MODULE_AUTHOR("Guenter Roeck");
->  MODULE_DESCRIPTION("PMBus core driver");
->  MODULE_LICENSE("GPL");
-> -- 
-> 1.8.3.1
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
