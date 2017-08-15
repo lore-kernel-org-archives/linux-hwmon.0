@@ -1,238 +1,103 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49449 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1752918AbdHOUwq (ORCPT
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45204 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1752971AbdHOUwv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Aug 2017 16:52:46 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v7FKnXJv046340
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:52:46 -0400
-Received: from e32.co.us.ibm.com (e32.co.us.ibm.com [32.97.110.150])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2cc6f8cw61-1
+        Tue, 15 Aug 2017 16:52:51 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v7FKmdgZ105031
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:52:50 -0400
+Received: from e37.co.us.ibm.com (e37.co.us.ibm.com [32.97.110.158])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2cc6f94xdd-1
         (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:52:46 -0400
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:52:50 -0400
 Received: from localhost
-        by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e37.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Tue, 15 Aug 2017 14:52:45 -0600
+        Tue, 15 Aug 2017 14:52:49 -0600
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux@roeck-us.net
 Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
         devicetree@vger.kernel.org, corbet@lwn.net,
         eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
-Subject: [PATCH v4 2/3] hwmon: (pmbus): Add IBM Common Form Factor (CFF) power supply driver
-Date: Tue, 15 Aug 2017 15:52:34 -0500
+Subject: [PATCH v4 3/3] Documentation: hwmon: Document the IBM CFF power supply
+Date: Tue, 15 Aug 2017 15:52:35 -0500
 In-Reply-To: <1502830355-502-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1502830355-502-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1502830355-502-3-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1502830355-502-4-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 From: "Edward A. James" <eajames@us.ibm.com>
 
-Add the driver to monitor IBM CFF power supplies with hwmon over
-pmbus.
-
 Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
- drivers/hwmon/pmbus/Kconfig     |  10 +++
- drivers/hwmon/pmbus/Makefile    |   1 +
- drivers/hwmon/pmbus/ibm-cffps.c | 151 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 162 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/ibm-cffps.c
+ Documentation/hwmon/ibm-cffps | 54 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/hwmon/ibm-cffps
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 68d717a..f3de18a 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -37,6 +37,16 @@ config SENSORS_ADM1275
- 	  This driver can also be built as a module. If so, the module will
- 	  be called adm1275.
- 
-+config SENSORS_IBM_CFFPS
-+	tristate "IBM Common Form Factor Power Supply"
-+	default n
-+	help
-+	  If you say yes here you get hardware monitoring support for the IBM
-+	  Common Form Factor power supply.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called ibm-cffps.
-+
- config SENSORS_IR35221
- 	tristate "Infineon IR35221"
- 	default n
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 75bb7ca..737fa4e 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -5,6 +5,7 @@
- obj-$(CONFIG_PMBUS)		+= pmbus_core.o
- obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
- obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
-+obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
- obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+diff --git a/Documentation/hwmon/ibm-cffps b/Documentation/hwmon/ibm-cffps
 new file mode 100644
-index 0000000..1a6294c
+index 0000000..e05ecd8
 --- /dev/null
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -0,0 +1,151 @@
-+/*
-+ * Copyright 2017 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
++++ b/Documentation/hwmon/ibm-cffps
+@@ -0,0 +1,54 @@
++Kernel driver ibm-cffps
++=======================
 +
-+#include <linux/device.h>
-+#include <linux/i2c.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
++Supported chips:
++  * IBM Common Form Factor power supply
 +
-+#include "pmbus.h"
++Author: Eddie James <eajames@us.ibm.com>
 +
-+/* STATUS_MFR_SPECIFIC bits */
-+#define CFFPS_MFR_FAN_FAULT			BIT(0)
-+#define CFFPS_MFR_THERMAL_FAULT			BIT(1)
-+#define CFFPS_MFR_OV_FAULT			BIT(2)
-+#define CFFPS_MFR_UV_FAULT			BIT(3)
-+#define CFFPS_MFR_PS_KILL			BIT(4)
-+#define CFFPS_MFR_OC_FAULT			BIT(5)
-+#define CFFPS_MFR_VAUX_FAULT			BIT(6)
-+#define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
++Description
++-----------
 +
-+static int ibm_cffps_read_byte_data(struct i2c_client *client, int page,
-+				    int reg)
-+{
-+	int rc, mfr;
++This driver supports IBM Common Form Factor (CFF) power supplies. This driver
++is a client to the core PMBus driver.
 +
-+	switch (reg) {
-+	case PMBUS_STATUS_VOUT:
-+	case PMBUS_STATUS_IOUT:
-+	case PMBUS_STATUS_TEMPERATURE:
-+	case PMBUS_STATUS_FAN_12:
-+		rc = pmbus_read_byte_data(client, page, reg);
-+		if (rc < 0)
-+			return rc;
++Usage Notes
++-----------
 +
-+		mfr = pmbus_read_byte_data(client, page,
-+					   PMBUS_STATUS_MFR_SPECIFIC);
-+		if (mfr < 0)
-+			/*
-+			 * Return the status register instead of an error,
-+			 * since we successfully read status.
-+			 */
-+			return rc;
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices for
++details.
 +
-+		/* Add MFR_SPECIFIC bits to the standard pmbus status regs. */
-+		if (reg == PMBUS_STATUS_FAN_12) {
-+			if (mfr & CFFPS_MFR_FAN_FAULT)
-+				rc |= PB_FAN_FAN1_FAULT;
-+		} else if (reg == PMBUS_STATUS_TEMPERATURE) {
-+			if (mfr & CFFPS_MFR_THERMAL_FAULT)
-+				rc |= PB_TEMP_OT_FAULT;
-+		} else if (reg == PMBUS_STATUS_VOUT) {
-+			if (mfr & (CFFPS_MFR_OV_FAULT | CFFPS_MFR_VAUX_FAULT))
-+				rc |= PB_VOLTAGE_OV_FAULT;
-+			if (mfr & CFFPS_MFR_UV_FAULT)
-+				rc |= PB_VOLTAGE_UV_FAULT;
-+		} else if (reg == PMBUS_STATUS_IOUT) {
-+			if (mfr & CFFPS_MFR_OC_FAULT)
-+				rc |= PB_IOUT_OC_FAULT;
-+			if (mfr & CFFPS_MFR_CURRENT_SHARE_WARNING)
-+				rc |= PB_CURRENT_SHARE_FAULT;
-+		}
-+		break;
-+	default:
-+		rc = -ENODATA;
-+		break;
-+	}
++Sysfs entries
++-------------
 +
-+	return rc;
-+}
++The following attributes are supported:
 +
-+static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
-+				    int reg)
-+{
-+	int rc, mfr;
++curr1_alarm		Output current over-current alarm.
++curr1_input		Measured output current in mA.
++curr1_label		"iout1"
 +
-+	switch (reg) {
-+	case PMBUS_STATUS_WORD:
-+		rc = pmbus_read_word_data(client, page, reg);
-+		if (rc < 0)
-+			return rc;
++fan1_alarm		Fan 1 warning.
++fan1_fault		Fan 1 fault.
++fan1_input		Fan 1 speed in RPM.
++fan2_alarm		Fan 2 warning.
++fan2_fault		Fan 2 fault.
++fan2_input		Fan 2 speed in RPM.
 +
-+		mfr = pmbus_read_byte_data(client, page,
-+					   PMBUS_STATUS_MFR_SPECIFIC);
-+		if (mfr < 0)
-+			/*
-+			 * Return the status register instead of an error,
-+			 * since we successfully read status.
-+			 */
-+			return rc;
++in1_alarm		Input voltage under-voltage alarm.
++in1_input		Measured input voltage in mV.
++in1_label		"vin"
++in2_alarm		Output voltage over-voltage alarm.
++in2_input		Measured output voltage in mV.
++in2_label		"vout1"
 +
-+		if (mfr & CFFPS_MFR_PS_KILL)
-+			rc |= PB_STATUS_OFF;
-+		break;
-+	default:
-+		rc = -ENODATA;
-+		break;
-+	}
++power1_alarm		Input fault or alarm.
++power1_input		Measured input power in uW.
++power1_label		"pin"
 +
-+	return rc;
-+}
-+
-+static struct pmbus_driver_info ibm_cffps_info = {
-+	.pages = 1,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		PMBUS_HAVE_PIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_TEMP |
-+		PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_VOUT |
-+		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT |
-+		PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_FAN12,
-+	.read_byte_data = ibm_cffps_read_byte_data,
-+	.read_word_data = ibm_cffps_read_word_data,
-+};
-+
-+static int ibm_cffps_probe(struct i2c_client *client,
-+			   const struct i2c_device_id *id)
-+{
-+	return pmbus_do_probe(client, id, &ibm_cffps_info);
-+}
-+
-+static const struct i2c_device_id ibm_cffps_id[] = {
-+	{ "ibm_cffps1", 1 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ibm_cffps_id);
-+
-+static const struct of_device_id ibm_cffps_of_match[] = {
-+	{ .compatible = "ibm,cffps1" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ibm_cffps_of_match);
-+
-+static struct i2c_driver ibm_cffps_driver = {
-+	.driver = {
-+		.name = "ibm-cffps",
-+		.of_match_table = ibm_cffps_of_match,
-+	},
-+	.probe = ibm_cffps_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = ibm_cffps_id,
-+};
-+
-+module_i2c_driver(ibm_cffps_driver);
-+
-+MODULE_AUTHOR("Eddie James");
-+MODULE_DESCRIPTION("PMBus driver for IBM Common Form Factor power supplies");
-+MODULE_LICENSE("GPL");
++temp1_alarm		PSU inlet ambient temperature over-temperature alarm.
++temp1_input		Measured PSU inlet ambient temp in millidegrees C.
++temp2_alarm		Secondary rectifier temp over-temperature alarm.
++temp2_input		Measured secondary rectifier temp in millidegrees C.
++temp3_alarm		ORing FET temperature over-temperature alarm.
++temp3_input		Measured ORing FET temperature in millidegrees C.
 -- 
 1.8.3.1
 
