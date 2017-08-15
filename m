@@ -1,236 +1,175 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:58562 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751989AbdHKBSL (ORCPT
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52903 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1752130AbdHOUhD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Aug 2017 21:18:11 -0400
-Date: Thu, 10 Aug 2017 18:18:07 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
+        Tue, 15 Aug 2017 16:37:03 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v7FKT6AO073977
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:37:02 -0400
+Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2cc6f2vdd9-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Aug 2017 16:37:02 -0400
+Received: from localhost
+        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Tue, 15 Aug 2017 16:37:02 -0400
+Subject: Re: [PATCH v3 3/3] Documentation: hwmon: Document the IBM CFF power
+ supply
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: robh+dt@kernel.org, jdelvare@suse.com,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        joel@jms.id.au, jk@ozlabs.org, andrew@aj.id.au,
         mark.rutland@arm.com, devicetree@vger.kernel.org, corbet@lwn.net,
         linux-doc@vger.kernel.org, "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus): Add POWER system power supply
- driver
-Message-ID: <20170811011807.GB10601@roeck-us.net>
-References: <1502403586-20549-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1502403586-20549-3-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1502724390-17411-1-git-send-email-eajames@linux.vnet.ibm.com>
+ <1502724390-17411-4-git-send-email-eajames@linux.vnet.ibm.com>
+ <20170814185308.GA11090@roeck-us.net>
+ <0d016c77-4e3e-b9df-b131-604ab6f15e4c@linux.vnet.ibm.com>
+ <20170814223717.GA21561@roeck-us.net>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+Date: Tue, 15 Aug 2017 15:36:55 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1502403586-20549-3-git-send-email-eajames@linux.vnet.ibm.com>
+In-Reply-To: <20170814223717.GA21561@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+Message-Id: <93f288f8-56b1-5a44-bc3b-5efedbfba171@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 10, 2017 at 05:19:45PM -0500, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Add the driver to monitor POWER system power supplies with hwmon over
-> pmbus.
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> ---
->  drivers/hwmon/pmbus/Kconfig   |  10 +++
->  drivers/hwmon/pmbus/Makefile  |   1 +
->  drivers/hwmon/pmbus/powerps.c | 144 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 155 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/powerps.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 68d717a..8925c1a 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -125,6 +125,16 @@ config SENSORS_MAX8688
->  	  This driver can also be built as a module. If so, the module will
->  	  be called max8688.
->  
-> +config SENSORS_POWERPS
-> +	tristate "IBM POWER System Power Supply"
-> +	default n
-> +	help
-> +	  If you say yes here you get hardware monitoring support for the IBM
-> +	  POWER system power supply.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called powerps.
-> +
->  config SENSORS_TPS40422
->  	tristate "TI TPS40422"
->  	default n
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 75bb7ca..3303af5 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
->  obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
-> +obj-$(CONFIG_SENSORS_POWERPS)	+= powerps.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
-> diff --git a/drivers/hwmon/pmbus/powerps.c b/drivers/hwmon/pmbus/powerps.c
-> new file mode 100644
-> index 0000000..21d28f2
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/powerps.c
-> @@ -0,0 +1,144 @@
-> +/*
-> + * Copyright 2017 IBM Corp.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/i2c.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +
-> +#include "pmbus.h"
-> +
-> +/* STATUS_MFR_SPECIFIC bits */
-> +#define POWERPS_MFR_FAN_FAULT			BIT(0)
-> +#define POWERPS_MFR_THERMAL_FAULT		BIT(1)
-> +#define POWERPS_MFR_OV_FAULT			BIT(2)
-> +#define POWERPS_MFR_UV_FAULT			BIT(3)
-> +#define POWERPS_MFR_PS_KILL			BIT(4)
-> +#define POWERPS_MFR_OC_FAULT			BIT(5)
-> +#define POWERPS_MFR_VAUX_FAULT			BIT(6)
-> +#define POWERPS_MFR_CURRENT_SHARE_WARNING	BIT(7)
-> +
-> +static int powerps_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int rc, mfr;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_VOUT:
-> +	case PMBUS_STATUS_IOUT:
-> +	case PMBUS_STATUS_TEMPERATURE:
-> +	case PMBUS_STATUS_FAN_12:
-> +		rc = pmbus_read_byte_data(client, page, reg);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		mfr = pmbus_read_byte_data(client, page,
-> +					   PMBUS_STATUS_MFR_SPECIFIC);
-> +		if (mfr < 0)
-> +			return rc;
 
-			return mfr; ?
 
-> +
-> +		/* Add MFR_SPECIFIC bits to the standard pmbus status regs. */
-> +		if (reg == PMBUS_STATUS_FAN_12) {
-> +			if (mfr & POWERPS_MFR_FAN_FAULT)
-> +				rc |= PB_FAN_FAN1_FAULT;
-> +		} else if (reg == PMBUS_STATUS_TEMPERATURE) {
-> +			if (mfr & POWERPS_MFR_THERMAL_FAULT)
-> +				rc |= PB_TEMP_OT_FAULT;
-> +		} else if (reg == PMBUS_STATUS_VOUT) {
-> +			if (mfr &
-> +			    (POWERPS_MFR_OV_FAULT | POWERPS_MFR_VAUX_FAULT))
+On 08/14/2017 05:37 PM, Guenter Roeck wrote:
+> On Mon, Aug 14, 2017 at 02:26:20PM -0500, Eddie James wrote:
+>>
+>> On 08/14/2017 01:53 PM, Guenter Roeck wrote:
+>>> On Mon, Aug 14, 2017 at 10:26:30AM -0500, Eddie James wrote:
+>>>> From: "Edward A. James" <eajames@us.ibm.com>
+>>>>
+>>>> Signed-off-by: Edward A. James <eajames@us.ibm.com>
+>>>> ---
+>>>>   Documentation/hwmon/ibm-cffps | 54 +++++++++++++++++++++++++++++++++++++++++++
+>>>>   1 file changed, 54 insertions(+)
+>>>>   create mode 100644 Documentation/hwmon/ibm-cffps
+>>>>
+>>>> diff --git a/Documentation/hwmon/ibm-cffps b/Documentation/hwmon/ibm-cffps
+>>>> new file mode 100644
+>>>> index 0000000..e091ff2
+>>>> --- /dev/null
+>>>> +++ b/Documentation/hwmon/ibm-cffps
+>>>> @@ -0,0 +1,54 @@
+>>>> +Kernel driver ibm-cffps
+>>>> +=======================
+>>>> +
+>>>> +Supported chips:
+>>>> +  * IBM Common Form Factor power supply
+>>>> +
+>>>> +Author: Eddie James <eajames@us.ibm.com>
+>>>> +
+>>>> +Description
+>>>> +-----------
+>>>> +
+>>>> +This driver supports IBM Common Form Factor (CFF) power supplies. This driver
+>>>> +is a client to the core PMBus driver.
+>>>> +
+>>>> +Usage Notes
+>>>> +-----------
+>>>> +
+>>>> +This driver does not auto-detect devices. You will have to instantiate the
+>>>> +devices explicitly. Please see Documentation/i2c/instantiating-devices for
+>>>> +details.
+>>>> +
+>>>> +Sysfs entries
+>>>> +-------------
+>>>> +
+>>>> +The following attributes are supported:
+>>>> +
+>>>> +curr1_alarm		Output current over-current fault.
+>>>> +curr1_input		Measured output current in mA.
+>>>> +curr1_label		"iout1"
+>>>> +
+>>>> +fan1_alarm		Fan 1 warning.
+>>>> +fan1_fault		Fan 1 fault.
+>>>> +fan1_input		Fan 1 speed in RPM.
+>>>> +fan2_alarm		Fan 2 warning.
+>>>> +fan2_fault		Fan 2 fault.
+>>>> +fan2_input		Fan 2 speed in RPM.
+>>>> +
+>>>> +in1_alarm		Input voltage under-voltage fault.
+>>> Just noticed. Are you sure you mean 'fault' here and below ?
+>>> 'alarm' attributes normally report an over- or under- condition,
+>>> but not a fault. Faults should be reported with 'fault' attributes.
+>>> In PMBus lingo (which doesn't distinguish a real 'fault' from
+>>> a critical over- or under- condition), the "FAULT" condition
+>>> usually maps with the 'crit_alarm' or 'lcrit_alarm' attributes.
+>>> Also, under-voltages would normally be reported as min_alarm
+>>> or clrit_alarm, not in_alarm.
+>> Thanks, I better change this doc to "alarm." The spec reports all these as
+>> "faults" but many of them are merely over-temp or over-voltage, etc, and
+>> should be "alarm" to be consistent with PMBus.
+>>
+>> The problem with this power supply is that it doesn't report any "limits."
+>> So unless I set up my read_byte function to return some limits, we can't get
+>> any lower or upper limits and therefore won't get the crit_alarm,
+>> lcrit_alarm, etc. Do you think I should "fake" the limits in the driver?
+>>
+> Good question. Are the limits documented ? If yes, that would make sense.
+> I am quite sure that limits are word registers, though.
 
-Wondering - this suggests that there is a VAUX. Would it make sense
-to map it to PMBUS_VIRT_READ_VMON ?
+No, no documentation on any limits... I'll leave it as is, as it it's 
+meeting our requirements for now. I'll just change "fault" to "alarm" in 
+the doc here.
 
-> +				rc |= PB_VOLTAGE_OV_FAULT;
-> +			if (mfr & POWERPS_MFR_UV_FAULT)
-> +				rc |= PB_VOLTAGE_UV_FAULT;
-> +		} else if (reg == PMBUS_STATUS_IOUT) {
-> +			if (mfr & POWERPS_MFR_OC_FAULT)
-> +				rc |= PB_IOUT_OC_FAULT;
-> +			if (mfr & POWERPS_MFR_CURRENT_SHARE_WARNING)
-> +				rc |= PB_CURRENT_SHARE_FAULT;
-> +		}
-> +		break;
-> +	default:
-> +		rc = -ENODATA;
-> +		break;
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static int powerps_read_word_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int rc, mfr;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_WORD:
-> +		rc = pmbus_read_word_data(client, page, reg);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		mfr = pmbus_read_byte_data(client, page,
-> +					   PMBUS_STATUS_MFR_SPECIFIC);
-> +		if (mfr < 0)
-> +			return rc;
+Thanks,
+Eddie
 
-			return mfr; ?
+>
+> Guenter
+>
+>>>> +in1_input		Measured input voltage in mV.
+>>>> +in1_label		"vin"
+>>>> +in2_alarm		Output voltage over-voltage fault.
+>>>> +in2_input		Measured output voltage in mV.
+>>>> +in2_label		"vout1"
+>>>> +
+>>>> +power1_alarm		Input fault.
+>>> Another example; this maps to PMBUS_PIN_OP_WARN_LIMIT which is an
+>>> input power alarm, not an indication of a fault condition.
+>> Hm, with my latest changes to look at the higher byte of STATUS_WORD, it
+>> looks like we now have the same name for both the pin generic alarm
+>> attribute and the pin_limit_attr... So in this device's case, it would map
+>> to PB_STATUS_INPUT bit of STATUS_WORD. Didn't think about that... any
+>> suggestions? Can't really change the name of the limit one without breaking
+>> people's code...
+>>
+>>>> +power1_input		Measured input power in uW.
+>>>> +power1_label		"pin"
+>>>> +
+>>>> +temp1_alarm		PSU inlet ambient temperature over-temperature fault.
+>>>> +temp1_input		Measured PSU inlet ambient temp in millidegrees C.
+>>>> +temp2_alarm		Secondary rectifier temp over-temperature fault.
+>>> Interestingly, PMBus does not distinguish between a critical temperature
+>>> alarm and an actual "fault". Makes me wonder if the IBM PS reports
+>>> CFFPS_MFR_THERMAL_FAULT if there is an actual fault (chip or sensor failure),
+>>> or if it has the same meaning as PB_TEMP_OT_FAULT, ie an excessively high
+>>> temperature.
+>> Will change these to "alarm" in the doc too.
+>>
+>>> If it is a real fault (a detected sensor failure), we should possibly
+>>> consider adding a respective "virtual" temperature status flag. The same
+>>> is true for other status bits reported in the manufacturer status
+>>> register if any of those reflect a "real" fault, ie a chip failure.
+>> Yea, that would probably be helpful. The CFFPS_MFR_THERMAL_FAULT bit is a
+>> fault (so the spec says), but I'm not sure what is triggering it.
+>>
+>> Thanks,
+>> Eddie
+>>
+>>>> +temp2_input		Measured secondary rectifier temp in millidegrees C.
+>>>> +temp3_alarm		ORing FET temperature over-temperature fault.
+>>>> +temp3_input		Measured ORing FET temperature in millidegrees C.
+>>>> -- 
+>>>> 1.8.3.1
+>>>>
 
-> +
-> +		if (mfr & POWERPS_MFR_PS_KILL)
-> +			rc |= PB_STATUS_OFF;
-> +		break;
-> +	default:
-> +		rc = -ENODATA;
-> +		break;
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static struct pmbus_driver_info powerps_info = {
-> +	.pages = 1,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +		PMBUS_HAVE_PIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_TEMP |
-> +		PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT |
-> +		PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_FAN12,
-> +	.read_byte_data = powerps_read_byte_data,
-> +	.read_word_data = powerps_read_word_data,
-> +	.debugfs = true,
-> +};
-> +
-> +static int powerps_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	return pmbus_do_probe(client, id, &powerps_info);
-> +}
-> +
-> +static const struct i2c_device_id powerps_id[] = {
-> +	{ "power_ps", 1 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, powerps_id);
-> +
-> +/* IBM provides many compatible power supplies; use a generic name. */
-> +static const struct of_device_id powerps_of_match[] = {
-> +	{ .compatible = "ibm,power-ps" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, powerps_of_match);
-> +
-> +static struct i2c_driver powerps_driver = {
-> +	.driver = {
-> +		.name = "powerps",
-> +		.of_match_table = powerps_of_match,
-> +	},
-> +	.probe = powerps_probe,
-> +	.remove = pmbus_do_remove,
-> +	.id_table = powerps_id,
-> +};
-> +
-> +module_i2c_driver(powerps_driver);
-> +
-> +MODULE_AUTHOR("Eddie James");
-> +MODULE_DESCRIPTION("PMBus driver for POWER system power supplies");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 1.8.3.1
-> 
