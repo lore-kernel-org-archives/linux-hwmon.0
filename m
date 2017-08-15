@@ -1,30 +1,48 @@
-Return-Path: <robherring2@gmail.com>
-Return-path: <robherring2@gmail.com>
-Date: Fri, 25 Aug 2017 13:10:54 -0500
-From: Rob Herring <robh@kernel.org>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux@roeck-us.net, jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
-	devicetree@vger.kernel.org, corbet@lwn.net,
-	"Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Document the IBM CCF power
- supply version 1
-Message-ID: <20170825181054.hjhz4kfsnpbkqooi@rob-hp-laptop>
-References: <1503344773-7236-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1503344773-7236-2-git-send-email-eajames@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1503344773-7236-2-git-send-email-eajames@linux.vnet.ibm.com>
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, corbet@lwn.net, eajames@linux.vnet.ibm.com,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH v4 0/3] hwmon: (pmbus): Add IBM Common Form Factor (CFF) power supply driver
+Date: Tue, 15 Aug 2017 15:52:32 -0500
+Message-Id: <1502830355-502-1-git-send-email-eajames@linux.vnet.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Aug 21, 2017 at 02:46:11PM -0500, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> ---
->  .../devicetree/bindings/hwmon/ibm,cffps1.txt        | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+This series adds a hwmon pmbus driver for a POWER System power supply. The
+core monitoring functionality is provided by pmbus.
+
+Changes since v3:
+ * Change "fault" to "alarm" in the documentation.
+
+Changes since v2:
+ * Renamed the driver again...
+ * Remove debugfs bool from pmbus_driver_info.
+ * Add comment for returning rc when reading STATUS_MFR_SPECIFIC fails.
+
+Since v1:
+ * Renamed the driver.
+ * Removed non-hwmon attributes.
+ * Simplified word and byte data reads.
+
+Edward A. James (3):
+  dt-bindings: i2c: Document the IBM CCF power supply version 1
+  hwmon: (pmbus): Add IBM Common Form Factor (CFF) power supply driver
+  Documentation: hwmon: Document the IBM CFF power supply
+
+ .../devicetree/bindings/i2c/ibm,cffps1.txt         |  21 +++
+ Documentation/hwmon/ibm-cffps                      |  54 ++++++++
+ drivers/hwmon/pmbus/Kconfig                        |  10 ++
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/ibm-cffps.c                    | 151 +++++++++++++++++++++
+ 5 files changed, 237 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
+ create mode 100644 Documentation/hwmon/ibm-cffps
+ create mode 100644 drivers/hwmon/pmbus/ibm-cffps.c
+
+-- 
+1.8.3.1
