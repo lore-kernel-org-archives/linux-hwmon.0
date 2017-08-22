@@ -1,86 +1,50 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40275 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753636AbdHUOyV (ORCPT
+Received: from mail-wr0-f175.google.com ([209.85.128.175]:35272 "EHLO
+        mail-wr0-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754702AbdHVHqP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2017 10:54:21 -0400
-From: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-To: Sebastian Reichel <sre@kernel.org>,
+        Tue, 22 Aug 2017 03:46:15 -0400
+Received: by mail-wr0-f175.google.com with SMTP id k46so42928418wre.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Aug 2017 00:46:15 -0700 (PDT)
+Date: Tue, 22 Aug 2017 08:46:11 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>,
         Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Subject: [RESEND] [PATCHv6 1/4] mfd: da9052: add register details for TSI
-Date: Mon, 21 Aug 2017 16:54:01 +0200
-Message-Id: <20170821145404.18902-2-sebastian.reichel@collabora.co.uk>
-In-Reply-To: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND] [PATCHv6 1/4] mfd: da9052: add register details for TSI
+Message-ID: <20170822074611.4zplckgbiibyh6pc@dell>
 References: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+ <20170821145404.18902-2-sebastian.reichel@collabora.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20170821145404.18902-2-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add register details an channels definition for using the TSI
-registers in the hwmon driver.
+On Mon, 21 Aug 2017, Sebastian Reichel wrote:
 
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
----
- include/linux/mfd/da9052/da9052.h |  6 ++++++
- include/linux/mfd/da9052/reg.h    | 11 ++++++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+> Add register details an channels definition for using the TSI
+> registers in the hwmon driver.
+> 
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> ---
+>  include/linux/mfd/da9052/da9052.h |  6 ++++++
+>  include/linux/mfd/da9052/reg.h    | 11 ++++++++++-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mfd/da9052/da9052.h b/include/linux/mfd/da9052/da9052.h
-index ce9230af09c2..ae5b663836d0 100644
---- a/include/linux/mfd/da9052/da9052.h
-+++ b/include/linux/mfd/da9052/da9052.h
-@@ -45,6 +45,12 @@
- #define DA9052_ADC_TJUNC	8
- #define DA9052_ADC_VBBAT	9
- 
-+/* TSI channel has its own 4 channel mux */
-+#define DA9052_ADC_TSI_XP	70
-+#define DA9052_ADC_TSI_XN	71
-+#define DA9052_ADC_TSI_YP	72
-+#define DA9052_ADC_TSI_YN	73
-+
- #define DA9052_IRQ_DCIN	0
- #define DA9052_IRQ_VBUS	1
- #define DA9052_IRQ_DCINREM	2
-diff --git a/include/linux/mfd/da9052/reg.h b/include/linux/mfd/da9052/reg.h
-index 5010f978725c..76780ea8849c 100644
---- a/include/linux/mfd/da9052/reg.h
-+++ b/include/linux/mfd/da9052/reg.h
-@@ -690,7 +690,10 @@
- /* TSI CONTROL REGISTER B BITS */
- #define DA9052_TSICONTB_ADCREF		0X80
- #define DA9052_TSICONTB_TSIMAN		0X40
--#define DA9052_TSICONTB_TSIMUX		0X30
-+#define DA9052_TSICONTB_TSIMUX_XP	0X00
-+#define DA9052_TSICONTB_TSIMUX_YP	0X10
-+#define DA9052_TSICONTB_TSIMUX_XN	0X20
-+#define DA9052_TSICONTB_TSIMUX_YN	0X30
- #define DA9052_TSICONTB_TSISEL3	0X08
- #define DA9052_TSICONTB_TSISEL2	0X04
- #define DA9052_TSICONTB_TSISEL1	0X02
-@@ -705,8 +708,14 @@
- /* TSI CO-ORDINATE LSB RESULT REGISTER BITS */
- #define DA9052_TSILSB_PENDOWN		0X40
- #define DA9052_TSILSB_TSIZL		0X30
-+#define DA9052_TSILSB_TSIZL_SHIFT	4
-+#define DA9052_TSILSB_TSIZL_BITS	2
- #define DA9052_TSILSB_TSIYL		0X0C
-+#define DA9052_TSILSB_TSIYL_SHIFT	2
-+#define DA9052_TSILSB_TSIYL_BITS	2
- #define DA9052_TSILSB_TSIXL		0X03
-+#define DA9052_TSILSB_TSIXL_SHIFT	0
-+#define DA9052_TSILSB_TSIXL_BITS	2
- 
- /* TSI Z MEASUREMENT MSB RESULT REGISTER BIT */
- #define DA9052_TSIZMSB_TSIZM		0XFF
+Applied, thanks.
+
 -- 
-2.14.1
-
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
