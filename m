@@ -1,99 +1,51 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40281 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753684AbdHUOyX (ORCPT
+Received: from mail-wr0-f169.google.com ([209.85.128.169]:34650 "EHLO
+        mail-wr0-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754759AbdHVHqZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2017 10:54:23 -0400
-From: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-To: Sebastian Reichel <sre@kernel.org>,
+        Tue, 22 Aug 2017 03:46:25 -0400
+Received: by mail-wr0-f169.google.com with SMTP id p14so49032402wrg.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Aug 2017 00:46:25 -0700 (PDT)
+Date: Tue, 22 Aug 2017 08:46:21 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>,
         Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Subject: [RESEND] [PATCHv6 2/4] mfd: da9052: make touchscreen registration optional
-Date: Mon, 21 Aug 2017 16:54:02 +0200
-Message-Id: <20170821145404.18902-3-sebastian.reichel@collabora.co.uk>
-In-Reply-To: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND] [PATCHv6 2/4] mfd: da9052: make touchscreen
+ registration optional
+Message-ID: <20170822074621.5qtevebr2edatvdr@dell>
 References: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+ <20170821145404.18902-3-sebastian.reichel@collabora.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20170821145404.18902-3-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-If the touchscreen pins are used as general purpose analogue
-input, the touchscreen driver should not be used. The pins
-will be handled by the existing hwmon driver instead.
+On Mon, 21 Aug 2017, Sebastian Reichel wrote:
 
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
----
- drivers/mfd/da9052-core.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+> If the touchscreen pins are used as general purpose analogue
+> input, the touchscreen driver should not be used. The pins
+> will be handled by the existing hwmon driver instead.
+> 
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> ---
+>  drivers/mfd/da9052-core.c | 26 +++++++++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
-index 977418ca9117..433add43a0a9 100644
---- a/drivers/mfd/da9052-core.c
-+++ b/drivers/mfd/da9052-core.c
-@@ -18,6 +18,7 @@
- #include <linux/mfd/core.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-+#include <linux/property.h>
- 
- #include <linux/mfd/da9052/da9052.h>
- #include <linux/mfd/da9052/pdata.h>
-@@ -520,9 +521,6 @@ static const struct mfd_cell da9052_subdev_info[] = {
- 	{
- 		.name = "da9052-wled3",
- 	},
--	{
--		.name = "da9052-tsi",
--	},
- 	{
- 		.name = "da9052-bat",
- 	},
-@@ -531,6 +529,10 @@ static const struct mfd_cell da9052_subdev_info[] = {
- 	},
- };
- 
-+static const struct mfd_cell da9052_tsi_subdev_info[] = {
-+	{ .name = "da9052-tsi" },
-+};
-+
- const struct regmap_config da9052_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -621,9 +623,27 @@ int da9052_device_init(struct da9052 *da9052, u8 chip_id)
- 		goto err;
- 	}
- 
-+	/*
-+	 * Check if touchscreen pins are used are analogue input instead
-+	 * of having a touchscreen connected to them. The analogue input
-+	 * functionality will be provided by hwmon driver (if enabled).
-+	 */
-+	if (!device_property_read_bool(da9052->dev, "dlg,tsi-as-adc")) {
-+		ret = mfd_add_devices(da9052->dev, PLATFORM_DEVID_AUTO,
-+				      da9052_tsi_subdev_info,
-+				      ARRAY_SIZE(da9052_tsi_subdev_info),
-+				      NULL, 0, NULL);
-+		if (ret) {
-+			dev_err(da9052->dev, "failed to add TSI subdev: %d\n",
-+				ret);
-+			goto err;
-+		}
-+	}
-+
- 	return 0;
- 
- err:
-+	mfd_remove_devices(da9052->dev);
- 	da9052_irq_exit(da9052);
- 
- 	return ret;
+Applied, thanks.
+
 -- 
-2.14.1
-
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
