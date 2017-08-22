@@ -1,103 +1,49 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40289 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753689AbdHUOy0 (ORCPT
+Received: from mail-wr0-f178.google.com ([209.85.128.178]:33411 "EHLO
+        mail-wr0-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754760AbdHVHqy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Aug 2017 10:54:26 -0400
-From: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-To: Sebastian Reichel <sre@kernel.org>,
+        Tue, 22 Aug 2017 03:46:54 -0400
+Received: by mail-wr0-f178.google.com with SMTP id a47so3460776wra.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Aug 2017 00:46:54 -0700 (PDT)
+Date: Tue, 22 Aug 2017 08:46:50 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+Cc: Sebastian Reichel <sre@kernel.org>,
         Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.co.uk>
-Subject: [RESEND] [PATCHv6 3/4] hwmon: da9052: replace S_IRUGO with 0444
-Date: Mon, 21 Aug 2017 16:54:03 +0200
-Message-Id: <20170821145404.18902-4-sebastian.reichel@collabora.co.uk>
-In-Reply-To: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND] [PATCHv6 3/4] hwmon: da9052: replace S_IRUGO with 0444
+Message-ID: <20170822074650.sejapweggpav22zn@dell>
 References: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
+ <20170821145404.18902-4-sebastian.reichel@collabora.co.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20170821145404.18902-4-sebastian.reichel@collabora.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Fix checkpatch warnings about S_IRUGO being less readable than
-providing the permissions octal as '0444'.
+On Mon, 21 Aug 2017, Sebastian Reichel wrote:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
----
- drivers/hwmon/da9052-hwmon.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+> Fix checkpatch warnings about S_IRUGO being less readable than
+> providing the permissions octal as '0444'.
+> 
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> ---
+>  drivers/hwmon/da9052-hwmon.c | 36 ++++++++++++++++++------------------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
-index c9832bfacfe5..708c91ac601f 100644
---- a/drivers/hwmon/da9052-hwmon.c
-+++ b/drivers/hwmon/da9052-hwmon.c
-@@ -196,43 +196,43 @@ static ssize_t show_label(struct device *dev,
- 		       input_names[to_sensor_dev_attr(devattr)->index]);
- }
- 
--static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, da9052_read_vddout, NULL,
-+static SENSOR_DEVICE_ATTR(in0_input, 0444, da9052_read_vddout, NULL,
- 			  DA9052_ADC_VDDOUT);
--static SENSOR_DEVICE_ATTR(in0_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in0_label, 0444, show_label, NULL,
- 			  DA9052_ADC_VDDOUT);
--static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, da9052_read_vbat, NULL,
-+static SENSOR_DEVICE_ATTR(in3_input, 0444, da9052_read_vbat, NULL,
- 			  DA9052_ADC_VBAT);
--static SENSOR_DEVICE_ATTR(in3_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in3_label, 0444, show_label, NULL,
- 			  DA9052_ADC_VBAT);
--static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, da9052_read_misc_channel, NULL,
-+static SENSOR_DEVICE_ATTR(in4_input, 0444, da9052_read_misc_channel, NULL,
- 			  DA9052_ADC_IN4);
--static SENSOR_DEVICE_ATTR(in4_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in4_label, 0444, show_label, NULL,
- 			  DA9052_ADC_IN4);
--static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, da9052_read_misc_channel, NULL,
-+static SENSOR_DEVICE_ATTR(in5_input, 0444, da9052_read_misc_channel, NULL,
- 			  DA9052_ADC_IN5);
--static SENSOR_DEVICE_ATTR(in5_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in5_label, 0444, show_label, NULL,
- 			  DA9052_ADC_IN5);
--static SENSOR_DEVICE_ATTR(in6_input, S_IRUGO, da9052_read_misc_channel, NULL,
-+static SENSOR_DEVICE_ATTR(in6_input, 0444, da9052_read_misc_channel, NULL,
- 			  DA9052_ADC_IN6);
--static SENSOR_DEVICE_ATTR(in6_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in6_label, 0444, show_label, NULL,
- 			  DA9052_ADC_IN6);
--static SENSOR_DEVICE_ATTR(in9_input, S_IRUGO, da9052_read_vbbat, NULL,
-+static SENSOR_DEVICE_ATTR(in9_input, 0444, da9052_read_vbbat, NULL,
- 			  DA9052_ADC_VBBAT);
--static SENSOR_DEVICE_ATTR(in9_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(in9_label, 0444, show_label, NULL,
- 			  DA9052_ADC_VBBAT);
- 
--static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, da9052_read_ich, NULL,
-+static SENSOR_DEVICE_ATTR(curr1_input, 0444, da9052_read_ich, NULL,
- 			  DA9052_ADC_ICH);
--static SENSOR_DEVICE_ATTR(curr1_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(curr1_label, 0444, show_label, NULL,
- 			  DA9052_ADC_ICH);
- 
--static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, da9052_read_tbat, NULL,
-+static SENSOR_DEVICE_ATTR(temp2_input, 0444, da9052_read_tbat, NULL,
- 			  DA9052_ADC_TBAT);
--static SENSOR_DEVICE_ATTR(temp2_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(temp2_label, 0444, show_label, NULL,
- 			  DA9052_ADC_TBAT);
--static SENSOR_DEVICE_ATTR(temp8_input, S_IRUGO, da9052_read_tjunc, NULL,
-+static SENSOR_DEVICE_ATTR(temp8_input, 0444, da9052_read_tjunc, NULL,
- 			  DA9052_ADC_TJUNC);
--static SENSOR_DEVICE_ATTR(temp8_label, S_IRUGO, show_label, NULL,
-+static SENSOR_DEVICE_ATTR(temp8_label, 0444, show_label, NULL,
- 			  DA9052_ADC_TJUNC);
- 
- static struct attribute *da9052_attrs[] = {
+Applied, thanks.
+
 -- 
-2.14.1
-
+Lee Jones
+Linaro STMicroelectronics Landing Team Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
