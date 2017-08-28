@@ -1,73 +1,31 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:56912 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751089AbdHPNmq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Aug 2017 09:42:46 -0400
-Subject: Re: [PATCH v4 1/3] dt-bindings: i2c: Document the IBM CCF power
- supply version 1
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, corbet@lwn.net,
-        "Edward A. James" <eajames@us.ibm.com>
-References: <1502830355-502-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1502830355-502-2-git-send-email-eajames@linux.vnet.ibm.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <6d0edce7-5e96-b6d4-8503-cf0f27f72d51@roeck-us.net>
-Date: Wed, 16 Aug 2017 06:42:43 -0700
+Return-Path: <gregkh@linuxfoundation.org>
+Return-path: <gregkh@linuxfoundation.org>
+Date: Mon, 28 Aug 2017 17:23:18 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Cc: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
+	jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH linux v5 1/3] drivers: w1: add hwmon support structures
+Message-ID: <20170828152318.GA13662@kroah.com>
+References: <20170717230906.4084-1-jaghu@google.com>
+ <20170717230906.4084-2-jaghu@google.com>
 MIME-Version: 1.0
-In-Reply-To: <1502830355-502-2-git-send-email-eajames@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20170717230906.4084-2-jaghu@google.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 08/15/2017 01:52 PM, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
+On Mon, Jul 17, 2017 at 04:09:04PM -0700, Jaghathiswari Rankappagounder Natarajan wrote:
+> This patch has changes to w1.h/w1.c/w1_family.h generic files to
+> add (optional) hwmon support structures.
 > 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> ---
->   .../devicetree/bindings/i2c/ibm,cffps1.txt          | 21 +++++++++++++++++++++
+> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+> Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Sorry, just noticed. Sorry for the piecemeal review :-(.
-The i2c directory is used for i2c controllers, not for other i2c devices.
-Please move to hwmon (and drop i2c from the subject).
+This patch series doesn't apply against my char-misc git tree at all
+(use the char-misc-next branch).  Can you please rebase it and resend?
 
-Thanks,
-Guenter
+thanks,
 
->   1 file changed, 21 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt b/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
-> new file mode 100644
-> index 0000000..f68a0a6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/ibm,cffps1.txt
-> @@ -0,0 +1,21 @@
-> +Device-tree bindings for IBM Common Form Factor Power Supply Version 1
-> +----------------------------------------------------------------------
-> +
-> +Required properties:
-> + - compatible = "ibm,cffps1";
-> + - reg = < I2C bus address >;		: Address of the power supply on the
-> +					  I2C bus.
-> +
-> +Example:
-> +
-> +    i2c-bus@100 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        #interrupt-cells = <1>;
-> +        < more properties >
-> +
-> +        power-supply@68 {
-> +            compatible = "ibm,cffps1";
-> +            reg = <0x68>;
-> +        };
-> +    };
-> 
-
+greg k-h
