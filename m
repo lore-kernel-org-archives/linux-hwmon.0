@@ -1,31 +1,36 @@
-Return-Path: <gregkh@linuxfoundation.org>
-Return-path: <gregkh@linuxfoundation.org>
-Date: Mon, 28 Aug 2017 17:23:18 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-Cc: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH linux v5 1/3] drivers: w1: add hwmon support structures
-Message-ID: <20170828152318.GA13662@kroah.com>
-References: <20170717230906.4084-1-jaghu@google.com>
- <20170717230906.4084-2-jaghu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170717230906.4084-2-jaghu@google.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48260 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1751317AbdH2SJU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Aug 2017 14:09:20 -0400
+From: Vadim Pasternak <vadimp@mellanox.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, jiri@resnulli.us,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [patch v1 0/2] Add support for Intel VID protocol VR13 and for TI tps53679 device
+Date: Tue, 29 Aug 2017 20:06:20 +0000
+Message-Id: <1504037182-122747-1-git-send-email-vadimp@mellanox.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 17, 2017 at 04:09:04PM -0700, Jaghathiswari Rankappagounder Natarajan wrote:
-> This patch has changes to w1.h/w1.c/w1_family.h generic files to
-> add (optional) hwmon support structures.
-> 
-> Signed-off-by: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
-> Acked-by: Evgeniy Polyakov <zbr@ioremap.net>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+This patchset adds support for:
+- VID conversion for protocol VR13;
+- Texas Instruments tps53679 device;
 
-This patch series doesn't apply against my char-misc git tree at all
-(use the char-misc-next branch).  Can you please rebase it and resend?
+Vadim Pasternak (2):
+  Add support for Intel VID protocol VR13
+  Add support for Texas Instruments tps53679 device
 
-thanks,
+ drivers/hwmon/pmbus/Kconfig      |  10 ++++
+ drivers/hwmon/pmbus/Makefile     |   1 +
+ drivers/hwmon/pmbus/pmbus.h      |   2 +-
+ drivers/hwmon/pmbus/pmbus_core.c |   4 ++
+ drivers/hwmon/pmbus/tps53679.c   | 126 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 142 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/hwmon/pmbus/tps53679.c
 
-greg k-h
+-- 
+2.1.4
+
