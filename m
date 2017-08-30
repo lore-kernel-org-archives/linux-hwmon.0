@@ -1,30 +1,51 @@
-Return-Path: <xow@google.com>
-Return-path: <xow@google.com>
-From: Xo Wang <xow@google.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: Xo Wang <xow@google.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org
-Subject: [PATCH 0/2] Add hwmon support for TI LM5066I hotswap controller
-Date: Tue, 29 Aug 2017 14:21:15 -0700
-Message-Id: <20170829212117.143441-1-xow@google.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42517 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751240AbdH3AqC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Aug 2017 20:46:02 -0400
+Date: Tue, 29 Aug 2017 17:45:29 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arvind Yadav <arvind.yadav.cs@gmail.com>
+Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: hwmon: ftsteutates: constify i2c_device_id
+Message-ID: <20170830004529.GA15111@roeck-us.net>
+References: <f172aa5ff3cae05e9744bcd3b184a732df17bfeb.1503170724.git.arvind.yadav.cs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f172aa5ff3cae05e9744bcd3b184a732df17bfeb.1503170724.git.arvind.yadav.cs@gmail.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Tested with hardware on Aspeed AST2500 connected to LM5066I on a custom board.
+On Sun, Aug 20, 2017 at 12:56:34AM +0530, Arvind Yadav wrote:
+> i2c_device_id are not supposed to change at runtime. All functions
+> working with i2c_device_id provided by <linux/i2c.h> work with
+> const i2c_device_id. So mark the non-const structs as const.
+> 
+> Signed-off-by: Arvind Yadav <arvind.yadav.cs@gmail.com>
 
-Xo Wang (2):
-  hwmon: (pmbus/lm25066) Offset coefficient depends on CL
-  hwmon: (pmbus/lm25066) Add support for TI LM5066I
+Appled to hwmon-next.
 
- Documentation/hwmon/lm25066   |  9 +++++++--
- drivers/hwmon/pmbus/lm25066.c | 47 +++++++++++++++++++++++++++++++++++++++----
- 2 files changed, 50 insertions(+), 6 deletions(-)
+Thanks,
+Guenter
 
--- 
-2.14.1.342.g6490525c54-goog
+> ---
+>  drivers/hwmon/ftsteutates.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+> index 0f0277e..317e45f 100644
+> --- a/drivers/hwmon/ftsteutates.c
+> +++ b/drivers/hwmon/ftsteutates.c
+> @@ -60,7 +60,7 @@
+>  
+>  static const unsigned short normal_i2c[] = { 0x73, I2C_CLIENT_END };
+>  
+> -static struct i2c_device_id fts_id[] = {
+> +static const struct i2c_device_id fts_id[] = {
+>  	{ "ftsteutates", 0 },
+>  	{ }
+>  };
