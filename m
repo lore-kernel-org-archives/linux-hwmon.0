@@ -1,211 +1,71 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:38208 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750863AbdHaEBw (ORCPT
+Received: from mail-pf0-f171.google.com ([209.85.192.171]:34777 "EHLO
+        mail-pf0-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751086AbdH3Xei (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Aug 2017 00:01:52 -0400
-Received: by mail-pf0-f193.google.com with SMTP id r187so5492541pfr.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2017 21:01:52 -0700 (PDT)
-Date: Wed, 30 Aug 2017 21:01:50 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Vadim Pasternak <vadimp@mellanox.com>
-Cc: linux-hwmon@vger.kernel.org, jiri@resnulli.us
-Subject: Re: [patch v2 1/1] Add support for Texas Instruments tps53679 device
-Message-ID: <20170831040150.GA26660@roeck-us.net>
-References: <1504130534-114811-1-git-send-email-vadimp@mellanox.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1504130534-114811-1-git-send-email-vadimp@mellanox.com>
+        Wed, 30 Aug 2017 19:34:38 -0400
+Received: by mail-pf0-f171.google.com with SMTP id l87so13551568pfj.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Aug 2017 16:34:38 -0700 (PDT)
+From: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+To: zbr@ioremap.net, linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc: Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>
+Subject: [PATCH linux v6 0/3] Export 1-wire thermal sensors as hwmon device
+Date: Wed, 30 Aug 2017 16:34:32 -0700
+Message-Id: <20170830233435.16500-1-jaghu@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 30, 2017 at 10:02:14PM +0000, Vadim Pasternak wrote:
-> The below lists of VOUT_MODE command readout with their related VID
-> protocols, Digital to Analog Converter steps, supported by the device:
-> VR12.0 mode, 5-mV DAC - 0x21
-> VR12.5 mode, 10-mV DAC - 0x22
-> VR13.0 mode, 10-mV DAC - 0x24
-> IMVP8 mode, 5-mV DAC - 0x25
-> VR13.0 mode, 5-mV DAC - 0x27
-> 
-> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Hi Greg,
+Please pull in this patchset into the tree. Thanks!
 
-Applied to hwmon-next. Minor comment below for reference (though many
-hwmon drivers do that wrong as well).
+Summary of what this patchset does:
 
-For future patches, please remember to tag the subject line with the
-subsystem and, if appropriate, the affected driver.
+Our board has 4 DS18B20 1-wire temperature sensors. Each 1-wire bus and the
+sensor under it is already configured against the Linux 1-wire driver
+(called w1). They have a sysfs file(e.g.
+/sys/bus/w1/devices/w1_bus_master1/28-000007704f4c/w1_slave) which, when read,
+runs code to read the temperature. We'd like the temperatures to show up in
+hwmon, so that the BMC IPMI sensor plumbing can forward those to host.
 
-Thanks,
-Guenter
+This patchset is based on top char-misc-next branch(from Greg KH's char-misc
+git tree).
 
-> ---
-> v1->v2
->  Comments pointed out by Guenter:
->  - arrange includes in alphabetic order;
->  - remove tps53679_data, since it's used only in tps53679_identify;
->  - drop redundant comment;
->  - drop id field in tps53679_id;
-> ---
->  drivers/hwmon/pmbus/Kconfig    |  10 ++++
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/tps53679.c | 113 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 124 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/tps53679.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 68d717a..42d2366 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -135,6 +135,16 @@ config SENSORS_TPS40422
->  	  This driver can also be built as a module. If so, the module will
->  	  be called tps40422.
->  
-> +config SENSORS_TPS53679
-> +	tristate "TI TPS53679"
-> +	default n
-> +	help
-> +	  If you say yes here you get hardware monitoring support for TI
-> +	  TPS53679.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called tps53679.
-> +
->  config SENSORS_UCD9000
->  	tristate "TI UCD90120, UCD90124, UCD90160, UCD9090, UCD90910"
->  	default n
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 75bb7ca..c7c76b0 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -14,6 +14,7 @@ obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
-> +obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-> new file mode 100644
-> index 0000000..85b515c
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/tps53679.c
-> @@ -0,0 +1,113 @@
-> +/*
-> + * Hardware monitoring driver for Texas Instruments TPS53679
-> + *
-> + * Copyright (c) 2017 Mellanox Technologies. All rights reserved.
-> + * Copyright (c) 2017 Vadim Pasternak <vadimp@mellanox.com>
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> + * GNU General Public License for more details.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +#define TPS53679_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
-> +#define TPS53679_PROT_VR12_5_10MV	0x02 /* VR12.5 mode, 10-mV DAC */
-> +#define TPS53679_PROT_VR13_10MV		0x04 /* VR13.0 mode, 10-mV DAC */
-> +#define TPS53679_PROT_IMVP8_5MV		0x05 /* IMVP8 mode, 5-mV DAC */
-> +#define TPS53679_PROT_VR13_5MV		0x07 /* VR13.0 mode, 5-mV DAC */
-> +#define TPS53679_PAGE_NUM		2
-> +
-> +static int tps53679_identify(struct i2c_client *client,
-> +			     struct pmbus_driver_info *info)
-> +{
-> +	u8 vout_params;
-> +	int ret;
-> +
-> +	/* Read the register with VOUT scaling value.*/
-> +	ret = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	vout_params = ret & GENMASK(4, 0);
-> +
-> +	switch (vout_params) {
-> +	case TPS53679_PROT_VR13_10MV:
-> +	case TPS53679_PROT_VR12_5_10MV:
-> +		info->vrm_version = vr13;
-> +		break;
-> +	case TPS53679_PROT_VR13_5MV:
-> +	case TPS53679_PROT_VR12_5MV:
-> +	case TPS53679_PROT_IMVP8_5MV:
-> +		info->vrm_version = vr12;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct pmbus_driver_info tps53679_info = {
-> +	.pages = TPS53679_PAGE_NUM,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = vid,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_POUT,
-> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_POUT,
-> +	.identify = tps53679_identify,
-> +};
-> +
-> +static int tps53679_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-> +{
-> +	return pmbus_do_probe(client, id, &tps53679_info);
-> +}
-> +
-> +static const struct i2c_device_id tps53679_id[] = {
-> +	{"tps53679", 0},
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, tps53679_id);
-> +
-> +static const struct of_device_id tps53679_of_match[] = {
-> +	{.compatible = "ti,tps53679"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, tps53679_of_match);
-> +
-> +static struct i2c_driver tps53679_driver = {
-> +	.driver = {
-> +		.name = "tps53679",
-> +		.of_match_table = of_match_ptr(tps53679_of_match),
-> +	},
-> +	.probe = tps53679_probe,
-> +	.remove = pmbus_do_remove,
-> +	.id_table = tps53679_id,
-> +};
-> +
-> +module_i2c_driver(tps53679_driver);
-> +
-> +MODULE_AUTHOR("Vadim Pasternak <vadimp@mellanox.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Texas Instruments TPS53679");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.1.4
-> 
+Tested:
+Yes; On a board with 4 DS18B20 1-wire temperature sensors:
+root@zaius:/sys/class/hwmon# ls
+hwmon0  hwmon1  hwmon2  hwmon3  hwmon4  hwmon5
+root@zaius:/sys/class/hwmon# cd hwmon0
+root@zaius:/sys/class/hwmon/hwmon0# ls
+device       name         subsystem    temp1_input  uevent
+root@zaius:/sys/class/hwmon/hwmon0# cat temp1_input
+24500
+root@zaius:/sys/class/hwmon/hwmon0# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon1
+root@zaius:/sys/class/hwmon/hwmon1# cat temp1_input
+26562
+root@zaius:/sys/class/hwmon/hwmon1# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon2
+root@zaius:/sys/class/hwmon/hwmon2# cat temp1_input
+27250
+root@zaius:/sys/class/hwmon/hwmon2# cd ..
+root@zaius:/sys/class/hwmon# cd hwmon3
+root@zaius:/sys/class/hwmon/hwmon3# cat temp1_input
+22250
+root@zaius:/sys/class/hwmon/hwmon3#
+
+Jaghathiswari Rankappagounder Natarajan (3):
+  drivers: w1: add hwmon support structures
+  drivers: w1: refactor w1_slave_show to make the temp reading
+    functionality separate
+  drivers: w1: add hwmon temp support for w1_therm
+
+ drivers/w1/slaves/w1_therm.c | 164 +++++++++++++++++++++++++++++++++++--------
+ drivers/w1/w1.c              |  18 ++++-
+ include/linux/w1.h           |   4 ++
+ 3 files changed, 156 insertions(+), 30 deletions(-)
+
+--
+2.14.1.581.gf28d330327-goog
+
