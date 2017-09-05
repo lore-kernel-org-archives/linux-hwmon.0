@@ -1,542 +1,316 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-lf0-f52.google.com ([209.85.215.52]:33928 "EHLO
-        mail-lf0-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1756914AbdIHWhT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Sep 2017 18:37:19 -0400
-Received: by mail-lf0-f52.google.com with SMTP id l196so8388194lfl.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 Sep 2017 15:37:18 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@cam.ac.uk>
-Cc: linux-hwmon@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org,
-        Davide Hug <d@videhug.ch>
-Subject: [PATCH] hwmon/sht15: Root out platform data
-Date: Sat,  9 Sep 2017 00:37:06 +0200
-Message-Id: <20170908223706.18412-1-linus.walleij@linaro.org>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <andrew@aj.id.au>
+Return-path: <andrew@aj.id.au>
+From: Andrew Jeffery <andrew@aj.id.au>
+To: linux-hwmon@vger.kernel.org
+Cc: Andrew Jeffery <andrew@aj.id.au>,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	joel@jms.id.au
+Subject: [PATCH] hwmon: pmbus: Make reg check and clear faults functions return errors
+Date: Tue,  5 Sep 2017 17:01:32 +1000
+Message-Id: <20170905070132.17682-1-andrew@aj.id.au>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-After finding out there are active users of this sensor I noticed:
+Some functions exposed by pmbus core conflated errors that occurred when
+setting the page to access with errors that occurred when accessing
+registers in a page. In some cases, this caused legitimate errors to be
+hidden under the guise of the register not being supported.
 
-- It has a single PXA27x board file using the platform data
-- The platform data is only used to carry two GPIO pins, all other
-  fields are unused
-- The driver does not use GPIO descriptors but the legacy GPIO
-  API
-
-I saw we can swiftly fix this by:
-
-- Killing off the platform data entirely
-- Define a GPIO descriptor lookup table in the board file
-- Use the standard devm_gpiod_get() to grab the GPIO descriptors
-  from either the device tree or the board file table.
-
-This compiles, but needs testing.
-
-Cc: arm@kernel.org
-Cc: Davide Hug <d@videhug.ch>
-Cc: Jonathan Cameron <jic23@cam.ac.uk>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
 ---
-ARM SoC folks: please ACK this so the HWMON maintainer can merge
-it when it is in reasonable shape.
+ Documentation/hwmon/pmbus-core   |  12 ++--
+ drivers/hwmon/pmbus/pmbus.h      |   6 +-
+ drivers/hwmon/pmbus/pmbus_core.c | 115 +++++++++++++++++++++++++++++----------
+ 3 files changed, 95 insertions(+), 38 deletions(-)
 
-Davide: can you test this patch with your setup?
-
-Jonathan: I gues you may feel this sensor needs migrating to IIO or
-so, like the Imote and Stargate2 needs migrating to device tree,
-but this helps a bit with that.
----
- Documentation/hwmon/sht15           |   3 +-
- arch/arm/mach-pxa/stargate2.c       |  17 ++--
- drivers/hwmon/sht15.c               | 165 ++++++++++++------------------------
- include/linux/platform_data/sht15.h |  38 ---------
- 4 files changed, 63 insertions(+), 160 deletions(-)
- delete mode 100644 include/linux/platform_data/sht15.h
-
-diff --git a/Documentation/hwmon/sht15 b/Documentation/hwmon/sht15
-index 778987d1856f..5e3207c3b177 100644
---- a/Documentation/hwmon/sht15
-+++ b/Documentation/hwmon/sht15
-@@ -42,8 +42,7 @@ chip. These coefficients are used to internally calibrate the signals from the
- sensors. Disabling the reload of those coefficients allows saving 10ms for each
- measurement and decrease power consumption, while losing on precision.
+diff --git a/Documentation/hwmon/pmbus-core b/Documentation/hwmon/pmbus-core
+index 8ed10e9ddfb5..3e9f41bb756f 100644
+--- a/Documentation/hwmon/pmbus-core
++++ b/Documentation/hwmon/pmbus-core
+@@ -218,17 +218,17 @@ Specifically, it provides the following information.
+   This function calls the device specific write_byte function if defined.
+   Therefore, it must _not_ be called from that function.
  
--Some options may be set directly in the sht15_platform_data structure
--or via sysfs attributes.
-+Some options may be set via sysfs attributes.
+-  bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
++  int pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
  
- Notes:
-   * The regulator supply name is set to "vcc".
-diff --git a/arch/arm/mach-pxa/stargate2.c b/arch/arm/mach-pxa/stargate2.c
-index 2d45d18b1a5e..6b7df6fd2448 100644
---- a/arch/arm/mach-pxa/stargate2.c
-+++ b/arch/arm/mach-pxa/stargate2.c
-@@ -29,6 +29,7 @@
- #include <linux/platform_data/pcf857x.h>
- #include <linux/platform_data/at24.h>
- #include <linux/smc91x.h>
-+#include <linux/gpio/machine.h>
- #include <linux/gpio.h>
- #include <linux/leds.h>
+-  Check if byte register exists. Return true if the register exists, false
+-  otherwise.
++  Check if byte register exists. Returns 1 if the register exists, 0 if it does
++  not, and less than zero on an unexpected error.
+   This function calls the device specific write_byte function if defined to
+   obtain the chip status. Therefore, it must _not_ be called from that function.
  
-@@ -52,7 +53,6 @@
- #include <linux/spi/spi.h>
- #include <linux/spi/pxa2xx_spi.h>
- #include <linux/mfd/da903x.h>
--#include <linux/platform_data/sht15.h>
+-  bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
++  int pmbus_check_word_register(struct i2c_client *client, int page, int reg);
  
- #include "devices.h"
- #include "generic.h"
-@@ -137,17 +137,18 @@ static unsigned long sg2_im2_unified_pin_config[] __initdata = {
- 	GPIO10_GPIO, /* large basic connector pin 23 */
- };
+-  Check if word register exists. Return true if the register exists, false
+-  otherwise.
++  Check if word register exists. Returns 1 if the register exists, 0 if it does
++  not, and less than zero on an unexpected error.
+   This function calls the device specific write_byte function if defined to
+   obtain the chip status. Therefore, it must _not_ be called from that function.
  
--static struct sht15_platform_data platform_data_sht15 = {
--	.gpio_data =  100,
--	.gpio_sck  =  98,
-+static struct gpiod_lookup_table sht15_gpiod_table = {
-+	.dev_id = "sht15",
-+	.table = {
-+		/* FIXME: should this have |GPIO_OPEN_DRAIN set? */
-+		GPIO_LOOKUP("gpio-pxa", 100, "data", GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP("gpio-pxa", 98, "clk", GPIO_ACTIVE_HIGH),
-+	},
- };
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index bfcb13bae34b..c53032a04a6f 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -413,9 +413,9 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg,
+ 			  u8 value);
+ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ 			   u8 mask, u8 value);
+-void pmbus_clear_faults(struct i2c_client *client);
+-bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
+-bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
++int pmbus_clear_faults(struct i2c_client *client);
++int pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
++int pmbus_check_word_register(struct i2c_client *client, int page, int reg);
+ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 		   struct pmbus_driver_info *info);
+ int pmbus_do_remove(struct i2c_client *client);
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index f1eff6b6c798..153700e35431 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -304,18 +304,24 @@ static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
+ 	return pmbus_read_byte_data(client, page, reg);
+ }
  
- static struct platform_device sht15 = {
- 	.name = "sht15",
- 	.id = -1,
--	.dev = {
--		.platform_data = &platform_data_sht15,
--	},
- };
- 
- static struct regulator_consumer_supply stargate2_sensor_3_con[] = {
-@@ -608,6 +609,7 @@ static void __init imote2_init(void)
- 
- 	imote2_stargate2_init();
- 
-+	gpiod_add_lookup_table(&sht15_gpiod_table);
- 	platform_add_devices(imote2_devices, ARRAY_SIZE(imote2_devices));
- 
- 	i2c_register_board_info(0, imote2_i2c_board_info,
-@@ -988,6 +990,7 @@ static void __init stargate2_init(void)
- 
- 	imote2_stargate2_init();
- 
-+	gpiod_add_lookup_table(&sht15_gpiod_table);
- 	platform_add_devices(ARRAY_AND_SIZE(stargate2_devices));
- 
- 	i2c_register_board_info(0, ARRAY_AND_SIZE(stargate2_i2c_board_info));
-diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index e4d642b673c6..6d26f6bbbb37 100644
---- a/drivers/hwmon/sht15.c
-+++ b/drivers/hwmon/sht15.c
-@@ -18,13 +18,11 @@
- 
- #include <linux/interrupt.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/mutex.h>
--#include <linux/platform_data/sht15.h>
- #include <linux/platform_device.h>
- #include <linux/sched.h>
- #include <linux/delay.h>
-@@ -34,7 +32,8 @@
- #include <linux/slab.h>
- #include <linux/atomic.h>
- #include <linux/bitrev.h>
--#include <linux/of_gpio.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/of.h>
- 
- /* Commands */
- #define SHT15_MEASURE_TEMP		0x03
-@@ -122,7 +121,8 @@ static const u8 sht15_crc8_table[] = {
- 
- /**
-  * struct sht15_data - device instance specific data
-- * @pdata:		platform data (gpio's etc).
-+ * @sck:		clock GPIO line
-+ * @data:		data GPIO line
-  * @read_work:		bh of interrupt handler.
-  * @wait_queue:		wait queue for getting values from device.
-  * @val_temp:		last temperature value read from device.
-@@ -150,7 +150,8 @@ static const u8 sht15_crc8_table[] = {
-  * @interrupt_handled:	flag used to indicate a handler has been scheduled.
-  */
- struct sht15_data {
--	struct sht15_platform_data	*pdata;
-+	struct gpio_desc		*sck;
-+	struct gpio_desc		*data;
- 	struct work_struct		read_work;
- 	wait_queue_head_t		wait_queue;
- 	uint16_t			val_temp;
-@@ -205,16 +206,16 @@ static int sht15_connection_reset(struct sht15_data *data)
+-static void pmbus_clear_fault_page(struct i2c_client *client, int page)
++static int pmbus_clear_fault_page(struct i2c_client *client, int page)
  {
- 	int i, err;
+-	_pmbus_write_byte(client, page, PMBUS_CLEAR_FAULTS);
++	return _pmbus_write_byte(client, page, PMBUS_CLEAR_FAULTS);
+ }
  
--	err = gpio_direction_output(data->pdata->gpio_data, 1);
-+	err = gpiod_direction_output(data->data, 1);
- 	if (err)
- 		return err;
- 	ndelay(SHT15_TSCKL);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
- 	for (i = 0; i < 9; ++i) {
--		gpio_set_value(data->pdata->gpio_sck, 1);
-+		gpiod_set_value(data->sck, 1);
- 		ndelay(SHT15_TSCKH);
--		gpio_set_value(data->pdata->gpio_sck, 0);
-+		gpiod_set_value(data->sck, 0);
- 		ndelay(SHT15_TSCKL);
+-void pmbus_clear_faults(struct i2c_client *client)
++int pmbus_clear_faults(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
++	int rv;
+ 	int i;
+ 
+-	for (i = 0; i < data->info->pages; i++)
+-		pmbus_clear_fault_page(client, i);
++	for (i = 0; i < data->info->pages; i++) {
++		rv = pmbus_clear_fault_page(client, i);
++		if (rv)
++			return rv;
++	}
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(pmbus_clear_faults);
+ 
+@@ -333,28 +339,45 @@ static int pmbus_check_status_cml(struct i2c_client *client)
+ 	return 0;
+ }
+ 
+-static bool pmbus_check_register(struct i2c_client *client,
++static int pmbus_check_register(struct i2c_client *client,
+ 				 int (*func)(struct i2c_client *client,
+ 					     int page, int reg),
+ 				 int page, int reg)
+ {
++	struct pmbus_data *data;
++	int check;
+ 	int rv;
+-	struct pmbus_data *data = i2c_get_clientdata(client);
+ 
+-	rv = func(client, page, reg);
+-	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
+-		rv = pmbus_check_status_cml(client);
+-	pmbus_clear_fault_page(client, -1);
+-	return rv >= 0;
++	data = i2c_get_clientdata(client);
++
++	/*
++	 * pmbus_set_page() guards transactions on the requested page matching
++	 * the current page. This may be done in the execution of func(), but
++	 * at that point a set-page error is conflated with accessing a
++	 * non-existent register.
++	 */
++	rv = pmbus_set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	check = func(client, page, reg);
++	if (check >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
++		check = pmbus_check_status_cml(client);
++
++	rv = pmbus_clear_fault_page(client, -1);
++	if (rv < 0)
++		return rv;
++
++	return check >= 0;
+ }
+ 
+-bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg)
++int pmbus_check_byte_register(struct i2c_client *client, int page, int reg)
+ {
+ 	return pmbus_check_register(client, _pmbus_read_byte_data, page, reg);
+ }
+ EXPORT_SYMBOL_GPL(pmbus_check_byte_register);
+ 
+-bool pmbus_check_word_register(struct i2c_client *client, int page, int reg)
++int pmbus_check_word_register(struct i2c_client *client, int page, int reg)
+ {
+ 	return pmbus_check_register(client, _pmbus_read_word_data, page, reg);
+ }
+@@ -390,7 +413,7 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
+ 
+ 	mutex_lock(&data->update_lock);
+ 	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		int i, j;
++		int i, j, ret;
+ 
+ 		for (i = 0; i < info->pages; i++) {
+ 			data->status[PB_STATUS_BASE + i]
+@@ -424,7 +447,13 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
+ 							    sensor->page,
+ 							    sensor->reg);
+ 		}
+-		pmbus_clear_faults(client);
++
++		ret = pmbus_clear_faults(client);
++		if (ret < 0) {
++			mutex_unlock(&data->update_lock);
++			return ERR_PTR(ret);
++		}
++
+ 		data->last_updated = jiffies;
+ 		data->valid = 1;
  	}
- 	return 0;
-@@ -227,11 +228,11 @@ static int sht15_connection_reset(struct sht15_data *data)
-  */
- static inline void sht15_send_bit(struct sht15_data *data, int val)
- {
--	gpio_set_value(data->pdata->gpio_data, val);
-+	gpiod_set_value(data->data, val);
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSCKH);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL); /* clock low time */
- }
+@@ -754,6 +783,9 @@ static ssize_t pmbus_show_boolean(struct device *dev,
+ 	struct pmbus_data *data = pmbus_update_device(dev);
+ 	int val;
  
-@@ -248,23 +249,23 @@ static int sht15_transmission_start(struct sht15_data *data)
- 	int err;
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
+ 	val = pmbus_get_boolean(data, boolean, attr->index);
+ 	if (val < 0)
+ 		return val;
+@@ -766,6 +798,9 @@ static ssize_t pmbus_show_sensor(struct device *dev,
+ 	struct pmbus_data *data = pmbus_update_device(dev);
+ 	struct pmbus_sensor *sensor = to_pmbus_sensor(devattr);
  
- 	/* ensure data is high and output */
--	err = gpio_direction_output(data->pdata->gpio_data, 1);
-+	err = gpiod_direction_output(data->data, 1);
- 	if (err)
- 		return err;
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSCKH);
--	gpio_set_value(data->pdata->gpio_data, 0);
-+	gpiod_set_value(data->data, 0);
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSCKH);
--	gpio_set_value(data->pdata->gpio_data, 1);
-+	gpiod_set_value(data->data, 1);
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
- 	return 0;
- }
-@@ -292,20 +293,20 @@ static int sht15_wait_for_response(struct sht15_data *data)
- {
- 	int err;
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
+ 	if (sensor->data < 0)
+ 		return sensor->data;
  
--	err = gpio_direction_input(data->pdata->gpio_data);
-+	err = gpiod_direction_input(data->data);
- 	if (err)
- 		return err;
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSCKH);
--	if (gpio_get_value(data->pdata->gpio_data)) {
--		gpio_set_value(data->pdata->gpio_sck, 0);
-+	if (gpiod_get_value(data->data)) {
-+		gpiod_set_value(data->sck, 0);
- 		dev_err(data->dev, "Command not acknowledged\n");
- 		err = sht15_connection_reset(data);
- 		if (err)
- 			return err;
- 		return -EIO;
- 	}
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
- 	return 0;
- }
-@@ -360,17 +361,17 @@ static int sht15_ack(struct sht15_data *data)
- {
- 	int err;
+@@ -995,7 +1030,11 @@ static int pmbus_add_limit_attrs(struct i2c_client *client,
+ 	struct pmbus_sensor *curr;
  
--	err = gpio_direction_output(data->pdata->gpio_data, 0);
-+	err = gpiod_direction_output(data->data, 0);
- 	if (err)
- 		return err;
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_data, 1);
-+	gpiod_set_value(data->data, 1);
- 
--	return gpio_direction_input(data->pdata->gpio_data);
-+	return gpiod_direction_input(data->data);
- }
- 
- /**
-@@ -383,13 +384,13 @@ static int sht15_end_transmission(struct sht15_data *data)
- {
- 	int err;
- 
--	err = gpio_direction_output(data->pdata->gpio_data, 1);
-+	err = gpiod_direction_output(data->data, 1);
- 	if (err)
- 		return err;
- 	ndelay(SHT15_TSU);
--	gpio_set_value(data->pdata->gpio_sck, 1);
-+	gpiod_set_value(data->sck, 1);
- 	ndelay(SHT15_TSCKH);
--	gpio_set_value(data->pdata->gpio_sck, 0);
-+	gpiod_set_value(data->sck, 0);
- 	ndelay(SHT15_TSCKL);
- 	return 0;
- }
-@@ -405,10 +406,10 @@ static u8 sht15_read_byte(struct sht15_data *data)
- 
- 	for (i = 0; i < 8; ++i) {
- 		byte <<= 1;
--		gpio_set_value(data->pdata->gpio_sck, 1);
-+		gpiod_set_value(data->sck, 1);
- 		ndelay(SHT15_TSCKH);
--		byte |= !!gpio_get_value(data->pdata->gpio_data);
--		gpio_set_value(data->pdata->gpio_sck, 0);
-+		byte |= !!gpiod_get_value(data->data);
-+		gpiod_set_value(data->sck, 0);
- 		ndelay(SHT15_TSCKL);
- 	}
- 	return byte;
-@@ -428,7 +429,7 @@ static int sht15_send_status(struct sht15_data *data, u8 status)
- 	err = sht15_send_cmd(data, SHT15_WRITE_STATUS);
- 	if (err)
- 		return err;
--	err = gpio_direction_output(data->pdata->gpio_data, 1);
-+	err = gpiod_direction_output(data->data, 1);
- 	if (err)
- 		return err;
- 	ndelay(SHT15_TSU);
-@@ -528,14 +529,14 @@ static int sht15_measurement(struct sht15_data *data,
- 	if (ret)
- 		return ret;
- 
--	ret = gpio_direction_input(data->pdata->gpio_data);
-+	ret = gpiod_direction_input(data->data);
- 	if (ret)
- 		return ret;
- 	atomic_set(&data->interrupt_handled, 0);
- 
--	enable_irq(gpio_to_irq(data->pdata->gpio_data));
--	if (gpio_get_value(data->pdata->gpio_data) == 0) {
--		disable_irq_nosync(gpio_to_irq(data->pdata->gpio_data));
-+	enable_irq(gpiod_to_irq(data->data));
-+	if (gpiod_get_value(data->data) == 0) {
-+		disable_irq_nosync(gpiod_to_irq(data->data));
- 		/* Only relevant if the interrupt hasn't occurred. */
- 		if (!atomic_read(&data->interrupt_handled))
- 			schedule_work(&data->read_work);
-@@ -547,7 +548,7 @@ static int sht15_measurement(struct sht15_data *data,
- 		data->state = SHT15_READING_NOTHING;
- 		return -EIO;
- 	} else if (ret == 0) { /* timeout occurred */
--		disable_irq_nosync(gpio_to_irq(data->pdata->gpio_data));
-+		disable_irq_nosync(gpiod_to_irq(data->data));
- 		ret = sht15_connection_reset(data);
- 		if (ret)
- 			return ret;
-@@ -826,15 +827,15 @@ static void sht15_bh_read_data(struct work_struct *work_s)
- 			       read_work);
- 
- 	/* Firstly, verify the line is low */
--	if (gpio_get_value(data->pdata->gpio_data)) {
-+	if (gpiod_get_value(data->data)) {
- 		/*
- 		 * If not, then start the interrupt again - care here as could
- 		 * have gone low in meantime so verify it hasn't!
+ 	for (i = 0; i < nlimit; i++) {
+-		if (pmbus_check_word_register(client, page, l->reg)) {
++		ret = pmbus_check_word_register(client, page, l->reg);
++		if (ret < 0)
++			return ret;
++
++		if (ret) {
+ 			curr = pmbus_add_sensor(data, name, l->attr, index,
+ 						page, l->reg, attr->class,
+ 						attr->update || l->update,
+@@ -1041,6 +1080,8 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+ 	if (!base)
+ 		return -ENOMEM;
+ 	if (attr->sfunc) {
++		int check;
++
+ 		ret = pmbus_add_limit_attrs(client, data, info, name,
+ 					    index, page, base, attr);
+ 		if (ret < 0)
+@@ -1050,9 +1091,13 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+ 		 * alarm attributes, if there is a global alarm bit, and if
+ 		 * the generic status register for this page is accessible.
  		 */
- 		atomic_set(&data->interrupt_handled, 0);
--		enable_irq(gpio_to_irq(data->pdata->gpio_data));
-+		enable_irq(gpiod_to_irq(data->data));
- 		/* If still not occurred or another handler was scheduled */
--		if (gpio_get_value(data->pdata->gpio_data)
-+		if (gpiod_get_value(data->data)
- 		    || atomic_read(&data->interrupt_handled))
- 			return;
- 	}
-@@ -918,46 +919,6 @@ static const struct of_device_id sht15_dt_match[] = {
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, sht15_dt_match);
--
--/*
-- * This function returns NULL if pdev isn't a device instatiated by dt,
-- * a pointer to pdata if it could successfully get all information
-- * from dt or a negative ERR_PTR() on error.
-- */
--static struct sht15_platform_data *sht15_probe_dt(struct device *dev)
--{
--	struct device_node *np = dev->of_node;
--	struct sht15_platform_data *pdata;
--
--	/* no device tree device */
--	if (!np)
--		return NULL;
--
--	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
--	if (!pdata)
--		return ERR_PTR(-ENOMEM);
--
--	pdata->gpio_data = of_get_named_gpio(np, "data-gpios", 0);
--	if (pdata->gpio_data < 0) {
--		if (pdata->gpio_data != -EPROBE_DEFER)
--			dev_err(dev, "data-gpios not found\n");
--		return ERR_PTR(pdata->gpio_data);
--	}
--
--	pdata->gpio_sck = of_get_named_gpio(np, "clk-gpios", 0);
--	if (pdata->gpio_sck < 0) {
--		if (pdata->gpio_sck != -EPROBE_DEFER)
--			dev_err(dev, "clk-gpios not found\n");
--		return ERR_PTR(pdata->gpio_sck);
--	}
--
--	return pdata;
--}
--#else
--static inline struct sht15_platform_data *sht15_probe_dt(struct device *dev)
--{
--	return NULL;
--}
- #endif
+-		if (!ret && attr->gbit &&
+-		    pmbus_check_byte_register(client, page,
+-					      data->status_register)) {
++
++		check = pmbus_check_byte_register(client, page,
++						  data->status_register);
++		if (check < 0)
++			return check;
++
++		if (!ret && attr->gbit && check) {
+ 			ret = pmbus_add_boolean(data, name, "alarm", index,
+ 						NULL, NULL,
+ 						PB_STATUS_BASE + page,
+@@ -1604,8 +1649,12 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+ 			if (!(info->func[page] & pmbus_fan_flags[f]))
+ 				break;
  
- static int sht15_probe(struct platform_device *pdev)
-@@ -977,25 +938,6 @@ static int sht15_probe(struct platform_device *pdev)
- 	data->dev = &pdev->dev;
- 	init_waitqueue_head(&data->wait_queue);
+-			if (!pmbus_check_word_register(client, page,
+-						       pmbus_fan_registers[f]))
++			ret = pmbus_check_word_register(client, page,
++						       pmbus_fan_registers[f]);
++			if (ret < 0)
++				return ret;
++
++			if (!ret)
+ 				break;
  
--	data->pdata = sht15_probe_dt(&pdev->dev);
--	if (IS_ERR(data->pdata))
--		return PTR_ERR(data->pdata);
--	if (data->pdata == NULL) {
--		data->pdata = dev_get_platdata(&pdev->dev);
--		if (data->pdata == NULL) {
--			dev_err(&pdev->dev, "no platform data supplied\n");
--			return -EINVAL;
--		}
--	}
--
--	data->supply_uv = data->pdata->supply_mv * 1000;
--	if (data->pdata->checksum)
--		data->checksumming = true;
--	if (data->pdata->no_otp_reload)
--		status |= SHT15_STATUS_NO_OTP_RELOAD;
--	if (data->pdata->low_resolution)
--		status |= SHT15_STATUS_LOW_RESOLUTION;
--
- 	/*
- 	 * If a regulator is available,
- 	 * query what the supply voltage actually is!
-@@ -1030,21 +972,18 @@ static int sht15_probe(struct platform_device *pdev)
+ 			/*
+@@ -1628,9 +1677,13 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+ 			 * Each fan status register covers multiple fans,
+ 			 * so we have to do some magic.
+ 			 */
+-			if ((info->func[page] & pmbus_fan_status_flags[f]) &&
+-			    pmbus_check_byte_register(client,
+-					page, pmbus_fan_status_registers[f])) {
++			ret =  pmbus_check_byte_register(client, page,
++						pmbus_fan_status_registers[f]);
++			if (ret < 0)
++				return ret;
++
++			if ((info->func[page] & pmbus_fan_status_flags[f])
++					&& ret) {
+ 				int base;
+ 
+ 				if (f > 1)	/* fan 3, 4 */
+@@ -1696,10 +1749,13 @@ static int pmbus_identify_common(struct i2c_client *client,
+ 				 struct pmbus_data *data, int page)
+ {
+ 	int vout_mode = -1;
++	int rv;
+ 
+-	if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
++	rv = pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE);
++	if (rv == 1)
+ 		vout_mode = _pmbus_read_byte_data(client, page,
+ 						  PMBUS_VOUT_MODE);
++
+ 	if (vout_mode >= 0 && vout_mode != 0xff) {
+ 		/*
+ 		 * Not all chips support the VOUT_MODE command,
+@@ -1725,8 +1781,7 @@ static int pmbus_identify_common(struct i2c_client *client,
+ 		}
  	}
  
- 	/* Try requesting the GPIOs */
--	ret = devm_gpio_request_one(&pdev->dev, data->pdata->gpio_sck,
--			GPIOF_OUT_INIT_LOW, "SHT15 sck");
--	if (ret) {
-+	data->sck = devm_gpiod_get(&pdev->dev, "clk", GPIOD_OUT_LOW);
-+	if (IS_ERR(data->sck)) {
- 		dev_err(&pdev->dev, "clock line GPIO request failed\n");
- 		goto err_release_reg;
- 	}
--
--	ret = devm_gpio_request(&pdev->dev, data->pdata->gpio_data,
--				"SHT15 data");
--	if (ret) {
-+	data->data = devm_gpiod_get(&pdev->dev, "data", GPIOD_IN);
-+	if (IS_ERR(data->data)) {
- 		dev_err(&pdev->dev, "data line GPIO request failed\n");
- 		goto err_release_reg;
- 	}
+-	pmbus_clear_fault_page(client, page);
+-	return 0;
++	return pmbus_clear_fault_page(client, page);
+ }
  
--	ret = devm_request_irq(&pdev->dev, gpio_to_irq(data->pdata->gpio_data),
-+	ret = devm_request_irq(&pdev->dev, gpiod_to_irq(data->data),
- 			       sht15_interrupt_fired,
- 			       IRQF_TRIGGER_FALLING,
- 			       "sht15 data",
-@@ -1053,7 +992,7 @@ static int sht15_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "failed to get irq for data line\n");
- 		goto err_release_reg;
- 	}
--	disable_irq_nosync(gpio_to_irq(data->pdata->gpio_data));
-+	disable_irq_nosync(gpiod_to_irq(data->data));
- 	ret = sht15_connection_reset(data);
- 	if (ret)
- 		goto err_release_reg;
-diff --git a/include/linux/platform_data/sht15.h b/include/linux/platform_data/sht15.h
-deleted file mode 100644
-index 12289c1e9413..000000000000
---- a/include/linux/platform_data/sht15.h
-+++ /dev/null
-@@ -1,38 +0,0 @@
--/*
-- * sht15.h - support for the SHT15 Temperature and Humidity Sensor
-- *
-- * Copyright (c) 2009 Jonathan Cameron
-- *
-- * Copyright (c) 2007 Wouter Horre
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * For further information, see the Documentation/hwmon/sht15 file.
-- */
--
--#ifndef _PDATA_SHT15_H
--#define _PDATA_SHT15_H
--
--/**
-- * struct sht15_platform_data - sht15 connectivity info
-- * @gpio_data:		no. of gpio to which bidirectional data line is
-- *			connected.
-- * @gpio_sck:		no. of gpio to which the data clock is connected.
-- * @supply_mv:		supply voltage in mv. Overridden by regulator if
-- *			available.
-- * @checksum:		flag to indicate the checksum should be validated.
-- * @no_otp_reload:	flag to indicate no reload from OTP.
-- * @low_resolution:	flag to indicate the temp/humidity resolution to use.
-- */
--struct sht15_platform_data {
--	int gpio_data;
--	int gpio_sck;
--	int supply_mv;
--	bool checksum;
--	bool no_otp_reload;
--	bool low_resolution;
--};
--
--#endif /* _PDATA_SHT15_H */
+ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+@@ -1756,7 +1811,9 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+ 		client->flags |= I2C_CLIENT_PEC;
+ 
+-	pmbus_clear_faults(client);
++	ret = pmbus_clear_faults(client);
++	if (ret < 0)
++		return ret;
+ 
+ 	if (info->identify) {
+ 		ret = (*info->identify)(client, info);
 -- 
-2.13.5
-
+2.11.0
