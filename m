@@ -1,54 +1,94 @@
-Return-Path: <SRS0=LLLD=AG=ladisch.de=clemens@webclient5.webclient5.de>
-Return-path: <SRS0=LLLD=AG=ladisch.de=clemens@webclient5.webclient5.de>
-Subject: Re: [PATCH] hwmon: (k10temp) Add support for family 17h
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <1504575935-19476-1-git-send-email-linux@roeck-us.net>
- <0565cf17-62d9-e319-8fe5-fbdf2d69335a@ladisch.de>
- <1e168fdb-862f-60f1-d119-918e00aac1f5@roeck-us.net>
- <705bb285-c532-a52e-b350-bd2b44b67b81@ladisch.de>
- <20170905164503.GA11478@roeck-us.net>
-From: Clemens Ladisch <clemens@ladisch.de>
-Message-ID: <9d0daec3-9850-4e36-7fdf-414c6f3beac1@ladisch.de>
-Date: Tue, 5 Sep 2017 19:48:56 +0200
-MIME-Version: 1.0
-In-Reply-To: <20170905164503.GA11478@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Return-Path: <groeck7@gmail.com>
+Return-path: <groeck7@gmail.com>
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Clemens Ladisch <clemens@ladisch.de>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 3/3] hwmon: (k10temp) Add support for temperature offsets
+Date: Wed,  6 Sep 2017 15:36:16 -0700
+Message-Id: <1504737376-32013-3-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1504737376-32013-1-git-send-email-linux@roeck-us.net>
+References: <1504737376-32013-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Guenter Roeck wrote:
-> On Tue, Sep 05, 2017 at 04:12:07PM +0200, Clemens Ladisch wrote:
->> Guenter Roeck wrote:
->>> What we should do then, as we did for coretemp, would be to collect the various
->>> temperature offsets (and temperature limits, for that matter) and apply per-CPU
->>> adjustments. Are the offsets documented somewhere ?
->>
->> AMD says:
->>  "Tctl is the processor temperature control value, used by the platform to
->>   control cooling systems. Tctl is a non-physical temperature on an
->>   arbitrary scale measured in degrees. It does _not_ represent an actual
->>   physical temperature like die or case temperature. Instead, it specifies
->>   the processor temperature relative to the point at which the system must
->>   supply the maximum cooling for the processor's specified maximum case
->>   temperature and maximum thermal power dissipation."
->
-> Pretty much the same as Intel. That doesn't mean we should not (try to) report
-> the real temperature as good as we can, as at least most of the BIOSes do,
+Add support for handling temperature offset values for various AMD CPUs,
+similar to the code used in the coretemp driver for Intel CPUs. This is
+primarily for Ryzen CPUs (which has documented temperature offsets),
+but the code is kept generic to simplify adding additional CPUs.
 
-AFAIK the BIOSes use the thermal diode (with external circuitry) for that.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Moved temperature offset handling into separate patch.
+    Temperature offset is now determined once in probe function.
+    Made temperature handling more generic, and support more chips.
 
-> and as all the Windows tools do, and as users expect us to do.
->
-> Do we really have to argue about this ?
+ drivers/hwmon/k10temp.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Looking at coretemp, this is going to be a maintenance nightmare.
-
-Oh well.  If you insist, please add a proper chip-to-offset database, and
-apply the offset to all four values.
-
-
-Regards,
-Clemens
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 8ce27b6b78be..c1a59e4c67b0 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -71,6 +71,24 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
++	int temp_offset;
++};
++
++struct tctl_offset {
++	u8 model;
++	char const *id;
++	int offset;
++};
++
++static const struct tctl_offset tctl_offset_table[] = {
++	{ 0x17, "AMD Ryzen 7 1600X", 20000 },
++	{ 0x17, "AMD Ryzen 7 1700X", 20000 },
++	{ 0x17, "AMD Ryzen 7 1800X", 20000 },
++	{ 0x17, "AMD Ryzen Threadripper 1950X", 27000 },
++	{ 0x17, "AMD Ryzen Threadripper 1920X", 27000 },
++	{ 0x17, "AMD Ryzen Threadripper 1950", 10000 },
++	{ 0x17, "AMD Ryzen Threadripper 1920", 10000 },
++	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
+ };
+ 
+ static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
+@@ -110,6 +128,7 @@ static ssize_t temp1_input_show(struct device *dev,
+ 
+ 	data->read_tempreg(data->pdev, &regval);
+ 	temp = (regval >> 21) * 125;
++	temp -= data->temp_offset;
+ 
+ 	return sprintf(buf, "%u\n", temp);
+ }
+@@ -217,6 +236,7 @@ static int k10temp_probe(struct pci_dev *pdev,
+ 	struct device *dev = &pdev->dev;
+ 	struct k10temp_data *data;
+ 	struct device *hwmon_dev;
++	int i;
+ 
+ 	if (unreliable) {
+ 		if (!force) {
+@@ -242,6 +262,16 @@ static int k10temp_probe(struct pci_dev *pdev,
+ 	else
+ 		data->read_tempreg = read_tempreg_pci;
+ 
++	for (i = 0; i < ARRAY_SIZE(tctl_offset_table); i++) {
++		const struct tctl_offset *entry = &tctl_offset_table[i];
++
++		if (boot_cpu_data.x86 == entry->model &&
++		    strstr(boot_cpu_data.x86_model_id, entry->id)) {
++			data->temp_offset = entry->offset;
++			break;
++		}
++	}
++
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", data,
+ 							   k10temp_groups);
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+-- 
+2.7.4
