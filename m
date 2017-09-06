@@ -1,94 +1,145 @@
-Return-Path: <groeck7@gmail.com>
-Return-path: <groeck7@gmail.com>
-Sender: Guenter Roeck <groeck7@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg0-f65.google.com ([74.125.83.65]:37052 "EHLO
+        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933085AbdIFWgU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Sep 2017 18:36:20 -0400
 From: Guenter Roeck <linux@roeck-us.net>
 To: Clemens Ladisch <clemens@ladisch.de>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 3/3] hwmon: (k10temp) Add support for temperature offsets
-Date: Wed,  6 Sep 2017 15:36:16 -0700
-Message-Id: <1504737376-32013-3-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1504737376-32013-1-git-send-email-linux@roeck-us.net>
-References: <1504737376-32013-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 1/3] hwmon: (k10temp) Move chip specific code into probe function
+Date: Wed,  6 Sep 2017 15:36:14 -0700
+Message-Id: <1504737376-32013-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Add support for handling temperature offset values for various AMD CPUs,
-similar to the code used in the coretemp driver for Intel CPUs. This is
-primarily for Ryzen CPUs (which has documented temperature offsets),
-but the code is kept generic to simplify adding additional CPUs.
+Introduce a local data structure and determine the temperature read
+function at probe time to reduce runtime complexity.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Moved temperature offset handling into separate patch.
-    Temperature offset is now determined once in probe function.
-    Made temperature handling more generic, and support more chips.
+v2: Added patch. Moved cleanup/preparation into first patch.
 
- drivers/hwmon/k10temp.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/hwmon/k10temp.c | 62 +++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 45 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 8ce27b6b78be..c1a59e4c67b0 100644
+index ce3b91f22e30..337795e3d81a 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -71,6 +71,24 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
- struct k10temp_data {
- 	struct pci_dev *pdev;
- 	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
-+	int temp_offset;
+@@ -61,31 +61,44 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+  */
+ #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
+ 
+-static void amd_nb_smu_index_read(struct pci_dev *pdev, unsigned int devfn,
+-				  int offset, u32 *val)
++struct k10temp_data {
++	struct pci_dev *pdev;
++	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
 +};
 +
-+struct tctl_offset {
-+	u8 model;
-+	char const *id;
-+	int offset;
-+};
++static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
++{
++	pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, regval);
++}
 +
-+static const struct tctl_offset tctl_offset_table[] = {
-+	{ 0x17, "AMD Ryzen 7 1600X", 20000 },
-+	{ 0x17, "AMD Ryzen 7 1700X", 20000 },
-+	{ 0x17, "AMD Ryzen 7 1800X", 20000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1950X", 27000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1920X", 27000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1950", 10000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1920", 10000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
- };
- 
- static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
-@@ -110,6 +128,7 @@ static ssize_t temp1_input_show(struct device *dev,
- 
- 	data->read_tempreg(data->pdev, &regval);
- 	temp = (regval >> 21) * 125;
-+	temp -= data->temp_offset;
- 
- 	return sprintf(buf, "%u\n", temp);
++static void amd_nb_index_read(struct pci_dev *pdev, unsigned int devfn,
++			      unsigned int base, int offset, u32 *val)
+ {
+ 	mutex_lock(&nb_smu_ind_mutex);
+ 	pci_bus_write_config_dword(pdev->bus, devfn,
+-				   0xb8, offset);
++				   base, offset);
+ 	pci_bus_read_config_dword(pdev->bus, devfn,
+-				  0xbc, val);
++				  base + 4, val);
+ 	mutex_unlock(&nb_smu_ind_mutex);
  }
-@@ -217,6 +236,7 @@ static int k10temp_probe(struct pci_dev *pdev,
+ 
++static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
++{
++	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
++			  F15H_M60H_REPORTED_TEMP_CTRL_OFFSET, regval);
++}
++
+ static ssize_t temp1_input_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
++	struct k10temp_data *data = dev_get_drvdata(dev);
+ 	u32 regval;
+-	struct pci_dev *pdev = dev_get_drvdata(dev);
+-
+-	if (boot_cpu_data.x86 == 0x15 && boot_cpu_data.x86_model == 0x60) {
+-		amd_nb_smu_index_read(pdev, PCI_DEVFN(0, 0),
+-				      F15H_M60H_REPORTED_TEMP_CTRL_OFFSET,
+-				      &regval);
+-	} else {
+-		pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, &regval);
+-	}
+-	return sprintf(buf, "%u\n", (regval >> 21) * 125);
++	int temp;
++
++	data->read_tempreg(data->pdev, &regval);
++	temp = (regval >> 21) * 125;
++
++	return sprintf(buf, "%u\n", temp);
+ }
+ 
+ static ssize_t temp1_max_show(struct device *dev,
+@@ -98,11 +111,12 @@ static ssize_t show_temp_crit(struct device *dev,
+ 			      struct device_attribute *devattr, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct k10temp_data *data = dev_get_drvdata(dev);
+ 	int show_hyst = attr->index;
+ 	u32 regval;
+ 	int value;
+ 
+-	pci_read_config_dword(dev_get_drvdata(dev),
++	pci_read_config_dword(data->pdev,
+ 			      REG_HARDWARE_THERMAL_CONTROL, &regval);
+ 	value = ((regval >> 16) & 0x7f) * 500 + 52000;
+ 	if (show_hyst)
+@@ -119,7 +133,8 @@ static umode_t k10temp_is_visible(struct kobject *kobj,
+ 				  struct attribute *attr, int index)
+ {
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+-	struct pci_dev *pdev = dev_get_drvdata(dev);
++	struct k10temp_data *data = dev_get_drvdata(dev);
++	struct pci_dev *pdev = data->pdev;
+ 
+ 	if (index >= 2) {
+ 		u32 reg_caps, reg_htc;
+@@ -187,6 +202,7 @@ static int k10temp_probe(struct pci_dev *pdev,
+ {
+ 	int unreliable = has_erratum_319(pdev);
  	struct device *dev = &pdev->dev;
- 	struct k10temp_data *data;
++	struct k10temp_data *data;
  	struct device *hwmon_dev;
-+	int i;
  
  	if (unreliable) {
- 		if (!force) {
-@@ -242,6 +262,16 @@ static int k10temp_probe(struct pci_dev *pdev,
- 	else
- 		data->read_tempreg = read_tempreg_pci;
+@@ -199,7 +215,19 @@ static int k10temp_probe(struct pci_dev *pdev,
+ 			 "unreliable CPU thermal sensor; check erratum 319\n");
+ 	}
  
-+	for (i = 0; i < ARRAY_SIZE(tctl_offset_table); i++) {
-+		const struct tctl_offset *entry = &tctl_offset_table[i];
+-	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", pdev,
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
 +
-+		if (boot_cpu_data.x86 == entry->model &&
-+		    strstr(boot_cpu_data.x86_model_id, entry->id)) {
-+			data->temp_offset = entry->offset;
-+			break;
-+		}
-+	}
++	data->pdev = pdev;
 +
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", data,
++	if (boot_cpu_data.x86 == 0x15 && (boot_cpu_data.x86_model == 0x60 ||
++					  boot_cpu_data.x86_model == 0x70))
++		data->read_tempreg = read_tempreg_nb_f15;
++	else
++		data->read_tempreg = read_tempreg_pci;
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", data,
  							   k10temp_groups);
  	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
 -- 
 2.7.4
+
