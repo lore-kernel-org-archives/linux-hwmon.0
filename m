@@ -1,104 +1,67 @@
-Return-Path: <andrew@aj.id.au>
-Return-path: <andrew@aj.id.au>
-Message-ID: <1506402405.30138.35.camel@aj.id.au>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: pmbus: Add Maxim MAX31785
- documentation
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:34239 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1750829AbdIHEjy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 8 Sep 2017 00:39:54 -0400
 From: Andrew Jeffery <andrew@aj.id.au>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, mark.rutland@arm.com, jdelvare@suse.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, joel@jms.id.au,
-	mspinler@linux.vnet.ibm.com, msbarth@linux.vnet.ibm.com,
-	openbmc@lists.ozlabs.org
-Date: Tue, 26 Sep 2017 14:36:45 +0930
-In-Reply-To: <20170918201528.GA27615@roeck-us.net>
-References: <20170908043919.6924-1-andrew@aj.id.au>
-	 <20170908043919.6924-2-andrew@aj.id.au>
-	 <20170918192638.4xqszyj466lrnpbz@rob-hp-laptop>
-	 <20170918201528.GA27615@roeck-us.net>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-KAruN5h0taGOo6R+Ub+B"
-Mime-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+To: linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc: Andrew Jeffery <andrew@aj.id.au>, robh+dt@kernel.org,
+        mark.rutland@arm.com, jdelvare@suse.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@jms.id.au, mspinler@linux.vnet.ibm.com,
+        msbarth@linux.vnet.ibm.com, openbmc@lists.ozlabs.org
+Subject: [PATCH v3 0/3] pmbus: Expand fan support and add MAX31785 driver
+Date: Fri,  8 Sep 2017 14:39:16 +1000
+Message-Id: <20170908043919.6924-1-andrew@aj.id.au>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+Hello,
 
---=-KAruN5h0taGOo6R+Ub+B
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+These three patches lay the ground work for fan control in the pmbus core and
+introduce a driver for the MAX31785 Intelligent Fan Controller that makes use
+of the new control features.
 
-On Mon, 2017-09-18 at 13:15 -0700, Guenter Roeck wrote:
-> On Mon, Sep 18, 2017 at 02:26:38PM -0500, Rob Herring wrote:
-> > On Fri, Sep 08, 2017 at 02:39:17PM +1000, Andrew Jeffery wrote:
-> > > > > > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> > > ---
-> > > =C2=A0.../devicetree/bindings/hwmon/pmbus/max31785.txt=C2=A0=C2=A0=C2=
-=A0| 158 +++++++++++++++++++++
-> >=20
-> > I think this needs to be located by what it does (fan control), not wha=
-t=C2=A0
-> > interface it has (pmbus).
-> >=20
-> > I'm not all that happy with hwmon either because things here seem to=C2=
-=A0
-> > just be based on being Linux hwmon devices which is sometimes arbitrary=
-.=C2=A0
-> >=20
->=20
-> The chip also measures temperatures. Other PMBus chips may do fan control=
-,
-> measure temperatures, measure and/or control voltages, current, power ...
-> Strictly speaking pretty much all PMBus chips are multi-function devices.
-> I personally don't really care if the documentation is spread across
-> several directories, but even here this is already challenging.
->=20
-> Only solution I can think of would be to create separate documents for ea=
-ch
-> functionality, ie here one for the device itself, one for fan control,
-> and one for temperature control (if that needs separate bindings). That
-> would be similar to mfd. But then we would still have to sort out where
-> to store the various bindings. Like iio, in subdirectories ? Like mfd,
-> in the matching subsystems ? If so, what to do if there is no matching
-> subsystem ?
->=20
-> Lots of questions. I'll be happy to spend some time sorting it out,
-> but I would need some directions.
->=20
+Since v2[1] I've addressed Rob's comments on the bindings, integrating the thermal
+support and cleaning up some warts. One of the warts was regarding the
+maxim,tmp-fans property which was switched to use a list of fan phandles rather
+than indexes. A corresponding change is made in the driver. I also did a
+comparison with the Aspeed PWM/Tach bindings but I'm not convinced there's much
+to take away from it other than those bindings are somewhat broken.
 
-Likewise - I'm keen to discuss and iterate on this so we get something
-satisfactory.
+In v3 I've dropped patch 4 from v2, which was a bunch of work-arounds for bad
+behaviour I observed in testing. At this stage the bad behaviour appears to be
+a product of the larger hardware design, not necessarily a problem with the
+Maxim chip. Guenter has performed some quick testing of a cut-down v2 driver
+against the MAX31785 evaluation board and couldn't reproduce the results I was
+seeing[2][3], which increases the likelyhood that it's not the Maxim chip and
+the work-around patch is inappropriate.
 
-At least I could split out the PMBus-specific bindings from the Maxim-
-specific bindings in the current document, but there's still the
-question of how to arrange it as Guenter has queried above, and also
-how much of PMBus to define bindings for. I'm hesitant to take a stab
-at describing bindings across the whole spec if I don't have useful
-driver implementations to test against. I know that the bindings
-describe the hardware and not the driver, but there are probably more
-or less clumsy ways to describe devices that could be ironed out with a
-corresponding implementation (e.g. the Aspeed PWM/Tacho...).
-
-Thoughts?
+Please review!
 
 Andrew
---=-KAruN5h0taGOo6R+Ub+B
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
------BEGIN PGP SIGNATURE-----
+[1] https://lkml.org/lkml/2017/8/2/88
+[2] https://lkml.org/lkml/2017/9/7/669
+[3] https://lkml.org/lkml/2017/9/5/53
 
-iQIcBAABCgAGBQJZyeBlAAoJEJ0dnzgO5LT5cNsQAJTIlYjvpwz30KYhT5UuocAo
-pJ7Pwd4i2eyPAhxcf3Y7COLo0zdxhlRI3si/zxUkJDGx/wTIrQ1jjWrtZ6VlZFIP
-VZUTWSsng0qlatB7PppeKxvaQIgI+AWw3AnrXpW3GQF3Ke+RhUdYpEjJ0oNKCOui
-Dq4ZhfUELi6pkd+5ZgvTI/OpgjlSBRLwiYc8GHrkdlExxTVRXJIbpE6qqjGBxYrL
-M/XbkHqntBq9PVu/uRRJtaSG1uol7rtMG5p4Vn3PTFOHE2s4Ke+9pLQMBFdEjaG9
-tQmN38UPZNxb7XHj+kiIqKV+v834DDjN9WkfnDAclIGSojOyTwiidHtlcmvuKdN3
-nL1aqjYU55tVe5mMK1VdPNTmeGpD9+QoPeDwb9o4WeOXBLXe45PelV0+LWLD64ha
-tkqDH4ilk4YS2sim/2aapqwoELtc6BJxf76oZcGqBAzqEAPoiWpGdn+PcGc3TErX
-hqKnMfL3p1/RgxJ6F69neZ6/OAbOYdj8H4nKNpBFVvyRpJBAicV1HkzR2av40p3w
-dhDFfazKw8rSPNUC49rZ1ZOuwJ0kIt4kRP4eB3k2ZqiAMpPjv5buT4gApHj6vRCc
-aiL4uDoO7M00r70Pm0M4zc4UA//cQ/VB/pvRlGTnEM4sk7IQvw6Vw6APEgswvG64
-N5+Xp/JKnOSAdOHvWe2R
-=quqO
------END PGP SIGNATURE-----
+Andrew Jeffery (3):
+  dt-bindings: hwmon: pmbus: Add Maxim MAX31785 documentation
+  hwmon: pmbus: Add fan control support
+  pmbus: Add driver for Maxim MAX31785 Intelligent Fan Controller
 
---=-KAruN5h0taGOo6R+Ub+B--
+ .../devicetree/bindings/hwmon/pmbus/max31785.txt   | 158 +++++
+ drivers/hwmon/pmbus/Kconfig                        |  10 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/max31785.c                     | 673 +++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                        |  29 +
+ drivers/hwmon/pmbus/pmbus_core.c                   | 224 ++++++-
+ 6 files changed, 1080 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/max31785.txt
+ create mode 100644 drivers/hwmon/pmbus/max31785.c
+
+-- 
+2.11.0
+
