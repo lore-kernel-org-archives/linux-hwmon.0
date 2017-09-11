@@ -1,83 +1,49 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-io0-f195.google.com ([209.85.223.195]:37635 "EHLO
-        mail-io0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750714AbdIRVMj (ORCPT
+Received: from mail-pg0-f52.google.com ([74.125.83.52]:35016 "EHLO
+        mail-pg0-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750911AbdIKWmB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Sep 2017 17:12:39 -0400
-Date: Mon, 18 Sep 2017 16:12:37 -0500
-From: Rob Herring <robh@kernel.org>
-To: Alan Tull <atull@kernel.org>
-Cc: linux-hwmon@vger.kernel.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oleksij Rempel <bug-track@fisher-privat.net>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add compatible for max1619
-Message-ID: <20170918211237.kirrnxlhqdgm2rdl@rob-hp-laptop>
-References: <20170911191649.3344-1-atull@kernel.org>
- <CANk1AXRDaGAcU944+_NO6tAUzUgaxgV85CqjK9tMZgNbDwNG+g@mail.gmail.com>
- <CANk1AXTnk5HDHHTOrT9xM9oUPf7rVpKir8QQKSVMaWOZwNASHQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANk1AXTnk5HDHHTOrT9xM9oUPf7rVpKir8QQKSVMaWOZwNASHQ@mail.gmail.com>
+        Mon, 11 Sep 2017 18:42:01 -0400
+Received: by mail-pg0-f52.google.com with SMTP id 188so17852344pgb.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Sep 2017 15:42:01 -0700 (PDT)
+From: Patrick Venture <venture@google.com>
+To: venture@google.com, joel@jms.id.au, linux@roeck-us.net
+Cc: kunyi@google.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) increase fan tach period
+Date: Mon, 11 Sep 2017 15:41:55 -0700
+Message-Id: <20170911224155.146738-1-venture@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 11, 2017 at 04:18:22PM -0500, Alan Tull wrote:
-> On Mon, Sep 11, 2017 at 2:33 PM, Alan Tull <atull@kernel.org> wrote:
-> 
-> Forget this - Guenter has pointed out that this patch is not needed,
-> as the i2c layer handles this without needing the compatible added.
+The previous value reduced the time required to determine
+the fan value, however, it's also used as the final timeout
+mechanism.  The prevous value would work for any fan speed
+greater than around 3k RPM.  This increased value, lets the fan
+speeds return quickly but will wait longer to handle speeds below 3k
+RPM.
 
-The binding is needed regardless.
+Testing: this value was determined through experimentation on the ast2400
+on the Quanta-q71l.  This configurations runs 8 fans attached to the
+controller.
 
-This could be in trivial-devices.txt instead. Either way,
+Signed-off-by: Patrick Venture <venture@google.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 69b97d45e3cb..f914e5f41048 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -161,7 +161,7 @@
+  * 11: reserved.
+  */
+ #define M_TACH_MODE 0x02 /* 10b */
+-#define M_TACH_UNIT 0x00c0
++#define M_TACH_UNIT 0x0210
+ #define INIT_FAN_CTRL 0xFF
+ 
+ /* How long we sleep in us while waiting for an RPM result. */
+-- 
+2.14.1.581.gf28d330327-goog
 
-Rob
-
-> 
-> Alan
-> 
-> > On Mon, Sep 11, 2017 at 2:16 PM, Alan Tull <atull@kernel.org> wrote:
-> >
-> > Add Oleksij Rempel
-> >
-> >> Add new device tree bindings document for max1619 device
-> >> including a new compatible string.
-> >>
-> >> Signed-off-by: Alan Tull <atull@kernel.org>
-> >> Cc: Jean Delvare <jdelvare@suse.com>
-> >> Cc: Guenter Roeck <linux@roeck-us.net>
-> >> Cc: Rob Herring <robh+dt@kernel.org>
-> >> Cc: Mark Rutland <mark.rutland@arm.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/hwmon/max1619.txt | 12 ++++++++++++
-> >>  1 file changed, 12 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/hwmon/max1619.txt
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/hwmon/max1619.txt b/Documentation/devicetree/bindings/hwmon/max1619.txt
-> >> new file mode 100644
-> >> index 0000000..c70dbbe
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/hwmon/max1619.txt
-> >> @@ -0,0 +1,12 @@
-> >> +Bindings for MAX1619 Temperature Sensor
-> >> +
-> >> +Required properties:
-> >> +- compatible : "maxim,max1619"
-> >> +- reg        : I2C address, one of 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x4c, or
-> >> +               0x4d, 0x4e
-> >> +
-> >> +Example:
-> >> +       temp@4c {
-> >> +               compatible = "maxim,max1619";
-> >> +               reg = <0x4c>;
-> >> +       };
-> >> --
-> >> 2.7.4
-> >>
