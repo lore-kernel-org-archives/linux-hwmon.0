@@ -1,12 +1,12 @@
 Return-Path: <atull@kernel.org>
 Return-path: <atull@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20170911191649.3344-2-atull@kernel.org>
-References: <20170911191649.3344-1-atull@kernel.org> <20170911191649.3344-2-atull@kernel.org>
+In-Reply-To: <20170911191649.3344-1-atull@kernel.org>
+References: <20170911191649.3344-1-atull@kernel.org>
 From: Alan Tull <atull@kernel.org>
-Date: Mon, 11 Sep 2017 14:32:26 -0500
-Message-ID: <CANk1AXS6dqswgQkERSWse8x7kO9CoQ5NT6K6Fs2_+wu4h6Mu9g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: add dt binding for max1619
+Date: Mon, 11 Sep 2017 14:33:07 -0500
+Message-ID: <CANk1AXRDaGAcU944+_NO6tAUzUgaxgV85CqjK9tMZgNbDwNG+g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add compatible for max1619
 To: linux-hwmon@vger.kernel.org,
 	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Cc: linux-kernel <linux-kernel@vger.kernel.org>, Alan Tull <atull@kernel.org>,
@@ -17,9 +17,10 @@ List-ID: <linux-hwmon@vger.kernel.org>
 
 On Mon, Sep 11, 2017 at 2:16 PM, Alan Tull <atull@kernel.org> wrote:
 
-Add Oleksij Rempel <bug-track@fisher-privat.net>
+Add Oleksij Rempel
 
-> Add new device tree binding for max1619.
+> Add new device tree bindings document for max1619 device
+> including a new compatible string.
 >
 > Signed-off-by: Alan Tull <atull@kernel.org>
 > Cc: Jean Delvare <jdelvare@suse.com>
@@ -27,34 +28,28 @@ Add Oleksij Rempel <bug-track@fisher-privat.net>
 > Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: Mark Rutland <mark.rutland@arm.com>
 > ---
->  drivers/hwmon/max1619.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  Documentation/devicetree/bindings/hwmon/max1619.txt | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/max1619.txt
 >
-> diff --git a/drivers/hwmon/max1619.c b/drivers/hwmon/max1619.c
-> index a182789..76d9669 100644
-> --- a/drivers/hwmon/max1619.c
-> +++ b/drivers/hwmon/max1619.c
-> @@ -303,10 +303,20 @@ static const struct i2c_device_id max1619_id[] = {
->  };
->  MODULE_DEVICE_TABLE(i2c, max1619_id);
->
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id max1619_of_match[] = {
-> +       { .compatible = "maxim,max1619", },
-> +       {},
-> +};
+> diff --git a/Documentation/devicetree/bindings/hwmon/max1619.txt b/Documentation/devicetree/bindings/hwmon/max1619.txt
+> new file mode 100644
+> index 0000000..c70dbbe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/max1619.txt
+> @@ -0,0 +1,12 @@
+> +Bindings for MAX1619 Temperature Sensor
 > +
-> +MODULE_DEVICE_TABLE(of, max1619_of_match);
-> +#endif
+> +Required properties:
+> +- compatible : "maxim,max1619"
+> +- reg        : I2C address, one of 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x4c, or
+> +               0x4d, 0x4e
 > +
->  static struct i2c_driver max1619_driver = {
->         .class          = I2C_CLASS_HWMON,
->         .driver = {
->                 .name   = "max1619",
-> +               .of_match_table = of_match_ptr(max1619_of_match),
->         },
->         .probe          = max1619_probe,
->         .id_table       = max1619_id,
+> +Example:
+> +       temp@4c {
+> +               compatible = "maxim,max1619";
+> +               reg = <0x4c>;
+> +       };
 > --
 > 2.7.4
 >
