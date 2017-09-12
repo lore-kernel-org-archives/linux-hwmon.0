@@ -1,63 +1,80 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f53.google.com ([74.125.82.53]:33671 "EHLO
-        mail-wm0-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753291AbdIDHyi (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Sep 2017 03:54:38 -0400
-Received: by mail-wm0-f53.google.com with SMTP id f145so2656923wme.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Sep 2017 00:54:37 -0700 (PDT)
-Date: Mon, 4 Sep 2017 08:54:34 +0100
-From: Lee Jones <lee.jones@linaro.org>
+Received: from mail-io0-f195.google.com ([209.85.223.195]:34189 "EHLO
+        mail-io0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751054AbdILQUK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Sep 2017 12:20:10 -0400
+Date: Tue, 12 Sep 2017 11:20:08 -0500
+From: Rob Herring <robh@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.co.uk>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Immutable branch between MFD and HWMON due for the
- v4.14 merge window
-Message-ID: <20170904075434.gk2t4xbn3wkh65bo@dell>
-References: <20170821145404.18902-1-sebastian.reichel@collabora.co.uk>
- <20170822074741.jjynyudbfgzsl7ju@dell>
- <20170829125113.g74twfnahomtdr2x@earth>
- <a61ad063-07a2-c24c-45b8-c3bdfe630a0c@roeck-us.net>
- <20170829141913.ieujukwf4xxed3ez@earth>
- <706b6632-dffc-ec94-1258-5ddc030a7ca2@roeck-us.net>
+Cc: Florian Eckert <fe@dev.tdt.de>, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com
+Subject: Re: [PATCH v3 2/2] hwmon: (ltq-cputemp) add devicetree bindings
+ documentation
+Message-ID: <20170912162008.y2dp3llaikkp3l45@rob-hp-laptop>
+References: <20170901065818.2037-1-fe@dev.tdt.de>
+ <20170901065818.2037-2-fe@dev.tdt.de>
+ <20170901142622.GC599@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <706b6632-dffc-ec94-1258-5ddc030a7ca2@roeck-us.net>
+In-Reply-To: <20170901142622.GC599@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 29 Aug 2017, Guenter Roeck wrote:
-
-> On 08/29/2017 07:19 AM, Sebastian Reichel wrote:
-> > Hi Guenter,
+On Fri, Sep 01, 2017 at 07:26:22AM -0700, Guenter Roeck wrote:
+> On Fri, Sep 01, 2017 at 08:58:18AM +0200, Florian Eckert wrote:
+> > Document the devicetree bindings for the ltq-cputemp
 > > 
-> > On Tue, Aug 29, 2017 at 06:34:39AM -0700, Guenter Roeck wrote:
-> > > On 08/29/2017 05:51 AM, Sebastian Reichel wrote:
-> > > > Hi Lee,
-> > > > 
-> > > > I noticed, that you did not yet push out your for-mfd-next branch,
-> > > > so the patches did not yet appear in linux-next. Was this
-> > > > intentional?
-> > > > 
-> > > The immutable branch referenced below doesn't exist either.
-> > 
-> > The immutable branch looks ok for me:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=ib-mfd-hwmon-v4.14
-> > 
+> > Signed-off-by: Florian Eckert <fe@dev.tdt.de>
 > 
-> Hmm, yes, I must be blind.
+> I see nothing special with the bindings, and they are in line with other lantiq
+> bindings, so I am taking the risk of accepting this patch (and the matching
+> driver) without waiting for explicit approval from Rob. Rob, scream at me if
+> that is not ok.
 
-:)
+Perhaps the existing one was not well reviewed.
 
--- 
-Lee Jones
-Linaro STMicroelectronics Landing Team Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> 
+> Thanks,
+> Guenter
+> 
+> > ---
+> >  Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt b/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > new file mode 100644
+> > index 000000000000..33fd00a987c7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > @@ -0,0 +1,10 @@
+> > +Lantiq cpu temperatur sensor
+
+s/temperatur/temperature/
+
+> > +
+> > +Requires node properties:
+> > +- compatible value :
+> > +	"lantiq,cputemp"
+
+Kind of non-specific. How is this device even accessed without any other 
+property? 
+
+> > +
+> > +Example:
+> > +	cputemp@0 {
+
+unit-address without reg property is not valid.
+
+> > +		compatible = "lantiq,cputemp";
+> > +	};
+> > -- 
+> > 2.11.0
+> > 
+> > --
+> > To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
