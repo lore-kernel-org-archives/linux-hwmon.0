@@ -1,71 +1,87 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:51618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751800AbdIMP0O (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Sep 2017 11:26:14 -0400
+Received: from mail-pg0-f68.google.com ([74.125.83.68]:38878 "EHLO
+        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751012AbdIMOMi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 Sep 2017 10:12:38 -0400
+Date: Wed, 13 Sep 2017 07:12:34 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Rob Herring <robh@kernel.org>
+Cc: Florian Eckert <fe@dev.tdt.de>, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com
+Subject: Re: [PATCH v3 2/2] hwmon: (ltq-cputemp) add devicetree bindings
+ documentation
+Message-ID: <20170913141234.GA27765@roeck-us.net>
+References: <20170901065818.2037-1-fe@dev.tdt.de>
+ <20170901065818.2037-2-fe@dev.tdt.de>
+ <20170901142622.GC599@roeck-us.net>
+ <20170912162008.y2dp3llaikkp3l45@rob-hp-laptop>
 MIME-Version: 1.0
-In-Reply-To: <a5a2e95a1fb671eb59459542af122d6e@dev.tdt.de>
-References: <20170901065818.2037-1-fe@dev.tdt.de> <20170901065818.2037-2-fe@dev.tdt.de>
- <20170901142622.GC599@roeck-us.net> <20170912162008.y2dp3llaikkp3l45@rob-hp-laptop>
- <a5a2e95a1fb671eb59459542af122d6e@dev.tdt.de>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 13 Sep 2017 10:25:51 -0500
-Message-ID: <CAL_Jsq+udc2p_jqQN+m4R69zW=7RBfJCDrQgNXOiMycErP43LQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] hwmon: (ltq-cputemp) add devicetree bindings documentation
-To: Florian Eckert <fe@dev.tdt.de>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20170912162008.y2dp3llaikkp3l45@rob-hp-laptop>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 13, 2017 at 12:36 AM, Florian Eckert <fe@dev.tdt.de> wrote:
-> Hello Rob
->
->>> > --- /dev/null
->>> > +++ b/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
->>> > @@ -0,0 +1,10 @@
->>> > +Lantiq cpu temperatur sensor
->>
->>
->> s/temperatur/temperature/
->
->
-> Will update this in a follow up page based on the old one. So no v4?
->
->>
->>> > +
->>> > +Requires node properties:
->>> > +- compatible value :
->>> > +     "lantiq,cputemp"
->>
->>
->> Kind of non-specific. How is this device even accessed without any other
->> property?
->
->
-> It does not need any further properties. If this is set in the device tree
-> then the driver is loaded.
+On Tue, Sep 12, 2017 at 11:20:08AM -0500, Rob Herring wrote:
+> On Fri, Sep 01, 2017 at 07:26:22AM -0700, Guenter Roeck wrote:
+> > On Fri, Sep 01, 2017 at 08:58:18AM +0200, Florian Eckert wrote:
+> > > Document the devicetree bindings for the ltq-cputemp
+> > > 
+> > > Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+> > 
+> > I see nothing special with the bindings, and they are in line with other lantiq
+> > bindings, so I am taking the risk of accepting this patch (and the matching
+> > driver) without waiting for explicit approval from Rob. Rob, scream at me if
+> > that is not ok.
+> 
+> Perhaps the existing one was not well reviewed.
+> 
+Bummer. Should teach me to never accept DT patches without your review.
+I owe you a beer or two.
 
-DT is not the only way to instantiate drivers.
+Guenter
 
-What I meant is how do you access the hardware? That should be evident
-from the binding and it is not.
-
-Looking at the driver, you have some memory mapped system control
-registers which get ioremapped in arch/mips/lantiq/xway/sysctrl.c and
-accesses thru some platform specific macros. That is not the ideal way
-to do things as we use syscon and regmap for such things. But that's
-all mostly kernel details not so relevant to the DT binding.
-
-For DT, I'd expect this is a child node of the sysctrl block with a
-reg property value of <0x40 4> (along with any other child devices).
-You could also not even put this in DT and the system controller can
-have it's own driver that instantiates the child device for this
-driver.
-
-Rob
+> > 
+> > Thanks,
+> > Guenter
+> > 
+> > > ---
+> > >  Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt | 10 ++++++++++
+> > >  1 file changed, 10 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt b/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > > new file mode 100644
+> > > index 000000000000..33fd00a987c7
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/hwmon/ltq-cputemp.txt
+> > > @@ -0,0 +1,10 @@
+> > > +Lantiq cpu temperatur sensor
+> 
+> s/temperatur/temperature/
+> 
+> > > +
+> > > +Requires node properties:
+> > > +- compatible value :
+> > > +	"lantiq,cputemp"
+> 
+> Kind of non-specific. How is this device even accessed without any other 
+> property? 
+> 
+> > > +
+> > > +Example:
+> > > +	cputemp@0 {
+> 
+> unit-address without reg property is not valid.
+> 
+> > > +		compatible = "lantiq,cputemp";
+> > > +	};
+> > > -- 
+> > > 2.11.0
+> > > 
+> > > --
+> > > To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> > > the body of a message to majordomo@vger.kernel.org
+> > > More majordomo info at  http://vger.kernel.org/majordomo-info.html
