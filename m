@@ -1,58 +1,83 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:60192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1750951AbdI1SNZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Sep 2017 14:13:25 -0400
-MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+aB=h+GOzv=vyAKupF8GogtbgHyG07e=F7-8eivsmh9w@mail.gmail.com>
-References: <20170911191649.3344-1-atull@kernel.org> <20170911191649.3344-2-atull@kernel.org>
- <20170911195857.GB2580@roeck-us.net> <20170918211124.jvvl75mznwf3n6sk@rob-hp-laptop>
- <CANk1AXQr1RzB9THosy+_8VPz4-GLzHSZYtGqf59S97aBThhaZA@mail.gmail.com> <CAL_Jsq+aB=h+GOzv=vyAKupF8GogtbgHyG07e=F7-8eivsmh9w@mail.gmail.com>
-From: Alan Tull <atull@kernel.org>
-Date: Thu, 28 Sep 2017 13:12:43 -0500
-Message-ID: <CANk1AXSA=F6tMBUZ_tWKSVpoUaGQZfPWfhBvXkO6iO-Gwkc8vg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: add dt binding for max1619
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+Received: from mail-io0-f195.google.com ([209.85.223.195]:37635 "EHLO
+        mail-io0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750714AbdIRVMj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 18 Sep 2017 17:12:39 -0400
+Date: Mon, 18 Sep 2017 16:12:37 -0500
+From: Rob Herring <robh@kernel.org>
+To: Alan Tull <atull@kernel.org>
+Cc: linux-hwmon@vger.kernel.org,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oleksij Rempel <bug-track@fisher-privat.net>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add compatible for max1619
+Message-ID: <20170918211237.kirrnxlhqdgm2rdl@rob-hp-laptop>
+References: <20170911191649.3344-1-atull@kernel.org>
+ <CANk1AXRDaGAcU944+_NO6tAUzUgaxgV85CqjK9tMZgNbDwNG+g@mail.gmail.com>
+ <CANk1AXTnk5HDHHTOrT9xM9oUPf7rVpKir8QQKSVMaWOZwNASHQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANk1AXTnk5HDHHTOrT9xM9oUPf7rVpKir8QQKSVMaWOZwNASHQ@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 19, 2017 at 2:35 PM, Rob Herring <robh@kernel.org> wrote:
-> On Tue, Sep 19, 2017 at 1:11 PM, Alan Tull <atull@kernel.org> wrote:
->> On Mon, Sep 18, 2017 at 4:11 PM, Rob Herring <robh@kernel.org> wrote:
->>> On Mon, Sep 11, 2017 at 12:58:57PM -0700, Guenter Roeck wrote:
->>>> On Mon, Sep 11, 2017 at 02:16:49PM -0500, Alan Tull wrote:
->>>> > Add new device tree binding for max1619.
->>>> >
->>>> > Signed-off-by: Alan Tull <atull@kernel.org>
->>>>
->>>> Technically that should already work, without explicit binding,
->>>> or did the i2c core change lately ?
->>>
->>> There was some work in that direction IIRC.
->>
->> Yes, after Guenter replied I tried it without this patch and it
->> worked.  i2c drivers can have a 'detect' function that can check part
->> id, etc.  If detection succeeds, it will fill in the device name in
->> i2c_board_info->type and the i2c-core will enumerate using that.
->
-> Right, I expected it still worked, but am saying we don't want to rely
-> on that behavior and introduce new places relying on it. Otherwise,
-> the driver will match on say "rob,max1619" as well. The detect
-> function is the really old way to probe devices IIRC. The function to
-> look at is i2c_of_match_device. We want OF style match, not a match
-> with i2c_of_match_device_sysfs which strips the vendor prefix from the
-> compatible.
+On Mon, Sep 11, 2017 at 04:18:22PM -0500, Alan Tull wrote:
+> On Mon, Sep 11, 2017 at 2:33 PM, Alan Tull <atull@kernel.org> wrote:
+> 
+> Forget this - Guenter has pointed out that this patch is not needed,
+> as the i2c layer handles this without needing the compatible added.
 
-OK, well my patch is out there if someone wants to take it.
+The binding is needed regardless.
 
-Alan
+This could be in trivial-devices.txt instead. Either way,
 
->
-> Rob
+Acked-by: Rob Herring <robh@kernel.org>
+
+Rob
+
+> 
+> Alan
+> 
+> > On Mon, Sep 11, 2017 at 2:16 PM, Alan Tull <atull@kernel.org> wrote:
+> >
+> > Add Oleksij Rempel
+> >
+> >> Add new device tree bindings document for max1619 device
+> >> including a new compatible string.
+> >>
+> >> Signed-off-by: Alan Tull <atull@kernel.org>
+> >> Cc: Jean Delvare <jdelvare@suse.com>
+> >> Cc: Guenter Roeck <linux@roeck-us.net>
+> >> Cc: Rob Herring <robh+dt@kernel.org>
+> >> Cc: Mark Rutland <mark.rutland@arm.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/hwmon/max1619.txt | 12 ++++++++++++
+> >>  1 file changed, 12 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/hwmon/max1619.txt
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/hwmon/max1619.txt b/Documentation/devicetree/bindings/hwmon/max1619.txt
+> >> new file mode 100644
+> >> index 0000000..c70dbbe
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/hwmon/max1619.txt
+> >> @@ -0,0 +1,12 @@
+> >> +Bindings for MAX1619 Temperature Sensor
+> >> +
+> >> +Required properties:
+> >> +- compatible : "maxim,max1619"
+> >> +- reg        : I2C address, one of 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x4c, or
+> >> +               0x4d, 0x4e
+> >> +
+> >> +Example:
+> >> +       temp@4c {
+> >> +               compatible = "maxim,max1619";
+> >> +               reg = <0x4c>;
+> >> +       };
+> >> --
+> >> 2.7.4
+> >>
