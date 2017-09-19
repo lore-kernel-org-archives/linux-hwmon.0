@@ -1,74 +1,112 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:36630 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753118AbdIROv2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Sep 2017 10:51:28 -0400
-Date: Mon, 18 Sep 2017 07:51:26 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Colin King <colin.king@canonical.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (sht15): remove redundant check on status and
- send of status value
-Message-ID: <20170918145126.GD11868@roeck-us.net>
-References: <20170918144548.32354-1-colin.king@canonical.com>
+Return-Path: <jdelvare@suse.de>
+Return-path: <jdelvare@suse.de>
+Date: Tue, 19 Sep 2017 14:59:34 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: linux-hwmon@vger.kernel.org
+Cc: Andrea Merello <andrea.merello@gmail.com>, Guenter Roeck
+ <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (stts751) Fix buffer size passed to snprintf
+Message-ID: <20170919145934.4da22fa6@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170918144548.32354-1-colin.king@canonical.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Sep 18, 2017 at 03:45:48PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> A previous commit removed bit or'ing into to the integer status
-> so now status is now always zero. This means that the non-zero check on
-> status and the sht15_send_status call will never occur; it is deadcode.
-> Clean this up by removing the dead code.
-> 
-> Detected by: CoverityScan CID#1456835 ("Logically dead code")
-> 
-> Fixes: aa7ab80c578c ("hwmon: (sht15) Root out platform data")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Function snprintf already cares for the terminating NUL at the end of
+the string, the caller doesn't need to do it.
 
-Applied to hwmon-next.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Andrea Merello <andrea.merello@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/stts751.c |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Thanks,
-Guenter
+--- linux-4.14-rc1.orig/drivers/hwmon/stts751.c	2017-09-17 00:47:51.000000000 +0200
++++ linux-4.14-rc1/drivers/hwmon/stts751.c	2017-09-19 14:51:39.773843565 +0200
+@@ -396,7 +396,7 @@ static ssize_t show_max_alarm(struct dev
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->max_alert);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->max_alert);
+ }
+ 
+ static ssize_t show_min_alarm(struct device *dev, struct device_attribute *attr,
+@@ -413,7 +413,7 @@ static ssize_t show_min_alarm(struct dev
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->min_alert);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->min_alert);
+ }
+ 
+ static ssize_t show_input(struct device *dev, struct device_attribute *attr,
+@@ -428,7 +428,7 @@ static ssize_t show_input(struct device
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->temp);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->temp);
+ }
+ 
+ static ssize_t show_therm(struct device *dev, struct device_attribute *attr,
+@@ -436,7 +436,7 @@ static ssize_t show_therm(struct device
+ {
+ 	struct stts751_priv *priv = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->therm);
+ }
+ 
+ static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
+@@ -478,7 +478,7 @@ static ssize_t show_hyst(struct device *
+ {
+ 	struct stts751_priv *priv = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->hyst);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->hyst);
+ }
+ 
+ static ssize_t set_hyst(struct device *dev, struct device_attribute *attr,
+@@ -518,7 +518,7 @@ static ssize_t show_therm_trip(struct de
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->therm_trip);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->therm_trip);
+ }
+ 
+ static ssize_t show_max(struct device *dev, struct device_attribute *attr,
+@@ -526,7 +526,7 @@ static ssize_t show_max(struct device *d
+ {
+ 	struct stts751_priv *priv = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_max);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->event_max);
+ }
+ 
+ static ssize_t set_max(struct device *dev, struct device_attribute *attr,
+@@ -560,7 +560,7 @@ static ssize_t show_min(struct device *d
+ {
+ 	struct stts751_priv *priv = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n", priv->event_min);
++	return snprintf(buf, PAGE_SIZE, "%d\n", priv->event_min);
+ }
+ 
+ static ssize_t set_min(struct device *dev, struct device_attribute *attr,
+@@ -594,7 +594,7 @@ static ssize_t show_interval(struct devi
+ {
+ 	struct stts751_priv *priv = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE - 1, "%d\n",
++	return snprintf(buf, PAGE_SIZE, "%d\n",
+ 			stts751_intervals[priv->interval]);
+ }
+ 
 
-> ---
->  drivers/hwmon/sht15.c | 8 --------
->  1 file changed, 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> index 0e3e5f83f5cf..25d28343ba93 100644
-> --- a/drivers/hwmon/sht15.c
-> +++ b/drivers/hwmon/sht15.c
-> @@ -925,7 +925,6 @@ static int sht15_probe(struct platform_device *pdev)
->  {
->  	int ret;
->  	struct sht15_data *data;
-> -	u8 status = 0;
->  
->  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
->  	if (!data)
-> @@ -1002,13 +1001,6 @@ static int sht15_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto err_release_reg;
->  
-> -	/* write status with platform data options */
-> -	if (status) {
-> -		ret = sht15_send_status(data, status);
-> -		if (ret)
-> -			goto err_release_reg;
-> -	}
-> -
->  	ret = sysfs_create_group(&pdev->dev.kobj, &sht15_attr_group);
->  	if (ret) {
->  		dev_err(&pdev->dev, "sysfs create failed\n");
-> -- 
-> 2.14.1
-> 
+
+-- 
+Jean Delvare
+SUSE L3 Support
