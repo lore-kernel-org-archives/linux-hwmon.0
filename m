@@ -1,133 +1,237 @@
-Return-Path: <eajames@linux.vnet.ibm.com>
-Return-path: <eajames@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 00/10] drivers/hwmon: Add On-Chip Controller (OCC)
- hwmon driver
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Content-Type: text/html; charset=utf-8
-From: Eddie James <eajames@linux.vnet.ibm.com>
-In-Reply-To: <20170905201831.GA16996@roeck-us.net>
-Date: Tue, 5 Sep 2017 16:39:53 -0500
-Cc: linux-hwmon@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
-        andrew@aj.id.au, "Edward A. James" <eajames@us.ibm.com>,
-        Brad Bishop <bradleyb@fuzziesquirrel.com>,
-        Matt Spinler <mspinler@linux.vnet.ibm.com>, msbarth@linux.vnet.ibm.com
-Content-Transfer-Encoding: quoted-printable
-References: <1501165829-12395-1-git-send-email-eajames@linux.vnet.ibm.com>
- <2AE5F533-8701-42BC-B542-0875DECC1B92@linux.vnet.ibm.com>
- <20170905201831.GA16996@roeck-us.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Message-Id: <99D2FB2D-9C20-4B99-A119-DDAEF20B60E4@linux.vnet.ibm.com>
+Return-Path: <andrew@aj.id.au>
+Return-path: <andrew@aj.id.au>
+Message-ID: <1505804214.4080.26.camel@aj.id.au>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: pmbus: Add Maxim MAX31785
+ documentation
+From: Andrew Jeffery <andrew@aj.id.au>
+To: Rob Herring <robh@kernel.org>
+Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org, mark.rutland@arm.com,
+ jdelvare@suse.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  joel@jms.id.au, mspinler@linux.vnet.ibm.com,
+ msbarth@linux.vnet.ibm.com,  openbmc@lists.ozlabs.org
+Date: Tue, 19 Sep 2017 16:26:54 +0930
+In-Reply-To: <20170918192638.4xqszyj466lrnpbz@rob-hp-laptop>
+References: <20170908043919.6924-1-andrew@aj.id.au>
+	 <20170908043919.6924-2-andrew@aj.id.au>
+	 <20170918192638.4xqszyj466lrnpbz@rob-hp-laptop>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-v9g5Sjz6UiACRiidMV2k"
+Mime-Version: 1.0
 List-ID: <linux-hwmon@vger.kernel.org>
 
-<html><head></head><body dir=3D"auto" style=3D"word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D"ApplePlainTextBody"><div =
-class=3D"ApplePlainTextBody"><br><blockquote type=3D"cite">On Sep 5, =
-2017, at 3:18 PM, Guenter Roeck &lt;linux@roeck-us.net&gt; =
-wrote:<br><br>On Tue, Sep 05, 2017 at 03:07:10PM -0500, Eddie James =
-wrote:<br><blockquote type=3D"cite">Hi Guenter,<br><br>I have some =
-additional features to add to this driver to handle some special =
-temperature sensor values. Wanted to run it by you before submitting a =
-new version to the list, since I=E2=80=99m not sure if there is a =
-standard way of addressing this or not.<br><br>Temp sensor may return 0 =
-for =E2=80=9Cdata unavailable; may be available later=E2=80=9D and 0xFF =
-for error. It makes sense to map 0xFF to a tempX_fault attribute. =
-However, for the =E2=80=9Cunavailable=E2=80=9D case, should I use =
-tempX_alarm for this? I think with =E2=80=9Calarm=E2=80=9D the sensor =
-data is usually available in a normal hwmon device? We would either have =
-to return a cached value for the tempX_input or return an error, since =
-the data is not there.<br><br></blockquote>mapping 0xff to fault makes =
-sense. Mapping 0x00 to alarm, however, doesn't<br>really make sense, =
-since there is not really an alarm =
-condition<br>(over/undertemperature/voltage). I can see two options: =
-Either return a cached<br>value, or return something like -EAGAIN. =
-Question though is if the condition<br>is or can be permanent. If yes, =
--EAGAIN would not be a good idea since it<br>most likely results in an =
-immediate retry by userspace. If the condition is<br>or can be =
-permanent, all you can probably do would be to report a cached<br>value =
-for some period of time and then switch to reporting a fault =
-condition.<br></blockquote><br>I don=E2=80=99t believe it can be =
-permanent. The OCC itself should switch it to 0xFF after a bit. We=E2=80=99=
-ll use EAGAIN, thanks for the suggestion.<br><br><blockquote =
-type=3D"cite"><br>[ sorry for not being more proactive with the review =
-]<br></blockquote><br>No problem, it=E2=80=99s obviously still in =
-development! Thanks for the quick =
-response.<br><br>Thanks,<br>Eddie<br><br><blockquote =
-type=3D"cite"><br>Guenter<br><br><br><blockquote =
-type=3D"cite">Thanks,<br>Eddie<br><br><blockquote type=3D"cite">On Jul =
-27, 2017, at 9:30 AM, Eddie James &lt;eajames@linux.vnet.ibm.com&gt; =
-wrote:<br><br>From: "Edward A. James" =
-&lt;eajames@us.ibm.com&gt;<br><br>This series adds a hwmon driver to =
-support the OCC on POWER8 and POWER9<br>processors. The OCC is an =
-embedded processor that provides realtime power and<br>thermal =
-monitoring and management.<br><br>This driver has two different platform =
-drivers as a "base" for the<br>hwmon interface, as the means of =
-communicating with the OCC on P8 and P9 is<br>completely different. For =
-P8, the driver is an I2C client driver. For P9 the<br>driver is an =
-FSI-based OCC client driver, and uses the OCC driver in-kernel<br>API. =
-The OCC driver is on the LKML (latest =
-https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lkml.org_lkml_2017_=
-7_5_633&amp;d=3DDwIDaQ&amp;c=3Djf_iaSHvJObTbx-siA1ZOg&amp;r=3DVKQig_uj8mzE=
-bP7l8f3q1ueghVg1ZAtCOXs0CFMvZww&amp;m=3DFg8M9rUttIJtUeu2lnGfv9Yh2q10HqtwYJ=
-lenbZ-UUM&amp;s=3D0UqHnEA8iTyCEs2WXnbqis9wWq1Jw8sOMJb6UO5L14k&amp;e=3D =
-).<br><br>Changes since v1:<br>* Remove wait loop in P9 code, as that is =
-now handled by FSI OCC driver.<br>* Removed dt binding documentation for =
-P9, FSI OCC driver will probe OCC hwmon<br> driver automatically.<br>* =
-Moved OCC response code definitions to the OCC include file.<br>* Fixed =
-includes.<br>* Changed some structure fields to __beXX as that is what =
-they are.<br>* Changed some errnos.<br>* Removed some dev_err().<br>* =
-Refactored P8 code a bit to use #defined addresses and magic values, =
-and<br> changed "goto retry" to a loop.<br>* Refactored error handling a =
-bit.<br><br>Edward A. James (10):<br>drivers/hwmon: Add On-Chip =
-Controller (OCC) hwmon driver<br>drivers/hwmon/occ: Add command =
-transport method for P8 and P9<br>drivers/hwmon/occ: Parse OCC poll =
-response<br>drivers/hwmon/occ: Add sensor types and =
-versions<br>drivers/hwmon/occ: Add sensor attributes and register hwmon =
-device<br>drivers/hwmon/occ: Add non-hwmon =
-attributes<br>drivers/hwmon/occ: Add error handling<br>Documentation: =
-hwmon: Add OCC documentation<br>Documentation: ABI: Add occ-hwmon driver =
-sysfs documentation<br>dt-bindings: i2c: Add P8 OCC hwmon driver =
-documentation<br><br>Documentation/ABI/testing/sysfs-driver-occ-hwmon =
-&nbsp;&nbsp;| &nbsp;&nbsp;77 =
-++<br>.../devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt &nbsp;&nbsp;| =
-&nbsp;&nbsp;25 +<br>Documentation/hwmon/occ =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;| &nbsp;&nbsp;74 ++<br>drivers/hwmon/Kconfig =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;2 =
-+<br>drivers/hwmon/Makefile =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;1 +<br>drivers/hwmon/occ/Kconfig =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;| &nbsp;&nbsp;28 +<br>drivers/hwmon/occ/Makefile =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| =
-&nbsp;&nbsp;11 +<br>drivers/hwmon/occ/common.c =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| =
-1289 ++++++++++++++++++++<br>drivers/hwmon/occ/common.h =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| =
-&nbsp;119 ++<br>drivers/hwmon/occ/p8_i2c.c =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| =
-&nbsp;261 ++++<br>drivers/hwmon/occ/p9_sbe.c =
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| =
-&nbsp;124 ++<br>11 files changed, 2011 insertions(+)<br>create mode =
-100644 Documentation/ABI/testing/sysfs-driver-occ-hwmon<br>create mode =
-100644 =
-Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt<br>create =
-mode 100644 Documentation/hwmon/occ<br>create mode 100644 =
-drivers/hwmon/occ/Kconfig<br>create mode 100644 =
-drivers/hwmon/occ/Makefile<br>create mode 100644 =
-drivers/hwmon/occ/common.c<br>create mode 100644 =
-drivers/hwmon/occ/common.h<br>create mode 100644 =
-drivers/hwmon/occ/p8_i2c.c<br>create mode 100644 =
-drivers/hwmon/occ/p9_sbe.c<br><br>-- =
-<br>1.8.3.1<br><br></blockquote><br></blockquote><br></blockquote><br></di=
-v></body></html>=
+
+--=-v9g5Sjz6UiACRiidMV2k
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+T24gTW9uLCAyMDE3LTA5LTE4IGF0IDE0OjI2IC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToKPiBP
+biBGcmksIFNlcCAwOCwgMjAxNyBhdCAwMjozOToxN1BNICsxMDAwLCBBbmRyZXcgSmVmZmVyeSB3
+cm90ZToKPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlk
+LmF1Pgo+ID4gLS0tCj4gPiDCoC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL3BtYnVzL21h
+eDMxNzg1LnR4dMKgwqDCoHwgMTU4ICsrKysrKysrKysrKysrKysrKysrKwo+IAo+IEkgdGhpbmsg
+dGhpcyBuZWVkcyB0byBiZSBsb2NhdGVkIGJ5IHdoYXQgaXQgZG9lcyAoZmFuIGNvbnRyb2wpLCBu
+b3Qgd2hhdMKgCj4gaW50ZXJmYWNlIGl0IGhhcyAocG1idXMpLgo+IAo+IEknbSBub3QgYWxsIHRo
+YXQgaGFwcHkgd2l0aCBod21vbiBlaXRoZXIgYmVjYXVzZSB0aGluZ3MgaGVyZSBzZWVtIHRvwqAK
+PiBqdXN0IGJlIGJhc2VkIG9uIGJlaW5nIExpbnV4IGh3bW9uIGRldmljZXMgd2hpY2ggaXMgc29t
+ZXRpbWVzIGFyYml0cmFyeS4KCkknbGwgZm9sbG93LXVwIG9uIHRoaXMgb24gR3VlbnRlcidzIHJl
+cGx5IGlmIG5lY2Vzc2FyeS4KCj4gwqAKPiAKPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDE1OCBpbnNl
+cnRpb25zKCspCj4gPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3MvaHdtb24vcG1idXMvbWF4MzE3ODUudHh0Cj4gPiAKPiA+IGRpZmYgLS1naXQg
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vcG1idXMvbWF4MzE3ODUu
+dHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL3BtYnVzL21heDMx
+Nzg1LnR4dAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4u
+YWY5NTc4ZTc3NDJjCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2Rl
+dmljZXRyZWUvYmluZGluZ3MvaHdtb24vcG1idXMvbWF4MzE3ODUudHh0Cj4gPiBAQCAtMCwwICsx
+LDE1OCBAQAo+ID4gK0JpbmRpbmdzIGZvciB0aGUgTWF4aW0gTUFYMzE3ODUgSW50ZWxsaWdlbnQg
+RmFuIENvbnRyb2xsZXIKPiA+ICs9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09Cj4gPiArCj4gPiArUmVmZXJlbmNlOgo+ID4gKwo+ID4gK2h0
+dHBzOi8vZGF0YXNoZWV0cy5tYXhpbWludGVncmF0ZWQuY29tL2VuL2RzL01BWDMxNzg1LnBkZgo+
+ID4gKwo+ID4gK1JlcXVpcmVkIHByb3BlcnRpZXM6Cj4gPiArLSBjb21wYXRpYmxlwqDCoMKgwqDC
+oDogT25lIG9mICJtYXhpbSxtYXgzMTc4NSIgb3IgIm1heGltLG1heDMxNzg1YSIKPiA+ICstIHJl
+Z8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDogSTJDIGFkZHJlc3MsIG9uZSBvZiAweDUyLCAweDUz
+LCAweDU0LCAweDU1Lgo+ID4gKy0gI2FkZHJlc3MtY2VsbHMgOiBNdXN0IGJlIDEKPiA+ICstICNz
+aXplLWNlbGxzwqDCoMKgwqA6IE11c3QgYmUgMAo+ID4gKy0gI3RoZXJtYWwtc2Vuc29yLWNlbGxz
+wqDCoDogU2hvdWxkIGJlIDEuIFRoZSBkZXZpY2Ugc3VwcG9ydHM6Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLSBPbmUgaW50ZXJuYWwg
+c2Vuc29yCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgLSBGb3VyIGV4dGVybmFsIEkyQyBkaWdpdGFsIHNlbnNvcnMKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAtIFNpeCBleHRl
+cm5hbCB0aGVybWFsIGRpb2Rlcwo+IAo+IFlvdSBzaG91bGQgZGVmaW5lIHRoZSBJRHMgaGVyZSwg
+bm90IGp1c3QgaG93IG1hbnkgb2YgZWFjaCB0eXBlLgoKT2theS4KCj4gCj4gPiArCj4gPiArT3B0
+aW9uYWwgcHJvcGVydGllczoKPiA+ICstIHVzZS1zdG9yZWQtcHJlc2VuY2XCoMKgwqDCoDogRG8g
+bm90IHRyZWF0IHRoZSBkZXZpY2V0cmVlIGRlc2NyaXB0aW9uIGFzIGNhbm9uIGZvcgo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZhbiBw
+cmVzZW5jZSAodGhlICdpbnN0YWxsZWQnIGJpdCBvZiBGQU5fQ09ORklHXyopLgo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoEluc3RlYWQs
+IHJlbHkgb24gdGhlIG9uIHRoZSBkZWZhdWx0IHZhbHVlIHN0b3JlIG9mCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhlIGRldmljZSB0
+byBwb3B1bGF0ZSBpdC4KPiAKPiBCb29sZWFuPyBQbGVhc2UgYmUgZXhwbGljaXQuCgpPa2F5LgoK
+PiAKPiBOZWVkcyBhIHZlbmRvciBwcmVmaXguCgpXZSd2ZSBkaXNjdXNzZWQgdGhpcyBwcmV2aW91
+c2x5LiBJdCdzIGRlc2NyaWJpbmcgaG93IHRvIGludGVycHJldCBwYXJ0Cm9mIHRoZSBQTUJ1cyBz
+cGVjLCBub3Qgc29tZXRoaW5nIE1heGltIGhhdmUgZG9uZSwgc28gSSBkb24ndCB0aGluayBpdApz
+aG91bGQgaGF2ZSBhIHZlbmRvciBwcmVmaXguCgpCdXQgbWF5YmUgSSdtIHJlcHJlc2VudGluZyBp
+dCB3cm9uZz8KCj4gCj4gPiArCj4gPiArQ2FwYWJpbGl0aWVzIGFyZSBjb25maWd1cmVkIHRocm91
+Z2ggc3Vibm9kZXMgb2YgdGhlIGNvbnRyb2xsZXIncyBub2RlLgo+ID4gKwo+ID4gK0ZhbnMKPiA+
+ICstLS0tCj4gPiArCj4gPiArT25seSBmYW5zIHdpdGggc3Vibm9kZXMgcHJlc2VudCB3aWxsIGJl
+IGNvbnNpZGVyZWQgYXMgaW5zdGFsbGVkLiBJZgo+ID4gK3VzZS1zdG9yZWQtcHJlc2VuY2UgaXMg
+cHJlc2VudCBpbiB0aGUgcGFyZW50IG5vZGUsIHRoZW4gb25seSBmYW5zIHRoYXQgYXJlIGJvdGgK
+PiA+ICtkZWZpbmVkIGluIHRoZSBkZXZpY2V0cmVlIGFuZCBoYXZlIHRoZWlyIGluc3RhbGxlZCBi
+aXQgc2V0IGFyZSBjb25zaWRlcmVkCj4gPiAraW5zdGFsbGVkLgo+ID4gKwo+ID4gK1JlcXVpcmVk
+IHN1Ym5vZGUgcHJvcGVydGllczoKPiA+ICstIGNvbXBhdGlibGXCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoDogTXVzdCBiZSAicG1idXMtZmFuIgo+IAo+ICJwbWJ1cyIgaXMgYSBwcm9wZXJ0eSBv
+ZiB0aGUgY29udHJvbGxlciwgbm90IHRoZSBmYW4sIHJpZ2h0PyBXZSBzaG91bGTCoAo+IGhhdmUg
+Y29tcGF0aWJsZXMgYWxvbmcgdGhlIGxpbmVzIG9mIHRoZSB0eXBlIG9mIGZhbiBsaWtlIDQtd2ly
+ZSwgMy13aXJlLMKgCj4gZXRjLsKgCgpZZXMsIFBNQnVzIGlzIGEgcHJvcGVydHkgb2YgdGhlIGNv
+bnRyb2xsZXIuIEJ1dCBhIGNvbnRyb2xsZXIgdGhhdAppbXBsZW1lbnRzIFBNQnVzIGZhbiBjb250
+cm9sIGFuZCBtb25pdG9yaW5nIGFic3RyYWN0cyBhd2F5IG1vc3Qgb2YgdGhlCmRldGFpbHMgb2Yg
+dGhlIGZhbiBoYXJkd2FyZSwgc28gSSBkb24ndCBzZWUgaXQgZml0IHRvIGRlc2NyaWJlIGUuZy4g
+NC0Kd2lyZSBvciAzLXdpcmUgcHJvcGVydGllcyBoZXJlLgoKUGVyaGFwcyB0aGlzIGlzIHJlc29s
+dmVkIGJ5IGhhdmluZyBhICJwbWJ1cy1mYW4tY29udHJvbCIgY29tcGF0aWJsZQpub2RlLCBhbmQg
+bmVzdGluZyBhIGZhbiBub2RlIHVuZGVyIHRoYXQ/IE15IGNvbmNlcm4gd291bGQgYmUgdGhhdCB0
+aGUKb25seSBlbGVtZW50IG9mIHRoZSBmYW4gc3Vibm9kZSB3b3VsZCBiZSB0aGUgInRhY2gtcHVs
+c2VzIiBwcm9wZXJ0eQoodGhvdWdoIG1heWJlIGFsc28gZHVhbC10YWNoIGlmIHdlIGdlbmVyYWxp
+c2UgdGhlIG1heGltLGZhbi1kdWFsLXRhY2gKcHJvcGVydHkgYmVsb3cpLgoKUmVnYXJkbGVzcywg
+d2hhdCBJJ20gdHJ5aW5nIHRvIGRlc2NyaWJlIGhlcmUgd2l0aCB0aGUgbm9uLXZlbmRvci0KcHJl
+Zml4ZWQgcHJvcGVydGllcyBhcmUgY29uZmlndXJhYmxlIGVsZW1lbnRzIG9mIHRoZSBQTUJ1cyBp
+bnRlcmZhY2UKZm9yIGZhbiBjb250cm9sLiBBZGhlcmVuY2UgdG8gUE1CdXMgYnkgYSBkZXZpY2Ug
+ZGljdGF0ZXMgdGhlIGNvbW1hbmQKaW50ZXJmYWNlLCBhbmQgaXMgdGhlcmVmb3JlIGEgcHJvcGVy
+dHkgb2YgdGhlIGNvbnRyb2xsZXIgaGFyZHdhcmUgYXQKdGhlIGVuZCBvZiB0aGUgZGF5LiBJbiB0
+aGlzIGluc3RhbmNlIChQTUJ1cykgSSBkb24ndCBzZWUgaG93IHdlIGNhbgpkcmF3IHRoZSBkaXN0
+aW5jdGlvbiBiZXR3ZWVuICJ3aGF0IGl0IGRvZXMiIGFuZCAid2hhdCBpbnRlcmZhY2UgaXQgaGFz
+IgotIGFkaGVyZW5jZSB0byByZWxldmFudCBwYXJ0cyBvZiB0aGUgUE1CdXMgc3BlYyBkZWZpbmVz
+IHRoZSBtaW5pbXVtIG9mCndoYXQgdGhlIGNvbnRyb2xsZXIgZG9lcyAoUE1CdXMgYWxsb3dzIGZv
+ciB2ZW5kb3IgZXh0ZW5zaW9ucykuClVuZm9ydHVuYXRlbHkgdGhlIFBNQnVzIHNwZWMgaXMgZmFp
+cmx5IGxvb3NlIGluIHRlcm1zIG9mIHdoYXQgaXQKKnJlcXVpcmVzKiB5b3UgdG8gaW1wbGVtZW50
+LCBidXQgSSBkb24ndCB0aGluayB0aGF0J3MgcmVsZXZhbnQgaGVyZS4KCj4gCj4gPiArLSByZWfC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgOiBUaGUgUE1CdXMgcGFnZSB0
+aGUgcHJvcGVydGllcyBhcHBseSB0by4KPiA+ICstICNjb29saW5nLWNlbGxzwqDCoMKgwqDCoMKg
+wqDCoMKgOiBTaG91bGQgYmUgMi4gU2VlIHRoZSB0aGVybWFsIGJpbmRpbmdzIGF0IFsxXS4KPiA+
+ICstIG1heGltLGZhbi1yb3Rvci1pbnB1dMKgwqA6IFRoZSB0eXBlIG9mIHJvdG9yIG1lYXN1cmVt
+ZW50IHByb3ZpZGVkIHRvIHRoZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRyb2xsZXIuIE11c3QgYmUgZWl0aGVyICJ0YWNoIiBm
+b3IgdGFjaG9tZXRlcgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHB1bHNlcyBvciAibG9jayIgZm9yIGEgbG9ja2VkLXJvdG9yIHNpZ25h
+bC4KPiA+ICstIG1heGltLGZhbi1sb2NrLXBvbGFyaXR5OiBSZXF1aXJlZCBpZmYgbWF4aW0sZmFu
+LXJvdG9yLWlucHV0IGlzICJsb2NrIi4gVmFsaWQKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2YWx1ZXMgYXJlICJsb3ciIGZvciBhY3Rp
+dmUgbG93LCAiaGlnaCIgZm9yIGFjdGl2ZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGhpZ2guCj4gPiArCj4gPiArT3B0aW9uYWwgc3Vi
+bm9kZSBwcm9wZXJ0aWVzOgo+ID4gKy0gZmFuLW1vZGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqA6ICJycG0iIG9yICJwd20iLiBEZWZhdWx0IHZhbHVlIGlzICJwd20iLgo+ID4gKy0gdGFj
+aC1wdWxzZXPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA6IFRhY2hvbWV0ZXIgcHVsc2VzIHBlciBy
+ZXZvbHV0aW9uLiBWYWxpZCB2YWx1ZXMgYXJlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgMSwgMiwgMyBvciA0LiBUaGUgZGVmYXVsdCBp
+cyAxLgo+ID4gKy0gY29vbGluZy1taW4tbGV2ZWzCoMKgwqDCoMKgwqA6IFNtYWxsZXN0IGNvb2xp
+bmcgc3RhdGUgYWNjZXB0ZWQuIFNlZSBbMV0uCj4gPiArLSBjb29saW5nLW1heC1sZXZlbMKgwqDC
+oMKgwqDCoDogTGFyZ2VzdCBjb29saW5nIHN0YXRlIGFjY2VwdGVkLiBTZWUgWzFdLgo+ID4gKy0g
+bWF4aW0sZmFuLW5vLWZhdWx0LXJhbXA6IERvIG5vdCByYW1wIHRoZSBmYW4gdG8gMTAwJSBQV00g
+ZHV0eSBvbiBkZXRlY3RpbmcgYQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZhbiBmYXVsdAo+ID4gKy0gbWF4aW0sZmFuLXN0YXJ0dXDC
+oMKgwqDCoMKgwqA6IFRoZSBudW1iZXIgb2Ygcm90YXRpb25zIHJlcXVpcmVkIGJlZm9yZSB0YWtp
+bmcKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBlbWVyZ2VuY3kgYWN0aW9uIGZvciBhbiB1bnJlc3BvbnNpdmUgZmFuIGFuZCBkcml2aW5n
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgaXQgd2l0aCAxMDAlIG9yIDAlIFBXTSBkdXR5LCBkZXBlbmRpbmcgb24gdGhlIHN0YXRlCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+b2YgbWF4aW0sZmFuLW5vLWZhdWx0LXJhbXAuIFZhbGlkIHZhbHVlcyBhcmUgMAo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoChhdXRvbWF0
+aWMgc3Bpbi11cCBkaXNhYmxlZCksIDIsIDQsIG9yIDguIERlZmF1bHQKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2YWx1ZSBpcyAwLgo+
+ID4gKy0gbWF4aW0sZmFuLWhlYWx0aMKgwqDCoMKgwqDCoMKgOiBFbmFibGUgYXV0b21hdGVkIGZh
+biBoZWFsdGggY2hlY2sKPiA+ICstIG1heGltLGZhbi1yYW1wwqDCoMKgwqDCoMKgwqDCoMKgOiBD
+b25maWd1cmVzIGhvdyBmYXN0IHRoZSBkZXZpY2UgcmFtcHMgdGhlIFBXTSBkdXR5Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY3ljbGUg
+ZnJvbSBvbmUgdmFsdWUgdG8gYW5vdGhlci4gVmFsaWQgdmFsdWVzIGFyZSAwCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdG8gNyBpbmNs
+dXNpdmUsIHdpdGggdmFsdWVzIDAgLSAyIGNvbmZpZ3VyaW5nIGEKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAxMDAwbXMgdXBkYXRlIHJh
+dGUgYW5kIDEgLSAzJSBkdXR5IHJlc3BlY3RpdmUgZHV0eQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGluY3JlYXNlLCBhbmQgMyAtIDcg
+YSAyMDBtcyB1cGRhdGUgcmF0ZSB3aXRoIGEgMSAtCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgNSUgcmVzcGVjdGl2ZSBkdXR5IGluY3Jl
+YXNlLiBEZWZhdWx0IHZhbHVlIGlzIDAuCj4gPiArLSBtYXhpbSxmYW4tbm8td2F0Y2hkb2fCoMKg
+OiBEbyBub3QgcmFtcCBmYW4gdG8gMTAwJSBQV00gZHV0eSBvbiBmYWlsdXJlIHRvCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdXBkYXRl
+IGRlc2lyZWQgZmFuIHJhdGUgaW5zaWRlIDEwcy4gVGhpcyBpbXBsaWVzCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWF4aW0sdG1wLW5v
+LWZhdWx0LXJhbXAKPiA+ICstIG1heGltLHRtcC1uby1mYXVsdC1yYW1wOiBEbyBub3QgcmFtcCBm
+YW4gdG8gMTAwJSBQV00gZHV0eSBvbiB0ZW1wZXJhdHVyZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNlbnNvciBmYXVsdCBkZXRlY3Rp
+b24uIFRoaXMgaW1wbGllcwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoG1heGltLGZhbi1uby13YXRjaGRvZwo+ID4gKy0gbWF4aW0sdG1w
+LWh5c3RlcmVzaXPCoMKgwqA6IFRoZSB0ZW1wZXJhdHVyZSBoeXN0ZXJlc2lzIHVzZWQgdG8gZGV0
+ZXJtaW5lCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgdHJhbnNpdGlvbnMgdG8gbG93ZXIgZmFuIHNwZWVkIGJhbmRzIGluIHRoZQo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRl
+bXBlcmF0dXJlL2ZhbiByYXRlIGxvb2t1cCB0YWJsZS4gVmFsaWQgdmFsdWVzIGFyZQo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDIsIDQs
+IDYgb3IgOCAoZGVncmVlcyBjZWxjaXVzKS4gRGVmYXVsdCB2YWx1ZSBpcyAyLgo+ID4gKy0gbWF4
+aW0sZmFuLWR1YWwtdGFjaMKgwqDCoMKgOiBFbmFibGUgZHVhbCB0YWNob21ldGVyIGZ1bmN0aW9u
+YWxpdHkKPiA+ICstIG1heGltLGZhbi1wd20tZnJlccKgwqDCoMKgwqA6IFRoZSBQV00gZnJlcXVl
+bmN5LiBWYWxpZCB2YWx1ZXMgYXJlIDMwLCA1MCwgMTAwLCAxNTAKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhbmQgMjUwMDAgKEh6KS4g
+RGVmYXVsdCB2YWx1ZSBpcyAzMEh6Lgo+ID4gKy0gbWF4aW0sZmFuLWxvb2t1cC10YWJsZSA6IEEg
+MTYtZWxlbWVudCBjZWxsIGFycmF5IG9mIGFsdGVybmF0aW5nIHRlbXBlcmF0dXJlCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYW5kIHJh
+dGUgdmFsdWVzIHJlcHJlc2VudGluZyB0aGUgbG9vayB1cCB0YWJsZS4gVGhlCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmF0ZSB1bml0
+cyBhcmUgc2V0IHRocm91Z2ggdGhlIGZhbi1tb2RlIHByb3BlcnR5Lgo+ID4gKy0gbWF4aW0sZmFu
+LWZhdWx0LXBpbi1tb246IFJhbXAgZmFucyB0byAxMDAlIFBXTSBkdXR5IHdoZW4gdGhlIEZBVUxU
+IHBpbiBpcwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGFzc2VydGVkCj4gCj4gSW4gZ2VuZXJhbCwgSSB0aGluayBhIGdvb2QgcG9ydGlv
+biBvZiB0aGVzZSBzaG91bGQgYmUgZWl0aGVyIGltcGxpZWQgYnnCoAo+IGEgZmFuIGNvbXBhdGli
+bGUgc3RyaW5nIG9yIGJlIHBhcnQgb2YgYSBjb21tb24gZmFuIGJpbmRpbmcuCgpBYm92ZSB5b3Ug
+bWFkZSB0aGUgZGlzdGluY3Rpb24gYmV0d2VlbiBmYW4gYW5kIGZhbiBjb250cm9sbGVyLCBidXQg
+SQpmZWVsIGxpa2UgZm9sbG93aW5nIHlvdXIgc3VnZ2VzdGlvbiBoZXJlIGlzIG1peGluZyB0aGlu
+Z3MgdXAgaW4gdGhlCm9wcG9zaXRlIGRpcmVjdGlvbiB0byB3aGF0IHlvdSBkZXNpcmVkIGFib3Zl
+LiBJbiBteSBtaW5kIG1vc3Qgb2YgdGhlc2UKcHJvcGVydGllcyBkZXNjcmliZSBhIGZhbiBjb250
+cm9sbGVyJ3MgY2FwYWJpbGl0eSByYXRoZXIgdGhhbiBhCnByb3BlcnR5IG9mIGEgZmFuLCBzYXZl
+IHNheSAidGFjaC1wdWxzZXMiLCB3aGljaCBpcyBhIHByb3BlcnR5IG9mIHRoZQpmYW4ncyB0YWNo
+bywgYW5kIG1heWJlICJtYXhpbSxmYW4tZHVhbC10YWNoIiB3aGljaCBhcHBsaWVzIHRvIGFueSBk
+dWFsLQpyb3RvciBmYW4gYW5kIHNob3VsZCBwcm9iYWJseSBiZSBnZW5lcmFsaXNlZC4KCj4gCj4g
+PiArCj4gPiArVGVtcGVyYXR1cmUKPiA+ICstLS0tLS0tLS0tLQo+ID4gKwo+ID4gK1JlcXVpcmVk
+IHN1Ym5vZGUgcHJvcGVydGllczoKPiA+ICstIGNvbXBhdGlibGXCoMKgwqDCoDogTXVzdCBiZSAi
+cG1idXMtdGVtcGVyYXR1cmUiCj4gPiArLSByZWfCoMKgwqDCoMKgwqDCoMKgwqDCoMKgOiBUaGUg
+UE1CdXMgcGFnZSB0aGUgcHJvcGVydGllcyBhcHBseSB0by4KPiA+ICsKPiA+ICtPcHRpb25hbCBz
+dWJub2RlIHByb3BlcnRpZXM6Cj4gPiArLSBtYXhpbSx0bXAtb2Zmc2V0wqDCoMKgwqDCoMKgOiBW
+YWxpZCB2YWx1ZXMgYXJlIDAgLSAzMCAoZGVncmVlcyBjZWxjaXVzKSBpbmNsdXNpdmUuCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoERlZmF1
+bHQgdmFsdWUgaXMgMC4KPiA+ICstIG1heGltLHRtcC1mYW5zwqDCoMKgwqDCoMKgwqDCoDogQW4g
+YXJyYXkgb2YgcGhhbmRsZXMgdG8gZmFucyBjb250cm9sbGVkIGJ5IHRoZQo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjdXJyZW50IHRlbXBl
+cmF0dXJlIHNlbnNvci4KPiAKPiBJcyB0aGlzIGEgZmVhdHVyZSBvZiB0aGUgTWF4aW0gY2hpcCBv
+ciBqdXN0IGEgbWFwcGluZyBvZiB0ZW1wZXJhdHVyZcKgCj4gc2Vuc29ycyB0byBmYW5zLiBUaGUg
+bGF0dGVyIHNob3VsZCBiZSBhIGNvbW1vbiBwcm9wZXJ0eS4KCkl0J3MgYSBtYW51ZmFjdHVyZXIt
+c3BlY2lmaWMgZmVhdHVyZSBvZiB0aGUgTWF4aW0gY2hpcCwgd2hpY2ggY2FuIGRvCnRoZSBmdWxs
+IGNsb3NlZC1sb29wIGZhbiBjb250cm9sIHVzaW5nIGEgbG9va3VwIHRhYmxlIG1hcHBpbmcKdGVt
+cGVyYXR1cmVzIHRvIGZhbiBzcGVlZHMuIFRoZSBsb29rdXAgdGFibGUgY2FuIGJlIGRlc2NyaWJl
+ZCB3aXRoIHRoZQptYXhpbSxmYW4tbG9va3VwLXRhYmxlIHByb3BlcnR5IHNwZWNpZmllZCBhYm92
+ZSwgYW5kIG1heGltLHRtcC1mYW5zCm1hcHMgdGhlIHRlbXBlcmF0dXJlIHNlbnNvciB0byBhIHNl
+dCBvZiBmYW5zIHRvIGNvbnRyb2wgdXNpbmcgaXRzCnRlbXBlcmF0dXJlIHJlYWRpbmdzIHdpdGgg
+cmVzcGVjdCB0byBlYWNoIGZhbidzIGxvb2t1cCB0YWJsZS4KCkNoZWVycywKCkFuZHJldwoKPiAK
+PiBSb2I=
+
+
+--=-v9g5Sjz6UiACRiidMV2k
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAABCgAGBQJZwL+3AAoJEJ0dnzgO5LT5yc4P/15/7kPLxdPTRZkMQJSy27dd
+oD8iba75fIxoLhGiDPx1l7zWqant3wVMz1UgKrpAXakoxeux8X+g7ANeuy6v1HHr
+/DUbvb6WeO3jxn3n9yVTx26vMKUochcoG5n7oME+TwnS/2mWiJawdNSbM5qHSFmn
+Xs5RIQusccq+TLL+Npxr/q9KOxmCXxeenIoXHqFQkk8XT6fi4E7+x4V9Jw85HDsV
+8SVpf9V048TlcRy1oAhPZpsoejwWS6eltkfVk7iPAJdslYFLhCmt0hHFy6+5pDj0
+QqbWx1moazDFCncYvbofqCqp6aIdhMN3qRcs1ckFdNA700gFmHBTQEWum1GVtDwl
+Ngm8VIJZ1Sz/y3YgMguUl/F1Kpou3GJyrRw847vSuyD9TPM7A48R2n8ol+D0BEq0
+HLVzatpOCcD2kO2fOoeKKmgY2vgofnNqxZfkKJVtYVgyD1BVdkAsGbIC8SouKSWH
+4NH1/NEYppYV2hQawd8JxtzIDh+CY62EmvF5chmBrg0giLzv3rcbnf0TRRfmqtAC
+74qk7dvavjrpemph9ksL1Ce9cUo89VWHjx50/jpimGfQhzFY+C1TeXBRFs3AwqBW
+7xYsj8yHlAYCmcGFPpQrDQCF+v58lI9Suy+9b5oYx9eSfxHZQEOozqv5Ci+QgaQY
+Ov7BNKK4WeL4a6UMqUP3
+=G6gK
+-----END PGP SIGNATURE-----
+
+--=-v9g5Sjz6UiACRiidMV2k--
