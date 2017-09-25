@@ -1,112 +1,56 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:29773 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751408AbdIWGrY (ORCPT
+Received: from mail-pg0-f47.google.com ([74.125.83.47]:55204 "EHLO
+        mail-pg0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752167AbdIYXJ0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Sep 2017 02:47:24 -0400
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: jdelvare@suse.com, linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] hwmon: (xgene) Fix up error handling path mixup in 'xgene_hwmon_probe()'
-Date: Sat, 23 Sep 2017 08:44:15 +0200
-Message-Id: <20170923064415.25307-1-christophe.jaillet@wanadoo.fr>
+        Mon, 25 Sep 2017 19:09:26 -0400
+Received: by mail-pg0-f47.google.com with SMTP id c137so4864051pga.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2017 16:09:26 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, Nishanth Menon <nm@ti.com>,
+        Simon Guinot <simon.guinot@sequanux.org>,
+        Jamie Lentin <jm@lentin.co.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/9] GPIO controlled fans refactoring
+Date: Tue, 26 Sep 2017 01:09:02 +0200
+Message-Id: <20170925230911.20824-1-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Commit 2ca492e22cb7 has moved the call to 'kfifo_alloc()' from after the
-main 'if' statement to before it.
-But it has not updated the error handling paths accordingly.
+This series:
 
-Fix all that:
-   - if 'kfifo_alloc()' fails we can return directly
-   - direct returns after 'kfifo_alloc()' must now go to 'out_mbox_free'
-   - 'goto out_mbox_free' must be replaced by 'goto out', otherwise the
-     '[pcc_]mbox_free_channel()' call will be missed.
+- Cleans up the GPIO controlled fan driver to correspond to
+  my personal idea of clean.
 
-Fixes: 2ca492e22cb7 ("hwmon: (xgene) Fix crash when alarm occurs before driver probe")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/hwmon/xgene-hwmon.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+- Cuts the support for platform data from board files that
+  noone is using, making the driver self-contained.
 
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 9c0dbb8191ad..e1be61095532 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -630,7 +630,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 			 sizeof(struct slimpro_resp_msg) * ASYNC_MSG_FIFO_SIZE,
- 			 GFP_KERNEL);
- 	if (rc)
--		goto out_mbox_free;
-+		return -ENOMEM;
- 
- 	INIT_WORK(&ctx->workq, xgene_hwmon_evt_work);
- 
-@@ -646,7 +646,8 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		if (IS_ERR(ctx->mbox_chan)) {
- 			dev_err(&pdev->dev,
- 				"SLIMpro mailbox channel request failed\n");
--			return -ENODEV;
-+			rc = -ENODEV;
-+			goto out_mbox_free;
- 		}
- 	} else {
- 		struct acpi_pcct_hw_reduced *cppc_ss;
-@@ -654,7 +655,8 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
- 					     &ctx->mbox_idx)) {
- 			dev_err(&pdev->dev, "no pcc-channel property\n");
--			return -ENODEV;
-+			rc = -ENODEV;
-+			goto out_mbox_free;
- 		}
- 
- 		cl->rx_callback = xgene_hwmon_pcc_rx_cb;
-@@ -662,7 +664,8 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		if (IS_ERR(ctx->mbox_chan)) {
- 			dev_err(&pdev->dev,
- 				"PPC channel request failed\n");
--			return -ENODEV;
-+			rc = -ENODEV;
-+			goto out_mbox_free;
- 		}
- 
- 		/*
-@@ -675,13 +678,13 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		if (!cppc_ss) {
- 			dev_err(&pdev->dev, "PPC subspace not found\n");
- 			rc = -ENODEV;
--			goto out_mbox_free;
-+			goto out;
- 		}
- 
- 		if (!ctx->mbox_chan->mbox->txdone_irq) {
- 			dev_err(&pdev->dev, "PCC IRQ not supported\n");
- 			rc = -ENODEV;
--			goto out_mbox_free;
-+			goto out;
- 		}
- 
- 		/*
-@@ -696,14 +699,14 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
- 			rc = -ENODEV;
--			goto out_mbox_free;
-+			goto out;
- 		}
- 
- 		if (!ctx->pcc_comm_addr) {
- 			dev_err(&pdev->dev,
- 				"Failed to ioremap PCC comm region\n");
- 			rc = -ENOMEM;
--			goto out_mbox_free;
-+			goto out;
- 		}
- 
- 		/*
+- Convert the driver to use GPIO descriptors.
+
+It needs some testing. Also by myself, but especially from people
+with fans using several GPIO lines.
+
+Linus Walleij (9):
+  hwmon: gpio-fan: Move DT bindings to the right place
+  hwmon: gpio-fan: Use local variable pointers
+  hwmon: gpio-fan: Localize platform data
+  hwmon: gpio-fan: Send around device pointer
+  hwmon: gpio-fan: Mandate OF_GPIO and cut pdata path
+  hwmon: gpio-fan: Get rid of platform data struct
+  hwmon: gpio-fan: Get rid of the gpio alarm struct
+  hwmon: gpio-fan: Rename GPIO line state variables
+  hwmon: gpio-fan: Convert to use GPIO descriptors
+
+ .../bindings/{gpio => hwmon}/gpio-fan.txt          |   0
+ drivers/hwmon/Kconfig                              |   1 +
+ drivers/hwmon/gpio-fan.c                           | 219 ++++++++-------------
+ include/linux/gpio-fan.h                           |  36 ----
+ 4 files changed, 83 insertions(+), 173 deletions(-)
+ rename Documentation/devicetree/bindings/{gpio => hwmon}/gpio-fan.txt (100%)
+ delete mode 100644 include/linux/gpio-fan.h
+
 -- 
-2.11.0
+2.13.5
 
