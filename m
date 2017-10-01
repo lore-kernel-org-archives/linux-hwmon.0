@@ -1,35 +1,30 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:35821 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750981AbdJAOLn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Oct 2017 10:11:43 -0400
-Date: Sun, 1 Oct 2017 07:11:40 -0700
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:37335 "EHLO
+        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751035AbdJAOaV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Oct 2017 10:30:21 -0400
+Date: Sun, 1 Oct 2017 07:30:19 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Alan Tull <atull@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [1/2] dt-bindings: hwmon: add compatible for max1619
-Message-ID: <20171001141140.GA31645@roeck-us.net>
-References: <20170911191649.3344-1-atull@kernel.org>
+To: hotran <hotran@apm.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Itaru Kitayama <itaru.kitayama@riken.jp>, lho@apm.com,
+        kdinh@apm.com, patches@apm.com
+Subject: Re: [1/2] hwmon: xgene: Support hwmon v2
+Message-ID: <20171001143019.GA1093@roeck-us.net>
+References: <1506014230-13933-2-git-send-email-hotran@apm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20170911191649.3344-1-atull@kernel.org>
+In-Reply-To: <1506014230-13933-2-git-send-email-hotran@apm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Sep 11, 2017 at 02:16:48PM -0500, Alan Tull wrote:
-> Add new device tree bindings document for max1619 device
-> including a new compatible string.
+On Thu, Sep 21, 2017 at 10:17:09AM -0700, hotran wrote:
+> This patch supports xgene-hwmon v2 which uses the non-cachable memory
+> as the PCC shared memory.
 > 
-> Signed-off-by: Alan Tull <atull@kernel.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Hoan Tran <hotran@apm.com>
 
 Applied to hwmon-next.
 
@@ -37,25 +32,18 @@ Thanks,
 Guenter
 
 > ---
->  Documentation/devicetree/bindings/hwmon/max1619.txt | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/max1619.txt
+>  drivers/hwmon/xgene-hwmon.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/max1619.txt b/Documentation/devicetree/bindings/hwmon/max1619.txt
-> new file mode 100644
-> index 0000000..c70dbbe
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/max1619.txt
-> @@ -0,0 +1,12 @@
-> +Bindings for MAX1619 Temperature Sensor
-> +
-> +Required properties:
-> +- compatible : "maxim,max1619"
-> +- reg        : I2C address, one of 0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x4c, or
-> +               0x4d, 0x4e
-> +
-> +Example:
-> +	temp@4c {
-> +		compatible = "maxim,max1619";
-> +		reg = <0x4c>;
-> +	};
+> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+> index 9c0dbb8..5cd327e 100644
+> --- a/drivers/hwmon/xgene-hwmon.c
+> +++ b/drivers/hwmon/xgene-hwmon.c
+> @@ -761,6 +761,7 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
+>  #ifdef CONFIG_ACPI
+>  static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
+>  	{"APMC0D29", 0},
+> +	{"APMC0D8A", 0},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
