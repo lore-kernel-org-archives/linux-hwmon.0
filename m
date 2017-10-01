@@ -1,223 +1,321 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f170.google.com ([209.85.192.170]:43035 "EHLO
-        mail-pf0-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934773AbdIYXJx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Sep 2017 19:09:53 -0400
-Received: by mail-pf0-f170.google.com with SMTP id y29so4588208pff.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Sep 2017 16:09:53 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Simon Guinot <simon.guinot@sequanux.org>,
-        Jamie Lentin <jm@lentin.co.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 9/9] hwmon: gpio-fan: Convert to use GPIO descriptors
-Date: Tue, 26 Sep 2017 01:09:11 +0200
-Message-Id: <20170925230911.20824-10-linus.walleij@linaro.org>
-In-Reply-To: <20170925230911.20824-1-linus.walleij@linaro.org>
-References: <20170925230911.20824-1-linus.walleij@linaro.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail.kernel.org ([198.145.29.99]:44974 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751005AbdJAK3k (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 1 Oct 2017 06:29:40 -0400
+Date: Sun, 1 Oct 2017 11:29:34 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Maciej Purski <m.purski@samsung.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-iio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH 1/4] iio: adc: ina2xx: Make max expected current
+ configurable
+Message-ID: <20171001112934.360c840b@archlinux>
+In-Reply-To: <1506603015-27202-2-git-send-email-m.purski@samsung.com>
+References: <1506603015-27202-1-git-send-email-m.purski@samsung.com>
+        <CGME20170928125053eucas1p19e757ac5c3774f54c7cd0ee4525decbe@eucas1p1.samsung.com>
+        <1506603015-27202-2-git-send-email-m.purski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This converts the GPIO fan driver to use GPIO descriptors. This way
-we avoid indirection since the gpiolib anyway just use descriptors
-inside, and we also get rid of explicit polarity handling: the
-descriptors internally knows if the line is active high or active
-low.
+On Thu, 28 Sep 2017 14:50:12 +0200
+Maciej Purski <m.purski@samsung.com> wrote:
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/hwmon/gpio-fan.c | 83 ++++++++++++++++++------------------------------
- 1 file changed, 31 insertions(+), 52 deletions(-)
+> Max expected current is used for calculating calibration register value,
+> Current LSB and Power LSB according to equations found in ina datasheet.
+> Max expected current is now implicitly set to default value,
+> which is 2^15, thanks to which Current LSB is equal to 1 mA and
+> Power LSB is equal to 20000 uW or 25000 uW depending on ina model.
+> 
+> Make max expected current configurable, just like it's already done
+> with shunt resistance: from device tree, platform_data or later
+> from sysfs. On each max_expected_current change, calculate new values
+> for Current LSB and Power LSB. According to datasheet Current LSB should
+> be calculated by dividing max expected current by 2^15, as values read
+> from device registers are in this case 16-bit integers. Power LSB
+> is calculated by multiplying Current LSB by a factor, which is defined
+> in ina documentation.
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 18b3c7c27d36..bd289e2e7359 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -29,10 +29,9 @@
- #include <linux/err.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
--#include <linux/of_gpio.h>
- #include <linux/thermal.h>
- 
- struct gpio_fan_speed {
-@@ -47,7 +46,7 @@ struct gpio_fan_data {
- 	struct thermal_cooling_device *cdev;
- 	struct mutex		lock; /* lock GPIOs operations. */
- 	int			num_gpios;
--	unsigned int		*gpios;
-+	struct gpio_desc	**gpios;
- 	int			num_speed;
- 	struct gpio_fan_speed	*speed;
- 	int			speed_index;
-@@ -55,8 +54,7 @@ struct gpio_fan_data {
- 	int			resume_speed;
- #endif
- 	bool			pwm_enable;
--	unsigned int		alarm_gpio;
--	unsigned int		alarm_gpio_active_low;
-+	struct gpio_desc	*alarm_gpio;
- 	struct work_struct	alarm_work;
- };
- 
-@@ -86,9 +84,9 @@ static ssize_t fan1_alarm_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
--	int value = gpio_get_value_cansleep(fan_data->alarm_gpio);
-+	int value = gpiod_get_value_cansleep(fan_data->alarm_gpio);
- 
--	if (fan_data->alarm_gpio_active_low)
-+	if (gpiod_is_active_low(fan_data->alarm_gpio))
- 		value = !value;
- 
- 	return sprintf(buf, "%d\n", value);
-@@ -98,31 +96,21 @@ static DEVICE_ATTR_RO(fan1_alarm);
- 
- static int fan_alarm_init(struct gpio_fan_data *fan_data)
- {
--	int err;
- 	int alarm_irq;
- 	struct device *dev = fan_data->dev;
- 
--	err = devm_gpio_request(dev, fan_data->alarm_gpio, "GPIO fan alarm");
--	if (err)
--		return err;
--
--	err = gpio_direction_input(fan_data->alarm_gpio);
--	if (err)
--		return err;
--
- 	/*
- 	 * If the alarm GPIO don't support interrupts, just leave
- 	 * without initializing the fail notification support.
- 	 */
--	alarm_irq = gpio_to_irq(fan_data->alarm_gpio);
-+	alarm_irq = gpiod_to_irq(fan_data->alarm_gpio);
- 	if (alarm_irq < 0)
- 		return 0;
- 
- 	INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
- 	irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
--	err = devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
--			       IRQF_SHARED, "GPIO fan alarm", fan_data);
--	return err;
-+	return devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
-+				IRQF_SHARED, "GPIO fan alarm", fan_data);
- }
- 
- /*
-@@ -135,8 +123,8 @@ static void __set_fan_ctrl(struct gpio_fan_data *fan_data, int ctrl_val)
- 	int i;
- 
- 	for (i = 0; i < fan_data->num_gpios; i++)
--		gpio_set_value_cansleep(fan_data->gpios[i],
--					(ctrl_val >> i) & 1);
-+		gpiod_set_value_cansleep(fan_data->gpios[i],
-+					 (ctrl_val >> i) & 1);
- }
- 
- static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
-@@ -147,7 +135,7 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
- 	for (i = 0; i < fan_data->num_gpios; i++) {
- 		int value;
- 
--		value = gpio_get_value_cansleep(fan_data->gpios[i]);
-+		value = gpiod_get_value_cansleep(fan_data->gpios[i]);
- 		ctrl_val |= (value << i);
- 	}
- 	return ctrl_val;
-@@ -362,19 +350,19 @@ static const struct attribute_group *gpio_fan_groups[] = {
- 
- static int fan_ctrl_init(struct gpio_fan_data *fan_data)
- {
--	struct device *dev = fan_data->dev;
- 	int num_gpios = fan_data->num_gpios;
--	unsigned int *gpios = fan_data->gpios;
-+	struct gpio_desc **gpios = fan_data->gpios;
- 	int i, err;
- 
- 	for (i = 0; i < num_gpios; i++) {
--		err = devm_gpio_request(dev, gpios[i],
--					"GPIO fan control");
--		if (err)
--			return err;
--
--		err = gpio_direction_output(gpios[i],
--					    gpio_get_value_cansleep(gpios[i]));
-+		/*
-+		 * The GPIO descriptors were retrieved with GPIOD_ASIS so here
-+		 * we set the GPIO into output mode, carefully preserving the
-+		 * current value by setting it to whatever it is already set
-+		 * (no surprise changes in default fan speed).
-+		 */
-+		err = gpiod_direction_output(gpios[i],
-+					gpiod_get_value_cansleep(gpios[i]));
- 		if (err)
- 			return err;
- 	}
-@@ -437,43 +425,34 @@ static int gpio_fan_get_of_data(struct gpio_fan_data *fan_data)
- 	struct gpio_fan_speed *speed;
- 	struct device *dev = fan_data->dev;
- 	struct device_node *np = dev->of_node;
--	unsigned int *gpios;
-+	struct gpio_desc **gpios;
- 	unsigned i;
- 	u32 u;
- 	struct property *prop;
- 	const __be32 *p;
- 
- 	/* Alarm GPIO if one exists */
--	if (of_gpio_named_count(np, "alarm-gpios") > 0) {
--		int val;
--		enum of_gpio_flags flags;
--
--		val = of_get_named_gpio_flags(np, "alarm-gpios", 0, &flags);
--		if (val < 0)
--			return val;
--		fan_data->alarm_gpio = val;
--		fan_data->alarm_gpio_active_low = flags & OF_GPIO_ACTIVE_LOW;
--	}
-+	fan_data->alarm_gpio = devm_gpiod_get_optional(dev, "alarm", GPIOD_IN);
-+	if (IS_ERR(fan_data->alarm_gpio))
-+		return PTR_ERR(fan_data->alarm_gpio);
- 
- 	/* Fill GPIO pin array */
--	fan_data->num_gpios = of_gpio_count(np);
-+	fan_data->num_gpios = gpiod_count(dev, NULL);
- 	if (fan_data->num_gpios <= 0) {
- 		if (fan_data->alarm_gpio)
- 			return 0;
- 		dev_err(dev, "DT properties empty / missing");
- 		return -ENODEV;
- 	}
--	gpios = devm_kzalloc(dev, fan_data->num_gpios * sizeof(unsigned int),
--			    GFP_KERNEL);
-+	gpios = devm_kzalloc(dev,
-+			     fan_data->num_gpios * sizeof(struct gpio_desc *),
-+			     GFP_KERNEL);
- 	if (!gpios)
- 		return -ENOMEM;
- 	for (i = 0; i < fan_data->num_gpios; i++) {
--		int val;
--
--		val = of_get_gpio(np, i);
--		if (val < 0)
--			return val;
--		gpios[i] = val;
-+		gpios[i] = devm_gpiod_get_index(dev, NULL, i, GPIOD_ASIS);
-+		if (IS_ERR(gpios[i]))
-+			return PTR_ERR(gpios[i]);
- 	}
- 	fan_data->gpios = gpios;
- 
--- 
-2.13.5
+One odd bit of casting inline.  Also this is new userspace ABI.
+It needs documenting in 
+
+Documentation/ABI/testing/sysfs-bus-iio* as appropriate.
+I'm also unclear on one element about this - is it a value used only
+for calibration or are we talking about the actual 'range' of the device?
+
+The interpretation of this value isn't clear against the more general
+ABI.
+
+In particular it is it in raw units (adc counts) or mA?  Docs say
+that but the naming of the attribute doesn't make this clear.
+
+Also I'm unconvinced this isn't better represented using the
+range specifications available for any IIO attribute on the raw
+value in combination with adjusting the scale value.
+Note not many drivers yet provide ranges on their raw outputs
+but we do have core support for it.  I've been meaning to start
+pushing this out into drivers, but been busy since we introduced
+the core support.  The dpot-dac driver does use it for examplel
+
+This moves the burden of calculating the 1lsb value to userspace,
+but importantly it would give us a consistent ABI where this fits
+in with existing elements (largely buy not introducing any new
+ones :).
+
+Thanks,
+
+Jonathan
+> 
+> Signed-off-by: Maciej Purski <m.purski@samsung.com>
+> ---
+>  drivers/iio/adc/ina2xx-adc.c         | 110 ++++++++++++++++++++++++++++++-----
+>  include/linux/platform_data/ina2xx.h |   2 +
+>  2 files changed, 98 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
+> index f387b97..883fede 100644
+> --- a/drivers/iio/adc/ina2xx-adc.c
+> +++ b/drivers/iio/adc/ina2xx-adc.c
+> @@ -56,6 +56,7 @@
+>  #define INA226_DEFAULT_IT		1110
+>  
+>  #define INA2XX_RSHUNT_DEFAULT           10000
+> +#define INA2XX_MAX_EXPECTED_A_DEFAULT	(1 << 15)	/* current_lsb = 1 mA */
+>  
+>  /*
+>   * bit masks for reading the settings in the configuration register
+> @@ -114,7 +115,7 @@ struct ina2xx_config {
+>  	int shunt_div;
+>  	int bus_voltage_shift;
+>  	int bus_voltage_lsb;	/* uV */
+> -	int power_lsb;		/* uW */
+> +	int power_lsb_factor;
+>  	enum ina2xx_ids chip_id;
+>  };
+>  
+> @@ -123,7 +124,10 @@ struct ina2xx_chip_info {
+>  	struct task_struct *task;
+>  	const struct ina2xx_config *config;
+>  	struct mutex state_lock;
+> -	unsigned int shunt_resistor;
+> +	unsigned int shunt_resistor;		/* uOhms */
+> +	unsigned int max_expected_current;	/* mA */
+> +	int current_lsb;			/* uA */
+> +	int power_lsb;				/* uW */
+>  	int avg;
+>  	int int_time_vbus; /* Bus voltage integration time uS */
+>  	int int_time_vshunt; /* Shunt voltage integration time uS */
+> @@ -137,7 +141,7 @@ static const struct ina2xx_config ina2xx_config[] = {
+>  		.shunt_div = 100,
+>  		.bus_voltage_shift = 3,
+>  		.bus_voltage_lsb = 4000,
+> -		.power_lsb = 20000,
+> +		.power_lsb_factor = 20,
+>  		.chip_id = ina219,
+>  	},
+>  	[ina226] = {
+> @@ -146,7 +150,7 @@ static const struct ina2xx_config ina2xx_config[] = {
+>  		.shunt_div = 400,
+>  		.bus_voltage_shift = 0,
+>  		.bus_voltage_lsb = 1250,
+> -		.power_lsb = 25000,
+> +		.power_lsb_factor = 25,
+>  		.chip_id = ina226,
+>  	},
+>  };
+> @@ -210,14 +214,15 @@ static int ina2xx_read_raw(struct iio_dev *indio_dev,
+>  
+>  		case INA2XX_POWER:
+>  			/* processed (mW) = raw*lsb (uW) / 1000 */
+> -			*val = chip->config->power_lsb;
+> +			*val = chip->power_lsb;
+>  			*val2 = 1000;
+>  			return IIO_VAL_FRACTIONAL;
+>  
+>  		case INA2XX_CURRENT:
+> -			/* processed (mA) = raw (mA) */
+> -			*val = 1;
+> -			return IIO_VAL_INT;
+> +			/* processed (mA) = raw*lsb (uA) / 1000 */
+> +			*val = chip->current_lsb;
+> +			*val2 = 1000;
+> +			return IIO_VAL_FRACTIONAL;
+>  		}
+>  	}
+>  
+> @@ -434,24 +439,47 @@ static ssize_t ina2xx_allow_async_readout_store(struct device *dev,
+>  }
+>  
+>  /*
+> - * Set current LSB to 1mA, shunt is in uOhms
+> - * (equation 13 in datasheet). We hardcode a Current_LSB
+> - * of 1.0 x10-6. The only remaining parameter is RShunt.
+> + * Calculate calibration value according to equation 1 in ina226 datasheet
+> + * http://www.ti.com/lit/ds/symlink/ina226.pdf.
+> + * Current LSB is in uA and RShunt is in uOhms, so RShunt should be
+> + * converted to mOhms in order to keep the scale.
+>   * There is no need to expose the CALIBRATION register
+>   * to the user for now. But we need to reset this register
+> - * if the user updates RShunt after driver init, e.g upon
+> - * reading an EEPROM/Probe-type value.
+> + * if the user updates RShunt or max expected current after driver
+> + * init, e.g upon reading an EEPROM/Probe-type value.
+>   */
+>  static int ina2xx_set_calibration(struct ina2xx_chip_info *chip)
+>  {
+> +	unsigned int rshunt = DIV_ROUND_CLOSEST(chip->shunt_resistor, 1000);
+>  	u16 regval = DIV_ROUND_CLOSEST(chip->config->calibration_factor,
+> -				   chip->shunt_resistor);
+> +				     chip->current_lsb * rshunt);
+>  
+>  	return regmap_write(chip->regmap, INA2XX_CALIBRATION, regval);
+>  }
+>  
+> +/*
+> + * Set max_expected_current (mA) and calculate current_lsb (uA),
+> + * according to equation 2 in ina226 datasheet. Power LSB is calculated
+> + * by multiplying Current LSB by a given factor, which may vary depending
+> + * on ina version.
+> + */
+> +static int set_max_expected_current(struct ina2xx_chip_info *chip,
+> +				    unsigned int val)
+> +{
+> +	if (val <= 0 || val > chip->config->calibration_factor)
+> +		return -EINVAL;
+> +
+> +	chip->max_expected_current = val;
+> +	chip->current_lsb = DIV_ROUND_CLOSEST(chip->max_expected_current * 1000,
+> +					      1 << 15);
+> +	chip->power_lsb = chip->current_lsb * chip->config->power_lsb_factor;
+> +
+> +	return 0;
+> +}
+> +
+>  static int set_shunt_resistor(struct ina2xx_chip_info *chip, unsigned int val)
+>  {
+> +
+>  	if (val <= 0 || val > chip->config->calibration_factor)
+>  		return -EINVAL;
+>  
+> @@ -493,6 +521,39 @@ static ssize_t ina2xx_shunt_resistor_store(struct device *dev,
+>  	return len;
+>  }
+>  
+> +static ssize_t ina2xx_max_expected_current_show(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  char *buf)
+> +{
+> +	struct ina2xx_chip_info *chip = iio_priv(dev_to_iio_dev(dev));
+> +
+> +	return sprintf(buf, "%d\n", chip->max_expected_current);
+> +}
+> +
+> +static ssize_t ina2xx_max_expected_current_store(struct device *dev,
+> +					   struct device_attribute *attr,
+> +					   const char *buf, size_t len)
+> +{
+> +	struct ina2xx_chip_info *chip = iio_priv(dev_to_iio_dev(dev));
+> +	unsigned long val;
+> +	int ret;
+> +
+> +	ret = kstrtoul((const char *) buf, 10, &val);
+
+Odd bit of casting given that's what it already is...
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = set_max_expected_current(chip, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Update the Calibration register */
+> +	ret = ina2xx_set_calibration(chip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return len;
+> +}
+> +
+>  #define INA219_CHAN(_type, _index, _address) { \
+>  	.type = (_type), \
+>  	.address = (_address), \
+> @@ -755,10 +816,15 @@ static IIO_DEVICE_ATTR(in_shunt_resistor, S_IRUGO | S_IWUSR,
+>  		       ina2xx_shunt_resistor_show,
+>  		       ina2xx_shunt_resistor_store, 0);
+>  
+> +static IIO_DEVICE_ATTR(in_max_expected_current, S_IRUGO | S_IWUSR,
+> +		       ina2xx_max_expected_current_show,
+> +		       ina2xx_max_expected_current_store, 0);
+> +
+>  static struct attribute *ina219_attributes[] = {
+>  	&iio_dev_attr_in_allow_async_readout.dev_attr.attr,
+>  	&iio_const_attr_ina219_integration_time_available.dev_attr.attr,
+>  	&iio_dev_attr_in_shunt_resistor.dev_attr.attr,
+> +	&iio_dev_attr_in_max_expected_current.dev_attr.attr,
+>  	NULL,
+>  };
+>  
+> @@ -766,6 +832,7 @@ static struct attribute *ina226_attributes[] = {
+>  	&iio_dev_attr_in_allow_async_readout.dev_attr.attr,
+>  	&iio_const_attr_ina226_integration_time_available.dev_attr.attr,
+>  	&iio_dev_attr_in_shunt_resistor.dev_attr.attr,
+> +	&iio_dev_attr_in_max_expected_current.dev_attr.attr,
+>  	NULL,
+>  };
+>  
+> @@ -851,6 +918,21 @@ static int ina2xx_probe(struct i2c_client *client,
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (of_property_read_u32(client->dev.of_node,
+> +				  "max-expected-current", &val) < 0) {
+> +		struct ina2xx_platform_data *pdata =
+> +		    dev_get_platdata(&client->dev);
+> +
+> +		if (pdata && pdata->max_mA != 0)
+> +			val = pdata->max_mA;
+> +		else
+> +			val = INA2XX_MAX_EXPECTED_A_DEFAULT;
+> +	}
+> +
+> +	ret = set_max_expected_current(chip, val);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Patch the current config register with default. */
+>  	val = chip->config->config_default;
+>  
+> diff --git a/include/linux/platform_data/ina2xx.h b/include/linux/platform_data/ina2xx.h
+> index 9abc0ca..f02b1d8 100644
+> --- a/include/linux/platform_data/ina2xx.h
+> +++ b/include/linux/platform_data/ina2xx.h
+> @@ -13,7 +13,9 @@
+>  /**
+>   * struct ina2xx_platform_data - ina2xx info
+>   * @shunt_uohms		shunt resistance in microohms
+> + * @max_mA		max expected current in mA
+>   */
+>  struct ina2xx_platform_data {
+>  	long shunt_uohms;
+> +	int max_mA;
+>  };
 
