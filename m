@@ -1,83 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:36283 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751437AbdJATqP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Oct 2017 15:46:15 -0400
-Date: Sun, 1 Oct 2017 12:46:13 -0700
+Received: from mail-pf0-f194.google.com ([209.85.192.194]:34831 "EHLO
+        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750965AbdJAOQ0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 1 Oct 2017 10:16:26 -0400
+Date: Sun, 1 Oct 2017 07:16:25 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: hotran <hotran@apm.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Itaru Kitayama <itaru.kitayama@riken.jp>, lho@apm.com,
-        kdinh@apm.com, patches@apm.com
-Subject: Re: [2/2] hwmon: xgene: Support PCC shared memory in IO region
-Message-ID: <20171001194613.GA808@roeck-us.net>
-References: <1506014230-13933-3-git-send-email-hotran@apm.com>
- <20171001143132.GA1237@roeck-us.net>
+To: Colin Ian King <colin.king@canonical.com>
+Cc: Rudolf Marek <r.marek@assembler.cz>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: hwmon: (w83793): make const array watchdog_minors static,
+ reduces object code size
+Message-ID: <20171001141625.GA32284@roeck-us.net>
+References: <20170922143620.13780-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20171001143132.GA1237@roeck-us.net>
+In-Reply-To: <20170922143620.13780-1-colin.king@canonical.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Oct 01, 2017 at 07:31:32AM -0700, Guenter Roeck wrote:
-> On Thu, Sep 21, 2017 at 10:17:10AM -0700, hotran wrote:
-> > As the PCC shared memory could be in IO region which doesn't
-> > support caching, this patch simply uses ioremap() for IO region.
-> > 
-> > Signed-off-by: Hoan Tran <hotran@apm.com>
+On Fri, Sep 22, 2017 at 03:36:20PM +0100, Colin Ian King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Applied to hwmon-next.
+> Don't populate const array watchdog_minors on the stack, instead make it
+> static. Makes the object code smaller by over 350 bytes:
 > 
-Turns out this doesn't work. memblock_is_memory() is not exported and marked
-__init_memblock, and thus not qavailable for modules. Dropped.
+> Before:
+>    text	   data	    bss	    dec	    hex	filename
+>   48019	  38144	    256	  86419	  15193	drivers/hwmon/w83793.o
+> 
+> After:
+>    text	   data	    bss	    dec	    hex	filename
+>   47574	  38232	    256	  86062	  1502e	drivers/hwmon/w83793.o
+> 
+> (gcc 6.3.0, x86-64)
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
+Applied to hwmon-next.
+
+Thanks,
 Guenter
 
-> Thanks,
-> Guenter
+> ---
+>  drivers/hwmon/w83793.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> > ---
-> >  drivers/hwmon/xgene-hwmon.c | 14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-> > index 5cd327e..2dac1ed 100644
-> > --- a/drivers/hwmon/xgene-hwmon.c
-> > +++ b/drivers/hwmon/xgene-hwmon.c
-> > @@ -32,6 +32,7 @@
-> >  #include <linux/kfifo.h>
-> >  #include <linux/mailbox_controller.h>
-> >  #include <linux/mailbox_client.h>
-> > +#include <linux/memblock.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/platform_device.h>
-> > @@ -135,6 +136,14 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
-> >  	return ret;
-> >  }
-> >  
-> > +static void __iomem *pcc_ioremap(phys_addr_t phys, size_t size)
-> > +{
-> > +	if (!memblock_is_memory(phys))
-> > +		return ioremap(phys, size);
-> > +
-> > +	return memremap(phys, size, MEMREMAP_WB);
-> > +}
-> > +
-> >  static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
-> >  {
-> >  	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
-> > @@ -690,9 +699,8 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
-> >  		 */
-> >  		ctx->comm_base_addr = cppc_ss->base_address;
-> >  		if (ctx->comm_base_addr) {
-> > -			ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
-> > -							cppc_ss->length,
-> > -							MEMREMAP_WB);
-> > +			ctx->pcc_comm_addr = pcc_ioremap(ctx->comm_base_addr,
-> > +							 cppc_ss->length);
-> >  		} else {
-> >  			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-> >  			rc = -ENODEV;
+> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+> index dab5c515d5a3..5ba9d9f1daa1 100644
+> --- a/drivers/hwmon/w83793.c
+> +++ b/drivers/hwmon/w83793.c
+> @@ -1676,7 +1676,9 @@ static int w83793_probe(struct i2c_client *client,
+>  			const struct i2c_device_id *id)
+>  {
+>  	struct device *dev = &client->dev;
+> -	const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
+> +	static const int watchdog_minors[] = {
+> +		WATCHDOG_MINOR, 212, 213, 214, 215
+> +	};
+>  	struct w83793_data *data;
+>  	int i, tmp, val, err;
+>  	int files_fan = ARRAY_SIZE(w83793_left_fan) / 7;
