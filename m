@@ -1,28 +1,29 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:33334 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:39067 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751027AbdJHPDT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 Oct 2017 11:03:19 -0400
-Date: Sun, 8 Oct 2017 07:26:37 -0700
+        with ESMTP id S1751802AbdJHO2b (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 Oct 2017 10:28:31 -0400
+Date: Sun, 8 Oct 2017 07:28:29 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Nishanth Menon <nm@ti.com>,
         Simon Guinot <simon.guinot@sequanux.org>,
         Jamie Lentin <jm@lentin.co.uk>
-Subject: Re: [2/9] hwmon: gpio-fan: Use local variable pointers
-Message-ID: <20171008142637.GA32017@roeck-us.net>
-References: <20170925230911.20824-3-linus.walleij@linaro.org>
+Subject: Re: [4/9] hwmon: gpio-fan: Send around device pointer
+Message-ID: <20171008142829.GA13577@roeck-us.net>
+References: <20170925230911.20824-5-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20170925230911.20824-3-linus.walleij@linaro.org>
+In-Reply-To: <20170925230911.20824-5-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 26, 2017 at 01:09:04AM +0200, Linus Walleij wrote:
-> Create local struct device *dev and device_node *np pointers to
-> make the code easier to read.
+On Tue, Sep 26, 2017 at 01:09:06AM +0200, Linus Walleij wrote:
+> The driver is storing the struct platform_device *pdev pointer
+> but what it is really using and want to pass around is a
+> struct device *dev pointer.
 > 
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
@@ -32,65 +33,87 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/gpio-fan.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+>  drivers/hwmon/gpio-fan.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 > 
 > diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> index 9c355b9d31c5..f29cee9398ef 100644
+> index cfa8d9b578dd..ad7d8fdf4f81 100644
 > --- a/drivers/hwmon/gpio-fan.c
 > +++ b/drivers/hwmon/gpio-fan.c
-> @@ -541,22 +541,24 @@ static int gpio_fan_probe(struct platform_device *pdev)
+> @@ -58,7 +58,7 @@ struct gpio_fan_platform_data {
+>  };
+>  
+>  struct gpio_fan_data {
+> -	struct platform_device	*pdev;
+> +	struct device		*dev;
+>  	struct device		*hwmon_dev;
+>  	/* Cooling device if any */
+>  	struct thermal_cooling_device *cdev;
+> @@ -85,8 +85,8 @@ static void fan_alarm_notify(struct work_struct *ws)
+>  	struct gpio_fan_data *fan_data =
+>  		container_of(ws, struct gpio_fan_data, alarm_work);
+>  
+> -	sysfs_notify(&fan_data->pdev->dev.kobj, NULL, "fan1_alarm");
+> -	kobject_uevent(&fan_data->pdev->dev.kobj, KOBJ_CHANGE);
+> +	sysfs_notify(&fan_data->dev->kobj, NULL, "fan1_alarm");
+> +	kobject_uevent(&fan_data->dev->kobj, KOBJ_CHANGE);
+>  }
+>  
+>  static irqreturn_t fan_alarm_irq_handler(int irq, void *dev_id)
+> @@ -118,11 +118,11 @@ static int fan_alarm_init(struct gpio_fan_data *fan_data,
 >  {
 >  	int err;
->  	struct gpio_fan_data *fan_data;
-> -	struct gpio_fan_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct gpio_fan_platform_data *pdata = dev_get_platdata(dev);
+>  	int alarm_irq;
+> -	struct platform_device *pdev = fan_data->pdev;
+> +	struct device *dev = fan_data->dev;
 >  
-> -	fan_data = devm_kzalloc(&pdev->dev, sizeof(struct gpio_fan_data),
-> +	fan_data = devm_kzalloc(dev, sizeof(struct gpio_fan_data),
->  				GFP_KERNEL);
->  	if (!fan_data)
->  		return -ENOMEM;
+>  	fan_data->alarm = alarm;
 >  
->  #ifdef CONFIG_OF_GPIO
->  	if (!pdata) {
-> -		pdata = devm_kzalloc(&pdev->dev,
-> +		pdata = devm_kzalloc(dev,
->  					sizeof(struct gpio_fan_platform_data),
->  					GFP_KERNEL);
->  		if (!pdata)
->  			return -ENOMEM;
+> -	err = devm_gpio_request(&pdev->dev, alarm->gpio, "GPIO fan alarm");
+> +	err = devm_gpio_request(dev, alarm->gpio, "GPIO fan alarm");
+>  	if (err)
+>  		return err;
 >  
-> -		err = gpio_fan_get_of_pdata(&pdev->dev, pdata);
-> +		err = gpio_fan_get_of_pdata(dev, pdata);
+> @@ -140,7 +140,7 @@ static int fan_alarm_init(struct gpio_fan_data *fan_data,
+>  
+>  	INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
+>  	irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
+> -	err = devm_request_irq(&pdev->dev, alarm_irq, fan_alarm_irq_handler,
+> +	err = devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
+>  			       IRQF_SHARED, "GPIO fan alarm", fan_data);
+>  	return err;
+>  }
+> @@ -191,7 +191,7 @@ static int get_fan_speed_index(struct gpio_fan_data *fan_data)
+>  		if (fan_data->speed[i].ctrl_val == ctrl_val)
+>  			return i;
+>  
+> -	dev_warn(&fan_data->pdev->dev,
+> +	dev_warn(fan_data->dev,
+>  		 "missing speed array entry for GPIO value 0x%x\n", ctrl_val);
+>  
+>  	return -ENODEV;
+> @@ -382,13 +382,13 @@ static const struct attribute_group *gpio_fan_groups[] = {
+>  static int fan_ctrl_init(struct gpio_fan_data *fan_data,
+>  			 struct gpio_fan_platform_data *pdata)
+>  {
+> -	struct platform_device *pdev = fan_data->pdev;
+> +	struct device *dev = fan_data->dev;
+>  	int num_ctrl = pdata->num_ctrl;
+>  	unsigned *ctrl = pdata->ctrl;
+>  	int i, err;
+>  
+>  	for (i = 0; i < num_ctrl; i++) {
+> -		err = devm_gpio_request(&pdev->dev, ctrl[i],
+> +		err = devm_gpio_request(dev, ctrl[i],
+>  					"GPIO fan control");
 >  		if (err)
 >  			return err;
->  	}
-> @@ -587,14 +589,14 @@ static int gpio_fan_probe(struct platform_device *pdev)
->  
->  	/* Make this driver part of hwmon class. */
->  	fan_data->hwmon_dev =
-> -		devm_hwmon_device_register_with_groups(&pdev->dev,
-> +		devm_hwmon_device_register_with_groups(dev,
->  						       "gpio_fan", fan_data,
->  						       gpio_fan_groups);
->  	if (IS_ERR(fan_data->hwmon_dev))
->  		return PTR_ERR(fan_data->hwmon_dev);
->  #ifdef CONFIG_OF_GPIO
->  	/* Optional cooling device register for Device tree platforms */
-> -	fan_data->cdev = thermal_of_cooling_device_register(pdev->dev.of_node,
-> +	fan_data->cdev = thermal_of_cooling_device_register(np,
->  							    "gpio-fan",
->  							    fan_data,
->  							    &gpio_fan_cool_ops);
-> @@ -604,7 +606,7 @@ static int gpio_fan_probe(struct platform_device *pdev)
->  							 &gpio_fan_cool_ops);
+> @@ -588,7 +588,7 @@ static int gpio_fan_probe(struct platform_device *pdev)
+>  		return -EINVAL;
 >  #endif /* CONFIG_OF_GPIO */
 >  
-> -	dev_info(&pdev->dev, "GPIO fan initialized\n");
-> +	dev_info(dev, "GPIO fan initialized\n");
+> -	fan_data->pdev = pdev;
+> +	fan_data->dev = dev;
+>  	platform_set_drvdata(pdev, fan_data);
+>  	mutex_init(&fan_data->lock);
 >  
->  	return 0;
->  }
