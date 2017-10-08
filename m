@@ -1,20 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f68.google.com ([209.85.218.68]:34521 "EHLO
-        mail-oi0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751421AbdJEUbZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Oct 2017 16:31:25 -0400
-Date: Thu, 5 Oct 2017 15:31:23 -0500
-From: Rob Herring <robh@kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42031 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751027AbdJHPDS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 Oct 2017 11:03:18 -0400
+Date: Sun, 8 Oct 2017 07:21:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Nishanth Menon <nm@ti.com>,
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Nishanth Menon <nm@ti.com>,
         Simon Guinot <simon.guinot@sequanux.org>,
         Jamie Lentin <jm@lentin.co.uk>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/9] hwmon: gpio-fan: Move DT bindings to the right place
-Message-ID: <20171005203123.3ks7umid7gha3io2@rob-hp-laptop>
-References: <20170925230911.20824-1-linus.walleij@linaro.org>
- <20170925230911.20824-2-linus.walleij@linaro.org>
+Subject: Re: [1/9] hwmon: gpio-fan: Move DT bindings to the right place
+Message-ID: <20171008142141.GA13877@roeck-us.net>
+References: <20170925230911.20824-2-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -29,10 +27,19 @@ On Tue, Sep 26, 2017 at 01:09:03AM +0200, Linus Walleij wrote:
 > 
 > Cc: devicetree@vger.kernel.org
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
 >  Documentation/devicetree/bindings/{gpio => hwmon}/gpio-fan.txt | 0
 >  1 file changed, 0 insertions(+), 0 deletions(-)
 >  rename Documentation/devicetree/bindings/{gpio => hwmon}/gpio-fan.txt (100%)
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
+> similarity index 100%
+> rename from Documentation/devicetree/bindings/gpio/gpio-fan.txt
+> rename to Documentation/devicetree/bindings/hwmon/gpio-fan.txt
