@@ -1,232 +1,135 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:47390 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753280AbdJIBqN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 Oct 2017 21:46:13 -0400
-Date: Sun, 8 Oct 2017 18:46:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [9/9,v2] hwmon: gpio-fan: Convert to use GPIO descriptors
-Message-ID: <20171009014610.GA30782@roeck-us.net>
-References: <20171008231432.6585-1-linus.walleij@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20171008231432.6585-1-linus.walleij@linaro.org>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <hotran@apm.com>
+Return-path: <hotran@apm.com>
+From: Hoan Tran <hotran@apm.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lho@apm.com,
+	kdinh@apm.com,
+	patches@apm.com,
+	Hoan Tran <hotran@apm.com>
+Subject: [PATCH v2] hwmon: xgene: Support hwmon v2
+Date: Tue, 10 Oct 2017 17:10:31 -0700
+Message-Id: <1507680631-4472-1-git-send-email-hotran@apm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Oct 09, 2017 at 01:14:32AM +0200, Linus Walleij wrote:
-> This converts the GPIO fan driver to use GPIO descriptors. This way
-> we avoid indirection since the gpiolib anyway just use descriptors
-> inside, and we also get rid of explicit polarity handling: the
-> descriptors internally knows if the line is active high or active
-> low.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+This patch supports xgene-hwmon v2 which uses the non-cachable memory
+as the PCC shared memory.
 
-Applied to hwmon-next.
+Signed-off-by: Hoan Tran <hotran@apm.com>
+---
 
-Thanks,
-Guenter
+v2
+ - Map PCC shared mem by ioremap() in case hwmon is v2
 
-> ---
-> ChangeLog v1->v2:
-> - Fix the polarity of the sysfs alarm file: it does not need to
->   be inverted any more.
-> - Check returned alarm IRQ for <= 0 as 0 is NO_IRQ and not a
->   valid IRQ in Linux.
-> ---
->  drivers/hwmon/gpio-fan.c | 87 +++++++++++++++++-------------------------------
->  1 file changed, 31 insertions(+), 56 deletions(-)
-> 
-> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> index 18b3c7c27d36..8b57119e841e 100644
-> --- a/drivers/hwmon/gpio-fan.c
-> +++ b/drivers/hwmon/gpio-fan.c
-> @@ -29,10 +29,9 @@
->  #include <linux/err.h>
->  #include <linux/mutex.h>
->  #include <linux/hwmon.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/thermal.h>
->  
->  struct gpio_fan_speed {
-> @@ -47,7 +46,7 @@ struct gpio_fan_data {
->  	struct thermal_cooling_device *cdev;
->  	struct mutex		lock; /* lock GPIOs operations. */
->  	int			num_gpios;
-> -	unsigned int		*gpios;
-> +	struct gpio_desc	**gpios;
->  	int			num_speed;
->  	struct gpio_fan_speed	*speed;
->  	int			speed_index;
-> @@ -55,8 +54,7 @@ struct gpio_fan_data {
->  	int			resume_speed;
->  #endif
->  	bool			pwm_enable;
-> -	unsigned int		alarm_gpio;
-> -	unsigned int		alarm_gpio_active_low;
-> +	struct gpio_desc	*alarm_gpio;
->  	struct work_struct	alarm_work;
->  };
->  
-> @@ -86,43 +84,29 @@ static ssize_t fan1_alarm_show(struct device *dev,
->  			       struct device_attribute *attr, char *buf)
->  {
->  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-> -	int value = gpio_get_value_cansleep(fan_data->alarm_gpio);
->  
-> -	if (fan_data->alarm_gpio_active_low)
-> -		value = !value;
-> -
-> -	return sprintf(buf, "%d\n", value);
-> +	return sprintf(buf, "%d\n", gpiod_get_value_cansleep(fan_data->alarm_gpio));
->  }
->  
->  static DEVICE_ATTR_RO(fan1_alarm);
->  
->  static int fan_alarm_init(struct gpio_fan_data *fan_data)
->  {
-> -	int err;
->  	int alarm_irq;
->  	struct device *dev = fan_data->dev;
->  
-> -	err = devm_gpio_request(dev, fan_data->alarm_gpio, "GPIO fan alarm");
-> -	if (err)
-> -		return err;
-> -
-> -	err = gpio_direction_input(fan_data->alarm_gpio);
-> -	if (err)
-> -		return err;
-> -
->  	/*
->  	 * If the alarm GPIO don't support interrupts, just leave
->  	 * without initializing the fail notification support.
->  	 */
-> -	alarm_irq = gpio_to_irq(fan_data->alarm_gpio);
-> -	if (alarm_irq < 0)
-> +	alarm_irq = gpiod_to_irq(fan_data->alarm_gpio);
-> +	if (alarm_irq <= 0)
->  		return 0;
->  
->  	INIT_WORK(&fan_data->alarm_work, fan_alarm_notify);
->  	irq_set_irq_type(alarm_irq, IRQ_TYPE_EDGE_BOTH);
-> -	err = devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
-> -			       IRQF_SHARED, "GPIO fan alarm", fan_data);
-> -	return err;
-> +	return devm_request_irq(dev, alarm_irq, fan_alarm_irq_handler,
-> +				IRQF_SHARED, "GPIO fan alarm", fan_data);
->  }
->  
->  /*
-> @@ -135,8 +119,8 @@ static void __set_fan_ctrl(struct gpio_fan_data *fan_data, int ctrl_val)
->  	int i;
->  
->  	for (i = 0; i < fan_data->num_gpios; i++)
-> -		gpio_set_value_cansleep(fan_data->gpios[i],
-> -					(ctrl_val >> i) & 1);
-> +		gpiod_set_value_cansleep(fan_data->gpios[i],
-> +					 (ctrl_val >> i) & 1);
->  }
->  
->  static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
-> @@ -147,7 +131,7 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
->  	for (i = 0; i < fan_data->num_gpios; i++) {
->  		int value;
->  
-> -		value = gpio_get_value_cansleep(fan_data->gpios[i]);
-> +		value = gpiod_get_value_cansleep(fan_data->gpios[i]);
->  		ctrl_val |= (value << i);
->  	}
->  	return ctrl_val;
-> @@ -362,19 +346,19 @@ static const struct attribute_group *gpio_fan_groups[] = {
->  
->  static int fan_ctrl_init(struct gpio_fan_data *fan_data)
->  {
-> -	struct device *dev = fan_data->dev;
->  	int num_gpios = fan_data->num_gpios;
-> -	unsigned int *gpios = fan_data->gpios;
-> +	struct gpio_desc **gpios = fan_data->gpios;
->  	int i, err;
->  
->  	for (i = 0; i < num_gpios; i++) {
-> -		err = devm_gpio_request(dev, gpios[i],
-> -					"GPIO fan control");
-> -		if (err)
-> -			return err;
-> -
-> -		err = gpio_direction_output(gpios[i],
-> -					    gpio_get_value_cansleep(gpios[i]));
-> +		/*
-> +		 * The GPIO descriptors were retrieved with GPIOD_ASIS so here
-> +		 * we set the GPIO into output mode, carefully preserving the
-> +		 * current value by setting it to whatever it is already set
-> +		 * (no surprise changes in default fan speed).
-> +		 */
-> +		err = gpiod_direction_output(gpios[i],
-> +					gpiod_get_value_cansleep(gpios[i]));
->  		if (err)
->  			return err;
->  	}
-> @@ -437,43 +421,34 @@ static int gpio_fan_get_of_data(struct gpio_fan_data *fan_data)
->  	struct gpio_fan_speed *speed;
->  	struct device *dev = fan_data->dev;
->  	struct device_node *np = dev->of_node;
-> -	unsigned int *gpios;
-> +	struct gpio_desc **gpios;
->  	unsigned i;
->  	u32 u;
->  	struct property *prop;
->  	const __be32 *p;
->  
->  	/* Alarm GPIO if one exists */
-> -	if (of_gpio_named_count(np, "alarm-gpios") > 0) {
-> -		int val;
-> -		enum of_gpio_flags flags;
-> -
-> -		val = of_get_named_gpio_flags(np, "alarm-gpios", 0, &flags);
-> -		if (val < 0)
-> -			return val;
-> -		fan_data->alarm_gpio = val;
-> -		fan_data->alarm_gpio_active_low = flags & OF_GPIO_ACTIVE_LOW;
-> -	}
-> +	fan_data->alarm_gpio = devm_gpiod_get_optional(dev, "alarm", GPIOD_IN);
-> +	if (IS_ERR(fan_data->alarm_gpio))
-> +		return PTR_ERR(fan_data->alarm_gpio);
->  
->  	/* Fill GPIO pin array */
-> -	fan_data->num_gpios = of_gpio_count(np);
-> +	fan_data->num_gpios = gpiod_count(dev, NULL);
->  	if (fan_data->num_gpios <= 0) {
->  		if (fan_data->alarm_gpio)
->  			return 0;
->  		dev_err(dev, "DT properties empty / missing");
->  		return -ENODEV;
->  	}
-> -	gpios = devm_kzalloc(dev, fan_data->num_gpios * sizeof(unsigned int),
-> -			    GFP_KERNEL);
-> +	gpios = devm_kzalloc(dev,
-> +			     fan_data->num_gpios * sizeof(struct gpio_desc *),
-> +			     GFP_KERNEL);
->  	if (!gpios)
->  		return -ENOMEM;
->  	for (i = 0; i < fan_data->num_gpios; i++) {
-> -		int val;
-> -
-> -		val = of_get_gpio(np, i);
-> -		if (val < 0)
-> -			return val;
-> -		gpios[i] = val;
-> +		gpios[i] = devm_gpiod_get_index(dev, NULL, i, GPIOD_ASIS);
-> +		if (IS_ERR(gpios[i]))
-> +			return PTR_ERR(gpios[i]);
->  	}
->  	fan_data->gpios = gpios;
->  
+ drivers/hwmon/xgene-hwmon.c | 52 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 9c0dbb8..52be7cd 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -91,6 +91,11 @@
+ #define to_xgene_hwmon_dev(cl)		\
+ 	container_of(cl, struct xgene_hwmon_dev, mbox_client)
+ 
++enum xgene_hwmon_version {
++	XGENE_HWMON_V1 = 0,
++	XGENE_HWMON_V2 = 1,
++};
++
+ struct slimpro_resp_msg {
+ 	u32 msg;
+ 	u32 param1;
+@@ -99,6 +104,7 @@ struct slimpro_resp_msg {
+ 
+ struct xgene_hwmon_dev {
+ 	struct device		*dev;
++	int			version;
+ 	struct mbox_chan	*mbox_chan;
+ 	struct mbox_client	mbox_client;
+ 	int			mbox_idx;
+@@ -135,6 +141,15 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
+ 	return ret;
+ }
+ 
++static void *xgene_pcc_ioremap(struct xgene_hwmon_dev *ctx,
++			       phys_addr_t phys, size_t size)
++{
++	if (ctx->version == XGENE_HWMON_V2)
++		return (void __force *)ioremap(phys, size);
++
++	return memremap(phys, size, MEMREMAP_WB);
++}
++
+ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
+ {
+ 	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
+@@ -609,6 +624,15 @@ static void xgene_hwmon_tx_done(struct mbox_client *cl, void *msg, int ret)
+ 	}
+ }
+ 
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
++	{"APMC0D29", XGENE_HWMON_V1},
++	{"APMC0D8A", XGENE_HWMON_V2},
++	{},
++};
++MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
++#endif
++
+ static int xgene_hwmon_probe(struct platform_device *pdev)
+ {
+ 	struct xgene_hwmon_dev *ctx;
+@@ -623,6 +647,20 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, ctx);
+ 	cl = &ctx->mbox_client;
+ 
++#ifdef CONFIG_ACPI
++	ctx->version = -EINVAL;
++	if (ACPI_COMPANION(&pdev->dev)) {
++		const struct acpi_device_id *acpi_id;
++
++		acpi_id = acpi_match_device(xgene_hwmon_acpi_match, &pdev->dev);
++		if (acpi_id)
++			ctx->version = (int)acpi_id->driver_data;
++	}
++
++	if (ctx->version < 0)
++		return -ENODEV;
++#endif
++
+ 	spin_lock_init(&ctx->kfifo_lock);
+ 	mutex_init(&ctx->rd_mutex);
+ 
+@@ -690,9 +728,9 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 		 */
+ 		ctx->comm_base_addr = cppc_ss->base_address;
+ 		if (ctx->comm_base_addr) {
+-			ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
+-							cppc_ss->length,
+-							MEMREMAP_WB);
++			ctx->pcc_comm_addr = xgene_pcc_ioremap(ctx,
++						ctx->comm_base_addr,
++						cppc_ss->length);
+ 		} else {
+ 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
+ 			rc = -ENODEV;
+@@ -758,14 +796,6 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_ACPI
+-static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
+-	{"APMC0D29", 0},
+-	{},
+-};
+-MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
+-#endif
+-
+ static const struct of_device_id xgene_hwmon_of_match[] = {
+ 	{.compatible = "apm,xgene-slimpro-hwmon"},
+ 	{}
+-- 
+1.9.1
