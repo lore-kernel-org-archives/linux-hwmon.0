@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:45128 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1758338AbdJMMva (ORCPT
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:47780 "EHLO
+        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753258AbdJMNui (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Oct 2017 08:51:30 -0400
+        Fri, 13 Oct 2017 09:50:38 -0400
 Subject: Re: [PATCH 1/2] hwmon: (jc42) optionally try to disable the SMBUS
  timeout
 To: Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
@@ -18,8 +18,8 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 References: <20171013092705.7038-1-peda@axentia.se>
  <20171013092705.7038-2-peda@axentia.se>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <3aae0c68-f001-50fa-8db7-3090978cf16d@roeck-us.net>
-Date: Fri, 13 Oct 2017 05:51:27 -0700
+Message-ID: <554a4494-14c9-7743-898c-5f83e3de227d@roeck-us.net>
+Date: Fri, 13 Oct 2017 06:50:35 -0700
 MIME-Version: 1.0
 In-Reply-To: <20171013092705.7038-2-peda@axentia.se>
 Content-Type: text/plain; charset=utf-8; format=flowed
@@ -81,10 +81,31 @@ On 10/13/2017 02:27 AM, Peter Rosin wrote:
 >   
 > +/* SMBUS register */
 > +#define SMBUS_STMOUT		BIT(7)  /* SMBus time-out, active low */
+> +
+>   /* Supported chips */
+>   
+>   /* Analog Devices */
+> @@ -476,6 +480,22 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>   
+>   	data->extended = !!(cap & JC42_CAP_RANGE);
+>   
+> +	if (device_property_read_bool(dev, "smbus-timeout-disable")) {
+> +		int smbus;
+> +
+> +		/*
+> +		 * Not all chips support this register, but from a
+> +		 * quick read of various datasheets no chip appears
+> +		 * incompatible with the below attempt to disable
+> +		 * the timeout. And the whole thing is opt-in...
+> +		 */
+> +		smbus = i2c_smbus_read_word_swapped(client, JC42_REG_SMBUS);
+> +		if (smbus < 0)
+> +			return smbus;
+> +		i2c_smbus_write_word_swapped(client, JC42_REG_SMBUS,
+> +					     smbus | SMBUS_STMOUT);
 
-Requires bitops.h.
+Looking into the SE97 datasheet, the bit is only writable if the alarm bits
+are not locked. Should we take this into account and unlock the alarm bits
+if necessary ?
 
-Otherwise looks good, though we'll have to wait for Rob's ack.
-
-Thanks,
 Guenter
