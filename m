@@ -1,11 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:50202 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751081AbdJMUfc (ORCPT
+Received: from mail-pg0-f65.google.com ([74.125.83.65]:50466 "EHLO
+        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753192AbdJMXos (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Oct 2017 16:35:32 -0400
-Date: Fri, 13 Oct 2017 13:35:27 -0700
+        Fri, 13 Oct 2017 19:44:48 -0400
+Date: Fri, 13 Oct 2017 16:44:43 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Peter Rosin <peda@axentia.se>
 Cc: linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
@@ -17,17 +17,21 @@ Cc: linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH 1/2] hwmon: (jc42) optionally try to disable the SMBUS
  timeout
-Message-ID: <20171013203527.GA14166@roeck-us.net>
+Message-ID: <20171013234443.GA31590@roeck-us.net>
 References: <20171013092705.7038-1-peda@axentia.se>
  <20171013092705.7038-2-peda@axentia.se>
  <554a4494-14c9-7743-898c-5f83e3de227d@roeck-us.net>
  <2d1bf447-489f-9e15-3b1e-d2f4a2c1dcfe@axentia.se>
+ <20171013203527.GA14166@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d1bf447-489f-9e15-3b1e-d2f4a2c1dcfe@axentia.se>
+In-Reply-To: <20171013203527.GA14166@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
+
+[ resending - looks like my primary email provider ended up on a spam list
+  and almost all of my e-mail gets dropped ]
 
 On Fri, Oct 13, 2017 at 04:26:57PM +0200, Peter Rosin wrote:
 > On 2017-10-13 15:50, Guenter Roeck wrote:
