@@ -1,50 +1,84 @@
-Return-Path: <miquel.raynal@free-electrons.com>
-Return-path: <miquel.raynal@free-electrons.com>
-From: Miquel Raynal <miquel.raynal@free-electrons.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-	Antoine Tenart <antoine.tenart@free-electrons.com>,
-	Gregory Clement <gregory.clement@free-electrons.com>,
-	Nadav Haklai <nadavh@marvell.com>,
-	Miquel Raynal <miquel.raynal@free-electrons.com>
-Subject: [PATCH] hwmon: (gpio-fan) Fix null pointer dereference at probe
-Date: Mon, 16 Oct 2017 14:12:10 +0200
-Message-Id: <20171016121210.25556-1-miquel.raynal@free-electrons.com>
+Return-Path: <robherring2@gmail.com>
+Return-path: <robherring2@gmail.com>
+Date: Tue, 17 Oct 2017 15:36:31 -0500
+From: Rob Herring <robh@kernel.org>
+To: Maciej Purski <m.purski@samsung.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-iio@vger.kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>, Kukjin Kim <kgene@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Hartmut Knaack <knaack.h@gmx.de>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v2 3/4] dt-bindings: hwmon: Add
+ ti-max-expected-current-microamp property to ina2xx
+Message-ID: <20171017203631.xaut7o3szaiucnqh@rob-hp-laptop>
+References: <1507811765-31005-1-git-send-email-m.purski@samsung.com>
+ <CGME20171012123635eucas1p1ff9a982db9d541cd0475d44d114ff92a@eucas1p1.samsung.com>
+ <1507811765-31005-4-git-send-email-m.purski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1507811765-31005-4-git-send-email-m.purski@samsung.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-A previous commit changed the argument list of gpio_fan_get_of_data(),
-removing the "struct *dev" argument and retrieving it instead from the
-gpio_fan_data structure. The "dev" entry of gpio_fan_data was then
-dereferenced to access the of_node field, leading to a kernel panic
-during the probe as the "dev" entry of the gpio_fan_data structure was
-not filled yet.
+On Thu, Oct 12, 2017 at 02:36:04PM +0200, Maciej Purski wrote:
+> Add optional max expected current property which allows calibrating
+> the ina sensor in order to achieve requested measure scale. Document
+> the changes in Documentation/hwmon/ina2xx.
+> 
+> Signed-off-by: Maciej Purski <m.purski@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ina2xx.txt | 4 +++-
+>  Documentation/hwmon/ina2xx                         | 3 +++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ina2xx.txt b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> index 02af0d9..49ef0be 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> @@ -14,11 +14,13 @@ Optional properties:
+>  
+>  - shunt-resistor
+>  	Shunt resistor value in micro-Ohm
+> -
+> +- ti-max-expected-current-microamp
+> +	Max expected current value in mA
 
-Fix this by setting fan_data->dev before calling gpio_fan_get_of_data().
+ti,max-...
 
-Fixes: 5859d8d30737 ("hwmon: (gpio-fan) Get rid of platform data struct")
-Signed-off-by: Miquel Raynal <miquel.raynal@free-electrons.com>
----
- drivers/hwmon/gpio-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The property name is a bit long. Does "expected" add anything? Is there 
+a max unexpected current?
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 43b697380987..5c9a52599cf6 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -510,11 +510,11 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 	if (!fan_data)
- 		return -ENOMEM;
- 
-+	fan_data->dev = dev;
- 	err = gpio_fan_get_of_data(fan_data);
- 	if (err)
- 		return err;
- 
--	fan_data->dev = dev;
- 	platform_set_drvdata(pdev, fan_data);
- 	mutex_init(&fan_data->lock);
- 
--- 
-2.11.0
+>  Example:
+>  
+>  ina220@44 {
+>  	compatible = "ti,ina220";
+>  	reg = <0x44>;
+>  	shunt-resistor = <1000>;
+> +	ti-max-expected-current-microamp = <3000>;
+>  };
+> diff --git a/Documentation/hwmon/ina2xx b/Documentation/hwmon/ina2xx
+> index cfd31d9..30620e8 100644
+> --- a/Documentation/hwmon/ina2xx
+> +++ b/Documentation/hwmon/ina2xx
+> @@ -55,6 +55,9 @@ The shunt value in micro-ohms can be set via platform data or device tree at
+>  compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
+>  refer to the Documentation/devicetree/bindings/i2c/ina2xx.txt for bindings
+>  if the device tree is used.
+> +The max expected current value in miliamp can be set via platform data
+> +or device tree at compile-time or via currX_max attribute in sysfs
+> +at run-time.
+>  
+>  Additionally ina226 supports update_interval attribute as described in
+>  Documentation/hwmon/sysfs-interface. Internally the interval is the sum of
+> -- 
+> 2.7.4
+> 
