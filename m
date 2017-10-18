@@ -1,208 +1,123 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f47.google.com ([209.85.218.47]:48666 "EHLO
-        mail-oi0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752250AbdJKRXs (ORCPT
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8531 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1758939AbdJRINd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Oct 2017 13:23:48 -0400
-Received: by mail-oi0-f47.google.com with SMTP id m198so4267475oig.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Oct 2017 10:23:47 -0700 (PDT)
-MIME-Version: 1.0
-In-Reply-To: <0961849d-c5e3-36d8-a157-d3a5652fa582@roeck-us.net>
-References: <1507680631-4472-1-git-send-email-hotran@apm.com> <0961849d-c5e3-36d8-a157-d3a5652fa582@roeck-us.net>
-From: Hoan Tran <hotran@apm.com>
-Date: Wed, 11 Oct 2017 10:23:46 -0700
-Message-ID: <CAFHUOYz2UvKKDPXBia_fZjTYEPdw7XuCEjM=C5Zzjj5LtQ=SXw@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: xgene: Support hwmon v2
+        Wed, 18 Oct 2017 04:13:33 -0400
+Date: Wed, 18 Oct 2017 09:12:26 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>, Loc Ho <lho@apm.com>,
-        Khuong Dinh <kdinh@apm.com>, patches <patches@apm.com>
-Content-Type: text/plain; charset="UTF-8"
+CC: Rob Herring <robh@kernel.org>,
+        Maciej Purski <m.purski@samsung.com>,
+        <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        "Bartlomiej Zolnierkiewicz" <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v2 3/4] dt-bindings: hwmon: Add
+ ti-max-expected-current-microamp property to ina2xx
+Message-ID: <20171018091226.000017dd@huawei.com>
+In-Reply-To: <20171017205821.GA8737@roeck-us.net>
+References: <1507811765-31005-1-git-send-email-m.purski@samsung.com>
+        <CGME20171012123635eucas1p1ff9a982db9d541cd0475d44d114ff92a@eucas1p1.samsung.com>
+        <1507811765-31005-4-git-send-email-m.purski@samsung.com>
+        <20171017203631.xaut7o3szaiucnqh@rob-hp-laptop>
+        <20171017205821.GA8737@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+On Tue, 17 Oct 2017 13:58:21 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-On Tue, Oct 10, 2017 at 8:54 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On 10/10/2017 05:10 PM, Hoan Tran wrote:
->>
->> This patch supports xgene-hwmon v2 which uses the non-cachable memory
->> as the PCC shared memory.
->>
->> Signed-off-by: Hoan Tran <hotran@apm.com>
->> ---
->>
->> v2
->>   - Map PCC shared mem by ioremap() in case hwmon is v2
->>
->
-> So I assume you expect me to replace the (already accepted) v1
-> of this patch with this one ?
+> On Tue, Oct 17, 2017 at 03:36:31PM -0500, Rob Herring wrote:
+> > On Thu, Oct 12, 2017 at 02:36:04PM +0200, Maciej Purski wrote:  
+> > > Add optional max expected current property which allows calibrating
+> > > the ina sensor in order to achieve requested measure scale. Document
+> > > the changes in Documentation/hwmon/ina2xx.
+> > > 
+> > > Signed-off-by: Maciej Purski <m.purski@samsung.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/hwmon/ina2xx.txt | 4 +++-
+> > >  Documentation/hwmon/ina2xx                         | 3 +++
+> > >  2 files changed, 6 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/ina2xx.txt b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> > > index 02af0d9..49ef0be 100644
+> > > --- a/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> > > +++ b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+> > > @@ -14,11 +14,13 @@ Optional properties:
+> > >  
+> > >  - shunt-resistor
+> > >  	Shunt resistor value in micro-Ohm
+> > > -
+> > > +- ti-max-expected-current-microamp
+> > > +	Max expected current value in mA  
+> > 
+> > ti,max-...
+> > 
+> > The property name is a bit long. Does "expected" add anything? Is there 
+> > a max unexpected current?
+> >   
+> I am not too happy with it either. To me it suggests that there _can_ be
+> an unexpected current (why specify a max _expected_ current otherwise ?),
+> and that unexpected current won't be measurable and thus not reported
+> because it is ... well, unexpected.
 
-Yes, it's intended to replace the v1.
+After calibration I 'think' this corresponds to the maximum current
+that the device can measure (it's applying scaling inside to make full use
+of available range of the register - there are some arguments that there is
+an optimum value after which we could do better in software).
 
->
-> Assuming the change is needed, I really have to ask: Has this version
-> of the patch been tested ?
+I guess the issue here is that this that we might need to separate the maximum
+current the device is capable of measuring from what it is currently configured
+to measure.  No idea how to describe that :)
 
-Yes
+Jonathan
 
->
->
->>   drivers/hwmon/xgene-hwmon.c | 52
->> +++++++++++++++++++++++++++++++++++----------
->>   1 file changed, 41 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
->> index 9c0dbb8..52be7cd 100644
->> --- a/drivers/hwmon/xgene-hwmon.c
->> +++ b/drivers/hwmon/xgene-hwmon.c
->> @@ -91,6 +91,11 @@
->>   #define to_xgene_hwmon_dev(cl)                \
->>         container_of(cl, struct xgene_hwmon_dev, mbox_client)
->>   +enum xgene_hwmon_version {
->> +       XGENE_HWMON_V1 = 0,
->> +       XGENE_HWMON_V2 = 1,
->> +};
->> +
->>   struct slimpro_resp_msg {
->>         u32 msg;
->>         u32 param1;
->> @@ -99,6 +104,7 @@ struct slimpro_resp_msg {
->>     struct xgene_hwmon_dev {
->>         struct device           *dev;
->> +       int                     version;
->>         struct mbox_chan        *mbox_chan;
->>         struct mbox_client      mbox_client;
->>         int                     mbox_idx;
->> @@ -135,6 +141,15 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16
->> mask)
->>         return ret;
->>   }
->>   +static void *xgene_pcc_ioremap(struct xgene_hwmon_dev *ctx,
->> +                              phys_addr_t phys, size_t size)
->> +{
->> +       if (ctx->version == XGENE_HWMON_V2)
->> +               return (void __force *)ioremap(phys, size);
->> +
->
-> Is that typecast really necessary ?
+> 
+> Guenter
+> 
+> > >  Example:
+> > >  
+> > >  ina220@44 {
+> > >  	compatible = "ti,ina220";
+> > >  	reg = <0x44>;
+> > >  	shunt-resistor = <1000>;
+> > > +	ti-max-expected-current-microamp = <3000>;
+> > >  };
+> > > diff --git a/Documentation/hwmon/ina2xx b/Documentation/hwmon/ina2xx
+> > > index cfd31d9..30620e8 100644
+> > > --- a/Documentation/hwmon/ina2xx
+> > > +++ b/Documentation/hwmon/ina2xx
+> > > @@ -55,6 +55,9 @@ The shunt value in micro-ohms can be set via platform data or device tree at
+> > >  compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
+> > >  refer to the Documentation/devicetree/bindings/i2c/ina2xx.txt for bindings
+> > >  if the device tree is used.
+> > > +The max expected current value in miliamp can be set via platform data
+> > > +or device tree at compile-time or via currX_max attribute in sysfs
+> > > +at run-time.
+> > >  
+> > >  Additionally ina226 supports update_interval attribute as described in
+> > >  Documentation/hwmon/sysfs-interface. Internally the interval is the sum of
+> > > -- 
+> > > 2.7.4
+> > >   
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-iio" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-This typecast is used to prevent warning by sparse.
-
->
->
->> +       return memremap(phys, size, MEMREMAP_WB);
->> +}
->> +
->>   static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
->>   {
->>         struct acpi_pcct_shared_memory *generic_comm_base =
->> ctx->pcc_comm_addr;
->> @@ -609,6 +624,15 @@ static void xgene_hwmon_tx_done(struct mbox_client
->> *cl, void *msg, int ret)
->>         }
->>   }
->>   +#ifdef CONFIG_ACPI
->> +static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
->> +       {"APMC0D29", XGENE_HWMON_V1},
->> +       {"APMC0D8A", XGENE_HWMON_V2},
->> +       {},
->> +};
->> +MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
->> +#endif
->> +
->>   static int xgene_hwmon_probe(struct platform_device *pdev)
->>   {
->>         struct xgene_hwmon_dev *ctx;
->> @@ -623,6 +647,20 @@ static int xgene_hwmon_probe(struct platform_device
->> *pdev)
->>         platform_set_drvdata(pdev, ctx);
->>         cl = &ctx->mbox_client;
->>   +#ifdef CONFIG_ACPI
->> +       ctx->version = -EINVAL;
->> +       if (ACPI_COMPANION(&pdev->dev)) {
->> +               const struct acpi_device_id *acpi_id;
->> +
->> +               acpi_id = acpi_match_device(xgene_hwmon_acpi_match,
->> &pdev->dev);
->> +               if (acpi_id)
->> +                       ctx->version = (int)acpi_id->driver_data;
->> +       }
->> +
->> +       if (ctx->version < 0)
->> +               return -ENODEV;
->
->
-> This doesn't make sense. Just return EINVAL if acpi_id is 0 above. There
-> is no need to assign a negative value to ctx->version.
->
-> I also don't see why ctx->version is necessary in the first place. In
-> reality
-> it is just a parameter to xgene_pcc_ioremap(). Which I think should be
-> inline
-> and not a separate function.
-
-Yes, let me move version variable into prove() function and use inline calls.
-
->
->> +#endif
->
- >
-> What if ACPI is enabled in the build but the system is running on HW which
-> does not support ACPI ? Is that guaranteed to never happen ? Why not use
-> acpi_disabled instead ?
-
-It's because xgene_hwmon_acpi_match is only available with
-CONFIG_ACPI. I'll move this logic into acpi_disabled below right
-before parsing the PCC channel information.
-
->
->> +
->>         spin_lock_init(&ctx->kfifo_lock);
->>         mutex_init(&ctx->rd_mutex);
->>   @@ -690,9 +728,9 @@ static int xgene_hwmon_probe(struct platform_device
->> *pdev)
->>                  */
->>                 ctx->comm_base_addr = cppc_ss->base_address;
->>                 if (ctx->comm_base_addr) {
->> -                       ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
->> -                                                       cppc_ss->length,
->> -                                                       MEMREMAP_WB);
->> +                       ctx->pcc_comm_addr = xgene_pcc_ioremap(ctx,
->> +                                               ctx->comm_base_addr,
->> +                                               cppc_ss->length);
->
->
-> Inline, please. The extra function adds more complexity than it is worth.
-
-Yes,
-
-
-Thanks for your comments!
-
-Hoan
-
->
->
->>                 } else {
->>                         dev_err(&pdev->dev, "Failed to get PCC comm
->> region\n");
->>                         rc = -ENODEV;
->> @@ -758,14 +796,6 @@ static int xgene_hwmon_remove(struct platform_device
->> *pdev)
->>         return 0;
->>   }
->>   -#ifdef CONFIG_ACPI
->> -static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
->> -       {"APMC0D29", 0},
->> -       {},
->> -};
->> -MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
->> -#endif
->> -
->>   static const struct of_device_id xgene_hwmon_of_match[] = {
->>         {.compatible = "apm,xgene-slimpro-hwmon"},
->>         {}
->>
->
