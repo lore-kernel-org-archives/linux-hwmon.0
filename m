@@ -1,114 +1,61 @@
-Return-Path: <hotran@apm.com>
-Return-path: <hotran@apm.com>
-From: Hoan Tran <hotran@apm.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lho@apm.com,
-	patches@apm.com,
-	Hoan Tran <hotran@apm.com>
-Subject: [PATCH v4] hwmon: xgene: Support hwmon v2
-Date: Tue, 17 Oct 2017 11:28:34 -0700
-Message-Id: <1508264914-4614-1-git-send-email-hotran@apm.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54046 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1752660AbdJSU5P (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Oct 2017 16:57:15 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id v9JKuGBi144885
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Oct 2017 16:57:15 -0400
+Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2dpws2b812-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Oct 2017 16:57:15 -0400
+Received: from localhost
+        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Thu, 19 Oct 2017 16:57:14 -0400
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux@roeck-us.net
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andrew@aj.id.au,
+        eajames@linux.vnet.ibm.com, "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH] drivers (pmbus): ir35221: Set PMBUS_PAGE before reading id and model
+Date: Thu, 19 Oct 2017 15:57:08 -0500
+Message-Id: <1508446628-13112-1-git-send-email-eajames@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-This patch supports xgene-hwmon v2 which uses the non-cachable memory
-as the PCC shared memory.
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Signed-off-by: Hoan Tran <hotran@apm.com>
+The MFR_ID and MFR_MODEL, which are manually read before probing the
+pmbus core,  are only valid for the two pages that the ir35221 has
+available. Since we don't know the state of the device when we start
+probing, set the page number first before reading id and model.
+
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
 ---
-v4
- - Initialize version variable
+ drivers/hwmon/pmbus/ir35221.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-v3
- - Use local version variable
- - Use inline calls instead of the private map function
-
-v2
- - Map PCC shared mem by ioremap() in case hwmon is v2
-
- drivers/hwmon/xgene-hwmon.c | 40 +++++++++++++++++++++++++++++++---------
- 1 file changed, 31 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 9c0dbb8..b4e3f11 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -91,6 +91,11 @@
- #define to_xgene_hwmon_dev(cl)		\
- 	container_of(cl, struct xgene_hwmon_dev, mbox_client)
+diff --git a/drivers/hwmon/pmbus/ir35221.c b/drivers/hwmon/pmbus/ir35221.c
+index 8b906b4..9a53930 100644
+--- a/drivers/hwmon/pmbus/ir35221.c
++++ b/drivers/hwmon/pmbus/ir35221.c
+@@ -267,6 +267,12 @@ static int ir35221_probe(struct i2c_client *client,
+ 				| I2C_FUNC_SMBUS_READ_BLOCK_DATA))
+ 		return -ENODEV;
  
-+enum xgene_hwmon_version {
-+	XGENE_HWMON_V1 = 0,
-+	XGENE_HWMON_V2 = 1,
-+};
++	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to set PMBUS_PAGE\n");
++		return ret;
++	}
 +
- struct slimpro_resp_msg {
- 	u32 msg;
- 	u32 param1;
-@@ -609,6 +614,15 @@ static void xgene_hwmon_tx_done(struct mbox_client *cl, void *msg, int ret)
- 	}
- }
- 
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
-+	{"APMC0D29", XGENE_HWMON_V1},
-+	{"APMC0D8A", XGENE_HWMON_V2},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
-+#endif
-+
- static int xgene_hwmon_probe(struct platform_device *pdev)
- {
- 	struct xgene_hwmon_dev *ctx;
-@@ -650,6 +664,16 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		}
- 	} else {
- 		struct acpi_pcct_hw_reduced *cppc_ss;
-+		int version = XGENE_HWMON_V1;
-+#ifdef CONFIG_ACPI
-+		const struct acpi_device_id *acpi_id;
-+
-+		acpi_id = acpi_match_device(xgene_hwmon_acpi_match, &pdev->dev);
-+		if (!acpi_id)
-+			return -EINVAL;
-+
-+		version = (int)acpi_id->driver_data;
-+#endif
- 
- 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
- 					     &ctx->mbox_idx)) {
-@@ -690,7 +714,13 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		 */
- 		ctx->comm_base_addr = cppc_ss->base_address;
- 		if (ctx->comm_base_addr) {
--			ctx->pcc_comm_addr = memremap(ctx->comm_base_addr,
-+			if (version == XGENE_HWMON_V2)
-+				ctx->pcc_comm_addr = (void __force *)ioremap(
-+							ctx->comm_base_addr,
-+							cppc_ss->length);
-+			else
-+				ctx->pcc_comm_addr = memremap(
-+							ctx->comm_base_addr,
- 							cppc_ss->length,
- 							MEMREMAP_WB);
- 		} else {
-@@ -758,14 +788,6 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_ACPI
--static const struct acpi_device_id xgene_hwmon_acpi_match[] = {
--	{"APMC0D29", 0},
--	{},
--};
--MODULE_DEVICE_TABLE(acpi, xgene_hwmon_acpi_match);
--#endif
--
- static const struct of_device_id xgene_hwmon_of_match[] = {
- 	{.compatible = "apm,xgene-slimpro-hwmon"},
- 	{}
+ 	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
 -- 
-1.9.1
+1.8.3.1
+
