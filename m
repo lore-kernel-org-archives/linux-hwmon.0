@@ -1,153 +1,96 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f196.google.com ([209.85.192.196]:52193 "EHLO
-        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751616AbdJRCi5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Oct 2017 22:38:57 -0400
-Subject: Re: [PATCH 1/2] hwmon: (jc42) optionally try to disable the SMBUS
- timeout
-To: Rob Herring <robh@kernel.org>
-Cc: Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-References: <20171013092705.7038-1-peda@axentia.se>
- <20171013092705.7038-2-peda@axentia.se>
- <554a4494-14c9-7743-898c-5f83e3de227d@roeck-us.net>
- <2d1bf447-489f-9e15-3b1e-d2f4a2c1dcfe@axentia.se>
- <20171013203527.GA14166@roeck-us.net>
- <20171017221606.c7zlfq4fe7r24ajb@rob-hp-laptop>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <56488899-825f-b4ea-8b5e-fff1f775db8f@roeck-us.net>
-Date: Tue, 17 Oct 2017 19:38:50 -0700
-MIME-Version: 1.0
-In-Reply-To: <20171017221606.c7zlfq4fe7r24ajb@rob-hp-laptop>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Return-Path: <stwiss.opensource@diasemi.com>
+Return-path: <stwiss.opensource@diasemi.com>
+From: Steve Twiss <stwiss.opensource@diasemi.com>
+To: Martyn Welch <martyn.welch@collabora.co.uk>, Jean Delvare
+	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, Support Opensource
+	<Support.Opensource@diasemi.com>
+Subject: RE: [PATCH] hwmon: da9052 Increase sample rate when using TSI
+Date: Fri, 20 Oct 2017 14:30:19 +0000
+Message-ID: <6ED8E3B22081A4459DAC7699F3695FB7019413286D@SW-EX-MBX02.diasemi.com>
+References: <1508428304-31106-1-git-send-email-martyn.welch@collabora.co.uk>
+In-Reply-To: <1508428304-31106-1-git-send-email-martyn.welch@collabora.co.uk>
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/17/2017 03:16 PM, Rob Herring wrote:
-> On Fri, Oct 13, 2017 at 01:35:27PM -0700, Guenter Roeck wrote:
->> On Fri, Oct 13, 2017 at 04:26:57PM +0200, Peter Rosin wrote:
->>> On 2017-10-13 15:50, Guenter Roeck wrote:
->>>> On 10/13/2017 02:27 AM, Peter Rosin wrote:
->>>>> With a nxp,se97 chip on an atmel sama5d31 board, the I2C adapter driver
->>>>> is not always capable of avoiding the 25-35 ms timeout as specified by
->>>>> the SMBUS protocol. This may cause silent corruption of the last bit of
->>>>> any transfer, e.g. a one is read instead of a zero if the sensor chip
->>>>> times out. This also affects the eeprom half of the nxp-se97 chip, where
->>>>> this silent corruption was originally noticed. Other I2C adapters probably
->>>>> suffer similar issues, e.g. bit-banging comes to mind as risky...
->>>>>
->>>>> The SMBUS register in the nxp chip is not a standard Jedec register, but
->>>>> it is not special to the nxp chips either, at least the atmel chips
->>>>> have the same mechanism. Therefore, do not special case this on the
->>>>> manufacturer, it is opt-in via the device property anyway.
->>>>>
->>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
->>>>> ---
->>>>>    Documentation/devicetree/bindings/hwmon/jc42.txt |  4 ++++
->>>>>    drivers/hwmon/jc42.c                             | 20 ++++++++++++++++++++
->>>>>    2 files changed, 24 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/hwmon/jc42.txt b/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>> index 07a250498fbb..f569db58f64a 100644
->>>>> --- a/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>> +++ b/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>> @@ -34,6 +34,10 @@ Required properties:
->>>>>    
->>>>>    - reg: I2C address
->>>>>    
->>>>> +Optional properties:
->>>>> +- smbus-timeout-disable: When set, the smbus timeout function will be disabled.
->>>>> +			 This is not supported on all chips.
-> 
-> Is this only for jc24 devices or could be any smbus device?
-> 
+Hi Martyn,
 
-SMBus timeout is a standard SMBus functionality, so I would say any. It is by
-default enabled on an SMBus device (actually it is not just enabled, it is
-mandatory). The ability to disable it comes handy if a SMBus chip is connected
-to an I2C controller which does not (or not necessarily) follow SMBus rules.
+On 19 October 2017 16:52, Martyn Welch wrote:
 
-I had seen that problem myself with MAX6697, and STTS751 (and its driver) also
-supports it.
+> To: Support Opensource; Jean Delvare; Guenter Roeck
+> Subject: [PATCH] hwmon: da9052 Increase sample rate when using TSI
+>=20
+> The TSI channel, which is usually used for touchscreen support, but can
+> be used as 4 general purpose ADCs. When used as a touchscreen interface
+> the touchscreen driver switches the device into 1ms sampling mode (rather
+> than the default 10ms economy mode) as recommended by the
+> manufacturer.
+> When using the TSI channels as a general purpose ADC we are currently not
+> doing this and testing suggests that this can result in ADC timeouts:
+>=20
+> [ 5827.198289] da9052 spi2.0: timeout waiting for ADC conversion interrup=
+t
+> [ 5827.728293] da9052 spi2.0: timeout waiting for ADC conversion interrup=
+t
+> [ 5993.808335] da9052 spi2.0: timeout waiting for ADC conversion interrup=
+t
+> [ 5994.328441] da9052 spi2.0: timeout waiting for ADC conversion interrup=
+t
+> [ 5994.848291] da9052 spi2.0: timeout waiting for ADC conversion interrup=
+t
+>=20
+> Switching to the 1ms timing resolves this issue.
+>=20
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.co.uk>
+> ---
+>  drivers/hwmon/da9052-hwmon.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
+> index 97a62f5..a973eb6 100644
+> --- a/drivers/hwmon/da9052-hwmon.c
+> +++ b/drivers/hwmon/da9052-hwmon.c
+> @@ -477,6 +477,11 @@ static int da9052_hwmon_probe(struct platform_device=
+ *pdev)
+>  		/* disable touchscreen features */
+>  		da9052_reg_write(hwmon->da9052, DA9052_TSI_CONT_A_REG, 0x00);
+>=20
+> +		/* Sample every 1ms */
+> +		da9052_reg_update(hwmon->da9052, DA9052_ADC_CONT_REG,
+> +					  DA9052_ADCCONT_ADCMODE,
+> +					  DA9052_ADCCONT_ADCMODE);
+> +
 
->>>>> +
->>>>>    Example:
->>>>>    
->>>>>    temp-sensor@1a {
->>>>> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
->>>>> index 1bf22eff0b08..fd816902fa30 100644
->>>>> --- a/drivers/hwmon/jc42.c
->>>>> +++ b/drivers/hwmon/jc42.c
->>>>> @@ -45,6 +45,7 @@ static const unsigned short normal_i2c[] = {
->>>>>    #define JC42_REG_TEMP		0x05
->>>>>    #define JC42_REG_MANID		0x06
->>>>>    #define JC42_REG_DEVICEID	0x07
->>>>> +#define JC42_REG_SMBUS		0x22 /* NXP and Atmel, possibly others? */
->>>>>    
->>>>>    /* Status bits in temperature register */
->>>>>    #define JC42_ALARM_CRIT_BIT	15
->>>>> @@ -73,6 +74,9 @@ static const unsigned short normal_i2c[] = {
->>>>>    #define ONS_MANID		0x1b09  /* ON Semiconductor */
->>>>>    #define STM_MANID		0x104a  /* ST Microelectronics */
->>>>>    
->>>>> +/* SMBUS register */
->>>>> +#define SMBUS_STMOUT		BIT(7)  /* SMBus time-out, active low */
->>>>> +
->>>>>    /* Supported chips */
->>>>>    
->>>>>    /* Analog Devices */
->>>>> @@ -476,6 +480,22 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
->>>>>    
->>>>>    	data->extended = !!(cap & JC42_CAP_RANGE);
->>>>>    
->>>>> +	if (device_property_read_bool(dev, "smbus-timeout-disable")) {
->>>>> +		int smbus;
->>>>> +
->>>>> +		/*
->>>>> +		 * Not all chips support this register, but from a
->>>>> +		 * quick read of various datasheets no chip appears
->>>>> +		 * incompatible with the below attempt to disable
->>>>> +		 * the timeout. And the whole thing is opt-in...
->>>>> +		 */
->>>>> +		smbus = i2c_smbus_read_word_swapped(client, JC42_REG_SMBUS);
->>>>> +		if (smbus < 0)
->>>>> +			return smbus;
->>>>> +		i2c_smbus_write_word_swapped(client, JC42_REG_SMBUS,
->>>>> +					     smbus | SMBUS_STMOUT);
->>>>
->>>> Looking into the SE97 datasheet, the bit is only writable if the alarm bits
->>>> are not locked. Should we take this into account and unlock the alarm bits
->>>> if necessary ?
->>>
->>> Right. And I thought about the case when the timeout was disabled before
->>> probing but with the property not present (perhaps by someone trying things
->>> out, like I have). Should the timeout be re-enabled in that case?
->>
->> No, because the property only states that the timeout should be disabled.
->> It does not say that it should be _enabled_ if the property is not there.
->> That would require a different property. A -> B does not imply B -> A.
-> 
-> A not-present/0/1 property is typically used for such cases. Perhaps you
-> want that?
-> 
+Acked-by: Steve Twiss <stwiss.opensource@diasemi.com>
 
-I don't want to change behavior if the property is not present. After all,
-the timeout may have been disabled by the BIOS/ROMMON (especially in systems
-w/o DT support). So far having the boolean flag was never a problem; as
-mentioned above, the timeout is by default (and per spec) enabled on SMBus
-devices. I would argue that anyone who disabled it must have done so on
-purpose (including "trying out things"), and that it should not be DT
-responsibility to have a flag along the line of "restore default
-configuration".
+According to the DA9053 Datasheet, Revision 2.1, 31-Aug-2016, Section 18.3,=
+ page 143.
 
-Thanks,
-Guenter
+	[The ADC] can be used either in high speed mode with measurements
+	sequences repeated every 1ms or in economy mode with sequences
+	performed every 10ms.
+
+Also, DA9053 Datasheet, Revision 2.1, 31-Aug-2016, Section 18.17,
+Table 56: GP-ADC Control Registers, Register Address R82 ADC_CONT, page 150=
+,
+
+	Bit 6, ADC_MODE
+	0: Measurement sequence interval 10 ms (economy mode)
+	1: Measurement sequence interval 1 ms (recommended for TSI mode)
+
+I can't find any reason why a global change to the sampling rate cannot be
+applied during the ADC measurements in this case. After all, as you said, t=
+his
+is gated by the previous change by Sebastian Reichel which enforces a
+protection of ADC measurements when using the TSI as a general ADC (see com=
+mit
+ebf555111bc11a5da9144e4af524260731a8b968).
+
+Regards,
+Steve
