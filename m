@@ -6,8 +6,8 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20171020103916.3309-2-romain.porte@nokia.com>
  <20171021162048.GA13173@roeck-us.net>
 From: Romain Porte <romain.porte@nokia.com>
-Message-ID: <d97c57bc-dfe0-74cf-4266-a2f223cc5d24@nokia.com>
-Date: Mon, 23 Oct 2017 09:54:26 +0200
+Message-ID: <47c2dd13-c357-56fa-6886-08ce6e2b9d92@nokia.com>
+Date: Mon, 23 Oct 2017 15:34:24 +0200
 MIME-Version: 1.0
 In-Reply-To: <20171021162048.GA13173@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
@@ -22,20 +22,15 @@ On 21/10/2017 18:20, Guenter Roeck wrote:
 > STORE_USER_ALL available to user space. Both can too easily result in
 > a bricked device (bad enough that the register values are writable using
 > i2cset).
-My point is that I am exactly using Linux's pmbus implementation in 
-order to perform a manufacturing calibration which is indeed a one-time 
-operation.
+After some work, I have tested accessing these registers using i2cget 
+and i2cset and I can reproduce all the features I have implemented in 
+this driver. I think am going to re-implement my calibration procedure 
+using i2cget and i2cset in userspace.
 
-I agree that exposing these sysfs entries to end users can be dangerous. 
-It can be useful if you actually want to perform a component calibration 
-using Linux. Actually I am running an userspace application that does 
-the calibration by writing to these sysfs entries. This driver is useful 
-for manufacturing calibration and I think can be useful for other Linux 
-users who wants to perform this kind of operation too.
-
-If this driver is dangerous for the end-user, how can we keep the 
-features of this driver for manufacturing calibration using Linux? Maybe 
-keep the generic driver for normal use and propose this specific driver 
-as 'Advanced TPS544C20 driver [DANGER]'?
+I thought it could be a good idea to make this accessible by sysfs 
+entries. Since one must read the datasheet for calibrating the 
+component, I guess it is not a big deal to have users to find register 
+addresses/sizes and write to them using userspace commands instead of 
+(over?)simplifying it by providing dedicated sysfs entries.
 
 Romain.
