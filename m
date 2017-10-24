@@ -1,36 +1,66 @@
-Return-Path: <romain.porte@nokia.com>
-Return-path: <romain.porte@nokia.com>
-Subject: Re: [1/2] pmbus: added tps544c20 driver with trimming support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20171020103916.3309-2-romain.porte@nokia.com>
- <20171021162048.GA13173@roeck-us.net>
-From: Romain Porte <romain.porte@nokia.com>
-Message-ID: <47c2dd13-c357-56fa-6886-08ce6e2b9d92@nokia.com>
-Date: Mon, 23 Oct 2017 15:34:24 +0200
-MIME-Version: 1.0
-In-Reply-To: <20171021162048.GA13173@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg0-f68.google.com ([74.125.83.68]:47875 "EHLO
+        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751216AbdJXAzc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Oct 2017 20:55:32 -0400
+Received: by mail-pg0-f68.google.com with SMTP id r25so13138088pgn.4
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Oct 2017 17:55:31 -0700 (PDT)
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ralf Goebel <ralf.goebel@imago-technologies.com>
+Subject: [PATCH] tmp102: Fix first temperature reading
+Date: Mon, 23 Oct 2017 17:55:26 -0700
+Message-Id: <1508806526-28489-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 21/10/2017 18:20, Guenter Roeck wrote:
-> This should be part of device programming in manufacturing, just like,
-> say, current calibration. It should not be user programmable, even less so
-> runtime programmable. On top of that, we definitely don't want to make
-> STORE_USER_ALL available to user space. Both can too easily result in
-> a bricked device (bad enough that the register values are writable using
-> i2cset).
-After some work, I have tested accessing these registers using i2cget 
-and i2cset and I can reproduce all the features I have implemented in 
-this driver. I think am going to re-implement my calibration procedure 
-using i2cget and i2cset in userspace.
+Commit 3d8f7a89a197 ("hwmon: (tmp102) Improve handling of initial read
+delay") reduced the initial temperature read delay and made it dependent
+on the chip's shutdown mode. If the chip was not in shutdown mode at probe,
+the read delay no longer applies.
 
-I thought it could be a good idea to make this accessible by sysfs 
-entries. Since one must read the datasheet for calibrating the 
-component, I guess it is not a big deal to have users to find register 
-addresses/sizes and write to them using userspace commands instead of 
-(over?)simplifying it by providing dedicated sysfs entries.
+This ignores the fact that the chip initialization changes the temperature
+sensor resolution, and that the temperature register values change when
+the resolution is changed. As a result, the reported temperature is twice
+as high as the real temperature until the first temperature conversion
+after the configuration change is complete. This can result in unexpected
+behavior and, worst case, in a system shutdown. To fix the problem,
+let's just always wait for a conversion to complete before reporting
+a temperature.
 
-Romain.
+Fixes: 3d8f7a89a197 ("hwmon: (tmp102) Improve handling of initial read delay")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=197167
+Reported-by: Ralf Goebel <ralf.goebel@imago-technologies.com>
+Cc: Ralf Goebel <ralf.goebel@imago-technologies.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/tmp102.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index 5eafbaada795..1af1932a72db 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -268,14 +268,7 @@ static int tmp102_probe(struct i2c_client *client,
+ 		return err;
+ 	}
+ 
+-	tmp102->ready_time = jiffies;
+-	if (tmp102->config_orig & TMP102_CONF_SD) {
+-		/*
+-		 * Mark that we are not ready with data until the first
+-		 * conversion is complete
+-		 */
+-		tmp102->ready_time += msecs_to_jiffies(CONVERSION_TIME_MS);
+-	}
++	tmp102->ready_time = jiffies + msecs_to_jiffies(CONVERSION_TIME_MS);
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 tmp102,
+-- 
+2.7.4
+
