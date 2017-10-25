@@ -1,101 +1,144 @@
-Return-Path: <eajames@linux.vnet.ibm.com>
-Return-path: <eajames@linux.vnet.ibm.com>
-Subject: Re: drivers (pmbus): ir35221: Set PMBUS_PAGE before reading id and
- model
-To: Guenter Roeck <linux@roeck-us.net>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:51760 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751668AbdJYVMh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 25 Oct 2017 17:12:37 -0400
+Date: Wed, 25 Oct 2017 14:12:34 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eddie James <eajames@linux.vnet.ibm.com>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, andrew@aj.id.au,
         "Edward A. James" <eajames@us.ibm.com>
-References: <1508446628-13112-1-git-send-email-eajames@linux.vnet.ibm.com>
- <20171021161013.GA12794@roeck-us.net>
- <1911942e-f770-dbff-969c-b98ed69f68ea@linux.vnet.ibm.com>
- <20171023221254.GB6066@roeck-us.net>
-From: Eddie James <eajames@linux.vnet.ibm.com>
-Date: Wed, 25 Oct 2017 14:54:46 -0500
+Subject: Re: [prefix=PATCH] drivers: pmbus: core: Prevent calling
+ pmbus_set_page with negative page
+Message-ID: <20171025211234.GA3273@roeck-us.net>
+References: <1508961173-22686-1-git-send-email-eajames@linux.vnet.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20171023221254.GB6066@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Message-Id: <c494c77e-d8c0-f4e0-48d5-7c840d192725@linux.vnet.ibm.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1508961173-22686-1-git-send-email-eajames@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+On Wed, Oct 25, 2017 at 02:52:53PM -0500, Eddie James wrote:
+> From: "Edward A. James" <eajames@us.ibm.com>
+> 
+> For devices with word data registers, the pmbus core may call read/write
+> word data functions with a page value of -1, in order to perform the
+> operation without setting the page. However, the read/write word data
+> functions accept only unsigned 8-bit page numbers, resulting in setting
+> a page of 0xFF in this situation. This may result in errors or undefined
+> behavior of some devices (specifically the ir35221, which allows the
+> page to be set to 0xFF, but some subsequent operations to read registers
+> may fail).
+> 
 
+Good catch.
 
-On 10/23/2017 05:12 PM, Guenter Roeck wrote:
-> On Mon, Oct 23, 2017 at 10:23:02AM -0500, Eddie James wrote:
->>
->> On 10/21/2017 11:10 AM, Guenter Roeck wrote:
->>> On Thu, Oct 19, 2017 at 03:57:08PM -0500, eajames@linux.vnet.ibm.com wrote:
->>>> From: "Edward A. James" <eajames@us.ibm.com>
->>>>
->>>> The MFR_ID and MFR_MODEL, which are manually read before probing the
->>>> pmbus core,  are only valid for the two pages that the ir35221 has
->>>> available. Since we don't know the state of the device when we start
->>>> probing, set the page number first before reading id and model.
->>>>
->>> If the device only has two pages, it is highly unlikely that it is possible
->>> to select another page which is not supported; any attempts to do so should
->>> result in a command error.
->>>
->>> Is this theory or based on an actual problem observed ? If so, it will require
->>> some additional explanation.
->> Hi,
->>
->> Yes, I have observed this with a physical ir35221 device off an i2c bus. It
->> seems that there are some places in the PMBUS core that manage to set the
->> page number to 0xFF due to pmbus_set_page being called with page=-1.
-> This would be bug(s) in the PMBus core which need(s) to be fixed.
->
->> pmbus_set_page doesn't check the CML register, so if the i2c op succeeds, it
->> will be a success. I can also set it to anything with i2cset tool without
->> error.
->>
->> I would also like to fix calling pmbus_set_page with -1, and I will send up
->> a patch if/when I have time. But I felt it makes sense to also ensure the
->> page is set correctly in the ir35221 driver, since it's an unknown state at
->> probe time, and this device appears a bit "weird" in that it doesn't return
->> an error if it's an unsupported page.
->>
-> With that logic, one could argue that we have to reprogram the entire chip
-> because, after all, soneone could have messed it up completely using i2cset.
-> And the same would be true for all the chips supported by any driver.
+Subject came off a bit odd. 
 
-Good point... Consider this patch abandoned. I have sent up a patch for 
-pmbus core.
+[prefix=PATCH] drivers: pmbus: core: Prevent ...
+
+Please use "[PATCH] hwmon: (pmbus/core) Prevent ..."
+
+This me wonder if we should move the check into pmbus_set_page()
+instead.
+
+int pmbus_set_page(struct i2c_client *client, int page)
+{
+	...
+	if (page >= 0 && page != data->currpage) {
+	...
+}
+
+What do you think ?
 
 Thanks,
-Eddie
+Guenter
 
->
-> I'd rather focus on fixing the PMBus core if it really tries to set page #255.
->
-> Guenter
->
->> Thanks,
->> Eddie
->>
->>> Thanks,
->>> Guenter
->>>
->>>> Signed-off-by: Edward A. James <eajames@us.ibm.com>
->>>> ---
->>>>   drivers/hwmon/pmbus/ir35221.c | 6 ++++++
->>>>   1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/drivers/hwmon/pmbus/ir35221.c b/drivers/hwmon/pmbus/ir35221.c
->>>> index 8b906b4..9a53930 100644
->>>> --- a/drivers/hwmon/pmbus/ir35221.c
->>>> +++ b/drivers/hwmon/pmbus/ir35221.c
->>>> @@ -267,6 +267,12 @@ static int ir35221_probe(struct i2c_client *client,
->>>>   				| I2C_FUNC_SMBUS_READ_BLOCK_DATA))
->>>>   		return -ENODEV;
->>>> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
->>>> +	if (ret < 0) {
->>>> +		dev_err(&client->dev, "Failed to set PMBUS_PAGE\n");
->>>> +		return ret;
->>>> +	}
->>>> +
->>>>   	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
->>>>   	if (ret < 0) {
->>>>   		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
+> Signed-off-by: Edward A. James <eajames@us.ibm.com>
+> ---
+>  drivers/hwmon/pmbus/pmbus.h      |  4 ++--
+>  drivers/hwmon/pmbus/pmbus_core.c | 29 ++++++++++++++++++-----------
+>  2 files changed, 20 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 4efa2bd..4a16da6 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -405,8 +405,8 @@ struct pmbus_driver_info {
+>  
+>  void pmbus_clear_cache(struct i2c_client *client);
+>  int pmbus_set_page(struct i2c_client *client, u8 page);
+> -int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg);
+> -int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word);
+> +int pmbus_read_word_data(struct i2c_client *client, int page, u8 reg);
+> +int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg, u16 word);
+>  int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg);
+>  int pmbus_write_byte(struct i2c_client *client, int page, u8 value);
+>  int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg,
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 302f0ae..6d6e030 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -186,13 +186,16 @@ static int _pmbus_write_byte(struct i2c_client *client, int page, u8 value)
+>  	return pmbus_write_byte(client, page, value);
+>  }
+>  
+> -int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word)
+> +int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
+> +			  u16 word)
+>  {
+>  	int rv;
+>  
+> -	rv = pmbus_set_page(client, page);
+> -	if (rv < 0)
+> -		return rv;
+> +	if (page >= 0) {
+> +		rv = pmbus_set_page(client, page);
+> +		if (rv < 0)
+> +			return rv;
+> +	}
+>  
+>  	return i2c_smbus_write_word_data(client, reg, word);
+>  }
+> @@ -219,13 +222,15 @@ static int _pmbus_write_word_data(struct i2c_client *client, int page, int reg,
+>  	return pmbus_write_word_data(client, page, reg, word);
+>  }
+>  
+> -int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg)
+> +int pmbus_read_word_data(struct i2c_client *client, int page, u8 reg)
+>  {
+>  	int rv;
+>  
+> -	rv = pmbus_set_page(client, page);
+> -	if (rv < 0)
+> -		return rv;
+> +	if (page >= 0) {
+> +		rv = pmbus_set_page(client, page);
+> +		if (rv < 0)
+> +			return rv;
+> +	}
+>  
+>  	return i2c_smbus_read_word_data(client, reg);
+>  }
+> @@ -269,9 +274,11 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+>  {
+>  	int rv;
+>  
+> -	rv = pmbus_set_page(client, page);
+> -	if (rv < 0)
+> -		return rv;
+> +	if (page >= 0) {
+> +		rv = pmbus_set_page(client, page);
+> +		if (rv < 0)
+> +			return rv;
+> +	}
+>  
+>  	return i2c_smbus_write_byte_data(client, reg, value);
+>  }
+> -- 
+> 1.8.3.1
+> 
