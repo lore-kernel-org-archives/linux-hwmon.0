@@ -1,145 +1,83 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:56309 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751295AbdJ1PnH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Oct 2017 11:43:07 -0400
-Date: Sat, 28 Oct 2017 08:43:04 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: eajames@linux.vnet.ibm.com
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrew@aj.id.au,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [v2] hwmon: (pmbus/core): Prevent unintentional setting of page
- to 0xFF
-Message-ID: <20171028154304.GA5541@roeck-us.net>
-References: <1509123305-10050-1-git-send-email-eajames@linux.vnet.ibm.com>
+Return-Path: <peda@axentia.se>
+Return-path: <peda@axentia.se>
+Subject: Re: [PATCH 1/2] hwmon: (jc42) optionally try to disable the SMBUS
+ timeout
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@free-electrons.com>,
+ Russell King <linux@armlinux.org.uk>, Jean Delvare <jdelvare@suse.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hwmon@vger.kernel.org
+References: <20171013092705.7038-1-peda@axentia.se>
+ <20171013092705.7038-2-peda@axentia.se>
+ <554a4494-14c9-7743-898c-5f83e3de227d@roeck-us.net>
+ <2d1bf447-489f-9e15-3b1e-d2f4a2c1dcfe@axentia.se>
+ <20171013203527.GA14166@roeck-us.net>
+ <20171017221606.c7zlfq4fe7r24ajb@rob-hp-laptop>
+ <56488899-825f-b4ea-8b5e-fff1f775db8f@roeck-us.net>
+From: Peter Rosin <peda@axentia.se>
+Message-ID: <0086a4ec-af2f-9303-610c-0de96b75ebd7@axentia.se>
+Date: Thu, 26 Oct 2017 08:44:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1509123305-10050-1-git-send-email-eajames@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <56488899-825f-b4ea-8b5e-fff1f775db8f@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Oct 27, 2017 at 11:55:05AM -0500, eajames@linux.vnet.ibm.com wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
+On 2017-10-18 04:38, Guenter Roeck wrote:
+> On 10/17/2017 03:16 PM, Rob Herring wrote:
+>> On Fri, Oct 13, 2017 at 01:35:27PM -0700, Guenter Roeck wrote:
+>>> On Fri, Oct 13, 2017 at 04:26:57PM +0200, Peter Rosin wrote:
+>>>> On 2017-10-13 15:50, Guenter Roeck wrote:
+>>>>> On 10/13/2017 02:27 AM, Peter Rosin wrote:
+>>>>>> With a nxp,se97 chip on an atmel sama5d31 board, the I2C adapter driver
+>>>>>> is not always capable of avoiding the 25-35 ms timeout as specified by
+>>>>>> the SMBUS protocol. This may cause silent corruption of the last bit of
+>>>>>> any transfer, e.g. a one is read instead of a zero if the sensor chip
+>>>>>> times out. This also affects the eeprom half of the nxp-se97 chip, where
+>>>>>> this silent corruption was originally noticed. Other I2C adapters probably
+>>>>>> suffer similar issues, e.g. bit-banging comes to mind as risky...
+>>>>>>
+>>>>>> The SMBUS register in the nxp chip is not a standard Jedec register, but
+>>>>>> it is not special to the nxp chips either, at least the atmel chips
+>>>>>> have the same mechanism. Therefore, do not special case this on the
+>>>>>> manufacturer, it is opt-in via the device property anyway.
+>>>>>>
+>>>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
+>>>>>> ---
+>>>>>>    Documentation/devicetree/bindings/hwmon/jc42.txt |  4 ++++
+>>>>>>    drivers/hwmon/jc42.c                             | 20 ++++++++++++++++++++
+>>>>>>    2 files changed, 24 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/hwmon/jc42.txt b/Documentation/devicetree/bindings/hwmon/jc42.txt
+>>>>>> index 07a250498fbb..f569db58f64a 100644
+>>>>>> --- a/Documentation/devicetree/bindings/hwmon/jc42.txt
+>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/jc42.txt
+>>>>>> @@ -34,6 +34,10 @@ Required properties:
+>>>>>>    
+>>>>>>    - reg: I2C address
+>>>>>>    
+>>>>>> +Optional properties:
+>>>>>> +- smbus-timeout-disable: When set, the smbus timeout function will be disabled.
+>>>>>> +			 This is not supported on all chips.
+>>
+>> Is this only for jc24 devices or could be any smbus device?
+>>
 > 
-> The pmbus core may call read/write word data functions with a page value
-> of -1, intending to perform the operation without setting the page.
-> However, the read/write word data functions accept only unsigned 8-bit
-> page numbers, and therefore cannot check for negative page number to
-> avoid setting the page. This results in setting the page number to 0xFF.
-> This may result in errors or undefined behavior of some devices
-> (specifically the ir35221, which allows the page to be set to 0xFF,
-> but some subsequent operations to read registers may fail).
+> SMBus timeout is a standard SMBus functionality, so I would say any. It is by
+> default enabled on an SMBus device (actually it is not just enabled, it is
+> mandatory). The ability to disable it comes handy if a SMBus chip is connected
+> to an I2C controller which does not (or not necessarily) follow SMBus rules.
 > 
-> Switch the pmbus_set_page page parameter to an integer and perform the
-> check for negative page there. Make read/write functions consistent in
-> accepting an integer page number parameter.
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
+> I had seen that problem myself with MAX6697, and STTS751 (and its driver) also
+> supports it.
 
-Applied. Note that the problem was introduced with commit cbcdec6202c9
-("hwmon: (pmbus): Access word data for STATUS_WORD"). I marked the patch
-accordingly.
+So, is the approach with an optional smbus-timeout-disable property documented
+in .../bindings/hwmon/jc42.txt good-to-go or should it be documented in some
+common SMBus client-device file? I don't fine any such beast, so I'm unsure
+how to proceed in that case.
 
-Thanks,
-Guenter
-
-> ---
-> 
-> Changes since v1:
->  * Move check for negative page to pmbus_set_page and change pmbus_set_page
->    page parameter to int.
-> 
->  drivers/hwmon/pmbus/pmbus.h      |  6 +++---
->  drivers/hwmon/pmbus/pmbus_core.c | 25 +++++++++++--------------
->  2 files changed, 14 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 4efa2bd..fa613bd 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -404,9 +404,9 @@ struct pmbus_driver_info {
->  /* Function declarations */
->  
->  void pmbus_clear_cache(struct i2c_client *client);
-> -int pmbus_set_page(struct i2c_client *client, u8 page);
-> -int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg);
-> -int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word);
-> +int pmbus_set_page(struct i2c_client *client, int page);
-> +int pmbus_read_word_data(struct i2c_client *client, int page, u8 reg);
-> +int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg, u16 word);
->  int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg);
->  int pmbus_write_byte(struct i2c_client *client, int page, u8 value);
->  int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg,
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 302f0ae..52a58b8 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -136,13 +136,13 @@ void pmbus_clear_cache(struct i2c_client *client)
->  }
->  EXPORT_SYMBOL_GPL(pmbus_clear_cache);
->  
-> -int pmbus_set_page(struct i2c_client *client, u8 page)
-> +int pmbus_set_page(struct i2c_client *client, int page)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
->  	int rv = 0;
->  	int newpage;
->  
-> -	if (page != data->currpage) {
-> +	if (page >= 0 && page != data->currpage) {
->  		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
->  		newpage = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
->  		if (newpage != page)
-> @@ -158,11 +158,9 @@ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
->  {
->  	int rv;
->  
-> -	if (page >= 0) {
-> -		rv = pmbus_set_page(client, page);
-> -		if (rv < 0)
-> -			return rv;
-> -	}
-> +	rv = pmbus_set_page(client, page);
-> +	if (rv < 0)
-> +		return rv;
->  
->  	return i2c_smbus_write_byte(client, value);
->  }
-> @@ -186,7 +184,8 @@ static int _pmbus_write_byte(struct i2c_client *client, int page, u8 value)
->  	return pmbus_write_byte(client, page, value);
->  }
->  
-> -int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word)
-> +int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
-> +			  u16 word)
->  {
->  	int rv;
->  
-> @@ -219,7 +218,7 @@ static int _pmbus_write_word_data(struct i2c_client *client, int page, int reg,
->  	return pmbus_write_word_data(client, page, reg, word);
->  }
->  
-> -int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg)
-> +int pmbus_read_word_data(struct i2c_client *client, int page, u8 reg)
->  {
->  	int rv;
->  
-> @@ -255,11 +254,9 @@ int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg)
->  {
->  	int rv;
->  
-> -	if (page >= 0) {
-> -		rv = pmbus_set_page(client, page);
-> -		if (rv < 0)
-> -			return rv;
-> -	}
-> +	rv = pmbus_set_page(client, page);
-> +	if (rv < 0)
-> +		return rv;
->  
->  	return i2c_smbus_read_byte_data(client, reg);
->  }
+Cheers,
+Peter
