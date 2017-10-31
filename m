@@ -7,9 +7,9 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH v1 11/15] hwmon: (w83792d) Remove duplicate NULL check
-Date: Tue, 31 Oct 2017 16:21:45 +0200
-Message-Id: <20171031142149.32512-11-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 09/15] hwmon: (w83781d) Remove duplicate NULL check
+Date: Tue, 31 Oct 2017 16:21:43 +0200
+Message-Id: <20171031142149.32512-9-andriy.shevchenko@linux.intel.com>
 In-Reply-To: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
 References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -22,43 +22,33 @@ Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/hwmon/w83792d.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/hwmon/w83781d.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
-index d764602d70db..76aa39e537e0 100644
---- a/drivers/hwmon/w83792d.c
-+++ b/drivers/hwmon/w83792d.c
-@@ -981,8 +981,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
- /* Undo inits in case of errors */
+diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
+index 246fb2365126..2b0f182daa87 100644
+--- a/drivers/hwmon/w83781d.c
++++ b/drivers/hwmon/w83781d.c
+@@ -1246,10 +1246,8 @@ w83781d_probe(struct i2c_client *client, const struct i2c_device_id *id)
  
- ERROR_SC_1:
--	if (data->lm75[0] != NULL)
+  exit_remove_files:
+ 	w83781d_remove_files(dev);
+-	if (data->lm75[0])
 -		i2c_unregister_device(data->lm75[0]);
-+	i2c_unregister_device(data->lm75[0]);
- ERROR_SC_0:
- 	return err;
- }
-@@ -1456,10 +1455,8 @@ w83792d_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	for (i = 0; i < ARRAY_SIZE(w83792d_group_fan); i++)
- 		sysfs_remove_group(&dev->kobj, &w83792d_group_fan[i]);
- exit_i2c_unregister:
--	if (data->lm75[0] != NULL)
--		i2c_unregister_device(data->lm75[0]);
--	if (data->lm75[1] != NULL)
+-	if (data->lm75[1])
 -		i2c_unregister_device(data->lm75[1]);
 +	i2c_unregister_device(data->lm75[0]);
 +	i2c_unregister_device(data->lm75[1]);
  	return err;
  }
  
-@@ -1475,10 +1472,8 @@ w83792d_remove(struct i2c_client *client)
- 		sysfs_remove_group(&client->dev.kobj,
- 				   &w83792d_group_fan[i]);
+@@ -1262,10 +1260,8 @@ w83781d_remove(struct i2c_client *client)
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	w83781d_remove_files(dev);
  
--	if (data->lm75[0] != NULL)
+-	if (data->lm75[0])
 -		i2c_unregister_device(data->lm75[0]);
--	if (data->lm75[1] != NULL)
+-	if (data->lm75[1])
 -		i2c_unregister_device(data->lm75[1]);
 +	i2c_unregister_device(data->lm75[0]);
 +	i2c_unregister_device(data->lm75[1]);
