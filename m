@@ -1,43 +1,53 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:40455 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S932684AbdJaTci (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Oct 2017 15:32:38 -0400
-Date: Tue, 31 Oct 2017 20:32:33 +0100
+Return-Path: <jdelvare@suse.de>
+Return-path: <jdelvare@suse.de>
+Date: Tue, 31 Oct 2017 20:43:29 +0100
 From: Jean Delvare <jdelvare@suse.de>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 11/15] hwmon: (w83792d) Remove duplicate NULL check
-Message-ID: <20171031203233.25a5daac@endymion>
-In-Reply-To: <20171031142149.32512-11-andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>, Rudolf
+ Marek <r.marek@assembler.cz>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1 12/15] hwmon: (w83793) Remove duplicate NULL check
+Message-ID: <20171031204329.00a8c776@endymion>
+In-Reply-To: <20171031142149.32512-12-andriy.shevchenko@linux.intel.com>
 References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
-        <20171031142149.32512-11-andriy.shevchenko@linux.intel.com>
+	<20171031142149.32512-12-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, 31 Oct 2017 16:21:45 +0200, Andy Shevchenko wrote:
+On Tue, 31 Oct 2017 16:21:46 +0200, Andy Shevchenko wrote:
 > Since i2c_unregister_device() became NULL-aware we may remove duplicate
 > NULL check.
 > 
+> Cc: Rudolf Marek <r.marek@assembler.cz>
 > Cc: Jean Delvare <jdelvare@suse.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
 > Cc: linux-hwmon@vger.kernel.org
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/hwmon/w83792d.c | 15 +++++----------
+>  drivers/hwmon/w83793.c | 15 +++++----------
 >  1 file changed, 5 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
-> index d764602d70db..76aa39e537e0 100644
-> --- a/drivers/hwmon/w83792d.c
-> +++ b/drivers/hwmon/w83792d.c
-> @@ -981,8 +981,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
->  /* Undo inits in case of errors */
+> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+> index 5ba9d9f1daa1..0af0f6283b35 100644
+> --- a/drivers/hwmon/w83793.c
+> +++ b/drivers/hwmon/w83793.c
+> @@ -1564,10 +1564,8 @@ static int w83793_remove(struct i2c_client *client)
+>  	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
+>  		device_remove_file(dev, &w83793_temp[i].dev_attr);
+>  
+> -	if (data->lm75[0] != NULL)
+> -		i2c_unregister_device(data->lm75[0]);
+> -	if (data->lm75[1] != NULL)
+> -		i2c_unregister_device(data->lm75[1]);
+> +	i2c_unregister_device(data->lm75[0]);
+> +	i2c_unregister_device(data->lm75[1]);
+>  
+>  	/* Decrease data reference counter */
+>  	mutex_lock(&watchdog_data_mutex);
+> @@ -1625,8 +1623,7 @@ w83793_detect_subclients(struct i2c_client *client)
+>  	/* Undo inits in case of errors */
 >  
 >  ERROR_SC_1:
 > -	if (data->lm75[0] != NULL)
@@ -46,22 +56,9 @@ On Tue, 31 Oct 2017 16:21:45 +0200, Andy Shevchenko wrote:
 >  ERROR_SC_0:
 >  	return err;
 >  }
-> @@ -1456,10 +1455,8 @@ w83792d_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	for (i = 0; i < ARRAY_SIZE(w83792d_group_fan); i++)
->  		sysfs_remove_group(&dev->kobj, &w83792d_group_fan[i]);
->  exit_i2c_unregister:
-> -	if (data->lm75[0] != NULL)
-> -		i2c_unregister_device(data->lm75[0]);
-> -	if (data->lm75[1] != NULL)
-> -		i2c_unregister_device(data->lm75[1]);
-> +	i2c_unregister_device(data->lm75[0]);
-> +	i2c_unregister_device(data->lm75[1]);
->  	return err;
->  }
->  
-> @@ -1475,10 +1472,8 @@ w83792d_remove(struct i2c_client *client)
->  		sysfs_remove_group(&client->dev.kobj,
->  				   &w83792d_group_fan[i]);
+> @@ -1962,10 +1959,8 @@ static int w83793_probe(struct i2c_client *client,
+>  	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
+>  		device_remove_file(dev, &w83793_temp[i].dev_attr);
 >  
 > -	if (data->lm75[0] != NULL)
 > -		i2c_unregister_device(data->lm75[0]);
@@ -69,9 +66,9 @@ On Tue, 31 Oct 2017 16:21:45 +0200, Andy Shevchenko wrote:
 > -		i2c_unregister_device(data->lm75[1]);
 > +	i2c_unregister_device(data->lm75[0]);
 > +	i2c_unregister_device(data->lm75[1]);
->  
->  	return 0;
->  }
+>  free_mem:
+>  	kfree(data);
+>  exit:
 
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
