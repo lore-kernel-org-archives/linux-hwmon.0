@@ -1,104 +1,69 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:44262 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932234AbdJZNp3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Oct 2017 09:45:29 -0400
-Subject: Re: [PATCH 1/2] hwmon: (jc42) optionally try to disable the SMBUS
- timeout
-To: Peter Rosin <peda@axentia.se>, Rob Herring <robh@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-References: <20171013092705.7038-1-peda@axentia.se>
- <20171013092705.7038-2-peda@axentia.se>
- <554a4494-14c9-7743-898c-5f83e3de227d@roeck-us.net>
- <2d1bf447-489f-9e15-3b1e-d2f4a2c1dcfe@axentia.se>
- <20171013203527.GA14166@roeck-us.net>
- <20171017221606.c7zlfq4fe7r24ajb@rob-hp-laptop>
- <56488899-825f-b4ea-8b5e-fff1f775db8f@roeck-us.net>
- <0086a4ec-af2f-9303-610c-0de96b75ebd7@axentia.se>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4c26fdcb-316f-c599-349e-505f9857d527@roeck-us.net>
-Date: Thu, 26 Oct 2017 06:45:26 -0700
-MIME-Version: 1.0
-In-Reply-To: <0086a4ec-af2f-9303-610c-0de96b75ebd7@axentia.se>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <andriy.shevchenko@linux.intel.com>
+Return-path: <andriy.shevchenko@linux.intel.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-i2c@vger.kernel.org,
+	Wolfram Sang <wsa@the-dreams.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v1 11/15] hwmon: (w83792d) Remove duplicate NULL check
+Date: Tue, 31 Oct 2017 16:21:45 +0200
+Message-Id: <20171031142149.32512-11-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
+References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/25/2017 11:44 PM, Peter Rosin wrote:
-> On 2017-10-18 04:38, Guenter Roeck wrote:
->> On 10/17/2017 03:16 PM, Rob Herring wrote:
->>> On Fri, Oct 13, 2017 at 01:35:27PM -0700, Guenter Roeck wrote:
->>>> On Fri, Oct 13, 2017 at 04:26:57PM +0200, Peter Rosin wrote:
->>>>> On 2017-10-13 15:50, Guenter Roeck wrote:
->>>>>> On 10/13/2017 02:27 AM, Peter Rosin wrote:
->>>>>>> With a nxp,se97 chip on an atmel sama5d31 board, the I2C adapter driver
->>>>>>> is not always capable of avoiding the 25-35 ms timeout as specified by
->>>>>>> the SMBUS protocol. This may cause silent corruption of the last bit of
->>>>>>> any transfer, e.g. a one is read instead of a zero if the sensor chip
->>>>>>> times out. This also affects the eeprom half of the nxp-se97 chip, where
->>>>>>> this silent corruption was originally noticed. Other I2C adapters probably
->>>>>>> suffer similar issues, e.g. bit-banging comes to mind as risky...
->>>>>>>
->>>>>>> The SMBUS register in the nxp chip is not a standard Jedec register, but
->>>>>>> it is not special to the nxp chips either, at least the atmel chips
->>>>>>> have the same mechanism. Therefore, do not special case this on the
->>>>>>> manufacturer, it is opt-in via the device property anyway.
->>>>>>>
->>>>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
->>>>>>> ---
->>>>>>>     Documentation/devicetree/bindings/hwmon/jc42.txt |  4 ++++
->>>>>>>     drivers/hwmon/jc42.c                             | 20 ++++++++++++++++++++
->>>>>>>     2 files changed, 24 insertions(+)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/hwmon/jc42.txt b/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>>>> index 07a250498fbb..f569db58f64a 100644
->>>>>>> --- a/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>>>> +++ b/Documentation/devicetree/bindings/hwmon/jc42.txt
->>>>>>> @@ -34,6 +34,10 @@ Required properties:
->>>>>>>     
->>>>>>>     - reg: I2C address
->>>>>>>     
->>>>>>> +Optional properties:
->>>>>>> +- smbus-timeout-disable: When set, the smbus timeout function will be disabled.
->>>>>>> +			 This is not supported on all chips.
->>>
->>> Is this only for jc24 devices or could be any smbus device?
->>>
->>
->> SMBus timeout is a standard SMBus functionality, so I would say any. It is by
->> default enabled on an SMBus device (actually it is not just enabled, it is
->> mandatory). The ability to disable it comes handy if a SMBus chip is connected
->> to an I2C controller which does not (or not necessarily) follow SMBus rules.
->>
->> I had seen that problem myself with MAX6697, and STTS751 (and its driver) also
->> supports it.
-> 
-> So, is the approach with an optional smbus-timeout-disable property documented
-> in .../bindings/hwmon/jc42.txt good-to-go or should it be documented in some
-> common SMBus client-device file? I don't fine any such beast, so I'm unsure
-> how to proceed in that case.
-> 
+Since i2c_unregister_device() became NULL-aware we may remove duplicate
+NULL check.
 
-I would suggest .../bindings/hwmon/jc42.txt. Even though the functionality is
-supported by various SMBus chips, it is not supported by _every_ SMBus chip.
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hwmon/w83792d.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-I also found this:
-
-https://github.com/opennetworklinux/linux/blob/master/3.2.65-1%2Bdeb7u2/patches/driver-adt7470-knob-to-disable-smbus-timeout.patch
-
-which suggests that we should find a common solution (even though that patch
-never found its way upstream).
-
-Rob, are you ok with "smbus-timeout-disable" as suggested above ?
-
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
+index d764602d70db..76aa39e537e0 100644
+--- a/drivers/hwmon/w83792d.c
++++ b/drivers/hwmon/w83792d.c
+@@ -981,8 +981,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
+ /* Undo inits in case of errors */
+ 
+ ERROR_SC_1:
+-	if (data->lm75[0] != NULL)
+-		i2c_unregister_device(data->lm75[0]);
++	i2c_unregister_device(data->lm75[0]);
+ ERROR_SC_0:
+ 	return err;
+ }
+@@ -1456,10 +1455,8 @@ w83792d_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	for (i = 0; i < ARRAY_SIZE(w83792d_group_fan); i++)
+ 		sysfs_remove_group(&dev->kobj, &w83792d_group_fan[i]);
+ exit_i2c_unregister:
+-	if (data->lm75[0] != NULL)
+-		i2c_unregister_device(data->lm75[0]);
+-	if (data->lm75[1] != NULL)
+-		i2c_unregister_device(data->lm75[1]);
++	i2c_unregister_device(data->lm75[0]);
++	i2c_unregister_device(data->lm75[1]);
+ 	return err;
+ }
+ 
+@@ -1475,10 +1472,8 @@ w83792d_remove(struct i2c_client *client)
+ 		sysfs_remove_group(&client->dev.kobj,
+ 				   &w83792d_group_fan[i]);
+ 
+-	if (data->lm75[0] != NULL)
+-		i2c_unregister_device(data->lm75[0]);
+-	if (data->lm75[1] != NULL)
+-		i2c_unregister_device(data->lm75[1]);
++	i2c_unregister_device(data->lm75[0]);
++	i2c_unregister_device(data->lm75[1]);
+ 
+ 	return 0;
+ }
+-- 
+2.14.2
