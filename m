@@ -1,77 +1,55 @@
-Return-Path: <jdelvare@suse.de>
-Return-path: <jdelvare@suse.de>
-Date: Tue, 31 Oct 2017 20:43:29 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>, Rudolf
- Marek <r.marek@assembler.cz>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 12/15] hwmon: (w83793) Remove duplicate NULL check
-Message-ID: <20171031204329.00a8c776@endymion>
-In-Reply-To: <20171031142149.32512-12-andriy.shevchenko@linux.intel.com>
-References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
-	<20171031142149.32512-12-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf0-f193.google.com ([209.85.192.193]:49903 "EHLO
+        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932779AbdJaU6R (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 31 Oct 2017 16:58:17 -0400
+Received: by mail-pf0-f193.google.com with SMTP id i5so222470pfe.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Oct 2017 13:58:17 -0700 (PDT)
+From: Hoan Tran <hotran@apm.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lho@apm.com, patches@apm.com, Hoan Tran <hotran@apm.com>
+Subject: [PATCH] hwmon: xgene: Minor clean up of ifdef and acpi_match_table reference
+Date: Tue, 31 Oct 2017 13:58:07 -0700
+Message-Id: <1509483487-10110-1-git-send-email-hotran@apm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 31 Oct 2017 16:21:46 +0200, Andy Shevchenko wrote:
-> Since i2c_unregister_device() became NULL-aware we may remove duplicate
-> NULL check.
-> 
-> Cc: Rudolf Marek <r.marek@assembler.cz>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/hwmon/w83793.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-> index 5ba9d9f1daa1..0af0f6283b35 100644
-> --- a/drivers/hwmon/w83793.c
-> +++ b/drivers/hwmon/w83793.c
-> @@ -1564,10 +1564,8 @@ static int w83793_remove(struct i2c_client *client)
->  	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
->  		device_remove_file(dev, &w83793_temp[i].dev_attr);
->  
-> -	if (data->lm75[0] != NULL)
-> -		i2c_unregister_device(data->lm75[0]);
-> -	if (data->lm75[1] != NULL)
-> -		i2c_unregister_device(data->lm75[1]);
-> +	i2c_unregister_device(data->lm75[0]);
-> +	i2c_unregister_device(data->lm75[1]);
->  
->  	/* Decrease data reference counter */
->  	mutex_lock(&watchdog_data_mutex);
-> @@ -1625,8 +1623,7 @@ w83793_detect_subclients(struct i2c_client *client)
->  	/* Undo inits in case of errors */
->  
->  ERROR_SC_1:
-> -	if (data->lm75[0] != NULL)
-> -		i2c_unregister_device(data->lm75[0]);
-> +	i2c_unregister_device(data->lm75[0]);
->  ERROR_SC_0:
->  	return err;
->  }
-> @@ -1962,10 +1959,8 @@ static int w83793_probe(struct i2c_client *client,
->  	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
->  		device_remove_file(dev, &w83793_temp[i].dev_attr);
->  
-> -	if (data->lm75[0] != NULL)
-> -		i2c_unregister_device(data->lm75[0]);
-> -	if (data->lm75[1] != NULL)
-> -		i2c_unregister_device(data->lm75[1]);
-> +	i2c_unregister_device(data->lm75[0]);
-> +	i2c_unregister_device(data->lm75[1]);
->  free_mem:
->  	kfree(data);
->  exit:
+This patch removes the un-necessary ifdef CONFIG_ACPI and directly
+uses the acpi_match_table from the driver pdev.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Hoan Tran <hotran@apm.com>
+---
+ drivers/hwmon/xgene-hwmon.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 5783436..85c4e3d 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -665,16 +665,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 		}
+ 	} else {
+ 		struct acpi_pcct_hw_reduced *cppc_ss;
+-		int version = XGENE_HWMON_V1;
+-#ifdef CONFIG_ACPI
+ 		const struct acpi_device_id *acpi_id;
++		int version = XGENE_HWMON_V1;
+ 
+-		acpi_id = acpi_match_device(xgene_hwmon_acpi_match, &pdev->dev);
++		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
++					    &pdev->dev);
+ 		if (!acpi_id)
+ 			return -EINVAL;
+ 
+ 		version = (int)acpi_id->driver_data;
+-#endif
+ 
+ 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
+ 					     &ctx->mbox_idx)) {
 -- 
-Jean Delvare
-SUSE L3 Support
+2.7.4
+
