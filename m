@@ -1,50 +1,61 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga04.intel.com ([192.55.52.120]:4004 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752408AbdKBMZC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 2 Nov 2017 08:25:02 -0400
-Message-ID: <1509625409.10233.184.camel@linux.intel.com>
-Subject: Re: [PATCH v1 09/15] hwmon: (w83781d) Remove duplicate NULL check
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Wolfram Sang <wsa@the-dreams.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Date: Thu, 02 Nov 2017 14:23:29 +0200
-In-Reply-To: <20171101230734.6zsxizhcwazffhrx@ninjato>
-References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
-         <20171031142149.32512-9-andriy.shevchenko@linux.intel.com>
-         <4b621f23-f251-7fa6-c79c-059b48f27345@roeck-us.net>
-         <1509542817.10233.156.camel@linux.intel.com>
-         <20171101230734.6zsxizhcwazffhrx@ninjato>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: from mail-pg0-f65.google.com ([74.125.83.65]:49138 "EHLO
+        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751402AbdKANP4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2017 09:15:56 -0400
+Date: Wed, 1 Nov 2017 06:15:53 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: hotran <hotran@apm.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lho@apm.com, patches@apm.com
+Subject: Re: hwmon: xgene: Minor clean up of ifdef and acpi_match_table
+ reference
+Message-ID: <20171101131553.GA21209@roeck-us.net>
+References: <1509483487-10110-1-git-send-email-hotran@apm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1509483487-10110-1-git-send-email-hotran@apm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, 2017-11-02 at 00:07 +0100, Wolfram Sang wrote:
-> > > I'll keep the hwmon patches from this series on hold until the
-> > > changes
-> > > to i2c_unregister_device make it into the tree. Ok with me if the
-> > > patches
-> > > are merged through some other tree.
-> > 
-> > Wolfram, what do you think?
-> > 
-> > At least we have couple of options:
-> > - apply i2c core patch now and wait until rc1
-> > - apply everything through i2c tree
-> > - ...
+On Tue, Oct 31, 2017 at 01:58:07PM -0700, hotran wrote:
+> This patch removes the un-necessary ifdef CONFIG_ACPI and directly
+> uses the acpi_match_table from the driver pdev.
 > 
-> I just applied patches 1-3 to my for-4.15 branch. So, other subsystems
-> could pick it at rc1 time. If you are going to resend, you can add my
-> 
-> Acked-by: Wolfram Sang <wsa@the-dreams.de>
-> 
-> to all of the remaining patches.
+> Signed-off-by: Hoan Tran <hotran@apm.com>
 
-Noted, thanks!
+Applied to hwmon-next, with now unnecessary initialization of 'version'
+removed.
 
--- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/xgene-hwmon.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+> index 5783436..85c4e3d 100644
+> --- a/drivers/hwmon/xgene-hwmon.c
+> +++ b/drivers/hwmon/xgene-hwmon.c
+> @@ -665,16 +665,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+>  		}
+>  	} else {
+>  		struct acpi_pcct_hw_reduced *cppc_ss;
+> -		int version = XGENE_HWMON_V1;
+> -#ifdef CONFIG_ACPI
+>  		const struct acpi_device_id *acpi_id;
+> +		int version = XGENE_HWMON_V1;
+>  
+> -		acpi_id = acpi_match_device(xgene_hwmon_acpi_match, &pdev->dev);
+> +		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
+> +					    &pdev->dev);
+>  		if (!acpi_id)
+>  			return -EINVAL;
+>  
+>  		version = (int)acpi_id->driver_data;
+> -#endif
+>  
+>  		if (device_property_read_u32(&pdev->dev, "pcc-channel",
+>  					     &ctx->mbox_idx)) {
