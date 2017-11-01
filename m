@@ -1,104 +1,91 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-lf0-f65.google.com ([209.85.215.65]:56908 "EHLO
-        mail-lf0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750716AbdKAG7y (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2017 02:59:54 -0400
-MIME-Version: 1.0
-In-Reply-To: <1331f460-d34b-02b2-d41a-3d0ec9543bb5@roeck-us.net>
-References: <20171101013421.8488-1-joel@jms.id.au> <d70eef8b-385e-4591-17b4-6fde3907df0f@roeck-us.net>
- <20171101020433.GF29237@lianli.shorne-pla.net> <1331f460-d34b-02b2-d41a-3d0ec9543bb5@roeck-us.net>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 1 Nov 2017 17:29:31 +1030
-Message-ID: <CACPK8Xcffkh5mXrCyXuDkFWPMPETb5OS2B61x1Oj7FiXhMFi9Q@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) Deassert reset in probe
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Stafford Horne <shorne@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Mykola Kostenok <c_mykolak@mellanox.com>,
-        Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: from mga01.intel.com ([192.55.52.88]:27059 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752118AbdKANdB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 1 Nov 2017 09:33:01 -0400
+Message-ID: <1509542817.10233.156.camel@linux.intel.com>
+Subject: Re: [PATCH v1 09/15] hwmon: (w83781d) Remove duplicate NULL check
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Date: Wed, 01 Nov 2017 15:26:57 +0200
+In-Reply-To: <4b621f23-f251-7fa6-c79c-059b48f27345@roeck-us.net>
+References: <20171031142149.32512-1-andriy.shevchenko@linux.intel.com>
+         <20171031142149.32512-9-andriy.shevchenko@linux.intel.com>
+         <4b621f23-f251-7fa6-c79c-059b48f27345@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 1, 2017 at 12:44 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On 10/31/2017 07:04 PM, Stafford Horne wrote:
->>
->> On Tue, Oct 31, 2017 at 06:53:15PM -0700, Guenter Roeck wrote:
->>>
->>> On 10/31/2017 06:34 PM, Joel Stanley wrote:
->>>>
->>>> The ASPEED SoC must deassert a reset in order to use the PWM/tach
->>>> peripheral.
->>>>
->>>> The device tree bindings are updated to document the resets phandle, and
->>>> the example is updated to match what is expected for both the reset and
->>>> clock phandle. Note that the bindings should have always had the reset
->>>> controller, as the hardware is unusable without it.
->>>>
->>>> Signed-off-by: Joel Stanley <joel@jms.id.au>
->>>
->>>
->>> Presumably the driver is being used. This change makes it incompatible
->>> with
->>> existing users. This is unacceptable; after all, it is possible that the
->>> device is taken out of reset by ROMMON or BIOS.
->>>
->>> On top of that, the reset controller code is quite strict and issues a
->>> backtrace if CONFIG_RESET_CONTROLLER is not enabled. Yet, there is no
->>> dependency added on RESET_CONTROLLER. You might want to consider making
->>> the new control optional and using
->>> devm_reset_control_get_optional_exclusive().
->>>
->>> The DT change should be a separate patch.
->>>
->>> More comments below.
->>
->>
->> [..]
->>
->>>>         return PTR_ERR_OR_ZERO(hwmon);
->>>>    }
->>>> +static int aspeed_pwm_tacho_remove(struct platform_device *pdev)
->>>> +{
->>>> +       struct aspeed_pwm_tacho_data *priv = platform_get_drvdata(pdev);
->>>> +
->>>> +       reset_control_deassert(priv->rst);
->>>
->>>
->>> This seems to be quite pointless. Also, did you test this code ?
->>>
->>>> +
->>>> +       return 0;
->>>> +}
->>>> +
->>>>    static const struct of_device_id of_pwm_tacho_match_table[] = {
->>>>         { .compatible = "aspeed,ast2400-pwm-tacho", },
->>>>         { .compatible = "aspeed,ast2500-pwm-tacho", },
->>>> @@ -969,6 +989,7 @@ MODULE_DEVICE_TABLE(of, of_pwm_tacho_match_table);
->>>>    static struct platform_driver aspeed_pwm_tacho_driver = {
->>>>         .probe          = aspeed_pwm_tacho_probe,
->>>> +       .probe          = aspeed_pwm_tacho_remove,
->>
->>
->> Also, this cant be right (should be .remove)?
->>
->
-> Nice. Makes me really wonder what this code would do. Does this even compile
-> ?
+On Wed, 2017-11-01 at 06:19 -0700, Guenter Roeck wrote:
+> On 10/31/2017 07:21 AM, Andy Shevchenko wrote:
+> > Since i2c_unregister_device() became NULL-aware we may remove
+> > duplicate
+> > NULL check.
+> > 
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: linux-hwmon@vger.kernel.org
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> I'll keep the hwmon patches from this series on hold until the changes
+> to i2c_unregister_device make it into the tree. Ok with me if the
+> patches
+> are merged through some other tree.
 
-It compiled. And booted, but it didn't do much :) I rushed sending out
-the patch a bit, sorry.
+Wolfram, what do you think?
 
-I've spent today I did some closer testing with a fixed v2 and I do
-get values out of the device. I don't have access to a machine that I
-can see the fans spinning on, so it's hard to know if the values are
-correct. I'll send it out tomorrow with a request for testing.
+At least we have couple of options:
+- apply i2c core patch now and wait until rc1
+- apply everything through i2c tree
+- ...
 
-Cheers,
+> 
+> Guenter
+> 
+> > ---
+> >   drivers/hwmon/w83781d.c | 12 ++++--------
+> >   1 file changed, 4 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
+> > index 246fb2365126..2b0f182daa87 100644
+> > --- a/drivers/hwmon/w83781d.c
+> > +++ b/drivers/hwmon/w83781d.c
+> > @@ -1246,10 +1246,8 @@ w83781d_probe(struct i2c_client *client,
+> > const struct i2c_device_id *id)
+> >   
+> >    exit_remove_files:
+> >   	w83781d_remove_files(dev);
+> > -	if (data->lm75[0])
+> > -		i2c_unregister_device(data->lm75[0]);
+> > -	if (data->lm75[1])
+> > -		i2c_unregister_device(data->lm75[1]);
+> > +	i2c_unregister_device(data->lm75[0]);
+> > +	i2c_unregister_device(data->lm75[1]);
+> >   	return err;
+> >   }
+> >   
+> > @@ -1262,10 +1260,8 @@ w83781d_remove(struct i2c_client *client)
+> >   	hwmon_device_unregister(data->hwmon_dev);
+> >   	w83781d_remove_files(dev);
+> >   
+> > -	if (data->lm75[0])
+> > -		i2c_unregister_device(data->lm75[0]);
+> > -	if (data->lm75[1])
+> > -		i2c_unregister_device(data->lm75[1]);
+> > +	i2c_unregister_device(data->lm75[0]);
+> > +	i2c_unregister_device(data->lm75[1]);
+> >   
+> >   	return 0;
+> >   }
+> > 
+> 
+> 
 
-Joel
+-- 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
