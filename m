@@ -1,69 +1,62 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f65.google.com ([209.85.218.65]:45933 "EHLO
-        mail-oi0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752194AbdKAPdb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2017 11:33:31 -0400
-Received: by mail-oi0-f65.google.com with SMTP id f66so5062040oib.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Nov 2017 08:33:31 -0700 (PDT)
-MIME-Version: 1.0
-In-Reply-To: <20171101131553.GA21209@roeck-us.net>
-References: <1509483487-10110-1-git-send-email-hotran@apm.com> <20171101131553.GA21209@roeck-us.net>
-From: Hoan Tran <hotran@apm.com>
-Date: Wed, 1 Nov 2017 08:33:30 -0700
-Message-ID: <CAFHUOYxsZLHYYNA62BwRf5q4KPwROUZOZMzWiDHNHveq0DoxwA@mail.gmail.com>
-Subject: Re: hwmon: xgene: Minor clean up of ifdef and acpi_match_table reference
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>, Loc Ho <lho@apm.com>,
-        patches <patches@apm.com>
-Content-Type: text/plain; charset="UTF-8"
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:57114 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750753AbdKBGhN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Nov 2017 02:37:13 -0400
+From: Lei YU <mine260309@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: Lei YU <mine260309@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH 2/2] hwmon: (w83773g) Add documentation
+Date: Thu,  2 Nov 2017 14:36:48 +0800
+Message-Id: <1509604608-20049-1-git-send-email-mine260309@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 1, 2017 at 6:15 AM, Guenter Roeck <linux@roeck-us.net> wrote:
-> On Tue, Oct 31, 2017 at 01:58:07PM -0700, hotran wrote:
->> This patch removes the un-necessary ifdef CONFIG_ACPI and directly
->> uses the acpi_match_table from the driver pdev.
->>
->> Signed-off-by: Hoan Tran <hotran@apm.com>
->
-> Applied to hwmon-next, with now unnecessary initialization of 'version'
-> removed.
+Add documentation for the w83773g driver.
 
-Thanks, Guenter
+Signed-off-by: Lei YU <mine260309@gmail.com>
+---
+ Documentation/hwmon/w83773g | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 Documentation/hwmon/w83773g
 
-Regards
-Hoan
+diff --git a/Documentation/hwmon/w83773g b/Documentation/hwmon/w83773g
+new file mode 100644
+index 0000000..da28731
+--- /dev/null
++++ b/Documentation/hwmon/w83773g
+@@ -0,0 +1,28 @@
++Kernel driver w83773g
++====================
++
++Supported chips:
++  * Nuvoton W83773G
++    Prefix: 'w83773g'
++    Addresses scanned: I2C 0x4c and 0x4d
++    Datasheet: https://www.nuvoton.com/resource-files/W83773G_SG_DatasheetV1_2.pdf
++
++Authors:
++	Lei YU <mine260309@gmail.com>
++
++Description
++-----------
++
++This driver implements support for Nuvoton W83773G temperature sensor
++chip. This chip implements one local and two remote sensors.
++Temperature is measured in degrees Celsius.
++The chip is wired over I2C/SMBus and specified over a temperature
++range of -40 to +125 degrees Celsius (for local sensor) and -40 to +127
++degrees Celsius (for remote sensors).
++Resolution for both the local and remote channels is 0.125 degree C.
++
++The chip supports only temperature measurement. The driver exports
++the temperature values via the following sysfs files:
++
++temp[1-3]_input
++temp[2-3]_fault
+-- 
+1.9.1
 
->
-> Thanks,
-> Guenter
->
->> ---
->>  drivers/hwmon/xgene-hwmon.c | 7 +++----
->>  1 file changed, 3 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
->> index 5783436..85c4e3d 100644
->> --- a/drivers/hwmon/xgene-hwmon.c
->> +++ b/drivers/hwmon/xgene-hwmon.c
->> @@ -665,16 +665,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->>               }
->>       } else {
->>               struct acpi_pcct_hw_reduced *cppc_ss;
->> -             int version = XGENE_HWMON_V1;
->> -#ifdef CONFIG_ACPI
->>               const struct acpi_device_id *acpi_id;
->> +             int version = XGENE_HWMON_V1;
->>
->> -             acpi_id = acpi_match_device(xgene_hwmon_acpi_match, &pdev->dev);
->> +             acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
->> +                                         &pdev->dev);
->>               if (!acpi_id)
->>                       return -EINVAL;
->>
->>               version = (int)acpi_id->driver_data;
->> -#endif
->>
->>               if (device_property_read_u32(&pdev->dev, "pcc-channel",
->>                                            &ctx->mbox_idx)) {
