@@ -1,9 +1,9 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:56329 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934073AbdKBDyK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2017 23:54:10 -0400
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:47794 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S934073AbdKBDy1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Nov 2017 23:54:27 -0400
 From: Joel Stanley <joel@jms.id.au>
 To: Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>
@@ -13,48 +13,64 @@ Cc: Philipp Zabel <philipp.zabel@gmail.com>,
         Patrick Venture <venture@google.com>,
         Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] hwmon: (aspeed-pwm-tacho) Sort headers
-Date: Thu,  2 Nov 2017 14:53:47 +1100
-Message-Id: <20171102035349.1902-2-joel@jms.id.au>
+Subject: [PATCH v2 3/3] dt-bindings: hwmon: aspeed-pwm-tacho: Add reset node
+Date: Thu,  2 Nov 2017 14:53:49 +1100
+Message-Id: <20171102035349.1902-4-joel@jms.id.au>
 In-Reply-To: <20171102035349.1902-1-joel@jms.id.au>
 References: <20171102035349.1902-1-joel@jms.id.au>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Sort the headers in preperation for future changes.
+The device tree bindings are updated to document the resets phandle, and
+the example is updated to match what is expected for both the reset and
+clock phandle.
+
+Note that the bindings should have always had the reset controller, as
+the hardware is unusable without it.
 
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- drivers/hwmon/aspeed-pwm-tacho.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt         | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-index f914e5f41048..63a95e23ca81 100644
---- a/drivers/hwmon/aspeed-pwm-tacho.c
-+++ b/drivers/hwmon/aspeed-pwm-tacho.c
-@@ -7,19 +7,19 @@
-  */
+diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+index 367c8203213b..3ac02988a1a5 100644
+--- a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
++++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+@@ -22,8 +22,9 @@ Required properties for pwm-tacho node:
+ - compatible : should be "aspeed,ast2400-pwm-tacho" for AST2400 and
+ 	       "aspeed,ast2500-pwm-tacho" for AST2500.
  
- #include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/errno.h>
- #include <linux/gpio/consumer.h>
--#include <linux/delay.h>
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/of_platform.h>
- #include <linux/of_device.h>
-+#include <linux/of_platform.h>
- #include <linux/platform_device.h>
--#include <linux/sysfs.h>
- #include <linux/regmap.h>
-+#include <linux/sysfs.h>
- #include <linux/thermal.h>
+-- clocks : a fixed clock providing input clock frequency(PWM
+-	   and Fan Tach clock)
++- clocks : phandle to clock provider with the clock number in the second cell
++
++- resets : phandle to reset controller with the reset number in the second cell
  
- /* ASPEED PWM & FAN Tach Register Definition */
+ fan subnode format:
+ ===================
+@@ -48,19 +49,14 @@ Required properties for each child node:
+ 
+ Examples:
+ 
+-pwm_tacho_fixed_clk: fixedclk {
+-	compatible = "fixed-clock";
+-	#clock-cells = <0>;
+-	clock-frequency = <24000000>;
+-};
+-
+ pwm_tacho: pwmtachocontroller@1e786000 {
+ 	#address-cells = <1>;
+ 	#size-cells = <1>;
+ 	#cooling-cells = <2>;
+ 	reg = <0x1E786000 0x1000>;
+ 	compatible = "aspeed,ast2500-pwm-tacho";
+-	clocks = <&pwm_tacho_fixed_clk>;
++	clocks = <&syscon ASPEED_CLK_APB>;
++	resets = <&syscon ASPEED_RESET_PWM>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default>;
+ 
 -- 
 2.14.1
 
