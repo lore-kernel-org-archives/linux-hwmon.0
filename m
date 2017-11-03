@@ -1,72 +1,46 @@
-Return-Path: <peda@axentia.se>
-Return-path: <peda@axentia.se>
-Subject: Re: [PATCH v2 2/2] ARM: dts: at91: disable the nxp,se97b SMBUS
- timeout on the TSE-850
-To: Alexandre Belloni <alexandre.belloni@free-electrons.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Russell King <linux@armlinux.org.uk>, Jean Delvare <jdelvare@suse.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hwmon@vger.kernel.org
-References: <20171127163101.27859-1-peda@axentia.se>
- <20171127163101.27859-3-peda@axentia.se>
- <20171129205311.GA20551@roeck-us.net> <20171129205629.GO21126@piout.net>
- <20171130171638.GA17788@roeck-us.net> <20171130172606.GZ21126@piout.net>
-From: Peter Rosin <peda@axentia.se>
-Message-ID: <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
-Date: Thu, 30 Nov 2017 19:46:09 +0100
-MIME-Version: 1.0
-In-Reply-To: <20171130172606.GZ21126@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Return-Path: <linux-kernel-owner@vger.kernel.org>
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ALKML <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Roy Franz <roy.franz@cavium.com>,
+        Harb Abdulhamid <harba@codeaurora.org>, Nishanth Menon <nm@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>, Loc Ho <lho@apm.com>,
+        Ryan Harkin <Ryan.Harkin@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v4 17/20] hwmon: (core) Add hwmon_max to hwmon_sensor_types enumeration
+Date: Fri,  3 Nov 2017 14:47:54 +0000
+Message-Id: <1509720477-18936-18-git-send-email-sudeep.holla@arm.com>
+In-Reply-To: <1509720477-18936-1-git-send-email-sudeep.holla@arm.com>
+References: <1509720477-18936-1-git-send-email-sudeep.holla@arm.com>
+Sender: linux-kernel-owner@vger.kernel.org
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 2017-11-30 18:26, Alexandre Belloni wrote:
-> On 30/11/2017 at 09:16:38 -0800, Guenter Roeck wrote:
->> On Wed, Nov 29, 2017 at 09:56:29PM +0100, Alexandre Belloni wrote:
->>> On 29/11/2017 at 12:53:11 -0800, Guenter Roeck wrote:
->>>> On Mon, Nov 27, 2017 at 05:31:01PM +0100, Peter Rosin wrote:
->>>>> The I2C adapter driver is sometimes slow, causing the SCL line to
->>>>> be stuck low for more than the stipulated SMBUS timeout of 25-35 ms.
->>>>> This causes the client device to give up which in turn causes silent
->>>>> corruption of data. So, disable the SMBUS timeout in the client device.
->>>>>
->>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
->>>>
->>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
->>>>
->>>> I assume this will be sent upstream through an arm tree.
->>>>
->>>
->>> Yes, I'm applying it right now.
->>>
->> Are you going to apply the patch for 4.15, or queue it up for 4.16 ?
->> I have been arguing with myself if this is a feature or a bug fix.
->> So far I queued the driver change up for 4.16, but I am open to
->> applying it to 4.15. Any thoughts ?
->>
-> 
-> I was wondering that myself. I'm open to have it as a fix in 4.15. Or
-> maybe Peter can send the series to stable if he needs it in 4.14.
-> 
-> Peter, what do you think/want?
+It's useful to know the maximum types of sensor supported by hwmon
+framework. It can be used to allocate some data structures when sorting
+the monitors based on their type.
 
-TL;DR Either way is fine.
+This will be used by scmi hwmon support.
 
-I think it's a bugfix; it fixes real problems where the application
-misbehave due to faulty content when reading from an eeprom. I'm
-expecting to make a new release for the hw in question RSN and these
-are the only local patches. So, it would be nice if they made it to
-4.14.x before my release happens. However, it's not like it's difficult
-to rebase the patches should that backport not happen or take too long.
+Cc: linux-hwmon@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ include/linux/hwmon.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-The badness started to happen much more frequently due to some timing
-difference affecting the i2c bus driver, but in theory it's a problem
-that has been there from the start. I have just not noticed it before...
-
-Cheers,
-Peter
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index ceb751987c40..e5fd2707b6df 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -29,6 +29,7 @@ enum hwmon_sensor_types {
+ 	hwmon_humidity,
+ 	hwmon_fan,
+ 	hwmon_pwm,
++	hwmon_max,
+ };
+ 
+ enum hwmon_chip_attributes {
+-- 
+2.7.4
