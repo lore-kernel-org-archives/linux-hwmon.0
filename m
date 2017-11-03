@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:47077 "EHLO
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55265 "EHLO
         out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1754141AbdKCEx4 (ORCPT
+        by vger.kernel.org with ESMTP id S1752251AbdKCEyQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 3 Nov 2017 00:53:56 -0400
+        Fri, 3 Nov 2017 00:54:16 -0400
 From: Andrew Jeffery <andrew@aj.id.au>
 To: linux-hwmon@vger.kernel.org
 Cc: Andrew Jeffery <andrew@aj.id.au>, linux@roeck-us.net,
@@ -12,244 +12,289 @@ Cc: Andrew Jeffery <andrew@aj.id.au>, linux@roeck-us.net,
         corbet@lwn.net, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         joel@jms.id.au, openbmc@lists.ozlabs.org
-Subject: [PATCH v4 2/6] pmbus: Add driver for Maxim MAX31785 Intelligent Fan Controller
-Date: Fri,  3 Nov 2017 15:53:02 +1100
-Message-Id: <20171103045306.26448-3-andrew@aj.id.au>
+Subject: [PATCH v4 6/6] pmbus: max31785: Add dual tachometer support
+Date: Fri,  3 Nov 2017 15:53:06 +1100
+Message-Id: <20171103045306.26448-7-andrew@aj.id.au>
 In-Reply-To: <20171103045306.26448-1-andrew@aj.id.au>
 References: <20171103045306.26448-1-andrew@aj.id.au>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The Maxim MAX31785 is a PMBus device providing closed-loop, multi-channel fan
-management with temperature and remote voltage sensing. Various fan control
-features are provided, including PWM frequency control, temperature hysteresis,
-dual tachometer measurements, and fan health monitoring.
+The dual tachometer feature is implemented in hardware with a TACHSEL
+input to indicate the rotor under measurement, and exposed on the device
+by extending the READ_FAN_SPEED_1 word with two extra bytes*. The need
+to read the non-standard four-byte response leads to a cut-down
+implementation of i2c_smbus_xfer_emulated() included in the driver.
+Further, to expose the second rotor tachometer value to userspace the
+values are exposed through virtual pages. We re-route accesses to
+FAN_CONFIG_1_2 and READ_FAN_SPEED_1 on undefined (in hardware) pages
+23-28 to the same registers on pages 0-5, and with the latter command we
+extract the value from the second word of the four-byte response.
 
-This patch presents a basic driver using only the existing features of the
-PMBus subsystem.
+* The documentation recommends the slower rotor be associated with
+TACHSEL=0, which provides the first word of the response. The TACHSEL=0
+measurement is used by the controller's closed-loop fan management.
 
 Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
 ---
- Documentation/hwmon/max31785   |  51 ++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig    |  10 ++++
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/max31785.c | 116 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 178 insertions(+)
- create mode 100644 Documentation/hwmon/max31785
- create mode 100644 drivers/hwmon/pmbus/max31785.c
+ Documentation/hwmon/max31785   |   8 ++-
+ drivers/hwmon/pmbus/max31785.c | 159 ++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 163 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/hwmon/max31785 b/Documentation/hwmon/max31785
-new file mode 100644
-index 000000000000..45fb6093dec2
---- /dev/null
+index e9edbf11948f..8e75efc5e4b9 100644
+--- a/Documentation/hwmon/max31785
 +++ b/Documentation/hwmon/max31785
-@@ -0,0 +1,51 @@
-+Kernel driver max31785
-+======================
-+
-+Supported chips:
-+  * Maxim MAX31785, MAX31785A
-+    Prefix: 'max31785' or 'max31785a'
-+    Addresses scanned: -
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX31785.pdf
-+
-+Author: Andrew Jeffery <andrew@aj.id.au>
-+
-+Description
-+-----------
-+
-+The Maxim MAX31785 is a PMBus device providing closed-loop, multi-channel fan
-+management with temperature and remote voltage sensing. Various fan control
-+features are provided, including PWM frequency control, temperature hysteresis,
-+dual tachometer measurements, and fan health monitoring.
-+
-+For dual rotor fan configuration, the MAX31785 exposes the slowest rotor of the
-+two in the fan[1-4]_input attributes.
-+
-+Usage Notes
-+-----------
-+
-+This driver does not probe for PMBus devices. You will have to instantiate
-+devices explicitly.
-+
-+Sysfs attributes
-+----------------
-+
-+fan[1-4]_alarm		Fan alarm.
-+fan[1-4]_fault		Fan fault.
-+fan[1-4]_input		Fan RPM.
-+
-+in[1-6]_crit		Critical maximum output voltage
-+in[1-6]_crit_alarm	Output voltage critical high alarm
-+in[1-6]_input		Measured output voltage
-+in[1-6]_label		"vout[18-23]"
-+in[1-6]_lcrit		Critical minimum output voltage
-+in[1-6]_lcrit_alarm	Output voltage critical low alarm
-+in[1-6]_max		Maximum output voltage
-+in[1-6]_max_alarm	Output voltage high alarm
-+in[1-6]_min		Minimum output voltage
-+in[1-6]_min_alarm	Output voltage low alarm
-+
-+temp[1-11]_crit		Critical high temperature
-+temp[1-11]_crit_alarm	Chip temperature critical high alarm
-+temp[1-11]_input	Measured temperature
-+temp[1-11]_max		Maximum temperature
-+temp[1-11]_max_alarm	Chip temperature high alarm
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 40019325b517..08479006c7f9 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -114,6 +114,16 @@ config SENSORS_MAX20751
- 	  This driver can also be built as a module. If so, the module will
- 	  be called max20751.
+@@ -17,8 +17,9 @@ management with temperature and remote voltage sensing. Various fan control
+ features are provided, including PWM frequency control, temperature hysteresis,
+ dual tachometer measurements, and fan health monitoring.
  
-+config SENSORS_MAX31785
-+	tristate "Maxim MAX31785 and compatibles"
-+	default n
-+	help
-+	  If you say yes here you get hardware monitoring support for Maxim
-+	  MAX31785.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called max31785.
-+
- config SENSORS_MAX34440
- 	tristate "Maxim MAX34440 and compatibles"
- 	default n
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 459a6be3390e..a8bf0e490db9 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
-+obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
- obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
- obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+-For dual rotor fan configuration, the MAX31785 exposes the slowest rotor of the
+-two in the fan[1-4]_input attributes.
++For dual-rotor configurations the MAX31785A exposes the second rotor tachometer
++readings in attributes fan[5-8]_input. By contrast the MAX31785 only exposes
++the slowest rotor measurement, and does so in the fan[1-4]_input attributes.
+ 
+ Usage Notes
+ -----------
+@@ -31,7 +32,8 @@ Sysfs attributes
+ 
+ fan[1-4]_alarm		Fan alarm.
+ fan[1-4]_fault		Fan fault.
+-fan[1-4]_input		Fan RPM.
++fan[1-8]_input		Fan RPM. On the MAX31785A, inputs 5-8 correspond to the
++			second rotor of fans 1-4
+ fan[1-4]_target		Fan input target
+ 
+ in[1-6]_crit		Critical maximum output voltage
 diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
-new file mode 100644
-index 000000000000..9313849d5160
---- /dev/null
+index 0d97ddf67079..2ca7febb2843 100644
+--- a/drivers/hwmon/pmbus/max31785.c
 +++ b/drivers/hwmon/pmbus/max31785.c
-@@ -0,0 +1,116 @@
-+/*
-+ * Copyright (C) 2017 IBM Corp.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
+@@ -16,10 +16,82 @@
+ 
+ enum max31785_regs {
+ 	MFR_REVISION		= 0x9b,
++	MFR_FAN_CONFIG		= 0xf1,
+ };
+ 
++#define MAX31785			0x3030
++#define MAX31785A			0x3040
 +
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include "pmbus.h"
++#define MFR_FAN_CONFIG_DUAL_TACH	BIT(12)
 +
-+enum max31785_regs {
-+	MFR_REVISION		= 0x9b,
-+};
+ #define MAX31785_NR_PAGES		23
+ 
++static int max31785_read_byte_data(struct i2c_client *client, int page,
++				   int reg)
++{
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		if (page < MAX31785_NR_PAGES)
++			return -ENODATA;
 +
-+#define MAX31785_NR_PAGES		23
++		return -ENOTSUPP;
++	case PMBUS_FAN_CONFIG_12:
++		if (page < MAX31785_NR_PAGES)
++			return -ENODATA;
 +
-+#define MAX31785_FAN_FUNCS \
-+	(PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12)
++		return pmbus_read_byte_data(client, page - MAX31785_NR_PAGES,
++					    reg);
++	}
 +
-+#define MAX31785_TEMP_FUNCS \
-+	(PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP)
++	return -ENODATA;
++}
 +
-+#define MAX31785_VOUT_FUNCS \
-+	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT)
++static int max31785_write_byte(struct i2c_client *client, int page, u8 value)
++{
++	if (page < MAX31785_NR_PAGES)
++		return -ENODATA;
 +
-+static const struct pmbus_driver_info max31785_info = {
-+	.pages = MAX31785_NR_PAGES,
++	return -ENOTSUPP;
++}
 +
-+	/* RPM */
-+	.format[PSC_FAN] = direct,
-+	.m[PSC_FAN] = 1,
-+	.b[PSC_FAN] = 0,
-+	.R[PSC_FAN] = 0,
-+	.func[0] = MAX31785_FAN_FUNCS,
-+	.func[1] = MAX31785_FAN_FUNCS,
-+	.func[2] = MAX31785_FAN_FUNCS,
-+	.func[3] = MAX31785_FAN_FUNCS,
-+	.func[4] = MAX31785_FAN_FUNCS,
-+	.func[5] = MAX31785_FAN_FUNCS,
++static int max31785_read_long_data(struct i2c_client *client, int page,
++				   int reg, u32 *data)
++{
++	unsigned char cmdbuf[1];
++	unsigned char rspbuf[4];
++	int rc;
 +
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 2,
-+	.func[6]  = MAX31785_TEMP_FUNCS,
-+	.func[7]  = MAX31785_TEMP_FUNCS,
-+	.func[8]  = MAX31785_TEMP_FUNCS,
-+	.func[9]  = MAX31785_TEMP_FUNCS,
-+	.func[10] = MAX31785_TEMP_FUNCS,
-+	.func[11] = MAX31785_TEMP_FUNCS,
-+	.func[12] = MAX31785_TEMP_FUNCS,
-+	.func[13] = MAX31785_TEMP_FUNCS,
-+	.func[14] = MAX31785_TEMP_FUNCS,
-+	.func[15] = MAX31785_TEMP_FUNCS,
-+	.func[16] = MAX31785_TEMP_FUNCS,
++	struct i2c_msg msg[2] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = sizeof(cmdbuf),
++			.buf = cmdbuf,
++		},
++		{
++			.addr = client->addr,
++			.flags = I2C_M_RD,
++			.len = sizeof(rspbuf),
++			.buf = rspbuf,
++		},
++	};
 +
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.m[PSC_VOLTAGE_OUT] = 1,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+	.func[17] = MAX31785_VOUT_FUNCS,
-+	.func[18] = MAX31785_VOUT_FUNCS,
-+	.func[19] = MAX31785_VOUT_FUNCS,
-+	.func[20] = MAX31785_VOUT_FUNCS,
-+	.func[21] = MAX31785_VOUT_FUNCS,
-+	.func[22] = MAX31785_VOUT_FUNCS,
-+};
++	cmdbuf[0] = reg;
 +
-+static int max31785_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
++	rc = pmbus_set_page(client, page);
++	if (rc < 0)
++		return rc;
++
++	rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++	if (rc < 0)
++		return rc;
++
++	*data = (rspbuf[0] << (0 * 8)) | (rspbuf[1] << (1 * 8)) |
++		(rspbuf[2] << (2 * 8)) | (rspbuf[3] << (3 * 8));
++
++	return rc;
++}
++
+ static int max31785_get_pwm(struct i2c_client *client, int page)
+ {
+ 	int config;
+@@ -76,7 +148,25 @@ static int max31785_read_word_data(struct i2c_client *client, int page,
+ 	int rv;
+ 
+ 	switch (reg) {
++	case PMBUS_READ_FAN_SPEED_1:
++	{
++		u32 val;
++
++		if (page < MAX31785_NR_PAGES)
++			return -ENODATA;
++
++		rv = max31785_read_long_data(client, page - MAX31785_NR_PAGES,
++					     reg, &val);
++		if (rv < 0)
++			return rv;
++
++		rv = (val >> 16) & 0xffff;
++		break;
++	}
+ 	case PMBUS_VIRT_PWM_1:
++		if (page >= MAX31785_NR_PAGES)
++			return -ENOTSUPP;
++
+ 		rv = max31785_get_pwm(client, page);
+ 		if (rv < 0)
+ 			return rv;
+@@ -85,10 +175,13 @@ static int max31785_read_word_data(struct i2c_client *client, int page,
+ 		rv /= 100;
+ 		break;
+ 	case PMBUS_VIRT_PWM_ENABLE_1:
++		if (page >= MAX31785_NR_PAGES)
++			return -ENOTSUPP;
++
+ 		rv = max31785_get_pwm_mode(client, page);
+ 		break;
+ 	default:
+-		rv = -ENODATA;
++		rv = (page >= MAX31785_NR_PAGES) ? -ENXIO : -ENODATA;
+ 		break;
+ 	}
+ 
+@@ -100,6 +193,9 @@ static const int max31785_pwm_modes[] = { 0x7fff, 0x2710, 0xffff };
+ static int max31785_write_word_data(struct i2c_client *client, int page,
+ 				    int reg, u16 word)
+ {
++	if (page >= MAX31785_NR_PAGES)
++		return -ENXIO;
++
+ 	switch (reg) {
+ 	case PMBUS_VIRT_PWM_ENABLE_1:
+ 		if (word >= ARRAY_SIZE(max31785_pwm_modes))
+@@ -127,7 +223,9 @@ static const struct pmbus_driver_info max31785_info = {
+ 	.pages = MAX31785_NR_PAGES,
+ 
+ 	.write_word_data = max31785_write_word_data,
++	.read_byte_data = max31785_read_byte_data,
+ 	.read_word_data = max31785_read_word_data,
++	.write_byte = max31785_write_byte,
+ 
+ 	/* RPM */
+ 	.format[PSC_FAN] = direct,
+@@ -174,6 +272,55 @@ static const struct pmbus_driver_info max31785_info = {
+ 	.func[22] = MAX31785_VOUT_FUNCS,
+ };
+ 
++static int max31785_configure(struct i2c_client *client,
++			      const struct i2c_device_id *id,
++			      struct pmbus_driver_info *info)
 +{
 +	struct device *dev = &client->dev;
-+	struct pmbus_driver_info *info;
-+	s64 ret;
++	bool dual_tach = false;
++	int ret;
++	int i;
 +
-+	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	*info = max31785_info;
-+
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 255);
++	ret = i2c_smbus_read_word_data(client, MFR_REVISION);
 +	if (ret < 0)
 +		return ret;
 +
-+	return pmbus_do_probe(client, id, info);
++	if (!strcmp("max31785a", id->name)) {
++		if (ret == MAX31785A)
++			dual_tach = true;
++		else
++			dev_warn(dev, "Expected max3175a, found max31785: cannot provide secondary tachometer readings\n");
++	} else if (!strcmp("max31785", id->name)) {
++		if (ret == MAX31785A)
++			dev_info(dev, "Expected max31785, found max3175a: suppressing secondary tachometer attributes\n");
++	} else {
++		return -EINVAL;
++	}
++
++	if (!dual_tach)
++		return 0;
++
++	for (i = 0; i <= 5; i++) {
++		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
++		if (ret < 0)
++			return ret;
++
++		ret = i2c_smbus_read_word_data(client, MFR_FAN_CONFIG);
++		if (ret < 0)
++			return ret;
++
++		if (ret & MFR_FAN_CONFIG_DUAL_TACH) {
++			int virtual = MAX31785_NR_PAGES + i;
++
++			info->pages = max(info->pages, virtual + 1);
++			info->func[virtual] |= PMBUS_HAVE_FAN12;
++			info->func[virtual] |= PMBUS_PAGE_VIRTUAL;
++		}
++	}
++
++	return 0;
 +}
 +
-+static const struct i2c_device_id max31785_id[] = {
-+	{ "max31785", 0 },
-+	{ "max31785a", 0 },
-+	{ },
-+};
+ static int max31785_probe(struct i2c_client *client,
+ 			  const struct i2c_device_id *id)
+ {
+@@ -181,6 +328,12 @@ static int max31785_probe(struct i2c_client *client,
+ 	struct pmbus_driver_info *info;
+ 	s64 ret;
+ 
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_BYTE_DATA |
++				     I2C_FUNC_SMBUS_WORD_DATA |
++				     I2C_FUNC_SMBUS_BLOCK_DATA))
++		return -ENODEV;
 +
-+MODULE_DEVICE_TABLE(i2c, max31785_id);
+ 	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+@@ -191,6 +344,10 @@ static int max31785_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = max31785_configure(client, id, info);
++	if (ret < 0)
++		return ret;
 +
-+static struct i2c_driver max31785_driver = {
-+	.driver = {
-+		.name = "max31785",
-+	},
-+	.probe = max31785_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = max31785_id,
-+};
-+
-+module_i2c_driver(max31785_driver);
-+
-+MODULE_AUTHOR("Andrew Jeffery <andrew@aj.id.au>");
-+MODULE_DESCRIPTION("PMBus driver for the Maxim MAX31785");
-+MODULE_LICENSE("GPL");
+ 	return pmbus_do_probe(client, id, info);
+ }
+ 
 -- 
 2.11.0
 
