@@ -1,684 +1,413 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:45064 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750793AbdKJIYY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Nov 2017 03:24:24 -0500
-Subject: Re: [v4,3/6] pmbus: core: Add fan control support
-To: Andrew Jeffery <andrew@aj.id.au>
-Cc: linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, jdelvare@suse.com, corbet@lwn.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, joel@jms.id.au, openbmc@lists.ozlabs.org
-References: <20171103045306.26448-4-andrew@aj.id.au>
- <20171105143957.GA23897@roeck-us.net> <1510283007.4287.41.camel@aj.id.au>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a34778a6-088e-d4df-c063-db394baa3153@roeck-us.net>
-Date: Fri, 10 Nov 2017 00:24:21 -0800
+Received: from mail-io0-f193.google.com ([209.85.223.193]:48775 "EHLO
+        mail-io0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753666AbdKHGDf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Nov 2017 01:03:35 -0500
 MIME-Version: 1.0
-In-Reply-To: <1510283007.4287.41.camel@aj.id.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <f02b61f8-ebda-6bfd-ec4e-d64b3bd488b4@roeck-us.net>
+References: <1510043274-4778-1-git-send-email-mine260309@gmail.com>
+ <1510043274-4778-3-git-send-email-mine260309@gmail.com> <f02b61f8-ebda-6bfd-ec4e-d64b3bd488b4@roeck-us.net>
+From: Lei YU <mine260309@gmail.com>
+Date: Wed, 8 Nov 2017 14:03:34 +0800
+Message-ID: <CAARXrt=zi4DpGVpH5Cjsr8+m20LdG7JXf7jRqzfzcSJ4isa97g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] drivers: hwmon: Add W83773G driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jiri Kosina <trivial@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 11/09/2017 07:03 PM, Andrew Jeffery wrote:
-> On Sun, 2017-11-05 at 06:39 -0800, Guenter Roeck wrote:
->> On Fri, Nov 03, 2017 at 03:53:03PM +1100, Andrew Jeffery wrote:
->>> Expose fanX_target, pwmX and pwmX_enable hwmon sysfs attributes.
->>>
->>> Fans in a PMBus device are driven by the configuration of two registers:
->>> FAN_CONFIG_x_y and FAN_COMMAND_x: FAN_CONFIG_x_y dictates how the fan
->>> and the tacho operate (if installed), while FAN_COMMAND_x sets the
->>> desired fan rate. The unit of FAN_COMMAND_x is dependent on the
->>> operational fan mode, RPM or PWM percent duty, as determined by the
->>> corresponding FAN_CONFIG_x_y.
->>>
->>> The mapping of fanX_target, pwmX and pwmX_enable onto FAN_CONFIG_x_y and
->>> FAN_COMMAND_x is implemented with the addition of virtual registers and
->>> generic implementations in the core:
->>>
->>> 1. PMBUS_VIRT_FAN_TARGET_x
->>> 2. PMBUS_VIRT_PWM_x
->>> 3. PMBUS_VIRT_PWM_ENABLE_x
->>>
->>> The virtual registers facilitate the necessary side-effects of each
->>> access. Examples of the read case, assuming m = 1, b = 0, R = 0:
->>>
->>>               Read     |              With              || Gives
->>>           -------------------------------------------------------
->>>             Attribute  | FAN_CONFIG_x_y | FAN_COMMAND_y || Value
->>>           ----------------------------------------------++-------
->>>            fanX_target | ~PB_FAN_z_RPM  | 0x0001        || 1
->>>            pwm1        | ~PB_FAN_z_RPM  | 0x0064        || 255
->>>            pwmX_enable | ~PB_FAN_z_RPM  | 0x0001        || 1
->>>            fanX_target |  PB_FAN_z_RPM  | 0x0001        || 1
->>>            pwm1        |  PB_FAN_z_RPM  | 0x0064        || 0
->>>            pwmX_enable |  PB_FAN_z_RPM  | 0x0001        || 1
->>>
->>> And the write case:
->>>
->>>               Write    | With  ||               Sets
->>>           -------------+-------++----------------+---------------
->>>             Attribute  | Value || FAN_CONFIG_x_y | FAN_COMMAND_x
->>>           -------------+-------++----------------+---------------
->>>            fanX_target | 1     ||  PB_FAN_z_RPM  | 0x0001
->>>            pwmX        | 255   || ~PB_FAN_z_RPM  | 0x0064
->>>            pwmX_enable | 1     || ~PB_FAN_z_RPM  | 0x0064
->>>
->>> Also, the DIRECT mode scaling of some controllers is different between
->>> RPM and PWM percent duty control modes, so PSC_PWM is introduced to
->>> capture the necessary coefficients.
->>>
->>> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
->>> ---
->>>   drivers/hwmon/pmbus/pmbus.h      |  29 +++++
->>>   drivers/hwmon/pmbus/pmbus_core.c | 224 ++++++++++++++++++++++++++++++++++++---
->>>   2 files changed, 238 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->>> index 4efa2bd4f6d8..cdf3e288e626 100644
->>> --- a/drivers/hwmon/pmbus/pmbus.h
->>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>> @@ -190,6 +190,28 @@ enum pmbus_regs {
->>>   	PMBUS_VIRT_VMON_UV_FAULT_LIMIT,
->>>   	PMBUS_VIRT_VMON_OV_FAULT_LIMIT,
->>>   	PMBUS_VIRT_STATUS_VMON,
->>> +
->>> +	/*
->>> +	 * RPM and PWM Fan control
->>> +	 *
->>> +	 * Drivers wanting to expose PWM control must define the behaviour of
->>> +	 * PMBUS_VIRT_PWM_ENABLE_[1-4] in the {read,write}_word_data callback.
->>> +	 *
->>> +	 * pmbus core provides default implementations for
->>> +	 * PMBUS_VIRT_FAN_TARGET_[1-4] and PMBUS_VIRT_PWM_[1-4].
->>> +	 */
->>> +	PMBUS_VIRT_FAN_TARGET_1,
->>> +	PMBUS_VIRT_FAN_TARGET_2,
->>> +	PMBUS_VIRT_FAN_TARGET_3,
->>> +	PMBUS_VIRT_FAN_TARGET_4,
->>> +	PMBUS_VIRT_PWM_1,
->>> +	PMBUS_VIRT_PWM_2,
->>> +	PMBUS_VIRT_PWM_3,
->>> +	PMBUS_VIRT_PWM_4,
->>> +	PMBUS_VIRT_PWM_ENABLE_1,
->>> +	PMBUS_VIRT_PWM_ENABLE_2,
->>> +	PMBUS_VIRT_PWM_ENABLE_3,
->>> +	PMBUS_VIRT_PWM_ENABLE_4,
->>>   };
->>>   
->>>   /*
->>> @@ -223,6 +245,8 @@ enum pmbus_regs {
->>>   #define PB_FAN_1_RPM			BIT(6)
->>>   #define PB_FAN_1_INSTALLED		BIT(7)
->>>   
->>> +enum pmbus_fan_mode { percent = 0, rpm };
->>> +
->>>   /*
->>>    * STATUS_BYTE, STATUS_WORD (lower)
->>>    */
->>> @@ -313,6 +337,7 @@ enum pmbus_sensor_classes {
->>>   	PSC_POWER,
->>>   	PSC_TEMPERATURE,
->>>   	PSC_FAN,
->>> +	PSC_PWM,
->>>   	PSC_NUM_CLASSES		/* Number of power sensor classes */
->>>   };
->>>   
->>> @@ -339,6 +364,8 @@ enum pmbus_sensor_classes {
->>>   #define PMBUS_HAVE_STATUS_FAN34	BIT(17)
->>>   #define PMBUS_HAVE_VMON		BIT(18)
->>>   #define PMBUS_HAVE_STATUS_VMON	BIT(19)
->>> +#define PMBUS_HAVE_PWM12	BIT(20)
->>> +#define PMBUS_HAVE_PWM34	BIT(21)
->>>   
->>>   enum pmbus_data_format { linear = 0, direct, vid };
->>>   enum vrm_version { vr11 = 0, vr12, vr13 };
->>> @@ -413,6 +440,8 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg,
->>>   			  u8 value);
->>>   int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
->>>   			   u8 mask, u8 value);
->>> +int pmbus_update_fan(struct i2c_client *client, int page, int id,
->>> +		     u8 config, u8 mask, u16 command);
->>>   void pmbus_clear_faults(struct i2c_client *client);
->>>   bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
->>>   bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
->>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>> index 302f0aef59de..55838b69e99a 100644
->>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>> @@ -64,6 +64,7 @@ struct pmbus_sensor {
->>>   	u16 reg;		/* register */
->>>   	enum pmbus_sensor_classes class;	/* sensor class */
->>>   	bool update;		/* runtime sensor update needed */
->>> +	bool convert;		/* Whether or not to apply linear/vid/direct */
->>>   	int data;		/* Sensor data.
->>>   				   Negative if there was a read error */
->>>   };
->>> @@ -128,6 +129,27 @@ struct pmbus_debugfs_entry {
->>>   	u8 reg;
->>>   };
->>>   
->>> +static const int pmbus_fan_rpm_mask[] = {
->>> +	PB_FAN_1_RPM,
->>> +	PB_FAN_2_RPM,
->>> +	PB_FAN_1_RPM,
->>> +	PB_FAN_2_RPM,
->>> +};
->>> +
->>> +static const int pmbus_fan_config_registers[] = {
->>> +	PMBUS_FAN_CONFIG_12,
->>> +	PMBUS_FAN_CONFIG_12,
->>> +	PMBUS_FAN_CONFIG_34,
->>> +	PMBUS_FAN_CONFIG_34
->>> +};
->>> +
->>> +static const int pmbus_fan_command_registers[] = {
->>> +	PMBUS_FAN_COMMAND_1,
->>> +	PMBUS_FAN_COMMAND_2,
->>> +	PMBUS_FAN_COMMAND_3,
->>> +	PMBUS_FAN_COMMAND_4,
->>> +};
->>> +
->>>   void pmbus_clear_cache(struct i2c_client *client)
->>>   {
->>>   	struct pmbus_data *data = i2c_get_clientdata(client);
->>> @@ -198,6 +220,31 @@ int pmbus_write_word_data(struct i2c_client *client, u8 page, u8 reg, u16 word)
->>>   }
->>>   EXPORT_SYMBOL_GPL(pmbus_write_word_data);
->>>   
->>> +int pmbus_update_fan(struct i2c_client *client, int page, int id,
->>> +			       u8 config, u8 mask, u16 command)
+On Tue, Nov 7, 2017 at 10:33 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 11/07/2017 12:27 AM, Lei YU wrote:
 >>
->> Please make sure continuation lines are aligned to '(' where possible.
-> 
-> Yep, sorry about that.
-> 
+>> Nuvoton W83773G is a hardware monitor IC providing one local
+>> temperature and two remote temperature sensors.
 >>
->>> +{
->>> +	int from, rv;
->>> +	u8 to;
->>> +
->>> +	from = pmbus_read_byte_data(client, page,
->>> +				    pmbus_fan_config_registers[id]);
->>> +	if (from < 0)
->>> +		return from;
->>> +
->>> +	to = (from & ~mask) | (config & mask);
->>> +
->>> +	if (to != from) {
->>> +		rv = pmbus_write_byte_data(client, page,
->>> +					   pmbus_fan_config_registers[id], to);
->>> +		if (rv < 0)
->>> +			return rv;
->>> +	}
->>> +
->>> +	return pmbus_write_word_data(client, page,
->>> +				     pmbus_fan_command_registers[id], command);
->>> +}
->>> +EXPORT_SYMBOL_GPL(pmbus_update_fan);
->>> +
->>>   /*
->>>    * _pmbus_write_word_data() is similar to pmbus_write_word_data(), but checks if
->>>    * a device specific mapping function exists and calls it if necessary.
->>> @@ -214,8 +261,40 @@ static int _pmbus_write_word_data(struct i2c_client *client, int page, int reg,
->>>   		if (status != -ENODATA)
->>>   			return status;
->>>   	}
->>> -	if (reg >= PMBUS_VIRT_BASE)
->>> -		return -ENXIO;
->>> +	if (reg >= PMBUS_VIRT_BASE) {
->>> +		int id, bit;
->>> +
->>> +		switch (reg) {
->>> +		case PMBUS_VIRT_FAN_TARGET_1:
->>> +		case PMBUS_VIRT_FAN_TARGET_2:
->>> +		case PMBUS_VIRT_FAN_TARGET_3:
->>> +		case PMBUS_VIRT_FAN_TARGET_4:
+>> Signed-off-by: Lei YU <mine260309@gmail.com>
+>> ---
+>> v2:
+>>   - Rewrite the driver using regmap
+>>   - Add offset and update_interval
+>> ---
+>>   drivers/hwmon/Kconfig   |  10 ++
+>>   drivers/hwmon/Makefile  |   1 +
+>>   drivers/hwmon/w83773g.c | 281
+>> ++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 292 insertions(+)
+>>   create mode 100644 drivers/hwmon/w83773g.c
 >>
->> Maybe
->> 		case PMBUS_VIRT_FAN_TARGET_1 ... PMBUS_VIRT_FAN_TARGET_4:
-> 
-> Sure. I'll fix all instances of this.
-> 
->>
->>> +			id = reg - PMBUS_VIRT_FAN_TARGET_1;
->>> +			bit = pmbus_fan_rpm_mask[id];
->>> +			status = pmbus_update_fan(client, page, id, bit, bit,
->>> +						  word);
->>> +			break;
->>> +		case PMBUS_VIRT_PWM_1:
->>> +		case PMBUS_VIRT_PWM_2:
->>> +		case PMBUS_VIRT_PWM_3:
->>> +		case PMBUS_VIRT_PWM_4:
->>> +		{
->>> +			u32 command = word;
->>
->> Please move command up and drop the {.
-> 
-> My default is to scope variables to where they are needed, but will
-> fix.
-> 
-I am fine with that and do it as well as long as it is in loops or if statements.
-In case statements it becomes awkward. Of course, that is all POV.
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index d654314..11c6248 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1710,6 +1710,16 @@ config SENSORS_VT8231
+>>           This driver can also be built as a module.  If so, the module
+>>           will be called vt8231.
+>>   +config SENSORS_W83773G
+>> +       tristate "Nuvoton W83773G"
+>> +       depends on I2C
+>> +       help
+>> +         If you say yes here you get support for the Nuvoton W83773G
+>> hardware
+>> +         monitoring chip.
+>> +
+>> +         This driver can also be built as a module.  If so, the module
+>> +         will be called w83773g.
+>> +
+>>   config SENSORS_W83781D
+>>         tristate "Winbond W83781D, W83782D, W83783S, Asus AS99127F"
+>>         depends on I2C
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index c84d978..0649ad8 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_ATK0110) += asus_atk0110.o
+>>   # asb100, then w83781d go first, as they can override other drivers'
+>> addresses.
+>>   obj-$(CONFIG_SENSORS_ASB100)  += asb100.o
+>>   obj-$(CONFIG_SENSORS_W83627HF)        += w83627hf.o
+>> +obj-$(CONFIG_SENSORS_W83773G)  += w83773g.o
+>>   obj-$(CONFIG_SENSORS_W83792D) += w83792d.o
+>>   obj-$(CONFIG_SENSORS_W83793)  += w83793.o
+>>   obj-$(CONFIG_SENSORS_W83795)  += w83795.o
+>> diff --git a/drivers/hwmon/w83773g.c b/drivers/hwmon/w83773g.c
+>> new file mode 100644
+>> index 0000000..d352bac
+>> --- /dev/null
+>> +++ b/drivers/hwmon/w83773g.c
+>> @@ -0,0 +1,281 @@
+>> +/*
+>> + * Copyright (C) 2017 IBM Corp.
+>> + *
+>> + * This program is free software; you can redistribute it and/or modify
+>> + * it under the terms of the GNU General Public License as published by
+>> + * the Free Software Foundation; either version 2 of the License, or
+>> + * (at your option) any later version.
+>> + *
+>> + * Driver for the Nuvoton W83773G SMBus temperature sensor IC.
+>> + * Supported models: W83773G
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/init.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/hwmon-sysfs.h>
+>> +#include <linux/err.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/* Addresses to scan */
+>> +static const unsigned short normal_i2c[] = { 0x4c, 0x4d, I2C_CLIENT_END
+>> };
+>> +
+>> +/* The W83773 registers */
+>> +#define W83773_CONVERSION_RATE_REG_READ                0x04
+>> +#define W83773_CONVERSION_RATE_REG_WRITE       0x0A
+>> +#define W83773_MANUFACTURER_ID_REG             0xFE
+>> +#define W83773_LOCAL_TEMP                      0x00
+>> +
+>> +static const u8 W83773_STATUS[2] = { 0x02, 0x17 };
+>> +
+>> +static const u8 W83773_TEMP_LSB[2] = { 0x10, 0x25 };
+>> +static const u8 W83773_TEMP_MSB[2] = { 0x01, 0x24 };
+>> +
+>> +static const u8 W83773_OFFSET_LSB[2] = { 0x12, 0x16 };
+>> +static const u8 W83773_OFFSET_MSB[2] = { 0x11, 0x15 };
+>> +
+>> +
+>> +/* this is the number of sensors in the device */
+>> +static const struct i2c_device_id w83773_id[] = {
+>> +       { "w83773g" },
+>> +       { }
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(i2c, w83773_id);
+>> +
+>> +static const struct of_device_id w83773_of_match[] = {
+>> +       {
+>> +               .compatible = "nuvoton,w83773g"
+>> +       },
+>> +       { },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, w83773_of_match);
+>> +
+>> +static inline int temp_of_local(s8 reg)
+>> +{
+>> +       return reg * 1000;
+>> +}
+>> +
+>> +static inline int temp_of_remote(s8 hb, u8 lb)
+>> +{
+>> +       return (hb << 3 | lb >> 5) * 125;
+>> +}
+>> +
+>> +static ssize_t show_local_temp(struct device *dev,
+>> +                              struct device_attribute *attr,
+>> +                              char *buf)
+>> +{
+>> +       struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, sda->index, &regval);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return sprintf(buf, "%d\n", temp_of_local(regval));
+>> +}
+>> +
+>> +static ssize_t show_remote_temp(struct device *dev,
+>> +                               struct device_attribute *attr,
+>> +                               char *buf)
+>> +{
+>> +       struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned int regval_high;
+>> +       unsigned int regval_low;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_TEMP_MSB[sda->index],
+>> &regval_high);
+>> +       ret |= regmap_read(regmap, W83773_TEMP_LSB[sda->index],
+>> &regval_low);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return sprintf(buf, "%d\n", temp_of_remote(regval_high,
+>> regval_low));
+>> +}
+>> +
+>> +static ssize_t show_status(struct device *dev,
+>> +                          struct device_attribute *attr,
+>> +                          char *buf)
+>> +{
+>> +       struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_STATUS[sda->index], &regval);
+>> +
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return sprintf(buf, "%d\n", (u8)regval & 0x04 >> 2);
+>> +}
+>> +
+>> +static ssize_t show_offset(struct device *dev,
+>> +                          struct device_attribute *attr,
+>> +                          char *buf)
+>> +{
+>> +       struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned int regval_high;
+>> +       unsigned int regval_low;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_OFFSET_MSB[sda->index],
+>> &regval_high);
+>> +       ret |= regmap_read(regmap, W83773_OFFSET_LSB[sda->index],
+>> &regval_low);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return sprintf(buf, "%d\n", temp_of_remote(regval_high,
+>> regval_low));
+>> +}
+>> +
+>> +static ssize_t set_offset(struct device *dev,
+>> +                         struct device_attribute *attr,
+>> +                         const char *buf, size_t count)
+>> +{
+>> +       struct sensor_device_attribute *sda = to_sensor_dev_attr(attr);
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       long val;
+>> +       int ret;
+>> +       int err;
+>> +       u8 high_byte;
+>> +       u8 low_byte;
+>> +
+>> +       err = kstrtol(buf, 10, &val);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       val = clamp_val(val, -127825, 127825);
+>> +       /* offset value equals to (high_byte << 3 | low_byte >> 5) * 125
+>> */
+>> +       val /= 125;
+>> +       high_byte = val >> 3;
+>> +       low_byte = (val & 0x07) << 5;
+>> +
+>> +       ret = regmap_write(regmap, W83773_OFFSET_MSB[sda->index],
+>> high_byte);
+>> +       ret |= regmap_write(regmap, W83773_OFFSET_LSB[sda->index],
+>> low_byte);
+>
+>
+> Please don't do that. The errors, if any, might be different, messing up
+> the error return.
 
->>
->> Why u32 ? The value should be bound to 0..255 (if it isn't and a larger
->> value is accepted we have overflow issues).
-> 
-> It gets scaled below, though we still only need u16 if the max value is
-> 255. I'll fix it.
-> 
-Good point. u32 is better than u16 - it results in less code on many architectures.
+OK, it will be fixed in v3.
 
->>
->>> +
->>> +			id = reg - PMBUS_VIRT_PWM_1;
->>> +			bit = pmbus_fan_rpm_mask[id];
->>> +			command *= 100;
->>> +			command /= 255;
->>> +			status = pmbus_update_fan(client, page, id, 0, bit,
->>> +						  command);
->>> +			break;
->>> +		}
->>> +		default:
->>> +			status = -ENXIO;
->>> +			break;
->>> +		}
->>> +		return status;
->>
->> Please move this code to a separate function.
-> 
-> Will do.
-> 
->>
->>> +	}
->>>   	return pmbus_write_word_data(client, page, reg, word);
->>>   }
->>>   
->>> @@ -231,6 +310,9 @@ int pmbus_read_word_data(struct i2c_client *client, u8 page, u8 reg)
->>>   }
->>>   EXPORT_SYMBOL_GPL(pmbus_read_word_data);
->>>   
->>> +static int pmbus_get_fan_command(struct i2c_client *client, int page, int id,
->>> +				 enum pmbus_fan_mode mode);
->>> +
->>>   /*
->>>    * _pmbus_read_word_data() is similar to pmbus_read_word_data(), but checks if
->>>    * a device specific mapping function exists and calls it if necessary.
->>> @@ -246,8 +328,42 @@ static int _pmbus_read_word_data(struct i2c_client *client, int page, int reg)
->>>   		if (status != -ENODATA)
->>>   			return status;
->>>   	}
->>> -	if (reg >= PMBUS_VIRT_BASE)
->>> -		return -ENXIO;
->>> +	if (reg >= PMBUS_VIRT_BASE) {
->>> +		int id;
->>> +
->>> +		switch (reg) {
->>> +		case PMBUS_VIRT_FAN_TARGET_1:
->>> +		case PMBUS_VIRT_FAN_TARGET_2:
->>> +		case PMBUS_VIRT_FAN_TARGET_3:
->>> +		case PMBUS_VIRT_FAN_TARGET_4:
->>
->> Since there is an implied assumption that those are sequential,
->> how about the following ?
->>
->> 		case PMBUS_VIRT_FAN_TARGET_1 ... PMBUS_VIRT_FAN_TARGET_4:
-> 
-> Will fix all instances of this, as noted above.
-> 
->>
->>> +			id = reg - PMBUS_VIRT_FAN_TARGET_1;
->>
->> This warrants a comment in the definition of PMBUS_VIRT_FAN_TARGET_X
->> and PMBUS_VIRT_PWM_X stating that the definitions must be in sequence.
-> 
-> Right, will add a comment to that effect.
-> 
->>
->>> +			status = pmbus_get_fan_command(client, page, id, rpm);
->>> +			break;
->>> +		case PMBUS_VIRT_PWM_1:
->>> +		case PMBUS_VIRT_PWM_2:
->>> +		case PMBUS_VIRT_PWM_3:
->>> +		case PMBUS_VIRT_PWM_4:
->>
->> Same as above.
-> 
-> Ack.
-> 
->>
->>> +		{
->>> +			int rv;
->>
->> Please move the declaration up and drop the {.
-> 
-> Ack.
-> 
->>
->>> +
->>> +			id = reg - PMBUS_VIRT_PWM_1;
->>> +			rv = pmbus_get_fan_command(client, page, id, percent);
->>> +			if (rv < 0)
->>> +				return rv;
->>> +
->>
->> Is this guaranteed to be <= 100 ?
-> 
-> PMBus spec rev 1.2 part II says in 14.10 and 14.11:
-> 
-> The second part of the configuration tells the device whether the fan
-> speed commands are in RPM or PWM duty cycle (in percent).
-> 
+>
+>
+>> +
+>> +       if (ret < 0)
+>> +               return ret;
+>> +       return count;
+>> +}
+>> +
+>> +static ssize_t show_update_interval(struct device *dev,
+>> +                                   struct device_attribute *attr,
+>> +                                   char *buf)
+>> +{
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_CONVERSION_RATE_REG_READ,
+>> &regval);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return sprintf(buf, "%u\n", 16000 >> regval);
+>> +}
+>> +
+>> +static ssize_t set_update_interval(struct device *dev,
+>> +                                  struct device_attribute *attr,
+>> +                                  const char *buf, size_t count)
+>> +{
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +       unsigned long val;
+>> +       int ret;
+>> +       int err, rate;
+>> +
+>> +       err = kstrtoul(buf, 10, &val);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       /*
+>> +        * For valid rates, interval can be calculated as
+>> +        *      interval = (1 << (8 - rate)) * 62.5;
+>> +        * Rounded rate is therefore
+>> +        *      rate = 8 - __fls(interval * 8 / (62.5 * 7));
+>> +        * Use clamp_val() to avoid overflows, and to ensure valid input
+>> +        * for __fls.
+>> +        */
+>> +       val = clamp_val(val, 62, 16000) * 10;
+>> +       rate = 8 - __fls((val * 8 / (625 * 7)));
+>> +       ret = regmap_write(regmap, W83773_CONVERSION_RATE_REG_WRITE,
+>> rate);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +       return count;
+>> +}
+>> +
+>> +static SENSOR_DEVICE_ATTR(temp1_input, 0444, show_local_temp, NULL,
+>> +                         W83773_LOCAL_TEMP);
+>> +static SENSOR_DEVICE_ATTR(temp2_input, 0444, show_remote_temp, NULL, 0);
+>> +static SENSOR_DEVICE_ATTR(temp2_fault, 0444, show_status, NULL, 0);
+>> +static SENSOR_DEVICE_ATTR(temp2_offset, 0644, show_offset, set_offset,
+>> 0);
+>> +static SENSOR_DEVICE_ATTR(temp3_input, 0444, show_remote_temp, NULL, 1);
+>> +static SENSOR_DEVICE_ATTR(temp3_fault, 0444, show_status, NULL, 1);
+>> +static SENSOR_DEVICE_ATTR(temp3_offset, 0644, show_offset, set_offset,
+>> 1);
+>> +static DEVICE_ATTR(update_interval, 0644, show_update_interval,
+>> +                  set_update_interval);
+>> +
+>> +static struct attribute *w83773g_attrs[] = {
+>> +       &sensor_dev_attr_temp1_input.dev_attr.attr,
+>> +       &sensor_dev_attr_temp2_input.dev_attr.attr,
+>> +       &sensor_dev_attr_temp2_fault.dev_attr.attr,
+>> +       &sensor_dev_attr_temp2_offset.dev_attr.attr,
+>> +       &sensor_dev_attr_temp3_input.dev_attr.attr,
+>> +       &sensor_dev_attr_temp3_fault.dev_attr.attr,
+>> +       &sensor_dev_attr_temp3_offset.dev_attr.attr,
+>> +       &dev_attr_update_interval.attr,
+>> +       NULL
+>> +};
+>> +ATTRIBUTE_GROUPS(w83773g);
+>> +
+>> +static const struct regmap_config w83773g_regmap_config = {
+>> +       .reg_bits = 8,
+>> +       .val_bits = 8,
+>> +};
+>> +
+>> +static int w83773_probe(struct i2c_client *client,
+>> +                       const struct i2c_device_id *id)
+>> +{
+>> +
+>> +       struct device *dev = &client->dev;
+>> +       struct device *hwmon_dev;
+>> +       struct regmap *regmap;
+>> +       int ret;
+>> +
+>> +       regmap = devm_regmap_init_i2c(client, &w83773g_regmap_config);
+>> +       if (IS_ERR(regmap)) {
+>> +               dev_err(dev, "failed to allocate register map\n");
+>> +               return PTR_ERR(regmap);
+>> +       }
+>> +
+>> +       /* Set the conversion rate to 2 Hz */
+>> +       ret = regmap_write(regmap, W83773_CONVERSION_RATE_REG_WRITE,
+>> 0x05);
+>> +       if (ret < 0) {
+>> +               dev_err(&client->dev, "error writing config rate
+>> register\n");
+>> +               return ret;
+>> +       }
+>> +
+>> +       i2c_set_clientdata(client, regmap);
+>> +       hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+>> client->name,
+>> +                                                     regmap,
+>> w83773g_groups);
+>
+>
+> You lost me here. Why did you stop using the new API ?
 
-Hmm, yes, sure, but can you trust the chip to follow the specification ?
+I was referencing some other hwmon driver (e.g. tmp401.c) and find out
+the usage of SENSOR_DEVICE_ATTR, which I feel more clear and straightforward.
 
-> However, the MAX31785 accepts the ranges 0-0x2710, so allows fractions
-> of a percent.
-> 
-Answering my own question ... apparently not.
+So what I know for know is:
+1. In v1, devm_hwmon_device_register_with_info() with hwmon_chip_info providing
+is_visible(), read/write() operations;
+2. In v2, devm_hwmon_device_register_with_groups() with attribute_group.
 
-> Not sure what my thoughts were here, it's probably best just to drop
-> this default PWM implementation as well.
-> 
+So from your suggestion, it seems the hwmon_chip_info is more preferable, is it?
+If yes, I will update this in v3 as well.
 
-I agree.
-
+Thanks!
+>
+> Guenter
+>
+>
+>> +       return PTR_ERR_OR_ZERO(hwmon_dev);
+>> +}
+>> +
+>> +static struct i2c_driver w83773_driver = {
+>> +       .class = I2C_CLASS_HWMON,
+>> +       .driver = {
+>> +               .name   = "w83773g",
+>> +               .of_match_table = of_match_ptr(w83773_of_match),
+>> +       },
+>> +       .probe = w83773_probe,
+>> +       .id_table = w83773_id,
+>> +       .address_list = normal_i2c,
+>> +};
+>> +
+>> +module_i2c_driver(w83773_driver);
+>> +
+>> +MODULE_AUTHOR("Lei YU <mine260309@gmail.com>");
+>> +MODULE_DESCRIPTION("W83773G temperature sensor driver");
+>> +MODULE_LICENSE("GPL");
 >>
->>> +			rv *= 255;
->>> +			rv /= 100;
->>> +
->>> +			status = rv;
->>> +			break;
->>> +		}
->>> +		default:
->>> +			status = -ENXIO;
->>> +			break;
->>> +		}
->>
->> Please move this code to a separate function.
-> 
-> Will do, though given I plan to gut the PWM implementation is it still
-> so disruptive?
-> 
-Let's see how it looks like. If it does more than just call another function
-it should be a separate function.
-
->>
->>> +
->>> +		return status;
->>> +	}
->>>   	return pmbus_read_word_data(client, page, reg);
->>>   }
->>>   
->>> @@ -314,6 +430,28 @@ static int _pmbus_read_byte_data(struct i2c_client *client, int page, int reg)
->>>   	return pmbus_read_byte_data(client, page, reg);
->>>   }
->>>   
->>> +static int pmbus_get_fan_command(struct i2c_client *client, int page, int id,
->>> +				 enum pmbus_fan_mode mode)
->>
->> Maybe better pmbus_get_fan_get_speed_rpm to clarify that we are not
->> really interested in the command register value but but in speed or rpm ?
-> 
-> Sounds reasonable on the surface. I'll look into it.
-> 
->>
->>> +{
->>> +	int config;
->>> +
->>> +	config = _pmbus_read_byte_data(client, page,
->>> +				       pmbus_fan_config_registers[id]);
->>> +	if (config < 0)
->>> +		return config;
->>> +
->>> +	/*
->>> +	 * We can't meaningfully translate between PWM and RPM, so if the
->>> +	 * attribute mode (fan[1-*]_target is RPM, pwm[1-*] and pwm[1-*]_enable
->>> +	 * are PWM) doesn't match the hardware mode, then report 0 instead.
->>> +	 */
->>> +	if ((mode == rpm) != (!!(config & pmbus_fan_rpm_mask[id])))
->>> +		return 0;
->>
->> Please drop the unnecessary ().
-> 
-> Sure.
-> 
->>
->> I am not too happy about this - the user has no means to specify pwm or
->> fan target speed _before_ changing the mode. It would be better to report
->> (and accept) cached values in that situation, and update the actual value
->> as the mode is changed.
-> 
-> I'm with you on the caching idea for switching modes, but do we want to
-> report values that don't obviously reflect the fan rate to userspace?
-
-0 doesn't reflect the rate either. Bad choices either way.
-
-> In previous revisions I was returning an error here but you pointed out
-> this would break sensors(1) and suggested I switch to 0 in the conflict
-> case.
-> 
->>
->>> +
->>> +	return _pmbus_read_word_data(client, page,
->>> +				     pmbus_fan_command_registers[id]);
->>> +}
->>> +
->>>   static void pmbus_clear_fault_page(struct i2c_client *client, int page)
->>>   {
->>>   	_pmbus_write_byte(client, page, PMBUS_CLEAR_FAULTS);
->>> @@ -515,7 +653,7 @@ static long pmbus_reg2data_direct(struct pmbus_data *data,
->>>   	/* X = 1/m * (Y * 10^-R - b) */
->>>   	R = -R;
->>>   	/* scale result to milli-units for everything but fans */
->>> -	if (sensor->class != PSC_FAN) {
->>> +	if (!(sensor->class == PSC_FAN || sensor->class == PSC_PWM)) {
->>
->> Please use positive logic
->>
->> 	if (sensor->class != PSC_FAN && sensor->class != PSC_PWM)
->>
->> It is (at least for me) much easier to read.
-> 
-> Okay.
-> 
->>
->>>   		R += 3;
->>>   		b *= 1000;
->>>   	}
->>> @@ -569,6 +707,9 @@ static long pmbus_reg2data(struct pmbus_data *data, struct pmbus_sensor *sensor)
->>>   {
->>>   	long val;
->>>   
->>> +	if (!sensor->convert)
->>> +		return sensor->data;
->>> +
->>>   	switch (data->info->format[sensor->class]) {
->>>   	case direct:
->>>   		val = pmbus_reg2data_direct(data, sensor);
->>> @@ -672,7 +813,7 @@ static u16 pmbus_data2reg_direct(struct pmbus_data *data,
->>>   	}
->>>   
->>>   	/* Calculate Y = (m * X + b) * 10^R */
->>> -	if (sensor->class != PSC_FAN) {
->>> +	if (!(sensor->class == PSC_FAN || sensor->class == PSC_PWM)) {
->>
->> Same as above.
->>
-> 
-> Ack.
-> 
->>>   		R -= 3;		/* Adjust R and b for data in milli-units */
->>>   		b *= 1000;
->>>   	}
->>> @@ -703,6 +844,9 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
->>>   {
->>>   	u16 regval;
->>>   
->>> +	if (!sensor->convert)
->>> +		return val;
->>> +
->>>   	switch (data->info->format[sensor->class]) {
->>>   	case direct:
->>>   		regval = pmbus_data2reg_direct(data, sensor, val);
->>> @@ -925,12 +1069,18 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
->>>   		return NULL;
->>>   	a = &sensor->attribute;
->>>   
->>> -	snprintf(sensor->name, sizeof(sensor->name), "%s%d_%s",
->>> -		 name, seq, type);
->>> +	if (type)
->>> +		snprintf(sensor->name, sizeof(sensor->name), "%s%d_%s",
->>> +			 name, seq, type);
->>> +	else
->>> +		snprintf(sensor->name, sizeof(sensor->name), "%s%d",
->>> +			 name, seq);
->>> +
->>>   	sensor->page = page;
->>>   	sensor->reg = reg;
->>>   	sensor->class = class;
->>>   	sensor->update = update;
->>> +	sensor->convert = true;
->>>   	pmbus_dev_attr_init(a, sensor->name,
->>>   			    readonly ? S_IRUGO : S_IRUGO | S_IWUSR,
->>>   			    pmbus_show_sensor, pmbus_set_sensor);
->>> @@ -1592,13 +1742,6 @@ static const int pmbus_fan_registers[] = {
->>>   	PMBUS_READ_FAN_SPEED_4
->>>   };
->>>   
->>> -static const int pmbus_fan_config_registers[] = {
->>> -	PMBUS_FAN_CONFIG_12,
->>> -	PMBUS_FAN_CONFIG_12,
->>> -	PMBUS_FAN_CONFIG_34,
->>> -	PMBUS_FAN_CONFIG_34
->>> -};
->>> -
->>>   static const int pmbus_fan_status_registers[] = {
->>>   	PMBUS_STATUS_FAN_12,
->>>   	PMBUS_STATUS_FAN_12,
->>> @@ -1621,6 +1764,48 @@ static const u32 pmbus_fan_status_flags[] = {
->>>   };
->>>   
->>>   /* Fans */
->>> +static int pmbus_add_fan_ctrl(struct i2c_client *client,
->>> +		struct pmbus_data *data, int index, int page, int id,
->>> +		u8 config)
->>> +{
->>> +	struct pmbus_sensor *sensor;
->>> +	int rv;
->>> +
->>> +	rv = _pmbus_read_word_data(client, page,
->>> +				   pmbus_fan_command_registers[id]);
->>> +	if (rv < 0)
->>> +		return rv;
->>> +
->>> +	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
->>> +				  PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
->>> +				  true, false);
->>> +
->>> +	if (!sensor)
->>> +		return -ENOMEM;
->>> +
->>> +	if (!((data->info->func[page] & PMBUS_HAVE_PWM12) ||
->>> +			(data->info->func[page] & PMBUS_HAVE_PWM34)))
->>
->> why not just the following ?
->>
->> 	if (!(data->info->func[page] & (PMBUS_HAVE_PWM12 | PMBUS_HAVE_PWM34)))
-> 
-> Sure, that's much neater.
-> 
->>
->> Also, doesn't this add attributes for 1,2 even if only 3,4 are
->> supported, and 3,4 even if only 1,2 are supported ?
-> 
-> It shouldn't, but that's due to the way I've called
-> pmbus_add_fan_ctrl() in pmbus_add_fan_attributes().
-> 
-> The call is guarded with:
-> 
->      /* Fan control */
->      if (pmbus_check_word_register(client, page,
->      		    pmbus_fan_command_registers[f])) {
->      	    ret = pmbus_add_fan_ctrl(client, data, index,
->      	    	    	    	     page, f, regval);
->      	    if (ret < 0)
->      	    	    return ret;
->      }
-> 
-> So 'f', or the formal parameter 'id', is only ever provided as
-> appropriate, and together the two tests should ensure that only the
-> appropriate attributes are created.
-> 
-> If the fan is marked as "not installed" then the addition of the
-> attribute is skipped. This code was already in place to handle the
-> fanX_input attribute.
-> 
-> So to the caller test, regardless of RPM or PWM mode, we need the
-> FAN_COMMAND register to configure the values. As it stands the change
-> makes fan control available for any PMBus device which has the
-> FAN_COMMANDxy register and whose driver configures a page with
-> PMBUS_HAVE_FANxy, exposing the fanX_target attribute. The test in
-> question above deals only with PMBUS_HAVE_PWMxy which was introduced in
-> this change.
-> 
-> There are some constraints: PMBUS_HAVE_FANxy is required if
-> PMBUS_HAVE_PWMxy is to be specified for a given page. This should
-> probably be documented in a comment alongside the #defines.
-> 
->>
->>> +		return 0;
->>> +
->>> +	sensor = pmbus_add_sensor(data, "pwm", NULL, index, page,
->>> +				  PMBUS_VIRT_PWM_1 + id, PSC_PWM,
->>> +				  true, false);
->>> +
->>> +	if (!sensor)
->>> +		return -ENOMEM;
->>> +
->>> +	sensor = pmbus_add_sensor(data, "pwm", "enable", index, page,
->>> +				  PMBUS_VIRT_PWM_ENABLE_1 + id, PSC_PWM,
->>> +				  true, false);
->>> +
->>> +	if (!sensor)
->>> +		return -ENOMEM;
->>> +
->>> +	sensor->convert = false;
->>
->> convert should be a new parameter to pmbus_add_sensor().
-> 
-> Will fix.
-> 
-> Cheers for the detailed feedback.
-> 
-> Andrew
-> 
->>
->>> +
->>> +	return 0;
->>> +}
->>> +
->>>   static int pmbus_add_fan_attributes(struct i2c_client *client,
->>>   				    struct pmbus_data *data)
->>>   {
->>> @@ -1658,6 +1843,15 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
->>>   					     PSC_FAN, true, true) == NULL)
->>>   				return -ENOMEM;
->>>   
->>> +			/* Fan control */
->>> +			if (pmbus_check_word_register(client, page,
->>> +					pmbus_fan_command_registers[f])) {
->>> +				ret = pmbus_add_fan_ctrl(client, data, index,
->>> +							 page, f, regval);
->>> +				if (ret < 0)
->>> +					return ret;
->>> +			}
->>> +
->>>   			/*
->>>   			 * Each fan status register covers multiple fans,
->>>   			 * so we have to do some magic.
-
+>
