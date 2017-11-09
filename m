@@ -1,44 +1,76 @@
-Return-Path: <mine260309@gmail.com>
-Return-path: <mine260309@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg0-f67.google.com ([74.125.83.67]:51149 "EHLO
+        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751225AbdKIHJs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Nov 2017 02:09:48 -0500
 From: Lei YU <mine260309@gmail.com>
 To: Mark Rutland <mark.rutland@arm.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jiri Kosina <trivial@kernel.org>
-Cc: Lei YU <mine260309@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH v3 0/3] Add W83773G hwmon sensor driver and doc
-Date: Thu,  9 Nov 2017 15:08:58 +0800
-Message-Id: <1510211341-17415-1-git-send-email-mine260309@gmail.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jiri Kosina <trivial@kernel.org>
+Cc: Lei YU <mine260309@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH v3 3/3] hwmon: (w83773g) Add documentation
+Date: Thu,  9 Nov 2017 15:09:01 +0800
+Message-Id: <1510211341-17415-4-git-send-email-mine260309@gmail.com>
+In-Reply-To: <1510211341-17415-1-git-send-email-mine260309@gmail.com>
+References: <1510211341-17415-1-git-send-email-mine260309@gmail.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Nuvoton W83773G is a hardware monitoring chip, which integrates two remote
-and one local temperature sensors.
+Add documentation for the w83773g driver.
+
+Signed-off-by: Lei YU <mine260309@gmail.com>
 ---
 v2:
- - The driver is re-written as v1's comment, so the author is changed to me.
- - Added the device to trivial-devices.txt
-v3:
- - Update the driver to use new API devm_hwmon_device_register_with_info()
-
-Lei YU (3):
-  DT: i2c: W83773G is a trivial device
-  drivers: hwmon: Add W83773G driver
-  hwmon: (w83773g) Add documentation
-
- .../devicetree/bindings/trivial-devices.txt        |   1 +
- Documentation/hwmon/w83773g                        |  33 ++
- drivers/hwmon/Kconfig                              |  10 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/w83773g.c                            | 348 +++++++++++++++++++++
- 5 files changed, 393 insertions(+)
+ - Add notes for offset and update_interval
+---
+ Documentation/hwmon/w83773g | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
  create mode 100644 Documentation/hwmon/w83773g
- create mode 100644 drivers/hwmon/w83773g.c
 
+diff --git a/Documentation/hwmon/w83773g b/Documentation/hwmon/w83773g
+new file mode 100644
+index 0000000..4cc6c0b
+--- /dev/null
++++ b/Documentation/hwmon/w83773g
+@@ -0,0 +1,33 @@
++Kernel driver w83773g
++====================
++
++Supported chips:
++  * Nuvoton W83773G
++    Prefix: 'w83773g'
++    Addresses scanned: I2C 0x4c and 0x4d
++    Datasheet: https://www.nuvoton.com/resource-files/W83773G_SG_DatasheetV1_2.pdf
++
++Authors:
++	Lei YU <mine260309@gmail.com>
++
++Description
++-----------
++
++This driver implements support for Nuvoton W83773G temperature sensor
++chip. This chip implements one local and two remote sensors.
++The chip also features offsets for the two remote sensors which get added to
++the input readings. The chip does all the scaling by itself and the driver
++therefore reports true temperatures that don't need any user-space adjustments.
++Temperature is measured in degrees Celsius.
++The chip is wired over I2C/SMBus and specified over a temperature
++range of -40 to +125 degrees Celsius (for local sensor) and -40 to +127
++degrees Celsius (for remote sensors).
++Resolution for both the local and remote channels is 0.125 degree C.
++
++The chip supports only temperature measurement. The driver exports
++the temperature values via the following sysfs files:
++
++temp[1-3]_input
++temp[2-3]_fault
++temp[2-3]_offset
++update_interval
 -- 
 1.9.1
+
