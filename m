@@ -1,37 +1,525 @@
-Return-Path: <robherring2@gmail.com>
-Return-path: <robherring2@gmail.com>
-Date: Mon, 6 Nov 2017 15:42:09 -0600
-From: Rob Herring <robh@kernel.org>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Philipp Zabel <philipp.zabel@gmail.com>,
-	Mykola Kostenok <c_mykolak@mellanox.com>,
-	Jaghathiswari Rankappagounder Natarajan <jaghu@google.com>,
-	Patrick Venture <venture@google.com>,
-	Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: aspeed-pwm-tacho: Add reset
- node
-Message-ID: <20171106214209.o2cu2ndkmz2apc62@rob-hp-laptop>
-References: <20171102035349.1902-1-joel@jms.id.au>
- <20171102035349.1902-4-joel@jms.id.au>
+Return-Path: <mine260309@gmail.com>
+Return-path: <mine260309@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20171102035349.1902-4-joel@jms.id.au>
+In-Reply-To: <2747fc2e-0120-cc14-991e-3f5baa4a0780@roeck-us.net>
+References: <1510211341-17415-1-git-send-email-mine260309@gmail.com>
+ <1510211341-17415-3-git-send-email-mine260309@gmail.com> <2747fc2e-0120-cc14-991e-3f5baa4a0780@roeck-us.net>
+From: Lei YU <mine260309@gmail.com>
+Date: Mon, 13 Nov 2017 10:52:55 +0800
+Message-ID: <CAARXrtk+_Lvz3bWc4Zti901wfY_vRSnGpw_KxwuSTeJ+TqcP=g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] drivers: hwmon: Add W83773G driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Rutland <mark.rutland@arm.com>, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <trivial@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Nov 02, 2017 at 02:53:49PM +1100, Joel Stanley wrote:
-> The device tree bindings are updated to document the resets phandle, and
-> the example is updated to match what is expected for both the reset and
-> clock phandle.
-> 
-> Note that the bindings should have always had the reset controller, as
-> the hardware is unusable without it.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt         | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+On Fri, Nov 10, 2017 at 10:49 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 11/08/2017 11:09 PM, Lei YU wrote:
+>>
+>> Nuvoton W83773G is a hardware monitor IC providing one local
+>> temperature and two remote temperature sensors.
+>>
+>> Signed-off-by: Lei YU <mine260309@gmail.com>
+>
+>
+> Nicely done. Couple of nitpicks left.
+>
+> Thanks!
+> Guenter
+>
+>
+>> ---
+>> v2:
+>>   - Rewrite the driver using regmap
+>>   - Add offset and update_interval
+>> v3:
+>>   - Use devm_hwmon_device_register_with_info() with is_visible/read/write
+>>     functions.
+>> ---
+>>   drivers/hwmon/Kconfig   |  10 ++
+>>   drivers/hwmon/Makefile  |   1 +
+>>   drivers/hwmon/w83773g.c | 348
+>> ++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 359 insertions(+)
+>>   create mode 100644 drivers/hwmon/w83773g.c
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index d654314..11c6248 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1710,6 +1710,16 @@ config SENSORS_VT8231
+>>           This driver can also be built as a module.  If so, the module
+>>           will be called vt8231.
+>>   +config SENSORS_W83773G
+>> +       tristate "Nuvoton W83773G"
+>> +       depends on I2C
+>> +       help
+>> +         If you say yes here you get support for the Nuvoton W83773G
+>> hardware
+>> +         monitoring chip.
+>> +
+>> +         This driver can also be built as a module.  If so, the module
+>> +         will be called w83773g.
+>> +
+>>   config SENSORS_W83781D
+>>         tristate "Winbond W83781D, W83782D, W83783S, Asus AS99127F"
+>>         depends on I2C
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index c84d978..0649ad8 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_ATK0110) += asus_atk0110.o
+>>   # asb100, then w83781d go first, as they can override other drivers'
+>> addresses.
+>>   obj-$(CONFIG_SENSORS_ASB100)  += asb100.o
+>>   obj-$(CONFIG_SENSORS_W83627HF)        += w83627hf.o
+>> +obj-$(CONFIG_SENSORS_W83773G)  += w83773g.o
+>>   obj-$(CONFIG_SENSORS_W83792D) += w83792d.o
+>>   obj-$(CONFIG_SENSORS_W83793)  += w83793.o
+>>   obj-$(CONFIG_SENSORS_W83795)  += w83795.o
+>> diff --git a/drivers/hwmon/w83773g.c b/drivers/hwmon/w83773g.c
+>> new file mode 100644
+>> index 0000000..58ac45b
+>> --- /dev/null
+>> +++ b/drivers/hwmon/w83773g.c
+>> @@ -0,0 +1,348 @@
+>> +/*
+>> + * Copyright (C) 2017 IBM Corp.
+>> + *
+>> + * This program is free software; you can redistribute it and/or modify
+>> + * it under the terms of the GNU General Public License as published by
+>> + * the Free Software Foundation; either version 2 of the License, or
+>> + * (at your option) any later version.
+>> + *
+>> + * Driver for the Nuvoton W83773G SMBus temperature sensor IC.
+>> + * Supported models: W83773G
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/init.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/hwmon-sysfs.h>
+>> +#include <linux/err.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/* Addresses to scan */
+>> +static const unsigned short normal_i2c[] = { 0x4c, 0x4d, I2C_CLIENT_END
+>> };
+>> +
+>> +/* W83773 has 3 channels */
+>> +#define W83773_CHANNELS                                3
+>> +
+>> +/* The W83773 registers */
+>> +#define W83773_CONVERSION_RATE_REG_READ                0x04
+>> +#define W83773_CONVERSION_RATE_REG_WRITE       0x0A
+>> +#define W83773_MANUFACTURER_ID_REG             0xFE
+>> +#define W83773_LOCAL_TEMP                      0x00
+>> +
+>> +static const u8 W83773_STATUS[2] = { 0x02, 0x17 };
+>> +
+>> +static const u8 W83773_TEMP_LSB[2] = { 0x10, 0x25 };
+>> +static const u8 W83773_TEMP_MSB[2] = { 0x01, 0x24 };
+>> +
+>> +static const u8 W83773_OFFSET_LSB[2] = { 0x12, 0x16 };
+>> +static const u8 W83773_OFFSET_MSB[2] = { 0x11, 0x15 };
+>> +
+>> +/* this is the number of sensors in the device */
+>> +static const struct i2c_device_id w83773_id[] = {
+>> +       { "w83773g" },
+>> +       { }
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(i2c, w83773_id);
+>> +
+>> +static const struct of_device_id w83773_of_match[] = {
+>> +       {
+>> +               .compatible = "nuvoton,w83773g"
+>> +       },
+>> +       { },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, w83773_of_match);
+>> +
+>> +static inline long temp_of_local(s8 reg)
+>> +{
+>> +       return reg * 1000;
+>> +}
+>> +
+>> +static inline long temp_of_remote(s8 hb, u8 lb)
+>> +{
+>> +       return (hb << 3 | lb >> 5) * 125;
+>> +}
+>> +
+>> +static int get_local_temp(struct regmap *regmap, long *val)
+>> +{
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_LOCAL_TEMP, &regval);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       *val = temp_of_local(regval);
+>> +       return 0;
+>> +}
+>> +
+>> +static int get_remote_temp(struct regmap *regmap, int index, long *val)
+>> +{
+>> +       unsigned int regval_high;
+>> +       unsigned int regval_low;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_TEMP_MSB[index], &regval_high);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_TEMP_LSB[index], &regval_low);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       *val = temp_of_remote(regval_high, regval_low);
+>> +       return 0;
+>> +}
+>> +
+>> +static int get_fault(struct regmap *regmap, int index, long *val)
+>> +{
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_STATUS[index], &regval);
+>> +
+>
+> Drop the empty line please.
+>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Will be fixed in v4.
+
+>
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       *val = (u8)regval & 0x04 >> 2;
+>> +       return 0;
+>> +}
+>> +
+>> +static int get_offset(struct regmap *regmap, int index, long *val)
+>> +{
+>> +       unsigned int regval_high;
+>> +       unsigned int regval_low;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_OFFSET_MSB[index], &regval_high);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_OFFSET_LSB[index], &regval_low);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       *val = temp_of_remote(regval_high, regval_low);
+>> +       return 0;
+>> +}
+>> +
+>> +static int set_offset(struct regmap *regmap, int index, long val)
+>> +{
+>> +       int ret;
+>> +       u8 high_byte;
+>> +       u8 low_byte;
+>> +
+>> +       val = clamp_val(val, -127825, 127825);
+>> +       /* offset value equals to (high_byte << 3 | low_byte >> 5) * 125
+>> */
+>> +       val /= 125;
+>> +       high_byte = val >> 3;
+>> +       low_byte = (val & 0x07) << 5;
+>> +
+>> +       ret = regmap_write(regmap, W83773_OFFSET_MSB[index], high_byte);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       ret = regmap_write(regmap, W83773_OFFSET_LSB[index], low_byte);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return 0;
+>
+>
+> For the second call,
+>
+>         return regmap_write(regmap, W83773_OFFSET_LSB[index], low_byte);
+>
+
+Will be fixed in v4.
+
+>> +}
+>> +
+>> +static int get_update_interval(struct regmap *regmap, long *val)
+>> +{
+>> +       unsigned int regval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(regmap, W83773_CONVERSION_RATE_REG_READ,
+>> &regval);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       *val = 16000 >> regval;
+>> +       return 0;
+>> +}
+>> +
+>> +static int set_update_interval(struct regmap *regmap, long val)
+>> +{
+>> +       int ret;
+>> +       int rate;
+>> +
+>> +       if (val <= 0)
+>> +               return -EINVAL;
+>> +
+>
+> Not really needed since you are clamping below. For consistency I would
+> suggest
+> to drop it (otherwise 0 returns -EINVAL, 1 translates to 62).
+>
+My initial idea is that user should not set a value equal or less than
+0, because
+it does not make sense. And thus user get EINVAL for values <= 0, and get
+interval 62 if he sets a value 1.
+But yes, it can be removed for consistency, so user always get 62 for
+values less than 62.
+
+Will be fixed in v4.
+
+>> +       /*
+>> +        * For valid rates, interval can be calculated as
+>> +        *      interval = (1 << (8 - rate)) * 62.5;
+>> +        * Rounded rate is therefore
+>> +        *      rate = 8 - __fls(interval * 8 / (62.5 * 7));
+>> +        * Use clamp_val() to avoid overflows, and to ensure valid input
+>> +        * for __fls.
+>> +        */
+>> +       val = clamp_val(val, 62, 16000) * 10;
+>> +       rate = 8 - __fls((val * 8 / (625 * 7)));
+>> +       ret = regmap_write(regmap, W83773_CONVERSION_RATE_REG_WRITE,
+>> rate);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +       return 0;
+>
+>
+> just
+>         return regmap_write(regmap, W83773_CONVERSION_RATE_REG_WRITE, rate);
+>
+
+Will be fixed in v4.
+
+>> +}
+>> +
+>> +static int w83773_read(struct device *dev, enum hwmon_sensor_types type,
+>> +                      u32 attr, int channel, long *val)
+>> +{
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +
+>> +       if (type == hwmon_chip) {
+>> +               if (attr == hwmon_chip_update_interval)
+>> +                       return get_update_interval(regmap, val);
+>> +               else
+>
+>
+> else not needed after return
+>
+
+Will be fixed in v4.
+
+>> +                       return -EOPNOTSUPP;
+>> +       }
+>> +
+>> +       switch (attr) {
+>> +       case hwmon_temp_input:
+>> +               if (channel == 0)
+>> +                       return get_local_temp(regmap, val);
+>> +               else
+>
+>
+> else not needed after return
+>
+
+Will be fixed in v4.
+
+>
+>> +                       return get_remote_temp(regmap, channel - 1, val);
+>> +       case hwmon_temp_fault:
+>> +               return get_fault(regmap, channel - 1, val);
+>> +       case hwmon_temp_offset:
+>> +               return get_offset(regmap, channel - 1, val);
+>> +       default:
+>> +               return -EOPNOTSUPP;
+>> +       }
+>> +}
+>> +
+>> +static int w83773_write(struct device *dev, enum hwmon_sensor_types type,
+>> +                       u32 attr, int channel, long val)
+>> +{
+>> +       struct regmap *regmap = dev_get_drvdata(dev);
+>> +
+>> +       if (type == hwmon_chip && attr == hwmon_chip_update_interval)
+>> +               return set_update_interval(regmap, val);
+>> +
+>> +       if (type == hwmon_temp && attr == hwmon_temp_offset)
+>> +               return set_offset(regmap, channel - 1, val);
+>> +
+>> +       return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static umode_t w83773_is_visible(const void *data, enum
+>> hwmon_sensor_types type,
+>> +                                u32 attr, int channel)
+>> +{
+>> +       switch (type) {
+>> +       case hwmon_chip:
+>> +               switch (attr) {
+>> +               case hwmon_chip_update_interval:
+>> +                       return 0644;
+>> +               }
+>> +               break;
+>> +       case hwmon_temp:
+>> +               switch (attr) {
+>> +               case hwmon_temp_input:
+>> +                       return 0444;
+>> +               case hwmon_temp_fault:
+>
+>
+> The above case statements can be combined.
+
+Will be fixed in v4.
+
+>
+>> +                       return 0444;
+>> +               case hwmon_temp_offset:
+>> +                       return 0644;
+>
+>
+> Wonder if static analyzers complain here and above because
+> of the missing default: case. Any idea ?
+
+hmm, I did not use static analyzer to parse this code so did not know.
+My idea is that it's safe here because it always goes to the "return 0"
+below so it is safe here.
+
+>
+>
+>> +               }
+>> +               break;
+>> +       default:
+>> +               break;
+>> +       }
+>> +       return 0;
+>> +}
+>> +
+>> +static const u32 w83773_chip_config[] = {
+>> +       HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL,
+>> +       0
+>> +};
+>> +
+>> +static const struct hwmon_channel_info w83773_chip = {
+>> +       .type = hwmon_chip,
+>> +       .config = w83773_chip_config,
+>> +};
+>> +
+>> +static const u32 w83773_temp_config[] = {
+>> +       HWMON_T_INPUT,
+>> +       HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_OFFSET,
+>> +       HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_OFFSET,
+>> +       0
+>> +};
+>> +
+>> +static const struct hwmon_channel_info w83773_temp = {
+>> +       .type = hwmon_temp,
+>> +       .config = w83773_temp_config,
+>> +};
+>> +
+>> +static const struct hwmon_channel_info *w83773_info[] = {
+>> +       &w83773_chip,
+>> +       &w83773_temp,
+>> +       NULL
+>> +};
+>> +
+>> +static const struct hwmon_ops w83773_ops = {
+>> +       .is_visible = w83773_is_visible,
+>> +       .read = w83773_read,
+>> +       .write = w83773_write,
+>> +};
+>> +
+>> +static const struct hwmon_chip_info w83773_chip_info = {
+>> +       .ops = &w83773_ops,
+>> +       .info = w83773_info,
+>> +};
+>> +
+>> +static const struct regmap_config w83773_regmap_config = {
+>> +       .reg_bits = 8,
+>> +       .val_bits = 8,
+>> +};
+>> +
+>> +static int w83773_probe(struct i2c_client *client,
+>> +                       const struct i2c_device_id *id)
+>> +{
+>> +       struct device *dev = &client->dev;
+>> +       struct device *hwmon_dev;
+>> +       struct regmap *regmap;
+>> +       int ret;
+>> +
+>> +       regmap = devm_regmap_init_i2c(client, &w83773_regmap_config);
+>> +       if (IS_ERR(regmap)) {
+>> +               dev_err(dev, "failed to allocate register map\n");
+>> +               return PTR_ERR(regmap);
+>> +       }
+>> +
+>> +       /* Set the conversion rate to 2 Hz */
+>> +       ret = regmap_write(regmap, W83773_CONVERSION_RATE_REG_WRITE,
+>> 0x05);
+>> +       if (ret < 0) {
+>> +               dev_err(&client->dev, "error writing config rate
+>> register\n");
+>> +               return ret;
+>> +       }
+>> +
+>> +       i2c_set_clientdata(client, regmap);
+>> +
+>> +       hwmon_dev = devm_hwmon_device_register_with_info(dev,
+>> +                                                        client->name,
+>> +                                                        regmap,
+>> +
+>> &w83773_chip_info,
+>> +                                                        NULL);
+>> +       return PTR_ERR_OR_ZERO(hwmon_dev);
+>> +}
+>> +
+>> +static struct i2c_driver w83773_driver = {
+>> +       .class = I2C_CLASS_HWMON,
+>> +       .driver = {
+>> +               .name   = "w83773g",
+>> +               .of_match_table = of_match_ptr(w83773_of_match),
+>> +       },
+>> +       .probe = w83773_probe,
+>> +       .id_table = w83773_id,
+>> +       .address_list = normal_i2c,
+>
+>
+> address_list is only used if there is a detect function, so you can drop it.
+>
+
+Will be fixed in v4.
+
+>
+>> +};
+>> +
+>> +module_i2c_driver(w83773_driver);
+>> +
+>> +MODULE_AUTHOR("Lei YU <mine260309@gmail.com>");
+>> +MODULE_DESCRIPTION("W83773G temperature sensor driver");
+>> +MODULE_LICENSE("GPL");
+>>
+>
