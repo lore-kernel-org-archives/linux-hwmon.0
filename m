@@ -1,157 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:44683 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750946AbdKSRQI (ORCPT
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:60277 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751761AbdKRD0m (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Nov 2017 12:16:08 -0500
-Received: by mail-pg0-f68.google.com with SMTP id c123so5519310pga.11
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Nov 2017 09:16:08 -0800 (PST)
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: Drop unnecessary 'default n' from Kconfig
-Date: Sun, 19 Nov 2017 09:16:02 -0800
-Message-Id: <1511111762-6419-1-git-send-email-linux@roeck-us.net>
+        Fri, 17 Nov 2017 22:26:42 -0500
+From: Andrew Jeffery <andrew@aj.id.au>
+To: linux-hwmon@vger.kernel.org
+Cc: Andrew Jeffery <andrew@aj.id.au>, linux@roeck-us.net,
+        robh+dt@kernel.org, mark.rutland@arm.com, jdelvare@suse.com,
+        corbet@lwn.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        joel@jms.id.au, openbmc@lists.ozlabs.org
+Subject: [PATCH v5 0/4] pmbus: Expand fan support and add MAX31785 driver
+Date: Sat, 18 Nov 2017 13:56:02 +1030
+Message-Id: <cover.8f64654fcede136901874050318e64de7f1a68cb.1510974230.git-series.andrew@aj.id.au>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-'default n' is default, so there is no need to specify it explicitly.
+Hello,
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/Kconfig | 16 ----------------
- 1 file changed, 16 deletions(-)
+This series introduces support for the MAX31785 intelligent fan controller, a
+PMBus device providing closed-loop fan control among a number of other
+features. Along the way the series adds support to control fans and create
+virtual pages to the PMBus core, the latter to support some of the more
+annoying design decisions found in the 'A' variant of the chip.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 530ff7c9234c..ef23553ff5cb 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -26,11 +26,9 @@ if HWMON
- 
- config HWMON_VID
- 	tristate
--	default n
- 
- config HWMON_DEBUG_CHIP
- 	bool "Hardware Monitoring Chip debugging messages"
--	default n
- 	help
- 	  Say Y here if you want the I2C chip drivers to produce a bunch of
- 	  debug messages to the system log.  Select this if you are having
-@@ -42,7 +40,6 @@ comment "Native drivers"
- config SENSORS_AB8500
- 	tristate "AB8500 thermal monitoring"
- 	depends on AB8500_GPADC && AB8500_BM
--	default n
- 	help
- 	  If you say yes here you get support for the thermal sensor part
- 	  of the AB8500 chip. The driver includes thermal management for
-@@ -302,7 +299,6 @@ config SENSORS_APPLESMC
- 	select NEW_LEDS
- 	select LEDS_CLASS
- 	select INPUT_POLLDEV
--	default n
- 	help
- 	  This driver provides support for the Apple System Management
- 	  Controller, which provides an accelerometer (Apple Sudden Motion
-@@ -678,7 +674,6 @@ config SENSORS_JC42
- config SENSORS_POWR1220
- 	tristate "Lattice POWR1220 Power Monitoring"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get access to the hardware monitoring
- 	  functions of the Lattice POWR1220 isp Power Supply Monitoring,
-@@ -702,7 +697,6 @@ config SENSORS_LTC2945
- 	tristate "Linear Technology LTC2945"
- 	depends on I2C
- 	select REGMAP_I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC2945
- 	  I2C System Monitor.
-@@ -727,7 +721,6 @@ config SENSORS_LTC2990
- config SENSORS_LTC4151
- 	tristate "Linear Technology LTC4151"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4151
- 	  High Voltage I2C Current and Voltage Monitor interface.
-@@ -738,7 +731,6 @@ config SENSORS_LTC4151
- config SENSORS_LTC4215
- 	tristate "Linear Technology LTC4215"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4215
- 	  Hot Swap Controller I2C interface.
-@@ -750,7 +742,6 @@ config SENSORS_LTC4222
- 	tristate "Linear Technology LTC4222"
- 	depends on I2C
- 	select REGMAP_I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4222
- 	  Dual Hot Swap Controller I2C interface.
-@@ -761,7 +752,6 @@ config SENSORS_LTC4222
- config SENSORS_LTC4245
- 	tristate "Linear Technology LTC4245"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4245
- 	  Multiple Supply Hot Swap Controller I2C interface.
-@@ -773,7 +763,6 @@ config SENSORS_LTC4260
- 	tristate "Linear Technology LTC4260"
- 	depends on I2C
- 	select REGMAP_I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4260
- 	  Positive Voltage Hot Swap Controller I2C interface.
-@@ -784,7 +773,6 @@ config SENSORS_LTC4260
- config SENSORS_LTC4261
- 	tristate "Linear Technology LTC4261"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for Linear Technology LTC4261
- 	  Negative Voltage Hot Swap Controller I2C interface.
-@@ -1276,7 +1264,6 @@ config SENSORS_NSA320
- config SENSORS_PCF8591
- 	tristate "Philips PCF8591 ADC/DAC"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for Philips PCF8591 4-channel
- 	  ADC, 1-channel DAC chips.
-@@ -1459,7 +1446,6 @@ config SENSORS_SMSC47B397
- 
- config SENSORS_SCH56XX_COMMON
- 	tristate
--	default n
- 
- config SENSORS_SCH5627
- 	tristate "SMSC SCH5627"
-@@ -1505,7 +1491,6 @@ config SENSORS_STTS751
- config SENSORS_SMM665
- 	tristate "Summit Microelectronics SMM665"
- 	depends on I2C
--	default n
- 	help
- 	  If you say yes here you get support for the hardware monitoring
- 	  features of the Summit Microelectronics SMM665/SMM665B Six-Channel
-@@ -1792,7 +1777,6 @@ config SENSORS_W83795
- config SENSORS_W83795_FANCTRL
- 	bool "Include automatic fan control support (DANGEROUS)"
- 	depends on SENSORS_W83795
--	default n
- 	help
- 	  If you say yes here, support for automatic fan speed control
- 	  will be included in the driver.
+This is the fifth spin of the series. v4 can be found here:
+
+    https://lkml.org/lkml/2017/11/3/15
+
+The changes over v4 include a rework of the fan control support to provide a
+more intuitive behaviour for fanX_target, pwmX. They now always read the value
+last set (in v4 they returned 0 if they were not the active control mode, and
+in even earlier spins they returned an error), which also allows implementation
+of sane behaviour for pwmX_enable when switching control modes.
+
+The default implementation for the PWM virtual registers is removed from pmbus
+core in light of having no consumers (the max31785 driver implements them
+itself), though whilst I was unsure about the generality of the scaling in
+replies on v4, after some more thought I have reason to believe it should hold
+in general. Regardless, it's gone for the moment, and I've added some
+commentary about the scaling in the max31785 implementation.
+
+Please review!
+
+Andrew
+
+Andrew Jeffery (4):
+  pmbus (core): Add fan control support
+  pmbus (max31785): Add fan control
+  pmbus (core): Add virtual page config bit
+  pmbus (max31785): Add dual tachometer support
+
+ Documentation/hwmon/max31785     |  15 +-
+ drivers/hwmon/pmbus/max31785.c   | 285 +++++++++++++++++++++++++++++++-
+ drivers/hwmon/pmbus/pmbus.h      |  41 ++++-
+ drivers/hwmon/pmbus/pmbus_core.c | 250 +++++++++++++++++++++++++---
+ 4 files changed, 566 insertions(+), 25 deletions(-)
+
+base-commit: ded0eb83449e8fcba22fd2736826336e101ffbcb
 -- 
-2.7.4
-
+git-series 0.9.1
