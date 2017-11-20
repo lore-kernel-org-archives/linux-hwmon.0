@@ -1,69 +1,277 @@
-Return-Path: <andrew@aj.id.au>
-Return-path: <andrew@aj.id.au>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:51439 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1751189AbdKTEnH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Nov 2017 23:43:07 -0500
 From: Andrew Jeffery <andrew@aj.id.au>
 To: linux-hwmon@vger.kernel.org
-Cc: Andrew Jeffery <andrew@aj.id.au>,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	corbet@lwn.net,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	joel@jms.id.au,
-	openbmc@lists.ozlabs.org
-Subject: [PATCH v6 0/4] pmbus: Expand fan support and add MAX31785 driver
-Date: Mon, 20 Nov 2017 15:12:02 +1030
-Message-Id: <cover.dfb0a63462b38b9384b1d077fd62d17a11a7a0dd.1511152748.git-series.andrew@aj.id.au>
-List-ID: <linux-hwmon@vger.kernel.org>
+Cc: Andrew Jeffery <andrew@aj.id.au>, linux@roeck-us.net,
+        jdelvare@suse.com, corbet@lwn.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        joel@jms.id.au, openbmc@lists.ozlabs.org
+Subject: [PATCH v6 4/4] pmbus (max31785): Add dual tachometer support
+Date: Mon, 20 Nov 2017 15:12:06 +1030
+Message-Id: <49a5c6db7eb5dd1c53d326e0f7314e8f9e258997.1511152748.git-series.andrew@aj.id.au>
+In-Reply-To: <cover.dfb0a63462b38b9384b1d077fd62d17a11a7a0dd.1511152748.git-series.andrew@aj.id.au>
+References: <cover.dfb0a63462b38b9384b1d077fd62d17a11a7a0dd.1511152748.git-series.andrew@aj.id.au>
+In-Reply-To: <cover.dfb0a63462b38b9384b1d077fd62d17a11a7a0dd.1511152748.git-series.andrew@aj.id.au>
+References: <cover.dfb0a63462b38b9384b1d077fd62d17a11a7a0dd.1511152748.git-series.andrew@aj.id.au>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hello,
+The dual tachometer feature is implemented in hardware with a TACHSEL
+input to indicate the rotor under measurement, and exposed on the device
+by extending the READ_FAN_SPEED_1 word with two extra bytes*. The need
+to read the non-standard four-byte response leads to a cut-down
+implementation of i2c_smbus_xfer_emulated() included in the driver.
+Further, to expose the second rotor tachometer value to userspace the
+values are exposed through virtual pages. We re-route accesses to
+FAN_CONFIG_1_2 and READ_FAN_SPEED_1 on pages 23-28 (not defined by the
+hardware) to the same registers on pages 0-5, and with the latter command we
+extract the value from the second word of the four-byte response.
 
-This series introduces support for the MAX31785 intelligent fan controller, a
-PMBus device providing closed-loop fan control among a number of other
-features. Along the way the series adds support to control fans and create
-virtual pages to the PMBus core, the latter to support some of the more
-annoying design decisions found in the 'A' variant of the chip.
+* The documentation recommends the slower rotor be associated with
+TACHSEL=0, which corresponds to the first word of the response. The TACHSEL=0
+measurement is used by the controller's closed-loop fan management to judge
+target fan rate.
 
-This is the sixth spin of the series. v5 can be found here:
+Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+---
+ Documentation/hwmon/max31785   |   8 +-
+ drivers/hwmon/pmbus/max31785.c | 147 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 152 insertions(+), 3 deletions(-)
 
-    https://lkml.org/lkml/2017/11/17/910
-
-v6 fixes an error-handling bug I introduced in pmbus_set_page() with PATCH 3/4,
-as pointed out by Guenter on v5[1]. The rework implements his suggested
-solution.
-
-A few other other minor fixes are included:
-
-* PATCH 1/4:
-  * Avoid potential NULL dereference in pmbus_get_fan_rate(). It
-    amounts to being an error path that should never happen in practice, but
-    lets make sure we don't die if we do hit it.
-  * Drop a redundant test for the presence of FAN_COMMAND_x in
-    pmbus_add_fan_ctrl(); document that its presence is a precondition to
-    calling it (this was already tested at the one call-site).
-
-* PATCH 2/4: Avoid scaling an error code in pmbus_pwm_enable(). Rather, test
-  the result of pmbus_get_fan_rate_cached() before performing the scaling when
-  switching to PWM mode.
-
-[1] https://lkml.org/lkml/2017/11/19/280
-
-Please review!
-
-Andrew
-
-Andrew Jeffery (4):
-  pmbus (core): Add fan control support
-  pmbus (max31785): Add fan control
-  pmbus (core): Add virtual page config bit
-  pmbus (max31785): Add dual tachometer support
-
- Documentation/hwmon/max31785     |  15 +-
- drivers/hwmon/pmbus/max31785.c   | 285 +++++++++++++++++++++++++++++++-
- drivers/hwmon/pmbus/pmbus.h      |  41 ++++-
- drivers/hwmon/pmbus/pmbus_core.c | 265 +++++++++++++++++++++++++++---
- 4 files changed, 575 insertions(+), 31 deletions(-)
-
-base-commit: ded0eb83449e8fcba22fd2736826336e101ffbcb
+diff --git a/Documentation/hwmon/max31785 b/Documentation/hwmon/max31785
+index 7b0a0a8cdb6b..270c5f865261 100644
+--- a/Documentation/hwmon/max31785
++++ b/Documentation/hwmon/max31785
+@@ -17,8 +17,9 @@ management with temperature and remote voltage sensing. Various fan control
+ features are provided, including PWM frequency control, temperature hysteresis,
+ dual tachometer measurements, and fan health monitoring.
+ 
+-For dual rotor fan configuration, the MAX31785 exposes the slowest rotor of the
+-two in the fan[1-4]_input attributes.
++For dual-rotor configurations the MAX31785A exposes the second rotor tachometer
++readings in attributes fan[5-8]_input. By contrast the MAX31785 only exposes
++the slowest rotor measurement, and does so in the fan[1-4]_input attributes.
+ 
+ Usage Notes
+ -----------
+@@ -31,7 +32,8 @@ Sysfs attributes
+ 
+ fan[1-4]_alarm		Fan alarm.
+ fan[1-4]_fault		Fan fault.
+-fan[1-4]_input		Fan RPM.
++fan[1-8]_input		Fan RPM. On the MAX31785A, inputs 5-8 correspond to the
++			second rotor of fans 1-4
+ fan[1-4]_target		Fan input target
+ 
+ in[1-6]_crit		Critical maximum output voltage
+diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
+index 8706a696c89a..bffab449be39 100644
+--- a/drivers/hwmon/pmbus/max31785.c
++++ b/drivers/hwmon/pmbus/max31785.c
+@@ -16,9 +16,79 @@
+ 
+ enum max31785_regs {
+ 	MFR_REVISION		= 0x9b,
++	MFR_FAN_CONFIG		= 0xf1,
+ };
+ 
++#define MAX31785			0x3030
++#define MAX31785A			0x3040
++
++#define MFR_FAN_CONFIG_DUAL_TACH	BIT(12)
++
+ #define MAX31785_NR_PAGES		23
++#define MAX31785_NR_FAN_PAGES		6
++
++static int max31785_read_byte_data(struct i2c_client *client, int page,
++				   int reg)
++{
++	if (page < MAX31785_NR_PAGES)
++		return -ENODATA;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		return -ENOTSUPP;
++	case PMBUS_FAN_CONFIG_12:
++		return pmbus_read_byte_data(client, page - MAX31785_NR_PAGES,
++					    reg);
++	}
++
++	return -ENODATA;
++}
++
++static int max31785_write_byte(struct i2c_client *client, int page, u8 value)
++{
++	if (page < MAX31785_NR_PAGES)
++		return -ENODATA;
++
++	return -ENOTSUPP;
++}
++
++static int max31785_read_long_data(struct i2c_client *client, int page,
++				   int reg, u32 *data)
++{
++	unsigned char cmdbuf[1];
++	unsigned char rspbuf[4];
++	int rc;
++
++	struct i2c_msg msg[2] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = sizeof(cmdbuf),
++			.buf = cmdbuf,
++		},
++		{
++			.addr = client->addr,
++			.flags = I2C_M_RD,
++			.len = sizeof(rspbuf),
++			.buf = rspbuf,
++		},
++	};
++
++	cmdbuf[0] = reg;
++
++	rc = pmbus_set_page(client, page);
++	if (rc < 0)
++		return rc;
++
++	rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
++	if (rc < 0)
++		return rc;
++
++	*data = (rspbuf[0] << (0 * 8)) | (rspbuf[1] << (1 * 8)) |
++		(rspbuf[2] << (2 * 8)) | (rspbuf[3] << (3 * 8));
++
++	return rc;
++}
+ 
+ static int max31785_get_pwm(struct i2c_client *client, int page)
+ {
+@@ -62,9 +132,30 @@ static int max31785_get_pwm_mode(struct i2c_client *client, int page)
+ static int max31785_read_word_data(struct i2c_client *client, int page,
+ 				   int reg)
+ {
++	u32 val;
+ 	int rv;
+ 
+ 	switch (reg) {
++	case PMBUS_READ_FAN_SPEED_1:
++		if (page < MAX31785_NR_PAGES)
++			return -ENODATA;
++
++		rv = max31785_read_long_data(client, page - MAX31785_NR_PAGES,
++					     reg, &val);
++		if (rv < 0)
++			return rv;
++
++		rv = (val >> 16) & 0xffff;
++		break;
++	case PMBUS_FAN_COMMAND_1:
++		/*
++		 * PMBUS_FAN_COMMAND_x is probed to judge whether or not to
++		 * expose fan control registers.
++		 *
++		 * Don't expose fan_target attribute for virtual pages.
++		 */
++		rv = (page >= MAX31785_NR_PAGES) ? -ENOTSUPP : -ENODATA;
++		break;
+ 	case PMBUS_VIRT_PWM_1:
+ 		rv = max31785_get_pwm(client, page);
+ 		break;
+@@ -157,11 +248,15 @@ static int max31785_write_word_data(struct i2c_client *client, int page,
+ #define MAX31785_VOUT_FUNCS \
+ 	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT)
+ 
++#define MAX37185_NUM_FAN_PAGES 6
++
+ static const struct pmbus_driver_info max31785_info = {
+ 	.pages = MAX31785_NR_PAGES,
+ 
+ 	.write_word_data = max31785_write_word_data,
++	.read_byte_data = max31785_read_byte_data,
+ 	.read_word_data = max31785_read_word_data,
++	.write_byte = max31785_write_byte,
+ 
+ 	/* RPM */
+ 	.format[PSC_FAN] = direct,
+@@ -208,13 +303,46 @@ static const struct pmbus_driver_info max31785_info = {
+ 	.func[22] = MAX31785_VOUT_FUNCS,
+ };
+ 
++static int max31785_configure_dual_tach(struct i2c_client *client,
++					struct pmbus_driver_info *info)
++{
++	int ret;
++	int i;
++
++	for (i = 0; i < MAX31785_NR_FAN_PAGES; i++) {
++		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
++		if (ret < 0)
++			return ret;
++
++		ret = i2c_smbus_read_word_data(client, MFR_FAN_CONFIG);
++		if (ret < 0)
++			return ret;
++
++		if (ret & MFR_FAN_CONFIG_DUAL_TACH) {
++			int virtual = MAX31785_NR_PAGES + i;
++
++			info->pages = virtual + 1;
++			info->func[virtual] |= PMBUS_HAVE_FAN12;
++			info->func[virtual] |= PMBUS_PAGE_VIRTUAL;
++		}
++	}
++
++	return 0;
++}
++
+ static int max31785_probe(struct i2c_client *client,
+ 			  const struct i2c_device_id *id)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct pmbus_driver_info *info;
++	bool dual_tach = false;
+ 	s64 ret;
+ 
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_BYTE_DATA |
++				     I2C_FUNC_SMBUS_WORD_DATA))
++		return -ENODEV;
++
+ 	info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+@@ -225,6 +353,25 @@ static int max31785_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = i2c_smbus_read_word_data(client, MFR_REVISION);
++	if (ret < 0)
++		return ret;
++
++	if (ret == MAX31785A) {
++		dual_tach = true;
++	} else if (ret == MAX31785) {
++		if (!strcmp("max31785a", id->name))
++			dev_warn(dev, "Expected max3175a, found max31785: cannot provide secondary tachometer readings\n");
++	} else {
++		return -ENODEV;
++	}
++
++	if (dual_tach) {
++		ret = max31785_configure_dual_tach(client, info);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	return pmbus_do_probe(client, id, info);
+ }
+ 
 -- 
 git-series 0.9.1
