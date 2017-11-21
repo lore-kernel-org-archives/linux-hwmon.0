@@ -1,36 +1,41 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx2.suse.de ([195.135.220.15]:43996 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:33040 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751004AbdKSUr2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Nov 2017 15:47:28 -0500
-Date: Sun, 19 Nov 2017 21:47:26 +0100
+        id S1751318AbdKUQKB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Nov 2017 11:10:01 -0500
+Date: Tue, 21 Nov 2017 17:09:59 +0100
 From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: Drop unnecessary 'default n' from Kconfig
-Message-ID: <20171119214726.0a6fbdd7@endymion>
-In-Reply-To: <1511111762-6419-1-git-send-email-linux@roeck-us.net>
-References: <1511111762-6419-1-git-send-email-linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: Drop reference to Jean's tree
+Message-ID: <20171121170959.310e4636@endymion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+This tree has not been used for over a year, Guenter is taking all
+the hwmon patches in practice.
 
-On Sun, 19 Nov 2017 09:16:02 -0800, Guenter Roeck wrote:
-> 'default n' is default, so there is no need to specify it explicitly.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/Kconfig | 16 ----------------
->  1 file changed, 16 deletions(-)
-> (...)
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ MAINTAINERS |    1 -
+ 1 file changed, 1 deletion(-)
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+--- linux-4.14.orig/MAINTAINERS	2017-11-12 19:46:13.000000000 +0100
++++ linux-4.14/MAINTAINERS	2017-11-21 17:07:29.991926400 +0100
+@@ -6072,7 +6072,6 @@ M:	Jean Delvare <jdelvare@suse.com>
+ M:	Guenter Roeck <linux@roeck-us.net>
+ L:	linux-hwmon@vger.kernel.org
+ W:	http://hwmon.wiki.kernel.org/
+-T:	quilt http://jdelvare.nerim.net/devel/linux/jdelvare-hwmon/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+ S:	Maintained
+ F:	Documentation/hwmon/
 
-(and heartily approved - thanks for doing that)
 
 -- 
 Jean Delvare
