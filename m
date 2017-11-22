@@ -1,11 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f65.google.com ([209.85.160.65]:42670 "EHLO
-        mail-pl0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751571AbdKVPWj (ORCPT
+Received: from mail-pl0-f66.google.com ([209.85.160.66]:35923 "EHLO
+        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751834AbdKVPXU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Nov 2017 10:22:39 -0500
-Date: Wed, 22 Nov 2017 07:22:37 -0800
+        Wed, 22 Nov 2017 10:23:20 -0500
+Date: Wed, 22 Nov 2017 07:23:19 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: eajames@linux.vnet.ibm.com
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -13,53 +13,199 @@ Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         jdelvare@suse.com, corbet@lwn.net, mark.rutland@arm.com,
         robh+dt@kernel.org, joel@jms.id.au,
         "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [v3, 09/12] hwmon (occ): Add sensor attributes and register
- hwmon device
-Message-ID: <20171122152237.GA20324@roeck-us.net>
-References: <1511222021-562-10-git-send-email-eajames@linux.vnet.ibm.com>
+Subject: Re: [v3,10/12] hwmon (occ): Add non-hwmon attributes
+Message-ID: <20171122152319.GA32326@roeck-us.net>
+References: <1511222021-562-11-git-send-email-eajames@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1511222021-562-10-git-send-email-eajames@linux.vnet.ibm.com>
+In-Reply-To: <1511222021-562-11-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 20, 2017 at 05:53:38PM -0600, eajames@linux.vnet.ibm.com wrote:
+On Mon, Nov 20, 2017 at 05:53:39PM -0600, eajames@linux.vnet.ibm.com wrote:
 > From: "Edward A. James" <eajames@us.ibm.com>
 > 
-> Setup the sensor attributes for every OCC sensor found by the first poll
-> response. Register the attributes with hwmon. Add hwmon documentation
-> for the driver.
+> Create device attributes for additional OCC properties that do not
+> belong as hwmon sensors. These provide additional information as to the
+> state of the processor and system.
 > 
+... and those attributes should really not be part of the hwmon driver.
+
 > Signed-off-by: Edward A. James <eajames@us.ibm.com>
 > ---
->  drivers/hwmon/occ/common.c | 450 +++++++++++++++++++++++++++++++++++++++++++++
->  drivers/hwmon/occ/common.h |  15 ++
-
-I seem to be missing the documentation.
-
-Documentation/hwmon/submitting-patches:
-
-* Document the driver in Documentation/hwmon/<driver_name>.
-
-* Do not create non-standard attributes unless really needed. If you have to use
-  non-standard attributes, or you believe you do, discuss it on the mailing list
-  first. Either case, provide a detailed explanation why you need the
-  non-standard attribute(s).
-  Standard attributes are specified in Documentation/hwmon/sysfs-interface.
-
-I really would expect a detailed explanation and, even more so,
-documentation for all the non-standard attributes you are adding.
-
-power%d_update_time
-power%d_update_tag
-power%d_accumulator
-
-really need to be documented, you really need to explain the need for those
-attributes. To me they don't mean anything.
-
-Note that you'd probably be much better off using
-devm_register_hwmon_with_info() nowadays, but i'll leave that for you to
-decide.
-
-Guenter
+>  drivers/hwmon/occ/common.c | 93 ++++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/hwmon/occ/common.h |  1 +
+>  drivers/hwmon/occ/p8_i2c.c | 10 +++++
+>  drivers/hwmon/occ/p9_sbe.c |  2 +
+>  4 files changed, 106 insertions(+)
+> 
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 337f286b..53e3592 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -24,6 +24,14 @@
+>  
+>  #define OCC_FRU_TYPE_VRM		0x3
+>  
+> +/* OCC status bits */
+> +#define OCC_STAT_MASTER			0x80
+> +#define OCC_STAT_ACTIVE			0x01
+> +#define OCC_EXT_STAT_DVFS_OT		0x80
+> +#define OCC_EXT_STAT_DVFS_POWER		0x40
+> +#define OCC_EXT_STAT_MEM_THROTTLE	0x20
+> +#define OCC_EXT_STAT_QUICK_DROP		0x10
+> +
+>  /* OCC sensor type and version definitions */
+>  
+>  struct temp_sensor_1 {
+> @@ -1108,6 +1116,81 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>  	return 0;
+>  }
+>  
+> +static ssize_t occ_show_status(struct device *dev,
+> +			       struct device_attribute *attr, char *buf)
+> +{
+> +	int rc;
+> +	int val = 0;
+> +	struct occ *occ = dev_get_drvdata(dev);
+> +	struct occ_poll_response_header *header;
+> +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+> +
+> +	rc = occ_update_response(occ);
+> +	if (rc)
+> +		return rc;
+> +
+> +	header = (struct occ_poll_response_header *)occ->resp.data;
+> +
+> +	switch (sattr->index) {
+> +	case 0:
+> +		val = (header->status & OCC_STAT_MASTER) ? 1 : 0;
+> +		break;
+> +	case 1:
+> +		val = (header->status & OCC_STAT_ACTIVE) ? 1 : 0;
+> +		break;
+> +	case 2:
+> +		val = (header->ext_status & OCC_EXT_STAT_DVFS_OT) ? 1 : 0;
+> +		break;
+> +	case 3:
+> +		val = (header->ext_status & OCC_EXT_STAT_DVFS_POWER) ? 1 : 0;
+> +		break;
+> +	case 4:
+> +		val = (header->ext_status & OCC_EXT_STAT_MEM_THROTTLE) ? 1 : 0;
+> +		break;
+> +	case 5:
+> +		val = (header->ext_status & OCC_EXT_STAT_QUICK_DROP) ? 1 : 0;
+> +		break;
+> +	case 6:
+> +		val = header->occ_state;
+> +		break;
+> +	case 7:
+> +		if (header->status & OCC_STAT_MASTER)
+> +			val = hweight8(header->occs_present);
+> +		else
+> +			val = 1;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return snprintf(buf, PAGE_SIZE - 1, "%d\n", val);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(occ_master, 0444, occ_show_status, NULL, 0);
+> +static SENSOR_DEVICE_ATTR(occ_active, 0444, occ_show_status, NULL, 1);
+> +static SENSOR_DEVICE_ATTR(occ_dvfs_ot, 0444, occ_show_status, NULL, 2);
+> +static SENSOR_DEVICE_ATTR(occ_dvfs_power, 0444, occ_show_status, NULL, 3);
+> +static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_show_status, NULL, 4);
+> +static SENSOR_DEVICE_ATTR(occ_quick_drop, 0444, occ_show_status, NULL, 5);
+> +static SENSOR_DEVICE_ATTR(occ_status, 0444, occ_show_status, NULL, 6);
+> +static SENSOR_DEVICE_ATTR(occs_present, 0444, occ_show_status, NULL, 7);
+> +
+> +static struct attribute *occ_attributes[] = {
+> +	&sensor_dev_attr_occ_master.dev_attr.attr,
+> +	&sensor_dev_attr_occ_active.dev_attr.attr,
+> +	&sensor_dev_attr_occ_dvfs_ot.dev_attr.attr,
+> +	&sensor_dev_attr_occ_dvfs_power.dev_attr.attr,
+> +	&sensor_dev_attr_occ_mem_throttle.dev_attr.attr,
+> +	&sensor_dev_attr_occ_quick_drop.dev_attr.attr,
+> +	&sensor_dev_attr_occ_status.dev_attr.attr,
+> +	&sensor_dev_attr_occs_present.dev_attr.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group occ_attr_group = {
+> +	.attrs = occ_attributes,
+> +};
+> +
+>  /* only need to do this once at startup, as OCC won't change sensors on us */
+>  static void occ_parse_poll_response(struct occ *occ)
+>  {
+> @@ -1188,5 +1271,15 @@ int occ_setup(struct occ *occ, const char *name)
+>  		return rc;
+>  	}
+>  
+> +	rc = sysfs_create_group(&occ->bus_dev->kobj, &occ_attr_group);
+> +	if (rc)
+> +		dev_warn(occ->bus_dev, "failed to create status attrs: %d\n",
+> +			 rc);
+> +
+>  	return 0;
+>  }
+> +
+> +void occ_shutdown(struct occ *occ)
+> +{
+> +	sysfs_remove_group(&occ->bus_dev->kobj, &occ_attr_group);
+> +}
+> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+> index 049c3b4..dc9e06d 100644
+> --- a/drivers/hwmon/occ/common.h
+> +++ b/drivers/hwmon/occ/common.h
+> @@ -110,5 +110,6 @@ struct occ {
+>  };
+>  
+>  int occ_setup(struct occ *occ, const char *name);
+> +void occ_shutdown(struct occ *occ);
+>  
+>  #endif /* OCC_COMMON_H */
+> diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+> index 8032c0b..d719632 100644
+> --- a/drivers/hwmon/occ/p8_i2c.c
+> +++ b/drivers/hwmon/occ/p8_i2c.c
+> @@ -230,6 +230,15 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
+>  	return occ_setup(occ, "p8_occ");
+>  }
+>  
+> +static int p8_i2c_occ_remove(struct i2c_client *client)
+> +{
+> +	struct occ *occ = dev_get_drvdata(&client->dev);
+> +
+> +	occ_shutdown(occ);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id p8_i2c_occ_of_match[] = {
+>  	{ .compatible = "ibm,p8-occ-hwmon" },
+>  	{}
+> @@ -243,6 +252,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
+>  		.of_match_table = p8_i2c_occ_of_match,
+>  	},
+>  	.probe = p8_i2c_occ_probe,
+> +	.remove = p8_i2c_occ_remove,
+>  };
+>  
+>  module_i2c_driver(p8_i2c_occ_driver);
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index be3a469..7dbe4d5 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -135,6 +135,8 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>  	p9_sbe_occ->sbe = NULL;
+>  	p9_sbe_occ_close_client(p9_sbe_occ);
+>  
+> +	occ_shutdown(occ);
+> +
+>  	return 0;
+>  }
+>  
