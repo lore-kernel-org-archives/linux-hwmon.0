@@ -1,62 +1,81 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f67.google.com ([209.85.160.67]:44847 "EHLO
-        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751307AbdKVPHx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Nov 2017 10:07:53 -0500
-Date: Wed, 22 Nov 2017 07:07:51 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Sinan Kaya <okaya@codeaurora.org>
-Cc: linux-pci@vger.kernel.org, timur@codeaurora.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:CORETEMP HARDWARE MONITORING DRIVER"
-        <linux-hwmon@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [11/30] hwmon: (coretemp) deprecate pci_get_bus_and_slot()
-Message-ID: <20171122150751.GA25158@roeck-us.net>
-References: <1511328675-21981-12-git-send-email-okaya@codeaurora.org>
+Return-Path: <oleksandr@natalenko.name>
+Return-path: <oleksandr@natalenko.name>
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+To: Jonathan Buzzard <jonathan@buzzard.org.uk>
+Cc: Pali =?ISO-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Mario Limonciello <mario.limonciello@dell.com>
+Subject: i8k_smm_func() takes enormous of time to execute
+Date: Thu, 23 Nov 2017 22:41:03 +0100
+Message-ID: <12093169.Rm9IG5ILEB@natalenko.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1511328675-21981-12-git-send-email-okaya@codeaurora.org>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Nov 22, 2017 at 12:30:56AM -0500, Sinan Kaya wrote:
-> pci_get_bus_and_slot() is restrictive such that it assumes domain=0 as
-> where a PCI device is present. This restricts the device drivers to be
-> reused for other domain numbers.
-> 
-> Use pci_get_domain_bus_and_slot() with a domain number of 0 where we can't
-> extract the domain number. Other places, use the actual domain number from
-> the device.
-> 
-> Signed-off-by: Sinan Kaya <okaya@codeaurora.org>
+Hi, Jonathan, Mario et al.
 
-Applied to hwmon-next.
+I've noticed that querying Dell Vostro 3360 hwmon sensor freezes the system=
+=20
+completely (like, really completely, even mouse cursor does not move, and=20
+sound playback stops) for approx. half of a second. Then, system recovers a=
+nd=20
+runs as usual. Also, sensor readings are okay, for instance:
 
-Thanks,
-Guenter
+=3D=3D=3D
+$ sensors dell_smm-virtual-0
+dell_smm-virtual-0
+Adapter: Virtual device
+Processor Fan: 5615 RPM
+CPU:            +51.0=B0C =20
+Ambient:        +36.0=B0C =20
+Other:          +63.0=B0C =20
+SODIMM:         +41.0=B0C=20
+=3D=3D=3D
 
-> ---
->  drivers/hwmon/coretemp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index c13a4fd..4bdbf77 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -246,7 +246,8 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
->  	int err;
->  	u32 eax, edx;
->  	int i;
-> -	struct pci_dev *host_bridge = pci_get_bus_and_slot(0, PCI_DEVFN(0, 0));
-> +	u16 devfn = PCI_DEVFN(0, 0);
-> +	struct pci_dev *host_bridge = pci_get_domain_bus_and_slot(0, 0, devfn);
->  
->  	/*
->  	 * Explicit tjmax table entries override heuristics.
+So, I've used trace-cmd to check what takes that much amount of time to=20
+execute, and got this:
+
+=3D=3D=3D
+# trace-cmd record -p function_graph -l i8k_smm -F sensors dell_smm-virtual=
+=2D0
+$ trace-cmd report
+=2E..
+sensors-23694 [002] 89099.214369: funcgraph_entry:      # 503440.746 us | =
+=20
+i8k_smm();
+=2E..
+=3D=3D=3D
+
+Clearly, 0.5 s delay.
+
+Looking at i8k_smm(), it calls i8k_smm_func() on 0th CPU:
+
+=3D=3D=3D
+ 232     ret =3D smp_call_on_cpu(0, i8k_smm_func, regs, true);
+=3D=3D=3D
+
+which, in turn, does some asm magic.
+
+I know that SMM is kinda "black box", and kernel has little to do with it, =
+but=20
+I think that under Windows, for instance, it would work without freezes. So=
+,=20
+likely, querying SMM might be done differently.
+
+I do not know how to approach this issue, thus asking for help/advice. Also=
+,=20
+CCing Jonathan since the comment before asm magic says this:
+
+=3D=3D=3D
+ 137  * Call the System Management Mode BIOS. Code provided by Jonathan=20
+Buzzard.
+=3D=3D=3D
+
+This was also reported in various places before, for instance, [1], but=20
+unfortunately, without any solution.
+
+Thanks.
+
+Regards,
+  Oleksandr
+
+[1] https://bugs.launchpad.net/ubuntu/+source/acpi/+bug/10490
