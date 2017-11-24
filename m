@@ -1,104 +1,85 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-io0-f196.google.com ([209.85.223.196]:40933 "EHLO
-        mail-io0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752652AbdK0XwK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Nov 2017 18:52:10 -0500
-From: Robert Lippert <roblip@gmail.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, xow@google.com,
-        Robert Lippert <rlippert@google.com>
-Subject: [PATCH v3] hwmon: (pmbus) Use 64bit math for DIRECT format values
-Date: Mon, 27 Nov 2017 15:51:55 -0800
-Message-Id: <20171127235155.91764-1-rlippert@google.com>
-In-Reply-To: <20171122220843.18309-1-rlippert@google.com>
-References: <20171122220843.18309-1-rlippert@google.com>
+Received: from mx2.suse.de ([195.135.220.15]:46320 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752955AbdKXKWd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Nov 2017 05:22:33 -0500
+Message-ID: <1511518948.15084.9.camel@suse.de>
+Subject: Re: i8k_smm_func() takes enormous of time to execute
+From: Jean Delvare <jdelvare@suse.de>
+To: Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Jonathan Buzzard <jonathan@buzzard.org.uk>
+Cc: Pali =?ISO-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@dell.com>
+Date: Fri, 24 Nov 2017 11:22:28 +0100
+In-Reply-To: <12093169.Rm9IG5ILEB@natalenko.name>
+References: <12093169.Rm9IG5ILEB@natalenko.name>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Power values in the 100s of watt range can easily blow past
-32bit math limits when processing everything in microwatts.
+Hi Oleksandr,
 
-Use 64bit math instead to avoid these issues on common 32bit ARM
-BMC platforms.
+On jeu., 2017-11-23 at 22:41 +0100, Oleksandr Natalenko wrote:
+> I've noticed that querying Dell Vostro 3360 hwmon sensor freezes the system 
+> completely (like, really completely, even mouse cursor does not move, and 
+> sound playback stops) for approx. half of a second. Then, system recovers and 
+> runs as usual. Also, sensor readings are okay, for instance:
+> 
+> ===
+> $ sensors dell_smm-virtual-0
+> dell_smm-virtual-0
+> Adapter: Virtual device
+> Processor Fan: 5615 RPM
+> CPU:            +51.0°C  
+> Ambient:        +36.0°C  
+> Other:          +63.0°C  
+> SODIMM:         +41.0°C 
+> ===
+> 
+> So, I've used trace-cmd to check what takes that much amount of time to 
+> execute, and got this:
+> 
+> ===
+> # trace-cmd record -p function_graph -l i8k_smm -F sensors dell_smm-virtual-0
+> $ trace-cmd report
+> ...
+> sensors-23694 [002] 89099.214369: funcgraph_entry:      # 503440.746 us |  
+> i8k_smm();
+> ...
+> ===
+> 
+> Clearly, 0.5 s delay.
+> 
+> Looking at i8k_smm(), it calls i8k_smm_func() on 0th CPU:
+> 
+> ===
+>  232     ret = smp_call_on_cpu(0, i8k_smm_func, regs, true);
+> ===
+> 
+> which, in turn, does some asm magic.
+> 
+> I know that SMM is kinda "black box", and kernel has little to do with it, but 
+> I think that under Windows, for instance, it would work without freezes. So, 
+> likely, querying SMM might be done differently.
+> 
+> I do not know how to approach this issue, thus asking for help/advice. Also, 
+> CCing Jonathan since the comment before asm magic says this:
+> 
+> ===
+>  137  * Call the System Management Mode BIOS. Code provided by Jonathan 
+> Buzzard.
+> ===
+> 
+> This was also reported in various places before, for instance, [1], but 
+> unfortunately, without any solution.
 
-Signed-off-by: Robert Lippert <rlippert@google.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+There are two patches waiting to be tested in
+https://bugzilla.kernel.org/show_bug.cgi?id=195751
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 52a58b8b6e1b..09977440bbea 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -21,6 +21,7 @@
- 
- #include <linux/debugfs.h>
- #include <linux/kernel.h>
-+#include <linux/math64.h>
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/err.h>
-@@ -499,8 +500,8 @@ static long pmbus_reg2data_linear(struct pmbus_data *data,
- static long pmbus_reg2data_direct(struct pmbus_data *data,
- 				  struct pmbus_sensor *sensor)
- {
--	long val = (s16) sensor->data;
--	long m, b, R;
-+	s64 b, val = (s16) sensor->data;
-+	s32 m, R;
- 
- 	m = data->info->m[sensor->class];
- 	b = data->info->b[sensor->class];
-@@ -528,11 +529,12 @@ static long pmbus_reg2data_direct(struct pmbus_data *data,
- 		R--;
- 	}
- 	while (R < 0) {
--		val = DIV_ROUND_CLOSEST(val, 10);
-+		val = div_s64(val + 5LL, 10L);  /* round closest */
- 		R++;
- 	}
- 
--	return (val - b) / m;
-+	val = div_s64(val - b, m);
-+	return clamp_val(val, LONG_MIN, LONG_MAX);
- }
- 
- /*
-@@ -656,7 +658,8 @@ static u16 pmbus_data2reg_linear(struct pmbus_data *data,
- static u16 pmbus_data2reg_direct(struct pmbus_data *data,
- 				 struct pmbus_sensor *sensor, long val)
- {
--	long m, b, R;
-+	s64 b, val64 = val;
-+	s32 m, R;
- 
- 	m = data->info->m[sensor->class];
- 	b = data->info->b[sensor->class];
-@@ -673,18 +676,18 @@ static u16 pmbus_data2reg_direct(struct pmbus_data *data,
- 		R -= 3;		/* Adjust R and b for data in milli-units */
- 		b *= 1000;
- 	}
--	val = val * m + b;
-+	val64 = val64 * m + b;
- 
- 	while (R > 0) {
--		val *= 10;
-+		val64 *= 10;
- 		R--;
- 	}
- 	while (R < 0) {
--		val = DIV_ROUND_CLOSEST(val, 10);
-+		val64 = div_s64(val64 + 5LL, 10L);  /* round closest */
- 		R++;
- 	}
- 
--	return val;
-+	return (u16) clamp_val(val64, S16_MIN, S16_MAX);
- }
- 
- static u16 pmbus_data2reg_vid(struct pmbus_data *data,
 -- 
-2.15.0.417.g466bffb3ac-goog
-
+Jean Delvare
+SUSE L3 Support
