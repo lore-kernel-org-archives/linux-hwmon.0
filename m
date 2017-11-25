@@ -1,56 +1,87 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:39971 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753078AbdK0QG5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Nov 2017 11:06:57 -0500
-Received: by mail-pf0-f194.google.com with SMTP id q63so6248380pfd.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Nov 2017 08:06:57 -0800 (PST)
-Date: Mon, 27 Nov 2017 08:06:55 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux-hwmon@vger.kernel.org, mspinler@linux.vnet.ibm.com
-Subject: Re: Overflow the hwmon API restricted to 32 bit signed integers
-Message-ID: <20171127160655.GB16884@roeck-us.net>
-References: <045ffd41-794b-f734-0ab1-550f688742c9@linux.vnet.ibm.com>
+Return-Path: <Stefan.Bruens@rwth-aachen.de>
+Return-path: <Stefan.Bruens@rwth-aachen.de>
+From: Stefan =?ISO-8859-1?Q?Br=FCns?= <stefan.bruens@rwth-aachen.de>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Maciej Purski <m.purski@samsung.com>, Jonathan Cameron <jic23@kernel.org>,
+	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, Javier Martinez Canillas
+	<javier@osg.samsung.com>, Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+	Lars-Peter Clausen <lars@metafoo.de>, Hartmut Knaack <knaack.h@gmx.de>, "Jean
+ Delvare" <jdelvare@suse.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 2/2] hwmon: (ina2xx) Make calibration register value fixed
+Date: Sat, 25 Nov 2017 21:49:14 +0100
+Message-ID: <1765425.OcFVFKOaMc@pebbles>
+In-Reply-To: <90ceee91-de0e-456f-b0c9-9274973ac02b@roeck-us.net>
+References: <1511364735-16818-1-git-send-email-m.purski@samsung.com> <1511364735-16818-3-git-send-email-m.purski@samsung.com> <90ceee91-de0e-456f-b0c9-9274973ac02b@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <045ffd41-794b-f734-0ab1-550f688742c9@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: multipart/signed; boundary="nextPart2485776.OalhKULJmM";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Nov 27, 2017 at 09:54:44AM -0600, Eddie James wrote:
-> Hi Guenter,
-> 
-> We're having a problem with overflowing signed 32 bit integers for reading
-> some hwmon attributes:
-> 
-> struct hwmon_ops { umode_t (*is_visible)(const void *drvdata, enum
-> hwmon_sensor_types type, u32 attr, int channel); int (*read)(struct device
-> *dev, enum hwmon_sensor_types type, u32 attr, int channel, long *val); int
-> (*read_string)(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> int channel, const char **str); int (*write)(struct device *dev, enum
-> hwmon_sensor_types type, u32 attr, int channel, long val); };
-> 
-> Specifically, power values in micro-watts (about 2200 watts will overflow
-> the value - imagine multiple processors and a number of GPUs...). What do
-> you suggest in this case?
-> 
-> This is relevant for our OCC driver; thanks for the comments btw. In our OCC
-> driver, we have custom sysfs entries for power, and so can return a string
-> with "%llx" to deal with this. But of course, the user space client, based
-> on the hwmon API, can't handle it.
-> 
-> Appreciate any suggestions.
-> 
-The easiest solution might be to expand the API with an optional function
-pointer to return 64 bit values. The hwmon core would then call either one
-or the other function.
+--nextPart2485776.OalhKULJmM
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-Guenter
+On Saturday, November 25, 2017 7:50:16 PM CET Guenter Roeck wrote:
+> On 11/22/2017 07:32 AM, Maciej Purski wrote:
+> > Calibration register is used for calculating current register in
+> > hardware according to datasheet:
+> > current =3D shunt_volt * calib_register / 2048 (ina 226)
+> > current =3D shunt_volt * calib_register / 4096 (ina 219)
+> >=20
+> > Fix calib_register value to 2048 for ina226 and 4096 for ina 219 in
+> > order to avoid truncation error and provide best precision allowed
+> > by shunt_voltage measurement. Make current scale value follow changes
+> > of shunt_resistor from sysfs as calib_register value is now fixed.
+> >=20
+> > Power_lsb value should also follow shunt_resistor changes as stated in
+> > datasheet:
+> > power_lsb =3D 25 * current_lsb (ina 226)
+> > power_lsb =3D 20 * current_lsb (ina 219)
+> >=20
+> > Signed-off-by: Maciej Purski <m.purski@samsung.com>
+>=20
+> Setting the calibration register to a specific value may optimize precisi=
+on,
+> but limits the supported value range, which is the whole point of providi=
+ng
+> a calibration register. What am I missing here ?
 
-> Thanks,
-> Eddie
-> 
+=46or the current register, any different calibration register value is=20
+completely useless - smaller values just truncate the register value, large=
+r=20
+values adds noise in the lsbs. Both registers (current/shunt voltage) are=20
+16bit, and nothing is going to change that.
+
+There is a *very* small allowed power operating area where scaling down wou=
+ld=20
+be of any use:
+1. Bus voltage exceeds 25 (20) Volts
+2. Shunt voltage is about 82 (320) mV
+
+In this case the power register overflows. More specifically, if:
+(shunt_voltage [mv] / 81.92) * (bus_voltage [V] / 25) > 1
+
+Maximum allowed bus voltage is 36 V resp 26 V. (ina226/219).
+
+Kind regards,
+
+Stefan
+
+=2D-=20
+Stefan Br=FCns  /  Bergstra=DFe 21  /  52062 Aachen
+home: +49 241 53809034     mobile: +49 151 50412019
+--nextPart2485776.OalhKULJmM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSwWRWIpJbl0W4DemNvf0o9jP6qUwUCWhnXSgAKCRBvf0o9jP6q
+U3niAJ456l1DjlwQN8qLbPTSZl0MxB526gCgrxpT9ghjxcdywvODHcUg/B4+kYA=
+=9aEm
+-----END PGP SIGNATURE-----
+
+--nextPart2485776.OalhKULJmM--
