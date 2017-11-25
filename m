@@ -1,39 +1,38 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:50664 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751569AbdKYQl6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Nov 2017 11:41:58 -0500
-Date: Sat, 25 Nov 2017 16:41:52 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Maciej Purski <m.purski@samsung.com>
-Cc: Stefan Bruens <stefan.bruens@rwth-aachen.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+Received: from mail-oi0-f68.google.com ([209.85.218.68]:36942 "EHLO
+        mail-oi0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751231AbdKYSuU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 25 Nov 2017 13:50:20 -0500
+Subject: Re: [PATCH 2/2] hwmon: (ina2xx) Make calibration register value fixed
+To: Maciej Purski <m.purski@samsung.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Stefan Bruens <stefan.bruens@rwth-aachen.de>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org,
         Javier Martinez Canillas <javier@osg.samsung.com>,
         Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Hartmut Knaack <knaack.h@gmx.de>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [PATCH 1/2] iio: adc: ina2xx: Make calibration register value
- fixed
-Message-ID: <20171125164152.6dee0312@archlinux>
-In-Reply-To: <1511364735-16818-2-git-send-email-m.purski@samsung.com>
 References: <1511364735-16818-1-git-send-email-m.purski@samsung.com>
-        <CGME20171122153246eucas1p20832152c270805d20343e40287402e0d@eucas1p2.samsung.com>
-        <1511364735-16818-2-git-send-email-m.purski@samsung.com>
+ <CGME20171122153251eucas1p2d1e78a6063a964dcf75a23e2c168df3f@eucas1p2.samsung.com>
+ <1511364735-16818-3-git-send-email-m.purski@samsung.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <90ceee91-de0e-456f-b0c9-9274973ac02b@roeck-us.net>
+Date: Sat, 25 Nov 2017 10:50:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <1511364735-16818-3-git-send-email-m.purski@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, 22 Nov 2017 16:32:14 +0100
-Maciej Purski <m.purski@samsung.com> wrote:
-
+On 11/22/2017 07:32 AM, Maciej Purski wrote:
 > Calibration register is used for calculating current register in
 > hardware according to datasheet:
 > current = shunt_volt * calib_register / 2048 (ina 226)
@@ -51,159 +50,198 @@ Maciej Purski <m.purski@samsung.com> wrote:
 > 
 > Signed-off-by: Maciej Purski <m.purski@samsung.com>
 
-I like the patch but would like to let it sit for a little longer
-to see if others wish to comment.
+Setting the calibration register to a specific value may optimize precision,
+but limits the supported value range, which is the whole point of providing
+a calibration register. What am I missing here ?
 
-Looks good to me but there are users out there and I want some
-feedback from others that this won't break them...
-
-Whilst the change is fully within the ABI we might have
-known user scripts that make assumptions about the scale for
-example and need time to fix those before we push this out.
-
-If no one shouts in a few weeks I'll probably take it to force
-the issue!
-
-Remind me if I seem to have forgotten it.
-
-Thanks,
-
-Jonathan
+Guenter
 
 > ---
->  drivers/iio/adc/ina2xx-adc.c | 59 ++++++++++++++++++++++++--------------------
->  1 file changed, 32 insertions(+), 27 deletions(-)
+>   drivers/hwmon/ina2xx.c | 87 +++++++++++++++++++++++++++++---------------------
+>   1 file changed, 50 insertions(+), 37 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
-> index 84a4387..0f25087 100644
-> --- a/drivers/iio/adc/ina2xx-adc.c
-> +++ b/drivers/iio/adc/ina2xx-adc.c
-> @@ -110,11 +110,11 @@ enum ina2xx_ids { ina219, ina226 };
->  
->  struct ina2xx_config {
->  	u16 config_default;
+> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> index 62e38fa..e362a93 100644
+> --- a/drivers/hwmon/ina2xx.c
+> +++ b/drivers/hwmon/ina2xx.c
+> @@ -95,18 +95,20 @@ enum ina2xx_ids { ina219, ina226 };
+>   
+>   struct ina2xx_config {
+>   	u16 config_default;
 > -	int calibration_factor;
 > +	int calibration_value;
->  	int shunt_div;
->  	int bus_voltage_shift;
->  	int bus_voltage_lsb;	/* uV */
+>   	int registers;
+>   	int shunt_div;
+>   	int bus_voltage_shift;
+>   	int bus_voltage_lsb;	/* uV */
 > -	int power_lsb;		/* uW */
 > +	int power_lsb_factor;
->  	enum ina2xx_ids chip_id;
->  };
->  
-> @@ -124,6 +124,8 @@ struct ina2xx_chip_info {
->  	const struct ina2xx_config *config;
->  	struct mutex state_lock;
->  	unsigned int shunt_resistor_uohm;
-> +	unsigned int current_lsb_uA;
-> +	unsigned int power_lsb_uW;
->  	int avg;
->  	int int_time_vbus; /* Bus voltage integration time uS */
->  	int int_time_vshunt; /* Shunt voltage integration time uS */
-> @@ -133,20 +135,20 @@ struct ina2xx_chip_info {
->  static const struct ina2xx_config ina2xx_config[] = {
->  	[ina219] = {
->  		.config_default = INA219_CONFIG_DEFAULT,
+>   };
+>   
+>   struct ina2xx_data {
+>   	const struct ina2xx_config *config;
+>   
+>   	long rshunt;
+> +	long current_lsb_uA;
+> +	long power_lsb_uW;
+>   	struct mutex config_lock;
+>   	struct regmap *regmap;
+>   
+> @@ -116,21 +118,21 @@ struct ina2xx_data {
+>   static const struct ina2xx_config ina2xx_config[] = {
+>   	[ina219] = {
+>   		.config_default = INA219_CONFIG_DEFAULT,
 > -		.calibration_factor = 40960000,
 > +		.calibration_value = 4096,
->  		.shunt_div = 100,
->  		.bus_voltage_shift = 3,
->  		.bus_voltage_lsb = 4000,
+>   		.registers = INA219_REGISTERS,
+>   		.shunt_div = 100,
+>   		.bus_voltage_shift = 3,
+>   		.bus_voltage_lsb = 4000,
 > -		.power_lsb = 20000,
 > +		.power_lsb_factor = 20,
->  		.chip_id = ina219,
->  	},
->  	[ina226] = {
->  		.config_default = INA226_CONFIG_DEFAULT,
+>   	},
+>   	[ina226] = {
+>   		.config_default = INA226_CONFIG_DEFAULT,
 > -		.calibration_factor = 5120000,
 > +		.calibration_value = 2048,
->  		.shunt_div = 400,
->  		.bus_voltage_shift = 0,
->  		.bus_voltage_lsb = 1250,
+>   		.registers = INA226_REGISTERS,
+>   		.shunt_div = 400,
+>   		.bus_voltage_shift = 0,
+>   		.bus_voltage_lsb = 1250,
 > -		.power_lsb = 25000,
 > +		.power_lsb_factor = 25,
->  		.chip_id = ina226,
->  	},
->  };
-> @@ -210,14 +212,15 @@ static int ina2xx_read_raw(struct iio_dev *indio_dev,
->  
->  		case INA2XX_POWER:
->  			/* processed (mW) = raw*lsb (uW) / 1000 */
-> -			*val = chip->config->power_lsb;
-> +			*val = chip->power_lsb_uW;
->  			*val2 = 1000;
->  			return IIO_VAL_FRACTIONAL;
->  
->  		case INA2XX_CURRENT:
-> -			/* processed (mA) = raw (mA) */
-> -			*val = 1;
-> -			return IIO_VAL_INT;
-> +			/* processed (mA) = raw*lsb (uA) / 1000 */
-> +			*val = chip->current_lsb_uA;
-> +			*val2 = 1000;
-> +			return IIO_VAL_FRACTIONAL;
->  		}
->  	}
->  
-> @@ -434,28 +437,35 @@ static ssize_t ina2xx_allow_async_readout_store(struct device *dev,
->  }
->  
->  /*
-> - * Set current LSB to 1mA, shunt is in uOhms
-> - * (equation 13 in datasheet). We hardcode a Current_LSB
-> - * of 1.0 x10-3. The only remaining parameter is RShunt.
-> - * There is no need to expose the CALIBRATION register
-> - * to the user for now. But we need to reset this register
-> - * if the user updates RShunt after driver init, e.g upon
-> - * reading an EEPROM/Probe-type value.
+>   	},
+>   };
+>   
+> @@ -169,12 +171,16 @@ static u16 ina226_interval_to_reg(int interval)
+>   	return INA226_SHIFT_AVG(avg_bits);
+>   }
+>   
+> +/*
 > + * Calibration register is set to the best value, which eliminates
 > + * truncation errors on calculating current register in hardware.
 > + * According to datasheet (eq. 3) the best values are 2048 for
 > + * ina226 and 4096 for ina219. They are hardcoded as calibration_value.
->   */
->  static int ina2xx_set_calibration(struct ina2xx_chip_info *chip)
->  {
-> -	u16 regval = DIV_ROUND_CLOSEST(chip->config->calibration_factor,
-> -				   chip->shunt_resistor_uohm);
+> + */
+>   static int ina2xx_calibrate(struct ina2xx_data *data)
+>   {
+> -	u16 val = DIV_ROUND_CLOSEST(data->config->calibration_factor,
+> -				    data->rshunt);
 > -
-> -	return regmap_write(chip->regmap, INA2XX_CALIBRATION, regval);
-> +	return regmap_write(chip->regmap, INA2XX_CALIBRATION,
-> +			    chip->config->calibration_value);
->  }
->  
+> -	return regmap_write(data->regmap, INA2XX_CALIBRATION, val);
+> +	return regmap_write(data->regmap, INA2XX_CALIBRATION,
+> +			    data->config->calibration_value);
+>   }
+>   
+>   /*
+> @@ -187,10 +193,6 @@ static int ina2xx_init(struct ina2xx_data *data)
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	/*
+> -	 * Set current LSB to 1mA, shunt is in uOhms
+> -	 * (equation 13 in datasheet).
+> -	 */
+>   	return ina2xx_calibrate(data);
+>   }
+>   
+> @@ -268,15 +270,15 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+>   		val = DIV_ROUND_CLOSEST(val, 1000);
+>   		break;
+>   	case INA2XX_POWER:
+> -		val = regval * data->config->power_lsb;
+> +		val = regval * data->power_lsb_uW;
+>   		break;
+>   	case INA2XX_CURRENT:
+> -		/* signed register, LSB=1mA (selected), in mA */
+> -		val = (s16)regval;
+> +		/* signed register, result in mA */
+> +		val = regval * data->current_lsb_uA;
+> +		val = DIV_ROUND_CLOSEST(val, 1000);
+>   		break;
+>   	case INA2XX_CALIBRATION:
+> -		val = DIV_ROUND_CLOSEST(data->config->calibration_factor,
+> -					regval);
+> +		val = regval;
+>   		break;
+>   	default:
+>   		/* programmer goofed */
+> @@ -304,9 +306,32 @@ static ssize_t ina2xx_show_value(struct device *dev,
+>   			ina2xx_get_value(data, attr->index, regval));
+>   }
+>   
+> -static ssize_t ina2xx_set_shunt(struct device *dev,
+> -				struct device_attribute *da,
+> -				const char *buf, size_t count)
 > +/*
 > + * In order to keep calibration register value fixed, the product
 > + * of current_lsb and shunt_resistor should also be fixed and equal
 > + * to shunt_voltage_lsb = 1 / shunt_div multiplied by 10^9 in order
 > + * to keep the scale.
 > + */
->  static int set_shunt_resistor(struct ina2xx_chip_info *chip, unsigned int val)
->  {
-> -	if (val <= 0 || val > chip->config->calibration_factor)
+> +static int ina2xx_set_shunt(struct ina2xx_data *data, long val)
+> +{
 > +	unsigned int dividend = DIV_ROUND_CLOSEST(1000000000,
-> +						  chip->config->shunt_div);
-> +
+> +						  data->config->shunt_div);
 > +	if (val <= 0 || val > dividend)
->  		return -EINVAL;
->  
->  	chip->shunt_resistor_uohm = val;
-> +	chip->current_lsb_uA = DIV_ROUND_CLOSEST(dividend, val);
-> +	chip->power_lsb_uW = chip->config->power_lsb_factor *
-> +			     chip->current_lsb_uA;
->  
->  	return 0;
->  }
-> @@ -485,11 +495,6 @@ static ssize_t ina2xx_shunt_resistor_store(struct device *dev,
->  	if (ret)
->  		return ret;
->  
-> -	/* Update the Calibration register */
-> -	ret = ina2xx_set_calibration(chip);
-> -	if (ret)
-> -		return ret;
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->config_lock);
+> +	data->rshunt = val;
+> +	data->current_lsb_uA = DIV_ROUND_CLOSEST(dividend, val);
+> +	data->power_lsb_uW = data->config->power_lsb_factor *
+> +			     data->current_lsb_uA;
+> +	mutex_unlock(&data->config_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t ina2xx_store_shunt(struct device *dev,
+> +				  struct device_attribute *da,
+> +				  const char *buf, size_t count)
+>   {
+>   	unsigned long val;
+>   	int status;
+> @@ -316,18 +341,9 @@ static ssize_t ina2xx_set_shunt(struct device *dev,
+>   	if (status < 0)
+>   		return status;
+>   
+> -	if (val == 0 ||
+> -	    /* Values greater than the calibration factor make no sense. */
+> -	    val > data->config->calibration_factor)
+> -		return -EINVAL;
 > -
->  	return len;
->  }
->  
+> -	mutex_lock(&data->config_lock);
+> -	data->rshunt = val;
+> -	status = ina2xx_calibrate(data);
+> -	mutex_unlock(&data->config_lock);
+> +	status = ina2xx_set_shunt(data, val);
+>   	if (status < 0)
+>   		return status;
+> -
+>   	return count;
+>   }
+>   
+> @@ -387,7 +403,7 @@ static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ina2xx_show_value, NULL,
+>   
+>   /* shunt resistance */
+>   static SENSOR_DEVICE_ATTR(shunt_resistor, S_IRUGO | S_IWUSR,
+> -			  ina2xx_show_value, ina2xx_set_shunt,
+> +			  ina2xx_show_value, ina2xx_store_shunt,
+>   			  INA2XX_CALIBRATION);
+>   
+>   /* update interval (ina226 only) */
+> @@ -448,10 +464,7 @@ static int ina2xx_probe(struct i2c_client *client,
+>   			val = INA2XX_RSHUNT_DEFAULT;
+>   	}
+>   
+> -	if (val <= 0 || val > data->config->calibration_factor)
+> -		return -ENODEV;
+> -
+> -	data->rshunt = val;
+> +	ina2xx_set_shunt(data, val);
+>   
+>   	ina2xx_regmap_config.max_register = data->config->registers;
+>   
+> 
 
