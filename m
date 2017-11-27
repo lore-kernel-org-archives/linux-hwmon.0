@@ -1,240 +1,124 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f67.google.com ([74.125.83.67]:43583 "EHLO
-        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752135AbdK2VX5 (ORCPT
+Received: from mail-qt0-f194.google.com ([209.85.216.194]:36727 "EHLO
+        mail-qt0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752275AbdK0VnN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Nov 2017 16:23:57 -0500
-Date: Wed, 29 Nov 2017 13:23:55 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Maciej Purski <m.purski@samsung.com>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-        Stefan Bruens <stefan.bruens@rwth-aachen.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Javier Martinez Canillas <javier@osg.samsung.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [2/2] hwmon: (ina2xx) Make calibration register value fixed
-Message-ID: <20171129212355.GA22717@roeck-us.net>
-References: <1511364735-16818-3-git-send-email-m.purski@samsung.com>
+        Mon, 27 Nov 2017 16:43:13 -0500
+Received: by mail-qt0-f194.google.com with SMTP id a19so41130533qtb.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Nov 2017 13:43:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1511364735-16818-3-git-send-email-m.purski@samsung.com>
+In-Reply-To: <20171122222809.GA2951@roeck-us.net>
+References: <20171122220843.18309-1-rlippert@google.com> <20171122222809.GA2951@roeck-us.net>
+From: Rob Lippert <rlippert@google.com>
+Date: Mon, 27 Nov 2017 13:42:51 -0800
+Message-ID: <CAFRv3wyCRTVEMTFFCa8_z6dsFHNR7U_9UixRTDHeoX1VN3cM4A@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus) Use 64bit math for DIRECT format values
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Robert Lippert <roblip@gmail.com>, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Xo Wang <xow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 22, 2017 at 04:32:15PM +0100, Maciej Purski wrote:
-> Calibration register is used for calculating current register in
-> hardware according to datasheet:
-> current = shunt_volt * calib_register / 2048 (ina 226)
-> current = shunt_volt * calib_register / 4096 (ina 219)
-> 
-> Fix calib_register value to 2048 for ina226 and 4096 for ina 219 in
-> order to avoid truncation error and provide best precision allowed
-> by shunt_voltage measurement. Make current scale value follow changes
-> of shunt_resistor from sysfs as calib_register value is now fixed.
-> 
-> Power_lsb value should also follow shunt_resistor changes as stated in
-> datasheet:
-> power_lsb = 25 * current_lsb (ina 226)
-> power_lsb = 20 * current_lsb (ina 219)
-> 
-> Signed-off-by: Maciej Purski <m.purski@samsung.com>
+On Wed, Nov 22, 2017 at 2:28 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Wed, Nov 22, 2017 at 02:08:43PM -0800, Robert Lippert wrote:
+>> Power values in the 100s of watt range can easily blow past
+>> 32bit math limits when processing everything in microwatts.
+>>
+>> Use 64bit math instead to avoid these issues on common 32bit ARM
+>> BMC platforms.
+>>
+>> Signed-off-by: Robert Lippert <rlippert@google.com>
+>> ---
+>>  drivers/hwmon/pmbus/pmbus_core.c | 21 ++++++++++++---------
+>>  1 file changed, 12 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 52a58b8b6e1b..f4efea9f282e 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -499,8 +499,8 @@ static long pmbus_reg2data_linear(struct pmbus_data *data,
+>>  static long pmbus_reg2data_direct(struct pmbus_data *data,
+>>                                 struct pmbus_sensor *sensor)
+>>  {
+>> -     long val = (s16) sensor->data;
+>> -     long m, b, R;
+>> +     s64 val = (s16) sensor->data;
+>> +     s64 m, b, R;
+>>
+>>       m = data->info->m[sensor->class];
+>>       b = data->info->b[sensor->class];
+>> @@ -528,11 +528,13 @@ static long pmbus_reg2data_direct(struct pmbus_data *data,
+>>               R--;
+>>       }
+>>       while (R < 0) {
+>> -             val = DIV_ROUND_CLOSEST(val, 10);
+>> +             do_div(val, 10);
+>
+> Any reason to not use DIV_ROUND_CLOSEST_ULL ?
 
-Applied.
+That macro doesn't quite work for signed division.  v2 changes this to
+use the signed 64bit division functions and I emulated the "round
+closest" by just adding 5 before dividing.
 
-Thanks,
-Guenter
+>
+>>               R++;
+>>       }
+>>
+>> -     return (val - b) / m;
+>> +     val = val - b;
+>> +     do_div(val, m);
+>> +     return val;
+>
+> Can this overflow ?
 
-> ---
->  drivers/hwmon/ina2xx.c | 87 +++++++++++++++++++++++++++++---------------------
->  1 file changed, 50 insertions(+), 37 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index 62e38fa..e362a93 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-> @@ -95,18 +95,20 @@ enum ina2xx_ids { ina219, ina226 };
->  
->  struct ina2xx_config {
->  	u16 config_default;
-> -	int calibration_factor;
-> +	int calibration_value;
->  	int registers;
->  	int shunt_div;
->  	int bus_voltage_shift;
->  	int bus_voltage_lsb;	/* uV */
-> -	int power_lsb;		/* uW */
-> +	int power_lsb_factor;
->  };
->  
->  struct ina2xx_data {
->  	const struct ina2xx_config *config;
->  
->  	long rshunt;
-> +	long current_lsb_uA;
-> +	long power_lsb_uW;
->  	struct mutex config_lock;
->  	struct regmap *regmap;
->  
-> @@ -116,21 +118,21 @@ struct ina2xx_data {
->  static const struct ina2xx_config ina2xx_config[] = {
->  	[ina219] = {
->  		.config_default = INA219_CONFIG_DEFAULT,
-> -		.calibration_factor = 40960000,
-> +		.calibration_value = 4096,
->  		.registers = INA219_REGISTERS,
->  		.shunt_div = 100,
->  		.bus_voltage_shift = 3,
->  		.bus_voltage_lsb = 4000,
-> -		.power_lsb = 20000,
-> +		.power_lsb_factor = 20,
->  	},
->  	[ina226] = {
->  		.config_default = INA226_CONFIG_DEFAULT,
-> -		.calibration_factor = 5120000,
-> +		.calibration_value = 2048,
->  		.registers = INA226_REGISTERS,
->  		.shunt_div = 400,
->  		.bus_voltage_shift = 0,
->  		.bus_voltage_lsb = 1250,
-> -		.power_lsb = 25000,
-> +		.power_lsb_factor = 25,
->  	},
->  };
->  
-> @@ -169,12 +171,16 @@ static u16 ina226_interval_to_reg(int interval)
->  	return INA226_SHIFT_AVG(avg_bits);
->  }
->  
-> +/*
-> + * Calibration register is set to the best value, which eliminates
-> + * truncation errors on calculating current register in hardware.
-> + * According to datasheet (eq. 3) the best values are 2048 for
-> + * ina226 and 4096 for ina219. They are hardcoded as calibration_value.
-> + */
->  static int ina2xx_calibrate(struct ina2xx_data *data)
->  {
-> -	u16 val = DIV_ROUND_CLOSEST(data->config->calibration_factor,
-> -				    data->rshunt);
-> -
-> -	return regmap_write(data->regmap, INA2XX_CALIBRATION, val);
-> +	return regmap_write(data->regmap, INA2XX_CALIBRATION,
-> +			    data->config->calibration_value);
->  }
->  
->  /*
-> @@ -187,10 +193,6 @@ static int ina2xx_init(struct ina2xx_data *data)
->  	if (ret < 0)
->  		return ret;
->  
-> -	/*
-> -	 * Set current LSB to 1mA, shunt is in uOhms
-> -	 * (equation 13 in datasheet).
-> -	 */
->  	return ina2xx_calibrate(data);
->  }
->  
-> @@ -268,15 +270,15 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
->  		val = DIV_ROUND_CLOSEST(val, 1000);
->  		break;
->  	case INA2XX_POWER:
-> -		val = regval * data->config->power_lsb;
-> +		val = regval * data->power_lsb_uW;
->  		break;
->  	case INA2XX_CURRENT:
-> -		/* signed register, LSB=1mA (selected), in mA */
-> -		val = (s16)regval;
-> +		/* signed register, result in mA */
-> +		val = regval * data->current_lsb_uA;
-> +		val = DIV_ROUND_CLOSEST(val, 1000);
->  		break;
->  	case INA2XX_CALIBRATION:
-> -		val = DIV_ROUND_CLOSEST(data->config->calibration_factor,
-> -					regval);
-> +		val = regval;
->  		break;
->  	default:
->  		/* programmer goofed */
-> @@ -304,9 +306,32 @@ static ssize_t ina2xx_show_value(struct device *dev,
->  			ina2xx_get_value(data, attr->index, regval));
->  }
->  
-> -static ssize_t ina2xx_set_shunt(struct device *dev,
-> -				struct device_attribute *da,
-> -				const char *buf, size_t count)
-> +/*
-> + * In order to keep calibration register value fixed, the product
-> + * of current_lsb and shunt_resistor should also be fixed and equal
-> + * to shunt_voltage_lsb = 1 / shunt_div multiplied by 10^9 in order
-> + * to keep the scale.
-> + */
-> +static int ina2xx_set_shunt(struct ina2xx_data *data, long val)
-> +{
-> +	unsigned int dividend = DIV_ROUND_CLOSEST(1000000000,
-> +						  data->config->shunt_div);
-> +	if (val <= 0 || val > dividend)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&data->config_lock);
-> +	data->rshunt = val;
-> +	data->current_lsb_uA = DIV_ROUND_CLOSEST(dividend, val);
-> +	data->power_lsb_uW = data->config->power_lsb_factor *
-> +			     data->current_lsb_uA;
-> +	mutex_unlock(&data->config_lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t ina2xx_store_shunt(struct device *dev,
-> +				  struct device_attribute *da,
-> +				  const char *buf, size_t count)
->  {
->  	unsigned long val;
->  	int status;
-> @@ -316,18 +341,9 @@ static ssize_t ina2xx_set_shunt(struct device *dev,
->  	if (status < 0)
->  		return status;
->  
-> -	if (val == 0 ||
-> -	    /* Values greater than the calibration factor make no sense. */
-> -	    val > data->config->calibration_factor)
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&data->config_lock);
-> -	data->rshunt = val;
-> -	status = ina2xx_calibrate(data);
-> -	mutex_unlock(&data->config_lock);
-> +	status = ina2xx_set_shunt(data, val);
->  	if (status < 0)
->  		return status;
-> -
->  	return count;
->  }
->  
-> @@ -387,7 +403,7 @@ static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ina2xx_show_value, NULL,
->  
->  /* shunt resistance */
->  static SENSOR_DEVICE_ATTR(shunt_resistor, S_IRUGO | S_IWUSR,
-> -			  ina2xx_show_value, ina2xx_set_shunt,
-> +			  ina2xx_show_value, ina2xx_store_shunt,
->  			  INA2XX_CALIBRATION);
->  
->  /* update interval (ina226 only) */
-> @@ -448,10 +464,7 @@ static int ina2xx_probe(struct i2c_client *client,
->  			val = INA2XX_RSHUNT_DEFAULT;
->  	}
->  
-> -	if (val <= 0 || val > data->config->calibration_factor)
-> -		return -ENODEV;
-> -
-> -	data->rshunt = val;
-> +	ina2xx_set_shunt(data, val);
->  
->  	ina2xx_regmap_config.max_register = data->config->registers;
->  
+Added clamp() to the return values in v2 to prevent overflow when
+returning a narrower type.
+
+>
+>>  }
+>>
+>>  /*
+>> @@ -656,7 +658,8 @@ static u16 pmbus_data2reg_linear(struct pmbus_data *data,
+>>  static u16 pmbus_data2reg_direct(struct pmbus_data *data,
+>>                                struct pmbus_sensor *sensor, long val)
+>>  {
+>> -     long m, b, R;
+>> +     s64 m, b, R;
+>> +     s64 val64 = val;
+>>
+>>       m = data->info->m[sensor->class];
+>>       b = data->info->b[sensor->class];
+>> @@ -673,18 +676,18 @@ static u16 pmbus_data2reg_direct(struct pmbus_data *data,
+>>               R -= 3;         /* Adjust R and b for data in milli-units */
+>>               b *= 1000;
+>>       }
+>> -     val = val * m + b;
+>> +     val64 = val64 * m + b;
+>>
+>>       while (R > 0) {
+>> -             val *= 10;
+>> +             val64 *= 10;
+>>               R--;
+>>       }
+>>       while (R < 0) {
+>> -             val = DIV_ROUND_CLOSEST(val, 10);
+>> +             do_div(val64, 10);
+>
+> Same here.
+>
+>>               R++;
+>>       }
+>>
+>> -     return val;
+>> +     return (u16) val64;
+>
+> Can this overflow ?
+>
+>>  }
+>>
+>>  static u16 pmbus_data2reg_vid(struct pmbus_data *data,
+>> --
+>> 2.15.0.448.gf294e3d99a-goog
+>>
