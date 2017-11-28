@@ -1,112 +1,76 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f196.google.com ([209.85.192.196]:43369 "EHLO
-        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751651AbdK0WIN (ORCPT
+Received: from mail-io0-f196.google.com ([209.85.223.196]:33787 "EHLO
+        mail-io0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753351AbdK1A3u (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Nov 2017 17:08:13 -0500
-Date: Mon, 27 Nov 2017 14:08:10 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Rob Lippert <rlippert@google.com>
-Cc: Robert Lippert <roblip@gmail.com>, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Xo Wang <xow@google.com>
-Subject: Re: [PATCH] hwmon: (pmbus/lm25066) Swap low/high current
- coefficients for LM5066(i)
-Message-ID: <20171127220810.GA3848@roeck-us.net>
-References: <20171122220728.17861-1-rlippert@google.com>
- <20171122232816.GA4615@roeck-us.net>
- <CAFRv3wz0GDBNSBDFu_aYdrHJCQ6dwSXxW85JVJdA++c0_yDxAQ@mail.gmail.com>
- <91322e5e-23e3-ea6a-04bd-1c23fedadbf7@roeck-us.net>
- <CAFRv3wy0yL704Y1=v3yOJtPMEjObPHcQuHaETh2FRmEHgpTi6A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFRv3wy0yL704Y1=v3yOJtPMEjObPHcQuHaETh2FRmEHgpTi6A@mail.gmail.com>
+        Mon, 27 Nov 2017 19:29:50 -0500
+From: Robert Lippert <roblip@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, xow@google.com,
+        Robert Lippert <rlippert@google.com>
+Subject: [PATCH] hwmon: (pmbus/lm25066) Default coefficients for low current limit
+Date: Mon, 27 Nov 2017 16:28:58 -0800
+Message-Id: <20171128002858.1821-1-rlippert@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 27, 2017 at 01:51:35PM -0800, Rob Lippert wrote:
-> On Wed, Nov 22, 2017 at 5:17 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > Hi Rob,
-> >
-> > On 11/22/2017 03:39 PM, Rob Lippert wrote:
-> >>
-> >> On Wed, Nov 22, 2017 at 3:28 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>
-> >>>
-> >>> On Wed, Nov 22, 2017 at 02:07:28PM -0800, Robert Lippert wrote:
-> >>>>
-> >>>> The _L low-current mode coefficient values should reference the
-> >>>> datasheet rows with CL=VDD but it seems were mistakenly pulled from
-> >>>> the rows with CL=GND.
-> >>>>
-> >>>> This causes the current/power to be reported as approximately double
-> >>>> the actual value when CL=GND and half the actual value when CL=VDD.
-> >>>>
-> >>>
-> >>> This would affect all chips supported by this driver. Hmm, and I was sure
-> >>> I tested this. I'll have to dig out my hardware and confirm.
-> >>
-> >>
-> >> I'm still not 100% convinced this commit is correct as I haven't been
-> >> able to validate the measurements against an external probe yet (and
-> >> my test board uses a non-standard sense resistor which means it needs
-> >> additional massaging of the data anyhow).
-> >>
-> >>>
-> >>>
-> >>> The code currently only uses bit 4 of the DEVICE_SETUP (D9h) command
-> >>> to determine which current limit setting to use. Looking into the
-> >>> datasheet, it looks like it also has to evaluate bit 2, and I wonder
-> >>> if there is a means to determine CL if bit 2 = 0. Any idea ?
-> >>
-> >>
-> >> On my test board CL=floating (equivalent to GND) and the value of
-> >> register 0xD9 is all zeroes.
-> >>
-> > Are you sure that floating is equivalent to GND ? I didn't check the
-> > datasheet, but it is more common for chips to have an internal pull-up.
-> >
-> >>>
-> >>> Does bit 4 report the CL pin value if bit 2 = 0 ?
-> >>
-> >>
-> >> I can't tell by reading the datasheet that 0xD9 bit4 will ever report
-> >> the pin value as the language is difficult to parse :)
-> >
-> >
-> > Same here.
-> >
-> >> But I don't have any hardware setup with CL=VDD to test...
-> >>
-> >
-> > I do have various evaluation boards, so I should be able to do some testing.
-> > I hope I'll get to it over the weekend.
-> 
-> Actually turns out my board does tie CL=VDD as recommended by the
-> LM5066i datasheet to improve the current/power reporting accuracy.
-> But the value in 0xD9 is always zero so it seems there is no way to
-> read this CL pin setting from the device.
-> 
-> I think my commit is technically correct but it seems will likely
-> break the readings for most boards that follow the datasheet typical
-> circuit which recommends CL=VDD.
-> 
-> Would it make sense to remove the code trying to read the CL setting
-> and default the coefficient values to the "low current limit" CL=VDD
-> setting?  (and maybe something in devtree or module param to pick the
-> other coefficients?)
-> 
+There seems to be no way to detect the value of the CL/GAIN pin
+from the device using PMBus.
 
-The code should also check bit 2. If bit 2 is not set, it is ok to assume
-CL=VDD. We can add a devicetree property if/when needed. Question though
-is still how to handle the problem for the other chips supported by the
-driver; if we change the code we should fix the problem for all chips,
-not just for one. Wonder if we can just swap the defines to minimize code
-changes.
+Low current mode seems to be recommended (from LM5066 datasheet) for
+improved current reporting accuracy in a typical design.
 
-Unfortunately I spent the entire weekend in bed with a cold, so I didn't get
-to do any tests with my eval boards :-(.
+Assume the device is in low current mode unless the register override
+bit is set and indicates high current limit mode.
 
-Guenter
+Signed-off-by: Robert Lippert <rlippert@google.com>
+---
+ drivers/hwmon/pmbus/lm25066.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index aa052f4449a9..f6ae7b4cf705 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -43,6 +43,7 @@ enum chips { lm25056, lm25063, lm25066, lm5064, lm5066, lm5066i };
+ #define LM25066_READ_AVG_IIN		0xde
+ #define LM25066_READ_AVG_PIN		0xdf
+ 
++#define LM25066_DEV_SETUP_CL_CONFIG	BIT(2)	/* Use pin or SMBus values */
+ #define LM25066_DEV_SETUP_CL		BIT(4)	/* Current limit */
+ 
+ /* LM25056 only */
+@@ -526,16 +527,22 @@ static int lm25066_probe(struct i2c_client *client,
+ 	info->R[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].R;
+ 	info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].R;
+ 	info->R[PSC_POWER] = coeff[PSC_POWER].R;
+-	if (config & LM25066_DEV_SETUP_CL) {
+-		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
+-		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
+-		info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
+-		info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
+-	} else {
++
++	/*
++	 * Assume chip is in low current limit/gain mode by default unless
++	 * the register override is asserted AND indicates high limit mode.
++	 */
++	if ((config & LM25066_DEV_SETUP_CL_CONFIG) &&
++		(config & LM25066_DEV_SETUP_CL)) {
+ 		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
+ 		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
+ 		info->m[PSC_POWER] = coeff[PSC_POWER].m;
+ 		info->b[PSC_POWER] = coeff[PSC_POWER].b;
++	} else {
++		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
++		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
++		info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
++		info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
+ 	}
+ 
+ 	return pmbus_do_probe(client, id, info);
+-- 
+2.15.0.417.g466bffb3ac-goog
+
