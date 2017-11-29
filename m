@@ -1,89 +1,149 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f66.google.com ([209.85.160.66]:39876 "EHLO
-        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751168AbdK3VRn (ORCPT
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:39687 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751596AbdK2CZW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Nov 2017 16:17:43 -0500
-Date: Thu, 30 Nov 2017 13:17:40 -0800
+        Tue, 28 Nov 2017 21:25:22 -0500
+Subject: Re: [PATCH] hwmon: (pmbus/lm25066) Default coefficients for low
+ current limit
+To: Rob Lippert <rlippert@google.com>
+Cc: Robert Lippert <roblip@gmail.com>, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Xo Wang <xow@google.com>
+References: <20171128002858.1821-1-rlippert@google.com>
+ <40bff1ab-dd3f-0d70-5ca2-8132af350380@roeck-us.net>
+ <CAFRv3wx-_RWu5A2jgOoV6vQzonzOfGbvSLrC3HH7MwASc8ScfA@mail.gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Rosin <peda@axentia.se>
-Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean Delvare <jdelvare@suse.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ARM: dts: at91: disable the nxp,se97b SMBUS
- timeout on the TSE-850
-Message-ID: <20171130211740.GA26784@roeck-us.net>
-References: <20171127163101.27859-1-peda@axentia.se>
- <20171127163101.27859-3-peda@axentia.se>
- <20171129205311.GA20551@roeck-us.net>
- <20171129205629.GO21126@piout.net>
- <20171130171638.GA17788@roeck-us.net>
- <20171130172606.GZ21126@piout.net>
- <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
+Message-ID: <95229acf-f06b-b3f4-4ad7-aef454656051@roeck-us.net>
+Date: Tue, 28 Nov 2017 18:25:19 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
+In-Reply-To: <CAFRv3wx-_RWu5A2jgOoV6vQzonzOfGbvSLrC3HH7MwASc8ScfA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 30, 2017 at 07:46:09PM +0100, Peter Rosin wrote:
-> On 2017-11-30 18:26, Alexandre Belloni wrote:
-> > On 30/11/2017 at 09:16:38 -0800, Guenter Roeck wrote:
-> >> On Wed, Nov 29, 2017 at 09:56:29PM +0100, Alexandre Belloni wrote:
-> >>> On 29/11/2017 at 12:53:11 -0800, Guenter Roeck wrote:
-> >>>> On Mon, Nov 27, 2017 at 05:31:01PM +0100, Peter Rosin wrote:
-> >>>>> The I2C adapter driver is sometimes slow, causing the SCL line to
-> >>>>> be stuck low for more than the stipulated SMBUS timeout of 25-35 ms.
-> >>>>> This causes the client device to give up which in turn causes silent
-> >>>>> corruption of data. So, disable the SMBUS timeout in the client device.
-> >>>>>
-> >>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
-> >>>>
-> >>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >>>>
-> >>>> I assume this will be sent upstream through an arm tree.
-> >>>>
-> >>>
-> >>> Yes, I'm applying it right now.
-> >>>
-> >> Are you going to apply the patch for 4.15, or queue it up for 4.16 ?
-> >> I have been arguing with myself if this is a feature or a bug fix.
-> >> So far I queued the driver change up for 4.16, but I am open to
-> >> applying it to 4.15. Any thoughts ?
-> >>
-> > 
-> > I was wondering that myself. I'm open to have it as a fix in 4.15. Or
-> > maybe Peter can send the series to stable if he needs it in 4.14.
-> > 
-> > Peter, what do you think/want?
+On 11/28/2017 10:39 AM, Rob Lippert wrote:
+> On Mon, Nov 27, 2017 at 8:26 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 11/27/2017 04:28 PM, Robert Lippert wrote:
+>>>
+>>> There seems to be no way to detect the value of the CL/GAIN pin
+>>> from the device using PMBus.
+>>>
+>>> Low current mode seems to be recommended (from LM5066 datasheet) for
+>>> improved current reporting accuracy in a typical design.
+>>>
+>>> Assume the device is in low current mode unless the register override
+>>> bit is set and indicates high current limit mode.
+>>>
+>>> Signed-off-by: Robert Lippert <rlippert@google.com>
+>>
+>>
+>> Applied (silently fixed continuation line alignment).
+>>
+>> Looking at the most recent version of various datasheets for the chips
+>> supported
+>> by the driver, looks like TI changed the coefficients (again). Not the first
+>> time.
+>> Time to go through all chips and update coefficients. Might be worthwhile
+>> to do that at least for the chips(s) which are of interest for you.
 > 
-> TL;DR Either way is fine.
+> This patch also needs commit "hwmon: (pmbus/lm25066) Swap low/high
+> current coefficients for LM5066(i)" to maintain the existing reporting
+> behavior for LM5066 devices atleast.
+> (as now it will be pulling from the _L values by default)
 > 
-> I think it's a bugfix; it fixes real problems where the application
-> misbehave due to faulty content when reading from an eeprom. I'm
-> expecting to make a new release for the hw in question RSN and these
-> are the only local patches. So, it would be nice if they made it to
-> 4.14.x before my release happens. However, it's not like it's difficult
-> to rebase the patches should that backport not happen or take too long.
+> I spot checked the coeff values for lm25056 with the online datasheet
+> and they also seem to be swapped although it is a little hard to be
+> sure since the meaning of GAIN input seems to be opposite of CL input:
+> GAIN=0 is low current and GAIN=1 is high current.
 > 
-Good enough for me. I'll send it as a fix for v4.15, with Cc: stable.
+> -Rob
+> 
+>>
+>> Thanks,
+>> Guenter
+>>
+>>
+>>> ---
+>>>    drivers/hwmon/pmbus/lm25066.c | 19 +++++++++++++------
+>>>    1 file changed, 13 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+>>> index aa052f4449a9..f6ae7b4cf705 100644
+>>> --- a/drivers/hwmon/pmbus/lm25066.c
+>>> +++ b/drivers/hwmon/pmbus/lm25066.c
+>>> @@ -43,6 +43,7 @@ enum chips { lm25056, lm25063, lm25066, lm5064, lm5066,
+>>> lm5066i };
+>>>    #define LM25066_READ_AVG_IIN          0xde
+>>>    #define LM25066_READ_AVG_PIN          0xdf
+>>>    +#define LM25066_DEV_SETUP_CL_CONFIG  BIT(2)  /* Use pin or SMBus values
+>>> */
+>>>    #define LM25066_DEV_SETUP_CL          BIT(4)  /* Current limit */
+>>>      /* LM25056 only */
+>>> @@ -526,16 +527,22 @@ static int lm25066_probe(struct i2c_client *client,
+>>>          info->R[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].R;
+>>>          info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].R;
+>>>          info->R[PSC_POWER] = coeff[PSC_POWER].R;
+>>> -       if (config & LM25066_DEV_SETUP_CL) {
+>>> -               info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
+>>> -               info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
+>>> -               info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
+>>> -               info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
+>>> -       } else {
+>>> +
+>>> +       /*
+>>> +        * Assume chip is in low current limit/gain mode by default unless
+>>> +        * the register override is asserted AND indicates high limit
+>>> mode.
+>>> +        */
+>>> +       if ((config & LM25066_DEV_SETUP_CL_CONFIG) &&
+>>> +               (config & LM25066_DEV_SETUP_CL)) {
+>>>                  info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
+>>>                  info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
+>>>                  info->m[PSC_POWER] = coeff[PSC_POWER].m;
+>>>                  info->b[PSC_POWER] = coeff[PSC_POWER].b;
+>>> +       } else {
+>>> +               info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
+>>> +               info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
+>>> +               info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
+>>> +               info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
+>>>          }
 
+After looking into it more closely, turns out this is wrong.
+
+The _L defines were supposed to be used if bit 4 is set, not if it is unset.
+It wasn't supposed to mean "low" but "CL/GAIN=1" (ok, looking at it with 20/20
+hindsight, that seems to be odd, but it is consistent with the code).
+
+So the code should be something like
+
+	if ((config & LM25066_DEV_SETUP_CL_CONFIG) &&
+	    (config & LM25066_DEV_SETUP_CL)) {
+		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
+		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
+		info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
+		info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
+	} else {
+		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
+		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
+		info->m[PSC_POWER] = coeff[PSC_POWER].m;
+		info->b[PSC_POWER] = coeff[PSC_POWER].b;
+	}
+
+Only that by itself is insufficient because not all chips support
+bit 2 (at least lm25056 doesn't). We can work around that with
+something like
+
+	if (data->id == lm25056)
+		config |= LM25066_DEV_SETUP_CL_CONFIG;
+
+Can you do that ?
+
+[ LM25063 doesn't have the bit either, but it looks like TI acquired
+   National before LM25063 shipped, and the chip was never actually
+   released. Dropping that will be a separate patch. ]
+
+Thanks,
 Guenter
-
-> The badness started to happen much more frequently due to some timing
-> difference affecting the i2c bus driver, but in theory it's a problem
-> that has been there from the start. I have just not noticed it before...
-> 
-> Cheers,
-> Peter
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
