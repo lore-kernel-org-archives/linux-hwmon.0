@@ -1,149 +1,221 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:39687 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751596AbdK2CZW (ORCPT
+Received: from mail-pg0-f65.google.com ([74.125.83.65]:40962 "EHLO
+        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751706AbdK2Cff (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Nov 2017 21:25:22 -0500
-Subject: Re: [PATCH] hwmon: (pmbus/lm25066) Default coefficients for low
- current limit
-To: Rob Lippert <rlippert@google.com>
-Cc: Robert Lippert <roblip@gmail.com>, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Xo Wang <xow@google.com>
-References: <20171128002858.1821-1-rlippert@google.com>
- <40bff1ab-dd3f-0d70-5ca2-8132af350380@roeck-us.net>
- <CAFRv3wx-_RWu5A2jgOoV6vQzonzOfGbvSLrC3HH7MwASc8ScfA@mail.gmail.com>
+        Tue, 28 Nov 2017 21:35:35 -0500
+Received: by mail-pg0-f65.google.com with SMTP id o2so836087pgc.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Nov 2017 18:35:35 -0800 (PST)
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <95229acf-f06b-b3f4-4ad7-aef454656051@roeck-us.net>
-Date: Tue, 28 Nov 2017 18:25:19 -0800
-MIME-Version: 1.0
-In-Reply-To: <CAFRv3wx-_RWu5A2jgOoV6vQzonzOfGbvSLrC3HH7MwASc8ScfA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (pmbus/lm25066) Drop support for LM25063
+Date: Tue, 28 Nov 2017 18:35:30 -0800
+Message-Id: <1511922930-29975-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 11/28/2017 10:39 AM, Rob Lippert wrote:
-> On Mon, Nov 27, 2017 at 8:26 PM, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 11/27/2017 04:28 PM, Robert Lippert wrote:
->>>
->>> There seems to be no way to detect the value of the CL/GAIN pin
->>> from the device using PMBus.
->>>
->>> Low current mode seems to be recommended (from LM5066 datasheet) for
->>> improved current reporting accuracy in a typical design.
->>>
->>> Assume the device is in low current mode unless the register override
->>> bit is set and indicates high current limit mode.
->>>
->>> Signed-off-by: Robert Lippert <rlippert@google.com>
->>
->>
->> Applied (silently fixed continuation line alignment).
->>
->> Looking at the most recent version of various datasheets for the chips
->> supported
->> by the driver, looks like TI changed the coefficients (again). Not the first
->> time.
->> Time to go through all chips and update coefficients. Might be worthwhile
->> to do that at least for the chips(s) which are of interest for you.
-> 
-> This patch also needs commit "hwmon: (pmbus/lm25066) Swap low/high
-> current coefficients for LM5066(i)" to maintain the existing reporting
-> behavior for LM5066 devices atleast.
-> (as now it will be pulling from the _L values by default)
-> 
-> I spot checked the coeff values for lm25056 with the online datasheet
-> and they also seem to be swapped although it is a little hard to be
-> sure since the meaning of GAIN input seems to be opposite of CL input:
-> GAIN=0 is low current and GAIN=1 is high current.
-> 
-> -Rob
-> 
->>
->> Thanks,
->> Guenter
->>
->>
->>> ---
->>>    drivers/hwmon/pmbus/lm25066.c | 19 +++++++++++++------
->>>    1 file changed, 13 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
->>> index aa052f4449a9..f6ae7b4cf705 100644
->>> --- a/drivers/hwmon/pmbus/lm25066.c
->>> +++ b/drivers/hwmon/pmbus/lm25066.c
->>> @@ -43,6 +43,7 @@ enum chips { lm25056, lm25063, lm25066, lm5064, lm5066,
->>> lm5066i };
->>>    #define LM25066_READ_AVG_IIN          0xde
->>>    #define LM25066_READ_AVG_PIN          0xdf
->>>    +#define LM25066_DEV_SETUP_CL_CONFIG  BIT(2)  /* Use pin or SMBus values
->>> */
->>>    #define LM25066_DEV_SETUP_CL          BIT(4)  /* Current limit */
->>>      /* LM25056 only */
->>> @@ -526,16 +527,22 @@ static int lm25066_probe(struct i2c_client *client,
->>>          info->R[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].R;
->>>          info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].R;
->>>          info->R[PSC_POWER] = coeff[PSC_POWER].R;
->>> -       if (config & LM25066_DEV_SETUP_CL) {
->>> -               info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
->>> -               info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
->>> -               info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
->>> -               info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
->>> -       } else {
->>> +
->>> +       /*
->>> +        * Assume chip is in low current limit/gain mode by default unless
->>> +        * the register override is asserted AND indicates high limit
->>> mode.
->>> +        */
->>> +       if ((config & LM25066_DEV_SETUP_CL_CONFIG) &&
->>> +               (config & LM25066_DEV_SETUP_CL)) {
->>>                  info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
->>>                  info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
->>>                  info->m[PSC_POWER] = coeff[PSC_POWER].m;
->>>                  info->b[PSC_POWER] = coeff[PSC_POWER].b;
->>> +       } else {
->>> +               info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
->>> +               info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
->>> +               info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
->>> +               info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
->>>          }
+LM25063 was never released. Drop support for it.
 
-After looking into it more closely, turns out this is wrong.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ Documentation/hwmon/lm25066   | 20 +------------
+ drivers/hwmon/pmbus/lm25066.c | 67 ++-----------------------------------------
+ 2 files changed, 3 insertions(+), 84 deletions(-)
 
-The _L defines were supposed to be used if bit 4 is set, not if it is unset.
-It wasn't supposed to mean "low" but "CL/GAIN=1" (ok, looking at it with 20/20
-hindsight, that seems to be odd, but it is consistent with the code).
+diff --git a/Documentation/hwmon/lm25066 b/Documentation/hwmon/lm25066
+index 3fa6bf820c88..51b32aa203a8 100644
+--- a/Documentation/hwmon/lm25066
++++ b/Documentation/hwmon/lm25066
+@@ -8,11 +8,6 @@ Supported chips:
+     Datasheets:
+ 	http://www.ti.com/lit/gpn/lm25056
+ 	http://www.ti.com/lit/gpn/lm25056a
+-  * TI LM25063
+-    Prefix: 'lm25063'
+-    Addresses scanned: -
+-    Datasheet:
+-	To be announced
+   * National Semiconductor LM25066
+     Prefix: 'lm25066'
+     Addresses scanned: -
+@@ -42,7 +37,7 @@ Description
+ -----------
+ 
+ This driver supports hardware monitoring for National Semiconductor / TI LM25056,
+-LM25063, LM25066, LM5064, and LM5066/LM5066I Power Management, Monitoring,
++LM25066, LM5064, and LM5066/LM5066I Power Management, Monitoring,
+ Control, and Protection ICs.
+ 
+ The driver is a client driver to the core PMBus driver. Please see
+@@ -74,12 +69,8 @@ in1_input		Measured input voltage.
+ in1_average		Average measured input voltage.
+ in1_min			Minimum input voltage.
+ in1_max			Maximum input voltage.
+-in1_crit		Critical high input voltage (LM25063 only).
+-in1_lcrit		Critical low input voltage (LM25063 only).
+ in1_min_alarm		Input voltage low alarm.
+ in1_max_alarm		Input voltage high alarm.
+-in1_lcrit_alarm		Input voltage critical low alarm (LM25063 only).
+-in1_crit_alarm		Input voltage critical high alarm. (LM25063 only).
+ 
+ in2_label		"vmon"
+ in2_input		Measured voltage on VAUX pin
+@@ -94,16 +85,12 @@ in3_input		Measured output voltage.
+ in3_average		Average measured output voltage.
+ in3_min			Minimum output voltage.
+ in3_min_alarm		Output voltage low alarm.
+-in3_highest		Historical minimum output voltage (LM25063 only).
+-in3_lowest		Historical maximum output voltage (LM25063 only).
+ 
+ curr1_label		"iin"
+ curr1_input		Measured input current.
+ curr1_average		Average measured input current.
+ curr1_max		Maximum input current.
+-curr1_crit		Critical input current (LM25063 only).
+ curr1_max_alarm		Input current high alarm.
+-curr1_crit_alarm	Input current critical high alarm (LM25063 only).
+ 
+ power1_label		"pin"
+ power1_input		Measured input power.
+@@ -113,11 +100,6 @@ power1_alarm		Input power alarm
+ power1_input_highest	Historical maximum power.
+ power1_reset_history	Write any value to reset maximum power history.
+ 
+-power2_label		"pout". LM25063 only.
+-power2_input		Measured output power.
+-power2_max		Maximum output power limit.
+-power2_crit		Critical output power limit.
+-
+ temp1_input		Measured temperature.
+ temp1_max		Maximum temperature.
+ temp1_crit		Critical high temperature.
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index 10d17fb8f283..53db78753a0d 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -1,5 +1,5 @@
+ /*
+- * Hardware monitoring driver for LM25056 / LM25063 / LM25066 / LM5064 / LM5066
++ * Hardware monitoring driver for LM25056 / LM25066 / LM5064 / LM5066
+  *
+  * Copyright (c) 2011 Ericsson AB.
+  * Copyright (c) 2013 Guenter Roeck
+@@ -28,7 +28,7 @@
+ #include <linux/i2c.h>
+ #include "pmbus.h"
+ 
+-enum chips { lm25056, lm25063, lm25066, lm5064, lm5066, lm5066i };
++enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+ 
+ #define LM25066_READ_VAUX		0xd0
+ #define LM25066_MFR_READ_IIN		0xd1
+@@ -53,11 +53,6 @@ enum chips { lm25056, lm25063, lm25066, lm5064, lm5066, lm5066i };
+ #define LM25056_MFR_STS_VAUX_OV_WARN	BIT(1)
+ #define LM25056_MFR_STS_VAUX_UV_WARN	BIT(0)
+ 
+-/* LM25063 only */
+-
+-#define LM25063_READ_VOUT_MAX		0xe5
+-#define LM25063_READ_VOUT_MIN		0xe6
+-
+ struct __coeff {
+ 	short m, b, R;
+ };
+@@ -122,36 +117,6 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+ 			.m = 16,
+ 		},
+ 	},
+-	[lm25063] = {
+-		[PSC_VOLTAGE_IN] = {
+-			.m = 16000,
+-			.R = -2,
+-		},
+-		[PSC_VOLTAGE_OUT] = {
+-			.m = 16000,
+-			.R = -2,
+-		},
+-		[PSC_CURRENT_IN] = {
+-			.m = 10000,
+-			.R = -2,
+-		},
+-		[PSC_CURRENT_IN_L] = {
+-			.m = 10000,
+-			.R = -2,
+-		},
+-		[PSC_POWER] = {
+-			.m = 5000,
+-			.R = -3,
+-		},
+-		[PSC_POWER_L] = {
+-			.m = 5000,
+-			.R = -3,
+-		},
+-		[PSC_TEMPERATURE] = {
+-			.m = 15596,
+-			.R = -3,
+-		},
+-	},
+ 	[lm5064] = {
+ 		[PSC_VOLTAGE_IN] = {
+ 			.m = 4611,
+@@ -272,10 +237,6 @@ static int lm25066_read_word_data(struct i2c_client *client, int page, int reg)
+ 			/* VIN: 6.14 mV VAUX: 293 uV LSB */
+ 			ret = DIV_ROUND_CLOSEST(ret * 293, 6140);
+ 			break;
+-		case lm25063:
+-			/* VIN: 6.25 mV VAUX: 200.0 uV LSB */
+-			ret = DIV_ROUND_CLOSEST(ret * 20, 625);
+-			break;
+ 		case lm25066:
+ 			/* VIN: 4.54 mV VAUX: 283.2 uV LSB */
+ 			ret = DIV_ROUND_CLOSEST(ret * 2832, 45400);
+@@ -330,24 +291,6 @@ static int lm25066_read_word_data(struct i2c_client *client, int page, int reg)
+ 	return ret;
+ }
+ 
+-static int lm25063_read_word_data(struct i2c_client *client, int page, int reg)
+-{
+-	int ret;
+-
+-	switch (reg) {
+-	case PMBUS_VIRT_READ_VOUT_MAX:
+-		ret = pmbus_read_word_data(client, 0, LM25063_READ_VOUT_MAX);
+-		break;
+-	case PMBUS_VIRT_READ_VOUT_MIN:
+-		ret = pmbus_read_word_data(client, 0, LM25063_READ_VOUT_MIN);
+-		break;
+-	default:
+-		ret = lm25066_read_word_data(client, page, reg);
+-		break;
+-	}
+-	return ret;
+-}
+-
+ static int lm25056_read_word_data(struct i2c_client *client, int page, int reg)
+ {
+ 	int ret;
+@@ -502,11 +445,6 @@ static int lm25066_probe(struct i2c_client *client,
+ 		info->read_word_data = lm25056_read_word_data;
+ 		info->read_byte_data = lm25056_read_byte_data;
+ 		data->rlimit = 0x0fff;
+-	} else if (data->id == lm25063) {
+-		info->func[0] |= PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+-		  | PMBUS_HAVE_POUT;
+-		info->read_word_data = lm25063_read_word_data;
+-		data->rlimit = 0xffff;
+ 	} else {
+ 		info->func[0] |= PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+ 		info->read_word_data = lm25066_read_word_data;
+@@ -543,7 +481,6 @@ static int lm25066_probe(struct i2c_client *client,
+ 
+ static const struct i2c_device_id lm25066_id[] = {
+ 	{"lm25056", lm25056},
+-	{"lm25063", lm25063},
+ 	{"lm25066", lm25066},
+ 	{"lm5064", lm5064},
+ 	{"lm5066", lm5066},
+-- 
+2.7.4
 
-So the code should be something like
-
-	if ((config & LM25066_DEV_SETUP_CL_CONFIG) &&
-	    (config & LM25066_DEV_SETUP_CL)) {
-		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
-		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
-		info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
-		info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
-	} else {
-		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
-		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
-		info->m[PSC_POWER] = coeff[PSC_POWER].m;
-		info->b[PSC_POWER] = coeff[PSC_POWER].b;
-	}
-
-Only that by itself is insufficient because not all chips support
-bit 2 (at least lm25056 doesn't). We can work around that with
-something like
-
-	if (data->id == lm25056)
-		config |= LM25066_DEV_SETUP_CL_CONFIG;
-
-Can you do that ?
-
-[ LM25063 doesn't have the bit either, but it looks like TI acquired
-   National before LM25063 shipped, and the chip was never actually
-   released. Dropping that will be a separate patch. ]
-
-Thanks,
-Guenter
