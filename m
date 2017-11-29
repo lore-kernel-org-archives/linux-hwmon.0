@@ -1,27 +1,26 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f66.google.com ([209.85.218.66]:39737 "EHLO
-        mail-oi0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752569AbdK1PBo (ORCPT
+Received: from mail-pl0-f66.google.com ([209.85.160.66]:38586 "EHLO
+        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751783AbdK2UwW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Nov 2017 10:01:44 -0500
-Date: Tue, 28 Nov 2017 09:01:42 -0600
-From: Rob Herring <robh@kernel.org>
+        Wed, 29 Nov 2017 15:52:22 -0500
+Date: Wed, 29 Nov 2017 12:52:19 -0800
+From: Guenter Roeck <linux@roeck-us.net>
 To: Peter Rosin <peda@axentia.se>
-Cc: linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@free-electrons.com>,
         Russell King <linux@armlinux.org.uk>,
-        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (jc42) optionally try to disable the SMBUS
+Subject: Re: [v2,1/2] hwmon: (jc42) optionally try to disable the SMBUS
  timeout
-Message-ID: <20171128150142.dpxg5xdkza5y6qqg@rob-hp-laptop>
-References: <20171127163101.27859-1-peda@axentia.se>
- <20171127163101.27859-2-peda@axentia.se>
+Message-ID: <20171129205219.GA20516@roeck-us.net>
+References: <20171127163101.27859-2-peda@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -44,10 +43,83 @@ On Mon, Nov 27, 2017 at 05:31:00PM +0100, Peter Rosin wrote:
 > manufacturer, it is opt-in via the device property anyway.
 > 
 > Signed-off-by: Peter Rosin <peda@axentia.se>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
 >  Documentation/devicetree/bindings/hwmon/jc42.txt |  4 ++++
-
-Acked-by: Rob Herring <robh@kernel.org>
-
 >  drivers/hwmon/jc42.c                             | 21 +++++++++++++++++++++
 >  2 files changed, 25 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/jc42.txt b/Documentation/devicetree/bindings/hwmon/jc42.txt
+> index 07a250498fbb..f569db58f64a 100644
+> --- a/Documentation/devicetree/bindings/hwmon/jc42.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/jc42.txt
+> @@ -34,6 +34,10 @@ Required properties:
+>  
+>  - reg: I2C address
+>  
+> +Optional properties:
+> +- smbus-timeout-disable: When set, the smbus timeout function will be disabled.
+> +			 This is not supported on all chips.
+> +
+>  Example:
+>  
+>  temp-sensor@1a {
+> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+> index 5f11dc014ed6..e5234f953a6d 100644
+> --- a/drivers/hwmon/jc42.c
+> +++ b/drivers/hwmon/jc42.c
+> @@ -22,6 +22,7 @@
+>   * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+>   */
+>  
+> +#include <linux/bitops.h>
+>  #include <linux/module.h>
+>  #include <linux/init.h>
+>  #include <linux/slab.h>
+> @@ -45,6 +46,7 @@ static const unsigned short normal_i2c[] = {
+>  #define JC42_REG_TEMP		0x05
+>  #define JC42_REG_MANID		0x06
+>  #define JC42_REG_DEVICEID	0x07
+> +#define JC42_REG_SMBUS		0x22 /* NXP and Atmel, possibly others? */
+>  
+>  /* Status bits in temperature register */
+>  #define JC42_ALARM_CRIT_BIT	15
+> @@ -75,6 +77,9 @@ static const unsigned short normal_i2c[] = {
+>  #define GT_MANID		0x1c68	/* Giantec */
+>  #define GT_MANID2		0x132d	/* Giantec, 2nd mfg ID */
+>  
+> +/* SMBUS register */
+> +#define SMBUS_STMOUT		BIT(7)  /* SMBus time-out, active low */
+> +
+>  /* Supported chips */
+>  
+>  /* Analog Devices */
+> @@ -495,6 +500,22 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  
+>  	data->extended = !!(cap & JC42_CAP_RANGE);
+>  
+> +	if (device_property_read_bool(dev, "smbus-timeout-disable")) {
+> +		int smbus;
+> +
+> +		/*
+> +		 * Not all chips support this register, but from a
+> +		 * quick read of various datasheets no chip appears
+> +		 * incompatible with the below attempt to disable
+> +		 * the timeout. And the whole thing is opt-in...
+> +		 */
+> +		smbus = i2c_smbus_read_word_swapped(client, JC42_REG_SMBUS);
+> +		if (smbus < 0)
+> +			return smbus;
+> +		i2c_smbus_write_word_swapped(client, JC42_REG_SMBUS,
+> +					     smbus | SMBUS_STMOUT);
+> +	}
+> +
+>  	config = i2c_smbus_read_word_swapped(client, JC42_REG_CONFIG);
+>  	if (config < 0)
+>  		return config;
