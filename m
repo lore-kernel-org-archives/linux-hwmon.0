@@ -1,109 +1,89 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f47.google.com ([74.125.82.47]:46940 "EHLO
-        mail-wm0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752848AbdKXLNo (ORCPT
+Received: from mail-pl0-f66.google.com ([209.85.160.66]:39876 "EHLO
+        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751168AbdK3VRn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Nov 2017 06:13:44 -0500
-Date: Fri, 24 Nov 2017 12:13:40 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-To: Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc: Jonathan Buzzard <jonathan@buzzard.org.uk>,
+        Thu, 30 Nov 2017 16:17:43 -0500
+Date: Thu, 30 Nov 2017 13:17:40 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Peter Rosin <peda@axentia.se>
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@dell.com>
-Subject: Re: i8k_smm_func() takes enormous of time to execute
-Message-ID: <20171124111340.cuszehmkmxg5re64@pali>
-References: <12093169.Rm9IG5ILEB@natalenko.name>
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] ARM: dts: at91: disable the nxp,se97b SMBUS
+ timeout on the TSE-850
+Message-ID: <20171130211740.GA26784@roeck-us.net>
+References: <20171127163101.27859-1-peda@axentia.se>
+ <20171127163101.27859-3-peda@axentia.se>
+ <20171129205311.GA20551@roeck-us.net>
+ <20171129205629.GO21126@piout.net>
+ <20171130171638.GA17788@roeck-us.net>
+ <20171130172606.GZ21126@piout.net>
+ <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <12093169.Rm9IG5ILEB@natalenko.name>
+In-Reply-To: <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thursday 23 November 2017 22:41:03 Oleksandr Natalenko wrote:
-> Hi, Jonathan, Mario et al.
+On Thu, Nov 30, 2017 at 07:46:09PM +0100, Peter Rosin wrote:
+> On 2017-11-30 18:26, Alexandre Belloni wrote:
+> > On 30/11/2017 at 09:16:38 -0800, Guenter Roeck wrote:
+> >> On Wed, Nov 29, 2017 at 09:56:29PM +0100, Alexandre Belloni wrote:
+> >>> On 29/11/2017 at 12:53:11 -0800, Guenter Roeck wrote:
+> >>>> On Mon, Nov 27, 2017 at 05:31:01PM +0100, Peter Rosin wrote:
+> >>>>> The I2C adapter driver is sometimes slow, causing the SCL line to
+> >>>>> be stuck low for more than the stipulated SMBUS timeout of 25-35 ms.
+> >>>>> This causes the client device to give up which in turn causes silent
+> >>>>> corruption of data. So, disable the SMBUS timeout in the client device.
+> >>>>>
+> >>>>> Signed-off-by: Peter Rosin <peda@axentia.se>
+> >>>>
+> >>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >>>>
+> >>>> I assume this will be sent upstream through an arm tree.
+> >>>>
+> >>>
+> >>> Yes, I'm applying it right now.
+> >>>
+> >> Are you going to apply the patch for 4.15, or queue it up for 4.16 ?
+> >> I have been arguing with myself if this is a feature or a bug fix.
+> >> So far I queued the driver change up for 4.16, but I am open to
+> >> applying it to 4.15. Any thoughts ?
+> >>
+> > 
+> > I was wondering that myself. I'm open to have it as a fix in 4.15. Or
+> > maybe Peter can send the series to stable if he needs it in 4.14.
+> > 
+> > Peter, what do you think/want?
 > 
-> I've noticed that querying Dell Vostro 3360 hwmon sensor freezes the system 
-> completely (like, really completely, even mouse cursor does not move, and 
-> sound playback stops) for approx. half of a second. Then, system recovers and 
-> runs as usual. Also, sensor readings are okay, for instance:
+> TL;DR Either way is fine.
 > 
-> ===
-> $ sensors dell_smm-virtual-0
-> dell_smm-virtual-0
-> Adapter: Virtual device
-> Processor Fan: 5615 RPM
-> CPU:            +51.0°C  
-> Ambient:        +36.0°C  
-> Other:          +63.0°C  
-> SODIMM:         +41.0°C 
-> ===
+> I think it's a bugfix; it fixes real problems where the application
+> misbehave due to faulty content when reading from an eeprom. I'm
+> expecting to make a new release for the hw in question RSN and these
+> are the only local patches. So, it would be nice if they made it to
+> 4.14.x before my release happens. However, it's not like it's difficult
+> to rebase the patches should that backport not happen or take too long.
 > 
-> So, I've used trace-cmd to check what takes that much amount of time to 
-> execute, and got this:
-> 
-> ===
-> # trace-cmd record -p function_graph -l i8k_smm -F sensors dell_smm-virtual-0
-> $ trace-cmd report
-> ...
-> sensors-23694 [002] 89099.214369: funcgraph_entry:      # 503440.746 us |  
-> i8k_smm();
-> ...
-> ===
-> 
-> Clearly, 0.5 s delay.
-> 
-> Looking at i8k_smm(), it calls i8k_smm_func() on 0th CPU:
-> 
-> ===
->  232     ret = smp_call_on_cpu(0, i8k_smm_func, regs, true);
-> ===
-> 
-> which, in turn, does some asm magic.
+Good enough for me. I'll send it as a fix for v4.15, with Cc: stable.
 
-Hi! If you compile module with DEBUG, then i8k_smm_func function print
-into dmes how much time it spend in SMM mode. And also it print which
-SMM action it was.
+Guenter
 
-Therefore you would be able to figure out which SMM call (which is just
-RPC) cause this freeze.
-
-Basically when CPU is in SMM mode, then execution of kernel is stopped
-and kernel does not know that such thing happened. So it is up to the
-SMM implementation to return control ASAP back to non-SMM mode.
-
-Kernel has no control over SMM, it can be fixed only by vendor by new
-BIOS or firmware update.
-
-What we can do is just identify problematic calls and avoid their usage.
-
-This problem is independent of kernel or whole operating system.
-
-> I know that SMM is kinda "black box", and kernel has little to do with it, but 
-> I think that under Windows, for instance, it would work without freezes. So, 
-> likely, querying SMM might be done differently.
+> The badness started to happen much more frequently due to some timing
+> difference affecting the i2c bus driver, but in theory it's a problem
+> that has been there from the start. I have just not noticed it before...
 > 
-> I do not know how to approach this issue, thus asking for help/advice. Also, 
-> CCing Jonathan since the comment before asm magic says this:
-> 
-> ===
->  137  * Call the System Management Mode BIOS. Code provided by Jonathan 
-> Buzzard.
-> ===
-> 
-> This was also reported in various places before, for instance, [1], but 
-> unfortunately, without any solution.
-> 
-> Thanks.
-> 
-> Regards,
->   Oleksandr
-> 
-> [1] https://bugs.launchpad.net/ubuntu/+source/acpi/+bug/10490
-
--- 
-Pali Rohár
-pali.rohar@gmail.com
+> Cheers,
+> Peter
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
