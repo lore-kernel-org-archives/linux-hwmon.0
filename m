@@ -1,85 +1,84 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f65.google.com ([74.125.83.65]:41604 "EHLO
-        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750891AbdK3VTZ (ORCPT
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:37934 "EHLO
+        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752715AbdK3RQl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 Nov 2017 16:19:25 -0500
-Date: Thu, 30 Nov 2017 13:19:24 -0800
+        Thu, 30 Nov 2017 12:16:41 -0500
+Date: Thu, 30 Nov 2017 09:16:38 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Martinez Canillas <javierm@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: (max31785) Add OF device ID table
-Message-ID: <20171130211924.GA26964@roeck-us.net>
-References: <20171130181257.3352-1-javierm@redhat.com>
+To: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Cc: Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean Delvare <jdelvare@suse.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] ARM: dts: at91: disable the nxp,se97b SMBUS
+ timeout on the TSE-850
+Message-ID: <20171130171638.GA17788@roeck-us.net>
+References: <20171127163101.27859-1-peda@axentia.se>
+ <20171127163101.27859-3-peda@axentia.se>
+ <20171129205311.GA20551@roeck-us.net>
+ <20171129205629.GO21126@piout.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20171130181257.3352-1-javierm@redhat.com>
+In-Reply-To: <20171129205629.GO21126@piout.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 30, 2017 at 07:12:57PM +0100, Javier Martinez Canillas wrote:
-> The driver doesn't have a struct of_device_id table but supported devices
-> are registered via Device Trees. This is working on the assumption that a
-> I2C device registered via OF will always match a legacy I2C device ID and
-> that the MODALIAS reported will always be of the form i2c:<device>.
+On Wed, Nov 29, 2017 at 09:56:29PM +0100, Alexandre Belloni wrote:
+> On 29/11/2017 at 12:53:11 -0800, Guenter Roeck wrote:
+> > On Mon, Nov 27, 2017 at 05:31:01PM +0100, Peter Rosin wrote:
+> > > The I2C adapter driver is sometimes slow, causing the SCL line to
+> > > be stuck low for more than the stipulated SMBUS timeout of 25-35 ms.
+> > > This causes the client device to give up which in turn causes silent
+> > > corruption of data. So, disable the SMBUS timeout in the client device.
+> > > 
+> > > Signed-off-by: Peter Rosin <peda@axentia.se>
+> > 
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> > 
+> > I assume this will be sent upstream through an arm tree.
+> > 
 > 
-> But this could change in the future so the correct approach is to have an
-> OF device ID table if the devices are registered via OF.
+> Yes, I'm applying it right now.
 > 
-> Before this patch:
-> 
-> $ modinfo drivers/hwmon/pmbus/max31785.ko | grep alias
-> alias:          i2c:max31785a
-> alias:          i2c:max31785
-> 
-> After this patch:
-> 
-> $ modinfo drivers/hwmon/pmbus/max31785.ko | grep alias
-> alias:          i2c:max31785a
-> alias:          i2c:max31785
-> alias:          of:N*T*Cmaxim,max31785aC*
-> alias:          of:N*T*Cmaxim,max31785a
-> alias:          of:N*T*Cmaxim,max31785C*
-> alias:          of:N*T*Cmaxim,max31785
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Are you going to apply the patch for 4.15, or queue it up for 4.16 ?
+I have been arguing with myself if this is a feature or a bug fix.
+So far I queued the driver change up for 4.16, but I am open to
+applying it to 4.15. Any thoughts ?
 
-Applied.
-
-Thanks,
 Guenter
 
-> ---
+> > Thanks,
+> > Guenter
+> > 
+> > > ---
+> > >  arch/arm/boot/dts/at91-tse850-3.dts | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/at91-tse850-3.dts b/arch/arm/boot/dts/at91-tse850-3.dts
+> > > index 5f29010cdbd8..9b82cc8843e1 100644
+> > > --- a/arch/arm/boot/dts/at91-tse850-3.dts
+> > > +++ b/arch/arm/boot/dts/at91-tse850-3.dts
+> > > @@ -221,6 +221,7 @@
+> > >  	jc42@18 {
+> > >  		compatible = "nxp,se97b", "jedec,jc-42.4-temp";
+> > >  		reg = <0x18>;
+> > > +		smbus-timeout-disable;
+> > >  	};
+> > >  
+> > >  	dpot: mcp4651-104@28 {
+> > > -- 
+> > > 2.11.0
+> > > 
 > 
->  drivers/hwmon/pmbus/max31785.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
-> index 9313849d5160..4666b5e95159 100644
-> --- a/drivers/hwmon/pmbus/max31785.c
-> +++ b/drivers/hwmon/pmbus/max31785.c
-> @@ -100,9 +100,18 @@ static const struct i2c_device_id max31785_id[] = {
->  
->  MODULE_DEVICE_TABLE(i2c, max31785_id);
->  
-> +static const struct of_device_id max31785_of_match[] = {
-> +	{ .compatible = "maxim,max31785" },
-> +	{ .compatible = "maxim,max31785a" },
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, max31785_of_match);
-> +
->  static struct i2c_driver max31785_driver = {
->  	.driver = {
->  		.name = "max31785",
-> +		.of_match_table = max31785_of_match,
->  	},
->  	.probe = max31785_probe,
->  	.remove = pmbus_do_remove,
 > -- 
-> 2.14.3
-> 
+> Alexandre Belloni, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
