@@ -1,97 +1,55 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f65.google.com ([74.125.83.65]:36236 "EHLO
-        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750995AbdLDXwH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Dec 2017 18:52:07 -0500
-Received: by mail-pg0-f65.google.com with SMTP id k134so9383036pga.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Dec 2017 15:52:07 -0800 (PST)
-Date: Mon, 4 Dec 2017 15:52:05 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Deal with errors from the thermal subsystem
-Message-ID: <20171204235205.GA3396@roeck-us.net>
-References: <20171204222029.11956-1-linus.walleij@linaro.org>
+Return-Path: <pali.rohar@gmail.com>
+Return-path: <pali.rohar@gmail.com>
+Date: Mon, 4 Dec 2017 11:35:07 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
+To: Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc: Jean Delvare <jdelvare@suse.de>,
+	Jonathan Buzzard <jonathan@buzzard.org.uk>,
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@dell.com>
+Subject: Re: i8k_smm_func() takes enormous of time to execute
+Message-ID: <20171204103507.gymmjw46lzggzndo@pali>
+References: <12093169.Rm9IG5ILEB@natalenko.name>
+ <2197616.V8s6m9LJcd@natalenko.name>
+ <20171124112543.3css4fwwmbiu36bm@pali>
+ <2978620.NBCOB6I8fo@natalenko.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20171204222029.11956-1-linus.walleij@linaro.org>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2978620.NBCOB6I8fo@natalenko.name>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Dec 04, 2017 at 11:20:29PM +0100, Linus Walleij wrote:
-> If the thermal subsystem returne -EPROBE_DEFER or any other error
-> when hwmon calls devm_thermal_zone_of_sensor_register(), this is
-> silently ignored.
+On Friday 24 November 2017 13:28:59 Oleksandr Natalenko wrote:
+> On pátek 24. listopadu 2017 12:25:43 CET Pali Rohár wrote:
+> > On Friday 24 November 2017 12:17:30 Oleksandr Natalenko wrote:
+> > > > There are two patches waiting to be tested in
+> > > > https://bugzilla.kernel.org/show_bug.cgi?id=195751
+> > > 
+> > > Tested and attached a couple of patches on top of those to the BZ. If
+> > > disabling fan control is the only approach here, I can confirm that this
+> > > works.
+> > 
+> > Hi! Please figure out which SMM call (they are identified by eax and ebx
+> > registers) cause this freeze. So we would now what needs to be
+> > blacklisted.
 > 
-> I ran into this with an incorrectly defined thermal zone, making
-> it non-existing and thus this call failed with -EPROBE_DEFER
-> assuming it would appear later. The sensor was still added
-> which is incorrect: sensors must strictly be added after the
-> thermal zones, so deferred probe must be respected.
+> Here it goes:
 > 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/hwmon/hwmon.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+> [ 7.191081] dell_smm_hwmon: smm(0x10a3 0x0000) = 0x002e (took     1837 usecs)
+> [ 7.194007] dell_smm_hwmon: smm(0x00a3 0x0001) = 0xffff (took      151 usecs)
+> [ 7.198239] dell_smm_hwmon: smm(0x00a3 0x0000) = 0x0002 (took     1411 usecs)
+> [ 7.199095] dell_smm_hwmon: smm(0x02a3 0x0001) = 0xffff (took       71 usecs)
+> [ 7.700493] dell_smm_hwmon: smm(0x02a3 0x0000) = 0x157c (took   488912 usecs)
+> [ 7.701277] dell_smm_hwmon: smm(0x0025 0X0000) = 0xffff (took       71 usecs)
 > 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index c9790e2c3440..6d1cb6b47490 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -143,6 +143,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
->  				    struct hwmon_device *hwdev, int index)
->  {
->  	struct hwmon_thermal_data *tdata;
-> +	struct thermal_zone_device *tzd;
->  
->  	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
->  	if (!tdata)
-> @@ -151,8 +152,10 @@ static int hwmon_thermal_add_sensor(struct device *dev,
->  	tdata->hwdev = hwdev;
->  	tdata->index = index;
->  
-> -	devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
-> -					     &hwmon_thermal_ops);
-> +	tzd = devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
-> +						   &hwmon_thermal_ops);
-> +	if (IS_ERR(tzd))
-> +		return PTR_ERR(tzd);
+> 0x02a3 is I8K_SMM_GET_SPEED.
 
-This won't work because devm_thermal_zone_of_sensor_register() returns
--ENODEV if CONFIG_THERMAL_OF is disabled. We'll have to check for
--EPROBE_DEFER and only return this specific error, but ignore all others.
+Ok, so it is really a good idea to disable fan control completely on your machine.
 
-Thanks,
-Guenter
+Your last patch in bugzilla looks ok, you add my Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
 
->  
->  	return 0;
->  }
-> @@ -621,14 +624,20 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->  				if (!chip->ops->is_visible(drvdata, hwmon_temp,
->  							   hwmon_temp_input, j))
->  					continue;
-> -				if (info[i]->config[j] & HWMON_T_INPUT)
-> -					hwmon_thermal_add_sensor(dev, hwdev, j);
-> +				if (info[i]->config[j] & HWMON_T_INPUT) {
-> +					err = hwmon_thermal_add_sensor(dev,
-> +								hwdev, j);
-> +					if (err)
-> +						goto free_device;
-> +				}
->  			}
->  		}
->  	}
->  
->  	return hdev;
->  
-> +free_device:
-> +	device_unregister(hdev);
->  free_hwmon:
->  	kfree(hwdev);
->  ida_remove:
-> -- 
-> 2.14.3
-> 
+-- 
+Pali Rohár
+pali.rohar@gmail.com
