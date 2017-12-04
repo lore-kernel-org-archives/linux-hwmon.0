@@ -5,34 +5,36 @@ From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/5] hwmon: (sht15) Fix parameter documentation of sht15_crc8()
-Date: Sun,  3 Dec 2017 18:15:02 -0800
-Message-Id: <1512353704-6973-3-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 4/5] hwmon : (iio_hwmon) Fix documentation of struct iio_hwmon_state
+Date: Sun,  3 Dec 2017 18:15:03 -0800
+Message-Id: <1512353704-6973-4-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1512353704-6973-1-git-send-email-linux@roeck-us.net>
 References: <1512353704-6973-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
 Sparse reports:
 
-drivers/hwmon/sht15.c:188: warning:
-		No description found for parameter 'len'
+drivers/hwmon/iio_hwmon.c:36: warning:
+	No description found for parameter 'groups'
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/sht15.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/iio_hwmon.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index 25d28343ba93..2be77752cd56 100644
---- a/drivers/hwmon/sht15.c
-+++ b/drivers/hwmon/sht15.c
-@@ -179,6 +179,7 @@ struct sht15_data {
-  * sht15_crc8() - compute crc8
-  * @data:	sht15 specific data.
-  * @value:	sht15 retrieved data.
-+ * @len:	Length of retrieved data
-  *
-  * This implements section 2 of the CRC datasheet.
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index f6a76679c650..5e5b32a1ec4b 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -23,7 +23,8 @@
+  * @channels:		filled with array of channels from iio
+  * @num_channels:	number of channels in channels (saves counting twice)
+  * @hwmon_dev:		associated hwmon device
+- * @attr_group:	the group of attributes
++ * @attr_group:		the group of attributes
++ * @groups:		null terminated array of attribute groups
+  * @attrs:		null terminated array of attribute pointers.
   */
+ struct iio_hwmon_state {
 -- 
 2.7.4
