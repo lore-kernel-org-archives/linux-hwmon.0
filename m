@@ -1,85 +1,38 @@
-Return-Path: <linus.walleij@linaro.org>
-Return-path: <linus.walleij@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2] hwmon: Deal with errors from the thermal subsystem
-Date: Tue,  5 Dec 2017 09:36:14 +0100
-Message-Id: <20171205083614.32537-1-linus.walleij@linaro.org>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from userp2130.oracle.com ([156.151.31.86]:33733 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752785AbdLEOiU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Dec 2017 09:38:20 -0500
+Date: Tue, 5 Dec 2017 17:37:26 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: Jean Delvare <jdelvare@suse.com>, Lei YU <mine260309@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (w83773g) Fix a precedence bug in get_fault()
+Message-ID: <20171205143726.d3tziwhjboyfxmgi@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-If the thermal subsystem returne -EPROBE_DEFER or any other error
-when hwmon calls devm_thermal_zone_of_sensor_register(), this is
-silently ignored.
+Shift has higher precedence than mask but presumably we wanted to set
+*val to 1 if BIT(2) was set or 0 if the bit was clear.
 
-I ran into this with an incorrectly defined thermal zone, making
-it non-existing and thus this call failed with -EPROBE_DEFER
-assuming it would appear later. The sensor was still added
-which is incorrect: sensors must strictly be added after the
-thermal zones, so deferred probe must be respected.
+Fixes: de0a524e3e09 ("hwmon: Add W83773G driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Explicitly discard -ENODEV as this is OK, forward any other
-  errors.
----
- drivers/hwmon/hwmon.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index c9790e2c3440..af5123042990 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -143,6 +143,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
- 				    struct hwmon_device *hwdev, int index)
- {
- 	struct hwmon_thermal_data *tdata;
-+	struct thermal_zone_device *tzd;
+diff --git a/drivers/hwmon/w83773g.c b/drivers/hwmon/w83773g.c
+index 0b97c285b049..e858093ac806 100644
+--- a/drivers/hwmon/w83773g.c
++++ b/drivers/hwmon/w83773g.c
+@@ -102,7 +102,7 @@ static int get_fault(struct regmap *regmap, int index, long *val)
+ 	if (ret < 0)
+ 		return ret;
  
- 	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
- 	if (!tdata)
-@@ -151,8 +152,14 @@ static int hwmon_thermal_add_sensor(struct device *dev,
- 	tdata->hwdev = hwdev;
- 	tdata->index = index;
- 
--	devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
--					     &hwmon_thermal_ops);
-+	tzd = devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
-+						   &hwmon_thermal_ops);
-+	/*
-+	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
-+	 * so ignore that error but forward any other error.
-+	 */
-+	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
-+		return PTR_ERR(tzd);
- 
+-	*val = (u8)regval & 0x04 >> 2;
++	*val = (regval & 0x04) >> 2;
  	return 0;
  }
-@@ -621,14 +628,20 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 				if (!chip->ops->is_visible(drvdata, hwmon_temp,
- 							   hwmon_temp_input, j))
- 					continue;
--				if (info[i]->config[j] & HWMON_T_INPUT)
--					hwmon_thermal_add_sensor(dev, hwdev, j);
-+				if (info[i]->config[j] & HWMON_T_INPUT) {
-+					err = hwmon_thermal_add_sensor(dev,
-+								hwdev, j);
-+					if (err)
-+						goto free_device;
-+				}
- 			}
- 		}
- 	}
  
- 	return hdev;
- 
-+free_device:
-+	device_unregister(hdev);
- free_hwmon:
- 	kfree(hwdev);
- ida_remove:
--- 
-2.14.3
