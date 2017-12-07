@@ -1,290 +1,60 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:46889 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752471AbdLGUxX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Dec 2017 15:53:23 -0500
-Date: Thu, 7 Dec 2017 12:53:21 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, mspinler@linux.vnet.ibm.com, joel@jms.id.au,
-        "Edward A. James" <eajames@us.ibm.com>
-Subject: Re: [PATCH 2/2] hwmon (pmbus): cffps: Add debugfs entries
-Message-ID: <20171207205321.GB7736@roeck-us.net>
-References: <1512676238-8020-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1512676238-8020-3-git-send-email-eajames@linux.vnet.ibm.com>
+Received: from casa.marquesmota.pt ([163.172.49.138]:42890 "EHLO
+        casa.marquesmota.pt" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750919AbdLGVl2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Dec 2017 16:41:28 -0500
+Date: Thu, 7 Dec 2017 21:32:01 +0000
+From: Paul Marques Mota <paul@marquesmota.pt>
+To: linux-hwmon@vger.kernel.org
+Message-ID: <20171207213201.rorchhbd63gzlekb@marquesmota.pt>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1512676238-8020-3-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 07, 2017 at 01:50:38PM -0600, Eddie James wrote:
-> From: "Edward A. James" <eajames@us.ibm.com>
-> 
-> Add debugfs entries for additional power supply data, including part
-> number, serial number, FRU number, firmware revision, ccin, and the
-> input history of the power supply. The input history is 10 minutes of
-> input power data in the form of twenty 30-second packets. Each packet
-> contains average and maximum power for that 30 second period.
-> 
-> Signed-off-by: Edward A. James <eajames@us.ibm.com>
-> ---
->  drivers/hwmon/pmbus/ibm-cffps.c | 199 +++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 198 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index cb56da6..6d19399 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -8,12 +8,26 @@
->   */
->  
->  #include <linux/bitops.h>
-> +#include <linux/debugfs.h>
->  #include <linux/device.h>
-> +#include <linux/fs.h>
->  #include <linux/i2c.h>
-> +#include <linux/jiffies.h>
->  #include <linux/module.h>
-> +#include <linux/mutex.h>
->  
->  #include "pmbus.h"
->  
-> +#define CFFPS_FRU_CMD				0x9A
-> +#define CFFPS_PN_CMD				0x9B
-> +#define CFFPS_SN_CMD				0x9E
-> +#define CFFPS_CCIN_CMD				0xBD
-> +#define CFFPS_FW_CMD_START			0xFA
-> +#define CFFPS_FW_NUM_BYTES			4
-> +
-> +#define CFFPS_INPUT_HISTORY_CMD			0xD6
-> +#define CFFPS_INPUT_HISTORY_SIZE		100
-> +
->  /* STATUS_MFR_SPECIFIC bits */
->  #define CFFPS_MFR_FAN_FAULT			BIT(0)
->  #define CFFPS_MFR_THERMAL_FAULT			BIT(1)
-> @@ -24,6 +38,144 @@
->  #define CFFPS_MFR_VAUX_FAULT			BIT(6)
->  #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
->  
-> +enum {
-> +	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
-> +	CFFPS_DEBUGFS_FRU,
-> +	CFFPS_DEBUGFS_PN,
-> +	CFFPS_DEBUGFS_SN,
-> +	CFFPS_DEBUGFS_CCIN,
-> +	CFFPS_DEBUGFS_FW,
-> +	CFFPS_DEBUGFS_NUM_ENTRIES
-> +};
-> +
-> +struct ibm_cffps_input_history {
-> +	struct mutex update_lock;
-> +	unsigned long last_update;
-> +
-> +	u8 byte_count;
-> +	u8 data[CFFPS_INPUT_HISTORY_SIZE];
-> +};
-> +
-> +struct ibm_cffps {
-> +	struct i2c_client *client;
-> +
-> +	struct ibm_cffps_input_history input_history;
-> +
-> +	int debugfs_entries[CFFPS_DEBUGFS_NUM_ENTRIES];
-> +};
-> +
-> +#define to_psu(x, y) container_of((x), struct ibm_cffps, debugfs_entries[(y)])
-> +
-> +static ssize_t ibm_cffps_read_input_history(struct ibm_cffps *psu,
-> +					    char __user *buf, size_t count,
-> +					    loff_t *ppos)
-> +{
-> +	int rc;
-> +	u8 msgbuf0[1] = { CFFPS_INPUT_HISTORY_CMD };
-> +	u8 msgbuf1[CFFPS_INPUT_HISTORY_SIZE + 1] = { 0 };
-> +	struct i2c_msg msg[2] = {
-> +		{
-> +			.addr = psu->client->addr,
-> +			.flags = psu->client->flags,
-> +			.len = 1,
-> +			.buf = msgbuf0,
-> +		}, {
-> +			.addr = psu->client->addr,
-> +			.flags = psu->client->flags | I2C_M_RD,
-> +			.len = CFFPS_INPUT_HISTORY_SIZE + 1,
-> +			.buf = msgbuf1,
-> +		},
-> +	};
-> +
-> +	if (!*ppos) {
-> +		mutex_lock(&psu->input_history.update_lock);
-> +		if (time_after(jiffies, psu->input_history.last_update + HZ)) {
-> +			/*
-> +			 * Use a raw i2c transfer, since we need more bytes
-> +			 * than Linux I2C supports through smbus xfr (only 32).
-> +			 */
-> +			rc = i2c_transfer(psu->client->adapter, msg, 2);
-> +			if (rc < 0) {
-> +				mutex_unlock(&psu->input_history.update_lock);
-> +				return rc;
-> +			}
-> +
-> +			psu->input_history.byte_count = msgbuf1[0];
-> +			memcpy(psu->input_history.data, &msgbuf1[1],
-> +			       CFFPS_INPUT_HISTORY_SIZE);
-> +			psu->input_history.last_update = jiffies;
-> +		}
-> +
-> +		mutex_unlock(&psu->input_history.update_lock);
-> +	}
-> +
-> +	return simple_read_from_buffer(buf, count, ppos,
-> +				       psu->input_history.data,
-> +				       psu->input_history.byte_count);
-> +}
-> +
-> +static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
-> +				    size_t count, loff_t *ppos)
-> +{
-> +	u8 cmd;
-> +	int i, rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct ibm_cffps *psu = to_psu(idxp, idx);
-> +	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
-> +
-> +	switch (idx) {
-> +	case CFFPS_DEBUGFS_INPUT_HISTORY:
-> +		return ibm_cffps_read_input_history(psu, buf, count, ppos);
-> +	case CFFPS_DEBUGFS_FRU:
-> +		cmd = CFFPS_FRU_CMD;
-> +		break;
-> +	case CFFPS_DEBUGFS_PN:
-> +		cmd = CFFPS_PN_CMD;
-> +		break;
-> +	case CFFPS_DEBUGFS_SN:
-> +		cmd = CFFPS_SN_CMD;
-> +		break;
-> +	case CFFPS_DEBUGFS_CCIN:
-> +		rc = i2c_smbus_read_word_data(psu->client, CFFPS_CCIN_CMD);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 5, "%04X", rc);
-> +		goto done;
-> +	case CFFPS_DEBUGFS_FW:
-> +		for (i = 0; i < CFFPS_FW_NUM_BYTES; ++i) {
-> +			rc = i2c_smbus_read_byte_data(psu->client,
-> +						      CFFPS_FW_CMD_START + i);
-> +			if (rc < 0)
-> +				return rc;
-> +
-> +			snprintf(&data[i * 2], 3, "%02X", rc);
-> +		}
-> +
-> +		rc = i * 2;
-> +		goto done;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +done:
-> +	data[rc] = '\n';
-> +	rc += 2;
-> +
-> +	return simple_read_from_buffer(buf, count, ppos, data, rc);
-> +}
-> +
-> +static const struct file_operations ibm_cffps_fops = {
-> +	.llseek = noop_llseek,
-> +	.read = ibm_cffps_debugfs_op,
-> +	.open = simple_open,
-> +};
-> +
->  static int ibm_cffps_read_byte_data(struct i2c_client *client, int page,
->  				    int reg)
->  {
-> @@ -119,7 +271,52 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
->  static int ibm_cffps_probe(struct i2c_client *client,
->  			   const struct i2c_device_id *id)
->  {
-> -	return pmbus_do_probe(client, id, &ibm_cffps_info);
-> +	int i, rc;
-> +	struct dentry *debugfs;
-> +	struct ibm_cffps *psu;
-> +
-> +	rc = pmbus_do_probe(client, id, &ibm_cffps_info);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Don't fail the probe if we can't create debugfs */
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return 0;
-> +
-> +	psu->client = client;
-> +	mutex_init(&psu->input_history.update_lock);
-> +	if (jiffies > HZ)
-> +		/* time_after wouldn't succeed with last_update = 0 in test */
+From: Paul Marques Mota <paul@marquesmota.pt>
+To: HARDWARE MONITORING <linux-hwmon@vger.kernel.org>
+Date: Thu, 7 Dec 2017 20:04:22 +0000
+Subject: [PATCH] add stack trace to deprecated hwmon_device_register()
 
-... but you are setting it to 'jiffies' elsewhere, so it can still end up
-being 0 at some point, especially since 'jiffies' starts with a large number
-and wraps a few minutes after boot. Not sure I understand the problem,
-actually.  Can you elaborate ?
+Hi,
 
-> +		psu->input_history.last_update = jiffies - HZ;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +	if (!debugfs)
-> +		return 0;
-> +
-It might be better to do that first, to avoid allocating memory unnecessarily.
-That memory would only be freed when the driver is unloaded.
+hwmon_device_register() in drivers/hwmon/hwmon.c prints the unhelpful
+message below on my machine:
 
-> +	for (i = 0; i < CFFPS_DEBUGFS_NUM_ENTRIES; ++i)
-> +		psu->debugfs_entries[i] = i;
-> +
-> +	debugfs_create_file("ibm_cffps_input_history", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_INPUT_HISTORY],
-> +			    &ibm_cffps_fops);
-> +	debugfs_create_file("ibm_cffps_fru", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_FRU],
-> +			    &ibm_cffps_fops);
-> +	debugfs_create_file("ibm_cffps_pn", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_PN],
-> +			    &ibm_cffps_fops);
-> +	debugfs_create_file("ibm_cffps_sn", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_SN],
-> +			    &ibm_cffps_fops);
-> +	debugfs_create_file("ibm_cffps_ccin", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_CCIN],
-> +			    &ibm_cffps_fops);
-> +	debugfs_create_file("ibm_cffps_fw", 0444, debugfs,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_FW],
-> +			    &ibm_cffps_fops);
+(NULL device *): hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
 
-Can you put those into their own subdirectory ?
+Therefore, this patch dumps the stack at that point. In my case it is
+then obvious in the resulting dmesg, available at
 
-	.../ibm_cffps/input_history
-	.../ibm_cffps/fru
+http://www.marquesmota.pt/dmesg.txt
 
-and so on. Also, consider using ibm_cffps1 (or client->name) to align
-with the the hwmon 'name' attribute.
+that thermal_add_hwmon_sysfs() in drivers/thermal/thermal_hwmon.c needs
+to be converted to the new API.
 
-Thanks,
-Guenter
+This patch is against 4.15.0-rc2
+I believe it is also needed in Bugzilla bug #195843
+https://bugzilla.kernel.org/show_bug.cgi?id=195843
 
-> +
-> +	return 0;
->  }
->  
->  static const struct i2c_device_id ibm_cffps_id[] = {
-> -- 
-> 1.8.3.1
-> 
+Signed-off-by: Paul Marques Mota<paul@marquesmota.pt>
+
+---
+ drivers/hwmon/hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index c9790e2c3440..31719ce4a681 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -702,6 +702,7 @@ struct device *hwmon_device_register(struct device *dev)
+ {
+ 	dev_warn(dev,
+ 		 "hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().\n");
++	dump_stack();
+ 
+ 	return __hwmon_device_register(dev, NULL, NULL, NULL, NULL);
+ }
+-- 
+2.15.1
+
