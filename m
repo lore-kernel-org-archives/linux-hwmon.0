@@ -1,53 +1,187 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.free-electrons.com ([62.4.15.54]:34845 "EHLO
-        mail.free-electrons.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750854AbdLDTjM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Dec 2017 14:39:12 -0500
-Date: Mon, 4 Dec 2017 20:39:01 +0100
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Russell King <linux@armlinux.org.uk>,
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:50320 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752960AbdLGMDo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Dec 2017 07:03:44 -0500
+From: Maciej Purski <m.purski@samsung.com>
+To: Jonathan Cameron <jic23@kernel.org>,
+        Stefan Bruens <stefan.bruens@rwth-aachen.de>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Hartmut Knaack <knaack.h@gmx.de>,
         Jean Delvare <jdelvare@suse.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ARM: dts: at91: disable the nxp,se97b SMBUS
- timeout on the TSE-850
-Message-ID: <20171204193901.GH21780@piout.net>
-References: <20171127163101.27859-1-peda@axentia.se>
- <20171127163101.27859-3-peda@axentia.se>
- <20171129205311.GA20551@roeck-us.net>
- <20171129205629.GO21126@piout.net>
- <20171130171638.GA17788@roeck-us.net>
- <20171130172606.GZ21126@piout.net>
- <acaea4f3-d273-444a-4df4-e6d1b35c876d@axentia.se>
- <20171130211740.GA26784@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20171130211740.GA26784@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Maciej Purski <m.purski@samsung.com>
+Subject: [PATCH v2] iio: adc: ina2xx: Make calibration register value fixed
+Date: Thu, 07 Dec 2017 13:02:47 +0100
+Message-id: <1512648167-11482-1-git-send-email-m.purski@samsung.com>
+References: <CGME20171207120340eucas1p24b145ba9b41768c1708ad574307c00c0@eucas1p2.samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 30/11/2017 at 13:17:40 -0800, Guenter Roeck wrote:
-> > I think it's a bugfix; it fixes real problems where the application
-> > misbehave due to faulty content when reading from an eeprom. I'm
-> > expecting to make a new release for the hw in question RSN and these
-> > are the only local patches. So, it would be nice if they made it to
-> > 4.14.x before my release happens. However, it's not like it's difficult
-> > to rebase the patches should that backport not happen or take too long.
-> > 
-> Good enough for me. I'll send it as a fix for v4.15, with Cc: stable.
-> 
+Calibration register is used for calculating current register in
+hardware according to datasheet:
+current = shunt_volt * calib_register / 2048 (ina 226)
+current = shunt_volt * calib_register / 4096 (ina 219)
 
-I have it in my fixes branch too, I'll send it to arm-soc soon.
+Fix calib_register value to 2048 for ina226 and 4096 for ina 219 in
+order to avoid truncation error and provide best precision allowed
+by shunt_voltage measurement. Make current scale value follow changes
+of shunt_resistor from sysfs as calib_register value is now fixed.
 
+Power_lsb value should also follow shunt_resistor changes as stated in
+datasheet:
+power_lsb = 25 * current_lsb (ina 226)
+power_lsb = 20 * current_lsb (ina 219)
 
+This is a part of the patchset: https://lkml.org/lkml/2017/11/22/394
+
+Signed-off-by: Maciej Purski <m.purski@samsung.com>
+
+---
+Changes in v2:
+- rebase on top of the latest next
+- remove a redundant variable - power_lsb_uW
+- fix comments
+---
+ drivers/iio/adc/ina2xx-adc.c | 58 +++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
+index ddf8781..3e4972f 100644
+--- a/drivers/iio/adc/ina2xx-adc.c
++++ b/drivers/iio/adc/ina2xx-adc.c
+@@ -124,11 +124,11 @@ enum ina2xx_ids { ina219, ina226 };
+ 
+ struct ina2xx_config {
+ 	u16 config_default;
+-	int calibration_factor;
++	int calibration_value;
+ 	int shunt_voltage_lsb;	/* nV */
+ 	int bus_voltage_shift;	/* position of lsb */
+ 	int bus_voltage_lsb;	/* uV */
+-	int power_lsb;		/* uW */
++	int power_lsb_factor;
+ 	enum ina2xx_ids chip_id;
+ };
+ 
+@@ -138,6 +138,7 @@ struct ina2xx_chip_info {
+ 	const struct ina2xx_config *config;
+ 	struct mutex state_lock;
+ 	unsigned int shunt_resistor_uohm;
++	unsigned int current_lsb_uA;
+ 	int avg;
+ 	int int_time_vbus; /* Bus voltage integration time uS */
+ 	int int_time_vshunt; /* Shunt voltage integration time uS */
+@@ -149,20 +150,20 @@ struct ina2xx_chip_info {
+ static const struct ina2xx_config ina2xx_config[] = {
+ 	[ina219] = {
+ 		.config_default = INA219_CONFIG_DEFAULT,
+-		.calibration_factor = 40960000,
++		.calibration_value = 4096,
+ 		.shunt_voltage_lsb = 10000,
+ 		.bus_voltage_shift = INA219_BUS_VOLTAGE_SHIFT,
+ 		.bus_voltage_lsb = 4000,
+-		.power_lsb = 20000,
++		.power_lsb_factor = 20,
+ 		.chip_id = ina219,
+ 	},
+ 	[ina226] = {
+ 		.config_default = INA226_CONFIG_DEFAULT,
+-		.calibration_factor = 5120000,
++		.calibration_value = 2048,
+ 		.shunt_voltage_lsb = 2500,
+ 		.bus_voltage_shift = 0,
+ 		.bus_voltage_lsb = 1250,
+-		.power_lsb = 25000,
++		.power_lsb_factor = 25,
+ 		.chip_id = ina226,
+ 	},
+ };
+@@ -229,14 +230,16 @@ static int ina2xx_read_raw(struct iio_dev *indio_dev,
+ 
+ 		case INA2XX_POWER:
+ 			/* processed (mW) = raw*lsb (uW) / 1000 */
+-			*val = chip->config->power_lsb;
++			*val = chip->config->power_lsb_factor *
++			       chip->current_lsb_uA;
+ 			*val2 = 1000;
+ 			return IIO_VAL_FRACTIONAL;
+ 
+ 		case INA2XX_CURRENT:
+-			/* processed (mA) = raw (mA) */
+-			*val = 1;
+-			return IIO_VAL_INT;
++			/* processed (mA) = raw*lsb (uA) / 1000 */
++			*val = chip->current_lsb_uA;
++			*val2 = 1000;
++			return IIO_VAL_FRACTIONAL;
+ 		}
+ 
+ 	case IIO_CHAN_INFO_HARDWAREGAIN:
+@@ -541,28 +544,34 @@ static ssize_t ina2xx_allow_async_readout_store(struct device *dev,
+ }
+ 
+ /*
+- * Set current LSB to 1mA, shunt is in uOhms
+- * (equation 13 in datasheet). We hardcode a Current_LSB
+- * of 1.0 x10-3. The only remaining parameter is RShunt.
+- * There is no need to expose the CALIBRATION register
+- * to the user for now. But we need to reset this register
+- * if the user updates RShunt after driver init, e.g upon
+- * reading an EEPROM/Probe-type value.
++ * Calibration register is set to the best value, which eliminates
++ * truncation errors on calculating current register in hardware.
++ * According to datasheet (INA 226: eq. 3, INA219: eq. 4) the best values
++ * are 2048 for ina226 and 4096 for ina219. They are hardcoded as
++ * calibration_value.
+  */
+ static int ina2xx_set_calibration(struct ina2xx_chip_info *chip)
+ {
+-	u16 regval = DIV_ROUND_CLOSEST(chip->config->calibration_factor,
+-				   chip->shunt_resistor_uohm);
+-
+-	return regmap_write(chip->regmap, INA2XX_CALIBRATION, regval);
++	return regmap_write(chip->regmap, INA2XX_CALIBRATION,
++			    chip->config->calibration_value);
+ }
+ 
++/*
++ * In order to keep calibration register value fixed, the product
++ * of current_lsb and shunt_resistor should also be fixed and equal
++ * to shunt_voltage_lsb = 1 / shunt_div multiplied by 10^9 in order
++ * to keep the scale.
++ */
+ static int set_shunt_resistor(struct ina2xx_chip_info *chip, unsigned int val)
+ {
+-	if (val <= 0 || val > chip->config->calibration_factor)
++	unsigned int dividend = DIV_ROUND_CLOSEST(1000000000,
++						  chip->config->shunt_div);
++
++	if (val <= 0 || val > dividend)
+ 		return -EINVAL;
+ 
+ 	chip->shunt_resistor_uohm = val;
++	chip->current_lsb_uA = DIV_ROUND_CLOSEST(dividend, val);
+ 
+ 	return 0;
+ }
+@@ -592,11 +601,6 @@ static ssize_t ina2xx_shunt_resistor_store(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Update the Calibration register */
+-	ret = ina2xx_set_calibration(chip);
+-	if (ret)
+-		return ret;
+-
+ 	return len;
+ }
+ 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
+
