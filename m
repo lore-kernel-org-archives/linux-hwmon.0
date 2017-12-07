@@ -1,34 +1,57 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f67.google.com ([74.125.83.67]:47066 "EHLO
-        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751323AbdLEQSB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Dec 2017 11:18:01 -0500
-Date: Tue, 5 Dec 2017 08:17:59 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Lei YU <mine260309@gmail.com>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (w83773g) Fix a precedence bug in get_fault()
-Message-ID: <20171205161759.GB12347@roeck-us.net>
-References: <20171205143726.d3tziwhjboyfxmgi@mwanda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20171205143726.d3tziwhjboyfxmgi@mwanda>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        eajames@linux.vnet.ibm.com, mspinler@linux.vnet.ibm.com,
+        joel@jms.id.au, "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH 1/2] hwmon: (pmbus): Export pmbus device debugfs directory entry
+Date: Thu,  7 Dec 2017 13:50:37 -0600
+In-Reply-To: <1512676238-8020-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1512676238-8020-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1512676238-8020-2-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Dec 05, 2017 at 05:37:26PM +0300, Dan Carpenter wrote:
-> Shift has higher precedence than mask but presumably we wanted to set
-> *val to 1 if BIT(2) was set or 0 if the bit was clear.
-> 
-> Fixes: de0a524e3e09 ("hwmon: Add W83773G driver")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Hi Dan,
+Pmbus client drivers, if they want to use debugfs, should use the same
+root directory as the pmbus debugfs entries are using. Therefore, export
+the device dentry for the pmbus client.
 
-I already queued up the fix after my own builders reported the problem.
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
+---
+ drivers/hwmon/pmbus/pmbus.h      | 2 ++
+ drivers/hwmon/pmbus/pmbus_core.c | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index d39d506..1d24397 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -461,4 +461,6 @@ int pmbus_get_fan_rate_cached(struct i2c_client *client, int page, int id,
+ 			      enum pmbus_fan_mode mode);
+ int pmbus_update_fan(struct i2c_client *client, int page, int id,
+ 		     u8 config, u8 mask, u16 command);
++struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client);
++
+ #endif /* PMBUS_H */
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 99ab39f..9abd382 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2381,6 +2381,13 @@ int pmbus_do_remove(struct i2c_client *client)
+ }
+ EXPORT_SYMBOL_GPL(pmbus_do_remove);
+ 
++struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
++{
++	struct pmbus_data *data = i2c_get_clientdata(client);
++
++	return data->debugfs;
++}
++
+ static int __init pmbus_core_init(void)
+ {
+ 	pmbus_debugfs_dir = debugfs_create_dir("pmbus", NULL);
+-- 
+1.8.3.1
