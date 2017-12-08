@@ -1,104 +1,262 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:37850 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752401AbdLELcg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Dec 2017 06:32:36 -0500
-Received: by mail-pf0-f194.google.com with SMTP id n6so10988958pfa.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 05 Dec 2017 03:32:36 -0800 (PST)
-Subject: Re: [PATCH v2] hwmon: Deal with errors from the thermal subsystem
-To: Linus Walleij <linus.walleij@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20171205083614.32537-1-linus.walleij@linaro.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <079a931b-42ef-4cf8-4ee8-29350160ab54@roeck-us.net>
-Date: Tue, 5 Dec 2017 03:32:34 -0800
-MIME-Version: 1.0
-In-Reply-To: <20171205083614.32537-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        eajames@linux.vnet.ibm.com, joel@jms.id.au,
+        "Edward A. James" <eajames@us.ibm.com>
+Subject: [PATCH v2 2/2] hwmon (pmbus): cffps: Add debugfs entries
+Date: Fri,  8 Dec 2017 11:42:49 -0600
+In-Reply-To: <1512754969-6556-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1512754969-6556-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1512754969-6556-3-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 12/05/2017 12:36 AM, Linus Walleij wrote:
-> If the thermal subsystem returne -EPROBE_DEFER or any other error
-> when hwmon calls devm_thermal_zone_of_sensor_register(), this is
-> silently ignored.
-> 
-> I ran into this with an incorrectly defined thermal zone, making
-> it non-existing and thus this call failed with -EPROBE_DEFER
-> assuming it would appear later. The sensor was still added
-> which is incorrect: sensors must strictly be added after the
-> thermal zones, so deferred probe must be respected.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+From: "Edward A. James" <eajames@us.ibm.com>
 
-Applied.
+Add debugfs entries for additional power supply data, including part
+number, serial number, FRU number, firmware revision, ccin, and the
+input history of the power supply. The input history is 10 minutes of
+input power data in the form of twenty 30-second packets. Each packet
+contains average and maximum power for that 30 second period.
 
-Thanks,
-Guenter
+Signed-off-by: Edward A. James <eajames@us.ibm.com>
+---
+ drivers/hwmon/pmbus/ibm-cffps.c | 202 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 201 insertions(+), 1 deletion(-)
 
-> ---
-> ChangeLog v1->v2:
-> - Explicitly discard -ENODEV as this is OK, forward any other
->    errors.
-> ---
->   drivers/hwmon/hwmon.c | 21 +++++++++++++++++----
->   1 file changed, 17 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index c9790e2c3440..af5123042990 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -143,6 +143,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
->   				    struct hwmon_device *hwdev, int index)
->   {
->   	struct hwmon_thermal_data *tdata;
-> +	struct thermal_zone_device *tzd;
->   
->   	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
->   	if (!tdata)
-> @@ -151,8 +152,14 @@ static int hwmon_thermal_add_sensor(struct device *dev,
->   	tdata->hwdev = hwdev;
->   	tdata->index = index;
->   
-> -	devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
-> -					     &hwmon_thermal_ops);
-> +	tzd = devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
-> +						   &hwmon_thermal_ops);
-> +	/*
-> +	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
-> +	 * so ignore that error but forward any other error.
-> +	 */
-> +	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
-> +		return PTR_ERR(tzd);
->   
->   	return 0;
->   }
-> @@ -621,14 +628,20 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->   				if (!chip->ops->is_visible(drvdata, hwmon_temp,
->   							   hwmon_temp_input, j))
->   					continue;
-> -				if (info[i]->config[j] & HWMON_T_INPUT)
-> -					hwmon_thermal_add_sensor(dev, hwdev, j);
-> +				if (info[i]->config[j] & HWMON_T_INPUT) {
-> +					err = hwmon_thermal_add_sensor(dev,
-> +								hwdev, j);
-> +					if (err)
-> +						goto free_device;
-> +				}
->   			}
->   		}
->   	}
->   
->   	return hdev;
->   
-> +free_device:
-> +	device_unregister(hdev);
->   free_hwmon:
->   	kfree(hwdev);
->   ida_remove:
-> 
-
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index cb56da6..456f2a9 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -8,12 +8,26 @@
+  */
+ 
+ #include <linux/bitops.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
++#include <linux/fs.h>
+ #include <linux/i2c.h>
++#include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ 
+ #include "pmbus.h"
+ 
++#define CFFPS_FRU_CMD				0x9A
++#define CFFPS_PN_CMD				0x9B
++#define CFFPS_SN_CMD				0x9E
++#define CFFPS_CCIN_CMD				0xBD
++#define CFFPS_FW_CMD_START			0xFA
++#define CFFPS_FW_NUM_BYTES			4
++
++#define CFFPS_INPUT_HISTORY_CMD			0xD6
++#define CFFPS_INPUT_HISTORY_SIZE		100
++
+ /* STATUS_MFR_SPECIFIC bits */
+ #define CFFPS_MFR_FAN_FAULT			BIT(0)
+ #define CFFPS_MFR_THERMAL_FAULT			BIT(1)
+@@ -24,6 +38,144 @@
+ #define CFFPS_MFR_VAUX_FAULT			BIT(6)
+ #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
+ 
++enum {
++	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
++	CFFPS_DEBUGFS_FRU,
++	CFFPS_DEBUGFS_PN,
++	CFFPS_DEBUGFS_SN,
++	CFFPS_DEBUGFS_CCIN,
++	CFFPS_DEBUGFS_FW,
++	CFFPS_DEBUGFS_NUM_ENTRIES
++};
++
++struct ibm_cffps_input_history {
++	struct mutex update_lock;
++	unsigned long last_update;
++
++	u8 byte_count;
++	u8 data[CFFPS_INPUT_HISTORY_SIZE];
++};
++
++struct ibm_cffps {
++	struct i2c_client *client;
++
++	struct ibm_cffps_input_history input_history;
++
++	int debugfs_entries[CFFPS_DEBUGFS_NUM_ENTRIES];
++};
++
++#define to_psu(x, y) container_of((x), struct ibm_cffps, debugfs_entries[(y)])
++
++static ssize_t ibm_cffps_read_input_history(struct ibm_cffps *psu,
++					    char __user *buf, size_t count,
++					    loff_t *ppos)
++{
++	int rc;
++	u8 msgbuf0[1] = { CFFPS_INPUT_HISTORY_CMD };
++	u8 msgbuf1[CFFPS_INPUT_HISTORY_SIZE + 1] = { 0 };
++	struct i2c_msg msg[2] = {
++		{
++			.addr = psu->client->addr,
++			.flags = psu->client->flags,
++			.len = 1,
++			.buf = msgbuf0,
++		}, {
++			.addr = psu->client->addr,
++			.flags = psu->client->flags | I2C_M_RD,
++			.len = CFFPS_INPUT_HISTORY_SIZE + 1,
++			.buf = msgbuf1,
++		},
++	};
++
++	if (!*ppos) {
++		mutex_lock(&psu->input_history.update_lock);
++		if (time_after(jiffies, psu->input_history.last_update + HZ)) {
++			/*
++			 * Use a raw i2c transfer, since we need more bytes
++			 * than Linux I2C supports through smbus xfr (only 32).
++			 */
++			rc = i2c_transfer(psu->client->adapter, msg, 2);
++			if (rc < 0) {
++				mutex_unlock(&psu->input_history.update_lock);
++				return rc;
++			}
++
++			psu->input_history.byte_count = msgbuf1[0];
++			memcpy(psu->input_history.data, &msgbuf1[1],
++			       CFFPS_INPUT_HISTORY_SIZE);
++			psu->input_history.last_update = jiffies;
++		}
++
++		mutex_unlock(&psu->input_history.update_lock);
++	}
++
++	return simple_read_from_buffer(buf, count, ppos,
++				       psu->input_history.data,
++				       psu->input_history.byte_count);
++}
++
++static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
++				    size_t count, loff_t *ppos)
++{
++	u8 cmd;
++	int i, rc;
++	int *idxp = file->private_data;
++	int idx = *idxp;
++	struct ibm_cffps *psu = to_psu(idxp, idx);
++	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
++
++	switch (idx) {
++	case CFFPS_DEBUGFS_INPUT_HISTORY:
++		return ibm_cffps_read_input_history(psu, buf, count, ppos);
++	case CFFPS_DEBUGFS_FRU:
++		cmd = CFFPS_FRU_CMD;
++		break;
++	case CFFPS_DEBUGFS_PN:
++		cmd = CFFPS_PN_CMD;
++		break;
++	case CFFPS_DEBUGFS_SN:
++		cmd = CFFPS_SN_CMD;
++		break;
++	case CFFPS_DEBUGFS_CCIN:
++		rc = i2c_smbus_read_word_data(psu->client, CFFPS_CCIN_CMD);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 5, "%04X", rc);
++		goto done;
++	case CFFPS_DEBUGFS_FW:
++		for (i = 0; i < CFFPS_FW_NUM_BYTES; ++i) {
++			rc = i2c_smbus_read_byte_data(psu->client,
++						      CFFPS_FW_CMD_START + i);
++			if (rc < 0)
++				return rc;
++
++			snprintf(&data[i * 2], 3, "%02X", rc);
++		}
++
++		rc = i * 2;
++		goto done;
++	default:
++		return -EINVAL;
++	}
++
++	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
++	if (rc < 0)
++		return rc;
++
++done:
++	data[rc] = '\n';
++	rc += 2;
++
++	return simple_read_from_buffer(buf, count, ppos, data, rc);
++}
++
++static const struct file_operations ibm_cffps_fops = {
++	.llseek = noop_llseek,
++	.read = ibm_cffps_debugfs_op,
++	.open = simple_open,
++};
++
+ static int ibm_cffps_read_byte_data(struct i2c_client *client, int page,
+ 				    int reg)
+ {
+@@ -119,7 +271,55 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
+ static int ibm_cffps_probe(struct i2c_client *client,
+ 			   const struct i2c_device_id *id)
+ {
+-	return pmbus_do_probe(client, id, &ibm_cffps_info);
++	int i, rc;
++	struct dentry *debugfs;
++	struct dentry *ibm_cffps_dir;
++	struct ibm_cffps *psu;
++
++	rc = pmbus_do_probe(client, id, &ibm_cffps_info);
++	if (rc)
++		return rc;
++
++	/* Don't fail the probe if we can't create debugfs */
++	debugfs = pmbus_get_debugfs_dir(client);
++	if (!debugfs)
++		return 0;
++
++	ibm_cffps_dir = debugfs_create_dir(client->name, debugfs);
++	if (!ibm_cffps_dir)
++		return 0;
++
++	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
++	if (!psu)
++		return 0;
++
++	psu->client = client;
++	mutex_init(&psu->input_history.update_lock);
++	psu->input_history.last_update = jiffies - HZ;
++
++	for (i = 0; i < CFFPS_DEBUGFS_NUM_ENTRIES; ++i)
++		psu->debugfs_entries[i] = i;
++
++	debugfs_create_file("input_history", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_INPUT_HISTORY],
++			    &ibm_cffps_fops);
++	debugfs_create_file("fru", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_FRU],
++			    &ibm_cffps_fops);
++	debugfs_create_file("part_number", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_PN],
++			    &ibm_cffps_fops);
++	debugfs_create_file("serial_number", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_SN],
++			    &ibm_cffps_fops);
++	debugfs_create_file("ccin", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_CCIN],
++			    &ibm_cffps_fops);
++	debugfs_create_file("fw_version", 0444, ibm_cffps_dir,
++			    &psu->debugfs_entries[CFFPS_DEBUGFS_FW],
++			    &ibm_cffps_fops);
++
++	return 0;
+ }
+ 
+ static const struct i2c_device_id ibm_cffps_id[] = {
+-- 
+1.8.3.1
