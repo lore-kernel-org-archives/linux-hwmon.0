@@ -1,49 +1,32 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f68.google.com ([209.85.160.68]:37778 "EHLO
-        mail-pl0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751163AbdL0Blc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Dec 2017 20:41:32 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.15-rc6
-Date: Tue, 26 Dec 2017 17:41:29 -0800
-Message-Id: <1514338889-22929-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <linus971@gmail.com>
+Return-path: <linus971@gmail.com>
+MIME-Version: 1.0
+Sender: linus971@gmail.com
+In-Reply-To: <1514338889-22929-1-git-send-email-linux@roeck-us.net>
+References: <1514338889-22929-1-git-send-email-linux@roeck-us.net>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 26 Dec 2017 18:25:27 -0800
+Message-ID: <CA+55aFxUA=jTodPShv7TX3mZMDmwk8YC-D3Q1wq7ZJbnevzD8w@mail.gmail.com>
+Subject: Re: [GIT PULL] hwmon fixes for v4.15-rc6
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Tue, Dec 26, 2017 at 5:41 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Please pull hwmon fixes for Linux v4.15-rc6 from signed tag:
+>
+>     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.15-rc6
 
-Please pull hwmon fixes for Linux v4.15-rc6 from signed tag:
+Hmm. That was a tag, but not a signed one. It's just a naked tag that
+pointed directly at the commit.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.15-rc6
+You *normally* do real signed tags. Did you change your workflow
+somehow this time?
 
-Thanks,
-Guenter
-------
+I've pulled it, since it's kernel.org, but I thought I'd mention this
+discrepancy.
 
-The following changes since commit 464e1d5f23cca236b930ef068c328a64cab78fb1:
-
-  Linux 4.15-rc5 (2017-12-23 20:47:16 -0800)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.15-rc6
-
-for you to fetch changes up to 47c332deb8e89f6c59b0bb2615945c6e7fad1a60:
-
-  hwmon: Deal with errors from the thermal subsystem (2017-12-26 11:53:24 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v4.16-rc6
-
-Handle errors from thermal subsystem
-
-----------------------------------------------------------------
-Linus Walleij (1):
-      hwmon: Deal with errors from the thermal subsystem
-
- drivers/hwmon/hwmon.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+                  Linus
