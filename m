@@ -1,78 +1,71 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:33102 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752300AbeAaP5O (ORCPT
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45584 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1756685AbeAHVKQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Jan 2018 10:57:14 -0500
-Received: by mail-pf0-f195.google.com with SMTP id t5so13059258pfi.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Jan 2018 07:57:14 -0800 (PST)
-Date: Wed, 31 Jan 2018 07:57:12 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Danilo Bargen <mail@dbrgn.ch>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        andreas.brauchli@sensirion.com
-Subject: Re: [PATCH] hwmon: (sht21) Don't use clock stretching
-Message-ID: <20180131155712.GA21986@roeck-us.net>
-References: <20180126233731.19127-1-mail@dbrgn.ch>
- <54a9981f-71fe-d332-8364-7bfb88eed2b3@roeck-us.net>
- <20180131153923.3df073df@adalbert.office.threema.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180131153923.3df073df@adalbert.office.threema.ch>
+        Mon, 8 Jan 2018 16:10:16 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.21) with SMTP id w08L9QjW047203
+        for <linux-hwmon@vger.kernel.org>; Mon, 8 Jan 2018 16:10:16 -0500
+Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2fcf5hjr4m-1
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jan 2018 16:10:15 -0500
+Received: from localhost
+        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Mon, 8 Jan 2018 14:10:14 -0700
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux@roeck-us.net, linux-kernel@vger.kernel.org, joel@jms.id.au,
+        eajames@linux.vnet.ibm.com
+Subject: [PATCH] hwmon (pmbus): cffps: Add PMBUS_SKIP_STATUS_CHECK
+Date: Mon,  8 Jan 2018 15:10:09 -0600
+Message-Id: <1515445809-19856-1-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 31, 2018 at 03:39:23PM +0100, Danilo Bargen wrote:
-> Hello Guenter
-> 
-> Thank you for your fast review!
-> 
-> > The driver must now support I2C_FUNC_I2C which is a significant change in functionality
-> > since it will no longer work on SMBus-only adapters.
-> 
-> You are right of course, I wasn't aware of that.
-> 
-> > You'll have to find a better
-> > solution, one that retains the old functionality but also works on the Raspberry Pi.
-> 
-> What are my options? A separate driver (sht21nhm) would probably not be accepted, right?
-> 
-One option would be to implement access functions differently if clock
-stretching is known to not work. That would, however, require infrastructure
-support since the controller driver should tell the chip driver that it doesnot
-support clock stretching.
+This power supply device regularly fails to read VOUT_MODE due to the
+CML bit going high. This results in an incorrect exponent used for the
+voltage data, and therefore the power supply reports incorrect voltage.
+Work around this by setting the pmbus flag to skip the CML check.
 
-> Or should I instead try to submit it to the Raspberry Pi kernel tree directly?
-> 
-> > FWIW, this should really be solved in the infrastructure. Many devices support and
-> > depend on clock stretching, and we can not mess up the drivers for all those devices
-> > to deal with a broken adapter.
-> 
-> Could you elaborate what you mean with "in the infrastructure"? Could there be a
-> way to solve this on the i2c / adapter driver level?
-> 
-As mentioned above, this is really a i2c controller driver issue. If the
-controller driver does not support clock stretching, it should tell chip drivers
-about it. There should also be infrastructure support to support "simulated"
-clock stretching; otherwise each and every chip driver who needs it would have
-to re-implement the same set of hacks.
+Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
+---
+ drivers/hwmon/pmbus/ibm-cffps.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> An interesting sidenote is that the driver used to work on the Raspberry Pi with
-> older kernel versions, but not on current ones. (I'd have to look up the exact
-> versions, but I think it changed sometime last year.) Maybe something about the
-> timing was changed that broke clock stretching.
-> 
-Wouldn't it make sense then to track down the patch which introduced the problem
-and fix the underlying issue instead of working around it ?
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index de254747..2d6f4f4 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -15,6 +15,7 @@
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/pmbus.h>
+ 
+ #include "pmbus.h"
+ 
+@@ -268,6 +269,10 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
+ 	.read_word_data = ibm_cffps_read_word_data,
+ };
+ 
++static struct pmbus_platform_data ibm_cffps_pdata = {
++	.flags = PMBUS_SKIP_STATUS_CHECK,
++};
++
+ static int ibm_cffps_probe(struct i2c_client *client,
+ 			   const struct i2c_device_id *id)
+ {
+@@ -276,6 +281,7 @@ static int ibm_cffps_probe(struct i2c_client *client,
+ 	struct dentry *ibm_cffps_dir;
+ 	struct ibm_cffps *psu;
+ 
++	client->dev.platform_data = &ibm_cffps_pdata;
+ 	rc = pmbus_do_probe(client, id, &ibm_cffps_info);
+ 	if (rc)
+ 		return rc;
+-- 
+1.8.3.1
 
-Guenter
-
-> > Has this been discussed on the i2c mailing list ?
-> 
-> I did not submit a discussion so far, and the mailing list search did not
-> turn up anything related. Should I start a discussion there?
-> 
-> Cheers and thanks for your time,
-> Danilo Bargen
