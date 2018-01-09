@@ -1,210 +1,93 @@
-Return-Path: <eajames@linux.vnet.ibm.com>
-Return-path: <eajames@linux.vnet.ibm.com>
-Subject: Re: [PATCH] hwmon (pmbus): cffps: Add led class device for power
- supply fault led
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, joel@jms.id.au
-References: <1515535524-27458-1-git-send-email-eajames@linux.vnet.ibm.com>
- <20180109225042.GB26819@roeck-us.net>
-From: Eddie James <eajames@linux.vnet.ibm.com>
-Date: Wed, 10 Jan 2018 10:36:56 -0600
-MIME-Version: 1.0
-In-Reply-To: <20180109225042.GB26819@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Message-Id: <e4793091-8e7f-6e4b-57a4-10a49fbc4f1e@linux.vnet.ibm.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mga09.intel.com ([134.134.136.24]:36192 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1753793AbeAIWb3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 9 Jan 2018 17:31:29 -0500
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH linux dev-4.10 1/6] Documentation: dt-bindings: Add Aspeed PECI
+Date: Tue,  9 Jan 2018 14:31:21 -0800
+Message-Id: <20180109223126.13093-2-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
+References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
+This commit adds a dt-bindings document for Aspeed PECI.
 
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+---
+ .../devicetree/bindings/misc/aspeed-peci.txt       | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/aspeed-peci.txt
 
-On 01/09/2018 04:50 PM, Guenter Roeck wrote:
-> On Tue, Jan 09, 2018 at 04:05:24PM -0600, Eddie James wrote:
->> This power supply device doesn't correctly manage it's own fault led.
->> Add an led class device and register it so that userspace can manage
->> power supply fault led as necessary.
->>
->> Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
->> ---
->>   drivers/hwmon/pmbus/ibm-cffps.c | 90 +++++++++++++++++++++++++++++++++++++----
->>   1 file changed, 82 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
->> index 2d6f4f4..1e95dea 100644
->> --- a/drivers/hwmon/pmbus/ibm-cffps.c
->> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
->> @@ -13,6 +13,7 @@
->>   #include <linux/fs.h>
->>   #include <linux/i2c.h>
->>   #include <linux/jiffies.h>
->> +#include <linux/leds.h>
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->>   #include <linux/pmbus.h>
->> @@ -25,6 +26,7 @@
->>   #define CFFPS_CCIN_CMD				0xBD
->>   #define CFFPS_FW_CMD_START			0xFA
->>   #define CFFPS_FW_NUM_BYTES			4
->> +#define CFFPS_SYS_CONFIG_CMD			0xDA
->>   
->>   #define CFFPS_INPUT_HISTORY_CMD			0xD6
->>   #define CFFPS_INPUT_HISTORY_SIZE		100
->> @@ -39,6 +41,11 @@
->>   #define CFFPS_MFR_VAUX_FAULT			BIT(6)
->>   #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
->>   
->> +#define CFFPS_LED_BLINK				BIT(0)
->> +#define CFFPS_LED_ON				BIT(1)
->> +#define CFFPS_LED_OFF				BIT(2)
->> +#define CFFPS_BLINK_RATE_MS			250
->> +
->>   enum {
->>   	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
->>   	CFFPS_DEBUGFS_FRU,
->> @@ -63,6 +70,9 @@ struct ibm_cffps {
->>   	struct ibm_cffps_input_history input_history;
->>   
->>   	int debugfs_entries[CFFPS_DEBUGFS_NUM_ENTRIES];
->> +
->> +	u8 led_state;
->> +	struct led_classdev led;
->>   };
->>   
->>   #define to_psu(x, y) container_of((x), struct ibm_cffps, debugfs_entries[(y)])
->> @@ -258,6 +268,51 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
->>   	return rc;
->>   }
->>   
->> +static void ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
->> +					 enum led_brightness brightness)
->> +{
->> +	int rc;
->> +	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
->> +
->> +	if (brightness == LED_OFF) {
->> +		psu->led_state = CFFPS_LED_OFF;
->> +	} else {
->> +		brightness = LED_FULL;
->> +		if (psu->led_state != CFFPS_LED_BLINK)
->> +			psu->led_state = CFFPS_LED_ON;
->> +	}
->> +
->> +	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
->> +				       psu->led_state);
->> +	if (rc < 0)
->> +		return;
->> +
->> +	led_cdev->brightness = brightness;
->> +}
->> +
->> +static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
->> +				   unsigned long *delay_on,
->> +				   unsigned long *delay_off)
->> +{
->> +	int rc;
->> +	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
->> +
->> +	psu->led_state = CFFPS_LED_BLINK;
->> +
->> +	if (led_cdev->brightness == LED_OFF)
->> +		return 0;
->> +
->> +	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
->> +				       CFFPS_LED_BLINK);
->> +	if (rc < 0)
->> +		return rc;
->> +
->> +	*delay_on = CFFPS_BLINK_RATE_MS;
->> +	*delay_off = CFFPS_BLINK_RATE_MS;
->> +
->> +	return 0;
->> +}
->> +
->>   static struct pmbus_driver_info ibm_cffps_info = {
->>   	.pages = 1,
->>   	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
->> @@ -277,6 +332,8 @@ static int ibm_cffps_probe(struct i2c_client *client,
->>   			   const struct i2c_device_id *id)
->>   {
->>   	int i, rc;
->> +	char *led_name;
->> +	size_t name_length;
->>   	struct dentry *debugfs;
->>   	struct dentry *ibm_cffps_dir;
->>   	struct ibm_cffps *psu;
->> @@ -286,6 +343,31 @@ static int ibm_cffps_probe(struct i2c_client *client,
->>   	if (rc)
->>   		return rc;
->>   
->> +	/* client name, '-', 8 chars for addr, and null */
->> +	name_length = strlen(client->name) + 10;
->> +
->> +	/* Don't fail the probe if we can't create led devices */
->> +	psu = devm_kzalloc(&client->dev, sizeof(*psu) + name_length,
->> +			   GFP_KERNEL);
->> +	if (!psu)
->> +		return 0;
-> ... and no debugfs either ?
+diff --git a/Documentation/devicetree/bindings/misc/aspeed-peci.txt b/Documentation/devicetree/bindings/misc/aspeed-peci.txt
+new file mode 100644
+index 0000000..d277c73
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/aspeed-peci.txt
+@@ -0,0 +1,55 @@
++* ASPEED PECI (Platform Environment Control Interface) misc driver.
++
++Hardware Interfaces:
++- This driver implements support for the ASPEED AST2400/2500 PECI which has the
++  following features:
++	- Directly connected to APB bus
++	- Intel PECI 3.1 compliant (PECI 3.0 for AST2400)
++	- Maximum packet length is 256 bytes (Baseline transmission unit)
++	- Support up to 8 CPUs and 2 domains per CPU
++	- Integrate PECI compliant I/O buffers, can connect to PECI bus directly
++	- Transmit buffer 32 bytes and receive buffer 32 bytes
++
++Required properties:
++- compatible: "aspeed,ast2400-peci" or "aspeed,ast2500-peci"
++	- aspeed,ast2400-peci: Aspeed AST2400 family PECI control interface
++	- aspeed,ast2500-peci: Aspeed AST2500 family PECI control interface
++- reg: Should contain PECI registers location and length
++- interrupts: Should contain PECI interrupt
++- clocks: Should contain clock source. = <&clk_clkin>;
++- clock_frequency: Should contain the operation frequency of PECI controller.
++	187500 ~ 24000000
++
++Optional properties:
++- msg-timing-nego: Message timing negotiation period.
++	This value will determine the period of message timing negotiation to be
++	issued by PECI controller. The unit of the programmed value is four
++	times of PECI clock period.
++	0 ~ 255 (default: 1)
++- addr-timing-nego: Address timing negotiation period.
++	This value will determine the period of address timing negotiation to be
++	issued by PECI controller. The unit of the programmed value is four
++	times of PECI clock period.
++	0 ~ 255 (default: 1)
++- rd-sampling-point: Read sampling point selection.
++	The whole period of a bit time will be divided into 16 time frames.
++	This value will determine which time frame this controller will sample
++	PECI signal for data read back. Usually in the middle of a bit time is
++	the best.
++	0 ~ 15 (default: 8)
++- cmd_timeout_ms: Command timeout in units of ms
++	1 ~ 60000 (default: 1000)
++
++Example:
++	peci: peci@1e78b000 {
++		compatible = "aspeed,ast2500-peci";
++		reg = <0x1e78b000 0x60>;
++		interrupt-controller;
++		interrupts = <15>;
++		clocks = <&clk_clkin>;
++		clock-frequency = <24000000>;
++		msg-timing-nego = <1>;
++		addr-timing-nego = <1>;
++		rd-sampling-point = <8>;
++		cmd-timeout-ms = <1000>;
++	};
+-- 
+2.7.4
 
-Well we need that struct allocated for debugfs as well. I'll clarify the 
-comment.
-
->
->> +
->> +	psu->client = client;
->> +	mutex_init(&psu->input_history.update_lock);
->> +	psu->input_history.last_update = jiffies - HZ;
->> +
->> +	led_name = (void *)(&psu[1]);
->> +	snprintf(led_name, name_length, "%s-%x", client->name, client->addr);
->> +	psu->led.name = led_name;
->> +	psu->led.max_brightness = LED_FULL;
->> +	psu->led.brightness_set = ibm_cffps_led_brightness_set;
->> +	psu->led.blink_set = ibm_cffps_led_blink_set;
->> +
->> +	rc = devm_led_classdev_register(&client->dev, &psu->led);
->> +	if (rc)
->> +		dev_info(&client->dev, "failed to register led class: %d\n",
-> dev_warn() might be more appropriate.
-
-Sure.
-
->
->> +			 rc);
->> +
-> Please move the led initialization code into its own function.
-
-Sure.
-
->
->>   	/* Don't fail the probe if we can't create debugfs */
->>   	debugfs = pmbus_get_debugfs_dir(client);
->>   	if (!debugfs)
->> @@ -295,14 +377,6 @@ static int ibm_cffps_probe(struct i2c_client *client,
->>   	if (!ibm_cffps_dir)
->>   		return 0;
->>   
->> -	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
->> -	if (!psu)
->> -		return 0;
->> -
->> -	psu->client = client;
->> -	mutex_init(&psu->input_history.update_lock);
->> -	psu->input_history.last_update = jiffies - HZ;
->> -
-> unrelated ?
-
-Thought it made sense to move it with the allocation, but I can leave it 
-where it is.
-
-Thanks,
-Eddie
-
->
->>   	for (i = 0; i < CFFPS_DEBUGFS_NUM_ENTRIES; ++i)
->>   		psu->debugfs_entries[i] = i;
->>   
->> -- 
->> 1.8.3.1
->>
