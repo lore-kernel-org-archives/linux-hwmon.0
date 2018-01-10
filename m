@@ -1,16 +1,16 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-ot0-f196.google.com ([74.125.82.196]:34988 "EHLO
+Received: from mail-ot0-f196.google.com ([74.125.82.196]:38908 "EHLO
         mail-ot0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751407AbeAJMUQ (ORCPT
+        with ESMTP id S965535AbeAJM3k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Jan 2018 07:20:16 -0500
+        Wed, 10 Jan 2018 07:29:40 -0500
 MIME-Version: 1.0
-In-Reply-To: <20180109223126.13093-5-jae.hyun.yoo@linux.intel.com>
-References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com> <20180109223126.13093-5-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180109223126.13093-7-jae.hyun.yoo@linux.intel.com>
+References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com> <20180109223126.13093-7-jae.hyun.yoo@linux.intel.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 10 Jan 2018 13:20:15 +0100
-Message-ID: <CAK8P3a1qiD1sWj0oQ=WbvpEDhtcYbzCxjg7t1iPs45WamfUVgw@mail.gmail.com>
-Subject: Re: [PATCH linux dev-4.10 4/6] Documentation: dt-bindings: Add a
+Date: Wed, 10 Jan 2018 13:29:39 +0100
+Message-ID: <CAK8P3a31+9HGQ=fQby5Zi1RZ671hKraZP_2ggLTMX3qvOiTx0w@mail.gmail.com>
+Subject: Re: [PATCH linux dev-4.10 6/6] drivers/hwmon: Add a driver for a
  generic PECI hwmon
 To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc: Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
@@ -28,59 +28,33 @@ List-Id: linux-hwmon@vger.kernel.org
 
 On Tue, Jan 9, 2018 at 11:31 PM, Jae Hyun Yoo
 <jae.hyun.yoo@linux.intel.com> wrote:
-> This commit add a dt-bindings document for a generic PECI hwmon
-> driver.
+> This commit adds driver implementation for a generic PECI hwmon.
 >
 > Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> ---
->  .../devicetree/bindings/hwmon/peci-hwmon.txt       | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt b/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
-> new file mode 100644
-> index 0000000..20b86f5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
-> @@ -0,0 +1,33 @@
-> +* Generic PECI (Platform Environment Control Interface) hwmon driver.
+
+> +static int xfer_peci_msg(int cmd, void *pmsg)
+> +{
+> +       int rc;
 > +
-> +Dependency:
-> +- This driver uses a PECI misc driver as a controller interface so one of PECI
-> +  misc drivers which provides compatible ioctls has to be enabled.
-
-The binding should only explain how we describe the hardware in an
-operating-system
-independent way, but not talk about how an OS is supposed to implement those
-drivers.
-
-Having multiple drivers each provide an exported function is not possible
-in Linux: it immediately breaks building an 'allyesconfig' kernel, and prevents
-you from running the same kernel across multiple implementations, so that
-has to be redesigned anyway.
-
-> +Required properties:
-> +- compatible: "peci-hwmon"
-> +- cpu-id: Should contain CPU socket ID
-> +       - 0 ~ 7
+> +       mutex_lock(&peci_hwmon_lock);
+> +       rc = peci_ioctl(NULL, cmd, (unsigned long)pmsg);
+> +       mutex_unlock(&peci_hwmon_lock);
 > +
-> +Optional properties:
-> +- show-core: If this protperty is defined, core tmeperature attrubites will be
+> +       return rc;
+> +}
 
-s/protperty/property/
-s/tmeperature/temperature/
-s/attrubites/attributes/
+I said earlier that peci_ioctl() looked unused, that was obviously
+wrong, but what you have here
+is not a proper way to abstract a bus.
 
-> +            enumerated.
-> +- dimm-nums: Should contain the number of DIMM slots that attached to each CPU
-> +            which is indicated by cpu-id.
-> +       0 ~ 16 (default: 16)
-> +            In case of 0, DIMM temperature attrubites will not be enumerated.
+Maybe this can be done more like an i2c bus: make the peci controller
+a bus device
+and register all known target/index pairs as devices with the peci bus
+type, and have
+them probed from DT. The driver can then bind to each of those individually.
+Not sure if that is getting to granular at that point, I'd have to
+understand better
+how it is expected to get used, and what the variances are between
+implementations.
 
-Is this only an initial list that you expect to be extended in the
-future, or is this
-a complete list of sensors that can ever be connected to PECI?
-
-Should this be PECI version specific?
-
-      Arnd
+       Arnd
