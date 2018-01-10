@@ -1,52 +1,84 @@
-Return-Path: <jae.hyun.yoo@linux.intel.com>
-Return-path: <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH linux dev-4.10 3/6] drivers/misc: Add driver for Aspeed
- PECI and generic PECI headers
-To: Greg KH <gregkh@linuxfoundation.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail.linuxfoundation.org ([140.211.169.12]:33040 "EHLO
+        mail.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751486AbeAJU1k (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Jan 2018 15:27:40 -0500
+Date: Wed, 10 Jan 2018 21:27:40 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de, jdelvare@suse.com,
- linux@roeck-us.net, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        openbmc@lists.ozlabs.org, Jae Hyun Yoo <jae.hyun.yoo@intel.com>
+Subject: Re: [PATCH linux dev-4.10 0/6] Add support PECI and PECI hwmon
+ drivers
+Message-ID: <20180110202740.GA27703@kroah.com>
 References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
- <20180109223126.13093-4-jae.hyun.yoo@linux.intel.com>
- <20180110102011.GC5822@kroah.com>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <d0977a2f-485c-f425-0a3b-7a20d0292273@linux.intel.com>
-Date: Wed, 10 Jan 2018 11:34:54 -0800
+ <20180110101755.GA5822@kroah.com>
+ <006c4a95-9299-bd17-6dec-52578e8461ae@linux.intel.com>
+ <20180110191703.GA20248@kroah.com>
+ <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20180110102011.GC5822@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 1/10/2018 2:20 AM, Greg KH wrote:
-> On Tue, Jan 09, 2018 at 02:31:23PM -0800, Jae Hyun Yoo wrote:
->> +#pragma pack(push, 1)
->> +struct peci_xfer_msg {
->> +	unsigned char client_addr;
->> +	unsigned char tx_len;
->> +	unsigned char rx_len;
->> +	unsigned char tx_buf[MAX_BUFFER_SIZE];
->> +	unsigned char rx_buf[MAX_BUFFER_SIZE];
->> +};
->> +#pragma pack(pop)
+On Wed, Jan 10, 2018 at 11:30:05AM -0800, Jae Hyun Yoo wrote:
+> On 1/10/2018 11:17 AM, Greg KH wrote:
+> > On Wed, Jan 10, 2018 at 11:14:34AM -0800, Jae Hyun Yoo wrote:
+> > > On 1/10/2018 2:17 AM, Greg KH wrote:
+> > > > On Tue, Jan 09, 2018 at 02:31:20PM -0800, Jae Hyun Yoo wrote:
+> > > > > From: Jae Hyun Yoo <jae.hyun.yoo@intel.com>
+> > > > > 
+> > > > > Hello,
+> > > > > 
+> > > > > This patch set provides support for PECI of AST2400/2500 which can give us PECI
+> > > > > functionalities such as temperature monitoring, platform manageability,
+> > > > > processor diagnostics and failure analysis. Also provides generic peci.h and
+> > > > > peci_ioctl.h headers to provide compatibility to peci drivers that can be
+> > > > > implemented later e.g. Nuvoton's BMC SoC family.
+> > > > 
+> > > > What is the "dev-4.10" in the subject for?  4.10 is really old and
+> > > > obsolete :(
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > > 
+> > > 
+> > > I made this patch set on top of the v4.10 which OpenBmc project is currently
+> > > using. I'll rebase this patch set onto the current kernel.org mainline.
+> > 
+> > What is "OpenBmc", and why are they using an obsolete and insecure
+> > kernel for their project?  That seems like a very foolish thing to do...
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
 > 
-> For any structure that crosses the user/kernel boundry, you _HAVE_ to
-> use the "__" variant.  So for here you would use __u8 instead of
-> "unsigned char" in order for things to work properly.
+> OpenBmc is an open source project to create a highly extensible framework
+> for BMC (Board Management Controller) software for data-center computer
+> systems:
+> https://github.com/openbmc
 > 
-> I'm guessing you didn't test this all out on a mixed 32/64 bit system?
-> 
-> Please fix up and test to ensure that it all works properly before
-> resubmitting.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Its current mainline is v4.10 but it is being kept upgrading so it will be
+> upgraded to the latest stable or long-term version soon.
 
-Thanks for your pointing it out. I'll fix this.
+Why hasn't it been updated in the year since 4.10 was released?  That's
+a _very_ long time to be running on a totally insecure kernel, and no
+new development should ever be done on old kernels, that's even crazier
+(as we can't go back in time and accept patches for new features to old
+releases...)
 
-Thanks a lot,
-Jae
+It sounds like the openbmc project needs to learn how to manage their
+kernels a whole lot better, who do I need to go poke about this?
+
+thanks,
+
+greg k-h
