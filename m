@@ -1,17 +1,17 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f67.google.com ([209.85.218.67]:40913 "EHLO
-        mail-oi0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934216AbeAJLzf (ORCPT
+Received: from mail-ot0-f196.google.com ([74.125.82.196]:34988 "EHLO
+        mail-ot0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751407AbeAJMUQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Jan 2018 06:55:35 -0500
+        Wed, 10 Jan 2018 07:20:16 -0500
 MIME-Version: 1.0
-In-Reply-To: <20180109223126.13093-4-jae.hyun.yoo@linux.intel.com>
-References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com> <20180109223126.13093-4-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180109223126.13093-5-jae.hyun.yoo@linux.intel.com>
+References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com> <20180109223126.13093-5-jae.hyun.yoo@linux.intel.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 10 Jan 2018 12:55:33 +0100
-Message-ID: <CAK8P3a3MaSEYnwk2_OadBSyKnBiwXsHw_RocvPDqL6oea9MuJA@mail.gmail.com>
-Subject: Re: [PATCH linux dev-4.10 3/6] drivers/misc: Add driver for Aspeed
- PECI and generic PECI headers
+Date: Wed, 10 Jan 2018 13:20:15 +0100
+Message-ID: <CAK8P3a1qiD1sWj0oQ=WbvpEDhtcYbzCxjg7t1iPs45WamfUVgw@mail.gmail.com>
+Subject: Re: [PATCH linux dev-4.10 4/6] Documentation: dt-bindings: Add a
+ generic PECI hwmon
 To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc: Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         gregkh <gregkh@linuxfoundation.org>,
@@ -28,291 +28,59 @@ List-Id: linux-hwmon@vger.kernel.org
 
 On Tue, Jan 9, 2018 at 11:31 PM, Jae Hyun Yoo
 <jae.hyun.yoo@linux.intel.com> wrote:
-> This commit adds driver implementation for Aspeed PECI. Also adds
-> generic peci.h and peci_ioctl.h files to provide compatibility
-> to peci drivers that can be implemented later e.g. Nuvoton's BMC
-> SoC family.
+> This commit add a dt-bindings document for a generic PECI hwmon
+> driver.
 >
 > Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-
-> +#include <linux/clk.h>
-> +#include <linux/crc8.h>
-> +#include <linux/delay.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/peci_ioctl.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/semaphore.h>
-> +#include <linux/types.h>
-> +#include <linux/uaccess.h>
-
-semaphore.h is not used here and can be dropped.
-
-> +static struct aspeed_peci *aspeed_peci_priv;
-
-Try to avoid instance variables like this one. You should always be able to find
-that pointer from whatever structure you were called with.
-
-
-> +       timeout = wait_for_completion_interruptible_timeout(
-> +                                       &priv->xfer_complete,
-> +                                       msecs_to_jiffies(priv->cmd_timeout_ms));
-> +
-> +       dev_dbg(priv->dev, "INT_STS : 0x%08x\n", priv->sts);
-> +       if (!regmap_read(priv->regmap, AST_PECI_CMD, &peci_state))
-> +               dev_dbg(priv->dev, "PECI_STATE : 0x%lx\n",
-> +                       PECI_CMD_STS_GET(peci_state));
-> +       else
-> +               dev_dbg(priv->dev, "PECI_STATE : read error\n");
-> +
-> +       if (timeout <= 0 || !(priv->sts & PECI_INT_CMD_DONE)) {
-> +               if (timeout <= 0) {
-> +                       dev_dbg(priv->dev, "Timeout waiting for a response!\n");
-> +                       rc = -ETIME;
-> +               } else {
-> +                       dev_dbg(priv->dev, "No valid response!\n");
-> +                       rc = -EFAULT;
-> +               }
-> +               return rc;
-> +       }
-
-You don't seem to handle -ERESTARTSYS correct here. Either do it
-right, or drop the _interruptible part above.
-
-> +typedef int (*ioctl_fn)(struct aspeed_peci *, void *);
-> +
-> +static ioctl_fn peci_ioctl_fn[PECI_CMD_MAX] = {
-> +       ioctl_xfer_msg,
-> +       ioctl_ping,
-> +       ioctl_get_dib,
-> +       ioctl_get_temp,
-> +       ioctl_rd_pkg_cfg,
-> +       ioctl_wr_pkg_cfg,
-> +       ioctl_rd_ia_msr,
-> +       NULL, /* Reserved */
-> +       ioctl_rd_pci_cfg,
-> +       NULL, /* Reserved */
-> +       ioctl_rd_pci_cfg_local,
-> +       ioctl_wr_pci_cfg_local,
-> +};
-> +
-> +
-> +long peci_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> +{
-> +       struct aspeed_peci *priv;
-> +       long ret = 0;
-> +       void __user *argp = (void __user *)arg;
-> +       int timeout = PECI_IDLE_CHECK_TIMEOUT;
-> +       u8 msg[sizeof(struct peci_xfer_msg)];
-> +       unsigned int peci_cmd, msg_size;
-> +       u32 cmd_sts;
-> +
-> +       /*
-> +        * Treat it as an inter module call when filp is null but only in case
-> +        * the private data is initialized.
-> +        */
-> +       if (filp)
-> +               priv = container_of(filp->private_data,
-> +                                   struct aspeed_peci, miscdev);
-> +       else
-> +               priv = aspeed_peci_priv;
-
-Drop this.
-
-> +       if (!priv)
-> +               return -ENXIO;
-> +
-> +       switch (cmd) {
-> +       case PECI_IOC_XFER:
-> +       case PECI_IOC_PING:
-> +       case PECI_IOC_GET_DIB:
-> +       case PECI_IOC_GET_TEMP:
-> +       case PECI_IOC_RD_PKG_CFG:
-> +       case PECI_IOC_WR_PKG_CFG:
-> +       case PECI_IOC_RD_IA_MSR:
-> +       case PECI_IOC_RD_PCI_CFG:
-> +       case PECI_IOC_RD_PCI_CFG_LOCAL:
-> +       case PECI_IOC_WR_PCI_CFG_LOCAL:
-> +               peci_cmd = _IOC_TYPE(cmd) - PECI_IOC_BASE;
-> +               msg_size = _IOC_SIZE(cmd);
-> +               break;
-
-Having to keep the switch() statement and the array above seems a
-little fragile. Can you just do one or the other?
-
-Regarding the command set, you have both a low-level PECI_IOC_XFER
-interface and a high-level interface. Can you explain why? I'd think that
-generally speaking it's better to have only one of the two.
-
-> +       /* Check command sts and bus idle state */
-> +       while (!regmap_read(priv->regmap, AST_PECI_CMD, &cmd_sts)
-> +              && (cmd_sts & (PECI_CMD_STS_MASK | PECI_CMD_PIN_MON))) {
-> +               if (timeout-- < 0) {
-> +                       dev_dbg(priv->dev, "Timeout waiting for idle state!\n");
-> +                       ret = -ETIME;
-> +                       goto out;
-> +               }
-> +               usleep_range(10000, 11000);
-> +       };
-
-To implement timeout, it's better to replace the counter with a
-jiffies/time_before or ktime_get()/ktime_before() check, since usleep_range()
-is might sleep considerably longer than expected.
-
-> +EXPORT_SYMBOL_GPL(peci_ioctl);
-
-No user of this, so drop it.
-
-> +static int aspeed_peci_open(struct inode *inode, struct file *filp)
-> +{
-> +       struct aspeed_peci *priv =
-> +               container_of(filp->private_data, struct aspeed_peci, miscdev);
-> +
-> +       atomic_inc(&priv->ref_count);
-> +
-> +       dev_dbg(priv->dev, "ref_count : %d\n", atomic_read(&priv->ref_count));
-> +
-> +       return 0;
-> +}
-> +
-> +static int aspeed_peci_release(struct inode *inode, struct file *filp)
-> +{
-> +       struct aspeed_peci *priv =
-> +               container_of(filp->private_data, struct aspeed_peci, miscdev);
-> +
-> +       atomic_dec(&priv->ref_count);
-> +
-> +       dev_dbg(priv->dev, "ref_count : %d\n", atomic_read(&priv->ref_count));
-> +
-> +       return 0;
-> +}
-
-Nothing uses that reference count, drop it.
-
+> ---
+>  .../devicetree/bindings/hwmon/peci-hwmon.txt       | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt b/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
 > new file mode 100644
-> index 0000000..66322c6
+> index 0000000..20b86f5
 > --- /dev/null
-> +++ b/include/misc/peci.h
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2017 Intel Corporation
+> +++ b/Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
+> @@ -0,0 +1,33 @@
+> +* Generic PECI (Platform Environment Control Interface) hwmon driver.
 > +
-> +#ifndef __PECI_H
-> +#define __PECI_H
-> +
-> +#include <linux/peci_ioctl.h>
-> +
-> +long peci_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
-> +
-> +#endif /* __PECI_H */
+> +Dependency:
+> +- This driver uses a PECI misc driver as a controller interface so one of PECI
+> +  misc drivers which provides compatible ioctls has to be enabled.
 
-Not used anywhere.
+The binding should only explain how we describe the hardware in an
+operating-system
+independent way, but not talk about how an OS is supposed to implement those
+drivers.
 
-> diff --git a/include/uapi/linux/peci_ioctl.h b/include/uapi/linux/peci_ioctl.h
-> new file mode 100644
-> index 0000000..8386848
-> --- /dev/null
-> +++ b/include/uapi/linux/peci_ioctl.h
-> @@ -0,0 +1,270 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2017 Intel Corporation
-> +
-> +#ifndef __PECI_IOCTL_H
-> +#define __PECI_IOCTL_H
-> +
-> +#include <linux/ioctl.h>
-> +
-> +/* Base Address of 48d */
-> +#define PECI_BASE_ADDR  0x30  /* The PECI client's default address of 0x30 */
-> +#define PECI_OFFSET_MAX 8     /* Max numver of CPU clients */
-> +
-> +/* PCI Access */
-> +#define MAX_PCI_READ_LEN 24  /* Number of bytes of the PCI Space read */
-> +
-> +#define PCI_BUS0_CPU0      0x00
-> +#define PCI_BUS0_CPU1      0x80
-> +#define PCI_CPUBUSNO_BUS   0x00
-> +#define PCI_CPUBUSNO_DEV   0x08
-> +#define PCI_CPUBUSNO_FUNC  0x02
-> +#define PCI_CPUBUSNO       0xcc
-> +#define PCI_CPUBUSNO_1     0xd0
-> +#define PCI_CPUBUSNO_VALID 0xd4
+Having multiple drivers each provide an exported function is not possible
+in Linux: it immediately breaks building an 'allyesconfig' kernel, and prevents
+you from running the same kernel across multiple implementations, so that
+has to be redesigned anyway.
 
-I can't tell for sure, but this file seems to be mixing the kernel API with
-hardware specific macros that are not needed in user space. Can you move
-some of this file into the driver itself?
-
-This might go back to the previous question about the high-level and
-low-level interfaces: if you can drop the low-level ioctl interface, more
-of this header can become private to the driver.
-
-> +/* Package Identifier Read Parameter Value */
-> +#define PKG_ID_CPU_ID               0x0000  /* 0 - CPUID Info */
-> +#define PKG_ID_PLATFORM_ID          0x0001  /* 1 - Platform ID */
-> +#define PKG_ID_UNCORE_ID            0x0002  /* 2 - Uncore Device ID */
-> +#define PKG_ID_MAX_THREAD_ID        0x0003  /* 3 - Max Thread ID */
-> +#define PKG_ID_MICROCODE_REV        0x0004  /* 4 - CPU Microcode Update Revision */
-> +#define PKG_ID_MACHINE_CHECK_STATUS 0x0005  /* 5 - Machine Check Status */
+> +Required properties:
+> +- compatible: "peci-hwmon"
+> +- cpu-id: Should contain CPU socket ID
+> +       - 0 ~ 7
 > +
-> +/* RdPkgConfig Index */
-> +#define MBX_INDEX_CPU_ID            0   /* Package Identifier Read */
-> +#define MBX_INDEX_VR_DEBUG          1   /* VR Debug */
-> +#define MBX_INDEX_PKG_TEMP_READ     2   /* Package Temperature Read */
-> +#define MBX_INDEX_ENERGY_COUNTER    3   /* Energy counter */
-> +#define MBX_INDEX_ENERGY_STATUS     4   /* DDR Energy Status */
-> +#define MBX_INDEX_WAKE_MODE_BIT     5   /* "Wake on PECI" Mode bit */
-> +#define MBX_INDEX_EPI               6   /* Efficient Performance Indication */
+> +Optional properties:
+> +- show-core: If this protperty is defined, core tmeperature attrubites will be
 
-Who defines these constants? Are they specific to the aspeed BMC, to the HECI
-protocol, or to a particular version of the remote endpoint?
+s/protperty/property/
+s/tmeperature/temperature/
+s/attrubites/attributes/
 
-> +#pragma pack(push, 1)
-> +struct peci_xfer_msg {
-> +       unsigned char client_addr;
-> +       unsigned char tx_len;
-> +       unsigned char rx_len;
-> +       unsigned char tx_buf[MAX_BUFFER_SIZE];
-> +       unsigned char rx_buf[MAX_BUFFER_SIZE];
-> +};
-> +#pragma pack(pop)
-> +
-> +struct peci_ping_msg {
-> +       unsigned char target;
-> +};
-> +
-> +struct peci_get_dib_msg {
-> +       unsigned char target;
-> +       unsigned int  dib;
-> +};
-> +
-> +struct peci_get_temp_msg {
-> +       unsigned char target;
-> +       signed short  temp_raw;
-> +};
+> +            enumerated.
+> +- dimm-nums: Should contain the number of DIMM slots that attached to each CPU
+> +            which is indicated by cpu-id.
+> +       0 ~ 16 (default: 16)
+> +            In case of 0, DIMM temperature attrubites will not be enumerated.
 
-Aside from what Greg already said about the types, please be careful to
-also avoid implicit padding in the API data structures, including the end of the
-structure.
+Is this only an initial list that you expect to be extended in the
+future, or is this
+a complete list of sensors that can ever be connected to PECI?
 
-> +#define PECI_IOC_RD_PCI_CFG \
-> +       _IOWR(PECI_IOC_BASE + PECI_CMD_RD_PCI_CFG, 0, \
-> +               struct peci_rd_pci_cfg_msg)
-> +
-> +#define PECI_IOC_RD_PCI_CFG_LOCAL \
-> +       _IOWR(PECI_IOC_BASE + PECI_CMD_RD_PCI_CFG_LOCAL, 0, \
-> +               struct peci_rd_pci_cfg_local_msg)
-> +
-> +#define PECI_IOC_WR_PCI_CFG_LOCAL \
-> +       _IOWR(PECI_IOC_BASE + PECI_CMD_WR_PCI_CFG_LOCAL, 0, \
-> +               struct peci_wr_pci_cfg_local_msg)
+Should this be PECI version specific?
 
-Can you give some background on what these do? In particular, who
-is configuring whose PCI devices?
-
-        Arnd
+      Arnd
