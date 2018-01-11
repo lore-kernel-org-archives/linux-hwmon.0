@@ -1,116 +1,41 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:33000 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932472AbeAKVki (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Jan 2018 16:40:38 -0500
-Date: Thu, 11 Jan 2018 13:40:35 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
+Return-Path: <andrew@lunn.ch>
+Return-path: <andrew@lunn.ch>
+Date: Thu, 11 Jan 2018 23:18:45 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	jdelvare@suse.com, arnd@arndb.de, linux-doc@vger.kernel.org,
+	andrew@aj.id.au, gregkh@linuxfoundation.org,
+	openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	joel@jms.id.au, linux-arm-kernel@lists.infradead.org
 Subject: Re: [linux, dev-4.10, 6/6] drivers/hwmon: Add a driver for a generic
  PECI hwmon
-Message-ID: <20180111214035.GA14748@roeck-us.net>
+Message-ID: <20180111221845.GA9278@lunn.ch>
 References: <20180109223126.13093-7-jae.hyun.yoo@linux.intel.com>
  <20180110214747.GA25248@roeck-us.net>
  <261ac28e-813c-a058-c81f-ad4e718d0233@linux.intel.com>
+ <20180111214035.GA14748@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <261ac28e-813c-a058-c81f-ad4e718d0233@linux.intel.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20180111214035.GA14748@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Jan 11, 2018 at 11:47:01AM -0800, Jae Hyun Yoo wrote:
-> On 1/10/2018 1:47 PM, Guenter Roeck wrote:
-> >On Tue, Jan 09, 2018 at 02:31:26PM -0800, Jae Hyun Yoo wrote:
-> >>This commit adds driver implementation for a generic PECI hwmon.
-> >>
-> >>Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> > >>+static const struct of_device_id peci_of_table[] = {
+> > >>+	{ .compatible = "peci-hwmon", },
+> > >
+> > >This does not look like a reference to some piece of hardware.
+> > >
+> > 
+> > This driver provides generic PECI hwmon function to which controller has
+> > PECI HW such as Aspeed or Nuvoton BMC chip so it's not dependant on a
+> > specific hardware. Should I remove this or any suggestion?
 
-[ ... ]
+PECI seems to be an Intel thing. So at least it should be
 
-> >>+
-> >>+	if (priv->temp.tcontrol.valid &&
-> >>+	    time_before(jiffies, priv->temp.tcontrol.last_updated +
-> >>+				 UPDATE_INTERVAL_MIN))
-> >>+		return 0;
-> >>+
-> >
-> >Is the delay necessary ? Otherwise I would suggest to drop it.
-> >It adds a lot of complexity to the driver. Also, if the user polls
-> >values more often, that is presumably on purpose.
-> >
-> 
-> I was intended to reduce traffic on PECI bus because it's low speed single
-> wired bus, and temperature values don't change frequently because the value
-> is sampled and averaged in CPU itself. I'll keep this.
-> 
-Then please try to move the common code into a single function.
+ { .compatible = "intel,peci-hwmon", }
 
-[ ... ]
+assuming it is actually compatible with the Intel specification.
 
-> >>+
-> >>+	rc = of_property_read_u32(np, "cpu-id", &priv->cpu_id);
-> >
-> >What entity determines cpu-id ?
-> >
-> 
-> CPU ID numbering is determined by hardware SOCKET_ID strap pins. In this
-> driver implementation, cpu-id is being used as CPU client indexing.
-> 
-Seems to me the necessary information to identify a given CPU should
-be provided by the PECI core. Also, there are already "cpu" nodes
-in devicetree which, if I recall correctly, may include information
-such as CPU Ids.
-
-> >>+	if (rc || priv->cpu_id >= CPU_ID_MAX) {
-> >>+		dev_err(dev, "Invalid cpu-id configuration\n");
-> >>+		return rc;
-> >>+	}
-> >>+
-> >>+	rc = of_property_read_u32(np, "dimm-nums", &priv->dimm_nums);
-> >
-> >This is an odd devicetree attribute. Normally the number of DIMMs
-> >is dynamic. Isn't there a means to get all that information dynamically
-> >instead of having to set it through devicetree ? What if someone adds
-> >or removes a DIMM ? Who updates the devicetree ?
-> >
-> 
-> It means the number of DIMM slots each CPU has, doesn't mean the number of
-> currently installed DIMM components. If a DIMM is inserted a slot, CPU
-> reports its actual temperature but on empty slot, CPU reports 0 instead of
-> reporting an error so it is the reason why this driver enumerates all DIMM
-> slots' attribute.
-> 
-And there is no other means to get the number of DIMM slots per CPU ?
-It just seems to be that this is the wrong location to provide such
-information.
-
-[ ... ]
-
-> >>+
-> >>+static const struct of_device_id peci_of_table[] = {
-> >>+	{ .compatible = "peci-hwmon", },
-> >
-> >This does not look like a reference to some piece of hardware.
-> >
-> 
-> This driver provides generic PECI hwmon function to which controller has
-> PECI HW such as Aspeed or Nuvoton BMC chip so it's not dependant on a
-> specific hardware. Should I remove this or any suggestion?
-> 
-
-I don't really know enough about the system to make a recommendation.
-It seems to me that the PECI core should identify which functionality
-it supports and instantiate the necessary driver(s). Maybe there should
-be sub-nodes to the peci node with relevant information. Those sub-nodes
-should specify the supported functionality in more detail, though -
-such as indicating the supported CPU and/or DIMM sensors.
-
-Guenter
+	 Andrew
