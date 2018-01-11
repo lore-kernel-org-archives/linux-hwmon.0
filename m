@@ -1,44 +1,116 @@
-Return-Path: <benh@kernel.crashing.org>
-Return-path: <benh@kernel.crashing.org>
-Message-ID: <1515703795.31850.45.camel@kernel.crashing.org>
-Subject: Re: [PATCH linux dev-4.10 0/6] Add support PECI and PECI hwmon
- drivers
-From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Jae Hyun Yoo
-	 <jae.hyun.yoo@linux.intel.com>, jdelvare@suse.com,
-        arnd@arndb.de, linux-doc@vger.kernel.org, andrew@aj.id.au,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Jae Hyun Yoo <jae.hyun.yoo@intel.com>, linux@roeck-us.net,
-        linux-arm-kernel@lists.infradead.org
-Date: Fri, 12 Jan 2018 07:49:55 +1100
-In-Reply-To: <20180111095923.GA29233@kroah.com>
-References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
-	 <20180110101755.GA5822@kroah.com>
-	 <006c4a95-9299-bd17-6dec-52578e8461ae@linux.intel.com>
-	 <20180110191703.GA20248@kroah.com>
-	 <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
-	 <20180110202740.GA27703@kroah.com>
-	 <e81095ff-d491-9977-25e6-7ba6d28d5e72@linux.intel.com>
-	 <20180111073038.GA3600@kroah.com> <1515661011.31850.27.camel@au1.ibm.com>
-	 <20180111095923.GA29233@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf0-f193.google.com ([209.85.192.193]:33000 "EHLO
+        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932472AbeAKVki (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Jan 2018 16:40:38 -0500
+Date: Thu, 11 Jan 2018 13:40:35 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
+Subject: Re: [linux, dev-4.10, 6/6] drivers/hwmon: Add a driver for a generic
+ PECI hwmon
+Message-ID: <20180111214035.GA14748@roeck-us.net>
+References: <20180109223126.13093-7-jae.hyun.yoo@linux.intel.com>
+ <20180110214747.GA25248@roeck-us.net>
+ <261ac28e-813c-a058-c81f-ad4e718d0233@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <261ac28e-813c-a058-c81f-ad4e718d0233@linux.intel.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, 2018-01-11 at 10:59 +0100, Greg KH wrote:
-> And, if you use it in a device, it's still totally unsupported and
-> insecure.  Seriously, does no one actually pay attention to the patches
-> I merge in the stable trees anymore?
+On Thu, Jan 11, 2018 at 11:47:01AM -0800, Jae Hyun Yoo wrote:
+> On 1/10/2018 1:47 PM, Guenter Roeck wrote:
+> >On Tue, Jan 09, 2018 at 02:31:26PM -0800, Jae Hyun Yoo wrote:
+> >>This commit adds driver implementation for a generic PECI hwmon.
+> >>
+> >>Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 
-Yeah not sure why we aren't picking an LTC here, it could be that it's
-just a dev branch, not release, Joel, what's the process in that case ?
+[ ... ]
 
-For anything going into products, if we're going to maintain a non-
-upstream branch, we should definitely stick it to an LTS release or
-we'll be missing a ton of security fixes.
+> >>+
+> >>+	if (priv->temp.tcontrol.valid &&
+> >>+	    time_before(jiffies, priv->temp.tcontrol.last_updated +
+> >>+				 UPDATE_INTERVAL_MIN))
+> >>+		return 0;
+> >>+
+> >
+> >Is the delay necessary ? Otherwise I would suggest to drop it.
+> >It adds a lot of complexity to the driver. Also, if the user polls
+> >values more often, that is presumably on purpose.
+> >
+> 
+> I was intended to reduce traffic on PECI bus because it's low speed single
+> wired bus, and temperature values don't change frequently because the value
+> is sampled and averaged in CPU itself. I'll keep this.
+> 
+Then please try to move the common code into a single function.
 
-Cheers,
-Ben.
+[ ... ]
+
+> >>+
+> >>+	rc = of_property_read_u32(np, "cpu-id", &priv->cpu_id);
+> >
+> >What entity determines cpu-id ?
+> >
+> 
+> CPU ID numbering is determined by hardware SOCKET_ID strap pins. In this
+> driver implementation, cpu-id is being used as CPU client indexing.
+> 
+Seems to me the necessary information to identify a given CPU should
+be provided by the PECI core. Also, there are already "cpu" nodes
+in devicetree which, if I recall correctly, may include information
+such as CPU Ids.
+
+> >>+	if (rc || priv->cpu_id >= CPU_ID_MAX) {
+> >>+		dev_err(dev, "Invalid cpu-id configuration\n");
+> >>+		return rc;
+> >>+	}
+> >>+
+> >>+	rc = of_property_read_u32(np, "dimm-nums", &priv->dimm_nums);
+> >
+> >This is an odd devicetree attribute. Normally the number of DIMMs
+> >is dynamic. Isn't there a means to get all that information dynamically
+> >instead of having to set it through devicetree ? What if someone adds
+> >or removes a DIMM ? Who updates the devicetree ?
+> >
+> 
+> It means the number of DIMM slots each CPU has, doesn't mean the number of
+> currently installed DIMM components. If a DIMM is inserted a slot, CPU
+> reports its actual temperature but on empty slot, CPU reports 0 instead of
+> reporting an error so it is the reason why this driver enumerates all DIMM
+> slots' attribute.
+> 
+And there is no other means to get the number of DIMM slots per CPU ?
+It just seems to be that this is the wrong location to provide such
+information.
+
+[ ... ]
+
+> >>+
+> >>+static const struct of_device_id peci_of_table[] = {
+> >>+	{ .compatible = "peci-hwmon", },
+> >
+> >This does not look like a reference to some piece of hardware.
+> >
+> 
+> This driver provides generic PECI hwmon function to which controller has
+> PECI HW such as Aspeed or Nuvoton BMC chip so it's not dependant on a
+> specific hardware. Should I remove this or any suggestion?
+> 
+
+I don't really know enough about the system to make a recommendation.
+It seems to me that the PECI core should identify which functionality
+it supports and instantiate the necessary driver(s). Maybe there should
+be sub-nodes to the peci node with relevant information. Those sub-nodes
+should specify the supported functionality in more detail, though -
+such as indicating the supported CPU and/or DIMM sensors.
+
+Guenter
