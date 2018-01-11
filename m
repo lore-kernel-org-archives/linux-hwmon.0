@@ -1,116 +1,87 @@
-Return-Path: <gregkh@linuxfoundation.org>
-Return-path: <gregkh@linuxfoundation.org>
-Date: Thu, 11 Jan 2018 09:41:28 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-	Andrew Jeffery <andrew@aj.id.au>, Arnd Bergmann <arnd@arndb.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-doc@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-	Jae Hyun Yoo <jae.hyun.yoo@intel.com>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Jeremy Kerr <jk@ozlabs.org>
+Return-Path: <benh@au1.ibm.com>
+Return-path: <benh@au1.ibm.com>
 Subject: Re: [PATCH linux dev-4.10 0/6] Add support PECI and PECI hwmon
  drivers
-Message-ID: <20180111084128.GA16780@kroah.com>
+From: Benjamin Herrenschmidt <benh@au1.ibm.com>
+Reply-To: benh@au1.ibm.com
+To: Greg KH <gregkh@linuxfoundation.org>,
+        Jae Hyun Yoo
+	 <jae.hyun.yoo@linux.intel.com>
+Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de, jdelvare@suse.com,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        openbmc@lists.ozlabs.org, Jae Hyun Yoo <jae.hyun.yoo@intel.com>
+Date: Thu, 11 Jan 2018 19:56:51 +1100
+In-Reply-To: <20180111073038.GA3600@kroah.com>
 References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
- <20180110101755.GA5822@kroah.com>
- <006c4a95-9299-bd17-6dec-52578e8461ae@linux.intel.com>
- <20180110191703.GA20248@kroah.com>
- <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
- <20180110202740.GA27703@kroah.com>
- <e81095ff-d491-9977-25e6-7ba6d28d5e72@linux.intel.com>
- <20180111073038.GA3600@kroah.com>
- <CACPK8Xe9Jti8S2px=QOcSMA2v+TZ4eGDGQND4qmBUBXeBpsBZQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8Xe9Jti8S2px=QOcSMA2v+TZ4eGDGQND4qmBUBXeBpsBZQ@mail.gmail.com>
+	 <20180110101755.GA5822@kroah.com>
+	 <006c4a95-9299-bd17-6dec-52578e8461ae@linux.intel.com>
+	 <20180110191703.GA20248@kroah.com>
+	 <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
+	 <20180110202740.GA27703@kroah.com>
+	 <e81095ff-d491-9977-25e6-7ba6d28d5e72@linux.intel.com>
+	 <20180111073038.GA3600@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Message-Id: <1515661011.31850.27.camel@au1.ibm.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Jan 11, 2018 at 12:28:48AM -0800, Joel Stanley wrote:
-> On Wed, Jan 10, 2018 at 11:30 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jan 10, 2018 at 01:46:34PM -0800, Jae Hyun Yoo wrote:
-> >> Thanks for your pointing it out and I totally agree with you. Actually, we
-> >> are preparing 4.13 update for now and an another update will be followed up.
-> >> As I answered above, I'll rebase this patch set onto the latest kernel.org
-> >> mainline. Sorry for my misunderstanding of upstream process.
-> >
-> > 4.13?  Why that kernel?  It too is obsolete and insecure and
-> > unsupported.
+On Thu, 2018-01-11 at 08:30 +0100, Greg KH wrote:
+> 4.13?  Why that kernel?  It too is obsolete and insecure and
+> unsupported.
+
+Haha, it's n-1. come on :-)
+
+
+> What keeps you all from just always tracking the latest tree from Linus?
+> What is in your tree that is not upstream that requires you to have a
+> kernel tree at all?
+
+There are a couple of ARM based SoC families for which we are in the
+process of rewriting all the driver in upstreamable form. This takes
+time.
+
+To respond to your other email about the USB CDC, it's mine, I haven't
+resubmited it yet because it had a dependency on some the aspeed clk
+driver to function properly (so is unusable without it) and it took 2
+kernel versions to get that clk stuff upstream for a number of reasons.
+
+So it's all getting upstream and eventually there will be (we hope) no
+"OpenBMC" kernel, it's just a way for us to get functional code with
+non-upstream-quality (read: vendor) drivers until we are one rewriting
+& upstreaming them all.
+
+> And if you do have out-of-tree code, why not use a process that makes it
+> trivial to update the base kernel version so that you can keep up to
+> date very easily?  (hint, just using 'git' is not a good way to do
+> this...)
+
+Joel and I both find git perfectly fine for that. I've not touched
+quilt in eons and frankly don't regret it ;-)
+
+That said, Jae should definitely submit a driver against upstream, not
+against some random OpenBMC tree.
+
+Jae, for example when I submitted the original USB stuff back then, I
+did it from a local upstream based branch (with just a few hacks to
+work around the lack of the clk stuff).
+
+I will rebase it in the next few days to upstream merged with Stephen's
+clk tree to get the finally merged clk stuff, verify it works, and
+submit patches against upstream.
+
+There should be no mention of dev-4.10 or 4.13 on lkml or other
+upstream submission lists. Development work should happen upstream
+*first* and eventually be backported to our older kernels while they
+exist (hopefully I prefer if we are more aggressive at forward porting
+the crappy drivers so we can keep our tree more up to date but that's a
+different discussion).
+
+Cheers,
+Ben.
+
+> thanks,
 > 
-> It contains support for our hardware that I have integrated from work
-> in progress patches and upstream commits.
-> 
-> The OpenBMC project, with myself as the kernel maintainer, have
-> intentions to regularly move to upstream releases. This takes time and
-> effort. This time and effort is balanced with submitting our drivers
-> upstream.
-
-Of course, but please do not have your "users" use a kernel that is
-known to have bugs and can not be supported.  That would not be good at
-all, don't you think?
-
-> > What keeps you all from just always tracking the latest tree from Linus?
-> 
-> Linus' tree does not contain all of the drivers required to boot
-> systems. Many of them are still under review on lkml, and others still
-> require rewrite from the vendor tree.
-
-Merging vendor trees into your tree has got to be a complicated mess.
-Why try to keep it all together in one place?
-
-And who is responsible for getting the vendor code upstream?  The
-individual drivers?  Individual driver submissions should be quite easy,
-what is preventing them from getting merged?
-
-> > What is in your tree that is not upstream that requires you to have a
-> > kernel tree at all?
-> 
-> We have PECI, video compression, crypto, USB CDC, DRM (graphics),
-> serial GPIO, LPC mailbox for the ASPEED SoC.
-
-What "USB CDC" do you have that is not upstream?  I'll pick on this one
-specifically as I don't think I've seen any patches recently submitted
-for that driver at all.  Am I just missing them?
-
-The other ones should also all be easy to get merged, with maybe the
-exception of the drm stuff due to the speed that subsystem moves at.
-But even there, the community is very helpful in getting stuff upstream,
-have you asked for help?
-
-> Another silicon vendor has recently joined the project and that brings
-> an entire SoC that is not upstream. We have patches on the ARM that
-> are under review for this SoC, with more drivers undergoing cleanup in
-> order to submit them to the relevant maintainers.
-
-Why are you merging all SoC trees together into one place?  That seems
-like a nightmare to manage, especially with git.
-
-> > And if you do have out-of-tree code, why not use a process that makes it
-> > trivial to update the base kernel version so that you can keep up to
-> > date very easily?  (hint, just using 'git' is not a good way to do
-> > this...)
-> 
-> We have a process that we've been developing under for the past few
-> years. I find git to be a great tool for managing Linux kernel trees.
-> 
-> What would you recommend for managing kernel trees?
-
-quilt is best for a tree that you can not rebase (i.e. a public git
-tree).  Otherwise you end up getting patches all mushed together and
-hard to extract in any simple way.
-
-Take a clue from the distros that have been managing kernels for decades
-and deal with an updated kernel all the time easily.
-
-Good luck, it sounds like you will need it :)
-
-thanks,
-
-greg k-h
+> greg k-h
