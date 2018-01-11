@@ -1,77 +1,97 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f196.google.com ([209.85.192.196]:35290 "EHLO
-        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932340AbeALBfk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Jan 2018 20:35:40 -0500
-Received: by mail-pf0-f196.google.com with SMTP id t12so3189391pfg.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jan 2018 17:35:40 -0800 (PST)
-Date: Thu, 11 Jan 2018 17:35:37 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: eajames@linux.vnet.ibm.com
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [hwmon:hwmon-next 23/23] drivers/hwmon/pmbus/ibm-cffps.c:330:
- undefined reference to `devm_of_led_classdev_register'
-Message-ID: <20180112013537.GB27166@roeck-us.net>
-References: <201801120800.899ckr4L%fengguang.wu@intel.com>
+Return-Path: <gregkh@linuxfoundation.org>
+Return-path: <gregkh@linuxfoundation.org>
+Date: Thu, 11 Jan 2018 08:30:38 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de, jdelvare@suse.com,
+	linux@roeck-us.net, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	openbmc@lists.ozlabs.org, Jae Hyun Yoo <jae.hyun.yoo@intel.com>
+Subject: Re: [PATCH linux dev-4.10 0/6] Add support PECI and PECI hwmon
+ drivers
+Message-ID: <20180111073038.GA3600@kroah.com>
+References: <20180109223126.13093-1-jae.hyun.yoo@linux.intel.com>
+ <20180110101755.GA5822@kroah.com>
+ <006c4a95-9299-bd17-6dec-52578e8461ae@linux.intel.com>
+ <20180110191703.GA20248@kroah.com>
+ <8997e43c-683e-418d-4e2b-1fe3fefe254e@linux.intel.com>
+ <20180110202740.GA27703@kroah.com>
+ <e81095ff-d491-9977-25e6-7ba6d28d5e72@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <201801120800.899ckr4L%fengguang.wu@intel.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <e81095ff-d491-9977-25e6-7ba6d28d5e72@linux.intel.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> head:   ef9e1cdf419a37065364edb47bd6dd9aee1bcb7d
-> commit: ef9e1cdf419a37065364edb47bd6dd9aee1bcb7d [23/23] hwmon: (pmbus/cffps) Add led class device for power supply fault led
-> config: x86_64-randconfig-s4-01120648 (attached as .config)
-> compiler: gcc-7 (Debian 7.2.0-12) 7.2.1 20171025
-> reproduce:
->         git checkout ef9e1cdf419a37065364edb47bd6dd9aee1bcb7d
->         # save the attached .config to linux build tree
->         make ARCH=x86_64 
+On Wed, Jan 10, 2018 at 01:46:34PM -0800, Jae Hyun Yoo wrote:
+> On 1/10/2018 12:27 PM, Greg KH wrote:
+> > On Wed, Jan 10, 2018 at 11:30:05AM -0800, Jae Hyun Yoo wrote:
+> > > On 1/10/2018 11:17 AM, Greg KH wrote:
+> > > > On Wed, Jan 10, 2018 at 11:14:34AM -0800, Jae Hyun Yoo wrote:
+> > > > > On 1/10/2018 2:17 AM, Greg KH wrote:
+> > > > > > On Tue, Jan 09, 2018 at 02:31:20PM -0800, Jae Hyun Yoo wrote:
+> > > > > > > From: Jae Hyun Yoo <jae.hyun.yoo@intel.com>
+> > > > > > > 
+> > > > > > > Hello,
+> > > > > > > 
+> > > > > > > This patch set provides support for PECI of AST2400/2500 which can give us PECI
+> > > > > > > functionalities such as temperature monitoring, platform manageability,
+> > > > > > > processor diagnostics and failure analysis. Also provides generic peci.h and
+> > > > > > > peci_ioctl.h headers to provide compatibility to peci drivers that can be
+> > > > > > > implemented later e.g. Nuvoton's BMC SoC family.
+> > > > > > 
+> > > > > > What is the "dev-4.10" in the subject for?  4.10 is really old and
+> > > > > > obsolete :(
+> > > > > > 
+> > > > > > thanks,
+> > > > > > 
+> > > > > > greg k-h
+> > > > > > 
+> > > > > 
+> > > > > I made this patch set on top of the v4.10 which OpenBmc project is currently
+> > > > > using. I'll rebase this patch set onto the current kernel.org mainline.
+> > > > 
+> > > > What is "OpenBmc", and why are they using an obsolete and insecure
+> > > > kernel for their project?  That seems like a very foolish thing to do...
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > > 
+> > > 
+> > > OpenBmc is an open source project to create a highly extensible framework
+> > > for BMC (Board Management Controller) software for data-center computer
+> > > systems:
+> > > https://github.com/openbmc
+> > > 
+> > > Its current mainline is v4.10 but it is being kept upgrading so it will be
+> > > upgraded to the latest stable or long-term version soon.
+> > 
+> > Why hasn't it been updated in the year since 4.10 was released?  That's
+> > a _very_ long time to be running on a totally insecure kernel, and no
+> > new development should ever be done on old kernels, that's even crazier
+> > (as we can't go back in time and accept patches for new features to old
+> > releases...)
+> > 
 > 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/hwmon/pmbus/ibm-cffps.o: In function `ibm_cffps_create_led_class':
-> >> drivers/hwmon/pmbus/ibm-cffps.c:330: undefined reference to `devm_of_led_classdev_register'
-> 
+> Thanks for your pointing it out and I totally agree with you. Actually, we
+> are preparing 4.13 update for now and an another update will be followed up.
+> As I answered above, I'll rebase this patch set onto the latest kernel.org
+> mainline. Sorry for my misunderstanding of upstream process.
 
-Looks like the driver now depends on LEDS_CLASS. This needs to be
-added to Kconfig, or you'll need to make ibm_cffps_create_led_class()
-conditional on LEDS_CLASS and provide a dummy function if LEDS_CLASS
-is not enabled.
+4.13?  Why that kernel?  It too is obsolete and insecure and
+unsupported.
 
-Either way is fine with me. Can you send me a patch ?
+What keeps you all from just always tracking the latest tree from Linus?
+What is in your tree that is not upstream that requires you to have a
+kernel tree at all?
 
-Guenter
+And if you do have out-of-tree code, why not use a process that makes it
+trivial to update the base kernel version so that you can keep up to
+date very easily?  (hint, just using 'git' is not a good way to do
+this...)
 
-On Fri, Jan 12, 2018 at 08:58:02AM +0800, kbuild test robot wrote:
-> vim +330 drivers/hwmon/pmbus/ibm-cffps.c
-> 
->    316	
->    317	static void ibm_cffps_create_led_class(struct ibm_cffps *psu)
->    318	{
->    319		int rc;
->    320		struct i2c_client *client = psu->client;
->    321		struct device *dev = &client->dev;
->    322	
->    323		snprintf(psu->led_name, sizeof(psu->led_name), "%s-%02x", client->name,
->    324			 client->addr);
->    325		psu->led.name = psu->led_name;
->    326		psu->led.max_brightness = LED_FULL;
->    327		psu->led.brightness_set = ibm_cffps_led_brightness_set;
->    328		psu->led.blink_set = ibm_cffps_led_blink_set;
->    329	
->  > 330		rc = devm_led_classdev_register(dev, &psu->led);
->    331		if (rc)
->    332			dev_warn(dev, "failed to register led class: %d\n", rc);
->    333	}
->    334	
-> 
-> ---
-> 0-DAY kernel test infrastructure                Open Source Technology Center
-> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+thanks,
 
-
+greg k-h
