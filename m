@@ -1,196 +1,43 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:35620 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751968AbeAKRjU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Jan 2018 12:39:20 -0500
-Date: Thu, 11 Jan 2018 09:39:16 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: eajames@linux.vnet.ibm.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, joel@jms.id.au
-Subject: Re: [v3] hwmon (pmbus): cffps: Add led class device for power supply
- fault led
-Message-ID: <20180111173916.GA9000@roeck-us.net>
-References: <1515691210-24402-1-git-send-email-eajames@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1515691210-24402-1-git-send-email-eajames@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <arnd@arndb.de>
+Return-path: <arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	"Edward A. James" <eajames@us.ibm.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: pmbus: ibm-cffps depends on LEDS_CLASS
+Date: Fri, 12 Jan 2018 16:49:00 +0100
+Message-Id: <20180112154926.3646202-1-arnd@arndb.de>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Jan 11, 2018 at 11:20:10AM -0600, eajames@linux.vnet.ibm.com wrote:
-> This power supply device doesn't correctly manage it's own fault led.
-> Add an led class device and register it so that userspace can manage
-> power supply fault led as necessary.
-> 
-> Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
+Building without CONFIG_LEDS_CLASS causes a link failure:
 
-Applied to hwmon-next.
+drivers/hwmon/pmbus/ibm-cffps.o: In function `ibm_cffps_probe':
+ibm-cffps.c:(.text+0x4f4): undefined reference to `devm_of_led_classdev_register'
 
-Thanks,
-Guenter
+This adds the required dependency.
 
-> ---
-> 
->  Changes since v2:
->  - Use fixed size buffer for led name.
-> 
->  Changes since v1:
->  - move led registration into a separate function.
->  - improve comments.
-> 
->  drivers/hwmon/pmbus/ibm-cffps.c | 96 +++++++++++++++++++++++++++++++++++++----
->  1 file changed, 88 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index 2d6f4f4..93d9a9e 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -13,6 +13,7 @@
->  #include <linux/fs.h>
->  #include <linux/i2c.h>
->  #include <linux/jiffies.h>
-> +#include <linux/leds.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/pmbus.h>
-> @@ -25,6 +26,7 @@
->  #define CFFPS_CCIN_CMD				0xBD
->  #define CFFPS_FW_CMD_START			0xFA
->  #define CFFPS_FW_NUM_BYTES			4
-> +#define CFFPS_SYS_CONFIG_CMD			0xDA
->  
->  #define CFFPS_INPUT_HISTORY_CMD			0xD6
->  #define CFFPS_INPUT_HISTORY_SIZE		100
-> @@ -39,6 +41,11 @@
->  #define CFFPS_MFR_VAUX_FAULT			BIT(6)
->  #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
->  
-> +#define CFFPS_LED_BLINK				BIT(0)
-> +#define CFFPS_LED_ON				BIT(1)
-> +#define CFFPS_LED_OFF				BIT(2)
-> +#define CFFPS_BLINK_RATE_MS			250
-> +
->  enum {
->  	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
->  	CFFPS_DEBUGFS_FRU,
-> @@ -63,6 +70,10 @@ struct ibm_cffps {
->  	struct ibm_cffps_input_history input_history;
->  
->  	int debugfs_entries[CFFPS_DEBUGFS_NUM_ENTRIES];
-> +
-> +	char led_name[32];
-> +	u8 led_state;
-> +	struct led_classdev led;
->  };
->  
->  #define to_psu(x, y) container_of((x), struct ibm_cffps, debugfs_entries[(y)])
-> @@ -258,6 +269,69 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
->  	return rc;
->  }
->  
-> +static void ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
-> +					 enum led_brightness brightness)
-> +{
-> +	int rc;
-> +	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
-> +
-> +	if (brightness == LED_OFF) {
-> +		psu->led_state = CFFPS_LED_OFF;
-> +	} else {
-> +		brightness = LED_FULL;
-> +		if (psu->led_state != CFFPS_LED_BLINK)
-> +			psu->led_state = CFFPS_LED_ON;
-> +	}
-> +
-> +	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
-> +				       psu->led_state);
-> +	if (rc < 0)
-> +		return;
-> +
-> +	led_cdev->brightness = brightness;
-> +}
-> +
-> +static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
-> +				   unsigned long *delay_on,
-> +				   unsigned long *delay_off)
-> +{
-> +	int rc;
-> +	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
-> +
-> +	psu->led_state = CFFPS_LED_BLINK;
-> +
-> +	if (led_cdev->brightness == LED_OFF)
-> +		return 0;
-> +
-> +	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
-> +				       CFFPS_LED_BLINK);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	*delay_on = CFFPS_BLINK_RATE_MS;
-> +	*delay_off = CFFPS_BLINK_RATE_MS;
-> +
-> +	return 0;
-> +}
-> +
-> +static void ibm_cffps_create_led_class(struct ibm_cffps *psu)
-> +{
-> +	int rc;
-> +	struct i2c_client *client = psu->client;
-> +	struct device *dev = &client->dev;
-> +
-> +	snprintf(psu->led_name, sizeof(psu->led_name), "%s-%02x", client->name,
-> +		 client->addr);
-> +	psu->led.name = psu->led_name;
-> +	psu->led.max_brightness = LED_FULL;
-> +	psu->led.brightness_set = ibm_cffps_led_brightness_set;
-> +	psu->led.blink_set = ibm_cffps_led_blink_set;
-> +
-> +	rc = devm_led_classdev_register(dev, &psu->led);
-> +	if (rc)
-> +		dev_warn(dev, "failed to register led class: %d\n", rc);
-> +}
-> +
->  static struct pmbus_driver_info ibm_cffps_info = {
->  	.pages = 1,
->  	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> @@ -286,6 +360,20 @@ static int ibm_cffps_probe(struct i2c_client *client,
->  	if (rc)
->  		return rc;
->  
-> +	/*
-> +	 * Don't fail the probe if there isn't enough memory for leds and
-> +	 * debugfs.
-> +	 */
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return 0;
-> +
-> +	psu->client = client;
-> +	mutex_init(&psu->input_history.update_lock);
-> +	psu->input_history.last_update = jiffies - HZ;
-> +
-> +	ibm_cffps_create_led_class(psu);
-> +
->  	/* Don't fail the probe if we can't create debugfs */
->  	debugfs = pmbus_get_debugfs_dir(client);
->  	if (!debugfs)
-> @@ -295,14 +383,6 @@ static int ibm_cffps_probe(struct i2c_client *client,
->  	if (!ibm_cffps_dir)
->  		return 0;
->  
-> -	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> -	if (!psu)
-> -		return 0;
-> -
-> -	psu->client = client;
-> -	mutex_init(&psu->input_history.update_lock);
-> -	psu->input_history.last_update = jiffies - HZ;
-> -
->  	for (i = 0; i < CFFPS_DEBUGFS_NUM_ENTRIES; ++i)
->  		psu->debugfs_entries[i] = i;
->  
+Fixes: f69316d62c70 ("hwmon: (pmbus) Add IBM Common Form Factor (CFF) power supply driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/pmbus/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 08479006c7f9..6e4298e99222 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -39,6 +39,7 @@ config SENSORS_ADM1275
+ 
+ config SENSORS_IBM_CFFPS
+ 	tristate "IBM Common Form Factor Power Supply"
++	depends on LEDS_CLASS
+ 	help
+ 	  If you say yes here you get hardware monitoring support for the IBM
+ 	  Common Form Factor power supply.
+-- 
+2.9.0
