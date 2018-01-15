@@ -1,81 +1,89 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:38769 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S967945AbeAON6f (ORCPT
+Received: from mail-pg0-f67.google.com ([74.125.83.67]:43592 "EHLO
+        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933878AbeAOQDj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Jan 2018 08:58:35 -0500
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
+        Mon, 15 Jan 2018 11:03:39 -0500
+Received: by mail-pg0-f67.google.com with SMTP id n17so595455pgf.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 15 Jan 2018 08:03:39 -0800 (PST)
+Date: Mon, 15 Jan 2018 08:03:36 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Maciej Purski <m.purski@samsung.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] hwmon: (ina2xx) Fix access to uninitialized mutex
-Date: Mon, 15 Jan 2018 14:58:21 +0100
-Message-id: <20180115135821.4443-1-m.szyprowski@samsung.com>
-References: <CGME20180115135831eucas1p2a0127a8f13c0daddf972e8162ba53699@eucas1p2.samsung.com>
+Subject: Re: hwmon: (ina2xx) Fix access to uninitialized mutex
+Message-ID: <20180115160336.GA13334@roeck-us.net>
+References: <20180115135821.4443-1-m.szyprowski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180115135821.4443-1-m.szyprowski@samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Initialize data->config_lock mutex before it is used by the driver code.
+On Mon, Jan 15, 2018 at 02:58:21PM +0100, Marek Szyprowski wrote:
+> Initialize data->config_lock mutex before it is used by the driver code.
+> 
+> This fixes following warning on Odroid XU3 boards:
+> 
+> INFO: trying to register non-static key.
+> the code is fine but needs lockdep annotation.
+> turning off the locking correctness validator.
+> CPU: 5 PID: 1 Comm: swapper/0 Not tainted 4.15.0-rc7-next-20180115-00001-gb75575dee3f2 #107
+> Hardware name: SAMSUNG EXYNOS (Flattened Device Tree)
+> [<c0111504>] (unwind_backtrace) from [<c010dbec>] (show_stack+0x10/0x14)
+> [<c010dbec>] (show_stack) from [<c09b3f74>] (dump_stack+0x90/0xc8)
+> [<c09b3f74>] (dump_stack) from [<c0179528>] (register_lock_class+0x1c0/0x59c)
+> [<c0179528>] (register_lock_class) from [<c017bd1c>] (__lock_acquire+0x78/0x1850)
+> [<c017bd1c>] (__lock_acquire) from [<c017de30>] (lock_acquire+0xc8/0x2b8)
+> [<c017de30>] (lock_acquire) from [<c09ca59c>] (__mutex_lock+0x60/0xa0c)
+> [<c09ca59c>] (__mutex_lock) from [<c09cafd0>] (mutex_lock_nested+0x1c/0x24)
+> [<c09cafd0>] (mutex_lock_nested) from [<c068b0d0>] (ina2xx_set_shunt+0x70/0xb0)
+> [<c068b0d0>] (ina2xx_set_shunt) from [<c068b218>] (ina2xx_probe+0x88/0x1b0)
+> [<c068b218>] (ina2xx_probe) from [<c0673d90>] (i2c_device_probe+0x1e0/0x2d0)
+> [<c0673d90>] (i2c_device_probe) from [<c053a268>] (driver_probe_device+0x2b8/0x4a0)
+> [<c053a268>] (driver_probe_device) from [<c053a54c>] (__driver_attach+0xfc/0x120)
+> [<c053a54c>] (__driver_attach) from [<c05384cc>] (bus_for_each_dev+0x58/0x7c)
+> [<c05384cc>] (bus_for_each_dev) from [<c0539590>] (bus_add_driver+0x174/0x250)
+> [<c0539590>] (bus_add_driver) from [<c053b5e0>] (driver_register+0x78/0xf4)
+> [<c053b5e0>] (driver_register) from [<c0675ef0>] (i2c_register_driver+0x38/0xa8)
+> [<c0675ef0>] (i2c_register_driver) from [<c0102b40>] (do_one_initcall+0x48/0x18c)
+> [<c0102b40>] (do_one_initcall) from [<c0e00df0>] (kernel_init_freeable+0x110/0x1d4)
+> [<c0e00df0>] (kernel_init_freeable) from [<c09c8120>] (kernel_init+0x8/0x114)
+> [<c09c8120>] (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+> 
+> Fixes: 5d389b125186 ("hwmon: (ina2xx) Make calibration register value fixed")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-This fixes following warning on Odroid XU3 boards:
+Applied.
 
-INFO: trying to register non-static key.
-the code is fine but needs lockdep annotation.
-turning off the locking correctness validator.
-CPU: 5 PID: 1 Comm: swapper/0 Not tainted 4.15.0-rc7-next-20180115-00001-gb75575dee3f2 #107
-Hardware name: SAMSUNG EXYNOS (Flattened Device Tree)
-[<c0111504>] (unwind_backtrace) from [<c010dbec>] (show_stack+0x10/0x14)
-[<c010dbec>] (show_stack) from [<c09b3f74>] (dump_stack+0x90/0xc8)
-[<c09b3f74>] (dump_stack) from [<c0179528>] (register_lock_class+0x1c0/0x59c)
-[<c0179528>] (register_lock_class) from [<c017bd1c>] (__lock_acquire+0x78/0x1850)
-[<c017bd1c>] (__lock_acquire) from [<c017de30>] (lock_acquire+0xc8/0x2b8)
-[<c017de30>] (lock_acquire) from [<c09ca59c>] (__mutex_lock+0x60/0xa0c)
-[<c09ca59c>] (__mutex_lock) from [<c09cafd0>] (mutex_lock_nested+0x1c/0x24)
-[<c09cafd0>] (mutex_lock_nested) from [<c068b0d0>] (ina2xx_set_shunt+0x70/0xb0)
-[<c068b0d0>] (ina2xx_set_shunt) from [<c068b218>] (ina2xx_probe+0x88/0x1b0)
-[<c068b218>] (ina2xx_probe) from [<c0673d90>] (i2c_device_probe+0x1e0/0x2d0)
-[<c0673d90>] (i2c_device_probe) from [<c053a268>] (driver_probe_device+0x2b8/0x4a0)
-[<c053a268>] (driver_probe_device) from [<c053a54c>] (__driver_attach+0xfc/0x120)
-[<c053a54c>] (__driver_attach) from [<c05384cc>] (bus_for_each_dev+0x58/0x7c)
-[<c05384cc>] (bus_for_each_dev) from [<c0539590>] (bus_add_driver+0x174/0x250)
-[<c0539590>] (bus_add_driver) from [<c053b5e0>] (driver_register+0x78/0xf4)
-[<c053b5e0>] (driver_register) from [<c0675ef0>] (i2c_register_driver+0x38/0xa8)
-[<c0675ef0>] (i2c_register_driver) from [<c0102b40>] (do_one_initcall+0x48/0x18c)
-[<c0102b40>] (do_one_initcall) from [<c0e00df0>] (kernel_init_freeable+0x110/0x1d4)
-[<c0e00df0>] (kernel_init_freeable) from [<c09c8120>] (kernel_init+0x8/0x114)
-[<c09c8120>] (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+Thanks,
+Guenter
 
-Fixes: 5d389b125186 ("hwmon: (ina2xx) Make calibration register value fixed")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/hwmon/ina2xx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index e362a932fe8c..e9e6aeabbf84 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -454,6 +454,7 @@ static int ina2xx_probe(struct i2c_client *client,
- 
- 	/* set the device type */
- 	data->config = &ina2xx_config[chip];
-+	mutex_init(&data->config_lock);
- 
- 	if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0) {
- 		struct ina2xx_platform_data *pdata = dev_get_platdata(dev);
-@@ -480,8 +481,6 @@ static int ina2xx_probe(struct i2c_client *client,
- 		return -ENODEV;
- 	}
- 
--	mutex_init(&data->config_lock);
--
- 	data->groups[group++] = &ina2xx_group;
- 	if (id->driver_data == ina226)
- 		data->groups[group++] = &ina226_group;
--- 
-2.15.0
-
+> ---
+>  drivers/hwmon/ina2xx.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> index e362a932fe8c..e9e6aeabbf84 100644
+> --- a/drivers/hwmon/ina2xx.c
+> +++ b/drivers/hwmon/ina2xx.c
+> @@ -454,6 +454,7 @@ static int ina2xx_probe(struct i2c_client *client,
+>  
+>  	/* set the device type */
+>  	data->config = &ina2xx_config[chip];
+> +	mutex_init(&data->config_lock);
+>  
+>  	if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0) {
+>  		struct ina2xx_platform_data *pdata = dev_get_platdata(dev);
+> @@ -480,8 +481,6 @@ static int ina2xx_probe(struct i2c_client *client,
+>  		return -ENODEV;
+>  	}
+>  
+> -	mutex_init(&data->config_lock);
+> -
+>  	data->groups[group++] = &ina2xx_group;
+>  	if (id->driver_data == ina226)
+>  		data->groups[group++] = &ina226_group;
