@@ -1,63 +1,60 @@
-Return-Path: <pali.rohar@gmail.com>
-Return-path: <pali.rohar@gmail.com>
-Date: Sat, 27 Jan 2018 15:09:28 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-To: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
-Cc: Oleksandr Natalenko <oleksandr@natalenko.name>,
-	Jonathan Buzzard <jonathan@buzzard.org.uk>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@dell.com>
-Subject: Re: i8k_smm_func() takes enormous of time to execute
-Message-ID: <20180127140928.ndukidmhklsm5fpf@pali>
-References: <12093169.Rm9IG5ILEB@natalenko.name>
- <2197616.V8s6m9LJcd@natalenko.name>
- <20171124112543.3css4fwwmbiu36bm@pali>
- <2978620.NBCOB6I8fo@natalenko.name>
- <20171204103507.gymmjw46lzggzndo@pali>
- <0cfe104c062adcd7cc35e0b94c5bfba1@natalenko.name>
- <20171204121829.m6zk3imp47ru2od2@pali>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ulxibi6bu7g234jx"
-Content-Disposition: inline
-In-Reply-To: <20171204121829.m6zk3imp47ru2od2@pali>
+Return-Path: <danilo@dbrgn.ch>
+Return-path: <danilo@dbrgn.ch>
+From: "Danilo Bargen" <danilo@dbrgn.ch>
+To: linux-hwmon@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	andreas.brauchli@sensirion.com,
+	Danilo Bargen <mail@dbrgn.ch>
+Subject: [PATCH] hwmon: (sht21) Update data sheet URLs
+Date: Sat, 27 Jan 2018 00:31:00 +0100
+Message-Id: <20180126233100.17995-1-mail@dbrgn.ch>
 List-ID: <linux-hwmon@vger.kernel.org>
 
+Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+---
+ Documentation/hwmon/sht21 | 6 +++---
+ drivers/hwmon/sht21.c     | 7 +------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
---ulxibi6bu7g234jx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Monday 04 December 2017 13:18:29 Pali Roh=C3=A1r wrote:
-> > > Your last patch in bugzilla looks ok, you add my Reviewed-by: Pali
-> > > Roh=C3=A1r <pali.rohar@gmail.com>
-> >=20
-> > Could you please advice on how to proceed further? I can submit all 3
-> > patches (incl. yours two), to a ML.
->=20
-> Now it is up to hwmon maintainers (Jean Delvare & Guenter Roeck) to pick
-> up these patches. I think nothing more is needed from your side. (And if
-> yes, Jean would write.)
->=20
-
-Jean Delvare & Guenter Roeck: PING
-
-Can you process patches from that bugzilla ticket?
-https://bugzilla.kernel.org/show_bug.cgi?id=3D195751
-
---=20
-Pali Roh=C3=A1r
-pali.rohar@gmail.com
-
---ulxibi6bu7g234jx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQS4VrIQdKium2krgIWL8Mk9A+RDUgUCWmyIFgAKCRCL8Mk9A+RD
-UpOkAKCHDH1URBeuHf1+kVxLPcb6tmgQigCgl1ySIxdXoYsw2qhX/rAiImOmAGA=
-=LWKA
------END PGP SIGNATURE-----
-
---ulxibi6bu7g234jx--
+diff --git a/Documentation/hwmon/sht21 b/Documentation/hwmon/sht21
+index 47f4765db256..e913605e1d70 100644
+--- a/Documentation/hwmon/sht21
++++ b/Documentation/hwmon/sht21
+@@ -6,13 +6,13 @@ Supported chips:
+     Prefix: 'sht21'
+     Addresses scanned: none
+     Datasheet: Publicly available at the Sensirion website
+-    http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT21.pdf
++    https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Sensirion_Humidity_Sensors_SHT21_Datasheet.pdf
+ 
+   * Sensirion SHT25
+-    Prefix: 'sht21'
++    Prefix: 'sht25'
+     Addresses scanned: none
+     Datasheet: Publicly available at the Sensirion website
+-    http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT25.pdf
++    https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Sensirion_Humidity_Sensors_SHT25_Datasheet.pdf
+ 
+ Author:
+   Urs Fleisch <urs.fleisch@sensirion.com>
+diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
+index 06706d288355..984f14b3e89a 100644
+--- a/drivers/hwmon/sht21.c
++++ b/drivers/hwmon/sht21.c
+@@ -12,12 +12,7 @@
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St - Fifth Floor, Boston, MA 02110-1301 USA
+- *
+- * Data sheet available (5/2010) at
+- * http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT21.pdf
++ * Data sheet available at https://www.sensirion.com/sht2x/
+  */
+ 
+ #include <linux/module.h>
+-- 
+2.15.1
