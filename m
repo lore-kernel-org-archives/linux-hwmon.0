@@ -1,21 +1,21 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f67.google.com ([74.125.82.67]:33233 "EHLO
-        mail-wm0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753161AbeA0QYO (ORCPT
+Received: from mail-wm0-f65.google.com ([74.125.82.65]:32791 "EHLO
+        mail-wm0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753138AbeA0Q33 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 27 Jan 2018 11:24:14 -0500
+        Sat, 27 Jan 2018 11:29:29 -0500
 From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
         Jonathan Buzzard <jonathan@buzzard.org.uk>,
         Mario Limonciello <mario.limonciello@dell.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
-Subject: [PATCH 4/4] hwmon: (dell-smm) Measure time duration of SMM call around inlined asm
-Date: Sat, 27 Jan 2018 17:23:51 +0100
-Message-Id: <20180127162351.13858-1-pali.rohar@gmail.com>
+Cc: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/4] hwmon: (dell-smm) Disable fan support for Dell Inspiron 7720
+Date: Sat, 27 Jan 2018 17:28:34 +0100
+Message-Id: <20180127162834.14675-1-pali.rohar@gmail.com>
 In-Reply-To: <20180127162204.13752-1-pali.rohar@gmail.com>
 References: <20180127162204.13752-1-pali.rohar@gmail.com>
 MIME-Version: 1.0
@@ -24,57 +24,127 @@ Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Measure only inlined asm code, not other functions to have as precise as
-possible measured time.
+Calling fan related SMM functions implemented by Dell BIOS firmware on Dell
+Inspiron 7720 freeze kernel for about 500ms. Until Dell fixes it we need to
+disable fan support for Dell Inspiron 7720 as it makes system unusable.
 
+Via "force" module param fan support can be enabled.
+
+Reported-by: vova7890@mail.ru
 Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=195751
+Cc: stable@vger.kernel.org # v4.0+, will need backport
 ---
- drivers/hwmon/dell-smm-hwmon.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 40 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index bf3bb7e1adab..e001afd53f46 100644
+index aef4f8317ae2..3f8b4e482b64 100644
 --- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -147,14 +147,16 @@ static int i8k_smm_func(void *par)
- 	int ebx = regs->ebx;
- 	unsigned long duration;
- 	ktime_t calltime, delta, rettime;
--
--	calltime = ktime_get();
- #endif
+@@ -76,6 +76,7 @@ static uint i8k_fan_mult = I8K_FAN_MULT;
+ static uint i8k_pwm_mult;
+ static uint i8k_fan_max = I8K_FAN_HIGH;
+ static bool disallow_fan_type_call;
++static bool disallow_fan_support;
  
- 	/* SMM requires CPU 0 */
- 	if (smp_processor_id() != 0)
- 		return -EBUSY;
+ #define I8K_HWMON_HAVE_TEMP1	(1 << 0)
+ #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
+@@ -242,6 +243,9 @@ static int i8k_get_fan_status(int fan)
+ {
+ 	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN, };
  
-+#ifdef DEBUG
-+	calltime = ktime_get();
-+#endif
++	if (disallow_fan_support)
++		return -EINVAL;
 +
- #if defined(CONFIG_X86_64)
- 	asm volatile("pushq %%rax\n\t"
- 		"movl 0(%%rax),%%edx\n\t"
-@@ -208,13 +210,17 @@ static int i8k_smm_func(void *par)
- 	    :    "a"(regs)
- 	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
- #endif
--	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
--		rc = -EINVAL;
+ 	regs.ebx = fan & 0xff;
+ 	return i8k_smm(&regs) ? : regs.eax & 0xff;
+ }
+@@ -253,6 +257,9 @@ static int i8k_get_fan_speed(int fan)
+ {
+ 	struct smm_regs regs = { .eax = I8K_SMM_GET_SPEED, };
  
- #ifdef DEBUG
- 	rettime = ktime_get();
- 	delta = ktime_sub(rettime, calltime);
- 	duration = ktime_to_ns(delta) >> 10;
-+#endif
++	if (disallow_fan_support)
++		return -EINVAL;
 +
-+	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-+		rc = -EINVAL;
+ 	regs.ebx = fan & 0xff;
+ 	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * i8k_fan_mult;
+ }
+@@ -264,7 +271,7 @@ static int _i8k_get_fan_type(int fan)
+ {
+ 	struct smm_regs regs = { .eax = I8K_SMM_GET_FAN_TYPE, };
+ 
+-	if (disallow_fan_type_call)
++	if (disallow_fan_support || disallow_fan_type_call)
+ 		return -EINVAL;
+ 
+ 	regs.ebx = fan & 0xff;
+@@ -289,6 +296,9 @@ static int i8k_get_fan_nominal_speed(int fan, int speed)
+ {
+ 	struct smm_regs regs = { .eax = I8K_SMM_GET_NOM_SPEED, };
+ 
++	if (disallow_fan_support)
++		return -EINVAL;
 +
-+#ifdef DEBUG
- 	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lu usecs)\n", eax, ebx,
- 		(rc ? 0xffff : regs->eax & 0xffff), duration);
- #endif
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
+ 	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * i8k_fan_mult;
+ }
+@@ -300,6 +310,9 @@ static int i8k_set_fan(int fan, int speed)
+ {
+ 	struct smm_regs regs = { .eax = I8K_SMM_SET_FAN, };
+ 
++	if (disallow_fan_support)
++		return -EINVAL;
++
+ 	speed = (speed < 0) ? 0 : ((speed > i8k_fan_max) ? i8k_fan_max : speed);
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
+ 
+@@ -772,6 +785,8 @@ static struct attribute *i8k_attrs[] = {
+ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
+ 			      int index)
+ {
++	if (disallow_fan_support && index >= 8)
++		return 0;
+ 	if (disallow_fan_type_call &&
+ 	    (index == 9 || index == 12 || index == 15))
+ 		return 0;
+@@ -1039,6 +1054,23 @@ static const struct dmi_system_id i8k_blacklist_fan_type_dmi_table[] __initconst
+ };
+ 
+ /*
++ * On some machines all fan related SMM functions implemented by Dell BIOS
++ * firmware freeze kernel for about 500ms. Until Dell fixes these problems fan
++ * support for affected blacklisted Dell machines stay disabled.
++ * See bug: https://bugzilla.kernel.org/show_bug.cgi?id=195751
++ */
++static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
++	{
++		.ident = "Dell Inspiron 7720",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 7720"),
++		},
++	},
++	{ }
++};
++
++/*
+  * Probe for the presence of a supported laptop.
+  */
+ static int __init i8k_probe(void)
+@@ -1060,6 +1092,12 @@ static int __init i8k_probe(void)
+ 			i8k_get_dmi_data(DMI_BIOS_VERSION));
+ 	}
+ 
++	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
++		pr_warn("broken Dell BIOS detected, disallow fan support\n");
++		if (!force)
++			disallow_fan_support = true;
++	}
++
+ 	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
+ 		pr_warn("broken Dell BIOS detected, disallow fan type call\n");
+ 		if (!force)
 -- 
 2.11.0
 
