@@ -1,144 +1,99 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:43622 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752993AbeA1WCF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Jan 2018 17:02:05 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v4.16
-Date: Sun, 28 Jan 2018 14:02:03 -0800
-Message-Id: <1517176923-30613-1-git-send-email-linux@roeck-us.net>
+Return-Path: <pali.rohar@gmail.com>
+Return-path: <pali.rohar@gmail.com>
+Date: Mon, 29 Jan 2018 09:46:50 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Oleksandr Natalenko <oleksandr@natalenko.name>,
+	Jonathan Buzzard <jonathan@buzzard.org.uk>,
+	Mario Limonciello <mario.limonciello@dell.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [4/4] hwmon: (dell-smm) Measure time duration of SMM call around
+ inlined asm
+Message-ID: <20180129084650.stj2x65zplou6vma@pali>
+References: <20180127162351.13858-1-pali.rohar@gmail.com>
+ <20180127175145.GA12923@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20180127175145.GA12923@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Linus,
+On Saturday 27 January 2018 09:51:45 Guenter Roeck wrote:
+> On Sat, Jan 27, 2018 at 05:23:51PM +0100, Pali Roh=C3=A1r wrote:
+> > Measure only inlined asm code, not other functions to have as precise as
+> > possible measured time.
+> >=20
+> > Signed-off-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
+> > ---
+> >  drivers/hwmon/dell-smm-hwmon.c | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
+mon.c
+> > index bf3bb7e1adab..e001afd53f46 100644
+> > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > @@ -147,14 +147,16 @@ static int i8k_smm_func(void *par)
+> >  	int ebx =3D regs->ebx;
+> >  	unsigned long duration;
+> >  	ktime_t calltime, delta, rettime;
+> > -
+> > -	calltime =3D ktime_get();
+> >  #endif
+> > =20
+> >  	/* SMM requires CPU 0 */
+> >  	if (smp_processor_id() !=3D 0)
+> >  		return -EBUSY;
+> > =20
+> > +#ifdef DEBUG
+> > +	calltime =3D ktime_get();
+> > +#endif
+> > +
+> >  #if defined(CONFIG_X86_64)
+> >  	asm volatile("pushq %%rax\n\t"
+> >  		"movl 0(%%rax),%%edx\n\t"
+> > @@ -208,13 +210,17 @@ static int i8k_smm_func(void *par)
+> >  	    :    "a"(regs)
+> >  	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+> >  #endif
+> > -	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=
+=3D eax)
+> > -		rc =3D -EINVAL;
+> > =20
+> >  #ifdef DEBUG
+> >  	rettime =3D ktime_get();
+> >  	delta =3D ktime_sub(rettime, calltime);
+> >  	duration =3D ktime_to_ns(delta) >> 10;
+> > +#endif
+> > +
+> > +	if (rc !=3D 0 || (regs->eax & 0xffff) =3D=3D 0xffff || regs->eax =3D=
+=3D eax)
+> > +		rc =3D -EINVAL;
+> > +
+> > +#ifdef DEBUG
+>=20
+> FWIW, the error introduced by dividing nS by 1,024 instead of 1,000 is
+> much worse than the improvements from moving the calls around. Using
+> specific numbers, the current code reports 500 mS as 488,281 uS.
+> So why bother ?
 
-Please pull hwmon updates for Linux v4.16 from signed tag:
+Ah, I have not noticed this yet :-(
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.16
+> I would have suggested to use ktime_us_delta(ktime_get(), calltime)
+> instead to make the results more accurate. Sure, you get the offset from
+> the additional divide operation, but at least that would be a constant
+> and not a systematic error.
+>=20
+> I'll hold this patch off for a bit. Please confirm that you want it
+> applied as-is. I applied the other patches from the series.
 
-Thanks,
-Guenter
-------
+Ok, I will fix this patch and resend just new version of this one.
 
-The following changes since commit 30a7acd573899fd8b8ac39236eff6468b195ac7d:
+Anyway, if 2/4 is targeting stable, then 3/4 should too. But now I see
+that I added Cc only to patch 2/4.
 
-  Linux 4.15-rc6 (2017-12-31 14:47:43 -0800)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.16
-
-for you to fetch changes up to 6fbc4232a5ac944531bda397f3644d1cf66bdd13:
-
-  hwmon: (dell-smm) Disable fan support for Dell Vostro 3360 (2018-01-27 09:34:22 -0800)
-
-----------------------------------------------------------------
-hwmon updates for v4.16
-
-New driver for W83773G
-Fan control support for PMBus drivers
-Improvements and minor fixes in several drivers
-
-----------------------------------------------------------------
-Andrew Jeffery (4):
-      hwmon: (pmbus) Add fan control support
-      hwmon: (pmbus/max31785) Add fan control
-      hwmon: (pmbus) Add virtual page config bit
-      hwmon: (pmbus/max31785) Add dual tachometer support
-
-Arnd Bergmann (1):
-      hwmon: (pmbus/ibm-cffps) Add dependency on LEDS_CLASS
-
-Eddie James (1):
-      hwmon: (pmbus) cffps: Add PMBUS_SKIP_STATUS_CHECK
-
-Edward A. James (2):
-      hwmon: (pmbus) Export pmbus device debugfs directory entry
-      hwmon: (pmbus) cffps: Add debugfs entries
-
-Emiliano Ingrassia (1):
-      hwmon: (sht3x) wait predefined limits loading complete before access
-
-Guenter Roeck (9):
-      hwmon: Drop unnecessary 'default n' from Kconfig
-      hwmon: (pmbus/lm25066) Drop support for LM25063
-      hwmon: Fix parameter documentation
-      hwmon: (sht21) Fix documentation of struct sht21
-      hwmon: (sht15) Fix parameter documentation of sht15_crc8()
-      hwmon: (iio_hwmon) Fix documentation of struct iio_hwmon_state
-      hwmon: (hih6130) Fix documentation of struct hih6130
-      hwmon: (w83773g) Fix fault detection and reporting
-      hwmon: (k10temp) Add temperature offset for Ryzen 1900X
-
-Javier Martinez Canillas (1):
-      hwmon: (max31785) Add OF device ID table
-
-Joel (2):
-      dt-bindings: hwmon: aspeed-pwm-tacho: Add reset node
-      hwmon: (aspeed-pwm-tacho) Deassert reset in probe
-
-Lei YU (2):
-      hwmon: Add W83773G driver
-      hwmon: (w83773g) Add documentation
-
-Luis de Bethencourt (1):
-      hwmon: (lm75) Fix trailing semicolon
-
-Maciej Purski (1):
-      hwmon: (ina2xx) Make calibration register value fixed
-
-Marek Szyprowski (1):
-      hwmon: (ina2xx) Fix access to uninitialized mutex
-
-Oleksandr Natalenko (1):
-      hwmon: (dell-smm) Disable fan support for Dell Vostro 3360
-
-Pali Rohár (2):
-      hwmon: (dell-smm) Enable broken functionality via "force" module param
-      hwmon: (dell-smm) Disable fan support for Dell Inspiron 7720
-
-Samuel Mendoza-Jonas (1):
-      hwmon: (pmbus/ir35221) Remove unnecessary scaling
-
-Sinan Kaya (1):
-      hwmon: (coretemp) deprecate pci_get_bus_and_slot()
-
-eajames@linux.vnet.ibm.com (1):
-      hwmon: (pmbus/cffps) Add led class device for power supply fault led
-
- .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt |  14 +-
- Documentation/hwmon/lm25066                        |  20 +-
- Documentation/hwmon/max31785                       |  15 +-
- Documentation/hwmon/w83773g                        |  33 +++
- drivers/hwmon/Kconfig                              |  26 +-
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/aspeed-pwm-tacho.c                   |  22 ++
- drivers/hwmon/coretemp.c                           |   3 +-
- drivers/hwmon/dell-smm-hwmon.c                     |  54 +++-
- drivers/hwmon/hih6130.c                            |   2 +-
- drivers/hwmon/hwmon.c                              |  12 +-
- drivers/hwmon/iio_hwmon.c                          |   3 +-
- drivers/hwmon/ina2xx.c                             |  90 +++---
- drivers/hwmon/k10temp.c                            |   1 +
- drivers/hwmon/lm75.c                               |   2 +-
- drivers/hwmon/pmbus/Kconfig                        |   1 +
- drivers/hwmon/pmbus/ibm-cffps.c                    | 288 +++++++++++++++++-
- drivers/hwmon/pmbus/ir35221.c                      | 189 ------------
- drivers/hwmon/pmbus/lm25066.c                      |  67 +----
- drivers/hwmon/pmbus/max31785.c                     | 294 +++++++++++++++++-
- drivers/hwmon/pmbus/pmbus.h                        |  41 +++
- drivers/hwmon/pmbus/pmbus_core.c                   | 273 +++++++++++++++--
- drivers/hwmon/sht15.c                              |   1 +
- drivers/hwmon/sht21.c                              |   2 +-
- drivers/hwmon/sht3x.c                              |   7 +
- drivers/hwmon/w83773g.c                            | 329 +++++++++++++++++++++
- 26 files changed, 1408 insertions(+), 382 deletions(-)
- create mode 100644 Documentation/hwmon/w83773g
- create mode 100644 drivers/hwmon/w83773g.c
+--=20
+Pali Roh=C3=A1r
+pali.rohar@gmail.com
