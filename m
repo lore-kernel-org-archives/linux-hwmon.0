@@ -1,41 +1,66 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f196.google.com ([209.85.192.196]:40353 "EHLO
-        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753332AbeASOjg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Jan 2018 09:39:36 -0500
-Received: by mail-pf0-f196.google.com with SMTP id i66so1498083pfd.7
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Jan 2018 06:39:36 -0800 (PST)
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (k10temp) Add temperature offset for Ryzen 1900X
-Date: Fri, 19 Jan 2018 06:39:32 -0800
-Message-Id: <1516372772-27311-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <mail@dbrgn.ch>
+Return-path: <mail@dbrgn.ch>
+Date: Fri, 2 Feb 2018 11:40:52 +0100
+From: Danilo Bargen <mail@dbrgn.ch>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+ andreas.brauchli@sensirion.com
+Subject: [PATCH v2 1/2] hwmon: (sht21) Update data sheet URLs
+Message-ID: <20180202114052.065b6d08@x2000>
+In-Reply-To: <20180202111306.6699fb4d@x2000>
+References: <20180126233100.17995-1-mail@dbrgn.ch>
+	<8168b9b5-66c4-a6be-07d7-67eee60f9471@roeck-us.net>
+	<20180202111306.6699fb4d@x2000>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Like the other CPUs from the same series, the 1900X has a
-temperature offset of 27 degrees C.
+The previously used URLs are dead.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Sensirion provides permalinks for their product datasheets at
+https://www.sensirion.com/en/about-us/links/.
+
+Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
 ---
- drivers/hwmon/k10temp.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/hwmon/sht21 | 6 +++---
+ drivers/hwmon/sht21.c     | 3 +--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 0721e175664a..06b4e1c78bd8 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -86,6 +86,7 @@ static const struct tctl_offset tctl_offset_table[] = {
- 	{ 0x17, "AMD Ryzen 7 1800X", 20000 },
- 	{ 0x17, "AMD Ryzen Threadripper 1950X", 27000 },
- 	{ 0x17, "AMD Ryzen Threadripper 1920X", 27000 },
-+	{ 0x17, "AMD Ryzen Threadripper 1900X", 27000 },
- 	{ 0x17, "AMD Ryzen Threadripper 1950", 10000 },
- 	{ 0x17, "AMD Ryzen Threadripper 1920", 10000 },
- 	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
+diff --git a/Documentation/hwmon/sht21 b/Documentation/hwmon/sht21
+index 47f4765db256..8b3cdda541c1 100644
+--- a/Documentation/hwmon/sht21
++++ b/Documentation/hwmon/sht21
+@@ -6,13 +6,13 @@ Supported chips:
+     Prefix: 'sht21'
+     Addresses scanned: none
+     Datasheet: Publicly available at the Sensirion website
+-    http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT21.pdf
++    http://www.sensirion.com/file/datasheet_sht21
+ 
+   * Sensirion SHT25
+-    Prefix: 'sht21'
++    Prefix: 'sht25'
+     Addresses scanned: none
+     Datasheet: Publicly available at the Sensirion website
+-    http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT25.pdf
++    http://www.sensirion.com/file/datasheet_sht25
+ 
+ Author:
+   Urs Fleisch <urs.fleisch@sensirion.com>
+diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
+index 06706d288355..e23736e21422 100644
+--- a/drivers/hwmon/sht21.c
++++ b/drivers/hwmon/sht21.c
+@@ -16,8 +16,7 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin St - Fifth Floor, Boston, MA 02110-1301 USA
+  *
+- * Data sheet available (5/2010) at
+- * http://www.sensirion.com/en/pdf/product_information/Datasheet-humidity-sensor-SHT21.pdf
++ * Data sheet available at http://www.sensirion.com/file/datasheet_sht21
+  */
+ 
+ #include <linux/module.h>
 -- 
-2.7.4
-
+2.16.1
