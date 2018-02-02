@@ -1,46 +1,32 @@
-Return-Path: <sudeep.holla@arm.com>
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: ALKML <linux-arm-kernel@lists.infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	DTML <devicetree@vger.kernel.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alexey Klimov <klimov.linux@gmail.com>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v5 17/20] hwmon: (core) Add hwmon_max to hwmon_sensor_types enumeration
-Date: Mon, 12 Feb 2018 18:45:21 +0000
-Message-Id: <1518461124-17371-18-git-send-email-sudeep.holla@arm.com>
-In-Reply-To: <1518461124-17371-1-git-send-email-sudeep.holla@arm.com>
-References: <1518461124-17371-1-git-send-email-sudeep.holla@arm.com>
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:51401 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1750799AbeBBKNS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 2 Feb 2018 05:13:18 -0500
+Date: Fri, 2 Feb 2018 11:13:06 +0100
+From: Danilo Bargen <mail@dbrgn.ch>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        andreas.brauchli@sensirion.com
+Subject: Re: [PATCH] hwmon: (sht21) Update data sheet URLs
+Message-ID: <20180202111306.6699fb4d@x2000>
+In-Reply-To: <8168b9b5-66c4-a6be-07d7-67eee60f9471@roeck-us.net>
+References: <20180126233100.17995-1-mail@dbrgn.ch>
+        <8168b9b5-66c4-a6be-07d7-67eee60f9471@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-It's useful to know the maximum types of sensor supported by hwmon
-framework. It can be used to allocate some data structures when sorting
-the monitors based on their type.
+Hello Guenter
 
-This will be used by scmi hwmon support.
+> Some prosa expected here.
+> ...
+> This does a bit more than updating the link to the datasheet.
 
-Cc: linux-hwmon@vger.kernel.org
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- include/linux/hwmon.h | 1 +
- 1 file changed, 1 insertion(+)
+Thanks, I will submit a patch with some more explanation in the commit message
+and without the license header change (which was suggested by scripts/checkpatch.pl).
 
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index ceb751987c40..e5fd2707b6df 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -29,6 +29,7 @@ enum hwmon_sensor_types {
- 	hwmon_humidity,
- 	hwmon_fan,
- 	hwmon_pwm,
-+	hwmon_max,
- };
- 
- enum hwmon_chip_attributes {
--- 
-2.7.4
+Danilo
