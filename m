@@ -1,32 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:51401 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1750799AbeBBKNS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 2 Feb 2018 05:13:18 -0500
-Date: Fri, 2 Feb 2018 11:13:06 +0100
-From: Danilo Bargen <mail@dbrgn.ch>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        andreas.brauchli@sensirion.com
-Subject: Re: [PATCH] hwmon: (sht21) Update data sheet URLs
-Message-ID: <20180202111306.6699fb4d@x2000>
-In-Reply-To: <8168b9b5-66c4-a6be-07d7-67eee60f9471@roeck-us.net>
-References: <20180126233100.17995-1-mail@dbrgn.ch>
-        <8168b9b5-66c4-a6be-07d7-67eee60f9471@roeck-us.net>
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:41848 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751130AbeBHB56 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Feb 2018 20:57:58 -0500
+Received: by mail-pf0-f195.google.com with SMTP id 68so1160379pfj.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 07 Feb 2018 17:57:58 -0800 (PST)
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (k10temp) Only apply temperature offset if result is positive
+Date: Wed,  7 Feb 2018 17:57:54 -0800
+Message-Id: <1518055074-27110-1-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hello Guenter
+A user reports a really bad temperature on Ryzen 1950X.
 
-> Some prosa expected here.
-> ...
-> This does a bit more than updating the link to the datasheet.
+k10temp-pci-00cb
+Adapter: PCI adapter
+temp1: +4294948.3°C (high = +70.0°C)
 
-Thanks, I will submit a patch with some more explanation in the commit message
-and without the license header change (which was suggested by scripts/checkpatch.pl).
+This will happen if the temperature reported by the chip is lower than
+the offset temperature. If that happens, let's report a temperature
+of 0 degrees C.
 
-Danilo
+Fixes: 1b50b776355f ("hwmon: (k10temp) Add support for temperature offsets")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/k10temp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 06b4e1c78bd8..4c6594a4661d 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -129,7 +129,10 @@ static ssize_t temp1_input_show(struct device *dev,
+ 
+ 	data->read_tempreg(data->pdev, &regval);
+ 	temp = (regval >> 21) * 125;
+-	temp -= data->temp_offset;
++	if (temp > data->temp_offset)
++		temp -= data->temp_offset;
++	else
++		temp = 0;
+ 
+ 	return sprintf(buf, "%u\n", temp);
+ }
+-- 
+2.7.4
+
