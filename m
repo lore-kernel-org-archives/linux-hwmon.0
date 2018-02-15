@@ -1,55 +1,46 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:41848 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751130AbeBHB56 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Feb 2018 20:57:58 -0500
-Received: by mail-pf0-f195.google.com with SMTP id 68so1160379pfj.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 07 Feb 2018 17:57:58 -0800 (PST)
+Received: from mail-pl0-f68.google.com ([209.85.160.68]:33000 "EHLO
+        mail-pl0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1162892AbeBOWJH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Feb 2018 17:09:07 -0500
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (k10temp) Only apply temperature offset if result is positive
-Date: Wed,  7 Feb 2018 17:57:54 -0800
-Message-Id: <1518055074-27110-1-git-send-email-linux@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.16-rc2
+Date: Thu, 15 Feb 2018 14:09:04 -0800
+Message-Id: <1518732544-17094-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-A user reports a really bad temperature on Ryzen 1950X.
+Hi Linus,
 
-k10temp-pci-00cb
-Adapter: PCI adapter
-temp1: +4294948.3°C (high = +70.0°C)
+Please pull hwmon fixes for Linux v4.16-rc2 from signed tag:
 
-This will happen if the temperature reported by the chip is lower than
-the offset temperature. If that happens, let's report a temperature
-of 0 degrees C.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.16-rc2
 
-Fixes: 1b50b776355f ("hwmon: (k10temp) Add support for temperature offsets")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
+Thanks,
+Guenter
+------
+
+The following changes since commit 7928b2cbe55b2a410a0f5c1f154610059c57b1b2:
+
+  Linux 4.16-rc1 (2018-02-11 15:04:29 -0800)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.16-rc2
+
+for you to fetch changes up to aef17ca1271948ee57cc39b2493d31110cc42625:
+
+  hwmon: (k10temp) Only apply temperature offset if result is positive (2018-02-12 14:23:29 -0800)
+
+----------------------------------------------------------------
+Fix bad temperature display on Ryzen/Threadripper
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (k10temp) Only apply temperature offset if result is positive
+
  drivers/hwmon/k10temp.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 06b4e1c78bd8..4c6594a4661d 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -129,7 +129,10 @@ static ssize_t temp1_input_show(struct device *dev,
- 
- 	data->read_tempreg(data->pdev, &regval);
- 	temp = (regval >> 21) * 125;
--	temp -= data->temp_offset;
-+	if (temp > data->temp_offset)
-+		temp -= data->temp_offset;
-+	else
-+		temp = 0;
- 
- 	return sprintf(buf, "%u\n", temp);
- }
--- 
-2.7.4
-
