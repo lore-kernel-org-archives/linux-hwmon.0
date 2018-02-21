@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:16239 "EHLO
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:16219 "EHLO
         hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751565AbeBUG7j (ORCPT
+        with ESMTP id S1751416AbeBUG7a (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Feb 2018 01:59:39 -0500
+        Wed, 21 Feb 2018 01:59:30 -0500
 From: Rajkumar Rampelli <rrajk@nvidia.com>
 To: <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -22,9 +22,9 @@ CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <ldewangan@nvidia.com>,
         <rrajk@nvidia.com>
-Subject: [PATCH 02/10] dt-bindings: Tegra186 tachometer device tree bindings
-Date: Wed, 21 Feb 2018 12:28:51 +0530
-Message-ID: <1519196339-9377-3-git-send-email-rrajk@nvidia.com>
+Subject: [PATCH 01/10] pwm: core: Add support for PWM HW driver with pwm capture only
+Date: Wed, 21 Feb 2018 12:28:50 +0530
+Message-ID: <1519196339-9377-2-git-send-email-rrajk@nvidia.com>
 In-Reply-To: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
 References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
 MIME-Version: 1.0
@@ -32,52 +32,32 @@ Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Supply Device tree binding documentation for the NVIDIA
-Tegra186 SoC's Tachometer Controller
+Add support for pwm HW driver which has only capture functionality.
+This helps to implement the PWM based Tachometer driver which reads
+the PWM output signals from electronic fans.
+
+PWM Tachometer captures the period and duty cycle of the PWM signal
 
 Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
 ---
- .../bindings/pwm/pwm-tegra-tachometer.txt          | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
+ drivers/pwm/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt b/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
-new file mode 100644
-index 0000000..4a7ead4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
-@@ -0,0 +1,31 @@
-+Bindings for a PWM based Tachometer driver
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index 1581f6a..87d14c9 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -246,6 +246,10 @@ static bool pwm_ops_check(const struct pwm_ops *ops)
+ 	if (ops->apply)
+ 		return true;
+ 
++	/* driver supports capture operation */
++	if (ops->capture)
++		return true;
 +
-+Required properties:
-+- compatible: Must be "nvidia,tegra186-pwm-tachometer"
-+- reg: physical base addresses of the controller and length of
-+  memory mapped region.
-+- #pwm-cells: should be 2. See pwm.txt in this directory for a
-+  description of the cells format.
-+- clocks: phandle list of tachometer clocks
-+- clock-names: should be "tachometer". See clock-bindings.txt in documentations
-+- resets: phandle to the reset controller for the Tachometer IP
-+- reset-names: should be "tachometer". See reset.txt in documentations
-+- nvidia,pulse-per-rev: Integer, pulses per revolution of a Fan. This value
-+  obtained from Fan specification document.
-+- nvidia,capture-window-len: Integer, window of the Fan Tach monitor, it indicates
-+  that how many period of the input fan tach signal will the FAN TACH logic
-+  monitor. Valid values are 1, 2, 4 and 8 only.
-+
-+Example:
-+	tegra_tachometer: tachometer@39c0000 {
-+		compatible = "nvidia,tegra186-pwm-tachometer";
-+		reg = <0x0 0x039c0000 0x0 0x10>;
-+		#pwm-cells = <2>;
-+		clocks = <&tegra_car TEGRA186_CLK_TACH>;
-+		clock-names = "tachometer";
-+		resets = <&tegra_car TEGRA186_RESET_TACH>;
-+		reset-names = "tachometer";
-+		nvidia,pulse-per-rev = <2>;
-+		nvidia,capture-window-len = <2>;
-+		status = "disabled";
-+	};
+ 	return false;
+ }
+ 
 -- 
 2.1.4
 
