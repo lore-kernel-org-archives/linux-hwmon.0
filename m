@@ -1,34 +1,104 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from thsbbfxrt02p.thalesgroup.com ([192.93.158.29]:48426 "EHLO
-        thsbbfxrt02p.thalesgroup.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1751559AbeBSIja (ORCPT
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:16202 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1750752AbeBUG7S (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Feb 2018 03:39:30 -0500
-Received: from thsbbfxrt02p.thalesgroup.com (localhost [127.0.0.1])
-        by localhost (Postfix) with SMTP id 3zlH885crnz6T8
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Feb 2018 09:33:28 +0100 (CET)
-From: SCHIRMER Laurent <Laurent.Schirmer@fr.thalesgroup.com>
-To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Date: Mon, 19 Feb 2018 09:30:13 +0100
-Subject: lm-sensors Export Control Status
-Message-ID: <3AC78EF6729E284B9662898A0078C5AC66010B2434@THSONEA01CMS07P.one.grp>
-References: <3AC78EF6729E284B9662898A0078C5AC660106E254@THSONEA01CMS07P.one.grp>
- <e3ff4b40-3ef1-2e2d-4c70-483c068a5be5@assembler.cz>
-In-Reply-To: <e3ff4b40-3ef1-2e2d-4c70-483c068a5be5@assembler.cz>
-Content-Language: fr-FR
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 21 Feb 2018 01:59:18 -0500
+From: Rajkumar Rampelli <rrajk@nvidia.com>
+To: <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
+        <catalin.marinas@arm.com>, <will.deacon@arm.com>,
+        <kstewart@linuxfoundation.org>, <gregkh@linuxfoundation.org>,
+        <pombredanne@nexb.com>, <mmaddireddy@nvidia.com>,
+        <mperttunen@nvidia.com>, <arnd@arndb.de>,
+        <gregory.clement@free-electrons.com>, <timur@codeaurora.org>,
+        <andy.gross@linaro.org>, <xuwei5@hisilicon.com>,
+        <elder@linaro.org>, <heiko@sntech.de>, <krzk@kernel.org>,
+        <ard.biesheuvel@linaro.org>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <ldewangan@nvidia.com>,
+        <rrajk@nvidia.com>
+Subject: [PATCH 00/10] Implementation of Tegra Tachometer driver
+Date: Wed, 21 Feb 2018 12:28:49 +0530
+Message-ID: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-SGVsbG8sDQoNCldlIGNvbnNpZGVyIHVzaW5nIGxtLXNlbnNvcnMgKDMuMS4yKSB1bmRlciB0aGUg
-dGVybXMgb2YgdGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSB2Mi4xIHdpdGhp
-biBhIGNvbW1lcmNpYWwgcHJvZHVjdC4NCg0KT3VyIHRoaXJkLXBhcnR5IGdvdmVybmFuY2UgcHJv
-Y2VzcyByZXF1aXJlcyB1cyB0byBjaGVjayB0aGUgZXhwb3J0IGNvbnRyb2wgY2xhc3NpZmljYXRp
-b24gZm9yIGV2ZXJ5IGVtYmVkZGVkIHNvZnR3YXJlLg0KDQpQbGVhc2Ugd291bGQgeW91IHByb3Zp
-ZGUgdXMgdGhlIGV4cG9ydCBjb250cm9sIHN0YXR1cyBmb3IgdGhpcyBzb2Z0d2FyZSAoRUNDTiks
-IG9yIGFzc2VydCB3aGV0aGVyIHRoaXMgc29mdHdhcmUgY29udGFpbnMgb3IgdXNlcyBlbmNyeXB0
-aW9uIHBhcnRzPw0KDQpZb3VyIGhlbHAgd291bGQgYmUgbW9zdCBhcHByZWNpYXRlZC4NCg0KQmVz
-dCByZWdhcmRzLA0KDQpMYXVyZW50IFNjaGlybWVyDQpDT1RTICYgT1NTIENlbnRlciBNYW5hZ2Vy
-DQpUSEFMRVMgRE1TIEZSQU5DRSBTQVMNCmh0dHA6Ly93d3cudGhhbGVzZ3JvdXAuY29tLw0KDQo=
+The following patches adds support for PWM based Tegra Tachometer driver
+which implements PWM capture interface to analyze the PWM signal of a
+electronic fan and reports it in periods and duty cycles.
+
+Generic PWM Tachometer implemented to monitor the speed of fan in rpms
+using PWM interface. RPM of Fan will be exposed to user interface through
+HWMON sysfs interface avialable at below location
+/sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+
+Steps to validate Tachometer:
+A. push modules pwm-tegra.ko, pwm-tegra-tachometer.ko and
+   generic-pwm-tachometer.ko to linux device using scp command.
+   scp build/tegra186/drivers/pwm/pwm-tegra.ko ubuntu@10.19.65.176:/tmp/
+   scp build/tegra186/drivers/pwm/pwm-tegra-tachometer.ko ubuntu@10.19.65.176:/tmp/
+   scp build/tegra186/drivers/hwmon/generic-pwm-tachometer.ko ubuntu@10.19.65.176:/tmp/
+B. On Linux device console, insert these modules using insmod command.
+   insmod /tmp/pwm-tegra.ko
+   insmod /tmp/pwm-tegra-tachometer.ko
+   insmod /tmp/generic-pwm-tachometer.ko
+C. Read RPM value at below sysfs node
+   cat /sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+D. Change the FAN speed using PWM sysfs interface. Follow below steps for the same:
+   a. cd /sys/class/pwm/pwmchip0
+   b. ls -la (make sure pwm controller is c340000.pwm)
+      Output should be: device -> ../../../c340000.pwm
+   c. echo 0 > export
+   d. cd pwmchip0:0
+   e. echo 8000 > period
+   f. echo 1 > enable
+   g. echo 7000 > duty_cycle # change duty_cycles from 0 to 7000 and see FAN speed
+   h. cat /sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+   i. echo 4000 > duty_cycle
+   h. cat /sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+   i. echo 2000 > duty_cycle
+   h. cat /sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+   i. echo 0 > duty_cycle
+   h. cat /sys/devices/platform/generic_pwm_tachometer/hwmon/hwmon0/rpm
+
+Rajkumar Rampelli (10):
+  pwm: core: Add support for PWM HW driver with pwm capture only
+  dt-bindings: Tegra186 tachometer device tree bindings
+  pwm: tegra: Add PWM based Tachometer driver
+  hwmon: generic-pwm-tachometer: Add DT binding details
+  hwmon: generic-pwm-tachometer: Add generic PWM based tachometer
+  arm64: tegra: Add Tachometer Controller on Tegra186
+  arm64: tegra: Add PWM based Tachometer support on Tegra186
+  arm64: defconfig: enable Nvidia Tegra Tachometer as a module
+  arm64: defconfig: Enable Generic PWM based Tachometer driver
+  arm64: tegra: Add PWM controller on Tegra186 soc
+
+ .../bindings/hwmon/generic-pwm-tachometer.txt      |  25 ++
+ .../bindings/pwm/pwm-tegra-tachometer.txt          |  31 +++
+ Documentation/hwmon/generic-pwm-tachometer         |  17 ++
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |   5 +
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  28 ++
+ arch/arm64/configs/defconfig                       |   2 +
+ drivers/hwmon/Kconfig                              |  10 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/generic-pwm-tachometer.c             | 112 ++++++++
+ drivers/pwm/Kconfig                                |  10 +
+ drivers/pwm/Makefile                               |   1 +
+ drivers/pwm/core.c                                 |   4 +
+ drivers/pwm/pwm-tegra-tachometer.c                 | 303 +++++++++++++++++++++
+ 13 files changed, 549 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/generic-pwm-tachometer.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
+ create mode 100644 Documentation/hwmon/generic-pwm-tachometer
+ create mode 100644 drivers/hwmon/generic-pwm-tachometer.c
+ create mode 100644 drivers/pwm/pwm-tegra-tachometer.c
+
+-- 
+2.1.4
+
