@@ -1,116 +1,52 @@
-Return-Path: <jae.hyun.yoo@linux.intel.com>
-Return-path: <jae.hyun.yoo@linux.intel.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mga05.intel.com ([192.55.52.43]:1816 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752322AbeBUQQ1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Feb 2018 11:16:27 -0500
 From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: joel@jms.id.au,
-	andrew@aj.id.au,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	benh@kernel.crashing.org,
-	andrew@lunn.ch
-Cc: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	openbmc@lists.ozlabs.org,
-	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v2 2/8] [PATCH 2/8] Documentations: dt-bindings: Add a document of PECI adapter driver for Aspeed AST24xx/25xx SoCs
-Date: Wed, 21 Feb 2018 08:16:00 -0800
-Message-Id: <20180221161606.32247-3-jae.hyun.yoo@linux.intel.com>
+To: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jdelvare@suse.com, linux@roeck-us.net,
+        benh@kernel.crashing.org, andrew@lunn.ch
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v2 8/8] [PATCH 8/8] Add a maintainer for the PECI subsystem
+Date: Wed, 21 Feb 2018 08:16:06 -0800
+Message-Id: <20180221161606.32247-9-jae.hyun.yoo@linux.intel.com>
 In-Reply-To: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
 References: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-This commit adds a dt-bindings document of PECI adapter driver for Aspeed
-AST24xx/25xx SoCs.
+This commit adds a maintainer information for the PECI subsystem.
 
 Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 ---
- .../devicetree/bindings/peci/peci-aspeed.txt       | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.txt
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.txt b/Documentation/devicetree/bindings/peci/peci-aspeed.txt
-new file mode 100644
-index 000000000000..8a86f346d550
---- /dev/null
-+++ b/Documentation/devicetree/bindings/peci/peci-aspeed.txt
-@@ -0,0 +1,73 @@
-+Device tree configuration for PECI buses on the AST24XX and AST25XX SoCs.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 93a12af4f180..f9c302cbb76b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10830,6 +10830,15 @@ L:	platform-driver-x86@vger.kernel.org
+ S:	Maintained
+ F:	drivers/platform/x86/peaq-wmi.c
+ 
++PECI SUBSYSTEM
++M:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/peci/
++F:	drivers/peci/
++F:	drivers/hwmon/peci-*.c
++F:	include/linux/peci.h
++F:	include/uapi/linux/peci-ioctl.h
 +
-+Required properties:
-+- compatible
-+	"aspeed,ast2400-peci" or "aspeed,ast2500-peci"
-+	- aspeed,ast2400-peci: Aspeed AST2400 family PECI controller
-+	- aspeed,ast2500-peci: Aspeed AST2500 family PECI controller
-+
-+- reg
-+	Should contain PECI registers location and length.
-+
-+- #address-cells
-+	Should be <1>.
-+
-+- #size-cells
-+	Should be <0>.
-+
-+- interrupts
-+	Should contain PECI interrupt.
-+
-+- clocks
-+	Should contain clock source for PECI hardware module. Should reference
-+	clkin clock.
-+
-+- clock_frequency
-+	Should contain the operation frequency of PECI hardware module.
-+	187500 ~ 24000000
-+
-+Optional properties:
-+- msg-timing-nego
-+	Message timing negotiation period. This value will determine the period
-+	of message timing negotiation to be issued by PECI controller. The unit
-+	of the programmed value is four times of PECI clock period.
-+	0 ~ 255 (default: 1)
-+
-+- addr-timing-nego
-+	Address timing negotiation period. This value will determine the period
-+	of address timing negotiation to be issued by PECI controller. The unit
-+	of the programmed value is four times of PECI clock period.
-+	0 ~ 255 (default: 1)
-+
-+- rd-sampling-point
-+	Read sampling point selection. The whole period of a bit time will be
-+	divided into 16 time frames. This value will determine which time frame
-+	this controller will sample PECI signal for data read back. Usually in
-+	the middle of a bit time is the best.
-+	0 ~ 15 (default: 8)
-+
-+- cmd_timeout_ms
-+	Command timeout in units of ms.
-+	1 ~ 60000 (default: 1000)
-+
-+Example:
-+	peci: peci@1e78b000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x0 0x1e78b000 0x60>;
-+
-+		peci0: peci-bus@0 {
-+			compatible = "aspeed,ast2500-peci";
-+			reg = <0x0 0x60>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <15>;
-+			clocks = <&clk_clkin>;
-+			clock-frequency = <24000000>;
-+			msg-timing-nego = <1>;
-+			addr-timing-nego = <1>;
-+			rd-sampling-point = <8>;
-+			cmd-timeout-ms = <1000>;
-+		};
-+	};
-\ No newline at end of file
+ PER-CPU MEMORY ALLOCATOR
+ M:	Tejun Heo <tj@kernel.org>
+ M:	Christoph Lameter <cl@linux.com>
 -- 
 2.16.1
+
