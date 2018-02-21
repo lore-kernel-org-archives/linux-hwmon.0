@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:12393 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751754AbeBUHAo (ORCPT
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:3255 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751760AbeBUHAc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Feb 2018 02:00:44 -0500
+        Wed, 21 Feb 2018 02:00:32 -0500
 From: Rajkumar Rampelli <rrajk@nvidia.com>
 To: <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -22,9 +22,9 @@ CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <ldewangan@nvidia.com>,
         <rrajk@nvidia.com>
-Subject: [PATCH 08/10] arm64: defconfig: enable Nvidia Tegra Tachometer as a module
-Date: Wed, 21 Feb 2018 12:28:57 +0530
-Message-ID: <1519196339-9377-9-git-send-email-rrajk@nvidia.com>
+Subject: [PATCH 07/10] arm64: tegra: Add PWM based Tachometer support on Tegra186
+Date: Wed, 21 Feb 2018 12:28:56 +0530
+Message-ID: <1519196339-9377-8-git-send-email-rrajk@nvidia.com>
 In-Reply-To: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
 References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
 MIME-Version: 1.0
@@ -32,26 +32,30 @@ Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Tegra Tachometer driver implements PWM capture to measure
-period. Enable this driver as a module in the ARM64 defconfig.
+Add PWM based Tachometer support on Tegra186 to measure
+number of rotations of a Fan per minute by using PWM
+capture interface
 
 Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 634b373..8b2bda7 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -550,6 +550,7 @@ CONFIG_PWM_MESON=m
- CONFIG_PWM_ROCKCHIP=y
- CONFIG_PWM_SAMSUNG=y
- CONFIG_PWM_TEGRA=m
-+CONFIG_PWM_TEGRA_TACHOMETER=m
- CONFIG_PHY_RCAR_GEN3_USB2=y
- CONFIG_PHY_HI6220_USB=y
- CONFIG_PHY_QCOM_USB_HS=y
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+index 8f2d598..37149e9 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+@@ -1042,4 +1042,10 @@
+ 		reset-names = "tachometer";
+ 		status = "disabled";
+ 	};
++
++	generic_pwm_tachometer {
++		compatible = "generic-pwm-tachometer";
++		pwms = <&tegra_tachometer 0 1000000>;
++		status = "disabled";
++	};
+ };
 -- 
 2.1.4
 
