@@ -1,52 +1,136 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga05.intel.com ([192.55.52.43]:1816 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752322AbeBUQQ1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Feb 2018 11:16:27 -0500
+Return-Path: <jae.hyun.yoo@linux.intel.com>
+Return-path: <jae.hyun.yoo@linux.intel.com>
 From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jdelvare@suse.com, linux@roeck-us.net,
-        benh@kernel.crashing.org, andrew@lunn.ch
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v2 8/8] [PATCH 8/8] Add a maintainer for the PECI subsystem
-Date: Wed, 21 Feb 2018 08:16:06 -0800
-Message-Id: <20180221161606.32247-9-jae.hyun.yoo@linux.intel.com>
+To: joel@jms.id.au,
+	andrew@aj.id.au,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	benh@kernel.crashing.org,
+	andrew@lunn.ch
+Cc: linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v2 3/8] [PATCH 3/8] ARM: dts: aspeed: peci: Add PECI node
+Date: Wed, 21 Feb 2018 08:16:01 -0800
+Message-Id: <20180221161606.32247-4-jae.hyun.yoo@linux.intel.com>
 In-Reply-To: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
 References: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This commit adds a maintainer information for the PECI subsystem.
+This commit adds PECI bus/adapter node of AST24xx/AST25xx into
+aspeed-g4 and aspeed-g5.
 
 Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm/boot/dts/aspeed-g4.dtsi | 25 +++++++++++++++++++++++++
+ arch/arm/boot/dts/aspeed-g5.dtsi | 25 +++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 93a12af4f180..f9c302cbb76b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10830,6 +10830,15 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
+diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
+index b0d8431a3700..077b4d6795b8 100644
+--- a/arch/arm/boot/dts/aspeed-g4.dtsi
++++ b/arch/arm/boot/dts/aspeed-g4.dtsi
+@@ -29,6 +29,7 @@
+ 		serial3 = &uart4;
+ 		serial4 = &uart5;
+ 		serial5 = &vuart;
++		peci0 = &peci0;
+ 	};
  
-+PECI SUBSYSTEM
-+M:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/peci/
-+F:	drivers/peci/
-+F:	drivers/hwmon/peci-*.c
-+F:	include/linux/peci.h
-+F:	include/uapi/linux/peci-ioctl.h
+ 	cpus {
+@@ -250,6 +251,13 @@
+ 				};
+ 			};
+ 
++			peci: peci@1e78b000 {
++				compatible = "simple-bus";
++				#address-cells = <1>;
++				#size-cells = <1>;
++				ranges = <0x0 0x1e78b000 0x60>;
++			};
 +
- PER-CPU MEMORY ALLOCATOR
- M:	Tejun Heo <tj@kernel.org>
- M:	Christoph Lameter <cl@linux.com>
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+@@ -290,6 +298,23 @@
+ 	};
+ };
+ 
++&peci {
++	peci0: peci-bus@0 {
++		compatible = "aspeed,ast2400-peci";
++		reg = <0x0 0x60>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interrupts = <15>;
++		clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++		clock-frequency = <24000000>;
++		msg-timing-nego = <1>;
++		addr-timing-nego = <1>;
++		rd-sampling-point = <8>;
++		cmd-timeout-ms = <1000>;
++		status = "disabled";
++	};
++};
++
+ &i2c {
+ 	i2c_ic: interrupt-controller@0 {
+ 		#interrupt-cells = <1>;
+diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
+index 40de3b66c33f..5d3b5e177a32 100644
+--- a/arch/arm/boot/dts/aspeed-g5.dtsi
++++ b/arch/arm/boot/dts/aspeed-g5.dtsi
+@@ -29,6 +29,7 @@
+ 		serial3 = &uart4;
+ 		serial4 = &uart5;
+ 		serial5 = &vuart;
++		peci0 = &peci0;
+ 	};
+ 
+ 	cpus {
+@@ -301,6 +302,13 @@
+ 				};
+ 			};
+ 
++			peci: peci@1e78b000 {
++				compatible = "simple-bus";
++				#address-cells = <1>;
++				#size-cells = <1>;
++				ranges = <0x0 0x1e78b000 0x60>;
++			};
++
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+@@ -341,6 +349,23 @@
+ 	};
+ };
+ 
++&peci {
++	peci0: peci-bus@0 {
++		compatible = "aspeed,ast2500-peci";
++		reg = <0x0 0x60>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interrupts = <15>;
++		clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++		clock-frequency = <24000000>;
++		msg-timing-nego = <1>;
++		addr-timing-nego = <1>;
++		rd-sampling-point = <8>;
++		cmd-timeout-ms = <1000>;
++		status = "disabled";
++	};
++};
++
+ &i2c {
+ 	i2c_ic: interrupt-controller@0 {
+ 		#interrupt-cells = <1>;
 -- 
 2.16.1
-
