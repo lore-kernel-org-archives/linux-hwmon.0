@@ -1,246 +1,168 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:42088 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932826AbeBUOuv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Feb 2018 09:50:51 -0500
-Subject: Re: [PATCH 05/10] hwmon: generic-pwm-tachometer: Add generic PWM
- based tachometer
-To: Rajkumar Rampelli <rrajk@nvidia.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
-        pombredanne@nexb.com, mmaddireddy@nvidia.com,
-        mperttunen@nvidia.com, arnd@arndb.de,
-        gregory.clement@free-electrons.com, timur@codeaurora.org,
-        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
-        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ldewangan@nvidia.com
-References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
- <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5172edff-fe29-7ed1-f0d2-b0359ea2c24d@roeck-us.net>
-Date: Wed, 21 Feb 2018 06:50:47 -0800
-MIME-Version: 1.0
-In-Reply-To: <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <jae.hyun.yoo@linux.intel.com>
+Return-path: <jae.hyun.yoo@linux.intel.com>
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To: joel@jms.id.au,
+	andrew@aj.id.au,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	benh@kernel.crashing.org,
+	andrew@lunn.ch
+Cc: linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	openbmc@lists.ozlabs.org,
+	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v2 0/8] PECI device driver introduction
+Date: Wed, 21 Feb 2018 08:15:58 -0800
+Message-Id: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/20/2018 10:58 PM, Rajkumar Rampelli wrote:
-> Add generic PWM based tachometer driver via HWMON interface
-> to report the RPM of motor. This drivers get the period/duty
-> cycle from PWM IP which captures the motor PWM output.
-> 
-> This driver implements a simple interface for monitoring the speed of
-> a fan and exposes it in roatations per minute (RPM) to the user space
-> by using the hwmon's sysfs interface
-> 
-> Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
-> ---
->   Documentation/hwmon/generic-pwm-tachometer |  17 +++++
->   drivers/hwmon/Kconfig                      |  10 +++
->   drivers/hwmon/Makefile                     |   1 +
->   drivers/hwmon/generic-pwm-tachometer.c     | 112 +++++++++++++++++++++++++++++
->   4 files changed, 140 insertions(+)
->   create mode 100644 Documentation/hwmon/generic-pwm-tachometer
->   create mode 100644 drivers/hwmon/generic-pwm-tachometer.c
-> 
-> diff --git a/Documentation/hwmon/generic-pwm-tachometer b/Documentation/hwmon/generic-pwm-tachometer
-> new file mode 100644
-> index 0000000..e0713ee
-> --- /dev/null
-> +++ b/Documentation/hwmon/generic-pwm-tachometer
-> @@ -0,0 +1,17 @@
-> +Kernel driver generic-pwm-tachometer
-> +====================================
-> +
-> +This driver enables the use of a PWM module to monitor a fan. It uses the
-> +generic PWM interface and can be used on SoCs as along as the SoC supports
-> +Tachometer controller that moniors the Fan speed in periods.
-> +
-> +Author: Rajkumar Rampelli <rrajk@nvidia.com>
-> +
-> +Description
-> +-----------
-> +
-> +The driver implements a simple interface for monitoring the Fan speed using
-> +PWM module and Tachometer controller. It requests period value through PWM
-> +capture interface to Tachometer and measures the Rotations per minute using
-> +received period value. It exposes the Fan speed in RPM to the user space by
-> +using the hwmon's sysfs interface.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index ef23553..8912dcb 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1878,6 +1878,16 @@ config SENSORS_XGENE
->   	  If you say yes here you get support for the temperature
->   	  and power sensors for APM X-Gene SoC.
->   
-> +config GENERIC_PWM_TACHOMETER
-> +	tristate "Generic PWM based tachometer driver"
-> +	depends on PWM
-> +	help
-> +	  Enables a driver to use PWM signal from motor to use
-> +	  for measuring the motor speed. The RPM is captured by
-> +	  PWM modules which has PWM capture capability and this
-> +	  drivers reads the captured data from PWM IP to convert
-> +	  it to speed in RPM.
-> +
->   if ACPI
->   
->   comment "ACPI drivers"
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index f814b4a..9dcc374 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -175,6 +175,7 @@ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
->   obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
->   
->   obj-$(CONFIG_PMBUS)		+= pmbus/
-> +obj-$(CONFIG_GENERIC_PWM_TACHOMETER) += generic-pwm-tachometer.o
->   
->   ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->   
-> diff --git a/drivers/hwmon/generic-pwm-tachometer.c b/drivers/hwmon/generic-pwm-tachometer.c
-> new file mode 100644
-> index 0000000..9354d43
-> --- /dev/null
-> +++ b/drivers/hwmon/generic-pwm-tachometer.c
-> @@ -0,0 +1,112 @@
-> +/*
-> + * Copyright (c) 2017-2018, NVIDIA CORPORATION.  All rights reserved.
-> + *
-> + * This program is free software; you can redistribute it and/or modify it
-> + * under the terms and conditions of the GNU General Public License,
-> + * version 2, as published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope it will be useful, but WITHOUT
-> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> + * more details.
-> + *
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/err.h>
-> +#include <linux/pwm.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +
-> +struct pwm_hwmon_tach {
-> +	struct device		*dev;
-> +	struct pwm_device	*pwm;
-> +	struct device		*hwmon;
-> +};
-> +
-> +static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct pwm_hwmon_tach *ptt = dev_get_drvdata(dev);
-> +	struct pwm_device *pwm = ptt->pwm;
-> +	struct pwm_capture result;
-> +	int err;
-> +	unsigned int rpm = 0;
-> +
-> +	err = pwm_capture(pwm, &result, 0);
-> +	if (err < 0) {
-> +		dev_err(ptt->dev, "Failed to capture PWM: %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	if (result.period)
-> +		rpm = DIV_ROUND_CLOSEST_ULL(60ULL * NSEC_PER_SEC,
-> +					    result.period);
-> +
-> +	return sprintf(buf, "%u\n", rpm);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(rpm, 0444, show_rpm, NULL, 0);
-> +
-> +static struct attribute *pwm_tach_attrs[] = {
-> +	&sensor_dev_attr_rpm.dev_attr.attr,
-> +	NULL,
-> +};
+Introduction of the Platform Environment Control Interface (PECI) bus
+device driver. PECI is a one-wire bus interface that provides a
+communication channel between Intel processor and chipset components to
+external monitoring or control devices. PECI is designed to support the
+following sideband functions:
 
-"rpm" is not a standard hwmon sysfs attribute. If you don't provide
-a single standard hwmon sysfs attribute, having a hwmon driver is pointless.
+* Processor and DRAM thermal management
+  - Processor fan speed control is managed by comparing Digital Thermal
+    Sensor (DTS) thermal readings acquired via PECI against the
+    processor-specific fan speed control reference point, or TCONTROL.
+    Both TCONTROL and DTS thermal readings are accessible via the processor
+    PECI client. These variables are referenced to a common temperature,
+    the TCC activation point, and are both defined as negative offsets from
+    that reference.
+  - PECI based access to the processor package configuration space provides
+    a means for Baseboard Management Controllers (BMC) or other platform
+    management devices to actively manage the processor and memory power
+    and thermal features.
 
-> +
-> +ATTRIBUTE_GROUPS(pwm_tach);
-> +
-> +static int pwm_tach_probe(struct platform_device *pdev)
-> +{
-> +	struct pwm_hwmon_tach *ptt;
-> +	int err;
-> +
-> +	ptt = devm_kzalloc(&pdev->dev, sizeof(*ptt), GFP_KERNEL);
-> +	if (!ptt)
-> +		return -ENOMEM;
-> +
-> +	ptt->dev = &pdev->dev;
-> +
-> +	platform_set_drvdata(pdev, ptt);
-> +	dev_set_drvdata(&pdev->dev, ptt);
-> +
+* Platform Manageability
+  - Platform manageability functions including thermal, power, and error
+    monitoring. Note that platform 'power' management includes monitoring
+    and control for both the processor and DRAM subsystem to assist with
+    data center power limiting.
+  - PECI allows read access to certain error registers in the processor MSR
+    space and status monitoring registers in the PCI configuration space
+    within the processor and downstream devices.
+  - PECI permits writes to certain registers in the processor PCI
+    configuration space.
 
-None of those is used.
+* Processor Interface Tuning and Diagnostics
+  - Processor interface tuning and diagnostics capabilities
+    (Intel(c) Interconnect BIST). The processors Intel(c) Interconnect
+    Built In Self Test (Intel(c) IBIST) allows for infield diagnostic
+    capabilities in the Intel UPI and memory controller interfaces. PECI
+    provides a port to execute these diagnostics via its PCI Configuration
+    read and write capabilities.
 
-> +	ptt->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
-> +	if (IS_ERR(ptt->pwm)) {
-> +		err = PTR_ERR(ptt->pwm);
-> +		dev_err(&pdev->dev, "Failed to get pwm handle, err: %d\n",
-> +			err);
-> +		return err;
-> +	}
-> +
-> +	ptt->hwmon = devm_hwmon_device_register_with_groups(&pdev->dev,
-> +					 "pwm_tach", ptt, pwm_tach_groups);
+* Failure Analysis
+  - Output the state of the processor after a failure for analysis via
+    Crashdump.
 
-Please use the new API - devm_hwmon_device_register_with_info -
-for new drivers.
+PECI uses a single wire for self-clocking and data transfer. The bus
+requires no additional control lines. The physical layer is a self-clocked
+one-wire bus that begins each bit with a driven, rising edge from an idle
+level near zero volts. The duration of the signal driven high depends on
+whether the bit value is a logic '0' or logic '1'. PECI also includes
+variable data transfer rate established with every message. In this way,
+it is highly flexible even though underlying logic is simple.
 
-> +	if (IS_ERR(ptt->hwmon)) {
-> +		err = PTR_ERR_OR_ZERO(ptt->hwmon);
-> +		dev_err(&pdev->dev, "Failed to register hwmon device: %d\n",
-> +			err);
-> +		return err;
-> +	}
+The interface design was optimized for interfacing to Intel processor and
+chipset components in both single processor and multiple processor
+environments. The single wire interface provides low board routing
+overhead for the multiple load connections in the congested routing area
+near the processor and chipset components. Bus speed, error checking, and
+low protocol overhead provides adequate link bandwidth and reliability to
+transfer critical device operating conditions and configuration
+information.
 
-Please no noise on failure. The failure is going to be a memory allocation failure,
-which is reported already, and user space will be informed with the error code.
+This implementation provides the basic framework to add PECI extensions
+to the Linux bus and device models. A hardware specific 'Adapter' driver
+can be attached to the PECI bus to provide sideband functions described
+above. It is also possible to access all devices on an adapter from
+userspace through the /dev interface. A device specific 'Client' driver
+also can be attached to the PECI bus so each processor client's features
+can be supported by the 'Client' driver through an adapter connection in
+the bus. This patch set includes Aspeed 24xx/25xx PECI driver and a generic
+PECI hwmon driver as the first implementation for both adapter and client
+drivers on the PECI bus framework.
 
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id pwm_tach_of_match[] = {
-> +	{ .compatible = "generic-pwm-tachometer" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, pwm_tach_of_match);
-> +
-> +static struct platform_driver pwm_tach_driver = {
-> +	.driver = {
-> +		.name = "generic-pwm-tachometer",
-> +		.of_match_table = pwm_tach_of_match,
-> +	},
-> +	.probe = pwm_tach_probe,
-> +};
-> +
-> +module_platform_driver(pwm_tach_driver);
-> +
-> +MODULE_DESCRIPTION("PWM based Generic Tachometer driver");
-> +MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
-> +MODULE_AUTHOR("Rajkumar Rampelli <rrajk@nvidia.com>");
-> +MODULE_LICENSE("GPL v2");
-> 
+v1 -> v2
+- Additionally implemented a core driver to support PECI linux bus driver
+  model.
+- Modified Aspeed PECI driver to make that to be an adapter driver in PECI
+  bus.
+- Modified PECI hwmon driver to make that to be a client driver in PECI
+  bus.
+- Simplified hwmon driver attribute labels and removed redundant strings.
+- Removed core_nums from device tree setting of hwmon driver and modified
+  core number detection logic to check the resolved_core register in
+  client CPU's local PCI configuration area.
+- Removed dimm_nums from device tree setting of hwmon driver and added
+  populated DIMM detection logic to support dynamic creation.
+- Removed indexing gap on core temperature and DIMM temperature attributes.
+- Improved hwmon registration and dynamic attribute creation logic.
+- Fixed structure definitions in PECI uapi header to make that use __u8,
+  __u16 and etc.
+- Modified wait_for_completion_interruptible_timeout error handling logic
+  in Aspeed PECI driver to deliver errors correctly.
+- Removed low-level xfer command from ioctl and kept only high-level PECI
+  command suite as ioctls.
+- Fixed I/O timeout logic in Aspeed PECI driver using ktime.
+- Added a function into hwmon driver to simplify update delay checking.
+- Added a function into hwmon driver to convert 10.6 to millidegree.
+- Dropped non-standard attributes in hwmon driver.
+- Fixed OF table for hwmon to make it indicate as a PECI client of Intel
+  CPU target.
+- Added a maintainer of PECI subsystem into MAINTAINERS document.
 
+Thanks,
+
+-Jae
+
+Jae Hyun Yoo (8):
+  drivers/peci: Add support for PECI bus driver core
+  Documentations: dt-bindings: Add a document of PECI adapter driver for
+    Aspeed AST24xx/25xx SoCs
+  ARM: dts: aspeed: peci: Add PECI node
+  drivers/peci: Add a PECI adapter driver for Aspeed AST24xx/AST25xx
+  Documentation: dt-bindings: Add a document for PECI hwmon client driver
+  Documentation: hwmon: Add a document for a PECI hwmon client driver
+  drivers/hwmon: Add a generic PECI hwmon client driver
+  Add a maintainer for the PECI subsystem
+
+ .../devicetree/bindings/hwmon/peci-hwmon.txt       |   27 +
+ .../devicetree/bindings/peci/peci-aspeed.txt       |   73 ++
+ Documentation/hwmon/peci-hwmon                     |   73 ++
+ MAINTAINERS                                        |    9 +
+ arch/arm/boot/dts/aspeed-g4.dtsi                   |   25 +
+ arch/arm/boot/dts/aspeed-g5.dtsi                   |   25 +
+ drivers/Kconfig                                    |    2 +
+ drivers/Makefile                                   |    1 +
+ drivers/hwmon/Kconfig                              |   10 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/peci-hwmon.c                         |  928 ++++++++++++++
+ drivers/peci/Kconfig                               |   39 +
+ drivers/peci/Makefile                              |    9 +
+ drivers/peci/peci-aspeed.c                         |  510 ++++++++
+ drivers/peci/peci-core.c                           | 1337 ++++++++++++++++
+ include/linux/peci.h                               |   97 ++
+ include/uapi/linux/peci-ioctl.h                    |  207 +++
+ 17 files changed, 3373 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/peci-hwmon.txt
+ create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.txt
+ create mode 100644 Documentation/hwmon/peci-hwmon
+ create mode 100644 drivers/hwmon/peci-hwmon.c
+ create mode 100644 drivers/peci/Kconfig
+ create mode 100644 drivers/peci/Makefile
+ create mode 100644 drivers/peci/peci-aspeed.c
+ create mode 100644 drivers/peci/peci-core.c
+ create mode 100644 include/linux/peci.h
+ create mode 100644 include/uapi/linux/peci-ioctl.h
+
+-- 
+2.16.1
