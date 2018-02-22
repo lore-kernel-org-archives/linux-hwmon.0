@@ -1,96 +1,55 @@
-Return-Path: <groeck7@gmail.com>
-Return-path: <groeck7@gmail.com>
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/4] hwmon: (nct6775) Initialize boolean variables with declaration
-Date: Wed, 21 Feb 2018 13:09:38 -0800
-Message-Id: <1519247379-29443-3-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1519247379-29443-1-git-send-email-linux@roeck-us.net>
-References: <1519247379-29443-1-git-send-email-linux@roeck-us.net>
+Return-Path: <jae.hyun.yoo@linux.intel.com>
+Return-path: <jae.hyun.yoo@linux.intel.com>
+Subject: Re: [PATCH v2 7/8] [PATCH 7/8] drivers/hwmon: Add a generic PECI
+ hwmon client driver
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Guenter Roeck <linux@roeck-us.net>, joel@jms.id.au, andrew@aj.id.au,
+ arnd@arndb.de, gregkh@linuxfoundation.org, jdelvare@suse.com,
+ benh@kernel.crashing.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ openbmc@lists.ozlabs.org
+References: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
+ <20180221161606.32247-8-jae.hyun.yoo@linux.intel.com>
+ <20180221182608.GA11635@roeck-us.net>
+ <618f34cd-ee43-d8e4-4fb0-3c23bf03835f@linux.intel.com>
+ <20180221214859.GA30263@roeck-us.net>
+ <576a50c6-c302-654c-ceb3-aaf820b7738a@linux.intel.com>
+ <20180222003720.GA25250@lunn.ch>
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Message-ID: <b506b4b1-7e7d-abd6-bac2-c45e7c1e0aae@linux.intel.com>
+Date: Wed, 21 Feb 2018 17:29:27 -0800
+MIME-Version: 1.0
+In-Reply-To: <20180222003720.GA25250@lunn.ch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Initialize boolean flags in nct6775_check_fan_inputs() while
-declaring them instead of several times throughout the code.
+On 2/21/2018 4:37 PM, Andrew Lunn wrote:
+>> But even with this change, it still needs to use delayed creation
+>> because BMC side kernel doesn't know how many DIMMs are populated on
+>> a remote server before the remote server completes its memory
+>> training and testing in BIOS, but it needs to check the remote
+>> server's CPU temperature as immediate as possible to make
+>> appropriate thermal control based on the remote CPU's temperature to
+>> avoid any critical thermal issue. What would be a better solution in
+>> this case?
+> 
+> You could change this driver so that it supports one DIMM.  Move the
+> 'hotplug' part into another driver which creates and destroys
+> instances of the hwmon DIMM device as the DIMMS come and go.
+> 
+> Also, do you need to handle CPU hotplug? You could split the CPU
+> temperature part into a separate hwmon driver? And again create and
+> destroy devices as CPUs come and go?
+> 
+> 	Andrew
+> 
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/nct6775.c | 28 ++++------------------------
- 1 file changed, 4 insertions(+), 24 deletions(-)
+That seems like a possible option. I'll rewrite the hwmon driver again 
+like that.
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index cebd716ddc91..5662b23dbffa 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -3360,8 +3360,10 @@ static inline void nct6775_init_device(struct nct6775_data *data)
- static void
- nct6775_check_fan_inputs(struct nct6775_data *data)
- {
--	bool fan3pin, fan4pin, fan4min, fan5pin, fan6pin;
--	bool pwm3pin, pwm4pin, pwm5pin, pwm6pin;
-+	bool fan3pin = false, fan4pin = false, fan4min = false;
-+	bool fan5pin = false, fan6pin = false;
-+	bool pwm3pin = false, pwm4pin = false, pwm5pin = false;
-+	bool pwm6pin = false;
- 	int sioreg = data->sioreg;
- 	int regval;
- 
-@@ -3378,12 +3380,6 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 
- 		/* On NCT6775, fan4 shares pins with the fdc interface */
- 		fan4pin = !(superio_inb(sioreg, 0x2A) & 0x80);
--		fan4min = false;
--		fan5pin = false;
--		fan6pin = false;
--		pwm4pin = false;
--		pwm5pin = false;
--		pwm6pin = false;
- 	} else if (data->kind == nct6776) {
- 		bool gpok = superio_inb(sioreg, 0x27) & 0x80;
- 		const char *board_vendor, *board_name;
-@@ -3423,23 +3419,11 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 			fan5pin = superio_inb(sioreg, 0x1C) & 0x02;
- 
- 		fan4min = fan4pin;
--		fan6pin = false;
- 		pwm3pin = fan3pin;
--		pwm4pin = false;
--		pwm5pin = false;
--		pwm6pin = false;
- 	} else if (data->kind == nct6106) {
- 		regval = superio_inb(sioreg, 0x24);
- 		fan3pin = !(regval & 0x80);
- 		pwm3pin = regval & 0x08;
--
--		fan4pin = false;
--		fan4min = false;
--		fan5pin = false;
--		fan6pin = false;
--		pwm4pin = false;
--		pwm5pin = false;
--		pwm6pin = false;
- 	} else { /* NCT6779D, NCT6791D, NCT6792D, NCT6793D, or NCT6795D */
- 		int regval_1b, regval_2a, regval_2f, regval_eb;
- 		bool dsw_en;
-@@ -3474,8 +3458,6 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 			if (!fan5pin)
- 				fan5pin = regval_1b & BIT(5);
- 
--			fan6pin = false;
--			pwm6pin = false;
- 			if (!dsw_en) {
- 				fan6pin = regval & BIT(1);
- 				pwm6pin = regval & BIT(0);
-@@ -3506,8 +3488,6 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 			}
- 			break;
- 		default:	/* NCT6779D */
--			fan6pin = false;
--			pwm6pin = false;
- 			break;
- 		}
- 
--- 
-2.7.4
+Thanks for the good idea. :)
+
+Jae
