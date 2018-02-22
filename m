@@ -1,9 +1,9 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga01.intel.com ([192.55.52.88]:42156 "EHLO mga01.intel.com"
+Received: from mga14.intel.com ([192.55.52.115]:31082 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751446AbeBVHCJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Feb 2018 02:02:09 -0500
-Date: Thu, 22 Feb 2018 15:01:10 +0800
+        id S1751217AbeBVHCI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 22 Feb 2018 02:02:08 -0500
+Date: Thu, 22 Feb 2018 15:01:11 +0800
 From: kbuild test robot <lkp@intel.com>
 To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc: kbuild-all@01.org, joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
@@ -13,9 +13,8 @@ Cc: kbuild-all@01.org, joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH v2 1/8] [PATCH 1/8] drivers/peci: Add support for PECI
- bus driver core
-Message-ID: <201802221429.9znwFmb7%fengguang.wu@intel.com>
+Subject: [RFC PATCH] drivers/peci: peci_match_id() can be static
+Message-ID: <20180222070111.GA22310@lkp-ne02>
 References: <20180221161606.32247-2-jae.hyun.yoo@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -24,27 +23,25 @@ In-Reply-To: <20180221161606.32247-2-jae.hyun.yoo@linux.intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Jae,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v4.16-rc2 next-20180221]
-[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-
-url:    https://github.com/0day-ci/linux/commits/Jae-Hyun-Yoo/PECI-device-driver-introduction/20180222-054545
-reproduce:
-        # apt-get install sparse
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF=-D__CHECK_ENDIAN__
-
-
-sparse warnings: (new ones prefixed by >>)
-
->> drivers/peci/peci-core.c:773:29: sparse: symbol 'peci_match_id' was not declared. Should it be
-
-Please review and possibly fold the followup patch.
-
+Fixes: 99f5d2b99ecd ("drivers/peci: Add support for PECI bus driver core")
+Signed-off-by: Fengguang Wu <fengguang.wu@intel.com>
 ---
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+ peci-core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/peci/peci-core.c b/drivers/peci/peci-core.c
+index d976c73..4709b8c 100644
+--- a/drivers/peci/peci-core.c
++++ b/drivers/peci/peci-core.c
+@@ -770,8 +770,8 @@ peci_of_match_device(const struct of_device_id *matches,
+ }
+ #endif
+ 
+-const struct peci_device_id *peci_match_id(const struct peci_device_id *id,
+-					   struct peci_client *client)
++static const struct peci_device_id *peci_match_id(const struct peci_device_id *id,
++						  struct peci_client *client)
+ {
+ 	if (!(id && client))
+ 		return NULL;
