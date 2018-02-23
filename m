@@ -1,227 +1,313 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f67.google.com ([74.125.83.67]:45726 "EHLO
-        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752420AbeB1O31 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Feb 2018 09:29:27 -0500
-Subject: Re: [PATCH 05/10] hwmon: generic-pwm-tachometer: Add generic PWM
- based tachometer
-To: Mikko Perttunen <cyndis@kapsi.fi>,
-        Rajkumar Rampelli <rrajk@nvidia.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
-        pombredanne@nexb.com, mmaddireddy@nvidia.com,
-        mperttunen@nvidia.com, arnd@arndb.de, timur@codeaurora.org,
-        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
-        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ldewangan@nvidia.com
-References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
- <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
- <5172edff-fe29-7ed1-f0d2-b0359ea2c24d@roeck-us.net>
- <2510b525-ec36-b49d-5a62-81f335c0d10d@nvidia.com>
- <cfe0d0ce-3a89-bad0-85ba-6edf1135d2dc@roeck-us.net>
- <2628eff2-dd33-34f4-a7e1-cfe46ef88a3f@nvidia.com>
- <4556a8d2-947d-72c4-2962-3167afb53978@kapsi.fi>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <62ba7f67-5a99-51ab-1214-eb68ebb7e642@roeck-us.net>
-Date: Wed, 28 Feb 2018 06:29:21 -0800
-MIME-Version: 1.0
-In-Reply-To: <4556a8d2-947d-72c4-2962-3167afb53978@kapsi.fi>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <sudeep.holla@arm.com>
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: ALKML <linux-arm-kernel@lists.infradead.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	DTML <devicetree@vger.kernel.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Alexey Klimov <klimov.linux@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v6 18/20] hwmon: add support for sensors exported via ARM SCMI
+Date: Fri, 23 Feb 2018 16:23:48 +0000
+Message-Id: <1519403030-21189-19-git-send-email-sudeep.holla@arm.com>
+In-Reply-To: <1519403030-21189-1-git-send-email-sudeep.holla@arm.com>
+References: <1519403030-21189-1-git-send-email-sudeep.holla@arm.com>
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 02/27/2018 11:03 PM, Mikko Perttunen wrote:
-> On 02/28/2018 08:12 AM, Rajkumar Rampelli wrote:
->>
->> On Wednesday 28 February 2018 11:28 AM, Guenter Roeck wrote:
->>> On 02/27/2018 09:38 PM, Rajkumar Rampelli wrote:
->>>>
->>>> On Wednesday 21 February 2018 08:20 PM, Guenter Roeck wrote:
->>>>> On 02/20/2018 10:58 PM, Rajkumar Rampelli wrote:
->>>>>> Add generic PWM based tachometer driver via HWMON interface
->>>>>> to report the RPM of motor. This drivers get the period/duty
->>>>>> cycle from PWM IP which captures the motor PWM output.
->>>>>>
->>>>>> This driver implements a simple interface for monitoring the speed of
->>>>>> a fan and exposes it in roatations per minute (RPM) to the user space
->>>>>> by using the hwmon's sysfs interface
->>>>>>
->>>>>> Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
->>>>>> ---
->>>>>>   Documentation/hwmon/generic-pwm-tachometer |  17 +++++
->>>>>>   drivers/hwmon/Kconfig                      |  10 +++
->>>>>>   drivers/hwmon/Makefile                     |   1 +
->>>>>>   drivers/hwmon/generic-pwm-tachometer.c     | 112 +++++++++++++++++++++++++++++
->>>>>>   4 files changed, 140 insertions(+)
->>>>>>   create mode 100644 Documentation/hwmon/generic-pwm-tachometer
->>>>>>   create mode 100644 drivers/hwmon/generic-pwm-tachometer.c
->>>>>>
->>>>>> diff --git a/Documentation/hwmon/generic-pwm-tachometer b/Documentation/hwmon/generic-pwm-tachometer
->>>>>> new file mode 100644
->>>>>> index 0000000..e0713ee
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/hwmon/generic-pwm-tachometer
->>>>>> @@ -0,0 +1,17 @@
->>>>>> +Kernel driver generic-pwm-tachometer
->>>>>> +====================================
->>>>>> +
->>>>>> +This driver enables the use of a PWM module to monitor a fan. It uses the
->>>>>> +generic PWM interface and can be used on SoCs as along as the SoC supports
->>>>>> +Tachometer controller that moniors the Fan speed in periods.
->>>>>> +
->>>>>> +Author: Rajkumar Rampelli <rrajk@nvidia.com>
->>>>>> +
->>>>>> +Description
->>>>>> +-----------
->>>>>> +
->>>>>> +The driver implements a simple interface for monitoring the Fan speed using
->>>>>> +PWM module and Tachometer controller. It requests period value through PWM
->>>>>> +capture interface to Tachometer and measures the Rotations per minute using
->>>>>> +received period value. It exposes the Fan speed in RPM to the user space by
->>>>>> +using the hwmon's sysfs interface.
->>>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>>>> index ef23553..8912dcb 100644
->>>>>> --- a/drivers/hwmon/Kconfig
->>>>>> +++ b/drivers/hwmon/Kconfig
->>>>>> @@ -1878,6 +1878,16 @@ config SENSORS_XGENE
->>>>>>         If you say yes here you get support for the temperature
->>>>>>         and power sensors for APM X-Gene SoC.
->>>>>>   +config GENERIC_PWM_TACHOMETER
->>>>>> +    tristate "Generic PWM based tachometer driver"
->>>>>> +    depends on PWM
->>>>>> +    help
->>>>>> +      Enables a driver to use PWM signal from motor to use
->>>>>> +      for measuring the motor speed. The RPM is captured by
->>>>>> +      PWM modules which has PWM capture capability and this
->>>>>> +      drivers reads the captured data from PWM IP to convert
->>>>>> +      it to speed in RPM.
->>>>>> +
->>>>>>   if ACPI
->>>>>>     comment "ACPI drivers"
->>>>>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->>>>>> index f814b4a..9dcc374 100644
->>>>>> --- a/drivers/hwmon/Makefile
->>>>>> +++ b/drivers/hwmon/Makefile
->>>>>> @@ -175,6 +175,7 @@ obj-$(CONFIG_SENSORS_WM8350)    += wm8350-hwmon.o
->>>>>>   obj-$(CONFIG_SENSORS_XGENE)    += xgene-hwmon.o
->>>>>>     obj-$(CONFIG_PMBUS)        += pmbus/
->>>>>> +obj-$(CONFIG_GENERIC_PWM_TACHOMETER) += generic-pwm-tachometer.o
->>>>>>     ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->>>>>>   diff --git a/drivers/hwmon/generic-pwm-tachometer.c b/drivers/hwmon/generic-pwm-tachometer.c
->>>>>> new file mode 100644
->>>>>> index 0000000..9354d43
->>>>>> --- /dev/null
->>>>>> +++ b/drivers/hwmon/generic-pwm-tachometer.c
->>>>>> @@ -0,0 +1,112 @@
->>>>>> +/*
->>>>>> + * Copyright (c) 2017-2018, NVIDIA CORPORATION.  All rights reserved.
->>>>>> + *
->>>>>> + * This program is free software; you can redistribute it and/or modify it
->>>>>> + * under the terms and conditions of the GNU General Public License,
->>>>>> + * version 2, as published by the Free Software Foundation.
->>>>>> + *
->>>>>> + * This program is distributed in the hope it will be useful, but WITHOUT
->>>>>> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
->>>>>> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
->>>>>> + * more details.
->>>>>> + *
->>>>>> + */
->>>>>> +
->>>>>> +#include <linux/module.h>
->>>>>> +#include <linux/platform_device.h>
->>>>>> +#include <linux/err.h>
->>>>>> +#include <linux/pwm.h>
->>>>>> +#include <linux/hwmon.h>
->>>>>> +#include <linux/hwmon-sysfs.h>
->>>>>> +
->>>>>> +struct pwm_hwmon_tach {
->>>>>> +    struct device        *dev;
->>>>>> +    struct pwm_device    *pwm;
->>>>>> +    struct device        *hwmon;
->>>>>> +};
->>>>>> +
->>>>>> +static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
->>>>>> +            char *buf)
->>>>>> +{
->>>>>> +    struct pwm_hwmon_tach *ptt = dev_get_drvdata(dev);
->>>>>> +    struct pwm_device *pwm = ptt->pwm;
->>>>>> +    struct pwm_capture result;
->>>>>> +    int err;
->>>>>> +    unsigned int rpm = 0;
->>>>>> +
->>>>>> +    err = pwm_capture(pwm, &result, 0);
->>>>>> +    if (err < 0) {
->>>>>> +        dev_err(ptt->dev, "Failed to capture PWM: %d\n", err);
->>>>>> +        return err;
->>>>>> +    }
->>>>>> +
->>>>>> +    if (result.period)
->>>>>> +        rpm = DIV_ROUND_CLOSEST_ULL(60ULL * NSEC_PER_SEC,
->>>>>> +                        result.period);
->>>>>> +
->>>>>> +    return sprintf(buf, "%u\n", rpm);
->>>>>> +}
->>>>>> +
->>>>>> +static SENSOR_DEVICE_ATTR(rpm, 0444, show_rpm, NULL, 0);
->>>>>> +
->>>>>> +static struct attribute *pwm_tach_attrs[] = {
->>>>>> +    &sensor_dev_attr_rpm.dev_attr.attr,
->>>>>> +    NULL,
->>>>>> +};
->>>>>
->>>>> "rpm" is not a standard hwmon sysfs attribute. If you don't provide
->>>>> a single standard hwmon sysfs attribute, having a hwmon driver is pointless.
->>>> Guenter Roeck,
->>>> I will define a new hwmon sysfs attribute node called "hwmon_tachometer_attributes" in hwmon.h like below and update the same in tachometer hwmon driver. Is it fine ?
->>>> enum hwmon_tachometer_attributes {
->>>
->>> Are you kidding me ?
->>>
->>> Guenter
->> Sorry, I just wanted to confirm whether my understanding is correct or not before implementing it actually.
->> Or, shall I add this attribute as a part of fan attributes with "hwmon_fan_rpm" ? or any other way to do it ? I need your inputs in fixing this.
-> 
-> I think he wants the attribute to be named according to the properties in this document: https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface. I guess the attribute would then map to fan1_input, though I'm not sure if that's 100% correct either since this could technically be attached to something other than a fan. But I would think in practice that's not a big concern.
-> 
-> Guenter,
-> Please correct me as well if I'm wrong.
-> 
-You are absolutely correct.
+Create a driver to add support for SoC sensors exported by the System
+Control Processor (SCP) via the System Control and Management Interface
+(SCMI). The supported sensor types is one of voltage, temperature,
+current, and power.
 
-While I am not opposed to ABI changes, the merits of those would need to be
-discussed on the mailing list. But replacing "fan1_input" with "rpm" is
-not an acceptable ABI change, even if it may measure something that turns
-but isn't a fan.
+The sensor labels and values provided by the SCP are exported via the
+hwmon sysfs interface.
 
-If this _is_ in fact supposed to be used for something else but fans, we
-would have to discuss what that might be, and if hwmon is the appropriate
-subsystem to measure and report it. This does to some degree lead back to
-my concern of having the "fan" part of this patch series in the pwm core.
-I am still not sure if that makes sense.
+Cc: linux-hwmon@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/hwmon/Kconfig      |  12 +++
+ drivers/hwmon/Makefile     |   1 +
+ drivers/hwmon/scmi-hwmon.c | 233 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 246 insertions(+)
+ create mode 100644 drivers/hwmon/scmi-hwmon.c
 
-Thanks,
-Guenter
-
-> Thank you,
-> Mikko
-> 
->>
->> -- 
->> To unsubscribe from this list: send the line "unsubscribe linux-tegra" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> -- 
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index ef23553ff5cb..033e57366d56 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -317,6 +317,18 @@ config SENSORS_APPLESMC
+ 	  Say Y here if you have an applicable laptop and want to experience
+ 	  the awesome power of applesmc.
+ 
++config SENSORS_ARM_SCMI
++	tristate "ARM SCMI Sensors"
++	depends on ARM_SCMI_PROTOCOL
++	depends on THERMAL || !THERMAL_OF
++	help
++	  This driver provides support for temperature, voltage, current
++	  and power sensors available on SCMI based platforms. The actual
++	  number and type of sensors exported depend on the platform.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called scmi-hwmon.
++
+ config SENSORS_ARM_SCPI
+ 	tristate "ARM SCPI Sensors"
+ 	depends on ARM_SCPI_PROTOCOL
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index f814b4ace138..e7d52a36e6c4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -46,6 +46,7 @@ obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
+ obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
+ obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
+ obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
++obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+ obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
+ obj-$(CONFIG_SENSORS_ASC7621)	+= asc7621.o
+ obj-$(CONFIG_SENSORS_ASPEED)	+= aspeed-pwm-tacho.o
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+new file mode 100644
+index 000000000000..7a0ab768d4b5
+--- /dev/null
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -0,0 +1,233 @@
++/*
++ * System Control and Management Interface(SCMI) based hwmon sensor driver
++ *
++ * Copyright (C) 2017 ARM Ltd.
++ * Sudeep Holla <sudeep.holla@arm.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
++ * kind, whether express or implied; without even the implied warranty
++ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/hwmon.h>
++#include <linux/module.h>
++#include <linux/scmi_protocol.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++#include <linux/thermal.h>
++
++struct scmi_sensors {
++	const struct scmi_handle *handle;
++	const struct scmi_sensor_info **info[hwmon_max];
++};
++
++static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			   u32 attr, int channel, long *val)
++{
++	int ret;
++	u64 value;
++	const struct scmi_sensor_info *sensor;
++	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
++	const struct scmi_handle *h = scmi_sensors->handle;
++
++	sensor = *(scmi_sensors->info[type] + channel);
++	ret = h->sensor_ops->reading_get(h, sensor->id, false, &value);
++	if (!ret)
++		*val = value;
++
++	return ret;
++}
++
++static int
++scmi_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
++		       u32 attr, int channel, const char **str)
++{
++	const struct scmi_sensor_info *sensor;
++	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
++
++	sensor = *(scmi_sensors->info[type] + channel);
++	*str = sensor->name;
++
++	return 0;
++}
++
++static umode_t
++scmi_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
++		      u32 attr, int channel)
++{
++	const struct scmi_sensor_info *sensor;
++	const struct scmi_sensors *scmi_sensors = drvdata;
++
++	sensor = *(scmi_sensors->info[type] + channel);
++	if (sensor && sensor->name)
++		return S_IRUGO;
++
++	return 0;
++}
++
++static const struct hwmon_ops scmi_hwmon_ops = {
++	.is_visible = scmi_hwmon_is_visible,
++	.read = scmi_hwmon_read,
++	.read_string = scmi_hwmon_read_string,
++};
++
++static struct hwmon_chip_info scmi_chip_info = {
++	.ops = &scmi_hwmon_ops,
++	.info = NULL,
++};
++
++static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
++				    struct device *dev, int num,
++				    enum hwmon_sensor_types type, u32 config)
++{
++	int i;
++	u32 *cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
++
++	if (!cfg)
++		return -ENOMEM;
++
++	scmi_hwmon_chan->type = type;
++	scmi_hwmon_chan->config = cfg;
++	for (i = 0; i < num; i++, cfg++)
++		*cfg = config;
++
++	return 0;
++}
++
++static enum hwmon_sensor_types scmi_types[] = {
++	[TEMPERATURE_C] = hwmon_temp,
++	[VOLTAGE] = hwmon_in,
++	[CURRENT] = hwmon_curr,
++	[POWER] = hwmon_power,
++	[ENERGY] = hwmon_energy,
++};
++
++static u32 hwmon_attributes[] = {
++	[hwmon_chip] = HWMON_C_REGISTER_TZ,
++	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
++	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
++	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
++	[hwmon_power] = HWMON_P_INPUT | HWMON_P_LABEL,
++	[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
++};
++
++static int scmi_hwmon_probe(struct scmi_device *sdev)
++{
++	int i, idx;
++	u16 nr_sensors;
++	enum hwmon_sensor_types type;
++	struct scmi_sensors *scmi_sensors;
++	const struct scmi_sensor_info *sensor;
++	int nr_count[hwmon_max] = {0}, nr_types = 0;
++	const struct hwmon_chip_info *chip_info;
++	struct device *hwdev, *dev = &sdev->dev;
++	struct hwmon_channel_info *scmi_hwmon_chan;
++	const struct hwmon_channel_info **ptr_scmi_ci;
++	const struct scmi_handle *handle = sdev->handle;
++
++	if (!handle || !handle->sensor_ops)
++		return -ENODEV;
++
++	nr_sensors = handle->sensor_ops->count_get(handle);
++	if (!nr_sensors)
++		return -EIO;
++
++	scmi_sensors = devm_kzalloc(dev, sizeof(*scmi_sensors), GFP_KERNEL);
++	if (!scmi_sensors)
++		return -ENOMEM;
++
++	scmi_sensors->handle = handle;
++
++	for (i = 0; i < nr_sensors; i++) {
++		sensor = handle->sensor_ops->info_get(handle, i);
++		if (!sensor)
++			return PTR_ERR(sensor);
++
++		switch (sensor->type) {
++		case TEMPERATURE_C:
++		case VOLTAGE:
++		case CURRENT:
++		case POWER:
++		case ENERGY:
++			type = scmi_types[sensor->type];
++			if (!nr_count[type])
++				nr_types++;
++			nr_count[type]++;
++			break;
++		}
++	}
++
++	if (nr_count[hwmon_temp])
++		nr_count[hwmon_chip]++, nr_types++;
++
++	scmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*scmi_hwmon_chan),
++				       GFP_KERNEL);
++	if (!scmi_hwmon_chan)
++		return -ENOMEM;
++
++	ptr_scmi_ci = devm_kcalloc(dev, nr_types + 1, sizeof(*ptr_scmi_ci),
++				   GFP_KERNEL);
++	if (!ptr_scmi_ci)
++		return -ENOMEM;
++
++	scmi_chip_info.info = ptr_scmi_ci;
++	chip_info = &scmi_chip_info;
++
++	for (type = 0; type < hwmon_max && nr_count[type]; type++) {
++		scmi_hwmon_add_chan_info(scmi_hwmon_chan, dev, nr_count[type],
++					 type, hwmon_attributes[type]);
++		*ptr_scmi_ci++ = scmi_hwmon_chan++;
++
++		scmi_sensors->info[type] =
++			devm_kcalloc(dev, nr_count[type],
++				     sizeof(*scmi_sensors->info), GFP_KERNEL);
++		if (!scmi_sensors->info[type])
++			return -ENOMEM;
++	}
++
++	for (i = nr_sensors - 1; i >= 0 ; i--) {
++		sensor = handle->sensor_ops->info_get(handle, i);
++		if (!sensor)
++			continue;
++
++		switch (sensor->type) {
++		case TEMPERATURE_C:
++		case VOLTAGE:
++		case CURRENT:
++		case POWER:
++		case ENERGY:
++			type = scmi_types[sensor->type];
++			idx = --nr_count[type];
++			*(scmi_sensors->info[type] + idx) = sensor;
++			break;
++		}
++	}
++
++	hwdev = devm_hwmon_device_register_with_info(dev, "scmi_sensors",
++						     scmi_sensors, chip_info,
++						     NULL);
++
++	return PTR_ERR_OR_ZERO(hwdev);
++}
++
++static const struct scmi_device_id scmi_id_table[] = {
++	{ SCMI_PROTOCOL_SENSOR },
++	{ },
++};
++MODULE_DEVICE_TABLE(scmi, scmi_id_table);
++
++static struct scmi_driver scmi_hwmon_drv = {
++	.name		= "scmi-hwmon",
++	.probe		= scmi_hwmon_probe,
++	.id_table	= scmi_id_table,
++};
++module_scmi_driver(scmi_hwmon_drv);
++
++MODULE_AUTHOR("Sudeep Holla <sudeep.holla@arm.com>");
++MODULE_DESCRIPTION("ARM SCMI HWMON interface driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.7.4
