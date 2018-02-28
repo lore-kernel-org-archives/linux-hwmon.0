@@ -1,55 +1,65 @@
-Return-Path: <jae.hyun.yoo@linux.intel.com>
-Return-path: <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH v2 7/8] [PATCH 7/8] drivers/hwmon: Add a generic PECI
- hwmon client driver
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Guenter Roeck <linux@roeck-us.net>, joel@jms.id.au, andrew@aj.id.au,
- arnd@arndb.de, gregkh@linuxfoundation.org, jdelvare@suse.com,
- benh@kernel.crashing.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- openbmc@lists.ozlabs.org
-References: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
- <20180221161606.32247-8-jae.hyun.yoo@linux.intel.com>
- <20180221182608.GA11635@roeck-us.net>
- <618f34cd-ee43-d8e4-4fb0-3c23bf03835f@linux.intel.com>
- <20180221214859.GA30263@roeck-us.net>
- <576a50c6-c302-654c-ceb3-aaf820b7738a@linux.intel.com>
- <20180222003720.GA25250@lunn.ch>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <b506b4b1-7e7d-abd6-bac2-c45e7c1e0aae@linux.intel.com>
-Date: Wed, 21 Feb 2018 17:29:27 -0800
-MIME-Version: 1.0
-In-Reply-To: <20180222003720.GA25250@lunn.ch>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg0-f67.google.com ([74.125.83.67]:37119 "EHLO
+        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751775AbeB1BVl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 27 Feb 2018 20:21:41 -0500
+Received: by mail-pg0-f67.google.com with SMTP id y26so332378pgv.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Feb 2018 17:21:41 -0800 (PST)
+From: Tim Harvey <tharvey@gateworks.com>
+To: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: [RFC 0/4] Add support for the Gateworks System Controller
+Date: Tue, 27 Feb 2018 17:21:10 -0800
+Message-Id: <1519780874-8558-1-git-send-email-tharvey@gateworks.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On 2/21/2018 4:37 PM, Andrew Lunn wrote:
->> But even with this change, it still needs to use delayed creation
->> because BMC side kernel doesn't know how many DIMMs are populated on
->> a remote server before the remote server completes its memory
->> training and testing in BIOS, but it needs to check the remote
->> server's CPU temperature as immediate as possible to make
->> appropriate thermal control based on the remote CPU's temperature to
->> avoid any critical thermal issue. What would be a better solution in
->> this case?
-> 
-> You could change this driver so that it supports one DIMM.  Move the
-> 'hotplug' part into another driver which creates and destroys
-> instances of the hwmon DIMM device as the DIMMS come and go.
-> 
-> Also, do you need to handle CPU hotplug? You could split the CPU
-> temperature part into a separate hwmon driver? And again create and
-> destroy devices as CPUs come and go?
-> 
-> 	Andrew
-> 
+This series adds support for the Gateworks System Controller used on Gateworks
+Laguna, Ventana, and Newport product families.
 
-That seems like a possible option. I'll rewrite the hwmon driver again 
-like that.
+The GSC is an MSP430 I2C slave controller whose firmware embeds the following
+features:
+ - I/O expander (16 GPIO's emulating a PCA955x)
+ - EEPROM (enumating AT24)
+ - RTC (enumating DS1672)
+ - HWMON
+ - Interrupt controller with tamper detect, user pushbotton
+ - Watchdog controller capable of full board power-cycle
+ - Power Control capable of full board power-cycle
 
-Thanks for the good idea. :)
+see http://trac.gateworks.com/wiki/gsc for more details
 
-Jae
+Tim Harvey (4):
+  dt-bindings: mfd: Add Gateworks System Controller bindings
+  mfd: add Gateworks System Controller core driver
+  hwmon: add Gateworks System Controller support
+  input: misc: Add Gateworks System Controller support
+
+ Documentation/devicetree/bindings/mfd/gsc.txt |  69 ++++++
+ drivers/hwmon/Kconfig                         |   6 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gsc-hwmon.c                     | 299 +++++++++++++++++++++++
+ drivers/input/misc/Kconfig                    |   6 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/gsc-input.c                | 196 +++++++++++++++
+ drivers/mfd/Kconfig                           |  10 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/gsc.c                             | 330 ++++++++++++++++++++++++++
+ include/linux/mfd/gsc.h                       |  79 ++++++
+ 11 files changed, 998 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gsc.txt
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/input/misc/gsc-input.c
+ create mode 100644 drivers/mfd/gsc.c
+ create mode 100644 include/linux/mfd/gsc.h
+
+-- 
+2.7.4
+
