@@ -1,456 +1,181 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f67.google.com ([74.125.83.67]:44756 "EHLO
-        mail-pg0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751463AbeB1CFv (ORCPT
+Received: from mail-pl0-f66.google.com ([209.85.160.66]:37184 "EHLO
+        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751948AbeB1F6U (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Feb 2018 21:05:51 -0500
-Subject: Re: [RFC 3/4] hwmon: add Gateworks System Controller support
-To: Tim Harvey <tharvey@gateworks.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org
-References: <1519780874-8558-1-git-send-email-tharvey@gateworks.com>
- <1519780874-8558-4-git-send-email-tharvey@gateworks.com>
+        Wed, 28 Feb 2018 00:58:20 -0500
+Subject: Re: [PATCH 05/10] hwmon: generic-pwm-tachometer: Add generic PWM
+ based tachometer
+To: Rajkumar Rampelli <rrajk@nvidia.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
+        catalin.marinas@arm.com, will.deacon@arm.com,
+        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
+        pombredanne@nexb.com, mmaddireddy@nvidia.com,
+        mperttunen@nvidia.com, arnd@arndb.de, timur@codeaurora.org,
+        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
+        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ldewangan@nvidia.com
+References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
+ <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
+ <5172edff-fe29-7ed1-f0d2-b0359ea2c24d@roeck-us.net>
+ <2510b525-ec36-b49d-5a62-81f335c0d10d@nvidia.com>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <69ea679a-91a7-761d-4fa8-2ac4c351fd43@roeck-us.net>
-Date: Tue, 27 Feb 2018 18:05:46 -0800
+Message-ID: <cfe0d0ce-3a89-bad0-85ba-6edf1135d2dc@roeck-us.net>
+Date: Tue, 27 Feb 2018 21:58:16 -0800
 MIME-Version: 1.0
-In-Reply-To: <1519780874-8558-4-git-send-email-tharvey@gateworks.com>
+In-Reply-To: <2510b525-ec36-b49d-5a62-81f335c0d10d@nvidia.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 02/27/2018 05:21 PM, Tim Harvey wrote:
-> The Gateworks System Controller has a hwmon sub-component that exposes
-> up to 16 ADC's, some of which are temperature sensors, others which are
-> voltage inputs. The ADC configuration (register mapping and name) is
-> configured via device-tree and varies board to board.
+On 02/27/2018 09:38 PM, Rajkumar Rampelli wrote:
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
->   drivers/hwmon/Kconfig     |   6 +
->   drivers/hwmon/Makefile    |   1 +
->   drivers/hwmon/gsc-hwmon.c | 299 ++++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 306 insertions(+)
->   create mode 100644 drivers/hwmon/gsc-hwmon.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7ad0176..9cdc3cb 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -475,6 +475,12 @@ config SENSORS_F75375S
->   	  This driver can also be built as a module.  If so, the module
->   	  will be called f75375s.
->   
-> +config SENSORS_GSC
-> +        tristate "Gateworks System Controller ADC"
-> +        depends on MFD_GSC
-> +        help
-> +          Support for the Gateworks System Controller A/D converters.
-> +
->   config SENSORS_MC13783_ADC
->           tristate "Freescale MC13783/MC13892 ADC"
->           depends on MFD_MC13XXX
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 0fe489f..835a536 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -69,6 +69,7 @@ obj-$(CONFIG_SENSORS_G760A)	+= g760a.o
->   obj-$(CONFIG_SENSORS_G762)	+= g762.o
->   obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
->   obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
-> +obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
->   obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
->   obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
->   obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
-> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-> new file mode 100644
-> index 0000000..3e14bea
-> --- /dev/null
-> +++ b/drivers/hwmon/gsc-hwmon.c
-> @@ -0,0 +1,299 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2018 Gateworks Corporation
-> + */
-> +#define DEBUG
+> On Wednesday 21 February 2018 08:20 PM, Guenter Roeck wrote:
+>> On 02/20/2018 10:58 PM, Rajkumar Rampelli wrote:
+>>> Add generic PWM based tachometer driver via HWMON interface
+>>> to report the RPM of motor. This drivers get the period/duty
+>>> cycle from PWM IP which captures the motor PWM output.
+>>>
+>>> This driver implements a simple interface for monitoring the speed of
+>>> a fan and exposes it in roatations per minute (RPM) to the user space
+>>> by using the hwmon's sysfs interface
+>>>
+>>> Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
+>>> ---
+>>>   Documentation/hwmon/generic-pwm-tachometer |  17 +++++
+>>>   drivers/hwmon/Kconfig                      |  10 +++
+>>>   drivers/hwmon/Makefile                     |   1 +
+>>>   drivers/hwmon/generic-pwm-tachometer.c     | 112 +++++++++++++++++++++++++++++
+>>>   4 files changed, 140 insertions(+)
+>>>   create mode 100644 Documentation/hwmon/generic-pwm-tachometer
+>>>   create mode 100644 drivers/hwmon/generic-pwm-tachometer.c
+>>>
+>>> diff --git a/Documentation/hwmon/generic-pwm-tachometer b/Documentation/hwmon/generic-pwm-tachometer
+>>> new file mode 100644
+>>> index 0000000..e0713ee
+>>> --- /dev/null
+>>> +++ b/Documentation/hwmon/generic-pwm-tachometer
+>>> @@ -0,0 +1,17 @@
+>>> +Kernel driver generic-pwm-tachometer
+>>> +====================================
+>>> +
+>>> +This driver enables the use of a PWM module to monitor a fan. It uses the
+>>> +generic PWM interface and can be used on SoCs as along as the SoC supports
+>>> +Tachometer controller that moniors the Fan speed in periods.
+>>> +
+>>> +Author: Rajkumar Rampelli <rrajk@nvidia.com>
+>>> +
+>>> +Description
+>>> +-----------
+>>> +
+>>> +The driver implements a simple interface for monitoring the Fan speed using
+>>> +PWM module and Tachometer controller. It requests period value through PWM
+>>> +capture interface to Tachometer and measures the Rotations per minute using
+>>> +received period value. It exposes the Fan speed in RPM to the user space by
+>>> +using the hwmon's sysfs interface.
+>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>> index ef23553..8912dcb 100644
+>>> --- a/drivers/hwmon/Kconfig
+>>> +++ b/drivers/hwmon/Kconfig
+>>> @@ -1878,6 +1878,16 @@ config SENSORS_XGENE
+>>>         If you say yes here you get support for the temperature
+>>>         and power sensors for APM X-Gene SoC.
+>>>   +config GENERIC_PWM_TACHOMETER
+>>> +    tristate "Generic PWM based tachometer driver"
+>>> +    depends on PWM
+>>> +    help
+>>> +      Enables a driver to use PWM signal from motor to use
+>>> +      for measuring the motor speed. The RPM is captured by
+>>> +      PWM modules which has PWM capture capability and this
+>>> +      drivers reads the captured data from PWM IP to convert
+>>> +      it to speed in RPM.
+>>> +
+>>>   if ACPI
+>>>     comment "ACPI drivers"
+>>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>>> index f814b4a..9dcc374 100644
+>>> --- a/drivers/hwmon/Makefile
+>>> +++ b/drivers/hwmon/Makefile
+>>> @@ -175,6 +175,7 @@ obj-$(CONFIG_SENSORS_WM8350)    += wm8350-hwmon.o
+>>>   obj-$(CONFIG_SENSORS_XGENE)    += xgene-hwmon.o
+>>>     obj-$(CONFIG_PMBUS)        += pmbus/
+>>> +obj-$(CONFIG_GENERIC_PWM_TACHOMETER) += generic-pwm-tachometer.o
+>>>     ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+>>>   diff --git a/drivers/hwmon/generic-pwm-tachometer.c b/drivers/hwmon/generic-pwm-tachometer.c
+>>> new file mode 100644
+>>> index 0000000..9354d43
+>>> --- /dev/null
+>>> +++ b/drivers/hwmon/generic-pwm-tachometer.c
+>>> @@ -0,0 +1,112 @@
+>>> +/*
+>>> + * Copyright (c) 2017-2018, NVIDIA CORPORATION.  All rights reserved.
+>>> + *
+>>> + * This program is free software; you can redistribute it and/or modify it
+>>> + * under the terms and conditions of the GNU General Public License,
+>>> + * version 2, as published by the Free Software Foundation.
+>>> + *
+>>> + * This program is distributed in the hope it will be useful, but WITHOUT
+>>> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+>>> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+>>> + * more details.
+>>> + *
+>>> + */
+>>> +
+>>> +#include <linux/module.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/err.h>
+>>> +#include <linux/pwm.h>
+>>> +#include <linux/hwmon.h>
+>>> +#include <linux/hwmon-sysfs.h>
+>>> +
+>>> +struct pwm_hwmon_tach {
+>>> +    struct device        *dev;
+>>> +    struct pwm_device    *pwm;
+>>> +    struct device        *hwmon;
+>>> +};
+>>> +
+>>> +static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
+>>> +            char *buf)
+>>> +{
+>>> +    struct pwm_hwmon_tach *ptt = dev_get_drvdata(dev);
+>>> +    struct pwm_device *pwm = ptt->pwm;
+>>> +    struct pwm_capture result;
+>>> +    int err;
+>>> +    unsigned int rpm = 0;
+>>> +
+>>> +    err = pwm_capture(pwm, &result, 0);
+>>> +    if (err < 0) {
+>>> +        dev_err(ptt->dev, "Failed to capture PWM: %d\n", err);
+>>> +        return err;
+>>> +    }
+>>> +
+>>> +    if (result.period)
+>>> +        rpm = DIV_ROUND_CLOSEST_ULL(60ULL * NSEC_PER_SEC,
+>>> +                        result.period);
+>>> +
+>>> +    return sprintf(buf, "%u\n", rpm);
+>>> +}
+>>> +
+>>> +static SENSOR_DEVICE_ATTR(rpm, 0444, show_rpm, NULL, 0);
+>>> +
+>>> +static struct attribute *pwm_tach_attrs[] = {
+>>> +    &sensor_dev_attr_rpm.dev_attr.attr,
+>>> +    NULL,
+>>> +};
+>>
+>> "rpm" is not a standard hwmon sysfs attribute. If you don't provide
+>> a single standard hwmon sysfs attribute, having a hwmon driver is pointless.
+> Guenter Roeck,
+> I will define a new hwmon sysfs attribute node called "hwmon_tachometer_attributes" in hwmon.h like below and update the same in tachometer hwmon driver. Is it fine ?
+> enum hwmon_tachometer_attributes {
 
-Please no.
+Are you kidding me ?
 
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/mfd/gsc.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +/* map channel to channel info */
-> +struct gsc_hwmon_ch {
-> +	u8 reg;
-> +	char name[32];
-> +};
-> +static struct gsc_hwmon_ch gsc_temp_ch[16];
-
-16 temperature channels ...
-
-> +static struct gsc_hwmon_ch gsc_in_ch[16];
-> +static struct gsc_hwmon_ch gsc_fan_ch[5];
-> +
-> +static int
-> +gsc_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	       int ch, long *val)
-> +{
-> +	struct gsc_dev *gsc = dev_get_drvdata(dev);
-> +	int sz, ret;
-> +	u8 reg;
-> +	u8 buf[3];
-> +
-> +	dev_dbg(dev, "%s type=%d attr=%d ch=%d\n", __func__, type, attr, ch);
-> +	switch (type) {
-> +	case hwmon_in:
-> +		sz = 3;
-> +		reg = gsc_in_ch[ch].reg;
-> +		break;
-> +	case hwmon_temp:
-> +		sz = 2;
-> +		reg = gsc_temp_ch[ch].reg;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	ret = regmap_bulk_read(gsc->regmap_hwmon, reg, &buf, sz);
-> +	if (!ret) {
-> +		*val = 0;
-> +		while (sz-- > 0)
-> +			*val |= (buf[sz] << (8*sz));
-> +		if ((type == hwmon_temp) && *val > 0x8000)
-
-Excessive [and inconsistent] ( )
-
-Please make this
-	if (ret)
-		return ret;
-	...
-	return 0;
-
-> +			*val -= 0xffff;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +gsc_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int ch, const char **buf)
-> +{
-> +	dev_dbg(dev, "%s type=%d attr=%d ch=%d\n", __func__, type, attr, ch);
-> +	switch (type) {
-> +	case hwmon_in:
-> +	case hwmon_temp:
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_in_label:
-> +			*buf = gsc_in_ch[ch].name;
-> +			return 0;
-> +			break;
-> +		case hwmon_temp_label:
-> +			*buf = gsc_temp_ch[ch].name;
-> +			return 0;
-> +			break;
-> +		case hwmon_fan_label:
-> +			*buf = gsc_fan_ch[ch].name;
-> +			return 0;
-> +			break;
-
-return followed by break doesn't make sense.
-
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -ENOTSUPP;
-> +}
-> +
-> +static int
-> +gsc_hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	       int ch, long val)
-> +{
-> +	struct gsc_dev *gsc = dev_get_drvdata(dev);
-> +	int ret;
-> +	u8 reg;
-> +	u8 buf[3];
-> +
-> +	dev_dbg(dev, "%s type=%d attr=%d ch=%d\n", __func__, type, attr, ch);
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		buf[0] = val & 0xff;
-> +		buf[1] = (val >> 8) & 0xff;
-> +		reg = gsc_fan_ch[ch].reg;
-> +		ret = regmap_bulk_write(gsc->regmap_hwmon, reg, &buf, 2);
-
-	&buf -> buf
-
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static umode_t
-> +gsc_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type, u32 attr,
-> +		     int ch)
-> +{
-> +	const struct gsc_dev *gsc = _data;
-> +	struct device *dev = gsc->dev;
-> +	umode_t mode = 0;
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		if (attr == hwmon_fan_input)
-> +			mode = (S_IRUGO | S_IWUSR);
-
-Unnecessary ( )
-
-> +		break;
-> +	case hwmon_temp:
-> +	case hwmon_in:
-> +		mode = S_IRUGO;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	dev_dbg(dev, "%s type=%d attr=%d ch=%d mode=0x%x\n", __func__, type,
-> +		attr, ch, mode);
-> +
-> +	return mode;
-> +}
-> +
-> +static u32 gsc_in_config[] = {
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	HWMON_I_INPUT,
-> +	0
-> +};
-> +static const struct hwmon_channel_info gsc_in = {
-> +	.type = hwmon_in,
-> +	.config = gsc_in_config,
-> +};
-> +
-> +static u32 gsc_temp_config[] = {
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	HWMON_T_INPUT,
-> +	0
-
-... but this array only has 8+1 elements. This seems inconsistent.
-How about using some defines for array sizes ?
-
-Also, why initialize those arrays ? You are overwriting them below.
-You could just use a static size array instead.
-
-I assume it is guaranteed that there is only exactly one instance
-of this device in the system. Have you tried what happens if you
-declare two instances anyway ? The result must be interesting,
-with all those static variables.
-
-> +};
-> +static const struct hwmon_channel_info gsc_temp = {
-> +	.type = hwmon_temp,
-> +	.config = gsc_temp_config,
-> +};
-> +
-> +static u32 gsc_fan_config[] = {
-> +	HWMON_F_INPUT,
-> +	HWMON_F_INPUT,
-> +	HWMON_F_INPUT,
-> +	HWMON_F_INPUT,
-> +	HWMON_F_INPUT,
-> +	HWMON_F_INPUT,
-> +	0,
-> +};
-
-The matching gsc_fan_ch has only 5 entries.
-
-> +static const struct hwmon_channel_info gsc_fan = {
-> +	.type = hwmon_fan,
-> +	.config = gsc_fan_config,
-> +};
-> +
-> +static const struct hwmon_channel_info *gsc_info[] = {
-> +	&gsc_temp,
-> +	&gsc_in,
-> +	&gsc_fan,
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops gsc_hwmon_ops = {
-> +	.is_visible = gsc_hwmon_is_visible,
-> +	.read = gsc_hwmon_read,
-> +	.read_string = gsc_hwmon_read_string,
-> +	.write = gsc_hwmon_write,
-> +};
-> +
-> +static const struct hwmon_chip_info gsc_chip_info = {
-> +	.ops = &gsc_hwmon_ops,
-> +	.info = gsc_info,
-> +};
-> +
-> +static int gsc_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct gsc_dev *gsc = dev_get_drvdata(pdev->dev.parent);
-> +	struct device_node *np;
-> +	struct device *hwmon;
-> +	int temp_count = 0;
-> +	int in_count = 0;
-> +	int fan_count = 0;
-> +	int ret;
-> +
-> +	dev_dbg(&pdev->dev, "%s\n", __func__);
-
-You declare local 'dev' variables all over the place, except here,
-where it would actually be used multiple times.
-
-Please either declare one here as well, or drop all the others.
-
-> +	np = of_get_next_child(pdev->dev.of_node, NULL);
-> +	while (np) {
-> +		u32 reg, type;
-> +		const char *label;
-> +
-> +		of_property_read_u32(np, "reg", &reg);
-> +		of_property_read_u32(np, "type", &type);
-> +		label = of_get_property(np, "label", NULL);
-
-It must be interesting to see what happens if no 'label' property
-is provided. Have you tried ? Also, no validation of 'reg' and 'type' ?
-Are you sure ?
-
-> +		switch(type) {
-> +		case 0: /* temperature sensor */
-> +			gsc_temp_config[temp_count] = HWMON_T_INPUT |
-> +						      HWMON_T_LABEL;
-> +			gsc_temp_ch[temp_count].reg = reg;
-> +			strncpy(gsc_temp_ch[temp_count].name, label, 32);
-
-This leaves the string unterminated if it is too long. Have you tested
-what happens in this situation ? Consider using strlcpy instead.
-
-Also please use sizeof() instead of '32'.
-
-> +			if (temp_count < ARRAY_SIZE(gsc_temp_config))
-> +				temp_count++;
-
-I would suggest to abort with EINVAL if this happens. Otherwise the last entry
-is overwritten, which doesn't make much sense. Also, this accepts up to ARRAY_SIZE()
-entries, leaving no termination.
-
-> +			break;
-> +		case 1: /* voltage sensor */
-> +			gsc_in_config[in_count] = HWMON_I_INPUT |
-> +						  HWMON_I_LABEL;
-> +			gsc_in_ch[in_count].reg = reg;
-
-So a reg value of 0xXXyy is auto-converted to 0xYY ?
-
-> +			strncpy(gsc_in_ch[in_count].name, label, 32);
-> +			if (in_count < ARRAY_SIZE(gsc_in_config))
-> +				in_count++;
-> +			break;
-> +		case 2: /* fan controller setpoint */
-> +			gsc_fan_config[fan_count] = HWMON_F_INPUT |
-> +						    HWMON_F_LABEL;
-> +			gsc_fan_ch[fan_count].reg = reg;
-
-It is going to be interesting to see what happens if there are more than
-5 such entries.
-
-> +			strncpy(gsc_fan_ch[fan_count].name, label, 32);
-> +			if (fan_count < ARRAY_SIZE(gsc_fan_config))
-> +				fan_count++;
-> +			break;
-
-All other types are silently ignored ?
-
-> +		}
-> +		np = of_get_next_child(pdev->dev.of_node, np);
-> +	}
-> +	/* terminate list */
-> +	gsc_in_config[in_count] = 0;
-> +	gsc_temp_config[temp_count] = 0;
-> +	gsc_fan_config[fan_count] = 0;
-> +
-I would suggest to move above code into a separate function.
-
-> +	hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
-> +						     KBUILD_MODNAME, gsc,
-> +						     &gsc_chip_info, NULL);
-> +	if (IS_ERR(hwmon)) {
-> +		ret = PTR_ERR(hwmon);
-> +		dev_err(&pdev->dev, "Unable to register hwmon device: %d\n",
-> +			ret);
-> +		return ret;
-> +	}
-
-The error would be ENOMEM. Is it necessary to report that again ?
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id gsc_hwmon_of_match[] = {
-> +	{ .compatible = "gw,gsc-hwmon", },
-> +	{}
-> +};
-> +
-> +static struct platform_driver gsc_hwmon_driver = {
-> +	.driver = {
-> +		.name = KBUILD_MODNAME,
-> +		.of_match_table = gsc_hwmon_of_match,
-> +	},
-> +	.probe = gsc_hwmon_probe,
-> +};
-> +
-> +module_platform_driver(gsc_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Tim Harvey <tharvey@gateworks.com>");
-> +MODULE_DESCRIPTION("GSC hardware monitor driver");
-> +MODULE_LICENSE("GPL v2");
-> 
-
+Guenter
