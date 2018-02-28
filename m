@@ -1,79 +1,39 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wr0-f196.google.com ([209.85.128.196]:37570 "EHLO
-        mail-wr0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S934879AbeB1VOC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Feb 2018 16:14:02 -0500
-Received: by mail-wr0-f196.google.com with SMTP id z12so3917700wrg.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 28 Feb 2018 13:14:01 -0800 (PST)
-MIME-Version: 1.0
-In-Reply-To: <170c83e1-8a34-5103-3767-139b22081cf9@infradead.org>
-References: <1519780874-8558-1-git-send-email-tharvey@gateworks.com>
- <1519780874-8558-3-git-send-email-tharvey@gateworks.com> <170c83e1-8a34-5103-3767-139b22081cf9@infradead.org>
-From: Tim Harvey <tharvey@gateworks.com>
-Date: Wed, 28 Feb 2018 13:14:00 -0800
-Message-ID: <CAJ+vNU0uRdG2vJWLc5ohBLNuzkKNQdH9-rSQxPAVW92f72yOPA@mail.gmail.com>
-Subject: Re: [RFC 2/4] mfd: add Gateworks System Controller core driver
-To: Randy Dunlap <rdunlap@infradead.org>
+Received: from vps0.lunn.ch ([185.16.172.187]:40757 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1752735AbeB1SxM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Feb 2018 13:53:12 -0500
+Date: Wed, 28 Feb 2018 19:53:02 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Tim Harvey <tharvey@gateworks.com>
 Cc: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC 2/4] mfd: add Gateworks System Controller core driver
+Message-ID: <20180228185302.GD1203@lunn.ch>
+References: <1519780874-8558-1-git-send-email-tharvey@gateworks.com>
+ <1519780874-8558-3-git-send-email-tharvey@gateworks.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1519780874-8558-3-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 27, 2018 at 6:00 PM, Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 02/27/2018 05:21 PM, Tim Harvey wrote:
->> The Gateworks System Controller (GSC) is an I2C slave controller
->> implemented with an MSP430 micro-controller whose firmware embeds the
->> following features:
->>  - I/O expander (16 GPIO's) using PCA955x protocol
->>  - Real Time Clock using DS1672 protocol
->>  - User EEPROM using AT24 protocol
->>  - HWMON using custom protocol
->>  - Interrupt controller with tamper detect, user pushbotton
->>  - Watchdog controller capable of full board power-cycle
->>  - Power Control capable of full board power-cycle
->>
->> see http://trac.gateworks.com/wiki/gsc for more details
->>
->> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
->> ---
->>  drivers/mfd/Kconfig     |  10 ++
->>  drivers/mfd/Makefile    |   1 +
->>  drivers/mfd/gsc.c       | 330 ++++++++++++++++++++++++++++++++++++++++++++++++
->>  include/linux/mfd/gsc.h |  79 ++++++++++++
->>  4 files changed, 420 insertions(+)
->>  create mode 100644 drivers/mfd/gsc.c
->>  create mode 100644 include/linux/mfd/gsc.h
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index 1d20a80..16dd486 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -341,6 +341,16 @@ config MFD_EXYNOS_LPASS
->>         Select this option to enable support for Samsung Exynos Low Power
->>         Audio Subsystem.
->>
->> +config MFD_GSC
->> +     tristate "Gateworks System Controller"
->> +     depends on (I2C && OF) || COMPILE_TEST
->
-> Do both I2C and OF have stubs so that a driver will build when they are
-> both disabled?  I.e., only COMPILE_TEST is enabled?
+> +		dev_err(&client->dev, ">> 0x%02x %d\n", reg, ret);
+> +		return ret;
+> +	}
+> +	dev_dbg(&client->dev, ">> 0x%02x=0x%02x (%d)\n", reg, val, retry);
+> +
+> +        return 0;
 
-Randy,
+Hi Tim
 
-No, at this point it requires both I2C and OF. I may add platform data
-to support an older non-device-tree family of boards but it still
-would require I2C.
+There appears to be a few spaces vs tabs issues in this file.
 
-I will remove the || COMPILE_TEST
-
-Thanks for catching that.
-
-Tim
+      Andrew
+ 
