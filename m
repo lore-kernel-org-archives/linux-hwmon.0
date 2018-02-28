@@ -1,137 +1,79 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:62285 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932103AbeBVMEM (ORCPT
+Received: from mail-wr0-f196.google.com ([209.85.128.196]:37570 "EHLO
+        mail-wr0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S934879AbeB1VOC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Feb 2018 07:04:12 -0500
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
-To: <thierry.reding@gmail.com>, <shc_work@mail.ru>, <kgene@kernel.org>,
-        <krzk@kernel.org>, <linux@armlinux.org.uk>,
-        <mturquette@baylibre.com>, <sboyd@codeaurora.org>,
-        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
-        <rodrigo.vivi@intel.com>, <airlied@linux.ie>, <kamil@wypas.org>,
-        <b.zolnierkie@samsung.com>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <dmitry.torokhov@gmail.com>,
-        <rpurdie@rpsys.net>, <jacek.anaszewski@gmail.com>, <pavel@ucw.cz>,
-        <mchehab@kernel.org>, <sean@mess.org>, <lee.jones@linaro.org>,
-        <daniel.thompson@linaro.org>, <jingoohan1@gmail.com>,
-        <milo.kim@ti.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <corbet@lwn.net>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@free-electrons.com>
-CC: <linux-pwm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 10/10] pwm: atmel: add push-pull mode support
-Date: Thu, 22 Feb 2018 14:01:21 +0200
-Message-ID: <1519300881-8136-11-git-send-email-claudiu.beznea@microchip.com>
-In-Reply-To: <1519300881-8136-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1519300881-8136-1-git-send-email-claudiu.beznea@microchip.com>
+        Wed, 28 Feb 2018 16:14:02 -0500
+Received: by mail-wr0-f196.google.com with SMTP id z12so3917700wrg.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Feb 2018 13:14:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <170c83e1-8a34-5103-3767-139b22081cf9@infradead.org>
+References: <1519780874-8558-1-git-send-email-tharvey@gateworks.com>
+ <1519780874-8558-3-git-send-email-tharvey@gateworks.com> <170c83e1-8a34-5103-3767-139b22081cf9@infradead.org>
+From: Tim Harvey <tharvey@gateworks.com>
+Date: Wed, 28 Feb 2018 13:14:00 -0800
+Message-ID: <CAJ+vNU0uRdG2vJWLc5ohBLNuzkKNQdH9-rSQxPAVW92f72yOPA@mail.gmail.com>
+Subject: Re: [RFC 2/4] mfd: add Gateworks System Controller core driver
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add support for PWM push-pull mode. This is only supported by SAMA5D2 SoCs.
+On Tue, Feb 27, 2018 at 6:00 PM, Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 02/27/2018 05:21 PM, Tim Harvey wrote:
+>> The Gateworks System Controller (GSC) is an I2C slave controller
+>> implemented with an MSP430 micro-controller whose firmware embeds the
+>> following features:
+>>  - I/O expander (16 GPIO's) using PCA955x protocol
+>>  - Real Time Clock using DS1672 protocol
+>>  - User EEPROM using AT24 protocol
+>>  - HWMON using custom protocol
+>>  - Interrupt controller with tamper detect, user pushbotton
+>>  - Watchdog controller capable of full board power-cycle
+>>  - Power Control capable of full board power-cycle
+>>
+>> see http://trac.gateworks.com/wiki/gsc for more details
+>>
+>> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+>> ---
+>>  drivers/mfd/Kconfig     |  10 ++
+>>  drivers/mfd/Makefile    |   1 +
+>>  drivers/mfd/gsc.c       | 330 ++++++++++++++++++++++++++++++++++++++++++++++++
+>>  include/linux/mfd/gsc.h |  79 ++++++++++++
+>>  4 files changed, 420 insertions(+)
+>>  create mode 100644 drivers/mfd/gsc.c
+>>  create mode 100644 include/linux/mfd/gsc.h
+>>
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index 1d20a80..16dd486 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -341,6 +341,16 @@ config MFD_EXYNOS_LPASS
+>>         Select this option to enable support for Samsung Exynos Low Power
+>>         Audio Subsystem.
+>>
+>> +config MFD_GSC
+>> +     tristate "Gateworks System Controller"
+>> +     depends on (I2C && OF) || COMPILE_TEST
+>
+> Do both I2C and OF have stubs so that a driver will build when they are
+> both disabled?  I.e., only COMPILE_TEST is enabled?
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/pwm/pwm-atmel.c | 40 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 36 insertions(+), 4 deletions(-)
+Randy,
 
-diff --git a/drivers/pwm/pwm-atmel.c b/drivers/pwm/pwm-atmel.c
-index d2482fe28cfa..da4b58c1ecf2 100644
---- a/drivers/pwm/pwm-atmel.c
-+++ b/drivers/pwm/pwm-atmel.c
-@@ -33,8 +33,11 @@
- 
- #define PWM_CMR			0x0
- /* Bit field in CMR */
--#define PWM_CMR_CPOL		(1 << 9)
--#define PWM_CMR_UPD_CDTY	(1 << 10)
-+#define PWM_CMR_CPOL		BIT(9)
-+#define PWM_CMR_UPD_CDTY	BIT(10)
-+#define PWM_CMR_DTHI		BIT(17)
-+#define PWM_CMR_DTLI		BIT(18)
-+#define PWM_CMR_PPM		BIT(19)
- #define PWM_CMR_CPRE_MSK	0xF
- 
- /* The following registers for PWM v1 */
-@@ -219,16 +222,19 @@ static int atmel_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- {
- 	struct atmel_pwm_chip *atmel_pwm = to_atmel_pwm_chip(chip);
- 	struct pwm_state cstate;
-+	struct pwm_caps caps;
- 	unsigned long cprd, cdty;
- 	u32 pres, val;
- 	int ret;
- 
- 	pwm_get_state(pwm, &cstate);
-+	pwm_get_caps(chip, pwm, &caps);
- 
- 	if (state->enabled) {
- 		if (cstate.enabled &&
- 		    cstate.polarity == state->polarity &&
--		    cstate.period == state->period) {
-+		    cstate.period == state->period &&
-+		    cstate.mode == state->mode) {
- 			cprd = atmel_pwm_ch_readl(atmel_pwm, pwm->hwpwm,
- 						  atmel_pwm->data->regs.period);
- 			atmel_pwm_calculate_cdty(state, cprd, &cdty);
-@@ -263,6 +269,18 @@ static int atmel_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 			val &= ~PWM_CMR_CPOL;
- 		else
- 			val |= PWM_CMR_CPOL;
-+
-+		/* PWM mode. */
-+		if (caps.modes & PWM_MODE(PUSH_PULL)) {
-+			if (state->mode == PWM_MODE(PUSH_PULL)) {
-+				val |= PWM_CMR_PPM | PWM_CMR_DTLI;
-+				val &= ~PWM_CMR_DTHI;
-+			} else {
-+				val &= ~(PWM_CMR_PPM | PWM_CMR_DTLI |
-+					 PWM_CMR_DTHI);
-+			}
-+		}
-+
- 		atmel_pwm_ch_writel(atmel_pwm, pwm->hwpwm, PWM_CMR, val);
- 		atmel_pwm_set_cprd_cdty(chip, pwm, cprd, cdty);
- 		mutex_lock(&atmel_pwm->isr_lock);
-@@ -315,6 +333,20 @@ static const struct atmel_pwm_data atmel_pwm_data_v2 = {
- 	},
- };
- 
-+static const struct atmel_pwm_data atmel_pwm_data_v3 = {
-+	.regs = {
-+		.period		= PWMV2_CPRD,
-+		.period_upd	= PWMV2_CPRDUPD,
-+		.duty		= PWMV2_CDTY,
-+		.duty_upd	= PWMV2_CDTYUPD,
-+	},
-+	.caps = {
-+		.modes = PWM_MODE(NORMAL) |
-+			 PWM_MODE(COMPLEMENTARY) |
-+			 PWM_MODE(PUSH_PULL),
-+	},
-+};
-+
- static const struct platform_device_id atmel_pwm_devtypes[] = {
- 	{
- 		.name = "at91sam9rl-pwm",
-@@ -337,7 +369,7 @@ static const struct of_device_id atmel_pwm_dt_ids[] = {
- 		.data = &atmel_pwm_data_v2,
- 	}, {
- 		.compatible = "atmel,sama5d2-pwm",
--		.data = &atmel_pwm_data_v2,
-+		.data = &atmel_pwm_data_v3,
- 	}, {
- 		/* sentinel */
- 	},
--- 
-2.7.4
+No, at this point it requires both I2C and OF. I may add platform data
+to support an older non-device-tree family of boards but it still
+would require I2C.
 
+I will remove the || COMPILE_TEST
+
+Thanks for catching that.
+
+Tim
