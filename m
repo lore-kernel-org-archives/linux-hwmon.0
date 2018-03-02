@@ -1,127 +1,132 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga18.intel.com ([134.134.136.126]:35697 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1750836AbeCFTV6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 6 Mar 2018 14:21:58 -0500
-Subject: Re: [PATCH v2 0/8] PECI device driver introduction
-To: Pavel Machek <pavel@ucw.cz>
-Cc: joel@jms.id.au, andrew@aj.id.au, arnd@arndb.de,
-        gregkh@linuxfoundation.org, jdelvare@suse.com, linux@roeck-us.net,
-        benh@kernel.crashing.org, andrew@lunn.ch,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-References: <20180221161606.32247-1-jae.hyun.yoo@linux.intel.com>
- <20180306124014.GB13950@amd>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <94a31519-8009-b131-4d9e-95631b789931@linux.intel.com>
-Date: Tue, 6 Mar 2018 11:21:57 -0800
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:59064 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1425206AbeCBJ2V (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Mar 2018 04:28:21 -0500
+Subject: Re: [PATCH v3 05/10] pwm: add PWM mode to pwm_config()
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC: <shc_work@mail.ru>, <kgene@kernel.org>, <krzk@kernel.org>,
+        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
+        <sboyd@codeaurora.org>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <airlied@linux.ie>, <kamil@wypas.org>,
+        <b.zolnierkie@samsung.com>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>, <dmitry.torokhov@gmail.com>,
+        <rpurdie@rpsys.net>, <jacek.anaszewski@gmail.com>, <pavel@ucw.cz>,
+        <mchehab@kernel.org>, <sean@mess.org>, <lee.jones@linaro.org>,
+        <daniel.thompson@linaro.org>, <jingoohan1@gmail.com>,
+        <milo.kim@ti.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <corbet@lwn.net>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@free-electrons.com>,
+        <linux-pwm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>
+References: <1519300881-8136-1-git-send-email-claudiu.beznea@microchip.com>
+ <1519300881-8136-6-git-send-email-claudiu.beznea@microchip.com>
+ <20180228194429.GD22932@mithrandir> <87r2p4hod7.fsf@intel.com>
+From: Claudiu Beznea <Claudiu.Beznea@microchip.com>
+Message-ID: <585cc4ae-3674-c119-295b-e59f4242e619@microchip.com>
+Date: Fri, 2 Mar 2018 11:28:09 +0200
 MIME-Version: 1.0
-In-Reply-To: <20180306124014.GB13950@amd>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <87r2p4hod7.fsf@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Pavel,
 
-Please see my answer inline.
 
-On 3/6/2018 4:40 AM, Pavel Machek wrote:
-> Hi!
+On 28.02.2018 22:04, Jani Nikula wrote:
+> On Wed, 28 Feb 2018, Thierry Reding <thierry.reding@gmail.com> wrote:
+>> Anyone that needs something other than normal mode should use the new
+>> atomic PWM API.
 > 
->> Introduction of the Platform Environment Control Interface (PECI) bus
->> device driver. PECI is a one-wire bus interface that provides a
->> communication channel between Intel processor and chipset components to
->> external monitoring or control devices. PECI is designed to support the
->> following sideband functions:
->>
->> * Processor and DRAM thermal management
->>    - Processor fan speed control is managed by comparing Digital Thermal
->>      Sensor (DTS) thermal readings acquired via PECI against the
->>      processor-specific fan speed control reference point, or TCONTROL.
->>      Both TCONTROL and DTS thermal readings are accessible via the processor
->>      PECI client. These variables are referenced to a common temperature,
->>      the TCC activation point, and are both defined as negative offsets from
->>      that reference.
->>    - PECI based access to the processor package configuration space provides
->>      a means for Baseboard Management Controllers (BMC) or other platform
->>      management devices to actively manage the processor and memory power
->>      and thermal features.
->>
->> * Platform Manageability
->>    - Platform manageability functions including thermal, power, and error
->>      monitoring. Note that platform 'power' management includes monitoring
->>      and control for both the processor and DRAM subsystem to assist with
->>      data center power limiting.
->>    - PECI allows read access to certain error registers in the processor MSR
->>      space and status monitoring registers in the PCI configuration space
->>      within the processor and downstream devices.
->>    - PECI permits writes to certain registers in the processor PCI
->>      configuration space.
->>
->> * Processor Interface Tuning and Diagnostics
->>    - Processor interface tuning and diagnostics capabilities
->>      (Intel(c) Interconnect BIST). The processors Intel(c) Interconnect
->>      Built In Self Test (Intel(c) IBIST) allows for infield diagnostic
->>      capabilities in the Intel UPI and memory controller interfaces. PECI
->>      provides a port to execute these diagnostics via its PCI Configuration
->>      read and write capabilities.
->>
->> * Failure Analysis
->>    - Output the state of the processor after a failure for analysis via
->>      Crashdump.
->>
->> PECI uses a single wire for self-clocking and data transfer. The bus
->> requires no additional control lines. The physical layer is a self-clocked
->> one-wire bus that begins each bit with a driven, rising edge from an idle
->> level near zero volts. The duration of the signal driven high depends on
->> whether the bit value is a logic '0' or logic '1'. PECI also includes
->> variable data transfer rate established with every message. In this way,
->> it is highly flexible even though underlying logic is simple.
->>
->> The interface design was optimized for interfacing to Intel processor and
->> chipset components in both single processor and multiple processor
->> environments. The single wire interface provides low board routing
->> overhead for the multiple load connections in the congested routing area
->> near the processor and chipset components. Bus speed, error checking, and
->> low protocol overhead provides adequate link bandwidth and reliability to
->> transfer critical device operating conditions and configuration
->> information.
->>
->> This implementation provides the basic framework to add PECI extensions
->> to the Linux bus and device models. A hardware specific 'Adapter' driver
->> can be attached to the PECI bus to provide sideband functions described
->> above. It is also possible to access all devices on an adapter from
->> userspace through the /dev interface. A device specific 'Client' driver
->> also can be attached to the PECI bus so each processor client's features
->> can be supported by the 'Client' driver through an adapter connection in
->> the bus. This patch set includes Aspeed 24xx/25xx PECI driver and a generic
->> PECI hwmon driver as the first implementation for both adapter and client
->> drivers on the PECI bus framework.
-> 
-> Ok, how does this interact with ACPI/SMM BIOS/Secure mode code? Does
-> Linux _need_ to control the fan? Or is SMM BIOS capable of doing all
-> the work itself and Linux has just read-only access for monitoring
-> purposes?
-> 
+> At the risk of revealing my true ignorance, what is the new atomic PWM
+> API? Where? Examples of how one would convert old code over to the new
+> API?
+As far as I know, the old PWM core code uses config(), set_polarity(),
+enable(), disable() methods of driver, registered as pwm_ops:
+struct pwm_ops {
 
-This driver is not for local CPUs which this driver is running on. 
-Instead, this driver will be running on BMC (Baseboard Management 
-Controller) kernel which is separated from the server machine. In this 
-implementation, it provides just read-only access for monitoring the 
-server's CPU and DIMM temperatures remotely through a PECI connection. 
-The BMC can control fans according to the monitoring data if the BMC has 
-a fan control interface and feature, but it depends on baseboard 
-hardware and software designs.
+        int (*request)(struct pwm_chip *chip, struct pwm_device *pwm);
 
-Thanks,
-Jae
+        void (*free)(struct pwm_chip *chip, struct pwm_device *pwm);
 
-> Pavel
+        int (*config)(struct pwm_chip *chip, struct pwm_device *pwm,
+
+                      int duty_ns, int period_ns);
+
+        int (*set_polarity)(struct pwm_chip *chip, struct pwm_device *pwm,
+
+                            enum pwm_polarity polarity);
+
+        int (*capture)(struct pwm_chip *chip, struct pwm_device *pwm,
+
+                       struct pwm_capture *result, unsigned long timeout);
+
+        int (*enable)(struct pwm_chip *chip, struct pwm_device *pwm);
+
+        void (*disable)(struct pwm_chip *chip, struct pwm_device *pwm);
+
+        int (*apply)(struct pwm_chip *chip, struct pwm_device *pwm,
+
+                     struct pwm_state *state);
+
+        void (*get_state)(struct pwm_chip *chip, struct pwm_device *pwm,
+
+                          struct pwm_state *state);
+
+#ifdef CONFIG_DEBUG_FS
+
+        void (*dbg_show)(struct pwm_chip *chip, struct seq_file *s);
+
+#endif
+
+        struct module *owner;
+
+};
+
+
+to do settings on hardware. In order to so settings on a PWM the users
+should have been follow the below steps:
+->config()
+->set_polarity()
+->enable()
+Moreover, if the PWM was previously enabled it should have been first
+disable and then to follow the above steps in order to apply a new settings
+on hardware.
+The driver should have been provide, at probe, all the above function:
+->config(), ->set_polarity(), ->disable(), ->enable(), function that were
+used by PWM core.
+
+Now, having atomic PWM, the driver should provide one function to PWM core,
+which is ->apply() function. Every PWM has a state associated, which keeps
+the period, duty cycle, polarity and enable/disable status. The driver's
+->apply() function takes as argument the state that should be applied and
+it takes care of applying this new state directly without asking user to
+call ->disable(), then ->config()/->set_polarity(), then ->enable() to
+apply new hardware settings.
+
+The PWM consumer could set a new state for PWM it uses, using
+pwm_apply_state(pwm, new_state);
+
+Regarding the models to switch on atomic PWM, on the controller side you
+can check for drivers that registers apply function at probe time.
+Regarding the PWM users, you can look for pwm_apply_state()
+(drivers/hwmon/pwm-fan.c or drivers/input/misc/pwm-beeper.c are some examples).
+
+Thierry, please correct me if I'm wrong.
+
+Thank you,
+Claudiu Beznea
+
 > 
-> -- (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures)
-> http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+> BR,
+> Jani.
 > 
