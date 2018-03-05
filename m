@@ -1,117 +1,68 @@
-Return-Path: <peng.hao2@zte.com.cn>
-Return-path: <peng.hao2@zte.com.cn>
-From: Peng Hao <peng.hao2@zte.com.cn>
-To: jdelvare@suse.com, linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Hao <peng.hao2@zte.com.cn>
-Subject: [PATCH v2] hwmon: g762: handle cleanup with devm_add_action
-Date: Thu, 1 Mar 2018 19:03:22 +0800
-Message-Id: <1519902202-80883-1-git-send-email-peng.hao2@zte.com.cn>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:39694 "EHLO
+        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753086AbeCEWDN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Mar 2018 17:03:13 -0500
+Received: by mail-pf0-f196.google.com with SMTP id u5so7843553pfh.6
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Mar 2018 14:03:13 -0800 (PST)
+From: Tim Harvey <tharvey@gateworks.com>
+To: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: [PATCH v2 0/4] Add support for the Gateworks System Controller
+Date: Mon,  5 Mar 2018 14:02:37 -0800
+Message-Id: <1520287361-12569-1-git-send-email-tharvey@gateworks.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Simplify code and use devm_add_action() to handle cleanup.
+This series adds support for the Gateworks System Controller used on Gateworks
+Laguna, Ventana, and Newport product families.
 
-Signed-off-by: Peng Hao <peng.hao2@zte.com.cn>
----
- drivers/hwmon/g762.c | 43 +++++++++++++++++--------------------------
- 1 file changed, 17 insertions(+), 26 deletions(-)
+The GSC is an MSP430 I2C slave controller whose firmware embeds the following
+features:
+ - I/O expander (16 GPIO's emulating a PCA955x)
+ - EEPROM (enumating AT24)
+ - RTC (enumating DS1672)
+ - HWMON
+ - Interrupt controller with tamper detect, user pushbotton
+ - Watchdog controller capable of full board power-cycle
+ - Power Control capable of full board power-cycle
 
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index 6d1208b..49046b4 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -128,7 +128,6 @@ enum g762_regs {
- 			 G762_REG_FAN_CMD2_GEAR_MODE_1)) >> 2))
- 
- struct g762_data {
--	struct device *hwmon_dev;
- 	struct i2c_client *client;
- 	struct clk *clk;
- 
-@@ -174,6 +173,9 @@ struct g762_data {
- 		      */
- };
- 
-+static void g762_remove(void *data);
-+
-+
- /*
-  * Convert count value from fan controller register (FAN_SET_CNT) into fan
-  * speed RPM value. Note that the datasheet documents a basic formula;
-@@ -626,6 +628,7 @@ static int g762_of_clock_enable(struct i2c_client *client)
- 	data = i2c_get_clientdata(client);
- 	data->clk = clk;
- 
-+	devm_add_action(&client->dev, g762_remove, data);
- 	return 0;
- 
-  clk_unprep:
-@@ -1051,9 +1054,17 @@ static inline int g762_fan_init(struct device *dev)
- 					 data->fan_cmd1);
- }
- 
-+static void g762_remove(void *data)
-+{
-+	struct g762_data *g762 = data;
-+
-+	g762_of_clock_disable(g762->client);
-+}
-+
- static int g762_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-+	struct device *hwmon_dev;
- 	struct g762_data *data;
- 	int ret;
- 
-@@ -1080,35 +1091,16 @@ static int g762_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 		return ret;
- 	ret = g762_of_prop_import(client);
- 	if (ret)
--		goto clock_dis;
-+		return ret;
- 	/* ... or platform_data */
- 	ret = g762_pdata_prop_import(client);
- 	if (ret)
--		goto clock_dis;
-+		return ret;
- 
--	data->hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
-+	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
- 							    data, g762_groups);
--	if (IS_ERR(data->hwmon_dev)) {
--		ret = PTR_ERR(data->hwmon_dev);
--		goto clock_dis;
--	}
--
--	return 0;
--
-- clock_dis:
--	g762_of_clock_disable(client);
--
--	return ret;
--}
--
--static int g762_remove(struct i2c_client *client)
--{
--	struct g762_data *data = i2c_get_clientdata(client);
--
--	hwmon_device_unregister(data->hwmon_dev);
--	g762_of_clock_disable(client);
--
--	return 0;
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static struct i2c_driver g762_driver = {
-@@ -1117,7 +1109,6 @@ static int g762_remove(struct i2c_client *client)
- 		.of_match_table = of_match_ptr(g762_dt_match),
- 	},
- 	.probe	  = g762_probe,
--	.remove	  = g762_remove,
- 	.id_table = g762_id,
- };
- 
+see http://trac.gateworks.com/wiki/gsc for more details
+
+Tim Harvey (4):
+  dt-bindings: mfd: Add Gateworks System Controller bindings
+  mfd: add Gateworks System Controller core driver
+  hwmon: add Gateworks System Controller support
+  input: misc: Add Gateworks System Controller support
+
+ Documentation/devicetree/bindings/mfd/gsc.txt | 159 +++++++++++++
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gsc-hwmon.c                     | 330 ++++++++++++++++++++++++++
+ drivers/input/misc/Kconfig                    |   9 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/gsc-input.c                | 180 ++++++++++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/gsc.c                             | 330 ++++++++++++++++++++++++++
+ include/linux/mfd/gsc.h                       |  82 +++++++
+ include/linux/platform_data/gsc_hwmon.h       |  34 +++
+ include/linux/platform_data/gsc_input.h       |  30 +++
+ 13 files changed, 1179 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gsc.txt
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/input/misc/gsc-input.c
+ create mode 100644 drivers/mfd/gsc.c
+ create mode 100644 include/linux/mfd/gsc.h
+ create mode 100644 include/linux/platform_data/gsc_hwmon.h
+ create mode 100644 include/linux/platform_data/gsc_input.h
+
 -- 
-1.8.3.1
+2.7.4
+
