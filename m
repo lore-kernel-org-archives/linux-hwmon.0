@@ -1,80 +1,82 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-oi0-f67.google.com ([209.85.218.67]:42349 "EHLO
-        mail-oi0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1161969AbeCAWIj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Mar 2018 17:08:39 -0500
-Date: Thu, 1 Mar 2018 16:08:36 -0600
-From: Rob Herring <robh@kernel.org>
-To: Mikko Perttunen <cyndis@kapsi.fi>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Rajkumar Rampelli <rrajk@nvidia.com>, mark.rutland@arm.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, jdelvare@suse.com,
-        corbet@lwn.net, catalin.marinas@arm.com, will.deacon@arm.com,
-        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
-        pombredanne@nexb.com, mmaddireddy@nvidia.com,
-        mperttunen@nvidia.com, arnd@arndb.de,
-        gregory.clement@free-electrons.com, timur@codeaurora.org,
-        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
-        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ldewangan@nvidia.com
+Received: from mail-pf0-f193.google.com ([209.85.192.193]:37474 "EHLO
+        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755544AbeCHOb2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Mar 2018 09:31:28 -0500
 Subject: Re: [PATCH 05/10] hwmon: generic-pwm-tachometer: Add generic PWM
  based tachometer
-Message-ID: <20180301220836.a77o5i5g7g2k7lei@rob-hp-laptop>
+To: Laxman Dewangan <ldewangan@nvidia.com>,
+        Rajkumar Rampelli <rrajk@nvidia.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>, robh+dt@kernel.org,
+        mark.rutland@arm.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
+        catalin.marinas@arm.com, will.deacon@arm.com,
+        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
+        pombredanne@nexb.com, mmaddireddy@nvidia.com,
+        mperttunen@nvidia.com, arnd@arndb.de, timur@codeaurora.org,
+        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
+        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
  <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
- <ee03e1e5-bbeb-1238-04ed-b992fe3a3ce6@kapsi.fi>
- <c1192f75-0e6e-c735-67e1-2901624831ae@roeck-us.net>
- <a5db25f7-6999-ff3a-21c2-161cfcf4db35@kapsi.fi>
+ <5172edff-fe29-7ed1-f0d2-b0359ea2c24d@roeck-us.net>
+ <2510b525-ec36-b49d-5a62-81f335c0d10d@nvidia.com>
+ <cfe0d0ce-3a89-bad0-85ba-6edf1135d2dc@roeck-us.net>
+ <2628eff2-dd33-34f4-a7e1-cfe46ef88a3f@nvidia.com>
+ <4556a8d2-947d-72c4-2962-3167afb53978@kapsi.fi>
+ <62ba7f67-5a99-51ab-1214-eb68ebb7e642@roeck-us.net>
+ <952cb50e-d9a0-ae5e-d9f6-d1ce268f0384@nvidia.com>
+ <f7818e4c-17b6-c58b-3424-85749bb9c1cc@roeck-us.net>
+ <5bffef40-a4a7-5f7d-a448-b2a381c57822@nvidia.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <d4e745a6-5534-662e-f6d5-a91bf580f550@roeck-us.net>
+Date: Thu, 8 Mar 2018 06:31:24 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5db25f7-6999-ff3a-21c2-161cfcf4db35@kapsi.fi>
+In-Reply-To: <5bffef40-a4a7-5f7d-a448-b2a381c57822@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 21, 2018 at 05:20:29PM +0200, Mikko Perttunen wrote:
-> On 21.02.2018 16:46, Guenter Roeck wrote:
-> > On 02/20/2018 11:15 PM, Mikko Perttunen wrote:
-> > > AIUI, the PWM framework already exposes a sysfs node with period
-> > > information. We should just use that instead of adding a new driver
-> > > for this.
-> > > 
-> > 
-> > I am kind of lost. Please explain.
-> > 
-> > Are you saying that we should drop the pwm-fan driver as well (which goes
-> > the opposite way), as well as any other drivers doing anything with pwm
-> > signals,
-> > because after all those signals are already exposed to userspace a sysfs
-> > attributes,
-> > and a kernel driver to abstract those values is thus not needed ?
+On 03/07/2018 10:06 PM, Laxman Dewangan wrote:
 > 
-> The only thing this driver does is do a constant division in kernelspace.
-> I'm not really seeing why that couldn't be done in userspace. But if you
-> think it's appropriate to do the RPM conversion in kernelspace then I'm not
-> greatly opposed to that.
 > 
-> > 
-> > > In any case, we cannot add something like this to device tree since
-> > > it's not a hardware device.
-> > > 
-> > 
-> > So you are saying there is no means to express in devicetree that
-> > a pwm input is connected to a fan ? How is that not hardware ?
-> > 
-> > If so, how do you express in devicetree that a pwm signal is connected
-> > to anything ?
+> On Wednesday 07 March 2018 07:50 PM, Guenter Roeck wrote:
+>> On 03/07/2018 01:47 AM, Rajkumar Rampelli wrote:
+>>>
+>>>>
+>>>> While I am not opposed to ABI changes, the merits of those would need to be
+>>>> discussed on the mailing list. But replacing "fan1_input" with "rpm" is
+>>>> not an acceptable ABI change, even if it may measure something that turns
+>>>> but isn't a fan.
+>>>>
+>>>> If this _is_ in fact supposed to be used for something else but fans, we
+>>>> would have to discuss what that might be, and if hwmon is the appropriate
+>>>> subsystem to measure and report it. This does to some degree lead back to
+>>>> my concern of having the "fan" part of this patch series in the pwm core.
+>>>> I am still not sure if that makes sense.
+>>>>
+>>>> Thanks,
+>>>> Guenter
+>>> I am planning to add tachometer support in pwm-fan.c driver (drivers/hwmon/) instead of adding new generic-pwm-tachometer.c driver. Measuring RPM value will be done in pwm-fan driver itself using pwm capture feature and will add new sysfs attributes under this driver to report rpm value of fan.
+>>
+>> There is an existing attribute to report the RPM of fans. It is called fan[1..n]_input.
+>>
+>> "replacing "fan1_input" with "rpm" is not an acceptable ABI change"
+>>
+>> Preemptive NACK.
 > 
-> If we want to describe that the tachometer is connected to a fan, then we
-> should have a fan node in the board's device tree. We don't have a chip that
-> has a thing called "generic-pwm-tachometer" attached to it. (We have chips
-> that have a "nvidia,tegra186-tachometer", so it's proper to have that.)
+> The RPM is measured speed via PWM signal capture  which is output from fan.
+> So should we have the fan[1..n]_output_rpm?
+> 
 
-We already have some fan control bindings in the tree. Follow those. 
-There's only so many ways to control fans, so lets have some alignment. 
-And yes, we should have a fan node. 
+No. I hear you clearly that you for some reason dislike fan[1..n]_input.
+While ABIs are not always to our liking, that doesn't mean that we get
+to change them at our whim. If that is not acceptable for you, I can't
+help you. And you can't change inX_input to inX_voltage either, sorry.
 
-Rob
+Guenter
