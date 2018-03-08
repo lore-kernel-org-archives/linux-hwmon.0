@@ -1,25 +1,22 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:37474 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1755544AbeCHOb2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Mar 2018 09:31:28 -0500
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:13369 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1755897AbeCHPVV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Mar 2018 10:21:21 -0500
 Subject: Re: [PATCH 05/10] hwmon: generic-pwm-tachometer: Add generic PWM
  based tachometer
-To: Laxman Dewangan <ldewangan@nvidia.com>,
+To: Guenter Roeck <linux@roeck-us.net>,
         Rajkumar Rampelli <rrajk@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>, robh+dt@kernel.org,
-        mark.rutland@arm.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
-        pombredanne@nexb.com, mmaddireddy@nvidia.com,
-        mperttunen@nvidia.com, arnd@arndb.de, timur@codeaurora.org,
-        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
-        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+        Mikko Perttunen <cyndis@kapsi.fi>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <jdelvare@suse.com>, <corbet@lwn.net>,
+        <catalin.marinas@arm.com>, <will.deacon@arm.com>,
+        <kstewart@linuxfoundation.org>, <gregkh@linuxfoundation.org>,
+        <pombredanne@nexb.com>, <mmaddireddy@nvidia.com>,
+        <mperttunen@nvidia.com>, <arnd@arndb.de>, <timur@codeaurora.org>,
+        <andy.gross@linaro.org>, <xuwei5@hisilicon.com>,
+        <elder@linaro.org>, <heiko@sntech.de>, <krzk@kernel.org>,
+        <ard.biesheuvel@linaro.org>
 References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
  <1519196339-9377-6-git-send-email-rrajk@nvidia.com>
  <5172edff-fe29-7ed1-f0d2-b0359ea2c24d@roeck-us.net>
@@ -31,52 +28,36 @@ References: <1519196339-9377-1-git-send-email-rrajk@nvidia.com>
  <952cb50e-d9a0-ae5e-d9f6-d1ce268f0384@nvidia.com>
  <f7818e4c-17b6-c58b-3424-85749bb9c1cc@roeck-us.net>
  <5bffef40-a4a7-5f7d-a448-b2a381c57822@nvidia.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d4e745a6-5534-662e-f6d5-a91bf580f550@roeck-us.net>
-Date: Thu, 8 Mar 2018 06:31:24 -0800
+ <d4e745a6-5534-662e-f6d5-a91bf580f550@roeck-us.net>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+From: Laxman Dewangan <ldewangan@nvidia.com>
+Message-ID: <4d00a31b-44cc-d3dc-78a2-1b7f23d777e0@nvidia.com>
+Date: Thu, 8 Mar 2018 20:51:07 +0530
 MIME-Version: 1.0
-In-Reply-To: <5bffef40-a4a7-5f7d-a448-b2a381c57822@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <d4e745a6-5534-662e-f6d5-a91bf580f550@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 03/07/2018 10:06 PM, Laxman Dewangan wrote:
-> 
-> 
-> On Wednesday 07 March 2018 07:50 PM, Guenter Roeck wrote:
->> On 03/07/2018 01:47 AM, Rajkumar Rampelli wrote:
->>>
->>>>
->>>> While I am not opposed to ABI changes, the merits of those would need to be
->>>> discussed on the mailing list. But replacing "fan1_input" with "rpm" is
->>>> not an acceptable ABI change, even if it may measure something that turns
->>>> but isn't a fan.
->>>>
->>>> If this _is_ in fact supposed to be used for something else but fans, we
->>>> would have to discuss what that might be, and if hwmon is the appropriate
->>>> subsystem to measure and report it. This does to some degree lead back to
->>>> my concern of having the "fan" part of this patch series in the pwm core.
->>>> I am still not sure if that makes sense.
->>>>
->>>> Thanks,
->>>> Guenter
->>> I am planning to add tachometer support in pwm-fan.c driver (drivers/hwmon/) instead of adding new generic-pwm-tachometer.c driver. Measuring RPM value will be done in pwm-fan driver itself using pwm capture feature and will add new sysfs attributes under this driver to report rpm value of fan.
->>
->> There is an existing attribute to report the RPM of fans. It is called fan[1..n]_input.
->>
->> "replacing "fan1_input" with "rpm" is not an acceptable ABI change"
->>
->> Preemptive NACK.
-> 
-> The RPM is measured speed via PWM signal capture  which is output from fan.
-> So should we have the fan[1..n]_output_rpm?
-> 
 
-No. I hear you clearly that you for some reason dislike fan[1..n]_input.
-While ABIs are not always to our liking, that doesn't mean that we get
-to change them at our whim. If that is not acceptable for you, I can't
-help you. And you can't change inX_input to inX_voltage either, sorry.
 
-Guenter
+On Thursday 08 March 2018 08:01 PM, Guenter Roeck wrote:
+> On 03/07/2018 10:06 PM, Laxman Dewangan wrote:
+>>
+>>
+>> The RPM is measured speed via PWM signal capture  which is output 
+>> from fan.
+>> So should we have the fan[1..n]_output_rpm?
+>>
+>
+> No. I hear you clearly that you for some reason dislike fan[1..n]_input.
+> While ABIs are not always to our liking, that doesn't mean that we get
+> to change them at our whim. If that is not acceptable for you, I can't
+> help you. And you can't change inX_input to inX_voltage either, sorry.
+
+My opinion is only to not use "input" as this is not really the input to 
+fan.
