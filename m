@@ -1,165 +1,223 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f68.google.com ([209.85.160.68]:32836 "EHLO
-        mail-pl0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1031350AbeCAOmZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Mar 2018 09:42:25 -0500
-Subject: Re: [PATCH v3] hwmon: g762: handle cleanup with devm_add_action
-To: Peng Hao <peng.hao2@zte.com.cn>, jdelvare@suse.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1519915710-82397-1-git-send-email-peng.hao2@zte.com.cn>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f2f23c95-7de3-4701-1691-cdd725e7bc18@roeck-us.net>
-Date: Thu, 1 Mar 2018 06:42:22 -0800
+Received: from mail-ot0-f194.google.com ([74.125.82.194]:40496 "EHLO
+        mail-ot0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932276AbeCIXOg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Mar 2018 18:14:36 -0500
+Date: Fri, 9 Mar 2018 17:14:33 -0600
+From: Rob Herring <robh@kernel.org>
+To: Tim Harvey <tharvey@gateworks.com>
+Cc: Lee Jones <lee.jones@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add Gateworks System Controller
+ bindings
+Message-ID: <20180309231433.tmlfy6vwbkvopmwd@rob-hp-laptop>
+References: <1520287361-12569-1-git-send-email-tharvey@gateworks.com>
+ <1520287361-12569-2-git-send-email-tharvey@gateworks.com>
 MIME-Version: 1.0
-In-Reply-To: <1519915710-82397-1-git-send-email-peng.hao2@zte.com.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1520287361-12569-2-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 03/01/2018 06:48 AM, Peng Hao wrote:
-> Simplify code and use devm_add_action() to handle cleanup.
+On Mon, Mar 05, 2018 at 02:02:38PM -0800, Tim Harvey wrote:
+> This patch adds documentation of device-tree bindings for the
+> Gateworks System Controller (GSC).
 > 
-> Signed-off-by: Peng Hao <peng.hao2@zte.com.cn>
-
-Excellent.
-
-The dummy function for g762_of_clock_disable() is no longer needed,
-and the NULL check for ->clk in g762_of_clock_disable() is not needed
-anymore either. No need to resend; I fixed that up.
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 > ---
->   drivers/hwmon/g762.c | 58 +++++++++++++++++-----------------------------------
->   1 file changed, 19 insertions(+), 39 deletions(-)
+>  Documentation/devicetree/bindings/mfd/gsc.txt | 159 ++++++++++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/gsc.txt
 > 
-> diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-> index 6d1208b..0f2d468 100644
-> --- a/drivers/hwmon/g762.c
-> +++ b/drivers/hwmon/g762.c
-> @@ -128,7 +128,6 @@ enum g762_regs {
->   			 G762_REG_FAN_CMD2_GEAR_MODE_1)) >> 2))
->   
->   struct g762_data {
-> -	struct device *hwmon_dev;
->   	struct i2c_client *client;
->   	struct clk *clk;
->   
-> @@ -594,6 +593,17 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
->    * call to g762_of_clock_disable(). Note that a reference to clock is kept
->    * in our private data structure to be used in this function.
->    */
-> +static void g762_of_clock_disable(void *data)
-> +{
-> +	struct g762_data *g762 = data;
+> diff --git a/Documentation/devicetree/bindings/mfd/gsc.txt b/Documentation/devicetree/bindings/mfd/gsc.txt
+> new file mode 100644
+> index 0000000..fe5d114
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/gsc.txt
+> @@ -0,0 +1,159 @@
+> +Gateworks System Controller multi-function device
 > +
-> +	if (!g762->clk)
-> +		return;
+> +The GSC is a Multifunction I2C slave device with the following submodules:
+> +- WDT
+> +- GPIO
+> +- Pushbutton controller
+> +- HWMON
 > +
-> +	clk_disable_unprepare(g762->clk);
-> +	clk_put(g762->clk);
-> +}
-> +
->   static int g762_of_clock_enable(struct i2c_client *client)
->   {
->   	struct g762_data *data;
-> @@ -625,7 +635,8 @@ static int g762_of_clock_enable(struct i2c_client *client)
->   
->   	data = i2c_get_clientdata(client);
->   	data->clk = clk;
-> -
-> +
-> +	devm_add_action(&client->dev, g762_of_clock_disable, data);
->   	return 0;
->   
->    clk_unprep:
-> @@ -637,17 +648,6 @@ static int g762_of_clock_enable(struct i2c_client *client)
->   	return ret;
->   }
->   
-> -static void g762_of_clock_disable(struct i2c_client *client)
-> -{
-> -	struct g762_data *data = i2c_get_clientdata(client);
-> -
-> -	if (!data->clk)
-> -		return;
-> -
-> -	clk_disable_unprepare(data->clk);
-> -	clk_put(data->clk);
-> -}
-> -
->   static int g762_of_prop_import_one(struct i2c_client *client,
->   				   const char *pname,
->   				   int (*psetter)(struct device *dev,
-> @@ -699,7 +699,7 @@ static int g762_of_clock_enable(struct i2c_client *client)
->   	return 0;
->   }
->   
-> -static void g762_of_clock_disable(struct i2c_client *client) { }
-> +static void g762_of_clock_disable(void *data) { }
->   #endif
->   
->   /*
-> @@ -1054,6 +1054,7 @@ static inline int g762_fan_init(struct device *dev)
->   static int g762_probe(struct i2c_client *client, const struct i2c_device_id *id)
->   {
->   	struct device *dev = &client->dev;
-> +	struct device *hwmon_dev;
->   	struct g762_data *data;
->   	int ret;
->   
-> @@ -1080,35 +1081,15 @@ static int g762_probe(struct i2c_client *client, const struct i2c_device_id *id)
->   		return ret;
->   	ret = g762_of_prop_import(client);
->   	if (ret)
-> -		goto clock_dis;
-> +		return ret;
->   	/* ... or platform_data */
->   	ret = g762_pdata_prop_import(client);
->   	if (ret)
-> -		goto clock_dis;
-> +		return ret;
->   
-> -	data->hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
->   							    data, g762_groups);
-> -	if (IS_ERR(data->hwmon_dev)) {
-> -		ret = PTR_ERR(data->hwmon_dev);
-> -		goto clock_dis;
-> -	}
-> -
-> -	return 0;
-> -
-> - clock_dis:
-> -	g762_of_clock_disable(client);
-> -
-> -	return ret;
-> -}
-> -
-> -static int g762_remove(struct i2c_client *client)
-> -{
-> -	struct g762_data *data = i2c_get_clientdata(client);
-> -
-> -	hwmon_device_unregister(data->hwmon_dev);
-> -	g762_of_clock_disable(client);
-> -
-> -	return 0;
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
->   static struct i2c_driver g762_driver = {
-> @@ -1117,7 +1098,6 @@ static int g762_remove(struct i2c_client *client)
->   		.of_match_table = of_match_ptr(g762_dt_match),
->   	},
->   	.probe	  = g762_probe,
-> -	.remove	  = g762_remove,
->   	.id_table = g762_id,
->   };
->   
-> 
+> +Required properties:
+> +- compatible : Must be "gw,gsc_v1", "gw,gsc_v2", "gw,gsc_v3"
 
+s/_/-/
+
+> +- reg: I2C address of the device
+> +- interrupts: interrupt triggered by GSC_IRQ# signal
+> +- interrupt-parent: Interrupt controller GSC is connected to
+> +- #interrupt-cells: should be <1>, index of the interrupt within the
+> +  controller, in accordance with the "one cell" variant of
+> +  <devicetree/bindings/interrupt-controller/interrupt.txt>
+> +
+> +Optional nodes:
+> +* watchdog:
+> +The GSC provides a Watchdog monitor which can power cycle the board's
+> +primary power supply on most board models when tripped.
+> +
+> +Required properties:
+> +- compatible: must be "gw,gsc-watchdog"
+> +
+> +* input:
+> +The GSC provides an input device capable of dispatching Linux Input events
+
+Linux details that are not relevant to the binding.
+
+> +for user pushbutton events, tamper switch events, etc.
+> +
+> +Required properties:
+> +- compatible: must be "gw,gsc-input"
+> +
+> +* hwmon:
+> +The GSC provides a set of Analog to Digitcal Converter (ADC) pins used for
+> +temperature and/or voltage monitoring.
+> +
+> +Required properties:
+> +- compatible: must be "gw,gsc-hwmon"
+> +
+> +Example:
+> +
+> +	gsc: gsc@20 {
+> +		compatible = "gw,gsc_v2";
+> +		reg = <0x20>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <4 GPIO_ACTIVE_LOW>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <1>;
+> +
+> +		gsc_input {
+
+input {
+
+> +			compatible = "gw,gsc-input";
+> +		};
+> +
+> +		gsc_watchdog {
+
+watchdog {
+
+> +			compatible = "gw,gsc-watchdog";
+> +		};
+> +
+> +		gsc_hwmon {
+
+hwmon {
+
+> +			compatible = "gw,gsc-hwmon";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			hwmon@0 { /* A0: Board Temperature */
+> +				type = <0>;
+
+Not documented.
+
+> +				reg = <0x00>;
+> +				label = "temp";
+> +			};
+> +
+> +			hwmon@1 { /* A1: Input Voltage */
+> +				type = <1>;
+> +				reg = <0x02>;
+> +				label = "Vin";
+> +			};
+> +
+> +			hwmon@2 { /* A2: 5P0 */
+> +				type = <1>;
+> +				reg = <0x0b>;
+> +				label = "5P0";
+> +			};
+> +
+> +			hwmon@4 { /* A4: 0-5V input */
+> +				type = <1>;
+> +				reg = <0x14>;
+> +				label = "ANL0";
+> +			};
+> +
+> +			hwmon@5 { /* A5: 2P5 PCIe/GigE */
+> +				type = <1>;
+> +				reg = <0x23>;
+> +				label = "2P5";
+> +			};
+> +
+> +			hwmon@6 { /* A6: 1P8 Aud/Vid */
+> +				type = <1>;
+> +				reg = <0x1d>;
+> +				label = "1P8";
+> +			};
+> +
+> +			hwmon@7 { /* A7: GPS */
+> +				type = <1>;
+> +				reg = <0x26>;
+> +				label = "GPS";
+> +			};
+> +
+> +			hwmon@12 { /* A12: VDD_CORE */
+> +				type = <1>;
+> +				reg = <0x3>;
+> +				label = "VDD_CORE";
+> +			};
+> +
+> +			hwmon@13 { /* A13: VDD_SOC */
+> +				type = <1>;
+> +				reg = <0x11>;
+> +				label = "VDD_SOC";
+> +			};
+> +
+> +			hwmon@14 { /* A14: 1P0 PCIe SW */
+> +				type = <1>;
+> +				reg = <0x20>;
+> +				label = "1P0";
+> +			};
+> +
+> +			hwmon@15 { /* fan0 */
+> +				type = <2>;
+> +				reg = <0x2c>;
+> +				label = "fan_50p";
+> +			};
+> +
+> +			hwmon@16 { /* fan1 */
+> +				type = <2>;
+> +				reg = <0x2e>;
+> +				label = "fan_60p";
+> +			};
+> +
+> +			hwmon@17 { /* fan2 */
+> +				type = <2>;
+> +				reg = <0x30>;
+> +				label = "fan_70p";
+> +			};
+> +
+> +			hwmon@18 { /* fan3 */
+> +				type = <2>;
+> +				reg = <0x32>;
+> +				label = "fan_80p";
+> +			};
+> +
+> +			hwmon@19 { /* fan4 */
+> +				type = <2>;
+> +				reg = <0x34>;
+> +				label = "fan_90p";
+> +			};
+> +
+> +			hwmon@20 { /* fan5 */
+> +				type = <2>;
+> +				reg = <0x36>;
+> +				label = "fan_100p";
+> +			};
+> +		};
+> +	};
+> -- 
+> 2.7.4
+> 
