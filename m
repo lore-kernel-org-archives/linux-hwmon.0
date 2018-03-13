@@ -1,131 +1,234 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33632 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1750779AbeCNTBk (ORCPT
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34140 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1752800AbeCMU7V (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Mar 2018 15:01:40 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w2EJ0S6V127460
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Mar 2018 15:01:40 -0400
-Received: from e31.co.us.ibm.com (e31.co.us.ibm.com [32.97.110.149])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2gq5c6ku54-1
+        Tue, 13 Mar 2018 16:59:21 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w2DKwhrg003526
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Mar 2018 16:59:20 -0400
+Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2gpk9t6rbg-1
         (version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Mar 2018 15:01:39 -0400
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Mar 2018 16:59:20 -0400
 Received: from localhost
-        by e31.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Wed, 14 Mar 2018 13:01:38 -0600
-Subject: Re: [PATCH v2 1/2] hwmon: (ucd9000) Add gpio chip interface
-To: Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Christopher Bostic <cbostic@linux.vnet.ibm.com>,
-        Andrew Jeffery <andrew@aj.id.au>
-References: <1520974749-5372-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1520974749-5372-2-git-send-email-eajames@linux.vnet.ibm.com>
- <CAHp75VdOzzmN=6K4H3rVGGaqMJ+q+nXnoY=qksNT6uvHnG6CAQ@mail.gmail.com>
- <20180314185542.GA23989@roeck-us.net>
+        Tue, 13 Mar 2018 16:59:19 -0400
 From: Eddie James <eajames@linux.vnet.ibm.com>
-Date: Wed, 14 Mar 2018 14:01:34 -0500
-MIME-Version: 1.0
-In-Reply-To: <20180314185542.GA23989@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Message-Id: <2e301c07-8880-0821-0549-9c52f5fb35f5@linux.vnet.ibm.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, joel@jms.id.au,
+        Christopher Bostic <cbostic@linux.vnet.ibm.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Subject: [PATCH v2 2/2] hwmon: (ucd9000) Add debugfs attributes to provide mfr_status
+Date: Tue, 13 Mar 2018 15:59:09 -0500
+In-Reply-To: <1520974749-5372-1-git-send-email-eajames@linux.vnet.ibm.com>
+References: <1520974749-5372-1-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1520974749-5372-3-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+From: Christopher Bostic <cbostic@linux.vnet.ibm.com>
 
+Expose the gpiN_fault fields of mfr_status as individual debugfs
+attributes. This provides a way for users to be easily notified of gpi
+faults. Also provide the whole mfr_status register in debugfs.
 
-On 03/14/2018 01:55 PM, Guenter Roeck wrote:
-> On Tue, Mar 13, 2018 at 11:13:04PM +0200, Andy Shevchenko wrote:
->> On Tue, Mar 13, 2018 at 10:59 PM, Eddie James
->> <eajames@linux.vnet.ibm.com> wrote:
->>> From: Christopher Bostic <cbostic@linux.vnet.ibm.com>
->>>
->>> Add a struct gpio_chip and define some methods so that this device's
->>> I/O can be accessed via /sys/class/gpio.
->>> +       /*
->>> +        * Note:
->>> +        *
->>> +        * Pinmux support has not been added to the new gpio_chip.
->>> +        * This support should be added when possible given the mux
->>> +        * behavior of these IO devices.
->>> +        */
->>> +       data->gpio.label = (const char *)&client->name;
->> Hmm... Why do you need this casting?
->>
->>> +       data->gpio.get_direction = ucd9000_gpio_get_direction;
->>> +       data->gpio.direction_input = ucd9000_gpio_direction_input;
->>> +       data->gpio.direction_output = ucd9000_gpio_direction_output;
->>> +       data->gpio.get = ucd9000_gpio_get;
->>> +       data->gpio.set = ucd9000_gpio_set;
->>> +       data->gpio.can_sleep = 1;
->> Isn't it type of boolean?
->>
-> You are right.
->
->>> +       data->gpio.base = -1;
->>> +       data->gpio.parent = &client->dev;
->>> +       data->gpio.owner = THIS_MODULE;
->>> +       data->gpio.of_node = client->dev.of_node;
->> I think GPIO core does this for you.
->>
-> Same here. I checked and found that it also sets the owner, so maybe this can be
-> dropped as well.
+Signed-off-by: Christopher Bostic <cbostic@linux.vnet.ibm.com>
+Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
+---
+ drivers/hwmon/pmbus/ucd9000.c | 140 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 139 insertions(+), 1 deletion(-)
 
-Ah true. Especially since there is a TODO: remove chip->owner in the core.
-
->
->>> +       if (data->gpio.ngpio) {
->> Hmm...
->>
->> I would rather reorganize the above part to a separate helper, like
->>
->> static int ..._probe_gpio()
->> {
->> ...
->>    switch () {
->>     default:
->>       return 0; /* GPIO part is optional */
->>    }
->>    return 0;
->> }
->>
->> ret = _probe_gpio();
->> if (ret)
->>   dev_warn();
->>
-> I am neutral to positiva on that.
-> Might as well add the call to devm_gpiochip_add_data()
-> into that function as well.
-
-Sure. I can do a v4.
-
-Thanks,
-Eddie
-
->
->>> +               ret = devm_gpiochip_add_data(&client->dev, &data->gpio,
->>> +                                            client);
->>> +               if (ret)
->>> +                       dev_warn(&client->dev, "Could not add gpiochip: %d\n",
->>> +                                ret);
->>> +       }
->>> +
->>>          return pmbus_do_probe(client, mid, info);
->>>   }
->>>
->>> --
->>> 1.8.3.1
->>>
->>
->>
->> -- 
->> With Best Regards,
->> Andy Shevchenko
+diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+index 023fb9e..b073d8e 100644
+--- a/drivers/hwmon/pmbus/ucd9000.c
++++ b/drivers/hwmon/pmbus/ucd9000.c
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
++#include <linux/debugfs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -36,6 +37,7 @@
+ #define UCD9000_NUM_PAGES		0xd6
+ #define UCD9000_FAN_CONFIG_INDEX	0xe7
+ #define UCD9000_FAN_CONFIG		0xe8
++#define UCD9000_MFR_STATUS		0xf3
+ #define UCD9000_GPIO_SELECT		0xfa
+ #define UCD9000_GPIO_CONFIG		0xfb
+ #define UCD9000_DEVICE_ID		0xfd
+@@ -63,13 +65,22 @@
+ #define UCD901XX_NUM_GPIOS	26
+ #define UCD90910_NUM_GPIOS	26
+ 
++#define UCD9000_DEBUGFS_NAME_LEN	24
++#define UCD9000_GPI_COUNT		8
++
+ struct ucd9000_data {
+ 	u8 fan_data[UCD9000_NUM_FAN][I2C_SMBUS_BLOCK_MAX];
+ 	struct pmbus_driver_info info;
+ 	struct gpio_chip gpio;
++	struct dentry *debugfs;
+ };
+ #define to_ucd9000_data(_info) container_of(_info, struct ucd9000_data, info)
+ 
++struct ucd9000_debugfs_entry {
++	struct i2c_client *client;
++	u8 index;
++};
++
+ static int ucd9000_get_fan_config(struct i2c_client *client, int fan)
+ {
+ 	int fan_config = 0;
+@@ -306,6 +317,124 @@ static int ucd9000_gpio_direction_output(struct gpio_chip *gc,
+ 					  val);
+ }
+ 
++#if IS_ENABLED(CONFIG_DEBUG_FS)
++static int ucd9000_get_mfr_status(struct i2c_client *client, u8 *buffer)
++{
++	int ret = pmbus_set_page(client, 0);
++
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * With the ucd90120 and ucd90124 devices, this command [MFR_STATUS]
++	 * is 2 bytes long (bits 0-15).  With the ucd90240 this command is 5
++	 * bytes long.  With all other devices, it is 4 bytes long.
++	 */
++	return i2c_smbus_read_block_data(client, UCD9000_MFR_STATUS, buffer);
++}
++
++static int ucd9000_debugfs_show_mfr_status_bit(void *data, u64 *val)
++{
++	struct ucd9000_debugfs_entry *entry = data;
++	struct i2c_client *client = entry->client;
++	u8 buffer[4];
++	int ret;
++
++	/*
++	 * This attribute is only created for devices that return 4 bytes for
++	 * status_mfr, so it's safe to call with 4-byte buffer.
++	 */
++	ret = ucd9000_get_mfr_status(client, buffer);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * Attribute only created for devices with gpi fault bits at bits
++	 * 16-23, which is the second byte of the response.
++	 */
++	*val = !!(buffer[1] & BIT(entry->index));
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(ucd9000_debugfs_mfr_status_bit,
++			 ucd9000_debugfs_show_mfr_status_bit, NULL, "%1lld\n");
++
++static ssize_t ucd9000_debugfs_read_mfr_status(struct file *file,
++					       char __user *buf, size_t count,
++					       loff_t *ppos)
++{
++	struct i2c_client *client = file->private_data;
++	u8 buffer[5] = { 0 };	/* Need max 5 bytes for any ucd9000 chip. */
++	int ret;
++
++	ret = ucd9000_get_mfr_status(client, buffer);
++	if (ret < 0)
++		return ret;
++
++	return simple_read_from_buffer(buf, count, ppos, buffer, ret);
++}
++
++static const struct file_operations ucd9000_debugfs_show_mfr_status_fops = {
++	.llseek = noop_llseek,
++	.read = ucd9000_debugfs_read_mfr_status,
++	.open = simple_open,
++};
++
++static int ucd9000_init_debugfs(struct i2c_client *client,
++				const struct i2c_device_id *mid,
++				struct ucd9000_data *data)
++{
++	struct dentry *debugfs;
++	struct ucd9000_debugfs_entry *entries;
++	int i;
++	char name[UCD9000_DEBUGFS_NAME_LEN];
++
++	debugfs = pmbus_get_debugfs_dir(client);
++	if (!debugfs)
++		return -ENOENT;
++
++	data->debugfs = debugfs_create_dir(client->name, debugfs);
++	if (!data->debugfs)
++		return -ENOENT;
++
++	/*
++	 * Of the chips this driver supports, only the UCD9090, UCD90160,
++	 * and UCD90910 report GPI faults in their MFR_STATUS register, so only
++	 * create the GPI fault debugfs attributes for those chips.
++	 */
++	if (mid->driver_data == ucd9090 || mid->driver_data == ucd90160 ||
++	    mid->driver_data == ucd90910) {
++		entries = devm_kzalloc(&client->dev,
++				       sizeof(*entries) * UCD9000_GPI_COUNT,
++				       GFP_KERNEL);
++		if (!entries)
++			return -ENOMEM;
++
++		for (i = 0; i < UCD9000_GPI_COUNT; i++) {
++			entries[i].client = client;
++			entries[i].index = i;
++			scnprintf(name, UCD9000_DEBUGFS_NAME_LEN,
++				  "gpi%d_alarm", i + 1);
++			debugfs_create_file(name, 0444, data->debugfs,
++					    &entries[i],
++					    &ucd9000_debugfs_mfr_status_bit);
++		}
++	}
++
++	scnprintf(name, UCD9000_DEBUGFS_NAME_LEN, "mfr_status");
++	debugfs_create_file(name, 0444, data->debugfs, client,
++			    &ucd9000_debugfs_show_mfr_status_fops);
++
++	return 0;
++}
++#else
++static int ucd9000_init_debugfs(struct i2c_client *client,
++				struct ucd9000_data *data)
++{
++	return 0;
++}
++#endif /* IS_ENABLED(CONFIG_DEBUG_FS) */
++
+ static int ucd9000_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -464,7 +593,16 @@ static int ucd9000_probe(struct i2c_client *client,
+ 				 ret);
+ 	}
+ 
+-	return pmbus_do_probe(client, mid, info);
++	ret = pmbus_do_probe(client, mid, info);
++	if (ret)
++		return ret;
++
++	ret = ucd9000_init_debugfs(client, mid, data);
++	if (ret)
++		dev_warn(&client->dev, "Failed to register debugfs: %d\n",
++			 ret);
++
++	return 0;
+ }
+ 
+ /* This is the driver that will be inserted */
+-- 
+1.8.3.1
 
