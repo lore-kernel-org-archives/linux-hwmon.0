@@ -1,56 +1,44 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:45502 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751466AbeCOSI3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Mar 2018 14:08:29 -0400
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: linux-kernel@vger.kernel.org
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH -next] hwmon: (scmi) return -EINVAL when sensor information is unavailable
-Date: Thu, 15 Mar 2018 18:08:19 +0000
-Message-Id: <1521137299-31363-1-git-send-email-sudeep.holla@arm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        joel@jms.id.au, andy.shevchenko@gmail.com,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Subject: [PATCH v5 0/2] hwmon: (ucd9000) Add gpio and debugfs interfaces
+Date: Thu, 15 Mar 2018 17:21:54 -0500
+Message-Id: <1521152516-10829-1-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Passing NULL pointer to PTR_ERR will result in return value of 0
-indicating success which is clearly not what it is intended here.
+The ucd9000 series chips have gpio pins. Add a gpio chip interface to the ucd
+device so that users can query and set the state of the gpio pins.
 
-This patch returns -EINVAL instead when the sensor information is not
-available.
+Add a debugfs interface using the existing pmbus debugfs directory to provide
+MFR_STATUS and the status of the gpi faults to users.
 
-Fixes: b23688aefb8b ("hwmon: add support for sensors exported via ARM SCMI")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/hwmon/scmi-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v4:
+ - max-sized buffers for smbus transfers
+ - used bin2hex instead of my own code
 
-Hi Guenter,
+Changes since v3:
+ - remove setting of gpio_chip->owner
+ - format the mfr_status data
+ - switch to #ifdef rather than #if IS_ENABLED for debugfs
 
-I will try to push this via ARM-SoC if possible before v4.17 merge window.
-So please provide Ack if you are fine.
+Changes since v2:
+ - split the gpio registration into it's own function
 
-Regards,
-Sudeep
+Changes since v1:
+ - dropped dev_err messages
+ - made gpio chip registration conditional on having gpio pins
+ - made mfr_status debugfs attribute more simple
 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 32e750373ced..363bf56eb0f2 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -138,7 +138,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 	for (i = 0; i < nr_sensors; i++) {
- 		sensor = handle->sensor_ops->info_get(handle, i);
- 		if (!sensor)
--			return PTR_ERR(sensor);
-+			return -EINVAL;
- 
- 		switch (sensor->type) {
- 		case TEMPERATURE_C:
+Christopher Bostic (2):
+  hwmon: (ucd9000) Add gpio chip interface
+  hwmon: (ucd9000) Add debugfs attributes to provide mfr_status
+
+ drivers/hwmon/pmbus/ucd9000.c | 338 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 337 insertions(+), 1 deletion(-)
+
 -- 
-2.7.4
-
+1.8.3.1
