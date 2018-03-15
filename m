@@ -1,138 +1,60 @@
-Return-Path: <linux-watchdog-owner@vger.kernel.org>
-Return-path: <linux-watchdog-owner@vger.kernel.org>
-Date: Fri, 30 Mar 2018 11:19:54 -0700
+Return-Path: <linux-kernel-owner@vger.kernel.org>
+Subject: Re: [PATCH -next] hwmon: (scmi) return -EINVAL when sensor
+ information is unavailable
+To: Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
+Cc: Dan Carpenter <dan.carpenter@oracle.com>, linux-hwmon@vger.kernel.org
+References: <1521137299-31363-1-git-send-email-sudeep.holla@arm.com>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Tim Harvey <tharvey@gateworks.com>
-Cc: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Wim Van Sebroeck <wim@iguana.be>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [v3,4/4] watchdog: add Gateworks System Controller support
-Message-ID: <20180330181954.GA17580@roeck-us.net>
-References: <1522250043-8065-5-git-send-email-tharvey@gateworks.com>
- <20180330010757.GA12896@roeck-us.net>
- <CAJ+vNU3ARKLK5AcssEP-_P8AmwnAnS8VtAEO1ppwum2jpCqAYQ@mail.gmail.com>
+Message-ID: <91ffbe33-29c7-9836-283c-0c6c13c60b1e@roeck-us.net>
+Date: Thu, 15 Mar 2018 14:27:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU3ARKLK5AcssEP-_P8AmwnAnS8VtAEO1ppwum2jpCqAYQ@mail.gmail.com>
-Sender: linux-watchdog-owner@vger.kernel.org
+In-Reply-To: <1521137299-31363-1-git-send-email-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+Sender: linux-kernel-owner@vger.kernel.org
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Mar 30, 2018 at 10:49:38AM -0700, Tim Harvey wrote:
-> On Thu, Mar 29, 2018 at 6:07 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On Wed, Mar 28, 2018 at 08:14:03AM -0700, Tim Harvey wrote:
-> >> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> >> ---
-> >>  drivers/watchdog/Kconfig   |  10 ++++
-> >>  drivers/watchdog/Makefile  |   1 +
-> >>  drivers/watchdog/gsc_wdt.c | 146 +++++++++++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 157 insertions(+)
-> >>  create mode 100644 drivers/watchdog/gsc_wdt.c
-> >>
-> <snip>
-> >> +
-> >> +static const struct watchdog_info gsc_wdt_info = {
-> >> +     .options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-> >
-> > Please confirm that WDIOF_MAGICCLOSE is not set on purpose.
-> >
-> >> +     .identity = "GSC Watchdog"
-> >> +};
-> >> +
-> <snip>
-> >> +
-> >> +static int gsc_wdt_probe(struct platform_device *pdev)
-> >> +{
-> >> +     struct gsc_dev *gsc = dev_get_drvdata(pdev->dev.parent);
-> >> +     struct device *dev = &pdev->dev;
-> >> +     struct gsc_wdt *wdt;
-> >> +     int ret;
-> >> +     unsigned int reg;
-> >> +
-> <snip>
-> >> +     /* ensure WD bit enabled */
-> >> +     if (regmap_read(gsc->regmap, GSC_CTRL_1, &reg))
-> >> +             return -EIO;
-> >> +     if (!(reg & (1 << GSC_CTRL_1_WDT_ENABLE))) {
-> >
-> > BIT()
-> >
-> >> +             dev_err(dev, "not enabled - must be manually enabled\n");
-> >
-> > This doesn't make sense. Bail out if the watchdog is disabled ? Why ?
-> >
-> >> +             return -EINVAL;
-> >> +     }
-> >> +
-> <snip>
-> >> +
-> >> +     watchdog_set_nowayout(&wdt->wdt_dev, 1);
-> >
-> > WATCHDOG_NOWAYOUT ?
-> >
+On 03/15/2018 11:08 AM, Sudeep Holla wrote:
+> Passing NULL pointer to PTR_ERR will result in return value of 0
+> indicating success which is clearly not what it is intended here.
 > 
-> Guenter,
+> This patch returns -EINVAL instead when the sensor information is not
+> available.
 > 
-> Thanks for the review!
+> Fixes: b23688aefb8b ("hwmon: add support for sensors exported via ARM SCMI")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/hwmon/scmi-hwmon.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The watchdog implementation of the GSC is such that it is enabled and
-> reset via a single non-volatile I2C register bit. If this bit is set
-> the watchdog will start ticking down automatically on board power up.
-> The register definitions don't provide a condition where it can be
-> enabled in a volatile way such that after board power-cycle it is
-> disabled again nor do they provide a separate register for enable vs
-> reset.
+> Hi Guenter,
 > 
-> In the typical case the user boots the board, driver registers
-> watchdog, userspace watchdog daemon enables watchdog and it starts
-> ticking. User now powers down the board and later powers it back up.
-> The watchdog was enabled previously by userspace and the register is
-> non-volatile so the watchdog starts ticking before the kernel driver
-> and watchdog daemon yet the user breaks out into the bootloader or
-> boots a different OS without a watchdog daemon and the board resets
-> without them expecting it. The feature that the watchdog starts
-> ticking at board power-up before the CPU has even fetched code was
-> part of its design and was put there to work around some SoC errata
-> that can cause the CPU to fail to fetch boot code. This has caused me
-> to implement a watchdog driver that never actually 'enables' or
-> 'disables' the watchdog which is why there is no MAGIC CLOSE and why I
-
-Yet the driver does enable and disable the watchdog in its start and stop
-functions. And I have no idea what that has to do with the MAGICCLOSE
-functionality, which is quite orthogonal to the start/stop functionality.
-
-> always set nowayout. Its possible this is a fairly unique case of a
-> watchdog. The probe failure if the watchdog isn't enabled is because I
-> don't want a non-enabled watchdog to get enabled just because the
-> driver/daemon were there.
+> I will try to push this via ARM-SoC if possible before v4.17 merge window.
+> So please provide Ack if you are fine.
 > 
-Huh ? The whole purpose of a watchdog is for it to be enabled when
-the watchdog device is opened.
-
-> I agree it's a very strange behavior and I'm not sure how to best
-> document or support it with the Linux watchdog API. I welcome any
-> recomendations!
+> Regards,
+> Sudeep
 > 
-
-Sorry, I fail to understand your logic.
-
-You do not explain why your code bails out if the watchdog is not already
-running. That does not make sense.
-
-You are saying that you don't want the watchdog driver to enable the watchdog.
-Since its whole purpose is to enable the watchdog if/when the watchdog device
-is opened, that doesn't make sense either.
-
-At the same time, you do not tell the watchdog core that the watchdog is
-already running, meaning the system _will_ reboot unless the watchdog
-device is opened within the watchdog timeout period. Again, that does not
-make sense.
-
-Maybe it all makes sense to you, but not to me, sorry.
-
-Guenter
+> diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+> index 32e750373ced..363bf56eb0f2 100644
+> --- a/drivers/hwmon/scmi-hwmon.c
+> +++ b/drivers/hwmon/scmi-hwmon.c
+> @@ -138,7 +138,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+>   	for (i = 0; i < nr_sensors; i++) {
+>   		sensor = handle->sensor_ops->info_get(handle, i);
+>   		if (!sensor)
+> -			return PTR_ERR(sensor);
+> +			return -EINVAL;
+>   
+>   		switch (sensor->type) {
+>   		case TEMPERATURE_C:
+> 
