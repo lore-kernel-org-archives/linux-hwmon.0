@@ -1,258 +1,186 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-ot0-f193.google.com ([74.125.82.193]:42123 "EHLO
-        mail-ot0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751524AbeCPUyQ (ORCPT
+Received: from mail-pf0-f195.google.com ([209.85.192.195]:37567 "EHLO
+        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751625AbeCTQIR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Mar 2018 16:54:16 -0400
-Date: Fri, 16 Mar 2018 13:54:13 -0700
+        Tue, 20 Mar 2018 12:08:17 -0400
+Date: Tue, 20 Mar 2018 09:08:14 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, joel@jms.id.au,
-        Christopher Bostic <cbostic@linux.vnet.ibm.com>,
-        Andrew Jeffery <andrew@aj.id.au>
-Subject: Re: [PATCH v6 2/2] hwmon: (ucd9000) Add debugfs attributes to
- provide mfr_status
-Message-ID: <20180316205413.GA9493@roeck-us.net>
-References: <1521228359-32396-1-git-send-email-eajames@linux.vnet.ibm.com>
- <1521228359-32396-3-git-send-email-eajames@linux.vnet.ibm.com>
- <20180316195953.GA2470@roeck-us.net>
- <505dc3ae-a4d3-0373-dd34-c429a215e3a4@linux.vnet.ibm.com>
+To: Andrey Gusakov <andrey.gusakov@cogentembedded.com>
+Cc: jdelvare@suse.com, lee.jones@linaro.org, cphealy@gmail.com,
+        andrew.smirnov@gmail.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: MC13783: add uid and die temperature sensor
+ inputs
+Message-ID: <20180320160814.GA31015@roeck-us.net>
+References: <1521558087-21626-1-git-send-email-andrey.gusakov@cogentembedded.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <505dc3ae-a4d3-0373-dd34-c429a215e3a4@linux.vnet.ibm.com>
+In-Reply-To: <1521558087-21626-1-git-send-email-andrey.gusakov@cogentembedded.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 16, 2018 at 03:04:47PM -0500, Eddie James wrote:
+On Tue, Mar 20, 2018 at 06:01:27PM +0300, Andrey Gusakov wrote:
+> The uid and die temperature can be read out on the ADIN7 using
+> input mux. Map uid and die tenperature sensor to channels 16
+> and 17.
 > 
+> Signed-off-by: Andrey Gusakov <andrey.gusakov@cogentembedded.com>
+> ---
+> Changes in v2:
+> - suport both mc13783 and mc13892
+> - uit_input renamed to in16_input
+> - style fixes
+> ---
+>  drivers/hwmon/mc13783-adc.c | 57 +++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/mfd/mc13xxx-core.c  | 15 +++++++++++-
+>  include/linux/mfd/mc13xxx.h |  2 ++
+>  3 files changed, 73 insertions(+), 1 deletion(-)
 > 
-> On 03/16/2018 02:59 PM, Guenter Roeck wrote:
-> >On Fri, Mar 16, 2018 at 02:25:59PM -0500, Eddie James wrote:
-> >>From: Christopher Bostic <cbostic@linux.vnet.ibm.com>
-> >>
-> >>Expose the gpiN_fault fields of mfr_status as individual debugfs
-> >>attributes. This provides a way for users to be easily notified of gpi
-> >>faults. Also provide the whole mfr_status register in debugfs.
-> >>
-> >>Signed-off-by: Christopher Bostic <cbostic@linux.vnet.ibm.com>
-> >>Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> >>Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
-> >>---
-> >>  drivers/hwmon/pmbus/ucd9000.c | 138 +++++++++++++++++++++++++++++++++++++++++-
-> >>  1 file changed, 137 insertions(+), 1 deletion(-)
-> >>
-> >>diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-> >>index ef2c5bf..88c98fb 100644
-> >>--- a/drivers/hwmon/pmbus/ucd9000.c
-> >>+++ b/drivers/hwmon/pmbus/ucd9000.c
-> >>@@ -19,6 +19,7 @@
-> >>   * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-> >>   */
-> >>+#include <linux/debugfs.h>
-> >>  #include <linux/kernel.h>
-> >>  #include <linux/module.h>
-> >>  #include <linux/of_device.h>
-> >>@@ -37,6 +38,7 @@
-> >>  #define UCD9000_NUM_PAGES		0xd6
-> >>  #define UCD9000_FAN_CONFIG_INDEX	0xe7
-> >>  #define UCD9000_FAN_CONFIG		0xe8
-> >>+#define UCD9000_MFR_STATUS		0xf3
-> >>  #define UCD9000_GPIO_SELECT		0xfa
-> >>  #define UCD9000_GPIO_CONFIG		0xfb
-> >>  #define UCD9000_DEVICE_ID		0xfd
-> >>@@ -64,15 +66,24 @@
-> >>  #define UCD901XX_NUM_GPIOS	26
-> >>  #define UCD90910_NUM_GPIOS	26
-> >>+#define UCD9000_DEBUGFS_NAME_LEN	24
-> >>+#define UCD9000_GPI_COUNT		8
-> >>+
-> >>  struct ucd9000_data {
-> >>  	u8 fan_data[UCD9000_NUM_FAN][I2C_SMBUS_BLOCK_MAX];
-> >>  	struct pmbus_driver_info info;
-> >>  #ifdef CONFIG_GPIOLIB
-> >>  	struct gpio_chip gpio;
-> >>  #endif
-> >>+	struct dentry *debugfs;
-> >>  };
-> >>  #define to_ucd9000_data(_info) container_of(_info, struct ucd9000_data, info)
-> >>+struct ucd9000_debugfs_entry {
-> >>+	struct i2c_client *client;
-> >>+	u8 index;
-> >>+};
-> >>+
-> >>  static int ucd9000_get_fan_config(struct i2c_client *client, int fan)
-> >>  {
-> >>  	int fan_config = 0;
-> >>@@ -359,6 +370,122 @@ static void ucd9000_probe_gpio(struct i2c_client *client,
-> >>  }
-> >>  #endif /* CONFIG_GPIOLIB */
-> >>+#ifdef CONFIG_DEBUG_FS
-> >>+static int ucd9000_get_mfr_status(struct i2c_client *client, u8 *buffer)
-> >>+{
-> >>+	int ret = pmbus_set_page(client, 0);
-> >>+
-> >>+	if (ret < 0)
-> >>+		return ret;
-> >>+
-> >>+	return i2c_smbus_read_block_data(client, UCD9000_MFR_STATUS, buffer);
-> >>+}
-> >>+
-> >>+static int ucd9000_debugfs_show_mfr_status_bit(void *data, u64 *val)
-> >>+{
-> >>+	struct ucd9000_debugfs_entry *entry = data;
-> >>+	struct i2c_client *client = entry->client;
-> >>+	u8 buffer[I2C_SMBUS_BLOCK_MAX];
-> >>+	int ret;
-> >>+
-> >>+	ret = ucd9000_get_mfr_status(client, buffer);
-> >>+	if (ret < 0)
-> >>+		return ret;
-> >>+
-> >>+	/*
-> >>+	 * Attribute only created for devices with gpi fault bits at bits
-> >>+	 * 16-23, which is the second byte of the response.
-> >>+	 */
-> >>+	*val = !!(buffer[1] & BIT(entry->index));
-> >>+
-> >>+	return 0;
-> >>+}
-> >>+DEFINE_DEBUGFS_ATTRIBUTE(ucd9000_debugfs_mfr_status_bit,
-> >>+			 ucd9000_debugfs_show_mfr_status_bit, NULL, "%1lld\n");
-> >>+
-> >>+static ssize_t ucd9000_debugfs_read_mfr_status(struct file *file,
-> >>+					       char __user *buf, size_t count,
-> >>+					       loff_t *ppos)
-> >>+{
-> >>+	struct i2c_client *client = file->private_data;
-> >>+	u8 buffer[I2C_SMBUS_BLOCK_MAX];
-> >>+	char str[(I2C_SMBUS_BLOCK_MAX * 2) + 2];
-> >>+	char *res;
-> >>+	int rc;
-> >>+
-> >>+	rc = ucd9000_get_mfr_status(client, buffer);
-> >>+	if (rc < 0)
-> >>+		return rc;
-> >>+
-> >>+	res = bin2hex(str, buffer, min(rc, I2C_SMBUS_BLOCK_MAX));
-> >>+	*res++ = '\n';
-> >>+	*res++ = 0;
-> >>+
-> >Unless I am missing something, this now returns the terminating '\0'
-> >to the user. Is this really what you want ?
-> 
-> Yes, that was my intention. I thought that was normal. It worked fine when I
-> cat'ed the file. Up to you, I can change it if you like.
-> 
-Please do. I suspect that you'll see the '\0' if you send the output to od.
-That is unexpected. I browsed through the kernel and was unable to find
-any other code doing the same, so we should not be the ones starting it.
+> diff --git a/drivers/hwmon/mc13783-adc.c b/drivers/hwmon/mc13783-adc.c
+> index 960a1db..413b83c 100644
+> --- a/drivers/hwmon/mc13783-adc.c
+> +++ b/drivers/hwmon/mc13783-adc.c
+> @@ -63,6 +63,10 @@ static int mc13783_adc_read(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>  
+> +	/* ADIN7 subchannels */
+> +	if (channel >= 16)
+> +		channel = 7;
+> +
+>  	channel &= 0x7;
+>  
+>  	*val = (sample[channel % 4] >> (channel > 3 ? 14 : 2)) & 0x3ff;
+> @@ -111,6 +115,54 @@ static ssize_t mc13783_adc_read_gp(struct device *dev,
+>  	return sprintf(buf, "%u\n", val);
+>  }
+>  
+> +static ssize_t mc13783_adc_read_uid(struct device *dev,
+> +		struct device_attribute *devattr, char *buf)
 
-Example is DEFINE_DEBUGFS_ATTRIBUTE, which ends up calling simple_attr_read().
-This in turn passes the result of scnprintf() or strlen() to
-simple_read_from_buffer(). Both not include the terminating '\0'.
+Please watch multi-line alignments.
 
-Thanks,
-Guenter
+> +{
+> +	unsigned int val;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	kernel_ulong_t driver_data = platform_get_device_id(pdev)->driver_data;
+> +	int ret = mc13783_adc_read(dev, devattr, &val);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* MC13892 have 1/2 divider, input range is [0, 4.800V] */
+> +	if (driver_data & MC13783_ADC_BPDIV2)
+> +		val = DIV_ROUND_CLOSEST(val * 4800, 1024);
+> +	/* MC13783 have 0.9 divider, input range is [0, 2.555V] */
 
-> Thanks,
-> Eddie
-> 
-> >
-> >I see other code adding the terminator, but it doesn't usually return it
-> >to the user.
-> >
-> >Guenter
-> >
-> >>+	return simple_read_from_buffer(buf, count, ppos, str, res - str);
-> >>+}
-> >>+
-> >>+static const struct file_operations ucd9000_debugfs_show_mfr_status_fops = {
-> >>+	.llseek = noop_llseek,
-> >>+	.read = ucd9000_debugfs_read_mfr_status,
-> >>+	.open = simple_open,
-> >>+};
-> >>+
-> >>+static int ucd9000_init_debugfs(struct i2c_client *client,
-> >>+				const struct i2c_device_id *mid,
-> >>+				struct ucd9000_data *data)
-> >>+{
-> >>+	struct dentry *debugfs;
-> >>+	struct ucd9000_debugfs_entry *entries;
-> >>+	int i;
-> >>+	char name[UCD9000_DEBUGFS_NAME_LEN];
-> >>+
-> >>+	debugfs = pmbus_get_debugfs_dir(client);
-> >>+	if (!debugfs)
-> >>+		return -ENOENT;
-> >>+
-> >>+	data->debugfs = debugfs_create_dir(client->name, debugfs);
-> >>+	if (!data->debugfs)
-> >>+		return -ENOENT;
-> >>+
-> >>+	/*
-> >>+	 * Of the chips this driver supports, only the UCD9090, UCD90160,
-> >>+	 * and UCD90910 report GPI faults in their MFR_STATUS register, so only
-> >>+	 * create the GPI fault debugfs attributes for those chips.
-> >>+	 */
-> >>+	if (mid->driver_data == ucd9090 || mid->driver_data == ucd90160 ||
-> >>+	    mid->driver_data == ucd90910) {
-> >>+		entries = devm_kzalloc(&client->dev,
-> >>+				       sizeof(*entries) * UCD9000_GPI_COUNT,
-> >>+				       GFP_KERNEL);
-> >>+		if (!entries)
-> >>+			return -ENOMEM;
-> >>+
-> >>+		for (i = 0; i < UCD9000_GPI_COUNT; i++) {
-> >>+			entries[i].client = client;
-> >>+			entries[i].index = i;
-> >>+			scnprintf(name, UCD9000_DEBUGFS_NAME_LEN,
-> >>+				  "gpi%d_alarm", i + 1);
-> >>+			debugfs_create_file(name, 0444, data->debugfs,
-> >>+					    &entries[i],
-> >>+					    &ucd9000_debugfs_mfr_status_bit);
-> >>+		}
-> >>+	}
-> >>+
-> >>+	scnprintf(name, UCD9000_DEBUGFS_NAME_LEN, "mfr_status");
-> >>+	debugfs_create_file(name, 0444, data->debugfs, client,
-> >>+			    &ucd9000_debugfs_show_mfr_status_fops);
-> >>+
-> >>+	return 0;
-> >>+}
-> >>+#else
-> >>+static int ucd9000_init_debugfs(struct i2c_client *client,
-> >>+				const struct i2c_device_id *mid,
-> >>+				struct ucd9000_data *data)
-> >>+{
-> >>+	return 0;
-> >>+}
-> >>+#endif /* CONFIG_DEBUG_FS */
-> >>+
-> >>  static int ucd9000_probe(struct i2c_client *client,
-> >>  			 const struct i2c_device_id *id)
-> >>  {
-> >>@@ -475,7 +602,16 @@ static int ucd9000_probe(struct i2c_client *client,
-> >>  	ucd9000_probe_gpio(client, mid, data);
-> >>-	return pmbus_do_probe(client, mid, info);
-> >>+	ret = pmbus_do_probe(client, mid, info);
-> >>+	if (ret)
-> >>+		return ret;
-> >>+
-> >>+	ret = ucd9000_init_debugfs(client, mid, data);
-> >>+	if (ret)
-> >>+		dev_warn(&client->dev, "Failed to register debugfs: %d\n",
-> >>+			 ret);
-> >>+
-> >>+	return 0;
-> >>  }
-> >>  /* This is the driver that will be inserted */
-> >>-- 
-> >>1.8.3.1
-> >>
-> >>--
-> >>To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> >>the body of a message to majordomo@vger.kernel.org
-> >>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Please move the comments into the if/else block and adjust indentation.
+
+> +	else
+> +		val = DIV_ROUND_CLOSEST(val * 2555, 1024);
+> +
+> +	return sprintf(buf, "%u\n", val);
+> +}
+> +
+> +static ssize_t mc13783_adc_read_temp(struct device *dev,
+> +		struct device_attribute *devattr, char *buf)
+> +{
+> +	unsigned int val;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	kernel_ulong_t driver_data = platform_get_device_id(pdev)->driver_data;
+> +	int ret = mc13783_adc_read(dev, devattr, &val);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* MC13892:
+> +	 * Die Temperature Read Out Code at 25C 680
+> +	 * Temperature change per LSB +0.4244C
+> +	 */
+
+This is not a networking driver. Please use the standard multi-line
+comment format. Also, please move the comments into the if/else
+block and use { } to improve readability.
+
+> +	if (driver_data & MC13783_ADC_BPDIV2)
+> +		ret = DIV_ROUND_CLOSEST(-2635920 + val * 4244, 10);
+> +	/* MC13783:
+> +	 * Die Temperature Read Out Code at 25C 282
+> +	 * Temperature change per LSB -1.14C
+> +	 */
+
+Especially this comment is just confusing due to its alignment.
+
+> +	else
+> +		ret = 346480 - 1140 * val;
+> +
+> +	return sprintf(buf, "%d\n", ret);
+> +}
+> +
+>  static DEVICE_ATTR_RO(name);
+>  static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, mc13783_adc_read_bp, NULL, 2);
+>  static SENSOR_DEVICE_ATTR(in5_input, S_IRUGO, mc13783_adc_read_gp, NULL, 5);
+> @@ -124,6 +176,9 @@ static ssize_t mc13783_adc_read_gp(struct device *dev,
+>  static SENSOR_DEVICE_ATTR(in13_input, S_IRUGO, mc13783_adc_read_gp, NULL, 13);
+>  static SENSOR_DEVICE_ATTR(in14_input, S_IRUGO, mc13783_adc_read_gp, NULL, 14);
+>  static SENSOR_DEVICE_ATTR(in15_input, S_IRUGO, mc13783_adc_read_gp, NULL, 15);
+> +static SENSOR_DEVICE_ATTR(in16_input, S_IRUGO, mc13783_adc_read_uid, NULL, 16);
+> +static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO,
+> +			  mc13783_adc_read_temp, NULL, 17);
+>  
+>  static struct attribute *mc13783_attr_base[] = {
+>  	&dev_attr_name.attr,
+> @@ -131,6 +186,8 @@ static ssize_t mc13783_adc_read_gp(struct device *dev,
+>  	&sensor_dev_attr_in5_input.dev_attr.attr,
+>  	&sensor_dev_attr_in6_input.dev_attr.attr,
+>  	&sensor_dev_attr_in7_input.dev_attr.attr,
+> +	&sensor_dev_attr_in16_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
+>  	NULL
+>  };
+>  
+> diff --git a/drivers/mfd/mc13xxx-core.c b/drivers/mfd/mc13xxx-core.c
+> index d7f54e4..c63e331 100644
+> --- a/drivers/mfd/mc13xxx-core.c
+> +++ b/drivers/mfd/mc13xxx-core.c
+> @@ -279,8 +279,21 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx, unsigned int mode,
+>  	adc0 = MC13XXX_ADC0_ADINC1 | MC13XXX_ADC0_ADINC2;
+>  	adc1 = MC13XXX_ADC1_ADEN | MC13XXX_ADC1_ADTRIGIGN | MC13XXX_ADC1_ASC;
+>  
+> -	if (channel > 7)
+> +	/*
+> +	 * Channels mapped through ADIN7:
+> +	 * 7  - General purpose ADIN7
+> +	 * 16 - UID
+> +	 * 17 - Die temperature
+> +	 */
+> +	if (channel > 7 && channel < 16) {
+>  		adc1 |= MC13XXX_ADC1_ADSEL;
+> +	} else if (channel == 16) {
+> +		adc0 |= MC13XXX_ADC0_ADIN7SEL_UID;
+> +		channel = 7;
+> +	} else if (channel == 17) {
+> +		adc0 |= MC13XXX_ADC0_ADIN7SEL_DIE;
+> +		channel = 7;
+> +	}
+>  
+>  	switch (mode) {
+>  	case MC13XXX_ADC_MODE_TS:
+> diff --git a/include/linux/mfd/mc13xxx.h b/include/linux/mfd/mc13xxx.h
+> index 638222e..54a3cd8 100644
+> --- a/include/linux/mfd/mc13xxx.h
+> +++ b/include/linux/mfd/mc13xxx.h
+> @@ -243,6 +243,8 @@ struct mc13xxx_platform_data {
+>  #define MC13XXX_ADC0_LICELLCON		(1 << 0)
+>  #define MC13XXX_ADC0_CHRGICON		(1 << 1)
+>  #define MC13XXX_ADC0_BATICON		(1 << 2)
+> +#define MC13XXX_ADC0_ADIN7SEL_DIE	(1 << 4)
+> +#define MC13XXX_ADC0_ADIN7SEL_UID	(2 << 4)
+>  #define MC13XXX_ADC0_ADREFEN		(1 << 10)
+>  #define MC13XXX_ADC0_TSMOD0		(1 << 12)
+>  #define MC13XXX_ADC0_TSMOD1		(1 << 13)
+> -- 
+> 1.9.1
 > 
