@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:7027 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752251AbeCUEm3 (ORCPT
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:12222 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751794AbeCUElO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Mar 2018 00:42:29 -0400
+        Wed, 21 Mar 2018 00:41:14 -0400
 From: Rajkumar Rampelli <rrajk@nvidia.com>
 To: <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -21,9 +21,9 @@ CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <ldewangan@nvidia.com>,
         <rrajk@nvidia.com>
-Subject: [PATCH V2 9/9] arm64: defconfig: enable pwm-fan as a loadable module
-Date: Wed, 21 Mar 2018 10:10:44 +0530
-Message-ID: <1521607244-29734-10-git-send-email-rrajk@nvidia.com>
+Subject: [PATCH V2 3/9] dt-bindings: Tegra186 tachometer device tree bindings
+Date: Wed, 21 Mar 2018 10:10:38 +0530
+Message-ID: <1521607244-29734-4-git-send-email-rrajk@nvidia.com>
 In-Reply-To: <1521607244-29734-1-git-send-email-rrajk@nvidia.com>
 References: <1521607244-29734-1-git-send-email-rrajk@nvidia.com>
 MIME-Version: 1.0
@@ -31,30 +31,57 @@ Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Enable pwm-fan driver to make use of a PWM interface to
-read speed of a fan in rotations per minute.
+Supply Device tree binding documentation for the NVIDIA
+Tegra186 SoC's Tachometer Controller
 
 Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
 ---
 
-V2: Added pwm-fan driver support as a loadable module.
-    Removed generic-pwm-tachometer driver support which was added as part of v1
+V2: Renamed compatible string to "nvidia,tegra186-pwm-tachometer"
+    Renamed dt property values of clock-names and reset-names to "tachometer"
+    from "tach"
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/pwm/pwm-tegra-tachometer.txt          | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8b2bda7..50aa3bce 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -320,6 +320,7 @@ CONFIG_SYSCON_REBOOT_MODE=y
- CONFIG_BATTERY_BQ27XXX=y
- CONFIG_SENSORS_ARM_SCPI=y
- CONFIG_SENSORS_LM90=m
-+CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
- CONFIG_CPU_THERMAL=y
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt b/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
+new file mode 100644
+index 0000000..4a7ead4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/pwm-tegra-tachometer.txt
+@@ -0,0 +1,31 @@
++Bindings for a PWM based Tachometer driver
++
++Required properties:
++- compatible: Must be "nvidia,tegra186-pwm-tachometer"
++- reg: physical base addresses of the controller and length of
++  memory mapped region.
++- #pwm-cells: should be 2. See pwm.txt in this directory for a
++  description of the cells format.
++- clocks: phandle list of tachometer clocks
++- clock-names: should be "tachometer". See clock-bindings.txt in documentations
++- resets: phandle to the reset controller for the Tachometer IP
++- reset-names: should be "tachometer". See reset.txt in documentations
++- nvidia,pulse-per-rev: Integer, pulses per revolution of a Fan. This value
++  obtained from Fan specification document.
++- nvidia,capture-window-len: Integer, window of the Fan Tach monitor, it indicates
++  that how many period of the input fan tach signal will the FAN TACH logic
++  monitor. Valid values are 1, 2, 4 and 8 only.
++
++Example:
++	tegra_tachometer: tachometer@39c0000 {
++		compatible = "nvidia,tegra186-pwm-tachometer";
++		reg = <0x0 0x039c0000 0x0 0x10>;
++		#pwm-cells = <2>;
++		clocks = <&tegra_car TEGRA186_CLK_TACH>;
++		clock-names = "tachometer";
++		resets = <&tegra_car TEGRA186_RESET_TACH>;
++		reset-names = "tachometer";
++		nvidia,pulse-per-rev = <2>;
++		nvidia,capture-window-len = <2>;
++		status = "disabled";
++	};
 -- 
 2.1.4
 
