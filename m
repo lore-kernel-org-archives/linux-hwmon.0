@@ -1,10 +1,9 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:7465 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751963AbeCUEl1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Mar 2018 00:41:27 -0400
+Received: from nat-hk.nvidia.com ([203.18.50.4]:42867 "EHLO nat-hk.nvidia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751524AbeCUErF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Mar 2018 00:47:05 -0400
 From: Rajkumar Rampelli <rrajk@nvidia.com>
 To: <robh+dt@kernel.org>, <mark.rutland@arm.com>,
         <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -21,9 +20,9 @@ CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <ldewangan@nvidia.com>,
         <rrajk@nvidia.com>
-Subject: [PATCH V2 4/9] arm64: tegra: Add Tachometer Controller on Tegra186
-Date: Wed, 21 Mar 2018 10:10:39 +0530
-Message-ID: <1521607244-29734-5-git-send-email-rrajk@nvidia.com>
+Subject: [PATCH V2 6/9] arm64: tegra: Add pwm based fan support on Tegra186
+Date: Wed, 21 Mar 2018 10:10:41 +0530
+Message-ID: <1521607244-29734-7-git-send-email-rrajk@nvidia.com>
 In-Reply-To: <1521607244-29734-1-git-send-email-rrajk@nvidia.com>
 References: <1521607244-29734-1-git-send-email-rrajk@nvidia.com>
 MIME-Version: 1.0
@@ -31,50 +30,29 @@ Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The NVIDIA Tegra186 SoC has a Tachometer Controller that analyzes the
-PWM signal of a Fan and reports the period value through pwm interface.
+Add pwm fan driver support on Tegra186 SoC.
 
 Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
 ---
 
-V2: Renamed clock-names/reset-names dt properties values to "tachometer"
-    Renamed compatible property value to "nvidia-tegra186-pwm-tachometer"
+V2: Removed generic-pwm-tachometer driver dt node and using pwm-fan driver
+    for reading fan speed.
 
- arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |  5 +++++
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           | 11 +++++++++++
- 2 files changed, 16 insertions(+)
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts b/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-index bd5305a..13c3e59 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-@@ -172,4 +172,9 @@
- 			vin-supply = <&vdd_5v0_sys>;
- 		};
- 	};
-+
-+	tachometer@39c0000 {
-+		nvidia,pulse-per-rev = <2>;
-+		nvidia,capture-window-len = <2>;
-+	};
- };
 diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-index 731cd01..19e1afc 100644
+index 19e1afc..27ae73e 100644
 --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
 +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-@@ -1042,4 +1042,15 @@
- 		reset-names = "pwm";
+@@ -1053,4 +1053,10 @@
+ 		reset-names = "tachometer";
  		status = "disabled";
  	};
 +
-+	tegra_tachometer: tachometer@39c0000 {
-+		compatible = "nvidia,tegra186-pwm-tachometer";
-+		reg = <0x0 0x039c0000 0x0 0x10>;
-+		#pwm-cells = <2>;
-+		clocks = <&bpmp TEGRA186_CLK_TACH>;
-+		clock-names = "tachometer";
-+		resets = <&bpmp TEGRA186_RESET_TACH>;
-+		reset-names = "tachometer";
++	pwm_fan {
++		compatible = "pwm-fan";
++		pwms = <&tegra_tachometer 0 1000000>;
 +		status = "disabled";
 +	};
  };
