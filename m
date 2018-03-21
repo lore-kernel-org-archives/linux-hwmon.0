@@ -1,95 +1,46 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:34341 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751477AbeCUGJ4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Mar 2018 02:09:56 -0400
-Subject: Re: [PATCH V2 7/9] hwmon: pwm-fan: add sysfs node to read rpm of fan
-To: Rajkumar Rampelli <rrajk@nvidia.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jdelvare@suse.com, corbet@lwn.net,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        kstewart@linuxfoundation.org, gregkh@linuxfoundation.org,
-        pombredanne@nexb.com, mmaddireddy@nvidia.com,
-        mperttunen@nvidia.com, arnd@arndb.de, timur@codeaurora.org,
-        andy.gross@linaro.org, xuwei5@hisilicon.com, elder@linaro.org,
-        heiko@sntech.de, krzk@kernel.org, ard.biesheuvel@linaro.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ldewangan@nvidia.com
-References: <1521607244-29734-1-git-send-email-rrajk@nvidia.com>
- <1521607244-29734-8-git-send-email-rrajk@nvidia.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <0da71848-1f75-62a3-75cb-a9b5cd887798@roeck-us.net>
-Date: Tue, 20 Mar 2018 23:09:52 -0700
-MIME-Version: 1.0
-In-Reply-To: <1521607244-29734-8-git-send-email-rrajk@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <alvaro.gamez@hazent.com>
+Return-path: <alvaro.gamez@hazent.com>
+From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Cc: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Subject: [PATCH] hwmon: (lm92) Remove spurious test that prevented max6335 detection
+Date: Wed, 21 Mar 2018 10:22:36 +0100
+Message-Id: <20180321092236.22204-1-alvaro.gamez@hazent.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 03/20/2018 09:40 PM, Rajkumar Rampelli wrote:
-> Add fan device attribute fan1_input in pwm-fan driver
-> to read speed of fan in rotations per minute.
-> 
-> Signed-off-by: Rajkumar Rampelli <rrajk@nvidia.com>
-> ---
-> 
-> V2: Removed generic-pwm-tachometer driver and using pwm-fan driver as per suggestions
->      to read fan speed.
->      Added fan device attribute to report speed of fan in rpms through hwmon sysfs.
-> 
->   drivers/hwmon/pwm-fan.c | 23 +++++++++++++++++++++++
->   1 file changed, 23 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 70cc0d1..8dda209 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -98,11 +98,34 @@ static ssize_t show_pwm(struct device *dev,
->   	return sprintf(buf, "%u\n", ctx->pwm_value);
->   }
->   
-> +static ssize_t show_rpm(struct device *dev, struct device_attribute *attr,
-> +			char *buf)
-> +{
-> +	struct pwm_fan_ctx *ptt = dev_get_drvdata(dev);
-> +	struct pwm_device *pwm = ptt->pwm;
-> +	struct pwm_capture result;
-> +	unsigned int rpm = 0;
-> +	int ret;
-> +
-> +	ret = pwm_capture(pwm, &result, 0);
-> +	if (ret < 0) {
-> +		pr_err("Failed to capture PWM: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	if (result.period)
-> +		rpm = DIV_ROUND_CLOSEST_ULL(60ULL * NSEC_PER_SEC,
-> +					    result.period);
-> +
-> +	return sprintf(buf, "%u\n", rpm);
-> +}
->   
->   static SENSOR_DEVICE_ATTR(pwm1, S_IRUGO | S_IWUSR, show_pwm, set_pwm, 0);
-> +static SENSOR_DEVICE_ATTR(fan1_input, 0444, show_rpm, NULL, 0);
->   
->   static struct attribute *pwm_fan_attrs[] = {
->   	&sensor_dev_attr_pwm1.dev_attr.attr,
-> +	&sensor_dev_attr_fan1_input.dev_attr.attr,
+An assumption was made that reads of a max6335 LM92_REG_MAN_ID register
+would return the last value read from any other of its register.
 
-This doesn't make sense. The same pwm can not both control the fan speed
-and report it.
+This assumption is not only something that is not documented anywhere,
+but it is also untrue, so this prevented max6335 recognition.
 
-Guenter
+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+---
+ drivers/hwmon/lm92.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
->   	NULL,
->   };
->   
-> 
-
+diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
+index 2a91974a10bb..a2c3f3080192 100644
+--- a/drivers/hwmon/lm92.c
++++ b/drivers/hwmon/lm92.c
+@@ -272,16 +272,8 @@ static int max6635_check(struct i2c_client *client)
+ 	u8 conf;
+ 	int i;
+ 
+-	/*
+-	 * No manufacturer ID register, so a read from this address will
+-	 * always return the last read value.
+-	 */
+ 	temp_low = i2c_smbus_read_word_data(client, LM92_REG_TEMP_LOW);
+-	if (i2c_smbus_read_word_data(client, LM92_REG_MAN_ID) != temp_low)
+-		return 0;
+ 	temp_high = i2c_smbus_read_word_data(client, LM92_REG_TEMP_HIGH);
+-	if (i2c_smbus_read_word_data(client, LM92_REG_MAN_ID) != temp_high)
+-		return 0;
+ 
+ 	/* Limits are stored as integer values (signed, 9-bit). */
+ 	if ((temp_low & 0x7f00) || (temp_high & 0x7f00))
+-- 
+2.16.2
