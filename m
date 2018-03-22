@@ -1,27 +1,19 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:43856 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1754176AbeCVBxM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Mar 2018 21:53:12 -0400
-Received: by mail-pg0-f68.google.com with SMTP id i9so2678414pgq.10
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Mar 2018 18:53:12 -0700 (PDT)
-Date: Wed, 21 Mar 2018 18:53:09 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Alvaro G. M" <alvaro.gamez@hazent.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: hwmon: (lm92) Do not try to detect MAX6635
-Message-ID: <20180322015309.GA32619@roeck-us.net>
+Return-Path: <jdelvare@suse.de>
+Return-path: <jdelvare@suse.de>
+Date: Thu, 22 Mar 2018 10:17:02 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lm92) Do not try to detect MAX6635
+Message-ID: <20180322101702.247542e2@endymion>
+In-Reply-To: <20180321150452.9257-1-alvaro.gamez@hazent.com>
 References: <20180321150452.9257-1-alvaro.gamez@hazent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180321150452.9257-1-alvaro.gamez@hazent.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Mar 21, 2018 at 04:04:52PM +0100, Alvaro G. M wrote:
+On Wed, 21 Mar 2018 16:04:52 +0100, Alvaro Gamez Machado wrote:
 > Maxim MAX663x family are mostly compatible with LM92, but they lack any
 > identification register. Weakening the detect function would make it prone
 > to false positives, and current one doesn't detect all chips.  Therefore,
@@ -29,12 +21,6 @@ On Wed, Mar 21, 2018 at 04:04:52PM +0100, Alvaro G. M wrote:
 > device instatiation.
 > 
 > Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
 > ---
 >  Documentation/hwmon/lm92 |  4 +---
 >  drivers/hwmon/lm92.c     | 58 ------------------------------------------------
@@ -131,3 +117,12 @@ Guenter
 >  	else
 >  		return -ENODEV;
 >  
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
+It would probably make sense to add prefix "max6635" to lm92_id[] so
+that the device can be instantiated by its actual name.
+
+-- 
+Jean Delvare
+SUSE L3 Support
