@@ -1,130 +1,269 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53692 "EHLO
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50100 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1751507AbeCVKzR (ORCPT
+        by vger.kernel.org with ESMTP id S1753690AbeCVKy7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Mar 2018 06:55:17 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w2MAsmnU012211
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:55:16 -0400
-Received: from e06smtp15.uk.ibm.com (e06smtp15.uk.ibm.com [195.75.94.111])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2gvb0yrb6q-1
+        Thu, 22 Mar 2018 06:54:59 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w2MAsoMH061555
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:54:59 -0400
+Received: from e06smtp10.uk.ibm.com (e06smtp10.uk.ibm.com [195.75.94.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2gvabat7ub-1
         (version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:55:16 -0400
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:54:59 -0400
 Received: from localhost
-        by e06smtp15.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp10.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
-        Thu, 22 Mar 2018 10:54:55 -0000
+        Thu, 22 Mar 2018 10:54:56 -0000
 From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 To: mpe@ellerman.id.au, linux@roeck-us.net
 Cc: linuxppc-dev@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, stewart@linux.vnet.ibm.com,
         Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Subject: [PATCH 1/3] powernv:opal-sensor-groups: Add support to enable sensor groups
-Date: Thu, 22 Mar 2018 16:24:33 +0530
+Subject: [PATCH 2/3] hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
+Date: Thu, 22 Mar 2018 16:24:34 +0530
 In-Reply-To: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-Message-Id: <1521716075-807-2-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+Message-Id: <1521716075-807-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Adds support to enable/disable a sensor group at runtime. This
-can be used to select the sensor groups that needs to be copied to
-main memory by OCC. Sensor groups like power, temperature, current,
-voltage, frequency, utilization can be enabled/disabled at runtime.
+On-Chip-Controller(OCC) is an embedded micro-processor in POWER9 chip
+which measures various system and chip level sensors. These sensors
+comprises of environmental sensors (like power, temperature, current
+and voltage) and performance sensors (like utilization, frequency).
+All these sensors are copied to main memory at a regular interval of
+100ms. OCC provides a way to select a group of sensors that is copied
+to the main memory to increase the update frequency of selected sensor
+groups. When a sensor-group is disabled, OCC will not copy it to main
+memory and those sensors read 0 values.
+
+This patch provides support for enabling/disabling the sensor groups
+like power, temperature, current and voltage. This patch adds new
+sysfs attributes to disable and enable them.
 
 Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 ---
- arch/powerpc/include/asm/opal-api.h                |  4 +++-
- arch/powerpc/include/asm/opal.h                    |  2 ++
- .../powerpc/platforms/powernv/opal-sensor-groups.c | 28 ++++++++++++++++++++++
- arch/powerpc/platforms/powernv/opal-wrappers.S     |  1 +
- 4 files changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/opal-api.h b/arch/powerpc/include/asm/opal-api.h
-index 94bd1bf..b6bbbd8 100644
---- a/arch/powerpc/include/asm/opal-api.h
-+++ b/arch/powerpc/include/asm/opal-api.h
-@@ -204,7 +204,9 @@
- #define OPAL_NPU_SPA_SETUP			159
- #define OPAL_NPU_SPA_CLEAR_CACHE		160
- #define OPAL_NPU_TL_SET				161
--#define OPAL_LAST				161
-+#define OPAL_SENSOR_READ_U64			162
-+#define OPAL_SENSOR_GROUP_ENABLE		163
-+#define OPAL_LAST				163
+- Should the new attributes be added to hwmon_chip_attrs[]?
+
+ Documentation/hwmon/ibmpowernv |  31 +++++++++-
+ drivers/hwmon/ibmpowernv.c     | 127 ++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 150 insertions(+), 8 deletions(-)
+
+diff --git a/Documentation/hwmon/ibmpowernv b/Documentation/hwmon/ibmpowernv
+index 8826ba2..5e510fd 100644
+--- a/Documentation/hwmon/ibmpowernv
++++ b/Documentation/hwmon/ibmpowernv
+@@ -38,4 +38,33 @@ tempX_max		Threshold ambient temperature for alert generation.
+ inX_input		Measured power supply voltage
+ inX_fault		0: No fail condition.
+ 			1: Failing power supply.
+-power1_input		System power consumption (microWatt)
++powerX_input		Power consumption (microWatt)
++currX_input		Measured current
++
++Sysfs attributes in POWER9
++---------------------------
++
++On-Chip-Controller(OCC) copies the sensors to main memory. The
++environmental sensor groups can be dynamically configured by writing
++to the below sysfs files. Writing to this file configures the sensor
++group update for the all the OCC chips in the system.
++
++power_enable		Disable/enable copying of power sensors
++			0: Disable
++			1: Enable
++			RO
++
++in_enable		Disable/enable copying of voltage sensors
++			0: Disable
++			1: Enable
++			RO
++
++curr_enable		Disable/enable copying of current sensors
++			0: Disable
++			1: Enable
++			RO
++
++temp_enable		Disable/enable copying of temperature sensors
++			0: Disable
++			1: Enable
++			RO
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index 5ccdd0b..696ccbc 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -90,6 +90,16 @@ struct sensor_data {
+ 	struct device_attribute dev_attr;
+ };
  
- /* Device tree flags */
++struct sensor_group_data {
++	u32 nr_ids;
++	u32 *id;
++	char name[MAX_ATTR_LEN];
++	struct device_attribute dev_attr;
++};
++
++DEFINE_MUTEX(sensor_groups_mutex);
++static int nr_sg_attr_count;
++
+ struct platform_data {
+ 	const struct attribute_group *attr_groups[MAX_SENSOR_TYPE + 1];
+ 	u32 sensors_count; /* Total count of sensors from each group */
+@@ -117,6 +127,42 @@ static ssize_t show_sensor(struct device *dev, struct device_attribute *devattr,
+ 	return sprintf(buf, "%u\n", x);
+ }
  
-diff --git a/arch/powerpc/include/asm/opal.h b/arch/powerpc/include/asm/opal.h
-index 12e70fb..0d37bf2 100644
---- a/arch/powerpc/include/asm/opal.h
-+++ b/arch/powerpc/include/asm/opal.h
-@@ -286,6 +286,7 @@ int64_t opal_imc_counters_init(uint32_t type, uint64_t address,
- int opal_get_power_shift_ratio(u32 handle, int token, u32 *psr);
- int opal_set_power_shift_ratio(u32 handle, int token, u32 psr);
- int opal_sensor_group_clear(u32 group_hndl, int token);
-+int opal_sensor_group_enable(u32 group_hndl, int token, bool enable);
- 
- s64 opal_signal_system_reset(s32 cpu);
- 
-@@ -318,6 +319,7 @@ extern int opal_message_notifier_unregister(enum opal_msg_type msg_type,
- extern int opal_async_wait_response_interruptible(uint64_t token,
- 		struct opal_msg *msg);
- extern int opal_get_sensor_data(u32 sensor_hndl, u32 *sensor_data);
-+extern int sensor_group_enable(u32 grp_hndl, bool enable);
- 
- struct rtc_time;
- extern unsigned long opal_get_boot_time(void);
-diff --git a/arch/powerpc/platforms/powernv/opal-sensor-groups.c b/arch/powerpc/platforms/powernv/opal-sensor-groups.c
-index 7e5a235..5b53f58 100644
---- a/arch/powerpc/platforms/powernv/opal-sensor-groups.c
-+++ b/arch/powerpc/platforms/powernv/opal-sensor-groups.c
-@@ -32,6 +32,34 @@ struct sg_attr {
- 	struct sg_attr *sgattrs;
- } *sgs;
- 
-+int sensor_group_enable(u32 handle, bool enable)
++static ssize_t store_enable(struct device *dev,
++			    struct device_attribute *devattr,
++			    const char *buf, size_t count)
 +{
-+	struct opal_msg msg;
-+	int token, ret;
++	struct sensor_group_data *sdata = container_of(devattr,
++						       struct sensor_group_data,
++						       dev_attr);
++	int ret;
++	u32 data;
++	int i;
 +
-+	token = opal_async_get_token_interruptible();
-+	if (token < 0)
-+		return token;
++	ret = kstrtoint(buf, 0, &data);
++	if (ret)
++		return ret;
 +
-+	ret = opal_sensor_group_enable(handle, token, enable);
-+	if (ret == OPAL_ASYNC_COMPLETION) {
-+		ret = opal_async_wait_response(token, &msg);
++	if (data != 0 && data != 1)
++		return -EIO;
++
++	ret = mutex_lock_interruptible(&sensor_groups_mutex);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < sdata->nr_ids; i++) {
++		ret =  sensor_group_enable(sdata->id[i], data);
 +		if (ret) {
-+			pr_devel("Failed to wait for the async response\n");
 +			ret = -EIO;
 +			goto out;
 +		}
-+		ret = opal_error_code(opal_get_async_rc(msg));
-+	} else {
-+		ret = opal_error_code(ret);
 +	}
 +
++	ret = count;
 +out:
-+	opal_async_release_token(token);
++	mutex_unlock(&sensor_groups_mutex);
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(sensor_group_enable);
 +
- static ssize_t sg_store(struct kobject *kobj, struct kobj_attribute *attr,
- 			const char *buf, size_t count)
+ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
+ 			  char *buf)
  {
-diff --git a/arch/powerpc/platforms/powernv/opal-wrappers.S b/arch/powerpc/platforms/powernv/opal-wrappers.S
-index 1b2936b..90c2b40 100644
---- a/arch/powerpc/platforms/powernv/opal-wrappers.S
-+++ b/arch/powerpc/platforms/powernv/opal-wrappers.S
-@@ -323,3 +323,4 @@ OPAL_CALL(opal_sensor_group_clear,		OPAL_SENSOR_GROUP_CLEAR);
- OPAL_CALL(opal_npu_spa_setup,			OPAL_NPU_SPA_SETUP);
- OPAL_CALL(opal_npu_spa_clear_cache,		OPAL_NPU_SPA_CLEAR_CACHE);
- OPAL_CALL(opal_npu_tl_set,			OPAL_NPU_TL_SET);
-+OPAL_CALL(opal_sensor_group_enable,		OPAL_SENSOR_GROUP_ENABLE);
+@@ -322,6 +368,21 @@ static int populate_attr_groups(struct platform_device *pdev)
+ 
+ 	of_node_put(opal);
+ 
++	opal = of_find_node_by_path("/ibm,opal/sensor-groups");
++	for (type = 0; type < MAX_SENSOR_TYPE; type++)
++		for_each_child_of_node(opal, np) {
++			enum sensors ctype;
++
++			ctype = get_sensor_type(np);
++			if (ctype == type) {
++				sensor_groups[ctype].attr_count++;
++				nr_sg_attr_count++;
++				break;
++			}
++		}
++
++	of_node_put(opal);
++
+ 	for (type = 0; type < MAX_SENSOR_TYPE; type++) {
+ 		sensor_groups[type].group.attrs = devm_kzalloc(&pdev->dev,
+ 					sizeof(struct attribute *) *
+@@ -400,19 +461,25 @@ static int create_device_attrs(struct platform_device *pdev)
+ 	const struct attribute_group **pgroups = pdata->attr_groups;
+ 	struct device_node *opal, *np;
+ 	struct sensor_data *sdata;
++	struct sensor_group_data *sgdata;
+ 	u32 sensor_id;
+ 	enum sensors type;
+ 	u32 count = 0;
+ 	int err = 0;
++	int nr_id[MAX_SENSOR_TYPE] = {0};
+ 
+-	opal = of_find_node_by_path("/ibm,opal/sensors");
+-	sdata = devm_kzalloc(&pdev->dev, pdata->sensors_count * sizeof(*sdata),
++	sdata = devm_kzalloc(&pdev->dev, (pdata->sensors_count -
++			     nr_sg_attr_count) * sizeof(*sdata),
+ 			     GFP_KERNEL);
+-	if (!sdata) {
+-		err = -ENOMEM;
+-		goto exit_put_node;
+-	}
++	if (!sdata)
++		return -ENOMEM;
++
++	sgdata = devm_kzalloc(&pdev->dev, nr_sg_attr_count * sizeof(*sgdata),
++			      GFP_KERNEL);
++	if (!sgdata)
++		return -ENOMEM;
+ 
++	opal = of_find_node_by_path("/ibm,opal/sensors");
+ 	for_each_child_of_node(opal, np) {
+ 		const char *attr_name;
+ 		u32 opal_index;
+@@ -496,7 +563,53 @@ static int create_device_attrs(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-exit_put_node:
++	of_node_put(opal);
++
++	opal = of_find_node_by_path("/ibm,opal/sensor-groups");
++	for_each_child_of_node(opal, np) {
++		type = get_sensor_type(np);
++		if (type == MAX_SENSOR_TYPE)
++			continue;
++		nr_id[type]++;
++	}
++
++	count = 0;
++	for (type = 0; type < MAX_SENSOR_TYPE; type++) {
++		int c = 0;
++
++		if (!nr_id[type])
++			continue;
++
++		sgdata[count].nr_ids = nr_id[type];
++		sgdata[count].id = devm_kzalloc(&pdev->dev, nr_id[type] *
++					    sizeof(u32), GFP_KERNEL);
++		if (!sgdata[count].id)
++			return -ENOMEM;
++
++		for_each_child_of_node(opal, np) {
++			enum sensors ctype;
++
++			ctype = get_sensor_type(np);
++			if (type != ctype)
++				continue;
++
++			if (of_property_read_u32(np, "sensor-group-id",
++						&sensor_id))
++				continue;
++
++			sgdata[count].id[c++] = sensor_id;
++		}
++		snprintf(sgdata[count].name, MAX_ATTR_LEN, "%s_enable",
++			 sensor_groups[type].name);
++		sysfs_attr_init(&sgdata[count].dev_attr.attr);
++		sgdata[count].dev_attr.attr.name = sgdata[count].name;
++		sgdata[count].dev_attr.attr.mode = 00220;
++		sgdata[count].dev_attr.store = store_enable;
++		pgroups[type]->attrs[sensor_groups[type].attr_count++] =
++			&sgdata[count].dev_attr.attr;
++		count++;
++	}
++
+ 	of_node_put(opal);
+ 	return err;
+ }
 -- 
 1.8.3.1
 
