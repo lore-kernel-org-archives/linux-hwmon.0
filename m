@@ -1,59 +1,75 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from smtprelay0042.hostedemail.com ([216.40.44.42]:41598 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1750983AbeCZUi3 (ORCPT
+Received: from mail-pl0-f67.google.com ([209.85.160.67]:35579 "EHLO
+        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752446AbeC0Gdd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Mar 2018 16:38:29 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave07.hostedemail.com (Postfix) with ESMTP id 022F91803A560
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Mar 2018 20:29:01 +0000 (UTC)
-Message-ID: <1522096136.12357.21.camel@perches.com>
-Subject: [PATCH script] hwmon: Use octal not symbolic permissions
-From: Joe Perches <joe@perches.com>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
+        Tue, 27 Mar 2018 02:33:33 -0400
+Subject: Re: [PATCH script] hwmon: Use octal not symbolic permissions
+To: Joe Perches <joe@perches.com>, Jean Delvare <jdelvare@suse.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, patches@opensource.cirrus.com
-Date: Mon, 26 Mar 2018 13:28:56 -0700
-Content-Type: text/plain; charset="ISO-8859-1"
-Mime-Version: 1.0
+References: <1522096136.12357.21.camel@perches.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <9b112651-d0cf-5f3b-b643-3328028a95cd@roeck-us.net>
+Date: Mon, 26 Mar 2018 23:33:30 -0700
+MIME-Version: 1.0
+In-Reply-To: <1522096136.12357.21.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-drivers/hwmon is the most frequent user of symbolic permissions
-like S_IRUGO in the kernel tree.
+On 03/26/2018 01:28 PM, Joe Perches wrote:
+> drivers/hwmon is the most frequent user of symbolic permissions
+> like S_IRUGO in the kernel tree.
+> 
+> $ git grep -w -P "S_[A-Z]{5,5}" | \
+>    cut -f1 -d: | cut -f1-2 -d"/" | sed -r 's/[A-Za-z0-9_-]+\.[ch]$//' | \
+>    sort | uniq -c | sort -rn | head
+>     3862 drivers/hwmon
+>      814 drivers/scsi
+>      763 drivers/net
+>      242 drivers/infiniband
+>      184 drivers/staging
+>      181 drivers/usb
+>      158 fs/proc
+>      150 fs/xfs
+>      148 fs/
+>      142 drivers/misc
+> 
+> But using octal and not symbolic permissions is preferred by many
+> as it can be more readable.
+> 
+> https://lkml.org/lkml/2016/8/2/1945
+> 
+> Rather than converting these piecemeal, perhaps just do them all
+> at once via a trivial script like the below:
+> 
+> $ git grep -w -P --name-only "S_[A-Z]{5,5}" drivers/hwmon | \
+>    xargs ./scripts/checkpatch.pl -f --types=symbolic_perms --fix-inplace
+> $ git grep -w -P --name-only "S_[A-Z]{5,5}" drivers/hwmon | \
+>    xargs ./scripts/checkpatch.pl -f --types=symbolic_perms --fix-inplace
+> 
+> It's run twice because checkpatch only does 1 conversion per line
+> and there are some multiple instance lines.
+> 
+> This currently results in a 669 KB patch which is too large
+> to post but can be easily generated when appropriate.
 
-$ git grep -w -P "S_[A-Z]{5,5}" | \
-  cut -f1 -d: | cut -f1-2 -d"/" | sed -r 's/[A-Za-z0-9_-]+\.[ch]$//' | \
-  sort | uniq -c | sort -rn | head
-   3862 drivers/hwmon
-    814 drivers/scsi
-    763 drivers/net
-    242 drivers/infiniband
-    184 drivers/staging
-    181 drivers/usb
-    158 fs/proc
-    150 fs/xfs
-    148 fs/
-    142 drivers/misc
+I have something similar using coccinelle, which has the added benefit
+of also adjusting multi-line alignments. But then I am hesitant to pull
+it in because I don't really see the point. A more intelligent approach
+would be to convert hwmon drivers to the latest API, and/or to introduce
+more intelligent macros such as SENSOR_DEVICE_ATTR_{RO,RW,WO}. But that
+would require active work as well as reviewers, and especially the latter
+is extremely difficult if not impossible to find for the hwmon subsystem.
 
-But using octal and not symbolic permissions is preferred by many
-as it can be more readable.
+Since the hwmon subsystem has been labeled as both "obsolete" and "obscure",
+that is maybe not entirely surprising, and I think we are good as we are.
+I am happy to accept patches updating permissions as other changes are made
+to a file, but I don't see a pressing need to change all files just to make
+statistics happy (and backports more difficult).
 
-https://lkml.org/lkml/2016/8/2/1945
-
-Rather than converting these piecemeal, perhaps just do them all
-at once via a trivial script like the below:
-
-$ git grep -w -P --name-only "S_[A-Z]{5,5}" drivers/hwmon | \
-  xargs ./scripts/checkpatch.pl -f --types=symbolic_perms --fix-inplace
-$ git grep -w -P --name-only "S_[A-Z]{5,5}" drivers/hwmon | \
-  xargs ./scripts/checkpatch.pl -f --types=symbolic_perms --fix-inplace
-
-It's run twice because checkpatch only does 1 conversion per line
-and there are some multiple instance lines.
-
-This currently results in a 669 KB patch which is too large
-to post but can be easily generated when appropriate.
+Guenter
