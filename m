@@ -1,60 +1,35 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-Subject: Re: [PATCH -next] hwmon: (scmi) return -EINVAL when sensor
- information is unavailable
-To: Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
-Cc: Dan Carpenter <dan.carpenter@oracle.com>, linux-hwmon@vger.kernel.org
-References: <1521137299-31363-1-git-send-email-sudeep.holla@arm.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <91ffbe33-29c7-9836-283c-0c6c13c60b1e@roeck-us.net>
-Date: Thu, 15 Mar 2018 14:27:21 -0700
-MIME-Version: 1.0
-In-Reply-To: <1521137299-31363-1-git-send-email-sudeep.holla@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Message-ID: <1522136107.12357.58.camel@perches.com>
+Subject: Re: [PATCH script] hwmon: Use octal not symbolic permissions
+From: Joe Perches <joe@perches.com>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        patches@opensource.cirrus.com
+Date: Tue, 27 Mar 2018 00:35:07 -0700
+In-Reply-To: <9b112651-d0cf-5f3b-b643-3328028a95cd@roeck-us.net>
+References: <1522096136.12357.21.camel@perches.com>
+         <9b112651-d0cf-5f3b-b643-3328028a95cd@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-kernel-owner@vger.kernel.org
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 03/15/2018 11:08 AM, Sudeep Holla wrote:
-> Passing NULL pointer to PTR_ERR will result in return value of 0
-> indicating success which is clearly not what it is intended here.
-> 
-> This patch returns -EINVAL instead when the sensor information is not
-> available.
-> 
-> Fixes: b23688aefb8b ("hwmon: add support for sensors exported via ARM SCMI")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+On Mon, 2018-03-26 at 23:33 -0700, Guenter Roeck wrote:
+> Since the hwmon subsystem has been labeled as both "obsolete" and "obscure",
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+fyi: It's marked Maintained in MAINTAINERS
 
-> ---
->   drivers/hwmon/scmi-hwmon.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Hi Guenter,
-> 
-> I will try to push this via ARM-SoC if possible before v4.17 merge window.
-> So please provide Ack if you are fine.
-> 
-> Regards,
-> Sudeep
-> 
-> diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-> index 32e750373ced..363bf56eb0f2 100644
-> --- a/drivers/hwmon/scmi-hwmon.c
-> +++ b/drivers/hwmon/scmi-hwmon.c
-> @@ -138,7 +138,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
->   	for (i = 0; i < nr_sensors; i++) {
->   		sensor = handle->sensor_ops->info_get(handle, i);
->   		if (!sensor)
-> -			return PTR_ERR(sensor);
-> +			return -EINVAL;
->   
->   		switch (sensor->type) {
->   		case TEMPERATURE_C:
-> 
+HARDWARE MONITORING
+M:	Jean Delvare <jdelvare@suse.com>
+M:	Guenter Roeck <linux@roeck-us.net>
+L:	linux-hwmon@vger.kernel.org
+W:	http://hwmon.wiki.kernel.org/
+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+S:	Maintained
+F:	Documentation/hwmon/
+F:	drivers/hwmon/
+F:	include/linux/hwmon*.h
