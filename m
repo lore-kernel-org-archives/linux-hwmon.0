@@ -1,54 +1,75 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f49.google.com ([74.125.82.49]:35323 "EHLO
-        mail-wm0-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753889AbeC1P1o (ORCPT
+Received: from mail-pl0-f67.google.com ([209.85.160.67]:44458 "EHLO
+        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752490AbeC0Pxd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Mar 2018 11:27:44 -0400
-Received: by mail-wm0-f49.google.com with SMTP id r82so6158867wme.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 28 Mar 2018 08:27:44 -0700 (PDT)
-Date: Wed, 28 Mar 2018 16:27:41 +0100
-From: Lee Jones <lee.jones@linaro.org>
-To: Andrey Gusakov <andrey.gusakov@cogentembedded.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, cphealy@gmail.com,
-        andrew.smirnov@gmail.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: MC13783: add uid and die temperature sensor
- inputs
-Message-ID: <20180328152741.st7rjnzlryzazjfh@dell>
-References: <1522160389-18822-1-git-send-email-andrey.gusakov@cogentembedded.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1522160389-18822-1-git-send-email-andrey.gusakov@cogentembedded.com>
+        Tue, 27 Mar 2018 11:53:33 -0400
+Received: by mail-pl0-f67.google.com with SMTP id 9-v6so14337287ple.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Mar 2018 08:53:33 -0700 (PDT)
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (nct6775) Fix writing pwmX_mode
+Date: Tue, 27 Mar 2018 08:53:30 -0700
+Message-Id: <1522166010-5406-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 27 Mar 2018, Andrey Gusakov wrote:
+pwmX_mode is defined in the ABI as 0=DC mode, 1=pwm mode. The chip
+register bit is set to 1 for DC mode. This got mixed up, and writing
+1 into pwmX_mode resulted in DC mode enabled. Fix it up by using
+the ABI definition throughout the driver for consistency.
 
-> The uid and die temperature can be read out on the ADIN7 using
-> input mux. Map uid and die temperature sensor to channels 16
-> and 17.
-> 
-> Signed-off-by: Andrey Gusakov <andrey.gusakov@cogentembedded.com>
-> ---
-> Changes in v3:
-> - comment style fixes
-> Changes in v2:
-> - suport both mc13783 and mc13892
-> - uid_input renamed to in16_input
-> - style fixes
-> ---
->  drivers/hwmon/mc13783-adc.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
+Fixes: 77eb5b3703d99 ("hwmon: (nct6775) Add support for pwm, pwm_mode, ... ")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/nct6775.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
->  drivers/mfd/mc13xxx-core.c  | 15 +++++++++++-
->  include/linux/mfd/mc13xxx.h |  2 ++
-
-For my own reference:
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index fdf24f008d75..aebce560bfaf 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -1513,7 +1513,7 @@ static void nct6775_update_pwm(struct device *dev)
+ 		duty_is_dc = data->REG_PWM_MODE[i] &&
+ 		  (nct6775_read_value(data, data->REG_PWM_MODE[i])
+ 		   & data->PWM_MODE_MASK[i]);
+-		data->pwm_mode[i] = duty_is_dc;
++		data->pwm_mode[i] = !duty_is_dc;
+ 
+ 		fanmodecfg = nct6775_read_value(data, data->REG_FAN_MODE[i]);
+ 		for (j = 0; j < ARRAY_SIZE(data->REG_PWM); j++) {
+@@ -2397,7 +2397,7 @@ show_pwm_mode(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct nct6775_data *data = nct6775_update_device(dev);
+ 	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+ 
+-	return sprintf(buf, "%d\n", !data->pwm_mode[sattr->index]);
++	return sprintf(buf, "%d\n", data->pwm_mode[sattr->index]);
+ }
+ 
+ static ssize_t
+@@ -2418,9 +2418,9 @@ store_pwm_mode(struct device *dev, struct device_attribute *attr,
+ 	if (val > 1)
+ 		return -EINVAL;
+ 
+-	/* Setting DC mode is not supported for all chips/channels */
++	/* Setting DC mode (0) is not supported for all chips/channels */
+ 	if (data->REG_PWM_MODE[nr] == 0) {
+-		if (val)
++		if (!val)
+ 			return -EINVAL;
+ 		return count;
+ 	}
+@@ -2429,7 +2429,7 @@ store_pwm_mode(struct device *dev, struct device_attribute *attr,
+ 	data->pwm_mode[nr] = val;
+ 	reg = nct6775_read_value(data, data->REG_PWM_MODE[nr]);
+ 	reg &= ~data->PWM_MODE_MASK[nr];
+-	if (val)
++	if (!val)
+ 		reg |= data->PWM_MODE_MASK[nr];
+ 	nct6775_write_value(data, data->REG_PWM_MODE[nr], reg);
+ 	mutex_unlock(&data->update_lock);
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.7.4
+
