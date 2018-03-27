@@ -1,41 +1,55 @@
-Return-Path: <sslayer@salem.gmr.ssr.upm.es>
-Return-path: <sslayer@salem.gmr.ssr.upm.es>
-Date: Thu, 22 Mar 2018 15:36:04 +0100
-From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (lm92) Add max6635 to lm92_id[]
-Message-ID: <20180322143603.GA20667@salem.gmr.ssr.upm.es>
-References: <20180322134311.19485-1-alvaro.gamez@hazent.com>
- <20180322152947.08642b1a@endymion>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180322152947.08642b1a@endymion>
+Return-Path: <joe@perches.com>
+Return-path: <joe@perches.com>
+Message-ID: <1522151285.12357.78.camel@perches.com>
+Subject: Re: [PATCH script] hwmon: Use octal not symbolic permissions
+From: Joe Perches <joe@perches.com>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+	patches@opensource.cirrus.com
+Date: Tue, 27 Mar 2018 04:48:05 -0700
+In-Reply-To: <5ec8703b-2979-7a1d-fbc3-bd528d7a5e29@roeck-us.net>
+References: <1522096136.12357.21.camel@perches.com>
+	 <9b112651-d0cf-5f3b-b643-3328028a95cd@roeck-us.net>
+	 <1522136107.12357.58.camel@perches.com>
+	 <5ec8703b-2979-7a1d-fbc3-bd528d7a5e29@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi!
-
-On Thu, Mar 22, 2018 at 03:29:47PM +0100, Jean Delvare wrote:
-> As the driver doesn't treat the two devices differently, the enum isn't
-> really needed. I don't really mind though, just a notice.
-
-Yeah, I just thought it looked cleaner this way. I thought also about
-adding an enum chips entry to struct lm92_data, but I didn't like that
-because there's no use for it right now, until (if) the driver is extended
-to support different but similar enough chips, so I just added the enum.
-
+On Tue, 2018-03-27 at 03:28 -0700, Guenter Roeck wrote:
+> On 03/27/2018 12:35 AM, Joe Perches wrote:
+> > On Mon, 2018-03-26 at 23:33 -0700, Guenter Roeck wrote:
+> > > Since the hwmon subsystem has been labeled as both "obsolete" and "obscure",
+> > 
+> > fyi: It's marked Maintained in MAINTAINERS
+> > 
 > 
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> 
-> Please also update Documentation/hwmon/lm92 which currently claims that
-> the max6635 must use "lm92" as prefix.
+> I did not say that it was not maintained, and I am aware of the information
+> in the MAINTAINERS file, thanks.
 
-Oh, I totally forgot about that. I'll be sending patch v2 in a couple of
-minutes.
+As am I.
 
-Thank you!
+I do agree that hwmon is obscure.  Almost everything about
+anything is obscure to those that don't fully understand it.
 
+I am unaware though of any use of "obsolete" in drivers/hwmon/
+or in Documentation/ about hwmon or the wiki/
 
--- 
-Alvaro G. M.
+In what sense do you mean hwmon is obsolete?
+
+And the cocci script?
+
+Anything later than:
+https://systeme.lip6.fr/pipermail/cocci/2016-December/003887.html
+https://github.com/groeck/coccinelle-patches/tree/master/hwmon
+?
+
+btw: I think the perl scripts I posted for DEV_ATTR_<RW|RO|WO>
+transforms are simpler and less prone to tool versioning
+issues.
+
+https://lkml.org/lkml/2017/12/22/844
+
+It'd be fairly simple to add SENSOR_ support.
