@@ -1,61 +1,91 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f68.google.com ([74.125.83.68]:45069 "EHLO
-        mail-pg0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753013AbeC1NRo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Mar 2018 09:17:44 -0400
-Subject: Re: [PATCH v3] hwmon: MC13783: add uid and die temperature sensor
- inputs
-To: Lee Jones <lee.jones@linaro.org>
-Cc: Andrey Gusakov <andrey.gusakov@cogentembedded.com>,
-        jdelvare@suse.com, cphealy@gmail.com, andrew.smirnov@gmail.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1522160389-18822-1-git-send-email-andrey.gusakov@cogentembedded.com>
- <ecb9f724-de98-5435-135c-2ca2661f5ee6@roeck-us.net>
- <20180328100606.huvblelpdsbzx3w7@dell>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <66c664db-c4d8-f2bc-e34c-2480509d0d95@roeck-us.net>
-Date: Wed, 28 Mar 2018 06:17:40 -0700
-MIME-Version: 1.0
-In-Reply-To: <20180328100606.huvblelpdsbzx3w7@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <tharvey@gateworks.com>
+Return-path: <tharvey@gateworks.com>
+From: Tim Harvey <tharvey@gateworks.com>
+To: Lee Jones <lee.jones@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Wim Van Sebroeck <wim@iguana.be>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/4] Add support for the Gateworks System Controller
+Date: Wed, 28 Mar 2018 08:13:59 -0700
+Message-Id: <1522250043-8065-1-git-send-email-tharvey@gateworks.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 03/28/2018 03:06 AM, Lee Jones wrote:
-> On Tue, 27 Mar 2018, Guenter Roeck wrote:
-> 
->> On 03/27/2018 07:19 AM, Andrey Gusakov wrote:
->>> The uid and die temperature can be read out on the ADIN7 using
->>> input mux. Map uid and die temperature sensor to channels 16
->>> and 17.
->>>
->>> Signed-off-by: Andrey Gusakov <andrey.gusakov@cogentembedded.com>
->>
->> Applied to hwmon-next.
-> 
-> You've applied changes to a subsystem without an appropriate
-> Maintainer Ack?
-> 
+This series adds support for the Gateworks System Controller used on Gateworks
+Laguna, Ventana, and Newport product families.
 
-Me blind. I didn't realize that part of it was in mfd. Now dropped, and sorry.
+The GSC is an MSP430 I2C slave controller whose firmware embeds the following
+features:
+ - I/O expander (16 GPIO's emulating a PCA955x)
+ - EEPROM (enumating AT24)
+ - RTC (enumating DS1672)
+ - HWMON
+ - Interrupt controller with tamper detect, user pushbotton
+ - Watchdog controller capable of full board power-cycle
+ - Power Control capable of full board power-cycle
 
-Guenter
+see http://trac.gateworks.com/wiki/gsc for more details
+---
+v3:
+ - removed unnecessary input driver
+ - added wdt driver
+ - bindings: encorporated feedback from mailng list
+ - hwmon:
+ - encoroprated feedback from mailng list
+ - added support for raw ADC voltage input used in newer GSC firmware
 
->>> ---
->>> Changes in v3:
->>> - comment style fixes
->>> Changes in v2:
->>> - suport both mc13783 and mc13892
->>> - uid_input renamed to in16_input
->>> - style fixes
->>> ---
->>>    drivers/hwmon/mc13783-adc.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
->>>    drivers/mfd/mc13xxx-core.c  | 15 +++++++++++-
->>>    include/linux/mfd/mc13xxx.h |  2 ++
->>>    3 files changed, 76 insertions(+), 1 deletion(-)
-> 
+v2:
+ - change license comment block style
+ - remove COMPILE_TEST
+ - fixed whitespace issues
+ - replaced a printk with dev_err
+ - remove DEBUG
+ - simplify regmap_bulk_read err check
+ - remove break after returns in switch statement
+ - fix fan setpoint buffer address
+ - remove unnecessary parens
+ - consistently use struct device *dev pointer
+ - add validation for hwmon child node props
+ - move parsing of of to own function
+ - use strlcpy to ensure null termination
+ - fix static array sizes and removed unnecessary initializers
+ - dynamically allocate channels
+ - fix fan input label
+ - support platform data
 
+Tim Harvey (4):
+  dt-bindings: mfd: Add Gateworks System Controller bindings
+  mfd: add Gateworks System Controller core driver
+  hwmon: add Gateworks System Controller support
+  watchdog: add Gateworks System Controller support
+
+ .../devicetree/bindings/mfd/gateworks-gsc.txt      | 135 ++++++++
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/gsc-hwmon.c                          | 368 +++++++++++++++++++++
+ drivers/mfd/Kconfig                                |  13 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/gateworks-gsc.c                        | 285 ++++++++++++++++
+ drivers/watchdog/Kconfig                           |  10 +
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/gsc_wdt.c                         | 146 ++++++++
+ include/linux/mfd/gsc.h                            |  75 +++++
+ include/linux/platform_data/gsc_hwmon.h            |  43 +++
+ 12 files changed, 1087 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.txt
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/mfd/gateworks-gsc.c
+ create mode 100644 drivers/watchdog/gsc_wdt.c
+ create mode 100644 include/linux/mfd/gsc.h
+ create mode 100644 include/linux/platform_data/gsc_hwmon.h
+
+-- 
+2.7.4
