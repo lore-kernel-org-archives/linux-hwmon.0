@@ -1,63 +1,65 @@
-Return-Path: <TimGuo@zhaoxin.com>
-Return-path: <TimGuo@zhaoxin.com>
-From: "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>
-To: David Wang <DavidWang@zhaoxin.com>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "rafel.j.wysocki@intel.com" <rafel.j.wysocki@intel.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC: "Bruce Chang (VAS)" <BruceChang@via-alliance.com>, "Cooper Yan(BJ-RD)"
-	<CooperYan@zhaoxin.com>, "Qiyuan Wang(BJ-RD)" <QiyuanWang@zhaoxin.com>,
-	Benjamin Pan <BenjaminPan@viatech.com>, Luke Lin <LukeLin@viacpu.com>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBod21vbiwgdmlhLWNwdXRlbXA6IHN1cHBvcnQgbmV3?=
- =?gb2312?Q?_centaur_CPUs?=
-Date: Thu, 29 Mar 2018 06:24:16 +0000
-Message-ID: <8ed020370c6f43d4864e60e28c95dff9@zhaoxin.com>
-References: <1522304273-17817-1-git-send-email-davidwang@zhaoxin.com>
-In-Reply-To: <1522304273-17817-1-git-send-email-davidwang@zhaoxin.com>
-Content-Language: zh-CN
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from zxshcas1.zhaoxin.com ([180.169.121.91]:22306 "EHLO
+        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1750716AbeC2Gg4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 29 Mar 2018 02:36:56 -0400
+From: David Wang <davidwang@zhaoxin.com>
+To: <jdelvare@suse.com>, <linux@roeck-us.net>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <rjw@rjwysocki.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <brucechang@via-alliance.com>, <cooperyan@zhaoxin.com>,
+        <qiyuanwang@zhaoxin.com>, <benjaminpan@viatech.com>,
+        <lukelin@viacpu.com>, <timguo@zhaoxin.com>,
+        David Wang <davidwang@zhaoxin.com>
+Subject: [PATCH v1] hwmon, via-cputem: support new centaur CPUs
+Date: Thu, 29 Mar 2018 14:36:43 +0800
+Message-ID: <1522305403-21009-1-git-send-email-davidwang@zhaoxin.com>
 MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-K2lmIChjLT54ODZfbW9kZWwgPT0gNykgew0KU2hvdWxkIGJlOg0KDQoraWYoYy0+eDg2ID09IDcp
-DQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBEYXZpZCBXYW5nDQq3osvNyrG85DogMjAx
-OMTqM9TCMjnI1SAxNDoxOA0KytW8/sjLOiBqZGVsdmFyZUBzdXNlLmNvbTsgbGludXhAcm9lY2st
-dXMubmV0OyB0Z2x4QGxpbnV0cm9uaXguZGU7IG1pbmdvQHJlZGhhdC5jb207IHJhZmVsLmoud3lz
-b2NraUBpbnRlbC5jb207IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZw0Ks63LzTogQnJ1Y2UgQ2hhbmcgKFZBUykgPEJydWNlQ2hhbmdAdmlh
-LWFsbGlhbmNlLmNvbT47IENvb3BlciBZYW4oQkotUkQpIDxDb29wZXJZYW5Aemhhb3hpbi5jb20+
-OyBRaXl1YW4gV2FuZyhCSi1SRCkgPFFpeXVhbldhbmdAemhhb3hpbi5jb20+OyBCZW5qYW1pbiBQ
-YW4gPEJlbmphbWluUGFuQHZpYXRlY2guY29tPjsgTHVrZSBMaW4gPEx1a2VMaW5AdmlhY3B1LmNv
-bT47IFRpbSBHdW8oQkotUkQpIDxUaW1HdW9Aemhhb3hpbi5jb20+OyBEYXZpZCBXYW5nIDxEYXZp
-ZFdhbmdAemhhb3hpbi5jb20+DQrW98ziOiBbUEFUQ0hdIGh3bW9uLCB2aWEtY3B1dGVtcDogc3Vw
-cG9ydCBuZXcgY2VudGF1ciBDUFVzDQoNClNpZ25lZC1vZmYtYnk6IERhdmlkIFdhbmcgPGRhdmlk
-d2FuZ0B6aGFveGluLmNvbT4NCi0tLQ0KIGRyaXZlcnMvaHdtb24vdmlhLWNwdXRlbXAuYyB8IDcg
-KysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvaHdtb24vdmlhLWNwdXRlbXAuYyBiL2RyaXZlcnMvaHdtb24vdmlhLWNwdXRlbXAu
-YyBpbmRleCAwN2EwY2IwLi5hYTBkMDQwIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9od21vbi92aWEt
-Y3B1dGVtcC5jDQorKysgYi9kcml2ZXJzL2h3bW9uL3ZpYS1jcHV0ZW1wLmMNCkBAIC0xMzYsNiAr
-MTM2LDExIEBAIHN0YXRpYyBpbnQgdmlhX2NwdXRlbXBfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rl
-dmljZSAqcGRldikNCiBkYXRhLT5pZCA9IHBkZXYtPmlkOw0KIGRhdGEtPm5hbWUgPSAidmlhX2Nw
-dXRlbXAiOw0KDQoraWYgKGMtPng4Nl9tb2RlbCA9PSA3KSB7DQorZGF0YS0+bXNyX3RlbXAgPSAw
-eDE0MjM7DQorZ290byB0ZXN0X2FjY2VzczsNCit9DQorDQogc3dpdGNoIChjLT54ODZfbW9kZWwp
-IHsNCiBjYXNlIDB4QToNCiAvKiBDNyBBICovDQpAQCAtMTUyLDYgKzE1Nyw3IEBAIHN0YXRpYyBp
-bnQgdmlhX2NwdXRlbXBfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCiByZXR1
-cm4gLUVOT0RFVjsNCiB9DQoNCit0ZXN0X2FjY2VzczoNCiAvKiB0ZXN0IGlmIHdlIGNhbiBhY2Nl
-c3MgdGhlIFRFTVBFUkFUVVJFIE1TUiAqLw0KIGVyciA9IHJkbXNyX3NhZmVfb25fY3B1KGRhdGEt
-PmlkLCBkYXRhLT5tc3JfdGVtcCwgJmVheCwgJmVkeCk7DQogaWYgKGVycikgew0KQEAgLTI4Myw2
-ICsyODksNyBAQCBzdGF0aWMgaW50IHZpYV9jcHV0ZW1wX2Rvd25fcHJlcCh1bnNpZ25lZCBpbnQg
-Y3B1KQ0KIHsgWDg2X1ZFTkRPUl9DRU5UQVVSLCA2LCAweGEsIH0sIC8qIEM3IEEgKi8NCiB7IFg4
-Nl9WRU5ET1JfQ0VOVEFVUiwgNiwgMHhkLCB9LCAvKiBDNyBEICovDQogeyBYODZfVkVORE9SX0NF
-TlRBVVIsIDYsIDB4ZiwgfSwgLyogTmFubyAqLw0KK3sgWDg2X1ZFTkRPUl9DRU5UQVVSLCA3LCBY
-ODZfTU9ERUxfQU5ZLCB9LA0KIHt9DQogfTsNCiBNT0RVTEVfREVWSUNFX1RBQkxFKHg4NmNwdSwg
-Y3B1dGVtcF9pZHMpOw0KLS0NCjEuOS4xDQoNCg0KDQqxo8PcyfnD96O6DQqxvtPKvP66rNPQsaPD
-3Lvy16jT0NDFz6KjrL32uanWuLaoytW8/sjLyrnTw6Gj0c+9+7bUsb7Tyrz+u/LG5MTayN3X9sjO
-us7OtL6tytrIqLXEsunUxKGiyrnTw6GiuLTWxrvy16q3oqGjDQpDT05GSURFTlRJQUwgTk9URToN
-ClRoaXMgZW1haWwgY29udGFpbnMgY29uZmlkZW50aWFsIG9yIGxlZ2FsbHkgcHJpdmlsZWdlZCBp
-bmZvcm1hdGlvbiBhbmQgaXMgZm9yIHRoZSBzb2xlIHVzZSBvZiBpdHMgaW50ZW5kZWQgcmVjaXBp
-ZW50LiBBbnkgdW5hdXRob3JpemVkIHJldmlldywgdXNlLCBjb3B5aW5nIG9yIGZvcndhcmRpbmcg
-b2YgdGhpcyBlbWFpbCBvciB0aGUgY29udGVudCBvZiB0aGlzIGVtYWlsIGlzIHN0cmljdGx5IHBy
-b2hpYml0ZWQuDQo=
+Newer centaur CPUs(Family == 7) also support this cpu temperature sensor.
+
+Signed-off-by: David Wang <davidwang@zhaoxin.com>
+---
+ drivers/hwmon/via-cputemp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
+index 07a0cb0..2f5bd50 100644
+--- a/drivers/hwmon/via-cputemp.c
++++ b/drivers/hwmon/via-cputemp.c
+@@ -136,6 +136,11 @@ static int via_cputemp_probe(struct platform_device *pdev)
+ 	data->id = pdev->id;
+ 	data->name = "via_cputemp";
+ 
++	if (c->x86 == 7) {
++		data->msr_temp = 0x1423;
++		goto test_access;
++	}
++
+ 	switch (c->x86_model) {
+ 	case 0xA:
+ 		/* C7 A */
+@@ -152,6 +157,7 @@ static int via_cputemp_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
++test_access:
+ 	/* test if we can access the TEMPERATURE MSR */
+ 	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &eax, &edx);
+ 	if (err) {
+@@ -283,6 +289,7 @@ static int via_cputemp_down_prep(unsigned int cpu)
+ 	{ X86_VENDOR_CENTAUR, 6, 0xa, }, /* C7 A */
+ 	{ X86_VENDOR_CENTAUR, 6, 0xd, }, /* C7 D */
+ 	{ X86_VENDOR_CENTAUR, 6, 0xf, }, /* Nano */
++	{ X86_VENDOR_CENTAUR, 7, X86_MODEL_ANY, },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, cputemp_ids);
+-- 
+1.9.1
+
