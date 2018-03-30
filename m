@@ -1,269 +1,164 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50100 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1753690AbeCVKy7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 22 Mar 2018 06:54:59 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w2MAsoMH061555
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:54:59 -0400
-Received: from e06smtp10.uk.ibm.com (e06smtp10.uk.ibm.com [195.75.94.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2gvabat7ub-1
-        (version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Mar 2018 06:54:59 -0400
-Received: from localhost
-        by e06smtp10.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
-        Thu, 22 Mar 2018 10:54:56 -0000
-From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-To: mpe@ellerman.id.au, linux@roeck-us.net
-Cc: linuxppc-dev@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stewart@linux.vnet.ibm.com,
-        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Subject: [PATCH 2/3] hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
-Date: Thu, 22 Mar 2018 16:24:34 +0530
-In-Reply-To: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-Message-Id: <1521716075-807-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <linux-watchdog-owner@vger.kernel.org>
+Return-path: <linux-watchdog-owner@vger.kernel.org>
+Date: Fri, 30 Mar 2018 10:48:38 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Tim Harvey <tharvey@gateworks.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@iguana.be>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [v3,4/4] watchdog: add Gateworks System Controller support
+Message-ID: <20180330174838.GA141984@dtor-ws>
+References: <1522250043-8065-5-git-send-email-tharvey@gateworks.com>
+ <20180330010757.GA12896@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180330010757.GA12896@roeck-us.net>
+Sender: linux-watchdog-owner@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On-Chip-Controller(OCC) is an embedded micro-processor in POWER9 chip
-which measures various system and chip level sensors. These sensors
-comprises of environmental sensors (like power, temperature, current
-and voltage) and performance sensors (like utilization, frequency).
-All these sensors are copied to main memory at a regular interval of
-100ms. OCC provides a way to select a group of sensors that is copied
-to the main memory to increase the update frequency of selected sensor
-groups. When a sensor-group is disabled, OCC will not copy it to main
-memory and those sensors read 0 values.
+On Thu, Mar 29, 2018 at 06:07:57PM -0700, Guenter Roeck wrote:
+> On Wed, Mar 28, 2018 at 08:14:03AM -0700, Tim Harvey wrote:
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > ---
+> >  drivers/watchdog/Kconfig   |  10 ++++
+> >  drivers/watchdog/Makefile  |   1 +
+> >  drivers/watchdog/gsc_wdt.c | 146 +++++++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 157 insertions(+)
+> >  create mode 100644 drivers/watchdog/gsc_wdt.c
+> > 
+> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> > index ca200d1..c9d4b2e 100644
+> > --- a/drivers/watchdog/Kconfig
+> > +++ b/drivers/watchdog/Kconfig
+> > @@ -150,6 +150,16 @@ config GPIO_WATCHDOG_ARCH_INITCALL
+> >  	  arch_initcall.
+> >  	  If in doubt, say N.
+> >  
+> > +config GSC_WATCHDOG
+> > +	tristate "Gateworks System Controller (GSC) Watchdog support"
+> > +	depends on MFD_GATEWORKS_GSC
+> > +	select WATCHDOG_CORE
+> > +	help
+> > +	  Say Y here to include support for the GSC Watchdog.
+> > +
+> > +	  This driver can also be built as a module. If so the module
+> > +	  will be called gsc_wdt.
+> > +
+> >  config MENF21BMC_WATCHDOG
+> >  	tristate "MEN 14F021P00 BMC Watchdog"
+> >  	depends on MFD_MENF21BMC || COMPILE_TEST
+> > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> > index 715a210..499327e 100644
+> > --- a/drivers/watchdog/Makefile
+> > +++ b/drivers/watchdog/Makefile
+> > @@ -215,6 +215,7 @@ obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
+> >  obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
+> >  obj-$(CONFIG_DA9063_WATCHDOG) += da9063_wdt.o
+> >  obj-$(CONFIG_GPIO_WATCHDOG)	+= gpio_wdt.o
+> > +obj-$(CONFIG_GSC_WATCHDOG)	+= gsc_wdt.o
+> >  obj-$(CONFIG_TANGOX_WATCHDOG) += tangox_wdt.o
+> >  obj-$(CONFIG_WDAT_WDT) += wdat_wdt.o
+> >  obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
+> > diff --git a/drivers/watchdog/gsc_wdt.c b/drivers/watchdog/gsc_wdt.c
+> > new file mode 100644
+> > index 0000000..b43d083
+> > --- /dev/null
+> > +++ b/drivers/watchdog/gsc_wdt.c
+> > @@ -0,0 +1,146 @@
+> > +/* SPDX-License-Identifier: GPL-2.0
+> > + *
+> > + * Copyright (C) 2018 Gateworks Corporation
+> > + *
+> > + * This driver registers a Linux Watchdog for the GSC
+> > + */
+> > +#include <linux/mfd/gsc.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/watchdog.h>
+> > +
+> > +#define WDT_DEFAULT_TIMEOUT	60
+> > +
+> > +struct gsc_wdt {
+> > +	struct watchdog_device wdt_dev;
+> > +	struct gsc_dev *gsc;
+> > +};
+> > +
+> > +static int gsc_wdt_start(struct watchdog_device *wdd)
+> > +{
+> > +	struct gsc_wdt *wdt = watchdog_get_drvdata(wdd);
+> > +	unsigned int reg = (1 << GSC_CTRL_1_WDT_ENABLE);
+> 
+> Please use BIT().
+> 
+> > +	int ret;
+> > +
+> > +	dev_dbg(wdd->parent, "%s timeout=%d\n", __func__, wdd->timeout);
+> 
+> I don't think those debug messages add any value.
+> 
+> > +
+> > +	/* clear first as regmap_update_bits will not write if no change */
+> > +	ret = regmap_update_bits(wdt->gsc->regmap, GSC_CTRL_1, reg, 0);
+> > +	if (ret)
+> > +		return ret;
+> > +	return regmap_update_bits(wdt->gsc->regmap, GSC_CTRL_1, reg, reg);
+> > +}
+> > +
+> > +static int gsc_wdt_stop(struct watchdog_device *wdd)
+> > +{
+> > +	struct gsc_wdt *wdt = watchdog_get_drvdata(wdd);
+> > +	unsigned int reg = (1 << GSC_CTRL_1_WDT_ENABLE);
+> > +
+> 
+> BIT(). You might as well drop the variable and just use
+> BIT(GSC_CTRL_1_WDT_ENABLE) below.
+> 
+> > +	dev_dbg(wdd->parent, "%s\n", __func__);
+> > +
+> > +	return regmap_update_bits(wdt->gsc->regmap, GSC_CTRL_1, reg, 0);
+> > +}
+> > +
+> > +static int gsc_wdt_set_timeout(struct watchdog_device *wdd,
+> > +			       unsigned int timeout)
+> > +{
+> > +	struct gsc_wdt *wdt = watchdog_get_drvdata(wdd);
+> > +	unsigned int long_sel = 0;
+> > +
+> > +	dev_dbg(wdd->parent, "%s: %d\n", __func__, timeout);
+> > +
+> > +	switch (timeout) {
+> > +	case 60:
+> > +		long_sel = (1 << GSC_CTRL_1_WDT_TIME);
+> > +	case 30:
+> > +		regmap_update_bits(wdt->gsc->regmap, GSC_CTRL_1,
+> > +				   (1 << GSC_CTRL_1_WDT_TIME),
+> 
+> BIT()
+> 
+> > +				   (long_sel << GSC_CTRL_1_WDT_TIME));
 
-This patch provides support for enabling/disabling the sensor groups
-like power, temperature, current and voltage. This patch adds new
-sysfs attributes to disable and enable them.
+This looks wrong. Are you sure that in case of 60 timeout you want to
+actually write
 
-Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
----
+	((1 << GSC_CTRL_1_WDT_TIME) << GSC_CTRL_1_WDT_TIME)
 
-- Should the new attributes be added to hwmon_chip_attrs[]?
+to the register?
 
- Documentation/hwmon/ibmpowernv |  31 +++++++++-
- drivers/hwmon/ibmpowernv.c     | 127 ++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 150 insertions(+), 8 deletions(-)
+Or you meant to write:
 
-diff --git a/Documentation/hwmon/ibmpowernv b/Documentation/hwmon/ibmpowernv
-index 8826ba2..5e510fd 100644
---- a/Documentation/hwmon/ibmpowernv
-+++ b/Documentation/hwmon/ibmpowernv
-@@ -38,4 +38,33 @@ tempX_max		Threshold ambient temperature for alert generation.
- inX_input		Measured power supply voltage
- inX_fault		0: No fail condition.
- 			1: Failing power supply.
--power1_input		System power consumption (microWatt)
-+powerX_input		Power consumption (microWatt)
-+currX_input		Measured current
-+
-+Sysfs attributes in POWER9
-+---------------------------
-+
-+On-Chip-Controller(OCC) copies the sensors to main memory. The
-+environmental sensor groups can be dynamically configured by writing
-+to the below sysfs files. Writing to this file configures the sensor
-+group update for the all the OCC chips in the system.
-+
-+power_enable		Disable/enable copying of power sensors
-+			0: Disable
-+			1: Enable
-+			RO
-+
-+in_enable		Disable/enable copying of voltage sensors
-+			0: Disable
-+			1: Enable
-+			RO
-+
-+curr_enable		Disable/enable copying of current sensors
-+			0: Disable
-+			1: Enable
-+			RO
-+
-+temp_enable		Disable/enable copying of temperature sensors
-+			0: Disable
-+			1: Enable
-+			RO
-diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index 5ccdd0b..696ccbc 100644
---- a/drivers/hwmon/ibmpowernv.c
-+++ b/drivers/hwmon/ibmpowernv.c
-@@ -90,6 +90,16 @@ struct sensor_data {
- 	struct device_attribute dev_attr;
- };
- 
-+struct sensor_group_data {
-+	u32 nr_ids;
-+	u32 *id;
-+	char name[MAX_ATTR_LEN];
-+	struct device_attribute dev_attr;
-+};
-+
-+DEFINE_MUTEX(sensor_groups_mutex);
-+static int nr_sg_attr_count;
-+
- struct platform_data {
- 	const struct attribute_group *attr_groups[MAX_SENSOR_TYPE + 1];
- 	u32 sensors_count; /* Total count of sensors from each group */
-@@ -117,6 +127,42 @@ static ssize_t show_sensor(struct device *dev, struct device_attribute *devattr,
- 	return sprintf(buf, "%u\n", x);
- }
- 
-+static ssize_t store_enable(struct device *dev,
-+			    struct device_attribute *devattr,
-+			    const char *buf, size_t count)
-+{
-+	struct sensor_group_data *sdata = container_of(devattr,
-+						       struct sensor_group_data,
-+						       dev_attr);
-+	int ret;
-+	u32 data;
-+	int i;
-+
-+	ret = kstrtoint(buf, 0, &data);
-+	if (ret)
-+		return ret;
-+
-+	if (data != 0 && data != 1)
-+		return -EIO;
-+
-+	ret = mutex_lock_interruptible(&sensor_groups_mutex);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < sdata->nr_ids; i++) {
-+		ret =  sensor_group_enable(sdata->id[i], data);
-+		if (ret) {
-+			ret = -EIO;
-+			goto out;
-+		}
-+	}
-+
-+	ret = count;
-+out:
-+	mutex_unlock(&sensor_groups_mutex);
-+	return ret;
-+}
-+
- static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
- 			  char *buf)
- {
-@@ -322,6 +368,21 @@ static int populate_attr_groups(struct platform_device *pdev)
- 
- 	of_node_put(opal);
- 
-+	opal = of_find_node_by_path("/ibm,opal/sensor-groups");
-+	for (type = 0; type < MAX_SENSOR_TYPE; type++)
-+		for_each_child_of_node(opal, np) {
-+			enum sensors ctype;
-+
-+			ctype = get_sensor_type(np);
-+			if (ctype == type) {
-+				sensor_groups[ctype].attr_count++;
-+				nr_sg_attr_count++;
-+				break;
-+			}
-+		}
-+
-+	of_node_put(opal);
-+
- 	for (type = 0; type < MAX_SENSOR_TYPE; type++) {
- 		sensor_groups[type].group.attrs = devm_kzalloc(&pdev->dev,
- 					sizeof(struct attribute *) *
-@@ -400,19 +461,25 @@ static int create_device_attrs(struct platform_device *pdev)
- 	const struct attribute_group **pgroups = pdata->attr_groups;
- 	struct device_node *opal, *np;
- 	struct sensor_data *sdata;
-+	struct sensor_group_data *sgdata;
- 	u32 sensor_id;
- 	enum sensors type;
- 	u32 count = 0;
- 	int err = 0;
-+	int nr_id[MAX_SENSOR_TYPE] = {0};
- 
--	opal = of_find_node_by_path("/ibm,opal/sensors");
--	sdata = devm_kzalloc(&pdev->dev, pdata->sensors_count * sizeof(*sdata),
-+	sdata = devm_kzalloc(&pdev->dev, (pdata->sensors_count -
-+			     nr_sg_attr_count) * sizeof(*sdata),
- 			     GFP_KERNEL);
--	if (!sdata) {
--		err = -ENOMEM;
--		goto exit_put_node;
--	}
-+	if (!sdata)
-+		return -ENOMEM;
-+
-+	sgdata = devm_kzalloc(&pdev->dev, nr_sg_attr_count * sizeof(*sgdata),
-+			      GFP_KERNEL);
-+	if (!sgdata)
-+		return -ENOMEM;
- 
-+	opal = of_find_node_by_path("/ibm,opal/sensors");
- 	for_each_child_of_node(opal, np) {
- 		const char *attr_name;
- 		u32 opal_index;
-@@ -496,7 +563,53 @@ static int create_device_attrs(struct platform_device *pdev)
- 		}
- 	}
- 
--exit_put_node:
-+	of_node_put(opal);
-+
-+	opal = of_find_node_by_path("/ibm,opal/sensor-groups");
-+	for_each_child_of_node(opal, np) {
-+		type = get_sensor_type(np);
-+		if (type == MAX_SENSOR_TYPE)
-+			continue;
-+		nr_id[type]++;
-+	}
-+
-+	count = 0;
-+	for (type = 0; type < MAX_SENSOR_TYPE; type++) {
-+		int c = 0;
-+
-+		if (!nr_id[type])
-+			continue;
-+
-+		sgdata[count].nr_ids = nr_id[type];
-+		sgdata[count].id = devm_kzalloc(&pdev->dev, nr_id[type] *
-+					    sizeof(u32), GFP_KERNEL);
-+		if (!sgdata[count].id)
-+			return -ENOMEM;
-+
-+		for_each_child_of_node(opal, np) {
-+			enum sensors ctype;
-+
-+			ctype = get_sensor_type(np);
-+			if (type != ctype)
-+				continue;
-+
-+			if (of_property_read_u32(np, "sensor-group-id",
-+						&sensor_id))
-+				continue;
-+
-+			sgdata[count].id[c++] = sensor_id;
-+		}
-+		snprintf(sgdata[count].name, MAX_ATTR_LEN, "%s_enable",
-+			 sensor_groups[type].name);
-+		sysfs_attr_init(&sgdata[count].dev_attr.attr);
-+		sgdata[count].dev_attr.attr.name = sgdata[count].name;
-+		sgdata[count].dev_attr.attr.mode = 00220;
-+		sgdata[count].dev_attr.store = store_enable;
-+		pgroups[type]->attrs[sensor_groups[type].attr_count++] =
-+			&sgdata[count].dev_attr.attr;
-+		count++;
-+	}
-+
- 	of_node_put(opal);
- 	return err;
- }
+	long_sel = timeout > 30;
+	regmap_update_bits(wdt->gsc->regmap, GSC_CTRL_1,
+			   (long_sel << GSC_CTRL_1_WDT_TIME),
+
+Thanks.
+
 -- 
-1.8.3.1
-
+Dmitry
