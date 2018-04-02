@@ -1,114 +1,180 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:45520 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753334AbeD3QCD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Apr 2018 12:02:03 -0400
-Date: Mon, 30 Apr 2018 09:01:59 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-Cc: Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Woods, Brian" <Brian.Woods@amd.com>
-Subject: Re: [PATCH 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
-Message-ID: <20180430160159.GB19372@roeck-us.net>
-References: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
- <20180429175305.GB19814@pd.tnic>
- <a4b1d937-c5b8-67d0-b5f0-312145fefc09@roeck-us.net>
- <MWHPR12MB1566866B2ACF36EAD7E4856AF8820@MWHPR12MB1566.namprd12.prod.outlook.com>
+Return-Path: <tharvey@gateworks.com>
+Return-path: <tharvey@gateworks.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR12MB1566866B2ACF36EAD7E4856AF8820@MWHPR12MB1566.namprd12.prod.outlook.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20180330181954.GA17580@roeck-us.net>
+References: <1522250043-8065-5-git-send-email-tharvey@gateworks.com>
+ <20180330010757.GA12896@roeck-us.net> <CAJ+vNU3ARKLK5AcssEP-_P8AmwnAnS8VtAEO1ppwum2jpCqAYQ@mail.gmail.com>
+ <20180330181954.GA17580@roeck-us.net>
+From: Tim Harvey <tharvey@gateworks.com>
+Date: Mon, 2 Apr 2018 09:07:19 -0700
+Message-ID: <CAJ+vNU1f+SH16hs3heMA_A2KcbzbXXmJtPxi0uiL4+4tNWgYoQ@mail.gmail.com>
+Subject: Re: [v3,4/4] watchdog: add Gateworks System Controller support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Wim Van Sebroeck <wim@iguana.be>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, Apr 30, 2018 at 03:38:59PM +0000, Ghannam, Yazen wrote:
-> > -----Original Message-----
-> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> > Sent: Sunday, April 29, 2018 2:24 PM
-> > To: Borislav Petkov <bp@suse.de>; Ghannam, Yazen
-> > <Yazen.Ghannam@amd.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>; Clemens Ladisch
-> > <clemens@ladisch.de>; x86@kernel.org; Jean Delvare <jdelvare@suse.com>;
-> > linux-kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; Woods, Brian
-> > <Brian.Woods@amd.com>
-> > Subject: Re: [PATCH 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
-> > 
-> > On 04/29/2018 10:53 AM, Borislav Petkov wrote:
-> > > On Sat, Apr 28, 2018 at 06:54:38PM -0700, Guenter Roeck wrote:
-> > >> Add Raven Ridge root bridge and data fabric PCI IDs.
-> > >> This is required for amd_pci_dev_to_node_id() and amd_smn_read().
-> > >>
-> > >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > >> ---
-> > >> This patch is a prerequisite for the second patch in the series.
-> > >> I'll be happy to apply both patches through hwmon if that is acceptable
-> > >> (and Cc: stable for 4.16+). If not, I'll be happy to wait for this patch
-> > >> to be available upstream.
-> > >>
-> > >> Since that there is no public documentation available for Raven Ridge,
-> > >> PCI IDs are derived from output of lspci.
-> > >>
-> > >>   arch/x86/kernel/amd_nb.c | 6 ++++++
-> > >>   1 file changed, 6 insertions(+)
-> > >>
-> > >> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> > >> index c88e0b127810..bd33613ecb7c 100644
-> > >> --- a/arch/x86/kernel/amd_nb.c
-> > >> +++ b/arch/x86/kernel/amd_nb.c
-> > >> @@ -14,8 +14,11 @@
-> > >>   #include <asm/amd_nb.h>
-> > >>
-> > >>   #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
-> > >> +#define PCI_DEVICE_ID_AMD_17H_RR_ROOT	0x15d0
-> > >
-> > > I think the nomenclature we decided upon at the time was
-> > >
-> > > ...AMD_<family>H_M<model>H...
-> > >
-> > > PCI_DEVICE_ID_AMD_15H_M10H_F3, for example.
-> > >
-> > > And in this case, it should be
-> > >
-> > > PCI_DEVICE_ID_AMD_17H_M<which model is RV>H_F<PCI function
-> > number>
-> > >
-> > 
-> > Makes sense.
-> > 
-> > > Yazen, which is the first model of Raven Ridge?
-> > >
-> > 
-> > 2400G is model 17 (0x11). I was unable to find information if there are
-> > other chips/models using the same set of PCI IDs.
-> > 
-> > I'll wait for additional feedback before resending.
-> 
-> There are other models using the same set of IDs, but the first is 10h.
-> 
-Ok, I'll make it PCI_DEVICE_ID_AMD_17H_M10H_ROOT and
-PCI_DEVICE_ID_AMD_17H_M10H_DF_F{3,4}.
+On Fri, Mar 30, 2018 at 11:19 AM, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Fri, Mar 30, 2018 at 10:49:38AM -0700, Tim Harvey wrote:
+>> On Thu, Mar 29, 2018 at 6:07 PM, Guenter Roeck <linux@roeck-us.net> wrote:
+>> > On Wed, Mar 28, 2018 at 08:14:03AM -0700, Tim Harvey wrote:
+>> >> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+>> >> ---
+>> >>  drivers/watchdog/Kconfig   |  10 ++++
+>> >>  drivers/watchdog/Makefile  |   1 +
+>> >>  drivers/watchdog/gsc_wdt.c | 146 +++++++++++++++++++++++++++++++++++++++++++++
+>> >>  3 files changed, 157 insertions(+)
+>> >>  create mode 100644 drivers/watchdog/gsc_wdt.c
+>> >>
+>> <snip>
+>> >> +
+>> >> +static const struct watchdog_info gsc_wdt_info = {
+>> >> +     .options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
+>> >
+>> > Please confirm that WDIOF_MAGICCLOSE is not set on purpose.
+>> >
+>> >> +     .identity = "GSC Watchdog"
+>> >> +};
+>> >> +
+>> <snip>
+>> >> +
+>> >> +static int gsc_wdt_probe(struct platform_device *pdev)
+>> >> +{
+>> >> +     struct gsc_dev *gsc = dev_get_drvdata(pdev->dev.parent);
+>> >> +     struct device *dev = &pdev->dev;
+>> >> +     struct gsc_wdt *wdt;
+>> >> +     int ret;
+>> >> +     unsigned int reg;
+>> >> +
+>> <snip>
+>> >> +     /* ensure WD bit enabled */
+>> >> +     if (regmap_read(gsc->regmap, GSC_CTRL_1, &reg))
+>> >> +             return -EIO;
+>> >> +     if (!(reg & (1 << GSC_CTRL_1_WDT_ENABLE))) {
+>> >
+>> > BIT()
+>> >
+>> >> +             dev_err(dev, "not enabled - must be manually enabled\n");
+>> >
+>> > This doesn't make sense. Bail out if the watchdog is disabled ? Why ?
+>> >
+>> >> +             return -EINVAL;
+>> >> +     }
+>> >> +
+>> <snip>
+>> >> +
+>> >> +     watchdog_set_nowayout(&wdt->wdt_dev, 1);
+>> >
+>> > WATCHDOG_NOWAYOUT ?
+>> >
+>>
+>> Guenter,
+>>
+>> Thanks for the review!
+>>
+>> The watchdog implementation of the GSC is such that it is enabled and
+>> reset via a single non-volatile I2C register bit. If this bit is set
+>> the watchdog will start ticking down automatically on board power up.
+>> The register definitions don't provide a condition where it can be
+>> enabled in a volatile way such that after board power-cycle it is
+>> disabled again nor do they provide a separate register for enable vs
+>> reset.
+>>
+>> In the typical case the user boots the board, driver registers
+>> watchdog, userspace watchdog daemon enables watchdog and it starts
+>> ticking. User now powers down the board and later powers it back up.
+>> The watchdog was enabled previously by userspace and the register is
+>> non-volatile so the watchdog starts ticking before the kernel driver
+>> and watchdog daemon yet the user breaks out into the bootloader or
+>> boots a different OS without a watchdog daemon and the board resets
+>> without them expecting it. The feature that the watchdog starts
+>> ticking at board power-up before the CPU has even fetched code was
+>> part of its design and was put there to work around some SoC errata
+>> that can cause the CPU to fail to fetch boot code. This has caused me
+>> to implement a watchdog driver that never actually 'enables' or
+>> 'disables' the watchdog which is why there is no MAGIC CLOSE and why I
+>
+> Yet the driver does enable and disable the watchdog in its start and stop
+> functions. And I have no idea what that has to do with the MAGICCLOSE
+> functionality, which is quite orthogonal to the start/stop functionality.
+>
+>> always set nowayout. Its possible this is a fairly unique case of a
+>> watchdog. The probe failure if the watchdog isn't enabled is because I
+>> don't want a non-enabled watchdog to get enabled just because the
+>> driver/daemon were there.
+>>
+> Huh ? The whole purpose of a watchdog is for it to be enabled when
+> the watchdog device is opened.
+>
+>> I agree it's a very strange behavior and I'm not sure how to best
+>> document or support it with the Linux watchdog API. I welcome any
+>> recomendations!
+>>
+>
+> Sorry, I fail to understand your logic.
+>
+> You do not explain why your code bails out if the watchdog is not already
+> running. That does not make sense.
+>
+> You are saying that you don't want the watchdog driver to enable the watchdog.
+> Since its whole purpose is to enable the watchdog if/when the watchdog device
+> is opened, that doesn't make sense either.
+>
+> At the same time, you do not tell the watchdog core that the watchdog is
+> already running, meaning the system _will_ reboot unless the watchdog
+> device is opened within the watchdog timeout period. Again, that does not
+> make sense.
+>
+> Maybe it all makes sense to you, but not to me, sorry.
 
-> Also, the F3 IDs for Fam17h and Fam17hMod10h are used in both amd_nb.c
-> and k10temp.c. Can you please delete the F3 IDs from these files and add
-> them to "include/linux/pci_ids.h"?
-> 
-I'll be happy to do that. However, my preference would be to do that
-in a separate patch. I would like to see this patch and patch 2/2
-applied to 4.16+ since together they fix a potential race condition
-as well as temperature reporting problems with multi-die Zen chips
-(Threadripper and EPYC). The pci_id.h changes are not bug fixes
-and would be more appropriate for v4.18.
+Guenter,
 
-Thanks,
-Guenter
+Right, I'm likely not explaining it well. Let me show the registers
+and describe the feature from the GSC perspective:
 
-> Thanks!
-> 
-> -Yazen
+I2C registers: non-volatile registers (battery backed)
+0x01: GSC_CTRL_1: Sleep Wakeup Timer Control
+ bit 4: WATCHDOG_TIME: 0=30 second timeout, 1=60 second timeout
+ bit 5: WATCHDOG_ENABLE: 0=disable watchdog, 1=enable/reset watchdog timer
+
+The GSC has the ability to enable/disable the primary board power
+supply. In the event that the watchdog timer is enabled and reaches 0
+it will power cycle the board by disabling the primary power supply
+for 1 second then enabling it again. The GSC_CTRL_1 bits retain their
+state during power cycles thus if WATCHDOG_ENABLE=1 and the board
+power cycles the watchdog starts counting down immediately and host
+software must either disable it or start resetting it before the
+timeout period.
+
+The 'use case' we have been using this in for a couple years is that
+users who want to use this watchdog will enable it externally (we have
+a command in the bootloader) and if enabled the kernel driver (that
+I'm proposing here which we've been using out-of-tree) will register
+the watchdog device and the userspace watchdog process can open the
+device and start tickling it. If the watchdog is never enabled (or
+disabled via the bootloader command) the kernel driver fails to probe
+and the SoC's watchdog can be used. The reason this feature was added
+to the GSC is that we had some errata with one of the SoC's we use
+such that it's internal reset was not resetting enough of the chip and
+in some cases we also wanted an external PMIC to be reset as well
+which is accomplished by cycling the primary power supply.
+
+What I'm proposing here is a watchdog driver that only has the ability
+to 'reset' the watchdog timer 'if enabled'. Because the same register
+is used to enable as well as reset the timer I don't want to
+enable/reset it if it isn't already enabled.
+
+Because start/stop are mandatory I suppose I could make stop a nop and
+make start only set WATCHDOG_TIME if it's already set. I was thinking
+that I would simply have the driver probe fail if the watchdog wasn't
+externally already enabled and let /dev/watchdog0 be the sometimes
+lesser valued SoC watchdog.
+
+Regards,
+
+Tim
