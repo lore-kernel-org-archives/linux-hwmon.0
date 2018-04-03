@@ -1,78 +1,71 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:37573 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753584AbeD2SYb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Apr 2018 14:24:31 -0400
-Subject: Re: [PATCH 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
-To: Borislav Petkov <bp@suse.de>, Yazen Ghannam <Yazen.Ghannam@amd.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-        Clemens Ladisch <clemens@ladisch.de>, x86@kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Brian Woods <brian.woods@amd.com>
-References: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
- <20180429175305.GB19814@pd.tnic>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a4b1d937-c5b8-67d0-b5f0-312145fefc09@roeck-us.net>
-Date: Sun, 29 Apr 2018 11:24:29 -0700
+Return-Path: <tharvey@gateworks.com>
+Return-path: <tharvey@gateworks.com>
 MIME-Version: 1.0
-In-Reply-To: <20180429175305.GB19814@pd.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <1522250043-8065-3-git-send-email-tharvey@gateworks.com>
+References: <1522250043-8065-1-git-send-email-tharvey@gateworks.com> <1522250043-8065-3-git-send-email-tharvey@gateworks.com>
+From: Tim Harvey <tharvey@gateworks.com>
+Date: Tue, 3 Apr 2018 08:48:27 -0700
+Message-ID: <CAJ+vNU3-gaTcMAzo5wB6oSfE-JQC3NBVRJS5zFMTE-nVpD4F5g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] mfd: add Gateworks System Controller core driver
+To: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Mark Brown <broonie@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Wim Van Sebroeck <wim@iguana.be>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 04/29/2018 10:53 AM, Borislav Petkov wrote:
-> On Sat, Apr 28, 2018 at 06:54:38PM -0700, Guenter Roeck wrote:
->> Add Raven Ridge root bridge and data fabric PCI IDs.
->> This is required for amd_pci_dev_to_node_id() and amd_smn_read().
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> This patch is a prerequisite for the second patch in the series.
->> I'll be happy to apply both patches through hwmon if that is acceptable
->> (and Cc: stable for 4.16+). If not, I'll be happy to wait for this patch
->> to be available upstream.
->>
->> Since that there is no public documentation available for Raven Ridge,
->> PCI IDs are derived from output of lspci.
->>
->>   arch/x86/kernel/amd_nb.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
->> index c88e0b127810..bd33613ecb7c 100644
->> --- a/arch/x86/kernel/amd_nb.c
->> +++ b/arch/x86/kernel/amd_nb.c
->> @@ -14,8 +14,11 @@
->>   #include <asm/amd_nb.h>
->>   
->>   #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
->> +#define PCI_DEVICE_ID_AMD_17H_RR_ROOT	0x15d0
-> 
-> I think the nomenclature we decided upon at the time was
-> 
-> ...AMD_<family>H_M<model>H...
-> 
-> PCI_DEVICE_ID_AMD_15H_M10H_F3, for example.
-> 
-> And in this case, it should be
-> 
-> PCI_DEVICE_ID_AMD_17H_M<which model is RV>H_F<PCI function number>
-> 
+On Wed, Mar 28, 2018 at 8:14 AM, Tim Harvey <tharvey@gateworks.com> wrote:
+> The Gateworks System Controller (GSC) is an I2C slave controller
+> implemented with an MSP430 micro-controller whose firmware embeds the
+> following features:
+>  - I/O expander (16 GPIO's) using PCA955x protocol
+>  - Real Time Clock using DS1672 protocol
+>  - User EEPROM using AT24 protocol
+>  - HWMON using custom protocol
+>  - Interrupt controller with tamper detect, user pushbotton
+>  - Watchdog controller capable of full board power-cycle
+>  - Power Control capable of full board power-cycle
+>
+> see http://trac.gateworks.com/wiki/gsc for more details
+>
+<snip>
+> +
+> +/*
+> + * gsc_powerdown - API to use GSC to power down board for a specific time
+> + *
+> + * secs - number of seconds to remain powered off
+> + */
+> +static int gsc_powerdown(struct gsc_dev *gsc, unsigned long secs)
+> +{
+> +       int ret;
+> +       unsigned char regs[4];
+> +
+> +       dev_info(&gsc->i2c->dev, "GSC powerdown for %ld seconds\n",
+> +                secs);
+> +       regs[0] = secs & 0xff;
+> +       regs[1] = (secs >> 8) & 0xff;
+> +       regs[2] = (secs >> 16) & 0xff;
+> +       regs[3] = (secs >> 24) & 0xff;
+> +       ret = regmap_bulk_write(gsc->regmap, GSC_TIME_ADD, regs, 4);
+> +
+> +       return ret;
+> +}
 
-Makes sense.
+Any feedback on the 'powerdown' sysfs attribute that hooks to this
+function? This allows the GSC to disable the board primary power
+supply for 2^32 seconds and is often used to 'reset' the board
+although it could also be used to put the board in a power down state
+longer. I'm wondering if there is a more appropriate API for this in
+the kernel that I don't know about.
 
-> Yazen, which is the first model of Raven Ridge?
-> 
+I would also like to register a restart handler using this but I
+believe that ARM restart handlers currently can not use I2C - is that
+correct?
 
-2400G is model 17 (0x11). I was unable to find information if there are
-other chips/models using the same set of PCI IDs.
+Regards,
 
-I'll wait for additional feedback before resending.
-
-Thanks,
-Guenter
-
+Tim
