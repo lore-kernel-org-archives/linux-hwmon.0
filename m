@@ -1,94 +1,89 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:43792 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751216AbeC3PTC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Mar 2018 11:19:02 -0400
-Date: Fri, 30 Mar 2018 07:55:40 -0700
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-ot0-f194.google.com ([74.125.82.194]:35160 "EHLO
+        mail-ot0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751507AbeDIRWi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Apr 2018 13:22:38 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-To: davidwang <davidwang@zhaoxin.com>
-Cc: jdelvare@suse.com, tglx@linutronix.de, mingo@redhat.com,
-        rafel.j.wysocki@intel.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brucechang@via-alliance.com,
-        cooperyan@zhaoxin.com, qiyuanwang@zhaoxin.com,
-        benjaminpan@viatech.com, lukelin@viacpu.com, timguo@zhaoxin.com
-Subject: Re: [v3] hwmon, via-cputem: support new centaur CPUs
-Message-ID: <20180330145540.GA13899@roeck-us.net>
-References: <1522371888-30013-1-git-send-email-davidwang@zhaoxin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1522371888-30013-1-git-send-email-davidwang@zhaoxin.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v4.17
+Date: Mon,  9 Apr 2018 10:22:35 -0700
+Message-Id: <1523294555-29481-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 30, 2018 at 09:04:48AM +0800, davidwang wrote:
-> New centaur CPUs(Familiy == 7) also support this cpu temperature sensor.
-> 
-> Change from v2 to v3:
-> *replace "goto" with "if...else.." according to suggestion from Guenter
->  
-> Change from v1 to v2:
-> *fixed the wrong if condition in patch v1.
-> 	
-> Signed-off-by: David Wang <davidwang@zhaoxin.com>
+Hi Linus,
 
-Applied to hwmon-next.
+Please pull hwmon updates for Linux v4.17 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.17
 
 Thanks,
 Guenter
+------
 
-> ---
->  drivers/hwmon/via-cputemp.c | 31 ++++++++++++++++++-------------
->  1 file changed, 18 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
-> index 07a0cb0..0e81f28 100644
-> --- a/drivers/hwmon/via-cputemp.c
-> +++ b/drivers/hwmon/via-cputemp.c
-> @@ -136,20 +136,24 @@ static int via_cputemp_probe(struct platform_device *pdev)
->  	data->id = pdev->id;
->  	data->name = "via_cputemp";
->  
-> -	switch (c->x86_model) {
-> -	case 0xA:
-> -		/* C7 A */
-> -	case 0xD:
-> -		/* C7 D */
-> -		data->msr_temp = 0x1169;
-> -		data->msr_vid = 0x198;
-> -		break;
-> -	case 0xF:
-> -		/* Nano */
-> +	if (c->x86 == 7) {
->  		data->msr_temp = 0x1423;
-> -		break;
-> -	default:
-> -		return -ENODEV;
-> +	} else {
-> +		switch (c->x86_model) {
-> +		case 0xA:
-> +			/* C7 A */
-> +		case 0xD:
-> +			/* C7 D */
-> +			data->msr_temp = 0x1169;
-> +			data->msr_vid = 0x198;
-> +			break;
-> +		case 0xF:
-> +			/* Nano */
-> +			data->msr_temp = 0x1423;
-> +			break;
-> +		default:
-> +			return -ENODEV;
-> +		}
->  	}
->  
->  	/* test if we can access the TEMPERATURE MSR */
-> @@ -283,6 +287,7 @@ static int via_cputemp_down_prep(unsigned int cpu)
->  	{ X86_VENDOR_CENTAUR, 6, 0xa, }, /* C7 A */
->  	{ X86_VENDOR_CENTAUR, 6, 0xd, }, /* C7 D */
->  	{ X86_VENDOR_CENTAUR, 6, 0xf, }, /* Nano */
-> +	{ X86_VENDOR_CENTAUR, 7, X86_MODEL_ANY, },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, cputemp_ids);
+The following changes since commit 91ab883eb21325ad80f3473633f794c78ac87f51:
+
+  Linux 4.16-rc2 (2018-02-18 17:29:42 -0800)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.17
+
+for you to fetch changes up to e3a2d2be510ec8a35ecd2a17a42467d417962bb7:
+
+  hwmon: (via-cputemp) support new centaur CPUs (2018-03-30 07:53:57 -0700)
+
+----------------------------------------------------------------
+hwmon updates for v4.17
+
+- Added chip support: new centaur CPUs, ADM1272, NCT6796D
+- ucd9000: added debugfs attributes, gpio support
+- Cleanup and minor bug fixes
+
+----------------------------------------------------------------
+Alvaro G. M (2):
+      hwmon: (lm92) Do not try to detect MAX6635
+      hwmon: (lm92) Add max6635 to lm92_id[]
+
+Christopher Bostic (2):
+      hwmon: (ucd9000) Add gpio chip interface
+      hwmon: (ucd9000) Add debugfs attributes to provide mfr_status
+
+Danilo Bargen (2):
+      hwmon: (sht21) Update data sheet URLs
+      hwmon: (sht3x) Update data sheet URL
+
+Guenter Roeck (8):
+      hwmon: (pmbus/max8688) Accept negative page register values
+      hwmon: (pmbus/adm1275) Accept negative page register values
+      hwmon: (nct6775) Use NUM_FAN consistently
+      hwmon: (nct6775) Improve fan6/pwm6 support
+      hwmon: (nct6775) Initialize boolean variables with declaration
+      hwmon: (nct6775) Add support for NCT6796D
+      hwmon: (pmbus/adm1275) Add support for ADM1272
+      hwmon: (nct6775) Fix writing pwmX_mode
+
+Hao Peng (1):
+      hwmon: (g762) handle cleanup with devm_add_action
+
+davidwang (1):
+      hwmon: (via-cputemp) support new centaur CPUs
+
+ Documentation/hwmon/adm1275   |  20 ++-
+ Documentation/hwmon/lm92      |   6 +-
+ Documentation/hwmon/nct6775   |  56 ++++---
+ Documentation/hwmon/sht21     |   6 +-
+ Documentation/hwmon/sht3x     |   2 +-
+ drivers/hwmon/Kconfig         |   5 +-
+ drivers/hwmon/g762.c          |  53 ++-----
+ drivers/hwmon/lm92.c          |  63 +-------
+ drivers/hwmon/nct6775.c       | 231 ++++++++++++++++++----------
+ drivers/hwmon/pmbus/Kconfig   |   4 +-
+ drivers/hwmon/pmbus/adm1275.c |  71 ++++++++-
+ drivers/hwmon/pmbus/max8688.c |   2 +-
+ drivers/hwmon/pmbus/ucd9000.c | 350 +++++++++++++++++++++++++++++++++++++++++-
+ drivers/hwmon/sht21.c         |   3 +-
+ drivers/hwmon/via-cputemp.c   |  31 ++--
+ 15 files changed, 662 insertions(+), 241 deletions(-)
