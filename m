@@ -1,13 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga02.intel.com ([134.134.136.20]:48508 "EHLO mga02.intel.com"
+Received: from mga06.intel.com ([134.134.136.31]:23474 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751157AbeDQSVQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Apr 2018 14:21:16 -0400
-Subject: Re: [PATCH v3 06/10] drivers/peci: Add a PECI adapter driver for
- Aspeed AST24xx/AST25xx
-To: Robin Murphy <robin.murphy@arm.com>,
-        Alan Cox <alan@linux.intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>, Andrew Lunn <andrew@lunn.ch>,
+        id S1752386AbeDJSdB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Apr 2018 14:33:01 -0400
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To: Alan Cox <alan@linux.intel.com>, Andrew Jeffery <andrew@aj.id.au>,
+        Andrew Lunn <andrew@lunn.ch>,
         Andy Shevchenko <andriy.shevchenko@intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -27,42 +25,112 @@ To: Robin Murphy <robin.murphy@arm.com>,
         Stef van Os <stef.van.os@prodrive-technologies.com>,
         Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>,
         Vernon Mauery <vernon.mauery@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v3 07/10] Documentation: dt-bindings: Add documents for PECI hwmon client drivers
+Date: Tue, 10 Apr 2018 11:32:09 -0700
+Message-Id: <20180410183212.16787-8-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
 References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
- <20180410183212.16787-7-jae.hyun.yoo@linux.intel.com>
- <93e7f93c-a2e4-1e16-be4c-b908f88b9897@arm.com>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <684d1e9e-b07d-ef79-4333-e47d11326e7f@linux.intel.com>
-Date: Tue, 17 Apr 2018 11:21:13 -0700
-MIME-Version: 1.0
-In-Reply-To: <93e7f93c-a2e4-1e16-be4c-b908f88b9897@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Robin,
+This commit adds dt-bindings documents for PECI cputemp and dimmtemp client
+drivers.
 
-On 4/17/2018 6:37 AM, Robin Murphy wrote:
-> Just a drive-by nit:
-> 
-> On 10/04/18 19:32, Jae Hyun Yoo wrote:
-> [...]
->> +#define PECI_CTRL_SAMPLING_MASK     GENMASK(19, 16)
->> +#define PECI_CTRL_SAMPLING(x)       (((x) << 16) & 
->> PECI_CTRL_SAMPLING_MASK)
->> +#define PECI_CTRL_SAMPLING_GET(x)   (((x) & PECI_CTRL_SAMPLING_MASK) 
->> >> 16)
-> 
-> FWIW, <linux/bitfield.h> already provides functionality like this, so it 
-> might be worth taking a look at FIELD_{GET,PREP}() to save all these 
-> local definitions.
-> 
-> Robin.
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
+Reviewed-by: James Feist <james.feist@linux.intel.com>
+Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
+Cc: Alan Cox <alan@linux.intel.com>
+Cc: Andrew Jeffery <andrew@aj.id.au>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Fengguang Wu <fengguang.wu@intel.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jason M Biils <jason.m.bills@linux.intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Joel Stanley <joel@jms.id.au>
+Cc: Julia Cartwright <juliac@eso.teric.us>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Milton Miller II <miltonm@us.ibm.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stef van Os <stef.van.os@prodrive-technologies.com>
+Cc: Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
+---
+ .../devicetree/bindings/hwmon/peci-cputemp.txt     | 24 +++++++++++++++++++++
+ .../devicetree/bindings/hwmon/peci-dimmtemp.txt    | 25 ++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/peci-cputemp.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/peci-dimmtemp.txt
 
-Yes, that looks better. Thanks a lot for your pointing it out.
+diff --git a/Documentation/devicetree/bindings/hwmon/peci-cputemp.txt b/Documentation/devicetree/bindings/hwmon/peci-cputemp.txt
+new file mode 100644
+index 000000000000..d5530ef9cfd2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/peci-cputemp.txt
+@@ -0,0 +1,24 @@
++Bindings for Intel PECI (Platform Environment Control Interface) cputemp driver.
++
++Required properties:
++- compatible : Should be "intel,peci-cputemp".
++- reg        : Should contain address of a client CPU. Address range of CPU
++	       clients is starting from 0x30 based on PECI specification.
++	       <0x30> .. <0x37> (depends on the PECI_OFFSET_MAX definition)
++
++Example:
++	peci-bus@0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		< more properties >
++
++		peci-cputemp@cpu0 {
++			compatible = "intel,peci-cputemp";
++			reg = <0x30>;
++		};
++
++		peci-cputemp@cpu1 {
++			compatible = "intel,peci-cputemp";
++			reg = <0x31>;
++		};
++	};
+diff --git a/Documentation/devicetree/bindings/hwmon/peci-dimmtemp.txt b/Documentation/devicetree/bindings/hwmon/peci-dimmtemp.txt
+new file mode 100644
+index 000000000000..56e5deb61e5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/peci-dimmtemp.txt
+@@ -0,0 +1,25 @@
++Bindings for Intel PECI (Platform Environment Control Interface) dimmtemp
++driver.
++
++Required properties:
++- compatible : Should be "intel,peci-dimmtemp".
++- reg        : Should contain address of a client CPU. Address range of CPU
++	       clients is starting from 0x30 based on PECI specification.
++	       <0x30> .. <0x37> (depends on the PECI_OFFSET_MAX definition)
++
++Example:
++	peci-bus@0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		< more properties >
++
++		peci-dimmtemp@cpu0 {
++			compatible = "intel,peci-dimmtemp";
++			reg = <0x30>;
++		};
++
++		peci-dimmtemp@cpu1 {
++			compatible = "intel,peci-dimmtemp";
++			reg = <0x31>;
++		};
++	};
+-- 
+2.16.2
 
-Jae
