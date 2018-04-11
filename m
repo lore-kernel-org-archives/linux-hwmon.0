@@ -2,15 +2,13 @@ Return-Path: <joel.stan@gmail.com>
 Return-path: <joel.stan@gmail.com>
 MIME-Version: 1.0
 Sender: joel.stan@gmail.com
-In-Reply-To: <20180410183212.16787-5-jae.hyun.yoo@linux.intel.com>
-References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com> <20180410183212.16787-5-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180410183212.16787-6-jae.hyun.yoo@linux.intel.com>
+References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com> <20180410183212.16787-6-jae.hyun.yoo@linux.intel.com>
 From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 11 Apr 2018 21:22:23 +0930
-Message-ID: <CACPK8XcfrheC+UDB7mLPkgPRCuk8f+P830NG+cy2v6F_PJvUTw@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] Documentations: dt-bindings: Add a document of
- PECI adapter driver for Aspeed AST24xx/25xx SoCs
-To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>, Rob Herring <robh+dt@kernel.org>,
-	linux-aspeed@lists.ozlabs.org, Ryan Chen <ryan_chen@aspeedtech.com>
+Date: Wed, 11 Apr 2018 21:22:30 +0930
+Message-ID: <CACPK8Xf7ta43K=POx8J6bAdjvX=wCzy-+HWqHsm+RstQxeetCQ@mail.gmail.com>
+Subject: Re: [PATCH v3 05/10] ARM: dts: aspeed: peci: Add PECI node
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc: Alan Cox <alan@linux.intel.com>, Andrew Jeffery <andrew@aj.id.au>, Andrew Lunn <andrew@lunn.ch>,
 	Andy Shevchenko <andriy.shevchenko@intel.com>, Arnd Bergmann <arnd@arndb.de>,
 	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Fengguang Wu <fengguang.wu@intel.com>,
@@ -29,93 +27,19 @@ Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-hwmon@vger.kernel.org>
 
 On 11 April 2018 at 04:02, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com> wrote:
-> This commit adds a dt-bindings document of PECI adapter driver for Aspeed
-
-We try to capitalise ASPEED.
-
-> AST24xx/25xx SoCs.
-> ---
->  .../devicetree/bindings/peci/peci-aspeed.txt       | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.txt
+> This commit adds PECI bus/adapter node of AST24xx/AST25xx into
+> aspeed-g4 and aspeed-g5.
 >
-> diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.txt b/Documentation/devicetree/bindings/peci/peci-aspeed.txt
-> new file mode 100644
-> index 000000000000..4598bb8c20fa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/peci/peci-aspeed.txt
-> @@ -0,0 +1,60 @@
-> +Device tree configuration for PECI buses on the AST24XX and AST25XX SoCs.
-> +
-> +Required properties:
-> +- compatible        : Should be "aspeed,ast2400-peci" or "aspeed,ast2500-peci"
-> +                     - aspeed,ast2400-peci: Aspeed AST2400 family PECI
-> +                                            controller
-> +                     - aspeed,ast2500-peci: Aspeed AST2500 family PECI
-> +                                            controller
-> +- reg               : Should contain PECI controller registers location and
-> +                     length.
-> +- #address-cells    : Should be <1>.
-> +- #size-cells       : Should be <0>.
-> +- interrupts        : Should contain PECI controller interrupt.
-> +- clocks            : Should contain clock source for PECI controller.
-> +                     Should reference clkin.
 
-Are you sure that this is driven by clkin? Most peripherals on the
-Aspeed are attached to the apb, so should reference that clock.
+The patches to the device trees get merged by the ASPEED maintainer
+(me). Once you have the bindings reviewed you can send the patches to
+me and the linux-aspeed list (I've got a pending patch to maintainers
+that will ensure get_maintainers.pl does the right thing as far as
+email addresses go).
 
-> +- clock_frequency   : Should contain the operation frequency of PECI controller
-> +                     in units of Hz.
-> +                     187500 ~ 24000000
+I'd suggest dropping it from your series and re-sending once the
+bindings and driver are reviewed.
 
-Can you explain why you need both the parent clock and this frequency
-to be specified?
+Cheers,
 
-> +
-> +Optional properties:
-> +- msg-timing-nego   : Message timing negotiation period. This value will
-
-Perhaps msg-timing-period? Or just msg-timing?
-
-> +                     determine the period of message timing negotiation to be
-> +                     issued by PECI controller. The unit of the programmed
-> +                     value is four times of PECI clock period.
-> +                     0 ~ 255 (default: 1)
-> +- addr-timing-nego  : Address timing negotiation period. This value will
-> +                     determine the period of address timing negotiation to be
-> +                     issued by PECI controller. The unit of the programmed
-> +                     value is four times of PECI clock period.
-> +                     0 ~ 255 (default: 1)
-> +- rd-sampling-point : Read sampling point selection. The whole period of a bit
-> +                     time will be divided into 16 time frames. This value will
-> +                     determine the time frame in which the controller will
-> +                     sample PECI signal for data read back. Usually in the
-> +                     middle of a bit time is the best.
-> +                     0 ~ 15 (default: 8)
-> +- cmd_timeout_ms    : Command timeout in units of ms.
-> +                     1 ~ 60000 (default: 1000)
-> +
-> +Example:
-> +       peci: peci@1e78b000 {
-> +               compatible = "simple-bus";
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               ranges = <0x0 0x1e78b000 0x60>;
-> +
-> +               peci0: peci-bus@0 {
-> +                       compatible = "aspeed,ast2500-peci";
-> +                       reg = <0x0 0x60>;
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       interrupts = <15>;
-> +                       clocks = <&clk_clkin>;
-> +                       clock-frequency = <24000000>;
-> +                       msg-timing-nego = <1>;
-> +                       addr-timing-nego = <1>;
-> +                       rd-sampling-point = <8>;
-> +                       cmd-timeout-ms = <1000>;
-> +               };
-> +       };
-> --
-> 2.16.2
->
+Joel
