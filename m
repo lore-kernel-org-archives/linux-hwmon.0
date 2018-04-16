@@ -1,92 +1,57 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga06.intel.com ([134.134.136.31]:23478 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1752194AbeDJSdI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Apr 2018 14:33:08 -0400
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: Alan Cox <alan@linux.intel.com>, Andrew Jeffery <andrew@aj.id.au>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Fengguang Wu <fengguang.wu@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Haiyue Wang <haiyue.wang@linux.intel.com>,
-        James Feist <james.feist@linux.intel.com>,
-        Jason M Biils <jason.m.bills@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Cartwright <juliac@eso.teric.us>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Milton Miller II <miltonm@us.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stef van Os <stef.van.os@prodrive-technologies.com>,
-        Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Vernon Mauery <vernon.mauery@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v3 10/10] Add a maintainer for the PECI subsystem
-Date: Tue, 10 Apr 2018 11:32:12 -0700
-Message-Id: <20180410183212.16787-11-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
-References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
+Received: from relay1.mentorg.com ([192.94.38.131]:53364 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753099AbeDPRI2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 16 Apr 2018 13:08:28 -0400
+Subject: [PATCH 1/1] hwmon: (ina2xx) initialize mutex before locking
+CC: <linux@roeck-us.net>, <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        chombour <Cedric_Hombourger@mentor.com>,
+        ahsann <Noor_Ahsan@mentor.com>, <m.purski@samsung.com>
+From: Ahsan Hussain <ahsan_hussain@mentor.com>
+Message-ID: <f286b0f4-948f-74a7-6dc1-90ca88f3dcdc@mentor.com>
+Date: Mon, 16 Apr 2018 22:08:19 +0500
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To: unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This commit adds a maintainer information for the PECI subsystem.
 
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
-Reviewed-by: James Feist <james.feist@linux.intel.com>
-Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
-Cc: Alan Cox <alan@linux.intel.com>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Fengguang Wu <fengguang.wu@intel.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jason M Biils <jason.m.bills@linux.intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Julia Cartwright <juliac@eso.teric.us>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Milton Miller II <miltonm@us.ibm.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stef van Os <stef.van.os@prodrive-technologies.com>
-Cc: Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
+Upstream commit
+
+8d008c0c ("hwmon: (ina2xx) Make calibration register value fixed")
+
+makes ina2xx_set_shunt() call mutex_lock on an un-initialized mutex.
+Initialize it prior so we don't get a NULL pointer dereference error
+
+Signed-off-by: Ahsan Hussain <ahsan_hussain@mentor.com>
 ---
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/hwmon/ina2xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5cd5ff0e4428..3e6917e1ad31 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10965,6 +10965,16 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
- 
-+PECI SUBSYSTEM
-+M:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-+M:	Jason M Biils <jason.m.bills@linux.intel.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/peci/
-+F:	drivers/peci/
-+F:	drivers/hwmon/peci-*.c
-+F:	include/linux/peci.h
-+F:	include/uapi/linux/peci-ioctl.h
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index a629f7c..1304f01 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -457,6 +457,8 @@ static int ina2xx_probe(struct i2c_client *client,
+ 			val = INA2XX_RSHUNT_DEFAULT;
+ 	}
+ +	mutex_init(&data->config_lock);
 +
- PER-CPU MEMORY ALLOCATOR
- M:	Tejun Heo <tj@kernel.org>
- M:	Christoph Lameter <cl@linux.com>
+ 	ina2xx_set_shunt(data, val);
+  	ina2xx_regmap_config.max_register = data->config->registers;
+@@ -473,8 +475,6 @@ static int ina2xx_probe(struct i2c_client *client,
+ 		return -ENODEV;
+ 	}
+ -	mutex_init(&data->config_lock);
+-
+ 	data->groups[group++] = &ina2xx_group;
+ 	if (id->driver_data == ina226)
+ 		data->groups[group++] = &ina226_group;
 -- 
-2.16.2
+2.7.4
 
