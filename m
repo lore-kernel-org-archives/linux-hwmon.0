@@ -1,11 +1,13 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga06.intel.com ([134.134.136.31]:23451 "EHLO mga06.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:62823 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751940AbeDJScw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Apr 2018 14:32:52 -0400
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: Alan Cox <alan@linux.intel.com>, Andrew Jeffery <andrew@aj.id.au>,
-        Andrew Lunn <andrew@lunn.ch>,
+        id S1752984AbeDSTAC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Apr 2018 15:00:02 -0400
+Date: Fri, 20 Apr 2018 02:59:07 +0800
+From: kbuild test robot <lkp@intel.com>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc: kbuild-all@01.org, Alan Cox <alan@linux.intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Andrew Lunn <andrew@lunn.ch>,
         Andy Shevchenko <andriy.shevchenko@intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -24,1732 +26,579 @@ To: Alan Cox <alan@linux.intel.com>, Andrew Jeffery <andrew@aj.id.au>,
         Randy Dunlap <rdunlap@infradead.org>,
         Stef van Os <stef.van.os@prodrive-technologies.com>,
         Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Vernon Mauery <vernon.mauery@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Vernon Mauery <vernon.mauery@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v3 03/10] drivers/peci: Add support for PECI bus driver core
-Date: Tue, 10 Apr 2018 11:32:05 -0700
-Message-Id: <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
-References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
+Subject: Re: [PATCH v3 03/10] drivers/peci: Add support for PECI bus driver
+ core
+Message-ID: <201804200133.omtxKqzI%fengguang.wu@intel.com>
+References: <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="d6Gm4EdcadzBjdND"
+Content-Disposition: inline
+In-Reply-To: <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This commit adds driver implementation for PECI bus core into linux
-driver framework.
 
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Signed-off-by: Fengguang Wu <fengguang.wu@intel.com>
-Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
-Reviewed-by: James Feist <james.feist@linux.intel.com>
-Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
-Cc: Alan Cox <alan@linux.intel.com>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Fengguang Wu <fengguang.wu@intel.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jason M Biils <jason.m.bills@linux.intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Julia Cartwright <juliac@eso.teric.us>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Milton Miller II <miltonm@us.ibm.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stef van Os <stef.van.os@prodrive-technologies.com>
-Cc: Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
+--d6Gm4EdcadzBjdND
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Jae,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v4.17-rc1 next-20180419]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+
+url:    https://github.com/0day-ci/linux/commits/Jae-Hyun-Yoo/PECI-device-driver-introduction/20180411-180018
+config: x86_64-randconfig-s0-04192349 (attached as .config)
+compiler: gcc-6 (Debian 6.4.0-9) 6.4.0 20171026
+reproduce:
+        # save the attached .config to linux build tree
+        make ARCH=x86_64 
+
+All errors (new ones prefixed by >>):
+
+   drivers//peci/peci-core.c: In function 'peci_device_match':
+>> drivers//peci/peci-core.c:739:6: error: implicit declaration of function 'peci_of_match_device' [-Werror=implicit-function-declaration]
+     if (peci_of_match_device(drv->of_match_table, client))
+         ^~~~~~~~~~~~~~~~~~~~
+   At top level:
+   drivers//peci/peci-core.c:840:28: warning: 'peci_new_device' defined but not used [-Wunused-function]
+    static struct peci_client *peci_new_device(struct peci_adapter *adapter,
+                               ^~~~~~~~~~~~~~~
+   drivers//peci/peci-core.c:135:29: warning: 'peci_verify_adapter' defined but not used [-Wunused-function]
+    static struct peci_adapter *peci_verify_adapter(struct device *dev)
+                                ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+vim +/peci_of_match_device +739 drivers//peci/peci-core.c
+
+   732	
+   733	static int peci_device_match(struct device *dev, struct device_driver *drv)
+   734	{
+   735		struct peci_client *client = peci_verify_client(dev);
+   736		struct peci_driver *driver;
+   737	
+   738		/* Attempt an OF style match */
+ > 739		if (peci_of_match_device(drv->of_match_table, client))
+   740			return 1;
+   741	
+   742		driver = to_peci_driver(drv);
+   743	
+   744		if (peci_match_id(driver->id_table, client))
+   745			return 1;
+   746	
+   747		return 0;
+   748	}
+   749	
+
 ---
- drivers/Kconfig                 |    2 +
- drivers/Makefile                |    1 +
- drivers/peci/Kconfig            |   17 +
- drivers/peci/Makefile           |    6 +
- drivers/peci/peci-core.c        | 1291 +++++++++++++++++++++++++++++++++++++++
- include/linux/peci.h            |  107 ++++
- include/uapi/linux/peci-ioctl.h |  200 ++++++
- 7 files changed, 1624 insertions(+)
- create mode 100644 drivers/peci/Kconfig
- create mode 100644 drivers/peci/Makefile
- create mode 100644 drivers/peci/peci-core.c
- create mode 100644 include/linux/peci.h
- create mode 100644 include/uapi/linux/peci-ioctl.h
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 
-diff --git a/drivers/Kconfig b/drivers/Kconfig
-index 95b9ccc08165..8c44d9738377 100644
---- a/drivers/Kconfig
-+++ b/drivers/Kconfig
-@@ -217,4 +217,6 @@ source "drivers/siox/Kconfig"
- 
- source "drivers/slimbus/Kconfig"
- 
-+source "drivers/peci/Kconfig"
-+
- endmenu
-diff --git a/drivers/Makefile b/drivers/Makefile
-index 24cd47014657..250fe3d0fa7e 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -185,3 +185,4 @@ obj-$(CONFIG_TEE)		+= tee/
- obj-$(CONFIG_MULTIPLEXER)	+= mux/
- obj-$(CONFIG_UNISYS_VISORBUS)	+= visorbus/
- obj-$(CONFIG_SIOX)		+= siox/
-+obj-$(CONFIG_PECI)		+= peci/
-diff --git a/drivers/peci/Kconfig b/drivers/peci/Kconfig
-new file mode 100644
-index 000000000000..1fbc13f9e6c2
---- /dev/null
-+++ b/drivers/peci/Kconfig
-@@ -0,0 +1,17 @@
-+#
-+# Platform Environment Control Interface (PECI) subsystem configuration
-+#
-+
-+menu "PECI support"
-+
-+config PECI
-+	bool "PECI support"
-+	select RT_MUTEXES
-+	select CRC8
-+	help
-+	  The Platform Environment Control Interface (PECI) is a one-wire bus
-+	  interface that provides a communication channel between Intel
-+	  processors and chipset components to external monitoring or control
-+	  devices.
-+
-+endmenu
-diff --git a/drivers/peci/Makefile b/drivers/peci/Makefile
-new file mode 100644
-index 000000000000..9e8615e0d3ff
---- /dev/null
-+++ b/drivers/peci/Makefile
-@@ -0,0 +1,6 @@
-+#
-+# Makefile for the PECI core and bus drivers.
-+#
-+
-+# Core functionality
-+obj-$(CONFIG_PECI)		+= peci-core.o
-diff --git a/drivers/peci/peci-core.c b/drivers/peci/peci-core.c
-new file mode 100644
-index 000000000000..9b45869b7c39
---- /dev/null
-+++ b/drivers/peci/peci-core.c
-@@ -0,0 +1,1291 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2018 Intel Corporation
-+
-+#include <linux/crc8.h>
-+#include <linux/delay.h>
-+#include <linux/fs.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/peci.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+
-+/* Device Specific Completion Code (CC) Definition */
-+#define DEV_PECI_CC_SUCCESS          0x40
-+#define DEV_PECI_CC_TIMEOUT          0x80
-+#define DEV_PECI_CC_OUT_OF_RESOURCE  0x81
-+#define DEV_PECI_CC_UNAVAIL_RESOURCE 0x82
-+#define DEV_PECI_CC_INVALID_REQ      0x90
-+
-+/* Completion Code mask to check retry needs */
-+#define DEV_PECI_CC_RETRY_CHECK_MASK 0xf0
-+#define DEV_PECI_CC_NEED_RETRY       0x80
-+
-+/* Skylake EDS says to retry for 250ms */
-+#define DEV_PECI_RETRY_TIME_MS     250
-+#define DEV_PECI_RETRY_INTERVAL_MS 10
-+#define DEV_PECI_RETRY_BIT         0x01
-+
-+#define GET_TEMP_WR_LEN   1
-+#define GET_TEMP_RD_LEN   2
-+#define GET_TEMP_PECI_CMD 0x01
-+
-+#define GET_DIB_WR_LEN   1
-+#define GET_DIB_RD_LEN   8
-+#define GET_DIB_PECI_CMD 0xf7
-+
-+#define RDPKGCFG_WRITE_LEN     5
-+#define RDPKGCFG_READ_LEN_BASE 1
-+#define RDPKGCFG_PECI_CMD      0xa1
-+
-+#define WRPKGCFG_WRITE_LEN_BASE 6
-+#define WRPKGCFG_READ_LEN       1
-+#define WRPKGCFG_PECI_CMD       0xa5
-+
-+#define RDIAMSR_WRITE_LEN 5
-+#define RDIAMSR_READ_LEN  9
-+#define RDIAMSR_PECI_CMD  0xb1
-+
-+#define WRIAMSR_PECI_CMD  0xb5
-+
-+#define RDPCICFG_WRITE_LEN 6
-+#define RDPCICFG_READ_LEN  5
-+#define RDPCICFG_PECI_CMD  0x61
-+
-+#define WRPCICFG_PECI_CMD  0x65
-+
-+#define RDPCICFGLOCAL_WRITE_LEN     5
-+#define RDPCICFGLOCAL_READ_LEN_BASE 1
-+#define RDPCICFGLOCAL_PECI_CMD      0xe1
-+
-+#define WRPCICFGLOCAL_WRITE_LEN_BASE 6
-+#define WRPCICFGLOCAL_READ_LEN       1
-+#define WRPCICFGLOCAL_PECI_CMD       0xe5
-+
-+/* Macro for getting minor revision number from DIB */
-+#define GET_MINOR_REV_NUM(x) (((x) >> 8) & 0xF)
-+
-+/* CRC8 table for Assure Write Frame Check */
-+#define PECI_CRC8_POLYNOMIAL 0x07
-+DECLARE_CRC8_TABLE(peci_crc8_table);
-+
-+static struct device_type peci_adapter_type;
-+static struct device_type peci_client_type;
-+
-+/* Max number of peci cdev */
-+#define PECI_CDEV_MAX    16
-+
-+/* Max index of devices sharing the same client address */
-+#define PECI_DEV_IDX_MAX 16
-+
-+static dev_t peci_devt;
-+static bool is_registered;
-+
-+static DEFINE_MUTEX(core_lock);
-+static DEFINE_IDR(peci_adapter_idr);
-+
-+static ssize_t name_show(struct device *dev,
-+			 struct device_attribute *attr,
-+			 char *buf)
-+{
-+	return sprintf(buf, "%s\n", dev->type == &peci_client_type ?
-+		       to_peci_client(dev)->name : to_peci_adapter(dev)->name);
-+}
-+static DEVICE_ATTR_RO(name);
-+
-+static void peci_client_dev_release(struct device *dev)
-+{
-+	kfree(to_peci_client(dev));
-+}
-+
-+static struct attribute *peci_device_attrs[] = {
-+	&dev_attr_name.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(peci_device);
-+
-+static struct device_type peci_client_type = {
-+	.groups		= peci_device_groups,
-+	.release	= peci_client_dev_release,
-+};
-+
-+static struct peci_client *peci_verify_client(struct device *dev)
-+{
-+	return (dev->type == &peci_client_type)
-+			? to_peci_client(dev)
-+			: NULL;
-+}
-+
-+static void peci_adapter_dev_release(struct device *dev)
-+{
-+	/* do nothing */
-+}
-+
-+static struct attribute *peci_adapter_attrs[] = {
-+	&dev_attr_name.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(peci_adapter);
-+
-+static struct device_type peci_adapter_type = {
-+	.groups		= peci_adapter_groups,
-+	.release	= peci_adapter_dev_release,
-+};
-+
-+static struct peci_adapter *peci_verify_adapter(struct device *dev)
-+{
-+	return (dev->type == &peci_adapter_type)
-+			? to_peci_adapter(dev)
-+			: NULL;
-+}
-+
-+static struct peci_adapter *peci_get_adapter(int nr)
-+{
-+	struct peci_adapter *adapter;
-+
-+	mutex_lock(&core_lock);
-+	adapter = idr_find(&peci_adapter_idr, nr);
-+	if (!adapter)
-+		goto out_unlock;
-+
-+	if (try_module_get(adapter->owner))
-+		get_device(&adapter->dev);
-+	else
-+		adapter = NULL;
-+
-+out_unlock:
-+	mutex_unlock(&core_lock);
-+	return adapter;
-+}
-+
-+static void peci_put_adapter(struct peci_adapter *adapter)
-+{
-+	if (!adapter)
-+		return;
-+
-+	put_device(&adapter->dev);
-+	module_put(adapter->owner);
-+}
-+
-+static u8 peci_aw_fcs(u8 *data, int len)
-+{
-+	return crc8(peci_crc8_table, data, (size_t)len, 0);
-+}
-+
-+static int __peci_xfer(struct peci_adapter *adapter, struct peci_xfer_msg *msg,
-+		       bool do_retry, bool has_aw_fcs)
-+{
-+	ktime_t start, end;
-+	s64 elapsed_ms;
-+	int rc = 0;
-+
-+	/**
-+	 * For some commands, the PECI originator may need to retry a command if
-+	 * the processor PECI client responds with a 0x8x completion code. In
-+	 * each instance, the processor PECI client may have started the
-+	 * operation but not completed it yet. When the 'retry' bit is set, the
-+	 * PECI client will ignore a new request if it exactly matches a
-+	 * previous valid request.
-+	 */
-+
-+	if (do_retry)
-+		start = ktime_get();
-+
-+	do {
-+		rc = adapter->xfer(adapter, msg);
-+
-+		if (!do_retry || rc)
-+			break;
-+
-+		if (msg->rx_buf[0] == DEV_PECI_CC_SUCCESS)
-+			break;
-+
-+		/* Retry is needed when completion code is 0x8x */
-+		if ((msg->rx_buf[0] & DEV_PECI_CC_RETRY_CHECK_MASK) !=
-+		    DEV_PECI_CC_NEED_RETRY) {
-+			rc = -EIO;
-+			break;
-+		}
-+
-+		/* Set the retry bit to indicate a retry attempt */
-+		msg->tx_buf[1] |= DEV_PECI_RETRY_BIT;
-+
-+		/* Recalculate the AW FCS if it has one */
-+		if (has_aw_fcs)
-+			msg->tx_buf[msg->tx_len - 1] = 0x80 ^
-+						peci_aw_fcs((u8 *)msg,
-+							    2 + msg->tx_len);
-+
-+		/**
-+		 * Retry for at least 250ms before returning an error.
-+		 * Retry interval guideline:
-+		 *   No minimum < Retry Interval < No maximum
-+		 *                (recommend 10ms)
-+		 */
-+		end = ktime_get();
-+		elapsed_ms = ktime_to_ms(ktime_sub(end, start));
-+		if (elapsed_ms >= DEV_PECI_RETRY_TIME_MS) {
-+			dev_dbg(&adapter->dev, "Timeout retrying xfer!\n");
-+			rc = -ETIMEDOUT;
-+			break;
-+		}
-+
-+		usleep_range(DEV_PECI_RETRY_INTERVAL_MS * 1000,
-+			     (DEV_PECI_RETRY_INTERVAL_MS * 1000) + 1000);
-+	} while (true);
-+
-+	if (rc)
-+		dev_dbg(&adapter->dev, "xfer error, rc: %d\n", rc);
-+
-+	return rc;
-+}
-+
-+static int peci_xfer(struct peci_adapter *adapter, struct peci_xfer_msg *msg)
-+{
-+	return __peci_xfer(adapter, msg, false, false);
-+}
-+
-+static int peci_xfer_with_retries(struct peci_adapter *adapter,
-+				  struct peci_xfer_msg *msg,
-+				  bool has_aw_fcs)
-+{
-+	return __peci_xfer(adapter, msg, true, has_aw_fcs);
-+}
-+
-+static int peci_scan_cmd_mask(struct peci_adapter *adapter)
-+{
-+	struct peci_xfer_msg msg;
-+	int rc = 0;
-+	u32 dib;
-+
-+	/* Update command mask just once */
-+	if (adapter->cmd_mask & BIT(PECI_CMD_PING))
-+		return 0;
-+
-+	msg.addr      = PECI_BASE_ADDR;
-+	msg.tx_len    = GET_DIB_WR_LEN;
-+	msg.rx_len    = GET_DIB_RD_LEN;
-+	msg.tx_buf[0] = GET_DIB_PECI_CMD;
-+
-+	rc = peci_xfer(adapter, &msg);
-+	if (rc)
-+		return rc;
-+
-+	dib = msg.rx_buf[0] | (msg.rx_buf[1] << 8) |
-+	      (msg.rx_buf[2] << 16) | (msg.rx_buf[3] << 24);
-+
-+	/* Check special case for Get DIB command */
-+	if (dib == 0x00) {
-+		dev_dbg(&adapter->dev, "DIB read as 0x00\n");
-+		return -EIO;
-+	}
-+
-+	/**
-+	 * Setting up the supporting commands based on minor revision number.
-+	 * See PECI Spec Table 3-1.
-+	 */
-+	switch (GET_MINOR_REV_NUM(dib)) {
-+	case 6:
-+		adapter->cmd_mask |= BIT(PECI_CMD_WR_IA_MSR);
-+		/* fallthrough */
-+	case 5:
-+		adapter->cmd_mask |= BIT(PECI_CMD_WR_PCI_CFG);
-+		/* fallthrough */
-+	case 4:
-+		adapter->cmd_mask |= BIT(PECI_CMD_RD_PCI_CFG);
-+		/* fallthrough */
-+	case 3:
-+		adapter->cmd_mask |= BIT(PECI_CMD_RD_PCI_CFG_LOCAL);
-+		adapter->cmd_mask |= BIT(PECI_CMD_WR_PCI_CFG_LOCAL);
-+		/* fallthrough */
-+	case 2:
-+		adapter->cmd_mask |= BIT(PECI_CMD_RD_IA_MSR);
-+		/* fallthrough */
-+	case 1:
-+		adapter->cmd_mask |= BIT(PECI_CMD_RD_PKG_CFG);
-+		adapter->cmd_mask |= BIT(PECI_CMD_WR_PKG_CFG);
-+	}
-+
-+	adapter->cmd_mask |= BIT(PECI_CMD_GET_TEMP);
-+	adapter->cmd_mask |= BIT(PECI_CMD_GET_DIB);
-+	adapter->cmd_mask |= BIT(PECI_CMD_PING);
-+
-+	return rc;
-+}
-+
-+static int peci_cmd_support(struct peci_adapter *adapter, enum peci_cmd cmd)
-+{
-+	if (!(adapter->cmd_mask & BIT(PECI_CMD_PING)) &&
-+	    peci_scan_cmd_mask(adapter) < 0) {
-+		dev_dbg(&adapter->dev, "Failed to scan command mask\n");
-+		return -EIO;
-+	}
-+
-+	if (!(adapter->cmd_mask & BIT(cmd))) {
-+		dev_dbg(&adapter->dev, "Command %d is not supported\n", cmd);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int peci_ioctl_ping(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_ping_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+
-+	msg.addr   = umsg->addr;
-+	msg.tx_len = 0;
-+	msg.rx_len = 0;
-+
-+	return peci_xfer(adapter, &msg);
-+}
-+
-+static int peci_ioctl_get_dib(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_get_dib_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc;
-+
-+	msg.addr      = umsg->addr;
-+	msg.tx_len    = GET_DIB_WR_LEN;
-+	msg.rx_len    = GET_DIB_RD_LEN;
-+	msg.tx_buf[0] = GET_DIB_PECI_CMD;
-+
-+	rc = peci_xfer(adapter, &msg);
-+	if (rc)
-+		return rc;
-+
-+	umsg->dib = msg.rx_buf[0] | (msg.rx_buf[1] << 8) |
-+		     (msg.rx_buf[2] << 16) | (msg.rx_buf[3] << 24);
-+
-+	return 0;
-+}
-+
-+static int peci_ioctl_get_temp(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_get_temp_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc;
-+
-+	msg.addr      = umsg->addr;
-+	msg.tx_len    = GET_TEMP_WR_LEN;
-+	msg.rx_len    = GET_TEMP_RD_LEN;
-+	msg.tx_buf[0] = GET_TEMP_PECI_CMD;
-+
-+	rc = peci_xfer(adapter, &msg);
-+	if (rc)
-+		return rc;
-+
-+	umsg->temp_raw = msg.rx_buf[0] | (msg.rx_buf[1] << 8);
-+
-+	return 0;
-+}
-+
-+static int peci_ioctl_rd_pkg_cfg(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_rd_pkg_cfg_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc = 0;
-+
-+	/* Per the PECI spec, the read length must be a byte, word, or dword */
-+	if (umsg->rx_len != 1 && umsg->rx_len != 2 && umsg->rx_len != 4) {
-+		dev_dbg(&adapter->dev, "Invalid read length, rx_len: %d\n",
-+			umsg->rx_len);
-+		return -EINVAL;
-+	}
-+
-+	msg.addr = umsg->addr;
-+	msg.tx_len = RDPKGCFG_WRITE_LEN;
-+	/* read lengths of 1 and 2 result in an error, so only use 4 for now */
-+	msg.rx_len = RDPKGCFG_READ_LEN_BASE + umsg->rx_len;
-+	msg.tx_buf[0] = RDPKGCFG_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;         /* request byte for Host ID | Retry bit */
-+				      /* Host ID is 0 for PECI 3.0 */
-+	msg.tx_buf[2] = umsg->index;            /* RdPkgConfig index */
-+	msg.tx_buf[3] = (u8)umsg->param;        /* LSB - Config parameter */
-+	msg.tx_buf[4] = (u8)(umsg->param >> 8); /* MSB - Config parameter */
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, false);
-+	if (!rc)
-+		memcpy(umsg->pkg_config, &msg.rx_buf[1], umsg->rx_len);
-+
-+	return rc;
-+}
-+
-+static int peci_ioctl_wr_pkg_cfg(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_wr_pkg_cfg_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc = 0, i;
-+
-+	/* Per the PECI spec, the write length must be a dword */
-+	if (umsg->tx_len != 4) {
-+		dev_dbg(&adapter->dev, "Invalid write length, tx_len: %d\n",
-+			umsg->tx_len);
-+		return -EINVAL;
-+	}
-+
-+	msg.addr = umsg->addr;
-+	msg.tx_len = WRPKGCFG_WRITE_LEN_BASE + umsg->tx_len;
-+	/* read lengths of 1 and 2 result in an error, so only use 4 for now */
-+	msg.rx_len = WRPKGCFG_READ_LEN;
-+	msg.tx_buf[0] = WRPKGCFG_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;         /* request byte for Host ID | Retry bit */
-+				      /* Host ID is 0 for PECI 3.0 */
-+	msg.tx_buf[2] = umsg->index;            /* RdPkgConfig index */
-+	msg.tx_buf[3] = (u8)umsg->param;        /* LSB - Config parameter */
-+	msg.tx_buf[4] = (u8)(umsg->param >> 8); /* MSB - Config parameter */
-+	for (i = 0; i < umsg->tx_len; i++)
-+		msg.tx_buf[5 + i] = (u8)(umsg->value >> (i << 3));
-+
-+	/* Add an Assure Write Frame Check Sequence byte */
-+	msg.tx_buf[5 + i] = 0x80 ^
-+			    peci_aw_fcs((u8 *)&msg, 8 + umsg->tx_len);
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, true);
-+
-+	return rc;
-+}
-+
-+static int peci_ioctl_rd_ia_msr(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_rd_ia_msr_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc = 0;
-+
-+	msg.addr = umsg->addr;
-+	msg.tx_len = RDIAMSR_WRITE_LEN;
-+	msg.rx_len = RDIAMSR_READ_LEN;
-+	msg.tx_buf[0] = RDIAMSR_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;
-+	msg.tx_buf[2] = umsg->thread_id;
-+	msg.tx_buf[3] = (u8)umsg->address;
-+	msg.tx_buf[4] = (u8)(umsg->address >> 8);
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, false);
-+	if (!rc)
-+		memcpy(&umsg->value, &msg.rx_buf[1], sizeof(uint64_t));
-+
-+	return rc;
-+}
-+
-+static int peci_ioctl_rd_pci_cfg(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_rd_pci_cfg_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	u32 address;
-+	int rc = 0;
-+
-+	address = umsg->reg;                  /* [11:0]  - Register */
-+	address |= (u32)umsg->function << 12; /* [14:12] - Function */
-+	address |= (u32)umsg->device << 15;   /* [19:15] - Device   */
-+	address |= (u32)umsg->bus << 20;      /* [27:20] - Bus      */
-+					      /* [31:28] - Reserved */
-+	msg.addr = umsg->addr;
-+	msg.tx_len = RDPCICFG_WRITE_LEN;
-+	msg.rx_len = RDPCICFG_READ_LEN;
-+	msg.tx_buf[0] = RDPCICFG_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;         /* request byte for Host ID | Retry bit */
-+				      /* Host ID is 0 for PECI 3.0 */
-+	msg.tx_buf[2] = (u8)address;         /* LSB - PCI Config Address */
-+	msg.tx_buf[3] = (u8)(address >> 8);  /* PCI Config Address */
-+	msg.tx_buf[4] = (u8)(address >> 16); /* PCI Config Address */
-+	msg.tx_buf[5] = (u8)(address >> 24); /* MSB - PCI Config Address */
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, false);
-+	if (!rc)
-+		memcpy(umsg->pci_config, &msg.rx_buf[1], 4);
-+
-+	return rc;
-+}
-+
-+static int peci_ioctl_rd_pci_cfg_local(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_rd_pci_cfg_local_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	u32 address;
-+	int rc = 0;
-+
-+	/* Per the PECI spec, the read length must be a byte, word, or dword */
-+	if (umsg->rx_len != 1 && umsg->rx_len != 2 && umsg->rx_len != 4) {
-+		dev_dbg(&adapter->dev, "Invalid read length, rx_len: %d\n",
-+			umsg->rx_len);
-+		return -EINVAL;
-+	}
-+
-+	address = umsg->reg;                  /* [11:0]  - Register */
-+	address |= (u32)umsg->function << 12; /* [14:12] - Function */
-+	address |= (u32)umsg->device << 15;   /* [19:15] - Device   */
-+	address |= (u32)umsg->bus << 20;      /* [23:20] - Bus      */
-+
-+	msg.addr = umsg->addr;
-+	msg.tx_len = RDPCICFGLOCAL_WRITE_LEN;
-+	msg.rx_len = RDPCICFGLOCAL_READ_LEN_BASE + umsg->rx_len;
-+	msg.tx_buf[0] = RDPCICFGLOCAL_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;         /* request byte for Host ID | Retry bit */
-+				      /* Host ID is 0 for PECI 3.0 */
-+	msg.tx_buf[2] = (u8)address;       /* LSB - PCI Configuration Address */
-+	msg.tx_buf[3] = (u8)(address >> 8);  /* PCI Configuration Address */
-+	msg.tx_buf[4] = (u8)(address >> 16); /* PCI Configuration Address */
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, false);
-+	if (!rc)
-+		memcpy(umsg->pci_config, &msg.rx_buf[1], umsg->rx_len);
-+
-+	return rc;
-+}
-+
-+static int peci_ioctl_wr_pci_cfg_local(struct peci_adapter *adapter, void *vmsg)
-+{
-+	struct peci_wr_pci_cfg_local_msg *umsg = vmsg;
-+	struct peci_xfer_msg msg;
-+	int rc = 0, i;
-+	u32 address;
-+
-+	/* Per the PECI spec, the write length must be a byte, word, or dword */
-+	if (umsg->tx_len != 1 && umsg->tx_len != 2 && umsg->tx_len != 4) {
-+		dev_dbg(&adapter->dev, "Invalid write length, tx_len: %d\n",
-+			umsg->tx_len);
-+		return -EINVAL;
-+	}
-+
-+	address = umsg->reg;                  /* [11:0]  - Register */
-+	address |= (u32)umsg->function << 12; /* [14:12] - Function */
-+	address |= (u32)umsg->device << 15;   /* [19:15] - Device   */
-+	address |= (u32)umsg->bus << 20;      /* [23:20] - Bus      */
-+
-+	msg.addr = umsg->addr;
-+	msg.tx_len = WRPCICFGLOCAL_WRITE_LEN_BASE + umsg->tx_len;
-+	msg.rx_len = WRPCICFGLOCAL_READ_LEN;
-+	msg.tx_buf[0] = WRPCICFGLOCAL_PECI_CMD;
-+	msg.tx_buf[1] = 0x00;         /* request byte for Host ID | Retry bit */
-+				      /* Host ID is 0 for PECI 3.0 */
-+	msg.tx_buf[2] = (u8)address;       /* LSB - PCI Configuration Address */
-+	msg.tx_buf[3] = (u8)(address >> 8);  /* PCI Configuration Address */
-+	msg.tx_buf[4] = (u8)(address >> 16); /* PCI Configuration Address */
-+	for (i = 0; i < umsg->tx_len; i++)
-+		msg.tx_buf[5 + i] = (u8)(umsg->value >> (i << 3));
-+
-+	/* Add an Assure Write Frame Check Sequence byte */
-+	msg.tx_buf[5 + i] = 0x80 ^
-+			    peci_aw_fcs((u8 *)&msg, 8 + umsg->tx_len);
-+
-+	rc = peci_xfer_with_retries(adapter, &msg, true);
-+
-+	return rc;
-+}
-+
-+typedef int (*peci_ioctl_fn_type)(struct peci_adapter *, void *);
-+
-+static const peci_ioctl_fn_type peci_ioctl_fn[PECI_CMD_MAX] = {
-+	NULL, /* Reserved */
-+	peci_ioctl_ping,
-+	peci_ioctl_get_dib,
-+	peci_ioctl_get_temp,
-+	peci_ioctl_rd_pkg_cfg,
-+	peci_ioctl_wr_pkg_cfg,
-+	peci_ioctl_rd_ia_msr,
-+	NULL, /* Reserved */
-+	peci_ioctl_rd_pci_cfg,
-+	NULL, /* Reserved */
-+	peci_ioctl_rd_pci_cfg_local,
-+	peci_ioctl_wr_pci_cfg_local,
-+};
-+
-+int peci_command(struct peci_adapter *adapter, enum peci_cmd cmd, void *vmsg)
-+{
-+	int rc = 0;
-+
-+	if (cmd >= PECI_CMD_MAX || cmd < PECI_CMD_XFER)
-+		return -EINVAL;
-+
-+	dev_dbg(&adapter->dev, "%s, cmd=0x%02x\n", __func__, cmd);
-+
-+	if (!peci_ioctl_fn[cmd])
-+		return -EINVAL;
-+
-+	rt_mutex_lock(&adapter->bus_lock);
-+
-+	rc = peci_cmd_support(adapter, cmd);
-+	if (!rc)
-+		rc = peci_ioctl_fn[cmd](adapter, vmsg);
-+
-+	rt_mutex_unlock(&adapter->bus_lock);
-+
-+	return rc;
-+}
-+EXPORT_SYMBOL_GPL(peci_command);
-+
-+static long peci_ioctl(struct file *file, unsigned int iocmd, unsigned long arg)
-+{
-+	struct peci_adapter *adapter = file->private_data;
-+	void __user *argp = (void __user *)arg;
-+	unsigned int msg_len;
-+	enum peci_cmd cmd;
-+	int rc = 0;
-+	u8 *msg;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	dev_dbg(&adapter->dev, "ioctl, cmd=0x%x, arg=0x%lx\n", iocmd, arg);
-+
-+	switch (iocmd) {
-+	case PECI_IOC_PING:
-+	case PECI_IOC_GET_DIB:
-+	case PECI_IOC_GET_TEMP:
-+	case PECI_IOC_RD_PKG_CFG:
-+	case PECI_IOC_WR_PKG_CFG:
-+	case PECI_IOC_RD_IA_MSR:
-+	case PECI_IOC_RD_PCI_CFG:
-+	case PECI_IOC_RD_PCI_CFG_LOCAL:
-+	case PECI_IOC_WR_PCI_CFG_LOCAL:
-+		cmd = _IOC_NR(iocmd);
-+		msg_len = _IOC_SIZE(iocmd);
-+		break;
-+
-+	default:
-+		dev_dbg(&adapter->dev, "Invalid ioctl cmd : 0x%x\n", iocmd);
-+		return -ENOTTY;
-+	}
-+
-+	msg = memdup_user(argp, msg_len);
-+	if (IS_ERR(msg))
-+		return PTR_ERR(msg);
-+
-+	rc = peci_command(adapter, cmd, msg);
-+
-+	if (!rc && copy_to_user(argp, msg, msg_len))
-+		rc = -EFAULT;
-+
-+	kfree(msg);
-+	return (long)rc;
-+}
-+
-+static int peci_open(struct inode *inode, struct file *file)
-+{
-+	unsigned int minor = iminor(inode);
-+	struct peci_adapter *adapter;
-+
-+	adapter = peci_get_adapter(minor);
-+	if (!adapter)
-+		return -ENODEV;
-+
-+	file->private_data = adapter;
-+
-+	return 0;
-+}
-+
-+static int peci_release(struct inode *inode, struct file *file)
-+{
-+	struct peci_adapter *adapter = file->private_data;
-+
-+	peci_put_adapter(adapter);
-+	file->private_data = NULL;
-+
-+	return 0;
-+}
-+
-+static const struct file_operations peci_fops = {
-+	.owner          = THIS_MODULE,
-+	.unlocked_ioctl = peci_ioctl,
-+	.open           = peci_open,
-+	.release        = peci_release,
-+};
-+
-+static int peci_detect(struct peci_adapter *adapter, u8 addr)
-+{
-+	struct peci_ping_msg msg;
-+
-+	msg.addr = addr;
-+
-+	return peci_command(adapter, PECI_CMD_PING, &msg);
-+}
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id *
-+peci_of_match_device(const struct of_device_id *matches,
-+		     struct peci_client *client)
-+{
-+	if (!(client && matches))
-+		return NULL;
-+
-+	return of_match_device(matches, &client->dev);
-+}
-+#endif
-+
-+static const struct peci_device_id *
-+peci_match_id(const struct peci_device_id *id, struct peci_client *client)
-+{
-+	if (!(id && client))
-+		return NULL;
-+
-+	while (id->name[0]) {
-+		if (strcmp(client->name, id->name) == 0)
-+			return id;
-+		id++;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int peci_device_match(struct device *dev, struct device_driver *drv)
-+{
-+	struct peci_client *client = peci_verify_client(dev);
-+	struct peci_driver *driver;
-+
-+	/* Attempt an OF style match */
-+	if (peci_of_match_device(drv->of_match_table, client))
-+		return 1;
-+
-+	driver = to_peci_driver(drv);
-+
-+	if (peci_match_id(driver->id_table, client))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int peci_device_probe(struct device *dev)
-+{
-+	struct peci_client	*client = peci_verify_client(dev);
-+	struct peci_driver	*driver;
-+	int status = -EINVAL;
-+
-+	if (!client)
-+		return 0;
-+
-+	if (!peci_of_match_device(dev->driver->of_match_table, client))
-+		return -ENODEV;
-+
-+	dev_dbg(dev, "%s: name:%s\n", __func__, client->name);
-+
-+	driver = to_peci_driver(dev->driver);
-+	if (driver->probe)
-+		status = driver->probe(client);
-+
-+	return status;
-+}
-+
-+static int peci_device_remove(struct device *dev)
-+{
-+	struct peci_client *client = peci_verify_client(dev);
-+	struct peci_driver *driver;
-+	int status = 0;
-+
-+	if (!client || !dev->driver)
-+		return 0;
-+
-+	driver = to_peci_driver(dev->driver);
-+	if (driver->remove) {
-+		dev_dbg(dev, "%s: name:%s\n", __func__, client->name);
-+		status = driver->remove(client);
-+	}
-+
-+	return status;
-+}
-+
-+static void peci_device_shutdown(struct device *dev)
-+{
-+	struct peci_client *client = peci_verify_client(dev);
-+	struct peci_driver *driver;
-+
-+	if (!client || !dev->driver)
-+		return;
-+
-+	dev_dbg(dev, "%s: name:%s\n", __func__, client->name);
-+
-+	driver = to_peci_driver(dev->driver);
-+	if (driver->shutdown)
-+		driver->shutdown(client);
-+}
-+
-+static struct bus_type peci_bus_type = {
-+	.name		= "peci",
-+	.match		= peci_device_match,
-+	.probe		= peci_device_probe,
-+	.remove		= peci_device_remove,
-+	.shutdown	= peci_device_shutdown,
-+};
-+
-+static void peci_unregister_device(struct peci_client *client)
-+{
-+	if (client->dev.of_node)
-+		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
-+
-+	device_unregister(&client->dev);
-+}
-+
-+static int peci_check_addr_validity(u8 addr)
-+{
-+	if (addr < PECI_BASE_ADDR && addr > PECI_BASE_ADDR + PECI_OFFSET_MAX)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int peci_check_client_busy(struct device *dev, void *client_new_p)
-+{
-+	struct peci_client *client = peci_verify_client(dev);
-+	struct peci_client *client_new = client_new_p;
-+
-+	if (client && client->addr == client_new->addr &&
-+	    client->idx == client_new->idx)
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
-+static struct peci_client *peci_new_device(struct peci_adapter *adapter,
-+					   struct peci_board_info const *info)
-+{
-+	struct peci_client *client;
-+	int rc;
-+
-+	client = kzalloc(sizeof(*client), GFP_KERNEL);
-+	if (!client)
-+		return NULL;
-+
-+	client->adapter = adapter;
-+	client->addr = info->addr;
-+	strlcpy(client->name, info->type, sizeof(client->name));
-+
-+	rc = peci_check_addr_validity(client->addr);
-+	if (rc) {
-+		dev_err(&adapter->dev, "Invalid PECI CPU address 0x%02hx\n",
-+			client->addr);
-+		goto err_free_client_silent;
-+	}
-+
-+	/* Check client's online status */
-+	rc = peci_detect(adapter, client->addr);
-+	if (rc)
-+		goto err_free_client;
-+
-+	for (client->idx = 0; client->idx < PECI_DEV_IDX_MAX; client->idx++) {
-+		rc = device_for_each_child(&adapter->dev, client,
-+					   peci_check_client_busy);
-+		if (!rc)
-+			break;
-+	}
-+
-+	if (rc || client->idx == PECI_DEV_IDX_MAX)
-+		goto err_free_client;
-+
-+	client->dev.parent = &client->adapter->dev;
-+	client->dev.bus = &peci_bus_type;
-+	client->dev.type = &peci_client_type;
-+	client->dev.of_node = info->of_node;
-+	dev_set_name(&client->dev, "%d-%02x:%02x",
-+		     adapter->nr, client->addr, client->idx);
-+
-+	rc = device_register(&client->dev);
-+	if (rc)
-+		goto err_free_client;
-+
-+	dev_dbg(&adapter->dev, "client [%s] registered with bus id %s\n",
-+		client->name, dev_name(&client->dev));
-+
-+	return client;
-+
-+err_free_client:
-+	dev_err(&adapter->dev,
-+		"Failed to register peci client %s at 0x%02x (%d)\n",
-+		client->name, client->addr, rc);
-+err_free_client_silent:
-+	kfree(client);
-+	return NULL;
-+}
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static struct peci_client *peci_of_register_device(struct peci_adapter *adapter,
-+						   struct device_node *node)
-+{
-+	struct peci_board_info info = {};
-+	struct peci_client *result;
-+	const __be32 *addr_be;
-+	u32 addr;
-+	int len;
-+
-+	dev_dbg(&adapter->dev, "register %s\n", node->full_name);
-+
-+	if (of_modalias_node(node, info.type, sizeof(info.type)) < 0) {
-+		dev_err(&adapter->dev, "modalias failure on %s\n",
-+			node->full_name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	addr_be = of_get_property(node, "reg", &len);
-+	if (!addr_be || len < sizeof(*addr_be)) {
-+		dev_err(&adapter->dev, "invalid reg on %s\n",
-+			node->full_name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	addr = be32_to_cpup(addr_be);
-+
-+	if (peci_check_addr_validity(addr)) {
-+		dev_err(&adapter->dev, "invalid addr=%x on %s\n",
-+			addr, node->full_name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	info.addr = addr;
-+	info.of_node = of_node_get(node);
-+
-+	result = peci_new_device(adapter, &info);
-+	if (!result)
-+		result = ERR_PTR(-EINVAL);
-+
-+	of_node_put(node);
-+	return result;
-+}
-+
-+static void peci_of_register_devices(struct peci_adapter *adapter)
-+{
-+	struct device_node *bus, *node;
-+	struct peci_client *client;
-+
-+	/* Only register child devices if the adapter has a node pointer set */
-+	if (!adapter->dev.of_node)
-+		return;
-+
-+	bus = of_get_child_by_name(adapter->dev.of_node, "peci-bus");
-+	if (!bus)
-+		bus = of_node_get(adapter->dev.of_node);
-+
-+	for_each_available_child_of_node(bus, node) {
-+		if (of_node_test_and_set_flag(node, OF_POPULATED))
-+			continue;
-+
-+		client = peci_of_register_device(adapter, node);
-+		if (IS_ERR(client)) {
-+			dev_warn(&adapter->dev,
-+				 "Failed to create PECI device for %s\n",
-+				 node->full_name);
-+			of_node_clear_flag(node, OF_POPULATED);
-+		}
-+	}
-+
-+	of_node_put(bus);
-+}
-+
-+static int peci_of_match_node(struct device *dev, void *data)
-+{
-+	return dev->of_node == data;
-+}
-+
-+/* must call put_device() when done with returned peci_client device */
-+static struct peci_client *peci_of_find_device(struct device_node *node)
-+{
-+	struct peci_client *client;
-+	struct device *dev;
-+
-+	dev = bus_find_device(&peci_bus_type, NULL, node, peci_of_match_node);
-+	if (!dev)
-+		return NULL;
-+
-+	client = peci_verify_client(dev);
-+	if (!client)
-+		put_device(dev);
-+
-+	return client;
-+}
-+
-+/* must call put_device() when done with returned peci_adapter device */
-+static struct peci_adapter *peci_of_find_adapter(struct device_node *node)
-+{
-+	struct peci_adapter *adapter;
-+	struct device *dev;
-+
-+	dev = bus_find_device(&peci_bus_type, NULL, node, peci_of_match_node);
-+	if (!dev)
-+		return NULL;
-+
-+	adapter = peci_verify_adapter(dev);
-+	if (!adapter)
-+		put_device(dev);
-+
-+	return adapter;
-+}
-+#else
-+static void peci_of_register_devices(struct peci_adapter *adapter) { }
-+#endif /* CONFIG_OF */
-+
-+#if IS_ENABLED(CONFIG_OF_DYNAMIC)
-+static int peci_of_notify(struct notifier_block *nb,
-+			  unsigned long action,
-+			  void *arg)
-+{
-+	struct of_reconfig_data *rd = arg;
-+	struct peci_adapter *adapter;
-+	struct peci_client *client;
-+
-+	switch (of_reconfig_get_state_change(action, rd)) {
-+	case OF_RECONFIG_CHANGE_ADD:
-+		adapter = peci_of_find_adapter(rd->dn->parent);
-+		if (!adapter)
-+			return NOTIFY_OK;	/* not for us */
-+
-+		if (of_node_test_and_set_flag(rd->dn, OF_POPULATED)) {
-+			put_device(&adapter->dev);
-+			return NOTIFY_OK;
-+		}
-+
-+		client = peci_of_register_device(adapter, rd->dn);
-+		put_device(&adapter->dev);
-+
-+		if (IS_ERR(client)) {
-+			dev_err(&adapter->dev,
-+				"failed to create client for '%s'\n",
-+				rd->dn->full_name);
-+			of_node_clear_flag(rd->dn, OF_POPULATED);
-+			return notifier_from_errno(PTR_ERR(client));
-+		}
-+		break;
-+	case OF_RECONFIG_CHANGE_REMOVE:
-+		/* already depopulated? */
-+		if (!of_node_check_flag(rd->dn, OF_POPULATED))
-+			return NOTIFY_OK;
-+
-+		/* find our device by node */
-+		client = peci_of_find_device(rd->dn);
-+		if (!client)
-+			return NOTIFY_OK;	/* no? not meant for us */
-+
-+		/* unregister takes one ref away */
-+		peci_unregister_device(client);
-+
-+		/* and put the reference of the find */
-+		put_device(&client->dev);
-+		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block peci_of_notifier = {
-+	.notifier_call = peci_of_notify,
-+};
-+#else
-+extern struct notifier_block peci_of_notifier;
-+#endif /* CONFIG_OF_DYNAMIC */
-+
-+static int peci_register_adapter(struct peci_adapter *adapter)
-+{
-+	int rc = -EINVAL;
-+
-+	/* Can't register until after driver model init */
-+	if (WARN_ON(!is_registered))
-+		goto err_free_idr;
-+
-+	if (WARN(!adapter->name[0], "peci adapter has no name"))
-+		goto err_free_idr;
-+
-+	if (WARN(!adapter->xfer, "peci adapter has no xfer function\n"))
-+		goto err_free_idr;
-+
-+	rt_mutex_init(&adapter->bus_lock);
-+
-+	dev_set_name(&adapter->dev, "peci%d", adapter->nr);
-+	adapter->dev.bus = &peci_bus_type;
-+	adapter->dev.type = &peci_adapter_type;
-+	device_initialize(&adapter->dev);
-+
-+	/* cdev */
-+	cdev_init(&adapter->cdev, &peci_fops);
-+	adapter->cdev.owner = THIS_MODULE;
-+	adapter->cdev.kobj.parent = &adapter->dev.kobj;
-+	adapter->dev.devt = MKDEV(MAJOR(peci_devt), adapter->nr);
-+	rc = cdev_add(&adapter->cdev, adapter->dev.devt, 1);
-+	if (rc) {
-+		pr_err("adapter '%s': can't add cdev (%d)\n",
-+		       adapter->name, rc);
-+		goto err_free_idr;
-+	}
-+	rc = device_add(&adapter->dev);
-+	if (rc) {
-+		pr_err("adapter '%s': can't add device (%d)\n",
-+		       adapter->name, rc);
-+		goto err_del_cdev;
-+	}
-+
-+	dev_dbg(&adapter->dev, "adapter [%s] registered\n", adapter->name);
-+
-+	/* create pre-declared device nodes */
-+	peci_of_register_devices(adapter);
-+
-+	return 0;
-+
-+err_del_cdev:
-+	cdev_del(&adapter->cdev);
-+err_free_idr:
-+	mutex_lock(&core_lock);
-+	idr_remove(&peci_adapter_idr, adapter->nr);
-+	mutex_unlock(&core_lock);
-+	return rc;
-+}
-+
-+static int peci_add_numbered_adapter(struct peci_adapter *adapter)
-+{
-+	int id;
-+
-+	mutex_lock(&core_lock);
-+	id = idr_alloc(&peci_adapter_idr, adapter,
-+		       adapter->nr, adapter->nr + 1, GFP_KERNEL);
-+	mutex_unlock(&core_lock);
-+	if (WARN(id < 0, "couldn't get idr"))
-+		return id == -ENOSPC ? -EBUSY : id;
-+
-+	return peci_register_adapter(adapter);
-+}
-+
-+int peci_add_adapter(struct peci_adapter *adapter)
-+{
-+	struct device *dev = &adapter->dev;
-+	int id;
-+
-+	if (dev->of_node) {
-+		id = of_alias_get_id(dev->of_node, "peci");
-+		if (id >= 0) {
-+			adapter->nr = id;
-+			return peci_add_numbered_adapter(adapter);
-+		}
-+	}
-+
-+	mutex_lock(&core_lock);
-+	id = idr_alloc(&peci_adapter_idr, adapter, 0, 0, GFP_KERNEL);
-+	mutex_unlock(&core_lock);
-+	if (WARN(id < 0, "couldn't get idr"))
-+		return id;
-+
-+	adapter->nr = id;
-+
-+	return peci_register_adapter(adapter);
-+}
-+EXPORT_SYMBOL_GPL(peci_add_adapter);
-+
-+static int peci_unregister_client(struct device *dev, void *dummy)
-+{
-+	struct peci_client *client = peci_verify_client(dev);
-+
-+	if (client)
-+		peci_unregister_device(client);
-+
-+	return 0;
-+}
-+
-+void peci_del_adapter(struct peci_adapter *adapter)
-+{
-+	struct peci_adapter *found;
-+
-+	/* First make sure that this adapter was ever added */
-+	mutex_lock(&core_lock);
-+	found = idr_find(&peci_adapter_idr, adapter->nr);
-+	mutex_unlock(&core_lock);
-+
-+	if (found != adapter)
-+		return;
-+
-+	/**
-+	 * Detach any active clients. This can't fail, thus we do not
-+	 * check the returned value.
-+	 */
-+	device_for_each_child(&adapter->dev, NULL, peci_unregister_client);
-+
-+	/* device name is gone after device_unregister */
-+	dev_dbg(&adapter->dev, "adapter [%s] unregistered\n", adapter->name);
-+
-+	device_unregister(&adapter->dev);
-+
-+	/* free cdev */
-+	cdev_del(&adapter->cdev);
-+
-+	/* free bus id */
-+	mutex_lock(&core_lock);
-+	idr_remove(&peci_adapter_idr, adapter->nr);
-+	mutex_unlock(&core_lock);
-+}
-+EXPORT_SYMBOL_GPL(peci_del_adapter);
-+
-+/**
-+ * A peci_driver is used with one or more peci_client (device) nodes to access
-+ * peci clients, on a bus instance associated with some peci_adapter.
-+ */
-+int peci_register_driver(struct module *owner, struct peci_driver *driver)
-+{
-+	int rc;
-+
-+	/* Can't register until after driver model init */
-+	if (WARN_ON(!is_registered))
-+		return -EAGAIN;
-+
-+	/* add the driver to the list of peci drivers in the driver core */
-+	driver->driver.owner = owner;
-+	driver->driver.bus = &peci_bus_type;
-+
-+	/**
-+	 * When registration returns, the driver core
-+	 * will have called probe() for all matching-but-unbound devices.
-+	 */
-+	rc = driver_register(&driver->driver);
-+	if (rc)
-+		return rc;
-+
-+	pr_debug("driver [%s] registered\n", driver->driver.name);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(peci_register_driver);
-+
-+void peci_del_driver(struct peci_driver *driver)
-+{
-+	driver_unregister(&driver->driver);
-+	pr_debug("driver [%s] unregistered\n", driver->driver.name);
-+}
-+EXPORT_SYMBOL_GPL(peci_del_driver);
-+
-+static int __init peci_init(void)
-+{
-+	int ret;
-+
-+	ret = bus_register(&peci_bus_type);
-+	if (ret < 0) {
-+		pr_err("peci: Failed to register PECI bus type!\n");
-+		return ret;
-+	}
-+
-+	ret = alloc_chrdev_region(&peci_devt, 0, PECI_CDEV_MAX, "peci");
-+	if (ret < 0) {
-+		pr_err("peci: Failed to allocate chr dev region!\n");
-+		bus_unregister(&peci_bus_type);
-+		return ret;
-+	}
-+
-+	crc8_populate_msb(peci_crc8_table, PECI_CRC8_POLYNOMIAL);
-+
-+	if (IS_ENABLED(CONFIG_OF_DYNAMIC))
-+		WARN_ON(of_reconfig_notifier_register(&peci_of_notifier));
-+
-+	is_registered = true;
-+
-+	return 0;
-+}
-+
-+static void __exit peci_exit(void)
-+{
-+	if (IS_ENABLED(CONFIG_OF_DYNAMIC))
-+		WARN_ON(of_reconfig_notifier_unregister(&peci_of_notifier));
-+
-+	unregister_chrdev_region(peci_devt, PECI_CDEV_MAX);
-+	bus_unregister(&peci_bus_type);
-+}
-+
-+postcore_initcall(peci_init);
-+module_exit(peci_exit);
-+
-+MODULE_AUTHOR("Jason M Biils <jason.m.bills@linux.intel.com>");
-+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-+MODULE_DESCRIPTION("PECI bus core module");
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/peci.h b/include/linux/peci.h
-new file mode 100644
-index 000000000000..8730deb6673c
---- /dev/null
-+++ b/include/linux/peci.h
-@@ -0,0 +1,107 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2018 Intel Corporation */
-+
-+#ifndef __LINUX_PECI_H
-+#define __LINUX_PECI_H
-+
-+#include <linux/cdev.h>
-+#include <linux/device.h>
-+#include <linux/peci-ioctl.h>
-+#include <linux/rtmutex.h>
-+
-+#define PECI_BUFFER_SIZE  32
-+#define PECI_NAME_SIZE    32
-+
-+struct peci_xfer_msg {
-+	u8	addr;
-+	u8	tx_len;
-+	u8	rx_len;
-+	u8	tx_buf[PECI_BUFFER_SIZE];
-+	u8	rx_buf[PECI_BUFFER_SIZE];
-+} __attribute__((__packed__));
-+
-+struct peci_board_info {
-+	char			type[PECI_NAME_SIZE];
-+	u8			addr;	/* CPU client address */
-+	struct device_node	*of_node;
-+};
-+
-+struct peci_adapter {
-+	struct module	*owner;
-+	struct rt_mutex	bus_lock;
-+	struct device	dev;
-+	struct cdev	cdev;
-+	int		nr;
-+	char		name[PECI_NAME_SIZE];
-+	int		(*xfer)(struct peci_adapter *adapter,
-+				struct peci_xfer_msg *msg);
-+	uint		cmd_mask;
-+};
-+
-+static inline struct peci_adapter *to_peci_adapter(void *d)
-+{
-+	return container_of(d, struct peci_adapter, dev);
-+}
-+
-+static inline void *peci_get_adapdata(const struct peci_adapter *adapter)
-+{
-+	return dev_get_drvdata(&adapter->dev);
-+}
-+
-+static inline void peci_set_adapdata(struct peci_adapter *adapter, void *data)
-+{
-+	dev_set_drvdata(&adapter->dev, data);
-+}
-+
-+struct peci_client {
-+	struct device		dev;		/* the device structure */
-+	struct peci_adapter	*adapter;	/* the adapter we sit on */
-+	u8			addr;		/* CPU client address */
-+	u8			idx;		/* device index */
-+	char			name[PECI_NAME_SIZE];
-+};
-+
-+static inline struct peci_client *to_peci_client(void *d)
-+{
-+	return container_of(d, struct peci_client, dev);
-+}
-+
-+struct peci_device_id {
-+	char		name[PECI_NAME_SIZE];
-+	kernel_ulong_t	driver_data;	/* Data private to the driver */
-+};
-+
-+struct peci_driver {
-+	int				(*probe)(struct peci_client *client);
-+	int				(*remove)(struct peci_client *client);
-+	void				(*shutdown)(struct peci_client *client);
-+	struct device_driver		driver;
-+	const struct peci_device_id	*id_table;
-+};
-+
-+static inline struct peci_driver *to_peci_driver(void *d)
-+{
-+	return container_of(d, struct peci_driver, driver);
-+}
-+
-+/**
-+ * module_peci_driver() - Helper macro for registering a modular PECI driver
-+ * @__peci_driver: peci_driver struct
-+ *
-+ * Helper macro for PECI drivers which do not do anything special in module
-+ * init/exit. This eliminates a lot of boilerplate. Each module may only
-+ * use this macro once, and calling it replaces module_init() and module_exit()
-+ */
-+#define module_peci_driver(__peci_driver) \
-+	module_driver(__peci_driver, peci_add_driver, peci_del_driver)
-+
-+/* use a define to avoid include chaining to get THIS_MODULE */
-+#define peci_add_driver(driver) peci_register_driver(THIS_MODULE, driver)
-+
-+int  peci_register_driver(struct module *owner, struct peci_driver *drv);
-+void peci_del_driver(struct peci_driver *driver);
-+int  peci_add_adapter(struct peci_adapter *adapter);
-+void peci_del_adapter(struct peci_adapter *adapter);
-+int  peci_command(struct peci_adapter *adpater, enum peci_cmd cmd, void *vmsg);
-+
-+#endif /* __LINUX_PECI_H */
-diff --git a/include/uapi/linux/peci-ioctl.h b/include/uapi/linux/peci-ioctl.h
-new file mode 100644
-index 000000000000..ec73847b9400
---- /dev/null
-+++ b/include/uapi/linux/peci-ioctl.h
-@@ -0,0 +1,200 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2018 Intel Corporation */
-+
-+#ifndef __PECI_IOCTL_H
-+#define __PECI_IOCTL_H
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+/* Base Address of 48d */
-+#define PECI_BASE_ADDR  0x30  /* The PECI client's default address of 0x30 */
-+#define PECI_OFFSET_MAX 8     /* Max numver of CPU clients */
-+
-+/* PCI Access */
-+#define MAX_PCI_READ_LEN 24   /* Number of bytes of the PCI Space read */
-+
-+#define PCI_BUS0_CPU0      0x00
-+#define PCI_BUS0_CPU1      0x80
-+#define PCI_CPUBUSNO_BUS   0x00
-+#define PCI_CPUBUSNO_DEV   0x08
-+#define PCI_CPUBUSNO_FUNC  0x02
-+#define PCI_CPUBUSNO       0xcc
-+#define PCI_CPUBUSNO_1     0xd0
-+#define PCI_CPUBUSNO_VALID 0xd4
-+
-+/* Package Identifier Read Parameter Value */
-+#define PKG_ID_CPU_ID               0x0000  /* CPUID Info */
-+#define PKG_ID_PLATFORM_ID          0x0001  /* Platform ID */
-+#define PKG_ID_UNCORE_ID            0x0002  /* Uncore Device ID */
-+#define PKG_ID_MAX_THREAD_ID        0x0003  /* Max Thread ID */
-+#define PKG_ID_MICROCODE_REV        0x0004  /* CPU Microcode Update Revision */
-+#define PKG_ID_MACHINE_CHECK_STATUS 0x0005  /* Machine Check Status */
-+
-+/* RdPkgConfig Index */
-+#define MBX_INDEX_CPU_ID            0   /* Package Identifier Read */
-+#define MBX_INDEX_VR_DEBUG          1   /* VR Debug */
-+#define MBX_INDEX_PKG_TEMP_READ     2   /* Package Temperature Read */
-+#define MBX_INDEX_ENERGY_COUNTER    3   /* Energy counter */
-+#define MBX_INDEX_ENERGY_STATUS     4   /* DDR Energy Status */
-+#define MBX_INDEX_WAKE_MODE_BIT     5   /* "Wake on PECI" Mode bit */
-+#define MBX_INDEX_EPI               6   /* Efficient Performance Indication */
-+#define MBX_INDEX_PKG_RAPL_PERF     8   /* Pkg RAPL Performance Status Read */
-+#define MBX_INDEX_PER_CORE_DTS_TEMP 9   /* Per Core DTS Temperature Read */
-+#define MBX_INDEX_DTS_MARGIN        10  /* DTS thermal margin */
-+#define MBX_INDEX_SKT_PWR_THRTL_DUR 11  /* Socket Power Throttled Duration */
-+#define MBX_INDEX_CFG_TDP_CONTROL   12  /* TDP Config Control */
-+#define MBX_INDEX_CFG_TDP_LEVELS    13  /* TDP Config Levels */
-+#define MBX_INDEX_DDR_DIMM_TEMP     14  /* DDR DIMM Temperature */
-+#define MBX_INDEX_CFG_ICCMAX        15  /* Configurable ICCMAX */
-+#define MBX_INDEX_TEMP_TARGET       16  /* Temperature Target Read */
-+#define MBX_INDEX_CURR_CFG_LIMIT    17  /* Current Config Limit */
-+#define MBX_INDEX_DIMM_TEMP_READ    20  /* Package Thermal Status Read */
-+#define MBX_INDEX_DRAM_IMC_TMP_READ 22  /* DRAM IMC Temperature Read */
-+#define MBX_INDEX_DDR_CH_THERM_STAT 23  /* DDR Channel Thermal Status */
-+#define MBX_INDEX_PKG_POWER_LIMIT1  26  /* Package Power Limit1 */
-+#define MBX_INDEX_PKG_POWER_LIMIT2  27  /* Package Power Limit2 */
-+#define MBX_INDEX_TDP               28  /* Thermal design power minimum */
-+#define MBX_INDEX_TDP_HIGH          29  /* Thermal design power maximum */
-+#define MBX_INDEX_TDP_UNITS         30  /* Units for power/energy registers */
-+#define MBX_INDEX_RUN_TIME          31  /* Accumulated Run Time */
-+#define MBX_INDEX_CONSTRAINED_TIME  32  /* Thermally Constrained Time Read */
-+#define MBX_INDEX_TURBO_RATIO       33  /* Turbo Activation Ratio */
-+#define MBX_INDEX_DDR_RAPL_PL1      34  /* DDR RAPL PL1 */
-+#define MBX_INDEX_DDR_PWR_INFO_HIGH 35  /* DRAM Power Info Read (high) */
-+#define MBX_INDEX_DDR_PWR_INFO_LOW  36  /* DRAM Power Info Read (low) */
-+#define MBX_INDEX_DDR_RAPL_PL2      37  /* DDR RAPL PL2 */
-+#define MBX_INDEX_DDR_RAPL_STATUS   38  /* DDR RAPL Performance Status */
-+#define MBX_INDEX_DDR_HOT_ABSOLUTE  43  /* DDR Hottest Dimm Absolute Temp */
-+#define MBX_INDEX_DDR_HOT_RELATIVE  44  /* DDR Hottest Dimm Relative Temp */
-+#define MBX_INDEX_DDR_THROTTLE_TIME 45  /* DDR Throttle Time */
-+#define MBX_INDEX_DDR_THERM_STATUS  46  /* DDR Thermal Status */
-+#define MBX_INDEX_TIME_AVG_TEMP     47  /* Package time-averaged temperature */
-+#define MBX_INDEX_TURBO_RATIO_LIMIT 49  /* Turbo Ratio Limit Read */
-+#define MBX_INDEX_HWP_AUTO_OOB      53  /* HWP Autonomous Out-of-band */
-+#define MBX_INDEX_DDR_WARM_BUDGET   55  /* DDR Warm Power Budget */
-+#define MBX_INDEX_DDR_HOT_BUDGET    56  /* DDR Hot Power Budget */
-+#define MBX_INDEX_PKG_PSYS_PWR_LIM3 57  /* Package/Psys Power Limit3 */
-+#define MBX_INDEX_PKG_PSYS_PWR_LIM1 58  /* Package/Psys Power Limit1 */
-+#define MBX_INDEX_PKG_PSYS_PWR_LIM2 59  /* Package/Psys Power Limit2 */
-+#define MBX_INDEX_PKG_PSYS_PWR_LIM4 60  /* Package/Psys Power Limit4 */
-+#define MBX_INDEX_PERF_LIMIT_REASON 65  /* Performance Limit Reasons */
-+
-+/* WrPkgConfig Index */
-+#define MBX_INDEX_DIMM_AMBIENT 19
-+#define MBX_INDEX_DIMM_TEMP    24
-+
-+enum peci_cmd {
-+	PECI_CMD_XFER = 0,
-+	PECI_CMD_PING,
-+	PECI_CMD_GET_DIB,
-+	PECI_CMD_GET_TEMP,
-+	PECI_CMD_RD_PKG_CFG,
-+	PECI_CMD_WR_PKG_CFG,
-+	PECI_CMD_RD_IA_MSR,
-+	PECI_CMD_WR_IA_MSR,
-+	PECI_CMD_RD_PCI_CFG,
-+	PECI_CMD_WR_PCI_CFG,
-+	PECI_CMD_RD_PCI_CFG_LOCAL,
-+	PECI_CMD_WR_PCI_CFG_LOCAL,
-+	PECI_CMD_MAX
-+};
-+
-+struct peci_ping_msg {
-+	__u8 addr;
-+} __attribute__((__packed__));
-+
-+struct peci_get_dib_msg {
-+	__u8  addr;
-+	__u32 dib;
-+} __attribute__((__packed__));
-+
-+struct peci_get_temp_msg {
-+	__u8  addr;
-+	__s16 temp_raw;
-+} __attribute__((__packed__));
-+
-+struct peci_rd_pkg_cfg_msg {
-+	__u8  addr;
-+	__u8  index;
-+	__u16 param;
-+	__u8  rx_len;
-+	__u8  pkg_config[4];
-+} __attribute__((__packed__));
-+
-+struct peci_wr_pkg_cfg_msg {
-+	__u8  addr;
-+	__u8  index;
-+	__u16 param;
-+	__u8  tx_len;
-+	__u32 value;
-+} __attribute__((__packed__));
-+
-+struct peci_rd_ia_msr_msg {
-+	__u8  addr;
-+	__u8  thread_id;
-+	__u16 address;
-+	__u64 value;
-+} __attribute__((__packed__));
-+
-+struct peci_rd_pci_cfg_msg {
-+	__u8  addr;
-+	__u8  bus;
-+	__u8  device;
-+	__u8  function;
-+	__u16 reg;
-+	__u8  pci_config[4];
-+} __attribute__((__packed__));
-+
-+struct peci_rd_pci_cfg_local_msg {
-+	__u8  addr;
-+	__u8  bus;
-+	__u8  device;
-+	__u8  function;
-+	__u16 reg;
-+	__u8  rx_len;
-+	__u8  pci_config[4];
-+} __attribute__((__packed__));
-+
-+struct peci_wr_pci_cfg_local_msg {
-+	__u8  addr;
-+	__u8  bus;
-+	__u8  device;
-+	__u8  function;
-+	__u16 reg;
-+	__u8  tx_len;
-+	__u32 value;
-+} __attribute__((__packed__));
-+
-+#define PECI_IOC_BASE  0xb6
-+
-+#define PECI_IOC_PING \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_PING, struct peci_ping_msg)
-+
-+#define PECI_IOC_GET_DIB \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_GET_DIB, struct peci_get_dib_msg)
-+
-+#define PECI_IOC_GET_TEMP \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_GET_TEMP, struct peci_get_temp_msg)
-+
-+#define PECI_IOC_RD_PKG_CFG \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_RD_PKG_CFG, struct peci_rd_pkg_cfg_msg)
-+
-+#define PECI_IOC_WR_PKG_CFG \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_WR_PKG_CFG, struct peci_wr_pkg_cfg_msg)
-+
-+#define PECI_IOC_RD_IA_MSR \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_RD_IA_MSR, struct peci_rd_ia_msr_msg)
-+
-+#define PECI_IOC_RD_PCI_CFG \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_RD_PCI_CFG, struct peci_rd_pci_cfg_msg)
-+
-+#define PECI_IOC_RD_PCI_CFG_LOCAL \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_RD_PCI_CFG_LOCAL, \
-+	      struct peci_rd_pci_cfg_local_msg)
-+
-+#define PECI_IOC_WR_PCI_CFG_LOCAL \
-+	_IOWR(PECI_IOC_BASE, PECI_CMD_WR_PCI_CFG_LOCAL, \
-+	      struct peci_wr_pci_cfg_local_msg)
-+
-+#endif /* __PECI_IOCTL_H */
--- 
-2.16.2
+--d6Gm4EdcadzBjdND
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
+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
+rZajYyszEoQYz1cmdHcCaWGX492phY3y4LHLLktR/7k3nDZUG6Tp2hp1YaysVyTilcF0sKKP
+eVuvtg8GXQaJYReIw0Oj+6mnHWsKDaZozAc+6HSN1CQxYDihTTaM7oeRXbOeXWIcKFnMX4kw
+DMzUbdm3n89fNgwEqO1DYQkJDPrnUnHqU8rueIoNq/RwvL4o3IgbO38R/l17uYk0EfnvlPD7
+Kc0URG4cEf+djF4ukqgqEIZpjhFXx73sfGtSvvz4+Pzly9O359dfP0SHjNGxNeP62VodT+wZ
+t8d5z25VglapJatALbS1TnfUiw8kdKCI8ThXUkeufSF2SrzTB5zGd+ClngmGncajtCP6C8In
+A9p1msRqdMSFaPOL6LV9cqCHNobNWPOwLr4Oo6vjGL17v+IAGqhKloKe7Y9pQm0vZw7qtAXB
+fEzW1m7X3nOdU2OWB91queHVBA7Q1vCNCaDLhK3nmkC9VI2gEoEeEO5d3zM/4kXsEjnMZCh2
+rTdBGydhGOyilWY4XRKq7TFB4WOu1NbtucvHl4rpl6cfZBgCMR1TyqOKmMJ61DExxjKtJbpy
+3vRWIPX/eyNq3NWwTco3n56/P3/79GPz+m3DU842f/76udkXDyISGs82X5/+nm5cn778eN38
++bz59vz86fnT/2zQX7ic0un5y/fN59e3zdfXt+fNy7fPr+rAHfm0hh+I+kWFDOFOFhQX9RJd
+kEQ0HDKilJJ00iWHZE8nfgC1Ia1LGmQ882RTORmDv5NO7+8J5FnWOnRIbJ3NYh0ms/3Rlw0/
+1XYhNzEmRdJntAIks9XVSvBfmfEhacv3kxu343do5pRez2XuvIK224cYkZHutj6Z1xqcIOzr
+018v3/4yY6cKiZGlsd5BYrOijRegs8Zm0S0+ErM1k29eF3LNlwdqX55+whD/ujl++fW8KZ7+
+fn6bpkcppjO019fXT8/yFBaJoCvZuipoDVosg5eU1uZGkA5CO4jZKHRM2QtEWigLAOoE+4Ui
+l5tahMY0rsZFn3AeeY4x2o0403NSqpZgkWt5ySwup0aU9C4nJGLWd/3VLM+Z5/QGRohxVtNX
+SMNCf6w79TW8IOsNOA329BalcmyqAdO85ooWz7RQ62IJ7DImDpk01Q2P/DLooyK5aVKHcfjv
+LF/Ei+JppevaBNS2M9u3qvmyKEh9SVpoA42My5NKyU8874Zl68CuXa9apw+jCI+dDxdLW97g
+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
+
+--d6Gm4EdcadzBjdND--
