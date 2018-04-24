@@ -1,13 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga04.intel.com ([192.55.52.120]:55443 "EHLO mga04.intel.com"
+Received: from mga07.intel.com ([134.134.136.100]:45485 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751726AbeDXQCG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 24 Apr 2018 12:02:06 -0400
-Message-ID: <1524585717.21176.504.camel@linux.intel.com>
+        id S1750868AbeDXQ3w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 24 Apr 2018 12:29:52 -0400
 Subject: Re: [PATCH v3 03/10] drivers/peci: Add support for PECI bus driver
  core
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Alan Cox <alan@linux.intel.com>,
         Andrew Jeffery <andrew@aj.id.au>, Andrew Lunn <andrew@lunn.ch>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -31,28 +29,34 @@ To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-Date: Tue, 24 Apr 2018 19:01:57 +0300
-In-Reply-To: <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
 References: <20180410183212.16787-1-jae.hyun.yoo@linux.intel.com>
-         <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+ <20180410183212.16787-4-jae.hyun.yoo@linux.intel.com>
+ <1524585717.21176.504.camel@linux.intel.com>
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Message-ID: <af70513f-a827-9aaa-1acf-629ae1692d7c@linux.intel.com>
+Date: Tue, 24 Apr 2018 09:29:48 -0700
+MIME-Version: 1.0
+In-Reply-To: <1524585717.21176.504.camel@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 2018-04-10 at 11:32 -0700, Jae Hyun Yoo wrote:
-> This commit adds driver implementation for PECI bus core into linux
-> driver framework.
+On 4/24/2018 9:01 AM, Andy Shevchenko wrote:
+> On Tue, 2018-04-10 at 11:32 -0700, Jae Hyun Yoo wrote:
+>> This commit adds driver implementation for PECI bus core into linux
+>> driver framework.
+>>
+> 
+> All comments you got for patch 6 are applicable here.
+> 
+> And perhaps in the rest of the series.
+> 
+> The rule of thumb: when you get even single comment in a certain place,
+> re-check _entire_ series for the same / similar patterns!
 > 
 
-All comments you got for patch 6 are applicable here.
+Thanks for your advice. I'll keep that in mind.
 
-And perhaps in the rest of the series.
-
-The rule of thumb: when you get even single comment in a certain place,
-re-check _entire_ series for the same / similar patterns!
-
--- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+Jae
