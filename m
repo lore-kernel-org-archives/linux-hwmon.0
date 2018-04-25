@@ -1,23 +1,22 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:52079 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:38376 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752884AbeDYMWj (ORCPT
+        with ESMTP id S1753142AbeDYM11 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Apr 2018 08:22:39 -0400
+        Wed, 25 Apr 2018 08:27:27 -0400
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Subject: [PATCH v2] hwmon: (k10temp) Add temperature offset for Ryzen 2700X
-Date: Wed, 25 Apr 2018 05:22:34 -0700
-Message-Id: <1524658954-5673-1-git-send-email-linux@roeck-us.net>
+Date: Wed, 25 Apr 2018 05:27:21 -0700
+Message-Id: <1524659241-17197-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Ryzen 2700X has a temperature offset of 10 degrees C.
-On some systems, it has an additional temperature offset of 49 degrees C.
-Experiments show that this offset is enabled if bit 20 of the 'Reported
-Temperature Control' register is set. Take this into account as well.
+Ryzen 2700X has a temperature offset of 10 degrees C. If bit 19 of the
+Temperature Control register is set, there is an additional offset of
+49 degrees C. Take this into account as well.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
