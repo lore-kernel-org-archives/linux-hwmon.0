@@ -1,188 +1,95 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f195.google.com ([209.85.192.195]:45142 "EHLO
-        mail-pf0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753546AbeD2Q1P (ORCPT
+Received: from mail-pf0-f196.google.com ([209.85.192.196]:45342 "EHLO
+        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753584AbeD2Rq2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Apr 2018 12:27:15 -0400
-Subject: Re: [PATCH 2/2] hwmon: (k10temp) Display both Tctl and Tdie
-To: Gabriel C <nix.or.die@gmail.com>
-Cc: Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
+        Sun, 29 Apr 2018 13:46:28 -0400
+Subject: Re: [PATCH 2/2] hwmon: (k10temp) Use API function to access System
+ Management Network
+To: Thomas Gleixner <tglx@linutronix.de>,
+        Clemens Ladisch <clemens@ladisch.de>
+Cc: x86@kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
         Brian Woods <brian.woods@amd.com>
-References: <1524798789-2239-1-git-send-email-linux@roeck-us.net>
- <1524798789-2239-2-git-send-email-linux@roeck-us.net>
- <CAEJqkggcXnTWwNvidc=qG5fWFu8Q-6uGtrapi88e5t3u7wD12Q@mail.gmail.com>
+References: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
+ <1524966879-9424-2-git-send-email-linux@roeck-us.net>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c4ff12d1-b529-aa71-b9a7-760e2f7d9794@roeck-us.net>
-Date: Sun, 29 Apr 2018 09:27:13 -0700
+Message-ID: <2db436f9-a335-9e25-d177-23095c2527ff@roeck-us.net>
+Date: Sun, 29 Apr 2018 10:46:25 -0700
 MIME-Version: 1.0
-In-Reply-To: <CAEJqkggcXnTWwNvidc=qG5fWFu8Q-6uGtrapi88e5t3u7wD12Q@mail.gmail.com>
+In-Reply-To: <1524966879-9424-2-git-send-email-linux@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 04/29/2018 09:13 AM, Gabriel C wrote:
-> 2018-04-27 5:13 GMT+02:00 Guenter Roeck <linux@roeck-us.net>:
->> On some AMD CPUs, there is a different between the die temperature
->> (Tdie) and the reported temperature (Tctl). Tdie is the real measured
->> temperature, and Tctl is used for fan control. Lets report both for
->> affected CPUs.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>   drivers/hwmon/k10temp.c | 55 ++++++++++++++++++++++++++++++++++++++++++-------
->>   1 file changed, 48 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
->> index b06bb1f90853..1135b8f1ad0f 100644
->> --- a/drivers/hwmon/k10temp.c
->> +++ b/drivers/hwmon/k10temp.c
->> @@ -80,6 +80,7 @@ struct k10temp_data {
->>          void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
->>          int temp_offset;
->>          u32 temp_adjust_mask;
->> +       bool show_tdie;
->>   };
->>
->>   struct tctl_offset {
->> @@ -140,17 +141,24 @@ static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
->>                            F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
->>   }
->>
->> -static ssize_t temp1_input_show(struct device *dev,
->> -                               struct device_attribute *attr, char *buf)
->> +unsigned int get_raw_temp(struct k10temp_data *data)
->>   {
->> -       struct k10temp_data *data = dev_get_drvdata(dev);
->> -       u32 regval;
->>          unsigned int temp;
->> +       u32 regval;
->>
->>          data->read_tempreg(data->pdev, &regval);
->>          temp = (regval >> 21) * 125;
->>          if (regval & data->temp_adjust_mask)
->>                  temp -= 49000;
->> +       return temp;
->> +}
->> +
->> +static ssize_t temp1_input_show(struct device *dev,
->> +                               struct device_attribute *attr, char *buf)
->> +{
->> +       struct k10temp_data *data = dev_get_drvdata(dev);
->> +       unsigned int temp = get_raw_temp(data);
->> +
->>          if (temp > data->temp_offset)
->>                  temp -= data->temp_offset;
->>          else
->> @@ -159,6 +167,23 @@ static ssize_t temp1_input_show(struct device *dev,
->>          return sprintf(buf, "%u\n", temp);
->>   }
->>
->> +static ssize_t temp2_input_show(struct device *dev,
->> +                               struct device_attribute *devattr, char *buf)
->> +{
->> +       struct k10temp_data *data = dev_get_drvdata(dev);
->> +       unsigned int temp = get_raw_temp(data);
->> +
->> +       return sprintf(buf, "%u\n", temp);
->> +}
->> +
->> +static ssize_t temp_label_show(struct device *dev,
->> +                              struct device_attribute *devattr, char *buf)
->> +{
->> +       struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
->> +
->> +       return sprintf(buf, "%s\n", attr->index ? "Tctl" : "Tdie");
->> +}
->> +
->>   static ssize_t temp1_max_show(struct device *dev,
->>                                struct device_attribute *attr, char *buf)
->>   {
->> @@ -187,16 +212,23 @@ static DEVICE_ATTR_RO(temp1_max);
->>   static SENSOR_DEVICE_ATTR(temp1_crit, S_IRUGO, show_temp_crit, NULL, 0);
->>   static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IRUGO, show_temp_crit, NULL, 1);
->>
->> +static SENSOR_DEVICE_ATTR(temp1_label, 0444, temp_label_show, NULL, 0);
->> +static DEVICE_ATTR_RO(temp2_input);
->> +static SENSOR_DEVICE_ATTR(temp2_label, 0444, temp_label_show, NULL, 1);
->> +
->>   static umode_t k10temp_is_visible(struct kobject *kobj,
->>                                    struct attribute *attr, int index)
->>   {
->>          struct device *dev = container_of(kobj, struct device, kobj);
->>          struct k10temp_data *data = dev_get_drvdata(dev);
->>          struct pci_dev *pdev = data->pdev;
->> +       u32 reg;
->>
->> -       if (index >= 2) {
->> -               u32 reg;
->> -
->> +       switch (index) {
->> +       case 0 ... 1:   /* temp1_input, temp1_max */
->> +       default:
->> +               break;
->> +       case 2 ... 3:   /* temp1_crit, temp1_crit_hyst */
->>                  if (!data->read_htcreg)
->>                          return 0;
->>
->> @@ -208,6 +240,11 @@ static umode_t k10temp_is_visible(struct kobject *kobj,
->>                  data->read_htcreg(data->pdev, &reg);
->>                  if (!(reg & HTC_ENABLE))
->>                          return 0;
->> +               break;
->> +       case 4 ... 6:   /* temp1_label, temp2_input, temp2_label */
->> +               if (!data->show_tdie)
->> +                       return 0;
->> +               break;
->>          }
->>          return attr->mode;
->>   }
->> @@ -217,6 +254,9 @@ static struct attribute *k10temp_attrs[] = {
->>          &dev_attr_temp1_max.attr,
->>          &sensor_dev_attr_temp1_crit.dev_attr.attr,
->>          &sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
->> +       &sensor_dev_attr_temp1_label.dev_attr.attr,
->> +       &dev_attr_temp2_input.attr,
->> +       &sensor_dev_attr_temp2_label.dev_attr.attr,
->>          NULL
->>   };
->>
->> @@ -292,6 +332,7 @@ static int k10temp_probe(struct pci_dev *pdev,
->>          } else if (boot_cpu_data.x86 == 0x17) {
->>                  data->temp_adjust_mask = 0x80000;
->>                  data->read_tempreg = read_tempreg_nb_f17;
->> +               data->show_tdie = true;
->>          } else {
->>                  data->read_htcreg = read_htcreg_pci;
->>                  data->read_tempreg = read_tempreg_pci;
->> --
->> 2.7.4
->>
+On 04/28/2018 06:54 PM, Guenter Roeck wrote:
+> The SMN (System Management Network) on Family 17h AMD CPUs is also accessed
+> from other drivers, specifically EDAC. Accessing it directly is racy.
+> On top of that, accessing the SMN through root bridge 00:00 is wrong on
+> multi-die CPUs and may result in reading the temperature from the wrong
+> die. Use available API functions to fix the problem.
 > 
-> On my EPYC box Tdie and Tctl seems to have the same value.
-> However the code is working fine and both values are displayed now.
+> For this to work, also change the Raven Ridge PCI device ID to point to
+> Data Fabric Function 3, since this ID is used by the API functions to
+> find the CPU node.
 > 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>   drivers/hwmon/k10temp.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index b06bb1f90853..00e785afae0d 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -23,6 +23,7 @@
+>   #include <linux/init.h>
+>   #include <linux/module.h>
+>   #include <linux/pci.h>
+> +#include <asm/amd_nb.h>
+>   #include <asm/processor.h>
+>   
+>   MODULE_DESCRIPTION("AMD Family 10h+ CPU core temperature monitor");
+> @@ -40,8 +41,8 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+>   #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+>   #endif
+>   
+> -#ifndef PCI_DEVICE_ID_AMD_17H_RR_NB
+> -#define PCI_DEVICE_ID_AMD_17H_RR_NB	0x15d0
+> +#ifndef PCI_DEVICE_ID_AMD_17H_RR_DF_F3
+> +#define PCI_DEVICE_ID_AMD_17H_RR_DF_F3	0x14eb
 
-Yes, that is as expected; EPYC CPUs don't have a temperature offset
-between Tctl and Tdie (at least not as far as I know). Tctl is the value
-reported by the chip; if I recall correctly, it is in the low 20s on
-your system if it is idle. If there was an offset, Tdie would be reported
-as an even lower temperature, ie in the 10s, which would not make sense.
-
-> Tested-by: Gabriel Craciunescu <nix.or.die@gmail.com>
-> 
-Thanks a lot for testing!
+This should have been 0x15eb. I'll resend after a week or so, waiting for more feedback.
 
 Guenter
 
-> Regards
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>   #endif
+>   
+>   /* CPUID function 0x80000001, ebx */
+> @@ -136,8 +137,8 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+>   
+>   static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
+>   {
+> -	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0x60,
+> -			  F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
+> +	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +		     F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
+>   }
+>   
+>   static ssize_t temp1_input_show(struct device *dev,
+> @@ -323,7 +324,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+> -	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_RR_NB) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_RR_DF_F3) },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(pci, k10temp_id_table);
 > 
 
