@@ -1,71 +1,133 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f65.google.com ([74.125.83.65]:35546 "EHLO
-        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753553AbeD2Qa3 (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:49185 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1753601AbeD2PIa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Apr 2018 12:30:29 -0400
-Subject: Re: [PATCH] hwmon: (k10temp) Add support for Stoney Ridge and Bristol
- Ridge CPUs
-To: Gabriel C <nix.or.die@gmail.com>
-Cc: Clemens Ladisch <clemens@ladisch.de>, linux-hwmon@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Brian Woods <brian.woods@amd.com>
-References: <1525018605-22302-1-git-send-email-linux@roeck-us.net>
- <CAEJqkgic1kvLiGwOtEWOWh7V_icht_cGpCTis+1NH-31sw+BGw@mail.gmail.com>
+        Sun, 29 Apr 2018 11:08:30 -0400
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1787a000-15d8-1477-a3b8-9ac9840fc575@roeck-us.net>
-Date: Sun, 29 Apr 2018 09:30:27 -0700
-MIME-Version: 1.0
-In-Reply-To: <CAEJqkgic1kvLiGwOtEWOWh7V_icht_cGpCTis+1NH-31sw+BGw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To: Clemens Ladisch <clemens@ladisch.de>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Brian Woods <brian.woods@amd.com>,
+        Gabriel C <nix.or.die@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2] hwmon: (k10temp) Fix reading critical temperature register
+Date: Sun, 29 Apr 2018 08:08:24 -0700
+Message-Id: <1525014504-14742-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 04/29/2018 09:28 AM, Gabriel C wrote:
-> 2018-04-29 18:16 GMT+02:00 Guenter Roeck <linux@roeck-us.net>:
->> Add support for Stoney Ridge and Bristol Ridge (Family 15h Model 0x70)
->> CPUs. Registers match those of Family 15h Model 0x60.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>   drivers/hwmon/k10temp.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
->> index 34b5448b00be..f014e03eee5a 100644
->> --- a/drivers/hwmon/k10temp.c
->> +++ b/drivers/hwmon/k10temp.c
->> @@ -36,6 +36,10 @@ MODULE_PARM_DESC(force, "force loading on processors with erratum 319");
->>   /* Provide lock for writing to NB_SMU_IND_ADDR */
->>   static DEFINE_MUTEX(nb_smu_ind_mutex);
->>
->> +#ifndef PCI_DEVICE_ID_AMD_15H_M70H_NB_F3
->> +#define PCI_DEVICE_ID_AMD_15H_M70H_NB_F3       0x15b3
->> +#endif
->> +
->>   #ifndef PCI_DEVICE_ID_AMD_17H_DF_F3
->>   #define PCI_DEVICE_ID_AMD_17H_DF_F3    0x1463
->>   #endif
->> @@ -319,6 +323,7 @@ static const struct pci_device_id k10temp_id_table[] = {
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M10H_F3) },
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M30H_NB_F3) },
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M60H_NB_F3) },
->> +       { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M70H_NB_F3) },
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
->>          { PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->> --
->> 2.7.4
->>
-> 
-> Is working fine for me on an A6-9220 APU.
-> 
-> Tested-by: Gabriel Craciunescu <nix.or.die@gmail.com>
-> 
-Thanks again!
+The HTC (Hardware Temperature Control) register has moved
+for recent chips.
 
-Guenter
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Actually call the new function pointer from show_temp_crit().
+
+ drivers/hwmon/k10temp.c | 40 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 30 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index d2cc55e21374..34b5448b00be 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -63,10 +63,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define  NB_CAP_HTC			0x00000400
+ 
+ /*
+- * For F15h M60h, functionality of REG_REPORTED_TEMPERATURE
+- * has been moved to D0F0xBC_xD820_0CA4 [Reported Temperature
+- * Control]
++ * For F15h M60h and M70h, REG_HARDWARE_THERMAL_CONTROL
++ * and REG_REPORTED_TEMPERATURE have been moved to
++ * D0F0xBC_xD820_0C64 [Hardware Temperature Control]
++ * D0F0xBC_xD820_0CA4 [Reported Temperature Control]
+  */
++#define F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET	0xd8200c64
+ #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
+ 
+ /* F17h M01h Access througn SMN */
+@@ -74,6 +76,7 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ 
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
++	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+ 	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
+ 	int temp_offset;
+ 	u32 temp_adjust_mask;
+@@ -98,6 +101,11 @@ static const struct tctl_offset tctl_offset_table[] = {
+ 	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
+ };
+ 
++static void read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
++{
++	pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL, regval);
++}
++
+ static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
+ {
+ 	pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, regval);
+@@ -114,6 +122,12 @@ static void amd_nb_index_read(struct pci_dev *pdev, unsigned int devfn,
+ 	mutex_unlock(&nb_smu_ind_mutex);
+ }
+ 
++static void read_htcreg_nb_f15(struct pci_dev *pdev, u32 *regval)
++{
++	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
++			  F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET, regval);
++}
++
+ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+ {
+ 	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
+@@ -160,8 +174,7 @@ static ssize_t show_temp_crit(struct device *dev,
+ 	u32 regval;
+ 	int value;
+ 
+-	pci_read_config_dword(data->pdev,
+-			      REG_HARDWARE_THERMAL_CONTROL, &regval);
++	data->read_htcreg(data->pdev, &regval);
+ 	value = ((regval >> 16) & 0x7f) * 500 + 52000;
+ 	if (show_hyst)
+ 		value -= ((regval >> 24) & 0xf) * 500;
+@@ -181,13 +194,18 @@ static umode_t k10temp_is_visible(struct kobject *kobj,
+ 	struct pci_dev *pdev = data->pdev;
+ 
+ 	if (index >= 2) {
+-		u32 reg_caps, reg_htc;
++		u32 reg;
++
++		if (!data->read_htcreg)
++			return 0;
+ 
+ 		pci_read_config_dword(pdev, REG_NORTHBRIDGE_CAPABILITIES,
+-				      &reg_caps);
+-		pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL,
+-				      &reg_htc);
+-		if (!(reg_caps & NB_CAP_HTC) || !(reg_htc & HTC_ENABLE))
++				      &reg);
++		if (!(reg & NB_CAP_HTC))
++			return 0;
++
++		data->read_htcreg(data->pdev, &reg);
++		if (!(reg & HTC_ENABLE))
+ 			return 0;
+ 	}
+ 	return attr->mode;
+@@ -268,11 +286,13 @@ static int k10temp_probe(struct pci_dev *pdev,
+ 
+ 	if (boot_cpu_data.x86 == 0x15 && (boot_cpu_data.x86_model == 0x60 ||
+ 					  boot_cpu_data.x86_model == 0x70)) {
++		data->read_htcreg = read_htcreg_nb_f15;
+ 		data->read_tempreg = read_tempreg_nb_f15;
+ 	} else if (boot_cpu_data.x86 == 0x17) {
+ 		data->temp_adjust_mask = 0x80000;
+ 		data->read_tempreg = read_tempreg_nb_f17;
+ 	} else {
++		data->read_htcreg = read_htcreg_pci;
+ 		data->read_tempreg = read_tempreg_pci;
+ 	}
+ 
+-- 
+2.7.4
 
