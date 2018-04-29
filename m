@@ -1,130 +1,92 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:48083 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753393AbeD2O7q (ORCPT
+Received: from mail-lf0-f67.google.com ([209.85.215.67]:36399 "EHLO
+        mail-lf0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751811AbeD2EQv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Apr 2018 10:59:46 -0400
-Date: Sun, 29 Apr 2018 07:59:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Clemens Ladisch <clemens@ladisch.de>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Brian Woods <brian.woods@amd.com>
-Subject: Re: [1/2] hwmon: (k10temp) Fix reading critical temperature register
-Message-ID: <20180429145943.GA13646@roeck-us.net>
-References: <1524798789-2239-1-git-send-email-linux@roeck-us.net>
+        Sun, 29 Apr 2018 00:16:51 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1524798789-2239-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
+References: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
+From: Gabriel C <nix.or.die@gmail.com>
+Date: Sun, 29 Apr 2018 06:16:19 +0200
+Message-ID: <CAEJqkghLXNMmxjJ5ARv=E20FqvGxOaihAH5dizsetGoBOV_r=A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+        Clemens Ladisch <clemens@ladisch.de>, X86 ML <x86@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Brian Woods <brian.woods@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 26, 2018 at 08:13:08PM -0700, Guenter Roeck wrote:
-> The HTC (Hardware Temperature Control) register has moved
-> for recent chips.
-> 
+2018-04-29 3:54 GMT+02:00 Guenter Roeck <linux@roeck-us.net>:
+> Add Raven Ridge root bridge and data fabric PCI IDs.
+> This is required for amd_pci_dev_to_node_id() and amd_smn_read().
+>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-> Compile tested only.
-
-No idea what I did here. I had the same patch in the standalone driver and
-it was reported working ... but this version is missing the code to actually
-call the new function from show_temp_crit(). I'll send a v2.
-
-Guenter
-
-> 
->  drivers/hwmon/k10temp.c | 37 +++++++++++++++++++++++++++++--------
->  1 file changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index d2cc55e21374..b06bb1f90853 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -63,10 +63,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
->  #define  NB_CAP_HTC			0x00000400
->  
->  /*
-> - * For F15h M60h, functionality of REG_REPORTED_TEMPERATURE
-> - * has been moved to D0F0xBC_xD820_0CA4 [Reported Temperature
-> - * Control]
-> + * For F15h M60h and M70h, REG_HARDWARE_THERMAL_CONTROL
-> + * and REG_REPORTED_TEMPERATURE have been moved to
-> + * D0F0xBC_xD820_0C64 [Hardware Temperature Control]
-> + * D0F0xBC_xD820_0CA4 [Reported Temperature Control]
->   */
-> +#define F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET	0xd8200c64
->  #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
->  
->  /* F17h M01h Access througn SMN */
-> @@ -74,6 +76,7 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
->  
->  struct k10temp_data {
->  	struct pci_dev *pdev;
-> +	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
->  	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
->  	int temp_offset;
->  	u32 temp_adjust_mask;
-> @@ -98,6 +101,11 @@ static const struct tctl_offset tctl_offset_table[] = {
->  	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
+> This patch is a prerequisite for the second patch in the series.
+> I'll be happy to apply both patches through hwmon if that is acceptable
+> (and Cc: stable for 4.16+). If not, I'll be happy to wait for this patch
+> to be available upstream.
+>
+> Since that there is no public documentation available for Raven Ridge,
+> PCI IDs are derived from output of lspci.
+>
+>  arch/x86/kernel/amd_nb.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index c88e0b127810..bd33613ecb7c 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -14,8 +14,11 @@
+>  #include <asm/amd_nb.h>
+>
+>  #define PCI_DEVICE_ID_AMD_17H_ROOT     0x1450
+> +#define PCI_DEVICE_ID_AMD_17H_RR_ROOT  0x15d0
+>  #define PCI_DEVICE_ID_AMD_17H_DF_F3    0x1463
+>  #define PCI_DEVICE_ID_AMD_17H_DF_F4    0x1464
+> +#define PCI_DEVICE_ID_AMD_17H_RR_DF_F3 0x15eb
+> +#define PCI_DEVICE_ID_AMD_17H_RR_DF_F4 0x15ec
+>
+>  /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+>  static DEFINE_MUTEX(smn_mutex);
+> @@ -24,6 +27,7 @@ static u32 *flush_words;
+>
+>  static const struct pci_device_id amd_root_ids[] = {
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
+> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_ROOT) },
+>         {}
 >  };
->  
-> +static void read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
-> +{
-> +	pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL, regval);
-> +}
-> +
->  static void read_tempreg_pci(struct pci_dev *pdev, u32 *regval)
->  {
->  	pci_read_config_dword(pdev, REG_REPORTED_TEMPERATURE, regval);
-> @@ -114,6 +122,12 @@ static void amd_nb_index_read(struct pci_dev *pdev, unsigned int devfn,
->  	mutex_unlock(&nb_smu_ind_mutex);
->  }
->  
-> +static void read_htcreg_nb_f15(struct pci_dev *pdev, u32 *regval)
-> +{
-> +	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
-> +			  F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET, regval);
-> +}
-> +
->  static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->  {
->  	amd_nb_index_read(pdev, PCI_DEVFN(0, 0), 0xb8,
-> @@ -181,13 +195,18 @@ static umode_t k10temp_is_visible(struct kobject *kobj,
->  	struct pci_dev *pdev = data->pdev;
->  
->  	if (index >= 2) {
-> -		u32 reg_caps, reg_htc;
-> +		u32 reg;
-> +
-> +		if (!data->read_htcreg)
-> +			return 0;
->  
->  		pci_read_config_dword(pdev, REG_NORTHBRIDGE_CAPABILITIES,
-> -				      &reg_caps);
-> -		pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL,
-> -				      &reg_htc);
-> -		if (!(reg_caps & NB_CAP_HTC) || !(reg_htc & HTC_ENABLE))
-> +				      &reg);
-> +		if (!(reg & NB_CAP_HTC))
-> +			return 0;
-> +
-> +		data->read_htcreg(data->pdev, &reg);
-> +		if (!(reg & HTC_ENABLE))
->  			return 0;
->  	}
->  	return attr->mode;
-> @@ -268,11 +287,13 @@ static int k10temp_probe(struct pci_dev *pdev,
->  
->  	if (boot_cpu_data.x86 == 0x15 && (boot_cpu_data.x86_model == 0x60 ||
->  					  boot_cpu_data.x86_model == 0x70)) {
-> +		data->read_htcreg = read_htcreg_nb_f15;
->  		data->read_tempreg = read_tempreg_nb_f15;
->  	} else if (boot_cpu_data.x86 == 0x17) {
->  		data->temp_adjust_mask = 0x80000;
->  		data->read_tempreg = read_tempreg_nb_f17;
->  	} else {
-> +		data->read_htcreg = read_htcreg_pci;
->  		data->read_tempreg = read_tempreg_pci;
->  	}
->  
+>
+> @@ -39,6 +43,7 @@ const struct pci_device_id amd_nb_misc_ids[] = {
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_DF_F3) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+>         {}
+>  };
+> @@ -51,6 +56,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F4) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
+> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_DF_F4) },
+>         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+>         {}
+>  };
+> --
+> 2.7.4
+>
+
+Works fine for me on top stable and on top v4.17-rc2-398-gcdface520934
+
+Tested-by: Gabriel Craciunescu <nix.or.die@gmail.com>
+
+
+Regards
