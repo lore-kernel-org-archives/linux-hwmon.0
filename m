@@ -1,141 +1,73 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39956 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1751281AbeEREEH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 May 2018 00:04:07 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w4I43vrU096485
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 May 2018 00:04:06 -0400
-Received: from e06smtp12.uk.ibm.com (e06smtp12.uk.ibm.com [195.75.94.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2j1nd3kvp4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 May 2018 00:04:06 -0400
-Received: from localhost
-        by e06smtp12.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
-        Fri, 18 May 2018 05:04:04 +0100
-Subject: Re: [PATCH 0/3] Add support to disable sensor groups in P9
-To: Guenter Roeck <linux@roeck-us.net>
-References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <20180515150205.GA29321@roeck-us.net>
- <2ceb6b30-60b7-d985-ee0d-6c5784eda273@linux.vnet.ibm.com>
- <56bba97b-c6ee-e7a1-136c-a2236437484a@roeck-us.net>
-Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stewart@linux.vnet.ibm.com
-From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Date: Fri, 18 May 2018 09:33:57 +0530
-MIME-Version: 1.0
-In-Reply-To: <56bba97b-c6ee-e7a1-136c-a2236437484a@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Message-Id: <ab26d4a0-c71a-abd8-1dad-8b25b77665c1@linux.vnet.ibm.com>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:38449 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1756460AbeEAS0a (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 May 2018 14:26:30 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: Thomas Gleixner <tglx@linutronix.de>,
+        Clemens Ladisch <clemens@ladisch.de>
+Cc: Jean Delvare <jdelvare@suse.com>, Borislav Petkov <bp@suse.de>,
+        Yazen Ghannam <Yazen.Ghannam@amd.com>,
+        Brian Woods <brian.woods@amd.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
+Date: Tue,  1 May 2018 11:26:21 -0700
+Message-Id: <1525199182-10474-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+Add Raven Ridge root bridge and data fabric PCI IDs.
+This is required for amd_pci_dev_to_node_id() and amd_smn_read().
 
+Tested-by: Gabriel Craciunescu <nix.or.die@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Use naming scheme suggested by Borislav Petkov.
 
-On 05/17/2018 06:08 PM, Guenter Roeck wrote:
-> On 05/16/2018 11:10 PM, Shilpasri G Bhat wrote:
->>
->>
->> On 05/15/2018 08:32 PM, Guenter Roeck wrote:
->>> On Thu, Mar 22, 2018 at 04:24:32PM +0530, Shilpasri G Bhat wrote:
->>>> This patch series adds support to enable/disable OCC based
->>>> inband-sensor groups at runtime. The environmental sensor groups are
->>>> managed in HWMON and the remaining platform specific sensor groups are
->>>> managed in /sys/firmware/opal.
->>>>
->>>> The firmware changes required for this patch is posted below:
->>>> https://lists.ozlabs.org/pipermail/skiboot/2018-March/010812.html
->>>>
->>>
->>> Sorry for not getting back earlier. This is a tough one.
->>>
->>
->> Thanks for the reply. I have tried to answer your questions according to my
->> understanding below:
->>
->>> Key problem is that you are changing the ABI with those new attributes.
->>> On top of that, the attributes _do_ make some sense (many chips support
->>> enabling/disabling of individual sensors), suggesting that those or
->>> similar attributes may or even should at some point be added to the ABI.
->>>
->>> At the same time, returning "0" as measurement values when sensors are
->>> disabled does not seem like a good idea, since "0" is a perfectly valid
->>> measurement, at least for most sensors.
->>
->> I agree.
->>
->>>
->>> Given that, we need to have a discussion about adding _enable attributes to
->>> the ABI
->>
->>> what is the scope,
->> IIUC the scope should be RW and the attribute is defined for each supported
->> sensor group
->>
-> 
-> That is _your_ need. I am not aware of any other chip where a per-sensor group
-> attribute would make sense. The discussion we need has to extend beyond the need
-> of a single chip.
-> 
-> Guenter
-> 
+ arch/x86/kernel/amd_nb.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-Is it okay if the ABI provides provision for both types of attribute
-power_enable and powerX_enable. And is it okay to decide which type of attribute
-to be used by the capability provided by the hwmon chip?
-
-
-- Shilpa
-
->>> when should the attributes exist and when not,
->> We control this currently via device-tree
->>
->>> do we want/need power_enable or powerX_enable or both, and so on), and
->> We need power_enable right now
->>
->>> what to return if a sensor is disabled (such as -ENODATA).
->> -ENODATA sounds good.
->>
->> Thanks and Regards,
->> Shilpa
->>
->>   Once we have an
->>> agreement, we can continue with an implementation.
->>>
->>> Guenter
->>>
->>>> Shilpasri G Bhat (3):
->>>>    powernv:opal-sensor-groups: Add support to enable sensor groups
->>>>    hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
->>>>    powernv: opal-sensor-groups: Add attributes to disable/enable sensors
->>>>
->>>>   .../ABI/testing/sysfs-firmware-opal-sensor-groups  |  34 ++++++
->>>>   Documentation/hwmon/ibmpowernv                     |  31 ++++-
->>>>   arch/powerpc/include/asm/opal-api.h                |   4 +-
->>>>   arch/powerpc/include/asm/opal.h                    |   2 +
->>>>   .../powerpc/platforms/powernv/opal-sensor-groups.c | 104 ++++++++++++-----
->>>>   arch/powerpc/platforms/powernv/opal-wrappers.S     |   1 +
->>>>   drivers/hwmon/ibmpowernv.c                         | 127
->>>> +++++++++++++++++++--
->>>>   7 files changed, 265 insertions(+), 38 deletions(-)
->>>>   create mode 100644
->>>> Documentation/ABI/testing/sysfs-firmware-opal-sensor-groups
->>>>
->>>> -- 
->>>> 1.8.3.1
->>>>
->>>> -- 
->>>> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
->>>> the body of a message to majordomo@vger.kernel.org
->>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>>
->>
->>
-> 
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index c88e0b127810..b481b95bd8f6 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -14,8 +14,11 @@
+ #include <asm/amd_nb.h>
+ 
+ #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
++#define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
+ #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+ #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
++#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
++#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
+ 
+ /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+ static DEFINE_MUTEX(smn_mutex);
+@@ -24,6 +27,7 @@ static u32 *flush_words;
+ 
+ static const struct pci_device_id amd_root_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
+ 	{}
+ };
+ 
+@@ -39,6 +43,7 @@ const struct pci_device_id amd_nb_misc_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{}
+ };
+@@ -51,6 +56,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+ 	{}
+ };
+-- 
+2.7.4
 
