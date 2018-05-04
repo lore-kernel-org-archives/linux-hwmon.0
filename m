@@ -1,92 +1,121 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-lf0-f67.google.com ([209.85.215.67]:36399 "EHLO
-        mail-lf0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751811AbeD2EQv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 29 Apr 2018 00:16:51 -0400
-MIME-Version: 1.0
-In-Reply-To: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
-References: <1524966879-9424-1-git-send-email-linux@roeck-us.net>
-From: Gabriel C <nix.or.die@gmail.com>
-Date: Sun, 29 Apr 2018 06:16:19 +0200
-Message-ID: <CAEJqkghLXNMmxjJ5ARv=E20FqvGxOaihAH5dizsetGoBOV_r=A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/amd_nb: Add support for Raven Ridge CPUs
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-        Clemens Ladisch <clemens@ladisch.de>, X86 ML <x86@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <Yazen.Ghannam@amd.com>,
-        Brian Woods <brian.woods@amd.com>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-qt0-f196.google.com ([209.85.216.196]:46504 "EHLO
+        mail-qt0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751747AbeEDWWe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 May 2018 18:22:34 -0400
+Received: by mail-qt0-f196.google.com with SMTP id m16-v6so29359296qtg.13
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 May 2018 15:22:34 -0700 (PDT)
+Message-ID: <1525472549.6877.81.camel@gmail.com>
+Subject: hwmon_device_register_with_info registration API issue
+From: Lucas Magasweran <lucasrangit@gmail.com>
+To: linux-hwmon@vger.kernel.org, jdelvare@suse.de
+Date: Sat, 05 May 2018 00:22:29 +0200
 Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-2018-04-29 3:54 GMT+02:00 Guenter Roeck <linux@roeck-us.net>:
-> Add Raven Ridge root bridge and data fabric PCI IDs.
-> This is required for amd_pci_dev_to_node_id() and amd_smn_read().
->
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> This patch is a prerequisite for the second patch in the series.
-> I'll be happy to apply both patches through hwmon if that is acceptable
-> (and Cc: stable for 4.16+). If not, I'll be happy to wait for this patch
-> to be available upstream.
->
-> Since that there is no public documentation available for Raven Ridge,
-> PCI IDs are derived from output of lspci.
->
->  arch/x86/kernel/amd_nb.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> index c88e0b127810..bd33613ecb7c 100644
-> --- a/arch/x86/kernel/amd_nb.c
-> +++ b/arch/x86/kernel/amd_nb.c
-> @@ -14,8 +14,11 @@
->  #include <asm/amd_nb.h>
->
->  #define PCI_DEVICE_ID_AMD_17H_ROOT     0x1450
-> +#define PCI_DEVICE_ID_AMD_17H_RR_ROOT  0x15d0
->  #define PCI_DEVICE_ID_AMD_17H_DF_F3    0x1463
->  #define PCI_DEVICE_ID_AMD_17H_DF_F4    0x1464
-> +#define PCI_DEVICE_ID_AMD_17H_RR_DF_F3 0x15eb
-> +#define PCI_DEVICE_ID_AMD_17H_RR_DF_F4 0x15ec
->
->  /* Protect the PCI config register pairs used for SMN and DF indirect access. */
->  static DEFINE_MUTEX(smn_mutex);
-> @@ -24,6 +27,7 @@ static u32 *flush_words;
->
->  static const struct pci_device_id amd_root_ids[] = {
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
-> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_ROOT) },
->         {}
->  };
->
-> @@ -39,6 +43,7 @@ const struct pci_device_id amd_nb_misc_ids[] = {
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
-> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_DF_F3) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
->         {}
->  };
-> @@ -51,6 +56,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_NB_F4) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
-> +       { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_RR_DF_F4) },
->         { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
->         {}
->  };
-> --
-> 2.7.4
->
+Hi Jean and al,
 
-Works fine for me on top stable and on top v4.17-rc2-398-gcdface520934
+Thank you for your Kernel Recipes 2016 talk about the new hwmon
+registration API [1].
 
-Tested-by: Gabriel Craciunescu <nix.or.die@gmail.com>
+I'm trying to use the latest hwmon_device_register_with_info() API
+where hwmon core handles the sysfs attributes for me. However, I cannot
+use it with a NULL parent struct device *dev and non-NULL struct
+hwmon_chip_info *chip. My platform driver module_init() calls
+hwmon_device_register_with_info(). __hwmon_device_register() has a NULL
+pointer dereference error because it uses device managed memory
+allocation internally.
+
+For example,
+
+my_hwmon_dev = hwmon_device_register_with_info(NULL, "my_name", NULL,
+                                               &my_hwmon_chip_info,
+                                               NULL);
+--> __hwmon_device_register(NULL, "my_name", NULL,
+                            &my_hwmon_chip_info, NULL);
+----> hwdev->groups = devm_kcalloc(NULL, ngroups,
+                                   sizeof(*groups), GFP_KERNEL);
+
+I see that later in the function dev is checked for NULL in "hdev-
+>of_node = dev ? dev->of_node : NULL;" but it cannot be NULL for
+devm_kcalloc().
+
+I tried the following 4.10.17 patch because I expected the hwmon
+attributes to be stored with the hwmon device directly and not the
+struct device *dev parent. However, none of my attributes are showing
+up in /sys/class/hwmon#/.
+
+Is my approach wrong?
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 3932f92..2e32589 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -560,6 +560,17 @@ __hwmon_device_register(struct device *dev, const
+char *name, void *drvdata,
+ 
+        hdev = &hwdev->dev;
+ 
++       hwdev->name = name;
++       hdev->class = &hwmon_class;
++       hdev->parent = dev;
++       hdev->of_node = dev ? dev->of_node : NULL;
++       hwdev->chip = chip;
++       dev_set_drvdata(hdev, drvdata);
++       dev_set_name(hdev, HWMON_ID_FORMAT, id);
++       err = device_register(hdev);
++       if (err)
++               goto free_hwmon;
++
+        if (chip) {
+                struct attribute **attrs;
+                int ngroups = 2; /* terminating NULL plus &hwdev-
+>groups */
+@@ -568,14 +579,14 @@ __hwmon_device_register(struct device *dev, const
+char *name, void *drvdata,
+                        for (i = 0; groups[i]; i++)
+                                ngroups++;
+ 
+-               hwdev->groups = devm_kcalloc(dev, ngroups,
+sizeof(*groups),
++               hwdev->groups = devm_kcalloc(dev ? dev : hdev, ngroups,
+sizeof(*groups),
+                                             GFP_KERNEL);
+                if (!hwdev->groups) {
+                        err = -ENOMEM;
+                        goto free_hwmon;
+                }
+ 
+-               attrs = __hwmon_create_attrs(dev, drvdata, chip);
++               attrs = __hwmon_create_attrs(dev ? dev : hdev, drvdata,
+chip);
+                if (IS_ERR(attrs)) {
+                        err = PTR_ERR(attrs);
+                        goto free_hwmon;
+@@ -595,17 +606,6 @@ __hwmon_device_register(struct device *dev, const
+char *name, void *drvdata,
+                hdev->groups = groups;
+        }
+ 
+-       hwdev->name = name;
+-       hdev->class = &hwmon_class;
+-       hdev->parent = dev;
+-       hdev->of_node = dev ? dev->of_node : NULL;
+-       hwdev->chip = chip;
+-       dev_set_drvdata(hdev, drvdata);
+-       dev_set_name(hdev, HWMON_ID_FORMAT, id);
+-       err = device_register(hdev);
+-       if (err)
+-               goto free_hwmon;
+-
+        if (chip && chip->ops->read &&
+            chip->info[0]->type == hwmon_chip &&
+            (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
 
 
-Regards
+ [1] https://kernel-recipes.org/en/2016/talks/new-hwmon-device-registra
+tion-api/
