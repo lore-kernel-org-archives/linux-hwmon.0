@@ -1,65 +1,54 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36430 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1755915AbeEHWQJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 May 2018 18:16:09 -0400
-Date: Tue, 8 May 2018 15:16:07 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Lucas Magasweran <lucas.magasweran@ieee.org>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: hwmon: (core) check parent dev != NULL when chip != NULL
-Message-ID: <20180508221607.GA7176@roeck-us.net>
-References: <1525779813-25716-2-git-send-email-lucas.magasweran@ieee.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1525779813-25716-2-git-send-email-lucas.magasweran@ieee.org>
+Received: from sauhun.de ([88.99.104.3]:37554 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751091AbeEFLYK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 6 May 2018 07:24:10 -0400
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: trivial@kernel.org
+Cc: linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: [PATCH 0/9] tree-wide: fix typo 'can by' to 'can be'
+Date: Sun,  6 May 2018 13:23:44 +0200
+Message-Id: <20180506112404.24872-1-wsa+renesas@sang-engineering.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, May 08, 2018 at 04:43:33AM -0700, Lucas Magasweran wrote:
-> hwmon_device_register_with_info() registration API requires a
-> non-NULL parent device when chip is non-NULL.
-> 
-> This commit adds a check and documents this requirement.
-> 
-> Signed-off-by: Lucas Magasweran <lucas.magasweran@ieee.org>
+I found this kind of typo when reading the documentation for device_remove().
+So, I checked the tree for it.
 
-Applied to hwmon-next.
+CCing all the subsystems directly, and I'd think the leftover ones could be
+picked up by the trivial tree. Or would it be more convenient if trivial would
+pick up all? I don't mind.
 
-Thanks,
-Guenter
+Based on v4.17-rc3.
 
-> ---
->  Documentation/hwmon/hwmon-kernel-api.txt | 3 ++-
->  drivers/hwmon/hwmon.c                    | 3 +++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
-> index 53a8066..eb7a78a 100644
-> --- a/Documentation/hwmon/hwmon-kernel-api.txt
-> +++ b/Documentation/hwmon/hwmon-kernel-api.txt
-> @@ -71,7 +71,8 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
->  to register a hardware monitoring device. It creates the standard sysfs
->  attributes in the hardware monitoring core, letting the driver focus on reading
->  from and writing to the chip instead of having to bother with sysfs attributes.
-> -Its parameters are described in more detail below.
-> +The parent device parameter cannot be NULL with non-NULL chip info. Its
-> +parameters are described in more detail below.
->  
->  devm_hwmon_device_register_with_info is similar to
->  hwmon_device_register_with_info. However, it is device managed, meaning the
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 32083e4..e88c019 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -698,6 +698,9 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
->  	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
->  		return ERR_PTR(-EINVAL);
->  
-> +	if (chip && !dev)
-> +		return ERR_PTR(-EINVAL);
-> +
->  	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
->  }
->  EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
+Wolfram Sang (9):
+  dt-bindings: i2c: fix typo 'can by' to 'can be'
+  powerpc/watchdog: fix typo 'can by' to 'can be'
+  base: core: fix typo 'can by' to 'can be'
+  hwmon: fschmd: fix typo 'can by' to 'can be'
+  input: ati_remote2: fix typo 'can by' to 'can be'
+  NTB: ntb_hw_idt: fix typo 'can by' to 'can be'
+  reiserfs: journal: fix typo 'can by' to 'can be'
+  net: flow_dissector: fix typo 'can by' to 'can be'
+  objtool: fix typo 'can by' to 'can be'
+
+ Documentation/devicetree/bindings/i2c/i2c-davinci.txt | 2 +-
+ arch/powerpc/kernel/watchdog.c                        | 2 +-
+ drivers/base/core.c                                   | 2 +-
+ drivers/hwmon/fschmd.c                                | 2 +-
+ drivers/input/misc/ati_remote2.c                      | 2 +-
+ drivers/ntb/hw/idt/ntb_hw_idt.c                       | 2 +-
+ fs/reiserfs/journal.c                                 | 2 +-
+ include/net/flow_dissector.h                          | 2 +-
+ tools/objtool/Documentation/stack-validation.txt      | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+-- 
+2.11.0
+
