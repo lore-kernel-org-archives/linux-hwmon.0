@@ -1,54 +1,41 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from sauhun.de ([88.99.104.3]:37554 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:37628 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751091AbeEFLYK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 6 May 2018 07:24:10 -0400
+        id S1751776AbeEFLYT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 6 May 2018 07:24:19 -0400
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: trivial@kernel.org
 Cc: linux-renesas-soc@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: [PATCH 0/9] tree-wide: fix typo 'can by' to 'can be'
-Date: Sun,  6 May 2018 13:23:44 +0200
-Message-Id: <20180506112404.24872-1-wsa+renesas@sang-engineering.com>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/9] hwmon: fschmd: fix typo 'can by' to 'can be'
+Date: Sun,  6 May 2018 13:23:48 +0200
+Message-Id: <20180506112404.24872-5-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20180506112404.24872-1-wsa+renesas@sang-engineering.com>
+References: <20180506112404.24872-1-wsa+renesas@sang-engineering.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-I found this kind of typo when reading the documentation for device_remove().
-So, I checked the tree for it.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwmon/fschmd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-CCing all the subsystems directly, and I'd think the leftover ones could be
-picked up by the trivial tree. Or would it be more convenient if trivial would
-pick up all? I don't mind.
-
-Based on v4.17-rc3.
-
-Wolfram Sang (9):
-  dt-bindings: i2c: fix typo 'can by' to 'can be'
-  powerpc/watchdog: fix typo 'can by' to 'can be'
-  base: core: fix typo 'can by' to 'can be'
-  hwmon: fschmd: fix typo 'can by' to 'can be'
-  input: ati_remote2: fix typo 'can by' to 'can be'
-  NTB: ntb_hw_idt: fix typo 'can by' to 'can be'
-  reiserfs: journal: fix typo 'can by' to 'can be'
-  net: flow_dissector: fix typo 'can by' to 'can be'
-  objtool: fix typo 'can by' to 'can be'
-
- Documentation/devicetree/bindings/i2c/i2c-davinci.txt | 2 +-
- arch/powerpc/kernel/watchdog.c                        | 2 +-
- drivers/base/core.c                                   | 2 +-
- drivers/hwmon/fschmd.c                                | 2 +-
- drivers/input/misc/ati_remote2.c                      | 2 +-
- drivers/ntb/hw/idt/ntb_hw_idt.c                       | 2 +-
- fs/reiserfs/journal.c                                 | 2 +-
- include/net/flow_dissector.h                          | 2 +-
- tools/objtool/Documentation/stack-validation.txt      | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
+index 5e78229ade049f..22d3a84f13ef58 100644
+--- a/drivers/hwmon/fschmd.c
++++ b/drivers/hwmon/fschmd.c
+@@ -105,7 +105,7 @@ static const u8 FSCHMD_REG_VOLT[7][6] = {
+ static const int FSCHMD_NO_VOLT_SENSORS[7] = { 3, 3, 3, 3, 3, 3, 6 };
+ 
+ /*
+- * minimum pwm at which the fan is driven (pwm can by increased depending on
++ * minimum pwm at which the fan is driven (pwm can be increased depending on
+  * the temp. Notice that for the scy some fans share there minimum speed.
+  * Also notice that with the scy the sensor order is different than with the
+  * other chips, this order was in the 2.4 driver and kept for consistency.
 -- 
 2.11.0
 
