@@ -1,31 +1,60 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ozlabs.org ([203.11.71.1]:59269 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S966653AbeEYLlp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 May 2018 07:41:45 -0400
-In-Reply-To: <1525688738-9185-4-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        linux@roeck-us.net
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-Cc: linux-hwmon@vger.kernel.org, stewart@linux.vnet.ibm.com,
-        jdelvare@suse.com, linux-kernel@vger.kernel.org, paulus@samba.org,
-        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [3/3] hwmon: (ibmpowernv) Add energy sensors
-Message-Id: <40skqW5Xm4z9s2k@ozlabs.org>
-Date: Fri, 25 May 2018 21:41:43 +1000 (AEST)
+Received: from mail-pl0-f65.google.com ([209.85.160.65]:39978 "EHLO
+        mail-pl0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754405AbeEHJjt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 May 2018 05:39:49 -0400
+From: Lei YU <mine260309@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc: Lei YU <mine260309@gmail.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) Use 24MHz clock
+Date: Tue,  8 May 2018 17:39:27 +0800
+Message-Id: <1525772367-20627-1-git-send-email-mine260309@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, 2018-05-07 at 10:25:38 UTC, Shilpasri G Bhat wrote:
-> This patch exports the accumulated power numbers of each power
-> sensor maintained by OCC.
-> 
-> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+The clock source for aspeed pwm is set to 24MHz, so use the hard-coded
+clock frequency instead of the one in device tree.
 
-Applied to powerpc next, thanks.
+Otherwise, in case of the clock specified in device tree is not 24MHz,
+the fan speed will be incorrect.
 
-https://git.kernel.org/powerpc/c/43d2974b66d916a6df16e536da542e
+Signed-off-by: Lei YU <mine260309@gmail.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-cheers
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 693a3d5..e83b8df 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -922,7 +922,6 @@ static int aspeed_pwm_tacho_probe(struct platform_device *pdev)
+ 	void __iomem *regs;
+ 	struct resource *res;
+ 	struct device *hwmon;
+-	struct clk *clk;
+ 	int ret;
+ 
+ 	np = dev->of_node;
+@@ -956,12 +955,10 @@ static int aspeed_pwm_tacho_probe(struct platform_device *pdev)
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TACH_SOURCE, 0);
+ 	regmap_write(priv->regmap, ASPEED_PTCR_TACH_SOURCE_EXT, 0);
+ 
+-	clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(clk))
+-		return -ENODEV;
+-	priv->clk_freq = clk_get_rate(clk);
+ 	aspeed_set_clock_enable(priv->regmap, true);
++	// The clock source is set to 24MHz
+ 	aspeed_set_clock_source(priv->regmap, 0);
++	priv->clk_freq = 24000000;
+ 
+ 	aspeed_create_type(priv);
+ 
+-- 
+2.7.4
+
