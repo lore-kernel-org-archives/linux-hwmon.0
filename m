@@ -1,70 +1,59 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:38421 "EHLO
+Received: from bh-25.webhostbox.net ([208.91.199.152]:55701 "EHLO
         bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S935265AbeEIR3i (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 May 2018 13:29:38 -0400
-Date: Wed, 9 May 2018 10:29:26 -0700
+        with ESMTP id S935023AbeEIR36 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 May 2018 13:29:58 -0400
+Date: Wed, 9 May 2018 10:29:55 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 Cc: mpe@ellerman.id.au, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
         benh@kernel.crashing.org, paulus@samba.org, jdelvare@suse.com,
         stewart@linux.vnet.ibm.com
-Subject: Re: [PATCH 2/3] hwmon: (ibmpowernv): Add support to read 64 bit
- sensors
-Message-ID: <20180509172926.GA20996@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (ibmpowernv) Add energy sensors
+Message-ID: <20180509172955.GB20996@roeck-us.net>
 References: <1525688738-9185-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <1525688738-9185-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+ <1525688738-9185-4-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1525688738-9185-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+In-Reply-To: <1525688738-9185-4-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, May 07, 2018 at 03:55:37PM +0530, Shilpasri G Bhat wrote:
-> The firmware has supported for reading sensor values of size u32.
-> This patch adds support to use newer firmware functions which allows
-> to read the sensors of size u64.
+On Mon, May 07, 2018 at 03:55:38PM +0530, Shilpasri G Bhat wrote:
+> This patch exports the accumulated power numbers of each power
+> sensor maintained by OCC.
 > 
 > Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-I won't apply for the time being since it depends on patch 1/3 which is
-outside hwmon.
-
 > ---
->  drivers/hwmon/ibmpowernv.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  drivers/hwmon/ibmpowernv.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-> index 5ccdd0b..74d9b5a 100644
+> index 74d9b5a..0298745 100644
 > --- a/drivers/hwmon/ibmpowernv.c
 > +++ b/drivers/hwmon/ibmpowernv.c
-> @@ -101,9 +101,10 @@ static ssize_t show_sensor(struct device *dev, struct device_attribute *devattr,
->  	struct sensor_data *sdata = container_of(devattr, struct sensor_data,
->  						 dev_attr);
->  	ssize_t ret;
-> -	u32 x;
-> +	u64 x;
-> +
-> +	ret =  opal_get_sensor_data_u64(sdata->id, &x);
+> @@ -51,6 +51,7 @@ enum sensors {
+>  	POWER_SUPPLY,
+>  	POWER_INPUT,
+>  	CURRENT,
+> +	ENERGY,
+>  	MAX_SENSOR_TYPE,
+>  };
 >  
-> -	ret = opal_get_sensor_data(sdata->id, &x);
->  	if (ret)
->  		return ret;
+> @@ -78,6 +79,7 @@ enum sensors {
+>  	{ "in"    },
+>  	{ "power" },
+>  	{ "curr"  },
+> +	{ "energy" },
+>  };
 >  
-> @@ -114,7 +115,7 @@ static ssize_t show_sensor(struct device *dev, struct device_attribute *devattr,
->  	else if (sdata->type == POWER_INPUT)
->  		x *= 1000000;
->  
-> -	return sprintf(buf, "%u\n", x);
-> +	return sprintf(buf, "%llu\n", x);
->  }
->  
->  static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
+>  struct sensor_data {
 > -- 
 > 1.8.3.1
 > 
