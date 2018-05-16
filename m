@@ -1,46 +1,64 @@
-Return-Path: <stefan.wahren@i2se.com>
-Return-path: <stefan.wahren@i2se.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mout.kundenserver.de ([212.227.17.13]:55781 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751389AbeEPNi2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 16 May 2018 09:38:28 -0400
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Eric Anholt <eric@anholt.net>
+        Mark Rutland <mark.rutland@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Eric Anholt <eric@anholt.net>
 Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Phil Elwell <phil@raspberrypi.org>,
-	bcm-kernel-feedback-list@broadcom.com,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-hwmon@vger.kernel.org,
-	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 6/6] arm64: defconfig: Enable RPi voltage sensor
-Date: Wed, 16 May 2018 15:37:07 +0200
-Message-Id: <1526477827-10859-7-git-send-email-stefan.wahren@i2se.com>
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Phil Elwell <phil@raspberrypi.org>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH RFC 1/6] ARM: bcm2835: Add GET_THROTTLED firmware property
+Date: Wed, 16 May 2018 15:37:02 +0200
+Message-Id: <1526477827-10859-2-git-send-email-stefan.wahren@i2se.com>
 In-Reply-To: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
 References: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The patch enables the hwmon driver for the Raspberry Pi.
+Recent Raspberry Pi firmware provides a mailbox property to detect
+under-voltage conditions. Here is the current definition.
+
+The u32 value returned by the firmware is divided into 2 parts:
+  - lower 16-bits are the live value
+  - upper 16-bits are the history or sticky value
+
+  Bits:
+  0: under-voltage
+  1: arm frequency capped
+  2: currently throttled 
+  16: under-voltage has occurred
+  17: arm frequency capped has occurred
+  18: throttling has occurred
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm64/configs/defconfig | 1 +
+ include/soc/bcm2835/raspberrypi-firmware.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d25121b..5cdecef 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -352,6 +352,7 @@ CONFIG_BATTERY_BQ27XXX=y
- CONFIG_SENSORS_ARM_SCPI=y
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_INA2XX=m
-+CONFIG_SENSORS_RASPBERRYPI_HWMON=m
- CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
- CONFIG_CPU_THERMAL=y
- CONFIG_THERMAL_EMULATION=y
+diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+index 8ee8991..c4a5c9e 100644
+--- a/include/soc/bcm2835/raspberrypi-firmware.h
++++ b/include/soc/bcm2835/raspberrypi-firmware.h
+@@ -75,6 +75,7 @@ enum rpi_firmware_property_tag {
+ 	RPI_FIRMWARE_GET_EDID_BLOCK =                         0x00030020,
+ 	RPI_FIRMWARE_GET_CUSTOMER_OTP =                       0x00030021,
+ 	RPI_FIRMWARE_GET_DOMAIN_STATE =                       0x00030030,
++	RPI_FIRMWARE_GET_THROTTLED =                          0x00030046,
+ 	RPI_FIRMWARE_SET_CLOCK_STATE =                        0x00038001,
+ 	RPI_FIRMWARE_SET_CLOCK_RATE =                         0x00038002,
+ 	RPI_FIRMWARE_SET_VOLTAGE =                            0x00038003,
 -- 
 2.7.4
+
