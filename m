@@ -16,42 +16,31 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	linux-rpi-kernel@lists.infradead.org,
 	linux-hwmon@vger.kernel.org,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 0/6] hwmon: Add support for Raspberry Pi voltage sensor
-Date: Wed, 16 May 2018 15:37:01 +0200
-Message-Id: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: [PATCH RFC 6/6] arm64: defconfig: Enable RPi voltage sensor
+Date: Wed, 16 May 2018 15:37:07 +0200
+Message-Id: <1526477827-10859-7-git-send-email-stefan.wahren@i2se.com>
+In-Reply-To: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
+References: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-A common issue for the Raspberry Pi is an inadequate power supply. 
-Noralf Trønnes started a discussion [1] about writting such under-voltage
-conditions into the kernel log.
+The patch enables the hwmon driver for the Raspberry Pi.
 
-This series is a draft to upstream the resulting kernel patch and is not
-intended for 4.18.
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1] - https://github.com/raspberrypi/linux/issues/2367
-
-Stefan Wahren (6):
-  ARM: bcm2835: Add GET_THROTTLED firmware property
-  dt-bindings: hwmon: Add Raspberry Pi voltage sensor
-  hwmon: Add support for RPi voltage sensor
-  ARM: bcm2835_defconfig: Enable RPi voltage sensor
-  ARM: multi_v7_defconfig: Enable RPi voltage sensor
-  arm64: defconfig: Enable RPi voltage sensor
-
- .../bindings/hwmon/raspberrypi-hwmon.txt           |  19 ++
- arch/arm/configs/bcm2835_defconfig                 |   2 +-
- arch/arm/configs/multi_v7_defconfig                |   1 +
- arch/arm64/configs/defconfig                       |   1 +
- drivers/hwmon/Kconfig                              |  10 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/raspberrypi-hwmon.c                  | 207 +++++++++++++++++++++
- include/soc/bcm2835/raspberrypi-firmware.h         |   1 +
- 8 files changed, 241 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi-hwmon.txt
- create mode 100644 drivers/hwmon/raspberrypi-hwmon.c
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d25121b..5cdecef 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -352,6 +352,7 @@ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_SENSORS_ARM_SCPI=y
+ CONFIG_SENSORS_LM90=m
+ CONFIG_SENSORS_INA2XX=m
++CONFIG_SENSORS_RASPBERRYPI_HWMON=m
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+ CONFIG_CPU_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
 -- 
 2.7.4
