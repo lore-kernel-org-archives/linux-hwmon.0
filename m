@@ -1,79 +1,115 @@
-Return-Path: <eric@anholt.net>
-Return-path: <eric@anholt.net>
-From: Eric Anholt <eric@anholt.net>
-To: Guenter Roeck <linux@roeck-us.net>, Stefan Wahren <stefan.wahren@i2se.com>
-Cc: Rob Herring <robh+dt@kernel.org>, bcm-kernel-feedback-list@broadcom.com,
- devicetree@vger.kernel.org, Noralf =?utf-8?Q?Tr=C3=B8nnes?=
- <noralf@tronnes.org>, Ray Jui <rjui@broadcom.com>, Scott Branden
- <sbranden@broadcom.com>, linux-rpi-kernel@lists.infradead.org, Florian
- Fainelli <f.fainelli@gmail.com>, Mark Rutland <mark.rutland@arm.com>, Phil
- Elwell <phil@raspberrypi.org>, linux-hwmon@vger.kernel.org, Jean Delvare
- <jdelvare@suse.com>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 3/6] hwmon: Add support for RPi voltage sensor
-In-Reply-To: <20180517164320.GA30364@roeck-us.net>
-References: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com> <1526477827-10859-4-git-send-email-stefan.wahren@i2se.com> <20180516182144.GB22705@roeck-us.net> <1560428919.21731.1526500741266@email.1und1.de> <20180517164320.GA30364@roeck-us.net>
-Date: Thu, 17 May 2018 18:25:31 +0100
-Message-ID: <87sh6qdwj8.fsf@anholt.net>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pl0-f67.google.com ([209.85.160.67]:40930 "EHLO
+        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751061AbeEQMi2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 17 May 2018 08:38:28 -0400
+Subject: Re: [PATCH 0/3] Add support to disable sensor groups in P9
+To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stewart@linux.vnet.ibm.com
+References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+ <20180515150205.GA29321@roeck-us.net>
+ <2ceb6b30-60b7-d985-ee0d-6c5784eda273@linux.vnet.ibm.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <56bba97b-c6ee-e7a1-136c-a2236437484a@roeck-us.net>
+Date: Thu, 17 May 2018 05:38:25 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha512; protocol="application/pgp-signature"
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <2ceb6b30-60b7-d985-ee0d-6c5784eda273@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 05/16/2018 11:10 PM, Shilpasri G Bhat wrote:
+> 
+> 
+> On 05/15/2018 08:32 PM, Guenter Roeck wrote:
+>> On Thu, Mar 22, 2018 at 04:24:32PM +0530, Shilpasri G Bhat wrote:
+>>> This patch series adds support to enable/disable OCC based
+>>> inband-sensor groups at runtime. The environmental sensor groups are
+>>> managed in HWMON and the remaining platform specific sensor groups are
+>>> managed in /sys/firmware/opal.
+>>>
+>>> The firmware changes required for this patch is posted below:
+>>> https://lists.ozlabs.org/pipermail/skiboot/2018-March/010812.html
+>>>
+>>
+>> Sorry for not getting back earlier. This is a tough one.
+>>
+> 
+> Thanks for the reply. I have tried to answer your questions according to my
+> understanding below:
+> 
+>> Key problem is that you are changing the ABI with those new attributes.
+>> On top of that, the attributes _do_ make some sense (many chips support
+>> enabling/disabling of individual sensors), suggesting that those or
+>> similar attributes may or even should at some point be added to the ABI.
+>>
+>> At the same time, returning "0" as measurement values when sensors are
+>> disabled does not seem like a good idea, since "0" is a perfectly valid
+>> measurement, at least for most sensors.
+> 
+> I agree.
+> 
+>>
+>> Given that, we need to have a discussion about adding _enable attributes to
+>> the ABI
+> 
+>> what is the scope,
+> IIUC the scope should be RW and the attribute is defined for each supported
+> sensor group
+> 
 
-Guenter Roeck <linux@roeck-us.net> writes:
+That is _your_ need. I am not aware of any other chip where a per-sensor group
+attribute would make sense. The discussion we need has to extend beyond the need
+of a single chip.
 
-> On Wed, May 16, 2018 at 09:59:01PM +0200, Stefan Wahren wrote:
->> Hi Guenter,
->>=20
->> > Guenter Roeck <linux@roeck-us.net> hat am 16. Mai 2018 um 20:21 geschr=
-ieben:
->> >=20
->> >=20
->> > On Wed, May 16, 2018 at 03:37:04PM +0200, Stefan Wahren wrote:
->> > > Currently there is no easy way to detect under-voltage conditions on=
- a remote
->> > > Raspberry Pi. This hwmon driver retrieves the state of the under-vol=
-tage sensor
->> > > via mailbox interface. The handling based on Noralf's modifications =
-to the
->> > > downstream firmware driver. In case of an under-voltage condition on=
-ly an entry
->> > > is written to the kernel log.
->> > >=20
->> >=20
->> > My major concern is how this is displayed with the 'sensors' command.
->> > Can you test and report ?
->>=20
->> I get the following output:
->> rpi_volt-isa-0000
->> Adapter: ISA adapter
->> in0:              N/A=20=20
->>=20
-> Ok, that works.
+Guenter
 
-Thanks for the quick review on this, Guenter!  This driver is going to
-help save a lot of people debugging time on rpis in the upstream kernel.
+>> when should the attributes exist and when not,
+> We control this currently via device-tree
+> 
+>> do we want/need power_enable or powerX_enable or both, and so on), and
+> We need power_enable right now
+> 
+>> what to return if a sensor is disabled (such as -ENODATA).
+> -ENODATA sounds good.
+> 
+> Thanks and Regards,
+> Shilpa
+> 
+>   Once we have an
+>> agreement, we can continue with an implementation.
+>>
+>> Guenter
+>>
+>>> Shilpasri G Bhat (3):
+>>>    powernv:opal-sensor-groups: Add support to enable sensor groups
+>>>    hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
+>>>    powernv: opal-sensor-groups: Add attributes to disable/enable sensors
+>>>
+>>>   .../ABI/testing/sysfs-firmware-opal-sensor-groups  |  34 ++++++
+>>>   Documentation/hwmon/ibmpowernv                     |  31 ++++-
+>>>   arch/powerpc/include/asm/opal-api.h                |   4 +-
+>>>   arch/powerpc/include/asm/opal.h                    |   2 +
+>>>   .../powerpc/platforms/powernv/opal-sensor-groups.c | 104 ++++++++++++-----
+>>>   arch/powerpc/platforms/powernv/opal-wrappers.S     |   1 +
+>>>   drivers/hwmon/ibmpowernv.c                         | 127 +++++++++++++++++++--
+>>>   7 files changed, 265 insertions(+), 38 deletions(-)
+>>>   create mode 100644 Documentation/ABI/testing/sysfs-firmware-opal-sensor-groups
+>>>
+>>> -- 
+>>> 1.8.3.1
+>>>
+>>> --
+>>> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+>>> the body of a message to majordomo@vger.kernel.org
+>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>
+> 
+> 
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE/JuuFDWp9/ZkuCBXtdYpNtH8nugFAlr9uwsACgkQtdYpNtH8
-nugEqhAAuro9lBVq4y5W1t72ofHEEk1bJG6UPQC+gPFBGJ8zOJ5nP0tDt+C49T1j
-fhiyxeGuaxXQj2Lj5ygvxpVts6KVXJZDq+huIjbFbz7eLdPo3wN3ddLvnfTQ9v3J
-UR34ssyl7OWvfgfv6ar5AeLv7G3OocTbzf+TCc7yWyg01+792YUz3IiDJJBObTT9
-Wls/QAkNgWI4DLf1g5dMKieAw9JmD4Ibe0+N4W+sUOoyM9pkCIlh9GUgQEnrJj3I
-r8aQQiwjWoMpaQEFZo6PewfFcisgB3SY5sE9iet/TB3uiJt0zU4W0iSgkG0SxY7q
-dj7qprNV+M+J4v4tQWE2pyU0UpH3+KGDVN9SuPto7epBdgeae5Gt2rcSE3tIZtBL
-0y0QGIbKxPNGbU2TUEbkhYmQwwZmQ45QfySX/wvwb0Z4J8QmKSONEDju/EA4JDEA
-tck1qha72Rl+4q6lsjupcPSt8g8hqe6srLkY/oqrZbvtrMAkqL6vBxqVhPdOOjTN
-0G4S6utrkYExXUSpJXTci+eTm6ml7iBKGlqv37Kpbg3a8kXoj7y5bDMb4/1CmZoH
-yHyDJACmFBab2hkKz4FDN7atV4wCQFUHXYnmMl1Ki8c1HvpiCbsdnSZ08aUXNUcr
-bgM5Wt3+PUcVImJVa7w3y9Sf/UHiNEBpCZckRZwHZThOofer8Bk=
-=qrim
------END PGP SIGNATURE-----
---=-=-=--
