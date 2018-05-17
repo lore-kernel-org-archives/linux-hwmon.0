@@ -1,96 +1,381 @@
-Return-Path: <shilpa.bhat@linux.vnet.ibm.com>
-Return-path: <shilpa.bhat@linux.vnet.ibm.com>
-Subject: Re: [PATCH 0/3] Add support to disable sensor groups in P9
-To: Guenter Roeck <linux@roeck-us.net>
-References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <20180515150205.GA29321@roeck-us.net>
-Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stewart@linux.vnet.ibm.com
-From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Date: Thu, 17 May 2018 11:40:35 +0530
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:44853 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752106AbeEQQnY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 17 May 2018 12:43:24 -0400
+Date: Thu, 17 May 2018 09:43:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Eric Anholt <eric@anholt.net>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Phil Elwell <phil@raspberrypi.org>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC 3/6] hwmon: Add support for RPi voltage sensor
+Message-ID: <20180517164320.GA30364@roeck-us.net>
+References: <1526477827-10859-1-git-send-email-stefan.wahren@i2se.com>
+ <1526477827-10859-4-git-send-email-stefan.wahren@i2se.com>
+ <20180516182144.GB22705@roeck-us.net>
+ <1560428919.21731.1526500741266@email.1und1.de>
 MIME-Version: 1.0
-In-Reply-To: <20180515150205.GA29321@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Message-Id: <2ceb6b30-60b7-d985-ee0d-6c5784eda273@linux.vnet.ibm.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1560428919.21731.1526500741266@email.1und1.de>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-
-
-On 05/15/2018 08:32 PM, Guenter Roeck wrote:
-> On Thu, Mar 22, 2018 at 04:24:32PM +0530, Shilpasri G Bhat wrote:
->> This patch series adds support to enable/disable OCC based
->> inband-sensor groups at runtime. The environmental sensor groups are
->> managed in HWMON and the remaining platform specific sensor groups are
->> managed in /sys/firmware/opal.
->>
->> The firmware changes required for this patch is posted below:
->> https://lists.ozlabs.org/pipermail/skiboot/2018-March/010812.html
->>
+On Wed, May 16, 2018 at 09:59:01PM +0200, Stefan Wahren wrote:
+> Hi Guenter,
 > 
-> Sorry for not getting back earlier. This is a tough one.
+> > Guenter Roeck <linux@roeck-us.net> hat am 16. Mai 2018 um 20:21 geschrieben:
+> > 
+> > 
+> > On Wed, May 16, 2018 at 03:37:04PM +0200, Stefan Wahren wrote:
+> > > Currently there is no easy way to detect under-voltage conditions on a remote
+> > > Raspberry Pi. This hwmon driver retrieves the state of the under-voltage sensor
+> > > via mailbox interface. The handling based on Noralf's modifications to the
+> > > downstream firmware driver. In case of an under-voltage condition only an entry
+> > > is written to the kernel log.
+> > > 
+> > 
+> > My major concern is how this is displayed with the 'sensors' command.
+> > Can you test and report ?
 > 
-
-Thanks for the reply. I have tried to answer your questions according to my
-understanding below:
-
-> Key problem is that you are changing the ABI with those new attributes.
-> On top of that, the attributes _do_ make some sense (many chips support
-> enabling/disabling of individual sensors), suggesting that those or
-> similar attributes may or even should at some point be added to the ABI.
+> I get the following output:
+> rpi_volt-isa-0000
+> Adapter: ISA adapter
+> in0:              N/A  
 > 
-> At the same time, returning "0" as measurement values when sensors are
-> disabled does not seem like a good idea, since "0" is a perfectly valid
-> measurement, at least for most sensors.
+Ok, that works.
 
-I agree.
-
+> > 
+> > Of course, it would be much better if the firmware would also report
+> > the actual voltage, but I guess we can't have everything.
 > 
-> Given that, we need to have a discussion about adding _enable attributes to
-> the ABI 
-
-> what is the scope,
-IIUC the scope should be RW and the attribute is defined for each supported
-sensor group
-
-> when should the attributes exist and when not,
-We control this currently via device-tree
-
-> do we want/need power_enable or powerX_enable or both, and so on), and 
-We need power_enable right now
-
-> what to return if a sensor is disabled (such as -ENODATA).
--ENODATA sounds good.
-
-Thanks and Regards,
-Shilpa
-
- Once we have an
-> agreement, we can continue with an implementation.
+> I think this isn't possible because the hardware only provide a binary value (GPIO).
 > 
-> Guenter
+> > 
+> > More comments inline.
+> > 
+> > Thanks,
+> > Guenter
+> > 
+> > > CC: "Noralf Trønnes" <noralf@tronnes.org>
+> > > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > > ---
+> > >  drivers/hwmon/Kconfig             |  10 ++
+> > >  drivers/hwmon/Makefile            |   1 +
+> > >  drivers/hwmon/raspberrypi-hwmon.c | 207 ++++++++++++++++++++++++++++++++++++++
+> > 
+> > Please also provide Documentation/hwmon/raspberrypi-hwmon.
+> > 
+> > >  3 files changed, 218 insertions(+)
+> > >  create mode 100644 drivers/hwmon/raspberrypi-hwmon.c
+> > > 
+> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > index 768aed5..7f935cf 100644
+> > > --- a/drivers/hwmon/Kconfig
+> > > +++ b/drivers/hwmon/Kconfig
+> > > @@ -1298,6 +1298,16 @@ config SENSORS_PWM_FAN
+> > >  	  This driver can also be built as a module.  If so, the module
+> > >  	  will be called pwm-fan.
+> > >  
+> > > +config SENSORS_RASPBERRYPI_HWMON
+> > > +	tristate "Raspberry Pi voltage monitor"
+> > > +	depends on (ARCH_BCM2835 && RASPBERRYPI_FIRMWARE) || (COMPILE_TEST && !RASPBERRYPI_FIRMWARE)
+> > > +	help
+> > > +	  If you say yes here you get support for voltage sensor on the
+> > > +	  Raspberry Pi.
+> > > +
+> > > +	  This driver can also be built as a module. If so, the module
+> > > +	  will be called raspberrypi-hwmon.
+> > > +
+> > >  config SENSORS_SHT15
+> > >  	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
+> > >  	depends on GPIOLIB || COMPILE_TEST
+> > > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> > > index e7d52a3..a929770 100644
+> > > --- a/drivers/hwmon/Makefile
+> > > +++ b/drivers/hwmon/Makefile
+> > > @@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+> > >  obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
+> > >  obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+> > >  obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
+> > > +obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
+> > >  obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
+> > >  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+> > >  obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
+> > > diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+> > > new file mode 100644
+> > > index 0000000..2003f6c
+> > > --- /dev/null
+> > > +++ b/drivers/hwmon/raspberrypi-hwmon.c
+> > > @@ -0,0 +1,207 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * Raspberry Pi voltage sensor driver
+> > > + *
+> > > + * Based on firmware/raspberrypi.c by Noralf Trønnes
+> > > + *
+> > > + * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
+> > > + */
+> > > +#include <linux/device.h>
+> > > +#include <linux/err.h>
+> > > +#include <linux/hwmon.h>
+> > > +#include <linux/hwmon-sysfs.h>
+> > 
+> > Unnecessary include
+> > 
+> > > +#include <linux/module.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/platform_device.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/workqueue.h>
+> > > +#include <soc/bcm2835/raspberrypi-firmware.h>
+> > > +
+> > > +#define UNDERVOLTAGE_STICKY_BIT	BIT(16)
+> > > +
+> > > +struct rpi_hwmon_data {
+> > > +	struct device *hwmon_dev;
+> > > +	struct rpi_firmware *fw;
+> > > +	u32 last_throttled;
+> > > +	struct delayed_work get_values_poll_work;
+> > > +};
+> > > +
+> > > +static void rpi_firmware_get_throttled(struct rpi_hwmon_data *data)
+> > > +{
+> > > +	u32 new_uv, old_uv, value;
+> > > +	int ret;
+> > > +
+> > > +	/* Clear sticky bits */
+> > 
+> > Please make more explicit that this is a request/command sent to the firmware.
+> > 
+> > > +	value = 0xffff;
+> > > +
+> > > +	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
+> > > +				    &value, sizeof(value));
+> > > +	if (ret) {
+> > > +		dev_err_once(data->hwmon_dev, "%s: Failed to get throttled (%d)\n",
+> > > +			     __func__, ret);
+> > 
+> > The function name seems unnecessary.
+> > 
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	new_uv = value & UNDERVOLTAGE_STICKY_BIT;
+> > > +	old_uv = data->last_throttled & UNDERVOLTAGE_STICKY_BIT;
+> > > +	data->last_throttled = value;
+> > > +
+> > > +	if (new_uv == old_uv)
+> > > +		return;
+> > > +
+> > > +	if (new_uv)
+> > > +		dev_crit(data->hwmon_dev, "Under-voltage detected! (0x%08x)\n",
+> > > +			 value);
+> > > +	else
+> > > +		dev_info(data->hwmon_dev, "Voltage normalised (0x%08x)\n",
+> > > +			 value);
+> > 
+> > What value do those hex values provide to the user ?
 > 
->> Shilpasri G Bhat (3):
->>   powernv:opal-sensor-groups: Add support to enable sensor groups
->>   hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
->>   powernv: opal-sensor-groups: Add attributes to disable/enable sensors
->>
->>  .../ABI/testing/sysfs-firmware-opal-sensor-groups  |  34 ++++++
->>  Documentation/hwmon/ibmpowernv                     |  31 ++++-
->>  arch/powerpc/include/asm/opal-api.h                |   4 +-
->>  arch/powerpc/include/asm/opal.h                    |   2 +
->>  .../powerpc/platforms/powernv/opal-sensor-groups.c | 104 ++++++++++++-----
->>  arch/powerpc/platforms/powernv/opal-wrappers.S     |   1 +
->>  drivers/hwmon/ibmpowernv.c                         | 127 +++++++++++++++++++--
->>  7 files changed, 265 insertions(+), 38 deletions(-)
->>  create mode 100644 Documentation/ABI/testing/sysfs-firmware-opal-sensor-groups
->>
->> -- 
->> 1.8.3.1
->>
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> The actual definition of the bits can be found in the commit log of patch #1. But this isn't very helpful for an end user.
 > 
+I would suggest to drop the value from the log.
+
+> > 
+> > > +
+> > > +	sysfs_notify(&data->hwmon_dev->kobj, NULL, "in0_lcrit_alarm");
+> > > +}
+> > > +
+> > > +static void get_values_poll(struct work_struct *work)
+> > > +{
+> > > +	struct rpi_hwmon_data *data;
+> > > +
+> > > +	data = container_of(work, struct rpi_hwmon_data,
+> > > +			    get_values_poll_work.work);
+> > > +
+> > > +	rpi_firmware_get_throttled(data);
+> > > +
+> > > +	/*
+> > > +	 * We can't run faster than the sticky shift (100ms) since we get
+> > > +	 * flipping in the sticky bits that are cleared.
+> > > +	 */
+> > > +	schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
+> > > +}
+> > > +
+> > > +static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
+> > > +		    u32 attr, int channel, long *val)
+> > > +{
+> > > +	struct rpi_hwmon_data *data = dev_get_drvdata(dev);
+> > > +
+> > > +	if (type != hwmon_in)
+> > > +		return -EOPNOTSUPP;
+> > > +
+> > > +	if (attr != hwmon_in_lcrit_alarm)
+> > > +		return -EOPNOTSUPP;
+> > > +
+> > > +	if (channel)
+> > > +		return -EOPNOTSUPP;
+> > > +
+> > There is only one channel, one attribute, and one type supported.
+> > As such, the checks are unnecessary.
+> > 
+> > > +	*val = !!(data->last_throttled & UNDERVOLTAGE_STICKY_BIT);
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
+> > > +			      u32 attr, int channel)
+> > > +{
+> > > +	if (type != hwmon_in)
+> > > +		return 0;
+> > > +
+> > > +	if (attr != hwmon_in_lcrit_alarm)
+> > > +		return 0;
+> > > +
+> > > +	if (channel)
+> > > +		return 0;
+> > 
+> > Same as above. In the list below, there is not a single conditional attribute.
+> > Given that, the checks should be unnecessary, and it should be sufficient to
+> > just return 0444.
+> > 
+> > > +
+> > > +	return 0444;
+> > > +}
+> > > +
+> > > +static const u32 rpi_in_config[] = {
+> > > +	HWMON_I_LCRIT_ALARM,
+> > > +	0
+> > > +};
+> > > +
+> > > +static const struct hwmon_channel_info rpi_in = {
+> > > +	.type = hwmon_in,
+> > > +	.config = rpi_in_config,
+> > > +};
+> > > +
+> > > +static const struct hwmon_channel_info *rpi_info[] = {
+> > > +	&rpi_in,
+> > > +	NULL
+> > > +};
+> > > +
+> > > +static const struct hwmon_ops rpi_hwmon_ops = {
+> > > +	.is_visible = rpi_is_visible,
+> > > +	.read = rpi_read,
+> > > +};
+> > > +
+> > > +static const struct hwmon_chip_info rpi_chip_info = {
+> > > +	.ops = &rpi_hwmon_ops,
+> > > +	.info = rpi_info,
+> > > +};
+> > > +
+> > > +static int rpi_hwmon_probe(struct platform_device *pdev)
+> > > +{
+> > > +	struct device *dev = &pdev->dev;
+> > > +	struct device_node *fw_node;
+> > > +	struct rpi_hwmon_data *data;
+> > > +	int ret;
+> > > +
+> > > +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > > +	if (!data)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	fw_node = of_get_parent(dev->of_node);
+> > > +	if (!fw_node) {
+> > > +		dev_err(dev, "Missing firmware node\n");
+> > > +		return -ENOENT;
+> > > +	}
+> > > +
+> > > +	data->fw = rpi_firmware_get(fw_node);
+> > > +	of_node_put(fw_node);
+> > > +	if (!data->fw)
+> > > +		return -EPROBE_DEFER;
+> > > +
+> > > +	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
+> > > +				    &data->last_throttled,
+> > > +				    sizeof(data->last_throttled));
+> > > +	if (ret) {
+> > > +		dev_info(dev, "Firmware doesn't support GET_THROTTLED\n");
+> > 
+> > If this is an error -> dev_err().
+> 
+> I wasn't sure. If the firmware is too old, we cannot provide this feature and it's a waste of resources to load this driver. On the other side i don't want to confuse people this is something bad.
+> 
+Then I would suggest to return -ENODEV.
+
+Guenter
+
+> Stefan
+> 
+> > 
+> > > +		return -EOPNOTSUPP;
+> > 
+> > or return -ENODEV.
+> > 
+> > > +	}
+> > > +
+> > > +	data->hwmon_dev = devm_hwmon_device_register_with_info(dev, "rpi_volt",
+> > > +							       data,
+> > > +							       &rpi_chip_info,
+> > > +							       NULL);
+> > > +
+> > > +	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
+> > > +	platform_set_drvdata(pdev, data);
+> > > +
+> > > +	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
+> > > +		schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
+> > > +
+> > > +	return PTR_ERR_OR_ZERO(data->hwmon_dev);
+> > > +}
+> > > +
+> > > +static int rpi_hwmon_remove(struct platform_device *pdev)
+> > > +{
+> > > +	struct rpi_hwmon_data *data = platform_get_drvdata(pdev);
+> > > +
+> > > +	cancel_delayed_work_sync(&data->get_values_poll_work);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static const struct of_device_id rpi_hwmon_of_match[] = {
+> > > +	{ .compatible = "raspberrypi,bcm2835-hwmon", },
+> > > +	{ /* sentinel */},
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, rpi_hwmon_of_match);
+> > > +
+> > > +static struct platform_driver rpi_hwmon_driver = {
+> > > +	.probe = rpi_hwmon_probe,
+> > > +	.remove = rpi_hwmon_remove,
+> > > +	.driver = {
+> > > +		.name = "raspberrypi-hwmon",
+> > > +		.of_match_table = rpi_hwmon_of_match,
+> > > +	},
+> > > +};
+> > > +module_platform_driver(rpi_hwmon_driver);
+> > > +
+> > > +MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
+> > > +MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
+> > > +MODULE_LICENSE("GPL v2");
+> > > -- 
+> > > 2.7.4
+> > > 
+> > > --
+> > > To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+> > > the body of a message to majordomo@vger.kernel.org
+> > > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
