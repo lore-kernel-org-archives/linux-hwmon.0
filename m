@@ -1,80 +1,141 @@
-Return-Path: <benh@kernel.crashing.org>
-Return-path: <benh@kernel.crashing.org>
-Message-ID: <c7998d0de444f6b972de2a0a366d509f3e52b639.camel@kernel.crashing.org>
-Subject: Re: hwmon driver with misc interface
-From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39956 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1751281AbeEREEH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 May 2018 00:04:07 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w4I43vrU096485
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 May 2018 00:04:06 -0400
+Received: from e06smtp12.uk.ibm.com (e06smtp12.uk.ibm.com [195.75.94.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2j1nd3kvp4-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 May 2018 00:04:06 -0400
+Received: from localhost
+        by e06smtp12.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
+        Fri, 18 May 2018 05:04:04 +0100
+Subject: Re: [PATCH 0/3] Add support to disable sensor groups in P9
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Eddie James
-	 <eajames@linux.vnet.ibm.com>
-Date: Tue, 22 May 2018 11:36:09 +1000
-In-Reply-To: <66a551332b9a458de4ca2f6ed2ee70219179e43e.camel@kernel.crashing.org>
-References: 
-	<66a551332b9a458de4ca2f6ed2ee70219179e43e.camel@kernel.crashing.org>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+References: <1521716075-807-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+ <20180515150205.GA29321@roeck-us.net>
+ <2ceb6b30-60b7-d985-ee0d-6c5784eda273@linux.vnet.ibm.com>
+ <56bba97b-c6ee-e7a1-136c-a2236437484a@roeck-us.net>
+Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stewart@linux.vnet.ibm.com
+From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Date: Fri, 18 May 2018 09:33:57 +0530
+MIME-Version: 1.0
+In-Reply-To: <56bba97b-c6ee-e7a1-136c-a2236437484a@roeck-us.net>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Message-Id: <ab26d4a0-c71a-abd8-1dad-8b25b77665c1@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 2018-05-22 at 09:31 +1000, Benjamin Herrenschmidt wrote:
-> I'm looking at a driver we're currently keeping out of tree which I
-> want to rework a bit and submit upstream. (You may have seen earlier
-> versions of it, it's the POWER8/POWER9 "OCC" driver). I have a couple
-> of design questions however, which I'd like to discuss with you before
-> I make choices that you may or may not accept.
 
-I also found some of the earlier threads on the matter and notice you
-weren't fan of the fact that we expose other attributes in sysfs that
-aren't per-se hwmon.
 
-This is a bit of a connundrum though.
+On 05/17/2018 06:08 PM, Guenter Roeck wrote:
+> On 05/16/2018 11:10 PM, Shilpasri G Bhat wrote:
+>>
+>>
+>> On 05/15/2018 08:32 PM, Guenter Roeck wrote:
+>>> On Thu, Mar 22, 2018 at 04:24:32PM +0530, Shilpasri G Bhat wrote:
+>>>> This patch series adds support to enable/disable OCC based
+>>>> inband-sensor groups at runtime. The environmental sensor groups are
+>>>> managed in HWMON and the remaining platform specific sensor groups are
+>>>> managed in /sys/firmware/opal.
+>>>>
+>>>> The firmware changes required for this patch is posted below:
+>>>> https://lists.ozlabs.org/pipermail/skiboot/2018-March/010812.html
+>>>>
+>>>
+>>> Sorry for not getting back earlier. This is a tough one.
+>>>
+>>
+>> Thanks for the reply. I have tried to answer your questions according to my
+>> understanding below:
+>>
+>>> Key problem is that you are changing the ABI with those new attributes.
+>>> On top of that, the attributes _do_ make some sense (many chips support
+>>> enabling/disabling of individual sensors), suggesting that those or
+>>> similar attributes may or even should at some point be added to the ABI.
+>>>
+>>> At the same time, returning "0" as measurement values when sensors are
+>>> disabled does not seem like a good idea, since "0" is a perfectly valid
+>>> measurement, at least for most sensors.
+>>
+>> I agree.
+>>
+>>>
+>>> Given that, we need to have a discussion about adding _enable attributes to
+>>> the ABI
+>>
+>>> what is the scope,
+>> IIUC the scope should be RW and the attribute is defined for each supported
+>> sensor group
+>>
+> 
+> That is _your_ need. I am not aware of any other chip where a per-sensor group
+> attribute would make sense. The discussion we need has to extend beyond the need
+> of a single chip.
+> 
+> Guenter
+> 
 
-There's a single communication channel providing all the values for
-both the "HW sensors" and the more high level synthetic informations
-provided by the OCC such as its status, whether it's throttling
-the main processor etc...
 
-It's all coming in via the same structure, under the same lock etc...
-and it would make little sense to explode that into many drivers.
+Is it okay if the ABI provides provision for both types of attribute
+power_enable and powerX_enable. And is it okay to decide which type of attribute
+to be used by the capability provided by the hwmon chip?
 
-Now it is not unheard of to have a single driver expose multiple
-interfaces without creating multiple "devices" in sysfs.
 
-In this specific case (OCC) we essentially have these "interfaces":
+- Shilpa
 
- - Actual sensors (thermal, power, etc...)
+>>> when should the attributes exist and when not,
+>> We control this currently via device-tree
+>>
+>>> do we want/need power_enable or powerX_enable or both, and so on), and
+>> We need power_enable right now
+>>
+>>> what to return if a sensor is disabled (such as -ENODATA).
+>> -ENODATA sounds good.
+>>
+>> Thanks and Regards,
+>> Shilpa
+>>
+>>   Once we have an
+>>> agreement, we can continue with an implementation.
+>>>
+>>> Guenter
+>>>
+>>>> Shilpasri G Bhat (3):
+>>>>    powernv:opal-sensor-groups: Add support to enable sensor groups
+>>>>    hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
+>>>>    powernv: opal-sensor-groups: Add attributes to disable/enable sensors
+>>>>
+>>>>   .../ABI/testing/sysfs-firmware-opal-sensor-groups  |  34 ++++++
+>>>>   Documentation/hwmon/ibmpowernv                     |  31 ++++-
+>>>>   arch/powerpc/include/asm/opal-api.h                |   4 +-
+>>>>   arch/powerpc/include/asm/opal.h                    |   2 +
+>>>>   .../powerpc/platforms/powernv/opal-sensor-groups.c | 104 ++++++++++++-----
+>>>>   arch/powerpc/platforms/powernv/opal-wrappers.S     |   1 +
+>>>>   drivers/hwmon/ibmpowernv.c                         | 127
+>>>> +++++++++++++++++++--
+>>>>   7 files changed, 265 insertions(+), 38 deletions(-)
+>>>>   create mode 100644
+>>>> Documentation/ABI/testing/sysfs-firmware-opal-sensor-groups
+>>>>
+>>>> -- 
+>>>> 1.8.3.1
+>>>>
+>>>> -- 
+>>>> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
+>>>> the body of a message to majordomo@vger.kernel.org
+>>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>>
+>>
+>>
+> 
 
- - Additional attributes going with each sensor, some corresponding to
-attributes defined in sysfs-interface (_label, _fault, ...) , some are
-specific to our chips (_fru_type, _accumulator, _update_time..). I
-understand you aren't fan of our "specific" ones, but some of them are
-necessary for us, and since they are sensor specific attributes,
-putting them elsewhere doesn't make much sense. Should we continue as
-we have done and just document them ? Should we "prefix" the names with
-something like an "vendor" prefix like we do in the device-tree to
-avoid namespace clashes ?
-
- - General information from the OCC. This is one of your point of
-contention. This is just currently 8 values we expose to userspace, so
-a separate driver for that seems rather overkill, this includes things
-like whether this is the master OCC (vs. slave OCC, ie multi-socket
-machines have an OCC in each socket), the state of the OCC, whether
-it's throttling the system memory, etc... All these come along with the
-sensor values in the "poll" response from the OCC.
-
- - On POWER9, what I described in my previous email, a chardev
-interface to send various commands to the OCC. Because these go via the
-same channel used to poll the sensor values, it needs to be done by the
-same kernel component. Currently a separate driver but it would
-simplify things a lot (and reduce code & memory footprint) to make it
-simply another interface exposed by the same driver as it's a rather
-trivial read/write chardev.
-
-Now, we really want to get to a point where we can upstream this, so I
-want to work with you to find an acceptable design for all this, while
-keeping in mind this is all running on a rather small and slow SoC, so
-we don't want to "bloat" things if it can be avoided. Also simpler code
-has less bugs.
-
-Cheers,
-Ben.
