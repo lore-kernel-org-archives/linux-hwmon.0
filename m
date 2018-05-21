@@ -1,196 +1,100 @@
-Return-Path: <bastiangermann@fishpost.de>
-Return-path: <bastiangermann@fishpost.de>
-From: Bastian Germann <bastiangermann@fishpost.de>
+Return-Path: <benh@kernel.crashing.org>
+Return-path: <benh@kernel.crashing.org>
+Message-ID: <66a551332b9a458de4ca2f6ed2ee70219179e43e.camel@kernel.crashing.org>
+Subject: hwmon driver with misc interface
+From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Bastian Germann <bastiangermann@fishpost.de>,
-	Luca Tettamanti <kronos.it@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (asus_atk0110) Make use of device managed memory
-Date: Fri,  1 Jun 2018 00:57:00 +0200
-Message-Id: <20180531225700.721-2-bastiangermann@fishpost.de>
-In-Reply-To: <20180531225700.721-1-bastiangermann@fishpost.de>
-References: <f885fcb0-d9f3-7702-13ad-5af2913131f0@roeck-us.net>
- <20180531225700.721-1-bastiangermann@fishpost.de>
+Cc: linux-hwmon@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Eddie James
+	 <eajames@linux.vnet.ibm.com>
+Date: Tue, 22 May 2018 09:31:49 +1000
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Use devm_* variants of kstrdup and kzalloc. Get rid of the kfree cleanups.
+Hi Guenter !
 
-Signed-off-by: Bastian Germann <bastiangermann@fishpost.de>
----
- drivers/hwmon/asus_atk0110.c | 54 +++++++-----------------------------
- 1 file changed, 10 insertions(+), 44 deletions(-)
+I'm looking at a driver we're currently keeping out of tree which I
+want to rework a bit and submit upstream. (You may have seen earlier
+versions of it, it's the POWER8/POWER9 "OCC" driver). I have a couple
+of design questions however, which I'd like to discuss with you before
+I make choices that you may or may not accept.
 
-diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
-index 33748cc07acc..8bf097bf6f24 100644
---- a/drivers/hwmon/asus_atk0110.c
-+++ b/drivers/hwmon/asus_atk0110.c
-@@ -190,7 +190,6 @@ static int atk_add(struct acpi_device *device);
- static int atk_remove(struct acpi_device *device);
- static void atk_print_sensor(struct atk_data *data, union acpi_object *obj);
- static int atk_read_value(struct atk_sensor_data *sensor, u64 *value);
--static void atk_free_sensors(struct atk_data *data);
- 
- static struct acpi_driver atk_driver = {
- 	.name	= ATK_HID,
-@@ -722,6 +721,7 @@ static void atk_pack_print(char *buf, size_t sz, union acpi_object *pack)
- static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
- {
- 	struct atk_data *data = inode->i_private;
-+	struct device *dev = &data->acpi_dev->dev;
- 	char *buf = NULL;
- 	union acpi_object *ret;
- 	u8 cls;
-@@ -748,7 +748,7 @@ static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
- 		id = &pack->package.elements[0];
- 		if (id->integer.value == data->debugfs.id) {
- 			/* Print the package */
--			buf = kzalloc(512, GFP_KERNEL);
-+			buf = devm_kzalloc(dev, 512, GFP_KERNEL);
- 			if (!buf) {
- 				ACPI_FREE(ret);
- 				return -ENOMEM;
-@@ -776,16 +776,9 @@ static ssize_t atk_debugfs_ggrp_read(struct file *file, char __user *buf,
- 	return simple_read_from_buffer(buf, count, pos, str, len);
- }
- 
--static int atk_debugfs_ggrp_release(struct inode *inode, struct file *file)
--{
--	kfree(file->private_data);
--	return 0;
--}
--
- static const struct file_operations atk_debugfs_ggrp_fops = {
- 	.read		= atk_debugfs_ggrp_read,
- 	.open		= atk_debugfs_ggrp_open,
--	.release	= atk_debugfs_ggrp_release,
- 	.llseek		= no_llseek,
- };
- 
-@@ -906,15 +899,13 @@ static int atk_add_sensor(struct atk_data *data, union acpi_object *obj)
- 	limit1 = atk_get_pack_member(data, obj, HWMON_PACK_LIMIT1);
- 	limit2 = atk_get_pack_member(data, obj, HWMON_PACK_LIMIT2);
- 
--	sensor = kzalloc(sizeof(*sensor), GFP_KERNEL);
-+	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
- 	if (!sensor)
- 		return -ENOMEM;
- 
--	sensor->acpi_name = kstrdup(name->string.pointer, GFP_KERNEL);
--	if (!sensor->acpi_name) {
--		err = -ENOMEM;
--		goto out;
--	}
-+	sensor->acpi_name = devm_kstrdup(dev, name->string.pointer, GFP_KERNEL);
-+	if (!sensor->acpi_name)
-+		return -ENOMEM;
- 
- 	INIT_LIST_HEAD(&sensor->list);
- 	sensor->type = type;
-@@ -955,9 +946,6 @@ static int atk_add_sensor(struct atk_data *data, union acpi_object *obj)
- 	(*num)++;
- 
- 	return 1;
--out:
--	kfree(sensor);
--	return err;
- }
- 
- static int atk_enumerate_old_hwmon(struct atk_data *data)
-@@ -998,8 +986,7 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 		dev_warn(dev, METHOD_OLD_ENUM_TMP ": ACPI exception: %s\n",
- 				acpi_format_exception(status));
- 
--		ret = -ENODEV;
--		goto cleanup;
-+		return -ENODEV;
- 	}
- 
- 	pack = buf.pointer;
-@@ -1020,8 +1007,7 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 		dev_warn(dev, METHOD_OLD_ENUM_FAN ": ACPI exception: %s\n",
- 				acpi_format_exception(status));
- 
--		ret = -ENODEV;
--		goto cleanup;
-+		return -ENODEV;
- 	}
- 
- 	pack = buf.pointer;
-@@ -1035,9 +1021,6 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 	ACPI_FREE(buf.pointer);
- 
- 	return count;
--cleanup:
--	atk_free_sensors(data);
--	return ret;
- }
- 
- static int atk_ec_present(struct atk_data *data)
-@@ -1213,17 +1196,6 @@ static int atk_init_attribute_groups(struct atk_data *data)
- 	return 0;
- }
- 
--static void atk_free_sensors(struct atk_data *data)
--{
--	struct list_head *head = &data->sensor_list;
--	struct atk_sensor_data *s, *tmp;
--
--	list_for_each_entry_safe(s, tmp, head, list) {
--		kfree(s->acpi_name);
--		kfree(s);
--	}
--}
--
- static int atk_register_hwmon(struct atk_data *data)
- {
- 	struct device *dev = &data->acpi_dev->dev;
-@@ -1323,7 +1295,7 @@ static int atk_add(struct acpi_device *device)
- 
- 	dev_dbg(&device->dev, "adding...\n");
- 
--	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	data = devm_kzalloc(&device->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
-@@ -1375,18 +1347,15 @@ static int atk_add(struct acpi_device *device)
- 		goto out;
- 	err = atk_register_hwmon(data);
- 	if (err)
--		goto cleanup;
-+		goto out;
- 
- 	atk_debugfs_init(data);
- 
- 	device->driver_data = data;
- 	return 0;
--cleanup:
--	atk_free_sensors(data);
- out:
- 	if (data->disable_ec)
- 		atk_ec_ctl(data, 0);
--	kfree(data);
- 	return err;
- }
- 
-@@ -1399,7 +1368,6 @@ static int atk_remove(struct acpi_device *device)
- 
- 	atk_debugfs_cleanup(data);
- 
--	atk_free_sensors(data);
- 	hwmon_device_unregister(data->hwmon_dev);
- 
- 	if (data->disable_ec) {
-@@ -1407,8 +1375,6 @@ static int atk_remove(struct acpi_device *device)
- 			dev_err(&device->dev, "Failed to disable EC\n");
- 	}
- 
--	kfree(data);
--
- 	return 0;
- }
- 
--- 
-2.17.1
+Background: the OCC is a microcontroller inside a POWER8 or POWER9
+processor which controls various power management functions of the
+chip, and monitor various chip internal metrics including temperature.
+
+The driver is for the kernel of the BMC (the management controller),
+typically a little ARM SoC, which needs to communicate with the above
+OCC on the main processor, to perform various system power and thermal
+management tasks.
+
+Our current out-of-tree driver has a "common" part which exposes all of
+the OCC "sensors" via hwmon, and two backends, one for P8 and one for
+P9, handling the communication with the actual OCC implementation.
+
+The backend gets instanciated from the device-tree and brings the
+common parts in, so far it's rather standard.
+
+The communication on POWER8 goes via i2c which is rather simple. There
+is no other channel and all is good.
+
+On POWER9, it however uses our "FSI" interface (drivers/fsi), more
+specifically it's stacked on top of another driver (fsi-sbefifo.c, not
+yet upstream, working on it too) which provides the communication with
+the actual OCC (it's much faster than i2c). In addition, on POWER9, we
+also need a separate userspace interface to the OCC for various
+management tasks beyond the simple sensors, which we provide via a misc
+chardev (/dev/occ*).
+
+The current design of the driver is a bit convoluted though:
+
+ - The sbefifo (transport controller if you want) creates a child
+platform device for the occ which represents its ability to communicate
+with the occ.
+
+ - A first driver (fsi-occ) binds to that, it's not an hwmon driver. It
+provides the /dev/occ* interface, and exports in-kernel functions for
+sending commands and receiving responses from the OCC (simple wrappers
+on top of the sbefifo). It also creates another platform device
+underneath itself.
+
+ - A second driver (occ-hwmon) then binds to that and uses the above
+exported functions to communicate with the occ (this is the POWER9
+backend of the hwmon driver).
+
+This is all a bit convoluted and I think I can simplify it quite a bit
+by removing the fsi-occ.c layer. The "wrappers" for sending commands to
+the OCC via sbefifo aren't particularily useful, the POWER9 hwmon occ
+backend could do that directly like the POWER8 one directly formats the
+i2c commands.
+
+However, I would have to bring the misc device into the hwmon driver.
+
+Do you have a policy against this ? I noticed a couple of drivers in
+drivers/hwmon already do something similar, but I wanted to double
+check.
+
+Additionally, there's another problem for which I'm not entirely fan of
+our solution... The OCC isn't always there. IE, when the server is
+powered off, the POWER9 chip is off, thus one cannot communicate with
+the OCC. Only after it's powered on and has gone sufficiently far
+during boot so that the POWER9 firmware has started the OCC can we
+communicate with it.
+
+Currently, what happens is that the occ-hwmon driver fails to bind when
+the server is off (in my latest code base due to specific error codes
+from sbefifo). Later on, the BMC userspace who monitors the system
+state gets notified via an IPMI message by the POWER9 firmware that the
+OCCs are up, and manually re-binds the driver.
+
+It works ... but I'm not fan of it. Do you have a better suggestion ?
+Should we keep the driver bound but error out on the values ? Should we
+play with the "power state" of the device ? What's the policy when
+accessing hwmon for a device in "suspended" state ?
+
+Thanks for your time,
+
+Cheers,
+Ben.
