@@ -1,295 +1,304 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f65.google.com ([209.85.160.65]:34273 "EHLO
-        mail-pl0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751214AbeEVNlu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 May 2018 09:41:50 -0400
-Subject: Re: [PATCH RFC V2 2/6] hwmon: Add support for RPi voltage sensor
-To: Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, Eric Anholt <eric@anholt.net>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Phil Elwell <phil@raspberrypi.org>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Return-Path: <stefan.wahren@i2se.com>
+Return-path: <stefan.wahren@i2se.com>
+Date: Tue, 22 May 2018 15:51:36 +0200 (CEST)
+From: Stefan Wahren <stefan.wahren@i2se.com>
+To: Rob Herring <robh+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	Eric Anholt <eric@anholt.net>, Mark Rutland <mark.rutland@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>
+Cc: Scott Branden <sbranden@broadcom.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	linux-rpi-kernel@lists.infradead.org,
+	Phil Elwell <phil@raspberrypi.org>,
+	bcm-kernel-feedback-list@broadcom.com, linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	=?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+	Ray Jui <rjui@broadcom.com>, linux-arm-kernel@lists.infradead.org
+Message-ID: <659923372.11518.1526997096662@email.1und1.de>
+In-Reply-To: <90a768aa-ee8c-1050-cf15-60637069dbdb@roeck-us.net>
 References: <1526988112-4021-1-git-send-email-stefan.wahren@i2se.com>
  <1526988112-4021-3-git-send-email-stefan.wahren@i2se.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <90a768aa-ee8c-1050-cf15-60637069dbdb@roeck-us.net>
-Date: Tue, 22 May 2018 06:41:46 -0700
+ <90a768aa-ee8c-1050-cf15-60637069dbdb@roeck-us.net>
+Subject: Re: [PATCH RFC V2 2/6] hwmon: Add support for RPi voltage sensor
 MIME-Version: 1.0
-In-Reply-To: <1526988112-4021-3-git-send-email-stefan.wahren@i2se.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 05/22/2018 04:21 AM, Stefan Wahren wrote:
-> Currently there is no easy way to detect undervoltage conditions on a
-> remote Raspberry Pi. This hwmon driver retrieves the state of the
-> undervoltage sensor via mailbox interface. The handling based on
-> Noralf's modifications to the downstream firmware driver. In case of
-> an undervoltage condition only an entry is written to the kernel log.
-> 
-> CC: "Noralf Trønnes" <noralf@tronnes.org>
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->   Documentation/hwmon/raspberrypi-hwmon |  22 +++++
->   drivers/hwmon/Kconfig                 |  10 ++
->   drivers/hwmon/Makefile                |   1 +
->   drivers/hwmon/raspberrypi-hwmon.c     | 168 ++++++++++++++++++++++++++++++++++
->   4 files changed, 201 insertions(+)
->   create mode 100644 Documentation/hwmon/raspberrypi-hwmon
->   create mode 100644 drivers/hwmon/raspberrypi-hwmon.c
-> 
-> diff --git a/Documentation/hwmon/raspberrypi-hwmon b/Documentation/hwmon/raspberrypi-hwmon
-> new file mode 100644
-> index 0000000..3c92e2c
-> --- /dev/null
-> +++ b/Documentation/hwmon/raspberrypi-hwmon
-> @@ -0,0 +1,22 @@
-> +Kernel driver raspberrypi-hwmon
-> +===============================
-> +
-> +Supported boards:
-> +  * Raspberry Pi A+ (via GPIO on SoC)
-> +  * Raspberry Pi B+ (via GPIO on SoC)
-> +  * Raspberry Pi 2 B (via GPIO on SoC)
-> +  * Raspberry Pi 3 B (via GPIO on port expander)
-> +  * Raspberry Pi 3 B+ (via PMIC)
-> +
-> +Author: Stefan Wahren <stefan.wahren@i2se.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver periodically polls a mailbox property of the VC4 firmware to detect
-> +undervoltage conditions.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +in0_lcrit_alarm		Undervoltage alarm
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 768aed5..9a5bdb0 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1298,6 +1298,16 @@ config SENSORS_PWM_FAN
->   	  This driver can also be built as a module.  If so, the module
->   	  will be called pwm-fan.
->   
-> +config SENSORS_RASPBERRYPI_HWMON
-> +	tristate "Raspberry Pi voltage monitor"
-> +	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
-> +	help
-> +	  If you say yes here you get support for voltage sensor on the
-> +	  Raspberry Pi.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called raspberrypi-hwmon.
-> +
->   config SENSORS_SHT15
->   	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
->   	depends on GPIOLIB || COMPILE_TEST
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index e7d52a3..a929770 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
->   obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
->   obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
->   obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
-> +obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
->   obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
->   obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->   obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
-> diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
-> new file mode 100644
-> index 0000000..6233e84
-> --- /dev/null
-> +++ b/drivers/hwmon/raspberrypi-hwmon.c
-> @@ -0,0 +1,168 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Raspberry Pi voltage sensor driver
-> + *
-> + * Based on firmware/raspberrypi.c by Noralf Trønnes
-> + *
-> + * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
-> + */
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/workqueue.h>
-> +#include <soc/bcm2835/raspberrypi-firmware.h>
-> +
-> +#define UNDERVOLTAGE_STICKY_BIT	BIT(16)
-> +
-> +struct rpi_hwmon_data {
-> +	struct device *hwmon_dev;
-> +	struct rpi_firmware *fw;
-> +	u32 last_throttled;
-> +	struct delayed_work get_values_poll_work;
-> +};
-> +
-> +static void rpi_firmware_get_throttled(struct rpi_hwmon_data *data)
-> +{
-> +	u32 new_uv, old_uv, value;
-> +	int ret;
-> +
-> +	/* Request firmware to clear sticky bits */
-> +	value = 0xffff;
-> +
-> +	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
-> +				    &value, sizeof(value));
-> +	if (ret) {
-> +		dev_err_once(data->hwmon_dev, "Failed to get throttled (%d)\n",
-> +			     ret);
-> +		return;
-> +	}
-> +
-> +	new_uv = value & UNDERVOLTAGE_STICKY_BIT;
-> +	old_uv = data->last_throttled & UNDERVOLTAGE_STICKY_BIT;
-> +	data->last_throttled = value;
-> +
-> +	if (new_uv == old_uv)
-> +		return;
-> +
-> +	if (new_uv)
-> +		dev_crit(data->hwmon_dev, "Undervoltage detected!\n");
-> +	else
-> +		dev_info(data->hwmon_dev, "Voltage normalised\n");
-> +
-> +	sysfs_notify(&data->hwmon_dev->kobj, NULL, "in0_lcrit_alarm");
-> +}
-> +
-> +static void get_values_poll(struct work_struct *work)
-> +{
-> +	struct rpi_hwmon_data *data;
-> +
-> +	data = container_of(work, struct rpi_hwmon_data,
-> +			    get_values_poll_work.work);
-> +
-> +	rpi_firmware_get_throttled(data);
-> +
-> +	/*
-> +	 * We can't run faster than the sticky shift (100ms) since we get
-> +	 * flipping in the sticky bits that are cleared.
-> +	 */
-> +	schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
-> +}
-> +
-> +static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
-> +		    u32 attr, int channel, long *val)
-> +{
-> +	struct rpi_hwmon_data *data = dev_get_drvdata(dev);
-> +
-> +	*val = !!(data->last_throttled & UNDERVOLTAGE_STICKY_BIT);
-> +	return 0;
-> +}
-> +
-> +static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
-> +			      u32 attr, int channel)
-> +{
-> +	return 0444;
-> +}
-> +
-> +static const u32 rpi_in_config[] = {
-> +	HWMON_I_LCRIT_ALARM,
-> +	0
-> +};
-> +
-> +static const struct hwmon_channel_info rpi_in = {
-> +	.type = hwmon_in,
-> +	.config = rpi_in_config,
-> +};
-> +
-> +static const struct hwmon_channel_info *rpi_info[] = {
-> +	&rpi_in,
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops rpi_hwmon_ops = {
-> +	.is_visible = rpi_is_visible,
-> +	.read = rpi_read,
-> +};
-> +
-> +static const struct hwmon_chip_info rpi_chip_info = {
-> +	.ops = &rpi_hwmon_ops,
-> +	.info = rpi_info,
-> +};
-> +
-> +static int rpi_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct rpi_hwmon_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->fw = platform_get_drvdata(to_platform_device(dev->parent));
-> +	if (!data->fw)
-> +		return -EPROBE_DEFER;
-> +
+Hi Guenter,
 
-I am a bit at loss here (and sorry I didn't bring this up before).
-How would this ever be possible, given that the driver is registered
-from the firmware driver ?
+> Guenter Roeck <linux@roeck-us.net> hat am 22. Mai 2018 um 15:41 geschrieb=
+en:
+>=20
+>=20
+> On 05/22/2018 04:21 AM, Stefan Wahren wrote:
+> > Currently there is no easy way to detect undervoltage conditions on a
+> > remote Raspberry Pi. This hwmon driver retrieves the state of the
+> > undervoltage sensor via mailbox interface. The handling based on
+> > Noralf's modifications to the downstream firmware driver. In case of
+> > an undervoltage condition only an entry is written to the kernel log.
+> >=20
+> > CC: "Noralf Tr=C3=B8nnes" <noralf@tronnes.org>
+> > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > ---
+> >   Documentation/hwmon/raspberrypi-hwmon |  22 +++++
+> >   drivers/hwmon/Kconfig                 |  10 ++
+> >   drivers/hwmon/Makefile                |   1 +
+> >   drivers/hwmon/raspberrypi-hwmon.c     | 168 +++++++++++++++++++++++++=
++++++++++
+> >   4 files changed, 201 insertions(+)
+> >   create mode 100644 Documentation/hwmon/raspberrypi-hwmon
+> >   create mode 100644 drivers/hwmon/raspberrypi-hwmon.c
+> >=20
+> > diff --git a/Documentation/hwmon/raspberrypi-hwmon b/Documentation/hwmo=
+n/raspberrypi-hwmon
+> > new file mode 100644
+> > index 0000000..3c92e2c
+> > --- /dev/null
+> > +++ b/Documentation/hwmon/raspberrypi-hwmon
+> > @@ -0,0 +1,22 @@
+> > +Kernel driver raspberrypi-hwmon
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +Supported boards:
+> > +  * Raspberry Pi A+ (via GPIO on SoC)
+> > +  * Raspberry Pi B+ (via GPIO on SoC)
+> > +  * Raspberry Pi 2 B (via GPIO on SoC)
+> > +  * Raspberry Pi 3 B (via GPIO on port expander)
+> > +  * Raspberry Pi 3 B+ (via PMIC)
+> > +
+> > +Author: Stefan Wahren <stefan.wahren@i2se.com>
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +This driver periodically polls a mailbox property of the VC4 firmware =
+to detect
+> > +undervoltage conditions.
+> > +
+> > +Sysfs entries
+> > +-------------
+> > +
+> > +in0_lcrit_alarm=09=09Undervoltage alarm
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 768aed5..9a5bdb0 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1298,6 +1298,16 @@ config SENSORS_PWM_FAN
+> >   =09  This driver can also be built as a module.  If so, the module
+> >   =09  will be called pwm-fan.
+> >  =20
+> > +config SENSORS_RASPBERRYPI_HWMON
+> > +=09tristate "Raspberry Pi voltage monitor"
+> > +=09depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
+> > +=09help
+> > +=09  If you say yes here you get support for voltage sensor on the
+> > +=09  Raspberry Pi.
+> > +
+> > +=09  This driver can also be built as a module. If so, the module
+> > +=09  will be called raspberrypi-hwmon.
+> > +
+> >   config SENSORS_SHT15
+> >   =09tristate "Sensiron humidity and temperature sensors. SHT15 and com=
+pat."
+> >   =09depends on GPIOLIB || COMPILE_TEST
+> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> > index e7d52a3..a929770 100644
+> > --- a/drivers/hwmon/Makefile
+> > +++ b/drivers/hwmon/Makefile
+> > @@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_PC87427)=09+=3D pc87427.o
+> >   obj-$(CONFIG_SENSORS_PCF8591)=09+=3D pcf8591.o
+> >   obj-$(CONFIG_SENSORS_POWR1220)  +=3D powr1220.o
+> >   obj-$(CONFIG_SENSORS_PWM_FAN)=09+=3D pwm-fan.o
+> > +obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)=09+=3D raspberrypi-hwmon.o
+> >   obj-$(CONFIG_SENSORS_S3C)=09+=3D s3c-hwmon.o
+> >   obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+=3D sch56xx-common.o
+> >   obj-$(CONFIG_SENSORS_SCH5627)=09+=3D sch5627.o
+> > diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberr=
+ypi-hwmon.c
+> > new file mode 100644
+> > index 0000000..6233e84
+> > --- /dev/null
+> > +++ b/drivers/hwmon/raspberrypi-hwmon.c
+> > @@ -0,0 +1,168 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Raspberry Pi voltage sensor driver
+> > + *
+> > + * Based on firmware/raspberrypi.c by Noralf Tr=C3=B8nnes
+> > + *
+> > + * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
+> > + */
+> > +#include <linux/device.h>
+> > +#include <linux/err.h>
+> > +#include <linux/hwmon.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/workqueue.h>
+> > +#include <soc/bcm2835/raspberrypi-firmware.h>
+> > +
+> > +#define UNDERVOLTAGE_STICKY_BIT=09BIT(16)
+> > +
+> > +struct rpi_hwmon_data {
+> > +=09struct device *hwmon_dev;
+> > +=09struct rpi_firmware *fw;
+> > +=09u32 last_throttled;
+> > +=09struct delayed_work get_values_poll_work;
+> > +};
+> > +
+> > +static void rpi_firmware_get_throttled(struct rpi_hwmon_data *data)
+> > +{
+> > +=09u32 new_uv, old_uv, value;
+> > +=09int ret;
+> > +
+> > +=09/* Request firmware to clear sticky bits */
+> > +=09value =3D 0xffff;
+> > +
+> > +=09ret =3D rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
+> > +=09=09=09=09    &value, sizeof(value));
+> > +=09if (ret) {
+> > +=09=09dev_err_once(data->hwmon_dev, "Failed to get throttled (%d)\n",
+> > +=09=09=09     ret);
+> > +=09=09return;
+> > +=09}
+> > +
+> > +=09new_uv =3D value & UNDERVOLTAGE_STICKY_BIT;
+> > +=09old_uv =3D data->last_throttled & UNDERVOLTAGE_STICKY_BIT;
+> > +=09data->last_throttled =3D value;
+> > +
+> > +=09if (new_uv =3D=3D old_uv)
+> > +=09=09return;
+> > +
+> > +=09if (new_uv)
+> > +=09=09dev_crit(data->hwmon_dev, "Undervoltage detected!\n");
+> > +=09else
+> > +=09=09dev_info(data->hwmon_dev, "Voltage normalised\n");
+> > +
+> > +=09sysfs_notify(&data->hwmon_dev->kobj, NULL, "in0_lcrit_alarm");
+> > +}
+> > +
+> > +static void get_values_poll(struct work_struct *work)
+> > +{
+> > +=09struct rpi_hwmon_data *data;
+> > +
+> > +=09data =3D container_of(work, struct rpi_hwmon_data,
+> > +=09=09=09    get_values_poll_work.work);
+> > +
+> > +=09rpi_firmware_get_throttled(data);
+> > +
+> > +=09/*
+> > +=09 * We can't run faster than the sticky shift (100ms) since we get
+> > +=09 * flipping in the sticky bits that are cleared.
+> > +=09 */
+> > +=09schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
+> > +}
+> > +
+> > +static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
+> > +=09=09    u32 attr, int channel, long *val)
+> > +{
+> > +=09struct rpi_hwmon_data *data =3D dev_get_drvdata(dev);
+> > +
+> > +=09*val =3D !!(data->last_throttled & UNDERVOLTAGE_STICKY_BIT);
+> > +=09return 0;
+> > +}
+> > +
+> > +static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_typ=
+es type,
+> > +=09=09=09      u32 attr, int channel)
+> > +{
+> > +=09return 0444;
+> > +}
+> > +
+> > +static const u32 rpi_in_config[] =3D {
+> > +=09HWMON_I_LCRIT_ALARM,
+> > +=090
+> > +};
+> > +
+> > +static const struct hwmon_channel_info rpi_in =3D {
+> > +=09.type =3D hwmon_in,
+> > +=09.config =3D rpi_in_config,
+> > +};
+> > +
+> > +static const struct hwmon_channel_info *rpi_info[] =3D {
+> > +=09&rpi_in,
+> > +=09NULL
+> > +};
+> > +
+> > +static const struct hwmon_ops rpi_hwmon_ops =3D {
+> > +=09.is_visible =3D rpi_is_visible,
+> > +=09.read =3D rpi_read,
+> > +};
+> > +
+> > +static const struct hwmon_chip_info rpi_chip_info =3D {
+> > +=09.ops =3D &rpi_hwmon_ops,
+> > +=09.info =3D rpi_info,
+> > +};
+> > +
+> > +static int rpi_hwmon_probe(struct platform_device *pdev)
+> > +{
+> > +=09struct device *dev =3D &pdev->dev;
+> > +=09struct rpi_hwmon_data *data;
+> > +=09int ret;
+> > +
+> > +=09data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > +=09if (!data)
+> > +=09=09return -ENOMEM;
+> > +
+> > +=09data->fw =3D platform_get_drvdata(to_platform_device(dev->parent));
+> > +=09if (!data->fw)
+> > +=09=09return -EPROBE_DEFER;
+> > +
+>=20
+> I am a bit at loss here (and sorry I didn't bring this up before).
+> How would this ever be possible, given that the driver is registered
+> from the firmware driver ?
 
-> +	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
-> +				    &data->last_throttled,
-> +				    sizeof(data->last_throttled));
-> +	if (ret)
-> +		return -ENODEV;
-> +
-> +	data->hwmon_dev = devm_hwmon_device_register_with_info(dev, "rpi_volt",
-> +							       data,
-> +							       &rpi_chip_info,
-> +							       NULL);
-> +
-> +	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
-> +		schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
-> +
-> +	return PTR_ERR_OR_ZERO(data->hwmon_dev);
-> +}
-> +
-> +static int rpi_hwmon_remove(struct platform_device *pdev)
-> +{
-> +	struct rpi_hwmon_data *data = platform_get_drvdata(pdev);
-> +
-> +	cancel_delayed_work_sync(&data->get_values_poll_work);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver rpi_hwmon_driver = {
-> +	.probe = rpi_hwmon_probe,
-> +	.remove = rpi_hwmon_remove,
-> +	.driver = {
-> +		.name = "raspberrypi-hwmon",
-> +	},
-> +};
-> +module_platform_driver(rpi_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
-> +MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
-> +MODULE_LICENSE("GPL v2");
-> 
+Do you refer to the (wrong) return code, the assumption that the parent mus=
+t be a platform driver or a possible race?
 
+>=20
+> > +=09ret =3D rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
+> > +=09=09=09=09    &data->last_throttled,
+> > +=09=09=09=09    sizeof(data->last_throttled));
+> > +=09if (ret)
+> > +=09=09return -ENODEV;
+> > +
+> > +=09data->hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "rpi_=
+volt",
+> > +=09=09=09=09=09=09=09       data,
+> > +=09=09=09=09=09=09=09       &rpi_chip_info,
+> > +=09=09=09=09=09=09=09       NULL);
+> > +
+> > +=09INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
+> > +=09platform_set_drvdata(pdev, data);
+> > +
+> > +=09if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
+> > +=09=09schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
+> > +
+> > +=09return PTR_ERR_OR_ZERO(data->hwmon_dev);
+> > +}
+> > +
+> > +static int rpi_hwmon_remove(struct platform_device *pdev)
+> > +{
+> > +=09struct rpi_hwmon_data *data =3D platform_get_drvdata(pdev);
+> > +
+> > +=09cancel_delayed_work_sync(&data->get_values_poll_work);
+> > +
+> > +=09return 0;
+> > +}
+> > +
+> > +static struct platform_driver rpi_hwmon_driver =3D {
+> > +=09.probe =3D rpi_hwmon_probe,
+> > +=09.remove =3D rpi_hwmon_remove,
+> > +=09.driver =3D {
+> > +=09=09.name =3D "raspberrypi-hwmon",
+> > +=09},
+> > +};
+> > +module_platform_driver(rpi_hwmon_driver);
+> > +
+> > +MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
+> > +MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
+> > +MODULE_LICENSE("GPL v2");
+> >=20
+>
