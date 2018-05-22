@@ -1,10 +1,10 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mout.kundenserver.de ([212.227.126.134]:59545 "EHLO
+Received: from mout.kundenserver.de ([212.227.126.130]:37911 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751443AbeEVLYA (ORCPT
+        with ESMTP id S1751269AbeEVLYS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 May 2018 07:24:00 -0400
+        Tue, 22 May 2018 07:24:18 -0400
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -19,46 +19,33 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-rpi-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC V2 1/6] ARM: bcm2835: Add GET_THROTTLED firmware property
-Date: Tue, 22 May 2018 13:21:47 +0200
-Message-Id: <1526988112-4021-2-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH RFC V2 5/6] ARM: multi_v7_defconfig: Enable RPi voltage sensor
+Date: Tue, 22 May 2018 13:21:51 +0200
+Message-Id: <1526988112-4021-6-git-send-email-stefan.wahren@i2se.com>
 In-Reply-To: <1526988112-4021-1-git-send-email-stefan.wahren@i2se.com>
 References: <1526988112-4021-1-git-send-email-stefan.wahren@i2se.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Recent Raspberry Pi firmware provides a mailbox property to detect
-under-voltage conditions. Here is the current definition.
-
-The u32 value returned by the firmware is divided into 2 parts:
-  - lower 16-bits are the live value
-  - upper 16-bits are the history or sticky value
-
-  Bits:
-  0: undervoltage
-  1: arm frequency capped
-  2: currently throttled
-  16: undervoltage has occurred
-  17: arm frequency capped has occurred
-  18: throttling has occurred
+The patch enables the hwmon driver for the Raspberry Pi.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- include/soc/bcm2835/raspberrypi-firmware.h | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
-index 8ee8991..c4a5c9e 100644
---- a/include/soc/bcm2835/raspberrypi-firmware.h
-+++ b/include/soc/bcm2835/raspberrypi-firmware.h
-@@ -75,6 +75,7 @@ enum rpi_firmware_property_tag {
- 	RPI_FIRMWARE_GET_EDID_BLOCK =                         0x00030020,
- 	RPI_FIRMWARE_GET_CUSTOMER_OTP =                       0x00030021,
- 	RPI_FIRMWARE_GET_DOMAIN_STATE =                       0x00030030,
-+	RPI_FIRMWARE_GET_THROTTLED =                          0x00030046,
- 	RPI_FIRMWARE_SET_CLOCK_STATE =                        0x00038001,
- 	RPI_FIRMWARE_SET_CLOCK_RATE =                         0x00038002,
- 	RPI_FIRMWARE_SET_VOLTAGE =                            0x00038003,
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 720461b..5c9dc00 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -477,6 +477,7 @@ CONFIG_SENSORS_LM90=y
+ CONFIG_SENSORS_LM95245=y
+ CONFIG_SENSORS_NTC_THERMISTOR=m
+ CONFIG_SENSORS_PWM_FAN=m
++CONFIG_SENSORS_RASPBERRYPI_HWMON=m
+ CONFIG_SENSORS_INA2XX=m
+ CONFIG_CPU_THERMAL=y
+ CONFIG_BCM2835_THERMAL=m
 -- 
 2.7.4
 
