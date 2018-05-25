@@ -15,9 +15,9 @@ Cc: Florian Fainelli <f.fainelli@gmail.com>,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V3 4/6] ARM: bcm2835_defconfig: Enable RPi voltage sensor
-Date: Fri, 25 May 2018 21:24:37 +0200
-Message-Id: <1527276279-23876-5-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V3 6/6] arm64: defconfig: Enable RPi voltage sensor
+Date: Fri, 25 May 2018 21:24:39 +0200
+Message-Id: <1527276279-23876-7-git-send-email-stefan.wahren@i2se.com>
 In-Reply-To: <1527276279-23876-1-git-send-email-stefan.wahren@i2se.com>
 References: <1527276279-23876-1-git-send-email-stefan.wahren@i2se.com>
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -26,21 +26,20 @@ The patch enables the hwmon driver for the Raspberry Pi.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm/configs/bcm2835_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835_defconfig
-index e4d188f..e9bc889 100644
---- a/arch/arm/configs/bcm2835_defconfig
-+++ b/arch/arm/configs/bcm2835_defconfig
-@@ -86,7 +86,7 @@ CONFIG_SPI=y
- CONFIG_SPI_BCM2835=y
- CONFIG_SPI_BCM2835AUX=y
- CONFIG_GPIO_SYSFS=y
--# CONFIG_HWMON is not set
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 3299505..e5c7198 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -353,6 +353,7 @@ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_SENSORS_ARM_SCPI=y
+ CONFIG_SENSORS_LM90=m
+ CONFIG_SENSORS_INA2XX=m
 +CONFIG_SENSORS_RASPBERRYPI_HWMON=m
- CONFIG_THERMAL=y
- CONFIG_BCM2835_THERMAL=y
- CONFIG_WATCHDOG=y
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+ CONFIG_CPU_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
 -- 
 2.7.4
