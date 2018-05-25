@@ -1,50 +1,30 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg0-f65.google.com ([74.125.83.65]:34289 "EHLO
-        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750745AbeEHEmD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 May 2018 00:42:03 -0400
-Subject: Re: [PATCH 4/9] hwmon: fschmd: fix typo 'can by' to 'can be'
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, trivial@kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20180506112404.24872-1-wsa+renesas@sang-engineering.com>
- <20180506112404.24872-5-wsa+renesas@sang-engineering.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <523422b7-46f5-30ca-3fb7-d30086e5f8fb@roeck-us.net>
-Date: Mon, 7 May 2018 21:42:01 -0700
-MIME-Version: 1.0
-In-Reply-To: <20180506112404.24872-5-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: from ozlabs.org ([203.11.71.1]:53703 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S966646AbeEYLln (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 25 May 2018 07:41:43 -0400
+In-Reply-To: <1525688738-9185-2-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
+To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
+        linux@roeck-us.net
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+Cc: linux-hwmon@vger.kernel.org, stewart@linux.vnet.ibm.com,
+        jdelvare@suse.com, linux-kernel@vger.kernel.org, paulus@samba.org,
+        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [1/3] powernv: opal-sensor: Add support to read 64bit sensor values
+Message-Id: <40skqT5t84z9s4k@ozlabs.org>
+Date: Fri, 25 May 2018 21:41:41 +1000 (AEST)
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 05/06/2018 04:23 AM, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/fschmd.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 2018-05-07 at 10:25:36 UTC, Shilpasri G Bhat wrote:
+> This patch adds support to read 64-bit sensor values. This method is
+> used to read energy sensors and counters which are of type u64.
 > 
-> diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
-> index 5e78229ade049f..22d3a84f13ef58 100644
-> --- a/drivers/hwmon/fschmd.c
-> +++ b/drivers/hwmon/fschmd.c
-> @@ -105,7 +105,7 @@ static const u8 FSCHMD_REG_VOLT[7][6] = {
->   static const int FSCHMD_NO_VOLT_SENSORS[7] = { 3, 3, 3, 3, 3, 3, 6 };
->   
->   /*
-> - * minimum pwm at which the fan is driven (pwm can by increased depending on
-> + * minimum pwm at which the fan is driven (pwm can be increased depending on
->    * the temp. Notice that for the scy some fans share there minimum speed.
->    * Also notice that with the scy the sensor order is different than with the
->    * other chips, this order was in the 2.4 driver and kept for consistency.
-> 
+> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
 
+Applied to powerpc next, thanks.
+
+https://git.kernel.org/powerpc/c/5cdcb01e0af5a709c9bebe0e0450dc
+
+cheers
