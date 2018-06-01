@@ -1,69 +1,165 @@
-Return-Path: <andy.shevchenko@gmail.com>
-Return-path: <andy.shevchenko@gmail.com>
-MIME-Version: 1.0
-In-Reply-To: <20180531225700.721-2-bastiangermann@fishpost.de>
-References: <f885fcb0-d9f3-7702-13ad-5af2913131f0@roeck-us.net>
- <20180531225700.721-1-bastiangermann@fishpost.de> <20180531225700.721-2-bastiangermann@fishpost.de>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 1 Jun 2018 12:54:04 +0300
-Message-ID: <CAHp75VcZqpQ7qM2aBzSsqa+xYOdevZkWy=h+u8=nhdP2foyH4g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (asus_atk0110) Make use of device managed memory
-To: Bastian Germann <bastiangermann@fishpost.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Luca Tettamanti <kronos.it@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Return-Path: <bastiangermann@fishpost.de>
+Return-path: <bastiangermann@fishpost.de>
+From: Bastian Germann <bastiangermann@fishpost.de>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Bastian Germann <bastiangermann@fishpost.de>,
+	Luca Tettamanti <kronos.it@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (asus_atk0110) Replace deprecated device register call
+Date: Fri,  1 Jun 2018 13:07:17 +0200
+Message-Id: <20180601110719.3281-1-bastiangermann@fishpost.de>
+In-Reply-To: <CAHp75VcZqpQ7qM2aBzSsqa+xYOdevZkWy=h+u8=nhdP2foyH4g@mail.gmail.com>
+References: <CAHp75VcZqpQ7qM2aBzSsqa+xYOdevZkWy=h+u8=nhdP2foyH4g@mail.gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Jun 1, 2018 at 1:57 AM, Bastian Germann
-<bastiangermann@fishpost.de> wrote:
-> Use devm_* variants of kstrdup and kzalloc. Get rid of the kfree cleanups.
+Make the asus_atk0110 driver use hwmon_device_register_with_groups instead
+of the deprecated hwmon_device_register.
+Construct the expected attribute_group array from the sensor list which
+contains all needed attributes.
+Remove the manual sysfs file creation and deletion that are now taken care
+of by the (un)register calls via the attribute_group array.
 
->  static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
->  {
->         struct atk_data *data = inode->i_private;
-> +       struct device *dev = &data->acpi_dev->dev;
->         char *buf = NULL;
->         union acpi_object *ret;
->         u8 cls;
-> @@ -748,7 +748,7 @@ static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
->                 id = &pack->package.elements[0];
->                 if (id->integer.value == data->debugfs.id) {
->                         /* Print the package */
-> -                       buf = kzalloc(512, GFP_KERNEL);
-> +                       buf = devm_kzalloc(dev, 512, GFP_KERNEL);
->                         if (!buf) {
->                                 ACPI_FREE(ret);
->                                 return -ENOMEM;
+Signed-off-by: Bastian Germann <bastiangermann@fishpost.de>
+---
+ drivers/hwmon/asus_atk0110.c | 75 ++++++++++++------------------------
+ 1 file changed, 25 insertions(+), 50 deletions(-)
 
-Looking to the function name, it feels like you are creating a memory
-leak and devm_ is inappropriate here.
-
-> @@ -776,16 +776,9 @@ static ssize_t atk_debugfs_ggrp_read(struct file *file, char __user *buf,
->         return simple_read_from_buffer(buf, count, pos, str, len);
->  }
->
-> -static int atk_debugfs_ggrp_release(struct inode *inode, struct file *file)
-> -{
-> -       kfree(file->private_data);
-> -       return 0;
-> -}
-> -
->  static const struct file_operations atk_debugfs_ggrp_fops = {
->         .read           = atk_debugfs_ggrp_read,
->         .open           = atk_debugfs_ggrp_open,
-> -       .release        = atk_debugfs_ggrp_release,
->         .llseek         = no_llseek,
->  };
-
-So do these.
-
-Also the question of time to leave of the objects used for debugfs
-communication. Please double check that it's not affected by the
-change.
-
-Otherwise looks good.
-
+diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
+index 975c43d446f8..33748cc07acc 100644
+--- a/drivers/hwmon/asus_atk0110.c
++++ b/drivers/hwmon/asus_atk0110.c
+@@ -125,6 +125,8 @@ struct atk_data {
+ 	int temperature_count;
+ 	int fan_count;
+ 	struct list_head sensor_list;
++	struct attribute_group attr_group[2];
++	const struct attribute_group *attr_groups[2];
+ 
+ 	struct {
+ 		struct dentry *root;
+@@ -262,14 +264,6 @@ static ssize_t atk_limit2_show(struct device *dev,
+ 	return sprintf(buf, "%lld\n", value);
+ }
+ 
+-static ssize_t atk_name_show(struct device *dev,
+-				struct device_attribute *attr, char *buf)
+-{
+-	return sprintf(buf, "atk0110\n");
+-}
+-static struct device_attribute atk_name_attr =
+-		__ATTR(name, 0444, atk_name_show, NULL);
+-
+ static void atk_init_attribute(struct device_attribute *attr, char *name,
+ 		sysfs_show_func show)
+ {
+@@ -1193,42 +1187,30 @@ static int atk_enumerate_new_hwmon(struct atk_data *data)
+ 	return err;
+ }
+ 
+-static int atk_create_files(struct atk_data *data)
++static int atk_init_attribute_groups(struct atk_data *data)
+ {
++	struct device *dev = &data->acpi_dev->dev;
+ 	struct atk_sensor_data *s;
+-	int err;
++	struct attribute **attrs;
++	int i = 0;
++	int len = (data->voltage_count + data->temperature_count
++			+ data->fan_count) * 4 + 1;
++
++	attrs = devm_kcalloc(dev, len, sizeof(struct attribute *), GFP_KERNEL);
++	if (!attrs)
++		return -ENOMEM;
+ 
+ 	list_for_each_entry(s, &data->sensor_list, list) {
+-		err = device_create_file(data->hwmon_dev, &s->input_attr);
+-		if (err)
+-			return err;
+-		err = device_create_file(data->hwmon_dev, &s->label_attr);
+-		if (err)
+-			return err;
+-		err = device_create_file(data->hwmon_dev, &s->limit1_attr);
+-		if (err)
+-			return err;
+-		err = device_create_file(data->hwmon_dev, &s->limit2_attr);
+-		if (err)
+-			return err;
++		attrs[i++] = &s->input_attr.attr;
++		attrs[i++] = &s->label_attr.attr;
++		attrs[i++] = &s->limit1_attr.attr;
++		attrs[i++] = &s->limit2_attr.attr;
+ 	}
+ 
+-	err = device_create_file(data->hwmon_dev, &atk_name_attr);
++	data->attr_group[0].attrs = attrs;
++	data->attr_groups[0] = data->attr_group;
+ 
+-	return err;
+-}
+-
+-static void atk_remove_files(struct atk_data *data)
+-{
+-	struct atk_sensor_data *s;
+-
+-	list_for_each_entry(s, &data->sensor_list, list) {
+-		device_remove_file(data->hwmon_dev, &s->input_attr);
+-		device_remove_file(data->hwmon_dev, &s->label_attr);
+-		device_remove_file(data->hwmon_dev, &s->limit1_attr);
+-		device_remove_file(data->hwmon_dev, &s->limit2_attr);
+-	}
+-	device_remove_file(data->hwmon_dev, &atk_name_attr);
++	return 0;
+ }
+ 
+ static void atk_free_sensors(struct atk_data *data)
+@@ -1245,24 +1227,15 @@ static void atk_free_sensors(struct atk_data *data)
+ static int atk_register_hwmon(struct atk_data *data)
+ {
+ 	struct device *dev = &data->acpi_dev->dev;
+-	int err;
+ 
+ 	dev_dbg(dev, "registering hwmon device\n");
+-	data->hwmon_dev = hwmon_device_register(dev);
++	data->hwmon_dev = hwmon_device_register_with_groups(dev, "atk0110",
++							    data,
++							    data->attr_groups);
+ 	if (IS_ERR(data->hwmon_dev))
+ 		return PTR_ERR(data->hwmon_dev);
+ 
+-	dev_dbg(dev, "populating sysfs directory\n");
+-	err = atk_create_files(data);
+-	if (err)
+-		goto remove;
+-
+ 	return 0;
+-remove:
+-	/* Cleanup the registered files */
+-	atk_remove_files(data);
+-	hwmon_device_unregister(data->hwmon_dev);
+-	return err;
+ }
+ 
+ static int atk_probe_if(struct atk_data *data)
+@@ -1397,6 +1370,9 @@ static int atk_add(struct acpi_device *device)
+ 		goto out;
+ 	}
+ 
++	err = atk_init_attribute_groups(data);
++	if (err)
++		goto out;
+ 	err = atk_register_hwmon(data);
+ 	if (err)
+ 		goto cleanup;
+@@ -1423,7 +1399,6 @@ static int atk_remove(struct acpi_device *device)
+ 
+ 	atk_debugfs_cleanup(data);
+ 
+-	atk_remove_files(data);
+ 	atk_free_sensors(data);
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
