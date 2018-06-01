@@ -1,177 +1,186 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qk0-f195.google.com ([209.85.220.195]:46692 "EHLO
-        mail-qk0-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751103AbeFDUfg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Jun 2018 16:35:36 -0400
+Received: from bh-25.webhostbox.net ([208.91.199.152]:33470 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1752360AbeFASyO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jun 2018 14:54:14 -0400
+Date: Fri, 1 Jun 2018 11:54:11 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Jason M Biils <jason.m.bills@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH linux-next v5 10/13] Documentation: hwmon: Add documents
+ for PECI hwmon client drivers
+Message-ID: <20180601185411.GA27795@roeck-us.net>
+References: <20180601182244.24028-1-jae.hyun.yoo@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20180601151419.15820-2-bastiangermann@fishpost.de>
-References: <8afcabf0-94c2-8068-5252-491494108a0c@roeck-us.net>
- <20180601151419.15820-1-bastiangermann@fishpost.de> <20180601151419.15820-2-bastiangermann@fishpost.de>
-From: Luca Tettamanti <kronos.it@gmail.com>
-Date: Mon, 4 Jun 2018 21:35:35 +0100
-Message-ID: <CAKPcRGq6eFrWGmL9xuac8jtu+xBc+VQ+J_x2fK+J_mr98Yx1Ag@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] hwmon: (asus_atk0110) Replace deprecated device
- register call
-To: Bastian Germann <bastiangermann@fishpost.de>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180601182244.24028-1-jae.hyun.yoo@linux.intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 1 June 2018 at 16:14, Bastian Germann <bastiangermann@fishpost.de> wrote:
-> Make the asus_atk0110 driver use hwmon_device_register_with_groups instead
-> of the deprecated hwmon_device_register.
-> Construct the expected attribute_group array from the sensor list which
-> contains all needed attributes.
-> Remove the manual sysfs file creation and deletion that are now taken care
-> of by the (un)register calls via the attribute_group array.
->
-> Signed-off-by: Bastian Germann <bastiangermann@fishpost.de>
+On Fri, Jun 01, 2018 at 11:22:44AM -0700, Jae Hyun Yoo wrote:
+> This commit adds hwmon documents for PECI cputemp and dimmtemp drivers.
+> 
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
+> Reviewed-by: James Feist <james.feist@linux.intel.com>
+> Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
+> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
 
-Thank you for cleaning this up!
-
-L.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/hwmon/asus_atk0110.c | 75 ++++++++++++------------------------
->  1 file changed, 25 insertions(+), 50 deletions(-)
->
-> diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
-> index 975c43d446f8..33748cc07acc 100644
-> --- a/drivers/hwmon/asus_atk0110.c
-> +++ b/drivers/hwmon/asus_atk0110.c
-> @@ -125,6 +125,8 @@ struct atk_data {
->         int temperature_count;
->         int fan_count;
->         struct list_head sensor_list;
-> +       struct attribute_group attr_group;
-> +       const struct attribute_group *attr_groups[2];
->
->         struct {
->                 struct dentry *root;
-> @@ -262,14 +264,6 @@ static ssize_t atk_limit2_show(struct device *dev,
->         return sprintf(buf, "%lld\n", value);
->  }
->
-> -static ssize_t atk_name_show(struct device *dev,
-> -                               struct device_attribute *attr, char *buf)
-> -{
-> -       return sprintf(buf, "atk0110\n");
-> -}
-> -static struct device_attribute atk_name_attr =
-> -               __ATTR(name, 0444, atk_name_show, NULL);
-> -
->  static void atk_init_attribute(struct device_attribute *attr, char *name,
->                 sysfs_show_func show)
->  {
-> @@ -1193,42 +1187,30 @@ static int atk_enumerate_new_hwmon(struct atk_data *data)
->         return err;
->  }
->
-> -static int atk_create_files(struct atk_data *data)
-> +static int atk_init_attribute_groups(struct atk_data *data)
->  {
-> +       struct device *dev = &data->acpi_dev->dev;
->         struct atk_sensor_data *s;
-> -       int err;
-> +       struct attribute **attrs;
-> +       int i = 0;
-> +       int len = (data->voltage_count + data->temperature_count
-> +                       + data->fan_count) * 4 + 1;
+>  Documentation/hwmon/peci-cputemp  | 78 +++++++++++++++++++++++++++++++
+>  Documentation/hwmon/peci-dimmtemp | 50 ++++++++++++++++++++
+>  2 files changed, 128 insertions(+)
+>  create mode 100644 Documentation/hwmon/peci-cputemp
+>  create mode 100644 Documentation/hwmon/peci-dimmtemp
+> 
+> diff --git a/Documentation/hwmon/peci-cputemp b/Documentation/hwmon/peci-cputemp
+> new file mode 100644
+> index 000000000000..821a9258f2e6
+> --- /dev/null
+> +++ b/Documentation/hwmon/peci-cputemp
+> @@ -0,0 +1,78 @@
+> +Kernel driver peci-cputemp
+> +==========================
 > +
-> +       attrs = devm_kcalloc(dev, len, sizeof(struct attribute *), GFP_KERNEL);
-> +       if (!attrs)
-> +               return -ENOMEM;
->
->         list_for_each_entry(s, &data->sensor_list, list) {
-> -               err = device_create_file(data->hwmon_dev, &s->input_attr);
-> -               if (err)
-> -                       return err;
-> -               err = device_create_file(data->hwmon_dev, &s->label_attr);
-> -               if (err)
-> -                       return err;
-> -               err = device_create_file(data->hwmon_dev, &s->limit1_attr);
-> -               if (err)
-> -                       return err;
-> -               err = device_create_file(data->hwmon_dev, &s->limit2_attr);
-> -               if (err)
-> -                       return err;
-> +               attrs[i++] = &s->input_attr.attr;
-> +               attrs[i++] = &s->label_attr.attr;
-> +               attrs[i++] = &s->limit1_attr.attr;
-> +               attrs[i++] = &s->limit2_attr.attr;
->         }
->
-> -       err = device_create_file(data->hwmon_dev, &atk_name_attr);
-> +       data->attr_group.attrs = attrs;
-> +       data->attr_groups[0] = &data->attr_group;
->
-> -       return err;
-> -}
-> -
-> -static void atk_remove_files(struct atk_data *data)
-> -{
-> -       struct atk_sensor_data *s;
-> -
-> -       list_for_each_entry(s, &data->sensor_list, list) {
-> -               device_remove_file(data->hwmon_dev, &s->input_attr);
-> -               device_remove_file(data->hwmon_dev, &s->label_attr);
-> -               device_remove_file(data->hwmon_dev, &s->limit1_attr);
-> -               device_remove_file(data->hwmon_dev, &s->limit2_attr);
-> -       }
-> -       device_remove_file(data->hwmon_dev, &atk_name_attr);
-> +       return 0;
->  }
->
->  static void atk_free_sensors(struct atk_data *data)
-> @@ -1245,24 +1227,15 @@ static void atk_free_sensors(struct atk_data *data)
->  static int atk_register_hwmon(struct atk_data *data)
->  {
->         struct device *dev = &data->acpi_dev->dev;
-> -       int err;
->
->         dev_dbg(dev, "registering hwmon device\n");
-> -       data->hwmon_dev = hwmon_device_register(dev);
-> +       data->hwmon_dev = hwmon_device_register_with_groups(dev, "atk0110",
-> +                                                           data,
-> +                                                           data->attr_groups);
->         if (IS_ERR(data->hwmon_dev))
->                 return PTR_ERR(data->hwmon_dev);
->
-> -       dev_dbg(dev, "populating sysfs directory\n");
-> -       err = atk_create_files(data);
-> -       if (err)
-> -               goto remove;
-> -
->         return 0;
-> -remove:
-> -       /* Cleanup the registered files */
-> -       atk_remove_files(data);
-> -       hwmon_device_unregister(data->hwmon_dev);
-> -       return err;
->  }
->
->  static int atk_probe_if(struct atk_data *data)
-> @@ -1397,6 +1370,9 @@ static int atk_add(struct acpi_device *device)
->                 goto out;
->         }
->
-> +       err = atk_init_attribute_groups(data);
-> +       if (err)
-> +               goto out;
->         err = atk_register_hwmon(data);
->         if (err)
->                 goto cleanup;
-> @@ -1423,7 +1399,6 @@ static int atk_remove(struct acpi_device *device)
->
->         atk_debugfs_cleanup(data);
->
-> -       atk_remove_files(data);
->         atk_free_sensors(data);
->         hwmon_device_unregister(data->hwmon_dev);
->
-> --
-> 2.17.1
->
+> +Supported chips:
+> +	One of Intel server CPUs listed below which is connected to a PECI bus.
+> +		* Intel Xeon E5/E7 v3 server processors
+> +			Intel Xeon E5-14xx v3 family
+> +			Intel Xeon E5-24xx v3 family
+> +			Intel Xeon E5-16xx v3 family
+> +			Intel Xeon E5-26xx v3 family
+> +			Intel Xeon E5-46xx v3 family
+> +			Intel Xeon E7-48xx v3 family
+> +			Intel Xeon E7-88xx v3 family
+> +		* Intel Xeon E5/E7 v4 server processors
+> +			Intel Xeon E5-16xx v4 family
+> +			Intel Xeon E5-26xx v4 family
+> +			Intel Xeon E5-46xx v4 family
+> +			Intel Xeon E7-48xx v4 family
+> +			Intel Xeon E7-88xx v4 family
+> +		* Intel Xeon Scalable server processors
+> +			Intel Xeon Bronze family
+> +			Intel Xeon Silver family
+> +			Intel Xeon Gold family
+> +			Intel Xeon Platinum family
+> +	Addresses scanned: PECI client address 0x30 - 0x37
+> +	Datasheet: Available from http://www.intel.com/design/literature.htm
+> +
+> +Author:
+> +	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements a generic PECI hwmon feature which provides Digital
+> +Thermal Sensor (DTS) thermal readings of the CPU package and CPU cores that are
+> +accessible using the PECI Client Command Suite via the processor PECI client.
+> +
+> +All temperature values are given in millidegree Celsius and will be measurable
+> +only when the target CPU is powered on.
+> +
+> +sysfs attributes
+> +----------------
+> +
+> +temp1_label		"Die"
+> +temp1_input		Provides current die temperature of the CPU package.
+> +temp1_max		Provides thermal control temperature of the CPU package
+> +			which is also known as Tcontrol.
+> +temp1_crit		Provides shutdown temperature of the CPU package which
+> +			is also known as the maximum processor junction
+> +			temperature, Tjmax or Tprochot.
+> +temp1_crit_hyst		Provides the hysteresis value from Tcontrol to Tjmax of
+> +			the CPU package.
+> +
+> +temp2_label		"Tcontrol"
+> +temp2_input		Provides current Tcontrol temperature of the CPU
+> +			package which is also known as Fan Temperature target.
+> +			Indicates the relative value from thermal monitor trip
+> +			temperature at which fans should be engaged.
+> +temp2_crit		Provides Tcontrol critical value of the CPU package
+> +			which is same to Tjmax.
+> +
+> +temp3_label		"Tthrottle"
+> +temp3_input		Provides current Tthrottle temperature of the CPU
+> +			package. Used for throttling temperature. If this value
+> +			is allowed and lower than Tjmax - the throttle will
+> +			occur and reported at lower than Tjmax.
+> +
+> +temp4_label		"Tjmax"
+> +temp4_input		Provides the maximum junction temperature, Tjmax of the
+> +			CPU package.
+> +
+> +temp[5-*]_label		Provides string "Core X", where X is resolved core
+> +			number.
+> +temp[5-*]_input		Provides current temperature of each core.
+> +temp[5-*]_max		Provides thermal control temperature of the core.
+> +temp[5-*]_crit		Provides shutdown temperature of the core.
+> +temp[5-*]_crit_hyst	Provides the hysteresis value from Tcontrol to Tjmax of
+> +			the core.
+> diff --git a/Documentation/hwmon/peci-dimmtemp b/Documentation/hwmon/peci-dimmtemp
+> new file mode 100644
+> index 000000000000..c54f2526188c
+> --- /dev/null
+> +++ b/Documentation/hwmon/peci-dimmtemp
+> @@ -0,0 +1,50 @@
+> +Kernel driver peci-dimmtemp
+> +===========================
+> +
+> +Supported chips:
+> +	One of Intel server CPUs listed below which is connected to a PECI bus.
+> +		* Intel Xeon E5/E7 v3 server processors
+> +			Intel Xeon E5-14xx v3 family
+> +			Intel Xeon E5-24xx v3 family
+> +			Intel Xeon E5-16xx v3 family
+> +			Intel Xeon E5-26xx v3 family
+> +			Intel Xeon E5-46xx v3 family
+> +			Intel Xeon E7-48xx v3 family
+> +			Intel Xeon E7-88xx v3 family
+> +		* Intel Xeon E5/E7 v4 server processors
+> +			Intel Xeon E5-16xx v4 family
+> +			Intel Xeon E5-26xx v4 family
+> +			Intel Xeon E5-46xx v4 family
+> +			Intel Xeon E7-48xx v4 family
+> +			Intel Xeon E7-88xx v4 family
+> +		* Intel Xeon Scalable server processors
+> +			Intel Xeon Bronze family
+> +			Intel Xeon Silver family
+> +			Intel Xeon Gold family
+> +			Intel Xeon Platinum family
+> +	Addresses scanned: PECI client address 0x30 - 0x37
+> +	Datasheet: Available from http://www.intel.com/design/literature.htm
+> +
+> +Author:
+> +	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements a generic PECI hwmon feature which provides Digital
+> +Thermal Sensor (DTS) thermal readings of DIMM components that are accessible
+> +using the PECI Client Command Suite via the processor PECI client.
+> +
+> +All temperature values are given in millidegree Celsius and will be measurable
+> +only when the target CPU is powered on.
+> +
+> +sysfs attributes
+> +----------------
+> +
+> +temp[N]_label		Provides string "DIMM CI", where C is DIMM channel and
+> +			I is DIMM index of the populated DIMM.
+> +temp[N]_input		Provides current temperature of the populated DIMM.
+> +
+> +Note:
+> +	DIMM temperature attributes will appear when the client CPU's BIOS
+> +	completes memory training and testing.
+> -- 
+> 2.17.0
+> 
