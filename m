@@ -1,59 +1,69 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:53113 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752064AbeFAQJE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Jun 2018 12:09:04 -0400
-Date: Fri, 1 Jun 2018 09:09:03 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Colin King <colin.king@canonical.com>
-Cc: Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (k10temp) Make function get_raw_temp static
-Message-ID: <20180601160903.GA4178@roeck-us.net>
-References: <20180601133713.8817-1-colin.king@canonical.com>
+Return-Path: <andy.shevchenko@gmail.com>
+Return-path: <andy.shevchenko@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180601133713.8817-1-colin.king@canonical.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20180531225700.721-2-bastiangermann@fishpost.de>
+References: <f885fcb0-d9f3-7702-13ad-5af2913131f0@roeck-us.net>
+ <20180531225700.721-1-bastiangermann@fishpost.de> <20180531225700.721-2-bastiangermann@fishpost.de>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 1 Jun 2018 12:54:04 +0300
+Message-ID: <CAHp75VcZqpQ7qM2aBzSsqa+xYOdevZkWy=h+u8=nhdP2foyH4g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (asus_atk0110) Make use of device managed memory
+To: Bastian Germann <bastiangermann@fishpost.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Luca Tettamanti <kronos.it@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Jun 01, 2018 at 02:37:13PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> The function get_raw_temp is local to the source and does not need to
-> be in global scope, so make it static.
-> 
-> Cleans up sparse warning:
-> drivers/hwmon/k10temp.c:149:14: warning: symbol 'get_raw_temp' was not
-> declared. Should it be static?
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+On Fri, Jun 1, 2018 at 1:57 AM, Bastian Germann
+<bastiangermann@fishpost.de> wrote:
+> Use devm_* variants of kstrdup and kzalloc. Get rid of the kfree cleanups.
 
-Applied.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/k10temp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index d3fae5a8e508..17c6460ae351 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -146,7 +146,7 @@ static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
->  		     F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
->  }
->  
-> -unsigned int get_raw_temp(struct k10temp_data *data)
-> +static unsigned int get_raw_temp(struct k10temp_data *data)
+>  static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
 >  {
->  	unsigned int temp;
->  	u32 regval;
-> -- 
-> 2.17.0
-> 
+>         struct atk_data *data = inode->i_private;
+> +       struct device *dev = &data->acpi_dev->dev;
+>         char *buf = NULL;
+>         union acpi_object *ret;
+>         u8 cls;
+> @@ -748,7 +748,7 @@ static int atk_debugfs_ggrp_open(struct inode *inode, struct file *file)
+>                 id = &pack->package.elements[0];
+>                 if (id->integer.value == data->debugfs.id) {
+>                         /* Print the package */
+> -                       buf = kzalloc(512, GFP_KERNEL);
+> +                       buf = devm_kzalloc(dev, 512, GFP_KERNEL);
+>                         if (!buf) {
+>                                 ACPI_FREE(ret);
+>                                 return -ENOMEM;
+
+Looking to the function name, it feels like you are creating a memory
+leak and devm_ is inappropriate here.
+
+> @@ -776,16 +776,9 @@ static ssize_t atk_debugfs_ggrp_read(struct file *file, char __user *buf,
+>         return simple_read_from_buffer(buf, count, pos, str, len);
+>  }
+>
+> -static int atk_debugfs_ggrp_release(struct inode *inode, struct file *file)
+> -{
+> -       kfree(file->private_data);
+> -       return 0;
+> -}
+> -
+>  static const struct file_operations atk_debugfs_ggrp_fops = {
+>         .read           = atk_debugfs_ggrp_read,
+>         .open           = atk_debugfs_ggrp_open,
+> -       .release        = atk_debugfs_ggrp_release,
+>         .llseek         = no_llseek,
+>  };
+
+So do these.
+
+Also the question of time to leave of the objects used for debugfs
+communication. Please double check that it's not affected by the
+change.
+
+Otherwise looks good.
+
+-- 
+With Best Regards,
+Andy Shevchenko
