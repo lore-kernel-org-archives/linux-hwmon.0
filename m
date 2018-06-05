@@ -1,91 +1,52 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:36450 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751169AbeFDBq1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jun 2018 21:46:27 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v4.18
-Date: Sun,  3 Jun 2018 18:46:26 -0700
-Message-Id: <1528076786-2472-1-git-send-email-linux@roeck-us.net>
+Received: from kopff.uberspace.de ([185.26.156.73]:42906 "EHLO
+        kopff.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751764AbeFERsh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 Jun 2018 13:48:37 -0400
+From: Helge Eichelberg <kernelorg@elchenberg.name>
+Cc: Helge Eichelberg <kernelorg@elchenberg.name>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Disable fan support for Dell XPS13 9333
+Date: Tue,  5 Jun 2018 19:38:32 +0200
+Message-Id: <20180605173833.27003-1-kernelorg@elchenberg.name>
+To: unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Calling fan related SMM functions implemented by Dell BIOS firmware on Dell
+XPS13 9333 freeze kernel for about 500ms. Until Dell fixes it we need to
+disable fan support for Dell XPS13 9333.
 
-Please pull hwmon updates for Linux v4.18 from signed tag:
+Via "force" module param fan support can be enabled.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.18
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=195751
+Signed-off-by: Helge Eichelberg <kernelorg@elchenberg.name>
+---
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks,
-Guenter
-------
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index bf3bb7e1adab..9d3ef879dc51 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1074,6 +1074,13 @@ static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
+ 			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Vostro 3360"),
+ 		},
+ 	},
++	{
++		.ident = "Dell XPS13 9333",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
++		},
++	},
+ 	{ }
+ };
+ 
+-- 
+2.14.1
 
-The following changes since commit 771c577c23bac90597c685971d7297ea00f99d11:
-
-  Linux 4.17-rc6 (2018-05-20 15:31:38 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.18
-
-for you to fetch changes up to c9bdf291542e14dbc5b9a71aa11f995de0e54f0d:
-
-  hwmon: (asus_atk0110) Make use of device managed memory (2018-06-01 09:38:36 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v4.18
-
-- asus_atk0110 driver modified to use new API
-- k10temp supports new CPUs and reports both Tctl and Tdie
-- minor fixes in gpio-fan, ltc2990, fschmd, and mc13783 drivers
-
-----------------------------------------------------------------
-Andrey Gusakov (1):
-      hwmon: MC13783: Add uid and die temperature sensor inputs
-
-Bastian Germann (2):
-      hwmon: (asus_atk0110) Replace deprecated device register call
-      hwmon: (asus_atk0110) Make use of device managed memory
-
-Colin Ian King (1):
-      hwmon: (k10temp) Make function get_raw_temp static
-
-Guenter Roeck (4):
-      hwmon: (k10temp) Add support for Stoney Ridge and Bristol Ridge CPUs
-      hwmon: (k10temp) Display both Tctl and Tdie
-      Merge tag 'ib-mfd-hwmon-v4.18' into hwmon-next
-      MAINTAINERS: hwmon: Add Documentation/devicetree/bindings/hwmon
-
-Lucas Magasweran (1):
-      hwmon: (core) check parent dev != NULL when chip != NULL
-
-Tom Levens (3):
-      hwmon: (ltc2990) Fix incorrect conversion of negative temperatures
-      hwmon: (ltc2990) add devicetree binding
-      hwmon: (ltc2990) support all measurement modes
-
-Viresh Kumar (1):
-      hwmon: (gpio-fan) Fix "#cooling-cells" property name in bindings
-
-Wolfram Sang (1):
-      hwmon: (fschmd) fix typo 'can by' to 'can be'
-
- .../devicetree/bindings/hwmon/gpio-fan.txt         |   2 +-
- .../devicetree/bindings/hwmon/ltc2990.txt          |  36 ++++
- Documentation/hwmon/hwmon-kernel-api.txt           |   3 +-
- Documentation/hwmon/ltc2990                        |  24 ++-
- MAINTAINERS                                        |   1 +
- drivers/hwmon/Kconfig                              |   7 +-
- drivers/hwmon/asus_atk0110.c                       | 117 ++++--------
- drivers/hwmon/fschmd.c                             |   2 +-
- drivers/hwmon/hwmon.c                              |   3 +
- drivers/hwmon/k10temp.c                            |  60 +++++-
- drivers/hwmon/ltc2990.c                            | 212 +++++++++++++++++----
- drivers/hwmon/mc13783-adc.c                        |  60 ++++++
- drivers/mfd/mc13xxx-core.c                         |  15 +-
- include/linux/mfd/mc13xxx.h                        |   2 +
- 14 files changed, 393 insertions(+), 151 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ltc2990.txt
