@@ -1,76 +1,58 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f66.google.com ([209.85.160.66]:44643 "EHLO
-        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932914AbeFLNVf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Jun 2018 09:21:35 -0400
-Subject: Re: [PATCH] hwmon: (w83791d) add error handling for i2c_new_dummy
-To: Zhouyang Jia <jiazhouyang09@gmail.com>
-Cc: Marc Hulsman <m.hulsman@tudelft.nl>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1528774504-38755-1-git-send-email-jiazhouyang09@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <902c09d8-57a3-442c-2e87-489be5727769@roeck-us.net>
-Date: Tue, 12 Jun 2018 06:21:33 -0700
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:42253 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1754400AbeFLVus (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Jun 2018 17:50:48 -0400
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Paul Menzel <pmenzel+linux-hwmon@molgen.mpg.de>
+Subject: nct6775: UBSAN: shift exponent 32 is too large for 32-bit type 'long
+ unsigned int'
+Message-ID: <d02001e2-fa4c-6a2e-cc50-a8d9a8146d57@molgen.mpg.de>
+Date: Tue, 12 Jun 2018 23:50:45 +0200
 MIME-Version: 1.0
-In-Reply-To: <1528774504-38755-1-git-send-email-jiazhouyang09@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 06/11/2018 08:35 PM, Zhouyang Jia wrote:
-> When i2c_new_dummy fails, the lack of error-handling code may
-> cause unexpected results.
-> 
-> This patch adds error-handling code after calling i2c_new_dummy.
-> 
-> Signed-off-by: Zhouyang Jia <jiazhouyang09@gmail.com>
+Dear Guenther, dear Jean,
 
-As before, NACK, sorry.
 
-Guenter
+Building Linux with the undefined behavior sanitizer (UBSAN), loading 
+the module *nct6775* on the ASRock E350M1 shows the error below.
 
-> ---
->   drivers/hwmon/w83791d.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
-> index 28fa3bd..a183432 100644
-> --- a/drivers/hwmon/w83791d.c
-> +++ b/drivers/hwmon/w83791d.c
-> @@ -1295,8 +1295,15 @@ static int w83791d_detect_subclients(struct i2c_client *client)
->   	}
->   
->   	val = w83791d_read(client, W83791D_REG_I2C_SUBADDR);
-> -	if (!(val & 0x08))
-> +	if (!(val & 0x08)) {
->   		data->lm75[0] = i2c_new_dummy(adapter, 0x48 + (val & 0x7));
-> +		if (data->lm75[0] == NULL) {
-> +			dev_err(&client->dev,
-> +				"Failed to allocate I2C device\n");
-> +			err = -ENODEV;
-> +			goto error_sc_1;
-> +		}
-> +	}
->   	if (!(val & 0x80)) {
->   		if ((data->lm75[0] != NULL) &&
->   				((val & 0x7) == ((val >> 4) & 0x7))) {
-> @@ -1309,6 +1316,12 @@ static int w83791d_detect_subclients(struct i2c_client *client)
->   		}
->   		data->lm75[1] = i2c_new_dummy(adapter,
->   					      0x48 + ((val >> 4) & 0x7));
-> +		if (data->lm75[1] == NULL) {
-> +			dev_err(&client->dev,
-> +				"Failed to allocate I2C device\n");
-> +			err = -ENODEV;
-> +			goto error_sc_1;
-> +		}
->   	}
->   
->   	return 0;
-> 
+```
+[   28.322775] UBSAN: Undefined behaviour in drivers/hwmon/nct6775.c:4179:27
+[   28.322833] shift exponent 32 is too large for 32-bit type 'long 
+unsigned int'
+```
 
+I believe this was introduced by commit cc66b3038254 (hwmon: (nct6775) 
+Rework temperature source and label handling), but the same issue was 
+already present before.
+
+```
+-       for (i = 0; i < data->temp_label_num - 1; i++) {
++       for (i = 0; i < 32; i++) {
++               if (!(data->temp_mask & BIT(i + 1)))
++                       continue;
+```
+
+`include/linux/bitops.h` has the macros below.
+
+```
+#define BIT(nr)                 (1UL << (nr))
+#define BIT_ULL(nr)             (1ULL << (nr))
+```
+
+Maybe `BIT_ULL` should be used, but I do not know, if that’d would work 
+with `data->temp_mask`, which has type `u32`.
+
+
+Kind regards,
+
+Paul
