@@ -1,74 +1,42 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from faui40.informatik.uni-erlangen.de ([131.188.34.40]:37388 "EHLO
-        faui40.informatik.uni-erlangen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S935961AbeFMPVD (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:42835 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S935977AbeFMQEc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Jun 2018 11:21:03 -0400
-From: Jakob Albert <jakob.j.albert@fau.de>
-To: devel@linuxdriverproject.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Wed, 13 Jun 2018 12:04:32 -0400
+Date: Wed, 13 Jun 2018 09:04:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jakob Albert <jakob.j.albert@fau.de>
+Cc: devel@linuxdriverproject.org, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lorenz Kaestle <lorenz.kaestle@fau.de>,
-        linux-kernel@i4.cs.fau.de, Jakob Albert <jakob.j.albert@fau.de>
-Subject: [PATCH v2 3/3] hwmon: (nct7904) Fix UNSPECIFIED_INT warning
-Date: Wed, 13 Jun 2018 17:13:25 +0200
-Message-Id: <1528902805-21474-4-git-send-email-jakob.j.albert@fau.de>
-In-Reply-To: <1528902805-21474-1-git-send-email-jakob.j.albert@fau.de>
+        linux-kernel@i4.cs.fau.de
+Subject: Re: [PATCH v2 0/3] hwmon: (nct7904) Fix style issues
+Message-ID: <20180613160430.GA11640@roeck-us.net>
 References: <1528902805-21474-1-git-send-email-jakob.j.albert@fau.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1528902805-21474-1-git-send-email-jakob.j.albert@fau.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Fix UNSPECIFIED_INT warning reported by checkpatch.pl
+On Wed, Jun 13, 2018 at 05:13:22PM +0200, Jakob Albert wrote:
+> This set of patches fixes style errors reported by checkpatch.pl. This
+> adapts the code to the coding style.
+> 
+> Changes since v1:
+> * Changed patch subjects and descriptions
+> 
+> 
+> 
+> Jakob Albert (3):
+>   hwmon: (nct7904) Fix SPACING errors
+>   hwmon: (nct7904) Fix CODE_INDENT error
+>   hwmon: (nct7904) Fix UNSPECIFIED_INT warning
+> 
 
-Signed-off-by: Lorenz Kaestle <lorenz.kaestle@fau.de>
-Signed-off-by: Jakob Albert <jakob.j.albert@fau.de>
----
-v1->v2:	Changed patch subject and description
+Series applied to hwmon-next.
 
- drivers/hwmon/nct7904.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 657ce88..7815ddf 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -77,7 +77,7 @@ struct nct7904_data {
- };
- 
- /* Access functions */
--static int nct7904_bank_lock(struct nct7904_data *data, unsigned bank)
-+static int nct7904_bank_lock(struct nct7904_data *data, unsigned int bank)
- {
- 	int ret;
- 
-@@ -99,7 +99,7 @@ static inline void nct7904_bank_release(struct nct7904_data *data)
- 
- /* Read 1-byte register. Returns unsigned reg or -ERRNO on error. */
- static int nct7904_read_reg(struct nct7904_data *data,
--			    unsigned bank, unsigned reg)
-+			    unsigned int bank, unsigned int reg)
- {
- 	struct i2c_client *client = data->client;
- 	int ret;
-@@ -117,7 +117,7 @@ static int nct7904_read_reg(struct nct7904_data *data,
-  * -ERRNO on error.
-  */
- static int nct7904_read_reg16(struct nct7904_data *data,
--			      unsigned bank, unsigned reg)
-+			      unsigned int bank, unsigned int reg)
- {
- 	struct i2c_client *client = data->client;
- 	int ret, hi;
-@@ -139,7 +139,7 @@ static int nct7904_read_reg16(struct nct7904_data *data,
- 
- /* Write 1-byte register. Returns 0 or -ERRNO on error. */
- static int nct7904_write_reg(struct nct7904_data *data,
--			     unsigned bank, unsigned reg, u8 val)
-+			     unsigned int bank, unsigned int reg, u8 val)
- {
- 	struct i2c_client *client = data->client;
- 	int ret;
--- 
-2.7.4
-
+Thanks,
+Guenter
