@@ -1,83 +1,52 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f68.google.com ([74.125.82.68]:39381 "EHLO
-        mail-wm0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S932068AbeFFPVh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 Jun 2018 11:21:37 -0400
-Date: Wed, 6 Jun 2018 17:21:34 +0200
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-To: Helge Eichelberg <kernelorg@elchenberg.name>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:38885 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S936058AbeFMPKk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 Jun 2018 11:10:40 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Disable fan support for Dell XPS13 9333
-Message-ID: <20180606152134.sw77aborznfy6mrj@pali>
-References: <20180605173833.27003-1-kernelorg@elchenberg.name>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="7xpsbcfufzx2oz5z"
-Content-Disposition: inline
-In-Reply-To: <20180605173833.27003-1-kernelorg@elchenberg.name>
+        Paul Menzel <pmenzel+linux-hwmon@molgen.mpg.de>
+Subject: [PATCH] hwmon: (nct6775) Fix loop limit
+Date: Wed, 13 Jun 2018 08:10:36 -0700
+Message-Id: <1528902636-9810-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+Commit cc66b3038254 ("hwmon: (nct6775) Rework temperature source and label
+handling") changed a loop limit from "data->temp_label_num - 1" to "32",
+as part of moving from a string array to a bit mask. This results in the
+following error, reported by UBSAN.
 
---7xpsbcfufzx2oz5z
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+UBSAN: Undefined behaviour in drivers/hwmon/nct6775.c:4179:27
+shift exponent 32 is too large for 32-bit type 'long unsigned int'
 
-On Tuesday 05 June 2018 19:38:32 Helge Eichelberg wrote:
-> Calling fan related SMM functions implemented by Dell BIOS firmware on De=
-ll
-> XPS13 9333 freeze kernel for about 500ms. Until Dell fixes it we need to
-> disable fan support for Dell XPS13 9333.
+Similar to the original loop, the limit has to be one less than the
+number of bits.
 
-Hi! Have you reported this firmware bug to Dell?
+Fixes: cc66b3038254 ("hwmon: (nct6775) Rework temperature source and label handling")
+Reported-by: Paul Menzel <pmenzel+linux-hwmon@molgen.mpg.de>
+Cc: Paul Menzel <pmenzel+linux-hwmon@molgen.mpg.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/nct6775.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also we should probably match also BIOS version and do not apply this
-blacklist quirk for BIOS versions in which Dell fixed it.
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index aebce560bfaf..b14eb73bc3c9 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -4175,7 +4175,7 @@ static int nct6775_probe(struct platform_device *pdev)
+ 	 * The temperature is already monitored if the respective bit in <mask>
+ 	 * is set.
+ 	 */
+-	for (i = 0; i < 32; i++) {
++	for (i = 0; i < 31; i++) {
+ 		if (!(data->temp_mask & BIT(i + 1)))
+ 			continue;
+ 		if (!reg_temp_alternate[i])
+-- 
+2.7.4
 
-> Via "force" module param fan support can be enabled.
->=20
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D195751
-> Signed-off-by: Helge Eichelberg <kernelorg@elchenberg.name>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmo=
-n.c
-> index bf3bb7e1adab..9d3ef879dc51 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1074,6 +1074,13 @@ static struct dmi_system_id i8k_blacklist_fan_supp=
-ort_dmi_table[] __initdata =3D {
->  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Vostro 3360"),
->  		},
->  	},
-> +	{
-> +		.ident =3D "Dell XPS13 9333",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
-> +		},
-> +	},
->  	{ }
->  };
-> =20
-
---=20
-Pali Roh=C3=A1r
-pali.rohar@gmail.com
-
---7xpsbcfufzx2oz5z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQS4VrIQdKium2krgIWL8Mk9A+RDUgUCWxf7+wAKCRCL8Mk9A+RD
-UrpHAKC5z51uDFci3hpJ1e0ZKW3U5hgnJwCfcYZuBb+bhE8fXAk/fUIn3xzIzgI=
-=Y8iZ
------END PGP SIGNATURE-----
-
---7xpsbcfufzx2oz5z--
