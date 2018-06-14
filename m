@@ -1,668 +1,493 @@
-Return-Path: <vadimp@mellanox.com>
-Return-path: <vadimp@mellanox.com>
-From: Vadim Pasternak <vadimp@mellanox.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"jiri@resnulli.us" <jiri@resnulli.us>, Michael Shych <michaelsh@mellanox.com>
-Subject: RE: [PATCH v2 1/1] hwmon: (mlxreg-fan) Add support for Mellanox FAN
- driver
-Date: Wed, 27 Jun 2018 10:31:32 +0000
-Message-ID: <HE1PR0502MB375318D24814E2CC6BF706CBA2480@HE1PR0502MB3753.eurprd05.prod.outlook.com>
-References: <1530030592-10434-1-git-send-email-vadimp@mellanox.com>
- <20180626222215.GA32057@roeck-us.net>
-In-Reply-To: <20180626222215.GA32057@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Return-Path: <SRS0=BQBr=JA=vger.kernel.org=linux-kernel-owner@kernel.org>
+From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To: Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        alsa-devel@alsa-project.org, linux-fsdevel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v3 16/27] docs: Fix more broken references
+Date: Thu, 14 Jun 2018 13:09:01 -0300
+Message-Id: <e1bf52a721005b2017434acc54ec5ddc152d6fe4.1528990947.git.mchehab+samsung@kernel.org>
+In-Reply-To: <cover.1528990947.git.mchehab+samsung@kernel.org>
+References: <cover.1528990947.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <cover.1528990947.git.mchehab+samsung@kernel.org>
+References: <cover.1528990947.git.mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: linux-kernel-owner@vger.kernel.org
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
+As we move stuff around, some doc references are broken. Fix some of
+them via this script:
+	./scripts/documentation-file-ref-check --fix
 
+Manually checked that produced results are valid.
 
-> -----Original Message-----
-> From: Guenter Roeck [mailto:linux@roeck-us.net]
-> Sent: Wednesday, June 27, 2018 1:22 AM
-> To: Vadim Pasternak <vadimp@mellanox.com>
-> Cc: linux-hwmon@vger.kernel.org; jiri@resnulli.us; Michael Shych
-> <michaelsh@mellanox.com>
-> Subject: Re: [PATCH v2 1/1] hwmon: (mlxreg-fan) Add support for Mellanox =
-FAN
-> driver
->=20
-> On Tue, Jun 26, 2018 at 04:29:52PM +0000, Vadim Pasternak wrote:
-> > Driver obtains PWM and tachometers registers location according to the
-> > system configuration and creates FAN/PWM hwmon objects and a cooling
-> > device. PWM and tachometers are controlled through the on-board
-> > programmable device, which exports its register map. This device could
-> > be attached to any bus type, for which register mapping is supported.
-> > Single instance is created with one PWM control, up to 12 tachometers
-> > and one cooling device. It could be as many instances as programmable
-> > device supports.
-> >
-> > Currently driver will be activated from the Mellanox platform driver:
-> > drivers/platform/x86/mlx-platform.c.
-> > For the future ARM based systems it could be activated from the ARM
-> > platform module.
-> >
-> > Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-> > ---
-> > v1->v2:
-> >  Comments pointed out by Guenter:
-> >  - In Kconfig change "depends on REGMAP" to select REGMAP and
-> >    use "depends on THERMAL || THERMAL=3Dn".
-> >  - Remove include for hwmon-sysfs.h.
-> >  - Change comments for the structures description: remove
-> >    replace "/**" with "/*" and mark as for internal use.
-> >  - Fix multi-line comments (two occurrences).
-> >  - Add dev handle to mlxreg_fan private data go get rid of
-> >    dereferencing it.
-> >  - Fix layout of "if" condition in mlxreg_fan_write.
-> >  - Pass mlxreg_core_platform_data as argument to avoid needing it in
-> >    mlxreg_fan.
-> >  - Remove dev_info call from mlxreg_fan_config.
-> >  - Replace dev_set_drvdata with platform_set_drvdata.
-> >  - Remove assignment for name mlxreg_fan{%d}, use always mlxreg_fan.
-> >  - Allow driver probing in case subsystem is not configured.
-> >    Use IS_REACHABLE(CONFIG_THERMAL) for test.
-> > ---
-> >  drivers/hwmon/Kconfig      |  12 ++
-> >  drivers/hwmon/Makefile     |   1 +
-> >  drivers/hwmon/mlxreg-fan.c | 467
-> > +++++++++++++++++++++++++++++++++++++++++++++
->=20
-> We'll also need drivers/hwmon/mlxreg-fan.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ .../devicetree/bindings/clock/st/st,clkgen.txt |  8 ++++----
+ .../devicetree/bindings/clock/ti/gate.txt      |  2 +-
+ .../devicetree/bindings/clock/ti/interface.txt |  2 +-
+ .../bindings/cpufreq/cpufreq-mediatek.txt      |  2 +-
+ .../devicetree/bindings/devfreq/rk3399_dmc.txt |  2 +-
+ .../bindings/gpu/arm,mali-midgard.txt          |  2 +-
+ .../bindings/gpu/arm,mali-utgard.txt           |  2 +-
+ .../devicetree/bindings/mfd/mt6397.txt         |  2 +-
+ .../devicetree/bindings/mfd/sun6i-prcm.txt     |  2 +-
+ .../devicetree/bindings/mmc/exynos-dw-mshc.txt |  2 +-
+ .../devicetree/bindings/net/dsa/ksz.txt        |  2 +-
+ .../devicetree/bindings/net/dsa/mt7530.txt     |  2 +-
+ .../devicetree/bindings/power/fsl,imx-gpc.txt  |  2 +-
+ .../bindings/power/wakeup-source.txt           |  2 +-
+ .../devicetree/bindings/usb/rockchip,dwc3.txt  |  2 +-
+ Documentation/hwmon/ina2xx                     |  2 +-
+ Documentation/maintainer/pull-requests.rst     |  2 +-
+ Documentation/translations/ko_KR/howto.rst     |  2 +-
+ MAINTAINERS                                    | 18 +++++++++---------
+ drivers/net/ethernet/intel/Kconfig             |  8 ++++----
+ drivers/soundwire/stream.c                     |  8 ++++----
+ fs/Kconfig.binfmt                              |  2 +-
+ fs/binfmt_misc.c                               |  2 +-
+ 23 files changed, 40 insertions(+), 40 deletions(-)
 
-ACK.
-I'll add /Documentation/hwmon/mlxreg-fan.
-
->=20
-> >  3 files changed, 480 insertions(+)
-> >  create mode 100644 drivers/hwmon/mlxreg-fan.c
-> >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig index
-> > f10840a..cd9ec2e 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -937,6 +937,18 @@ config SENSORS_MCP3021
-> >  	  This driver can also be built as a module.  If so, the module
-> >  	  will be called mcp3021.
-> >
-> > +config SENSORS_MLXREG_FAN
-> > +	tristate "Mellanox Mellanox FAN driver"
-> > +	depends on MELLANOX_PLATFORM
-> > +	depends on THERMAL || THERMAL=3Dn
-> > +	select REGMAP
-> > +	help
-> > +	  This option enables support for the FAN control on the Mellanox
-> > +	  Ethernet and InfiniBand switches. The driver can be activated by th=
-e
-> > +	  platform device add call. Say Y to enable these. To compile this
-> > +	  driver as a module, choose 'M' here: the module will be called
-> > +	  mlxreg-fan.
-> > +
-> >  config SENSORS_TC654
-> >  	tristate "Microchip TC654/TC655 and compatibles"
-> >  	depends on I2C
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile index
-> > e7d52a3..cac3c06 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -129,6 +129,7 @@ obj-$(CONFIG_SENSORS_MAX31790)	+=3D
-> max31790.o
-> >  obj-$(CONFIG_SENSORS_MC13783_ADC)+=3D mc13783-adc.o
-> >  obj-$(CONFIG_SENSORS_MCP3021)	+=3D mcp3021.o
-> >  obj-$(CONFIG_SENSORS_TC654)	+=3D tc654.o
-> > +obj-$(CONFIG_SENSORS_MLXREG_FAN) +=3D mlxreg-fan.o
-> >  obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) +=3D menf21bmc_hwmon.o
-> >  obj-$(CONFIG_SENSORS_NCT6683)	+=3D nct6683.o
-> >  obj-$(CONFIG_SENSORS_NCT6775)	+=3D nct6775.o
-> > diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> > new file mode 100644 index 0000000..ba309a6
-> > --- /dev/null
-> > +++ b/drivers/hwmon/mlxreg-fan.c
-> > @@ -0,0 +1,467 @@
-> > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) // // Copyright
-> > +(c) 2018 Mellanox Technologies. All rights reserved.
-> > +// Copyright (c) 2018 Vadim Pasternak <vadimp@mellanox.com>
-> > +
-> > +#include <linux/bitops.h>
-> > +#include <linux/device.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_data/mlxreg.h> #include
-> > +<linux/platform_device.h> #include <linux/regmap.h> #include
-> > +<linux/thermal.h>
-> > +
-> > +#define MLXREG_FAN_MAX_TACHO		12
-> > +#define MLXREG_FAN_MAX_STATE		10
-> > +#define MLXREG_FAN_MIN_DUTY		51	/* 20% */
-> > +#define MLXREG_FAN_MAX_DUTY		255	/* 100% */
-> > +/*
-> > + * Minimum and maximum FAN allowed speed in percent: from 20% to
-> > +100%. Values
-> > + * MLXREG_FAN_MAX_STATE + x, where x is between 2 and 10 are used for
-> > + * setting FAN speed dynamic minimum. For example, if value is set to
-> > +14 (40%)
-> > + * cooling levels vector will be set to 4, 4, 4, 4, 4, 5, 6, 7, 8, 9,
-> > +10 to
-> > + * introduce PWM speed in percent: 40, 40, 40, 40, 40, 50, 60. 70, 80,=
- 90, 100.
-> > + */
-> > +#define MLXREG_FAN_SPEED_MIN		(MLXREG_FAN_MAX_STATE +
-> 2)
-> > +#define MLXREG_FAN_SPEED_MAX		(MLXREG_FAN_MAX_STATE *
-> 2)
-> > +#define MLXREG_FAN_SPEED_MIN_LEVEL	2	/* 20 percent */
-> > +#define MLXREG_FAN_TACHO_ROUND_DEF	500
-> > +#define MLXREG_FAN_TACHO_DIVIDER_DEF	1132
-> > +#define MLXREG_FAN_GET_RPM(val, d, r)	(15000000 / ((val) * (d) / 100 +
-> (r)))
-> > +#define MLXREG_FAN_GET_FAULT(val, mask) (((val) ^ (mask)) ? false :
-> > +true)
->=20
-> This can be written simpler as
-> 					(!!((val) ^ (mask)))
-> to avoid the conditional.
-
-ACK.
-
->=20
-> Given the discussion around the other driver, is this really a fault or r=
-ather an
-> alert/warning ?
-
-In this case it's fault.
-It'll mean that tachometer is broken and should be replaced.
-Theoretically It could also the case when SW sets PWM below
-the allowed minimum, but it's protected by MLXREG_FAN_MIN_DUTY.
-
->=20
-> > +#define MLXREG_FAN_PWM_DUTY2STATE(duty)
-> 	(DIV_ROUND_CLOSEST((duty) *	\
-> > +					 MLXREG_FAN_MAX_STATE,
-> 	\
-> > +					 MLXREG_FAN_MAX_DUTY))
-> > +#define MLXREG_FAN_PWM_STATE2DUTY(stat)
-> 	(DIV_ROUND_CLOSEST((stat) *	\
-> > +					 MLXREG_FAN_MAX_DUTY,
-> 	\
-> > +					 MLXREG_FAN_MAX_STATE))
-> > +
-> > +/*
-> > + * struct mlxreg_fan_tacho - tachometer data (internal use):
-> > + *
-> > + * @connected: indicates if tachometer is connected;
-> > + * @reg: register offset;
-> > + * @mask: fault mask;
-> > + */
-> > +struct mlxreg_fan_tacho {
-> > +	bool connected;
-> > +	int reg;
-> > +	int mask;
->=20
-> int or u32 ? Just wondering.
-
-I'll change it to u32, since regmap_read and regmap_write use
-unsigned int.
-
->=20
-> > +};
-> > +
-> > +/*
-> > + * struct mlxreg_fan_pwm - PWM data (internal use):
-> > + *
-> > + * @connected: indicates if PWM is connected;
-> > + * @reg: register offset;
-> > + */
-> > +struct mlxreg_fan_pwm {
-> > +	bool connected;
-> > +	int reg;
-> > +};
-> > +
-> > +/*
-> > + * struct mlxreg_fan - private data (internal use):
-> > + *
-> > + * @pdev: platform device;
-> > + * @dev: basic device;
-> > + * @pdata: platform data;
-> > + * @tacho: tachometer data;
-> > + * @pwm: PWM data;
-> > + * @round: round value for tachometer RPM calculation;
-> > + * @divider: divider value for tachometer RPM calculation;
-> > + * @cooling: cooling device levels;
-> > + * @cdev: cooling device;
-> > + */
-> > +struct mlxreg_fan {
-> > +	struct platform_device *pdev;
-> > +	struct device *dev;
-> > +	struct mlxreg_core_platform_data *pdata;
-> > +	struct mlxreg_fan_tacho tacho[MLXREG_FAN_MAX_TACHO];
-> > +	struct mlxreg_fan_pwm pwm;
-> > +	int round;
-> > +	int divider;
-> > +	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
-> > +	struct thermal_cooling_device *cdev; };
-> > +
-> > +static int
-> > +mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32
-> attr,
-> > +		int channel, long *val)
-> > +{
-> > +	struct mlxreg_fan *mlxreg_fan =3D dev_get_drvdata(dev);
-> > +	struct mlxreg_fan_tacho *tacho;
-> > +	u32 regval;
-> > +	int err;
-> > +
-> > +	switch (type) {
-> > +	case hwmon_fan:
-> > +		tacho =3D &mlxreg_fan->tacho[channel];
-> > +		switch (attr) {
-> > +		case hwmon_fan_input:
-> > +			err =3D regmap_read(mlxreg_fan->pdata->regmap,
-> > +					  tacho->reg, &regval);
-> > +			if (err)
-> > +				return err;
-> > +
-> > +			*val =3D MLXREG_FAN_GET_RPM(regval, mlxreg_fan-
-> >divider,
-> > +						  mlxreg_fan->round);
->=20
-> regval needs to be validate dto ensure that there are no divide by zero
-> exceptions.
-> Also, ->divider and ->round need to be validated at least once for the sa=
-me
-> reason.
-
-ACK
-
->=20
-> > +			break;
-> > +
-> > +		case hwmon_fan_fault:
-> > +			err =3D regmap_read(mlxreg_fan->pdata->regmap,
-> > +					  tacho->reg, &regval);
-> > +			if (err)
-> > +				return err;
-> > +
-> > +			*val =3D MLXREG_FAN_GET_FAULT(regval, tacho->mask);
-> > +			break;
-> > +
-> > +		default:
-> > +			return -EOPNOTSUPP;
-> > +		}
-> > +		break;
-> > +
-> > +	case hwmon_pwm:
-> > +		switch (attr) {
-> > +		case hwmon_pwm_input:
-> > +			err =3D regmap_read(mlxreg_fan->pdata->regmap,
-> > +					  mlxreg_fan->pwm.reg, &regval);
-> > +			if (err)
-> > +				return err;
-> > +
-> > +			*val =3D regval;
-> > +			break;
-> > +
-> > +		default:
-> > +			return -EOPNOTSUPP;
-> > +		}
-> > +		break;
-> > +
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +mlxreg_fan_write(struct device *dev, enum hwmon_sensor_types type, u32
-> attr,
-> > +		 int channel, long val)
-> > +{
-> > +	struct mlxreg_fan *mlxreg_fan =3D dev_get_drvdata(dev);
-> > +
-> > +	switch (type) {
-> > +	case hwmon_pwm:
-> > +		switch (attr) {
-> > +		case hwmon_pwm_input:
-> > +			if (val < MLXREG_FAN_MIN_DUTY ||
-> > +			    val > MLXREG_FAN_MAX_DUTY)
-> > +				return -EINVAL;
-> > +			return regmap_write(mlxreg_fan->pdata->regmap,
-> > +					    mlxreg_fan->pwm.reg, val);
-> > +		default:
-> > +			return -EOPNOTSUPP;
-> > +		}
-> > +		break;
-> > +
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +
-> > +static umode_t
-> > +mlxreg_fan_is_visible(const void *data, enum hwmon_sensor_types type,
-> u32 attr,
-> > +		      int channel)
-> > +{
-> > +	switch (type) {
-> > +	case hwmon_fan:
-> > +		if (!(((struct mlxreg_fan *)data)->tacho[channel].connected))
-> > +			return 0;
-> > +
-> > +		switch (attr) {
-> > +		case hwmon_fan_input:
-> > +		case hwmon_fan_fault:
-> > +			return 0444;
-> > +		default:
-> > +			break;
-> > +		}
-> > +		break;
-> > +
-> > +	case hwmon_pwm:
-> > +		switch (attr) {
-> > +		case hwmon_pwm_input:
-> > +			return 0644;
-> > +		default:
-> > +			break;
-> > +		}
-> > +		break;
-> > +
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const u32 mlxreg_fan_hwmon_fan_config[] =3D {
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	HWMON_F_INPUT | HWMON_F_FAULT,
-> > +	0
-> > +};
-> > +
-> > +static const struct hwmon_channel_info mlxreg_fan_hwmon_fan =3D {
-> > +	.type =3D hwmon_fan,
-> > +	.config =3D mlxreg_fan_hwmon_fan_config, };
-> > +
-> > +static const u32 mlxreg_fan_hwmon_pwm_config[] =3D {
-> > +	HWMON_PWM_INPUT,
-> > +	0
-> > +};
-> > +
-> > +static const struct hwmon_channel_info mlxreg_fan_hwmon_pwm =3D {
-> > +	.type =3D hwmon_pwm,
-> > +	.config =3D mlxreg_fan_hwmon_pwm_config, };
-> > +
-> > +static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] =3D {
-> > +	&mlxreg_fan_hwmon_fan,
-> > +	&mlxreg_fan_hwmon_pwm,
-> > +	NULL
-> > +};
-> > +
-> > +static const struct hwmon_ops mlxreg_fan_hwmon_hwmon_ops =3D {
-> > +	.is_visible =3D mlxreg_fan_is_visible,
-> > +	.read =3D mlxreg_fan_read,
-> > +	.write =3D mlxreg_fan_write,
-> > +};
-> > +
-> > +static const struct hwmon_chip_info mlxreg_fan_hwmon_chip_info =3D {
-> > +	.ops =3D &mlxreg_fan_hwmon_hwmon_ops,
-> > +	.info =3D mlxreg_fan_hwmon_info,
-> > +};
-> > +
-> > +static int mlxreg_fan_get_max_state(struct thermal_cooling_device *cde=
-v,
-> > +				    unsigned long *state)
-> > +{
-> > +	*state =3D MLXREG_FAN_MAX_STATE;
-> > +	return 0;
-> > +}
-> > +
-> > +static int mlxreg_fan_get_cur_state(struct thermal_cooling_device *cde=
-v,
-> > +				    unsigned long *state)
-> > +
-> > +{
-> > +	struct mlxreg_fan *mlxreg_fan =3D cdev->devdata;
-> > +	u32 regval;
-> > +	int err;
-> > +
-> > +	err =3D regmap_read(mlxreg_fan->pdata->regmap, mlxreg_fan-
-> >pwm.reg,
-> > +			  &regval);
-> > +	if (err) {
-> > +		dev_err(mlxreg_fan->dev, "Failed to query PWM duty\n");
-> > +		return err;
-> > +	}
-> > +
-> > +	*state =3D MLXREG_FAN_PWM_DUTY2STATE(regval);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mlxreg_fan_set_cur_state(struct thermal_cooling_device *cde=
-v,
-> > +				    unsigned long state)
-> > +
-> > +{
-> > +	struct mlxreg_fan *mlxreg_fan =3D cdev->devdata;
-> > +	unsigned long cur_state;
-> > +	u32 regval;
-> > +	int i;
-> > +	int err;
-> > +
-> > +	/*
-> > +	 * Verify if this request is for changing allowed FAN dynamical
-> > +	 * minimum. If it is - update cooling levels accordingly and update
-> > +	 * state, if current state is below the newly requested minimum state=
-.
-> > +	 * For example, if current state is 5, and minimal state is to be
-> > +	 * changed from 4 to 6, mlxreg_fan->cooling_levels[0 to 5] will be
-> > +	 * changed all from 4 to 6. And state 5 (mlxreg_fan->cooling_levels[4=
-])
-> > +	 * should be overwritten.
-> > +	 */
-> > +	if (state >=3D MLXREG_FAN_SPEED_MIN && state <=3D
-> MLXREG_FAN_SPEED_MAX) {
-> > +		state -=3D MLXREG_FAN_MAX_STATE;
-> > +		for (i =3D 0; i < state; i++)
-> > +			mlxreg_fan->cooling_levels[i] =3D state;
-> > +		for (i =3D state; i <=3D MLXREG_FAN_MAX_STATE; i++)
-> > +			mlxreg_fan->cooling_levels[i] =3D i;
-> > +
-> > +		err =3D regmap_read(mlxreg_fan->pdata->regmap,
-> > +				  mlxreg_fan->pwm.reg, &regval);
-> > +		if (err) {
-> > +			dev_err(mlxreg_fan->dev, "Failed to query PWM
-> duty\n");
-> > +			return err;
-> > +		}
-> > +
-> > +		cur_state =3D MLXREG_FAN_PWM_DUTY2STATE(regval);
-> > +		if (state < cur_state)
-> > +			return 0;
-> > +
-> > +		state =3D cur_state;
-> > +	}
-> > +
-> > +	if (state > MLXREG_FAN_MAX_STATE)
-> > +		return -EINVAL;
-> > +
-> > +	/* Normalize the state to the valid speed range. */
-> > +	state =3D mlxreg_fan->cooling_levels[state];
-> > +	err =3D regmap_write(mlxreg_fan->pdata->regmap, mlxreg_fan-
-> >pwm.reg,
-> > +			   MLXREG_FAN_PWM_STATE2DUTY(state));
-> > +	if (err) {
-> > +		dev_err(mlxreg_fan->dev, "Failed to write PWM duty\n");
-> > +		return err;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops =
-=3D {
-> > +	.get_max_state	=3D mlxreg_fan_get_max_state,
-> > +	.get_cur_state	=3D mlxreg_fan_get_cur_state,
-> > +	.set_cur_state	=3D mlxreg_fan_set_cur_state,
-> > +};
-> > +
-> > +static int mlxreg_fan_config(struct mlxreg_fan *mlxreg_fan,
-> > +			     struct mlxreg_core_platform_data *pdata) {
-> > +	struct mlxreg_core_data *data =3D pdata->data;
-> > +	int tacho_num =3D 0, i;
-> > +
-> > +	mlxreg_fan->round =3D MLXREG_FAN_TACHO_ROUND_DEF;
-> > +	mlxreg_fan->divider =3D MLXREG_FAN_TACHO_DIVIDER_DEF;
-> > +	for (i =3D 0; i < pdata->counter; i++, data++) {
-> > +		if (strnstr(data->label, "tacho", sizeof(data->label))) {
-> > +			if (tacho_num =3D=3D MLXREG_FAN_MAX_TACHO) {
-> > +				dev_err(mlxreg_fan->dev, "invalid tacho entry:
-> %s\n",
-> > +					data->label);
-> > +				return -EINVAL;
-> > +			}
-> > +			mlxreg_fan->tacho[tacho_num].reg =3D data->reg;
-> > +			mlxreg_fan->tacho[tacho_num].mask =3D data->mask;
-> > +			mlxreg_fan->tacho[tacho_num++].connected =3D true;
-> > +		} else if (strnstr(data->label, "pwm", sizeof(data->label))) {
-> > +			if (mlxreg_fan->pwm.connected) {
-> > +				dev_err(mlxreg_fan->dev, "invalid pwm entry:
-> %s\n",
-> > +					data->label);
-> > +				return -EINVAL;
-> > +			}
-> > +			mlxreg_fan->pwm.reg =3D data->reg;
-> > +			mlxreg_fan->pwm.connected =3D true;
-> > +		} else if (strnstr(data->label, "conf", sizeof(data->label))) {
-> > +			mlxreg_fan->round =3D data->mask;
-> > +			mlxreg_fan->divider =3D data->bit;
->=20
-> Multiple "conf" entries are ok, but multiple "pwm" entries result in an e=
-rror ?
-> Just wondering.
-
-Right.
-Will handle it.
-
->=20
-> > +		} else {
-> > +			dev_err(mlxreg_fan->dev, "invalid label: %s\n",
-> > +				data->label);
-> > +			return -EINVAL;
-> > +		}
-> > +	}
-> > +
-> > +	/* Init cooling levels per PWM state. */
-> > +	for (i =3D 0; i < MLXREG_FAN_SPEED_MIN_LEVEL; i++)
-> > +		mlxreg_fan->cooling_levels[i] =3D
-> MLXREG_FAN_SPEED_MIN_LEVEL;
-> > +	for (i =3D MLXREG_FAN_SPEED_MIN_LEVEL; i <=3D
-> MLXREG_FAN_MAX_STATE; i++)
-> > +		mlxreg_fan->cooling_levels[i] =3D i;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mlxreg_fan_probe(struct platform_device *pdev) {
-> > +	struct mlxreg_core_platform_data *pdata;
-> > +	struct mlxreg_fan *mlxreg_fan;
-> > +	struct device *hwm;
-> > +	const char *name;
-> > +	int err;
-> > +
-> > +	pdata =3D dev_get_platdata(&pdev->dev);
-> > +	if (!pdata) {
-> > +		dev_err(&pdev->dev, "Failed to get platform data.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	mlxreg_fan =3D devm_kzalloc(&pdev->dev, sizeof(*mlxreg_fan),
-> GFP_KERNEL);
-> > +	if (!mlxreg_fan)
-> > +		return -ENOMEM;
-> > +
-> > +	mlxreg_fan->pdev =3D pdev;
-> > +	mlxreg_fan->dev =3D &pdev->dev;
-> > +	mlxreg_fan->pdata =3D pdata;
-> > +	platform_set_drvdata(pdev, mlxreg_fan);
-> > +
-> > +	err =3D mlxreg_fan_config(mlxreg_fan, pdata);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	name =3D devm_kasprintf(&pdev->dev, GFP_KERNEL, "mlxreg_fan");
-> > +	if (!name)
-> > +		return -ENOMEM;
->=20
-> You lost me here. What is this for, and why not just use "mlxreg_fan"
-> as string directly below ?
->=20
-> > +
-> > +	hwm =3D devm_hwmon_device_register_with_info(&pdev->dev, name,
-> > +						   mlxreg_fan,
-> > +
-> &mlxreg_fan_hwmon_chip_info,
-> > +						   NULL);
-> > +	if (IS_ERR(hwm)) {
-> > +		dev_err(&pdev->dev, "Failed to register hwmon device\n");
-> > +		return PTR_ERR(hwm);
-> > +	}
-> > +
-> > +	if (IS_REACHABLE(CONFIG_THERMAL)) {
-> > +		mlxreg_fan->cdev =3D thermal_cooling_device_register(
-> > +						"mlxreg_fan",
->=20
-> Here you use "mlxreg_fan" directly.
->=20
-> > +						mlxreg_fan,
-> > +						&mlxreg_fan_cooling_ops);
-> > +		if (IS_ERR(mlxreg_fan->cdev)) {
-> > +			dev_err(&pdev->dev, "Failed to register cooling
-> device\n");
-> > +			return PTR_ERR(mlxreg_fan->cdev);
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mlxreg_fan_remove(struct platform_device *pdev) {
-> > +	struct mlxreg_fan *mlxreg_fan =3D platform_get_drvdata(pdev);
-> > +
-> > +	if (IS_REACHABLE(CONFIG_THERMAL))
-> > +		thermal_cooling_device_unregister(mlxreg_fan->cdev);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static struct platform_driver mlxreg_fan_driver =3D {
-> > +	.driver =3D {
-> > +	    .name =3D "mlxreg-fan",
-> > +	},
-> > +	.probe =3D mlxreg_fan_probe,
-> > +	.remove =3D mlxreg_fan_remove,
-> > +};
-> > +
-> > +module_platform_driver(mlxreg_fan_driver);
-> > +
-> > +MODULE_AUTHOR("Vadim Pasternak <vadimp@mellanox.com>");
-> > +MODULE_DESCRIPTION("Mellanox FAN driver"); MODULE_LICENSE("GPL");
-> > +MODULE_ALIAS("platform:mlxreg-fan");
-> > --
-> > 2.1.4
-> >
+diff --git a/Documentation/devicetree/bindings/clock/st/st,clkgen.txt b/Documentation/devicetree/bindings/clock/st/st,clkgen.txt
+index 7364953d0d0b..45ac19bfa0a9 100644
+--- a/Documentation/devicetree/bindings/clock/st/st,clkgen.txt
++++ b/Documentation/devicetree/bindings/clock/st/st,clkgen.txt
+@@ -31,10 +31,10 @@ This binding uses the common clock binding[1].
+ Each subnode should use the binding described in [2]..[7]
+ 
+ [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+-[3] Documentation/devicetree/bindings/clock/st,clkgen-mux.txt
+-[4] Documentation/devicetree/bindings/clock/st,clkgen-pll.txt
+-[7] Documentation/devicetree/bindings/clock/st,quadfs.txt
+-[8] Documentation/devicetree/bindings/clock/st,flexgen.txt
++[3] Documentation/devicetree/bindings/clock/st/st,clkgen-mux.txt
++[4] Documentation/devicetree/bindings/clock/st/st,clkgen-pll.txt
++[7] Documentation/devicetree/bindings/clock/st/st,quadfs.txt
++[8] Documentation/devicetree/bindings/clock/st/st,flexgen.txt
+ 
+ 
+ Required properties:
+diff --git a/Documentation/devicetree/bindings/clock/ti/gate.txt b/Documentation/devicetree/bindings/clock/ti/gate.txt
+index 03f8fdee62a7..56d603c1f716 100644
+--- a/Documentation/devicetree/bindings/clock/ti/gate.txt
++++ b/Documentation/devicetree/bindings/clock/ti/gate.txt
+@@ -10,7 +10,7 @@ will be controlled instead and the corresponding hw-ops for
+ that is used.
+ 
+ [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+-[2] Documentation/devicetree/bindings/clock/gate-clock.txt
++[2] Documentation/devicetree/bindings/clock/gpio-gate-clock.txt
+ [3] Documentation/devicetree/bindings/clock/ti/clockdomain.txt
+ 
+ Required properties:
+diff --git a/Documentation/devicetree/bindings/clock/ti/interface.txt b/Documentation/devicetree/bindings/clock/ti/interface.txt
+index 3111a409fea6..3f4704040140 100644
+--- a/Documentation/devicetree/bindings/clock/ti/interface.txt
++++ b/Documentation/devicetree/bindings/clock/ti/interface.txt
+@@ -9,7 +9,7 @@ companion clock finding (match corresponding functional gate
+ clock) and hardware autoidle enable / disable.
+ 
+ [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+-[2] Documentation/devicetree/bindings/clock/gate-clock.txt
++[2] Documentation/devicetree/bindings/clock/gpio-gate-clock.txt
+ 
+ Required properties:
+ - compatible : shall be one of:
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
+index d36f07e0a2bb..0551c78619de 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
+@@ -8,7 +8,7 @@ Required properties:
+ 	"intermediate"	- A parent of "cpu" clock which is used as "intermediate" clock
+ 			  source (usually MAINPLL) when the original CPU PLL is under
+ 			  transition and not stable yet.
+-	Please refer to Documentation/devicetree/bindings/clk/clock-bindings.txt for
++	Please refer to Documentation/devicetree/bindings/clock/clock-bindings.txt for
+ 	generic clock consumer properties.
+ - operating-points-v2: Please refer to Documentation/devicetree/bindings/opp/opp.txt
+ 	for detail.
+diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+index d6d2833482c9..fc2bcbe26b1e 100644
+--- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
++++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+@@ -12,7 +12,7 @@ Required properties:
+ - clocks:		 Phandles for clock specified in "clock-names" property
+ - clock-names :		 The name of clock used by the DFI, must be
+ 			 "pclk_ddr_mon";
+-- operating-points-v2:	 Refer to Documentation/devicetree/bindings/power/opp.txt
++- operating-points-v2:	 Refer to Documentation/devicetree/bindings/opp/opp.txt
+ 			 for details.
+ - center-supply:	 DMC supply node.
+ - status:		 Marks the node enabled/disabled.
+diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.txt b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.txt
+index 039219df05c5..18a2cde2e5f3 100644
+--- a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.txt
++++ b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.txt
+@@ -34,7 +34,7 @@ Optional properties:
+ - mali-supply : Phandle to regulator for the Mali device. Refer to
+   Documentation/devicetree/bindings/regulator/regulator.txt for details.
+ 
+-- operating-points-v2 : Refer to Documentation/devicetree/bindings/power/opp.txt
++- operating-points-v2 : Refer to Documentation/devicetree/bindings/opp/opp.txt
+   for details.
+ 
+ 
+diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.txt b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.txt
+index c1f65d1dac1d..63cd91176a68 100644
+--- a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.txt
++++ b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.txt
+@@ -44,7 +44,7 @@ Optional properties:
+ 
+   - memory-region:
+     Memory region to allocate from, as defined in
+-    Documentation/devicetree/bindi/reserved-memory/reserved-memory.txt
++    Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
+ 
+   - mali-supply:
+     Phandle to regulator for the Mali device, as defined in
+diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+index d1df77f4d655..0ebd08af777d 100644
+--- a/Documentation/devicetree/bindings/mfd/mt6397.txt
++++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+@@ -12,7 +12,7 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
+ It is interfaced to host controller using SPI interface by a proprietary hardware
+ called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
+ See the following for pwarp node definitions:
+-Documentation/devicetree/bindings/soc/pwrap.txt
++Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+ 
+ This document describes the binding for MFD device and its sub module.
+ 
+diff --git a/Documentation/devicetree/bindings/mfd/sun6i-prcm.txt b/Documentation/devicetree/bindings/mfd/sun6i-prcm.txt
+index dd2c06540485..4d21ffdb0fc1 100644
+--- a/Documentation/devicetree/bindings/mfd/sun6i-prcm.txt
++++ b/Documentation/devicetree/bindings/mfd/sun6i-prcm.txt
+@@ -9,7 +9,7 @@ Required properties:
+ 
+ The prcm node may contain several subdevices definitions:
+  - see Documentation/devicetree/clk/sunxi.txt for clock devices
+- - see Documentation/devicetree/reset/allwinner,sunxi-clock-reset.txt for reset
++ - see Documentation/devicetree/bindings/reset/allwinner,sunxi-clock-reset.txt for reset
+    controller devices
+ 
+ 
+diff --git a/Documentation/devicetree/bindings/mmc/exynos-dw-mshc.txt b/Documentation/devicetree/bindings/mmc/exynos-dw-mshc.txt
+index a58c173b7ab9..0419a63f73a0 100644
+--- a/Documentation/devicetree/bindings/mmc/exynos-dw-mshc.txt
++++ b/Documentation/devicetree/bindings/mmc/exynos-dw-mshc.txt
+@@ -62,7 +62,7 @@ Required properties for a slot (Deprecated - Recommend to use one slot per host)
+   rest of the gpios (depending on the bus-width property) are the data lines in
+   no particular order. The format of the gpio specifier depends on the gpio
+   controller.
+-(Deprecated - Refer to Documentation/devicetree/binding/pinctrl/samsung-pinctrl.txt)
++(Deprecated - Refer to Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt)
+ 
+ Example:
+ 
+diff --git a/Documentation/devicetree/bindings/net/dsa/ksz.txt b/Documentation/devicetree/bindings/net/dsa/ksz.txt
+index fd23904ac68e..a700943218ca 100644
+--- a/Documentation/devicetree/bindings/net/dsa/ksz.txt
++++ b/Documentation/devicetree/bindings/net/dsa/ksz.txt
+@@ -6,7 +6,7 @@ Required properties:
+ - compatible: For external switch chips, compatible string must be exactly one
+   of: "microchip,ksz9477"
+ 
+-See Documentation/devicetree/bindings/dsa/dsa.txt for a list of additional
++See Documentation/devicetree/bindings/net/dsa/dsa.txt for a list of additional
+ required and optional properties.
+ 
+ Examples:
+diff --git a/Documentation/devicetree/bindings/net/dsa/mt7530.txt b/Documentation/devicetree/bindings/net/dsa/mt7530.txt
+index a9bc27b93ee3..aa3527f71fdc 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mt7530.txt
++++ b/Documentation/devicetree/bindings/net/dsa/mt7530.txt
+@@ -31,7 +31,7 @@ Required properties for the child nodes within ports container:
+ - phy-mode: String, must be either "trgmii" or "rgmii" for port labeled
+ 	 "cpu".
+ 
+-See Documentation/devicetree/bindings/dsa/dsa.txt for a list of additional
++See Documentation/devicetree/bindings/net/dsa/dsa.txt for a list of additional
+ required, optional properties and how the integrated switch subnodes must
+ be specified.
+ 
+diff --git a/Documentation/devicetree/bindings/power/fsl,imx-gpc.txt b/Documentation/devicetree/bindings/power/fsl,imx-gpc.txt
+index b31d6bbeee16..726ec2875223 100644
+--- a/Documentation/devicetree/bindings/power/fsl,imx-gpc.txt
++++ b/Documentation/devicetree/bindings/power/fsl,imx-gpc.txt
+@@ -14,7 +14,7 @@ Required properties:
+   datasheet
+ - interrupts: Should contain one interrupt specifier for the GPC interrupt
+ - clocks: Must contain an entry for each entry in clock-names.
+-  See Documentation/devicetree/bindings/clocks/clock-bindings.txt for details.
++  See Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
+ - clock-names: Must include the following entries:
+   - ipg
+ 
+diff --git a/Documentation/devicetree/bindings/power/wakeup-source.txt b/Documentation/devicetree/bindings/power/wakeup-source.txt
+index 5d254ab13ebf..cfd74659fbed 100644
+--- a/Documentation/devicetree/bindings/power/wakeup-source.txt
++++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
+@@ -22,7 +22,7 @@ List of legacy properties and respective binding document
+ 3. "has-tpo"			Documentation/devicetree/bindings/rtc/rtc-opal.txt
+ 4. "linux,wakeup"		Documentation/devicetree/bindings/input/gpio-matrix-keypad.txt
+ 				Documentation/devicetree/bindings/mfd/tc3589x.txt
+-				Documentation/devicetree/bindings/input/ads7846.txt
++				Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
+ 5. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+ 6. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsung-keypad.txt
+ 7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt b/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+index 50a31536e975..252a05c5d976 100644
+--- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.txt
+@@ -16,7 +16,7 @@ A child node must exist to represent the core DWC3 IP block. The name of
+ the node is not important. The content of the node is defined in dwc3.txt.
+ 
+ Phy documentation is provided in the following places:
+-Documentation/devicetree/bindings/phy/rockchip,dwc3-usb-phy.txt
++Documentation/devicetree/bindings/phy/qcom-dwc3-usb-phy.txt
+ 
+ Example device nodes:
+ 
+diff --git a/Documentation/hwmon/ina2xx b/Documentation/hwmon/ina2xx
+index cfd31d94c872..72d16f08e431 100644
+--- a/Documentation/hwmon/ina2xx
++++ b/Documentation/hwmon/ina2xx
+@@ -53,7 +53,7 @@ bus supply voltage.
+ 
+ The shunt value in micro-ohms can be set via platform data or device tree at
+ compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
+-refer to the Documentation/devicetree/bindings/i2c/ina2xx.txt for bindings
++refer to the Documentation/devicetree/bindings/hwmon/ina2xx.txt for bindings
+ if the device tree is used.
+ 
+ Additionally ina226 supports update_interval attribute as described in
+diff --git a/Documentation/maintainer/pull-requests.rst b/Documentation/maintainer/pull-requests.rst
+index a19db3458b56..22b271de0304 100644
+--- a/Documentation/maintainer/pull-requests.rst
++++ b/Documentation/maintainer/pull-requests.rst
+@@ -41,7 +41,7 @@ named ``char-misc-next``, you would be using the following command::
+ 
+ that will create a signed tag called ``char-misc-4.15-rc1`` based on the
+ last commit in the ``char-misc-next`` branch, and sign it with your gpg key
+-(see :ref:`Documentation/maintainer/configure_git.rst <configuregit>`).
++(see :ref:`Documentation/maintainer/configure-git.rst <configuregit>`).
+ 
+ Linus will only accept pull requests based on a signed tag. Other
+ maintainers may differ.
+diff --git a/Documentation/translations/ko_KR/howto.rst b/Documentation/translations/ko_KR/howto.rst
+index 624654bdcd8a..a8197e072599 100644
+--- a/Documentation/translations/ko_KR/howto.rst
++++ b/Documentation/translations/ko_KR/howto.rst
+@@ -160,7 +160,7 @@ mtk.manpages@gmail.com의 메인테이너에게 보낼 것을 권장한다.
+     독특한 행동에 관하여 흔히 있는 오해들과 혼란들을 해소하고 있기
+     때문이다.
+ 
+-  :ref:`Documentation/process/stable_kernel_rules.rst <stable_kernel_rules>`
++  :ref:`Documentation/process/stable-kernel-rules.rst <stable_kernel_rules>`
+     이 문서는 안정적인 커널 배포가 이루어지는 규칙을 설명하고 있으며
+     여러분들이 이러한 배포들 중 하나에 변경을 하길 원한다면
+     무엇을 해야 하는지를 설명한다.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ec65e33e2cf1..5871dd5060f6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4513,7 +4513,7 @@ DRM DRIVER FOR ILITEK ILI9225 PANELS
+ M:	David Lechner <david@lechnology.com>
+ S:	Maintained
+ F:	drivers/gpu/drm/tinydrm/ili9225.c
+-F:	Documentation/devicetree/bindings/display/ili9225.txt
++F:	Documentation/devicetree/bindings/display/ilitek,ili9225.txt
+ 
+ DRM DRIVER FOR INTEL I810 VIDEO CARDS
+ S:	Orphan / Obsolete
+@@ -4599,13 +4599,13 @@ DRM DRIVER FOR SITRONIX ST7586 PANELS
+ M:	David Lechner <david@lechnology.com>
+ S:	Maintained
+ F:	drivers/gpu/drm/tinydrm/st7586.c
+-F:	Documentation/devicetree/bindings/display/st7586.txt
++F:	Documentation/devicetree/bindings/display/sitronix,st7586.txt
+ 
+ DRM DRIVER FOR SITRONIX ST7735R PANELS
+ M:	David Lechner <david@lechnology.com>
+ S:	Maintained
+ F:	drivers/gpu/drm/tinydrm/st7735r.c
+-F:	Documentation/devicetree/bindings/display/st7735r.txt
++F:	Documentation/devicetree/bindings/display/sitronix,st7735r.txt
+ 
+ DRM DRIVER FOR TDFX VIDEO CARDS
+ S:	Orphan / Obsolete
+@@ -4824,7 +4824,7 @@ M:	Eric Anholt <eric@anholt.net>
+ S:	Supported
+ F:	drivers/gpu/drm/v3d/
+ F:	include/uapi/drm/v3d_drm.h
+-F:	Documentation/devicetree/bindings/display/brcm,bcm-v3d.txt
++F:	Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.txt
+ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ 
+ DRM DRIVERS FOR VC4
+@@ -5735,7 +5735,7 @@ M:	Madalin Bucur <madalin.bucur@nxp.com>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/freescale/fman
+-F:	Documentation/devicetree/bindings/powerpc/fsl/fman.txt
++F:	Documentation/devicetree/bindings/net/fsl-fman.txt
+ 
+ FREESCALE QORIQ PTP CLOCK DRIVER
+ M:	Yangbo Lu <yangbo.lu@nxp.com>
+@@ -8700,7 +8700,7 @@ M:	Guenter Roeck <linux@roeck-us.net>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/hwmon/max6697
+-F:	Documentation/devicetree/bindings/i2c/max6697.txt
++F:	Documentation/devicetree/bindings/hwmon/max6697.txt
+ F:	drivers/hwmon/max6697.c
+ F:	include/linux/platform_data/max6697.h
+ 
+@@ -9080,7 +9080,7 @@ M:	Martin Donnelly <martin.donnelly@ge.com>
+ M:	Martyn Welch <martyn.welch@collabora.co.uk>
+ S:	Maintained
+ F:	drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+-F:	Documentation/devicetree/bindings/video/bridge/megachips-stdpxxxx-ge-b850v3-fw.txt
++F:	Documentation/devicetree/bindings/display/bridge/megachips-stdpxxxx-ge-b850v3-fw.txt
+ 
+ MEGARAID SCSI/SAS DRIVERS
+ M:	Kashyap Desai <kashyap.desai@broadcom.com>
+@@ -10728,7 +10728,7 @@ PARALLEL LCD/KEYPAD PANEL DRIVER
+ M:	Willy Tarreau <willy@haproxy.com>
+ M:	Ksenija Stanojevic <ksenija.stanojevic@gmail.com>
+ S:	Odd Fixes
+-F:	Documentation/misc-devices/lcd-panel-cgram.txt
++F:	Documentation/auxdisplay/lcd-panel-cgram.txt
+ F:	drivers/misc/panel.c
+ 
+ PARALLEL PORT SUBSYSTEM
+@@ -13291,7 +13291,7 @@ M:	Vinod Koul <vkoul@kernel.org>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git
+ S:	Supported
+-F:	Documentation/sound/alsa/compress_offload.txt
++F:	Documentation/sound/designs/compress-offload.rst
+ F:	include/sound/compress_driver.h
+ F:	include/uapi/sound/compress_*
+ F:	sound/core/compress_offload.c
+diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
+index 14d287bed33c..1ab613eb5796 100644
+--- a/drivers/net/ethernet/intel/Kconfig
++++ b/drivers/net/ethernet/intel/Kconfig
+@@ -33,7 +33,7 @@ config E100
+ 	  to identify the adapter.
+ 
+ 	  More specific information on configuring the driver is in
+-	  <file:Documentation/networking/e100.txt>.
++	  <file:Documentation/networking/e100.rst>.
+ 
+ 	  To compile this driver as a module, choose M here. The module
+ 	  will be called e100.
+@@ -49,7 +49,7 @@ config E1000
+ 	  <http://support.intel.com>
+ 
+ 	  More specific information on configuring the driver is in
+-	  <file:Documentation/networking/e1000.txt>.
++	  <file:Documentation/networking/e1000.rst>.
+ 
+ 	  To compile this driver as a module, choose M here. The module
+ 	  will be called e1000.
+@@ -94,7 +94,7 @@ config IGB
+ 	  <http://support.intel.com>
+ 
+ 	  More specific information on configuring the driver is in
+-	  <file:Documentation/networking/e1000.txt>.
++	  <file:Documentation/networking/e1000.rst>.
+ 
+ 	  To compile this driver as a module, choose M here. The module
+ 	  will be called igb.
+@@ -130,7 +130,7 @@ config IGBVF
+ 	  <http://support.intel.com>
+ 
+ 	  More specific information on configuring the driver is in
+-	  <file:Documentation/networking/e1000.txt>.
++	  <file:Documentation/networking/e1000.rst>.
+ 
+ 	  To compile this driver as a module, choose M here. The module
+ 	  will be called igbvf.
+diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+index 8974a0fcda1b..4b5e250e8615 100644
+--- a/drivers/soundwire/stream.c
++++ b/drivers/soundwire/stream.c
+@@ -1291,7 +1291,7 @@ static int _sdw_prepare_stream(struct sdw_stream_runtime *stream)
+  *
+  * @stream: Soundwire stream
+  *
+- * Documentation/soundwire/stream.txt explains this API in detail
++ * Documentation/driver-api/soundwire/stream.rst explains this API in detail
+  */
+ int sdw_prepare_stream(struct sdw_stream_runtime *stream)
+ {
+@@ -1348,7 +1348,7 @@ static int _sdw_enable_stream(struct sdw_stream_runtime *stream)
+  *
+  * @stream: Soundwire stream
+  *
+- * Documentation/soundwire/stream.txt explains this API in detail
++ * Documentation/driver-api/soundwire/stream.rst explains this API in detail
+  */
+ int sdw_enable_stream(struct sdw_stream_runtime *stream)
+ {
+@@ -1400,7 +1400,7 @@ static int _sdw_disable_stream(struct sdw_stream_runtime *stream)
+  *
+  * @stream: Soundwire stream
+  *
+- * Documentation/soundwire/stream.txt explains this API in detail
++ * Documentation/driver-api/soundwire/stream.rst explains this API in detail
+  */
+ int sdw_disable_stream(struct sdw_stream_runtime *stream)
+ {
+@@ -1456,7 +1456,7 @@ static int _sdw_deprepare_stream(struct sdw_stream_runtime *stream)
+  *
+  * @stream: Soundwire stream
+  *
+- * Documentation/soundwire/stream.txt explains this API in detail
++ * Documentation/driver-api/soundwire/stream.rst explains this API in detail
+  */
+ int sdw_deprepare_stream(struct sdw_stream_runtime *stream)
+ {
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index 57a27c42b5ac..56df483de619 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -168,7 +168,7 @@ config BINFMT_MISC
+ 	  will automatically feed it to the correct interpreter.
+ 
+ 	  You can do other nice things, too. Read the file
+-	  <file:Documentation/binfmt_misc.txt> to learn how to use this
++	  <file:Documentation/admin-guide/binfmt-misc.rst> to learn how to use this
+ 	  feature, <file:Documentation/admin-guide/java.rst> for information about how
+ 	  to include Java support. and <file:Documentation/admin-guide/mono.rst> for
+           information about how to include Mono-based .NET support.
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index 4de191563261..4b5fff31ef27 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -4,7 +4,7 @@
+  * Copyright (C) 1997 Richard Günther
+  *
+  * binfmt_misc detects binaries via a magic or filename extension and invokes
+- * a specified wrapper. See Documentation/binfmt_misc.txt for more details.
++ * a specified wrapper. See Documentation/admin-guide/binfmt-misc.rst for more details.
+  */
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-- 
+2.17.1
