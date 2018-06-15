@@ -1,33 +1,35 @@
-Return-Path: <SRS0=BQBr=JA=vger.kernel.org=linux-kernel-owner@kernel.org>
-Date: Thu, 14 Jun 2018 09:22:33 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-hwmon@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        alsa-devel@alsa-project.org, linux-fsdevel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
+Return-Path: <SRS0=sQLo=JB=vger.kernel.org=linux-kernel-owner@kernel.org>
 Subject: Re: [PATCH v3 16/27] docs: Fix more broken references
-Message-ID: <20180614162233.GA10788@roeck-us.net>
+To: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-samsung-soc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-fsdevel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 References: <cover.1528990947.git.mchehab+samsung@kernel.org>
  <e1bf52a721005b2017434acc54ec5ddc152d6fe4.1528990947.git.mchehab+samsung@kernel.org>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <cba1f9da-7dce-af9c-d5c2-3a7e18ce4760@gmail.com>
+Date: Fri, 15 Jun 2018 10:46:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <e1bf52a721005b2017434acc54ec5ddc152d6fe4.1528990947.git.mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kernel-owner@vger.kernel.org
 List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Jun 14, 2018 at 01:09:01PM -0300, Mauro Carvalho Chehab wrote:
+
+
+On 14/06/18 18:09, Mauro Carvalho Chehab wrote:
 > As we move stuff around, some doc references are broken. Fix some of
 > them via this script:
 > 	./scripts/documentation-file-ref-check --fix
@@ -36,9 +38,9 @@ On Thu, Jun 14, 2018 at 01:09:01PM -0300, Mauro Carvalho Chehab wrote:
 > 
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-For hwmon:
+for mt6397.txt:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
 >  .../devicetree/bindings/clock/st/st,clkgen.txt |  8 ++++----
@@ -495,10 +497,4 @@ Acked-by: Guenter Roeck <linux@roeck-us.net>
 >   */
 >  
 >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> -- 
-> 2.17.1
 > 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-hwmon" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
