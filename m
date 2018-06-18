@@ -1,48 +1,46 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:42194 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753688AbeFOVms (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 Jun 2018 17:42:48 -0400
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-To: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-From: Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <e1bf52a721005b2017434acc54ec5ddc152d6fe4.1528990947.git.mchehab+samsung@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-hwmon@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        alsa-devel@alsa-project.org, linux-fsdevel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <cover.1528990947.git.mchehab+samsung@kernel.org>
- <e1bf52a721005b2017434acc54ec5ddc152d6fe4.1528990947.git.mchehab+samsung@kernel.org>
-Message-ID: <152909896651.16708.13481357388390831455@swboyd.mtv.corp.google.com>
-Subject: Re: [PATCH v3 16/27] docs: Fix more broken references
-Date: Fri, 15 Jun 2018 14:42:46 -0700
+Received: from bh-25.webhostbox.net ([208.91.199.152]:56324 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1754561AbeFRQZB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 18 Jun 2018 12:25:01 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ben Hutchings <ben.hutchings@codethink.co.uk>
+Subject: [PATCH] hwmon: (nct6775) Fix comment in the description of pwm_mode
+Date: Mon, 18 Jun 2018 09:24:57 -0700
+Message-Id: <1529339097-23743-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Quoting Mauro Carvalho Chehab (2018-06-14 09:09:01)
-> As we move stuff around, some doc references are broken. Fix some of
-> them via this script:
->         ./scripts/documentation-file-ref-check --fix
-> =
+Commit 415eb2a1aaa488 ("hwmon: (nct6775) Fix writing pwmX_mode") changed
+the definition of the pwm_mode variable, but did not update the comment
+describing it.
 
-> Manually checked that produced results are valid.
-> =
+Reported-by: Ben Hutchings <ben.hutchings@codethink.co.uk>
+Cc: Ben Hutchings <ben.hutchings@codethink.co.uk>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/nct6775.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> ---
->  .../devicetree/bindings/clock/st/st,clkgen.txt |  8 ++++----
->  .../devicetree/bindings/clock/ti/gate.txt      |  2 +-
->  .../devicetree/bindings/clock/ti/interface.txt |  2 +-
-
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index f9d1349c3286..37149909f8a8 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -1050,8 +1050,8 @@ struct nct6775_data {
+ 	u64 beeps;
+ 
+ 	u8 pwm_num;	/* number of pwm */
+-	u8 pwm_mode[NUM_FAN];	/* 1->DC variable voltage,
+-				 * 0->PWM variable duty cycle
++	u8 pwm_mode[NUM_FAN];	/* 0->DC variable voltage,
++				 * 1->PWM variable duty cycle
+ 				 */
+ 	enum pwm_enable pwm_enable[NUM_FAN];
+ 			/* 0->off
+-- 
+2.7.4
 
