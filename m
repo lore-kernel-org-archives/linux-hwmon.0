@@ -1,447 +1,193 @@
-Return-Path: <tmaimon77@gmail.com>
-Return-path: <tmaimon77@gmail.com>
-MIME-Version: 1.0
-In-Reply-To: <20180625171417.GA16379@rob-hp-laptop>
-References: <20180624124155.82412-1-tmaimon77@gmail.com> <20180624124155.82412-2-tmaimon77@gmail.com>
- <20180625171417.GA16379@rob-hp-laptop>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Tue, 26 Jun 2018 01:20:50 +0300
-Message-ID: <CAP6Zq1h-M6YDS67pkgHy-GMmiVk1D-RScLgDyG65JQM+S35rEQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-binding: hwmon: Add NPCM7xx PWM and Fan
- controller documentation
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, jdelvare@suse.com,
-	Guenter Roeck <linux@roeck-us.net>, Avi Fishman <avifishman70@gmail.com>,
-	Nancy Yuen <yuenn@google.com>, Brendan Higgins <brendanhiggins@google.com>,
-	Patrick Venture <venture@google.com>, Joel Stanley <joel@jms.id.au>,
-	devicetree <devicetree@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: multipart/alternative; boundary="0000000000004dfa06056f7ecba6"
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pl0-f67.google.com ([209.85.160.67]:38325 "EHLO
+        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932675AbeFUXhu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 21 Jun 2018 19:37:50 -0400
+Received: by mail-pl0-f67.google.com with SMTP id d10-v6so2488405plo.5
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Jun 2018 16:37:50 -0700 (PDT)
+From: Kun Yi <kunyi@google.com>
+To: linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc: rlippert@google.com, benjaminfair@google.com,
+        Kun Yi <kunyi@google.com>
+Subject: [PATCH] hwmon (pmbus/max34440): Add support for MAX34451.
+Date: Thu, 21 Jun 2018 16:37:27 -0700
+Message-Id: <20180621233727.76577-1-kunyi@google.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
---0000000000004dfa06056f7ecba6
-Content-Type: text/plain; charset="UTF-8"
+MAX34451 is a 16-Channel Voltage/Current Monitor and 12-Channel
+Sequencer.
 
-Hi Rob,
+Signed-off-by: Kun Yi <kunyi@google.com>
+---
+ Documentation/hwmon/max34440   | 16 ++++++---
+ drivers/hwmon/pmbus/Kconfig    |  2 +-
+ drivers/hwmon/pmbus/max34440.c | 62 ++++++++++++++++++++++++++++++++--
+ 3 files changed, 72 insertions(+), 8 deletions(-)
 
+diff --git a/Documentation/hwmon/max34440 b/Documentation/hwmon/max34440
+index 9ba6587b7657..b2de8fa49273 100644
+--- a/Documentation/hwmon/max34440
++++ b/Documentation/hwmon/max34440
+@@ -16,6 +16,11 @@ Supported chips:
+     Prefixes: 'max34446'
+     Addresses scanned: -
+     Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34446.pdf
++  * Maxim MAX34451
++    PMBus 16-Channel V/I Monitor and 12-Channel Sequencer/Marginer
++    Prefixes: 'max34451'
++    Addresses scanned: -
++    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34451.pdf
+   * Maxim MAX34460
+     PMBus 12-Channel Voltage Monitor & Sequencer
+     Prefix: 'max34460'
+@@ -36,9 +41,10 @@ Description
+ This driver supports hardware monitoring for Maxim MAX34440 PMBus 6-Channel
+ Power-Supply Manager, MAX34441 PMBus 5-Channel Power-Supply Manager
+ and Intelligent Fan Controller, and MAX34446 PMBus Power-Supply Data Logger.
+-It also supports the MAX34460 and MAX34461 PMBus Voltage Monitor & Sequencers.
+-The MAX34460 supports 12 voltage channels, and the MAX34461 supports 16 voltage
+-channels.
++It also supports the MAX34451, MAX34460, and MAX34461 PMBus Voltage Monitor &
++Sequencers. The MAX34451 supports monitoring voltage or current of 12 channels
++based on GIN pins. The MAX34460 supports 12 voltage channels, and the MAX34461
++supports 16 voltage channels.
+ 
+ The driver is a client driver to the core PMBus driver. Please see
+ Documentation/hwmon/pmbus for details on PMBus client drivers.
+@@ -93,7 +99,7 @@ curr[1-6]_max		Maximum current. From IOUT_OC_WARN_LIMIT register.
+ curr[1-6]_crit		Critical maximum current. From IOUT_OC_FAULT_LIMIT register.
+ curr[1-6]_max_alarm	Current high alarm. From IOUT_OC_WARNING status.
+ curr[1-6]_crit_alarm	Current critical high alarm. From IOUT_OC_FAULT status.
+-curr[1-4]_average	Historical average current (MAX34446 only).
++curr[1-4]_average	Historical average current (MAX34446/34451 only).
+ curr[1-6]_highest	Historical maximum current.
+ curr[1-6]_reset_history	Write any value to reset history.
+ 
+@@ -123,5 +129,7 @@ temp[1-8]_reset_history	Write any value to reset history.
+ 			temp7 and temp8 attributes only exist for MAX34440.
+ 			MAX34446 only supports temp[1-3].
+ 
++MAX34451 supports attribute groups in[1-16] (or curr[1-16] based on input pins)
++and temp[1-5].
+ MAX34460 supports attribute groups in[1-12] and temp[1-5].
+ MAX34461 supports attribute groups in[1-16] and temp[1-5].
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index e71aec69e76e..a82018aaf473 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -130,7 +130,7 @@ config SENSORS_MAX34440
+ 	default n
+ 	help
+ 	  If you say yes here you get hardware monitoring support for Maxim
+-	  MAX34440, MAX34441, MAX34446, MAX34460, and MAX34461.
++	  MAX34440, MAX34441, MAX34446, MAX34451, MAX34460, and MAX34461.
+ 
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called max34440.
+diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+index 74a1f6f68fb3..f879b9457c78 100644
+--- a/drivers/hwmon/pmbus/max34440.c
++++ b/drivers/hwmon/pmbus/max34440.c
+@@ -27,7 +27,7 @@
+ #include <linux/i2c.h>
+ #include "pmbus.h"
+ 
+-enum chips { max34440, max34441, max34446, max34460, max34461 };
++enum chips { max34440, max34441, max34446, max34451, max34460, max34461 };
+ 
+ #define MAX34440_MFR_VOUT_PEAK		0xd4
+ #define MAX34440_MFR_IOUT_PEAK		0xd5
+@@ -67,7 +67,7 @@ static int max34440_read_word_data(struct i2c_client *client, int page, int reg)
+ 					   MAX34440_MFR_VOUT_PEAK);
+ 		break;
+ 	case PMBUS_VIRT_READ_IOUT_AVG:
+-		if (data->id != max34446)
++		if (data->id != max34446 && data->id != max34451)
+ 			return -ENXIO;
+ 		ret = pmbus_read_word_data(client, page,
+ 					   MAX34446_MFR_IOUT_AVG);
+@@ -143,7 +143,7 @@ static int max34440_write_word_data(struct i2c_client *client, int page,
+ 	case PMBUS_VIRT_RESET_IOUT_HISTORY:
+ 		ret = pmbus_write_word_data(client, page,
+ 					    MAX34440_MFR_IOUT_PEAK, 0);
+-		if (!ret && data->id == max34446)
++		if (!ret && (data->id == max34446 || data->id == max34451))
+ 			ret = pmbus_write_word_data(client, page,
+ 					MAX34446_MFR_IOUT_AVG, 0);
+ 
+@@ -325,6 +325,61 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
+ 	},
++	[max34451] = {
++		.pages = 21,
++		.format[PSC_VOLTAGE_OUT] = direct,
++		.format[PSC_TEMPERATURE] = direct,
++		.format[PSC_CURRENT_OUT] = direct,
++		.m[PSC_VOLTAGE_OUT] = 1,
++		.b[PSC_VOLTAGE_OUT] = 0,
++		.R[PSC_VOLTAGE_OUT] = 3,
++		.m[PSC_CURRENT_OUT] = 1,
++		.b[PSC_CURRENT_OUT] = 0,
++		.R[PSC_CURRENT_OUT] = 2,
++		.m[PSC_TEMPERATURE] = 1,
++		.b[PSC_TEMPERATURE] = 0,
++		.R[PSC_TEMPERATURE] = 2,
++		.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[12] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[13] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[14] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[15] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
++		.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++		.read_byte_data = max34440_read_byte_data,
++		.read_word_data = max34440_read_word_data,
++		.write_word_data = max34440_write_word_data,
++	},
+ 	[max34460] = {
+ 		.pages = 18,
+ 		.format[PSC_VOLTAGE_OUT] = direct,
+@@ -413,6 +468,7 @@ static const struct i2c_device_id max34440_id[] = {
+ 	{"max34440", max34440},
+ 	{"max34441", max34441},
+ 	{"max34446", max34446},
++	{"max34451", max34451},
+ 	{"max34460", max34460},
+ 	{"max34461", max34461},
+ 	{}
+-- 
+2.18.0.rc2.346.g013aa6912e-goog
 
-On 25 June 2018 at 20:14, Rob Herring <robh@kernel.org> wrote:
-
-> On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:
-> > Added device tree binding documentation for Nuvoton BMC
-> > NPCM7xx Pulse Width Modulation (PWM)  and Fan tach controller.
-> > The PWM controller can support upto 8 PWM output ports.
-> > The Fan tach controller can support upto 16 tachometer inputs.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  | 84
-> ++++++++++++++++++++++
-> >  1 file changed, 84 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-
-> fan.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-> b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-> > new file mode 100644
-> > index 000000000000..a9eacda34f92
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-> > @@ -0,0 +1,84 @@
-> > +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver
->
-> Bindings are for h/w, not drivers.
->
-> > +
-> > +The NPCM7xx has two identical Pulse-width modulation (PWM) controller
-> modules,
-> > +Each PWM module has four PWM controller outputs, Totally 8 PWM
-> controller outputs.
-> > +
-> > +The NPCM7xx has eight identical Fan tachometer controller modules,
-> > +Each Fan module has two Fan controller inputs, Totally 16 Fan
-> controller inputs.
->
-> Have you looked at other fan ctrlr bindings?f This looks like similar
-> h/w to ASpeed. Really, I'd like to see a common doc that describes the
->
-
-We do not have the same H/W as Aspeed, I believe in the near future we will
-need to add
-more DT properties that will used only in the NPCM7xx module.
-
-structure and common properties.
->
-
-what do you mean by common structure and common properties?
-
-
-> > +
-> > +Required properties for pwm-fan node:
-> > +- compatible : "nuvoton,npcm750-pwm-fan" for Poleg NPCM7XX.
-> > +- reg                        : specifies physical base address and size
-> of the registers.
-> > +- reg-names  : must contain:
-> > +                                     * "pwm-base" for the PWM registers.
-> > +                                     * "fan-base" for the Fan registers.
->
-> '-base' is redundant. And your example doesn't match.
->
-> > +- clocks             : phandle of reference clocks.
-> > +- clock-names        : must contain
-> > +                                     * "clk_apb3" for clock of PWM
-> controller.
-> > +                                     * "clk_apb4" for clock of Fan
-> controller.
-> > +- interrupts : contain the Fan interrupts with flags for falling edge.
-> > +- pinctrl-names      : a pinctrl state named "default" must be defined.
-> > +- pinctrl-0  : phandle referencing pin configuration of the PWM and Fan
-> > +                                     controller ports.
-> > +
-> > +pwm subnode format:
-> > +===================
-> > +Under pwm subnode can be upto 8 child nodes, each child node
-> representing a PWM channel.
-> > +Each pwm subnode must have one PWM channel and atleast one Fan tach
-> channel.
-> > +
-> > +For PWM channel can be configured cooling-levels to create cooling
-> device.
-> > +Cooling device could be bound to a thermal zone for the thermal control.
-> > +
-> > +Required properties for each child node:
-> > +- pwm-ch : specify the PWM output channel.
-> > +                     integer value in the range 0 through 7, that
-> represent
-> > +                     the PWM channel number that used.
-> > +
-> > +- fan-ch : specify the Fan input channel.
-> > +                     integer value in the range 0 through 15, that
-> represent
-> > +                     the Fan channel number that used.
->
-> This is really the tach channel.
->
->
-> > +
-> > +                     At least one Fan tach input channel is required
-> > +
-> > +Optional property for each child node:
-> > +- cooling-levels: PWM duty cycle values in a range from 0 to 255
-> > +                  which correspond to thermal cooling states.
-> > +
-> > +Examples:
-> > +
-> > +pwm_fan:pwm_fan_controller@103000 {
->
-> fan-controller@...
->
-> > +     compatible = "nuvoton,npcm750-pwm-fan";
-> > +     reg = <0x103000 0x2000>,
-> > +             <0x180000 0x8000>;
-> > +     reg-names = "pwm_base", "fan_base";
-> > +     clocks = <&clk NPCM7XX_CLK_APB3>,
-> > +             <&clk NPCM7XX_CLK_APB4>;
-> > +     clock-names = "clk_apb3","clk_apb4";
-> > +     interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&pwm0_pins &pwm1_pins &pwm2_pins
-> > +                     &fanin0_pins &fanin1_pins &fanin2_pins
-> > +                     &fanin3_pins &fanin4_pins>;
-> > +
-> > +                     pwm@0 {
->
-> The sub-nodes should be "fan" nodes.
->
-> A unit-address without reg property is not valid.
->
-> > +                             pwm-ch = /bits/ 8 <0x00>;
->
-> Use 'reg' like ASpeed binding.
->
-> > +                             fan-ch = /bits/ 8 <0x00 0x01>;
-> > +                             cooling-levels = <127 255>;
-> > +                             };
-> > +                     pwm@1 {
-> > +                             pwm-ch = /bits/ 8 <0x01>;
-> > +                             fan-ch = /bits/ 8 <0x02 0x03>;
-> > +                             };
-> > +                     pwm@2 {
-> > +                             pwm-ch = /bits/ 8 <0x02>;
-> > +                             fan-ch = /bits/ 8 <0x04>;
-> > +                             };
-> > +
-> > +};
-> > \ No newline at end of file
->
-> ^^^
->
-> > --
-> > 2.14.1
-> >
-> > --
-> > To unsubscribe from this list: send the line "unsubscribe devicetree" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-Thanks!
-
-Tomer
-
---0000000000004dfa06056f7ecba6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Rob,<div><br></div><div><br></div><div class=3D"gmail_e=
-xtra"><div class=3D"gmail_quote">On 25 June 2018 at 20:14, Rob Herring <spa=
-n dir=3D"ltr">&lt;<a href=3D"mailto:robh@kernel.org" target=3D"_blank">robh=
-@kernel.org</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span c=
-lass=3D"">On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:<br>
-&gt; Added device tree binding documentation for Nuvoton BMC<br>
-&gt; NPCM7xx Pulse Width Modulation (PWM)=C2=A0 and Fan tach controller.<br=
->
-&gt; The PWM controller can support upto 8 PWM output ports.<br>
-&gt; The Fan tach controller can support upto 16 tachometer inputs.<br>
-&gt; <br>
-&gt; Signed-off-by: Tomer Maimon &lt;<a href=3D"mailto:tmaimon77@gmail.com"=
->tmaimon77@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 .../devicetree/bindings/hwmon/<wbr>npcm750-pwm-fan.txt=C2=A0 | 8=
-4 ++++++++++++++++++++++<br>
-&gt;=C2=A0 1 file changed, 84 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 Documentation/devicetree/<wbr>bindings/hwmon/=
-npcm750-pwm-<wbr>fan.txt<br>
-&gt; <br>
-&gt; diff --git a/Documentation/devicetree/<wbr>bindings/hwmon/npcm750-pwm-=
-<wbr>fan.txt b/Documentation/devicetree/<wbr>bindings/hwmon/npcm750-pwm-<wb=
-r>fan.txt<br>
-&gt; new file mode 100644<br>
-&gt; index 000000000000..a9eacda34f92<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/Documentation/devicetree/<wbr>bindings/hwmon/npcm750-pwm-<wbr>fa=
-n.txt<br>
-&gt; @@ -0,0 +1,84 @@<br>
-&gt; +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver<br>
-<br>
-</span>Bindings are for h/w, not drivers.<br>
-<span class=3D""><br>
-&gt; +<br>
-&gt; +The NPCM7xx has two identical Pulse-width modulation (PWM) controller=
- modules,<br>
-&gt; +Each PWM module has four PWM controller outputs, Totally 8 PWM contro=
-ller outputs.<br>
-&gt; +<br>
-&gt; +The NPCM7xx has eight identical Fan tachometer controller modules,<br=
->
-&gt; +Each Fan module has two Fan controller inputs, Totally 16 Fan control=
-ler inputs.<br>
-<br>
-</span>Have you looked at other fan ctrlr bindings?f This looks like simila=
-r <br>
-h/w to ASpeed. Really, I&#39;d like to see a common doc that describes the =
-<br></blockquote><div>=C2=A0</div><div>
-
-<div style=3D"font-size:small;background-color:rgb(255,255,255);text-decora=
-tion-style:initial;text-decoration-color:initial">We do not have the same H=
-/W as Aspeed, I believe in the near future we will need to add=C2=A0</div><=
-div style=3D"font-size:small;background-color:rgb(255,255,255);text-decorat=
-ion-style:initial;text-decoration-color:initial">more DT properties that wi=
-ll used only in the NPCM7xx module.=C2=A0=C2=A0</div><br></div><blockquote =
-class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
-;padding-left:1ex">
-structure and common properties.<br></blockquote><div><br></div>
-
-<span style=3D"font-size:small;background-color:rgb(255,255,255);text-decor=
-ation-style:initial;text-decoration-color:initial;float:none;display:inline=
-">what do you mean by common=C2=A0</span><span style=3D"font-size:small;bac=
-kground-color:rgb(255,255,255);text-decoration-style:initial;text-decoratio=
-n-color:initial;float:none;display:inline">structure and common properties?=
-</span>
-
-<div><span style=3D"font-size:small;background-color:rgb(255,255,255);text-=
-decoration-style:initial;text-decoration-color:initial;float:none;display:i=
-nline"><br></span></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
- 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span class=3D""><br=
->
-&gt; +<br>
-&gt; +Required properties for pwm-fan node:<br>
-&gt; +- compatible : &quot;nuvoton,npcm750-pwm-fan&quot; for Poleg NPCM7XX.=
-<br>
-&gt; +- reg=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 : specifies physical base address and size of the regi=
-sters.<br>
-&gt; +- reg-names=C2=A0 : must contain:<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* &quot;pwm-=
-base&quot; for the PWM registers.<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* &quot;fan-=
-base&quot; for the Fan registers.<br>
-<br>
-</span>&#39;-base&#39; is redundant. And your example doesn&#39;t match.<br=
->
-<div><div class=3D"h5"><br>
-&gt; +- clocks=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0: phandle of =
-reference clocks.<br>
-&gt; +- clock-names=C2=A0 =C2=A0 =C2=A0 =C2=A0 : must contain<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* &quot;clk_=
-apb3&quot; for clock of PWM controller.<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* &quot;clk_=
-apb4&quot; for clock of Fan controller.<br>
-&gt; +- interrupts : contain the Fan interrupts with flags for falling edge=
-.<br>
-&gt; +- pinctrl-names=C2=A0 =C2=A0 =C2=A0 : a pinctrl state named &quot;def=
-ault&quot; must be defined.<br>
-&gt; +- pinctrl-0=C2=A0 : phandle referencing pin configuration of the PWM =
-and Fan<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0controller p=
-orts.<br>
-&gt; +<br>
-&gt; +pwm subnode format:<br>
-&gt; +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
-&gt; +Under pwm subnode can be upto 8 child nodes, each child node represen=
-ting a PWM channel.<br>
-&gt; +Each pwm subnode must have one PWM channel and atleast one Fan tach c=
-hannel.<br>
-&gt; +<br>
-&gt; +For PWM channel can be configured cooling-levels to create cooling de=
-vice.<br>
-&gt; +Cooling device could be bound to a thermal zone for the thermal contr=
-ol.<br>
-&gt; +<br>
-&gt; +Required properties for each child node:<br>
-&gt; +- pwm-ch : specify the PWM output channel.<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0integer value in the range 0 through 7, that represent<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0the PWM channel number that used.<br>
-&gt; +<br>
-&gt; +- fan-ch : specify the Fan input channel.<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0integer value in the range 0 through 15, that represent<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0the Fan channel number that used.<br>
-<br>
-</div></div>This is really the tach channel.<br>
-<span class=3D""><br>
-<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0At least one Fan tach input channel is required<br>
-&gt; +<br>
-&gt; +Optional property for each child node:<br>
-&gt; +- cooling-levels: PWM duty cycle values in a range from 0 to 255<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 which =
-correspond to thermal cooling states.<br>
-&gt; +<br>
-&gt; +Examples:<br>
-&gt; +<br>
-&gt; +pwm_fan:pwm_fan_controller@<wbr>103000 {<br>
-<br>
-</span>fan-controller@...<br>
-<span class=3D""><br>
-&gt; +=C2=A0 =C2=A0 =C2=A0compatible =3D &quot;nuvoton,npcm750-pwm-fan&quot=
-;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0reg =3D &lt;0x103000 0x2000&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;0x180000 0x8000&g=
-t;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0reg-names =3D &quot;pwm_base&quot;, &quot;fan_bas=
-e&quot;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0clocks =3D &lt;&amp;clk NPCM7XX_CLK_APB3&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;&amp;clk NPCM7XX_=
-CLK_APB4&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0clock-names =3D &quot;clk_apb3&quot;,&quot;clk_ap=
-b4&quot;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0interrupts =3D &lt;GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH=
-&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH&gt;,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&lt;GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0pinctrl-names =3D &quot;default&quot;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0pinctrl-0 =3D &lt;&amp;pwm0_pins &amp;pwm1_pins &=
-amp;pwm2_pins<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&amp;fanin0_pins &amp;fanin1_pins &amp;fanin2_pins<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0&amp;fanin3_pins &amp;fanin4_pins&gt;;<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0pwm@0 {<br>
-<br>
-</span>The sub-nodes should be &quot;fan&quot; nodes.<br>
-<br>
-A unit-address without reg property is not valid.<br>
-<span class=3D""><br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pwm-ch =3D /bits/ 8 &lt;0x00&gt;;<br>
-<br>
-</span>Use &#39;reg&#39; like ASpeed binding. <br>
-<span class=3D""><br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fan-ch =3D /bits/ 8 &lt;0x00 0x01&gt;;<b=
-r>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0cooling-levels =3D &lt;127 255&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0};<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0pwm@1 {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pwm-ch =3D /bits/ 8 &lt;0x01&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fan-ch =3D /bits/ 8 &lt;0x02 0x03&gt;;<b=
-r>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0};<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0pwm@2 {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0pwm-ch =3D /bits/ 8 &lt;0x02&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fan-ch =3D /bits/ 8 &lt;0x04&gt;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0};<br>
-&gt; +<br>
-&gt; +};<br>
-&gt; \ No newline at end of file<br>
-<br>
-</span>^^^<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-&gt; -- <br>
-&gt; 2.14.1<br>
-&gt; <br>
-&gt; --<br>
-&gt; To unsubscribe from this list: send the line &quot;unsubscribe devicet=
-ree&quot; in<br>
-&gt; the body of a message to <a href=3D"mailto:majordomo@vger.kernel.org">=
-majordomo@vger.kernel.org</a><br>
-&gt; More majordomo info at=C2=A0 <a href=3D"http://vger.kernel.org/majordo=
-mo-info.html" rel=3D"noreferrer" target=3D"_blank">http://vger.kernel.org/<=
-wbr>majordomo-info.html</a></font></span></blockquote><div><br></div><div>T=
-hanks!</div><div><br></div><div>Tomer=C2=A0</div></div><br></div></div>
-
---0000000000004dfa06056f7ecba6--
