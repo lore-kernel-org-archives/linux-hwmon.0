@@ -1,123 +1,53 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:43901 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S932747AbeFUNR2 (ORCPT
+Received: from bh-25.webhostbox.net ([208.91.199.152]:50548 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933297AbeFUQib (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Jun 2018 09:17:28 -0400
-Date: Thu, 21 Jun 2018 15:17:26 +0200 (CEST)
-From: Julia Lawall <julia.lawall@lip6.fr>
-To: Joe Perches <joe@perches.com>
-cc: Guenter Roeck <linux@roeck-us.net>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        cocci <cocci@systeme.lip6.fr>, robh+dt@kernel.org,
-        mark.rutland@arm.com, jdelvare@suse.com, avifishman70@gmail.com,
-        yuenn@google.com, brendanhiggins@google.com, venture@google.com,
-        joel@jms.id.au, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2 2/2] hwmon: npcm750: add NPCM7xx PWM and Fan driver
-In-Reply-To: <a6a5a21236c37cfc63329e54248d941bf6d49e3c.camel@perches.com>
-Message-ID: <alpine.DEB.2.20.1806211515060.3774@hadrien>
-References: <20180619105352.97181-1-tmaimon77@gmail.com>  <20180619105352.97181-3-tmaimon77@gmail.com>  <20180620164853.GA3459@roeck-us.net> <a6a5a21236c37cfc63329e54248d941bf6d49e3c.camel@perches.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 21 Jun 2018 12:38:31 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v4.18-rc2
+Date: Thu, 21 Jun 2018 09:38:30 -0700
+Message-Id: <1529599110-4073-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+Hi Linus,
 
+Please pull hwmon fixes for Linux v4.18-rc2 from signed tag:
 
-On Wed, 20 Jun 2018, Joe Perches wrote:
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.18-rc2
 
-> (adding Julia Lawall and cocci mailing list)
->
-> On Wed, 2018-06-20 at 09:48 -0700, Guenter Roeck wrote:
-> []
-> > > +static inline void npcm7xx_fan_start_capture(struct npcm7xx_pwm_fan_data *data,
-> > > +						 u8 fan, u8 cmp)
-> > > +{
-> > > +	u8 fan_id = 0;
-> > > +	u8 reg_mode = 0;
-> > > +	u8 reg_int = 0;
-> > > +	unsigned long flags;
-> > > +
-> > > +	fan_id = NPCM7XX_FAN_INPUT(fan, cmp);
-> > > +
-> > > +	/* to check whether any fan tach is enable */
-> > > +	if (data->npcm7xx_fan[fan_id].FanStFlag != FAN_DISABLE) {
-> > > +		/* reset status */
-> > > +		spin_lock_irqsave(&data->npcm7xx_fan_lock[fan], flags);
-> > > +
-> > > +		data->npcm7xx_fan[fan_id].FanStFlag = FAN_INIT;
-> > > +		reg_int = ioread8(NPCM7XX_FAN_REG_TIEN(data->fan_base, fan));
-> > > +
-> > > +		if (cmp == NPCM7XX_FAN_CMPA) {
-> > > +			/* enable interrupt */
-> > > +			iowrite8((u8) (reg_int | (NPCM7XX_FAN_TIEN_TAIEN |
-> > > +						  NPCM7XX_FAN_TIEN_TEIEN)),
-> >
-> > Is the (u8) typecast really necessary ? Seems unlikely.
->
-> The cast is not really necessary here as there would
-> be an implicit cast already.
->
-> Some might complain about loss of type safety and
-> "make W=123" would probably emit something here.
->
-> But casts to the same type are not necessary.
->
-> A possible coccinelle script to find casts to the
-> same type is below, but there are some false positives
-> for things like __force and __user casts
->
-> Also, spatch (1.0.4) seems to have a defect for this
-> when the type is used in operations that change a
-> smaller type to int or unsigned int.
->
-> i.e.: (offset is u16, but offset * 2 is int)
+Thanks,
+Guenter
+------
 
-Ah.  The rule is that the result type is always the larger one?
-Unfortunately, Coccinelle doesn't know the size of any type.  I could add
-some special cases, but that may be more confusing than helpful.
+The following changes since commit ce397d215ccd07b8ae3f71db689aedb85d56ab40:
 
-julia
+  Linux 4.18-rc1 (2018-06-17 08:04:49 +0900)
 
->
-> While running the cocci script below:
->
-> HANDLING: drivers/net/ethernet/intel/igb/e1000_nvm.c
-> diff =
-> diff -u -p a/drivers/net/drivers/net/ethernet/intel/igb/e1000_nvm.c b/drivers/net/ethernet/intel/igb/e1000_nvm.c
-> --- a/drivers/net/ethernet/intel/igb/e1000_nvm.c
-> +++ b/drivers/net/ethernet/intel/igb/e1000_nvm.c
-> @@ -335,7 +335,7 @@ s32 igb_read_nvm_spi(struct e1000_hw *hw
->
->  	/* Send the READ command (opcode + addr) */
->  	igb_shift_out_eec_bits(hw, read_opcode, nvm->opcode_bits);
-> -	igb_shift_out_eec_bits(hw, (u16)(offset*2), nvm->address_bits);
-> +	igb_shift_out_eec_bits(hw, (offset * 2), nvm->address_bits);
->
->  	/* Read the data.  SPI NVMs increment the address with each byte
->  	 * read and will roll over if reading beyond the end.  This allows
->
-> ---
->
-> Anyway, here's the cocci script:
->
-> $ cat same_typecast.cocci
-> @@
-> type T;
-> T foo;
-> @@
->
-> -	(T *)&foo
-> +	&foo
->
-> @@
-> type T;
-> T foo;
-> @@
->
-> -	(T)foo
-> +	foo
->
->
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.18-rc2
+
+for you to fetch changes up to 91bb8f45f73f19a0150c233c0f11cdeb6d71d1e9:
+
+  hwmon: (nct6775) Fix loop limit (2018-06-16 16:40:36 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v4.18-rc2
+
+- Fix a loop limit in nct6775 driver
+- Disable fan support for Dell XPS13 9333
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (nct6775) Fix loop limit
+
+Helge Eichelberg (1):
+      hwmon: (dell-smm) Disable fan support for Dell XPS13 9333
+
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ drivers/hwmon/nct6775.c        | 2 +-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
