@@ -1,391 +1,165 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga07.intel.com ([134.134.136.100]:50633 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S932621AbeFUTlv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Jun 2018 15:41:51 -0400
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jason M Biils <jason.m.bills@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Cc: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Alan Cox <alan@linux.intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Stef van Os <stef.van.os@prodrive-technologies.com>
-Subject: [PATCH linux-next v6 12/13] hwmon: Add PECI dimmtemp driver
-Date: Thu, 21 Jun 2018 12:41:49 -0700
-Message-Id: <20180621194149.21118-1-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20180621193721.20588-1-jae.hyun.yoo@linux.intel.com>
-References: <20180621193721.20588-1-jae.hyun.yoo@linux.intel.com>
+Received: from mail-yb0-f193.google.com ([209.85.213.193]:42141 "EHLO
+        mail-yb0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933724AbeFYROV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 25 Jun 2018 13:14:21 -0400
+Date: Mon, 25 Jun 2018 11:14:17 -0600
+From: Rob Herring <robh@kernel.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
+Cc: mark.rutland@arm.com, jdelvare@suse.com, linux@roeck-us.net,
+        avifishman70@gmail.com, yuenn@google.com,
+        brendanhiggins@google.com, venture@google.com, joel@jms.id.au,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v4 1/2] dt-binding: hwmon: Add NPCM7xx PWM and Fan
+ controller documentation
+Message-ID: <20180625171417.GA16379@rob-hp-laptop>
+References: <20180624124155.82412-1-tmaimon77@gmail.com>
+ <20180624124155.82412-2-tmaimon77@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180624124155.82412-2-tmaimon77@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This commit adds PECI dimmtemp hwmon driver.
+On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:
+> Added device tree binding documentation for Nuvoton BMC
+> NPCM7xx Pulse Width Modulation (PWM)  and Fan tach controller.
+> The PWM controller can support upto 8 PWM output ports.
+> The Fan tach controller can support upto 16 tachometer inputs.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  | 84 ++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> new file mode 100644
+> index 000000000000..a9eacda34f92
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> @@ -0,0 +1,84 @@
+> +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver
 
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
-Reviewed-by: James Feist <james.feist@linux.intel.com>
-Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Cc: Alan Cox <alan@linux.intel.com>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jason M Biils <jason.m.bills@linux.intel.com>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Stef van Os <stef.van.os@prodrive-technologies.com>
----
- drivers/hwmon/Kconfig         |  14 ++
- drivers/hwmon/Makefile        |   1 +
- drivers/hwmon/peci-dimmtemp.c | 295 ++++++++++++++++++++++++++++++++++
- 3 files changed, 310 insertions(+)
- create mode 100644 drivers/hwmon/peci-dimmtemp.c
+Bindings are for h/w, not drivers.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index fbff90a87084..e2a002477db9 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1270,6 +1270,20 @@ config SENSORS_PECI_CPUTEMP
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called peci-cputemp.
- 
-+config SENSORS_PECI_DIMMTEMP
-+	tristate "PECI DIMM temperature monitoring support"
-+	depends on PECI
-+	select MFD_INTEL_PECI_CLIENT
-+	help
-+	  If you say yes here you get support for the generic Intel PECI hwmon
-+	  driver which provides Digital Thermal Sensor (DTS) thermal readings of
-+	  DIMM components that are accessible using the PECI Client Command
-+	  Suite via the processor PECI client.
-+	  Check Documentation/hwmon/peci-dimmtemp for details.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called peci-dimmtemp.
-+
- config SENSORS_NSA320
- 	tristate "ZyXEL NSA320 and compatible fan speed and temperature sensors"
- 	depends on GPIOLIB && OF
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 3cd603cd66a7..48d9598fcd3a 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -137,6 +137,7 @@ obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
- obj-$(CONFIG_SENSORS_NSA320)	+= nsa320-hwmon.o
- obj-$(CONFIG_SENSORS_NTC_THERMISTOR)	+= ntc_thermistor.o
- obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+= peci-cputemp.o
-+obj-$(CONFIG_SENSORS_PECI_DIMMTEMP)	+= peci-dimmtemp.o
- obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
- obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
- obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
-diff --git a/drivers/hwmon/peci-dimmtemp.c b/drivers/hwmon/peci-dimmtemp.c
-new file mode 100644
-index 000000000000..5ff243681572
---- /dev/null
-+++ b/drivers/hwmon/peci-dimmtemp.c
-@@ -0,0 +1,295 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2018 Intel Corporation
-+
-+#include <linux/hwmon.h>
-+#include <linux/jiffies.h>
-+#include <linux/mfd/intel-peci-client.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/workqueue.h>
-+
-+#define DIMM_MASK_CHECK_DELAY_JIFFIES msecs_to_jiffies(5000)
-+#define DIMM_MASK_CHECK_RETRY_MAX     60 /* 60 x 5 secs = 5 minutes */
-+
-+struct peci_dimmtemp {
-+	struct peci_mfd *mfd;
-+	struct device *dev;
-+	char name[PECI_NAME_SIZE];
-+	u8 addr;
-+	const struct cpu_gen_info *gen_info;
-+	struct workqueue_struct *work_queue;
-+	struct delayed_work work_handler;
-+	struct temp_data temp[DIMM_NUMS_MAX];
-+	u32 dimm_mask;
-+	int retry_count;
-+	u32 temp_config[DIMM_NUMS_MAX + 1];
-+	struct hwmon_channel_info temp_info;
-+	const struct hwmon_channel_info *info[2];
-+	struct hwmon_chip_info chip;
-+};
-+
-+static const char *dimmtemp_label[CHAN_RANK_MAX][DIMM_IDX_MAX] = {
-+	{ "DIMM A0", "DIMM A1", "DIMM A2" },
-+	{ "DIMM B0", "DIMM B1", "DIMM B2" },
-+	{ "DIMM C0", "DIMM C1", "DIMM C2" },
-+	{ "DIMM D0", "DIMM D1", "DIMM D2" },
-+	{ "DIMM E0", "DIMM E1", "DIMM E2" },
-+	{ "DIMM F0", "DIMM F1", "DIMM F2" },
-+	{ "DIMM G0", "DIMM G1", "DIMM G2" },
-+	{ "DIMM H0", "DIMM H1", "DIMM H2" },
-+};
-+
-+static int get_dimm_temp(struct peci_dimmtemp *priv, int dimm_no)
-+{
-+	int dimm_order = dimm_no % priv->gen_info->dimm_idx_max;
-+	int chan_rank = dimm_no / priv->gen_info->dimm_idx_max;
-+	u8  cfg_data[4];
-+	int rc;
-+
-+	if (!peci_temp_need_update(&priv->temp[dimm_no]))
-+		return 0;
-+
-+	rc = peci_client_rd_pkg_cfg_cmd(priv->mfd, MBX_INDEX_DDR_DIMM_TEMP,
-+					chan_rank, cfg_data);
-+	if (rc)
-+		return rc;
-+
-+	priv->temp[dimm_no].value = cfg_data[dimm_order] * 1000;
-+
-+	peci_temp_mark_updated(&priv->temp[dimm_no]);
-+
-+	return 0;
-+}
-+
-+static int dimmtemp_read_string(struct device *dev,
-+				enum hwmon_sensor_types type,
-+				u32 attr, int channel, const char **str)
-+{
-+	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
-+	u32 dimm_idx_max = priv->gen_info->dimm_idx_max;
-+	int chan_rank, dimm_idx;
-+
-+	if (attr != hwmon_temp_label)
-+		return -EOPNOTSUPP;
-+
-+	chan_rank = channel / dimm_idx_max;
-+	dimm_idx = channel % dimm_idx_max;
-+	*str = dimmtemp_label[chan_rank][dimm_idx];
-+	return 0;
-+}
-+
-+static int dimmtemp_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
-+	int rc;
-+
-+	if (attr != hwmon_temp_input)
-+		return -EOPNOTSUPP;
-+
-+	rc = get_dimm_temp(priv, channel);
-+	if (rc)
-+		return rc;
-+
-+	*val = priv->temp[channel].value;
-+	return 0;
-+}
-+
-+static umode_t dimmtemp_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	const struct peci_dimmtemp *priv = data;
-+
-+	if (priv->temp_config[channel] & BIT(attr) &&
-+	    priv->dimm_mask & BIT(channel))
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops dimmtemp_ops = {
-+	.is_visible = dimmtemp_is_visible,
-+	.read_string = dimmtemp_read_string,
-+	.read = dimmtemp_read,
-+};
-+
-+static int check_populated_dimms(struct peci_dimmtemp *priv)
-+{
-+	u32 chan_rank_max = priv->gen_info->chan_rank_max;
-+	u32 dimm_idx_max = priv->gen_info->dimm_idx_max;
-+	int chan_rank, dimm_idx, rc;
-+	u8  cfg_data[4];
-+
-+	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
-+		rc = peci_client_rd_pkg_cfg_cmd(priv->mfd,
-+						MBX_INDEX_DDR_DIMM_TEMP,
-+						chan_rank, cfg_data);
-+		if (rc) {
-+			priv->dimm_mask = 0;
-+			return rc;
-+		}
-+
-+		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
-+			if (cfg_data[dimm_idx])
-+				priv->dimm_mask |= BIT(chan_rank *
-+						       chan_rank_max +
-+						       dimm_idx);
-+	}
-+
-+	if (!priv->dimm_mask)
-+		return -EAGAIN;
-+
-+	dev_dbg(priv->dev, "Scanned populated DIMMs: 0x%x\n", priv->dimm_mask);
-+	return 0;
-+}
-+
-+static int create_dimm_temp_info(struct peci_dimmtemp *priv)
-+{
-+	int rc, i, config_idx, channels;
-+	struct device *hwmon_dev;
-+
-+	rc = check_populated_dimms(priv);
-+	if (rc) {
-+		if (rc == -EAGAIN) {
-+			if (priv->retry_count < DIMM_MASK_CHECK_RETRY_MAX) {
-+				queue_delayed_work(priv->work_queue,
-+						   &priv->work_handler,
-+						 DIMM_MASK_CHECK_DELAY_JIFFIES);
-+				priv->retry_count++;
-+				dev_dbg(priv->dev,
-+					"Deferred DIMM temp info creation\n");
-+			} else {
-+				dev_err(priv->dev,
-+					"Timeout DIMM temp info creation\n");
-+				rc = -ETIMEDOUT;
-+			}
-+		}
-+
-+		return rc;
-+	}
-+
-+	channels = priv->gen_info->chan_rank_max *
-+		   priv->gen_info->dimm_idx_max;
-+	for (i = 0, config_idx = 0; i < channels; i++)
-+		if (priv->dimm_mask & BIT(i))
-+			while (i >= config_idx)
-+				priv->temp_config[config_idx++] =
-+					HWMON_T_LABEL | HWMON_T_INPUT;
-+
-+	priv->chip.ops = &dimmtemp_ops;
-+	priv->chip.info = priv->info;
-+
-+	priv->info[0] = &priv->temp_info;
-+
-+	priv->temp_info.type = hwmon_temp;
-+	priv->temp_info.config = priv->temp_config;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(priv->dev,
-+							 priv->name,
-+							 priv,
-+							 &priv->chip,
-+							 NULL);
-+	rc = PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (!rc)
-+		dev_dbg(priv->dev, "%s: sensor '%s'\n",
-+			dev_name(hwmon_dev), priv->name);
-+
-+	return rc;
-+}
-+
-+static void create_dimm_temp_info_delayed(struct work_struct *work)
-+{
-+	struct delayed_work *dwork = to_delayed_work(work);
-+	struct peci_dimmtemp *priv = container_of(dwork, struct peci_dimmtemp,
-+						  work_handler);
-+	int rc;
-+
-+	rc = create_dimm_temp_info(priv);
-+	if (rc && rc != -EAGAIN)
-+		dev_dbg(priv->dev, "Failed to create DIMM temp info\n");
-+}
-+
-+static int peci_dimmtemp_probe(struct platform_device *pdev)
-+{
-+	struct peci_mfd *mfd = dev_get_drvdata(pdev->dev.parent);
-+	struct device *dev = &pdev->dev;
-+	struct peci_dimmtemp *priv;
-+	int rc;
-+
-+	if ((mfd->adapter->cmd_mask &
-+	    (BIT(PECI_CMD_GET_TEMP) | BIT(PECI_CMD_RD_PKG_CFG))) !=
-+	    (BIT(PECI_CMD_GET_TEMP) | BIT(PECI_CMD_RD_PKG_CFG)))
-+		return -ENODEV;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(dev, priv);
-+	priv->mfd = mfd;
-+	priv->dev = dev;
-+	priv->addr = mfd->addr;
-+	priv->gen_info = mfd->gen_info;
-+
-+	snprintf(priv->name, PECI_NAME_SIZE, "peci_dimmtemp.cpu%d",
-+		 priv->mfd->cpu_no);
-+
-+	priv->work_queue = alloc_ordered_workqueue(priv->name, 0);
-+	if (!priv->work_queue)
-+		return -ENOMEM;
-+
-+	INIT_DELAYED_WORK(&priv->work_handler, create_dimm_temp_info_delayed);
-+
-+	rc = create_dimm_temp_info(priv);
-+	if (rc && rc != -EAGAIN) {
-+		dev_err(dev, "Failed to create DIMM temp info\n");
-+		goto err_free_wq;
-+	}
-+
-+	return 0;
-+
-+err_free_wq:
-+	destroy_workqueue(priv->work_queue);
-+	return rc;
-+}
-+
-+static int peci_dimmtemp_remove(struct platform_device *pdev)
-+{
-+	struct peci_dimmtemp *priv = dev_get_drvdata(&pdev->dev);
-+
-+	cancel_delayed_work_sync(&priv->work_handler);
-+	destroy_workqueue(priv->work_queue);
-+
-+	return 0;
-+}
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id peci_dimmtemp_of_table[] = {
-+	{ .compatible = "intel,peci-dimmtemp" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, peci_dimmtemp_of_table);
-+#endif
-+
-+static const struct platform_device_id peci_dimmtemp_ids[] = {
-+	{ .name = "peci-dimmtemp", .driver_data = 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(platform, peci_dimmtemp_ids);
-+
-+static struct platform_driver peci_dimmtemp_driver = {
-+	.probe    = peci_dimmtemp_probe,
-+	.remove   = peci_dimmtemp_remove,
-+	.id_table = peci_dimmtemp_ids,
-+	.driver   = {
-+			.name           = "peci-dimmtemp",
-+			.of_match_table = of_match_ptr(peci_dimmtemp_of_table),
-+	},
-+};
-+module_platform_driver(peci_dimmtemp_driver);
-+
-+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-+MODULE_DESCRIPTION("PECI dimmtemp driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
+> +
+> +The NPCM7xx has two identical Pulse-width modulation (PWM) controller modules,
+> +Each PWM module has four PWM controller outputs, Totally 8 PWM controller outputs.
+> +
+> +The NPCM7xx has eight identical Fan tachometer controller modules,
+> +Each Fan module has two Fan controller inputs, Totally 16 Fan controller inputs.
 
+Have you looked at other fan ctrlr bindings?f This looks like similar 
+h/w to ASpeed. Really, I'd like to see a common doc that describes the 
+structure and common properties.
+
+> +
+> +Required properties for pwm-fan node:
+> +- compatible	: "nuvoton,npcm750-pwm-fan" for Poleg NPCM7XX.
+> +- reg 			: specifies physical base address and size of the registers.
+> +- reg-names 	: must contain:
+> +					* "pwm-base" for the PWM registers.
+> + 					* "fan-base" for the Fan registers.
+
+'-base' is redundant. And your example doesn't match.
+
+> +- clocks		: phandle of reference clocks.
+> +- clock-names	: must contain
+> +					* "clk_apb3" for clock of PWM controller.
+> + 					* "clk_apb4" for clock of Fan controller.
+> +- interrupts	: contain the Fan interrupts with flags for falling edge.
+> +- pinctrl-names	: a pinctrl state named "default" must be defined.
+> +- pinctrl-0 	: phandle referencing pin configuration of the PWM and Fan
+> +					controller ports.
+> +
+> +pwm subnode format:
+> +===================
+> +Under pwm subnode can be upto 8 child nodes, each child node representing a PWM channel.
+> +Each pwm subnode must have one PWM channel and atleast one Fan tach channel.
+> +
+> +For PWM channel can be configured cooling-levels to create cooling device.
+> +Cooling device could be bound to a thermal zone for the thermal control.
+> +
+> +Required properties for each child node:
+> +- pwm-ch : specify the PWM output channel.
+> +			integer value in the range 0 through 7, that represent
+> +			the PWM channel number that used.
+> +
+> +- fan-ch : specify the Fan input channel.
+> +			integer value in the range 0 through 15, that represent
+> +			the Fan channel number that used.
+
+This is really the tach channel.
+
+
+> +
+> +			At least one Fan tach input channel is required
+> +
+> +Optional property for each child node:
+> +- cooling-levels: PWM duty cycle values in a range from 0 to 255
+> +                  which correspond to thermal cooling states.
+> +
+> +Examples:
+> +
+> +pwm_fan:pwm_fan_controller@103000 {
+
+fan-controller@...
+
+> +	compatible = "nuvoton,npcm750-pwm-fan";
+> +	reg = <0x103000 0x2000>,
+> +		<0x180000 0x8000>;
+> +	reg-names = "pwm_base", "fan_base";
+> +	clocks = <&clk NPCM7XX_CLK_APB3>,
+> +		<&clk NPCM7XX_CLK_APB4>;
+> +	clock-names = "clk_apb3","clk_apb4";
+> +	interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pwm0_pins &pwm1_pins &pwm2_pins
+> +			&fanin0_pins &fanin1_pins &fanin2_pins
+> +			&fanin3_pins &fanin4_pins>;
+> +
+> +			pwm@0 {
+
+The sub-nodes should be "fan" nodes.
+
+A unit-address without reg property is not valid.
+
+> +				pwm-ch = /bits/ 8 <0x00>;
+
+Use 'reg' like ASpeed binding. 
+
+> +				fan-ch = /bits/ 8 <0x00 0x01>;
+> +				cooling-levels = <127 255>;
+> +				};
+> +			pwm@1 {
+> +				pwm-ch = /bits/ 8 <0x01>;
+> +				fan-ch = /bits/ 8 <0x02 0x03>;
+> +				};
+> +			pwm@2 {
+> +				pwm-ch = /bits/ 8 <0x02>;
+> +				fan-ch = /bits/ 8 <0x04>;
+> +				};
+> +
+> +};
+> \ No newline at end of file
+
+^^^
+
+> -- 
+> 2.14.1
+> 
+> --
+> To unsubscribe from this list: send the line "unsubscribe devicetree" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
