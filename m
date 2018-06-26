@@ -1,165 +1,177 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-yb0-f193.google.com ([209.85.213.193]:42141 "EHLO
-        mail-yb0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S933724AbeFYROV (ORCPT
+Received: from mail-pl0-f66.google.com ([209.85.160.66]:36724 "EHLO
+        mail-pl0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S933522AbeFZNrL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Jun 2018 13:14:21 -0400
-Date: Mon, 25 Jun 2018 11:14:17 -0600
-From: Rob Herring <robh@kernel.org>
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: mark.rutland@arm.com, jdelvare@suse.com, linux@roeck-us.net,
-        avifishman70@gmail.com, yuenn@google.com,
-        brendanhiggins@google.com, venture@google.com, joel@jms.id.au,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v4 1/2] dt-binding: hwmon: Add NPCM7xx PWM and Fan
- controller documentation
-Message-ID: <20180625171417.GA16379@rob-hp-laptop>
-References: <20180624124155.82412-1-tmaimon77@gmail.com>
- <20180624124155.82412-2-tmaimon77@gmail.com>
+        Tue, 26 Jun 2018 09:47:11 -0400
+Subject: Re: [PATCH] media: video-i2c: add hwmon support for amg88xx
+To: Matt Ranostay <matt.ranostay@konsulko.com>,
+        linux-media@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+References: <20180626063025.7778-1-matt.ranostay@konsulko.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <50948d52-3dcd-79b6-52e8-cf6651393449@roeck-us.net>
+Date: Tue, 26 Jun 2018 06:47:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180624124155.82412-2-tmaimon77@gmail.com>
+In-Reply-To: <20180626063025.7778-1-matt.ranostay@konsulko.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:
-> Added device tree binding documentation for Nuvoton BMC
-> NPCM7xx Pulse Width Modulation (PWM)  and Fan tach controller.
-> The PWM controller can support upto 8 PWM output ports.
-> The Fan tach controller can support upto 16 tachometer inputs.
+On 06/25/2018 11:30 PM, Matt Ranostay wrote:
+> AMG88xx has an on-board thermistor which is used for more accurate
+> processing of its temperature readings from the 8x8 thermopile array
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
 > ---
->  .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  | 84 ++++++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+>   drivers/media/i2c/video-i2c.c | 73 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 73 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-> new file mode 100644
-> index 000000000000..a9eacda34f92
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-> @@ -0,0 +1,84 @@
-> +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver
+> diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+> index 0b347cc19aa5..16c3e03af219 100644
+> --- a/drivers/media/i2c/video-i2c.c
+> +++ b/drivers/media/i2c/video-i2c.c
+> @@ -10,6 +10,8 @@
+>   
+>   #include <linux/delay.h>
+>   #include <linux/freezer.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
 
-Bindings are for h/w, not drivers.
+The second include is not needed.
 
+>   #include <linux/kthread.h>
+>   #include <linux/i2c.h>
+>   #include <linux/list.h>
+> @@ -77,6 +79,9 @@ struct video_i2c_chip {
+>   
+>   	/* xfer function */
+>   	int (*xfer)(struct video_i2c_data *data, char *buf);
 > +
-> +The NPCM7xx has two identical Pulse-width modulation (PWM) controller modules,
-> +Each PWM module has four PWM controller outputs, Totally 8 PWM controller outputs.
+> +	/* hwmon init function */
+> +	int (*hwmon_init)(struct video_i2c_data *data);
+>   };
+>   
+>   static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+> @@ -101,6 +106,70 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+>   	return (ret == 2) ? 0 : -EIO;
+>   }
+>   
+> +#if defined(CONFIG_HWMON) || (defined(MODULE) && defined(CONFIG_HWMON_MODULE))
 > +
-> +The NPCM7xx has eight identical Fan tachometer controller modules,
-> +Each Fan module has two Fan controller inputs, Totally 16 Fan controller inputs.
-
-Have you looked at other fan ctrlr bindings?f This looks like similar 
-h/w to ASpeed. Really, I'd like to see a common doc that describes the 
-structure and common properties.
-
-> +
-> +Required properties for pwm-fan node:
-> +- compatible	: "nuvoton,npcm750-pwm-fan" for Poleg NPCM7XX.
-> +- reg 			: specifies physical base address and size of the registers.
-> +- reg-names 	: must contain:
-> +					* "pwm-base" for the PWM registers.
-> + 					* "fan-base" for the Fan registers.
-
-'-base' is redundant. And your example doesn't match.
-
-> +- clocks		: phandle of reference clocks.
-> +- clock-names	: must contain
-> +					* "clk_apb3" for clock of PWM controller.
-> + 					* "clk_apb4" for clock of Fan controller.
-> +- interrupts	: contain the Fan interrupts with flags for falling edge.
-> +- pinctrl-names	: a pinctrl state named "default" must be defined.
-> +- pinctrl-0 	: phandle referencing pin configuration of the PWM and Fan
-> +					controller ports.
-> +
-> +pwm subnode format:
-> +===================
-> +Under pwm subnode can be upto 8 child nodes, each child node representing a PWM channel.
-> +Each pwm subnode must have one PWM channel and atleast one Fan tach channel.
-> +
-> +For PWM channel can be configured cooling-levels to create cooling device.
-> +Cooling device could be bound to a thermal zone for the thermal control.
-> +
-> +Required properties for each child node:
-> +- pwm-ch : specify the PWM output channel.
-> +			integer value in the range 0 through 7, that represent
-> +			the PWM channel number that used.
-> +
-> +- fan-ch : specify the Fan input channel.
-> +			integer value in the range 0 through 15, that represent
-> +			the Fan channel number that used.
-
-This is really the tach channel.
-
-
-> +
-> +			At least one Fan tach input channel is required
-> +
-> +Optional property for each child node:
-> +- cooling-levels: PWM duty cycle values in a range from 0 to 255
-> +                  which correspond to thermal cooling states.
-> +
-> +Examples:
-> +
-> +pwm_fan:pwm_fan_controller@103000 {
-
-fan-controller@...
-
-> +	compatible = "nuvoton,npcm750-pwm-fan";
-> +	reg = <0x103000 0x2000>,
-> +		<0x180000 0x8000>;
-> +	reg-names = "pwm_base", "fan_base";
-> +	clocks = <&clk NPCM7XX_CLK_APB3>,
-> +		<&clk NPCM7XX_CLK_APB4>;
-> +	clock-names = "clk_apb3","clk_apb4";
-> +	interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pwm0_pins &pwm1_pins &pwm2_pins
-> +			&fanin0_pins &fanin1_pins &fanin2_pins
-> +			&fanin3_pins &fanin4_pins>;
-> +
-> +			pwm@0 {
-
-The sub-nodes should be "fan" nodes.
-
-A unit-address without reg property is not valid.
-
-> +				pwm-ch = /bits/ 8 <0x00>;
-
-Use 'reg' like ASpeed binding. 
-
-> +				fan-ch = /bits/ 8 <0x00 0x01>;
-> +				cooling-levels = <127 255>;
-> +				};
-> +			pwm@1 {
-> +				pwm-ch = /bits/ 8 <0x01>;
-> +				fan-ch = /bits/ 8 <0x02 0x03>;
-> +				};
-> +			pwm@2 {
-> +				pwm-ch = /bits/ 8 <0x02>;
-> +				fan-ch = /bits/ 8 <0x04>;
-> +				};
-> +
+> +static const u32 amg88xx_temp_config[] = {
+> +	HWMON_T_INPUT,
+> +	0
 > +};
-> \ No newline at end of file
+> +
+> +static const struct hwmon_channel_info amg88xx_temp = {
+> +	.type = hwmon_temp,
+> +	.config = amg88xx_temp_config,
+> +};
+> +
+> +static const struct hwmon_channel_info *amg88xx_info[] = {
+> +	&amg88xx_temp,
+> +	NULL
+> +};
+> +
+> +static umode_t amg88xx_is_visible(const void *drvdata,
+> +				  enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	return 0444;
+> +}
+> +
+> +static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	struct video_i2c_data *data = dev_get_drvdata(dev);
+> +	struct i2c_client *client = data->client;
+> +	int tmp = i2c_smbus_read_word_data(client, 0x0e);
+> +
+> +	if (tmp < 0)
+> +		return -EINVAL;
+> +
 
-^^^
+Please return the error. This does not reflect an invalid argument.
 
-> -- 
-> 2.14.1
+
+> +	/* check for sign bit, and invert temp reading to a negative value */
+> +	if (0x800 & tmp)
+
+Yoda programming dislike I do. All it does to obfuscate the code and confuse
+the reader. Don't tell me that "if (0 > ret)" is somehow better than
+"if (ret < 0)". On top of that, it is misguided here. It was introduced
+to prevent sloppy programmers from writing code such as
+	if (i = 15)
+which does not apply here.
+
+> +		tmp = -(tmp & 0x7ff);
+
+0x800 => 0x0 -> -0x0 -> 0x0
+
+seems wrong. Maybe consider using sign_extend32() instead ?
+
+> +
+> +	*val = (tmp * 625) / 10;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops amg88xx_hwmon_ops = {
+> +	.is_visible = amg88xx_is_visible,
+> +	.read = amg88xx_read,
+> +};
+> +
+> +static const struct hwmon_chip_info amg88xx_chip_info = {
+> +	.ops = &amg88xx_hwmon_ops,
+> +	.info = amg88xx_info,
+> +};
+> +
+> +static int amg88xx_hwmon_init(struct video_i2c_data *data)
+> +{
+> +	void *hwmon = devm_hwmon_device_register_with_info(&data->client->dev,
+> +				"amg88xx", data, &amg88xx_chip_info, NULL);
+> +
+> +	return IS_ERR(hwmon);
+
+What is the point of not returning the error (eg with PTR_ERR_OR_ZERO) but a boolean ?
+
+> +}
+> +#else
+> +#define	amg88xx_hwmon_init	NULL
+> +#endif
+> +
+>   #define AMG88XX		0
+>   
+>   static const struct video_i2c_chip video_i2c_chip[] = {
+> @@ -111,6 +180,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
+>   		.buffer_size	= 128,
+>   		.bpp		= 16,
+>   		.xfer		= &amg88xx_xfer,
+> +		.hwmon_init	= &amg88xx_hwmon_init,
+
+This won't work if amg88xx_hwmon_init is NULL. Besides, & in front of
+a function name is unnecessary.
+
+>   	}
+>   };
+>   
+> @@ -505,6 +575,9 @@ static int video_i2c_probe(struct i2c_client *client,
+>   	video_set_drvdata(&data->vdev, data);
+>   	i2c_set_clientdata(client, data);
+>   
+> +	if (data->chip->hwmon_init)
+> +		data->chip->hwmon_init(data);
+
+What is the point of having the function return an int (or bool) and
+if the return value is ignored ?
+
+> +
+>   	ret = video_register_device(&data->vdev, VFL_TYPE_GRABBER, -1);
+>   	if (ret < 0)
+>   		goto error_unregister_device;
 > 
-> --
-> To unsubscribe from this list: send the line "unsubscribe devicetree" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
