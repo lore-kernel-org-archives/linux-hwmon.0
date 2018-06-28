@@ -1,136 +1,282 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:39461 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752231AbeF2ReD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Jun 2018 13:34:03 -0400
-Date: Fri, 29 Jun 2018 10:34:01 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: netdev <netdev@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        vadimp@mellanox.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] net: phy: sfp: Add HWMON support for module
- sensors
-Message-ID: <20180629173401.GB7470@roeck-us.net>
-References: <1530218475-4369-1-git-send-email-andrew@lunn.ch>
- <1530218475-4369-3-git-send-email-andrew@lunn.ch>
- <20180628224123.GA20118@roeck-us.net>
- <20180629074540.GC11285@lunn.ch>
+Return-Path: <tmaimon77@gmail.com>
+Return-path: <tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180629074540.GC11285@lunn.ch>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <CAL_JsqJCYPLw+jqx+7Cy=cXFFb-CNp=Ezew7FNT=cfAndqWe5A@mail.gmail.com>
+References: <20180624124155.82412-1-tmaimon77@gmail.com> <20180624124155.82412-2-tmaimon77@gmail.com>
+ <20180625171417.GA16379@rob-hp-laptop> <CAP6Zq1h-M6YDS67pkgHy-GMmiVk1D-RScLgDyG65JQM+S35rEQ@mail.gmail.com>
+ <CAL_JsqJCYPLw+jqx+7Cy=cXFFb-CNp=Ezew7FNT=cfAndqWe5A@mail.gmail.com>
+From: Tomer Maimon <tmaimon77@gmail.com>
+Date: Thu, 28 Jun 2018 14:01:07 +0300
+Message-ID: <CAP6Zq1iWcpfP5h9GT0BRhdo-DQ3B_rZCi3FP-8xFRVMCsU-y=w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-binding: hwmon: Add NPCM7xx PWM and Fan
+ controller documentation
+To: Rob Herring <robh@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Avi Fishman <avifishman70@gmail.com>,
+	Nancy Yuen <yuenn@google.com>, Brendan Higgins <brendanhiggins@google.com>,
+	Patrick Venture <venture@google.com>, Joel Stanley <joel@jms.id.au>,
+	devicetree <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Linux HWMON List <linux-hwmon@vger.kernel.org>, OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: multipart/alternative; boundary="000000000000fd04a9056fb1a57d"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Jun 29, 2018 at 09:45:40AM +0200, Andrew Lunn wrote:
-> > > +	case hwmon_power:
-> > > +		/* External calibration of receive power requires
-> > > +		 * floating point arithmetic. Doing that in the kernel
-> > > +		 * is not easy, so just skip it. If the module does
-> > > +		 * not require external calibration, we can however
-> > > +		 * show receiver power, since FP is then not needed.
-> > > +		 */
-> > > +		if (sfp->id.ext.diagmon & SFP_DIAGMON_EXT_CAL &&
-> > > +		    channel == 1)
-> > > +			return 0;
-> > 
-> > It would be nice if it was possible to convert the floting point to
-> > a fixed point calculation. Would that be possible ?
-> 
-> Maybe. I decided to leave it for later.
-> 
-> The kernel has some support for emulating floating point hardware, by
-> doing floating point operations in software. I didn't find any
-> examples of using that code outside of emulation, but i wondered if it
-> would be possible to use it here. We don't need high performance here,
-> when just reading a sensor once per second.
-> 
-> > > +/* Sensors values are stored as two bytes, MSB second */
-> > > +static int sfp_hwmon_read_sensor(struct sfp *sfp, int reg, long *value)
-> > > +{
-> > > +	u8 val[2];
-> > > +	int err;
-> > > +
-> > > +	err = sfp_read(sfp, true, reg, val, 2);
-> > > +	if (err < 0)
-> > > +		return err;
-> > > +
-> > > +	*value = val[0] << 8 | val[1];
-> > > +
-> > 
-> > Any chance to use something like __be16 and be16_to_cpu() ?
-> > You do that elsewhere - why not here ?
-> 
-> Yes. I want to look at this again. I don't like it either.
-> 
-> > > +	for (i = j = 0; sfp->hwmon_name[i]; i++) {
-> > > +		if (isalnum(sfp->hwmon_name[i])) {
-> > > +			if (i != j)
-> > > +				sfp->hwmon_name[j] = sfp->hwmon_name[i];
-> > > +			j++;
-> > > +		}
-> > > +	}
-> > 
-> > It might be better and simpler to replace invalid characters with '_'
-> > instead of dropping them. Also note that '_' is a valid character.
-> > Strictly speaking only "-* \t\n" are invalid.
-> 
-> I borrowed this code from the marvell10g driver. I don't know where it
+--000000000000fd04a9056fb1a57d
+Content-Type: text/plain; charset="UTF-8"
 
-... which wasn't reviewed by a hwmon maintainer, so I take no
-responsibility (it does look pretty clean, though). Wonder if anyone
-noticed that the hwmon interface is disabled if HWMON is built as module.
+Hi Rob,
 
-> borrowed it from. Is there a hwmon core function which we can pass an
-> arbitrary name to and it returned a sanitised one? Maybe we should add
-> one?
-> 
-Maybe, but I am not sure how to allocate the replacement string.
-You are using devm_kstrdup() which is another devm_ function that you
-should probably not use. How about declaring hwmon_name[] with a fixed
-maximum length in sfp ? The memory savings from dynamic allocation (if
-there are any) seem negligible.
+On 26 June 2018 at 18:03, Rob Herring <robh@kernel.org> wrote:
 
-> > > +	sfp->hwmon_name[j] = '\0';
-> > > +
-> > Is it possible that j == 0 ?
-> 
-> Hummm....
-> 
-> sfp->hwmon_name is derived from dev_name(sfp->dev), which comes from
-> pdev->dev in the probe function. That comes from the device tree node
-> name. I suppose it is possible to name the node $@#$@, but i suspect
-> Rob would NACK it :-)
-> 
-> I can add a check for j==0 and return -EINVAL.
-> 
-I would prefer replacing invalid characters with '_', but I won't argue. 
+> On Mon, Jun 25, 2018 at 4:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > Hi Rob,
+> >
+> >
+> > On 25 June 2018 at 20:14, Rob Herring <robh@kernel.org> wrote:
+> >>
+> >> On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:
+> >> > Added device tree binding documentation for Nuvoton BMC
+> >> > NPCM7xx Pulse Width Modulation (PWM)  and Fan tach controller.
+> >> > The PWM controller can support upto 8 PWM output ports.
+> >> > The Fan tach controller can support upto 16 tachometer inputs.
+> >> >
+> >> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> >> > ---
+> >> >  .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  | 84
+> ++++++++++++++++++++++
+> >> >  1 file changed, 84 insertions(+)
+> >> >  create mode 100644 Documentation/devicetree/
+> bindings/hwmon/npcm750-pwm-fan.txt
+> >> >
+> >> > diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> >> > new file mode 100644
+> >> > index 000000000000..a9eacda34f92
+> >> > --- /dev/null
+> >> > +++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+> >> > @@ -0,0 +1,84 @@
+> >> > +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver
+> >>
+> >> Bindings are for h/w, not drivers.
+> >>
+> >> > +
+> >> > +The NPCM7xx has two identical Pulse-width modulation (PWM)
+> controller modules,
+> >> > +Each PWM module has four PWM controller outputs, Totally 8 PWM
+> controller outputs.
+> >> > +
+> >> > +The NPCM7xx has eight identical Fan tachometer controller modules,
+> >> > +Each Fan module has two Fan controller inputs, Totally 16 Fan
+> controller inputs.
+> >>
+> >> Have you looked at other fan ctrlr bindings?f This looks like similar
+> >> h/w to ASpeed. Really, I'd like to see a common doc that describes the
+> >
+> >
+> > We do not have the same H/W as Aspeed, I believe in the near future we
+> will need to add
+> > more DT properties that will used only in the NPCM7xx module.
+>
+> I didn't say it was the same. Both are multi-channel PWMs with tach
+> inputs. Presumably, they can attach to the same types of fans as there
+> are only a limited number of types of fans and none of them are
+> specific to any fan controller.
+>
+> >> structure and common properties.
+> >
+> >
+> > what do you mean by common structure and common properties?
+>
+> When we have multiple bindings for the same class of device/hw, we
+> define all the common parts in a common binding doc. This often
+> doesn't happen at first, so we end up with a variety of bindings until
+> we see some commonality.
+>
+> In this case, for structure, having sub-nodes for fans. As fans are
+> not specific to the controllers, their node should not be defined by
+> the controller binding. It's also how you describe the fan type,
+> number of fans, the PWM connections, the tach connections, etc.
+>
+> Rob
+>
 
-> > > +	sfp->hwmon_dev = devm_hwmon_device_register_with_info(sfp->dev,
-> > > +				sfp->hwmon_name, sfp, &sfp_hwmon_chip_info,
-> > > +				NULL);
-> > > +
-> > > +	return PTR_ERR_OR_ZERO(sfp->hwmon_dev);
-> > > +}
-> > > +
-> > > +static void sfp_hwmon_remove(struct sfp *sfp)
-> > > +{
-> > > +	devm_hwmon_device_unregister(sfp->hwmon_dev);
-> > 
-> > If registartion and removal are not tied to a device, it doesn't make sense
-> > to use devm_ functions. Either use hwmon_device_register_with_info()
-> > and hwmon_device_unregister(), or drop the remove function.
-> 
-> Yes. I can change it. We have a few different lifetimes involved
-> here. You can consider the driver probe being for the SFP cage. The
-> SFP module being inserted into the cage is a different life time, and
-> the lifetime of the hwmon device.
-> 
-As Russell pointed out, devm_ functions are inappropriate in this case.
+Thanks a lot for the clarification, indeed we can do a common binding doc.
+is it O.K. for now to stay with the same binding document (V5 - that  i
+will send toady),
+and later on we will work on creating common binding document for the
+fan-nodes.
+
+also I will like to know how to represent the fan-nodes properties in
+the common
+binding document,
+the property name "aspeed,fan-tach-ch" is something related Aspeed.
+
+Do I need to ask the Aspeed hwmon maintainer to modify his driver to
+use fan-tach-ch
+property?
+or to mention both fan-tach properties (NPCM and Aspeed) in the  common
+binding document ?
 
 Thanks,
-Guenter
+
+Tomer
+
+--000000000000fd04a9056fb1a57d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Rob,<div class=3D"gmail_extra"><br><div class=3D"gmail_=
+quote">On 26 June 2018 at 18:03, Rob Herring <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:robh@kernel.org" target=3D"_blank">robh@kernel.org</a>&gt;</span=
+> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bo=
+rder-left:1px #ccc solid;padding-left:1ex"><div class=3D"HOEnZb"><div class=
+=3D"h5">On Mon, Jun 25, 2018 at 4:20 PM Tomer Maimon &lt;<a href=3D"mailto:=
+tmaimon77@gmail.com">tmaimon77@gmail.com</a>&gt; wrote:<br>
+&gt;<br>
+&gt; Hi Rob,<br>
+&gt;<br>
+&gt;<br>
+&gt; On 25 June 2018 at 20:14, Rob Herring &lt;<a href=3D"mailto:robh@kerne=
+l.org">robh@kernel.org</a>&gt; wrote:<br>
+&gt;&gt;<br>
+&gt;&gt; On Sun, Jun 24, 2018 at 03:41:54PM +0300, Tomer Maimon wrote:<br>
+&gt;&gt; &gt; Added device tree binding documentation for Nuvoton BMC<br>
+&gt;&gt; &gt; NPCM7xx Pulse Width Modulation (PWM)=C2=A0 and Fan tach contr=
+oller.<br>
+&gt;&gt; &gt; The PWM controller can support upto 8 PWM output ports.<br>
+&gt;&gt; &gt; The Fan tach controller can support upto 16 tachometer inputs=
+.<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; Signed-off-by: Tomer Maimon &lt;<a href=3D"mailto:tmaimon77@g=
+mail.com">tmaimon77@gmail.com</a>&gt;<br>
+&gt;&gt; &gt; ---<br>
+&gt;&gt; &gt;=C2=A0 .../devicetree/bindings/hwmon/<wbr>npcm750-pwm-fan.txt=
+=C2=A0 | 84 ++++++++++++++++++++++<br>
+&gt;&gt; &gt;=C2=A0 1 file changed, 84 insertions(+)<br>
+&gt;&gt; &gt;=C2=A0 create mode 100644 Documentation/devicetree/<wbr>bindin=
+gs/hwmon/npcm750-pwm-<wbr>fan.txt<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; diff --git a/Documentation/devicetree/<wbr>bindings/hwmon/npc=
+m750-pwm-<wbr>fan.txt b/Documentation/devicetree/<wbr>bindings/hwmon/npcm75=
+0-pwm-<wbr>fan.txt<br>
+&gt;&gt; &gt; new file mode 100644<br>
+&gt;&gt; &gt; index 000000000000..a9eacda34f92<br>
+&gt;&gt; &gt; --- /dev/null<br>
+&gt;&gt; &gt; +++ b/Documentation/devicetree/<wbr>bindings/hwmon/npcm750-pw=
+m-<wbr>fan.txt<br>
+&gt;&gt; &gt; @@ -0,0 +1,84 @@<br>
+&gt;&gt; &gt; +Nuvoton NPCM7xx PWM and Fan Tacho controller device driver<b=
+r>
+&gt;&gt;<br>
+&gt;&gt; Bindings are for h/w, not drivers.<br>
+&gt;&gt;<br>
+&gt;&gt; &gt; +<br>
+&gt;&gt; &gt; +The NPCM7xx has two identical Pulse-width modulation (PWM) c=
+ontroller modules,<br>
+&gt;&gt; &gt; +Each PWM module has four PWM controller outputs, Totally 8 P=
+WM controller outputs.<br>
+&gt;&gt; &gt; +<br>
+&gt;&gt; &gt; +The NPCM7xx has eight identical Fan tachometer controller mo=
+dules,<br>
+&gt;&gt; &gt; +Each Fan module has two Fan controller inputs, Totally 16 Fa=
+n controller inputs.<br>
+&gt;&gt;<br>
+&gt;&gt; Have you looked at other fan ctrlr bindings?f This looks like simi=
+lar<br>
+&gt;&gt; h/w to ASpeed. Really, I&#39;d like to see a common doc that descr=
+ibes the<br>
+&gt;<br>
+&gt;<br>
+&gt; We do not have the same H/W as Aspeed, I believe in the near future we=
+ will need to add<br>
+&gt; more DT properties that will used only in the NPCM7xx module.<br>
+<br>
+</div></div>I didn&#39;t say it was the same. Both are multi-channel PWMs w=
+ith tach<br>
+inputs. Presumably, they can attach to the same types of fans as there<br>
+are only a limited number of types of fans and none of them are<br>
+specific to any fan controller.<br>
+<span class=3D""><br>
+&gt;&gt; structure and common properties.<br>
+&gt;<br>
+&gt;<br>
+&gt; what do you mean by common structure and common properties?<br>
+<br>
+</span>When we have multiple bindings for the same class of device/hw, we<b=
+r>
+define all the common parts in a common binding doc. This often<br>
+doesn&#39;t happen at first, so we end up with a variety of bindings until<=
+br>
+we see some commonality.<br>
+<br>
+In this case, for structure, having sub-nodes for fans. As fans are<br>
+not specific to the controllers, their node should not be defined by<br>
+the controller binding. It&#39;s also how you describe the fan type,<br>
+number of fans, the PWM connections, the tach connections, etc.<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Rob<br></font></span></blockquote><div><br></div><div>Thanks a lot for the =
+clarification, indeed we can do a common binding doc.</div><div>is it O.K. =
+for now to stay with the same binding document (V5 - that=C2=A0 i will send=
+ toady),<br></div><div>and later on we will work on creating=C2=A0<span sty=
+le=3D"font-size:small;background-color:rgb(255,255,255);text-decoration-sty=
+le:initial;text-decoration-color:initial;float:none;display:inline">common =
+binding document for the fan-nodes.</span></div><div><span style=3D"font-si=
+ze:small;background-color:rgb(255,255,255);text-decoration-style:initial;te=
+xt-decoration-color:initial;float:none;display:inline"><br></span></div><di=
+v>also I will like to know how to represent the=C2=A0<span style=3D"font-si=
+ze:small;background-color:rgb(255,255,255);text-decoration-style:initial;te=
+xt-decoration-color:initial;float:none;display:inline">fan-nodes properties=
+ in the=C2=A0<span style=3D"text-decoration-style:initial;text-decoration-c=
+olor:initial;float:none;display:inline">common binding document,</span></sp=
+an></div><div>the property name &quot;<font color=3D"#000000"><span style=
+=3D"font-family:&quot;Ubuntu Mono&quot;,monospace;font-size:0.9em;white-spa=
+ce:pre">aspeed,fan-tach-ch&quot; </span><font face=3D"arial, helvetica, san=
+s-serif"><span style=3D"white-space:pre">is </span><span style=3D"white-spa=
+ce:pre">something </span><span style=3D"white-space:pre">related Aspeed.</s=
+pan></font></font></div><div><font color=3D"#000000" face=3D"Ubuntu Mono, m=
+onospace"><span style=3D"font-size:0.9em;white-space:pre"><br></span></font=
+></div><div><font color=3D"#000000"><font face=3D"arial, helvetica, sans-se=
+rif"><span style=3D"white-space:pre">Do I need to ask the Aspeed hwmon main=
+tainer to modify his driver to use  </span></font><span style=3D"background=
+-color:rgb(255,255,255);text-decoration-style:initial;text-decoration-color=
+:initial;float:none;display:inline"><span style=3D"font-family:&quot;Ubuntu=
+ Mono&quot;,monospace;font-size:11.7px;white-space:pre">fan-tach-ch </span>=
+<span style=3D"white-space:pre"><font face=3D"arial, helvetica, sans-serif"=
+>property?</font></span></span><font face=3D"arial, helvetica, sans-serif">=
+=C2=A0</font></font></div><div><font color=3D"#000000"><span style=3D"white=
+-space:pre"><font face=3D"arial, helvetica, sans-serif">or to mention both =
+fan-tach</font><font face=3D"Ubuntu Mono, monospace"><span style=3D"font-si=
+ze:11.7px"> </span></font></span><span style=3D"font-family:&quot;Ubuntu Mo=
+no&quot;,monospace;font-size:0.9em;white-space:pre"><span style=3D"color:rg=
+b(34,34,34);font-family:arial,sans-serif;font-size:small;white-space:normal=
+;background-color:rgb(255,255,255);text-decoration-style:initial;text-decor=
+ation-color:initial;float:none;display:inline">properties<span>=C2=A0(NPCM =
+and Aspeed) in the=C2=A0
+
+<span style=3D"font-size:small;background-color:rgb(255,255,255);text-decor=
+ation-style:initial;text-decoration-color:initial;float:none;display:inline=
+">common binding document</span>=C2=A0?</span></span></span></font></div><d=
+iv><span style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-siz=
+e:small;white-space:normal;background-color:rgb(255,255,255);text-decoratio=
+n-style:initial;text-decoration-color:initial;float:none;display:inline"><s=
+pan></span></span>
+
+</div><div><span style=3D"font-size:small;background-color:rgb(255,255,255)=
+;text-decoration-style:initial;text-decoration-color:initial;float:none;dis=
+play:inline"><br></span></div><div><span style=3D"font-size:small;backgroun=
+d-color:rgb(255,255,255);text-decoration-style:initial;text-decoration-colo=
+r:initial;float:none;display:inline">Thanks,</span></div><div><span style=
+=3D"font-size:small;background-color:rgb(255,255,255);text-decoration-style=
+:initial;text-decoration-color:initial;float:none;display:inline"><br></spa=
+n></div><div><span style=3D"font-size:small;background-color:rgb(255,255,25=
+5);text-decoration-style:initial;text-decoration-color:initial;float:none;d=
+isplay:inline">Tomer</span></div><div><span style=3D"font-size:small;backgr=
+ound-color:rgb(255,255,255);text-decoration-style:initial;text-decoration-c=
+olor:initial;float:none;display:inline"><span style=3D"font-size:12.8px;tex=
+t-decoration-style:initial;text-decoration-color:initial;float:none;display=
+:inline"><span>=C2=A0</span></span>
+
+</span></div></div><br></div></div>
+
+--000000000000fd04a9056fb1a57d--
