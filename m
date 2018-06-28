@@ -1,93 +1,43 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from vps0.lunn.ch ([185.16.172.187]:46419 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753642AbeF1UmN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Jun 2018 16:42:13 -0400
+Return-Path: <andrew@lunn.ch>
+Return-path: <andrew@lunn.ch>
 From: Andrew Lunn <andrew@lunn.ch>
 To: netdev <netdev@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        vadimp@mellanox.com, linux-hwmon@vger.kernel.org
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Russell King <rmk+kernel@arm.linux.org.uk>,
+	vadimp@mellanox.com,
+	linux-hwmon@vger.kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH RFC 1/2] hwmon: Add support for power min, lcrit, min_alarm and lcrit_alarm
-Date: Thu, 28 Jun 2018 22:41:14 +0200
-Message-Id: <1530218475-4369-2-git-send-email-andrew@lunn.ch>
-In-Reply-To: <1530218475-4369-1-git-send-email-andrew@lunn.ch>
-References: <1530218475-4369-1-git-send-email-andrew@lunn.ch>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Subject: [PATCH RFC 0/2] HWMON support for SFP modules
+Date: Thu, 28 Jun 2018 22:41:13 +0200
+Message-Id: <1530218475-4369-1-git-send-email-andrew@lunn.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Some sensors support reporting minimal and lower critical power, as
-well as alarms when these thresholds are reached. Add support for
-these attributes to the hwmon core.
+This patchset adds HWMON support to SFP modules. The first patch adds
+some attributes for power sensors which are currently missing from the
+hwmon core. The second patch then extends the core SFP code to export
+the sensors found in SFP modules.
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/hwmon/hwmon.c | 4 ++++
- include/linux/hwmon.h | 8 ++++++++
- 2 files changed, 12 insertions(+)
+This code has been tested with two SFP modules:
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index e88c01961948..33d51281272b 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -394,12 +394,16 @@ static const char * const hwmon_power_attr_templates[] = {
- 	[hwmon_power_cap_hyst] = "power%d_cap_hyst",
- 	[hwmon_power_cap_max] = "power%d_cap_max",
- 	[hwmon_power_cap_min] = "power%d_cap_min",
-+	[hwmon_power_min] = "power%d_min",
- 	[hwmon_power_max] = "power%d_max",
-+	[hwmon_power_lcrit] = "power%d_lcrit",
- 	[hwmon_power_crit] = "power%d_crit",
- 	[hwmon_power_label] = "power%d_label",
- 	[hwmon_power_alarm] = "power%d_alarm",
- 	[hwmon_power_cap_alarm] = "power%d_cap_alarm",
-+	[hwmon_power_min_alarm] = "power%d_min_alarm",
- 	[hwmon_power_max_alarm] = "power%d_max_alarm",
-+	[hwmon_power_lcrit_alarm] = "power%d_lcrit_alarm",
- 	[hwmon_power_crit_alarm] = "power%d_crit_alarm",
- };
- 
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 1b74ad11a5a4..b217101ca76e 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -188,12 +188,16 @@ enum hwmon_power_attributes {
- 	hwmon_power_cap_hyst,
- 	hwmon_power_cap_max,
- 	hwmon_power_cap_min,
-+	hwmon_power_min,
- 	hwmon_power_max,
- 	hwmon_power_crit,
-+	hwmon_power_lcrit,
- 	hwmon_power_label,
- 	hwmon_power_alarm,
- 	hwmon_power_cap_alarm,
-+	hwmon_power_min_alarm,
- 	hwmon_power_max_alarm,
-+	hwmon_power_lcrit_alarm,
- 	hwmon_power_crit_alarm,
- };
- 
-@@ -214,12 +218,16 @@ enum hwmon_power_attributes {
- #define HWMON_P_CAP_HYST		BIT(hwmon_power_cap_hyst)
- #define HWMON_P_CAP_MAX			BIT(hwmon_power_cap_max)
- #define HWMON_P_CAP_MIN			BIT(hwmon_power_cap_min)
-+#define HWMON_P_MIN			BIT(hwmon_power_min)
- #define HWMON_P_MAX			BIT(hwmon_power_max)
-+#define HWMON_P_LCRIT			BIT(hwmon_power_lcrit)
- #define HWMON_P_CRIT			BIT(hwmon_power_crit)
- #define HWMON_P_LABEL			BIT(hwmon_power_label)
- #define HWMON_P_ALARM			BIT(hwmon_power_alarm)
- #define HWMON_P_CAP_ALARM		BIT(hwmon_power_cap_alarm)
-+#define HWMON_P_MIN_ALARM		BIT(hwmon_power_max_alarm)
- #define HWMON_P_MAX_ALARM		BIT(hwmon_power_max_alarm)
-+#define HWMON_P_LCRIT_ALARM		BIT(hwmon_power_lcrit_alarm)
- #define HWMON_P_CRIT_ALARM		BIT(hwmon_power_crit_alarm)
- 
- enum hwmon_energy_attributes {
+module OEM SFP-7000-85 rev 11.0 sn M1512220075 dc 160221
+module FINISAR CORP. FTLF8524E2GNL rev A sn PW40MNN dc 160725
+
+The anonymous module uses external calibration, while the FINISAR uses
+internal calibration. Thus both code paths have been tested.
+
+Andrew Lunn (2):
+  hwmon: Add support for power min, lcrit, min_alarm and lcrit_alarm
+  net: phy: sfp: Add HWMON support for module sensors
+
+ drivers/hwmon/hwmon.c |   4 +
+ drivers/net/phy/sfp.c | 732 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/hwmon.h |   8 +
+ include/linux/sfp.h   |  72 ++++-
+ 4 files changed, 815 insertions(+), 1 deletion(-)
+
 -- 
 2.18.0.rc2
-
