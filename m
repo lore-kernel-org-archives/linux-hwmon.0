@@ -1,117 +1,177 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from bh-25.webhostbox.net ([208.91.199.152]:54593 "EHLO
-        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751750AbeF1Pmq (ORCPT
+Received: from mail-pg0-f65.google.com ([74.125.83.65]:39745 "EHLO
+        mail-pg0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S965570AbeF1SLG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Jun 2018 11:42:46 -0400
-Date: Thu, 28 Jun 2018 08:42:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Matt Ranostay <matt.ranostay@konsulko.com>
-Cc: kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] media: video-i2c: add hwmon support for amg88xx
-Message-ID: <20180628154243.GA10540@roeck-us.net>
-References: <20180627181243.14630-1-matt.ranostay@konsulko.com>
- <201806280548.XGuVj1ZB%fengguang.wu@intel.com>
- <CAJCx=g=SAhbS+_ZWhQwQLErMTMijaytdPxsWgyXqVPXqxG6cUg@mail.gmail.com>
- <bdf5bac2-4011-5172-ddf5-d6099b71de4e@roeck-us.net>
- <CAJCx=gm17RjS013W2O1O7g6k4DGe37SpZK5wg_zyDCpaCZMmwQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJCx=gm17RjS013W2O1O7g6k4DGe37SpZK5wg_zyDCpaCZMmwQ@mail.gmail.com>
+        Thu, 28 Jun 2018 14:11:06 -0400
+Received: by mail-pg0-f65.google.com with SMTP id n2-v6so2810222pgq.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 28 Jun 2018 11:11:06 -0700 (PDT)
+From: Matt Ranostay <matt.ranostay@konsulko.com>
+To: linux-media@vger.kernel.org
+Cc: Matt Ranostay <matt.ranostay@konsulko.com>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH v4] media: video-i2c: add hwmon support for amg88xx
+Date: Thu, 28 Jun 2018 11:11:04 -0700
+Message-Id: <20180628181104.16177-1-matt.ranostay@konsulko.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 27, 2018 at 09:06:31PM -0700, Matt Ranostay wrote:
-> On Wed, Jun 27, 2018 at 8:42 PM, Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 06/27/2018 06:39 PM, Matt Ranostay wrote:
-> >>
-> >> On Wed, Jun 27, 2018 at 3:43 PM, kbuild test robot <lkp@intel.com> wrote:
-> >>>
-> >>> Hi Matt,
-> >>>
-> >>> I love your patch! Yet something to improve:
-> >>>
-> >>> [auto build test ERROR on linuxtv-media/master]
-> >>> [also build test ERROR on v4.18-rc2 next-20180627]
-> >>> [if your patch is applied to the wrong git tree, please drop us a note to
-> >>> help improve the system]
-> >>>
-> >>> url:
-> >>> https://github.com/0day-ci/linux/commits/Matt-Ranostay/media-video-i2c-add-hwmon-support-for-amg88xx/20180628-032019
-> >>> base:   git://linuxtv.org/media_tree.git master
-> >>> config: x86_64-randconfig-g0-06280029 (attached as .config)
-> >>> compiler: gcc-4.9 (Debian 4.9.4-2) 4.9.4
-> >>> reproduce:
-> >>>          # save the attached .config to linux build tree
-> >>>          make ARCH=x86_64
-> >>>
-> >>> All errors (new ones prefixed by >>):
-> >>>
-> >>>     drivers/media/i2c/video-i2c.o: In function `amg88xx_hwmon_init':
-> >>>>>
-> >>>>> drivers/media/i2c/video-i2c.c:167: undefined reference to
-> >>>>> `devm_hwmon_device_register_with_info'
-> >>>
-> >>>
-> >>> vim +167 drivers/media/i2c/video-i2c.c
-> >>>
-> >>
-> >> Guenter,
-> >>
-> >> Before I resubmit this change do you agree an "imply HWMON" in the
-> >> Kconfig is the right way to avoid this race condition on build?
-> >> Using 'select HWMON' would of course defeat the purpose of '#if
-> >> IS_ENABLED(CONFIG_HWMON)'
-> >>
-> >
-> > Looks like it, but you'll have to try. I have not used it myself, so I
-> > don't really know what exactly it does. Another option might be to use
-> > IS_REACHABLE().
-> >
-> 
-> Looking at IS_REACHABLE documentation and that seems less than ideal
-> since it will return false if CONFIG_HWMON is a module.
+AMG88xx has an on-board thermistor which is used for more accurate
+processing of its temperature readings from the 8x8 thermopile array
 
-Agreed. There are constructs like "depends on HWMON || HWMON=n",
-but that is not perfect either. "imply" sounds like a better option.
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+---
+ drivers/media/i2c/Kconfig     |  1 +
+ drivers/media/i2c/video-i2c.c | 81 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
 
-Thanks,
-Guenter
+Changes from v1:
+* remove unneeded include statement
+* removed evil &NULL dereference if hwmon isn't enabled
+* return PTR_ERR instead of boolean IS_ERR from amg88xx_hwmon_init()
+* use error code returned from hwmon_init() to display dev_warn
 
-> Testing out 'imply HWMON' tonight.
-> 
-> - Matt
-> 
-> > Guenter
-> >
-> >
-> >> Thanks,
-> >>
-> >> Matt
-> >>
-> >>>     164
-> >>>     165  static int amg88xx_hwmon_init(struct video_i2c_data *data)
-> >>>     166  {
-> >>>   > 167          void *hwmon =
-> >>> devm_hwmon_device_register_with_info(&data->client->dev,
-> >>>     168                                  "amg88xx", data,
-> >>> &amg88xx_chip_info, NULL);
-> >>>     169
-> >>>     170          return PTR_ERR(hwmon);
-> >>>     171  }
-> >>>     172  #else
-> >>>     173  #define amg88xx_hwmon_init      NULL
-> >>>     174  #endif
-> >>>     175
-> >>>
-> >>> ---
-> >>> 0-DAY kernel test infrastructure                Open Source Technology
-> >>> Center
-> >>> https://lists.01.org/pipermail/kbuild-all                   Intel
-> >>> Corporation
-> >>
-> >>
-> >
+Changes from v2:
+* change #ifdef check to use cleaner IS_ENABLED(CONFIG_HWMON)
+* document why the temperature value isn't sign extended more concisely 
+
+Changes from v3:
+* add 'imply HWMON' to avoid build race conditions
+
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 341452fe98df..799a0278b690 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1002,6 +1002,7 @@ config VIDEO_I2C
+ 	tristate "I2C transport video support"
+ 	depends on VIDEO_V4L2 && I2C
+ 	select VIDEOBUF2_VMALLOC
++	imply HWMON
+ 	---help---
+ 	  Enable the I2C transport video support which supports the
+ 	  following:
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index 0b347cc19aa5..7dc9338502e5 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/freezer.h>
++#include <linux/hwmon.h>
+ #include <linux/kthread.h>
+ #include <linux/i2c.h>
+ #include <linux/list.h>
+@@ -77,6 +78,9 @@ struct video_i2c_chip {
+ 
+ 	/* xfer function */
+ 	int (*xfer)(struct video_i2c_data *data, char *buf);
++
++	/* hwmon init function */
++	int (*hwmon_init)(struct video_i2c_data *data);
+ };
+ 
+ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+@@ -101,6 +105,74 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+ 	return (ret == 2) ? 0 : -EIO;
+ }
+ 
++#if IS_ENABLED(CONFIG_HWMON)
++
++static const u32 amg88xx_temp_config[] = {
++	HWMON_T_INPUT,
++	0
++};
++
++static const struct hwmon_channel_info amg88xx_temp = {
++	.type = hwmon_temp,
++	.config = amg88xx_temp_config,
++};
++
++static const struct hwmon_channel_info *amg88xx_info[] = {
++	&amg88xx_temp,
++	NULL
++};
++
++static umode_t amg88xx_is_visible(const void *drvdata,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	return 0444;
++}
++
++static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct video_i2c_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	int tmp = i2c_smbus_read_word_data(client, 0x0e);
++
++	if (tmp < 0)
++		return tmp;
++
++	/*
++	 * Check for sign bit, this isn't a two's complement value but an
++	 * absolute temperature that needs to be inverted in the case of being
++	 * negative.
++	 */
++	if (tmp & BIT(11))
++		tmp = -(tmp & 0x7ff);
++
++	*val = (tmp * 625) / 10;
++
++	return 0;
++}
++
++static const struct hwmon_ops amg88xx_hwmon_ops = {
++	.is_visible = amg88xx_is_visible,
++	.read = amg88xx_read,
++};
++
++static const struct hwmon_chip_info amg88xx_chip_info = {
++	.ops = &amg88xx_hwmon_ops,
++	.info = amg88xx_info,
++};
++
++static int amg88xx_hwmon_init(struct video_i2c_data *data)
++{
++	void *hwmon = devm_hwmon_device_register_with_info(&data->client->dev,
++				"amg88xx", data, &amg88xx_chip_info, NULL);
++
++	return PTR_ERR(hwmon);
++}
++#else
++#define	amg88xx_hwmon_init	NULL
++#endif
++
+ #define AMG88XX		0
+ 
+ static const struct video_i2c_chip video_i2c_chip[] = {
+@@ -111,6 +183,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
+ 		.buffer_size	= 128,
+ 		.bpp		= 16,
+ 		.xfer		= &amg88xx_xfer,
++		.hwmon_init	= amg88xx_hwmon_init,
+ 	},
+ };
+ 
+@@ -505,6 +578,14 @@ static int video_i2c_probe(struct i2c_client *client,
+ 	video_set_drvdata(&data->vdev, data);
+ 	i2c_set_clientdata(client, data);
+ 
++	if (data->chip->hwmon_init) {
++		ret = data->chip->hwmon_init(data);
++		if (ret < 0) {
++			dev_warn(&client->dev,
++				 "failed to register hwmon device\n");
++		}
++	}
++
+ 	ret = video_register_device(&data->vdev, VFL_TYPE_GRABBER, -1);
+ 	if (ret < 0)
+ 		goto error_unregister_device;
+-- 
+2.17.1
+
