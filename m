@@ -1,77 +1,58 @@
-Return-Path: <linux+linux=roeck-us.net@armlinux.org.uk>
-Return-path: <linux+linux=roeck-us.net@armlinux.org.uk>
-Date: Fri, 29 Jun 2018 16:47:19 +0100
-From: Russell King - ARM Linux <linux@armlinux.org.uk>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from bh-25.webhostbox.net ([208.91.199.152]:45499 "EHLO
+        bh-25.webhostbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S932446AbeF2RMW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 29 Jun 2018 13:12:22 -0400
+Date: Fri, 29 Jun 2018 10:12:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Andrew Lunn <andrew@lunn.ch>
-Cc: Guenter Roeck <linux@roeck-us.net>, netdev <netdev@vger.kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>, vadimp@mellanox.com,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] net: phy: sfp: Add HWMON support for module
- sensors
-Message-ID: <20180629154718.GI17271@n2100.armlinux.org.uk>
+Cc: netdev <netdev@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        vadimp@mellanox.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH RFC 1/2] hwmon: Add support for power min, lcrit,
+ min_alarm and lcrit_alarm
+Message-ID: <20180629171220.GA7470@roeck-us.net>
 References: <1530218475-4369-1-git-send-email-andrew@lunn.ch>
- <1530218475-4369-3-git-send-email-andrew@lunn.ch>
- <20180628224123.GA20118@roeck-us.net>
- <20180629074540.GC11285@lunn.ch>
+ <1530218475-4369-2-git-send-email-andrew@lunn.ch>
+ <20180628224236.GB20118@roeck-us.net>
+ <20180629072156.GA11285@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20180629074540.GC11285@lunn.ch>
-Sender: Russell King - ARM Linux <linux@armlinux.org.uk>
-List-ID: <linux-hwmon@vger.kernel.org>
+In-Reply-To: <20180629072156.GA11285@lunn.ch>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 29, 2018 at 09:45:40AM +0200, Andrew Lunn wrote:
-> > > +	for (i = j = 0; sfp->hwmon_name[i]; i++) {
-> > > +		if (isalnum(sfp->hwmon_name[i])) {
-> > > +			if (i != j)
-> > > +				sfp->hwmon_name[j] = sfp->hwmon_name[i];
-> > > +			j++;
-> > > +		}
-> > > +	}
+On Fri, Jun 29, 2018 at 09:21:56AM +0200, Andrew Lunn wrote:
+> On Thu, Jun 28, 2018 at 03:42:36PM -0700, Guenter Roeck wrote:
+> > On Thu, Jun 28, 2018 at 10:41:14PM +0200, Andrew Lunn wrote:
+> > > Some sensors support reporting minimal and lower critical power, as
+> > > well as alarms when these thresholds are reached. Add support for
+> > > these attributes to the hwmon core.
+> > > 
+> > > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
 > > 
-> > It might be better and simpler to replace invalid characters with '_'
-> > instead of dropping them. Also note that '_' is a valid character.
-> > Strictly speaking only "-* \t\n" are invalid.
+> > I am inclined to accept this patch immediately. I'll do that
+> > in the next couple of days unless someone gives me a good reason
+> > not to.
 > 
-> I borrowed this code from the marvell10g driver. I don't know where it
-> borrowed it from. Is there a hwmon core function which we can pass an
-> arbitrary name to and it returned a sanitised one? Maybe we should add
-> one?
-
-... which in turn came from the marvell driver.
-
-> > > +	sfp->hwmon_dev = devm_hwmon_device_register_with_info(sfp->dev,
-> > > +				sfp->hwmon_name, sfp, &sfp_hwmon_chip_info,
-> > > +				NULL);
-> > > +
-> > > +	return PTR_ERR_OR_ZERO(sfp->hwmon_dev);
-> > > +}
-> > > +
-> > > +static void sfp_hwmon_remove(struct sfp *sfp)
-> > > +{
-> > > +	devm_hwmon_device_unregister(sfp->hwmon_dev);
-> > 
-> > If registartion and removal are not tied to a device, it doesn't make sense
-> > to use devm_ functions. Either use hwmon_device_register_with_info()
-> > and hwmon_device_unregister(), or drop the remove function.
+> Hi Guenter
 > 
-> Yes. I can change it. We have a few different lifetimes involved
-> here. You can consider the driver probe being for the SFP cage. The
-> SFP module being inserted into the cage is a different life time, and
-> the lifetime of the hwmon device.
+> We need to watch out for merge dependencies. If you take it, you
+> probably should also take the second patch into your tree as
+> well. Otherwise, you need a stable branch DaveM can pull into net-next
+> if he takes the second patch.
+> 
+Good point. I don't have anything queued for hwmon.c, so it should be ok
+for the patch to go through networking. I'll Ack it when the time comes.
 
-It should be the lifetime of the inserted module, since the presence
-of the monitoring devices is module dependent - and obviously when
-the module is removed, there's no monitoring devices accessible.
+> I also have a patch to lm-sensors sensors, so it prints these
+> values. I will create a github pull request.
+> 
+Excellent.
 
-Guenter is correct, this should not be using the devm_* functions.
-
-Another point is (I've not checked your original patch for this) is
-that we don't want to fail the probe of the SFP module if the hwmon
-failed to register - we just need to remember not to try to unregister
-an invalid pointer thereby oopsing the kernel.
-
--- 
-RMK's Patch system: http://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 8.8Mbps down 630kbps up
-According to speedtest.net: 8.21Mbps down 510kbps up
+Thanks,
+Guenter
