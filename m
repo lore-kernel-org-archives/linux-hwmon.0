@@ -1,107 +1,153 @@
-Return-Path: <jae.hyun.yoo@linux.intel.com>
-Return-path: <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH v7 08/12] mfd: intel-peci-client: Add PECI client MFD
- driver
-To: Randy Dunlap <rdunlap@infradead.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Lee Jones <lee.jones@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
- Kishon Vijay Abraham I <kishon@ti.com>,
- Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
- "Darrick J . Wong" <darrick.wong@oracle.com>,
- Eric Sandeen <sandeen@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
- Wu Hao <hao.wu@intel.com>, Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
- "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
- Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
- "David S . Miller" <davem@davemloft.net>,
- Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Philippe Ombredanne <pombredanne@nexb.com>, Vinod Koul <vkoul@kernel.org>,
- Stephen Boyd <sboyd@codeaurora.org>,
- David Kershner <david.kershner@unisys.com>,
- Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
- Sagar Dharia <sdharia@codeaurora.org>, Johan Hovold <johan@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Juergen Gross <jgross@suse.com>,
- Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-doc@vger.kernel.org,
- openbmc@lists.ozlabs.org, James Feist <james.feist@linux.intel.com>,
- Jason M Biils <jason.m.bills@linux.intel.com>,
- Vernon Mauery <vernon.mauery@linux.intel.com>
-References: <20180723214751.1733-1-jae.hyun.yoo@linux.intel.com>
- <20180723214751.1733-9-jae.hyun.yoo@linux.intel.com>
- <c1abe3ec-fc26-d8b0-c769-e9295577ac05@infradead.org>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <98051293-6b30-af31-a5c6-56b0e1ac964a@linux.intel.com>
-Date: Mon, 23 Jul 2018 15:36:58 -0700
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40874 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732205AbeGJUFZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Jul 2018 16:05:25 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w6AJxT0T097575
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jul 2018 16:04:48 -0400
+Received: from e32.co.us.ibm.com (e32.co.us.ibm.com [32.97.110.150])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2k4xvt8dvg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Jul 2018 16:04:48 -0400
+Received: from localhost
+        by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Tue, 10 Jul 2018 14:04:47 -0600
+Subject: Re: hwmon driver with misc interface
+To: Guenter Roeck <linux@roeck-us.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: linux-hwmon@vger.kernel.org, Joel Stanley <joel@jms.id.au>
+References: <66a551332b9a458de4ca2f6ed2ee70219179e43e.camel@kernel.crashing.org>
+ <c7998d0de444f6b972de2a0a366d509f3e52b639.camel@kernel.crashing.org>
+ <9f887b7c-2b6a-1a35-474f-1c83e488dde3@roeck-us.net>
+ <0351089598dd12fa9b75a3725cd3c5faa1198f6d.camel@kernel.crashing.org>
+ <34ddef1a-3ffa-eb06-65a0-3e1f2b6d4f16@roeck-us.net>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+Date: Tue, 10 Jul 2018 15:04:33 -0500
 MIME-Version: 1.0
-In-Reply-To: <c1abe3ec-fc26-d8b0-c769-e9295577ac05@infradead.org>
+In-Reply-To: <34ddef1a-3ffa-eb06-65a0-3e1f2b6d4f16@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Message-Id: <516bc180-624f-3645-7f2d-27397ee720b3@linux.vnet.ibm.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi Randy,
 
-On 7/23/2018 3:21 PM, Randy Dunlap wrote:
-> On 07/23/2018 02:47 PM, Jae Hyun Yoo wrote:
->> This commit adds PECI client MFD driver.
+
+On 07/08/2018 08:26 PM, Guenter Roeck wrote:
+> On 07/08/2018 06:05 PM, Benjamin Herrenschmidt wrote:
+>> On Sun, 2018-07-08 at 16:30 -0700, Guenter Roeck wrote:
+>>>
+>>> Trying to be be reasonable....
+>>>
+>>> Let's make some ground rules.
+>>>
+>>> - Do not attach foreign attributes (not related to hardware 
+>>> monitoring) to
+>>>     the hwmon device. Attach foreign attributes to its parent, eg 
+>>> the platform
+>>>     or i2c driver, or to a separate (misc ?) device if that is not 
+>>> feasible
+>>>     for some reason.
+>>> - Avoid foreign subsystem drivers. If the chip has an input device, 
+>>> a watchdog,
+>>>     and a hardware monitor, there should be three drivers.
+>>>     This is to some degree flexible; for example, PMBus drivers may 
+>>> register
+>>>     as power regulators, and some chips also have gpio support. But 
+>>> what,
+>>>     for example, the applesmc driver does is really not acceptable.
 >>
->> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->> Cc: Lee Jones <lee.jones@linaro.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Andrew Jeffery <andrew@aj.id.au>
->> Cc: James Feist <james.feist@linux.intel.com>
->> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
->> Cc: Joel Stanley <joel@jms.id.au>
->> Cc: Vernon Mauery <vernon.mauery@linux.intel.com>
->> ---
->>   drivers/mfd/Kconfig                   |  14 ++
->>   drivers/mfd/Makefile                  |   1 +
->>   drivers/mfd/intel-peci-client.c       | 182 ++++++++++++++++++++++++++
->>   include/linux/mfd/intel-peci-client.h |  81 ++++++++++++
->>   4 files changed, 278 insertions(+)
->>   create mode 100644 drivers/mfd/intel-peci-client.c
->>   create mode 100644 include/linux/mfd/intel-peci-client.h
+>> This rule can be a bit nasty if the various "parts" of the chip need
+>> tight interlock, share an interrupt etc... the solution to that is to
+>> have most of the common code in a "parent" driver that creates child
+>> devices with separate drivers that directly link onto the parent and
+>> use exported functions, but it can easily bloat the driver
+>> significantly for little benefit.
 >>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index f3fa516011ec..e38b591479d4 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -595,6 +595,20 @@ config MFD_INTEL_MSIC
->>   	  Passage) chip. This chip embeds audio, battery, GPIO, etc.
->>   	  devices used in Intel Medfield platforms.
->>   
->> +config MFD_INTEL_PECI_CLIENT
->> +	bool "Intel PECI client"
->> +	depends on (PECI || COMPILE_TEST)
->> +	select MFD_CORE
->> +	help
->> +	  If you say yes to this option, support will be included for the
->> +	  multi-funtional Intel PECI (Platform Environment Control Interface)
-> 
-> 	  multi-functional
-> 
+>
+> But that is what mfd drivers are for, or am I missing something ?
+> After all, it has "multi-function device" right in its name.
+>
+> Sure, there is somebloat, but on the plus side it ensures that
+> all bits and pieces are reviewed by the respective maintainers,
+> and the cross-functional API is _forced_ to be clean.
+>
+>> That said, this is maybe not *too much* of an issue in the OCC case,
+>> see below.
+>>
+>>> - Private hwmon attributes are acceptable as long as they are clearly
+>>>     documented and explained as necessary. This is not a free ride; 
+>>> you should
+>>>     have good reasons for private attributes and be able to explain 
+>>> that and why
+>>>     you need them. In this context, "because the hardware provides 
+>>> the information"
+>>>     is not a valid reason. The use case is important, not the fact that
+>>>     the hardware provides some random information.
+>>>
+>>> Can you work with that ?
+>>
+>> Anything is always possible :-) The main question for me here is
+>> whether to keep what we do today:
+>>
+>>     * sbefifo (the transport driver)
+>>       |
+>>       * fsi-occ platform driver
+>>              ("passes occ hwmon commands to sbefifo and adds /dev/occ")
+>>               |
+>>               * occ-hwmon
+>>
+>> Or can I collapse fsi-occ and occ-hwmon into one.
+>>
+>> Now /dev/occ is just a "raw" interface to send commands to the OCC, via
+>> the same path occ-hwmon does. There's locking needed there between the
+>> two so it currently happens in fsi-occ.
+>>
+>>> From what you are saying, you prefer that we keep it separate, which is
+>> our current design. I find it a bit messy but it's not a huge deal
+>> frankly, so let's do so.
+>>
+> Other drivers solve that with an API from parent to child, either with
+> a direct function call or with a callback function provided to the child.
+> Another option would be to handle it through regmap; That nowadays
+> supports custom accesses implemented in the parent driver (see 
+> regmap_read
+> and regmap_write in struct regmap_config). The child driver gets the
+> regmap pointer and uses the regmap API. I don't see that as messy.
+>
+>> The pre-requisite sbefifo driver is now in Greg's tree (and I'll have
+>> some fixes for it in -next this week), so you should be able to at
+>> least test build when Eddie resubmits.
+>>
+> Ok.
+>
+>> As for the various sysfs files for monitoring the base functionality of
+>> the occ, Eddie, you can always move them to fsi-occ.
+>>
+>
+> Yes, I think that would be more appropriate.
 
-Thanks for your pointing it out. Will fix it.
+This still won't work, since then we wouldn't have those attributes 
+available in the P8 version of the driver (which has no fsi-occ driver). 
+In addition, how would the poll response data get from the hwmon driver 
+to the fsi-occ driver? Yet another interface? Seems awkward.
+
+How about debugfs? We don't really mind where the attributes are, just 
+that the data is exposed somewhere...
 
 Thanks,
+Eddie
 
-Jae
+>
+> Thanks,
+> Guenter
+>
+>> Cheers,
+>> Ben.
+>>
+>
 
->> +	  client. PECI is a one-wire bus interface that provides a communication
->> +	  channel from PECI clients in Intel processors and chipset components
->> +	  to external monitoring or control devices.
->> +
->> +	  Additional drivers must be enabled in order to use the functionality
->> +	  of the device.
->> +
->>   config MFD_IPAQ_MICRO
->>   	bool "Atmel Micro ASIC (iPAQ h3100/h3600/h3700) Support"
->>   	depends on SA1100_H3100 || SA1100_H3600
-> 
-> 
