@@ -1,168 +1,97 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qk0-f193.google.com ([209.85.220.193]:35017 "EHLO
-        mail-qk0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725753AbeGWEhL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Jul 2018 00:37:11 -0400
-Received: by mail-qk0-f193.google.com with SMTP id u21-v6so9391868qku.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Jul 2018 20:38:05 -0700 (PDT)
-From: =?UTF-8?q?Maxime=20Roussin-B=C3=A9langer?=
-        <maxime.roussinbelanger@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        =?UTF-8?q?Maxime=20Roussin-B=C3=A9langer?=
-        <maxime.roussinbelanger@gmail.com>
-Subject: [PATCH v2] hwmon: (iio_hwmon) Use devm functions
-Date: Sun, 22 Jul 2018 23:33:29 -0400
-Message-Id: <20180723033329.28213-1-maxime.roussinbelanger@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
+From: Eddie James <eajames@linux.vnet.ibm.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
+        benh@kernel.crashing.org, linux@roeck-us.net, jdelvare@suse.com,
+        mark.rutland@arm.com, openbmc@lists.ozlabs.org, robh+dt@kernel.org,
+        joel@jms.id.au, Eddie James <eajames@linux.vnet.ibm.com>
+Subject: [PATCH v4 0/9] hwmon and fsi: Add On-Chip Controller (OCC) driver
+Date: Wed, 11 Jul 2018 16:01:29 -0500
+Message-Id: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Use devm_iio_channel_get_all() to automatically release
-channels.
+This series adds a hwmon driver to support the OCC on POWER8 and POWER9
+processors. The OCC is an embedded processor that provides realtime power and
+thermal monitoring and management.
 
-Use devm_hwmon_device_register_with_groups() to
-automatically unregister the device.
+The series also adds a "bus" driver to handle atomic communication between the
+service processor and the OCC on a POWER9 chip. This communication takes place
+over FSI bus to the SBE (Self-Boot engine) FIFO, which in turn communicates
+with the OCC. The driver for the SBEFIFO is already in linux-next as an FSI
+client driver.
 
-Signed-off-by: Maxime Roussin-Bélanger <maxime.roussinbelanger@gmail.com>
----
-Changes in v2:
-	- Remove unnecessary {}
+For POWER8 OCCs, communication between the service processor and the OCC is
+achieved over I2C bus.
 
-drivers/hwmon/iio_hwmon.c | 63 ++++++++++++---------------------------
- 1 file changed, 19 insertions(+), 44 deletions(-)
+Changes since v3:
+ * Add the FSI OCC driver.
+ * Pull the sysfs attribute code into it's own file for cleanliness.
+ * Various fixes for attribute creation and integer overflow.
 
-diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-index a3a1d1cb2f27..44d7dfe9cb46 100644
---- a/drivers/hwmon/iio_hwmon.c
-+++ b/drivers/hwmon/iio_hwmon.c
-@@ -73,44 +73,38 @@ static int iio_hwmon_probe(struct platform_device *pdev)
- 	if (dev->of_node && dev->of_node->name)
- 		name = dev->of_node->name;
- 
--	channels = iio_channel_get_all(dev);
-+	channels = devm_iio_channel_get_all(dev);
- 	if (IS_ERR(channels)) {
- 		if (PTR_ERR(channels) == -ENODEV)
- 			return -EPROBE_DEFER;
- 		return PTR_ERR(channels);
- 	}
- 
- 	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
--	if (st == NULL) {
--		ret = -ENOMEM;
--		goto error_release_channels;
--	}
-+	if (st == NULL)
-+		return -ENOMEM;
- 
- 	st->channels = channels;
- 
- 	/* count how many attributes we have */
- 	while (st->channels[st->num_channels].indio_dev)
- 		st->num_channels++;
- 
- 	st->attrs = devm_kzalloc(dev,
- 				 sizeof(*st->attrs) * (st->num_channels + 1),
- 				 GFP_KERNEL);
--	if (st->attrs == NULL) {
--		ret = -ENOMEM;
--		goto error_release_channels;
--	}
-+	if (st->attrs == NULL)
-+		return -ENOMEM;
- 
- 	for (i = 0; i < st->num_channels; i++) {
- 		a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
--		if (a == NULL) {
--			ret = -ENOMEM;
--			goto error_release_channels;
--		}
-+		if (a == NULL)
-+			return -ENOMEM;
- 
- 		sysfs_attr_init(&a->dev_attr.attr);
- 		ret = iio_get_channel_type(&st->channels[i], &type);
- 		if (ret < 0)
--			goto error_release_channels;
-+			return ret;
- 
- 		switch (type) {
- 		case IIO_VOLTAGE:
-@@ -138,49 +132,31 @@ static int iio_hwmon_probe(struct platform_device *pdev)
- 							       humidity_i++);
- 			break;
- 		default:
--			ret = -EINVAL;
--			goto error_release_channels;
--		}
--		if (a->dev_attr.attr.name == NULL) {
--			ret = -ENOMEM;
--			goto error_release_channels;
-+			return -EINVAL;
- 		}
-+		if (a->dev_attr.attr.name == NULL)
-+			return -ENOMEM;
-+
- 		a->dev_attr.show = iio_hwmon_read_val;
- 		a->dev_attr.attr.mode = S_IRUGO;
- 		a->index = i;
- 		st->attrs[i] = &a->dev_attr.attr;
- 	}
- 
- 	st->attr_group.attrs = st->attrs;
- 	st->groups[0] = &st->attr_group;
- 
- 	sname = devm_kstrdup(dev, name, GFP_KERNEL);
--	if (!sname) {
--		ret = -ENOMEM;
--		goto error_release_channels;
--	}
-+	if (!sname)
-+		return -ENOMEM;
- 
- 	strreplace(sname, '-', '_');
--	st->hwmon_dev = hwmon_device_register_with_groups(dev, sname, st,
--							  st->groups);
--	if (IS_ERR(st->hwmon_dev)) {
--		ret = PTR_ERR(st->hwmon_dev);
--		goto error_release_channels;
--	}
--	platform_set_drvdata(pdev, st);
--	return 0;
--
--error_release_channels:
--	iio_channel_release_all(channels);
--	return ret;
--}
-+	st->hwmon_dev = devm_hwmon_device_register_with_groups(dev, sname, st,
-+							       st->groups);
-+	if (IS_ERR(st->hwmon_dev))
-+		return PTR_ERR(st->hwmon_dev);
- 
--static int iio_hwmon_remove(struct platform_device *pdev)
--{
--	struct iio_hwmon_state *st = platform_get_drvdata(pdev);
--
--	hwmon_device_unregister(st->hwmon_dev);
--	iio_channel_release_all(st->channels);
-+	platform_set_drvdata(pdev, st);
- 
- 	return 0;
- }
-@@ -197,7 +173,6 @@ static struct platform_driver __refdata iio_hwmon_driver = {
- 		.of_match_table = iio_hwmon_of_match,
- 	},
- 	.probe = iio_hwmon_probe,
--	.remove = iio_hwmon_remove,
- };
- 
- module_platform_driver(iio_hwmon_driver);
+Changes since v2:
+ * Add sysfs_notify for the error and throttling attributes when change is
+   detected.
+ * Removed occs_present counting of devices bound.
+ * Improved remove() of P9 driver to avoid bad behavior with relation to OCC
+   driver when unbound.
+ * Added default cases (return EINVAL) for all sensor show functions.
+ * Added temperature fault sensor.
+ * Added back dt binding documentation for P9 to address checkpatch warning.
+ * Added occs_present attribute from the poll response.
+
+Changes since v1:
+ * Remove wait loop in P9 code, as that is now handled by FSI OCC driver.
+ * Removed dt binding documentation for P9, FSI OCC driver will probe OCC hwmon
+   driver automatically.
+ * Moved OCC response code definitions to the OCC include file.
+ * Fixed includes.
+ * Changed some structure fields to __beXX as that is what they are.
+ * Changed some errnos.
+ * Removed some dev_err().
+ * Refactored P8 code a bit to use #defined addresses and magic values, and
+   changed "goto retry" to a loop.
+ * Refactored error handling a bit.
+
+Eddie James (9):
+  fsi: Add On-Chip Controller (OCC) driver
+  Documentation: hwmon: Add OCC documentation
+  dt-bindings: i2c: Add P8 OCC hwmon device documentation
+  hwmon: Add On-Chip Controller (OCC) hwmon driver
+  hwmon (occ): Add command transport method for P8 and P9
+  hwmon (occ): Parse OCC poll response
+  hwmon (occ): Add sensor types and versions
+  hwmon (occ): Add sensor attributes and register hwmon device
+  hwmon (occ): Add sysfs attributes for additional OCC data
+
+ .../devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt   |   25 +
+ Documentation/hwmon/occ                            |   73 ++
+ drivers/fsi/Kconfig                                |   10 +
+ drivers/fsi/Makefile                               |    1 +
+ drivers/fsi/fsi-occ.c                              |  609 ++++++++++
+ drivers/hwmon/Kconfig                              |    2 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/occ/Kconfig                          |   28 +
+ drivers/hwmon/occ/Makefile                         |   11 +
+ drivers/hwmon/occ/common.c                         | 1250 ++++++++++++++++++++
+ drivers/hwmon/occ/common.h                         |  136 +++
+ drivers/hwmon/occ/p8_i2c.c                         |  264 +++++
+ drivers/hwmon/occ/p9_sbe.c                         |  115 ++
+ drivers/hwmon/occ/sysfs.c                          |  188 +++
+ include/linux/fsi-occ.h                            |   34 +
+ 15 files changed, 2747 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/ibm,p8-occ-hwmon.txt
+ create mode 100644 Documentation/hwmon/occ
+ create mode 100644 drivers/fsi/fsi-occ.c
+ create mode 100644 drivers/hwmon/occ/Kconfig
+ create mode 100644 drivers/hwmon/occ/Makefile
+ create mode 100644 drivers/hwmon/occ/common.c
+ create mode 100644 drivers/hwmon/occ/common.h
+ create mode 100644 drivers/hwmon/occ/p8_i2c.c
+ create mode 100644 drivers/hwmon/occ/p9_sbe.c
+ create mode 100644 drivers/hwmon/occ/sysfs.c
+ create mode 100644 include/linux/fsi-occ.h
+
 -- 
-2.18.0
-
+1.8.3.1
