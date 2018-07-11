@@ -1,21 +1,21 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48002 "EHLO
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53814 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390367AbeGKVIP (ORCPT
+        by vger.kernel.org with ESMTP id S2390348AbeGKVIO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Jul 2018 17:08:15 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w6BL0eq7011936
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:02:04 -0400
-Received: from e35.co.us.ibm.com (e35.co.us.ibm.com [32.97.110.153])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2k5npn119v-1
+        Wed, 11 Jul 2018 17:08:14 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w6BL0N2B008371
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:02:02 -0400
+Received: from e31.co.us.ibm.com (e31.co.us.ibm.com [32.97.110.149])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2k5mn4kg1c-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:02:03 -0400
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:02:01 -0400
 Received: from localhost
-        by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e31.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Wed, 11 Jul 2018 15:02:03 -0600
+        Wed, 11 Jul 2018 15:02:01 -0600
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
@@ -23,549 +23,725 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         benh@kernel.crashing.org, linux@roeck-us.net, jdelvare@suse.com,
         mark.rutland@arm.com, openbmc@lists.ozlabs.org, robh+dt@kernel.org,
         joel@jms.id.au, Eddie James <eajames@linux.vnet.ibm.com>
-Subject: [PATCH v4 8/9] hwmon (occ): Add sensor attributes and register hwmon device
-Date: Wed, 11 Jul 2018 16:01:37 -0500
+Subject: [PATCH v4 7/9] hwmon (occ): Add sensor types and versions
+Date: Wed, 11 Jul 2018 16:01:36 -0500
 In-Reply-To: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1531342898-15790-9-git-send-email-eajames@linux.vnet.ibm.com>
+Message-Id: <1531342898-15790-8-git-send-email-eajames@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Setup the sensor attributes for every OCC sensor found by the first poll
-response. Register the attributes with hwmon.
+Add structures to define all sensor types and versions. Add sysfs show
+and store functions for each sensor type. Add a method to construct the
+"set user power cap" command and send it to the OCC. Add rate limit to
+polling the OCC (in case user-space reads our hwmon entries rapidly).
 
 Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
 ---
- drivers/hwmon/occ/common.c | 452 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/hwmon/occ/common.h |  16 ++
- 2 files changed, 468 insertions(+)
+ drivers/hwmon/occ/common.c | 648 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/occ/common.h |   5 +
+ 2 files changed, 653 insertions(+)
 
 diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index 1719536..da55919 100644
+index 73f62aa..1719536 100644
 --- a/drivers/hwmon/occ/common.c
 +++ b/drivers/hwmon/occ/common.c
-@@ -11,10 +11,12 @@
+@@ -11,10 +11,119 @@
   */
  
  #include <linux/device.h>
-+#include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/jiffies.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/jiffies.h>
  #include <linux/kernel.h>
- #include <linux/mutex.h>
-+#include <linux/sysfs.h>
- #include <asm/unaligned.h>
++#include <linux/mutex.h>
++#include <asm/unaligned.h>
  
  #include "common.h"
-@@ -678,6 +680,439 @@ static ssize_t occ_show_extended(struct device *dev,
- 	return rc;
+ 
++#define OCC_UPDATE_FREQUENCY		msecs_to_jiffies(1000)
++
++#define OCC_TEMP_SENSOR_FAULT		0xFF
++
++#define OCC_FRU_TYPE_VRM		0x3
++
++/* OCC sensor type and version definitions */
++
++struct temp_sensor_1 {
++	u16 sensor_id;
++	u16 value;
++} __packed;
++
++struct temp_sensor_2 {
++	u32 sensor_id;
++	u8 fru_type;
++	u8 value;
++} __packed;
++
++struct freq_sensor_1 {
++	u16 sensor_id;
++	u16 value;
++} __packed;
++
++struct freq_sensor_2 {
++	u32 sensor_id;
++	u16 value;
++} __packed;
++
++struct power_sensor_1 {
++	u16 sensor_id;
++	u32 update_tag;
++	u32 accumulator;
++	u16 value;
++} __packed;
++
++struct power_sensor_2 {
++	u32 sensor_id;
++	u8 function_id;
++	u8 apss_channel;
++	u16 reserved;
++	u32 update_tag;
++	u64 accumulator;
++	u16 value;
++} __packed;
++
++struct power_sensor_data {
++	u16 value;
++	u32 update_tag;
++	u64 accumulator;
++} __packed;
++
++struct power_sensor_data_and_time {
++	u16 update_time;
++	u16 value;
++	u32 update_tag;
++	u64 accumulator;
++} __packed;
++
++struct power_sensor_a0 {
++	u32 sensor_id;
++	struct power_sensor_data_and_time system;
++	u32 reserved;
++	struct power_sensor_data_and_time proc;
++	struct power_sensor_data vdd;
++	struct power_sensor_data vdn;
++} __packed;
++
++struct caps_sensor_1 {
++	u16 curr_powercap;
++	u16 curr_powerreading;
++	u16 norm_powercap;
++	u16 max_powercap;
++	u16 min_powercap;
++	u16 user_powerlimit;
++} __packed;
++
++struct caps_sensor_2 {
++	u16 curr_powercap;
++	u16 curr_powerreading;
++	u16 norm_powercap;
++	u16 max_powercap;
++	u16 min_powercap;
++	u16 user_powerlimit;
++	u8 user_powerlimit_source;
++} __packed;
++
++struct caps_sensor_3 {
++	u16 curr_powercap;
++	u16 curr_powerreading;
++	u16 norm_powercap;
++	u16 max_powercap;
++	u16 hard_min_powercap;
++	u16 soft_min_powercap;
++	u16 user_powerlimit;
++	u8 user_powerlimit_source;
++} __packed;
++
++struct extended_sensor {
++	u8 name[4];
++	u8 flags;
++	u8 reserved;
++	u8 data[6];
++} __packed;
++
+ static int occ_poll(struct occ *occ)
+ {
+ 	u16 checksum = occ->poll_cmd_data + 1;
+@@ -30,9 +139,545 @@ static int occ_poll(struct occ *occ)
+ 	cmd[6] = checksum & 0xFF;	/* checksum lsb */
+ 	cmd[7] = 0;
+ 
++	/* mutex should already be locked if necessary */
+ 	return occ->send_cmd(occ, cmd);
  }
  
-+/*
-+ * Some helper macros to make it easier to define an occ_attribute. Since these
-+ * are dynamically allocated, we shouldn't use the existing kernel macros which
-+ * stringify the name argument.
-+ */
-+#define ATTR_OCC(_name, _mode, _show, _store) {				\
-+	.attr	= {							\
-+		.name = _name,						\
-+		.mode = VERIFY_OCTAL_PERMISSIONS(_mode),		\
-+	},								\
-+	.show	= _show,						\
-+	.store	= _store,						\
-+}
-+
-+#define SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index) {	\
-+	.dev_attr	= ATTR_OCC(_name, _mode, _show, _store),	\
-+	.index		= _index,					\
-+	.nr		= _nr,						\
-+}
-+
-+#define OCC_INIT_ATTR(_name, _mode, _show, _store, _nr, _index)		\
-+	((struct sensor_device_attribute_2)				\
-+		SENSOR_ATTR_OCC(_name, _mode, _show, _store, _nr, _index))
-+
-+/*
-+ * Allocate and instatiate sensor_device_attribute_2s. It's most efficient to
-+ * use our own instead of the built-in hwmon attribute types.
-+ */
-+static int occ_setup_sensor_attrs(struct occ *occ)
++static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
 +{
-+	unsigned int i, s, num_attrs = 0;
-+	struct device *dev = occ->bus_dev;
++	int rc;
++	u8 cmd[8];
++	u16 checksum = 0x24;
++	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
++
++	cmd[0] = 0;
++	cmd[1] = 0x22;
++	cmd[2] = 0;
++	cmd[3] = 2;
++
++	memcpy(&cmd[4], &user_power_cap_be, 2);
++
++	checksum += cmd[4] + cmd[5];
++	cmd[6] = checksum >> 8;
++	cmd[7] = checksum & 0xFF;
++
++	rc = mutex_lock_interruptible(&occ->lock);
++	if (rc)
++		return rc;
++
++	rc = occ->send_cmd(occ, cmd);
++
++	mutex_unlock(&occ->lock);
++
++	return rc;
++}
++
++static int occ_update_response(struct occ *occ)
++{
++	int rc = mutex_lock_interruptible(&occ->lock);
++
++	if (rc)
++		return rc;
++
++	/* limit the maximum rate of polling the OCC */
++	if (time_after(jiffies, occ->last_update + OCC_UPDATE_FREQUENCY)) {
++		rc = occ_poll(occ);
++		occ->last_update = jiffies;
++	}
++
++	mutex_unlock(&occ->lock);
++	return rc;
++}
++
++static ssize_t occ_show_temp_1(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u32 val = 0;
++	struct temp_sensor_1 *temp;
++	struct occ *occ = dev_get_drvdata(dev);
 +	struct occ_sensors *sensors = &occ->sensors;
-+	struct occ_attribute *attr;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
++
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	temp = ((struct temp_sensor_1 *)sensors->temp.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&temp->sensor_id);
++		break;
++	case 1:
++		/* millidegrees */
++		val = get_unaligned_be16(&temp->value) * 1000;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
++
++static ssize_t occ_show_temp_2(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u32 val = 0;
 +	struct temp_sensor_2 *temp;
-+	ssize_t (*show_temp)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_temp_1;
-+	ssize_t (*show_freq)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_freq_1;
-+	ssize_t (*show_power)(struct device *, struct device_attribute *,
-+			      char *) = occ_show_power_1;
-+	ssize_t (*show_caps)(struct device *, struct device_attribute *,
-+			     char *) = occ_show_caps_1;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+	switch (sensors->temp.version) {
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	temp = ((struct temp_sensor_2 *)sensors->temp.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be32(&temp->sensor_id);
++		break;
 +	case 1:
-+		num_attrs += (sensors->temp.num_sensors * 2);
++		val = temp->value;
++		if (val == OCC_TEMP_SENSOR_FAULT)
++			return -EREMOTEIO;
++
++		if (temp->fru_type != OCC_FRU_TYPE_VRM) {
++			/* sensor not ready */
++			if (val == 0)
++				return -EAGAIN;
++
++			val *= 1000;	/* millidegrees */
++		}
 +		break;
 +	case 2:
-+		num_attrs += (sensors->temp.num_sensors * 4);
-+		show_temp = occ_show_temp_2;
-+		break;
-+	default:
-+		sensors->temp.num_sensors = 0;
-+	}
-+
-+	switch (sensors->freq.version) {
-+	case 2:
-+		show_freq = occ_show_freq_2;
-+		/* fall through */
-+	case 1:
-+		num_attrs += (sensors->freq.num_sensors * 2);
-+		break;
-+	default:
-+		sensors->freq.num_sensors = 0;
-+	}
-+
-+	switch (sensors->power.version) {
-+	case 1:
-+		num_attrs += (sensors->power.num_sensors * 4);
-+		break;
-+	case 2:
-+		num_attrs += (sensors->power.num_sensors * 6);
-+		show_power = occ_show_power_2;
-+		break;
-+	case 0xA0:
-+		num_attrs += (sensors->power.num_sensors * 19);
-+		show_power = occ_show_power_a0;
-+		break;
-+	default:
-+		sensors->power.num_sensors = 0;
-+	}
-+
-+	switch (sensors->caps.version) {
-+	case 1:
-+		num_attrs += (sensors->caps.num_sensors * 6);
-+		break;
-+	case 2:
-+		num_attrs += (sensors->caps.num_sensors * 7);
-+		show_caps = occ_show_caps_2;
++		val = temp->fru_type;
 +		break;
 +	case 3:
-+		num_attrs += (sensors->caps.num_sensors * 8);
-+		show_caps = occ_show_caps_3;
++		val = temp->value == OCC_TEMP_SENSOR_FAULT;
 +		break;
 +	default:
-+		sensors->caps.num_sensors = 0;
++		return -EINVAL;
 +	}
 +
-+	switch (sensors->extended.version) {
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
++
++static ssize_t occ_show_freq_1(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u16 val = 0;
++	struct freq_sensor_1 *freq;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
++
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	freq = ((struct freq_sensor_1 *)sensors->freq.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&freq->sensor_id);
++		break;
 +	case 1:
-+		num_attrs += (sensors->extended.num_sensors * 3);
++		val = get_unaligned_be16(&freq->value);
 +		break;
 +	default:
-+		sensors->extended.num_sensors = 0;
++		return -EINVAL;
 +	}
 +
-+	occ->attrs = devm_kzalloc(dev, sizeof(*occ->attrs) * num_attrs,
-+				  GFP_KERNEL);
-+	if (!occ->attrs)
-+		return -ENOMEM;
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
 +
-+	/* null-terminated list */
-+	occ->group.attrs = devm_kzalloc(dev, sizeof(*occ->group.attrs) *
-+					num_attrs + 1, GFP_KERNEL);
-+	if (!occ->group.attrs)
-+		return -ENOMEM;
++static ssize_t occ_show_freq_2(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u32 val = 0;
++	struct freq_sensor_2 *freq;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+	attr = occ->attrs;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
 +
-+	for (i = 0; i < sensors->temp.num_sensors; ++i) {
-+		s = i + 1;
-+		temp = ((struct temp_sensor_2 *)sensors->temp.data) + i;
++	freq = ((struct freq_sensor_2 *)sensors->freq.data) + sattr->index;
 +
-+		snprintf(attr->name, sizeof(attr->name), "temp%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
-+					     0, i);
-+		attr++;
-+
-+		if (sensors->temp.version > 1 &&
-+		    temp->fru_type == OCC_FRU_TYPE_VRM) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "temp%d_alarm", s);
-+		} else {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "temp%d_input", s);
-+		}
-+
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_temp, NULL,
-+					     1, i);
-+		attr++;
-+
-+		if (sensors->temp.version > 1) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "temp%d_fru_type", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_temp, NULL, 2, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "temp%d_fault", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_temp, NULL, 3, i);
-+			attr++;
-+		}
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be32(&freq->sensor_id);
++		break;
++	case 1:
++		val = get_unaligned_be16(&freq->value);
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	for (i = 0; i < sensors->freq.num_sensors; ++i) {
-+		s = i + 1;
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
 +
-+		snprintf(attr->name, sizeof(attr->name), "freq%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
-+					     0, i);
-+		attr++;
++static ssize_t occ_show_power_1(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u64 val = 0;
++	struct power_sensor_1 *power;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+		snprintf(attr->name, sizeof(attr->name), "freq%d_input", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_freq, NULL,
-+					     1, i);
-+		attr++;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	power = ((struct power_sensor_1 *)sensors->power.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&power->sensor_id);
++		break;
++	case 1:
++		val = get_unaligned_be32(&power->update_tag);
++		break;
++	case 2:
++		val = get_unaligned_be32(&power->accumulator);
++		break;
++	case 3:
++		/* microwatts */
++		val = get_unaligned_be16(&power->value) * 1000000ULL;
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	if (sensors->power.version == 0xA0) {
-+		/* Special case for many-attribute power sensor. Split it into
-+		 * a sensor number per power type, emulating several sensors.
-+		 */
-+		for (i = 0; i < sensors->power.num_sensors; ++i) {
-+			s = (i * 4) + 1;
++	return snprintf(buf, PAGE_SIZE - 1, "%llu\n", val);
++}
 +
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_id", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 0, i);
-+			attr++;
++static ssize_t occ_show_power_2(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u64 val = 0;
++	struct power_sensor_2 *power;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+			/* system power attributes */
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 1, i);
-+			attr++;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
 +
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_time", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 2, i);
-+			attr++;
++	power = ((struct power_sensor_2 *)sensors->power.data) + sattr->index;
 +
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 3, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 4, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 5, i);
-+			attr++;
-+
-+			s++;
-+
-+			/* processor power attributes */
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 6, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_time", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 7, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 8, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 9, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 10, i);
-+			attr++;
-+
-+			s++;
-+
-+			/* vdd power attributes */
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 11, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 12, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 13, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 14, i);
-+			attr++;
-+
-+			s++;
-+
-+			/* vdn power attributes */
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 15, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 16, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 17, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 18, i);
-+			attr++;
-+		}
-+	} else {
-+		for (i = 0; i < sensors->power.num_sensors; ++i) {
-+			s = i + 1;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_label", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 0, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_update_tag", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 1, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_accumulator", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 2, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "power%d_input", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_power, NULL, 3, i);
-+			attr++;
-+
-+			if (sensors->power.version > 1) {
-+				snprintf(attr->name, sizeof(attr->name),
-+					 "power%d_function_id", s);
-+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+							     show_power, NULL,
-+							     4, i);
-+				attr++;
-+
-+				snprintf(attr->name, sizeof(attr->name),
-+					 "power%d_apss_channel", s);
-+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+							     show_power, NULL,
-+							     5, i);
-+				attr++;
-+			}
-+		}
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be32(&power->sensor_id);
++		break;
++	case 1:
++		val = get_unaligned_be32(&power->update_tag);
++		break;
++	case 2:
++		val = get_unaligned_be64(&power->accumulator);
++		break;
++	case 3:
++		/* microwatts */
++		val = get_unaligned_be16(&power->value) * 1000000ULL;
++		break;
++	case 4:
++		val = power->function_id;
++		break;
++	case 5:
++		val = power->apss_channel;
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	for (i = 0; i < sensors->caps.num_sensors; ++i) {
-+		s = i + 1;
++	return snprintf(buf, PAGE_SIZE - 1, "%llu\n", val);
++}
 +
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_current", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     0, i);
-+		attr++;
++static ssize_t occ_show_power_a0(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u64 val = 0;
++	struct power_sensor_a0 *power;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_reading", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     1, i);
-+		attr++;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
 +
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_norm", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     2, i);
-+		attr++;
++	power = ((struct power_sensor_a0 *)sensors->power.data) + sattr->index;
 +
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_max", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
-+					     3, i);
-+		attr++;
-+
-+		if (sensors->caps.version > 2) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_min_hard", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 4, i);
-+			attr++;
-+
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_min_soft", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 7, i);
-+			attr++;
-+		} else {
-+			snprintf(attr->name, sizeof(attr->name), "caps%d_min",
-+				 s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 4, i);
-+			attr++;
-+		}
-+
-+		snprintf(attr->name, sizeof(attr->name), "caps%d_user", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0644, show_caps,
-+					     occ_store_caps_user, 5, i);
-+		attr++;
-+
-+		if (sensors->caps.version > 1) {
-+			snprintf(attr->name, sizeof(attr->name),
-+				 "caps%d_user_source", s);
-+			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+						     show_caps, NULL, 6, i);
-+			attr++;
-+		}
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be32(&power->sensor_id);
++		break;
++	case 1:
++		return snprintf(buf, PAGE_SIZE - 1, "system\n");
++	case 2:
++		val = get_unaligned_be16(&power->system.update_time);
++		break;
++	case 3:
++		/* microwatts */
++		val = get_unaligned_be16(&power->system.value) * 1000000ULL;
++		break;
++	case 4:
++		val = get_unaligned_be32(&power->system.update_tag);
++		break;
++	case 5:
++		val = get_unaligned_be64(&power->system.accumulator);
++		break;
++	case 6:
++		return snprintf(buf, PAGE_SIZE - 1, "proc\n");
++	case 7:
++		val = get_unaligned_be16(&power->proc.update_time);
++		break;
++	case 8:
++		/* microwatts */
++		val = get_unaligned_be16(&power->proc.value) * 1000000ULL;
++		break;
++	case 9:
++		val = get_unaligned_be32(&power->proc.update_tag);
++		break;
++	case 10:
++		val = get_unaligned_be64(&power->proc.accumulator);
++		break;
++	case 11:
++		return snprintf(buf, PAGE_SIZE - 1, "vdd\n");
++	case 12:
++		/* microwatts */
++		val = get_unaligned_be16(&power->vdd.value) * 1000000ULL;
++		break;
++	case 13:
++		val = get_unaligned_be32(&power->vdd.update_tag);
++		break;
++	case 14:
++		val = get_unaligned_be64(&power->vdd.accumulator);
++		break;
++	case 15:
++		return snprintf(buf, PAGE_SIZE - 1, "vdn\n");
++	case 16:
++		/* microwatts */
++		val = get_unaligned_be16(&power->vdn.value) * 1000000ULL;
++		break;
++	case 17:
++		val = get_unaligned_be32(&power->vdn.update_tag);
++		break;
++	case 18:
++		val = get_unaligned_be64(&power->vdn.accumulator);
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	for (i = 0; i < sensors->extended.num_sensors; ++i) {
-+		s = i + 1;
++	return snprintf(buf, PAGE_SIZE - 1, "%llu\n", val);
++}
 +
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_label", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 0, i);
-+		attr++;
++static ssize_t occ_show_caps_1(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u16 val = 0;
++	struct caps_sensor_1 *caps;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
 +
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_flags", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 1, i);
-+		attr++;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
 +
-+		snprintf(attr->name, sizeof(attr->name), "extn%d_input", s);
-+		attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+					     occ_show_extended, NULL, 2, i);
-+		attr++;
++	caps = ((struct caps_sensor_1 *)sensors->caps.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&caps->curr_powercap);
++		break;
++	case 1:
++		val = get_unaligned_be16(&caps->curr_powerreading);
++		break;
++	case 2:
++		val = get_unaligned_be16(&caps->norm_powercap);
++		break;
++	case 3:
++		val = get_unaligned_be16(&caps->max_powercap);
++		break;
++	case 4:
++		val = get_unaligned_be16(&caps->min_powercap);
++		break;
++	case 5:
++		val = get_unaligned_be16(&caps->user_powerlimit);
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	/* put the sensors in the group */
-+	for (i = 0; i < num_attrs; ++i) {
-+		sysfs_attr_init(&occ->attrs[i].sensor.dev_attr.attr);
-+		occ->group.attrs[i] = &occ->attrs[i].sensor.dev_attr.attr;
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
++
++static ssize_t occ_show_caps_2(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u16 val = 0;
++	struct caps_sensor_2 *caps;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
++
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	caps = ((struct caps_sensor_2 *)sensors->caps.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&caps->curr_powercap);
++		break;
++	case 1:
++		val = get_unaligned_be16(&caps->curr_powerreading);
++		break;
++	case 2:
++		val = get_unaligned_be16(&caps->norm_powercap);
++		break;
++	case 3:
++		val = get_unaligned_be16(&caps->max_powercap);
++		break;
++	case 4:
++		val = get_unaligned_be16(&caps->min_powercap);
++		break;
++	case 5:
++		val = get_unaligned_be16(&caps->user_powerlimit);
++		break;
++	case 6:
++		val = caps->user_powerlimit_source;
++		break;
++	default:
++		return -EINVAL;
 +	}
 +
-+	return 0;
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
++
++static ssize_t occ_show_caps_3(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	int rc;
++	u16 val = 0;
++	struct caps_sensor_3 *caps;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
++
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	caps = ((struct caps_sensor_3 *)sensors->caps.data) + sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		val = get_unaligned_be16(&caps->curr_powercap);
++		break;
++	case 1:
++		val = get_unaligned_be16(&caps->curr_powerreading);
++		break;
++	case 2:
++		val = get_unaligned_be16(&caps->norm_powercap);
++		break;
++	case 3:
++		val = get_unaligned_be16(&caps->max_powercap);
++		break;
++	case 4:
++		val = get_unaligned_be16(&caps->hard_min_powercap);
++		break;
++	case 5:
++		val = get_unaligned_be16(&caps->user_powerlimit);
++		break;
++	case 6:
++		val = caps->user_powerlimit_source;
++		break;
++	case 7:
++		val = get_unaligned_be16(&caps->soft_min_powercap);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
++}
++
++static ssize_t occ_store_caps_user(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	int rc;
++	u16 user_power_cap;
++	struct occ *occ = dev_get_drvdata(dev);
++
++	rc = kstrtou16(buf, 0, &user_power_cap);
++	if (rc)
++		return rc;
++
++	rc = occ_set_user_power_cap(occ, user_power_cap);
++	if (rc)
++		return rc;
++
++	return count;
++}
++
++static ssize_t occ_show_extended(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	int rc;
++	struct extended_sensor *extn;
++	struct occ *occ = dev_get_drvdata(dev);
++	struct occ_sensors *sensors = &occ->sensors;
++	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
++
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
++
++	extn = ((struct extended_sensor *)sensors->extended.data) +
++		sattr->index;
++
++	switch (sattr->nr) {
++	case 0:
++		rc = snprintf(buf, PAGE_SIZE - 1, "%02x%02x%02x%02x\n",
++			      extn->name[0], extn->name[1], extn->name[2],
++			      extn->name[3]);
++		break;
++	case 1:
++		rc = snprintf(buf, PAGE_SIZE - 1, "%02x\n", extn->flags);
++		break;
++	case 2:
++		rc = snprintf(buf, PAGE_SIZE - 1, "%02x%02x%02x%02x%02x%02x\n",
++			      extn->data[0], extn->data[1], extn->data[2],
++			      extn->data[3], extn->data[4], extn->data[5]);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return rc;
 +}
 +
  /* only need to do this once at startup, as OCC won't change sensors on us */
  static void occ_parse_poll_response(struct occ *occ)
  {
-@@ -741,6 +1176,7 @@ int occ_setup(struct occ *occ, const char *name)
+@@ -95,6 +740,9 @@ int occ_setup(struct occ *occ, const char *name)
+ {
  	int rc;
  
- 	mutex_init(&occ->lock);
-+	occ->groups[0] = &occ->group;
- 
- 	/* no need to lock */
++	mutex_init(&occ->lock);
++
++	/* no need to lock */
  	rc = occ_poll(occ);
-@@ -755,5 +1191,21 @@ int occ_setup(struct occ *occ, const char *name)
- 
- 	occ_parse_poll_response(occ);
- 
-+	rc = occ_setup_sensor_attrs(occ);
-+	if (rc) {
-+		dev_err(occ->bus_dev, "failed to setup sensor attrs: %d\n",
-+			rc);
-+		return rc;
-+	}
-+
-+	occ->hwmon = devm_hwmon_device_register_with_groups(occ->bus_dev, name,
-+							    occ, occ->groups);
-+	if (IS_ERR(occ->hwmon)) {
-+		rc = PTR_ERR(occ->hwmon);
-+		dev_err(occ->bus_dev, "failed to register hwmon device: %d\n",
-+			rc);
-+		return rc;
-+	}
-+
- 	return 0;
- }
+ 	if (rc == -ESHUTDOWN) {
+ 		dev_info(occ->bus_dev, "host is not ready\n");
 diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index f697adb..2c1c06e 100644
+index cfcd353..f697adb 100644
 --- a/drivers/hwmon/occ/common.h
 +++ b/drivers/hwmon/occ/common.h
-@@ -12,7 +12,9 @@
+@@ -12,6 +12,8 @@
  #ifndef OCC_COMMON_H
  #define OCC_COMMON_H
  
-+#include <linux/hwmon-sysfs.h>
- #include <linux/mutex.h>
-+#include <linux/sysfs.h>
- 
++#include <linux/mutex.h>
++
  struct device;
  
-@@ -85,6 +87,15 @@ struct occ_sensors {
- 	struct occ_sensor extended;
- };
+ #define OCC_RESP_DATA_BYTES		4089
+@@ -91,6 +93,9 @@ struct occ {
  
-+/*
-+ * Use our own attribute struct so we can dynamically allocate space for the
-+ * name.
-+ */
-+struct occ_attribute {
-+	char name[32];
-+	struct sensor_device_attribute_2 sensor;
-+};
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+ 	int (*send_cmd)(struct occ *occ, u8 *cmd);
 +
- struct occ {
- 	struct device *bus_dev;
- 
-@@ -96,6 +107,11 @@ struct occ {
- 
- 	unsigned long last_update;
- 	struct mutex lock;		/* lock OCC access */
-+
-+	struct device *hwmon;
-+	struct occ_attribute *attrs;
-+	struct attribute_group group;
-+	const struct attribute_group *groups[2];
++	unsigned long last_update;
++	struct mutex lock;		/* lock OCC access */
  };
  
  int occ_setup(struct occ *occ, const char *name);
