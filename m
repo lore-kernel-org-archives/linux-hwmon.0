@@ -1,97 +1,210 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47464 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387710AbeGKVIA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Jul 2018 17:08:00 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w6BL0sRY122990
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:01:49 -0400
-Received: from e36.co.us.ibm.com (e36.co.us.ibm.com [32.97.110.154])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2k5prk6dqy-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 17:01:48 -0400
-Received: from localhost
-        by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Wed, 11 Jul 2018 15:01:47 -0600
+Return-Path: <eajames@linux.vnet.ibm.com>
+Return-path: <eajames@linux.vnet.ibm.com>
 From: Eddie James <eajames@linux.vnet.ibm.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
         benh@kernel.crashing.org, linux@roeck-us.net, jdelvare@suse.com,
         mark.rutland@arm.com, openbmc@lists.ozlabs.org, robh+dt@kernel.org,
-        joel@jms.id.au, Eddie James <eajames@linux.vnet.ibm.com>,
-        Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH v4 1/9] fsi: Add On-Chip Controller (OCC) driver
-Date: Wed, 11 Jul 2018 16:01:30 -0500
+        joel@jms.id.au, Eddie James <eajames@linux.vnet.ibm.com>
+Subject: [PATCH v4 9/9] hwmon (occ): Add sysfs attributes for additional OCC data
+Date: Wed, 11 Jul 2018 16:01:38 -0500
 In-Reply-To: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
 References: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
-Message-Id: <1531342898-15790-2-git-send-email-eajames@linux.vnet.ibm.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Message-Id: <1531342898-15790-10-git-send-email-eajames@linux.vnet.ibm.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-The OCC is a device embedded on a POWER processor that collects and
-aggregates sensor data from the processor and system. The OCC can
-provide the raw sensor data as well as perform thermal and power
-management on the system.
-
-This driver provides an atomic communications channel between a service
-processor (e.g. a BMC) and the OCC. The driver is dependent on the FSI
-SBEFIFO driver to get hardware access through the SBE to the OCC SRAM.
-Commands are issued to the SBE to send or fetch data to the SRAM.
+The OCC provides a variety of additional information about the state of
+the host processor, such as throttling, error conditions, and the number
+of OCCs detected in the system. This information is essential to service
+processor applications such as fan control and host management.
+Therefore, export this data in the form of sysfs attributes attached to
+the platform device (to which the hwmon device is also attached).
 
 Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- drivers/fsi/Kconfig     |  10 +
- drivers/fsi/Makefile    |   1 +
- drivers/fsi/fsi-occ.c   | 609 ++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/fsi-occ.h |  34 +++
- 4 files changed, 654 insertions(+)
- create mode 100644 drivers/fsi/fsi-occ.c
- create mode 100644 include/linux/fsi-occ.h
+ drivers/hwmon/occ/Makefile |   2 +-
+ drivers/hwmon/occ/common.c |  45 ++++++++++-
+ drivers/hwmon/occ/common.h |  17 ++++
+ drivers/hwmon/occ/p8_i2c.c |  10 +++
+ drivers/hwmon/occ/p9_sbe.c |   1 +
+ drivers/hwmon/occ/sysfs.c  | 188 +++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 259 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/hwmon/occ/sysfs.c
 
-diff --git a/drivers/fsi/Kconfig b/drivers/fsi/Kconfig
-index 24f84a9..322cec3 100644
---- a/drivers/fsi/Kconfig
-+++ b/drivers/fsi/Kconfig
-@@ -39,4 +39,14 @@ config FSI_SBEFIFO
- 	a pipe-like FSI device for communicating with the self boot engine
- 	(SBE) on POWER processors.
+diff --git a/drivers/hwmon/occ/Makefile b/drivers/hwmon/occ/Makefile
+index ab5c3e9..46a8636 100644
+--- a/drivers/hwmon/occ/Makefile
++++ b/drivers/hwmon/occ/Makefile
+@@ -1,4 +1,4 @@
+-occ-hwmon-objs := common.o
++occ-hwmon-objs := common.o sysfs.o
  
-+config FSI_OCC
-+	tristate "OCC SBEFIFO client device driver"
-+	depends on FSI_SBEFIFO
-+	---help---
-+	This option enables an SBEFIFO based On-Chip Controller (OCC) device
-+	driver. The OCC is a device embedded on a POWER processor that collects
-+	and aggregates sensor data from the processor and system. The OCC can
-+	provide the raw sensor data as well as perform thermal and power
-+	management on the system.
+ ifeq ($(CONFIG_SENSORS_OCC_P9_SBE), y)
+ occ-hwmon-objs += p9_sbe.o
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index da55919..7bc52af 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -21,6 +21,11 @@
+ 
+ #include "common.h"
+ 
++#define OCC_ERROR_COUNT_THRESHOLD	2	/* required by OCC spec */
 +
- endif
-diff --git a/drivers/fsi/Makefile b/drivers/fsi/Makefile
-index 851182e..75fdc6d 100644
---- a/drivers/fsi/Makefile
-+++ b/drivers/fsi/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_FSI_MASTER_HUB) += fsi-master-hub.o
- obj-$(CONFIG_FSI_MASTER_GPIO) += fsi-master-gpio.o
- obj-$(CONFIG_FSI_SCOM) += fsi-scom.o
- obj-$(CONFIG_FSI_SBEFIFO) += fsi-sbefifo.o
-+obj-$(CONFIG_FSI_OCC) += fsi-occ.o
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
++#define OCC_STATE_SAFE			4
++#define OCC_SAFE_TIMEOUT		msecs_to_jiffies(60000) /* 1 min */
++
+ #define OCC_UPDATE_FREQUENCY		msecs_to_jiffies(1000)
+ 
+ #define OCC_TEMP_SENSOR_FAULT		0xFF
+@@ -128,8 +133,10 @@ struct extended_sensor {
+ 
+ static int occ_poll(struct occ *occ)
+ {
++	int rc;
+ 	u16 checksum = occ->poll_cmd_data + 1;
+ 	u8 cmd[8];
++	struct occ_poll_response_header *header;
+ 
+ 	/* big endian */
+ 	cmd[0] = 0;			/* sequence number */
+@@ -142,7 +149,35 @@ static int occ_poll(struct occ *occ)
+ 	cmd[7] = 0;
+ 
+ 	/* mutex should already be locked if necessary */
+-	return occ->send_cmd(occ, cmd);
++	rc = occ->send_cmd(occ, cmd);
++	if (rc) {
++		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
++			occ->error = rc;
++
++		goto done;
++	}
++
++	/* clear error since communication was successful */
++	occ->error_count = 0;
++	occ->error = 0;
++
++	/* check for safe state */
++	header = (struct occ_poll_response_header *)occ->resp.data;
++	if (header->occ_state == OCC_STATE_SAFE) {
++		if (occ->last_safe) {
++			if (time_after(jiffies,
++				       occ->last_safe + OCC_SAFE_TIMEOUT))
++				occ->error = -EHOSTDOWN;
++		} else {
++			occ->last_safe = jiffies;
++		}
++	} else {
++		occ->last_safe = 0;
++	}
++
++done:
++	occ_sysfs_poll_done(occ);
++	return rc;
+ }
+ 
+ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+@@ -174,7 +209,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
+ 	return rc;
+ }
+ 
+-static int occ_update_response(struct occ *occ)
++int occ_update_response(struct occ *occ)
+ {
+ 	int rc = mutex_lock_interruptible(&occ->lock);
+ 
+@@ -1207,5 +1242,9 @@ int occ_setup(struct occ *occ, const char *name)
+ 		return rc;
+ 	}
+ 
+-	return 0;
++	rc = occ_setup_sysfs(occ);
++	if (rc)
++		dev_err(occ->bus_dev, "failed to setup sysfs: %d\n", rc);
++
++	return rc;
+ }
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index 2c1c06e..7bacbb6 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -112,8 +112,25 @@ struct occ {
+ 	struct occ_attribute *attrs;
+ 	struct attribute_group group;
+ 	const struct attribute_group *groups[2];
++
++	int error;                      /* latest transfer error */
++	unsigned int error_count;       /* number of xfr errors observed */
++	unsigned long last_safe;        /* time OCC entered "safe" state */
++
++	/*
++	 * Store the previous state data for comparison in order to notify
++	 * sysfs readers of state changes.
++	 */
++	int prev_error;
++	u8 prev_stat;
++	u8 prev_ext_stat;
++	u8 prev_occs_present;
+ };
+ 
+ int occ_setup(struct occ *occ, const char *name);
++int occ_setup_sysfs(struct occ *occ);
++void occ_shutdown(struct occ *occ);
++void occ_sysfs_poll_done(struct occ *occ);
++int occ_update_response(struct occ *occ);
+ 
+ #endif /* OCC_COMMON_H */
+diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
+index 9a920db..63f3db8 100644
+--- a/drivers/hwmon/occ/p8_i2c.c
++++ b/drivers/hwmon/occ/p8_i2c.c
+@@ -232,6 +232,15 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
+ 	return occ_setup(occ, "p8_occ");
+ }
+ 
++static int p8_i2c_occ_remove(struct i2c_client *client)
++{
++	struct occ *occ = dev_get_drvdata(&client->dev);
++
++	occ_shutdown(occ);
++
++	return 0;
++}
++
+ static const struct of_device_id p8_i2c_occ_of_match[] = {
+ 	{ .compatible = "ibm,p8-occ-hwmon" },
+ 	{}
+@@ -245,6 +254,7 @@ static int p8_i2c_occ_probe(struct i2c_client *client,
+ 		.of_match_table = p8_i2c_occ_of_match,
+ 	},
+ 	.probe = p8_i2c_occ_probe,
++	.remove = p8_i2c_occ_remove,
+ };
+ 
+ module_i2c_driver(p8_i2c_occ_driver);
+diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+index fb32788..e379b05 100644
+--- a/drivers/hwmon/occ/p9_sbe.c
++++ b/drivers/hwmon/occ/p9_sbe.c
+@@ -95,6 +95,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+ 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+ 
+ 	ctx->sbe = NULL;
++	occ_shutdown(occ);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
 new file mode 100644
-index 0000000..bba67a6
+index 0000000..743b26ec
 --- /dev/null
-+++ b/drivers/fsi/fsi-occ.c
-@@ -0,0 +1,609 @@
++++ b/drivers/hwmon/occ/sysfs.c
+@@ -0,0 +1,188 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * On-Chip Controller Driver
++ * OCC hwmon driver sysfs interface
 + *
 + * Copyright (C) IBM Corporation 2018
 + *
@@ -101,643 +214,181 @@ index 0000000..bba67a6
 + * (at your option) any later version.
 + */
 +
-+#include <asm/unaligned.h>
++#include <linux/bitops.h>
 +#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/fs.h>
-+#include <linux/fsi-sbefifo.h>
-+#include <linux/gfp.h>
-+#include <linux/idr.h>
++#include <linux/hwmon-sysfs.h>
 +#include <linux/kernel.h>
-+#include <linux/list.h>
-+#include <linux/miscdevice.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/fsi-occ.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
++#include <linux/sysfs.h>
 +
-+#define OCC_SRAM_BYTES		4096
-+#define OCC_CMD_DATA_BYTES	4090
-+#define OCC_RESP_DATA_BYTES	4089
++#include "common.h"
 +
-+#define OCC_SRAM_CMD_ADDR	0xFFFBE000
-+#define OCC_SRAM_RSP_ADDR	0xFFFBF000
++/* OCC status register */
++#define OCC_STAT_MASTER			BIT(7)
++#define OCC_STAT_ACTIVE			BIT(0)
 +
-+/*
-+ * Assume we don't have much FFDC, if we do we'll overflow and
-+ * fail the command. This needs to be big enough for simple
-+ * commands as well.
-+ */
-+#define OCC_SBE_STATUS_WORDS	32
++/* OCC extended status register */
++#define OCC_EXT_STAT_DVFS_OT		BIT(7)
++#define OCC_EXT_STAT_DVFS_POWER		BIT(6)
++#define OCC_EXT_STAT_MEM_THROTTLE	BIT(5)
++#define OCC_EXT_STAT_QUICK_DROP		BIT(4)
 +
-+#define OCC_TIMEOUT_MS		1000
-+#define OCC_CMD_IN_PRG_WAIT_MS	50
-+
-+struct occ {
-+	struct device *dev;
-+	struct device *sbefifo;
-+	char name[32];
-+	int idx;
-+	struct miscdevice mdev;
-+	struct mutex occ_lock;
-+};
-+
-+#define to_occ(x)	container_of((x), struct occ, mdev)
-+
-+struct occ_response {
-+	u8 seq_no;
-+	u8 cmd_type;
-+	u8 return_status;
-+	__be16 data_length;
-+	u8 data[OCC_RESP_DATA_BYTES + 2];	/* two bytes checksum */
-+} __packed;
-+
-+struct occ_client {
-+	struct occ *occ;
-+	struct mutex lock;
-+	size_t data_size;
-+	size_t read_offset;
-+	u8 *buffer;
-+};
-+
-+#define to_client(x)	container_of((x), struct occ_client, xfr)
-+
-+static DEFINE_IDA(occ_ida);
-+
-+static int occ_open(struct inode *inode, struct file *file)
++static ssize_t occ_sysfs_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
 +{
-+	struct occ_client *client = kzalloc(sizeof(*client), GFP_KERNEL);
-+	struct miscdevice *mdev = file->private_data;
-+	struct occ *occ = to_occ(mdev);
-+
-+	if (!client)
-+		return -ENOMEM;
-+
-+	client->buffer = (u8 *)__get_free_page(GFP_KERNEL);
-+	if (!client->buffer) {
-+		kfree(client);
-+		return -ENOMEM;
-+	}
-+
-+	client->occ = occ;
-+	mutex_init(&client->lock);
-+	file->private_data = client;
-+
-+	/* We allocate a 1-page buffer, make sure it all fits */
-+	BUILD_BUG_ON((OCC_CMD_DATA_BYTES + 3) > PAGE_SIZE);
-+	BUILD_BUG_ON((OCC_RESP_DATA_BYTES + 7) > PAGE_SIZE);
-+
-+	return 0;
-+}
-+
-+static ssize_t occ_read(struct file *file, char __user *buf, size_t len,
-+			loff_t *offset)
-+{
-+	struct occ_client *client = file->private_data;
-+	ssize_t rc = 0;
-+
-+	if (!client)
-+		return -ENODEV;
-+
-+	if (len > OCC_SRAM_BYTES)
-+		return -EINVAL;
-+
-+	mutex_lock(&client->lock);
-+
-+	/* This should not be possible ... */
-+	if (WARN_ON_ONCE(client->read_offset > client->data_size)) {
-+		rc = -EIO;
-+		goto done;
-+	}
-+
-+	/* Grab how much data we have to read */
-+	rc = min(len, client->data_size - client->read_offset);
-+	if (copy_to_user(buf, client->buffer + client->read_offset, rc))
-+		rc = -EFAULT;
-+	else
-+		client->read_offset += rc;
-+
-+ done:
-+	mutex_unlock(&client->lock);
-+
-+	return rc;
-+}
-+
-+static ssize_t occ_write(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *offset)
-+{
-+	struct occ_client *client = file->private_data;
-+	size_t rlen, data_length;
-+	u16 checksum = 0;
-+	ssize_t rc, i;
-+	u8 *cmd;
-+
-+	if (!client)
-+		return -ENODEV;
-+
-+	if (len > (OCC_CMD_DATA_BYTES + 3) || len < 3)
-+		return -EINVAL;
-+
-+	mutex_lock(&client->lock);
-+
-+	/* Construct the command */
-+	cmd = client->buffer;
-+
-+	/* Sequence number (we could increment and compare with response) */
-+	cmd[0] = 1;
-+
-+	/*
-+	 * Copy the user command (assume user data follows the occ command
-+	 * format)
-+	 * byte 0: command type
-+	 * bytes 1-2: data length (msb first)
-+	 * bytes 3-n: data
-+	 */
-+	if (copy_from_user(&cmd[1], buf, len)) {
-+		rc = -EFAULT;
-+		goto done;
-+	}
-+
-+	/* Extract data length */
-+	data_length = (cmd[2] << 8) + cmd[3];
-+	if (data_length > OCC_CMD_DATA_BYTES) {
-+		rc = -EINVAL;
-+		goto done;
-+	}
-+
-+	/* Calculate checksum */
-+	for (i = 0; i < data_length + 4; ++i)
-+		checksum += cmd[i];
-+
-+	cmd[data_length + 4] = checksum >> 8;
-+	cmd[data_length + 5] = checksum & 0xFF;
-+
-+	/* Submit command */
-+	rlen = PAGE_SIZE;
-+	rc = fsi_occ_submit(client->occ->dev, cmd, data_length + 6, cmd,
-+			    &rlen);
-+	if (rc)
-+		goto done;
-+
-+	/* Set read tracking data */
-+	client->data_size = rlen;
-+	client->read_offset = 0;
-+
-+	/* Done */
-+	rc = len;
-+
-+ done:
-+	mutex_unlock(&client->lock);
-+
-+	return rc;
-+}
-+
-+static int occ_release(struct inode *inode, struct file *file)
-+{
-+	struct occ_client *client = file->private_data;
-+
-+	free_page((unsigned long)client->buffer);
-+	kfree(client);
-+
-+	return 0;
-+}
-+
-+static const struct file_operations occ_fops = {
-+	.owner = THIS_MODULE,
-+	.open = occ_open,
-+	.read = occ_read,
-+	.write = occ_write,
-+	.release = occ_release,
-+};
-+
-+static int occ_verify_checksum(struct occ_response *resp, u16 data_length)
-+{
-+	/* Fetch the two bytes after the data for the checksum. */
-+	u16 checksum_resp = get_unaligned_be16(&resp->data[data_length]);
-+	u16 checksum;
-+	u16 i;
-+
-+	checksum = resp->seq_no;
-+	checksum += resp->cmd_type;
-+	checksum += resp->return_status;
-+	checksum += (data_length >> 8) + (data_length & 0xFF);
-+
-+	for (i = 0; i < data_length; ++i)
-+		checksum += resp->data[i];
-+
-+	if (checksum != checksum_resp)
-+		return -EBADMSG;
-+
-+	return 0;
-+}
-+
-+static int occ_getsram(struct occ *occ, u32 address, void *data, ssize_t len)
-+{
-+	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
-+	size_t resp_len, resp_data_len;
-+	__be32 *resp, cmd[5];
 +	int rc;
-+
-+	/*
-+	 * Magic sequence to do SBE getsram command. SBE will fetch data from
-+	 * specified SRAM address.
-+	 */
-+	cmd[0] = cpu_to_be32(0x5);
-+	cmd[1] = cpu_to_be32(SBEFIFO_CMD_GET_OCC_SRAM);
-+	cmd[2] = cpu_to_be32(1);
-+	cmd[3] = cpu_to_be32(address);
-+	cmd[4] = cpu_to_be32(data_len);
-+
-+	resp_len = (data_len >> 2) + OCC_SBE_STATUS_WORDS;
-+	resp = kzalloc(resp_len << 2, GFP_KERNEL);
-+	if (!resp)
-+		return -ENOMEM;
-+
-+	rc = sbefifo_submit(occ->sbefifo, cmd, 5, resp, &resp_len);
-+	if (rc)
-+		goto free;
-+
-+	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_GET_OCC_SRAM,
-+				  resp, resp_len, &resp_len);
-+	if (rc)
-+		goto free;
-+
-+	resp_data_len = be32_to_cpu(resp[resp_len - 1]);
-+	if (resp_data_len != data_len) {
-+		dev_err(occ->dev, "SRAM read expected %d bytes got %zd\n",
-+			data_len, resp_data_len);
-+		rc = -EBADMSG;
-+	} else {
-+		memcpy(data, resp, len);
-+	}
-+
-+free:
-+	/* Convert positive SBEI status */
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM read returned failure status: %08x\n",
-+			rc);
-+		rc = -EBADMSG;
-+	}
-+
-+	kfree(resp);
-+	return rc;
-+}
-+
-+static int occ_putsram(struct occ *occ, u32 address, const void *data,
-+		       ssize_t len)
-+{
-+	size_t cmd_len, buf_len, resp_len, resp_data_len;
-+	u32 data_len = ((len + 7) / 8) * 8;	/* must be multiples of 8 B */
-+	__be32 *buf;
-+	int rc;
-+
-+	/*
-+	 * We use the same buffer for command and response, make
-+	 * sure it's big enough
-+	 */
-+	resp_len = OCC_SBE_STATUS_WORDS;
-+	cmd_len = (data_len >> 2) + 5;
-+	buf_len = max(cmd_len, resp_len);
-+	buf = kzalloc(buf_len << 2, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Magic sequence to do SBE putsram command. SBE will transfer
-+	 * data to specified SRAM address.
-+	 */
-+	buf[0] = cpu_to_be32(cmd_len);
-+	buf[1] = cpu_to_be32(SBEFIFO_CMD_PUT_OCC_SRAM);
-+	buf[2] = cpu_to_be32(1);
-+	buf[3] = cpu_to_be32(address);
-+	buf[4] = cpu_to_be32(data_len);
-+
-+	memcpy(&buf[5], data, len);
-+
-+	rc = sbefifo_submit(occ->sbefifo, buf, cmd_len, buf, &resp_len);
-+	if (rc)
-+		goto free;
-+
-+	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
-+				  buf, resp_len, &resp_len);
-+	if (rc)
-+		goto free;
-+
-+	if (resp_len != 1) {
-+		dev_err(occ->dev, "SRAM write response length invalid: %zd\n",
-+			resp_len);
-+		rc = -EBADMSG;
-+	} else {
-+		resp_data_len = be32_to_cpu(buf[0]);
-+		if (resp_data_len != data_len) {
-+			dev_err(occ->dev,
-+				"SRAM write expected %d bytes got %zd\n",
-+				data_len, resp_data_len);
-+			rc = -EBADMSG;
-+		}
-+	}
-+
-+free:
-+	/* Convert positive SBEI status */
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM write returned failure status: %08x\n",
-+			rc);
-+		rc = -EBADMSG;
-+	}
-+
-+	kfree(buf);
-+	return rc;
-+}
-+
-+static int occ_trigger_attn(struct occ *occ)
-+{
-+	__be32 buf[OCC_SBE_STATUS_WORDS];
-+	size_t resp_len, resp_data_len;
-+	int rc;
-+
-+	BUILD_BUG_ON(OCC_SBE_STATUS_WORDS < 7);
-+	resp_len = OCC_SBE_STATUS_WORDS;
-+
-+	buf[0] = cpu_to_be32(0x5 + 0x2);        /* Chip-op length in words */
-+	buf[1] = cpu_to_be32(SBEFIFO_CMD_PUT_OCC_SRAM);
-+	buf[2] = cpu_to_be32(0x3);              /* Mode: Circular */
-+	buf[3] = cpu_to_be32(0x0);              /* Address: ignore in mode 3 */
-+	buf[4] = cpu_to_be32(0x8);              /* Data length in bytes */
-+	buf[5] = cpu_to_be32(0x20010000);       /* Trigger OCC attention */
-+	buf[6] = 0;
-+
-+	rc = sbefifo_submit(occ->sbefifo, buf, 7, buf, &resp_len);
-+	if (rc)
-+		goto error;
-+
-+	rc = sbefifo_parse_status(occ->sbefifo, SBEFIFO_CMD_PUT_OCC_SRAM,
-+				  buf, resp_len, &resp_len);
-+	if (rc)
-+		goto error;
-+
-+	if (resp_len != 1) {
-+		dev_err(occ->dev, "SRAM attn response length invalid: %zd\n",
-+			resp_len);
-+		rc = -EBADMSG;
-+	} else {
-+		resp_data_len = be32_to_cpu(buf[0]);
-+		if (resp_data_len != 8) {
-+			dev_err(occ->dev,
-+				"SRAM attn expected 8 bytes got %zd\n",
-+				resp_data_len);
-+			rc = -EBADMSG;
-+		}
-+	}
-+
-+ error:
-+	/* Convert positive SBEI status */
-+	if (rc > 0) {
-+		dev_err(occ->dev, "SRAM attn returned failure status: %08x\n",
-+			rc);
-+		rc = -EBADMSG;
-+	}
-+
-+	return rc;
-+}
-+
-+int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
-+		   void *response, size_t *resp_len)
-+{
-+	const unsigned long timeout = msecs_to_jiffies(OCC_TIMEOUT_MS);
-+	const unsigned long wait_time =
-+		msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
++	int val = 0;
 +	struct occ *occ = dev_get_drvdata(dev);
-+	struct occ_response *resp = response;
-+	u16 resp_data_length;
-+	unsigned long start;
-+	int rc;
++	struct occ_poll_response_header *header;
++	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
 +
-+	if (!occ)
-+		return -ENODEV;
++	rc = occ_update_response(occ);
++	if (rc)
++		return rc;
 +
-+	if (*resp_len < 7) {
-+		dev_dbg(dev, "Bad resplen %zd\n", *resp_len);
++	header = (struct occ_poll_response_header *)occ->resp.data;
++
++	switch (sattr->index) {
++	case 0:
++		val = !!(header->status & OCC_STAT_MASTER);
++		break;
++	case 1:
++		val = !!(header->status & OCC_STAT_ACTIVE);
++		break;
++	case 2:
++		val = !!(header->status & OCC_EXT_STAT_DVFS_OT);
++		break;
++	case 3:
++		val = !!(header->status & OCC_EXT_STAT_DVFS_POWER);
++		break;
++	case 4:
++		val = !!(header->status & OCC_EXT_STAT_MEM_THROTTLE);
++		break;
++	case 5:
++		val = !!(header->status & OCC_EXT_STAT_QUICK_DROP);
++		break;
++	case 6:
++		val = header->occ_state;
++		break;
++	case 7:
++		if (header->status & OCC_STAT_MASTER)
++			val = hweight8(header->occs_present);
++		else
++			val = 1;
++		break;
++	case 8:
++		val = occ->error;
++		break;
++	default:
 +		return -EINVAL;
 +	}
 +
-+	mutex_lock(&occ->occ_lock);
-+
-+	rc = occ_putsram(occ, OCC_SRAM_CMD_ADDR, request, req_len);
-+	if (rc)
-+		goto done;
-+
-+	rc = occ_trigger_attn(occ);
-+	if (rc)
-+		goto done;
-+
-+	/* Read occ response header */
-+	start = jiffies;
-+	do {
-+		rc = occ_getsram(occ, OCC_SRAM_RSP_ADDR, resp, 8);
-+		if (rc)
-+			goto done;
-+
-+		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
-+			rc = -ETIMEDOUT;
-+
-+			if (time_after(jiffies, start + timeout))
-+				break;
-+
-+			set_current_state(TASK_UNINTERRUPTIBLE);
-+			schedule_timeout(wait_time);
-+		}
-+	} while (rc);
-+
-+	/* Extract size of response data */
-+	resp_data_length = get_unaligned_be16(&resp->data_length);
-+
-+	/* Message size is data length + 5 bytes header + 2 bytes checksum */
-+	if ((resp_data_length + 7) > *resp_len) {
-+		rc = -EMSGSIZE;
-+		goto done;
-+	}
-+
-+	dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
-+		resp->return_status, resp_data_length);
-+
-+	/* Grab the rest */
-+	if (resp_data_length > 1) {
-+		/* already got 3 bytes resp, also need 2 bytes checksum */
-+		rc = occ_getsram(occ, OCC_SRAM_RSP_ADDR + 8,
-+				 &resp->data[3], resp_data_length - 1);
-+		if (rc)
-+			goto done;
-+	}
-+
-+	*resp_len = resp_data_length + 7;
-+	rc = occ_verify_checksum(resp, resp_data_length);
-+
-+ done:
-+	mutex_unlock(&occ->occ_lock);
-+
-+	return rc;
-+}
-+EXPORT_SYMBOL_GPL(fsi_occ_submit);
-+
-+static int occ_unregister_child(struct device *dev, void *data)
-+{
-+	struct platform_device *hwmon_dev = to_platform_device(dev);
-+
-+	platform_device_unregister(hwmon_dev);
-+
-+	return 0;
++	return snprintf(buf, PAGE_SIZE - 1, "%d\n", val);
 +}
 +
-+static int occ_probe(struct platform_device *pdev)
-+{
-+	int rc;
-+	u32 reg;
-+	struct occ *occ;
-+	struct platform_device *hwmon_dev;
-+	struct device *dev = &pdev->dev;
-+	struct platform_device_info hwmon_dev_info = {
-+		.parent = dev,
-+		.name = "occ-hwmon",
-+	};
++static SENSOR_DEVICE_ATTR(occ_master, 0444, occ_sysfs_show, NULL, 0);
++static SENSOR_DEVICE_ATTR(occ_active, 0444, occ_sysfs_show, NULL, 1);
++static SENSOR_DEVICE_ATTR(occ_dvfs_overtemp, 0444, occ_sysfs_show, NULL, 2);
++static SENSOR_DEVICE_ATTR(occ_dvfs_power, 0444, occ_sysfs_show, NULL, 3);
++static SENSOR_DEVICE_ATTR(occ_mem_throttle, 0444, occ_sysfs_show, NULL, 4);
++static SENSOR_DEVICE_ATTR(occ_quick_pwr_drop, 0444, occ_sysfs_show, NULL, 5);
++static SENSOR_DEVICE_ATTR(occ_state, 0444, occ_sysfs_show, NULL, 6);
++static SENSOR_DEVICE_ATTR(occs_present, 0444, occ_sysfs_show, NULL, 7);
++static SENSOR_DEVICE_ATTR(occ_error, 0444, occ_sysfs_show, NULL, 8);
 +
-+	occ = devm_kzalloc(dev, sizeof(*occ), GFP_KERNEL);
-+	if (!occ)
-+		return -ENOMEM;
-+
-+	occ->dev = dev;
-+	occ->sbefifo = dev->parent;
-+	mutex_init(&occ->occ_lock);
-+
-+	if (dev->of_node) {
-+		rc = of_property_read_u32(dev->of_node, "reg", &reg);
-+		if (!rc) {
-+			/* make sure we don't have a duplicate from dts */
-+			occ->idx = ida_simple_get(&occ_ida, reg, reg + 1,
-+						  GFP_KERNEL);
-+			if (occ->idx < 0)
-+				occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
-+							  GFP_KERNEL);
-+		} else {
-+			occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
-+						  GFP_KERNEL);
-+		}
-+	} else {
-+		occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX, GFP_KERNEL);
-+	}
-+
-+	platform_set_drvdata(pdev, occ);
-+
-+	snprintf(occ->name, sizeof(occ->name), "occ%d", occ->idx);
-+	occ->mdev.fops = &occ_fops;
-+	occ->mdev.minor = MISC_DYNAMIC_MINOR;
-+	occ->mdev.name = occ->name;
-+	occ->mdev.parent = dev;
-+
-+	rc = misc_register(&occ->mdev);
-+	if (rc) {
-+		dev_err(dev, "failed to register miscdevice: %d\n", rc);
-+		ida_simple_remove(&occ_ida, occ->idx);
-+		return rc;
-+	}
-+
-+	hwmon_dev_info.id = occ->idx;
-+	hwmon_dev = platform_device_register_full(&hwmon_dev_info);
-+	if (!hwmon_dev)
-+		dev_warn(dev, "failed to create hwmon device\n");
-+
-+	return 0;
-+}
-+
-+static int occ_remove(struct platform_device *pdev)
-+{
-+	struct occ *occ = platform_get_drvdata(pdev);
-+
-+	misc_deregister(&occ->mdev);
-+
-+	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
-+
-+	ida_simple_remove(&occ_ida, occ->idx);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id occ_match[] = {
-+	{ .compatible = "ibm,p9-occ" },
-+	{ },
++static struct attribute *occ_attributes[] = {
++	&sensor_dev_attr_occ_master.dev_attr.attr,
++	&sensor_dev_attr_occ_active.dev_attr.attr,
++	&sensor_dev_attr_occ_dvfs_overtemp.dev_attr.attr,
++	&sensor_dev_attr_occ_dvfs_power.dev_attr.attr,
++	&sensor_dev_attr_occ_mem_throttle.dev_attr.attr,
++	&sensor_dev_attr_occ_quick_pwr_drop.dev_attr.attr,
++	&sensor_dev_attr_occ_state.dev_attr.attr,
++	&sensor_dev_attr_occs_present.dev_attr.attr,
++	&sensor_dev_attr_occ_error.dev_attr.attr,
++	NULL
 +};
 +
-+static struct platform_driver occ_driver = {
-+	.driver = {
-+		.name = "occ",
-+		.of_match_table	= occ_match,
-+	},
-+	.probe	= occ_probe,
-+	.remove = occ_remove,
++static const struct attribute_group occ_sysfs = {
++	.attrs = occ_attributes,
 +};
 +
-+static int occ_init(void)
++void occ_sysfs_poll_done(struct occ *occ)
 +{
-+	return platform_driver_register(&occ_driver);
++	const char *name;
++	struct occ_poll_response_header *header =
++		(struct occ_poll_response_header *)occ->resp.data;
++
++	/*
++	 * On the first poll response, we haven't yet created the sysfs
++	 * attributes, so don't make any notify calls.
++	 */
++	if (!occ->hwmon)
++		goto done;
++
++	if ((header->status & OCC_STAT_MASTER) !=
++	    (occ->prev_stat & OCC_STAT_MASTER)) {
++		name = sensor_dev_attr_occ_master.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->status & OCC_STAT_ACTIVE) !=
++	    (occ->prev_stat & OCC_STAT_ACTIVE)) {
++		name = sensor_dev_attr_occ_active.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->ext_status & OCC_EXT_STAT_DVFS_OT) !=
++	    (occ->prev_ext_stat & OCC_EXT_STAT_DVFS_OT)) {
++		name = sensor_dev_attr_occ_dvfs_overtemp.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->ext_status & OCC_EXT_STAT_DVFS_POWER) !=
++	    (occ->prev_ext_stat & OCC_EXT_STAT_DVFS_POWER)) {
++		name = sensor_dev_attr_occ_dvfs_power.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->ext_status & OCC_EXT_STAT_MEM_THROTTLE) !=
++	    (occ->prev_ext_stat & OCC_EXT_STAT_MEM_THROTTLE)) {
++		name = sensor_dev_attr_occ_mem_throttle.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->ext_status & OCC_EXT_STAT_QUICK_DROP) !=
++	    (occ->prev_ext_stat & OCC_EXT_STAT_QUICK_DROP)) {
++		name = sensor_dev_attr_occ_quick_pwr_drop.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if ((header->status & OCC_STAT_MASTER) &&
++	    header->occs_present != occ->prev_occs_present) {
++		name = sensor_dev_attr_occs_present.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	if (occ->error && occ->error != occ->prev_error) {
++		name = sensor_dev_attr_occ_error.dev_attr.attr.name;
++		sysfs_notify(&occ->bus_dev->kobj, NULL, name);
++	}
++
++	/* no notifications for OCC state; doesn't indicate error condition */
++
++done:
++	occ->prev_error = occ->error;
++	occ->prev_stat = header->status;
++	occ->prev_ext_stat = header->ext_status;
++	occ->prev_occs_present = header->occs_present;
 +}
 +
-+static void occ_exit(void)
++int occ_setup_sysfs(struct occ *occ)
 +{
-+	platform_driver_unregister(&occ_driver);
-+
-+	ida_destroy(&occ_ida);
++	return sysfs_create_group(&occ->bus_dev->kobj, &occ_sysfs);
 +}
 +
-+module_init(occ_init);
-+module_exit(occ_exit);
-+
-+MODULE_AUTHOR("Eddie James <eajames@linux.vnet.ibm.com>");
-+MODULE_DESCRIPTION("BMC P9 OCC driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/fsi-occ.h b/include/linux/fsi-occ.h
-new file mode 100644
-index 0000000..e28cf9a
---- /dev/null
-+++ b/include/linux/fsi-occ.h
-@@ -0,0 +1,34 @@
-+/*
-+ * On-Chip Controller Driver definitions and prototypes
-+ *
-+ * Copyright (C) IBM Corporation 2018
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ */
-+
-+#ifndef LINUX_FSI_OCC_H
-+#define LINUX_FSI_OCC_H
-+
-+struct device;
-+
-+#define OCC_RESP_CMD_IN_PRG		0xFF
-+#define OCC_RESP_SUCCESS		0
-+#define OCC_RESP_CMD_INVAL		0x11
-+#define OCC_RESP_CMD_LEN_INVAL		0x12
-+#define OCC_RESP_DATA_INVAL		0x13
-+#define OCC_RESP_CHKSUM_ERR		0x14
-+#define OCC_RESP_INT_ERR		0x15
-+#define OCC_RESP_BAD_STATE		0x16
-+#define OCC_RESP_CRIT_EXCEPT		0xE0
-+#define OCC_RESP_CRIT_INIT		0xE1
-+#define OCC_RESP_CRIT_WATCHDOG		0xE2
-+#define OCC_RESP_CRIT_OCB		0xE3
-+#define OCC_RESP_CRIT_HW		0xE4
-+
-+int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
-+		   void *response, size_t *resp_len);
-+
-+#endif /* LINUX_FSI_OCC_H */
++void occ_shutdown(struct occ *occ)
++{
++	sysfs_remove_group(&occ->bus_dev->kobj, &occ_sysfs);
++}
 -- 
 1.8.3.1
-
