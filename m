@@ -1,24 +1,25 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:42638 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726464AbeGLCAF (ORCPT
+Received: from mail-pl0-f67.google.com ([209.85.160.67]:39014 "EHLO
+        mail-pl0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733093AbeGLCHh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Jul 2018 22:00:05 -0400
-Received: by mail-pf0-f194.google.com with SMTP id l9-v6so7934194pff.9
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 18:52:58 -0700 (PDT)
-Subject: Re: [PATCH 4/5] hwmon: adt7475: Change to use adt7475_write macro
+        Wed, 11 Jul 2018 22:07:37 -0400
+Received: by mail-pl0-f67.google.com with SMTP id s24-v6so9962349plq.6
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 19:00:28 -0700 (PDT)
+Subject: Re: [PATCH 1/5] hwmon: adt7475: Split device update function to
+ measure and limits
 To: Tokunori Ikegami <ikegami@allied-telesis.co.jp>,
         Jean Delvare <jdelvare@suse.com>
 Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
         linux-hwmon@vger.kernel.org
 References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
- <20180712010450.10586-5-ikegami@allied-telesis.co.jp>
+ <20180712010450.10586-2-ikegami@allied-telesis.co.jp>
 From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <fe368940-6b82-7da2-4827-8193f75f5072@roeck-us.net>
-Date: Wed, 11 Jul 2018 18:52:56 -0700
+Message-ID: <e529079c-6f45-fdd5-c227-a1dd2563d42d@roeck-us.net>
+Date: Wed, 11 Jul 2018 19:00:26 -0700
 MIME-Version: 1.0
-In-Reply-To: <20180712010450.10586-5-ikegami@allied-telesis.co.jp>
+In-Reply-To: <20180712010450.10586-2-ikegami@allied-telesis.co.jp>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -26,145 +27,273 @@ Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
 On 07/11/2018 06:04 PM, Tokunori Ikegami wrote:
-> As same with adt7475_read it is better to use adt7475_write macro.
-> So change to use it instead of i2c_smbus_write_byte_data.
+> The function has the measure update part and limits and settings part.
+> And those parts can be split so split them for a maintainability.
 > 
-You don't explain why this would be "better", and I disagree that it is.
-On the contrary, it just hides the API function. I don't see why this
-would be better, and even more I don't want to encourage others
-flooding us with patches to introduce similar code in other drivers
-because they think that it is "better".
-
-Guenter
-
 > Signed-off-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
 > Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > Cc: linux-hwmon@vger.kernel.org
 > ---
->   drivers/hwmon/adt7475.c | 30 +++++++++++++++++-------------
->   1 file changed, 17 insertions(+), 13 deletions(-)
+>   drivers/hwmon/adt7475.c | 214 +++++++++++++++++++++++++++---------------------
+>   1 file changed, 122 insertions(+), 92 deletions(-)
 > 
 > diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index bad250729e99..31a12ac405ef 100644
+> index 9ef84998c7f3..234f725213f9 100644
 > --- a/drivers/hwmon/adt7475.c
 > +++ b/drivers/hwmon/adt7475.c
-> @@ -133,6 +133,10 @@
+> @@ -1658,119 +1658,149 @@ static void adt7475_read_pwm(struct i2c_client *client, int index)
+>   	}
+>   }
 >   
->   #define adt7475_read(reg) i2c_smbus_read_byte_data(client, (reg))
->   
-> +/* Macro to write the registers */
->  > +#define adt7475_write(reg, val) i2c_smbus_write_byte_data(client, (reg), (val))
-> +
->   /* Macros to easily index the registers */
->   
->   #define TACH_REG(idx) (REG_TACH_BASE + ((idx) * 2))
-> @@ -322,11 +326,11 @@ static int adt7475_write_word(struct i2c_client *client, int reg, u16 val)
+> -static struct adt7475_data *adt7475_update_device(struct device *dev)
+> +static int adt7475_update_measure(struct device *dev)
 >   {
->   	int ret;
+>   	struct i2c_client *client = to_i2c_client(dev);
+>   	struct adt7475_data *data = i2c_get_clientdata(client);
+>   	u16 ext;
+>   	int i;
 >   
-> -	ret = i2c_smbus_write_byte_data(client, reg + 1, val >> 8);
-> +	ret = adt7475_write(reg + 1, val >> 8);
->   	if (ret < 0)
->   		return ret;
+> -	mutex_lock(&data->lock);
+> +	data->alarms = adt7475_read(REG_STATUS2) << 8;
+> +	data->alarms |= adt7475_read(REG_STATUS1);
+> +
+> +	ext = (adt7475_read(REG_EXTEND2) << 8) |
+> +		adt7475_read(REG_EXTEND1);
+> +	for (i = 0; i < ADT7475_VOLTAGE_COUNT; i++) {
+> +		if (!(data->has_voltage & (1 << i)))
+> +			continue;
+> +		data->voltage[INPUT][i] =
+> +			(adt7475_read(VOLTAGE_REG(i)) << 2) |
+> +			((ext >> (i * 2)) & 3);
+> +	}
 >   
-> -	ret = i2c_smbus_write_byte_data(client, reg, val & 0xFF);
-> +	ret = adt7475_write(reg, val & 0xFF);
->   	if (ret < 0)
->   		return ret;
+> -	/* Measurement values update every 2 seconds */
+> -	if (time_after(jiffies, data->measure_updated + HZ * 2) ||
+> -	    !data->valid) {
+> -		data->alarms = adt7475_read(REG_STATUS2) << 8;
+> -		data->alarms |= adt7475_read(REG_STATUS1);
+> -
+> -		ext = (adt7475_read(REG_EXTEND2) << 8) |
+> -			adt7475_read(REG_EXTEND1);
+> -		for (i = 0; i < ADT7475_VOLTAGE_COUNT; i++) {
+> -			if (!(data->has_voltage & (1 << i)))
+> -				continue;
+> -			data->voltage[INPUT][i] =
+> -				(adt7475_read(VOLTAGE_REG(i)) << 2) |
+> -				((ext >> (i * 2)) & 3);
+> -		}
+> +	for (i = 0; i < ADT7475_TEMP_COUNT; i++)
+> +		data->temp[INPUT][i] =
+> +			(adt7475_read(TEMP_REG(i)) << 2) |
+> +			((ext >> ((i + 5) * 2)) & 3);
+> +
+> +	if (data->has_voltage & (1 << 5)) {
+> +		data->alarms |= adt7475_read(REG_STATUS4) << 24;
+> +		ext = adt7475_read(REG_EXTEND3);
+> +		data->voltage[INPUT][5] = adt7475_read(REG_VTT) << 2 |
+> +			((ext >> 4) & 3);
+> +	}
 >   
-> @@ -381,7 +385,7 @@ static ssize_t set_voltage(struct device *dev, struct device_attribute *attr,
->   			reg = REG_VTT_MAX;
+> -		for (i = 0; i < ADT7475_TEMP_COUNT; i++)
+> -			data->temp[INPUT][i] =
+> -				(adt7475_read(TEMP_REG(i)) << 2) |
+> -				((ext >> ((i + 5) * 2)) & 3);
+> +	for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+> +		if (i == 3 && !data->has_fan4)
+> +			continue;
+> +		data->tach[INPUT][i] =
+> +			adt7475_read_word(client, TACH_REG(i));
+> +	}
+>   
+> -		if (data->has_voltage & (1 << 5)) {
+> -			data->alarms |= adt7475_read(REG_STATUS4) << 24;
+> -			ext = adt7475_read(REG_EXTEND3);
+> -			data->voltage[INPUT][5] = adt7475_read(REG_VTT) << 2 |
+> -				((ext >> 4) & 3);
+> -		}
+> +	/* Updated by hw when in auto mode */
+> +	for (i = 0; i < ADT7475_PWM_COUNT; i++) {
+> +		if (i == 1 && !data->has_pwm2)
+> +			continue;
+> +		data->pwm[INPUT][i] = adt7475_read(PWM_REG(i));
+> +	}
+>   
+> -		for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+> -			if (i == 3 && !data->has_fan4)
+> -				continue;
+> -			data->tach[INPUT][i] =
+> -				adt7475_read_word(client, TACH_REG(i));
+> -		}
+> +	if (data->has_vid)
+> +		data->vid = adt7475_read(REG_VID) & 0x3f;
+>   
+> -		/* Updated by hw when in auto mode */
+> -		for (i = 0; i < ADT7475_PWM_COUNT; i++) {
+> -			if (i == 1 && !data->has_pwm2)
+> -				continue;
+> -			data->pwm[INPUT][i] = adt7475_read(PWM_REG(i));
+> -		}
+> +	return 0;
+> +}
+>   
+> -		if (data->has_vid)
+> -			data->vid = adt7475_read(REG_VID) & 0x3f;
+> +static int adt7475_update_limits(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct adt7475_data *data = i2c_get_clientdata(client);
+> +	int i;
+>   
+> -		data->measure_updated = jiffies;
+> +	data->config4 = adt7475_read(REG_CONFIG4);
+> +	data->config5 = adt7475_read(REG_CONFIG5);
+> +
+> +	for (i = 0; i < ADT7475_VOLTAGE_COUNT; i++) {
+> +		if (!(data->has_voltage & (1 << i)))
+> +			continue;
+> +		/* Adjust values so they match the input precision */
+> +		data->voltage[MIN][i] =
+> +			adt7475_read(VOLTAGE_MIN_REG(i)) << 2;
+> +		data->voltage[MAX][i] =
+> +			adt7475_read(VOLTAGE_MAX_REG(i)) << 2;
 >   	}
 >   
-> -	i2c_smbus_write_byte_data(client, reg,
-> +	adt7475_write(reg,
->   				  data->voltage[sattr->nr][sattr->index] >> 2);
->   	mutex_unlock(&data->lock);
+> -	/* Limits and settings, should never change update every 60 seconds */
+> -	if (time_after(jiffies, data->limits_updated + HZ * 60) ||
+> -	    !data->valid) {
+> -		data->config4 = adt7475_read(REG_CONFIG4);
+> -		data->config5 = adt7475_read(REG_CONFIG5);
+> -
+> -		for (i = 0; i < ADT7475_VOLTAGE_COUNT; i++) {
+> -			if (!(data->has_voltage & (1 << i)))
+> -				continue;
+> -			/* Adjust values so they match the input precision */
+> -			data->voltage[MIN][i] =
+> -				adt7475_read(VOLTAGE_MIN_REG(i)) << 2;
+> -			data->voltage[MAX][i] =
+> -				adt7475_read(VOLTAGE_MAX_REG(i)) << 2;
+> -		}
+> +	if (data->has_voltage & (1 << 5)) {
+> +		data->voltage[MIN][5] = adt7475_read(REG_VTT_MIN) << 2;
+> +		data->voltage[MAX][5] = adt7475_read(REG_VTT_MAX) << 2;
+> +	}
 >   
-> @@ -534,7 +538,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *attr,
->   		break;
+> -		if (data->has_voltage & (1 << 5)) {
+> -			data->voltage[MIN][5] = adt7475_read(REG_VTT_MIN) << 2;
+> -			data->voltage[MAX][5] = adt7475_read(REG_VTT_MAX) << 2;
+> -		}
+> +	for (i = 0; i < ADT7475_TEMP_COUNT; i++) {
+> +		/* Adjust values so they match the input precision */
+> +		data->temp[MIN][i] =
+> +			adt7475_read(TEMP_MIN_REG(i)) << 2;
+> +		data->temp[MAX][i] =
+> +			adt7475_read(TEMP_MAX_REG(i)) << 2;
+> +		data->temp[AUTOMIN][i] =
+> +			adt7475_read(TEMP_TMIN_REG(i)) << 2;
+> +		data->temp[THERM][i] =
+> +			adt7475_read(TEMP_THERM_REG(i)) << 2;
+> +		data->temp[OFFSET][i] =
+> +			adt7475_read(TEMP_OFFSET_REG(i));
+> +	}
+> +	adt7475_read_hystersis(client);
+>   
+> -		for (i = 0; i < ADT7475_TEMP_COUNT; i++) {
+> -			/* Adjust values so they match the input precision */
+> -			data->temp[MIN][i] =
+> -				adt7475_read(TEMP_MIN_REG(i)) << 2;
+> -			data->temp[MAX][i] =
+> -				adt7475_read(TEMP_MAX_REG(i)) << 2;
+> -			data->temp[AUTOMIN][i] =
+> -				adt7475_read(TEMP_TMIN_REG(i)) << 2;
+> -			data->temp[THERM][i] =
+> -				adt7475_read(TEMP_THERM_REG(i)) << 2;
+> -			data->temp[OFFSET][i] =
+> -				adt7475_read(TEMP_OFFSET_REG(i));
+> -		}
+> -		adt7475_read_hystersis(client);
+> +	for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+> +		if (i == 3 && !data->has_fan4)
+> +			continue;
+> +		data->tach[MIN][i] =
+> +			adt7475_read_word(client, TACH_MIN_REG(i));
+> +	}
+>   
+> -		for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+> -			if (i == 3 && !data->has_fan4)
+> -				continue;
+> -			data->tach[MIN][i] =
+> -				adt7475_read_word(client, TACH_MIN_REG(i));
+> -		}
+> +	for (i = 0; i < ADT7475_PWM_COUNT; i++) {
+> +		if (i == 1 && !data->has_pwm2)
+> +			continue;
+> +		data->pwm[MAX][i] = adt7475_read(PWM_MAX_REG(i));
+> +		data->pwm[MIN][i] = adt7475_read(PWM_MIN_REG(i));
+> +		/* Set the channel and control information */
+> +		adt7475_read_pwm(client, i);
+> +	}
+>   
+> -		for (i = 0; i < ADT7475_PWM_COUNT; i++) {
+> -			if (i == 1 && !data->has_pwm2)
+> -				continue;
+> -			data->pwm[MAX][i] = adt7475_read(PWM_MAX_REG(i));
+> -			data->pwm[MIN][i] = adt7475_read(PWM_MIN_REG(i));
+> -			/* Set the channel and control information */
+> -			adt7475_read_pwm(client, i);
+> -		}
+> +	data->range[0] = adt7475_read(TEMP_TRANGE_REG(0));
+> +	data->range[1] = adt7475_read(TEMP_TRANGE_REG(1));
+> +	data->range[2] = adt7475_read(TEMP_TRANGE_REG(2));
+> +
+> +	return 0;
+> +}
+>   
+> -		data->range[0] = adt7475_read(TEMP_TRANGE_REG(0));
+> -		data->range[1] = adt7475_read(TEMP_TRANGE_REG(1));
+> -		data->range[2] = adt7475_read(TEMP_TRANGE_REG(2));
+> +static struct adt7475_data *adt7475_update_device(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct adt7475_data *data = i2c_get_clientdata(client);
+> +	int ret;
+>   
+> +	mutex_lock(&data->lock);
+> +
+> +	/* Measurement values update every 2 seconds */
+> +	if (time_after(jiffies, data->measure_updated + HZ * 2) ||
+> +	    !data->valid) {
+> +		ret = adt7475_update_measure(dev);
+> +		if (ret < 0) {
+> +			data->valid = 0;
+> +			mutex_unlock(&data->lock);
+> +			return data;
+
+Maybe I am missing something, but I don't see the point of this code.
+The errors still won't be returned to the user. The only effect is that
+old values will be returned, and the next time around the read operation
+will hopefully succeed. That isn't error handling, it is error suppression.
+
+> +		}
+> +		data->measure_updated = jiffies;
+> +	}
+> +
+> +	/* Limits and settings, should never change update every 60 seconds */
+> +	if (time_after(jiffies, data->limits_updated + HZ * 60) ||
+> +	    !data->valid) {
+
+Is there any reason to believe that the limits have to be updated more
+than once ? Does the chip have the habit of loosing its configuration ?
+If it does, wouldn't it be better to _restore_ the limits to the ones
+previously cached instead of silently discarding the configuration ?
+
+> +		ret = adt7475_update_limits(dev);
+> +		if (ret < 0) {
+> +			data->valid = 0;
+> +			mutex_unlock(&data->lock);
+> +			return data;
+> +		}
+>   		data->limits_updated = jiffies;
+>   		data->valid = 1;
 >   	}
->   
-> -	i2c_smbus_write_byte_data(client, reg, out);
-> +	adt7475_write(reg, out);
->   
->   	mutex_unlock(&data->lock);
->   	return count;
-> @@ -615,7 +619,7 @@ static ssize_t set_temp_st(struct device *dev, struct device_attribute *attr,
->   	data->enh_acoustics[idx] &= ~(0xf << shift);
->   	data->enh_acoustics[idx] |= (val << shift);
->   
-> -	i2c_smbus_write_byte_data(client, reg, data->enh_acoustics[idx]);
-> +	adt7475_write(reg, data->enh_acoustics[idx]);
->   
->   	mutex_unlock(&data->lock);
->   
-> @@ -683,7 +687,7 @@ static ssize_t set_point2(struct device *dev, struct device_attribute *attr,
->   	data->range[sattr->index] &= ~0xF0;
->   	data->range[sattr->index] |= val << 4;
->   
-> -	i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(sattr->index),
-> +	adt7475_write(TEMP_TRANGE_REG(sattr->index),
->   				  data->range[sattr->index]);
->   
->   	mutex_unlock(&data->lock);
-> @@ -798,7 +802,7 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
->   	}
->   
->   	data->pwm[sattr->nr][sattr->index] = clamp_val(val, 0, 0xFF);
-> -	i2c_smbus_write_byte_data(client, reg,
-> +	adt7475_write(reg,
->   				  data->pwm[sattr->nr][sattr->index]);
->   	mutex_unlock(&data->lock);
->   
-> @@ -835,7 +839,7 @@ static ssize_t set_stall_disable(struct device *dev,
->   	if (val)
->   		data->enh_acoustics[0] |= mask;
->   
-> -	i2c_smbus_write_byte_data(client, REG_ENHANCE_ACOUSTICS1,
-> +	adt7475_write(REG_ENHANCE_ACOUSTICS1,
->   				  data->enh_acoustics[0]);
->   
->   	mutex_unlock(&data->lock);
-> @@ -894,7 +898,7 @@ static int hw_set_pwm(struct i2c_client *client, int index,
->   	data->pwm[CONTROL][index] &= ~0xE0;
->   	data->pwm[CONTROL][index] |= (val & 7) << 5;
->   
-> -	i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
-> +	adt7475_write(PWM_CONFIG_REG(index),
->   				  data->pwm[CONTROL][index]);
->   
->   	return 0;
-> @@ -983,7 +987,7 @@ static ssize_t set_pwmfreq(struct device *dev, struct device_attribute *attr,
->   	data->range[sattr->index] &= ~0xf;
->   	data->range[sattr->index] |= out;
->   
-> -	i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(sattr->index),
-> +	adt7475_write(TEMP_TRANGE_REG(sattr->index),
->   				  data->range[sattr->index]);
->   
->   	mutex_unlock(&data->lock);
-> @@ -1017,7 +1021,7 @@ static ssize_t pwm_use_point2_pwm_at_crit_store(struct device *dev,
->   		data->config4 |= CONFIG4_MAXDUTY;
->   	else
->   		data->config4 &= ~CONFIG4_MAXDUTY;
-> -	i2c_smbus_write_byte_data(client, REG_CONFIG4, data->config4);
-> +	adt7475_write(REG_CONFIG4, data->config4);
->   	mutex_unlock(&data->lock);
->   
->   	return count;
-> @@ -1642,10 +1646,10 @@ static void adt7475_read_pwm(struct i2c_client *client, int index)
->   		data->pwm[CONTROL][index] &= ~0xE0;
->   		data->pwm[CONTROL][index] |= (7 << 5);
->   
-> -		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
-> +		adt7475_write(PWM_CONFIG_REG(index),
->   					  data->pwm[INPUT][index]);
->   
-> -		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
-> +		adt7475_write(PWM_CONFIG_REG(index),
->   					  data->pwm[CONTROL][index]);
->   
->   		data->pwmctl[index] = 1;
 > 
 
