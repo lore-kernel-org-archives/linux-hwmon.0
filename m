@@ -1,17 +1,12 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f193.google.com ([209.85.192.193]:42068 "EHLO
-        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727072AbeGLOPj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Jul 2018 10:15:39 -0400
-Received: by mail-pf0-f193.google.com with SMTP id l9-v6so9028384pff.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Jul 2018 07:05:56 -0700 (PDT)
-Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
-To: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Return-Path: <ikegami@allied-telesis.co.jp>
+Return-path: <ikegami@allied-telesis.co.jp>
+From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+CC: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
+Date: Thu, 12 Jul 2018 14:33:02 +0000
+Message-ID: <TY2PR01MB3178B31FF7FA9B3D39771F67DC590@TY2PR01MB3178.jpnprd01.prod.outlook.com>
 References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
  <20180712010450.10586-4-ikegami@allied-telesis.co.jp>
  <8109bd46-9065-a5e7-9e52-975563cb0df8@roeck-us.net>
@@ -20,226 +15,166 @@ References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
  <OSAPR01MB31707337DE771DFB3852F44EDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
  <e0d479ac-ddd0-710d-65e4-3b8ed4db085a@roeck-us.net>
  <TY2PR01MB3178A7E39660F9AD8BFBC872DC590@TY2PR01MB3178.jpnprd01.prod.outlook.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8f91af1d-c7c2-7099-853a-9cfc3e57a662@roeck-us.net>
-Date: Thu, 12 Jul 2018 07:05:52 -0700
+ <8f91af1d-c7c2-7099-853a-9cfc3e57a662@roeck-us.net>
+In-Reply-To: <8f91af1d-c7c2-7099-853a-9cfc3e57a662@roeck-us.net>
+Content-Language: ja-JP
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <TY2PR01MB3178A7E39660F9AD8BFBC872DC590@TY2PR01MB3178.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 07/12/2018 06:47 AM, IKEGAMI Tokunori wrote:
-> Hi Guenter-san,
-> 
-> Sorry but let me consult one more thing.
-> 
-> Since I have just remembered that there are -EAGAIN and -ETIMEDOUT possible to be returned by I2C driver.
-> Those were mentioned to be able to be checked by the hwmon adt7475 driver in our company not long ago.
-> Also I have just confirmed the Documentation/i2c/fault-codes so it seems still correct.
-> 
-> How do you think about this?
-> Still those errors also should be just returned to user space?
-> 
-
-A driver should return the error codes it receives from lower level drivers, ie
-in this case the error code from the i2c controller driver. It should not modify
-error return codes. In fact, if a driver does modify error return codes,
-static analyzers will complain.
-
-Hope this helps,
-Guenter
-
-> Sorry for many times asking you but if you have a time please let me know your opinion.
-> 
-> Regards,
-> Ikegami
-> 
->> -----Original Message-----
->> From: IKEGAMI Tokunori
->> Sent: Thursday, July 12, 2018 3:23 PM
->> To: 'Guenter Roeck'; Jean Delvare
->> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
->> Subject: RE: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
->>
->> Hi Guenter-san,
->>
->> Thank you so much for the explanation.
->> I could understand enough it.
->> I will abandon these patches for now.
->>
->>> What is an "I2C error unit" ?
->>
->>    The error unit is caused by the I2C isolator failure device then bad
->> I2C signals causes the error.
->>    Our products have been replaced the device to other new device for the
->> manufacturing.
->>    But still there are many units using the old device and it is possible
->> to be caused the failure behavior in future.
->>    We tried to change the I2C clock speed on the error unit but the issue
->> was not able to be resolved.
->>    By the way we have fixed our original user space driver for other
->> feature to retry for the error.
->>
->>> Yes, the driver should check for errors, but it should report all errors
->>> to user space and neither retry nor silently hide/ignore errors (unless
->>> a problem is known to be a chip problem).
->>
->>    I will do consider this in future.
->>    But at first I will investigate the cause of another voltage warning
->> issue at first.
->>    It is not caused by the I2C error but sometimes detected the voltage
->> warning actually.
->>
->> Regards,
->> Ikegami
->>
->>> -----Original Message-----
->>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter
->>> Roeck
->>> Sent: Thursday, July 12, 2018 1:23 PM
->>> To: IKEGAMI Tokunori; Jean Delvare
->>> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
->>> Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read
->> macro
->>>
->>> On 07/11/2018 09:01 PM, IKEGAMI Tokunori wrote:
->>>> Hi Guenter-san,
->>>>
->>>> Thank you so much for your comments.
->>>>
->>>> Oh I see and actually we have some I2C error units in our products.
->>>> The patch is for the error case mainly.
->>>
->>> What is an "I2C error unit" ?
->>>
->>>> But I think that sometimes the I2C error is still caused on the normal
->>> units also actually.
->>>> I am not sure about that the normal units error behavior is caused
->> by
->>> the board (I2C controller) or the chip ADT7476A but probably the former
->>> but not sure.
->>>> So should these patches not be applied to the adt7475 driver as you
->>> mentioned?
->>>>
->>>
->>> Drivers are not responsible for handling bad board behavior, so retries
->>> due to controller or board issues should not be handled by the chip
->>> driver.
->>> Otherwise we would end up having to sprinkle retries into all i2c
->> drivers
->>> in the kernel.
->>>
->>> If the problem is caused by the controller, it should be handled in
->> the
->>> controller driver. If the problem is caused by bad i2c signals, it
->> should
->>> be handled by hardware (or maybe by selecting a different clock speed).
->>>
->>>> At first I thought that the I2C SMBus APIs return error codes but
->> adt7475
->>> driver does not check so it should be checked the error codes.
->>>> Is this not correct?
->>>>
->>>
->>> Yes, the driver should check for errors, but it should report all errors
->>> to user space and neither retry nor silently hide/ignore errors (unless
->>> a problem is known to be a chip problem).
->>>
->>> Guenter
->>>
->>>> To make sure let me confirm above.
->>>>
->>>> Regards,
->>>> Ikegami
->>>>
->>>>> -----Original Message-----
->>>>> From: linux-hwmon-owner@vger.kernel.org
->>>>> [mailto:linux-hwmon-owner@vger.kernel.org] On Behalf Of Guenter
->>> Roeck
->>>>> Sent: Thursday, July 12, 2018 12:42 PM
->>>>> To: IKEGAMI Tokunori; Jean Delvare
->>>>> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
->>>>> Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read
->>> macro
->>>>>
->>>>> On 07/11/2018 07:52 PM, IKEGAMI Tokunori wrote:
->>>>>> Hi Guenter-san,
->>>>>>
->>>>>> Thank you so much for your comments.
->>>>>> Okay now I am thinking to change the adt7475_read macro to a function
->>>>> to repeat for the error case.
->>>>>> If you have any comment about this please let me know.
->>>>>
->>>>> Yes - we should only do this if it is known to be a chip problem.
->>>>> Patching the chip driver for a board (or i2c controller) problem
->>>>> is not appropriate.
->>>>>
->>>>> Guenter
->>>>>
->>>>>> Anyway I will do send v2 version patches later.
->>>>>>
->>>>>> Regards,
->>>>>> Ikegami
->>>>>>
->>>>>>> -----Original Message-----
->>>>>>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of
->> Guenter
->>>>>>> Roeck
->>>>>>> Sent: Thursday, July 12, 2018 10:50 AM
->>>>>>> To: IKEGAMI Tokunori; Jean Delvare
->>>>>>> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
->>>>>>> Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use
->> adt7475_read
->>>>> macro
->>>>>>>
->>>>>>> On 07/11/2018 06:04 PM, Tokunori Ikegami wrote:
->>>>>>>> It shoudl be same as with other functions to use adt7475_read.
->>>>>>>> So change to use it instead of i2c_smbus_read_byte_data.
->>>>>>>>
->>>>>>>
->>>>>>> I don't see a point in this change. Replacing a function name
->> doesn't
->>>>>>> make
->>>>>>> the code easier to read. If anything, you could consider dropping
->>>>>>> adt7475_read
->>>>>>> and calling i2c_smbus_read_byte_data() directly.
->>>>>>>
->>>>>>> Guenter
->>>>>>>
->>>>>>>> Signed-off-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
->>>>>>>> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>>>>>>> Cc: linux-hwmon@vger.kernel.org
->>>>>>>> ---
->>>>>>>>      drivers/hwmon/adt7475.c | 2 +-
->>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
->>>>>>>> index a40eb62ee6b1..bad250729e99 100644
->>>>>>>> --- a/drivers/hwmon/adt7475.c
->>>>>>>> +++ b/drivers/hwmon/adt7475.c
->>>>>>>> @@ -1012,7 +1012,7 @@ static ssize_t
->>>>>>> pwm_use_point2_pwm_at_crit_store(struct device *dev,
->>>>>>>>      		return -EINVAL;
->>>>>>>>
->>>>>>>>      	mutex_lock(&data->lock);
->>>>>>>> -	data->config4 = i2c_smbus_read_byte_data(client,
->>>>>>> REG_CONFIG4);
->>>>>>>> +	data->config4 = adt7475_read(REG_CONFIG4);
->>>>>>>>      	if (val)
->>>>>>>>      		data->config4 |= CONFIG4_MAXDUTY;
->>>>>>>>      	else
->>>>>>>>
->>>>>>
->>>>>
->>>>> --
->>>>> To unsubscribe from this list: send the line "unsubscribe
->> linux-hwmon"
->>>>> in
->>>>> the body of a message to majordomo@vger.kernel.org
->>>>> More majordomo info at
->> http://vger.kernel.org/majordomo-info.html
-> 
-
+SGkgR3VlbnRlci1zYW4sDQoNClRoYW5rIHlvdSBzbyBtdWNoIGZvciB5b3VyIGhlbHAuDQoNCj4g
+QSBkcml2ZXIgc2hvdWxkIHJldHVybiB0aGUgZXJyb3IgY29kZXMgaXQgcmVjZWl2ZXMgZnJvbSBs
+b3dlciBsZXZlbA0KPiBkcml2ZXJzLCBpZQ0KPiBpbiB0aGlzIGNhc2UgdGhlIGVycm9yIGNvZGUg
+ZnJvbSB0aGUgaTJjIGNvbnRyb2xsZXIgZHJpdmVyLiBJdCBzaG91bGQNCj4gbm90IG1vZGlmeQ0K
+PiBlcnJvciByZXR1cm4gY29kZXMuIEluIGZhY3QsIGlmIGEgZHJpdmVyIGRvZXMgbW9kaWZ5IGVy
+cm9yIHJldHVybiBjb2RlcywNCj4gc3RhdGljIGFuYWx5emVycyB3aWxsIGNvbXBsYWluLg0KDQog
+IE5vdGVkIGFib3V0IHRoaXMgSSB3aWxsIHRyeSB0byBjb25zaWRlciB0byBkbyB0aGlzLg0KDQpS
+ZWdhcmRzLA0KSWtlZ2FtaQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
+IEd1ZW50ZXIgUm9lY2sgW21haWx0bzpncm9lY2s3QGdtYWlsLmNvbV0gT24gQmVoYWxmIE9mIEd1
+ZW50ZXINCj4gUm9lY2sNCj4gU2VudDogVGh1cnNkYXksIEp1bHkgMTIsIDIwMTggMTE6MDYgUE0N
+Cj4gVG86IElLRUdBTUkgVG9rdW5vcmk7IEplYW4gRGVsdmFyZQ0KPiBDYzogUEFDS0hBTSBDaHJp
+czsgbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy81
+XSBod21vbjogYWR0NzQ3NTogQ2hhbmdlIHRvIHVzZSBhZHQ3NDc1X3JlYWQgbWFjcm8NCj4gDQo+
+IE9uIDA3LzEyLzIwMTggMDY6NDcgQU0sIElLRUdBTUkgVG9rdW5vcmkgd3JvdGU6DQo+ID4gSGkg
+R3VlbnRlci1zYW4sDQo+ID4NCj4gPiBTb3JyeSBidXQgbGV0IG1lIGNvbnN1bHQgb25lIG1vcmUg
+dGhpbmcuDQo+ID4NCj4gPiBTaW5jZSBJIGhhdmUganVzdCByZW1lbWJlcmVkIHRoYXQgdGhlcmUg
+YXJlIC1FQUdBSU4gYW5kIC1FVElNRURPVVQNCj4gcG9zc2libGUgdG8gYmUgcmV0dXJuZWQgYnkg
+STJDIGRyaXZlci4NCj4gPiBUaG9zZSB3ZXJlIG1lbnRpb25lZCB0byBiZSBhYmxlIHRvIGJlIGNo
+ZWNrZWQgYnkgdGhlIGh3bW9uIGFkdDc0NzUgZHJpdmVyDQo+IGluIG91ciBjb21wYW55IG5vdCBs
+b25nIGFnby4NCj4gPiBBbHNvIEkgaGF2ZSBqdXN0IGNvbmZpcm1lZCB0aGUgRG9jdW1lbnRhdGlv
+bi9pMmMvZmF1bHQtY29kZXMgc28gaXQNCj4gc2VlbXMgc3RpbGwgY29ycmVjdC4NCj4gPg0KPiA+
+IEhvdyBkbyB5b3UgdGhpbmsgYWJvdXQgdGhpcz8NCj4gPiBTdGlsbCB0aG9zZSBlcnJvcnMgYWxz
+byBzaG91bGQgYmUganVzdCByZXR1cm5lZCB0byB1c2VyIHNwYWNlPw0KPiA+DQo+IA0KPiBBIGRy
+aXZlciBzaG91bGQgcmV0dXJuIHRoZSBlcnJvciBjb2RlcyBpdCByZWNlaXZlcyBmcm9tIGxvd2Vy
+IGxldmVsDQo+IGRyaXZlcnMsIGllDQo+IGluIHRoaXMgY2FzZSB0aGUgZXJyb3IgY29kZSBmcm9t
+IHRoZSBpMmMgY29udHJvbGxlciBkcml2ZXIuIEl0IHNob3VsZA0KPiBub3QgbW9kaWZ5DQo+IGVy
+cm9yIHJldHVybiBjb2Rlcy4gSW4gZmFjdCwgaWYgYSBkcml2ZXIgZG9lcyBtb2RpZnkgZXJyb3Ig
+cmV0dXJuIGNvZGVzLA0KPiBzdGF0aWMgYW5hbHl6ZXJzIHdpbGwgY29tcGxhaW4uDQo+IA0KPiBI
+b3BlIHRoaXMgaGVscHMsDQo+IEd1ZW50ZXINCj4gDQo+ID4gU29ycnkgZm9yIG1hbnkgdGltZXMg
+YXNraW5nIHlvdSBidXQgaWYgeW91IGhhdmUgYSB0aW1lIHBsZWFzZSBsZXQgbWUNCj4ga25vdyB5
+b3VyIG9waW5pb24uDQo+ID4NCj4gPiBSZWdhcmRzLA0KPiA+IElrZWdhbWkNCj4gPg0KPiA+PiAt
+LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+PiBGcm9tOiBJS0VHQU1JIFRva3Vub3JpDQo+
+ID4+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDEyLCAyMDE4IDM6MjMgUE0NCj4gPj4gVG86ICdHdWVu
+dGVyIFJvZWNrJzsgSmVhbiBEZWx2YXJlDQo+ID4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51eC1o
+d21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4gU3ViamVjdDogUkU6IFtQQVRDSCAzLzVdIGh3bW9u
+OiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNlIGFkdDc0NzVfcmVhZA0KPiBtYWNybw0KPiA+Pg0KPiA+
+PiBIaSBHdWVudGVyLXNhbiwNCj4gPj4NCj4gPj4gVGhhbmsgeW91IHNvIG11Y2ggZm9yIHRoZSBl
+eHBsYW5hdGlvbi4NCj4gPj4gSSBjb3VsZCB1bmRlcnN0YW5kIGVub3VnaCBpdC4NCj4gPj4gSSB3
+aWxsIGFiYW5kb24gdGhlc2UgcGF0Y2hlcyBmb3Igbm93Lg0KPiA+Pg0KPiA+Pj4gV2hhdCBpcyBh
+biAiSTJDIGVycm9yIHVuaXQiID8NCj4gPj4NCj4gPj4gICAgVGhlIGVycm9yIHVuaXQgaXMgY2F1
+c2VkIGJ5IHRoZSBJMkMgaXNvbGF0b3IgZmFpbHVyZSBkZXZpY2UgdGhlbg0KPiBiYWQNCj4gPj4g
+STJDIHNpZ25hbHMgY2F1c2VzIHRoZSBlcnJvci4NCj4gPj4gICAgT3VyIHByb2R1Y3RzIGhhdmUg
+YmVlbiByZXBsYWNlZCB0aGUgZGV2aWNlIHRvIG90aGVyIG5ldyBkZXZpY2UgZm9yDQo+IHRoZQ0K
+PiA+PiBtYW51ZmFjdHVyaW5nLg0KPiA+PiAgICBCdXQgc3RpbGwgdGhlcmUgYXJlIG1hbnkgdW5p
+dHMgdXNpbmcgdGhlIG9sZCBkZXZpY2UgYW5kIGl0IGlzDQo+IHBvc3NpYmxlDQo+ID4+IHRvIGJl
+IGNhdXNlZCB0aGUgZmFpbHVyZSBiZWhhdmlvciBpbiBmdXR1cmUuDQo+ID4+ICAgIFdlIHRyaWVk
+IHRvIGNoYW5nZSB0aGUgSTJDIGNsb2NrIHNwZWVkIG9uIHRoZSBlcnJvciB1bml0IGJ1dCB0aGUN
+Cj4gaXNzdWUNCj4gPj4gd2FzIG5vdCBhYmxlIHRvIGJlIHJlc29sdmVkLg0KPiA+PiAgICBCeSB0
+aGUgd2F5IHdlIGhhdmUgZml4ZWQgb3VyIG9yaWdpbmFsIHVzZXIgc3BhY2UgZHJpdmVyIGZvciBv
+dGhlcg0KPiA+PiBmZWF0dXJlIHRvIHJldHJ5IGZvciB0aGUgZXJyb3IuDQo+ID4+DQo+ID4+PiBZ
+ZXMsIHRoZSBkcml2ZXIgc2hvdWxkIGNoZWNrIGZvciBlcnJvcnMsIGJ1dCBpdCBzaG91bGQgcmVw
+b3J0IGFsbA0KPiBlcnJvcnMNCj4gPj4+IHRvIHVzZXIgc3BhY2UgYW5kIG5laXRoZXIgcmV0cnkg
+bm9yIHNpbGVudGx5IGhpZGUvaWdub3JlIGVycm9ycw0KPiAodW5sZXNzDQo+ID4+PiBhIHByb2Js
+ZW0gaXMga25vd24gdG8gYmUgYSBjaGlwIHByb2JsZW0pLg0KPiA+Pg0KPiA+PiAgICBJIHdpbGwg
+ZG8gY29uc2lkZXIgdGhpcyBpbiBmdXR1cmUuDQo+ID4+ICAgIEJ1dCBhdCBmaXJzdCBJIHdpbGwg
+aW52ZXN0aWdhdGUgdGhlIGNhdXNlIG9mIGFub3RoZXIgdm9sdGFnZQ0KPiB3YXJuaW5nDQo+ID4+
+IGlzc3VlIGF0IGZpcnN0Lg0KPiA+PiAgICBJdCBpcyBub3QgY2F1c2VkIGJ5IHRoZSBJMkMgZXJy
+b3IgYnV0IHNvbWV0aW1lcyBkZXRlY3RlZCB0aGUgdm9sdGFnZQ0KPiA+PiB3YXJuaW5nIGFjdHVh
+bGx5Lg0KPiA+Pg0KPiA+PiBSZWdhcmRzLA0KPiA+PiBJa2VnYW1pDQo+ID4+DQo+ID4+PiAtLS0t
+LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+Pj4gRnJvbTogR3VlbnRlciBSb2VjayBbbWFpbHRv
+Omdyb2VjazdAZ21haWwuY29tXSBPbiBCZWhhbGYgT2YgR3VlbnRlcg0KPiA+Pj4gUm9lY2sNCj4g
+Pj4+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDEyLCAyMDE4IDE6MjMgUE0NCj4gPj4+IFRvOiBJS0VH
+QU1JIFRva3Vub3JpOyBKZWFuIERlbHZhcmUNCj4gPj4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51
+eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy81XSBo
+d21vbjogYWR0NzQ3NTogQ2hhbmdlIHRvIHVzZSBhZHQ3NDc1X3JlYWQNCj4gPj4gbWFjcm8NCj4g
+Pj4+DQo+ID4+PiBPbiAwNy8xMS8yMDE4IDA5OjAxIFBNLCBJS0VHQU1JIFRva3Vub3JpIHdyb3Rl
+Og0KPiA+Pj4+IEhpIEd1ZW50ZXItc2FuLA0KPiA+Pj4+DQo+ID4+Pj4gVGhhbmsgeW91IHNvIG11
+Y2ggZm9yIHlvdXIgY29tbWVudHMuDQo+ID4+Pj4NCj4gPj4+PiBPaCBJIHNlZSBhbmQgYWN0dWFs
+bHkgd2UgaGF2ZSBzb21lIEkyQyBlcnJvciB1bml0cyBpbiBvdXIgcHJvZHVjdHMuDQo+ID4+Pj4g
+VGhlIHBhdGNoIGlzIGZvciB0aGUgZXJyb3IgY2FzZSBtYWlubHkuDQo+ID4+Pg0KPiA+Pj4gV2hh
+dCBpcyBhbiAiSTJDIGVycm9yIHVuaXQiID8NCj4gPj4+DQo+ID4+Pj4gQnV0IEkgdGhpbmsgdGhh
+dCBzb21ldGltZXMgdGhlIEkyQyBlcnJvciBpcyBzdGlsbCBjYXVzZWQgb24gdGhlIG5vcm1hbA0K
+PiA+Pj4gdW5pdHMgYWxzbyBhY3R1YWxseS4NCj4gPj4+PiBJIGFtIG5vdCBzdXJlIGFib3V0IHRo
+YXQgdGhlIG5vcm1hbCB1bml0cyBlcnJvciBiZWhhdmlvciBpcyBjYXVzZWQNCj4gPj4gYnkNCj4g
+Pj4+IHRoZSBib2FyZCAoSTJDIGNvbnRyb2xsZXIpIG9yIHRoZSBjaGlwIEFEVDc0NzZBIGJ1dCBw
+cm9iYWJseSB0aGUNCj4gZm9ybWVyDQo+ID4+PiBidXQgbm90IHN1cmUuDQo+ID4+Pj4gU28gc2hv
+dWxkIHRoZXNlIHBhdGNoZXMgbm90IGJlIGFwcGxpZWQgdG8gdGhlIGFkdDc0NzUgZHJpdmVyIGFz
+IHlvdQ0KPiA+Pj4gbWVudGlvbmVkPw0KPiA+Pj4+DQo+ID4+Pg0KPiA+Pj4gRHJpdmVycyBhcmUg
+bm90IHJlc3BvbnNpYmxlIGZvciBoYW5kbGluZyBiYWQgYm9hcmQgYmVoYXZpb3IsIHNvDQo+IHJl
+dHJpZXMNCj4gPj4+IGR1ZSB0byBjb250cm9sbGVyIG9yIGJvYXJkIGlzc3VlcyBzaG91bGQgbm90
+IGJlIGhhbmRsZWQgYnkgdGhlIGNoaXANCj4gPj4+IGRyaXZlci4NCj4gPj4+IE90aGVyd2lzZSB3
+ZSB3b3VsZCBlbmQgdXAgaGF2aW5nIHRvIHNwcmlua2xlIHJldHJpZXMgaW50byBhbGwgaTJjDQo+
+ID4+IGRyaXZlcnMNCj4gPj4+IGluIHRoZSBrZXJuZWwuDQo+ID4+Pg0KPiA+Pj4gSWYgdGhlIHBy
+b2JsZW0gaXMgY2F1c2VkIGJ5IHRoZSBjb250cm9sbGVyLCBpdCBzaG91bGQgYmUgaGFuZGxlZCBp
+bg0KPiA+PiB0aGUNCj4gPj4+IGNvbnRyb2xsZXIgZHJpdmVyLiBJZiB0aGUgcHJvYmxlbSBpcyBj
+YXVzZWQgYnkgYmFkIGkyYyBzaWduYWxzLCBpdA0KPiA+PiBzaG91bGQNCj4gPj4+IGJlIGhhbmRs
+ZWQgYnkgaGFyZHdhcmUgKG9yIG1heWJlIGJ5IHNlbGVjdGluZyBhIGRpZmZlcmVudCBjbG9jaw0K
+PiBzcGVlZCkuDQo+ID4+Pg0KPiA+Pj4+IEF0IGZpcnN0IEkgdGhvdWdodCB0aGF0IHRoZSBJMkMg
+U01CdXMgQVBJcyByZXR1cm4gZXJyb3IgY29kZXMgYnV0DQo+ID4+IGFkdDc0NzUNCj4gPj4+IGRy
+aXZlciBkb2VzIG5vdCBjaGVjayBzbyBpdCBzaG91bGQgYmUgY2hlY2tlZCB0aGUgZXJyb3IgY29k
+ZXMuDQo+ID4+Pj4gSXMgdGhpcyBub3QgY29ycmVjdD8NCj4gPj4+Pg0KPiA+Pj4NCj4gPj4+IFll
+cywgdGhlIGRyaXZlciBzaG91bGQgY2hlY2sgZm9yIGVycm9ycywgYnV0IGl0IHNob3VsZCByZXBv
+cnQgYWxsDQo+IGVycm9ycw0KPiA+Pj4gdG8gdXNlciBzcGFjZSBhbmQgbmVpdGhlciByZXRyeSBu
+b3Igc2lsZW50bHkgaGlkZS9pZ25vcmUgZXJyb3JzDQo+ICh1bmxlc3MNCj4gPj4+IGEgcHJvYmxl
+bSBpcyBrbm93biB0byBiZSBhIGNoaXAgcHJvYmxlbSkuDQo+ID4+Pg0KPiA+Pj4gR3VlbnRlcg0K
+PiA+Pj4NCj4gPj4+PiBUbyBtYWtlIHN1cmUgbGV0IG1lIGNvbmZpcm0gYWJvdmUuDQo+ID4+Pj4N
+Cj4gPj4+PiBSZWdhcmRzLA0KPiA+Pj4+IElrZWdhbWkNCj4gPj4+Pg0KPiA+Pj4+PiAtLS0tLU9y
+aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+Pj4+PiBGcm9tOiBsaW51eC1od21vbi1vd25lckB2Z2Vy
+Lmtlcm5lbC5vcmcNCj4gPj4+Pj4gW21haWx0bzpsaW51eC1od21vbi1vd25lckB2Z2VyLmtlcm5l
+bC5vcmddIE9uIEJlaGFsZiBPZiBHdWVudGVyDQo+ID4+PiBSb2Vjaw0KPiA+Pj4+PiBTZW50OiBU
+aHVyc2RheSwgSnVseSAxMiwgMjAxOCAxMjo0MiBQTQ0KPiA+Pj4+PiBUbzogSUtFR0FNSSBUb2t1
+bm9yaTsgSmVhbiBEZWx2YXJlDQo+ID4+Pj4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51eC1od21v
+bkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+Pj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzVdIGh3bW9u
+OiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNlIGFkdDc0NzVfcmVhZA0KPiA+Pj4gbWFjcm8NCj4gPj4+
+Pj4NCj4gPj4+Pj4gT24gMDcvMTEvMjAxOCAwNzo1MiBQTSwgSUtFR0FNSSBUb2t1bm9yaSB3cm90
+ZToNCj4gPj4+Pj4+IEhpIEd1ZW50ZXItc2FuLA0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IFRoYW5rIHlv
+dSBzbyBtdWNoIGZvciB5b3VyIGNvbW1lbnRzLg0KPiA+Pj4+Pj4gT2theSBub3cgSSBhbSB0aGlu
+a2luZyB0byBjaGFuZ2UgdGhlIGFkdDc0NzVfcmVhZCBtYWNybyB0byBhDQo+IGZ1bmN0aW9uDQo+
+ID4+Pj4+IHRvIHJlcGVhdCBmb3IgdGhlIGVycm9yIGNhc2UuDQo+ID4+Pj4+PiBJZiB5b3UgaGF2
+ZSBhbnkgY29tbWVudCBhYm91dCB0aGlzIHBsZWFzZSBsZXQgbWUga25vdy4NCj4gPj4+Pj4NCj4g
+Pj4+Pj4gWWVzIC0gd2Ugc2hvdWxkIG9ubHkgZG8gdGhpcyBpZiBpdCBpcyBrbm93biB0byBiZSBh
+IGNoaXAgcHJvYmxlbS4NCj4gPj4+Pj4gUGF0Y2hpbmcgdGhlIGNoaXAgZHJpdmVyIGZvciBhIGJv
+YXJkIChvciBpMmMgY29udHJvbGxlcikgcHJvYmxlbQ0KPiA+Pj4+PiBpcyBub3QgYXBwcm9wcmlh
+dGUuDQo+ID4+Pj4+DQo+ID4+Pj4+IEd1ZW50ZXINCj4gPj4+Pj4NCj4gPj4+Pj4+IEFueXdheSBJ
+IHdpbGwgZG8gc2VuZCB2MiB2ZXJzaW9uIHBhdGNoZXMgbGF0ZXIuDQo+ID4+Pj4+Pg0KPiA+Pj4+
+Pj4gUmVnYXJkcywNCj4gPj4+Pj4+IElrZWdhbWkNCj4gPj4+Pj4+DQo+ID4+Pj4+Pj4gLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4+Pj4+PiBGcm9tOiBHdWVudGVyIFJvZWNrIFttYWls
+dG86Z3JvZWNrN0BnbWFpbC5jb21dIE9uIEJlaGFsZiBPZg0KPiA+PiBHdWVudGVyDQo+ID4+Pj4+
+Pj4gUm9lY2sNCj4gPj4+Pj4+PiBTZW50OiBUaHVyc2RheSwgSnVseSAxMiwgMjAxOCAxMDo1MCBB
+TQ0KPiA+Pj4+Pj4+IFRvOiBJS0VHQU1JIFRva3Vub3JpOyBKZWFuIERlbHZhcmUNCj4gPj4+Pj4+
+PiBDYzogUEFDS0hBTSBDaHJpczsgbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+ID4+Pj4+
+Pj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzVdIGh3bW9uOiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNl
+DQo+ID4+IGFkdDc0NzVfcmVhZA0KPiA+Pj4+PiBtYWNybw0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4g
+T24gMDcvMTEvMjAxOCAwNjowNCBQTSwgVG9rdW5vcmkgSWtlZ2FtaSB3cm90ZToNCj4gPj4+Pj4+
+Pj4gSXQgc2hvdWRsIGJlIHNhbWUgYXMgd2l0aCBvdGhlciBmdW5jdGlvbnMgdG8gdXNlIGFkdDc0
+NzVfcmVhZC4NCj4gPj4+Pj4+Pj4gU28gY2hhbmdlIHRvIHVzZSBpdCBpbnN0ZWFkIG9mIGkyY19z
+bWJ1c19yZWFkX2J5dGVfZGF0YS4NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4+IEkg
+ZG9uJ3Qgc2VlIGEgcG9pbnQgaW4gdGhpcyBjaGFuZ2UuIFJlcGxhY2luZyBhIGZ1bmN0aW9uIG5h
+bWUNCj4gPj4gZG9lc24ndA0KPiA+Pj4+Pj4+IG1ha2UNCj4gPj4+Pj4+PiB0aGUgY29kZSBlYXNp
+ZXIgdG8gcmVhZC4gSWYgYW55dGhpbmcsIHlvdSBjb3VsZCBjb25zaWRlciBkcm9wcGluZw0KPiA+
+Pj4+Pj4+IGFkdDc0NzVfcmVhZA0KPiA+Pj4+Pj4+IGFuZCBjYWxsaW5nIGkyY19zbWJ1c19yZWFk
+X2J5dGVfZGF0YSgpIGRpcmVjdGx5Lg0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4gR3VlbnRlcg0KPiA+
+Pj4+Pj4+DQo+ID4+Pj4+Pj4+IFNpZ25lZC1vZmYtYnk6IFRva3Vub3JpIElrZWdhbWkNCj4gPGlr
+ZWdhbWlAYWxsaWVkLXRlbGVzaXMuY28uanA+DQo+ID4+Pj4+Pj4+IENjOiBDaHJpcyBQYWNraGFt
+IDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+ID4+Pj4+Pj4+IENjOiBsaW51
+eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+Pj4+Pj4gLS0tDQo+ID4+Pj4+Pj4+ICAgICAg
+ZHJpdmVycy9od21vbi9hZHQ3NDc1LmMgfCAyICstDQo+ID4+Pj4+Pj4+ICAgICAgMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4+Pj4+Pj4+DQo+ID4+Pj4+
+Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiBiL2RyaXZlcnMvaHdt
+b24vYWR0NzQ3NS5jDQo+ID4+Pj4+Pj4+IGluZGV4IGE0MGViNjJlZTZiMS4uYmFkMjUwNzI5ZTk5
+IDEwMDY0NA0KPiA+Pj4+Pj4+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiA+Pj4+
+Pj4+PiArKysgYi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiA+Pj4+Pj4+PiBAQCAtMTAxMiw3
+ICsxMDEyLDcgQEAgc3RhdGljIHNzaXplX3QNCj4gPj4+Pj4+PiBwd21fdXNlX3BvaW50Ml9wd21f
+YXRfY3JpdF9zdG9yZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4+Pj4+Pj4+ICAgICAgCQlyZXR1
+cm4gLUVJTlZBTDsNCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gICAgICAJbXV0ZXhfbG9jaygmZGF0
+YS0+bG9jayk7DQo+ID4+Pj4+Pj4+IC0JZGF0YS0+Y29uZmlnNCA9IGkyY19zbWJ1c19yZWFkX2J5
+dGVfZGF0YShjbGllbnQsDQo+ID4+Pj4+Pj4gUkVHX0NPTkZJRzQpOw0KPiA+Pj4+Pj4+PiArCWRh
+dGEtPmNvbmZpZzQgPSBhZHQ3NDc1X3JlYWQoUkVHX0NPTkZJRzQpOw0KPiA+Pj4+Pj4+PiAgICAg
+IAlpZiAodmFsKQ0KPiA+Pj4+Pj4+PiAgICAgIAkJZGF0YS0+Y29uZmlnNCB8PSBDT05GSUc0X01B
+WERVVFk7DQo+ID4+Pj4+Pj4+ICAgICAgCWVsc2UNCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+DQo+ID4+
+Pj4+DQo+ID4+Pj4+IC0tDQo+ID4+Pj4+IFRvIHVuc3Vic2NyaWJlIGZyb20gdGhpcyBsaXN0OiBz
+ZW5kIHRoZSBsaW5lICJ1bnN1YnNjcmliZQ0KPiA+PiBsaW51eC1od21vbiINCj4gPj4+Pj4gaW4N
+Cj4gPj4+Pj4gdGhlIGJvZHkgb2YgYSBtZXNzYWdlIHRvIG1ham9yZG9tb0B2Z2VyLmtlcm5lbC5v
+cmcNCj4gPj4+Pj4gTW9yZSBtYWpvcmRvbW8gaW5mbyBhdA0KPiA+PiBodHRwOi8vdmdlci5rZXJu
+ZWwub3JnL21ham9yZG9tby1pbmZvLmh0bWwNCj4gPg0KDQo=
