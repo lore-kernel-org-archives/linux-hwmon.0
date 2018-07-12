@@ -1,12 +1,18 @@
-Return-Path: <ikegami@allied-telesis.co.jp>
-Return-path: <ikegami@allied-telesis.co.jp>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail1.bemta23.messagelabs.com ([67.219.246.115]:35146 "EHLO
+        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726529AbeGLDEV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Jul 2018 23:04:21 -0400
 From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
 CC: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 Subject: RE: [PATCH 4/5] hwmon: adt7475: Change to use adt7475_write macro
 Date: Thu, 12 Jul 2018 02:56:55 +0000
-Message-ID: 
+Message-ID:
  <OSAPR01MB3170C2F14D75DC381B14994DDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
 References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
  <20180712010450.10586-5-ikegami@allied-telesis.co.jp>
@@ -16,7 +22,9 @@ Content-Language: ja-JP
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
+Message-ID: <20180712025655.4bSwNv9ueO0GxydYf6R8FHewdmmt13nHh_9fRPFUmcI@z>
 
 SGkgR3VlbnRlci1zYW4sDQoNCkkgdGhpbmsgdG8gY2hhbmdlIHRoZSBwYXRjaCB0byByZXBlYXQg
 Zm9yIHRoZSBlcnJvciBjYXNlIGJ5IGEgYWR0NzQ3NV93cml0ZSBmdW5jdGlvbiBhcyBzYW1lIHdp
