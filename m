@@ -1,92 +1,150 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail1.bemta24.messagelabs.com ([67.219.250.116]:14527 "EHLO
-        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725748AbeGLEJg (ORCPT
+Received: from mail-pf0-f193.google.com ([209.85.192.193]:41550 "EHLO
+        mail-pf0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725756AbeGLEbM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Jul 2018 00:09:36 -0400
-From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
-To: Guenter Roeck <linux@roeck-us.net>,
+        Thu, 12 Jul 2018 00:31:12 -0400
+Received: by mail-pf0-f193.google.com with SMTP id c21-v6so15171649pfn.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jul 2018 21:23:31 -0700 (PDT)
+Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
+To: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>,
         Jean Delvare <jdelvare@suse.com>
-CC: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
+Cc: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
-Date: Thu, 12 Jul 2018 04:01:51 +0000
-Message-ID:
- <OSAPR01MB31707337DE771DFB3852F44EDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
 References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
  <20180712010450.10586-4-ikegami@allied-telesis.co.jp>
  <8109bd46-9065-a5e7-9e52-975563cb0df8@roeck-us.net>
  <OSAPR01MB317031FF04DEDDC33E01C2E0DC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
  <3860355d-ed87-902c-dc54-908c85f98ce4@roeck-us.net>
-In-Reply-To: <3860355d-ed87-902c-dc54-908c85f98ce4@roeck-us.net>
-Content-Language: ja-JP
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <OSAPR01MB31707337DE771DFB3852F44EDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e0d479ac-ddd0-710d-65e4-3b8ed4db085a@roeck-us.net>
+Date: Wed, 11 Jul 2018 21:23:27 -0700
 MIME-Version: 1.0
+In-Reply-To: <OSAPR01MB31707337DE771DFB3852F44EDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
-Message-ID: <20180712040151.yTeh63ahMd9IJIEhbNi7M0cW3dJp7UrbeQdg-X-AjRY@z>
 
-SGkgR3VlbnRlci1zYW4sDQoNClRoYW5rIHlvdSBzbyBtdWNoIGZvciB5b3VyIGNvbW1lbnRzLg0K
-DQpPaCBJIHNlZSBhbmQgYWN0dWFsbHkgd2UgaGF2ZSBzb21lIEkyQyBlcnJvciB1bml0cyBpbiBv
-dXIgcHJvZHVjdHMuDQpUaGUgcGF0Y2ggaXMgZm9yIHRoZSBlcnJvciBjYXNlIG1haW5seS4NCkJ1
-dCBJIHRoaW5rIHRoYXQgc29tZXRpbWVzIHRoZSBJMkMgZXJyb3IgaXMgc3RpbGwgY2F1c2VkIG9u
-IHRoZSBub3JtYWwgdW5pdHMgYWxzbyBhY3R1YWxseS4NCkkgYW0gbm90IHN1cmUgYWJvdXQgdGhh
-dCB0aGUgbm9ybWFsIHVuaXRzIGVycm9yIGJlaGF2aW9yIGlzIGNhdXNlZCBieSB0aGUgYm9hcmQg
-KEkyQyBjb250cm9sbGVyKSBvciB0aGUgY2hpcCBBRFQ3NDc2QSBidXQgcHJvYmFibHkgdGhlIGZv
-cm1lciBidXQgbm90IHN1cmUuDQpTbyBzaG91bGQgdGhlc2UgcGF0Y2hlcyBub3QgYmUgYXBwbGll
-ZCB0byB0aGUgYWR0NzQ3NSBkcml2ZXIgYXMgeW91IG1lbnRpb25lZD8NCg0KQXQgZmlyc3QgSSB0
-aG91Z2h0IHRoYXQgdGhlIEkyQyBTTUJ1cyBBUElzIHJldHVybiBlcnJvciBjb2RlcyBidXQgYWR0
-NzQ3NSBkcml2ZXIgZG9lcyBub3QgY2hlY2sgc28gaXQgc2hvdWxkIGJlIGNoZWNrZWQgdGhlIGVy
-cm9yIGNvZGVzLg0KSXMgdGhpcyBub3QgY29ycmVjdD8NCg0KVG8gbWFrZSBzdXJlIGxldCBtZSBj
-b25maXJtIGFib3ZlLg0KDQpSZWdhcmRzLA0KSWtlZ2FtaQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVz
-c2FnZS0tLS0tDQo+IEZyb206IGxpbnV4LWh3bW9uLW93bmVyQHZnZXIua2VybmVsLm9yZw0KPiBb
-bWFpbHRvOmxpbnV4LWh3bW9uLW93bmVyQHZnZXIua2VybmVsLm9yZ10gT24gQmVoYWxmIE9mIEd1
-ZW50ZXIgUm9lY2sNCj4gU2VudDogVGh1cnNkYXksIEp1bHkgMTIsIDIwMTggMTI6NDIgUE0NCj4g
-VG86IElLRUdBTUkgVG9rdW5vcmk7IEplYW4gRGVsdmFyZQ0KPiBDYzogUEFDS0hBTSBDaHJpczsg
-bGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy81XSBo
-d21vbjogYWR0NzQ3NTogQ2hhbmdlIHRvIHVzZSBhZHQ3NDc1X3JlYWQgbWFjcm8NCj4gDQo+IE9u
-IDA3LzExLzIwMTggMDc6NTIgUE0sIElLRUdBTUkgVG9rdW5vcmkgd3JvdGU6DQo+ID4gSGkgR3Vl
-bnRlci1zYW4sDQo+ID4NCj4gPiBUaGFuayB5b3Ugc28gbXVjaCBmb3IgeW91ciBjb21tZW50cy4N
-Cj4gPiBPa2F5IG5vdyBJIGFtIHRoaW5raW5nIHRvIGNoYW5nZSB0aGUgYWR0NzQ3NV9yZWFkIG1h
-Y3JvIHRvIGEgZnVuY3Rpb24NCj4gdG8gcmVwZWF0IGZvciB0aGUgZXJyb3IgY2FzZS4NCj4gPiBJ
-ZiB5b3UgaGF2ZSBhbnkgY29tbWVudCBhYm91dCB0aGlzIHBsZWFzZSBsZXQgbWUga25vdy4NCj4g
-DQo+IFllcyAtIHdlIHNob3VsZCBvbmx5IGRvIHRoaXMgaWYgaXQgaXMga25vd24gdG8gYmUgYSBj
-aGlwIHByb2JsZW0uDQo+IFBhdGNoaW5nIHRoZSBjaGlwIGRyaXZlciBmb3IgYSBib2FyZCAob3Ig
-aTJjIGNvbnRyb2xsZXIpIHByb2JsZW0NCj4gaXMgbm90IGFwcHJvcHJpYXRlLg0KPiANCj4gR3Vl
-bnRlcg0KPiANCj4gPiBBbnl3YXkgSSB3aWxsIGRvIHNlbmQgdjIgdmVyc2lvbiBwYXRjaGVzIGxh
-dGVyLg0KPiA+DQo+ID4gUmVnYXJkcywNCj4gPiBJa2VnYW1pDQo+ID4NCj4gPj4gLS0tLS1Pcmln
-aW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJvbTogR3VlbnRlciBSb2VjayBbbWFpbHRvOmdyb2Vj
-azdAZ21haWwuY29tXSBPbiBCZWhhbGYgT2YgR3VlbnRlcg0KPiA+PiBSb2Vjaw0KPiA+PiBTZW50
-OiBUaHVyc2RheSwgSnVseSAxMiwgMjAxOCAxMDo1MCBBTQ0KPiA+PiBUbzogSUtFR0FNSSBUb2t1
-bm9yaTsgSmVhbiBEZWx2YXJlDQo+ID4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51eC1od21vbkB2
-Z2VyLmtlcm5lbC5vcmcNCj4gPj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzVdIGh3bW9uOiBhZHQ3
-NDc1OiBDaGFuZ2UgdG8gdXNlIGFkdDc0NzVfcmVhZA0KPiBtYWNybw0KPiA+Pg0KPiA+PiBPbiAw
-Ny8xMS8yMDE4IDA2OjA0IFBNLCBUb2t1bm9yaSBJa2VnYW1pIHdyb3RlOg0KPiA+Pj4gSXQgc2hv
-dWRsIGJlIHNhbWUgYXMgd2l0aCBvdGhlciBmdW5jdGlvbnMgdG8gdXNlIGFkdDc0NzVfcmVhZC4N
-Cj4gPj4+IFNvIGNoYW5nZSB0byB1c2UgaXQgaW5zdGVhZCBvZiBpMmNfc21idXNfcmVhZF9ieXRl
-X2RhdGEuDQo+ID4+Pg0KPiA+Pg0KPiA+PiBJIGRvbid0IHNlZSBhIHBvaW50IGluIHRoaXMgY2hh
-bmdlLiBSZXBsYWNpbmcgYSBmdW5jdGlvbiBuYW1lIGRvZXNuJ3QNCj4gPj4gbWFrZQ0KPiA+PiB0
-aGUgY29kZSBlYXNpZXIgdG8gcmVhZC4gSWYgYW55dGhpbmcsIHlvdSBjb3VsZCBjb25zaWRlciBk
-cm9wcGluZw0KPiA+PiBhZHQ3NDc1X3JlYWQNCj4gPj4gYW5kIGNhbGxpbmcgaTJjX3NtYnVzX3Jl
-YWRfYnl0ZV9kYXRhKCkgZGlyZWN0bHkuDQo+ID4+DQo+ID4+IEd1ZW50ZXINCj4gPj4NCj4gPj4+
-IFNpZ25lZC1vZmYtYnk6IFRva3Vub3JpIElrZWdhbWkgPGlrZWdhbWlAYWxsaWVkLXRlbGVzaXMu
-Y28uanA+DQo+ID4+PiBDYzogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxl
-c2lzLmNvLm56Pg0KPiA+Pj4gQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZw0KPiA+Pj4g
-LS0tDQo+ID4+PiAgICBkcml2ZXJzL2h3bW9uL2FkdDc0NzUuYyB8IDIgKy0NCj4gPj4+ICAgIDEg
-ZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiA+Pj4NCj4gPj4+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYyBiL2RyaXZlcnMvaHdtb24vYWR0
-NzQ3NS5jDQo+ID4+PiBpbmRleCBhNDBlYjYyZWU2YjEuLmJhZDI1MDcyOWU5OSAxMDA2NDQNCj4g
-Pj4+IC0tLSBhL2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+ID4+PiArKysgYi9kcml2ZXJzL2h3
-bW9uL2FkdDc0NzUuYw0KPiA+Pj4gQEAgLTEwMTIsNyArMTAxMiw3IEBAIHN0YXRpYyBzc2l6ZV90
-DQo+ID4+IHB3bV91c2VfcG9pbnQyX3B3bV9hdF9jcml0X3N0b3JlKHN0cnVjdCBkZXZpY2UgKmRl
-diwNCj4gPj4+ICAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+ID4+Pg0KPiA+Pj4gICAgCW11dGV4X2xv
-Y2soJmRhdGEtPmxvY2spOw0KPiA+Pj4gLQlkYXRhLT5jb25maWc0ID0gaTJjX3NtYnVzX3JlYWRf
-Ynl0ZV9kYXRhKGNsaWVudCwNCj4gPj4gUkVHX0NPTkZJRzQpOw0KPiA+Pj4gKwlkYXRhLT5jb25m
-aWc0ID0gYWR0NzQ3NV9yZWFkKFJFR19DT05GSUc0KTsNCj4gPj4+ICAgIAlpZiAodmFsKQ0KPiA+
-Pj4gICAgCQlkYXRhLT5jb25maWc0IHw9IENPTkZJRzRfTUFYRFVUWTsNCj4gPj4+ICAgIAllbHNl
-DQo+ID4+Pg0KPiA+DQo+IA0KPiAtLQ0KPiBUbyB1bnN1YnNjcmliZSBmcm9tIHRoaXMgbGlzdDog
-c2VuZCB0aGUgbGluZSAidW5zdWJzY3JpYmUgbGludXgtaHdtb24iDQo+IGluDQo+IHRoZSBib2R5
-IG9mIGEgbWVzc2FnZSB0byBtYWpvcmRvbW9Admdlci5rZXJuZWwub3JnDQo+IE1vcmUgbWFqb3Jk
-b21vIGluZm8gYXQgIGh0dHA6Ly92Z2VyLmtlcm5lbC5vcmcvbWFqb3Jkb21vLWluZm8uaHRtbA0K
+On 07/11/2018 09:01 PM, IKEGAMI Tokunori wrote:
+> Hi Guenter-san,
+> 
+> Thank you so much for your comments.
+> 
+> Oh I see and actually we have some I2C error units in our products.
+> The patch is for the error case mainly.
+
+What is an "I2C error unit" ?
+
+> But I think that sometimes the I2C error is still caused on the normal units also actually.
+> I am not sure about that the normal units error behavior is caused by the board (I2C controller) or the chip ADT7476A but probably the former but not sure.
+> So should these patches not be applied to the adt7475 driver as you mentioned?
+> 
+
+Drivers are not responsible for handling bad board behavior, so retries
+due to controller or board issues should not be handled by the chip driver.
+Otherwise we would end up having to sprinkle retries into all i2c drivers
+in the kernel.
+
+If the problem is caused by the controller, it should be handled in the
+controller driver. If the problem is caused by bad i2c signals, it should
+be handled by hardware (or maybe by selecting a different clock speed).
+
+> At first I thought that the I2C SMBus APIs return error codes but adt7475 driver does not check so it should be checked the error codes.
+> Is this not correct?
+> 
+
+Yes, the driver should check for errors, but it should report all errors
+to user space and neither retry nor silently hide/ignore errors (unless
+a problem is known to be a chip problem).
+
+Guenter
+
+> To make sure let me confirm above.
+> 
+> Regards,
+> Ikegami
+> 
+>> -----Original Message-----
+>> From: linux-hwmon-owner@vger.kernel.org
+>> [mailto:linux-hwmon-owner@vger.kernel.org] On Behalf Of Guenter Roeck
+>> Sent: Thursday, July 12, 2018 12:42 PM
+>> To: IKEGAMI Tokunori; Jean Delvare
+>> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
+>> Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
+>>
+>> On 07/11/2018 07:52 PM, IKEGAMI Tokunori wrote:
+>>> Hi Guenter-san,
+>>>
+>>> Thank you so much for your comments.
+>>> Okay now I am thinking to change the adt7475_read macro to a function
+>> to repeat for the error case.
+>>> If you have any comment about this please let me know.
+>>
+>> Yes - we should only do this if it is known to be a chip problem.
+>> Patching the chip driver for a board (or i2c controller) problem
+>> is not appropriate.
+>>
+>> Guenter
+>>
+>>> Anyway I will do send v2 version patches later.
+>>>
+>>> Regards,
+>>> Ikegami
+>>>
+>>>> -----Original Message-----
+>>>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter
+>>>> Roeck
+>>>> Sent: Thursday, July 12, 2018 10:50 AM
+>>>> To: IKEGAMI Tokunori; Jean Delvare
+>>>> Cc: PACKHAM Chris; linux-hwmon@vger.kernel.org
+>>>> Subject: Re: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read
+>> macro
+>>>>
+>>>> On 07/11/2018 06:04 PM, Tokunori Ikegami wrote:
+>>>>> It shoudl be same as with other functions to use adt7475_read.
+>>>>> So change to use it instead of i2c_smbus_read_byte_data.
+>>>>>
+>>>>
+>>>> I don't see a point in this change. Replacing a function name doesn't
+>>>> make
+>>>> the code easier to read. If anything, you could consider dropping
+>>>> adt7475_read
+>>>> and calling i2c_smbus_read_byte_data() directly.
+>>>>
+>>>> Guenter
+>>>>
+>>>>> Signed-off-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+>>>>> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>>>> Cc: linux-hwmon@vger.kernel.org
+>>>>> ---
+>>>>>     drivers/hwmon/adt7475.c | 2 +-
+>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+>>>>> index a40eb62ee6b1..bad250729e99 100644
+>>>>> --- a/drivers/hwmon/adt7475.c
+>>>>> +++ b/drivers/hwmon/adt7475.c
+>>>>> @@ -1012,7 +1012,7 @@ static ssize_t
+>>>> pwm_use_point2_pwm_at_crit_store(struct device *dev,
+>>>>>     		return -EINVAL;
+>>>>>
+>>>>>     	mutex_lock(&data->lock);
+>>>>> -	data->config4 = i2c_smbus_read_byte_data(client,
+>>>> REG_CONFIG4);
+>>>>> +	data->config4 = adt7475_read(REG_CONFIG4);
+>>>>>     	if (val)
+>>>>>     		data->config4 |= CONFIG4_MAXDUTY;
+>>>>>     	else
+>>>>>
+>>>
+>>
+>> --
+>> To unsubscribe from this list: send the line "unsubscribe linux-hwmon"
+>> in
+>> the body of a message to majordomo@vger.kernel.org
+>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
