@@ -1,385 +1,217 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40290 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1753342AbeGERfx (ORCPT
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.2]:31130 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726463AbeGLDIc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 5 Jul 2018 13:35:53 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w65HYRse124443
-        for <linux-hwmon@vger.kernel.org>; Thu, 5 Jul 2018 13:35:53 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2k1pyya348-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Jul 2018 13:35:53 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
-        Thu, 5 Jul 2018 18:35:51 +0100
-Subject: Re: [PATCH v3 2/3] hwmon: ibmpowernv: Add attributes to
- enable/disable sensor groups
-To: Guenter Roeck <linux@roeck-us.net>, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ego@linux.vnet.ibm.com
-References: <1530798689-27742-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <1530798689-27742-3-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
- <9b55f78a-1d29-4391-c43e-124772b7aa9f@roeck-us.net>
-From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
-Date: Thu, 5 Jul 2018 23:05:42 +0530
+        Wed, 11 Jul 2018 23:08:32 -0400
+From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [PATCH 1/5] hwmon: adt7475: Split device update function to
+ measure and limits
+Date: Thu, 12 Jul 2018 03:01:03 +0000
+Message-ID:
+ <OSAPR01MB3170C147B8273A7803FD7443DC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
+References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
+ <20180712010450.10586-2-ikegami@allied-telesis.co.jp>
+ <e529079c-6f45-fdd5-c227-a1dd2563d42d@roeck-us.net>
+In-Reply-To: <e529079c-6f45-fdd5-c227-a1dd2563d42d@roeck-us.net>
+Content-Language: ja-JP
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <9b55f78a-1d29-4391-c43e-124772b7aa9f@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Message-Id: <d1c00dde-2d1f-5748-a306-f646ae265f8f@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
+Message-ID: <20180712030103.1CHSCr3qi2sRWw_7pWSDkLxqUeWwb-elPjFxmE4Z5XQ@z>
 
-Hi,
-
-On 07/05/2018 09:07 PM, Guenter Roeck wrote:
-> On 07/05/2018 06:51 AM, Shilpasri G Bhat wrote:
->> On-Chip-Controller(OCC) is an embedded micro-processor in POWER9 chip
->> which measures various system and chip level sensors. These sensors
->> comprises of environmental sensors (like power, temperature, current
->> and voltage) and performance sensors (like utilization, frequency).
->> All these sensors are copied to main memory at a regular interval of
->> 100ms. OCC provides a way to select a group of sensors that is copied
->> to the main memory to increase the update frequency of selected sensor
->> groups. When a sensor-group is disabled, OCC will not copy it to main
->> memory and those sensors read 0 values.
->>
->> This patch provides support for enabling/disabling the sensor groups
->> like power, temperature, current and voltage. This patch adds new
->> per-senor sysfs attribute to disable and enable them.
->>
->> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
->> ---
->> Changes from v2:
->> - Writes to first 'enable' attribute of the sensor group will affect all the
->>    sensors in the group
->> - Removed global mutex and made it per sensor-group
->>
->>   drivers/hwmon/ibmpowernv.c | 184 ++++++++++++++++++++++++++++++++++++++-------
->>   1 file changed, 155 insertions(+), 29 deletions(-)
->>
->> diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
->> index f829dad..9c6adee 100644
->> --- a/drivers/hwmon/ibmpowernv.c
->> +++ b/drivers/hwmon/ibmpowernv.c
->> @@ -73,6 +73,10 @@ enum sensors {
->>       struct attribute_group group;
->>       u32 attr_count;
->>       u32 hwmon_index;
->> +    struct mutex mutex;
->> +    u32 *gid;
->> +    u32 nr_gid;
->> +    bool enable;
->>   } sensor_groups[] = {
->>       { "fan"   },
->>       { "temp"  },
->> @@ -105,6 +109,9 @@ static ssize_t show_sensor(struct device *dev, struct
->> device_attribute *devattr,
->>       ssize_t ret;
->>       u64 x;
->>   +    if (!sensor_groups[sdata->type].enable)
->> +        return -ENODATA;
->> +
->>       ret =  opal_get_sensor_data_u64(sdata->id, &x);
->>         if (ret)
->> @@ -120,6 +127,46 @@ static ssize_t show_sensor(struct device *dev, struct
->> device_attribute *devattr,
->>       return sprintf(buf, "%llu\n", x);
->>   }
->>   +static ssize_t show_enable(struct device *dev,
->> +               struct device_attribute *devattr, char *buf)
->> +{
->> +    struct sensor_data *sdata = container_of(devattr, struct sensor_data,
->> +                         dev_attr);
->> +
->> +    return sprintf(buf, "%u\n", sensor_groups[sdata->type].enable);
->> +}
->> +
->> +static ssize_t store_enable(struct device *dev,
->> +                struct device_attribute *devattr,
->> +                const char *buf, size_t count)
->> +{
->> +    struct sensor_data *sdata = container_of(devattr, struct sensor_data,
->> +                         dev_attr);
->> +    struct sensor_group *sg = &sensor_groups[sdata->type];
->> +    int ret, i;
->> +    bool data;
->> +
->> +    ret = kstrtobool(buf, &data);
->> +    if (ret)
->> +        return ret;
->> +
->> +    ret = mutex_lock_interruptible(&sg->mutex);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (data != sg->enable)
->> +        for (i = 0; i < sg->nr_gid && !ret; i++)
->> +            ret =  sensor_group_enable(sg->gid[i], data);
->> +
-> 
-> Wouldn't it be better to have a separate attribute for each of the
-> affected groups if there can be more than one ? Just wondering.
-> 
-> The idea was to widen the scope to a point where there is a 1:1 match
-> between the hardware capabilities and attributes. Clearly having
-> a separate attribute for all sensors was inappropriate, but the code
-> above now suggests that a single attribute for all sensors may have
-> widened the scope too much (because the hardware can do better than
-> this).
-> 
-
-Yup it would be better to have 'enable' attribute for each sub-group.
-
-Thanks and Regards,
-Shilpa
-
-> Thanks,
-> Guenter
-> 
->> +    if (!ret) {
->> +        sg->enable = data;
->> +        ret = count;
->> +    }
->> +
->> +    mutex_unlock(&sg->mutex);
->> +    return ret;
->> +}
->> +
->>   static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
->>                 char *buf)
->>   {
->> @@ -292,13 +339,68 @@ static u32 get_sensor_hwmon_index(struct sensor_data
->> *sdata,
->>       return ++sensor_groups[sdata->type].hwmon_index;
->>   }
->>   +static int init_sensor_group_data(struct platform_device *pdev)
->> +{
->> +    struct device_node *groups, *sg;
->> +    enum sensors type;
->> +    int ret = 0, i;
->> +
->> +    for (i = 0; i < MAX_SENSOR_TYPE; i++) {
->> +        sensor_groups[i].nr_gid = 0;
->> +        sensor_groups[i].enable = true;
->> +    }
->> +
->> +    groups = of_find_node_by_path("/ibm,opal/sensor-groups");
->> +    if (!groups)
->> +        return ret;
->> +
->> +    for (i = 0; i < MAX_SENSOR_TYPE; i++) {
->> +        u32 gid[256];
->> +        u32 id, size;
->> +
->> +        for_each_child_of_node(groups, sg) {
->> +            type = get_sensor_type(sg);
->> +            if (type != i)
->> +                continue;
->> +
->> +            if (of_property_read_u32(sg, "sensor-group-id", &id))
->> +                continue;
->> +
->> +            gid[sensor_groups[i].nr_gid++] = id;
->> +        }
->> +
->> +        if (!sensor_groups[i].nr_gid)
->> +            continue;
->> +
->> +        size = sensor_groups[i].nr_gid * sizeof(u32);
->> +        sensor_groups[i].gid = devm_kzalloc(&pdev->dev, size,
->> +                            GFP_KERNEL);
->> +        if (!sensor_groups[i].gid) {
->> +            ret = -ENOMEM;
->> +            break;
->> +        }
->> +
->> +        memcpy(sensor_groups[i].gid, gid, size);
->> +        sensor_groups[i].enable = false;
->> +        mutex_init(&sensor_groups[i].mutex);
->> +    }
->> +
->> +    of_node_put(groups);
->> +    return ret;
->> +}
->> +
->>   static int populate_attr_groups(struct platform_device *pdev)
->>   {
->>       struct platform_data *pdata = platform_get_drvdata(pdev);
->>       const struct attribute_group **pgroups = pdata->attr_groups;
->>       struct device_node *opal, *np;
->> +    int ret;
->>       enum sensors type;
->>   +    ret = init_sensor_group_data(pdev);
->> +    if (ret)
->> +        return ret;
->> +
->>       opal = of_find_node_by_path("/ibm,opal/sensors");
->>       for_each_child_of_node(opal, np) {
->>           const char *label;
->> @@ -313,7 +415,7 @@ static int populate_attr_groups(struct platform_device *pdev)
->>           sensor_groups[type].attr_count++;
->>             /*
->> -         * add attributes for labels, min and max
->> +         * add attributes for labels, min, max and enable
->>            */
->>           if (!of_property_read_string(np, "label", &label))
->>               sensor_groups[type].attr_count++;
->> @@ -321,6 +423,8 @@ static int populate_attr_groups(struct platform_device *pdev)
->>               sensor_groups[type].attr_count++;
->>           if (of_find_property(np, "sensor-data-max", NULL))
->>               sensor_groups[type].attr_count++;
->> +        if (sensor_groups[type].nr_gid)
->> +            sensor_groups[type].attr_count++;
->>       }
->>         of_node_put(opal);
->> @@ -344,7 +448,10 @@ static int populate_attr_groups(struct platform_device
->> *pdev)
->>   static void create_hwmon_attr(struct sensor_data *sdata, const char *attr_name,
->>                     ssize_t (*show)(struct device *dev,
->>                             struct device_attribute *attr,
->> -                          char *buf))
->> +                          char *buf),
->> +                ssize_t (*store)(struct device *dev,
->> +                         struct device_attribute *attr,
->> +                         const char *buf, size_t count))
->>   {
->>       snprintf(sdata->name, MAX_ATTR_LEN, "%s%d_%s",
->>            sensor_groups[sdata->type].name, sdata->hwmon_index,
->> @@ -352,8 +459,13 @@ static void create_hwmon_attr(struct sensor_data *sdata,
->> const char *attr_name,
->>         sysfs_attr_init(&sdata->dev_attr.attr);
->>       sdata->dev_attr.attr.name = sdata->name;
->> -    sdata->dev_attr.attr.mode = S_IRUGO;
->>       sdata->dev_attr.show = show;
->> +    if (store) {
->> +        sdata->dev_attr.store = store;
->> +        sdata->dev_attr.attr.mode = 0664;
->> +    } else {
->> +        sdata->dev_attr.attr.mode = 0444;
->> +    }
->>   }
->>     static void populate_sensor(struct sensor_data *sdata, int od, int hd, int
->> sid,
->> @@ -361,13 +473,16 @@ static void populate_sensor(struct sensor_data *sdata,
->> int od, int hd, int sid,
->>                   const struct attribute_group *pgroup,
->>                   ssize_t (*show)(struct device *dev,
->>                           struct device_attribute *attr,
->> -                        char *buf))
->> +                        char *buf),
->> +                ssize_t (*store)(struct device *dev,
->> +                         struct device_attribute *attr,
->> +                         const char *buf, size_t count))
->>   {
->>       sdata->id = sid;
->>       sdata->type = type;
->>       sdata->opal_index = od;
->>       sdata->hwmon_index = hd;
->> -    create_hwmon_attr(sdata, attr_name, show);
->> +    create_hwmon_attr(sdata, attr_name, show, store);
->>       pgroup->attrs[sensor_groups[type].attr_count++] = &sdata->dev_attr.attr;
->>   }
->>   @@ -408,18 +523,16 @@ static int create_device_attrs(struct platform_device
->> *pdev)
->>       u32 count = 0;
->>       int err = 0;
->>   -    opal = of_find_node_by_path("/ibm,opal/sensors");
->>       sdata = devm_kcalloc(&pdev->dev,
->>                    pdata->sensors_count, sizeof(*sdata),
->>                    GFP_KERNEL);
->> -    if (!sdata) {
->> -        err = -ENOMEM;
->> -        goto exit_put_node;
->> -    }
->> +    if (!sdata)
->> +        return -ENOMEM;
->>   +    opal = of_find_node_by_path("/ibm,opal/sensors");
->>       for_each_child_of_node(opal, np) {
->>           const char *attr_name;
->> -        u32 opal_index;
->> +        u32 opal_index, hw_id;
->>           const char *label;
->>             if (np->name == NULL)
->> @@ -456,14 +569,11 @@ static int create_device_attrs(struct platform_device
->> *pdev)
->>               opal_index = INVALID_INDEX;
->>           }
->>   -        sdata[count].opal_index = opal_index;
->> -        sdata[count].hwmon_index =
->> -            get_sensor_hwmon_index(&sdata[count], sdata, count);
->> -
->> -        create_hwmon_attr(&sdata[count], attr_name, show_sensor);
->> -
->> -        pgroups[type]->attrs[sensor_groups[type].attr_count++] =
->> -                &sdata[count++].dev_attr.attr;
->> +        hw_id = get_sensor_hwmon_index(&sdata[count], sdata, count);
->> +        populate_sensor(&sdata[count], opal_index, hw_id, sensor_id,
->> +                attr_name, type, pgroups[type], show_sensor,
->> +                NULL);
->> +        count++;
->>             if (!of_property_read_string(np, "label", &label)) {
->>               /*
->> @@ -474,33 +584,49 @@ static int create_device_attrs(struct platform_device
->> *pdev)
->>                */
->>                 make_sensor_label(np, &sdata[count], label);
->> -            populate_sensor(&sdata[count], opal_index,
->> -                    sdata[count - 1].hwmon_index,
->> +            populate_sensor(&sdata[count], opal_index, hw_id,
->>                       sensor_id, "label", type, pgroups[type],
->> -                    show_label);
->> +                    show_label, NULL);
->>               count++;
->>           }
->>             if (!of_property_read_u32(np, "sensor-data-max", &sensor_id)) {
->>               attr_name = get_max_attr(type);
->> -            populate_sensor(&sdata[count], opal_index,
->> -                    sdata[count - 1].hwmon_index,
->> +            populate_sensor(&sdata[count], opal_index, hw_id,
->>                       sensor_id, attr_name, type,
->> -                    pgroups[type], show_sensor);
->> +                    pgroups[type], show_sensor, NULL);
->>               count++;
->>           }
->>             if (!of_property_read_u32(np, "sensor-data-min", &sensor_id)) {
->>               attr_name = get_min_attr(type);
->> -            populate_sensor(&sdata[count], opal_index,
->> -                    sdata[count - 1].hwmon_index,
->> +            populate_sensor(&sdata[count], opal_index, hw_id,
->>                       sensor_id, attr_name, type,
->> -                    pgroups[type], show_sensor);
->> +                    pgroups[type], show_sensor, NULL);
->>               count++;
->>           }
->> +
->> +        if (sensor_groups[type].nr_gid) {
->> +            ssize_t (*store)(struct device *dev,
->> +                     struct device_attribute *attr,
->> +                     const char *buf, size_t count);
->> +
->> +            if (!sensor_groups[type].enable) {
->> +                sensor_groups[type].enable = true;
->> +                store = store_enable;
->> +            } else {
->> +                store = NULL;
->> +            }
->> +
->> +            sensor_groups[type].enable = true;
->> +            populate_sensor(&sdata[count], opal_index, hw_id,
->> +                    sensor_id, "enable", type,
->> +                    pgroups[type], show_enable, store);
->> +            count++;
->> +        }
->> +
->>       }
->>   -exit_put_node:
->>       of_node_put(opal);
->>       return err;
->>   }
->>
-> 
-
+SGkgR3VlbnRlci1zYW4sDQoNClllcyB5b3UgYXJlIGNvcnJlY3QuDQpBdCBmaXJzdCBJIHRob3Vn
+aHQgdG8gY2hhbmdlIHRoZSByZWFkIGFuZCB3cml0ZSBmdW5jdGlvbnMgdG8gcmVwZWF0IGZvciB0
+aGUgZXJyb3IgY2FzZS4NClRoZW4gSSBjb25maXJtZWQgdGhlIGxtOTMgaW1wbGVtZW50YXRpb24g
+YW5kIGZvbGxvd2VkIGl0IGJhc2ljYWxseSBzaW5jZSBJIHRob3VnaHQgaXQgaXMgYmV0dGVyLg0K
+QnV0IGFzIHlvdSBtZW50aW9uZWQgdGhpcyBpcyBub3QgYW4gZXJyb3IgaGFuZGxpbmcgc28gSSB3
+aWxsIGNoYW5nZSB0byBhZGQgdGhlIG9yaWdpbmFsIHJldHJ5IGZ1bmN0aW9ucy4NCg0KUmVnYXJk
+cywNCklrZWdhbWkNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHdWVu
+dGVyIFJvZWNrIFttYWlsdG86Z3JvZWNrN0BnbWFpbC5jb21dIE9uIEJlaGFsZiBPZiBHdWVudGVy
+DQo+IFJvZWNrDQo+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDEyLCAyMDE4IDExOjAwIEFNDQo+IFRv
+OiBJS0VHQU1JIFRva3Vub3JpOyBKZWFuIERlbHZhcmUNCj4gQ2M6IFBBQ0tIQU0gQ2hyaXM7IGxp
+bnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDEvNV0gaHdt
+b246IGFkdDc0NzU6IFNwbGl0IGRldmljZSB1cGRhdGUgZnVuY3Rpb24NCj4gdG8gbWVhc3VyZSBh
+bmQgbGltaXRzDQo+IA0KPiBPbiAwNy8xMS8yMDE4IDA2OjA0IFBNLCBUb2t1bm9yaSBJa2VnYW1p
+IHdyb3RlOg0KPiA+IFRoZSBmdW5jdGlvbiBoYXMgdGhlIG1lYXN1cmUgdXBkYXRlIHBhcnQgYW5k
+IGxpbWl0cyBhbmQgc2V0dGluZ3MgcGFydC4NCj4gPiBBbmQgdGhvc2UgcGFydHMgY2FuIGJlIHNw
+bGl0IHNvIHNwbGl0IHRoZW0gZm9yIGEgbWFpbnRhaW5hYmlsaXR5Lg0KPiA+DQo+ID4gU2lnbmVk
+LW9mZi1ieTogVG9rdW5vcmkgSWtlZ2FtaSA8aWtlZ2FtaUBhbGxpZWQtdGVsZXNpcy5jby5qcD4N
+Cj4gPiBDYzogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56
+Pg0KPiA+IENjOiBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPiAtLS0NCj4gPiAgIGRy
+aXZlcnMvaHdtb24vYWR0NzQ3NS5jIHwgMjE0DQo+ICsrKysrKysrKysrKysrKysrKysrKysrKysr
+Ky0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDEyMiBpbnNlcnRp
+b25zKCspLCA5MiBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3
+bW9uL2FkdDc0NzUuYyBiL2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+ID4gaW5kZXggOWVmODQ5
+OThjN2YzLi4yMzRmNzI1MjEzZjkgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9od21vbi9hZHQ3
+NDc1LmMNCj4gPiArKysgYi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiA+IEBAIC0xNjU4LDEx
+OSArMTY1OCwxNDkgQEAgc3RhdGljIHZvaWQgYWR0NzQ3NV9yZWFkX3B3bShzdHJ1Y3QNCj4gaTJj
+X2NsaWVudCAqY2xpZW50LCBpbnQgaW5kZXgpDQo+ID4gICAJfQ0KPiA+ICAgfQ0KPiA+DQo+ID4g
+LXN0YXRpYyBzdHJ1Y3QgYWR0NzQ3NV9kYXRhICphZHQ3NDc1X3VwZGF0ZV9kZXZpY2Uoc3RydWN0
+IGRldmljZQ0KPiAqZGV2KQ0KPiA+ICtzdGF0aWMgaW50IGFkdDc0NzVfdXBkYXRlX21lYXN1cmUo
+c3RydWN0IGRldmljZSAqZGV2KQ0KPiA+ICAgew0KPiA+ICAgCXN0cnVjdCBpMmNfY2xpZW50ICpj
+bGllbnQgPSB0b19pMmNfY2xpZW50KGRldik7DQo+ID4gICAJc3RydWN0IGFkdDc0NzVfZGF0YSAq
+ZGF0YSA9IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQpOw0KPiA+ICAgCXUxNiBleHQ7DQo+ID4g
+ICAJaW50IGk7DQo+ID4NCj4gPiAtCW11dGV4X2xvY2soJmRhdGEtPmxvY2spOw0KPiA+ICsJZGF0
+YS0+YWxhcm1zID0gYWR0NzQ3NV9yZWFkKFJFR19TVEFUVVMyKSA8PCA4Ow0KPiA+ICsJZGF0YS0+
+YWxhcm1zIHw9IGFkdDc0NzVfcmVhZChSRUdfU1RBVFVTMSk7DQo+ID4gKw0KPiA+ICsJZXh0ID0g
+KGFkdDc0NzVfcmVhZChSRUdfRVhURU5EMikgPDwgOCkgfA0KPiA+ICsJCWFkdDc0NzVfcmVhZChS
+RUdfRVhURU5EMSk7DQo+ID4gKwlmb3IgKGkgPSAwOyBpIDwgQURUNzQ3NV9WT0xUQUdFX0NPVU5U
+OyBpKyspIHsNCj4gPiArCQlpZiAoIShkYXRhLT5oYXNfdm9sdGFnZSAmICgxIDw8IGkpKSkNCj4g
+PiArCQkJY29udGludWU7DQo+ID4gKwkJZGF0YS0+dm9sdGFnZVtJTlBVVF1baV0gPQ0KPiA+ICsJ
+CQkoYWR0NzQ3NV9yZWFkKFZPTFRBR0VfUkVHKGkpKSA8PCAyKSB8DQo+ID4gKwkJCSgoZXh0ID4+
+IChpICogMikpICYgMyk7DQo+ID4gKwl9DQo+ID4NCj4gPiAtCS8qIE1lYXN1cmVtZW50IHZhbHVl
+cyB1cGRhdGUgZXZlcnkgMiBzZWNvbmRzICovDQo+ID4gLQlpZiAodGltZV9hZnRlcihqaWZmaWVz
+LCBkYXRhLT5tZWFzdXJlX3VwZGF0ZWQgKyBIWiAqIDIpIHx8DQo+ID4gLQkgICAgIWRhdGEtPnZh
+bGlkKSB7DQo+ID4gLQkJZGF0YS0+YWxhcm1zID0gYWR0NzQ3NV9yZWFkKFJFR19TVEFUVVMyKSA8
+PCA4Ow0KPiA+IC0JCWRhdGEtPmFsYXJtcyB8PSBhZHQ3NDc1X3JlYWQoUkVHX1NUQVRVUzEpOw0K
+PiA+IC0NCj4gPiAtCQlleHQgPSAoYWR0NzQ3NV9yZWFkKFJFR19FWFRFTkQyKSA8PCA4KSB8DQo+
+ID4gLQkJCWFkdDc0NzVfcmVhZChSRUdfRVhURU5EMSk7DQo+ID4gLQkJZm9yIChpID0gMDsgaSA8
+IEFEVDc0NzVfVk9MVEFHRV9DT1VOVDsgaSsrKSB7DQo+ID4gLQkJCWlmICghKGRhdGEtPmhhc192
+b2x0YWdlICYgKDEgPDwgaSkpKQ0KPiA+IC0JCQkJY29udGludWU7DQo+ID4gLQkJCWRhdGEtPnZv
+bHRhZ2VbSU5QVVRdW2ldID0NCj4gPiAtCQkJCShhZHQ3NDc1X3JlYWQoVk9MVEFHRV9SRUcoaSkp
+IDw8IDIpIHwNCj4gPiAtCQkJCSgoZXh0ID4+IChpICogMikpICYgMyk7DQo+ID4gLQkJfQ0KPiA+
+ICsJZm9yIChpID0gMDsgaSA8IEFEVDc0NzVfVEVNUF9DT1VOVDsgaSsrKQ0KPiA+ICsJCWRhdGEt
+PnRlbXBbSU5QVVRdW2ldID0NCj4gPiArCQkJKGFkdDc0NzVfcmVhZChURU1QX1JFRyhpKSkgPDwg
+MikgfA0KPiA+ICsJCQkoKGV4dCA+PiAoKGkgKyA1KSAqIDIpKSAmIDMpOw0KPiA+ICsNCj4gPiAr
+CWlmIChkYXRhLT5oYXNfdm9sdGFnZSAmICgxIDw8IDUpKSB7DQo+ID4gKwkJZGF0YS0+YWxhcm1z
+IHw9IGFkdDc0NzVfcmVhZChSRUdfU1RBVFVTNCkgPDwgMjQ7DQo+ID4gKwkJZXh0ID0gYWR0NzQ3
+NV9yZWFkKFJFR19FWFRFTkQzKTsNCj4gPiArCQlkYXRhLT52b2x0YWdlW0lOUFVUXVs1XSA9IGFk
+dDc0NzVfcmVhZChSRUdfVlRUKSA8PCAyIHwNCj4gPiArCQkJKChleHQgPj4gNCkgJiAzKTsNCj4g
+PiArCX0NCj4gPg0KPiA+IC0JCWZvciAoaSA9IDA7IGkgPCBBRFQ3NDc1X1RFTVBfQ09VTlQ7IGkr
+KykNCj4gPiAtCQkJZGF0YS0+dGVtcFtJTlBVVF1baV0gPQ0KPiA+IC0JCQkJKGFkdDc0NzVfcmVh
+ZChURU1QX1JFRyhpKSkgPDwgMikgfA0KPiA+IC0JCQkJKChleHQgPj4gKChpICsgNSkgKiAyKSkg
+JiAzKTsNCj4gPiArCWZvciAoaSA9IDA7IGkgPCBBRFQ3NDc1X1RBQ0hfQ09VTlQ7IGkrKykgew0K
+PiA+ICsJCWlmIChpID09IDMgJiYgIWRhdGEtPmhhc19mYW40KQ0KPiA+ICsJCQljb250aW51ZTsN
+Cj4gPiArCQlkYXRhLT50YWNoW0lOUFVUXVtpXSA9DQo+ID4gKwkJCWFkdDc0NzVfcmVhZF93b3Jk
+KGNsaWVudCwgVEFDSF9SRUcoaSkpOw0KPiA+ICsJfQ0KPiA+DQo+ID4gLQkJaWYgKGRhdGEtPmhh
+c192b2x0YWdlICYgKDEgPDwgNSkpIHsNCj4gPiAtCQkJZGF0YS0+YWxhcm1zIHw9IGFkdDc0NzVf
+cmVhZChSRUdfU1RBVFVTNCkgPDwNCj4gMjQ7DQo+ID4gLQkJCWV4dCA9IGFkdDc0NzVfcmVhZChS
+RUdfRVhURU5EMyk7DQo+ID4gLQkJCWRhdGEtPnZvbHRhZ2VbSU5QVVRdWzVdID0NCj4gYWR0NzQ3
+NV9yZWFkKFJFR19WVFQpIDw8IDIgfA0KPiA+IC0JCQkJKChleHQgPj4gNCkgJiAzKTsNCj4gPiAt
+CQl9DQo+ID4gKwkvKiBVcGRhdGVkIGJ5IGh3IHdoZW4gaW4gYXV0byBtb2RlICovDQo+ID4gKwlm
+b3IgKGkgPSAwOyBpIDwgQURUNzQ3NV9QV01fQ09VTlQ7IGkrKykgew0KPiA+ICsJCWlmIChpID09
+IDEgJiYgIWRhdGEtPmhhc19wd20yKQ0KPiA+ICsJCQljb250aW51ZTsNCj4gPiArCQlkYXRhLT5w
+d21bSU5QVVRdW2ldID0gYWR0NzQ3NV9yZWFkKFBXTV9SRUcoaSkpOw0KPiA+ICsJfQ0KPiA+DQo+
+ID4gLQkJZm9yIChpID0gMDsgaSA8IEFEVDc0NzVfVEFDSF9DT1VOVDsgaSsrKSB7DQo+ID4gLQkJ
+CWlmIChpID09IDMgJiYgIWRhdGEtPmhhc19mYW40KQ0KPiA+IC0JCQkJY29udGludWU7DQo+ID4g
+LQkJCWRhdGEtPnRhY2hbSU5QVVRdW2ldID0NCj4gPiAtCQkJCWFkdDc0NzVfcmVhZF93b3JkKGNs
+aWVudCwNCj4gVEFDSF9SRUcoaSkpOw0KPiA+IC0JCX0NCj4gPiArCWlmIChkYXRhLT5oYXNfdmlk
+KQ0KPiA+ICsJCWRhdGEtPnZpZCA9IGFkdDc0NzVfcmVhZChSRUdfVklEKSAmIDB4M2Y7DQo+ID4N
+Cj4gPiAtCQkvKiBVcGRhdGVkIGJ5IGh3IHdoZW4gaW4gYXV0byBtb2RlICovDQo+ID4gLQkJZm9y
+IChpID0gMDsgaSA8IEFEVDc0NzVfUFdNX0NPVU5UOyBpKyspIHsNCj4gPiAtCQkJaWYgKGkgPT0g
+MSAmJiAhZGF0YS0+aGFzX3B3bTIpDQo+ID4gLQkJCQljb250aW51ZTsNCj4gPiAtCQkJZGF0YS0+
+cHdtW0lOUFVUXVtpXSA9DQo+IGFkdDc0NzVfcmVhZChQV01fUkVHKGkpKTsNCj4gPiAtCQl9DQo+
+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+DQo+ID4gLQkJaWYgKGRhdGEtPmhhc192aWQpDQo+
+ID4gLQkJCWRhdGEtPnZpZCA9IGFkdDc0NzVfcmVhZChSRUdfVklEKSAmIDB4M2Y7DQo+ID4gK3N0
+YXRpYyBpbnQgYWR0NzQ3NV91cGRhdGVfbGltaXRzKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gPiAr
+ew0KPiA+ICsJc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IHRvX2kyY19jbGllbnQoZGV2KTsN
+Cj4gPiArCXN0cnVjdCBhZHQ3NDc1X2RhdGEgKmRhdGEgPSBpMmNfZ2V0X2NsaWVudGRhdGEoY2xp
+ZW50KTsNCj4gPiArCWludCBpOw0KPiA+DQo+ID4gLQkJZGF0YS0+bWVhc3VyZV91cGRhdGVkID0g
+amlmZmllczsNCj4gPiArCWRhdGEtPmNvbmZpZzQgPSBhZHQ3NDc1X3JlYWQoUkVHX0NPTkZJRzQp
+Ow0KPiA+ICsJZGF0YS0+Y29uZmlnNSA9IGFkdDc0NzVfcmVhZChSRUdfQ09ORklHNSk7DQo+ID4g
+Kw0KPiA+ICsJZm9yIChpID0gMDsgaSA8IEFEVDc0NzVfVk9MVEFHRV9DT1VOVDsgaSsrKSB7DQo+
+ID4gKwkJaWYgKCEoZGF0YS0+aGFzX3ZvbHRhZ2UgJiAoMSA8PCBpKSkpDQo+ID4gKwkJCWNvbnRp
+bnVlOw0KPiA+ICsJCS8qIEFkanVzdCB2YWx1ZXMgc28gdGhleSBtYXRjaCB0aGUgaW5wdXQgcHJl
+Y2lzaW9uICovDQo+ID4gKwkJZGF0YS0+dm9sdGFnZVtNSU5dW2ldID0NCj4gPiArCQkJYWR0NzQ3
+NV9yZWFkKFZPTFRBR0VfTUlOX1JFRyhpKSkgPDwgMjsNCj4gPiArCQlkYXRhLT52b2x0YWdlW01B
+WF1baV0gPQ0KPiA+ICsJCQlhZHQ3NDc1X3JlYWQoVk9MVEFHRV9NQVhfUkVHKGkpKSA8PCAyOw0K
+PiA+ICAgCX0NCj4gPg0KPiA+IC0JLyogTGltaXRzIGFuZCBzZXR0aW5ncywgc2hvdWxkIG5ldmVy
+IGNoYW5nZSB1cGRhdGUgZXZlcnkgNjANCj4gc2Vjb25kcyAqLw0KPiA+IC0JaWYgKHRpbWVfYWZ0
+ZXIoamlmZmllcywgZGF0YS0+bGltaXRzX3VwZGF0ZWQgKyBIWiAqIDYwKSB8fA0KPiA+IC0JICAg
+ICFkYXRhLT52YWxpZCkgew0KPiA+IC0JCWRhdGEtPmNvbmZpZzQgPSBhZHQ3NDc1X3JlYWQoUkVH
+X0NPTkZJRzQpOw0KPiA+IC0JCWRhdGEtPmNvbmZpZzUgPSBhZHQ3NDc1X3JlYWQoUkVHX0NPTkZJ
+RzUpOw0KPiA+IC0NCj4gPiAtCQlmb3IgKGkgPSAwOyBpIDwgQURUNzQ3NV9WT0xUQUdFX0NPVU5U
+OyBpKyspIHsNCj4gPiAtCQkJaWYgKCEoZGF0YS0+aGFzX3ZvbHRhZ2UgJiAoMSA8PCBpKSkpDQo+
+ID4gLQkJCQljb250aW51ZTsNCj4gPiAtCQkJLyogQWRqdXN0IHZhbHVlcyBzbyB0aGV5IG1hdGNo
+IHRoZSBpbnB1dA0KPiBwcmVjaXNpb24gKi8NCj4gPiAtCQkJZGF0YS0+dm9sdGFnZVtNSU5dW2ld
+ID0NCj4gPiAtCQkJCWFkdDc0NzVfcmVhZChWT0xUQUdFX01JTl9SRUcoaSkpIDw8IDI7DQo+ID4g
+LQkJCWRhdGEtPnZvbHRhZ2VbTUFYXVtpXSA9DQo+ID4gLQkJCQlhZHQ3NDc1X3JlYWQoVk9MVEFH
+RV9NQVhfUkVHKGkpKSA8PCAyOw0KPiA+IC0JCX0NCj4gPiArCWlmIChkYXRhLT5oYXNfdm9sdGFn
+ZSAmICgxIDw8IDUpKSB7DQo+ID4gKwkJZGF0YS0+dm9sdGFnZVtNSU5dWzVdID0gYWR0NzQ3NV9y
+ZWFkKFJFR19WVFRfTUlOKSA8PA0KPiAyOw0KPiA+ICsJCWRhdGEtPnZvbHRhZ2VbTUFYXVs1XSA9
+IGFkdDc0NzVfcmVhZChSRUdfVlRUX01BWCkgPDwNCj4gMjsNCj4gPiArCX0NCj4gPg0KPiA+IC0J
+CWlmIChkYXRhLT5oYXNfdm9sdGFnZSAmICgxIDw8IDUpKSB7DQo+ID4gLQkJCWRhdGEtPnZvbHRh
+Z2VbTUlOXVs1XSA9DQo+IGFkdDc0NzVfcmVhZChSRUdfVlRUX01JTikgPDwgMjsNCj4gPiAtCQkJ
+ZGF0YS0+dm9sdGFnZVtNQVhdWzVdID0NCj4gYWR0NzQ3NV9yZWFkKFJFR19WVFRfTUFYKSA8PCAy
+Ow0KPiA+IC0JCX0NCj4gPiArCWZvciAoaSA9IDA7IGkgPCBBRFQ3NDc1X1RFTVBfQ09VTlQ7IGkr
+Kykgew0KPiA+ICsJCS8qIEFkanVzdCB2YWx1ZXMgc28gdGhleSBtYXRjaCB0aGUgaW5wdXQgcHJl
+Y2lzaW9uICovDQo+ID4gKwkJZGF0YS0+dGVtcFtNSU5dW2ldID0NCj4gPiArCQkJYWR0NzQ3NV9y
+ZWFkKFRFTVBfTUlOX1JFRyhpKSkgPDwgMjsNCj4gPiArCQlkYXRhLT50ZW1wW01BWF1baV0gPQ0K
+PiA+ICsJCQlhZHQ3NDc1X3JlYWQoVEVNUF9NQVhfUkVHKGkpKSA8PCAyOw0KPiA+ICsJCWRhdGEt
+PnRlbXBbQVVUT01JTl1baV0gPQ0KPiA+ICsJCQlhZHQ3NDc1X3JlYWQoVEVNUF9UTUlOX1JFRyhp
+KSkgPDwgMjsNCj4gPiArCQlkYXRhLT50ZW1wW1RIRVJNXVtpXSA9DQo+ID4gKwkJCWFkdDc0NzVf
+cmVhZChURU1QX1RIRVJNX1JFRyhpKSkgPDwgMjsNCj4gPiArCQlkYXRhLT50ZW1wW09GRlNFVF1b
+aV0gPQ0KPiA+ICsJCQlhZHQ3NDc1X3JlYWQoVEVNUF9PRkZTRVRfUkVHKGkpKTsNCj4gPiArCX0N
+Cj4gPiArCWFkdDc0NzVfcmVhZF9oeXN0ZXJzaXMoY2xpZW50KTsNCj4gPg0KPiA+IC0JCWZvciAo
+aSA9IDA7IGkgPCBBRFQ3NDc1X1RFTVBfQ09VTlQ7IGkrKykgew0KPiA+IC0JCQkvKiBBZGp1c3Qg
+dmFsdWVzIHNvIHRoZXkgbWF0Y2ggdGhlIGlucHV0DQo+IHByZWNpc2lvbiAqLw0KPiA+IC0JCQlk
+YXRhLT50ZW1wW01JTl1baV0gPQ0KPiA+IC0JCQkJYWR0NzQ3NV9yZWFkKFRFTVBfTUlOX1JFRyhp
+KSkgPDwgMjsNCj4gPiAtCQkJZGF0YS0+dGVtcFtNQVhdW2ldID0NCj4gPiAtCQkJCWFkdDc0NzVf
+cmVhZChURU1QX01BWF9SRUcoaSkpIDw8IDI7DQo+ID4gLQkJCWRhdGEtPnRlbXBbQVVUT01JTl1b
+aV0gPQ0KPiA+IC0JCQkJYWR0NzQ3NV9yZWFkKFRFTVBfVE1JTl9SRUcoaSkpIDw8IDI7DQo+ID4g
+LQkJCWRhdGEtPnRlbXBbVEhFUk1dW2ldID0NCj4gPiAtCQkJCWFkdDc0NzVfcmVhZChURU1QX1RI
+RVJNX1JFRyhpKSkgPDwgMjsNCj4gPiAtCQkJZGF0YS0+dGVtcFtPRkZTRVRdW2ldID0NCj4gPiAt
+CQkJCWFkdDc0NzVfcmVhZChURU1QX09GRlNFVF9SRUcoaSkpOw0KPiA+IC0JCX0NCj4gPiAtCQlh
+ZHQ3NDc1X3JlYWRfaHlzdGVyc2lzKGNsaWVudCk7DQo+ID4gKwlmb3IgKGkgPSAwOyBpIDwgQURU
+NzQ3NV9UQUNIX0NPVU5UOyBpKyspIHsNCj4gPiArCQlpZiAoaSA9PSAzICYmICFkYXRhLT5oYXNf
+ZmFuNCkNCj4gPiArCQkJY29udGludWU7DQo+ID4gKwkJZGF0YS0+dGFjaFtNSU5dW2ldID0NCj4g
+PiArCQkJYWR0NzQ3NV9yZWFkX3dvcmQoY2xpZW50LCBUQUNIX01JTl9SRUcoaSkpOw0KPiA+ICsJ
+fQ0KPiA+DQo+ID4gLQkJZm9yIChpID0gMDsgaSA8IEFEVDc0NzVfVEFDSF9DT1VOVDsgaSsrKSB7
+DQo+ID4gLQkJCWlmIChpID09IDMgJiYgIWRhdGEtPmhhc19mYW40KQ0KPiA+IC0JCQkJY29udGlu
+dWU7DQo+ID4gLQkJCWRhdGEtPnRhY2hbTUlOXVtpXSA9DQo+ID4gLQkJCQlhZHQ3NDc1X3JlYWRf
+d29yZChjbGllbnQsDQo+IFRBQ0hfTUlOX1JFRyhpKSk7DQo+ID4gLQkJfQ0KPiA+ICsJZm9yIChp
+ID0gMDsgaSA8IEFEVDc0NzVfUFdNX0NPVU5UOyBpKyspIHsNCj4gPiArCQlpZiAoaSA9PSAxICYm
+ICFkYXRhLT5oYXNfcHdtMikNCj4gPiArCQkJY29udGludWU7DQo+ID4gKwkJZGF0YS0+cHdtW01B
+WF1baV0gPSBhZHQ3NDc1X3JlYWQoUFdNX01BWF9SRUcoaSkpOw0KPiA+ICsJCWRhdGEtPnB3bVtN
+SU5dW2ldID0gYWR0NzQ3NV9yZWFkKFBXTV9NSU5fUkVHKGkpKTsNCj4gPiArCQkvKiBTZXQgdGhl
+IGNoYW5uZWwgYW5kIGNvbnRyb2wgaW5mb3JtYXRpb24gKi8NCj4gPiArCQlhZHQ3NDc1X3JlYWRf
+cHdtKGNsaWVudCwgaSk7DQo+ID4gKwl9DQo+ID4NCj4gPiAtCQlmb3IgKGkgPSAwOyBpIDwgQURU
+NzQ3NV9QV01fQ09VTlQ7IGkrKykgew0KPiA+IC0JCQlpZiAoaSA9PSAxICYmICFkYXRhLT5oYXNf
+cHdtMikNCj4gPiAtCQkJCWNvbnRpbnVlOw0KPiA+IC0JCQlkYXRhLT5wd21bTUFYXVtpXSA9DQo+
+IGFkdDc0NzVfcmVhZChQV01fTUFYX1JFRyhpKSk7DQo+ID4gLQkJCWRhdGEtPnB3bVtNSU5dW2ld
+ID0NCj4gYWR0NzQ3NV9yZWFkKFBXTV9NSU5fUkVHKGkpKTsNCj4gPiAtCQkJLyogU2V0IHRoZSBj
+aGFubmVsIGFuZCBjb250cm9sIGluZm9ybWF0aW9uICovDQo+ID4gLQkJCWFkdDc0NzVfcmVhZF9w
+d20oY2xpZW50LCBpKTsNCj4gPiAtCQl9DQo+ID4gKwlkYXRhLT5yYW5nZVswXSA9IGFkdDc0NzVf
+cmVhZChURU1QX1RSQU5HRV9SRUcoMCkpOw0KPiA+ICsJZGF0YS0+cmFuZ2VbMV0gPSBhZHQ3NDc1
+X3JlYWQoVEVNUF9UUkFOR0VfUkVHKDEpKTsNCj4gPiArCWRhdGEtPnJhbmdlWzJdID0gYWR0NzQ3
+NV9yZWFkKFRFTVBfVFJBTkdFX1JFRygyKSk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4g
+K30NCj4gPg0KPiA+IC0JCWRhdGEtPnJhbmdlWzBdID0gYWR0NzQ3NV9yZWFkKFRFTVBfVFJBTkdF
+X1JFRygwKSk7DQo+ID4gLQkJZGF0YS0+cmFuZ2VbMV0gPSBhZHQ3NDc1X3JlYWQoVEVNUF9UUkFO
+R0VfUkVHKDEpKTsNCj4gPiAtCQlkYXRhLT5yYW5nZVsyXSA9IGFkdDc0NzVfcmVhZChURU1QX1RS
+QU5HRV9SRUcoMikpOw0KPiA+ICtzdGF0aWMgc3RydWN0IGFkdDc0NzVfZGF0YSAqYWR0NzQ3NV91
+cGRhdGVfZGV2aWNlKHN0cnVjdCBkZXZpY2UNCj4gKmRldikNCj4gPiArew0KPiA+ICsJc3RydWN0
+IGkyY19jbGllbnQgKmNsaWVudCA9IHRvX2kyY19jbGllbnQoZGV2KTsNCj4gPiArCXN0cnVjdCBh
+ZHQ3NDc1X2RhdGEgKmRhdGEgPSBpMmNfZ2V0X2NsaWVudGRhdGEoY2xpZW50KTsNCj4gPiArCWlu
+dCByZXQ7DQo+ID4NCj4gPiArCW11dGV4X2xvY2soJmRhdGEtPmxvY2spOw0KPiA+ICsNCj4gPiAr
+CS8qIE1lYXN1cmVtZW50IHZhbHVlcyB1cGRhdGUgZXZlcnkgMiBzZWNvbmRzICovDQo+ID4gKwlp
+ZiAodGltZV9hZnRlcihqaWZmaWVzLCBkYXRhLT5tZWFzdXJlX3VwZGF0ZWQgKyBIWiAqIDIpIHx8
+DQo+ID4gKwkgICAgIWRhdGEtPnZhbGlkKSB7DQo+ID4gKwkJcmV0ID0gYWR0NzQ3NV91cGRhdGVf
+bWVhc3VyZShkZXYpOw0KPiA+ICsJCWlmIChyZXQgPCAwKSB7DQo+ID4gKwkJCWRhdGEtPnZhbGlk
+ID0gMDsNCj4gPiArCQkJbXV0ZXhfdW5sb2NrKCZkYXRhLT5sb2NrKTsNCj4gPiArCQkJcmV0dXJu
+IGRhdGE7DQo+IA0KPiBNYXliZSBJIGFtIG1pc3Npbmcgc29tZXRoaW5nLCBidXQgSSBkb24ndCBz
+ZWUgdGhlIHBvaW50IG9mIHRoaXMgY29kZS4NCj4gVGhlIGVycm9ycyBzdGlsbCB3b24ndCBiZSBy
+ZXR1cm5lZCB0byB0aGUgdXNlci4gVGhlIG9ubHkgZWZmZWN0IGlzIHRoYXQNCj4gb2xkIHZhbHVl
+cyB3aWxsIGJlIHJldHVybmVkLCBhbmQgdGhlIG5leHQgdGltZSBhcm91bmQgdGhlIHJlYWQgb3Bl
+cmF0aW9uDQo+IHdpbGwgaG9wZWZ1bGx5IHN1Y2NlZWQuIFRoYXQgaXNuJ3QgZXJyb3IgaGFuZGxp
+bmcsIGl0IGlzIGVycm9yDQo+IHN1cHByZXNzaW9uLg0KPiANCj4gPiArCQl9DQo+ID4gKwkJZGF0
+YS0+bWVhc3VyZV91cGRhdGVkID0gamlmZmllczsNCj4gPiArCX0NCj4gPiArDQo+ID4gKwkvKiBM
+aW1pdHMgYW5kIHNldHRpbmdzLCBzaG91bGQgbmV2ZXIgY2hhbmdlIHVwZGF0ZSBldmVyeSA2MA0K
+PiBzZWNvbmRzICovDQo+ID4gKwlpZiAodGltZV9hZnRlcihqaWZmaWVzLCBkYXRhLT5saW1pdHNf
+dXBkYXRlZCArIEhaICogNjApIHx8DQo+ID4gKwkgICAgIWRhdGEtPnZhbGlkKSB7DQo+IA0KPiBJ
+cyB0aGVyZSBhbnkgcmVhc29uIHRvIGJlbGlldmUgdGhhdCB0aGUgbGltaXRzIGhhdmUgdG8gYmUg
+dXBkYXRlZCBtb3JlDQo+IHRoYW4gb25jZSA/IERvZXMgdGhlIGNoaXAgaGF2ZSB0aGUgaGFiaXQg
+b2YgbG9vc2luZyBpdHMgY29uZmlndXJhdGlvbiA/DQo+IElmIGl0IGRvZXMsIHdvdWxkbid0IGl0
+IGJlIGJldHRlciB0byBfcmVzdG9yZV8gdGhlIGxpbWl0cyB0byB0aGUgb25lcw0KPiBwcmV2aW91
+c2x5IGNhY2hlZCBpbnN0ZWFkIG9mIHNpbGVudGx5IGRpc2NhcmRpbmcgdGhlIGNvbmZpZ3VyYXRp
+b24gPw0KPiANCj4gPiArCQlyZXQgPSBhZHQ3NDc1X3VwZGF0ZV9saW1pdHMoZGV2KTsNCj4gPiAr
+CQlpZiAocmV0IDwgMCkgew0KPiA+ICsJCQlkYXRhLT52YWxpZCA9IDA7DQo+ID4gKwkJCW11dGV4
+X3VubG9jaygmZGF0YS0+bG9jayk7DQo+ID4gKwkJCXJldHVybiBkYXRhOw0KPiA+ICsJCX0NCj4g
+PiAgIAkJZGF0YS0+bGltaXRzX3VwZGF0ZWQgPSBqaWZmaWVzOw0KPiA+ICAgCQlkYXRhLT52YWxp
+ZCA9IDE7DQo+ID4gICAJfQ0KPiA+DQoNCg==
