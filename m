@@ -1,180 +1,946 @@
-Return-Path: <ikegami@allied-telesis.co.jp>
-Return-path: <ikegami@allied-telesis.co.jp>
-From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
-CC: PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH 3/5] hwmon: adt7475: Change to use adt7475_read macro
-Date: Thu, 12 Jul 2018 14:33:02 +0000
-Message-ID: <TY2PR01MB3178B31FF7FA9B3D39771F67DC590@TY2PR01MB3178.jpnprd01.prod.outlook.com>
-References: <20180712010450.10586-1-ikegami@allied-telesis.co.jp>
- <20180712010450.10586-4-ikegami@allied-telesis.co.jp>
- <8109bd46-9065-a5e7-9e52-975563cb0df8@roeck-us.net>
- <OSAPR01MB317031FF04DEDDC33E01C2E0DC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
- <3860355d-ed87-902c-dc54-908c85f98ce4@roeck-us.net>
- <OSAPR01MB31707337DE771DFB3852F44EDC590@OSAPR01MB3170.jpnprd01.prod.outlook.com>
- <e0d479ac-ddd0-710d-65e4-3b8ed4db085a@roeck-us.net>
- <TY2PR01MB3178A7E39660F9AD8BFBC872DC590@TY2PR01MB3178.jpnprd01.prod.outlook.com>
- <8f91af1d-c7c2-7099-853a-9cfc3e57a662@roeck-us.net>
-In-Reply-To: <8f91af1d-c7c2-7099-853a-9cfc3e57a662@roeck-us.net>
-Content-Language: ja-JP
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Return-Path: <andrew@lunn.ch>
+Return-path: <andrew@lunn.ch>
+From: Andrew Lunn <andrew@lunn.ch>
+To: David Miller <davem@davemloft.net>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: netdev <netdev@vger.kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Russell King <rmk+kernel@arm.linux.org.uk>,
+	linux-hwmon@vger.kernel.org,
+	Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH net-next 4/4] net: phy: sfp: Add HWMON support for module sensors
+Date: Tue, 17 Jul 2018 21:48:13 +0200
+Message-Id: <1531856893-27884-5-git-send-email-andrew@lunn.ch>
+In-Reply-To: <1531856893-27884-1-git-send-email-andrew@lunn.ch>
+References: <1531856893-27884-1-git-send-email-andrew@lunn.ch>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-SGkgR3VlbnRlci1zYW4sDQoNClRoYW5rIHlvdSBzbyBtdWNoIGZvciB5b3VyIGhlbHAuDQoNCj4g
-QSBkcml2ZXIgc2hvdWxkIHJldHVybiB0aGUgZXJyb3IgY29kZXMgaXQgcmVjZWl2ZXMgZnJvbSBs
-b3dlciBsZXZlbA0KPiBkcml2ZXJzLCBpZQ0KPiBpbiB0aGlzIGNhc2UgdGhlIGVycm9yIGNvZGUg
-ZnJvbSB0aGUgaTJjIGNvbnRyb2xsZXIgZHJpdmVyLiBJdCBzaG91bGQNCj4gbm90IG1vZGlmeQ0K
-PiBlcnJvciByZXR1cm4gY29kZXMuIEluIGZhY3QsIGlmIGEgZHJpdmVyIGRvZXMgbW9kaWZ5IGVy
-cm9yIHJldHVybiBjb2RlcywNCj4gc3RhdGljIGFuYWx5emVycyB3aWxsIGNvbXBsYWluLg0KDQog
-IE5vdGVkIGFib3V0IHRoaXMgSSB3aWxsIHRyeSB0byBjb25zaWRlciB0byBkbyB0aGlzLg0KDQpS
-ZWdhcmRzLA0KSWtlZ2FtaQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
-IEd1ZW50ZXIgUm9lY2sgW21haWx0bzpncm9lY2s3QGdtYWlsLmNvbV0gT24gQmVoYWxmIE9mIEd1
-ZW50ZXINCj4gUm9lY2sNCj4gU2VudDogVGh1cnNkYXksIEp1bHkgMTIsIDIwMTggMTE6MDYgUE0N
-Cj4gVG86IElLRUdBTUkgVG9rdW5vcmk7IEplYW4gRGVsdmFyZQ0KPiBDYzogUEFDS0hBTSBDaHJp
-czsgbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy81
-XSBod21vbjogYWR0NzQ3NTogQ2hhbmdlIHRvIHVzZSBhZHQ3NDc1X3JlYWQgbWFjcm8NCj4gDQo+
-IE9uIDA3LzEyLzIwMTggMDY6NDcgQU0sIElLRUdBTUkgVG9rdW5vcmkgd3JvdGU6DQo+ID4gSGkg
-R3VlbnRlci1zYW4sDQo+ID4NCj4gPiBTb3JyeSBidXQgbGV0IG1lIGNvbnN1bHQgb25lIG1vcmUg
-dGhpbmcuDQo+ID4NCj4gPiBTaW5jZSBJIGhhdmUganVzdCByZW1lbWJlcmVkIHRoYXQgdGhlcmUg
-YXJlIC1FQUdBSU4gYW5kIC1FVElNRURPVVQNCj4gcG9zc2libGUgdG8gYmUgcmV0dXJuZWQgYnkg
-STJDIGRyaXZlci4NCj4gPiBUaG9zZSB3ZXJlIG1lbnRpb25lZCB0byBiZSBhYmxlIHRvIGJlIGNo
-ZWNrZWQgYnkgdGhlIGh3bW9uIGFkdDc0NzUgZHJpdmVyDQo+IGluIG91ciBjb21wYW55IG5vdCBs
-b25nIGFnby4NCj4gPiBBbHNvIEkgaGF2ZSBqdXN0IGNvbmZpcm1lZCB0aGUgRG9jdW1lbnRhdGlv
-bi9pMmMvZmF1bHQtY29kZXMgc28gaXQNCj4gc2VlbXMgc3RpbGwgY29ycmVjdC4NCj4gPg0KPiA+
-IEhvdyBkbyB5b3UgdGhpbmsgYWJvdXQgdGhpcz8NCj4gPiBTdGlsbCB0aG9zZSBlcnJvcnMgYWxz
-byBzaG91bGQgYmUganVzdCByZXR1cm5lZCB0byB1c2VyIHNwYWNlPw0KPiA+DQo+IA0KPiBBIGRy
-aXZlciBzaG91bGQgcmV0dXJuIHRoZSBlcnJvciBjb2RlcyBpdCByZWNlaXZlcyBmcm9tIGxvd2Vy
-IGxldmVsDQo+IGRyaXZlcnMsIGllDQo+IGluIHRoaXMgY2FzZSB0aGUgZXJyb3IgY29kZSBmcm9t
-IHRoZSBpMmMgY29udHJvbGxlciBkcml2ZXIuIEl0IHNob3VsZA0KPiBub3QgbW9kaWZ5DQo+IGVy
-cm9yIHJldHVybiBjb2Rlcy4gSW4gZmFjdCwgaWYgYSBkcml2ZXIgZG9lcyBtb2RpZnkgZXJyb3Ig
-cmV0dXJuIGNvZGVzLA0KPiBzdGF0aWMgYW5hbHl6ZXJzIHdpbGwgY29tcGxhaW4uDQo+IA0KPiBI
-b3BlIHRoaXMgaGVscHMsDQo+IEd1ZW50ZXINCj4gDQo+ID4gU29ycnkgZm9yIG1hbnkgdGltZXMg
-YXNraW5nIHlvdSBidXQgaWYgeW91IGhhdmUgYSB0aW1lIHBsZWFzZSBsZXQgbWUNCj4ga25vdyB5
-b3VyIG9waW5pb24uDQo+ID4NCj4gPiBSZWdhcmRzLA0KPiA+IElrZWdhbWkNCj4gPg0KPiA+PiAt
-LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+PiBGcm9tOiBJS0VHQU1JIFRva3Vub3JpDQo+
-ID4+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDEyLCAyMDE4IDM6MjMgUE0NCj4gPj4gVG86ICdHdWVu
-dGVyIFJvZWNrJzsgSmVhbiBEZWx2YXJlDQo+ID4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51eC1o
-d21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4gU3ViamVjdDogUkU6IFtQQVRDSCAzLzVdIGh3bW9u
-OiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNlIGFkdDc0NzVfcmVhZA0KPiBtYWNybw0KPiA+Pg0KPiA+
-PiBIaSBHdWVudGVyLXNhbiwNCj4gPj4NCj4gPj4gVGhhbmsgeW91IHNvIG11Y2ggZm9yIHRoZSBl
-eHBsYW5hdGlvbi4NCj4gPj4gSSBjb3VsZCB1bmRlcnN0YW5kIGVub3VnaCBpdC4NCj4gPj4gSSB3
-aWxsIGFiYW5kb24gdGhlc2UgcGF0Y2hlcyBmb3Igbm93Lg0KPiA+Pg0KPiA+Pj4gV2hhdCBpcyBh
-biAiSTJDIGVycm9yIHVuaXQiID8NCj4gPj4NCj4gPj4gICAgVGhlIGVycm9yIHVuaXQgaXMgY2F1
-c2VkIGJ5IHRoZSBJMkMgaXNvbGF0b3IgZmFpbHVyZSBkZXZpY2UgdGhlbg0KPiBiYWQNCj4gPj4g
-STJDIHNpZ25hbHMgY2F1c2VzIHRoZSBlcnJvci4NCj4gPj4gICAgT3VyIHByb2R1Y3RzIGhhdmUg
-YmVlbiByZXBsYWNlZCB0aGUgZGV2aWNlIHRvIG90aGVyIG5ldyBkZXZpY2UgZm9yDQo+IHRoZQ0K
-PiA+PiBtYW51ZmFjdHVyaW5nLg0KPiA+PiAgICBCdXQgc3RpbGwgdGhlcmUgYXJlIG1hbnkgdW5p
-dHMgdXNpbmcgdGhlIG9sZCBkZXZpY2UgYW5kIGl0IGlzDQo+IHBvc3NpYmxlDQo+ID4+IHRvIGJl
-IGNhdXNlZCB0aGUgZmFpbHVyZSBiZWhhdmlvciBpbiBmdXR1cmUuDQo+ID4+ICAgIFdlIHRyaWVk
-IHRvIGNoYW5nZSB0aGUgSTJDIGNsb2NrIHNwZWVkIG9uIHRoZSBlcnJvciB1bml0IGJ1dCB0aGUN
-Cj4gaXNzdWUNCj4gPj4gd2FzIG5vdCBhYmxlIHRvIGJlIHJlc29sdmVkLg0KPiA+PiAgICBCeSB0
-aGUgd2F5IHdlIGhhdmUgZml4ZWQgb3VyIG9yaWdpbmFsIHVzZXIgc3BhY2UgZHJpdmVyIGZvciBv
-dGhlcg0KPiA+PiBmZWF0dXJlIHRvIHJldHJ5IGZvciB0aGUgZXJyb3IuDQo+ID4+DQo+ID4+PiBZ
-ZXMsIHRoZSBkcml2ZXIgc2hvdWxkIGNoZWNrIGZvciBlcnJvcnMsIGJ1dCBpdCBzaG91bGQgcmVw
-b3J0IGFsbA0KPiBlcnJvcnMNCj4gPj4+IHRvIHVzZXIgc3BhY2UgYW5kIG5laXRoZXIgcmV0cnkg
-bm9yIHNpbGVudGx5IGhpZGUvaWdub3JlIGVycm9ycw0KPiAodW5sZXNzDQo+ID4+PiBhIHByb2Js
-ZW0gaXMga25vd24gdG8gYmUgYSBjaGlwIHByb2JsZW0pLg0KPiA+Pg0KPiA+PiAgICBJIHdpbGwg
-ZG8gY29uc2lkZXIgdGhpcyBpbiBmdXR1cmUuDQo+ID4+ICAgIEJ1dCBhdCBmaXJzdCBJIHdpbGwg
-aW52ZXN0aWdhdGUgdGhlIGNhdXNlIG9mIGFub3RoZXIgdm9sdGFnZQ0KPiB3YXJuaW5nDQo+ID4+
-IGlzc3VlIGF0IGZpcnN0Lg0KPiA+PiAgICBJdCBpcyBub3QgY2F1c2VkIGJ5IHRoZSBJMkMgZXJy
-b3IgYnV0IHNvbWV0aW1lcyBkZXRlY3RlZCB0aGUgdm9sdGFnZQ0KPiA+PiB3YXJuaW5nIGFjdHVh
-bGx5Lg0KPiA+Pg0KPiA+PiBSZWdhcmRzLA0KPiA+PiBJa2VnYW1pDQo+ID4+DQo+ID4+PiAtLS0t
-LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+Pj4gRnJvbTogR3VlbnRlciBSb2VjayBbbWFpbHRv
-Omdyb2VjazdAZ21haWwuY29tXSBPbiBCZWhhbGYgT2YgR3VlbnRlcg0KPiA+Pj4gUm9lY2sNCj4g
-Pj4+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDEyLCAyMDE4IDE6MjMgUE0NCj4gPj4+IFRvOiBJS0VH
-QU1JIFRva3Vub3JpOyBKZWFuIERlbHZhcmUNCj4gPj4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51
-eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy81XSBo
-d21vbjogYWR0NzQ3NTogQ2hhbmdlIHRvIHVzZSBhZHQ3NDc1X3JlYWQNCj4gPj4gbWFjcm8NCj4g
-Pj4+DQo+ID4+PiBPbiAwNy8xMS8yMDE4IDA5OjAxIFBNLCBJS0VHQU1JIFRva3Vub3JpIHdyb3Rl
-Og0KPiA+Pj4+IEhpIEd1ZW50ZXItc2FuLA0KPiA+Pj4+DQo+ID4+Pj4gVGhhbmsgeW91IHNvIG11
-Y2ggZm9yIHlvdXIgY29tbWVudHMuDQo+ID4+Pj4NCj4gPj4+PiBPaCBJIHNlZSBhbmQgYWN0dWFs
-bHkgd2UgaGF2ZSBzb21lIEkyQyBlcnJvciB1bml0cyBpbiBvdXIgcHJvZHVjdHMuDQo+ID4+Pj4g
-VGhlIHBhdGNoIGlzIGZvciB0aGUgZXJyb3IgY2FzZSBtYWlubHkuDQo+ID4+Pg0KPiA+Pj4gV2hh
-dCBpcyBhbiAiSTJDIGVycm9yIHVuaXQiID8NCj4gPj4+DQo+ID4+Pj4gQnV0IEkgdGhpbmsgdGhh
-dCBzb21ldGltZXMgdGhlIEkyQyBlcnJvciBpcyBzdGlsbCBjYXVzZWQgb24gdGhlIG5vcm1hbA0K
-PiA+Pj4gdW5pdHMgYWxzbyBhY3R1YWxseS4NCj4gPj4+PiBJIGFtIG5vdCBzdXJlIGFib3V0IHRo
-YXQgdGhlIG5vcm1hbCB1bml0cyBlcnJvciBiZWhhdmlvciBpcyBjYXVzZWQNCj4gPj4gYnkNCj4g
-Pj4+IHRoZSBib2FyZCAoSTJDIGNvbnRyb2xsZXIpIG9yIHRoZSBjaGlwIEFEVDc0NzZBIGJ1dCBw
-cm9iYWJseSB0aGUNCj4gZm9ybWVyDQo+ID4+PiBidXQgbm90IHN1cmUuDQo+ID4+Pj4gU28gc2hv
-dWxkIHRoZXNlIHBhdGNoZXMgbm90IGJlIGFwcGxpZWQgdG8gdGhlIGFkdDc0NzUgZHJpdmVyIGFz
-IHlvdQ0KPiA+Pj4gbWVudGlvbmVkPw0KPiA+Pj4+DQo+ID4+Pg0KPiA+Pj4gRHJpdmVycyBhcmUg
-bm90IHJlc3BvbnNpYmxlIGZvciBoYW5kbGluZyBiYWQgYm9hcmQgYmVoYXZpb3IsIHNvDQo+IHJl
-dHJpZXMNCj4gPj4+IGR1ZSB0byBjb250cm9sbGVyIG9yIGJvYXJkIGlzc3VlcyBzaG91bGQgbm90
-IGJlIGhhbmRsZWQgYnkgdGhlIGNoaXANCj4gPj4+IGRyaXZlci4NCj4gPj4+IE90aGVyd2lzZSB3
-ZSB3b3VsZCBlbmQgdXAgaGF2aW5nIHRvIHNwcmlua2xlIHJldHJpZXMgaW50byBhbGwgaTJjDQo+
-ID4+IGRyaXZlcnMNCj4gPj4+IGluIHRoZSBrZXJuZWwuDQo+ID4+Pg0KPiA+Pj4gSWYgdGhlIHBy
-b2JsZW0gaXMgY2F1c2VkIGJ5IHRoZSBjb250cm9sbGVyLCBpdCBzaG91bGQgYmUgaGFuZGxlZCBp
-bg0KPiA+PiB0aGUNCj4gPj4+IGNvbnRyb2xsZXIgZHJpdmVyLiBJZiB0aGUgcHJvYmxlbSBpcyBj
-YXVzZWQgYnkgYmFkIGkyYyBzaWduYWxzLCBpdA0KPiA+PiBzaG91bGQNCj4gPj4+IGJlIGhhbmRs
-ZWQgYnkgaGFyZHdhcmUgKG9yIG1heWJlIGJ5IHNlbGVjdGluZyBhIGRpZmZlcmVudCBjbG9jaw0K
-PiBzcGVlZCkuDQo+ID4+Pg0KPiA+Pj4+IEF0IGZpcnN0IEkgdGhvdWdodCB0aGF0IHRoZSBJMkMg
-U01CdXMgQVBJcyByZXR1cm4gZXJyb3IgY29kZXMgYnV0DQo+ID4+IGFkdDc0NzUNCj4gPj4+IGRy
-aXZlciBkb2VzIG5vdCBjaGVjayBzbyBpdCBzaG91bGQgYmUgY2hlY2tlZCB0aGUgZXJyb3IgY29k
-ZXMuDQo+ID4+Pj4gSXMgdGhpcyBub3QgY29ycmVjdD8NCj4gPj4+Pg0KPiA+Pj4NCj4gPj4+IFll
-cywgdGhlIGRyaXZlciBzaG91bGQgY2hlY2sgZm9yIGVycm9ycywgYnV0IGl0IHNob3VsZCByZXBv
-cnQgYWxsDQo+IGVycm9ycw0KPiA+Pj4gdG8gdXNlciBzcGFjZSBhbmQgbmVpdGhlciByZXRyeSBu
-b3Igc2lsZW50bHkgaGlkZS9pZ25vcmUgZXJyb3JzDQo+ICh1bmxlc3MNCj4gPj4+IGEgcHJvYmxl
-bSBpcyBrbm93biB0byBiZSBhIGNoaXAgcHJvYmxlbSkuDQo+ID4+Pg0KPiA+Pj4gR3VlbnRlcg0K
-PiA+Pj4NCj4gPj4+PiBUbyBtYWtlIHN1cmUgbGV0IG1lIGNvbmZpcm0gYWJvdmUuDQo+ID4+Pj4N
-Cj4gPj4+PiBSZWdhcmRzLA0KPiA+Pj4+IElrZWdhbWkNCj4gPj4+Pg0KPiA+Pj4+PiAtLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+Pj4+PiBGcm9tOiBsaW51eC1od21vbi1vd25lckB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gPj4+Pj4gW21haWx0bzpsaW51eC1od21vbi1vd25lckB2Z2VyLmtlcm5l
-bC5vcmddIE9uIEJlaGFsZiBPZiBHdWVudGVyDQo+ID4+PiBSb2Vjaw0KPiA+Pj4+PiBTZW50OiBU
-aHVyc2RheSwgSnVseSAxMiwgMjAxOCAxMjo0MiBQTQ0KPiA+Pj4+PiBUbzogSUtFR0FNSSBUb2t1
-bm9yaTsgSmVhbiBEZWx2YXJlDQo+ID4+Pj4+IENjOiBQQUNLSEFNIENocmlzOyBsaW51eC1od21v
-bkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+Pj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzVdIGh3bW9u
-OiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNlIGFkdDc0NzVfcmVhZA0KPiA+Pj4gbWFjcm8NCj4gPj4+
-Pj4NCj4gPj4+Pj4gT24gMDcvMTEvMjAxOCAwNzo1MiBQTSwgSUtFR0FNSSBUb2t1bm9yaSB3cm90
-ZToNCj4gPj4+Pj4+IEhpIEd1ZW50ZXItc2FuLA0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IFRoYW5rIHlv
-dSBzbyBtdWNoIGZvciB5b3VyIGNvbW1lbnRzLg0KPiA+Pj4+Pj4gT2theSBub3cgSSBhbSB0aGlu
-a2luZyB0byBjaGFuZ2UgdGhlIGFkdDc0NzVfcmVhZCBtYWNybyB0byBhDQo+IGZ1bmN0aW9uDQo+
-ID4+Pj4+IHRvIHJlcGVhdCBmb3IgdGhlIGVycm9yIGNhc2UuDQo+ID4+Pj4+PiBJZiB5b3UgaGF2
-ZSBhbnkgY29tbWVudCBhYm91dCB0aGlzIHBsZWFzZSBsZXQgbWUga25vdy4NCj4gPj4+Pj4NCj4g
-Pj4+Pj4gWWVzIC0gd2Ugc2hvdWxkIG9ubHkgZG8gdGhpcyBpZiBpdCBpcyBrbm93biB0byBiZSBh
-IGNoaXAgcHJvYmxlbS4NCj4gPj4+Pj4gUGF0Y2hpbmcgdGhlIGNoaXAgZHJpdmVyIGZvciBhIGJv
-YXJkIChvciBpMmMgY29udHJvbGxlcikgcHJvYmxlbQ0KPiA+Pj4+PiBpcyBub3QgYXBwcm9wcmlh
-dGUuDQo+ID4+Pj4+DQo+ID4+Pj4+IEd1ZW50ZXINCj4gPj4+Pj4NCj4gPj4+Pj4+IEFueXdheSBJ
-IHdpbGwgZG8gc2VuZCB2MiB2ZXJzaW9uIHBhdGNoZXMgbGF0ZXIuDQo+ID4+Pj4+Pg0KPiA+Pj4+
-Pj4gUmVnYXJkcywNCj4gPj4+Pj4+IElrZWdhbWkNCj4gPj4+Pj4+DQo+ID4+Pj4+Pj4gLS0tLS1P
-cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4+Pj4+PiBGcm9tOiBHdWVudGVyIFJvZWNrIFttYWls
-dG86Z3JvZWNrN0BnbWFpbC5jb21dIE9uIEJlaGFsZiBPZg0KPiA+PiBHdWVudGVyDQo+ID4+Pj4+
-Pj4gUm9lY2sNCj4gPj4+Pj4+PiBTZW50OiBUaHVyc2RheSwgSnVseSAxMiwgMjAxOCAxMDo1MCBB
-TQ0KPiA+Pj4+Pj4+IFRvOiBJS0VHQU1JIFRva3Vub3JpOyBKZWFuIERlbHZhcmUNCj4gPj4+Pj4+
-PiBDYzogUEFDS0hBTSBDaHJpczsgbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+ID4+Pj4+
-Pj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzVdIGh3bW9uOiBhZHQ3NDc1OiBDaGFuZ2UgdG8gdXNl
-DQo+ID4+IGFkdDc0NzVfcmVhZA0KPiA+Pj4+PiBtYWNybw0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4g
-T24gMDcvMTEvMjAxOCAwNjowNCBQTSwgVG9rdW5vcmkgSWtlZ2FtaSB3cm90ZToNCj4gPj4+Pj4+
-Pj4gSXQgc2hvdWRsIGJlIHNhbWUgYXMgd2l0aCBvdGhlciBmdW5jdGlvbnMgdG8gdXNlIGFkdDc0
-NzVfcmVhZC4NCj4gPj4+Pj4+Pj4gU28gY2hhbmdlIHRvIHVzZSBpdCBpbnN0ZWFkIG9mIGkyY19z
-bWJ1c19yZWFkX2J5dGVfZGF0YS4NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4+IEkg
-ZG9uJ3Qgc2VlIGEgcG9pbnQgaW4gdGhpcyBjaGFuZ2UuIFJlcGxhY2luZyBhIGZ1bmN0aW9uIG5h
-bWUNCj4gPj4gZG9lc24ndA0KPiA+Pj4+Pj4+IG1ha2UNCj4gPj4+Pj4+PiB0aGUgY29kZSBlYXNp
-ZXIgdG8gcmVhZC4gSWYgYW55dGhpbmcsIHlvdSBjb3VsZCBjb25zaWRlciBkcm9wcGluZw0KPiA+
-Pj4+Pj4+IGFkdDc0NzVfcmVhZA0KPiA+Pj4+Pj4+IGFuZCBjYWxsaW5nIGkyY19zbWJ1c19yZWFk
-X2J5dGVfZGF0YSgpIGRpcmVjdGx5Lg0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4gR3VlbnRlcg0KPiA+
-Pj4+Pj4+DQo+ID4+Pj4+Pj4+IFNpZ25lZC1vZmYtYnk6IFRva3Vub3JpIElrZWdhbWkNCj4gPGlr
-ZWdhbWlAYWxsaWVkLXRlbGVzaXMuY28uanA+DQo+ID4+Pj4+Pj4+IENjOiBDaHJpcyBQYWNraGFt
-IDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+ID4+Pj4+Pj4+IENjOiBsaW51
-eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+Pj4+Pj4gLS0tDQo+ID4+Pj4+Pj4+ICAgICAg
-ZHJpdmVycy9od21vbi9hZHQ3NDc1LmMgfCAyICstDQo+ID4+Pj4+Pj4+ICAgICAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4+Pj4+Pj4+DQo+ID4+Pj4+
-Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiBiL2RyaXZlcnMvaHdt
-b24vYWR0NzQ3NS5jDQo+ID4+Pj4+Pj4+IGluZGV4IGE0MGViNjJlZTZiMS4uYmFkMjUwNzI5ZTk5
-IDEwMDY0NA0KPiA+Pj4+Pj4+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiA+Pj4+
-Pj4+PiArKysgYi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYw0KPiA+Pj4+Pj4+PiBAQCAtMTAxMiw3
-ICsxMDEyLDcgQEAgc3RhdGljIHNzaXplX3QNCj4gPj4+Pj4+PiBwd21fdXNlX3BvaW50Ml9wd21f
-YXRfY3JpdF9zdG9yZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4+Pj4+Pj4+ICAgICAgCQlyZXR1
-cm4gLUVJTlZBTDsNCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gICAgICAJbXV0ZXhfbG9jaygmZGF0
-YS0+bG9jayk7DQo+ID4+Pj4+Pj4+IC0JZGF0YS0+Y29uZmlnNCA9IGkyY19zbWJ1c19yZWFkX2J5
-dGVfZGF0YShjbGllbnQsDQo+ID4+Pj4+Pj4gUkVHX0NPTkZJRzQpOw0KPiA+Pj4+Pj4+PiArCWRh
-dGEtPmNvbmZpZzQgPSBhZHQ3NDc1X3JlYWQoUkVHX0NPTkZJRzQpOw0KPiA+Pj4+Pj4+PiAgICAg
-IAlpZiAodmFsKQ0KPiA+Pj4+Pj4+PiAgICAgIAkJZGF0YS0+Y29uZmlnNCB8PSBDT05GSUc0X01B
-WERVVFk7DQo+ID4+Pj4+Pj4+ICAgICAgCWVsc2UNCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+DQo+ID4+
-Pj4+DQo+ID4+Pj4+IC0tDQo+ID4+Pj4+IFRvIHVuc3Vic2NyaWJlIGZyb20gdGhpcyBsaXN0OiBz
-ZW5kIHRoZSBsaW5lICJ1bnN1YnNjcmliZQ0KPiA+PiBsaW51eC1od21vbiINCj4gPj4+Pj4gaW4N
-Cj4gPj4+Pj4gdGhlIGJvZHkgb2YgYSBtZXNzYWdlIHRvIG1ham9yZG9tb0B2Z2VyLmtlcm5lbC5v
-cmcNCj4gPj4+Pj4gTW9yZSBtYWpvcmRvbW8gaW5mbyBhdA0KPiA+PiBodHRwOi8vdmdlci5rZXJu
-ZWwub3JnL21ham9yZG9tby1pbmZvLmh0bWwNCj4gPg0KDQo=
+SFP modules can contain a number of sensors. The EEPROM also contains
+recommended alarm and critical values for each sensor, and indications
+of if these have been exceeded. Export this information via
+HWMON. Currently temperature, VCC, bias current, transmit power, and
+possibly receiver power is supported.
+
+The sensors in the modules can either return calibrate or uncalibrated
+values. Uncalibrated values need to be manipulated, using coefficients
+provided in the SFP EEPROM. Uncalibrated receive power values require
+floating point maths in order to calibrate them. Performing this in
+the kernel is hard. So if the SFP module indicates it uses
+uncalibrated values, RX power is not made available.
+
+With this hwmon device, it is possible to view the sensor values using
+lm-sensors programs:
+
+in0:          +3.29 V  (crit min =  +2.90 V, min =  +3.00 V)
+                       (max =  +3.60 V, crit max =  +3.70 V)
+temp1:        +33.0°C  (low  =  -5.0°C, high = +80.0°C)
+                       (crit low = -10.0°C, crit = +85.0°C)
+power1:      1000.00 nW (max = 794.00 uW, min =  50.00 uW)  ALARM (LCRIT)
+                       (lcrit =  40.00 uW, crit = 1000.00 uW)
+curr1:        +0.00 A  (crit min =  +0.00 A, min =  +0.00 A)  ALARM (LCRIT, MIN)
+                       (max =  +0.01 A, crit max =  +0.01 A)
+
+The scaling sensors performs on the bias current is not particularly
+good. The raw values are more useful:
+
+curr1:
+  curr1_input: 0.000
+  curr1_min: 0.002
+  curr1_max: 0.010
+  curr1_lcrit: 0.000
+  curr1_crit: 0.011
+  curr1_min_alarm: 1.000
+  curr1_max_alarm: 0.000
+  curr1_lcrit_alarm: 1.000
+  curr1_crit_alarm: 0.000
+
+In order to keep the I2C overhead to a minimum, the constant values,
+such as limits and calibration coefficients are read once at module
+insertion time. Thus only reading *_input and *_alarm properties
+requires i2c read operations.
+
+Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+---
+RFC->V1
+Use __be16 when reading sensor
+DIV_ROUND_CLOSEST()
+Don't use devm_hwmon_* to fix lifetime issues
+Replace invalid chars in hwmon name with _
+---
+ drivers/net/phy/Kconfig |   1 +
+ drivers/net/phy/sfp.c   | 727 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/sfp.h     |  72 +++-
+ 3 files changed, 799 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 7761536974bf..f31ae4faf4e5 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+@@ -215,6 +215,7 @@ config SFP
+ 	tristate "SFP cage support"
+ 	depends on I2C
+ 	select MDIO_I2C
++	imply HWMON
+ 
+ config AMD_PHY
+ 	tristate "AMD PHYs"
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index c4c92db86dfa..5661226cf75b 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -1,5 +1,7 @@
++#include <linux/ctype.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/hwmon.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/jiffies.h>
+@@ -131,6 +133,12 @@ struct sfp {
+ 	unsigned int sm_retries;
+ 
+ 	struct sfp_eeprom_id id;
++#if IS_ENABLED(CONFIG_HWMON)
++	struct sfp_diag diag;
++	struct device *hwmon_dev;
++	char *hwmon_name;
++#endif
++
+ };
+ 
+ static bool sff_module_supported(const struct sfp_eeprom_id *id)
+@@ -316,6 +324,719 @@ static unsigned int sfp_check(void *buf, size_t len)
+ 	return check;
+ }
+ 
++/* hwmon */
++#if IS_ENABLED(CONFIG_HWMON)
++static umode_t sfp_hwmon_is_visible(const void *data,
++				    enum hwmon_sensor_types type,
++				    u32 attr, int channel)
++{
++	const struct sfp *sfp = data;
++
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++		case hwmon_temp_min_alarm:
++		case hwmon_temp_max_alarm:
++		case hwmon_temp_lcrit_alarm:
++		case hwmon_temp_crit_alarm:
++		case hwmon_temp_min:
++		case hwmon_temp_max:
++		case hwmon_temp_lcrit:
++		case hwmon_temp_crit:
++			return 0444;
++		default:
++			return 0;
++		}
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++		case hwmon_in_min_alarm:
++		case hwmon_in_max_alarm:
++		case hwmon_in_lcrit_alarm:
++		case hwmon_in_crit_alarm:
++		case hwmon_in_min:
++		case hwmon_in_max:
++		case hwmon_in_lcrit:
++		case hwmon_in_crit:
++			return 0444;
++		default:
++			return 0;
++		}
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++		case hwmon_curr_min_alarm:
++		case hwmon_curr_max_alarm:
++		case hwmon_curr_lcrit_alarm:
++		case hwmon_curr_crit_alarm:
++		case hwmon_curr_min:
++		case hwmon_curr_max:
++		case hwmon_curr_lcrit:
++		case hwmon_curr_crit:
++			return 0444;
++		default:
++			return 0;
++		}
++	case hwmon_power:
++		/* External calibration of receive power requires
++		 * floating point arithmetic. Doing that in the kernel
++		 * is not easy, so just skip it. If the module does
++		 * not require external calibration, we can however
++		 * show receiver power, since FP is then not needed.
++		 */
++		if (sfp->id.ext.diagmon & SFP_DIAGMON_EXT_CAL &&
++		    channel == 1)
++			return 0;
++		switch (attr) {
++		case hwmon_power_input:
++		case hwmon_power_min_alarm:
++		case hwmon_power_max_alarm:
++		case hwmon_power_lcrit_alarm:
++		case hwmon_power_crit_alarm:
++		case hwmon_power_min:
++		case hwmon_power_max:
++		case hwmon_power_lcrit:
++		case hwmon_power_crit:
++			return 0444;
++		default:
++			return 0;
++		}
++	default:
++		return 0;
++	}
++}
++
++static int sfp_hwmon_read_sensor(struct sfp *sfp, int reg, long *value)
++{
++	__be16 val;
++	int err;
++
++	err = sfp_read(sfp, true, reg, &val, sizeof(val));
++	if (err < 0)
++		return err;
++
++	*value = be16_to_cpu(val);
++
++	return 0;
++}
++
++static void sfp_hwmon_to_rx_power(long *value)
++{
++	*value = DIV_ROUND_CLOSEST(*value, 100);
++}
++
++static void sfp_hwmon_calibrate(struct sfp *sfp, unsigned int slope, int offset,
++				long *value)
++{
++	if (sfp->id.ext.diagmon & SFP_DIAGMON_EXT_CAL)
++		*value = DIV_ROUND_CLOSEST(*value * slope, 256) + offset;
++}
++
++static void sfp_hwmon_calibrate_temp(struct sfp *sfp, long *value)
++{
++	sfp_hwmon_calibrate(sfp, be16_to_cpu(sfp->diag.cal_t_slope),
++			    be16_to_cpu(sfp->diag.cal_t_offset), value);
++
++	if (*value >= 0x8000)
++		*value -= 0x10000;
++
++	*value = DIV_ROUND_CLOSEST(*value * 1000, 256);
++}
++
++static void sfp_hwmon_calibrate_vcc(struct sfp *sfp, long *value)
++{
++	sfp_hwmon_calibrate(sfp, be16_to_cpu(sfp->diag.cal_v_slope),
++			    be16_to_cpu(sfp->diag.cal_v_offset), value);
++
++	*value = DIV_ROUND_CLOSEST(*value, 10);
++}
++
++static void sfp_hwmon_calibrate_bias(struct sfp *sfp, long *value)
++{
++	sfp_hwmon_calibrate(sfp, be16_to_cpu(sfp->diag.cal_txi_slope),
++			    be16_to_cpu(sfp->diag.cal_txi_offset), value);
++
++	*value = DIV_ROUND_CLOSEST(*value, 500);
++}
++
++static void sfp_hwmon_calibrate_tx_power(struct sfp *sfp, long *value)
++{
++	sfp_hwmon_calibrate(sfp, be16_to_cpu(sfp->diag.cal_txpwr_slope),
++			    be16_to_cpu(sfp->diag.cal_txpwr_offset), value);
++
++	*value = DIV_ROUND_CLOSEST(*value, 10);
++}
++
++static int sfp_hwmon_read_temp(struct sfp *sfp, int reg, long *value)
++{
++	int err;
++
++	err = sfp_hwmon_read_sensor(sfp, reg, value);
++	if (err < 0)
++		return err;
++
++	sfp_hwmon_calibrate_temp(sfp, value);
++
++	return 0;
++}
++
++static int sfp_hwmon_read_vcc(struct sfp *sfp, int reg, long *value)
++{
++	int err;
++
++	err = sfp_hwmon_read_sensor(sfp, reg, value);
++	if (err < 0)
++		return err;
++
++	sfp_hwmon_calibrate_vcc(sfp, value);
++
++	return 0;
++}
++
++static int sfp_hwmon_read_bias(struct sfp *sfp, int reg, long *value)
++{
++	int err;
++
++	err = sfp_hwmon_read_sensor(sfp, reg, value);
++	if (err < 0)
++		return err;
++
++	sfp_hwmon_calibrate_bias(sfp, value);
++
++	return 0;
++}
++
++static int sfp_hwmon_read_tx_power(struct sfp *sfp, int reg, long *value)
++{
++	int err;
++
++	err = sfp_hwmon_read_sensor(sfp, reg, value);
++	if (err < 0)
++		return err;
++
++	sfp_hwmon_calibrate_tx_power(sfp, value);
++
++	return 0;
++}
++
++static int sfp_hwmon_read_rx_power(struct sfp *sfp, int reg, long *value)
++{
++	int err;
++
++	err = sfp_hwmon_read_sensor(sfp, reg, value);
++	if (err < 0)
++		return err;
++
++	sfp_hwmon_to_rx_power(value);
++
++	return 0;
++}
++
++static int sfp_hwmon_temp(struct sfp *sfp, u32 attr, long *value)
++{
++	u8 status;
++	int err;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		return sfp_hwmon_read_temp(sfp, SFP_TEMP, value);
++
++	case hwmon_temp_lcrit:
++		*value = be16_to_cpu(sfp->diag.temp_low_alarm);
++		sfp_hwmon_calibrate_temp(sfp, value);
++		return 0;
++
++	case hwmon_temp_min:
++		*value = be16_to_cpu(sfp->diag.temp_low_warn);
++		sfp_hwmon_calibrate_temp(sfp, value);
++		return 0;
++	case hwmon_temp_max:
++		*value = be16_to_cpu(sfp->diag.temp_high_warn);
++		sfp_hwmon_calibrate_temp(sfp, value);
++		return 0;
++
++	case hwmon_temp_crit:
++		*value = be16_to_cpu(sfp->diag.temp_high_alarm);
++		sfp_hwmon_calibrate_temp(sfp, value);
++		return 0;
++
++	case hwmon_temp_lcrit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TEMP_LOW);
++		return 0;
++
++	case hwmon_temp_min_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TEMP_LOW);
++		return 0;
++
++	case hwmon_temp_max_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TEMP_HIGH);
++		return 0;
++
++	case hwmon_temp_crit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TEMP_HIGH);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int sfp_hwmon_vcc(struct sfp *sfp, u32 attr, long *value)
++{
++	u8 status;
++	int err;
++
++	switch (attr) {
++	case hwmon_in_input:
++		return sfp_hwmon_read_vcc(sfp, SFP_VCC, value);
++
++	case hwmon_in_lcrit:
++		*value = be16_to_cpu(sfp->diag.volt_low_alarm);
++		sfp_hwmon_calibrate_vcc(sfp, value);
++		return 0;
++
++	case hwmon_in_min:
++		*value = be16_to_cpu(sfp->diag.volt_low_warn);
++		sfp_hwmon_calibrate_vcc(sfp, value);
++		return 0;
++
++	case hwmon_in_max:
++		*value = be16_to_cpu(sfp->diag.volt_high_warn);
++		sfp_hwmon_calibrate_vcc(sfp, value);
++		return 0;
++
++	case hwmon_in_crit:
++		*value = be16_to_cpu(sfp->diag.volt_high_alarm);
++		sfp_hwmon_calibrate_vcc(sfp, value);
++		return 0;
++
++	case hwmon_in_lcrit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_VCC_LOW);
++		return 0;
++
++	case hwmon_in_min_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_VCC_LOW);
++		return 0;
++
++	case hwmon_in_max_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_VCC_HIGH);
++		return 0;
++
++	case hwmon_in_crit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_VCC_HIGH);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int sfp_hwmon_bias(struct sfp *sfp, u32 attr, long *value)
++{
++	u8 status;
++	int err;
++
++	switch (attr) {
++	case hwmon_curr_input:
++		return sfp_hwmon_read_bias(sfp, SFP_TX_BIAS, value);
++
++	case hwmon_curr_lcrit:
++		*value = be16_to_cpu(sfp->diag.bias_low_alarm);
++		sfp_hwmon_calibrate_bias(sfp, value);
++		return 0;
++
++	case hwmon_curr_min:
++		*value = be16_to_cpu(sfp->diag.bias_low_warn);
++		sfp_hwmon_calibrate_bias(sfp, value);
++		return 0;
++
++	case hwmon_curr_max:
++		*value = be16_to_cpu(sfp->diag.bias_high_warn);
++		sfp_hwmon_calibrate_bias(sfp, value);
++		return 0;
++
++	case hwmon_curr_crit:
++		*value = be16_to_cpu(sfp->diag.bias_high_alarm);
++		sfp_hwmon_calibrate_bias(sfp, value);
++		return 0;
++
++	case hwmon_curr_lcrit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TX_BIAS_LOW);
++		return 0;
++
++	case hwmon_curr_min_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TX_BIAS_LOW);
++		return 0;
++
++	case hwmon_curr_max_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TX_BIAS_HIGH);
++		return 0;
++
++	case hwmon_curr_crit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TX_BIAS_HIGH);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int sfp_hwmon_tx_power(struct sfp *sfp, u32 attr, long *value)
++{
++	u8 status;
++	int err;
++
++	switch (attr) {
++	case hwmon_power_input:
++		return sfp_hwmon_read_tx_power(sfp, SFP_TX_POWER, value);
++
++	case hwmon_power_lcrit:
++		*value = be16_to_cpu(sfp->diag.txpwr_low_alarm);
++		sfp_hwmon_calibrate_tx_power(sfp, value);
++		return 0;
++
++	case hwmon_power_min:
++		*value = be16_to_cpu(sfp->diag.txpwr_low_warn);
++		sfp_hwmon_calibrate_tx_power(sfp, value);
++		return 0;
++
++	case hwmon_power_max:
++		*value = be16_to_cpu(sfp->diag.txpwr_high_warn);
++		sfp_hwmon_calibrate_tx_power(sfp, value);
++		return 0;
++
++	case hwmon_power_crit:
++		*value = be16_to_cpu(sfp->diag.txpwr_high_alarm);
++		sfp_hwmon_calibrate_tx_power(sfp, value);
++		return 0;
++
++	case hwmon_power_lcrit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TXPWR_LOW);
++		return 0;
++
++	case hwmon_power_min_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TXPWR_LOW);
++		return 0;
++
++	case hwmon_power_max_alarm:
++		err = sfp_read(sfp, true, SFP_WARN0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN0_TXPWR_HIGH);
++		return 0;
++
++	case hwmon_power_crit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM0, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM0_TXPWR_HIGH);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int sfp_hwmon_rx_power(struct sfp *sfp, u32 attr, long *value)
++{
++	u8 status;
++	int err;
++
++	switch (attr) {
++	case hwmon_power_input:
++		return sfp_hwmon_read_rx_power(sfp, SFP_RX_POWER, value);
++
++	case hwmon_power_lcrit:
++		*value = be16_to_cpu(sfp->diag.rxpwr_low_alarm);
++		sfp_hwmon_to_rx_power(value);
++		return 0;
++
++	case hwmon_power_min:
++		*value = be16_to_cpu(sfp->diag.rxpwr_low_warn);
++		sfp_hwmon_to_rx_power(value);
++		return 0;
++
++	case hwmon_power_max:
++		*value = be16_to_cpu(sfp->diag.rxpwr_high_warn);
++		sfp_hwmon_to_rx_power(value);
++		return 0;
++
++	case hwmon_power_crit:
++		*value = be16_to_cpu(sfp->diag.rxpwr_high_alarm);
++		sfp_hwmon_to_rx_power(value);
++		return 0;
++
++	case hwmon_power_lcrit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM1, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM1_RXPWR_LOW);
++		return 0;
++
++	case hwmon_power_min_alarm:
++		err = sfp_read(sfp, true, SFP_WARN1, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN1_RXPWR_LOW);
++		return 0;
++
++	case hwmon_power_max_alarm:
++		err = sfp_read(sfp, true, SFP_WARN1, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_WARN1_RXPWR_HIGH);
++		return 0;
++
++	case hwmon_power_crit_alarm:
++		err = sfp_read(sfp, true, SFP_ALARM1, &status, sizeof(status));
++		if (err < 0)
++			return err;
++
++		*value = !!(status & SFP_ALARM1_RXPWR_HIGH);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int sfp_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			  u32 attr, int channel, long *value)
++{
++	struct sfp *sfp = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return sfp_hwmon_temp(sfp, attr, value);
++	case hwmon_in:
++		return sfp_hwmon_vcc(sfp, attr, value);
++	case hwmon_curr:
++		return sfp_hwmon_bias(sfp, attr, value);
++	case hwmon_power:
++		switch (channel) {
++		case 0:
++			return sfp_hwmon_tx_power(sfp, attr, value);
++		case 1:
++			return sfp_hwmon_rx_power(sfp, attr, value);
++		default:
++			return -EOPNOTSUPP;
++		}
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops sfp_hwmon_ops = {
++	.is_visible = sfp_hwmon_is_visible,
++	.read = sfp_hwmon_read,
++};
++
++static u32 sfp_hwmon_chip_config[] = {
++	HWMON_C_REGISTER_TZ,
++	0,
++};
++
++static const struct hwmon_channel_info sfp_hwmon_chip = {
++	.type = hwmon_chip,
++	.config = sfp_hwmon_chip_config,
++};
++
++static u32 sfp_hwmon_temp_config[] = {
++	HWMON_T_INPUT |
++	HWMON_T_MAX | HWMON_T_MIN |
++	HWMON_T_MAX_ALARM | HWMON_T_MIN_ALARM |
++	HWMON_T_CRIT | HWMON_T_LCRIT |
++	HWMON_T_CRIT_ALARM | HWMON_T_LCRIT_ALARM,
++	0,
++};
++
++static const struct hwmon_channel_info sfp_hwmon_temp_channel_info = {
++	.type = hwmon_temp,
++	.config = sfp_hwmon_temp_config,
++};
++
++static u32 sfp_hwmon_vcc_config[] = {
++	HWMON_I_INPUT |
++	HWMON_I_MAX | HWMON_I_MIN |
++	HWMON_I_MAX_ALARM | HWMON_I_MIN_ALARM |
++	HWMON_I_CRIT | HWMON_I_LCRIT |
++	HWMON_I_CRIT_ALARM | HWMON_I_LCRIT_ALARM,
++	0,
++};
++
++static const struct hwmon_channel_info sfp_hwmon_vcc_channel_info = {
++	.type = hwmon_in,
++	.config = sfp_hwmon_vcc_config,
++};
++
++static u32 sfp_hwmon_bias_config[] = {
++	HWMON_C_INPUT |
++	HWMON_C_MAX | HWMON_C_MIN |
++	HWMON_C_MAX_ALARM | HWMON_C_MIN_ALARM |
++	HWMON_C_CRIT | HWMON_C_LCRIT |
++	HWMON_C_CRIT_ALARM | HWMON_C_LCRIT_ALARM,
++	0,
++};
++
++static const struct hwmon_channel_info sfp_hwmon_bias_channel_info = {
++	.type = hwmon_curr,
++	.config = sfp_hwmon_bias_config,
++};
++
++static u32 sfp_hwmon_power_config[] = {
++	/* Transmit power */
++	HWMON_P_INPUT |
++	HWMON_P_MAX | HWMON_P_MIN |
++	HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
++	HWMON_P_CRIT | HWMON_P_LCRIT |
++	HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM,
++	/* Receive power */
++	HWMON_P_INPUT |
++	HWMON_P_MAX | HWMON_P_MIN |
++	HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
++	HWMON_P_CRIT | HWMON_P_LCRIT |
++	HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM,
++	0,
++};
++
++static const struct hwmon_channel_info sfp_hwmon_power_channel_info = {
++	.type = hwmon_power,
++	.config = sfp_hwmon_power_config,
++};
++
++static const struct hwmon_channel_info *sfp_hwmon_info[] = {
++	&sfp_hwmon_chip,
++	&sfp_hwmon_vcc_channel_info,
++	&sfp_hwmon_temp_channel_info,
++	&sfp_hwmon_bias_channel_info,
++	&sfp_hwmon_power_channel_info,
++	NULL,
++};
++
++static const struct hwmon_chip_info sfp_hwmon_chip_info = {
++	.ops = &sfp_hwmon_ops,
++	.info = sfp_hwmon_info,
++};
++
++static int sfp_hwmon_insert(struct sfp *sfp)
++{
++	int err, i;
++
++	if (sfp->id.ext.sff8472_compliance == SFP_SFF8472_COMPLIANCE_NONE)
++		return 0;
++
++	if (!(sfp->id.ext.diagmon & SFP_DIAGMON_DDM))
++		return 0;
++
++	if (sfp->id.ext.diagmon & SFP_DIAGMON_ADDRMODE)
++		/* This driver in general does not support address
++		 * change.
++		 */
++		return 0;
++
++	err = sfp_read(sfp, true, 0, &sfp->diag, sizeof(sfp->diag));
++	if (err < 0)
++		return err;
++
++	sfp->hwmon_name = kstrdup(dev_name(sfp->dev), GFP_KERNEL);
++	if (!sfp->hwmon_name)
++		return -ENODEV;
++
++	for (i = 0; sfp->hwmon_name[i]; i++)
++		if (hwmon_is_bad_char(sfp->hwmon_name[i]))
++			sfp->hwmon_name[i] = '_';
++
++	sfp->hwmon_dev = hwmon_device_register_with_info(sfp->dev,
++							 sfp->hwmon_name, sfp,
++							 &sfp_hwmon_chip_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(sfp->hwmon_dev);
++}
++
++static void sfp_hwmon_remove(struct sfp *sfp)
++{
++	hwmon_device_unregister(sfp->hwmon_dev);
++	kfree(sfp->hwmon_name);
++}
++#else
++static int sfp_hwmon_insert(struct sfp *sfp)
++{
++	return 0;
++}
++
++static void sfp_hwmon_remove(struct sfp *sfp)
++{
++}
++#endif
++
+ /* Helpers */
+ static void sfp_module_tx_disable(struct sfp *sfp)
+ {
+@@ -636,6 +1357,10 @@ static int sfp_sm_mod_probe(struct sfp *sfp)
+ 		dev_warn(sfp->dev,
+ 			 "module address swap to access page 0xA2 is not supported.\n");
+ 
++	ret = sfp_hwmon_insert(sfp);
++	if (ret < 0)
++		return ret;
++
+ 	ret = sfp_module_insert(sfp->sfp_bus, &sfp->id);
+ 	if (ret < 0)
+ 		return ret;
+@@ -647,6 +1372,8 @@ static void sfp_sm_mod_remove(struct sfp *sfp)
+ {
+ 	sfp_module_remove(sfp->sfp_bus);
+ 
++	sfp_hwmon_remove(sfp);
++
+ 	if (sfp->mod_phy)
+ 		sfp_sm_phy_detach(sfp);
+ 
+diff --git a/include/linux/sfp.h b/include/linux/sfp.h
+index ebce9e24906a..d37518e89db2 100644
+--- a/include/linux/sfp.h
++++ b/include/linux/sfp.h
+@@ -231,6 +231,50 @@ struct sfp_eeprom_id {
+ 	struct sfp_eeprom_ext ext;
+ } __packed;
+ 
++struct sfp_diag {
++	__be16 temp_high_alarm;
++	__be16 temp_low_alarm;
++	__be16 temp_high_warn;
++	__be16 temp_low_warn;
++	__be16 volt_high_alarm;
++	__be16 volt_low_alarm;
++	__be16 volt_high_warn;
++	__be16 volt_low_warn;
++	__be16 bias_high_alarm;
++	__be16 bias_low_alarm;
++	__be16 bias_high_warn;
++	__be16 bias_low_warn;
++	__be16 txpwr_high_alarm;
++	__be16 txpwr_low_alarm;
++	__be16 txpwr_high_warn;
++	__be16 txpwr_low_warn;
++	__be16 rxpwr_high_alarm;
++	__be16 rxpwr_low_alarm;
++	__be16 rxpwr_high_warn;
++	__be16 rxpwr_low_warn;
++	__be16 laser_temp_high_alarm;
++	__be16 laser_temp_low_alarm;
++	__be16 laser_temp_high_warn;
++	__be16 laser_temp_low_warn;
++	__be16 tec_cur_high_alarm;
++	__be16 tec_cur_low_alarm;
++	__be16 tec_cur_high_warn;
++	__be16 tec_cur_low_warn;
++	__be32 cal_rxpwr4;
++	__be32 cal_rxpwr3;
++	__be32 cal_rxpwr2;
++	__be32 cal_rxpwr1;
++	__be32 cal_rxpwr0;
++	__be16 cal_txi_slope;
++	__be16 cal_txi_offset;
++	__be16 cal_txpwr_slope;
++	__be16 cal_txpwr_offset;
++	__be16 cal_t_slope;
++	__be16 cal_t_offset;
++	__be16 cal_v_slope;
++	__be16 cal_v_offset;
++} __packed;
++
+ /* SFP EEPROM registers */
+ enum {
+ 	SFP_PHYS_ID			= 0x00,
+@@ -384,7 +428,33 @@ enum {
+ 	SFP_TEC_CUR			= 0x6c,
+ 
+ 	SFP_STATUS			= 0x6e,
+-	SFP_ALARM			= 0x70,
++	SFP_ALARM0			= 0x70,
++	SFP_ALARM0_TEMP_HIGH		= BIT(7),
++	SFP_ALARM0_TEMP_LOW		= BIT(6),
++	SFP_ALARM0_VCC_HIGH		= BIT(5),
++	SFP_ALARM0_VCC_LOW		= BIT(4),
++	SFP_ALARM0_TX_BIAS_HIGH		= BIT(3),
++	SFP_ALARM0_TX_BIAS_LOW		= BIT(2),
++	SFP_ALARM0_TXPWR_HIGH		= BIT(1),
++	SFP_ALARM0_TXPWR_LOW		= BIT(0),
++
++	SFP_ALARM1			= 0x71,
++	SFP_ALARM1_RXPWR_HIGH		= BIT(7),
++	SFP_ALARM1_RXPWR_LOW		= BIT(6),
++
++	SFP_WARN0			= 0x74,
++	SFP_WARN0_TEMP_HIGH		= BIT(7),
++	SFP_WARN0_TEMP_LOW		= BIT(6),
++	SFP_WARN0_VCC_HIGH		= BIT(5),
++	SFP_WARN0_VCC_LOW		= BIT(4),
++	SFP_WARN0_TX_BIAS_HIGH		= BIT(3),
++	SFP_WARN0_TX_BIAS_LOW		= BIT(2),
++	SFP_WARN0_TXPWR_HIGH		= BIT(1),
++	SFP_WARN0_TXPWR_LOW		= BIT(0),
++
++	SFP_WARN1			= 0x75,
++	SFP_WARN1_RXPWR_HIGH		= BIT(7),
++	SFP_WARN1_RXPWR_LOW		= BIT(6),
+ 
+ 	SFP_EXT_STATUS			= 0x76,
+ 	SFP_VSL				= 0x78,
+-- 
+2.18.0
