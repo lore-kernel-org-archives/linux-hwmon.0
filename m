@@ -1,11 +1,11 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf0-f196.google.com ([209.85.192.196]:38529 "EHLO
-        mail-pf0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729840AbeGQUqq (ORCPT
+Received: from mail-oi0-f65.google.com ([209.85.218.65]:36328 "EHLO
+        mail-oi0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729840AbeGQUrF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Jul 2018 16:46:46 -0400
-Date: Tue, 17 Jul 2018 13:12:29 -0700
+        Tue, 17 Jul 2018 16:47:05 -0400
+Date: Tue, 17 Jul 2018 13:12:48 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Andrew Lunn <andrew@lunn.ch>
 Cc: David Miller <davem@davemloft.net>,
@@ -13,91 +13,64 @@ Cc: David Miller <davem@davemloft.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Russell King <rmk+kernel@arm.linux.org.uk>,
         linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH net-next 2/4] hwmon: Add support for power min, lcrit,
- min_alarm and lcrit_alarm
-Message-ID: <20180717201229.GB15476@roeck-us.net>
+Subject: Re: [PATCH net-next 3/4] hwmon: Add helper to tell if a char is
+ invalid in a name
+Message-ID: <20180717201248.GC15476@roeck-us.net>
 References: <1531856893-27884-1-git-send-email-andrew@lunn.ch>
- <1531856893-27884-3-git-send-email-andrew@lunn.ch>
+ <1531856893-27884-4-git-send-email-andrew@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1531856893-27884-3-git-send-email-andrew@lunn.ch>
+In-Reply-To: <1531856893-27884-4-git-send-email-andrew@lunn.ch>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 17, 2018 at 09:48:11PM +0200, Andrew Lunn wrote:
-> Some sensors support reporting minimal and lower critical power, as
-> well as alarms when these thresholds are reached. Add support for
-> these attributes to the hwmon core.
+On Tue, Jul 17, 2018 at 09:48:12PM +0200, Andrew Lunn wrote:
+> HWMON device names are not allowed to contain "-* \t\n". Add a helper
+> which will return true if passed an invalid character. It can be used
+> to massage a string into a hwmon compatible name by replacing invalid
+> characters with '_'.
 > 
 > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/hwmon/hwmon.c | 4 ++++
->  include/linux/hwmon.h | 8 ++++++++
->  2 files changed, 12 insertions(+)
+>  include/linux/hwmon.h | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index e88c01961948..33d51281272b 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -394,12 +394,16 @@ static const char * const hwmon_power_attr_templates[] = {
->  	[hwmon_power_cap_hyst] = "power%d_cap_hyst",
->  	[hwmon_power_cap_max] = "power%d_cap_max",
->  	[hwmon_power_cap_min] = "power%d_cap_min",
-> +	[hwmon_power_min] = "power%d_min",
->  	[hwmon_power_max] = "power%d_max",
-> +	[hwmon_power_lcrit] = "power%d_lcrit",
->  	[hwmon_power_crit] = "power%d_crit",
->  	[hwmon_power_label] = "power%d_label",
->  	[hwmon_power_alarm] = "power%d_alarm",
->  	[hwmon_power_cap_alarm] = "power%d_cap_alarm",
-> +	[hwmon_power_min_alarm] = "power%d_min_alarm",
->  	[hwmon_power_max_alarm] = "power%d_max_alarm",
-> +	[hwmon_power_lcrit_alarm] = "power%d_lcrit_alarm",
->  	[hwmon_power_crit_alarm] = "power%d_crit_alarm",
->  };
->  
 > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index 1b74ad11a5a4..b217101ca76e 100644
+> index b217101ca76e..9493d4a388db 100644
 > --- a/include/linux/hwmon.h
 > +++ b/include/linux/hwmon.h
-> @@ -188,12 +188,16 @@ enum hwmon_power_attributes {
->  	hwmon_power_cap_hyst,
->  	hwmon_power_cap_max,
->  	hwmon_power_cap_min,
-> +	hwmon_power_min,
->  	hwmon_power_max,
->  	hwmon_power_crit,
-> +	hwmon_power_lcrit,
->  	hwmon_power_label,
->  	hwmon_power_alarm,
->  	hwmon_power_cap_alarm,
-> +	hwmon_power_min_alarm,
->  	hwmon_power_max_alarm,
-> +	hwmon_power_lcrit_alarm,
->  	hwmon_power_crit_alarm,
->  };
+> @@ -398,4 +398,27 @@ devm_hwmon_device_register_with_info(struct device *dev,
+>  void hwmon_device_unregister(struct device *dev);
+>  void devm_hwmon_device_unregister(struct device *dev);
 >  
-> @@ -214,12 +218,16 @@ enum hwmon_power_attributes {
->  #define HWMON_P_CAP_HYST		BIT(hwmon_power_cap_hyst)
->  #define HWMON_P_CAP_MAX			BIT(hwmon_power_cap_max)
->  #define HWMON_P_CAP_MIN			BIT(hwmon_power_cap_min)
-> +#define HWMON_P_MIN			BIT(hwmon_power_min)
->  #define HWMON_P_MAX			BIT(hwmon_power_max)
-> +#define HWMON_P_LCRIT			BIT(hwmon_power_lcrit)
->  #define HWMON_P_CRIT			BIT(hwmon_power_crit)
->  #define HWMON_P_LABEL			BIT(hwmon_power_label)
->  #define HWMON_P_ALARM			BIT(hwmon_power_alarm)
->  #define HWMON_P_CAP_ALARM		BIT(hwmon_power_cap_alarm)
-> +#define HWMON_P_MIN_ALARM		BIT(hwmon_power_max_alarm)
->  #define HWMON_P_MAX_ALARM		BIT(hwmon_power_max_alarm)
-> +#define HWMON_P_LCRIT_ALARM		BIT(hwmon_power_lcrit_alarm)
->  #define HWMON_P_CRIT_ALARM		BIT(hwmon_power_crit_alarm)
->  
->  enum hwmon_energy_attributes {
+> +/**
+> + * hwmon_is_bad_char - Is the char invalid in a hwmon name
+> + * @ch: the char to be considered
+> + *
+> + * hwmon_is_bad_char() can be used to determine if the given character
+> + * may not be used in a hwmon name.
+> + *
+> + * Returns true if the char is invalid, false otherwise.
+> + */
+> +static inline bool hwmon_is_bad_char(const char ch)
+> +{
+> +	switch (ch) {
+> +	case '-':
+> +	case '*':
+> +	case ' ':
+> +	case '\t':
+> +	case '\n':
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  #endif
 > -- 
 > 2.18.0
 > 
