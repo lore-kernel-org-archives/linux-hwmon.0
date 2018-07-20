@@ -1,61 +1,59 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42530 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727274AbeGUFXa (ORCPT
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45474 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727571AbeGTG7Q (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 21 Jul 2018 01:23:30 -0400
-Received: by mail-pg1-f196.google.com with SMTP id y4-v6so8402676pgp.9
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Jul 2018 21:32:15 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: rpi: add module alias to raspberrypi-hwmon
-To: Peter Robinson <pbrobinson@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org
-Cc: Stefan Wahren <stefan.wahren@i2se.com>,
-        Eric Anholt <eric@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <20180720230212.26006-1-pbrobinson@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <48b9e013-b1f2-4f11-d70d-9b13e69c639f@roeck-us.net>
-Date: Fri, 20 Jul 2018 21:24:39 -0700
-MIME-Version: 1.0
-In-Reply-To: <20180720230212.26006-1-pbrobinson@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Fri, 20 Jul 2018 02:59:16 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id w6K69Qnb146058
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Jul 2018 02:12:40 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2kb8h0bska-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Jul 2018 02:12:39 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <shilpa.bhat@linux.vnet.ibm.com>;
+        Fri, 20 Jul 2018 07:12:37 +0100
+From: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+To: mpe@ellerman.id.au, linux@roeck-us.net
+Cc: linuxppc-dev@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ego@linux.vnet.ibm.com,
+        stewart@linux.ibm.com,
+        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Subject: [PATCH v7 0/2] hwmon/powernv: Add attributes to enable/disable sensors
+Date: Fri, 20 Jul 2018 11:42:21 +0530
+Message-Id: <1532067143-22022-1-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 07/20/2018 04:02 PM, Peter Robinson wrote:
-> The raspberrypi-hwmon driver doesn't automatically load, although it does work
-> when loaded, by adding the alias it auto loads as expected when built as a
-> module. Tested on RPi2/RPi3 on 32 bit kernel and RPi3B+ on aarch64 with
-> Fedora 28 and a patched 4.18 RC kernel.
-> 
-> Fixes: q3c493c885cf ("hwmon: Add support for RPi voltage sensor")
-> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-> CC: Stefan Wahren <stefan.wahren@i2se.com>
-> CC: Eric Anholt <eric@anholt.net>
+This patch series adds new attribute to enable or disable a sensor at
+runtime.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Changes from v6:
+- Updated the commit message as per Stewart's suggestion
+- Use the compatible DT property instead of the path to find the node
 
-Florian, I think the driver is in your tree - can you take this patch ?
+v6 : https://lkml.org/lkml/2018/7/18/806
+v5 : https://lkml.org/lkml/2018/7/15/15
+v4 : https://lkml.org/lkml/2018/7/6/379
+v3 : https://lkml.org/lkml/2018/7/5/476
+v2 : https://lkml.org/lkml/2018/7/4/263
+v1 : https://lkml.org/lkml/2018/3/22/214
 
-Thanks,
-Guenter
+Shilpasri G Bhat (2):
+  powernv:opal-sensor-groups: Add support to enable sensor groups
+  hwmon: ibmpowernv: Add attributes to enable/disable sensor groups
 
-> ---
->   drivers/hwmon/raspberrypi-hwmon.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
-> index fb4e4a6bb1f63..be5ba46908953 100644
-> --- a/drivers/hwmon/raspberrypi-hwmon.c
-> +++ b/drivers/hwmon/raspberrypi-hwmon.c
-> @@ -164,3 +164,4 @@ module_platform_driver(rpi_hwmon_driver);
->   MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
->   MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
->   MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:raspberrypi-hwmon");
-> 
+ Documentation/hwmon/ibmpowernv                     |  43 +++-
+ arch/powerpc/include/asm/opal-api.h                |   1 +
+ arch/powerpc/include/asm/opal.h                    |   2 +
+ .../powerpc/platforms/powernv/opal-sensor-groups.c |  28 +++
+ arch/powerpc/platforms/powernv/opal-wrappers.S     |   1 +
+ drivers/hwmon/ibmpowernv.c                         | 249 ++++++++++++++++++---
+ 6 files changed, 290 insertions(+), 34 deletions(-)
+
+-- 
+1.8.3.1
 
