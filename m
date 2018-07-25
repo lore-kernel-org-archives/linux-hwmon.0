@@ -1,214 +1,170 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga09.intel.com ([134.134.136.24]:58659 "EHLO mga09.intel.com"
+Received: from www.linuxtv.org ([130.149.80.248]:56762 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731423AbeGaUhv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Jul 2018 16:37:51 -0400
-Subject: Re: [PATCH v7 08/12] mfd: intel-peci-client: Add PECI client MFD
- driver
-To: Lee Jones <lee.jones@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        darrick.wong@oracle.com, sandeen@redhat.com,
-        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        kusumi.tomohiro@gmail.com, bryantly@linux.vnet.ibm.com,
-        fbarrat@linux.vnet.ibm.com, David Miller <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Vinod <vkoul@kernel.org>, Stephen Boyd <sboyd@codeaurora.org>,
-        david.kershner@unisys.com,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, jgross@suse.com,
-        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed@lists.ozlabs.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        James Feist <james.feist@linux.intel.com>,
-        Jason M Biils <jason.m.bills@linux.intel.com>,
-        Vernon Mauery <vernon.mauery@linux.intel.com>
-References: <20180723214751.1733-1-jae.hyun.yoo@linux.intel.com>
- <20180723214751.1733-9-jae.hyun.yoo@linux.intel.com>
- <20180727082611.GE4628@dell>
- <acffdfef-cb20-4208-5297-d94bac5ecb1b@linux.intel.com>
- <CAL_JsqL7WkDOaegwmBDqLkRh0JfCo7O2krONVstjWMUsLiJMrg@mail.gmail.com>
- <7ab43253-1154-6e2f-b216-69b0d44b470a@linux.intel.com>
- <20180731070117.GE4662@dell>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <52b5342d-e31a-f4a2-f269-a159d3f58252@linux.intel.com>
-Date: Tue, 31 Jul 2018 11:56:09 -0700
-MIME-Version: 1.0
-In-Reply-To: <20180731070117.GE4662@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728990AbeGYPCV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 25 Jul 2018 11:02:21 -0400
+From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Date: Wed, 25 Jul 2018 12:33:53 +0000
+Subject: [git:media_tree/master] media: video-i2c: add hwmon support for amg88xx
+To: linuxtv-commits@linuxtv.org
+Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Reply-to: linux-media@vger.kernel.org
+Message-Id: <E1fiJun-00011l-Ui@www.linuxtv.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Lee,
+This is an automatic generated email to let you know that the following patch were queued:
 
-On 7/31/2018 12:01 AM, Lee Jones wrote:
-> On Mon, 30 Jul 2018, Jae Hyun Yoo wrote:
-> 
->> Hi Rob,
->>
->> On 7/30/2018 3:10 PM, Rob Herring wrote:
->>> On Fri, Jul 27, 2018 at 11:36 AM Jae Hyun Yoo
->>> <jae.hyun.yoo@linux.intel.com> wrote:
->>>>
->>>> Hi Lee,
->>>>
->>>> On 7/27/2018 1:26 AM, Lee Jones wrote:
->>>>> On Mon, 23 Jul 2018, Jae Hyun Yoo wrote:
->>>>>
->>>>>> This commit adds PECI client MFD driver.
->>>>>>
->>>>>> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->>>>>> Cc: Lee Jones <lee.jones@linaro.org>
->>>>>> Cc: Rob Herring <robh+dt@kernel.org>
->>>>>> Cc: Andrew Jeffery <andrew@aj.id.au>
->>>>>> Cc: James Feist <james.feist@linux.intel.com>
->>>>>> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
->>>>>> Cc: Joel Stanley <joel@jms.id.au>
->>>>>> Cc: Vernon Mauery <vernon.mauery@linux.intel.com>
->>>>>> ---
->>>>>>     drivers/mfd/Kconfig                   |  14 ++
->>>>>>     drivers/mfd/Makefile                  |   1 +
->>>>>>     drivers/mfd/intel-peci-client.c       | 182 ++++++++++++++++++++++++++
->>>>>>     include/linux/mfd/intel-peci-client.h |  81 ++++++++++++
->>>>>>     4 files changed, 278 insertions(+)
->>>>>>     create mode 100644 drivers/mfd/intel-peci-client.c
->>>>>>     create mode 100644 include/linux/mfd/intel-peci-client.h
->>>>>>
->>>>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->>>>>> index f3fa516011ec..e38b591479d4 100644
->>>>>> --- a/drivers/mfd/Kconfig
->>>>>> +++ b/drivers/mfd/Kconfig
->>>>>> @@ -595,6 +595,20 @@ config MFD_INTEL_MSIC
->>>>>>          Passage) chip. This chip embeds audio, battery, GPIO, etc.
->>>>>>          devices used in Intel Medfield platforms.
->>>>>>
->>>>>> +config MFD_INTEL_PECI_CLIENT
->>>>>> +    bool "Intel PECI client"
->>>>>> +    depends on (PECI || COMPILE_TEST)
->>>>>> +    select MFD_CORE
->>>>>> +    help
->>>>>> +      If you say yes to this option, support will be included for the
->>>>>> +      multi-funtional Intel PECI (Platform Environment Control Interface)
->>>>>> +      client. PECI is a one-wire bus interface that provides a communication
->>>>>> +      channel from PECI clients in Intel processors and chipset components
->>>>>> +      to external monitoring or control devices.
->>>>>> +
->>>>>> +      Additional drivers must be enabled in order to use the functionality
->>>>>> +      of the device.
->>>>>> +
->>>>>>     config MFD_IPAQ_MICRO
->>>>>>        bool "Atmel Micro ASIC (iPAQ h3100/h3600/h3700) Support"
->>>>>>        depends on SA1100_H3100 || SA1100_H3600
->>>>>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
->>>>>> index 2852a6042ecf..29e2cacc58bd 100644
->>>>>> --- a/drivers/mfd/Makefile
->>>>>> +++ b/drivers/mfd/Makefile
->>>>>> @@ -203,6 +203,7 @@ obj-$(CONFIG_MFD_INTEL_LPSS)     += intel-lpss.o
->>>>>>     obj-$(CONFIG_MFD_INTEL_LPSS_PCI)   += intel-lpss-pci.o
->>>>>>     obj-$(CONFIG_MFD_INTEL_LPSS_ACPI)  += intel-lpss-acpi.o
->>>>>>     obj-$(CONFIG_MFD_INTEL_MSIC)       += intel_msic.o
->>>>>> +obj-$(CONFIG_MFD_INTEL_PECI_CLIENT) += intel-peci-client.o
->>>>>>     obj-$(CONFIG_MFD_PALMAS)   += palmas.o
->>>>>>     obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
->>>>>>     obj-$(CONFIG_MFD_RC5T583)  += rc5t583.o rc5t583-irq.o
->>>>>> diff --git a/drivers/mfd/intel-peci-client.c b/drivers/mfd/intel-peci-client.c
->>>>>> new file mode 100644
->>>>>> index 000000000000..d7702cf1ea50
->>>>>> --- /dev/null
->>>>>> +++ b/drivers/mfd/intel-peci-client.c
->>>>>> @@ -0,0 +1,182 @@
->>>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>>> +// Copyright (c) 2018 Intel Corporation
->>>>>> +
->>>>>> +#include <linux/bitfield.h>
->>>>>> +#include <linux/mfd/core.h>
->>>>>> +#include <linux/mfd/intel-peci-client.h>
->>>>>> +#include <linux/module.h>
->>>>>> +#include <linux/peci.h>
->>>>>> +#include <linux/of_device.h>
->>>>>> +
->>>>>> +enum cpu_gens {
->>>>>> +    CPU_GEN_HSX = 0, /* Haswell Xeon */
->>>>>> +    CPU_GEN_BRX,     /* Broadwell Xeon */
->>>>>> +    CPU_GEN_SKX,     /* Skylake Xeon */
->>>>>> +};
->>>>>> +
->>>>>> +static struct mfd_cell peci_functions[] = {
->>>>>> +    {
->>>>>> +            .name = "peci-cputemp",
->>>>>> +            .of_compatible = "intel,peci-cputemp",
->>>>>> +    },
->>>>>> +    {
->>>>>> +            .name = "peci-dimmtemp",
->>>>>> +            .of_compatible = "intel,peci-dimmtemp",
->>>>>> +    },
->>>>>> +};
->>>>>
->>>>> The more I look at this driver, the less I think it fits into MFD.
->>>>>
->>>>> What's stopping you from registering these devices directly from DT?
->>>>>
->>>>
->>>> Because DT doesn't allow 2 nodes at the same address so Rob suggested
->>>> MFD for this case.
->>>
->>> Only after I first suggested you create cpu and dimm sensors from a
->>> single hwmon driver. Perhaps you should figure out how to fix the
->>> problem with delayed registration. Perhaps you can register the
->>> sensor, but just delay returning actual data until it is ready.
->>>
->>
->> The actual reason why I divided the single hwmon driver into two is for
->> using recommended hwmon API set which doesn't allow incremental
->> creation of sysfs attributes at run time - using of
->> 'devm_hwmon_device_register_with_info' is suggested by Guenter instead
->> of using other deprecated APIs.
->>
->> The reason why the delayed registration is needed is, BMC kernel cannot
->> know how many DIMM are installed in remote machine before the machine
->> completing memory training and testing in POST. So dimm temp driver
->> cannot create hwmon attributes in advance.
->>
->> My thought is, this way is the best to address these requirements.
-> 
-> As I've previously explained, I do not think this is a good fit for
-> MFD.  Since this whole PECI piece is a bit, let's say 'niche', perhaps
-> it's better to contain the client within the PECI subsystem too.  You
-> can then use the platform_device_add() API to register devices as and
-> when required.
-> 
+Subject: media: video-i2c: add hwmon support for amg88xx
+Author:  Matt Ranostay <matt.ranostay@konsulko.com>
+Date:    Thu Jun 28 14:11:04 2018 -0400
 
-If I do like that, I would face the 'DT doesn't allow 2 nodes at the
-same address' issue again. Also, as I previously explained, additional
-PECI sideband function drivers should be added later through this MFD
-driver. For an example, remote CPU crash dump driver which would be an
-misc char type driver that are sharing the same unit address also needs
-to be added later, and it's definitely not an additional hwmon subsystem
-driver. I'm still thinking that an MFD driver is more suitable to
-support these mixed-type function drivers that are sharing a single
-device unit.
+AMG88xx has an on-board thermistor which is used for more accurate
+processing of its temperature readings from the 8x8 thermopile array
 
-Thanks,
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-Jae
+ drivers/media/i2c/Kconfig     |  1 +
+ drivers/media/i2c/video-i2c.c | 81 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+
+---
+
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 5ee7a09001a7..439f6be08b95 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1033,6 +1033,7 @@ config VIDEO_I2C
+ 	tristate "I2C transport video support"
+ 	depends on VIDEO_V4L2 && I2C
+ 	select VIDEOBUF2_VMALLOC
++	imply HWMON
+ 	---help---
+ 	  Enable the I2C transport video support which supports the
+ 	  following:
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index 0b347cc19aa5..7dc9338502e5 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/freezer.h>
++#include <linux/hwmon.h>
+ #include <linux/kthread.h>
+ #include <linux/i2c.h>
+ #include <linux/list.h>
+@@ -77,6 +78,9 @@ struct video_i2c_chip {
+ 
+ 	/* xfer function */
+ 	int (*xfer)(struct video_i2c_data *data, char *buf);
++
++	/* hwmon init function */
++	int (*hwmon_init)(struct video_i2c_data *data);
+ };
+ 
+ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+@@ -101,6 +105,74 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+ 	return (ret == 2) ? 0 : -EIO;
+ }
+ 
++#if IS_ENABLED(CONFIG_HWMON)
++
++static const u32 amg88xx_temp_config[] = {
++	HWMON_T_INPUT,
++	0
++};
++
++static const struct hwmon_channel_info amg88xx_temp = {
++	.type = hwmon_temp,
++	.config = amg88xx_temp_config,
++};
++
++static const struct hwmon_channel_info *amg88xx_info[] = {
++	&amg88xx_temp,
++	NULL
++};
++
++static umode_t amg88xx_is_visible(const void *drvdata,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	return 0444;
++}
++
++static int amg88xx_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct video_i2c_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	int tmp = i2c_smbus_read_word_data(client, 0x0e);
++
++	if (tmp < 0)
++		return tmp;
++
++	/*
++	 * Check for sign bit, this isn't a two's complement value but an
++	 * absolute temperature that needs to be inverted in the case of being
++	 * negative.
++	 */
++	if (tmp & BIT(11))
++		tmp = -(tmp & 0x7ff);
++
++	*val = (tmp * 625) / 10;
++
++	return 0;
++}
++
++static const struct hwmon_ops amg88xx_hwmon_ops = {
++	.is_visible = amg88xx_is_visible,
++	.read = amg88xx_read,
++};
++
++static const struct hwmon_chip_info amg88xx_chip_info = {
++	.ops = &amg88xx_hwmon_ops,
++	.info = amg88xx_info,
++};
++
++static int amg88xx_hwmon_init(struct video_i2c_data *data)
++{
++	void *hwmon = devm_hwmon_device_register_with_info(&data->client->dev,
++				"amg88xx", data, &amg88xx_chip_info, NULL);
++
++	return PTR_ERR(hwmon);
++}
++#else
++#define	amg88xx_hwmon_init	NULL
++#endif
++
+ #define AMG88XX		0
+ 
+ static const struct video_i2c_chip video_i2c_chip[] = {
+@@ -111,6 +183,7 @@ static const struct video_i2c_chip video_i2c_chip[] = {
+ 		.buffer_size	= 128,
+ 		.bpp		= 16,
+ 		.xfer		= &amg88xx_xfer,
++		.hwmon_init	= amg88xx_hwmon_init,
+ 	},
+ };
+ 
+@@ -505,6 +578,14 @@ static int video_i2c_probe(struct i2c_client *client,
+ 	video_set_drvdata(&data->vdev, data);
+ 	i2c_set_clientdata(client, data);
+ 
++	if (data->chip->hwmon_init) {
++		ret = data->chip->hwmon_init(data);
++		if (ret < 0) {
++			dev_warn(&client->dev,
++				 "failed to register hwmon device\n");
++		}
++	}
++
+ 	ret = video_register_device(&data->vdev, VFL_TYPE_GRABBER, -1);
+ 	if (ret < 0)
+ 		goto error_unregister_device;
