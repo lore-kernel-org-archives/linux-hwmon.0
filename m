@@ -1,182 +1,162 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44897 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387933AbeGWTop (ORCPT
+Received: from mail-wm0-f67.google.com ([74.125.82.67]:55352 "EHLO
+        mail-wm0-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729431AbeG0JrE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Jul 2018 15:44:45 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r1-v6so984461pgp.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Jul 2018 11:42:13 -0700 (PDT)
-Date: Mon, 23 Jul 2018 11:42:11 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Maxime =?iso-8859-1?Q?Roussin-B=E9langer?=
-        <maxime.roussinbelanger@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v2] hwmon: (iio_hwmon) Use devm functions
-Message-ID: <20180723184211.GA9521@roeck-us.net>
-References: <20180723033329.28213-1-maxime.roussinbelanger@gmail.com>
+        Fri, 27 Jul 2018 05:47:04 -0400
+Received: by mail-wm0-f67.google.com with SMTP id f21-v6so4407806wmc.5
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Jul 2018 01:26:16 -0700 (PDT)
+Date: Fri, 27 Jul 2018 09:26:11 +0100
+From: Lee Jones <lee.jones@linaro.org>
+To: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
+        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
+        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
+        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        David Kershner <david.kershner@unisys.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        Johan Hovold <johan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-doc@vger.kernel.org,
+        openbmc@lists.ozlabs.org,
+        James Feist <james.feist@linux.intel.com>,
+        Jason M Biils <jason.m.bills@linux.intel.com>,
+        Vernon Mauery <vernon.mauery@linux.intel.com>
+Subject: Re: [PATCH v7 08/12] mfd: intel-peci-client: Add PECI client MFD
+ driver
+Message-ID: <20180727082611.GE4628@dell>
+References: <20180723214751.1733-1-jae.hyun.yoo@linux.intel.com>
+ <20180723214751.1733-9-jae.hyun.yoo@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20180723033329.28213-1-maxime.roussinbelanger@gmail.com>
+In-Reply-To: <20180723214751.1733-9-jae.hyun.yoo@linux.intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 22, 2018 at 11:33:29PM -0400, Maxime Roussin-B�langer wrote:
-> Use devm_iio_channel_get_all() to automatically release
-> channels.
+On Mon, 23 Jul 2018, Jae Hyun Yoo wrote:
+
+> This commit adds PECI client MFD driver.
 > 
-> Use devm_hwmon_device_register_with_groups() to
-> automatically unregister the device.
-> 
-> Signed-off-by: Maxime Roussin-B�langer <maxime.roussinbelanger@gmail.com>
-
-Applied, with a couple of additional changes (see below).
-
-Thanks,
-Guenter
-
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: James Feist <james.feist@linux.intel.com>
+> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
+> Cc: Joel Stanley <joel@jms.id.au>
+> Cc: Vernon Mauery <vernon.mauery@linux.intel.com>
 > ---
-> Changes in v2:
-> 	- Remove unnecessary {}
+>  drivers/mfd/Kconfig                   |  14 ++
+>  drivers/mfd/Makefile                  |   1 +
+>  drivers/mfd/intel-peci-client.c       | 182 ++++++++++++++++++++++++++
+>  include/linux/mfd/intel-peci-client.h |  81 ++++++++++++
+>  4 files changed, 278 insertions(+)
+>  create mode 100644 drivers/mfd/intel-peci-client.c
+>  create mode 100644 include/linux/mfd/intel-peci-client.h
 > 
-> drivers/hwmon/iio_hwmon.c | 63 ++++++++++++---------------------------
->  1 file changed, 19 insertions(+), 44 deletions(-)
-> 
-> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-> index a3a1d1cb2f27..44d7dfe9cb46 100644
-> --- a/drivers/hwmon/iio_hwmon.c
-> +++ b/drivers/hwmon/iio_hwmon.c
-> @@ -73,44 +73,38 @@ static int iio_hwmon_probe(struct platform_device *pdev)
->  	if (dev->of_node && dev->of_node->name)
->  		name = dev->of_node->name;
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index f3fa516011ec..e38b591479d4 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -595,6 +595,20 @@ config MFD_INTEL_MSIC
+>  	  Passage) chip. This chip embeds audio, battery, GPIO, etc.
+>  	  devices used in Intel Medfield platforms.
 >  
-> -	channels = iio_channel_get_all(dev);
-> +	channels = devm_iio_channel_get_all(dev);
->  	if (IS_ERR(channels)) {
->  		if (PTR_ERR(channels) == -ENODEV)
->  			return -EPROBE_DEFER;
->  		return PTR_ERR(channels);
->  	}
->  
->  	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-> -	if (st == NULL) {
-> -		ret = -ENOMEM;
-> -		goto error_release_channels;
-> -	}
-> +	if (st == NULL)
-> +		return -ENOMEM;
->  
->  	st->channels = channels;
->  
->  	/* count how many attributes we have */
->  	while (st->channels[st->num_channels].indio_dev)
->  		st->num_channels++;
->  
->  	st->attrs = devm_kzalloc(dev,
->  				 sizeof(*st->attrs) * (st->num_channels + 1),
->  				 GFP_KERNEL);
-> -	if (st->attrs == NULL) {
-> -		ret = -ENOMEM;
-> -		goto error_release_channels;
-> -	}
-> +	if (st->attrs == NULL)
-> +		return -ENOMEM;
->  
->  	for (i = 0; i < st->num_channels; i++) {
->  		a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
-> -		if (a == NULL) {
-> -			ret = -ENOMEM;
-> -			goto error_release_channels;
-> -		}
-> +		if (a == NULL)
-> +			return -ENOMEM;
->  
->  		sysfs_attr_init(&a->dev_attr.attr);
->  		ret = iio_get_channel_type(&st->channels[i], &type);
->  		if (ret < 0)
-> -			goto error_release_channels;
-> +			return ret;
->  
->  		switch (type) {
->  		case IIO_VOLTAGE:
-> @@ -138,49 +132,31 @@ static int iio_hwmon_probe(struct platform_device *pdev)
->  							       humidity_i++);
->  			break;
->  		default:
-> -			ret = -EINVAL;
-> -			goto error_release_channels;
-> -		}
-> -		if (a->dev_attr.attr.name == NULL) {
-> -			ret = -ENOMEM;
-> -			goto error_release_channels;
-> +			return -EINVAL;
->  		}
-> +		if (a->dev_attr.attr.name == NULL)
-> +			return -ENOMEM;
+> +config MFD_INTEL_PECI_CLIENT
+> +	bool "Intel PECI client"
+> +	depends on (PECI || COMPILE_TEST)
+> +	select MFD_CORE
+> +	help
+> +	  If you say yes to this option, support will be included for the
+> +	  multi-funtional Intel PECI (Platform Environment Control Interface)
+> +	  client. PECI is a one-wire bus interface that provides a communication
+> +	  channel from PECI clients in Intel processors and chipset components
+> +	  to external monitoring or control devices.
 > +
->  		a->dev_attr.show = iio_hwmon_read_val;
->  		a->dev_attr.attr.mode = S_IRUGO;
->  		a->index = i;
->  		st->attrs[i] = &a->dev_attr.attr;
->  	}
->  
->  	st->attr_group.attrs = st->attrs;
->  	st->groups[0] = &st->attr_group;
->  
->  	sname = devm_kstrdup(dev, name, GFP_KERNEL);
-> -	if (!sname) {
-> -		ret = -ENOMEM;
-> -		goto error_release_channels;
-> -	}
-> +	if (!sname)
-> +		return -ENOMEM;
->  
->  	strreplace(sname, '-', '_');
-> -	st->hwmon_dev = hwmon_device_register_with_groups(dev, sname, st,
-> -							  st->groups);
-> -	if (IS_ERR(st->hwmon_dev)) {
-> -		ret = PTR_ERR(st->hwmon_dev);
-> -		goto error_release_channels;
-> -	}
-> -	platform_set_drvdata(pdev, st);
-> -	return 0;
-> -
-> -error_release_channels:
-> -	iio_channel_release_all(channels);
-> -	return ret;
-> -}
-> +	st->hwmon_dev = devm_hwmon_device_register_with_groups(dev, sname, st,
-> +							       st->groups);
+> +	  Additional drivers must be enabled in order to use the functionality
+> +	  of the device.
+> +
+>  config MFD_IPAQ_MICRO
+>  	bool "Atmel Micro ASIC (iPAQ h3100/h3600/h3700) Support"
+>  	depends on SA1100_H3100 || SA1100_H3600
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 2852a6042ecf..29e2cacc58bd 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -203,6 +203,7 @@ obj-$(CONFIG_MFD_INTEL_LPSS)	+= intel-lpss.o
+>  obj-$(CONFIG_MFD_INTEL_LPSS_PCI)	+= intel-lpss-pci.o
+>  obj-$(CONFIG_MFD_INTEL_LPSS_ACPI)	+= intel-lpss-acpi.o
+>  obj-$(CONFIG_MFD_INTEL_MSIC)	+= intel_msic.o
+> +obj-$(CONFIG_MFD_INTEL_PECI_CLIENT)	+= intel-peci-client.o
+>  obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
+>  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
+>  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+> diff --git a/drivers/mfd/intel-peci-client.c b/drivers/mfd/intel-peci-client.c
+> new file mode 100644
+> index 000000000000..d7702cf1ea50
+> --- /dev/null
+> +++ b/drivers/mfd/intel-peci-client.c
+> @@ -0,0 +1,182 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2018 Intel Corporation
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/intel-peci-client.h>
+> +#include <linux/module.h>
+> +#include <linux/peci.h>
+> +#include <linux/of_device.h>
+> +
+> +enum cpu_gens {
+> +	CPU_GEN_HSX = 0, /* Haswell Xeon */
+> +	CPU_GEN_BRX,     /* Broadwell Xeon */
+> +	CPU_GEN_SKX,     /* Skylake Xeon */
+> +};
+> +
+> +static struct mfd_cell peci_functions[] = {
+> +	{
+> +		.name = "peci-cputemp",
+> +		.of_compatible = "intel,peci-cputemp",
+> +	},
+> +	{
+> +		.name = "peci-dimmtemp",
+> +		.of_compatible = "intel,peci-dimmtemp",
+> +	},
+> +};
 
-st->hwmon_dev is now unnecessary. Changed to local variable.
+The more I look at this driver, the less I think it fits into MFD.
 
-> +	if (IS_ERR(st->hwmon_dev))
-> +		return PTR_ERR(st->hwmon_dev);
->  
-> -static int iio_hwmon_remove(struct platform_device *pdev)
-> -{
-> -	struct iio_hwmon_state *st = platform_get_drvdata(pdev);
-> -
-> -	hwmon_device_unregister(st->hwmon_dev);
-> -	iio_channel_release_all(st->channels);
-> +	platform_set_drvdata(pdev, st);
+What's stopping you from registering these devices directly from DT?
 
-This is now unnecessary. Dropped. With this, the simplified the code to
-
-	hwmon_dev = devm_hwmon_device_register_with_groups(dev, sname, st,
-							   st->groups);
-	return PTR_ERR_OR_ZERO(hwmon_dev);
-
->  
->  	return 0;
->  }
-> @@ -197,7 +173,6 @@ static struct platform_driver __refdata iio_hwmon_driver = {
->  		.of_match_table = iio_hwmon_of_match,
->  	},
->  	.probe = iio_hwmon_probe,
-> -	.remove = iio_hwmon_remove,
->  };
->  
->  module_platform_driver(iio_hwmon_driver);
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
