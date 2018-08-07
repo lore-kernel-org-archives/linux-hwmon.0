@@ -1,32 +1,40 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ozlabs.org ([203.11.71.1]:41333 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733304AbeHAHID (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 1 Aug 2018 03:08:03 -0400
-In-Reply-To: <1532423589-18730-2-git-send-email-shilpa.bhat@linux.vnet.ibm.com>
-To: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        linux@roeck-us.net
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-Cc: linux-hwmon@vger.kernel.org, ego@linux.vnet.ibm.com,
-        Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, stewart@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [v8, 1/2] powernv:opal-sensor-groups: Add support to enable sensor groups
-Message-Id: <41gMDb4Ry7z9s4V@ozlabs.org>
-Date: Wed,  1 Aug 2018 15:24:15 +1000 (AEST)
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.113]:26426 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727669AbeHGLLr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 Aug 2018 07:11:47 -0400
+From: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Tokunori Ikegami <ikegami@allied-telesis.co.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/4] hwmon: (adt7475) Add error handling for update function
+Date: Tue,  7 Aug 2018 17:57:29 +0900
+Message-Id: <20180807085733.28756-1-ikegami@allied-telesis.co.jp>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, 2018-07-24 at 09:13:08 UTC, Shilpasri G Bhat wrote:
-> Adds support to enable/disable a sensor group at runtime. This
-> can be used to select the sensor groups that needs to be copied to
-> main memory by OCC. Sensor groups like power, temperature, current,
-> voltage, frequency, utilization can be enabled/disabled at runtime.
-> 
-> Signed-off-by: Shilpasri G Bhat <shilpa.bhat@linux.vnet.ibm.com>
+Currently the device update function does not care the I2C SMBus error.
+This causes a spurious sensor warining detection by sensor application.
+To prevent this issue add error handling for the update function.
+Also change the show functions to return error pointer value.
 
-Series applied to powerpc next, thanks.
+Signed-off-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: linux-hwmon@vger.kernel.org
 
-https://git.kernel.org/powerpc/c/04baaf28f40c68c35a413cd9d0db71
+Tokunori Ikegami (4):
+  hwmon: (adt7475) Split device update function to measure and limits
+  hwmon: (adt7475) Change valid parameter to bool type
+  hwmon: (adt7475) Change update functions to add error handling
+  hwmon: (adt7475) Change show functions to return error data correctly
 
-cheers
+ drivers/hwmon/adt7475.c | 347 +++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 252 insertions(+), 95 deletions(-)
+
+-- 
+2.16.1
+
