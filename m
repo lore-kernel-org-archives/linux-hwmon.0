@@ -1,65 +1,66 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.3]:61564 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726774AbeHKBy5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Aug 2018 21:54:57 -0400
-From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Jean Delvare <jdelvare@suse.com>,
-        PACKHAM Chris <chris.packham@alliedtelesis.co.nz>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH v3 0/4] hwmon: (adt7475) Add error handling for update
- function
-Date: Fri, 10 Aug 2018 23:22:51 +0000
-Message-ID: <TY2PR01MB2169D6EE3D6957BF54B7954EDC240@TY2PR01MB2169.jpnprd01.prod.outlook.com>
-References: <20180808013219.26118-1-ikegami@allied-telesis.co.jp>
- <20180810161333.GA3404@roeck-us.net>
-In-Reply-To: <20180810161333.GA3404@roeck-us.net>
-Content-Language: ja-JP
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from mail.phoronix.com ([23.111.154.110]:54474 "EHLO
+        sky.phoronix.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730634AbeHITia (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Aug 2018 15:38:30 -0400
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+From: Michael Larabel <Michael@phoronix.com>
+Subject: [PATCH] hwmon: (k10temp) 27C offset needed for Threadripper 2920X /
+ 2970WX
+Message-ID: <962bacd7-4369-0e36-ef55-ee3681baa27e@phoronix.com>
+Date: Thu, 9 Aug 2018 11:26:14 -0500
 MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------666AEDF09EF38D8CF7A43D95"
+Content-Language: en-US
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Guenter-san,
+This is a multi-part message in MIME format.
+--------------666AEDF09EF38D8CF7A43D95
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you so much for your support.
-I am very happy with this.
+Guenter, list:
 
-Regards,
-Ikegami
+I was able to confirm that the AMD Threadripper 2920X and 2970WX also 
+require a 27 degree Tctl offset.
 
-> -----Original Message-----
-> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter
-> Roeck
-> Sent: Saturday, August 11, 2018 1:14 AM
-> To: IKEGAMI Tokunori
-> Cc: Jean Delvare; PACKHAM Chris; linux-hwmon@vger.kernel.org
-> Subject: Re: [PATCH v3 0/4] hwmon: (adt7475) Add error handling for updat=
-e
-> function
->=20
-> On Wed, Aug 08, 2018 at 10:32:15AM +0900, Tokunori Ikegami wrote:
-> > Currently the device update function does not care the I2C SMBus error.
-> > This causes a spurious sensor warining detection by sensor application.
-> > To prevent this issue add error handling for the update function.
-> > Also change the show functions to return error pointer value.
-> >
-> > Signed-off-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > Cc: linux-hwmon@vger.kernel.org
-> >
-> > Tokunori Ikegami (4):
-> >   hwmon: (adt7475) Split device update function to measure and limits
-> >   hwmon: (adt7475) Change valid parameter to bool type
-> >   hwmon: (adt7475) Change update functions to add error handling
-> >   hwmon: (adt7475) Change show functions to return error data correctly
-> >
->=20
-> Series applied to hwmon-next.
->=20
-> Thanks,
-> Guenter
+Michael
+
+
+--------------666AEDF09EF38D8CF7A43D95
+Content-Type: text/x-patch;
+ name="0001-k10temp-27C-Offset-needed-for-Threadripper2.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="0001-k10temp-27C-Offset-needed-for-Threadripper2.patch"
+
+>From f368ba0dce5eb94e4552650595082b51ebc37b55 Mon Sep 17 00:00:00 2001
+From: Michael Larabel <michael@phoronix.com>
+Date: Tue, 7 Aug 2018 09:54:54 -0400
+Subject: [PATCH] k10temp: 27C Offset needed for Threadripper2
+
+For at least the Threadripper 2950X and Threadripper 2990WX, it's confirmed a 27 degree offset is needed.
+---
+ drivers/hwmon/k10temp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 17c6460ae351..577e2ede5a1a 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -105,6 +105,8 @@ static const struct tctl_offset tctl_offset_table[] = {
+ 	{ 0x17, "AMD Ryzen Threadripper 1950", 10000 },
+ 	{ 0x17, "AMD Ryzen Threadripper 1920", 10000 },
+ 	{ 0x17, "AMD Ryzen Threadripper 1910", 10000 },
++	{ 0x17, "AMD Ryzen Threadripper 2950X", 27000 },
++	{ 0x17, "AMD Ryzen Threadripper 2990WX", 27000 },
+ };
+ 
+ static void read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
+-- 
+2.17.1
+
+
+--------------666AEDF09EF38D8CF7A43D95--
