@@ -1,113 +1,112 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40157 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727781AbeHMAGy (ORCPT
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36180 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727539AbeHKWqY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Aug 2018 20:06:54 -0400
+        Sat, 11 Aug 2018 18:46:24 -0400
+Date: Sat, 11 Aug 2018 12:15:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.19-rc1
-Date: Sun, 12 Aug 2018 14:27:33 -0700
-Message-Id: <1534109253-19294-1-git-send-email-linux@roeck-us.net>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Tejun Heo <tj@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-ide@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        smartmontools-support@listi.jpberlin.de
+Subject: Re: [PATCH] RFC: libata: Add hwmon support for SMART temperature
+ sensors
+Message-ID: <20180811191534.GA24710@roeck-us.net>
+References: <20180809222425.17304-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20180809222425.17304-1-linus.walleij@linaro.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On Fri, Aug 10, 2018 at 12:24:25AM +0200, Linus Walleij wrote:
+> S.M.A.R.T. temperature sensors have been supported for
+> years by userspace tools such as smarttools.
+> 
+> The temperature readout is however also a good fit for
+> Linux' hwmon subsystem. By adding a hwmon interface to dig
+> out SMART parameter 194, we can expose the drive temperature
+> as a standard hwmon sensor.
+> 
+> The idea came about when experimenting with NAS enclosures
+> that lack their own on-board sensors but instead piggy-back
+> the sensor found in the harddrive, if any, to decide on a
+> policy for driving the on-board fan.
+> 
+> The kernel thermal subsystem supports defining a thermal
+> policy for the enclosure using the device tree, see e.g.:
+> arch/arm/boot/dts/gemini-dlink-dns-313.dts
+> but this requires a proper hwmon sensor integrated with
+> the kernel.
+> 
+> This is a first attempt at providing a kernel-internal
+> hwmon sensor for ATA drives. It is possible to do the
+> same for SCSI, NVME etc, but their protocols and
+> peculiarities seem to require a per-subsystem implementation.
+> They would all end up in the same namespace using the
+> SCSI name such as "sd_0:0:0:0".
+> 
+> With this driver, the hard disk temperatur can be read from
+> sysfs:
+> 
+>  > cd /sys/class/hwmon/hwmon0/
+>  > cat temp1_input
+>  38
+> 
+> This likely means that they can also be handled by
+> userspace tools such as lm_sensors in a uniform way
+> without need for any special tools such as "hddtemp"
+> (which seems dormant) though I haven't tested it.
+> 
+> This driver does not block any simultaneous use of
+> other SMART userspace tools, it's a both/and approach,
+> not either/or.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Please pull hwmon fixes for Linux v4.19-rc1 from signed tag:
+[ ... ]
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.19-rc1
+> +	/* Names the hwmon device something like "sd_0:0:0:0" */
+> +	sname = devm_kasprintf(dev, GFP_KERNEL, "sd_%s", dev_name(dev));
+> +	if (!sname)
+> +		return -ENOMEM;
 
-Thanks,
+This is actually not needed and results in an awkward output such as
+
+sd_10:0:0:0-scsi-10-0
+
+as device name reported by the sensors command (after adding scsi bus
+support to it). We don't usually encode device indexes into the name
+string since it results in duplicate output. "sd" as name passed to
+devm_hwmon_device_register_with_info() is sufficient.
+
+I implemented the following translation from host:bus:slot:lun to
+the sensors command output:
+
+a:b:c:d -> scsi-a-bbcd, where a in the output is decimal and bbcd are hex
+nibbles. Let me know if this is ok or if you have a better idea.
+
+I found that some ssd drives report a temperature of 0 degrees C.
+
+$ sudo hddtemp /dev/sdb
+/dev/sdb: M4-CT256M4SSD2: 0°C
+
+# sensors
+sd_10:0:0:0-scsi-10-0
+Adapter: SCSI adapter
+temp1:         +0.0°C  (low  =  +0.0°C, high =  +0.0°C)
+
+At least some drives (eg WDC WD4001FAEX-00MJRA0) don't report low/high
+temperatures. Maybe we should detect this situation and not instantiate
+the device (or the min/max attributes) if no useful data is returned.
+What do you think ?
+Are min/max temperatures configurable ?
+
 Guenter
-------
-
-The following changes since commit 1e4b044d22517cae7047c99038abb444423243ca:
-
-  Linux 4.18-rc4 (2018-07-08 16:34:02 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.19-rc1
-
-for you to fetch changes up to 4afec79f652b11189c07ce49498c4477adda887c:
-
-  hwmon: (adt7475) Change show functions to return error data correctly (2018-08-10 09:13:01 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v4.19-rc1
-
-New driver for NPCM7xx PWM and Fan controller
-New driver for Mellanox FAN controller
-Add support for MAX34451 to max34440 driver
-Add support for new Threadripper variants to k10temp driver
-Add error handling to adt7475 driver
-Cleanup nct6775 and nct7904 drivers
-Document sensor enable ABI attributes
-
-----------------------------------------------------------------
-Guenter Roeck (2):
-      hwmon: (nct6775) Fix comment in the description of pwm_mode
-      hwmon: k10temp: Support Threadripper 2920X, 2970WX; simplify offset table
-
-Gustavo A. R. Silva (1):
-      hwmon: Mark expected switch fall-throughs
-
-Jakob Albert (3):
-      hwmon: (nct7904) Fix SPACING errors
-      hwmon: (nct7904) Fix CODE_INDENT error
-      hwmon: (nct7904) Fix UNSPECIFIED_INT warning
-
-Kun Yi (1):
-      hwmon: (pmbus/max34440) Add support for MAX34451.
-
-Maxime Roussin-BÃ©langer (1):
-      hwmon: (iio_hwmon) Use devm functions
-
-Michael Larabel (1):
-      hwmon: (k10temp) 27C Offset needed for Threadripper2
-
-Shilpasri G Bhat (1):
-      hwmon: Document the sensor enable attribute
-
-Tokunori Ikegami (4):
-      hwmon: (adt7475) Split device update function to measure and limits
-      hwmon: (adt7475) Change valid parameter to bool type
-      hwmon: (adt7475) Change update functions to add error handling
-      hwmon: (adt7475) Change show functions to return error data correctly
-
-Tomer Maimon (2):
-      dt-binding: hwmon: Add NPCM7xx PWM and Fan controller documentation
-      hwmon: Add NPCM7xx PWM and Fan driver
-
-Vadim Pasternak (1):
-      hwmon: (mlxreg-fan) Add support for Mellanox FAN driver
-
- .../devicetree/bindings/hwmon/npcm750-pwm-fan.txt  |   84 ++
- Documentation/hwmon/max34440                       |   16 +-
- Documentation/hwmon/mlxreg-fan                     |   60 ++
- Documentation/hwmon/npcm750-pwm-fan                |   22 +
- Documentation/hwmon/sysfs-interface                |   48 +
- drivers/hwmon/Kconfig                              |   22 +
- drivers/hwmon/Makefile                             |    2 +
- drivers/hwmon/adt7475.c                            |  340 +++++--
- drivers/hwmon/emc1403.c                            |    2 +
- drivers/hwmon/iio_hwmon.c                          |   67 +-
- drivers/hwmon/k10temp.c                            |    8 +-
- drivers/hwmon/mlxreg-fan.c                         |  489 +++++++++
- drivers/hwmon/nct6775.c                            |    6 +-
- drivers/hwmon/nct7904.c                            |   68 +-
- drivers/hwmon/npcm750-pwm-fan.c                    | 1057 ++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig                        |    2 +-
- drivers/hwmon/pmbus/max34440.c                     |   93 +-
- 17 files changed, 2190 insertions(+), 196 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
- create mode 100644 Documentation/hwmon/mlxreg-fan
- create mode 100644 Documentation/hwmon/npcm750-pwm-fan
- create mode 100644 drivers/hwmon/mlxreg-fan.c
- create mode 100644 drivers/hwmon/npcm750-pwm-fan.c
