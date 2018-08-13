@@ -1,87 +1,70 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl0-f65.google.com ([209.85.160.65]:40271 "EHLO
-        mail-pl0-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727734AbeHMBLO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 12 Aug 2018 21:11:14 -0400
+Return-Path: <htejun@gmail.com>
+Return-path: <htejun@gmail.com>
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Mon, 13 Aug 2018 07:14:38 -0700
+From: Tejun Heo <tj@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-ide@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	smartmontools-support@listi.jpberlin.de,
+	Hans de Goede <hdegoede@redhat.com>
 Subject: Re: [PATCH] RFC: libata: Add hwmon support for SMART temperature
  sensors
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Walleij <linus.walleij@linaro.org>,
-        Tejun Heo <tj@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc: linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        smartmontools-support@listi.jpberlin.de
+Message-ID: <20180813141438.GH3978217@devbig004.ftw2.facebook.com>
 References: <20180809222425.17304-1-linus.walleij@linaro.org>
  <eef62afc-76bd-c9a5-6b12-6ba40b7eca66@roeck-us.net>
-Message-ID: <cf319e6a-59a9-d6de-79e2-91994177194c@roeck-us.net>
-Date: Sun, 12 Aug 2018 15:31:43 -0700
+ <CACRpkdY0y_q-MXvwmW_aF=DnNy2X9z+=7jY8SGObrBuvs8h2_A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <eef62afc-76bd-c9a5-6b12-6ba40b7eca66@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdY0y_q-MXvwmW_aF=DnNy2X9z+=7jY8SGObrBuvs8h2_A@mail.gmail.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 08/09/2018 09:15 PM, Guenter Roeck wrote:
-> On 08/09/2018 03:24 PM, Linus Walleij wrote:
->> S.M.A.R.T. temperature sensors have been supported for
->> years by userspace tools such as smarttools.
->>
->> The temperature readout is however also a good fit for
->> Linux' hwmon subsystem. By adding a hwmon interface to dig
->> out SMART parameter 194, we can expose the drive temperature
->> as a standard hwmon sensor.
->>
-[ ... ]
->> +
->> +static int ata_hwmon_read_temp(struct ata_hwmon *ata, int *temp,
->> +                   int *min, int *max)
->> +{
+(cc'ing Hans)
 
-[ ... ]
+On Fri, Aug 10, 2018 at 11:53:35AM +0200, Linus Walleij wrote:
+> On Fri, Aug 10, 2018 at 6:15 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 08/09/2018 03:24 PM, Linus Walleij wrote:
+> 
+> > > This is a first attempt at providing a kernel-internal
+> > > hwmon sensor for ATA drives. It is possible to do the
+> > > same for SCSI, NVME etc, but their protocols and
+> > > peculiarities seem to require a per-subsystem implementation.
+> > > They would all end up in the same namespace using the
+> > > SCSI name such as "sd_0:0:0:0".
+> > >
+> > If the implementation for other drive types needs to be different,
+> > how about "ata" as prefix ?
+> 
+> I was thinking that since through libata all devices on ATA
+> are registered to the SCSI namespace, userspace would just
+> see sd_N:N:N:N and know "it is some harddrive" and we
+> do not need to know if it is SCSI or ATA. This seems to be
+> the way the block developers are thinking about it: ATA drives
+> are entirely hidden behind SCSI, as are USB mass storage
+> drives.
 
->> +        if (id == SMART_TEMP_PROP_194)
->> +            break;
+Yeah, I think that's the right approach given that most of libata's
+interface is scsi based.
 
-231 also seems to report the temperature if available, as does 190.
+> Yeah I know you are minimalist when it comes to dmesg ;)
+> 
+> Let's hear what the ATA people think though, it could be kind of useful
+> if someone posts a log asking what's wrong with their drive
+> and it says the hard disk is 60 degrees on boot. "Man, I think you
+> need to look at your fans."
 
-Not sure if 190 is worth it, though - Samsung SSD 840 PRO Series supports
-it but reports a static value of 28. And it seems to be either as
-degrees C or as 100 - degrees C, depending on the drive manufacturer,
-which makes it quite unreliable.
+I don't really mind either way as long as it's dbg but yeah hwmon core
+likely is a better place to make that call.
 
-[ ... ]
+So, one thought I have is that this doesn't really add any new
+capabilities.  The information is fully discoverable from userspace
+and interpreting the data requires quite a bit of heuristics.  So, do
+we really need this in the kernel?
 
->> +
->> +static int ata_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->> +              u32 attr, int channel, long *val)
->> +{
->> +    struct ata_hwmon *ata = dev_get_drvdata(dev);
->> +    int temp, min, max;
->> +    int ret;
->> +
->> +    if (type != hwmon_temp)
->> +        return -EINVAL;
->> +
->> +    ret = ata_hwmon_read_temp(ata, &temp, &min, &max);
->> +    if (ret)
->> +        return ret;
->> +
->> +    switch (attr) {
->> +    case hwmon_temp_input:
->> +        *val = temp;
->> +        break;
->> +    case hwmon_temp_min:
->> +        *val = min;
->> +        break;
->> +    case hwmon_temp_max:
->> +        *val = max;
->> +        break;
+Thanks.
 
-Those numbers need to be multiplied by 1,000 (hwmon ABI expects milli-degrees C).
-
-Guenter
+-- 
+tejun
