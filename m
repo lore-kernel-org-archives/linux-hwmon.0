@@ -1,61 +1,91 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.208]:37897 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725972AbeHUF62 (ORCPT
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.3]:10060 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728272AbeHNMTD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Aug 2018 01:58:28 -0400
+        Tue, 14 Aug 2018 08:19:03 -0400
 From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
-To: Guenter Roeck <linux@roeck-us.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-CC: Jean Delvare <jdelvare@suse.com>,
+To: Dan Carpenter <dan.carpenter@oracle.com>,
+        Jean Delvare <jdelvare@suse.com>
+CC: Guenter Roeck <linux@roeck-us.net>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: RE: [PATCH 2/2 v2] hwmon: (adt7475) Make adt7475_read_word() return
- errors
-Date: Tue, 21 Aug 2018 02:40:14 +0000
-Message-ID: <TY2PR01MB2169658C8FFC8150B7F8BBC5DC310@TY2PR01MB2169.jpnprd01.prod.outlook.com>
-References: <TYAPR01MB2175C5AA4B777C61CB0AE04DDC380@TYAPR01MB2175.jpnprd01.prod.outlook.com>
- <20180814100747.oovzd66gxmm755nr@kili.mountain>
- <20180814134049.GA607@roeck-us.net>
- <TY2PR01MB216928C2DF3E2976F4E9BDADDC3F0@TY2PR01MB2169.jpnprd01.prod.outlook.com>
- <01f7b2a7-f1af-65d0-5e6e-9d2a484f3a48@roeck-us.net>
-In-Reply-To: <01f7b2a7-f1af-65d0-5e6e-9d2a484f3a48@roeck-us.net>
+Subject: RE: [PATCH 1/2] hwmon: (adt7475) Potential error pointer dereferences
+Date: Tue, 14 Aug 2018 09:32:36 +0000
+Message-ID: <TYAPR01MB2175286700961F9A378095A5DC380@TYAPR01MB2175.jpnprd01.prod.outlook.com>
+References: <20180814091236.zubxfj32bedobr52@kili.mountain>
+In-Reply-To: <20180814091236.zubxfj32bedobr52@kili.mountain>
 Content-Language: ja-JP
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-SGkgR3VlbnRlci1zYW4sDQoNClRoYW5rIHlvdSBzbyBtdWNoIGZvciB0aGUgbWFpbCBhbmQgbm90
-ZWQgaXQuDQooQnV0IHNvcnJ5IGZvciB0b28gbGF0ZSB0byByZXBseSBzaW5jZSB0aGUgbWFpbCB3
-YXMgYXV0b21hdGljYWxseSBtb3ZlZCBmcm9tIHRoZSBtYWlsIHJlY2VpdmluZyBmb2xkZXIuKQ0K
-DQpSZWdhcmRzLA0KSWtlZ2FtaQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZy
-b206IGxpbnV4LWh3bW9uLW93bmVyQHZnZXIua2VybmVsLm9yZw0KPiBbbWFpbHRvOmxpbnV4LWh3
-bW9uLW93bmVyQHZnZXIua2VybmVsLm9yZ10gT24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9lY2sNCj4g
-U2VudDogV2VkbmVzZGF5LCBBdWd1c3QgMTUsIDIwMTggOTozNyBQTQ0KPiBUbzogSUtFR0FNSSBU
-b2t1bm9yaTsgRGFuIENhcnBlbnRlcg0KPiBDYzogSmVhbiBEZWx2YXJlOyBsaW51eC1od21vbkB2
-Z2VyLmtlcm5lbC5vcmc7DQo+IGtlcm5lbC1qYW5pdG9yc0B2Z2VyLmtlcm5lbC5vcmcNCj4gU3Vi
-amVjdDogUmU6IFtQQVRDSCAyLzIgdjJdIGh3bW9uOiAoYWR0NzQ3NSkgTWFrZSBhZHQ3NDc1X3Jl
-YWRfd29yZCgpDQo+IHJldHVybiBlcnJvcnMNCj4gDQo+IE9uIDA4LzE0LzIwMTggMTE6MDIgUE0s
-IElLRUdBTUkgVG9rdW5vcmkgd3JvdGU6DQo+ID4gSGkgR3VlbnRlci1zYW4sDQo+ID4NCj4gPiBD
-b3VsZCB5b3UgcGxlYXNlIGxldCBtZSBrbm93IHRoZSBnaXQgcmVwb3NpdG9yeSB0aGF0IGFwcGxp
-ZWQgdGhlIGZpeGVzDQo+IGJ5IERhbi1zYW4/DQo+ID4NCj4gDQo+IFNlcmllcyBub3cgdXBsb2Fk
-ZWQuIEknbGwgc2VuZCBhIHB1bGwgcmVxdWVzdCB0byBMaW51cyBhZnRlciAtcmMxIGhhcw0KPiBi
-ZWVuIHB1Ymxpc2hlZC4NCj4gDQo+IGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC9ncm9lY2svbGludXgtc3RhZ2luZy5nDQo+IGl0IGh3bW9uDQo+IA0KPiBHdWVu
-dGVyDQo+IA0KPiA+IFJlZ2FyZHMsDQo+ID4gSWtlZ2FtaQ0KPiA+DQo+ID4+IC0tLS0tT3JpZ2lu
-YWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IEd1ZW50ZXIgUm9lY2sgW21haWx0bzpncm9lY2s3
-QGdtYWlsLmNvbV0gT24gQmVoYWxmIE9mIEd1ZW50ZXINCj4gPj4gUm9lY2sNCj4gPj4gU2VudDog
-VHVlc2RheSwgQXVndXN0IDE0LCAyMDE4IDEwOjQxIFBNDQo+ID4+IFRvOiBEYW4gQ2FycGVudGVy
-DQo+ID4+IENjOiBKZWFuIERlbHZhcmU7IElLRUdBTUkgVG9rdW5vcmk7IGxpbnV4LWh3bW9uQHZn
-ZXIua2VybmVsLm9yZzsNCj4gPj4ga2VybmVsLWphbml0b3JzQHZnZXIua2VybmVsLm9yZw0KPiA+
-PiBTdWJqZWN0OiBSZTogW1BBVENIIDIvMiB2Ml0gaHdtb246IChhZHQ3NDc1KSBNYWtlIGFkdDc0
-NzVfcmVhZF93b3JkKCkNCj4gPj4gcmV0dXJuIGVycm9ycw0KPiA+Pg0KPiA+PiBPbiBUdWUsIEF1
-ZyAxNCwgMjAxOCBhdCAwMTowNzo0N1BNICswMzAwLCBEYW4gQ2FycGVudGVyIHdyb3RlOg0KPiA+
-Pj4gVGhlIGFkdDc0NzVfcmVhZF93b3JkKCkgZnVuY3Rpb24gd2FzIG1lYW50IHRvIHJldHVybiBu
-ZWdhdGl2ZSBlcnJvcg0KPiA+Pj4gY29kZXMgb24gZmFpbHVyZS4NCj4gPj4+DQo+ID4+PiBTaWdu
-ZWQtb2ZmLWJ5OiBEYW4gQ2FycGVudGVyIDxkYW4uY2FycGVudGVyQG9yYWNsZS5jb20+DQo+ID4+
-PiBSZXZpZXdlZC1ieTogVG9rdW5vcmkgSWtlZ2FtaSA8aWtlZ2FtaUBhbGxpZWQtdGVsZXNpcy5j
-by5qcD4NCj4gPj4NCj4gPj4gQXBwbGllZC4NCj4gPj4NCj4gPj4gVGhhbmtzLA0KPiA+PiBHdWVu
-dGVyDQo+ID4NCg0K
+Hi Dan-san,
+
+Thank you so much for the fixes.
+But very sorry for the problem caused by my changes.
+
+I have reviewed them and those look good.
+
+Reviewed-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+
+Regards,
+Ikegami
+
+> -----Original Message-----
+> From: Dan Carpenter [mailto:dan.carpenter@oracle.com]
+> Sent: Tuesday, August 14, 2018 6:13 PM
+> To: Jean Delvare; IKEGAMI Tokunori
+> Cc: Guenter Roeck; linux-hwmon@vger.kernel.org;
+> kernel-janitors@vger.kernel.org
+> Subject: [PATCH 1/2] hwmon: (adt7475) Potential error pointer
+> dereferences
+>=20
+> The adt7475_update_device() function returns error pointers.  The
+> problem is that in show_pwmfreq() we dereference it before the check.
+> And then in pwm_use_point2_pwm_at_crit_show() there isn't a check at
+> all.  I don't know if it's required, but it silences a static checker
+> warning and it's doesn't hurt anything to check.
+>=20
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+>=20
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 90837f7c7d0f..16045149f3db 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -962,13 +962,14 @@ static ssize_t show_pwmfreq(struct device *dev,
+> struct device_attribute *attr,
+>  {
+>  	struct adt7475_data *data =3D adt7475_update_device(dev);
+>  	struct sensor_device_attribute_2 *sattr =3D
+> to_sensor_dev_attr_2(attr);
+> -	int i =3D clamp_val(data->range[sattr->index] & 0xf, 0,
+> -			  ARRAY_SIZE(pwmfreq_table) - 1);
+> +	int idx;
+>=20
+>  	if (IS_ERR(data))
+>  		return PTR_ERR(data);
+> +	idx =3D clamp_val(data->range[sattr->index] & 0xf, 0,
+> +			ARRAY_SIZE(pwmfreq_table) - 1);
+>=20
+> -	return sprintf(buf, "%d\n", pwmfreq_table[i]);
+> +	return sprintf(buf, "%d\n", pwmfreq_table[idx]);
+>  }
+>=20
+>  static ssize_t set_pwmfreq(struct device *dev, struct device_attribute
+> *attr,
+> @@ -1004,6 +1005,10 @@ static ssize_t
+> pwm_use_point2_pwm_at_crit_show(struct device *dev,
+>  					char *buf)
+>  {
+>  	struct adt7475_data *data =3D adt7475_update_device(dev);
+> +
+> +	if (IS_ERR(data))
+> +		return PTR_ERR(data);
+> +
+>  	return sprintf(buf, "%d\n", !!(data->config4 &
+> CONFIG4_MAXDUTY));
+>  }
+>=20
