@@ -1,34 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39369 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732699AbeHNQZw (ORCPT
+Received: from userp2130.oracle.com ([156.151.31.86]:55024 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728101AbeHNMBR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Aug 2018 12:25:52 -0400
-Received: by mail-pg1-f195.google.com with SMTP id a11-v6so9114115pgw.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Aug 2018 06:38:39 -0700 (PDT)
-Date: Tue, 14 Aug 2018 06:38:38 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Lothar Felten <lothar.felten@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/1] hwmon: (ina2xx) fix sysfs shunt resistor read access
-Message-ID: <20180814133838.GA27969@roeck-us.net>
-References: <20180814070937.3794-1-lothar.felten@gmail.com>
+        Tue, 14 Aug 2018 08:01:17 -0400
+Date: Tue, 14 Aug 2018 12:14:32 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH 2/2] hwmon: (adt7475) Remove some unnecessary checks
+Message-ID: <20180814091432.xhdmxd7aqbz2si4k@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20180814070937.3794-1-lothar.felten@gmail.com>
+In-Reply-To: <20180814091236.zubxfj32bedobr52@kili.mountain>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 14, 2018 at 09:09:37AM +0200, Lothar Felten wrote:
-> fix the sysfs shunt resistor read access: return the shunt resistor
-> value, not the calibration register contents.
-> 
-> update email address
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+The adt7475_read_word() returns u16 values, so it's impossible for
+"ret" to be negative.  The check is harmless, but static checkers
+complain about it.
 
-Applied.
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 16045149f3db..9d3da8ea38ba 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1492,10 +1492,7 @@ static int adt7475_update_limits(struct i2c_client *client)
+ 	for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+ 		if (i == 3 && !data->has_fan4)
+ 			continue;
+-		ret = adt7475_read_word(client, TACH_MIN_REG(i));
+-		if (ret < 0)
+-			return ret;
+-		data->tach[MIN][i] = ret;
++		data->tach[MIN][i] = adt7475_read_word(client, TACH_MIN_REG(i));
+ 	}
+ 
+ 	for (i = 0; i < ADT7475_PWM_COUNT; i++) {
+@@ -1881,10 +1878,7 @@ static int adt7475_update_measure(struct device *dev)
+ 	for (i = 0; i < ADT7475_TACH_COUNT; i++) {
+ 		if (i == 3 && !data->has_fan4)
+ 			continue;
+-		ret = adt7475_read_word(client, TACH_REG(i));
+-		if (ret < 0)
+-			return ret;
+-		data->tach[INPUT][i] = ret;
++		data->tach[INPUT][i] = adt7475_read_word(client, TACH_REG(i));
+ 	}
+ 
+ 	/* Updated by hw when in auto mode */
