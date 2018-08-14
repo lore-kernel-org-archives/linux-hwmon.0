@@ -1,36 +1,39 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40882 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732741AbeHNQ0s (ORCPT
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44362 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732699AbeHNQbL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Aug 2018 12:26:48 -0400
-Date: Tue, 14 Aug 2018 06:39:34 -0700
+        Tue, 14 Aug 2018 12:31:11 -0400
+Date: Tue, 14 Aug 2018 06:43:55 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Tokunori Ikegami <ikegami@allied-telesis.co.jp>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (adt7475) Potential error pointer dereferences
-Message-ID: <20180814133934.GA11077@roeck-us.net>
-References: <20180814091236.zubxfj32bedobr52@kili.mountain>
+To: michael.hennerich@analog.com
+Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: hwmon: pmbus: ltc2978: Add support for LTM4686
+ uModule
+Message-ID: <20180814134355.GA15658@roeck-us.net>
+References: <1534249108-29765-1-git-send-email-michael.hennerich@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20180814091236.zubxfj32bedobr52@kili.mountain>
+In-Reply-To: <1534249108-29765-1-git-send-email-michael.hennerich@analog.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 14, 2018 at 12:12:36PM +0300, Dan Carpenter wrote:
-> The adt7475_update_device() function returns error pointers.  The
-> problem is that in show_pwmfreq() we dereference it before the check.
-> And then in pwm_use_point2_pwm_at_crit_show() there isn't a check at
-> all.  I don't know if it's required, but it silences a static checker
-> warning and it's doesn't hurt anything to check.
+On Tue, Aug 14, 2018 at 02:18:28PM +0200, michael.hennerich@analog.com wrote:
+> From: Michael Hennerich <michael.hennerich@analog.com>
 > 
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+> This patch adds support for LTM4686 Ultrathin Dual 10A or
+> Single 20A uModule Regulator with Digital Power System Management.
+> 
+> Datasheet: http://www.analog.com/ltm4686
+> 
+> 
+> Signed-off-by: Michael Hennerich <michael.hennerich@analog.com>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
