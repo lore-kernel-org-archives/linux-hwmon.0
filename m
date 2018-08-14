@@ -1,95 +1,34 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm0-f66.google.com ([74.125.82.66]:37389 "EHLO
-        mail-wm0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727670AbeHNJzj (ORCPT
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:39369 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732699AbeHNQZw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Aug 2018 05:55:39 -0400
-Received: by mail-wm0-f66.google.com with SMTP id n11-v6so11094083wmc.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Aug 2018 00:09:46 -0700 (PDT)
-From: Lothar Felten <lothar.felten@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Lothar Felten <lothar.felten@gmail.com>
-Subject: [PATCH 1/1] hwmon: (ina2xx) fix sysfs shunt resistor read access
-Date: Tue, 14 Aug 2018 09:09:37 +0200
-Message-Id: <20180814070937.3794-1-lothar.felten@gmail.com>
+        Tue, 14 Aug 2018 12:25:52 -0400
+Received: by mail-pg1-f195.google.com with SMTP id a11-v6so9114115pgw.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Aug 2018 06:38:39 -0700 (PDT)
+Date: Tue, 14 Aug 2018 06:38:38 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Lothar Felten <lothar.felten@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: (ina2xx) fix sysfs shunt resistor read access
+Message-ID: <20180814133838.GA27969@roeck-us.net>
+References: <20180814070937.3794-1-lothar.felten@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180814070937.3794-1-lothar.felten@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-fix the sysfs shunt resistor read access: return the shunt resistor
-value, not the calibration register contents.
+On Tue, Aug 14, 2018 at 09:09:37AM +0200, Lothar Felten wrote:
+> fix the sysfs shunt resistor read access: return the shunt resistor
+> value, not the calibration register contents.
+> 
+> update email address
+> 
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 
-update email address
+Applied.
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- Documentation/hwmon/ina2xx           |  2 +-
- drivers/hwmon/ina2xx.c               | 13 +++++++++++--
- include/linux/platform_data/ina2xx.h |  2 +-
- 3 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/hwmon/ina2xx b/Documentation/hwmon/ina2xx
-index 72d16f08e431..b8df81f6d6bc 100644
---- a/Documentation/hwmon/ina2xx
-+++ b/Documentation/hwmon/ina2xx
-@@ -32,7 +32,7 @@ Supported chips:
-     Datasheet: Publicly available at the Texas Instruments website
-                http://www.ti.com/
- 
--Author: Lothar Felten <l-felten@ti.com>
-+Author: Lothar Felten <lothar.felten@gmail.com>
- 
- Description
- -----------
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index e9e6aeabbf84..71d3445ba869 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -17,7 +17,7 @@
-  * Bi-directional Current/Power Monitor with I2C Interface
-  * Datasheet: http://www.ti.com/product/ina230
-  *
-- * Copyright (C) 2012 Lothar Felten <l-felten@ti.com>
-+ * Copyright (C) 2012 Lothar Felten <lothar.felten@gmail.com>
-  * Thanks to Jan Volkering
-  *
-  * This program is free software; you can redistribute it and/or modify
-@@ -329,6 +329,15 @@ static int ina2xx_set_shunt(struct ina2xx_data *data, long val)
- 	return 0;
- }
- 
-+static ssize_t ina2xx_show_shunt(struct device *dev,
-+			      struct device_attribute *da,
-+			      char *buf)
-+{
-+	struct ina2xx_data *data = dev_get_drvdata(dev);
-+
-+	return snprintf(buf, PAGE_SIZE, "%li\n", data->rshunt);
-+}
-+
- static ssize_t ina2xx_store_shunt(struct device *dev,
- 				  struct device_attribute *da,
- 				  const char *buf, size_t count)
-@@ -403,7 +412,7 @@ static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ina2xx_show_value, NULL,
- 
- /* shunt resistance */
- static SENSOR_DEVICE_ATTR(shunt_resistor, S_IRUGO | S_IWUSR,
--			  ina2xx_show_value, ina2xx_store_shunt,
-+			  ina2xx_show_shunt, ina2xx_store_shunt,
- 			  INA2XX_CALIBRATION);
- 
- /* update interval (ina226 only) */
-diff --git a/include/linux/platform_data/ina2xx.h b/include/linux/platform_data/ina2xx.h
-index 9abc0ca7259b..9f0aa1b48c78 100644
---- a/include/linux/platform_data/ina2xx.h
-+++ b/include/linux/platform_data/ina2xx.h
-@@ -1,7 +1,7 @@
- /*
-  * Driver for Texas Instruments INA219, INA226 power monitor chips
-  *
-- * Copyright (C) 2012 Lothar Felten <l-felten@ti.com>
-+ * Copyright (C) 2012 Lothar Felten <lothar.felten@gmail.com>
-  *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License version 2 as
--- 
-2.11.0
+Thanks,
+Guenter
