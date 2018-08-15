@@ -1,35 +1,56 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45688 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732699AbeHNQ2F (ORCPT
+Received: from mail1.bemta23.messagelabs.com ([67.219.246.3]:42555 "EHLO
+        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725876AbeHOIxg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Aug 2018 12:28:05 -0400
-Date: Tue, 14 Aug 2018 06:40:49 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 2/2 v2] hwmon: (adt7475) Make adt7475_read_word() return
+        Wed, 15 Aug 2018 04:53:36 -0400
+From: IKEGAMI Tokunori <ikegami@allied-telesis.co.jp>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+CC: Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: RE: [PATCH 2/2 v2] hwmon: (adt7475) Make adt7475_read_word() return
  errors
-Message-ID: <20180814134049.GA607@roeck-us.net>
+Date: Wed, 15 Aug 2018 06:02:46 +0000
+Message-ID: <TY2PR01MB216928C2DF3E2976F4E9BDADDC3F0@TY2PR01MB2169.jpnprd01.prod.outlook.com>
 References: <TYAPR01MB2175C5AA4B777C61CB0AE04DDC380@TYAPR01MB2175.jpnprd01.prod.outlook.com>
  <20180814100747.oovzd66gxmm755nr@kili.mountain>
+ <20180814134049.GA607@roeck-us.net>
+In-Reply-To: <20180814134049.GA607@roeck-us.net>
+Content-Language: ja-JP
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180814100747.oovzd66gxmm755nr@kili.mountain>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 14, 2018 at 01:07:47PM +0300, Dan Carpenter wrote:
-> The adt7475_read_word() function was meant to return negative error
-> codes on failure.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+Hi Guenter-san,
 
-Applied.
+Could you please let me know the git repository that applied the fixes by D=
+an-san?
 
-Thanks,
-Guenter
+Regards,
+Ikegami
+
+> -----Original Message-----
+> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter
+> Roeck
+> Sent: Tuesday, August 14, 2018 10:41 PM
+> To: Dan Carpenter
+> Cc: Jean Delvare; IKEGAMI Tokunori; linux-hwmon@vger.kernel.org;
+> kernel-janitors@vger.kernel.org
+> Subject: Re: [PATCH 2/2 v2] hwmon: (adt7475) Make adt7475_read_word()
+> return errors
+>=20
+> On Tue, Aug 14, 2018 at 01:07:47PM +0300, Dan Carpenter wrote:
+> > The adt7475_read_word() function was meant to return negative error
+> > codes on failure.
+> >
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Reviewed-by: Tokunori Ikegami <ikegami@allied-telesis.co.jp>
+>=20
+> Applied.
+>=20
+> Thanks,
+> Guenter
