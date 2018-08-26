@@ -1,44 +1,37 @@
-Return-Path: <festevam@gmail.com>
-Return-path: <festevam@gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	Fabio Estevam <fabio.estevam@nxp.com>
-Subject: [PATCH 2/2] hwmon: (mc13783-adc) Use nxp.com URLs
-Date: Sat, 25 Aug 2018 00:27:56 -0300
-Message-Id: <1535167676-27013-2-git-send-email-festevam@gmail.com>
-In-Reply-To: <1535167676-27013-1-git-send-email-festevam@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42192 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbeHZR22 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 26 Aug 2018 13:28:28 -0400
+Received: by mail-pg1-f193.google.com with SMTP id y4-v6so6222580pgp.9
+        for <linux-hwmon@vger.kernel.org>; Sun, 26 Aug 2018 06:45:51 -0700 (PDT)
+Date: Sun, 26 Aug 2018 06:45:49 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Fabio Estevam <fabio.estevam@nxp.com>
+Subject: Re: [PATCH 1/2] hwmon: (mc13783-adc) Remove the mention to 'Atlas'
+Message-ID: <20180826134549.GA4364@roeck-us.net>
 References: <1535167676-27013-1-git-send-email-festevam@gmail.com>
-List-ID: <linux-hwmon@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1535167676-27013-1-git-send-email-festevam@gmail.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+On Sat, Aug 25, 2018 at 12:27:55AM -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> 'Atlas' was an internal name for the MC13783 PMIC only and does not
+> apply to MC13892.
+> 
+> To avoid confusion, remove the 'Atlas' term from the description.
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-Use the nxp.com URLs for the MC13783 and MC13892 datasheets.
+Applied to hwmon-next.
 
-The original URLs are still valid, but the nxp.com one is shorter
-and more up-to-date.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- Documentation/hwmon/mc13783-adc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/hwmon/mc13783-adc b/Documentation/hwmon/mc13783-adc
-index 2798a29..05ccc9f 100644
---- a/Documentation/hwmon/mc13783-adc
-+++ b/Documentation/hwmon/mc13783-adc
-@@ -4,10 +4,10 @@ Kernel driver mc13783-adc
- Supported chips:
-   * Freescale MC13783
-     Prefix: 'mc13783'
--    Datasheet: http://www.freescale.com/files/rf_if/doc/data_sheet/MC13783.pdf?fsrch=1
-+    Datasheet: https://www.nxp.com/docs/en/data-sheet/MC13783.pdf
-   * Freescale MC13892
-     Prefix: 'mc13892'
--    Datasheet: http://cache.freescale.com/files/analog/doc/data_sheet/MC13892.pdf?fsrch=1&sr=1
-+    Datasheet: https://www.nxp.com/docs/en/data-sheet/MC13892.pdf
- 
- Authors:
-     Sascha Hauer <s.hauer@pengutronix.de>
--- 
-2.7.4
+Thanks,
+Guenter
