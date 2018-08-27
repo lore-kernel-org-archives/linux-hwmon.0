@@ -1,73 +1,58 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38698 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbeHOXgz (ORCPT
+Received: from mail-oi0-f68.google.com ([209.85.218.68]:44290 "EHLO
+        mail-oi0-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727274AbeH0W4k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Aug 2018 19:36:55 -0400
-Date: Wed, 15 Aug 2018 13:43:08 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6775) Fix potential Spectre v1
-Message-ID: <20180815204308.GC18407@roeck-us.net>
-References: <20180815131437.GA25639@embeddedor.com>
+        Mon, 27 Aug 2018 18:56:40 -0400
+Received: by mail-oi0-f68.google.com with SMTP id l82-v6so24718oih.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Aug 2018 12:08:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180815131437.GA25639@embeddedor.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 27 Aug 2018 16:08:47 -0300
+Message-ID: <CAOMZO5B5CdyGosPduP0uje_wNhiJDcH5NsumENAdQKjLBWFM0g@mail.gmail.com>
+Subject: Reading from the MC13892 ADC channels causes shutdown
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?=
+        <u.kleine-koenig@pengutronix.de>,
+        David Jander <david.jander@protonic.nl>,
+        Andrey Gusakov <andrey.gusakov@cogentembedded.com>
+Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 15, 2018 at 08:14:37AM -0500, Gustavo A. R. Silva wrote:
-> val can be indirectly controlled by user-space, hence leading to
-> a potential exploitation of the Spectre variant 1 vulnerability.
-> 
-> This issue was detected with the help of Smatch:
-> 
-> vers/hwmon/nct6775.c:2698 store_pwm_weight_temp_sel() warn: potential
-> spectre issue 'data->temp_src' [r]
-> 
-> Fix this by sanitizing val before using it to index data->temp_src
-> 
-> Notice that given that speculation windows are large, the policy is
-> to kill the speculation on the first load and not worry if it can be
-> completed with a dependent load/store [1].
-> 
-> [1] https://marc.info/?l=linux-kernel&m=152449131114778&w=2
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Hi,
 
-Applied.
+Has anyone managed to read ADC values from the MC13892 ADC recently?
+
+I am running 4.19-rc1 on a imx51-babbage board and after trying to
+read a channel:
+
+# cat /sys/class/hwmon/hwmon0/device/in7_input
+
+the PMIC shuts down completely, which causes the entire board to die.
+
+I don't know if this is a regression or not. I can try to run a
+bisect, but I would be interested to know if anyone knows if MC13892
+ADC readings worked at some point in the past.
+
+Also noticed that the shutdow happens after writing to the ADC1 register.
+
+Removing the line below  makes the ADC reading to timeout, but at
+least the PMIC does not shut down:
+
+--- a/drivers/mfd/mc13xxx-core.c
++++ b/drivers/mfd/mc13xxx-core.c
+@@ -327,7 +327,6 @@ int mc13xxx_adc_do_conversion(struct mc13xxx
+*mc13xxx, unsigned int mode,
+                        mc13xxx_handler_adcdone, __func__, &adcdone_data);
+
+        mc13xxx_reg_write(mc13xxx, MC13XXX_ADC0, adc0);
+-       mc13xxx_reg_write(mc13xxx, MC13XXX_ADC1, adc1);
+
+        mc13xxx_unlock(mc13xxx);
+
+Any ideas are welcome.
 
 Thanks,
-Guenter
 
-> ---
->  drivers/hwmon/nct6775.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index c6bd61e..944f5b6 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -63,6 +63,7 @@
->  #include <linux/bitops.h>
->  #include <linux/dmi.h>
->  #include <linux/io.h>
-> +#include <linux/nospec.h>
->  #include "lm75.h"
->  
->  #define USE_ALTERNATE
-> @@ -2689,6 +2690,7 @@ store_pwm_weight_temp_sel(struct device *dev, struct device_attribute *attr,
->  		return err;
->  	if (val > NUM_TEMP)
->  		return -EINVAL;
-> +	val = array_index_nospec(val, NUM_TEMP + 1);
->  	if (val && (!(data->have_temp & BIT(val - 1)) ||
->  		    !data->temp_src[val - 1]))
->  		return -EINVAL;
-> -- 
-> 2.7.4
-> 
+Fabio Estevam
