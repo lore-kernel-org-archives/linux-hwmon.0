@@ -1,55 +1,27 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41623 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbeH1Wid (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Aug 2018 18:38:33 -0400
-Received: by mail-pg1-f196.google.com with SMTP id s15-v6so1137295pgv.8
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Aug 2018 11:45:37 -0700 (PDT)
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (iio_hwmon) Do not duplicate or sanitize fixed string
-Date: Tue, 28 Aug 2018 11:45:35 -0700
-Message-Id: <1535481935-28226-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <linus971@gmail.com>
+Return-path: <linus971@gmail.com>
+MIME-Version: 1.0
+References: <1535574760-11636-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1535574760-11636-1-git-send-email-linux@roeck-us.net>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 29 Aug 2018 16:07:34 -0700
+Message-ID: <CA+55aFzUVOKJgXpfUEwC2eK7mNhhJktse=Dbrwh0x8AmUxwEcQ@mail.gmail.com>
+Subject: Re: [GIT PULL] hwmon fixes for v4.19-rc2
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Calling devm_kstrdup() on a fixed string is unnecessary, as is validating
-its contents. Rearrange the code to avoid both.
+On Wed, Aug 29, 2018 at 1:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Please pull hwmon fixes for Linux v4.19-rc2 from signed tag:
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/iio_hwmon.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+That actually isn't a signed tag at all, it's just a bare tag (ie just
+directly points to the commit).
 
-diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-index 7566991f1c04..eed66e533ee2 100644
---- a/drivers/hwmon/iio_hwmon.c
-+++ b/drivers/hwmon/iio_hwmon.c
-@@ -137,14 +137,15 @@ static int iio_hwmon_probe(struct platform_device *pdev)
- 	st->attr_group.attrs = st->attrs;
- 	st->groups[0] = &st->attr_group;
- 
--	if (dev->of_node)
-+	if (dev->of_node) {
- 		sname = devm_kasprintf(dev, GFP_KERNEL, "%pOFn", dev->of_node);
--	else
--		sname = devm_kstrdup(dev, "iio_hwmon", GFP_KERNEL);
--	if (!sname)
--		return -ENOMEM;
-+		if (!sname)
-+			return -ENOMEM;
-+		strreplace(sname, '-', '_');
-+	} else {
-+		sname = "iio_hwmon";
-+	}
- 
--	strreplace(sname, '-', '_');
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, sname, st,
- 							   st->groups);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
--- 
-2.7.4
+I guess I don't care *that* much, since it's from kernel.org, but you
+should check what happened to your workflow. *Normally* you do
+actually have signed tags.
+
+            Linus
