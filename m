@@ -1,48 +1,60 @@
-Return-Path: <SRS0=0/YT=MK=vger.kernel.org=linux-kernel-owner@kernel.org>
-From: Joe Perches <joe@perches.com>
-To: linux-kernel@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Bad MAINTAINERS pattern in section 'MAX20751 HARDWARE MONITOR DRIVER'
-Date: Fri, 28 Sep 2018 14:55:15 -0700
-Message-Id: <20180928215516.30001-1-joe@perches.com>
-Sender: linux-kernel-owner@vger.kernel.org
-List-Archive: <https://lore.kernel.org/lkml/>
-List-Post: <mailto:linux-kernel@vger.kernel.org>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mout.kundenserver.de ([212.227.17.24]:56433 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726020AbeIBPiW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Sep 2018 11:38:22 -0400
+From: Stefan Wahren <stefan.wahren@i2se.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc: Eric Anholt <eric@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Phil Elwell <phil@raspberrypi.org>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH RFC 0/2] hwmon: Add RPi PoE HAT fan driver
+Date: Sun,  2 Sep 2018 13:20:49 +0200
+Message-Id: <1535887251-29515-1-git-send-email-stefan.wahren@i2se.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Please fix this defect appropriately.
+This series is an early stage of the hwmon driver for the fan on the
+Raspberry Pi Power over Ethernet HAT [1]. At the end this should use a
+Device Tree Overlay.
 
-linux-next MAINTAINERS section:
+Changes by Stefan based on [2]:
+- reformat the downstream patches for submission
+- drop reboot notification
+- fix remaining checkpatch issues
+- add COMPILE_TEST to Kconfig
 
-	8835	MAX20751 HARDWARE MONITOR DRIVER
-	8836	M:	Guenter Roeck <linux@roeck-us.net>
-	8837	L:	linux-hwmon@vger.kernel.org
-	8838	S:	Maintained
-	8839	F:	Documentation/hwmon/max20751
--->	8840	F:	drivers/hwmon/max20751.c
+The driver is mostly copy & paste from pwm-fan, which isn't good. Personally
+i see two options:
 
-Commit that introduced this:
+1) integrate the driver function into the pwm-fan driver (new compatible)
+2) implement the core function as a PWM driver and use the pwm-fan driver on top
 
-commit 1f61cab8a729e00af77b51b44c3a8dc8ef3b3eb9
- Author: Guenter Roeck <linux@roeck-us.net>
- Date:   Mon Jun 8 11:15:23 2015 -0700
- 
-     hwmon: (pmbus) Add support for MAX20751
-     
-     MAX20751 is a multiphase power controller with internal buck converter.
-     It uses VR12.0 to report the output voltage. This requires an explicit
-     driver, since the VR version can not be auto-detected.
-     
-     The chip supports a manufacturer specific command to fine-tune the output
-     voltage.  This command is not currently supported.
-     
-     Signed-off-by: Guenter Roeck <linux@roeck-us.net>
- 
-  Documentation/hwmon/max20751   | 77 ++++++++++++++++++++++++++++++++++++++++++
-  MAINTAINERS                    |  7 ++++
-  drivers/hwmon/pmbus/Kconfig    | 10 ++++++
-  drivers/hwmon/pmbus/Makefile   |  1 +
-  drivers/hwmon/pmbus/max20751.c | 64 +++++++++++++++++++++++++++++++++++
-  5 files changed, 159 insertions(+)
+[1] - https://www.raspberrypi.org/products/poe-hat/
+[2] - https://github.com/raspberrypi/linux/commit/0f937c8dc3201ebffa6c617c616fd7c65db65959
 
-No commit with drivers/hwmon/max20751.c found
+Serge Schneider (2):
+  dt-bindings: hwmon: Add RPi PoE HAT documentation
+  hwmon: Add RPi PoE HAT fan driver
+
+ .../devicetree/bindings/hwmon/rpi-poe-fan.txt      |  55 +++
+ Documentation/hwmon/rpi-poe-fan                    |  15 +
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/rpi-poe-fan.c                        | 414 +++++++++++++++++++++
+ include/soc/bcm2835/raspberrypi-firmware.h         |   2 +
+ 6 files changed, 498 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt
+ create mode 100644 Documentation/hwmon/rpi-poe-fan
+ create mode 100644 drivers/hwmon/rpi-poe-fan.c
+
+-- 
+2.7.4
