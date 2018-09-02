@@ -1,7 +1,7 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mout.kundenserver.de ([212.227.17.24]:56433 "EHLO
+Received: from mout.kundenserver.de ([212.227.17.13]:34547 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726020AbeIBPiW (ORCPT
+        with ESMTP id S1726155AbeIBPiW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Sep 2018 11:38:22 -0400
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Jean Delvare <jdelvare@suse.com>,
@@ -15,46 +15,88 @@ Cc: Eric Anholt <eric@anholt.net>,
         linux-arm-kernel@lists.infradead.org,
         linux-rpi-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org,
+        Serge Schneider <serge@raspberrypi.org>,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 0/2] hwmon: Add RPi PoE HAT fan driver
-Date: Sun,  2 Sep 2018 13:20:49 +0200
-Message-Id: <1535887251-29515-1-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH RFC 1/2] dt-bindings: hwmon: Add RPi PoE HAT documentation
+Date: Sun,  2 Sep 2018 13:20:50 +0200
+Message-Id: <1535887251-29515-2-git-send-email-stefan.wahren@i2se.com>
+In-Reply-To: <1535887251-29515-1-git-send-email-stefan.wahren@i2se.com>
+References: <1535887251-29515-1-git-send-email-stefan.wahren@i2se.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This series is an early stage of the hwmon driver for the fan on the
-Raspberry Pi Power over Ethernet HAT [1]. At the end this should use a
-Device Tree Overlay.
+From: Serge Schneider <serge@raspberrypi.org>
 
-Changes by Stefan based on [2]:
-- reformat the downstream patches for submission
-- drop reboot notification
-- fix remaining checkpatch issues
-- add COMPILE_TEST to Kconfig
+This patch adds the binding for the fan on the Raspberry Pi Power over
+Ethernet HAT.
 
-The driver is mostly copy & paste from pwm-fan, which isn't good. Personally
-i see two options:
-
-1) integrate the driver function into the pwm-fan driver (new compatible)
-2) implement the core function as a PWM driver and use the pwm-fan driver on top
-
-[1] - https://www.raspberrypi.org/products/poe-hat/
-[2] - https://github.com/raspberrypi/linux/commit/0f937c8dc3201ebffa6c617c616fd7c65db65959
-
-Serge Schneider (2):
-  dt-bindings: hwmon: Add RPi PoE HAT documentation
-  hwmon: Add RPi PoE HAT fan driver
-
- .../devicetree/bindings/hwmon/rpi-poe-fan.txt      |  55 +++
- Documentation/hwmon/rpi-poe-fan                    |  15 +
- drivers/hwmon/Kconfig                              |  11 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/rpi-poe-fan.c                        | 414 +++++++++++++++++++++
- include/soc/bcm2835/raspberrypi-firmware.h         |   2 +
- 6 files changed, 498 insertions(+)
+Signed-off-by: Serge Schneider <serge@raspberrypi.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ .../devicetree/bindings/hwmon/rpi-poe-fan.txt      | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt
- create mode 100644 Documentation/hwmon/rpi-poe-fan
- create mode 100644 drivers/hwmon/rpi-poe-fan.c
 
+diff --git a/Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt b/Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt
+new file mode 100644
+index 0000000..c71f856
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt
+@@ -0,0 +1,55 @@
++Bindings for the Raspberry Pi PoE HAT fan
++
++Required properties:
++- compatible	: "raspberrypi,rpi-poe-fan"
++- firmware	: Reference to the RPi firmware device node
++- pwms		: the PWM that is used to control the PWM fan
++- cooling-levels      : PWM duty cycle values in a range from 0 to 255
++			which correspond to thermal cooling states
++
++Example:
++	fan0: rpi-poe-fan@0 {
++		compatible = "raspberrypi,rpi-poe-fan";
++		firmware = <&firmware>;
++		cooling-min-state = <0>;
++		cooling-max-state = <3>;
++		#cooling-cells = <2>;
++		cooling-levels = <0 50 150 255>;
++		status = "okay";
++	};
++
++	thermal-zones {
++		cpu_thermal: cpu-thermal {
++			trips {
++				threshold: trip-point@0 {
++					temperature = <45000>;
++					hysteresis = <5000>;
++					type = "active";
++				};
++				target: trip-point@1 {
++					temperature = <50000>;
++					hysteresis = <2000>;
++					type = "active";
++				};
++				cpu_hot: cpu_hot@0 {
++					temperature = <55000>;
++					hysteresis = <2000>;
++					type = "active";
++				};
++			};
++			cooling-maps {
++				map0 {
++					trip = <&threshold>;
++					cooling-device = <&fan0 0 1>;
++				};
++				map1 {
++					trip = <&target>;
++					cooling-device = <&fan0 1 2>;
++				};
++				map2 {
++					trip = <&cpu_hot>;
++					cooling-device = <&fan0 2 3>;
++				};
++			};
++		};
++	};
 -- 
 2.7.4
