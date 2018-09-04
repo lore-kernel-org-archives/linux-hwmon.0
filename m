@@ -1,73 +1,103 @@
-Return-Path: <stefan.wahren@i2se.com>
-Return-path: <stefan.wahren@i2se.com>
-Date: Sun, 2 Sep 2018 18:26:44 +0200 (CEST)
-From: Stefan Wahren <stefan.wahren@i2se.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	linux-rpi-kernel@lists.infradead.org, Eric Anholt <eric@anholt.net>,
-	Phil Elwell <phil@raspberrypi.org>, Jean Delvare <jdelvare@suse.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, serge@raspberrypi.org
-Message-ID: <67224834.51159.1535905604770@email.1und1.de>
-In-Reply-To: <99ca4f6d-d2b2-36e7-9f27-189df379cfaf@roeck-us.net>
-References: <1535887251-29515-1-git-send-email-stefan.wahren@i2se.com>
- <99ca4f6d-d2b2-36e7-9f27-189df379cfaf@roeck-us.net>
-Subject: Re: [PATCH RFC 0/2] hwmon: Add RPi PoE HAT fan driver
+Return-Path: <dan.carpenter@oracle.com>
+Return-path: <dan.carpenter@oracle.com>
+Date: Tue, 4 Sep 2018 15:40:54 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (nct6775) Add support for weighted fan control
+Message-ID: <20180904124054.qabt7iqu7nkarlq4@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Guenter,
+Hello Guenter Roeck,
 
-> Guenter Roeck <linux@roeck-us.net> hat am 2. September 2018 um 16:23 geschrieben:
-> 
-> 
-> On 09/02/2018 04:20 AM, Stefan Wahren wrote:
-> > This series is an early stage of the hwmon driver for the fan on the
-> > Raspberry Pi Power over Ethernet HAT [1]. At the end this should use a
-> > Device Tree Overlay.
-> > 
-> > Changes by Stefan based on [2]:
-> > - reformat the downstream patches for submission
-> > - drop reboot notification
-> > - fix remaining checkpatch issues
-> > - add COMPILE_TEST to Kconfig
-> > 
-> > The driver is mostly copy & paste from pwm-fan, which isn't good. Personally
-> > i see two options:
-> > 
-> > 1) integrate the driver function into the pwm-fan driver (new compatible)
-> > 2) implement the core function as a PWM driver and use the pwm-fan driver on top
-> > 
-> 
-> I don't really see the point of thise driver. Why not implement either of those ?
+The patch bbd8decd4123: "hwmon: (nct6775) Add support for weighted
+fan control" from Dec 4, 2012, leads to the following static checker
+warning:
 
-i'm not sure about your question. Since the fan is placed over the SoC, the fan should takes care of the SoC temperature. AFAIK the firmware should have exclusive access to the I2C. So why we need this mailbox interface instead of a I2C driver.
+	drivers/hwmon/nct6775.c:1562 nct6775_update_pwm()
+	warn: dead code because of 'j == 1' and 'j < (56 / 8 + 0)'
 
-> 2) sounds like a perfect fit to me.
-> 
-> Guenter
-> 
-> > [1] - https://www.raspberrypi.org/products/poe-hat/
-> > [2] - https://github.com/raspberrypi/linux/commit/0f937c8dc3201ebffa6c617c616fd7c65db65959
-> > 
-> > Serge Schneider (2):
-> >    dt-bindings: hwmon: Add RPi PoE HAT documentation
-> >    hwmon: Add RPi PoE HAT fan driver
-> > 
-> >   .../devicetree/bindings/hwmon/rpi-poe-fan.txt      |  55 +++
-> >   Documentation/hwmon/rpi-poe-fan                    |  15 +
-> >   drivers/hwmon/Kconfig                              |  11 +
-> >   drivers/hwmon/Makefile                             |   1 +
-> >   drivers/hwmon/rpi-poe-fan.c                        | 414 +++++++++++++++++++++
-> >   include/soc/bcm2835/raspberrypi-firmware.h         |   2 +
-> >   6 files changed, 498 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/hwmon/rpi-poe-fan.txt
-> >   create mode 100644 Documentation/hwmon/rpi-poe-fan
-> >   create mode 100644 drivers/hwmon/rpi-poe-fan.c
-> > 
->
+drivers/hwmon/nct6775.c
+  1503  static void nct6775_update_pwm(struct device *dev)
+  1504  {
+  1505          struct nct6775_data *data = dev_get_drvdata(dev);
+  1506          int i, j;
+  1507          int fanmodecfg, reg;
+  1508          bool duty_is_dc;
+  1509  
+  1510          for (i = 0; i < data->pwm_num; i++) {
+  1511                  if (!(data->has_pwm & BIT(i)))
+  1512                          continue;
+  1513  
+  1514                  duty_is_dc = data->REG_PWM_MODE[i] &&
+  1515                    (nct6775_read_value(data, data->REG_PWM_MODE[i])
+  1516                     & data->PWM_MODE_MASK[i]);
+  1517                  data->pwm_mode[i] = !duty_is_dc;
+  1518  
+  1519                  fanmodecfg = nct6775_read_value(data, data->REG_FAN_MODE[i]);
+  1520                  for (j = 0; j < ARRAY_SIZE(data->REG_PWM); j++) {
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+j is set to ARRAY_SIZE(data->REG_PWM) which is 7 at the end of this
+loop.
+
+  1521                          if (data->REG_PWM[j] && data->REG_PWM[j][i]) {
+  1522                                  data->pwm[j][i]
+  1523                                    = nct6775_read_value(data,
+  1524                                                         data->REG_PWM[j][i]);
+  1525                          }
+  1526                  }
+  1527  
+  1528                  data->pwm_enable[i] = reg_to_pwm_enable(data->pwm[0][i],
+  1529                                                          (fanmodecfg >> 4) & 7);
+  1530  
+  1531                  if (!data->temp_tolerance[0][i] ||
+  1532                      data->pwm_enable[i] != speed_cruise)
+  1533                          data->temp_tolerance[0][i] = fanmodecfg & 0x0f;
+  1534                  if (!data->target_speed_tolerance[i] ||
+  1535                      data->pwm_enable[i] == speed_cruise) {
+  1536                          u8 t = fanmodecfg & 0x0f;
+  1537  
+  1538                          if (data->REG_TOLERANCE_H) {
+  1539                                  t |= (nct6775_read_value(data,
+  1540                                        data->REG_TOLERANCE_H[i]) & 0x70) >> 1;
+  1541                          }
+  1542                          data->target_speed_tolerance[i] = t;
+  1543                  }
+  1544  
+  1545                  data->temp_tolerance[1][i] =
+  1546                          nct6775_read_value(data,
+  1547                                          data->REG_CRITICAL_TEMP_TOLERANCE[i]);
+  1548  
+  1549                  reg = nct6775_read_value(data, data->REG_TEMP_SEL[i]);
+  1550                  data->pwm_temp_sel[i] = reg & 0x1f;
+  1551                  /* If fan can stop, report floor as 0 */
+  1552                  if (reg & 0x80)
+  1553                          data->pwm[2][i] = 0;
+  1554  
+  1555                  if (!data->REG_WEIGHT_TEMP_SEL[i])
+  1556                          continue;
+  1557  
+  1558                  reg = nct6775_read_value(data, data->REG_WEIGHT_TEMP_SEL[i]);
+  1559                  data->pwm_weight_temp_sel[i] = reg & 0x1f;
+  1560                  /* If weight is disabled, report weight source as 0 */
+  1561                  if (j == 1 && !(reg & 0x80))
+                            ^^^^^^
+So it can't be 1 here.  Did you intend to say "i == 1"?
+
+  1562                          data->pwm_weight_temp_sel[i] = 0;
+  1563  
+  1564                  /* Weight temp data */
+  1565                  for (j = 0; j < ARRAY_SIZE(data->weight_temp); j++) {
+  1566                          data->weight_temp[j][i]
+  1567                            = nct6775_read_value(data,
+  1568                                                 data->REG_WEIGHT_TEMP[j][i]);
+  1569                  }
+  1570          }
+  1571  }
+
+regards,
+dan carpenter
