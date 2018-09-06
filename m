@@ -1,110 +1,56 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45581 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbeIGGXx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Sep 2018 02:23:53 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (nct6775) Fix access to fan pulse registers
-Date: Thu,  6 Sep 2018 18:45:27 -0700
-Message-Id: <1536284727-8875-1-git-send-email-linux@roeck-us.net>
+Received: from mail-qt0-f193.google.com ([209.85.216.193]:43807 "EHLO
+        mail-qt0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726031AbeIFXfl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Sep 2018 19:35:41 -0400
+Received: by mail-qt0-f193.google.com with SMTP id g53-v6so13512576qtg.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Sep 2018 11:58:52 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, Fabio Estevam <fabio.estevam@nxp.com>
+Subject: [PATCH 1/2] hwmon: (mc13783-adc) Switch to SPDX identifier
+Date: Thu,  6 Sep 2018 15:59:49 -0300
+Message-Id: <1536260390-22584-1-git-send-email-festevam@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Not all fans have a fan pulse register. This can result in reading
-beyond the end of REG_FAN_PULSES and FAN_PULSE_SHIFT arrays,
-and was reported by smatch as possible error.
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-1672          for (i = 0; i < ARRAY_SIZE(data->rpm); i++) {
-                              ^^^^^^^^^^^^^^^^^^^^^^^^
-			      This is a 7 element array.
-...
-1685                  data->fan_pulses[i] =
-1686                    (nct6775_read_value(data, data->REG_FAN_PULSES[i])
-1687                          >> data->FAN_PULSE_SHIFT[i]) & 0x03;
-                                 ^^^^^^^^^^^^^^^^^^^^^^^^
-				 FAN_PULSE_SHIFT is either 5 or 6
-				 elements.
+Adopt the SPDX license identifier headers to ease license compliance
+management.
 
-To fix the problem, we have to ensure that all REG_FAN_PULSES and
-FAN_PULSE_SHIFT have the appropriate length, and that REG_FAN_PULSES
-is only read if the register actually exists.
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- drivers/hwmon/nct6775.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ drivers/hwmon/mc13783-adc.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 139781ae830b..87c316c6c341 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -299,8 +299,9 @@ static const u16 NCT6775_REG_PWM_READ[] = {
+diff --git a/drivers/hwmon/mc13783-adc.c b/drivers/hwmon/mc13783-adc.c
+index 78fe875..825b922 100644
+--- a/drivers/hwmon/mc13783-adc.c
++++ b/drivers/hwmon/mc13783-adc.c
+@@ -1,21 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Driver for the ADC on Freescale Semiconductor MC13783 and MC13892 PMICs.
+  *
+  * Copyright 2004-2007 Freescale Semiconductor, Inc. All Rights Reserved.
+  * Copyright (C) 2009 Sascha Hauer, Pengutronix
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License
+- * as published by the Free Software Foundation; either version 2
+- * of the License, or (at your option) any later version.
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License along with
+- * this program; if not, write to the Free Software Foundation, Inc., 51
+- * Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+  */
  
- static const u16 NCT6775_REG_FAN[] = { 0x630, 0x632, 0x634, 0x636, 0x638 };
- static const u16 NCT6775_REG_FAN_MIN[] = { 0x3b, 0x3c, 0x3d };
--static const u16 NCT6775_REG_FAN_PULSES[] = { 0x641, 0x642, 0x643, 0x644, 0 };
--static const u16 NCT6775_FAN_PULSE_SHIFT[] = { 0, 0, 0, 0, 0, 0 };
-+static const u16 NCT6775_REG_FAN_PULSES[NUM_FAN] = {
-+	0x641, 0x642, 0x643, 0x644 };
-+static const u16 NCT6775_FAN_PULSE_SHIFT[NUM_FAN] = { };
- 
- static const u16 NCT6775_REG_TEMP[] = {
- 	0x27, 0x150, 0x250, 0x62b, 0x62c, 0x62d };
-@@ -425,8 +426,8 @@ static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0 };
- 
- static const u16 NCT6776_REG_FAN_MIN[] = {
- 	0x63a, 0x63c, 0x63e, 0x640, 0x642, 0x64a, 0x64c };
--static const u16 NCT6776_REG_FAN_PULSES[] = {
--	0x644, 0x645, 0x646, 0x647, 0x648, 0x649, 0 };
-+static const u16 NCT6776_REG_FAN_PULSES[NUM_FAN] = {
-+	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
- 
- static const u16 NCT6776_REG_WEIGHT_DUTY_BASE[] = {
- 	0x13e, 0x23e, 0x33e, 0x83e, 0x93e, 0xa3e };
-@@ -502,8 +503,8 @@ static const s8 NCT6779_BEEP_BITS[] = {
- 
- static const u16 NCT6779_REG_FAN[] = {
- 	0x4b0, 0x4b2, 0x4b4, 0x4b6, 0x4b8, 0x4ba, 0x660 };
--static const u16 NCT6779_REG_FAN_PULSES[] = {
--	0x644, 0x645, 0x646, 0x647, 0x648, 0x649, 0 };
-+static const u16 NCT6779_REG_FAN_PULSES[NUM_FAN] = {
-+	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
- 
- static const u16 NCT6779_REG_CRITICAL_PWM_ENABLE[] = {
- 	0x136, 0x236, 0x336, 0x836, 0x936, 0xa36, 0xb36 };
-@@ -779,8 +780,8 @@ static const u16 NCT6106_REG_TEMP_CONFIG[] = {
- 
- static const u16 NCT6106_REG_FAN[] = { 0x20, 0x22, 0x24 };
- static const u16 NCT6106_REG_FAN_MIN[] = { 0xe0, 0xe2, 0xe4 };
--static const u16 NCT6106_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6, 0, 0 };
--static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4, 0, 0 };
-+static const u16 NCT6106_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6 };
-+static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4 };
- 
- static const u8 NCT6106_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3 };
- static const u8 NCT6106_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04 };
-@@ -1682,9 +1683,13 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
- 			if (data->has_fan_min & BIT(i))
- 				data->fan_min[i] = nct6775_read_value(data,
- 					   data->REG_FAN_MIN[i]);
--			data->fan_pulses[i] =
--			  (nct6775_read_value(data, data->REG_FAN_PULSES[i])
--				>> data->FAN_PULSE_SHIFT[i]) & 0x03;
-+
-+			if (data->REG_FAN_PULSES[i]) {
-+				data->fan_pulses[i] =
-+				  (nct6775_read_value(data,
-+						      data->REG_FAN_PULSES[i])
-+				   >> data->FAN_PULSE_SHIFT[i]) & 0x03;
-+			}
- 
- 			nct6775_select_fan_div(dev, data, i, reg);
- 		}
+ #include <linux/mfd/mc13xxx.h>
 -- 
 2.7.4
