@@ -1,77 +1,110 @@
-Return-Path: <dan.carpenter@oracle.com>
-Return-path: <dan.carpenter@oracle.com>
-Date: Thu, 6 Sep 2018 09:50:36 +0300
-From: Dan Carpenter <dan.carpenter@oracle.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [bug report] hwmon: (nct6775) Add support for weighted fan
- control
-Message-ID: <20180906065036.7scxdui5zxiw2czk@mwanda>
-References: <20180904124054.qabt7iqu7nkarlq4@kili.mountain>
- <df45855d-e21c-9b29-d661-7284453241fe@roeck-us.net>
- <20180905075711.c7mcegjcq45gburb@mwanda>
- <f0049a5e-d7b3-7072-29a1-7a5c40d87697@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0049a5e-d7b3-7072-29a1-7a5c40d87697@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45581 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726349AbeIGGXx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Sep 2018 02:23:53 -0400
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (nct6775) Fix access to fan pulse registers
+Date: Thu,  6 Sep 2018 18:45:27 -0700
+Message-Id: <1536284727-8875-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 05, 2018 at 03:05:00PM -0700, Guenter Roeck wrote:
-> Hi Dan,
-> 
-> On 09/05/2018 12:57 AM, Dan Carpenter wrote:
-> > Done.  Btw, I saw another that looks legit.
-> > 
-> Thanks ...
-> 
-> > drivers/hwmon/nct6775.c:1687 nct6775_update_device()
-> > error: buffer overflow 'data->FAN_PULSE_SHIFT' 6 <= 6
-> > 
-> > drivers/hwmon/nct6775.c
-> >    1667                          data->in[i][2] = nct6775_read_value(data,
-> >    1668                                            data->REG_IN_MINMAX[1][i]);
-> >    1669                  }
-> >    1670
-> >    1671                  /* Measured fan speeds and limits */
-> >    1672                  for (i = 0; i < ARRAY_SIZE(data->rpm); i++) {
-> >                                      ^^^^^^^^^^^^^^^^^^^^^^^^
-> > This is a 7 element array.
-> > 
-> >    1673                          u16 reg;
-> >    1674
-> >    1675                          if (!(data->has_fan & BIT(i)))
-> >                                        ^^^^^^^^^^^^^^^^^^^^^^
-> > 
-> > I probably wouldn't have reported this originally because Smatch is bad
-> > at these checks.  (I just haven't gotten around to it yet).  But we do
-> > have fan7pin so it looks like BIT(6) can be set.
-> > 
-> >    1676                                  continue;
-> >    1677
-> >    1678                          reg = nct6775_read_value(data, data->REG_FAN[i]);
-> >    1679                          data->rpm[i] = data->fan_from_reg(reg,
-> >    1680                                                            data->fan_div[i]);
-> >    1681
-> >    1682                          if (data->has_fan_min & BIT(i))
-> >    1683                                  data->fan_min[i] = nct6775_read_value(data,
-> >    1684                                             data->REG_FAN_MIN[i]);
-> >    1685                          data->fan_pulses[i] =
-> >    1686                            (nct6775_read_value(data, data->REG_FAN_PULSES[i])
-> >    1687                                  >> data->FAN_PULSE_SHIFT[i]) & 0x03;
-> >                                             ^^^^^^^^^^^^^^^^^^^^^^^^
-> > FAN_PULSE_SHIFT is either 5 or 6 elements.
-> > 
-> 
-> Array size of xxx_REG_FAN_PULSES[] and xxx_FAN_PULSE_SHIFT[] should probably
-> be NUM_FAN to be on the safe side. There is a slight secondary problem, though:
-> data->REG_FAN_PULSES[i] should not be read if it is 0. It doesn't matter much -
-> it results in an unnecessary read from register 0 - but it is still undesirable.
-> 
-> Care to send another patch ?
+Not all fans have a fan pulse register. This can result in reading
+beyond the end of REG_FAN_PULSES and FAN_PULSE_SHIFT arrays,
+and was reported by smatch as possible error.
 
-Can you do that one and give me a Reported-by tag?  It seems slightly
-more involved and I am dumb.
+1672          for (i = 0; i < ARRAY_SIZE(data->rpm); i++) {
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+			      This is a 7 element array.
+...
+1685                  data->fan_pulses[i] =
+1686                    (nct6775_read_value(data, data->REG_FAN_PULSES[i])
+1687                          >> data->FAN_PULSE_SHIFT[i]) & 0x03;
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+				 FAN_PULSE_SHIFT is either 5 or 6
+				 elements.
 
-regards,
-dan carpenter
+To fix the problem, we have to ensure that all REG_FAN_PULSES and
+FAN_PULSE_SHIFT have the appropriate length, and that REG_FAN_PULSES
+is only read if the register actually exists.
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/nct6775.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 139781ae830b..87c316c6c341 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -299,8 +299,9 @@ static const u16 NCT6775_REG_PWM_READ[] = {
+ 
+ static const u16 NCT6775_REG_FAN[] = { 0x630, 0x632, 0x634, 0x636, 0x638 };
+ static const u16 NCT6775_REG_FAN_MIN[] = { 0x3b, 0x3c, 0x3d };
+-static const u16 NCT6775_REG_FAN_PULSES[] = { 0x641, 0x642, 0x643, 0x644, 0 };
+-static const u16 NCT6775_FAN_PULSE_SHIFT[] = { 0, 0, 0, 0, 0, 0 };
++static const u16 NCT6775_REG_FAN_PULSES[NUM_FAN] = {
++	0x641, 0x642, 0x643, 0x644 };
++static const u16 NCT6775_FAN_PULSE_SHIFT[NUM_FAN] = { };
+ 
+ static const u16 NCT6775_REG_TEMP[] = {
+ 	0x27, 0x150, 0x250, 0x62b, 0x62c, 0x62d };
+@@ -425,8 +426,8 @@ static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0 };
+ 
+ static const u16 NCT6776_REG_FAN_MIN[] = {
+ 	0x63a, 0x63c, 0x63e, 0x640, 0x642, 0x64a, 0x64c };
+-static const u16 NCT6776_REG_FAN_PULSES[] = {
+-	0x644, 0x645, 0x646, 0x647, 0x648, 0x649, 0 };
++static const u16 NCT6776_REG_FAN_PULSES[NUM_FAN] = {
++	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
+ 
+ static const u16 NCT6776_REG_WEIGHT_DUTY_BASE[] = {
+ 	0x13e, 0x23e, 0x33e, 0x83e, 0x93e, 0xa3e };
+@@ -502,8 +503,8 @@ static const s8 NCT6779_BEEP_BITS[] = {
+ 
+ static const u16 NCT6779_REG_FAN[] = {
+ 	0x4b0, 0x4b2, 0x4b4, 0x4b6, 0x4b8, 0x4ba, 0x660 };
+-static const u16 NCT6779_REG_FAN_PULSES[] = {
+-	0x644, 0x645, 0x646, 0x647, 0x648, 0x649, 0 };
++static const u16 NCT6779_REG_FAN_PULSES[NUM_FAN] = {
++	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
+ 
+ static const u16 NCT6779_REG_CRITICAL_PWM_ENABLE[] = {
+ 	0x136, 0x236, 0x336, 0x836, 0x936, 0xa36, 0xb36 };
+@@ -779,8 +780,8 @@ static const u16 NCT6106_REG_TEMP_CONFIG[] = {
+ 
+ static const u16 NCT6106_REG_FAN[] = { 0x20, 0x22, 0x24 };
+ static const u16 NCT6106_REG_FAN_MIN[] = { 0xe0, 0xe2, 0xe4 };
+-static const u16 NCT6106_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6, 0, 0 };
+-static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4, 0, 0 };
++static const u16 NCT6106_REG_FAN_PULSES[] = { 0xf6, 0xf6, 0xf6 };
++static const u16 NCT6106_FAN_PULSE_SHIFT[] = { 0, 2, 4 };
+ 
+ static const u8 NCT6106_REG_PWM_MODE[] = { 0xf3, 0xf3, 0xf3 };
+ static const u8 NCT6106_PWM_MODE_MASK[] = { 0x01, 0x02, 0x04 };
+@@ -1682,9 +1683,13 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
+ 			if (data->has_fan_min & BIT(i))
+ 				data->fan_min[i] = nct6775_read_value(data,
+ 					   data->REG_FAN_MIN[i]);
+-			data->fan_pulses[i] =
+-			  (nct6775_read_value(data, data->REG_FAN_PULSES[i])
+-				>> data->FAN_PULSE_SHIFT[i]) & 0x03;
++
++			if (data->REG_FAN_PULSES[i]) {
++				data->fan_pulses[i] =
++				  (nct6775_read_value(data,
++						      data->REG_FAN_PULSES[i])
++				   >> data->FAN_PULSE_SHIFT[i]) & 0x03;
++			}
+ 
+ 			nct6775_select_fan_div(dev, data, i, reg);
+ 		}
+-- 
+2.7.4
