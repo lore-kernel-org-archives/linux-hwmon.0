@@ -1,61 +1,134 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from szxga06-in.huawei.com ([45.249.212.32]:40599 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726852AbeIPUTw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Sep 2018 16:19:52 -0400
-Message-ID: <5B9E6F1F.5030908@huawei.com>
-Date: Sun, 16 Sep 2018 22:56:31 +0800
-From: zhong jiang <zhongjiang@huawei.com>
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35410 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726850AbeILBh7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 11 Sep 2018 21:37:59 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p12-v6so12807125pfh.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Sep 2018 13:36:59 -0700 (PDT)
+Date: Tue, 11 Sep 2018 13:36:56 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kun Yi <kunyi@google.com>
+Cc: linux-hwmon@vger.kernel.org, frodol@dds.nl,
+        openbmc@lists.ozlabs.org, rlippert@google.com,
+        benjaminfair@google.com
+Subject: Re: [PATCH] hwmon: (lm75) Add MAX31725/6 support
+Message-ID: <20180911203656.GA25948@roeck-us.net>
 MIME-Version: 1.0
-To: Guenter Roeck <linux@roeck-us.net>
-CC: <kronos.it@gmail.com>, <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: Use PTR_ERR_OR_ZERO instead of reimplementing
- its function
-References: <20180916004318.GA30797@roeck-us.net>
-In-Reply-To: <20180916004318.GA30797@roeck-us.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 2018/9/16 8:43, Guenter Roeck wrote:
-> On Tue, Sep 11, 2018 at 08:03:37PM +0800, zhong jiang wrote:
->> PTR_ERR_OR_ZERO has implemented the same function. We prefer to use
->> inlined function rather than code-opened implementation.
->>
->> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
-> Applied to hwmon-next. For future patches, please also refer to the
-> affected driver in the Subject line, unless the change is in the
-> subsystem core code.
-Get it.  Thanks.
+On Tue, Sep 11, 2018 at 01:25:58PM -0700, Kun Yi wrote:
+> MAX31725/MAX31726 are local temperature sensors with +/- 0.5 degree
+> Celsius accuracy and 16-bit (0.00390625 degrees Celsius) resolution.
+> They have a register mapping and encoding compatible with the lm75
+> series drivers. Address scan and extended temperature range are
+> not supported by this patch.
+> 
+> Tested on real hardware and verified temperature readings are correct.
+> 
+> Signed-off-by: Kun Yi <kunyi@google.com>
 
-Sincerely,
-zhong jiang
-> Thanks,
-> Guenter
->
->> ---
->>  drivers/hwmon/asus_atk0110.c | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
->> index a6636fe..a7cf008 100644
->> --- a/drivers/hwmon/asus_atk0110.c
->> +++ b/drivers/hwmon/asus_atk0110.c
->> @@ -1210,10 +1210,8 @@ static int atk_register_hwmon(struct atk_data *data)
->>  	data->hwmon_dev = hwmon_device_register_with_groups(dev, "atk0110",
->>  							    data,
->>  							    data->attr_groups);
->> -	if (IS_ERR(data->hwmon_dev))
->> -		return PTR_ERR(data->hwmon_dev);
->>  
->> -	return 0;
->> +	return PTR_ERR_OR_ZERO(data->hwmon_dev);
->>  }
->>  
->>  static int atk_probe_if(struct atk_data *data)
->> -- 
->> 1.7.12.4
->>
->
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
+> ---
+>  Documentation/hwmon/lm75 |  6 +++---
+>  drivers/hwmon/lm75.c     | 18 ++++++++++++++++--
+>  2 files changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/lm75 b/Documentation/hwmon/lm75
+> index ac95edfcd907..2f1120f88c16 100644
+> --- a/Documentation/hwmon/lm75
+> +++ b/Documentation/hwmon/lm75
+> @@ -17,8 +17,8 @@ Supported chips:
+>      Addresses scanned: none
+>      Datasheet: Publicly available at the Maxim website
+>                 http://www.maximintegrated.com/
+> -  * Maxim MAX6625, MAX6626
+> -    Prefixes: 'max6625', 'max6626'
+> +  * Maxim MAX6625, MAX6626, MAX31725, MAX31726
+> +    Prefixes: 'max6625', 'max6626', 'max31725', 'max31726'
+>      Addresses scanned: none
+>      Datasheet: Publicly available at the Maxim website
+>                 http://www.maxim-ic.com/
+> @@ -86,7 +86,7 @@ The LM75 is essentially an industry standard; there may be other
+>  LM75 clones not listed here, with or without various enhancements,
+>  that are supported. The clones are not detected by the driver, unless
+>  they reproduce the exact register tricks of the original LM75, and must
+> -therefore be instantiated explicitly. Higher resolution up to 12-bit
+> +therefore be instantiated explicitly. Higher resolution up to 16-bit
+>  is supported by this driver, other specific enhancements are not.
+>  
+>  The LM77 is not supported, contrary to what we pretended for a long time.
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 49f4b33a5685..e6e5a1080f09 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -47,6 +47,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+>  	lm75b,
+>  	max6625,
+>  	max6626,
+> +	max31725,
+>  	mcp980x,
+>  	stds75,
+>  	tcn75,
+> @@ -64,7 +65,6 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+>  static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
+>  					0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
+>  
+> -
+>  /* The LM75 registers */
+>  #define LM75_REG_TEMP		0x00
+>  #define LM75_REG_CONF		0x01
+> @@ -76,7 +76,7 @@ struct lm75_data {
+>  	struct i2c_client	*client;
+>  	struct regmap		*regmap;
+>  	u8			orig_conf;
+> -	u8			resolution;	/* In bits, between 9 and 12 */
+> +	u8			resolution;	/* In bits, between 9 and 16 */
+>  	u8			resolution_limits;
+>  	unsigned int		sample_time;	/* In ms */
+>  };
+> @@ -339,6 +339,10 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  		data->resolution_limits = 9;
+>  		data->sample_time = MSEC_PER_SEC / 4;
+>  		break;
+> +	case max31725:
+> +		data->resolution = 16;
+> +		data->sample_time = MSEC_PER_SEC / 8;
+> +		break;
+>  	case tcn75:
+>  		data->resolution = 9;
+>  		data->sample_time = MSEC_PER_SEC / 8;
+> @@ -415,6 +419,8 @@ static const struct i2c_device_id lm75_ids[] = {
+>  	{ "lm75b", lm75b, },
+>  	{ "max6625", max6625, },
+>  	{ "max6626", max6626, },
+> +	{ "max31725", max31725, },
+> +	{ "max31726", max31725, },
+>  	{ "mcp980x", mcp980x, },
+>  	{ "stds75", stds75, },
+>  	{ "tcn75", tcn75, },
+> @@ -471,6 +477,14 @@ static const struct of_device_id lm75_of_match[] = {
+>  		.compatible = "maxim,max6626",
+>  		.data = (void *)max6626
+>  	},
+> +	{
+> +		.compatible = "maxim,max31725",
+> +		.data = (void *)max31725
+> +	},
+> +	{
+> +		.compatible = "maxim,max31726",
+> +		.data = (void *)max31725
+> +	},
+>  	{
+>  		.compatible = "maxim,mcp980x",
+>  		.data = (void *)mcp980x
+> -- 
+> 2.19.0.rc2.392.g5ba43deb5a-goog
+> 
