@@ -1,215 +1,93 @@
-Return-Path: <groeck7@gmail.com>
-Return-path: <groeck7@gmail.com>
-Sender: Guenter Roeck <groeck7@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37450 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbeIPEvf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 16 Sep 2018 00:51:35 -0400
+Received: by mail-pf1-f195.google.com with SMTP id h69-v6so5897759pfd.4
+        for <linux-hwmon@vger.kernel.org>; Sat, 15 Sep 2018 16:30:49 -0700 (PDT)
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Robert Kern <ulteq@web.de>
-Subject: [PATCH v3 1/2] hwmon: (nct6775) Fix virtual temperature sources for NCT6796D
-Date: Sat, 15 Sep 2018 16:30:42 -0700
-Message-Id: <1537054243-26154-1-git-send-email-linux@roeck-us.net>
-List-ID: <linux-hwmon@vger.kernel.org>
+        Guenter Roeck <linux@roeck-us.net>, Robert Kern <ulteq@web.de>
+Subject: [PATCH v3 2/2] hwmon: (nct6775) Fix RPM output for fan7 on NCT6796D
+Date: Sat, 15 Sep 2018 16:30:43 -0700
+Message-Id: <1537054243-26154-2-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1537054243-26154-1-git-send-email-linux@roeck-us.net>
+References: <1537054243-26154-1-git-send-email-linux@roeck-us.net>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-The following kernel log message is reported for the nct6775 driver
-on ASUS WS X299 SAGE.
-
-nct6775: Found NCT6796D or compatible chip at 0x2e:0x290
-nct6775 nct6775.656: Invalid temperature source 11 at index 0,
-			source register 0x100, temp register 0x73
-nct6775 nct6775.656: Invalid temperature source 11 at index 2,
-			source register 0x300, temp register 0x77
-nct6775 nct6775.656: Invalid temperature source 11 at index 3,
-			source register 0x800, temp register 0x79
-nct6775 nct6775.656: Invalid temperature source 11 at index 4,
-			source register 0x900, temp register 0x7b
-
-A recent version of the datasheet lists temperature source 11 as reserved.
-However, an older version of the datasheet lists temperature sources 10
-and 11 as supported virtual temperature sources. Apparently the older
-version of the datasheet is correct, so list those temperature sources
-as supported.
-
-Virtual temperature sources are different than other temperature sources:
-Values are not read from a temperature sensor, but written either from
-BIOS or an embedded controller. As such, each virtual temperature has to
-be reported. Since there is now more than one temperature source, we have
-to keep virtual temperature sources in a chip-specific mask and can no
-longer rely on the assumption that there is only one virtual temperature
-source with a fixed index. This accounts for most of the complexity of this
-patch.
+fan7 on NCT6796D does not have a fan count register; it only has an RPM
+register. Switch to using RPM registers to read the fan speed for all
+chips supporting it to solve the problem for good.
 
 Reported-by: Robert Kern <ulteq@web.de>
 Cc: Robert Kern <ulteq@web.de>
 Fixes: 81820059a428 ("hwmon: (nct6775) Add support for NCT6796D")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v3: Handle multiple virtual interrupt sources correctly
-v2: No change
+v3: Further minimize changes: Add new dummy function to convert register
+    values into rpm
+v2: NCT6795D/NCT6796D still have the old RPM registers, only the register
+    at 0x660 is new and has to be used. Minimize required changes by using
+    the 'old' RPM registers where possible. 
 
- drivers/hwmon/nct6775.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ drivers/hwmon/nct6775.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 87c316c6c341..202a2b422461 100644
+index 202a2b422461..af4d8792bbb5 100644
 --- a/drivers/hwmon/nct6775.c
 +++ b/drivers/hwmon/nct6775.c
-@@ -207,8 +207,6 @@ superio_exit(int ioreg)
+@@ -502,7 +502,7 @@ static const s8 NCT6779_BEEP_BITS[] = {
+ 	30, 31 };			/* intrusion0, intrusion1 */
  
- #define NUM_FAN		7
+ static const u16 NCT6779_REG_FAN[] = {
+-	0x4b0, 0x4b2, 0x4b4, 0x4b6, 0x4b8, 0x4ba, 0x660 };
++	0x4c0, 0x4c2, 0x4c4, 0x4c6, 0x4c8, 0x4ca, 0x660 };
+ static const u16 NCT6779_REG_FAN_PULSES[NUM_FAN] = {
+ 	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
  
--#define TEMP_SOURCE_VIRTUAL	0x1f
--
- /* Common and NCT6775 specific data */
+@@ -924,6 +924,11 @@ static unsigned int fan_from_reg16(u16 reg, unsigned int divreg)
+ 	return 1350000U / (reg << divreg);
+ }
  
- /* Voltage min/max registers for nr=7..14 are in bank 5 */
-@@ -374,6 +372,7 @@ static const char *const nct6775_temp_label[] = {
- };
++static unsigned int fan_from_reg_rpm(u16 reg, unsigned int divreg)
++{
++	return reg;
++}
++
+ static u16 fan_to_reg(u32 fan, unsigned int divreg)
+ {
+ 	if (!fan)
+@@ -1284,7 +1289,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
+ 	case nct6795:
+ 	case nct6796:
+ 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
+-		  ((reg & 0xfff0) == 0x4b0 && (reg & 0x000f) < 0x0b) ||
++		  (reg & 0xfff0) == 0x4c0 ||
+ 		  reg == 0x402 ||
+ 		  reg == 0x63a || reg == 0x63c || reg == 0x63e ||
+ 		  reg == 0x640 || reg == 0x642 || reg == 0x64a ||
+@@ -3868,7 +3873,7 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->ALARM_BITS = NCT6779_ALARM_BITS;
+ 		data->BEEP_BITS = NCT6779_BEEP_BITS;
  
- #define NCT6775_TEMP_MASK	0x001ffffe
-+#define NCT6775_VIRT_TEMP_MASK	0x00000000
+-		data->fan_from_reg = fan_from_reg13;
++		data->fan_from_reg = fan_from_reg_rpm;
+ 		data->fan_from_reg_min = fan_from_reg13;
+ 		data->target_temp_mask = 0xff;
+ 		data->tolerance_mask = 0x07;
+@@ -3949,7 +3954,7 @@ static int nct6775_probe(struct platform_device *pdev)
+ 		data->ALARM_BITS = NCT6791_ALARM_BITS;
+ 		data->BEEP_BITS = NCT6779_BEEP_BITS;
  
- static const u16 NCT6775_REG_TEMP_ALTERNATE[32] = {
- 	[13] = 0x661,
-@@ -462,6 +461,7 @@ static const char *const nct6776_temp_label[] = {
- };
- 
- #define NCT6776_TEMP_MASK	0x007ffffe
-+#define NCT6776_VIRT_TEMP_MASK	0x00000000
- 
- static const u16 NCT6776_REG_TEMP_ALTERNATE[32] = {
- 	[14] = 0x401,
-@@ -560,7 +560,9 @@ static const char *const nct6779_temp_label[] = {
- };
- 
- #define NCT6779_TEMP_MASK	0x07ffff7e
-+#define NCT6779_VIRT_TEMP_MASK	0x00000000
- #define NCT6791_TEMP_MASK	0x87ffff7e
-+#define NCT6791_VIRT_TEMP_MASK	0x80000000
- 
- static const u16 NCT6779_REG_TEMP_ALTERNATE[32]
- 	= { 0x490, 0x491, 0x492, 0x493, 0x494, 0x495, 0, 0,
-@@ -639,6 +641,7 @@ static const char *const nct6792_temp_label[] = {
- };
- 
- #define NCT6792_TEMP_MASK	0x9fffff7e
-+#define NCT6792_VIRT_TEMP_MASK	0x80000000
- 
- static const char *const nct6793_temp_label[] = {
- 	"",
-@@ -676,6 +679,7 @@ static const char *const nct6793_temp_label[] = {
- };
- 
- #define NCT6793_TEMP_MASK	0xbfff037e
-+#define NCT6793_VIRT_TEMP_MASK	0x80000000
- 
- static const char *const nct6795_temp_label[] = {
- 	"",
-@@ -713,6 +717,7 @@ static const char *const nct6795_temp_label[] = {
- };
- 
- #define NCT6795_TEMP_MASK	0xbfffff7e
-+#define NCT6795_VIRT_TEMP_MASK	0x80000000
- 
- static const char *const nct6796_temp_label[] = {
- 	"",
-@@ -725,8 +730,8 @@ static const char *const nct6796_temp_label[] = {
- 	"AUXTIN4",
- 	"SMBUSMASTER 0",
- 	"SMBUSMASTER 1",
--	"",
--	"",
-+	"Virtual_TEMP",
-+	"Virtual_TEMP",
- 	"",
- 	"",
- 	"",
-@@ -749,7 +754,8 @@ static const char *const nct6796_temp_label[] = {
- 	"Virtual_TEMP"
- };
- 
--#define NCT6796_TEMP_MASK	0xbfff03fe
-+#define NCT6796_TEMP_MASK	0xbfff0ffe
-+#define NCT6796_VIRT_TEMP_MASK	0x80000c00
- 
- /* NCT6102D/NCT6106D specific data */
- 
-@@ -970,6 +976,7 @@ struct nct6775_data {
- 	u16 reg_temp_config[NUM_TEMP];
- 	const char * const *temp_label;
- 	u32 temp_mask;
-+	u32 virt_temp_mask;
- 
- 	u16 REG_CONFIG;
- 	u16 REG_VBAT;
-@@ -3644,6 +3651,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 
- 		data->temp_label = nct6776_temp_label;
- 		data->temp_mask = NCT6776_TEMP_MASK;
-+		data->virt_temp_mask = NCT6776_VIRT_TEMP_MASK;
- 
- 		data->REG_VBAT = NCT6106_REG_VBAT;
- 		data->REG_DIODE = NCT6106_REG_DIODE;
-@@ -3722,6 +3730,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 
- 		data->temp_label = nct6775_temp_label;
- 		data->temp_mask = NCT6775_TEMP_MASK;
-+		data->virt_temp_mask = NCT6775_VIRT_TEMP_MASK;
- 
- 		data->REG_CONFIG = NCT6775_REG_CONFIG;
- 		data->REG_VBAT = NCT6775_REG_VBAT;
-@@ -3794,6 +3803,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 
- 		data->temp_label = nct6776_temp_label;
- 		data->temp_mask = NCT6776_TEMP_MASK;
-+		data->virt_temp_mask = NCT6776_VIRT_TEMP_MASK;
- 
- 		data->REG_CONFIG = NCT6775_REG_CONFIG;
- 		data->REG_VBAT = NCT6775_REG_VBAT;
-@@ -3866,6 +3876,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 
- 		data->temp_label = nct6779_temp_label;
- 		data->temp_mask = NCT6779_TEMP_MASK;
-+		data->virt_temp_mask = NCT6779_VIRT_TEMP_MASK;
- 
- 		data->REG_CONFIG = NCT6775_REG_CONFIG;
- 		data->REG_VBAT = NCT6775_REG_VBAT;
-@@ -3949,22 +3960,27 @@ static int nct6775_probe(struct platform_device *pdev)
- 		case nct6791:
- 			data->temp_label = nct6779_temp_label;
- 			data->temp_mask = NCT6791_TEMP_MASK;
-+			data->virt_temp_mask = NCT6791_VIRT_TEMP_MASK;
- 			break;
- 		case nct6792:
- 			data->temp_label = nct6792_temp_label;
- 			data->temp_mask = NCT6792_TEMP_MASK;
-+			data->virt_temp_mask = NCT6792_VIRT_TEMP_MASK;
- 			break;
- 		case nct6793:
- 			data->temp_label = nct6793_temp_label;
- 			data->temp_mask = NCT6793_TEMP_MASK;
-+			data->virt_temp_mask = NCT6793_VIRT_TEMP_MASK;
- 			break;
- 		case nct6795:
- 			data->temp_label = nct6795_temp_label;
- 			data->temp_mask = NCT6795_TEMP_MASK;
-+			data->virt_temp_mask = NCT6795_VIRT_TEMP_MASK;
- 			break;
- 		case nct6796:
- 			data->temp_label = nct6796_temp_label;
- 			data->temp_mask = NCT6796_TEMP_MASK;
-+			data->virt_temp_mask = NCT6796_VIRT_TEMP_MASK;
- 			break;
- 		}
- 
-@@ -4148,7 +4164,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 		 * for each fan reflects a different temperature, and there
- 		 * are no duplicates.
- 		 */
--		if (src != TEMP_SOURCE_VIRTUAL) {
-+		if (!(data->virt_temp_mask & BIT(src))) {
- 			if (mask & BIT(src))
- 				continue;
- 			mask |= BIT(src);
+-		data->fan_from_reg = fan_from_reg13;
++		data->fan_from_reg = fan_from_reg_rpm;
+ 		data->fan_from_reg_min = fan_from_reg13;
+ 		data->target_temp_mask = 0xff;
+ 		data->tolerance_mask = 0x07;
 -- 
 2.7.4
