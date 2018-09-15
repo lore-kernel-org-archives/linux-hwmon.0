@@ -1,70 +1,69 @@
-Return-Path: <dgilbert@interlog.com>
-Return-path: <dgilbert@interlog.com>
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v4] libata: Add hwmon support for SMART temperature
- sensors
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+Return-Path: <Christian.Franke@t-online.de>
+Return-path: <Christian.Franke@t-online.de>
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: Re: [smartmontools-support] [PATCH v4] libata: Add hwmon support for
+ SMART temperature sensors
+To: dgilbert@interlog.com,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
  Linus Walleij <linus.walleij@linaro.org>, Jens Axboe <axboe@kernel.dk>,
  Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
  Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+Cc: linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
  smartmontools-support@listi.jpberlin.de,
  linux-scsi <linux-scsi@vger.kernel.org>
 References: <20180913142217.17579-1-linus.walleij@linaro.org>
  <1536949216.3531.35.camel@HansenPartnership.com>
-From: Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <e669e4ff-a09f-0bfd-4a52-22a5f66487a2@interlog.com>
-Date: Fri, 14 Sep 2018 15:38:36 -0400
+ <e669e4ff-a09f-0bfd-4a52-22a5f66487a2@interlog.com>
+Message-ID: <66afc39a-b90a-7dc1-fc56-c9cd033e54de@t-online.de>
+Date: Sat, 15 Sep 2018 18:38:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <1536949216.3531.35.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <e669e4ff-a09f-0bfd-4a52-22a5f66487a2@interlog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 2018-09-14 02:20 PM, James Bottomley wrote:
-> On Thu, 2018-09-13 at 16:22 +0200, Linus Walleij wrote:
-> [...]
->> +	/* Send ATA command to read SMART values */
->> +	memset(scsi_cmd, 0, sizeof(scsi_cmd));
->> +	scsi_cmd[0] = ATA_16;
->> +	scsi_cmd[1] = (4 << 1); /* PIO Data-in */
->> +	/*
->> +	 * No off.line or cc, read from dev, block count in sector
->> count
->> +	 * field.
->> +	 */
->> +	scsi_cmd[2] = 0x0e;
->> +	scsi_cmd[4] = ATA_SMART_READ_VALUES;
->> +	scsi_cmd[6] = 1; /* Read 1 sector */
->> +	scsi_cmd[8] = 0; /* args[1]; */
->> +	scsi_cmd[10] = ATA_SMART_LBAM_PASS;
->> +	scsi_cmd[12] = ATA_SMART_LBAH_PASS;
->> +	scsi_cmd[14] = ATA_CMD_SMART;
->> +
->> +	cmd_result = scsi_execute(ata->sdev, scsi_cmd,
->> DMA_FROM_DEVICE,
->> +				  buf, ATA_SECT_SIZE,
->> +				  NULL, &sshdr, 10 * HZ, 5, 0, 0,
->> NULL);
-> 
-> Given that you're using scsi_execute and this would work on most SAS
-> drives as well as SATA ones, why not use the SAS mode pages and we'll
-> translate it to SATA in the existing libata-scsi SAT?
+Douglas Gilbert wrote:
+> On 2018-09-14 02:20 PM, James Bottomley wrote:
+>> ...
+>> Given that you're using scsi_execute and this would work on most SAS
+>> drives as well as SATA ones, why not use the SAS mode pages and we'll
+>> translate it to SATA in the existing libata-scsi SAT?
+>
+> Fetch the SCSI Temperature Log page [0xd] with the LOG SENSE SCSI 
+> command.
+> See sat5r01a.pdf chapter 10.3.8 for how that should be translated
+> to ATA commands by libata and other SATLs.
 
-Fetch the SCSI Temperature Log page [0xd] with the LOG SENSE SCSI command.
-See sat5r01a.pdf chapter 10.3.8 for how that should be translated
-to ATA commands by libata and other SATLs.
+Please note that SAT requires other access methods than the patch 
+implements.
 
-Doug Gilbert
+A comparison of ATA access methods for temperature:
 
-> That way this can work on all SCSI devices that support SMART not just
-> the SATA subset.
-> 
-> If you can't figure out how to do this initially, then simply
-> separating smart from libata is a good first start so we can build on
-> it in SCSI as well.
-> 
-> James
-> 
-> 
+1) ATA SMART Attribute 194 (from vendor specific SMART DATA):
+- Provides: current temperature, possibly lifetime(?) min/max in various 
+formats.
+- Standards:
+-- SMART READ DATA cmd: ATA-3 to ACS-3, no longer documented in ACS-4.
+-- Attribute 194: "existing practice", not mentioned in any related 
+standard,
+- Supported by: virtually all HDD/SSD with temperature sensor.
+- Used by: this patch, smartctl/smartd, most other disk monitoring tools.
+
+2) ATA SCT Status (GP/SMART log address 0xe0):
+- Provides: current temperature, power cycle min/max, lifetime min/max, 
+over/under limit count.
+- Standards: ATA-8 ACS or later.
+- Supported by: various devices since ~2006, still unsupported by some 
+recent devices.
+- Used by: SAT-4 or later, smartctl 5.38+, ...?
+
+3) ATA Temperature Statistics (GP log address 0x04, page 0x05):
+- Provides current temperature, lifetime min/max, over/under limit time, ...
+- Standards: ATA ACS-2 or later.
+- Supported by: few devices since ~2010, still unsupported by many 
+recent devices.
+- Used by: SAT-3 or later, smartctl 5.42+, ...?
+
+Interestingly SAT-4 adds the older SCT access method.
+
+Christian
