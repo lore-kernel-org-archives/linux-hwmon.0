@@ -1,52 +1,52 @@
 Return-Path: <natechancellor@gmail.com>
 Return-path: <natechancellor@gmail.com>
+Date: Sat, 15 Sep 2018 17:06:12 -0700
 From: Nathan Chancellor <natechancellor@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH] hwmon: scmi: Remove redundant pointer check
-Date: Sat, 15 Sep 2018 17:05:07 -0700
-Message-Id: <20180916000506.28905-1-natechancellor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Clang warning in drivers/hwmon/scmi-hwmon.c
+Message-ID: <20180916000612.GA29020@flashbox>
+References: <20180915051032.GA23900@flashbox>
+ <bb1167c5-d0d7-7d14-d2ba-0df3830ab53a@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb1167c5-d0d7-7d14-d2ba-0df3830ab53a@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Clang warns when the address of a pointer is used in a boolean context
-as it will always return true.
+On Sat, Sep 15, 2018 at 04:37:20PM -0700, Guenter Roeck wrote:
+> On 09/14/2018 10:10 PM, Nathan Chancellor wrote:
+> > Hi Sundeep and others,
+> > 
+> > A group of us are trying to clean up all the warnings we see with an
+> > 'allyesconfig' arm64 build done with Clang and this one came up:
+> > 
+> > drivers/hwmon/scmi-hwmon.c:59:24: warning: address of array 'sensor->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+> >          if (sensor && sensor->name)
+> >                     ~~ ~~~~~~~~^~~~
+> > 1 warning generated.
+> > 
+> > Would it be appropriate to just delete that check or does the check
+> > need to be adjusted in some way (such as checking for the first value
+> > 'sensor->name[0]')? Either option technically solves the warning but I
+> > don't have the hardware to check if this breaks the driver.
+> > 
+> 
+> Presumably the check is supposed to validate the content of the data structure,
+> so dropping the test doesn't seem to make sense. However, one could argue
+> that, if the _content_ is to be checked, it should be checked earlier,
+> before the data pointer is stored (ie in scmi_hwmon_probe()).
+> 
+> Given that, I'll be happy to accept a patch to just drop the check; it
+> does not change the behavior of the driver, after all. If a real validation
+> is desirable, it can be added (into the probe function) with a separate patch.
+> 
+> Thanks,
+> Guenter
+> 
 
-drivers/hwmon/scmi-hwmon.c:59:24: warning: address of array
-'sensor->name' will always evaluate to 'true'
-[-Wpointer-bool-conversion]
-        if (sensor && sensor->name)
-                   ~~ ~~~~~~~~^~~~
-1 warning generated.
+Thank you for the quick response and clarification, patch sent.
 
-Remove the check as it isn't doing anything currently; if validation
-of the contents of the data structure was intended by the original
-author (since this line has been present from the first version of
-this driver), it can be added in a follow-up patch.
-
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
- drivers/hwmon/scmi-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 91976b6ca300..2e005edee0c9 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -56,7 +56,7 @@ scmi_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
- 	const struct scmi_sensors *scmi_sensors = drvdata;
- 
- 	sensor = *(scmi_sensors->info[type] + channel);
--	if (sensor && sensor->name)
-+	if (sensor)
- 		return S_IRUGO;
- 
- 	return 0;
--- 
-2.19.0
+Nathan
