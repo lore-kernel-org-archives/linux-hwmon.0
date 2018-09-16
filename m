@@ -1,93 +1,52 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37450 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725871AbeIPEvf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 Sep 2018 00:51:35 -0400
-Received: by mail-pf1-f195.google.com with SMTP id h69-v6so5897759pfd.4
-        for <linux-hwmon@vger.kernel.org>; Sat, 15 Sep 2018 16:30:49 -0700 (PDT)
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, Robert Kern <ulteq@web.de>
-Subject: [PATCH v3 2/2] hwmon: (nct6775) Fix RPM output for fan7 on NCT6796D
-Date: Sat, 15 Sep 2018 16:30:43 -0700
-Message-Id: <1537054243-26154-2-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1537054243-26154-1-git-send-email-linux@roeck-us.net>
-References: <1537054243-26154-1-git-send-email-linux@roeck-us.net>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <natechancellor@gmail.com>
+Return-path: <natechancellor@gmail.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] hwmon: scmi: Remove redundant pointer check
+Date: Sat, 15 Sep 2018 17:05:07 -0700
+Message-Id: <20180916000506.28905-1-natechancellor@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+List-ID: <linux-hwmon@vger.kernel.org>
 
-fan7 on NCT6796D does not have a fan count register; it only has an RPM
-register. Switch to using RPM registers to read the fan speed for all
-chips supporting it to solve the problem for good.
+Clang warns when the address of a pointer is used in a boolean context
+as it will always return true.
 
-Reported-by: Robert Kern <ulteq@web.de>
-Cc: Robert Kern <ulteq@web.de>
-Fixes: 81820059a428 ("hwmon: (nct6775) Add support for NCT6796D")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+drivers/hwmon/scmi-hwmon.c:59:24: warning: address of array
+'sensor->name' will always evaluate to 'true'
+[-Wpointer-bool-conversion]
+        if (sensor && sensor->name)
+                   ~~ ~~~~~~~~^~~~
+1 warning generated.
+
+Remove the check as it isn't doing anything currently; if validation
+of the contents of the data structure was intended by the original
+author (since this line has been present from the first version of
+this driver), it can be added in a follow-up patch.
+
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
-v3: Further minimize changes: Add new dummy function to convert register
-    values into rpm
-v2: NCT6795D/NCT6796D still have the old RPM registers, only the register
-    at 0x660 is new and has to be used. Minimize required changes by using
-    the 'old' RPM registers where possible. 
+ drivers/hwmon/scmi-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/hwmon/nct6775.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 202a2b422461..af4d8792bbb5 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -502,7 +502,7 @@ static const s8 NCT6779_BEEP_BITS[] = {
- 	30, 31 };			/* intrusion0, intrusion1 */
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index 91976b6ca300..2e005edee0c9 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -56,7 +56,7 @@ scmi_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+ 	const struct scmi_sensors *scmi_sensors = drvdata;
  
- static const u16 NCT6779_REG_FAN[] = {
--	0x4b0, 0x4b2, 0x4b4, 0x4b6, 0x4b8, 0x4ba, 0x660 };
-+	0x4c0, 0x4c2, 0x4c4, 0x4c6, 0x4c8, 0x4ca, 0x660 };
- static const u16 NCT6779_REG_FAN_PULSES[NUM_FAN] = {
- 	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
+ 	sensor = *(scmi_sensors->info[type] + channel);
+-	if (sensor && sensor->name)
++	if (sensor)
+ 		return S_IRUGO;
  
-@@ -924,6 +924,11 @@ static unsigned int fan_from_reg16(u16 reg, unsigned int divreg)
- 	return 1350000U / (reg << divreg);
- }
- 
-+static unsigned int fan_from_reg_rpm(u16 reg, unsigned int divreg)
-+{
-+	return reg;
-+}
-+
- static u16 fan_to_reg(u32 fan, unsigned int divreg)
- {
- 	if (!fan)
-@@ -1284,7 +1289,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 	case nct6795:
- 	case nct6796:
- 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
--		  ((reg & 0xfff0) == 0x4b0 && (reg & 0x000f) < 0x0b) ||
-+		  (reg & 0xfff0) == 0x4c0 ||
- 		  reg == 0x402 ||
- 		  reg == 0x63a || reg == 0x63c || reg == 0x63e ||
- 		  reg == 0x640 || reg == 0x642 || reg == 0x64a ||
-@@ -3868,7 +3873,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->ALARM_BITS = NCT6779_ALARM_BITS;
- 		data->BEEP_BITS = NCT6779_BEEP_BITS;
- 
--		data->fan_from_reg = fan_from_reg13;
-+		data->fan_from_reg = fan_from_reg_rpm;
- 		data->fan_from_reg_min = fan_from_reg13;
- 		data->target_temp_mask = 0xff;
- 		data->tolerance_mask = 0x07;
-@@ -3949,7 +3954,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->ALARM_BITS = NCT6791_ALARM_BITS;
- 		data->BEEP_BITS = NCT6779_BEEP_BITS;
- 
--		data->fan_from_reg = fan_from_reg13;
-+		data->fan_from_reg = fan_from_reg_rpm;
- 		data->fan_from_reg_min = fan_from_reg13;
- 		data->target_temp_mask = 0xff;
- 		data->tolerance_mask = 0x07;
+ 	return 0;
 -- 
-2.7.4
+2.19.0
