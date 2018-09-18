@@ -1,70 +1,118 @@
-Return-Path: <benh@kernel.crashing.org>
-Return-path: <benh@kernel.crashing.org>
-Message-ID: <c002018d3765280e135d673f7c731784a90a260d.camel@kernel.crashing.org>
-Subject: Re: [PATCH v5 01/10] dt-bindings: fsi: Add P9 OCC device
- documentation
-From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To: Rob Herring <robh@kernel.org>, Eddie James <eajames@linux.vnet.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, jdelvare@suse.com,
-        linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com, linux@roeck-us.net,
-        joel@jms.id.au
-Date: Wed, 12 Sep 2018 09:56:33 +0200
-In-Reply-To: <20180910181610.GA5907@bogus>
-References: <1535664761-86018-1-git-send-email-eajames@linux.vnet.ibm.com>
-	 <1535664761-86018-2-git-send-email-eajames@linux.vnet.ibm.com>
-	 <20180910181610.GA5907@bogus>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Return-Path: <jae.hyun.yoo@linux.intel.com>
+Return-path: <jae.hyun.yoo@linux.intel.com>
+From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To: Lee Jones <lee.jones@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+	Kishon Vijay Abraham I <kishon@ti.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	"Darrick J . Wong" <darrick.wong@oracle.com>,
+	Eric Sandeen <sandeen@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Wu Hao <hao.wu@intel.com>,
+	Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
+	"Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
+	Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Philippe Ombredanne <pombredanne@nexb.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Stephen Boyd <sboyd@codeaurora.org>,
+	David Kershner <david.kershner@unisys.com>,
+	Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+	Sagar Dharia <sdharia@codeaurora.org>,
+	Johan Hovold <johan@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Juergen Gross <jgross@suse.com>,
+	Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-doc@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v8 01/12] dt-bindings: Add a document of PECI subsystem
+Date: Tue, 18 Sep 2018 14:51:13 -0700
+Message-Id: <20180918215124.14003-2-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20180918215124.14003-1-jae.hyun.yoo@linux.intel.com>
+References: <20180918215124.14003-1-jae.hyun.yoo@linux.intel.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Mon, 2018-09-10 at 13:16 -0500, Rob Herring wrote:
-> On Thu, Aug 30, 2018 at 04:32:32PM -0500, Eddie James wrote:
-> > Document the bindings for the FSI-attached POWER9 On-Chip Controller.
-> > 
-> > Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
-> > ---
-> >  Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
-> > new file mode 100644
-> > index 0000000..46372f6
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
-> > @@ -0,0 +1,15 @@
-> > +Device-tree bindings for FSI-attached POWER9 On-Chip Controller (OCC)
-> > +---------------------------------------------------------------------
-> > +
-> > +This is the binding for the P9 On-Chip Controller accessed over FSI from a
-> > +service processor. See fsi.txt for details on bindings for FSI slave and CFAM
-> > +nodes.
-> > +
-> > +Required properties:
-> > + - compatible = "ibm,p9-occ"
-> > +
-> > +Examples:
-> > +
-> > +    occ {
-> 
-> FSI slave devices are supposed to have an address according to the 
-> binding doc.
+This commit adds a document of generic PECI bus, adapter and client
+driver.
 
-This isn't the FSI device per-se actually. This is a node below the
-"sbefifo" FSI device. The SBE fifo is the mechanism by which we
-communicate with the OCC. The sbefifo doesn't really define a "bus",
-it's mostly used from userspace directly via /dev/sbefifo* to perform
-various tasks in the chip, but it happens to also provide the in-kernel 
-transport for the OCC commands.
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Andrew Jeffery <andrew@aj.id.au>
+Cc: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
+Reviewed-by: James Feist <james.feist@linux.intel.com>
+Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
+---
+ .../devicetree/bindings/peci/peci.txt         | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/peci/peci.txt
 
-Cheers,
-Ben.
-
-> > +        compatible = "ibm,p9-occ";
-> > +    };
-> > -- 
-> > 1.8.3.1
-> > 
+diff --git a/Documentation/devicetree/bindings/peci/peci.txt b/Documentation/devicetree/bindings/peci/peci.txt
+new file mode 100644
+index 000000000000..864b7ab4e9fa
+--- /dev/null
++++ b/Documentation/devicetree/bindings/peci/peci.txt
+@@ -0,0 +1,43 @@
++Generic device tree configuration for PECI adapters
++===================================================
++
++Required properties:
++- #address-cells : Should be <1>. Read more about client addresses below.
++- #size-cells    : Should be <0>. Read more about client addresses below.
++
++The cells properties above define that an address of CPU clients of a PECI bus
++are described by a single value.
++
++Example:
++	peci0: peci-bus@0 {
++		compatible = "vendor,soc-peci";
++		reg = <0x0 0x1000>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++	};
++
++Generic device tree configuration for PECI clients
++==================================================
++
++Required properties:
++- compatible : Should contain name of PECI client.
++- reg        : Should contain address of a client CPU. Address range of CPU
++	       clients starts from 0x30 based on PECI specification.
++
++Example:
++	peci-bus@0 {
++		compatible = "vendor,soc-peci";
++		reg = <0x0 0x1000>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		peci-client@30 {
++			compatible = "intel,peci-client";
++			reg = <0x30>;
++		};
++
++		peci-client@31 {
++			compatible = "intel,peci-client";
++			reg = <0x31>;
++		};
++	};
+-- 
+2.18.0
