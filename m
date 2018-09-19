@@ -1,54 +1,44 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32806 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731592AbeISWdb (ORCPT
+Received: from mail.linuxfoundation.org ([140.211.169.12]:49584 "EHLO
+        mail.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727623AbeITDSe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Sep 2018 18:33:31 -0400
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.19-rc5
-Date: Wed, 19 Sep 2018 09:54:42 -0700
-Message-Id: <1537376082-32219-1-git-send-email-linux@roeck-us.net>
+        Wed, 19 Sep 2018 23:18:34 -0400
+Date: Wed, 19 Sep 2018 23:38:39 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] hwmon fixes for v4.19-rc5
+Message-ID: <20180919213839.GA16944@kroah.com>
+References: <1537376082-32219-1-git-send-email-linux@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1537376082-32219-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
-Hi Greg,
+On Wed, Sep 19, 2018 at 09:54:42AM -0700, Guenter Roeck wrote:
+> Hi Linus,
+> Hi Greg,
+> 
+> Please pull hwmon fixes for Linux v4.19-rc5 from signed tag:
+> 
+>     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.19-rc5
+> 
+> Thanks,
+> Guenter
+> ------
+> 
+> The following changes since commit 57361846b52bc686112da6ca5368d11210796804:
+> 
+>   Linux 4.19-rc2 (2018-09-02 14:37:30 -0700)
+> 
+> are available in the git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.19-rc5
 
-Please pull hwmon fixes for Linux v4.19-rc5 from signed tag:
+Now pulled, thanks.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.19-rc5
-
-Thanks,
-Guenter
-------
-
-The following changes since commit 57361846b52bc686112da6ca5368d11210796804:
-
-  Linux 4.19-rc2 (2018-09-02 14:37:30 -0700)
-
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.19-rc5
-
-for you to fetch changes up to 55066354285b36ee09dc50e2527f43a97c567177:
-
-  hwmon: (nct6775) Use different register to get fan RPM for fan7 (2018-09-17 05:38:50 -0700)
-
-----------------------------------------------------------------
-Various bug fixes for nct6775 driver
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      hwmon: (nct6775) Set weight source to zero correctly
-
-Guenter Roeck (4):
-      hwmon: (nct6775) Fix access to fan pulse registers
-      hwmon: (nct6775) Fix virtual temperature sources for NCT6796D
-      hwmon: (nct6775) Fix RPM output for fan7 on NCT6796D
-      hwmon: (nct6775) Use different register to get fan RPM for fan7
-
- drivers/hwmon/nct6775.c | 72 +++++++++++++++++++++++++++++++++----------------
- 1 file changed, 49 insertions(+), 23 deletions(-)
+greg k-h
