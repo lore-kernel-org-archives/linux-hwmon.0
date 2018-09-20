@@ -1,200 +1,128 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40593 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727242AbeITT3g (ORCPT
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:39738 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727242AbeITT3W (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Sep 2018 15:29:36 -0400
-Received: by mail-pl1-f193.google.com with SMTP id s17-v6so4380878plp.7
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Sep 2018 06:46:02 -0700 (PDT)
+        Thu, 20 Sep 2018 15:29:22 -0400
+Received: by mail-pf1-f195.google.com with SMTP id j8-v6so4403790pff.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Sep 2018 06:45:48 -0700 (PDT)
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 12/13] hwmon: (nct6775) Add support for NCT6797D
-Date: Thu, 20 Sep 2018 06:45:40 -0700
-Message-Id: <1537451141-27242-12-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 02/13] hwmon: (nct6775) Replace 'regval' with variables named after config registers
+Date: Thu, 20 Sep 2018 06:45:30 -0700
+Message-Id: <1537451141-27242-2-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1537451141-27242-1-git-send-email-linux@roeck-us.net>
 References: <1537451141-27242-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add support for NCT6797D. With the exception of fan/pwm configuration
-registers, it is mostly compatible with NCT6795D.
+Using variables named after configuration registers makes it more obvious
+which configuration register value is used, especially if more than one
+configuration register value is used to determine a configuration detail.
+
+No functional change.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/nct6775.c | 45 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ drivers/hwmon/nct6775.c | 43 +++++++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 77255f7da974..9569acf80e18 100644
+index 7a3a1d59553e..bd1c4772994a 100644
 --- a/drivers/hwmon/nct6775.c
 +++ b/drivers/hwmon/nct6775.c
-@@ -42,6 +42,7 @@
-  * nct6793d    15      6       6       2+6    0xd120 0xc1    0x5ca3
-  * nct6795d    14      6       6       2+6    0xd350 0xc1    0x5ca3
-  * nct6796d    14      7       7       2+6    0xd420 0xc1    0x5ca3
-+ * nct6797d    14      7       7       2+6    0xd450 0xc1    0x5ca3
-  *
-  * #temp lists the number of monitored temperature sources (first value) plus
-  * the number of directly connectable temperature sensors (second value).
-@@ -69,7 +70,7 @@
- #define USE_ALTERNATE
+@@ -3436,7 +3436,8 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 	bool pwm3pin = false, pwm4pin = false, pwm5pin = false;
+ 	bool pwm6pin = false, pwm7pin = false;
+ 	int sioreg = data->sioreg;
+-	int regval;
++	int cr24;
++	int cr2c;
  
- enum kinds { nct6106, nct6775, nct6776, nct6779, nct6791, nct6792, nct6793,
--	     nct6795, nct6796 };
-+	     nct6795, nct6796, nct6797 };
+ 	/* Store SIO_REG_ENABLE for use during resume */
+ 	superio_select(sioreg, NCT6775_LD_HWM);
+@@ -3444,10 +3445,10 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
  
- /* used to set data->name = nct6775_device_names[data->sio_kind] */
- static const char * const nct6775_device_names[] = {
-@@ -82,6 +83,7 @@ static const char * const nct6775_device_names[] = {
- 	"nct6793",
- 	"nct6795",
- 	"nct6796",
-+	"nct6797",
- };
+ 	/* fan4 and fan5 share some pins with the GPIO and serial flash */
+ 	if (data->kind == nct6775) {
+-		regval = superio_inb(sioreg, 0x2c);
++		cr2c = superio_inb(sioreg, 0x2c);
  
- static const char * const nct6775_sio_names[] __initconst = {
-@@ -94,6 +96,7 @@ static const char * const nct6775_sio_names[] __initconst = {
- 	"NCT6793D",
- 	"NCT6795D",
- 	"NCT6796D",
-+	"NCT6797D",
- };
+-		fan3pin = regval & BIT(6);
+-		pwm3pin = regval & BIT(7);
++		fan3pin = cr2c & BIT(6);
++		pwm3pin = cr2c & BIT(7);
  
- static unsigned short force_id;
-@@ -129,6 +132,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for fan RPM signal");
- #define SIO_NCT6793_ID		0xd120
- #define SIO_NCT6795_ID		0xd350
- #define SIO_NCT6796_ID		0xd420
-+#define SIO_NCT6797_ID		0xd450
- #define SIO_ID_MASK		0xFFF0
- 
- enum pwm_enable { off, manual, thermal_cruise, speed_cruise, sf3, sf4 };
-@@ -504,7 +508,7 @@ static const s8 NCT6779_BEEP_BITS[] = {
- static const u16 NCT6779_REG_FAN[] = {
- 	0x4c0, 0x4c2, 0x4c4, 0x4c6, 0x4c8, 0x4ca, 0x4ce };
- static const u16 NCT6779_REG_FAN_PULSES[NUM_FAN] = {
--	0x644, 0x645, 0x646, 0x647, 0x648, 0x649 };
-+	0x644, 0x645, 0x646, 0x647, 0x648, 0x649, 0x64f };
- 
- static const u16 NCT6779_REG_CRITICAL_PWM_ENABLE[] = {
- 	0x136, 0x236, 0x336, 0x836, 0x936, 0xa36, 0xb36 };
-@@ -1288,6 +1292,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 	case nct6793:
- 	case nct6795:
- 	case nct6796:
-+	case nct6797:
- 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
- 		  (reg & 0xfff0) == 0x4c0 ||
- 		  reg == 0x402 ||
-@@ -1643,6 +1648,7 @@ static void nct6775_update_pwm_limits(struct device *dev)
- 		case nct6793:
- 		case nct6795:
- 		case nct6796:
-+		case nct6797:
- 			reg = nct6775_read_value(data,
- 					data->REG_CRITICAL_PWM_ENABLE[i]);
- 			if (reg & data->CRITICAL_PWM_ENABLE_MASK)
-@@ -3077,6 +3083,7 @@ store_auto_pwm(struct device *dev, struct device_attribute *attr,
- 		case nct6793:
- 		case nct6795:
- 		case nct6796:
-+		case nct6797:
- 			nct6775_write_value(data, data->REG_CRITICAL_PWM[nr],
- 					    val);
- 			reg = nct6775_read_value(data,
-@@ -3496,7 +3503,11 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 		fan3pin = !(cr24 & 0x80);
- 		pwm3pin = cr24 & 0x08;
+ 		/* On NCT6775, fan4 shares pins with the fdc interface */
+ 		fan4pin = !(superio_inb(sioreg, 0x2A) & 0x80);
+@@ -3492,30 +3493,32 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 		fan4min = fan4pin;
+ 		pwm3pin = fan3pin;
+ 	} else if (data->kind == nct6106) {
+-		regval = superio_inb(sioreg, 0x24);
+-		fan3pin = !(regval & 0x80);
+-		pwm3pin = regval & 0x08;
++		cr24 = superio_inb(sioreg, 0x24);
++		fan3pin = !(cr24 & 0x80);
++		pwm3pin = cr24 & 0x08;
  	} else {
--		/* NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D */
-+		/*
-+		 * NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D,
-+		 * NCT6797D
-+		 */
-+		int cr1a = superio_inb(sioreg, 0x1a);
- 		int cr1b = superio_inb(sioreg, 0x1b);
- 		int cr1c = superio_inb(sioreg, 0x1c);
- 		int cr1d = superio_inb(sioreg, 0x1d);
-@@ -3505,6 +3516,7 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 		int cr2d = superio_inb(sioreg, 0x2d);
- 		int cr2f = superio_inb(sioreg, 0x2f);
- 		bool dsw_en = cr2f & BIT(3);
-+		bool ddr4_en = cr2f & BIT(4);
- 		int cre0;
- 		int creb;
- 		int cred;
-@@ -3577,6 +3589,23 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 		/* NCT6779D, NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D */
+ 		int cr1b, cr2a, cr2f;
++		int cr1c;
++		int cr2d;
+ 		bool dsw_en;
  
- 			pwm7pin = !(cr1d & (BIT(2) | BIT(3)));
- 			break;
-+		case nct6797:
-+			fan5pin |= !ddr4_en && (cr1b & BIT(5));
-+			fan5pin |= creb & BIT(5);
-+
-+			fan6pin = cr2a & BIT(4);
-+			fan6pin |= creb & BIT(3);
-+
-+			fan7pin = cr1a & BIT(1);
-+
-+			pwm5pin |= (creb & BIT(4)) && !(cr2a & BIT(0));
-+			pwm5pin |= !ddr4_en && (cr2d & BIT(7));
-+
-+			pwm6pin = creb & BIT(2);
-+			pwm6pin |= cred & BIT(2);
-+
-+			pwm7pin = cr1d & BIT(4);
-+			break;
- 		default:	/* NCT6779D */
- 			break;
- 		}
-@@ -3954,8 +3983,10 @@ static int nct6775_probe(struct platform_device *pdev)
- 	case nct6793:
- 	case nct6795:
- 	case nct6796:
-+	case nct6797:
- 		data->in_num = 15;
--		data->pwm_num = (data->kind == nct6796) ? 7 : 6;
-+		data->pwm_num = (data->kind == nct6796 ||
-+				 data->kind == nct6797) ? 7 : 6;
- 		data->auto_pwm_num = 4;
- 		data->has_fan_div = false;
- 		data->temp_fixed_num = 6;
-@@ -3989,6 +4020,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 			data->virt_temp_mask = NCT6793_VIRT_TEMP_MASK;
- 			break;
- 		case nct6795:
-+		case nct6797:
- 			data->temp_label = nct6795_temp_label;
- 			data->temp_mask = NCT6795_TEMP_MASK;
- 			data->virt_temp_mask = NCT6795_VIRT_TEMP_MASK;
-@@ -4267,6 +4299,7 @@ static int nct6775_probe(struct platform_device *pdev)
- 	case nct6793:
- 	case nct6795:
- 	case nct6796:
-+	case nct6797:
- 		break;
- 	}
+-		regval = superio_inb(sioreg, 0x1c);
++		cr1c = superio_inb(sioreg, 0x1c);
  
-@@ -4302,6 +4335,7 @@ static int nct6775_probe(struct platform_device *pdev)
+-		fan3pin = !(regval & BIT(5));
+-		fan4pin = !(regval & BIT(6));
+-		fan5pin = !(regval & BIT(7));
++		fan3pin = !(cr1c & BIT(5));
++		fan4pin = !(cr1c & BIT(6));
++		fan5pin = !(cr1c & BIT(7));
+ 
+-		pwm3pin = !(regval & BIT(0));
+-		pwm4pin = !(regval & BIT(1));
+-		pwm5pin = !(regval & BIT(2));
++		pwm3pin = !(cr1c & BIT(0));
++		pwm4pin = !(cr1c & BIT(1));
++		pwm5pin = !(cr1c & BIT(2));
+ 
+-		regval = superio_inb(sioreg, 0x2d);
++		cr2d = superio_inb(sioreg, 0x2d);
+ 		switch (data->kind) {
+ 		case nct6791:
+ 		case nct6792:
+-			fan6pin = regval & BIT(1);
+-			pwm6pin = regval & BIT(0);
++			fan6pin = cr2d & BIT(1);
++			pwm6pin = cr2d & BIT(0);
+ 			break;
  		case nct6793:
  		case nct6795:
- 		case nct6796:
-+		case nct6797:
- 			tmp |= 0x7e;
- 			break;
- 		}
-@@ -4504,6 +4538,9 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 	case SIO_NCT6796_ID:
- 		sio_data->kind = nct6796;
- 		break;
-+	case SIO_NCT6797_ID:
-+		sio_data->kind = nct6797;
-+		break;
- 	default:
- 		if (val != 0xffff)
- 			pr_debug("unsupported chip ID: 0x%04x\n", val);
+@@ -3526,7 +3529,7 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 			dsw_en = cr2f & BIT(3);
+ 
+ 			if (!pwm5pin)
+-				pwm5pin = regval & BIT(7);
++				pwm5pin = cr2d & BIT(7);
+ 
+ 			if (!fan5pin)
+ 				fan5pin = cr1b & BIT(5);
+@@ -3536,8 +3539,8 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 				int creb = superio_inb(sioreg, 0xeb);
+ 
+ 				if (!dsw_en) {
+-					fan6pin = regval & BIT(1);
+-					pwm6pin = regval & BIT(0);
++					fan6pin = cr2d & BIT(1);
++					pwm6pin = cr2d & BIT(0);
+ 				}
+ 
+ 				if (!fan5pin)
 -- 
 2.7.4
