@@ -1,52 +1,79 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:56138 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725898AbeIUP7B (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Sep 2018 11:59:01 -0400
+Return-Path: <thierry.reding@gmail.com>
+Return-path: <thierry.reding@gmail.com>
 From: Thierry Reding <thierry.reding@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
+	Guenter Roeck <linux@roeck-us.net>
 Cc: Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] hwmon: pwm-fan: Silence error on probe deferral
-Date: Fri, 21 Sep 2018 12:10:47 +0200
-Message-Id: <20180921101048.11679-1-thierry.reding@gmail.com>
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] hwmon: pwm-fan: Set fan speed to 0 on suspend
+Date: Fri, 21 Sep 2018 12:10:48 +0200
+Message-Id: <20180921101048.11679-2-thierry.reding@gmail.com>
+In-Reply-To: <20180921101048.11679-1-thierry.reding@gmail.com>
+References: <20180921101048.11679-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
 From: Thierry Reding <treding@nvidia.com>
 
-Probe deferrals aren't actual errors, so silence the error message in
-case the PWM cannot yet be acquired.
+Technically this is not required because disabling the PWM should be
+enough. However, when support for atomic operations was implemented in
+the PWM subsystem, only actual changes to the PWM channel are applied
+during pwm_config(), which means that during after resume from suspend
+the old settings won't be applied.
+
+One possible solution is for the PWM driver to implement its own PM
+operations such that settings from before suspend get applied on resume.
+This has the disadvantage of completely ignoring any particular ordering
+requirements that PWM user drivers might have, so it is best to leave it
+up to the user drivers to apply the settings that they want at the
+appropriate time.
+
+Another way to solve this would be to read back the current state of the
+PWM at the time of resume. That way, in case the configuration was lost
+during suspend, applying the old settings in PWM user drivers would
+actually get them applied because they differ from the current settings.
+However, not all PWM drivers support reading the hardware state, and not
+all hardware may support it.
+
+The best workaround at this point seems to be to let PWM user drivers
+tell the PWM subsystem that the PWM is turned off by, in addition to
+disabling it, also setting the duty cycle to 0. This causes the resume
+operation to apply a configuration that is different from the current
+configuration, resulting in the proper state from before suspend getting
+restored.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/hwmon/pwm-fan.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/hwmon/pwm-fan.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 7838af58f92d..936aaf76dd6e 100644
+index 936aaf76dd6e..7da6a160d45a 100644
 --- a/drivers/hwmon/pwm-fan.c
 +++ b/drivers/hwmon/pwm-fan.c
-@@ -221,8 +221,12 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	ctx->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
- 	if (IS_ERR(ctx->pwm)) {
--		dev_err(&pdev->dev, "Could not get PWM\n");
--		return PTR_ERR(ctx->pwm);
-+		ret = PTR_ERR(ctx->pwm);
+@@ -294,9 +294,19 @@ static int pwm_fan_remove(struct platform_device *pdev)
+ static int pwm_fan_suspend(struct device *dev)
+ {
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
++	struct pwm_args args;
++	int ret;
 +
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "Could not get PWM: %d\n", ret);
++	pwm_get_args(ctx->pwm, &args);
 +
-+		return ret;
- 	}
++	if (ctx->pwm_value) {
++		ret = pwm_config(ctx->pwm, 0, args.period);
++		if (ret < 0)
++			return ret;
  
- 	platform_set_drvdata(pdev, ctx);
+-	if (ctx->pwm_value)
+ 		pwm_disable(ctx->pwm);
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.19.0
