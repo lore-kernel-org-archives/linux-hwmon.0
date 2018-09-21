@@ -1,32 +1,35 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f171.google.com ([209.85.210.171]:46195 "EHLO
-        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727392AbeIUTIk (ORCPT
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33928 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727392AbeIUTKD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Sep 2018 15:08:40 -0400
-Date: Fri, 21 Sep 2018 06:19:48 -0700
+        Fri, 21 Sep 2018 15:10:03 -0400
+Date: Fri, 21 Sep 2018 06:21:11 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: zhong jiang <zhongjiang@huawei.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2] hwmon: scpi-hwmon:  remove redundant continue
-Message-ID: <20180921131948.GA16088@roeck-us.net>
-References: <1537493403-15745-1-git-send-email-zhongjiang@huawei.com>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: pwm-fan: Silence error on probe deferral
+Message-ID: <20180921132111.GA16424@roeck-us.net>
+References: <20180921101048.11679-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1537493403-15745-1-git-send-email-zhongjiang@huawei.com>
+In-Reply-To: <20180921101048.11679-1-thierry.reding@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 21, 2018 at 09:30:03AM +0800, zhong jiang wrote:
-> The continue will not truely skip any code. hence it is safe to
-> remove it.
+On Fri, Sep 21, 2018 at 12:10:47PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
+> Probe deferrals aren't actual errors, so silence the error message in
+> case the PWM cannot yet be acquired.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 
-Applied to hwmon-next.
+Applied.
 
 Thanks,
 Guenter
