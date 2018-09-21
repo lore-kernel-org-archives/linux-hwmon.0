@@ -1,64 +1,61 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from szxga06-in.huawei.com ([45.249.212.32]:56872 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388788AbeIUHYq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Sep 2018 03:24:46 -0400
-Message-ID: <5BA44B89.6090006@huawei.com>
-Date: Fri, 21 Sep 2018 09:38:17 +0800
-From: zhong jiang <zhongjiang@huawei.com>
-MIME-Version: 1.0
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43267 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390231AbeIUXd4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Sep 2018 19:33:56 -0400
+Date: Fri, 21 Sep 2018 10:43:54 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
-CC: <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: remove redundant continue
-References: <1537431070-38261-1-git-send-email-zhongjiang@huawei.com> <20180920173045.GA15272@roeck-us.net>
-In-Reply-To: <20180920173045.GA15272@roeck-us.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        afd@ti.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: ina3221: Get channel names from DT node
+Message-ID: <20180921174353.GA24662@Asurada-Nvidia.nvidia.com>
+References: <20180921000753.21846-1-nicoleotsuka@gmail.com>
+ <20180921000753.21846-3-nicoleotsuka@gmail.com>
+ <21a6e8f3-c95d-43d0-ca3f-3f91ddfeff07@roeck-us.net>
+ <20180921012038.GA23354@Asurada-Nvidia.nvidia.com>
+ <20180921091813.GA21564@Asurada-Nvidia.nvidia.com>
+ <75741ce9-80a3-9277-b8e3-2d3c3e003797@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75741ce9-80a3-9277-b8e3-2d3c3e003797@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 2018/9/21 1:30, Guenter Roeck wrote:
-> On Thu, Sep 20, 2018 at 04:11:10PM +0800, zhong jiang wrote:
->> The continue will not truely skip any code. hence it is safe to
->> remove it.
->>
->> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
-> The proper subject line would be
->
-> hwmon: (scpi-hwmon) <summary>
->
-> Since it now happened several times that I got a patch without proper
-> subject (ie where the subject does not even mention the affected driver),
-> I am no longer going to accept patches if the affected driver is missing,
-> sorry.
-I will fix that and resend.  Thanks
+On Fri, Sep 21, 2018 at 05:56:00AM -0700, Guenter Roeck wrote:
 
-Sincerely,
-zhong jiang
-> Guenter
->
->> ---
->>  drivers/hwmon/scpi-hwmon.c | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
->> index 7e49da5..111d521 100644
->> --- a/drivers/hwmon/scpi-hwmon.c
->> +++ b/drivers/hwmon/scpi-hwmon.c
->> @@ -286,10 +286,8 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
->>  		 * any thermal zones or if the thermal subsystem is
->>  		 * not configured.
->>  		 */
->> -		if (IS_ERR(z)) {
->> +		if (IS_ERR(z))
->>  			devm_kfree(dev, zone);
->> -			continue;
->> -		}
->>  	}
->>  
->>  	return 0;
->> -- 
->> 1.7.12.4
->>
->
+> > I tried is_visible but it looks like it won't be that neat to
+> > implement as some attributes of this driver don't really pass
+> > the channel index to the store()/show() but some other indexes.
+> > 
+> 
+> The channel index is not the only means that can be used to determine
+> the channel index. Many drivers use the position in the attrs[] array
+> to determine the channel index. I don't see why this would not be
+> possible here.
+
+Hmmm, that should simply work...I didn't mean not possible though.
+
+> > If you are very against the dynamical group, I can drop it to
+> > leave the sysfs node as it was.
+> > 
+> > And for the name nodes that I was talking about above, I will
+> > add an sysfs store() function so non-DT users can set them,
+> > and I also removed the confusing "unknown" default name.
+> > 
+> 
+> The label attributes are RO. Please follow the ABI.
+> 
+> temp[1-*]_label Suggested temperature channel label.
+
+Thanks a lot for the hint. I looked up the doc and feel that
+this one probably fits my situation more:
+    in[0-*]_label   Suggested voltage channel label.
+
+Will follow it in my next version.
+
+Thank you
+Nicolin
