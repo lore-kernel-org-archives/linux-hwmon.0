@@ -1,79 +1,32 @@
-Return-Path: <thierry.reding@gmail.com>
-Return-path: <thierry.reding@gmail.com>
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Kamil Debski <kamil@wypas.org>,
-	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: pwm-fan: Set fan speed to 0 on suspend
-Date: Fri, 21 Sep 2018 12:10:48 +0200
-Message-Id: <20180921101048.11679-2-thierry.reding@gmail.com>
-In-Reply-To: <20180921101048.11679-1-thierry.reding@gmail.com>
-References: <20180921101048.11679-1-thierry.reding@gmail.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pf1-f171.google.com ([209.85.210.171]:46195 "EHLO
+        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727392AbeIUTIk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Sep 2018 15:08:40 -0400
+Date: Fri, 21 Sep 2018 06:19:48 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: zhong jiang <zhongjiang@huawei.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2] hwmon: scpi-hwmon:  remove redundant continue
+Message-ID: <20180921131948.GA16088@roeck-us.net>
+References: <1537493403-15745-1-git-send-email-zhongjiang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1537493403-15745-1-git-send-email-zhongjiang@huawei.com>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Fri, Sep 21, 2018 at 09:30:03AM +0800, zhong jiang wrote:
+> The continue will not truely skip any code. hence it is safe to
+> remove it.
+> 
+> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
 
-Technically this is not required because disabling the PWM should be
-enough. However, when support for atomic operations was implemented in
-the PWM subsystem, only actual changes to the PWM channel are applied
-during pwm_config(), which means that during after resume from suspend
-the old settings won't be applied.
+Applied to hwmon-next.
 
-One possible solution is for the PWM driver to implement its own PM
-operations such that settings from before suspend get applied on resume.
-This has the disadvantage of completely ignoring any particular ordering
-requirements that PWM user drivers might have, so it is best to leave it
-up to the user drivers to apply the settings that they want at the
-appropriate time.
-
-Another way to solve this would be to read back the current state of the
-PWM at the time of resume. That way, in case the configuration was lost
-during suspend, applying the old settings in PWM user drivers would
-actually get them applied because they differ from the current settings.
-However, not all PWM drivers support reading the hardware state, and not
-all hardware may support it.
-
-The best workaround at this point seems to be to let PWM user drivers
-tell the PWM subsystem that the PWM is turned off by, in addition to
-disabling it, also setting the duty cycle to 0. This causes the resume
-operation to apply a configuration that is different from the current
-configuration, resulting in the proper state from before suspend getting
-restored.
-
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/hwmon/pwm-fan.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 936aaf76dd6e..7da6a160d45a 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -294,9 +294,19 @@ static int pwm_fan_remove(struct platform_device *pdev)
- static int pwm_fan_suspend(struct device *dev)
- {
- 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-+	struct pwm_args args;
-+	int ret;
-+
-+	pwm_get_args(ctx->pwm, &args);
-+
-+	if (ctx->pwm_value) {
-+		ret = pwm_config(ctx->pwm, 0, args.period);
-+		if (ret < 0)
-+			return ret;
- 
--	if (ctx->pwm_value)
- 		pwm_disable(ctx->pwm);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.19.0
+Thanks,
+Guenter
