@@ -1,61 +1,35 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43267 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390231AbeIUXd4 (ORCPT
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41555 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390726AbeIVCD0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Sep 2018 19:33:56 -0400
-Date: Fri, 21 Sep 2018 10:43:54 -0700
+        Fri, 21 Sep 2018 22:03:26 -0400
 From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        afd@ti.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: ina3221: Get channel names from DT node
-Message-ID: <20180921174353.GA24662@Asurada-Nvidia.nvidia.com>
-References: <20180921000753.21846-1-nicoleotsuka@gmail.com>
- <20180921000753.21846-3-nicoleotsuka@gmail.com>
- <21a6e8f3-c95d-43d0-ca3f-3f91ddfeff07@roeck-us.net>
- <20180921012038.GA23354@Asurada-Nvidia.nvidia.com>
- <20180921091813.GA21564@Asurada-Nvidia.nvidia.com>
- <75741ce9-80a3-9277-b8e3-2d3c3e003797@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75741ce9-80a3-9277-b8e3-2d3c3e003797@roeck-us.net>
+To: jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        mark.rutland@arm.com, corbet@lwn.net
+Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v2 0/2] Add an initial DT binding doc for ina3221
+Date: Fri, 21 Sep 2018 13:12:50 -0700
+Message-Id: <20180921201252.12875-1-nicoleotsuka@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Sep 21, 2018 at 05:56:00AM -0700, Guenter Roeck wrote:
+This series adds a initial DT binding doc for ina3221. It defines
+a child node to describe the input source of each ina3221 channel.
+Then it changes the driver to handle the information properly.
 
-> > I tried is_visible but it looks like it won't be that neat to
-> > implement as some attributes of this driver don't really pass
-> > the channel index to the store()/show() but some other indexes.
-> > 
-> 
-> The channel index is not the only means that can be used to determine
-> the channel index. Many drivers use the position in the attrs[] array
-> to determine the channel index. I don't see why this would not be
-> possible here.
+Changelog
+v1->v2:
+ * Redefined DT bindings (detail in PATCH-1)
+ * Changed the driver code accordingly (detail in PATCH-2)
 
-Hmmm, that should simply work...I didn't mean not possible though.
+ .../devicetree/bindings/hwmon/ina3221.txt     |  38 ++++++
+ Documentation/hwmon/ina3221                   |   1 +
+ drivers/hwmon/ina3221.c                       | 126 ++++++++++++++++--
+ 3 files changed, 155 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
 
-> > If you are very against the dynamical group, I can drop it to
-> > leave the sysfs node as it was.
-> > 
-> > And for the name nodes that I was talking about above, I will
-> > add an sysfs store() function so non-DT users can set them,
-> > and I also removed the confusing "unknown" default name.
-> > 
-> 
-> The label attributes are RO. Please follow the ABI.
-> 
-> temp[1-*]_label Suggested temperature channel label.
-
-Thanks a lot for the hint. I looked up the doc and feel that
-this one probably fits my situation more:
-    in[0-*]_label   Suggested voltage channel label.
-
-Will follow it in my next version.
-
-Thank you
-Nicolin
+-- 
+2.17.1
