@@ -1,44 +1,52 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12664 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388299AbeIUH2y (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Sep 2018 03:28:54 -0400
-From: zhong jiang <zhongjiang@huawei.com>
-To: <linux@roeck-us.net>
-CC: <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCHv2] hwmon: scpi-hwmon:  remove redundant continue
-Date: Fri, 21 Sep 2018 09:30:03 +0800
-Message-ID: <1537493403-15745-1-git-send-email-zhongjiang@huawei.com>
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:56138 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725898AbeIUP7B (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Sep 2018 11:59:01 -0400
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: pwm-fan: Silence error on probe deferral
+Date: Fri, 21 Sep 2018 12:10:47 +0200
+Message-Id: <20180921101048.11679-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The continue will not truely skip any code. hence it is safe to
-remove it.
+From: Thierry Reding <treding@nvidia.com>
 
-Signed-off-by: zhong jiang <zhongjiang@huawei.com>
+Probe deferrals aren't actual errors, so silence the error message in
+case the PWM cannot yet be acquired.
+
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/hwmon/scpi-hwmon.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/pwm-fan.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 7e49da5..111d521 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -286,10 +286,8 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 		 * any thermal zones or if the thermal subsystem is
- 		 * not configured.
- 		 */
--		if (IS_ERR(z)) {
-+		if (IS_ERR(z))
- 			devm_kfree(dev, zone);
--			continue;
--		}
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 7838af58f92d..936aaf76dd6e 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -221,8 +221,12 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	ctx->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
+ 	if (IS_ERR(ctx->pwm)) {
+-		dev_err(&pdev->dev, "Could not get PWM\n");
+-		return PTR_ERR(ctx->pwm);
++		ret = PTR_ERR(ctx->pwm);
++
++		if (ret != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Could not get PWM: %d\n", ret);
++
++		return ret;
  	}
  
- 	return 0;
+ 	platform_set_drvdata(pdev, ctx);
 -- 
-1.7.12.4
+2.19.0
