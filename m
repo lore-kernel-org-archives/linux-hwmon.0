@@ -1,44 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.linuxfoundation.org ([140.211.169.12]:49584 "EHLO
-        mail.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727623AbeITDSe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Sep 2018 23:18:34 -0400
-Date: Wed, 19 Sep 2018 23:38:39 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] hwmon fixes for v4.19-rc5
-Message-ID: <20180919213839.GA16944@kroah.com>
-References: <1537376082-32219-1-git-send-email-linux@roeck-us.net>
+Received: from szxga06-in.huawei.com ([45.249.212.32]:56872 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388788AbeIUHYq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Sep 2018 03:24:46 -0400
+Message-ID: <5BA44B89.6090006@huawei.com>
+Date: Fri, 21 Sep 2018 09:38:17 +0800
+From: zhong jiang <zhongjiang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1537376082-32219-1-git-send-email-linux@roeck-us.net>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: remove redundant continue
+References: <1537431070-38261-1-git-send-email-zhongjiang@huawei.com> <20180920173045.GA15272@roeck-us.net>
+In-Reply-To: <20180920173045.GA15272@roeck-us.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 19, 2018 at 09:54:42AM -0700, Guenter Roeck wrote:
-> Hi Linus,
-> Hi Greg,
-> 
-> Please pull hwmon fixes for Linux v4.19-rc5 from signed tag:
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-linus-v4.19-rc5
-> 
-> Thanks,
+On 2018/9/21 1:30, Guenter Roeck wrote:
+> On Thu, Sep 20, 2018 at 04:11:10PM +0800, zhong jiang wrote:
+>> The continue will not truely skip any code. hence it is safe to
+>> remove it.
+>>
+>> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
+> The proper subject line would be
+>
+> hwmon: (scpi-hwmon) <summary>
+>
+> Since it now happened several times that I got a patch without proper
+> subject (ie where the subject does not even mention the affected driver),
+> I am no longer going to accept patches if the affected driver is missing,
+> sorry.
+I will fix that and resend.  Thanks
+
+Sincerely,
+zhong jiang
 > Guenter
-> ------
-> 
-> The following changes since commit 57361846b52bc686112da6ca5368d11210796804:
-> 
->   Linux 4.19-rc2 (2018-09-02 14:37:30 -0700)
-> 
-> are available in the git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-linus-v4.19-rc5
-
-Now pulled, thanks.
-
-greg k-h
+>
+>> ---
+>>  drivers/hwmon/scpi-hwmon.c | 4 +---
+>>  1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+>> index 7e49da5..111d521 100644
+>> --- a/drivers/hwmon/scpi-hwmon.c
+>> +++ b/drivers/hwmon/scpi-hwmon.c
+>> @@ -286,10 +286,8 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+>>  		 * any thermal zones or if the thermal subsystem is
+>>  		 * not configured.
+>>  		 */
+>> -		if (IS_ERR(z)) {
+>> +		if (IS_ERR(z))
+>>  			devm_kfree(dev, zone);
+>> -			continue;
+>> -		}
+>>  	}
+>>  
+>>  	return 0;
+>> -- 
+>> 1.7.12.4
+>>
+>
