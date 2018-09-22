@@ -1,47 +1,56 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:43161 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727993AbeIVWOs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Sep 2018 18:14:48 -0400
-Received: by mail-pg1-f173.google.com with SMTP id q19-v6so6507136pgn.10
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Sep 2018 09:20:42 -0700 (PDT)
-Subject: Re: NCT7802Y on Asus Fan Extension Card
-To: Aleksandr Mezin <mezin.alexander@gmail.com>,
-        linux-hwmon@vger.kernel.org
-References: <CADnvcfKW_YCUNz_+42c5XApFUqYdij2qQ-cjBR_gHRjq4=aK4g@mail.gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ef58b84e-4926-cd6f-4f4a-6d8b31e2e465@roeck-us.net>
-Date: Sat, 22 Sep 2018 09:20:38 -0700
+Return-Path: <nicoleotsuka@gmail.com>
+Return-path: <nicoleotsuka@gmail.com>
+Date: Sat, 22 Sep 2018 11:03:48 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+	corbet@lwn.net, afd@ti.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add ina3221 documentation
+Message-ID: <20180922180348.GA9092@Asurada>
+References: <20180921223216.634-1-nicoleotsuka@gmail.com>
+ <20180921223216.634-2-nicoleotsuka@gmail.com>
+ <3c117b80-f671-1e57-6eab-3d9801b4b889@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <CADnvcfKW_YCUNz_+42c5XApFUqYdij2qQ-cjBR_gHRjq4=aK4g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c117b80-f671-1e57-6eab-3d9801b4b889@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 09/22/2018 07:38 AM, Aleksandr Mezin wrote:
-> Hello.
+> >+2) child nodes
+> >+  The names of child nodes should indicate input source names
+> >+
+> >+  Required properties:
+> >+  - input-id: Must be 1, 2 or 3
+> >+
+> >+  Optional properties:
+> >+  - shunt-resistor: Shunt resistor value in micro-Ohm
+> >+  - status: Should be "disabled" if no input source
+> >+
+> >+  Example:
+> >+
+> >+  input1 {
+> >+          input-id = <0x1>;
+> >+          status = "disabled";
+> >+  };
+> >+  VDD_GPU {
+> >+          input-id = <0x2>;
+> >+          shunt-resistor = <5000>;
+> >+  };
+> >
 > 
-> I'm trying to get monitoring working for Asus Fan Extension Card. The
-> card has NCT7802Y on it. "modprobe nct7802" doesn't fail, the module
-> loads, no errors in dmesg, but hwmon device doesn't show up too. What
-> am I missing?
-> 
-> The motherboard is Asus Prime X299-A, with NCT6796D on it (mostly working).
-> 
-modprobe doesn't guarantee that the device is instantiated due to chip
-limitations (its device ID register is not always accessible). We also
-don't know if the chip is directly connected to an i2c bus visible to
-the CPU, or to an embedded controller.
+> Using child nodes is a good idea. However, you are converting the node name into
+> the hwmon 'label' attribute which I can not accept. First, it is undocumented,
+> second, it effectively creates an undocumented property (if one wants to configure
+> the shunt resistor value, one has to configure a child node which is converted
+> into a label), and third, it violates the hwmon ABI ('input1' is not a "hint
+> about what this voltage channel is being used for").
 
-You could try to run i2cdetect to see if the chip is visible. If it is, you may
-have to instantiate it manually. If it isn't, the chip is not visible to the CPU,
-and you are out of luck.
+Oh. I see the point here now. Then a child name could be just input[123],
+and I will add a separate optional child property to indicate the label.
 
-What is wrong with the NCT6796D ?
+Will fix it in next ver.
 
-Thanks,
-Guenter
+Thanks
+Nicolin
