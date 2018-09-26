@@ -1,80 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40349 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbeI0CAI (ORCPT
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:47028 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbeI0CMz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Sep 2018 22:00:08 -0400
-Date: Wed, 26 Sep 2018 12:45:34 -0700
+        Wed, 26 Sep 2018 22:12:55 -0400
+Date: Wed, 26 Sep 2018 12:58:17 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Nicolin Chen <nicoleotsuka@gmail.com>
 Cc: jdelvare@suse.com, corbet@lwn.net, afd@ti.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: ina3221: Add power sysfs nodes
-Message-ID: <20180926194534.GB18731@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: ina3221: Add enable sysfs nodes
+Message-ID: <20180926195817.GA19695@roeck-us.net>
 References: <20180926064245.4091-1-nicoleotsuka@gmail.com>
- <20180926064245.4091-2-nicoleotsuka@gmail.com>
- <dbf77a33-ae5c-1ac7-c94f-fa5505074adb@roeck-us.net>
- <20180926182006.GB6329@Asurada-Nvidia.nvidia.com>
+ <20180926064245.4091-3-nicoleotsuka@gmail.com>
+ <0cfe55e1-10d8-ac1f-8b6e-73777074a219@roeck-us.net>
+ <20180926180243.GA6329@Asurada-Nvidia.nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20180926182006.GB6329@Asurada-Nvidia.nvidia.com>
+In-Reply-To: <20180926180243.GA6329@Asurada-Nvidia.nvidia.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Nicolin,
+Nicolin,
 
-On Wed, Sep 26, 2018 at 11:20:06AM -0700, Nicolin Chen wrote:
-> On Wed, Sep 26, 2018 at 05:34:53AM -0700, Guenter Roeck wrote:
-> > Hi Nicolin,
-> > 
+On Wed, Sep 26, 2018 at 11:02:44AM -0700, Nicolin Chen wrote:
+> On Wed, Sep 26, 2018 at 06:06:32AM -0700, Guenter Roeck wrote:
 > > On 09/25/2018 11:42 PM, Nicolin Chen wrote:
-> > > The hwmon sysfs ABI supports powerX_input and powerX_crit. This
-> > > can ease user space programs who care more about power in total
-> > > than voltage or current individually.
+> > > The inX_enable interface allows user space to enable or disable
+> > > the corresponding channel. Meanwhile, according to hwmon ABI, a
+> > > disabled channel/sensor should return -ENODATA as a read result.
 > > > 
-> > > So this patch adds these two sysfs nodes for INA3221 driver.
+> > > However, there're configurable nodes sharing the same __show()
+> > > functions. So this change also adds to check if the attribute is
+> > > read-only to make sure it's not reading a configuration but the
+> > > sensor data.
+>  
+> > One necessary high level change I don't see below: With this change,
+> > we should no longer drop a channel entirely if it is disabled from
+> > devicetree. All channels should be visible but report -ENODATA if
+> > disabled. In other words, it should be possible for the 'enable' flag
+> > to override settings in DT.
 > 
-> > Ah, sorry, we can't do that. The sysfs nodes are for chips providing power
-> > registers, not for kernel drivers to provide calculations based on voltage
-> > and current measurements.
-> 
-> Hmm..I saw ina2xx.c and ltc4215.c are doing similar calculations...
-> 
-
-ina2xx.c doesn't; the chips supported by the driver do have a register
-reporting the power (0x03). ltc4215.c was not reviewed by a hwmon
-maintainer. I think I mentioned before that you can find anything you want
-in the Linux kernel. That doesn't make it right.
-
-> > Basic guideline is that we report what is there, not some calculation based
-> > on it.
-> 
-> I could feel the back thoughts behind the guideline, but this does
-> give user space programs some trouble -- I have a few programs that
-> were used to read ina2xx driver which provides power nodes, but now
-> those programs will have to implement another function to read the
-> voltage and current separately to do further calculations.
-> 
-> Do you know any better solution for this situation?
+> Hmm...I don't feel so convinced here. The status in DT binding isn't
+> exactly a setting but a physical status: if a hardware design leaves
+> a channel to be disconnected, I don't really see a point in enabling
+> it in the runtime. Or maybe you can shed some light on it?
 > 
 
-Userspace simply must not assume that power attributes exist and calculate
-it from voltage and current attributes if needed.
+You are making an assumption from your use case. It might as well be that
+some or all channels are disabled in DT by default to conserve power,
+not because they are disconnected.
 
-> > This is even more true for power limits: We can not assume that the power limit
-> > is (max voltage * max current). or (current voltage * max_current), or anything
-> > else. We simply don't have the knowledge to make that assumption.
+> Meanwhile, I believe the enable nodes are necessary in either way as
+> users could decide to disable the connected channels, based on their
+> use cases, to save power.
 > 
-> I agree that power limit is a bit tricky here as the voltage could
-> change depending on the user space, Yes, I assumed that users who
-> set_power() should be aware of it (whether fixed or dynamical) so
-> as to decide to configure power limit or just current limit.
-> 
-
-You just can not make any such assumptions, sorry. Limit attributes
-absolutely must be reflected in hardware. 
+Agreed, though I would not say "necessary". "Useful" seems to be more
+appropriate.
 
 Thanks,
 Guenter
