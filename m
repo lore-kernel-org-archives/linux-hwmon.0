@@ -1,71 +1,80 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43736 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725929AbeIXGKG (ORCPT
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40349 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbeI0CAI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Sep 2018 02:10:06 -0400
-Date: Sun, 23 Sep 2018 17:10:25 -0700
-From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        corbet@lwn.net, afd@ti.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wed, 26 Sep 2018 22:00:08 -0400
+Date: Wed, 26 Sep 2018 12:45:34 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nicolin Chen <nicoleotsuka@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, afd@ti.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add ina3221 documentation
-Message-ID: <20180924001025.GA7496@Asurada>
-References: <20180923041118.8743-1-nicoleotsuka@gmail.com>
- <20180923041118.8743-2-nicoleotsuka@gmail.com>
- <353ccbbd-94c8-72eb-eb98-8a0507431e15@roeck-us.net>
- <20180923053151.GB9960@Asurada>
- <ce76fdf2-2894-96ad-d2f5-b2c25f197ee4@roeck-us.net>
- <20180923060120.GA8872@Asurada-Nvidia.nvidia.com>
- <fe5c9570-70f8-d54d-509e-fce3733a4145@roeck-us.net>
+Subject: Re: [PATCH 1/2] hwmon: ina3221: Add power sysfs nodes
+Message-ID: <20180926194534.GB18731@roeck-us.net>
+References: <20180926064245.4091-1-nicoleotsuka@gmail.com>
+ <20180926064245.4091-2-nicoleotsuka@gmail.com>
+ <dbf77a33-ae5c-1ac7-c94f-fa5505074adb@roeck-us.net>
+ <20180926182006.GB6329@Asurada-Nvidia.nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fe5c9570-70f8-d54d-509e-fce3733a4145@roeck-us.net>
+In-Reply-To: <20180926182006.GB6329@Asurada-Nvidia.nvidia.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 22, 2018 at 11:36:22PM -0700, Guenter Roeck wrote:
-> >>>>>+  Optional properties:
-> >>>>>+  - input-label: Name of the input source
+Hi Nicolin,
+
+On Wed, Sep 26, 2018 at 11:20:06AM -0700, Nicolin Chen wrote:
+> On Wed, Sep 26, 2018 at 05:34:53AM -0700, Guenter Roeck wrote:
+> > Hi Nicolin,
+> > 
+> > On 09/25/2018 11:42 PM, Nicolin Chen wrote:
+> > > The hwmon sysfs ABI supports powerX_input and powerX_crit. This
+> > > can ease user space programs who care more about power in total
+> > > than voltage or current individually.
+> > > 
+> > > So this patch adds these two sysfs nodes for INA3221 driver.
 > 
-> Just noticed the "input-" here. Please just use "label".
-
-Will fix in v5.
-
-> >>>>>+  input1 {
-> >>>>>+          input-id = <0x1>;
-> >>>>
-> >>>>We'll have to find a better name for this. Feel free to look up examples in the
-> >>>>existing devicetree descriptions. The one that seems to be used most of the time
-> >>>>to indicate a channel index or id is "reg". It should also start with 0 - there
-> >>>>is no real reason for it to start with 1; it only makes the code more complex.
-> >>>
-> >>>The reason is that the port start from 1 in the datasheet.
-> >>>
-> >>
-> >>Maybe, but for me I'll want to have something that we can reuse for other chips.
-> >>Having the index start with 0 for one chip and with 1 for another would be
-> >>confusing. It is bad enough that we have in[0..n] for voltages and temp[1..n]
-> >>for temperatures. I would not want to see the same in devicetree files,
-> >>and much less so on a per-device basis. It is also pretty common to start
-> >>channel numbers with 0 in devicetree files.
-> >
-> >Understood. I search a bit and saw most of "*-id" start from 0,
-> >although I cannot be sure whether their Datasheet/RM/schematics
-> >are counting from 0 or 1.
-> >
-> >And I also found a transposing example:
-> >     Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt
-> >
+> > Ah, sorry, we can't do that. The sysfs nodes are for chips providing power
+> > registers, not for kernel drivers to provide calculations based on voltage
+> > and current measurements.
 > 
-> You'll always find an example for anything in the kernel. In this case,
-> it is for one specific chip. I'll want this to be reusable as template for
-> _all_ hardware monitoring chips.
+> Hmm..I saw ina2xx.c and ltc4215.c are doing similar calculations...
+> 
 
-I see.
+ina2xx.c doesn't; the chips supported by the driver do have a register
+reporting the power (0x03). ltc4215.c was not reviewed by a hwmon
+maintainer. I think I mentioned before that you can find anything you want
+in the Linux kernel. That doesn't make it right.
 
-Thanks
-Nicolin
+> > Basic guideline is that we report what is there, not some calculation based
+> > on it.
+> 
+> I could feel the back thoughts behind the guideline, but this does
+> give user space programs some trouble -- I have a few programs that
+> were used to read ina2xx driver which provides power nodes, but now
+> those programs will have to implement another function to read the
+> voltage and current separately to do further calculations.
+> 
+> Do you know any better solution for this situation?
+> 
+
+Userspace simply must not assume that power attributes exist and calculate
+it from voltage and current attributes if needed.
+
+> > This is even more true for power limits: We can not assume that the power limit
+> > is (max voltage * max current). or (current voltage * max_current), or anything
+> > else. We simply don't have the knowledge to make that assumption.
+> 
+> I agree that power limit is a bit tricky here as the voltage could
+> change depending on the user space, Yes, I assumed that users who
+> set_power() should be aware of it (whether fixed or dynamical) so
+> as to decide to configure power limit or just current limit.
+> 
+
+You just can not make any such assumptions, sorry. Limit attributes
+absolutely must be reflected in hardware. 
+
+Thanks,
+Guenter
