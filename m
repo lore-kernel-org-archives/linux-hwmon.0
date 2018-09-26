@@ -1,47 +1,57 @@
 Return-Path: <nicoleotsuka@gmail.com>
 Return-path: <nicoleotsuka@gmail.com>
-Date: Wed, 26 Sep 2018 11:02:44 -0700
+Date: Wed, 26 Sep 2018 11:20:06 -0700
 From: Nicolin Chen <nicoleotsuka@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: jdelvare@suse.com, corbet@lwn.net, afd@ti.com,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: ina3221: Add enable sysfs nodes
-Message-ID: <20180926180243.GA6329@Asurada-Nvidia.nvidia.com>
+Subject: Re: [PATCH 1/2] hwmon: ina3221: Add power sysfs nodes
+Message-ID: <20180926182006.GB6329@Asurada-Nvidia.nvidia.com>
 References: <20180926064245.4091-1-nicoleotsuka@gmail.com>
- <20180926064245.4091-3-nicoleotsuka@gmail.com>
- <0cfe55e1-10d8-ac1f-8b6e-73777074a219@roeck-us.net>
+ <20180926064245.4091-2-nicoleotsuka@gmail.com>
+ <dbf77a33-ae5c-1ac7-c94f-fa5505074adb@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0cfe55e1-10d8-ac1f-8b6e-73777074a219@roeck-us.net>
+In-Reply-To: <dbf77a33-ae5c-1ac7-c94f-fa5505074adb@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Sep 26, 2018 at 06:06:32AM -0700, Guenter Roeck wrote:
+On Wed, Sep 26, 2018 at 05:34:53AM -0700, Guenter Roeck wrote:
+> Hi Nicolin,
+> 
 > On 09/25/2018 11:42 PM, Nicolin Chen wrote:
-> > The inX_enable interface allows user space to enable or disable
-> > the corresponding channel. Meanwhile, according to hwmon ABI, a
-> > disabled channel/sensor should return -ENODATA as a read result.
+> > The hwmon sysfs ABI supports powerX_input and powerX_crit. This
+> > can ease user space programs who care more about power in total
+> > than voltage or current individually.
 > > 
-> > However, there're configurable nodes sharing the same __show()
-> > functions. So this change also adds to check if the attribute is
-> > read-only to make sure it's not reading a configuration but the
-> > sensor data.
- 
-> One necessary high level change I don't see below: With this change,
-> we should no longer drop a channel entirely if it is disabled from
-> devicetree. All channels should be visible but report -ENODATA if
-> disabled. In other words, it should be possible for the 'enable' flag
-> to override settings in DT.
+> > So this patch adds these two sysfs nodes for INA3221 driver.
 
-Hmm...I don't feel so convinced here. The status in DT binding isn't
-exactly a setting but a physical status: if a hardware design leaves
-a channel to be disconnected, I don't really see a point in enabling
-it in the runtime. Or maybe you can shed some light on it?
+> Ah, sorry, we can't do that. The sysfs nodes are for chips providing power
+> registers, not for kernel drivers to provide calculations based on voltage
+> and current measurements.
 
-Meanwhile, I believe the enable nodes are necessary in either way as
-users could decide to disable the connected channels, based on their
-use cases, to save power.
+Hmm..I saw ina2xx.c and ltc4215.c are doing similar calculations...
+
+> Basic guideline is that we report what is there, not some calculation based
+> on it.
+
+I could feel the back thoughts behind the guideline, but this does
+give user space programs some trouble -- I have a few programs that
+were used to read ina2xx driver which provides power nodes, but now
+those programs will have to implement another function to read the
+voltage and current separately to do further calculations.
+
+Do you know any better solution for this situation?
+
+> This is even more true for power limits: We can not assume that the power limit
+> is (max voltage * max current). or (current voltage * max_current), or anything
+> else. We simply don't have the knowledge to make that assumption.
+
+I agree that power limit is a bit tricky here as the voltage could
+change depending on the user space, Yes, I assumed that users who
+set_power() should be aware of it (whether fixed or dynamical) so
+as to decide to configure power limit or just current limit.
 
 Thanks
 Nicolin
