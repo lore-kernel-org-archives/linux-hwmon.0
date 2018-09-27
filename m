@@ -11,42 +11,95 @@ Cc: afd@ti.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v7 0/2] Add an initial DT binding doc for ina3221
-Date: Thu, 27 Sep 2018 13:54:04 -0700
-Message-Id: <20180927205406.21932-1-nicoleotsuka@gmail.com>
+Subject: [PATCH v7 1/2] dt-bindings: hwmon: Add ina3221 documentation
+Date: Thu, 27 Sep 2018 13:54:05 -0700
+Message-Id: <20180927205406.21932-2-nicoleotsuka@gmail.com>
+In-Reply-To: <20180927205406.21932-1-nicoleotsuka@gmail.com>
+References: <20180927205406.21932-1-nicoleotsuka@gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-This series adds a initial DT binding doc for ina3221. It defines
-a child node to describe the input source of each ina3221 channel.
-Then it changes the driver to handle the information properly.
+Texas Instruments INA3221 is a triple-channel shunt and bus
+voltage monitor. This patch adds a DT binding doc for it.
 
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
 Changelog
 v6->v7:
- * Refined the example in the binding doc (PATCH-1)
+ * Restored three channel examples and merged them with the parent one
 v5->v6:
- * Removed status property and merged examples (PATCH-1)
- * Added in[123]_enable sysfs nodes (PATCH-2)
+ * Removed status property as no need to explicitly list it.
+ * Combined all examples into a complete one.
 v4->v5:
- * Changed two property names of child node (PATCH-1)
- * Changed the driver accordingly and simplified is_visible (PATCH-2)
+ * Replaced "input-id" with "reg" and added address-cells and size-cells
+ * Replaced "input-label" with "label"
+ * Replaced "shunt-resistor" with "shunt-resistor-micro-ohms"
 v3->v4:
- * Fixed one place in child DT node bindings (PATCH-1)
- * Changed the driver accordingly and added is_visible (PATCH-2)
+ * Removed the attempt of putting labels in the node names
+ * Added a new optional label property in the child node
+ * Updated examples accordingly
 v2->v3:
- * Fixed two places in DT bindings (PATCH-1)
+ * Added a simple subject in the line 1
+ * Fixed the shunt resistor value in the example
 v1->v2:
- * Redefined DT bindings (detail in PATCH-1)
- * Changed the driver code accordingly (detail in PATCH-2)
+ * Dropped channel name properties
+ * Added child node definitions.
+ * * Added shunt resistor property in the child node
+ * * Added status property to indicate connection status
+ * * Changed to use child node name as the label of input source
 
-Nicolin Chen (2):
-  dt-bindings: hwmon: Add ina3221 documentation
-  hwmon: ina3221: Read channel input source info from DT
-
- .../devicetree/bindings/hwmon/ina3221.txt     |  44 ++++
- Documentation/hwmon/ina3221                   |   2 +
- drivers/hwmon/ina3221.c                       | 237 ++++++++++++++++--
- 3 files changed, 269 insertions(+), 14 deletions(-)
+ .../devicetree/bindings/hwmon/ina3221.txt     | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
 
+diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+new file mode 100644
+index 000000000000..a7b25caa2b8e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+@@ -0,0 +1,44 @@
++Texas Instruments INA3221 Device Tree Bindings
++
++1) ina3221 node
++  Required properties:
++  - compatible: Must be "ti,ina3221"
++  - reg: I2C address
++
++  Optional properties:
++  = The node contains optional child nodes for three channels =
++  = Each child node describes the information of input source =
++
++  - #address-cells: Required only if a child node is present. Must be 1.
++  - #size-cells: Required only if a child node is present. Must be 0.
++
++2) child nodes
++  Required properties:
++  - reg: Must be 0, 1 or 2, corresponding to IN1, IN2 or IN3 port of INA3221
++
++  Optional properties:
++  - label: Name of the input source
++  - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
++
++Example:
++
++ina3221@40 {
++	compatible = "ti,ina3221";
++	reg = <0x40>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	input@0 {
++		reg = <0x0>;
++		status = "disabled";
++	};
++	input@1 {
++		reg = <0x1>;
++		shunt-resistor-micro-ohms = <5000>;
++	};
++	input@2 {
++		reg = <0x2>;
++		label = "VDD_5V";
++		shunt-resistor-micro-ohms = <5000>;
++	};
++};
 -- 
 2.17.1
