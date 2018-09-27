@@ -1,249 +1,117 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38407 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbeIZTT3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Sep 2018 15:19:29 -0400
-Subject: Re: [PATCH 2/2] hwmon: ina3221: Add enable sysfs nodes
-To: Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com,
-        corbet@lwn.net
-Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20180926064245.4091-1-nicoleotsuka@gmail.com>
- <20180926064245.4091-3-nicoleotsuka@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <0cfe55e1-10d8-ac1f-8b6e-73777074a219@roeck-us.net>
-Date: Wed, 26 Sep 2018 06:06:32 -0700
+Return-Path: <robherring2@gmail.com>
+Return-path: <robherring2@gmail.com>
+Date: Thu, 27 Sep 2018 12:42:55 -0500
+From: Rob Herring <robh@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com,
+	mark.rutland@arm.com, corbet@lwn.net, afd@ti.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: Add ina3221 documentation
+Message-ID: <20180927174255.GA7587@bogus>
+References: <20180925225930.31886-1-nicoleotsuka@gmail.com>
+ <20180925225930.31886-2-nicoleotsuka@gmail.com>
+ <4f16baf7-b1bc-c7d2-3dd9-ed10b78d59b6@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20180926064245.4091-3-nicoleotsuka@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f16baf7-b1bc-c7d2-3dd9-ed10b78d59b6@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Nicolin,
-
-On 09/25/2018 11:42 PM, Nicolin Chen wrote:
-> The inX_enable interface allows user space to enable or disable
-> the corresponding channel. Meanwhile, according to hwmon ABI, a
-> disabled channel/sensor should return -ENODATA as a read result.
+On Tue, Sep 25, 2018 at 06:52:29PM -0700, Guenter Roeck wrote:
+> Hi Nicolin,
 > 
-> However, there're configurable nodes sharing the same __show()
-> functions. So this change also adds to check if the attribute is
-> read-only to make sure it's not reading a configuration but the
-> sensor data.
+> On 09/25/2018 03:59 PM, Nicolin Chen wrote:
+> > Texas Instruments INA3221 is a triple-channel shunt and bus
+> > voltage monitor. This patch adds a DT binding doc for it.
+> > 
+> > Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> > ---
+> > Changelog
+> > v4->v5:
+> >   * Replaced "input-id" with "reg" and added address-cells and size-cells
+> >   * Replaced "input-label" with "label"
+> >   * Replaced "shunt-resistor" with "shunt-resistor-micro-ohms"
+> > v3->v4:
+> >   * Removed the attempt of putting labels in the node names
+> >   * Added a new optional label property in the child node
+> >   * Updated examples accordingly
+> > v2->v3:
+> >   * Added a simple subject in the line 1
+> >   * Fixed the shunt resistor value in the example
+> > v1->v2:
+> >   * Dropped channel name properties
+> >   * Added child node definitions.
+> >   * * Added shunt resistor property in the child node
+> >   * * Added status property to indicate connection status
+> >   * * Changed to use child node name as the label of input source
+> > 
+> >   .../devicetree/bindings/hwmon/ina3221.txt     | 49 +++++++++++++++++++
+> >   1 file changed, 49 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> > new file mode 100644
+> > index 000000000000..e17a897f4803
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> > @@ -0,0 +1,49 @@
+> > +Texas Instruments INA3221 Device Tree Bindings
+> > +
+> > +1) ina3221 node
+> > +  Required properties:
+> > +  - compatible: Must be "ti,ina3221"
+> > +  - reg: I2C address
+> > +
+> > +  Optional properties:
+> > +  = The node contains optional child nodes for three channels =
+> > +  = Each child node describes the information of input source =
+> > +
+> > +  - #address-cells: Required only if a child node is present. Must be 1.
+> > +  - #size-cells: Required only if a child node is present. Must be 0.
+> > +
+> > +  Example:
+> > +
+> > +  ina3221@40 {
+> > +          compatible = "ti,ina3221";
+> > +          reg = <0x40>;
+> > +          #address-cells = <1>;
+> > +          #size-cells = <0>;
+> > +
+> > +          [ child node definitions... ]
+> > +  };
+> > +
+> > +2) child nodes
+> > +  Required properties:
+> > +  - reg: Must be 0, 1 or 2, corresponding to IN1, IN2 or IN3 port of INA3221
+> > +
+> > +  Optional properties:
+> > +  - label: Name of the input source
+> > +  - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
+> > +  - status: Should be "disabled" if no input source
+> > +
+> > +  Example:
+> > +
+> > +  input@0 {
+> > +          reg = <0x0>;
+> > +          status = "disabled";
 > 
-
-One necessary high level change I don't see below: With this change,
-we should no longer drop a channel entirely if it is disabled from
-devicetree. All channels should be visible but report -ENODATA if
-disabled. In other words, it should be possible for the 'enable' flag
-to override settings in DT.
-
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
->   Documentation/hwmon/ina3221 |  1 +
->   drivers/hwmon/ina3221.c     | 85 +++++++++++++++++++++++++++++++++++++
->   2 files changed, 86 insertions(+)
+> I kind of feel embarrassed that I asked for the reg change ... especially while
+> saying at the same time that I would like to see this work for other chips
+> as well.
 > 
-> diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
-> index 6be64b553cd0..1aa32366d8aa 100644
-> --- a/Documentation/hwmon/ina3221
-> +++ b/Documentation/hwmon/ina3221
-> @@ -23,6 +23,7 @@ Sysfs entries
->   
->   in[123]_input           Bus voltage(mV) channels
->   in[123]_label           Voltage channel labels
-> +in[123]_enable          Voltage channel enable controls
->   curr[123]_input         Current(mA) measurement channels
->   shunt[123]_resistor     Shunt resistance(uOhm) channels
->   curr[123]_crit          Critical alert current(mA) setting, activates the
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index 5890a2da3bfe..1be2d062a19e 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -78,6 +78,9 @@ enum ina3221_channels {
->   };
->   
->   static const unsigned int register_channel[] = {
-> +	[INA3221_BUS1] = INA3221_CHANNEL1,
-> +	[INA3221_BUS2] = INA3221_CHANNEL2,
-> +	[INA3221_BUS3] = INA3221_CHANNEL3,
->   	[INA3221_SHUNT1] = INA3221_CHANNEL1,
->   	[INA3221_SHUNT2] = INA3221_CHANNEL2,
->   	[INA3221_SHUNT3] = INA3221_CHANNEL3,
-> @@ -113,6 +116,19 @@ struct ina3221_data {
->   	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
->   };
->   
-> +static inline bool ina3221_is_enable(struct ina3221_data *ina, int channel)
-
-s/is_enable/is_enabled/, maybe ?
-
-> +{
-> +	unsigned int config;
-> +	int ret;
-> +
-> +	/* Return false to reject further read */
-> +	ret = regmap_read(ina->regmap, INA3221_CONFIG, &config);
-> +	if (ret)
-> +		return false;
-> +
-> +	return (config & INA3221_CONFIG_CHx_EN(channel)) > 0;
-
-The "> 0" is unnecessary. Conversion to bool is automatic. If you want to make
-it explicit, please use
-
-	return !!(config & INA3221_CONFIG_CHx_EN(channel));
-
-It should not be necessary to re-read the value from the chip all the time.
-I would suggest to cache the value in the 'disabled' variable.
-
-> +}
-> +
->   static ssize_t ina3221_show_label(struct device *dev,
->   				  struct device_attribute *attr, char *buf)
->   {
-> @@ -124,6 +140,45 @@ static ssize_t ina3221_show_label(struct device *dev,
->   	return snprintf(buf, PAGE_SIZE, "%s\n", input->label);
->   }
->   
-> +static ssize_t ina3221_show_enable(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int channel = sd_attr->index;
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n",
-> +			ina3221_is_enable(ina, channel));
-> +}
-> +
-> +static ssize_t ina3221_set_enable(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t count)
-> +{
-> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	unsigned int channel = sd_attr->index;
-> +	unsigned int mask = INA3221_CONFIG_CHx_EN(channel);
-> +	unsigned int config;
-> +	int val, ret;
-> +
-> +	ret = kstrtoint(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* inX_enable only accepts 1 for enabling or 0 for disabling */
-> +	if (val != 0 && val != 1)
-> +		return -EINVAL;
-> +
-Just use kstrtobool().
-
-> +	config = val ? mask : 0;
-> +
-> +	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG, mask, config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
->   static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
->   			      int *val)
->   {
-> @@ -146,8 +201,13 @@ static ssize_t ina3221_show_bus_voltage(struct device *dev,
->   	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->   	struct ina3221_data *ina = dev_get_drvdata(dev);
->   	unsigned int reg = sd_attr->index;
-> +	unsigned int channel = register_channel[reg];
->   	int val, voltage_mv, ret;
->   
-> +	/* No data for read-only attribute if channel is disabled */
-> +	if (!attr->store && !ina3221_is_enable(ina, channel))
-> +		return -ENODATA;
-> +
->   	ret = ina3221_read_value(ina, reg, &val);
->   	if (ret)
->   		return ret;
-> @@ -164,8 +224,13 @@ static ssize_t ina3221_show_shunt_voltage(struct device *dev,
->   	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->   	struct ina3221_data *ina = dev_get_drvdata(dev);
->   	unsigned int reg = sd_attr->index;
-> +	unsigned int channel = register_channel[reg];
->   	int val, voltage_uv, ret;
->   
-> +	/* No data for read-only attribute if channel is disabled */
-> +	if (!attr->store && !ina3221_is_enable(ina, channel))
-> +		return -ENODATA;
-> +
->   	ret = ina3221_read_value(ina, reg, &val);
->   	if (ret)
->   		return ret;
-> @@ -201,8 +266,13 @@ static ssize_t ina3221_show_current(struct device *dev,
->   	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
->   	struct ina3221_data *ina = dev_get_drvdata(dev);
->   	unsigned int reg = sd_attr->index;
-> +	unsigned int channel = register_channel[reg];
->   	int current_ma, ret;
->   
-> +	/* No data for read-only attribute if channel is disabled */
-> +	if (!attr->store && !ina3221_is_enable(ina, channel))
-> +		return -ENODATA;
-> +
->   	ret = __ina3221_show_current(ina, reg, &current_ma);
->   	if (ret)
->   		return ret;
-> @@ -318,6 +388,10 @@ static ssize_t ina3221_show_power(struct device *dev,
->   	int val, current_ma, voltage_mv, ret;
->   	s64 power_uw;
->   
-> +	/* No data for read-only attribute if channel is disabled */
-> +	if (!attr->store && !ina3221_is_enable(ina, channel))
-> +		return -ENODATA;
-> +
->   	/* Read bus voltage */
->   	ret = ina3221_read_value(ina, reg_bus, &val);
->   	if (ret)
-> @@ -377,6 +451,14 @@ static SENSOR_DEVICE_ATTR(in2_label, 0444,
->   static SENSOR_DEVICE_ATTR(in3_label, 0444,
->   		ina3221_show_label, NULL, INA3221_CHANNEL3);
->   
-> +/* voltage channel enable */
-> +static SENSOR_DEVICE_ATTR(in1_enable, 0644,
-> +		ina3221_show_enable, ina3221_set_enable, INA3221_CHANNEL1);
-> +static SENSOR_DEVICE_ATTR(in2_enable, 0644,
-> +		ina3221_show_enable, ina3221_set_enable, INA3221_CHANNEL2);
-> +static SENSOR_DEVICE_ATTR(in3_enable, 0644,
-> +		ina3221_show_enable, ina3221_set_enable, INA3221_CHANNEL3);
-> +
->   /* bus voltage */
->   static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO,
->   		ina3221_show_bus_voltage, NULL, INA3221_BUS1);
-> @@ -460,6 +542,7 @@ static SENSOR_DEVICE_ATTR(power3_crit, 0644,
->   static struct attribute *ina3221_attrs[] = {
->   	/* channel 1 -- make sure label at first */
->   	&sensor_dev_attr_in1_label.dev_attr.attr,
-> +	&sensor_dev_attr_in1_enable.dev_attr.attr,
->   	&sensor_dev_attr_in1_input.dev_attr.attr,
->   	&sensor_dev_attr_curr1_input.dev_attr.attr,
->   	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
-> @@ -473,6 +556,7 @@ static struct attribute *ina3221_attrs[] = {
->   
->   	/* channel 2 -- make sure label at first */
->   	&sensor_dev_attr_in2_label.dev_attr.attr,
-> +	&sensor_dev_attr_in2_enable.dev_attr.attr,
->   	&sensor_dev_attr_in2_input.dev_attr.attr,
->   	&sensor_dev_attr_curr2_input.dev_attr.attr,
->   	&sensor_dev_attr_shunt2_resistor.dev_attr.attr,
-> @@ -486,6 +570,7 @@ static struct attribute *ina3221_attrs[] = {
->   
->   	/* channel 3 -- make sure label at first */
->   	&sensor_dev_attr_in3_label.dev_attr.attr,
-> +	&sensor_dev_attr_in3_enable.dev_attr.attr,
->   	&sensor_dev_attr_in3_input.dev_attr.attr,
->   	&sensor_dev_attr_curr3_input.dev_attr.attr,
->   	&sensor_dev_attr_shunt3_resistor.dev_attr.attr,
+> Other chips have different kinds of sensors. Voltage, current, power, temperature,
+> and others. Whatever we come up with should support that.
 > 
+> I see two possibilities right now. We can stick with reg and add a "type" property,
+> or we can make the index something like
+> 	{voltage,current,power,temperature,humidity}-{id,index}
+> 
+> I personally prefer "type", but I don't really have a strong opinion.
+> What do you think ? Or maybe we should really wait for feedback from Rob.
+
+reg and 'type' is my preference though just 'type' may be too vague. For 
+this case I don't think we need it if there's only one possible type as 
+the driver should know that.
+
+Rob
