@@ -1,48 +1,52 @@
 Return-Path: <nicoleotsuka@gmail.com>
 Return-path: <nicoleotsuka@gmail.com>
-Date: Thu, 27 Sep 2018 16:14:59 -0700
 From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, corbet@lwn.net, afd@ti.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh+dt@kernel.org,
+	mark.rutland@arm.com,
+	corbet@lwn.net
+Cc: afd@ti.com,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: ina3221: Add enable sysfs nodes
-Message-ID: <20180927231458.GA31793@Asurada-Nvidia.nvidia.com>
-References: <20180926064245.4091-1-nicoleotsuka@gmail.com>
- <20180926064245.4091-3-nicoleotsuka@gmail.com>
- <0cfe55e1-10d8-ac1f-8b6e-73777074a219@roeck-us.net>
- <20180927222614.GA8430@Asurada-Nvidia.nvidia.com>
- <20180927225200.GE9198@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180927225200.GE9198@roeck-us.net>
+Subject: [PATCH v7 0/2] Add an initial DT binding doc for ina3221
+Date: Thu, 27 Sep 2018 13:54:04 -0700
+Message-Id: <20180927205406.21932-1-nicoleotsuka@gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Thu, Sep 27, 2018 at 03:52:00PM -0700, Guenter Roeck wrote:
+This series adds a initial DT binding doc for ina3221. It defines
+a child node to describe the input source of each ina3221 channel.
+Then it changes the driver to handle the information properly.
 
-> The proper fix for this problem would be to add support for suspend /
-> resume to the driver. At resume time, all channels will have been
-> re-enabled if the chip was powered off, even if they were explicitly
-> disabled by devicetree (or via explicit configuration). This means
-> the driver just behaves badly across suspend/resume, period.
-> Displaying a raw value instead of a cached one doesn't solve that
-> problem. By using a cached value, at least the user would not notice
-> that the chip no longer does what it is supposed to be doing.
->
-> I guess we just have different priorities. If I think suspend/resume
-> is a problem for my use case, I would just go ahead and fix it.
-> I would not try to write code that doesn't fix the problem causing it,
-> much less argue for it.
+Changelog
+v6->v7:
+ * Refined the example in the binding doc (PATCH-1)
+v5->v6:
+ * Removed status property and merged examples (PATCH-1)
+ * Added in[123]_enable sysfs nodes (PATCH-2)
+v4->v5:
+ * Changed two property names of child node (PATCH-1)
+ * Changed the driver accordingly and simplified is_visible (PATCH-2)
+v3->v4:
+ * Fixed one place in child DT node bindings (PATCH-1)
+ * Changed the driver accordingly and added is_visible (PATCH-2)
+v2->v3:
+ * Fixed two places in DT bindings (PATCH-1)
+v1->v2:
+ * Redefined DT bindings (detail in PATCH-1)
+ * Changed the driver code accordingly (detail in PATCH-2)
 
-I agree.
+Nicolin Chen (2):
+  dt-bindings: hwmon: Add ina3221 documentation
+  hwmon: ina3221: Read channel input source info from DT
 
-> Having said that, I didn't mention that part in my other reply,
-> meaning I'll accept the code as is.
+ .../devicetree/bindings/hwmon/ina3221.txt     |  44 ++++
+ Documentation/hwmon/ina3221                   |   2 +
+ drivers/hwmon/ina3221.c                       | 237 ++++++++++++++++--
+ 3 files changed, 269 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
 
-Thanks for the generosity. But, since Rob hasn't acked yet, let
-me write the patch for suspend and resume first, which shouldn't
-take long.
-
-Thanks
-Nicolin
+-- 
+2.17.1
