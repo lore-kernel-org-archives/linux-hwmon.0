@@ -1,49 +1,129 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36658 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbeI2EPW (ORCPT
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43898 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728197AbeI2WCk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Sep 2018 00:15:22 -0400
-From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: jdelvare@suse.com, linux@roeck-us.net
-Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
+        Sat, 29 Sep 2018 18:02:40 -0400
+Date: Sat, 29 Sep 2018 08:33:46 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nicolin Chen <nicoleotsuka@gmail.com>
+Cc: jdelvare@suse.com, afd@ti.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] hwmon: ina3221: Add INA3221_CONFIG to volatile_table
-Date: Fri, 28 Sep 2018 14:49:20 -0700
-Message-Id: <20180928214921.11528-2-nicoleotsuka@gmail.com>
-In-Reply-To: <20180928214921.11528-1-nicoleotsuka@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: ina3221: Add suspend and resume functions
+Message-ID: <20180929153346.GA26651@roeck-us.net>
 References: <20180928214921.11528-1-nicoleotsuka@gmail.com>
+ <20180928214921.11528-3-nicoleotsuka@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180928214921.11528-3-nicoleotsuka@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The MSB (15th bit) of INA3221_CONFIG is a self-clear reset bit.
-So this register should be added to the volatile_table of the
-regmap_config. Otherwise, we will see this bit is sticky in the
-regcache which might accidentally reset the chip when an actual
-write happens to the register.
+On Fri, Sep 28, 2018 at 02:49:21PM -0700, Nicolin Chen wrote:
+> Depending on the hardware design, an INA3221 chip might lose
+> its power during system suspend/resume. So this patch adds
+> a pair of suspend and resume functions to cache the register
+> values including config register value and limit settings.
+> 
+> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> ---
+>  drivers/hwmon/ina3221.c | 54 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index cfe65ff01051..26f66f728b27 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -91,11 +91,13 @@ static const unsigned int register_channel[] = {
+>   * @regmap: Register map of the device
+>   * @fields: Register fields of the device
+>   * @shunt_resistors: Array of resistor values per channel
+> + * @reg_config: Register value of INA3221_CONFIG
+>   */
+>  struct ina3221_data {
+>  	struct regmap *regmap;
+>  	struct regmap_field *fields[F_MAX_FIELDS];
+>  	int shunt_resistors[INA3221_NUM_CHANNELS];
+> +	u32 reg_config;
+>  };
+>  
+>  static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
+> @@ -415,8 +417,59 @@ static int ina3221_probe(struct i2c_client *client,
+>  		return PTR_ERR(hwmon_dev);
+>  	}
+>  
+> +	dev_set_drvdata(dev, ina);
+> +
+> +	return 0;
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +static int ina3221_suspend(struct device *dev)
+> +{
+> +	struct ina3221_data *ina = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Save config register value and enable cache-only */
+> +	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
+> +	if (ret)
+> +		return ret;
+> +
 
-This might not be a severe bug for the current code line since
-there's no second place touching the INA3221_CONFIG except the
-reset routine in the probe().
+Would it make sense to explicitly disable all channels here ?
 
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
----
- drivers/hwmon/ina3221.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index e6b49500c52a..cfe65ff01051 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -353,7 +353,7 @@ static struct attribute *ina3221_attrs[] = {
- ATTRIBUTE_GROUPS(ina3221);
- 
- static const struct regmap_range ina3221_yes_ranges[] = {
--	regmap_reg_range(INA3221_SHUNT1, INA3221_BUS3),
-+	regmap_reg_range(INA3221_CONFIG, INA3221_BUS3),
- 	regmap_reg_range(INA3221_MASK_ENABLE, INA3221_MASK_ENABLE),
- };
- 
--- 
-2.17.1
+> +	regcache_cache_only(ina->regmap, true);
+> +	regcache_mark_dirty(ina->regmap);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ina3221_resume(struct device *dev)
+> +{
+> +	struct ina3221_data *ina = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	regcache_cache_only(ina->regmap, false);
+> +
+> +	/* Software reset the chip */
+> +	ret = regmap_field_write(ina->fields[F_RST], true);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to reset device\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Restore cached register values to hardware */
+> +	ret = regcache_sync(ina->regmap);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Restore config register value to hardware */
+> +	ret = regmap_write(ina->regmap, INA3221_CONFIG, ina->reg_config);
+> +	if (ret)
+> +		return ret;
+> +
+>  	return 0;
+>  }
+> +#endif
+> +
+> +static const struct dev_pm_ops ina3221_pm = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(ina3221_suspend, ina3221_resume)
+> +};
+>  
+>  static const struct of_device_id ina3221_of_match_table[] = {
+>  	{ .compatible = "ti,ina3221", },
+> @@ -435,6 +488,7 @@ static struct i2c_driver ina3221_i2c_driver = {
+>  	.driver = {
+>  		.name = INA3221_DRIVER_NAME,
+>  		.of_match_table = ina3221_of_match_table,
+> +		.pm = &ina3221_pm,
+>  	},
+>  	.id_table = ina3221_ids,
+>  };
+> -- 
+> 2.17.1
+> 
