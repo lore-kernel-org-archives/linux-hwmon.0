@@ -1,108 +1,105 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43631 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbeI2IGR (ORCPT
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34604 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728553AbeJAD3v (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Sep 2018 04:06:17 -0400
-From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, corbet@lwn.net
+        Sun, 30 Sep 2018 23:29:51 -0400
+Subject: Re: [PATCH v8 2/2] hwmon: ina3221: Read channel input source info
+ from DT
+To: Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, corbet@lwn.net
 Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v8 1/2] dt-bindings: hwmon: Add ina3221 documentation
-Date: Fri, 28 Sep 2018 18:39:36 -0700
-Message-Id: <20180929013937.29289-2-nicoleotsuka@gmail.com>
-In-Reply-To: <20180929013937.29289-1-nicoleotsuka@gmail.com>
 References: <20180929013937.29289-1-nicoleotsuka@gmail.com>
+ <20180929013937.29289-3-nicoleotsuka@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <ab3a36dc-fa5a-4669-2f99-aa55a4083db2@roeck-us.net>
+Date: Sun, 30 Sep 2018 13:55:18 -0700
+MIME-Version: 1.0
+In-Reply-To: <20180929013937.29289-3-nicoleotsuka@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Texas Instruments INA3221 is a triple-channel shunt and bus
-voltage monitor. This patch adds a DT binding doc for it.
+Hi Nicolin,
 
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
----
-Changelog
-v7->v8:
- * N/A
-v6->v7:
- * Restored three channel examples and merged them with the parent one
-v5->v6:
- * Removed status property as no need to explicitly list it.
- * Combined all examples into a complete one.
-v4->v5:
- * Replaced "input-id" with "reg" and added address-cells and size-cells
- * Replaced "input-label" with "label"
- * Replaced "shunt-resistor" with "shunt-resistor-micro-ohms"
-v3->v4:
- * Removed the attempt of putting labels in the node names
- * Added a new optional label property in the child node
- * Updated examples accordingly
-v2->v3:
- * Added a simple subject in the line 1
- * Fixed the shunt resistor value in the example
-v1->v2:
- * Dropped channel name properties
- * Added child node definitions.
- * * Added shunt resistor property in the child node
- * * Added status property to indicate connection status
- * * Changed to use child node name as the label of input source
+On 09/28/2018 06:39 PM, Nicolin Chen wrote:
+> An ina3221 chip has three input ports. Each port is used
+> to measure the voltage and current of its input source.
+> 
+> The DT binding now has defined bindings for their input
+> sources, so the driver should read these information and
+> handle accordingly.
+> 
+> This patch adds a new structure of input source specific
+> information including input source label, shunt resistor
+> value and its connection status. It exposes these labels
+> via in[123]_label sysfs nodes upon available, and also
+> disables those channels where there are no input source
+> being connected. Meanwhile, it also adds in[123]_enable
+> sysfs nodes for users to get control of three channels,
+> and returns -ENODATA code for any sensor read according
+> to hwmon ABI.
+> 
+> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 
- .../devicetree/bindings/hwmon/ina3221.txt     | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/ina3221.txt
+[ ... ]
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
-new file mode 100644
-index 000000000000..a7b25caa2b8e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
-@@ -0,0 +1,44 @@
-+Texas Instruments INA3221 Device Tree Bindings
-+
-+1) ina3221 node
-+  Required properties:
-+  - compatible: Must be "ti,ina3221"
-+  - reg: I2C address
-+
-+  Optional properties:
-+  = The node contains optional child nodes for three channels =
-+  = Each child node describes the information of input source =
-+
-+  - #address-cells: Required only if a child node is present. Must be 1.
-+  - #size-cells: Required only if a child node is present. Must be 0.
-+
-+2) child nodes
-+  Required properties:
-+  - reg: Must be 0, 1 or 2, corresponding to IN1, IN2 or IN3 port of INA3221
-+
-+  Optional properties:
-+  - label: Name of the input source
-+  - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
-+
-+Example:
-+
-+ina3221@40 {
-+	compatible = "ti,ina3221";
-+	reg = <0x40>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	input@0 {
-+		reg = <0x0>;
-+		status = "disabled";
-+	};
-+	input@1 {
-+		reg = <0x1>;
-+		shunt-resistor-micro-ohms = <5000>;
-+	};
-+	input@2 {
-+		reg = <0x2>;
-+		label = "VDD_5V";
-+		shunt-resistor-micro-ohms = <5000>;
-+	};
-+};
--- 
-2.17.1
+> +
+> +static ssize_t ina3221_set_enable(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
+> +	struct ina3221_data *ina = dev_get_drvdata(dev);
+> +	unsigned int channel = sd_attr->index;
+> +	u16 config = ina->reg_config;
+> +	bool enable;
+> +	int ret;
+> +
+> +	ret = kstrtobool(buf, &enable);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (enable)
+> +		config |= INA3221_CONFIG_CHx_EN(channel);
+> +	else
+> +		config &= ~INA3221_CONFIG_CHx_EN(channel);
+> +
+> +	ret = regmap_write(ina->regmap, INA3221_CONFIG, config);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ina->reg_config = config;
+> +
+
+Sorry it too me so long to realize this: The code above is racy.
+There could be multiple threads enabling and disabling a channel.
+Without a mutex, there is no guarantee that the final value of
+reg_config matches the value written into the chip.
+
+You'll have to introduce a mutex and implement something like
+
+	...
+	ret = kstrtobool(buf, &enable);
+	if (ret)
+		return ret;
+
+	mutex_lock(&ina->update_lock);
+	config = ina->reg_config;
+	...
+	ret = regmap_write(ina->regmap, INA3221_CONFIG, config);
+	if (ret) {
+		count = ret;
+		goto error;
+	}
+	ina->reg_config = config;
+error:
+	mutex_unlock(&ina->update_lock);
+	return count;
+
+Guenter
