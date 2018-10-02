@@ -1,37 +1,65 @@
-Return-Path: <nicoleotsuka@gmail.com>
-Return-path: <nicoleotsuka@gmail.com>
-Date: Tue, 2 Oct 2018 10:07:48 -0700
-From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-	corbet@lwn.net, afd@ti.com, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v9 1/2] dt-bindings: hwmon: Add ina3221 documentation
-Message-ID: <20181002170748.GA24384@Asurada-Nvidia.nvidia.com>
-References: <20181002010523.2019-1-nicoleotsuka@gmail.com>
- <20181002010523.2019-2-nicoleotsuka@gmail.com>
- <20181002170518.GA27236@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20181002170518.GA27236@roeck-us.net>
+Return-Path: <arnd@arndb.de>
+Return-path: <arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nicolin Chen <nicoleotsuka@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: ina3221: mark PM functions as __maybe_unused
+Date: Tue,  2 Oct 2018 23:10:47 +0200
+Message-Id: <20181002211054.2654746-1-arnd@arndb.de>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Oct 02, 2018 at 10:05:18AM -0700, Guenter Roeck wrote:
-> Hi Nicolin,
-> 
-> On Mon, Oct 01, 2018 at 06:05:22PM -0700, Nicolin Chen wrote:
-> > Texas Instruments INA3221 is a triple-channel shunt and bus
-> > voltage monitor. This patch adds a DT binding doc for it.
-> > 
-> > Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> > ---
-> 
-> This version of the series looks good to me. I'll add both patches to
-> hwmon-next, with the understanding that I may pull them if Rob has
-> bindings related concerns.
+When CONFIG_PM_SLEEP is disabled, we get a warning about unused
+suspend/resume functions:
 
-Thanks a lot, especially for the review.
+drivers/hwmon/ina3221.c:451:12: error: 'ina3221_resume' defined but not used [-Werror=unused-function]
+ static int ina3221_resume(struct device *dev)
+drivers/hwmon/ina3221.c:428:12: error: 'ina3221_suspend' defined but not used [-Werror=unused-function]
+ static int ina3221_suspend(struct device *dev)
 
-Nicolin
+Picking the correct #ifdef check is hard, so let's remove
+that check and instead mark the functions as __maybe_unused
+to let the compiler silently drop them instead.
+
+Fixes: 7de1ab9dac8e ("hwmon: (ina3221) Add suspend and resume functions")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/ina3221.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 1e38b4c43fbf..8c3352910cc4 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -424,8 +424,7 @@ static int ina3221_probe(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM
+-static int ina3221_suspend(struct device *dev)
++static int __maybe_unused ina3221_suspend(struct device *dev)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
+@@ -448,7 +447,7 @@ static int ina3221_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int ina3221_resume(struct device *dev)
++static int __maybe_unused ina3221_resume(struct device *dev)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
+@@ -474,7 +473,6 @@ static int ina3221_resume(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static const struct dev_pm_ops ina3221_pm = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(ina3221_suspend, ina3221_resume)
+-- 
+2.18.0
