@@ -1,87 +1,46 @@
-Return-Path: <cv-dong@jinso.co.jp>
-Return-path: <cv-dong@jinso.co.jp>
-Subject: Re: [PATCH] hwmon: Fix the 'No sensors found' error after replacing
- the parameter NULL by the actual device
-To: Guenter Roeck <linux@roeck-us.net>, broonie@kernel.org,
-        geert+renesas@glider.be, linux-hwmon@vger.kernel.org
-Cc: kuninori.morimoto.gx@renesas.com, yoshihiro.shimoda.uh@renesas.com,
-        linux-renesas-soc@vger.kernel.org, h-inayoshi@jinso.co.jp,
-        nv-dung@jinso.co.jp, na-hoan@jinso.co.jp
-References: <1538469324-8028-1-git-send-email-cv-dong@jinso.co.jp>
- <031294c5-2fd5-f6cc-6762-30e987c5029c@roeck-us.net>
- <84db03da-fb58-0f77-cfb4-317b434376f8@jinso.co.jp>
- <aada98e3-fedd-6f8e-2e95-9a924fc871da@roeck-us.net>
-From: Cao Van Dong <cv-dong@jinso.co.jp>
-Message-ID: <702ed5ec-bae4-4ce7-11cd-6900e5179d50@jinso.co.jp>
-Date: Wed, 3 Oct 2018 12:16:44 +0900
+Return-Path: <nicoleotsuka@gmail.com>
+Return-path: <nicoleotsuka@gmail.com>
+Date: Wed, 3 Oct 2018 16:46:58 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org
+Subject: hwmon: trace event support?
+Message-ID: <20181003234657.GA32550@Asurada-Nvidia.nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <aada98e3-fedd-6f8e-2e95-9a924fc871da@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Dear Guenter-san,
+Hello Guenter,
 
-Thanks for your comment!
+I am thinking about a possibility of adding a trace event support
+in hwmon subsystem. Ftrace is pretty useful and widely applied to
+different subsystems already while hwmon doesn't seem to have one
+yet. I know some power/perf folks who rely on the trace events to
+analyse relationships among cpufreq <-> thermal <-> power: usually
+what they do is enabling trace events, then letting the system run
+for a while, and finally collecting all data from Ftrace outputs.
 
->>>> In __hwmon_device_register() function of hwmon.c, we have assigned 
->>>> 'dev' directly to 'hdev->parent'.
->>>> Formerly, when registering the hwmon device, we pass NULL as the 
->>>> device. This is not affected.
->>>> Recently, the developer has replaced the parameter NULL as the 
->>>> device by the actual device.
->>>> This causes the "No sensors found" error. This patch is to fix this 
->>>> error.
->>>>
->>>> This patch is based on the v4.19-rc3 tag.
->>>>
->>>
->>> NACK.
->>>
->>> This is wrong. The passed device is the hwmon driver's parent 
->>> device. Using that device's
->>> parent would be wrong. Indeed, that device could be a platform 
->>> device with no parent.
->> Maybe I did not know all problem. If I'm wrong, sorry for the 
->> inconvenience.
->>
->>> The problem must be fixed in the calling code.
->>>
->> I will see the feedback from Marc-san.
->>
->
-> The "No sensors found" message is from the "sensors" application.
-> The device type associated with the passed device is unknown to
-> libsensors (it is parsed from the parent device subsystem name -
-> what is that, anyway ?). This could be addressed in libsensors,
-> or the thermal subsystem could attach itself to a known subsystem,
-> or the thermal subsystem must pass a pointer the parent device.
->
-> Again, trying to address the problem in the hwmon core is simply wrong.
->
-I will create other patch(v2) to fix for this error from the calling 
-function.
+Both cpufreq and thermal have trace events; but for power data, it
+seems that they have to go through sysfs nodes, which is difficult
+for them to get data at the same timestamps corresponding to those
+Ftrace data. Similar to tz->poll_queue in thermal_core, hwmon core
+could also have a work queue polling the registered sensor inputs
+(by default disabled; enabled only if users configure poll_delay)
+so that the power data can be generated to Ftrace outputs as well.
 
+To add this, the hwmon core needs an interface that can get sensor
+inputs as drivers like ina3221 don't report any values back to the
+core but directly expose them via sysfs ABI nodes.
 
-Regards,
-Dong/Jinso
+I noticed the hwmon_device_register_with_info() could be actually
+a good API to use since it has defined different sensor types and
+more importantly the ops->read() interface, but the ina3221 driver
+is very compact that there would be very little gain from this API
+at this moment. However, maybe having trace event support would be
+a good reason to apply this API.
 
+What do you think about it? Any concern or better solution?
 
->>>> ---
->>>>   drivers/hwmon/hwmon.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
->>>> index 33d5128..7c8d3cb 100644
->>>> --- a/drivers/hwmon/hwmon.c
->>>> +++ b/drivers/hwmon/hwmon.c
->>>> @@ -610,7 +610,7 @@ __hwmon_device_register(struct device *dev, 
->>>> const char *name, void *drvdata,
->>>>         hwdev->name = name;
->>>>       hdev->class = &hwmon_class;
->>>> -    hdev->parent = dev;
->>>> +    hdev->parent = dev->parent;
->>>>       hdev->of_node = dev ? dev->of_node : NULL;
->>>>       hwdev->chip = chip;
->>>>       dev_set_drvdata(hdev, drvdata);
+Thank you
+Nicolin
