@@ -1,65 +1,96 @@
-Return-Path: <arnd@arndb.de>
-Return-path: <arnd@arndb.de>
-From: Arnd Bergmann <arnd@arndb.de>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nicolin Chen <nicoleotsuka@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: ina3221: mark PM functions as __maybe_unused
-Date: Tue,  2 Oct 2018 23:10:47 +0200
-Message-Id: <20181002211054.2654746-1-arnd@arndb.de>
+Return-Path: <cv-dong@jinso.co.jp>
+Return-path: <cv-dong@jinso.co.jp>
+Subject: Re: [PATCH] hwmon: Fix the 'No sensors found' error after replacing
+ the parameter NULL by the actual device
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Brown
+ <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-hwmon@vger.kernel.org,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?B?56iy5ZCJ?= <h-inayoshi@jinso.co.jp>,
+        =?UTF-8?B?RHVuZ++8muS6ug==?=
+ =?UTF-8?B?44K9?= <nv-dung@jinso.co.jp>,
+        Hoan Nguyen An <na-hoan@jinso.co.jp>
+References: <1538469324-8028-1-git-send-email-cv-dong@jinso.co.jp>
+ <CAMuHMdXOQdJL14xNj3AHL6RC-fu=SWReXmh1JOS4s9cc-ZL5iQ@mail.gmail.com>
+ <4ed65427-ce94-5586-82ef-f73d7ff413ed@jinso.co.jp>
+ <3fd89cff-4e3f-b4b5-6f45-6a6363003646@roeck-us.net>
+From: Cao Van Dong <cv-dong@jinso.co.jp>
+Message-ID: <f8a0d9cf-826a-6fae-e675-5dc24007c00c@jinso.co.jp>
+Date: Wed, 3 Oct 2018 10:17:58 +0900
+MIME-Version: 1.0
+In-Reply-To: <3fd89cff-4e3f-b4b5-6f45-6a6363003646@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 List-ID: <linux-hwmon@vger.kernel.org>
 
-When CONFIG_PM_SLEEP is disabled, we get a warning about unused
-suspend/resume functions:
+Dear Guente-san,
 
-drivers/hwmon/ina3221.c:451:12: error: 'ina3221_resume' defined but not used [-Werror=unused-function]
- static int ina3221_resume(struct device *dev)
-drivers/hwmon/ina3221.c:428:12: error: 'ina3221_suspend' defined but not used [-Werror=unused-function]
- static int ina3221_suspend(struct device *dev)
+Thanks for your comment!
+>>>> In __hwmon_device_register() function of hwmon.c, we have assigned 
+>>>> 'dev' directly to 'hdev->parent'.
+>>>> Formerly, when registering the hwmon device, we pass NULL as the 
+>>>> device. This is not affected.
+>>>> Recently, the developer has replaced the parameter NULL as the 
+>>>> device by the actual device.
+>>> Do you know the commit ID of this recent change?
+>>> It's useful for review of your change, and to know to which versions 
+>>> your
+>>> patch should be backported.
+>>
+>> The commit ID of this recent change is"f6b6b52 thermal_hwmon: Pass 
+>> the originating device down to hwmon_device_register_with_info".
+>>
+> If thermal doesn't want hwmon to use the thermal zone device, it 
+> should pass
+> the parent of that device as parameter.
 
-Picking the correct #ifdef check is hard, so let's remove
-that check and instead mark the functions as __maybe_unused
-to let the compiler silently drop them instead.
+I will see the feedback from Marc-san.
+>
+>>>> This causes the "No sensors found" error. This patch is to fix this 
+>>>> error.
+>>> On which platform do you see this failure?
+>>> Thanks again!
+>>
+>> This error is found on Gen2 Lager board v4.19-rc2 by RVC team.
+>>
+>
+> Some more details about the error would be useful.
 
-Fixes: 7de1ab9dac8e ("hwmon: (ina3221) Add suspend and resume functions")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hwmon/ina3221.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Below are some information about confirm the error:
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 1e38b4c43fbf..8c3352910cc4 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -424,8 +424,7 @@ static int ina3221_probe(struct i2c_client *client,
- 	return 0;
- }
- 
--#ifdef CONFIG_PM
--static int ina3221_suspend(struct device *dev)
-+static int __maybe_unused ina3221_suspend(struct device *dev)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	int ret;
-@@ -448,7 +447,7 @@ static int ina3221_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int ina3221_resume(struct device *dev)
-+static int __maybe_unused ina3221_resume(struct device *dev)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	int ret;
-@@ -474,7 +473,6 @@ static int ina3221_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
- static const struct dev_pm_ops ina3221_pm = {
- 	SET_SYSTEM_SLEEP_PM_OPS(ina3221_suspend, ina3221_resume)
--- 
-2.18.0
+- Before the commit "f6b6b52ef7a54160c0a4d2b56a58f84a2e5b33c5" (pass 
+NULL as the device):
+"root@linaro-nano:~# sensors
+  cpu_thermal-virtual-0
+  Adapter: Virtual device
+  temp1:        +30.0�°C  (crit = +95.0�°C)
+
+  root@linaro-nano:~# "
+
+
+- After the commit "f6b6b52ef7a54160c0a4d2b56a58f84a2e5b33c5" (pass the 
+actual device):
+"root@linaro-nano:~# sensors
+  No sensors found!
+  Make sure you loaded all the kernel drivers you need.
+  Try sensors-detect to find out which these are.
+  root@linaro-nano:~#"
+
+
+- At my patch (change dev to dev->parent):
+"root@linaro-nano:~# sensors
+  cpu_thermal-virtual-0
+  Adapter: Virtual device
+  temp1:        +30.0�°C  (crit = +95.0�°C)
+
+  root@linaro-nano:~#"
+
+
+Regards,
+Dong/Jinso
