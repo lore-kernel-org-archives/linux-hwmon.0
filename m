@@ -1,124 +1,72 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:44367 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727256AbeJDTrE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Oct 2018 15:47:04 -0400
-Received: by mail-pl1-f196.google.com with SMTP id p25-v6so5148544pli.11
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Oct 2018 05:53:54 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: (sht3x) add devicetree support
-To: Wojciech Slenska <wojciech.slenska@gmail.com>,
-        linux-hwmon@vger.kernel.org
-References: <1538639451-28264-1-git-send-email-wojciech.slenska@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <49f84e8f-372b-d38e-9c68-d0c56cc4f689@roeck-us.net>
-Date: Thu, 4 Oct 2018 05:53:51 -0700
+Return-Path: <nicoleotsuka@gmail.com>
+Return-path: <nicoleotsuka@gmail.com>
+Date: Wed, 3 Oct 2018 22:08:39 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: hwmon: trace event support?
+Message-ID: <20181004050838.GA9439@Asurada-Nvidia.nvidia.com>
+References: <20181003234657.GA32550@Asurada-Nvidia.nvidia.com>
+ <cbc579ab-b95f-4917-154d-95dc0c059a06@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1538639451-28264-1-git-send-email-wojciech.slenska@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cbc579ab-b95f-4917-154d-95dc0c059a06@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/04/2018 12:50 AM, Wojciech Slenska wrote:
-> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
-> ---
->   Documentation/devicetree/bindings/hwmon/sht3x.txt | 16 +++++++++++++
+Thanks for the quick response.
 
-Please copy DT maintainers for dt property approval.
-
->   drivers/hwmon/sht3x.c                             | 28 ++++++++++++++++++++---
->   2 files changed, 41 insertions(+), 3 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/sht3x.txt
+On Wed, Oct 03, 2018 at 05:42:23PM -0700, Guenter Roeck wrote:
+> > Ftrace data. Similar to tz->poll_queue in thermal_core, hwmon core
+> > could also have a work queue polling the registered sensor inputs
+> > (by default disabled; enabled only if users configure poll_delay)
+> > so that the power data can be generated to Ftrace outputs as well.
+> > 
+> > To add this, the hwmon core needs an interface that can get sensor
+> > inputs as drivers like ina3221 don't report any values back to the
+> > core but directly expose them via sysfs ABI nodes.
+> > 
+> > I noticed the hwmon_device_register_with_info() could be actually
+> > a good API to use since it has defined different sensor types and
+> > more importantly the ops->read() interface, but the ina3221 driver
+> > is very compact that there would be very little gain from this API
+> > at this moment. However, maybe having trace event support would be
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sht3x.txt b/Documentation/devicetree/bindings/hwmon/sht3x.txt
-> new file mode 100644
-> index 0000000..80b117e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sht3x.txt
-> @@ -0,0 +1,16 @@
-> +Sensirion SHT3x Humidity and Temperature Sensor
-> +
-> +Required node properties:
-> +- compatible: "sensirion,sht3x" or "sensirion,sts3x"
-> +- reg: I2C bus address of the device
-> +
-> +Optional properties:
-> +- blocking-io: enable blocking mode on i2c
-> +- no-high-precision: disable high accuracy
+> "very little gain" is a false assumption. Its size would most likely
+> be reduced by 20% or more, mostly because all the sysfs handling
+> is done by the core if one uses the _info API.
 
-Should probably be prefixed by "sensirion,"
+Didn't intend to deny the improvement; probably should have used a
+more positive word instead of "little" :)
 
-> +
-> +Example sht3x node:
-> +
-> +sensor {
-> +	compatible = "sensirion,sht3x";
-> +	reg = <0x4a>;
-> +}
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 370b57d..1f8b7e7 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -31,6 +31,7 @@
->   #include <linux/slab.h>
->   #include <linux/jiffies.h>
->   #include <linux/platform_data/sht3x.h>
-> +#include <linux/of.h>
->   
->   /* commands (high precision mode) */
->   static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-> @@ -699,6 +700,7 @@ static int sht3x_probe(struct i2c_client *client,
->   	struct i2c_adapter *adap = client->adapter;
->   	struct device *dev = &client->dev;
->   	const struct attribute_group **attribute_groups;
-> +	struct device_node *np = client->dev.of_node;
->   
->   	/*
->   	 * we require full i2c support since the sht3x uses multi-byte read and
-> @@ -724,8 +726,16 @@ static int sht3x_probe(struct i2c_client *client,
->   	data->client = client;
->   	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
->   
-> -	if (client->dev.platform_data)
-> -		data->setup = *(struct sht3x_platform_data *)dev->platform_data;
-> +	if (np) {
-> +		if (of_find_property(np, "blocking-io", NULL))
-> +			data->setup.blocking_io = true;
-> +		if (of_find_property(np, "no-high-precision", NULL))
-> +			data->setup.high_precision = false;
-
-Please use of_property_read_bool().
-
-> +	} else {
-> +		if (client->dev.platform_data)
-> +			data->setup = *(struct sht3x_platform_data *)
-> +				dev->platform_data;
-> +	}
->   
->   	sht3x_select_command(data);
->   
-> @@ -768,8 +778,20 @@ static const struct i2c_device_id sht3x_ids[] = {
->   
->   MODULE_DEVICE_TABLE(i2c, sht3x_ids);
->   
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id sht3x_dt_match[] = {
-> +	{ .compatible = "sensirion,sht3x" },
-> +	{ .compatible = "sensirion,sts3x" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, sht3x_dt_match);
-> +#endif
-> +
->   static struct i2c_driver sht3x_i2c_driver = {
-> -	.driver.name = "sht3x",
-> +	.driver = {
-> +		.name = "sht3x",
-> +		.of_match_table = of_match_ptr(sht3x_dt_match),
-> +	},
->   	.probe       = sht3x_probe,
->   	.id_table    = sht3x_ids,
->   };
+> > a good reason to apply this API.
+> > 
+> > What do you think about it? Any concern or better solution?
 > 
+> I would not object to adding trace support into the hwmon subsystem.
+> However, it should be tied to the new API. I would resist patches
+> adding trace support to individual hwmon drivers unless the new API
+> is used and additional driver specific trace support is warranted.
+
+Yes, my idea is to implement it with the _info API inside the hwmon
+core. What do you think about the mentioned solution? Would you be
+in favor of a polling work queue?
+
+"----------. Similar to tz->poll_queue in thermal_core, hwmon core
+ could also have a work queue polling the registered sensor inputs
+ (by default disabled; enabled only if users configure poll_delay)
+ so that the power data can be generated to Ftrace outputs as well."
+
+> Note that this also applies to hwmon drivers registering through
+> thermal. The thermal subsystem calls the _info API but misuses it
+> to avoid a warning generated when using the old API. Of course,
+> I have no influence over the hwmon code in the thermal subsystem,
+> so whatever is done there is essentially wild-wild-west.
+
+I saw they have some obvious code in the hwmon core. If you want,
+we can keep the polling work queue and trace events away from it,
+which sounds plausible to me considering that thermal subsystem
+has its own polling work queue and trace events for sensor data.
+
+Thank you
+Nicolin
