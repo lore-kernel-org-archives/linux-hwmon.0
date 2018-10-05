@@ -1,30 +1,59 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32904 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726759AbeJFHAR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 Oct 2018 03:00:17 -0400
+Return-Path: <nicoleotsuka@gmail.com>
+Return-path: <nicoleotsuka@gmail.com>
 From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: jdelvare@suse.com, linux@roeck-us.net
-Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: (ina3221) Apply _info API
-Date: Fri,  5 Oct 2018 16:59:03 -0700
-Message-Id: <20181005235905.29403-1-nicoleotsuka@gmail.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: afd@ti.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (core) Add hwmon_in_enable attribute
+Date: Fri,  5 Oct 2018 16:59:04 -0700
+Message-Id: <20181005235905.29403-2-nicoleotsuka@gmail.com>
+In-Reply-To: <20181005235905.29403-1-nicoleotsuka@gmail.com>
+References: <20181005235905.29403-1-nicoleotsuka@gmail.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-This series of patches applies _info API of hwmon core to
-the ina3221 hwmon driver.
+According to hwmon ABI, in%d_enable is a sysfs interface that
+allows user space to enable and disable the input sensor. So
+this patch just simply adds the attribute to the list.
 
-Nicolin Chen (2):
-  hwmon: (core) Add hwmon_in_enable attribute
-  hwmon: (ina3221) Use _info API to register hwmon device
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+ drivers/hwmon/hwmon.c | 1 +
+ include/linux/hwmon.h | 2 ++
+ 2 files changed, 3 insertions(+)
 
- drivers/hwmon/hwmon.c   |   1 +
- drivers/hwmon/ina3221.c | 528 +++++++++++++++++++---------------------
- include/linux/hwmon.h   |   2 +
- 3 files changed, 248 insertions(+), 283 deletions(-)
-
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 33d51281272b..ac1cdf88840f 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -356,6 +356,7 @@ static const char * const hwmon_in_attr_templates[] = {
+ 	[hwmon_in_max_alarm] = "in%d_max_alarm",
+ 	[hwmon_in_lcrit_alarm] = "in%d_lcrit_alarm",
+ 	[hwmon_in_crit_alarm] = "in%d_crit_alarm",
++	[hwmon_in_enable] = "in%d_enable",
+ };
+ 
+ static const char * const hwmon_curr_attr_templates[] = {
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 9493d4a388db..99e0c1b0b5fb 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -118,6 +118,7 @@ enum hwmon_in_attributes {
+ 	hwmon_in_max_alarm,
+ 	hwmon_in_lcrit_alarm,
+ 	hwmon_in_crit_alarm,
++	hwmon_in_enable,
+ };
+ 
+ #define HWMON_I_INPUT		BIT(hwmon_in_input)
+@@ -135,6 +136,7 @@ enum hwmon_in_attributes {
+ #define HWMON_I_MAX_ALARM	BIT(hwmon_in_max_alarm)
+ #define HWMON_I_LCRIT_ALARM	BIT(hwmon_in_lcrit_alarm)
+ #define HWMON_I_CRIT_ALARM	BIT(hwmon_in_crit_alarm)
++#define HWMON_I_ENABLE		BIT(hwmon_in_enable)
+ 
+ enum hwmon_curr_attributes {
+ 	hwmon_curr_input,
 -- 
 2.17.1
