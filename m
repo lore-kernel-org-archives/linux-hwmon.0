@@ -1,64 +1,42 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:42039 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbeJPQGk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Oct 2018 12:06:40 -0400
-Received: by mail-qt1-f195.google.com with SMTP id j46-v6so24660237qtc.9
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Oct 2018 01:17:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20181007204949.19628-1-linus.walleij@linaro.org> <b2a634c1-233c-48be-564f-92435b0cede5@t-online.de>
-In-Reply-To: <b2a634c1-233c-48be-564f-92435b0cede5@t-online.de>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 16 Oct 2018 10:17:13 +0200
-Message-ID: <CACRpkdbwvDmtA2mh-vf_O=sTrEox1O9a8a1jHydzZL5CAK+iKw@mail.gmail.com>
-Subject: Re: [smartmontools-support] [PATCH v5] scsi: Add hwmon support for
- SMART temperature sensors
-To: Christian.Franke@t-online.de
-Cc: "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
-        smartmontools-support@listi.jpberlin.de, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40181 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726468AbeJIDTO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Oct 2018 23:19:14 -0400
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: afd@ti.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (ina3221) Clamp shunt resistor value from DT
+Date: Mon,  8 Oct 2018 13:05:37 -0700
+Message-Id: <20181008200537.22062-1-nicoleotsuka@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Christian,
+The input->shunt_resistor is int type while the value from DT is
+unsigned int. Meanwhile, a divide-by-zero error would happen if
+the value is 0. So this patch just simply clamps the value.
 
-thanks a lot for your feedback!
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+ drivers/hwmon/ina3221.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Tue, Oct 16, 2018 at 7:36 AM Christian Franke
-<Christian.Franke@t-online.de> wrote:
-> Linus Walleij wrote:
-> > ...
-> > - I am uncertain if this applies to SAS drives as well,
-> >    it appears not (Christian Frankes answer) they
-> >    require a different access method, and I can't test it,
-> >    so I am currently only setting it up explicitly for
-> >    ATA slave devices.
->
-> It doesn't apply to SAS devices.
->
-> If there is ATA/SATA temperature detection support in the kernel, it
-> should IMO also be mapped to SCSI/SAS commands as suggested by SAT (see
-> also the mail from Douglas Gilbert):
-> If SCSI Temperature Log page is requested (SCSI LOG SENSE cmd) for an
-> ATA/SATA device, read SMART attributes and return a Log page with
-> Temperature field set from attribute 194.
->
-> Does your patch support this?
-
-Not yet. I have nothing to test with, else I would try to take a
-stab. I try to start by fixing the small need I have but leave space
-and placeholders for improvements.
-
-> SAT requires "SCT Status" or "Device Statistics" access method for
-> temperature. In practice, SMART attribute 194 is supported by much more
-> devices.
-
-If something like this is used by USB attached drives I could try it,
-because I do have a USB cradle.
-
-Yours,
-Linus Walleij
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index c3a497aed345..ce8f0a8c4982 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -536,8 +536,10 @@ static int ina3221_probe_child_from_dt(struct device *dev,
+ 	of_property_read_string(child, "label", &input->label);
+ 
+ 	/* Overwrite default shunt resistor value optionally */
+-	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val))
++	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val)) {
++		val = clamp_val(val, 1, INT_MAX);
+ 		input->shunt_resistor = val;
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
