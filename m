@@ -1,55 +1,48 @@
-Return-Path: <kunyi@google.com>
-Return-path: <kunyi@google.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from youngberry.canonical.com ([91.189.89.112]:54078 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbeJIT2n (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Oct 2018 15:28:43 -0400
+From: Colin King <colin.king@canonical.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (tmp421) make const array 'names' static
+Date: Tue,  9 Oct 2018 13:11:57 +0100
+Message-Id: <20181009121157.21656-1-colin.king@canonical.com>
 MIME-Version: 1.0
-References: <20181008214925.86281-1-kunyi@google.com> <20181010003832.GA21971@roeck-us.net>
-In-Reply-To: <20181010003832.GA21971@roeck-us.net>
-From: Kun Yi <kunyi@google.com>
-Date: Tue, 9 Oct 2018 20:55:19 -0700
-Message-ID: <CAGMNF6WC054KEMk-cOwEUoLzWEq4wpfCXAwDzsvLDWZpWsqzTw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (npcm-750-pwm-fan): Change initial pwm target to 255
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, jdelvare@suse.com,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>, linux-hwmon@vger.kernel.org,
-	Robert Lippert <rlippert@google.com>, Benjamin Fair <benjaminfair@google.com>
-Content-Type: text/plain; charset="UTF-8"
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Great, thanks!
+From: Colin Ian King <colin.king@canonical.com>
 
-On Tue, Oct 9, 2018 at 5:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Oct 08, 2018 at 02:49:25PM -0700, Kun Yi wrote:
-> > Change initial PWM target to 255 to prevent overheating, for example
-> > when BMC hangs in userspace or when userspace fan control application is
-> > not implemented yet.
-> >
-> > Signed-off-by: Kun Yi <kunyi@google.com>
->
-> Makes sense to me, and in line with other drivers. Applied to hwmon-next.
->
-> Thanks,
-> Guenter
->
-> > ---
-> >  drivers/hwmon/npcm750-pwm-fan.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-> > index 96634fd54e0b..c0fab54c0094 100644
-> > --- a/drivers/hwmon/npcm750-pwm-fan.c
-> > +++ b/drivers/hwmon/npcm750-pwm-fan.c
-> > @@ -52,7 +52,7 @@
-> >
-> >  /* Define the Counter Register, value = 100 for match 100% */
-> >  #define NPCM7XX_PWM_COUNTER_DEFAULT_NUM              255
-> > -#define NPCM7XX_PWM_CMR_DEFAULT_NUM          127
-> > +#define NPCM7XX_PWM_CMR_DEFAULT_NUM          255
-> >  #define NPCM7XX_PWM_CMR_MAX                  255
-> >
-> >  /* default all PWM channels PRESCALE2 = 1 */
+The const array 'names' can be made static, saves populating it on
+the stack and will make it read-only.
 
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/hwmon/tmp421.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-
+diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+index e36399213324..8844c9565d2a 100644
+--- a/drivers/hwmon/tmp421.c
++++ b/drivers/hwmon/tmp421.c
+@@ -226,8 +226,10 @@ static int tmp421_detect(struct i2c_client *client,
+ {
+ 	enum chips kind;
+ 	struct i2c_adapter *adapter = client->adapter;
+-	const char * const names[] = { "TMP421", "TMP422", "TMP423",
+-				       "TMP441", "TMP442" };
++	static const char * const names[] = {
++		"TMP421", "TMP422", "TMP423",
++		"TMP441", "TMP442"
++	};
+ 	int addr = client->addr;
+ 	u8 reg;
+ 
 -- 
-Regards,
-Kun
+2.17.1
