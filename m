@@ -1,62 +1,55 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39569 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725766AbeJJH4q (ORCPT
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44739 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726468AbeJJH6D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Oct 2018 03:56:46 -0400
-Date: Tue, 9 Oct 2018 17:37:15 -0700
+        Wed, 10 Oct 2018 03:58:03 -0400
+Received: by mail-pg1-f196.google.com with SMTP id g2-v6so1624891pgu.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Oct 2018 17:38:34 -0700 (PDT)
+Date: Tue, 9 Oct 2018 17:38:32 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Nicolin Chen <nicoleotsuka@gmail.com>
-Cc: jdelvare@suse.com, afd@ti.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (ina3221) Validate shunt resistor value from DT
-Message-ID: <20181010003715.GA21748@roeck-us.net>
-References: <20181008212451.18637-1-nicoleotsuka@gmail.com>
+To: Kun Yi <kunyi@google.com>
+Cc: avifishman70@gmail.com, tmaimon77@gmail.com, jdelvare@suse.com,
+        openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        rlippert@google.com, benjaminfair@google.com
+Subject: Re: [PATCH] hwmon: (npcm-750-pwm-fan): Change initial pwm target to
+ 255
+Message-ID: <20181010003832.GA21971@roeck-us.net>
+References: <20181008214925.86281-1-kunyi@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181008212451.18637-1-nicoleotsuka@gmail.com>
+In-Reply-To: <20181008214925.86281-1-kunyi@google.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 08, 2018 at 02:24:51PM -0700, Nicolin Chen wrote:
-> The input->shunt_resistor is int type while the value from DT is
-> unsigned int. Meanwhile, a divide-by-zero error would happen if
-> the value is 0. So this patch just simply validates the value.
+On Mon, Oct 08, 2018 at 02:49:25PM -0700, Kun Yi wrote:
+> Change initial PWM target to 255 to prevent overheating, for example
+> when BMC hangs in userspace or when userspace fan control application is
+> not implemented yet.
 > 
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> Signed-off-by: Kun Yi <kunyi@google.com>
 
-Applied.
+Makes sense to me, and in line with other drivers. Applied to hwmon-next.
 
 Thanks,
 Guenter
 
 > ---
-> Changelog
-> v1->v2:
->  * Validate the value and error out
+>  drivers/hwmon/npcm750-pwm-fan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  drivers/hwmon/ina3221.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index c3a497aed345..4f3ed24efe8e 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -536,8 +536,14 @@ static int ina3221_probe_child_from_dt(struct device *dev,
->  	of_property_read_string(child, "label", &input->label);
+> diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
+> index 96634fd54e0b..c0fab54c0094 100644
+> --- a/drivers/hwmon/npcm750-pwm-fan.c
+> +++ b/drivers/hwmon/npcm750-pwm-fan.c
+> @@ -52,7 +52,7 @@
 >  
->  	/* Overwrite default shunt resistor value optionally */
-> -	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val))
-> +	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val)) {
-> +		if (val < 1 || val > INT_MAX) {
-> +			dev_err(dev, "invalid shunt resistor value %u of %s\n",
-> +				val, child->name);
-> +			return -EINVAL;
-> +		}
->  		input->shunt_resistor = val;
-> +	}
+>  /* Define the Counter Register, value = 100 for match 100% */
+>  #define NPCM7XX_PWM_COUNTER_DEFAULT_NUM		255
+> -#define NPCM7XX_PWM_CMR_DEFAULT_NUM		127
+> +#define NPCM7XX_PWM_CMR_DEFAULT_NUM		255
+>  #define NPCM7XX_PWM_CMR_MAX			255
 >  
->  	return 0;
->  }
+>  /* default all PWM channels PRESCALE2 = 1 */
