@@ -1,147 +1,225 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33766 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726206AbeJJUow (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Oct 2018 16:44:52 -0400
-Subject: Re: [PATCH 2/2] hwmon: (ina3221) Add operating mode support
-To: Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org
+Return-Path: <nicoleotsuka@gmail.com>
+Return-path: <nicoleotsuka@gmail.com>
+Date: Wed, 10 Oct 2018 14:13:57 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (core) Add hwmon_mode structure and mode
+ sysfs node
+Message-ID: <20181010211356.GA1706@Asurada-Nvidia.nvidia.com>
 References: <20181010043310.30873-1-nicoleotsuka@gmail.com>
- <20181010043310.30873-3-nicoleotsuka@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <32c22986-544e-aca1-12bf-9080667cf499@roeck-us.net>
-Date: Wed, 10 Oct 2018 06:22:39 -0700
+ <20181010043310.30873-2-nicoleotsuka@gmail.com>
+ <2c535925-5b75-75e6-e383-645fdf45f519@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20181010043310.30873-3-nicoleotsuka@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c535925-5b75-75e6-e383-645fdf45f519@roeck-us.net>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Nicolin,
+Hi Guenter,
 
-On 10/09/2018 09:33 PM, Nicolin Chen wrote:
-> The hwmon core now has a new optional mode interface. So this patch
-> just implements this mode support so that user space can check and
-> configure via sysfs node its operating modes: power-down, one-shot,
-> and continuous modes.
+On Wed, Oct 10, 2018 at 06:08:30AM -0700, Guenter Roeck wrote:
+> > +available_modes The available operating modes of the chip.
+> > +		This should be short, lowercase string, not containing
+> > +		whitespace, or the wildcard character '*'.
+> > +		This attribute shows all the available of the operating modes,
+> > +		for example, "power-down" "one-shot" and "continuous".
+> > +		RO
+> > +
+> > +mode		The current operating mode of the chip.
+> > +		This should be short, lowercase string, not containing
+> > +		whitespace, or the wildcard character '*'.
+> > +		This attribute shows the current operating mode of the chip.
+> > +		Writing a valid string from the list of available_modes will
+> > +		configure the chip to the corresponding operating mode.
+> > +		RW
+> > +
+
+> This is not a well defined ABI: The modes would be under full and arbitrary
+> control by drivers, and be completely driver dependent. It isn't just the sysfs
+> attribute that makes the ABI, it is also the contents.
+
+> Also, being able to set the mode itself (for whatever definition of mode)
+> is of questionable value. This is not only for the modes suggested here, but
+> for other possible modes such as comparator mode vs. interrupt mode (which,
+> if configurable, should be via platform data or devicetree node entries).
+> For the modes suggested here, more in the other patch.
+
+I could foresee an objection here but still wrote the change after
+seeing quite a few drivers (especially TI's chips) share the same
+pattern for operating modes: power-down, one-shot and continuous.
+For example, I could add it to ina3221 driver instead of touching
+the core code, but later I would do the same for the ina2xx driver
+(just received a board having ina230/226.)
+
+Although I don't mind doing this and will put it to ina3221 driver
+in v2, yet maybe we could think about a better way to abstract it?
+
+Thank you
+Nicolin
+------
+
+> In short, NACK. I am open to enhancing the ABI, but I don't see the value
+> of this attribute.
 > 
-
-One-shot mode on its own does not make sense or add value: It would require
-explicit driver support to trigger a reading, wait for the result, and
-report it back to the user. If the intent here is to have the user write the
-mode (which triggers the one-shot reading), wait a bit, and then read the
-results, that doesn't make sense because standard userspace applications
-won't know that. Also, that would be unsynchronized - one has to read the
-CVRF bit in the mask/enable register to know if the reading is complete.
-The effort to do all this using CPU cycles would in most if not all cases
-outweigh any perceived power savings. As such, I just don't see the
-practical use case.
-
-power-down mode effectively reinvents runtime power management (runtime
-suspend/resume support) and is thus simply unacceptable.
-
-I am open to help explore adding support for runtime power management
-to the hwmon subsystem, but that would be less than straightforward and
-require an actual use case to warrant the effort.
-
-As such, NACK, sorry.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
->   drivers/hwmon/ina3221.c | 64 +++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 64 insertions(+)
+> Guenter
 > 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index d61688f04594..5218fd85506d 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -77,6 +77,28 @@ enum ina3221_channels {
->   	INA3221_NUM_CHANNELS
->   };
->   
-> +enum ina3221_modes {
-> +	INA3221_MODE_POWERDOWN,
-> +	INA3221_MODE_ONESHOT,
-> +	INA3221_MODE_CONTINUOUS,
-> +	INA3221_NUM_MODES,
-> +};
-> +
-> +static const char *ina3221_mode_names[INA3221_NUM_MODES] = {
-> +	[INA3221_MODE_POWERDOWN] = "power-down",
-> +	[INA3221_MODE_ONESHOT] = "one-shot",
-> +	[INA3221_MODE_CONTINUOUS] = "continuous",
-> +};
-> +
-> +static const u16 ina3221_mode_val[] = {
-> +	[INA3221_MODE_POWERDOWN] = INA3221_CONFIG_MODE_POWERDOWN,
-> +	[INA3221_MODE_ONESHOT] = INA3221_CONFIG_MODE_SHUNT |
-> +				     INA3221_CONFIG_MODE_BUS,
-> +	[INA3221_MODE_CONTINUOUS] = INA3221_CONFIG_MODE_CONTINUOUS |
-> +				    INA3221_CONFIG_MODE_SHUNT |
-> +				    INA3221_CONFIG_MODE_BUS,
-> +};
-> +
->   /**
->    * struct ina3221_input - channel input source specific information
->    * @label: label of channel input source
-> @@ -386,9 +408,51 @@ static const struct hwmon_ops ina3221_hwmon_ops = {
->   	.write = ina3221_write,
->   };
->   
-> +static int ina3221_mode_get_index(struct device *dev, unsigned int *index)
-> +{
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	u16 mode = ina->reg_config & INA3221_CONFIG_MODE_MASK;
-> +
-> +	if (mode == INA3221_CONFIG_MODE_POWERDOWN)
-> +		*index = INA3221_MODE_POWERDOWN;
-> +	if (mode & INA3221_CONFIG_MODE_CONTINUOUS)
-> +		*index = INA3221_MODE_CONTINUOUS;
-> +	else
-> +		*index = INA3221_MODE_ONESHOT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ina3221_mode_set_index(struct device *dev, unsigned int index)
-> +{
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
-> +				 INA3221_CONFIG_MODE_MASK,
-> +				 ina3221_mode_val[index]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Cache the latest config register value */
-> +	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_mode ina3221_hwmon_mode = {
-> +	.names = ina3221_mode_names,
-> +	.list_size = INA3221_NUM_MODES,
-> +	.get_index = ina3221_mode_get_index,
-> +	.set_index = ina3221_mode_set_index,
-> +};
-> +
->   static const struct hwmon_chip_info ina3221_chip_info = {
->   	.ops = &ina3221_hwmon_ops,
->   	.info = ina3221_info,
-> +	.mode = &ina3221_hwmon_mode,
->   };
->   
->   /* Extra attribute groups */
+> 
+> >   update_interval	The interval at which the chip will update readings.
+> >   		Unit: millisecond
+> >   		RW
+> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> > index 975c95169884..5a33b616284b 100644
+> > --- a/drivers/hwmon/hwmon.c
+> > +++ b/drivers/hwmon/hwmon.c
+> > @@ -72,25 +72,88 @@ name_show(struct device *dev, struct device_attribute *attr, char *buf)
+> >   }
+> >   static DEVICE_ATTR_RO(name);
+> > +static ssize_t available_modes_show(struct device *dev,
+> > +				    struct device_attribute *attr, char *buf)
+> > +{
+> > +	struct hwmon_device *hwdev = to_hwmon_device(dev);
+> > +	const struct hwmon_chip_info *chip = hwdev->chip;
+> > +	const struct hwmon_mode *mode = chip->mode;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < mode->list_size; i++)
+> > +		snprintf(buf, PAGE_SIZE, "%s%s ", buf, mode->names[i]);
+> > +
+> > +	return snprintf(buf, PAGE_SIZE, "%s\n", buf);
+> > +}
+> > +static DEVICE_ATTR_RO(available_modes);
+> > +
+> > +static ssize_t mode_show(struct device *dev,
+> > +			 struct device_attribute *attr, char *buf)
+> > +{
+> > +	struct hwmon_device *hwdev = to_hwmon_device(dev);
+> > +	const struct hwmon_chip_info *chip = hwdev->chip;
+> > +	const struct hwmon_mode *mode = chip->mode;
+> > +	unsigned int index;
+> > +	int ret;
+> > +
+> > +	ret = mode->get_index(dev, &index);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return snprintf(buf, PAGE_SIZE, "%s\n", mode->names[index]);
+> > +}
+> > +
+> > +static ssize_t mode_store(struct device *dev, struct device_attribute *attr,
+> > +			  const char *buf, size_t count)
+> > +{
+> > +	struct hwmon_device *hwdev = to_hwmon_device(dev);
+> > +	const struct hwmon_chip_info *chip = hwdev->chip;
+> > +	const struct hwmon_mode *mode = chip->mode;
+> > +	const char **names = mode->names;
+> > +	unsigned int index;
+> > +	int ret;
+> > +
+> > +	/* Get the corresponding mode index */
+> > +	for (index = 0; index < mode->list_size; index++) {
+> > +		if (!strncmp(buf, names[index], strlen(names[index])))
+> > +			break;
+> > +	}
+> > +
+> > +	if (index >= mode->list_size)
+> > +		return -EINVAL;
+> > +
+> > +	ret = mode->set_index(dev, index);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return count;
+> > +}
+> > +static DEVICE_ATTR_RW(mode);
+> > +
+> >   static struct attribute *hwmon_dev_attrs[] = {
+> > -	&dev_attr_name.attr,
+> > +	&dev_attr_name.attr,		/* index = 0 */
+> > +	&dev_attr_available_modes.attr,	/* index = 1 */
+> > +	&dev_attr_mode.attr,		/* index = 2 */
+> >   	NULL
+> >   };
+> > -static umode_t hwmon_dev_name_is_visible(struct kobject *kobj,
+> > -					 struct attribute *attr, int n)
+> > +static umode_t hwmon_dev_is_visible(struct kobject *kobj,
+> > +				    struct attribute *attr, int n)
+> >   {
+> >   	struct device *dev = container_of(kobj, struct device, kobj);
+> > +	struct hwmon_device *hwdev = to_hwmon_device(dev);
+> > -	if (to_hwmon_device(dev)->name == NULL)
+> > -		return 0;
+> > +	if (n == 0 && hwdev->name)
+> > +		return attr->mode;
+> > +	else if (n <= 2 && hwdev->chip->mode)
+> > +		return attr->mode;
+> > -	return attr->mode;
+> > +	return 0;
+> >   }
+> >   static const struct attribute_group hwmon_dev_attr_group = {
+> >   	.attrs		= hwmon_dev_attrs,
+> > -	.is_visible	= hwmon_dev_name_is_visible,
+> > +	.is_visible	= hwmon_dev_is_visible,
+> >   };
+> >   static const struct attribute_group *hwmon_dev_attr_groups[] = {
+> > @@ -591,6 +654,16 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> >   		struct attribute **attrs;
+> >   		int ngroups = 2; /* terminating NULL plus &hwdev->groups */
+> > +		/* Validate optional hwmon_mode */
+> > +		if (chip->mode) {
+> > +			/* Check mandatory properties */
+> > +			if (!chip->mode->names || !chip->mode->list_size ||
+> > +			    !chip->mode->get_index || !chip->mode->set_index) {
+> > +				err = -EINVAL;
+> > +				goto free_hwmon;
+> > +			}
+> > +		}
+> > +
+> >   		if (groups)
+> >   			for (i = 0; groups[i]; i++)
+> >   				ngroups++;
+> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> > index 99e0c1b0b5fb..06c1940ca98b 100644
+> > --- a/include/linux/hwmon.h
+> > +++ b/include/linux/hwmon.h
+> > @@ -365,14 +365,38 @@ struct hwmon_channel_info {
+> >   	const u32 *config;
+> >   };
+> > +/**
+> > + * Chip operating mode information
+> > + * @names:	A list of available operating mode names.
+> > + * @list_size:	The total number of available operating mode names.
+> > + * @get_index:	Callback to get current operating mode index. Mandatory.
+> > + *		Parameters are:
+> > + *		@dev:	Pointer to hardware monitoring device
+> > + *		@index:	Pointer to returned mode index
+> > + *		The function returns 0 on success or a negative error number.
+> > + * @set_index:	Callback to set operating mode using the index. Mandatory.
+> > + *		Parameters are:
+> > + *		@dev:	Pointer to hardware monitoring device
+> > + *		@index:	Mode index in the mode list
+> > + *		The function returns 0 on success or a negative error number.
+> > + */
+> > +struct hwmon_mode {
+> > +	const char **names;
+> > +	unsigned int list_size;
+> > +	int (*get_index)(struct device *dev, unsigned int *index);
+> > +	int (*set_index)(struct device *dev, unsigned int index);
+> > +};
+> > +
+> >   /**
+> >    * Chip configuration
+> >    * @ops:	Pointer to hwmon operations.
+> >    * @info:	Null-terminated list of channel information.
+> > + * @mode:	Pointer to hwmon operating mode (optional).
+> >    */
+> >   struct hwmon_chip_info {
+> >   	const struct hwmon_ops *ops;
+> >   	const struct hwmon_channel_info **info;
+> > +	const struct hwmon_mode *mode;
+> >   };
+> >   /* hwmon_device_register() is deprecated */
+> > 
 > 
