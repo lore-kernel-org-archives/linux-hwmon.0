@@ -1,28 +1,41 @@
 Return-Path: <nicoleotsuka@gmail.com>
 Return-path: <nicoleotsuka@gmail.com>
+Date: Thu, 11 Oct 2018 12:36:59 -0700
 From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	corbet@lwn.net,
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, corbet@lwn.net,
 	linux-doc@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: Add operating mode support for core and ina3221
-Date: Tue,  9 Oct 2018 21:33:08 -0700
-Message-Id: <20181010043310.30873-1-nicoleotsuka@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (ina3221) Add operating mode support
+Message-ID: <20181011193658.GA3828@Asurada-Nvidia.nvidia.com>
+References: <20181010043310.30873-1-nicoleotsuka@gmail.com>
+ <20181010043310.30873-3-nicoleotsuka@gmail.com>
+ <32c22986-544e-aca1-12bf-9080667cf499@roeck-us.net>
+ <20181010230906.GB1706@Asurada-Nvidia.nvidia.com>
+ <20181010234300.GA25480@roeck-us.net>
+ <20181011002411.GA10379@Asurada-Nvidia.nvidia.com>
+ <20181011193152.GA4854@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20181011193152.GA4854@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Add operating mode support in the core and ina3221.
+On Thu, Oct 11, 2018 at 12:31:52PM -0700, Guenter Roeck wrote:
 
-Nicolin Chen (2):
-  hwmon: (core) Add hwmon_mode structure and mode sysfs node
-  hwmon: (ina3221) Add operating mode support
+> > One more question here, and this might sound a bit abuse of using
+> > the existing hwmon ABI: would it sound plausible to you that the
+> > driver powers down the chip when all three channels get disabled
+> > via in[123]_enable nodes? :)
+> > 
+> 
+> I would not call that an abuse, no.
 
- Documentation/hwmon/sysfs-interface | 15 +++++
- drivers/hwmon/hwmon.c               | 87 ++++++++++++++++++++++++++---
- drivers/hwmon/ina3221.c             | 64 +++++++++++++++++++++
- include/linux/hwmon.h               | 24 ++++++++
- 4 files changed, 183 insertions(+), 7 deletions(-)
+Hmm..do you mean that you aren't in favor of powering down the chip
+after all channels get disabled?
 
--- 
-2.17.1
+I was thinking about having pm_runtime_get_sync()/put() for channel
+enabling/disabling routine of in[123]_enable.
+
+Thanks
+Nicolin
