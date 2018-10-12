@@ -1,183 +1,86 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45251 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbeJLKiy (ORCPT
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43797 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728131AbeJLUQy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Oct 2018 06:38:54 -0400
-Date: Thu, 11 Oct 2018 20:08:38 -0700
+        Fri, 12 Oct 2018 16:16:54 -0400
+Date: Fri, 12 Oct 2018 05:44:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) remove redundant 'default n' from Kconfig
-Message-ID: <20181012030838.GA12708@roeck-us.net>
-References: <CGME20181010143559eucas1p109d607c22ad0d3b2934ac92e14b02256@eucas1p1.samsung.com>
- <20181010143559eucas1p109d607c22ad0d3b2934ac92e14b02256~cRgTZHiWX1762717627eucas1p1I@eucas1p1.samsung.com>
+To: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Rob Herring <robh@kernel.org>,
+        Eddie James <eajames@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, jdelvare@suse.com,
+        linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, joel@jms.id.au
+Subject: Re: [PATCH v5 01/10] dt-bindings: fsi: Add P9 OCC device
+ documentation
+Message-ID: <20181012124434.GA11386@roeck-us.net>
+References: <1535664761-86018-1-git-send-email-eajames@linux.vnet.ibm.com>
+ <1535664761-86018-2-git-send-email-eajames@linux.vnet.ibm.com>
+ <20180910181610.GA5907@bogus>
+ <c002018d3765280e135d673f7c731784a90a260d.camel@kernel.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181010143559eucas1p109d607c22ad0d3b2934ac92e14b02256~cRgTZHiWX1762717627eucas1p1I@eucas1p1.samsung.com>
+In-Reply-To: <c002018d3765280e135d673f7c731784a90a260d.camel@kernel.crashing.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 10, 2018 at 04:35:57PM +0200, Bartlomiej Zolnierkiewicz wrote:
-> 'default n' is the default value for any bool or tristate Kconfig
-> setting so there is no need to write it explicitly.
+On Wed, Sep 12, 2018 at 09:56:33AM +0200, Benjamin Herrenschmidt wrote:
+> On Mon, 2018-09-10 at 13:16 -0500, Rob Herring wrote:
+> > On Thu, Aug 30, 2018 at 04:32:32PM -0500, Eddie James wrote:
+> > > Document the bindings for the FSI-attached POWER9 On-Chip Controller.
+> > > 
+> > > Signed-off-by: Eddie James <eajames@linux.vnet.ibm.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt | 15 +++++++++++++++
+> > >  1 file changed, 15 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+> > > new file mode 100644
+> > > index 0000000..46372f6
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+> > > @@ -0,0 +1,15 @@
+> > > +Device-tree bindings for FSI-attached POWER9 On-Chip Controller (OCC)
+> > > +---------------------------------------------------------------------
+> > > +
+> > > +This is the binding for the P9 On-Chip Controller accessed over FSI from a
+> > > +service processor. See fsi.txt for details on bindings for FSI slave and CFAM
+> > > +nodes.
+> > > +
+> > > +Required properties:
+> > > + - compatible = "ibm,p9-occ"
+> > > +
+> > > +Examples:
+> > > +
+> > > +    occ {
+> > 
+> > FSI slave devices are supposed to have an address according to the 
+> > binding doc.
 > 
-> Also since commit f467c5640c29 ("kconfig: only write '# CONFIG_FOO
-> is not set' for visible symbols") the Kconfig behavior is the same
-> regardless of 'default n' being present or not:
+> This isn't the FSI device per-se actually. This is a node below the
+> "sbefifo" FSI device. The SBE fifo is the mechanism by which we
+> communicate with the OCC. The sbefifo doesn't really define a "bus",
+> it's mostly used from userspace directly via /dev/sbefifo* to perform
+> various tasks in the chip, but it happens to also provide the in-kernel 
+> transport for the OCC commands.
 > 
->     ...
->     One side effect of (and the main motivation for) this change is making
->     the following two definitions behave exactly the same:
->     
->         config FOO
->                 bool
->     
->         config FOO
->                 bool
->                 default n
->     
->     With this change, neither of these will generate a
->     '# CONFIG_FOO is not set' line (assuming FOO isn't selected/implied).
->     That might make it clearer to people that a bare 'default n' is
->     redundant.
->     ...
-> 
-> Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
-Applied to hwmon-next.
+What is the conclusion here ? Is it ok as-is, or does it have to be changed ?
 
 Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/pmbus/Kconfig |   15 ---------------
->  1 file changed, 15 deletions(-)
+> Cheers,
+> Ben.
 > 
-> Index: b/drivers/hwmon/pmbus/Kconfig
-> ===================================================================
-> --- a/drivers/hwmon/pmbus/Kconfig	2018-10-09 15:58:39.067122941 +0200
-> +++ b/drivers/hwmon/pmbus/Kconfig	2018-10-10 16:31:57.671888538 +0200
-> @@ -5,7 +5,6 @@
->  menuconfig PMBUS
->  	tristate "PMBus support"
->  	depends on I2C
-> -	default n
->  	help
->  	  Say yes here if you want to enable PMBus support.
->  
-> @@ -28,7 +27,6 @@ config SENSORS_PMBUS
->  
->  config SENSORS_ADM1275
->  	tristate "Analog Devices ADM1275 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Analog
->  	  Devices ADM1075, ADM1272, ADM1275, ADM1276, ADM1278, ADM1293,
-> @@ -49,7 +47,6 @@ config SENSORS_IBM_CFFPS
->  
->  config SENSORS_IR35221
->  	tristate "Infineon IR35221"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for the
->  	  Infineon IR35221 controller.
-> @@ -59,7 +56,6 @@ config SENSORS_IR35221
->  
->  config SENSORS_LM25066
->  	tristate "National Semiconductor LM25066 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for National
->  	  Semiconductor LM25056, LM25066, LM5064, and LM5066.
-> @@ -69,7 +65,6 @@ config SENSORS_LM25066
->  
->  config SENSORS_LTC2978
->  	tristate "Linear Technologies LTC2978 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Linear
->  	  Technology LTC2974, LTC2975, LTC2977, LTC2978, LTC2980, LTC3880,
-> @@ -88,7 +83,6 @@ config SENSORS_LTC2978_REGULATOR
->  
->  config SENSORS_LTC3815
->  	tristate "Linear Technologies LTC3815"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Linear
->  	  Technology LTC3815.
-> @@ -98,7 +92,6 @@ config SENSORS_LTC3815
->  
->  config SENSORS_MAX16064
->  	tristate "Maxim MAX16064"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Maxim
->  	  MAX16064.
-> @@ -108,7 +101,6 @@ config SENSORS_MAX16064
->  
->  config SENSORS_MAX20751
->  	tristate "Maxim MAX20751"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Maxim
->  	  MAX20751.
-> @@ -118,7 +110,6 @@ config SENSORS_MAX20751
->  
->  config SENSORS_MAX31785
->  	tristate "Maxim MAX31785 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Maxim
->  	  MAX31785.
-> @@ -128,7 +119,6 @@ config SENSORS_MAX31785
->  
->  config SENSORS_MAX34440
->  	tristate "Maxim MAX34440 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Maxim
->  	  MAX34440, MAX34441, MAX34446, MAX34451, MAX34460, and MAX34461.
-> @@ -138,7 +128,6 @@ config SENSORS_MAX34440
->  
->  config SENSORS_MAX8688
->  	tristate "Maxim MAX8688"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Maxim
->  	  MAX8688.
-> @@ -148,7 +137,6 @@ config SENSORS_MAX8688
->  
->  config SENSORS_TPS40422
->  	tristate "TI TPS40422"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for TI
->  	  TPS40422.
-> @@ -167,7 +155,6 @@ config SENSORS_TPS53679
->  
->  config SENSORS_UCD9000
->  	tristate "TI UCD90120, UCD90124, UCD90160, UCD9090, UCD90910"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for TI
->  	  UCD90120, UCD90124, UCD90160, UCD9090, UCD90910, Sequencer and System
-> @@ -178,7 +165,6 @@ config SENSORS_UCD9000
->  
->  config SENSORS_UCD9200
->  	tristate "TI UCD9220, UCD9222, UCD9224, UCD9240, UCD9244, UCD9246, UCD9248"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for TI
->  	  UCD9220, UCD9222, UCD9224, UCD9240, UCD9244, UCD9246, and UCD9248
-> @@ -189,7 +175,6 @@ config SENSORS_UCD9200
->  
->  config SENSORS_ZL6100
->  	tristate "Intersil ZL6100 and compatibles"
-> -	default n
->  	help
->  	  If you say yes here you get hardware monitoring support for Intersil
->  	  ZL2004, ZL2005, ZL2006, ZL2008, ZL2105, ZL2106, ZL6100, ZL6105,
+> > > +        compatible = "ibm,p9-occ";
+> > > +    };
+> > > -- 
+> > > 1.8.3.1
+> > > 
+> 
