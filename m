@@ -1,99 +1,65 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41504 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbeJPDlZ (ORCPT
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:42375 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726469AbeJORGF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Oct 2018 23:41:25 -0400
-Date: Mon, 15 Oct 2018 12:54:40 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wojciech =?utf-8?Q?Sle=C5=84ska?= <wojciech.slenska@gmail.com>
-Cc: robh@kernel.org, jdelvare@suse.com, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (sht3x) add devicetree support
-Message-ID: <20181015195440.GA21968@roeck-us.net>
-References: <1538717915-22294-1-git-send-email-wojciech.slenska@gmail.com>
- <20181012202829.GA24897@bogus>
- <CAMYPSMqVHYYLpTmk5ACktKCms3yGFXXs9_m4xOGyVpq3VVSigg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMYPSMqVHYYLpTmk5ACktKCms3yGFXXs9_m4xOGyVpq3VVSigg@mail.gmail.com>
+        Mon, 15 Oct 2018 13:06:05 -0400
+From: Dmitry Bazhenov <bazhenov.dn@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc: Dmitry Bazhenov <bazhenov.dn@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus) Fix page count auto-detection.
+Date: Mon, 15 Oct 2018 14:21:22 +0500
+Message-Id: <20181015092122.10533-1-bazhenov.dn@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 15, 2018 at 07:55:58AM +0200, Wojciech Sleńska wrote:
-> pt., 12 paź 2018 o 22:28 Rob Herring <robh@kernel.org> napisał(a):
-> >
-> > On Fri, Oct 05, 2018 at 07:38:35AM +0200, Wojciech Slenska wrote:
-> >
-> > Commit msg?
-> >
-> > > Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/hwmon/sht3x.txt | 16 +++++++++++++
-> >
-> > Please split bindings to separate patch.
-> 
-> I will do this.
-> 
-> >
-> > >  drivers/hwmon/sht3x.c                             | 28 ++++++++++++++++++++---
-> > >  2 files changed, 41 insertions(+), 3 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/hwmon/sht3x.txt
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/sht3x.txt b/Documentation/devicetree/bindings/hwmon/sht3x.txt
-> > > new file mode 100644
-> > > index 0000000..80b117e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/sht3x.txt
-> > > @@ -0,0 +1,16 @@
-> > > +Sensirion SHT3x Humidity and Temperature Sensor
-> > > +
-> > > +Required node properties:
-> > > +- compatible: "sensirion,sht3x" or "sensirion,sts3x"
-> > > +- reg: I2C bus address of the device
-> > > +
-> > > +Optional properties:
-> > > +- sensirion,blocking-io: enable blocking mode on i2c
-> >
-> > This is not a h/w parameter and shouldn't be in DT.
-> >
-> > > +- sensirion,no-high-precision: disable high accuracy
-> >
-> > Maybe this one is okay, but couldn't the user want to set this? If so,
-> > then it should be a sysfs attr.
-> 
-> Those two parameters have been just moved from
-> linux/include/linux/platform_data/sht3x.h
-> Currently, those two parameters can be set in board file, so for me
-> was natural to move it to dts.
-> Of course, I can remove it from dts completely.
-> 
+Devices with compatible="pmbus" field have zero initial page count,
+and pmbus_clear_faults() being called before the page count auto-
+detection does not actually clear faults because it depends on the
+page count. Non-cleared faults in its turn may fail the subsequent
+page count auto-detection.
 
-I wonder if there is an authoritative document explaining the current policy
-in respect to devicetree properties. Sometimes I hear that platform
-configuration parameters are now permitted, sometimes I hear that we are
-back to hardware description only.
+This patch fixes this problem by calling pmbus_clear_fault_page()
+for currently set page and calling pmbus_clear_faults() after the
+page count was detected.
 
-Guenter
+Signed-off-by: Dmitry Bazhenov <bazhenov.dn@gmail.com>
+---
+ drivers/hwmon/pmbus/pmbus.c      | 2 ++
+ drivers/hwmon/pmbus/pmbus_core.c | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-> >
-> > > +
-> > > +Example sht3x node:
-> > > +
-> > > +sensor {
-> >
-> > sensor@4a
-> >
-> 
-> I will fix this.
-> 
-> > > +     compatible = "sensirion,sht3x";
-> > > +     reg = <0x4a>;
-> > > +}
-> >
-> 
-> BR
-> Wojciech Slenska
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 7718e58dbda5..7688dab32f6e 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -118,6 +118,8 @@ static int pmbus_identify(struct i2c_client *client,
+ 		} else {
+ 			info->pages = 1;
+ 		}
++
++		pmbus_clear_faults(client);
+ 	}
+ 
+ 	if (pmbus_check_byte_register(client, 0, PMBUS_VOUT_MODE)) {
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 82c3754e21e3..2e2b5851139c 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2015,7 +2015,10 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+ 		client->flags |= I2C_CLIENT_PEC;
+ 
+-	pmbus_clear_faults(client);
++	if (data->info->pages)
++		pmbus_clear_faults(client);
++	else
++		pmbus_clear_fault_page(client, -1);
+ 
+ 	if (info->identify) {
+ 		ret = (*info->identify)(client, info);
+-- 
+2.17.1
