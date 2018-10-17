@@ -5,154 +5,100 @@ To: jdelvare@suse.com,
 	linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] hwmon: (ina3221) Serialize sysfs ABI accesses
-Date: Tue, 16 Oct 2018 18:24:24 -0700
-Message-Id: <20181017012426.26958-4-nicoleotsuka@gmail.com>
+Subject: [PATCH 4/5] hwmon: (ina3221) Make sure data is ready after channel enabling
+Date: Tue, 16 Oct 2018 18:24:25 -0700
+Message-Id: <20181017012426.26958-5-nicoleotsuka@gmail.com>
 In-Reply-To: <20181017012426.26958-1-nicoleotsuka@gmail.com>
 References: <20181017012426.26958-1-nicoleotsuka@gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-This change adds a mutex to serialize accesses of sysfs attributes.
-
-This is required when polling CVRF bit of the MASK/ENABLE register
-because this bit is cleared on a read of this MASK/ENABLE register
-or a write to CONFIG register, which means that this bit might be
-accidentally cleared by reading other fields like alert flags.
-
-So this patch adds a mutex lock to protect the write() and read()
-callbacks. The read_string() callback won't need the lock since it
-just returns the label without touching any hardware register.
+The data might need some time to get ready after channel enabling,
+although the data register is readable without CVRF being set. So
+this patch adds a CVRF polling to make sure that data register is
+updated with the new data.
 
 Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 ---
- drivers/hwmon/ina3221.c | 51 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 45 insertions(+), 6 deletions(-)
+ drivers/hwmon/ina3221.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 3e98b59108ee..5fc375bf6635 100644
+index 5fc375bf6635..160ddc404d73 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -18,6 +18,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/of.h>
- #include <linux/regmap.h>
+@@ -45,6 +45,7 @@
+ #define INA3221_CONFIG_MODE_BUS		BIT(1)
+ #define INA3221_CONFIG_MODE_CONTINUOUS	BIT(2)
+ #define INA3221_CONFIG_CHx_EN(x)	BIT(14 - (x))
++#define INA3221_CONFIG_CHs_EN_MASK	GENMASK(14, 12)
  
-@@ -94,12 +95,14 @@ struct ina3221_input {
-  * @regmap: Register map of the device
-  * @fields: Register fields of the device
-  * @inputs: Array of channel input source specific structures
-+ * @lock: mutex lock to serialize sysfs attribute accesses
-  * @reg_config: Register value of INA3221_CONFIG
-  */
- struct ina3221_data {
- 	struct regmap *regmap;
- 	struct regmap_field *fields[F_MAX_FIELDS];
- 	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
-+	struct mutex lock;
- 	u32 reg_config;
- };
+ #define INA3221_RSHUNT_DEFAULT		10000
  
-@@ -261,29 +264,53 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
- static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
- 			u32 attr, int channel, long *val)
- {
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+	int ret;
+@@ -52,6 +53,9 @@ enum ina3221_fields {
+ 	/* Configuration */
+ 	F_RST,
+ 
++	/* Status Flags */
++	F_CVRF,
 +
-+	mutex_lock(&ina->lock);
-+
- 	switch (type) {
- 	case hwmon_in:
- 		/* 0-align channel ID */
--		return ina3221_read_in(dev, attr, channel - 1, val);
-+		ret = ina3221_read_in(dev, attr, channel - 1, val);
-+		break;
- 	case hwmon_curr:
--		return ina3221_read_curr(dev, attr, channel, val);
-+		ret = ina3221_read_curr(dev, attr, channel, val);
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		ret = -EOPNOTSUPP;
-+		break;
- 	}
-+
-+	mutex_unlock(&ina->lock);
-+
-+	return ret;
+ 	/* Alert Flags */
+ 	F_WF3, F_WF2, F_WF1,
+ 	F_CF3, F_CF2, F_CF1,
+@@ -63,6 +67,7 @@ enum ina3221_fields {
+ static const struct reg_field ina3221_reg_fields[] = {
+ 	[F_RST] = REG_FIELD(INA3221_CONFIG, 15, 15),
+ 
++	[F_CVRF] = REG_FIELD(INA3221_MASK_ENABLE, 0, 0),
+ 	[F_WF3] = REG_FIELD(INA3221_MASK_ENABLE, 3, 3),
+ 	[F_WF2] = REG_FIELD(INA3221_MASK_ENABLE, 4, 4),
+ 	[F_WF1] = REG_FIELD(INA3221_MASK_ENABLE, 5, 5),
+@@ -111,6 +116,19 @@ static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+ 	return ina->reg_config & INA3221_CONFIG_CHx_EN(channel);
  }
  
- static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
- 			 u32 attr, int channel, long val)
++static inline int ina3221_wait_for_data_if_active(struct ina3221_data *ina)
++{
++	u32 cvrf;
++
++	/* No need to wait if all channels are disabled */
++	if ((ina->reg_config & INA3221_CONFIG_CHs_EN_MASK) == 0)
++		return 0;
++
++	/* Polling the CVRF bit to make sure read data is ready */
++	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
++					      cvrf, cvrf, 100, 100000);
++}
++
+ static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
+ 			      int *val)
  {
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+	int ret;
-+
-+	mutex_lock(&ina->lock);
-+
- 	switch (type) {
- 	case hwmon_in:
- 		/* 0-align channel ID */
--		return ina3221_write_enable(dev, channel - 1, val);
-+		ret = ina3221_write_enable(dev, channel - 1, val);
-+		break;
- 	case hwmon_curr:
--		return ina3221_write_curr(dev, attr, channel, val);
-+		ret = ina3221_write_curr(dev, attr, channel, val);
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		ret = -EOPNOTSUPP;
-+		break;
- 	}
-+
-+	mutex_unlock(&ina->lock);
-+
-+	return ret;
- }
- 
- static int ina3221_read_string(struct device *dev, enum hwmon_sensor_types type,
-@@ -578,6 +605,7 @@ static int ina3221_probe(struct i2c_client *client,
+@@ -258,6 +276,13 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
  	if (ret)
  		return ret;
  
-+	mutex_init(&ina->lock);
- 	dev_set_drvdata(dev, ina);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ina,
-@@ -585,12 +613,22 @@ static int ina3221_probe(struct i2c_client *client,
- 							 ina3221_groups);
- 	if (IS_ERR(hwmon_dev)) {
- 		dev_err(dev, "Unable to register hwmon device\n");
-+		mutex_destroy(&ina->lock);
- 		return PTR_ERR(hwmon_dev);
- 	}
- 
++	/* Make sure data conversion is finished */
++	ret = ina3221_wait_for_data_if_active(ina);
++	if (ret) {
++		dev_err(dev, "Timed out at waiting for CVRF bit\n");
++		return ret;
++	}
++
  	return 0;
  }
  
-+static int ina3221_remove(struct i2c_client *client)
-+{
-+	struct ina3221_data *ina = dev_get_drvdata(&client->dev);
-+
-+	mutex_destroy(&ina->lock);
-+
-+	return 0;
-+}
-+
- static int __maybe_unused ina3221_suspend(struct device *dev)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
-@@ -659,6 +697,7 @@ MODULE_DEVICE_TABLE(i2c, ina3221_ids);
+@@ -676,6 +701,13 @@ static int __maybe_unused ina3221_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
- static struct i2c_driver ina3221_i2c_driver = {
- 	.probe = ina3221_probe,
-+	.remove = ina3221_remove,
- 	.driver = {
- 		.name = INA3221_DRIVER_NAME,
- 		.of_match_table = ina3221_of_match_table,
++	/* Make sure data conversion is finished */
++	ret = ina3221_wait_for_data_if_active(ina);
++	if (ret) {
++		dev_err(dev, "Timed out at waiting for CVRF bit\n");
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.17.1
