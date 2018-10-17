@@ -1,55 +1,52 @@
 Return-Path: <nicoleotsuka@gmail.com>
 Return-path: <nicoleotsuka@gmail.com>
-Date: Wed, 17 Oct 2018 13:39:17 -0700
+Date: Wed, 17 Oct 2018 13:53:48 -0700
 From: Nicolin Chen <nicoleotsuka@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] hwmon: (ina3221) Return -ENODATA for two alarms
- attributes
-Message-ID: <20181017203917.GB15941@Asurada-Nvidia.nvidia.com>
+Subject: Re: [PATCH 4/5] hwmon: (ina3221) Make sure data is ready after
+ channel enabling
+Message-ID: <20181017205348.GC15941@Asurada-Nvidia.nvidia.com>
 References: <20181017012426.26958-1-nicoleotsuka@gmail.com>
- <20181017012426.26958-3-nicoleotsuka@gmail.com>
- <20181017194605.GB6812@roeck-us.net>
+ <20181017012426.26958-5-nicoleotsuka@gmail.com>
+ <20181017165543.GA22822@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181017194605.GB6812@roeck-us.net>
+In-Reply-To: <20181017165543.GA22822@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Oct 17, 2018 at 12:46:05PM -0700, Guenter Roeck wrote:
-> On Tue, Oct 16, 2018 at 06:24:23PM -0700, Nicolin Chen wrote:
-> > There is nothing critically wrong to read these two attributes
-> > without having a is_enabled() check at this point. But reading
-> > the MASK_ENABLE register would clear the CVRF bit according to
-> > the datasheet. So it'd be safer to fence for disabled channels
-> > in order to add pm runtime feature.
-> > 
-> > Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> > ---
-> >  drivers/hwmon/ina3221.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> > index d61688f04594..3e98b59108ee 100644
-> > --- a/drivers/hwmon/ina3221.c
-> > +++ b/drivers/hwmon/ina3221.c
-> > @@ -200,6 +200,8 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
-> >  		return 0;
-> >  	case hwmon_curr_crit_alarm:
-> >  	case hwmon_curr_max_alarm:
-> > +		if (!ina3221_is_enabled(ina, channel))
-> > +			return -ENODATA;
+Hello Guenter,
+
+On Wed, Oct 17, 2018 at 09:55:43AM -0700, Guenter Roeck wrote:
+> > @@ -676,6 +701,13 @@ static int __maybe_unused ina3221_resume(struct device *dev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	/* Make sure data conversion is finished */
+> > +	ret = ina3221_wait_for_data_if_active(ina);
 > 
-> Makes sense, but can you check what the sensors command does with this ?
+> This is quite expensive and would delay resume (and enable, for that matter).
+> A less expensive solution would be to save the enable time here and in
+> ina3221_write_enable(). ina3221_wait_for_data_if_active() can then be called
+> from read functions and would wait if not enough time has expired.
+> 
+> 	if (time_before(...))
+> 		usleep_range(missing wait time, missing_wait_time * 2);
+> 
+> or something like that. This could be done per channel or, to keep
+> things simple, just using a single time for all channels.
 
-Not quite understanding the question. Do you mean the user case
-causing the race condition -- wiping out the CVRF bit?
+I was thinking something that'd fit one-shot mode too so decided
+to add a polling. But you are right. It does make sense to skip
+polling until an actual read happens, though it also feels a bit
+reasonable to me that putting a polling to the enabling routine.
 
-> If it bails out I'd rather have the code return 0 and no error (after all,
-> the sensor is disabled, so any alarm would be bogus).
-
-That's true. Since they are alert flags, should return 0. I will
-fix it.
+The wait time would be sightly more complicated than the polling
+actually, as it needs to involve total conversion time which may
+vary depending on the number of enabled channels. I will see what
+would be safer and easier and apply that in v2.
 
 Thanks
+Nicolin
