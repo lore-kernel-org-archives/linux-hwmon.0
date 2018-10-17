@@ -1,93 +1,102 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga18.intel.com ([134.134.136.126]:61673 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727414AbeJPBoh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Oct 2018 21:44:37 -0400
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To: Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+Received: from mail-it1-f201.google.com ([209.85.166.201]:58309 "EHLO
+        mail-it1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727377AbeJRGYg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 18 Oct 2018 02:24:36 -0400
+Received: by mail-it1-f201.google.com with SMTP id d7-v6so3673441itf.7
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Oct 2018 15:26:50 -0700 (PDT)
+Date: Wed, 17 Oct 2018 15:26:39 -0700
+Message-Id: <20181017222639.254434-1-kunyi@google.com>
+Mime-Version: 1.0
+Subject: [PATCH v3 1/2] hwmon: (adm1275): Allow setting shunt reg value
+From: Kun Yi <kunyi@google.com>
+Cc: openbmc@lists.ozlabs.org, kunyi@google.com,
         Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
-        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
-        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        David Kershner <david.kershner@unisys.com>,
-        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason M Biils <jason.m.bills@linux.intel.com>
-Subject: [RESEND PATCH v8 12/12] Add maintainers for the PECI subsystem
-Date: Mon, 15 Oct 2018 10:57:12 -0700
-Message-Id: <20181015175712.1500-13-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20181015175712.1500-1-jae.hyun.yoo@linux.intel.com>
-References: <20181015175712.1500-1-jae.hyun.yoo@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To: unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-This commit adds maintainer information for the PECI subsystem.
+The ADM series of hotswap controllers support extending
+the current measurement range by using a sensing resistor
+value other than the typical 1 mOhm. For example, using a 0.5 mOhm
+sensing resistor doubles the maximal current can be measured.
 
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jason M Biils <jason.m.bills@linux.intel.com>
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Current driver assumes a shunt resistor value of 1 mOhm in calculation,
+meaning for other resistor values, hwmon will report scaled
+current/power measurements. This patch parses device tree parameter
+"shunt-resistor-micro-ohms", if there is one.
+
+Signed-off-by: Kun Yi <kunyi@google.com>
 ---
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Changes in v3:
+- splitted hwmon and device tree binding patches
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f934a9187f7c..131f583af3a7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11550,6 +11550,19 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
+ Documentation/hwmon/adm1275   |  3 +++
+ drivers/hwmon/pmbus/adm1275.c | 15 +++++++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/hwmon/adm1275 b/Documentation/hwmon/adm1275
+index 39033538eb03..5e277b0d91ce 100644
+--- a/Documentation/hwmon/adm1275
++++ b/Documentation/hwmon/adm1275
+@@ -58,6 +58,9 @@ The ADM1075, unlike many other PMBus devices, does not support internal voltage
+ or current scaling. Reported voltages, currents, and power are raw measurements,
+ and will typically have to be scaled.
  
-+PECI SUBSYSTEM
-+M:	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-+M:	Jason M Biils <jason.m.bills@linux.intel.com>
-+L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/peci/
-+F:	drivers/mfd/intel-peci-client.c
-+F:	drivers/peci/
-+F:	drivers/hwmon/peci-*.c
-+F:	include/linux/mfd/intel-peci-client.h
-+F:	include/linux/peci.h
-+F:	include/uapi/linux/peci-ioctl.h
++The shunt value in micro-ohms can be set via device tree at compile-time. Please
++refer to the Documentation/devicetree/bindings/hwmon/adm1275.txt for bindings
++if the device tree is used.
+ 
+ Platform data support
+ ---------------------
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 13600fa79e7f..f569372c9204 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -373,6 +373,7 @@ static int adm1275_probe(struct i2c_client *client,
+ 	const struct coefficients *coefficients;
+ 	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
+ 	int tindex = -1;
++	u32 shunt;
+ 
+ 	if (!i2c_check_functionality(client->adapter,
+ 				     I2C_FUNC_SMBUS_READ_BYTE_DATA
+@@ -421,6 +422,13 @@ static int adm1275_probe(struct i2c_client *client,
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	if (of_property_read_u32(client->dev.of_node,
++				 "shunt-resistor-micro-ohms", &shunt))
++		shunt = 1000; /* 1 mOhm if not set via DT */
 +
- PER-CPU MEMORY ALLOCATOR
- M:	Dennis Zhou <dennis@kernel.org>
- M:	Tejun Heo <tj@kernel.org>
++	if (shunt == 0)
++		return -EINVAL;
++
+ 	data->id = mid->driver_data;
+ 
+ 	info = &data->info;
+@@ -654,12 +662,15 @@ static int adm1275_probe(struct i2c_client *client,
+ 		info->R[PSC_VOLTAGE_OUT] = coefficients[voindex].R;
+ 	}
+ 	if (cindex >= 0) {
+-		info->m[PSC_CURRENT_OUT] = coefficients[cindex].m;
++		/* Scale current with sense resistor value */
++		info->m[PSC_CURRENT_OUT] =
++			coefficients[cindex].m * shunt / 1000;
+ 		info->b[PSC_CURRENT_OUT] = coefficients[cindex].b;
+ 		info->R[PSC_CURRENT_OUT] = coefficients[cindex].R;
+ 	}
+ 	if (pindex >= 0) {
+-		info->m[PSC_POWER] = coefficients[pindex].m;
++		info->m[PSC_POWER] =
++			coefficients[pindex].m * shunt / 1000;
+ 		info->b[PSC_POWER] = coefficients[pindex].b;
+ 		info->R[PSC_POWER] = coefficients[pindex].R;
+ 	}
 -- 
-2.19.1
+2.19.1.331.ge82ca0e54c-goog
