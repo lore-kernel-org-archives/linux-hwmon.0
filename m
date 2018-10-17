@@ -1,42 +1,55 @@
 Return-Path: <nicoleotsuka@gmail.com>
 Return-path: <nicoleotsuka@gmail.com>
-Date: Wed, 17 Oct 2018 13:15:02 -0700
+Date: Wed, 17 Oct 2018 13:39:17 -0700
 From: Nicolin Chen <nicoleotsuka@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] hwmon: (core) Inherit power properties to hdev
-Message-ID: <20181017201501.GA15941@Asurada-Nvidia.nvidia.com>
+Subject: Re: [PATCH 2/5] hwmon: (ina3221) Return -ENODATA for two alarms
+ attributes
+Message-ID: <20181017203917.GB15941@Asurada-Nvidia.nvidia.com>
 References: <20181017012426.26958-1-nicoleotsuka@gmail.com>
- <20181017012426.26958-2-nicoleotsuka@gmail.com>
- <20181017194430.GA6812@roeck-us.net>
+ <20181017012426.26958-3-nicoleotsuka@gmail.com>
+ <20181017194605.GB6812@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181017194430.GA6812@roeck-us.net>
+In-Reply-To: <20181017194605.GB6812@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Oct 17, 2018 at 12:44:30PM -0700, Guenter Roeck wrote:
-
-> > +	hdev->driver = dev->driver;
-> > +	hdev->power = dev->power;
-> > +	hdev->pm_domain = dev->pm_domain;
-> 
-> dev can, unfortunately, be NULL
-> 
-> >  	hdev->of_node = dev ? dev->of_node : NULL;
-> 
-> ... as you can see here.
-
-Oops..will fix it.
-
-Thanks!
-
-> 
-> Guenter
-> 
-> >  	hwdev->chip = chip;
-> >  	dev_set_drvdata(hdev, drvdata);
-> > -- 
-> > 2.17.1
+On Wed, Oct 17, 2018 at 12:46:05PM -0700, Guenter Roeck wrote:
+> On Tue, Oct 16, 2018 at 06:24:23PM -0700, Nicolin Chen wrote:
+> > There is nothing critically wrong to read these two attributes
+> > without having a is_enabled() check at this point. But reading
+> > the MASK_ENABLE register would clear the CVRF bit according to
+> > the datasheet. So it'd be safer to fence for disabled channels
+> > in order to add pm runtime feature.
 > > 
+> > Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> > ---
+> >  drivers/hwmon/ina3221.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> > index d61688f04594..3e98b59108ee 100644
+> > --- a/drivers/hwmon/ina3221.c
+> > +++ b/drivers/hwmon/ina3221.c
+> > @@ -200,6 +200,8 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+> >  		return 0;
+> >  	case hwmon_curr_crit_alarm:
+> >  	case hwmon_curr_max_alarm:
+> > +		if (!ina3221_is_enabled(ina, channel))
+> > +			return -ENODATA;
+> 
+> Makes sense, but can you check what the sensors command does with this ?
+
+Not quite understanding the question. Do you mean the user case
+causing the race condition -- wiping out the CVRF bit?
+
+> If it bails out I'd rather have the code return 0 and no error (after all,
+> the sensor is disabled, so any alarm would be bogus).
+
+That's true. Since they are alert flags, should return 0. I will
+fix it.
+
+Thanks
