@@ -5,25 +5,36 @@ To: jdelvare@suse.com,
 	linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] hwmon: (ina3221) Implement PM runtime to save power
-Date: Tue, 16 Oct 2018 18:24:21 -0700
-Message-Id: <20181017012426.26958-1-nicoleotsuka@gmail.com>
+Subject: [PATCH 2/5] hwmon: (ina3221) Return -ENODATA for two alarms attributes
+Date: Tue, 16 Oct 2018 18:24:23 -0700
+Message-Id: <20181017012426.26958-3-nicoleotsuka@gmail.com>
+In-Reply-To: <20181017012426.26958-1-nicoleotsuka@gmail.com>
+References: <20181017012426.26958-1-nicoleotsuka@gmail.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-This series patches implement PM runtime feature in the ina3221 hwmon
-driver (PATCH-5). However, PATCH-[1:4] are required to make sure that
-the PM runtime feature would be functional and safe.
+There is nothing critically wrong to read these two attributes
+without having a is_enabled() check at this point. But reading
+the MASK_ENABLE register would clear the CVRF bit according to
+the datasheet. So it'd be safer to fence for disabled channels
+in order to add pm runtime feature.
 
-Nicolin Chen (5):
-  hwmon: (core) Inherit power properties to hdev
-  hwmon: (ina3221) Return -ENODATA for two alarms attributes
-  hwmon: (ina3221) Serialize sysfs ABI accesses
-  hwmon: (ina3221) Make sure data is ready after channel enabling
-  hwmon: (ina3221) Add PM runtime support
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+ drivers/hwmon/ina3221.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/hwmon/hwmon.c   |   3 +
- drivers/hwmon/ina3221.c | 185 ++++++++++++++++++++++++++++++++++------
- 2 files changed, 162 insertions(+), 26 deletions(-)
-
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index d61688f04594..3e98b59108ee 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -200,6 +200,8 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 		return 0;
+ 	case hwmon_curr_crit_alarm:
+ 	case hwmon_curr_max_alarm:
++		if (!ina3221_is_enabled(ina, channel))
++			return -ENODATA;
+ 		ret = regmap_field_read(ina->fields[reg], &regval);
+ 		if (ret)
+ 			return ret;
 -- 
 2.17.1
