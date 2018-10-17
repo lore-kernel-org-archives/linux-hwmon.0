@@ -1,115 +1,68 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-io1-f66.google.com ([209.85.166.66]:47072 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727387AbeJ3FMG (ORCPT
+Received: from mail-ot1-f73.google.com ([209.85.210.73]:44288 "EHLO
+        mail-ot1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727466AbeJRGZE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Oct 2018 01:12:06 -0400
-Received: by mail-io1-f66.google.com with SMTP id y22-v6so5828179ioj.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Oct 2018 13:21:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20181017222639.254434-1-kunyi@google.com> <20181027172833.GA25052@roeck-us.net>
-In-Reply-To: <20181027172833.GA25052@roeck-us.net>
+        Thu, 18 Oct 2018 02:25:04 -0400
+Received: by mail-ot1-f73.google.com with SMTP id s68so20438556ota.11
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Oct 2018 15:27:19 -0700 (PDT)
+Date: Wed, 17 Oct 2018 15:27:09 -0700
+Message-Id: <20181017222710.254994-1-kunyi@google.com>
+Mime-Version: 1.0
+Subject: [PATCH v3 2/2] dt-bindings: hwmon: Add adm127x documentation
 From: Kun Yi <kunyi@google.com>
-Date: Mon, 29 Oct 2018 13:21:23 -0700
-Message-ID: <CAGMNF6Xg28hm05wPXtq9bqssoNmgrzFGQiG4P+vLyXKvzvdJCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] hwmon: (adm1275): Allow setting shunt reg value
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: OpenBMC Maillist <openbmc@lists.ozlabs.org>, jdelvare@suse.com,
-        corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: openbmc@lists.ozlabs.org, kunyi@google.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+To: unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Sat, Oct 27, 2018 at 10:28 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Oct 17, 2018 at 03:26:39PM -0700, Kun Yi wrote:
-> > The ADM series of hotswap controllers support extending
-> > the current measurement range by using a sensing resistor
-> > value other than the typical 1 mOhm. For example, using a 0.5 mOhm
-> > sensing resistor doubles the maximal current can be measured.
-> >
-> > Current driver assumes a shunt resistor value of 1 mOhm in calculation,
-> > meaning for other resistor values, hwmon will report scaled
-> > current/power measurements. This patch parses device tree parameter
-> > "shunt-resistor-micro-ohms", if there is one.
-> >
-> > Signed-off-by: Kun Yi <kunyi@google.com>
->
-> Applied to hwmon-next.
->
-> Thanks,
-> Guenter
->
-> > ---
-> > Changes in v3:
-> > - splitted hwmon and device tree binding patches
-> >
-> >  Documentation/hwmon/adm1275   |  3 +++
-> >  drivers/hwmon/pmbus/adm1275.c | 15 +++++++++++++--
-> >  2 files changed, 16 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/hwmon/adm1275 b/Documentation/hwmon/adm1275
-> > index 39033538eb03..5e277b0d91ce 100644
-> > --- a/Documentation/hwmon/adm1275
-> > +++ b/Documentation/hwmon/adm1275
-> > @@ -58,6 +58,9 @@ The ADM1075, unlike many other PMBus devices, does not support internal voltage
-> >  or current scaling. Reported voltages, currents, and power are raw measurements,
-> >  and will typically have to be scaled.
-> >
-> > +The shunt value in micro-ohms can be set via device tree at compile-time. Please
-> > +refer to the Documentation/devicetree/bindings/hwmon/adm1275.txt for bindings
-> > +if the device tree is used.
-> >
-> >  Platform data support
-> >  ---------------------
-> > diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> > index 13600fa79e7f..f569372c9204 100644
-> > --- a/drivers/hwmon/pmbus/adm1275.c
-> > +++ b/drivers/hwmon/pmbus/adm1275.c
-> > @@ -373,6 +373,7 @@ static int adm1275_probe(struct i2c_client *client,
-> >       const struct coefficients *coefficients;
-> >       int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
-> >       int tindex = -1;
-> > +     u32 shunt;
-> >
-> >       if (!i2c_check_functionality(client->adapter,
-> >                                    I2C_FUNC_SMBUS_READ_BYTE_DATA
-> > @@ -421,6 +422,13 @@ static int adm1275_probe(struct i2c_client *client,
-> >       if (!data)
-> >               return -ENOMEM;
-> >
-> > +     if (of_property_read_u32(client->dev.of_node,
-> > +                              "shunt-resistor-micro-ohms", &shunt))
-> > +             shunt = 1000; /* 1 mOhm if not set via DT */
-> > +
-> > +     if (shunt == 0)
-> > +             return -EINVAL;
-> > +
-> >       data->id = mid->driver_data;
-> >
-> >       info = &data->info;
-> > @@ -654,12 +662,15 @@ static int adm1275_probe(struct i2c_client *client,
-> >               info->R[PSC_VOLTAGE_OUT] = coefficients[voindex].R;
-> >       }
-> >       if (cindex >= 0) {
-> > -             info->m[PSC_CURRENT_OUT] = coefficients[cindex].m;
-> > +             /* Scale current with sense resistor value */
-> > +             info->m[PSC_CURRENT_OUT] =
-> > +                     coefficients[cindex].m * shunt / 1000;
-> >               info->b[PSC_CURRENT_OUT] = coefficients[cindex].b;
-> >               info->R[PSC_CURRENT_OUT] = coefficients[cindex].R;
-> >       }
-> >       if (pindex >= 0) {
-> > -             info->m[PSC_POWER] = coefficients[pindex].m;
-> > +             info->m[PSC_POWER] =
-> > +                     coefficients[pindex].m * shunt / 1000;
-> >               info->b[PSC_POWER] = coefficients[pindex].b;
-> >               info->R[PSC_POWER] = coefficients[pindex].R;
-> >       }
+adm127x are hot-swap controllers that allow a circuit board to be removed from
+or inserted into a live backplane. This patch adds the device tree
+bindings documentation.
 
-Thanks!
+Signed-off-by: Kun Yi <kunyi@google.com>
+---
+ .../devicetree/bindings/hwmon/adm1275.txt     | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adm1275.txt
 
+diff --git a/Documentation/devicetree/bindings/hwmon/adm1275.txt b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+new file mode 100644
+index 000000000000..1ecd03f3da4d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+@@ -0,0 +1,25 @@
++adm1275 properties
++
++Required properties:
++- compatible: Must be one of the supported compatible strings:
++	- "adi,adm1075" for adm1075
++	- "adi,adm1272" for adm1272
++	- "adi,adm1275" for adm1275
++	- "adi,adm1276" for adm1276
++	- "adi,adm1278" for adm1278
++	- "adi,adm1293" for adm1293
++	- "adi,adm1294" for adm1294
++- reg: I2C address
++
++Optional properties:
++
++- shunt-resistor-micro-ohms
++	Shunt resistor value in micro-Ohm
++
++Example:
++
++adm1272@10 {
++	compatible = "adi,adm1272";
++	reg = <0x10>;
++	shunt-resistor-micro-ohms = <500>;
++};
 -- 
-Regards,
-Kun
+2.19.1.331.ge82ca0e54c-goog
