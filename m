@@ -1,221 +1,134 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:43824 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728143AbeJRVsI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Oct 2018 17:48:08 -0400
-Subject: Re: [PATCH 2/2] hwmon: (isl68137) add accessors to enable/disable AVS
- mode
-To: Kun Yi <kunyi@google.com>
-Cc: openbmc@lists.ozlabs.org, Robert Lippert <rlippert@google.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20181017225622.8366-1-kunyi@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8c1fdf5d-0d54-da8b-a11d-0e74ea8ce974@roeck-us.net>
-Date: Thu, 18 Oct 2018 06:46:58 -0700
+Return-Path: <robh@kernel.org>
+Return-path: <robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20181017225622.8366-1-kunyi@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+References: <1538717915-22294-1-git-send-email-wojciech.slenska@gmail.com>
+ <20181012202829.GA24897@bogus> <CAMYPSMqVHYYLpTmk5ACktKCms3yGFXXs9_m4xOGyVpq3VVSigg@mail.gmail.com>
+ <20181015195440.GA21968@roeck-us.net> <CAL_JsqKzwhnQUbF3vOTU3pDCLPQQL33TbgWqrFf1bzRt8VmMgw@mail.gmail.com>
+ <20181016233821.GA1662@roeck-us.net>
+In-Reply-To: <20181016233821.GA1662@roeck-us.net>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 18 Oct 2018 08:47:43 -0500
+Message-ID: <CAL_JsqK42DkjRjG81Yi=qmhPZx=RUT0oe-z4zJOxB__MqGgihw@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (sht3x) add devicetree support
+To: Guenter Roeck <linux@roeck-us.net>, Wojciech Slenska <wojciech.slenska@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Mark Rutland <mark.rutland@arm.com>,
+	Linux HWMON List <linux-hwmon@vger.kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On 10/17/2018 03:56 PM, Kun Yi wrote:
-> From: Robert Lippert <rlippert@google.com>
-> 
-> This patch adds sysfs files avs(0|1)_enabled underneath the I2C device
-> to control the AVS state of each rail and perform the appropriate
-> hacks when enabling AVS.
-> 
-> The ISL68137 has issues wrt AVS operation mode that require it
-> to be enabled/disabled at runtime.
-> 
+On Tue, Oct 16, 2018 at 6:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Tue, Oct 16, 2018 at 01:02:08PM -0500, Rob Herring wrote:
+> > On Mon, Oct 15, 2018 at 2:54 PM Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> > >
+> > > On Mon, Oct 15, 2018 at 07:55:58AM +0200, Wojciech Sle=C5=84ska wrote=
+:
+> > > > pt., 12 pa=C5=BA 2018 o 22:28 Rob Herring <robh@kernel.org> napisa=
+=C5=82(a):
+> > > > >
+> > > > > On Fri, Oct 05, 2018 at 07:38:35AM +0200, Wojciech Slenska wrote:
+> > > > >
+> > > > > Commit msg?
+> > > > >
+> > > > > > Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+> > > > > > ---
+> > > > > >  Documentation/devicetree/bindings/hwmon/sht3x.txt | 16 +++++++=
+++++++
+> > > > >
+> > > > > Please split bindings to separate patch.
+> > > >
+> > > > I will do this.
+> > > >
+> > > > >
+> > > > > >  drivers/hwmon/sht3x.c                             | 28 +++++++=
++++++++++++++---
+> > > > > >  2 files changed, 41 insertions(+), 3 deletions(-)
+> > > > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/sht=
+3x.txt
+> > > > > >
+> > > > > > diff --git a/Documentation/devicetree/bindings/hwmon/sht3x.txt =
+b/Documentation/devicetree/bindings/hwmon/sht3x.txt
+> > > > > > new file mode 100644
+> > > > > > index 0000000..80b117e
+> > > > > > --- /dev/null
+> > > > > > +++ b/Documentation/devicetree/bindings/hwmon/sht3x.txt
+> > > > > > @@ -0,0 +1,16 @@
+> > > > > > +Sensirion SHT3x Humidity and Temperature Sensor
+> > > > > > +
+> > > > > > +Required node properties:
+> > > > > > +- compatible: "sensirion,sht3x" or "sensirion,sts3x"
+> > > > > > +- reg: I2C bus address of the device
+> > > > > > +
+> > > > > > +Optional properties:
+> > > > > > +- sensirion,blocking-io: enable blocking mode on i2c
+> > > > >
+> > > > > This is not a h/w parameter and shouldn't be in DT.
+> > > > >
+> > > > > > +- sensirion,no-high-precision: disable high accuracy
+> > > > >
+> > > > > Maybe this one is okay, but couldn't the user want to set this? I=
+f so,
+> > > > > then it should be a sysfs attr.
+> > > >
+> > > > Those two parameters have been just moved from
+> > > > linux/include/linux/platform_data/sht3x.h
+> > > > Currently, those two parameters can be set in board file, so for me
+> > > > was natural to move it to dts.
+> > > > Of course, I can remove it from dts completely.
+> > > >
+> > >
+> > > I wonder if there is an authoritative document explaining the current=
+ policy
+> > > in respect to devicetree properties.
+> >
+> > No. In the end it is often a judgement call.
+> >
+> > > Sometimes I hear that platform
+> > > configuration parameters are now permitted, sometimes I hear that we =
+are
+> > > back to hardware description only.
+> >
+> > Yes, configuration is permitted, but there are some constraints. The
+> > questions I ask are is it OS specific or specific to current
+> > implementation of an OS, who or what decides what the setting is? The
+> > last question results in lots of things dropped in favor of a sysfs
+> > control.
+> >
+> In this driver, both parameters were considered system / platform paramet=
+ers.
+> One controls if the chip uses i2c clock stretching or if the system has t=
+o poll
+> for results. This is determined by the system's i2c controller and may al=
+so be
+> influenced by considerations such as if there is another chip on the same=
+ bus.
 
-This is quite unusual. This would usually be handled in ROMMON/BIOS for
-devices like this. What are those issues ?
+Okay, makes sense. As it is named, it sounded like picking a s/w API
+to use (sync vs. async). So please improve the description based on
+Guenter's explanation.
 
-> Additionally enabling AVS mode requires a hack to set the VOUT value
-> before enabling to make sure that the device does not switch to
-> an old cached AVS provided value and is instead in a "clean" state
-> before booting.
-> 
-> Signed-off-by: Robert Lippert <rlippert@google.com>
-> Signed-off-by: Kun Yi <kunyi@google.com>
-> ---
->   drivers/hwmon/pmbus/isl68137.c | 120 ++++++++++++++++++++++++++++++++-
->   1 file changed, 118 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-> index 2a5322e4a286..94e2894f13bc 100644
-> --- a/drivers/hwmon/pmbus/isl68137.c
-> +++ b/drivers/hwmon/pmbus/isl68137.c
-> @@ -19,8 +19,11 @@
->   #include <linux/init.h>
->   #include <linux/err.h>
->   #include <linux/i2c.h>
-> +#include <linux/hwmon-sysfs.h>
->   #include "pmbus.h"
->   
-> +#define ISL68137_VOUT_AVS 0x30
-> +
->   static struct pmbus_driver_info isl68137_info = {
->   	.pages = 2,
->   	.format[PSC_VOLTAGE_IN] = direct,
-> @@ -56,10 +59,123 @@ static struct pmbus_driver_info isl68137_info = {
->   	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
->   };
->   
-> +static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
-> +					     int page,
-> +					     char *buf)
-> +{
-> +	int val = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +
-> +	return sprintf(buf, "%d\n",
-> +		       (val & ISL68137_VOUT_AVS) == ISL68137_VOUT_AVS ? 1 : 0);
-> +}
-> +
-> +static ssize_t isl68137_avs_enable_store_page(struct i2c_client *client,
-> +					      int page,
-> +					      const char *buf, size_t count)
-> +{
-> +	int rc, op_val;
-> +
-> +	if (count < 1) {
-> +		rc = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	switch (buf[0]) {
-> +	case '0':
-> +		op_val = 0;
-> +		break;
-> +	case '1':
-> +		op_val = ISL68137_VOUT_AVS;
-> +		break;
-> +	default:
-> +		rc = -EINVAL;
-> +		goto out;
-> +	}
-> +
-Please use kstrtobool().
+> The other parameter controls accuracy which directly translates into powe=
+r
+> consumption. While there could be applications where both parameters are
+> controlled by user space, that would be the exception. In the expected us=
+e
+> case, ie for hardware monitoring, user space control would neither be fea=
+sible
+> nor desirable. As such, sysfs controls for the parameters don't even exis=
+t.
 
-> +	/*
-> +	 * Writes to VOUT setpoint over AVSBus will persist after the VRM is
-> +	 * switched to PMBus control. Switching back to AVSBus control
-> +	 * restores this persisted setpoint rather than re-initializing to
-> +	 * PMBus VOUT_COMMAND. Writing VOUT_COMMAND first over PMBus before
-> +	 * enabling AVS control is the workaround.
-> +	 */
-> +	if (op_val == ISL68137_VOUT_AVS) {
-> +		int vout_command = pmbus_read_word_data(client, page,
-> +							PMBUS_VOUT_COMMAND);
-> +		rc = pmbus_write_word_data(client, page, PMBUS_VOUT_COMMAND,
-> +					   vout_command);
-> +		if (rc)
-> +			goto out;
+I could imagine you may want to switch modes based on battery powered
+vs. plugged in. But that's not to say you couldn't want it one way or
+the other for a system.
 
-Does it make a difference if bit 1 is set in the operation register ?
+> I don't mind if you reject adding those dt properties for now, but I woul=
+d
+> resist adding sysfs attributes unless someone provides me with an actual
+> and specific use case.
 
-> +	}
-> +
-> +	rc = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				    ISL68137_VOUT_AVS, op_val);
-> +
-> +out:
-> +	return rc < 0 ? rc : count;
-> +}
-> +
-> +static ssize_t isl68137_avs_enable_show(struct device *dev,
-> +					struct device_attribute *devattr,
-> +					char *buf)
-> +{
-> +	struct i2c_client *client = kobj_to_i2c_client(&dev->kobj);
-> +	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(devattr);
-> +
-> +	return isl68137_avs_enable_show_page(client, attr->index, buf);
-> +}
-> +
-> +static ssize_t isl68137_avs_enable_store(struct device *dev,
-> +				struct device_attribute *devattr,
-> +				const char *buf, size_t count)
-> +{
-> +	struct i2c_client *client = kobj_to_i2c_client(&dev->kobj);
-> +	struct sensor_device_attribute_2 *attr = to_sensor_dev_attr_2(devattr);
-> +
-> +	return isl68137_avs_enable_store_page(client, attr->index, buf, count);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR_2(avs0_enabled, 0644,
-> +			    isl68137_avs_enable_show, isl68137_avs_enable_store,
-> +			    0, 0);
-> +static SENSOR_DEVICE_ATTR_2(avs1_enabled, 0644,
-> +			    isl68137_avs_enable_show, isl68137_avs_enable_store,
-> +			    0, 1);
-> +
+I'm not rejecting them. My next question though is should these be
+common properties?
 
-Why ATTR_2 ? That seems quite pointless.
-
-I would suggest to use _enable as attribute name, but I understand this is POV,
-so I won't insist on it.
-
-> +static int isl68137_remove(struct i2c_client *client);
-> +
-
-Please move the remove function to this location.
-
->   static int isl68137_probe(struct i2c_client *client,
->   			  const struct i2c_device_id *id)
->   {
-> -	return pmbus_do_probe(client, id, &isl68137_info);
-> +	int rc;
-> +
-> +	rc = pmbus_do_probe(client, id, &isl68137_info);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc = device_create_file(&client->dev,
-> +				&sensor_dev_attr_avs0_enabled.dev_attr);
-> +	if (rc)
-> +		goto out_fail;
-> +	rc = device_create_file(&client->dev,
-> +				&sensor_dev_attr_avs1_enabled.dev_attr);
-> +	if (rc)
-> +		goto out_fail;
-> +
-This creadtes the device files after the hwmon device is created,
-which may confuse userspace if it is triggered by the creation of the
-hwmon device. You might consider creating the device files before
-registering the hwmon device. That makes removal on error a bit
-more complex, though, so I'll leave it up to you.
-
-> +	return rc;
-> +
-> +out_fail:
-> +	isl68137_remove(client);
-> +	return rc;
-> +}
-> +
-> +static int isl68137_remove(struct i2c_client *client)
-> +{
-> +	device_remove_file(&client->dev,
-> +			   &sensor_dev_attr_avs1_enabled.dev_attr);
-> +	device_remove_file(&client->dev,
-> +			   &sensor_dev_attr_avs0_enabled.dev_attr);
-> +	return pmbus_do_remove(client);
->   }
->   
->   static const struct i2c_device_id isl68137_id[] = {
-> @@ -75,7 +191,7 @@ static struct i2c_driver isl68137_driver = {
->   		   .name = "isl68137",
->   		   },
->   	.probe = isl68137_probe,
-> -	.remove = pmbus_do_remove,
-> +	.remove = isl68137_remove,
->   	.id_table = isl68137_id,
->   };
->   
-> 
+Rob
