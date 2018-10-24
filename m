@@ -1,41 +1,53 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35271 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbeJZH4U (ORCPT
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33073 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725817AbeJYEDi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Oct 2018 03:56:20 -0400
-Date: Thu, 25 Oct 2018 16:21:38 -0700
+        Thu, 25 Oct 2018 00:03:38 -0400
 From: Nicolin Chen <nicoleotsuka@gmail.com>
-To: linux@roeck-us.net
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] hwmon: (core) Inherit power properties to hdev
-Message-ID: <20181025232138.GA28487@Asurada-Nvidia.nvidia.com>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/5] hwmon: (ina3221) Check channel status for alarms attribute read
+Date: Wed, 24 Oct 2018 12:33:59 -0700
+Message-Id: <20181024193402.16698-3-nicoleotsuka@gmail.com>
+In-Reply-To: <20181024193402.16698-1-nicoleotsuka@gmail.com>
 References: <20181024193402.16698-1-nicoleotsuka@gmail.com>
- <20181024193402.16698-2-nicoleotsuka@gmail.com>
- <20181025001301.Horde.VCevVrrSs6rOyXT41xiPOzW@cp2.active-venture.com>
- <20181025010116.GA4543@Asurada-Nvidia.nvidia.com>
- <20181025013349.GA7569@Asurada-Nvidia.nvidia.com>
- <20181025065531.Horde.JhVAJU3eOlwYcSJ57tV4I5-@cp2.active-venture.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20181025065531.Horde.JhVAJU3eOlwYcSJ57tV4I5-@cp2.active-venture.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 25, 2018 at 06:55:31AM +0000, linux@roeck-us.net wrote:
-> > won't work then. I guess it'd be safer to ignore the problem of
-> > the power node, i.e. using parent dev pointer for pm runtime.
-> > 
-> It might be worthwhile looking up how other virtal devices handle
-> this problem. Maybe the hwmon code could have its own suspend/resume
-> callbacks. Not sure how to make that work, though, and what those
-> callbacks would (have to) do.
+There is nothing critically wrong to read these two attributes
+without having a is_enabled() check at this point. But reading
+the MASK_ENABLE register would clear the CVRF bit according to
+the datasheet. So it'd be safer to fence for disabled channels
+in order to add pm runtime feature.
 
-I am adding a core pm pointer to the class. A hwmon driver will
-also need to pass a private pm pointer in a chip/info structure.
-I will send it soon.
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+Changelog
+v2->v3:
+ * N/A
+v1->v2:
+ * Returned 0 for alert flags instead of -ENODATA
 
-Thanks
-Nicolin
+ drivers/hwmon/ina3221.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index d61688f04594..26cdf3342d80 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -200,6 +200,12 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 		return 0;
+ 	case hwmon_curr_crit_alarm:
+ 	case hwmon_curr_max_alarm:
++		/* No actual register read if channel is disabled */
++		if (!ina3221_is_enabled(ina, channel)) {
++			/* Return 0 for alert flags */
++			*val = 0;
++			return 0;
++		}
+ 		ret = regmap_field_read(ina->fields[reg], &regval);
+ 		if (ret)
+ 			return ret;
+-- 
+2.17.1
