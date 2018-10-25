@@ -1,76 +1,64 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from linux-outbound-1.webhostbox.net ([207.174.213.190]:41789 "EHLO
-        linux-outbound-1.webhostbox.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725829AbeJYInP (ORCPT
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44712 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726117AbeJYJbq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Oct 2018 04:43:15 -0400
-Date: Thu, 25 Oct 2018 00:13:01 +0000
-Message-ID: <20181025001301.Horde.VCevVrrSs6rOyXT41xiPOzW@cp2.active-venture.com>
-From: linux@roeck-us.net
-To: Nicolin Chen <nicoleotsuka@gmail.com>
+        Thu, 25 Oct 2018 05:31:46 -0400
+Date: Wed, 24 Oct 2018 18:01:17 -0700
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: linux@roeck-us.net
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3 1/5] hwmon: (core) Inherit power properties to hdev
+Message-ID: <20181025010116.GA4543@Asurada-Nvidia.nvidia.com>
 References: <20181024193402.16698-1-nicoleotsuka@gmail.com>
  <20181024193402.16698-2-nicoleotsuka@gmail.com>
-In-Reply-To: <20181024193402.16698-2-nicoleotsuka@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+ <20181025001301.Horde.VCevVrrSs6rOyXT41xiPOzW@cp2.active-venture.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20181025001301.Horde.VCevVrrSs6rOyXT41xiPOzW@cp2.active-venture.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+On Thu, Oct 25, 2018 at 12:13:01AM +0000, linux@roeck-us.net wrote:
 
-Quoting Nicolin Chen <nicoleotsuka@gmail.com>:
+> > +	if (dev) {
+> > +		hdev->driver = dev->driver;
+> > +		hdev->power = dev->power;
+> > +		hdev->pm_domain = dev->pm_domain;
+> > +		hdev->of_node = dev->of_node;
+> > +	}
+> 
+> We'l need to dig into this more; I suspect it may be inappropriate to do this.
+> With this change, every hwmon driver supporting (runtime ?) suspend/resume
+> will have the problem worked around in #5, and that just seems wrong.
 
-> The new hdev is a child device related to the original parent
-> hwmon driver and its device. However, it doesn't support the
-> power features, typically being defined in the parent driver.
->
-> So this patch inherits three necessary power properties from
-> the parent dev to hdev: power, pm_domain and driver pointers.
->
-> Note that the dev->driver pointer is the place that contains
-> a dev_pm_ops pointer defined in the parent device driver and
-> the pm runtime core also checks this pointer:
->        if (!cb && dev->driver && dev->driver->pm)
->
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
-> Changelog
-> v2->v3:
->  * N/A
-> v1->v2:
->  * Added device pointers
->
->  drivers/hwmon/hwmon.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 975c95169884..14cfab64649f 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -625,7 +625,12 @@ __hwmon_device_register(struct device *dev,  
-> const char *name, void *drvdata,
->  	hwdev->name = name;
->  	hdev->class = &hwmon_class;
->  	hdev->parent = dev;
-> -	hdev->of_node = dev ? dev->of_node : NULL;
-> +	if (dev) {
-> +		hdev->driver = dev->driver;
-> +		hdev->power = dev->power;
-> +		hdev->pm_domain = dev->pm_domain;
-> +		hdev->of_node = dev->of_node;
-> +	}
+Hmm..that's true...thanks for catching it.
 
-We'l need to dig into this more; I suspect it may be inappropriate to do this.
-With this change, every hwmon driver supporting (runtime ?) suspend/resume
-will have the problem worked around in #5, and that just seems wrong.
+Actually I am not sure the reason of having a child device in
+the core, but could we use the parent dev pointer in the hwmon
+core as hwmon_dev upon confirming parent dev pointer != NULL?
 
-Guenter
+The problem here is that the power directory under each hwmon
+directory is tied to the hwmon_dev pointer, not to the parent
+dev pointer, and the hwmon core creates all sysfs nodes based
+on the child node. So those nodes under power directory won't
+be valid unless we copy all pm information, especially PM ops.
 
->  	hwdev->chip = chip;
->  	dev_set_drvdata(hdev, drvdata);
->  	dev_set_name(hdev, HWMON_ID_FORMAT, id);
-> --
-> 2.17.1
+There is an option of ignoring this problem though, while all
+hwmon drivers will need to be careful of mixing using the dev
+pointers. So it'd be a lot of easier if we could just use the
+original dev pointer in the core since we mainly just need to
+create sysfs nodes.
+
+Another way of doing this might be to pass down the PM pointer
+via _info structure instead of linking it to the parent driver,
+which then will forbid all hwmon drivers having its own PM ops
+callbacks -- the very opposite way of this patch, and it does
+not sound fully reasonable and feasible to me...
+
+What do you think about?
+
+Thanks
+Nicolin
