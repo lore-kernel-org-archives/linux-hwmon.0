@@ -1,135 +1,388 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:38999 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727567AbeJZI0N (ORCPT
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36126 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727687AbeJZI0O (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Oct 2018 04:26:13 -0400
+        Fri, 26 Oct 2018 04:26:14 -0400
 From: Nicolin Chen <nicoleotsuka@gmail.com>
 To: jdelvare@suse.com, linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/5] hwmon: (ina3221) Make sure data is ready before reading
-Date: Thu, 25 Oct 2018 16:51:21 -0700
-Message-Id: <20181025235122.3240-5-nicoleotsuka@gmail.com>
+Subject: [PATCH v4 5/5] hwmon: (ina3221) Add PM runtime support
+Date: Thu, 25 Oct 2018 16:51:22 -0700
+Message-Id: <20181025235122.3240-6-nicoleotsuka@gmail.com>
 In-Reply-To: <20181025235122.3240-1-nicoleotsuka@gmail.com>
 References: <20181025235122.3240-1-nicoleotsuka@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-The data might need some time to get ready after channel enabling,
-although the data register is always readable. The CVRF bit is to
-indicate that data conversion is finished, so polling the CVRF bit
-before data reading could ensure the result being valid.
+If all three channels are disabled via in[123]_enable ABI,
+the driver could suspend the chip for power saving purpose.
 
-An alternative way could be to wait for expected time between the
-channel enabling and the data reading. And this could avoid extra
-I2C communications. However, INA3221 seemly takes longer time than
-what's stated in the datasheet. Test results show that sometimes
-it couldn't finish data conversion in time.
+So this patch adds the PM runtime support in order to gain
+more power control than system suspend and resume use case.
 
-So this patch plays safe by adding a CVRF polling to make sure the
-data register is updated with the new data.
+For PM runtime, there are a few related changes happening:
+1) Added a new explicit hdev device pointer for all the PM
+   runtime callbacks. This is because hwmon core registers
+   a child device for each hwmon driver. So there might be
+   a mismatch between two device pointers in the driver if
+   mixing using them.
+2) Passed the pm pointer via _with_info API to hwmon core
+   so as to let the hwmon class control those callbacks.
+3) Added a check in ina3221_is_enabled() to make sure that
+   the chip is resumed.
+4) Bypassed the unchanged status in ina3221_write_enable()
+   in order to keep the PM runtime refcount being matched.
+5) Removed the reset routine in the probe() by calling the
+   resume() via pm_runtime_get_sync() instead, as they're
+   similar. It's also necessary to do so to match initial
+   PM refcount with the number of enabled channels.
 
 Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 ---
 Changelog
 v3->v4:
- * N/A
+ * Passed pm pointer via _with_info API instead the i2c driver
 v2->v3:
- * Dropped timeout dev_err messages as it's indicated in the errno
+ * Improved a dev_err message
+ * Added comments at pm_runtime_put_noidle() callbacks
+ * Added pm_runtime header file in an alphabetical order
 v1->v2:
- * Moved CVRF polling to data read routine
- * Added calculation of wait time based on conversion time setting
+ * Bypassed i2c_client->dev in suspend/resume()
+ * Added a missing '\n' in one dev_err()
 
- drivers/hwmon/ina3221.c | 42 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ drivers/hwmon/ina3221.c | 213 ++++++++++++++++++++++++++--------------
+ 1 file changed, 137 insertions(+), 76 deletions(-)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 10e8347a3c80..07dd6ef58d3e 100644
+index 07dd6ef58d3e..974a29b1c8f0 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -44,6 +44,13 @@
- #define INA3221_CONFIG_MODE_SHUNT	BIT(0)
- #define INA3221_CONFIG_MODE_BUS		BIT(1)
- #define INA3221_CONFIG_MODE_CONTINUOUS	BIT(2)
-+#define INA3221_CONFIG_VSH_CT_SHIFT	3
-+#define INA3221_CONFIG_VSH_CT_MASK	GENMASK(5, 3)
-+#define INA3221_CONFIG_VSH_CT(x)	(((x) & GENMASK(5, 3)) >> 3)
-+#define INA3221_CONFIG_VBUS_CT_SHIFT	6
-+#define INA3221_CONFIG_VBUS_CT_MASK	GENMASK(8, 6)
-+#define INA3221_CONFIG_VBUS_CT(x)	(((x) & GENMASK(8, 6)) >> 6)
-+#define INA3221_CONFIG_CHs_EN_MASK	GENMASK(14, 12)
+@@ -20,6 +20,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ 
+ #define INA3221_DRIVER_NAME		"ina3221"
+@@ -53,6 +54,7 @@
+ #define INA3221_CONFIG_CHs_EN_MASK	GENMASK(14, 12)
  #define INA3221_CONFIG_CHx_EN(x)	BIT(14 - (x))
  
++#define INA3221_CONFIG_DEFAULT		0x7127
  #define INA3221_RSHUNT_DEFAULT		10000
-@@ -52,6 +59,9 @@ enum ina3221_fields {
- 	/* Configuration */
- 	F_RST,
  
-+	/* Status Flags */
-+	F_CVRF,
-+
- 	/* Alert Flags */
- 	F_WF3, F_WF2, F_WF1,
- 	F_CF3, F_CF2, F_CF1,
-@@ -63,6 +73,7 @@ enum ina3221_fields {
- static const struct reg_field ina3221_reg_fields[] = {
- 	[F_RST] = REG_FIELD(INA3221_CONFIG, 15, 15),
+ enum ina3221_fields {
+@@ -103,6 +105,7 @@ struct ina3221_input {
  
-+	[F_CVRF] = REG_FIELD(INA3221_MASK_ENABLE, 0, 0),
- 	[F_WF3] = REG_FIELD(INA3221_MASK_ENABLE, 3, 3),
- 	[F_WF2] = REG_FIELD(INA3221_MASK_ENABLE, 4, 4),
- 	[F_WF1] = REG_FIELD(INA3221_MASK_ENABLE, 5, 5),
-@@ -111,6 +122,28 @@ static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
- 	return ina->reg_config & INA3221_CONFIG_CHx_EN(channel);
+ /**
+  * struct ina3221_data - device specific information
++ * @hdev: Device pointer of hwmon child device, used for pm runtime
+  * @regmap: Register map of the device
+  * @fields: Register fields of the device
+  * @inputs: Array of channel input source specific structures
+@@ -110,6 +113,7 @@ struct ina3221_input {
+  * @reg_config: Register value of INA3221_CONFIG
+  */
+ struct ina3221_data {
++	struct device *hdev;
+ 	struct regmap *regmap;
+ 	struct regmap_field *fields[F_MAX_FIELDS];
+ 	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+@@ -119,7 +123,8 @@ struct ina3221_data {
+ 
+ static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+ {
+-	return ina->reg_config & INA3221_CONFIG_CHx_EN(channel);
++	return pm_runtime_active(ina->hdev) &&
++	       (ina->reg_config & INA3221_CONFIG_CHx_EN(channel));
  }
  
-+/* Lookup table for Bus and Shunt conversion times in usec */
-+static const u16 ina3221_conv_time[] = {
-+	140, 204, 332, 588, 1100, 2116, 4156, 8244,
-+};
+ /* Lookup table for Bus and Shunt conversion times in usec */
+@@ -290,21 +295,48 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	u16 config, mask = INA3221_CONFIG_CHx_EN(channel);
++	u16 config_old = ina->reg_config & mask;
+ 	int ret;
+ 
+ 	config = enable ? mask : 0;
+ 
++	/* Bypass if enable status is not being changed */
++	if (config_old == config)
++		return 0;
 +
-+static inline int ina3221_wait_for_data(struct ina3221_data *ina)
++	/* For enabling routine, increase refcount and resume() at first */
++	if (enable) {
++		ret = pm_runtime_get_sync(ina->hdev);
++		if (ret < 0) {
++			dev_err(dev, "Failed to get PM runtime\n");
++			return ret;
++		}
++	}
++
+ 	/* Enable or disable the channel */
+ 	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG, mask, config);
+ 	if (ret)
+-		return ret;
++		goto fail;
+ 
+ 	/* Cache the latest config register value */
+ 	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
+ 	if (ret)
+-		return ret;
++		goto fail;
++
++	/* For disabling routine, decrease refcount or suspend() at last */
++	if (!enable)
++		pm_runtime_put_sync(ina->hdev);
+ 
+ 	return 0;
++
++fail:
++	if (enable) {
++		dev_err(dev, "Failed to enable channel %d: error %d\n",
++			channel, ret);
++		pm_runtime_put_sync(ina->hdev);
++	}
++
++	return ret;
+ }
+ 
+ static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -461,9 +493,66 @@ static const struct hwmon_ops ina3221_hwmon_ops = {
+ 	.write = ina3221_write,
+ };
+ 
++static int __maybe_unused ina3221_suspend(struct device *dev)
 +{
-+	u32 channels = hweight16(ina->reg_config & INA3221_CONFIG_CHs_EN_MASK);
-+	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(ina->reg_config);
-+	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(ina->reg_config);
-+	u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
-+	u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
-+	u32 wait, cvrf;
++	struct ina3221_data *ina = dev_get_drvdata(dev);
++	int ret;
 +
-+	/* Calculate total conversion time */
-+	wait = channels * (vbus_ct + vsh_ct);
++	/* Save config register value and enable cache-only */
++	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
++	if (ret)
++		return ret;
 +
-+	/* Polling the CVRF bit to make sure read data is ready */
-+	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
-+					      cvrf, cvrf, wait, 100000);
++	/* Set to power-down mode for power saving */
++	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
++				 INA3221_CONFIG_MODE_MASK,
++				 INA3221_CONFIG_MODE_POWERDOWN);
++	if (ret)
++		return ret;
++
++	regcache_cache_only(ina->regmap, true);
++	regcache_mark_dirty(ina->regmap);
++
++	return 0;
 +}
 +
- static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
- 			      int *val)
- {
-@@ -150,6 +183,10 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
- 		if (!ina3221_is_enabled(ina, channel))
- 			return -ENODATA;
++static int __maybe_unused ina3221_resume(struct device *dev)
++{
++	struct ina3221_data *ina = dev_get_drvdata(dev);
++	int ret;
++
++	regcache_cache_only(ina->regmap, false);
++
++	/* Software reset the chip */
++	ret = regmap_field_write(ina->fields[F_RST], true);
++	if (ret) {
++		dev_err(dev, "Unable to reset device\n");
++		return ret;
++	}
++
++	/* Restore cached register values to hardware */
++	ret = regcache_sync(ina->regmap);
++	if (ret)
++		return ret;
++
++	/* Restore config register value to hardware */
++	ret = regmap_write(ina->regmap, INA3221_CONFIG, ina->reg_config);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct dev_pm_ops ina3221_pm = {
++	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++				pm_runtime_force_resume)
++	SET_RUNTIME_PM_OPS(ina3221_suspend, ina3221_resume, NULL)
++};
++
+ static const struct hwmon_chip_info ina3221_chip_info = {
+ 	.ops = &ina3221_hwmon_ops,
+ 	.info = ina3221_info,
++	.pm = &ina3221_pm,
+ };
  
-+		ret = ina3221_wait_for_data(ina);
-+		if (ret)
-+			return ret;
+ /* Extra attribute groups */
+@@ -599,7 +688,6 @@ static int ina3221_probe(struct i2c_client *client,
+ {
+ 	struct device *dev = &client->dev;
+ 	struct ina3221_data *ina;
+-	struct device *hwmon_dev;
+ 	int i, ret;
+ 
+ 	ina = devm_kzalloc(dev, sizeof(*ina), GFP_KERNEL);
+@@ -631,104 +719,78 @@ static int ina3221_probe(struct i2c_client *client,
+ 		return ret;
+ 	}
+ 
+-	ret = regmap_field_write(ina->fields[F_RST], true);
+-	if (ret) {
+-		dev_err(dev, "Unable to reset device\n");
+-		return ret;
+-	}
+-
+-	/* Sync config register after reset */
+-	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
+-	if (ret)
+-		return ret;
++	/* The driver will be reset, so use reset value */
++	ina->reg_config = INA3221_CONFIG_DEFAULT;
+ 
+ 	/* Disable channels if their inputs are disconnected */
+ 	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
+ 		if (ina->inputs[i].disconnected)
+ 			ina->reg_config &= ~INA3221_CONFIG_CHx_EN(i);
+ 	}
+-	ret = regmap_write(ina->regmap, INA3221_CONFIG, ina->reg_config);
+-	if (ret)
+-		return ret;
+ 
+ 	mutex_init(&ina->lock);
+ 	dev_set_drvdata(dev, ina);
+ 
+-	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ina,
++	/* Fence sysfs nodes till pm_runtime is resumed */
++	mutex_lock(&ina->lock);
 +
- 		ret = ina3221_read_value(ina, reg, &regval);
- 		if (ret)
- 			return ret;
-@@ -189,6 +226,11 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- 	case hwmon_curr_input:
- 		if (!ina3221_is_enabled(ina, channel))
- 			return -ENODATA;
++	/* Use the returned hdev for pm_runtime */
++	ina->hdev = devm_hwmon_device_register_with_info(dev, client->name, ina,
+ 							 &ina3221_chip_info,
+ 							 ina3221_groups);
+-	if (IS_ERR(hwmon_dev)) {
++	if (IS_ERR(ina->hdev)) {
+ 		dev_err(dev, "Unable to register hwmon device\n");
+-		mutex_destroy(&ina->lock);
+-		return PTR_ERR(hwmon_dev);
++		ret = PTR_ERR(ina->hdev);
++		goto fail_lock;
+ 	}
+ 
++	/* Enable PM runtime -- status is suspended by default */
++	pm_runtime_enable(ina->hdev);
 +
-+		ret = ina3221_wait_for_data(ina);
-+		if (ret)
-+			return ret;
++	/* Initialize (resume) the device */
++	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
++		if (ina->inputs[i].disconnected)
++			continue;
++		/* Match the refcount with number of enabled channels */
++		ret = pm_runtime_get_sync(ina->hdev);
++		if (ret < 0)
++			goto fail_pm;
++	}
 +
- 		/* fall through */
- 	case hwmon_curr_crit:
- 	case hwmon_curr_max:
++	mutex_unlock(&ina->lock);
++
+ 	return 0;
++
++fail_pm:
++	pm_runtime_disable(ina->hdev);
++	pm_runtime_set_suspended(ina->hdev);
++	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
++	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
++		pm_runtime_put_noidle(ina->hdev);
++fail_lock:
++	mutex_unlock(&ina->lock);
++	mutex_destroy(&ina->lock);
++
++	return ret;
+ }
+ 
+ static int ina3221_remove(struct i2c_client *client)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(&client->dev);
++	int i;
++
++	pm_runtime_disable(ina->hdev);
++	pm_runtime_set_suspended(ina->hdev);
++
++	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
++	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
++		pm_runtime_put_noidle(ina->hdev);
+ 
+ 	mutex_destroy(&ina->lock);
+ 
+ 	return 0;
+ }
+ 
+-static int __maybe_unused ina3221_suspend(struct device *dev)
+-{
+-	struct ina3221_data *ina = dev_get_drvdata(dev);
+-	int ret;
+-
+-	/* Save config register value and enable cache-only */
+-	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
+-	if (ret)
+-		return ret;
+-
+-	/* Set to power-down mode for power saving */
+-	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
+-				 INA3221_CONFIG_MODE_MASK,
+-				 INA3221_CONFIG_MODE_POWERDOWN);
+-	if (ret)
+-		return ret;
+-
+-	regcache_cache_only(ina->regmap, true);
+-	regcache_mark_dirty(ina->regmap);
+-
+-	return 0;
+-}
+-
+-static int __maybe_unused ina3221_resume(struct device *dev)
+-{
+-	struct ina3221_data *ina = dev_get_drvdata(dev);
+-	int ret;
+-
+-	regcache_cache_only(ina->regmap, false);
+-
+-	/* Software reset the chip */
+-	ret = regmap_field_write(ina->fields[F_RST], true);
+-	if (ret) {
+-		dev_err(dev, "Unable to reset device\n");
+-		return ret;
+-	}
+-
+-	/* Restore cached register values to hardware */
+-	ret = regcache_sync(ina->regmap);
+-	if (ret)
+-		return ret;
+-
+-	/* Restore config register value to hardware */
+-	ret = regmap_write(ina->regmap, INA3221_CONFIG, ina->reg_config);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
+-}
+-
+-static const struct dev_pm_ops ina3221_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(ina3221_suspend, ina3221_resume)
+-};
+-
+ static const struct of_device_id ina3221_of_match_table[] = {
+ 	{ .compatible = "ti,ina3221", },
+ 	{ /* sentinel */ }
+@@ -747,7 +809,6 @@ static struct i2c_driver ina3221_i2c_driver = {
+ 	.driver = {
+ 		.name = INA3221_DRIVER_NAME,
+ 		.of_match_table = ina3221_of_match_table,
+-		.pm = &ina3221_pm,
+ 	},
+ 	.id_table = ina3221_ids,
+ };
 -- 
 2.17.1
