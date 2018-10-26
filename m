@@ -1,83 +1,70 @@
-Return-Path: <wsa@the-dreams.de>
-Return-path: <wsa@the-dreams.de>
-Date: Thu, 18 Oct 2018 20:07:21 +0200
-From: Wolfram Sang <wsa@the-dreams.de>
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Wojciech Slenska <wojciech.slenska@gmail.com>,
+Return-Path: <linux@rasmusvillemoes.dk>
+Return-path: <linux@rasmusvillemoes.dk>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To: Kees Cook <keescook@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-nfs@vger.kernel.org,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	linux-hwmon@vger.kernel.org,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	"Steven Rostedt (VMware)" <rostedt@goodmis.org>,
 	Jean Delvare <jdelvare@suse.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Linux HWMON List <linux-hwmon@vger.kernel.org>,
-	devicetree@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: (sht3x) add devicetree support
-Message-ID: <20181018180721.GA941@kunai>
-References: <1538717915-22294-1-git-send-email-wojciech.slenska@gmail.com>
- <20181012202829.GA24897@bogus>
- <CAMYPSMqVHYYLpTmk5ACktKCms3yGFXXs9_m4xOGyVpq3VVSigg@mail.gmail.com>
- <20181015195440.GA21968@roeck-us.net>
- <CAL_JsqKzwhnQUbF3vOTU3pDCLPQQL33TbgWqrFf1bzRt8VmMgw@mail.gmail.com>
- <20181016233821.GA1662@roeck-us.net>
- <CAL_JsqK42DkjRjG81Yi=qmhPZx=RUT0oe-z4zJOxB__MqGgihw@mail.gmail.com>
- <20181018144141.GA3963@roeck-us.net>
- <CAL_JsqK62Yi9+w=06LrsiDCgLp9W0WmfYTL9QCv98Qfij7Zbbw@mail.gmail.com>
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [RFC PATCH 0/7] runtime format string checking
+Date: Sat, 27 Oct 2018 01:24:02 +0200
+Message-Id: <20181026232409.16100-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20171108223020.24487-1-linux@rasmusvillemoes.dk>
+References: <20171108223020.24487-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ReaqsoxgOBHFXBhH"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK62Yi9+w=06LrsiDCgLp9W0WmfYTL9QCv98Qfij7Zbbw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
+This is a resurrection of something I sent out about a year ago. In
+the relatively few places where we use a non-literal as format string,
+we can annotate the source with a fmtcheck() call that will (a) at
+build time, allow the compiler to check the variadic arguments against
+the template, and (b) at runtime, check that the format specifiers
+present in the actual format string match those in the template (and
+if not, WARN and use the template to ensure runtime type safety).
 
---ReaqsoxgOBHFXBhH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Finding places to annotate is just
 
-Hi,
+  make -j8 KCFLAGS='-Wformat-nonliteral'
 
-> And here's another device with programmable clock stretching[1]. Lots
-> of discussions in searching about masters not supporting clock
-> stretching more than I found of slaves which are configurable. At
-> least in that case, we should be able to derive it from master
-> compatible strings. But for the cases where both ends can support
-> stretching or not, seems like we need an i2c property.
+So far, in about half the places I looked, one might as well get
+completely rid of the non-literal format string. Patches 5,6,7 are
+some examples of where one might add fmtcheck() calls. I don't think
+we can get to a state where we can unconditionally add
+-Wformat-nonliteral to the build, but I think there's a lot of
+low-hanging fruit.
 
-I haven't read all this, but regarding clock stretching, this is the
-current state:
+This is on top of Miguel's compiler attributes series [1], which I
+hope will land in mainline soon.
 
-* clock streching is defined in the I2C specs and thus masters are
-  assumed to handle it properly
-* if they can't, this is a quirk and we have a flag for it:
-  I2C_AQ_NO_CLK_STRETCH
-* client drivers can check for quirks and act accordingly:
-  i2c_check_quirks(struct i2c_adapter *adap, u64 quirks)
+[1] https://github.com/ojeda/linux.git tags/compiler-attributes-for-linus-4.20-rc1
 
-Note: there is currently no user of this feature because mainlining the
-client got stuck for some reason. So, I'd be happy if all this is useful
-to you.
+Rasmus Villemoes (7):
+  compiler_attributes.h: add __attribute__((format_arg)) shorthand
+  lib/vsprintf.c: add fmtcheck utility
+  kernel.h: implement fmtmatch() wrapper around fmtcheck()
+  lib/test_printf.c: add a few fmtcheck() test cases
+  kernel/kthread.c: do runtime check of format string in
+    kthread_create_on_cpu()
+  nfs: use fmtcheck() in root_nfs_data
+  drivers: hwmon: add runtime format string checking
 
-Regards,
+ drivers/hwmon/hwmon.c               |  3 +-
+ fs/nfs/nfsroot.c                    |  2 +-
+ include/linux/compiler_attributes.h | 13 ++++++
+ include/linux/kernel.h              | 25 +++++++++++
+ kernel/kthread.c                    |  4 +-
+ lib/Kconfig.debug                   |  9 ++++
+ lib/test_printf.c                   | 43 +++++++++++++++++++
+ lib/vsprintf.c                      | 65 +++++++++++++++++++++++++++++
+ 8 files changed, 160 insertions(+), 4 deletions(-)
 
-   Wolfram
-
-
---ReaqsoxgOBHFXBhH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlvIy9UACgkQFA3kzBSg
-KbaaHRAAhwDHds2Kdekb2TMRBArWzrdhaYsMHD1aMGGx1PfGfQq3QuLTm0ipdax3
-YqLZ8FXXDiWMgRgVO9dzZOloGhnCZOhP6w7oX7fYwyA9sqiz6A1pQBZqMAlTRDrA
-zyJk8fqd9368GarqbapulalX6CXK5+D4aMNT3uT0MsGPNmDZYG1RA+rjh3k9ksRc
-Fw+u9fcD+tqkBT035aKch+//VAW8Vv8sdw4lCJHmAxaaHRVMZIR6pwg6lwZr72Ay
-0euOKPSS1G/c9qF7i4tRCneWbI8M0QOlFKLeNzjlGJbkhYGM4ywrW7oTX0/1oTaS
-s+mYIrNWspRqsDpSgHprNddI7p1jvK6+DZcgcYoJhtLp94IMez/X6ZyfDrQxLPhj
-Qnt477YlVg1x3GeaNWEE7XEDbuyTi2zjDfBf78CLaYR4qC8i5feq5w/lfZGsMX34
-12098Kv3+7fNnZkj120hw08yUIH4r/iPpTpDB5Jmk3YhZQaldzOTB5l8sMGHwsrZ
-QWEXmn6K42rZcgatoAUfqo/c1hHNStWBqlAgPOdEu+Y5XLSNT4vrLJwLTsLFAjWg
-JmIw0vq0HOUiDS6gH4qfZRgvIbfrmniJbAoHUKptwdfF0IV4otHipk79gAFguFvb
-TBCh/lcJgq1ZhA5apDPxRp3SLEIfhVGAJBmjIR4NxTATUFdKfEw=
-=qUEj
------END PGP SIGNATURE-----
-
---ReaqsoxgOBHFXBhH--
+-- 
+2.19.1.6.gbde171bbf5
