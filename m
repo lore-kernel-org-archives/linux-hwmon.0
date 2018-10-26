@@ -1,52 +1,48 @@
 Return-Path: <linux@rasmusvillemoes.dk>
 Return-path: <linux@rasmusvillemoes.dk>
 From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: Kees Cook <keescook@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
+To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-hwmon@vger.kernel.org
-Subject: [RFC PATCH 7/7] drivers: hwmon: add runtime format string checking
-Date: Sat, 27 Oct 2018 01:24:09 +0200
-Message-Id: <20181026232409.16100-8-linux@rasmusvillemoes.dk>
-In-Reply-To: <20181026232409.16100-1-linux@rasmusvillemoes.dk>
-References: <20171108223020.24487-1-linux@rasmusvillemoes.dk>
- <20181026232409.16100-1-linux@rasmusvillemoes.dk>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: hwmon: remove redundant cast
+Date: Sat, 27 Oct 2018 00:30:59 +0200
+Message-Id: <20181026223059.17652-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-With -Wformat-nonliteral, gcc complains
-
-drivers/hwmon/hwmon.c: In function ‘hwmon_genattr’:
-drivers/hwmon/hwmon.c:282:6: warning: format not a string literal, argument types not checked [-Wformat-nonliteral]
-      index + hwmon_attr_base(type));
-
-Add a runtime check to ensure that the template indeed has a single %d
-printf specifier. Using fmtcheck() also makes gcc verify that the
-expression 'index + hwmon_attr_base(type)' is suitable for %d.
+struct attribute::name which this local variable name is eventually
+assigned to is "const char*", and so is the template parameter. We might
+as well preserve the constness all the way through.
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- drivers/hwmon/hwmon.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hwmon/hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 33d51281272b..ec6f5f36b5fc 100644
+index 975c95169884..ea42c5ec40d9 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -278,7 +278,8 @@ static struct attribute *hwmon_genattr(struct device *dev,
+@@ -267,7 +267,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
+ 	struct device_attribute *dattr;
+ 	struct attribute *a;
+ 	umode_t mode;
+-	char *name;
++	const char *name;
+ 	bool is_string = is_string_attr(type, attr);
+ 
+ 	/* The attribute is invisible if there is no template string */
+@@ -289,7 +289,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
+ 		return ERR_PTR(-ENOMEM);
+ 
  	if (type == hwmon_chip) {
- 		name = (char *)template;
+-		name = (char *)template;
++		name = template;
  	} else {
--		scnprintf(hattr->name, sizeof(hattr->name), template,
-+		scnprintf(hattr->name, sizeof(hattr->name),
-+			  fmtcheck(template, "type%dwhat", 0),
+ 		scnprintf(hattr->name, sizeof(hattr->name), template,
  			  index + hwmon_attr_base(type));
- 		name = hattr->name;
- 	}
 -- 
 2.19.1.6.gbde171bbf5
