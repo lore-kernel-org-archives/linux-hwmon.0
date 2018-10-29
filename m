@@ -1,57 +1,70 @@
-Return-Path: <mfe@pengutronix.de>
-Return-path: <mfe@pengutronix.de>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51397 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbeJ2XY1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Oct 2018 19:24:27 -0400
 From: Marco Felsch <m.felsch@pengutronix.de>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	tpiepho@impinj.com,
-	dmitry.torokhov@gmail.com,
-	kernel@pengutronix.de
-Subject: [PATCH v2 0/2] Add GPIO brownout detection support
-Date: Mon, 29 Oct 2018 15:35:19 +0100
-Message-Id: <20181029143521.22122-1-m.felsch@pengutronix.de>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, tpiepho@impinj.com,
+        dmitry.torokhov@gmail.com, kernel@pengutronix.de
+Subject: [PATCH v2 1/2] dt-binding: hwmon: add gpio-brownout bindings
+Date: Mon, 29 Oct 2018 15:35:20 +0100
+Message-Id: <20181029143521.22122-2-m.felsch@pengutronix.de>
+In-Reply-To: <20181029143521.22122-1-m.felsch@pengutronix.de>
+References: <20181029143521.22122-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi,
+Add dt-bindings for gpio-brownout detection devices. Such a device
+determines the voltage good/bad state by the gpio line level.
 
-this is my v2 of my v1 [1]. I converted the driver from the input to the
-hwmon framework, as proposed by Trent [2]. Futhermore I droped the OF
-dependency for the core functionality (sensing the gpio) and moved the
-addtional feature (unbinding devices) to a additional config. So the
-dependencies are much cleaner.
-
-The spi patches are already applied by Mark so I dropped them in my v2.
-You have to apply the patche from Marks Git:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-find-by-node
-
-to get the patch stack compiled.
-
-I rebased the series on top of Guenter's hwmon-next branch and checked
-it by checkpatch. Unfortunately it complains about a missing help
-paragraph for SENSORS_GPIO_BROWNOUT_UNBIND, but the help exists.
-
-Regards,
-Marco
-
-[1] https://patchwork.kernel.org/cover/10613821/
-[2] https://patchwork.kernel.org/patch/10613825/
-
-Marco Felsch (2):
-  dt-binding: hwmon: add gpio-brownout bindings
-  hwmon: add generic GPIO brownout support
-
- .../bindings/hwmon/gpio-brownout.txt          |  32 +++
- Documentation/hwmon/gpio-brownout             |  14 ++
- drivers/hwmon/Kconfig                         |  23 +++
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/gpio-brownout.c                 | 195 ++++++++++++++++++
- 5 files changed, 265 insertions(+)
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+ .../bindings/hwmon/gpio-brownout.txt          | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-brownout.txt
- create mode 100644 Documentation/hwmon/gpio-brownout
- create mode 100644 drivers/hwmon/gpio-brownout.c
 
+diff --git a/Documentation/devicetree/bindings/hwmon/gpio-brownout.txt b/Documentation/devicetree/bindings/hwmon/gpio-brownout.txt
+new file mode 100644
+index 000000000000..f3272befc8f8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/gpio-brownout.txt
+@@ -0,0 +1,32 @@
++Device-Tree bindings for GPIO line brownout detection
++
++Required properties:
++- compatible: Must be "gpio-brownout"
++- gpio-brownout,sense-gpios: This gpio is used to detect a brownout. The gpio
++  must support interrupts.
++
++Optional properties:
++- gpio-brownout,dev-list: A list of i2c or spi device phandles. All
++  listed devices will be released from their drivers in the order they listed
++  upon a brownout detection. This can be helpful to avoid a interrupt flood,
++  because some system designs power off all external devices immediately and
++  keep the host on for a certain time.
++
++Example:
++
++i2c3 {
++	temp_core: lm75@48 { };
++	temp_chassis: lm75@49 { };
++};
++
++spi1 {
++	ts: ad7879@1 { };
++};
++
++/ {
++	gpio_brownout {
++		compatible = "gpio-brownout";
++		gpio-brownout,sense-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
++		gpio-brownout,dev-list = <&temp_core &ts>;
++	};
++};
 -- 
 2.19.1
