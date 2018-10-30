@@ -1,133 +1,67 @@
-Return-Path: <mfe@pengutronix.de>
-Return-path: <mfe@pengutronix.de>
-Date: Tue, 30 Oct 2018 18:00:26 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Trent Piepho <tpiepho@impinj.com>,
-	"dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+Return-Path: <tpiepho@impinj.com>
+Return-path: <tpiepho@impinj.com>
+From: Trent Piepho <tpiepho@impinj.com>
+To: "linux@roeck-us.net" <linux@roeck-us.net>, "m.felsch@pengutronix.de"
+	<m.felsch@pengutronix.de>
+CC: "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>
+	"jdelvare@suse.com" <jdelvare@suse.com>, "kernel@pengutronix.de"
+	<kernel@pengutronix.de>
 Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181030170026.licamhckbznuvcse@pengutronix.de>
+Date: Tue, 30 Oct 2018 18:49:07 +0000
+Message-ID: <1540925347.30311.65.camel@impinj.com>
 References: <20181029143521.22122-1-m.felsch@pengutronix.de>
- <20181029143521.22122-3-m.felsch@pengutronix.de>
- <20181029195238.GA24689@roeck-us.net>
- <1540847798.30311.47.camel@impinj.com>
- <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
- <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
- <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
+	 <20181029143521.22122-3-m.felsch@pengutronix.de>
+	 <20181029195238.GA24689@roeck-us.net>
+	 <1540847798.30311.47.camel@impinj.com>
+	 <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
+In-Reply-To: <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6841C0E5E2E47E44A64242C8F6DF0F1B@namprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 18-10-30 06:13, Guenter Roeck wrote:
-> On 10/30/18 3:47 AM, Marco Felsch wrote:
-> > On 18-10-29 18:12, Guenter Roeck wrote:
-> > > On 10/29/18 2:16 PM, Trent Piepho wrote:
-
-[Snip]
-
-> > > > 
-> > > > Consider, what if we had a "classic" hwmon chip, but on this board the
-> > > > I2C/LPC/SPI interface was not connected as an appropriate master was
-> > > > not available, and the default configuration of the chip was
-> > > > acceptable.  The chip's alarm outputs are connected to GPIOs, as it
-> > > > normal for a hwmon chip with alarm outputs.
-> > > > 
-> > > "If we had" is theory. Do we ? We don't usually add code to the kernel
-> > > just in case the hardware it supports might be out there.
-> > 
-> > Yes, there are "good old" hwmon chips without any management interface,
-> > e.g. LTC694-3.3, LTC7862, ... also there might be a discrete hw circuit.
-> > I think it's better to handle those "simple" chips by a generic hwmon
-> > driver. By simple I mean chips which informs the host only by toggling a
-> > gpio to report a state. For this purpose my driver (including name
-> > convention) isn't generic enough, I think about a hwmon-simple device.
-> > Such a device can support reporting states, no voltage/power/temp values.
-> > 
-> 
-> Yes, I agree. It doesn't really make sense to keep adding single-attribute drivers.
-> hwmon-gpio-simple, maybe, to indicate that it gets its data from gpio ?
-
-hwmon-gpio-simple sounds ok for me.
-
-> The most difficult part of such a driver would probably be to define acceptable
-> devicetree properties.
-
-That's true! One possible solution could be:
-
-hwmon_dev {
-	compatible = "hwmon-gpio-simple";
-	name = "gpio-generic-hwmon";
-	update-interval-ms = 100;
-
-	hwmon-gpio-simple,dev@0 {
-		reg = <0>;
-		gpio = <gpio3 15 GPIO_ACTIVE_LOW>;
-		hwmon-gpio-simple,type = "in";
-		hwmon-gpio-simple,report = "crit_alarm";
-	};
-
-	hwmon-gpio-simple,dev@1 {
-		reg = <1>;
-		gpio = <gpio3 19 GPIO_ACTIVE_LOW>;
-		hwmon-gpio-simple,type = "temp";
-		hwmon-gpio-simple,report = "alarm";
-	};
-};
-
-[SNIP]
-
-> > > > The ability of the hwmon driver to cause certain other devices to be
-> > > > removed is a different question.
-> > > > 
-> > > I disagree. That functionality is essential to the driver as submitted.
-> > 
-> > You're right thats important for my use-case, but I got you, thats not a
-> > hwmon related problem. If I understood the device-model correctly there
-> > are absolut no problems to hot-unplug devices, this is always the case
-> > if we unbind a driver from user-space. So why we can't handle it
-> > directly in the kernel. Are there any concerns? If not can you give me
-> > some hints to get the logic at thr right place.
-> > 
-> Well, the easiest solution would have been to do nothing code-wise and
-> register a gpio-keys instance on the gpio pin to create a KEY_POWER event.
-> Of course that might be considered an abuse of the input subsystem,
-> as Dmitry has pointed out, and is probably not acceptable. Now, if you
-> want that functionality, you could probably write some udev rules and
-> accomplish the same by listening for a change event from a sysfs attribute
-> supporting it (I think KEY_POWER is not really handled in the kernel,
-> but I am not entirely sure).
-
-I came from the input framework, as you pointed out.
-
-> Handling the event in the kernel is more tricky. First, I don't think the
-> selective device removal as you have suggested would be acceptable anywhere;
-> it may cause all kinds of trouble. The thermal subsystem supports the
-> functionality to shut down the kernel in emergencies, but is limited
-> in its scope (or at least I think so) to thermal events. Anything else
-> would have to be discussed. I for my part prefer handling it from userspace.
-
-Imagine that use-case: There is a custom board design which power off
-all external devices and leave the host on for a certain time (a few
-seconds) upon a low-voltage detection. Now the pins from the external
-devices are floating around and producing a huge amount of interrupts,
-so the kernel is really busy handling those interrupts and can't handle
-user-space processes anymore. The "host keep-on time" was intended to be
-used to save all user data currently processed, but this never happen.
-Furthermore there can be a high-priority userspace task which can't be
-preempted and the exec_time for this task is greater than the "host
-keep-on time". So the task which will unbind the devices gets never
-scheduled. Hopefully you get me and understand my outlines and why we
-need to do the unbinding within the kernel-space.
-
-One solution could be to split the drivers into to: hwmon for measuring
-and notifying, of-unbind to unbind registered devices. For this we need
-to get a kernel_notification from the hwmon-framework, so the generic
-unbinding driver gets informed. Are you agree with me?
-
-Regards,
-Marco
+T24gTW9uLCAyMDE4LTEwLTI5IGF0IDE4OjEyIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
+PiBPbiAxMC8yOS8xOCAyOjE2IFBNLCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+ID4gDQo+ID4gSWYg
+d2UgaWdub3JlIHRoZSBhYmlsaXR5IHRvIHN0b3Agb3RoZXIgZGV2aWNlcywgaG93IGlzIHRoaXMg
+bm90IGEgaHdtb24NCj4gPiBkZXZpY2Ugd2l0aCBqdXN0IGFsYXJtIGZlYXR1cmVzPw0KPiA+IA0K
+PiANCj4gUG9zc2libHksIGJ1dCB0aGUgYWJpbGl0eSB0byBzdG9wIG90aGVyIGRldmljZXMgaXMg
+YXQgdGhlIGNvcmUgb2YgdGhlIGRyaXZlcg0KPiBhcyBzdWJtaXR0ZWQuDQoNCkkgd2FzIHRoaW5r
+aW5nIGFsb25nIHRoZSBsaW5lcyBvZiBhIGRyaXZlciBmb3IgZ3BpbyBiYXNlZCBoYXJkd2FyZQ0K
+YWxhcm1zLCB0aGF0IGRpZCBub3QgaW5jbHVkZSB0aGUgZGV2aWNlIHN0b3AgZmVhdHVyZS4gIFdv
+dWxkIHRoYXQgYWxzbw0KYmUgcXVpY2tseSBOQUNLZWQ/DQoNCj4gPiBJMkMvTFBDL1NQSSBpbnRl
+cmZhY2Ugd2FzIG5vdCBjb25uZWN0ZWQgYXMgYW4gYXBwcm9wcmlhdGUgbWFzdGVyIHdhcw0KPiA+
+IG5vdCBhdmFpbGFibGUsIGFuZCB0aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uIG9mIHRoZSBjaGlw
+IHdhcw0KPiA+IGFjY2VwdGFibGUuICBUaGUgY2hpcCdzIGFsYXJtIG91dHB1dHMgYXJlIGNvbm5l
+Y3RlZCB0byBHUElPcywgYXMgaXQNCj4gPiBub3JtYWwgZm9yIGEgaHdtb24gY2hpcCB3aXRoIGFs
+YXJtIG91dHB1dHMuDQo+ID4gDQo+IA0KPiAiSWYgd2UgaGFkIiBpcyB0aGVvcnkuIERvIHdlID8g
+V2UgZG9uJ3QgdXN1YWxseSBhZGQgY29kZSB0byB0aGUga2VybmVsDQo+IGp1c3QgaW4gY2FzZSB0
+aGUgaGFyZHdhcmUgaXQgc3VwcG9ydHMgbWlnaHQgYmUgb3V0IHRoZXJlLg0KDQpXaGF0IEkgd2Fz
+IHRyeWluZyB0byBkbyB3YXMgcmVhY2ggdGhlIGNvbmNsdXNpb24gdGhhdCBhIGdwaW8gaGFyZHdh
+cmUNCmFsYXJtIGFzIGEgaHdtb24gZHJpdmVyIGlzIGFwcHJvcHJpYXRlIHZpYSBjbGVhciBzdGVw
+cy4NCg0KQSBjbGFzc2ljIGh3bW9uIGNoaXAgc2hvdWxkIGhhdmUgYSBod21vbiBkcml2ZXIuICBX
+ZSBhbGwgYWNjZXB0IHRoYXQuDQoNCkRpc2Nvbm5lY3QgaTJjIGludGVyZmFjZSwga2VlcCBhbGFy
+bXMsIGRvZXMgdGhlIGtlcm5lbCBpbnRlcmZhY2UgbmVlZA0KdG8gY2hhbmdlPyAgU2VlbXMgY2xl
+YXIgdG8gbWUgdGhlIGFuc3dlciBpcyBubywgc2hvdWxkIHN0aWxsIGJlIGh3bW9uLg0KDQpSZXBs
+YWNlIGNoaXAgd2l0aCBkaXNjcmV0ZSBsb2dpYywgZS5nLiBhbiBvcCBhbXAgYW5kIGEgZmV3IHJl
+c2lzdG9ycw0Kc2VydmluZyBhcyBhIHZvbHRhZ2UgY29tcGFyYXRvciwgd2hpY2ggaGFzIHRoZSBz
+YW1lIGJlaGF2aW9yIGFzIHRoZSANCmh3bW9uIGNoaXAgYXMgZmFyIGFzIHRoZSByZXN0IG9mIHRo
+ZSBzeXN0ZW0gaXMgY29uY2VybmVkLiAgRG9lcyB0aGUNCmtlcm5lbCBpbnRlcmZhY2UgbmVlZCB0
+byBjaGFuZ2Ugbm93PyAgQWdhaW4sIHNlZW1zIGxpa2UgaXQgc2hvdWxkbid0DQpjaGFuZ2UuDQoN
+Cj4gDQo+IEZvciB2b2x0YWdlIG1vbml0b3JpbmcsIHRoYXQgaXMgbm90IG5vcm1hbGx5IHRoZSBj
+YXNlLiBJdCBpcyBtdWNoIG1vcmUgbGlrZWx5DQo+IHRoYXQgdGhlcmUgaXMgaW4gZmFjdCBhIGhh
+cmR3YXJlIG1vbml0b3Jpbmcgb3IgcG93ZXIgY29udHJvbCBjaGlwLCB0aGUNCj4gKG9yIGFuKSBh
+bGFybSBvdXRwdXQgb2YgdGhhdCBjaGlwIGlzIGNvbm5lY3RlZCB0byBhIGdwaW8gbGluZSwgYW5k
+IGl0cyBjb250cm9sDQo+IGludGVyZmFjZSBpcyBjb25uZWN0ZWQuIElmIHNvLCB0aGUgZHJpdmVy
+IGZvciB0aGF0IGNoaXAgc2hvdWxkIGJlIGVuaGFuY2VkDQo+IHRvIHN1cHBvcnQgaW50ZXJydXB0
+cywgYW5kIHRvIHJlcG9ydCB0aGUgc3RhdHVzIHdpdGggaXRzIG93biBzeXNmcyBhdHRyaWJ1dGVz
+Lg0KDQpJIGFncmVlIHRoYXQgd3JpdGluZyBhIHNwZWNpYWxpemVkIGRyaXZlciB0aGF0IHByZXRl
+bmRzIGEgaHdtb24gY2hpcA0Kd2l0aCBhIGNvbnRyb2wgaW50ZXJmYWNlIGlzIGp1c3QgYSBncGlv
+IHdvdWxkbid0IGJlIGFwcHJvcHJpYXRlIGFzIGFuDQp1cHN0cmVhbWFibGUgZHJpdmVyIGZvciB0
+aGUga2VybmVsLiAgSXQncyBtb3JlIG9mIGEgb25lIG9mZiBoYWNrIG9mDQpleHBlZGllbmN5Lg0K
+DQpCdXQgaXQncyBwcmV0dHkgZWFzeSB0byBtYWtlIGEgdm9sdGFnZSBhbGFybSBjaXJjdWl0IHdp
+dGggYW4gb3AgYW1wLiANCkV2ZW4gYSBkaWZmZXJlbnRpYWwgdGVtcGVyYXR1cmUgc2Vuc29yIHdp
+dGggaHlzdGVyZXNpcyBpcyBqdXN0IGEgZmV3DQpjb21wb25lbnRzLg0KDQpXb3VsZCBhIGh3bW9u
+IGRyaXZlciBmb3IgdGhpcyBiZSB1bmFjY2VwdGFibGU/DQo=
