@@ -1,139 +1,203 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-sn1nam02on0112.outbound.protection.outlook.com ([104.47.36.112]:21377
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727656AbeKHDiz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 7 Nov 2018 22:38:55 -0500
-From: Trent Piepho <tpiepho@impinj.com>
-To: "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>
-CC: "linux@roeck-us.net" <linux@roeck-us.net>,
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40138 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727644AbeKAWFi (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Nov 2018 18:05:38 -0400
+Received: by mail-pg1-f195.google.com with SMTP id o14-v6so9008083pgv.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Nov 2018 06:02:44 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Trent Piepho <tpiepho@impinj.com>,
         "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Date: Wed, 7 Nov 2018 18:07:14 +0000
-Message-ID: <1541614034.30311.280.camel@impinj.com>
-References: <20181030201147.GB28185@roeck-us.net>
-         <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
-         <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
-         <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
-         <20181101151428.GB25346@roeck-us.net>
-         <1541096469.30311.166.camel@impinj.com>
-         <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
-         <1541199919.30311.224.camel@impinj.com>
-         <20181105081917.3af4v2c2wejsfnqe@pengutronix.de>
-         <1541537426.30311.271.camel@impinj.com>
-         <20181107093529.mwkjbbpipbsoraho@pengutronix.de>
-In-Reply-To: <20181107093529.mwkjbbpipbsoraho@pengutronix.de>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E624D611A859E24AB60FFF384920FE5F@namprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+References: <20181029143521.22122-1-m.felsch@pengutronix.de>
+ <20181029143521.22122-3-m.felsch@pengutronix.de>
+ <20181029195238.GA24689@roeck-us.net> <1540847798.30311.47.camel@impinj.com>
+ <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
+ <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
+ <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
+ <20181030170026.licamhckbznuvcse@pengutronix.de>
+ <1540928050.30311.94.camel@impinj.com> <20181030201147.GB28185@roeck-us.net>
+ <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <6d9991b4-887a-2d93-d63b-46a0b1a9165b@roeck-us.net>
+Date: Thu, 1 Nov 2018 06:02:42 -0700
 MIME-Version: 1.0
+In-Reply-To: <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-T24gV2VkLCAyMDE4LTExLTA3IGF0IDEwOjM1ICswMTAwLCBNYXJjbyBGZWxzY2ggd3JvdGU6DQo+
-IE9uIDE4LTExLTA2IDIwOjUwLCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+ID4gDQo+ID4gPiBDdXJy
-ZW50bHkgSSB1c2luZyB0aGUgZ3Bpb2RfdG9faXJxKCkgZnVuY3Rpb24gdG8gY29udmVydCB0aGUg
-c2Vuc2UgZ3Bpbw0KPiA+ID4gaW50byBhIGlycSwgYnV0IEkgZG8gc29tZSBtYWdpYyB0byBkZXRl
-cm1pbmUgdGhlIGVkZ2UuIEkgdG91Z2h0IHRoZXJlDQo+ID4gPiBtaWdodCBiZSByZWFzb25zIHdo
-eSB0aGVyZSBhcmUgbm8gZWRnZSBkZWZpbmVzIGluDQo+ID4gPiBpbmNsdWRlL2R0LWJpbmRpbmdz
-L2dwaW8vZ3Bpby5oLg0KPiA+IA0KPiA+IEp1c3QgcmVxdWVzdCB0aGUgaW50ZXJydXB0IHdpdGgg
-SVJRRl9UUklHR0VSX1JJU0lORyBhbmQgaXQgd2lsbCB3b3JrIG9uDQo+ID4gYWxtb3N0IGFueSBT
-b0MuICBUaGUgcmVhc29uIHlvdSBzZWUgbm8gZWRnZSBkZWZpbmVzIHdpdGggZ3BpbyBoYW5kbGVz
-DQo+ID4gaXMgdGhhdCBlZGdlIGFuZCBsZXZlbCB0cmlnZ2VyaW5nIGlzIGEgaW50ZXJydXB0IGNv
-bmNlcHQsIG5vdCBhIGdwaW8NCj4gPiBjb25jZXB0LiAgVGhlcmUgYXJlIG5vIGxldmVsIHRyaWdn
-ZXJzIGRlZmluZWQgZm9yIGdwaW9zIGVpdGhlci4gIFRoZQ0KPiA+IGFjdGl2ZSBsb3cvaGlnaCBm
-bGFncyBqdXN0IGRlZmluZSB3aGF0IHZvbHRhZ2Ugc2hvdWxkIGJlIGNvbnNpZGVyZWQNCj4gPiAi
-YXNzZXJ0ZWQiLiAgVGhleSBhcmVuJ3QgaW50ZW5kZWQgdG8gYmUgcmVsYXRlZCB0byBpbnRlcnJ1
-cHRzLg0KPiANCj4gT2theSwgdGhhbmtzIGZvciB0aGlzIGhpbnQuIFNvIGEgZ3BpbyBtYXJrZWQg
-YXMgR1BJT19BQ1RJVkVfTE9XIHdpbGwNCj4gdHJpZ2dlciBhIElSUUZfVFJJR0dFUl9SSVNJTkcg
-cmVxdWVzdGVkIGludGVycnVwdCBpZiB0aGUgZ3BpbyBsZXZlbA0KPiAoZWxlY3RyaWNhbCkgZ29l
-cyBmcm9tIDEtPjA/IEkgZGlkbid0IGtuZXcgdGhhdC4NCg0KWWVzIGFuZCBuby4gIEFjdGl2ZSBs
-b3cgaXMgYSBncGlvIGNvbmNlcHQgYW5kIGVkZ2UgaXMgYW4gaW50ZXJydXB0DQpjb25jZXB0IGFu
-ZCB0aGV5IGRvbid0IGtub3cgYWJvdXQgZWFjaCBvdGhlci4gIFNvIHlvdSdsbCBmaW5kIHRoYXQN
-CnJlcXVlc3RpbmcgYSByaXNpbmcgZWRnZSBpbnRlcnJ1cHQgb24gdGhlIGlycSBsaW5lIGFzc29j
-aWF0ZWQgd2l0aCBhDQpncGlvIHZpYSB0aGUga2VybmVsIGlycSBpbnRlcmZhY2Ugd2lsbCBnaXZl
-IHlvdSBhbiBpbnRlcnJ1cHQgb24gdGhlDQpHTkQtPlZjYyBlZGdlLiAgQnV0IHRoZW4gdGFrZSBh
-IGxvb2sgYXQgY29tbWl0IDA3Njk3NDYxODNjLCANCg0KICAgICAgICBpZiAodGVzdF9iaXQoRkxB
-R19UUklHX0ZBTEwsICZncGlvX2ZsYWdzKSkNCiAgICAgICAgICAgICAgIGlycV9mbGFncyB8PSB0
-ZXN0X2JpdChGTEFHX0FDVElWRV9MT1csICZkZXNjLT5mbGFncykgPw0KICAgICAgICAgICAgICAg
-ICAgICAgICBJUlFGX1RSSUdHRVJfUklTSU5HIDogSVJRRl9UUklHR0VSX0ZBTExJTkc7DQoNCklm
-IHlvdSB1c2UgdGhlIHN5c2ZzIGludGVyZmFjZSB0byByZXF1ZXN0IGFuIGVkZ2UgaW50ZXJydXB0
-LCBzaW5jZSBpdA0Ka25vd3MgYWJvdXQgYm90aCB0aGUgZ3BpbyBhY3RpdmUgbG93IGZsYWcgYW5k
-IHRoZSBlZGdlIGJlaW5nIHJlcXVlc3RlZCwNCml0IHRyaWVzIHRvIGNvbWJpbmUgdGhlbSwgc28g
-eW91IGdldCBhbiBpbnRlcnJ1cHQgb24gdGhlIFZjYy0+R05EIGVkZ2UuDQoNCj4gDQo+ID4gDQo+
-ID4gPiBPa2F5LCBzbyBubyBwb2xsaW5nIGZvciB0aGUgY3VycmVudCBzb2x1dGlvbi4gTGV0IG1l
-IHN1bW1hcml6ZSBvdXINCj4gPiA+IHNvbHV0aW9uOg0KPiA+ID4gIC0gbm8gcG9sbGluZyAoY3Vy
-cmVudGx5KQ0KPiA+ID4gIC0gZHQtbm9kZSBzcGVjaWZpZXMgYSBncGlvIGluc3RlYWQgb2YgYSBp
-bnRlcnJ1cHQNCj4gPiA+ICAgIC0+IGdwaW8gPC0+IGlycSBtYXBwaW5nIGlzIGRvbmUgYnkgZ3Bp
-b2RfdG9faXJxKCkgYW5kIGZhaWxzIGlmIGdwaW8NCj4gPiA+ICAgICAgIGRvZXNuJ3Qgc3VwcG9y
-dCBpcnEncw0KPiA+ID4gIC0gbW9yZSBhbGFybXMgcGVyIHNlbnNvcg0KPiA+ID4gDQo+ID4gPiBP
-bmx5IG9uZSBsYXN0IHRoaW5nIEkgdG91Z2h0IGFib3V0Og0KPiA+ID4gDQo+ID4gPiBVc2luZyBh
-IGZsYXQgZGVzaWduIGxpa2UgeW91IG1lbnRpb25lZCB3b3VsZCBsZWFkIGludG8gYSAidmlydHVh
-bCINCj4gPiA+IGFkZHJlc3MgY29uZmxpY3QsIHNpbmNlIGJvdGggc2Vuc29ycyBhcmUgb24gdGhl
-IHNhbWUgbGV2ZWwuIEkgdG91Z2h0DQo+ID4gPiBhYm91dCBpMmMvc3BpL211eGVzL2dyYXBoLWRl
-dmljZXMgd2hpY2ggZG9uJ3Qgc3VwcG9ydCBzdWNoICJhZGRyZXNzaW5nIg0KPiA+ID4gc2NoZW1l
-Lg0KPiA+IA0KPiA+IFlvdSBtZWFuIGEgdGVtcCBhbGFybSBhbmQgYSB2b2x0YWdlIGFsYXJtIGNv
-dWxkIGJvdGggYmUgcmVnID0gPDE+PyAgSQ0KPiA+IGRvbid0IHRoaW5rIGFueXRoaW5nIGNvbXBs
-YWlucyBhYm91dCB0aGF0LiAgQnV0IGl0IGRvZXMgc2VlbQ0KPiA+IHVuZGVzaXJhYmxlLg0KPiAN
-Cj4gWWVzLCBiZWNhdXNlIGJvdGggdHlwZXMgYXJlIG9uIHRoZSBzYW1lIGhpZXJhcmNoeSBsZXZl
-bC4gQXMgSSBzYWlkIGl0IGlzDQo+IG1vcmUgYSBkdC1jb252ZW50aW9uIGRlY2lzaW9uLg0KPiAN
-Cj4gPiA+IGh3bW9uX2RldiB7DQo+ID4gPiAJY29tcGF0aWJsZSA9ICJncGlvLWFsYXJtIjsNCj4g
-PiA+IAliYXRAMCB7DQo+ID4gPiAJCXJlZyA9IDwwPjsNCj4gPiA+IAkJbGFiZWwgPSAiQmF0dGVy
-eSBQYWNrMSBWb2x0YWdlIjsNCj4gPiA+IAkJdHlwZSA9ICJ2b2x0YWdlIjsNCj4gPiA+IAkJYWxh
-cm0tdHlwZSA9IDxHUElPX0FMQVJNX0xDUklULCBHUElPX0FMQVJNX0NSSVQ+Ow0KPiA+IA0KPiA+
-IFdvdWxkIGhhdmUgdG8gYmUgPEdQSU9fQUxBUk1fTENSSVQ+LCA8R1BJT19BTEFSTV9DUklUPjsN
-Cj4gPiANCj4gPiBJJ20gbm90IHN1cmUgaWYgZHQgYmluZGluZ3MgcHJlZmVyIHN5bWJvbGljIGlu
-dGVnZXIgY29uc3RhbnRzIHZzDQo+ID4gc3RyaW5ncyBmb3Igc29tZXRoaW5nIHdoaWNoIGlzIGFu
-IGVudW1lcmF0aW9uIGxpa2UgdGhpcy4gIHN0cmluZ3Mgc2VlbQ0KPiA+IG1vcmUgY29tbW9uIHRv
-IG1lLCBlLmcuIGFsYXJtLXR5cGVzID0gImxjcml0IiwgImNyaXQiOw0KPiANCj4gVGhhdCdzIGEg
-Z29vZCBxdWVzdGlvbi4gSSB0ZXJtIG9mIHBhcnNpbmcsIHRoZSBub24gc3RyaW5nIHZhcmlhbnQg
-c2hvdWxkDQo+IGJlIGZhc3Rlci4gSSBkb24ndCBoYXZlIGFueSBwcmVmZXJlbmNlLCBidXQgd2ls
-bCB0cnkgdGhlIHN0cmluZyB2YXJpYW50DQo+IGZpcnN0IDspDQo+IA0KPiBSZWdhcmRzLA0KPiBN
-YXJjbw0KPiANCj4gPiA+IAkJYWxhcm0tZ3Bpb3MgPSA8JmdwaW8zIDE1IEdQSU9fQUNUSVZFX0xP
-Vw0KPiA+ID4gCQkJCSZncGlvMyAxNiBHUElPX0FDVElWRV9MT1c+Ow0KPiA+ID4gCX07DQo+ID4g
-PiAJYmF0QDEgew0KPiA+ID4gCQlyZWcgPSA8MT47DQo+ID4gPiAJCWxhYmVsID0gIkJhdHRlcnkg
-UGFjazIgVm9sdGFnZSI7DQo+ID4gPiAJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9MQ1JJVCwg
-R1BJT19BTEFSTV9DUklUPjsNCj4gPiA+IAkJYWxhcm0tZ3Bpb3MgPSA8JmdwaW8zIDkgR1BJT19B
-Q1RJVkVfTE9XDQo+ID4gPiAJCQkJJmdwaW8zIDEgR1BJT19BQ1RJVkVfTE9XPjsNCj4gPiA+IAl9
-Ow0KPiA+ID4gCWNwdXRlbXBAMCB7DQo+ID4gPiAJCXJlZyA9IDwwPjsNCj4gPiA+IAkJbGFiZWwg
-PSAiQ1BVIFRlbXBlcmF0dXJlIENyaXRpY2FsIjsNCj4gPiA+IAkJdHlwZSA9ICJ0ZW1wZXJhdHVy
-ZSI7DQo+ID4gPiAJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9HRU5SSUM+Ow0KPiA+ID4gCQlh
-bGFybS1ncGlvcyA9IDwmZ3BpbzQgMTcgR1BJT19BQ1RJVkVfTE9XPjsNCj4gPiA+IAl9Ow0KPiA+
-ID4gfTsNCj4gPiA+IA0KPiA+ID4gV2hlcmUgYSBtb3JlIHN0cnVjdHVyZWQgbGF5b3V0IGRvbid0
-IGhhdmUgdGhpcyAiaXNzdWUiLg0KPiA+ID4gDQo+ID4gPiBod21vbl9kZXYgew0KPiA+ID4gCWNv
-bXBhdGlibGUgPSAiZ3Bpby1hbGFybSI7DQo+ID4gPiANCj4gPiA+IAl2b2x0YWdlIHsNCj4gPiA+
-IAkJYmF0QDAgew0KPiA+ID4gCQkJcmVnID0gPDA+Ow0KPiA+ID4gCSAJCWxhYmVsID0gIkJhdHRl
-cnkgUGFjazEgVm9sdGFnZSI7DQo+ID4gPiAJCQlhbGFybS10eXBlID0gPEdQSU9fQUxBUk1fTENS
-SVQsIEdQSU9fQUxBUk1fQ1JJVD47DQo+ID4gPiAJCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzMgMTUg
-R1BJT19BQ1RJVkVfTE9XDQo+ID4gPiAJCQkJCSZncGlvMyAxNiBHUElPX0FDVElWRV9MT1c+Ow0K
-PiA+ID4gCQl9Ow0KPiA+ID4gCQliYXRAMSB7DQo+ID4gPiAJCQlyZWcgPSA8MT47DQo+ID4gPiAJ
-IAkJbGFiZWwgPSAiQmF0dGVyeSBQYWNrMiBWb2x0YWdlIjsNCj4gPiA+IAkJCWFsYXJtLXR5cGUg
-PSA8R1BJT19BTEFSTV9MQ1JJVCwgR1BJT19BTEFSTV9DUklUPjsNCj4gPiA+IAkJCWFsYXJtLWdw
-aW9zID0gPCZncGlvMyA5IEdQSU9fQUNUSVZFX0xPVw0KPiA+ID4gCQkJCQkmZ3BpbzMgMSBHUElP
-X0FDVElWRV9MT1c+Ow0KPiA+ID4gCQl9Ow0KPiA+ID4gCX07DQo+ID4gPiAJdGVtcGVyYXR1cmUg
-ew0KPiA+ID4gCQljcHV0ZW1wIHsNCj4gPiA+IAkJCWxhYmVsID0gIkNQVSBUZW1wZXJhdHVyZSBD
-cml0aWNhbCI7DQo+ID4gPiAJCQlhbGFybS10eXBlID0gPEdQSU9fQUxBUk1fR0VOUklDPjsNCj4g
-PiA+IAkJCWFsYXJtLWdwaW9zID0gPCZncGlvNCAxNyBHUElPX0FDVElWRV9MT1c+Ow0KPiA+ID4g
-CQl9Ow0KPiA+ID4gCX07DQo+ID4gPiB9Ow0KPiA+ID4gDQo+ID4gPiBXZSBkb24ndCBoYXZlIHRv
-IHRha2UgdGhpcyBsYXlvdXQsIHdlIGNhbiBhbHNvIGNvbnNpZGVyIGFib3V0IGRldmljZXM6DQo+
-ID4gPiANCj4gPiA+IGh3bW9uX2RldiB7DQo+ID4gPiAJY29tcGF0aWJsZSA9ICJncGlvLWFsYXJt
-IjsNCj4gPiA+IA0KPiA+ID4gCWRldkAwIHsNCj4gPiA+IAkJcmVnID0gPDA+Ow0KPiA+ID4gCQl2
-b2x0YWdlIHsNCj4gPiA+IAkJCWxhYmVsID0gIkJhdHRlcnkgUGFjazEgVm9sdGFnZSI7DQo+ID4g
-PiAJCQlhbGFybS10eXBlID0gPEdQSU9fQUxBUk1fTENSSVQsIEdQSU9fQUxBUk1fQ1JJVD47DQo+
-ID4gPiAJCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzMgMTUgR1BJT19BQ1RJVkVfTE9XDQo+ID4gPiAJ
-CQkJCSZncGlvMyAxNiBHUElPX0FDVElWRV9MT1c+Ow0KPiA+ID4gCQl9Ow0KPiA+ID4gCQl0ZW1w
-ZXJhdHVyZSB7DQo+ID4gPiAJCQlsYWJlbCA9ICJCYXR0ZXJ5IFBhY2sxIFRlbXBlcmF0dXJlIENy
-aXRpY2FsIjsNCj4gPiA+IAkJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9HRU5SSUM+Ow0KPiA+
-ID4gCQkJYWxhcm0tZ3Bpb3MgPSA8JmdwaW80IDE3IEdQSU9fQUNUSVZFX0xPVz47DQo+ID4gPiAJ
-CX07DQo+ID4gPiAJfTsNCj4gPiA+IAlkZXZAMSB7DQo+ID4gPiAJCXJlZyA9IDwxPjsNCj4gPiA+
-IAkJdGVtcGVyYXR1cmUgew0KPiA+ID4gCQkJbGFiZWwgPSAiQ1BVIFRlbXBlcmF0dXJlIENyaXRp
-Y2FsIjsNCj4gPiA+IAkJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9HRU5SSUM+Ow0KPiA+ID4g
-CQkJYWxhcm0tZ3Bpb3MgPSA8JmdwaW80IDE5IEdQSU9fQUNUSVZFX0xPVz47DQo+ID4gPiAJCX07
-DQo+ID4gPiAJfTsNCj4gPiA+IH07DQo+ID4gPiANCj4gPiA+IEkgZG9uJ3QgdGhpbmsgdGhhdCBp
-cyBhIGlzc3VlIGF0IGFsbCwgYnV0IEkgZG9uJ3Qga25vdyB0aGUgZHQNCj4gPiA+IG1haW50YWlu
-ZXJzIG9waW5pb24gb2YgdGhpcyB0aGVtZS4NCj4gPiA+IA0KPiA+ID4gUmVnYXJkcywNCj4gPiA+
-IE1hcmNv
+On 11/1/18 3:40 AM, Marco Felsch wrote:
+> On 18-10-30 13:11, Guenter Roeck wrote:
+>> On Tue, Oct 30, 2018 at 07:34:11PM +0000, Trent Piepho wrote:
+>>> On Tue, 2018-10-30 at 18:00 +0100, Marco Felsch wrote:
+>>>> On 18-10-30 06:13, Guenter Roeck wrote:
+>>>>> On 10/30/18 3:47 AM, Marco Felsch wrote:
+>>>>>>
+>>>> hwmon-gpio-simple sounds ok for me.
+>>>>
+>>>>> The most difficult part of such a driver would probably be to define acceptable
+>>>>> devicetree properties.
+>>>>
+>>>> That's true! One possible solution could be:
+>>>>
+>>>> hwmon_dev {
+>>>> 	compatible = "hwmon-gpio-simple";
+>>>> 	name = "gpio-generic-hwmon";
+>>>> 	update-interval-ms = 100;
+>>>>
+>>>> 	hwmon-gpio-simple,dev@0 {
+>>>> 		reg = <0>;
+>>>> 		gpio = <gpio3 15 GPIO_ACTIVE_LOW>;
+>>>> 		hwmon-gpio-simple,type = "in";
+>>>> 		hwmon-gpio-simple,report = "crit_alarm";
+>>>> 	};
+>>>>
+>>>> 	hwmon-gpio-simple,dev@1 {
+>>>> 		reg = <1>;
+>>>> 		gpio = <gpio3 19 GPIO_ACTIVE_LOW>;
+>>>> 		hwmon-gpio-simple,type = "temp";
+>>>> 		hwmon-gpio-simple,report = "alarm";
+>>>> 	};
+>>>> };
+>>>
+>>> Here's some options:
+>>>
+>>> hwmon_dev {
+>>> 	/* Orthogonal to existing "gpio-fan" binding. */
+>>> 	compatible = "gpio-alarm";
+>>> 	/* Standard DT property for GPIO users is [<name>-]gpios */
+>>> 	alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW>,
+>>> 	              <&gpio3 19 GPIO_ACTIVE_LOW>;
+>>> 	/* A <prop>-names property is also a DT standard */
+>>>          alarm-gpios-names = "in0", "temp0";
+>>
+>> temp1, and it would have to specify which alarm, but, yes, that would
+>> be better.
+>>
+>>> };
+>>>
+>>> The driver can create hwmon alarm attribute(s) based on the name(s).  I
+>>> used "alarm" as it seemed to fit the pattern established by the "fan"
+>>> driver.  Both the gpio-fan and gpio-alarm driver use gpios, but I think
+>>> considering them one driver for that reason does not make sense.
+>>>
+>>> The names are very Linuxy, something that is not liked in DT bindings.
+>>> It also doesn't extend well if you need to add more attributes to each
+>>> alarm.  Here's something that's more like what I did for the gpio-leds
+>>> binding.
+>>>
+>>> hwmon_dev {
+>>> 	compatible = "gpio-alarm";
+>>> 	voltage@0 {
+>>> 		label = "Battery Voltage Low";
+>>> 		type = "voltage";
+>>> 		alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW>;
+>>> 	};
+>>> 	cputemp@0 {
+>>> 		label = "CPU Temperature Critical";
+>>> 		type = "temperature";
+>>> 		interrupt-parent = <&gpio3>;
+>>> 		interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+>>> 	};
+>>
+>> Even better, though the type of alarm (generic, min, max, lcrit, crit,
+>> cap, emergency, fault) is still needed. That needs to be specified by
+>> some explicit means, not with a label (though having a label is ok).
+> 
+> Thanks for your ideas, looks quite nice.
+> 
+>> There could also be more than one alarm per sensor (eg in0_lcrit_alarm,
+>> in0_min_alarm, in0_max_alarm, in0_crit_alarm), all of which would share
+>> a single label. Something like
+>>
+>> #define GPIO_ALARM_GENERIC	0
+>> #define GPIO_ALARM_MIN		1
+>> ...
+>>
+>> 	voltage@0 {
+> 
+> 		reg = <0>;
+> 
+> I remember that we have to add a reg property if we want to use xyz@0.
+> 
+>> 		label = "Battery Voltage";
+>> 		type = "voltage";
+>> 		alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+>> 		alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
+>> 				&gpio3 16 GPIO_ACTIVE_LOW>;
+>> 	};
+>>
+>> with some better (acceptable) values for "alarm-type" and the actual fields.
+> 
+> Should we use the @<reg> suffix to map it to in<reg>_*_alarm or should
+> we do something like that:
+> 
+> hwmon_dev {
+> 	compatible = "gpio-alarm";
+> 
+> 	voltage {
+> 		bat@0 {
+> 			reg = <0>;
+> 
+> 	 		label = "Battery Pack1 Voltage";
+> 			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> 			interrupt-parent = <&gpio3>;
+> 			interrupts = <15 IRQ_TYPE_LEVEL_LOW>,
+> 				     <16 IRQ_TYPE_EDGE_RISING>;
+> 		
+> 		};
+> 
+> 		bat@1 {
+> 			reg = <1>;
+> 
+> 	 		label = "Battery Pack2 Voltage";
+> 			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> 			interrupts-extended = <&gpio3 17 IRQ_TYPE_EDGE_FALLING>,
+> 					      <&gpio4 18 IRQ_TYPE_EDGE_FALLING>;
+> 		
+> 		};
+> 	};
+> 
+> 	temperature {
+> 		cputemp {
+> 			label = "CPU Temperature Critical";
+> 			alarm-type = <GPIO_ALARM_CRIT>;
+> 			interrupt-parent = <&gpio3>;
+> 			interrupts = <20 IRQ_TYPE_EDGE_FALLING>;
+> 		};
+> 	};
+> };
+> 
+> Now the subnodes imply the type. Since the hwmon-gpio-simple should
+> work interrupt driven all the time we should replace the alarm-gpios by
+
+Note that this isn't entirely correct: If the gpio pin doesn't support
+interrupts, the driver would just report the state of the pin.
+
+Guenter
+
+> the interrupt property, so we can use the already existing EDGE
+> flags, as Trent mentoined. Otherwise we have to asume if
+> the gpio is low-active then the interrupt should be triggered on a
+> falling edge.
+> 
+> Marco
+> 
+>> Guenter
+>>
+>>> };
+>>>
+>>> Supporting interrupts instead of just a gpio would allow for edge
+>>> triggering.
+>>>
+>>> I can also see that someone might want to create some kind of time
+>>> based hysteresis for circuits that don't have that.  While it would be
+>>> very easy to add a "linux,debounce = <1000>;" property, I imagine that
+>>> would be rejected as configuration in the DT binding.
+> 
