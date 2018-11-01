@@ -1,12 +1,12 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45818 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728627AbeKBALv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Nov 2018 20:11:51 -0400
-Received: by mail-pl1-f193.google.com with SMTP id o19-v6so9063291pll.12
-        for <linux-hwmon@vger.kernel.org>; Thu, 01 Nov 2018 08:08:29 -0700 (PDT)
-Date: Thu, 1 Nov 2018 08:08:26 -0700
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33158 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727976AbeKBARy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Nov 2018 20:17:54 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i62-v6so1625158pfi.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Nov 2018 08:14:31 -0700 (PDT)
+Date: Thu, 1 Nov 2018 08:14:28 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Marco Felsch <m.felsch@pengutronix.de>
 Cc: Trent Piepho <tpiepho@impinj.com>,
@@ -15,7 +15,7 @@ Cc: Trent Piepho <tpiepho@impinj.com>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>
 Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181101150826.GA25346@roeck-us.net>
+Message-ID: <20181101151428.GB25346@roeck-us.net>
 References: <1540847798.30311.47.camel@impinj.com>
  <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
  <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
@@ -24,17 +24,17 @@ References: <1540847798.30311.47.camel@impinj.com>
  <1540928050.30311.94.camel@impinj.com>
  <20181030201147.GB28185@roeck-us.net>
  <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
- <6d9991b4-887a-2d93-d63b-46a0b1a9165b@roeck-us.net>
- <20181101145858.iavdll2aqjpd7n6s@pengutronix.de>
+ <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+ <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181101145858.iavdll2aqjpd7n6s@pengutronix.de>
+In-Reply-To: <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 01, 2018 at 03:58:58PM +0100, Marco Felsch wrote:
-> On 18-11-01 06:02, Guenter Roeck wrote:
+On Thu, Nov 01, 2018 at 03:53:12PM +0100, Marco Felsch wrote:
+> On 18-11-01 06:01, Guenter Roeck wrote:
 > > On 11/1/18 3:40 AM, Marco Felsch wrote:
 > > > On 18-10-30 13:11, Guenter Roeck wrote:
 > > > > On Tue, Oct 30, 2018 at 07:34:11PM +0000, Trent Piepho wrote:
@@ -177,17 +177,51 @@ On Thu, Nov 01, 2018 at 03:58:58PM +0100, Marco Felsch wrote:
 > > > 	};
 > > > };
 > > > 
+> > Works for me.
+> > 
 > > > Now the subnodes imply the type. Since the hwmon-gpio-simple should
 > > > work interrupt driven all the time we should replace the alarm-gpios by
+> > > the interrupt property, so we can use the already existing EDGE
+> > > flags, as Trent mentoined. Otherwise we have to asume if
+> > > the gpio is low-active then the interrupt should be triggered on a
+> > > falling edge.
+> > > 
 > > 
-> > Note that this isn't entirely correct: If the gpio pin doesn't support
-> > interrupts, the driver would just report the state of the pin.
+> > Isn't that configurable with devicetree flags ? I don't think a driver
+> > should get involved in deciding the active edge.
 > 
-> Okay, but how do we detect and report a alarm if you won't have a
-> (fallback) polling mechanism nor a gpio which doesn't support
-> interrupts? Should the user poll the sysfs-entry instead?
+> No, AFAIK we can only specify the active level types for gpios. This
+> made sense to me, because I saw no gpio-controller which support
+> 'edge-level' reporting (however it will be called) currently.
 > 
-Yes. Not different to existing hwmon drivers which don't implement
-interrupt handling.
+> Deciding the edge within the driver was/is the only solution is found
+> currently, but I'm with you, thats a bit stupid. I open minded for other
+> solutions.
+> 
+Thinking about it, interrupts should be triggered on both edges for this
+to work. Reason is that we want to report all pin status changes to
+userspace. Otherwise userspace would have to poll anyway.
 
 Guenter
+
+> Marco
+> 
+> > Guenter
+> > 
+> > 
+> > > Marco
+> > > 
+> > > > Guenter
+> > > > 
+> > > > > };
+> > > > > 
+> > > > > Supporting interrupts instead of just a gpio would allow for edge
+> > > > > triggering.
+> > > > > 
+> > > > > I can also see that someone might want to create some kind of time
+> > > > > based hysteresis for circuits that don't have that.  While it would be
+> > > > > very easy to add a "linux,debounce = <1000>;" property, I imagine that
+> > > > > would be rejected as configuration in the DT binding.
+> > > 
+> > 
+> > 
