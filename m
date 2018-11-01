@@ -1,6 +1,6 @@
 Return-Path: <mfe@pengutronix.de>
 Return-path: <mfe@pengutronix.de>
-Date: Thu, 1 Nov 2018 15:53:12 +0100
+Date: Thu, 1 Nov 2018 15:58:58 +0100
 From: Marco Felsch <m.felsch@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Trent Piepho <tpiepho@impinj.com>,
@@ -9,7 +9,7 @@ Cc: Trent Piepho <tpiepho@impinj.com>,
 	"jdelvare@suse.com" <jdelvare@suse.com>,
 	"kernel@pengutronix.de" <kernel@pengutronix.de>
 Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
+Message-ID: <20181101145858.iavdll2aqjpd7n6s@pengutronix.de>
 References: <20181029195238.GA24689@roeck-us.net>
  <1540847798.30311.47.camel@impinj.com>
  <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
@@ -19,14 +19,14 @@ References: <20181029195238.GA24689@roeck-us.net>
  <1540928050.30311.94.camel@impinj.com>
  <20181030201147.GB28185@roeck-us.net>
  <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
- <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+ <6d9991b4-887a-2d93-d63b-46a0b1a9165b@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+In-Reply-To: <6d9991b4-887a-2d93-d63b-46a0b1a9165b@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 18-11-01 06:01, Guenter Roeck wrote:
+On 18-11-01 06:02, Guenter Roeck wrote:
 > On 11/1/18 3:40 AM, Marco Felsch wrote:
 > > On 18-10-30 13:11, Guenter Roeck wrote:
 > > > On Tue, Oct 30, 2018 at 07:34:11PM +0000, Trent Piepho wrote:
@@ -169,32 +169,25 @@ On 18-11-01 06:01, Guenter Roeck wrote:
 > > 	};
 > > };
 > > 
-> Works for me.
-> 
 > > Now the subnodes imply the type. Since the hwmon-gpio-simple should
 > > work interrupt driven all the time we should replace the alarm-gpios by
+> 
+> Note that this isn't entirely correct: If the gpio pin doesn't support
+> interrupts, the driver would just report the state of the pin.
+
+Okay, but how do we detect and report a alarm if you won't have a
+(fallback) polling mechanism nor a gpio which doesn't support
+interrupts? Should the user poll the sysfs-entry instead?
+
+Marco
+ 
+> Guenter
+> 
 > > the interrupt property, so we can use the already existing EDGE
 > > flags, as Trent mentoined. Otherwise we have to asume if
 > > the gpio is low-active then the interrupt should be triggered on a
 > > falling edge.
 > > 
-> 
-> Isn't that configurable with devicetree flags ? I don't think a driver
-> should get involved in deciding the active edge.
-
-No, AFAIK we can only specify the active level types for gpios. This
-made sense to me, because I saw no gpio-controller which support
-'edge-level' reporting (however it will be called) currently.
-
-Deciding the edge within the driver was/is the only solution is found
-currently, but I'm with you, thats a bit stupid. I open minded for other
-solutions.
-
-Marco
-
-> Guenter
-> 
-> 
 > > Marco
 > > 
 > > > Guenter
