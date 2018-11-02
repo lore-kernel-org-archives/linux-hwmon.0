@@ -10,33 +10,69 @@ To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: [PATCH 0/4] Update DF/SMN access and k10temp for AMD F17h M30h
-Date: Fri, 2 Nov 2018 18:11:02 +0000
-Message-ID: <20181102181055.130531-1-brian.woods@amd.com>
+Subject: [PATCH 3/4] x86/amd_nb: add PCI device IDs for F17h M30h
+Date: Fri, 2 Nov 2018 18:11:10 +0000
+Message-ID: <20181102181055.130531-4-brian.woods@amd.com>
+References: <20181102181055.130531-1-brian.woods@amd.com>
+In-Reply-To: <20181102181055.130531-1-brian.woods@amd.com>
 Content-Language: en-US
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Updates the data fabric/SMN code needed to get k10temp working for M30h.
-Since there are now processors which have multiple roots per DF/SMN
-interface, there needs to some logic which skips N-1 root complexes per
-DF/SMN interface.  This is because the root complexes per interface are
-redundant (as far as DF/SMN goes).  These changes shouldn't effect past
-processors and, for F17h M0Xh, the mappings stay the same.
+Add the PCI device IDs for family 17h model 30h, since they are needed
+for accessing various registers via the data fabric/SMN interface.
 
-Brian Woods (4):
-  k10temp: x86/amd_nb: consolidate shared device IDs
-  x86/amd_nb: add support for newer PCI topologies
-  x86/amd_nb: add PCI device IDs for F17h M30h
-  hwmon: k10temp: add support for AMD F17h M30h CPUs
+Signed-off-by: Brian Woods <brian.woods@amd.com>
+---
+ arch/x86/kernel/amd_nb.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- arch/x86/kernel/amd_nb.c | 50 ++++++++++++++++++++++++++++++++++++++++----=
-----
- drivers/hwmon/k10temp.c  | 10 ++--------
- include/linux/pci_ids.h  |  3 +++
- 3 files changed, 47 insertions(+), 16 deletions(-)
-
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index c0bf26aeb7c3..fd69067f6eb1 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -16,8 +16,11 @@
+=20
+ #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
+ #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
++#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
+ #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
+=20
+ /* Protect the PCI config register pairs used for SMN and DF indirect acce=
+ss. */
+ static DEFINE_MUTEX(smn_mutex);
+@@ -27,9 +30,11 @@ static u32 *flush_words;
+ static const struct pci_device_id amd_root_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
+ 	{}
+ };
+=20
++
+ #define PCI_DEVICE_ID_AMD_CNB17H_F4     0x1704
+=20
+ const struct pci_device_id amd_nb_misc_ids[] =3D {
+@@ -43,6 +48,7 @@ const struct pci_device_id amd_nb_misc_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{}
+ };
+@@ -56,6 +62,7 @@ static const struct pci_device_id amd_nb_link_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+ 	{}
+ };
 --=20
 2.11.0
