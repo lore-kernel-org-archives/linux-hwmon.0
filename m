@@ -10,9 +10,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: [PATCH 3/4] x86/amd_nb: add PCI device IDs for F17h M30h
-Date: Fri, 2 Nov 2018 18:11:10 +0000
-Message-ID: <20181102181055.130531-4-brian.woods@amd.com>
+Subject: [PATCH 1/4] k10temp: x86/amd_nb: consolidate shared device IDs
+Date: Fri, 2 Nov 2018 18:11:04 +0000
+Message-ID: <20181102181055.130531-2-brian.woods@amd.com>
 References: <20181102181055.130531-1-brian.woods@amd.com>
 In-Reply-To: <20181102181055.130531-1-brian.woods@amd.com>
 Content-Language: en-US
@@ -21,58 +21,75 @@ Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Add the PCI device IDs for family 17h model 30h, since they are needed
-for accessing various registers via the data fabric/SMN interface.
+Consolidate shared PCI_DEVICE_IDs that were scattered through k10temp
+and amd_nb, and move them into pci_ids.
 
 Signed-off-by: Brian Woods <brian.woods@amd.com>
 ---
- arch/x86/kernel/amd_nb.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/kernel/amd_nb.c | 3 +--
+ drivers/hwmon/k10temp.c  | 9 +--------
+ include/linux/pci_ids.h  | 2 ++
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index c0bf26aeb7c3..fd69067f6eb1 100644
+index a6eca647bc76..19d489ee2b1e 100644
 --- a/arch/x86/kernel/amd_nb.c
 +++ b/arch/x86/kernel/amd_nb.c
-@@ -16,8 +16,11 @@
+@@ -11,13 +11,12 @@
+ #include <linux/errno.h>
+ #include <linux/export.h>
+ #include <linux/spinlock.h>
++#include <linux/pci_ids.h>
+ #include <asm/amd_nb.h>
 =20
  #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
  #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
-+#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
-+#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
+-#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
  #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+-#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
-+#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
 =20
  /* Protect the PCI config register pairs used for SMN and DF indirect acce=
 ss. */
- static DEFINE_MUTEX(smn_mutex);
-@@ -27,9 +30,11 @@ static u32 *flush_words;
- static const struct pci_device_id amd_root_ids[] =3D {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
- 	{}
- };
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 2cef0c37ff6f..bc6871c8dd4e 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -23,6 +23,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/pci_ids.h>
+ #include <asm/amd_nb.h>
+ #include <asm/processor.h>
 =20
-+
- #define PCI_DEVICE_ID_AMD_CNB17H_F4     0x1704
+@@ -41,14 +42,6 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define PCI_DEVICE_ID_AMD_15H_M70H_NB_F3	0x15b3
+ #endif
 =20
- const struct pci_device_id amd_nb_misc_ids[] =3D {
-@@ -43,6 +48,7 @@ const struct pci_device_id amd_nb_misc_ids[] =3D {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
- 	{}
- };
-@@ -56,6 +62,7 @@ static const struct pci_device_id amd_nb_link_ids[] =3D {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
- 	{}
- };
+-#ifndef PCI_DEVICE_ID_AMD_17H_DF_F3
+-#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+-#endif
+-
+-#ifndef PCI_DEVICE_ID_AMD_17H_M10H_DF_F3
+-#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3	0x15eb
+-#endif
+-
+ /* CPUID function 0x80000001, ebx */
+ #define CPUID_PKGTYPE_MASK	0xf0000000
+ #define CPUID_PKGTYPE_F		0x00000000
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 69f0abe1ba1a..78d5cd29778a 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -545,6 +545,8 @@
+ #define PCI_DEVICE_ID_AMD_16H_NB_F4	0x1534
+ #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F3 0x1583
+ #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
++#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
++#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+ #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+ #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
 --=20
 2.11.0
