@@ -1,100 +1,72 @@
-Return-Path: <mfe@pengutronix.de>
-Return-path: <mfe@pengutronix.de>
-Date: Fri, 2 Nov 2018 07:38:03 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Trent Piepho <tpiepho@impinj.com>
-Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
-	"dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
+Return-Path: <tpiepho@impinj.com>
+Return-path: <tpiepho@impinj.com>
+From: Trent Piepho <tpiepho@impinj.com>
+To: "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>, "dmitry.torokhov@gmail.com"
+	<dmitry.torokhov@gmail.com>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "jdelvare@suse.com" <jdelvare@suse.com>,
 	"kernel@pengutronix.de" <kernel@pengutronix.de>
 Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
+Date: Fri, 2 Nov 2018 23:05:20 +0000
+Message-ID: <1541199919.30311.224.camel@impinj.com>
 References: <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
- <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
- <20181030170026.licamhckbznuvcse@pengutronix.de>
- <1540928050.30311.94.camel@impinj.com>
- <20181030201147.GB28185@roeck-us.net>
- <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
- <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
- <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
- <20181101151428.GB25346@roeck-us.net>
- <1541096469.30311.166.camel@impinj.com>
+	 <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
+	 <20181030170026.licamhckbznuvcse@pengutronix.de>
+	 <1540928050.30311.94.camel@impinj.com>
+	 <20181030201147.GB28185@roeck-us.net>
+	 <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
+	 <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+	 <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
+	 <20181101151428.GB25346@roeck-us.net>
+	 <1541096469.30311.166.camel@impinj.com>
+	 <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
+In-Reply-To: <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <697DC301C9AF7C469F72234A2C88906A@namprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1541096469.30311.166.camel@impinj.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On 18-11-01 18:21, Trent Piepho wrote:
-> On Thu, 2018-11-01 at 08:14 -0700, Guenter Roeck wrote:
-> > On Thu, Nov 01, 2018 at 03:53:12PM +0100, Marco Felsch wrote:
-> > > 
-> > > > 
-> > > > Isn't that configurable with devicetree flags ? I don't think a driver
-> > > > should get involved in deciding the active edge.
-> > > 
-> > > No, AFAIK we can only specify the active level types for gpios. This
-> > > made sense to me, because I saw no gpio-controller which support
-> > > 'edge-level' reporting (however it will be called) currently.
-> 
-> Interrupts types are specific to each interrupt controller, but there
-> is a standard set of flags that, AFAIK, every Linux controller uses. 
-> These include IRQ_TYPE_EDGE_BOTH, IRQ_TYPE_EDGE_RISING,
-> IRQ_TYPE_LEVEL_HIGH, and so on.
-> 
-> So you can support hardware that is inherently edge or level triggered.
-
-I've been spoken about gpio-controllers and AFAIK there are no edge
-types. Interrupt-Controller are a different story, as you pointed out
-above.
-
-> I have used edge triggered interrupts on GPIO pins on many designs.
-> 
-> From what I remember, most hwmon chips use level triggered signals. 
-> The general process in the driver:
-> 
-> Level goes to asserted, IRQ handler invoked
-> Ack interrupt in hwmon chip's alarm register, which usually de-asserts
-> the alarm line
-> Set bit in driver state to indicate the alarm attribute should be set
-> sysfs_notify anything polling the attribute
-> If alarm line did not de-assert on ack, leave IRQ masked
-> Sysfs attribute stays set until userspace process acks it (by reading)
-
-Okay, thanks for that hint. Should we reference this in the
-Documentation/hwmon/sysfs-interface?
-
-> The important part here is that the alarm is latched in the driver.  We
-> don't just report the current alarm status in the attribute.  Otherwise
-> an alarm could come and go without anyone noticing if they didn't read
-> the attribute at just the right time.
-> 
-> Put another way, the hwmon alarm attribute means an alarm occurred
-> since the last time the attribute was reset.  It does not mean the
-> alarm is currently active.
-> 
-> This also means the driver does not need to continuously track the
-> alarm status.  Once we detect the first alarm, we don't care what it
-> does until the alarm status is reset and we need to watch for alarms
-> again.
-> 
-> If one has something like an op-amp voltage comparator, I think the
-> driver would register a level interrupt.  It be left masked after the
-> irq handler notes the alarm, to prevent immediately re-asserting.  This
-> is normal for level interrupts that can not be de-asserted by an action
-> of the irq handler.  It would be unmasked on the ack/read of the alarm
-> attribute.  That would trigger another interrupt if the alarm signal is
-> still asserted.
-> 
-> If instead, you tried registering for IRQs on both edges, then it's not
-> reliable.  It's possible for the edges to come in too fast, before the
-> irq controller or the kernel is ready for them, and then you get out of
-> sync.
-
-Too fast state changes sounds like a glitch. Anyway, IMHO we should
-support support both interrupts and gpios. If the users use gpios they
-have to poll the gpio, as Guenter pointed out, else we register a
-irq-handler.
-
-Marco
+T24gRnJpLCAyMDE4LTExLTAyIGF0IDA3OjM4ICswMTAwLCBNYXJjbyBGZWxzY2ggd3JvdGU6DQo+
+IE9uIDE4LTExLTAxIDE4OjIxLCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+ID4gT24gVGh1LCAyMDE4
+LTExLTAxIGF0IDA4OjE0IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiA+ID4gT24gVGh1
+LCBOb3YgMDEsIDIwMTggYXQgMDM6NTM6MTJQTSArMDEwMCwgTWFyY28gRmVsc2NoIHdyb3RlOg0K
+PiA+ID4gPiANCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBJc24ndCB0aGF0IGNvbmZpZ3VyYWJsZSB3
+aXRoIGRldmljZXRyZWUgZmxhZ3MgPyBJIGRvbid0IHRoaW5rIGEgZHJpdmVyDQo+ID4gPiA+ID4g
+c2hvdWxkIGdldCBpbnZvbHZlZCBpbiBkZWNpZGluZyB0aGUgYWN0aXZlIGVkZ2UuDQo+ID4gPiA+
+IA0KPiA+ID4gPiBObywgQUZBSUsgd2UgY2FuIG9ubHkgc3BlY2lmeSB0aGUgYWN0aXZlIGxldmVs
+IHR5cGVzIGZvciBncGlvcy4gVGhpcw0KPiA+ID4gPiBtYWRlIHNlbnNlIHRvIG1lLCBiZWNhdXNl
+IEkgc2F3IG5vIGdwaW8tY29udHJvbGxlciB3aGljaCBzdXBwb3J0DQo+ID4gPiA+ICdlZGdlLWxl
+dmVsJyByZXBvcnRpbmcgKGhvd2V2ZXIgaXQgd2lsbCBiZSBjYWxsZWQpIGN1cnJlbnRseS4NCj4g
+PiANCj4gPiBJbnRlcnJ1cHRzIHR5cGVzIGFyZSBzcGVjaWZpYyB0byBlYWNoIGludGVycnVwdCBj
+b250cm9sbGVyLCBidXQgdGhlcmUNCj4gPiBpcyBhIHN0YW5kYXJkIHNldCBvZiBmbGFncyB0aGF0
+LCBBRkFJSywgZXZlcnkgTGludXggY29udHJvbGxlciB1c2VzLiANCj4gPiBUaGVzZSBpbmNsdWRl
+IElSUV9UWVBFX0VER0VfQk9USCwgSVJRX1RZUEVfRURHRV9SSVNJTkcsDQo+ID4gSVJRX1RZUEVf
+TEVWRUxfSElHSCwgYW5kIHNvIG9uLg0KPiA+IA0KPiA+IFNvIHlvdSBjYW4gc3VwcG9ydCBoYXJk
+d2FyZSB0aGF0IGlzIGluaGVyZW50bHkgZWRnZSBvciBsZXZlbCB0cmlnZ2VyZWQuDQo+IA0KPiBJ
+J3ZlIGJlZW4gc3Bva2VuIGFib3V0IGdwaW8tY29udHJvbGxlcnMgYW5kIEFGQUlLIHRoZXJlIGFy
+ZSBubyBlZGdlDQo+IHR5cGVzLiBJbnRlcnJ1cHQtQ29udHJvbGxlciBhcmUgYSBkaWZmZXJlbnQg
+c3RvcnksIGFzIHlvdSBwb2ludGVkIG91dA0KPiBhYm92ZS4NCg0KWW91IGNhbiB1c2UgZWRnZSB0
+cmlnZ2VyaW5nIHdpdGggZ3Bpb3MuICBKdXN0IHRyeSB3cml0aW5nICJyaXNpbmciIG9yDQoiZmFs
+bGluZyIgaW50byAvc3lzL2NsYXNzL2dwaW8vZ3Bpb1gvZWRnZQ0KDQpJdCdzIGxldmVsIHlvdSBj
+YW4ndCBkbyBzeXNmcy4gIFRoZSBpcnEgbWFza2luZyBuZWNlc3NhcnkgaXNuJ3QNCnN1cHBvcnRl
+ZCB0byBnZXQgaXQgdG8gd29yayBpbiBhIHVzZWZ1bCB3YXksIGkuZS4gd2l0aG91dCBhIGxpdmUt
+bG9jaw0KSVJRIGxvb3AuDQoNCkJ1dCB5b3UgY2FuIGluIHRoZSBrZXJuZWwuDQoNCk5vcm1hbCBw
+cm9jZXNzIGlzIHRvIGNhbGwgZ3Bpb2RfdG9faXJxKCkgYW5kIHRoZW4gdXNlIHN0YW5kYXJkIElS
+UUYNCmZsYWdzIHRvIHNlbGVjdCBsZXZlbCwgZWRnZSwgZXRjLg0KDQo+IFRvbyBmYXN0IHN0YXRl
+IGNoYW5nZXMgc291bmRzIGxpa2UgYSBnbGl0Y2guIEFueXdheSwgSU1ITyB3ZSBzaG91bGQNCg0K
+TGludXggaGFzIG5vIGhhcmQgcmVhbC10aW1lIGd1YXJhbnRlZSBhYm91dCBpbnRlcnJ1cHQgbGF0
+ZW5jeSwgc28NCnRoZXJlJ3Mgbm8gd2F5IHlvdSBjYW4gYmUgc3VyZSBlYWNoIGludGVycnVwdCBp
+cyBwcm9jZXNzZWQgYmVmb3JlIHRoZQ0KbmV4dC4NCg0KVHJ5aW5nIHRvIHRyYWNrIGxldmVsIGJ5
+IGludGVycnVwdGluZyBvbiBib3RoIGVkZ2VzIGRvZXNuJ3Qgd29yayB3ZWxsLiANCllvdSBnZXQg
+b3V0IG9mIHN5bmMgYW5kIHN0dWNrIHdhaXRpbmcgZm9yIHNvbWV0aGluZyB0aGF0J3MgYWxyZWFk
+eQ0KaGFwcGVuZWQuDQoNCj4gc3VwcG9ydCBzdXBwb3J0IGJvdGggaW50ZXJydXB0cyBhbmQgZ3Bp
+b3MuIElmIHRoZSB1c2VycyB1c2UgZ3Bpb3MgdGhleQ0KPiBoYXZlIHRvIHBvbGwgdGhlIGdwaW8s
+IGFzIEd1ZW50ZXIgcG9pbnRlZCBvdXQsIGVsc2Ugd2UgcmVnaXN0ZXIgYQ0KPiBpcnEtaGFuZGxl
+ci4NCg0KSWYgZ3BpbyhkPylfdG9faXJxIHJldHVybnMgYSB2YWxpZCB2YWx1ZSwgd2h5IHBvbGw/
+ICBJdCB1c3VhbGx5IHdvcmtzDQp0byBjYWxsIHRoaXMuICBQbGVudHkgb2YgY2FsbCBzaXRlcyBp
+biB0aGUga2VybmVsIHRoYXQgdXNlIGl0IGFuZCBkb24ndA0KZmFsbGJhY2sgdG8gcG9sbGluZyBp
+ZiBpdCBkb2Vzbid0IHdvcmsuDQoNCkkgdGhpbmsgaXQncyBmaW5lIHRvIGNhbGwgZ3Bpb2RfdG9f
+aXJxKCkgYW5kIGZhaWwgaWYgdGhhdCBmYWlscywgYW5kDQpsZXQgYSBwb2xsaW5nIGZhbGxiYWNr
+IGJlIHdyaXR0ZW4gaWYgYW5kIHdoZW4gdGhlIG5lZWQgYXJpc2VzLg==
