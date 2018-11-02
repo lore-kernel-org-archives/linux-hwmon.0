@@ -1,88 +1,138 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44545 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728215AbeKCDeT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 2 Nov 2018 23:34:19 -0400
-Date: Fri, 2 Nov 2018 11:26:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
+Return-Path: <helgaas@kernel.org>
+Return-path: <helgaas@kernel.org>
+Date: Fri, 2 Nov 2018 14:59:25 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
 To: "Woods, Brian" <Brian.Woods@amd.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, Pu Wen <puwen@hygon.cn>,
-        Jia Zhang <qianyue.zj@alibaba-inc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 4/4] hwmon: k10temp: add support for AMD F17h M30h CPUs
-Message-ID: <20181102182610.GB5782@roeck-us.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	Clemens Ladisch <clemens@ladisch.de>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Pu Wen <puwen@hygon.cn>,
+	Jia Zhang <qianyue.zj@alibaba-inc.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
+Message-ID: <20181102195925.GB160487@google.com>
 References: <20181102181055.130531-1-brian.woods@amd.com>
- <20181102181055.130531-5-brian.woods@amd.com>
+ <20181102181055.130531-3-brian.woods@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181102181055.130531-5-brian.woods@amd.com>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+In-Reply-To: <20181102181055.130531-3-brian.woods@amd.com>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Nov 02, 2018 at 06:11:12PM +0000, Woods, Brian wrote:
-> Add support for AMD family 17h model 30h processors for k10temp.  Model
-> 30h is functionally the same as model 01h processors (as far as k10temp
-> is concerned), just the PCI device IDs need to be updated.
-> 
+On Fri, Nov 02, 2018 at 06:11:07PM +0000, Woods, Brian wrote:
+> Add support for new processors which have multiple PCI root complexes
+> per data fabric/SMN interface.  The interfaces per root complex are
+> redundant and should be skipped.  This makes sure the DF/SMN interfaces
+> get accessed via the correct root complex.
+
+SMN?
+
+> Ex:
+> DF/SMN 0 -> 60
+> 	    40
+> 	    20
+> 	    00
+> DF/SMN 1 -> e0
+> 	    c0
+> 	    a0
+> 	    80
+
+This isn't my code, and I'm not really objecting to these changes, but
+from where I sit, the fact that you need this sort of vendor-specific
+topology discovery is a little bit ugly and seems like something of a
+maintenance issue.  You could argue that this is sort of an "AMD CPU
+driver", which is entitled to be device-specific, and that does make
+some sense.
+
+But device-specific code is typically packaged as a driver that uses
+driver registration interfaces like acpi_bus_register_driver(),
+pci_register_driver(), etc.  That gives you a consistent structure
+and, more importantly, a framework for dealing with hotplug.  It
+doesn't look like amd_nb.c would deal well with hot-add of CPUs.
+
 > Signed-off-by: Brian Woods <brian.woods@amd.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-(assuming the patch will be sent upstream as part of the series
- and not through hwmon)
-
 > ---
->  arch/x86/kernel/amd_nb.c | 1 -
->  drivers/hwmon/k10temp.c  | 1 +
->  include/linux/pci_ids.h  | 1 +
->  3 files changed, 2 insertions(+), 1 deletion(-)
+>  arch/x86/kernel/amd_nb.c | 41 +++++++++++++++++++++++++++++++++++------
+>  1 file changed, 35 insertions(+), 6 deletions(-)
 > 
 > diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> index fd69067f6eb1..e491aa4a1970 100644
+> index 19d489ee2b1e..c0bf26aeb7c3 100644
 > --- a/arch/x86/kernel/amd_nb.c
 > +++ b/arch/x86/kernel/amd_nb.c
-> @@ -17,7 +17,6 @@
->  #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
->  #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
->  #define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
-> -#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
->  #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
->  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
->  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index bc6871c8dd4e..9790f1f5eb98 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -360,6 +360,7 @@ static const struct pci_device_id k10temp_id_table[] = {
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(pci, k10temp_id_table);
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 78d5cd29778a..349276fbd269 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -547,6 +547,7 @@
->  #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
->  #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
->  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
-> +#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
->  #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
->  #define PCI_DEVICE_ID_AMD_LANCE		0x2000
->  #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+> @@ -213,7 +213,10 @@ int amd_cache_northbridges(void)
+>  	const struct pci_device_id *root_ids = amd_root_ids;
+>  	struct pci_dev *root, *misc, *link;
+>  	struct amd_northbridge *nb;
+> -	u16 i = 0;
+> +	u16 roots_per_misc = 0;
+> +	u16 misc_count = 0;
+> +	u16 root_count = 0;
+> +	u16 i, j;
+>  
+>  	if (amd_northbridges.num)
+>  		return 0;
+> @@ -226,26 +229,52 @@ int amd_cache_northbridges(void)
+>  
+>  	misc = NULL;
+>  	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
+> -		i++;
+> +		misc_count++;
+>  
+> -	if (!i)
+> +	root = NULL;
+> +	while ((root = next_northbridge(root, root_ids)) != NULL)
+> +		root_count++;
+> +
+> +	if (!misc_count)
+>  		return -ENODEV;
+>  
+> -	nb = kcalloc(i, sizeof(struct amd_northbridge), GFP_KERNEL);
+> +	if (root_count) {
+> +		roots_per_misc = root_count / misc_count;
+> +
+> +		/*
+> +		 * There should be _exactly_ N roots for each DF/SMN
+> +		 * interface.
+> +		 */
+> +		if (!roots_per_misc || (root_count % roots_per_misc)) {
+> +			pr_info("Unsupported AMD DF/PCI configuration found\n");
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	nb = kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
+>  	if (!nb)
+>  		return -ENOMEM;
+>  
+>  	amd_northbridges.nb = nb;
+> -	amd_northbridges.num = i;
+> +	amd_northbridges.num = misc_count;
+>  
+>  	link = misc = root = NULL;
+> -	for (i = 0; i != amd_northbridges.num; i++) {
+> +	for (i = 0; i < amd_northbridges.num; i++) {
+>  		node_to_amd_nb(i)->root = root =
+>  			next_northbridge(root, root_ids);
+>  		node_to_amd_nb(i)->misc = misc =
+>  			next_northbridge(misc, misc_ids);
+>  		node_to_amd_nb(i)->link = link =
+>  			next_northbridge(link, link_ids);
+> +
+> +		/*
+> +		 * If there are more root devices than data fabric/SMN,
+> +		 * interfaces, then the root devices per DF/SMN
+> +		 * interface are redundant and N-1 should be skipped so
+> +		 * they aren't mapped incorrectly.
+> +		 */
+> +		for (j = 1; j < roots_per_misc; j++)
+> +			root = next_northbridge(root, root_ids);
+>  	}
+>  
+>  	if (amd_gart_present())
 > -- 
 > 2.11.0
 > 
