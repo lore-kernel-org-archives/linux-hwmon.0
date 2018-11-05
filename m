@@ -1,159 +1,95 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47907 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbeKASqc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Nov 2018 14:46:32 -0400
-Date: Thu, 1 Nov 2018 10:44:11 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Trent Piepho <tpiepho@impinj.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+Received: from mail.kernel.org ([198.145.29.99]:33096 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387580AbeKFHHY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 6 Nov 2018 02:07:24 -0500
+Date: Mon, 5 Nov 2018 15:45:37 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: "Woods, Brian" <Brian.Woods@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, Pu Wen <puwen@hygon.cn>,
+        Jia Zhang <qianyue.zj@alibaba-inc.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Andy Whitcroft <apw@canonical.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181101094411.gewgluqvggxu3osp@pengutronix.de>
-References: <20181029143521.22122-1-m.felsch@pengutronix.de>
- <20181029143521.22122-3-m.felsch@pengutronix.de>
- <20181029195238.GA24689@roeck-us.net>
- <1540847798.30311.47.camel@impinj.com>
- <8841d944-4fab-7d43-4edc-20f9a95ac009@roeck-us.net>
- <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
- <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
- <20181030170026.licamhckbznuvcse@pengutronix.de>
- <20181030195614.GA28185@roeck-us.net>
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
+Message-ID: <20181105214537.GA19420@google.com>
+References: <20181102181055.130531-1-brian.woods@amd.com>
+ <20181102181055.130531-3-brian.woods@amd.com>
+ <20181102195925.GB160487@google.com>
+ <20181102232948.GC26770@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181030195614.GA28185@roeck-us.net>
+In-Reply-To: <20181102232948.GC26770@zn.tnic>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 18-10-30 12:56, Guenter Roeck wrote:
-> On Tue, Oct 30, 2018 at 06:00:26PM +0100, Marco Felsch wrote:
-> > On 18-10-30 06:13, Guenter Roeck wrote:
-> > > On 10/30/18 3:47 AM, Marco Felsch wrote:
-> > > > On 18-10-29 18:12, Guenter Roeck wrote:
-> > > > > On 10/29/18 2:16 PM, Trent Piepho wrote:
-> > 
-> > [Snip]
-> > 
-> > > > > > 
-> > > > > > Consider, what if we had a "classic" hwmon chip, but on this board the
-> > > > > > I2C/LPC/SPI interface was not connected as an appropriate master was
-> > > > > > not available, and the default configuration of the chip was
-> > > > > > acceptable.  The chip's alarm outputs are connected to GPIOs, as it
-> > > > > > normal for a hwmon chip with alarm outputs.
-> > > > > > 
-> > > > > "If we had" is theory. Do we ? We don't usually add code to the kernel
-> > > > > just in case the hardware it supports might be out there.
-> > > > 
-> > > > Yes, there are "good old" hwmon chips without any management interface,
-> > > > e.g. LTC694-3.3, LTC7862, ... also there might be a discrete hw circuit.
-> > > > I think it's better to handle those "simple" chips by a generic hwmon
-> > > > driver. By simple I mean chips which informs the host only by toggling a
-> > > > gpio to report a state. For this purpose my driver (including name
-> > > > convention) isn't generic enough, I think about a hwmon-simple device.
-> > > > Such a device can support reporting states, no voltage/power/temp values.
-> > > > 
-> > > 
-> > > Yes, I agree. It doesn't really make sense to keep adding single-attribute drivers.
-> > > hwmon-gpio-simple, maybe, to indicate that it gets its data from gpio ?
-> > 
-> > hwmon-gpio-simple sounds ok for me.
-> > 
-> > > The most difficult part of such a driver would probably be to define acceptable
-> > > devicetree properties.
-> > 
-> > That's true! One possible solution could be:
-> > 
-> > hwmon_dev {
-> > 	compatible = "hwmon-gpio-simple";
-> 
-> This is unlikely to be acceptable for dt maintainers since "hwmon" is a Linuxism.
-> Not that I have a better idea for an acceptable "compatible" name.
-> 
-> > 	name = "gpio-generic-hwmon";
-> > 	update-interval-ms = 100;
-> 
-> We would not want to implement any polling in the kernel.
-> 
-> > 
-> > 	hwmon-gpio-simple,dev@0 {
-> > 		reg = <0>;
-> > 		gpio = <gpio3 15 GPIO_ACTIVE_LOW>;
-> > 		hwmon-gpio-simple,type = "in";
-> > 		hwmon-gpio-simple,report = "crit_alarm";
-> > 	};
-> > 
-> > 	hwmon-gpio-simple,dev@1 {
-> > 		reg = <1>;
-> > 		gpio = <gpio3 19 GPIO_ACTIVE_LOW>;
-> > 		hwmon-gpio-simple,type = "temp";
-> > 		hwmon-gpio-simple,report = "alarm";
-> > 	};
-> > };
-> > 
-> > [SNIP]
-> > 
-> > > > > > The ability of the hwmon driver to cause certain other devices to be
-> > > > > > removed is a different question.
-> > > > > > 
-> > > > > I disagree. That functionality is essential to the driver as submitted.
-> > > > 
-> > > > You're right thats important for my use-case, but I got you, thats not a
-> > > > hwmon related problem. If I understood the device-model correctly there
-> > > > are absolut no problems to hot-unplug devices, this is always the case
-> > > > if we unbind a driver from user-space. So why we can't handle it
-> > > > directly in the kernel. Are there any concerns? If not can you give me
-> > > > some hints to get the logic at thr right place.
-> > > > 
-> > > Well, the easiest solution would have been to do nothing code-wise and
-> > > register a gpio-keys instance on the gpio pin to create a KEY_POWER event.
-> > > Of course that might be considered an abuse of the input subsystem,
-> > > as Dmitry has pointed out, and is probably not acceptable. Now, if you
-> > > want that functionality, you could probably write some udev rules and
-> > > accomplish the same by listening for a change event from a sysfs attribute
-> > > supporting it (I think KEY_POWER is not really handled in the kernel,
-> > > but I am not entirely sure).
-> > 
-> > I came from the input framework, as you pointed out.
-> > 
-> > > Handling the event in the kernel is more tricky. First, I don't think the
-> > > selective device removal as you have suggested would be acceptable anywhere;
-> > > it may cause all kinds of trouble. The thermal subsystem supports the
-> > > functionality to shut down the kernel in emergencies, but is limited
-> > > in its scope (or at least I think so) to thermal events. Anything else
-> > > would have to be discussed. I for my part prefer handling it from userspace.
-> > 
-> > Imagine that use-case: There is a custom board design which power off
-> > all external devices and leave the host on for a certain time (a few
-> > seconds) upon a low-voltage detection. Now the pins from the external
-> > devices are floating around and producing a huge amount of interrupts,
-> > so the kernel is really busy handling those interrupts and can't handle
-> > user-space processes anymore. The "host keep-on time" was intended to be
-> > used to save all user data currently processed, but this never happen.
-> > Furthermore there can be a high-priority userspace task which can't be
-> > preempted and the exec_time for this task is greater than the "host
-> > keep-on time". So the task which will unbind the devices gets never
-> > scheduled. Hopefully you get me and understand my outlines and why we
-> > need to do the unbinding within the kernel-space.
-> > 
-> This would be better handled with a DT overlay and removal of the same
-> if power goes bad. The power good signal would then be tied to DT overlay
-> insertion and removal, ie it would be be handled like an "insert/remove"
-> pin.
-> 
-> > One solution could be to split the drivers into to: hwmon for measuring
-> > and notifying, of-unbind to unbind registered devices. For this we need
-> > to get a kernel_notification from the hwmon-framework, so the generic
-> > unbinding driver gets informed. Are you agree with me?
-> > 
-> At a previous employer we had a kernel module which would trigger DT overlay
-> insertion and removal for OIR capable cards with a number of devices on them.
-> That worked pretty well. A similar approach might work here. Maybe it is
-> even possible to integrate it into extcon-gpio.
+[+cc Takashi, Andy, Colin, Myron for potential distro impact]
 
-Thanks for your hints.
+[Beginning of thread:
+https://lore.kernel.org/linux-pci/20181102181055.130531-1-brian.woods@amd.com/]
 
-Marco
+On Sat, Nov 03, 2018 at 12:29:48AM +0100, Borislav Petkov wrote:
+> On Fri, Nov 02, 2018 at 02:59:25PM -0500, Bjorn Helgaas wrote:
+> > This isn't my code, and I'm not really objecting to these changes, but
+> > from where I sit, the fact that you need this sort of vendor-specific
+> > topology discovery is a little bit ugly and seems like something of a
+> > maintenance issue.  
+
+I think this is the most important part, and I should have elaborated
+on it instead of getting into the driver structure details below.
+
+It is a major goal of ACPI and PCI that an old kernel should work
+unchanged on a new platform unless it needs to use new functionality
+introduced in the new platform.
+
+amd_nb.c prevents us from achieving that goal.  These patches don't
+add new functionality; they merely describe minor topographical
+differences in new hardware.  We usually try to do that in a more
+generic way, e.g., via an ACPI method, so the new platform can update
+the ACPI method and use an old, already-qualified, already-shipped
+kernel.
+
+I'm not strenuously objecting to these because this isn't a *huge*
+deal, but I suspect it is a source of friction for distros that don't
+want to update and requalify their software for every new platform.
+
+> > You could argue that this is sort of an "AMD CPU
+> > driver", which is entitled to be device-specific, and that does make
+> > some sense.
+> 
+> It is a bunch of glue code which enumerates the PCI devices a CPU
+> has and other in-kernel users can use that instead of doing the
+> discovery/enumeration themselves.
+> 
+> > But device-specific code is typically packaged as a driver that uses
+> > driver registration interfaces like acpi_bus_register_driver(),
+> > pci_register_driver(), etc.  That gives you a consistent structure
+> > and, more importantly, a framework for dealing with hotplug.  It
+> > doesn't look like amd_nb.c would deal well with hot-add of CPUs.
+> 
+> If you mean physical hotadd, then that's a non-issue as, AFAIK, AMD
+> doesn't support that.
+> 
+> Now, TBH I've never tried soft-offlining the cores of a node and then
+> check whether using the PCI devices of that node would work.
+> 
+> Now, I don't mind this getting converted to a proper PCI driver as long
+> as it is not a module as it has to be present at all times. Other than
+> that, I'm a happy camper.
+
+amd_nb.c uses pci_get_device(), which is incompatible with hotplug and
+subverts the usual driver/device ownership model.  We could pursue
+this part of the conversation, but I think it's more fruitful to
+approach this from the "new machine, old kernel" angle above.
