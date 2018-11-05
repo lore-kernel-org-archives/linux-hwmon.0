@@ -1,81 +1,150 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38506 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728372AbeKHLNU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Nov 2018 06:13:20 -0500
-Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
-To: Bjorn Helgaas <helgaas@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>,
-        "Woods, Brian" <Brian.Woods@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+Received: from mail.skyhub.de ([5.9.137.197]:38780 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725139AbeKFFAC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 6 Nov 2018 00:00:02 -0500
+Date: Mon, 5 Nov 2018 20:38:40 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: "Woods, Brian" <Brian.Woods@amd.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         "x86@kernel.org" <x86@kernel.org>,
         Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, Pu Wen <puwen@hygon.cn>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>, Pu Wen <puwen@hygon.cn>,
         Jia Zhang <qianyue.zj@alibaba-inc.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Andy Whitcroft <apw@canonical.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-References: <20181102195925.GB160487@google.com>
- <20181102232948.GC26770@zn.tnic> <20181105214537.GA19420@google.com>
- <20181105215650.GG26868@zn.tnic> <20181106214256.GA65443@google.com>
- <20181106220059.GA4139@zn.tnic> <20181106232040.GA85755@google.com>
- <75748b089ee696d5cbaa5c0ce68bad228699894c.camel@linux.intel.com>
- <20181107213103.GA41183@google.com>
- <baf4b2e9c9b7cb2f827fd3bffce4b72f6d9376a8.camel@linux.intel.com>
- <20181107231411.GB41183@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <2c4b9e7e-6558-e5ce-50e6-58aaec22fd1c@roeck-us.net>
-Date: Wed, 7 Nov 2018 17:40:14 -0800
+Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
+Message-ID: <20181105193840.GA26868@zn.tnic>
+References: <20181102181055.130531-1-brian.woods@amd.com>
+ <20181102181055.130531-3-brian.woods@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20181107231411.GB41183@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20181102181055.130531-3-brian.woods@amd.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 11/7/18 3:14 PM, Bjorn Helgaas wrote:
+On Fri, Nov 02, 2018 at 06:11:07PM +0000, Woods, Brian wrote:
+> Add support for new processors which have multiple PCI root complexes
+> per data fabric/SMN interface.
+
+Please write out abbreviations. I believe it is only you and I who know
+what SMN means. :)
+
+> The interfaces per root complex are redundant and should be skipped.
+
+And I believe it is only you who understands that sentence. :)
+
+Please elaborate why interfaces need to be skipped, *which* interfaces
+need to be skipped and which is the correct interface to access DF/SMN
+through?
+
+> This makes sure the DF/SMN interfaces get accessed via the correct
+> root complex.
 >
->>
->> There is no INT3401 on any newer atom or core platforms, so you can't
->> enumerate on this device. We don't control what ACPI device is present
->> on a system. It depends on what the other non-Linux OS is using.
+> Ex:
+> DF/SMN 0 -> 60
+> 	    40
+> 	    20
+> 	    00
+> DF/SMN 1 -> e0
+> 	    c0
+> 	    a0
+> 	    80
 > 
-> Sure, you can't *force* OEMs to supply a given ACPI device, but you
-> can certainly say "if you want this functionality, supply INT3401
-> devices."  That's what you do with PNP0A03 (PCI host bridges), for
-> example.  If an OEM doesn't supply PNP0A03 devices, the system can
-> boot just fine as long as you don't need PCI.
+> Signed-off-by: Brian Woods <brian.woods@amd.com>
+> ---
+>  arch/x86/kernel/amd_nb.c | 41 +++++++++++++++++++++++++++++++++++------
+>  1 file changed, 35 insertions(+), 6 deletions(-)
 > 
-> This model of using the PCI IDs forces OS vendors to release updates
-> for every new platform.  I guess you must have considered that and
-> decided whatever benefit you're getting was worth the cost.
-> 
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 19d489ee2b1e..c0bf26aeb7c3 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -213,7 +213,10 @@ int amd_cache_northbridges(void)
+>  	const struct pci_device_id *root_ids = amd_root_ids;
+>  	struct pci_dev *root, *misc, *link;
+>  	struct amd_northbridge *nb;
+> -	u16 i = 0;
+> +	u16 roots_per_misc = 0;
+> +	u16 misc_count = 0;
+> +	u16 root_count = 0;
+> +	u16 i, j;
+>  
+>  	if (amd_northbridges.num)
+>  		return 0;
+> @@ -226,26 +229,52 @@ int amd_cache_northbridges(void)
+>  
+>  	misc = NULL;
+>  	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
+> -		i++;
+> +		misc_count++;
+>  
+> -	if (!i)
+> +	root = NULL;
+> +	while ((root = next_northbridge(root, root_ids)) != NULL)
+> +		root_count++;
+> +
+> +	if (!misc_count)
+>  		return -ENODEV;
 
-I really dislike where this is going. Board vendors - and that included
-Intel when Intel was still selling boards - have a long history of only
-making mandatory methods available in ACPI. Pretty much all of them don't
-make hardware monitoring information available via ACPI. This is a pain
-especially for laptops where the information is provided by an embedded
-controller. On systems with Super-IO chips with dedicated hardware
-monitoring functionality, they often go as far as signing mutual NDAs
-with chip vendors, which lets both the board and the chip vendor claim
-that they can not provide chip specifications to third parties, aka
-users.
+So you're doing the root_count above but returning in the !misc_count
+case. So that root_count iteration was unnecessary work. IOW, you should
+keep the misc_count check after its loop.
 
-You are pretty much extending that to CPU temperature monitoring. The
-fallout, if adopted, will be that it will effectively no longer be
-possible to monitor the temperature on chips supporting this
-"feature".
+>  
+> -	nb = kcalloc(i, sizeof(struct amd_northbridge), GFP_KERNEL);
+> +	if (root_count) {
+> +		roots_per_misc = root_count / misc_count;
+> +
+> +		/*
+> +		 * There should be _exactly_ N roots for each DF/SMN
+> +		 * interface.
+> +		 */
+> +		if (!roots_per_misc || (root_count % roots_per_misc)) {
+> +			pr_info("Unsupported AMD DF/PCI configuration found\n");
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	nb = kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
+>  	if (!nb)
+>  		return -ENOMEM;
+>  
+>  	amd_northbridges.nb = nb;
+> -	amd_northbridges.num = i;
+> +	amd_northbridges.num = misc_count;
+>  
+>  	link = misc = root = NULL;
+> -	for (i = 0; i != amd_northbridges.num; i++) {
+> +	for (i = 0; i < amd_northbridges.num; i++) {
+>  		node_to_amd_nb(i)->root = root =
+>  			next_northbridge(root, root_ids);
+>  		node_to_amd_nb(i)->misc = misc =
+>  			next_northbridge(misc, misc_ids);
+>  		node_to_amd_nb(i)->link = link =
+>  			next_northbridge(link, link_ids);
+> +
+> +		/*
+> +		 * If there are more root devices than data fabric/SMN,
+> +		 * interfaces, then the root devices per DF/SMN
+> +		 * interface are redundant and N-1 should be skipped so
+> +		 * they aren't mapped incorrectly.
+> +		 */
 
-I do not think that would be a good idea.
+This text is trying to explain it a bit better but you still still need
+to specify which are the redundant ones. All N-1 or is there a special
+root device through which the DF/SMN gets accessed or?
 
-Guenter
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
