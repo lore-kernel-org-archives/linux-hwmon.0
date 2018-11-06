@@ -1,205 +1,138 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33667 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbeKERhy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Nov 2018 12:37:54 -0500
-Date: Mon, 5 Nov 2018 09:19:17 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Trent Piepho <tpiepho@impinj.com>
-Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
+Received: from mail-eopbgr720129.outbound.protection.outlook.com ([40.107.72.129]:34358
+        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726176AbeKGGRj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 7 Nov 2018 01:17:39 -0500
+From: Trent Piepho <tpiepho@impinj.com>
+To: "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>,
         "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>
 Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Message-ID: <20181105081917.3af4v2c2wejsfnqe@pengutronix.de>
+Date: Tue, 6 Nov 2018 20:50:27 +0000
+Message-ID: <1541537426.30311.271.camel@impinj.com>
 References: <20181030170026.licamhckbznuvcse@pengutronix.de>
- <1540928050.30311.94.camel@impinj.com>
- <20181030201147.GB28185@roeck-us.net>
- <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
- <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
- <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
- <20181101151428.GB25346@roeck-us.net>
- <1541096469.30311.166.camel@impinj.com>
- <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
- <1541199919.30311.224.camel@impinj.com>
+         <1540928050.30311.94.camel@impinj.com>
+         <20181030201147.GB28185@roeck-us.net>
+         <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
+         <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+         <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
+         <20181101151428.GB25346@roeck-us.net>
+         <1541096469.30311.166.camel@impinj.com>
+         <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
+         <1541199919.30311.224.camel@impinj.com>
+         <20181105081917.3af4v2c2wejsfnqe@pengutronix.de>
+In-Reply-To: <20181105081917.3af4v2c2wejsfnqe@pengutronix.de>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <ABD0AB095A357C4F8BDDC66FD19529EF@namprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1541199919.30311.224.camel@impinj.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 18-11-02 23:05, Trent Piepho wrote:
-> On Fri, 2018-11-02 at 07:38 +0100, Marco Felsch wrote:
-> > On 18-11-01 18:21, Trent Piepho wrote:
-> > > On Thu, 2018-11-01 at 08:14 -0700, Guenter Roeck wrote:
-> > > > On Thu, Nov 01, 2018 at 03:53:12PM +0100, Marco Felsch wrote:
-> > > > > 
-> > > > > > 
-> > > > > > Isn't that configurable with devicetree flags ? I don't think a driver
-> > > > > > should get involved in deciding the active edge.
-> > > > > 
-> > > > > No, AFAIK we can only specify the active level types for gpios. This
-> > > > > made sense to me, because I saw no gpio-controller which support
-> > > > > 'edge-level' reporting (however it will be called) currently.
-> > > 
-> > > Interrupts types are specific to each interrupt controller, but there
-> > > is a standard set of flags that, AFAIK, every Linux controller uses. 
-> > > These include IRQ_TYPE_EDGE_BOTH, IRQ_TYPE_EDGE_RISING,
-> > > IRQ_TYPE_LEVEL_HIGH, and so on.
-> > > 
-> > > So you can support hardware that is inherently edge or level triggered.
-> > 
-> > I've been spoken about gpio-controllers and AFAIK there are no edge
-> > types. Interrupt-Controller are a different story, as you pointed out
-> > above.
-> 
-> You can use edge triggering with gpios.  Just try writing "rising" or
-> "falling" into /sys/class/gpio/gpioX/edge
-
-Can we access the gpios trough the sysfs if they are requested by a
-driver?
-
-> It's level you can't do sysfs.  The irq masking necessary isn't
-> supported to get it to work in a useful way, i.e. without a live-lock
-> IRQ loop.
-> 
-> But you can in the kernel.
-> 
-> Normal process is to call gpiod_to_irq() and then use standard IRQF
-> flags to select level, edge, etc.
-
-Currently I using the gpiod_to_irq() function to convert the sense gpio
-into a irq, but I do some magic to determine the edge. I tought there
-might be reasons why there are no edge defines in
-include/dt-bindings/gpio/gpio.h.
-
-> > Too fast state changes sounds like a glitch. Anyway, IMHO we should
-> 
-> Linux has no hard real-time guarantee about interrupt latency, so
-> there's no way you can be sure each interrupt is processed before the
-> next.
-> 
-> Trying to track level by interrupting on both edges doesn't work well. 
-> You get out of sync and stuck waiting for something that's already
-> happened.
-
-Yes, I'm with you. 
-
-> > support support both interrupts and gpios. If the users use gpios they
-> > have to poll the gpio, as Guenter pointed out, else we register a
-> > irq-handler.
-> 
-> If gpio(d?)_to_irq returns a valid value, why poll?  It usually works
-> to call this.  Plenty of call sites in the kernel that use it and don't
-> fallback to polling if it doesn't work.
-> 
-> I think it's fine to call gpiod_to_irq() and fail if that fails, and
-> let a polling fallback be written if and when the need arises.
-
-Okay, so no polling for the current solution. Let me summarize our
-solution:
- - no polling (currently)
- - dt-node specifies a gpio instead of a interrupt
-   -> gpio <-> irq mapping is done by gpiod_to_irq() and fails if gpio
-      doesn't support irq's
- - more alarms per sensor
-
-Only one last thing I tought about:
-
-Using a flat design like you mentioned would lead into a "virtual"
-address conflict, since both sensors are on the same level. I tought
-about i2c/spi/muxes/graph-devices which don't support such "addressing"
-scheme.
-
-hwmon_dev {
-	compatible = "gpio-alarm";
-	bat@0 {
-		reg = <0>;
-		label = "Battery Pack1 Voltage";
-		type = "voltage";
-		alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
-		alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
-				&gpio3 16 GPIO_ACTIVE_LOW>;
-	};
-	bat@1 {
-		reg = <1>;
-		label = "Battery Pack2 Voltage";
-		alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
-		alarm-gpios = <&gpio3 9 GPIO_ACTIVE_LOW
-				&gpio3 1 GPIO_ACTIVE_LOW>;
-	};
-	cputemp@0 {
-		reg = <0>;
-		label = "CPU Temperature Critical";
-		type = "temperature";
-		alarm-type = <GPIO_ALARM_GENRIC>;
-		alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
-	};
-};
-
-Where a more structured layout don't have this "issue".
-
-hwmon_dev {
-	compatible = "gpio-alarm";
-
-	voltage {
-		bat@0 {
-			reg = <0>;
-	 		label = "Battery Pack1 Voltage";
-			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
-			alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
-					&gpio3 16 GPIO_ACTIVE_LOW>;
-		};
-		bat@1 {
-			reg = <1>;
-	 		label = "Battery Pack2 Voltage";
-			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
-			alarm-gpios = <&gpio3 9 GPIO_ACTIVE_LOW
-					&gpio3 1 GPIO_ACTIVE_LOW>;
-		};
-	};
-	temperature {
-		cputemp {
-			label = "CPU Temperature Critical";
-			alarm-type = <GPIO_ALARM_GENRIC>;
-			alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
-		};
-	};
-};
-
-We don't have to take this layout, we can also consider about devices:
-
-hwmon_dev {
-	compatible = "gpio-alarm";
-
-	dev@0 {
-		reg = <0>;
-		voltage {
-			label = "Battery Pack1 Voltage";
-			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
-			alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
-					&gpio3 16 GPIO_ACTIVE_LOW>;
-		};
-		temperature {
-			label = "Battery Pack1 Temperature Critical";
-			alarm-type = <GPIO_ALARM_GENRIC>;
-			alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
-		};
-	};
-	dev@1 {
-		reg = <1>;
-		temperature {
-			label = "CPU Temperature Critical";
-			alarm-type = <GPIO_ALARM_GENRIC>;
-			alarm-gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
-		};
-	};
-};
-
-I don't think that is a issue at all, but I don't know the dt
-maintainers opinion of this theme.
-
-Regards,
-Marco
+T24gTW9uLCAyMDE4LTExLTA1IGF0IDA5OjE5ICswMTAwLCBNYXJjbyBGZWxzY2ggd3JvdGU6DQo+
+IE9uIDE4LTExLTAyIDIzOjA1LCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+ID4gT24gRnJpLCAyMDE4
+LTExLTAyIGF0IDA3OjM4ICswMTAwLCBNYXJjbyBGZWxzY2ggd3JvdGU6DQo+ID4gPiANCj4gPiA+
+ID4gSW50ZXJydXB0cyB0eXBlcyBhcmUgc3BlY2lmaWMgdG8gZWFjaCBpbnRlcnJ1cHQgY29udHJv
+bGxlciwgYnV0IHRoZXJlDQo+ID4gPiA+IGlzIGEgc3RhbmRhcmQgc2V0IG9mIGZsYWdzIHRoYXQs
+IEFGQUlLLCBldmVyeSBMaW51eCBjb250cm9sbGVyIHVzZXMuIA0KPiA+ID4gPiBUaGVzZSBpbmNs
+dWRlIElSUV9UWVBFX0VER0VfQk9USCwgSVJRX1RZUEVfRURHRV9SSVNJTkcsDQo+ID4gPiA+IElS
+UV9UWVBFX0xFVkVMX0hJR0gsIGFuZCBzbyBvbi4NCj4gPiA+ID4gDQo+ID4gPiA+IFNvIHlvdSBj
+YW4gc3VwcG9ydCBoYXJkd2FyZSB0aGF0IGlzIGluaGVyZW50bHkgZWRnZSBvciBsZXZlbCB0cmln
+Z2VyZWQuDQo+ID4gPiANCj4gPiA+IEkndmUgYmVlbiBzcG9rZW4gYWJvdXQgZ3Bpby1jb250cm9s
+bGVycyBhbmQgQUZBSUsgdGhlcmUgYXJlIG5vIGVkZ2UNCj4gPiA+IHR5cGVzLiBJbnRlcnJ1cHQt
+Q29udHJvbGxlciBhcmUgYSBkaWZmZXJlbnQgc3RvcnksIGFzIHlvdSBwb2ludGVkIG91dA0KPiA+
+ID4gYWJvdmUuDQo+ID4gDQo+ID4gWW91IGNhbiB1c2UgZWRnZSB0cmlnZ2VyaW5nIHdpdGggZ3Bp
+b3MuICBKdXN0IHRyeSB3cml0aW5nICJyaXNpbmciIG9yDQo+ID4gImZhbGxpbmciIGludG8gL3N5
+cy9jbGFzcy9ncGlvL2dwaW9YL2VkZ2UNCj4gDQo+IENhbiB3ZSBhY2Nlc3MgdGhlIGdwaW9zIHRy
+b3VnaCB0aGUgc3lzZnMgaWYgdGhleSBhcmUgcmVxdWVzdGVkIGJ5IGENCj4gZHJpdmVyPw0KDQpX
+aGVuIEkgZmlyc3QgZGlkIHRoZSBzeXNmcyBpbnRlcmZhY2UgZm9yIGdwaW9zLCB5b3UgY291bGQg
+ZG8gdGhhdCwgYnV0DQpEYXZpZCBCcm93bmVsbCB3YW50ZWQgaXQgc28gdGhhdCB5b3UgY2FuJ3Qg
+YWNjZXNzIGdwaW9zIHZpYSBzeXNmcyBpZiBhDQpkcml2ZXIgcmVxdWVzdGVkIHRoZW0uICBUaGUg
+Y29tcHJvbWlzZSB3YXMgdGhhdCAqa2VybmVsKiBjb2RlIGNhbg0KZXhwbGljaXRseSBleHBvcnQg
+dG8gc3lzZnMgYSBncGlvIHRoYXQgaXMgdXNlZCBieSBhIGRyaXZlciAoaWUuIGFsc28NCnJlcXVl
+c3RlZCBpbiBrZXJuZWwgY29kZSksIGJ1dCB5b3UgY291bGRuJ3QgZG8gaXQganVzdCBmcm9tIHVz
+ZXJzcGFjZS4NCg0KQnV0IHRoYXQncyBpcnJlbGV2YW50IGhlcmUuICBUaGUgcG9pbnQgaXMgdGhh
+dCB5b3UgY2FuIGdldCBlZGdlDQp0cmlnZ2VyZWQgaW50ZXJydXB0cyBvbiBhIGdwaW8gYW5kIGlm
+IHlvdSBkb24ndCBiZWxpZXZlIG1lLCBqdXN0IHRyeSBpdA0KZm9yIHlvdXJzZWxmIGFuZCB5b3Un
+bGwgc2VlIGl0IHdvcmtzLiAgVGhlIHN5c2ZzIGludGVyZmFjZSBqdXN0DQp0cmFuc2xhdGVzIGlu
+dG8gdGhlIHNhbWUgY2FsbHMgYSBrZXJuZWwgZHJpdmVyIGNvdWxkIG1ha2UuDQoNCj4gPiBJdCdz
+IGxldmVsIHlvdSBjYW4ndCBkbyBzeXNmcy4gIFRoZSBpcnEgbWFza2luZyBuZWNlc3NhcnkgaXNu
+J3QNCj4gPiBzdXBwb3J0ZWQgdG8gZ2V0IGl0IHRvIHdvcmsgaW4gYSB1c2VmdWwgd2F5LCBpLmUu
+IHdpdGhvdXQgYSBsaXZlLWxvY2sNCj4gPiBJUlEgbG9vcC4NCj4gPiANCj4gPiBCdXQgeW91IGNh
+biBpbiB0aGUga2VybmVsLg0KPiA+IA0KPiA+IE5vcm1hbCBwcm9jZXNzIGlzIHRvIGNhbGwgZ3Bp
+b2RfdG9faXJxKCkgYW5kIHRoZW4gdXNlIHN0YW5kYXJkIElSUUYNCj4gPiBmbGFncyB0byBzZWxl
+Y3QgbGV2ZWwsIGVkZ2UsIGV0Yy4NCj4gDQo+IEN1cnJlbnRseSBJIHVzaW5nIHRoZSBncGlvZF90
+b19pcnEoKSBmdW5jdGlvbiB0byBjb252ZXJ0IHRoZSBzZW5zZSBncGlvDQo+IGludG8gYSBpcnEs
+IGJ1dCBJIGRvIHNvbWUgbWFnaWMgdG8gZGV0ZXJtaW5lIHRoZSBlZGdlLiBJIHRvdWdodCB0aGVy
+ZQ0KPiBtaWdodCBiZSByZWFzb25zIHdoeSB0aGVyZSBhcmUgbm8gZWRnZSBkZWZpbmVzIGluDQo+
+IGluY2x1ZGUvZHQtYmluZGluZ3MvZ3Bpby9ncGlvLmguDQoNCkp1c3QgcmVxdWVzdCB0aGUgaW50
+ZXJydXB0IHdpdGggSVJRRl9UUklHR0VSX1JJU0lORyBhbmQgaXQgd2lsbCB3b3JrIG9uDQphbG1v
+c3QgYW55IFNvQy4gIFRoZSByZWFzb24geW91IHNlZSBubyBlZGdlIGRlZmluZXMgd2l0aCBncGlv
+IGhhbmRsZXMNCmlzIHRoYXQgZWRnZSBhbmQgbGV2ZWwgdHJpZ2dlcmluZyBpcyBhIGludGVycnVw
+dCBjb25jZXB0LCBub3QgYSBncGlvDQpjb25jZXB0LiAgVGhlcmUgYXJlIG5vIGxldmVsIHRyaWdn
+ZXJzIGRlZmluZWQgZm9yIGdwaW9zIGVpdGhlci4gIFRoZQ0KYWN0aXZlIGxvdy9oaWdoIGZsYWdz
+IGp1c3QgZGVmaW5lIHdoYXQgdm9sdGFnZSBzaG91bGQgYmUgY29uc2lkZXJlZA0KImFzc2VydGVk
+Ii4gIFRoZXkgYXJlbid0IGludGVuZGVkIHRvIGJlIHJlbGF0ZWQgdG8gaW50ZXJydXB0cy4NCg0K
+PiBPa2F5LCBzbyBubyBwb2xsaW5nIGZvciB0aGUgY3VycmVudCBzb2x1dGlvbi4gTGV0IG1lIHN1
+bW1hcml6ZSBvdXINCj4gc29sdXRpb246DQo+ICAtIG5vIHBvbGxpbmcgKGN1cnJlbnRseSkNCj4g
+IC0gZHQtbm9kZSBzcGVjaWZpZXMgYSBncGlvIGluc3RlYWQgb2YgYSBpbnRlcnJ1cHQNCj4gICAg
+LT4gZ3BpbyA8LT4gaXJxIG1hcHBpbmcgaXMgZG9uZSBieSBncGlvZF90b19pcnEoKSBhbmQgZmFp
+bHMgaWYgZ3Bpbw0KPiAgICAgICBkb2Vzbid0IHN1cHBvcnQgaXJxJ3MNCj4gIC0gbW9yZSBhbGFy
+bXMgcGVyIHNlbnNvcg0KPiANCj4gT25seSBvbmUgbGFzdCB0aGluZyBJIHRvdWdodCBhYm91dDoN
+Cj4gDQo+IFVzaW5nIGEgZmxhdCBkZXNpZ24gbGlrZSB5b3UgbWVudGlvbmVkIHdvdWxkIGxlYWQg
+aW50byBhICJ2aXJ0dWFsIg0KPiBhZGRyZXNzIGNvbmZsaWN0LCBzaW5jZSBib3RoIHNlbnNvcnMg
+YXJlIG9uIHRoZSBzYW1lIGxldmVsLiBJIHRvdWdodA0KPiBhYm91dCBpMmMvc3BpL211eGVzL2dy
+YXBoLWRldmljZXMgd2hpY2ggZG9uJ3Qgc3VwcG9ydCBzdWNoICJhZGRyZXNzaW5nIg0KPiBzY2hl
+bWUuDQoNCllvdSBtZWFuIGEgdGVtcCBhbGFybSBhbmQgYSB2b2x0YWdlIGFsYXJtIGNvdWxkIGJv
+dGggYmUgcmVnID0gPDE+PyAgSQ0KZG9uJ3QgdGhpbmsgYW55dGhpbmcgY29tcGxhaW5zIGFib3V0
+IHRoYXQuICBCdXQgaXQgZG9lcyBzZWVtDQp1bmRlc2lyYWJsZS4NCg0KDQo+IGh3bW9uX2RldiB7
+DQo+IAljb21wYXRpYmxlID0gImdwaW8tYWxhcm0iOw0KPiAJYmF0QDAgew0KPiAJCXJlZyA9IDww
+PjsNCj4gCQlsYWJlbCA9ICJCYXR0ZXJ5IFBhY2sxIFZvbHRhZ2UiOw0KPiAJCXR5cGUgPSAidm9s
+dGFnZSI7DQo+IAkJYWxhcm0tdHlwZSA9IDxHUElPX0FMQVJNX0xDUklULCBHUElPX0FMQVJNX0NS
+SVQ+Ow0KDQpXb3VsZCBoYXZlIHRvIGJlIDxHUElPX0FMQVJNX0xDUklUPiwgPEdQSU9fQUxBUk1f
+Q1JJVD47DQoNCkknbSBub3Qgc3VyZSBpZiBkdCBiaW5kaW5ncyBwcmVmZXIgc3ltYm9saWMgaW50
+ZWdlciBjb25zdGFudHMgdnMNCnN0cmluZ3MgZm9yIHNvbWV0aGluZyB3aGljaCBpcyBhbiBlbnVt
+ZXJhdGlvbiBsaWtlIHRoaXMuICBzdHJpbmdzIHNlZW0NCm1vcmUgY29tbW9uIHRvIG1lLCBlLmcu
+IGFsYXJtLXR5cGVzID0gImxjcml0IiwgImNyaXQiOw0KDQo+IAkJYWxhcm0tZ3Bpb3MgPSA8Jmdw
+aW8zIDE1IEdQSU9fQUNUSVZFX0xPVw0KPiAJCQkJJmdwaW8zIDE2IEdQSU9fQUNUSVZFX0xPVz47
+DQo+IAl9Ow0KPiAJYmF0QDEgew0KPiAJCXJlZyA9IDwxPjsNCj4gCQlsYWJlbCA9ICJCYXR0ZXJ5
+IFBhY2syIFZvbHRhZ2UiOw0KPiAJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9MQ1JJVCwgR1BJ
+T19BTEFSTV9DUklUPjsNCj4gCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzMgOSBHUElPX0FDVElWRV9M
+T1cNCj4gCQkJCSZncGlvMyAxIEdQSU9fQUNUSVZFX0xPVz47DQo+IAl9Ow0KPiAJY3B1dGVtcEAw
+IHsNCj4gCQlyZWcgPSA8MD47DQo+IAkJbGFiZWwgPSAiQ1BVIFRlbXBlcmF0dXJlIENyaXRpY2Fs
+IjsNCj4gCQl0eXBlID0gInRlbXBlcmF0dXJlIjsNCj4gCQlhbGFybS10eXBlID0gPEdQSU9fQUxB
+Uk1fR0VOUklDPjsNCj4gCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzQgMTcgR1BJT19BQ1RJVkVfTE9X
+PjsNCj4gCX07DQo+IH07DQo+IA0KPiBXaGVyZSBhIG1vcmUgc3RydWN0dXJlZCBsYXlvdXQgZG9u
+J3QgaGF2ZSB0aGlzICJpc3N1ZSIuDQo+IA0KPiBod21vbl9kZXYgew0KPiAJY29tcGF0aWJsZSA9
+ICJncGlvLWFsYXJtIjsNCj4gDQo+IAl2b2x0YWdlIHsNCj4gCQliYXRAMCB7DQo+IAkJCXJlZyA9
+IDwwPjsNCj4gCSAJCWxhYmVsID0gIkJhdHRlcnkgUGFjazEgVm9sdGFnZSI7DQo+IAkJCWFsYXJt
+LXR5cGUgPSA8R1BJT19BTEFSTV9MQ1JJVCwgR1BJT19BTEFSTV9DUklUPjsNCj4gCQkJYWxhcm0t
+Z3Bpb3MgPSA8JmdwaW8zIDE1IEdQSU9fQUNUSVZFX0xPVw0KPiAJCQkJCSZncGlvMyAxNiBHUElP
+X0FDVElWRV9MT1c+Ow0KPiAJCX07DQo+IAkJYmF0QDEgew0KPiAJCQlyZWcgPSA8MT47DQo+IAkg
+CQlsYWJlbCA9ICJCYXR0ZXJ5IFBhY2syIFZvbHRhZ2UiOw0KPiAJCQlhbGFybS10eXBlID0gPEdQ
+SU9fQUxBUk1fTENSSVQsIEdQSU9fQUxBUk1fQ1JJVD47DQo+IAkJCWFsYXJtLWdwaW9zID0gPCZn
+cGlvMyA5IEdQSU9fQUNUSVZFX0xPVw0KPiAJCQkJCSZncGlvMyAxIEdQSU9fQUNUSVZFX0xPVz47
+DQo+IAkJfTsNCj4gCX07DQo+IAl0ZW1wZXJhdHVyZSB7DQo+IAkJY3B1dGVtcCB7DQo+IAkJCWxh
+YmVsID0gIkNQVSBUZW1wZXJhdHVyZSBDcml0aWNhbCI7DQo+IAkJCWFsYXJtLXR5cGUgPSA8R1BJ
+T19BTEFSTV9HRU5SSUM+Ow0KPiAJCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzQgMTcgR1BJT19BQ1RJ
+VkVfTE9XPjsNCj4gCQl9Ow0KPiAJfTsNCj4gfTsNCj4gDQo+IFdlIGRvbid0IGhhdmUgdG8gdGFr
+ZSB0aGlzIGxheW91dCwgd2UgY2FuIGFsc28gY29uc2lkZXIgYWJvdXQgZGV2aWNlczoNCj4gDQo+
+IGh3bW9uX2RldiB7DQo+IAljb21wYXRpYmxlID0gImdwaW8tYWxhcm0iOw0KPiANCj4gCWRldkAw
+IHsNCj4gCQlyZWcgPSA8MD47DQo+IAkJdm9sdGFnZSB7DQo+IAkJCWxhYmVsID0gIkJhdHRlcnkg
+UGFjazEgVm9sdGFnZSI7DQo+IAkJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFSTV9MQ1JJVCwgR1BJ
+T19BTEFSTV9DUklUPjsNCj4gCQkJYWxhcm0tZ3Bpb3MgPSA8JmdwaW8zIDE1IEdQSU9fQUNUSVZF
+X0xPVw0KPiAJCQkJCSZncGlvMyAxNiBHUElPX0FDVElWRV9MT1c+Ow0KPiAJCX07DQo+IAkJdGVt
+cGVyYXR1cmUgew0KPiAJCQlsYWJlbCA9ICJCYXR0ZXJ5IFBhY2sxIFRlbXBlcmF0dXJlIENyaXRp
+Y2FsIjsNCj4gCQkJYWxhcm0tdHlwZSA9IDxHUElPX0FMQVJNX0dFTlJJQz47DQo+IAkJCWFsYXJt
+LWdwaW9zID0gPCZncGlvNCAxNyBHUElPX0FDVElWRV9MT1c+Ow0KPiAJCX07DQo+IAl9Ow0KPiAJ
+ZGV2QDEgew0KPiAJCXJlZyA9IDwxPjsNCj4gCQl0ZW1wZXJhdHVyZSB7DQo+IAkJCWxhYmVsID0g
+IkNQVSBUZW1wZXJhdHVyZSBDcml0aWNhbCI7DQo+IAkJCWFsYXJtLXR5cGUgPSA8R1BJT19BTEFS
+TV9HRU5SSUM+Ow0KPiAJCQlhbGFybS1ncGlvcyA9IDwmZ3BpbzQgMTkgR1BJT19BQ1RJVkVfTE9X
+PjsNCj4gCQl9Ow0KPiAJfTsNCj4gfTsNCj4gDQo+IEkgZG9uJ3QgdGhpbmsgdGhhdCBpcyBhIGlz
+c3VlIGF0IGFsbCwgYnV0IEkgZG9uJ3Qga25vdyB0aGUgZHQNCj4gbWFpbnRhaW5lcnMgb3Bpbmlv
+biBvZiB0aGlzIHRoZW1lLg0KPiANCj4gUmVnYXJkcywNCj4gTWFyY28=
