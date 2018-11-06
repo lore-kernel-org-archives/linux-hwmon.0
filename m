@@ -2,8 +2,8 @@ Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Received: from mail-eopbgr710077.outbound.protection.outlook.com ([40.107.71.77]:4676
         "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727268AbeKGFf0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 7 Nov 2018 00:35:26 -0500
+        id S1726463AbeKGFf1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 7 Nov 2018 00:35:27 -0500
 From: "Woods, Brian" <Brian.Woods@amd.com>
 To: Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -18,9 +18,9 @@ To: Thomas Gleixner <tglx@linutronix.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: [PATCH v2 2/4] x86/amd_nb: add support for newer PCI topologies
-Date: Tue, 6 Nov 2018 20:08:16 +0000
-Message-ID: <20181106200754.60722-3-brian.woods@amd.com>
+Subject: [PATCH v2 3/4] x86/amd_nb: add PCI device IDs for F17h M30h
+Date: Tue, 6 Nov 2018 20:08:18 +0000
+Message-ID: <20181106200754.60722-4-brian.woods@amd.com>
 References: <20181106200754.60722-1-brian.woods@amd.com>
 In-Reply-To: <20181106200754.60722-1-brian.woods@amd.com>
 Content-Language: en-US
@@ -30,104 +30,70 @@ MIME-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add support for new processors which have multiple PCI root complexes
-per data fabric/system management network interface.  If there are (N)
-multiple PCI roots per DF/SMN interface, then the PCI roots are
-redundant (as far as SMN/DF access goes).  For each DF/SMN interface:
-map to the first available PCI root and skip the next N-1 PCI roots so
-the following DF/SMN interface get mapped to a correct PCI root.
-
-Ex:
-DF/SMN 0 -> 60
-	    40
-	    20
-	    00
-DF/SMN 1 -> e0
-	    c0
-	    a0
-	    80
+Add the PCI device IDs for family 17h model 30h, since they are needed
+for accessing various registers via the data fabric/SMN interface.
 
 Signed-off-by: Brian Woods <brian.woods@amd.com>
 ---
- arch/x86/kernel/amd_nb.c | 44 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 38 insertions(+), 6 deletions(-)
+ arch/x86/kernel/amd_nb.c | 6 ++++++
+ include/linux/pci_ids.h  | 1 +
+ 2 files changed, 7 insertions(+)
 
 diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 19d489ee2b1e..cc34266e3c62 100644
+index cc34266e3c62..cc51275c8759 100644
 --- a/arch/x86/kernel/amd_nb.c
 +++ b/arch/x86/kernel/amd_nb.c
-@@ -213,7 +213,10 @@ int amd_cache_northbridges(void)
- 	const struct pci_device_id *root_ids =3D amd_root_ids;
- 	struct pci_dev *root, *misc, *link;
- 	struct amd_northbridge *nb;
--	u16 i =3D 0;
-+	u16 roots_per_misc =3D 0;
-+	u16 misc_count =3D 0;
-+	u16 root_count =3D 0;
-+	u16 i, j;
+@@ -16,8 +16,10 @@
 =20
- 	if (amd_northbridges.num)
- 		return 0;
-@@ -226,26 +229,55 @@ int amd_cache_northbridges(void)
+ #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
+ #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
++#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
+ #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
 =20
- 	misc =3D NULL;
- 	while ((misc =3D next_northbridge(misc, misc_ids)) !=3D NULL)
--		i++;
-+		misc_count++;
+ /* Protect the PCI config register pairs used for SMN and DF indirect acce=
+ss. */
+ static DEFINE_MUTEX(smn_mutex);
+@@ -27,9 +29,11 @@ static u32 *flush_words;
+ static const struct pci_device_id amd_root_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
+ 	{}
+ };
 =20
--	if (!i)
-+	if (!misc_count)
- 		return -ENODEV;
-=20
--	nb =3D kcalloc(i, sizeof(struct amd_northbridge), GFP_KERNEL);
-+	root =3D NULL;
-+	while ((root =3D next_northbridge(root, root_ids)) !=3D NULL)
-+		root_count++;
 +
-+	if (root_count) {
-+		roots_per_misc =3D root_count / misc_count;
-+
-+		/*
-+		 * There should be _exactly_ N roots for each DF/SMN
-+		 * interface.
-+		 */
-+		if (!roots_per_misc || (root_count % roots_per_misc)) {
-+			pr_info("Unsupported AMD DF/PCI configuration found\n");
-+			return -ENODEV;
-+		}
-+	}
-+
-+	nb =3D kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
- 	if (!nb)
- 		return -ENOMEM;
+ #define PCI_DEVICE_ID_AMD_CNB17H_F4     0x1704
 =20
- 	amd_northbridges.nb =3D nb;
--	amd_northbridges.num =3D i;
-+	amd_northbridges.num =3D misc_count;
-=20
- 	link =3D misc =3D root =3D NULL;
--	for (i =3D 0; i !=3D amd_northbridges.num; i++) {
-+	for (i =3D 0; i < amd_northbridges.num; i++) {
- 		node_to_amd_nb(i)->root =3D root =3D
- 			next_northbridge(root, root_ids);
- 		node_to_amd_nb(i)->misc =3D misc =3D
- 			next_northbridge(misc, misc_ids);
- 		node_to_amd_nb(i)->link =3D link =3D
- 			next_northbridge(link, link_ids);
-+
-+		/*
-+		 * If there are more PCI root devices than data fabric/
-+		 * system management network interfaces, then the (N)
-+		 * PCI roots per DF/SMN interface are functionally the
-+		 * same (for DF/SMN access) and N-1 are redundant.  N-1
-+		 * PCI roots should be skipped per DF/SMN interface so
-+		 * the following DF/SMN interfaces get mapped to
-+		 * correct PCI roots.
-+		 */
-+		for (j =3D 1; j < roots_per_misc; j++)
-+			root =3D next_northbridge(root, root_ids);
- 	}
-=20
- 	if (amd_gart_present())
+ const struct pci_device_id amd_nb_misc_ids[] =3D {
+@@ -43,6 +47,7 @@ const struct pci_device_id amd_nb_misc_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{}
+ };
+@@ -56,6 +61,7 @@ static const struct pci_device_id amd_nb_link_ids[] =3D {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+ 	{}
+ };
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 78d5cd29778a..349276fbd269 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -547,6 +547,7 @@
+ #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
+ #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
++#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+ #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+ #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
 --=20
 2.11.0
