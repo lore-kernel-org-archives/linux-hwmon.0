@@ -1,26 +1,25 @@
 Return-Path: <SRS0=alsP=NS=vger.kernel.org=linux-kernel-owner@kernel.org>
-Date: Wed, 7 Nov 2018 12:42:53 -0800
+Date: Wed, 7 Nov 2018 12:43:29 -0800
 From: "tip-bot for Woods, Brian" <tipbot@zytor.com>
-Message-ID: <tip-dedf7dce4cec5c0abe69f4fa6938d5100398220b@git.kernel.org>
-Cc: bp@suse.de, puwen@hygon.cn, linux@roeck-us.net,
-        bhelgaas@google.com, clemens@ladisch.de, x86@kernel.org,
-        linux-hwmon@vger.kernel.org, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, qianyue.zj@alibaba-inc.com,
-        jdelvare@suse.com, linux-pci@vger.kernel.org, brian.woods@amd.com,
-        tglx@linutronix.de, hpa@zytor.com, Brian.Woods@amd.com,
-        mingo@redhat.com
-Reply-To: linux@roeck-us.net, bhelgaas@google.com, bp@suse.de,
-          puwen@hygon.cn, clemens@ladisch.de, mingo@kernel.org,
-          linux-hwmon@vger.kernel.org, x86@kernel.org,
-          qianyue.zj@alibaba-inc.com, linux-kernel@vger.kernel.org,
-          tglx@linutronix.de, brian.woods@amd.com,
-          linux-pci@vger.kernel.org, jdelvare@suse.com, hpa@zytor.com,
-          mingo@redhat.com, Brian.Woods@amd.com
-In-Reply-To: <20181106200754.60722-2-brian.woods@amd.com>
-References: <20181106200754.60722-2-brian.woods@amd.com>
+Message-ID: <tip-556e4c62baffa71e2045a298379db7e57dd47f3d@git.kernel.org>
+Cc: tglx@linutronix.de, hpa@zytor.com, linux-pci@vger.kernel.org,
+        bhelgaas@google.com, linux-hwmon@vger.kernel.org,
+        qianyue.zj@alibaba-inc.com, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, x86@kernel.org, clemens@ladisch.de,
+        jdelvare@suse.com, mingo@redhat.com, linux@roeck-us.net,
+        brian.woods@amd.com, puwen@hygon.cn, Brian.Woods@amd.com,
+        bp@suse.de
+Reply-To: bp@suse.de, Brian.Woods@amd.com, puwen@hygon.cn,
+          brian.woods@amd.com, linux@roeck-us.net, mingo@redhat.com,
+          jdelvare@suse.com, clemens@ladisch.de, x86@kernel.org,
+          mingo@kernel.org, linux-kernel@vger.kernel.org,
+          qianyue.zj@alibaba-inc.com, linux-hwmon@vger.kernel.org,
+          bhelgaas@google.com, hpa@zytor.com, linux-pci@vger.kernel.org,
+          tglx@linutronix.de
+In-Reply-To: <20181106200754.60722-3-brian.woods@amd.com>
+References: <20181106200754.60722-3-brian.woods@amd.com>
 To: linux-tip-commits@vger.kernel.org
-Subject: [tip:x86/amd-nb] hwmon/k10temp, x86/amd_nb: Consolidate shared
- device IDs
+Subject: [tip:x86/amd-nb] x86/amd_nb: Add support for newer PCI topologies
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=UTF-8
@@ -30,23 +29,37 @@ List-Archive: <https://lore.kernel.org/lkml/>
 List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Commit-ID:  dedf7dce4cec5c0abe69f4fa6938d5100398220b
-Gitweb:     https://git.kernel.org/tip/dedf7dce4cec5c0abe69f4fa6938d5100398220b
+Commit-ID:  556e4c62baffa71e2045a298379db7e57dd47f3d
+Gitweb:     https://git.kernel.org/tip/556e4c62baffa71e2045a298379db7e57dd47f3d
 Author:     Woods, Brian <Brian.Woods@amd.com>
-AuthorDate: Tue, 6 Nov 2018 20:08:14 +0000
+AuthorDate: Tue, 6 Nov 2018 20:08:16 +0000
 Committer:  Borislav Petkov <bp@suse.de>
-CommitDate: Wed, 7 Nov 2018 21:28:04 +0100
+CommitDate: Wed, 7 Nov 2018 21:28:29 +0100
 
-hwmon/k10temp, x86/amd_nb: Consolidate shared device IDs
+x86/amd_nb: Add support for newer PCI topologies
 
-Consolidate shared PCI_DEVICE_IDs that were scattered through k10temp
-and amd_nb, and move them into pci_ids.
+Add support for new processors which have multiple PCI root complexes
+per data fabric/system management network interface.  If there are (N)
+multiple PCI roots per DF/SMN interface, then the PCI roots are
+redundant (as far as SMN/DF access goes).  For each DF/SMN interface:
+map to the first available PCI root and skip the next N-1 PCI roots so
+the following DF/SMN interface get mapped to a correct PCI root.
+
+Ex:
+DF/SMN 0 -> 60
+	    40
+	    20
+	    00
+DF/SMN 1 -> e0
+	    c0
+	    a0
+	    80
 
 Signed-off-by: Brian Woods <brian.woods@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
 CC: Bjorn Helgaas <bhelgaas@google.com>
 CC: Clemens Ladisch <clemens@ladisch.de>
+CC: Guenter Roeck <linux@roeck-us.net>
 CC: "H. Peter Anvin" <hpa@zytor.com>
 CC: Ingo Molnar <mingo@redhat.com>
 CC: Jean Delvare <jdelvare@suse.com>
@@ -56,69 +69,85 @@ CC: <linux-pci@vger.kernel.org>
 CC: Pu Wen <puwen@hygon.cn>
 CC: Thomas Gleixner <tglx@linutronix.de>
 CC: x86-ml <x86@kernel.org>
-Link: http://lkml.kernel.org/r/20181106200754.60722-2-brian.woods@amd.com
+Link: http://lkml.kernel.org/r/20181106200754.60722-3-brian.woods@amd.com
 ---
- arch/x86/kernel/amd_nb.c | 3 +--
- drivers/hwmon/k10temp.c  | 9 +--------
- include/linux/pci_ids.h  | 2 ++
- 3 files changed, 4 insertions(+), 10 deletions(-)
+ arch/x86/kernel/amd_nb.c | 44 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index a6eca647bc76..19d489ee2b1e 100644
+index 19d489ee2b1e..cc34266e3c62 100644
 --- a/arch/x86/kernel/amd_nb.c
 +++ b/arch/x86/kernel/amd_nb.c
-@@ -11,13 +11,12 @@
- #include <linux/errno.h>
- #include <linux/export.h>
- #include <linux/spinlock.h>
-+#include <linux/pci_ids.h>
- #include <asm/amd_nb.h>
+@@ -213,7 +213,10 @@ int amd_cache_northbridges(void)
+ 	const struct pci_device_id *root_ids = amd_root_ids;
+ 	struct pci_dev *root, *misc, *link;
+ 	struct amd_northbridge *nb;
+-	u16 i = 0;
++	u16 roots_per_misc = 0;
++	u16 misc_count = 0;
++	u16 root_count = 0;
++	u16 i, j;
  
- #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
- #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
--#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
- #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
--#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
+ 	if (amd_northbridges.num)
+ 		return 0;
+@@ -226,26 +229,55 @@ int amd_cache_northbridges(void)
  
- /* Protect the PCI config register pairs used for SMN and DF indirect access. */
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 2cef0c37ff6f..bc6871c8dd4e 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -23,6 +23,7 @@
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/pci_ids.h>
- #include <asm/amd_nb.h>
- #include <asm/processor.h>
+ 	misc = NULL;
+ 	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
+-		i++;
++		misc_count++;
  
-@@ -41,14 +42,6 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
- #define PCI_DEVICE_ID_AMD_15H_M70H_NB_F3	0x15b3
- #endif
+-	if (!i)
++	if (!misc_count)
+ 		return -ENODEV;
  
--#ifndef PCI_DEVICE_ID_AMD_17H_DF_F3
--#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
--#endif
--
--#ifndef PCI_DEVICE_ID_AMD_17H_M10H_DF_F3
--#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3	0x15eb
--#endif
--
- /* CPUID function 0x80000001, ebx */
- #define CPUID_PKGTYPE_MASK	0xf0000000
- #define CPUID_PKGTYPE_F		0x00000000
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 69f0abe1ba1a..78d5cd29778a 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -545,6 +545,8 @@
- #define PCI_DEVICE_ID_AMD_16H_NB_F4	0x1534
- #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F3 0x1583
- #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
-+#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
-+#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
- #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
- #define PCI_DEVICE_ID_AMD_LANCE		0x2000
- #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+-	nb = kcalloc(i, sizeof(struct amd_northbridge), GFP_KERNEL);
++	root = NULL;
++	while ((root = next_northbridge(root, root_ids)) != NULL)
++		root_count++;
++
++	if (root_count) {
++		roots_per_misc = root_count / misc_count;
++
++		/*
++		 * There should be _exactly_ N roots for each DF/SMN
++		 * interface.
++		 */
++		if (!roots_per_misc || (root_count % roots_per_misc)) {
++			pr_info("Unsupported AMD DF/PCI configuration found\n");
++			return -ENODEV;
++		}
++	}
++
++	nb = kcalloc(misc_count, sizeof(struct amd_northbridge), GFP_KERNEL);
+ 	if (!nb)
+ 		return -ENOMEM;
+ 
+ 	amd_northbridges.nb = nb;
+-	amd_northbridges.num = i;
++	amd_northbridges.num = misc_count;
+ 
+ 	link = misc = root = NULL;
+-	for (i = 0; i != amd_northbridges.num; i++) {
++	for (i = 0; i < amd_northbridges.num; i++) {
+ 		node_to_amd_nb(i)->root = root =
+ 			next_northbridge(root, root_ids);
+ 		node_to_amd_nb(i)->misc = misc =
+ 			next_northbridge(misc, misc_ids);
+ 		node_to_amd_nb(i)->link = link =
+ 			next_northbridge(link, link_ids);
++
++		/*
++		 * If there are more PCI root devices than data fabric/
++		 * system management network interfaces, then the (N)
++		 * PCI roots per DF/SMN interface are functionally the
++		 * same (for DF/SMN access) and N-1 are redundant.  N-1
++		 * PCI roots should be skipped per DF/SMN interface so
++		 * the following DF/SMN interfaces get mapped to
++		 * correct PCI roots.
++		 */
++		for (j = 1; j < roots_per_misc; j++)
++			root = next_northbridge(root, root_ids);
+ 	}
+ 
+ 	if (amd_gart_present())
