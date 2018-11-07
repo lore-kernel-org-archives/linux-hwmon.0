@@ -1,72 +1,42 @@
-Return-Path: <tpiepho@impinj.com>
-Return-path: <tpiepho@impinj.com>
-From: Trent Piepho <tpiepho@impinj.com>
-To: "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>
-CC: "linux@roeck-us.net" <linux@roeck-us.net>, "dmitry.torokhov@gmail.com"
-	<dmitry.torokhov@gmail.com>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "jdelvare@suse.com" <jdelvare@suse.com>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
-Date: Fri, 2 Nov 2018 23:05:20 +0000
-Message-ID: <1541199919.30311.224.camel@impinj.com>
-References: <20181030104706.dbuld7tymwcpayzd@pengutronix.de>
-	 <783b26c9-2654-4aff-5e77-e35a17973e63@roeck-us.net>
-	 <20181030170026.licamhckbznuvcse@pengutronix.de>
-	 <1540928050.30311.94.camel@impinj.com>
-	 <20181030201147.GB28185@roeck-us.net>
-	 <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
-	 <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
-	 <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
-	 <20181101151428.GB25346@roeck-us.net>
-	 <1541096469.30311.166.camel@impinj.com>
-	 <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
-In-Reply-To: <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <697DC301C9AF7C469F72234A2C88906A@namprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40128 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726552AbeKGN26 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Nov 2018 08:28:58 -0500
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: linux@roeck-us.net, robh+dt@kernel.org, jdelvare@suse.com
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] hwmon: (adt7475): inverted PWM output
+Date: Wed,  7 Nov 2018 17:00:08 +1300
+Message-Id: <20181107040010.27436-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-T24gRnJpLCAyMDE4LTExLTAyIGF0IDA3OjM4ICswMTAwLCBNYXJjbyBGZWxzY2ggd3JvdGU6DQo+
-IE9uIDE4LTExLTAxIDE4OjIxLCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+ID4gT24gVGh1LCAyMDE4
-LTExLTAxIGF0IDA4OjE0IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiA+ID4gT24gVGh1
-LCBOb3YgMDEsIDIwMTggYXQgMDM6NTM6MTJQTSArMDEwMCwgTWFyY28gRmVsc2NoIHdyb3RlOg0K
-PiA+ID4gPiANCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBJc24ndCB0aGF0IGNvbmZpZ3VyYWJsZSB3
-aXRoIGRldmljZXRyZWUgZmxhZ3MgPyBJIGRvbid0IHRoaW5rIGEgZHJpdmVyDQo+ID4gPiA+ID4g
-c2hvdWxkIGdldCBpbnZvbHZlZCBpbiBkZWNpZGluZyB0aGUgYWN0aXZlIGVkZ2UuDQo+ID4gPiA+
-IA0KPiA+ID4gPiBObywgQUZBSUsgd2UgY2FuIG9ubHkgc3BlY2lmeSB0aGUgYWN0aXZlIGxldmVs
-IHR5cGVzIGZvciBncGlvcy4gVGhpcw0KPiA+ID4gPiBtYWRlIHNlbnNlIHRvIG1lLCBiZWNhdXNl
-IEkgc2F3IG5vIGdwaW8tY29udHJvbGxlciB3aGljaCBzdXBwb3J0DQo+ID4gPiA+ICdlZGdlLWxl
-dmVsJyByZXBvcnRpbmcgKGhvd2V2ZXIgaXQgd2lsbCBiZSBjYWxsZWQpIGN1cnJlbnRseS4NCj4g
-PiANCj4gPiBJbnRlcnJ1cHRzIHR5cGVzIGFyZSBzcGVjaWZpYyB0byBlYWNoIGludGVycnVwdCBj
-b250cm9sbGVyLCBidXQgdGhlcmUNCj4gPiBpcyBhIHN0YW5kYXJkIHNldCBvZiBmbGFncyB0aGF0
-LCBBRkFJSywgZXZlcnkgTGludXggY29udHJvbGxlciB1c2VzLiANCj4gPiBUaGVzZSBpbmNsdWRl
-IElSUV9UWVBFX0VER0VfQk9USCwgSVJRX1RZUEVfRURHRV9SSVNJTkcsDQo+ID4gSVJRX1RZUEVf
-TEVWRUxfSElHSCwgYW5kIHNvIG9uLg0KPiA+IA0KPiA+IFNvIHlvdSBjYW4gc3VwcG9ydCBoYXJk
-d2FyZSB0aGF0IGlzIGluaGVyZW50bHkgZWRnZSBvciBsZXZlbCB0cmlnZ2VyZWQuDQo+IA0KPiBJ
-J3ZlIGJlZW4gc3Bva2VuIGFib3V0IGdwaW8tY29udHJvbGxlcnMgYW5kIEFGQUlLIHRoZXJlIGFy
-ZSBubyBlZGdlDQo+IHR5cGVzLiBJbnRlcnJ1cHQtQ29udHJvbGxlciBhcmUgYSBkaWZmZXJlbnQg
-c3RvcnksIGFzIHlvdSBwb2ludGVkIG91dA0KPiBhYm92ZS4NCg0KWW91IGNhbiB1c2UgZWRnZSB0
-cmlnZ2VyaW5nIHdpdGggZ3Bpb3MuICBKdXN0IHRyeSB3cml0aW5nICJyaXNpbmciIG9yDQoiZmFs
-bGluZyIgaW50byAvc3lzL2NsYXNzL2dwaW8vZ3Bpb1gvZWRnZQ0KDQpJdCdzIGxldmVsIHlvdSBj
-YW4ndCBkbyBzeXNmcy4gIFRoZSBpcnEgbWFza2luZyBuZWNlc3NhcnkgaXNuJ3QNCnN1cHBvcnRl
-ZCB0byBnZXQgaXQgdG8gd29yayBpbiBhIHVzZWZ1bCB3YXksIGkuZS4gd2l0aG91dCBhIGxpdmUt
-bG9jaw0KSVJRIGxvb3AuDQoNCkJ1dCB5b3UgY2FuIGluIHRoZSBrZXJuZWwuDQoNCk5vcm1hbCBw
-cm9jZXNzIGlzIHRvIGNhbGwgZ3Bpb2RfdG9faXJxKCkgYW5kIHRoZW4gdXNlIHN0YW5kYXJkIElS
-UUYNCmZsYWdzIHRvIHNlbGVjdCBsZXZlbCwgZWRnZSwgZXRjLg0KDQo+IFRvbyBmYXN0IHN0YXRl
-IGNoYW5nZXMgc291bmRzIGxpa2UgYSBnbGl0Y2guIEFueXdheSwgSU1ITyB3ZSBzaG91bGQNCg0K
-TGludXggaGFzIG5vIGhhcmQgcmVhbC10aW1lIGd1YXJhbnRlZSBhYm91dCBpbnRlcnJ1cHQgbGF0
-ZW5jeSwgc28NCnRoZXJlJ3Mgbm8gd2F5IHlvdSBjYW4gYmUgc3VyZSBlYWNoIGludGVycnVwdCBp
-cyBwcm9jZXNzZWQgYmVmb3JlIHRoZQ0KbmV4dC4NCg0KVHJ5aW5nIHRvIHRyYWNrIGxldmVsIGJ5
-IGludGVycnVwdGluZyBvbiBib3RoIGVkZ2VzIGRvZXNuJ3Qgd29yayB3ZWxsLiANCllvdSBnZXQg
-b3V0IG9mIHN5bmMgYW5kIHN0dWNrIHdhaXRpbmcgZm9yIHNvbWV0aGluZyB0aGF0J3MgYWxyZWFk
-eQ0KaGFwcGVuZWQuDQoNCj4gc3VwcG9ydCBzdXBwb3J0IGJvdGggaW50ZXJydXB0cyBhbmQgZ3Bp
-b3MuIElmIHRoZSB1c2VycyB1c2UgZ3Bpb3MgdGhleQ0KPiBoYXZlIHRvIHBvbGwgdGhlIGdwaW8s
-IGFzIEd1ZW50ZXIgcG9pbnRlZCBvdXQsIGVsc2Ugd2UgcmVnaXN0ZXIgYQ0KPiBpcnEtaGFuZGxl
-ci4NCg0KSWYgZ3BpbyhkPylfdG9faXJxIHJldHVybnMgYSB2YWxpZCB2YWx1ZSwgd2h5IHBvbGw/
-ICBJdCB1c3VhbGx5IHdvcmtzDQp0byBjYWxsIHRoaXMuICBQbGVudHkgb2YgY2FsbCBzaXRlcyBp
-biB0aGUga2VybmVsIHRoYXQgdXNlIGl0IGFuZCBkb24ndA0KZmFsbGJhY2sgdG8gcG9sbGluZyBp
-ZiBpdCBkb2Vzbid0IHdvcmsuDQoNCkkgdGhpbmsgaXQncyBmaW5lIHRvIGNhbGwgZ3Bpb2RfdG9f
-aXJxKCkgYW5kIGZhaWwgaWYgdGhhdCBmYWlscywgYW5kDQpsZXQgYSBwb2xsaW5nIGZhbGxiYWNr
-IGJlIHdyaXR0ZW4gaWYgYW5kIHdoZW4gdGhlIG5lZWQgYXJpc2VzLg==
+Hi,
+
+I have a hardware design that requires logic low PWM output. The adt7475
+supports this but the current driver does not have any way of configuring=
+=20this.
+I've gone with a device-tree property as this is an artifact of the hardw=
+are
+design and not something that might be configured via sysfs.
+
+Chris Packham (2):
+=20 dt-bindings: hwmon: add binding documentation for adt7475
+=20 hwmon: (adt7475): add support for inverting the pwm output
+
+=20.../devicetree/bindings/hwmon/adt7475.txt     | 22 +++++++++++++++++++=
+
+=20.../devicetree/bindings/trivial-devices.txt   |  4 ----
+=20drivers/hwmon/adt7475.c                       | 17 ++++++++++++++
+=203 files changed, 39 insertions(+), 4 deletions(-)
+=20create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.txt=
+
+
+--=20
+2.19.1
