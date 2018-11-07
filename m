@@ -1,85 +1,213 @@
-Return-Path: <helgaas@kernel.org>
-Return-path: <helgaas@kernel.org>
-Date: Wed, 7 Nov 2018 07:38:56 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Woods, Brian" <Brian.Woods@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	Clemens Ladisch <clemens@ladisch.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Pu Wen <puwen@hygon.cn>,
-	Jia Zhang <qianyue.zj@alibaba-inc.com>,
-	Takashi Iwai <tiwai@suse.de>, Andy Whitcroft <apw@canonical.com>,
-	Colin Ian King <colin.king@canonical.com>,
-	Myron Stowe <myron.stowe@redhat.com>,
-	Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+Return-Path: <mfe@pengutronix.de>
+Return-path: <mfe@pengutronix.de>
+Date: Wed, 7 Nov 2018 10:35:29 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Trent Piepho <tpiepho@impinj.com>
+Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
+	"dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
-Message-ID: <20181107133856.GA238955@google.com>
-References: <20181102181055.130531-1-brian.woods@amd.com>
- <20181102181055.130531-3-brian.woods@amd.com>
- <20181102195925.GB160487@google.com>
- <20181102232948.GC26770@zn.tnic>
- <20181105214537.GA19420@google.com>
- <20181105215650.GG26868@zn.tnic>
- <20181106214256.GA65443@google.com>
- <20181106220059.GA4139@zn.tnic>
- <20181106232040.GA85755@google.com>
- <20181107091838.GA10835@zn.tnic>
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v2 2/2] hwmon: add generic GPIO brownout support
+Message-ID: <20181107093529.mwkjbbpipbsoraho@pengutronix.de>
+References: <20181030201147.GB28185@roeck-us.net>
+ <20181101104059.em3bvpdzo2bsyazy@pengutronix.de>
+ <e9a896c8-0025-5c4c-d1ee-ab599320fac0@roeck-us.net>
+ <20181101145312.wadkj5u2rlr5ewdq@pengutronix.de>
+ <20181101151428.GB25346@roeck-us.net>
+ <1541096469.30311.166.camel@impinj.com>
+ <20181102063803.blsavuxhi5i2vgog@pengutronix.de>
+ <1541199919.30311.224.camel@impinj.com>
+ <20181105081917.3af4v2c2wejsfnqe@pengutronix.de>
+ <1541537426.30311.271.camel@impinj.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181107091838.GA10835@zn.tnic>
+In-Reply-To: <1541537426.30311.271.camel@impinj.com>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Wed, Nov 07, 2018 at 10:18:38AM +0100, Borislav Petkov wrote:
-> On Tue, Nov 06, 2018 at 05:20:41PM -0600, Bjorn Helgaas wrote:
-> > Or maybe even drivers/acpi/thermal.c, which claims every Thermal Zone
-> > (ACPI 6.2, sec 11), would be sufficient.  I don't know what the
-> > relationship between hwmon and other thermal stuff, e.g.,
-> > Documentation/thermal/sysfs-api.txt is.  acpi/thermal.c looks tied
-> > into the drivers/thermal stuff (it registers "thermal_zone" devices),
-> > but not to hwmon.
+On 18-11-06 20:50, Trent Piepho wrote:
+> On Mon, 2018-11-05 at 09:19 +0100, Marco Felsch wrote:
+> > On 18-11-02 23:05, Trent Piepho wrote:
+> > > On Fri, 2018-11-02 at 07:38 +0100, Marco Felsch wrote:
+> > > > 
+> > > > > Interrupts types are specific to each interrupt controller, but there
+> > > > > is a standard set of flags that, AFAIK, every Linux controller uses. 
+> > > > > These include IRQ_TYPE_EDGE_BOTH, IRQ_TYPE_EDGE_RISING,
+> > > > > IRQ_TYPE_LEVEL_HIGH, and so on.
+> > > > > 
+> > > > > So you can support hardware that is inherently edge or level triggered.
+> > > > 
+> > > > I've been spoken about gpio-controllers and AFAIK there are no edge
+> > > > types. Interrupt-Controller are a different story, as you pointed out
+> > > > above.
+> > > 
+> > > You can use edge triggering with gpios.  Just try writing "rising" or
+> > > "falling" into /sys/class/gpio/gpioX/edge
+> > 
+> > Can we access the gpios trough the sysfs if they are requested by a
+> > driver?
 > 
-> Err, I still don't think I'm catching your drift but let me stop you
-> right there: amd_nb is not there only for hwmon/k10temp. It is a small
-> interface glue if you will, which exports the CPU functionality in PCI
-> config space to other consumers.
+> When I first did the sysfs interface for gpios, you could do that, but
+> David Brownell wanted it so that you can't access gpios via sysfs if a
+> driver requested them.  The compromise was that *kernel* code can
+> explicitly export to sysfs a gpio that is used by a driver (ie. also
+> requested in kernel code), but you couldn't do it just from userspace.
 > 
-> So it is not really a driver - it is used by drivers to talk/query CPU
-> settings through it.
+> But that's irrelevant here.  The point is that you can get edge
+> triggered interrupts on a gpio and if you don't believe me, just try it
+> for yourself and you'll see it works.  The sysfs interface just
+> translates into the same calls a kernel driver could make.
 > 
-> With that said, I don't think I understand all that talk about PNP IDs
-> and ACPI methods. But maybe I'm missing something...
+> > > It's level you can't do sysfs.  The irq masking necessary isn't
+> > > supported to get it to work in a useful way, i.e. without a live-lock
+> > > IRQ loop.
+> > > 
+> > > But you can in the kernel.
+> > > 
+> > > Normal process is to call gpiod_to_irq() and then use standard IRQF
+> > > flags to select level, edge, etc.
+> > 
+> > Currently I using the gpiod_to_irq() function to convert the sense gpio
+> > into a irq, but I do some magic to determine the edge. I tought there
+> > might be reasons why there are no edge defines in
+> > include/dt-bindings/gpio/gpio.h.
+> 
+> Just request the interrupt with IRQF_TRIGGER_RISING and it will work on
+> almost any SoC.  The reason you see no edge defines with gpio handles
+> is that edge and level triggering is a interrupt concept, not a gpio
+> concept.  There are no level triggers defined for gpios either.  The
+> active low/high flags just define what voltage should be considered
+> "asserted".  They aren't intended to be related to interrupts.
 
-Firmware supplies ACPI namespace.  The namespace contains an abstract
-description of the platform, including devices.  Devices are
-identified by PNP IDs, which are analogous to PCI vendor/device IDs,
-except that a device may have several generic "compatible device IDs"
-in addition to an ID unique to the device.  Devices may also contain
-methods (supplied by firmware as part of the namespace), which are
-essentially bytecode that can be executed by the ACPI interpreter in
-the kernel.  Linux drivers claim ACPI devices based on PNP ID and
-operate them using either ACPI methods (which can decouple the driver
-from device specifics) or the usual direct MMIO/IO port/MSR style.
+Okay, thanks for this hint. So a gpio marked as GPIO_ACTIVE_LOW will
+trigger a IRQF_TRIGGER_RISING requested interrupt if the gpio level
+(electrical) goes from 1->0? I didn't knew that.
 
-Here's an outline of how it *could* work:
+> 
+> > Okay, so no polling for the current solution. Let me summarize our
+> > solution:
+> >  - no polling (currently)
+> >  - dt-node specifies a gpio instead of a interrupt
+> >    -> gpio <-> irq mapping is done by gpiod_to_irq() and fails if gpio
+> >       doesn't support irq's
+> >  - more alarms per sensor
+> > 
+> > Only one last thing I tought about:
+> > 
+> > Using a flat design like you mentioned would lead into a "virtual"
+> > address conflict, since both sensors are on the same level. I tought
+> > about i2c/spi/muxes/graph-devices which don't support such "addressing"
+> > scheme.
+> 
+> You mean a temp alarm and a voltage alarm could both be reg = <1>?  I
+> don't think anything complains about that.  But it does seem
+> undesirable.
 
-  - AMD defines "AMD0001" device ID for the CPU temp sensor
-  - BIOS supplies AMD0001 devices in the ACPI namespace
-  - Each AMD0001 device has a _TMP method (supplied by BIOS and
-    specific to the CPU)
-  - Linux driver claims AMD0001 devices
-  - Driver reads temp sensors by executing _TMP methods (Linux ACPI
-    interpreter runs the bytecode)
+Yes, because both types are on the same hierarchy level. As I said it is
+more a dt-convention decision.
 
-That way when you release a new platform with different temp sensors,
-you update the BIOS AMD0001 devices and _TMP methods to know about
-them, and the old Linux driver works unchanged.
+> > hwmon_dev {
+> > 	compatible = "gpio-alarm";
+> > 	bat@0 {
+> > 		reg = <0>;
+> > 		label = "Battery Pack1 Voltage";
+> > 		type = "voltage";
+> > 		alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> 
+> Would have to be <GPIO_ALARM_LCRIT>, <GPIO_ALARM_CRIT>;
+> 
+> I'm not sure if dt bindings prefer symbolic integer constants vs
+> strings for something which is an enumeration like this.  strings seem
+> more common to me, e.g. alarm-types = "lcrit", "crit";
 
-Bjorn
+That's a good question. I term of parsing, the non string variant should
+be faster. I don't have any preference, but will try the string variant
+first ;)
+
+Regards,
+Marco
+
+> > 		alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
+> > 				&gpio3 16 GPIO_ACTIVE_LOW>;
+> > 	};
+> > 	bat@1 {
+> > 		reg = <1>;
+> > 		label = "Battery Pack2 Voltage";
+> > 		alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> > 		alarm-gpios = <&gpio3 9 GPIO_ACTIVE_LOW
+> > 				&gpio3 1 GPIO_ACTIVE_LOW>;
+> > 	};
+> > 	cputemp@0 {
+> > 		reg = <0>;
+> > 		label = "CPU Temperature Critical";
+> > 		type = "temperature";
+> > 		alarm-type = <GPIO_ALARM_GENRIC>;
+> > 		alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
+> > 	};
+> > };
+> > 
+> > Where a more structured layout don't have this "issue".
+> > 
+> > hwmon_dev {
+> > 	compatible = "gpio-alarm";
+> > 
+> > 	voltage {
+> > 		bat@0 {
+> > 			reg = <0>;
+> > 	 		label = "Battery Pack1 Voltage";
+> > 			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> > 			alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
+> > 					&gpio3 16 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 		bat@1 {
+> > 			reg = <1>;
+> > 	 		label = "Battery Pack2 Voltage";
+> > 			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> > 			alarm-gpios = <&gpio3 9 GPIO_ACTIVE_LOW
+> > 					&gpio3 1 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 	};
+> > 	temperature {
+> > 		cputemp {
+> > 			label = "CPU Temperature Critical";
+> > 			alarm-type = <GPIO_ALARM_GENRIC>;
+> > 			alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 	};
+> > };
+> > 
+> > We don't have to take this layout, we can also consider about devices:
+> > 
+> > hwmon_dev {
+> > 	compatible = "gpio-alarm";
+> > 
+> > 	dev@0 {
+> > 		reg = <0>;
+> > 		voltage {
+> > 			label = "Battery Pack1 Voltage";
+> > 			alarm-type = <GPIO_ALARM_LCRIT, GPIO_ALARM_CRIT>;
+> > 			alarm-gpios = <&gpio3 15 GPIO_ACTIVE_LOW
+> > 					&gpio3 16 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 		temperature {
+> > 			label = "Battery Pack1 Temperature Critical";
+> > 			alarm-type = <GPIO_ALARM_GENRIC>;
+> > 			alarm-gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 	};
+> > 	dev@1 {
+> > 		reg = <1>;
+> > 		temperature {
+> > 			label = "CPU Temperature Critical";
+> > 			alarm-type = <GPIO_ALARM_GENRIC>;
+> > 			alarm-gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
+> > 		};
+> > 	};
+> > };
+> > 
+> > I don't think that is a issue at all, but I don't know the dt
+> > maintainers opinion of this theme.
+> > 
+> > Regards,
+> > Marco
