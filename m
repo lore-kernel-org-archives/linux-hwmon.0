@@ -1,8 +1,8 @@
-Return-Path: <bp@alien8.de>
-Return-path: <bp@alien8.de>
-Date: Wed, 7 Nov 2018 10:18:38 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Bjorn Helgaas <helgaas@kernel.org>
+Return-Path: <helgaas@kernel.org>
+Return-path: <helgaas@kernel.org>
+Date: Wed, 7 Nov 2018 07:38:56 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
 Cc: "Woods, Brian" <Brian.Woods@amd.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
@@ -20,7 +20,7 @@ Cc: "Woods, Brian" <Brian.Woods@amd.com>,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
 Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
-Message-ID: <20181107091838.GA10835@zn.tnic>
+Message-ID: <20181107133856.GA238955@google.com>
 References: <20181102181055.130531-1-brian.woods@amd.com>
  <20181102181055.130531-3-brian.woods@amd.com>
  <20181102195925.GB160487@google.com>
@@ -30,35 +30,56 @@ References: <20181102181055.130531-1-brian.woods@amd.com>
  <20181106214256.GA65443@google.com>
  <20181106220059.GA4139@zn.tnic>
  <20181106232040.GA85755@google.com>
+ <20181107091838.GA10835@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181106232040.GA85755@google.com>
+In-Reply-To: <20181107091838.GA10835@zn.tnic>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Tue, Nov 06, 2018 at 05:20:41PM -0600, Bjorn Helgaas wrote:
-> Or maybe even drivers/acpi/thermal.c, which claims every Thermal Zone
-> (ACPI 6.2, sec 11), would be sufficient.  I don't know what the
-> relationship between hwmon and other thermal stuff, e.g.,
-> Documentation/thermal/sysfs-api.txt is.  acpi/thermal.c looks tied
-> into the drivers/thermal stuff (it registers "thermal_zone" devices),
-> but not to hwmon.
+On Wed, Nov 07, 2018 at 10:18:38AM +0100, Borislav Petkov wrote:
+> On Tue, Nov 06, 2018 at 05:20:41PM -0600, Bjorn Helgaas wrote:
+> > Or maybe even drivers/acpi/thermal.c, which claims every Thermal Zone
+> > (ACPI 6.2, sec 11), would be sufficient.  I don't know what the
+> > relationship between hwmon and other thermal stuff, e.g.,
+> > Documentation/thermal/sysfs-api.txt is.  acpi/thermal.c looks tied
+> > into the drivers/thermal stuff (it registers "thermal_zone" devices),
+> > but not to hwmon.
+> 
+> Err, I still don't think I'm catching your drift but let me stop you
+> right there: amd_nb is not there only for hwmon/k10temp. It is a small
+> interface glue if you will, which exports the CPU functionality in PCI
+> config space to other consumers.
+> 
+> So it is not really a driver - it is used by drivers to talk/query CPU
+> settings through it.
+> 
+> With that said, I don't think I understand all that talk about PNP IDs
+> and ACPI methods. But maybe I'm missing something...
 
-Err, I still don't think I'm catching your drift but let me stop you
-right there: amd_nb is not there only for hwmon/k10temp. It is a small
-interface glue if you will, which exports the CPU functionality in PCI
-config space to other consumers.
+Firmware supplies ACPI namespace.  The namespace contains an abstract
+description of the platform, including devices.  Devices are
+identified by PNP IDs, which are analogous to PCI vendor/device IDs,
+except that a device may have several generic "compatible device IDs"
+in addition to an ID unique to the device.  Devices may also contain
+methods (supplied by firmware as part of the namespace), which are
+essentially bytecode that can be executed by the ACPI interpreter in
+the kernel.  Linux drivers claim ACPI devices based on PNP ID and
+operate them using either ACPI methods (which can decouple the driver
+from device specifics) or the usual direct MMIO/IO port/MSR style.
 
-So it is not really a driver - it is used by drivers to talk/query CPU
-settings through it.
+Here's an outline of how it *could* work:
 
-With that said, I don't think I understand all that talk about PNP IDs
-and ACPI methods. But maybe I'm missing something...
+  - AMD defines "AMD0001" device ID for the CPU temp sensor
+  - BIOS supplies AMD0001 devices in the ACPI namespace
+  - Each AMD0001 device has a _TMP method (supplied by BIOS and
+    specific to the CPU)
+  - Linux driver claims AMD0001 devices
+  - Driver reads temp sensors by executing _TMP methods (Linux ACPI
+    interpreter runs the bytecode)
 
-So what's up?
+That way when you release a new platform with different temp sensors,
+you update the BIOS AMD0001 devices and _TMP methods to know about
+them, and the old Linux driver works unchanged.
 
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Bjorn
