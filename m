@@ -1,62 +1,124 @@
-Return-Path: <bp@alien8.de>
-Return-path: <bp@alien8.de>
-Date: Sat, 3 Nov 2018 00:29:48 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Woods, Brian" <Brian.Woods@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	Clemens Ladisch <clemens@ladisch.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Pu Wen <puwen@hygon.cn>,
-	Jia Zhang <qianyue.zj@alibaba-inc.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 2/4] x86/amd_nb: add support for newer PCI topologies
-Message-ID: <20181102232948.GC26770@zn.tnic>
-References: <20181102181055.130531-1-brian.woods@amd.com>
- <20181102181055.130531-3-brian.woods@amd.com>
- <20181102195925.GB160487@google.com>
+Return-Path: <SRS0=alsP=NS=vger.kernel.org=linux-kernel-owner@kernel.org>
+Date: Wed, 7 Nov 2018 12:42:53 -0800
+From: "tip-bot for Woods, Brian" <tipbot@zytor.com>
+Message-ID: <tip-dedf7dce4cec5c0abe69f4fa6938d5100398220b@git.kernel.org>
+Cc: bp@suse.de, puwen@hygon.cn, linux@roeck-us.net,
+        bhelgaas@google.com, clemens@ladisch.de, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, qianyue.zj@alibaba-inc.com,
+        jdelvare@suse.com, linux-pci@vger.kernel.org, brian.woods@amd.com,
+        tglx@linutronix.de, hpa@zytor.com, Brian.Woods@amd.com,
+        mingo@redhat.com
+Reply-To: linux@roeck-us.net, bhelgaas@google.com, bp@suse.de,
+          puwen@hygon.cn, clemens@ladisch.de, mingo@kernel.org,
+          linux-hwmon@vger.kernel.org, x86@kernel.org,
+          qianyue.zj@alibaba-inc.com, linux-kernel@vger.kernel.org,
+          tglx@linutronix.de, brian.woods@amd.com,
+          linux-pci@vger.kernel.org, jdelvare@suse.com, hpa@zytor.com,
+          mingo@redhat.com, Brian.Woods@amd.com
+In-Reply-To: <20181106200754.60722-2-brian.woods@amd.com>
+References: <20181106200754.60722-2-brian.woods@amd.com>
+To: linux-tip-commits@vger.kernel.org
+Subject: [tip:x86/amd-nb] hwmon/k10temp, x86/amd_nb: Consolidate shared
+ device IDs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Content-Disposition: inline
-In-Reply-To: <20181102195925.GB160487@google.com>
+Sender: linux-kernel-owner@vger.kernel.org
+List-Archive: <https://lore.kernel.org/lkml/>
+List-Post: <mailto:linux-kernel@vger.kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-On Fri, Nov 02, 2018 at 02:59:25PM -0500, Bjorn Helgaas wrote:
-> This isn't my code, and I'm not really objecting to these changes, but
-> from where I sit, the fact that you need this sort of vendor-specific
-> topology discovery is a little bit ugly and seems like something of a
-> maintenance issue.  You could argue that this is sort of an "AMD CPU
-> driver", which is entitled to be device-specific, and that does make
-> some sense.
+Commit-ID:  dedf7dce4cec5c0abe69f4fa6938d5100398220b
+Gitweb:     https://git.kernel.org/tip/dedf7dce4cec5c0abe69f4fa6938d5100398220b
+Author:     Woods, Brian <Brian.Woods@amd.com>
+AuthorDate: Tue, 6 Nov 2018 20:08:14 +0000
+Committer:  Borislav Petkov <bp@suse.de>
+CommitDate: Wed, 7 Nov 2018 21:28:04 +0100
 
-It is a bunch of glue code which enumerates the PCI devices a CPU
-has and other in-kernel users can use that instead of doing the
-discovery/enumeration themselves.
+hwmon/k10temp, x86/amd_nb: Consolidate shared device IDs
 
-> But device-specific code is typically packaged as a driver that uses
-> driver registration interfaces like acpi_bus_register_driver(),
-> pci_register_driver(), etc.  That gives you a consistent structure
-> and, more importantly, a framework for dealing with hotplug.  It
-> doesn't look like amd_nb.c would deal well with hot-add of CPUs.
+Consolidate shared PCI_DEVICE_IDs that were scattered through k10temp
+and amd_nb, and move them into pci_ids.
 
-If you mean physical hotadd, then that's a non-issue as, AFAIK, AMD
-doesn't support that.
+Signed-off-by: Brian Woods <brian.woods@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+CC: Bjorn Helgaas <bhelgaas@google.com>
+CC: Clemens Ladisch <clemens@ladisch.de>
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Jean Delvare <jdelvare@suse.com>
+CC: Jia Zhang <qianyue.zj@alibaba-inc.com>
+CC: <linux-hwmon@vger.kernel.org>
+CC: <linux-pci@vger.kernel.org>
+CC: Pu Wen <puwen@hygon.cn>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: x86-ml <x86@kernel.org>
+Link: http://lkml.kernel.org/r/20181106200754.60722-2-brian.woods@amd.com
+---
+ arch/x86/kernel/amd_nb.c | 3 +--
+ drivers/hwmon/k10temp.c  | 9 +--------
+ include/linux/pci_ids.h  | 2 ++
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-Now, TBH I've never tried soft-offlining the cores of a node and then
-check whether using the PCI devices of that node would work.
-
-Now, I don't mind this getting converted to a proper PCI driver as long
-as it is not a module as it has to be present at all times. Other than
-that, I'm a happy camper.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index a6eca647bc76..19d489ee2b1e 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -11,13 +11,12 @@
+ #include <linux/errno.h>
+ #include <linux/export.h>
+ #include <linux/spinlock.h>
++#include <linux/pci_ids.h>
+ #include <asm/amd_nb.h>
+ 
+ #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
+ #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
+-#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+ #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+-#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
+ 
+ /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 2cef0c37ff6f..bc6871c8dd4e 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -23,6 +23,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/pci_ids.h>
+ #include <asm/amd_nb.h>
+ #include <asm/processor.h>
+ 
+@@ -41,14 +42,6 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define PCI_DEVICE_ID_AMD_15H_M70H_NB_F3	0x15b3
+ #endif
+ 
+-#ifndef PCI_DEVICE_ID_AMD_17H_DF_F3
+-#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+-#endif
+-
+-#ifndef PCI_DEVICE_ID_AMD_17H_M10H_DF_F3
+-#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3	0x15eb
+-#endif
+-
+ /* CPUID function 0x80000001, ebx */
+ #define CPUID_PKGTYPE_MASK	0xf0000000
+ #define CPUID_PKGTYPE_F		0x00000000
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 69f0abe1ba1a..78d5cd29778a 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -545,6 +545,8 @@
+ #define PCI_DEVICE_ID_AMD_16H_NB_F4	0x1534
+ #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F3 0x1583
+ #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
++#define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
++#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+ #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+ #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
