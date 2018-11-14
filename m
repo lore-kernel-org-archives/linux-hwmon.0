@@ -1,19 +1,19 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:36254 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:37832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733164AbeKOI3X (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 03:29:23 -0500
+        id S1728165AbeKOIan (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 03:30:43 -0500
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.18 22/59] hwmon: (ibmpowernv) Remove bogus __init annotations
-Date: Wed, 14 Nov 2018 17:22:54 -0500
-Message-Id: <20181114222335.99339-22-sashal@kernel.org>
-In-Reply-To: <20181114222335.99339-1-sashal@kernel.org>
-References: <20181114222335.99339-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 12/27] hwmon: (ibmpowernv) Remove bogus __init annotations
+Date: Wed, 14 Nov 2018 17:25:01 -0500
+Message-Id: <20181114222520.99926-12-sashal@kernel.org>
+In-Reply-To: <20181114222520.99926-1-sashal@kernel.org>
+References: <20181114222520.99926-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -40,10 +40,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index f829dadfd5a0..2968d527bdf6 100644
+index 5ccdd0b52650..b38f4951c94e 100644
 --- a/drivers/hwmon/ibmpowernv.c
 +++ b/drivers/hwmon/ibmpowernv.c
-@@ -129,7 +129,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
+@@ -126,7 +126,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
  	return sprintf(buf, "%s\n", sdata->label);
  }
  
@@ -52,7 +52,7 @@ index f829dadfd5a0..2968d527bdf6 100644
  {
  	int cpu;
  
-@@ -140,9 +140,8 @@ static int __init get_logical_cpu(int hwcpu)
+@@ -137,9 +137,8 @@ static int __init get_logical_cpu(int hwcpu)
  	return -ENOENT;
  }
  
