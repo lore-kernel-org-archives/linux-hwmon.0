@@ -1,60 +1,43 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35090 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726780AbeKNDLv (ORCPT
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43829 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727522AbeKNNuV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Nov 2018 22:11:51 -0500
-Date: Tue, 13 Nov 2018 09:12:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Nicolin Chen <nicoleotsuka@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon (lm63) Do not overwrite data->kind
-Message-ID: <20181113171249.GA21521@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Wed, 14 Nov 2018 08:50:21 -0500
+From: Nicolin Chen <nicoleotsuka@gmail.com>
+To: jdelvare@suse.com, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (ina2xx) Fix current value calculation
+Date: Tue, 13 Nov 2018 19:48:54 -0800
+Message-Id: <20181114034854.20035-1-nicoleotsuka@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 12, 2018 at 08:36:56PM -0800, Nicolin Chen wrote:
-> According to the code right before the removed line, data->kind
-> should be either from DT or from id pointer. So there shouldn't
-> be an additional overwriting after the if-else statement.
-> 
-> So this patch just removes the overwriting line.
-> 
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
-> Guenter,
->     I have not really tested this change but still sent it out
->     since it looks obvious. Please feel free to drop it if you
->     have concern at an untested change. Thanks.
+The current register (04h) has a sign bit at MSB. The comments
+for this calculation also mention that it's a signed register.
 
-Good find. You are right, the patch introducing the DT code didn't
-really do anything. Given that no one (including me) noticed that
-commit b25f663b91f1a was effectively a no-op, I'll queue this up
-for the next kernel release.
+However, the regval is unsigned type so result of calculation
+turns out to be an incorrect value when current is negative.
 
-Thanks,
-Guenter
+This patch simply fixes this by adding a casting to s16.
 
-> 
->  drivers/hwmon/lm63.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
-> index 4c1770920d29..eac54b9cdeec 100644
-> --- a/drivers/hwmon/lm63.c
-> +++ b/drivers/hwmon/lm63.c
-> @@ -1120,7 +1120,6 @@ static int lm63_probe(struct i2c_client *client,
->  		data->kind = (enum chips)of_device_get_match_data(&client->dev);
->  	else
->  		data->kind = id->driver_data;
-> -	data->kind = id->driver_data;
->  	if (data->kind == lm64)
->  		data->temp2_offset = 16000;
->  
-> -- 
-> 2.17.1
-> 
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+ drivers/hwmon/ina2xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index c2252cf452f5..07ee19573b3f 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -274,7 +274,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+ 		break;
+ 	case INA2XX_CURRENT:
+ 		/* signed register, result in mA */
+-		val = regval * data->current_lsb_uA;
++		val = (s16)regval * data->current_lsb_uA;
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_CALIBRATION:
+-- 
+2.17.1
