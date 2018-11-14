@@ -1,19 +1,19 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:38504 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:38848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389183AbeKOIbM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 03:31:12 -0500
+        id S2389353AbeKOIbc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 03:31:32 -0500
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.9 08/13] hwmon: (ibmpowernv) Remove bogus __init annotations
-Date: Wed, 14 Nov 2018 17:25:49 -0500
-Message-Id: <20181114222558.100213-8-sashal@kernel.org>
-In-Reply-To: <20181114222558.100213-1-sashal@kernel.org>
-References: <20181114222558.100213-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 6/8] hwmon: (ibmpowernv) Remove bogus __init annotations
+Date: Wed, 14 Nov 2018 17:26:12 -0500
+Message-Id: <20181114222618.100378-6-sashal@kernel.org>
+In-Reply-To: <20181114222618.100378-1-sashal@kernel.org>
+References: <20181114222618.100378-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -40,7 +40,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index 6d2e6605751c..18b3c8f258bf 100644
+index 55b5a8ff1cfe..ca3aa28977bc 100644
 --- a/drivers/hwmon/ibmpowernv.c
 +++ b/drivers/hwmon/ibmpowernv.c
 @@ -114,7 +114,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
