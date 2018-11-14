@@ -1,65 +1,68 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:43032 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730102AbeK1CyV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Nov 2018 21:54:21 -0500
-MIME-Version: 1.0
-References: <20181114212843.16954-1-bp@alien8.de> <20181114212843.16954-4-bp@alien8.de>
-In-Reply-To: <20181114212843.16954-4-bp@alien8.de>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 27 Nov 2018 17:55:49 +0200
-Message-ID: <CAHp75Vca7Vn5To5GWb_EtZ1ZKyzWnL2Wv3M3wrKVX=X8qmxUfw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] x86/cpuid: Make cpuinfo_x86.x86_model_id global
-To: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Received: from mail.kernel.org ([198.145.29.99]:36254 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733164AbeKOI3X (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 03:29:23 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 4.18 22/59] hwmon: (ibmpowernv) Remove bogus __init annotations
+Date: Wed, 14 Nov 2018 17:22:54 -0500
+Message-Id: <20181114222335.99339-22-sashal@kernel.org>
+In-Reply-To: <20181114222335.99339-1-sashal@kernel.org>
+References: <20181114222335.99339-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 14, 2018 at 11:29 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> From: Borislav Petkov <bp@suse.de>
->
-> ... and __ro_after_init. Since the brand string is being read earlier
-> now, in early_identify_cpu(), get_model_name() needs to read out the
-> extended CPUID level for the brand string. This is temporary only, until
-> the full CPUID read out has been added.
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
->  drivers/platform/x86/intel_ips.c     |  6 +++---
->  15 files changed, 35 insertions(+), 35 deletions(-)
+[ Upstream commit e3e61f01d755188cb6c2dcf5a244b9c0937c258e ]
 
+If gcc decides not to inline make_sensor_label():
 
+    WARNING: vmlinux.o(.text+0x4df549c): Section mismatch in reference from the function .create_device_attrs() to the function .init.text:.make_sensor_label()
+    The function .create_device_attrs() references
+    the function __init .make_sensor_label().
+    This is often because .create_device_attrs lacks a __init
+    annotation or the annotation of .make_sensor_label is wrong.
 
-> diff --git a/drivers/platform/x86/intel_ips.c b/drivers/platform/x86/intel_ips.c
-> index 225638a1b09e..4309f198cbad 100644
-> --- a/drivers/platform/x86/intel_ips.c
-> +++ b/drivers/platform/x86/intel_ips.c
-> @@ -1367,11 +1367,11 @@ static struct ips_mcp_limits *ips_detect_cpu(struct ips_driver *ips)
->         else
->                 ips->turbo_toggle_allowed = false;
->
-> -       if (strstr(boot_cpu_data.x86_model_id, "CPU       M"))
-> +       if (strstr(x86_model_id, "CPU       M"))
->                 limits = &ips_sv_limits;
-> -       else if (strstr(boot_cpu_data.x86_model_id, "CPU       L"))
-> +       else if (strstr(x86_model_id, "CPU       L"))
->                 limits = &ips_lv_limits;
-> -       else if (strstr(boot_cpu_data.x86_model_id, "CPU       U"))
-> +       else if (strstr(x86_model_id, "CPU       U"))
->                 limits = &ips_ulv_limits;
->         else {
->                 dev_info(ips->dev, "No CPUID match found.\n");
+As .probe() can be called after freeing of __init memory, all __init
+annotiations in the driver are bogus, and should be removed.
 
-Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/ibmpowernv.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-for PDx86 bits
-
---
-With Best Regards,
-Andy Shevchenko
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index f829dadfd5a0..2968d527bdf6 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -129,7 +129,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
+ 	return sprintf(buf, "%s\n", sdata->label);
+ }
+ 
+-static int __init get_logical_cpu(int hwcpu)
++static int get_logical_cpu(int hwcpu)
+ {
+ 	int cpu;
+ 
+@@ -140,9 +140,8 @@ static int __init get_logical_cpu(int hwcpu)
+ 	return -ENOENT;
+ }
+ 
+-static void __init make_sensor_label(struct device_node *np,
+-				     struct sensor_data *sdata,
+-				     const char *label)
++static void make_sensor_label(struct device_node *np,
++			      struct sensor_data *sdata, const char *label)
+ {
+ 	u32 id;
+ 	size_t n;
+-- 
+2.17.1
