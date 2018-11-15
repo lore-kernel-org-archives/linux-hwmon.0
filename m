@@ -1,51 +1,52 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36777 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726821AbeKOP3o (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 10:29:44 -0500
-Received: by mail-pl1-f193.google.com with SMTP id y6-v6so1342749plt.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Nov 2018 21:23:24 -0800 (PST)
-Date: Wed, 14 Nov 2018 21:23:20 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Huacai Chen <chenhc@lemote.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>, Yao Wang <wangyao@lemote.com>
+Received: from smtpbg202.qq.com ([184.105.206.29]:58200 "EHLO smtpbg202.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728280AbeKOSSE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 13:18:04 -0500
+From: "=?utf-8?B?6ZmI5Y2O5omN?=" <chenhc@lemote.com>
+To: "=?utf-8?B?R3VlbnRlciBSb2Vjaw==?=" <linux@roeck-us.net>
+Cc: "=?utf-8?B?SmVhbiBEZWx2YXJl?=" <jdelvare@suse.com>,
+        "=?utf-8?B?bGludXgtaHdtb24=?=" <linux-hwmon@vger.kernel.org>,
+        "=?utf-8?B?RnV4aW4gWmhhbmc=?=" <zhangfx@lemote.com>,
+        "=?utf-8?B?WWFvIFdhbmc=?=" <wangyao@lemote.com>
 Subject: Re: [PATCH] hwmon: (w83795) temp4_type has writable permission
-Message-ID: <20181115052320.GA5535@roeck-us.net>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+Date: Thu, 15 Nov 2018 16:11:10 +0800
+Message-ID: <tencent_73462BD43F9BC4D94258BB95@qq.com>
 References: <1542249898-20406-1-git-send-email-chenhc@lemote.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1542249898-20406-1-git-send-email-chenhc@lemote.com>
+        <20181115052320.GA5535@roeck-us.net>
+In-Reply-To: <20181115052320.GA5535@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 15, 2018 at 10:44:57AM +0800, Huacai Chen wrote:
-> Signed-off-by: Yao Wang <wangyao@lemote.com>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-
-Sorry, that really lacks context. Please add some details.
-
-Guenter
-
-> ---
->  drivers/hwmon/w83795.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
-> index 49276bb..1bb80f9 100644
-> --- a/drivers/hwmon/w83795.c
-> +++ b/drivers/hwmon/w83795.c
-> @@ -1691,7 +1691,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
->   * somewhere else in the code
->   */
->  #define SENSOR_ATTR_TEMP(index) {					\
-> -	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 4 ? S_IWUSR : 0), \
-> +	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 5 ? S_IWUSR : 0), \
->  		show_temp_mode, store_temp_mode, NOT_USED, index - 1),	\
->  	SENSOR_ATTR_2(temp##index##_input, S_IRUGO, show_temp,		\
->  		NULL, TEMP_READ, index - 1),				\
-> -- 
-> 2.7.0
-> 
+Qm90aCBkYXRhc2hlZXQgYW5kIHRoZSBjb21tZW50cyBvZiBzdG9yZV90ZW1wX21vZGUoKSB0
+ZWxsIHVzIHRoYXQgdGVtcDF+NCBpcyB3cml0YWJsZSwgc28gZml4IGl0Lg0KDQpIdWFjYWkN
+CiANCi0tLS0tLS0tLS0tLS0tLS0tLSBPcmlnaW5hbCAtLS0tLS0tLS0tLS0tLS0tLS0NCkZy
+b206ICAiR3VlbnRlciBSb2VjayI8bGludXhAcm9lY2stdXMubmV0PjsNCkRhdGU6ICBUaHUs
+IE5vdiAxNSwgMjAxOCAwMToyMyBQTQ0KVG86ICAiSHVhY2FpIENoZW4iPGNoZW5oY0BsZW1v
+dGUuY29tPjsNCkNjOiAgIkplYW4gRGVsdmFyZSI8amRlbHZhcmVAc3VzZS5jb20+OyAibGlu
+dXgtaHdtb24iPGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz47ICJGdXhpbiBaaGFuZyI8
+emhhbmdmeEBsZW1vdGUuY29tPjsgIllhbyBXYW5nIjx3YW5neWFvQGxlbW90ZS5jb20+Ow0K
+U3ViamVjdDogIFJlOiBbUEFUQ0hdIGh3bW9uOiAodzgzNzk1KSB0ZW1wNF90eXBlIGhhcyB3
+cml0YWJsZSBwZXJtaXNzaW9uDQogDQpPbiBUaHUsIE5vdiAxNSwgMjAxOCBhdCAxMDo0NDo1
+N0FNICswODAwLCBIdWFjYWkgQ2hlbiB3cm90ZToNCj4gU2lnbmVkLW9mZi1ieTogWWFvIFdh
+bmcgPHdhbmd5YW9AbGVtb3RlLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSHVhY2FpIENoZW4g
+PGNoZW5oY0BsZW1vdGUuY29tPg0KDQpTb3JyeSwgdGhhdCByZWFsbHkgbGFja3MgY29udGV4
+dC4gUGxlYXNlIGFkZCBzb21lIGRldGFpbHMuDQoNCkd1ZW50ZXINCg0KPiAtLS0NCj4gIGRy
+aXZlcnMvaHdtb24vdzgzNzk1LmMgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
+cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3
+bW9uL3c4Mzc5NS5jIGIvZHJpdmVycy9od21vbi93ODM3OTUuYw0KPiBpbmRleCA0OTI3NmJi
+Li4xYmI4MGY5IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2h3bW9uL3c4Mzc5NS5jDQo+ICsr
+KyBiL2RyaXZlcnMvaHdtb24vdzgzNzk1LmMNCj4gQEAgLTE2OTEsNyArMTY5MSw3IEBAIHN0
+b3JlX3NmX3NldHVwKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1
+dGUgKmF0dHIsDQo+ICAgKiBzb21ld2hlcmUgZWxzZSBpbiB0aGUgY29kZQ0KPiAgICovDQo+
+ICAjZGVmaW5lIFNFTlNPUl9BVFRSX1RFTVAoaW5kZXgpIHsJXA0KPiAtCVNFTlNPUl9BVFRS
+XzIodGVtcCMjaW5kZXgjI190eXBlLCBTX0lSVUdPIHwgKGluZGV4IDwgNCA/IFNfSVdVU1Ig
+OiAwKSwgXA0KPiArCVNFTlNPUl9BVFRSXzIodGVtcCMjaW5kZXgjI190eXBlLCBTX0lSVUdP
+IHwgKGluZGV4IDwgNSA/IFNfSVdVU1IgOiAwKSwgXA0KPiAgc2hvd190ZW1wX21vZGUsIHN0
+b3JlX3RlbXBfbW9kZSwgTk9UX1VTRUQsIGluZGV4IC0gMSksCVwNCj4gIFNFTlNPUl9BVFRS
+XzIodGVtcCMjaW5kZXgjI19pbnB1dCwgU19JUlVHTywgc2hvd190ZW1wLAlcDQo+ICBOVUxM
+LCBURU1QX1JFQUQsIGluZGV4IC0gMSksCVwNCj4gLS0gDQo+IDIuNy4wDQo+
