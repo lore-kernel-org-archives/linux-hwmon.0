@@ -1,52 +1,95 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from smtpbg202.qq.com ([184.105.206.29]:58200 "EHLO smtpbg202.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728280AbeKOSSE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 13:18:04 -0500
-From: "=?utf-8?B?6ZmI5Y2O5omN?=" <chenhc@lemote.com>
-To: "=?utf-8?B?R3VlbnRlciBSb2Vjaw==?=" <linux@roeck-us.net>
-Cc: "=?utf-8?B?SmVhbiBEZWx2YXJl?=" <jdelvare@suse.com>,
-        "=?utf-8?B?bGludXgtaHdtb24=?=" <linux-hwmon@vger.kernel.org>,
-        "=?utf-8?B?RnV4aW4gWmhhbmc=?=" <zhangfx@lemote.com>,
-        "=?utf-8?B?WWFvIFdhbmc=?=" <wangyao@lemote.com>
-Subject: Re: [PATCH] hwmon: (w83795) temp4_type has writable permission
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: base64
-Date: Thu, 15 Nov 2018 16:11:10 +0800
-Message-ID: <tencent_73462BD43F9BC4D94258BB95@qq.com>
-References: <1542249898-20406-1-git-send-email-chenhc@lemote.com>
-        <20181115052320.GA5535@roeck-us.net>
-In-Reply-To: <20181115052320.GA5535@roeck-us.net>
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36083 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbeKOP6O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 10:58:14 -0500
+Received: by mail-pg1-f196.google.com with SMTP id n2so1322204pgm.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Nov 2018 21:51:49 -0800 (PST)
+From: Huacai Chen <chenhc@lemote.com>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V5 0/8] MIPS: Loongson: new features and improvements
+Date: Thu, 15 Nov 2018 13:50:49 +0800
+Message-Id: <1542261057-6019-1-git-send-email-chenhc@lemote.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Qm90aCBkYXRhc2hlZXQgYW5kIHRoZSBjb21tZW50cyBvZiBzdG9yZV90ZW1wX21vZGUoKSB0
-ZWxsIHVzIHRoYXQgdGVtcDF+NCBpcyB3cml0YWJsZSwgc28gZml4IGl0Lg0KDQpIdWFjYWkN
-CiANCi0tLS0tLS0tLS0tLS0tLS0tLSBPcmlnaW5hbCAtLS0tLS0tLS0tLS0tLS0tLS0NCkZy
-b206ICAiR3VlbnRlciBSb2VjayI8bGludXhAcm9lY2stdXMubmV0PjsNCkRhdGU6ICBUaHUs
-IE5vdiAxNSwgMjAxOCAwMToyMyBQTQ0KVG86ICAiSHVhY2FpIENoZW4iPGNoZW5oY0BsZW1v
-dGUuY29tPjsNCkNjOiAgIkplYW4gRGVsdmFyZSI8amRlbHZhcmVAc3VzZS5jb20+OyAibGlu
-dXgtaHdtb24iPGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZz47ICJGdXhpbiBaaGFuZyI8
-emhhbmdmeEBsZW1vdGUuY29tPjsgIllhbyBXYW5nIjx3YW5neWFvQGxlbW90ZS5jb20+Ow0K
-U3ViamVjdDogIFJlOiBbUEFUQ0hdIGh3bW9uOiAodzgzNzk1KSB0ZW1wNF90eXBlIGhhcyB3
-cml0YWJsZSBwZXJtaXNzaW9uDQogDQpPbiBUaHUsIE5vdiAxNSwgMjAxOCBhdCAxMDo0NDo1
-N0FNICswODAwLCBIdWFjYWkgQ2hlbiB3cm90ZToNCj4gU2lnbmVkLW9mZi1ieTogWWFvIFdh
-bmcgPHdhbmd5YW9AbGVtb3RlLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSHVhY2FpIENoZW4g
-PGNoZW5oY0BsZW1vdGUuY29tPg0KDQpTb3JyeSwgdGhhdCByZWFsbHkgbGFja3MgY29udGV4
-dC4gUGxlYXNlIGFkZCBzb21lIGRldGFpbHMuDQoNCkd1ZW50ZXINCg0KPiAtLS0NCj4gIGRy
-aXZlcnMvaHdtb24vdzgzNzk1LmMgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3
-bW9uL3c4Mzc5NS5jIGIvZHJpdmVycy9od21vbi93ODM3OTUuYw0KPiBpbmRleCA0OTI3NmJi
-Li4xYmI4MGY5IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2h3bW9uL3c4Mzc5NS5jDQo+ICsr
-KyBiL2RyaXZlcnMvaHdtb24vdzgzNzk1LmMNCj4gQEAgLTE2OTEsNyArMTY5MSw3IEBAIHN0
-b3JlX3NmX3NldHVwKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1
-dGUgKmF0dHIsDQo+ICAgKiBzb21ld2hlcmUgZWxzZSBpbiB0aGUgY29kZQ0KPiAgICovDQo+
-ICAjZGVmaW5lIFNFTlNPUl9BVFRSX1RFTVAoaW5kZXgpIHsJXA0KPiAtCVNFTlNPUl9BVFRS
-XzIodGVtcCMjaW5kZXgjI190eXBlLCBTX0lSVUdPIHwgKGluZGV4IDwgNCA/IFNfSVdVU1Ig
-OiAwKSwgXA0KPiArCVNFTlNPUl9BVFRSXzIodGVtcCMjaW5kZXgjI190eXBlLCBTX0lSVUdP
-IHwgKGluZGV4IDwgNSA/IFNfSVdVU1IgOiAwKSwgXA0KPiAgc2hvd190ZW1wX21vZGUsIHN0
-b3JlX3RlbXBfbW9kZSwgTk9UX1VTRUQsIGluZGV4IC0gMSksCVwNCj4gIFNFTlNPUl9BVFRS
-XzIodGVtcCMjaW5kZXgjI19pbnB1dCwgU19JUlVHTywgc2hvd190ZW1wLAlcDQo+ICBOVUxM
-LCBURU1QX1JFQUQsIGluZGV4IC0gMSksCVwNCj4gLS0gDQo+IDIuNy4wDQo+
+This patchset is prepared for the next 4.21 release for Linux/MIPS. It
+add Loongson-3A R2.1 basic support, adds "model name" and "CPU MHz"
+knobs in /proc/cpuinfo which is needed by some userspace tools, adds
+Loongson-3 kexec/kdump support, and introduces WAR_LLSC_MB to improve
+stability.
+
+V1 -> V2:
+1, Add Loongson-3A R3.1 basic support.
+2, Fix CPU UART irq delivery problem.
+3, Improve code and descriptions (Thank James Hogan).
+4, Sync the code to upstream.
+
+V2 -> V3:
+1, Remove merged patches.
+2, Improve code and descriptions (Thank James Hogan).
+3, Sync the code to upstream.
+
+V3 -> V4:
+1, Remove merged patches.
+2, Improve kdump support.
+3, Sync the code to upstream.
+
+V4 -> V5:
+1, Remove merged patches.
+2, Add Loongson-3A R2.1 support.
+3, Improve kexec/kdump support.
+4, Sync the code to upstream.
+
+Huacai Chen(8):
+ MIPS: Loongson: Add Loongson-3A R2.1 basic support.
+ MIPS: c-r4k: Add r4k_blast_scache_node for Loongson-3.
+ MIPS: Ensure pmd_present() returns false after pmd_mknotpresent().
+ MIPS: Add __cpu_full_name[] to make CPU names more human-readable.
+ MIPS: Align kernel load address to 64KB.
+ MIPS: Reserve extra memory for crash dump.
+ MIPS: Loongson: Add kexec/kdump support.
+ MIPS: Loongson: Introduce and use WAR_LLSC_MB.
+
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+ arch/mips/boot/compressed/calc_vmlinuz_load_addr.c |  7 +-
+ arch/mips/include/asm/atomic.h                     | 36 ++++++--
+ arch/mips/include/asm/barrier.h                    |  6 ++
+ arch/mips/include/asm/bitops.h                     | 15 ++++
+ arch/mips/include/asm/cmpxchg.h                    |  9 +-
+ arch/mips/include/asm/cpu-info.h                   |  2 +
+ arch/mips/include/asm/cpu.h                        |  3 +-
+ arch/mips/include/asm/edac.h                       |  5 +-
+ arch/mips/include/asm/futex.h                      | 18 ++--
+ arch/mips/include/asm/local.h                      | 10 ++-
+ arch/mips/include/asm/mach-loongson64/boot_param.h |  1 +
+ .../asm/mach-loongson64/kernel-entry-init.h        |  4 +-
+ arch/mips/include/asm/mach-loongson64/mmzone.h     |  1 +
+ arch/mips/include/asm/mmzone.h                     |  8 ++
+ arch/mips/include/asm/pgtable-64.h                 |  5 ++
+ arch/mips/include/asm/pgtable.h                    |  5 +-
+ arch/mips/include/asm/r4kcache.h                   | 21 +++++
+ arch/mips/include/asm/time.h                       |  2 +
+ arch/mips/kernel/cpu-probe.c                       | 28 +++++--
+ arch/mips/kernel/idle.c                            |  2 +-
+ arch/mips/kernel/proc.c                            |  6 ++
+ arch/mips/kernel/relocate_kernel.S                 | 26 ++++++
+ arch/mips/kernel/setup.c                           | 51 ++++++++++++
+ arch/mips/kernel/syscall.c                         |  2 +
+ arch/mips/kernel/time.c                            |  2 +
+ arch/mips/loongson64/Platform                      |  3 +
+ arch/mips/loongson64/common/env.c                  | 23 +++++-
+ arch/mips/loongson64/common/reset.c                | 95 ++++++++++++++++++++++
+ arch/mips/loongson64/loongson-3/smp.c              |  9 +-
+ arch/mips/loongson64/loongson-3/smp.h              |  1 +
+ arch/mips/mm/c-r4k.c                               | 46 +++++++++--
+ arch/mips/mm/tlbex.c                               | 11 +++
+ drivers/platform/mips/cpu_hwmon.c                  |  3 +-
+ 33 files changed, 421 insertions(+), 45 deletions(-)
+--
+2.7.0
