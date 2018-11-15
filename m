@@ -1,181 +1,185 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:34317 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728647AbeKOP6v (ORCPT
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:44396 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727045AbeKOP7L (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 10:58:51 -0500
-Received: by mail-pl1-f196.google.com with SMTP id f12-v6so8965817plo.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Nov 2018 21:52:26 -0800 (PST)
+        Thu, 15 Nov 2018 10:59:11 -0500
 From: Huacai Chen <chenhc@lemote.com>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
         Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <james.hogan@mips.com>, linux-mips@linux-mips.org,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-Subject: [PATCH V5 1/8] MIPS: Loongson: Add Loongson-3A R2.1 basic support
-Date: Thu, 15 Nov 2018 13:50:50 +0800
-Message-Id: <1542261057-6019-2-git-send-email-chenhc@lemote.com>
+        "# 3 . 15+" <stable@vger.kernel.org>
+Subject: [PATCH V5 2/8] MIPS: c-r4k: Add r4k_blast_scache_node for Loongson-3
+Date: Thu, 15 Nov 2018 13:50:51 +0800
+Message-Id: <1542261057-6019-3-git-send-email-chenhc@lemote.com>
 In-Reply-To: <1542261057-6019-1-git-send-email-chenhc@lemote.com>
 References: <1542261057-6019-1-git-send-email-chenhc@lemote.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Loongson-3A R2.1 is the bugfix revision of Loongson-3A R2.
+For multi-node Loongson-3 (NUMA configuration), r4k_blast_scache() can
+only flush Node-0's scache. So we add r4k_blast_scache_node() by using
+(CAC_BASE | (node_id << NODE_ADDRSPACE_SHIFT)) instead of CKSEG0 as the
+start address.
 
-All Loongson-3 CPU family:
-
-Code-name         Brand-name       PRId
-Loongson-3A R1    Loongson-3A1000  0x6305
-Loongson-3A R2    Loongson-3A2000  0x6308
-Loongson-3A R2.1  Loongson-3A2000  0x630c
-Loongson-3A R3    Loongson-3A3000  0x6309
-Loongson-3A R3.1  Loongson-3A3000  0x630d
-Loongson-3B R1    Loongson-3B1000  0x6306
-Loongson-3B R2    Loongson-3B1500  0x6307
-
+Cc: <stable@vger.kernel.org> # 3.15+
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <james.hogan@mips.com>
-Cc: linux-mips@linux-mips.org
-Cc: Fuxin Zhang <zhangfx@lemote.com>
-Cc: Zhangjin Wu <wuzhangjin@gmail.com>
-Cc: Huacai Chen <chenhuacai@gmail.com>
 ---
- arch/mips/include/asm/cpu.h                               | 3 ++-
- arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
- arch/mips/kernel/cpu-probe.c                              | 3 ++-
- arch/mips/kernel/idle.c                                   | 2 +-
- arch/mips/loongson64/common/env.c                         | 3 ++-
- arch/mips/loongson64/loongson-3/smp.c                     | 3 ++-
- arch/mips/mm/c-r4k.c                                      | 2 +-
- drivers/platform/mips/cpu_hwmon.c                         | 3 ++-
- 8 files changed, 14 insertions(+), 9 deletions(-)
+ arch/mips/include/asm/mach-loongson64/mmzone.h |  1 +
+ arch/mips/include/asm/mmzone.h                 |  8 +++++
+ arch/mips/include/asm/r4kcache.h               | 25 +++++++++++++++
+ arch/mips/mm/c-r4k.c                           | 44 ++++++++++++++++++++++----
+ 4 files changed, 71 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index dacbdb8..532b49b 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -248,8 +248,9 @@
- #define PRID_REV_LOONGSON3A_R1		0x0005
- #define PRID_REV_LOONGSON3B_R1		0x0006
- #define PRID_REV_LOONGSON3B_R2		0x0007
--#define PRID_REV_LOONGSON3A_R2		0x0008
-+#define PRID_REV_LOONGSON3A_R2_0	0x0008
- #define PRID_REV_LOONGSON3A_R3_0	0x0009
-+#define PRID_REV_LOONGSON3A_R2_1	0x000c
- #define PRID_REV_LOONGSON3A_R3_1	0x000d
+diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
+index c9f7e23..59c8b11 100644
+--- a/arch/mips/include/asm/mach-loongson64/mmzone.h
++++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
+@@ -21,6 +21,7 @@
+ #define NODE3_ADDRSPACE_OFFSET 0x300000000000UL
  
- /*
-diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-index cbac603..b5e288a 100644
---- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-+++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-@@ -31,7 +31,7 @@
- 	/* Enable STFill Buffer */
- 	mfc0	t0, CP0_PRID
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64 | PRID_REV_LOONGSON3A_R2)
-+	slti	t0, (PRID_IMP_LOONGSON_64 | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 1f
- 	mfc0	t0, CP0_CONFIG6
- 	or	t0, 0x100
-@@ -60,7 +60,7 @@
- 	/* Enable STFill Buffer */
- 	mfc0	t0, CP0_PRID
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64 | PRID_REV_LOONGSON3A_R2)
-+	slti	t0, (PRID_IMP_LOONGSON_64 | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 1f
- 	mfc0	t0, CP0_CONFIG6
- 	or	t0, 0x100
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 71dcef8..65dc2e6 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1871,7 +1871,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 	switch (c->processor_id & PRID_IMP_MASK) {
- 	case PRID_IMP_LOONGSON_64:  /* Loongson-2/3 */
- 		switch (c->processor_id & PRID_REV_MASK) {
--		case PRID_REV_LOONGSON3A_R2:
-+		case PRID_REV_LOONGSON3A_R2_0:
-+		case PRID_REV_LOONGSON3A_R2_1:
- 			c->cputype = CPU_LOONGSON3;
- 			__cpu_name[cpu] = "ICT Loongson-3";
- 			set_elf_platform(cpu, "loongson3a");
-diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-index 4d335b1..695f554 100644
---- a/arch/mips/kernel/idle.c
-+++ b/arch/mips/kernel/idle.c
-@@ -184,7 +184,7 @@ void __init check_wait(void)
- 		cpu_wait = r4k_wait;
- 		break;
- 	case CPU_LOONGSON3:
--		if ((c->processor_id & PRID_REV_MASK) >= PRID_REV_LOONGSON3A_R2)
-+		if ((c->processor_id & PRID_REV_MASK) >= PRID_REV_LOONGSON3A_R2_0)
- 			cpu_wait = r4k_wait;
- 		break;
+ #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
++#define nid_to_addrbase(nid) ((nid) << NODE_ADDRSPACE_SHIFT)
  
-diff --git a/arch/mips/loongson64/common/env.c b/arch/mips/loongson64/common/env.c
-index 8f68ee0..72e5f8f 100644
---- a/arch/mips/loongson64/common/env.c
-+++ b/arch/mips/loongson64/common/env.c
-@@ -197,7 +197,8 @@ void __init prom_init_env(void)
- 			cpu_clock_freq = 797000000;
- 			break;
- 		case PRID_REV_LOONGSON3A_R1:
--		case PRID_REV_LOONGSON3A_R2:
-+		case PRID_REV_LOONGSON3A_R2_0:
-+		case PRID_REV_LOONGSON3A_R2_1:
- 		case PRID_REV_LOONGSON3A_R3_0:
- 		case PRID_REV_LOONGSON3A_R3_1:
- 			cpu_clock_freq = 900000000;
-diff --git a/arch/mips/loongson64/loongson-3/smp.c b/arch/mips/loongson64/loongson-3/smp.c
-index b5c1e0a..8fba0aa 100644
---- a/arch/mips/loongson64/loongson-3/smp.c
-+++ b/arch/mips/loongson64/loongson-3/smp.c
-@@ -682,7 +682,8 @@ void play_dead(void)
- 		play_dead_at_ckseg1 =
- 			(void *)CKSEG1ADDR((unsigned long)loongson3a_r1_play_dead);
- 		break;
--	case PRID_REV_LOONGSON3A_R2:
-+	case PRID_REV_LOONGSON3A_R2_0:
-+	case PRID_REV_LOONGSON3A_R2_1:
- 	case PRID_REV_LOONGSON3A_R3_0:
- 	case PRID_REV_LOONGSON3A_R3_1:
- 		play_dead_at_ckseg1 =
+ #define LEVELS_PER_SLICE 128
+ 
+diff --git a/arch/mips/include/asm/mmzone.h b/arch/mips/include/asm/mmzone.h
+index f085fba..2a0fe1d 100644
+--- a/arch/mips/include/asm/mmzone.h
++++ b/arch/mips/include/asm/mmzone.h
+@@ -9,6 +9,14 @@
+ #include <asm/page.h>
+ #include <mmzone.h>
+ 
++#ifndef pa_to_nid
++#define pa_to_nid(addr) 0
++#endif
++
++#ifndef nid_to_addrbase
++#define nid_to_addrbase(nid) 0
++#endif
++
+ #ifdef CONFIG_DISCONTIGMEM
+ 
+ #define pfn_to_nid(pfn)		pa_to_nid((pfn) << PAGE_SHIFT)
+diff --git a/arch/mips/include/asm/r4kcache.h b/arch/mips/include/asm/r4kcache.h
+index d19b2d6..0815c2a 100644
+--- a/arch/mips/include/asm/r4kcache.h
++++ b/arch/mips/include/asm/r4kcache.h
+@@ -674,4 +674,25 @@ __BUILD_BLAST_CACHE_RANGE(s, scache, Hit_Writeback_Inv_SD, , )
+ __BUILD_BLAST_CACHE_RANGE(inv_d, dcache, Hit_Invalidate_D, , )
+ __BUILD_BLAST_CACHE_RANGE(inv_s, scache, Hit_Invalidate_SD, , )
+ 
++/* Currently, this is very specific to Loongson-3 */
++#define __BUILD_BLAST_CACHE_NODE(pfx, desc, indexop, hitop, lsize)	\
++static inline void blast_##pfx##cache##lsize##_node(long node)		\
++{									\
++	unsigned long start = CAC_BASE | nid_to_addrbase(node);		\
++	unsigned long end = start + current_cpu_data.desc.waysize;	\
++	unsigned long ws_inc = 1UL << current_cpu_data.desc.waybit;	\
++	unsigned long ws_end = current_cpu_data.desc.ways <<		\
++			       current_cpu_data.desc.waybit;		\
++	unsigned long ws, addr;						\
++									\
++	for (ws = 0; ws < ws_end; ws += ws_inc)				\
++		for (addr = start; addr < end; addr += lsize * 32)	\
++			cache##lsize##_unroll32(addr|ws, indexop);	\
++}
++
++__BUILD_BLAST_CACHE_NODE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 16)
++__BUILD_BLAST_CACHE_NODE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 32)
++__BUILD_BLAST_CACHE_NODE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 64)
++__BUILD_BLAST_CACHE_NODE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 128)
++
+ #endif /* _ASM_R4KCACHE_H */
 diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 05bd777..7e430b4 100644
+index 7e430b4..96d666a 100644
 --- a/arch/mips/mm/c-r4k.c
 +++ b/arch/mips/mm/c-r4k.c
-@@ -1352,7 +1352,7 @@ static void probe_pcache(void)
- 					  c->dcache.ways *
- 					  c->dcache.linesz;
- 		c->dcache.waybit = 0;
--		if ((prid & PRID_REV_MASK) >= PRID_REV_LOONGSON3A_R2)
-+		if ((prid & PRID_REV_MASK) >= PRID_REV_LOONGSON3A_R2_0)
- 			c->options |= MIPS_CPU_PREFETCH;
+@@ -459,11 +459,28 @@ static void r4k_blast_scache_setup(void)
+ 		r4k_blast_scache = blast_scache128;
+ }
+ 
++static void (*r4k_blast_scache_node)(long node);
++
++static void r4k_blast_scache_node_setup(void)
++{
++	unsigned long sc_lsize = cpu_scache_line_size();
++
++	if (current_cpu_type() != CPU_LOONGSON3)
++		r4k_blast_scache_node = (void *)cache_noop;
++	else if (sc_lsize == 16)
++		r4k_blast_scache_node = blast_scache16_node;
++	else if (sc_lsize == 32)
++		r4k_blast_scache_node = blast_scache32_node;
++	else if (sc_lsize == 64)
++		r4k_blast_scache_node = blast_scache64_node;
++	else if (sc_lsize == 128)
++		r4k_blast_scache_node = blast_scache128_node;
++}
++
+ static inline void local_r4k___flush_cache_all(void * args)
+ {
+ 	switch (current_cpu_type()) {
+ 	case CPU_LOONGSON2:
+-	case CPU_LOONGSON3:
+ 	case CPU_R4000SC:
+ 	case CPU_R4000MC:
+ 	case CPU_R4400SC:
+@@ -480,6 +497,11 @@ static inline void local_r4k___flush_cache_all(void * args)
+ 		r4k_blast_scache();
  		break;
  
-diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index f66521c..42efcb8 100644
---- a/drivers/platform/mips/cpu_hwmon.c
-+++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -25,9 +25,10 @@ int loongson3_cpu_temp(int cpu)
- 	case PRID_REV_LOONGSON3A_R1:
- 		reg = (reg >> 8) & 0xff;
- 		break;
--	case PRID_REV_LOONGSON3A_R2:
- 	case PRID_REV_LOONGSON3B_R1:
- 	case PRID_REV_LOONGSON3B_R2:
-+	case PRID_REV_LOONGSON3A_R2_0:
-+	case PRID_REV_LOONGSON3A_R2_1:
- 		reg = ((reg >> 8) & 0xff) - 100;
- 		break;
- 	case PRID_REV_LOONGSON3A_R3_0:
++	case CPU_LOONGSON3:
++		/* Use get_ebase_cpunum() for both NUMA=y/n */
++		r4k_blast_scache_node(get_ebase_cpunum() >> 2);
++		break;
++
+ 	case CPU_BMIPS5000:
+ 		r4k_blast_scache();
+ 		__sync();
+@@ -840,10 +862,14 @@ static void r4k_dma_cache_wback_inv(unsigned long addr, unsigned long size)
+ 
+ 	preempt_disable();
+ 	if (cpu_has_inclusive_pcaches) {
+-		if (size >= scache_size)
+-			r4k_blast_scache();
+-		else
++		if (size >= scache_size) {
++			if (current_cpu_type() != CPU_LOONGSON3)
++				r4k_blast_scache();
++			else
++				r4k_blast_scache_node(pa_to_nid(addr));
++		} else {
+ 			blast_scache_range(addr, addr + size);
++		}
+ 		preempt_enable();
+ 		__sync();
+ 		return;
+@@ -877,9 +903,12 @@ static void r4k_dma_cache_inv(unsigned long addr, unsigned long size)
+ 
+ 	preempt_disable();
+ 	if (cpu_has_inclusive_pcaches) {
+-		if (size >= scache_size)
+-			r4k_blast_scache();
+-		else {
++		if (size >= scache_size) {
++			if (current_cpu_type() != CPU_LOONGSON3)
++				r4k_blast_scache();
++			else
++				r4k_blast_scache_node(pa_to_nid(addr));
++		} else {
+ 			/*
+ 			 * There is no clearly documented alignment requirement
+ 			 * for the cache instruction on MIPS processors and
+@@ -1918,6 +1947,7 @@ void r4k_cache_init(void)
+ 	r4k_blast_scache_page_setup();
+ 	r4k_blast_scache_page_indexed_setup();
+ 	r4k_blast_scache_setup();
++	r4k_blast_scache_node_setup();
+ #ifdef CONFIG_EVA
+ 	r4k_blast_dcache_user_page_setup();
+ 	r4k_blast_icache_user_page_setup();
 -- 
 2.7.0
