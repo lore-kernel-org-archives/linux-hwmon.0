@@ -1,68 +1,40 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:38848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389353AbeKOIbc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Nov 2018 03:31:32 -0500
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.4 6/8] hwmon: (ibmpowernv) Remove bogus __init annotations
-Date: Wed, 14 Nov 2018 17:26:12 -0500
-Message-Id: <20181114222618.100378-6-sashal@kernel.org>
-In-Reply-To: <20181114222618.100378-1-sashal@kernel.org>
-References: <20181114222618.100378-1-sashal@kernel.org>
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34027 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbeKOMvF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Nov 2018 07:51:05 -0500
+Received: by mail-pf1-f195.google.com with SMTP id h3so2365227pfg.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Nov 2018 18:45:10 -0800 (PST)
+From: Huacai Chen <chenhc@lemote.com>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>, Yao Wang <wangyao@lemote.com>
+Subject: [PATCH] hwmon: (w83795) temp4_type has writable permission
+Date: Thu, 15 Nov 2018 10:44:57 +0800
+Message-Id: <1542249898-20406-1-git-send-email-chenhc@lemote.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-
-[ Upstream commit e3e61f01d755188cb6c2dcf5a244b9c0937c258e ]
-
-If gcc decides not to inline make_sensor_label():
-
-    WARNING: vmlinux.o(.text+0x4df549c): Section mismatch in reference from the function .create_device_attrs() to the function .init.text:.make_sensor_label()
-    The function .create_device_attrs() references
-    the function __init .make_sensor_label().
-    This is often because .create_device_attrs lacks a __init
-    annotation or the annotation of .make_sensor_label is wrong.
-
-As .probe() can be called after freeing of __init memory, all __init
-annotiations in the driver are bogus, and should be removed.
-
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Yao Wang <wangyao@lemote.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- drivers/hwmon/ibmpowernv.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/hwmon/w83795.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
-index 55b5a8ff1cfe..ca3aa28977bc 100644
---- a/drivers/hwmon/ibmpowernv.c
-+++ b/drivers/hwmon/ibmpowernv.c
-@@ -114,7 +114,7 @@ static ssize_t show_label(struct device *dev, struct device_attribute *devattr,
- 	return sprintf(buf, "%s\n", sdata->label);
- }
- 
--static int __init get_logical_cpu(int hwcpu)
-+static int get_logical_cpu(int hwcpu)
- {
- 	int cpu;
- 
-@@ -125,9 +125,8 @@ static int __init get_logical_cpu(int hwcpu)
- 	return -ENOENT;
- }
- 
--static void __init make_sensor_label(struct device_node *np,
--				     struct sensor_data *sdata,
--				     const char *label)
-+static void make_sensor_label(struct device_node *np,
-+			      struct sensor_data *sdata, const char *label)
- {
- 	u32 id;
- 	size_t n;
+diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
+index 49276bb..1bb80f9 100644
+--- a/drivers/hwmon/w83795.c
++++ b/drivers/hwmon/w83795.c
+@@ -1691,7 +1691,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
+  * somewhere else in the code
+  */
+ #define SENSOR_ATTR_TEMP(index) {					\
+-	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 4 ? S_IWUSR : 0), \
++	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 5 ? S_IWUSR : 0), \
+ 		show_temp_mode, store_temp_mode, NOT_USED, index - 1),	\
+ 	SENSOR_ATTR_2(temp##index##_input, S_IRUGO, show_temp,		\
+ 		NULL, TEMP_READ, index - 1),				\
 -- 
-2.17.1
+2.7.0
