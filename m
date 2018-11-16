@@ -1,47 +1,42 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from ms.tdt.de ([195.243.126.94]:42799 "EHLO mail.dev.tdt.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730564AbeKTRoH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Nov 2018 12:44:07 -0500
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Tue, 20 Nov 2018 08:16:28 +0100
-From: Florian Eckert <fe@dev.tdt.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, jdelvare@suse.com,
-        mark.rutland@arm.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 1/2] hwmon: (adcxx) add devictree bindings
- documentation
-In-Reply-To: <20181119012555.GA7856@roeck-us.net>
-References: <20181115135013.30723-1-fe@dev.tdt.de>
- <20181115135013.30723-2-fe@dev.tdt.de> <20181117144040.GA8016@bogus>
- <20181119012555.GA7856@roeck-us.net>
-Message-ID: <b6ee9998a565333f5105be46426b289c@dev.tdt.de>
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:58685 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727767AbeKPWEN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Nov 2018 17:04:13 -0500
+From: Vadim Pasternak <vadimp@mellanox.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, michaelsh@mellanox.com,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH hwmon-next v1 1/1] hwmon: (mlxreg-fan) Fix macros for tacho fault reading
+Date: Fri, 16 Nov 2018 13:47:11 +0000
+Message-Id: <1542376031-179816-1-git-send-email-vadimp@mellanox.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hello Guenter,
+Fix macros for tacometer fault reading.
+This fix is relevant for three Mellanox systems MQMB7, MSN37, MSN34,
+which are about to be released to the customers.
+At the moment, none of them is at customers sites.
 
->> 
->> Needs a better description of what this h/w is.
->> 
->> ADCs go in iio/adc/
->> 
-> FWIW, the hwmon driver for this chip series would be a perfect 
-> candidate
-> for a conversion to an iio driver. The driver predates the existence of
-> iio.
-> 
-> Florian, any interest doing that ? It is quite likely that the chip 
-> isn't
-> used for hardware monitoring.
+Fixes: 65afb4c8e7e4 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I will have a look on the next week about your suggestion to port this 
-device
-to iio/adc.
-
-   - Florian
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index de46577..d8fa4be 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -51,7 +51,7 @@
+  */
+ #define MLXREG_FAN_GET_RPM(rval, d, s)	(DIV_ROUND_CLOSEST(15000000 * 100, \
+ 					 ((rval) + (s)) * (d)))
+-#define MLXREG_FAN_GET_FAULT(val, mask) (!!((val) ^ (mask)))
++#define MLXREG_FAN_GET_FAULT(val, mask) (!((val) ^ (mask)))
+ #define MLXREG_FAN_PWM_DUTY2STATE(duty)	(DIV_ROUND_CLOSEST((duty) *	\
+ 					 MLXREG_FAN_MAX_STATE,		\
+ 					 MLXREG_FAN_MAX_DUTY))
+-- 
+2.1.4
