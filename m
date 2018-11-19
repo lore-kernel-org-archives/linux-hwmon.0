@@ -1,170 +1,132 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46855 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406271AbeKTDbw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Nov 2018 22:31:52 -0500
-Date: Mon, 19 Nov 2018 09:07:32 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Rosin <peda@axentia.se>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Return-Path: <peda@axentia.se>
+Return-path: <peda@axentia.se>
+From: Peter Rosin <peda@axentia.se>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Jean
+ Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>, Mark Rutland
+	<mark.rutland@arm.com>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>
 Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
  from Epcos
-Message-ID: <20181119170732.GA27435@roeck-us.net>
+Date: Mon, 19 Nov 2018 21:16:12 +0000
+Message-ID: <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
 References: <20181117121248.32143-1-peda@axentia.se>
  <20181117121248.32143-2-peda@axentia.se>
+ <20181119170732.GA27435@roeck-us.net>
+In-Reply-To: <20181119170732.GA27435@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1A2D82838FAA6546BFB9DC7D106E587E@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20181117121248.32143-2-peda@axentia.se>
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-On Sat, Nov 17, 2018 at 12:13:00PM +0000, Peter Rosin wrote:
-> More of the same...
-> 
-> Signed-off-by: Peter Rosin <peda@axentia.se>
-> ---
->  drivers/hwmon/Kconfig                        |  3 +-
->  drivers/hwmon/ntc_thermistor.c               | 57 +++++++++++++++++++++++++++-
->  include/linux/platform_data/ntc_thermistor.h |  1 +
->  3 files changed, 58 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index f10840ad465c..5438cecace22 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1206,7 +1206,8 @@ config SENSORS_NTC_THERMISTOR
->  
->  	  Currently, this driver supports
->  	  NCP15WB473, NCP18WB473, NCP21WB473, NCP03WB473, NCP15WL333,
-> -	  NCP03WF104 and NCP15XH103 from Murata and B57330V2103 from EPCOS.
-> +	  NCP03WF104 and NCP15XH103 from Murata and B57330V2103 and
-> +	  B57891S0103 from EPCOS.
->  
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called ntc-thermistor.
-> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-> index c52d07c6b49f..e0c6b2f244a6 100644
-> --- a/drivers/hwmon/ntc_thermistor.c
-> +++ b/drivers/hwmon/ntc_thermistor.c
-> @@ -55,6 +55,7 @@ static const struct platform_device_id ntc_thermistor_id[] = {
->  	{ "b57330v2103", TYPE_B57330V2103},
->  	{ "ncp03wf104", TYPE_NCPXXWF104 },
->  	{ "ncp15xh103", TYPE_NCPXXXH103 },
-> +	{ "b57891s0103", TYPE_B57891S0103 },
->  	{ },
->  };
->  
-> @@ -212,8 +213,8 @@ static const struct ntc_compensation ncpXXxh103[] = {
->  };
->  
->  /*
-> - * The following compensation table is from the specification of EPCOS NTC
-> - * Thermistors Datasheet
-> + * The following compensation tables are from the specifications in EPCOS NTC
-> + * Thermistors Datasheets
->   */
->  static const struct ntc_compensation b57330v2103[] = {
->  	{ .temp_c	= -40, .ohm	= 190030 },
-> @@ -252,6 +253,52 @@ static const struct ntc_compensation b57330v2103[] = {
->  	{ .temp_c	= 125, .ohm	= 531 },
->  };
->  
-> +static const struct ntc_compensation b57891s0103[] = {
-> +	{ .temp_c	= -55.0, .ohm	= 878900 },
-> +	{ .temp_c	= -50.0, .ohm	= 617590 },
-> +	{ .temp_c	= -45.0, .ohm	= 439340 },
-> +	{ .temp_c	= -40.0, .ohm	= 316180 },
-> +	{ .temp_c	= -35.0, .ohm	= 230060 },
-> +	{ .temp_c	= -30.0, .ohm	= 169150 },
-> +	{ .temp_c	= -25.0, .ohm	= 125550 },
-> +	{ .temp_c	= -20.0, .ohm	= 94143 },
-> +	{ .temp_c	= -15.0, .ohm	= 71172 },
-> +	{ .temp_c	= -10.0, .ohm	= 54308 },
-> +	{ .temp_c	= -5.0, .ohm	= 41505 },
-> +	{ .temp_c	= 0.0, .ohm	= 32014 },
-> +	{ .temp_c	= 5.0, .ohm	= 25011 },
-> +	{ .temp_c	= 10.0, .ohm	= 19691 },
-> +	{ .temp_c	= 15.0, .ohm	= 15618 },
-> +	{ .temp_c	= 20.0, .ohm	= 12474 },
-> +	{ .temp_c	= 25.0, .ohm	= 10000 },
-> +	{ .temp_c	= 30.0, .ohm	= 8080 },
-> +	{ .temp_c	= 35.0, .ohm	= 6569 },
-> +	{ .temp_c	= 40.0, .ohm	= 5372 },
-> +	{ .temp_c	= 45.0, .ohm	= 4424 },
-> +	{ .temp_c	= 50.0, .ohm	= 3661 },
-> +	{ .temp_c	= 55.0, .ohm	= 3039 },
-> +	{ .temp_c	= 60.0, .ohm	= 2536 },
-> +	{ .temp_c	= 65.0, .ohm	= 2128 },
-> +	{ .temp_c	= 70.0, .ohm	= 1794 },
-> +	{ .temp_c	= 75.0, .ohm	= 1518 },
-> +	{ .temp_c	= 80.0, .ohm	= 1290 },
-> +	{ .temp_c	= 85.0, .ohm	= 1100 },
-> +	{ .temp_c	= 90.0, .ohm	= 942 },
-> +	{ .temp_c	= 95.0, .ohm	= 809 },
-> +	{ .temp_c	= 100.0, .ohm	= 697 },
-> +	{ .temp_c	= 105.0, .ohm	= 604 },
-> +	{ .temp_c	= 110.0, .ohm	= 525 },
-> +	{ .temp_c	= 115.0, .ohm	= 457 },
-> +	{ .temp_c	= 120.0, .ohm	= 400 },
-> +	{ .temp_c	= 125.0, .ohm	= 351 },
-> +	{ .temp_c	= 130.0, .ohm	= 308 },
-> +	{ .temp_c	= 135.0, .ohm	= 272 },
-> +	{ .temp_c	= 140.0, .ohm	= 240 },
-> +	{ .temp_c	= 145.0, .ohm	= 213 },
-> +	{ .temp_c	= 150.0, .ohm	= 189 },
-> +	{ .temp_c	= 155.0, .ohm	= 168 },
-> +};
-> +
->  struct ntc_data {
->  	struct ntc_thermistor_platform_data *pdata;
->  	const struct ntc_compensation *comp;
-> @@ -296,6 +343,8 @@ static const struct of_device_id ntc_match[] = {
->  		.data = &ntc_thermistor_id[6] },
->  	{ .compatible = "murata,ncp15xh103",
->  		.data = &ntc_thermistor_id[7] },
-> +	{ .compatible = "epcos,b57891s0103",
-> +		.data = &ntc_thermistor_id[8] },
->  
->  	/* Usage of vendor name "ntc" is deprecated */
->  	{ .compatible = "ntc,ncp15wb473",
-> @@ -627,6 +676,10 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
->  		data->comp = ncpXXxh103;
->  		data->n_comp = ARRAY_SIZE(ncpXXxh103);
->  		break;
-> +	case TYPE_B57891S0103:
-> +		data->comp = b57891s0103;
-> +		data->n_comp = ARRAY_SIZE(b57891s0103);
-> +		break;
->  	default:
->  		dev_err(dev, "Unknown device type: %lu(%s)\n",
->  				pdev_id->driver_data, pdev_id->name);
-> diff --git a/include/linux/platform_data/ntc_thermistor.h b/include/linux/platform_data/ntc_thermistor.h
-> index 698d0d59db76..231a27c302ec 100644
-> --- a/include/linux/platform_data/ntc_thermistor.h
-> +++ b/include/linux/platform_data/ntc_thermistor.h
-> @@ -29,6 +29,7 @@ enum ntc_thermistor_type {
->  	TYPE_B57330V2103,
->  	TYPE_NCPXXWF104,
->  	TYPE_NCPXXXH103,
-> +	TYPE_B57891S0103,
-
-Guess I deserve the non-alphabetic order as penalty for not enforcing it 
-earlier. I'll accept the patch after DT approval and submit another one
-myself afterwards to restore alphabetic order.
-
-Guenter
-
->  };
->  
->  struct ntc_thermistor_platform_data {
-> -- 
-> 2.11.0
-> 
+T24gMjAxOC0xMS0xOSAxODowNywgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gU2F0LCBOb3Yg
+MTcsIDIwMTggYXQgMTI6MTM6MDBQTSArMDAwMCwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+PiBNb3Jl
+IG9mIHRoZSBzYW1lLi4uDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgUm9zaW4gPHBlZGFA
+YXhlbnRpYS5zZT4NCj4+IC0tLQ0KPj4gIGRyaXZlcnMvaHdtb24vS2NvbmZpZyAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDMgKy0NCj4+ICBkcml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMg
+ICAgICAgICAgICAgICB8IDU3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4+ICBpbmNs
+dWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJtaXN0b3IuaCB8ICAxICsNCj4+ICAzIGZp
+bGVzIGNoYW5nZWQsIDU4IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vS2NvbmZpZyBiL2RyaXZlcnMvaHdtb24vS2NvbmZpZw0K
+Pj4gaW5kZXggZjEwODQwYWQ0NjVjLi41NDM4Y2VjYWNlMjIgMTAwNjQ0DQo+PiAtLS0gYS9kcml2
+ZXJzL2h3bW9uL0tjb25maWcNCj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vS2NvbmZpZw0KPj4gQEAg
+LTEyMDYsNyArMTIwNiw4IEBAIGNvbmZpZyBTRU5TT1JTX05UQ19USEVSTUlTVE9SDQo+PiAgDQo+
+PiAgCSAgQ3VycmVudGx5LCB0aGlzIGRyaXZlciBzdXBwb3J0cw0KPj4gIAkgIE5DUDE1V0I0NzMs
+IE5DUDE4V0I0NzMsIE5DUDIxV0I0NzMsIE5DUDAzV0I0NzMsIE5DUDE1V0wzMzMsDQo+PiAtCSAg
+TkNQMDNXRjEwNCBhbmQgTkNQMTVYSDEwMyBmcm9tIE11cmF0YSBhbmQgQjU3MzMwVjIxMDMgZnJv
+bSBFUENPUy4NCj4+ICsJICBOQ1AwM1dGMTA0IGFuZCBOQ1AxNVhIMTAzIGZyb20gTXVyYXRhIGFu
+ZCBCNTczMzBWMjEwMyBhbmQNCj4+ICsJICBCNTc4OTFTMDEwMyBmcm9tIEVQQ09TLg0KPj4gIA0K
+Pj4gIAkgIFRoaXMgZHJpdmVyIGNhbiBhbHNvIGJlIGJ1aWx0IGFzIGEgbW9kdWxlLiAgSWYgc28s
+IHRoZSBtb2R1bGUNCj4+ICAJICB3aWxsIGJlIGNhbGxlZCBudGMtdGhlcm1pc3Rvci4NCj4+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMgYi9kcml2ZXJzL2h3bW9u
+L250Y190aGVybWlzdG9yLmMNCj4+IGluZGV4IGM1MmQwN2M2YjQ5Zi4uZTBjNmIyZjI0NGE2IDEw
+MDY0NA0KPj4gLS0tIGEvZHJpdmVycy9od21vbi9udGNfdGhlcm1pc3Rvci5jDQo+PiArKysgYi9k
+cml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMNCj4+IEBAIC01NSw2ICs1NSw3IEBAIHN0YXRp
+YyBjb25zdCBzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlX2lkIG50Y190aGVybWlzdG9yX2lkW10gPSB7
+DQo+PiAgCXsgImI1NzMzMHYyMTAzIiwgVFlQRV9CNTczMzBWMjEwM30sDQo+PiAgCXsgIm5jcDAz
+d2YxMDQiLCBUWVBFX05DUFhYV0YxMDQgfSwNCj4+ICAJeyAibmNwMTV4aDEwMyIsIFRZUEVfTkNQ
+WFhYSDEwMyB9LA0KPj4gKwl7ICJiNTc4OTFzMDEwMyIsIFRZUEVfQjU3ODkxUzAxMDMgfSwNCj4+
+ICAJeyB9LA0KPj4gIH07DQo+PiAgDQo+PiBAQCAtMjEyLDggKzIxMyw4IEBAIHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgbnRjX2NvbXBlbnNhdGlvbiBuY3BYWHhoMTAzW10gPSB7DQo+PiAgfTsNCj4+ICAN
+Cj4+ICAvKg0KPj4gLSAqIFRoZSBmb2xsb3dpbmcgY29tcGVuc2F0aW9uIHRhYmxlIGlzIGZyb20g
+dGhlIHNwZWNpZmljYXRpb24gb2YgRVBDT1MgTlRDDQo+PiAtICogVGhlcm1pc3RvcnMgRGF0YXNo
+ZWV0DQo+PiArICogVGhlIGZvbGxvd2luZyBjb21wZW5zYXRpb24gdGFibGVzIGFyZSBmcm9tIHRo
+ZSBzcGVjaWZpY2F0aW9ucyBpbiBFUENPUyBOVEMNCj4+ICsgKiBUaGVybWlzdG9ycyBEYXRhc2hl
+ZXRzDQo+PiAgICovDQo+PiAgc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0aW9uIGI1
+NzMzMHYyMTAzW10gPSB7DQo+PiAgCXsgLnRlbXBfYwk9IC00MCwgLm9obQk9IDE5MDAzMCB9LA0K
+Pj4gQEAgLTI1Miw2ICsyNTMsNTIgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0
+aW9uIGI1NzMzMHYyMTAzW10gPSB7DQo+PiAgCXsgLnRlbXBfYwk9IDEyNSwgLm9obQk9IDUzMSB9
+LA0KPj4gIH07DQo+PiAgDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0aW9u
+IGI1Nzg5MXMwMTAzW10gPSB7DQo+PiArCXsgLnRlbXBfYwk9IC01NS4wLCAub2htCT0gODc4OTAw
+IH0sDQo+PiArCXsgLnRlbXBfYwk9IC01MC4wLCAub2htCT0gNjE3NTkwIH0sDQo+PiArCXsgLnRl
+bXBfYwk9IC00NS4wLCAub2htCT0gNDM5MzQwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC00MC4wLCAu
+b2htCT0gMzE2MTgwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC0zNS4wLCAub2htCT0gMjMwMDYwIH0s
+DQo+PiArCXsgLnRlbXBfYwk9IC0zMC4wLCAub2htCT0gMTY5MTUwIH0sDQo+PiArCXsgLnRlbXBf
+Ywk9IC0yNS4wLCAub2htCT0gMTI1NTUwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC0yMC4wLCAub2ht
+CT0gOTQxNDMgfSwNCj4+ICsJeyAudGVtcF9jCT0gLTE1LjAsIC5vaG0JPSA3MTE3MiB9LA0KPj4g
+Kwl7IC50ZW1wX2MJPSAtMTAuMCwgLm9obQk9IDU0MzA4IH0sDQo+PiArCXsgLnRlbXBfYwk9IC01
+LjAsIC5vaG0JPSA0MTUwNSB9LA0KPj4gKwl7IC50ZW1wX2MJPSAwLjAsIC5vaG0JPSAzMjAxNCB9
+LA0KPj4gKwl7IC50ZW1wX2MJPSA1LjAsIC5vaG0JPSAyNTAxMSB9LA0KPj4gKwl7IC50ZW1wX2MJ
+PSAxMC4wLCAub2htCT0gMTk2OTEgfSwNCj4+ICsJeyAudGVtcF9jCT0gMTUuMCwgLm9obQk9IDE1
+NjE4IH0sDQo+PiArCXsgLnRlbXBfYwk9IDIwLjAsIC5vaG0JPSAxMjQ3NCB9LA0KPj4gKwl7IC50
+ZW1wX2MJPSAyNS4wLCAub2htCT0gMTAwMDAgfSwNCj4+ICsJeyAudGVtcF9jCT0gMzAuMCwgLm9o
+bQk9IDgwODAgfSwNCj4+ICsJeyAudGVtcF9jCT0gMzUuMCwgLm9obQk9IDY1NjkgfSwNCj4+ICsJ
+eyAudGVtcF9jCT0gNDAuMCwgLm9obQk9IDUzNzIgfSwNCj4+ICsJeyAudGVtcF9jCT0gNDUuMCwg
+Lm9obQk9IDQ0MjQgfSwNCj4+ICsJeyAudGVtcF9jCT0gNTAuMCwgLm9obQk9IDM2NjEgfSwNCj4+
+ICsJeyAudGVtcF9jCT0gNTUuMCwgLm9obQk9IDMwMzkgfSwNCj4+ICsJeyAudGVtcF9jCT0gNjAu
+MCwgLm9obQk9IDI1MzYgfSwNCj4+ICsJeyAudGVtcF9jCT0gNjUuMCwgLm9obQk9IDIxMjggfSwN
+Cj4+ICsJeyAudGVtcF9jCT0gNzAuMCwgLm9obQk9IDE3OTQgfSwNCj4+ICsJeyAudGVtcF9jCT0g
+NzUuMCwgLm9obQk9IDE1MTggfSwNCj4+ICsJeyAudGVtcF9jCT0gODAuMCwgLm9obQk9IDEyOTAg
+fSwNCj4+ICsJeyAudGVtcF9jCT0gODUuMCwgLm9obQk9IDExMDAgfSwNCj4+ICsJeyAudGVtcF9j
+CT0gOTAuMCwgLm9obQk9IDk0MiB9LA0KPj4gKwl7IC50ZW1wX2MJPSA5NS4wLCAub2htCT0gODA5
+IH0sDQo+PiArCXsgLnRlbXBfYwk9IDEwMC4wLCAub2htCT0gNjk3IH0sDQo+PiArCXsgLnRlbXBf
+Ywk9IDEwNS4wLCAub2htCT0gNjA0IH0sDQo+PiArCXsgLnRlbXBfYwk9IDExMC4wLCAub2htCT0g
+NTI1IH0sDQo+PiArCXsgLnRlbXBfYwk9IDExNS4wLCAub2htCT0gNDU3IH0sDQo+PiArCXsgLnRl
+bXBfYwk9IDEyMC4wLCAub2htCT0gNDAwIH0sDQo+PiArCXsgLnRlbXBfYwk9IDEyNS4wLCAub2ht
+CT0gMzUxIH0sDQo+PiArCXsgLnRlbXBfYwk9IDEzMC4wLCAub2htCT0gMzA4IH0sDQo+PiArCXsg
+LnRlbXBfYwk9IDEzNS4wLCAub2htCT0gMjcyIH0sDQo+PiArCXsgLnRlbXBfYwk9IDE0MC4wLCAu
+b2htCT0gMjQwIH0sDQo+PiArCXsgLnRlbXBfYwk9IDE0NS4wLCAub2htCT0gMjEzIH0sDQo+PiAr
+CXsgLnRlbXBfYwk9IDE1MC4wLCAub2htCT0gMTg5IH0sDQo+PiArCXsgLnRlbXBfYwk9IDE1NS4w
+LCAub2htCT0gMTY4IH0sDQo+PiArfTsNCj4+ICsNCj4+ICBzdHJ1Y3QgbnRjX2RhdGEgew0KPj4g
+IAlzdHJ1Y3QgbnRjX3RoZXJtaXN0b3JfcGxhdGZvcm1fZGF0YSAqcGRhdGE7DQo+PiAgCWNvbnN0
+IHN0cnVjdCBudGNfY29tcGVuc2F0aW9uICpjb21wOw0KPj4gQEAgLTI5Niw2ICszNDMsOCBAQCBz
+dGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBudGNfbWF0Y2hbXSA9IHsNCj4+ICAJCS5k
+YXRhID0gJm50Y190aGVybWlzdG9yX2lkWzZdIH0sDQo+PiAgCXsgLmNvbXBhdGlibGUgPSAibXVy
+YXRhLG5jcDE1eGgxMDMiLA0KPj4gIAkJLmRhdGEgPSAmbnRjX3RoZXJtaXN0b3JfaWRbN10gfSwN
+Cj4+ICsJeyAuY29tcGF0aWJsZSA9ICJlcGNvcyxiNTc4OTFzMDEwMyIsDQo+PiArCQkuZGF0YSA9
+ICZudGNfdGhlcm1pc3Rvcl9pZFs4XSB9LA0KPj4gIA0KPj4gIAkvKiBVc2FnZSBvZiB2ZW5kb3Ig
+bmFtZSAibnRjIiBpcyBkZXByZWNhdGVkICovDQo+PiAgCXsgLmNvbXBhdGlibGUgPSAibnRjLG5j
+cDE1d2I0NzMiLA0KPj4gQEAgLTYyNyw2ICs2NzYsMTAgQEAgc3RhdGljIGludCBudGNfdGhlcm1p
+c3Rvcl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4gIAkJZGF0YS0+Y29t
+cCA9IG5jcFhYeGgxMDM7DQo+PiAgCQlkYXRhLT5uX2NvbXAgPSBBUlJBWV9TSVpFKG5jcFhYeGgx
+MDMpOw0KPj4gIAkJYnJlYWs7DQo+PiArCWNhc2UgVFlQRV9CNTc4OTFTMDEwMzoNCj4+ICsJCWRh
+dGEtPmNvbXAgPSBiNTc4OTFzMDEwMzsNCj4+ICsJCWRhdGEtPm5fY29tcCA9IEFSUkFZX1NJWkUo
+YjU3ODkxczAxMDMpOw0KPj4gKwkJYnJlYWs7DQo+PiAgCWRlZmF1bHQ6DQo+PiAgCQlkZXZfZXJy
+KGRldiwgIlVua25vd24gZGV2aWNlIHR5cGU6ICVsdSglcylcbiIsDQo+PiAgCQkJCXBkZXZfaWQt
+PmRyaXZlcl9kYXRhLCBwZGV2X2lkLT5uYW1lKTsNCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
+bnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJtaXN0b3IuaCBiL2luY2x1ZGUvbGludXgvcGxhdGZv
+cm1fZGF0YS9udGNfdGhlcm1pc3Rvci5oDQo+PiBpbmRleCA2OThkMGQ1OWRiNzYuLjIzMWEyN2Mz
+MDJlYyAxMDA2NDQNCj4+IC0tLSBhL2luY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0YS9udGNfdGhl
+cm1pc3Rvci5oDQo+PiArKysgYi9pbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJt
+aXN0b3IuaA0KPj4gQEAgLTI5LDYgKzI5LDcgQEAgZW51bSBudGNfdGhlcm1pc3Rvcl90eXBlIHsN
+Cj4+ICAJVFlQRV9CNTczMzBWMjEwMywNCj4+ICAJVFlQRV9OQ1BYWFdGMTA0LA0KPj4gIAlUWVBF
+X05DUFhYWEgxMDMsDQo+PiArCVRZUEVfQjU3ODkxUzAxMDMsDQo+IA0KPiBHdWVzcyBJIGRlc2Vy
+dmUgdGhlIG5vbi1hbHBoYWJldGljIG9yZGVyIGFzIHBlbmFsdHkgZm9yIG5vdCBlbmZvcmNpbmcg
+aXQgDQo+IGVhcmxpZXIuIEknbGwgYWNjZXB0IHRoZSBwYXRjaCBhZnRlciBEVCBhcHByb3ZhbCBh
+bmQgc3VibWl0IGFub3RoZXIgb25lDQo+IG15c2VsZiBhZnRlcndhcmRzIHRvIHJlc3RvcmUgYWxw
+aGFiZXRpYyBvcmRlci4NCg0KUmlnaHQsIEknbSB0aGlua2luZyBhbm90aGVyIGdvb2QgY2hhbmdl
+IHdvdWxkIGJlIHRvIGludHJvZHVjZSBhbiBlbnVtDQppbnRvIHRoZSBudGNfdGhlcm1pc3Rvcl9p
+ZCBhcnJheSwgYmVjYXVzZSB0aGUgaGFyZC1jb2RlZCBudW1iZXJpbmcgaW4NCnRoZSBudGNfbWF0
+Y2ggdmFyaWFibGUgaXMgYSBiaXQgZnJhZ2lsZSBpbiBteSB0YXN0ZSwgYW5kIHRoYXQgbGlzdCB3
+b3VsZA0KYWxzbyBiZW5lZml0IGZyb20gYmVpbmcgYWxwaGFiZXRpYy4gQ3VycmVudGx5IHRoZXJl
+J3Mgc2ltcGx5IG5vIHdheSB0bw0KYWRkIHRoaW5ncyBpbiB0aGUgbWlkZGxlIHdpdGhvdXQgY2F1
+c2luZyBtYXloZW0uIEkgdGhvdWdodCBhYm91dCBkb2luZw0KdGhhdCwgYnV0IGRpZG4ndCB3YW50
+IHRvIHdhc3RlIGVuZXJneSBkb2luZyBpdCB1cCBmcm9udCB3aXRob3V0IGtub3dpbmcNCmlmIGl0
+IHdvdWxkIGJlIHdlbGwgcmVjZWl2ZWQgKHRoZSBkcml2ZXIgbWlnaHQgaGF2ZSBiZWVuIHN1cGVy
+c2VkZWQgb3INCnNvbWV0aGluZykuIEknbSBnbGFkIHRoYXQgeW91IGhhdmUgdm9sdW50ZWVyZWQg
+dG8gY2xlYW4gdGhpbmdzIHVwLg0KSGEhIDotKQ0KDQpDaGVlcnMsDQpQZXRlcg0KDQo+IEd1ZW50
+ZXINCj4gDQo+PiAgfTsNCj4+ICANCj4+ICBzdHJ1Y3QgbnRjX3RoZXJtaXN0b3JfcGxhdGZvcm1f
+ZGF0YSB7DQo+PiAtLSANCj4+IDIuMTEuMA0KPj4NCg0K
