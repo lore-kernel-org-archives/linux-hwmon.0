@@ -1,132 +1,66 @@
-Return-Path: <peda@axentia.se>
-Return-path: <peda@axentia.se>
-From: Peter Rosin <peda@axentia.se>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Jean
- Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>, Mark Rutland
-	<mark.rutland@arm.com>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Return-path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42615 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725898AbeKTHxk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 20 Nov 2018 02:53:40 -0500
+Date: Mon, 19 Nov 2018 13:28:06 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Peter Rosin <peda@axentia.se>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
  from Epcos
-Date: Mon, 19 Nov 2018 21:16:12 +0000
-Message-ID: <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
+Message-ID: <20181119212806.GC5795@roeck-us.net>
 References: <20181117121248.32143-1-peda@axentia.se>
  <20181117121248.32143-2-peda@axentia.se>
  <20181119170732.GA27435@roeck-us.net>
-In-Reply-To: <20181119170732.GA27435@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1A2D82838FAA6546BFB9DC7D106E587E@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
 MIME-Version: 1.0
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-T24gMjAxOC0xMS0xOSAxODowNywgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gU2F0LCBOb3Yg
-MTcsIDIwMTggYXQgMTI6MTM6MDBQTSArMDAwMCwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+PiBNb3Jl
-IG9mIHRoZSBzYW1lLi4uDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgUm9zaW4gPHBlZGFA
-YXhlbnRpYS5zZT4NCj4+IC0tLQ0KPj4gIGRyaXZlcnMvaHdtb24vS2NvbmZpZyAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgIDMgKy0NCj4+ICBkcml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMg
-ICAgICAgICAgICAgICB8IDU3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCj4+ICBpbmNs
-dWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJtaXN0b3IuaCB8ICAxICsNCj4+ICAzIGZp
-bGVzIGNoYW5nZWQsIDU4IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vS2NvbmZpZyBiL2RyaXZlcnMvaHdtb24vS2NvbmZpZw0K
-Pj4gaW5kZXggZjEwODQwYWQ0NjVjLi41NDM4Y2VjYWNlMjIgMTAwNjQ0DQo+PiAtLS0gYS9kcml2
-ZXJzL2h3bW9uL0tjb25maWcNCj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vS2NvbmZpZw0KPj4gQEAg
-LTEyMDYsNyArMTIwNiw4IEBAIGNvbmZpZyBTRU5TT1JTX05UQ19USEVSTUlTVE9SDQo+PiAgDQo+
-PiAgCSAgQ3VycmVudGx5LCB0aGlzIGRyaXZlciBzdXBwb3J0cw0KPj4gIAkgIE5DUDE1V0I0NzMs
-IE5DUDE4V0I0NzMsIE5DUDIxV0I0NzMsIE5DUDAzV0I0NzMsIE5DUDE1V0wzMzMsDQo+PiAtCSAg
-TkNQMDNXRjEwNCBhbmQgTkNQMTVYSDEwMyBmcm9tIE11cmF0YSBhbmQgQjU3MzMwVjIxMDMgZnJv
-bSBFUENPUy4NCj4+ICsJICBOQ1AwM1dGMTA0IGFuZCBOQ1AxNVhIMTAzIGZyb20gTXVyYXRhIGFu
-ZCBCNTczMzBWMjEwMyBhbmQNCj4+ICsJICBCNTc4OTFTMDEwMyBmcm9tIEVQQ09TLg0KPj4gIA0K
-Pj4gIAkgIFRoaXMgZHJpdmVyIGNhbiBhbHNvIGJlIGJ1aWx0IGFzIGEgbW9kdWxlLiAgSWYgc28s
-IHRoZSBtb2R1bGUNCj4+ICAJICB3aWxsIGJlIGNhbGxlZCBudGMtdGhlcm1pc3Rvci4NCj4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMgYi9kcml2ZXJzL2h3bW9u
-L250Y190aGVybWlzdG9yLmMNCj4+IGluZGV4IGM1MmQwN2M2YjQ5Zi4uZTBjNmIyZjI0NGE2IDEw
-MDY0NA0KPj4gLS0tIGEvZHJpdmVycy9od21vbi9udGNfdGhlcm1pc3Rvci5jDQo+PiArKysgYi9k
-cml2ZXJzL2h3bW9uL250Y190aGVybWlzdG9yLmMNCj4+IEBAIC01NSw2ICs1NSw3IEBAIHN0YXRp
-YyBjb25zdCBzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlX2lkIG50Y190aGVybWlzdG9yX2lkW10gPSB7
-DQo+PiAgCXsgImI1NzMzMHYyMTAzIiwgVFlQRV9CNTczMzBWMjEwM30sDQo+PiAgCXsgIm5jcDAz
-d2YxMDQiLCBUWVBFX05DUFhYV0YxMDQgfSwNCj4+ICAJeyAibmNwMTV4aDEwMyIsIFRZUEVfTkNQ
-WFhYSDEwMyB9LA0KPj4gKwl7ICJiNTc4OTFzMDEwMyIsIFRZUEVfQjU3ODkxUzAxMDMgfSwNCj4+
-ICAJeyB9LA0KPj4gIH07DQo+PiAgDQo+PiBAQCAtMjEyLDggKzIxMyw4IEBAIHN0YXRpYyBjb25z
-dCBzdHJ1Y3QgbnRjX2NvbXBlbnNhdGlvbiBuY3BYWHhoMTAzW10gPSB7DQo+PiAgfTsNCj4+ICAN
-Cj4+ICAvKg0KPj4gLSAqIFRoZSBmb2xsb3dpbmcgY29tcGVuc2F0aW9uIHRhYmxlIGlzIGZyb20g
-dGhlIHNwZWNpZmljYXRpb24gb2YgRVBDT1MgTlRDDQo+PiAtICogVGhlcm1pc3RvcnMgRGF0YXNo
-ZWV0DQo+PiArICogVGhlIGZvbGxvd2luZyBjb21wZW5zYXRpb24gdGFibGVzIGFyZSBmcm9tIHRo
-ZSBzcGVjaWZpY2F0aW9ucyBpbiBFUENPUyBOVEMNCj4+ICsgKiBUaGVybWlzdG9ycyBEYXRhc2hl
-ZXRzDQo+PiAgICovDQo+PiAgc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0aW9uIGI1
-NzMzMHYyMTAzW10gPSB7DQo+PiAgCXsgLnRlbXBfYwk9IC00MCwgLm9obQk9IDE5MDAzMCB9LA0K
-Pj4gQEAgLTI1Miw2ICsyNTMsNTIgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0
-aW9uIGI1NzMzMHYyMTAzW10gPSB7DQo+PiAgCXsgLnRlbXBfYwk9IDEyNSwgLm9obQk9IDUzMSB9
-LA0KPj4gIH07DQo+PiAgDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBudGNfY29tcGVuc2F0aW9u
-IGI1Nzg5MXMwMTAzW10gPSB7DQo+PiArCXsgLnRlbXBfYwk9IC01NS4wLCAub2htCT0gODc4OTAw
-IH0sDQo+PiArCXsgLnRlbXBfYwk9IC01MC4wLCAub2htCT0gNjE3NTkwIH0sDQo+PiArCXsgLnRl
-bXBfYwk9IC00NS4wLCAub2htCT0gNDM5MzQwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC00MC4wLCAu
-b2htCT0gMzE2MTgwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC0zNS4wLCAub2htCT0gMjMwMDYwIH0s
-DQo+PiArCXsgLnRlbXBfYwk9IC0zMC4wLCAub2htCT0gMTY5MTUwIH0sDQo+PiArCXsgLnRlbXBf
-Ywk9IC0yNS4wLCAub2htCT0gMTI1NTUwIH0sDQo+PiArCXsgLnRlbXBfYwk9IC0yMC4wLCAub2ht
-CT0gOTQxNDMgfSwNCj4+ICsJeyAudGVtcF9jCT0gLTE1LjAsIC5vaG0JPSA3MTE3MiB9LA0KPj4g
-Kwl7IC50ZW1wX2MJPSAtMTAuMCwgLm9obQk9IDU0MzA4IH0sDQo+PiArCXsgLnRlbXBfYwk9IC01
-LjAsIC5vaG0JPSA0MTUwNSB9LA0KPj4gKwl7IC50ZW1wX2MJPSAwLjAsIC5vaG0JPSAzMjAxNCB9
-LA0KPj4gKwl7IC50ZW1wX2MJPSA1LjAsIC5vaG0JPSAyNTAxMSB9LA0KPj4gKwl7IC50ZW1wX2MJ
-PSAxMC4wLCAub2htCT0gMTk2OTEgfSwNCj4+ICsJeyAudGVtcF9jCT0gMTUuMCwgLm9obQk9IDE1
-NjE4IH0sDQo+PiArCXsgLnRlbXBfYwk9IDIwLjAsIC5vaG0JPSAxMjQ3NCB9LA0KPj4gKwl7IC50
-ZW1wX2MJPSAyNS4wLCAub2htCT0gMTAwMDAgfSwNCj4+ICsJeyAudGVtcF9jCT0gMzAuMCwgLm9o
-bQk9IDgwODAgfSwNCj4+ICsJeyAudGVtcF9jCT0gMzUuMCwgLm9obQk9IDY1NjkgfSwNCj4+ICsJ
-eyAudGVtcF9jCT0gNDAuMCwgLm9obQk9IDUzNzIgfSwNCj4+ICsJeyAudGVtcF9jCT0gNDUuMCwg
-Lm9obQk9IDQ0MjQgfSwNCj4+ICsJeyAudGVtcF9jCT0gNTAuMCwgLm9obQk9IDM2NjEgfSwNCj4+
-ICsJeyAudGVtcF9jCT0gNTUuMCwgLm9obQk9IDMwMzkgfSwNCj4+ICsJeyAudGVtcF9jCT0gNjAu
-MCwgLm9obQk9IDI1MzYgfSwNCj4+ICsJeyAudGVtcF9jCT0gNjUuMCwgLm9obQk9IDIxMjggfSwN
-Cj4+ICsJeyAudGVtcF9jCT0gNzAuMCwgLm9obQk9IDE3OTQgfSwNCj4+ICsJeyAudGVtcF9jCT0g
-NzUuMCwgLm9obQk9IDE1MTggfSwNCj4+ICsJeyAudGVtcF9jCT0gODAuMCwgLm9obQk9IDEyOTAg
-fSwNCj4+ICsJeyAudGVtcF9jCT0gODUuMCwgLm9obQk9IDExMDAgfSwNCj4+ICsJeyAudGVtcF9j
-CT0gOTAuMCwgLm9obQk9IDk0MiB9LA0KPj4gKwl7IC50ZW1wX2MJPSA5NS4wLCAub2htCT0gODA5
-IH0sDQo+PiArCXsgLnRlbXBfYwk9IDEwMC4wLCAub2htCT0gNjk3IH0sDQo+PiArCXsgLnRlbXBf
-Ywk9IDEwNS4wLCAub2htCT0gNjA0IH0sDQo+PiArCXsgLnRlbXBfYwk9IDExMC4wLCAub2htCT0g
-NTI1IH0sDQo+PiArCXsgLnRlbXBfYwk9IDExNS4wLCAub2htCT0gNDU3IH0sDQo+PiArCXsgLnRl
-bXBfYwk9IDEyMC4wLCAub2htCT0gNDAwIH0sDQo+PiArCXsgLnRlbXBfYwk9IDEyNS4wLCAub2ht
-CT0gMzUxIH0sDQo+PiArCXsgLnRlbXBfYwk9IDEzMC4wLCAub2htCT0gMzA4IH0sDQo+PiArCXsg
-LnRlbXBfYwk9IDEzNS4wLCAub2htCT0gMjcyIH0sDQo+PiArCXsgLnRlbXBfYwk9IDE0MC4wLCAu
-b2htCT0gMjQwIH0sDQo+PiArCXsgLnRlbXBfYwk9IDE0NS4wLCAub2htCT0gMjEzIH0sDQo+PiAr
-CXsgLnRlbXBfYwk9IDE1MC4wLCAub2htCT0gMTg5IH0sDQo+PiArCXsgLnRlbXBfYwk9IDE1NS4w
-LCAub2htCT0gMTY4IH0sDQo+PiArfTsNCj4+ICsNCj4+ICBzdHJ1Y3QgbnRjX2RhdGEgew0KPj4g
-IAlzdHJ1Y3QgbnRjX3RoZXJtaXN0b3JfcGxhdGZvcm1fZGF0YSAqcGRhdGE7DQo+PiAgCWNvbnN0
-IHN0cnVjdCBudGNfY29tcGVuc2F0aW9uICpjb21wOw0KPj4gQEAgLTI5Niw2ICszNDMsOCBAQCBz
-dGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBudGNfbWF0Y2hbXSA9IHsNCj4+ICAJCS5k
-YXRhID0gJm50Y190aGVybWlzdG9yX2lkWzZdIH0sDQo+PiAgCXsgLmNvbXBhdGlibGUgPSAibXVy
-YXRhLG5jcDE1eGgxMDMiLA0KPj4gIAkJLmRhdGEgPSAmbnRjX3RoZXJtaXN0b3JfaWRbN10gfSwN
-Cj4+ICsJeyAuY29tcGF0aWJsZSA9ICJlcGNvcyxiNTc4OTFzMDEwMyIsDQo+PiArCQkuZGF0YSA9
-ICZudGNfdGhlcm1pc3Rvcl9pZFs4XSB9LA0KPj4gIA0KPj4gIAkvKiBVc2FnZSBvZiB2ZW5kb3Ig
-bmFtZSAibnRjIiBpcyBkZXByZWNhdGVkICovDQo+PiAgCXsgLmNvbXBhdGlibGUgPSAibnRjLG5j
-cDE1d2I0NzMiLA0KPj4gQEAgLTYyNyw2ICs2NzYsMTAgQEAgc3RhdGljIGludCBudGNfdGhlcm1p
-c3Rvcl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4gIAkJZGF0YS0+Y29t
-cCA9IG5jcFhYeGgxMDM7DQo+PiAgCQlkYXRhLT5uX2NvbXAgPSBBUlJBWV9TSVpFKG5jcFhYeGgx
-MDMpOw0KPj4gIAkJYnJlYWs7DQo+PiArCWNhc2UgVFlQRV9CNTc4OTFTMDEwMzoNCj4+ICsJCWRh
-dGEtPmNvbXAgPSBiNTc4OTFzMDEwMzsNCj4+ICsJCWRhdGEtPm5fY29tcCA9IEFSUkFZX1NJWkUo
-YjU3ODkxczAxMDMpOw0KPj4gKwkJYnJlYWs7DQo+PiAgCWRlZmF1bHQ6DQo+PiAgCQlkZXZfZXJy
-KGRldiwgIlVua25vd24gZGV2aWNlIHR5cGU6ICVsdSglcylcbiIsDQo+PiAgCQkJCXBkZXZfaWQt
-PmRyaXZlcl9kYXRhLCBwZGV2X2lkLT5uYW1lKTsNCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
-bnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJtaXN0b3IuaCBiL2luY2x1ZGUvbGludXgvcGxhdGZv
-cm1fZGF0YS9udGNfdGhlcm1pc3Rvci5oDQo+PiBpbmRleCA2OThkMGQ1OWRiNzYuLjIzMWEyN2Mz
-MDJlYyAxMDA2NDQNCj4+IC0tLSBhL2luY2x1ZGUvbGludXgvcGxhdGZvcm1fZGF0YS9udGNfdGhl
-cm1pc3Rvci5oDQo+PiArKysgYi9pbmNsdWRlL2xpbnV4L3BsYXRmb3JtX2RhdGEvbnRjX3RoZXJt
-aXN0b3IuaA0KPj4gQEAgLTI5LDYgKzI5LDcgQEAgZW51bSBudGNfdGhlcm1pc3Rvcl90eXBlIHsN
-Cj4+ICAJVFlQRV9CNTczMzBWMjEwMywNCj4+ICAJVFlQRV9OQ1BYWFdGMTA0LA0KPj4gIAlUWVBF
-X05DUFhYWEgxMDMsDQo+PiArCVRZUEVfQjU3ODkxUzAxMDMsDQo+IA0KPiBHdWVzcyBJIGRlc2Vy
-dmUgdGhlIG5vbi1hbHBoYWJldGljIG9yZGVyIGFzIHBlbmFsdHkgZm9yIG5vdCBlbmZvcmNpbmcg
-aXQgDQo+IGVhcmxpZXIuIEknbGwgYWNjZXB0IHRoZSBwYXRjaCBhZnRlciBEVCBhcHByb3ZhbCBh
-bmQgc3VibWl0IGFub3RoZXIgb25lDQo+IG15c2VsZiBhZnRlcndhcmRzIHRvIHJlc3RvcmUgYWxw
-aGFiZXRpYyBvcmRlci4NCg0KUmlnaHQsIEknbSB0aGlua2luZyBhbm90aGVyIGdvb2QgY2hhbmdl
-IHdvdWxkIGJlIHRvIGludHJvZHVjZSBhbiBlbnVtDQppbnRvIHRoZSBudGNfdGhlcm1pc3Rvcl9p
-ZCBhcnJheSwgYmVjYXVzZSB0aGUgaGFyZC1jb2RlZCBudW1iZXJpbmcgaW4NCnRoZSBudGNfbWF0
-Y2ggdmFyaWFibGUgaXMgYSBiaXQgZnJhZ2lsZSBpbiBteSB0YXN0ZSwgYW5kIHRoYXQgbGlzdCB3
-b3VsZA0KYWxzbyBiZW5lZml0IGZyb20gYmVpbmcgYWxwaGFiZXRpYy4gQ3VycmVudGx5IHRoZXJl
-J3Mgc2ltcGx5IG5vIHdheSB0bw0KYWRkIHRoaW5ncyBpbiB0aGUgbWlkZGxlIHdpdGhvdXQgY2F1
-c2luZyBtYXloZW0uIEkgdGhvdWdodCBhYm91dCBkb2luZw0KdGhhdCwgYnV0IGRpZG4ndCB3YW50
-IHRvIHdhc3RlIGVuZXJneSBkb2luZyBpdCB1cCBmcm9udCB3aXRob3V0IGtub3dpbmcNCmlmIGl0
-IHdvdWxkIGJlIHdlbGwgcmVjZWl2ZWQgKHRoZSBkcml2ZXIgbWlnaHQgaGF2ZSBiZWVuIHN1cGVy
-c2VkZWQgb3INCnNvbWV0aGluZykuIEknbSBnbGFkIHRoYXQgeW91IGhhdmUgdm9sdW50ZWVyZWQg
-dG8gY2xlYW4gdGhpbmdzIHVwLg0KSGEhIDotKQ0KDQpDaGVlcnMsDQpQZXRlcg0KDQo+IEd1ZW50
-ZXINCj4gDQo+PiAgfTsNCj4+ICANCj4+ICBzdHJ1Y3QgbnRjX3RoZXJtaXN0b3JfcGxhdGZvcm1f
-ZGF0YSB7DQo+PiAtLSANCj4+IDIuMTEuMA0KPj4NCg0K
+On Mon, Nov 19, 2018 at 09:16:12PM +0000, Peter Rosin wrote:
+> > 
+> > Guess I deserve the non-alphabetic order as penalty for not enforcing it 
+> > earlier. I'll accept the patch after DT approval and submit another one
+> > myself afterwards to restore alphabetic order.
+> 
+> Right, I'm thinking another good change would be to introduce an enum
+> into the ntc_thermistor_id array, because the hard-coded numbering in
+
+Yes, sounds like a good idea.
+
+> the ntc_match variable is a bit fragile in my taste, and that list would
+> also benefit from being alphabetic. Currently there's simply no way to
+> add things in the middle without causing mayhem. I thought about doing
+> that, but didn't want to waste energy doing it up front without knowing
+> if it would be well received (the driver might have been superseded or
+
+It would.
+
+Guenter
+
+> something). I'm glad that you have volunteered to clean things up.
+> Ha! :-)
+> 
+> Cheers,
+> Peter
+> 
+> > Guenter
+> > 
+> >>  };
+> >>  
+> >>  struct ntc_thermistor_platform_data {
+> >> -- 
+> >> 2.11.0
+> >>
+> 
