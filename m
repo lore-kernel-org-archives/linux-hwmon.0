@@ -1,40 +1,58 @@
-Return-Path: <thierry.reding@gmail.com>
-Return-path: <thierry.reding@gmail.com>
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: hwmon: lm90: Document ti,tmp451 compatible string
-Date: Fri, 23 Nov 2018 13:08:46 +0100
-Message-Id: <20181123120846.16999-1-thierry.reding@gmail.com>
+Return-Path: <peda@axentia.se>
+Return-path: <peda@axentia.se>
+From: Peter Rosin <peda@axentia.se>
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>, Guenter
+ Roeck <linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>
+Subject: [PATCH 0/2] hwmon: (ntc_thermistor) sort thermistors
+Date: Wed, 21 Nov 2018 16:03:35 +0000
+Message-ID: <20181121160327.16772-1-peda@axentia.se>
+References: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
+In-Reply-To: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
+Content-Language: en-US
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Thierry Reding <treding@nvidia.com>
+Hi!
 
-The TI TMP451 temperature sensors are compatible with the National LM90
-temperature sensors.
+These patches are on top of https://patchwork.kernel.org/patch/10687455/
+("hwmon: (ntc_thermistor): add support for B57891S0103 from Epcos")
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- Documentation/devicetree/bindings/hwmon/lm90.txt | 1 +
- 1 file changed, 1 insertion(+)
+I suspect the bots will be confused since that patch is not applied yet.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
-index 97581266e329..c76a7ac47c34 100644
---- a/Documentation/devicetree/bindings/hwmon/lm90.txt
-+++ b/Documentation/devicetree/bindings/hwmon/lm90.txt
-@@ -23,6 +23,7 @@ Required node properties:
- 		"onnn,nct1008"
- 		"winbond,w83l771"
- 		"nxp,sa56004"
-+		"ti,tmp451"
- 
- - reg: I2C bus address of the device
- 
--- 
-2.19.1
+Also, patch 2 of this series has a false positive check-patch issue [1].
+At least with my copy of check-patch. I suspect check-patch warns about
+the macro in case it is ever used to something other than to initialize
+an array, but I fail to see how that would be possible and am therefore
+ignoring the issue.
+
+Further, check-patch warns about patch 1 since I appear to add DT
+compatibles that are not documented. But of course, I'm not adding them,
+I'm just moving them about, so I'm ignoring that too.
+
+Cheers,
+Peter
+
+[1] check-patch output is as below
+
+CHECK: Macro argument reuse 'compensation' - possible side-effects?
+#28: FILE: drivers/hwmon/ntc_thermistor.c:323:
++#define NTC_TYPE(ntc, compensation) \
++[(ntc)] =3D { .comp =3D (compensation), .n_comp =3D ARRAY_SIZE(compensatio=
+n) }
+
+
+Peter Rosin (2):
+  hwmon: (ntc_thermistor) sort thermistor id lists alphabetically
+  hwmon: (ntc_thermistor) use a table to lookup the thermistor type
+
+ drivers/hwmon/ntc_thermistor.c               | 129 +++++++++++++++--------=
+----
+ include/linux/platform_data/ntc_thermistor.h |   6 +-
+ 2 files changed, 73 insertions(+), 62 deletions(-)
+
+--=20
+2.11.0
