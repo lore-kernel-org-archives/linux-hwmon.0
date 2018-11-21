@@ -1,87 +1,60 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34750 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727206AbeKUTPo (ORCPT
+Received: from aserp2120.oracle.com ([141.146.126.78]:60994 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729105AbeKVEEq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Nov 2018 14:15:44 -0500
-Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
- from Epcos
-To: Peter Rosin <peda@axentia.se>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20181117121248.32143-1-peda@axentia.se>
- <20181117121248.32143-2-peda@axentia.se>
- <20181119170732.GA27435@roeck-us.net>
- <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
- <20181119212806.GC5795@roeck-us.net>
- <f15d3e1c-1b53-f390-78e2-6a88c77aed05@axentia.se>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
-Date: Wed, 21 Nov 2018 00:42:05 -0800
+        Wed, 21 Nov 2018 23:04:46 -0500
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-scsi@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        smartmontools-support@listi.jpberlin.de
+Subject: Re: [PATCH v7] scsi: Add hwmon support for SMART temperature sensors
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20181118193729.25278-1-linus.walleij@linaro.org>
+Date: Wed, 21 Nov 2018 12:28:46 -0500
+In-Reply-To: <20181118193729.25278-1-linus.walleij@linaro.org> (Linus
+        Walleij's message of "Sun, 18 Nov 2018 20:37:29 +0100")
+Message-ID: <yq1va4q8hm9.fsf@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <f15d3e1c-1b53-f390-78e2-6a88c77aed05@axentia.se>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 11/20/18 10:06 PM, Peter Rosin wrote:
-> On 2018-11-19 22:28, Guenter Roeck wrote:
->> On Mon, Nov 19, 2018 at 09:16:12PM +0000, Peter Rosin wrote:
->>>>
->>>> Guess I deserve the non-alphabetic order as penalty for not enforcing it
->>>> earlier. I'll accept the patch after DT approval and submit another one
->>>> myself afterwards to restore alphabetic order.
->>>
->>> Right, I'm thinking another good change would be to introduce an enum
->>> into the ntc_thermistor_id array, because the hard-coded numbering in
->>
->> Yes, sounds like a good idea.
->>
->>> the ntc_match variable is a bit fragile in my taste, and that list would
->>> also benefit from being alphabetic. Currently there's simply no way to
->>> add things in the middle without causing mayhem. I thought about doing
->>> that, but didn't want to waste energy doing it up front without knowing
->>> if it would be well received (the driver might have been superseded or
->>
->> It would.
-> 
-> Right, so I have some patches sorting things out... However, one question
 
-Sounds good.
+Hi Linus!
 
-> before I send them: Is it ok to sort the enum ntc_thermistor_type in the
-> include/linux/platform_data/ntc_thermistor.h header or will that break
-> stuff?
-> 
+> This driver does not block any simultaneous use of other SMART
+> userspace tools, it's a both/and approach, not either/or.
 
-Should be ok. It is not an UAPI, after all.
+The problem with all this is that the storage topology is largely
+undiscoverable for monitoring purposes. We can use heuristics, but in
+many cases there is no reliable way to find out that there is an ATA
+device behind member #3 of a USB-attached RAID controller's virtual disk
+#5.
 
-Guenter
+So while I am sympathetic to providing this type of information inside
+the kernel, the complexity of getting it right is mindboggling. Which is
+why it currently lives in smartmontools in userland. And why even the
+latter defers several of the topology decisions to the administrator.
 
-> Cheers,
-> Peter
-> 
->> Guenter
->>
->>> something). I'm glad that you have volunteered to clean things up.
->>> Ha! :-)
->>>
->>> Cheers,
->>> Peter
->>>
->>>> Guenter
->>>>
->>>>>   };
->>>>>   
->>>>>   struct ntc_thermistor_platform_data {
->>>>> -- 
->>>>> 2.11.0
->>>>>
->>>
-> 
+You could then argue that the kernel should only provide sensors for a
+trivial subset of configurations such as direct-attached ATA/SAS/USB
+devices that provide sufficient heuristics to ensure we don't
+accidentally send commands down that may wedge the device. I.e. repicate
+smartmontools' heuristics inside the kernel. That's a valid position but
+I remain unconvinced that it's worth it. Do you have specific user cases
+other than this particular RAID box without enclosure sensors? (It's
+also worth noting that HDD temperature sensors are notoriously
+unreliable).
+
+And finally, from an implementation perspective, both James and Doug
+pointed you to SAT and the SCSI Temperature Log Page. libata is our
+SAT. And thus the S.M.A.R.T. bits should be located in a libsmart
+library that libata and USB can use to fill out the SCSI Temperature Log
+Page. The hwmon-facing code would then use that log page instead of
+dissecting S.M.A.R.T. information directly.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
