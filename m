@@ -1,57 +1,87 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-eopbgr70134.outbound.protection.outlook.com ([40.107.7.134]:55008
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726195AbeKUQju (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Nov 2018 11:39:50 -0500
-From: Peter Rosin <peda@axentia.se>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34750 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727206AbeKUTPo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Nov 2018 14:15:44 -0500
+Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
+ from Epcos
+To: Peter Rosin <peda@axentia.se>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
- from Epcos
-Date: Wed, 21 Nov 2018 06:06:41 +0000
-Message-ID: <f15d3e1c-1b53-f390-78e2-6a88c77aed05@axentia.se>
 References: <20181117121248.32143-1-peda@axentia.se>
  <20181117121248.32143-2-peda@axentia.se>
  <20181119170732.GA27435@roeck-us.net>
  <f1235661-f8f2-9885-1e7f-491f5c234078@axentia.se>
  <20181119212806.GC5795@roeck-us.net>
-In-Reply-To: <20181119212806.GC5795@roeck-us.net>
-Content-Language: en-US
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A4B519E5F340654C947F9DC427B2B62A@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <f15d3e1c-1b53-f390-78e2-6a88c77aed05@axentia.se>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
+Date: Wed, 21 Nov 2018 00:42:05 -0800
 MIME-Version: 1.0
+In-Reply-To: <f15d3e1c-1b53-f390-78e2-6a88c77aed05@axentia.se>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-T24gMjAxOC0xMS0xOSAyMjoyOCwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gTW9uLCBOb3Yg
-MTksIDIwMTggYXQgMDk6MTY6MTJQTSArMDAwMCwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+Pj4NCj4+
-PiBHdWVzcyBJIGRlc2VydmUgdGhlIG5vbi1hbHBoYWJldGljIG9yZGVyIGFzIHBlbmFsdHkgZm9y
-IG5vdCBlbmZvcmNpbmcgaXQgDQo+Pj4gZWFybGllci4gSSdsbCBhY2NlcHQgdGhlIHBhdGNoIGFm
-dGVyIERUIGFwcHJvdmFsIGFuZCBzdWJtaXQgYW5vdGhlciBvbmUNCj4+PiBteXNlbGYgYWZ0ZXJ3
-YXJkcyB0byByZXN0b3JlIGFscGhhYmV0aWMgb3JkZXIuDQo+Pg0KPj4gUmlnaHQsIEknbSB0aGlu
-a2luZyBhbm90aGVyIGdvb2QgY2hhbmdlIHdvdWxkIGJlIHRvIGludHJvZHVjZSBhbiBlbnVtDQo+
-PiBpbnRvIHRoZSBudGNfdGhlcm1pc3Rvcl9pZCBhcnJheSwgYmVjYXVzZSB0aGUgaGFyZC1jb2Rl
-ZCBudW1iZXJpbmcgaW4NCj4gDQo+IFllcywgc291bmRzIGxpa2UgYSBnb29kIGlkZWEuDQo+IA0K
-Pj4gdGhlIG50Y19tYXRjaCB2YXJpYWJsZSBpcyBhIGJpdCBmcmFnaWxlIGluIG15IHRhc3RlLCBh
-bmQgdGhhdCBsaXN0IHdvdWxkDQo+PiBhbHNvIGJlbmVmaXQgZnJvbSBiZWluZyBhbHBoYWJldGlj
-LiBDdXJyZW50bHkgdGhlcmUncyBzaW1wbHkgbm8gd2F5IHRvDQo+PiBhZGQgdGhpbmdzIGluIHRo
-ZSBtaWRkbGUgd2l0aG91dCBjYXVzaW5nIG1heWhlbS4gSSB0aG91Z2h0IGFib3V0IGRvaW5nDQo+
-PiB0aGF0LCBidXQgZGlkbid0IHdhbnQgdG8gd2FzdGUgZW5lcmd5IGRvaW5nIGl0IHVwIGZyb250
-IHdpdGhvdXQga25vd2luZw0KPj4gaWYgaXQgd291bGQgYmUgd2VsbCByZWNlaXZlZCAodGhlIGRy
-aXZlciBtaWdodCBoYXZlIGJlZW4gc3VwZXJzZWRlZCBvcg0KPiANCj4gSXQgd291bGQuDQoNClJp
-Z2h0LCBzbyBJIGhhdmUgc29tZSBwYXRjaGVzIHNvcnRpbmcgdGhpbmdzIG91dC4uLiBIb3dldmVy
-LCBvbmUgcXVlc3Rpb24NCmJlZm9yZSBJIHNlbmQgdGhlbTogSXMgaXQgb2sgdG8gc29ydCB0aGUg
-ZW51bSBudGNfdGhlcm1pc3Rvcl90eXBlIGluIHRoZQ0KaW5jbHVkZS9saW51eC9wbGF0Zm9ybV9k
-YXRhL250Y190aGVybWlzdG9yLmggaGVhZGVyIG9yIHdpbGwgdGhhdCBicmVhaw0Kc3R1ZmY/DQoN
-CkNoZWVycywNClBldGVyDQoNCj4gR3VlbnRlcg0KPiANCj4+IHNvbWV0aGluZykuIEknbSBnbGFk
-IHRoYXQgeW91IGhhdmUgdm9sdW50ZWVyZWQgdG8gY2xlYW4gdGhpbmdzIHVwLg0KPj4gSGEhIDot
-KQ0KPj4NCj4+IENoZWVycywNCj4+IFBldGVyDQo+Pg0KPj4+IEd1ZW50ZXINCj4+Pg0KPj4+PiAg
-fTsNCj4+Pj4gIA0KPj4+PiAgc3RydWN0IG50Y190aGVybWlzdG9yX3BsYXRmb3JtX2RhdGEgew0K
-Pj4+PiAtLSANCj4+Pj4gMi4xMS4wDQo+Pj4+DQo+Pg0KDQo=
+On 11/20/18 10:06 PM, Peter Rosin wrote:
+> On 2018-11-19 22:28, Guenter Roeck wrote:
+>> On Mon, Nov 19, 2018 at 09:16:12PM +0000, Peter Rosin wrote:
+>>>>
+>>>> Guess I deserve the non-alphabetic order as penalty for not enforcing it
+>>>> earlier. I'll accept the patch after DT approval and submit another one
+>>>> myself afterwards to restore alphabetic order.
+>>>
+>>> Right, I'm thinking another good change would be to introduce an enum
+>>> into the ntc_thermistor_id array, because the hard-coded numbering in
+>>
+>> Yes, sounds like a good idea.
+>>
+>>> the ntc_match variable is a bit fragile in my taste, and that list would
+>>> also benefit from being alphabetic. Currently there's simply no way to
+>>> add things in the middle without causing mayhem. I thought about doing
+>>> that, but didn't want to waste energy doing it up front without knowing
+>>> if it would be well received (the driver might have been superseded or
+>>
+>> It would.
+> 
+> Right, so I have some patches sorting things out... However, one question
+
+Sounds good.
+
+> before I send them: Is it ok to sort the enum ntc_thermistor_type in the
+> include/linux/platform_data/ntc_thermistor.h header or will that break
+> stuff?
+> 
+
+Should be ok. It is not an UAPI, after all.
+
+Guenter
+
+> Cheers,
+> Peter
+> 
+>> Guenter
+>>
+>>> something). I'm glad that you have volunteered to clean things up.
+>>> Ha! :-)
+>>>
+>>> Cheers,
+>>> Peter
+>>>
+>>>> Guenter
+>>>>
+>>>>>   };
+>>>>>   
+>>>>>   struct ntc_thermistor_platform_data {
+>>>>> -- 
+>>>>> 2.11.0
+>>>>>
+>>>
+> 
