@@ -1,42 +1,40 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from youngberry.canonical.com ([91.189.89.112]:47731 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726248AbeK0DXN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Nov 2018 22:23:13 -0500
-From: Colin King <colin.king@canonical.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (ltc2978): Fix spelling mistake "comppatible" -> "compatible"
-Date: Mon, 26 Nov 2018 16:28:32 +0000
-Message-Id: <20181126162832.28060-1-colin.king@canonical.com>
+Return-Path: <thierry.reding@gmail.com>
+Return-path: <thierry.reding@gmail.com>
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwmon: lm90: Document ti,tmp451 compatible string
+Date: Fri, 23 Nov 2018 13:08:46 +0100
+Message-Id: <20181123120846.16999-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Thierry Reding <treding@nvidia.com>
 
-There is a spelling mistake in the module description text, fix it.
+The TI TMP451 temperature sensors are compatible with the National LM90
+temperature sensors.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/hwmon/pmbus/ltc2978.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/hwmon/lm90.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 07afb92bb36b..29c0b7219aaa 100644
---- a/drivers/hwmon/pmbus/ltc2978.c
-+++ b/drivers/hwmon/pmbus/ltc2978.c
-@@ -795,5 +795,5 @@ static struct i2c_driver ltc2978_driver = {
- module_i2c_driver(ltc2978_driver);
+diff --git a/Documentation/devicetree/bindings/hwmon/lm90.txt b/Documentation/devicetree/bindings/hwmon/lm90.txt
+index 97581266e329..c76a7ac47c34 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm90.txt
++++ b/Documentation/devicetree/bindings/hwmon/lm90.txt
+@@ -23,6 +23,7 @@ Required node properties:
+ 		"onnn,nct1008"
+ 		"winbond,w83l771"
+ 		"nxp,sa56004"
++		"ti,tmp451"
  
- MODULE_AUTHOR("Guenter Roeck");
--MODULE_DESCRIPTION("PMBus driver for LTC2978 and comppatible chips");
-+MODULE_DESCRIPTION("PMBus driver for LTC2978 and compatible chips");
- MODULE_LICENSE("GPL");
+ - reg: I2C bus address of the device
+ 
 -- 
 2.19.1
