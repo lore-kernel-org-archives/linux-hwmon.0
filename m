@@ -1,78 +1,165 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:45626 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730360AbeKXDXt (ORCPT
+Received: from userp2130.oracle.com ([156.151.31.86]:39562 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727607AbeKXKNS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Nov 2018 22:23:49 -0500
-Subject: Re: [PATCH] hwmon (ina3221) Add single-shot mode support
-To: Nicolin Chen <nicoleotsuka@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-References: <20181113042353.1507-1-nicoleotsuka@gmail.com>
- <20181113043248.GB11205@roeck-us.net>
- <20181113045823.GB26327@Asurada-Nvidia.nvidia.com>
- <20181113172102.GA21714@roeck-us.net>
- <20181114001141.GA14925@Asurada-Nvidia.nvidia.com>
- <20181114172330.GA25592@roeck-us.net>
- <20181117015131.GA10407@Asurada-Nvidia.nvidia.com>
- <20181119174559.GC27435@roeck-us.net>
- <20181119221842.GA26382@Asurada-Nvidia.nvidia.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b1a34c68-d5e3-9a6f-67b1-6b6d2332f1c6@roeck-us.net>
-Date: Fri, 23 Nov 2018 08:38:50 -0800
+        Sat, 24 Nov 2018 05:13:18 -0500
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-scsi@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        smartmontools-support@listi.jpberlin.de
+Subject: Re: [PATCH v7] scsi: Add hwmon support for SMART temperature sensors
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20181118193729.25278-1-linus.walleij@linaro.org>
+        <yq1va4q8hm9.fsf@oracle.com>
+        <CACRpkdY2-JfpSP0=cpfzCrX2GYiChj2ZMC_i3k+9xH8kDnt7Ng@mail.gmail.com>
+Date: Fri, 23 Nov 2018 18:26:28 -0500
+In-Reply-To: <CACRpkdY2-JfpSP0=cpfzCrX2GYiChj2ZMC_i3k+9xH8kDnt7Ng@mail.gmail.com>
+        (Linus Walleij's message of "Thu, 22 Nov 2018 14:49:53 +0100")
+Message-ID: <yq1lg5j5qaj.fsf@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20181119221842.GA26382@Asurada-Nvidia.nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 11/19/18 2:18 PM, Nicolin Chen wrote:
-> On Mon, Nov 19, 2018 at 09:45:59AM -0800, Guenter Roeck wrote:
->>> In short, other than exposing it via a generic ABI to the user
->>> space, how about defining some policy to maintaining it within
->>> the driver?
-> 
->> I think that would be a bad idea. It changes timing for everyone
->> curently using the driver. It also effectively disables monitoring,
->> which is the main purpose for using this chip (and other hardware
->> monitoring chips). This is indeed a key difference between iio
->> and hwmon - the main purpose of chips in the iio subsystem is to
->> be able report data efficiently to user space, not hardware monitoring.
->> I do not think it is appropriate to use iio requirements as argument
->> to change hwmon driver behavior (and vice versa).
-> 
-> OK...what about setting a default mode via DT? I didn't expect it
-> to be possible until I found this existing solution. Though it is
-> still in an iio driver, I don't think this should be iio specific.
-> 
->    commit 023e30fb0d3a3b9d6b8dc9e47590aa544d58a22f
->    Author: Adriana Reus <adriana.reus@intel.com>
->    Date:   Tue Nov 24 12:59:49 2015 +0200
-> 
->      Documentation: devicetree: Add property for controlling power saving
->                     mode for the us5182 als sensor
-> 
->      Add a property to allow changing the default power-saving mode.
->      By default, at read raw the chip will activate and provide
->      one measurent, then it will shut itself down. However, the
->      chip can also work in "continuous" mode which may be more reliable
->      but is also more power consuming.
-> 
->      Signed-off-by: Adriana Reus <adriana.reus@intel.com>
->      Acked-by: Rob Herring <robh@kernel.org>
->      Signed-off-by: Jonathan Cameron <jic23@kernel.org>
-> 
-> Would it be possible for me to apply a similar one? Since hwmon
-> driver uses continuous mode by default, I will add a "one-shot"
-> property instead of "continuous" -- all existing users won't be
-> effected unless they place one-shot properties in DT bindings.
-> 
 
-I would accept such a patch, but it would for all practical purposes
-disable the monitoring of limits. Make sure that is well documented.
+Hi Linus,
 
-Guenter
+>> The problem with all this is that the storage topology is largely
+>> undiscoverable for monitoring purposes. We can use heuristics, but in
+>> many cases there is no reliable way to find out that there is an ATA
+>> device behind member #3 of a USB-attached RAID controller's virtual disk
+>> #5.
+>
+> OK I guess they just opt out of it?
+
+There is no way to discover the actual topology in a vendor-agnostic
+way. See all the -d options to smartctl and how discovery is left as an
+exercise to the user in many cases :(
+
+>> You could then argue that the kernel should only provide sensors for a
+>> trivial subset of configurations such as direct-attached ATA/SAS/USB
+>> devices that provide sufficient heuristics to ensure we don't
+>> accidentally send commands down that may wedge the device.
+>
+> This is what the current patch does ... it's an opt-in per-subsystem.
+
+Yep, but I'm afraid that may not be a good enough granularity. There are
+tons of USB devices out there that wedge when you send them a command
+they didn't expect (temperature sensor on a USB stick?). So there needs
+to be some sort of heuristic in place. In this case the right way to
+signal "I'm an ATA device" would be to provide the ATA Information VPD
+page. Unfortunately, almost no USB/UAS/FireWire devices fill that out.
+
+To solve other, similar headaches I have been toying with the idea of
+teaching usb-storage/uas to present an intermediary libata-like SAT for
+the primary (non-I/O) commands instead of relying on the device
+implementation doing the right thing. This would clean up some of the
+extensive blacklist/whitelist hacks we currently carry in SCSI due to
+misbehaving devices.
+
+> I just opted in libata PATA devices (pretty obvious this will work)
+> and USB, and tested a bit with different devices there, nothing seems
+> to break, the ATA disks behind USB transport works fine and
+> report temperature just fine.
+
+libata should be reasonably safe, USB & UAS definitely carry some risk.
+
+>> (It's also worth noting that HDD temperature sensors are notoriously
+>> unreliable).
+>
+> I am sorry if you think that D-Link does bad engineering, what I
+> am trying to achieve is upstream support for this device, without
+> any out-of-tree patches. The D-Link DIR-685 uses the harddisk
+> sensor for this, whether we like it or not.
+
+Sad, but not surprising.
+
+Meanwhile elsewhere we have had drive vendors begging us to ignore the
+reported temperature. We have measured in excess of 25 degC difference
+between the drive PCB temp sensor and the sensor in the drive bay. We
+have also had cases where the drives reported "lp0 on fire" despite the
+bay temperature being nominal.
+
+So I think it is imperative that no action is taken in response to the
+drive-reported values without explicit opt-in from the user (or in your
+NAS case maybe some device tree platform enablement). There is a reason
+that all this S.M.A.R.T. stuff is disabled by default and left for the
+admin to configure. S.M.A.R.T. and its properly standardized successors
+have improved, but so far we have had way too many false positives to
+entertain turning it on by default. I would absolutely love for things
+to Just Work but unfortunately it hasn't been feasible to go there.
+
+Taking a step back: You are doing this so that you can feed drive
+temperature sensor data to hwmon from inside the kernel. Thought about
+feeding it temperature data from smartctl in userland instead?  Just
+wondering if the path of least resistance is leveraging the 70Klines of
+existing temperature sensor reading heuristics that is smartmontools
+(admittedly some of that is non-Linux support).
+
+> I hope this is possible without having to buy and implement the same
+> mechanism also for SCSI drives. I don't have any SCSI devices...
+
+# modprobe scsi_debug
+# sg_logs /dev/sda
+    Linux     scsi_debug        0184
+Supported log pages  (spc-2) [0x0]:
+    0x00        Supported log pages
+    0x0d        Temperature
+    0x2f        Informational exceptions (SMART)
+
+> Am I right in that the modepages for libata is the stuff inside
+> drivers/ata/libata-scsi.c, like the stuff on the very top with the
+> cache_mpage[] and def_control_mpage[]?
+
+Essentially, yes. Except the temperature is in a log page and not a mode
+(device configuration) page. Pretty much the same thing.
+
+> These are all generated in response to the ata_scsiop_mode_sense()
+> callback from ata_scsi_simulate() in response to MODE_SENSE and
+> MODE_SENSE_10 commands.
+
+Yeah, so you'd have to mirror this to implement LOG SENSE.
+
+> - Add a case for LOG_SENSE (0x4d) in ata_scsi_simulate()
+>
+> - Prepare a callback and provide a mode page 0x0d from there.
+>
+> - Provide a modepage 0x0d in response to that command from SCSI.
+
+Log page, yes.
+
+> - Implement some code to request and deal with that modepage in
+> drivers/scsi to register the hwmon sensor
+
+Correct.
+
+> Architecturally I see the upside of this, but I also see a problem:
+> the modepage simulation would be useful not only for libata but also
+> (as is proved by testing with USB cradles) from USB storage as
+> well. But I guess I can figure that out, it's essentially just a piece
+> of libata that USB need to share.
+
+Yep, that's why I suggested making it a "libsmart" so that the code
+could be leveraged by usb-storage/uas.
+
+> The thing/command I pass in now is ATA_16 (0x85) 16-byte pass-thru, I
+> take it that a ATA_16 pass thru is NOT a proper command or modepage
+> but something like an uglyhack?...
+
+ATA_16 is a pass-thru command defined in the T10 SAT (SCSI-ATA
+Translation) specification. It acts as a conduit for sending an
+encapsulated ATA command through a SCSI device.
+
+You also need to add the ability to stop sending these commands if they
+fail. Sending unsupported commands to a device can be quite disruptive
+and impact performance for other I/O. So if the passthrough fails, you
+should permanently disable the feature for that device. That's how we
+usually deal with these things since there often isn't a way to
+determine up front if something is going to work or not.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
