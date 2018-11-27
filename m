@@ -1,66 +1,69 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42136 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbeKZKjb (ORCPT
+Received: from confino.investici.org ([212.103.72.250]:29124 "EHLO
+        confino.investici.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbeK1Kcu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Nov 2018 05:39:31 -0500
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v4.20-rc5
-Date: Sun, 25 Nov 2018 15:47:10 -0800
-Message-Id: <1543189630-5306-1-git-send-email-linux@roeck-us.net>
+        Wed, 28 Nov 2018 05:32:50 -0500
+From: Michele Sorcinelli <michelesr@autistici.org>
+To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Michele Sorcinelli <michelesr@autistici.org>
+Subject: [PATCH] dell-smm-hwmon.c: Add XPS 9570 to supported devices list
+Date: Tue, 27 Nov 2018 23:06:37 +0000
+Message-Id: <20181127230637.8673-1-michelesr@autistici.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Allow the module to be loaded on Dell XPS 9570, without having to use
+the "force=1" option. The module loads without problems, and reports
+correct fan values:
 
-Please pull hwmon fixes for Linux v4.20-rc5 from signed tag:
+    $ time cat /proc/i8k
+    1.0 1.5 -1 35 0 0 0 0 -1 -22
+    cat /proc/i8k  0.00s user 0.00s system 7% cpu 0.033 total
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v4.20-rc5
+However, the call may freeze the kernel for a very small time due to
+code running in the SSM layer. This is a known issue with the driver, and
+can be reproduced with other supported models. Average execution
+time is 33 ms.
 
-Thanks,
-Guenter
-------
+The command line tools from i8kutils can properly set the fan speed,
+although the firmware will override it, unless automatic fan
+control is disabled with the proper SSM call.
 
-The following changes since commit ccda4af0f4b92f7b4c308d3acc262f4a7e3affad:
+Average fans speed (when firwmare automatic control is off):
 
-  Linux 4.20-rc2 (2018-11-11 17:12:31 -0600)
+STATE -> RPM
+0 0 -> 0 0
+1 1 -> 2500 2500
+2 2 -> 5100 5100
+3 3 -> same as 2 2
+---
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-are available in the git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v4.20-rc5
-
-for you to fetch changes up to 09aaf6813cfca4c18034fda7a43e68763f34abb1:
-
-  hwmon: (w83795) temp4_type has writable permission (2018-11-18 14:34:56 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v4.20-rc5
-
-Fix temp4_type attribute permissions in w83795 driver
-Fix tacho fault detection in mlxreg-fan driver
-Fix current value calculations in ina2xx driver
-Fix initial notification/warning in raspberrypi driver
-Fix a NULL pointer access in ina2xx
-
-----------------------------------------------------------------
-Huacai Chen (1):
-      hwmon: (w83795) temp4_type has writable permission
-
-Nicolin Chen (2):
-      hwmon (ina2xx) Fix NULL id pointer in probe()
-      hwmon: (ina2xx) Fix current value calculation
-
-Stefan Wahren (1):
-      hwmon: (raspberrypi) Fix initial notify
-
-Vadim Pasternak (1):
-      hwmon: (mlxreg-fan) Fix macros for tacho fault reading
-
- drivers/hwmon/ina2xx.c            | 6 +++---
- drivers/hwmon/mlxreg-fan.c        | 2 +-
- drivers/hwmon/raspberrypi-hwmon.c | 6 ------
- drivers/hwmon/w83795.c            | 2 +-
- 4 files changed, 5 insertions(+), 11 deletions(-)
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 9d3ef879d..367a8a617 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1017,6 +1017,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
+ 		},
+ 	},
++	{
++		.ident = "Dell XPS 15 9570",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
++		},
++	},
+ 	{ }
+ };
+ 
+-- 
+2.19.2
