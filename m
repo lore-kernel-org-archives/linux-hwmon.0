@@ -1,72 +1,145 @@
-Return-Path: <flip101@gmail.com>
-Return-path: <flip101@gmail.com>
+Return-Path: <michelesr@autistici.org>
+Return-path: <michelesr@autistici.org>
+Subject: Re: [PATCH] dell-smm-hwmon.c: Add XPS 9570 to supported devices list
+From: Michele Sorcinelli <michelesr@autistici.org>
+To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org
+References: <20181127230637.8673-1-michelesr@autistici.org>
+ <fee13b89-90d1-0c62-84f1-4f282ca36c61@autistici.org>
+ <20181128125613.7sblicuf6xqd7lun@pali>
+ <0d8fa793-2823-949e-1f4d-68824717b487@autistici.org>
+Message-ID: <8f9f8a22-0d32-f938-5a6d-21d5cf1e91a5@autistici.org>
+Date: Wed, 28 Nov 2018 23:23:07 +0000
 MIME-Version: 1.0
-From: Philippe L <flip101@gmail.com>
-Date: Wed, 28 Nov 2018 16:20:38 +0000
-Message-ID: <CACQKD__b7a7-R_LBLiaAxpwD2xUkHAWY6Dhhqg2gazbnPZavJQ@mail.gmail.com>
-Subject: amdgpu creating fan attribute for integrated graphics
-To: Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-	"David (ChunMing) Zhou" <David1.Zhou@amd.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Content-Type: multipart/alternative; boundary="000000000000069a7b057bbbf360"
+In-Reply-To: <0d8fa793-2823-949e-1f4d-68824717b487@autistici.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
---000000000000069a7b057bbbf360
-Content-Type: text/plain; charset="UTF-8"
+I tried to debug the temperature sensor probing with some printk()
+around the code... it looks like the ssm calls are all returning -22
+as result:
 
-Hello,
+[   90.565793] Calling i8k_get_temp_type(0)
+[   90.565795] Inside i8k_get_temp_type() with sensors = 0
+[   90.565795] Performing i8k_smm call
+[   90.567708] Result of the i8k_smm call: -22
+[   90.567708] Return value of i8k_get_temp_type: -22
+[   90.567709] Result of i8k_get_temp_type(0): -22
+[   90.567709] Calling i8k_get_temp_type(1)
+[   90.567710] Inside i8k_get_temp_type() with sensors = 1
+[   90.567710] Performing i8k_smm call
+[   90.568567] Result of the i8k_smm call: -22
+[   90.568567] Return value of i8k_get_temp_type: -22
+[   90.568568] Result of i8k_get_temp_type(0): -22
+[   90.568568] Calling i8k_get_temp_type(2)
+[   90.568568] Inside i8k_get_temp_type() with sensors = 2
+[   90.568569] Performing i8k_smm call
+[   90.569441] Result of the i8k_smm call: -22
+[   90.569441] Return value of i8k_get_temp_type: -22
+[   90.569442] Result of i8k_get_temp_type(0): -22
+[   90.569442] Calling i8k_get_temp_type(3)
+[   90.569442] Inside i8k_get_temp_type() with sensors = 3
+[   90.569443] Performing i8k_smm call
+[   90.570321] Result of the i8k_smm call: -22
+[   90.570322] Return value of i8k_get_temp_type: -22
+[   90.570322] Result of i8k_get_temp_type(0): -22
 
-I'm writing to you after discussing a fancontrol issue on the lm-sensors
-issue tracker. I have a AMD Ryzen 5 2400G APU (with integrated graphics).
-The amdgpu driver is loaded and also creates a fan1_input attribute.
-However there is no separate GPU fan, there is only the CPU (APU) fan which
-is controlled by the motherboard. The fan1_input also seems to give some
-invalid readouts. I have not yet reached the bottom of this investigation,
-but so far my conclusion is that this causes fancontrol to choke up.
+So this must be the reason for which sensors aren't detected.
 
-Specifically the comment by Guenter Roeck here
-https://github.com/lm-sensors/lm-sensors/issues/144#issuecomment-442165451
-describes the findings regarding the amdgpu driver.
+AFAIK, SSM code is much of a black-box and finding how to fix
+this will probably require some reverse engineering.
 
-I'm writing to notify you about this problem, perhaps there can be some
-improvement in the amdgpu driver. I'm not really knowledgeable to discuss
-the workings of these drivers but i can provide debug output if needed.
+However, apart from this and the fact that kernel hangs during
+the SSM call (that is reasonable and again not much can't be done),
+everything looks fine.
 
-Best regards,
-Philippe
+Let me know if you want me to include more information in the commit 
+message for the patch or want me to do more testing.
 
---000000000000069a7b057bbbf360
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div class=3D"gmail_defa=
-ult" style=3D"font-family:verdana,sans-serif;color:rgb(7,55,99)">Hello,</di=
-v><div class=3D"gmail_default" style=3D"font-family:verdana,sans-serif;colo=
-r:rgb(7,55,99)"><br></div><div class=3D"gmail_default" style=3D"font-family=
-:verdana,sans-serif;color:rgb(7,55,99)">I&#39;m writing to you after discus=
-sing a fancontrol issue on the lm-sensors issue tracker. I have a AMD Ryzen=
- 5 2400G APU (with integrated graphics). The amdgpu driver is loaded and al=
-so creates a fan1_input attribute. However there is no separate GPU fan, th=
-ere is only the CPU (APU) fan which is controlled by the motherboard. The f=
-an1_input also seems to give some invalid readouts. I have not yet reached =
-the bottom of this investigation, but so far my conclusion is that this cau=
-ses fancontrol to choke up.</div><div class=3D"gmail_default" style=3D"font=
--family:verdana,sans-serif;color:rgb(7,55,99)"><br></div><div class=3D"gmai=
-l_default" style=3D"font-family:verdana,sans-serif;color:rgb(7,55,99)">Spec=
-ifically the comment by Guenter Roeck here <a href=3D"https://github.com/lm=
--sensors/lm-sensors/issues/144#issuecomment-442165451">https://github.com/l=
-m-sensors/lm-sensors/issues/144#issuecomment-442165451</a> describes the fi=
-ndings regarding the amdgpu driver.</div><div class=3D"gmail_default" style=
-=3D"font-family:verdana,sans-serif;color:rgb(7,55,99)"><br></div><div class=
-=3D"gmail_default" style=3D"font-family:verdana,sans-serif;color:rgb(7,55,9=
-9)">I&#39;m writing to notify you about this problem, perhaps there can be =
-some improvement in the amdgpu driver. I&#39;m not really knowledgeable to =
-discuss the workings of these drivers but i can provide debug output if nee=
-ded.</div><div class=3D"gmail_default" style=3D"font-family:verdana,sans-se=
-rif;color:rgb(7,55,99)"><br></div><div class=3D"gmail_default" style=3D"fon=
-t-family:verdana,sans-serif;color:rgb(7,55,99)">Best regards,</div><div cla=
-ss=3D"gmail_default" style=3D"font-family:verdana,sans-serif;color:rgb(7,55=
-,99)">Philippe<br></div></div></div></div>
-
---000000000000069a7b057bbbf360--
+On 11/28/18 1:01 PM, Michele Sorcinelli wrote:
+> Yes, values are reported correctly when the fan are on. I tested it
+> by disabling the firmware automatic control using 
+> https://github.com/TomFreudenberg/dell-bios-fan-control and then running 
+> i8kfan 1 1 and i8kfan 2 2, which brought the fans to 2500 and 5100 
+> respectively.
+> 
+> When automatic control is on I can see intermediate speeds as well.
+> 
+> Is there anything that can be done to help the driver to discover
+> the temperature sensors?
+> 
+> On 11/28/18 12:56 PM, Pali Rohár wrote:
+>> On Wednesday 28 November 2018 12:30:31 Michele Sorcinelli wrote:
+>>> The output of sensors related to the is:
+>>>
+>>> dell_smm-virtual-0
+>>> Adapter: Virtual device
+>>> fan1:           0 RPM
+>>> fan2:           0 RPM
+>>
+>> Ok, this means that both fans are turned off.
+>>
+>> When you start fans, have both number meaningful/correct value?
+>>
+>>> This suggests that temperature sensors are not discovered.
+>>
+>> Yes, probably they are unsupported or not discovered. But this is not
+>> a problem.
+>>
+>>> Speeds reported in the hwmon interface are consistent with the others.
+>>>
+>>>
+>>> On 11/27/18 11:06 PM, Michele Sorcinelli wrote:
+>>>> Allow the module to be loaded on Dell XPS 9570, without having to use
+>>>> the "force=1" option. The module loads without problems, and reports
+>>>> correct fan values:
+>>>>
+>>>>       $ time cat /proc/i8k
+>>>>       1.0 1.5 -1 35 0 0 0 0 -1 -22
+>>>>       cat /proc/i8k  0.00s user 0.00s system 7% cpu 0.033 total
+>>>>
+>>>> However, the call may freeze the kernel for a very small time due to
+>>>> code running in the SSM layer. This is a known issue with the 
+>>>> driver, and
+>>>> can be reproduced with other supported models. Average execution
+>>>> time is 33 ms.
+>>>>
+>>>> The command line tools from i8kutils can properly set the fan speed,
+>>>> although the firmware will override it, unless automatic fan
+>>>> control is disabled with the proper SSM call.
+>>>>
+>>>> Average fans speed (when firwmare automatic control is off):
+>>>>
+>>>> STATE -> RPM
+>>>> 0 0 -> 0 0
+>>>> 1 1 -> 2500 2500
+>>>> 2 2 -> 5100 5100
+>>>> 3 3 -> same as 2 2
+>>>> ---
+>>>>    drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+>>>>    1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/drivers/hwmon/dell-smm-hwmon.c 
+>>>> b/drivers/hwmon/dell-smm-hwmon.c
+>>>> index 9d3ef879d..367a8a617 100644
+>>>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>>>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>>>> @@ -1017,6 +1017,13 @@ static const struct dmi_system_id 
+>>>> i8k_dmi_table[] __initconst = {
+>>>>                DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
+>>>>            },
+>>>>        },
+>>>> +    {
+>>>> +        .ident = "Dell XPS 15 9570",
+>>>> +        .matches = {
+>>>> +            DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+>>>> +            DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
+>>>> +        },
+>>>> +    },
+>>>>        { }
+>>>>    };
+>>>>
+>>
