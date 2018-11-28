@@ -1,104 +1,74 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from confino.investici.org ([212.103.72.250]:34652 "EHLO
-        confino.investici.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728092AbeK2ADc (ORCPT
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37972 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727307AbeK2HDX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Nov 2018 19:03:32 -0500
-Subject: Re: [PATCH] dell-smm-hwmon.c: Add XPS 9570 to supported devices list
-To: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-References: <20181127230637.8673-1-michelesr@autistici.org>
- <fee13b89-90d1-0c62-84f1-4f282ca36c61@autistici.org>
- <20181128125613.7sblicuf6xqd7lun@pali>
-From: Michele Sorcinelli <michelesr@autistici.org>
-Message-ID: <0d8fa793-2823-949e-1f4d-68824717b487@autistici.org>
-Date: Wed, 28 Nov 2018 13:01:53 +0000
+        Thu, 29 Nov 2018 02:03:23 -0500
+Received: by mail-pg1-f195.google.com with SMTP id g189so9980564pgc.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Nov 2018 12:00:35 -0800 (PST)
+Subject: Re: amdgpu creating fan attribute for integrated graphics
+To: "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        Philippe L <flip101@gmail.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Zhou, David(ChunMing)" <David1.Zhou@amd.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <CACQKD__b7a7-R_LBLiaAxpwD2xUkHAWY6Dhhqg2gazbnPZavJQ@mail.gmail.com>
+ <BN6PR12MB180917C25343DCC507B3DB7BF7D10@BN6PR12MB1809.namprd12.prod.outlook.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Message-ID: <4fac9995-cca2-48ad-0e65-badad14e0cde@roeck-us.net>
+Date: Wed, 28 Nov 2018 12:00:31 -0800
 MIME-Version: 1.0
-In-Reply-To: <20181128125613.7sblicuf6xqd7lun@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <BN6PR12MB180917C25343DCC507B3DB7BF7D10@BN6PR12MB1809.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Yes, values are reported correctly when the fan are on. I tested it
-by disabling the firmware automatic control using 
-https://github.com/TomFreudenberg/dell-bios-fan-control and then running 
-i8kfan 1 1 and i8kfan 2 2, which brought the fans to 2500 and 5100 
-respectively.
-
-When automatic control is on I can see intermediate speeds as well.
-
-Is there anything that can be done to help the driver to discover
-the temperature sensors?
-
-On 11/28/18 12:56 PM, Pali Rohár wrote:
-> On Wednesday 28 November 2018 12:30:31 Michele Sorcinelli wrote:
->> The output of sensors related to the is:
->>
->> dell_smm-virtual-0
->> Adapter: Virtual device
->> fan1:           0 RPM
->> fan2:           0 RPM
-> 
-> Ok, this means that both fans are turned off.
-> 
-> When you start fans, have both number meaningful/correct value?
-> 
->> This suggests that temperature sensors are not discovered.
-> 
-> Yes, probably they are unsupported or not discovered. But this is not
-> a problem.
-> 
->> Speeds reported in the hwmon interface are consistent with the others.
->>
->>
->> On 11/27/18 11:06 PM, Michele Sorcinelli wrote:
->>> Allow the module to be loaded on Dell XPS 9570, without having to use
->>> the "force=1" option. The module loads without problems, and reports
->>> correct fan values:
->>>
->>>       $ time cat /proc/i8k
->>>       1.0 1.5 -1 35 0 0 0 0 -1 -22
->>>       cat /proc/i8k  0.00s user 0.00s system 7% cpu 0.033 total
->>>
->>> However, the call may freeze the kernel for a very small time due to
->>> code running in the SSM layer. This is a known issue with the driver, and
->>> can be reproduced with other supported models. Average execution
->>> time is 33 ms.
->>>
->>> The command line tools from i8kutils can properly set the fan speed,
->>> although the firmware will override it, unless automatic fan
->>> control is disabled with the proper SSM call.
->>>
->>> Average fans speed (when firwmare automatic control is off):
->>>
->>> STATE -> RPM
->>> 0 0 -> 0 0
->>> 1 1 -> 2500 2500
->>> 2 2 -> 5100 5100
->>> 3 3 -> same as 2 2
->>> ---
->>>    drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->>>    1 file changed, 7 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
->>> index 9d3ef879d..367a8a617 100644
->>> --- a/drivers/hwmon/dell-smm-hwmon.c
->>> +++ b/drivers/hwmon/dell-smm-hwmon.c
->>> @@ -1017,6 +1017,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->>>    			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
->>>    		},
->>>    	},
->>> +	{
->>> +		.ident = "Dell XPS 15 9570",
->>> +		.matches = {
->>> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->>> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
->>> +		},
->>> +	},
->>>    	{ }
->>>    };
->>>
-> 
+T24gMTEvMjgvMTggMTA6NTMgQU0sIERldWNoZXIsIEFsZXhhbmRlciB3cm90ZToNCj4gSSBi
+ZWxpZXZlIHRoZSBhdHRhY2hlZCBwYXRjaCBzaG91bGQgZml4IHRoZSBpc3N1ZS4NCj4gDQoN
+ClRoZXJlIGlzIGFsc28gYSBwb3dlciBhdHRyaWJ1dGUgd2hpY2ggcmV0dXJucyAtRUlOVkFM
+LCBwbHVzIGlmIEkgcmVtZW1iZXINCmNvcnJlY3RseSBzb21lIHZvbHRhZ2UgYXR0cmlidXRl
+cy4NCg0KR3VlbnRlcg0KDQo+IA0KPiBBbGV4DQo+IA0KPiAtLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0N
+Cj4gKkZyb206KiBQaGlsaXBwZSBMIDxmbGlwMTAxQGdtYWlsLmNvbT4NCj4gKlNlbnQ6KiBX
+ZWRuZXNkYXksIE5vdmVtYmVyIDI4LCAyMDE4IDExOjIwOjM4IEFNDQo+ICpUbzoqIERldWNo
+ZXIsIEFsZXhhbmRlcjsgS29lbmlnLCBDaHJpc3RpYW47IFpob3UsIERhdmlkKENodW5NaW5n
+KQ0KPiAqQ2M6KiBHdWVudGVyIFJvZWNrOyBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5vcmcN
+Cj4gKlN1YmplY3Q6KiBhbWRncHUgY3JlYXRpbmcgZmFuIGF0dHJpYnV0ZSBmb3IgaW50ZWdy
+YXRlZCBncmFwaGljcw0KPiBIZWxsbywNCj4gDQo+IEknbSB3cml0aW5nIHRvIHlvdSBhZnRl
+ciBkaXNjdXNzaW5nIGEgZmFuY29udHJvbCBpc3N1ZSBvbiB0aGUgbG0tc2Vuc29ycyBpc3N1
+ZSB0cmFja2VyLiBJIGhhdmUgYSBBTUQgUnl6ZW4gNSAyNDAwRyBBUFUgKHdpdGggaW50ZWdy
+YXRlZCBncmFwaGljcykuIFRoZSBhbWRncHUgZHJpdmVyIGlzIGxvYWRlZCBhbmQgYWxzbyBj
+cmVhdGVzIGEgZmFuMV9pbnB1dCBhdHRyaWJ1dGUuIEhvd2V2ZXIgdGhlcmUgaXMgbm8gc2Vw
+YXJhdGUgR1BVIGZhbiwgdGhlcmUgaXMgb25seSB0aGUgQ1BVIChBUFUpIGZhbiB3aGljaCBp
+cyBjb250cm9sbGVkIGJ5IHRoZSBtb3RoZXJib2FyZC4gVGhlIGZhbjFfaW5wdXQgYWxzbyBz
+ZWVtcyB0byBnaXZlIHNvbWUgaW52YWxpZCByZWFkb3V0cy4gSSBoYXZlIG5vdCB5ZXQgcmVh
+Y2hlZCB0aGUgYm90dG9tIG9mIHRoaXMgaW52ZXN0aWdhdGlvbiwgYnV0IHNvIGZhciBteSBj
+b25jbHVzaW9uIGlzIHRoYXQgdGhpcyBjYXVzZXMgZmFuY29udHJvbCB0byBjaG9rZSB1cC4N
+Cj4gDQo+IFNwZWNpZmljYWxseSB0aGUgY29tbWVudCBieSBHdWVudGVyIFJvZWNrIGhlcmUg
+aHR0cHM6Ly9naXRodWIuY29tL2xtLXNlbnNvcnMvbG0tc2Vuc29ycy9pc3N1ZXMvMTQ0I2lz
+c3VlY29tbWVudC00NDIxNjU0NTEgZGVzY3JpYmVzIHRoZSBmaW5kaW5ncyByZWdhcmRpbmcg
+dGhlIGFtZGdwdSBkcml2ZXIuDQo+IA0KPiBJJ20gd3JpdGluZyB0byBub3RpZnkgeW91IGFi
+b3V0IHRoaXMgcHJvYmxlbSwgcGVyaGFwcyB0aGVyZSBjYW4gYmUgc29tZSBpbXByb3ZlbWVu
+dCBpbiB0aGUgYW1kZ3B1IGRyaXZlci4gSSdtIG5vdCByZWFsbHkga25vd2xlZGdlYWJsZSB0
+byBkaXNjdXNzIHRoZSB3b3JraW5ncyBvZiB0aGVzZSBkcml2ZXJzIGJ1dCBpIGNhbiBwcm92
+aWRlIGRlYnVnIG91dHB1dCBpZiBuZWVkZWQuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IFBo
+aWxpcHBlDQoNCg==
