@@ -1,27 +1,33 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43854 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbeLBFpj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:45:39 -0500
-Date: Sat, 1 Dec 2018 10:32:31 -0800
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43030 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725726AbeLBFoo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:44:44 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w73so4382214pfk.10
+        for <linux-hwmon@vger.kernel.org>; Sat, 01 Dec 2018 10:31:38 -0800 (PST)
+Date: Sat, 1 Dec 2018 10:31:35 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Corentin Labbe <clabbe@baylibre.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: fix typo build -> built
-Message-ID: <20181201183231.GA14451@roeck-us.net>
-References: <1543522155-17406-1-git-send-email-clabbe@baylibre.com>
+To: Michele Sorcinelli <michelesr@autistici.org>
+Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] dell-smm-hwmon.c: Add XPS 9570 to supported devices list
+Message-ID: <20181201183135.GA30503@roeck-us.net>
+References: <026d224f-7f8d-b50f-f269-e6b2408a8822@autistici.org>
+ <20181130184256.7487-1-michelesr@autistici.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1543522155-17406-1-git-send-email-clabbe@baylibre.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20181130184256.7487-1-michelesr@autistici.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 29, 2018 at 08:09:14PM +0000, Corentin Labbe wrote:
-> This patch fix a typo where build is used instead of built.
+On Fri, Nov 30, 2018 at 06:42:56PM +0000, Michele Sorcinelli wrote:
+> Allow the module to be loaded on Dell XPS 9570, without having to
+> provide the "force=1" option.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> Signed-off-by: Michele Sorcinelli <michelesr@autistici.org>
+> Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
 
 Applied to hwmon-next.
 
@@ -29,46 +35,24 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/Kconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 532a0532d01b..100b7fce1412 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -179,7 +179,7 @@ config SENSORS_ADT7X10
->  	  This module contains common code shared by the ADT7310/ADT7320 and
->  	  ADT7410/ADT7420 temperature monitoring chip drivers.
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 9d3ef879d..367a8a617 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1017,6 +1017,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
+>  		},
+>  	},
+> +	{
+> +		.ident = "Dell XPS 15 9570",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
+> +		},
+> +	},
+>  	{ }
+>  };
 >  
-> -	  If build as a module, the module will be called adt7x10.
-> +	  If built as a module, the module will be called adt7x10.
->  
->  config SENSORS_ADT7310
->  	tristate "Analog Devices ADT7310/ADT7320"
-> @@ -242,7 +242,7 @@ config SENSORS_ADT7475
->  	  ADT7473, ADT7475, ADT7476 and ADT7490 hardware monitoring
->  	  chips.
->  
-> -	  This driver can also be build as a module.  If so, the module
-> +	  This driver can also be built as a module.  If so, the module
->  	  will be called adt7475.
->  
->  config SENSORS_ASC7621
-> @@ -666,7 +666,7 @@ config SENSORS_JZ4740
->  	  If you say yes here you get support for reading adc values from the ADCIN
->  	  pin on Ingenic JZ4740 SoC based boards.
->  
-> -	  This driver can also be build as a module. If so, the module will be
-> +	  This driver can also be built as a module. If so, the module will be
->  	  called jz4740-hwmon.
->  
->  config SENSORS_JC42
-> @@ -1594,7 +1594,7 @@ config SENSORS_AMC6821
->  	  If you say yes here you get support for the Texas Instruments
->  	  AMC6821 hardware monitoring chips.
->  
-> -	  This driver can also be build as a module.  If so, the module
-> +	  This driver can also be built as a module.  If so, the module
->  	  will be called amc6821.
->  
->  config SENSORS_INA209
