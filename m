@@ -1,29 +1,31 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44878 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725728AbeLBFxo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:53:44 -0500
-Date: Sat, 1 Dec 2018 10:40:34 -0800
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33000 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbeLBFwD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:52:03 -0500
+Date: Sat, 1 Dec 2018 10:38:53 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Peter Rosin <peda@axentia.se>
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor) use a table to lookup the
- thermistor type
-Message-ID: <20181201184034.GA25714@roeck-us.net>
-References: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
- <20181121160327.16772-1-peda@axentia.se>
- <20181121160327.16772-3-peda@axentia.se>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: (ntc_thermistor): add support for B57891S0103
+ from Epcos
+Message-ID: <20181201183853.GA19581@roeck-us.net>
+References: <20181117121248.32143-1-peda@axentia.se>
+ <20181117121248.32143-2-peda@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181121160327.16772-3-peda@axentia.se>
+In-Reply-To: <20181117121248.32143-2-peda@axentia.se>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 21, 2018 at 04:03:46PM +0000, Peter Rosin wrote:
-> Sort the entries while at it.
+On Sat, Nov 17, 2018 at 12:13:00PM +0000, Peter Rosin wrote:
+> More of the same...
 > 
 > Signed-off-by: Peter Rosin <peda@axentia.se>
 
@@ -33,97 +35,130 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/ntc_thermistor.c               | 47 +++++++++++++---------------
->  include/linux/platform_data/ntc_thermistor.h |  6 ++--
->  2 files changed, 24 insertions(+), 29 deletions(-)
+>  drivers/hwmon/Kconfig                        |  3 +-
+>  drivers/hwmon/ntc_thermistor.c               | 57 +++++++++++++++++++++++++++-
+>  include/linux/platform_data/ntc_thermistor.h |  1 +
+>  3 files changed, 58 insertions(+), 3 deletions(-)
 > 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index f10840ad465c..5438cecace22 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1206,7 +1206,8 @@ config SENSORS_NTC_THERMISTOR
+>  
+>  	  Currently, this driver supports
+>  	  NCP15WB473, NCP18WB473, NCP21WB473, NCP03WB473, NCP15WL333,
+> -	  NCP03WF104 and NCP15XH103 from Murata and B57330V2103 from EPCOS.
+> +	  NCP03WF104 and NCP15XH103 from Murata and B57330V2103 and
+> +	  B57891S0103 from EPCOS.
+>  
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called ntc-thermistor.
 > diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-> index 7747c1ed1f02..56d83b2472c8 100644
+> index c52d07c6b49f..e0c6b2f244a6 100644
 > --- a/drivers/hwmon/ntc_thermistor.c
 > +++ b/drivers/hwmon/ntc_thermistor.c
-> @@ -315,6 +315,23 @@ static const struct ntc_compensation b57891s0103[] = {
->  	{ .temp_c	= 155.0, .ohm	= 168 },
+> @@ -55,6 +55,7 @@ static const struct platform_device_id ntc_thermistor_id[] = {
+>  	{ "b57330v2103", TYPE_B57330V2103},
+>  	{ "ncp03wf104", TYPE_NCPXXWF104 },
+>  	{ "ncp15xh103", TYPE_NCPXXXH103 },
+> +	{ "b57891s0103", TYPE_B57891S0103 },
+>  	{ },
 >  };
 >  
-> +struct ntc_type {
-> +	const struct ntc_compensation *comp;
-> +	int n_comp;
-> +};
-> +
-> +#define NTC_TYPE(ntc, compensation) \
-> +[(ntc)] = { .comp = (compensation), .n_comp = ARRAY_SIZE(compensation) }
-> +
-> +static const struct ntc_type ntc_type[] = {
-> +	NTC_TYPE(TYPE_B57330V2103, b57330v2103),
-> +	NTC_TYPE(TYPE_B57891S0103, b57891s0103),
-> +	NTC_TYPE(TYPE_NCPXXWB473,  ncpXXwb473),
-> +	NTC_TYPE(TYPE_NCPXXWF104,  ncpXXwf104),
-> +	NTC_TYPE(TYPE_NCPXXWL333,  ncpXXwl333),
-> +	NTC_TYPE(TYPE_NCPXXXH103,  ncpXXxh103),
+> @@ -212,8 +213,8 @@ static const struct ntc_compensation ncpXXxh103[] = {
+>  };
+>  
+>  /*
+> - * The following compensation table is from the specification of EPCOS NTC
+> - * Thermistors Datasheet
+> + * The following compensation tables are from the specifications in EPCOS NTC
+> + * Thermistors Datasheets
+>   */
+>  static const struct ntc_compensation b57330v2103[] = {
+>  	{ .temp_c	= -40, .ohm	= 190030 },
+> @@ -252,6 +253,52 @@ static const struct ntc_compensation b57330v2103[] = {
+>  	{ .temp_c	= 125, .ohm	= 531 },
+>  };
+>  
+> +static const struct ntc_compensation b57891s0103[] = {
+> +	{ .temp_c	= -55.0, .ohm	= 878900 },
+> +	{ .temp_c	= -50.0, .ohm	= 617590 },
+> +	{ .temp_c	= -45.0, .ohm	= 439340 },
+> +	{ .temp_c	= -40.0, .ohm	= 316180 },
+> +	{ .temp_c	= -35.0, .ohm	= 230060 },
+> +	{ .temp_c	= -30.0, .ohm	= 169150 },
+> +	{ .temp_c	= -25.0, .ohm	= 125550 },
+> +	{ .temp_c	= -20.0, .ohm	= 94143 },
+> +	{ .temp_c	= -15.0, .ohm	= 71172 },
+> +	{ .temp_c	= -10.0, .ohm	= 54308 },
+> +	{ .temp_c	= -5.0, .ohm	= 41505 },
+> +	{ .temp_c	= 0.0, .ohm	= 32014 },
+> +	{ .temp_c	= 5.0, .ohm	= 25011 },
+> +	{ .temp_c	= 10.0, .ohm	= 19691 },
+> +	{ .temp_c	= 15.0, .ohm	= 15618 },
+> +	{ .temp_c	= 20.0, .ohm	= 12474 },
+> +	{ .temp_c	= 25.0, .ohm	= 10000 },
+> +	{ .temp_c	= 30.0, .ohm	= 8080 },
+> +	{ .temp_c	= 35.0, .ohm	= 6569 },
+> +	{ .temp_c	= 40.0, .ohm	= 5372 },
+> +	{ .temp_c	= 45.0, .ohm	= 4424 },
+> +	{ .temp_c	= 50.0, .ohm	= 3661 },
+> +	{ .temp_c	= 55.0, .ohm	= 3039 },
+> +	{ .temp_c	= 60.0, .ohm	= 2536 },
+> +	{ .temp_c	= 65.0, .ohm	= 2128 },
+> +	{ .temp_c	= 70.0, .ohm	= 1794 },
+> +	{ .temp_c	= 75.0, .ohm	= 1518 },
+> +	{ .temp_c	= 80.0, .ohm	= 1290 },
+> +	{ .temp_c	= 85.0, .ohm	= 1100 },
+> +	{ .temp_c	= 90.0, .ohm	= 942 },
+> +	{ .temp_c	= 95.0, .ohm	= 809 },
+> +	{ .temp_c	= 100.0, .ohm	= 697 },
+> +	{ .temp_c	= 105.0, .ohm	= 604 },
+> +	{ .temp_c	= 110.0, .ohm	= 525 },
+> +	{ .temp_c	= 115.0, .ohm	= 457 },
+> +	{ .temp_c	= 120.0, .ohm	= 400 },
+> +	{ .temp_c	= 125.0, .ohm	= 351 },
+> +	{ .temp_c	= 130.0, .ohm	= 308 },
+> +	{ .temp_c	= 135.0, .ohm	= 272 },
+> +	{ .temp_c	= 140.0, .ohm	= 240 },
+> +	{ .temp_c	= 145.0, .ohm	= 213 },
+> +	{ .temp_c	= 150.0, .ohm	= 189 },
+> +	{ .temp_c	= 155.0, .ohm	= 168 },
 > +};
 > +
 >  struct ntc_data {
 >  	struct ntc_thermistor_platform_data *pdata;
 >  	const struct ntc_compensation *comp;
-> @@ -671,37 +688,15 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
+> @@ -296,6 +343,8 @@ static const struct of_device_id ntc_match[] = {
+>  		.data = &ntc_thermistor_id[6] },
+>  	{ .compatible = "murata,ncp15xh103",
+>  		.data = &ntc_thermistor_id[7] },
+> +	{ .compatible = "epcos,b57891s0103",
+> +		.data = &ntc_thermistor_id[8] },
 >  
->  	data->pdata = pdata;
->  
-> -	switch (pdev_id->driver_data) {
-> -	case TYPE_NCPXXWB473:
-> -		data->comp = ncpXXwb473;
-> -		data->n_comp = ARRAY_SIZE(ncpXXwb473);
-> -		break;
-> -	case TYPE_NCPXXWL333:
-> -		data->comp = ncpXXwl333;
-> -		data->n_comp = ARRAY_SIZE(ncpXXwl333);
-> -		break;
-> -	case TYPE_B57330V2103:
-> -		data->comp = b57330v2103;
-> -		data->n_comp = ARRAY_SIZE(b57330v2103);
-> -		break;
-> -	case TYPE_NCPXXWF104:
-> -		data->comp = ncpXXwf104;
-> -		data->n_comp = ARRAY_SIZE(ncpXXwf104);
-> -		break;
-> -	case TYPE_NCPXXXH103:
-> -		data->comp = ncpXXxh103;
-> -		data->n_comp = ARRAY_SIZE(ncpXXxh103);
-> -		break;
-> -	case TYPE_B57891S0103:
-> -		data->comp = b57891s0103;
-> -		data->n_comp = ARRAY_SIZE(b57891s0103);
-> -		break;
-> -	default:
-> +	if (pdev_id->driver_data >= ARRAY_SIZE(ntc_type)) {
+>  	/* Usage of vendor name "ntc" is deprecated */
+>  	{ .compatible = "ntc,ncp15wb473",
+> @@ -627,6 +676,10 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
+>  		data->comp = ncpXXxh103;
+>  		data->n_comp = ARRAY_SIZE(ncpXXxh103);
+>  		break;
+> +	case TYPE_B57891S0103:
+> +		data->comp = b57891s0103;
+> +		data->n_comp = ARRAY_SIZE(b57891s0103);
+> +		break;
+>  	default:
 >  		dev_err(dev, "Unknown device type: %lu(%s)\n",
 >  				pdev_id->driver_data, pdev_id->name);
->  		return -EINVAL;
->  	}
->  
-> +	data->comp   = ntc_type[pdev_id->driver_data].comp;
-> +	data->n_comp = ntc_type[pdev_id->driver_data].n_comp;
-> +
->  	hwmon_dev = devm_hwmon_device_register_with_groups(dev, pdev_id->name,
->  							   data, ntc_groups);
->  	if (IS_ERR(hwmon_dev)) {
 > diff --git a/include/linux/platform_data/ntc_thermistor.h b/include/linux/platform_data/ntc_thermistor.h
-> index 231a27c302ec..ee03d429742b 100644
+> index 698d0d59db76..231a27c302ec 100644
 > --- a/include/linux/platform_data/ntc_thermistor.h
 > +++ b/include/linux/platform_data/ntc_thermistor.h
-> @@ -24,12 +24,12 @@
->  struct iio_channel;
->  
->  enum ntc_thermistor_type {
-> -	TYPE_NCPXXWB473,
-> -	TYPE_NCPXXWL333,
+> @@ -29,6 +29,7 @@ enum ntc_thermistor_type {
 >  	TYPE_B57330V2103,
-> +	TYPE_B57891S0103,
-> +	TYPE_NCPXXWB473,
 >  	TYPE_NCPXXWF104,
-> +	TYPE_NCPXXWL333,
 >  	TYPE_NCPXXXH103,
-> -	TYPE_B57891S0103,
+> +	TYPE_B57891S0103,
 >  };
 >  
 >  struct ntc_thermistor_platform_data {
