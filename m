@@ -1,252 +1,148 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36683 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbeLVR0r (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Dec 2018 12:26:47 -0500
-Received: by mail-wm1-f66.google.com with SMTP id p6so8529981wmc.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Dec 2018 09:26:44 -0800 (PST)
-Date: Sat, 22 Dec 2018 13:50:21 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Michele Sorcinelli <michelesr@autistici.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] dell-smm-hwmon.c: Additional temperature sensors
-Message-ID: <20181222125021.kzwzupc4hj7y4vlc@pali>
-References: <20181205091528.ixpitemcg6wnwbyp@pali>
- <20181214235758.13360-1-michelesr@autistici.org>
- <20181221234032.GA17715@roeck-us.net>
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43470 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725728AbeLBFxB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:53:01 -0500
+Date: Sat, 1 Dec 2018 10:39:51 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Peter Rosin <peda@axentia.se>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH 1/2] hwmon: (ntc_thermistor) sort thermistor id lists
+ alphabetically
+Message-ID: <20181201183951.GA11613@roeck-us.net>
+References: <b732b7e0-0076-9cb3-a146-4d0cd80d2658@roeck-us.net>
+ <20181121160327.16772-1-peda@axentia.se>
+ <20181121160327.16772-2-peda@axentia.se>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="z4rz343vgo457etp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20181221234032.GA17715@roeck-us.net>
+In-Reply-To: <20181121160327.16772-2-peda@axentia.se>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
+On Wed, Nov 21, 2018 at 04:03:39PM +0000, Peter Rosin wrote:
+> Use an enum to index the array, so that it is possible to add sorted
+> entries without causing churn.
+> 
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
---z4rz343vgo457etp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to hwmon-next.
 
-On Friday 21 December 2018 15:40:32 Guenter Roeck wrote:
-> On Fri, Dec 14, 2018 at 11:57:59PM +0000, Michele Sorcinelli wrote:
-> > The code has been extended to support up to 10 temperature sensors.
-> >=20
-> > Changes from previous patch versions:
-> >=20
-> > - fix wrong index ranges in i8k_is_visible() if conditions
-> > - restore i8k_get_temp_type() as probe method for temp sensors because
-> >   i8k_get_temp() is not reliable (for example it won't work when
-> >   the sensors is turned off)
-> >=20
-> > Signed-off-by: Michele Sorcinelli <michelesr@autistici.org>
->=20
-> Pali, this is waiting for your feedbacck. Any comments ?
->=20
-> Thanks,
-> Guenter
+Thanks,
+Guenter
 
-Hi! Sorry for delay.
-
-> > ---
-> >  drivers/hwmon/dell-smm-hwmon.c | 105 ++++++++++++++++++++++++++++-----
-> >  1 file changed, 90 insertions(+), 15 deletions(-)
-> >  mode change 100644 =3D> 100755 drivers/hwmon/dell-smm-hwmon.c
-
-This change is wrong, source code files should not be executable.
-
-Otherwise looks good. After removing executable bit, you can add my
-Reviewed-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
-
-> >=20
-> > --
-> > 2.20.0
-> >=20
-> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
-mon.c
-> > old mode 100644
-> > new mode 100755
-> > index 367a8a617..73a30e3e4
-> > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > @@ -82,9 +82,16 @@ static bool disallow_fan_support;
-> >  #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
-> >  #define I8K_HWMON_HAVE_TEMP3	(1 << 2)
-> >  #define I8K_HWMON_HAVE_TEMP4	(1 << 3)
-> > -#define I8K_HWMON_HAVE_FAN1	(1 << 4)
-> > -#define I8K_HWMON_HAVE_FAN2	(1 << 5)
-> > -#define I8K_HWMON_HAVE_FAN3	(1 << 6)
-> > +#define I8K_HWMON_HAVE_TEMP5	(1 << 4)
-> > +#define I8K_HWMON_HAVE_TEMP6	(1 << 5)
-> > +#define I8K_HWMON_HAVE_TEMP7	(1 << 6)
-> > +#define I8K_HWMON_HAVE_TEMP8	(1 << 7)
-> > +#define I8K_HWMON_HAVE_TEMP9	(1 << 8)
-> > +#define I8K_HWMON_HAVE_TEMP10	(1 << 9)
-> > +
-> > +#define I8K_HWMON_HAVE_FAN1	(1 << 10)
-> > +#define I8K_HWMON_HAVE_FAN2	(1 << 11)
-> > +#define I8K_HWMON_HAVE_FAN3	(1 << 12)
-> >=20
-> >  MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
-> >  MODULE_AUTHOR("Pali Roh=C3=A1r <pali.rohar@gmail.com>");
-> > @@ -743,6 +750,25 @@ static SENSOR_DEVICE_ATTR(temp3_label, S_IRUGO, i8=
-k_hwmon_show_temp_label, NULL,
-> >  static SENSOR_DEVICE_ATTR(temp4_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 3);
-> >  static SENSOR_DEVICE_ATTR(temp4_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> >  			  3);
-> > +static SENSOR_DEVICE_ATTR(temp5_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 4);
-> > +static SENSOR_DEVICE_ATTR(temp5_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> > +			  4);
-> > +static SENSOR_DEVICE_ATTR(temp6_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 5);
-> > +static SENSOR_DEVICE_ATTR(temp6_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> > +			  5);
-> > +static SENSOR_DEVICE_ATTR(temp7_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 6);
-> > +static SENSOR_DEVICE_ATTR(temp7_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> > +			  6);
-> > +static SENSOR_DEVICE_ATTR(temp8_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 7);
-> > +static SENSOR_DEVICE_ATTR(temp8_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> > +			  7);
-> > +static SENSOR_DEVICE_ATTR(temp9_input, S_IRUGO, i8k_hwmon_show_temp, N=
-ULL, 8);
-> > +static SENSOR_DEVICE_ATTR(temp9_label, S_IRUGO, i8k_hwmon_show_temp_la=
-bel, NULL,
-> > +			  8);
-> > +static SENSOR_DEVICE_ATTR(temp10_input, S_IRUGO, i8k_hwmon_show_temp, =
-NULL, 9);
-> > +static SENSOR_DEVICE_ATTR(temp10_label, S_IRUGO, i8k_hwmon_show_temp_l=
-abel, NULL,
-> > +			  9);
-> > +
-> >  static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, i8k_hwmon_show_fan, NUL=
-L, 0);
-> >  static SENSOR_DEVICE_ATTR(fan1_label, S_IRUGO, i8k_hwmon_show_fan_labe=
-l, NULL,
-> >  			  0);
-> > @@ -770,15 +796,27 @@ static struct attribute *i8k_attrs[] =3D {
-> >  	&sensor_dev_attr_temp3_label.dev_attr.attr,	/* 5 */
-> >  	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 6 */
-> >  	&sensor_dev_attr_temp4_label.dev_attr.attr,	/* 7 */
-> > -	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 8 */
-> > -	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 9 */
-> > -	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 10 */
-> > -	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 11 */
-> > -	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 12 */
-> > -	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 13 */
-> > -	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 14 */
-> > -	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 15 */
-> > -	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 16 */
-> > +	&sensor_dev_attr_temp5_input.dev_attr.attr,	/* 8 */
-> > +	&sensor_dev_attr_temp5_label.dev_attr.attr,	/* 9 */
-> > +	&sensor_dev_attr_temp6_input.dev_attr.attr,	/* 10 */
-> > +	&sensor_dev_attr_temp6_label.dev_attr.attr,	/* 11 */
-> > +	&sensor_dev_attr_temp7_input.dev_attr.attr,	/* 12 */
-> > +	&sensor_dev_attr_temp7_label.dev_attr.attr,	/* 13 */
-> > +	&sensor_dev_attr_temp8_input.dev_attr.attr,	/* 14 */
-> > +	&sensor_dev_attr_temp8_label.dev_attr.attr,	/* 15 */
-> > +	&sensor_dev_attr_temp9_input.dev_attr.attr,	/* 16 */
-> > +	&sensor_dev_attr_temp9_label.dev_attr.attr,	/* 17 */
-> > +	&sensor_dev_attr_temp10_input.dev_attr.attr,	/* 18 */
-> > +	&sensor_dev_attr_temp10_label.dev_attr.attr,	/* 19 */
-> > +	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 20 */
-> > +	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 21 */
-> > +	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 22 */
-> > +	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 23 */
-> > +	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 24 */
-> > +	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 25 */
-> > +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 26 */
-> > +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 27 */
-> > +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 28 */
-> >  	NULL
-> >  };
-> >=20
-> > @@ -802,13 +840,32 @@ static umode_t i8k_is_visible(struct kobject *kob=
-j, struct attribute *attr,
-> >  	if (index >=3D 6 && index <=3D 7 &&
-> >  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP4))
-> >  		return 0;
-> > -	if (index >=3D 8 && index <=3D 10 &&
-> > +	if (index >=3D 8 && index <=3D 9 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP5))
-> > +		return 0;
-> > +	if (index >=3D 10 && index <=3D 11 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP6))
-> > +		return 0;
-> > +	if (index >=3D 12 && index <=3D 13 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP7))
-> > +		return 0;
-> > +	if (index >=3D 14 && index <=3D 15 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP8))
-> > +		return 0;
-> > +	if (index >=3D 16 && index <=3D 17 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP9))
-> > +		return 0;
-> > +	if (index >=3D 18 && index <=3D 19 &&
-> > +	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP10))
-> > +		return 0;
-> > +
-> > +	if (index >=3D 20 && index <=3D 22 &&
-> >  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
-> >  		return 0;
-> > -	if (index >=3D 11 && index <=3D 13 &&
-> > +	if (index >=3D 23 && index <=3D 25 &&
-> >  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
-> >  		return 0;
-> > -	if (index >=3D 14 && index <=3D 16 &&
-> > +	if (index >=3D 26 && index <=3D 28 &&
-> >  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
-> >  		return 0;
-> >=20
-> > @@ -841,6 +898,24 @@ static int __init i8k_init_hwmon(void)
-> >  	err =3D i8k_get_temp_type(3);
-> >  	if (err >=3D 0)
-> >  		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP4;
-> > +	err =3D i8k_get_temp_type(4);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP5;
-> > +	err =3D i8k_get_temp_type(5);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP6;
-> > +	err =3D i8k_get_temp_type(6);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP7;
-> > +	err =3D i8k_get_temp_type(7);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP8;
-> > +	err =3D i8k_get_temp_type(8);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP9;
-> > +	err =3D i8k_get_temp_type(9);
-> > +	if (err >=3D 0)
-> > +		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP10;
-> >=20
-> >  	/* First fan attributes, if fan status or type is OK */
-> >  	err =3D i8k_get_fan_status(0);
-
---=20
-Pali Roh=C3=A1r
-pali.rohar@gmail.com
-
---z4rz343vgo457etp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQS4VrIQdKium2krgIWL8Mk9A+RDUgUCXB4zCwAKCRCL8Mk9A+RD
-UsNZAKCHQQ+yes0Cbq7VPrCVVtZyxTV7lQCfXDpIdVRKlH50SKgUF6O4qA/0W3s=
-=GMq1
------END PGP SIGNATURE-----
-
---z4rz343vgo457etp--
+> ---
+>  drivers/hwmon/ntc_thermistor.c | 82 +++++++++++++++++++++++++-----------------
+>  1 file changed, 49 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+> index e0c6b2f244a6..7747c1ed1f02 100644
+> --- a/drivers/hwmon/ntc_thermistor.c
+> +++ b/drivers/hwmon/ntc_thermistor.c
+> @@ -45,18 +45,34 @@ struct ntc_compensation {
+>  	unsigned int	ohm;
+>  };
+>  
+> -/* Order matters, ntc_match references the entries by index */
+> +/*
+> + * Used as index in a zero-terminated array, holes not allowed so
+> + * that NTC_LAST is the first empty array entry.
+> + */
+> +enum {
+> +	NTC_B57330V2103,
+> +	NTC_B57891S0103,
+> +	NTC_NCP03WB473,
+> +	NTC_NCP03WF104,
+> +	NTC_NCP15WB473,
+> +	NTC_NCP15WL333,
+> +	NTC_NCP15XH103,
+> +	NTC_NCP18WB473,
+> +	NTC_NCP21WB473,
+> +	NTC_LAST,
+> +};
+> +
+>  static const struct platform_device_id ntc_thermistor_id[] = {
+> -	{ "ncp15wb473", TYPE_NCPXXWB473 },
+> -	{ "ncp18wb473", TYPE_NCPXXWB473 },
+> -	{ "ncp21wb473", TYPE_NCPXXWB473 },
+> -	{ "ncp03wb473", TYPE_NCPXXWB473 },
+> -	{ "ncp15wl333", TYPE_NCPXXWL333 },
+> -	{ "b57330v2103", TYPE_B57330V2103},
+> -	{ "ncp03wf104", TYPE_NCPXXWF104 },
+> -	{ "ncp15xh103", TYPE_NCPXXXH103 },
+> -	{ "b57891s0103", TYPE_B57891S0103 },
+> -	{ },
+> +	[NTC_B57330V2103]     = { "b57330v2103",     TYPE_B57330V2103 },
+> +	[NTC_B57891S0103]     = { "b57891s0103",     TYPE_B57891S0103 },
+> +	[NTC_NCP03WB473]      = { "ncp03wb473",      TYPE_NCPXXWB473 },
+> +	[NTC_NCP03WF104]      = { "ncp03wf104",      TYPE_NCPXXWF104 },
+> +	[NTC_NCP15WB473]      = { "ncp15wb473",      TYPE_NCPXXWB473 },
+> +	[NTC_NCP15WL333]      = { "ncp15wl333",      TYPE_NCPXXWL333 },
+> +	[NTC_NCP15XH103]      = { "ncp15xh103",      TYPE_NCPXXXH103 },
+> +	[NTC_NCP18WB473]      = { "ncp18wb473",      TYPE_NCPXXWB473 },
+> +	[NTC_NCP21WB473]      = { "ncp21wb473",      TYPE_NCPXXWB473 },
+> +	[NTC_LAST]            = { },
+>  };
+>  
+>  /*
+> @@ -327,36 +343,36 @@ static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
+>  }
+>  
+>  static const struct of_device_id ntc_match[] = {
+> -	{ .compatible = "murata,ncp15wb473",
+> -		.data = &ntc_thermistor_id[0] },
+> -	{ .compatible = "murata,ncp18wb473",
+> -		.data = &ntc_thermistor_id[1] },
+> -	{ .compatible = "murata,ncp21wb473",
+> -		.data = &ntc_thermistor_id[2] },
+> -	{ .compatible = "murata,ncp03wb473",
+> -		.data = &ntc_thermistor_id[3] },
+> -	{ .compatible = "murata,ncp15wl333",
+> -		.data = &ntc_thermistor_id[4] },
+>  	{ .compatible = "epcos,b57330v2103",
+> -		.data = &ntc_thermistor_id[5]},
+> +		.data = &ntc_thermistor_id[NTC_B57330V2103]},
+> +	{ .compatible = "epcos,b57891s0103",
+> +		.data = &ntc_thermistor_id[NTC_B57891S0103] },
+> +	{ .compatible = "murata,ncp03wb473",
+> +		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
+>  	{ .compatible = "murata,ncp03wf104",
+> -		.data = &ntc_thermistor_id[6] },
+> +		.data = &ntc_thermistor_id[NTC_NCP03WF104] },
+> +	{ .compatible = "murata,ncp15wb473",
+> +		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
+> +	{ .compatible = "murata,ncp15wl333",
+> +		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
+>  	{ .compatible = "murata,ncp15xh103",
+> -		.data = &ntc_thermistor_id[7] },
+> -	{ .compatible = "epcos,b57891s0103",
+> -		.data = &ntc_thermistor_id[8] },
+> +		.data = &ntc_thermistor_id[NTC_NCP15XH103] },
+> +	{ .compatible = "murata,ncp18wb473",
+> +		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
+> +	{ .compatible = "murata,ncp21wb473",
+> +		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
+>  
+>  	/* Usage of vendor name "ntc" is deprecated */
+> +	{ .compatible = "ntc,ncp03wb473",
+> +		.data = &ntc_thermistor_id[NTC_NCP03WB473] },
+>  	{ .compatible = "ntc,ncp15wb473",
+> -		.data = &ntc_thermistor_id[0] },
+> +		.data = &ntc_thermistor_id[NTC_NCP15WB473] },
+> +	{ .compatible = "ntc,ncp15wl333",
+> +		.data = &ntc_thermistor_id[NTC_NCP15WL333] },
+>  	{ .compatible = "ntc,ncp18wb473",
+> -		.data = &ntc_thermistor_id[1] },
+> +		.data = &ntc_thermistor_id[NTC_NCP18WB473] },
+>  	{ .compatible = "ntc,ncp21wb473",
+> -		.data = &ntc_thermistor_id[2] },
+> -	{ .compatible = "ntc,ncp03wb473",
+> -		.data = &ntc_thermistor_id[3] },
+> -	{ .compatible = "ntc,ncp15wl333",
+> -		.data = &ntc_thermistor_id[4] },
+> +		.data = &ntc_thermistor_id[NTC_NCP21WB473] },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, ntc_match);
