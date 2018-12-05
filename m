@@ -1,16 +1,16 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:48578 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:48754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727882AbeLEJn6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 5 Dec 2018 04:43:58 -0500
+        id S1727882AbeLEJoI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 5 Dec 2018 04:44:08 -0500
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Nicolin Chen <nicoleotsuka@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/69] hwmon (ina2xx) Fix NULL id pointer in probe()
-Date: Wed,  5 Dec 2018 04:41:48 -0500
-Message-Id: <20181205094247.6556-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 13/69] hwmon: (ina2xx) Fix current value calculation
+Date: Wed,  5 Dec 2018 04:41:51 -0500
+Message-Id: <20181205094247.6556-13-sashal@kernel.org>
 In-Reply-To: <20181205094247.6556-1-sashal@kernel.org>
 References: <20181205094247.6556-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -18,65 +18,36 @@ List-Id: linux-hwmon@vger.kernel.org
 
 From: Nicolin Chen <nicoleotsuka@gmail.com>
 
-[ Upstream commit 70df9ebbd82c794ddfbb49d45b337f18d5588dc2 ]
+[ Upstream commit 38cd989ee38c16388cde89db5b734f9d55b905f9 ]
 
-When using DT configurations, the id pointer might turn out to
-be NULL. Then the driver encounters NULL pointer access:
+The current register (04h) has a sign bit at MSB. The comments
+for this calculation also mention that it's a signed register.
 
-  Unable to handle kernel read from unreadable memory at vaddr 00000018
-  [...]
-  PC is at ina2xx_probe+0x114/0x200
-  LR is at ina2xx_probe+0x10c/0x200
-  [...]
-  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+However, the regval is unsigned type so result of calculation
+turns out to be an incorrect value when current is negative.
 
-The reason is that i2c core returns the id pointer by matching
-id_table with client->name, while the client->name is actually
-using the name from the first string in the DT compatible list,
-not the best one. So i2c core would fail to match the id_table
-if the best matched compatible string isn't the first one, and
-then would return a NULL id pointer.
+This patch simply fixes this by adding a casting to s16.
 
-This probably should be fixed in i2c core. But it doesn't hurt
-to make the driver robust. So this patch fixes it by using the
-"chip" that's added to unify both DT and non-DT configurations.
-
-Additionally, since id pointer could be null, so as id->name:
-  ina2xx 10-0047: power monitor (null) (Rshunt = 1000 uOhm)
-  ina2xx 10-0048: power monitor (null) (Rshunt = 10000 uOhm)
-
-So this patch also fixes NULL name pointer, using client->name
-to play safe and to align with hwmon->name.
-
-Fixes: bd0ddd4d0883 ("hwmon: (ina2xx) Add OF device ID table")
+Fixes: 5d389b125186c ("hwmon: (ina2xx) Make calibration register value fixed")
 Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/ina2xx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/ina2xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 71d3445ba869..c2252cf452f5 100644
+index c2252cf452f5..07ee19573b3f 100644
 --- a/drivers/hwmon/ina2xx.c
 +++ b/drivers/hwmon/ina2xx.c
-@@ -491,7 +491,7 @@ static int ina2xx_probe(struct i2c_client *client,
- 	}
- 
- 	data->groups[group++] = &ina2xx_group;
--	if (id->driver_data == ina226)
-+	if (chip == ina226)
- 		data->groups[group++] = &ina226_group;
- 
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-@@ -500,7 +500,7 @@ static int ina2xx_probe(struct i2c_client *client,
- 		return PTR_ERR(hwmon_dev);
- 
- 	dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
--		 id->name, data->rshunt);
-+		 client->name, data->rshunt);
- 
- 	return 0;
- }
+@@ -274,7 +274,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+ 		break;
+ 	case INA2XX_CURRENT:
+ 		/* signed register, result in mA */
+-		val = regval * data->current_lsb_uA;
++		val = (s16)regval * data->current_lsb_uA;
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_CALIBRATION:
 -- 
 2.17.1
