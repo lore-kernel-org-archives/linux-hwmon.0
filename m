@@ -3,60 +3,49 @@ Return-path: <sashal@kernel.org>
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Stefan Wahren <stefan.wahren@i2se.com>,
+Cc: Nicolin Chen <nicoleotsuka@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 028/123] hwmon: (raspberrypi) Fix initial notify
-Date: Wed,  5 Dec 2018 04:34:20 -0500
-Message-Id: <20181205093555.5386-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 034/123] hwmon: (ina2xx) Fix current value calculation
+Date: Wed,  5 Dec 2018 04:34:26 -0500
+Message-Id: <20181205093555.5386-34-sashal@kernel.org>
 In-Reply-To: <20181205093555.5386-1-sashal@kernel.org>
 References: <20181205093555.5386-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Nicolin Chen <nicoleotsuka@gmail.com>
 
-[ Upstream commit 35fdc3902179366489a12cae4cb3ccc3b95f0afe ]
+[ Upstream commit 38cd989ee38c16388cde89db5b734f9d55b905f9 ]
 
-In case an under-voltage happens before probing the driver wont
-write the critical warning into the kernel log. So don't init
-of last_throttled during probe and fix this issue.
+The current register (04h) has a sign bit at MSB. The comments
+for this calculation also mention that it's a signed register.
 
-Fixes: 74d1e007915f ("hwmon: Add support for RPi voltage sensor")
-Reported-by: "Noralf Trønnes" <noralf@tronnes.org>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+However, the regval is unsigned type so result of calculation
+turns out to be an incorrect value when current is negative.
+
+This patch simply fixes this by adding a casting to s16.
+
+Fixes: 5d389b125186c ("hwmon: (ina2xx) Make calibration register value fixed")
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/raspberrypi-hwmon.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/hwmon/ina2xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
-index be5ba4690895..0d0457245e7d 100644
---- a/drivers/hwmon/raspberrypi-hwmon.c
-+++ b/drivers/hwmon/raspberrypi-hwmon.c
-@@ -115,7 +115,6 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct rpi_hwmon_data *data;
--	int ret;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -124,11 +123,6 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- 	/* Parent driver assure that firmware is correct */
- 	data->fw = dev_get_drvdata(dev->parent);
- 
--	/* Init throttled */
--	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
--				    &data->last_throttled,
--				    sizeof(data->last_throttled));
--
- 	data->hwmon_dev = devm_hwmon_device_register_with_info(dev, "rpi_volt",
- 							       data,
- 							       &rpi_chip_info,
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index c2252cf452f5..07ee19573b3f 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -274,7 +274,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+ 		break;
+ 	case INA2XX_CURRENT:
+ 		/* signed register, result in mA */
+-		val = regval * data->current_lsb_uA;
++		val = (s16)regval * data->current_lsb_uA;
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_CALIBRATION:
 -- 
 2.17.1
