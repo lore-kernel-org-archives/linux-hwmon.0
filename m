@@ -1,18 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:59322 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:33992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729847AbeLEJwq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 5 Dec 2018 04:52:46 -0500
+        id S1729995AbeLEJzd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 5 Dec 2018 04:55:33 -0500
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Huacai Chen <chenhc@lemote.com>, Yao Wang <wangyao@lemote.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 07/33] hwmon: (w83795) temp4_type has writable permission
-Date: Wed,  5 Dec 2018 04:51:05 -0500
-Message-Id: <20181205095131.7685-7-sashal@kernel.org>
-In-Reply-To: <20181205095131.7685-1-sashal@kernel.org>
-References: <20181205095131.7685-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 3.18 05/26] hwmon: (w83795) temp4_type has writable permission
+Date: Wed,  5 Dec 2018 04:54:09 -0500
+Message-Id: <20181205095430.8019-5-sashal@kernel.org>
+In-Reply-To: <20181205095430.8019-1-sashal@kernel.org>
+References: <20181205095430.8019-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
@@ -33,10 +33,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
-index 49276bbdac3d..1bb80f992aa8 100644
+index 21894131190f..9b838fff7e4d 100644
 --- a/drivers/hwmon/w83795.c
 +++ b/drivers/hwmon/w83795.c
-@@ -1691,7 +1691,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
+@@ -1693,7 +1693,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
   * somewhere else in the code
   */
  #define SENSOR_ATTR_TEMP(index) {					\
