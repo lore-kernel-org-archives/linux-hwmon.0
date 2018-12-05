@@ -1,58 +1,82 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43030 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725726AbeLBFoo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 2 Dec 2018 00:44:44 -0500
-Received: by mail-pf1-f193.google.com with SMTP id w73so4382214pfk.10
-        for <linux-hwmon@vger.kernel.org>; Sat, 01 Dec 2018 10:31:38 -0800 (PST)
-Date: Sat, 1 Dec 2018 10:31:35 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Michele Sorcinelli <michelesr@autistici.org>
-Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dell-smm-hwmon.c: Add XPS 9570 to supported devices list
-Message-ID: <20181201183135.GA30503@roeck-us.net>
-References: <026d224f-7f8d-b50f-f269-e6b2408a8822@autistici.org>
- <20181130184256.7487-1-michelesr@autistici.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20181130184256.7487-1-michelesr@autistici.org>
+Received: from mail.kernel.org ([198.145.29.99]:48578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727882AbeLEJn6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 5 Dec 2018 04:43:58 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Nicolin Chen <nicoleotsuka@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 10/69] hwmon (ina2xx) Fix NULL id pointer in probe()
+Date: Wed,  5 Dec 2018 04:41:48 -0500
+Message-Id: <20181205094247.6556-10-sashal@kernel.org>
+In-Reply-To: <20181205094247.6556-1-sashal@kernel.org>
+References: <20181205094247.6556-1-sashal@kernel.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 30, 2018 at 06:42:56PM +0000, Michele Sorcinelli wrote:
-> Allow the module to be loaded on Dell XPS 9570, without having to
-> provide the "force=1" option.
-> 
-> Signed-off-by: Michele Sorcinelli <michelesr@autistici.org>
-> Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
+From: Nicolin Chen <nicoleotsuka@gmail.com>
 
-Applied to hwmon-next.
+[ Upstream commit 70df9ebbd82c794ddfbb49d45b337f18d5588dc2 ]
 
-Thanks,
-Guenter
+When using DT configurations, the id pointer might turn out to
+be NULL. Then the driver encounters NULL pointer access:
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 9d3ef879d..367a8a617 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1017,6 +1017,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->  			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
->  		},
->  	},
-> +	{
-> +		.ident = "Dell XPS 15 9570",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
-> +		},
-> +	},
->  	{ }
->  };
->  
+  Unable to handle kernel read from unreadable memory at vaddr 00000018
+  [...]
+  PC is at ina2xx_probe+0x114/0x200
+  LR is at ina2xx_probe+0x10c/0x200
+  [...]
+  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+The reason is that i2c core returns the id pointer by matching
+id_table with client->name, while the client->name is actually
+using the name from the first string in the DT compatible list,
+not the best one. So i2c core would fail to match the id_table
+if the best matched compatible string isn't the first one, and
+then would return a NULL id pointer.
+
+This probably should be fixed in i2c core. But it doesn't hurt
+to make the driver robust. So this patch fixes it by using the
+"chip" that's added to unify both DT and non-DT configurations.
+
+Additionally, since id pointer could be null, so as id->name:
+  ina2xx 10-0047: power monitor (null) (Rshunt = 1000 uOhm)
+  ina2xx 10-0048: power monitor (null) (Rshunt = 10000 uOhm)
+
+So this patch also fixes NULL name pointer, using client->name
+to play safe and to align with hwmon->name.
+
+Fixes: bd0ddd4d0883 ("hwmon: (ina2xx) Add OF device ID table")
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/ina2xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index 71d3445ba869..c2252cf452f5 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -491,7 +491,7 @@ static int ina2xx_probe(struct i2c_client *client,
+ 	}
+ 
+ 	data->groups[group++] = &ina2xx_group;
+-	if (id->driver_data == ina226)
++	if (chip == ina226)
+ 		data->groups[group++] = &ina226_group;
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+@@ -500,7 +500,7 @@ static int ina2xx_probe(struct i2c_client *client,
+ 		return PTR_ERR(hwmon_dev);
+ 
+ 	dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+-		 id->name, data->rshunt);
++		 client->name, data->rshunt);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
