@@ -3,78 +3,60 @@ Return-path: <sashal@kernel.org>
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Nicolin Chen <nicoleotsuka@gmail.com>,
+Cc: Stefan Wahren <stefan.wahren@i2se.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 027/123] hwmon (ina2xx) Fix NULL id pointer in probe()
-Date: Wed,  5 Dec 2018 04:34:19 -0500
-Message-Id: <20181205093555.5386-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 028/123] hwmon: (raspberrypi) Fix initial notify
+Date: Wed,  5 Dec 2018 04:34:20 -0500
+Message-Id: <20181205093555.5386-28-sashal@kernel.org>
 In-Reply-To: <20181205093555.5386-1-sashal@kernel.org>
 References: <20181205093555.5386-1-sashal@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Nicolin Chen <nicoleotsuka@gmail.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 70df9ebbd82c794ddfbb49d45b337f18d5588dc2 ]
+[ Upstream commit 35fdc3902179366489a12cae4cb3ccc3b95f0afe ]
 
-When using DT configurations, the id pointer might turn out to
-be NULL. Then the driver encounters NULL pointer access:
+In case an under-voltage happens before probing the driver wont
+write the critical warning into the kernel log. So don't init
+of last_throttled during probe and fix this issue.
 
-  Unable to handle kernel read from unreadable memory at vaddr 00000018
-  [...]
-  PC is at ina2xx_probe+0x114/0x200
-  LR is at ina2xx_probe+0x10c/0x200
-  [...]
-  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-
-The reason is that i2c core returns the id pointer by matching
-id_table with client->name, while the client->name is actually
-using the name from the first string in the DT compatible list,
-not the best one. So i2c core would fail to match the id_table
-if the best matched compatible string isn't the first one, and
-then would return a NULL id pointer.
-
-This probably should be fixed in i2c core. But it doesn't hurt
-to make the driver robust. So this patch fixes it by using the
-"chip" that's added to unify both DT and non-DT configurations.
-
-Additionally, since id pointer could be null, so as id->name:
-  ina2xx 10-0047: power monitor (null) (Rshunt = 1000 uOhm)
-  ina2xx 10-0048: power monitor (null) (Rshunt = 10000 uOhm)
-
-So this patch also fixes NULL name pointer, using client->name
-to play safe and to align with hwmon->name.
-
-Fixes: bd0ddd4d0883 ("hwmon: (ina2xx) Add OF device ID table")
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+Fixes: 74d1e007915f ("hwmon: Add support for RPi voltage sensor")
+Reported-by: "Noralf Trønnes" <noralf@tronnes.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/ina2xx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/raspberrypi-hwmon.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 71d3445ba869..c2252cf452f5 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -491,7 +491,7 @@ static int ina2xx_probe(struct i2c_client *client,
- 	}
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index be5ba4690895..0d0457245e7d 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -115,7 +115,6 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct rpi_hwmon_data *data;
+-	int ret;
  
- 	data->groups[group++] = &ina2xx_group;
--	if (id->driver_data == ina226)
-+	if (chip == ina226)
- 		data->groups[group++] = &ina226_group;
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -124,11 +123,6 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ 	/* Parent driver assure that firmware is correct */
+ 	data->fw = dev_get_drvdata(dev->parent);
  
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-@@ -500,7 +500,7 @@ static int ina2xx_probe(struct i2c_client *client,
- 		return PTR_ERR(hwmon_dev);
- 
- 	dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
--		 id->name, data->rshunt);
-+		 client->name, data->rshunt);
- 
- 	return 0;
- }
+-	/* Init throttled */
+-	ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_THROTTLED,
+-				    &data->last_throttled,
+-				    sizeof(data->last_throttled));
+-
+ 	data->hwmon_dev = devm_hwmon_device_register_with_info(dev, "rpi_volt",
+ 							       data,
+ 							       &rpi_chip_info,
 -- 
 2.17.1
