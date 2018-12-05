@@ -3,49 +3,46 @@ Return-path: <sashal@kernel.org>
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Nicolin Chen <nicoleotsuka@gmail.com>,
+Cc: Vadim Pasternak <vadimp@mellanox.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 034/123] hwmon: (ina2xx) Fix current value calculation
-Date: Wed,  5 Dec 2018 04:34:26 -0500
-Message-Id: <20181205093555.5386-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 039/123] hwmon: (mlxreg-fan) Fix macros for tacho fault reading
+Date: Wed,  5 Dec 2018 04:34:31 -0500
+Message-Id: <20181205093555.5386-39-sashal@kernel.org>
 In-Reply-To: <20181205093555.5386-1-sashal@kernel.org>
 References: <20181205093555.5386-1-sashal@kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Nicolin Chen <nicoleotsuka@gmail.com>
+From: Vadim Pasternak <vadimp@mellanox.com>
 
-[ Upstream commit 38cd989ee38c16388cde89db5b734f9d55b905f9 ]
+[ Upstream commit 243cfe3fb8978c7eec24511aba7dac98819ed896 ]
 
-The current register (04h) has a sign bit at MSB. The comments
-for this calculation also mention that it's a signed register.
+Fix macros for tacometer fault reading.
+This fix is relevant for three Mellanox systems MQMB7, MSN37, MSN34,
+which are about to be released to the customers.
+At the moment, none of them is at customers sites.
 
-However, the regval is unsigned type so result of calculation
-turns out to be an incorrect value when current is negative.
-
-This patch simply fixes this by adding a casting to s16.
-
-Fixes: 5d389b125186c ("hwmon: (ina2xx) Make calibration register value fixed")
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+Fixes: 65afb4c8e7e4 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/ina2xx.c | 2 +-
+ drivers/hwmon/mlxreg-fan.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index c2252cf452f5..07ee19573b3f 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -274,7 +274,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
- 		break;
- 	case INA2XX_CURRENT:
- 		/* signed register, result in mA */
--		val = regval * data->current_lsb_uA;
-+		val = (s16)regval * data->current_lsb_uA;
- 		val = DIV_ROUND_CLOSEST(val, 1000);
- 		break;
- 	case INA2XX_CALIBRATION:
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index de46577c7d5a..d8fa4bea4bc8 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -51,7 +51,7 @@
+  */
+ #define MLXREG_FAN_GET_RPM(rval, d, s)	(DIV_ROUND_CLOSEST(15000000 * 100, \
+ 					 ((rval) + (s)) * (d)))
+-#define MLXREG_FAN_GET_FAULT(val, mask) (!!((val) ^ (mask)))
++#define MLXREG_FAN_GET_FAULT(val, mask) (!((val) ^ (mask)))
+ #define MLXREG_FAN_PWM_DUTY2STATE(duty)	(DIV_ROUND_CLOSEST((duty) *	\
+ 					 MLXREG_FAN_MAX_STATE,		\
+ 					 MLXREG_FAN_MAX_DUTY))
 -- 
 2.17.1
