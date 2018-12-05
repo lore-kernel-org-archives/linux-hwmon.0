@@ -3,46 +3,46 @@ Return-path: <sashal@kernel.org>
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Vadim Pasternak <vadimp@mellanox.com>,
+Cc: Huacai Chen <chenhc@lemote.com>,
+	Yao Wang <wangyao@lemote.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 039/123] hwmon: (mlxreg-fan) Fix macros for tacho fault reading
-Date: Wed,  5 Dec 2018 04:34:31 -0500
-Message-Id: <20181205093555.5386-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 043/123] hwmon: (w83795) temp4_type has writable permission
+Date: Wed,  5 Dec 2018 04:34:35 -0500
+Message-Id: <20181205093555.5386-43-sashal@kernel.org>
 In-Reply-To: <20181205093555.5386-1-sashal@kernel.org>
 References: <20181205093555.5386-1-sashal@kernel.org>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-From: Vadim Pasternak <vadimp@mellanox.com>
+From: Huacai Chen <chenhc@lemote.com>
 
-[ Upstream commit 243cfe3fb8978c7eec24511aba7dac98819ed896 ]
+[ Upstream commit 09aaf6813cfca4c18034fda7a43e68763f34abb1 ]
 
-Fix macros for tacometer fault reading.
-This fix is relevant for three Mellanox systems MQMB7, MSN37, MSN34,
-which are about to be released to the customers.
-At the moment, none of them is at customers sites.
+Both datasheet and comments of store_temp_mode() tell us that temp1~4_type
+is writable, so fix it.
 
-Fixes: 65afb4c8e7e4 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Signed-off-by: Yao Wang <wangyao@lemote.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+Fixes: 39deb6993e7c (" hwmon: (w83795) Simplify temperature sensor type handling")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/mlxreg-fan.c | 2 +-
+ drivers/hwmon/w83795.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index de46577c7d5a..d8fa4bea4bc8 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -51,7 +51,7 @@
+diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
+index 49276bbdac3d..1bb80f992aa8 100644
+--- a/drivers/hwmon/w83795.c
++++ b/drivers/hwmon/w83795.c
+@@ -1691,7 +1691,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
+  * somewhere else in the code
   */
- #define MLXREG_FAN_GET_RPM(rval, d, s)	(DIV_ROUND_CLOSEST(15000000 * 100, \
- 					 ((rval) + (s)) * (d)))
--#define MLXREG_FAN_GET_FAULT(val, mask) (!!((val) ^ (mask)))
-+#define MLXREG_FAN_GET_FAULT(val, mask) (!((val) ^ (mask)))
- #define MLXREG_FAN_PWM_DUTY2STATE(duty)	(DIV_ROUND_CLOSEST((duty) *	\
- 					 MLXREG_FAN_MAX_STATE,		\
- 					 MLXREG_FAN_MAX_DUTY))
+ #define SENSOR_ATTR_TEMP(index) {					\
+-	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 4 ? S_IWUSR : 0), \
++	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 5 ? S_IWUSR : 0), \
+ 		show_temp_mode, store_temp_mode, NOT_USED, index - 1),	\
+ 	SENSOR_ATTR_2(temp##index##_input, S_IRUGO, show_temp,		\
+ 		NULL, TEMP_READ, index - 1),				\
 -- 
 2.17.1
