@@ -1,49 +1,35 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail.kernel.org ([198.145.29.99]:33992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729995AbeLEJzd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 5 Dec 2018 04:55:33 -0500
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Huacai Chen <chenhc@lemote.com>, Yao Wang <wangyao@lemote.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 3.18 05/26] hwmon: (w83795) temp4_type has writable permission
-Date: Wed,  5 Dec 2018 04:54:09 -0500
-Message-Id: <20181205095430.8019-5-sashal@kernel.org>
-In-Reply-To: <20181205095430.8019-1-sashal@kernel.org>
-References: <20181205095430.8019-1-sashal@kernel.org>
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38526 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbeLFR7i (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Dec 2018 12:59:38 -0500
+Date: Thu, 6 Dec 2018 09:59:35 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com
+Subject: Re: [PATCH] hwmon: (lm75) Add STLM75 support
+Message-ID: <20181206175935.GA10500@roeck-us.net>
+References: <20181205211422.22266-1-jagan@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20181205211422.22266-1-jagan@amarulasolutions.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-From: Huacai Chen <chenhc@lemote.com>
+On Thu, Dec 06, 2018 at 02:44:22AM +0530, Jagan Teki wrote:
+> The STLM75 is a high-precision digital CMOS temperature sensor
+> IC with a sigma-delta temperature-to-digital converter.
+> 
+> The configuration register mapping is similar to existing lm75
+> but the sample rate is 150ms(max).
+> 
+> Tested on real hardware and verified temperature readings are correct.
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-[ Upstream commit 09aaf6813cfca4c18034fda7a43e68763f34abb1 ]
+Applied to hwmon-next.
 
-Both datasheet and comments of store_temp_mode() tell us that temp1~4_type
-is writable, so fix it.
-
-Signed-off-by: Yao Wang <wangyao@lemote.com>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
-Fixes: 39deb6993e7c (" hwmon: (w83795) Simplify temperature sensor type handling")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/w83795.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
-index 21894131190f..9b838fff7e4d 100644
---- a/drivers/hwmon/w83795.c
-+++ b/drivers/hwmon/w83795.c
-@@ -1693,7 +1693,7 @@ store_sf_setup(struct device *dev, struct device_attribute *attr,
-  * somewhere else in the code
-  */
- #define SENSOR_ATTR_TEMP(index) {					\
--	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 4 ? S_IWUSR : 0), \
-+	SENSOR_ATTR_2(temp##index##_type, S_IRUGO | (index < 5 ? S_IWUSR : 0), \
- 		show_temp_mode, store_temp_mode, NOT_USED, index - 1),	\
- 	SENSOR_ATTR_2(temp##index##_input, S_IRUGO, show_temp,		\
- 		NULL, TEMP_READ, index - 1),				\
--- 
-2.17.1
+Thanks,
+Guenter
