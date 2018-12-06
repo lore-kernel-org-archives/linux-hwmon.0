@@ -6,9 +6,9 @@ To: linux-hwmon@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>,
 	linux-kernel@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 06/13] hwmon: (ltc4260) Auto-convert to use SENSOR_DEVICE_ATTR_{RO, RW, WO}
-Date: Thu,  6 Dec 2018 11:22:26 -0800
-Message-Id: <1544124153-23961-7-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 07/13] hwmon: (max6650) Auto-convert to use SENSOR_DEVICE_ATTR_{RO, RW, WO}
+Date: Thu,  6 Dec 2018 11:22:27 -0800
+Message-Id: <1544124153-23961-8-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1544124153-23961-1-git-send-email-linux@roeck-us.net>
 References: <1544124153-23961-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
@@ -18,69 +18,68 @@ https://github.com/groeck/coccinelle-patches/raw/master/hwmon/sensor-devattr-w6.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc4260.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+ drivers/hwmon/max6650.c | 31 +++++++++++++------------------
+ 1 file changed, 13 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hwmon/ltc4260.c b/drivers/hwmon/ltc4260.c
-index afb09574b12c..011b1ae98ff1 100644
---- a/drivers/hwmon/ltc4260.c
-+++ b/drivers/hwmon/ltc4260.c
-@@ -79,7 +79,7 @@ static int ltc4260_get_value(struct device *dev, u8 reg)
- 	return val;
+diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
+index 65be4b19fe47..4752a9ee9645 100644
+--- a/drivers/hwmon/max6650.c
++++ b/drivers/hwmon/max6650.c
+@@ -209,8 +209,8 @@ static int max6650_set_operating_mode(struct max6650_data *data, u8 mode)
+ 	return 0;
  }
  
--static ssize_t ltc4260_show_value(struct device *dev,
-+static ssize_t ltc4260_value_show(struct device *dev,
- 				  struct device_attribute *da, char *buf)
+-static ssize_t get_fan(struct device *dev, struct device_attribute *devattr,
+-		       char *buf)
++static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
++			char *buf)
  {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-@@ -91,7 +91,7 @@ static ssize_t ltc4260_show_value(struct device *dev,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", value);
- }
- 
--static ssize_t ltc4260_show_bool(struct device *dev,
-+static ssize_t ltc4260_bool_show(struct device *dev,
- 				 struct device_attribute *da, char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-@@ -111,30 +111,24 @@ static ssize_t ltc4260_show_bool(struct device *dev,
- }
- 
- /* Voltages */
--static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ltc4260_show_value, NULL,
--			  LTC4260_SOURCE);
--static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ltc4260_show_value, NULL,
--			  LTC4260_ADIN);
-+static SENSOR_DEVICE_ATTR_RO(in1_input, ltc4260_value, LTC4260_SOURCE);
-+static SENSOR_DEVICE_ATTR_RO(in2_input, ltc4260_value, LTC4260_ADIN);
- 
- /*
-  * Voltage alarms
-  * UV/OV faults are associated with the input voltage, and the POWER BAD and
-  * FET SHORT faults are associated with the output voltage.
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max6650_data *data = max6650_update_device(dev);
+@@ -514,8 +514,8 @@ static ssize_t fan1_div_store(struct device *dev,
+  * 1 = alarm
   */
--static SENSOR_DEVICE_ATTR(in1_min_alarm, S_IRUGO, ltc4260_show_bool, NULL,
--			  FAULT_UV);
--static SENSOR_DEVICE_ATTR(in1_max_alarm, S_IRUGO, ltc4260_show_bool, NULL,
--			  FAULT_OV);
--static SENSOR_DEVICE_ATTR(in2_alarm, S_IRUGO, ltc4260_show_bool, NULL,
--			  FAULT_POWER_BAD | FAULT_FET_SHORT);
-+static SENSOR_DEVICE_ATTR_RO(in1_min_alarm, ltc4260_bool, FAULT_UV);
-+static SENSOR_DEVICE_ATTR_RO(in1_max_alarm, ltc4260_bool, FAULT_OV);
-+static SENSOR_DEVICE_ATTR_RO(in2_alarm, ltc4260_bool,
-+			     FAULT_POWER_BAD | FAULT_FET_SHORT);
  
- /* Current (via sense resistor) */
--static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ltc4260_show_value, NULL,
--			  LTC4260_SENSE);
-+static SENSOR_DEVICE_ATTR_RO(curr1_input, ltc4260_value, LTC4260_SENSE);
+-static ssize_t get_alarm(struct device *dev, struct device_attribute *devattr,
+-			 char *buf)
++static ssize_t alarm_show(struct device *dev,
++			  struct device_attribute *devattr, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max6650_data *data = max6650_update_device(dev);
+@@ -534,24 +534,19 @@ static ssize_t get_alarm(struct device *dev, struct device_attribute *devattr,
+ 	return sprintf(buf, "%d\n", alarm);
+ }
  
- /* Overcurrent alarm */
--static SENSOR_DEVICE_ATTR(curr1_max_alarm, S_IRUGO, ltc4260_show_bool, NULL,
--			  FAULT_OC);
-+static SENSOR_DEVICE_ATTR_RO(curr1_max_alarm, ltc4260_bool, FAULT_OC);
+-static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, get_fan, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, get_fan, NULL, 1);
+-static SENSOR_DEVICE_ATTR(fan3_input, S_IRUGO, get_fan, NULL, 2);
+-static SENSOR_DEVICE_ATTR(fan4_input, S_IRUGO, get_fan, NULL, 3);
++static SENSOR_DEVICE_ATTR_RO(fan1_input, fan, 0);
++static SENSOR_DEVICE_ATTR_RO(fan2_input, fan, 1);
++static SENSOR_DEVICE_ATTR_RO(fan3_input, fan, 2);
++static SENSOR_DEVICE_ATTR_RO(fan4_input, fan, 3);
+ static DEVICE_ATTR_RW(fan1_target);
+ static DEVICE_ATTR_RW(fan1_div);
+ static DEVICE_ATTR_RW(pwm1_enable);
+ static DEVICE_ATTR_RW(pwm1);
+-static SENSOR_DEVICE_ATTR(fan1_max_alarm, S_IRUGO, get_alarm, NULL,
+-			  MAX6650_ALRM_MAX);
+-static SENSOR_DEVICE_ATTR(fan1_min_alarm, S_IRUGO, get_alarm, NULL,
+-			  MAX6650_ALRM_MIN);
+-static SENSOR_DEVICE_ATTR(fan1_fault, S_IRUGO, get_alarm, NULL,
+-			  MAX6650_ALRM_TACH);
+-static SENSOR_DEVICE_ATTR(gpio1_alarm, S_IRUGO, get_alarm, NULL,
+-			  MAX6650_ALRM_GPIO1);
+-static SENSOR_DEVICE_ATTR(gpio2_alarm, S_IRUGO, get_alarm, NULL,
+-			  MAX6650_ALRM_GPIO2);
++static SENSOR_DEVICE_ATTR_RO(fan1_max_alarm, alarm, MAX6650_ALRM_MAX);
++static SENSOR_DEVICE_ATTR_RO(fan1_min_alarm, alarm, MAX6650_ALRM_MIN);
++static SENSOR_DEVICE_ATTR_RO(fan1_fault, alarm, MAX6650_ALRM_TACH);
++static SENSOR_DEVICE_ATTR_RO(gpio1_alarm, alarm, MAX6650_ALRM_GPIO1);
++static SENSOR_DEVICE_ATTR_RO(gpio2_alarm, alarm, MAX6650_ALRM_GPIO2);
  
- static struct attribute *ltc4260_attrs[] = {
- 	&sensor_dev_attr_in1_input.dev_attr.attr,
+ static umode_t max6650_attrs_visible(struct kobject *kobj, struct attribute *a,
+ 				    int n)
 -- 
 2.7.4
