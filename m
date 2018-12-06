@@ -6,133 +6,195 @@ To: linux-hwmon@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>,
 	linux-kernel@vger.kernel.org,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH (resend) 01/13] hwmon: Introduce SENSOR_DEVICE_ATTR_{RO, RW, WO} and variants
-Date: Thu,  6 Dec 2018 11:22:21 -0800
-Message-Id: <1544124153-23961-2-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 02/13] hwmon: (ltc2945): Auto-convert to use SENSOR_DEVICE_ATTR_{RO, RW, WO}
+Date: Thu,  6 Dec 2018 11:22:22 -0800
+Message-Id: <1544124153-23961-3-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1544124153-23961-1-git-send-email-linux@roeck-us.net>
 References: <1544124153-23961-1-git-send-email-linux@roeck-us.net>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Introduce SENSOR_DEVICE_ATTR_{RO,RW,WO} and SENSOR_DEVICE_ATTR_2_{RO,RW,WO}
-as simplified variants of SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 to
-simplify the source code, improve readbility, and reduce the chance of
-inconsistencies.
+Conversion was done done using the coccinelle script at
+https://github.com/groeck/coccinelle-patches/raw/master/hwmon/sensor-devattr-w6.cocci
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/hwmon-kernel-api.txt | 24 +++++++++++++-------
- include/linux/hwmon-sysfs.h              | 39 ++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 8 deletions(-)
+ drivers/hwmon/ltc2945.c | 121 ++++++++++++++++++++----------------------------
+ 1 file changed, 50 insertions(+), 71 deletions(-)
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.txt b/Documentation/hwmon/hwmon-kernel-api.txt
-index eb7a78aebb38..8bdefb41be30 100644
---- a/Documentation/hwmon/hwmon-kernel-api.txt
-+++ b/Documentation/hwmon/hwmon-kernel-api.txt
-@@ -299,17 +299,25 @@ functions is used.
- The header file linux/hwmon-sysfs.h provides a number of useful macros to
- declare and use hardware monitoring sysfs attributes.
+diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
+index 1b92e4f6e234..f16716a1fead 100644
+--- a/drivers/hwmon/ltc2945.c
++++ b/drivers/hwmon/ltc2945.c
+@@ -226,7 +226,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
+ 	return val;
+ }
  
--In many cases, you can use the exsting define DEVICE_ATTR to declare such
--attributes. This is feasible if an attribute has no additional context. However,
--in many cases there will be additional information such as a sensor index which
--will need to be passed to the sysfs attribute handling function.
-+In many cases, you can use the exsting define DEVICE_ATTR or its variants
-+DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
-+attribute has no additional context. However, in many cases there will be
-+additional information such as a sensor index which will need to be passed
-+to the sysfs attribute handling function.
+-static ssize_t ltc2945_show_value(struct device *dev,
++static ssize_t ltc2945_value_show(struct device *dev,
+ 				  struct device_attribute *da, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+@@ -238,9 +238,9 @@ static ssize_t ltc2945_show_value(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%lld\n", value);
+ }
  
- SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 can be used to define attributes
- which need such additional context information. SENSOR_DEVICE_ATTR requires
- one additional argument, SENSOR_DEVICE_ATTR_2 requires two.
+-static ssize_t ltc2945_set_value(struct device *dev,
+-				     struct device_attribute *da,
+-				     const char *buf, size_t count)
++static ssize_t ltc2945_value_store(struct device *dev,
++				   struct device_attribute *da,
++				   const char *buf, size_t count)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+ 	struct regmap *regmap = dev_get_drvdata(dev);
+@@ -273,7 +273,7 @@ static ssize_t ltc2945_set_value(struct device *dev,
+ 	return ret < 0 ? ret : count;
+ }
  
--SENSOR_DEVICE_ATTR defines a struct sensor_device_attribute variable.
--This structure has the following fields.
-+Simplified variants of SENSOR_DEVICE_ATTR and SENSOR_DEVICE_ATTR_2 are available
-+and should be used if standard attribute permissions and function names are
-+feasible. Standard permissions are 0644 for SENSOR_DEVICE_ATTR[_2]_RW,
-+0444 for SENSOR_DEVICE_ATTR[_2]_RO, and 0200 for SENSOR_DEVICE_ATTR[_2]_WO.
-+Standard functions, similar to DEVICE_ATTR_{RW,RO,WO}, have _show and _store
-+appended to the provided function name.
-+
-+SENSOR_DEVICE_ATTR and its variants define a struct sensor_device_attribute
-+variable. This structure has the following fields.
+-static ssize_t ltc2945_reset_history(struct device *dev,
++static ssize_t ltc2945_history_store(struct device *dev,
+ 				     struct device_attribute *da,
+ 				     const char *buf, size_t count)
+ {
+@@ -326,7 +326,7 @@ static ssize_t ltc2945_reset_history(struct device *dev,
+ 	return ret ? : count;
+ }
  
- struct sensor_device_attribute {
- 	struct device_attribute dev_attr;
-@@ -320,8 +328,8 @@ You can use to_sensor_dev_attr to get the pointer to this structure from the
- attribute read or write function. Its parameter is the device to which the
- attribute is attached.
+-static ssize_t ltc2945_show_bool(struct device *dev,
++static ssize_t ltc2945_bool_show(struct device *dev,
+ 				 struct device_attribute *da, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+@@ -347,86 +347,65 @@ static ssize_t ltc2945_show_bool(struct device *dev,
  
--SENSOR_DEVICE_ATTR_2 defines a struct sensor_device_attribute_2 variable,
--which is defined as follows.
-+SENSOR_DEVICE_ATTR_2 and its variants define a struct sensor_device_attribute_2
-+variable, which is defined as follows.
+ /* Input voltages */
  
- struct sensor_device_attribute_2 {
- 	struct device_attribute dev_attr;
-diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
-index 1c7b89ae6bdc..473897bbd898 100644
---- a/include/linux/hwmon-sysfs.h
-+++ b/include/linux/hwmon-sysfs.h
-@@ -33,10 +33,28 @@ struct sensor_device_attribute{
- 	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
- 	  .index = _index }
+-static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_VIN_H);
+-static SENSOR_DEVICE_ATTR(in1_min, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MIN_VIN_THRES_H);
+-static SENSOR_DEVICE_ATTR(in1_max, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MAX_VIN_THRES_H);
+-static SENSOR_DEVICE_ATTR(in1_lowest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MIN_VIN_H);
+-static SENSOR_DEVICE_ATTR(in1_highest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MAX_VIN_H);
+-static SENSOR_DEVICE_ATTR(in1_reset_history, S_IWUSR, NULL,
+-			  ltc2945_reset_history, LTC2945_MIN_VIN_H);
+-
+-static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_ADIN_H);
+-static SENSOR_DEVICE_ATTR(in2_min, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MIN_ADIN_THRES_H);
+-static SENSOR_DEVICE_ATTR(in2_max, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MAX_ADIN_THRES_H);
+-static SENSOR_DEVICE_ATTR(in2_lowest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MIN_ADIN_H);
+-static SENSOR_DEVICE_ATTR(in2_highest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MAX_ADIN_H);
+-static SENSOR_DEVICE_ATTR(in2_reset_history, S_IWUSR, NULL,
+-			  ltc2945_reset_history, LTC2945_MIN_ADIN_H);
++static SENSOR_DEVICE_ATTR_RO(in1_input, ltc2945_value, LTC2945_VIN_H);
++static SENSOR_DEVICE_ATTR_RW(in1_min, ltc2945_value, LTC2945_MIN_VIN_THRES_H);
++static SENSOR_DEVICE_ATTR_RW(in1_max, ltc2945_value, LTC2945_MAX_VIN_THRES_H);
++static SENSOR_DEVICE_ATTR_RO(in1_lowest, ltc2945_value, LTC2945_MIN_VIN_H);
++static SENSOR_DEVICE_ATTR_RO(in1_highest, ltc2945_value, LTC2945_MAX_VIN_H);
++static SENSOR_DEVICE_ATTR_WO(in1_reset_history, ltc2945_history,
++			     LTC2945_MIN_VIN_H);
++
++static SENSOR_DEVICE_ATTR_RO(in2_input, ltc2945_value, LTC2945_ADIN_H);
++static SENSOR_DEVICE_ATTR_RW(in2_min, ltc2945_value, LTC2945_MIN_ADIN_THRES_H);
++static SENSOR_DEVICE_ATTR_RW(in2_max, ltc2945_value, LTC2945_MAX_ADIN_THRES_H);
++static SENSOR_DEVICE_ATTR_RO(in2_lowest, ltc2945_value, LTC2945_MIN_ADIN_H);
++static SENSOR_DEVICE_ATTR_RO(in2_highest, ltc2945_value, LTC2945_MAX_ADIN_H);
++static SENSOR_DEVICE_ATTR_WO(in2_reset_history, ltc2945_history,
++			     LTC2945_MIN_ADIN_H);
  
-+#define SENSOR_ATTR_RO(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0444, _func##_show, NULL, _index)
-+
-+#define SENSOR_ATTR_RW(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-+
-+#define SENSOR_ATTR_WO(_name, _func, _index)			\
-+	SENSOR_ATTR(_name, 0200, NULL, _func##_store, _index)
-+
- #define SENSOR_DEVICE_ATTR(_name, _mode, _show, _store, _index)	\
- struct sensor_device_attribute sensor_dev_attr_##_name		\
- 	= SENSOR_ATTR(_name, _mode, _show, _store, _index)
+ /* Voltage alarms */
  
-+#define SENSOR_DEVICE_ATTR_RO(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0444, _func##_show, NULL, _index)
-+
-+#define SENSOR_DEVICE_ATTR_RW(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0644, _func##_show, _func##_store, _index)
-+
-+#define SENSOR_DEVICE_ATTR_WO(_name, _func, _index)		\
-+	SENSOR_DEVICE_ATTR(_name, 0200, NULL, _func##_store, _index)
-+
- struct sensor_device_attribute_2 {
- 	struct device_attribute dev_attr;
- 	u8 index;
-@@ -50,8 +68,29 @@ struct sensor_device_attribute_2 {
- 	  .index = _index,					\
- 	  .nr = _nr }
+-static SENSOR_DEVICE_ATTR(in1_min_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_VIN_UV);
+-static SENSOR_DEVICE_ATTR(in1_max_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_VIN_OV);
+-static SENSOR_DEVICE_ATTR(in2_min_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_ADIN_UV);
+-static SENSOR_DEVICE_ATTR(in2_max_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_ADIN_OV);
++static SENSOR_DEVICE_ATTR_RO(in1_min_alarm, ltc2945_bool, FAULT_VIN_UV);
++static SENSOR_DEVICE_ATTR_RO(in1_max_alarm, ltc2945_bool, FAULT_VIN_OV);
++static SENSOR_DEVICE_ATTR_RO(in2_min_alarm, ltc2945_bool, FAULT_ADIN_UV);
++static SENSOR_DEVICE_ATTR_RO(in2_max_alarm, ltc2945_bool, FAULT_ADIN_OV);
  
-+#define SENSOR_ATTR_2_RO(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0444, _func##_show, NULL, _nr, _index)
-+
-+#define SENSOR_ATTR_2_RW(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0644, _func##_show, _func##_store, _nr, _index)
-+
-+#define SENSOR_ATTR_2_WO(_name, _func, _nr, _index)		\
-+	SENSOR_ATTR_2(_name, 0200, NULL, _func##_store, _nr, _index)
-+
- #define SENSOR_DEVICE_ATTR_2(_name,_mode,_show,_store,_nr,_index)	\
- struct sensor_device_attribute_2 sensor_dev_attr_##_name		\
- 	= SENSOR_ATTR_2(_name, _mode, _show, _store, _nr, _index)
+ /* Currents (via sense resistor) */
  
-+#define SENSOR_DEVICE_ATTR_2_RO(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0444, _func##_show, NULL,		\
-+			     _nr, _index)
-+
-+#define SENSOR_DEVICE_ATTR_2_RW(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0644, _func##_show, _func##_store,	\
-+			     _nr, _index)
-+
-+#define SENSOR_DEVICE_ATTR_2_WO(_name, _func, _nr, _index)		\
-+	SENSOR_DEVICE_ATTR_2(_name, 0200, NULL, _func##_store,		\
-+			     _nr, _index)
-+
- #endif /* _LINUX_HWMON_SYSFS_H */
+-static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_SENSE_H);
+-static SENSOR_DEVICE_ATTR(curr1_min, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MIN_SENSE_THRES_H);
+-static SENSOR_DEVICE_ATTR(curr1_max, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MAX_SENSE_THRES_H);
+-static SENSOR_DEVICE_ATTR(curr1_lowest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MIN_SENSE_H);
+-static SENSOR_DEVICE_ATTR(curr1_highest, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_MAX_SENSE_H);
+-static SENSOR_DEVICE_ATTR(curr1_reset_history, S_IWUSR, NULL,
+-			  ltc2945_reset_history, LTC2945_MIN_SENSE_H);
++static SENSOR_DEVICE_ATTR_RO(curr1_input, ltc2945_value, LTC2945_SENSE_H);
++static SENSOR_DEVICE_ATTR_RW(curr1_min, ltc2945_value,
++			     LTC2945_MIN_SENSE_THRES_H);
++static SENSOR_DEVICE_ATTR_RW(curr1_max, ltc2945_value,
++			     LTC2945_MAX_SENSE_THRES_H);
++static SENSOR_DEVICE_ATTR_RO(curr1_lowest, ltc2945_value, LTC2945_MIN_SENSE_H);
++static SENSOR_DEVICE_ATTR_RO(curr1_highest, ltc2945_value,
++			     LTC2945_MAX_SENSE_H);
++static SENSOR_DEVICE_ATTR_WO(curr1_reset_history, ltc2945_history,
++			     LTC2945_MIN_SENSE_H);
+ 
+ /* Current alarms */
+ 
+-static SENSOR_DEVICE_ATTR(curr1_min_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_SENSE_UV);
+-static SENSOR_DEVICE_ATTR(curr1_max_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_SENSE_OV);
++static SENSOR_DEVICE_ATTR_RO(curr1_min_alarm, ltc2945_bool, FAULT_SENSE_UV);
++static SENSOR_DEVICE_ATTR_RO(curr1_max_alarm, ltc2945_bool, FAULT_SENSE_OV);
+ 
+ /* Power */
+ 
+-static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ltc2945_show_value, NULL,
+-			  LTC2945_POWER_H);
+-static SENSOR_DEVICE_ATTR(power1_min, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MIN_POWER_THRES_H);
+-static SENSOR_DEVICE_ATTR(power1_max, S_IRUGO | S_IWUSR, ltc2945_show_value,
+-			  ltc2945_set_value, LTC2945_MAX_POWER_THRES_H);
+-static SENSOR_DEVICE_ATTR(power1_input_lowest, S_IRUGO, ltc2945_show_value,
+-			  NULL, LTC2945_MIN_POWER_H);
+-static SENSOR_DEVICE_ATTR(power1_input_highest, S_IRUGO, ltc2945_show_value,
+-			  NULL, LTC2945_MAX_POWER_H);
+-static SENSOR_DEVICE_ATTR(power1_reset_history, S_IWUSR, NULL,
+-			  ltc2945_reset_history, LTC2945_MIN_POWER_H);
++static SENSOR_DEVICE_ATTR_RO(power1_input, ltc2945_value, LTC2945_POWER_H);
++static SENSOR_DEVICE_ATTR_RW(power1_min, ltc2945_value,
++			     LTC2945_MIN_POWER_THRES_H);
++static SENSOR_DEVICE_ATTR_RW(power1_max, ltc2945_value,
++			     LTC2945_MAX_POWER_THRES_H);
++static SENSOR_DEVICE_ATTR_RO(power1_input_lowest, ltc2945_value,
++			     LTC2945_MIN_POWER_H);
++static SENSOR_DEVICE_ATTR_RO(power1_input_highest, ltc2945_value,
++			     LTC2945_MAX_POWER_H);
++static SENSOR_DEVICE_ATTR_WO(power1_reset_history, ltc2945_history,
++			     LTC2945_MIN_POWER_H);
+ 
+ /* Power alarms */
+ 
+-static SENSOR_DEVICE_ATTR(power1_min_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_POWER_UV);
+-static SENSOR_DEVICE_ATTR(power1_max_alarm, S_IRUGO, ltc2945_show_bool, NULL,
+-			  FAULT_POWER_OV);
++static SENSOR_DEVICE_ATTR_RO(power1_min_alarm, ltc2945_bool, FAULT_POWER_UV);
++static SENSOR_DEVICE_ATTR_RO(power1_max_alarm, ltc2945_bool, FAULT_POWER_OV);
+ 
+ static struct attribute *ltc2945_attrs[] = {
+ 	&sensor_dev_attr_in1_input.dev_attr.attr,
 -- 
 2.7.4
