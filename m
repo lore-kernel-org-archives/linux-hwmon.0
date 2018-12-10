@@ -1,45 +1,32 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from [110.188.70.11] ([110.188.70.11]:39828 "EHLO spam2.hygon.cn"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726066AbeLIGkE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 9 Dec 2018 01:40:04 -0500
-From: Pu Wen <puwen@hygon.cn>
-Subject: Re: [RFC PATCH] hwmon/k10temp: Add Hygon Dhyana support
-To: Guenter Roeck <linux@roeck-us.net>
-CC: <clemens@ladisch.de>, <jdelvare@suse.com>, <bp@alien8.de>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1544250808-20462-1-git-send-email-puwen@hygon.cn>
- <20181208155559.GA27489@roeck-us.net>
-Message-ID: <d91c04e9-71c2-3045-1e31-f2f4cc076e87@hygon.cn>
-Date: Sun, 9 Dec 2018 14:39:15 +0800
-MIME-Version: 1.0
-In-Reply-To: <20181208155559.GA27489@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44206 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728786AbeLJWIw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 Dec 2018 17:08:52 -0500
+Received: by mail-pg1-f196.google.com with SMTP id t13so5604932pgr.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:08:52 -0800 (PST)
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 00/30] hwmon: Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date: Mon, 10 Dec 2018 14:08:18 -0800
+Message-Id: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 2018/12/8 23:56, Guenter Roeck wrote:
-> On Sat, Dec 08, 2018 at 02:33:28PM +0800, Pu Wen wrote:
->> Add support for Hygon Dhyana family 18h processor for k10temp to get the
->> temperature. As Hygon Dhyana shares the same function interface with AMD
->> family 17h, so add Hygon PCI Vendor ID and reuse the code path of AMD.
->>
->> Signed-off-by: Pu Wen <puwen@hygon.cn>
->> Acked-by: Borislav Petkov <bp@suse.de>
-> 
-> Applied to hwmon-next.
+Use SENSOR[_DEVICE]_ATTR[_2]_{RO,RW,WO} to simplify the source code,
+to improve readbility, and to reduce the chance of inconsistencies.
 
-Thanks a lot.
+Also replace any remaining S_<PERMS> in the drivers with octal values.
 
-> If the Hygon CPUs have Tctl/Tdie temperature offsets similar to some
-> of the AMD CPUs, please submit follow-up patches as necessary to add
-> support for it.
+The conversion was done automatically with coccinelle. The semantic patches
+and the scripts used to generate this commit log are available at
+https://github.com/groeck/coccinelle-patches/hwmon/.
 
-Right now Hygon Dhyana CPUs do not have temperature offsets. Of course
-I'll submit follow-up patches if necessary in the future.
+This patch series does not introduce functional changes. It was verified
+by compiling the old and new files and comparing text and data sizes.
 
--- 
-Regards,
-Pu Wen
+This series includes about one third of the auto-converted drivers.
+The remaining patches will be submitted after the next commit window.
