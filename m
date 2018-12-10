@@ -1,18 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35989 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729444AbeLJWJD (ORCPT
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40125 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729444AbeLJWJE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Dec 2018 17:09:03 -0500
-Received: by mail-pg1-f193.google.com with SMTP id n2so5618775pgm.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:09:02 -0800 (PST)
+        Mon, 10 Dec 2018 17:09:04 -0500
+Received: by mail-pg1-f194.google.com with SMTP id z10so5615807pgp.7
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:09:03 -0800 (PST)
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 07/30] hwmon: (adcxx) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date: Mon, 10 Dec 2018 14:08:25 -0800
-Message-Id: <1544479728-30077-8-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 08/30] hwmon: (adm1021) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date: Mon, 10 Dec 2018 14:08:26 -0800
+Message-Id: <1544479728-30077-9-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 References: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -32,94 +32,109 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/adcxx.c | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ drivers/hwmon/adm1021.c | 48 ++++++++++++++++++++++--------------------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/hwmon/adcxx.c b/drivers/hwmon/adcxx.c
-index 69e0bb97e597..c8feb2295fe2 100644
---- a/drivers/hwmon/adcxx.c
-+++ b/drivers/hwmon/adcxx.c
-@@ -57,8 +57,8 @@ struct adcxx {
- };
- 
- /* sysfs hook function */
--static ssize_t adcxx_read(struct device *dev,
--		struct device_attribute *devattr, char *buf)
-+static ssize_t adcxx_show(struct device *dev,
-+			  struct device_attribute *devattr, char *buf)
- {
- 	struct spi_device *spi = to_spi_device(dev);
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-@@ -94,15 +94,15 @@ static ssize_t adcxx_read(struct device *dev,
- 	return status;
+diff --git a/drivers/hwmon/adm1021.c b/drivers/hwmon/adm1021.c
+index eacf10fadbc6..49461b60e296 100644
+--- a/drivers/hwmon/adm1021.c
++++ b/drivers/hwmon/adm1021.c
+@@ -156,8 +156,8 @@ static struct adm1021_data *adm1021_update_device(struct device *dev)
+ 	return data;
  }
  
--static ssize_t adcxx_show_min(struct device *dev,
--		struct device_attribute *devattr, char *buf)
-+static ssize_t adcxx_min_show(struct device *dev,
-+			      struct device_attribute *devattr, char *buf)
+-static ssize_t show_temp(struct device *dev,
+-			 struct device_attribute *devattr, char *buf)
++static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
++			 char *buf)
  {
- 	/* The minimum reference is 0 for this chip family */
- 	return sprintf(buf, "0\n");
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct adm1021_data *data = adm1021_update_device(dev);
+@@ -165,7 +165,7 @@ static ssize_t show_temp(struct device *dev,
+ 	return sprintf(buf, "%d\n", data->temp[index]);
  }
  
--static ssize_t adcxx_show_max(struct device *dev,
--		struct device_attribute *devattr, char *buf)
-+static ssize_t adcxx_max_show(struct device *dev,
-+			      struct device_attribute *devattr, char *buf)
+-static ssize_t show_temp_max(struct device *dev,
++static ssize_t temp_max_show(struct device *dev,
+ 			     struct device_attribute *devattr, char *buf)
  {
- 	struct spi_device *spi = to_spi_device(dev);
- 	struct adcxx *adc = spi_get_drvdata(spi);
-@@ -118,8 +118,9 @@ static ssize_t adcxx_show_max(struct device *dev,
- 	return sprintf(buf, "%d\n", reference);
+ 	int index = to_sensor_dev_attr(devattr)->index;
+@@ -174,7 +174,7 @@ static ssize_t show_temp_max(struct device *dev,
+ 	return sprintf(buf, "%d\n", data->temp_max[index]);
  }
  
--static ssize_t adcxx_set_max(struct device *dev,
--	struct device_attribute *devattr, const char *buf, size_t count)
-+static ssize_t adcxx_max_store(struct device *dev,
-+			       struct device_attribute *devattr,
-+			       const char *buf, size_t count)
+-static ssize_t show_temp_min(struct device *dev,
++static ssize_t temp_min_show(struct device *dev,
+ 			     struct device_attribute *devattr, char *buf)
  {
- 	struct spi_device *spi = to_spi_device(dev);
- 	struct adcxx *adc = spi_get_drvdata(spi);
-@@ -138,25 +139,24 @@ static ssize_t adcxx_set_max(struct device *dev,
+ 	int index = to_sensor_dev_attr(devattr)->index;
+@@ -183,7 +183,7 @@ static ssize_t show_temp_min(struct device *dev,
+ 	return sprintf(buf, "%d\n", data->temp_min[index]);
+ }
+ 
+-static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
++static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
+ {
+ 	int index = to_sensor_dev_attr(attr)->index;
+@@ -199,9 +199,9 @@ static ssize_t alarms_show(struct device *dev,
+ 	return sprintf(buf, "%u\n", data->alarms);
+ }
+ 
+-static ssize_t set_temp_max(struct device *dev,
+-			    struct device_attribute *devattr,
+-			    const char *buf, size_t count)
++static ssize_t temp_max_store(struct device *dev,
++			      struct device_attribute *devattr,
++			      const char *buf, size_t count)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct adm1021_data *data = dev_get_drvdata(dev);
+@@ -225,9 +225,9 @@ static ssize_t set_temp_max(struct device *dev,
  	return count;
  }
  
--static ssize_t adcxx_show_name(struct device *dev, struct device_attribute
--			      *devattr, char *buf)
-+static ssize_t adcxx_name_show(struct device *dev,
-+			       struct device_attribute *devattr, char *buf)
+-static ssize_t set_temp_min(struct device *dev,
+-			    struct device_attribute *devattr,
+-			    const char *buf, size_t count)
++static ssize_t temp_min_store(struct device *dev,
++			      struct device_attribute *devattr,
++			      const char *buf, size_t count)
  {
- 	return sprintf(buf, "%s\n", to_spi_device(dev)->modalias);
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct adm1021_data *data = dev_get_drvdata(dev);
+@@ -287,21 +287,17 @@ static ssize_t low_power_store(struct device *dev,
  }
  
- static struct sensor_device_attribute ad_input[] = {
--	SENSOR_ATTR(name, S_IRUGO, adcxx_show_name, NULL, 0),
--	SENSOR_ATTR(in_min, S_IRUGO, adcxx_show_min, NULL, 0),
--	SENSOR_ATTR(in_max, S_IWUSR | S_IRUGO, adcxx_show_max,
--					adcxx_set_max, 0),
--	SENSOR_ATTR(in0_input, S_IRUGO, adcxx_read, NULL, 0),
--	SENSOR_ATTR(in1_input, S_IRUGO, adcxx_read, NULL, 1),
--	SENSOR_ATTR(in2_input, S_IRUGO, adcxx_read, NULL, 2),
--	SENSOR_ATTR(in3_input, S_IRUGO, adcxx_read, NULL, 3),
--	SENSOR_ATTR(in4_input, S_IRUGO, adcxx_read, NULL, 4),
--	SENSOR_ATTR(in5_input, S_IRUGO, adcxx_read, NULL, 5),
--	SENSOR_ATTR(in6_input, S_IRUGO, adcxx_read, NULL, 6),
--	SENSOR_ATTR(in7_input, S_IRUGO, adcxx_read, NULL, 7),
-+	SENSOR_ATTR_RO(name, adcxx_name, 0),
-+	SENSOR_ATTR_RO(in_min, adcxx_min, 0),
-+	SENSOR_ATTR_RW(in_max, adcxx_max, 0),
-+	SENSOR_ATTR_RO(in0_input, adcxx, 0),
-+	SENSOR_ATTR_RO(in1_input, adcxx, 1),
-+	SENSOR_ATTR_RO(in2_input, adcxx, 2),
-+	SENSOR_ATTR_RO(in3_input, adcxx, 3),
-+	SENSOR_ATTR_RO(in4_input, adcxx, 4),
-+	SENSOR_ATTR_RO(in5_input, adcxx, 5),
-+	SENSOR_ATTR_RO(in6_input, adcxx, 6),
-+	SENSOR_ATTR_RO(in7_input, adcxx, 7),
- };
  
- /*----------------------------------------------------------------------*/
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
+-static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, show_temp_max,
+-			  set_temp_max, 0);
+-static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp_min,
+-			  set_temp_min, 0);
+-static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, show_temp, NULL, 1);
+-static SENSOR_DEVICE_ATTR(temp2_max, S_IWUSR | S_IRUGO, show_temp_max,
+-			  set_temp_max, 1);
+-static SENSOR_DEVICE_ATTR(temp2_min, S_IWUSR | S_IRUGO, show_temp_min,
+-			  set_temp_min, 1);
+-static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL, 6);
+-static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_alarm, NULL, 5);
+-static SENSOR_DEVICE_ATTR(temp2_max_alarm, S_IRUGO, show_alarm, NULL, 4);
+-static SENSOR_DEVICE_ATTR(temp2_min_alarm, S_IRUGO, show_alarm, NULL, 3);
+-static SENSOR_DEVICE_ATTR(temp2_fault, S_IRUGO, show_alarm, NULL, 2);
++static SENSOR_DEVICE_ATTR_RO(temp1_input, temp, 0);
++static SENSOR_DEVICE_ATTR_RW(temp1_max, temp_max, 0);
++static SENSOR_DEVICE_ATTR_RW(temp1_min, temp_min, 0);
++static SENSOR_DEVICE_ATTR_RO(temp2_input, temp, 1);
++static SENSOR_DEVICE_ATTR_RW(temp2_max, temp_max, 1);
++static SENSOR_DEVICE_ATTR_RW(temp2_min, temp_min, 1);
++static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, alarm, 6);
++static SENSOR_DEVICE_ATTR_RO(temp1_min_alarm, alarm, 5);
++static SENSOR_DEVICE_ATTR_RO(temp2_max_alarm, alarm, 4);
++static SENSOR_DEVICE_ATTR_RO(temp2_min_alarm, alarm, 3);
++static SENSOR_DEVICE_ATTR_RO(temp2_fault, alarm, 2);
+ 
+ static DEVICE_ATTR_RO(alarms);
+ static DEVICE_ATTR_RW(low_power);
 -- 
 2.7.4
