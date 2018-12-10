@@ -1,18 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33097 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729607AbeLJWJc (ORCPT
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:35503 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729688AbeLJWJe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Dec 2018 17:09:32 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c123so6075242pfb.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:09:32 -0800 (PST)
+        Mon, 10 Dec 2018 17:09:34 -0500
+Received: by mail-pg1-f194.google.com with SMTP id s198so5624594pgs.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:09:33 -0800 (PST)
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 28/30] hwmon: (emc6w201) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date: Mon, 10 Dec 2018 14:08:46 -0800
-Message-Id: <1544479728-30077-29-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 29/30] hwmon: (fschmd) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date: Mon, 10 Dec 2018 14:08:47 -0800
+Message-Id: <1544479728-30077-30-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 References: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -32,211 +32,358 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/emc6w201.c | 150 +++++++++++++++++++----------------------------
- 1 file changed, 61 insertions(+), 89 deletions(-)
+ drivers/hwmon/fschmd.c | 235 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 116 insertions(+), 119 deletions(-)
 
-diff --git a/drivers/hwmon/emc6w201.c b/drivers/hwmon/emc6w201.c
-index 4aee5adf9ef2..b4735e7e18f5 100644
---- a/drivers/hwmon/emc6w201.c
-+++ b/drivers/hwmon/emc6w201.c
-@@ -189,8 +189,8 @@ static struct emc6w201_data *emc6w201_update_device(struct device *dev)
+diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
+index 22d3a84f13ef..042a166e1858 100644
+--- a/drivers/hwmon/fschmd.c
++++ b/drivers/hwmon/fschmd.c
+@@ -331,8 +331,8 @@ static void fschmd_release_resources(struct kref *ref)
+  * Sysfs attr show / store functions
+  */
  
- static const s16 nominal_mv[6] = { 2500, 1500, 3300, 5000, 1500, 1500 };
- 
--static ssize_t show_in(struct device *dev, struct device_attribute *devattr,
--	char *buf)
-+static ssize_t in_show(struct device *dev, struct device_attribute *devattr,
-+		       char *buf)
+-static ssize_t show_in_value(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t in_value_show(struct device *dev,
++			     struct device_attribute *devattr, char *buf)
  {
- 	struct emc6w201_data *data = emc6w201_update_device(dev);
- 	int sf = to_sensor_dev_attr_2(devattr)->index;
-@@ -200,8 +200,8 @@ static ssize_t show_in(struct device *dev, struct device_attribute *devattr,
- 		       (unsigned)data->in[sf][nr] * nominal_mv[nr] / 0xC0);
+ 	const int max_reading[3] = { 14200, 6600, 3300 };
+ 	int index = to_sensor_dev_attr(devattr)->index;
+@@ -349,8 +349,8 @@ static ssize_t show_in_value(struct device *dev,
+ 
+ #define TEMP_FROM_REG(val)	(((val) - 128) * 1000)
+ 
+-static ssize_t show_temp_value(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t temp_value_show(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -358,8 +358,8 @@ static ssize_t show_temp_value(struct device *dev,
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_act[index]));
  }
  
--static ssize_t set_in(struct device *dev, struct device_attribute *devattr,
--		      const char *buf, size_t count)
-+static ssize_t in_store(struct device *dev, struct device_attribute *devattr,
-+			const char *buf, size_t count)
+-static ssize_t show_temp_max(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t temp_max_show(struct device *dev,
++			     struct device_attribute *devattr, char *buf)
  {
- 	struct emc6w201_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -228,8 +228,8 @@ static ssize_t set_in(struct device *dev, struct device_attribute *devattr,
- 	return err < 0 ? err : count;
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -367,8 +367,9 @@ static ssize_t show_temp_max(struct device *dev,
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_max[index]));
  }
  
--static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
--	char *buf)
-+static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
-+			 char *buf)
+-static ssize_t store_temp_max(struct device *dev, struct device_attribute
+-	*devattr, const char *buf, size_t count)
++static ssize_t temp_max_store(struct device *dev,
++			      struct device_attribute *devattr,
++			      const char *buf, size_t count)
  {
- 	struct emc6w201_data *data = emc6w201_update_device(dev);
- 	int sf = to_sensor_dev_attr_2(devattr)->index;
-@@ -238,8 +238,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
- 	return sprintf(buf, "%d\n", (int)data->temp[sf][nr] * 1000);
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = dev_get_drvdata(dev);
+@@ -390,8 +391,8 @@ static ssize_t store_temp_max(struct device *dev, struct device_attribute
+ 	return count;
  }
  
--static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
--			const char *buf, size_t count)
-+static ssize_t temp_store(struct device *dev,
-+			  struct device_attribute *devattr, const char *buf,
-+			  size_t count)
+-static ssize_t show_temp_fault(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t temp_fault_show(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
  {
- 	struct emc6w201_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -266,8 +267,8 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
- 	return err < 0 ? err : count;
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -403,8 +404,8 @@ static ssize_t show_temp_fault(struct device *dev,
+ 		return sprintf(buf, "1\n");
  }
  
--static ssize_t show_fan(struct device *dev, struct device_attribute *devattr,
--	char *buf)
-+static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
-+			char *buf)
+-static ssize_t show_temp_alarm(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t temp_alarm_show(struct device *dev,
++			       struct device_attribute *devattr, char *buf)
  {
- 	struct emc6w201_data *data = emc6w201_update_device(dev);
- 	int sf = to_sensor_dev_attr_2(devattr)->index;
-@@ -282,8 +283,8 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *devattr,
- 	return sprintf(buf, "%u\n", rpm);
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -419,8 +420,8 @@ static ssize_t show_temp_alarm(struct device *dev,
+ 
+ #define RPM_FROM_REG(val)	((val) * 60)
+ 
+-static ssize_t show_fan_value(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t fan_value_show(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -428,8 +429,8 @@ static ssize_t show_fan_value(struct device *dev,
+ 	return sprintf(buf, "%u\n", RPM_FROM_REG(data->fan_act[index]));
  }
  
--static ssize_t set_fan(struct device *dev, struct device_attribute *devattr,
--		       const char *buf, size_t count)
-+static ssize_t fan_store(struct device *dev, struct device_attribute *devattr,
-+			 const char *buf, size_t count)
+-static ssize_t show_fan_div(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t fan_div_show(struct device *dev,
++			    struct device_attribute *devattr, char *buf)
  {
- 	struct emc6w201_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-@@ -312,83 +313,54 @@ static ssize_t set_fan(struct device *dev, struct device_attribute *devattr,
- 	return err < 0 ? err : count;
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -438,8 +439,9 @@ static ssize_t show_fan_div(struct device *dev,
+ 	return sprintf(buf, "%d\n", 1 << (data->fan_ripple[index] & 3));
  }
  
--static SENSOR_DEVICE_ATTR_2(in0_input, S_IRUGO, show_in, NULL, 0, input);
--static SENSOR_DEVICE_ATTR_2(in0_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    0, min);
--static SENSOR_DEVICE_ATTR_2(in0_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    0, max);
--static SENSOR_DEVICE_ATTR_2(in1_input, S_IRUGO, show_in, NULL, 1, input);
--static SENSOR_DEVICE_ATTR_2(in1_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    1, min);
--static SENSOR_DEVICE_ATTR_2(in1_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    1, max);
--static SENSOR_DEVICE_ATTR_2(in2_input, S_IRUGO, show_in, NULL, 2, input);
--static SENSOR_DEVICE_ATTR_2(in2_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    2, min);
--static SENSOR_DEVICE_ATTR_2(in2_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    2, max);
--static SENSOR_DEVICE_ATTR_2(in3_input, S_IRUGO, show_in, NULL, 3, input);
--static SENSOR_DEVICE_ATTR_2(in3_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    3, min);
--static SENSOR_DEVICE_ATTR_2(in3_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    3, max);
--static SENSOR_DEVICE_ATTR_2(in4_input, S_IRUGO, show_in, NULL, 4, input);
--static SENSOR_DEVICE_ATTR_2(in4_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    4, min);
--static SENSOR_DEVICE_ATTR_2(in4_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    4, max);
--static SENSOR_DEVICE_ATTR_2(in5_input, S_IRUGO, show_in, NULL, 5, input);
--static SENSOR_DEVICE_ATTR_2(in5_min, S_IRUGO | S_IWUSR, show_in, set_in,
--			    5, min);
--static SENSOR_DEVICE_ATTR_2(in5_max, S_IRUGO | S_IWUSR, show_in, set_in,
--			    5, max);
--
--static SENSOR_DEVICE_ATTR_2(temp1_input, S_IRUGO, show_temp, NULL, 0, input);
--static SENSOR_DEVICE_ATTR_2(temp1_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    0, min);
--static SENSOR_DEVICE_ATTR_2(temp1_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    0, max);
--static SENSOR_DEVICE_ATTR_2(temp2_input, S_IRUGO, show_temp, NULL, 1, input);
--static SENSOR_DEVICE_ATTR_2(temp2_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    1, min);
--static SENSOR_DEVICE_ATTR_2(temp2_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    1, max);
--static SENSOR_DEVICE_ATTR_2(temp3_input, S_IRUGO, show_temp, NULL, 2, input);
--static SENSOR_DEVICE_ATTR_2(temp3_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    2, min);
--static SENSOR_DEVICE_ATTR_2(temp3_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    2, max);
--static SENSOR_DEVICE_ATTR_2(temp4_input, S_IRUGO, show_temp, NULL, 3, input);
--static SENSOR_DEVICE_ATTR_2(temp4_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    3, min);
--static SENSOR_DEVICE_ATTR_2(temp4_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    3, max);
--static SENSOR_DEVICE_ATTR_2(temp5_input, S_IRUGO, show_temp, NULL, 4, input);
--static SENSOR_DEVICE_ATTR_2(temp5_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    4, min);
--static SENSOR_DEVICE_ATTR_2(temp5_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    4, max);
--static SENSOR_DEVICE_ATTR_2(temp6_input, S_IRUGO, show_temp, NULL, 5, input);
--static SENSOR_DEVICE_ATTR_2(temp6_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    5, min);
--static SENSOR_DEVICE_ATTR_2(temp6_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
--			    5, max);
--
--static SENSOR_DEVICE_ATTR_2(fan1_input, S_IRUGO, show_fan, NULL, 0, input);
--static SENSOR_DEVICE_ATTR_2(fan1_min, S_IRUGO | S_IWUSR, show_fan, set_fan,
--			    0, min);
--static SENSOR_DEVICE_ATTR_2(fan2_input, S_IRUGO, show_fan, NULL, 1, input);
--static SENSOR_DEVICE_ATTR_2(fan2_min, S_IRUGO | S_IWUSR, show_fan, set_fan,
--			    1, min);
--static SENSOR_DEVICE_ATTR_2(fan3_input, S_IRUGO, show_fan, NULL, 2, input);
--static SENSOR_DEVICE_ATTR_2(fan3_min, S_IRUGO | S_IWUSR, show_fan, set_fan,
--			    2, min);
--static SENSOR_DEVICE_ATTR_2(fan4_input, S_IRUGO, show_fan, NULL, 3, input);
--static SENSOR_DEVICE_ATTR_2(fan4_min, S_IRUGO | S_IWUSR, show_fan, set_fan,
--			    3, min);
--static SENSOR_DEVICE_ATTR_2(fan5_input, S_IRUGO, show_fan, NULL, 4, input);
--static SENSOR_DEVICE_ATTR_2(fan5_min, S_IRUGO | S_IWUSR, show_fan, set_fan,
--			    4, min);
-+static SENSOR_DEVICE_ATTR_2_RO(in0_input, in, 0, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in0_min, in, 0, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in0_max, in, 0, max);
-+static SENSOR_DEVICE_ATTR_2_RO(in1_input, in, 1, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in1_min, in, 1, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in1_max, in, 1, max);
-+static SENSOR_DEVICE_ATTR_2_RO(in2_input, in, 2, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in2_min, in, 2, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in2_max, in, 2, max);
-+static SENSOR_DEVICE_ATTR_2_RO(in3_input, in, 3, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in3_min, in, 3, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in3_max, in, 3, max);
-+static SENSOR_DEVICE_ATTR_2_RO(in4_input, in, 4, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in4_min, in, 4, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in4_max, in, 4, max);
-+static SENSOR_DEVICE_ATTR_2_RO(in5_input, in, 5, input);
-+static SENSOR_DEVICE_ATTR_2_RW(in5_min, in, 5, min);
-+static SENSOR_DEVICE_ATTR_2_RW(in5_max, in, 5, max);
-+
-+static SENSOR_DEVICE_ATTR_2_RO(temp1_input, temp, 0, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp1_min, temp, 0, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp1_max, temp, 0, max);
-+static SENSOR_DEVICE_ATTR_2_RO(temp2_input, temp, 1, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp2_min, temp, 1, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp2_max, temp, 1, max);
-+static SENSOR_DEVICE_ATTR_2_RO(temp3_input, temp, 2, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp3_min, temp, 2, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp3_max, temp, 2, max);
-+static SENSOR_DEVICE_ATTR_2_RO(temp4_input, temp, 3, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp4_min, temp, 3, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp4_max, temp, 3, max);
-+static SENSOR_DEVICE_ATTR_2_RO(temp5_input, temp, 4, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp5_min, temp, 4, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp5_max, temp, 4, max);
-+static SENSOR_DEVICE_ATTR_2_RO(temp6_input, temp, 5, input);
-+static SENSOR_DEVICE_ATTR_2_RW(temp6_min, temp, 5, min);
-+static SENSOR_DEVICE_ATTR_2_RW(temp6_max, temp, 5, max);
-+
-+static SENSOR_DEVICE_ATTR_2_RO(fan1_input, fan, 0, input);
-+static SENSOR_DEVICE_ATTR_2_RW(fan1_min, fan, 0, min);
-+static SENSOR_DEVICE_ATTR_2_RO(fan2_input, fan, 1, input);
-+static SENSOR_DEVICE_ATTR_2_RW(fan2_min, fan, 1, min);
-+static SENSOR_DEVICE_ATTR_2_RO(fan3_input, fan, 2, input);
-+static SENSOR_DEVICE_ATTR_2_RW(fan3_min, fan, 2, min);
-+static SENSOR_DEVICE_ATTR_2_RO(fan4_input, fan, 3, input);
-+static SENSOR_DEVICE_ATTR_2_RW(fan4_min, fan, 3, min);
-+static SENSOR_DEVICE_ATTR_2_RO(fan5_input, fan, 4, input);
-+static SENSOR_DEVICE_ATTR_2_RW(fan5_min, fan, 4, min);
+-static ssize_t store_fan_div(struct device *dev, struct device_attribute
+-	*devattr, const char *buf, size_t count)
++static ssize_t fan_div_store(struct device *dev,
++			     struct device_attribute *devattr,
++			     const char *buf, size_t count)
+ {
+ 	u8 reg;
+ 	int index = to_sensor_dev_attr(devattr)->index;
+@@ -488,8 +490,8 @@ static ssize_t store_fan_div(struct device *dev, struct device_attribute
+ 	return count;
+ }
  
- static struct attribute *emc6w201_attrs[] = {
- 	&sensor_dev_attr_in0_input.dev_attr.attr,
+-static ssize_t show_fan_alarm(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t fan_alarm_show(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -500,8 +502,8 @@ static ssize_t show_fan_alarm(struct device *dev,
+ 		return sprintf(buf, "0\n");
+ }
+ 
+-static ssize_t show_fan_fault(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t fan_fault_show(struct device *dev,
++			      struct device_attribute *devattr, char *buf)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -513,8 +515,9 @@ static ssize_t show_fan_fault(struct device *dev,
+ }
+ 
+ 
+-static ssize_t show_pwm_auto_point1_pwm(struct device *dev,
+-	struct device_attribute *devattr, char *buf)
++static ssize_t pwm_auto_point1_pwm_show(struct device *dev,
++					struct device_attribute *devattr,
++					char *buf)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = fschmd_update_device(dev);
+@@ -527,8 +530,9 @@ static ssize_t show_pwm_auto_point1_pwm(struct device *dev,
+ 	return sprintf(buf, "%d\n", val);
+ }
+ 
+-static ssize_t store_pwm_auto_point1_pwm(struct device *dev,
+-	struct device_attribute *devattr, const char *buf, size_t count)
++static ssize_t pwm_auto_point1_pwm_store(struct device *dev,
++					 struct device_attribute *devattr,
++					 const char *buf, size_t count)
+ {
+ 	int index = to_sensor_dev_attr(devattr)->index;
+ 	struct fschmd_data *data = dev_get_drvdata(dev);
+@@ -605,104 +609,97 @@ static ssize_t alert_led_store(struct device *dev,
+ static DEVICE_ATTR_RW(alert_led);
+ 
+ static struct sensor_device_attribute fschmd_attr[] = {
+-	SENSOR_ATTR(in0_input, 0444, show_in_value, NULL, 0),
+-	SENSOR_ATTR(in1_input, 0444, show_in_value, NULL, 1),
+-	SENSOR_ATTR(in2_input, 0444, show_in_value, NULL, 2),
+-	SENSOR_ATTR(in3_input, 0444, show_in_value, NULL, 3),
+-	SENSOR_ATTR(in4_input, 0444, show_in_value, NULL, 4),
+-	SENSOR_ATTR(in5_input, 0444, show_in_value, NULL, 5),
++	SENSOR_ATTR_RO(in0_input, in_value, 0),
++	SENSOR_ATTR_RO(in1_input, in_value, 1),
++	SENSOR_ATTR_RO(in2_input, in_value, 2),
++	SENSOR_ATTR_RO(in3_input, in_value, 3),
++	SENSOR_ATTR_RO(in4_input, in_value, 4),
++	SENSOR_ATTR_RO(in5_input, in_value, 5),
+ };
+ 
+ static struct sensor_device_attribute fschmd_temp_attr[] = {
+-	SENSOR_ATTR(temp1_input, 0444, show_temp_value, NULL, 0),
+-	SENSOR_ATTR(temp1_max,   0644, show_temp_max, store_temp_max, 0),
+-	SENSOR_ATTR(temp1_fault, 0444, show_temp_fault, NULL, 0),
+-	SENSOR_ATTR(temp1_alarm, 0444, show_temp_alarm, NULL, 0),
+-	SENSOR_ATTR(temp2_input, 0444, show_temp_value, NULL, 1),
+-	SENSOR_ATTR(temp2_max,   0644, show_temp_max, store_temp_max, 1),
+-	SENSOR_ATTR(temp2_fault, 0444, show_temp_fault, NULL, 1),
+-	SENSOR_ATTR(temp2_alarm, 0444, show_temp_alarm, NULL, 1),
+-	SENSOR_ATTR(temp3_input, 0444, show_temp_value, NULL, 2),
+-	SENSOR_ATTR(temp3_max,   0644, show_temp_max, store_temp_max, 2),
+-	SENSOR_ATTR(temp3_fault, 0444, show_temp_fault, NULL, 2),
+-	SENSOR_ATTR(temp3_alarm, 0444, show_temp_alarm, NULL, 2),
+-	SENSOR_ATTR(temp4_input, 0444, show_temp_value, NULL, 3),
+-	SENSOR_ATTR(temp4_max,   0644, show_temp_max, store_temp_max, 3),
+-	SENSOR_ATTR(temp4_fault, 0444, show_temp_fault, NULL, 3),
+-	SENSOR_ATTR(temp4_alarm, 0444, show_temp_alarm, NULL, 3),
+-	SENSOR_ATTR(temp5_input, 0444, show_temp_value, NULL, 4),
+-	SENSOR_ATTR(temp5_max,   0644, show_temp_max, store_temp_max, 4),
+-	SENSOR_ATTR(temp5_fault, 0444, show_temp_fault, NULL, 4),
+-	SENSOR_ATTR(temp5_alarm, 0444, show_temp_alarm, NULL, 4),
+-	SENSOR_ATTR(temp6_input, 0444, show_temp_value, NULL, 5),
+-	SENSOR_ATTR(temp6_max,   0644, show_temp_max, store_temp_max, 5),
+-	SENSOR_ATTR(temp6_fault, 0444, show_temp_fault, NULL, 5),
+-	SENSOR_ATTR(temp6_alarm, 0444, show_temp_alarm, NULL, 5),
+-	SENSOR_ATTR(temp7_input, 0444, show_temp_value, NULL, 6),
+-	SENSOR_ATTR(temp7_max,   0644, show_temp_max, store_temp_max, 6),
+-	SENSOR_ATTR(temp7_fault, 0444, show_temp_fault, NULL, 6),
+-	SENSOR_ATTR(temp7_alarm, 0444, show_temp_alarm, NULL, 6),
+-	SENSOR_ATTR(temp8_input, 0444, show_temp_value, NULL, 7),
+-	SENSOR_ATTR(temp8_max,   0644, show_temp_max, store_temp_max, 7),
+-	SENSOR_ATTR(temp8_fault, 0444, show_temp_fault, NULL, 7),
+-	SENSOR_ATTR(temp8_alarm, 0444, show_temp_alarm, NULL, 7),
+-	SENSOR_ATTR(temp9_input, 0444, show_temp_value, NULL, 8),
+-	SENSOR_ATTR(temp9_max,   0644, show_temp_max, store_temp_max, 8),
+-	SENSOR_ATTR(temp9_fault, 0444, show_temp_fault, NULL, 8),
+-	SENSOR_ATTR(temp9_alarm, 0444, show_temp_alarm, NULL, 8),
+-	SENSOR_ATTR(temp10_input, 0444, show_temp_value, NULL, 9),
+-	SENSOR_ATTR(temp10_max,   0644, show_temp_max, store_temp_max, 9),
+-	SENSOR_ATTR(temp10_fault, 0444, show_temp_fault, NULL, 9),
+-	SENSOR_ATTR(temp10_alarm, 0444, show_temp_alarm, NULL, 9),
+-	SENSOR_ATTR(temp11_input, 0444, show_temp_value, NULL, 10),
+-	SENSOR_ATTR(temp11_max,   0644, show_temp_max, store_temp_max, 10),
+-	SENSOR_ATTR(temp11_fault, 0444, show_temp_fault, NULL, 10),
+-	SENSOR_ATTR(temp11_alarm, 0444, show_temp_alarm, NULL, 10),
++	SENSOR_ATTR_RO(temp1_input, temp_value, 0),
++	SENSOR_ATTR_RW(temp1_max, temp_max, 0),
++	SENSOR_ATTR_RO(temp1_fault, temp_fault, 0),
++	SENSOR_ATTR_RO(temp1_alarm, temp_alarm, 0),
++	SENSOR_ATTR_RO(temp2_input, temp_value, 1),
++	SENSOR_ATTR_RW(temp2_max, temp_max, 1),
++	SENSOR_ATTR_RO(temp2_fault, temp_fault, 1),
++	SENSOR_ATTR_RO(temp2_alarm, temp_alarm, 1),
++	SENSOR_ATTR_RO(temp3_input, temp_value, 2),
++	SENSOR_ATTR_RW(temp3_max, temp_max, 2),
++	SENSOR_ATTR_RO(temp3_fault, temp_fault, 2),
++	SENSOR_ATTR_RO(temp3_alarm, temp_alarm, 2),
++	SENSOR_ATTR_RO(temp4_input, temp_value, 3),
++	SENSOR_ATTR_RW(temp4_max, temp_max, 3),
++	SENSOR_ATTR_RO(temp4_fault, temp_fault, 3),
++	SENSOR_ATTR_RO(temp4_alarm, temp_alarm, 3),
++	SENSOR_ATTR_RO(temp5_input, temp_value, 4),
++	SENSOR_ATTR_RW(temp5_max, temp_max, 4),
++	SENSOR_ATTR_RO(temp5_fault, temp_fault, 4),
++	SENSOR_ATTR_RO(temp5_alarm, temp_alarm, 4),
++	SENSOR_ATTR_RO(temp6_input, temp_value, 5),
++	SENSOR_ATTR_RW(temp6_max, temp_max, 5),
++	SENSOR_ATTR_RO(temp6_fault, temp_fault, 5),
++	SENSOR_ATTR_RO(temp6_alarm, temp_alarm, 5),
++	SENSOR_ATTR_RO(temp7_input, temp_value, 6),
++	SENSOR_ATTR_RW(temp7_max, temp_max, 6),
++	SENSOR_ATTR_RO(temp7_fault, temp_fault, 6),
++	SENSOR_ATTR_RO(temp7_alarm, temp_alarm, 6),
++	SENSOR_ATTR_RO(temp8_input, temp_value, 7),
++	SENSOR_ATTR_RW(temp8_max, temp_max, 7),
++	SENSOR_ATTR_RO(temp8_fault, temp_fault, 7),
++	SENSOR_ATTR_RO(temp8_alarm, temp_alarm, 7),
++	SENSOR_ATTR_RO(temp9_input, temp_value, 8),
++	SENSOR_ATTR_RW(temp9_max, temp_max, 8),
++	SENSOR_ATTR_RO(temp9_fault, temp_fault, 8),
++	SENSOR_ATTR_RO(temp9_alarm, temp_alarm, 8),
++	SENSOR_ATTR_RO(temp10_input, temp_value, 9),
++	SENSOR_ATTR_RW(temp10_max, temp_max, 9),
++	SENSOR_ATTR_RO(temp10_fault, temp_fault, 9),
++	SENSOR_ATTR_RO(temp10_alarm, temp_alarm, 9),
++	SENSOR_ATTR_RO(temp11_input, temp_value, 10),
++	SENSOR_ATTR_RW(temp11_max, temp_max, 10),
++	SENSOR_ATTR_RO(temp11_fault, temp_fault, 10),
++	SENSOR_ATTR_RO(temp11_alarm, temp_alarm, 10),
+ };
+ 
+ static struct sensor_device_attribute fschmd_fan_attr[] = {
+-	SENSOR_ATTR(fan1_input, 0444, show_fan_value, NULL, 0),
+-	SENSOR_ATTR(fan1_div,   0644, show_fan_div, store_fan_div, 0),
+-	SENSOR_ATTR(fan1_alarm, 0444, show_fan_alarm, NULL, 0),
+-	SENSOR_ATTR(fan1_fault, 0444, show_fan_fault, NULL, 0),
+-	SENSOR_ATTR(pwm1_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 0),
+-	SENSOR_ATTR(fan2_input, 0444, show_fan_value, NULL, 1),
+-	SENSOR_ATTR(fan2_div,   0644, show_fan_div, store_fan_div, 1),
+-	SENSOR_ATTR(fan2_alarm, 0444, show_fan_alarm, NULL, 1),
+-	SENSOR_ATTR(fan2_fault, 0444, show_fan_fault, NULL, 1),
+-	SENSOR_ATTR(pwm2_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 1),
+-	SENSOR_ATTR(fan3_input, 0444, show_fan_value, NULL, 2),
+-	SENSOR_ATTR(fan3_div,   0644, show_fan_div, store_fan_div, 2),
+-	SENSOR_ATTR(fan3_alarm, 0444, show_fan_alarm, NULL, 2),
+-	SENSOR_ATTR(fan3_fault, 0444, show_fan_fault, NULL, 2),
+-	SENSOR_ATTR(pwm3_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 2),
+-	SENSOR_ATTR(fan4_input, 0444, show_fan_value, NULL, 3),
+-	SENSOR_ATTR(fan4_div,   0644, show_fan_div, store_fan_div, 3),
+-	SENSOR_ATTR(fan4_alarm, 0444, show_fan_alarm, NULL, 3),
+-	SENSOR_ATTR(fan4_fault, 0444, show_fan_fault, NULL, 3),
+-	SENSOR_ATTR(pwm4_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 3),
+-	SENSOR_ATTR(fan5_input, 0444, show_fan_value, NULL, 4),
+-	SENSOR_ATTR(fan5_div,   0644, show_fan_div, store_fan_div, 4),
+-	SENSOR_ATTR(fan5_alarm, 0444, show_fan_alarm, NULL, 4),
+-	SENSOR_ATTR(fan5_fault, 0444, show_fan_fault, NULL, 4),
+-	SENSOR_ATTR(pwm5_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 4),
+-	SENSOR_ATTR(fan6_input, 0444, show_fan_value, NULL, 5),
+-	SENSOR_ATTR(fan6_div,   0644, show_fan_div, store_fan_div, 5),
+-	SENSOR_ATTR(fan6_alarm, 0444, show_fan_alarm, NULL, 5),
+-	SENSOR_ATTR(fan6_fault, 0444, show_fan_fault, NULL, 5),
+-	SENSOR_ATTR(pwm6_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 5),
+-	SENSOR_ATTR(fan7_input, 0444, show_fan_value, NULL, 6),
+-	SENSOR_ATTR(fan7_div,   0644, show_fan_div, store_fan_div, 6),
+-	SENSOR_ATTR(fan7_alarm, 0444, show_fan_alarm, NULL, 6),
+-	SENSOR_ATTR(fan7_fault, 0444, show_fan_fault, NULL, 6),
+-	SENSOR_ATTR(pwm7_auto_point1_pwm, 0644, show_pwm_auto_point1_pwm,
+-		store_pwm_auto_point1_pwm, 6),
++	SENSOR_ATTR_RO(fan1_input, fan_value, 0),
++	SENSOR_ATTR_RW(fan1_div, fan_div, 0),
++	SENSOR_ATTR_RO(fan1_alarm, fan_alarm, 0),
++	SENSOR_ATTR_RO(fan1_fault, fan_fault, 0),
++	SENSOR_ATTR_RW(pwm1_auto_point1_pwm, pwm_auto_point1_pwm, 0),
++	SENSOR_ATTR_RO(fan2_input, fan_value, 1),
++	SENSOR_ATTR_RW(fan2_div, fan_div, 1),
++	SENSOR_ATTR_RO(fan2_alarm, fan_alarm, 1),
++	SENSOR_ATTR_RO(fan2_fault, fan_fault, 1),
++	SENSOR_ATTR_RW(pwm2_auto_point1_pwm, pwm_auto_point1_pwm, 1),
++	SENSOR_ATTR_RO(fan3_input, fan_value, 2),
++	SENSOR_ATTR_RW(fan3_div, fan_div, 2),
++	SENSOR_ATTR_RO(fan3_alarm, fan_alarm, 2),
++	SENSOR_ATTR_RO(fan3_fault, fan_fault, 2),
++	SENSOR_ATTR_RW(pwm3_auto_point1_pwm, pwm_auto_point1_pwm, 2),
++	SENSOR_ATTR_RO(fan4_input, fan_value, 3),
++	SENSOR_ATTR_RW(fan4_div, fan_div, 3),
++	SENSOR_ATTR_RO(fan4_alarm, fan_alarm, 3),
++	SENSOR_ATTR_RO(fan4_fault, fan_fault, 3),
++	SENSOR_ATTR_RW(pwm4_auto_point1_pwm, pwm_auto_point1_pwm, 3),
++	SENSOR_ATTR_RO(fan5_input, fan_value, 4),
++	SENSOR_ATTR_RW(fan5_div, fan_div, 4),
++	SENSOR_ATTR_RO(fan5_alarm, fan_alarm, 4),
++	SENSOR_ATTR_RO(fan5_fault, fan_fault, 4),
++	SENSOR_ATTR_RW(pwm5_auto_point1_pwm, pwm_auto_point1_pwm, 4),
++	SENSOR_ATTR_RO(fan6_input, fan_value, 5),
++	SENSOR_ATTR_RW(fan6_div, fan_div, 5),
++	SENSOR_ATTR_RO(fan6_alarm, fan_alarm, 5),
++	SENSOR_ATTR_RO(fan6_fault, fan_fault, 5),
++	SENSOR_ATTR_RW(pwm6_auto_point1_pwm, pwm_auto_point1_pwm, 5),
++	SENSOR_ATTR_RO(fan7_input, fan_value, 6),
++	SENSOR_ATTR_RW(fan7_div, fan_div, 6),
++	SENSOR_ATTR_RO(fan7_alarm, fan_alarm, 6),
++	SENSOR_ATTR_RO(fan7_fault, fan_fault, 6),
++	SENSOR_ATTR_RW(pwm7_auto_point1_pwm, pwm_auto_point1_pwm, 6),
+ };
+ 
+ 
+@@ -1169,7 +1166,7 @@ static int fschmd_probe(struct i2c_client *client,
+ 	for (i = 0; i < (FSCHMD_NO_TEMP_SENSORS[data->kind] * 4); i++) {
+ 		/* Poseidon doesn't have TEMP_LIMIT registers */
+ 		if (kind == fscpos && fschmd_temp_attr[i].dev_attr.show ==
+-				show_temp_max)
++				temp_max_show)
+ 			continue;
+ 
+ 		if (kind == fscsyl) {
 -- 
 2.7.4
