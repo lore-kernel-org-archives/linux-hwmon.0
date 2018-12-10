@@ -1,18 +1,18 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46031 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729444AbeLJWJA (ORCPT
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46225 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729037AbeLJWJC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Dec 2018 17:09:00 -0500
-Received: by mail-pg1-f195.google.com with SMTP id y4so5599830pgc.12
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:08:59 -0800 (PST)
+        Mon, 10 Dec 2018 17:09:02 -0500
+Received: by mail-pf1-f194.google.com with SMTP id c73so6039701pfe.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Dec 2018 14:09:01 -0800 (PST)
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 05/30] hwmon: (ad7418) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date: Mon, 10 Dec 2018 14:08:23 -0800
-Message-Id: <1544479728-30077-6-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 06/30] hwmon: (adc128d818) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date: Mon, 10 Dec 2018 14:08:24 -0800
+Message-Id: <1544479728-30077-7-git-send-email-linux@roeck-us.net>
 In-Reply-To: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 References: <1544479728-30077-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -32,68 +32,189 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ad7418.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ drivers/hwmon/adc128d818.c | 135 ++++++++++++++++++---------------------------
+ 1 file changed, 55 insertions(+), 80 deletions(-)
 
-diff --git a/drivers/hwmon/ad7418.c b/drivers/hwmon/ad7418.c
-index a01b731ba5d7..76f0a5c01e8a 100644
---- a/drivers/hwmon/ad7418.c
-+++ b/drivers/hwmon/ad7418.c
-@@ -103,8 +103,8 @@ static struct ad7418_data *ad7418_update_device(struct device *dev)
- 	return data;
+diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+index bd2ca315c9d8..ca794bf904de 100644
+--- a/drivers/hwmon/adc128d818.c
++++ b/drivers/hwmon/adc128d818.c
+@@ -153,8 +153,8 @@ static struct adc128_data *adc128_update_device(struct device *dev)
+ 	return ret;
  }
  
--static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
--			char *buf)
-+static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
-+			 char *buf)
+-static ssize_t adc128_show_in(struct device *dev, struct device_attribute *attr,
+-			      char *buf)
++static ssize_t adc128_in_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
  {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct ad7418_data *data = ad7418_update_device(dev);
-@@ -112,7 +112,7 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
- 		LM75_TEMP_FROM_REG(data->temp[attr->index]));
+ 	struct adc128_data *data = adc128_update_device(dev);
+ 	int index = to_sensor_dev_attr_2(attr)->index;
+@@ -168,8 +168,9 @@ static ssize_t adc128_show_in(struct device *dev, struct device_attribute *attr,
+ 	return sprintf(buf, "%d\n", val);
  }
  
--static ssize_t show_adc(struct device *dev, struct device_attribute *devattr,
-+static ssize_t adc_show(struct device *dev, struct device_attribute *devattr,
- 			char *buf)
+-static ssize_t adc128_set_in(struct device *dev, struct device_attribute *attr,
+-			     const char *buf, size_t count)
++static ssize_t adc128_in_store(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
  {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-@@ -122,8 +122,9 @@ static ssize_t show_adc(struct device *dev, struct device_attribute *devattr,
- 		((data->in[attr->index] >> 6) * 2500 + 512) / 1024);
- }
- 
--static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
--			const char *buf, size_t count)
-+static ssize_t temp_store(struct device *dev,
-+			  struct device_attribute *devattr, const char *buf,
-+			  size_t count)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct ad7418_data *data = dev_get_drvdata(dev);
-@@ -143,16 +144,14 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
+ 	struct adc128_data *data = dev_get_drvdata(dev);
+ 	int index = to_sensor_dev_attr_2(attr)->index;
+@@ -193,7 +194,7 @@ static ssize_t adc128_set_in(struct device *dev, struct device_attribute *attr,
  	return count;
  }
  
--static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
--static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IWUSR | S_IRUGO,
--				show_temp, set_temp, 1);
+-static ssize_t adc128_show_temp(struct device *dev,
++static ssize_t adc128_temp_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+ 	struct adc128_data *data = adc128_update_device(dev);
+@@ -207,9 +208,9 @@ static ssize_t adc128_show_temp(struct device *dev,
+ 	return sprintf(buf, "%d\n", temp * 500);/* 0.5 degrees C resolution */
+ }
+ 
+-static ssize_t adc128_set_temp(struct device *dev,
+-			       struct device_attribute *attr,
+-			       const char *buf, size_t count)
++static ssize_t adc128_temp_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
+ {
+ 	struct adc128_data *data = dev_get_drvdata(dev);
+ 	int index = to_sensor_dev_attr(attr)->index;
+@@ -233,7 +234,7 @@ static ssize_t adc128_set_temp(struct device *dev,
+ 	return count;
+ }
+ 
+-static ssize_t adc128_show_alarm(struct device *dev,
++static ssize_t adc128_alarm_show(struct device *dev,
+ 				 struct device_attribute *attr, char *buf)
+ {
+ 	struct adc128_data *data = adc128_update_device(dev);
+@@ -272,77 +273,51 @@ static umode_t adc128_is_visible(struct kobject *kobj,
+ 	return attr->mode;
+ }
+ 
+-static SENSOR_DEVICE_ATTR_2(in0_input, S_IRUGO,
+-			    adc128_show_in, NULL, 0, 0);
+-static SENSOR_DEVICE_ATTR_2(in0_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 0, 1);
+-static SENSOR_DEVICE_ATTR_2(in0_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 0, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in1_input, S_IRUGO,
+-			    adc128_show_in, NULL, 1, 0);
+-static SENSOR_DEVICE_ATTR_2(in1_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 1, 1);
+-static SENSOR_DEVICE_ATTR_2(in1_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 1, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in2_input, S_IRUGO,
+-			    adc128_show_in, NULL, 2, 0);
+-static SENSOR_DEVICE_ATTR_2(in2_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 2, 1);
+-static SENSOR_DEVICE_ATTR_2(in2_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 2, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in3_input, S_IRUGO,
+-			    adc128_show_in, NULL, 3, 0);
+-static SENSOR_DEVICE_ATTR_2(in3_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 3, 1);
+-static SENSOR_DEVICE_ATTR_2(in3_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 3, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in4_input, S_IRUGO,
+-			    adc128_show_in, NULL, 4, 0);
+-static SENSOR_DEVICE_ATTR_2(in4_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 4, 1);
+-static SENSOR_DEVICE_ATTR_2(in4_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 4, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in5_input, S_IRUGO,
+-			    adc128_show_in, NULL, 5, 0);
+-static SENSOR_DEVICE_ATTR_2(in5_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 5, 1);
+-static SENSOR_DEVICE_ATTR_2(in5_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 5, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in6_input, S_IRUGO,
+-			    adc128_show_in, NULL, 6, 0);
+-static SENSOR_DEVICE_ATTR_2(in6_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 6, 1);
+-static SENSOR_DEVICE_ATTR_2(in6_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 6, 2);
+-
+-static SENSOR_DEVICE_ATTR_2(in7_input, S_IRUGO,
+-			    adc128_show_in, NULL, 7, 0);
+-static SENSOR_DEVICE_ATTR_2(in7_min, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 7, 1);
+-static SENSOR_DEVICE_ATTR_2(in7_max, S_IWUSR | S_IRUGO,
+-			    adc128_show_in, adc128_set_in, 7, 2);
+-
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, adc128_show_temp, NULL, 0);
 -static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO,
--				show_temp, set_temp, 2);
-+static SENSOR_DEVICE_ATTR_RO(temp1_input, temp, 0);
-+static SENSOR_DEVICE_ATTR_RW(temp1_max_hyst, temp, 1);
-+static SENSOR_DEVICE_ATTR_RW(temp1_max, temp, 2);
+-			  adc128_show_temp, adc128_set_temp, 1);
+-static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IWUSR | S_IRUGO,
+-			  adc128_show_temp, adc128_set_temp, 2);
+-
+-static SENSOR_DEVICE_ATTR(in0_alarm, S_IRUGO, adc128_show_alarm, NULL, 0);
+-static SENSOR_DEVICE_ATTR(in1_alarm, S_IRUGO, adc128_show_alarm, NULL, 1);
+-static SENSOR_DEVICE_ATTR(in2_alarm, S_IRUGO, adc128_show_alarm, NULL, 2);
+-static SENSOR_DEVICE_ATTR(in3_alarm, S_IRUGO, adc128_show_alarm, NULL, 3);
+-static SENSOR_DEVICE_ATTR(in4_alarm, S_IRUGO, adc128_show_alarm, NULL, 4);
+-static SENSOR_DEVICE_ATTR(in5_alarm, S_IRUGO, adc128_show_alarm, NULL, 5);
+-static SENSOR_DEVICE_ATTR(in6_alarm, S_IRUGO, adc128_show_alarm, NULL, 6);
+-static SENSOR_DEVICE_ATTR(in7_alarm, S_IRUGO, adc128_show_alarm, NULL, 7);
+-static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, adc128_show_alarm, NULL, 7);
++static SENSOR_DEVICE_ATTR_2_RO(in0_input, adc128_in, 0, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in0_min, adc128_in, 0, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in0_max, adc128_in, 0, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in1_input, adc128_in, 1, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in1_min, adc128_in, 1, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in1_max, adc128_in, 1, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in2_input, adc128_in, 2, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in2_min, adc128_in, 2, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in2_max, adc128_in, 2, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in3_input, adc128_in, 3, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in3_min, adc128_in, 3, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in3_max, adc128_in, 3, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in4_input, adc128_in, 4, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in4_min, adc128_in, 4, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in4_max, adc128_in, 4, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in5_input, adc128_in, 5, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in5_min, adc128_in, 5, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in5_max, adc128_in, 5, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in6_input, adc128_in, 6, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in6_min, adc128_in, 6, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in6_max, adc128_in, 6, 2);
++
++static SENSOR_DEVICE_ATTR_2_RO(in7_input, adc128_in, 7, 0);
++static SENSOR_DEVICE_ATTR_2_RW(in7_min, adc128_in, 7, 1);
++static SENSOR_DEVICE_ATTR_2_RW(in7_max, adc128_in, 7, 2);
++
++static SENSOR_DEVICE_ATTR_RO(temp1_input, adc128_temp, 0);
++static SENSOR_DEVICE_ATTR_RW(temp1_max, adc128_temp, 1);
++static SENSOR_DEVICE_ATTR_RW(temp1_max_hyst, adc128_temp, 2);
++
++static SENSOR_DEVICE_ATTR_RO(in0_alarm, adc128_alarm, 0);
++static SENSOR_DEVICE_ATTR_RO(in1_alarm, adc128_alarm, 1);
++static SENSOR_DEVICE_ATTR_RO(in2_alarm, adc128_alarm, 2);
++static SENSOR_DEVICE_ATTR_RO(in3_alarm, adc128_alarm, 3);
++static SENSOR_DEVICE_ATTR_RO(in4_alarm, adc128_alarm, 4);
++static SENSOR_DEVICE_ATTR_RO(in5_alarm, adc128_alarm, 5);
++static SENSOR_DEVICE_ATTR_RO(in6_alarm, adc128_alarm, 6);
++static SENSOR_DEVICE_ATTR_RO(in7_alarm, adc128_alarm, 7);
++static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, adc128_alarm, 7);
  
--static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, show_adc, NULL, 0);
--static SENSOR_DEVICE_ATTR(in2_input, S_IRUGO, show_adc, NULL, 1);
--static SENSOR_DEVICE_ATTR(in3_input, S_IRUGO, show_adc, NULL, 2);
--static SENSOR_DEVICE_ATTR(in4_input, S_IRUGO, show_adc, NULL, 3);
-+static SENSOR_DEVICE_ATTR_RO(in1_input, adc, 0);
-+static SENSOR_DEVICE_ATTR_RO(in2_input, adc, 1);
-+static SENSOR_DEVICE_ATTR_RO(in3_input, adc, 2);
-+static SENSOR_DEVICE_ATTR_RO(in4_input, adc, 3);
- 
- static struct attribute *ad7416_attrs[] = {
- 	&sensor_dev_attr_temp1_max.dev_attr.attr,
+ static struct attribute *adc128_attrs[] = {
+ 	&sensor_dev_attr_in0_alarm.dev_attr.attr,
 -- 
 2.7.4
