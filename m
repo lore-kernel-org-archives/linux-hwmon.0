@@ -1,29 +1,36 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
 Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-qt1-f182.google.com ([209.85.160.182]:33015 "EHLO
-        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726134AbeLKUbL (ORCPT
+Received: from mail-pg1-f181.google.com ([209.85.215.181]:37744 "EHLO
+        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbeLKVNW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Dec 2018 15:31:11 -0500
-Received: by mail-qt1-f182.google.com with SMTP id l11so18052256qtp.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Dec 2018 12:31:10 -0800 (PST)
+        Tue, 11 Dec 2018 16:13:22 -0500
+Received: by mail-pg1-f181.google.com with SMTP id 80so7229508pge.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Dec 2018 13:13:20 -0800 (PST)
+Date: Tue, 11 Dec 2018 13:13:18 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ranran <ranshalit@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: How to detect which device is mapped to hwmonX ?
+Message-ID: <20181211211318.GA3004@roeck-us.net>
+References: <CAJ2oMhJgfNZbfsnnyUdRQLUdt9xiE4++_C7R8a_sFsyy7PxWPg@mail.gmail.com>
 MIME-Version: 1.0
-From: Ranran <ranshalit@gmail.com>
-Date: Tue, 11 Dec 2018 22:30:58 +0200
-Message-ID: <CAJ2oMhJgfNZbfsnnyUdRQLUdt9xiE4++_C7R8a_sFsyy7PxWPg@mail.gmail.com>
-Subject: How to detect which device is mapped to hwmonX ?
-To: linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ2oMhJgfNZbfsnnyUdRQLUdt9xiE4++_C7R8a_sFsyy7PxWPg@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hello,
+On Tue, Dec 11, 2018 at 10:30:58PM +0200, Ranran wrote:
+> Hello,
+> 
+> I have several nodes /sys/class/hwmon/hwmonX ,
+> but checking the fields I could not find yet a way how to identify a
+> device (for example i2c address) to the given mapping of hwmonX.
+> 
+> Is there a way to find out which device is mapped to which hwmonX ?
+> 
 
-I have several nodes /sys/class/hwmon/hwmonX ,
-but checking the fields I could not find yet a way how to identify a
-device (for example i2c address) to the given mapping of hwmonX.
+Maybe libsensors would work for you ?
 
-Is there a way to find out which device is mapped to which hwmonX ?
-
-Thanks,
-ran
+Guenter
