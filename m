@@ -1,55 +1,118 @@
-Return-Path: <olysonek@redhat.com>
+Return-Path: <linux-hwmon-owner@vger.kernel.org>
+Received: from mx2.suse.de ([195.135.220.15]:47728 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726566AbeLQKtD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 17 Dec 2018 05:49:03 -0500
+Date: Mon, 17 Dec 2018 11:48:59 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: =?UTF-8?B?T25kxZllaiBMeXNvbsSbaw==?= <olysonek@redhat.com>
+Cc: linux-hwmon@vger.kernel.org
 Subject: Re: libsensors soname bump
-Cc: Aurelien Jarno <aurelien@aurel32.net>, Jean Delvare <jdelvare@suse.de>,
- linux-hwmon@vger.kernel.org
+Message-ID: <20181217114859.1f52e889@endymion>
+In-Reply-To: <514c8587-ccf3-f7af-b88d-744add6f1da2@redhat.com>
 References: <20181216124344.49d06b69@endymion>
- <514c8587-ccf3-f7af-b88d-744add6f1da2@redhat.com>
- <3799b201-38f9-d74f-273d-f819736dcfb6@redhat.com>
- <20181217115902.15e538fe@endymion>
- <20181217112713.jvobrvrmxpkfeshi@aurel32.net>
-To: lm-sensors@vger.kernel.org
-From: =?UTF-8?Q?Ond=c5=99ej_Lyson=c4=9bk?= <olysonek@redhat.com>
-Message-ID: <7b96e7c3-11d6-a06f-53a6-1d61be31c3b3@redhat.com>
-Date: Mon, 17 Dec 2018 13:06:38 +0100
+        <514c8587-ccf3-f7af-b88d-744add6f1da2@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20181217112713.jvobrvrmxpkfeshi@aurel32.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-List-ID: <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Sender: linux-hwmon-owner@vger.kernel.org
+List-Id: linux-hwmon@vger.kernel.org
 
-Hi lm-sensors list,
-
-We're currently considering reverting the undue libsensors soname change
-that happened in lm_sensors 3.5.0 (see below, the whole thread should be
-available on spinics [1]). Would that pose a major problem for anyone?
-
-Thanks!
-
-[1] https://www.spinics.net/lists/linux-hwmon/msg04837.html
-
-Best regards
-Ondřej Lysoněk
-
-On 17. 12. 18 12:27, Aurelien Jarno wrote:
-> On 2018-12-17 11:59, Jean Delvare wrote:
->> On Mon, 17 Dec 2018 11:35:46 +0100, Ondřej Lysoněk wrote:
->>> I mean, I would love to revert the soname change, however doing so now
->>> seems like a bad thing to do - people may have already adopted
->>> lm_sensors 3.5.0. So I'd like to avoid reverting the change unless there
->>> is a good justification to do so.
->>
->> It's not in Debian yet:
->> https://packages.debian.org/sid/lm-sensors
+On Mon, 17 Dec 2018 10:46:43 +0100, Ondřej Lysoněk wrote:
+> On 16. 12. 18 12:43, Jean Delvare wrote:
+> > You have recently released lm-sensors 3.5.0 with a new soname for
+> > libsensors:
+> > 
+> > -LIBMAINVER := 4
+> > -LIBMINORVER := 4.0
+> > +LIBMAINVER := 5
+> > +LIBMINORVER := 0.0
+> > 
+> > -#define SENSORS_API_VERSION            0x440
+> > +#define SENSORS_API_VERSION            0x500
+> > 
+> > This is declaring the new library as incompatible with the previous
+> > version, meaning that distributions will have to build and ship both
+> > libsensors4 and libsensors5 for a long time until all applications have
+> > been updated and rebuilt to link with the new library. This is a
+> > significant effort for the whole community and should only be done when
+> > necessary.  
 > 
-> It's available in the experimental suite with the soname change:
-> https://packages.debian.org/experimental/lm-sensors
+> I thought there was an ABI change, which would warrant a soname bump. Or
+> am I wrong in thinking that? I was mistaken however and I'm sorry about
+> that, there was no ABI change.
 > 
-> And it's waiting for a transition slot to rebuild all the
-> reverse dependencies in sid:
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=915790
+> I don't see why distributions would have to ship two versions of the
+> library. The *name* of the library didn't change, it's still libsensors
+> (not libsensors4 or libsensors5).
+
+But the packages as they exist today, they link with libsensors.so.4,
+not libsensors.so:
+
+$ rpm -q --requires sensors | grep sensors
+libsensors.so.4()(64bit)
+
+Having only one library works only if you update the whole system at
+once. That can work in some specific cases I suppose, but in practice
+can be hard to achieve in a complex ecosystem without breaking things
+"temporarily". That's really not the kind of thing users enjoy. The
+whole point of using a distribution is that things just work, all the
+time.
+
+So the standard way to handle major library version changes is to
+provide both in parallel at first, then migrate all applications, and
+once all applications have been migrated, deprecate the old library.
+And after a few years, remove that old library.
+
+> [~/git/lm-sensors]$ make
+> ...
+> [~/git/lm-sensors]$ ls lib/ | grep libsensors.so
+> libsensors.so
+> libsensors.so.5
+> libsensors.so.5.0.0
 > 
-> So on the Debian side, there is still time to revert the soname change.
-> 
-> Aurelien
-> 
+> So all distros need to do is rebuild dependent packages. No changes to
+> other packages should be required.
+
+Well, that alone is already pretty painful. Having to rebuild, ship,
+download and install all these applications is a major waste of
+resources. That's no less that 98 packages for my distribution. The
+whole point of having shared libraries is to make it possible to update
+one package and leave the rest unchanged. Changing the soname breaks
+that possibility.
+
+For us (openSUSE) it would also require changing the BuildRequires of
+all these applications from "libsensors4-devel" to "libsensors5-devel".
+Maybe that package should be named "libsensors-devel" instead, I'm not
+sure why we versioned it, I see that most libraries are not doing that.
+Maybe we had to when transitioning from lm-sensors 2 to lm-sensors 3. I
+don't remember the details.
+
+> Am I missing something?
+
+There are also all the 3rd party applications. Either shipped as
+binaries by proprietary software editors, or built in the Open Build
+Service. Changing the library version with no reason breaks
+compatibility with them.
+
+Without the soname change, it is possible for a user to cherry-pick a
+package update they need, independent of what the distribution has. For
+example, a user may need the latest version of libsensors because it
+fixes a bug for them. They could get it from the Open Build Service
+easily... But now they won't be able to install it, because the soname
+is incompatible with their current distribution. They would either have
+to pull all the packages using libsensors from the Open Build System
+(which can be very painful if some of these packages also have complex
+dependencies), or changing distributions altogether. This is opposite
+to the flexibility we intend to provide to our users.
+
+The major version of a library should only ever be changed for
+incompatible changes, that is, if an application built for the old
+version of the library will fail to run with the new version of the
+library. If this is not the case then then major version must stay the
+same.
+
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
