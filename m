@@ -1,6 +1,5 @@
 Return-Path: <olysonek@redhat.com>
 Subject: Re: libsensors soname bump
-To: lordheavym@gmail.com
 Cc: Aurelien Jarno <aurelien@aurel32.net>, Jean Delvare <jdelvare@suse.de>,
  linux-hwmon@vger.kernel.org
 References: <20181216124344.49d06b69@endymion>
@@ -8,9 +7,10 @@ References: <20181216124344.49d06b69@endymion>
  <3799b201-38f9-d74f-273d-f819736dcfb6@redhat.com>
  <20181217115902.15e538fe@endymion>
  <20181217112713.jvobrvrmxpkfeshi@aurel32.net>
+To: lm-sensors@vger.kernel.org
 From: =?UTF-8?Q?Ond=c5=99ej_Lyson=c4=9bk?= <olysonek@redhat.com>
-Message-ID: <c9cf6e23-696b-7d72-87be-8a3ee70afa2d@redhat.com>
-Date: Mon, 17 Dec 2018 12:48:04 +0100
+Message-ID: <7b96e7c3-11d6-a06f-53a6-1d61be31c3b3@redhat.com>
+Date: Mon, 17 Dec 2018 13:06:38 +0100
 MIME-Version: 1.0
 In-Reply-To: <20181217112713.jvobrvrmxpkfeshi@aurel32.net>
 Content-Type: text/plain; charset=utf-8
@@ -18,16 +18,11 @@ Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Laurent,
+Hi lm-sensors list,
 
-I see that you're the lm_sensors maintainer in Arch Linux. I understand
-you recently upgraded lm_sensors to 3.5.0 in Arch, while keeping the
-upstream soname change of libsensors to libsensors.so.5.
-
-As the soname change was undue, we're currently considering reverting it
-(see below, the whole thread should be available on spinics [1]). Would
-that pose a major problem for you? Have the dependent packages in Arch
-already been rebuilt?
+We're currently considering reverting the undue libsensors soname change
+that happened in lm_sensors 3.5.0 (see below, the whole thread should be
+available on spinics [1]). Would that pose a major problem for anyone?
 
 Thanks!
 
