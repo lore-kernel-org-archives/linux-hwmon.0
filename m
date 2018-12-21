@@ -7,55 +7,47 @@ Cc: pakki001@umn.edu,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: lm80: fix a missing check of return value
-Date: Fri, 21 Dec 2018 00:13:03 -0600
-Message-Id: <20181221061304.59684-1-kjlu@umn.edu>
+Subject: [PATCH] lm80: fix a missing check of return value
+Date: Fri, 21 Dec 2018 01:25:24 -0600
+Message-Id: <20181221072524.60369-1-kjlu@umn.edu>
 List-ID: <linux-hwmon@vger.kernel.org>
 
-If lm80_read_value() fails, it returns a negative number instead of the
-correct read data. Therefore, we should avoid using the data if it
-fails.
-
-The fix checks if lm80_read_value() fails, and if so, returns with the
-error number.
+When lm80_read_value() fails, the read data is an error number. So let's
+check its status before using the read data.
 
 Signed-off-by: Kangjie Lu <kjlu@umn.edu>
 ---
- drivers/hwmon/lm80.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/hwmon/lm80.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
-index 08e3945a6fbf..fca6363cd77f 100644
+index fca6363cd77f..7457ff8bc860 100644
 --- a/drivers/hwmon/lm80.c
 +++ b/drivers/hwmon/lm80.c
-@@ -360,9 +360,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
- 	struct i2c_client *client = data->client;
- 	unsigned long min, val;
- 	u8 reg;
--	int err = kstrtoul(buf, 10, &val);
--	if (err < 0)
--		return err;
-+	int ret;
-+
-+	ret = kstrtoul(buf, 10, &val);
-+	if (ret < 0)
-+		return ret;
+@@ -628,6 +628,7 @@ static int lm80_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	struct device *hwmon_dev;
+ 	struct lm80_data *data;
++	int rv;
  
- 	/* Save fan_min */
- 	mutex_lock(&data->update_lock);
-@@ -390,8 +392,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
- 		return -EINVAL;
- 	}
+ 	data = devm_kzalloc(dev, sizeof(struct lm80_data), GFP_KERNEL);
+ 	if (!data)
+@@ -640,8 +641,14 @@ static int lm80_probe(struct i2c_client *client,
+ 	lm80_init_client(client);
  
--	reg = (lm80_read_value(client, LM80_REG_FANDIV) &
--	       ~(3 << (2 * (nr + 1)))) | (data->fan_div[nr] << (2 * (nr + 1)));
-+	ret = lm80_read_value(client, LM80_REG_FANDIV);
-+	if (ret < 0)
-+		return ret;
-+	reg = (ret & ~(3 << (2 * (nr + 1))))
-+	      | (data->fan_div[nr] << (2 * (nr + 1)));
- 	lm80_write_value(client, LM80_REG_FANDIV, reg);
+ 	/* A few vars need to be filled upon startup */
+-	data->fan[f_min][0] = lm80_read_value(client, LM80_REG_FAN_MIN(1));
+-	data->fan[f_min][1] = lm80_read_value(client, LM80_REG_FAN_MIN(2));
++	rv = lm80_read_value(client, LM80_REG_FAN_MIN(1));
++	if (rv < 0)
++		return rv;
++	data->fan[f_min][0] = rv;
++	rv = lm80_read_value(client, LM80_REG_FAN_MIN(2));
++	if (rv < 0)
++		return rv;
++	data->fan[f_min][1] = rv;
  
- 	/* Restore fan_min */
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+ 							   data, lm80_groups);
 -- 
 2.17.2 (Apple Git-113)
