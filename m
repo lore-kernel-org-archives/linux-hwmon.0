@@ -1,87 +1,61 @@
-Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Return-path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:51076 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726868AbeLRRGD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Dec 2018 12:06:03 -0500
-Subject: Re: libsensors soname bump
-To: Jean Delvare <jdelvare@suse.de>
-Cc: linux-hwmon@vger.kernel.org, Aurelien Jarno <aurelien@aurel32.net>,
-        lordheavym@gmail.com, lm-sensors@vger.kernel.org
-References: <20181216124344.49d06b69@endymion>
-From: =?UTF-8?Q?Ond=c5=99ej_Lyson=c4=9bk?= <olysonek@redhat.com>
-Message-ID: <05037889-f0ce-8f5b-2a35-b85170443883@redhat.com>
-Date: Tue, 18 Dec 2018 18:06:00 +0100
-MIME-Version: 1.0
-In-Reply-To: <20181216124344.49d06b69@endymion>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-Sender: linux-hwmon-owner@vger.kernel.org
-List-Id: linux-hwmon@vger.kernel.org
+Return-Path: <kjlu@umn.edu>
+Return-path: <kjlu@umn.edu>
+From: Kangjie Lu <kjlu@umn.edu>
+To: kjlu@umn.edu
+Cc: pakki001@umn.edu,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: lm80: fix a missing check of return value
+Date: Fri, 21 Dec 2018 00:13:03 -0600
+Message-Id: <20181221061304.59684-1-kjlu@umn.edu>
+List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Jean,
+If lm80_read_value() fails, it returns a negative number instead of the
+correct read data. Therefore, we should avoid using the data if it
+fails.
 
-On 16. 12. 18 12:43, Jean Delvare wrote:
-> Hi Ondřej,
-> 
-> You have recently released lm-sensors 3.5.0 with a new soname for
-> libsensors:
-> 
-> -LIBMAINVER := 4
-> -LIBMINORVER := 4.0
-> +LIBMAINVER := 5
-> +LIBMINORVER := 0.0
-> 
-> -#define SENSORS_API_VERSION            0x440
-> +#define SENSORS_API_VERSION            0x500
-> 
-> This is declaring the new library as incompatible with the previous
-> version, meaning that distributions will have to build and ship both
-> libsensors4 and libsensors5 for a long time until all applications have
-> been updated and rebuilt to link with the new library. This is a
-> significant effort for the whole community and should only be done when
-> necessary.
-> 
-> In this specific case, I can't see what warranted such a change of
-> major library version change. From
-> lm-sensors/doc/developers/release_checklist:
-> 
->   Remember: update main number when interface changes, minor if new
->   functionality is added, and patch if only bugs are fixed.
-> 
-> In this case I can only see new functionality added, there is no
-> interface change. Therefore the correct value for SENSORS_API_VERSION
-> was 0x450, not 0x500. This would avoid the parallel maintenance and
-> installation of 2 versions of the library for several years to come.
-> 
-> Would you consider quickly releasing lm-sensors 3.5.1 with the proper
-> library version number, to save all that work to all application
-> authors/maintainers and distribution package maintainers?
+The fix checks if lm80_read_value() fails, and if so, returns with the
+error number.
 
-I did consider it, but I'm afraid I can't do this, sorry. I'm afraid it
-would cause more problems than it would solve.
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+---
+ drivers/hwmon/lm80.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-lm_sensors 3.5.0 has already been picked up by several distributions
-[1], and at least Arch Linux, Slackware and Gentoo have already rebuilt
-the dependent packages. It feels wrong to force the people, who already
-picked up the new version, to do the work again. I've spoken to the
-Gentoo maintainer and he's not thrilled about doing that. I'm really not
-looking forward to another batch of angry breakage reports after doing
-another soname change.
-
-Doing the 3.5.1 release would also mean that everyone using 3.5.0 would
-have to upgrade, otherwise the values of the SENSORS_API_VERSION macro
-would be different on different systems, forcing users of that macro to
-deal with the mess.
-
-I suggest that you use the patch that reverts the soname change in
-OpenSUSE, but keep the new SENSORS_API_VERSION so that it remains
-consistent with other distros.
-
-Thanks for understanding.
-
-[1] https://repology.org/metapackage/lm-sensors/versions
-
-Best regards
-Ondřej Lysoněk
+diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
+index 08e3945a6fbf..fca6363cd77f 100644
+--- a/drivers/hwmon/lm80.c
++++ b/drivers/hwmon/lm80.c
+@@ -360,9 +360,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 	struct i2c_client *client = data->client;
+ 	unsigned long min, val;
+ 	u8 reg;
+-	int err = kstrtoul(buf, 10, &val);
+-	if (err < 0)
+-		return err;
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret < 0)
++		return ret;
+ 
+ 	/* Save fan_min */
+ 	mutex_lock(&data->update_lock);
+@@ -390,8 +392,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = (lm80_read_value(client, LM80_REG_FANDIV) &
+-	       ~(3 << (2 * (nr + 1)))) | (data->fan_div[nr] << (2 * (nr + 1)));
++	ret = lm80_read_value(client, LM80_REG_FANDIV);
++	if (ret < 0)
++		return ret;
++	reg = (ret & ~(3 << (2 * (nr + 1))))
++	      | (data->fan_div[nr] << (2 * (nr + 1)));
+ 	lm80_write_value(client, LM80_REG_FANDIV, reg);
+ 
+ 	/* Restore fan_min */
+-- 
+2.17.2 (Apple Git-113)
