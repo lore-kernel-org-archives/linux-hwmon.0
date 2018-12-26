@@ -1,34 +1,44 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36167 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbeLZEUW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Dec 2018 23:20:22 -0500
-Received: by mail-pg1-f195.google.com with SMTP id n2so7110654pgm.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Dec 2018 20:20:22 -0800 (PST)
-Subject: Re: [PATCH v5] dell-smm-hwmon.c: Support up to 10 temp sensors
-To: Michele Sorcinelli <michelesr@autistici.org>
-Cc: =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>,
-        linux-hwmon@vger.kernel.org
-References: <20181224161459.8680-1-michelesr@autistici.org>
- <e1d71c62-0d63-276a-1a54-3f3583fbbfba@autistici.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1269d8a0-41ea-4575-42c3-1adf045a56d2@roeck-us.net>
-Date: Tue, 25 Dec 2018 20:20:18 -0800
-MIME-Version: 1.0
-In-Reply-To: <e1d71c62-0d63-276a-1a54-3f3583fbbfba@autistici.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Received: from szxga04-in.huawei.com ([45.249.212.190]:17061 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726650AbeLZLVZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 26 Dec 2018 06:21:25 -0500
+From: Wei Yongjun <weiyongjun1@huawei.com>
+To: Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, Kangjie Lu <kjlu@umn.edu>
+CC: Wei Yongjun <weiyongjun1@huawei.com>,
+        <linux-hwmon@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Subject: [PATCH -next] hwmon: (lm80) Fix missing unlock on error in set_fan_div()
+Date: Wed, 26 Dec 2018 11:28:24 +0000
+Message-ID: <1545823704-73836-1-git-send-email-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On 12/25/18 9:23 AM, Michele Sorcinelli wrote:
-> There's a typo in the last patch I sent, it says v5 but in fact is v4.
-> 
-> Sorry for the inconvenience and thanks for your patience.
-> 
+Add the missing unlock before return from function set_fan_div()
+in the error handling case.
 
-No worries. I'll apply the patch after the commit window has closed.
+Fixes: c9c63915519b ("hwmon: (lm80) fix a missing check of the status of SMBus read")
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/hwmon/lm80.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Guenter
+diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
+index 0e30fa0..f9b8e3e 100644
+--- a/drivers/hwmon/lm80.c
++++ b/drivers/hwmon/lm80.c
+@@ -393,8 +393,10 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 	}
+ 
+ 	rv = lm80_read_value(client, LM80_REG_FANDIV);
+-	if (rv < 0)
++	if (rv < 0) {
++		mutex_unlock(&data->update_lock);
+ 		return rv;
++	}
+ 	reg = (rv & ~(3 << (2 * (nr + 1))))
+ 	    | (data->fan_div[nr] << (2 * (nr + 1)));
+ 	lm80_write_value(client, LM80_REG_FANDIV, reg);
