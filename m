@@ -1,40 +1,68 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-lj1-f169.google.com ([209.85.208.169]:44714 "EHLO
-        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbeL2Eqi (ORCPT
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43203 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727178AbeL1PLD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 28 Dec 2018 23:46:38 -0500
-Received: by mail-lj1-f169.google.com with SMTP id k19-v6so20073114lji.11
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Dec 2018 20:46:36 -0800 (PST)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id q21-v6sm8800391ljc.5.2018.12.28.19.43.28
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Dec 2018 19:43:28 -0800 (PST)
-Received: by mail-lf1-f49.google.com with SMTP id u18so15577123lff.10
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Dec 2018 19:43:28 -0800 (PST)
+        Fri, 28 Dec 2018 10:11:03 -0500
+Date: Fri, 28 Dec 2018 07:11:00 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Tony_Ao@wiwynn.com
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matt_Chen@wiwynn.com,
+        vijaykhemka@fb.com
+Subject: Re: [PATCH] hwmon: (tmp421) Correct the misspelling of the tmp442
+ compatible attribute in OF device ID table
+Message-ID: <20181228151100.GA22978@roeck-us.net>
 MIME-Version: 1.0
-References: <1546008946-17600-1-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1546008946-17600-1-git-send-email-linux@roeck-us.net>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 28 Dec 2018 19:43:11 -0800
-Message-ID: <CAHk-=wjZREyNTzSTq2hYrueHGby48w2h1dDPLtCqC+BubV5zUA@mail.gmail.com>
-Subject: Re: [GIT PULL resend] hwmon updates for v4.21
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-On Fri, Dec 28, 2018 at 6:55 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> [ First sent last Sunday. Resending now because I don't know if I will have
->   internet access in the next few days. I don't know if it got lost, if it
->   was rejected, or what else may have happened. If it is still in the queue,
->   my apologies for the noise.  If it was rejected, I would appreciate
->   feedback.
+On Fri, Dec 28, 2018 at 02:03:22AM +0000, Tony_Ao@wiwynn.com wrote:
+> Hi there,
+> 
+> Correct a typo in OF device ID table.
+> The last one should be 'ti,tmp442'.
+> 
 
-It was still just in my queue. It's about to be pulled next.
+Good catch. Unfortunately, the patch is corrupted and does not apply
+(tabs replaced with spaces). Please resend and make sure that your
+mailer leaves it alone (possibly use git send-email).
 
-                  Linus
+Also, please drop the "confidential" trailer.
+
+Thanks,
+Guenter
+
+> Signed-off-by: Cheng-Min Ao <tony_ao@wiwynn.com>
+> Signed-off-by: Yu-Hsiang Chen <matt_chen@wiwynn.com>
+> ---
+> drivers/hwmon/tmp421.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+> index 8844c95..7053be5 100644
+> --- a/drivers/hwmon/tmp421.c
+> +++ b/drivers/hwmon/tmp421.c
+> @@ -88,7 +88,7 @@
+>                 .data = (void *)2
+>         },
+>         {
+> -               .compatible = "ti,tmp422",
+> +               .compatible = "ti,tmp442",
+>                 .data = (void *)3
+>         },
+>         { },
+> --
+> 1.9.1
+> 
+> Regards,
+> Tony
+> 
+> 
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+> This email contains confidential or legally privileged information and is for the sole use of its intended recipient. 
+> Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited.
+> If you are not the intended recipient, you may reply to the sender and should delete this e-mail immediately.
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------
