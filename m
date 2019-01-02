@@ -1,185 +1,109 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mga12.intel.com ([192.55.52.136]:36855 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbfABSWU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 2 Jan 2019 13:22:20 -0500
-Subject: Re: [PATCH v9 08/12] mfd: intel-peci-client: Add PECI client MFD
- driver
-To: Lee Jones <lee.jones@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+Received: from userp2130.oracle.com ([156.151.31.86]:39480 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729052AbfABPYw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Jan 2019 10:24:52 -0500
+Date: Wed, 2 Jan 2019 18:23:59 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: kbuild@01.org, Kangjie Lu <kjlu@umn.edu>
+Cc: kbuild-all@01.org, kjlu@umn.edu, pakki001@umn.edu,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
-        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
-        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        David Kershner <david.kershner@unisys.com>,
-        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        James Feist <james.feist@linux.intel.com>,
-        Jason M Biils <jason.m.bills@linux.intel.com>,
-        Vernon Mauery <vernon.mauery@linux.intel.com>
-References: <20181218210417.30140-1-jae.hyun.yoo@linux.intel.com>
- <20181218210417.30140-9-jae.hyun.yoo@linux.intel.com>
- <20181221144603.GR13248@dell>
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <8e4bcf7d-aa43-6745-2ade-9123c8d182ef@linux.intel.com>
-Date: Wed, 2 Jan 2019 10:22:18 -0800
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: lm80: fix a missing check of return value
+Message-ID: <20190102152359.GC22256@kadam>
 MIME-Version: 1.0
-In-Reply-To: <20181221144603.GR13248@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20181221061304.59684-1-kjlu@umn.edu>
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Hi Lee,
+Hi Kangjie,
 
-On 12/21/2018 6:46 AM, Lee Jones wrote:
-> On Tue, 18 Dec 2018, Jae Hyun Yoo wrote:
-> 
->> This commit adds PECI client MFD driver.
->>
+Thank you for the patch! Perhaps something to improve:
 
-<snip>
+url:    https://github.com/0day-ci/linux/commits/Kangjie-Lu/hwmon-lm80-fix-a-missing-check-of-return-value/20181222-023000
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 
->>   
->> +config MFD_INTEL_PECI_CLIENT
->> +	bool "Intel PECI client"
->> +	depends on (PECI || COMPILE_TEST)
->> +	select MFD_CORE
->> +	help
->> +	  If you say yes to this option, support will be included for the
->> +	  Intel PECI (Platform Environment Control Interface) client. PECI is a
->> +	  one-wire bus interface that provides a communication channel from PECI
->> +	  clients in Intel processors and chipset components to external
->> +	  monitoring or control devices.
-> 
-> This driver doesn't appear to actually do anything that can't be done
-> in a header file i.e. match some static data with a CPU ID.  The child
-> devices can be registered by whatever registers this device.
-> 
-> It seems superfluous.  Why do you need it?
->
+smatch warnings:
+drivers/hwmon/lm80.c:408 set_fan_div() warn: inconsistent returns 'mutex:&data->update_lock'.
+  Locked on:   line 397
+  Unlocked on: line 367
 
-The main reason I added it is to provide a way for sharing the same unit
-address from multiple side-band function drivers that read 'reg'
-property setting from the parent node (this driver's node). The 'reg'
-property reading code is not in this driver but it will be performed in
-peci-core when this driver is registered using
-module_peci_driver(peci_client_driver), and then it will provides
-client->addr information for all its child node drivers.
+# https://github.com/0day-ci/linux/commit/7612ba0bef1defb6de3290accca07633ccfd3365
+git remote add linux-review https://github.com/0day-ci/linux
+git remote update linux-review
+git checkout 7612ba0bef1defb6de3290accca07633ccfd3365
+vim +408 drivers/hwmon/lm80.c
 
-<snip>
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  348  
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  349  /*
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  350   * Note: we save and restore the fan minimum here, because its value is
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  351   * determined in part by the fan divisor.  This follows the principle of
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  352   * least surprise; the user doesn't expect the fan minimum to change just
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  353   * because the divisor changed.
+1160631b1 drivers/hwmon/lm80.c     Guenter Roeck      2012-01-19  354   */
+f8181762a drivers/hwmon/lm80.c     Jean Delvare       2008-01-05  355  static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+f8181762a drivers/hwmon/lm80.c     Jean Delvare       2008-01-05  356  	const char *buf, size_t count)
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  357  {
+f8181762a drivers/hwmon/lm80.c     Jean Delvare       2008-01-05  358  	int nr = to_sensor_dev_attr(attr)->index;
+118c9a61f drivers/hwmon/lm80.c     Guenter Roeck      2014-04-04  359  	struct lm80_data *data = dev_get_drvdata(dev);
+118c9a61f drivers/hwmon/lm80.c     Guenter Roeck      2014-04-04  360  	struct i2c_client *client = data->client;
+6a9e7c4c0 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-10  361  	unsigned long min, val;
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  362  	u8 reg;
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  363  	int ret;
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  364  
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  365  	ret = kstrtoul(buf, 10, &val);
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  366  	if (ret < 0)
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  367  		return ret;
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  368  
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  369  	/* Save fan_min */
+9a61bf630 drivers/hwmon/lm80.c     Ingo Molnar        2006-01-18  370  	mutex_lock(&data->update_lock);
+85b3ee07b drivers/hwmon/lm80.c     Guenter Roeck      2014-04-13  371  	min = FAN_FROM_REG(data->fan[f_min][nr],
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  372  			   DIV_FROM_REG(data->fan_div[nr]));
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  373  
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  374  	switch (val) {
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  375  	case 1:
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  376  		data->fan_div[nr] = 0;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  377  		break;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  378  	case 2:
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  379  		data->fan_div[nr] = 1;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  380  		break;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  381  	case 4:
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  382  		data->fan_div[nr] = 2;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  383  		break;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  384  	case 8:
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  385  		data->fan_div[nr] = 3;
+66b3b1f75 drivers/hwmon/lm80.c     Frans Meulenbroeks 2012-01-04  386  		break;
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  387  	default:
+118c9a61f drivers/hwmon/lm80.c     Guenter Roeck      2014-04-04  388  		dev_err(dev,
+b55f37572 drivers/hwmon/lm80.c     Guenter Roeck      2013-01-10  389  			"fan_div value %ld not supported. Choose one of 1, 2, 4 or 8!\n",
+b55f37572 drivers/hwmon/lm80.c     Guenter Roeck      2013-01-10  390  			val);
+9a61bf630 drivers/hwmon/lm80.c     Ingo Molnar        2006-01-18  391  		mutex_unlock(&data->update_lock);
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  392  		return -EINVAL;
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  393  	}
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  394  
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  395  	ret = lm80_read_value(client, LM80_REG_FANDIV);
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  396  	if (ret < 0)
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  397  		return ret;
+                                                                                ^^^^^^^^^^
+Need to drop the lock before returning.
 
->> +#include <linux/bitfield.h>
->> +#include <linux/mfd/core.h>
->> +#include <linux/mfd/intel-peci-client.h>
->> +#include <linux/module.h>
->> +#include <linux/peci.h>
->> +#include <linux/of_device.h>
-> 
-> Alphabetical.
-> 
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  398  	reg = (ret & ~(3 << (2 * (nr + 1))))
+7612ba0be drivers/hwmon/lm80.c     Kangjie Lu         2018-12-21  399  	      | (data->fan_div[nr] << (2 * (nr + 1)));
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  400  	lm80_write_value(client, LM80_REG_FANDIV, reg);
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  401  
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  402  	/* Restore fan_min */
+85b3ee07b drivers/hwmon/lm80.c     Guenter Roeck      2014-04-13  403  	data->fan[f_min][nr] = FAN_TO_REG(min, DIV_FROM_REG(data->fan_div[nr]));
+85b3ee07b drivers/hwmon/lm80.c     Guenter Roeck      2014-04-13  404  	lm80_write_value(client, LM80_REG_FAN_MIN(nr + 1),
+85b3ee07b drivers/hwmon/lm80.c     Guenter Roeck      2014-04-13  405  			 data->fan[f_min][nr]);
+9a61bf630 drivers/hwmon/lm80.c     Ingo Molnar        2006-01-18  406  	mutex_unlock(&data->update_lock);
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  407  
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16 @408  	return count;
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  409  }
+^1da177e4 drivers/i2c/chips/lm80.c Linus Torvalds     2005-04-16  410  
 
-Will fix it. Thanks!
-
-<snip>
-
->> +enum cpu_gens {
->> +	CPU_GEN_HSX = 0, /* Haswell Xeon */
->> +	CPU_GEN_BRX,     /* Broadwell Xeon */
->> +	CPU_GEN_SKX,     /* Skylake Xeon */
->> +};
-> 
-> This is unused.
-> 
-
-This is being used in 8 lines below but actually the static array can be
-initialized without using this enum type. Will remove it.
-
->> +static struct mfd_cell peci_functions[] = {
->> +	{ .name = "peci-cputemp", },
->> +	{ .name = "peci-dimmtemp", },
->> +	/* TODO: Add additional PECI sideband functions into here */
->> +};
->> +
->> +static const struct cpu_gen_info cpu_gen_info_table[] = {
->> +	[CPU_GEN_HSX] = {
->> +		.family        = 6, /* Family code */
->> +		.model         = INTEL_FAM6_HASWELL_X,
->> +		.core_max      = CORE_MAX_ON_HSX,
->> +		.chan_rank_max = CHAN_RANK_MAX_ON_HSX,
->> +		.dimm_idx_max  = DIMM_IDX_MAX_ON_HSX },
->> +	[CPU_GEN_BRX] = {
->> +		.family        = 6, /* Family code */
->> +		.model         = INTEL_FAM6_BROADWELL_X,
->> +		.core_max      = CORE_MAX_ON_BDX,
->> +		.chan_rank_max = CHAN_RANK_MAX_ON_BDX,
->> +		.dimm_idx_max  = DIMM_IDX_MAX_ON_BDX },
->> +	[CPU_GEN_SKX] = {
->> +		.family        = 6, /* Family code */
->> +		.model         = INTEL_FAM6_SKYLAKE_X,
->> +		.core_max      = CORE_MAX_ON_SKX,
->> +		.chan_rank_max = CHAN_RANK_MAX_ON_SKX,
->> +		.dimm_idx_max  = DIMM_IDX_MAX_ON_SKX },
->> +};
->> +
->> +static int peci_client_get_cpu_gen_info(struct peci_client_manager *priv)
->> +{
->> +	u32 cpu_id;
->> +	u16 family;
->> +	u8 model;
->> +	int rc;
-> 
-> ret is almost ubiquitous in the kernel.  Please use it instead.
-> 
-
-Okay. Will change rc to ret.
-
-<snip>
-
->> +static int peci_client_probe(struct peci_client *client)
->> +{
->> +	struct device *dev = &client->dev;
->> +	struct peci_client_manager *priv;
->> +	uint cpu_no;
->> +	int ret;
->> +
->> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	dev_set_drvdata(dev, priv);
->> +	priv->client = client;
->> +	priv->dev = dev;
-> 
-> If you have client (Which contains dev, you don't need dev).
-> 
-
-Makes sense. Will remove the 'dev' member.
-
-<snip>
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
