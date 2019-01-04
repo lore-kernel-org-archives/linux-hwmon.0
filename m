@@ -1,515 +1,147 @@
 Return-Path: <linux-hwmon-owner@vger.kernel.org>
-Received: from mail-out.m-online.net ([212.18.0.9]:47647 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726093AbfADCP6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Jan 2019 21:15:58 -0500
-From: Marek Vasut <marex@denx.de>
-To: netdev@vger.kernel.org
-Cc: Marek Vasut <marex@denx.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: [PATCH V4] net: phy: tja11xx: Add TJA11xx PHY driver
-Date: Fri,  4 Jan 2019 03:15:47 +0100
-Message-Id: <20190104021547.15527-1-marex@denx.de>
+Received: from mx01.hxt-semitech.com ([223.203.96.7]:46671 "EHLO
+        barracuda.hxt-semitech.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727006AbfADI4E (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 4 Jan 2019 03:56:04 -0500
+From: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+To: <linux@roeck-us.net>, <jdelvare@suse.com>
+CC: <openbmc@lists.ozlabs.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Xiaoting Liu <xiaoting.liu@hxt-semitech.com>,
+        Shunyong Yang <shunyong.yang@hxt-semitech.com>
+Subject: [PATCH 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with driver_data
+Date: Fri, 4 Jan 2019 16:55:51 +0800
+Message-ID: <680b4d5659971cc4f6e1a6878837c2ce49962a7c.1546591275.git.xiaoting.liu@hxt-semitech.com>
+In-Reply-To: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
+References: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
 Sender: linux-hwmon-owner@vger.kernel.org
 List-Id: linux-hwmon@vger.kernel.org
 
-Add driver for the NXP TJA1100 and TJA1101 PHYs. These PHYs are special
-BroadRReach 100BaseT1 PHYs used in automotive.
+Current code compares device name with name in i2c_device_id to decide
+whether PMBUS_SKIP_STATUS_CHECK should be set in pmbus_platform_data,
+which makes adding new devices with PMBUS_SKIP_STATUS_CHECK should also
+modify code in pmbus_probe().
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
----
-V2: - Use phy_modify(), phy_{set,clear}_bits()
-    - Drop enable argument of tja11xx_enable_link_control()
-    - Use PHY_BASIC_T1_FEATURES and dont modify supported/advertised
-      features in config_init callback
-    - Use genphy_soft_reset() instead of opencoding the reset sequence.
-    - Drop the aneg parts, since the PHY datasheet claims it does not
-      support aneg
-V3: - Replace clr with mask
-    - Add hwmon support
-    - Check commstat in tja11xx_read_status() only if link is up
-    - Use PHY_ID_MATCH_MODEL()
-V4: - Use correct bit in tja11xx_hwmon_read() hwmon_temp_crit_alarm
-    - Use ENOMEM if devm_kstrdup() fails
-    - Check $type in tja11xx_hwmon_read() in addition to $attr
----
- drivers/net/phy/Kconfig       |   6 +
- drivers/net/phy/Makefile      |   1 +
- drivers/net/phy/nxp-tja11xx.c | 426 ++++++++++++++++++++++++++++++++++
- 3 files changed, 433 insertions(+)
- create mode 100644 drivers/net/phy/nxp-tja11xx.c
+This patch adds pmbus_device_info to save pages and flags. Its pointer
+is put in driver_data of i2c_device_id, which makes adding new device
+more straightforward.
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index 3d187cd50eb0..88b462ef1274 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -389,6 +389,12 @@ config NATIONAL_PHY
- 	---help---
- 	  Currently supports the DP83865 PHY.
- 
-+config NXP_TJA11XX_PHY
-+	tristate "NXP TJA11xx PHYs support"
-+	depends on HWMON
-+	---help---
-+	  Currently supports the NXP TJA1100 and TJA1101 PHY.
+Signed-off-by: Shunyong Yang <shunyong.yang@hxt-semitech.com>
+Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+---
+ drivers/hwmon/pmbus/pmbus.c | 54 +++++++++++++++++++++++++++------------------
+ include/linux/pmbus.h       |  5 +++++
+ 2 files changed, 37 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 7688dab32f6e..aa4cf9636e99 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -172,13 +172,15 @@ static int pmbus_probe(struct i2c_client *client,
+        struct pmbus_driver_info *info;
+        struct pmbus_platform_data *pdata = NULL;
+        struct device *dev = &client->dev;
++       struct pmbus_device_info *device_info;
+
+        info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+        if (!info)
+                return -ENOMEM;
+
+-       if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
+-           !strcmp(id->name, "sgd009")) {
++       device_info = (struct pmbus_device_info *)id->driver_data;
 +
- config QSEMI_PHY
- 	tristate "Quality Semiconductor PHYs"
- 	---help---
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index 5805c0b7d60e..023e5db8c7cc 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -76,6 +76,7 @@ obj-$(CONFIG_MICROCHIP_PHY)	+= microchip.o
- obj-$(CONFIG_MICROCHIP_T1_PHY)	+= microchip_t1.o
- obj-$(CONFIG_MICROSEMI_PHY)	+= mscc.o
- obj-$(CONFIG_NATIONAL_PHY)	+= national.o
-+obj-$(CONFIG_NXP_TJA11XX_PHY)	+= nxp-tja11xx.o
- obj-$(CONFIG_QSEMI_PHY)		+= qsemi.o
- obj-$(CONFIG_REALTEK_PHY)	+= realtek.o
- obj-$(CONFIG_RENESAS_PHY)	+= uPD60620.o
-diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
-new file mode 100644
-index 000000000000..dffd6c4d7e46
---- /dev/null
-+++ b/drivers/net/phy/nxp-tja11xx.c
-@@ -0,0 +1,426 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* NXP TJA1100 BroadRReach PHY driver
-+ *
-+ * Copyright (C) 2018 Marek Vasut <marex@denx.de>
-+ */
-+#include <linux/delay.h>
-+#include <linux/ethtool.h>
-+#include <linux/kernel.h>
-+#include <linux/mii.h>
-+#include <linux/module.h>
-+#include <linux/phy.h>
-+#include <linux/hwmon.h>
-+#include <linux/bitfield.h>
-+
-+#define PHY_ID_MASK			0xfffffff0
-+#define PHY_ID_TJA1100			0x0180dc40
-+#define PHY_ID_TJA1101			0x0180dd00
-+
-+#define MII_ECTRL			17
-+#define MII_ECTRL_LINK_CONTROL		BIT(15)
-+#define MII_ECTRL_POWER_MODE_MASK	GENMASK(14, 11)
-+#define MII_ECTRL_POWER_MODE_NO_CHANGE	(0x0 << 11)
-+#define MII_ECTRL_POWER_MODE_NORMAL	(0x3 << 11)
-+#define MII_ECTRL_POWER_MODE_STANDBY	(0xc << 11)
-+#define MII_ECTRL_CONFIG_EN		BIT(2)
-+#define MII_ECTRL_WAKE_REQUEST		BIT(0)
-+
-+#define MII_CFG1			18
-+#define MII_CFG1_AUTO_OP		BIT(14)
-+#define MII_CFG1_SLEEP_CONFIRM		BIT(6)
-+#define MII_CFG1_LED_MODE_MASK		GENMASK(5, 4)
-+#define MII_CFG1_LED_MODE_LINKUP	0
-+#define MII_CFG1_LED_ENABLE		BIT(3)
-+
-+#define MII_CFG2			19
-+#define MII_CFG2_SLEEP_REQUEST_TO	GENMASK(1, 0)
-+#define MII_CFG2_SLEEP_REQUEST_TO_16MS	0x3
-+
-+#define MII_INTSRC			21
-+#define MII_INTSRC_TEMP_ERR		BIT(1)
-+#define MII_INTSRC_UV_ERR		BIT(3)
-+
-+#define MII_COMMSTAT			23
-+#define MII_COMMSTAT_LINK_UP		BIT(15)
-+
-+#define MII_GENSTAT			24
-+#define MII_GENSTAT_PLL_LOCKED		BIT(14)
-+
-+#define MII_COMMCFG			27
-+#define MII_COMMCFG_AUTO_OP		BIT(15)
-+
-+struct tja11xx_priv {
-+	char		*hwmon_name;
-+	struct device	*hwmon_dev;
++       if (device_info->flags & PMBUS_SKIP_STATUS_CHECK) {
+                pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
+                                     GFP_KERNEL);
+                if (!pdata)
+@@ -187,36 +189,44 @@ static int pmbus_probe(struct i2c_client *client,
+                pdata->flags = PMBUS_SKIP_STATUS_CHECK;
+        }
+
+-       info->pages = id->driver_data;
++       info->pages = device_info->pages;
+        info->identify = pmbus_identify;
+        dev->platform_data = pdata;
+
+        return pmbus_do_probe(client, id, info);
+ }
+
++static const struct pmbus_device_info default_pmbus_info = {1, 0};
++static const struct pmbus_device_info dps460_pmbus_info = {
++                               1, PMBUS_SKIP_STATUS_CHECK};
++static const struct pmbus_device_info dps800_pmbus_info = {
++                               1, PMBUS_SKIP_STATUS_CHECK};
++static const struct pmbus_device_info sgd009_pmbus_info = {
++                               1, PMBUS_SKIP_STATUS_CHECK};
++static const struct pmbus_device_info pmbus_info = {0, 0};
+ /*
+  * Use driver_data to set the number of pages supported by the chip.
+  */
+ static const struct i2c_device_id pmbus_id[] = {
+-       {"adp4000", 1},
+-       {"bmr453", 1},
+-       {"bmr454", 1},
+-       {"dps460", 1},
+-       {"dps800", 1},
+-       {"mdt040", 1},
+-       {"ncp4200", 1},
+-       {"ncp4208", 1},
+-       {"pdt003", 1},
+-       {"pdt006", 1},
+-       {"pdt012", 1},
+-       {"pmbus", 0},
+-       {"sgd009", 1},
+-       {"tps40400", 1},
+-       {"tps544b20", 1},
+-       {"tps544b25", 1},
+-       {"tps544c20", 1},
+-       {"tps544c25", 1},
+-       {"udt020", 1},
++       {"adp4000", (kernel_ulong_t)&default_pmbus_info},
++       {"bmr453", (kernel_ulong_t)&default_pmbus_info},
++       {"bmr454", (kernel_ulong_t)&default_pmbus_info},
++       {"dps460", (kernel_ulong_t)&dps460_pmbus_info},
++       {"dps800", (kernel_ulong_t)&dps800_pmbus_info},
++       {"mdt040", (kernel_ulong_t)&default_pmbus_info},
++       {"ncp4200", (kernel_ulong_t)&default_pmbus_info},
++       {"ncp4208", (kernel_ulong_t)&default_pmbus_info},
++       {"pdt003", (kernel_ulong_t)&default_pmbus_info},
++       {"pdt006", (kernel_ulong_t)&default_pmbus_info},
++       {"pdt012", (kernel_ulong_t)&default_pmbus_info},
++       {"pmbus", (kernel_ulong_t)&pmbus_info},
++       {"sgd009", (kernel_ulong_t)&sgd009_pmbus_info},
++       {"tps40400", (kernel_ulong_t)&default_pmbus_info},
++       {"tps544b20", (kernel_ulong_t)&default_pmbus_info},
++       {"tps544b25", (kernel_ulong_t)&default_pmbus_info},
++       {"tps544c20", (kernel_ulong_t)&default_pmbus_info},
++       {"tps544c25", (kernel_ulong_t)&default_pmbus_info},
++       {"udt020", (kernel_ulong_t)&default_pmbus_info},
+        {}
+ };
+
+diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+index ee3c2aba2a8e..3c05edad7666 100644
+--- a/include/linux/pmbus.h
++++ b/include/linux/pmbus.h
+@@ -46,4 +46,9 @@ struct pmbus_platform_data {
+        struct regulator_init_data *reg_init_data;
+ };
+
++struct pmbus_device_info {
++       int pages;
++       u32 flags;
 +};
 +
-+struct tja11xx_phy_stats {
-+	const char	*string;
-+	u8		reg;
-+	u8		off;
-+	u16		mask;
-+};
-+
-+static struct tja11xx_phy_stats tja11xx_hw_stats[] = {
-+	{ "phy_symbol_error_count", 20, 0, GENMASK(15, 0) },
-+	{ "phy_polarity_detect", 25, 6, BIT(6) },
-+	{ "phy_open_detect", 25, 7, BIT(7) },
-+	{ "phy_short_detect", 25, 8, BIT(8) },
-+	{ "phy_rem_rcvr_count", 26, 0, GENMASK(7, 0) },
-+	{ "phy_loc_rcvr_count", 26, 8, GENMASK(15, 8) },
-+};
-+
-+static int tja11xx_check(struct phy_device *phydev, u8 reg, u16 mask, u16 set)
-+{
-+	int i, ret;
-+
-+	for (i = 0; i < 200; i++) {
-+		ret = phy_read(phydev, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		if ((ret & mask) == set)
-+			return 0;
-+
-+		usleep_range(100, 150);
-+	}
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static int phy_modify_check(struct phy_device *phydev, u8 reg,
-+			    u16 mask, u16 set)
-+{
-+	int ret;
-+
-+	ret = phy_modify(phydev, reg, mask, set);
-+	if (ret)
-+		return ret;
-+
-+	return tja11xx_check(phydev, reg, mask, set);
-+}
-+
-+static int tja11xx_enable_reg_write(struct phy_device *phydev)
-+{
-+	return phy_set_bits(phydev, MII_ECTRL, MII_ECTRL_CONFIG_EN);
-+}
-+
-+static int tja11xx_enable_link_control(struct phy_device *phydev)
-+{
-+	return phy_set_bits(phydev, MII_ECTRL, MII_ECTRL_LINK_CONTROL);
-+}
-+
-+static int tja11xx_wakeup(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = phy_read(phydev, MII_ECTRL);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (ret & MII_ECTRL_POWER_MODE_MASK) {
-+	case MII_ECTRL_POWER_MODE_NO_CHANGE:
-+		break;
-+	case MII_ECTRL_POWER_MODE_NORMAL:
-+		ret = phy_set_bits(phydev, MII_ECTRL, MII_ECTRL_WAKE_REQUEST);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_clear_bits(phydev, MII_ECTRL, MII_ECTRL_WAKE_REQUEST);
-+		if (ret)
-+			return ret;
-+		break;
-+	case MII_ECTRL_POWER_MODE_STANDBY:
-+		ret = phy_modify_check(phydev, MII_ECTRL,
-+				       MII_ECTRL_POWER_MODE_MASK,
-+				       MII_ECTRL_POWER_MODE_STANDBY);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_modify(phydev, MII_ECTRL, MII_ECTRL_POWER_MODE_MASK,
-+				 MII_ECTRL_POWER_MODE_NORMAL);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_modify_check(phydev, MII_GENSTAT,
-+				       MII_GENSTAT_PLL_LOCKED,
-+				       MII_GENSTAT_PLL_LOCKED);
-+		if (ret)
-+			return ret;
-+
-+		return tja11xx_enable_link_control(phydev);
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tja11xx_soft_reset(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = tja11xx_enable_reg_write(phydev);
-+	if (ret)
-+		return ret;
-+
-+	return genphy_soft_reset(phydev);
-+}
-+
-+static int tja11xx_config_init(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = tja11xx_enable_reg_write(phydev);
-+	if (ret)
-+		return ret;
-+
-+	phydev->irq = PHY_POLL;
-+	phydev->autoneg = AUTONEG_DISABLE;
-+	phydev->speed = SPEED_100;
-+	phydev->duplex = DUPLEX_FULL;
-+	phydev->pause = 0;
-+	phydev->asym_pause = 0;
-+
-+	switch (phydev->phy_id & PHY_ID_MASK) {
-+	case PHY_ID_TJA1100:
-+		ret = phy_modify(phydev, MII_CFG1,
-+				 MII_CFG1_AUTO_OP | MII_CFG1_LED_MODE_MASK |
-+				 MII_CFG1_LED_ENABLE,
-+				 MII_CFG1_AUTO_OP | MII_CFG1_LED_MODE_LINKUP |
-+				 MII_CFG1_LED_ENABLE);
-+		if (ret)
-+			return ret;
-+		break;
-+	case PHY_ID_TJA1101:
-+		ret = phy_set_bits(phydev, MII_COMMCFG, MII_COMMCFG_AUTO_OP);
-+		if (ret)
-+			return ret;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = phy_clear_bits(phydev, MII_CFG1, MII_CFG1_SLEEP_CONFIRM);
-+	if (ret)
-+		return ret;
-+
-+	ret = phy_modify(phydev, MII_CFG2, MII_CFG2_SLEEP_REQUEST_TO,
-+			 MII_CFG2_SLEEP_REQUEST_TO_16MS);
-+	if (ret)
-+		return ret;
-+
-+	ret = tja11xx_wakeup(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* ACK interrupts by reading the status register */
-+	ret = phy_read(phydev, MII_INTSRC);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int tja11xx_read_status(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = genphy_update_link(phydev);
-+	if (ret)
-+		return ret;
-+
-+	if (phydev->link) {
-+		ret = phy_read(phydev, MII_COMMSTAT);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (!(ret & MII_COMMSTAT_LINK_UP))
-+			phydev->link = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tja11xx_get_sset_count(struct phy_device *phydev)
-+{
-+	return ARRAY_SIZE(tja11xx_hw_stats);
-+}
-+
-+static void tja11xx_get_strings(struct phy_device *phydev, u8 *data)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tja11xx_hw_stats); i++) {
-+		strncpy(data + i * ETH_GSTRING_LEN,
-+			tja11xx_hw_stats[i].string, ETH_GSTRING_LEN);
-+	}
-+}
-+
-+static void tja11xx_get_stats(struct phy_device *phydev,
-+			      struct ethtool_stats *stats, u64 *data)
-+{
-+	int i, ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(tja11xx_hw_stats); i++) {
-+		ret = phy_read(phydev, tja11xx_hw_stats[i].reg);
-+		if (ret < 0)
-+			data[i] = U64_MAX;
-+		else {
-+			data[i] = ret & tja11xx_hw_stats[i].mask;
-+			data[i] >>= tja11xx_hw_stats[i].off;
-+		}
-+	}
-+}
-+
-+static int tja11xx_hwmon_read(struct device *dev,
-+			      enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *value)
-+{
-+	struct phy_device *phydev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	if (type == hwmon_in && attr == hwmon_in_lcrit_alarm) {
-+		ret = phy_read(phydev, MII_INTSRC);
-+		if (ret < 0)
-+			return ret;
-+
-+		*value = !!(ret & MII_INTSRC_TEMP_ERR);
-+		return 0;
-+	}
-+
-+	if (type == hwmon_temp && attr == hwmon_temp_crit_alarm) {
-+		ret = phy_read(phydev, MII_INTSRC);
-+		if (ret < 0)
-+			return ret;
-+
-+		*value = !!(ret & MII_INTSRC_UV_ERR);
-+		return 0;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static umode_t tja11xx_hwmon_is_visible(const void *data,
-+					enum hwmon_sensor_types type,
-+					u32 attr, int channel)
-+{
-+	if (type == hwmon_in && attr == hwmon_in_lcrit_alarm)
-+		return 0444;
-+
-+	if (type == hwmon_temp && attr == hwmon_temp_crit_alarm)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static u32 tja11xx_hwmon_in_config[] = {
-+	HWMON_I_LCRIT_ALARM,
-+	0
-+};
-+
-+static const struct hwmon_channel_info tja11xx_hwmon_in = {
-+	.type		= hwmon_in,
-+	.config		= tja11xx_hwmon_in_config,
-+};
-+
-+static u32 tja11xx_hwmon_temp_config[] = {
-+	HWMON_T_CRIT_ALARM,
-+	0
-+};
-+
-+static const struct hwmon_channel_info tja11xx_hwmon_temp = {
-+	.type		= hwmon_temp,
-+	.config		= tja11xx_hwmon_temp_config,
-+};
-+
-+static const struct hwmon_channel_info *tja11xx_hwmon_info[] = {
-+	&tja11xx_hwmon_in,
-+	&tja11xx_hwmon_temp,
-+	NULL
-+};
-+
-+static const struct hwmon_ops tja11xx_hwmon_hwmon_ops = {
-+	.is_visible	= tja11xx_hwmon_is_visible,
-+	.read		= tja11xx_hwmon_read,
-+};
-+
-+static const struct hwmon_chip_info tja11xx_hwmon_chip_info = {
-+	.ops		= &tja11xx_hwmon_hwmon_ops,
-+	.info		= tja11xx_hwmon_info,
-+};
-+
-+static int tja11xx_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct tja11xx_priv *priv;
-+	int i;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->hwmon_name = devm_kstrdup(dev, dev_name(dev), GFP_KERNEL);
-+	if (!priv->hwmon_name)
-+		return -ENOMEM;
-+
-+	for (i = 0; priv->hwmon_name[i]; i++)
-+		if (hwmon_is_bad_char(priv->hwmon_name[i]))
-+			priv->hwmon_name[i] = '_';
-+
-+	priv->hwmon_dev =
-+		devm_hwmon_device_register_with_info(dev, priv->hwmon_name,
-+						     phydev,
-+						     &tja11xx_hwmon_chip_info,
-+						     NULL);
-+
-+	return PTR_ERR_OR_ZERO(priv->hwmon_dev);
-+}
-+
-+static struct phy_driver tja11xx_driver[] = {
-+	{
-+		PHY_ID_MATCH_MODEL(PHY_ID_TJA1100),
-+		.name		= "NXP TJA1100",
-+		.features       = PHY_BASIC_T1_FEATURES,
-+		.probe		= tja11xx_probe,
-+		.soft_reset	= tja11xx_soft_reset,
-+		.config_init	= tja11xx_config_init,
-+		.read_status	= tja11xx_read_status,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.set_loopback   = genphy_loopback,
-+		/* Statistics */
-+		.get_sset_count = tja11xx_get_sset_count,
-+		.get_strings	= tja11xx_get_strings,
-+		.get_stats	= tja11xx_get_stats,
-+	}, {
-+		PHY_ID_MATCH_MODEL(PHY_ID_TJA1101),
-+		.name		= "NXP TJA1101",
-+		.features       = PHY_BASIC_T1_FEATURES,
-+		.probe		= tja11xx_probe,
-+		.soft_reset	= tja11xx_soft_reset,
-+		.config_init	= tja11xx_config_init,
-+		.read_status	= tja11xx_read_status,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.set_loopback   = genphy_loopback,
-+		/* Statistics */
-+		.get_sset_count = tja11xx_get_sset_count,
-+		.get_strings	= tja11xx_get_strings,
-+		.get_stats	= tja11xx_get_stats,
-+	}
-+};
-+
-+module_phy_driver(tja11xx_driver);
-+
-+static struct mdio_device_id __maybe_unused tja11xx_tbl[] = {
-+	{ PHY_ID_MATCH_MODEL(PHY_ID_TJA1100) },
-+	{ PHY_ID_MATCH_MODEL(PHY_ID_TJA1101) },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(mdio, tja11xx_tbl);
-+
-+MODULE_AUTHOR("Marek Vasut <marex@denx.de>");
-+MODULE_DESCRIPTION("NXP TJA11xx BoardR-Reach PHY driver");
-+MODULE_LICENSE("GPL");
--- 
-2.19.2
+ #endif /* _PMBUS_H_ */
+--
+1.8.3.1
+
+
+
+
+This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
