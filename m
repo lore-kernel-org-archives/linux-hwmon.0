@@ -2,233 +2,158 @@ Return-Path: <SRS0=6G0q=PM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA850C43387
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jan 2019 14:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21FEFC43387
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jan 2019 16:24:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6111020874
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jan 2019 14:54:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D81A721872
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jan 2019 16:24:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VO0K11K0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k4Id7XnH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfADOyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jan 2019 09:54:10 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41596 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbfADOyK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 09:54:10 -0500
-Received: by mail-pf1-f194.google.com with SMTP id b7so18419922pfi.8;
-        Fri, 04 Jan 2019 06:54:09 -0800 (PST)
+        id S1727352AbfADQYa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jan 2019 11:24:30 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:32826 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727312AbfADQYa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 11:24:30 -0500
+Received: by mail-oi1-f195.google.com with SMTP id c206so30808259oib.0;
+        Fri, 04 Jan 2019 08:24:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WyNwvvmB7Y0SxjoBpNJMU5F6oVWThqtshgbUQc2EguI=;
-        b=VO0K11K0rGzoVuMK8Eun3V59n6IqlZd/ICje3VTXPKo066E0pCT6A/a1qTuKtO3fjL
-         e7QFzhQFs6xT5pit2O6ueSYR8Od3Ta3kaCtPpAUPXhRvp7Yg/pR+5YJY42jfnHZEgQEw
-         sRXKVEIiVm6Wrs+HW+C/tkQV6f3UnspSovVvXFRuFkDm2rLY5wf7pFFyRFZRa6pgALRk
-         HjRLJK145Vevh+kqwQyHiTX+EtIqF5OaH2P0JAO8ME+WROkI4T4dPHvfyCtbiy7S9FQY
-         k2We62KmYQ9mT+GNDpxWyzywwDd2sxRhYsDfQ+tpIO2NDziYk1AJQgPH7FlAED4pSaW5
-         9Hpw==
+        h=date:in-reply-to:references:mime-version:content-transfer-encoding
+         :autocrypt:subject:to:cc:from:message-id;
+        bh=AXvJ9DmSDHklY9ZpMwBKt0shChYkn2A+VWM/tF4u790=;
+        b=k4Id7XnHKr6vZR6ECW2mUyERFfbwKCWwtYERnuwrnfg20SVLYKTRjK21kUNQ4w8X+W
+         vxIgp2WJRYeJWH/ZiepZek8Lk3jakI9e+GSBRJYYcv25ExksPzRM3cuYV8GAangW/32h
+         c1DNc+io0xfGz8lsSj51dW2a/FNAr47ib+cBl5zNhrp+8QoNj+8sY58USs3VZsInNvhv
+         oCfbzNg+11H9+F6IjwDyZ44vnyBko2NSdf0zTCBY7UxY7aoh4dVDJA8WhRLkPMafrX0G
+         N7qNMSlAHNmZGQ38DdouxWHHFVfxk7RaCArxnLygcLpRbhocvNDKeXvQxEQ6QIQIhe2K
+         o5Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WyNwvvmB7Y0SxjoBpNJMU5F6oVWThqtshgbUQc2EguI=;
-        b=nu95QM02iz3JUpUb5GWirP9pY20Q8livvv6BvtFMJ0DMGK8UPY8L85O64Wo3j5Rpq5
-         hpSsz2cJm/RiZAOBP4Y60MGlgUWVkJ6gXWIgjX3nfbcl45HNz1zBzvigZ+YHwtb3jpXQ
-         XzurTp1uEQfmahjgGp5EIzDNAzUSDVTN7K8sWhS/NCQKwlD+VuZ7Y34Sq0KqlwXhvYbA
-         9cQFzlfpMRL9Ks6ItYRmnuxeYqkEr+By83UJcFNMeiC+xaJU4wZhgPAW4B3k2yGbj/Bj
-         fecO+VDtpT7OTzG1EOBXgosjFgas0w5Cs25pRRc9ARIVczT8IuWXRa1tyjjBBopm00eE
-         /obA==
-X-Gm-Message-State: AJcUukehVkVlit9HkNRpiS7pMDrtImlS0NZ/p96zyHhRYrggHahHW5ir
-        ZYdoJqm2Xo5ZKynxWGFDIfw=
-X-Google-Smtp-Source: ALg8bN5M9kaVnmnvLAZiRPO6hyLIi5HYji/reH8QNwr2avqARx6Dc32KU4muztyO70zg9At4lTK9nQ==
-X-Received: by 2002:a63:2054:: with SMTP id r20mr1912011pgm.328.1546613649411;
-        Fri, 04 Jan 2019 06:54:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e131sm97228328pfg.75.2019.01.04.06.54.08
+        h=x-gm-message-state:date:in-reply-to:references:mime-version
+         :content-transfer-encoding:autocrypt:subject:to:cc:from:message-id;
+        bh=AXvJ9DmSDHklY9ZpMwBKt0shChYkn2A+VWM/tF4u790=;
+        b=dh1HwCoLWfgpe6+tK+uNaqIm++rFChc7OVK67oNdTAx8DAK9jrn6GY+qyggpLNn43E
+         fz4l+YPgr2AvQ46GLPVFH+rB6ARZb2hFCJ9ocHWPpsbfvN7mpEsaAxFMKuCsSvsupglv
+         NC2SmxdLBhksh9+632AVWtrlyvnQJqW3VxywA2xmMH8VyZagiIJvJ3iu30EiE1vtO0aB
+         ARbkvGLo/Uf77TOO1W85hGdWHJb6aenrGFOjBn7KYBmHToZMrtX/7B36eTa2bm5s+lGv
+         n+mv9DHT6AqfWPtc38UbFEO3/p/V4wv6enNgdSyrjtCVP7fJZoky+DXQSh8qMn/miV9q
+         Uy6A==
+X-Gm-Message-State: AJcUukc0z4hscEFcv5gFE4o4J/b/JDMOIXzPrZHKNWcwhdwU6S/+wN05
+        ZiBxAcUgexhfEh4a0iti/rI90u2i
+X-Google-Smtp-Source: ALg8bN763ZpU26wC5nK8wrXAd031gwvhmIWfZZOvw8tyqs/UG1cZCnTt9YolahzZcvtVP885Xc/ynA==
+X-Received: by 2002:aca:5b43:: with SMTP id p64mr1411751oib.41.1546619068810;
+        Fri, 04 Jan 2019 08:24:28 -0800 (PST)
+Received: from localhost (ip68-228-73-187.oc.oc.cox.net. [68.228.73.187])
+        by smtp.gmail.com with ESMTPSA id w5sm28074324oif.48.2019.01.04.08.24.27
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Jan 2019 06:54:08 -0800 (PST)
-Subject: Re: [PATCH 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with
- driver_data
-To:     Xiaoting Liu <xiaoting.liu@hxt-semitech.com>, jdelvare@suse.com
-Cc:     openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shunyong Yang <shunyong.yang@hxt-semitech.com>
-References: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
- <680b4d5659971cc4f6e1a6878837c2ce49962a7c.1546591275.git.xiaoting.liu@hxt-semitech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b9548ce0-97d2-a3d4-d578-015fc5419967@roeck-us.net>
-Date:   Fri, 4 Jan 2019 06:54:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        Fri, 04 Jan 2019 08:24:28 -0800 (PST)
+Date:   Fri, 04 Jan 2019 08:24:19 -0800
+In-Reply-To: <20190104021547.15527-1-marex@denx.de>
+References: <20190104021547.15527-1-marex@denx.de>
 MIME-Version: 1.0
-In-Reply-To: <680b4d5659971cc4f6e1a6878837c2ce49962a7c.1546591275.git.xiaoting.liu@hxt-semitech.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Autocrypt: addr=f.fainelli@gmail.com; keydata=
+ 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
+Subject: Re: [PATCH V4] net: phy: tja11xx: Add TJA11xx PHY driver
+To:     Marek Vasut <marex@denx.de>, netdev@vger.kernel.org
+CC:     Andrew Lunn <andrew@lunn.ch>, Guenter Roeck <linux@roeck-us.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <E29570D9-3298-443A-8809-7E5BC4147FCD@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
-Message-ID: <20190104145407.yxTDnf4QdTJEqfKZxmIVr1452prlM9KcxFvJ5AaKX94@z>
+Message-ID: <20190104162419.uPKR-Rr26krJ9Aq93Qb9SimSlPszF6rjyvPTYGtLOGM@z>
 
-On 1/4/19 12:55 AM, Xiaoting Liu wrote:
-> Current code compares device name with name in i2c_device_id to decide
-> whether PMBUS_SKIP_STATUS_CHECK should be set in pmbus_platform_data,
-> which makes adding new devices with PMBUS_SKIP_STATUS_CHECK should also
-> modify code in pmbus_probe().
-> 
-> This patch adds pmbus_device_info to save pages and flags. Its pointer
-> is put in driver_data of i2c_device_id, which makes adding new device
-> more straightforward.
-> 
 
-Good idea, but I don't see at this time where the patch is needed.
-Maybe in patch 3/4 which is missing from the series ?
 
-> Signed-off-by: Shunyong Yang <shunyong.yang@hxt-semitech.com>
-> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
-> ---
->   drivers/hwmon/pmbus/pmbus.c | 54 +++++++++++++++++++++++++++------------------
->   include/linux/pmbus.h       |  5 +++++
->   2 files changed, 37 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> index 7688dab32f6e..aa4cf9636e99 100644
-> --- a/drivers/hwmon/pmbus/pmbus.c
-> +++ b/drivers/hwmon/pmbus/pmbus.c
-> @@ -172,13 +172,15 @@ static int pmbus_probe(struct i2c_client *client,
->          struct pmbus_driver_info *info;
->          struct pmbus_platform_data *pdata = NULL;
->          struct device *dev = &client->dev;
-> +       struct pmbus_device_info *device_info;
-> 
->          info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
->          if (!info)
->                  return -ENOMEM;
-> 
-> -       if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
-> -           !strcmp(id->name, "sgd009")) {
-> +       device_info = (struct pmbus_device_info *)id->driver_data;
-> +
-> +       if (device_info->flags & PMBUS_SKIP_STATUS_CHECK) {
->                  pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
->                                       GFP_KERNEL);
->                  if (!pdata)
-> @@ -187,36 +189,44 @@ static int pmbus_probe(struct i2c_client *client,
->                  pdata->flags = PMBUS_SKIP_STATUS_CHECK;
->          }
-> 
-> -       info->pages = id->driver_data;
-> +       info->pages = device_info->pages;
->          info->identify = pmbus_identify;
->          dev->platform_data = pdata;
-> 
->          return pmbus_do_probe(client, id, info);
->   }
-> 
-> +static const struct pmbus_device_info default_pmbus_info = {1, 0};
-> +static const struct pmbus_device_info dps460_pmbus_info = {
-> +                               1, PMBUS_SKIP_STATUS_CHECK};
-> +static const struct pmbus_device_info dps800_pmbus_info = {
-> +                               1, PMBUS_SKIP_STATUS_CHECK};
-> +static const struct pmbus_device_info sgd009_pmbus_info = {
-> +                               1, PMBUS_SKIP_STATUS_CHECK};
+On January 3, 2019 6:15:47 PM PST, Marek Vasut <marex@denx=2Ede> wrote:
+>Add driver for the NXP TJA1100 and TJA1101 PHYs=2E These PHYs are special
+>BroadRReach 100BaseT1 PHYs used in automotive=2E
+>
+>Signed-off-by: Marek Vasut <marex@denx=2Ede>
+>Cc: Andrew Lunn <andrew@lunn=2Ech>
+>Cc: Florian Fainelli <f=2Efainelli@gmail=2Ecom>
+>Cc: Guenter Roeck <linux@roeck-us=2Enet>
+>Cc: Heiner Kallweit <hkallweit1@gmail=2Ecom>
+>Cc: Jean Delvare <jdelvare@suse=2Ecom>
+>Cc: linux-hwmon@vger=2Ekernel=2Eorg
+>---
+>V2: - Use phy_modify(), phy_{set,clear}_bits()
+>    - Drop enable argument of tja11xx_enable_link_control()
+>    - Use PHY_BASIC_T1_FEATURES and dont modify supported/advertised
+>      features in config_init callback
+>    - Use genphy_soft_reset() instead of opencoding the reset sequence=2E
+>    - Drop the aneg parts, since the PHY datasheet claims it does not
+>      support aneg
+>V3: - Replace clr with mask
+>    - Add hwmon support
+>    - Check commstat in tja11xx_read_status() only if link is up
+>    - Use PHY_ID_MATCH_MODEL()
+>V4: - Use correct bit in tja11xx_hwmon_read() hwmon_temp_crit_alarm
+>    - Use ENOMEM if devm_kstrdup() fails
+>    - Check $type in tja11xx_hwmon_read() in addition to $attr
+>---
 
-Three structures with exactly the same content does not add value.
-Please merge into one with a common name that reflects its use.
+[Snip]
 
-> +static const struct pmbus_device_info pmbus_info = {0, 0};
+>+	ret =3D tja11xx_enable_reg_write(phydev);
+>+	if (ret)
+>+		return ret;
+>+
+>+	phydev->irq =3D PHY_POLL;
 
-default_pmbus_info and pmbus_info are badly named and ordered.
-The name should reflect that one sets one page and that the other
-leaves the number of pages unset.
+The PHY driver should not be imposing that, leave it up to the platform co=
+nfiguration to set that=2E
 
-I would suggest three structures and names, such as
+>+	phydev->autoneg =3D AUTONEG_DISABLE;
+>+	phydev->speed =3D SPEED_100;
+>+	phydev->duplex =3D DUPLEX_FULL;
+>+	phydev->pause =3D 0;
+>+	phydev->asym_pause =3D 0;
 
-pmbus_info_one
-pmbus_info_one_skip
-pmbus_info_zero
+Are any of those necessary if you set basic T1 features?
 
-though I am open to better names.
-
->   /*
->    * Use driver_data to set the number of pages supported by the chip.
->    */
->   static const struct i2c_device_id pmbus_id[] = {
-> -       {"adp4000", 1},
-> -       {"bmr453", 1},
-> -       {"bmr454", 1},
-> -       {"dps460", 1},
-> -       {"dps800", 1},
-> -       {"mdt040", 1},
-> -       {"ncp4200", 1},
-> -       {"ncp4208", 1},
-> -       {"pdt003", 1},
-> -       {"pdt006", 1},
-> -       {"pdt012", 1},
-> -       {"pmbus", 0},
-> -       {"sgd009", 1},
-> -       {"tps40400", 1},
-> -       {"tps544b20", 1},
-> -       {"tps544b25", 1},
-> -       {"tps544c20", 1},
-> -       {"tps544c25", 1},
-> -       {"udt020", 1},
-> +       {"adp4000", (kernel_ulong_t)&default_pmbus_info},
-> +       {"bmr453", (kernel_ulong_t)&default_pmbus_info},
-> +       {"bmr454", (kernel_ulong_t)&default_pmbus_info},
-> +       {"dps460", (kernel_ulong_t)&dps460_pmbus_info},
-> +       {"dps800", (kernel_ulong_t)&dps800_pmbus_info},
-> +       {"mdt040", (kernel_ulong_t)&default_pmbus_info},
-> +       {"ncp4200", (kernel_ulong_t)&default_pmbus_info},
-> +       {"ncp4208", (kernel_ulong_t)&default_pmbus_info},
-> +       {"pdt003", (kernel_ulong_t)&default_pmbus_info},
-> +       {"pdt006", (kernel_ulong_t)&default_pmbus_info},
-> +       {"pdt012", (kernel_ulong_t)&default_pmbus_info},
-> +       {"pmbus", (kernel_ulong_t)&pmbus_info},
-> +       {"sgd009", (kernel_ulong_t)&sgd009_pmbus_info},
-> +       {"tps40400", (kernel_ulong_t)&default_pmbus_info},
-> +       {"tps544b20", (kernel_ulong_t)&default_pmbus_info},
-> +       {"tps544b25", (kernel_ulong_t)&default_pmbus_info},
-> +       {"tps544c20", (kernel_ulong_t)&default_pmbus_info},
-> +       {"tps544c25", (kernel_ulong_t)&default_pmbus_info},
-> +       {"udt020", (kernel_ulong_t)&default_pmbus_info},
->          {}
->   };
-> 
-> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-> index ee3c2aba2a8e..3c05edad7666 100644
-> --- a/include/linux/pmbus.h
-> +++ b/include/linux/pmbus.h
-> @@ -46,4 +46,9 @@ struct pmbus_platform_data {
->          struct regulator_init_data *reg_init_data;
->   };
-> 
-> +struct pmbus_device_info {
-> +       int pages;
-> +       u32 flags;
-> +};
-> +
-
-This should not be needed here. The structure can be declared locally
-in pmbus.c (its use in patch 4/4 is wrong).
-
->   #endif /* _PMBUS_H_ */
-> --
-> 1.8.3.1
-> 
-> 
-> 
-> 
-> This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
-> 
-> 
-> 
-
+Everything else looks good to me=2E Thanks!
+--=20
+Florian
