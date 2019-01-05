@@ -2,137 +2,190 @@ Return-Path: <SRS0=8Zs/=PN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C8F3C43387
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 01:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE14C43612
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:38:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E67E021871
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 01:26:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99C7E2173B
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:38:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UW/9IznH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sTHN+XGf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726219AbfAEB0t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jan 2019 20:26:49 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34118 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfAEB0t (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 20:26:49 -0500
-Received: by mail-pl1-f194.google.com with SMTP id w4so18163781plz.1;
-        Fri, 04 Jan 2019 17:26:48 -0800 (PST)
+        id S1726168AbfAECiA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jan 2019 21:38:00 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42215 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfAECh7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 21:37:59 -0500
+Received: by mail-pl1-f195.google.com with SMTP id y1so18194866plp.9;
+        Fri, 04 Jan 2019 18:37:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=vYqZdkMKi7Jgfl1eWfMElua+x0asDiHZJv3Enjj0O0Q=;
-        b=UW/9IznH+QOWJor/WFFVUVP4d61GoX9y0KuoXyro0Ul/QcwVX3ybV1YLVECryjTPZW
-         1lFziFne3QN+lLuAuMGX5maioi3SkT0UNsJiW/HF7PW+roqEHiTpgcECkxauNpawFTUS
-         M72yrO/61vReoVIKjmqYu4Ey76Xf3u5vgFHYKUfLDrm/IG7DqhYcs9x5ncwkRU4YV2k3
-         8KuPw8bBLBZWdgC76x0FgwT77B2OqvX5LN2GBo/yQ0HGD4V48pfO4EeOt5lAJVf1ytUi
-         eSpvCP8oHdXhmV21KbeIaVCGfWGZoLRitXB88zTUUh2FOSxD2AHCKkLQrzimvg0wg3hI
-         vgBQ==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WNO0eJVD7QNizKwKpe2kxUQ5NL7c+qonse6H61Z/kaw=;
+        b=sTHN+XGfCTbQzBMSWCx5gEpW4z/qXQDQS54/POtWuwfE3Wz7oXkFkuzBQ84d+TyXwg
+         emsmv0L6cgxyT9s9FCnC5VRHpf3uQGLjweVVr/JWJgmqpQU8vfW/+DsC5W6M8Rq4yVk4
+         Y0B0mLqsT7CMM39lmb/YhGLGdJuj/6Hd6PhEGouATAi0ahf25Z3XSyO18Pm7WrS2KEPW
+         +DrpMUcw4A3n7iRLufOESV+tF5ntwGRvhhHhOnq0C5BkdqXFT16TaDM+OGmrllw7RHol
+         CcCIWAPR6UqBgDTDDED6gvhhFOefEombmStl2rnSk9e98iy+gJgvxX4G8SNL5uw8i8Xg
+         3FwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=vYqZdkMKi7Jgfl1eWfMElua+x0asDiHZJv3Enjj0O0Q=;
-        b=HEyi/XoQHo2KNg/ECRQCb2Aybg8mdCEU+b1JBWenFnurRz0jHlsBQRYVXBLFMHDrcn
-         HBIM9R4ouX0vyyGMT5H+dtJylbXqtOV7onTsLObz0FDU3Z8lKOO9g9LsCsebRH0ycppJ
-         aC2Bt3iVcV+61stnTNybL3LqQb1oyyOKCzIVog5/8H4Md0il6a4gkwzbKRgcsALm12LG
-         2OWxtq4pN1Szv5n6p1ZpxjhFve3VQUJWy5F28VovOUtml7jPKwFZUJXxab6E33eQlEo3
-         /rW0vtFEHyWdKjz73mS35Al/x/L4bXEnD7qzUFiO8FTSgSjhCdA/aIPQyNXN+wz6DwKw
-         /fOQ==
-X-Gm-Message-State: AJcUukdVzi9cerr2PHZUr+6oEmeX56DnR3POY2yYnRxGffU8UJlaXqiE
-        loKDYfYVmpzkovGkYWMQBus=
-X-Google-Smtp-Source: ALg8bN6GoUmq8erY41K7ewa9DpdAVF1qLJOHRoFH5rn2zhqeJxKxrV+7Gg+VudilCgPD1Ul1IHxf2A==
-X-Received: by 2002:a17:902:9b87:: with SMTP id y7mr36564554plp.336.1546651608245;
-        Fri, 04 Jan 2019 17:26:48 -0800 (PST)
-Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id c67sm77148549pfg.170.2019.01.04.17.26.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 04 Jan 2019 17:26:47 -0800 (PST)
-Date:   Fri, 4 Jan 2019 17:26:43 -0800
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     =?iso-8859-1?B?QnL8bnMs?= Stefan <Stefan.Bruens@rwth-aachen.de>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC][PATCH] hwmon: (ina2xx) Improve current and power reading
- precision
-Message-ID: <20190105012642.GA18025@Asurada-Nvidia.nvidia.com>
-References: <20181121012629.5432-1-nicoleotsuka@gmail.com>
- <2863036.QIPGp1Eqjm@sbruens-linux.lcs.intern>
- <20181121194051.GA8902@Asurada-Nvidia.nvidia.com>
- <1717545.GXSegKtrMu@sbruens-linux.lcs.intern>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WNO0eJVD7QNizKwKpe2kxUQ5NL7c+qonse6H61Z/kaw=;
+        b=jdPIHDPQtBbt1Ml56rvBPJ2H3KcJ7qc30pwlPaxNWyovLyr01b+r4Vj8m4xQyQCqIp
+         EpGsvENOCLGi112Kg3+gUndwHRtKxCTnsmeEC9rWvJIeeqm5swSmm1hxUVQY5YsPcV2k
+         sWelxINyoWLA0ScbiFQKNvweIiGWP1lkPBRIcIzkFY2vFuUHPumct5QmPQUBt8Pq512w
+         BY5SObYyx41z1UmyG2sNk/62xyk2pFMXoq1Iq3/noX2V7RsvmDa41eWR5fjGAAr/CVog
+         EGe9LyHvuHYevVCHGj6kNIwX+Um+e6ip5P2k8g89/OjTvfEU94Fd0cJCYIoa40vJkgOO
+         puEA==
+X-Gm-Message-State: AJcUukdMKJDOkDGqMldTqQ/OMA1U+B6SVs1cbHrdxC2v/Ul8V3sHyNVp
+        IFBlYuw4QL4dJJ8o08oUnynjaa5n
+X-Google-Smtp-Source: ALg8bN7OJYaMRniNhO8zuFtn5dcVRyv9Cp4jm/BVrJQxIOaEjRv04VKlxwUa4H+mIxqtWOAv3HhBYw==
+X-Received: by 2002:a17:902:2c03:: with SMTP id m3mr55171860plb.125.1546655878445;
+        Fri, 04 Jan 2019 18:37:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t90sm125054729pfj.23.2019.01.04.18.37.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 04 Jan 2019 18:37:57 -0800 (PST)
+Subject: Re: [PATCH 2/2] hwmon: (ina3221) Implement ti,single-shot DT property
+To:     Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190105004904.17947-1-nicoleotsuka@gmail.com>
+ <20190105004904.17947-3-nicoleotsuka@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c5d8771d-3274-6982-2f9f-903fd5310488@roeck-us.net>
+Date:   Fri, 4 Jan 2019 18:37:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1717545.GXSegKtrMu@sbruens-linux.lcs.intern>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190105004904.17947-3-nicoleotsuka@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
-Message-ID: <20190105012643.f8bksyGHnDraUJpHnbA2Et1Xau-d-5fWZ-bscfELsHE@z>
+Message-ID: <20190105023755.OYA1KstVIERDbQG7T_kN21r-C7Z-rZ0_Vr-5PMNnOtE@z>
 
-Hi Stefan,
-
-Sorry for a super late reply. I took a long vacation.
-
-On Wed, Nov 21, 2018 at 10:16:09PM +0000, Brüns, Stefan wrote:
-> > > Another concern may be voltage drop over the shunt, but for this case you
-> > > have a nominal voltage of 1.8V, so 30uV are 0.001%.
-> > > 
-> > > > When measuring a 1.8v voltage running a small current (e.g. 33 mA),
-> > > > the power value (that's supposed to be 59.4 mW) becomes inaccurate
-> > > > due to the larger scale (25mA for method A; 62.5 mA for method B).
-> > 
-> > Just found out that I have typos here: 25mW and 62.5mW.
-> > 
-> > > Another look into the datasheet reveals, even at full gain (PGA=1), the
-> > > LSB is 40mV / 2^12 = 40mV / 4096 ~ 10uV. So when the current ADC reads
-> > > out as 3*LSB, this anything between 25mA and 35mA. This is the best case
-> > > figure.
-> > Current read doesn't get affected a lot actually, since hwmon ABI
-> > also reports current value in unit mA. However, the power read is
-> > the matter here. With a 62.5mW power_lsb, power results are kinda
-> > useless on my system.
+On 1/4/19 4:49 PM, Nicolin Chen wrote:
+> By default, ina3221, as a hardware monitor, continuously measures
+> the inputs and generates corresponding data. However, for battery
+> powered devices, this mode might be power consuming.
 > 
-> The reported current does not matter here, actually. Internally, the ADC value 
-> will have an uncertainty of 10mA (at PGA=1). At 1.8V, your uncertainty is 
-> 18mW. And thats *only* the quantization noise. It wont get better than that.
+> The DT binding doc is updated with a new boolean type property to
+> allow changing the default operating mode from consuming mode to
+> single-shot mode, which will measure input on demand and then shut
+> down to save power.
+> 
+> So this patch implements the DT property accordingly.
+> 
+> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> ---
+>   drivers/hwmon/ina3221.c | 28 ++++++++++++++++++++++++++++
+>   1 file changed, 28 insertions(+)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index e90ccac8bebb..152735659e19 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -91,6 +91,12 @@ enum ina3221_channels {
+>   	INA3221_NUM_CHANNELS
+>   };
+>   
+> +enum ina3221_modes {
+> +	INA3221_MODE_SINGLE_SHOT,
+> +	INA3221_MODE_CONTINUOUS,
+> +	INA3221_NUM_MODES,
 
-The fact is that I do get better power results after setting the
-calibration value to 0x7ff. That's the necessity of this change.
+Is NUM_MODES used anywhere ? Please drop unless there is a reason to keep it.
 
-> Also note, you are apparently using the ina2xx hwmon driver - I strongly 
-> advise against it, you should either use the ina2xx driver from the IIO 
-> subsystem directly, or use the IIO driver via iio-hwmon.
+Guenter
 
-The IIO version is also using the minimum calibration value. It
-will not solve my problem here.
+> +};
+> +
+>   /**
+>    * struct ina3221_input - channel input source specific information
+>    * @label: label of channel input source
+> @@ -111,6 +117,7 @@ struct ina3221_input {
+>    * @inputs: Array of channel input source specific structures
+>    * @lock: mutex lock to serialize sysfs attribute accesses
+>    * @reg_config: Register value of INA3221_CONFIG
+> + * @mode: Operating mode -- continuous or single-shot
+>    */
+>   struct ina3221_data {
+>   	struct device *pm_dev;
+> @@ -119,6 +126,7 @@ struct ina3221_data {
+>   	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+>   	struct mutex lock;
+>   	u32 reg_config;
+> +	enum ina3221_modes mode;
+>   };
+>   
+>   static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+> @@ -188,6 +196,11 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
+>   		if (!ina3221_is_enabled(ina, channel))
+>   			return -ENODATA;
+>   
+> +		/* Write CONFIG register to trigger a single-shot measurement */
+> +		if (ina->mode == INA3221_MODE_SINGLE_SHOT)
+> +			regmap_write(ina->regmap, INA3221_CONFIG,
+> +				     ina->reg_config);
+> +
+>   		ret = ina3221_wait_for_data(ina);
+>   		if (ret)
+>   			return ret;
+> @@ -232,6 +245,11 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+>   		if (!ina3221_is_enabled(ina, channel))
+>   			return -ENODATA;
+>   
+> +		/* Write CONFIG register to trigger a single-shot measurement */
+> +		if (ina->mode == INA3221_MODE_SINGLE_SHOT)
+> +			regmap_write(ina->regmap, INA3221_CONFIG,
+> +				     ina->reg_config);
+> +
+>   		ret = ina3221_wait_for_data(ina);
+>   		if (ret)
+>   			return ret;
+> @@ -617,6 +635,9 @@ static int ina3221_probe_from_dt(struct device *dev, struct ina3221_data *ina)
+>   	if (!np)
+>   		return 0;
+>   
+> +	if (of_property_read_bool(np, "ti,single-shot"))
+> +		ina->mode = INA3221_MODE_SINGLE_SHOT;
+> +
+>   	for_each_child_of_node(np, child) {
+>   		ret = ina3221_probe_child_from_dt(dev, child, ina);
+>   		if (ret)
+> @@ -654,6 +675,9 @@ static int ina3221_probe(struct i2c_client *client,
+>   		}
+>   	}
+>   
+> +	/* Hardware default uses the continuous mode */
+> +	ina->mode = INA3221_MODE_CONTINUOUS;
+> +
+>   	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
+>   		ina->inputs[i].shunt_resistor = INA3221_RSHUNT_DEFAULT;
+>   
+> @@ -666,6 +690,10 @@ static int ina3221_probe(struct i2c_client *client,
+>   	/* The driver will be reset, so use reset value */
+>   	ina->reg_config = INA3221_CONFIG_DEFAULT;
+>   
+> +	/* Clear continuous bit to use single-shot mode */
+> +	if (ina->mode == INA3221_MODE_SINGLE_SHOT)
+> +		ina->reg_config &= ~INA3221_CONFIG_MODE_CONTINUOUS;
+> +
+>   	/* Disable channels if their inputs are disconnected */
+>   	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
+>   		if (ina->inputs[i].disconnected)
+> 
 
-> There is also always the possibility to read the bus and shunt voltage 
-> registers and calculate the power manually.
-
-Won't that be a waste since the hardware could have provided a
-better accuracy? It would need more I2C bus reads and cpu cycles
-for calculation.
-
-I don't get why you're against a setting for calibration value.
-This is how the hardware got designed to cover different cases.
-Since we do have such a case that needs some accuracy, it'd be
-fair to add it into the driver. Plus, the feature won't change
-the minimum calibration value at all -- everyone would be happy.
-
-Thanks
-Nicolin
