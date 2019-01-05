@@ -2,190 +2,89 @@ Return-Path: <SRS0=8Zs/=PN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE14C43612
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B910C43387
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:48:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 99C7E2173B
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:38:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 625E921871
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jan 2019 02:48:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sTHN+XGf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ph/7c4l2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbfAECiA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jan 2019 21:38:00 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42215 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfAECh7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 21:37:59 -0500
-Received: by mail-pl1-f195.google.com with SMTP id y1so18194866plp.9;
-        Fri, 04 Jan 2019 18:37:59 -0800 (PST)
+        id S1726295AbfAECsa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jan 2019 21:48:30 -0500
+Received: from mail-pg1-f174.google.com ([209.85.215.174]:32837 "EHLO
+        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbfAECsa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jan 2019 21:48:30 -0500
+Received: by mail-pg1-f174.google.com with SMTP id z11so18247763pgu.0;
+        Fri, 04 Jan 2019 18:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WNO0eJVD7QNizKwKpe2kxUQ5NL7c+qonse6H61Z/kaw=;
-        b=sTHN+XGfCTbQzBMSWCx5gEpW4z/qXQDQS54/POtWuwfE3Wz7oXkFkuzBQ84d+TyXwg
-         emsmv0L6cgxyT9s9FCnC5VRHpf3uQGLjweVVr/JWJgmqpQU8vfW/+DsC5W6M8Rq4yVk4
-         Y0B0mLqsT7CMM39lmb/YhGLGdJuj/6Hd6PhEGouATAi0ahf25Z3XSyO18Pm7WrS2KEPW
-         +DrpMUcw4A3n7iRLufOESV+tF5ntwGRvhhHhOnq0C5BkdqXFT16TaDM+OGmrllw7RHol
-         CcCIWAPR6UqBgDTDDED6gvhhFOefEombmStl2rnSk9e98iy+gJgvxX4G8SNL5uw8i8Xg
-         3FwQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6wQfkN/TIt9PCEKz1YXzxME2KYLAjV/XhP7L6NOpM/w=;
+        b=Ph/7c4l2//miF05k6MKNRx4Cw+n9yxK9+KKzCpgmBHiJWiQc/oeIxG9DVvELThWqc+
+         vVjq8jLu9z/Bmd4smgYPLt9FYBNI6TUU/0qWp80T1uD/YK3xPpB2r0hjis/VKvbNyqj/
+         8Am6MJSCPMaq/8tfoLnLrvw+9GYRiS9FNleivfXFdkn3bm7dEJOnX0we+9DlHX5C/lIz
+         d1hHsoMAnBNFrh2adNK/v4KMh7Gio2wcJToImr0WWM2uQmNTgiRF6mv/xXg6G/xJXtLe
+         tkZqctgkQ4iXF0KV1KysUhnkuhv5LbIw04zPQCAc+C3ceYsF0SQI7acpytNwqgKGBsw+
+         6bYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WNO0eJVD7QNizKwKpe2kxUQ5NL7c+qonse6H61Z/kaw=;
-        b=jdPIHDPQtBbt1Ml56rvBPJ2H3KcJ7qc30pwlPaxNWyovLyr01b+r4Vj8m4xQyQCqIp
-         EpGsvENOCLGi112Kg3+gUndwHRtKxCTnsmeEC9rWvJIeeqm5swSmm1hxUVQY5YsPcV2k
-         sWelxINyoWLA0ScbiFQKNvweIiGWP1lkPBRIcIzkFY2vFuUHPumct5QmPQUBt8Pq512w
-         BY5SObYyx41z1UmyG2sNk/62xyk2pFMXoq1Iq3/noX2V7RsvmDa41eWR5fjGAAr/CVog
-         EGe9LyHvuHYevVCHGj6kNIwX+Um+e6ip5P2k8g89/OjTvfEU94Fd0cJCYIoa40vJkgOO
-         puEA==
-X-Gm-Message-State: AJcUukdMKJDOkDGqMldTqQ/OMA1U+B6SVs1cbHrdxC2v/Ul8V3sHyNVp
-        IFBlYuw4QL4dJJ8o08oUnynjaa5n
-X-Google-Smtp-Source: ALg8bN7OJYaMRniNhO8zuFtn5dcVRyv9Cp4jm/BVrJQxIOaEjRv04VKlxwUa4H+mIxqtWOAv3HhBYw==
-X-Received: by 2002:a17:902:2c03:: with SMTP id m3mr55171860plb.125.1546655878445;
-        Fri, 04 Jan 2019 18:37:58 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t90sm125054729pfj.23.2019.01.04.18.37.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Jan 2019 18:37:57 -0800 (PST)
-Subject: Re: [PATCH 2/2] hwmon: (ina3221) Implement ti,single-shot DT property
-To:     Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6wQfkN/TIt9PCEKz1YXzxME2KYLAjV/XhP7L6NOpM/w=;
+        b=AvqoXgOOm2D8qK5K/hIzbrrbMhPudqhPLaUCqsYmBkgl0sAO4+r+sWUCQnxGfGRKK7
+         m2BdK2zmvt6MTb9Dyhb6NEHRxOfpau3S7qjztUvMmJ9WAmsnyr4JmXDuLyq9mXMYyT0P
+         SnXQT3OdJl39palAuFy8I0BB8AIIryzuFexwsvxWGA5xZvx+PFUEaamyQ2EHZdSdSzSH
+         9OJgrRsdvDwWiKIxXUdQ2jbk3aaNEAmplVecWdMV93z2nwMmOHUBx2ZqNlpeWJz3BD+W
+         55Cy2VuNSXSDyW4GjdXTQ+PgHz1jsmZr70ttpHYDFlqm8mSHMfWpxP5YRgx6CiJVu4Vl
+         dCaA==
+X-Gm-Message-State: AA+aEWbzyw92LhsqZyP1P9wE1o7rij4HvOFHx/RRnu/kUtGo8eOIhBwr
+        MPH0eeVJ7J/Yk7Lm8kZj1E7bJZ/n
+X-Google-Smtp-Source: AFSGD/Vwrvpwqf5fuq3zU9AJl43cslGMrwSts9SboO6dmyEsjE12t03PXAju8tCml5mTzKflwDmClA==
+X-Received: by 2002:a62:e0d8:: with SMTP id d85mr53817376pfm.214.1546656509024;
+        Fri, 04 Jan 2019 18:48:29 -0800 (PST)
+Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id k38sm118521205pgb.33.2019.01.04.18.48.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 04 Jan 2019 18:48:28 -0800 (PST)
+Date:   Fri, 4 Jan 2019 18:48:24 -0800
+From:   Nicolin Chen <nicoleotsuka@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (ina3221) Implement ti,single-shot DT property
+Message-ID: <20190105024823.GA20936@Asurada-Nvidia.nvidia.com>
 References: <20190105004904.17947-1-nicoleotsuka@gmail.com>
  <20190105004904.17947-3-nicoleotsuka@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c5d8771d-3274-6982-2f9f-903fd5310488@roeck-us.net>
-Date:   Fri, 4 Jan 2019 18:37:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+ <c5d8771d-3274-6982-2f9f-903fd5310488@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20190105004904.17947-3-nicoleotsuka@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5d8771d-3274-6982-2f9f-903fd5310488@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
-Message-ID: <20190105023755.OYA1KstVIERDbQG7T_kN21r-C7Z-rZ0_Vr-5PMNnOtE@z>
+Message-ID: <20190105024824.1AMZPc_0VjMgbtxwZaO2bspx-I598j1ai3qR26f77eA@z>
 
-On 1/4/19 4:49 PM, Nicolin Chen wrote:
-> By default, ina3221, as a hardware monitor, continuously measures
-> the inputs and generates corresponding data. However, for battery
-> powered devices, this mode might be power consuming.
+On Fri, Jan 04, 2019 at 06:37:55PM -0800, Guenter Roeck wrote:
+> > +enum ina3221_modes {
+> > +	INA3221_MODE_SINGLE_SHOT,
+> > +	INA3221_MODE_CONTINUOUS,
+> > +	INA3221_NUM_MODES,
 > 
-> The DT binding doc is updated with a new boolean type property to
-> allow changing the default operating mode from consuming mode to
-> single-shot mode, which will measure input on demand and then shut
-> down to save power.
-> 
-> So this patch implements the DT property accordingly.
-> 
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
->   drivers/hwmon/ina3221.c | 28 ++++++++++++++++++++++++++++
->   1 file changed, 28 insertions(+)
-> 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index e90ccac8bebb..152735659e19 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -91,6 +91,12 @@ enum ina3221_channels {
->   	INA3221_NUM_CHANNELS
->   };
->   
-> +enum ina3221_modes {
-> +	INA3221_MODE_SINGLE_SHOT,
-> +	INA3221_MODE_CONTINUOUS,
-> +	INA3221_NUM_MODES,
+> Is NUM_MODES used anywhere ? Please drop unless there is a reason to keep it.
 
-Is NUM_MODES used anywhere ? Please drop unless there is a reason to keep it.
+Will clean it up in v2.
 
-Guenter
-
-> +};
-> +
->   /**
->    * struct ina3221_input - channel input source specific information
->    * @label: label of channel input source
-> @@ -111,6 +117,7 @@ struct ina3221_input {
->    * @inputs: Array of channel input source specific structures
->    * @lock: mutex lock to serialize sysfs attribute accesses
->    * @reg_config: Register value of INA3221_CONFIG
-> + * @mode: Operating mode -- continuous or single-shot
->    */
->   struct ina3221_data {
->   	struct device *pm_dev;
-> @@ -119,6 +126,7 @@ struct ina3221_data {
->   	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
->   	struct mutex lock;
->   	u32 reg_config;
-> +	enum ina3221_modes mode;
->   };
->   
->   static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
-> @@ -188,6 +196,11 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
->   		if (!ina3221_is_enabled(ina, channel))
->   			return -ENODATA;
->   
-> +		/* Write CONFIG register to trigger a single-shot measurement */
-> +		if (ina->mode == INA3221_MODE_SINGLE_SHOT)
-> +			regmap_write(ina->regmap, INA3221_CONFIG,
-> +				     ina->reg_config);
-> +
->   		ret = ina3221_wait_for_data(ina);
->   		if (ret)
->   			return ret;
-> @@ -232,6 +245,11 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
->   		if (!ina3221_is_enabled(ina, channel))
->   			return -ENODATA;
->   
-> +		/* Write CONFIG register to trigger a single-shot measurement */
-> +		if (ina->mode == INA3221_MODE_SINGLE_SHOT)
-> +			regmap_write(ina->regmap, INA3221_CONFIG,
-> +				     ina->reg_config);
-> +
->   		ret = ina3221_wait_for_data(ina);
->   		if (ret)
->   			return ret;
-> @@ -617,6 +635,9 @@ static int ina3221_probe_from_dt(struct device *dev, struct ina3221_data *ina)
->   	if (!np)
->   		return 0;
->   
-> +	if (of_property_read_bool(np, "ti,single-shot"))
-> +		ina->mode = INA3221_MODE_SINGLE_SHOT;
-> +
->   	for_each_child_of_node(np, child) {
->   		ret = ina3221_probe_child_from_dt(dev, child, ina);
->   		if (ret)
-> @@ -654,6 +675,9 @@ static int ina3221_probe(struct i2c_client *client,
->   		}
->   	}
->   
-> +	/* Hardware default uses the continuous mode */
-> +	ina->mode = INA3221_MODE_CONTINUOUS;
-> +
->   	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
->   		ina->inputs[i].shunt_resistor = INA3221_RSHUNT_DEFAULT;
->   
-> @@ -666,6 +690,10 @@ static int ina3221_probe(struct i2c_client *client,
->   	/* The driver will be reset, so use reset value */
->   	ina->reg_config = INA3221_CONFIG_DEFAULT;
->   
-> +	/* Clear continuous bit to use single-shot mode */
-> +	if (ina->mode == INA3221_MODE_SINGLE_SHOT)
-> +		ina->reg_config &= ~INA3221_CONFIG_MODE_CONTINUOUS;
-> +
->   	/* Disable channels if their inputs are disconnected */
->   	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
->   		if (ina->inputs[i].disconnected)
-> 
-
+Thanks
+Nicolin
