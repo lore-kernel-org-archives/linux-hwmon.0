@@ -1,63 +1,134 @@
-From: Nicolin Chen <nicoleotsuka@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
-Date: Fri, 04 Jan 2019 17:26:58 -0800
-Subject: Re: [RFC][PATCH] hwmon: (ina2xx) Improve current and power reading precision
-In-Reply-To: <20181121012629.5432-1-nicoleotsuka@gmail.com>
-Message-ID: <20190105012642.GA18025@Asurada-Nvidia.nvidia.com>
+Date: Fri, 04 Jan 2019 18:38:32 -0800
+Subject: Re: [PATCH 2/2] hwmon: (ina3221) Implement ti,single-shot DT property
+In-Reply-To: <20190105004904.17947-1-nicoleotsuka@gmail.com>
+Message-ID: <c5d8771d-3274-6982-2f9f-903fd5310488@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 List-ID: <linux-hwmon@vger.kernel.org>
 
-Hi Stefan,
 
-Sorry for a super late reply. I took a long vacation.
+On 1/4/19 4:49 PM, Nicolin Chen wrote:
 
-On Wed, Nov 21, 2018 at 10:16:09PM +0000, Brüns, Stefan wrote:
-> > > Another concern may be voltage drop over the shunt, but for this case you
-> > > have a nominal voltage of 1.8V, so 30uV are 0.001%.
-> > > 
-> > > > When measuring a 1.8v voltage running a small current (e.g. 33 mA),
-> > > > the power value (that's supposed to be 59.4 mW) becomes inaccurate
-> > > > due to the larger scale (25mA for method A; 62.5 mA for method B).
-> > 
-> > Just found out that I have typos here: 25mW and 62.5mW.
-> > 
-> > > Another look into the datasheet reveals, even at full gain (PGA=1), the
-> > > LSB is 40mV / 2^12 = 40mV / 4096 ~ 10uV. So when the current ADC reads
-> > > out as 3*LSB, this anything between 25mA and 35mA. This is the best case
-> > > figure.
-> > Current read doesn't get affected a lot actually, since hwmon ABI
-> > also reports current value in unit mA. However, the power read is
-> > the matter here. With a 62.5mW power_lsb, power results are kinda
-> > useless on my system.
-> 
-> The reported current does not matter here, actually. Internally, the ADC 
-> value 
-> will have an uncertainty of 10mA (at PGA=1). At 1.8V, your uncertainty is 
-> 18mW. And thats *only* the quantization noise. It wont get better than that.
+By default, ina3221, as a hardware monitor, continuously measures
+the inputs and generates corresponding data. However, for battery
+powered devices, this mode might be power consuming.
 
-The fact is that I do get better power results after setting the
-calibration value to 0x7ff. That's the necessity of this change.
+The DT binding doc is updated with a new boolean type property to
+allow changing the default operating mode from consuming mode to
+single-shot mode, which will measure input on demand and then shut
+down to save power.
 
-> Also note, you are apparently using the ina2xx hwmon driver - I strongly 
-> advise against it, you should either use the ina2xx driver from the IIO 
-> subsystem directly, or use the IIO driver via iio-hwmon.
+So this patch implements the DT property accordingly.
 
-The IIO version is also using the minimum calibration value. It
-will not solve my problem here.
+Signed-off-by: Nicolin Chen <nicoleots...@gmail.com>
+---
+  drivers/hwmon/ina3221.c | 28 ++++++++++++++++++++++++++++
+  1 file changed, 28 insertions(+)
 
-> There is also always the possibility to read the bus and shunt voltage 
-> registers and calculate the power manually.
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index e90ccac8bebb..152735659e19 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -91,6 +91,12 @@ enum ina3221_channels {
+        INA3221_NUM_CHANNELS
+  };
+  
++enum ina3221_modes {
 
-Won't that be a waste since the hardware could have provided a
-better accuracy? It would need more I2C bus reads and cpu cycles
-for calculation.
++       INA3221_MODE_SINGLE_SHOT,
++       INA3221_MODE_CONTINUOUS,
++       INA3221_NUM_MODES,
 
-I don't get why you're against a setting for calibration value.
-This is how the hardware got designed to cover different cases.
-Since we do have such a case that needs some accuracy, it'd be
-fair to add it into the driver. Plus, the feature won't change
-the minimum calibration value at all -- everyone would be happy.
 
-Thanks
-Nicolin
+Is NUM_MODES used anywhere ? Please drop unless there is a reason to keep it.
+
+Guenter
+
+
++};
++
+  /**
+   * struct ina3221_input - channel input source specific information
+   * @label: label of channel input source
+@@ -111,6 +117,7 @@ struct ina3221_input {
+   * @inputs: Array of channel input source specific structures
+   * @lock: mutex lock to serialize sysfs attribute accesses
+   * @reg_config: Register value of INA3221_CONFIG
++ * @mode: Operating mode -- continuous or single-shot
+   */
+  struct ina3221_data {
+        struct device *pm_dev;
+@@ -119,6 +126,7 @@ struct ina3221_data {
+        struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+        struct mutex lock;
+        u32 reg_config;
++       enum ina3221_modes mode;
+  };
+  
+  static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+
+@@ -188,6 +196,11 @@ static int ina3221_read_in(struct device *dev, u32 attr, 
+int channel, long *val)
+                if (!ina3221_is_enabled(ina, channel))
+                        return -ENODATA;
+  
++		/* Write CONFIG register to trigger a single-shot measurement */
+
++               if (ina->mode == INA3221_MODE_SINGLE_SHOT)
++                       regmap_write(ina->regmap, INA3221_CONFIG,
++                                    ina->reg_config);
++
+                ret = ina3221_wait_for_data(ina);
+                if (ret)
+                        return ret;
+@@ -232,6 +245,11 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+                if (!ina3221_is_enabled(ina, channel))
+                        return -ENODATA;
+  
++		/* Write CONFIG register to trigger a single-shot measurement */
+
++               if (ina->mode == INA3221_MODE_SINGLE_SHOT)
++                       regmap_write(ina->regmap, INA3221_CONFIG,
++                                    ina->reg_config);
++
+                ret = ina3221_wait_for_data(ina);
+                if (ret)
+                        return ret;
+@@ -617,6 +635,9 @@ static int ina3221_probe_from_dt(struct device *dev, struct 
+ina3221_data *ina)
+        if (!np)
+                return 0;
+  
++	if (of_property_read_bool(np, "ti,single-shot"))
+
++               ina->mode = INA3221_MODE_SINGLE_SHOT;
++
+        for_each_child_of_node(np, child) {
+                ret = ina3221_probe_child_from_dt(dev, child, ina);
+                if (ret)
+@@ -654,6 +675,9 @@ static int ina3221_probe(struct i2c_client *client,
+                }
+        }
+  
++	/* Hardware default uses the continuous mode */
+
++       ina->mode = INA3221_MODE_CONTINUOUS;
++
+        for (i = 0; i < INA3221_NUM_CHANNELS; i++)
+                ina->inputs[i].shunt_resistor = INA3221_RSHUNT_DEFAULT;
+  
+@@ -666,6 +690,10 @@ static int ina3221_probe(struct i2c_client *client,
+
+        /* The driver will be reset, so use reset value */
+        ina->reg_config = INA3221_CONFIG_DEFAULT;
+  
++	/* Clear continuous bit to use single-shot mode */
+
++       if (ina->mode == INA3221_MODE_SINGLE_SHOT)
++               ina->reg_config &= ~INA3221_CONFIG_MODE_CONTINUOUS;
++
+        /* Disable channels if their inputs are disconnected */
+        for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
+                if (ina->inputs[i].disconnected)
