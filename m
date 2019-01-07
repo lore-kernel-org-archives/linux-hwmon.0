@@ -2,116 +2,188 @@ Return-Path: <SRS0=ZG3s=PP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7DAAC43387
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 14:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E67C43612
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 18:43:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75BE5206BB
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 14:04:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DiBJ2NI3"
+	by mail.kernel.org (Postfix) with ESMTP id D49502054F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 18:43:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfAGOEq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Jan 2019 09:04:46 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37099 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbfAGOEp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Jan 2019 09:04:45 -0500
-Received: by mail-pf1-f195.google.com with SMTP id y126so217652pfb.4;
-        Mon, 07 Jan 2019 06:04:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=80bC7EvBXvwUzeNM76uilRT3B917MijdAdYsd0gcdAM=;
-        b=DiBJ2NI3a4b/ydkhc1CPMQCRpf8QzHOO6WHZmXIq2SdBLWOTH3/GxfsPNsPEVKSZFf
-         DqUJlvrlsvQ5lTmg9ze0DdM8RpTREbfxU3iXiXFnkaPr8uRkgX8kCLOQbEN7mpDjKsmV
-         GNI7hKaWti3KSdrZszgPK3LqBuogMapFr+X3h1bpTWr4ho7bbx+yTmB6jtcu8IkFLuMk
-         od50vYEGWwrAeUY8yrorTvyNkLt9zZ91rkXwXgpGaepK+qLekfFI4tTJUdS06mFlPe0K
-         qQ4C9jrm1M7q6oqu+ApvlFX83IdTOI/YVuRUcUR42/DaxS4T7qXrcFAyXJfscoacxgVP
-         8eyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=80bC7EvBXvwUzeNM76uilRT3B917MijdAdYsd0gcdAM=;
-        b=kLzx6MVj/39ykVKQPqJDrPte3TfzP5S0UadMhb40xkrEFAsCJNBOrAsjfJSyhu1AFI
-         bJPQc67zveOx6wtsVBwqmN/1b4ePcHAIS7PRG8jPAZM+va00lWwGs8DYviXDu+gIVe+S
-         xaxAMFCRHo9ZK2Hh+tSHDUA9Lx1LqJiOptDcSRsW9yVh0U99/DcqR08U8qBVz7IuQAyC
-         m9rDh9g3v2RML34eKUyU9fkLtYBHHVz1x0N5g5LmZP6ZrIIOkqs5S18ecb9fon0lJ9ne
-         lzebOHHF0HrJ6Wyw/XZ9OwpRDk6Q0/e+7v3j4WaywbsvdP4tIPbDrLgWkwSQlOCTZqCv
-         8j8A==
-X-Gm-Message-State: AJcUukfHDo35a4PbrYcpuanNkSD8kYOvJSK/F1LGUHThkhuabLWdjkhg
-        P868BzeqjyTVlIdvGbrJaPawZEds
-X-Google-Smtp-Source: ALg8bN7HtwoXE3vIX7aHAViJkI1WHNvGPl3YDw5p1KHjEUsmskVkJwWJan4gteEUVNy8e1VTqZq7Ng==
-X-Received: by 2002:a63:ae01:: with SMTP id q1mr10858334pgf.402.1546869885076;
-        Mon, 07 Jan 2019 06:04:45 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u29sm92340056pgn.23.2019.01.07.06.04.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Jan 2019 06:04:44 -0800 (PST)
-Subject: Re: [PATCH v2 4/4] hwmon: (pmbus) add support for DPS-650AB
-To:     Xiaoting Liu <xiaoting.liu@hxt-semitech.com>, jdelvare@suse.com
-Cc:     openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shunyong.yang@hxt-semitech.com,
-        dongsheng.wang@hxt-semitech.com
-References: <cover.1546851856.git.xiaoting.liu@hxt-semitech.com>
- <2e94eb44c0acf6b90c1d9bbffd1c5c5cc2af59be.1546851856.git.xiaoting.liu@hxt-semitech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <af54e702-d384-4af8-0cbc-008a1e927b67@roeck-us.net>
-Date:   Mon, 7 Jan 2019 06:04:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1727188AbfAGSnj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Jan 2019 13:43:39 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46744 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726745AbfAGSni (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Jan 2019 13:43:38 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id x07IXfRi070298
+        for <linux-hwmon@vger.kernel.org>; Mon, 7 Jan 2019 13:43:38 -0500
+Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2pv99r2vcg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Jan 2019 13:43:38 -0500
+Received: from localhost
+        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Mon, 7 Jan 2019 18:43:36 -0000
+Received: from b01cxnp22035.gho.pok.ibm.com (9.57.198.25)
+        by e16.ny.us.ibm.com (146.89.104.203) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 7 Jan 2019 18:43:33 -0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x07IhWbU22872174
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Jan 2019 18:43:32 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE7FEAC060;
+        Mon,  7 Jan 2019 18:43:32 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BDDAAC062;
+        Mon,  7 Jan 2019 18:43:31 +0000 (GMT)
+Received: from [9.41.179.222] (unknown [9.41.179.222])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Jan 2019 18:43:31 +0000 (GMT)
+Subject: Re: [PATCH] hwmon (occ): Fix potential integer overflow
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190107183431.GA12428@embeddedor>
+From:   Eddie James <eajames@linux.vnet.ibm.com>
+Date:   Mon, 7 Jan 2019 12:43:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <2e94eb44c0acf6b90c1d9bbffd1c5c5cc2af59be.1546851856.git.xiaoting.liu@hxt-semitech.com>
+In-Reply-To: <20190107183431.GA12428@embeddedor>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19010718-0072-0000-0000-000003E5D0DF
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010362; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000273; SDB=6.01143142; UDB=6.00595100; IPR=6.00923392;
+ MB=3.00025019; MTD=3.00000008; XFM=3.00000015; UTC=2019-01-07 18:43:35
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19010718-0073-0000-0000-00004AB85C93
+Message-Id: <c77ba012-e793-a4c0-00d5-90d4faa3d72a@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-01-07_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1901070158
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/7/19 3:06 AM, Xiaoting Liu wrote:
-> Provide support for PSU DPS-650AB from Delta Electronics, INC.
-> 
 
-Where is patch 3/4 ?
 
-> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+On 01/07/2019 12:34 PM, Gustavo A. R. Silva wrote:
+> Cast get_unaligned_be32(...) to u64 in order to give the compiler
+> complete information about the proper arithmetic to use and avoid
+> a potential integer overflow.
+>
+> Notice that such function call is used in contexts that expect
+> expressions of type u64 (64 bits, unsigned); and the following
+> expressions are currently being evaluated using 32-bit
+> arithmetic:
+>
+> val = get_unaligned_be32(&power->update_tag) *
+>                          occ->powr_sample_time_us;
+>
+> val = get_unaligned_be32(&power->vdn.update_tag) *
+>                          occ->powr_sample_time_us;
+
+Thanks,
+
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
+
+>
+> Addresses-Coverity-ID: 1442357 ("Unintentional integer overflow")
+> Addresses-Coverity-ID: 1442476 ("Unintentional integer overflow")
+> Addresses-Coverity-ID: 1442508 ("Unintentional integer overflow")
+> Fixes: ff692d80b2e2 ("hwmon (occ): Add sensor types and versions")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 > ---
-> v2:
->    Change the patch subject and commit message.
->    Drop dps650ab.c file.
->    Replace struct name dps650ab_pmbus_info with pmbus_info_one_skip.
-> ---
->   drivers/hwmon/pmbus/pmbus.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-> index e38dd97cc49a..f6b35f858db8 100644
-> --- a/drivers/hwmon/pmbus/pmbus.c
-> +++ b/drivers/hwmon/pmbus/pmbus.c
-> @@ -213,6 +213,7 @@ static int pmbus_probe(struct i2c_client *client,
->          {"bmr453", (kernel_ulong_t)&pmbus_info_one},
->          {"bmr454", (kernel_ulong_t)&pmbus_info_one},
->          {"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
-> +       {"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
->          {"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
->          {"mdt040", (kernel_ulong_t)&pmbus_info_one},
->          {"ncp4200", (kernel_ulong_t)&pmbus_info_one},
-> --
-> 1.8.3.1
-> 
-> 
-> 
-> 
-> This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
-> 
-> 
-> 
+>   drivers/hwmon/occ/common.c | 24 ++++++++++++------------
+>   1 file changed, 12 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 423903f87955..391118c8aae8 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -380,8 +380,8 @@ static ssize_t occ_show_power_1(struct device *dev,
+>   		val *= 1000000ULL;
+>   		break;
+>   	case 2:
+> -		val = get_unaligned_be32(&power->update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 3:
+>   		val = get_unaligned_be16(&power->value) * 1000000ULL;
+> @@ -425,8 +425,8 @@ static ssize_t occ_show_power_2(struct device *dev,
+>   				       &power->update_tag);
+>   		break;
+>   	case 2:
+> -		val = get_unaligned_be32(&power->update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 3:
+>   		val = get_unaligned_be16(&power->value) * 1000000ULL;
+> @@ -463,8 +463,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
+>   				       &power->system.update_tag);
+>   		break;
+>   	case 2:
+> -		val = get_unaligned_be32(&power->system.update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->system.update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 3:
+>   		val = get_unaligned_be16(&power->system.value) * 1000000ULL;
+> @@ -477,8 +477,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
+>   				       &power->proc.update_tag);
+>   		break;
+>   	case 6:
+> -		val = get_unaligned_be32(&power->proc.update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->proc.update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 7:
+>   		val = get_unaligned_be16(&power->proc.value) * 1000000ULL;
+> @@ -491,8 +491,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
+>   				       &power->vdd.update_tag);
+>   		break;
+>   	case 10:
+> -		val = get_unaligned_be32(&power->vdd.update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->vdd.update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 11:
+>   		val = get_unaligned_be16(&power->vdd.value) * 1000000ULL;
+> @@ -505,8 +505,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
+>   				       &power->vdn.update_tag);
+>   		break;
+>   	case 14:
+> -		val = get_unaligned_be32(&power->vdn.update_tag) *
+> -			occ->powr_sample_time_us;
+> +		val = (u64)get_unaligned_be32(&power->vdn.update_tag) *
+> +			   occ->powr_sample_time_us;
+>   		break;
+>   	case 15:
+>   		val = get_unaligned_be16(&power->vdn.value) * 1000000ULL;
 
