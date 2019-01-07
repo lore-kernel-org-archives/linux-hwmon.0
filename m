@@ -2,148 +2,191 @@ Return-Path: <SRS0=ZG3s=PP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23CCDC43387
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 06:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F34D5C43387
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 10:57:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2B5020859
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 06:35:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDq0T9cN"
+	by mail.kernel.org (Postfix) with ESMTP id BAD762087F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 10:57:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfAGGfp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Jan 2019 01:35:45 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37964 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbfAGGfp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Jan 2019 01:35:45 -0500
-Received: by mail-pg1-f194.google.com with SMTP id g189so20298376pgc.5;
-        Sun, 06 Jan 2019 22:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+4IsfouBM5k447fQjg2cNq9AAdG3mq/zeEqYKpDOerY=;
-        b=jDq0T9cNzS+qQylrCqprqiv43L6B8a3jBETEBaNmVDZiEkF2wUqA11X7+WRD37oEXT
-         v18vmI/y80FxXOcKv3C2xV6ETAGS+zmpscBm0P6rbKGQC16OYmCBVAsJ4n6mz0vzZDzq
-         6EYdWClTh1VU3bJL2ml+ReyDWVG2myjIMJ6mh6+ljEJiUhlScSqZ6qY9mKrLOhGD2mot
-         EQuY2g2agrQHJu04XT/8RTDQs6IxeoAgCCH49uBTLNZAp7XsvwlVb8wF+VGABLR696Wg
-         ihGLnbXoMLaj4sjg8sN9S4FPG64iXlh8WffdnueTYDhjSRCuZVZOfpRHPs8az66RRY31
-         dX1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+4IsfouBM5k447fQjg2cNq9AAdG3mq/zeEqYKpDOerY=;
-        b=mjHrSyNBSZC0UnGsCqf8ZpNr3iCopKpLVsueIEqsPP2NH2rNPColbYUHyk+YESk7pQ
-         1irQeZPe/8FEgOZ7yGReJpgyFO0LLiwfUEHtgR8hq6+P8fB712GHBdPOZKQmeu6FNUHX
-         BiX3hPT3yWSx9goZNG0uQw5JcHIFjKPSqV7MQetY3PIlPNeN5LHd0ABvTPzqkCHBpqUo
-         zoOR0IvkvuH9zY7nCzpdqmjREt63KxfJWb4R8d0uOz9qFaIgT9rN2chdnf7nrSHl9KPQ
-         2gPKPPc+xebXeRsN2M3GKes/tvCUb27uGkycwagPHAESFTWn+h05SWFNkKz7+ktX4iZ6
-         HylQ==
-X-Gm-Message-State: AJcUukfgkZ6kcs23shF82481brxebN2rFAeJQ5zQIDhs3FRLQtcKvu3x
-        +cBAJpdW7AiR+uCPbpMpcaLtnaXL
-X-Google-Smtp-Source: ALg8bN5Xq94IKikOFLPj3bv+ASpH6ywwcwP9rPcJaWv5jkc2dy0VXfBVOxceM9Wr8RsxheAwzdv5Cw==
-X-Received: by 2002:a63:8441:: with SMTP id k62mr28909415pgd.392.1546842944148;
-        Sun, 06 Jan 2019 22:35:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v89sm98503674pfk.12.2019.01.06.22.35.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Jan 2019 22:35:43 -0800 (PST)
-Subject: Re: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
-To:     "Liu, Xiaoting" <xiaoting.liu@hxt-semitech.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>,
-        "Wang, Dongsheng" <dongsheng.wang@hxt-semitech.com>
-References: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
- <8540dfc96a75a6aa4bd1a7d5f24db7d36a71282c.1546591275.git.xiaoting.liu@hxt-semitech.com>
- <20190105170518.GA1879@roeck-us.net>
- <d3a77a2f9b1741a28f5a2b394b517ea2@HXTBJIDCEMVIW02.hxtcorp.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <fa369fc7-23ad-8f06-e295-c591746cfa58@roeck-us.net>
-Date:   Sun, 6 Jan 2019 22:35:42 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1726777AbfAGK5w convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Jan 2019 05:57:52 -0500
+Received: from [38.106.11.25] ([38.106.11.25]:36234 "EHLO
+        barracuda02.hxt-semitech.com" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725550AbfAGK5w (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Jan 2019 05:57:52 -0500
+X-ASG-Debug-ID: 1546858667-107606139f139e60001-LXWHwZ
+Received: from HXTBJIDCEMVIW02.hxtcorp.net ([10.128.0.15]) by barracuda02.hxt-semitech.com with ESMTP id rBwp6DpdWE2escEX (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Mon, 07 Jan 2019 18:57:47 +0800 (CST)
+X-Barracuda-Envelope-From: xiaoting.liu@hxt-semitech.com
+Received: from openbmc001.localdomain (10.5.21.169) by
+ HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 7 Jan 2019 18:57:41 +0800
+From:   Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+To:     <linux@roeck-us.net>, <jdelvare@suse.com>
+CC:     <openbmc@lists.ozlabs.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <shunyong.yang@hxt-semitech.com>,
+        <dongsheng.wang@hxt-semitech.com>,
+        Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+Subject: [PATCH v2 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with driver_data
+Date:   Mon, 7 Jan 2019 18:57:42 +0800
+X-ASG-Orig-Subj: [PATCH v2 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with driver_data
+Message-ID: <b336867f159242e141f21e2bef7182adbc624fbd.1546851856.git.xiaoting.liu@hxt-semitech.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <cover.1546851856.git.xiaoting.liu@hxt-semitech.com>
+References: <cover.1546851856.git.xiaoting.liu@hxt-semitech.com>
 MIME-Version: 1.0
-In-Reply-To: <d3a77a2f9b1741a28f5a2b394b517ea2@HXTBJIDCEMVIW02.hxtcorp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.5.21.169]
+X-ClientProxiedBy: HXTBJIDCEMVIW01.hxtcorp.net (10.128.0.14) To
+ HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15)
+Content-Transfer-Encoding: 8BIT
+X-Barracuda-Connect: UNKNOWN[10.128.0.15]
+X-Barracuda-Start-Time: 1546858667
+X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
+X-Barracuda-URL: https://192.168.50.102:443/cgi-mod/mark.cgi
+X-Barracuda-Scan-Msg-Size: 5038
+X-Virus-Scanned: by bsmtpd at hxt-semitech.com
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5000 1.0000 0.7500
+X-Barracuda-Spam-Score: 0.75
+X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65266
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/6/19 10:30 PM, Liu, Xiaoting wrote:
-> Hi Guenter Roeck,
-> 
-> Thanks for your reply.
-> 
-> On 2019/1/6 1:05, Guenter Roeck wrote:
->> On Fri, Jan 04, 2019 at 05:00:30PM +0800, Xiaoting Liu wrote:
->>> Bindings for DPS650AB power, voltage, temperature, and fan monitering.
->>>
->> Misleading subject. While the DPS650AB may ber a power supply,
->> it is a PMBus hwmon driver, and should be marked accordingly in the subject.
->>
->> Guenter
-> 
-> We will change the subject as "dt-bindings: hwmon: Add dps650ab
-> documentation", is that okey?
-> 
+Current code compares device name with name in i2c_device_id to decide
+whether PMBUS_SKIP_STATUS_CHECK should be set in pmbus_platform_data,
+which makes adding new devices with PMBUS_SKIP_STATUS_CHECK should also
+modify code in pmbus_probe().
 
-Sure.
+This patch adds pmbus_device_info to save pages and flags. Its pointer
+is put in driver_data of i2c_device_id, which makes adding new device
+more straightforward.
 
-Thanks,
-Guenter
+Signed-off-by: Shunyong Yang <shunyong.yang@hxt-semitech.com>
+Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+---
+v2:
+  Move struct pmbus_device_info definition location from pmbus.h to pmbus.c.
+  Change struct name from default_pmbus_info to pmbus_info_one.
+  Change struct name from pmbus_info to pmbus_info_zero.
+  Replace struct name dps460_pmbus_info and sgd009_pmbus_info with
+  pmbus_info_one_skip.
+---
+ drivers/hwmon/pmbus/pmbus.c | 55 +++++++++++++++++++++++++++------------------
+ 1 file changed, 33 insertions(+), 22 deletions(-)
 
-> Thanks,
-> 
-> Xiaoting.
-> 
->>> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
->>> ---
->>>   Documentation/devicetree/bindings/hwmon/dps650ab.txt | 11 +++++++++++
->>>   1 file changed, 11 insertions(+)
->>>
->>> --
->>> 1.8.3.1
->>>
->>>
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/dps650ab.txt b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
->>> new file mode 100644
->>> index 000000000000..bbd601100e66
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
->>> @@ -0,0 +1,11 @@
->>> +Bindings for DPS650AB power, voltage, temperature, and fan monitering
->>> +
->>> +Required properties:
->>> +- compatible : "dps650ab"
->>> +- reg        : I2C address, one of 0x58, 0x59.
->>> +
->>> +Example:
->>> +       dps650ab@58 {
->>> +                   compatible = "dps650ab";
->>> +                   reg = <0x58>;
->>> +       };
-> 
-> 
-> 
-> 
-> 
-> This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
-> 
-> 
-> 
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 7688dab32f6e..e38dd97cc49a 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -28,6 +28,11 @@
+ #include <linux/pmbus.h>
+ #include "pmbus.h"
+
++struct pmbus_device_info {
++       int pages;
++       u32 flags;
++};
++
+ /*
+  * Find sensor groups and status registers on each page.
+  */
+@@ -172,13 +177,15 @@ static int pmbus_probe(struct i2c_client *client,
+        struct pmbus_driver_info *info;
+        struct pmbus_platform_data *pdata = NULL;
+        struct device *dev = &client->dev;
++       struct pmbus_device_info *device_info;
+
+        info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
+        if (!info)
+                return -ENOMEM;
+
+-       if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
+-           !strcmp(id->name, "sgd009")) {
++       device_info = (struct pmbus_device_info *)id->driver_data;
++
++       if (device_info->flags & PMBUS_SKIP_STATUS_CHECK) {
+                pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
+                                     GFP_KERNEL);
+                if (!pdata)
+@@ -187,36 +194,40 @@ static int pmbus_probe(struct i2c_client *client,
+                pdata->flags = PMBUS_SKIP_STATUS_CHECK;
+        }
+
+-       info->pages = id->driver_data;
++       info->pages = device_info->pages;
+        info->identify = pmbus_identify;
+        dev->platform_data = pdata;
+
+        return pmbus_do_probe(client, id, info);
+ }
+
++static const struct pmbus_device_info pmbus_info_one = {1, 0};
++static const struct pmbus_device_info pmbus_info_zero = {0, 0};
++static const struct pmbus_device_info pmbus_info_one_skip = {
++                               1, PMBUS_SKIP_STATUS_CHECK};
+ /*
+  * Use driver_data to set the number of pages supported by the chip.
+  */
+ static const struct i2c_device_id pmbus_id[] = {
+-       {"adp4000", 1},
+-       {"bmr453", 1},
+-       {"bmr454", 1},
+-       {"dps460", 1},
+-       {"dps800", 1},
+-       {"mdt040", 1},
+-       {"ncp4200", 1},
+-       {"ncp4208", 1},
+-       {"pdt003", 1},
+-       {"pdt006", 1},
+-       {"pdt012", 1},
+-       {"pmbus", 0},
+-       {"sgd009", 1},
+-       {"tps40400", 1},
+-       {"tps544b20", 1},
+-       {"tps544b25", 1},
+-       {"tps544c20", 1},
+-       {"tps544c25", 1},
+-       {"udt020", 1},
++       {"adp4000", (kernel_ulong_t)&pmbus_info_one},
++       {"bmr453", (kernel_ulong_t)&pmbus_info_one},
++       {"bmr454", (kernel_ulong_t)&pmbus_info_one},
++       {"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
++       {"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
++       {"mdt040", (kernel_ulong_t)&pmbus_info_one},
++       {"ncp4200", (kernel_ulong_t)&pmbus_info_one},
++       {"ncp4208", (kernel_ulong_t)&pmbus_info_one},
++       {"pdt003", (kernel_ulong_t)&pmbus_info_one},
++       {"pdt006", (kernel_ulong_t)&pmbus_info_one},
++       {"pdt012", (kernel_ulong_t)&pmbus_info_one},
++       {"pmbus", (kernel_ulong_t)&pmbus_info_zero},
++       {"sgd009", (kernel_ulong_t)&pmbus_info_one_skip},
++       {"tps40400", (kernel_ulong_t)&pmbus_info_one},
++       {"tps544b20", (kernel_ulong_t)&pmbus_info_one},
++       {"tps544b25", (kernel_ulong_t)&pmbus_info_one},
++       {"tps544c20", (kernel_ulong_t)&pmbus_info_one},
++       {"tps544c25", (kernel_ulong_t)&pmbus_info_one},
++       {"udt020", (kernel_ulong_t)&pmbus_info_one},
+        {}
+ };
+
+--
+1.8.3.1
+
+
+
+
+This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
+
 
