@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 013A2C43387
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 02:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC07C43387
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 06:30:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9EE4520838
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 02:51:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6997120859
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 06:30:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbfAGCvE convert rfc822-to-8bit (ORCPT
+        id S1725535AbfAGGaU convert rfc822-to-8bit (ORCPT
         <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Jan 2019 21:51:04 -0500
-Received: from [38.106.11.25] ([38.106.11.25]:49634 "EHLO
+        Mon, 7 Jan 2019 01:30:20 -0500
+Received: from [38.106.11.25] ([38.106.11.25]:55786 "EHLO
         barracuda02.hxt-semitech.com" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726278AbfAGCvE (ORCPT
+        by vger.kernel.org with ESMTP id S1725777AbfAGGaU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 6 Jan 2019 21:51:04 -0500
-X-Greylist: delayed 923 seconds by postgrey-1.27 at vger.kernel.org; Sun, 06 Jan 2019 21:51:00 EST
-X-ASG-Debug-ID: 1546828533-107606139f130b30001-LXWHwZ
-Received: from HXTBJIDCEMVIW02.hxtcorp.net ([10.128.0.15]) by barracuda02.hxt-semitech.com with ESMTP id P8ON2kRhmPUePqyK (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Mon, 07 Jan 2019 10:35:33 +0800 (CST)
-X-Barracuda-Envelope-From: shunyong.yang@hxt-semitech.com
+        Mon, 7 Jan 2019 01:30:20 -0500
+X-ASG-Debug-ID: 1546842616-107606139f134ca0001-LXWHwZ
+Received: from HXTBJIDCEMVIW01.hxtcorp.net ([10.128.0.14]) by barracuda02.hxt-semitech.com with ESMTP id DZJl4vMJpzdnrWIm (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Mon, 07 Jan 2019 14:30:16 +0800 (CST)
+X-Barracuda-Envelope-From: xiaoting.liu@hxt-semitech.com
 Received: from HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) by
- HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 7 Jan 2019 10:35:28 +0800
+ HXTBJIDCEMVIW01.hxtcorp.net (10.128.0.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 7 Jan 2019 14:30:10 +0800
 Received: from HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6]) by
  HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6%12]) with mapi id
- 15.00.1395.000; Mon, 7 Jan 2019 10:35:28 +0800
-From:   "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Liu, Xiaoting" <xiaoting.liu@hxt-semitech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+ 15.00.1395.000; Mon, 7 Jan 2019 14:30:10 +0800
+From:   "Liu, Xiaoting" <xiaoting.liu@hxt-semitech.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with
- driver_data
-Thread-Topic: [PATCH 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with
- driver_data
-X-ASG-Orig-Subj: Re: [PATCH 1/4] pmbus: associate PMBUS_SKIP_STATUS_CHECK with
- driver_data
-Thread-Index: AQHUpAtN0XMGdiJXnEO7wZj7H+98nw==
-Date:   Mon, 7 Jan 2019 02:35:28 +0000
-Message-ID: <0d61e25645bf457ebb55e4c3f64bcb63@HXTBJIDCEMVIW02.hxtcorp.net>
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>,
+        "Wang, Dongsheng" <dongsheng.wang@hxt-semitech.com>
+Subject: Re: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+Thread-Topic: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+X-ASG-Orig-Subj: Re: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+Thread-Index: AQHUpAvy8GAMUOOpLkCuSbjbkhrxsA==
+Date:   Mon, 7 Jan 2019 06:30:09 +0000
+Message-ID: <d3a77a2f9b1741a28f5a2b394b517ea2@HXTBJIDCEMVIW02.hxtcorp.net>
 References: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
- <680b4d5659971cc4f6e1a6878837c2ce49962a7c.1546591275.git.xiaoting.liu@hxt-semitech.com>
- <b9548ce0-97d2-a3d4-d578-015fc5419967@roeck-us.net>
-Accept-Language: en-US
+ <8540dfc96a75a6aa4bd1a7d5f24db7d36a71282c.1546591275.git.xiaoting.liu@hxt-semitech.com>
+ <20190105170518.GA1879@roeck-us.net>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.64.6.206]
+x-originating-ip: [10.64.1.98]
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-Barracuda-Connect: UNKNOWN[10.128.0.15]
-X-Barracuda-Start-Time: 1546828533
+X-Barracuda-Connect: UNKNOWN[10.128.0.14]
+X-Barracuda-Start-Time: 1546842616
 X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
 X-Barracuda-URL: https://192.168.50.102:443/cgi-mod/mark.cgi
-X-Barracuda-Scan-Msg-Size: 6971
+X-Barracuda-Scan-Msg-Size: 1898
 X-Virus-Scanned: by bsmtpd at hxt-semitech.com
 X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4998 1.0000 0.0000
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.4991 1.0000 0.0000
 X-Barracuda-Spam-Score: 0.00
 X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65250
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65257
         Rule breakdown below
          pts rule name              description
         ---- ---------------------- --------------------------------------------------
@@ -76,189 +75,59 @@ Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
-Message-ID: <20190107023528.HbgzQ1E9X9MxI4KUQmlC5LUKTwVbmGQeJeupk7aJspU@z>
 
-Hi, Guenter,
-  Thanks for reply.
+Hi Guenter Roeck,
 
-On 2019/1/4 22:54, Guenter Roeck wrote:
-> On 1/4/19 12:55 AM, Xiaoting Liu wrote:
->> Current code compares device name with name in i2c_device_id to decide
->> whether PMBUS_SKIP_STATUS_CHECK should be set in pmbus_platform_data,
->> which makes adding new devices with PMBUS_SKIP_STATUS_CHECK should also
->> modify code in pmbus_probe().
+Thanks for your reply.
+
+On 2019/1/6 1:05, Guenter Roeck wrote:
+> On Fri, Jan 04, 2019 at 05:00:30PM +0800, Xiaoting Liu wrote:
+>> Bindings for DPS650AB power, voltage, temperature, and fan monitering.
 >>
->> This patch adds pmbus_device_info to save pages and flags. Its pointer
->> is put in driver_data of i2c_device_id, which makes adding new device
->> more straightforward.
->>
-> 
-> Good idea, but I don't see at this time where the patch is needed.
-> Maybe in patch 3/4 which is missing from the series ?
+> Misleading subject. While the DPS650AB may ber a power supply,
+> it is a PMBus hwmon driver, and should be marked accordingly in the subject.
+>
+> Guenter
 
-The reason we figure out this patch is that we want to add dps650ab to
-pmbus_id[] in pmbus.c. As dps650ab has flag of PMBUS_SKIP_STATUS_CHECK
-and we don't want to change pmbus_probe(), so make this patch as a
-premise patch.
-As you stated that adding both dps650ab in pmbus.c and adding a separate
-dps650ab driver file is a conceptional mistake, I will work with
-Xiaoting to decide which approach we should use.
+We will change the subject as "dt-bindings: hwmon: Add dps650ab
+documentation", is that okey?
 
-> 
->> Signed-off-by: Shunyong Yang <shunyong.yang@hxt-semitech.com>
+Thanks,
+
+Xiaoting.
+
 >> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
 >> ---
->>   drivers/hwmon/pmbus/pmbus.c | 54 +++++++++++++++++++++++++++------------------
->>   include/linux/pmbus.h       |  5 +++++
->>   2 files changed, 37 insertions(+), 22 deletions(-)
+>>  Documentation/devicetree/bindings/hwmon/dps650ab.txt | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
 >>
->> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
->> index 7688dab32f6e..aa4cf9636e99 100644
->> --- a/drivers/hwmon/pmbus/pmbus.c
->> +++ b/drivers/hwmon/pmbus/pmbus.c
->> @@ -172,13 +172,15 @@ static int pmbus_probe(struct i2c_client *client,
->>          struct pmbus_driver_info *info;
->>          struct pmbus_platform_data *pdata = NULL;
->>          struct device *dev = &client->dev;
->> +       struct pmbus_device_info *device_info;
->>
->>          info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info), GFP_KERNEL);
->>          if (!info)
->>                  return -ENOMEM;
->>
->> -       if (!strcmp(id->name, "dps460") || !strcmp(id->name, "dps800") ||
->> -           !strcmp(id->name, "sgd009")) {
->> +       device_info = (struct pmbus_device_info *)id->driver_data;
->> +
->> +       if (device_info->flags & PMBUS_SKIP_STATUS_CHECK) {
->>                  pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
->>                                       GFP_KERNEL);
->>                  if (!pdata)
->> @@ -187,36 +189,44 @@ static int pmbus_probe(struct i2c_client *client,
->>                  pdata->flags = PMBUS_SKIP_STATUS_CHECK;
->>          }
->>
->> -       info->pages = id->driver_data;
->> +       info->pages = device_info->pages;
->>          info->identify = pmbus_identify;
->>          dev->platform_data = pdata;
->>
->>          return pmbus_do_probe(client, id, info);
->>   }
->>
->> +static const struct pmbus_device_info default_pmbus_info = {1, 0};
->> +static const struct pmbus_device_info dps460_pmbus_info = {
->> +                               1, PMBUS_SKIP_STATUS_CHECK};
->> +static const struct pmbus_device_info dps800_pmbus_info = {
->> +                               1, PMBUS_SKIP_STATUS_CHECK};
->> +static const struct pmbus_device_info sgd009_pmbus_info = {
->> +                               1, PMBUS_SKIP_STATUS_CHECK};
-> 
-> Three structures with exactly the same content does not add value.
-> Please merge into one with a common name that reflects its use.
->
-
-Thanks. we will following you suggestion to use common name as
-pmbus_info_one_skip.
-
->> +static const struct pmbus_device_info pmbus_info = {0, 0};
-> 
-> default_pmbus_info and pmbus_info are badly named and ordered.
-> The name should reflect that one sets one page and that the other
-> leaves the number of pages unset.
-> 
-> I would suggest three structures and names, such as
-> 
-> pmbus_info_one
-> pmbus_info_one_skip
-> pmbus_info_zero
-> 
-> though I am open to better names.
-
-Thanks. We will change.
-
-> 
->>   /*
->>    * Use driver_data to set the number of pages supported by the chip.
->>    */
->>   static const struct i2c_device_id pmbus_id[] = {
->> -       {"adp4000", 1},
->> -       {"bmr453", 1},
->> -       {"bmr454", 1},
->> -       {"dps460", 1},
->> -       {"dps800", 1},
->> -       {"mdt040", 1},
->> -       {"ncp4200", 1},
->> -       {"ncp4208", 1},
->> -       {"pdt003", 1},
->> -       {"pdt006", 1},
->> -       {"pdt012", 1},
->> -       {"pmbus", 0},
->> -       {"sgd009", 1},
->> -       {"tps40400", 1},
->> -       {"tps544b20", 1},
->> -       {"tps544b25", 1},
->> -       {"tps544c20", 1},
->> -       {"tps544c25", 1},
->> -       {"udt020", 1},
->> +       {"adp4000", (kernel_ulong_t)&default_pmbus_info},
->> +       {"bmr453", (kernel_ulong_t)&default_pmbus_info},
->> +       {"bmr454", (kernel_ulong_t)&default_pmbus_info},
->> +       {"dps460", (kernel_ulong_t)&dps460_pmbus_info},
->> +       {"dps800", (kernel_ulong_t)&dps800_pmbus_info},
->> +       {"mdt040", (kernel_ulong_t)&default_pmbus_info},
->> +       {"ncp4200", (kernel_ulong_t)&default_pmbus_info},
->> +       {"ncp4208", (kernel_ulong_t)&default_pmbus_info},
->> +       {"pdt003", (kernel_ulong_t)&default_pmbus_info},
->> +       {"pdt006", (kernel_ulong_t)&default_pmbus_info},
->> +       {"pdt012", (kernel_ulong_t)&default_pmbus_info},
->> +       {"pmbus", (kernel_ulong_t)&pmbus_info},
->> +       {"sgd009", (kernel_ulong_t)&sgd009_pmbus_info},
->> +       {"tps40400", (kernel_ulong_t)&default_pmbus_info},
->> +       {"tps544b20", (kernel_ulong_t)&default_pmbus_info},
->> +       {"tps544b25", (kernel_ulong_t)&default_pmbus_info},
->> +       {"tps544c20", (kernel_ulong_t)&default_pmbus_info},
->> +       {"tps544c25", (kernel_ulong_t)&default_pmbus_info},
->> +       {"udt020", (kernel_ulong_t)&default_pmbus_info},
->>          {}
->>   };
->>
->> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
->> index ee3c2aba2a8e..3c05edad7666 100644
->> --- a/include/linux/pmbus.h
->> +++ b/include/linux/pmbus.h
->> @@ -46,4 +46,9 @@ struct pmbus_platform_data {
->>          struct regulator_init_data *reg_init_data;
->>   };
->>
->> +struct pmbus_device_info {
->> +       int pages;
->> +       u32 flags;
->> +};
->> +
-> 
-> This should not be needed here. The structure can be declared locally
-> in pmbus.c (its use in patch 4/4 is wrong).
->
-
-OK. We will move the structure back to pmbus.c. And we will decide
-whether we need 4/4.
-
-Thanks.
-Shunyong.
-
-
->>   #endif /* _PMBUS_H_ */
 >> --
 >> 1.8.3.1
 >>
 >>
 >>
->>
->> This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
->>
->>
->>
-> 
-> 
+>> diff --git a/Documentation/devicetree/bindings/hwmon/dps650ab.txt b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
+>> new file mode 100644
+>> index 000000000000..bbd601100e66
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
+>> @@ -0,0 +1,11 @@
+>> +Bindings for DPS650AB power, voltage, temperature, and fan monitering
+>> +
+>> +Required properties:
+>> +- compatible : "dps650ab"
+>> +- reg        : I2C address, one of 0x58, 0x59.
+>> +
+>> +Example:
+>> +       dps650ab@58 {
+>> +                   compatible = "dps650ab";
+>> +                   reg = <0x58>;
+>> +       };
+
+
+
+
+
+This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
+
 
