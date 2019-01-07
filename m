@@ -4,174 +4,167 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2DEBC43387
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 19:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7991EC43387
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 19:35:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 739F12085A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 19:32:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45CF42085A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jan 2019 19:35:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a2ykPIAo"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VukaHJef"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbfAGTca (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Jan 2019 14:32:30 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34366 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727106AbfAGTca (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Jan 2019 14:32:30 -0500
-Received: by mail-pl1-f194.google.com with SMTP id w4so626351plz.1;
-        Mon, 07 Jan 2019 11:32:29 -0800 (PST)
+        id S1726934AbfAGTf6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Jan 2019 14:35:58 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35858 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726888AbfAGTf5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Jan 2019 14:35:57 -0500
+Received: by mail-pf1-f196.google.com with SMTP id b85so661947pfc.3;
+        Mon, 07 Jan 2019 11:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=k9Zm2zLLTG+FgZqASlSTT+P/5IN9Lxy3p1LmClfLLK4=;
-        b=a2ykPIAoav8CA0bfAoMkV/kY/5ulAbVbjg4ui8IXYw8EqzEpQJE1yQ4YS9s2h4sp/E
-         H5YUGH+xSdUmisblsMJ2dX1PA2IXC7oLqFIUIOdm+7ZLRisE8Iruyj5pIpkNIDeymNFE
-         NUUOWa5RzH0IQ9cpczVSZ/OENik3jZcYiEMLN+jFgqohTDUVlq6stCO/gL4ZdCr/lf8o
-         YAa+CDZrFXqDQp6D2XGKOXtAQaJBeVMWl8c3IpA4byuiGd4tsIB4JvEN8WlBLdLo9UGN
-         LgVEtJtgn5+fBMgS3DWVrTnyOGIkafgiOkY82xJMSXVLfzir2r3VCdAEK1VJimJjILmp
-         gluw==
+        bh=edW9kvO7o8V+7WPFgx+paf1/9qQIOc7hSoeqZYm+4aY=;
+        b=VukaHJef07iEZi5Zm+xxFQxb08PIp/9GvmqkhYy6216GCvgvTD51h9e9XyrzUDummd
+         QqYlYRjiXcG3Sn46zEVVxa8gdhH9WuEx0Tdlw0keHaxvBdNDZoIZt6JWiFGFzb8pnd6t
+         DvK2ZUMoUu3gnsga88sne7Bi8f0d0K424mf8jnBMYWxI623mtekWs3gUNwhVLw8LNupf
+         5CtsxCGpcxWlAgVzXHPqGLAxY8x+JlLuTBb2pQeMSlvzSAuuGrktWVng4Ohjzzyw4IXm
+         cuyhp9VbkNPxai+BFuubZQZn5q8GVKN03uQk4NhAmxmOyeNZDIJUSaOmXfOsd6deTlNZ
+         XuyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=k9Zm2zLLTG+FgZqASlSTT+P/5IN9Lxy3p1LmClfLLK4=;
-        b=Jl5Nx93CPIE0vM7t7v2HwRKI9GVAQYAL5XHN7UiRHKN0Ff9i1kmywHgMFqRYhFoGqZ
-         XwnAbW1Xa7QDByVIERR/jARAU/exW06ZyJVNTaYul6ZLn4AoZF1pgXyIgeZsLwNLykMY
-         ZsMZWtPrdwXATXOsGXbPQk08BbaAL3aUUQcr9hUuwqFaEk/agv9XLTHmk6wX34cqDkfo
-         KDtM7rUud/bEBU0kSoQ6+J1MFnpbxDdjKHR1NYFM9JTf1apb+q8PTrAReQS9UjHAj2jG
-         3/kmhml3tudEWbowDtyCBjCNsbI1dvkgCbm0EEmZMlGq6A5ALy0icyuTS78HWa5h0uPP
-         MLUQ==
-X-Gm-Message-State: AJcUukfteaHM7qUZBtnq16te/6qubaQNtJ5c0GCR43Dl2pGthdbL6cwJ
-        VDju1cBRtESaeYOA8h+ldaM=
-X-Google-Smtp-Source: ALg8bN5FFGQFx5Fy6b33H/T8FSMY5XEvJgtuV8IgNh41BJgR10T/iuY+uO63LBzZKUjONwvCaK1hsw==
-X-Received: by 2002:a17:902:7c85:: with SMTP id y5mr62118791pll.63.1546889549245;
-        Mon, 07 Jan 2019 11:32:29 -0800 (PST)
+        bh=edW9kvO7o8V+7WPFgx+paf1/9qQIOc7hSoeqZYm+4aY=;
+        b=gujUAhgFd624lTC832yA58fWxDKq52FGqd7lRKc5iQh1ujdYcYPFtCxkAinmfusRbz
+         Zz0jo383NdNCyDzJnm08Ywxf7xqZtgE2v8nJXn5N0In5g3P4LtDJLjQdcPMTcLsBc22j
+         Qx335dpTt2uLpEWOoN5mqRWfC79Oku/N4FJw2zkQgsTpXCyFkuNtyeelUXW9Zc6c8pXA
+         SbGhqMXj8CRV+ytHsae/qyPiaw93V1HsyDlr5B6QwlfPQVq0+NSBvKIIVeiJkywAG60U
+         M50MI+NKW6FOiZw+zEsNTxJwKjqpb6TE91GwfbgMZYaxo5yQ2HCdpBM/1YV12ao6BJuY
+         B1BA==
+X-Gm-Message-State: AJcUukcDawtBgGIkgN5l2YkSOOpQu3CbrfT5sqi+mWLstDr+hevKy9jb
+        g845eaWQ9mDSLLjJH+luP7k=
+X-Google-Smtp-Source: ALg8bN67a/Eu19E0QBa5Nkq1aaq3Q/2GYvcHskeAS5bzj3VAf8GF1r2ZEVHQBmw0x+q0LatE1zfRPg==
+X-Received: by 2002:a65:60c2:: with SMTP id r2mr12159706pgv.393.1546889756881;
+        Mon, 07 Jan 2019 11:35:56 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m3sm85827098pgl.69.2019.01.07.11.32.28
+        by smtp.gmail.com with ESMTPSA id 78sm121456194pft.184.2019.01.07.11.35.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Jan 2019 11:32:28 -0800 (PST)
-Date:   Mon, 7 Jan 2019 11:32:27 -0800
+        Mon, 07 Jan 2019 11:35:56 -0800 (PST)
+Date:   Mon, 7 Jan 2019 11:35:55 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Eddie James <eajames@linux.vnet.ibm.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+To:     Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon (occ): Fix potential integer overflow
-Message-ID: <20190107193227.GA10660@roeck-us.net>
-References: <20190107183431.GA12428@embeddedor>
+Subject: Re: [PATCH v2 2/2] hwmon: (ina3221) Implement ti,single-shot DT
+ property
+Message-ID: <20190107193555.GA13547@roeck-us.net>
+References: <20190105030636.533-1-nicoleotsuka@gmail.com>
+ <20190105030636.533-3-nicoleotsuka@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190107183431.GA12428@embeddedor>
+In-Reply-To: <20190105030636.533-3-nicoleotsuka@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 07, 2019 at 12:34:31PM -0600, Gustavo A. R. Silva wrote:
-> Cast get_unaligned_be32(...) to u64 in order to give the compiler
-> complete information about the proper arithmetic to use and avoid
-> a potential integer overflow.
+On Fri, Jan 04, 2019 at 07:06:36PM -0800, Nicolin Chen wrote:
+> By default, ina3221, as a hardware monitor, continuously measures
+> the inputs and generates corresponding data. However, for battery
+> powered devices, this mode might be power consuming.
 > 
-> Notice that such function call is used in contexts that expect
-> expressions of type u64 (64 bits, unsigned); and the following
-> expressions are currently being evaluated using 32-bit
-> arithmetic:
+> The DT binding doc is updated with a new boolean type property to
+> allow changing the default operating mode from consuming mode to
+> single-shot mode, which will measure input on demand and then shut
+> down to save power.
 > 
-> val = get_unaligned_be32(&power->update_tag) *
->                         occ->powr_sample_time_us;
+> So this patch implements the DT property accordingly.
 > 
-> val = get_unaligned_be32(&power->vdn.update_tag) *
->                         occ->powr_sample_time_us;
+> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+> ---
+> Changelog
+> v1->v2:
+>  * Replaced the useless mode defines with a boolean variable.
 > 
-> Addresses-Coverity-ID: 1442357 ("Unintentional integer overflow")
-> Addresses-Coverity-ID: 1442476 ("Unintentional integer overflow")
-> Addresses-Coverity-ID: 1442508 ("Unintentional integer overflow")
-> Fixes: ff692d80b2e2 ("hwmon (occ): Add sensor types and versions")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+>  drivers/hwmon/ina3221.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index e90ccac8bebb..4258a6ebe195 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -111,6 +111,7 @@ struct ina3221_input {
+>   * @inputs: Array of channel input source specific structures
+>   * @lock: mutex lock to serialize sysfs attribute accesses
+>   * @reg_config: Register value of INA3221_CONFIG
+> + * @single_shot: running in single-shot operating mode
+>   */
+>  struct ina3221_data {
+>  	struct device *pm_dev;
+> @@ -119,6 +120,8 @@ struct ina3221_data {
+>  	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+>  	struct mutex lock;
+>  	u32 reg_config;
+> +
+> +	bool single_shot;
+>  };
+>  
+>  static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+> @@ -188,6 +191,11 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  		if (!ina3221_is_enabled(ina, channel))
+>  			return -ENODATA;
+>  
+> +		/* Write CONFIG register to trigger a single-shot measurement */
+> +		if (ina->single_shot)
+> +			regmap_write(ina->regmap, INA3221_CONFIG,
+> +				     ina->reg_config);
+> +
+>  		ret = ina3221_wait_for_data(ina);
+>  		if (ret)
+>  			return ret;
+> @@ -232,6 +240,11 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+>  		if (!ina3221_is_enabled(ina, channel))
+>  			return -ENODATA;
+>  
+> +		/* Write CONFIG register to trigger a single-shot measurement */
+> +		if (ina->single_shot)
+> +			regmap_write(ina->regmap, INA3221_CONFIG,
+> +				     ina->reg_config);
+> +
+>  		ret = ina3221_wait_for_data(ina);
+>  		if (ret)
+>  			return ret;
+> @@ -617,6 +630,9 @@ static int ina3221_probe_from_dt(struct device *dev, struct ina3221_data *ina)
+>  	if (!np)
+>  		return 0;
+>  
+> +	if (of_property_read_bool(np, "ti,single-shot"))
+> +		ina->single_shot = true;
+> +
+	ina->single_shot = of_property_read_bool(np, "ti,single-shot");
 
-Applied.
+No need to resend right now; let's wait for feedback from Rob.
 
-Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/occ/common.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 423903f87955..391118c8aae8 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -380,8 +380,8 @@ static ssize_t occ_show_power_1(struct device *dev,
->  		val *= 1000000ULL;
->  		break;
->  	case 2:
-> -		val = get_unaligned_be32(&power->update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 3:
->  		val = get_unaligned_be16(&power->value) * 1000000ULL;
-> @@ -425,8 +425,8 @@ static ssize_t occ_show_power_2(struct device *dev,
->  				       &power->update_tag);
->  		break;
->  	case 2:
-> -		val = get_unaligned_be32(&power->update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 3:
->  		val = get_unaligned_be16(&power->value) * 1000000ULL;
-> @@ -463,8 +463,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
->  				       &power->system.update_tag);
->  		break;
->  	case 2:
-> -		val = get_unaligned_be32(&power->system.update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->system.update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 3:
->  		val = get_unaligned_be16(&power->system.value) * 1000000ULL;
-> @@ -477,8 +477,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
->  				       &power->proc.update_tag);
->  		break;
->  	case 6:
-> -		val = get_unaligned_be32(&power->proc.update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->proc.update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 7:
->  		val = get_unaligned_be16(&power->proc.value) * 1000000ULL;
-> @@ -491,8 +491,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
->  				       &power->vdd.update_tag);
->  		break;
->  	case 10:
-> -		val = get_unaligned_be32(&power->vdd.update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->vdd.update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 11:
->  		val = get_unaligned_be16(&power->vdd.value) * 1000000ULL;
-> @@ -505,8 +505,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
->  				       &power->vdn.update_tag);
->  		break;
->  	case 14:
-> -		val = get_unaligned_be32(&power->vdn.update_tag) *
-> -			occ->powr_sample_time_us;
-> +		val = (u64)get_unaligned_be32(&power->vdn.update_tag) *
-> +			   occ->powr_sample_time_us;
->  		break;
->  	case 15:
->  		val = get_unaligned_be16(&power->vdn.value) * 1000000ULL;
+>  	for_each_child_of_node(np, child) {
+>  		ret = ina3221_probe_child_from_dt(dev, child, ina);
+>  		if (ret)
+> @@ -666,6 +682,10 @@ static int ina3221_probe(struct i2c_client *client,
+>  	/* The driver will be reset, so use reset value */
+>  	ina->reg_config = INA3221_CONFIG_DEFAULT;
+>  
+> +	/* Clear continuous bit to use single-shot mode */
+> +	if (ina->single_shot)
+> +		ina->reg_config &= ~INA3221_CONFIG_MODE_CONTINUOUS;
+> +
+>  	/* Disable channels if their inputs are disconnected */
+>  	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
+>  		if (ina->inputs[i].disconnected)
