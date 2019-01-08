@@ -6,49 +6,46 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9629C43612
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Jan 2019 08:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B79C43387
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Jan 2019 09:13:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 989852089F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Jan 2019 08:57:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF11C2089F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Jan 2019 09:13:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbfAHI5b convert rfc822-to-8bit (ORCPT
+        id S1727939AbfAHJNP convert rfc822-to-8bit (ORCPT
         <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Jan 2019 03:57:31 -0500
-Received: from [38.106.11.25] ([38.106.11.25]:47492 "EHLO
+        Tue, 8 Jan 2019 04:13:15 -0500
+Received: from [38.106.11.25] ([38.106.11.25]:47946 "EHLO
         barracuda02.hxt-semitech.com" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727689AbfAHI5a (ORCPT
+        by vger.kernel.org with ESMTP id S1727107AbfAHJNP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 8 Jan 2019 03:57:30 -0500
-X-ASG-Debug-ID: 1546937844-107606139f152750001-LXWHwZ
-Received: from HXTBJIDCEMVIW01.hxtcorp.net ([10.128.0.14]) by barracuda02.hxt-semitech.com with ESMTP id LzL2Zu51YUH14gAn (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Tue, 08 Jan 2019 16:57:24 +0800 (CST)
+        Tue, 8 Jan 2019 04:13:15 -0500
+X-ASG-Debug-ID: 1546938791-107606139f152b80001-LXWHwZ
+Received: from HXTBJIDCEMVIW01.hxtcorp.net ([10.128.0.14]) by barracuda02.hxt-semitech.com with ESMTP id mdPmz4DGalF0DetK (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Tue, 08 Jan 2019 17:13:11 +0800 (CST)
 X-Barracuda-Envelope-From: xiaoting.liu@hxt-semitech.com
 Received: from HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) by
  HXTBJIDCEMVIW01.hxtcorp.net (10.128.0.14) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 8 Jan 2019 16:57:19 +0800
+ 15.0.1395.4; Tue, 8 Jan 2019 17:13:05 +0800
 Received: from HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6]) by
  HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6%12]) with mapi id
- 15.00.1395.000; Tue, 8 Jan 2019 16:57:19 +0800
+ 15.00.1395.000; Tue, 8 Jan 2019 17:13:05 +0800
 From:   "Liu, Xiaoting" <xiaoting.liu@hxt-semitech.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>,
         "Wang, Dongsheng" <dongsheng.wang@hxt-semitech.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon: add dps650ab documentation
-Thread-Topic: [PATCH v2 2/4] dt-bindings: hwmon: add dps650ab documentation
-X-ASG-Orig-Subj: Re: [PATCH v2 2/4] dt-bindings: hwmon: add dps650ab documentation
-Thread-Index: AQHUpnWQzQeKH0TYK0OcFgV3qTYMfw==
-Date:   Tue, 8 Jan 2019 08:57:19 +0000
-Message-ID: <6d28f64bd2f441d09819d66b55537e0b@HXTBJIDCEMVIW02.hxtcorp.net>
+Subject: Re: [PATCH v2 4/4] hwmon: (pmbus) add support for DPS-650AB
+Thread-Topic: [PATCH v2 4/4] hwmon: (pmbus) add support for DPS-650AB
+X-ASG-Orig-Subj: Re: [PATCH v2 4/4] hwmon: (pmbus) add support for DPS-650AB
+Thread-Index: AQHUpnWQvB84NJ6vhUqklmqeqreTrQ==
+Date:   Tue, 8 Jan 2019 09:13:04 +0000
+Message-ID: <a05be53a7110480990bc3b2cf1d31dae@HXTBJIDCEMVIW02.hxtcorp.net>
 References: <cover.1546851856.git.xiaoting.liu@hxt-semitech.com>
- <0087d2d9c7cd7f38761f76c80d1c37cb2cea6ef2.1546851856.git.xiaoting.liu@hxt-semitech.com>
- <568735a3-1de2-3880-5fe1-7be38a55f33f@roeck-us.net>
+ <2e94eb44c0acf6b90c1d9bbffd1c5c5cc2af59be.1546851856.git.xiaoting.liu@hxt-semitech.com>
+ <af54e702-d384-4af8-0cbc-008a1e927b67@roeck-us.net>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -59,16 +56,16 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 X-Barracuda-Connect: UNKNOWN[10.128.0.14]
-X-Barracuda-Start-Time: 1546937844
+X-Barracuda-Start-Time: 1546938791
 X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
 X-Barracuda-URL: https://192.168.50.102:443/cgi-mod/mark.cgi
-X-Barracuda-Scan-Msg-Size: 1391
+X-Barracuda-Scan-Msg-Size: 1392
 X-Virus-Scanned: by bsmtpd at hxt-semitech.com
 X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4824 1.0000 0.0000
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.4928 1.0000 0.0000
 X-Barracuda-Spam-Score: 0.00
 X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65314
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65315
         Rule breakdown below
          pts rule name              description
         ---- ---------------------- --------------------------------------------------
@@ -77,56 +74,51 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2019/1/7 21:58, Guenter Roeck wrote:
-> On 1/7/19 3:00 AM, Xiaoting Liu wrote:
->> Bindings for DPS650AB power, voltage, temperature, and fan monitering.
->>
->> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
->> ---
->> v2:
->>    Change the patch subject.
->> ---
->>   Documentation/devicetree/bindings/hwmon/dps650ab.txt | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/dps650ab.txt b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
->> new file mode 100644
->> index 000000000000..6bbbff89f6d5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
->> @@ -0,0 +1,11 @@
->> +Bindings for DPS650AB power, voltage, temperature, and fan monitering
->> +
-> Assuming this is the Delta Electronics DPS-650-AB power supply, I think
-> you should mention that here.
-I will update commit message as mentioned.
->
->> +Required properties:
->> +- compatible : "dps650ab"
-> Again, assuming this is the Delta Electronics power supply, this should
-> probably be something like "delta,dps650ab".
+Hi Guenter Roeck,
 
-OK, I will add delta to compatible property.
+Thanks for your reply.
+
+On 2019/1/7 22:04, Guenter Roeck wrote:
+> On 1/7/19 3:06 AM, Xiaoting Liu wrote:
+>> Provide support for PSU DPS-650AB from Delta Electronics, INC.
+>>
+> Where is patch 3/4 ?
+
+Sorry for forgetting to send patch 3/4 to you, please refer to the
+following link,
+
+https://lore.kernel.org/patchwork/patch/1029475/
 
 Thanks,
 
 Xiaoting
 
->
-> Thanks,
-> Guenter
->
->> +- reg       : I2C address, one of 0x58, 0x59.
->> +
->> +Example:
->> +       dps650ab@58 {
->> +                   compatible = "dps650ab";
->> +                   reg = <0x58>;
->> +       };
+>> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+>> ---
+>> v2:
+>>    Change the patch subject and commit message.
+>>    Drop dps650ab.c file.
+>>    Replace struct name dps650ab_pmbus_info with pmbus_info_one_skip.
+>> ---
+>>   drivers/hwmon/pmbus/pmbus.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+>> index e38dd97cc49a..f6b35f858db8 100644
+>> --- a/drivers/hwmon/pmbus/pmbus.c
+>> +++ b/drivers/hwmon/pmbus/pmbus.c
+>> @@ -213,6 +213,7 @@ static int pmbus_probe(struct i2c_client *client,
+>>          {"bmr453", (kernel_ulong_t)&pmbus_info_one},
+>>          {"bmr454", (kernel_ulong_t)&pmbus_info_one},
+>>          {"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
+>> +       {"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
+>>          {"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
+>>          {"mdt040", (kernel_ulong_t)&pmbus_info_one},
+>>          {"ncp4200", (kernel_ulong_t)&pmbus_info_one},
 >> --
 >> 1.8.3.1
 >>
 >>
 >>
->>
+>
 
