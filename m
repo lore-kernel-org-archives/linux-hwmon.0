@@ -2,94 +2,115 @@ Return-Path: <SRS0=pbQB=PS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A6CC43444
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 02:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A41E3C43387
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 16:45:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B3C020665
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 02:51:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EF56206B7
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 16:45:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbfAJCu5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Jan 2019 21:50:57 -0500
-Received: from [223.203.96.18] ([223.203.96.18]:33958 "EHLO
-        barracuda02.hxt-semitech.com" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727233AbfAJCu5 (ORCPT
+        id S1728178AbfAJQpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Jan 2019 11:45:41 -0500
+Received: from gateway31.websitewelcome.com ([192.185.144.96]:48423 "EHLO
+        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728180AbfAJQpk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 9 Jan 2019 21:50:57 -0500
-X-Greylist: delayed 1143 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jan 2019 21:50:56 EST
-X-ASG-Debug-ID: 1547087509-107606139f176010001-LXWHwZ
-Received: from HXTBJIDCEMVIW02.hxtcorp.net ([10.128.0.15]) by barracuda02.hxt-semitech.com with ESMTP id fjQ69rVqfbcloQWy (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Thu, 10 Jan 2019 10:31:50 +0800 (CST)
-X-Barracuda-Envelope-From: xiaoting.liu@hxt-semitech.com
-Received: from openbmc001.localdomain (10.5.21.169) by
- HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 10 Jan 2019 10:31:42 +0800
-From:   Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
-To:     <linux@roeck-us.net>, <jdelvare@suse.com>
-CC:     <openbmc@lists.ozlabs.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <shunyong.yang@hxt-semitech.com>,
-        <dongsheng.wang@hxt-semitech.com>,
-        Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
-Subject: [PATCH v3 4/4] hwmon: (pmbus) add support for DPS-650AB
-Date:   Thu, 10 Jan 2019 10:31:44 +0800
-X-ASG-Orig-Subj: [PATCH v3 4/4] hwmon: (pmbus) add support for DPS-650AB
-Message-ID: <625d047f0f42d30bb5ceb75ada529b5fa0c9a21a.1546918172.git.xiaoting.liu@hxt-semitech.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1546918172.git.xiaoting.liu@hxt-semitech.com>
-References: <cover.1546918172.git.xiaoting.liu@hxt-semitech.com>
+        Thu, 10 Jan 2019 11:45:40 -0500
+X-Greylist: delayed 1269 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Jan 2019 11:45:40 EST
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 26438B191D
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Jan 2019 10:24:31 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id hd8AgqdEp4FKphd8BgHmc1; Thu, 10 Jan 2019 10:24:31 -0600
+X-Authority-Reason: nr=8
+Received: from [189.250.130.205] (port=50704 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1ghd8A-000D11-96; Thu, 10 Jan 2019 10:24:30 -0600
+Date:   Thu, 10 Jan 2019 10:24:29 -0600
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] hwmon: (adt7462) Mark expected switch fall-throughs
+Message-ID: <20190110162429.GA15908@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.5.21.169]
-X-ClientProxiedBy: HXTBJIDCEMVIW01.hxtcorp.net (10.128.0.14) To
- HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15)
-X-Barracuda-Connect: UNKNOWN[10.128.0.15]
-X-Barracuda-Start-Time: 1547087510
-X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
-X-Barracuda-URL: https://192.168.50.102:443/cgi-mod/mark.cgi
-X-Barracuda-Scan-Msg-Size: 1003
-X-Virus-Scanned: by bsmtpd at hxt-semitech.com
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.8846 1.0000 3.0633
-X-Barracuda-Spam-Score: 3.06
-X-Barracuda-Spam-Status: No, SCORE=3.06 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65431
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.130.205
+X-Source-L: No
+X-Exim-ID: 1ghd8A-000D11-96
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.130.205]:50704
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Provide support for PSU DPS-650AB from Delta Electronics, INC.
+In preparation to enabling -Wimplicit-fallthrough, mark switch cases
+where we are expecting to fall through.
 
-Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
----
-v3:
-  No change.
----
-v2:
-  Change the patch subject and commit message.
-  Drop dps650ab.c file.
-  Replace struct name dps650ab_pmbus_info with pmbus_info_one_skip.
----
- drivers/hwmon/pmbus/pmbus.c | 1 +
- 1 file changed, 1 insertion(+)
+Warning level 3 was used: -Wimplicit-fallthrough=3
 
-diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-index ef845a1310fa..e648ed8d926a 100644
---- a/drivers/hwmon/pmbus/pmbus.c
-+++ b/drivers/hwmon/pmbus/pmbus.c
-@@ -212,6 +212,7 @@ static int pmbus_probe(struct i2c_client *client,
- 	{"bmr453", (kernel_ulong_t)&pmbus_info_one},
- 	{"bmr454", (kernel_ulong_t)&pmbus_info_one},
- 	{"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
-+	{"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"mdt040", (kernel_ulong_t)&pmbus_info_one},
- 	{"ncp4200", (kernel_ulong_t)&pmbus_info_one},
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/hwmon/adt7462.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
+index b0211f731251..030f5d49c061 100644
+--- a/drivers/hwmon/adt7462.c
++++ b/drivers/hwmon/adt7462.c
+@@ -448,6 +448,7 @@ static const char *voltage_label(struct adt7462_data *data, int which)
+ 		case 3:
+ 			return "+1.5V";
+ 		}
++		/* fall through */
+ 	case 2:
+ 		if (!(data->pin_cfg[1] & ADT7462_PIN22_INPUT))
+ 			return "+12V3";
+@@ -505,6 +506,7 @@ static const char *voltage_label(struct adt7462_data *data, int which)
+ 		case 3:
+ 			return "+1.5";
+ 		}
++		/* fall through */
+ 	case 11:
+ 		if (data->pin_cfg[3] >> ADT7462_PIN28_SHIFT ==
+ 					ADT7462_PIN28_VOLT &&
+@@ -542,6 +544,7 @@ static int voltage_multiplier(struct adt7462_data *data, int which)
+ 		case 3:
+ 			return 7800;
+ 		}
++		/* fall through */
+ 	case 2:
+ 		if (!(data->pin_cfg[1] & ADT7462_PIN22_INPUT))
+ 			return 62500;
+@@ -599,6 +602,7 @@ static int voltage_multiplier(struct adt7462_data *data, int which)
+ 		case 3:
+ 			return 7800;
+ 		}
++		/* fall through */
+ 	case 11:
+ 	case 12:
+ 		if (data->pin_cfg[3] >> ADT7462_PIN28_SHIFT ==
 -- 
-1.8.3.1
+2.20.1
 
