@@ -7,79 +7,78 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FAF8C43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 18:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 240B3C43387
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 18:42:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A0BC20874
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 18:31:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9E08206B7
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jan 2019 18:42:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H04BMkYF"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VRSBdK+q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfAJSbx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Jan 2019 13:31:53 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33622 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727821AbfAJSbw (ORCPT
+        id S1728005AbfAJSm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Jan 2019 13:42:29 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42193 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727000AbfAJSm3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Jan 2019 13:31:52 -0500
-Received: by mail-pf1-f193.google.com with SMTP id c123so5703321pfb.0;
-        Thu, 10 Jan 2019 10:31:52 -0800 (PST)
+        Thu, 10 Jan 2019 13:42:29 -0500
+Received: by mail-pl1-f195.google.com with SMTP id y1so5551066plp.9;
+        Thu, 10 Jan 2019 10:42:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=EOncnPHWdA2GYIole6MY3FQfttAqfUYxz/TSYuNxSrE=;
-        b=H04BMkYFfGksBapV+T89qQxBmB0OIq/SExAiCAwv5/vTxrGcjqIz1AWY35nOzZutZ6
-         M0r3pz5PkZnxbJanMkn4Rl8FpiWujdU5KXEqdg+3Sz2P3kTghYgRlWU+o9Q2BTqZOY5T
-         iDgQdi2fhSvxJ4oiJckxZqNhAGSoYCfIBUTOC5iT/fGcp9JYydihS4vV47IaElsPXVYt
-         HlBOOexHIbJE53bFffKyI8xblV1ycbFKxMtGXG1H6fXVoVbtl/hGwZlYha/VJ2lJY+UT
-         tREwwn9FUELrqXx8G0PGDZ3KmG8cNEqbb/auQ16oBDaJ54omAl3DyVpyi+dHHGM/l6O7
-         25NA==
+        bh=GmBKVju7YpXYxZxfMod0Ao5g3yfsoyp7zP+gkrAEqrk=;
+        b=VRSBdK+qlxZFezxWlJF0twycu102H5+rmtO01buiToMpWnbKVsumyVzg+oYFwlwhNT
+         k734y0PlEmqk4Ldr1NzYJmOOhkGKVWIV3CSlQDF0uZmXYVJk5QzS2E62P3awtbrfQPig
+         lxFJyF6GVQkRHwBImj6te2NAJ0V0ry8PqZYM+vOa4Bgao6mdJSgdd1lv+4dV7IJi3Sjh
+         SCcFRkhqd5wPKEajt/gaNW3UwUxCNXV559NYyXctlrMyHejqhCKK6n7c4d8X0OdrlcSl
+         XEf6LzjVlAr11jhNLr5JiQOs/mXWusRnNDgM/Zwvu5WiLuWamwc1/ABiivxtccGNgdR4
+         PUNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EOncnPHWdA2GYIole6MY3FQfttAqfUYxz/TSYuNxSrE=;
-        b=BkO4Usf7jKygrkImfACn4dcWa8gZm4uORrJzlFPJbfDN6B/X1DB+0ujuoKks1WdPlg
-         9HYlaUngAvpY0NMyFTo/p0radYTCIK3a9onDouUwTIP1S5b9pKWbrVWPbUxlVeLexVeK
-         5irYwlFX5/w7RdsxlH8KJzW7fQ221X+8l2kOfgTyYdFEGMjbFMkeG+/R2N3JWFjpC1zx
-         yO1nPhg2E3K/c9F5pv/cM6m3JmHxdUvqwuGg0oSvhjYjUcHym0pYXbWxs67jnNIg0XRF
-         M5g/bj92KFhdSkds1yQMezFxJc6I4WaTEGZLy98YqvNUh+ryGAuwCCAOq+i71DRxQc1a
-         14tw==
-X-Gm-Message-State: AJcUukfS7MrHZvItZrtKrlehHWSjPusrv68rbHJPLacMf6NdOc4tyEY3
-        YR93og7oOZPod1emTuOI7WQ=
-X-Google-Smtp-Source: ALg8bN4Vcnd0++5XDaa49TfsfiVMN5fZMPT4Kb4RJCImJO0WvpLNohks7nphZlerwzgoTU8+/gMnVw==
-X-Received: by 2002:a63:658:: with SMTP id 85mr10291877pgg.373.1547145111769;
-        Thu, 10 Jan 2019 10:31:51 -0800 (PST)
+        bh=GmBKVju7YpXYxZxfMod0Ao5g3yfsoyp7zP+gkrAEqrk=;
+        b=f2PsnyGF0G76zIb2fPreX4ypm057rn/Zwb6NbnAKkjItg0QFCQfgTyQUlCbhbq/9se
+         JTos5Rt0WNPxyG1Fap0k8RazW0TIyNqS8btrI3ExEKbL3Ji+IWOEE9HKoCDzypvqwoTP
+         Uio4V0ePOoTUka92HIXRV0kzV+rTMcjjRGGHZBnDkblPyry2Zdk8UvKsBsIrkxRLxJG3
+         9p+yTn8YTRbqEJSFx63M8cyKVIArd3FQfEsXIOFJCeZO5wEFr15UKJ0x+r2u0TbiA0sn
+         X4keImsuCwxMeuZtnC4s+/hdvK0BZl68jCK8UJdJdNR7hfZYHkAab3+2K9DI0ljqP/RU
+         O/uQ==
+X-Gm-Message-State: AJcUuke7shkJW99NccWJ81w4TrHxRLeZaIuEdzugDioO/YrA6np4TGtJ
+        lyP6EgfEBRweUjsjDinAwVQ=
+X-Google-Smtp-Source: ALg8bN58bphF34IBddXD21DM+2+BSjyaYpSwmsYXMavtJtI2y9DMA/O/E86C3rAu9yW4B/Y1QgnJhA==
+X-Received: by 2002:a17:902:9a81:: with SMTP id w1mr10941431plp.19.1547145748937;
+        Thu, 10 Jan 2019 10:42:28 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r8sm157973209pgu.38.2019.01.10.10.31.50
+        by smtp.gmail.com with ESMTPSA id d69sm104501339pfg.168.2019.01.10.10.42.27
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Jan 2019 10:31:50 -0800 (PST)
-Date:   Thu, 10 Jan 2019 10:31:49 -0800
+        Thu, 10 Jan 2019 10:42:28 -0800 (PST)
+Date:   Thu, 10 Jan 2019 10:42:27 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adt7462) Mark expected switch fall-throughs
-Message-ID: <20190110183149.GA4179@roeck-us.net>
-References: <20190110162429.GA15908@embeddedor>
+To:     Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+Cc:     jdelvare@suse.com, openbmc@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shunyong.yang@hxt-semitech.com, dongsheng.wang@hxt-semitech.com
+Subject: Re: [PATCH v3 4/4] hwmon: (pmbus) add support for DPS-650AB
+Message-ID: <20190110184227.GB9010@roeck-us.net>
+References: <cover.1546918172.git.xiaoting.liu@hxt-semitech.com>
+ <625d047f0f42d30bb5ceb75ada529b5fa0c9a21a.1546918172.git.xiaoting.liu@hxt-semitech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190110162429.GA15908@embeddedor>
+In-Reply-To: <625d047f0f42d30bb5ceb75ada529b5fa0c9a21a.1546918172.git.xiaoting.liu@hxt-semitech.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 10, 2019 at 10:24:29AM -0600, Gustavo A. R. Silva wrote:
-> In preparation to enabling -Wimplicit-fallthrough, mark switch cases
-> where we are expecting to fall through.
+On Thu, Jan 10, 2019 at 10:31:44AM +0800, Xiaoting Liu wrote:
+> Provide support for PSU DPS-650AB from Delta Electronics, INC.
 > 
-> Warning level 3 was used: -Wimplicit-fallthrough=3
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
 
 Applied to hwmon-next.
 
@@ -87,42 +86,29 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/adt7462.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> v3:
+>   No change.
+> ---
+> v2:
+>   Change the patch subject and commit message.
+>   Drop dps650ab.c file.
+>   Replace struct name dps650ab_pmbus_info with pmbus_info_one_skip.
+> ---
+>  drivers/hwmon/pmbus/pmbus.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
-> index b0211f731251..030f5d49c061 100644
-> --- a/drivers/hwmon/adt7462.c
-> +++ b/drivers/hwmon/adt7462.c
-> @@ -448,6 +448,7 @@ static const char *voltage_label(struct adt7462_data *data, int which)
->  		case 3:
->  			return "+1.5V";
->  		}
-> +		/* fall through */
->  	case 2:
->  		if (!(data->pin_cfg[1] & ADT7462_PIN22_INPUT))
->  			return "+12V3";
-> @@ -505,6 +506,7 @@ static const char *voltage_label(struct adt7462_data *data, int which)
->  		case 3:
->  			return "+1.5";
->  		}
-> +		/* fall through */
->  	case 11:
->  		if (data->pin_cfg[3] >> ADT7462_PIN28_SHIFT ==
->  					ADT7462_PIN28_VOLT &&
-> @@ -542,6 +544,7 @@ static int voltage_multiplier(struct adt7462_data *data, int which)
->  		case 3:
->  			return 7800;
->  		}
-> +		/* fall through */
->  	case 2:
->  		if (!(data->pin_cfg[1] & ADT7462_PIN22_INPUT))
->  			return 62500;
-> @@ -599,6 +602,7 @@ static int voltage_multiplier(struct adt7462_data *data, int which)
->  		case 3:
->  			return 7800;
->  		}
-> +		/* fall through */
->  	case 11:
->  	case 12:
->  		if (data->pin_cfg[3] >> ADT7462_PIN28_SHIFT ==
+> diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+> index ef845a1310fa..e648ed8d926a 100644
+> --- a/drivers/hwmon/pmbus/pmbus.c
+> +++ b/drivers/hwmon/pmbus/pmbus.c
+> @@ -212,6 +212,7 @@ static int pmbus_probe(struct i2c_client *client,
+>  	{"bmr453", (kernel_ulong_t)&pmbus_info_one},
+>  	{"bmr454", (kernel_ulong_t)&pmbus_info_one},
+>  	{"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
+> +	{"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
+>  	{"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
+>  	{"mdt040", (kernel_ulong_t)&pmbus_info_one},
+>  	{"ncp4200", (kernel_ulong_t)&pmbus_info_one},
+> -- 
+> 1.8.3.1
+> 
