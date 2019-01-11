@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEBAFC43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B32C43387
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:34:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B03032084C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:31:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7B232084C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1547242293;
-	bh=wTwNNBLK9XKCazXMD/eW1bS2NsXJImOUTCWAhVot3tk=;
+	s=default; t=1547242460;
+	bh=jLhWXAzEEm6YLDQfb0ZYN8ilTWGfi61ZyyGgPLuCqIM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=BoMK8xE+LmggyuDjfKFQc0QYpAiEN3HVyIqlxR2eLlgDdej2driIReknfQ19zmi7j
-	 dIED3X2YZ6M7xyX8mnd/hzOF6nFdOeqooLn2bkmoX4o1SM6nOnCLT7mO9kVvbi01ap
-	 UkmWvw3SOqqI6gvyOQidIDUaJq10jfsKjwEAgs6Q=
+	b=pBBkOXQqlGOzw1wIjTk5N2BccrHNMgUL+FqZiuDqxOyMhAS/j/HHwEUkrXe6mWfwS
+	 fVt7nUSDu5l/dFlQmvprHeefiF3tjZ5gxw2rxOdLAMwjCBL3tdmCwyi1622grOOOkH
+	 8rps6kmZwShHg+/1QIKpyJjEVgs/PPE2R2KN+zS0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725764AbfAKVb2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Jan 2019 16:31:28 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38541 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbfAKVb2 (ORCPT
+        id S1725829AbfAKVeU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Jan 2019 16:34:20 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34104 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725535AbfAKVeT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Jan 2019 16:31:28 -0500
-Received: by mail-ot1-f67.google.com with SMTP id e12so14421248otl.5;
-        Fri, 11 Jan 2019 13:31:27 -0800 (PST)
+        Fri, 11 Jan 2019 16:34:19 -0500
+Received: by mail-oi1-f196.google.com with SMTP id r62so13425003oie.1;
+        Fri, 11 Jan 2019 13:34:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gjKUWXoyBGsDaa8XCbDtSc0bf22b9KFq3QUlcdNswu8=;
-        b=MODSclUDgiUqgeoszXJNXvXOLXcdEVfRQsmttn09oVFzelhT59ErewuLj+QxbhXEI6
-         /CJTNiiObUdMhjgNm0kklPbMDtmLsphLetXtXR5Hul+LRIAkwL2tUJ3fLIf3wJ58nZkE
-         uypkNQZv3G52J+Geo72fDBTXa22bndnTs1VKLQ1TF485CdtZm7gHPSKcvWqdMCp9TMsf
-         wviY3J9ZA7tyRJSFBC4S1CaLgQi37L8y8qZL5R0tZJPo7b6golvJ79MeUSmMdGczj2fP
-         1qFL+1fWDADNyZgYv+yqLB0PT2N2djKSpBoG0as8E16uWPNR5XcIEqJZEx0MijxMhrXi
-         JLig==
-X-Gm-Message-State: AJcUukd4eh/in3zS5MaY/nJKLguuaF8TxqvQ1WJ3vDeFuVn0PjW9JDR5
-        OH4tr4gRYJLCEmjEHEsdMxw1xwzs6Q==
-X-Google-Smtp-Source: ALg8bN6d4Z8GKELVgQhwT9GQ8zNFKKcGCQ9iEoA7pZXP9S6unRhX+0lis370YTiwc/1j8/RfkY2pKg==
-X-Received: by 2002:a9d:3b21:: with SMTP id z30mr11596657otb.132.1547242287215;
-        Fri, 11 Jan 2019 13:31:27 -0800 (PST)
+        bh=fStD3fX73PRegT02xKt7fnKpQ4WfsTB4mU/UU+dUJUc=;
+        b=cyn+NCSC9rZqu0PrRvd7NtJzDbHLdXDtSBsWEJh2oCcCnvoLYsG4pEls4MfkGOM0IJ
+         /wyldl1K27oRzk09IZ0m8Hf5zR+3BUNCtXJ6upWqGWlCdNwFnui4R7ZCGvCbXTzgGDy2
+         dYQt3tNnthjVne0izJ3C0cOdvR7xRhubeThK7QBzFmxZzxfEVsodTlYcrVVNLtSJHsD6
+         xrETCuwxbNPGABipHnzuSUcDSwnIuii3KPxYNfRFluwR49bAroq/j2Ku3pTssYlPuW9o
+         STpCglaeGf8i1mVKTMVC8YEInsUC8W7JOoVvv2C8RRfarWldU7n2knsiBZLUUgZGBiF/
+         XZDQ==
+X-Gm-Message-State: AJcUukfTQJJr0uaeAkYguitPCyRuWAfnN939NnaG8hsxYOcWuf87ymDF
+        ZHBeXFu34DN6Yre/r4Xf5Ea36RobnA==
+X-Google-Smtp-Source: ALg8bN67A0L2zted3UmarUHxXisYL4fWuDOkLdgP14TTM7Ps2nF4hV1uK+JZv3KbNRNAg5QiXMC1jQ==
+X-Received: by 2002:aca:dec1:: with SMTP id v184mr9679876oig.217.1547242459073;
+        Fri, 11 Jan 2019 13:34:19 -0800 (PST)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g138sm77317127oib.26.2019.01.11.13.31.26
+        by smtp.gmail.com with ESMTPSA id p203sm55414222oic.49.2019.01.11.13.34.17
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 11 Jan 2019 13:31:26 -0800 (PST)
-Date:   Fri, 11 Jan 2019 15:31:25 -0600
+        Fri, 11 Jan 2019 13:34:18 -0800 (PST)
+Date:   Fri, 11 Jan 2019 15:34:17 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Nicolin Chen <nicoleotsuka@gmail.com>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         mark.rutland@arm.com, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ina3221: Add ti,single-shot
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ina3221: Add ti,single-shot
  property
-Message-ID: <20190111213125.GA17790@bogus>
-References: <20190105004904.17947-1-nicoleotsuka@gmail.com>
- <20190105004904.17947-2-nicoleotsuka@gmail.com>
+Message-ID: <20190111213417.GA23016@bogus>
+References: <20190105030636.533-1-nicoleotsuka@gmail.com>
+ <20190105030636.533-2-nicoleotsuka@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190105004904.17947-2-nicoleotsuka@gmail.com>
+In-Reply-To: <20190105030636.533-2-nicoleotsuka@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri,  4 Jan 2019 16:49:03 -0800, Nicolin Chen wrote:
+On Fri,  4 Jan 2019 19:06:35 -0800, Nicolin Chen wrote:
 > By default, ina3221, as a hardware monitor, continuously measures
 > the inputs and generates corresponding data. However, for battery
 > powered devices, this mode might be power consuming.
