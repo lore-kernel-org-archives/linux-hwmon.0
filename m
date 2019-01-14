@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B94B1C43387
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 11:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E15D6C43387
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 11:43:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8950120659
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 11:42:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2D0E20659
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 11:43:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="NcVFLpRo"
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="dl1Tod/+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbfANLmy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Jan 2019 06:42:54 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:38504 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726437AbfANLmy (ORCPT
+        id S1726752AbfANLnb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Jan 2019 06:43:31 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44633 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726449AbfANLn3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Jan 2019 06:42:54 -0500
-Received: by mail-qk1-f196.google.com with SMTP id a1so10308921qkc.5;
-        Mon, 14 Jan 2019 03:42:53 -0800 (PST)
+        Mon, 14 Jan 2019 06:43:29 -0500
+Received: by mail-qt1-f194.google.com with SMTP id n32so26046169qte.11;
+        Mon, 14 Jan 2019 03:43:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V6RyqVqTsW2wUgM3iE9ftzfC21Ku2y0YEvbTox3U+yE=;
-        b=NcVFLpRoaYQKc3MQzL2CIelNqTvVThhEzNZFvCMyWt9l9FM5HOBLbaaQjFbEC1TRJd
-         8AutPqz1bstM57ORbIUbHBXbQyhAJWM+hSvQySTcb+X7amfpPQHVWeY/mtw0aOGULPma
-         WeEM/9nG8Yy0CojM1W6rgunmZ9MHltNNJuxrQ=
+        bh=YSsm5KHK1vgCekTlZkLBW7Oe/copp0QlvQ1V9CXjt5o=;
+        b=dl1Tod/+fmKMxz4fSs5uM5OM9EYe6up7FyBft3vlu7o6dlsBOasONH5bd4nc3hvSZl
+         E5WQMXS2tLJKQ2lT5FUVS8T/vygn+OgEKcvdctm8G3V+cXd+LFDgdKSyHN9JnabIRRqN
+         pQH2AL8bnVeS0u8feuE6mAnJEYTOYe4BiZwRg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V6RyqVqTsW2wUgM3iE9ftzfC21Ku2y0YEvbTox3U+yE=;
-        b=ExWEzoZ2YRTFbTuDBag0LDKs1M/M5fu+Vu2i3ItSz3+PaDgmjq4oyGhAnBDZgSUBQr
-         WA3AM7JMmA6biOtH9rz5/CB8MNTqqLw8ILcy7L5aZPgt/uQYcxOy+Vg12FZhcOdxemI4
-         BDuyx4ZsqwTMewZmXIuJiGFIWxOOmQHve17wcXNbISpMeL5jpZb81YVw3YmTAQjjsDyy
-         xkmqxk8NxoUSyLXMC9BVudDLuaridRlaBHcKdX2hYL8xyr+xTovoUFSqpv1Vt92tC97d
-         4KZhoyfxRjwZ2UgkGjOmYHiCzBV49CaApeaOUzedcqm0ttGBRodMTm+XiKSxhAJvGQhY
-         rjKA==
-X-Gm-Message-State: AJcUukfYEWYlfMDz4Mgnq1KnYtWYo0r6eZoMaOLrKo/AkthLtVM9Xyix
-        FP3BzSKOaHY/WRkyKPyws8wasuNEzRVBskDRSKA=
-X-Google-Smtp-Source: ALg8bN61vPHmDFt59oJjGsnPDUxQeZ2HKmFZE65UF4JoH+tbdX0SI+dTbl5ZWCRcHq0Ks6nBhOM6b8Y0/3Lb5SXVTLA=
-X-Received: by 2002:a37:781:: with SMTP id 123mr22049227qkh.231.1547466172551;
- Mon, 14 Jan 2019 03:42:52 -0800 (PST)
+        bh=YSsm5KHK1vgCekTlZkLBW7Oe/copp0QlvQ1V9CXjt5o=;
+        b=GPcIaFriXCFOsT7URf/ECXtLTuEzfzsA0a+z8Vm3shEKs5bwJ+pdIEd+ElSfA7qoBG
+         24LkMTnQ3PhZU2IDgYftdsz295K6UG0JQu3En8RJ0mKnSDNI6oQIwq5BOXnECNunGQiw
+         j2NZb+xV/HzwI+70fOeFj0gp61qSH4nynq1+MvdcHiYDiIrsfdc+yFC+3VwsiKIYsdpF
+         cDhx8B+ObzLpb0Ye+aHRajl976UNOiay2EU3n3KXxLrvOO82V1+C1hR5KFjfqIyj2qS6
+         qBFYhqVRVaDOEzwzQCnUo0u9RC86wHyn5uIuTUqccvUUeLHevri3YQN2iS86OMbbPi6O
+         OGsg==
+X-Gm-Message-State: AJcUukfV+BB/x/aPLLHubdMnwJCJ7uZYNTqBo7/E4WeO/IDwcLVyLP2J
+        g4zlmYyFW7vSc0hMcryd43kEgv2d16tPpUGUDQk=
+X-Google-Smtp-Source: ALg8bN5msTpaMGdDNrcEC56t+z7OMLr65M73GRhD2on6tc5RQReecFM8zdmQ4xtnRFOpjFrk5SvU3HtNxMx0mTaG++o=
+X-Received: by 2002:a0c:89b4:: with SMTP id 49mr23814949qvr.85.1547466207923;
+ Mon, 14 Jan 2019 03:43:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20190107214136.5256-1-jae.hyun.yoo@linux.intel.com> <20190107214136.5256-9-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20190107214136.5256-9-jae.hyun.yoo@linux.intel.com>
+References: <20190107214136.5256-1-jae.hyun.yoo@linux.intel.com> <20190107214136.5256-10-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20190107214136.5256-10-jae.hyun.yoo@linux.intel.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 14 Jan 2019 22:12:41 +1030
-Message-ID: <CACPK8Xet1HUbC4MN-XO31oZj56+af1Lpc_mtee-COSYizedWTg@mail.gmail.com>
-Subject: Re: [PATCH v10 08/12] mfd: intel-peci-client: Add PECI client driver
+Date:   Mon, 14 Jan 2019 22:13:17 +1030
+Message-ID: <CACPK8XdK-VpV7y1UT81QUo7CXuUp=gjjnZmTbvLvRVERtv5fDA@mail.gmail.com>
+Subject: Re: [PATCH v10 09/12] Documentation: hwmon: Add documents for PECI
+ hwmon client drivers
 To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
@@ -90,8 +91,9 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-doc@vger.kernel.org,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        James Feist <james.feist@linux.intel.com>,
         Jason M Biils <jason.m.bills@linux.intel.com>,
+        Haiyue Wang <haiyue.wang@linux.intel.com>,
+        James Feist <james.feist@linux.intel.com>,
         Vernon Mauery <vernon.mauery@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -101,13 +103,17 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Tue, 8 Jan 2019 at 08:11, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com> wrote:
 >
-> This commit adds PECI client driver.
-
-It looks like it's a PECI driver for the three CPU families, and it
-implements cpu and dimm temp, with sideband functions deferred to the
-future. If you add that information with a few more words it would
-make for a nicer commit message.
-
+> This commit adds hwmon documents for PECI cputemp and dimmtemp drivers.
+>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
 > Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
+> Reviewed-by: James Feist <james.feist@linux.intel.com>
+> Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 Reviewed-by: Joel Stanley <joel@jms.id.au>
