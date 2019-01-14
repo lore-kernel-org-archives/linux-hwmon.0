@@ -3,87 +3,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5865C43387
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 17:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4052C43387
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 22:54:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A852A20659
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 17:48:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CD852063F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 22:54:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfANRsW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Jan 2019 12:48:22 -0500
-Received: from gateway22.websitewelcome.com ([192.185.46.194]:17027 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726643AbfANRsW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Jan 2019 12:48:22 -0500
-X-Greylist: delayed 1488 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Jan 2019 12:48:22 EST
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 6957C189A7F
-        for <linux-hwmon@vger.kernel.org>; Mon, 14 Jan 2019 11:20:08 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id j5uCg8XSTYTGMj5uCgsm5C; Mon, 14 Jan 2019 11:20:08 -0600
-X-Authority-Reason: nr=8
-Received: from [189.250.130.205] (port=46336 helo=[192.168.43.131])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1gj5uB-0037bH-OS; Mon, 14 Jan 2019 11:20:08 -0600
-Subject: Re: [PATCH] hwmon: (adt7462) Mark expected switch fall-throughs
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190110162429.GA15908@embeddedor>
- <20190110183149.GA4179@roeck-us.net>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <e24a7337-3d32-de17-d2a1-77201f6b40f2@embeddedor.com>
-Date:   Mon, 14 Jan 2019 11:20:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1726993AbfANWyY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Jan 2019 17:54:24 -0500
+Received: from mga02.intel.com ([134.134.136.20]:62626 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726787AbfANWyY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 14 Jan 2019 17:54:24 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2019 14:54:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.56,479,1539673200"; 
+   d="scan'208";a="291540833"
+Received: from yoojae-mobl1.amr.corp.intel.com (HELO [10.7.153.143]) ([10.7.153.143])
+  by orsmga005.jf.intel.com with ESMTP; 14 Jan 2019 14:54:23 -0800
+Subject: Re: [PATCH v10 09/12] Documentation: hwmon: Add documents for PECI
+ hwmon client drivers
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
+        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
+        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
+        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        David Kershner <david.kershner@unisys.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        Johan Hovold <johan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
+        linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Jason M Biils <jason.m.bills@linux.intel.com>,
+        Haiyue Wang <haiyue.wang@linux.intel.com>,
+        James Feist <james.feist@linux.intel.com>,
+        Vernon Mauery <vernon.mauery@linux.intel.com>
+References: <20190107214136.5256-1-jae.hyun.yoo@linux.intel.com>
+ <20190107214136.5256-10-jae.hyun.yoo@linux.intel.com>
+ <CACPK8XdK-VpV7y1UT81QUo7CXuUp=gjjnZmTbvLvRVERtv5fDA@mail.gmail.com>
+From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Message-ID: <879f5254-2575-6a40-07ed-a80b2d944cb6@linux.intel.com>
+Date:   Mon, 14 Jan 2019 14:54:23 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.3
 MIME-Version: 1.0
-In-Reply-To: <20190110183149.GA4179@roeck-us.net>
+In-Reply-To: <CACPK8XdK-VpV7y1UT81QUo7CXuUp=gjjnZmTbvLvRVERtv5fDA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.130.205
-X-Source-L: No
-X-Exim-ID: 1gj5uB-0037bH-OS
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [189.250.130.205]:46336
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-
-On 1/10/19 12:31 PM, Guenter Roeck wrote:
-> On Thu, Jan 10, 2019 at 10:24:29AM -0600, Gustavo A. R. Silva wrote:
->> In preparation to enabling -Wimplicit-fallthrough, mark switch cases
->> where we are expecting to fall through.
+On 1/14/2019 3:43 AM, Joel Stanley wrote:
+> On Tue, 8 Jan 2019 at 08:11, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com> wrote:
 >>
->> Warning level 3 was used: -Wimplicit-fallthrough=3
+>> This commit adds hwmon documents for PECI cputemp and dimmtemp drivers.
 >>
->> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
+>> Cc: Randy Dunlap <rdunlap@infradead.org>
+>> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+>> Reviewed-by: Haiyue Wang <haiyue.wang@linux.intel.com>
+>> Reviewed-by: James Feist <james.feist@linux.intel.com>
+>> Reviewed-by: Vernon Mauery <vernon.mauery@linux.intel.com>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Applied to hwmon-next.
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> 
 
-Thank you, Guenter.
+Hi Joel,
 
---
-Gustavo
+Thank you so much for your careful review on this patch series. I'll
+submit v11 soon to address your review comments.
+
+Regards,
+Jae
