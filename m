@@ -1,86 +1,136 @@
-Return-Path: <SRS0=3IXP=PT=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=1lQR=PW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B32C43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90950C43387
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 02:41:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7B232084C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jan 2019 21:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1547242460;
-	bh=jLhWXAzEEm6YLDQfb0ZYN8ilTWGfi61ZyyGgPLuCqIM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=pBBkOXQqlGOzw1wIjTk5N2BccrHNMgUL+FqZiuDqxOyMhAS/j/HHwEUkrXe6mWfwS
-	 fVt7nUSDu5l/dFlQmvprHeefiF3tjZ5gxw2rxOdLAMwjCBL3tdmCwyi1622grOOOkH
-	 8rps6kmZwShHg+/1QIKpyJjEVgs/PPE2R2KN+zS0=
+	by mail.kernel.org (Postfix) with ESMTP id 63D0120657
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Jan 2019 02:41:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725829AbfAKVeU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Jan 2019 16:34:20 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34104 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbfAKVeT (ORCPT
+        id S1726679AbfANClX convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 13 Jan 2019 21:41:23 -0500
+Received: from [223.203.96.18] ([223.203.96.18]:47270 "EHLO
+        barracuda02.hxt-semitech.com" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726631AbfANClW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Jan 2019 16:34:19 -0500
-Received: by mail-oi1-f196.google.com with SMTP id r62so13425003oie.1;
-        Fri, 11 Jan 2019 13:34:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fStD3fX73PRegT02xKt7fnKpQ4WfsTB4mU/UU+dUJUc=;
-        b=cyn+NCSC9rZqu0PrRvd7NtJzDbHLdXDtSBsWEJh2oCcCnvoLYsG4pEls4MfkGOM0IJ
-         /wyldl1K27oRzk09IZ0m8Hf5zR+3BUNCtXJ6upWqGWlCdNwFnui4R7ZCGvCbXTzgGDy2
-         dYQt3tNnthjVne0izJ3C0cOdvR7xRhubeThK7QBzFmxZzxfEVsodTlYcrVVNLtSJHsD6
-         xrETCuwxbNPGABipHnzuSUcDSwnIuii3KPxYNfRFluwR49bAroq/j2Ku3pTssYlPuW9o
-         STpCglaeGf8i1mVKTMVC8YEInsUC8W7JOoVvv2C8RRfarWldU7n2knsiBZLUUgZGBiF/
-         XZDQ==
-X-Gm-Message-State: AJcUukfTQJJr0uaeAkYguitPCyRuWAfnN939NnaG8hsxYOcWuf87ymDF
-        ZHBeXFu34DN6Yre/r4Xf5Ea36RobnA==
-X-Google-Smtp-Source: ALg8bN67A0L2zted3UmarUHxXisYL4fWuDOkLdgP14TTM7Ps2nF4hV1uK+JZv3KbNRNAg5QiXMC1jQ==
-X-Received: by 2002:aca:dec1:: with SMTP id v184mr9679876oig.217.1547242459073;
-        Fri, 11 Jan 2019 13:34:19 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p203sm55414222oic.49.2019.01.11.13.34.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 11 Jan 2019 13:34:18 -0800 (PST)
-Date:   Fri, 11 Jan 2019 15:34:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ina3221: Add ti,single-shot
- property
-Message-ID: <20190111213417.GA23016@bogus>
-References: <20190105030636.533-1-nicoleotsuka@gmail.com>
- <20190105030636.533-2-nicoleotsuka@gmail.com>
+        Sun, 13 Jan 2019 21:41:22 -0500
+X-ASG-Debug-ID: 1547433674-107606139f18abc0001-LXWHwZ
+Received: from HXTBJIDCEMVIW02.hxtcorp.net ([10.128.0.15]) by barracuda02.hxt-semitech.com with ESMTP id tp8x8fpV40bBIN5A (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO); Mon, 14 Jan 2019 10:41:15 +0800 (CST)
+X-Barracuda-Envelope-From: xiaoting.liu@hxt-semitech.com
+Received: from HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) by
+ HXTBJIDCEMVIW02.hxtcorp.net (10.128.0.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 14 Jan 2019 10:41:04 +0800
+Received: from HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6]) by
+ HXTBJIDCEMVIW02.hxtcorp.net ([fe80::3e:f4ff:7927:a6f6%12]) with mapi id
+ 15.00.1395.000; Mon, 14 Jan 2019 10:41:04 +0800
+From:   "Liu, Xiaoting" <xiaoting.liu@hxt-semitech.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>,
+        "Wang, Dongsheng" <dongsheng.wang@hxt-semitech.com>
+Subject: Re: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+Thread-Topic: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+X-ASG-Orig-Subj: Re: [PATCH 2/4] dt-bindings: power supply: Document dps650ab
+Thread-Index: AQHUpAvy8GAMUOOpLkCuSbjbkhrxsA==
+Date:   Mon, 14 Jan 2019 02:41:04 +0000
+Message-ID: <d51a1a5fe99b4227a596ff66c05ad67c@HXTBJIDCEMVIW02.hxtcorp.net>
+References: <cover.1546591275.git.xiaoting.liu@hxt-semitech.com>
+ <8540dfc96a75a6aa4bd1a7d5f24db7d36a71282c.1546591275.git.xiaoting.liu@hxt-semitech.com>
+ <20190111193612.GA23166@bogus>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.64.1.98]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190105030636.533-2-nicoleotsuka@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Barracuda-Connect: UNKNOWN[10.128.0.15]
+X-Barracuda-Start-Time: 1547433675
+X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
+X-Barracuda-URL: https://192.168.50.102:443/cgi-mod/mark.cgi
+X-Barracuda-Scan-Msg-Size: 1899
+X-Virus-Scanned: by bsmtpd at hxt-semitech.com
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5000 1.0000 0.0000
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.65646
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri,  4 Jan 2019 19:06:35 -0800, Nicolin Chen wrote:
-> By default, ina3221, as a hardware monitor, continuously measures
-> the inputs and generates corresponding data. However, for battery
-> powered devices, this mode might be power consuming.
-> 
-> This patch adds a "ti,single-shot" property to allow changing the
-> default continuous mode to single-shot operating mode.
-> 
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/ina3221.txt | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+Hi Rob Herring,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for your reply.
+
+On 2019/1/12 3:42, Rob Herring wrote:
+> On Fri, Jan 04, 2019 at 05:00:30PM +0800, Xiaoting Liu wrote:
+>> Bindings for DPS650AB power, voltage, temperature, and fan monitering.
+> s/monitering/monitoring/
+
+I delivered the latest v3 patch and updated the subject. you can refer
+to the following link:
+
+https://patchwork.ozlabs.org/patch/1022664/
+
+>
+>> Signed-off-by: Xiaoting Liu <xiaoting.liu@hxt-semitech.com>
+>> ---
+>>  Documentation/devicetree/bindings/hwmon/dps650ab.txt | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/dps650ab.txt b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
+>> new file mode 100644
+>> index 000000000000..bbd601100e66
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/dps650ab.txt
+>> @@ -0,0 +1,11 @@
+>> +Bindings for DPS650AB power, voltage, temperature, and fan monitering
+>> +
+>> +Required properties:
+>> +- compatible : "dps650ab"
+> Needs a vendor prefix.g
+Add vendor delta on v3 patch.
+>
+>> +- reg        : I2C address, one of 0x58, 0x59.
+>> +
+>> +Example:
+>> +       dps650ab@58 {
+>> +                   compatible = "dps650ab";
+>> +                   reg = <0x58>;
+>> +       };
+>> --
+>> 1.8.3.1
+>>
+>>
+>>
+>>
+>> This email is intended only for the named addressee. It may contain information that is confidential/private, legally privileged, or copyright-protected, and you should handle it accordingly. If you are not the intended recipient, you do not have legal rights to retain, copy, or distribute this email or its contents, and should promptly delete the email and all electronic copies in your system; do not retain copies in any media. If you have received this email in error, please notify the sender promptly. Thank you.
+> We can't accept emails with these clauses.
+>
+> Rob
+
+Delete the message on v3 patch.
+
+Thanks,
+
+Xiaoting
+
+
