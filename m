@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D45FCC43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BBDCC43444
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9895120855
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE29820855
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SzR2noyM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhpyVeef"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbfAQVON (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 16:14:13 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39927 "EHLO
+        id S1728586AbfAQVOO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 16:14:14 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43344 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728239AbfAQVON (ORCPT
+        with ESMTP id S1728239AbfAQVOO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 16:14:13 -0500
-Received: by mail-pl1-f195.google.com with SMTP id 101so5297940pld.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:12 -0800 (PST)
+        Thu, 17 Jan 2019 16:14:14 -0500
+Received: by mail-pl1-f195.google.com with SMTP id gn14so5292066plb.10
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9JqaKgiveE4F5YM/uK1rASqgM9lKuUgqKdKnKdrCd0I=;
-        b=SzR2noyM7zPVxLN2IUpaIY7qYIWtKdae3W6eWfxph46LFkwbq5oHrX3e2Dg5CLVk/R
-         nvu/BHh4lblfUIVRVubO9L7aLSPOlYnBzIcmNGIKIk8tgZUNMCzjH1hsqJKaavd3LWu/
-         qpskWg9UZoyx63dGLTjtgSOezjgr+J7qnwSPm/xqvikI0x289pOFAh25Aed84FDLa49U
-         SrlToND86+xS6dlk5a8mi+/DVa61T1jwzkQPMHAhJ3lWjmfcL6/QsnqEXKcgTWJreu98
-         M9zE3BRGpZf13bMZtgDsgybfcBsC8P6ErrMvU6fErr4LwaWyernpTg0kR3szl3/IaEqV
-         l5wA==
+        bh=n/Pp1+zP6m/fErFOGL/q6Rat/sAFCAVvW1CTO5SoMx4=;
+        b=AhpyVeefrtQP3x+kxNvhWWhv9WanRVDfuw64WDCiiv7LpxLyDtz3ytPvAeusxlnrpG
+         WVyRqNy4FCwixe7cFLmeKx6DF/BfOecn462J2ajZalbRD8rsj0ExBjWn+az/SA18NlmT
+         VVLdQp0EQwFpLmZrNfKVlp940HXJvj9m9TDDunCqS1ByDagV61w2GRopXf9OSXWQM2rZ
+         0NfImUCKL5dmUD3x74vFFtice7HO3n5WWf6+wlzA6u4Ym3fNInUd7eLYxPUMbqa3hx+T
+         PxowrEfRak1CRUoZCD0WQ7+CFtIeFENLH6O/RZLUXDiedvsz2zS5Z8rKWn3vfkUx33Rm
+         dV9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=9JqaKgiveE4F5YM/uK1rASqgM9lKuUgqKdKnKdrCd0I=;
-        b=lcRXeK0cC8za5vhxzezwQFC0+AN+Al37YMogwJsmz7O2s5Za9swVrvmTNQ+P4/o3lV
-         iM66+FwRbAkePmwybHaCAsbGzRLou3W3V0eG4jObCiwA6Um8zt7I90wi0ImYxpes+18h
-         DVe6RLLDNupXGI4cq0r8jrWAtK6pZeQhJRRoC+00Dyqyqkvd7GqmkvW+mOBpPEtQNq3Q
-         95xEoUDz7a7KJ1cgS5tyBhANMwYfC/GonHSjDbfW7y8Ppx1YRjRDZxfjPtk8DF2YCq04
-         yRGiZ0NQwnf5UT/NSF/a592LBzwy8FCLfc955gbwmYjH+gfgJI7PGAf+kREys2CeBibW
-         1aQA==
-X-Gm-Message-State: AJcUukeUcFDEsWR39IYpIQB4RrUwXf1153ZVBdgoyzjHnHvjBkNasHfB
-        VccZJVgfab9R4sdqwn2ZUlkytpzN
-X-Google-Smtp-Source: ALg8bN4DAaXx7/L/yrQUvUI03rS1UR/Lgltz6RRR6wwF0jh/rHYD5euLOG8DllMsNwCglMtlIOVNcw==
-X-Received: by 2002:a17:902:9f89:: with SMTP id g9mr16588815plq.214.1547759651853;
-        Thu, 17 Jan 2019 13:14:11 -0800 (PST)
+        bh=n/Pp1+zP6m/fErFOGL/q6Rat/sAFCAVvW1CTO5SoMx4=;
+        b=Hsx/0pmi3pMKPO/v9IJ2BrwLhflYUjBORL2Y2xTIzVlbr9gDigFNO1/RSy3TJjqiGT
+         kjaUQJQ/7gcSE9F8tq6G/QWCdRws7Kkd40qtVG20xywJrfI35hz9a/U4Cn+jUyiqkLTP
+         zqeymv0VnlwAUG8N88ZXaifEenJkzr+UJOMABPtdnNn4n/H1OKkbv1LHSGpwDvE8UoA1
+         a4S4SnSbhU3doyu5RWLJ39dEhlZZdh6pocTD7jYUz7EMO+kh+MnE8XQpXA88fhPjtdPD
+         Yx2fxq2NMdc2uz+iKXX/EcJT+tEWy319TLPv00/mQXnaR3clt80Jid+/LIfvxVpBBKqj
+         9sUQ==
+X-Gm-Message-State: AJcUukfubtkuQFIH9xilTOpyAMX6GFetuE0nNp/3LBXo3eTKYwI0h6YW
+        eMNxjogvXOCN0A1auoQyL3vsOjES
+X-Google-Smtp-Source: ALg8bN5/KdKZTzU7cZjFlk9V/7XF/9O/ToZmuLwP1uEhtulyRB7dXN2EDGkuUTin3kVaZALsq0KToQ==
+X-Received: by 2002:a17:902:968d:: with SMTP id n13mr16758391plp.109.1547759653414;
+        Thu, 17 Jan 2019 13:14:13 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s9sm5264094pgl.88.2019.01.17.13.14.11
+        by smtp.gmail.com with ESMTPSA id t13sm2917996pgr.42.2019.01.17.13.14.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Jan 2019 13:14:11 -0800 (PST)
+        Thu, 17 Jan 2019 13:14:12 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 11/29] hwmon: (ina209) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date:   Thu, 17 Jan 2019 13:13:31 -0800
-Message-Id: <1547759629-23007-12-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 12/29] hwmon: (ina3221) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date:   Thu, 17 Jan 2019 13:13:32 -0800
+Message-Id: <1547759629-23007-13-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
 References: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
@@ -83,221 +83,51 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ina209.c | 151 +++++++++++++++++++++----------------------------
- 1 file changed, 65 insertions(+), 86 deletions(-)
+ drivers/hwmon/ina3221.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hwmon/ina209.c b/drivers/hwmon/ina209.c
-index aa0768ce8aea..e3854463db84 100644
---- a/drivers/hwmon/ina209.c
-+++ b/drivers/hwmon/ina209.c
-@@ -230,9 +230,9 @@ static u16 ina209_reg_from_interval(u16 config, long interval)
- 	return (config & 0xf807) | (adc << 3) | (adc << 7);
- }
- 
--static ssize_t ina209_set_interval(struct device *dev,
--				   struct device_attribute *da,
--				   const char *buf, size_t count)
-+static ssize_t ina209_interval_store(struct device *dev,
-+				     struct device_attribute *da,
-+				     const char *buf, size_t count)
- {
- 	struct ina209_data *data = ina209_update_device(dev);
- 	long val;
-@@ -257,7 +257,7 @@ static ssize_t ina209_set_interval(struct device *dev,
- 	return count;
- }
- 
--static ssize_t ina209_show_interval(struct device *dev,
-+static ssize_t ina209_interval_show(struct device *dev,
- 				    struct device_attribute *da, char *buf)
- {
- 	struct ina209_data *data = dev_get_drvdata(dev);
-@@ -279,10 +279,9 @@ static u16 ina209_reset_history_regs[] = {
- 	INA209_POWER_PEAK
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index e90ccac8bebb..f157214b3b83 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -499,7 +499,7 @@ static const struct hwmon_chip_info ina3221_chip_info = {
  };
  
--static ssize_t ina209_reset_history(struct device *dev,
-+static ssize_t ina209_history_store(struct device *dev,
- 				    struct device_attribute *da,
--				    const char *buf,
--				    size_t count)
-+				    const char *buf, size_t count)
+ /* Extra attribute groups */
+-static ssize_t ina3221_show_shunt(struct device *dev,
++static ssize_t ina3221_shunt_show(struct device *dev,
+ 				  struct device_attribute *attr, char *buf)
  {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
- 	struct ina209_data *data = dev_get_drvdata(dev);
-@@ -306,10 +305,9 @@ static ssize_t ina209_reset_history(struct device *dev,
- 	return count;
+ 	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
+@@ -510,9 +510,9 @@ static ssize_t ina3221_show_shunt(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", input->shunt_resistor);
  }
  
--static ssize_t ina209_set_value(struct device *dev,
--				struct device_attribute *da,
--				const char *buf,
--				size_t count)
-+static ssize_t ina209_value_store(struct device *dev,
-+				  struct device_attribute *da,
-+				  const char *buf, size_t count)
+-static ssize_t ina3221_set_shunt(struct device *dev,
+-				 struct device_attribute *attr,
+-				 const char *buf, size_t count)
++static ssize_t ina3221_shunt_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
  {
- 	struct ina209_data *data = ina209_update_device(dev);
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-@@ -337,9 +335,8 @@ static ssize_t ina209_set_value(struct device *dev,
- 	return count;
+ 	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+@@ -533,12 +533,9 @@ static ssize_t ina3221_set_shunt(struct device *dev,
  }
  
--static ssize_t ina209_show_value(struct device *dev,
--				 struct device_attribute *da,
--				 char *buf)
-+static ssize_t ina209_value_show(struct device *dev,
-+				 struct device_attribute *da, char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
- 	struct ina209_data *data = ina209_update_device(dev);
-@@ -352,9 +349,8 @@ static ssize_t ina209_show_value(struct device *dev,
- 	return snprintf(buf, PAGE_SIZE, "%ld\n", val);
- }
+ /* shunt resistance */
+-static SENSOR_DEVICE_ATTR(shunt1_resistor, S_IRUGO | S_IWUSR,
+-		ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL1);
+-static SENSOR_DEVICE_ATTR(shunt2_resistor, S_IRUGO | S_IWUSR,
+-		ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL2);
+-static SENSOR_DEVICE_ATTR(shunt3_resistor, S_IRUGO | S_IWUSR,
+-		ina3221_show_shunt, ina3221_set_shunt, INA3221_CHANNEL3);
++static SENSOR_DEVICE_ATTR_RW(shunt1_resistor, ina3221_shunt, INA3221_CHANNEL1);
++static SENSOR_DEVICE_ATTR_RW(shunt2_resistor, ina3221_shunt, INA3221_CHANNEL2);
++static SENSOR_DEVICE_ATTR_RW(shunt3_resistor, ina3221_shunt, INA3221_CHANNEL3);
  
--static ssize_t ina209_show_alarm(struct device *dev,
--				 struct device_attribute *da,
--				 char *buf)
-+static ssize_t ina209_alarm_show(struct device *dev,
-+				 struct device_attribute *da, char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
- 	struct ina209_data *data = ina209_update_device(dev);
-@@ -374,82 +370,65 @@ static ssize_t ina209_show_alarm(struct device *dev,
- }
- 
- /* Shunt voltage, history, limits, alarms */
--static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, ina209_show_value, NULL,
--			  INA209_SHUNT_VOLTAGE);
--static SENSOR_DEVICE_ATTR(in0_input_highest, S_IRUGO, ina209_show_value, NULL,
--			  INA209_SHUNT_VOLTAGE_POS_PEAK);
--static SENSOR_DEVICE_ATTR(in0_input_lowest, S_IRUGO, ina209_show_value, NULL,
--			  INA209_SHUNT_VOLTAGE_NEG_PEAK);
--static SENSOR_DEVICE_ATTR(in0_reset_history, S_IWUSR, NULL,
--			  ina209_reset_history, (1 << 0) | (1 << 1));
--static SENSOR_DEVICE_ATTR(in0_max, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_SHUNT_VOLTAGE_POS_WARN);
--static SENSOR_DEVICE_ATTR(in0_min, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_SHUNT_VOLTAGE_NEG_WARN);
--static SENSOR_DEVICE_ATTR(in0_crit_max, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_CRITICAL_DAC_POS);
--static SENSOR_DEVICE_ATTR(in0_crit_min, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_CRITICAL_DAC_NEG);
--
--static SENSOR_DEVICE_ATTR(in0_min_alarm,  S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 11);
--static SENSOR_DEVICE_ATTR(in0_max_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 12);
--static SENSOR_DEVICE_ATTR(in0_crit_min_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 6);
--static SENSOR_DEVICE_ATTR(in0_crit_max_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 7);
-+static SENSOR_DEVICE_ATTR_RO(in0_input, ina209_value, INA209_SHUNT_VOLTAGE);
-+static SENSOR_DEVICE_ATTR_RO(in0_input_highest, ina209_value,
-+			     INA209_SHUNT_VOLTAGE_POS_PEAK);
-+static SENSOR_DEVICE_ATTR_RO(in0_input_lowest, ina209_value,
-+			     INA209_SHUNT_VOLTAGE_NEG_PEAK);
-+static SENSOR_DEVICE_ATTR_WO(in0_reset_history, ina209_history,
-+			     (1 << 0) | (1 << 1));
-+static SENSOR_DEVICE_ATTR_RW(in0_max, ina209_value,
-+			     INA209_SHUNT_VOLTAGE_POS_WARN);
-+static SENSOR_DEVICE_ATTR_RW(in0_min, ina209_value,
-+			     INA209_SHUNT_VOLTAGE_NEG_WARN);
-+static SENSOR_DEVICE_ATTR_RW(in0_crit_max, ina209_value,
-+			     INA209_CRITICAL_DAC_POS);
-+static SENSOR_DEVICE_ATTR_RW(in0_crit_min, ina209_value,
-+			     INA209_CRITICAL_DAC_NEG);
-+
-+static SENSOR_DEVICE_ATTR_RO(in0_min_alarm, ina209_alarm, 1 << 11);
-+static SENSOR_DEVICE_ATTR_RO(in0_max_alarm, ina209_alarm, 1 << 12);
-+static SENSOR_DEVICE_ATTR_RO(in0_crit_min_alarm, ina209_alarm, 1 << 6);
-+static SENSOR_DEVICE_ATTR_RO(in0_crit_max_alarm, ina209_alarm, 1 << 7);
- 
- /* Bus voltage, history, limits, alarms */
--static SENSOR_DEVICE_ATTR(in1_input, S_IRUGO, ina209_show_value, NULL,
--			  INA209_BUS_VOLTAGE);
--static SENSOR_DEVICE_ATTR(in1_input_highest, S_IRUGO, ina209_show_value, NULL,
--			  INA209_BUS_VOLTAGE_MAX_PEAK);
--static SENSOR_DEVICE_ATTR(in1_input_lowest, S_IRUGO, ina209_show_value, NULL,
--			  INA209_BUS_VOLTAGE_MIN_PEAK);
--static SENSOR_DEVICE_ATTR(in1_reset_history, S_IWUSR, NULL,
--			  ina209_reset_history, (1 << 2) | (1 << 3));
--static SENSOR_DEVICE_ATTR(in1_max, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_BUS_VOLTAGE_OVER_WARN);
--static SENSOR_DEVICE_ATTR(in1_min, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_BUS_VOLTAGE_UNDER_WARN);
--static SENSOR_DEVICE_ATTR(in1_crit_max, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_BUS_VOLTAGE_OVER_LIMIT);
--static SENSOR_DEVICE_ATTR(in1_crit_min, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_BUS_VOLTAGE_UNDER_LIMIT);
--
--static SENSOR_DEVICE_ATTR(in1_min_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 14);
--static SENSOR_DEVICE_ATTR(in1_max_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 15);
--static SENSOR_DEVICE_ATTR(in1_crit_min_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 9);
--static SENSOR_DEVICE_ATTR(in1_crit_max_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 10);
-+static SENSOR_DEVICE_ATTR_RO(in1_input, ina209_value, INA209_BUS_VOLTAGE);
-+static SENSOR_DEVICE_ATTR_RO(in1_input_highest, ina209_value,
-+			     INA209_BUS_VOLTAGE_MAX_PEAK);
-+static SENSOR_DEVICE_ATTR_RO(in1_input_lowest, ina209_value,
-+			     INA209_BUS_VOLTAGE_MIN_PEAK);
-+static SENSOR_DEVICE_ATTR_WO(in1_reset_history, ina209_history,
-+			     (1 << 2) | (1 << 3));
-+static SENSOR_DEVICE_ATTR_RW(in1_max, ina209_value,
-+			     INA209_BUS_VOLTAGE_OVER_WARN);
-+static SENSOR_DEVICE_ATTR_RW(in1_min, ina209_value,
-+			     INA209_BUS_VOLTAGE_UNDER_WARN);
-+static SENSOR_DEVICE_ATTR_RW(in1_crit_max, ina209_value,
-+			     INA209_BUS_VOLTAGE_OVER_LIMIT);
-+static SENSOR_DEVICE_ATTR_RW(in1_crit_min, ina209_value,
-+			     INA209_BUS_VOLTAGE_UNDER_LIMIT);
-+
-+static SENSOR_DEVICE_ATTR_RO(in1_min_alarm, ina209_alarm, 1 << 14);
-+static SENSOR_DEVICE_ATTR_RO(in1_max_alarm, ina209_alarm, 1 << 15);
-+static SENSOR_DEVICE_ATTR_RO(in1_crit_min_alarm, ina209_alarm, 1 << 9);
-+static SENSOR_DEVICE_ATTR_RO(in1_crit_max_alarm, ina209_alarm, 1 << 10);
- 
- /* Power */
--static SENSOR_DEVICE_ATTR(power1_input, S_IRUGO, ina209_show_value, NULL,
--			  INA209_POWER);
--static SENSOR_DEVICE_ATTR(power1_input_highest, S_IRUGO, ina209_show_value,
--			  NULL, INA209_POWER_PEAK);
--static SENSOR_DEVICE_ATTR(power1_reset_history, S_IWUSR, NULL,
--			  ina209_reset_history, 1 << 4);
--static SENSOR_DEVICE_ATTR(power1_max, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_POWER_WARN);
--static SENSOR_DEVICE_ATTR(power1_crit, S_IRUGO | S_IWUSR, ina209_show_value,
--			  ina209_set_value, INA209_POWER_OVER_LIMIT);
--
--static SENSOR_DEVICE_ATTR(power1_max_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 13);
--static SENSOR_DEVICE_ATTR(power1_crit_alarm, S_IRUGO, ina209_show_alarm, NULL,
--			  1 << 8);
-+static SENSOR_DEVICE_ATTR_RO(power1_input, ina209_value, INA209_POWER);
-+static SENSOR_DEVICE_ATTR_RO(power1_input_highest, ina209_value,
-+			     INA209_POWER_PEAK);
-+static SENSOR_DEVICE_ATTR_WO(power1_reset_history, ina209_history, 1 << 4);
-+static SENSOR_DEVICE_ATTR_RW(power1_max, ina209_value, INA209_POWER_WARN);
-+static SENSOR_DEVICE_ATTR_RW(power1_crit, ina209_value,
-+			     INA209_POWER_OVER_LIMIT);
-+
-+static SENSOR_DEVICE_ATTR_RO(power1_max_alarm, ina209_alarm, 1 << 13);
-+static SENSOR_DEVICE_ATTR_RO(power1_crit_alarm, ina209_alarm, 1 << 8);
- 
- /* Current */
--static SENSOR_DEVICE_ATTR(curr1_input, S_IRUGO, ina209_show_value, NULL,
--			  INA209_CURRENT);
-+static SENSOR_DEVICE_ATTR_RO(curr1_input, ina209_value, INA209_CURRENT);
- 
--static SENSOR_DEVICE_ATTR(update_interval, S_IRUGO | S_IWUSR,
--			  ina209_show_interval, ina209_set_interval, 0);
-+static SENSOR_DEVICE_ATTR_RW(update_interval, ina209_interval, 0);
- 
- /*
-  * Finally, construct an array of pointers to members of the above objects,
+ static struct attribute *ina3221_attrs[] = {
+ 	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
 -- 
 2.7.4
 
