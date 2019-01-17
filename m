@@ -2,105 +2,101 @@ Return-Path: <SRS0=PihD=PZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D433C43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 23:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18EC2C43387
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 23:36:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE95320851
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 23:16:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC3A52086D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 23:36:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sLXvPzaE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oFrX1p9c"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726993AbfAQXQ2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 18:16:28 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41932 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfAQXQ2 (ORCPT
+        id S1726604AbfAQXgz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 18:36:55 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36143 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726008AbfAQXgz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 18:16:28 -0500
-Received: by mail-pf1-f194.google.com with SMTP id b7so5563730pfi.8;
-        Thu, 17 Jan 2019 15:16:27 -0800 (PST)
+        Thu, 17 Jan 2019 18:36:55 -0500
+Received: by mail-pg1-f194.google.com with SMTP id n2so5143400pgm.3;
+        Thu, 17 Jan 2019 15:36:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Z2Qiq0Ed588WGoXnC05hwrw0bSJ0AT21Dhu9rJ7m6Xo=;
-        b=sLXvPzaEhjKQfTb9+vpI/ouwGnfbEkqvdmUaVSgtOBqBud546z2SBrKkj3ZIB8eCjK
-         qFMWnDu/JRVEKjBqWycfD9d8eOuPQs7nQortz2QdluO5dqCJa07e8Z4CohOLuVa0j4NE
-         578RA6TS/I0R4vT2sm6OXewIbWN7G0dcQVApEuy8YtgWWsgMV8nfecyKNVj88ERr7Hut
-         HYb+hgjtwsZV/a5p2ih1fTc9j1dMWYzVMaKW++dpoI7XM5SLOpRV7N1FcCyzlf8vuH6W
-         ggfsJPT7FRAfixAXA8JLT6XKWSQfTrctEAKR9MiWRcskqkm5ehLOCRdSgsxIFsVyKYBJ
-         YwAA==
+        bh=mUOUrhc55hYKZLuJ30VUbIjoTyKBilkmeOoNQ0KpoIA=;
+        b=oFrX1p9cYbZb3NNGnfhPTz6vzRW6HAGja1V+ISfB9ZhzJnkjxAR6vVVACWL7q7MdDI
+         2Z+MPxMGgAXlqF2KQb1hbB5J4GP/6S/VwAyDlWG3TqQRHMrhH56WqLuZtZB0vFwc6eM2
+         4Iee2xEl5Geq+LMWQqSw24yoXc089vBoOJ4WoBFO+SoRZikbtU1D2T8UgcSQctqDxw4h
+         3TRK2DP08kPxjm59uaREy+28qEFLr9zRoPjVvAi5nDnGyiM4OUSWHOcAfKF21AlBo6NZ
+         qITVp9UpIlg0a3SSa/ZB1mJFFg4x1Vlj1yCzANyToHhgHkIlXFlvscUshsbf87Rrnqqt
+         cM7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Z2Qiq0Ed588WGoXnC05hwrw0bSJ0AT21Dhu9rJ7m6Xo=;
-        b=caaOEqOwRb7WDIcmKlxZ+k2OnNCmpJ7IUs9kVdUXR2taAm45lhqn7CLOeixUgdT844
-         G0E0cR0ulinUuCjHDHvwuVfQNhZ+wxk/2bdYP9GI+Y/BjqPat4DEODtGE/ogS3+4c6uq
-         ExTs+p8TvaWFnJBzQQS6uuZjV1eTBICQ9VohoVoTZIewSHPuibf0CWpIAnmAaEG5MRmI
-         MAaAPakhtJjvb62YRsZetk0sSZY8UdXqhQ0U85QgndmcwLlws+fin5zP2AomViFn0Eyq
-         C1TNqFSb+m/JY3adh4VtFBko9uY9NOj9O2vVdpUK8DdU4/wXrLpUTG37I0VfoFXQxTQh
-         IoLA==
-X-Gm-Message-State: AJcUukdDK16XBt7OjqBkGKP4O6mOlATPqyiX1eMSUi8JNcJfnIUUxYJg
-        pI5AkCYAeEjji3GNAoGj5Uc=
-X-Google-Smtp-Source: ALg8bN4leVLb42zsC8U0ccMYFCDWtoLfSKM/fX3V4FAF2HoRLYrIvdDiZ8iMZDvioiEPmeauQaWXVQ==
-X-Received: by 2002:a63:fe0a:: with SMTP id p10mr15142445pgh.265.1547766987223;
-        Thu, 17 Jan 2019 15:16:27 -0800 (PST)
-Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id y6sm5685597pfd.104.2019.01.17.15.16.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 17 Jan 2019 15:16:27 -0800 (PST)
-Date:   Thu, 17 Jan 2019 15:16:22 -0800
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     =?iso-8859-1?B?QnL8bnMs?= Stefan <Stefan.Bruens@rwth-aachen.de>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC][PATCH] hwmon: (ina2xx) Improve current and power reading
- precision
-Message-ID: <20190117231622.GA9310@Asurada-Nvidia.nvidia.com>
-References: <20181121012629.5432-1-nicoleotsuka@gmail.com>
- <2863036.QIPGp1Eqjm@sbruens-linux.lcs.intern>
- <20181121194051.GA8902@Asurada-Nvidia.nvidia.com>
- <1717545.GXSegKtrMu@sbruens-linux.lcs.intern>
- <20190105012642.GA18025@Asurada-Nvidia.nvidia.com>
- <20190117223828.GI16918@Asurada-Nvidia.nvidia.com>
- <20190117231323.GB23511@roeck-us.net>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mUOUrhc55hYKZLuJ30VUbIjoTyKBilkmeOoNQ0KpoIA=;
+        b=t+1iN8noVHYIx0Fz8tJVDeAAUqExyF7KLq+JO25yPpsvSQD/9UpsnWXjbjo4H1lXzW
+         ebqtcldIrKqoOHQb4oPMVgqJnBq7R/VkW+9u5nUI8LyMB15a9SzmsV1e6MMXyti4fSrM
+         dgFh4iCIXlnkiwqh350PYMtMkknSUjAPnxKH6jUdE9EdeMDz/lDy2Fxu5XC+rFe+ecvT
+         MAzBfMdwp0sFqiU7/iY1JRVW2k5lk6nx6PgKWfVcD2yChdt3w3BqyxIHVRybxOpyqcYu
+         KozIL4Wad54glck9Qp8pdeLgy6cCeDYX8NiwpARL91VfrNFLZJen8q8IQKEoaTa6YqCc
+         VkTg==
+X-Gm-Message-State: AJcUukcDj/9BCYBFZnnJVn3UMMW3xY2qG4pm5aYaptzXNx72VImbKEOE
+        4+L4PfQxwtRdwEr60uz13Pc=
+X-Google-Smtp-Source: ALg8bN4UNGClMMrUXo0UgnHyDTYl+AzOh+BjrOUm2AA/WXlz4OwdHpuH+aShJBkkgK0nce/czKjW8Q==
+X-Received: by 2002:a62:9fcf:: with SMTP id v76mr11383617pfk.144.1547768214134;
+        Thu, 17 Jan 2019 15:36:54 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z9sm8682114pfd.99.2019.01.17.15.36.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Jan 2019 15:36:53 -0800 (PST)
+Date:   Thu, 17 Jan 2019 15:36:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] hwmon (ina3221) Add single-shot mode support
+Message-ID: <20190117233651.GA24862@roeck-us.net>
+References: <20190117231253.8828-1-nicoleotsuka@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190117231323.GB23511@roeck-us.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190117231253.8828-1-nicoleotsuka@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-On Thu, Jan 17, 2019 at 03:13:23PM -0800, Guenter Roeck wrote:
-
-> I have one claim stating that your change won't make a difference,
-> and your claim that it would. That leaves me with no choice but to
-> spend a large amount of time with the datasheet, and possibly with
-> my evaluation boards, trying to find out who is correct. Unfortunately,
-> time is scarce to come by those days. I would very much prefer for
-> you folks to sort out your differences and present me with a single
-> opinion.
+On Thu, Jan 17, 2019 at 03:12:51PM -0800, Nicolin Chen wrote:
+> By default, ina3221, as a hardware monitor, continuously measures
+> the inputs and generates corresponding data. However, for battery
+> powered devices, this mode might be power consuming.
 > 
-> Long term the best solution would really be to replace the hwmon
-> driver with the iio driver and use the iio-hwmon bridge. The ina2xx
-> driver doesn't support limits, so there is no real benefit of using
-> the hwmon driver over the iio driver, at least assuming that the
-> iio driver supports all the attributes. So maybe you should make your
-> case for the changes in the iio driver.
+> This series of patches add a feature of changing default operating
+> mode to its single-shot mode via DT.
+> 
+> Changelog
+> v2->v3:
+>  * Added "Reviewed-by" from Rob to PATCH-1
+>  * Cleaned-up PATCH-2
+> v1->v2:
+>  * Cleaned-up PATCH-2
+> 
+> Nicolin Chen (2):
+>   dt-bindings: hwmon: ina3221: Add ti,single-shot property
+>   hwmon: (ina3221) Implement ti,single-shot DT property
+> 
+>  .../devicetree/bindings/hwmon/ina3221.txt     | 10 ++++++++++
+>  drivers/hwmon/ina3221.c                       | 19 +++++++++++++++++++
+>  2 files changed, 29 insertions(+)
+> 
+Series applied to hwmon-next.
 
-Thanks for the input. Let's drop this hwmon change then.
+Thanks,
+Guenter
