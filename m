@@ -2,122 +2,91 @@ Return-Path: <SRS0=PihD=PZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F979C43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C500C43387
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 22:30:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C01E20868
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C349C20851
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 22:30:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktHbSnlM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwqcp6qN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728924AbfAQVOo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 16:14:44 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33603 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbfAQVOo (ORCPT
+        id S1725856AbfAQWaR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 17:30:17 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41782 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725784AbfAQWaR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 16:14:44 -0500
-Received: by mail-pg1-f194.google.com with SMTP id z11so5000271pgu.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:43 -0800 (PST)
+        Thu, 17 Jan 2019 17:30:17 -0500
+Received: by mail-pf1-f193.google.com with SMTP id b7so5512106pfi.8;
+        Thu, 17 Jan 2019 14:30:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=UQav4Opv0hhsKj7mfF9ZhNlerLO3yXWgigWMegpFZUk=;
-        b=ktHbSnlM9HkrQidcWsJ3diymAH3naxWACK1G6xn/r1yRsO5cfc0ojJ3atifa3t8ysL
-         EFXBKaaL1ktMROba9X5GbtSAlaDIqs3iLzU/Qkz63UAU6gFi9DPyHfrhczEgIODI4peX
-         Ei7sBB+kkG09jlEgJnsvgA5gW6dO+YKD72chd1N7TSGz8ppqDzzBl0ucGfQFxyDY6M1D
-         Nri5xMybCgaeOxVLSEj0GlxAOCr0TUjVkhiDLn1SoNPcCxEpkS6LPIHmckztV2tmCThb
-         ocMdWN1O+zzldUEABjJ9FrE/powIjW89gS0HOmRNLI2AvOZ+UAaotQ8DuoUqZY5O2MKk
-         aOeA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Flg9UyWqDfkMw/fLK76ciPXUqMDoI3BxkA0JnI3gY78=;
+        b=iwqcp6qNckDpxeGQnZCvsWT4lATx5KeuSr68meF/BpF8H3hAZNNmWvmukTjvaHYtzA
+         1gSA2OUm+c4NucjzTAQJh7CNL1meYFuQJF0VDAxesD4LpJ5qMfpBGhpLBVb6jha7sa/m
+         QW77jAh7RWvkhF87ydiDbMDLbeClztvaL54pKrFuA+HvqVEdpr9Jm9WWz/ab5zEbo2g+
+         N+srYVKGTaYrzAsDjc53dmHgG+XVRFSBNi+jZy0uuIyFX4iHlWgqWtjrxU8YMEqnKNID
+         zArgCAJuPX8OsDtwRh3GzFNDzqh8BYdi4IH+6Qd8/9DhMVZ8IRIkaV58dbb0TjqhqKcS
+         PVfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=UQav4Opv0hhsKj7mfF9ZhNlerLO3yXWgigWMegpFZUk=;
-        b=EaSxDsD9R/gMtWwFyLAyh2PSYWJPqhAT4evXfsYQQXL/kjFY/fHcU+6FbnJNCZ64gG
-         bMwzV99iI5my8fuYF+hcknn8Nm+B6yM/suVmlKENUh6ZnFr+iCQGuKNLQUYoqbMT06xn
-         qFijfDbztULiZRKXI/sDH0OWwnR0LX+QlLIBdfIVgzQ5IwEkpF9zZEhm9OLdMq8GnZgm
-         PKC1TthhffAIwxBbtHtMSSFZ/dg2re1yAXdNgZ6gmrjtJ43EE+2TivBaDTYs6qa+oskQ
-         83aOfOhY8XJF226+7nbZTywBse9cPCoYELlKYHbkY1bylQD6hi+nROf552QeVeOUzV+T
-         ImkQ==
-X-Gm-Message-State: AJcUukdjzMgxrnKORRY+HOyyIphcJWtwD0sOhNVZKCcrIDB5EM2yxlYx
-        KMEU9aGp/vQFWVENiXe6XWMSZH2K
-X-Google-Smtp-Source: ALg8bN4UnjachFUkC4H8nZIoyTO7N/hHM3Uz0EnWMJMS2szbPIImn/oqxwm5DZW6TwBklwwnVMGuzw==
-X-Received: by 2002:a65:4381:: with SMTP id m1mr14653748pgp.358.1547759682435;
-        Thu, 17 Jan 2019 13:14:42 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n70sm5057409pfi.185.2019.01.17.13.14.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Jan 2019 13:14:41 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 29/29] hwmon: (ltc4245) Replace S_<PERMS> with octal values
-Date:   Thu, 17 Jan 2019 13:13:49 -0800
-Message-Id: <1547759629-23007-30-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
-References: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Flg9UyWqDfkMw/fLK76ciPXUqMDoI3BxkA0JnI3gY78=;
+        b=gcPm0YcwCC/s+ZnXPq3788OTMIXU+ZtqmZZjb+iC2YW0b1p4UlKeMhilcOa/TmBwgE
+         gKZZjtU02n2Y5r3XdFeF3PM0y3y3SfGQc5DQddAE3cCHZTe9EsZyKsfJM5gObq9JIS9f
+         m9kSW154FIdprBHRJo3s24jC/NU3PmeuFNArjSnxjZd3kX+612o4l5NdhypsJS1EuNi9
+         PiaJC48XI7kgej7Xf+4FAsgZ0JxBXq6KlCn/tfvCKvJhDfNumH6Awc3nKYATBU9bkU6r
+         tDFyxa9/rHZQn5WkZ6+AJ5W/Nu+Mrj9uLJRh8byZFxZJ2Q9tcYmX110XRYTKG6AWrLzF
+         CpqA==
+X-Gm-Message-State: AJcUukdKvYBtRpWUn1hlnPCj0UrYq0t7TM2hH4XSJY2muMKnT4uQvSiM
+        ZkzHGeTxnA2tdiWFngClzz4=
+X-Google-Smtp-Source: ALg8bN51QAJdkUnuMhqB8DcZqA7nlGEoUa3s2Mrv81kVasrJi0932YTdly1kTMg4XxeVpMI24gPWyQ==
+X-Received: by 2002:a62:6e07:: with SMTP id j7mr17151733pfc.135.1547764216352;
+        Thu, 17 Jan 2019 14:30:16 -0800 (PST)
+Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id u70sm4875968pfa.176.2019.01.17.14.30.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 17 Jan 2019 14:30:15 -0800 (PST)
+Date:   Thu, 17 Jan 2019 14:30:13 -0800
+From:   Nicolin Chen <nicoleotsuka@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: (ina3221) Implement ti,single-shot DT
+ property
+Message-ID: <20190117223012.GH16918@Asurada-Nvidia.nvidia.com>
+References: <20190105030636.533-1-nicoleotsuka@gmail.com>
+ <20190105030636.533-3-nicoleotsuka@gmail.com>
+ <20190107193555.GA13547@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190107193555.GA13547@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Replace S_<PERMS> with octal values.
+On Mon, Jan 07, 2019 at 11:35:55AM -0800, Guenter Roeck wrote:
 
-The conversion was done automatically with coccinelle. The semantic patches
-and the scripts used to generate this commit log are available at
-https://github.com/groeck/coccinelle-patches/hwmon/.
+> > +	if (of_property_read_bool(np, "ti,single-shot"))
+> > +		ina->single_shot = true;
+> > +
+> 	ina->single_shot = of_property_read_bool(np, "ti,single-shot");
+> 
+> No need to resend right now; let's wait for feedback from Rob.
 
-This patch does not introduce functional changes. It was verified by
-compiling the old and new files and comparing text and data sizes.
+Looks like Rob has acked. Is this resend version fine for review?
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/ltc4245.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/ltc4245.c b/drivers/hwmon/ltc4245.c
-index 082f0a0bd8a0..34d0653ca607 100644
---- a/drivers/hwmon/ltc4245.c
-+++ b/drivers/hwmon/ltc4245.c
-@@ -362,11 +362,11 @@ static umode_t ltc4245_is_visible(const void *_data,
- 		case hwmon_in_input:
- 			if (channel > 9 && !data->use_extra_gpios)
- 				return 0;
--			return S_IRUGO;
-+			return 0444;
- 		case hwmon_in_min_alarm:
- 			if (channel > 8)
- 				return 0;
--			return S_IRUGO;
-+			return 0444;
- 		default:
- 			return 0;
- 		}
-@@ -374,14 +374,14 @@ static umode_t ltc4245_is_visible(const void *_data,
- 		switch (attr) {
- 		case hwmon_curr_input:
- 		case hwmon_curr_max_alarm:
--			return S_IRUGO;
-+			return 0444;
- 		default:
- 			return 0;
- 		}
- 	case hwmon_power:
- 		switch (attr) {
- 		case hwmon_power_input:
--			return S_IRUGO;
-+			return 0444;
- 		default:
- 			return 0;
- 		}
--- 
-2.7.4
-
+Thank you
+Nicolin
