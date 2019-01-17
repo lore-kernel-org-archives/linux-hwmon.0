@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECB6C43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCE1C43387
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A5E720855
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF44220855
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/rpbUHY"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ftJUvApk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728423AbfAQVOF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 16:14:05 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46791 "EHLO
+        id S1728436AbfAQVOG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 16:14:06 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44504 "EHLO
         mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728286AbfAQVOE (ORCPT
+        with ESMTP id S1728286AbfAQVOG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 16:14:04 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c73so5409584pfe.13
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:04 -0800 (PST)
+        Thu, 17 Jan 2019 16:14:06 -0500
+Received: by mail-pf1-f195.google.com with SMTP id u6so5416599pfh.11
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=48LmfwR+pLchJCu5bEeWFFVbtD0D/VnUkQL7IQD9lb4=;
-        b=K/rpbUHYbXMzi4fxhT/xg2K65fwp0x+2iHEBKsnofmGKLtudd/ea0WEHdwzFeCozAL
-         PMG0h10NKLni6JthhI4fxoUW5nED7S0n4DqUyI39JJUb0o3vFVIlYjy5hGQ2cU+6Udfg
-         AR/p0ED/U5PQymDzkQjdtTUgmOk/Ug+LoXP7pJiD6TkPrqk5gEhNU1Kfmzgh/mB6VSAo
-         MasKIhlsCIps3Ct7BUx2AiAxFuikMscAcdlY/hfOe8Q9Bfe6AS7rKIR8MR+XGWQUZ3uv
-         9V/gT3bIsPXtCHBDJzwCWZDUD1OBylXCjG8p5Ibk9Eq+i9i0MswaHJKC2AiAEUu38nVa
-         ZoZA==
+        bh=JVs2+vUWrbs1sUEGMyhyGuVRYb9oTyBLjoe+e8rENr0=;
+        b=ftJUvApkD4Zdy3sSZzow3osJuAGQYUHhwgbXHRrIlTj0zDOxiCwDdTLEM0lGDR4sut
+         ebUcqB/+wf+Tylkkq1PwUjdKPri4nByMRvB7o2bhobGrXquc/eP73PUVlC+/WFjZgQQj
+         UHyt0OeBRGYfIR1yP1HhQyMRWSgImaeeoFumfHzKwrDbspguzCRNbIRAu67L2YNNGoep
+         p8wKeiuW4rXWZpJrTeknAhVIoU8sb8tkhjyrtTrpHoLALiCub7rab++tC1NCbiWib/9l
+         3D682ZfOT83XOY3MdvLIo4kwyRj2UGXtvUSSccRCSkj9B+908gTVHliU1BhBckux8xY2
+         wnyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=48LmfwR+pLchJCu5bEeWFFVbtD0D/VnUkQL7IQD9lb4=;
-        b=lLQAhv4VosVyHx/mamvrqILFTHOXcfvULZkvNtDuc+Q9pfWMGicHJt/h/SBSeztmWK
-         TSen8Iel26n0li9pt92NaLV7sQ5M4X3PA0+ojOj5Sm+RMPl1x5dCVwO57LTzU9lcotEJ
-         CNFR0U0s6JSc35io748u1fy0grzFLfWjvHUCef9HBJJYy8PexCQtXefHrDhoZHXR5uDd
-         8q3coKlcjNJjyg2UQ0ZLCB8drA6GWpuq3104JVw19NOrLzIFuULhyN4Sv940qXe76j+B
-         YaW/OvbkV4F6GLtYsiu4WFMCTwwNwsJ3OJ3B6Pu3027h+JWL3WptJSm3vCC6QD2xs806
-         l8oA==
-X-Gm-Message-State: AJcUukcUiyiJhUW6WwhUeMQlg5PZRs/9MpTDvLInuzQEk4GfpqMQneWY
-        RtNX8Smny9wprsKjAH/1mhu1A7/r
-X-Google-Smtp-Source: ALg8bN4bUzqdG4/abNZSWrW46WgRTY5HIS6utDfOVVgQNF2XdTyK31GMe29ejZU3z7JS0CG03l9nSA==
-X-Received: by 2002:a63:40c6:: with SMTP id n189mr14603054pga.355.1547759643642;
-        Thu, 17 Jan 2019 13:14:03 -0800 (PST)
+        bh=JVs2+vUWrbs1sUEGMyhyGuVRYb9oTyBLjoe+e8rENr0=;
+        b=OcS36IImsHyfFfxSySQawS0rff+IZTtEoOOVuk9zEGwgcLb0+LhCcfTz3XTL+uKnKv
+         JR4mDZ8rvncGP1nEOBfjQvaoUfHR8KTErIjGLySjP4/Dcx3W8oWNdDXuqjqeA0dOl+TJ
+         g7WbToZxeiJVlDoy4fmx8kBX3An5zVZl6TnPsvG5oy6TVY4klZa7Xtg822ptNkrJyg2O
+         94ttL1Ut/BQAwsxErIiiBhYfoEdv3RWfsAH0EReiWif/vZIo6CYC4xB5rj8pzXvAfIki
+         Y8WDwSeeWTIw06KwEpuo/p8ARplt889p1OTnqLlr1ptk+hlnH8tMm8eOF6nnCvAuKv8z
+         HqFA==
+X-Gm-Message-State: AJcUukcsiqIo6WBcamGHjqw1A3t70YEqB5Tsoxnk+duWZwJ/fZEyqAgR
+        uqOOUKsl5FztdzWp9Yas5J88I6iX
+X-Google-Smtp-Source: ALg8bN4fvldp1KZz6iUMFJOU3Nx98XC1HMqNw2f+S2cLjOXCWA8PL1qRXtEqbHDWc/qjo/eAEh195g==
+X-Received: by 2002:a63:5402:: with SMTP id i2mr14630604pgb.79.1547759645377;
+        Thu, 17 Jan 2019 13:14:05 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w10sm3413319pgi.81.2019.01.17.13.14.02
+        by smtp.gmail.com with ESMTPSA id w185sm3754858pfb.135.2019.01.17.13.14.04
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Jan 2019 13:14:03 -0800 (PST)
+        Thu, 17 Jan 2019 13:14:04 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 06/29] hwmon: (i5500_temp) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date:   Thu, 17 Jan 2019 13:13:26 -0800
-Message-Id: <1547759629-23007-7-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 07/29] hwmon: (i5k_amb) Replace S_<PERMS> with octal values
+Date:   Thu, 17 Jan 2019 13:13:27 -0800
+Message-Id: <1547759629-23007-8-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
 References: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
@@ -69,10 +69,7 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use SENSOR[_DEVICE]_ATTR[_2]_{RO,RW,WO} to simplify the source code,
-to improve readbility, and to reduce the chance of inconsistencies.
-
-Also replace any remaining S_<PERMS> in the driver with octal values.
+Replace S_<PERMS> with octal values.
 
 The conversion was done automatically with coccinelle. The semantic patches
 and the scripts used to generate this commit log are available at
@@ -83,48 +80,67 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/i5500_temp.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/hwmon/i5k_amb.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/i5500_temp.c b/drivers/hwmon/i5500_temp.c
-index 400e0675a90b..a51038c6597d 100644
---- a/drivers/hwmon/i5500_temp.c
-+++ b/drivers/hwmon/i5500_temp.c
-@@ -58,7 +58,7 @@ static ssize_t temp1_input_show(struct device *dev,
- 	return sprintf(buf, "%ld\n", temp);
- }
- 
--static ssize_t show_thresh(struct device *dev,
-+static ssize_t thresh_show(struct device *dev,
- 			   struct device_attribute *devattr, char *buf)
- {
- 	struct pci_dev *pdev = to_pci_dev(dev->parent);
-@@ -72,7 +72,7 @@ static ssize_t show_thresh(struct device *dev,
- 	return sprintf(buf, "%ld\n", temp);
- }
- 
--static ssize_t show_alarm(struct device *dev,
-+static ssize_t alarm_show(struct device *dev,
- 			  struct device_attribute *devattr, char *buf)
- {
- 	struct pci_dev *pdev = to_pci_dev(dev->parent);
-@@ -84,11 +84,11 @@ static ssize_t show_alarm(struct device *dev,
- }
- 
- static DEVICE_ATTR_RO(temp1_input);
--static SENSOR_DEVICE_ATTR(temp1_crit, S_IRUGO, show_thresh, NULL, 0xE2);
--static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO, show_thresh, NULL, 0xEC);
--static SENSOR_DEVICE_ATTR(temp1_max, S_IRUGO, show_thresh, NULL, 0xEE);
--static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_alarm, NULL, 0);
--static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL, 1);
-+static SENSOR_DEVICE_ATTR_RO(temp1_crit, thresh, 0xE2);
-+static SENSOR_DEVICE_ATTR_RO(temp1_max_hyst, thresh, 0xEC);
-+static SENSOR_DEVICE_ATTR_RO(temp1_max, thresh, 0xEE);
-+static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, alarm, 0);
-+static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, alarm, 1);
- 
- static struct attribute *i5500_temp_attrs[] = {
- 	&dev_attr_temp1_input.attr,
+diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
+index a4edc43dd060..2cf73d8eec1c 100644
+--- a/drivers/hwmon/i5k_amb.c
++++ b/drivers/hwmon/i5k_amb.c
+@@ -296,7 +296,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_label", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0444;
+ 			iattr->s_attr.dev_attr.show = show_label;
+ 			iattr->s_attr.index = k;
+ 			sysfs_attr_init(&iattr->s_attr.dev_attr.attr);
+@@ -311,7 +311,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_input", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0444;
+ 			iattr->s_attr.dev_attr.show = show_amb_temp;
+ 			iattr->s_attr.index = k;
+ 			sysfs_attr_init(&iattr->s_attr.dev_attr.attr);
+@@ -326,7 +326,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_min", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IWUSR | S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0644;
+ 			iattr->s_attr.dev_attr.show = show_amb_min;
+ 			iattr->s_attr.dev_attr.store = store_amb_min;
+ 			iattr->s_attr.index = k;
+@@ -342,7 +342,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_mid", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IWUSR | S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0644;
+ 			iattr->s_attr.dev_attr.show = show_amb_mid;
+ 			iattr->s_attr.dev_attr.store = store_amb_mid;
+ 			iattr->s_attr.index = k;
+@@ -358,7 +358,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_max", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IWUSR | S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0644;
+ 			iattr->s_attr.dev_attr.show = show_amb_max;
+ 			iattr->s_attr.dev_attr.store = store_amb_max;
+ 			iattr->s_attr.index = k;
+@@ -374,7 +374,7 @@ static int i5k_amb_hwmon_init(struct platform_device *pdev)
+ 			snprintf(iattr->name, AMB_SYSFS_NAME_LEN,
+ 				 "temp%d_alarm", d);
+ 			iattr->s_attr.dev_attr.attr.name = iattr->name;
+-			iattr->s_attr.dev_attr.attr.mode = S_IRUGO;
++			iattr->s_attr.dev_attr.attr.mode = 0444;
+ 			iattr->s_attr.dev_attr.show = show_amb_alarm;
+ 			iattr->s_attr.index = k;
+ 			sysfs_attr_init(&iattr->s_attr.dev_attr.attr);
 -- 
 2.7.4
 
