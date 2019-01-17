@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5E3EC43387
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF94C43612
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AF04720855
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D36B20855
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Jan 2019 21:14:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4vSbHPL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P9a6cUvG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbfAQVOa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 16:14:30 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39180 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728664AbfAQVOa (ORCPT
+        id S1728741AbfAQVOc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 16:14:32 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36595 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728664AbfAQVOc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 16:14:30 -0500
-Received: by mail-pg1-f196.google.com with SMTP id w6so4986938pgl.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:29 -0800 (PST)
+        Thu, 17 Jan 2019 16:14:32 -0500
+Received: by mail-pf1-f195.google.com with SMTP id b85so5431430pfc.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jan 2019 13:14:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=x0+ND3oN1efrXphYsthVrA2mU6vQ0dqg4bRDgsUTLhI=;
-        b=P4vSbHPLC2gUZv2mBL/e0oab3dMKOrXACxy+Q4fKc2Kl5I99m6VN5HgZEucbPZr3yE
-         9AVDpR1V//yx0eYbAWVGYmH9Inyi82tRwnG8q4Ihfq/EkEGcKh/HrKFYHzT+RMxVsiwC
-         VVKUGqKVTrhDzO92WzGiLRxV/5hnpxozkE/keVyAin1tfzmeYSroDK7oOSOmHm6UdLbF
-         pOT8t+ipjmMbgxx2Bkzccq+/mwYEm0f/nceDAbIkqwJPNTo7c6WG86F6fP3A/HKueRwC
-         WfKxijAbW1PrJTQOdrZ7563wz4YjWlpvhQmaxikhqokvFzj+rFf2sYX3P7S9d4i8VYLb
-         5Wyg==
+        bh=WotTsz6+om3jrperZj7Nx/HIO5a1d6AFFi1U84t1LPY=;
+        b=P9a6cUvGXSklek6mvJ7/NNMfLIW0OLwrdT+AQO0Wuu7cBdWQknIQEQmosAzRGdpyNm
+         sa/0RkIJGV33ul64YpNjhEOCiW9RgXZDTZeV63LsIQjMxCoV+1ASzSl6vSQcmdmJCepr
+         nSANJosbMSSCGf5eco0bFijUMHpXYYIxiHYsiLWsM+tFdduM+v6d4EYruMiWDyDcnK0e
+         uyRSxH0/cK4t4ZG4w8hvrOE5zLg6kQuA//r3/bsG1P7s/+KXkXZJe5OOGO6lN+BQBLtU
+         n3p41dtO9uh25ywY/ANwm6HprG0QUeMw2q+1vqjThH6x3y8nI3jSHGQTQSUklLKI4JYu
+         x4jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=x0+ND3oN1efrXphYsthVrA2mU6vQ0dqg4bRDgsUTLhI=;
-        b=Cmj5RBB3W+OpXTpUKzIWMxiMG1UouD+CegpmijVnceUih/sAAzGdEfQqj8osC/uZLi
-         TmHnu6kwx26KtrkOqVC5cQO07EyMIM/HqSb6CzVPuTjCNWJlEC/5F0koLVLE9naKxRIJ
-         CWFaGbYLdfEmMZsFp2g0Cns258b22qyuky8fzf1MxIVoctd1fFmNOVp+p3mKEIFlbrhx
-         +AcrYUMQTX+PbbzL7clG0DmBnDkOc8S+yfps0HLx9Erj3KHEhX7szVItJDHc9bWi6tXI
-         dpLSY+8PUX+DA4a9puI/mE4+znchPv205WlI9LRTM1xZ48LuBczWTybgaLDDiBuLrMxl
-         AFpQ==
-X-Gm-Message-State: AJcUukfUs54SGMP2Ve8CcYDpX5FbPu4XPMQ0E030zzn8UF1+6p+wt57H
-        3zoT5xTg5UkpzcwBoh1SIvtvzYgS
-X-Google-Smtp-Source: ALg8bN7TfCDqH/am9ITY8nvd92R7nM6mv7XB0Gg3RVaep2bpmOmX7qrTRHSDikwu5FwBh0sR5AO49g==
-X-Received: by 2002:a62:a1a:: with SMTP id s26mr16592941pfi.31.1547759669095;
-        Thu, 17 Jan 2019 13:14:29 -0800 (PST)
+        bh=WotTsz6+om3jrperZj7Nx/HIO5a1d6AFFi1U84t1LPY=;
+        b=tGynurjs/5oLvgpGW6yiRcxubMbn3XPWDa5aLhpK5UDNfBlL/oPL4o5UcCIn5geP/8
+         0Gv0kKwIxQKAgzpILxOG0NmV6lpqLWki5GhtvgbMUE/Tjx/zULfV6Urdss5OkJ21F4QI
+         YaV6qYNIc0YLuPJ5qQfX1XM8HGCU3UlNYsQmwjVUGW/0yOdfMrmz7ltIr1YXQ+yh4sxv
+         0E1H9LuH9iPGmXipO6anLXKuCOPcoFsdoWuWHYT7BvgflIo6yBl/4gGWVE0vGmsfRjkz
+         Rh8912YnsP1DaMldu8zjDvPL78ONI8livRfTJObLi4HkbOKsePYgEXUTLavWFu4Puvr8
+         0eYA==
+X-Gm-Message-State: AJcUukeNsBDxW5v0QvopR0Ht9dSlJGS3wtIFlhAa4HJa4zHOXPzElWTF
+        BEh9MUJ9vIreHEsbu3NNfx8NwVnP
+X-Google-Smtp-Source: ALg8bN4isKQ88kGNCWSn9YxMlqhfyMZkBWoo0Ej2mhMBsB1qgzSerCCNFUMXiP618dy4Eim3boIkew==
+X-Received: by 2002:a62:59c9:: with SMTP id k70mr16460276pfj.243.1547759670742;
+        Thu, 17 Jan 2019 13:14:30 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3sm2432964pgv.31.2019.01.17.13.14.28
+        by smtp.gmail.com with ESMTPSA id z9sm8453651pfd.99.2019.01.17.13.14.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Jan 2019 13:14:28 -0800 (PST)
+        Thu, 17 Jan 2019 13:14:30 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 21/29] hwmon: (lm90) Replace S_<PERMS> with octal values
-Date:   Thu, 17 Jan 2019 13:13:41 -0800
-Message-Id: <1547759629-23007-22-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 22/29] hwmon: (lm92) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date:   Thu, 17 Jan 2019 13:13:42 -0800
+Message-Id: <1547759629-23007-23-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
 References: <1547759629-23007-1-git-send-email-linux@roeck-us.net>
@@ -69,7 +69,10 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Replace S_<PERMS> with octal values.
+Use SENSOR[_DEVICE]_ATTR[_2]_{RO,RW,WO} to simplify the source code,
+to improve readbility, and to reduce the chance of inconsistencies.
+
+Also replace any remaining S_<PERMS> in the driver with octal values.
 
 The conversion was done automatically with coccinelle. The semantic patches
 and the scripts used to generate this commit log are available at
@@ -80,47 +83,96 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm90.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/hwmon/lm92.c | 39 ++++++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index c2f411c290bf..480d70a51778 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1266,17 +1266,17 @@ static umode_t lm90_temp_is_visible(const void *data, u32 attr, int channel)
- 	case hwmon_temp_emergency_alarm:
- 	case hwmon_temp_emergency_hyst:
- 	case hwmon_temp_fault:
--		return S_IRUGO;
-+		return 0444;
- 	case hwmon_temp_min:
- 	case hwmon_temp_max:
- 	case hwmon_temp_crit:
- 	case hwmon_temp_emergency:
- 	case hwmon_temp_offset:
--		return S_IRUGO | S_IWUSR;
-+		return 0644;
- 	case hwmon_temp_crit_hyst:
- 		if (channel == 0)
--			return S_IRUGO | S_IWUSR;
--		return S_IRUGO;
-+			return 0644;
-+		return 0444;
- 	default:
- 		return 0;
- 	}
-@@ -1338,9 +1338,9 @@ static umode_t lm90_chip_is_visible(const void *data, u32 attr, int channel)
+diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
+index e7333f8e185c..39d8afe4279a 100644
+--- a/drivers/hwmon/lm92.c
++++ b/drivers/hwmon/lm92.c
+@@ -143,7 +143,7 @@ static struct lm92_data *lm92_update_device(struct device *dev)
+ 	return data;
+ }
+ 
+-static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
++static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
+ 			 char *buf)
  {
- 	switch (attr) {
- 	case hwmon_chip_update_interval:
--		return S_IRUGO | S_IWUSR;
-+		return 0644;
- 	case hwmon_chip_alarms:
--		return S_IRUGO;
-+		return 0444;
- 	default:
- 		return 0;
- 	}
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+@@ -152,8 +152,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
+ 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[attr->index]));
+ }
+ 
+-static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
+-			const char *buf, size_t count)
++static ssize_t temp_store(struct device *dev,
++			  struct device_attribute *devattr, const char *buf,
++			  size_t count)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct lm92_data *data = dev_get_drvdata(dev);
+@@ -173,7 +174,7 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *devattr,
+ 	return count;
+ }
+ 
+-static ssize_t show_temp_hyst(struct device *dev,
++static ssize_t temp_hyst_show(struct device *dev,
+ 			      struct device_attribute *devattr, char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+@@ -192,9 +193,9 @@ static ssize_t temp1_min_hyst_show(struct device *dev,
+ 		       + TEMP_FROM_REG(data->temp[t_hyst]));
+ }
+ 
+-static ssize_t set_temp_hyst(struct device *dev,
+-			     struct device_attribute *devattr,
+-			     const char *buf, size_t count)
++static ssize_t temp_hyst_store(struct device *dev,
++			       struct device_attribute *devattr,
++			       const char *buf, size_t count)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct lm92_data *data = dev_get_drvdata(dev);
+@@ -224,7 +225,7 @@ static ssize_t alarms_show(struct device *dev, struct device_attribute *attr,
+ 	return sprintf(buf, "%d\n", ALARMS_FROM_REG(data->temp[t_input]));
+ }
+ 
+-static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
++static ssize_t alarm_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
+ {
+ 	int bitnr = to_sensor_dev_attr(attr)->index;
+@@ -232,21 +233,17 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
+ 	return sprintf(buf, "%d\n", (data->temp[t_input] >> bitnr) & 1);
+ }
+ 
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, t_input);
+-static SENSOR_DEVICE_ATTR(temp1_crit, S_IWUSR | S_IRUGO, show_temp, set_temp,
+-			  t_crit);
+-static SENSOR_DEVICE_ATTR(temp1_crit_hyst, S_IWUSR | S_IRUGO, show_temp_hyst,
+-			  set_temp_hyst, t_crit);
+-static SENSOR_DEVICE_ATTR(temp1_min, S_IWUSR | S_IRUGO, show_temp, set_temp,
+-			  t_min);
++static SENSOR_DEVICE_ATTR_RO(temp1_input, temp, t_input);
++static SENSOR_DEVICE_ATTR_RW(temp1_crit, temp, t_crit);
++static SENSOR_DEVICE_ATTR_RW(temp1_crit_hyst, temp_hyst, t_crit);
++static SENSOR_DEVICE_ATTR_RW(temp1_min, temp, t_min);
+ static DEVICE_ATTR_RO(temp1_min_hyst);
+-static SENSOR_DEVICE_ATTR(temp1_max, S_IWUSR | S_IRUGO, show_temp, set_temp,
+-			  t_max);
+-static SENSOR_DEVICE_ATTR(temp1_max_hyst, S_IRUGO, show_temp_hyst, NULL, t_max);
++static SENSOR_DEVICE_ATTR_RW(temp1_max, temp, t_max);
++static SENSOR_DEVICE_ATTR_RO(temp1_max_hyst, temp_hyst, t_max);
+ static DEVICE_ATTR_RO(alarms);
+-static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO, show_alarm, NULL, 2);
+-static SENSOR_DEVICE_ATTR(temp1_min_alarm, S_IRUGO, show_alarm, NULL, 0);
+-static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO, show_alarm, NULL, 1);
++static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, alarm, 2);
++static SENSOR_DEVICE_ATTR_RO(temp1_min_alarm, alarm, 0);
++static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, alarm, 1);
+ 
+ /*
+  * Detection and registration
 -- 
 2.7.4
 
