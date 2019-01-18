@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D46C43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 680ADC43387
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 31F4920652
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36E8820652
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EooudYQj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wt/puWrC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727562AbfARODo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jan 2019 09:03:44 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:50281 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727285AbfARODn (ORCPT
+        id S1727324AbfAROEE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jan 2019 09:04:04 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:33839 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727489AbfARODl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jan 2019 09:03:43 -0500
-Received: by mail-wm1-f68.google.com with SMTP id n190so4631504wmd.0;
-        Fri, 18 Jan 2019 06:03:42 -0800 (PST)
+        Fri, 18 Jan 2019 09:03:41 -0500
+Received: by mail-wr1-f67.google.com with SMTP id j2so15273423wrw.1;
+        Fri, 18 Jan 2019 06:03:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=52hWXrVesE9hsYVcvtF6fWpIkVgqCxxIYdkUhzqrpz8=;
-        b=EooudYQjYAyQVnH01dtyFpFmvjNbyz5EvGFVvYLY2VvATnvqjEY01XCZ1/PHkmq60T
-         QUJOoHTJt1i2OPCZY1HELOGT1zMHL8Rq7uJO04W60uPo8soxOXurj27qP/ft7/xOsCVK
-         2m33r5yQfb2cisVOxJeAdyQG01mF9iaollNmF2ZTNFpGMAzxv0DAacaUI1Hl3yjYYT9P
-         5teW7gk/TBZevv7h6mPHeukCTwj0aUTQYxIX3BK54iJ8ufSlmLpjVOjp9jPO5yEtsvYo
-         KKnPEcRiwNllQygPHuJRja4IHRRqNcvYowloif1boMaajzcx7WW82vGu/g56RH1Ed4Ej
-         JxYQ==
+        bh=NUYEzC/vmFZgItCQvOymRNmQxHG9/z8q+s/lyY68E14=;
+        b=Wt/puWrCW+zAnEqKzUdMLeqWq0K7shRYilkopyRSSqaUG4WD0389NBCYrRjlDfcCo8
+         PunE6m8ZlvUeBnF6nYo8Y5cS7V0VHtsuYwi4o2vDXMfGUOMSePuM9Im5A2lcvELb8THQ
+         x9W+9nDjRv8wyh1+o+4To17CF6RfbuY5F4LAh4j4Y39KzEh1YeqIZ9VO7a4tsrdKj4LK
+         uRq04YKa2g4+PNv26eOsPVXlREjV++skVvTRKKEnZynNPQPVbRntE/vFgq9GcVTy8CSo
+         4GrIxdLRy+ZZn0Qhp0A2YHI0gBUDkUeUUBId5BkHlFfHTC7wz7B/qT3I5Uj+ttCdetNk
+         k6rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=52hWXrVesE9hsYVcvtF6fWpIkVgqCxxIYdkUhzqrpz8=;
-        b=fq1frvln0LetXNV/1pqR/Gf71CTLy1+UAWBg/TXTmUoKVw9Nlx9xp85kwK/dMXxaFr
-         cMxLYMMKv/K5sQvfdIw8+HgCaOJ7GUw1lF1yqcnotU+O2PRiWJSejHBQp9hJ6GfRiF+k
-         77CQ9ODvBTrSqMQsCpRv23xxXGzHmZ00PL5traKFewtYCsDXAWPPUaeKbSJr8/EfDGV5
-         cU3vtFyYuisQ67PA+mEsRyF27lZF+e1EfRR1w8PL3L+YLNFxSb2DhTp0q/kpTdI0a1tr
-         xCW/IKjzSb9tjx1aD4EWRZAnprtIl3noOfBMugpUwibHUf69YZuvTSYsaCimwDAsNTG2
-         f/+Q==
-X-Gm-Message-State: AJcUukf8zTV9nvc60Q8ZuSh0alZr4tzrr1aVFdMvZlphEAcSWREAkzCa
-        PUV9Ky1+RY1kAQggO4F0FwM=
-X-Google-Smtp-Source: ALg8bN4ZpocWfDxw4K8mJso8mLxXVLfgDK3T6BJUwS3dX+JelgVMkM1ikufi55+U9o4Fbgn1Vzrzig==
-X-Received: by 2002:a1c:f319:: with SMTP id q25mr15832227wmq.151.1547820221550;
-        Fri, 18 Jan 2019 06:03:41 -0800 (PST)
+        bh=NUYEzC/vmFZgItCQvOymRNmQxHG9/z8q+s/lyY68E14=;
+        b=d2y+qJ4NM71TDbHG0KGcFmAJgeddQpxsAfg86rhf4MUi/JSz3QZa8GmOHlS4OUZvz5
+         8sJs2Quvoj3IqfqUTdBC/Wffsb2Co3HmwEd27jiRlummW7eVrawr76vOibkCEVTpx7Ic
+         oOOGbPISSI3uy9/w/uEqnCDtbxxGMsWBfHjZKNX6gPX7Xdp8o96nD6FJcS1MgvUv+i+N
+         7k5OSRS37nqmUQZoDgBgtwxw9IreNhF7AdQJXvc7Wg1B8Ru3VM/OM1WkKFrO/6kutQuc
+         ogsJidUEd6+t4Oe/5nCIuW95ahlfQYmtmmNz3/DKHJzAnKcv5nnO3OEgGXutDcxMDZXT
+         /o8Q==
+X-Gm-Message-State: AJcUukfZ0PP/BmPDLW6dXI8KMBZDASjwFh6T08n8tgdjG/bFYEk+kXoG
+        pf3nNVr+EZYLLkfsJw2YM4c=
+X-Google-Smtp-Source: ALg8bN7H25nEZBKyEMbp24Ela+aOF+2ayivG3+FpXe7s5pVbXj8dKkkOzdlhrQFax49TKGoc+F7eqw==
+X-Received: by 2002:adf:b201:: with SMTP id u1mr16428812wra.165.1547820219274;
+        Fri, 18 Jan 2019 06:03:39 -0800 (PST)
 Received: from Red.local ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.40
+        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Jan 2019 06:03:41 -0800 (PST)
+        Fri, 18 Jan 2019 06:03:38 -0800 (PST)
 From:   Corentin Labbe <clabbe.montjoie@gmail.com>
 To:     jdelvare@suse.com, linux@roeck-us.net
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Corentin Labbe <clabbe.montjoie@gmail.com>
-Subject: [PATCH 5/7] hwmon: adm1029: Fix Logical continuations should be on the previous line checkpatch warning
-Date:   Fri, 18 Jan 2019 15:03:27 +0100
-Message-Id: <20190118140329.18970-6-clabbe.montjoie@gmail.com>
+Subject: [PATCH 3/7] hwmon: adm1029: replace S_IXXX macros by their numeric values
+Date:   Fri, 18 Jan 2019 15:03:25 +0100
+Message-Id: <20190118140329.18970-4-clabbe.montjoie@gmail.com>
 X-Mailer: git-send-email 2.19.2
 In-Reply-To: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
 References: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
@@ -72,51 +72,66 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patchs fix the "Logical continuations should be on the previous line" checkpatch warning.
+As requested by checkpatch, this patch replace S_IXXX macros by their numeric values.
 
 Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
 ---
- drivers/hwmon/adm1029.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/hwmon/adm1029.c | 37 ++++++++++++++++---------------------
+ 1 file changed, 16 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
-index f9f4f1f4a4c7..4339f6b864a1 100644
+index 381bfae6b04b..092f16ad774f 100644
 --- a/drivers/hwmon/adm1029.c
 +++ b/drivers/hwmon/adm1029.c
-@@ -131,8 +131,7 @@ static struct adm1029_data *adm1029_update_device(struct device *dev)
- 	 * Use the "cache" Luke, don't recheck values
- 	 * if there are already checked not a long time later
- 	 */
--	if (time_after(jiffies, data->last_updated + HZ * 2)
--	 || !data->valid) {
-+	if (time_after(jiffies, data->last_updated + HZ * 2) || !data->valid) {
- 		int nr;
+@@ -250,32 +250,27 @@ static ssize_t set_fan_div(struct device *dev,
+ 	return count;
+ }
  
- 		dev_dbg(&client->dev, "Updating adm1029 data\n");
-@@ -182,9 +181,9 @@ show_fan(struct device *dev, struct device_attribute *devattr, char *buf)
- 	struct adm1029_data *data = adm1029_update_device(dev);
- 	u16 val;
+-/*
+- * Access rights on sysfs. S_IRUGO: Is Readable by User, Group and Others
+- *			   S_IWUSR: Is Writable by User.
+- */
+-static SENSOR_DEVICE_ATTR(temp1_input, S_IRUGO, show_temp, NULL, 0);
+-static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO, show_temp, NULL, 1);
+-static SENSOR_DEVICE_ATTR(temp3_input, S_IRUGO, show_temp, NULL, 2);
++/* Access rights on sysfs. */
++static SENSOR_DEVICE_ATTR(temp1_input, 0444, show_temp, NULL, 0);
++static SENSOR_DEVICE_ATTR(temp2_input, 0444, show_temp, NULL, 1);
++static SENSOR_DEVICE_ATTR(temp3_input, 0444, show_temp, NULL, 2);
  
--	if (data->fan[attr->index] == 0
--	    || (data->fan_div[attr->index] & 0xC0) == 0
--	    || data->fan[attr->index] == 255) {
-+	if (data->fan[attr->index] == 0 ||
-+	    (data->fan_div[attr->index] & 0xC0) == 0 ||
-+	    data->fan[attr->index] == 255) {
- 		return sprintf(buf, "0\n");
- 	}
+-static SENSOR_DEVICE_ATTR(temp1_max, S_IRUGO, show_temp, NULL, 3);
+-static SENSOR_DEVICE_ATTR(temp2_max, S_IRUGO, show_temp, NULL, 4);
+-static SENSOR_DEVICE_ATTR(temp3_max, S_IRUGO, show_temp, NULL, 5);
++static SENSOR_DEVICE_ATTR(temp1_max, 0444, show_temp, NULL, 3);
++static SENSOR_DEVICE_ATTR(temp2_max, 0444, show_temp, NULL, 4);
++static SENSOR_DEVICE_ATTR(temp3_max, 0444, show_temp, NULL, 5);
  
-@@ -325,8 +324,8 @@ static int adm1029_detect(struct i2c_client *client,
- 	nb_fan_support = i2c_smbus_read_byte_data(client,
- 						ADM1029_REG_NB_FAN_SUPPORT);
- 	/* 0x41 is Analog Devices */
--	if (man_id != 0x41 || (temp_devices_installed & 0xf9) != 0x01
--	    || nb_fan_support != 0x03)
-+	if (man_id != 0x41 || (temp_devices_installed & 0xf9) != 0x01 ||
-+	    nb_fan_support != 0x03)
- 		return -ENODEV;
+-static SENSOR_DEVICE_ATTR(temp1_min, S_IRUGO, show_temp, NULL, 6);
+-static SENSOR_DEVICE_ATTR(temp2_min, S_IRUGO, show_temp, NULL, 7);
+-static SENSOR_DEVICE_ATTR(temp3_min, S_IRUGO, show_temp, NULL, 8);
++static SENSOR_DEVICE_ATTR(temp1_min, 0444, show_temp, NULL, 6);
++static SENSOR_DEVICE_ATTR(temp2_min, 0444, show_temp, NULL, 7);
++static SENSOR_DEVICE_ATTR(temp3_min, 0444, show_temp, NULL, 8);
  
- 	if ((chip_id & 0xF0) != 0x00) {
+-static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, show_fan, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, show_fan, NULL, 1);
++static SENSOR_DEVICE_ATTR(fan1_input, 0444, show_fan, NULL, 0);
++static SENSOR_DEVICE_ATTR(fan2_input, 0444, show_fan, NULL, 1);
+ 
+-static SENSOR_DEVICE_ATTR(fan1_min, S_IRUGO, show_fan, NULL, 2);
+-static SENSOR_DEVICE_ATTR(fan2_min, S_IRUGO, show_fan, NULL, 3);
++static SENSOR_DEVICE_ATTR(fan1_min, 0444, show_fan, NULL, 2);
++static SENSOR_DEVICE_ATTR(fan2_min, 0444, show_fan, NULL, 3);
+ 
+-static SENSOR_DEVICE_ATTR(fan1_div, S_IRUGO | S_IWUSR,
+-			  show_fan_div, set_fan_div, 0);
+-static SENSOR_DEVICE_ATTR(fan2_div, S_IRUGO | S_IWUSR,
+-			  show_fan_div, set_fan_div, 1);
++static SENSOR_DEVICE_ATTR(fan1_div, 0644, show_fan_div, set_fan_div, 0);
++static SENSOR_DEVICE_ATTR(fan2_div, 0644, show_fan_div, set_fan_div, 1);
+ 
+ static struct attribute *adm1029_attrs[] = {
+ 	&sensor_dev_attr_temp1_input.dev_attr.attr,
 -- 
 2.19.2
 
