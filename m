@@ -2,86 +2,119 @@ Return-Path: <SRS0=ckkT=P2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6910AC43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 00:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD614C43387
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 01:47:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36CCE2087E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 00:44:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CAF62086D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 01:47:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="iRnhXj64"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725981AbfARAoA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Jan 2019 19:44:00 -0500
-Received: from Galois.linutronix.de ([146.0.238.70]:48150 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbfARAoA (ORCPT
+        id S1727004AbfARBrW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Jan 2019 20:47:22 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:40784 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726908AbfARBrW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Jan 2019 19:44:00 -0500
-Received: from p4fea4364.dip0.t-ipconnect.de ([79.234.67.100] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1gkIGH-0002Wx-Kf; Fri, 18 Jan 2019 01:43:53 +0100
-Date:   Fri, 18 Jan 2019 01:43:52 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Eddie James <eajames@linux.vnet.ibm.com>
-cc:     LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux@roeck-us.net, jdelvare@suse.com,
-        Mark Rutland <mark.rutland@arm.com>, openbmc@lists.ozlabs.org,
-        robh+dt@kernel.org, joel@jms.id.au,
-        Kate Stewart <kstewart@linuxfoundation.org>
+        Thu, 17 Jan 2019 20:47:22 -0500
+Received: by mail-qt1-f193.google.com with SMTP id k12so13613626qtf.7;
+        Thu, 17 Jan 2019 17:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uTwo0yITEGKp6cTbipX0KbZvBbv3f4rj2ICmUTMtejg=;
+        b=iRnhXj64b80HfZFXu0ykvlYD1yb6EzU65nI3rRetwsQrJhJno6kBwy1zerO1r1bRyJ
+         W8MI+oCJo6yxh/jIbesF9YKyofkByp9Fg1r1e+Jok1LeOME0JvGL4UFwiz5AKXbC5Vna
+         D9zI3xUEiJFNWxsMFEEFM6v/6DRzybcZMVKfk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uTwo0yITEGKp6cTbipX0KbZvBbv3f4rj2ICmUTMtejg=;
+        b=Z0+w2x/G/4/tXxi9iJXR41MWUX2yrc1hfJIhrccTDEsqvNtLRPhVAT0B84yJXsrpni
+         uZzdUeA1C+euIHJpif9NsnnTBeXC7TI/KJ+PqEKKe+P5YqplWpfQoYeH7KvPrbcRVppY
+         azpk1cn5QuGaIM5f34C2ZXv7CEcpU1Lk2PsmIAQTlLiExeZDb0QcHqxtx+t0KrKSu5JD
+         lrncy+YKLtKKKD+lJ+OLnNNvad0iJ+0q2SUZtmZqyCHILBWtCxdvbC6J1Ner1AyUMT93
+         VkSOuXa62ueYECCrntDIj5m2AjZhkfFqDryA7GSkieFQJpRaCswidZ0xcs55RyarLSrq
+         aSNQ==
+X-Gm-Message-State: AJcUukcm4hFlte4eGLOXxWDjazUp7p6pdolCUtk0eU/yxz5nGIScCCgz
+        4oXM3I/SBqO7aiJap8ho89wPz/YyKf+xXtqbONBiyffRsSE=
+X-Google-Smtp-Source: ALg8bN5s1S18KgznjwO4dhn9Mq/f5WN9bFsBjlfPJ6opbGBWDw3+6eWXoCzFvZjJ9v+H4f/2X07g68z69fxED1Lqx+I=
+X-Received: by 2002:ac8:3065:: with SMTP id g34mr14218910qte.136.1547776040664;
+ Thu, 17 Jan 2019 17:47:20 -0800 (PST)
+MIME-Version: 1.0
+References: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com>
+ <1531342898-15790-10-git-send-email-eajames@linux.vnet.ibm.com> <alpine.DEB.2.21.1901180140150.1647@nanos.tec.linutronix.de>
+In-Reply-To: <alpine.DEB.2.21.1901180140150.1647@nanos.tec.linutronix.de>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Fri, 18 Jan 2019 12:47:08 +1100
+Message-ID: <CACPK8Xf3=pTRubt0VnUJ6GyT7bG15oCL+XtqzfeAAtccqbR_xg@mail.gmail.com>
 Subject: Re: [PATCH v4 9/9] hwmon (occ): Add sysfs attributes for additional
  OCC data
-In-Reply-To: <1531342898-15790-10-git-send-email-eajames@linux.vnet.ibm.com>
-Message-ID: <alpine.DEB.2.21.1901180140150.1647@nanos.tec.linutronix.de>
-References: <1531342898-15790-1-git-send-email-eajames@linux.vnet.ibm.com> <1531342898-15790-10-git-send-email-eajames@linux.vnet.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Eddie,
+On Fri, 18 Jan 2019 at 11:44, Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Eddie,
+>
+> On Wed, 11 Jul 2018, Eddie James wrote:
+>
+> > --- /dev/null
+> > +++ b/drivers/hwmon/occ/sysfs.c
+> > @@ -0,0 +1,188 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * OCC hwmon driver sysfs interface
+> > + *
+> > + * Copyright (C) IBM Corporation 2018
+> > + *
+> > + * This program is free software; you can redistribute it and/or modify
+> > + * it under the terms of the GNU General Public License as published by
+> > + * the Free Software Foundation; either version 2 of the License, or
+> > + * (at your option) any later version.
+> > + */
+>
+> The above license information is inconsistent.
+>
+> The SPDX license identifier says GPL v2 only, but the license notice says
+> GPL v2 or later. This is just wrong.
+>
+> Please decide which one to use and please also remove the boiler plate
+> text. It is redundant.
+>
+> See Documentation/process/license-rules.rst
 
-On Wed, 11 Jul 2018, Eddie James wrote:
+Thanks Thomas.
 
-> --- /dev/null
-> +++ b/drivers/hwmon/occ/sysfs.c
-> @@ -0,0 +1,188 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * OCC hwmon driver sysfs interface
-> + *
-> + * Copyright (C) IBM Corporation 2018
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + */
+Eddie, as IBM contributed code our preferred license is GPLv2+. Be
+sure to include the copyright line in your header (I noticed some OCC
+files are missing this, please audit all of your recent
+contributions):
 
-The above license information is inconsistent.
+// SPDX-License-Identifier: GPL-2.0+
+// Copyright IBM Corp 2019
 
-The SPDX license identifier says GPL v2 only, but the license notice says
-GPL v2 or later. This is just wrong.
+Cheers,
 
-Please decide which one to use and please also remove the boiler plate
-text. It is redundant.
-
-See Documentation/process/license-rules.rst
-
-Please fix ASAP.
-
-Thanks,
-
-	tglx
+Joel
