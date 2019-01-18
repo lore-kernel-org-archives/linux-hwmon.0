@@ -2,67 +2,96 @@ Return-Path: <SRS0=ckkT=P2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F2C4C43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 05:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB110C43387
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 003EA20883
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 05:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1547787903;
-	bh=006OUrKTevYCX2185pTGlu3dz0nUnugdRFFdiOwcO3Q=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=Fh/zFB+nfINqPuBxHDYg3wn81OYPD8rgNxvzog/FZfLkvj1xGCUbNCvcRSPkV7njq
-	 C4lX1hzBpmiM4U8Kt8xyXC2BMs5VNnjb5EJONkUgouTUpUZxQSjLSYCnHy6Y9EJZQx
-	 oM9rdEbaTErPcJUcoWuMNVqEIEFGLbU7Q2667AWU=
+	by mail.kernel.org (Postfix) with ESMTP id 7A44620652
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hf4nNOEw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbfARFFC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jan 2019 00:05:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbfARFFC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jan 2019 00:05:02 -0500
-Subject: Re: [GIT PULL] hwmon fixes for hwmon-for-v5.0-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1547787902;
-        bh=006OUrKTevYCX2185pTGlu3dz0nUnugdRFFdiOwcO3Q=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=I4SBL39K2qU92xAntkgeWBenGxfCXV/98KSwTeAWcQxRSxR/SVtsNEw8ziTo7Dmwa
-         MzeuQiMh0cfP+trHJ8p7Ix0B+WqnvBvvcylfo2Ck1hQqDXghF1LZf4zpcnGlTV8c13
-         PhEUrlG5ALWidpipg95ov/+pv0VZgrqixUxGCbuY=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1547758610-27138-1-git-send-email-linux@roeck-us.net>
-References: <1547758610-27138-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1547758610-27138-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.0-rc3
-X-PR-Tracked-Commit-Id: f422449b58548a41e98fc97b259a283718e527db
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0a2fbed84a962c486a71d2c91c86a31332dcbf02
-Message-Id: <154778790197.10702.16097371652738285782.pr-tracker-bot@kernel.org>
-Date:   Fri, 18 Jan 2019 05:05:01 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1727324AbfARODi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jan 2019 09:03:38 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36409 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727080AbfARODh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 Jan 2019 09:03:37 -0500
+Received: by mail-wr1-f68.google.com with SMTP id u4so15203705wrp.3;
+        Fri, 18 Jan 2019 06:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WR1nFNQ/cxF8iimNSvdE701p5pXzi5nUdfvJequTVDc=;
+        b=Hf4nNOEwcdvIiWlwcHar7yGe3wlCEQY+rm54PfaQ55CjCH1f+yyQQey9kkPN2oAOgg
+         mUV0ZtLVNJN28AETiCI1WDlY4UcllKLBdm2lp/VSI2zPoXHs9oo68nwZlJGeNgdbFIla
+         PpSXz9bOBQRXpXdmZ3702CJEowwGoGks1HRl0qgtfz8+BJN4yd7kbQtNlR/CtskGBh0S
+         qJqn3JjLyRAB20KoGknypj4RWSNDD0R/ZX/fE6hxN7L53gBw/PDwD4miX25aYYpUjGj9
+         /d80N8mKDQKvesFZOMp8YpjePqSXlp5vnLypvBV5ibqntqB3ZD/FHb4znDzOVfwCKYwJ
+         dGfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WR1nFNQ/cxF8iimNSvdE701p5pXzi5nUdfvJequTVDc=;
+        b=DZoGQidAjgMMdvkQcOYNthVdnZkzYn+cyU5kRwkvjK5MGNRl1ChTKJwjHh2HZEw1Jj
+         0swUSs+PwM+Op1mLX9fgX864dKqe9b1KP+qXCCA2ylUvQAp9fIQQTl6Y7D8y4OknbUw1
+         2RvYuiaN5SHMd6QaBuaWFR3WIX01ceLDxWRo1mW5/bXXxFKvqZ8kmZidse4Ft0Aus8cf
+         fdUAR861yeLsXbaH4L2r4MgpcR/MR/OAKvKM6bbBjXB4tTvU9MZHkaE6bT3UWzQZu5Ih
+         r0bVP0NduOq/mke8losklhYSp7mla6XyzxgTcSwceIBbkEMTsxwKH8IxWK/FGizIoFDl
+         tT1g==
+X-Gm-Message-State: AJcUukfiM8YUDBPbub7XB4Oiozx8NBqXCpQ+rTrYN49GLV5SD73eu6zV
+        KDj7YjTAPTy367mA9z1tm80N4dv7
+X-Google-Smtp-Source: ALg8bN7DDKCKo+OD01EwDbnqiGZmEOiAnBYhA8dQ6hmHS/xAphe68sGBh5+hhQykxng5lflL98ycGw==
+X-Received: by 2002:a5d:4e82:: with SMTP id e2mr16293255wru.291.1547820215961;
+        Fri, 18 Jan 2019 06:03:35 -0800 (PST)
+Received: from Red.local ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
+        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Jan 2019 06:03:35 -0800 (PST)
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe.montjoie@gmail.com>
+Subject: [PATCH 0/7] hwmon: adm1029: Fix most style problem
+Date:   Fri, 18 Jan 2019 15:03:22 +0100
+Message-Id: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
+X-Mailer: git-send-email 2.19.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Thu, 17 Jan 2019 12:56:50 -0800:
+Hello
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.0-rc3
+Thirteen years later, coding style have change a bit.
+This patch series fixes the gap.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0a2fbed84a962c486a71d2c91c86a31332dcbf02
+This patch serie was tested on my precious so rare real hardware.
 
-Thank you!
+Regards
+
+Corentin Labbe (7):
+  hwmon: adm1029: Remove write to FFF paragraph
+  hwmon: adm1029: Add SPDX header
+  hwmon: adm1029: replace S_IXXX macros by their numeric values
+  hwmon: adm1029: Add blank line after declarations
+  hwmon: adm1029: Fix Logical continuations should be on the previous
+    line checkpatch warning
+  hwmon: adm1029: Fix function alignment
+  hwmon: adm1029: Add a comment for locking mutex
+
+ drivers/hwmon/adm1029.c | 67 +++++++++++++++++++----------------------
+ 1 file changed, 31 insertions(+), 36 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.19.2
+
