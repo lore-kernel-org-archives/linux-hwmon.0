@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D69C43387
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4B6C43612
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7385A20652
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2E7720883
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:03:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dn5D22rd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VFTqonkv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbfARODo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jan 2019 09:03:44 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:41876 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727524AbfARODm (ORCPT
+        id S1727622AbfARODp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jan 2019 09:03:45 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51462 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727553AbfARODp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jan 2019 09:03:42 -0500
-Received: by mail-wr1-f65.google.com with SMTP id x10so15157635wrs.8;
-        Fri, 18 Jan 2019 06:03:41 -0800 (PST)
+        Fri, 18 Jan 2019 09:03:45 -0500
+Received: by mail-wm1-f68.google.com with SMTP id b11so4618462wmj.1;
+        Fri, 18 Jan 2019 06:03:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vCzxSPy+FzZRjZn8HTA+OyQdWgf2KeAGuCfMKZTF/eE=;
-        b=Dn5D22rdXlUC6LOdZ47CDE0REV4rkFHQYoewqEmLB5+xhG3c/URKIKSJeBu2IrTuhZ
-         uWGsEmlBX/4jOxv/GYapduBe89+uM5VBcoGsr+icLa91eG9bxHq2Kt0WqazBmNkKZG3a
-         NpeoGd4cycMby8azEw0+RWujKsZlXSo/YGyv4JOHV4SdyT32hJBRoc8Vk0wASWPWjyEv
-         0c8eyWfVuVgX+Twq5CltUZ3D3ztJ1aclyxYiKos7VTCbm/9+vQ2agPQHf22nwtCFxkg4
-         DZdSuJn9/W9OBEOKXbsGPlnDCqHM2+nUS1XTMOTE8zW5tOEHHSgl7zUy5GDXFlR8QivK
-         PoVw==
+        bh=w7Ai0hltg2jalPdM8DZ6LIbqR1s61sezTuxMf4F3h7I=;
+        b=VFTqonkvdFADx/zms1yRuBIFRbi79hFhXVsaEYJbVAkJWYqlTgDLYefVjgziLNb0P8
+         w1Ngu+7kXmZOoh//mKJQjG16H7DsWZwj2kbsCP6o9U8l9dCzwFzNt1Po4QaShTYja1bg
+         lKJjHw/93AjrUTgdLb3+plwvo1qv3l2RsaSSbzYhnS5KYs5SVlc23D8CSbzyiQPRMsZ9
+         kOHI5oT5kyIoZfGG56NMDuhJEhbdSswcm4ZTWtIPFrOcP1TBidNYhDANZJbG0YsfR0rn
+         TrS2V5pnK3EFGIGQR/hydt4IyO6SaKQjT6aVV5IlHMXX/T/TMylS4rTB8pD8FHUfMy7g
+         y/ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vCzxSPy+FzZRjZn8HTA+OyQdWgf2KeAGuCfMKZTF/eE=;
-        b=oi6ClTGrucA08grSGXY9Kq7nMklHcjKGkQPQcV/VxaIgkmJQPys8+9Z9946gPghBMr
-         ld4T/3NFDABqBFmCs3zyFq88fyWt0sAfc6jsqWEgNpOnYk9heVGnlL77AwB6VokVK8K/
-         iDRv0FZDWL5M0ToTV5/UhoWlyxVl5etcxQQMXRwSPv3a0wMsNR1iRT90z1zYykAB20S2
-         xvtS1I2muxZ9Ay+KKDPHyMfrOj/h9Hob3jngP9ihEQHuIUAGbfTC+HaUghssjoOYID6/
-         25tU1OLG53A51hIfNsnuYAUTsa8Cs8VxTK4RO1DnODlm3qQ64lVx2Xb2BBQLaN0ESFej
-         DCCQ==
-X-Gm-Message-State: AJcUukfPfMtkgigThelCLRpKjhjYrhaVVSiJJ4cG8Nv14OwEaSkR6Gz0
-        20PA7S46SOuUea62nrEE900=
-X-Google-Smtp-Source: ALg8bN4U3nqZAn5zFGzeXhSPpMnuC3pPR08rqSo/CW4odgYwwnO+fxSiLg5fsj2KmPUmc2ZGvu5qVQ==
-X-Received: by 2002:a5d:6152:: with SMTP id y18mr17624308wrt.141.1547820220427;
-        Fri, 18 Jan 2019 06:03:40 -0800 (PST)
+        bh=w7Ai0hltg2jalPdM8DZ6LIbqR1s61sezTuxMf4F3h7I=;
+        b=rJviwlOVK5SCunIMniwKZpQSaPiGhbOJcYKf78HpzkR4vKXYT1e8VYy4+I1msda/xk
+         WXtV5buTlrdLYa32AhYs8gX6GDeSK/NoK7udK5Zv9apQxpl+kMXeV8jd9dX0K83hqk+e
+         BosWVkclbio4fCjQniZHKR7a3N+hPG1KCckdcnjHB2Dw1CF7RqOdnRDj/qlL3juuxoWo
+         pef8c/iq3F9xTk4Tvo34k9t9e4+kDMjiG3cpMfQuZoqrMVdeZkilw627X1dTXT1/xDwq
+         uNgK4Kk5GF3D+DGHCCqjc7XRZ25Q7zP6oV7HdTQbWPLO95ErfDzBbYmi7cYtznCPAVN4
+         MY/Q==
+X-Gm-Message-State: AJcUukfcAJn/mJuOc3hKnxwhZI8e0j4RQ15gfJCi1eV7qv6VeOvOQ2Xu
+        XH+j7mVNhkC15qxjDSPgMps=
+X-Google-Smtp-Source: ALg8bN61yhfhaVfJZB5OHdnPNJtooAJF3HS3D61o39/mudIqtH5joxBW5n45rul7F23Wn10eDdFLpg==
+X-Received: by 2002:a1c:8548:: with SMTP id h69mr14987483wmd.11.1547820222613;
+        Fri, 18 Jan 2019 06:03:42 -0800 (PST)
 Received: from Red.local ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.39
+        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Jan 2019 06:03:39 -0800 (PST)
+        Fri, 18 Jan 2019 06:03:42 -0800 (PST)
 From:   Corentin Labbe <clabbe.montjoie@gmail.com>
 To:     jdelvare@suse.com, linux@roeck-us.net
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Corentin Labbe <clabbe.montjoie@gmail.com>
-Subject: [PATCH 4/7] hwmon: adm1029: Add blank line after declarations
-Date:   Fri, 18 Jan 2019 15:03:26 +0100
-Message-Id: <20190118140329.18970-5-clabbe.montjoie@gmail.com>
+Subject: [PATCH 6/7] hwmon: adm1029: Fix function alignment
+Date:   Fri, 18 Jan 2019 15:03:28 +0100
+Message-Id: <20190118140329.18970-7-clabbe.montjoie@gmail.com>
 X-Mailer: git-send-email 2.19.2
 In-Reply-To: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
 References: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
@@ -72,49 +72,38 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-As requested by checkpatch, this patch adds a blank line after declarations
+This patch fix the "Alignment should match open parenthesis" checkpatch
+warning.
 
 Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
 ---
- drivers/hwmon/adm1029.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hwmon/adm1029.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
-index 092f16ad774f..f9f4f1f4a4c7 100644
+index 4339f6b864a1..e9fe4fc3489e 100644
 --- a/drivers/hwmon/adm1029.c
 +++ b/drivers/hwmon/adm1029.c
-@@ -171,6 +171,7 @@ show_temp(struct device *dev, struct device_attribute *devattr, char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct adm1029_data *data = adm1029_update_device(dev);
-+
- 	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[attr->index]));
+@@ -203,8 +203,8 @@ show_fan_div(struct device *dev, struct device_attribute *devattr, char *buf)
+ 	return sprintf(buf, "%d\n", DIV_FROM_REG(data->fan_div[attr->index]));
  }
  
-@@ -180,6 +181,7 @@ show_fan(struct device *dev, struct device_attribute *devattr, char *buf)
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct adm1029_data *data = adm1029_update_device(dev);
- 	u16 val;
-+
- 	if (data->fan[attr->index] == 0
- 	    || (data->fan_div[attr->index] & 0xC0) == 0
- 	    || data->fan[attr->index] == 255) {
-@@ -196,6 +198,7 @@ show_fan_div(struct device *dev, struct device_attribute *devattr, char *buf)
+-static ssize_t set_fan_div(struct device *dev,
+-	    struct device_attribute *devattr, const char *buf, size_t count)
++static ssize_t set_fan_div(struct device *dev, struct device_attribute *devattr,
++			   const char *buf, size_t count)
  {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct adm1029_data *data = adm1029_update_device(dev);
-+
- 	if ((data->fan_div[attr->index] & 0xC0) == 0)
- 		return sprintf(buf, "0\n");
- 	return sprintf(buf, "%d\n", DIV_FROM_REG(data->fan_div[attr->index]));
-@@ -210,6 +213,7 @@ static ssize_t set_fan_div(struct device *dev,
- 	u8 reg;
- 	long val;
- 	int ret = kstrtol(buf, 10, &val);
-+
- 	if (ret < 0)
- 		return ret;
- 
+ 	struct adm1029_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+@@ -322,7 +322,7 @@ static int adm1029_detect(struct i2c_client *client,
+ 	temp_devices_installed = i2c_smbus_read_byte_data(client,
+ 					ADM1029_REG_TEMP_DEVICES_INSTALLED);
+ 	nb_fan_support = i2c_smbus_read_byte_data(client,
+-						ADM1029_REG_NB_FAN_SUPPORT);
++						  ADM1029_REG_NB_FAN_SUPPORT);
+ 	/* 0x41 is Analog Devices */
+ 	if (man_id != 0x41 || (temp_devices_installed & 0xf9) != 0x01 ||
+ 	    nb_fan_support != 0x03)
 -- 
 2.19.2
 
