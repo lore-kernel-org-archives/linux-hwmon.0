@@ -2,98 +2,104 @@ Return-Path: <SRS0=ckkT=P2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00484C43444
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57AECC43387
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:20:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1EEA20652
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:04:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2197A2086D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 14:20:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cPe1W2uk"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDEhlsb/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727469AbfARODj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jan 2019 09:03:39 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51449 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727285AbfARODj (ORCPT
+        id S1727234AbfAROUo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jan 2019 09:20:44 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35025 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727123AbfAROUo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jan 2019 09:03:39 -0500
-Received: by mail-wm1-f65.google.com with SMTP id b11so4618190wmj.1;
-        Fri, 18 Jan 2019 06:03:37 -0800 (PST)
+        Fri, 18 Jan 2019 09:20:44 -0500
+Received: by mail-pf1-f194.google.com with SMTP id z9so6689530pfi.2;
+        Fri, 18 Jan 2019 06:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sEQntTSMSzloJbJKItQL/Y0eCsx+0HRyKgqFsac2X4A=;
-        b=cPe1W2ukeE/BxfcSLkU4cf2uNzCL4X2WMZ6EcEj/Q8GTgGYMJf8XxHolt76sPRzxsN
-         gkVeLuJi3fsmr3N0pcCcnUi1zl0xlVcQytXZJjcfkmB6BVUfytc3x+Df9jb4ikgcYsBZ
-         rTW1zsNY5Faq9hvvQIWR8pFJu43sLi5zXu0wi1tb1xYtaS+GvPBsh0t8XxgVqOpJYukK
-         dkiYAFWmSVTFeZ8MsLooULG2ogeLquVjU595O6zag6IXUItjouX9A3eOTpXulR62FRVi
-         Xtnh4Hydt5lfgqMNwXUwJgm4b0fk9NE7k4aPYfSS8wB4bQAiZ6qz3fhyBg6OWkS4Us0L
-         sCIQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=m3JSc6RrjJ1uHXAaN23Q8gzSjIqIxEi378aoJMYIEqo=;
+        b=dDEhlsb/p4kl97t4/9G2i30QdDCl23tgEPUhXz7xIKFjSS/J++QckC8cQT3oUlKYFG
+         V74cbu+epuSeDBJN4BtiNbPnHOIZfqClS5C8kOw5UcGOz5zWSopNkH0QcTDjCidOEuZZ
+         tzifwX6JE0eQJxJfCZjsA8i+hjVsFDJGywYSmD3bGe4JOxRMwxdz5ql1IucBYb0TGLQj
+         sc2D1n0Z0OXKbkTMKXcDbx5V72dMhSi6qxwKWXCAeTq7eqDTaRQh/sLGWE8UHDqK9HJz
+         YcIgfSKSBxEXd12CD6TH8eyE9fsB5KbOv2WCoaa0dzsDFr7lcOXwUjrhzvhihQwL/Sut
+         Qfvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sEQntTSMSzloJbJKItQL/Y0eCsx+0HRyKgqFsac2X4A=;
-        b=K+ZC1Yzq7vLO0w1wflGlw9xwfym9eOX/KyGB+frptYPTKVhcInvM0gKUoHivIiCj0t
-         tJQ3Z1ZvPfm3eu8E7Zc+CBNtKmOOvAgGlsyiHhGhK2ifwe6xLLZuS3BzooPbW/dzMNqq
-         1D9TfLxECvbQt9DR/uFGdoPBiKmE2HToSdluN37YhkhQelmZaLUNhEBiReG8CrkrfQWl
-         yEmFhqAURFlgU+W7bzcDK+3us+Jw6y258NnfB1O++kNNDV83wNbvpIwaBG/sx/xbDpGz
-         WKa3WXDWjr9xIeRpN5zVFG/1N/4lzSrZ4pDPvTL1jeTmwxlZjqZETUZL9TdLSlbhDrGA
-         v9HA==
-X-Gm-Message-State: AJcUukfowuAeHchoXkX4ONcfmdeZho5enUvNMXOEjBDF/Bw+yO2/6gYS
-        pIWvin6UIBxdWQsFJ0wdOAM=
-X-Google-Smtp-Source: ALg8bN6CBfjl98Yk5c5w8yTwqnQVs4NK7yvhHiHIWNK4Esfs2hBofypR91EnZNxQUEbEFm91/bCGYw==
-X-Received: by 2002:a1c:4108:: with SMTP id o8mr15369849wma.91.1547820217059;
-        Fri, 18 Jan 2019 06:03:37 -0800 (PST)
-Received: from Red.local ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id g197sm8464676wmd.29.2019.01.18.06.03.36
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=m3JSc6RrjJ1uHXAaN23Q8gzSjIqIxEi378aoJMYIEqo=;
+        b=R5byb4F03dG31gEnpyXZ4oXwsEtg7gC/EA2I23Na+NBk+a6Zhv7kIppdktrvXqwkQg
+         BKLmvGGDeuXfILmE0gzYnPtaVDnC+ucpWgZEFLUXh7bLECKvfCb2ZP2IsUwcibgyxScY
+         fP//w9nmktPSb9EcrWgYb643UMs6u1nAoqeDarj+70RSBykqUrM52cK6VLLUUDrFGTH2
+         J1OlHn+lF7D2jgS9vAzYbIIxgoDow+xjmM8EfIe1FnVPF0Rj7GihubsqQhWsVA2Hk0B4
+         uFlwiVusJlT4vC//lKwmvrXY7H8/dpVLBAO2dUpGecszMM/kvuj1kH6ngaQEj2HeunyX
+         vjuw==
+X-Gm-Message-State: AJcUukfooXZynJ0xslqCmxYJ0o25mTz9kR3Gc7+DAkjxuLAZW/POHIoL
+        JkM50lAv0TGpBVEEgRM3A+8=
+X-Google-Smtp-Source: ALg8bN48UJ4pBK+m8DxsEwA3XxPD4vXDkQhBgF/0NSrO1y4OebFJ0s3U7+uQitaPfhYyvEXtIf80+Q==
+X-Received: by 2002:a62:6ec8:: with SMTP id j191mr19552669pfc.198.1547821243544;
+        Fri, 18 Jan 2019 06:20:43 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m9sm8709240pgd.32.2019.01.18.06.20.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Jan 2019 06:03:36 -0800 (PST)
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe.montjoie@gmail.com>
-Subject: [PATCH 1/7] hwmon: adm1029: Remove write to FFF paragraph
-Date:   Fri, 18 Jan 2019 15:03:23 +0100
-Message-Id: <20190118140329.18970-2-clabbe.montjoie@gmail.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
+        Fri, 18 Jan 2019 06:20:42 -0800 (PST)
+Date:   Fri, 18 Jan 2019 06:20:40 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] hwmon: adm1029: Fix most style problem
+Message-ID: <20190118142040.GA16507@roeck-us.net>
 References: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190118140329.18970-1-clabbe.montjoie@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-As suggested by checkpatch, remove the "write to FFF" paragraph.
+On Fri, Jan 18, 2019 at 03:03:22PM +0100, Corentin Labbe wrote:
+> Hello
+> 
+> Thirteen years later, coding style have change a bit.
+> This patch series fixes the gap.
+> 
+> This patch serie was tested on my precious so rare real hardware.
+> 
+Series applied to hwmon-next.
 
-Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
----
- drivers/hwmon/adm1029.c | 4 ----
- 1 file changed, 4 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
-index 8c5cdb560258..3dd4c84ec89e 100644
---- a/drivers/hwmon/adm1029.c
-+++ b/drivers/hwmon/adm1029.c
-@@ -19,10 +19,6 @@
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  */
- 
- #include <linux/module.h>
--- 
-2.19.2
-
+> Regards
+> 
+> Corentin Labbe (7):
+>   hwmon: adm1029: Remove write to FFF paragraph
+>   hwmon: adm1029: Add SPDX header
+>   hwmon: adm1029: replace S_IXXX macros by their numeric values
+>   hwmon: adm1029: Add blank line after declarations
+>   hwmon: adm1029: Fix Logical continuations should be on the previous
+>     line checkpatch warning
+>   hwmon: adm1029: Fix function alignment
+>   hwmon: adm1029: Add a comment for locking mutex
+> 
+>  drivers/hwmon/adm1029.c | 67 +++++++++++++++++++----------------------
+>  1 file changed, 31 insertions(+), 36 deletions(-)
+> 
+> -- 
+> 2.19.2
+> 
