@@ -2,65 +2,65 @@ Return-Path: <SRS0=ckkT=P2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E480C5ACD3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 17:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BDD3C5AC81
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 17:15:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAF0220850
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 17:15:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25B5D20850
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Jan 2019 17:15:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D9EraJYl"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cG7tJ+fD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbfARRPn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Jan 2019 12:15:43 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35014 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727986AbfARRPn (ORCPT
+        id S1728436AbfARRPp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Jan 2019 12:15:45 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34137 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727986AbfARRPo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Jan 2019 12:15:43 -0500
-Received: by mail-pg1-f193.google.com with SMTP id s198so6356071pgs.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Jan 2019 09:15:42 -0800 (PST)
+        Fri, 18 Jan 2019 12:15:44 -0500
+Received: by mail-pf1-f193.google.com with SMTP id h3so6917352pfg.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Jan 2019 09:15:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vBM03/aGHdDi2mIiohqFlZI/qfaV09K1cg4F8KFISCg=;
-        b=D9EraJYlfcfFJLGs9y3GGB1TUVYEiXLZci1LoE1hM7f1S0I5fX0jKIT6f8yJvPSXNA
-         h305zPoVH2x7tWprAIz9WwIF3Z/4qx+cVt4pZQcvBuHl3ll2KqbJotndKz3p/bKGBHgS
-         l+ri3wrtxooW5C/mK1yJ4ipI6zrx8eKZnJFhJUxy3a9WVm3qoCAaGA82sSFhvK0bdTJt
-         x3kVy7HCCaXxY9DBLTxwoiPqJGSZk7gjOXCfgsYFr0L1ps+AiONdDVHlsHXjktolzmkS
-         Fd8+fZQncyMg3L+mBtMcfJF6Z727Ls8sFVYrzWCIaeQW39gyj9Z05gu7SwjvH1bSxDIk
-         /mIA==
+        bh=BHaRAgB1LSH6PvAYmWA+UnFo7Boqbo0zej2XZxnQK6M=;
+        b=cG7tJ+fD3y2X0n9hAc0jgr/P0X8frIc2HRaJAkhQYWCW4mrnmT4VMXLX+9LOLii07G
+         U6X4eGZlvIEPgGPe8G7L4M3ugS7LIQDkpCxXwL73sLNPNqrMi7exD14SwX9OCUv9nb6B
+         aTbnnXgJ5RbyH7JYnuxaaxZieDvvltZU3ICTTSAtYz7QS+2EzSI4OK2XTOmsV7CTxMcI
+         HDm4zmOcU0+XA+QjyINBVD99P0qJuPI53JycShVLO42sSqIk18MuqT8OHEHcsQDtwXxn
+         MV8JuRFgahM6pBxOaFtq0wLEVkjtaPzOt+MPKwBeDGa+xDNpT+O2uP6/wJDHJ9D8dybE
+         S/1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=vBM03/aGHdDi2mIiohqFlZI/qfaV09K1cg4F8KFISCg=;
-        b=L5pj+U+LS1ItiLXz1n+b27eiX9eSxWqQm1Ew5JcVP3Prj8RvX9ypDnqLCq1h0kdqj6
-         c4F8lv2mzRemba9xNUZn+dROYnO1kACuQWKEk9yeaj+EjjKrlEsschOXPNU+v2hxIKCx
-         Ts7UuOJtGI8bldztRLN3Tdkxq07WGMKl1w8OAbnN/xrkuX3H1HXy8vq/U1Eieq6iR+Wu
-         5VOXag+VENvq7G0WtCVtF5jJBCYlvZu5H0Xvm0R/kf6SXvgsslL7RQH5mCNQcuTV6a3Z
-         VjQzNKMp17WLUxJJyn+zcFJcudGalTTZdHxAvpt8li9ywAVmlqojDxlhQ2VBUdbM29QY
-         0o5g==
-X-Gm-Message-State: AJcUukdlyGsvFe9+vtKcEFzBwZK2ZR/Or+YwuIziUU62eL7wdjDWMIfL
-        LDWlobPbmLmtIrxLN+SQlKPbjpxU
-X-Google-Smtp-Source: ALg8bN7xc6LUk+/j9qf0Vgk32yv3CsTY5LrWr//Q42vO/EG2KwX+aJFKVwJH+wfrtlDCzaqSwfK3GQ==
-X-Received: by 2002:a63:ea4f:: with SMTP id l15mr18132436pgk.102.1547831741890;
-        Fri, 18 Jan 2019 09:15:41 -0800 (PST)
+        bh=BHaRAgB1LSH6PvAYmWA+UnFo7Boqbo0zej2XZxnQK6M=;
+        b=gbKAX3ImXzJd9znvWbg1CHY2WdMIDt8hdNpSJZwiuTRxylfgfElJozH1M/svlOhKE9
+         tTzRDgL0L2avsLEigmnrkte2ckzmEsnbjKutea+TMQUhn8AHmYUi0Rjtys57xVvFS0jE
+         YGov2m4ioCmSE6HhCskoun3xScQTDAmnBYItQVqKDaTdd6p0uhv2oOz92GkRct+/jLBX
+         06ecQIT2/WZxf6c5ldVtUe7be8cd3zMsGE0pCmUf93+7QrjJDU8PIrAH4b9cGHlNo0VJ
+         QscK6/2/Zid9ihLKeCsQM3ohNFFd6V5pzXiCZPry1hGmu3sPiLmgJmkKW692Z+93GKm6
+         7/qg==
+X-Gm-Message-State: AJcUukfcSN9pRI7v+3vCeBJWup/CO2HikV4/jB6SdudroipFsIOX2ENj
+        XgEGA59UAMFHrk1CRtU3xRHk/RXM
+X-Google-Smtp-Source: ALg8bN798cbQlWuzuhUsM1AnQ5jY6MouaYyp7rb5ORX3LydtRHaLKQOh/4yYBY5Dh68e1XU7lmqv3g==
+X-Received: by 2002:a63:e5c:: with SMTP id 28mr11029595pgo.369.1547831743483;
+        Fri, 18 Jan 2019 09:15:43 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t5sm10727376pfb.60.2019.01.18.09.15.41
+        by smtp.gmail.com with ESMTPSA id h69sm6338071pge.4.2019.01.18.09.15.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Jan 2019 09:15:41 -0800 (PST)
+        Fri, 18 Jan 2019 09:15:42 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 23/30] hwmon: (stts751) Use permission specific SENSOR[_DEVICE]_ATTR variants
-Date:   Fri, 18 Jan 2019 09:14:53 -0800
-Message-Id: <1547831700-15865-24-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 24/30] hwmon: (tc654) Use permission specific SENSOR[_DEVICE]_ATTR variants
+Date:   Fri, 18 Jan 2019 09:14:54 -0800
+Message-Id: <1547831700-15865-25-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1547831700-15865-1-git-send-email-linux@roeck-us.net>
 References: <1547831700-15865-1-git-send-email-linux@roeck-us.net>
@@ -83,182 +83,150 @@ compiling the old and new files and comparing text and data sizes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/stts751.c | 64 ++++++++++++++++++++++++-------------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
+ drivers/hwmon/tc654.c | 60 +++++++++++++++++++++++----------------------------
+ 1 file changed, 27 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
-index 7fe152d92350..90b60297f2f7 100644
---- a/drivers/hwmon/stts751.c
-+++ b/drivers/hwmon/stts751.c
-@@ -382,8 +382,8 @@ static int stts751_update(struct stts751_priv *priv)
- 	return 0;
- }
+diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
+index 18136e1f95fd..81dd229d7db4 100644
+--- a/drivers/hwmon/tc654.c
++++ b/drivers/hwmon/tc654.c
+@@ -200,7 +200,7 @@ static struct tc654_data *tc654_update_client(struct device *dev)
+  * sysfs attributes
+  */
  
--static ssize_t show_max_alarm(struct device *dev, struct device_attribute *attr,
--			      char *buf)
-+static ssize_t max_alarm_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
- {
- 	int ret;
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -399,8 +399,8 @@ static ssize_t show_max_alarm(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->max_alert);
- }
- 
--static ssize_t show_min_alarm(struct device *dev, struct device_attribute *attr,
--			      char *buf)
-+static ssize_t min_alarm_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
- {
- 	int ret;
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -416,7 +416,7 @@ static ssize_t show_min_alarm(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->min_alert);
- }
- 
--static ssize_t show_input(struct device *dev, struct device_attribute *attr,
-+static ssize_t input_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
- 	int ret;
-@@ -431,7 +431,7 @@ static ssize_t show_input(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->temp);
- }
- 
--static ssize_t show_therm(struct device *dev, struct device_attribute *attr,
-+static ssize_t therm_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -439,8 +439,8 @@ static ssize_t show_therm(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->therm);
- }
- 
--static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
--			 const char *buf, size_t count)
-+static ssize_t therm_store(struct device *dev, struct device_attribute *attr,
-+			   const char *buf, size_t count)
- {
- 	int ret;
- 	long temp;
-@@ -473,7 +473,7 @@ static ssize_t set_therm(struct device *dev, struct device_attribute *attr,
- 	return count;
- }
- 
--static ssize_t show_hyst(struct device *dev, struct device_attribute *attr,
-+static ssize_t hyst_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -481,8 +481,8 @@ static ssize_t show_hyst(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->hyst);
- }
- 
--static ssize_t set_hyst(struct device *dev, struct device_attribute *attr,
--			const char *buf, size_t count)
-+static ssize_t hyst_store(struct device *dev, struct device_attribute *attr,
-+			  const char *buf, size_t count)
- {
- 	int ret;
- 	long temp;
-@@ -506,7 +506,7 @@ static ssize_t set_hyst(struct device *dev, struct device_attribute *attr,
- 	return count;
- }
- 
--static ssize_t show_therm_trip(struct device *dev,
-+static ssize_t therm_trip_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	int ret;
-@@ -521,7 +521,7 @@ static ssize_t show_therm_trip(struct device *dev,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->therm_trip);
- }
- 
--static ssize_t show_max(struct device *dev, struct device_attribute *attr,
-+static ssize_t max_show(struct device *dev, struct device_attribute *attr,
+-static ssize_t show_fan(struct device *dev, struct device_attribute *da,
++static ssize_t fan_show(struct device *dev, struct device_attribute *da,
  			char *buf)
  {
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -529,8 +529,8 @@ static ssize_t show_max(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->event_max);
+ 	int nr = to_sensor_dev_attr(da)->index;
+@@ -218,7 +218,7 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", val);
  }
  
--static ssize_t set_max(struct device *dev, struct device_attribute *attr,
--		       const char *buf, size_t count)
-+static ssize_t max_store(struct device *dev, struct device_attribute *attr,
-+			 const char *buf, size_t count)
+-static ssize_t show_fan_min(struct device *dev, struct device_attribute *da,
++static ssize_t fan_min_show(struct device *dev, struct device_attribute *da,
+ 			    char *buf)
  {
- 	int ret;
- 	long temp;
-@@ -555,7 +555,7 @@ static ssize_t set_max(struct device *dev, struct device_attribute *attr,
- 	return ret;
+ 	int nr = to_sensor_dev_attr(da)->index;
+@@ -231,8 +231,8 @@ static ssize_t show_fan_min(struct device *dev, struct device_attribute *da,
+ 		       TC654_FAN_FAULT_FROM_REG(data->fan_fault[nr]));
  }
  
--static ssize_t show_min(struct device *dev, struct device_attribute *attr,
-+static ssize_t min_show(struct device *dev, struct device_attribute *attr,
- 			char *buf)
+-static ssize_t set_fan_min(struct device *dev, struct device_attribute *da,
+-			   const char *buf, size_t count)
++static ssize_t fan_min_store(struct device *dev, struct device_attribute *da,
++			     const char *buf, size_t count)
  {
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
-@@ -563,8 +563,8 @@ static ssize_t show_min(struct device *dev, struct device_attribute *attr,
- 	return snprintf(buf, PAGE_SIZE, "%d\n", priv->event_min);
+ 	int nr = to_sensor_dev_attr(da)->index;
+ 	struct tc654_data *data = dev_get_drvdata(dev);
+@@ -255,7 +255,7 @@ static ssize_t set_fan_min(struct device *dev, struct device_attribute *da,
+ 	return ret < 0 ? ret : count;
  }
  
--static ssize_t set_min(struct device *dev, struct device_attribute *attr,
--		       const char *buf, size_t count)
-+static ssize_t min_store(struct device *dev, struct device_attribute *attr,
-+			 const char *buf, size_t count)
+-static ssize_t show_fan_alarm(struct device *dev, struct device_attribute *da,
++static ssize_t fan_alarm_show(struct device *dev, struct device_attribute *da,
+ 			      char *buf)
  {
- 	int ret;
- 	long temp;
-@@ -589,8 +589,8 @@ static ssize_t set_min(struct device *dev, struct device_attribute *attr,
- 	return ret;
- }
+ 	int nr = to_sensor_dev_attr(da)->index;
+@@ -275,8 +275,8 @@ static ssize_t show_fan_alarm(struct device *dev, struct device_attribute *da,
  
--static ssize_t show_interval(struct device *dev, struct device_attribute *attr,
--			     char *buf)
-+static ssize_t interval_show(struct device *dev,
-+			     struct device_attribute *attr, char *buf)
+ static const u8 TC654_FAN_PULSE_SHIFT[] = { 1, 3 };
+ 
+-static ssize_t show_fan_pulses(struct device *dev, struct device_attribute *da,
+-			       char *buf)
++static ssize_t fan_pulses_show(struct device *dev,
++			       struct device_attribute *da, char *buf)
  {
- 	struct stts751_priv *priv = dev_get_drvdata(dev);
- 
-@@ -598,8 +598,9 @@ static ssize_t show_interval(struct device *dev, struct device_attribute *attr,
- 			stts751_intervals[priv->interval]);
+ 	int nr = to_sensor_dev_attr(da)->index;
+ 	struct tc654_data *data = tc654_update_client(dev);
+@@ -289,8 +289,9 @@ static ssize_t show_fan_pulses(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", val);
  }
  
--static ssize_t set_interval(struct device *dev, struct device_attribute *attr,
+-static ssize_t set_fan_pulses(struct device *dev, struct device_attribute *da,
+-			      const char *buf, size_t count)
++static ssize_t fan_pulses_store(struct device *dev,
++				struct device_attribute *da, const char *buf,
++				size_t count)
+ {
+ 	int nr = to_sensor_dev_attr(da)->index;
+ 	struct tc654_data *data = dev_get_drvdata(dev);
+@@ -329,8 +330,8 @@ static ssize_t set_fan_pulses(struct device *dev, struct device_attribute *da,
+ 	return ret < 0 ? ret : count;
+ }
+ 
+-static ssize_t show_pwm_mode(struct device *dev,
+-			     struct device_attribute *da, char *buf)
++static ssize_t pwm_mode_show(struct device *dev, struct device_attribute *da,
++			     char *buf)
+ {
+ 	struct tc654_data *data = tc654_update_client(dev);
+ 
+@@ -340,9 +341,8 @@ static ssize_t show_pwm_mode(struct device *dev,
+ 	return sprintf(buf, "%d\n", !!(data->config & TC654_REG_CONFIG_DUTYC));
+ }
+ 
+-static ssize_t set_pwm_mode(struct device *dev,
+-			    struct device_attribute *da,
 -			    const char *buf, size_t count)
-+static ssize_t interval_store(struct device *dev,
-+			      struct device_attribute *attr, const char *buf,
-+			      size_t count)
++static ssize_t pwm_mode_store(struct device *dev, struct device_attribute *da,
++			      const char *buf, size_t count)
  {
- 	unsigned long val;
- 	int idx;
-@@ -746,16 +747,15 @@ static int stts751_read_chip_config(struct stts751_priv *priv)
- 	return 0;
+ 	struct tc654_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+@@ -371,7 +371,7 @@ static ssize_t set_pwm_mode(struct device *dev,
+ static const int tc654_pwm_map[16] = { 77,  88, 102, 112, 124, 136, 148, 160,
+ 				      172, 184, 196, 207, 219, 231, 243, 255};
+ 
+-static ssize_t show_pwm(struct device *dev, struct device_attribute *da,
++static ssize_t pwm_show(struct device *dev, struct device_attribute *da,
+ 			char *buf)
+ {
+ 	struct tc654_data *data = tc654_update_client(dev);
+@@ -388,8 +388,8 @@ static ssize_t show_pwm(struct device *dev, struct device_attribute *da,
+ 	return sprintf(buf, "%d\n", pwm);
  }
  
--static SENSOR_DEVICE_ATTR(temp1_input, 0444, show_input, NULL, 0);
--static SENSOR_DEVICE_ATTR(temp1_min, 0644, show_min, set_min, 0);
--static SENSOR_DEVICE_ATTR(temp1_max, 0644, show_max, set_max, 0);
--static SENSOR_DEVICE_ATTR(temp1_min_alarm, 0444, show_min_alarm, NULL, 0);
--static SENSOR_DEVICE_ATTR(temp1_max_alarm, 0444, show_max_alarm, NULL, 0);
--static SENSOR_DEVICE_ATTR(temp1_crit, 0644, show_therm,	set_therm, 0);
--static SENSOR_DEVICE_ATTR(temp1_crit_hyst, 0644, show_hyst, set_hyst, 0);
--static SENSOR_DEVICE_ATTR(temp1_crit_alarm, 0444, show_therm_trip, NULL, 0);
--static SENSOR_DEVICE_ATTR(update_interval, 0644,
--			  show_interval, set_interval, 0);
-+static SENSOR_DEVICE_ATTR_RO(temp1_input, input, 0);
-+static SENSOR_DEVICE_ATTR_RW(temp1_min, min, 0);
-+static SENSOR_DEVICE_ATTR_RW(temp1_max, max, 0);
-+static SENSOR_DEVICE_ATTR_RO(temp1_min_alarm, min_alarm, 0);
-+static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, max_alarm, 0);
-+static SENSOR_DEVICE_ATTR_RW(temp1_crit, therm, 0);
-+static SENSOR_DEVICE_ATTR_RW(temp1_crit_hyst, hyst, 0);
-+static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, therm_trip, 0);
-+static SENSOR_DEVICE_ATTR_RW(update_interval, interval, 0);
+-static ssize_t set_pwm(struct device *dev, struct device_attribute *da,
+-		       const char *buf, size_t count)
++static ssize_t pwm_store(struct device *dev, struct device_attribute *da,
++			 const char *buf, size_t count)
+ {
+ 	struct tc654_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
+@@ -423,22 +423,16 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute *da,
+ 	return ret < 0 ? ret : count;
+ }
  
- static struct attribute *stts751_attrs[] = {
- 	&sensor_dev_attr_temp1_input.dev_attr.attr,
+-static SENSOR_DEVICE_ATTR(fan1_input, S_IRUGO, show_fan, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_input, S_IRUGO, show_fan, NULL, 1);
+-static SENSOR_DEVICE_ATTR(fan1_min, S_IWUSR | S_IRUGO, show_fan_min,
+-			  set_fan_min, 0);
+-static SENSOR_DEVICE_ATTR(fan2_min, S_IWUSR | S_IRUGO, show_fan_min,
+-			  set_fan_min, 1);
+-static SENSOR_DEVICE_ATTR(fan1_alarm, S_IRUGO, show_fan_alarm, NULL, 0);
+-static SENSOR_DEVICE_ATTR(fan2_alarm, S_IRUGO, show_fan_alarm, NULL, 1);
+-static SENSOR_DEVICE_ATTR(fan1_pulses, S_IWUSR | S_IRUGO, show_fan_pulses,
+-			  set_fan_pulses, 0);
+-static SENSOR_DEVICE_ATTR(fan2_pulses, S_IWUSR | S_IRUGO, show_fan_pulses,
+-			  set_fan_pulses, 1);
+-static SENSOR_DEVICE_ATTR(pwm1_mode, S_IWUSR | S_IRUGO,
+-			  show_pwm_mode, set_pwm_mode, 0);
+-static SENSOR_DEVICE_ATTR(pwm1, S_IWUSR | S_IRUGO, show_pwm,
+-			  set_pwm, 0);
++static SENSOR_DEVICE_ATTR_RO(fan1_input, fan, 0);
++static SENSOR_DEVICE_ATTR_RO(fan2_input, fan, 1);
++static SENSOR_DEVICE_ATTR_RW(fan1_min, fan_min, 0);
++static SENSOR_DEVICE_ATTR_RW(fan2_min, fan_min, 1);
++static SENSOR_DEVICE_ATTR_RO(fan1_alarm, fan_alarm, 0);
++static SENSOR_DEVICE_ATTR_RO(fan2_alarm, fan_alarm, 1);
++static SENSOR_DEVICE_ATTR_RW(fan1_pulses, fan_pulses, 0);
++static SENSOR_DEVICE_ATTR_RW(fan2_pulses, fan_pulses, 1);
++static SENSOR_DEVICE_ATTR_RW(pwm1_mode, pwm_mode, 0);
++static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+ 
+ /* Driver data */
+ static struct attribute *tc654_attrs[] = {
 -- 
 2.7.4
 
