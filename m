@@ -2,80 +2,95 @@ Return-Path: <SRS0=brSS=P5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 745F0C2F42E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jan 2019 15:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB54C3712A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jan 2019 19:56:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 436CE2085A
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jan 2019 15:28:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87A6C20861
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Jan 2019 19:56:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728654AbfAUP2a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Jan 2019 10:28:30 -0500
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:36278 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728539AbfAUP23 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Jan 2019 10:28:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81318EBD;
-        Mon, 21 Jan 2019 07:28:29 -0800 (PST)
-Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70D6F3F5C1;
-        Mon, 21 Jan 2019 07:28:28 -0800 (PST)
-Date:   Mon, 21 Jan 2019 15:28:25 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: Re: [PATCH 29/30] hwmon: (vexpress-hwmon) Use permission specific
- SENSOR[_DEVICE]_ATTR variants
-Message-ID: <20190121152825.GB27784@e107155-lin>
-References: <1547831700-15865-1-git-send-email-linux@roeck-us.net>
- <1547831700-15865-30-git-send-email-linux@roeck-us.net>
- <20190118182157.GA13374@e107155-lin>
- <20190118185844.GB5284@roeck-us.net>
- <20190121093854.GC13374@e107155-lin>
- <7ab7492f-7820-8abc-c695-a11df89ce5e6@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ab7492f-7820-8abc-c695-a11df89ce5e6@roeck-us.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1728033AbfAUT4m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Jan 2019 14:56:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40296 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727699AbfAUT4m (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 21 Jan 2019 14:56:42 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x0LJshnY081339
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Jan 2019 14:56:41 -0500
+Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2q5htwpgc9-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Jan 2019 14:56:40 -0500
+Received: from localhost
+        by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Mon, 21 Jan 2019 19:56:39 -0000
+Received: from b01cxnp23034.gho.pok.ibm.com (9.57.198.29)
+        by e14.ny.us.ibm.com (146.89.104.201) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 21 Jan 2019 19:56:37 -0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x0LJuaE020250800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Jan 2019 19:56:36 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF2E0AE060;
+        Mon, 21 Jan 2019 19:56:35 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E807AE05C;
+        Mon, 21 Jan 2019 19:56:35 +0000 (GMT)
+Received: from oc6728276242.ibm.com (unknown [9.85.171.190])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Jan 2019 19:56:35 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, joel@jms.id.au, tglx@linutronix.de,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH 0/2] occ: FSI and hwmon: Fix license headers
+Date:   Mon, 21 Jan 2019 13:56:30 -0600
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+x-cbid: 19012119-0052-0000-0000-0000037BE1B3
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010449; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000275; SDB=6.01149804; UDB=6.00599143; IPR=6.00930129;
+ MB=3.00025225; MTD=3.00000008; XFM=3.00000015; UTC=2019-01-21 19:56:39
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19012119-0053-0000-0000-00005F8CCBD4
+Message-Id: <1548100592-50383-1-git-send-email-eajames@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-01-21_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=658 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1901210155
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 21, 2019 at 07:22:44AM -0800, Guenter Roeck wrote:
-> On 1/21/19 1:38 AM, Sudeep Holla wrote:
+Source files for the FSI OCC and OCC hwmon drivers had a combination of bad
+license information and missing IBM copyright. Correct the licenses.
 
-[...]
+Eddie James (2):
+  hwmon (occ): Fix license headers
+  fsi: occ: Fix license header
 
-> > Sorry for not being clear, I was referring to these:
-> > $ git grep "return S_.*" drivers/hwmon/ | sort | uniq
-> >
+ drivers/fsi/fsi-occ.c      |  3 ++-
+ drivers/hwmon/occ/common.c |  3 ++-
+ drivers/hwmon/occ/common.h |  3 ++-
+ drivers/hwmon/occ/p8_i2c.c |  3 ++-
+ drivers/hwmon/occ/p9_sbe.c |  3 ++-
+ drivers/hwmon/occ/sysfs.c  | 13 ++-----------
+ 6 files changed, 12 insertions(+), 16 deletions(-)
 
-[...]
+-- 
+1.8.3.1
 
-> > drivers/hwmon/tmp102.c:		return S_IRUGO;
-> > drivers/hwmon/tmp102.c:		return S_IRUGO | S_IWUSR;
-> > drivers/hwmon/tmp421.c:		return S_IRUGO;
-> >
->
-> The series only includes auto-converted drivers, and the conversion
-> focused on auto-converting SENSOR_ attributes. While it tried to convert
-> various instances of the above, that was not the primary focus. I will
-> likely submit one or more follow-up series to address remaining
-> SENSOR_... attributes as well as any leftover S_<perms> definitions.
->
-
-OK sounds good, just wanted to make sure I understood the intention
-for this right.
-
---
-Regards,
-Sudeep
