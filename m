@@ -1,74 +1,79 @@
-Return-Path: <SRS0=IsVg=P6=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=B7jK=QB=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88143C282C3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jan 2019 09:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 295B4C282C0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jan 2019 20:13:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6020A218D0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Jan 2019 09:55:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E517B2146E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jan 2019 20:13:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T0au+f/p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727977AbfAVJzj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Jan 2019 04:55:39 -0500
-Received: from foss.arm.com ([217.140.101.70]:49712 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726872AbfAVJzj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Jan 2019 04:55:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD292EBD;
-        Tue, 22 Jan 2019 01:55:38 -0800 (PST)
-Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A1A43F6A8;
-        Tue, 22 Jan 2019 01:55:37 -0800 (PST)
-Date:   Tue, 22 Jan 2019 09:55:31 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: Re: [PATCH 29/30] hwmon: (vexpress-hwmon) Use permission specific
- SENSOR[_DEVICE]_ATTR variants
-Message-ID: <20190122095531.GA2656@e107155-lin>
-References: <1547831700-15865-1-git-send-email-linux@roeck-us.net>
- <1547831700-15865-30-git-send-email-linux@roeck-us.net>
- <20190118182157.GA13374@e107155-lin>
- <20190118185844.GB5284@roeck-us.net>
- <20190121093854.GC13374@e107155-lin>
- <7ab7492f-7820-8abc-c695-a11df89ce5e6@roeck-us.net>
- <20190121152825.GB27784@e107155-lin>
- <d920b47d-157e-7bf6-7055-4caf75a58968@roeck-us.net>
+        id S1726284AbfAYUNv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Jan 2019 15:13:51 -0500
+Received: from mail-qk1-f169.google.com ([209.85.222.169]:43092 "EHLO
+        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726165AbfAYUNv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 25 Jan 2019 15:13:51 -0500
+Received: by mail-qk1-f169.google.com with SMTP id z18so6122301qkj.10
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Jan 2019 12:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=9ZcA2pnhkLlqzIpgxiix6CRmF5RUaxPRY3Jb+goYbAA=;
+        b=T0au+f/pzd9WpvoSBj6LJuZ6TXjnMrgZ0ZYdjtCQ2Ooe6KXQxSWjP3VlF+g/Z13axX
+         Ik0YLPFC70EPOsIERohUwaoiykY5PLhqqTucyQtgkn68gPnRht4LIFXOwNNTteSc0TDG
+         3+3sFQMwXUnvfrcTFIsjBpzBgToCK+nTRtX7rwrj+KQ9ZE8MJk5LYxuXfTIUQwm2FXUn
+         Ixex33XlLsfCOtGo+6KCqcIUg+Kuk0ulSIqIuUHXufjrjRFDbaF7IRktYBADdEHzW/SN
+         vSMouNRvmqczIt0vPhaqHTtMe09jO3SqH1iNWEfqeT1Z4bI71MH0rR0AFes1tv4zxIGU
+         4L/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=9ZcA2pnhkLlqzIpgxiix6CRmF5RUaxPRY3Jb+goYbAA=;
+        b=rjknhDz5K9b6mBl6Xy33iUGE/AaW2vTYSkywAspJMB0/1tvc/G0TyZzb1uFXQdMTEk
+         +g5IsHRtbLqy454V/A7AMt2pgA8b29r/2mCF5kYPGLH7F3HdvdeCYcJLicaMAA1SSpC7
+         fGL7imjaKQXX827IoTc/qn7dCE5PrZAiZoXZ/HDQ9J5HA2Az9rtvceJbUCOlrjYNaO8Z
+         FVVTVvmZWCN4FSp/eBcGP79VrutHf1ZOjTMFer88SeFI16Sxz0R8uDvsFTSLywT2/SuU
+         19mZhxWd60JRT0VrVpACmf02tCWOD6XZr8cDuHQedhvgi6+JG9R+wPV2TVvDld/nNc1W
+         oP8g==
+X-Gm-Message-State: AJcUukfou+TL4H8MY7tfAI6142pteUS6QPPrLclEV07a0+LJbTPz92pw
+        k6CwPRTB37sR2dH3vX8GM/icePntSD5kFTL9+VfJmWHX
+X-Google-Smtp-Source: ALg8bN50u9Rkp0Um0PVEpW95227PxxaUVCzT02jAt0A8qixr5Rw7itfP9LUwH7umnAQhuJsRNkndFJ6kiG5Ok6UKPDw=
+X-Received: by 2002:a37:953:: with SMTP id 80mr11193877qkj.48.1548447230257;
+ Fri, 25 Jan 2019 12:13:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d920b47d-157e-7bf6-7055-4caf75a58968@roeck-us.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+From:   Matt Wilbur <wilburm@gmail.com>
+Date:   Fri, 25 Jan 2019 15:13:39 -0500
+Message-ID: <CAGQJtpOG7m3J9=nbUFi9xhhOKh2T9spSDW4mYfkPeJrSVANdXQ@mail.gmail.com>
+Subject: LM5066 low- and high-current limit scaling
+To:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 21, 2019 at 04:45:38PM -0800, Guenter Roeck wrote:
-> On 1/21/19 7:28 AM, Sudeep Holla wrote:
-> > On Mon, Jan 21, 2019 at 07:22:44AM -0800, Guenter Roeck wrote:
->
+Hi
 
-[...]
+First off, this is the first time I've ever tried something like this,
+so I fully anticipate I will make some etiquette / process mistakes.
 
-> After having another look ... did you check the entire series
-> of patches ? Because for me, in hwmon-next:
->
-> $ git grep "return S_.*" drivers/hwmon/ | sort | uniq
-> $
+In a project I am working on, we make use of the LM5066 hot-swap
+controller.  I believe the kernel module for this chip
+(drivers/hwmon/pmbus/lm25066.c) has an error where the scaling
+parameters for the low- and high-current limits are swapped.
 
-No I didn't check applying the patches, just looked at the pattern in few
-patches and thought of asking you directly the details.
+What's the best way for me to make my case?  Just create a patch and
+try to submit it?  A free-form discussion on the mailing list?
 
---
-Regards,
-Sudeep
+Thanks in advance.
+
+Matt
