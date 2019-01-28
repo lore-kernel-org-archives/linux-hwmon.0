@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7701FC282CF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:34:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A59C4151A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:35:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FAB020811
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:34:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3D9A20811
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1548693297;
-	bh=H3w7iQyLSktoE60p0KTrHDNUT8HwwE17kKhyhZKV3TE=;
+	s=default; t=1548693315;
+	bh=ZCfT/kp1TR+Xf4193Lj1qd4gG0ZZP3lhj/mphjeTJ7Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bO18yZq14ZBDRh4HcvOWcSrdYSon3Yb671Qrfw3yUrgORQd4/g0XWoO9vUfg/V3XY
-	 jndCan8K09I5Z51IE9IqNMYrMtGdZ5M/tIhgAANGdlMxHS70h2Zlctk6il/dGCAwIw
-	 jah7hUwZQeIVPmPoOlZVAaC8jZS9Khz4EaE8bsJA=
+	b=optKnF3rfQ7vudY7ZVEWtC5CMXiYVQuzLaKJEdchyR7rL5BAI6s8Ra8g2UcZzQO+9
+	 p6tkpO4n1XXwjAm6xelAXr0Vakj72uudPe0YRXbBJXNBFpPpQe01awatVMc3YQVvLg
+	 YPa+LyXmsvxK50JfKzHKQ6IpAs06F2m4V6HS2nkc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390039AbfA1QZx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Jan 2019 11:25:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34890 "EHLO mail.kernel.org"
+        id S1729376AbfA1QfC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Jan 2019 11:35:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390060AbfA1QZw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Jan 2019 11:25:52 -0500
+        id S2390051AbfA1QZv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 28 Jan 2019 11:25:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0245C2084A;
-        Mon, 28 Jan 2019 16:25:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DD11421741;
+        Mon, 28 Jan 2019 16:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1548692751;
-        bh=H3w7iQyLSktoE60p0KTrHDNUT8HwwE17kKhyhZKV3TE=;
+        s=default; t=1548692750;
+        bh=ZCfT/kp1TR+Xf4193Lj1qd4gG0ZZP3lhj/mphjeTJ7Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fOMlWigv+3YA7nWvMtE8Mlg2QmHJzdchRaFueXh4VMVBazZaFaormY/Xdid6C3ywj
-         LVXA2KrIVR9LVLJLKNUXT7vvQfKNw0la+iGGKwM9qNBpXLqIib7GHq2ZKTz1MDYcbV
-         Lh2KejqXV4aVraIe74CZN4O74jsTl9tiacbq6uw4=
+        b=FsiLH2I+Hdzdgrz7HhlhePdFbU7l9g5IXT2SLopmA7tBhBUqBKUaRMmqjWYwjn3Ny
+         yaj/F1lwwkWYfw3HjdlwchXOFr007VRO/D7MwB1o9OmhaD6kNF715Fjwy4Gb3X/o38
+         BVcmF5ZwkngTqo1mK2S/EhHWE64oasMGVuvSM4+8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kangjie Lu <kjlu@umn.edu>, Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 64/80] hwmon: (lm80) fix a missing check of bus read in lm80 probe
-Date:   Mon, 28 Jan 2019 11:23:45 -0500
-Message-Id: <20190128162401.58841-64-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 63/80] hwmon: (lm80) fix a missing check of the status of SMBus read
+Date:   Mon, 28 Jan 2019 11:23:44 -0500
+Message-Id: <20190128162401.58841-63-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190128162401.58841-1-sashal@kernel.org>
 References: <20190128162401.58841-1-sashal@kernel.org>
@@ -58,51 +58,56 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Kangjie Lu <kjlu@umn.edu>
 
-[ Upstream commit 9aa3aa15f4c2f74f47afd6c5db4b420fadf3f315 ]
+[ Upstream commit c9c63915519b1def7043b184680f33c24cd49d7b ]
 
-In lm80_probe(), if lm80_read_value() fails, it returns a negative
-error number which is stored to data->fan[f_min] and will be further
-used. We should avoid using the data if the read fails.
+If lm80_read_value() fails, it returns a negative number instead of the
+correct read data. Therefore, we should avoid using the data if it
+fails.
 
 The fix checks if lm80_read_value() fails, and if so, returns with the
 error number.
 
 Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+[groeck: One variable for return values is enough]
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/lm80.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm80.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
-index 47ddae6b7038..cb6606a0470d 100644
+index 4bcd9b882948..47ddae6b7038 100644
 --- a/drivers/hwmon/lm80.c
 +++ b/drivers/hwmon/lm80.c
-@@ -628,6 +628,7 @@ static int lm80_probe(struct i2c_client *client,
- 	struct device *dev = &client->dev;
- 	struct device *hwmon_dev;
- 	struct lm80_data *data;
+@@ -360,9 +360,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 	struct i2c_client *client = data->client;
+ 	unsigned long min, val;
+ 	u8 reg;
+-	int err = kstrtoul(buf, 10, &val);
+-	if (err < 0)
+-		return err;
 +	int rv;
- 
- 	data = devm_kzalloc(dev, sizeof(struct lm80_data), GFP_KERNEL);
- 	if (!data)
-@@ -640,8 +641,14 @@ static int lm80_probe(struct i2c_client *client,
- 	lm80_init_client(client);
- 
- 	/* A few vars need to be filled upon startup */
--	data->fan[f_min][0] = lm80_read_value(client, LM80_REG_FAN_MIN(1));
--	data->fan[f_min][1] = lm80_read_value(client, LM80_REG_FAN_MIN(2));
-+	rv = lm80_read_value(client, LM80_REG_FAN_MIN(1));
++
++	rv = kstrtoul(buf, 10, &val);
 +	if (rv < 0)
 +		return rv;
-+	data->fan[f_min][0] = rv;
-+	rv = lm80_read_value(client, LM80_REG_FAN_MIN(2));
+ 
+ 	/* Save fan_min */
+ 	mutex_lock(&data->update_lock);
+@@ -390,8 +392,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = (lm80_read_value(client, LM80_REG_FANDIV) &
+-	       ~(3 << (2 * (nr + 1)))) | (data->fan_div[nr] << (2 * (nr + 1)));
++	rv = lm80_read_value(client, LM80_REG_FANDIV);
 +	if (rv < 0)
 +		return rv;
-+	data->fan[f_min][1] = rv;
++	reg = (rv & ~(3 << (2 * (nr + 1))))
++	    | (data->fan_div[nr] << (2 * (nr + 1)));
+ 	lm80_write_value(client, LM80_REG_FANDIV, reg);
  
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
- 							   data, lm80_groups);
+ 	/* Restore fan_min */
 -- 
 2.19.1
 
