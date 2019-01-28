@@ -2,100 +2,107 @@ Return-Path: <SRS0=CT/L=QE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7BB5C282C8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F27C282C8
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:27:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C3F142171F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:23:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4DD521927
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 16:27:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1548692870;
+	bh=H3w7iQyLSktoE60p0KTrHDNUT8HwwE17kKhyhZKV3TE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=B8sHUrTgdyrGb+V8+i+uO5UQf0aVoiwRyJwlJst2KkNfp7/pjkDD8DM5tcfZC0Be+
+	 mFay6zns/HNk0XuB+JwL4vulUcsRgy39du9LS2Ht/2X3vIu8aNTnQ+eW40JxpR+jvq
+	 fiMNCrtr5jGjUOVReARmmJclpCYX9ctgaFg86qk8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389478AbfA1QXg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Jan 2019 11:23:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37492 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389472AbfA1QXg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Jan 2019 11:23:36 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x0SGJQYA012191
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Jan 2019 11:23:35 -0500
-Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2qa3mnnse4-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Jan 2019 11:23:35 -0500
-Received: from localhost
-        by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Mon, 28 Jan 2019 16:23:34 -0000
-Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
-        by e14.ny.us.ibm.com (146.89.104.201) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 28 Jan 2019 16:23:31 -0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x0SGNU1724576250
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Jan 2019 16:23:30 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3A0DB2064;
-        Mon, 28 Jan 2019 16:23:30 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 288D6B2068;
-        Mon, 28 Jan 2019 16:23:30 +0000 (GMT)
-Received: from talon7.ibm.com (unknown [9.41.179.222])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Jan 2019 16:23:30 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, joel@jms.id.au,
-        jdelvare@suse.com, tglx@linutronix.de,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2 2/2] fsi: occ: Fix license header
-Date:   Mon, 28 Jan 2019 10:23:24 -0600
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1548692604-9899-1-git-send-email-eajames@linux.ibm.com>
-References: <1548692604-9899-1-git-send-email-eajames@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19012816-0052-0000-0000-0000037F700C
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00010493; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000277; SDB=6.01153048; UDB=6.00601113; IPR=6.00933410;
- MB=3.00025324; MTD=3.00000008; XFM=3.00000015; UTC=2019-01-28 16:23:33
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19012816-0053-0000-0000-00005FA1EBCD
-Message-Id: <1548692604-9899-3-git-send-email-eajames@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-01-28_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=752 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1901280123
+        id S2390027AbfA1Q1t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Jan 2019 11:27:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390476AbfA1Q1s (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 28 Jan 2019 11:27:48 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 43F0A2147A;
+        Mon, 28 Jan 2019 16:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1548692868;
+        bh=H3w7iQyLSktoE60p0KTrHDNUT8HwwE17kKhyhZKV3TE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ewb7kRFtU1/nkZYJvlJhH5oEycs27HJYmT9MZHsJTVh3P3426JylgpFUEp92KUWAl
+         UG6yZbleT11JH8F482G3eF8ECHTk+zVg9WEd5bmYwPGx3HookKSMAFHnNWBOS4D7V0
+         wX4E0uCp1WOlnITqJukP6PvvjbaP0ratB7Dyk4O8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kangjie Lu <kjlu@umn.edu>, Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 3.18 48/61] hwmon: (lm80) fix a missing check of bus read in lm80 probe
+Date:   Mon, 28 Jan 2019 11:26:10 -0500
+Message-Id: <20190128162623.59854-48-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190128162623.59854-1-sashal@kernel.org>
+References: <20190128162623.59854-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-OCC driver source is missing the IBM Copyright
+From: Kangjie Lu <kjlu@umn.edu>
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+[ Upstream commit 9aa3aa15f4c2f74f47afd6c5db4b420fadf3f315 ]
+
+In lm80_probe(), if lm80_read_value() fails, it returns a negative
+error number which is stored to data->fan[f_min] and will be further
+used. We should avoid using the data if the read fails.
+
+The fix checks if lm80_read_value() fails, and if so, returns with the
+error number.
+
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/fsi/fsi-occ.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hwmon/lm80.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index a2301ce..d75038f 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -1,4 +1,5 @@
--// SPDX-License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: GPL-2.0+
-+// Copyright IBM Corp 2019
+diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
+index 47ddae6b7038..cb6606a0470d 100644
+--- a/drivers/hwmon/lm80.c
++++ b/drivers/hwmon/lm80.c
+@@ -628,6 +628,7 @@ static int lm80_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	struct device *hwmon_dev;
+ 	struct lm80_data *data;
++	int rv;
  
- #include <linux/device.h>
- #include <linux/err.h>
+ 	data = devm_kzalloc(dev, sizeof(struct lm80_data), GFP_KERNEL);
+ 	if (!data)
+@@ -640,8 +641,14 @@ static int lm80_probe(struct i2c_client *client,
+ 	lm80_init_client(client);
+ 
+ 	/* A few vars need to be filled upon startup */
+-	data->fan[f_min][0] = lm80_read_value(client, LM80_REG_FAN_MIN(1));
+-	data->fan[f_min][1] = lm80_read_value(client, LM80_REG_FAN_MIN(2));
++	rv = lm80_read_value(client, LM80_REG_FAN_MIN(1));
++	if (rv < 0)
++		return rv;
++	data->fan[f_min][0] = rv;
++	rv = lm80_read_value(client, LM80_REG_FAN_MIN(2));
++	if (rv < 0)
++		return rv;
++	data->fan[f_min][1] = rv;
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+ 							   data, lm80_groups);
 -- 
-1.8.3.1
+2.19.1
 
