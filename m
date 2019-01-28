@@ -1,128 +1,125 @@
-Return-Path: <SRS0=B7jK=QB=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=CT/L=QE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC18C282C2
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jan 2019 22:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFF7FC282CA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 00:21:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE0BE21855
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Jan 2019 22:04:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B65DC2147A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 00:21:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gltMPQyv"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EzHmfq4Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbfAYWEH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Jan 2019 17:04:07 -0500
-Received: from mail-pl1-f178.google.com ([209.85.214.178]:38364 "EHLO
-        mail-pl1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfAYWEH (ORCPT
+        id S1726648AbfA1AVy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 27 Jan 2019 19:21:54 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34130 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726551AbfA1AVx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Jan 2019 17:04:07 -0500
-Received: by mail-pl1-f178.google.com with SMTP id e5so5156282plb.5
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Jan 2019 14:04:06 -0800 (PST)
+        Sun, 27 Jan 2019 19:21:53 -0500
+Received: by mail-pl1-f194.google.com with SMTP id w4so6966877plz.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Jan 2019 16:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=PCZb4cxuCjbf0qm7oe0GNJHjjpy1C8qX3eIL7jLWAug=;
-        b=gltMPQyvQBSvvZFgIMbAH3XS4VjzZQ9bDL46A09/+UGbZ2FwSfJhcRP+hbTeXBnRJA
-         fLAJBUJ5I4SPnk8U6J+cNn56uniUTccJGhO605oflmndCet12RF8IoTOOw9iOtCgGgBd
-         3UhUkLs2FhR0UwByP9nbtMSgqePRypThOEVCl8dfd+Eve/4sDjCVuYfzHCNufbbVdjW8
-         xa74GxWfwlpz3/Bsu+B+LJr+ZP8nhmj+O6msl0FBQ0gLrciXrEuaPmUV36JizAFC58jV
-         gVK3N4egqrlmgqLWohmXH9xViC5EBhVP/Ruyz5mTBE7G9NrSlM+FOGrBflG4EX2QksGV
-         BW+g==
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cQDwBD3ETjMTMBg08mKtyF0Kk5tQuymyH5ooWvASiVg=;
+        b=EzHmfq4ZI+8zE1cqSQbWDp9V57GckPffIOKp9dAhzKlKXXsZow5idUuFtseABfKwcF
+         JCxPk5hIblUzX7+9TQgZFs8YeGn7KTBt2C77oXJCqOVIBce79Ovh0pgmonjUBXivc4hb
+         qG8IbY7HzkTAT5xkqaLBJ4d1urbxMGmyttYR678JxR29EisGXQWz3GQw7urfobyoCvyr
+         Yp6MOaUSKQHyzYsq2f1x1JsxXsz2RQbhn9WCaogs5akG+uQjOqSb0x6Fu04vtAhvggUO
+         E5yVMPdAWYxfJIdj6Pze5m1GuQS8+jeh98/ZFLCVe8lupcaghF6vX6I9IiCPZEt+QPi/
+         K6Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=PCZb4cxuCjbf0qm7oe0GNJHjjpy1C8qX3eIL7jLWAug=;
-        b=Zj9OFjDXQRswb0PXsXMzH6FBNLBOZpesw4P+zEBK55Rdipj5vCmKk8pDFrZ0VGeENv
-         5gKjYKwo+F5WpdaH1r+iPxPE4MZ0JQi6Xq5ZSsU1VG9eCJ6Gnis2MiYvvVbCTsr3GWGq
-         VZZ/dNnWRJbZ9BKKgQr+f1IEwhWhZGVqcD1mTtF/thW6SHUAgOCEXf6WpDNXAIVvyZgN
-         xg24kLA673xOjYiLIxZgLvS5kYbByiapd5jZfS+x0kcZZb9SfneMAnyvfbkQlbh7Yjde
-         8fhfwis7P0zTr8ThnIrzyIec3armJecNypez9WIk++JLoZaevK0bPvU14hlaV4XhMcSk
-         YfsA==
-X-Gm-Message-State: AJcUukeyJH6n3LWmkV/Uo7UHDJl2a9qPESnB9PXZl1loaA5SDweKzZ+y
-        fFj7GIobtctwS/qhKKX80IU=
-X-Google-Smtp-Source: ALg8bN6DYAX75gka7TYWHUcm0QObOn40h/Dmkga5m73BfvjXih8Uws2udGh4sPv2wq+jbNSQAk1CJA==
-X-Received: by 2002:a17:902:6bc7:: with SMTP id m7mr12997359plt.106.1548453846327;
-        Fri, 25 Jan 2019 14:04:06 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c23sm30468828pfi.83.2019.01.25.14.04.04
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cQDwBD3ETjMTMBg08mKtyF0Kk5tQuymyH5ooWvASiVg=;
+        b=h4CPEHdgvSHK5XpmAifb5pg81nthKZIV76XbUkXrtIHoCEBDK7QSdI2DHOqWfIlHbv
+         NUVs+WRB+WvOVkp7axccix2tWUb3mdBcaJCSzaTIC5Kt7o2IqNdD19wgnUFlet1YcoEO
+         iEet2WNQk7Dk/gJQx0zS2yuxRQcd8yj7Ixv1IlaOPCWHGg/kN9ys3AEH2IN14E1oDz4K
+         uVlCOpQdIELqnUt3Jt3b4sAnIn6THMKi2AfwI5Vl5+gKWSFb0R4dpSx6Y39K0wBpmYvB
+         e4U04hJiCPuZMxv+/RfWUSuOPn74qg/uNv+GO5oJcAA3bQHn+tyaId9hY/ZoY8HuUgBv
+         WpPA==
+X-Gm-Message-State: AJcUukcA3pUhx1H5hDJKy5ihhUjHflldz05To/+DXpqYo62MaZiCHqXw
+        pvEDeStf+YWzRh7PvPzU4ubWFt/K
+X-Google-Smtp-Source: ALg8bN6hCESSZ0p3lvxkEjmNDJPu4b8H41jkZaLDwGd0ANo6PyTUomh6UjkJ8+E3awEjOZjQBegAqg==
+X-Received: by 2002:a17:902:76cb:: with SMTP id j11mr20210919plt.179.1548634912865;
+        Sun, 27 Jan 2019 16:21:52 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h64sm51445405pfc.142.2019.01.27.16.21.51
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Jan 2019 14:04:05 -0800 (PST)
-Date:   Fri, 25 Jan 2019 14:04:03 -0800
+        Sun, 27 Jan 2019 16:21:51 -0800 (PST)
+Subject: Re: nct6775: current code detects too few fan sensors for some
+ NCT6793D chips
+To:     Chris Siebenmann <cks@cs.toronto.edu>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <20190127215959.4431B320112@apps1.cs.toronto.edu>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matt Wilbur <wilburm@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: LM5066 low- and high-current limit scaling
-Message-ID: <20190125220403.GA23935@roeck-us.net>
-References: <CAGQJtpOG7m3J9=nbUFi9xhhOKh2T9spSDW4mYfkPeJrSVANdXQ@mail.gmail.com>
+Message-ID: <1ca6ee86-755a-0821-c6d9-26ba160ef0df@roeck-us.net>
+Date:   Sun, 27 Jan 2019 16:21:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGQJtpOG7m3J9=nbUFi9xhhOKh2T9spSDW4mYfkPeJrSVANdXQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190127215959.4431B320112@apps1.cs.toronto.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jan 25, 2019 at 03:13:39PM -0500, Matt Wilbur wrote:
-> Hi
+On 1/27/19 1:59 PM, Chris Siebenmann wrote:
+>   I have an Asus PRIME Z370-A motherboard, on which I run Fedora. In
+> Fedora's 4.19.15 kernel, the nct6775 driver detected all six fan sensors
+> on my motherboard.  In their recently released 4.20.3 kernel, it only
+> detects five, dropping the sixth fan sensor (which happens to be the
+> second chassis fan on this motherboard).
 > 
-> First off, this is the first time I've ever tried something like this,
-> so I fully anticipate I will make some etiquette / process mistakes.
+>   I filed a Fedora bug report, and after discussions with the Fedora
+> maintainer for this area we think we have narrowed the likely issue down
+> to this change:
 > 
-> In a project I am working on, we make use of the LM5066 hot-swap
-> controller.  I believe the kernel module for this chip
-> (drivers/hwmon/pmbus/lm25066.c) has an error where the scaling
-> parameters for the low- and high-current limits are swapped.
+> hwmon: (nct6775) Separate fan/pwm configuration detection for NCT6793D
 > 
-> What's the best way for me to make my case?  Just create a patch and
-> try to submit it?  A free-form discussion on the mailing list?
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2d99925a15b639026b67bd96419df6f9d760b212
+> 
+> If I'm reading the before and after code right, the code before the change
+> did:
+>      fan6pin = !dsw_en && (cr2d & BIT(1));
+>      fan6pin |= creb & BIT(3);
+> 
+> And the code after dropped the '!dsw_en' part and became just:
+>      fan6pin = creb & BIT(3);
 > 
 
-Normally you would send a patch and make your case in the description.
+Sigh. Too much complexity in those chips. Yes, the first line got lost,
+but it applies for NCT6793D. Sorry for that. I'll write a patch.
 
-However, be careful.
+> (I don't know if it's possible for me to probe things in some way to
+> see if dsw_en would be set, or even dump the full raw state of these
+> registers.)
+> 
+>   The full Fedora bug report is here, with various things like dmesg
+> output and so on from the two kernels on my hardware:
+> 
+> 	https://bugzilla.redhat.com/show_bug.cgi?id=1669564
+> 
+> (Hopefully emailing you directly instead of the linux-hwmon mailing
+> list is the right choice. I looked at the mailing list archive and
+> it seemed to be for development, with lots of patches, instead of
+> issue reports.)
+> 
 
-PSC_CURRENT_IN_L is used if DEVICE_SETUP[4]=1, which (hopefully) translates
-to CL=VDD. Per LM25066 datasheet, table 41:
-	CL=GND:		M=13661, B=–5200, R=-2
-	CL=VDD:		M=6854, B=-3100, R=-2
-
-Current code:
-	DEVICE_SETUP[4]=0: M=13661, B=0, R=-2
-	DEVICE_SETUP[4]=1: M=6852, B=0, R=-2
-
-This looks mostly correct to me, except for the offset and the
-slight difference if CL=VDD. Looks like that was changed at some
-point in later datasheet versions.
-
-Overall, the problem (or confusion) is that the logic for
-DEVICE_SETUP[4] in the datasheets for the various chips changes.
-
-5066i:
-	0 = high setting (50 mV)
-	1 = low setting (26 mV)
-
-25066, 25066i:
-	0 = low setting (25 mV)
-	1 = high setting (46 mV)
-
-... so of course it may well be that the data for some of the chips
-is wrong, since we use PSC_CURRENT_IN_L for DEVICE_SETUP[4]=1
-throughout (in other words, it is likely that either the data for
-LM5066 is wrong, or that the data for LM25066 is wrong - the only
-question is which one). It may also be that the datasheets are wrong
-or misleading, and that CL=VDD is not (or not always) equivalent
-to DEVICE_SETUP[4]=1.
+e-mailing me, or any other maintainer, directly without copying the
+respective mailing list is never the correct choice. It is ok
+to copy me, but it is never ok to not let the rest of the community
+know that there may be a problem.
 
 Guenter
