@@ -2,115 +2,112 @@ Return-Path: <SRS0=CT/L=QE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C0AC282C8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 17:02:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FDC5C4151A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 17:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EA96A21741
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 17:02:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UY7gN3W1"
+	by mail.kernel.org (Postfix) with ESMTP id 17B8E2175B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Jan 2019 17:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1548695461;
+	bh=rpGuL0U3h7Hq77TNLq8XnKd1cHGOMWFsyjr95sIHu6Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=T9EcMJ/etALWSYVmYAMCc4jgZuia8voMRUD520vNQUHKkmyheUKHp92ugXruzX7rp
+	 s0in4SSHWjlNKe+9kLhFsPFx2W/ezXipZQ9pH1UfHlqnfcoNHcU3XllltIT6duS+Hv
+	 fyKRIcBIFe41ucw3BE7+wxRrwbidOT/LmSKpMOzY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732267AbfA1RCK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Jan 2019 12:02:10 -0500
-Received: from mail-it1-f171.google.com ([209.85.166.171]:33761 "EHLO
-        mail-it1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730640AbfA1RCJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Jan 2019 12:02:09 -0500
-Received: by mail-it1-f171.google.com with SMTP id m8so11446014itk.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 28 Jan 2019 09:02:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=161vU+penShdsybBNDzJb2MJQ7yf7zHsTm1ycQGxzBA=;
-        b=UY7gN3W19I+XwafRIRgiQtaOKg4WOg0unYdiABW0YVDAt4TVNBgFxtdcrx4ud7XchT
-         dpAC4O/TUgsizyq7BnkehiR1HnwQ2O3DKKAI2Z2pHORFr21m/NpuZqpMviwTsPDBJsSc
-         FfX5NUzABj1ZivgF7u5xbQnaPoTD4SwR4Y1/PPD5HVJb6FWx+t88MXXyNo22NZ6kT2Rg
-         f+09S1APR3DHX0IbfV9jyY2/75cSvqKwbvcldAzvsPVQdoRb5CLFSQnnB1qEAMYYU9Yp
-         HQUgiyfq400dC0aGbYy4AXMMO1oytgBPfk7BVx/sw+PUcDONiqxAO7pOliuTUrteABQv
-         xvrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=161vU+penShdsybBNDzJb2MJQ7yf7zHsTm1ycQGxzBA=;
-        b=pjpZs3LtHXWSQGCt/+lTT0jglv8ACxxGY+CIKa7WeaNYLIzY9H4Ims2RMAIPRwscGW
-         9bGJap5pbG/yd7780TzevislLZn+gwkAkMa+4hh18dHMJhkRjwd+ScIbFDIIjSwDCdpL
-         RfPZydNClpKjpqhrCcC+HO5FWDNzi4MYl4nIslv0rH0KIVMbn1f8IjeDszsK/mwjf/uq
-         FUGV5lBYzymxGUNjeyHtVZEqRDjhez5w3vHRJ/acAvJigTdxZbtzIBOjro77AnErisqr
-         3yKLv+pb+wz+I8HmM7ItPeT4D9+NllSFZomZSd0eoykxKmf/ZzM72H+AlEmboFpGHyf3
-         Z9qw==
-X-Gm-Message-State: AJcUukfZeKftzp6oMPxijqLvDErlFPYqeot0DTguTsYFCW8WXQgsAvkT
-        tcr5+p89YKkzEQKu9doc8eWNS27J
-X-Google-Smtp-Source: ALg8bN7VY/bJyguynObVM0OHuwZAG+C0hZP8/Ll9ulpxdvGEkdYTYv5n0EV9Wu68HtJ/E35WvUP4Kg==
-X-Received: by 2002:a24:385:: with SMTP id e127mr10135474ite.32.1548694928077;
-        Mon, 28 Jan 2019 09:02:08 -0800 (PST)
-Received: from localhost.localdomain ([24.114.84.177])
-        by smtp.gmail.com with ESMTPSA id v74sm18331962ita.27.2019.01.28.09.02.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Jan 2019 09:02:07 -0800 (PST)
-From:   Matt Wilbur <wilburm@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Matt Wilbur <wilburm@gmail.com>
-Subject: [PATCH 1/1] Fix swapped coeffs for LM5066 and LM5066i iin
-Date:   Mon, 28 Jan 2019 12:00:34 -0500
-Message-Id: <20190128170034.24348-2-wilburm@gmail.com>
-X-Mailer: git-send-email 2.20.1.309.g16a465bc01
-In-Reply-To: <20190128170034.24348-1-wilburm@gmail.com>
-References: <20190128170034.24348-1-wilburm@gmail.com>
+        id S1732265AbfA1QKB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Jan 2019 11:10:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731494AbfA1QJ7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 28 Jan 2019 11:09:59 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A77A42171F;
+        Mon, 28 Jan 2019 16:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1548691799;
+        bh=rpGuL0U3h7Hq77TNLq8XnKd1cHGOMWFsyjr95sIHu6Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YyM1/E60um74XuEihNRwEAzVukqBwm5yMk4idIBKsPHaxw6PWOepdF3YDJPdkCzLp
+         QSTzZW2PUNpfTrap3uQekjmeHXgU8lbbVbtA+FhfP4nBiVA1WBTBJeuC9P+Su2+v36
+         XfN1LN/nykgxQWYmdUtZVA9+hO/EUkd/4nnuFlmk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kangjie Lu <kjlu@umn.edu>, Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 220/258] hwmon: (lm80) fix a missing check of the status of SMBus read
+Date:   Mon, 28 Jan 2019 10:58:46 -0500
+Message-Id: <20190128155924.51521-220-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190128155924.51521-1-sashal@kernel.org>
+References: <20190128155924.51521-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
----
- drivers/hwmon/pmbus/lm25066.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+From: Kangjie Lu <kjlu@umn.edu>
 
-diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index 53db78753a0d..9d917b5f0a81 100644
---- a/drivers/hwmon/pmbus/lm25066.c
-+++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -156,11 +156,11 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
- 			.R = -2,
- 		},
- 		[PSC_CURRENT_IN] = {
--			.m = 10753,
-+			.m = 5405,
- 			.R = -2,
- 		},
- 		[PSC_CURRENT_IN_L] = {
--			.m = 5405,
-+			.m = 10753,
- 			.R = -2,
- 		},
- 		[PSC_POWER] = {
-@@ -197,13 +197,13 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
- 			.R = -2,
- 		},
- 		[PSC_POWER] = {
--			.m = 1701,
--			.b = -4000,
-+			.m = 861,
-+			.b = -965,
- 			.R = -3,
- 		},
- 		[PSC_POWER_L] = {
--			.m = 861,
--			.b = -965,
-+			.m = 1701,
-+			.b = -4000,
- 			.R = -3,
- 		},
- 		[PSC_TEMPERATURE] = {
+[ Upstream commit c9c63915519b1def7043b184680f33c24cd49d7b ]
+
+If lm80_read_value() fails, it returns a negative number instead of the
+correct read data. Therefore, we should avoid using the data if it
+fails.
+
+The fix checks if lm80_read_value() fails, and if so, returns with the
+error number.
+
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+[groeck: One variable for return values is enough]
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/lm80.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hwmon/lm80.c b/drivers/hwmon/lm80.c
+index 08e3945a6fbf..04f9df0d2341 100644
+--- a/drivers/hwmon/lm80.c
++++ b/drivers/hwmon/lm80.c
+@@ -360,9 +360,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 	struct i2c_client *client = data->client;
+ 	unsigned long min, val;
+ 	u8 reg;
+-	int err = kstrtoul(buf, 10, &val);
+-	if (err < 0)
+-		return err;
++	int rv;
++
++	rv = kstrtoul(buf, 10, &val);
++	if (rv < 0)
++		return rv;
+ 
+ 	/* Save fan_min */
+ 	mutex_lock(&data->update_lock);
+@@ -390,8 +392,11 @@ static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
+ 		return -EINVAL;
+ 	}
+ 
+-	reg = (lm80_read_value(client, LM80_REG_FANDIV) &
+-	       ~(3 << (2 * (nr + 1)))) | (data->fan_div[nr] << (2 * (nr + 1)));
++	rv = lm80_read_value(client, LM80_REG_FANDIV);
++	if (rv < 0)
++		return rv;
++	reg = (rv & ~(3 << (2 * (nr + 1))))
++	    | (data->fan_div[nr] << (2 * (nr + 1)));
+ 	lm80_write_value(client, LM80_REG_FANDIV, reg);
+ 
+ 	/* Restore fan_min */
 -- 
-2.17.1
+2.19.1
 
