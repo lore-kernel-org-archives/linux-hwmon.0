@@ -2,125 +2,99 @@ Return-Path: <SRS0=2nFx=QG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C401C282D7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83EF5C282D7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:19:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B11B20870
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:15:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EDA420989
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:19:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sweptlaser-com.20150623.gappssmtp.com header.i=@sweptlaser-com.20150623.gappssmtp.com header.b="vTZ2B3C0"
+	dkim=pass (2048-bit key) header.d=sweptlaser-com.20150623.gappssmtp.com header.i=@sweptlaser-com.20150623.gappssmtp.com header.b="DIBrp5I9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731836AbfA3QPE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Jan 2019 11:15:04 -0500
-Received: from mail-it1-f196.google.com ([209.85.166.196]:36478 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731667AbfA3QPE (ORCPT
+        id S1731750AbfA3QTy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Jan 2019 11:19:54 -0500
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:40777 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727546AbfA3QTx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Jan 2019 11:15:04 -0500
-Received: by mail-it1-f196.google.com with SMTP id c9so170307itj.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Jan 2019 08:15:03 -0800 (PST)
+        Wed, 30 Jan 2019 11:19:53 -0500
+Received: by mail-vk1-f193.google.com with SMTP id v70so20637vkv.7
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Jan 2019 08:19:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sweptlaser-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:subject:date:message-id:in-reply-to:references;
-        bh=IxHZdTZ6J0dpqWIVklavMlPQmX6oRc8uMd+DCSk6CDk=;
-        b=vTZ2B3C0M+IYtIE+1ZByVSr8uvDds1bkorJ/izZWC9z03JVXu7LuwmOcAq7fYn/9A9
-         dECDOKcTnhGbsU4+R66PctMZE6QSBEmZEOg0tMLmI50ViTKwGfaQOHzUii0lg7reCGEP
-         Ji1zrX01M+XLtHTl7ovxPap/JJkvfqbY8mOgO0d97h7JkFh0eWcuNVR02Gh+kLOIj2er
-         IsQnSZ00aiLf1Om6b1YoTJjus6zBQf3WRxsTO6Lb+XZVQgOqnYynfdrsokOVdaTtGNs0
-         fEBnVOZfZ+G77ScaOwoMNr7p+d+XwjCMTfaz/HtVI1qaZIr4m64KrLfsHYdrvb3wQlkZ
-         StNQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p1OSTSUc+1gsns6jfkPG4uHPBgSAMiDJvTOmjA9DSHk=;
+        b=DIBrp5I9nz3cogKQvrSZ2KpWZTGzXsDJmHc0ef/YRrhZafArLDzikjaHwshTSYXGz2
+         bF0ygh7sz6L/MryGrL9ibmjwl2DvQi0byh6Y1xSaOrZJj8q2iIeREPfRUUSqOXnp9cKg
+         cwC4UBKqcPoBg7Z47Xm3JfMeWgqRVyB48CyBFzBqkB1/kNa/AFvsv/wMZFNSpJAWB5Gc
+         EeK2UCXDg86mpaDSvkl1WJ4ahQUkM20H8qroXdaRPVb+gsFWmiAgdmRdBXxnKThDyNnx
+         32MCm5Quz3VX6IgkwTcRzlxtoEjvV4WePM47r8VghaE2z5V8XJDPZi0T3xncQ55Ltbin
+         zQog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references;
-        bh=IxHZdTZ6J0dpqWIVklavMlPQmX6oRc8uMd+DCSk6CDk=;
-        b=S7wYfxUQcUbvkg86UinvNFKOdKJqXZKvv+ix/XPErahIMOVCSGHcqv/Zho+AWk5Hzn
-         QLV5C9qyU37hVbwenZwEuWfrvEYPtspWz/tpDL6gE+R75Sa+8+xtb1xHD0S1/265mKPZ
-         +7UfxeKF4QlFJnqrKebCcrta+zUmmZ28II0zOwWvm/wReUn3eO21VRWOSy+ubxSJIebO
-         uLlBucsTSY2zZ9c3/OtnA8Wbul5wM8WUbKfqdRz64h0/yGXmPBsrZw1U7YT0HuLxyoA2
-         2qhZ7jKV15XpwDET6pQlDBJNr0xC/WS6vG6rwf1dOdCG5iGEUHqcjP+JXMVzqTXzLVN+
-         +BCg==
-X-Gm-Message-State: AJcUukfOhJohic3JKrp//fLFLEDCfb3DxJj5XD+L5OroWHUANnuFKlws
-        V/D5yCKjfv8fA9O/GXgcNiT2iw==
-X-Google-Smtp-Source: ALg8bN6hyhlWNG+Bom6AsDIWg3dMrA988+TESAa8wqmvOcTJKaKcwDSR2/4FsfXMcE+mFTIDdDWPKg==
-X-Received: by 2002:a24:710:: with SMTP id f16mr14079927itf.121.1548864902945;
-        Wed, 30 Jan 2019 08:15:02 -0800 (PST)
-Received: from yngvi.hq.sweptlaser.com ([63.147.146.226])
-        by smtp.googlemail.com with ESMTPSA id 15sm838678iog.59.2019.01.30.08.15.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 30 Jan 2019 08:15:02 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p1OSTSUc+1gsns6jfkPG4uHPBgSAMiDJvTOmjA9DSHk=;
+        b=gbjQWDA0AeyRbozUb0tfWTcOu2M1EgP2RA14wZQTfV1jl1B4UjB8i++und9jMRCHYv
+         0wHgMR2WPuhELnRNf+zRo6Klg40j7A3m1lpge15Dj1f2sxejlLUdXINwReEEbIJJdvbW
+         5bgWlx1yffP4iUqQbVRvqOPQwIoqHwv/PC4azdXsw/C0MKHKMkXWA8upUZdtNPj5dqCS
+         7XQbh0fgm488GswLwc+tJLu5MKAPwn5tBE/SprU4zV57N9oB7+ZO7bfruNGZ7G/6bfrt
+         wlIgTvSJe57ZfZO6a1DAxeWzvNSzS7IZ+JxcytNFm/vKZ1W35meWUYcnESFCnw7LYFVG
+         XDdQ==
+X-Gm-Message-State: AJcUukeUns0EIMaB1ZMAvwSOC86JdmBJ4r9yJwOOsxM9bQBatE2Zj8l9
+        YqRcs9lAQZfVs9YznA3EYvlyaWPPLP7ZJQgIxNwQiQ==
+X-Google-Smtp-Source: ALg8bN49OWwRKIlnoBpQEkLwne2NWX9XO+p80DK+Lzgl3+RUZWp98mk8GAQcmqSSN2eHLgF8ORscO0bGZeJxFiQzklA=
+X-Received: by 2002:a1f:298e:: with SMTP id p136mr12881074vkp.40.1548865192778;
+ Wed, 30 Jan 2019 08:19:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20190129212920.27921-1-jgebben@sweptlaser.com> <20190129233824.GA27719@roeck-us.net>
+In-Reply-To: <20190129233824.GA27719@roeck-us.net>
 From:   Jeremy Gebben <jgebben@sweptlaser.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH resend 3/3] hwmon: (lm85) add support for LM96000 high frequencies
-Date:   Wed, 30 Jan 2019 09:14:47 -0700
-Message-Id: <20190130161447.19946-3-jgebben@sweptlaser.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190130161447.19946-1-jgebben@sweptlaser.com>
-References: <20190129212920.27921-1-jgebben@sweptlaser.com>
- <20190130161447.19946-1-jgebben@sweptlaser.com>
+Date:   Wed, 30 Jan 2019 09:19:42 -0700
+Message-ID: <CAB48C-qXCBrnmsx8RQcpWwo-f48aC_oK+snKKaBgKw6agK3qqQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] hwmon: (lm85) add LM96000 high freqency pwm support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This chip expands the freqency field from 3 to 4 bits, to
-add more frequencies in the 22.5 to 30 kHz ranges.
+On Tue, Jan 29, 2019 at 4:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Tue, Jan 29, 2019 at 02:29:17PM -0700, Jeremy Gebben wrote:
+> > Hi,
+> >
+> > This patch adds support for the PWM frequencies from 22.5 to 30 kHz
+> > available on the LM96000.
+> >
+> > It looks like this chip has been supported for a long time, but wasn't
+> > mentioned in the docs (which I have updated).
+> >
+> > Also, it has been using the generic 'lm85' prefix, which I have not
+> > changed to avoid breaking userspace or device tree files. AFAICT,
+> > lm85_detect() will only return 'lm85' for LM96000 chips, so it doesn't
+> > look like you can get a bare 'lm85' prefix with any other chips.
+> >
+> > I stumbled on to a 10 year old thread discussing a patch which looks
+> > like an early attempt to add support for this chip, which may be of
+> > interest:
+> > https://lm-sensors.lm-sensors.narkive.com/1SIwaMDT/patch-hwmon-lm96000-support
+> >
+> > Thanks for reviewing,
+> >
+> Where are the actual patches ?
 
-Signed-off-by: Jeremy Gebben <jgebben@sweptlaser.com>
----
- Documentation/hwmon/lm85 | 3 +++
- drivers/hwmon/lm85.c     | 9 +++++++++
- 2 files changed, 12 insertions(+)
+Oops! It looks like they didn't send correctly. Hopefully they should
+be showing up shortly.
 
-diff --git a/Documentation/hwmon/lm85 b/Documentation/hwmon/lm85
-index 9f3a945d1b80..264874f09196 100644
---- a/Documentation/hwmon/lm85
-+++ b/Documentation/hwmon/lm85
-@@ -140,6 +140,9 @@ of voltage and temperature channels.
- SMSC EMC6D103S is similar to EMC6D103, but does not support pwm#_auto_pwm_minctl
- and temp#_auto_temp_off.
- 
-+The LM96000 supports additional high frequency PWM modes (22.5 kHz, 24 kHz,
-+25.7 kHz, 27.7 kHz and 30 kHz), which can be configured on a per-PWM basis.
-+
- Hardware Configurations
- -----------------------
- 
-diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
-index 48f59667a88c..37bfa7d105a2 100644
---- a/drivers/hwmon/lm85.c
-+++ b/drivers/hwmon/lm85.c
-@@ -202,6 +202,11 @@ static const int lm85_freq_map[] = { /* 1 Hz */
- 	10, 15, 23, 30, 38, 47, 61, 94
- };
- 
-+static const int lm85_high_freq_map[] = { /* 1 Hz */
-+	10, 15, 23, 30, 38, 47, 61, 94,
-+	22500, 24000, 25700, 25700, 27700, 27700, 30000, 30000
-+};
-+
- static const int adm1027_freq_map[] = { /* 1 Hz */
- 	11, 15, 22, 29, 35, 44, 59, 88
- };
-@@ -1574,6 +1579,10 @@ static int lm85_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 		data->freq_map = adm1027_freq_map;
- 		data->freq_map_mask = ARRAY_SIZE(adm1027_freq_map) - 1;
- 		break;
-+	case lm85:
-+		data->freq_map = lm85_high_freq_map;
-+		data->freq_map_mask = ARRAY_SIZE(lm85_high_freq_map) - 1;
-+		break;
- 	default:
- 		data->freq_map = lm85_freq_map;
- 		data->freq_map_mask = ARRAY_SIZE(lm85_freq_map) - 1;
--- 
-2.17.1
+Jeremy
 
+>
+> Guenter
