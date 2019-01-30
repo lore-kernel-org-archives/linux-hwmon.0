@@ -1,98 +1,84 @@
-Return-Path: <SRS0=NJdv=QF=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=2nFx=QG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE18C169C4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jan 2019 23:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C3F0C282D7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 15:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A84342147A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Jan 2019 23:38:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Szv/aWlQ"
+	by mail.kernel.org (Postfix) with ESMTP id 5ABFA20989
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 15:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbfA2Xi1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Jan 2019 18:38:27 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40679 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbfA2Xi1 (ORCPT
+        id S1727356AbfA3PII (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Jan 2019 10:08:08 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:46205 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727371AbfA3PIH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Jan 2019 18:38:27 -0500
-Received: by mail-pl1-f196.google.com with SMTP id u18so10112274plq.7;
-        Tue, 29 Jan 2019 15:38:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+PKnZOF1yqFmuekM1RzTe7u5OOiAaunZnovVhZl+qbI=;
-        b=Szv/aWlQJ10ULdZwETIrYZX4KT27S/jknazVwzeZ+u3KpJoj0exgxUgyx9r5/eyfws
-         uSW/iimyZK4YYO6kPeZmYTBimX7lfba8c+3qRm53RhO6IYPqGUBNAqznNSEhx9ZJRNZF
-         vyoPokHq+wvcV/NlmSfjeCgC7QwqXHsMzhNZxGvnjexxRdbzRTPlv54jOWZOIyoV6RlS
-         HeVgu/2nOOuaOuCfWn8gWn3TAYSxCRE5IFTc3wKJbxtE0HuLj4VwE8aMbThlKsply3zy
-         qmG+wcEhVSoTxOKC6It+A5mMbcVE68BXER4MHgGGj3GN7vDY/J/KWCuNm75PGgmacyO6
-         TXqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+PKnZOF1yqFmuekM1RzTe7u5OOiAaunZnovVhZl+qbI=;
-        b=nfbmNcPV3HleOUksRd6ZKi2QDKCE/sqmpVV/ZwECb2LqhGQ7W/S9uC63WtpV6Mo4sU
-         CKnOeN2D4Os2d17Jh5PzREGUNzaCnR+ecnCYkVkk2pS2nvb+5tIpswkoUEuyabK2MMMY
-         K7ShrWsEMhoQNIQhV2IfeDcoCoRKAR9ngcrybwLJUF9/05o5YLxSgm7xw1zZGhlH53fB
-         yPPrkbjDsxIF27hdwk4yUuxyHzrjMSYV8WyzmmRJa0gO3xIyzT5S5KWFdijJ1AEdabUH
-         nwSk+aVKDfmUj01CixTAkwGFXv0jvWfCwqtC8+VJRddVGdcZv4Kmm3jqp851mq5Nmnki
-         PoKQ==
-X-Gm-Message-State: AJcUukdzkHwXx0O7cIdeSsIVQW86doE2iFqs9iwcbmrrVIMqx0NUYhyO
-        tWD0w0YgjTL1b1OMYIfakeu77MF4
-X-Google-Smtp-Source: ALg8bN6ABT00sEbE6Nmq7BO+lGJGOXpFcTUe/NyzMJ4t0yA/u0BC1C0pyZ1kBNZnQwS3Y3jS7RHHmw==
-X-Received: by 2002:a17:902:32c3:: with SMTP id z61mr27961012plb.114.1548805106593;
-        Tue, 29 Jan 2019 15:38:26 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h82sm75890725pfa.105.2019.01.29.15.38.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Jan 2019 15:38:25 -0800 (PST)
-Date:   Tue, 29 Jan 2019 15:38:24 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jeremy Gebben <jgebben@sweptlaser.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] hwmon: (lm85) add LM96000 high freqency pwm support
-Message-ID: <20190129233824.GA27719@roeck-us.net>
-References: <20190129212920.27921-1-jgebben@sweptlaser.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190129212920.27921-1-jgebben@sweptlaser.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Wed, 30 Jan 2019 10:08:07 -0500
+Received: from stefan-Vostro-260.fritz.box ([109.104.32.180]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1M6DSo-1gmdSz1Fai-006hqN; Wed, 30 Jan 2019 16:07:37 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH RFC 2/3] Documentation: pwm-fan: Add description for RPM support
+Date:   Wed, 30 Jan 2019 16:07:06 +0100
+Message-Id: <1548860827-29796-3-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1548860827-29796-1-git-send-email-stefan.wahren@i2se.com>
+References: <1548860827-29796-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:/YIqKdqgVDmYWEMiLNtyELC/NS1lKvJ0Jspw1LEnainiPq0TU80
+ aOfym8HojknQ5XmBInoMITqNHXkBdTupzva1jaoVRS3jGzd6i0B59WbgWTmTcwBKDhO8wjr
+ 3t20HPdXrzajtTc3IRAW8LGfU8qilgIIG5lkf1xzVvBHjA5aU0ZgXOJTHWrexLXg0vfCH6t
+ 9LKMRZSXMwsZ5IR893u1g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3rWlNTitYmI=:j1cLP4tlq6KCZeJ5ltKeBC
+ GtDSBTxSCpr4gTR8xRASzN7rAlljpStiU0MFvOBaDcSmKd+qGX3Oxvb31lyULMJLAAFYxGJ/l
+ v/APg/bbe8O+ZLn3NNYWX2EpeaaJ9HRFtleYttwOa6t85IkXsm40TY8HVdAZtiS3CoFgraaKM
+ 1u5+kOCS/e/PQkL5gUFGT4aSS5t9W20txGu0yJu1m56xWvFk+gFFQUkoOpMhd0jFSoUxhmNDK
+ 8s8tymjJeqeikSCqmX2QlTLOJvL9ir2G1kKQLkN6QdWq33WmEj+2IOGLTbRSX1/xHIAGGrb4r
+ xmN99EqAqsVwNNOe/346gMWzZyslauk/TqzeAt1Wdf6hYO1lEaZ5WPO6Ih1J9fVp78BXt2tLy
+ LHoHKnUVeWmmVR+4oE7q9hlRk83P9vo+UAAx4PUhSMQnTGnmxiJQhKtTgGpQByarJsVjLZlR1
+ fvF/TmCk4cvgvL1C6oiIAbsB2DalKFuhBL8fkUc437E80DwZ92zJVSw0i2hBQHpJlqYVZNyZx
+ eXTdnDmaXtS2Z/RhtuumGPb2K/bM2Hinp+ukOR65a741JdQiTxLG+4jYsCVuiY39lhOFIFWrx
+ FtJgNHG/FRPZvq8otRgdC36o3AznOfJxUqyDIRkIbVM1aK71SKIMcS1hEGPEJ7YdhDhFm1Bam
+ J0mR13mXMaySKb1LZbjCSRtwadfNx3pg564PKdsmglsRnJlQMo0p4kbscxWnlxztJw+zML5UX
+ LWCl4XnuWZ3e0cge+fOpmUNjB0cD38j5VV2uv9z1isJF0MZeR//Tvwk1CDE=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 29, 2019 at 02:29:17PM -0700, Jeremy Gebben wrote:
-> Hi,
-> 
-> This patch adds support for the PWM frequencies from 22.5 to 30 kHz
-> available on the LM96000.
-> 
-> It looks like this chip has been supported for a long time, but wasn't
-> mentioned in the docs (which I have updated).
-> 
-> Also, it has been using the generic 'lm85' prefix, which I have not
-> changed to avoid breaking userspace or device tree files. AFAICT,
-> lm85_detect() will only return 'lm85' for LM96000 chips, so it doesn't
-> look like you can get a bare 'lm85' prefix with any other chips.
-> 
-> I stumbled on to a 10 year old thread discussing a patch which looks
-> like an early attempt to add support for this chip, which may be of
-> interest:
-> https://lm-sensors.lm-sensors.narkive.com/1SIwaMDT/patch-hwmon-lm96000-support
-> 
-> Thanks for reviewing,
-> 
-Where are the actual patches ?
+This adds a short description for the new RPM support of the pwm-fan
+driver.
 
-Guenter
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ Documentation/hwmon/pwm-fan | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/hwmon/pwm-fan b/Documentation/hwmon/pwm-fan
+index 18529d2..a1ba34c 100644
+--- a/Documentation/hwmon/pwm-fan
++++ b/Documentation/hwmon/pwm-fan
+@@ -15,3 +15,7 @@ The driver implements a simple interface for driving a fan connected to
+ a PWM output. It uses the generic PWM interface, thus it can be used with
+ a range of SoCs. The driver exposes the fan to the user space through
+ the hwmon's sysfs interface.
++
++The measured fan rotation speed returned via 'fan1_input' is derived
++from the sampled interrupts from the tachometer signal by assuming
++a 2 pulse-per-revolution fan.
+-- 
+2.7.4
+
