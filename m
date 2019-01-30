@@ -2,186 +2,183 @@ Return-Path: <SRS0=2nFx=QG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FCB5C282D7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 15:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E30BFC282D7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:15:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7A61220989
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 15:09:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A669920870
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Jan 2019 16:15:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=sweptlaser-com.20150623.gappssmtp.com header.i=@sweptlaser-com.20150623.gappssmtp.com header.b="N2WHyfGn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731006AbfA3PJZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Jan 2019 10:09:25 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:41587 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728704AbfA3PIe (ORCPT
+        id S1731728AbfA3QPC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Jan 2019 11:15:02 -0500
+Received: from mail-it1-f193.google.com ([209.85.166.193]:55726 "EHLO
+        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731582AbfA3QPC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Jan 2019 10:08:34 -0500
-Received: from stefan-Vostro-260.fritz.box ([109.104.32.180]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mt6x5-1h8J3Q2ZQ1-00tSws; Wed, 30 Jan 2019 16:07:37 +0100
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 30 Jan 2019 11:15:02 -0500
+Received: by mail-it1-f193.google.com with SMTP id m62so95764ith.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Jan 2019 08:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sweptlaser-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:subject:date:message-id:in-reply-to:references;
+        bh=yrq93au3oJ2dDM7QTKg4qsC2yIDdT7nuUkBxd+KI7Ck=;
+        b=N2WHyfGnz0FXfh9XYdxqt5P55gq8ixYlS5bBxzI18t56btVqdiw48LD8CamOF+xv/9
+         1UqOiiBSQGxByk/5Nn81AECQkzksMrwyH0m618LIbq6e7E3Vu35s+T2idZnWBZLPGUMY
+         jIZ9+E8dxoHkxq3g3OisSXCursJLvhnJjI5OfS+9QnnbgiOa7DEtGzSqNxvxEwLYgzPx
+         XEklNAcaot9HPnNKRqxDJuAonKtuB82ySmJFMq1xqm/tOjfihFlg/N/CSZ3zW4n6w+nM
+         i4+Ac61u/octZWczU6UK9CFSA4XssjXP1P95mzgetrAv/RTrE7iPGrg2y37R18r9jpIa
+         RdRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references;
+        bh=yrq93au3oJ2dDM7QTKg4qsC2yIDdT7nuUkBxd+KI7Ck=;
+        b=rayzLsmG8X5wGZP7BU0M6go6aw/bZmM3tDPJNeczqledSAbkQLkK47xwB7IQrz+8ns
+         LUiRykYtNQZHU40PrRZUecPvKNK/4AcTeAvm0ZgX6Az/4PHNVqXTeSk3aB4AwGWdlcj6
+         UD4XfBsAghcMtGAW/+CcJcu2Zojt7eGvK9ubp436pdBZLK6e9MAx3NXKfNoRnMrztVHp
+         tOboJ/OuP1ulxIf+n/UxnvjSd32tXuslpk0rcY2mbOC91lHnUazxKXD1pvZpoXJ6pXpK
+         A75OF2jBF4xlOWUGcYTgoK3+ZcxA+G3jVRXDsszekoD3eGGb0BXL8JdBTxftbsfEoaCm
+         NlAg==
+X-Gm-Message-State: AJcUukfjqBDA8X/KfUqMDgQSIYrtgW5sD8fPq+c5EADFlh+rkT5AMYQR
+        Gzc/eBvlxtnNoW5rp6O2dyu8mtBRNb4=
+X-Google-Smtp-Source: ALg8bN7tQLMuCew9n4iSOOWyqdnYoMWjvEC1dFlpH33Rr5cpmNErLq1pd62L//HM/hM5OHH04pKLEQ==
+X-Received: by 2002:a05:660c:3c7:: with SMTP id c7mr13602440itl.131.1548864900873;
+        Wed, 30 Jan 2019 08:15:00 -0800 (PST)
+Received: from yngvi.hq.sweptlaser.com ([63.147.146.226])
+        by smtp.googlemail.com with ESMTPSA id 15sm838678iog.59.2019.01.30.08.14.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Jan 2019 08:15:00 -0800 (PST)
+From:   Jeremy Gebben <jgebben@sweptlaser.com>
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC 3/3] hwmon: pwm-fan: Add RPM support via external interrupt
-Date:   Wed, 30 Jan 2019 16:07:07 +0100
-Message-Id: <1548860827-29796-4-git-send-email-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1548860827-29796-1-git-send-email-stefan.wahren@i2se.com>
-References: <1548860827-29796-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:6PYVM5mOr+jBDqoqPfyVkKi+e0aGZeVm24bfzZGyzxFAih7gpae
- raII4Co9rIKaOdehU6cr+sKJGKFDK0+LdZ7ext2u1mV+deLQkPbemEULY/35iHFGKT+1YD9
- 94aJjLzqIID3Ss1/9a8YszSUHfuK8FZR0xqIo5CGkojiQrs/fwK3YOi7frm3nYgYHGW3SDC
- 15TQNyOBM5d8qcXUoXAKA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ix9sLYOMfN0=:37umqU0jLHN7b4sJINs0Ud
- DSyUoEmuFZ1bxKaWUjHbstLKfIvQQ4scDwG/KrX1XRZ7SCCUQKeB3ugQzFhq994piG3qg0PEK
- cadW2OWd0jF9XTLPkCiWUUbBEY4T7Z+unaaaaiXFhCxgnFoLr/lQVl4GkLEO3/GfhVpNYFtcN
- 0Xn/ETEq1FH2sNb1+ITxgWNBZek2S+FtI7se5K95bmQ0CfDx15p1s+mdJkvjasChZUtuKzz0o
- ecrxEFCShzw0erB1Yzio1RSeiQamgPb6rpR9J4kuJG/TCWFCPapj2fMvTDJNxai5LXa+gAhDt
- xm4KNrvsek0tySzrHxPrh70P20DO/HL7U6oPX8ZLIakosi6ujZry1Ikii4B9eQnrjfWCf3AtC
- p4yAjdLk9mN4Utdxw1rMYB9DEmGW3Lds1dOhofcheJm2/m1wc9Ck00xvUvnp8c1y7bWndiJ5k
- waKevZR32KS1SBo9ZhbWczEULfespHMPhWYtWPwV0pQvZxJav8hnmnjaIOPhXG2UIxD7byMbO
- 8Y935Ps5SDEK+wTEhg+n9+MP5A4RPB3bizp19To5boVFReOz0xufsOn0Ejro9kS0dZ0yVA9TU
- k/RtcNHswm6MdtsRHYILdMa2XY7pe614U3FzJ1tipi1a3fLWz8KeoVyZS8eanLIXgfgdu0/cN
- PGZxXhzgtPSxh4oC6HedzyQ4Iyvv16jzTewOFJQkVlAX6GpbvyjDQvh8u1g1nKqI3fDEhP3ze
- 4A9i+Kc63MTey8UVxPOiyxWCYVHF+GhIYcpDgytNKjldZ8E+xkRYKmh7814=
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH resend 1/3] hwmon: (lm85) remove freq_map size hardcodes
+Date:   Wed, 30 Jan 2019 09:14:45 -0700
+Message-Id: <20190130161447.19946-1-jgebben@sweptlaser.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190129212920.27921-1-jgebben@sweptlaser.com>
+References: <20190129212920.27921-1-jgebben@sweptlaser.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This adds RPM support to the pwm-fan driver in order to use with
-fancontrol/pwmconfig. This feature is intended for 2 pulse-per-revolution
-fans which provides a tachometer output signal.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Allow support for chips that support more than 8 frequencies.
+The size still must be a power of two.
+
+Signed-off-by: Jeremy Gebben <jgebben@sweptlaser.com>
 ---
- drivers/hwmon/pwm-fan.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/hwmon/lm85.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 9e0591e..731fdc6 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -18,6 +18,7 @@
+diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+index 0a325878e8f5..48f59667a88c 100644
+--- a/drivers/hwmon/lm85.c
++++ b/drivers/hwmon/lm85.c
+@@ -198,13 +198,13 @@ static int RANGE_TO_REG(long range)
+ #define RANGE_FROM_REG(val)	lm85_range_map[(val) & 0x0f]
  
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
-+#include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-@@ -26,13 +27,22 @@
- #include <linux/regulator/consumer.h>
- #include <linux/sysfs.h>
- #include <linux/thermal.h>
-+#include <linux/timer.h>
- 
- #define MAX_PWM 255
-+#define SAMPLE_TIME		1 /* seconds */
-+#define PULSE_PER_REVOLUTION	2
- 
- struct pwm_fan_ctx {
- 	struct mutex lock;
- 	struct pwm_device *pwm;
- 	struct regulator *reg_en;
-+
-+	int irq;
-+	unsigned int pulses;
-+	unsigned int rpm;
-+	struct timer_list sample_timer;
-+
- 	unsigned int pwm_value;
- 	unsigned int pwm_fan_state;
- 	unsigned int pwm_fan_max_state;
-@@ -40,6 +50,27 @@ struct pwm_fan_ctx {
- 	struct thermal_cooling_device *cdev;
+ /* These are the PWM frequency encodings */
+-static const int lm85_freq_map[8] = { /* 1 Hz */
++static const int lm85_freq_map[] = { /* 1 Hz */
+ 	10, 15, 23, 30, 38, 47, 61, 94
  };
+-static const int adm1027_freq_map[8] = { /* 1 Hz */
++
++static const int adm1027_freq_map[] = { /* 1 Hz */
+ 	11, 15, 22, 29, 35, 44, 59, 88
+ };
+-#define FREQ_MAP_LEN	8
  
-+static irqreturn_t pulse_handler(int irq, void *dev_id)
-+{
-+	struct pwm_fan_ctx *ctx = dev_id;
-+
-+	if (ctx->pulses < INT_MAX / 2)
-+		ctx->pulses++;
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void sample_timer(struct timer_list *t)
-+{
-+	struct pwm_fan_ctx *ctx = from_timer(ctx, t, sample_timer);
-+	unsigned int pulses;
-+
-+	pulses = ctx->pulses;
-+	ctx->pulses -= pulses;
-+	ctx->rpm = pulses * 60 / SAMPLE_TIME / PULSE_PER_REVOLUTION;
-+	mod_timer(&ctx->sample_timer, jiffies + (HZ * SAMPLE_TIME));
-+}
-+
- static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
- {
- 	unsigned long period;
-@@ -100,11 +131,20 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
- 	return sprintf(buf, "%u\n", ctx->pwm_value);
+ static int FREQ_TO_REG(const int *map,
+ 		       unsigned int map_size, unsigned long freq)
+@@ -212,9 +212,9 @@ static int FREQ_TO_REG(const int *map,
+ 	return find_closest(freq, map, map_size);
  }
  
-+static ssize_t rpm_show(struct device *dev,
-+			struct device_attribute *attr, char *buf)
-+{
-+	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+-static int FREQ_FROM_REG(const int *map, u8 reg)
++static int FREQ_FROM_REG(const int *map, unsigned int map_size, u8 reg)
+ {
+-	return map[reg & 0x07];
++	return map[reg & (map_size - 1)];
+ }
+ 
+ /*
+@@ -296,6 +296,8 @@ struct lm85_data {
+ 	struct i2c_client *client;
+ 	const struct attribute_group *groups[6];
+ 	const int *freq_map;
++	unsigned int freq_map_mask;
 +
-+	return sprintf(buf, "%u\n", ctx->rpm);
-+}
+ 	enum chips type;
  
- static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
-+static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+ 	bool has_vid5;	/* true if VID5 is configured for ADT7463 or ADT7468 */
+@@ -514,7 +516,7 @@ static struct lm85_data *lm85_update_device(struct device *dev)
+ 			data->autofan[i].config =
+ 			    lm85_read_value(client, LM85_REG_AFAN_CONFIG(i));
+ 			val = lm85_read_value(client, LM85_REG_AFAN_RANGE(i));
+-			data->pwm_freq[i] = val & 0x07;
++			data->pwm_freq[i] = val & data->freq_map_mask;
+ 			data->zone[i].range = val >> 4;
+ 			data->autofan[i].min_pwm =
+ 			    lm85_read_value(client, LM85_REG_AFAN_MINPWM(i));
+@@ -791,7 +793,8 @@ static ssize_t show_pwm_freq(struct device *dev,
+ 	if (IS_ADT7468_HFPWM(data))
+ 		freq = 22500;
+ 	else
+-		freq = FREQ_FROM_REG(data->freq_map, data->pwm_freq[nr]);
++		freq = FREQ_FROM_REG(data->freq_map, data->freq_map_mask + 1,
++				     data->pwm_freq[nr]);
  
- static struct attribute *pwm_fan_attrs[] = {
- 	&sensor_dev_attr_pwm1.dev_attr.attr,
-+	&sensor_dev_attr_fan1_input.dev_attr.attr,
- 	NULL,
- };
+ 	return sprintf(buf, "%d\n", freq);
+ }
+@@ -820,7 +823,7 @@ static ssize_t set_pwm_freq(struct device *dev,
+ 		lm85_write_value(client, ADT7468_REG_CFG5, data->cfg5);
+ 	} else {					/* Low freq. mode */
+ 		data->pwm_freq[nr] = FREQ_TO_REG(data->freq_map,
+-						 FREQ_MAP_LEN, val);
++						 data->freq_map_mask + 1, val);
+ 		lm85_write_value(client, LM85_REG_AFAN_RANGE(nr),
+ 				 (data->zone[nr].range << 4)
+ 				 | data->pwm_freq[nr]);
+@@ -1196,7 +1199,7 @@ static ssize_t set_temp_auto_temp_min(struct device *dev,
+ 		TEMP_FROM_REG(data->zone[nr].limit));
+ 	lm85_write_value(client, LM85_REG_AFAN_RANGE(nr),
+ 		((data->zone[nr].range & 0x0f) << 4)
+-		| (data->pwm_freq[nr] & 0x07));
++		| data->pwm_freq[nr]);
  
-@@ -263,6 +303,19 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		}
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+@@ -1232,7 +1235,7 @@ static ssize_t set_temp_auto_temp_max(struct device *dev,
+ 		val - min);
+ 	lm85_write_value(client, LM85_REG_AFAN_RANGE(nr),
+ 		((data->zone[nr].range & 0x0f) << 4)
+-		| (data->pwm_freq[nr] & 0x07));
++		| data->pwm_freq[nr]);
+ 	mutex_unlock(&data->update_lock);
+ 	return count;
+ }
+@@ -1569,9 +1572,11 @@ static int lm85_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	case emc6d103:
+ 	case emc6d103s:
+ 		data->freq_map = adm1027_freq_map;
++		data->freq_map_mask = ARRAY_SIZE(adm1027_freq_map) - 1;
+ 		break;
+ 	default:
+ 		data->freq_map = lm85_freq_map;
++		data->freq_map_mask = ARRAY_SIZE(lm85_freq_map) - 1;
  	}
  
-+	timer_setup(&ctx->sample_timer, sample_timer, 0);
-+
-+	ctx->irq = platform_get_irq(pdev, 0);
-+	if (ctx->irq >= 0) {
-+		ret = devm_request_irq(&pdev->dev, ctx->irq, pulse_handler, 0,
-+				       pdev->name, ctx);
-+		if (ret) {
-+			dev_err(&pdev->dev, "Can't get interrupt working.\n");
-+			return ret;
-+		}
-+		mod_timer(&ctx->sample_timer, jiffies + (HZ * SAMPLE_TIME));
-+	}
-+
- 	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
- 						       ctx, pwm_fan_groups);
- 	if (IS_ERR(hwmon)) {
-@@ -304,6 +357,8 @@ static int pwm_fan_remove(struct platform_device *pdev)
- 	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
- 
- 	thermal_cooling_device_unregister(ctx->cdev);
-+	del_timer_sync(&ctx->sample_timer);
-+
- 	if (ctx->pwm_value)
- 		pwm_disable(ctx->pwm);
- 
+ 	/* Set the VRM version */
 -- 
-2.7.4
+2.17.1
 
