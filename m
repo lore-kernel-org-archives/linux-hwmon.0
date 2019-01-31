@@ -6,153 +6,117 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4C5AC169C4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 17:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEE10C169C4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:06:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7857420881
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 17:58:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C8D6218AF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:06:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UXfqnpiL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xpmid0th"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbfAaR6o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Jan 2019 12:58:44 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33306 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbfAaR6o (ORCPT
+        id S1727930AbfAaSGW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Jan 2019 13:06:22 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36189 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727191AbfAaSGW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Jan 2019 12:58:44 -0500
-Received: by mail-pl1-f195.google.com with SMTP id z23so1826382plo.0;
-        Thu, 31 Jan 2019 09:58:43 -0800 (PST)
+        Thu, 31 Jan 2019 13:06:22 -0500
+Received: by mail-pg1-f195.google.com with SMTP id n2so1687121pgm.3;
+        Thu, 31 Jan 2019 10:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7myhdk7E3+TT6ebRJum3PKNz1A/U8y95id46q85qWFA=;
-        b=UXfqnpiLb0sYTMfuyEsUT0NBpBdE06FJHLeRZ7haUPKD65qD77qsiiANhtRkh5WiS6
-         7xI3PqooWpkAow5y57Alo6FSQg1m6OdCLx0YsIUAHQhlzOR3Ivq2eR2Rp7+2Nvo7CAll
-         pVmTVVrYeoU5p7ZXstHUDoSOMT1BqY/AUDCI1xzRJcKRVY9jZTC1Ud1BrmCRkGG/apjf
-         8uM9oZaVNM/kFRbxMhkFaO26x44GhdldnfiwEgtyhsd3MJ04tm/1xh1NgpbnELjJ3ZTt
-         pVEeHmfghISK1/hH2PPvyH3ZcuI8szfYnBqNPDIE5v811hWtBfyaG+ZZ2r/mOOKITwlw
-         x8GA==
+        bh=7ISBQSLV4QRFn7QOf1TiE/kOFO4Fqazqa5WY1TB5FDo=;
+        b=Xpmid0tha9yESo2oCnvIWtlNZEaT58OjZI2ly2tigUh3OIB6/6/a1TuQbMFNPBUcQ7
+         VzxzjXLwtsIn7zdUDq49ipfG7VVAdNvklHFE0iNEHzn9ncssaWImwswatQytRqfip8hM
+         EmV/E1/yKgsb/DnTl4RS0/KOZ27kthiwE88e15RkTUztDIEWrfuNg47pmjYcqufZ3s+i
+         wqfIwPX3+xE85hJQ0brciFNyVy7sHcX/OEHopgu3mXsNA2X6idi9f3K91fBXVv0YSipp
+         i8lGNKB8rmmUJqjiDxfx3Qx9Dhq3fcKxE5c/BMd4ywNjvIKRudalnqZhrT66dsyU1/Fg
+         V/uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7myhdk7E3+TT6ebRJum3PKNz1A/U8y95id46q85qWFA=;
-        b=A7/yq/bIS4dpgC1NGlKnwxjZ7IPXtLvJK6NZ2LhEeQoFXDuYOB5tbie8RNZRCANcnN
-         ILzIOlXS67mfe3+n8DTXTs1nEyz/BL8GyG3nhnoXzeUJUBi3A6RXuWnRj7WVJlurdlTr
-         Pb5nyDW8gcyOkuWXhjkydAcDINZlgi5tx0Ov0TVbnxa1ljUI2ycYYGJyUBZRfpTRqJty
-         muv6qBKPpLbdZ2uWgnKjOO85s0/zmnT7zyV4QtgU79ill1g9sdJhkfFXVG8iBIgu9b8n
-         +PiOELrCma9ZNXjfW3uUOiPfDzEkDKnAc7QEPVSSqzS+el2ZF69ELN3WIVHaqWaAzTtm
-         Vt+g==
-X-Gm-Message-State: AJcUukdQAdHJxeTucHSSIjMImSK4QUWY7Ai1+TUoA0bC9EfNeulSU5ne
-        kPkzXGmiyDt9h93GWTYidllb9hmv
-X-Google-Smtp-Source: ALg8bN4KJvqqw2eCRobOJkD02z7VPnFh1yRzToU/Qcr6F19L33adkSsHJMwQDTmOU3MkDQZ2MFtj4g==
-X-Received: by 2002:a17:902:5ac2:: with SMTP id g2mr35884774plm.313.1548957523423;
-        Thu, 31 Jan 2019 09:58:43 -0800 (PST)
+        bh=7ISBQSLV4QRFn7QOf1TiE/kOFO4Fqazqa5WY1TB5FDo=;
+        b=iU0HRyEpQHjvLnUrSlwBrZP4HoAVQ9ICkG0bYbWyN/53MLTXIJnl7vudZTyxpMYP3Z
+         mQ31Vnia7tUaFo/bWPARbSCPyKO8qwC6E3SNUyFFLGAUg8gXjGsAAggWJ2yHiw0er/ar
+         EBQgBTEw6XxaxdYvr+SZg4zm8dHsRPmnL3S3WQHqBJPcWX5fvQvJbIljtFHSTz3Jw2wm
+         G5DH4nIBEkcFZx/LrnmMa2CGDPtE6ZgLthpBF3ma4jb2IGxcgRDeYozGBXyuhQ2a16Q9
+         d4coqj2eiFHknrcz3VN8x2BcOCnyQNFMbPjrWGh2a4njcqQ4YoDfMq/VdTanm5fis9Y0
+         l6ew==
+X-Gm-Message-State: AJcUukc2b3ygggtua3xyFBRoF2nvRJLr/+Tw79VRqgiZM9NdP16JGoD8
+        54/qLfNSzzKMw5gK9TB873Y=
+X-Google-Smtp-Source: ALg8bN5u9uyXpc5qFOq1KV7QHDxYcDGODy8igV3xdUri3X/lg7NIQP03FC0ki8TCyVF625utGAgFBg==
+X-Received: by 2002:a62:7504:: with SMTP id q4mr35080600pfc.180.1548957980920;
+        Thu, 31 Jan 2019 10:06:20 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c9sm9396278pfc.92.2019.01.31.09.58.42
+        by smtp.gmail.com with ESMTPSA id f13sm7780367pfa.132.2019.01.31.10.06.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Jan 2019 09:58:42 -0800 (PST)
-Date:   Thu, 31 Jan 2019 09:58:42 -0800
+        Thu, 31 Jan 2019 10:06:20 -0800 (PST)
+Date:   Thu, 31 Jan 2019 10:06:19 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        joel@jms.id.au, jdelvare@suse.com, tglx@linutronix.de
-Subject: Re: [PATCH v2 1/2] hwmon (occ): Fix license headers
-Message-ID: <20190131175842.GA16851@roeck-us.net>
-References: <1548692604-9899-1-git-send-email-eajames@linux.ibm.com>
- <1548692604-9899-2-git-send-email-eajames@linux.ibm.com>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com
+Subject: Re: [PATCH] dt-bindings: hwmon: Add lm75 documentation
+Message-ID: <20190131180619.GA17074@roeck-us.net>
+References: <20190129065623.6771-1-jagan@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1548692604-9899-2-git-send-email-eajames@linux.ibm.com>
+In-Reply-To: <20190129065623.6771-1-jagan@amarulasolutions.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 28, 2019 at 10:23:23AM -0600, Eddie James wrote:
-> Files have inconsistent license information.
+On Tue, Jan 29, 2019 at 12:26:23PM +0530, Jagan Teki wrote:
+> Add dt-binding documentation for lm75 hwmon sensor.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Currently documented for national,lm75 and st,stlm75 and
+> rest might add when required.
 
-Applied.
+Why ? The various properties are already implemented in the driver.
+I don't see the value documenting only two of them.
+
+I do see though that nxp,lm75, and nxp,lm75a are used but _not_
+referenced in the driver.
+
+If we start cleaning that up I think it would make more sense
+to clean up everything, not just part of it.
 
 Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/occ/common.c |  3 ++-
->  drivers/hwmon/occ/common.h |  3 ++-
->  drivers/hwmon/occ/p8_i2c.c |  3 ++-
->  drivers/hwmon/occ/p9_sbe.c |  3 ++-
->  drivers/hwmon/occ/sysfs.c  | 13 ++-----------
->  5 files changed, 10 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 391118c..b91a80a 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -1,4 +1,5 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +// SPDX-License-Identifier: GPL-2.0+
-> +// Copyright IBM Corp 2019
->  
->  #include <linux/device.h>
->  #include <linux/hwmon.h>
-> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-> index 7c44df3..ed2cf42 100644
-> --- a/drivers/hwmon/occ/common.h
-> +++ b/drivers/hwmon/occ/common.h
-> @@ -1,4 +1,5 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/* Copyright IBM Corp 2019 */
->  
->  #ifndef OCC_COMMON_H
->  #define OCC_COMMON_H
-> diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-> index b59efc9..76fb787 100644
-> --- a/drivers/hwmon/occ/p8_i2c.c
-> +++ b/drivers/hwmon/occ/p8_i2c.c
-> @@ -1,4 +1,5 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +// SPDX-License-Identifier: GPL-2.0+
-> +// Copyright IBM Corp 2019
->  
->  #include <linux/device.h>
->  #include <linux/errno.h>
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index b65c1d1..f6387cc 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -1,4 +1,5 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +// SPDX-License-Identifier: GPL-2.0+
-> +// Copyright IBM Corp 2019
->  
->  #include <linux/device.h>
->  #include <linux/errno.h>
-> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
-> index 743b26ec..fe3d15e 100644
-> --- a/drivers/hwmon/occ/sysfs.c
-> +++ b/drivers/hwmon/occ/sysfs.c
-> @@ -1,14 +1,5 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * OCC hwmon driver sysfs interface
-> - *
-> - * Copyright (C) IBM Corporation 2018
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
-> - */
-> +// SPDX-License-Identifier: GPL-2.0+
-> +// Copyright IBM Corp 2019
->  
->  #include <linux/bitops.h>
->  #include <linux/device.h>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/lm75.txt | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
+> new file mode 100644
+> index 000000000000..e384a3765f10
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
+> @@ -0,0 +1,15 @@
+> +*LM75 hwmon sensor.
+> +
+> +Required properties:
+> +- compatible: one of
+> +	"national,lm75"
+> +	"st,stlm75"
+> +
+> +- reg: I2C address
+> +
+> +Example:
+> +
+> +sensor@48 {
+> +	compatible = "st,stlm75";
+> +	reg = <0x48>;
+> +};
