@@ -2,121 +2,130 @@ Return-Path: <SRS0=50Tr=QH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEE10C169C4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C32BBC282D9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:11:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C8D6218AF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:06:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94752218AF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 18:11:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xpmid0th"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Okbve4sz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbfAaSGW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Jan 2019 13:06:22 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36189 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727191AbfAaSGW (ORCPT
+        id S1728094AbfAaSLp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Jan 2019 13:11:45 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39763 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfAaSLp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Jan 2019 13:06:22 -0500
-Received: by mail-pg1-f195.google.com with SMTP id n2so1687121pgm.3;
-        Thu, 31 Jan 2019 10:06:21 -0800 (PST)
+        Thu, 31 Jan 2019 13:11:45 -0500
+Received: by mail-pl1-f194.google.com with SMTP id 101so1828746pld.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 31 Jan 2019 10:11:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7ISBQSLV4QRFn7QOf1TiE/kOFO4Fqazqa5WY1TB5FDo=;
-        b=Xpmid0tha9yESo2oCnvIWtlNZEaT58OjZI2ly2tigUh3OIB6/6/a1TuQbMFNPBUcQ7
-         VzxzjXLwtsIn7zdUDq49ipfG7VVAdNvklHFE0iNEHzn9ncssaWImwswatQytRqfip8hM
-         EmV/E1/yKgsb/DnTl4RS0/KOZ27kthiwE88e15RkTUztDIEWrfuNg47pmjYcqufZ3s+i
-         wqfIwPX3+xE85hJQ0brciFNyVy7sHcX/OEHopgu3mXsNA2X6idi9f3K91fBXVv0YSipp
-         i8lGNKB8rmmUJqjiDxfx3Qx9Dhq3fcKxE5c/BMd4ywNjvIKRudalnqZhrT66dsyU1/Fg
-         V/uw==
+        bh=BHZ5P5cSZ2uBfzxcAAcZqSWsmmlNB7F0m+pAzsIT8G4=;
+        b=Okbve4szWhBDdEwcuvRnuGbPOp/S3PL19R6kNE9X0S6M+wpBqtQvUayA8Xunw2NaOB
+         TjHDtcBlL92OCgEmGXaDyVNqVcm2WbfHao7AQJIzeXKXl4+SB3sZ1JAcM32+dUSo5lzU
+         nQr6Zkv+23w762BBcGMx+q9ZSEu3UqdrfWrqIzEx1sm+LzUUoLdUomy9DPybkijGkJK3
+         qLvYiNHdRlv1R2rDNdsP9snXjiaCgzD2EFQlne7TlQ8/VAA7xhQEstB9RBmM8/5Z5LUO
+         2PjfpfeFrBeHl4INOPDjUcASlfsP8vw10HAX8wzIdCYMenHR45HYG/x22FtVb9RzCKdP
+         240w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7ISBQSLV4QRFn7QOf1TiE/kOFO4Fqazqa5WY1TB5FDo=;
-        b=iU0HRyEpQHjvLnUrSlwBrZP4HoAVQ9ICkG0bYbWyN/53MLTXIJnl7vudZTyxpMYP3Z
-         mQ31Vnia7tUaFo/bWPARbSCPyKO8qwC6E3SNUyFFLGAUg8gXjGsAAggWJ2yHiw0er/ar
-         EBQgBTEw6XxaxdYvr+SZg4zm8dHsRPmnL3S3WQHqBJPcWX5fvQvJbIljtFHSTz3Jw2wm
-         G5DH4nIBEkcFZx/LrnmMa2CGDPtE6ZgLthpBF3ma4jb2IGxcgRDeYozGBXyuhQ2a16Q9
-         d4coqj2eiFHknrcz3VN8x2BcOCnyQNFMbPjrWGh2a4njcqQ4YoDfMq/VdTanm5fis9Y0
-         l6ew==
-X-Gm-Message-State: AJcUukc2b3ygggtua3xyFBRoF2nvRJLr/+Tw79VRqgiZM9NdP16JGoD8
-        54/qLfNSzzKMw5gK9TB873Y=
-X-Google-Smtp-Source: ALg8bN5u9uyXpc5qFOq1KV7QHDxYcDGODy8igV3xdUri3X/lg7NIQP03FC0ki8TCyVF625utGAgFBg==
-X-Received: by 2002:a62:7504:: with SMTP id q4mr35080600pfc.180.1548957980920;
-        Thu, 31 Jan 2019 10:06:20 -0800 (PST)
+        bh=BHZ5P5cSZ2uBfzxcAAcZqSWsmmlNB7F0m+pAzsIT8G4=;
+        b=Zc3vWpNytHIlC/gJ52WHtDE0m9DT3Da/dGFeZQg3BbOnfSCmzhriM0cOTuzHa8JPJe
+         0gYsRqjCfK/JYwx/oGSZou5QRQQvh47NjJnyxnYrLbzaIPacz10L8le4JMpKrIgTjEPR
+         kr/223Ceh0oF+OWrIEevOHae++dbXPBN1wxjku2pU2XTb/g1hJeu1PgkspTTcuhsEIsG
+         V2PKDBTLs1lDDNd3+S8lpYwjAimeeJcSOAxmdrs4VAd/eBGIG4t9Op3aW1kosu5Jgnmq
+         dAZWMZuRjYuSHSlUdmsa83o5BSVBhRJEo5vYIFc6GrF3nepMBZMtIYG49efLYa5uDMCy
+         ggzw==
+X-Gm-Message-State: AJcUukfQaIbKlRku7aqlwJ3LXSaaQduKtEF8cH/gB1gHY+yICKumqbN8
+        uYR1JQWDhICuiXO6Mj5shjTj35L3
+X-Google-Smtp-Source: ALg8bN4n8FF0PKAd5G8mCLGNN8udI7XObulaVYptszhbJcX/VX7ub/WNG+p4TgxgNmZbC9DfoxbWug==
+X-Received: by 2002:a17:902:b20e:: with SMTP id t14mr35957699plr.128.1548958304729;
+        Thu, 31 Jan 2019 10:11:44 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f13sm7780367pfa.132.2019.01.31.10.06.19
+        by smtp.gmail.com with ESMTPSA id u126sm9931257pgb.2.2019.01.31.10.11.43
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Jan 2019 10:06:20 -0800 (PST)
-Date:   Thu, 31 Jan 2019 10:06:19 -0800
+        Thu, 31 Jan 2019 10:11:44 -0800 (PST)
+Date:   Thu, 31 Jan 2019 10:11:43 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com
-Subject: Re: [PATCH] dt-bindings: hwmon: Add lm75 documentation
-Message-ID: <20190131180619.GA17074@roeck-us.net>
-References: <20190129065623.6771-1-jagan@amarulasolutions.com>
+To:     Matt Wilbur <wilburm@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/1] Fix swapped coeffs for LM5066 and LM5066i iin
+Message-ID: <20190131181143.GA17285@roeck-us.net>
+References: <20190128170034.24348-1-wilburm@gmail.com>
+ <20190128170034.24348-2-wilburm@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190129065623.6771-1-jagan@amarulasolutions.com>
+In-Reply-To: <20190128170034.24348-2-wilburm@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 29, 2019 at 12:26:23PM +0530, Jagan Teki wrote:
-> Add dt-binding documentation for lm75 hwmon sensor.
-> 
-> Currently documented for national,lm75 and st,stlm75 and
-> rest might add when required.
+Hi,
 
-Why ? The various properties are already implemented in the driver.
-I don't see the value documenting only two of them.
+On Mon, Jan 28, 2019 at 12:00:34PM -0500, Matt Wilbur wrote:
+> ---
 
-I do see though that nxp,lm75, and nxp,lm75a are used but _not_
-referenced in the driver.
+Unfortunately, your patch is not signed, and I can not apply it.
+Also, the explanation should be part of this patch. Please
+also note the expected subject line, which should start with
+"hwmon: (pmbus/lm25066)".
 
-If we start cleaning that up I think it would make more sense
-to clean up everything, not just part of it.
+On top of that, while the subject claims to also address LM5066i,
+it does not really do that.
 
-Thanks,
 Guenter
 
+>  drivers/hwmon/pmbus/lm25066.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/lm75.txt | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
+> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> index 53db78753a0d..9d917b5f0a81 100644
+> --- a/drivers/hwmon/pmbus/lm25066.c
+> +++ b/drivers/hwmon/pmbus/lm25066.c
+> @@ -156,11 +156,11 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN] = {
+> -			.m = 10753,
+> +			.m = 5405,
+>  			.R = -2,
+>  		},
+>  		[PSC_CURRENT_IN_L] = {
+> -			.m = 5405,
+> +			.m = 10753,
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+> @@ -197,13 +197,13 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+>  			.R = -2,
+>  		},
+>  		[PSC_POWER] = {
+> -			.m = 1701,
+> -			.b = -4000,
+> +			.m = 861,
+> +			.b = -965,
+>  			.R = -3,
+>  		},
+>  		[PSC_POWER_L] = {
+> -			.m = 861,
+> -			.b = -965,
+> +			.m = 1701,
+> +			.b = -4000,
+>  			.R = -3,
+>  		},
+>  		[PSC_TEMPERATURE] = {
+> -- 
+> 2.17.1
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> new file mode 100644
-> index 000000000000..e384a3765f10
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> @@ -0,0 +1,15 @@
-> +*LM75 hwmon sensor.
-> +
-> +Required properties:
-> +- compatible: one of
-> +	"national,lm75"
-> +	"st,stlm75"
-> +
-> +- reg: I2C address
-> +
-> +Example:
-> +
-> +sensor@48 {
-> +	compatible = "st,stlm75";
-> +	reg = <0x48>;
-> +};
