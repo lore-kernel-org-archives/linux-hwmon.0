@@ -1,101 +1,123 @@
-Return-Path: <SRS0=50Tr=QH=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=JJyj=QI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3768C282DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 22:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD8DDC282D8
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 10:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B31F52087F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Jan 2019 22:07:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sweptlaser-com.20150623.gappssmtp.com header.i=@sweptlaser-com.20150623.gappssmtp.com header.b="RVkqA+9X"
+	by mail.kernel.org (Postfix) with ESMTP id 987F920815
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 10:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729398AbfAaWHJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Jan 2019 17:07:09 -0500
-Received: from mail-it1-f196.google.com ([209.85.166.196]:52300 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729396AbfAaWG6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Jan 2019 17:06:58 -0500
-Received: by mail-it1-f196.google.com with SMTP id d11so6253047itf.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 31 Jan 2019 14:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sweptlaser-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:subject:date:message-id:in-reply-to:references;
-        bh=Vw245cWn0g5x+EHUeJcq50G2A16G6gSxztuHmTu3Pu4=;
-        b=RVkqA+9XmPMxQyaPHIL9zuSx+GXpOFVAmVWtufq+OO6f4AltvKsVonGdL543DfXBlH
-         A0tkB+iJmrhEajErDu00dCZ8n0HbvQFdAlIPNP7VOZiUJMxt0EVkT20OahVZ66JsQeuz
-         34h52+bj4L+PYZsMRwKvhjZQp8hzTpZIx46yun4VW8sI7Wa/68bB0VKuwD24CSEKBPCt
-         xYSzXJbWcHwnAAjgG9s47gcc6dD/ExMXejyTK1783W4h0r+7+pQXEw47/z5E3DhcFDdk
-         RqeT6GCq1efACi6gmg46AaGlg+SPGLwf0dySXAEv6HOPO8SKrYR8UJEEIrX6GVCtwYxt
-         Fn8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references;
-        bh=Vw245cWn0g5x+EHUeJcq50G2A16G6gSxztuHmTu3Pu4=;
-        b=SiGgu/RXGb6fYs7M9Il56cRJnY+heR2yOb8gr2ojykM0wLLk3lTCWc0v9iGHwnxnXf
-         p9f7BZlNYWngT55kcumf/O5JEXCAwNx5Pwb9nmpqZB4jJRLX1GYVbodBOPVc7HT4ERl7
-         boL2zsSIaqYyHtkFE4BrFrXvNK5mOoPQQOV++rdNeZ5cwEgsTLlkGI3ehh6z7o5/W9VO
-         85YIjl8MFeJcZNxOtbO3jyxDV7D6ogbCyi2Z31dDAplZNNDAY/PmjjQR1KklXKNpngHD
-         WeeQxmyN2nvfVaapzAYGCGTbriuUMDkIYBO2Toaqhpi8cgccRgXoQtmv/YempcM9W4D9
-         6UgA==
-X-Gm-Message-State: AJcUukePEwaXzZRiXbdbIAzF6JnaMRkZFwYcuggKuBVS9kJylTBWcOMk
-        vFsW2/s4hGcmrZECfAseV5Ckew==
-X-Google-Smtp-Source: ALg8bN4YDmDOmsi9TL3GKBcYNKf9BuwV4wLwtRGsuKMGvO7gOsJvWxbUx7zY37jzDFCJGBjFBGfETg==
-X-Received: by 2002:a05:660c:4b:: with SMTP id p11mr20478600itk.71.1548972417872;
-        Thu, 31 Jan 2019 14:06:57 -0800 (PST)
-Received: from yngvi.hq.sweptlaser.com ([63.147.146.226])
-        by smtp.googlemail.com with ESMTPSA id l186sm286439itl.22.2019.01.31.14.06.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 31 Jan 2019 14:06:57 -0800 (PST)
-From:   Jeremy Gebben <jgebben@sweptlaser.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] hwmon: (lm85) Document the LM96000 as supported
-Date:   Thu, 31 Jan 2019 15:06:16 -0700
-Message-Id: <20190131220617.15223-3-jgebben@sweptlaser.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190131220617.15223-1-jgebben@sweptlaser.com>
-References: <20190131220617.15223-1-jgebben@sweptlaser.com>
+        id S1729037AbfBAKjD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Feb 2019 05:39:03 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:52111 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728225AbfBAKjD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Feb 2019 05:39:03 -0500
+Received: from [192.168.178.52] ([109.104.54.189]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MTznO-1ghJ2329Lu-00Qzyb; Fri, 01 Feb 2019 11:38:09 +0100
+Subject: Re: [PATCH 2/2] hwmon: pwm-fan: Add optional regulator support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1548781631-5736-1-git-send-email-stefan.wahren@i2se.com>
+ <1548781631-5736-2-git-send-email-stefan.wahren@i2se.com>
+ <20190131175651.GA16231@roeck-us.net>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Message-ID: <2c05a0dc-6e5a-97a7-bc79-f01275fe956c@i2se.com>
+Date:   Fri, 1 Feb 2019 11:38:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <20190131175651.GA16231@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:FQhik6GlkG+GRHwI71D6o38ToirX14WEn7lWHN+O921h12g2SM4
+ QXrTSwWbaJW+XufOW6C2jT2pA6LfJ2zy3UJyxOMPZwFxOrSUuL7z71Zi4P7X8DuY7r8Fyx3
+ zGBKmCb8xdTgKNn9zmTzfbfRaDFeU+oOsXY/3orGhCEhGOhgYsZ6sInzmFDabDe0A03RFMh
+ hWErOFgxUYgdBrK5tOsZQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ApUoyVgIt/s=:U9HybeiVYat0tmxGIawnBy
+ YbIAHQwnImgYCFNJvKgdfrIjFcxYoVnidAbuSP1Jdk7wb+Swl3Z/yHJahRBlQQ2LD0Bf2P+X9
+ 3zVvl6WY58FVKa9Uj1CZX85s2SKbFw3BQP5MSCjkkwrQPRw1h4pRRw980TY+BVXkWO1SjI2fd
+ YkaMNlR4f4y+4cR5iHAIVyMS9GYIfjK+OwJ5OYxTFg27+F6MfeKLO12HVaBIt06kLkPgzc9QA
+ OeKtgDbq/Krise3eqzggpvrf8+R6TNtUsMPm2NS0dchopzFfJPDYvCUwHrCFIjram4RhoP+jb
+ gNdVDGf1pDx/50TUZ7viYeFSXuZCwhb4ahuylbKfiSnVNKH1v1hX8cl20Vk6YihzqZ8k038zM
+ sHC+2GfpoEvfKL6l5sAU9NiiYzQSn9kh57kzs6VusBgVi/dcKjGmbrCXyPRVq+Fxf0A9/07zb
+ bkSXbLlEj9FdhKyfAlpAXlgM6GaBUzsB9fLZh5upiUk2nnpOrz/Izykkaq4gM7zDYltSdAuUB
+ rfVgiR2uN5SjPDpkoajhYDOgRzhC0uVjGhTErbbrg6WX3Yhh3cSaOGCVJNae5FGkR8I6dxCBl
+ mx9evL+o4WGlUz6/WkZc4pGfJXxZ3Sza/4AEQSQ7eZ2OvZ1p54ij/nkkWMph/sSTT2BEomgeo
+ 8mPTVM2zKCFKnAiREN2zrRGeCZvsTNrFN9QI6WR9FQ99n6mSXEPK1JwOxrOvtLm8cD+vR2u7s
+ 0Sb/A/q46rY6qyF9Wdu3MuaMJCnm4yBK11hWiyENr3uFBiMC3C4OWZQyhXc=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-It has been supported as a generic lm85 for quite some time.
+Hi Guenter,
 
-Signed-off-by: Jeremy Gebben <jgebben@sweptlaser.com>
----
- Documentation/hwmon/lm85 | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Am 31.01.19 um 18:56 schrieb Guenter Roeck:
+> On Tue, Jan 29, 2019 at 06:07:11PM +0100, Stefan Wahren wrote:
+>> This adds optional regulator support to the pwm-fan driver. This is
+>> necessary for pwm fans which are powered by a switchable supply.
+>>
+>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+>> ---
+>>  drivers/hwmon/pwm-fan.c | 35 +++++++++++++++++++++++++++++++++++
+>>  1 file changed, 35 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+>> index 2c94482..9e0591e 100644
+>> --- a/drivers/hwmon/pwm-fan.c
+>> +++ b/drivers/hwmon/pwm-fan.c
+>> @@ -23,6 +23,7 @@
+>>  #include <linux/of.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pwm.h>
+>> +#include <linux/regulator/consumer.h>
+>>  #include <linux/sysfs.h>
+>>  #include <linux/thermal.h>
+>>  
+>> @@ -31,6 +32,7 @@
+>>  struct pwm_fan_ctx {
+>>  	struct mutex lock;
+>>  	struct pwm_device *pwm;
+>> +	struct regulator *reg_en;
+>>  	unsigned int pwm_value;
+>>  	unsigned int pwm_fan_state;
+>>  	unsigned int pwm_fan_max_state;
+>> @@ -244,6 +246,23 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>>  		return ret;
+>>  	}
+>>  
+>> +	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
+>> +	if (!IS_ERR(ctx->reg_en)) {
+> It is customary to handle the error case first.
+>
+>> +		ret = regulator_enable(ctx->reg_en);
+>> +		if (ret)
+>> +			dev_err(&pdev->dev,
+>> +				"Failed to enable fan supply: %d\n", ret);
+>> +	} else {
+>> +		switch (PTR_ERR(ctx->reg_en)) {
+>> +		case -ENODEV:
+>> +		case -ENOSYS:
+> Does devm_regulator_get_optional() ever return -ENOSYS ?
+> I glanced through other calls to devm_regulator_get_optional(),
+> but I don't see that check anywhere.
 
-diff --git a/Documentation/hwmon/lm85 b/Documentation/hwmon/lm85
-index 7c49feaa7..9f3a945d1 100644
---- a/Documentation/hwmon/lm85
-+++ b/Documentation/hwmon/lm85
-@@ -3,9 +3,13 @@ Kernel driver lm85
- 
- Supported chips:
-   * National Semiconductor LM85 (B and C versions)
--    Prefix: 'lm85'
-+    Prefix: 'lm85b' or 'lm85c'
-     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
-     Datasheet: http://www.national.com/pf/LM/LM85.html
-+  * Texas Instruments LM96000
-+    Prefix: 'lm85'
-+    Addresses scanned: I2C 0x2c, 0x2d, 0x2e
-+    Datasheet: http://www.ti.com/lit/ds/symlink/lm96000.pdf
-   * Analog Devices ADM1027
-     Prefix: 'adm1027'
-     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
--- 
-2.17.1
+sorry, i mixed this up with. In case CONFIG_REGULATOR=n we are getting
+-ENODEV.
+
+Thanks Stefan
 
