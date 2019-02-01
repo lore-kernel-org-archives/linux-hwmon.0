@@ -2,122 +2,138 @@ Return-Path: <SRS0=JJyj=QI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD8DDC282D8
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 10:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB79C282D8
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 11:41:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 987F920815
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 10:39:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B408121872
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Feb 2019 11:41:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="htTQ31DI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbfBAKjD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 1 Feb 2019 05:39:03 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:52111 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728225AbfBAKjD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Feb 2019 05:39:03 -0500
-Received: from [192.168.178.52] ([109.104.54.189]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MTznO-1ghJ2329Lu-00Qzyb; Fri, 01 Feb 2019 11:38:09 +0100
-Subject: Re: [PATCH 2/2] hwmon: pwm-fan: Add optional regulator support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1548781631-5736-1-git-send-email-stefan.wahren@i2se.com>
- <1548781631-5736-2-git-send-email-stefan.wahren@i2se.com>
- <20190131175651.GA16231@roeck-us.net>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Message-ID: <2c05a0dc-6e5a-97a7-bc79-f01275fe956c@i2se.com>
-Date:   Fri, 1 Feb 2019 11:38:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1726582AbfBALlY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 1 Feb 2019 06:41:24 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36243 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726330AbfBALlY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 1 Feb 2019 06:41:24 -0500
+Received: by mail-qk1-f196.google.com with SMTP id o125so3818968qkf.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 01 Feb 2019 03:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t5DbGBsbl1Q9SgDhBN6f3lM5IIY89JlrCZIHOzSGjA0=;
+        b=htTQ31DIHXcukG6VoKKV+YI2Hp3HARfdT5xuCNz1Ti8KuxkuR5OZt/roA34e9vIgEF
+         dK5AVY8GKXjTDlDfHME4SKLZmPWexp759rColuFvHxweEQqPcnAsUpR8RSzFpWkwFbFp
+         XIlyvt6zOKl6B2F7wE+WDSAsU/0KJ/crafJHBuXO7g+/xREfep1xC5nN0SAvxKiE7e9v
+         t0XoYInESEc3YCPNOIpZta8l2GFMAL5sQehhPnzqBvinIV0lJ6kPMFmU0M6xdzkNkYFT
+         xNRaXzCUaTfxEkWpsQK69QjtpM84crrTpaDUYcCMZ5t+uuSOpeFdxvtQag6pi56dDceL
+         ftvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t5DbGBsbl1Q9SgDhBN6f3lM5IIY89JlrCZIHOzSGjA0=;
+        b=Nw1PTj97Ma9ZNtYWiqs2laMzAvvHqAERyIbGD/PRo8zpY7a6NWosQkMbYQ1gh8Xoma
+         +rt9ZSmKbW+yo/ALmzNqQtpa0/Z462kxjzpXlakpImMcRlC5xr4PY5Upr8jS1aVid/0V
+         +W5MLBl7ZpsVP2WEbMAqRsgfyn4Ug7HpydMwAIwSxqquycpLXh5acsIUxGENNFm3iJ03
+         NXE0yPAKERr9+STLu1ZB+G6I1hVAnx0QoX0TdlVUnSsxDMsC7vz8te3GePB56LgA/fXZ
+         vW0pS74aFrXBkZXfBNgWSZTQ27+TAWCbXzErXWMWNK9Ao/mO91XuwN0HyJYroc/Q2YgC
+         iBTg==
+X-Gm-Message-State: AJcUukfjoWFbI/aATtdM9X5NDnDL0b+TL6CMNPe09xlAyfQq1j+1A4ky
+        mXewICIPDwpwT1aqPU8LYsb516yGiyNw4lhZvELyLw==
+X-Google-Smtp-Source: ALg8bN6YeY4pZvKIcylXmT19n4MIrhfNI2k+AJbVHonbTsi72jo+hOKPk2DYf1RCCbD3bmBa8IVq1idURPhPyZAx1UQ=
+X-Received: by 2002:a37:953:: with SMTP id 80mr35592124qkj.48.1549021282947;
+ Fri, 01 Feb 2019 03:41:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20190131175651.GA16231@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:FQhik6GlkG+GRHwI71D6o38ToirX14WEn7lWHN+O921h12g2SM4
- QXrTSwWbaJW+XufOW6C2jT2pA6LfJ2zy3UJyxOMPZwFxOrSUuL7z71Zi4P7X8DuY7r8Fyx3
- zGBKmCb8xdTgKNn9zmTzfbfRaDFeU+oOsXY/3orGhCEhGOhgYsZ6sInzmFDabDe0A03RFMh
- hWErOFgxUYgdBrK5tOsZQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ApUoyVgIt/s=:U9HybeiVYat0tmxGIawnBy
- YbIAHQwnImgYCFNJvKgdfrIjFcxYoVnidAbuSP1Jdk7wb+Swl3Z/yHJahRBlQQ2LD0Bf2P+X9
- 3zVvl6WY58FVKa9Uj1CZX85s2SKbFw3BQP5MSCjkkwrQPRw1h4pRRw980TY+BVXkWO1SjI2fd
- YkaMNlR4f4y+4cR5iHAIVyMS9GYIfjK+OwJ5OYxTFg27+F6MfeKLO12HVaBIt06kLkPgzc9QA
- OeKtgDbq/Krise3eqzggpvrf8+R6TNtUsMPm2NS0dchopzFfJPDYvCUwHrCFIjram4RhoP+jb
- gNdVDGf1pDx/50TUZ7viYeFSXuZCwhb4ahuylbKfiSnVNKH1v1hX8cl20Vk6YihzqZ8k038zM
- sHC+2GfpoEvfKL6l5sAU9NiiYzQSn9kh57kzs6VusBgVi/dcKjGmbrCXyPRVq+Fxf0A9/07zb
- bkSXbLlEj9FdhKyfAlpAXlgM6GaBUzsB9fLZh5upiUk2nnpOrz/Izykkaq4gM7zDYltSdAuUB
- rfVgiR2uN5SjPDpkoajhYDOgRzhC0uVjGhTErbbrg6WX3Yhh3cSaOGCVJNae5FGkR8I6dxCBl
- mx9evL+o4WGlUz6/WkZc4pGfJXxZ3Sza/4AEQSQ7eZ2OvZ1p54ij/nkkWMph/sSTT2BEomgeo
- 8mPTVM2zKCFKnAiREN2zrRGeCZvsTNrFN9QI6WR9FQ99n6mSXEPK1JwOxrOvtLm8cD+vR2u7s
- 0Sb/A/q46rY6qyF9Wdu3MuaMJCnm4yBK11hWiyENr3uFBiMC3C4OWZQyhXc=
+References: <20190128170034.24348-1-wilburm@gmail.com> <20190128170034.24348-2-wilburm@gmail.com>
+ <20190131181143.GA17285@roeck-us.net>
+In-Reply-To: <20190131181143.GA17285@roeck-us.net>
+From:   Matt Wilbur <wilburm@gmail.com>
+Date:   Fri, 1 Feb 2019 06:41:11 -0500
+Message-ID: <CAGQJtpOn-gVuuCrY=eGHACOkQAHDk6QXDuaRyg2tOOwj2DaKmw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Fix swapped coeffs for LM5066 and LM5066i iin
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-Am 31.01.19 um 18:56 schrieb Guenter Roeck:
-> On Tue, Jan 29, 2019 at 06:07:11PM +0100, Stefan Wahren wrote:
->> This adds optional regulator support to the pwm-fan driver. This is
->> necessary for pwm fans which are powered by a switchable supply.
->>
->> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
->> ---
->>  drivers/hwmon/pwm-fan.c | 35 +++++++++++++++++++++++++++++++++++
->>  1 file changed, 35 insertions(+)
->>
->> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
->> index 2c94482..9e0591e 100644
->> --- a/drivers/hwmon/pwm-fan.c
->> +++ b/drivers/hwmon/pwm-fan.c
->> @@ -23,6 +23,7 @@
->>  #include <linux/of.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/pwm.h>
->> +#include <linux/regulator/consumer.h>
->>  #include <linux/sysfs.h>
->>  #include <linux/thermal.h>
->>  
->> @@ -31,6 +32,7 @@
->>  struct pwm_fan_ctx {
->>  	struct mutex lock;
->>  	struct pwm_device *pwm;
->> +	struct regulator *reg_en;
->>  	unsigned int pwm_value;
->>  	unsigned int pwm_fan_state;
->>  	unsigned int pwm_fan_max_state;
->> @@ -244,6 +246,23 @@ static int pwm_fan_probe(struct platform_device *pdev)
->>  		return ret;
->>  	}
->>  
->> +	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
->> +	if (!IS_ERR(ctx->reg_en)) {
-> It is customary to handle the error case first.
+On Thu, Jan 31, 2019 at 1:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
->> +		ret = regulator_enable(ctx->reg_en);
->> +		if (ret)
->> +			dev_err(&pdev->dev,
->> +				"Failed to enable fan supply: %d\n", ret);
->> +	} else {
->> +		switch (PTR_ERR(ctx->reg_en)) {
->> +		case -ENODEV:
->> +		case -ENOSYS:
-> Does devm_regulator_get_optional() ever return -ENOSYS ?
-> I glanced through other calls to devm_regulator_get_optional(),
-> but I don't see that check anywhere.
+> Hi,
+>
+> On Mon, Jan 28, 2019 at 12:00:34PM -0500, Matt Wilbur wrote:
+> > ---
+>
+> Unfortunately, your patch is not signed, and I can not apply it.
+> Also, the explanation should be part of this patch. Please
+> also note the expected subject line, which should start with
+> "hwmon: (pmbus/lm25066)".
+>
+> On top of that, while the subject claims to also address LM5066i,
+> it does not really do that.
 
-sorry, i mixed this up with. In case CONFIG_REGULATOR=n we are getting
--ENODEV.
+I will give it another shot - but I did switch the coefficients for
+the LM5066i current measurement.
 
-Thanks Stefan
+Since this was my first attempt at submitting a patch, I wanted to
+work through the process.
+I also need to swap power coefficients and add the b coefficient for
+the LM5066 and LM5066i.
 
+Matt
+
+
+>
+> Guenter
+>
+> >  drivers/hwmon/pmbus/lm25066.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> > index 53db78753a0d..9d917b5f0a81 100644
+> > --- a/drivers/hwmon/pmbus/lm25066.c
+> > +++ b/drivers/hwmon/pmbus/lm25066.c
+> > @@ -156,11 +156,11 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+> >                       .R = -2,
+> >               },
+> >               [PSC_CURRENT_IN] = {
+> > -                     .m = 10753,
+> > +                     .m = 5405,
+> >                       .R = -2,
+> >               },
+> >               [PSC_CURRENT_IN_L] = {
+> > -                     .m = 5405,
+> > +                     .m = 10753,
+> >                       .R = -2,
+> >               },
+> >               [PSC_POWER] = {
+> > @@ -197,13 +197,13 @@ static struct __coeff lm25066_coeff[6][PSC_NUM_CLASSES + 2] = {
+> >                       .R = -2,
+> >               },
+> >               [PSC_POWER] = {
+> > -                     .m = 1701,
+> > -                     .b = -4000,
+> > +                     .m = 861,
+> > +                     .b = -965,
+> >                       .R = -3,
+> >               },
+> >               [PSC_POWER_L] = {
+> > -                     .m = 861,
+> > -                     .b = -965,
+> > +                     .m = 1701,
+> > +                     .b = -4000,
+> >                       .R = -3,
+> >               },
+> >               [PSC_TEMPERATURE] = {
+> > --
+> > 2.17.1
+> >
