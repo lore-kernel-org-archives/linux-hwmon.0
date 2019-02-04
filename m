@@ -2,76 +2,92 @@ Return-Path: <SRS0=55dy=QL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FDCC282CB
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 20:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F454C282C4
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 22:45:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 11AD42073D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 20:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1549312049;
-	bh=Qgosmz3c19ve/+XghqQRXAjVuEdEsze0qR1KCexpGgY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=HWyl1V3GWpbBSTE2nj7udRn0Ua61/FtYIO2kvaKG76H08tpjbN2W20JL5iKHegMfV
-	 AYiThjbkN0ff3lN7f3U0/j5WgPruIwMe1wd8x/h0ZOn7LNGTairsqxWnl8m/xSYAH+
-	 mfv5TT5E3TuZ9QopHewA9N4xouT7Ks+/yS8FRWQ0=
+	by mail.kernel.org (Postfix) with ESMTP id C575320821
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 22:45:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqFs5bR0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728755AbfBDU12 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Feb 2019 15:27:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54514 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728622AbfBDU12 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 4 Feb 2019 15:27:28 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9280920815;
-        Mon,  4 Feb 2019 20:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1549312047;
-        bh=Qgosmz3c19ve/+XghqQRXAjVuEdEsze0qR1KCexpGgY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ABpNwkJNZMwE7qvGnAIBi785oS9+Z/fIBP8OBJk+A1XReI7fXTAVtKCR7VP9afOSh
-         +5a7YL0YlPEpoHHvugVM4t/DmgRhKeb8d3VvlhO/8NgVqR5R0MA/npKO3oopM7KwR5
-         WZc5EqLor+Z/l/nOShoBhl27cXDfznaY/CvDvNfE=
-Received: by mail-qt1-f171.google.com with SMTP id e5so1401015qtr.12;
-        Mon, 04 Feb 2019 12:27:27 -0800 (PST)
-X-Gm-Message-State: AHQUAuY+t16/mEbSk8QUhpflyKvwZI7CeN9bJq1rM4NoBqz680B1QvTK
-        eZbshc4GMhcyKnyQ3ZWwAT9dUEZtC520/SDM4Q==
-X-Google-Smtp-Source: AHgI3IZXuyQZ3BH0DX8+B/aa2Blt8W/P1/EvnnsNJD4igItDl+lGWau4d5e5svLRLYGVkA5Lp4JuM2QXPsNcuW93f6M=
-X-Received: by 2002:ac8:1712:: with SMTP id w18mr976833qtj.76.1549312046833;
- Mon, 04 Feb 2019 12:27:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20190204201906.8859-1-jgebben@sweptlaser.com> <20190204201906.8859-3-jgebben@sweptlaser.com>
-In-Reply-To: <20190204201906.8859-3-jgebben@sweptlaser.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 4 Feb 2019 14:27:15 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+Qej8XWDhLXzKJFSpuS7vdadko1N=EDyL-ysNuP4THcg@mail.gmail.com>
-Message-ID: <CAL_Jsq+Qej8XWDhLXzKJFSpuS7vdadko1N=EDyL-ysNuP4THcg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] dt-bindings: Add LM96000 as a trivial device
+        id S1728153AbfBDWpH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 4 Feb 2019 17:45:07 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35451 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfBDWpH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Feb 2019 17:45:07 -0500
+Received: by mail-pl1-f196.google.com with SMTP id p8so619758plo.2;
+        Mon, 04 Feb 2019 14:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NJuYUJnOGWCJiAV08E4cVuBASW9ES+HHjXeqXLduS/s=;
+        b=LqFs5bR0Mnlv9ll0+SvKEeo1OaTvHOrQvnQbCbEOEvsNxDkIS/FAKPLUfUbuXNWGJA
+         MbLWaB2ysCKyPHCbc0EnKq4Ko2PE8kTeitPVoa0kq2kYyRzVOYfkYnGXTwaKbGtqmNCZ
+         aV1y5i+J6OmWFa1zVhoMANzq0GEVitVcsTosfe5riZji0tafeymXzW9Pdk88U+soRmHw
+         y53DyDJ2MnL8K1fpycZTL4Q9LBFZv+oirsSOdPaobh1iOuX+GJOuNFnN4tve4kRisgCC
+         rttAxCUpie+OYLfvuTDjpUCgMNf50FmMJp51GPf/ZTTdiHnYY+lnO1sLyfauA4+p6vC7
+         fG/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NJuYUJnOGWCJiAV08E4cVuBASW9ES+HHjXeqXLduS/s=;
+        b=nkvJDvhOsT6JC0y8POPu6ItOL8rWOLhAdNIH82jaCppsfhLBxITNCWz7N6+r3/O0hp
+         c50gKWmv7zSv2Ws6SotxUSePeCOLDNBBsMHFP+HXIfSxfuTqogBEyqYITCvT29jBmGbi
+         85PEHmCGzBXoKL3p/NR83bT4EM38xzd21G7Xt6Rxkm/WZO467AzjbM9Cz/vyGr0/nocu
+         gTO+9zyTI0Vsma89gQzf7uRddNJogwxvapyCZ27gzLAnQ4ccqMuA3G+YdwGKrzTzHPXQ
+         IblNKoSq/8dtj2JNi1u8yKO8uo18oY01w0MUfiUZpIZyVNzEn4FMFD/pE9iqdcRChz2T
+         2oFg==
+X-Gm-Message-State: AHQUAubru8TYZnHKABsflMdCI3LkpwDSG+RHzzixIkvJTSBb5/j+z2aA
+        ndo2PKnT3ZtmmXZ3KIqjqZo=
+X-Google-Smtp-Source: AHgI3IaoElp3W9QkGMMx6ZtA9iqNRopV/v/ALYdZYg6C8s1ePNCpsnjSjWzR07OULd9RQmsBey4Kow==
+X-Received: by 2002:a17:902:7882:: with SMTP id q2mr1811977pll.305.1549320306690;
+        Mon, 04 Feb 2019 14:45:06 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s2sm1231707pfa.167.2019.02.04.14.45.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 Feb 2019 14:45:05 -0800 (PST)
+Date:   Mon, 4 Feb 2019 14:45:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Jeremy Gebben <jgebben@sweptlaser.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] hwmon: (lm85) add LM96000 high freqency pwm
+ support
+Message-ID: <20190204224504.GA11792@roeck-us.net>
+References: <20190204201906.8859-1-jgebben@sweptlaser.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190204201906.8859-1-jgebben@sweptlaser.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 4, 2019 at 2:19 PM Jeremy Gebben <jgebben@sweptlaser.com> wrote:
->
-> The LM96000 is a temperature sensor and fan controller based
-> on the LM85.
->
-> Signed-off-by: Jeremy Gebben <jgebben@sweptlaser.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+On Mon, Feb 04, 2019 at 01:19:02PM -0700, Jeremy Gebben wrote:
+> Hi,
+> 
+> This patch set adds support for the PWM frequencies from 22.5 to 30 kHz
+> available on the LM96000.
+> 
+> It looks like this chip has been supported for a long time, but wasn't
+> mentioned in the docs (which I have updated).
+> 
+> I stumbled on to a 10 year old thread discussing a patch which looks
+> like an early attempt to add support for this chip, which may be of
+> interest:
+> https://lm-sensors.lm-sensors.narkive.com/1SIwaMDT/patch-hwmon-lm96000-support
+> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Series applied to hwmon-next.
+
+Thanks,
+Guenter
