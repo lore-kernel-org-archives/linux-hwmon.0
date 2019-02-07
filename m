@@ -1,93 +1,88 @@
-Return-Path: <SRS0=55dy=QL=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=CTyS=QO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F454C282C4
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 22:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8723EC282C2
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 12:34:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C575320821
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Feb 2019 22:45:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E2B921907
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 12:34:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqFs5bR0"
+	dkim=pass (1024-bit key) header.d=autistici.org header.i=@autistici.org header.b="gth37Jd/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728153AbfBDWpH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Feb 2019 17:45:07 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35451 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfBDWpH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Feb 2019 17:45:07 -0500
-Received: by mail-pl1-f196.google.com with SMTP id p8so619758plo.2;
-        Mon, 04 Feb 2019 14:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NJuYUJnOGWCJiAV08E4cVuBASW9ES+HHjXeqXLduS/s=;
-        b=LqFs5bR0Mnlv9ll0+SvKEeo1OaTvHOrQvnQbCbEOEvsNxDkIS/FAKPLUfUbuXNWGJA
-         MbLWaB2ysCKyPHCbc0EnKq4Ko2PE8kTeitPVoa0kq2kYyRzVOYfkYnGXTwaKbGtqmNCZ
-         aV1y5i+J6OmWFa1zVhoMANzq0GEVitVcsTosfe5riZji0tafeymXzW9Pdk88U+soRmHw
-         y53DyDJ2MnL8K1fpycZTL4Q9LBFZv+oirsSOdPaobh1iOuX+GJOuNFnN4tve4kRisgCC
-         rttAxCUpie+OYLfvuTDjpUCgMNf50FmMJp51GPf/ZTTdiHnYY+lnO1sLyfauA4+p6vC7
-         fG/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NJuYUJnOGWCJiAV08E4cVuBASW9ES+HHjXeqXLduS/s=;
-        b=nkvJDvhOsT6JC0y8POPu6ItOL8rWOLhAdNIH82jaCppsfhLBxITNCWz7N6+r3/O0hp
-         c50gKWmv7zSv2Ws6SotxUSePeCOLDNBBsMHFP+HXIfSxfuTqogBEyqYITCvT29jBmGbi
-         85PEHmCGzBXoKL3p/NR83bT4EM38xzd21G7Xt6Rxkm/WZO467AzjbM9Cz/vyGr0/nocu
-         gTO+9zyTI0Vsma89gQzf7uRddNJogwxvapyCZ27gzLAnQ4ccqMuA3G+YdwGKrzTzHPXQ
-         IblNKoSq/8dtj2JNi1u8yKO8uo18oY01w0MUfiUZpIZyVNzEn4FMFD/pE9iqdcRChz2T
-         2oFg==
-X-Gm-Message-State: AHQUAubru8TYZnHKABsflMdCI3LkpwDSG+RHzzixIkvJTSBb5/j+z2aA
-        ndo2PKnT3ZtmmXZ3KIqjqZo=
-X-Google-Smtp-Source: AHgI3IaoElp3W9QkGMMx6ZtA9iqNRopV/v/ALYdZYg6C8s1ePNCpsnjSjWzR07OULd9RQmsBey4Kow==
-X-Received: by 2002:a17:902:7882:: with SMTP id q2mr1811977pll.305.1549320306690;
-        Mon, 04 Feb 2019 14:45:06 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s2sm1231707pfa.167.2019.02.04.14.45.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Feb 2019 14:45:05 -0800 (PST)
-Date:   Mon, 4 Feb 2019 14:45:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jeremy Gebben <jgebben@sweptlaser.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] hwmon: (lm85) add LM96000 high freqency pwm
- support
-Message-ID: <20190204224504.GA11792@roeck-us.net>
-References: <20190204201906.8859-1-jgebben@sweptlaser.com>
+        id S1726809AbfBGMec (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Feb 2019 07:34:32 -0500
+Received: from perdizione.investici.org ([94.23.50.208]:29548 "EHLO
+        perdizione.investici.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726799AbfBGMec (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Feb 2019 07:34:32 -0500
+X-Greylist: delayed 1100 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Feb 2019 07:34:31 EST
+Received: from [94.23.50.208] (perdizione [94.23.50.208]) (Authenticated sender: mikefender@cryptolab.net) by localhost (Postfix) with ESMTPSA id 952151401F4;
+        Thu,  7 Feb 2019 12:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=autistici.org;
+        s=stigmate; t=1549541767;
+        bh=sjmHY9aDDchQdHcgHW6hvG74vKp73uJ8suoTQLLgwls=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=gth37Jd/ipy+rDJ/uPemqMYlLQyx0C6t9OkZJo+EDs82CJQmM8vlMl99sBtGI0q1w
+         VoNyGBP3DT9cm/QmluWBIa3Bvxk1nPRLwDEnbYrhqGl15eqc6QJeDam0DmDKvyyri4
+         NoIWWzp/lzYS7oeHnzmlCfTA7P5vAbQh9sUkJR94=
+Subject: Re: [PATCH] dell-smm-hwmon.c: Additional temperature sensors
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali.rohar@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+References: <20181207202927.14168-1-michelesr@autistici.org>
+ <20181208005603.11721-1-michelesr@autistici.org>
+ <3f1b847e-2b70-70bb-f5e6-5f68ffbc63ed@roeck-us.net>
+ <20181210105823.xq3mnrlfgdx63etl@pali>
+From:   Michele Sorcinelli <michelesr@autistici.org>
+Message-ID: <127d6adc-6002-ad28-14bd-1ca475d421c5@autistici.org>
+Date:   Thu, 7 Feb 2019 12:16:06 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190204201906.8859-1-jgebben@sweptlaser.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20181210105823.xq3mnrlfgdx63etl@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 04, 2019 at 01:19:02PM -0700, Jeremy Gebben wrote:
-> Hi,
-> 
-> This patch set adds support for the PWM frequencies from 22.5 to 30 kHz
-> available on the LM96000.
-> 
-> It looks like this chip has been supported for a long time, but wasn't
-> mentioned in the docs (which I have updated).
-> 
-> I stumbled on to a 10 year old thread discussing a patch which looks
-> like an early attempt to add support for this chip, which may be of
-> interest:
-> https://lm-sensors.lm-sensors.narkive.com/1SIwaMDT/patch-hwmon-lm96000-support
-> 
+As far as I know Dell won't help with fixing the SMM layer, they probably
+changed something starting with firmware version 1.3.0 and they don't
+wanna release information about it.
 
-Series applied to hwmon-next.
+https://www.hwinfo.com/forum/Thread-Dell-XPS-15-9570-temperatures-not-named-anymore
+
+I wonder if something can be done to force the discovery of the sensors in the driver,
+maybe adding a module option to use i8k_get_temp() as probe method as a workaround,
+or maybe just forcing that method for this specific model?
+
+Let me know your thoughts.
 
 Thanks,
-Guenter
+Michele.
+
+On 12/10/18 10:58 AM, Pali Rohár wrote:
+> On Friday 07 December 2018 20:24:49 Guenter Roeck wrote:
+>> Anyway, I would like to get some feedback if this can cause regressions
+>> on systems which don't support that many sensors and maybe report something
+>> completely different if one tries to read the high-numbered sensors.
+>> I seem to recall that there was a reason for checking the type and not just
+>> trying to read sensor values.
+> 
+> There can be also different problem for sensors which are turned off.
+> E.g. on notebooks with switchable graphic cards which have included
+> temperature sensors. When graphic card is turned off, then SMM returns
+> error when asking for temperature value (for obvious reason). But
+> temperature type still returns correct value "this is GPU sensors".
+> 
+> So we cannot replace temp_type check by temp_value check. It introduce
+> race condition between "starting GPU" and initializing dell-smm hwmon.
+> Now linux kernel has support for dynamic turning ON/OFF switchable GPU,
+> so we need to care about these race conditions too.
+> 
