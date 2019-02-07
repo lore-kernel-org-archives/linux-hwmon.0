@@ -2,207 +2,178 @@ Return-Path: <SRS0=CTyS=QO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B58BC282C2
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 18:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D013C282C2
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 22:00:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0A2142086C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 18:18:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUizLL1D"
+	by mail.kernel.org (Postfix) with ESMTP id CFE5421721
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 22:00:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfBGSSa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Feb 2019 13:18:30 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36907 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbfBGSSa (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Feb 2019 13:18:30 -0500
-Received: by mail-pl1-f194.google.com with SMTP id b5so307710plr.4;
-        Thu, 07 Feb 2019 10:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yqYYiqjS6eJr9g7jLPNaaxd40OapnbzFHmDcUHc4DwQ=;
-        b=aUizLL1DZBI1MpfVhWKXxJjV1SYoMV4WI0FetOUsG4ongauB5cPq+tw0hTHFX7CPJU
-         pGLFEKsvkTnUsILsZVej+C6rr38Ei4Py5ul0c2ewEf/4TuMmAqF3427NfdA0J03gwtAd
-         +czVLV6Ge+/kg2Rhf0PKH8mwtcIUAuwHMhv4NJLpAs2jcET/nuV0gFgw4Wz8/w2PF50M
-         OlvZ0OnDDc1CWZ3SdztnC6ei3FEzgPzYvQ+ZcBAjZ168/nT2/zkM99we1mOpD1OKFFYo
-         ZpPJbueiuRBbD/e/OsdRPlAzU95BUxUdmKIFsP6NVkedfJyGDZ0bnLxWQIiXcKh8UY1G
-         TCuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yqYYiqjS6eJr9g7jLPNaaxd40OapnbzFHmDcUHc4DwQ=;
-        b=sD78ExLl94M0dl5eKvGfCdG1fl/NPxoEaF0VuDhjqFGvvPWYQSI/bhRwGM/cn381MM
-         6mkYbaNjfjVGnssHUkbU0xka/FcKG3Xf9tBxBhlrETjdcOQRDC9RYN2vgHkNKDKHGoQB
-         EUYAhSIqliSEPNyFIki7msenYCnutjuEPFZsoMVIHTbjz8xojYEuzrwZ8BO92B13XxaR
-         fA58S1d3fvY22tcspkrfO3YHuWwVeARTUhMt68NsEyYxqnuMM2O4H+gJg8f2d6LHWXm2
-         H5is7A10JoJpdSVi67uuPD8Ems86lRERvJyZTkK5VNyU1sFQSFFS4WwdlAk5A3Jhwaqz
-         eH1A==
-X-Gm-Message-State: AHQUAublhTwL+Y80iegZ19aCMNgXybBDXLBbsz2PArHnTb4d43DGFPvH
-        kHuV3Hbxmhk7/8tQaqE/4z8=
-X-Google-Smtp-Source: AHgI3IYpMOj4jqhQpxDRi9FHrtQjAYfGhOF7Wyzq+9VYIHxpSFVEI4/oC+JiMFZEza3bvdihWZyGMg==
-X-Received: by 2002:a17:902:622:: with SMTP id 31mr17539959plg.171.1549563509093;
-        Thu, 07 Feb 2019 10:18:29 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f20sm11972086pfn.177.2019.02.07.10.18.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Feb 2019 10:18:27 -0800 (PST)
-Date:   Thu, 7 Feb 2019 10:18:26 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] hwmon: pwm-fan: Add optional regulator support
-Message-ID: <20190207181826.GA27492@roeck-us.net>
-References: <1549557480-14436-1-git-send-email-stefan.wahren@i2se.com>
- <1549557480-14436-3-git-send-email-stefan.wahren@i2se.com>
+        id S1726873AbfBGWAQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 Feb 2019 17:00:16 -0500
+Received: from da1vs03.rockwellcollins.com ([205.175.227.47]:58843 "EHLO
+        da1vs03.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727078AbfBGWAQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 7 Feb 2019 17:00:16 -0500
+X-Greylist: delayed 566 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Feb 2019 17:00:15 EST
+Received: from ofwda1n02.rockwellcollins.com (HELO dtulimr01.rockwellcollins.com) ([205.175.227.14])
+  by da1vs03.rockwellcollins.com with ESMTP; 07 Feb 2019 15:50:49 -0600
+X-Received: from righttwix.rockwellcollins.com (righttwix.rockwellcollins.com [192.168.141.218])
+        by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id D2808607CC;
+        Thu,  7 Feb 2019 15:50:48 -0600 (CST)
+From:   Brandon Maier <brandon.maier@rockwellcollins.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org,
+        Brandon Maier <brandon.maier@rockwellcollins.com>
+Subject: [PATCH] hwmon: (ad7418) Catch I2C errors
+Date:   Thu,  7 Feb 2019 15:50:36 -0600
+Message-Id: <20190207215036.185561-1-brandon.maier@rockwellcollins.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1549557480-14436-3-git-send-email-stefan.wahren@i2se.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 07, 2019 at 05:38:00PM +0100, Stefan Wahren wrote:
-> This adds optional regulator support to the pwm-fan driver. This is
-> necessary for pwm fans which are powered by a switchable supply.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->  drivers/hwmon/pwm-fan.c | 39 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 2c94482..344915c 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -23,6 +23,7 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/pwm.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/sysfs.h>
->  #include <linux/thermal.h>
->  
-> @@ -31,6 +32,7 @@
->  struct pwm_fan_ctx {
->  	struct mutex lock;
->  	struct pwm_device *pwm;
-> +	struct regulator *reg_en;
->  	unsigned int pwm_value;
->  	unsigned int pwm_fan_state;
->  	unsigned int pwm_fan_max_state;
-> @@ -231,6 +233,21 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, ctx);
->  
-> +	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
-> +	if (IS_ERR(ctx->reg_en)) {
-> +		if (PTR_ERR(ctx->reg_en) == -ENODEV)
-> +			ctx->reg_en = NULL;
-> +		else
-> +			return PTR_ERR(ctx->reg_en);
+If there is an i2c failure, the ad7416 reports its temperature as 0C.
+Return an error code so users can properly detect errors.
 
-		if PTR_ERR(ctx->reg_en) != -ENODEV)
-			return PTR_ERR(ctx->reg_en);
-		ctx->reg_en = NULL;
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-would be a bit easier to read and avoid an else.
+---
+Tested on an ad7416, attempting to `cat` the temp1_input while the
+sensor is physically disconnected returns this:
 
-> +	} else {
-> +		ret = regulator_enable(ctx->reg_en);
-> +		if (ret) {
-> +			dev_err(&pdev->dev,
-> +				"Failed to enable fan supply: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
->  	ctx->pwm_value = MAX_PWM;
->  
->  	/* Set duty cycle to maximum allowed and enable PWM output */
-> @@ -241,7 +258,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  	ret = pwm_apply_state(ctx->pwm, &state);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to configure PWM\n");
-> -		return ret;
-> +		goto err_reg_disable;
->  	}
->  
->  	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
-> @@ -277,6 +294,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  	state.enabled = false;
->  	pwm_apply_state(ctx->pwm, &state);
->  
-> +err_reg_disable:
-> +	if (ctx->reg_en)
-> +		regulator_disable(ctx->reg_en);
-> +
->  	return ret;
->  }
->  
-> @@ -287,6 +308,10 @@ static int pwm_fan_remove(struct platform_device *pdev)
->  	thermal_cooling_device_unregister(ctx->cdev);
->  	if (ctx->pwm_value)
->  		pwm_disable(ctx->pwm);
-> +
-> +	if (ctx->reg_en)
-> +		regulator_disable(ctx->reg_en);
-> +
->  	return 0;
->  }
->  
-> @@ -299,6 +324,12 @@ static int pwm_fan_suspend(struct device *dev)
->  
->  	pwm_get_args(ctx->pwm, &args);
->  
-> +	if (ctx->reg_en) {
-> +		ret = regulator_disable(ctx->reg_en);
-> +		if (ret)
-> +			dev_err(dev, "Failed to disable fan supply: %d\n", ret);
+> cat: read error: Remote I/O error
+---
+ drivers/hwmon/ad7418.c | 65 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 49 insertions(+), 16 deletions(-)
 
-This is a bit weird. The error is returned to the caller, but only if
-ctx->pwm_value is 0. Otherwise it is ignored. This warrants an explanation
-(and some selling) if it is on purpose.
+diff --git a/drivers/hwmon/ad7418.c b/drivers/hwmon/ad7418.c
+index 76f0a5c01e8a..28a91d14d7af 100644
+--- a/drivers/hwmon/ad7418.c
++++ b/drivers/hwmon/ad7418.c
+@@ -54,10 +54,11 @@ struct ad7418_data {
+ 	u16			in[4];
+ };
+ 
+-static struct ad7418_data *ad7418_update_device(struct device *dev)
++static int ad7418_update_device(struct device *dev)
+ {
+ 	struct ad7418_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
++	s32 val;
+ 
+ 	mutex_lock(&data->lock);
+ 
+@@ -67,47 +68,74 @@ static struct ad7418_data *ad7418_update_device(struct device *dev)
+ 		int i, ch;
+ 
+ 		/* read config register and clear channel bits */
+-		cfg = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
++		val = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
++		if (val < 0)
++			goto abort;
++
++		cfg = val;
+ 		cfg &= 0x1F;
+ 
+-		i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
++		val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
+ 						cfg | AD7418_CH_TEMP);
++		if (val < 0)
++			goto abort;
++
+ 		udelay(30);
+ 
+ 		for (i = 0; i < 3; i++) {
+-			data->temp[i] =
+-				i2c_smbus_read_word_swapped(client,
+-						AD7418_REG_TEMP[i]);
++			val = i2c_smbus_read_word_swapped(client,
++							  AD7418_REG_TEMP[i]);
++			if (val < 0)
++				goto abort;
++
++			data->temp[i] = val;
+ 		}
+ 
+ 		for (i = 0, ch = 4; i < data->adc_max; i++, ch--) {
+-			i2c_smbus_write_byte_data(client,
+-					AD7418_REG_CONF,
+-					cfg | AD7418_REG_ADC_CH(ch));
++			val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
++							cfg | AD7418_REG_ADC_CH(ch));
++			if (val < 0)
++				goto abort;
+ 
+ 			udelay(15);
+-			data->in[data->adc_max - 1 - i] =
+-				i2c_smbus_read_word_swapped(client,
+-						AD7418_REG_ADC);
++			val = i2c_smbus_read_word_swapped(client,
++							  AD7418_REG_ADC);
++			if (val < 0)
++				goto abort;
++
++			data->in[data->adc_max - 1 - i] = val;
+ 		}
+ 
+ 		/* restore old configuration value */
+-		i2c_smbus_write_word_swapped(client, AD7418_REG_CONF, cfg);
++		val = i2c_smbus_write_word_swapped(client, AD7418_REG_CONF,
++						   cfg);
++		if (val < 0)
++			goto abort;
+ 
+ 		data->last_updated = jiffies;
+ 		data->valid = 1;
+ 	}
+ 
+ 	mutex_unlock(&data->lock);
++	return 0;
+ 
+-	return data;
++abort:
++	data->valid = 0;
++	mutex_unlock(&data->lock);
++	return val;
+ }
+ 
+ static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
+ 			 char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct ad7418_data *data = ad7418_update_device(dev);
++	struct ad7418_data *data = dev_get_drvdata(dev);
++	int ret;
++
++	ret = ad7418_update_device(dev);
++	if (ret < 0)
++		return ret;
++
+ 	return sprintf(buf, "%d\n",
+ 		LM75_TEMP_FROM_REG(data->temp[attr->index]));
+ }
+@@ -116,7 +144,12 @@ static ssize_t adc_show(struct device *dev, struct device_attribute *devattr,
+ 			char *buf)
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct ad7418_data *data = ad7418_update_device(dev);
++	struct ad7418_data *data = dev_get_drvdata(dev);
++	int ret;
++
++	ret = ad7418_update_device(dev);
++	if (ret < 0)
++		return ret;
+ 
+ 	return sprintf(buf, "%d\n",
+ 		((data->in[attr->index] >> 6) * 2500 + 512) / 1024);
+-- 
+2.20.1
 
-> +	}
-> +
->  	if (ctx->pwm_value) {
->  		ret = pwm_config(ctx->pwm, 0, args.period);
->  		if (ret < 0)
-> @@ -317,6 +348,12 @@ static int pwm_fan_resume(struct device *dev)
->  	unsigned long duty;
->  	int ret;
->  
-> +	if (ctx->reg_en) {
-> +		ret = regulator_enable(ctx->reg_en);
-> +		if (ret)
-> +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
-
-Does it really make sense here to ignore this error ? After all,
-the fan will likely not work if that error really happens. Doesn't
-that count as resume failure ?
-
-> +	}
-> +
->  	if (ctx->pwm_value == 0)
->  		return 0;
->  
-> -- 
-> 2.7.4
-> 
