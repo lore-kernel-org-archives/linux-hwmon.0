@@ -1,179 +1,88 @@
-Return-Path: <SRS0=CTyS=QO=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=q7Hd=QS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D013C282C2
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 22:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 426C2C282CC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 09:46:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFE5421721
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Feb 2019 22:00:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CF592082F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 09:46:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726873AbfBGWAQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Feb 2019 17:00:16 -0500
-Received: from da1vs03.rockwellcollins.com ([205.175.227.47]:58843 "EHLO
-        da1vs03.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727078AbfBGWAQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 7 Feb 2019 17:00:16 -0500
-X-Greylist: delayed 566 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Feb 2019 17:00:15 EST
-Received: from ofwda1n02.rockwellcollins.com (HELO dtulimr01.rockwellcollins.com) ([205.175.227.14])
-  by da1vs03.rockwellcollins.com with ESMTP; 07 Feb 2019 15:50:49 -0600
-X-Received: from righttwix.rockwellcollins.com (righttwix.rockwellcollins.com [192.168.141.218])
-        by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id D2808607CC;
-        Thu,  7 Feb 2019 15:50:48 -0600 (CST)
-From:   Brandon Maier <brandon.maier@rockwellcollins.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org,
-        Brandon Maier <brandon.maier@rockwellcollins.com>
-Subject: [PATCH] hwmon: (ad7418) Catch I2C errors
-Date:   Thu,  7 Feb 2019 15:50:36 -0600
-Message-Id: <20190207215036.185561-1-brandon.maier@rockwellcollins.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
+        id S1726036AbfBKJqU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Feb 2019 04:46:20 -0500
+Received: from mga11.intel.com ([192.55.52.93]:34567 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725931AbfBKJqU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Feb 2019 04:46:20 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2019 01:46:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.58,358,1544515200"; 
+   d="scan'208";a="145831034"
+Received: from byang6-mobl1.amr.corp.intel.com ([10.255.29.79])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2019 01:46:17 -0800
+Message-ID: <1549878372.2099.36.camel@intel.com>
+Subject: coretemp driver change on dual-die/package systems
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org
+Date:   Mon, 11 Feb 2019 17:46:12 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If there is an i2c failure, the ad7416 reports its temperature as 0C.
-Return an error code so users can properly detect errors.
+Hi, Jean and Guenter,
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Per the Intel Software Developer's Manual, which you can found at www.i
+ntel.com/sdm, when CPUID.1F is present, it is preferred over CPUID.B.
 
----
-Tested on an ad7416, attempting to `cat` the temp1_input while the
-sensor is physically disconnected returns this:
+New dual-die/package systems will see this difference:    
+   CPUID.0B enumerates the CPUs on each die as if they were in
+different packages.
+   CPUID.1F enumerates the CPUs on each die within the same package.
 
-> cat: read error: Remote I/O error
----
- drivers/hwmon/ad7418.c | 65 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 49 insertions(+), 16 deletions(-)
+This will manifest in the sysfs physical_package_id attribute. ie. In
+the example above, CPUID.B would cause lscpu to show 2 packages, and
+CPUID.1F will cause lscpu to show 1 package.
 
-diff --git a/drivers/hwmon/ad7418.c b/drivers/hwmon/ad7418.c
-index 76f0a5c01e8a..28a91d14d7af 100644
---- a/drivers/hwmon/ad7418.c
-+++ b/drivers/hwmon/ad7418.c
-@@ -54,10 +54,11 @@ struct ad7418_data {
- 	u16			in[4];
- };
- 
--static struct ad7418_data *ad7418_update_device(struct device *dev)
-+static int ad7418_update_device(struct device *dev)
- {
- 	struct ad7418_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
-+	s32 val;
- 
- 	mutex_lock(&data->lock);
- 
-@@ -67,47 +68,74 @@ static struct ad7418_data *ad7418_update_device(struct device *dev)
- 		int i, ch;
- 
- 		/* read config register and clear channel bits */
--		cfg = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
-+		val = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
-+		if (val < 0)
-+			goto abort;
-+
-+		cfg = val;
- 		cfg &= 0x1F;
- 
--		i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
-+		val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
- 						cfg | AD7418_CH_TEMP);
-+		if (val < 0)
-+			goto abort;
-+
- 		udelay(30);
- 
- 		for (i = 0; i < 3; i++) {
--			data->temp[i] =
--				i2c_smbus_read_word_swapped(client,
--						AD7418_REG_TEMP[i]);
-+			val = i2c_smbus_read_word_swapped(client,
-+							  AD7418_REG_TEMP[i]);
-+			if (val < 0)
-+				goto abort;
-+
-+			data->temp[i] = val;
- 		}
- 
- 		for (i = 0, ch = 4; i < data->adc_max; i++, ch--) {
--			i2c_smbus_write_byte_data(client,
--					AD7418_REG_CONF,
--					cfg | AD7418_REG_ADC_CH(ch));
-+			val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
-+							cfg | AD7418_REG_ADC_CH(ch));
-+			if (val < 0)
-+				goto abort;
- 
- 			udelay(15);
--			data->in[data->adc_max - 1 - i] =
--				i2c_smbus_read_word_swapped(client,
--						AD7418_REG_ADC);
-+			val = i2c_smbus_read_word_swapped(client,
-+							  AD7418_REG_ADC);
-+			if (val < 0)
-+				goto abort;
-+
-+			data->in[data->adc_max - 1 - i] = val;
- 		}
- 
- 		/* restore old configuration value */
--		i2c_smbus_write_word_swapped(client, AD7418_REG_CONF, cfg);
-+		val = i2c_smbus_write_word_swapped(client, AD7418_REG_CONF,
-+						   cfg);
-+		if (val < 0)
-+			goto abort;
- 
- 		data->last_updated = jiffies;
- 		data->valid = 1;
- 	}
- 
- 	mutex_unlock(&data->lock);
-+	return 0;
- 
--	return data;
-+abort:
-+	data->valid = 0;
-+	mutex_unlock(&data->lock);
-+	return val;
- }
- 
- static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
- 			 char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct ad7418_data *data = ad7418_update_device(dev);
-+	struct ad7418_data *data = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ad7418_update_device(dev);
-+	if (ret < 0)
-+		return ret;
-+
- 	return sprintf(buf, "%d\n",
- 		LM75_TEMP_FROM_REG(data->temp[attr->index]));
- }
-@@ -116,7 +144,12 @@ static ssize_t adc_show(struct device *dev, struct device_attribute *devattr,
- 			char *buf)
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct ad7418_data *data = ad7418_update_device(dev);
-+	struct ad7418_data *data = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ad7418_update_device(dev);
-+	if (ret < 0)
-+		return ret;
- 
- 	return sprintf(buf, "%d\n",
- 		((data->in[attr->index] >> 6) * 2500 + 512) / 1024);
--- 
-2.20.1
+Also, with CPUID.B the concept of a package-scope MSR and a die-scope
+MSR are synonymous.  With CPUID.1F, it is possible for some MSRs to
+have die-scope, and other MSRs to have package-scope.
+
+MSR_IA32_PACKAGE_THERM_STATUS is a die-scope MSR, thus we need to
+update the coretemp driver to become multi-die-aware when we support
+CPUID.1F.
+
+Previously, we create one hwmon device for each package, now we need to
+create one hwmon device for each die.
+But there is one problem left. For each coretemp hwmon device, the
+"temp1_input" attribute represents the temperature got from
+MSR_IA32_PACKAGE_THERM_STATUS, and "temp1_label" is "Package id X",
+where X is the logical package id.
+Now we create one hwmon device for each die, thus temp1_label can not
+use logical package id any more, because there are two dies in the same
+package.
+To me, there are two choices,
+1. changing "temp1_label" from "Package id X" to "Package id Y", where
+Y is just a unique number instead of logical package id, say, using
+ida.
+2. changing "temp1_label" from "Package id X" to "Package id X Die id
+Y", where Y is the die id.
+
+Question is I'm not sure how temp1_label is used and if this change
+will break any userspace, like lm-sensors?
+
+thanks,
+rui
 
