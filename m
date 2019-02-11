@@ -2,124 +2,110 @@ Return-Path: <SRS0=q7Hd=QS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8818CC169C4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 14:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4092AC169C4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 22:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 58C68222B7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 14:13:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UqdhaoT+"
+	by mail.kernel.org (Postfix) with ESMTP id 161BA2080F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Feb 2019 22:29:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbfBKONL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Feb 2019 09:13:11 -0500
-Received: from mail-pl1-f169.google.com ([209.85.214.169]:37952 "EHLO
-        mail-pl1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbfBKONK (ORCPT
+        id S1727532AbfBKW3P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Feb 2019 17:29:15 -0500
+Received: from gateway20.websitewelcome.com ([192.185.62.46]:33476 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726751AbfBKW3P (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Feb 2019 09:13:10 -0500
-Received: by mail-pl1-f169.google.com with SMTP id e5so5365041plb.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Feb 2019 06:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=spiO16hRbNdzSRnb1MIC14pTshl+Vq2fiNT4wKQ/Ia0=;
-        b=UqdhaoT+iCWk59xqsGDR/ktIwWFMUf4CP0BXo13oZtIVaYB6aYe28/Yuy9BNnYXP8l
-         oHUGOPPy9UAJvJBtdRlDlNBVNG5WyotKNIg3Hwq9O2fxJJKQZiziYD5Yz5Os5SghJA1/
-         bhY+qQqBfJ0V8fu/Hguy9x9WvkfJE332KXxbk/PjMlRRi5+BMZGvHk82wO2YPDYbGY2y
-         ANK8q9xuarWZN73XGaRyeq1c+EKo9PUrNZKC6WKmL+D94+ZTSNvdJJdo1VTBmYcRmgXa
-         OATZ0ekG6/ejOESm3/zNgealUf+PcDn01OlhmiuKFadkpinsWDJfk22fu5+m4j2G7Luu
-         YczA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=spiO16hRbNdzSRnb1MIC14pTshl+Vq2fiNT4wKQ/Ia0=;
-        b=ENcBrhpUBe9wGmJczQQL80bmvWjOPLi+PIpUk18fnGBDr9tVsumGDfRghymdU3NMrk
-         u/8qjUw16CunvvNG0pUxxOH28H+TZs7xzaBMcfryKZPwcKBS9FFrxYVGO0S8KXMkXL66
-         GAGoVRcbNbWdLnTqG+EAQSWxtbMUZSJyClrxCThfRWipCm56TNO5llNorvfRQF/jx6si
-         HbliZ8P4Vd/3jgvRJfYw5w9fzOaHh6rfam29IpwZSmPxeAOiSCjra2na3Kop1LyEsSDn
-         gCyFG3d5xP7JGYiYp9WwTL99nV7PeDWxcXryOj4VYEThF+0NXEu8rftQN769AjGF5gL+
-         +SVw==
-X-Gm-Message-State: AHQUAuaHeTA0Sl0FE/yDaOeomEKiGYl4WutpCw5gm6C9KV5lUUSIya3U
-        9sNWG8M7aJp6OEHiH/6Kkc27Ud7b
-X-Google-Smtp-Source: AHgI3IbgRDsitc1k5r/34ch913jqV2osJpYfInCiZdB+ue4pcNwOHdP0QlASzeDzBGEhgQhxa3LdPw==
-X-Received: by 2002:a17:902:9a07:: with SMTP id v7mr36900431plp.247.1549894389794;
-        Mon, 11 Feb 2019 06:13:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p29sm12586419pgm.78.2019.02.11.06.13.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Feb 2019 06:13:09 -0800 (PST)
-Subject: Re: coretemp driver change on dual-die/package systems
-To:     Zhang Rui <rui.zhang@intel.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org
-References: <1549878372.2099.36.camel@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4ecc367e-5020-ed68-e7bc-839b2dc5bb12@roeck-us.net>
-Date:   Mon, 11 Feb 2019 06:13:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        Mon, 11 Feb 2019 17:29:15 -0500
+X-Greylist: delayed 1296 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Feb 2019 17:29:15 EST
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 7FCD9400FB48B
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 Feb 2019 16:07:39 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id tJjngRG0K2PzOtJjngwFMt; Mon, 11 Feb 2019 16:07:39 -0600
+X-Authority-Reason: nr=8
+Received: from [189.250.119.20] (port=59790 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1gtJjm-0043n4-Qg; Mon, 11 Feb 2019 16:07:38 -0600
+Date:   Mon, 11 Feb 2019 16:07:38 -0600
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] hwmon: (f71882fg) Mark expected switch fall-through
+Message-ID: <20190211220738.GA5955@embeddedor>
 MIME-Version: 1.0
-In-Reply-To: <1549878372.2099.36.camel@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.119.20
+X-Source-L: No
+X-Exim-ID: 1gtJjm-0043n4-Qg
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.119.20]:59790
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 8
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/11/19 1:46 AM, Zhang Rui wrote:
-> Hi, Jean and Guenter,
-> 
-> Per the Intel Software Developer's Manual, which you can found at www.i
-> ntel.com/sdm, when CPUID.1F is present, it is preferred over CPUID.B.
-> 
-> New dual-die/package systems will see this difference:
->     CPUID.0B enumerates the CPUs on each die as if they were in
-> different packages.
->     CPUID.1F enumerates the CPUs on each die within the same package.
-> 
-> This will manifest in the sysfs physical_package_id attribute. ie. In
-> the example above, CPUID.B would cause lscpu to show 2 packages, and
-> CPUID.1F will cause lscpu to show 1 package.
-> 
-> Also, with CPUID.B the concept of a package-scope MSR and a die-scope
-> MSR are synonymous.  With CPUID.1F, it is possible for some MSRs to
-> have die-scope, and other MSRs to have package-scope.
-> 
-> MSR_IA32_PACKAGE_THERM_STATUS is a die-scope MSR, thus we need to
-> update the coretemp driver to become multi-die-aware when we support
-> CPUID.1F.
-> 
-> Previously, we create one hwmon device for each package, now we need to
-> create one hwmon device for each die.
-> But there is one problem left. For each coretemp hwmon device, the
-> "temp1_input" attribute represents the temperature got from
-> MSR_IA32_PACKAGE_THERM_STATUS, and "temp1_label" is "Package id X",
-> where X is the logical package id.
-> Now we create one hwmon device for each die, thus temp1_label can not
-> use logical package id any more, because there are two dies in the same
-> package.
-> To me, there are two choices,
-> 1. changing "temp1_label" from "Package id X" to "Package id Y", where
-> Y is just a unique number instead of logical package id, say, using
-> ida.
-> 2. changing "temp1_label" from "Package id X" to "Package id X Die id
-> Y", where Y is the die id.
-> 
-> Question is I'm not sure how temp1_label is used and if this change
-> will break any userspace, like lm-sensors?
-> 
+In preparation to enabling -Wimplicit-fallthrough, mark switch
+cases where we are expecting to fall through.
 
-Please feel free to change the label as it makes sense. I would suggest option
-2 to avoid confusion. The string it reports is not part of the ABI and
-can be changed. It can be overwritten with sensors3.conf anyway, so nothing
-should depend on it.
+This patch fixes the following warnings:
 
-Guenter
+drivers/hwmon/f71882fg.c: In function ‘f71882fg_probe’:
+drivers/hwmon/f71882fg.c:2457:33: warning: this statement may fall through [-Wimplicit-fallthrough=]
+    data->auto_point_temp_signed = 1;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+drivers/hwmon/f71882fg.c:2459:3: note: here
+   case f71889fg:
+   ^~~~
+
+Warning level 3 was used: -Wimplicit-fallthrough=3
+
+Notice that, in this particular case, the code comment is modified
+in accordance with what GCC is expecting to find.
+
+This patch is part of the ongoing efforts to enable
+-Wimplicit-fallthrough.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/hwmon/f71882fg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
+index ca54ce5c8e10..83023798e489 100644
+--- a/drivers/hwmon/f71882fg.c
++++ b/drivers/hwmon/f71882fg.c
+@@ -2455,7 +2455,7 @@ static int f71882fg_probe(struct platform_device *pdev)
+ 		case f71869a:
+ 			/* These always have signed auto point temps */
+ 			data->auto_point_temp_signed = 1;
+-			/* Fall through to select correct fan/pwm reg bank! */
++			/* Fall through - to select correct fan/pwm reg bank! */
+ 		case f71889fg:
+ 		case f71889ed:
+ 		case f71889a:
+-- 
+2.20.1
+
