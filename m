@@ -2,237 +2,213 @@ Return-Path: <SRS0=z86d=QT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E55B2C282C4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 17:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E01C282C4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 21:49:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B36F2222BB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 17:55:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7F92222C0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 21:49:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbHU+Udd"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="beKPVIef"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728817AbfBLRzV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Feb 2019 12:55:21 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35334 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728481AbfBLRzV (ORCPT
+        id S1731252AbfBLVtN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Feb 2019 16:49:13 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43492 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727816AbfBLVtN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Feb 2019 12:55:21 -0500
-Received: by mail-pl1-f193.google.com with SMTP id p8so1663795plo.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 Feb 2019 09:55:20 -0800 (PST)
+        Tue, 12 Feb 2019 16:49:13 -0500
+Received: by mail-pf1-f195.google.com with SMTP id q17so86227pfh.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Feb 2019 13:49:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=c1YGAbNesDA0b3kVisXSvm63bkzYBI9o0nezucIXyoU=;
-        b=FbHU+UddYFbk1R8EudOb9Z/hG1OUpNrAARyIcq2maso4oVg+axAoj5sxskZK50Hm3u
-         gf75x1YKCQZ8FuI6invLSsBg/u77IMxIkKZqJYUB3OomwuRU0jxK06vvSR5Kky+Kwf+D
-         bZUmtBouOGAKHDq+Vt8+5walNduLvtPFthq1kujNb6tNTETQG5e7QlpcxFRJVgjKKi0Q
-         ATkQl4YBbxTYku8QAhYr9oUjMgZWf31+I/owLwK9bcUT4l4B5FnNxqNq4lKIbSFDuoXq
-         Nln8S4Ki7ksaJ5CuiXv19BHuA5TJNcvqaBLNwIg2U/c84GMXqpWwZj7znAjgjNEHsZu8
-         UfrA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xm4eoP65RFrYlDQJYEBkhBqxXUmSxBYRGaIrZfk/2oU=;
+        b=beKPVIefnN1h++CNWMeLBqkcWl40XAE1ImYOmoX7gqgvJNcEZX30x8GQA0lt9CA4nK
+         oaaKXJ2riUxIy/2s57EWc655+bSISmRchptYs7Z6ib0GWorQTitnBsnutgkSVIKGCJ2r
+         DHxfAk7HJ2b0UTqamW7URiUUh8kCgni4L+zp7z7+n4OJJoXi/1bSPCS3nBA94hrz/FaS
+         I5cnzYweHTzeQFE3x2/aiiK63AAYRu1hq0TrmEZXw3vUWX/DHGPKpUwp7C0vmeqvFbGo
+         4RwYv+blDpWv8swW62RXxwduf97BUs/xyVJHpdsZS/b66i/5MGf7MvVfJACuydxhe7iS
+         DSIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=c1YGAbNesDA0b3kVisXSvm63bkzYBI9o0nezucIXyoU=;
-        b=UubBtvT33z641Wn6h5dz2qE6PpyGyPgMu1HMSfpYrcFqWgqGi4D8JG5jz1Zfyffp5R
-         0K4yqPlE3f/G+Mu0OvlaZ2MYas4gTf+TjMOwzE4Ed2sNhcuNL3axW50rn+/h6BPYjbcF
-         GGQTPZu6vr8FMpxxhU9IShHxj/gj5Pd1yZjdRsTTVmCFFffQIxHakB4tyiPp/M+0A2Tz
-         mSx0Uc3c0Mw9GObAugceGApJWP6OqVK61g/cavmHMu4uOHLPNqm5b6eY99qvg10VDfKx
-         v50oGBtBzQ6FCCcx0VgkaAwpcZP+zJ2/SVC2RW9PIMcwHEVb3GwsRgI+6ZMu3uUE3VTH
-         7RLw==
-X-Gm-Message-State: AHQUAuYOi8JMgCNCQ2LIgB3GwvtTciMiUYyiIVM1ETwIxEig+LxHNtXZ
-        Y+FLCJsMR/8ROVH3cdEbmw8yJyPq
-X-Google-Smtp-Source: AHgI3IaYevvGtRHyIh2KPNnEQ0Zl3Ah3H2hhfgUnMvGYvI+qGZ+Dhlc2GsZ3Aay6MQ7Ibsek8mqLWw==
-X-Received: by 2002:a17:902:7e0d:: with SMTP id b13mr5227512plm.154.1549994119771;
-        Tue, 12 Feb 2019 09:55:19 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xm4eoP65RFrYlDQJYEBkhBqxXUmSxBYRGaIrZfk/2oU=;
+        b=pkNU2Z92a0u4iixw/99mV64AckV0IEq9OFzUYVZQ+Vkmd96TJSY1CRGEZ8zenu+Ecg
+         hy/7c6W3VaWH3CX/0o1WbKP8rLYWLzC2MOUi1I53wsEvXQWtSV28OwUoDsTQgSgki6TB
+         g0wsV6lDt5HMqdvFLB9mi2nkFetMpmqPPABRSUa9oV0WthTNUIuR5dYCAPYUNAQ6z9zX
+         RXbhXld7/JBALSgoouoDNTTLnk+vFXsusdSpC6GgH7wcsE6jP/UwC3jOttqG72/6Ozu2
+         y8tHA4LvYNIZHV2j5pCKH9HQPhc+8jPH/UWlFnQqZknDxoJhxmhxvoGgsGAlhPuwjncl
+         cF6g==
+X-Gm-Message-State: AHQUAuZAzR6nn5S3SqpjuzbYxDHsuwZdm+UkAlUjM9Dm5mESXaVrtCPm
+        XG+IWrYU/5+U21oqiIcZKfI=
+X-Google-Smtp-Source: AHgI3Ib66qq5g34AK/XKSBnepDxJFjHE2WpRfBYaazo5O3p9pjZOknxnoTRUouk0ptoeQRZxPpQMDg==
+X-Received: by 2002:a63:5109:: with SMTP id f9mr5564262pgb.450.1550008152427;
+        Tue, 12 Feb 2019 13:49:12 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i8sm29745980pgo.19.2019.02.12.09.55.18
+        by smtp.gmail.com with ESMTPSA id g185sm19490355pfc.174.2019.02.12.13.49.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Feb 2019 09:55:18 -0800 (PST)
+        Tue, 12 Feb 2019 13:49:11 -0800 (PST)
+Date:   Tue, 12 Feb 2019 13:49:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Peter Rosin <peda@axentia.se>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (ntc_thermistor) Convert to new hwmon API
-Date:   Tue, 12 Feb 2019 09:55:16 -0800
-Message-Id: <1549994116-6562-1-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
+To:     Brandon Maier <brandon.maier@rockwellcollins.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ad7418) Catch I2C errors
+Message-ID: <20190212214909.GA17486@roeck-us.net>
+References: <20190207215036.185561-1-brandon.maier@rockwellcollins.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190207215036.185561-1-brandon.maier@rockwellcollins.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use devm_hwmon_device_register_with_info() instead of
-devm_hwmon_device_register_with_groups() to register the hwmon
-device to simplify the code and make it easier to maintain.
-As part of this change, thermal device registration is moved into
-the hwmon core.
+On Thu, Feb 07, 2019 at 03:50:36PM -0600, Brandon Maier wrote:
+> If there is an i2c failure, the ad7416 reports its temperature as 0C.
+> Return an error code so users can properly detect errors.
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/ntc_thermistor.c | 106 +++++++++++++++++++++++++----------------
- 1 file changed, 66 insertions(+), 40 deletions(-)
+Applied to hwmon-next.
 
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index 2823aff82c82..e4f9f7ce92fa 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -37,8 +37,6 @@
- #include <linux/iio/consumer.h>
- 
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
--#include <linux/thermal.h>
- 
- struct ntc_compensation {
- 	int		temp_c;
-@@ -588,55 +586,87 @@ static int ntc_thermistor_get_ohm(struct ntc_data *data)
- 	return -EINVAL;
- }
- 
--static int ntc_read_temp(void *data, int *temp)
-+static int ntc_read(struct device *dev, enum hwmon_sensor_types type,
-+		    u32 attr, int channel, long *val)
- {
-+	struct ntc_data *data = dev_get_drvdata(dev);
- 	int ohm;
- 
--	ohm = ntc_thermistor_get_ohm(data);
--	if (ohm < 0)
--		return ohm;
--
--	*temp = get_temp_mc(data, ohm);
--
--	return 0;
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			ohm = ntc_thermistor_get_ohm(data);
-+			if (ohm < 0)
-+				return ohm;
-+			*val = get_temp_mc(data, ohm);
-+			return 0;
-+		case hwmon_temp_type:
-+			*val = 4;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
- }
- 
--static ssize_t ntc_type_show(struct device *dev,
--			     struct device_attribute *attr, char *buf)
-+static umode_t ntc_is_visible(const void *data, enum hwmon_sensor_types type,
-+			      u32 attr, int channel)
- {
--	return sprintf(buf, "4\n");
-+	if (type == hwmon_temp) {
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_type:
-+			return 0444;
-+		default:
-+			break;
-+		}
-+	}
-+	return 0;
- }
- 
--static ssize_t ntc_temp_show(struct device *dev,
--			     struct device_attribute *attr, char *buf)
--{
--	struct ntc_data *data = dev_get_drvdata(dev);
--	int ohm;
-+static const u32 ntc_chip_config[] = {
-+	HWMON_C_REGISTER_TZ,
-+	0
-+};
- 
--	ohm = ntc_thermistor_get_ohm(data);
--	if (ohm < 0)
--		return ohm;
-+static const struct hwmon_channel_info ntc_chip = {
-+	.type = hwmon_chip,
-+	.config = ntc_chip_config,
-+};
- 
--	return sprintf(buf, "%d\n", get_temp_mc(data, ohm));
--}
-+static const u32 ntc_temp_config[] = {
-+	HWMON_T_INPUT, HWMON_T_TYPE,
-+	0
-+};
- 
--static SENSOR_DEVICE_ATTR_RO(temp1_type, ntc_type, 0);
--static SENSOR_DEVICE_ATTR_RO(temp1_input, ntc_temp, 0);
-+static const struct hwmon_channel_info ntc_temp = {
-+	.type = hwmon_temp,
-+	.config = ntc_temp_config,
-+};
- 
--static struct attribute *ntc_attrs[] = {
--	&sensor_dev_attr_temp1_type.dev_attr.attr,
--	&sensor_dev_attr_temp1_input.dev_attr.attr,
--	NULL,
-+static const struct hwmon_channel_info *ntc_info[] = {
-+	&ntc_chip,
-+	&ntc_temp,
-+	NULL
- };
--ATTRIBUTE_GROUPS(ntc);
- 
--static const struct thermal_zone_of_device_ops ntc_of_thermal_ops = {
--	.get_temp = ntc_read_temp,
-+static const struct hwmon_ops ntc_hwmon_ops = {
-+	.is_visible = ntc_is_visible,
-+	.read = ntc_read,
-+};
-+
-+static const struct hwmon_chip_info ntc_chip_info = {
-+	.ops = &ntc_hwmon_ops,
-+	.info = ntc_info,
- };
- 
- static int ntc_thermistor_probe(struct platform_device *pdev)
- {
--	struct thermal_zone_device *tz;
- 	struct device *dev = &pdev->dev;
- 	const struct of_device_id *of_id =
- 			of_match_device(of_match_ptr(ntc_match), dev);
-@@ -697,8 +727,9 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
- 	data->comp   = ntc_type[pdev_id->driver_data].comp;
- 	data->n_comp = ntc_type[pdev_id->driver_data].n_comp;
- 
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, pdev_id->name,
--							   data, ntc_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, pdev_id->name,
-+							 data, &ntc_chip_info,
-+							 NULL);
- 	if (IS_ERR(hwmon_dev)) {
- 		dev_err(dev, "unable to register as hwmon device.\n");
- 		return PTR_ERR(hwmon_dev);
-@@ -707,11 +738,6 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
- 	dev_info(dev, "Thermistor type: %s successfully probed.\n",
- 		 pdev_id->name);
- 
--	tz = devm_thermal_zone_of_sensor_register(dev, 0, data,
--						  &ntc_of_thermal_ops);
--	if (IS_ERR(tz))
--		dev_dbg(dev, "Failed to register to thermal fw.\n");
--
- 	return 0;
- }
- 
--- 
-2.7.4
+Thanks,
+Guenter
 
+> ---
+> Tested on an ad7416, attempting to `cat` the temp1_input while the
+> sensor is physically disconnected returns this:
+> 
+> > cat: read error: Remote I/O error
+> ---
+>  drivers/hwmon/ad7418.c | 65 +++++++++++++++++++++++++++++++-----------
+>  1 file changed, 49 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ad7418.c b/drivers/hwmon/ad7418.c
+> index 76f0a5c01e8a..28a91d14d7af 100644
+> --- a/drivers/hwmon/ad7418.c
+> +++ b/drivers/hwmon/ad7418.c
+> @@ -54,10 +54,11 @@ struct ad7418_data {
+>  	u16			in[4];
+>  };
+>  
+> -static struct ad7418_data *ad7418_update_device(struct device *dev)
+> +static int ad7418_update_device(struct device *dev)
+>  {
+>  	struct ad7418_data *data = dev_get_drvdata(dev);
+>  	struct i2c_client *client = data->client;
+> +	s32 val;
+>  
+>  	mutex_lock(&data->lock);
+>  
+> @@ -67,47 +68,74 @@ static struct ad7418_data *ad7418_update_device(struct device *dev)
+>  		int i, ch;
+>  
+>  		/* read config register and clear channel bits */
+> -		cfg = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
+> +		val = i2c_smbus_read_byte_data(client, AD7418_REG_CONF);
+> +		if (val < 0)
+> +			goto abort;
+> +
+> +		cfg = val;
+>  		cfg &= 0x1F;
+>  
+> -		i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
+> +		val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
+>  						cfg | AD7418_CH_TEMP);
+> +		if (val < 0)
+> +			goto abort;
+> +
+>  		udelay(30);
+>  
+>  		for (i = 0; i < 3; i++) {
+> -			data->temp[i] =
+> -				i2c_smbus_read_word_swapped(client,
+> -						AD7418_REG_TEMP[i]);
+> +			val = i2c_smbus_read_word_swapped(client,
+> +							  AD7418_REG_TEMP[i]);
+> +			if (val < 0)
+> +				goto abort;
+> +
+> +			data->temp[i] = val;
+>  		}
+>  
+>  		for (i = 0, ch = 4; i < data->adc_max; i++, ch--) {
+> -			i2c_smbus_write_byte_data(client,
+> -					AD7418_REG_CONF,
+> -					cfg | AD7418_REG_ADC_CH(ch));
+> +			val = i2c_smbus_write_byte_data(client, AD7418_REG_CONF,
+> +					cfg | AD7418_REG_ADC_CH(ch));
+> +			if (val < 0)
+> +				goto abort;
+>  
+>  			udelay(15);
+> -			data->in[data->adc_max - 1 - i] =
+> -				i2c_smbus_read_word_swapped(client,
+> -						AD7418_REG_ADC);
+> +			val = i2c_smbus_read_word_swapped(client,
+> +							  AD7418_REG_ADC);
+> +			if (val < 0)
+> +				goto abort;
+> +
+> +			data->in[data->adc_max - 1 - i] = val;
+>  		}
+>  
+>  		/* restore old configuration value */
+> -		i2c_smbus_write_word_swapped(client, AD7418_REG_CONF, cfg);
+> +		val = i2c_smbus_write_word_swapped(client, AD7418_REG_CONF,
+> +						   cfg);
+> +		if (val < 0)
+> +			goto abort;
+>  
+>  		data->last_updated = jiffies;
+>  		data->valid = 1;
+>  	}
+>  
+>  	mutex_unlock(&data->lock);
+> +	return 0;
+>  
+> -	return data;
+> +abort:
+> +	data->valid = 0;
+> +	mutex_unlock(&data->lock);
+> +	return val;
+>  }
+>  
+>  static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
+>  			 char *buf)
+>  {
+>  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> -	struct ad7418_data *data = ad7418_update_device(dev);
+> +	struct ad7418_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = ad7418_update_device(dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	return sprintf(buf, "%d\n",
+>  		LM75_TEMP_FROM_REG(data->temp[attr->index]));
+>  }
+> @@ -116,7 +144,12 @@ static ssize_t adc_show(struct device *dev, struct device_attribute *devattr,
+>  			char *buf)
+>  {
+>  	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> -	struct ad7418_data *data = ad7418_update_device(dev);
+> +	struct ad7418_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = ad7418_update_device(dev);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	return sprintf(buf, "%d\n",
+>  		((data->in[attr->index] >> 6) * 2500 + 512) / 1024);
