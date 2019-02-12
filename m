@@ -2,166 +2,129 @@ Return-Path: <SRS0=z86d=QT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C677DC282C4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 08:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A1DC282CA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 11:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A053120675
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 08:52:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9E792184A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Feb 2019 11:38:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="lUIlMsyi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbfBLIwp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Feb 2019 03:52:45 -0500
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:46564 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727234AbfBLIwp (ORCPT
+        id S1727312AbfBLLiU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Feb 2019 06:38:20 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37050 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbfBLLiT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Feb 2019 03:52:45 -0500
-Received: by mail-ua1-f65.google.com with SMTP id j8so595226uae.13;
-        Tue, 12 Feb 2019 00:52:44 -0800 (PST)
+        Tue, 12 Feb 2019 06:38:19 -0500
+Received: by mail-pf1-f195.google.com with SMTP id s22so321345pfh.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Feb 2019 03:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k6pAyer58RNNFhdHldiD3k4wD4R5mI/N48g+M0dHSFw=;
+        b=lUIlMsyixC9JiOxpujHG1ZbS/3Bmxp8Mk0PpoAVpJBBLd3slQS9KXgkNSDxgMUluBc
+         GeVry8mJXd1ISgCsXHiHLXjaKmM01emVMXZhG8nuIPMKDygwT0SQRS9jE0zoRIuq1nUi
+         6AEWzrYtWD7BkVsaNh/OoCor6tAQm0slIcyDA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d0f2h6/PSCtqA+tAPeNLb/jo2IEr2qwo+STy14wU4ok=;
-        b=o+9PXaIdSLLqM3UhX61XeJx+36y+Kca0YpkAgenkiIiaWIMB4SCOhNkE5FdhJ6Ywzd
-         VQb6wSakNMlOZ2notEKtoDuIBRWrv7Y4Av8bNei5VWKz2Oq3e593nDOXhwv3uSgP3bmA
-         12VaVY0V/0/TJi03UxtWq9QaMkOiADW1O4f4IFrhqKYYD9reSDW0XSXoDXT6fYOWE5C2
-         zVzmH4Sdh82idF8r1T311EtTJ0IY3nfTQedvMuJDbbwuG7PuJKRXFC/8YHLURdfs04RM
-         BSUpgttO/hnkAn/OZ76JjubxAYD9YB45CkzjtPCz+AfFO0mzCEeW2HPQVpAa+M/gHbDR
-         X9Ug==
-X-Gm-Message-State: AHQUAuZN8dUXu/Cg4cdg4nKi7iCTzL8aIMavw1VAzG9w7h2rkIUZNsX5
-        GfjMqw3tM04cF5dC0EqoS8dl+7i5BEeI2Q5frz8=
-X-Google-Smtp-Source: AHgI3IYaWcD58+fGpP35XEJ6XG1vwdB+jt7r7L7bIbH+uu+CHWrxB7NHy69+D5AD5E0hZayFzBUczOgsc/PO5Ay9DF4=
-X-Received: by 2002:a9f:2726:: with SMTP id a35mr1061155uaa.75.1549961563502;
- Tue, 12 Feb 2019 00:52:43 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k6pAyer58RNNFhdHldiD3k4wD4R5mI/N48g+M0dHSFw=;
+        b=CGTHuBJ/YOR14oIzD6JbHw/7k7AIuyMmVxYU5k0nUge1zRzhJpl+spljo3eIYYj2Bm
+         bFg89UEEQJA41Sn+J6tBdglyzu2cZRk01spfT4amj97RJRobPibtdowt5iy8P5CNVE5M
+         edSh3wGns4sZ83U77c5TjY1/98z1l6+cf1HLoUvBwQs6C2zDOpHOelpP1s/4+hyJZ02d
+         HihLXrF0Sl/aFZAm087HMAt9aRh2HWZ06K2a9vihrLaqIiy0t5lQbdRabQiJT6zBsFWO
+         RfXseJx1xJFlxBjLjnNXA9umKrj4EznoEIiHLKU8HPEVEUNp1DQPSaKZC9LZcR8v2ahG
+         xiaQ==
+X-Gm-Message-State: AHQUAubRXLku9DdJQSq3lNVakUVN+VqfRrfByYbAT7KlvfmWJKUH0K29
+        Z3AjgAORvxPOi9JelwEDGb4CyA==
+X-Google-Smtp-Source: AHgI3IbuX/T5TOQiDafZ/5axHx4F5iMTZigEVlxQJxapu/vf0htRap7fFeS2C2qxeMVFRovSt4NyeA==
+X-Received: by 2002:a62:3241:: with SMTP id y62mr3537498pfy.178.1549971498845;
+        Tue, 12 Feb 2019 03:38:18 -0800 (PST)
+Received: from localhost.localdomain ([115.97.184.151])
+        by smtp.gmail.com with ESMTPSA id b15sm4653478pfj.44.2019.02.12.03.38.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Feb 2019 03:38:18 -0800 (PST)
+From:   Jagan Teki <jagan@amarulasolutions.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
+Date:   Tue, 12 Feb 2019 17:08:08 +0530
+Message-Id: <20190212113808.3040-1-jagan@amarulasolutions.com>
+X-Mailer: git-send-email 2.18.0.321.gffc6fa0e3
 MIME-Version: 1.0
-References: <20181217155644.29278-1-marek.vasut@gmail.com> <20181217155644.29278-4-marek.vasut@gmail.com>
- <20181218214439.GB8850@localhost.localdomain> <867ffa18-9c16-685a-7c83-7534bc14e41d@gmail.com>
- <a4aa607d-f83a-2ed4-09c2-fdcba308664d@gmail.com> <2b24720c-c649-44e0-0337-c8a52c78d33d@gmail.com>
- <20190205232442.GA4423@localhost.localdomain> <1b331713-d1d1-1fe0-277e-2fea4866c244@gmail.com>
-In-Reply-To: <1b331713-d1d1-1fe0-277e-2fea4866c244@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Feb 2019 09:52:31 +0100
-Message-ID: <CAMuHMdW_ifuQqz9Y_-o4JXX42d+NMOt5L6chszcvw0MriSq8LA@mail.gmail.com>
-Subject: Re: [PATCH V3 3/6] thermal: Register hwmon in thermal_zone_of_sensor_register_param()
-To:     Marek Vasut <marek.vasut@gmail.com>
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi all,
+Add missing dt-binding documentation for lm75 hwmon sensor.
 
-On Mon, Feb 11, 2019 at 9:43 PM Marek Vasut <marek.vasut@gmail.com> wrote:
-> On 2/6/19 12:24 AM, Eduardo Valentin wrote:
-> > On Mon, Jan 28, 2019 at 01:10:11PM +0100, Marek Vasut wrote:
-> >> On 1/15/19 1:35 AM, Marek Vasut wrote:
-> >>> On 12/22/18 3:19 AM, Marek Vasut wrote:
-> >>>> On 12/18/2018 10:44 PM, Eduardo Valentin wrote:
-> >>>>> On Mon, Dec 17, 2018 at 04:56:41PM +0100, marek.vasut@gmail.com wrote:
-> >>>>>> From: Marek Vasut <marek.vasut@gmail.com>
-> >>>>>>
-> >>>>>> Register hwmon sysfs interface in thermal_zone_of_sensor_register_param()
-> >>>>>> in case thermal_zone_params->no_hwmon is set to false. This behavior is
-> >>>>>> the same as thermal_zone_device_register().
-> >>>>>>
-> >>>>>> From: Marek Vasut <marek.vasut+renesas@gmail.com>
-> >>>>>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >>>>>> Cc: Eduardo Valentin <edubezval@gmail.com>
-> >>>>>> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> >>>>>> Cc: Zhang Rui <rui.zhang@intel.com>
-> >>>>>> Cc: linux-renesas-soc@vger.kernel.org
-> >>>>>> To: linux-pm@vger.kernel.org
-> >>>>>> Signed-off-by: Marek Vasut <marek.vasut+renesas@gmail.com>
-> >>>>>> ---
-> >>>>>> V2: No change
-> >>>>>> V3: - Work around the From line and SoB line checkpatch warning
-> >>>>>>     - Reorder the SoB line at the end
-> >>>>>> ---
-> >>>>>>  drivers/thermal/of-thermal.c | 12 +++++++++++-
-> >>>>>>  1 file changed, 11 insertions(+), 1 deletion(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
-> >>>>>> index e1a303a5698c..5ccff7b678de 100644
-> >>>>>> --- a/drivers/thermal/of-thermal.c
-> >>>>>> +++ b/drivers/thermal/of-thermal.c
-> >>>>>> @@ -15,6 +15,7 @@
-> >>>>>>  #include <linux/string.h>
-> >>>>>>
-> >>>>>>  #include "thermal_core.h"
-> >>>>>> +#include "thermal_hwmon.h"
-> >>>>>>
-> >>>>>>  /***   Private data structures to represent thermal device tree data ***/
-> >>>>>>
-> >>>>>> @@ -521,8 +522,15 @@ thermal_zone_of_sensor_register_params(struct device *dev, int sensor_id,
-> >>>>>>                  if (sensor_specs.np == sensor_np && id == sensor_id) {
-> >>>>>>                          tzd = thermal_zone_of_add_sensor(child, sensor_np,
-> >>>>>>                                                           data, ops);
-> >>>>>> -                        if (!IS_ERR(tzd))
-> >>>>>> +                        if (!IS_ERR(tzd)) {
-> >>>>>> +                                tzd->tzp = tzp;
-> >>>>>
-> >>>>> So, here you will overwrite what was done in of_parse_thermal_zones().
-> >>>>> That means, after this point, property like sustainable power, slope and
-> >>>>> offset are gone.
-> >>>>
-> >>>> Hmmmmm, that was rather inobvious, indeed.
-> >>>>
-> >>>> Do you have some suggestion how to pass in the no_hwmon = false then ?
-> >>>> Since tzp->no_hwmon is set to true in of_parse_thermal_zones(), the
-> >>>> three drivers (stm32, rcar, rcar_gen3) seem to hack around it. I'd like
-> >>>> to clean that up.
-> >>>
-> >
-> > Yeah, that is an issue.
-> >
-> >>> Bump ?
-> >>
-> >> Bump again, any suggestions ?
-> >
-> > Yeah, a couple of ideas have been proposed for this issue.
-> >
-> > First most tempting one is to have a DT property per thermal zone.
-> > Making it linux specific, something prefixed by linux,<property>. I
-> > recall Amit Kutcheria trying something similar to this, but dont
-> > remember where that went. Frankly, this is a Linux thing, I am not
-> > convinced DT is really the right place to fix this.
->
-> DT is not the right place for this, DT describes hardware and this is
-> policy, so it shouldn't be in DT.
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+Changes for v2:
+-  Add all compatible nodes available in lm75.
 
-Indeed.
+ .../devicetree/bindings/hwmon/lm75.txt        | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
 
-> > Another hack that could be written is a module parameter for of-thermal
-> > that would reflect the no_hwmon value, globally. The down side here is
-> > you have to make sure all drivers match that no_hwmon value, right?
->
-> Indeed, it should be the driver which decides whether or not to register
-> a HWMON interface for the thermal zone.
->
-> I guess for now, I'll just discard this entire series and hack the data
-> structure like other drivers do, since I don't see any reasonable solution.
-
-Pardon my ignorance, but when would a thermal driver (not) want to register
-a hwmon interface for the thermal zone?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
+new file mode 100644
+index 000000000000..12d8cf7cf592
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
+@@ -0,0 +1,37 @@
++*LM75 hwmon sensor.
++
++Required properties:
++- compatible: manufacturer and chip name, one of
++		"adi,adt75",
++		"dallas,ds1775",
++		"dallas,ds75",
++		"dallas,ds7505",
++		"gmt,g751",
++		"national,lm75",
++		"national,lm75a",
++		"national,lm75b",
++		"maxim,max6625",
++		"maxim,max6626",
++		"maxim,max31725",
++		"maxim,max31726",
++		"maxim,mcp980x",
++		"st,stds75",
++		"st,stlm75",
++		"microchip,tcn75",
++		"ti,tmp100",
++		"ti,tmp101",
++		"ti,tmp105",
++		"ti,tmp112",
++		"ti,tmp175",
++		"ti,tmp275",
++		"ti,tmp75",
++		"ti,tmp75c",
++
++- reg: I2C bus address of the device
++
++Example:
++
++sensor@48 {
++	compatible = "st,stlm75";
++	reg = <0x48>;
++};
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.18.0.321.gffc6fa0e3
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
