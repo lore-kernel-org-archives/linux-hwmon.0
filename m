@@ -2,67 +2,90 @@ Return-Path: <SRS0=SKzQ=QU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC1FC282C4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 01:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3908C282CA
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 02:47:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED48F222C1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 01:40:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9EDFC2175B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 02:47:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550022004;
-	bh=FB5k61Zte5ntsoN/7KjAMVBm2M1aDxcTd/fVJU4f2p4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=CvyzbgMZW1dtYghb/0fmSNZENiw2K1x5HNQwj0EFJT+W/8Br4zAXDRd8KV4eFZwtP
-	 LcjbY3EFbrIiwC2CVOqx1MKYR1BU6+U1NqmQ2DQkNjJbykDdodgf1eFzL+sD8OFPlL
-	 hRAHPGXB3Rei4Ay/MDl9w5XOk0lATAom3SEiYoW4=
+	s=default; t=1550026034;
+	bh=qND/tzvc7JIgtuenQ1WcIjulKE/Qx61mW8iVL2pqh/4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=JY7R1NnU+hcXlRc0vjp3QXKoN4o4o1TDOILpi9ELyLnEKFmkAQSxFUEWvEQlrKKVw
+	 zoYWPib9ko39u2I61lcSn79SlpEn7pF+Srnn0I+QVWGhIs76mR2xOFQl4N9V+fGtH9
+	 oRBV0uusXdfkUJB9quPti8B6hppwKrUE2cmNj454=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbfBMBkD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Feb 2019 20:40:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49894 "EHLO mail.kernel.org"
+        id S2389328AbfBMCrJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Feb 2019 21:47:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727458AbfBMBkD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Feb 2019 20:40:03 -0500
-Subject: Re: [GIT PULL] hwmon fixes for hwmon-for-v5.0-rc7
+        id S2389022AbfBMCkd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Feb 2019 21:40:33 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C3E8E2175B;
+        Wed, 13 Feb 2019 02:40:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1550022002;
-        bh=FB5k61Zte5ntsoN/7KjAMVBm2M1aDxcTd/fVJU4f2p4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=AfdT1lXUZgNKTABPWuwTgSJ/oArcZde6KXvB3sIZ9tXEU6GLxaLkr0W5OyOGC34O8
-         jLtrVHODD3aiXL5JAfl8ewEa4z50y10FdjIY02VHAWX66nOGmTBuITWAhlfEsj81vG
-         yjOkcbQ/8zqSUPKMZBGBc/Nlk2D4OqQ56XQ6Azrg=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1550008589-18228-1-git-send-email-linux@roeck-us.net>
-References: <1550008589-18228-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1550008589-18228-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.0-rc7
-X-PR-Tracked-Commit-Id: 2a2ec4aa0577ec0b7df2d1bde5c84ed39a8637cb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 991b9eb4243b53e6dcaeda94e515d713ca7ddd2e
-Message-Id: <155002200285.24766.18170098131434310929.pr-tracker-bot@kernel.org>
-Date:   Wed, 13 Feb 2019 01:40:02 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        s=default; t=1550025632;
+        bh=qND/tzvc7JIgtuenQ1WcIjulKE/Qx61mW8iVL2pqh/4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dpJKFe53eZG3jnbpD/WLOHjhLr0bKe7eCejJrU/CX7OFTZhsggSnbmHaloagzjvPK
+         Q1V8kxR+vlk3+98sqs1bmlEGwCqOc7f1G8713djHu6MZ7AzIDZxTGk1x2zU6b7Iyq1
+         S4DjC8mxxhWiqJsRvcstgloXe6wMdSSz9YR8/aIc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Cheng-Min Ao <tony_ao@wiwynn.com>,
+        Yu-Hsiang Chen <matt_chen@wiwynn.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 29/34] hwmon: (tmp421) Correct the misspelling of the tmp442 compatible attribute in OF device ID table
+Date:   Tue, 12 Feb 2019 21:39:47 -0500
+Message-Id: <20190213023952.21311-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190213023952.21311-1-sashal@kernel.org>
+References: <20190213023952.21311-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Tue, 12 Feb 2019 13:56:29 -0800:
+From: Cheng-Min Ao <tony_ao@wiwynn.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.0-rc7
+[ Upstream commit f422449b58548a41e98fc97b259a283718e527db ]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/991b9eb4243b53e6dcaeda94e515d713ca7ddd2e
+Correct a typo in OF device ID table
+The last one should be 'ti,tmp442'
 
-Thank you!
+Signed-off-by: Cheng-Min Ao <tony_ao@wiwynn.com>
+Signed-off-by: Yu-Hsiang Chen <matt_chen@wiwynn.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/tmp421.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+index e36399213324..ceb3db6f3fdd 100644
+--- a/drivers/hwmon/tmp421.c
++++ b/drivers/hwmon/tmp421.c
+@@ -88,7 +88,7 @@ static const struct of_device_id tmp421_of_match[] = {
+ 		.data = (void *)2
+ 	},
+ 	{
+-		.compatible = "ti,tmp422",
++		.compatible = "ti,tmp442",
+ 		.data = (void *)3
+ 	},
+ 	{ },
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.19.1
+
