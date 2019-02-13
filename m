@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA823C282C4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 02:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D82C3C282C4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 03:04:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DFC92190A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 02:59:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6E4A207E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 03:04:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550026742;
-	bh=X49ohnDIm5wUUx8INhd0YOnPIGraaH2fNuB2nlyoh0o=;
+	s=default; t=1550027054;
+	bh=u29ijz/e6aML/AdxV0H78F+xu+ykR4NiH/5Edk4QpI4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=r3GYG6h1nzhqhH73Jw+4hBpNvJMNFG2h+Oe3R19fQx8fmoRAayq5CUqmvg1Jz1/uS
-	 WzplMffBUUS9rOM1EVEr6G3E60akssMB9xf8MNMHNAeBTrw0DSVtyoApmoK7EY2Y6S
-	 DUpckbxDSZpDCg/acRvpb0XRQ0lnYAjmzEYKvXTA=
+	b=nmMgHJLQ7Tlru9n3sAprFbELWKDF9pDKEuBuXJRDPqu/Qg7Odt6A9quY0Gk/23Lr5
+	 UwQjTW1XD6buyrpG320O3LqDRYR1kZupss85zGVCts95Gyt7wywaOQHNZYgQbnt4RW
+	 p5bSalHSCkCC5VpTDwOCpltXNHqKwbpvmWSJocW8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389223AbfBMC7C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Feb 2019 21:59:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40012 "EHLO mail.kernel.org"
+        id S2390118AbfBMDEE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Feb 2019 22:04:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388122AbfBMCgY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Feb 2019 21:36:24 -0500
+        id S2387624AbfBMCeJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Feb 2019 21:34:09 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5BBEB222CA;
-        Wed, 13 Feb 2019 02:36:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D70E6222C2;
+        Wed, 13 Feb 2019 02:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1550025384;
-        bh=X49ohnDIm5wUUx8INhd0YOnPIGraaH2fNuB2nlyoh0o=;
+        s=default; t=1550025248;
+        bh=u29ijz/e6aML/AdxV0H78F+xu+ykR4NiH/5Edk4QpI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CtA8vtNeF2P5SYLXGlE8YwYKkH31LFenI23uxBsSYkEg4lxS0fkejscqK+wzS25sz
-         6DvMffuUzL6AuCZYpCmvN/+1s2gx7C4ROsSRP8NB/vl7LJ2RHkFO63+jqfTlg+bOll
-         8KL8XKHIHMzf/crRcrZ5w2wFi2v8BfZr+P6U8RqQ=
+        b=k/rDy5m+8RIgMvqSg042o4BZw6xnbTejggUFLU1csnMqYWNjLxYgjBWjwC1EizCVf
+         uHTl0OzXRMDKUBBWx8B1BJrX5XyuaBAQW2mrvsKsvP9Lhn9qgTA+yvyBpdw7Oqs3ra
+         88PqinztQMBLI/nRfxjbcn7TKDrO5NAlVFyps/ag=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Cheng-Min Ao <tony_ao@wiwynn.com>,
-        Yu-Hsiang Chen <matt_chen@wiwynn.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Michael Cook <mcook@mackal.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 093/105] hwmon: (tmp421) Correct the misspelling of the tmp442 compatible attribute in OF device ID table
-Date:   Tue, 12 Feb 2019 21:33:24 -0500
-Message-Id: <20190213023336.19019-93-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.20 030/105] hwmon: (nct6775) Enable IO mapping for NCT6797D and NCT6798D
+Date:   Tue, 12 Feb 2019 21:32:21 -0500
+Message-Id: <20190213023336.19019-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
 References: <20190213023336.19019-1-sashal@kernel.org>
@@ -58,34 +56,47 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Cheng-Min Ao <tony_ao@wiwynn.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit f422449b58548a41e98fc97b259a283718e527db ]
+[ Upstream commit 9de15c95a63f527c8f7a968cd95e6ec71fc6891d ]
 
-Correct a typo in OF device ID table
-The last one should be 'ti,tmp442'
+Similar to other recent chips from Nuvoton, IO mapping may be disabled
+by default. Enable it when instantiating the driver and after resume.
 
-Signed-off-by: Cheng-Min Ao <tony_ao@wiwynn.com>
-Signed-off-by: Yu-Hsiang Chen <matt_chen@wiwynn.com>
+Fixes: 0599682b826f ("hwmon: (nct6775) Add support for NCT6798D")
+Fixes: e41da286a2fd ("hwmon: (nct6775) Add support for NCT6797D")
+Reported-by: Michael Cook <mcook@mackal.net>
+Cc: Michael Cook <mcook@mackal.net>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/tmp421.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/nct6775.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-index 8844c9565d2a..7053be59ad2e 100644
---- a/drivers/hwmon/tmp421.c
-+++ b/drivers/hwmon/tmp421.c
-@@ -88,7 +88,7 @@ static const struct of_device_id tmp421_of_match[] = {
- 		.data = (void *)2
- 	},
- 	{
--		.compatible = "ti,tmp422",
-+		.compatible = "ti,tmp442",
- 		.data = (void *)3
- 	},
- 	{ },
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 8f91e366866f..4adec4ab7d06 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -4508,7 +4508,8 @@ static int __maybe_unused nct6775_resume(struct device *dev)
+ 
+ 	if (data->kind == nct6791 || data->kind == nct6792 ||
+ 	    data->kind == nct6793 || data->kind == nct6795 ||
+-	    data->kind == nct6796)
++	    data->kind == nct6796 || data->kind == nct6797 ||
++	    data->kind == nct6798)
+ 		nct6791_enable_io_mapping(sioreg);
+ 
+ 	superio_exit(sioreg);
+@@ -4644,7 +4645,8 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+ 
+ 	if (sio_data->kind == nct6791 || sio_data->kind == nct6792 ||
+ 	    sio_data->kind == nct6793 || sio_data->kind == nct6795 ||
+-	    sio_data->kind == nct6796)
++	    sio_data->kind == nct6796 || sio_data->kind == nct6797 ||
++	    sio_data->kind == nct6798)
+ 		nct6791_enable_io_mapping(sioaddr);
+ 
+ 	superio_exit(sioaddr);
 -- 
 2.19.1
 
