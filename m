@@ -1,102 +1,75 @@
-Return-Path: <SRS0=SKzQ=QU=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=P/pW=QY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D82C3C282C4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 03:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD61C43381
+	for <linux-hwmon@archiver.kernel.org>; Sun, 17 Feb 2019 17:42:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A6E4A207E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Feb 2019 03:04:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550027054;
-	bh=u29ijz/e6aML/AdxV0H78F+xu+ykR4NiH/5Edk4QpI4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nmMgHJLQ7Tlru9n3sAprFbELWKDF9pDKEuBuXJRDPqu/Qg7Odt6A9quY0Gk/23Lr5
-	 UwQjTW1XD6buyrpG320O3LqDRYR1kZupss85zGVCts95Gyt7wywaOQHNZYgQbnt4RW
-	 p5bSalHSCkCC5VpTDwOCpltXNHqKwbpvmWSJocW8=
+	by mail.kernel.org (Postfix) with ESMTP id 890402089F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 17 Feb 2019 17:42:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390118AbfBMDEE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Feb 2019 22:04:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387624AbfBMCeJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Feb 2019 21:34:09 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D70E6222C2;
-        Wed, 13 Feb 2019 02:34:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1550025248;
-        bh=u29ijz/e6aML/AdxV0H78F+xu+ykR4NiH/5Edk4QpI4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k/rDy5m+8RIgMvqSg042o4BZw6xnbTejggUFLU1csnMqYWNjLxYgjBWjwC1EizCVf
-         uHTl0OzXRMDKUBBWx8B1BJrX5XyuaBAQW2mrvsKsvP9Lhn9qgTA+yvyBpdw7Oqs3ra
-         88PqinztQMBLI/nRfxjbcn7TKDrO5NAlVFyps/ag=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Michael Cook <mcook@mackal.net>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 030/105] hwmon: (nct6775) Enable IO mapping for NCT6797D and NCT6798D
-Date:   Tue, 12 Feb 2019 21:32:21 -0500
-Message-Id: <20190213023336.19019-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190213023336.19019-1-sashal@kernel.org>
-References: <20190213023336.19019-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1727908AbfBQRmB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 17 Feb 2019 12:42:01 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:58720 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725811AbfBQRmB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 17 Feb 2019 12:42:01 -0500
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 17 Feb 2019 19:41:58 +0200
+Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x1HHfwM8014822;
+        Sun, 17 Feb 2019 19:41:58 +0200
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH v1 hwmon] hwmon: (pmbus) Fix driver info initialization in probe routine
+Date:   Sun, 17 Feb 2019 17:41:55 +0000
+Message-Id: <20190217174155.25829-1-vadimp@mellanox.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+Fix tps53679_probe() by using dynamically allocated "pmbus_driver_info"
+structure instead of static. Usage of static structures causes
+overwritten of the field "vrm_version", in case the system is equipped
+with several tps53679 devices with the different "vrm_version".
+In such case the last probed device overwrites this field for all
+others.
 
-[ Upstream commit 9de15c95a63f527c8f7a968cd95e6ec71fc6891d ]
-
-Similar to other recent chips from Nuvoton, IO mapping may be disabled
-by default. Enable it when instantiating the driver and after resume.
-
-Fixes: 0599682b826f ("hwmon: (nct6775) Add support for NCT6798D")
-Fixes: e41da286a2fd ("hwmon: (nct6775) Add support for NCT6797D")
-Reported-by: Michael Cook <mcook@mackal.net>
-Cc: Michael Cook <mcook@mackal.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 610526527a13 ("hwmon: (pmbus) Add support for Texas Instruments tps53679 device")
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 ---
- drivers/hwmon/nct6775.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/tps53679.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 8f91e366866f..4adec4ab7d06 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -4508,7 +4508,8 @@ static int __maybe_unused nct6775_resume(struct device *dev)
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+index 85b515cd9df0..45eacc504e2f 100644
+--- a/drivers/hwmon/pmbus/tps53679.c
++++ b/drivers/hwmon/pmbus/tps53679.c
+@@ -80,7 +80,15 @@ static struct pmbus_driver_info tps53679_info = {
+ static int tps53679_probe(struct i2c_client *client,
+ 			  const struct i2c_device_id *id)
+ {
+-	return pmbus_do_probe(client, id, &tps53679_info);
++	struct pmbus_driver_info *info;
++
++	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
++	if (!info)
++		return -ENOMEM;
++
++	memcpy(info, &tps53679_info, sizeof(*info));
++
++	return pmbus_do_probe(client, id, info);
+ }
  
- 	if (data->kind == nct6791 || data->kind == nct6792 ||
- 	    data->kind == nct6793 || data->kind == nct6795 ||
--	    data->kind == nct6796)
-+	    data->kind == nct6796 || data->kind == nct6797 ||
-+	    data->kind == nct6798)
- 		nct6791_enable_io_mapping(sioreg);
- 
- 	superio_exit(sioreg);
-@@ -4644,7 +4645,8 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- 
- 	if (sio_data->kind == nct6791 || sio_data->kind == nct6792 ||
- 	    sio_data->kind == nct6793 || sio_data->kind == nct6795 ||
--	    sio_data->kind == nct6796)
-+	    sio_data->kind == nct6796 || sio_data->kind == nct6797 ||
-+	    sio_data->kind == nct6798)
- 		nct6791_enable_io_mapping(sioaddr);
- 
- 	superio_exit(sioaddr);
+ static const struct i2c_device_id tps53679_id[] = {
 -- 
-2.19.1
+2.11.0
 
