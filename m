@@ -2,86 +2,77 @@ Return-Path: <SRS0=HSB5=QZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E43C1C43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Feb 2019 19:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 740DAC43381
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Feb 2019 19:54:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD166217D9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Feb 2019 19:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550519236;
-	bh=w7A2PCla5Ssfq2rflg7OxzXhdlvnuY+13wYK2TIsuZE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=uMXv9oi0RCB8LxHVKDrtQSZAK+gQgn93InCjAC5lJ44/hS5g1DOH25EGhuGJc+FtV
-	 l/EoMponx+BYV4g6cjFpHpOiwiKlZDmOFCNlmlSSgHKG2B2D1YkO+qE6m/eVtk0Atc
-	 ua8ETn6bWAHVicibNoZLChTrhn2y4lTWz3zve3Pc=
+	by mail.kernel.org (Postfix) with ESMTP id 46EB2217F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Feb 2019 19:54:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725827AbfBRTrQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Feb 2019 14:47:16 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46845 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfBRTrQ (ORCPT
+        id S1726583AbfBRTys (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Feb 2019 14:54:48 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:37045 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725535AbfBRTyr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Feb 2019 14:47:16 -0500
-Received: by mail-ot1-f65.google.com with SMTP id c18so8678054otl.13;
-        Mon, 18 Feb 2019 11:47:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jtQJLb3Ix4NUvp/w/Kzu9WLZGLamYJr6jSx5praA95k=;
-        b=i1nDsYXKhcEoxVTwmMA6HDyWQnbPxx5Ysnaxppb3EGRqpkQoEthsFjP91DFsXxDFXB
-         +IJgBEZdpEvEBYz7FWIvOLKrzSh1vJl/AOxGrGM65i+FLPuTjYRab1GzkKwjtvry5nL+
-         R++LM9oFN6KllHSkIjG542tMcPQnxD9OzbEuG8+nCximVKnY13W0AvYyHVkk30J5LuZ7
-         NXMfbO5Q46qWq35TF7nlPcPp7fhHyhySr7qtWI4tQFx6OCWxgqUsTdxz2+lvmcLOHKeh
-         OtsisME3ZYXfEjG1PAZsXSWim8avkGe72fDRYNtHNV15WUnjVEa+WMGDLM/LVlOl0XYX
-         nbEg==
-X-Gm-Message-State: AHQUAuZqhmkYG9A6Q7z/wBweXUlqW9hZtencyeW+AFADzptsYXDpuqk1
-        +fqAC5VEbrXkgheBlYAECohu+Uc=
-X-Google-Smtp-Source: AHgI3IYUOlMsxewbwCgNLhuYw8dHBxiB8mGxoRweaxqnEBKmMU5CP3RtMsZLT8zSohjB3HOpdmj/lQ==
-X-Received: by 2002:a9d:7651:: with SMTP id o17mr14513723otl.279.1550519235336;
-        Mon, 18 Feb 2019 11:47:15 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n187sm2974187oia.34.2019.02.18.11.47.14
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 18 Feb 2019 11:47:14 -0800 (PST)
-Date:   Mon, 18 Feb 2019 13:47:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: hwmon: Add optional regulator
- support to pwm-fan
-Message-ID: <20190218194714.GA6350@bogus>
-References: <1549557480-14436-1-git-send-email-stefan.wahren@i2se.com>
- <1549557480-14436-2-git-send-email-stefan.wahren@i2se.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1549557480-14436-2-git-send-email-stefan.wahren@i2se.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Mon, 18 Feb 2019 14:54:47 -0500
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 18 Feb 2019 21:54:41 +0200
+Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x1IJsfAg025628;
+        Mon, 18 Feb 2019 21:54:41 +0200
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH v2 hwmon] hwmon: (pmbus) Fix driver info initialization in probe routine
+Date:   Mon, 18 Feb 2019 19:54:40 +0000
+Message-Id: <20190218195440.19680-1-vadimp@mellanox.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu,  7 Feb 2019 17:37:59 +0100, Stefan Wahren wrote:
-> This adds an optional regulator support (e.g. switchable supply) to the
-> pwm fan binding.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Fix tps53679_probe() by using dynamically allocated "pmbus_driver_info"
+structure instead of static. Usage of static structures causes
+overwritten of the field "vrm_version", in case the system is equipped
+with several tps53679 devices with the different "vrm_version".
+In such case the last probed device overwrites this field for all
+others.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 610526527a13 ("hwmon: (pmbus) Add support for Texas Instruments tps53679 device")
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+---
+v1->v2:
+ Comments pointed out by Guenter:
+ - Use devm_kmemdup().
+---
+ drivers/hwmon/pmbus/tps53679.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+index 85b515cd9df0..2bc352c5357f 100644
+--- a/drivers/hwmon/pmbus/tps53679.c
++++ b/drivers/hwmon/pmbus/tps53679.c
+@@ -80,7 +80,14 @@ static struct pmbus_driver_info tps53679_info = {
+ static int tps53679_probe(struct i2c_client *client,
+ 			  const struct i2c_device_id *id)
+ {
+-	return pmbus_do_probe(client, id, &tps53679_info);
++	struct pmbus_driver_info *info;
++
++	info = devm_kmemdup(&client->dev, &tps53679_info, sizeof(*info),
++			    GFP_KERNEL);
++	if (!info)
++		return -ENOMEM;
++
++	return pmbus_do_probe(client, id, info);
+ }
+ 
+ static const struct i2c_device_id tps53679_id[] = {
+-- 
+2.11.0
+
