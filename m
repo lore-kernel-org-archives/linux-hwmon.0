@@ -4,70 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38351C43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 03:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2DB8C43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 03:40:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0946A2147C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 03:23:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C16FC217D7
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 03:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1550546606;
+	s=default; t=1550547649;
 	bh=twcOX56e0/4WliLxy1WR5bEhwD8Jk/rippbyemDJcp0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:List-ID:
 	 From;
-	b=UCMnlhaO3nLhP+mMYnKq70C0RBG7dhOtraCGK8crLsbNsU/dk2BRkvc/yFca/hLO2
-	 lKzx5OiywyaxYN7KM+6+NA73HYPiVRUvOpIXJisHhYlcvFF88/kMuzMi2AbZ8+dD2n
-	 J3CWN1FILmqDytVaTdolWuenV4fTnYc9sC6yVlFA=
+	b=sv1AWcdWNCUfYYHkmglERe5iAtoHpzb5QowmmpIL0HAhpCJbuJH29W51PwrZXVnnR
+	 8BtnH5El6lY+jiXjCBowWh0UZGPUSACWshYFodAQUo9a6wUK/tdFXCEU9js9vcYABd
+	 Zq5lVSgt/Hg/w7WJgST8ynA6Ns/X9rxrVVDH7DEg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbfBSDXZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Feb 2019 22:23:25 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:34986 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbfBSDXZ (ORCPT
+        id S1725832AbfBSDkn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Feb 2019 22:40:43 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:38245 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbfBSDkh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Feb 2019 22:23:25 -0500
-Received: by mail-qt1-f195.google.com with SMTP id p48so21632424qtk.2;
-        Mon, 18 Feb 2019 19:23:24 -0800 (PST)
+        Mon, 18 Feb 2019 22:40:37 -0500
+Received: by mail-qk1-f195.google.com with SMTP id p15so11253034qkl.5;
+        Mon, 18 Feb 2019 19:40:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :reply-to:organization;
         bh=4x3YEbY+b8iwgi6V4Vw/GKRAcVXI/s5Wldf/gvM/ryc=;
-        b=OqJ9NF9ZAEUOxqM4o5nWZh8RW0Q+lUveBjwdDzwPpVVqPX4wKovI8cTGVODL9dI8x6
-         hXXI5SPf9FlrCy/Y6LVayFMQUq0+gEp74DCi36uGIx3IIJnP3Y8gjK0xSMUHaUbHaIYK
-         48/wPyziCyfxfgSJzxJgOnQal3RoWa9wDwQhgFJ8mYmUuwbUjXrVTXVCgfo4TR7eFi+L
-         GNkKNgLfcBKlP7rZz48cOYuSVT8wUZ6z0mkZyu3IN5FtbIJk/YxjVIw9rF3xxQybLacr
-         ix/NUB2VsorgD5yM3/gw/RL2XLJVQhN393ka/lqzY4onlBC29YUd+qoIKBC/Cl7lNMbU
-         vRuQ==
+        b=YmAtURyI8zG/1xt0X4+vDRUqCZvrKrDB7Hln7uHlOsYMsx8bvgnkAZa0voxRwOwA8v
+         /ZU6+VR07GCo+PMhvCDL+MWcBx01NUeXeKrHmk5gn6D6X9Y36GDvEe4oeAqwe4VsUmcy
+         dcO6FMMEHgTQIzTeyP83lmaY5necvZ0Pky7aXRH4nH/fciWURxtzJ1B+oPIVOwyU4Vrs
+         ya4FsJtzfsmxEW60p9Lpv7+DTKdpZWn8S9m/URu2gLlcyEVu5tBUUUOUqDjP9CrsST8b
+         +XoFEAJjnEFr5/P0E6sdZelb2JLJpJOCsRaL/s6Nv6NyaOi099RRMrcl6fmIjpqWvXqm
+         htEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:reply-to:organization;
         bh=4x3YEbY+b8iwgi6V4Vw/GKRAcVXI/s5Wldf/gvM/ryc=;
-        b=aRgS03W8dtt2nYDvRk/88hHSIoH/0cESBOwgS1TCRu/vCJDE8pwHRWUIbuDZ3XCPHv
-         7e9gFsQOz2t2SZCfWjVHN/t1uvR7rJRUZOsEkBROLepBHdQLXeQ5RdWNPJmyGLLEof4I
-         oXDCzeyMkhsgoFFoz09g0mKNxKUUkjUszNYHoQLNTB3lFhiEUBoIC5ftapuyGGpAoQLN
-         PyLAKR9G8M4hsgdtUokKzbowTT2aGGR3JiUFfExLwm3m7NkJqE7uL0vJ74qbkkxEEnzu
-         Im8aQlFEH8rZtXVPKDVJzKu72w4nPEthH4m0Bd9I4QwXdsJaDM/OlRwPdcNUnOIOjA4b
-         9AUQ==
-X-Gm-Message-State: AHQUAuZuO6aDekF8LeshkBQEy60l3cFeO/Ar8HTPuBcVTMy4nRNb4Ylc
-        ELkkDAS/brW+IW4EGY1z4Nw=
-X-Google-Smtp-Source: AHgI3IYrdsaWwtncsz97jnIh54kOJUb2zfz2QdpVSKBKahk8G08eMi1/Hw7cgPTX7GsJhfZhsjYLLg==
-X-Received: by 2002:a0c:eac9:: with SMTP id y9mr6209132qvp.82.1550546604317;
-        Mon, 18 Feb 2019 19:23:24 -0800 (PST)
+        b=ezEMrTTqBYq3V15b3toGViqxeuaYfXf7rUv+ZU4hsAiwXwDTZ67qLJK7VzbN0ERJsx
+         0XVu9JjzXTahcWUf+JoQaEiPsKgSgybzbyhbUg9biBwMLp2S8L35xxm5L13hd4hxFjb5
+         m0hd0QQd0kNgypSXJMA769LySl6WfEV2vh4GPcr+gMNEGEIZQTEXlQ3jq0gfb5Af5GXM
+         jDupx/vkTP8/JmninGw5aFkjmMqc3meckkNbJwuDz46s0mj90hDz2iYAxMA/SrXWExNz
+         +UltK83maB99TjKDibZzTxocdl4QgjbHM8ESuMjkwm3r/FBPhwPFfhbPPEXLHBlerTiH
+         ATSA==
+X-Gm-Message-State: AHQUAubjE91EdDP8mDRFrI7XoupOcGakDRhrxd3rxhQ72stx+sD/qqrg
+        qE/g51+zZ1+mNdQYJUtRaBg=
+X-Google-Smtp-Source: AHgI3IZqczMZvBsPPtJt4zm0gkPkcnsOELBX8QanN7ftQG2PiWd88Lxp1MjX3f0JwspMhcOmSfPR2A==
+X-Received: by 2002:a37:b801:: with SMTP id i1mr18864499qkf.24.1550547636192;
+        Mon, 18 Feb 2019 19:40:36 -0800 (PST)
 Received: from kbl.fios-router.home (pool-96-233-42-17.bstnma.fios.verizon.net. [96.233.42.17])
-        by smtp.gmail.com with ESMTPSA id l31sm205282qtb.20.2019.02.18.19.23.22
+        by smtp.gmail.com with ESMTPSA id u5sm7327680qtg.37.2019.02.18.19.40.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Feb 2019 19:23:23 -0800 (PST)
+        Mon, 18 Feb 2019 19:40:35 -0800 (PST)
 From:   Len Brown <lenb@kernel.org>
-X-Google-Original-From: Len Brown <len.brown@intel.com>
-To:     linux-drivers-review@linux.intel.com
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 Subject: [PATCH 11/11] hwmon/coretemp: Support multi-die/package
-Date:   Mon, 18 Feb 2019 22:22:59 -0500
-Message-Id: <8ce75b95ef6105ebe5fb8c9e43b33f06516e3c16.1550545163.git.len.brown@intel.com>
+Date:   Mon, 18 Feb 2019 22:40:13 -0500
+Message-Id:
+ <8ce75b95ef6105ebe5fb8c9e43b33f06516e3c16.1550545163.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.18.0-rc0
 In-Reply-To: <635b2bf8b1151a191cd9299276b75791a818c0c2.1550545163.git.len.brown@intel.com>
 References: <635b2bf8b1151a191cd9299276b75791a818c0c2.1550545163.git.len.brown@intel.com>
@@ -77,6 +78,8 @@ Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20190219034013.Rw217aDUtEpl-Sf5hZMHOnkR4Dk4_89p_4_QliwWxOI@z>
 
 From: Zhang Rui <rui.zhang@intel.com>
 
