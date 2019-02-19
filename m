@@ -6,64 +6,65 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7E60C43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 15:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB2EC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 16:46:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9789820859
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 15:08:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C13121773
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Feb 2019 16:46:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="emovxxhj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnnyoTWW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726356AbfBSPIf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Feb 2019 10:08:35 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42928 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbfBSPIf (ORCPT
+        id S1725991AbfBSQqQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Feb 2019 11:46:16 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43429 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726244AbfBSQqP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Feb 2019 10:08:35 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b2so4530278pgl.9;
-        Tue, 19 Feb 2019 07:08:34 -0800 (PST)
+        Tue, 19 Feb 2019 11:46:15 -0500
+Received: by mail-pf1-f196.google.com with SMTP id q17so10481406pfh.10;
+        Tue, 19 Feb 2019 08:46:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W6Hd5sZy+wPBS8w27mmEbVfiXnWBtSxklu7+i6OVV+M=;
-        b=emovxxhjRqrrAIrn6qITy+HzzXZv+PR1/rJpYoTvVhkQKx0P3+On6mvWhfRE3p9H5v
-         fvryDaChPJvUOj5zVQgcQvzuIihaTOxxUk96co2Lzkp9L89/sfprOVD3/C/0CH9maNFw
-         OYVSbK7C957C6v+gHypCYzVh6JU0zMxQDnk8kz4Tq3OZdZyer5CwXxSVGQNRByKyBbev
-         YZP2pqJMDsbwvlRpXtXGZhJYJcy77zh209fYqwCSM/Cq0WeSj3CRbrcHUbJaZg0SsN3g
-         JSxsYvFmX0e9qDen1OOxmLH6AQ3VgKVenxESubHSa/C+OY3AvZb5Z23XRlR30QMHu3jA
-         /nrA==
+        bh=1Qu2t5Kd9pgLrX06LIAt+b3Zb2/etIust7WpLoqpeB4=;
+        b=VnnyoTWWXidBBt1pIhmQhNUC9SzzTpvgaTLeao1BXgcGOWzsewI9x5wHlWUVy7SBSI
+         rR7evGhQDQCRcWt+HoBI+Dccj3VLpVqJJf5GbhEDGdj4+284Z4Su9n9ms2B73HEPJNdf
+         hiORm99BPGhH9qVdCeKQm1cIrN0dO30q/DXNJiqacLLgmCY2+cFxR6LHAR+H0rfaghWq
+         EdhkmviPFG72waxZmMQ7ON6eManhKvNwBttKW9zif2vzPrX9hGa0G+gUPaimEUVt6jZn
+         IKm6HCP23jHSCRDoUqf6WwovJzELuHIYDNzC+4cW6ch+SgpHRtbi4OAFK2tG3P+gX803
+         eBzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=W6Hd5sZy+wPBS8w27mmEbVfiXnWBtSxklu7+i6OVV+M=;
-        b=fJWa4JgXJido8x+sQ6ZP4ZpgQv+2hHcQGrFHVgnaOaEhKbRAUGxH+mF2GekCRF6/B4
-         gEw566T57uSjcmUpIbSZsKkaJwrt3Sz4o3rwqf4sgDO5COZHz2a8Rhmexgsz4ovVMxIP
-         g6p0deM5e7AZxbsOKtfn/yTcxiPF3ONMlUmU0UjFUGm972d1+UpGNZgdPXQtY2VXX8C+
-         tbAZhYUUF8nqG6DIKNoJnyJ+02f9F8+xbV7dZcOTn9aQrDjKvR1IMCkuAZ2OnbnoWpPW
-         O5s/VRTcwCVVIJf+nOX+SQFoKaM6gTb6zcOapl3h0tTmhOvYobWKzQts7Llsn8C2pcm8
-         q+eQ==
-X-Gm-Message-State: AHQUAuYHFnhrEQkYNw4fte29BDO7jaeJrSiu51iDU77HSYn8olozTFdk
-        jSkWt5f9T7IPWXmAB/8hek4vvzgc
-X-Google-Smtp-Source: AHgI3Ia12Vnu3TPiysituutLrck+fp+Snb0Nhw9OiuRFFQmoTnzDjUzulVciLa6a25yjhjuRFdvUlA==
-X-Received: by 2002:a63:4a0a:: with SMTP id x10mr7804074pga.325.1550588913581;
-        Tue, 19 Feb 2019 07:08:33 -0800 (PST)
+        bh=1Qu2t5Kd9pgLrX06LIAt+b3Zb2/etIust7WpLoqpeB4=;
+        b=hPd3IgNrSiqZaK81Gxb6mEywcp/jT7LUZ5xri9/fMAP+K3DbPwcdsnac+lCfT413aC
+         dLRkvseLVPAgBIDfyyf3WTbwO5NHjlJQYnwVLBHGfRbetPG/IhZct90sVOqCC2DtvH+e
+         lB20ARGZoiGha7Q4oklAYKWmaUNa6bhonLpzXWcg9SthPVOlhPulB8H4j7FGpn6bbmsH
+         ZkQxfFLufMwyeyLiEv5qnrIbnDZau1oXfkqyzn1QMxYERH7pe0+yD3l1p3aNlAfkYKAF
+         gId4P9vfugn9+7sDDJSakvUxYlWUMotEuevm21tF3K142BMTC2anMYiOoEPoWTbRt3jz
+         KZxQ==
+X-Gm-Message-State: AHQUAua1SShOVtFMard4o+7Nx4ZuFA3XFVPkqf2LOhklq2RyOIvpcDeg
+        hdaQio4dpG5rfFv/BiEt6pNzDNDc
+X-Google-Smtp-Source: AHgI3Ib6+IpIb6iWPXOP+ND0r+rOxPkRYt30YOrDjAMvpO2KclWCe/WX0wQv6DxvIOFfolyWkUmHyw==
+X-Received: by 2002:a63:7403:: with SMTP id p3mr1737158pgc.343.1550594774669;
+        Tue, 19 Feb 2019 08:46:14 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 20sm11350365pfs.182.2019.02.19.07.08.31
+        by smtp.gmail.com with ESMTPSA id q5sm23049732pga.71.2019.02.19.08.46.13
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Feb 2019 07:08:32 -0800 (PST)
+        Tue, 19 Feb 2019 08:46:14 -0800 (PST)
 Subject: Re: [PATCH 11/11] hwmon/coretemp: Support multi-die/package
-To:     Len Brown <lenb@kernel.org>, linux-drivers-review@linux.intel.com
-Cc:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+To:     Len Brown <lenb@kernel.org>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 References: <635b2bf8b1151a191cd9299276b75791a818c0c2.1550545163.git.len.brown@intel.com>
  <8ce75b95ef6105ebe5fb8c9e43b33f06516e3c16.1550545163.git.len.brown@intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <46024e46-c5af-f6de-c6bc-71fb7a4cd6bd@roeck-us.net>
-Date:   Tue, 19 Feb 2019 07:08:30 -0800
+Message-ID: <2e9ca4e1-d9ff-8f0c-c3c3-80f8b19bb7ee@roeck-us.net>
+Date:   Tue, 19 Feb 2019 08:46:12 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.4.0
 MIME-Version: 1.0
@@ -76,7 +77,7 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/18/19 7:22 PM, Len Brown wrote:
+On 2/18/19 7:40 PM, Len Brown wrote:
 > From: Zhang Rui <rui.zhang@intel.com>
 > 
 > This patch introduces coretemp driver support
@@ -98,11 +99,6 @@ On 2/18/19 7:22 PM, Len Brown wrote:
 > Signed-off-by: Len Brown <len.brown@intel.com>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-I assume this will be pushed together with the rest of the series.
-
-Thanks,
-Guenter
 
 > ---
 >   drivers/hwmon/coretemp.c | 9 +++++----
