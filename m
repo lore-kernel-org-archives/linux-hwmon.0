@@ -2,102 +2,84 @@ Return-Path: <SRS0=LV6A=Q4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9869EC43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 14:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F7CC43381
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 15:47:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 60BA72084D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 14:02:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F9D020823
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 15:47:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYjyleo4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUiE5wax"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbfBUOCG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Feb 2019 09:02:06 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33809 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfBUOCG (ORCPT
+        id S1726109AbfBUPrl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Feb 2019 10:47:41 -0500
+Received: from mail-io1-f54.google.com ([209.85.166.54]:42619 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbfBUPrl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Feb 2019 09:02:06 -0500
-Received: by mail-pf1-f195.google.com with SMTP id u9so6622711pfn.1;
-        Thu, 21 Feb 2019 06:02:05 -0800 (PST)
+        Thu, 21 Feb 2019 10:47:41 -0500
+Received: by mail-io1-f54.google.com with SMTP id p196so1835193iod.9
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Feb 2019 07:47:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k5Schwkk1ah14OotQG7r095bpWgpXc7DDnuwku9sPow=;
-        b=RYjyleo44vgSOKpZ27rFNL0kfrUAMRqzFCfI+cO+20a7B75sJ9gg09ipN4mDoxm+ca
-         NyDB617LZqlWigaNbU2nP04X3yUd5rqBY0JuJx3fHyDsJvhOZoNC3ArINasEPhnSHoZm
-         MP6nWgOsPDi+KJMsVWz7t2hJ+an7WBDLIvbU4yPyHFSOPLHn0qFvlo0qzogX1scHZOM1
-         1SPxZixECxNZ8jtaJPyUSIBBl5jrA/NYCJqisgmLGfTh3ml0652q1Wn+bqxjViCoQOKP
-         SG8CMfEXzBMJtFWFG5vntLVciHRK0wKzTfp7MREB9hRt7A88Cuh1PLxDJpoLUj0/3fSk
-         qP4A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=Whon/XJ0FFT+aeo+mROB2jxxgSE1ZJSMmU+/YCaDep8=;
+        b=YUiE5waxPSfXpO3lhaE7SXTfN2/vTRfeeCML7SFsppJ63KxQqMXtNDk+dfLUtp7AVZ
+         Ebuhel7nst12U+Qapv9rLqTbCb8NdlpUGXsdO88G/Zzpp+m9HpAHcpROeQEpYKme1J9g
+         ak3iM+5uB+nT+6Z2X/NLx4wCczNd3zawVF8bUq0KIQVzrKrzq4jzOUxF8dazBY+Ug/7U
+         AeeAAN3LU/YAzLwIbxIaWxhFhaqG2QQxO5YOfrunV72Mfig1CI3N1+UWmq99GYkTq0ux
+         xmuoHZaZiAjZnEAA2QOue4dfuANR75FkkgetnukT3C+9oXzExbWfGhTTKUw13xnLgKGl
+         JRvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=k5Schwkk1ah14OotQG7r095bpWgpXc7DDnuwku9sPow=;
-        b=n3j367idUH3sOD6EEOIiOzzlzBYgBRzcBStPMlhAz1t5lufbMhDIhWtjFl5K5PDzdV
-         fhVLTMSXQMngUomGu/zxiJg7P7PtksBfkVS++mNNxMgf4KkEqQVGikgIJUDVsIgC6EEI
-         Lkyfb1L9zRtSwVVPMyi8Ipp7cHFVbi5HHm0N5U9TgitLOpSDKgtxhIvYKuDIuBbHYuqE
-         HgzZYtknqechjSZwMSoFwodRZnGsYgRGk5/t3002cIfOkqg6xZ0vQF6nStrdu9JcDjBy
-         a/SjHqHvKX8kUb0g9bSphL7S9V4fb63y0P6exzgjeSWxGfMpAyo1bQqsi185RDOlrzsY
-         LV/Q==
-X-Gm-Message-State: AHQUAuYw/xGbCDFBs/zT+bXcgXkmLGmHbV184Ta6QxHMcMDI6+Q+ApkN
-        RKi9AAaUFt3lwvTmkNAQpp5gQD3y
-X-Google-Smtp-Source: AHgI3IaGMSPKx0COprFB9zJpl/VnN6qE5PdAd4c2nAfwXT+t48pvhDtEdGBohAI5lTVTFJvdDoUxVw==
-X-Received: by 2002:a63:d70a:: with SMTP id d10mr34327070pgg.286.1550757724896;
-        Thu, 21 Feb 2019 06:02:04 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h15sm28148144pgl.43.2019.02.21.06.02.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Feb 2019 06:02:03 -0800 (PST)
-Subject: Re: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
-To:     Jagan Teki <jagan@amarulasolutions.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20190212113808.3040-1-jagan@amarulasolutions.com>
- <CAMty3ZBaOZoj+xV+e+4BtYdaWA2biwENmngOa9vbbMB=_vbB1w@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <59969c88-585c-cb7d-3104-8059b78ed2e3@roeck-us.net>
-Date:   Thu, 21 Feb 2019 06:02:01 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=Whon/XJ0FFT+aeo+mROB2jxxgSE1ZJSMmU+/YCaDep8=;
+        b=i9Mqf2ijPoBAKnSEPRQNS/oJH/Kl9KT5t/Cb6yUft5Og9KrfzChCkurt0oAlhVOP/p
+         rBkxdi1QieU36ApuT4SMDwaO9bKujKvK/ZIn8dEEnA48qKEo13BMIWIZL9OtvkWtvhtT
+         1m6FBVczKswKa8+DWcQuigt7wNiC7fz+gOfINqhMdLDjwjnswCx3xN/P2699PB8fvQU3
+         uhGnwq0CPX5qyfVI39Q4G/N883T8prbUaaSW+Fh2ea0HprZKzxZUcF0KWFjJLZH/rAlE
+         oZdxaTHHDx9OMU8Cbka/avzq7rH90sTxHEdsCBdj1F9sS4gkUYt3JWnwYbSkiEtNKzUZ
+         ryKQ==
+X-Gm-Message-State: AHQUAuZpRIstWPecRPFwmjR6B2KkX18UpjRXmNulYmY4zzuaBb2gTjrr
+        W10ZzWTCrIrU8IMMRcpbPGO+WCntUCcR7odQXaZpog==
+X-Google-Smtp-Source: AHgI3IaSnPOqhBtD1530aBHtfZfOKynwFG+ZCs1cEQTPvxrXI8dm/xzkAm3f7i/7dKZ9mq1M6h1e4LivfU8LMVnjnqk=
+X-Received: by 2002:a5e:9807:: with SMTP id s7mr12324464ioj.90.1550764060190;
+ Thu, 21 Feb 2019 07:47:40 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMty3ZBaOZoj+xV+e+4BtYdaWA2biwENmngOa9vbbMB=_vbB1w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAGWqDJ48N5Q6OsHq_f217za-34zQMDY8qNL6XEDLREPY3JP3MA@mail.gmail.com>
+In-Reply-To: <CAGWqDJ48N5Q6OsHq_f217za-34zQMDY8qNL6XEDLREPY3JP3MA@mail.gmail.com>
+From:   Vinay Simha B N <simhavcs@gmail.com>
+Date:   Thu, 21 Feb 2019 21:17:28 +0530
+Message-ID: <CAGWqDJ6+uOsgNaKsOmjT7J4RoJqxaU_Ce4vz0dRiFQXHELrSmA@mail.gmail.com>
+Subject: tmp102 hwmon accessing temp1_input, max, max_hyst
+To:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/20/19 9:22 AM, Jagan Teki wrote:
-> On Tue, Feb 12, 2019 at 5:08 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
->>
->> Add missing dt-binding documentation for lm75 hwmon sensor.
->>
->> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->> ---
->> Changes for v2:
->> -  Add all compatible nodes available in lm75.
->>
->>   .../devicetree/bindings/hwmon/lm75.txt        | 37 +++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
-> 
-> Any comments on this? It is blocking some dts changes to get merge
-> into Mainline.
-> 
+hi,
 
-Waiting for Rob's Ack.
+could you please suggest, how to export_symbol the tmp102 temp1_input,
+max and max_hyst values to another kernel driver?
 
-Guenter
+ We can acess the values from
+filp_open("/sys/class/hwmon/hwmon1/temp1_input", O_RDONLY, 0); in
+kernel space, but is there better apporach to access the values in the
+kernel space.
+
+ --
+regards,
+vinaysimha
+
+
+
+-- 
+regards,
+vinaysimha
