@@ -1,184 +1,175 @@
-Return-Path: <SRS0=LV6A=Q4=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=b2a5=Q5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DEBC43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 19:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A680EC4360F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Feb 2019 13:46:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E869C2081B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Feb 2019 19:49:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s3kAxYAx"
+	by mail.kernel.org (Postfix) with ESMTP id 81FD22075C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Feb 2019 13:46:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfBUTtd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Feb 2019 14:49:33 -0500
-Received: from mail-pg1-f172.google.com ([209.85.215.172]:37631 "EHLO
-        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbfBUTtd (ORCPT
+        id S1726952AbfBVNqn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Feb 2019 08:46:43 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:54349 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726352AbfBVNqm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Feb 2019 14:49:33 -0500
-Received: by mail-pg1-f172.google.com with SMTP id q206so14256696pgq.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Feb 2019 11:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nqoJm7GUlovqo9ROttWj/WT2t2yOXgNTnUnh7Qi+b0o=;
-        b=s3kAxYAxTK3a37Fl02fA5QUy7xUWeHLa+2A8EU1JYDYZwdw0EeZcYViXjnt2nT6pRd
-         QGWmW1JAYP+9/v56XuRGKgkE4RrWC86hYzXmPPpK8xQXZdbKE9Rw9TyMOAcLdBeD0bPB
-         gWOKWSag3/Dcd+fgX4tkvc8LvaX8+DPzhdHq+kLQj2GDDBaxZF4BKd5nhqyDZ6o0DiIs
-         OeCuutjFJ+DMx237AsjVH8aDpbKGG5LpNi2C/rn7qFV2VBfTVUa4g7Tq1vKYEqj593XV
-         MAlPxfTIXJqW9oIURGKoU1xYZcjAcANQ+zos0AYjjOXkBGC0cy8XBMPIclTtpJGpEq6Q
-         T9ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nqoJm7GUlovqo9ROttWj/WT2t2yOXgNTnUnh7Qi+b0o=;
-        b=pkF7bcGvzyxjywyR3O/uwtIXx+MMbefopzFmseHzWF2tEptzrF9Z9l143+S/YbBteq
-         GJxu/9lPqNQnXV2VXybmNJ56W033pSCwClv9y8RempVWSM24QTu83I3hOlFYvkgz80Im
-         AS5SpFdC2C18Ar/YCoVye4HFPKpsW1ixDkilQdF0mZAXTx/z374JsXz+6gG99Z2bjQ7l
-         22THOzHekaL/OscpchOUsNA/M4VV85Ehm/aO2h9dM8KPTXt9TPswQD81sLK5pOxijdZL
-         Ad54xZFVU/FQ5XSnf7/mdwR4n4lNIDH7U0oZUL6NahuuSaaSURh4XE3/GRj4eZmbE+Vu
-         pXCg==
-X-Gm-Message-State: AHQUAuZBT49J2S6MLXriPFflVhhFa8pPbZrV9URZk/7/lga2133MV5wh
-        5cB3YRyASUWgn8wsy3a5ZQc=
-X-Google-Smtp-Source: AHgI3IZNvXnY4iI6z1oftLCi70LeIOVs83z8DnRCCS2weUPM+G+PH8/y9rUPvKZ2OKiakOH1lvm0pw==
-X-Received: by 2002:a62:7592:: with SMTP id q140mr233639pfc.164.1550778572196;
-        Thu, 21 Feb 2019 11:49:32 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r80sm35715101pfa.111.2019.02.21.11.49.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Feb 2019 11:49:30 -0800 (PST)
-Date:   Thu, 21 Feb 2019 11:49:29 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vinay Simha B N <simhavcs@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: tmp102 hwmon accessing temp1_input, max, max_hyst
-Message-ID: <20190221194929.GA676@roeck-us.net>
-References: <CAGWqDJ48N5Q6OsHq_f217za-34zQMDY8qNL6XEDLREPY3JP3MA@mail.gmail.com>
- <20190221175511.GA22715@roeck-us.net>
- <CAGWqDJ4pvVeTsqepodC-9g2UDjVq6NT-n3FaudXN456uwLQ00w@mail.gmail.com>
- <20190221184805.GC22715@roeck-us.net>
- <CAGWqDJ6p1yo+LJrJESCCQ-UcF8LnhPj8Tyug4Jhne_ydA2Z7GA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGWqDJ6p1yo+LJrJESCCQ-UcF8LnhPj8Tyug4Jhne_ydA2Z7GA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Fri, 22 Feb 2019 08:46:42 -0500
+Received: from stefan-Vostro-260.fritz.box ([109.104.42.136]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1M6DSo-1gzLwE2WRU-006h8U; Fri, 22 Feb 2019 14:46:06 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V3 2/2] hwmon: pwm-fan: Add optional regulator support
+Date:   Fri, 22 Feb 2019 14:45:24 +0100
+Message-Id: <1550843124-10992-3-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1550843124-10992-1-git-send-email-stefan.wahren@i2se.com>
+References: <1550843124-10992-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:NlVN2sXQK4iQZ+CbQkfSXqK0tGzIEq3ndxMjQl5A1TVybMy1zsN
+ RQtiGJdTgnEuf0M3zU86vWORaLibt3FnJDLscHI8VK15tPON3uX8Ck3Kw8kfXTZyrKfz0n/
+ hIBEVj/brIhbB00Zzi0DrALdTN0iwF0Y/+Uq9X1GtBYfwZgg9O1GbalwGK4qrR052vwqgcQ
+ wZNaTu8h1QxT60jtlFmLA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:W7TgeG4HLeI=:8LQA5DbbbhBIMYyq8gcBiq
+ HI3qG70Viv9CpDlWgLRCP1yXuj7ocsOU0fBkTDfThlnm6VSvKYY5GIpd6hvd5JxD7cPLAL8F5
+ 5pVD9a/Y/2u7005NmA9tpV7R/M2gGFBqnvsQQKpwhTvQxbg8txe2+Xxl7+/JI8wRfrqLsVQaY
+ WE3iRc2YrngYkfdU/38Arj5rXfHJNVc23WU6wuklKkSKc4wcFA6w3IQ77ZSId+zAc7X0cpLFE
+ 4Vqwibap9MuYs+/zbQCyXI8R+ZeMKMuwJxzJQnecoXQF60zH31rUxoof4Rfrz94YY7vIxSjo/
+ Q9cIL54+vuFYvSTiYTcPKzCA8TAgBO7ncisdWtkQcJOxGOrtLT+V7oL2dK1N3ZOiAzv2cHR8P
+ wEKAKwkGEKzUNA0KOKvMbCGv2XM0UYU34e53uxuSVkk5cmFTgHW6EW/Eu5Q7FA2GfqIxSaDfb
+ TFAsxkk4mJWm8fcihz91tNj9hfe/tSpiSXgp+9BRwblc44mCYdFI09J+SQUaADY6mYJBqprro
+ vj30+0Q9e0Kk7Sd58NfYHSzRiv0FmV1F9qqWInF9PIagDb8gv56fRlUmRR5AHGBw818O63ko4
+ qcO2bvjuVP0smi2lfzrxcn4/gj1Kk79S1l0NBohRwv7lO0UGGjyffvQGeZ+fmG9CZtJxUttUt
+ jcMjr2NG1M50L9SVIjUFn7XAsiZEyJDLnzj/clc9jOFZxoTc2V1tW/FJSrt0UP494ZDrK20ZC
+ 7wH6jDDLEbcYi1utBcfc/MhzRWtEX9xFsQUyle5lVaSRt3wSQ/6SfoD7mEI=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 22, 2019 at 12:32:08AM +0530, Vinay Simha B N wrote:
-> On Fri, Feb 22, 2019 at 12:18 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Thu, Feb 21, 2019 at 11:46:32PM +0530, Vinay Simha B N wrote:
-> > > guenter,
-> > >
-> > > i want to use these three  tmp102 temp1_input, max and max_hys in
-> > > dsi2hdmi(adv7533) driver to enable or disabled based on temperature
-> > > range.
-> > >
-> > > https://github.com/vinaysimha/kernel-msm/commit/8ee2b9104fa56765320d4846086d91b8271f5609
-> > >
-> > > dsi2hdmi operating temperature range is -10 to 85 deg C, we will
-> > > enable dsi2hdmi only when temperate in operating range otherwise will
-> > > disable the chip.
-> > >
-> > Do you envision a system utilizing this chip that would have an operating range
-> > outsize -10 .. +85 degrees C ? That seems to be quite unlikely.
-> this system sits in a place below this temperature range, cpu can
-> handle upto -30, but the adv7535(dsi2hdmi) operating range -10 to +85,
-> so we want the system to be on and disable and enable display based on
-> temp range.
-> >
-> > Your solution will only work for a system with exactly one tempperature sensor;
-> > otherwise there is no guarantee that the sensor will be instantiated as hwmon1
-> we do have two temperature sensor, currently i had used hwmon1 for testing,
-> i have to read hwmon1 otherwise interrupt will not get cleared.
-> thought to have polling method also, since in this code reading from
-> userspace is not feasible, is it possible to optimize, any suggestion?
-> either i need to have global variable declared in adv7511_drv.c and
-> export it to tmp102.c driver . please suggest
+This adds optional regulator support to the pwm-fan driver. This is
+necessary for pwm fans which are powered by a switchable supply.
 
-You might want to consider attaching the tmp102 to a thermal zone, and then
-use thermal_zone_get_temp() to read the temperature.
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ drivers/hwmon/pwm-fan.c | 43 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-> >
-> > Either case, a decison like this would not only apply to a single chip,
-> > but to other chips in the system. It might be in the scope of power
-> > or thermal management, though it seems to me that it might make more
-> > sense to control it from user space.
-> >
-> > Overall, with the above in mind, I don't think a hwmon specific solution
-> > would make sense. If a solution is really warranted in the first place
-> > (I really wonder about that operating range), it should be implemented
-> > as generic solution which applies to the rest of the system as well.
-> >
-> > There are some pieces which should be implemented in the hwmon driver -
-> > for example, it looks like your code implements interrupt handling for
-> > the tmp102. That should be handled in the tmp102 driver, which would
-> > then read the alert bit and report the status as temp1_alarm.
-> initially i had implemented irq in tmp102.c , but how to inform this
-> information to dsi2hdmi(adv7511_drv.c)
-> any references how temp1_alarm is used.
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 2c94482..167221c 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -23,6 +23,7 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pwm.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/sysfs.h>
+ #include <linux/thermal.h>
+ 
+@@ -31,6 +32,7 @@
+ struct pwm_fan_ctx {
+ 	struct mutex lock;
+ 	struct pwm_device *pwm;
++	struct regulator *reg_en;
+ 	unsigned int pwm_value;
+ 	unsigned int pwm_fan_state;
+ 	unsigned int pwm_fan_max_state;
+@@ -231,6 +233,21 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, ctx);
+ 
++	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
++	if (IS_ERR(ctx->reg_en)) {
++		if (PTR_ERR(ctx->reg_en) != -ENODEV)
++			return PTR_ERR(ctx->reg_en);
++
++		ctx->reg_en = NULL;
++	} else {
++		ret = regulator_enable(ctx->reg_en);
++		if (ret) {
++			dev_err(&pdev->dev,
++				"Failed to enable fan supply: %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	ctx->pwm_value = MAX_PWM;
+ 
+ 	/* Set duty cycle to maximum allowed and enable PWM output */
+@@ -241,7 +258,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	ret = pwm_apply_state(ctx->pwm, &state);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to configure PWM\n");
+-		return ret;
++		goto err_reg_disable;
+ 	}
+ 
+ 	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
+@@ -277,6 +294,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	state.enabled = false;
+ 	pwm_apply_state(ctx->pwm, &state);
+ 
++err_reg_disable:
++	if (ctx->reg_en)
++		regulator_disable(ctx->reg_en);
++
+ 	return ret;
+ }
+ 
+@@ -287,6 +308,10 @@ static int pwm_fan_remove(struct platform_device *pdev)
+ 	thermal_cooling_device_unregister(ctx->cdev);
+ 	if (ctx->pwm_value)
+ 		pwm_disable(ctx->pwm);
++
++	if (ctx->reg_en)
++		regulator_disable(ctx->reg_en);
++
+ 	return 0;
+ }
+ 
+@@ -307,6 +332,14 @@ static int pwm_fan_suspend(struct device *dev)
+ 		pwm_disable(ctx->pwm);
+ 	}
+ 
++	if (ctx->reg_en) {
++		ret = regulator_disable(ctx->reg_en);
++		if (ret) {
++			dev_err(dev, "Failed to disable fan supply: %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -317,6 +350,14 @@ static int pwm_fan_resume(struct device *dev)
+ 	unsigned long duty;
+ 	int ret;
+ 
++	if (ctx->reg_en) {
++		ret = regulator_enable(ctx->reg_en);
++		if (ret) {
++			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
++			return ret;
++		}
++	}
++
+ 	if (ctx->pwm_value == 0)
+ 		return 0;
+ 
+-- 
+2.7.4
 
-This would require some work, since the infrastructure does not currently
-support handling thermal alarms. In a nutshell,
-
-- the tmp102 driver would implement an interrupt handler
-- the interrupt handler would notify the hwmon core that an
-  interrupt was observed. This notification callback would have
-  to be implemented. It would notify userspace using sysfs_notify()
-  and possibly with a udev event, and it would notify the thermal
-  core by calling thermal_zone_device_update(). I don't know how
-  the thermal core would then notify the dsi2hdmi driver.
-
-Guenter
-
-> >
-> > Thanks,
-> > Guenter
-> >
-> > >
-> > > On Thu, Feb 21, 2019 at 11:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > On Thu, Feb 21, 2019 at 08:21:09PM +0530, Vinay Simha B N wrote:
-> > > > > hi,
-> > > > >
-> > > > > could you please suggest, how to export_symbol the tmp102 temp1_input, max
-> > > > > and max_hyst values to another kernel driver?
-> > > > >
-> > > > > We can acess the values
-> > > > > from filp_open("/sys/class/hwmon/hwmon1/temp1_input", O_RDONLY, 0); in
-> > > > > kernel space, but is there better apporach to access the values in the
-> > > > > kernel space.
-> > > > >
-> > > > There is no in-kernel API to do that, and I do not immediately see
-> > > > the purpose. Either case, accessing the sysfs attribute directly is
-> > > > as wrong as it can get, if for nothing else since there is no guarantee
-> > > > that this will always be the hwmon1 device.
-> > > >
-> > > > Can you explain what you are trying to do ?
-> > > >
-> > > > Thanks,
-> > > > Guenter
-> > >
-> > >
-> > >
-> > > --
-> > > regards,
-> > > vinaysimha
-> 
-> 
-> 
-> -- 
-> regards,
-> vinaysimha
