@@ -2,79 +2,82 @@ Return-Path: <SRS0=SUeP=RA=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C7E1C43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 15:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01DD1C43381
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 16:00:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D0F2920663
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 15:27:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H9ntWb4s"
+	by mail.kernel.org (Postfix) with ESMTP id C9F4620842
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 16:00:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbfBYP1R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Feb 2019 10:27:17 -0500
-Received: from mail-qk1-f170.google.com ([209.85.222.170]:39926 "EHLO
-        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727467AbfBYP1P (ORCPT
+        id S1727704AbfBYQAa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Feb 2019 11:00:30 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:51621 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727659AbfBYQAa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Feb 2019 10:27:15 -0500
-Received: by mail-qk1-f170.google.com with SMTP id x6so5505506qki.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Feb 2019 07:27:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UJPTUSjzbTvQiWrTZhU7w4PLyrZlFIUdoaSZI/HyKNU=;
-        b=H9ntWb4sC5pqeI6t0ZL8WIcLl8PSrqKEeHlNEgEErvHIoFUtxCDERihFeBpiCj0GJt
-         gNDxwDDJu6re/zKgx/z47hYL1tumrLKXwqQLyhkmn52w4WEPq1dGTTESJ9onqIPY9FUR
-         rUJ6NGgOLCfgdwy+iY0e+Wu2yg+SCN2KWs+jY23Q2dAVLWYe8AXnZWa/ac6YfAvJVnc3
-         MydUQDRwaEFRljm4X06sPxbOYGbQfeHitz4Ggljc3LaLQJb0k7jNjiGlnONzMdB0CRq0
-         KN3TRcUUmTkUFfx5BjUmGuIXc5SWgW33r0/nZHKjs3Oq4UucFayXcX2jXvsSc0unAsEW
-         C2gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UJPTUSjzbTvQiWrTZhU7w4PLyrZlFIUdoaSZI/HyKNU=;
-        b=qRShgZvf8y/QE4AAsHDAPTCpVf4vVor0YjTXgaUeoZHDLXnkY+Obi6BXhFNIkWFS0A
-         l3lKu9zAtaXPiTSCOUWULEwuWN6R4WquJXvy6CmIBK1OqGZYojo6mMDRL5ArxwYJYrIP
-         ilaTRo/ibYIyCnadS3ITT7qPTvClSQsWzXL9HFmgmI6fwVT+abHdCJ/6kfXrzS5p2Xc8
-         padb+dlMK/p85pJ4PvuUaASCpKfjFOZ73rUTbWVOppGvXVikNZxyTGbOWIQhL6suNwDr
-         O/G4zancptNhDz8O/frwiZiu/F+hZ8K0tWDt4BvJmctBliFeM0L3AEWJMQLh6nJ3J6C1
-         1fXQ==
-X-Gm-Message-State: AHQUAub3ffxTFad0FAo1CGGt+2vdAV9CQTrAqZ2EYRkz/s48eYJmrk21
-        jlzSOSRA+645ghok0FUah9T/jrwfSSp9J833KKkK4Q==
-X-Google-Smtp-Source: AHgI3IZoOOFmQRu8VCNCVKJ4dgLSLthkuR0c4UpC7SNpLAUjj0zbdfv5085iibIZtEpmEcI11EUzwnQuu/uQCGY8qCE=
-X-Received: by 2002:a37:a556:: with SMTP id o83mr13749670qke.78.1551108434881;
- Mon, 25 Feb 2019 07:27:14 -0800 (PST)
-MIME-Version: 1.0
-References: <201902252359.6qjnq0C3%fengguang.wu@intel.com>
-In-Reply-To: <201902252359.6qjnq0C3%fengguang.wu@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 25 Feb 2019 16:26:56 +0100
-Message-ID: <CACRpkdZHqX6qXFp1AzyVpfXmqL_YyKaCVYXy_f_ij=u9ApKPKQ@mail.gmail.com>
-Subject: Re: [hwmon:hwmon-next 88/88] FATAL: drivers/hwmon/ad7418: struct
- of_device_id is not terminated with a NULL entry!
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@01.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 25 Feb 2019 11:00:30 -0500
+Received: from stefan-Vostro-260.fritz.box ([109.104.53.79]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mzi3l-1hBxnh38z3-00vieL; Mon, 25 Feb 2019 16:59:56 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH RFC V2 2/3] Documentation: pwm-fan: Add description for RPM support
+Date:   Mon, 25 Feb 2019 16:59:18 +0100
+Message-Id: <1551110359-19860-3-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1551110359-19860-1-git-send-email-stefan.wahren@i2se.com>
+References: <1551110359-19860-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:rDt8rM8KQB7JFkh3ue3qtgnNVwqdhgTVjkuzq7YJjfKcx4G3RLQ
+ ZAOY6VuACZp32WN3rZ76TCxfMuEueg/h4gOamV6qi97+sWRAa3MEGLeIpzIg0Ox3X8H4AGB
+ K7TXTDMVcUH9xuDejYbE7qBMRd+Ng66UKhhpiDDNoI5vIDCVmW5JxgvyNJxDDkcU7WEuVVa
+ gw1k+JKQDD494X0dzxJxg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YcnrOrRgbC4=:bKedZtA2+xcuV9deovjPhf
+ o+C2kfVozulnUkG7GtEPbXm6erhPX1zyFPUqahEO7IKz7rgTK7U4p8gdcaPSIT/OZopMK6UWj
+ dhamxS2Iip7xvuJ/ulNYVDifvfUezgP4RX+ovv65d/2nX1ghjaTwuUSkZnXrtYogoocDoRkuS
+ TsexyT0XGPJN9UmICwIxnM8j6DBwx2IEtQoir78NSnx8ioKNv4W6VDe0IbZ7wnyyV+xqXUa1e
+ MKvjyAz0lkUsO3Lf8XTbC2nvcsMIuJA5spEajA9NzubVzXZiq+Dfm7yLObOp+SP90ue7SO8gY
+ RYaXxGvOT8zLXgH4AeMkjtCY8ND8XLoOv2mGfHD0FihIv6n3Faan228vC5dsHE7SPZRSIazUl
+ 5COllol5FZ6y2pL7S92bmhvIDWewBxEqVdHSs6gPKMQD6h1/UcoYM16/tXW0hfirKA5sQNIyk
+ QgU9Fo5ZLVEfUXVOb/kbWQ0OC2yq1Ui0VBCnrIjaAVZ6rPvUoRU0iAV5pCijEp5Trq2eTNTKT
+ NNS42Dc3PLTehnn2Znat+BsHqJ/GUdIUFaGQBCzf6m0vj2XzdlZEVVWVUGMqwY0nWgrjNcXpi
+ BNcGpVOzLHKfNsqrACzT++C0ec4zTbUMHqTLfI59rJUCQsO4rIptdUMNIobdppKZqFORJl9dT
+ fv8GQjdR0MvdfeCTueq9ICJf2CvhHG+2+gB9cGlCe5nA19Tt64+uqBC9kRCCaciXbzDXTEcDL
+ rinKUfqN+g80bRfcmZo+34Wv1BaktXJip+jTavqemJ7Nr5gO4sPhh2CuiLU=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 25, 2019 at 4:08 PM kbuild test robot <lkp@intel.com> wrote:
+This adds a short description for the new RPM support of the pwm-fan
+driver.
 
-> >> FATAL: drivers/hwmon/ad7418: struct of_device_id is not terminated with a NULL entry!
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ Documentation/hwmon/pwm-fan | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Grrr why do I always do this silly mistake. Sorry :(
+diff --git a/Documentation/hwmon/pwm-fan b/Documentation/hwmon/pwm-fan
+index 18529d2..82fe967 100644
+--- a/Documentation/hwmon/pwm-fan
++++ b/Documentation/hwmon/pwm-fan
+@@ -15,3 +15,6 @@ The driver implements a simple interface for driving a fan connected to
+ a PWM output. It uses the generic PWM interface, thus it can be used with
+ a range of SoCs. The driver exposes the fan to the user space through
+ the hwmon's sysfs interface.
++
++The fan rotation speed returned via the optional 'fan1_input' is extrapolated
++from the sampled interrupts from the tachometer signal within 1 second.
+-- 
+2.7.4
 
-Guenther, could you poke in a {} as last element of
-ad7418_dt_ids[] or would you like me to send a v2?
-
-Yours,
-Linus Walleij
