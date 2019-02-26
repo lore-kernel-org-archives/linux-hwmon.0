@@ -1,73 +1,95 @@
-Return-Path: <SRS0=SUeP=RA=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=hC89=RB=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFFCFC43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 16:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A56CBC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:05:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9671020684
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Feb 2019 16:37:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76116213A2
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:05:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="lkZvxAf1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728211AbfBYQhK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Feb 2019 11:37:10 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:7673 "EHLO
-        mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727930AbfBYQhK (ORCPT
+        id S1726018AbfBZGFH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Feb 2019 01:05:07 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:34507 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725940AbfBZGFH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Feb 2019 11:37:10 -0500
-X-IronPort-AV: E=Sophos;i="5.58,411,1544482800"; 
-   d="scan'208";a="297277383"
-Received: from vaio-julia.rsr.lip6.fr ([132.227.76.33])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2019 17:37:07 +0100
-Date:   Mon, 25 Feb 2019 17:37:04 +0100 (CET)
-From:   Julia Lawall <julia.lawall@lip6.fr>
-X-X-Sender: jll@hadrien
-To:     Linus Walleij <linus.walleij@linaro.org>
-cc:     Guenter Roeck <linux@roeck-us.net>, kbuild-all@01.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: fix of_table.cocci warnings
-Message-ID: <alpine.DEB.2.20.1902251735550.3474@hadrien>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+        Tue, 26 Feb 2019 01:05:07 -0500
+Received: by mail-io1-f66.google.com with SMTP id e1so9631590iok.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Feb 2019 22:05:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QBbQSjxgXNOYZnEmoNiNRV58Re9OYSStn0JNxlv7v/o=;
+        b=lkZvxAf1FWMD9XdaKePztbZ19t1muIkBBWFeYmpvJU1Fkmw1Bog/cSaLWeL9I/5+tS
+         bjyR9sgxgk3B1dqF3NCmCI2F7zCSbx0VXF0pL6Sy+MoVZsgdMmRDae8iy0p8+ItEfzfe
+         h1xrJnMNk0BFA/Bu0fiSrZTQXEl1vu7Ez0GR8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QBbQSjxgXNOYZnEmoNiNRV58Re9OYSStn0JNxlv7v/o=;
+        b=eHwBE5m7SPNvL09HJldjXz6HtVPajr7cKLvpDpNq5RJF27wyiQC8VyPLjaisPY5Out
+         EmgV5MXyi1xvMwcXAvJnTqn5hU8Ehltb/3KdWYyPtygQAbTlJ3fhlv/YXuMCd4E+i8jJ
+         gZZCsnTgYL3Az7M98lf1a9hZZF2c4IglKKkYZhZAvGIISDhF/sRGdkoFK/g0PBS/2mFR
+         WMWhNH1VpJVRKGNYAH+S7mmmYQFAaXtst0wL0ZcT+najS/rQwMcXZQJ8rF9VG5OE+CTw
+         CKcYZwRdDkE0AK1ZuHcdDzWGHG4u7P8uyhWumtgsOauXGZpBye8Bpkxo30pzOwbDvQpl
+         4HCw==
+X-Gm-Message-State: AHQUAuYi5sBfVcwFD9ZPJhz8lua9eEl8LPsav+1cXfV83GhdRlp9dTKl
+        m39uoIaAC5L7FKktQE9d9oJlJC1OVK46Kg+JFqcJgw==
+X-Google-Smtp-Source: AHgI3IayJXoPFhflLHgZWELMwCRx0Yb2FMD2NYdu+Ti8duXQp4OzM215LULD3zn5NYbwzLyMEZB1wX1XxAcC/USnIXo=
+X-Received: by 2002:a5e:c605:: with SMTP id f5mr11998100iok.252.1551161106550;
+ Mon, 25 Feb 2019 22:05:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20190212113808.3040-1-jagan@amarulasolutions.com>
+ <CAMty3ZBaOZoj+xV+e+4BtYdaWA2biwENmngOa9vbbMB=_vbB1w@mail.gmail.com> <59969c88-585c-cb7d-3104-8059b78ed2e3@roeck-us.net>
+In-Reply-To: <59969c88-585c-cb7d-3104-8059b78ed2e3@roeck-us.net>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Tue, 26 Feb 2019 11:34:55 +0530
+Message-ID: <CAMty3ZCT+yBJOnjcvLoKva+E1Zkdgr0aA=_kAreqpM3=c7yczg@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: kbuild test robot <lkp@intel.com>
+Rob,
 
-Make sure (of/i2c/platform)_device_id tables are NULL terminated
+On Thu, Feb 21, 2019 at 7:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 2/20/19 9:22 AM, Jagan Teki wrote:
+> > On Tue, Feb 12, 2019 at 5:08 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+> >>
+> >> Add missing dt-binding documentation for lm75 hwmon sensor.
+> >>
+> >> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> >> ---
+> >> Changes for v2:
+> >> -  Add all compatible nodes available in lm75.
+> >>
+> >>   .../devicetree/bindings/hwmon/lm75.txt        | 37 +++++++++++++++++++
+> >>   1 file changed, 37 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
+> >
+> > Any comments on this? It is blocking some dts changes to get merge
+> > into Mainline.
+> >
+>
+> Waiting for Rob's Ack.
 
-Generated by: scripts/coccinelle/misc/of_table.cocci
-
-Fixes: 08c95c6f6f95 ("hwmon: (ad7418) Add device tree probing")
-CC: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: kbuild test robot <fengguang.wu@intel.com>
-Signed-off-by: Julia Lawall <julia.lawall@lip6.fr>
-
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   08c95c6f6f95a6ca6f0290429e3190fc3ab3c528
-commit: 08c95c6f6f95a6ca6f0290429e3190fc3ab3c528 [88/88] hwmon: (ad7418) Add device tree probing
-:::::: branch date: 2 hours ago
-:::::: commit date: 2 hours ago
-
- ad7418.c |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/drivers/hwmon/ad7418.c
-+++ b/drivers/hwmon/ad7418.c
-@@ -299,6 +299,7 @@ static const struct of_device_id ad7418_
- 	{ .compatible = "adi,ad7416", .data = (void *)ad7416, },
- 	{ .compatible = "adi,ad7417", .data = (void *)ad7417, },
- 	{ .compatible = "adi,ad7418", .data = (void *)ad7418, },
-+	{},
- };
- MODULE_DEVICE_TABLE(of, ad7418_dt_ids);
-
+Any comments?
