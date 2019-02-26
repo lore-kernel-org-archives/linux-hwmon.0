@@ -2,94 +2,154 @@ Return-Path: <SRS0=hC89=RB=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A56CBC43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:05:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40ABAC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:21:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 76116213A2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:05:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="lkZvxAf1"
+	by mail.kernel.org (Postfix) with ESMTP id 129432173C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 26 Feb 2019 06:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1551162064;
+	bh=+hmIA6J3xzhhj0EBuQ5cxZY43or4OX3LirZ2VLfbplg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:List-ID:
+	 From;
+	b=iW4UHvNhDq+biZ0t23Rd4/ZM7gMHF69DtebIYo47EVuUFcqio2FECrC8lxGUpMyYZ
+	 +cgW1xeaxJql+dz1U2FWDpZ5H6KJ4kkFBANSbgQPpLUcp/VSditMpxPOCHMrE8lZUo
+	 X3cpwlUyx9G0hSRmXA46WRtSmadX9zMefu7iFd7I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbfBZGFH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Feb 2019 01:05:07 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:34507 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbfBZGFH (ORCPT
+        id S1726719AbfBZGUj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Feb 2019 01:20:39 -0500
+Received: from mail-it1-f196.google.com ([209.85.166.196]:38175 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726707AbfBZGUh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Feb 2019 01:05:07 -0500
-Received: by mail-io1-f66.google.com with SMTP id e1so9631590iok.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Feb 2019 22:05:07 -0800 (PST)
+        Tue, 26 Feb 2019 01:20:37 -0500
+Received: by mail-it1-f196.google.com with SMTP id l66so2441052itg.3;
+        Mon, 25 Feb 2019 22:20:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QBbQSjxgXNOYZnEmoNiNRV58Re9OYSStn0JNxlv7v/o=;
-        b=lkZvxAf1FWMD9XdaKePztbZ19t1muIkBBWFeYmpvJU1Fkmw1Bog/cSaLWeL9I/5+tS
-         bjyR9sgxgk3B1dqF3NCmCI2F7zCSbx0VXF0pL6Sy+MoVZsgdMmRDae8iy0p8+ItEfzfe
-         h1xrJnMNk0BFA/Bu0fiSrZTQXEl1vu7Ez0GR8=
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :reply-to:organization;
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=WZwfdiiMrL93Jstdw4WXOPnxuoyrRlMgaZxRpMglEyeRQ4GV5BZDzFGWP7gYFTqwcS
+         X0MWlgKx9RucDvbhECv2HzqREyU4qA4Jf49p15Cs5kkndB9JqLdAWdR4rBgu2axFQWdt
+         j4Cbj29Q6lw7s8b4lkd74TjRxs6l3Y78SDvbdYbcKqs/90EC6S5HnN9Azx1Nvmc1Y4f8
+         VK02LUcem6hVg3DFOylO5gbQc9x4WgDKPiqlA537gPYR3VY4xKryLREVvOFEH9aNaG2w
+         lIB2k0yywghuCVXXQ/6uplteYGarAAJXYaCBjhdlTjb6MSZBJ8Pkab9RHAD3D18hA29Z
+         6xIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QBbQSjxgXNOYZnEmoNiNRV58Re9OYSStn0JNxlv7v/o=;
-        b=eHwBE5m7SPNvL09HJldjXz6HtVPajr7cKLvpDpNq5RJF27wyiQC8VyPLjaisPY5Out
-         EmgV5MXyi1xvMwcXAvJnTqn5hU8Ehltb/3KdWYyPtygQAbTlJ3fhlv/YXuMCd4E+i8jJ
-         gZZCsnTgYL3Az7M98lf1a9hZZF2c4IglKKkYZhZAvGIISDhF/sRGdkoFK/g0PBS/2mFR
-         WMWhNH1VpJVRKGNYAH+S7mmmYQFAaXtst0wL0ZcT+najS/rQwMcXZQJ8rF9VG5OE+CTw
-         CKcYZwRdDkE0AK1ZuHcdDzWGHG4u7P8uyhWumtgsOauXGZpBye8Bpkxo30pzOwbDvQpl
-         4HCw==
-X-Gm-Message-State: AHQUAuYi5sBfVcwFD9ZPJhz8lua9eEl8LPsav+1cXfV83GhdRlp9dTKl
-        m39uoIaAC5L7FKktQE9d9oJlJC1OVK46Kg+JFqcJgw==
-X-Google-Smtp-Source: AHgI3IayJXoPFhflLHgZWELMwCRx0Yb2FMD2NYdu+Ti8duXQp4OzM215LULD3zn5NYbwzLyMEZB1wX1XxAcC/USnIXo=
-X-Received: by 2002:a5e:c605:: with SMTP id f5mr11998100iok.252.1551161106550;
- Mon, 25 Feb 2019 22:05:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20190212113808.3040-1-jagan@amarulasolutions.com>
- <CAMty3ZBaOZoj+xV+e+4BtYdaWA2biwENmngOa9vbbMB=_vbB1w@mail.gmail.com> <59969c88-585c-cb7d-3104-8059b78ed2e3@roeck-us.net>
-In-Reply-To: <59969c88-585c-cb7d-3104-8059b78ed2e3@roeck-us.net>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Tue, 26 Feb 2019 11:34:55 +0530
-Message-ID: <CAMty3ZCT+yBJOnjcvLoKva+E1Zkdgr0aA=_kAreqpM3=c7yczg@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:reply-to:organization;
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=umk4h2zqENmN1vgaw2UCk+T4Uvki6nCn8JSTVlkfL3R8OZMAWv+oE3jjOrbJmyZu2W
+         CVLKWOnIWwTTXrXkJ50sTFVUDUF5j3PiebIGAA25jJoFKhKwZZtFlkNJTd64EKqAhnz2
+         T0mLeJFQhEaOwcJVeXGr+LTerCCPRAipQ31WckRhZanVNi1RALrPJvbNqk74f5Ma0hgd
+         j6BbOgE8ggVmZBi0GZTsep2cxsj+KYiT8o+888liaB/ZaECxyBx1cnOqNSXvs37hl90Z
+         CmLF8RApR1qVeXZuAYboSKYYm9D+hJ8pH+SSB56NyUBRJ4YSBK9Wzc/OxV3sc5MtqpdQ
+         t/GQ==
+X-Gm-Message-State: AHQUAuZJ6UgJf4OQJZKYdLYn3yX3W0roC/7wbDUh2FJb6vMueZDiX8fG
+        VlDWC2mXYyaMNhXWjJhVJPs=
+X-Google-Smtp-Source: AHgI3IZuA55xfyqfkT3w9xHSTYUADogSzdPU98ulVcYeRwsV+acjLGynLjiFhe6SjINFtTNLUh2PbA==
+X-Received: by 2002:a02:8884:: with SMTP id n4mr11142324jaj.110.1551162036627;
+        Mon, 25 Feb 2019 22:20:36 -0800 (PST)
+Received: from kbl.lan (h66-222-56-144.cntcnh.dsl.dynamic.tds.net. [66.222.56.144])
+        by smtp.gmail.com with ESMTPSA id w8sm6431431ita.21.2019.02.25.22.20.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 25 Feb 2019 22:20:35 -0800 (PST)
+From:   Len Brown <lenb@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 11/14] hwmon/coretemp: Support multi-die/package
+Date:   Tue, 26 Feb 2019 01:20:09 -0500
+Message-Id: <b91ef931b054bacf5b4a34799560062615ff4e25.1551160674.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.18.0-rc0
+In-Reply-To: <e2810a5317d3a109a98204e883fd1461f77b9339.1551160674.git.len.brown@intel.com>
+References: <e2810a5317d3a109a98204e883fd1461f77b9339.1551160674.git.len.brown@intel.com>
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Rob,
+From: Zhang Rui <rui.zhang@intel.com>
 
-On Thu, Feb 21, 2019 at 7:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/20/19 9:22 AM, Jagan Teki wrote:
-> > On Tue, Feb 12, 2019 at 5:08 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
-> >>
-> >> Add missing dt-binding documentation for lm75 hwmon sensor.
-> >>
-> >> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> >> ---
-> >> Changes for v2:
-> >> -  Add all compatible nodes available in lm75.
-> >>
-> >>   .../devicetree/bindings/hwmon/lm75.txt        | 37 +++++++++++++++++++
-> >>   1 file changed, 37 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
-> >
-> > Any comments on this? It is blocking some dts changes to get merge
-> > into Mainline.
-> >
->
-> Waiting for Rob's Ack.
+This patch introduces coretemp driver support
+for new dual-die/package systems.
 
-Any comments?
+On the new dual-die/package systems, the package temperature MSRs becomes
+die-scope. Thus instead of one hwmon device per physical package, now
+there should be one hwmon device for each die on these systems.
+
+On the hardwares that do not have multi-die support,
+topology_logical_die_id() equals topology_physical_package_id(), thus the
+only difference is that physical package id is used as the coretemp
+platform device id, instead of logical package id on these systems.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+---
+ drivers/hwmon/coretemp.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 5d34f7271e67..57f348d43819 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -435,7 +435,7 @@ static int chk_ucode_version(unsigned int cpu)
+ 
+ static struct platform_device *coretemp_get_pdev(unsigned int cpu)
+ {
+-	int pkgid = topology_logical_package_id(cpu);
++	int pkgid = topology_logical_die_id(cpu);
+ 
+ 	if (pkgid >= 0 && pkgid < max_packages)
+ 		return pkg_devices[pkgid];
+@@ -579,7 +579,7 @@ static struct platform_driver coretemp_driver = {
+ 
+ static struct platform_device *coretemp_device_add(unsigned int cpu)
+ {
+-	int err, pkgid = topology_logical_package_id(cpu);
++	int err, pkgid = topology_logical_die_id(cpu);
+ 	struct platform_device *pdev;
+ 
+ 	if (pkgid < 0)
+@@ -703,7 +703,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 * the rest.
+ 	 */
+ 	if (cpumask_empty(&pd->cpumask)) {
+-		pkg_devices[topology_logical_package_id(cpu)] = NULL;
++		pkg_devices[topology_logical_die_id(cpu)] = NULL;
+ 		platform_device_unregister(pdev);
+ 		return 0;
+ 	}
+@@ -732,6 +732,7 @@ static enum cpuhp_state coretemp_hp_online;
+ static int __init coretemp_init(void)
+ {
+ 	int err;
++	struct cpuinfo_x86 *c = &cpu_data(0);
+ 
+ 	/*
+ 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+@@ -741,7 +742,7 @@ static int __init coretemp_init(void)
+ 	if (!x86_match_cpu(coretemp_ids))
+ 		return -ENODEV;
+ 
+-	max_packages = topology_max_packages();
++	max_packages = topology_max_packages() * c->x86_max_dies;
+ 	pkg_devices = kcalloc(max_packages, sizeof(struct platform_device *),
+ 			      GFP_KERNEL);
+ 	if (!pkg_devices)
+-- 
+2.18.0-rc0
+
