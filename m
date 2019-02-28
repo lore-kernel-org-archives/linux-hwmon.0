@@ -2,129 +2,93 @@ Return-Path: <SRS0=M4nh=RD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17FA9C43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Feb 2019 17:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33E58C43381
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Feb 2019 17:39:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A6666218C3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Feb 2019 17:30:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07976204FD
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Feb 2019 17:39:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="S0KHlnB6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a6qTzMI2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731584AbfB1Ra5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Feb 2019 12:30:57 -0500
-Received: from mail-it1-f196.google.com ([209.85.166.196]:40199 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726172AbfB1Ra5 (ORCPT
+        id S1733292AbfB1RjH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Feb 2019 12:39:07 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39170 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732689AbfB1RjH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Feb 2019 12:30:57 -0500
-Received: by mail-it1-f196.google.com with SMTP id l139so14775310ita.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 28 Feb 2019 09:30:56 -0800 (PST)
+        Thu, 28 Feb 2019 12:39:07 -0500
+Received: by mail-pl1-f195.google.com with SMTP id b65so7056927plb.6;
+        Thu, 28 Feb 2019 09:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fxsfEy8QIwi5UtCMRHdl1vmnvf9J7WKcthBi5S4gM9k=;
-        b=S0KHlnB6ibdEy70rkjjelRCQ4ipwqcaar0MtLGA//5B3Ls3zuvsRXeJmrYpDPOkT7b
-         XX57m5Cyb2TAAugtoIK78lKUSYe2rIONVxFR7JuAwpyc0MkjyorDjT7paQffARkhKYb5
-         WLiiAWh//0KOlSqAuGSZ5SW7YfuzNYSB/tYZc=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qiWi7lzCnlBini3Sln9qtOtkEtXADQ7lho+ft2Y1gzY=;
+        b=a6qTzMI2dColFsIjIbc1lu8Gw9e0pzssZmSV5S7UTWkNlWp16nVlRGaRoJjvEl3ISS
+         tTLDvqzkx/MPRYRi5AtpzOH+mfIlgXiVw9kPgpBcBkHkM9VMy24nHPrMpsgk3JSaTwBK
+         vxq1pCUbOgH7Skz895cyeW/6KXKvcHfex68SOZLPN4ZZgSGH3YEPDDzFzjEABPzwHXRf
+         LVvjmM27F6OogwodiCjWOYFC24A1KarxZxF2U8Nbo59PsgOWnVSc08HqbDwgQgvFExaj
+         ayZf/zoP3cGjum7wPDLA5Ww+vu+xV5Lsrk+GIMSh67ks+gTgJxF8LeU/utLiFIETEkA8
+         9Mqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fxsfEy8QIwi5UtCMRHdl1vmnvf9J7WKcthBi5S4gM9k=;
-        b=b1TRw6o48ndiZAjD0Op/GSJ9c1heWvp918/23XIJHRLSVmlIOXe2kupjHZuXlunOCI
-         aUpZTSQkRK7MTd5k+kkWHR2aH47mJhvPrjcb3S0Y1pAFhHh1BKueVf6NgXVX5Ub4DPq1
-         LLPIZ6fLBGvt3sxkxLQd6OvxB3zPzvH2JC1pKRhs1bW+TK2po3JkxhPHrLb7cVswdlOp
-         MvHqeD1UyhM6UB+UCl8FrvmrNMQBN2TixAbnG9LwJfu1qo+dXRD/f6oiHf6viVTgB8qQ
-         VXWC43bbzxixLBTMXgplCzkfL3g+EnyP7B8CGK0lzeh2k0MaXA/X4LOK7AwgezGakYpG
-         b/Cw==
-X-Gm-Message-State: AHQUAuaI904Gc+2fXWFVaKMinQRrCArMqofq6OXvv7A8D4ocp9XnSVVK
-        ehUNEsR3G5FXRIQFCS7KUgI0bMSC/Ti2aQQX7GEEVg==
-X-Google-Smtp-Source: AHgI3IYszOofLgE7fLNMTjxiJZVzAU9FtNSowW4N8ZYiBcFQpnRTHBL64NrPJwDEFR2ZztqKVcKcxXeSv/9nzB59djQ=
-X-Received: by 2002:a24:e4d:: with SMTP id 74mr397241ite.32.1551375055773;
- Thu, 28 Feb 2019 09:30:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20190212113808.3040-1-jagan@amarulasolutions.com> <20190228151543.GA18597@bogus>
-In-Reply-To: <20190228151543.GA18597@bogus>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Thu, 28 Feb 2019 23:00:44 +0530
-Message-ID: <CAMty3ZDR_Vnutobg=wjzwPZ_pkD4pLA76Lpec9u4OR8OtmuLGA@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qiWi7lzCnlBini3Sln9qtOtkEtXADQ7lho+ft2Y1gzY=;
+        b=QydKZj3+ApQ/mMiMkzethdZ8VgZge+t6gh6OwGBEQsSBRrBDx7hogvnUa5DJY+GxyH
+         gtyPSXJydXnghHp8andKz3GFIbsj6RF9TZAoJighkqcOE25SWjfRHL3fvpDg0C/nGMcv
+         wJjjkCD9TwtnQ9pl3v7EpMCaLUAL/D2Cbtgx4MN8rT8mGBKG+zuQTvdn1T6AZGsKLqKJ
+         mVxj0ghOrjM0qyJXCnxEuHtGAmKoMQu4tx4j+wkKaYuDPrMqVqC9EjF0mE8Or300Dlwy
+         LK2GT6cvhvzyBJuwLjA0RmqMcEhSWmrRd2DL2S3WHCHdMgLTPNOlAS7F3kh9VSUHAiHk
+         x1GA==
+X-Gm-Message-State: APjAAAUA2+99lHPY60KhBZfVavXPhL4zIePa34U6lgnA1weug9bnE7Ah
+        qzX45jgVd/3CbXHEBXgo21U=
+X-Google-Smtp-Source: APXvYqxph1DjgCJxhVChXxi3PZsSedTFsymERRq2wB2lYtiSyONLwE0h0z4l5Af/f6X8bE4fBS6tzw==
+X-Received: by 2002:a17:902:9304:: with SMTP id bc4mr536556plb.81.1551375546729;
+        Thu, 28 Feb 2019 09:39:06 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m67sm33759875pfj.70.2019.02.28.09.39.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Feb 2019 09:39:05 -0800 (PST)
+Date:   Thu, 28 Feb 2019 09:39:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
         Mark Rutland <mark.rutland@arm.com>,
         linux-hwmon@vger.kernel.org,
         devicetree <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2] dt-bindings: hwmon: Add missing documentation for lm75
+Message-ID: <20190228173904.GA18568@roeck-us.net>
+References: <20190212113808.3040-1-jagan@amarulasolutions.com>
+ <20190228151543.GA18597@bogus>
+ <CAMty3ZDR_Vnutobg=wjzwPZ_pkD4pLA76Lpec9u4OR8OtmuLGA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMty3ZDR_Vnutobg=wjzwPZ_pkD4pLA76Lpec9u4OR8OtmuLGA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 28, 2019 at 8:45 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Feb 12, 2019 at 05:08:08PM +0530, Jagan Teki wrote:
-> > Add missing dt-binding documentation for lm75 hwmon sensor.
+On Thu, Feb 28, 2019 at 11:00:44PM +0530, Jagan Teki wrote:
+> On Thu, Feb 28, 2019 at 8:45 PM Rob Herring <robh@kernel.org> wrote:
 > >
-> > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> > ---
-> > Changes for v2:
-> > -  Add all compatible nodes available in lm75.
-> >
-> >  .../devicetree/bindings/hwmon/lm75.txt        | 37 +++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/lm75.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> > new file mode 100644
-> > index 000000000000..12d8cf7cf592
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> > @@ -0,0 +1,37 @@
-> > +*LM75 hwmon sensor.
-> > +
-> > +Required properties:
-> > +- compatible: manufacturer and chip name, one of
-> > +             "adi,adt75",
-> > +             "dallas,ds1775",
-> > +             "dallas,ds75",
-> > +             "dallas,ds7505",
-> > +             "gmt,g751",
-> > +             "national,lm75",
-> > +             "national,lm75a",
-> > +             "national,lm75b",
-> > +             "maxim,max6625",
-> > +             "maxim,max6626",
-> > +             "maxim,max31725",
-> > +             "maxim,max31726",
-> > +             "maxim,mcp980x",
-> > +             "st,stds75",
-> > +             "st,stlm75",
-> > +             "microchip,tcn75",
-> > +             "ti,tmp100",
-> > +             "ti,tmp101",
-> > +             "ti,tmp105",
-> > +             "ti,tmp112",
-> > +             "ti,tmp175",
-> > +             "ti,tmp275",
-> > +             "ti,tmp75",
-> > +             "ti,tmp75c",
->
-> Some of these are in trivial-devices.yaml already. So you either need to
-> remove them from there. Or you can move all these to trivial-devices and
-> benefit from having a schema. I prefer the latter, but either way is
-> fine. You can remove them from trivial-devices.yaml in a separate patch,
-> so:
+> > On Tue, Feb 12, 2019 at 05:08:08PM +0530, Jagan Teki wrote:
+> > > Add missing dt-binding documentation for lm75 hwmon sensor.
+> > >
+> > > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+[ ... ]
 
-Thanks, Rob.
+> 
+> Guenter, could you please pick this.
 
-I will remove trivial devices from here wrt trivial-devices.yaml in
-separate patch.
+Applied to hwmon-next (and pushed).
 
-Guenter, could you please pick this.
+Guenter
