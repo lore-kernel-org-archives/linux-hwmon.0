@@ -2,101 +2,92 @@ Return-Path: <SRS0=8uXM=RO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F51C43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 13:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6215FC43381
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 19:55:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D7E4F20657
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 13:12:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UjgY7xSg"
+	by mail.kernel.org (Postfix) with ESMTP id 2D5C2214AE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 19:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1552334140;
+	bh=WA9HePv95xQ6u/mO8f6hJhrUuU79gR7iLRUX3wjKbuY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=2nqsaiA8cceQp9/r9PrhBxEVfE0E8vUPAFZIw+aVJSMnlGTbVbm3IvhVsHq0KlF38
+	 LRr/CHrIh5m6qighXjmSiz43NEf7zycf8lMNXOj6dUrljgQ/LQ3LW4gL7U/6AhlgVV
+	 7+z0aqYhYnJA6eER8WxAGXytGMU/0p0M0oEkaCWY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfCKNM1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Mar 2019 09:12:27 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40777 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbfCKNM1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Mar 2019 09:12:27 -0400
-Received: by mail-pg1-f194.google.com with SMTP id u9so4007660pgo.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Mar 2019 06:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZHtyv0mi+627Ica6we6/m0kgX6WByLgMUL9ZtLIYupg=;
-        b=UjgY7xSgE4YfcQp09T9I3xyPqRdUrQDa5FWwl3YfztOWbuSkjTQKY42QVvY2HsEHEJ
-         4d24QD4KlzmOgAmFRwN4bGgHzSwpDdx4ekZhCreCwSnDiQ2VEyPxeMJSu9qRL8B3vJcR
-         E6QGXYRRQroqRkvHy1dvEtj86lC578yYFtvywqruAuIHBLP8cJ2b6o0A/+u0/YaXZB4I
-         QwpZoanpBH28r3hjEegrGcqBXkQPLriGfQ744bs5HE7wJEEoOO0Pj/gF4pUA203t9L83
-         wU07naLCYNmOUvy3W9mHRwlXI5dUyvI+5RWH3BMMMAiyjuWZVPC6em3iyibGFg+LQ6ze
-         4NWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZHtyv0mi+627Ica6we6/m0kgX6WByLgMUL9ZtLIYupg=;
-        b=scmeW6+LhQwbH1/hrcHowOjmHU4po6/fqwMH2QuRZQGtA5ItGsqop7LKCDSNDMXTJE
-         DVhbAhrPaQAprW5WAAWNMkn3aXi+8IJOl9nPTxoT+pyvt5mYBIS0CXkBtaxfHIHzXhLN
-         hu3ZSObS3vewfQcjwqIFIijd7MXKwcv09SlwZSqQfIffkCjHnOg7BoKJFOTGY21fp5oK
-         imnqITn5tn6zUoeEErE5PZP0Ajbc4wrncGzvSCTPt2AD9ZvFb2ensp++MIS+LB0NbiAc
-         KqGC+Y/zz0mZe0StY9E1tQWOM+xbuzyNTCZJAElv3yxwpNy+qHKHQ4AiRNLXM5ENaFPS
-         rPwg==
-X-Gm-Message-State: APjAAAU4pyCqySCQ9eus+lFxM+o++YG2NBIMFVnMEVaRCP8lQtQk9Awr
-        dHSxf5d3+Zsuv5kLvrv3TOs=
-X-Google-Smtp-Source: APXvYqzkw3ji4WE3y9nWR+YDU9z+EkNuGj2oKu3a51gDgvytzL1+tTOdUlC7lez7/LVbUKgPx3JsIg==
-X-Received: by 2002:a63:1318:: with SMTP id i24mr17871146pgl.163.1552309946631;
-        Mon, 11 Mar 2019 06:12:26 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 195sm16140767pfc.50.2019.03.11.06.12.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Mar 2019 06:12:25 -0700 (PDT)
-Date:   Mon, 11 Mar 2019 06:12:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Axel Lin <axel.lin@ingics.com>
-Cc:     Lei YU <mine260309@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (w83773g) Select REGMAP_I2C to fix build error
-Message-ID: <20190311131224.GA27286@roeck-us.net>
-References: <20190311095730.3288-1-axel.lin@ingics.com>
+        id S1728206AbfCKTzj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Mar 2019 15:55:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32922 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728313AbfCKTzj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Mar 2019 15:55:39 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 660C3214D8;
+        Mon, 11 Mar 2019 19:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1552334139;
+        bh=WA9HePv95xQ6u/mO8f6hJhrUuU79gR7iLRUX3wjKbuY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V0p7VDGr8tMrU4rEmTTjkIZhMx3pvc5nOskyVFFzulPrUcxAC1SXkqXa667U/0XUG
+         g3Cnd7GLUboGjn/X4izilw4FXoQrxbQbQXH/qVt6wL8hxY9IyE5yIumzV2HPzmppOt
+         dYTLavI0hMoKziHtw0UYo2VI/Yb4pyw+N/McAsCA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Chris Siebenmann <cks@cs.toronto.edu>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.20 09/52] hwmon: (nct6775) Fix fan6 detection for NCT6793D
+Date:   Mon, 11 Mar 2019 15:54:33 -0400
+Message-Id: <20190311195516.137772-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190311195516.137772-1-sashal@kernel.org>
+References: <20190311195516.137772-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190311095730.3288-1-axel.lin@ingics.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 11, 2019 at 05:57:30PM +0800, Axel Lin wrote:
-> Select REGMAP_I2C to avoid below build error:
-> ERROR: "__devm_regmap_init_i2c" [drivers/hwmon/w83773g.ko] undefined!
-> 
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-Applied.
+[ Upstream commit 2a2ec4aa0577ec0b7df2d1bde5c84ed39a8637cb ]
 
-Thanks,
-Guenter
+Commit 2d99925a15b6 ("hwmon: (nct6775) Separate fan/pwm configuration
+detection for NCT6793D") accidentally removed part of the code detecting
+if fan6 is enabled or not. As result, fan6 is no longer detected on Asus
+PRIME Z370-A. Restore the missing detection code.
 
-> ---
->  drivers/hwmon/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 6f929bfa9fcd..d0f1dfe2bcbb 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1759,6 +1759,7 @@ config SENSORS_VT8231
->  config SENSORS_W83773G
->  	tristate "Nuvoton W83773G"
->  	depends on I2C
-> +	select REGMAP_I2C
->  	help
->  	  If you say yes here you get support for the Nuvoton W83773G hardware
->  	  monitoring chip.
+Fixes: 2d99925a15b6 ("hwmon: (nct6775) Separate fan/pwm configuration detection for NCT6793D")
+Reported-by: Chris Siebenmann <cks@cs.toronto.edu>
+Cc: Chris Siebenmann <cks@cs.toronto.edu>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/nct6775.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 4adec4ab7d06..59ee01f3d022 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -3594,7 +3594,8 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
+ 			fan5pin |= cr1b & BIT(5);
+ 			fan5pin |= creb & BIT(5);
+ 
+-			fan6pin = creb & BIT(3);
++			fan6pin = !dsw_en && (cr2d & BIT(1));
++			fan6pin |= creb & BIT(3);
+ 
+ 			pwm5pin |= cr2d & BIT(7);
+ 			pwm5pin |= (creb & BIT(4)) && !(cr2a & BIT(0));
+-- 
+2.19.1
+
