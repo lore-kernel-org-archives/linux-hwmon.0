@@ -2,218 +2,102 @@ Return-Path: <SRS0=gDtV=RP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A35D9C43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 22:38:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A5A4C43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 22:52:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 640232077B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 22:38:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D3352173C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 22:52:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Df8hz9ri"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CwpRD2WB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbfCLWiD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Mar 2019 18:38:03 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43838 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726372AbfCLWiC (ORCPT
+        id S1726477AbfCLWwm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Mar 2019 18:52:42 -0400
+Received: from mail-pf1-f182.google.com ([209.85.210.182]:37710 "EHLO
+        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726284AbfCLWwl (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Mar 2019 18:38:02 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q17so2854609pfh.10;
-        Tue, 12 Mar 2019 15:38:02 -0700 (PDT)
+        Tue, 12 Mar 2019 18:52:41 -0400
+Received: by mail-pf1-f182.google.com with SMTP id s22so2894778pfh.4;
+        Tue, 12 Mar 2019 15:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=UykSa0CBEPUem0AbxJYF2Dlvbvu24y1KIIhaADlP1+Y=;
-        b=Df8hz9riEjR4HlxcjRyRn/ocH2RVMJ58pBhcC2qD7+4m9Fz7gH4ogZMG9oSu0pcENO
-         q1kymOjBqcMCozQOr4RhePPqDfoPfEpc/RE98oYHJUUjOd7uSHxa1VOG5xp/nWmqLvep
-         /O/UN8FvfhpWNITYhobg2rozgIGII5h9uwdqecAdF91DkQc8g6X9XCNDLqJbkx9JPavq
-         cvHO34ydiPAYmUdkukLFjItIPQC/exLIHlF62zMjVIa51uiZ4KoF3srG/6P9aS3PRvEl
-         pxlDKb7kyWWH3kVb90hpwpsb3LLW2AAu502fxb6mgkXVD3jWMqJ2TcGBzfhemvHsgmQW
-         rpeA==
+        bh=+zjiX7dOtnqO9UeNMZu2JA3zDMs2qfAVu5ZR9QhVnv0=;
+        b=CwpRD2WBh6ImOBttJmjaQ6xd65jEySj+i9SscKgjn2/Ecz8/s7lNJqgP1EFf8Y8Y8i
+         1au4+GqVMtpg9zRNyWQJ0Rwpg/+6HV8u/U48fZgx8D3v2VJTJplAyHKcbjfZxLIVtCtv
+         MNcudi/dlzPIfr/dNR37TArT9Aul6XngNUbL8VYJSbMJE8Yn3FZultQjEgLXLAIHEheX
+         Xj/tN8aohi6bPl8ax05HhxLZFXYXF6OLZtJFh1ojRb6uK+4KtSnES1ERY/V3lCvtZoGI
+         dWRZjWxG0dTTjqeSOW9eWDYHmtp8YDTzkxGzHAx4+PGHPuYAQ+fuRww2uH6amqmDCS6T
+         HVBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UykSa0CBEPUem0AbxJYF2Dlvbvu24y1KIIhaADlP1+Y=;
-        b=pdT5a2bVhvNYH8MRu7UDxjk0r6ciUKW1fUsbeKcTpoBSsK8QR2RyXx5SsqKcsTumrF
-         fQcY+Dynr+V1XgwNf2nQkr9bjriXINyNlgi1FJJ0lS/3S6xSq7vCvYerSHI8rZeXQhQF
-         H9ZGAKL0bgI4KpNyQi2uUFH6yq2olDZy1JBK6z4swjeR58BlW9orBpJ2d1WgGrrPwnKl
-         EvT18xm875xnqkdJ2IZdHtxXPTkdLFhvI0vMqaD7D6EnNB0cpzkQCUk52bueGeV5CBp4
-         QMtEfEooAUXcJQ0idmYPIzroEmGSRkMVvffd+WgXTxJLxHvwTJh1JMYDifstV5AK30DL
-         uNTA==
-X-Gm-Message-State: APjAAAWDYKXqD0Abv/Ft6kiu7XZYVC1xgILp56erm5Epcd7ffGSRmFnF
-        7eINz55TBuzdnra8qR/+2SY=
-X-Google-Smtp-Source: APXvYqwcqePWrb/7HT5HrjT82TfnbIPqCIgnqho4+1/GP5EYkR8R8Pp5AvfK0bsWXVV4dLUhxBi7hg==
-X-Received: by 2002:a63:4718:: with SMTP id u24mr37740472pga.381.1552430281710;
-        Tue, 12 Mar 2019 15:38:01 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x19sm12941336pfm.108.2019.03.12.15.37.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Mar 2019 15:38:00 -0700 (PDT)
-Date:   Tue, 12 Mar 2019 15:37:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+zjiX7dOtnqO9UeNMZu2JA3zDMs2qfAVu5ZR9QhVnv0=;
+        b=dMNdbp8yXgN2jZgRc+g9xhm6h+5Hz9peG9dc5EUqWUkArMH5wOkE6x+DecoO7PERS9
+         nuWdKCbPYLknjDLEX2z7J+nN9cvd+bgJP02TJT6WFmuOXMlpH/EREcBJxXQIqUvxRZ5o
+         DE48iuL2GJ1nHCTOB4413XM9b0xOG/Ed0XCqu9kowserZS2XqAUr1pboudfNUVelQB0r
+         jv9wq1jt1fd+Q4Ss8aCqqDrAqMGzubgDihMxErwhMXqjjklKqslk6J6R6ODF1jETW1pD
+         6AyyTqOcSLU/wV+/vgAtSB3TXXFnwVA8HQTKqvfR7NLJMuKZyVPu7Xm+GD6JIC4Av5gW
+         QnVQ==
+X-Gm-Message-State: APjAAAWcMnTsTaz57iTF4yh3Deo9pni3nqDpQzIAhitXmZ+5k/7D/jcH
+        HcTKWedypsbbbagSvYmaeSI=
+X-Google-Smtp-Source: APXvYqwElSqzB4gY7GckAYy0OVzp4EHhTGx2s6uK48eapKEdHYk0dNxiS3hOqbHk2ABjmw8QOXhDvA==
+X-Received: by 2002:a17:902:6942:: with SMTP id k2mr41828274plt.136.1552431160955;
+        Tue, 12 Mar 2019 15:52:40 -0700 (PDT)
+Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id i72sm27345363pfj.147.2019.03.12.15.52.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Mar 2019 15:52:40 -0700 (PDT)
+Date:   Tue, 12 Mar 2019 15:52:36 -0700
+From:   Nicolin Chen <nicoleotsuka@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, corbet@lwn.net,
         linux-doc@vger.kernel.org
 Subject: Re: [PATCH] hwmon: (ina3221) Add averaging mode support
-Message-ID: <20190312223759.GA31590@roeck-us.net>
+Message-ID: <20190312225235.GA29097@Asurada-Nvidia.nvidia.com>
 References: <20190312220431.26710-1-nicoleotsuka@gmail.com>
+ <20190312223759.GA31590@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190312220431.26710-1-nicoleotsuka@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190312223759.GA31590@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 12, 2019 at 03:04:31PM -0700, Nicolin Chen wrote:
-> The CONFIG register has a 3-bit averaging mode field for users
-> to setup the number of samples that are collected and averaged
-> together. This is very useful to filter noise from sensor data.
+On Tue, Mar 12, 2019 at 03:37:59PM -0700, Guenter Roeck wrote:
+> > +average                 Averaging mode. Supports the list of number of samples:
+> > +                          1, 4, 16, 64, 128, 256, 512, 1024
 > 
-> This patch adds an 'average' sysfs node, and updates wait time
-> calculation by taking this average value into account.
+> This is the number of samples, so I think "samples" would be a better
+> attribute name. This would also avoid confusion with other _average
+> attributes.
 > 
-> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> ---
->  Documentation/hwmon/ina3221 |  2 ++
->  drivers/hwmon/ina3221.c     | 61 ++++++++++++++++++++++++++++++++++++-
->  2 files changed, 62 insertions(+), 1 deletion(-)
+> I'll need to check with other chips if this is the best approach and
+> name for the attribute, especially to see if it should be chip-wide
+> or per sensor.
+
+Will wait for that then. Another thing is that the conversion times
+are also configurable. And I plan to use the update_interval in the
+ABI once this average is added. This means that average value will
+be changed via this 'average' node (or other name), and conversion
+times will be changed via the 'update_interval' node by following
+the formula: update_interval = channels * (vbus_ct + vsh_ct) * avg
+
+> > +	for (i = 0; i < ARRAY_SIZE(ina3221_avg); i++)
+> > +		if (ina3221_avg[i] == avg)
+> > +			break;
 > 
-> diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
-> index 4b82cbfb551c..1e25be009d24 100644
-> --- a/Documentation/hwmon/ina3221
-> +++ b/Documentation/hwmon/ina3221
-> @@ -35,3 +35,5 @@ curr[123]_max           Warning alert current(mA) setting, activates the
->                            average is above this value.
->  curr[123]_max_alarm     Warning alert current limit exceeded
->  in[456]_input           Shunt voltage(uV) for channels 1, 2, and 3 respectively
-> +average                 Averaging mode. Supports the list of number of samples:
-> +                          1, 4, 16, 64, 128, 256, 512, 1024
+> Please use find_closest().
 
-This is the number of samples, so I think "samples" would be a better
-attribute name. This would also avoid confusion with other _average
-attributes.
-
-I'll need to check with other chips if this is the best approach and
-name for the attribute, especially to see if it should be chip-wide
-or per sensor.
-
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index 3626b87a5fd2..259c192427ac 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -51,6 +51,9 @@
->  #define INA3221_CONFIG_VBUS_CT_SHIFT	6
->  #define INA3221_CONFIG_VBUS_CT_MASK	GENMASK(8, 6)
->  #define INA3221_CONFIG_VBUS_CT(x)	(((x) & GENMASK(8, 6)) >> 6)
-> +#define INA3221_CONFIG_AVG_SHIFT	9
-> +#define INA3221_CONFIG_AVG_MASK		GENMASK(11, 9)
-> +#define INA3221_CONFIG_AVG(x)		(((x) & GENMASK(11, 9)) >> 9)
->  #define INA3221_CONFIG_CHs_EN_MASK	GENMASK(14, 12)
->  #define INA3221_CONFIG_CHx_EN(x)	BIT(14 - (x))
->  
-> @@ -135,17 +138,24 @@ static const u16 ina3221_conv_time[] = {
->  	140, 204, 332, 588, 1100, 2116, 4156, 8244,
->  };
->  
-> +/* Lookup table for averaging rates */
-> +static const int ina3221_avg[] = {
-> +	1, 4, 16, 64, 128, 256, 512, 1024,
-> +};
-> +
->  static inline int ina3221_wait_for_data(struct ina3221_data *ina)
->  {
->  	u32 channels = hweight16(ina->reg_config & INA3221_CONFIG_CHs_EN_MASK);
->  	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(ina->reg_config);
->  	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(ina->reg_config);
-> +	u32 avg_idx = INA3221_CONFIG_AVG(ina->reg_config);
->  	u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
->  	u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
-> +	u32 avg = ina3221_avg[avg_idx];
->  	u32 wait, cvrf;
->  
->  	/* Calculate total conversion time */
-> -	wait = channels * (vbus_ct + vsh_ct);
-> +	wait = channels * (vbus_ct + vsh_ct) * avg;
->  
->  	/* Polling the CVRF bit to make sure read data is ready */
->  	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
-> @@ -545,15 +555,64 @@ static ssize_t ina3221_shunt_store(struct device *dev,
->  	return count;
->  }
->  
-> +static ssize_t ina3221_avg_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
-> +{
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	u32 avg_idx = INA3221_CONFIG_AVG(ina->reg_config);
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", ina3221_avg[avg_idx]);
-> +}
-> +
-> +static ssize_t ina3221_avg_store(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 const char *buf, size_t count)
-> +{
-> +	struct ina3221_data *ina = dev_get_drvdata(dev);
-> +	int ret, avg, i;
-> +
-> +	ret = kstrtoint(buf, 0, &avg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(ina3221_avg); i++)
-> +		if (ina3221_avg[i] == avg)
-> +			break;
-
-Please use find_closest().
-
-> +
-> +	if (i == ARRAY_SIZE(ina3221_avg))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&ina->lock);
-> +
-> +	ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
-> +				 INA3221_CONFIG_AVG_MASK,
-> +				 i << INA3221_CONFIG_AVG_SHIFT);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	/* Update reg_config accordingly */
-> +	ret = regmap_read(ina->regmap, INA3221_CONFIG, &ina->reg_config);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +unlock:
-> +	mutex_unlock(&ina->lock);
-> +
-> +	return ret ? ret : count;
-> +}
-> +
->  /* shunt resistance */
->  static SENSOR_DEVICE_ATTR_RW(shunt1_resistor, ina3221_shunt, INA3221_CHANNEL1);
->  static SENSOR_DEVICE_ATTR_RW(shunt2_resistor, ina3221_shunt, INA3221_CHANNEL2);
->  static SENSOR_DEVICE_ATTR_RW(shunt3_resistor, ina3221_shunt, INA3221_CHANNEL3);
-> +/* averaging mode */
-> +static SENSOR_DEVICE_ATTR_RW(average, ina3221_avg, 0);
->  
->  static struct attribute *ina3221_attrs[] = {
->  	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
->  	&sensor_dev_attr_shunt2_resistor.dev_attr.attr,
->  	&sensor_dev_attr_shunt3_resistor.dev_attr.attr,
-> +	&sensor_dev_attr_average.dev_attr.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(ina3221);
-> -- 
-> 2.17.1
-> 
+OK. Thanks
