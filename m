@@ -1,93 +1,116 @@
-Return-Path: <SRS0=8uXM=RO=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=gDtV=RP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6215FC43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 19:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E853EC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:27:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2D5C2214AE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Mar 2019 19:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1552334140;
-	bh=WA9HePv95xQ6u/mO8f6hJhrUuU79gR7iLRUX3wjKbuY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2nqsaiA8cceQp9/r9PrhBxEVfE0E8vUPAFZIw+aVJSMnlGTbVbm3IvhVsHq0KlF38
-	 LRr/CHrIh5m6qighXjmSiz43NEf7zycf8lMNXOj6dUrljgQ/LQ3LW4gL7U/6AhlgVV
-	 7+z0aqYhYnJA6eER8WxAGXytGMU/0p0M0oEkaCWY=
+	by mail.kernel.org (Postfix) with ESMTP id B81B52054F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:27:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bGCsKchf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbfCKTzj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Mar 2019 15:55:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32922 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728313AbfCKTzj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Mar 2019 15:55:39 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 660C3214D8;
-        Mon, 11 Mar 2019 19:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1552334139;
-        bh=WA9HePv95xQ6u/mO8f6hJhrUuU79gR7iLRUX3wjKbuY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V0p7VDGr8tMrU4rEmTTjkIZhMx3pvc5nOskyVFFzulPrUcxAC1SXkqXa667U/0XUG
-         g3Cnd7GLUboGjn/X4izilw4FXoQrxbQbQXH/qVt6wL8hxY9IyE5yIumzV2HPzmppOt
-         dYTLavI0hMoKziHtw0UYo2VI/Yb4pyw+N/McAsCA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Chris Siebenmann <cks@cs.toronto.edu>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.20 09/52] hwmon: (nct6775) Fix fan6 detection for NCT6793D
-Date:   Mon, 11 Mar 2019 15:54:33 -0400
-Message-Id: <20190311195516.137772-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190311195516.137772-1-sashal@kernel.org>
-References: <20190311195516.137772-1-sashal@kernel.org>
+        id S1725894AbfCLP1C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Mar 2019 11:27:02 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44414 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbfCLP1C (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Mar 2019 11:27:02 -0400
+Received: by mail-pf1-f194.google.com with SMTP id a3so2060398pff.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Mar 2019 08:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5onZcB4Kx1sA6z3poglGUeR66ZutvqKzCd0nCvcPU4M=;
+        b=bGCsKchfZ0LDej/PzRhc7x4wCXSWEzxLCs3A9xTLv0ipIe0/ZXgOICXYP3bgsGuf5M
+         9BfD1e8coMRMWaFIoqpJowSly7WwFhMS+DeRUg92l0K4AF0xbH2eCQ2t1xT1qIsB+MXm
+         q0g3VvSlajfyPolRm5Oob5+1dnRwPA3akeuf3fYd8YoHdQurCvkY4OEQGsW/0LcWnMk3
+         XmfbhfIX3yF4pSNzLBa7uqZwPFvl46DkPRtCY9HgkSVh8xTLoEMgrQQbNB1Q03WV3+/6
+         NTvHZ/RlxSZgJ/n2JWO37o9ql75KU1U2Ik/tQanuGXTz4fE6a79INRvlOiT/TcfwZAjs
+         0OgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5onZcB4Kx1sA6z3poglGUeR66ZutvqKzCd0nCvcPU4M=;
+        b=KEUS94qcE3DPpLI/NKYUTEwFDO4yyhRElf0gGqrAaQqOYokH9Io01VL6AFq5w8ZhMn
+         cW37ueaPsvoaUh9qMD+yIc5FcPyT3gs0CRkCn7gWPczpL1DY43YecwfxnbVNJdJchcxx
+         +1kLr74H2gB1OmbvI913RY1tuDd+/Fn/LAr+Q6a/SXFCbbNEdux1whqWL1sCXtsGoksk
+         rM+m0hYRKI9A6aM1eHqyNwYqog0jq8EmQbvJch9LW+ceN2CmBVar6m9Y5O8bdTP5eqnT
+         otlhORiyYKer5/m21lfiMrDwtrMvWaNWbBZ/jtVkbNsWXJerOAZ816u2EPdQRrHWzh/U
+         2CmQ==
+X-Gm-Message-State: APjAAAXOgb/4/4AF0aIos5ZUmhRvMUxhRKZKw7iK+2MOtpQ8uaSwYUpL
+        ckPA/CP94gdkj00EOGHDtAfJUJny
+X-Google-Smtp-Source: APXvYqzhHBywFmliNFpyoVKPmTdWmmQXS0cRuqTNzyffu6Cy/66aNAf9Biyht/oQwiLdXp5eRbuIfQ==
+X-Received: by 2002:a17:902:7896:: with SMTP id q22mr2510886pll.66.1552404421264;
+        Tue, 12 Mar 2019 08:27:01 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a2sm12031279pff.58.2019.03.12.08.26.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Mar 2019 08:26:59 -0700 (PDT)
+Date:   Tue, 12 Mar 2019 08:26:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Carlos Menin <carlos.menin@outlook.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: adc128d818: Fix value read from Device Tree
+Message-ID: <20190312152658.GA11644@roeck-us.net>
+References: <FR1P152MB28554B3FC5B4F6303019337993490@FR1P152MB2855.LAMP152.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <FR1P152MB28554B3FC5B4F6303019337993490@FR1P152MB2855.LAMP152.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Tue, Mar 12, 2019 at 01:14:39PM +0000, Carlos Menin wrote:
+> Cells in DT are 32-bits in size. of_property_read_u8() does not work
+> properly as it returns incorrect values in little-endian architectures.
+> Fix it by using of_property_read_u32() instead.
+> 
+Are you saying that pretty much all callers of of_property_read_u8()
+have this problem ? I would not rule that out, but it seems hard to
+believe.
 
-[ Upstream commit 2a2ec4aa0577ec0b7df2d1bde5c84ed39a8637cb ]
+Guenter
 
-Commit 2d99925a15b6 ("hwmon: (nct6775) Separate fan/pwm configuration
-detection for NCT6793D") accidentally removed part of the code detecting
-if fan6 is enabled or not. As result, fan6 is no longer detected on Asus
-PRIME Z370-A. Restore the missing detection code.
-
-Fixes: 2d99925a15b6 ("hwmon: (nct6775) Separate fan/pwm configuration detection for NCT6793D")
-Reported-by: Chris Siebenmann <cks@cs.toronto.edu>
-Cc: Chris Siebenmann <cks@cs.toronto.edu>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/nct6775.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 4adec4ab7d06..59ee01f3d022 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -3594,7 +3594,8 @@ nct6775_check_fan_inputs(struct nct6775_data *data)
- 			fan5pin |= cr1b & BIT(5);
- 			fan5pin |= creb & BIT(5);
- 
--			fan6pin = creb & BIT(3);
-+			fan6pin = !dsw_en && (cr2d & BIT(1));
-+			fan6pin |= creb & BIT(3);
- 
- 			pwm5pin |= cr2d & BIT(7);
- 			pwm5pin |= (creb & BIT(4)) && !(cr2a & BIT(0));
--- 
-2.19.1
-
+> Signed-off-by: Carlos Menin <carlos.menin@outlook.com>
+> ---
+>  drivers/hwmon/adc128d818.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+> index ca794bf..b5eb3c0 100644
+> --- a/drivers/hwmon/adc128d818.c
+> +++ b/drivers/hwmon/adc128d818.c
+> @@ -70,7 +70,7 @@ struct adc128_data {
+>  	struct regulator *regulator;
+>  	int vref;		/* Reference voltage in mV */
+>  	struct mutex update_lock;
+> -	u8 mode;		/* Operation mode */
+> +	u32 mode;		/* Operation mode */
+>  	bool valid;		/* true if following fields are valid */
+>  	unsigned long last_updated;	/* In jiffies */
+>  
+> @@ -467,7 +467,7 @@ static int adc128_probe(struct i2c_client *client,
+>  	}
+>  
+>  	/* Operation mode is optional. If unspecified, keep current mode */
+> -	if (of_property_read_u8(dev->of_node, "ti,mode", &data->mode) == 0) {
+> +	if (of_property_read_u32(dev->of_node, "ti,mode", &data->mode) == 0) {
+>  		if (data->mode > 3) {
+>  			dev_err(dev, "invalid operation mode %d\n",
+>  				data->mode);
+> -- 
+> 2.7.4
+> 
