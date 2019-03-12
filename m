@@ -2,115 +2,126 @@ Return-Path: <SRS0=gDtV=RP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E853EC43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5162AC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B81B52054F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:27:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bGCsKchf"
+	by mail.kernel.org (Postfix) with ESMTP id 1FA3920693
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Mar 2019 15:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1552405734;
+	bh=rvJynhYlX2tizCOlh3wi7Musb3KpzCuBmsJoC7SROEA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=2hc+Jr83RBnjVJ8sZAWt4xDL924q+OmeM/TfohjXUDHR42THPqLQGFbGS3bPAJgjw
+	 s99MjNGjFoyrjDvHKy3iEmydpFa0gfHMAm1Dw4ZsvSuzvx8Ip7SoWrh2+gNaPe+Un6
+	 psTDHQ8E0todBt7bFmRk+pQtHzhHPDtnMWytxsrY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725894AbfCLP1C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Mar 2019 11:27:02 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44414 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbfCLP1C (ORCPT
+        id S1726728AbfCLPst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Mar 2019 11:48:49 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46799 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbfCLPss (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Mar 2019 11:27:02 -0400
-Received: by mail-pf1-f194.google.com with SMTP id a3so2060398pff.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 Mar 2019 08:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5onZcB4Kx1sA6z3poglGUeR66ZutvqKzCd0nCvcPU4M=;
-        b=bGCsKchfZ0LDej/PzRhc7x4wCXSWEzxLCs3A9xTLv0ipIe0/ZXgOICXYP3bgsGuf5M
-         9BfD1e8coMRMWaFIoqpJowSly7WwFhMS+DeRUg92l0K4AF0xbH2eCQ2t1xT1qIsB+MXm
-         q0g3VvSlajfyPolRm5Oob5+1dnRwPA3akeuf3fYd8YoHdQurCvkY4OEQGsW/0LcWnMk3
-         XmfbhfIX3yF4pSNzLBa7uqZwPFvl46DkPRtCY9HgkSVh8xTLoEMgrQQbNB1Q03WV3+/6
-         NTvHZ/RlxSZgJ/n2JWO37o9ql75KU1U2Ik/tQanuGXTz4fE6a79INRvlOiT/TcfwZAjs
-         0OgQ==
+        Tue, 12 Mar 2019 11:48:48 -0400
+Received: by mail-oi1-f196.google.com with SMTP id j10so2426940oij.13;
+        Tue, 12 Mar 2019 08:48:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5onZcB4Kx1sA6z3poglGUeR66ZutvqKzCd0nCvcPU4M=;
-        b=KEUS94qcE3DPpLI/NKYUTEwFDO4yyhRElf0gGqrAaQqOYokH9Io01VL6AFq5w8ZhMn
-         cW37ueaPsvoaUh9qMD+yIc5FcPyT3gs0CRkCn7gWPczpL1DY43YecwfxnbVNJdJchcxx
-         +1kLr74H2gB1OmbvI913RY1tuDd+/Fn/LAr+Q6a/SXFCbbNEdux1whqWL1sCXtsGoksk
-         rM+m0hYRKI9A6aM1eHqyNwYqog0jq8EmQbvJch9LW+ceN2CmBVar6m9Y5O8bdTP5eqnT
-         otlhORiyYKer5/m21lfiMrDwtrMvWaNWbBZ/jtVkbNsWXJerOAZ816u2EPdQRrHWzh/U
-         2CmQ==
-X-Gm-Message-State: APjAAAXOgb/4/4AF0aIos5ZUmhRvMUxhRKZKw7iK+2MOtpQ8uaSwYUpL
-        ckPA/CP94gdkj00EOGHDtAfJUJny
-X-Google-Smtp-Source: APXvYqzhHBywFmliNFpyoVKPmTdWmmQXS0cRuqTNzyffu6Cy/66aNAf9Biyht/oQwiLdXp5eRbuIfQ==
-X-Received: by 2002:a17:902:7896:: with SMTP id q22mr2510886pll.66.1552404421264;
-        Tue, 12 Mar 2019 08:27:01 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a2sm12031279pff.58.2019.03.12.08.26.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Mar 2019 08:26:59 -0700 (PDT)
-Date:   Tue, 12 Mar 2019 08:26:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Carlos Menin <carlos.menin@outlook.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: adc128d818: Fix value read from Device Tree
-Message-ID: <20190312152658.GA11644@roeck-us.net>
-References: <FR1P152MB28554B3FC5B4F6303019337993490@FR1P152MB2855.LAMP152.PROD.OUTLOOK.COM>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Swil8d26nbBRuIeERFxj3CEgC6UaIXsOtAc/yNrkCTg=;
+        b=jmV1VVgP+zk8wDEpJLgpYZ0IPyrTwPzW2jOjUZ2HuNFjKSB4hchb80cQbPkV4z4xxv
+         PGnIPWJHMoXaeGNo/zHSTG2Y2C5qoaRyd3HrwTCkVHw5RcHzAkudFjeLj+l/VE8sAl++
+         VVNGId4EJiH+aF6YnrTm1u3MmpjDjWsA4JG9dOBLekKB8Mbl/5IEnp2prOEB+py/HX3Y
+         mSKptsz/YZCJ2C7NSjLnli3Rsgngff0kizVu2MqLjIwreF0b7E0EJr4O26a3T2K6Gb95
+         GvsGLemTDd5pXVKbqIZoUwexeErfJum0dTQlWdBX2AfVJEomQETrq6Vuvr9yGC5rVwaF
+         3uTw==
+X-Gm-Message-State: APjAAAWz/JCzUPlE6QEZAhdC1HMFJBKuzspmDG+9g/bX42ri0EjwtUy3
+        FjywQgcIJtQ25hRnZJnIhA==
+X-Google-Smtp-Source: APXvYqwltG9DNQesPzcC0Iub1FKXSuhut5dcBFyyqmOOtWQC5u8K9EOxiqR8No1qy5fVZQV1ijw1Wg==
+X-Received: by 2002:aca:42c6:: with SMTP id p189mr2119669oia.163.1552405727445;
+        Tue, 12 Mar 2019 08:48:47 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e138sm4131014oih.27.2019.03.12.08.48.46
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Mar 2019 08:48:46 -0700 (PDT)
+Date:   Tue, 12 Mar 2019 10:48:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC V2 1/3] dt-bindings: hwmon: Add tachometer interrupt
+ to pwm-fan
+Message-ID: <20190312154846.GA11788@bogus>
+References: <1551110359-19860-1-git-send-email-stefan.wahren@i2se.com>
+ <1551110359-19860-2-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <FR1P152MB28554B3FC5B4F6303019337993490@FR1P152MB2855.LAMP152.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1551110359-19860-2-git-send-email-stefan.wahren@i2se.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 12, 2019 at 01:14:39PM +0000, Carlos Menin wrote:
-> Cells in DT are 32-bits in size. of_property_read_u8() does not work
-> properly as it returns incorrect values in little-endian architectures.
-> Fix it by using of_property_read_u32() instead.
+On Mon, Feb 25, 2019 at 04:59:17PM +0100, Stefan Wahren wrote:
+> This adds the tachometer interrupt to the pwm-fan binding, which is
+> necessary for RPM support.
 > 
-Are you saying that pretty much all callers of of_property_read_u8()
-have this problem ? I would not rule that out, but it seems hard to
-believe.
-
-Guenter
-
-> Signed-off-by: Carlos Menin <carlos.menin@outlook.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 > ---
->  drivers/hwmon/adc128d818.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 > 
-> diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-> index ca794bf..b5eb3c0 100644
-> --- a/drivers/hwmon/adc128d818.c
-> +++ b/drivers/hwmon/adc128d818.c
-> @@ -70,7 +70,7 @@ struct adc128_data {
->  	struct regulator *regulator;
->  	int vref;		/* Reference voltage in mV */
->  	struct mutex update_lock;
-> -	u8 mode;		/* Operation mode */
-> +	u32 mode;		/* Operation mode */
->  	bool valid;		/* true if following fields are valid */
->  	unsigned long last_updated;	/* In jiffies */
+> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> index 49ca5d8..7d09623 100644
+> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+> @@ -8,6 +8,14 @@ Required properties:
 >  
-> @@ -467,7 +467,7 @@ static int adc128_probe(struct i2c_client *client,
->  	}
+>  Optional properties:
+>  - fan-supply    : phandle to the regulator that provides power to the fan
+> +- interrupts      : This contains a single interrupt specifier which
+> +		    describes the tachometer output of the fan as an
+> +		    interrupt source. The output signal must generate a
+> +		    defined number of interrupts per fan revolution, which
+> +		    require that it must be self resetting edge interrupts.
+> +		    See interrupt-controller/interrupts.txt for the format.
+> +- interrupt-ratio : defines the ratio interrupts per fan revolution as an
+> +		    integer (default is 2 interrupts per revolution)
+
+Name this for what it is, not how it is used. Using 'interrupt' is 
+misleading that it is related to the interrupt binding.
+'tach-pulse-per-rev' or something similar.
+
 >  
->  	/* Operation mode is optional. If unspecified, keep current mode */
-> -	if (of_property_read_u8(dev->of_node, "ti,mode", &data->mode) == 0) {
-> +	if (of_property_read_u32(dev->of_node, "ti,mode", &data->mode) == 0) {
->  		if (data->mode > 3) {
->  			dev_err(dev, "invalid operation mode %d\n",
->  				data->mode);
+>  Example:
+>  	fan0: pwm-fan {
+> @@ -38,3 +46,14 @@ Example:
+>  					};
+>  			     };
+>  		};
+> +
+> +Example 2:
+> +	fan0: pwm-fan {
+> +		fan0: pwm-fan {
+> +		compatible = "pwm-fan";
+> +		pwms = <&pwm 0 40000 0>;
+> +		fan-supply = <&reg_fan>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> +		interrupt-ratio = <2>;
+> +	};
 > -- 
 > 2.7.4
 > 
