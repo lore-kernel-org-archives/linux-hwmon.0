@@ -1,292 +1,105 @@
-Return-Path: <SRS0=mQrJ=RR=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=+5Hs=RS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 309FCC43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Mar 2019 18:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8970DC43381
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Mar 2019 10:25:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7AA82077B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Mar 2019 18:38:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXnYMwM2"
+	by mail.kernel.org (Postfix) with ESMTP id 60E3B218A5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Mar 2019 10:25:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbfCNSiX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Mar 2019 14:38:23 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36325 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726936AbfCNSiX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Mar 2019 14:38:23 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r124so4587919pgr.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 Mar 2019 11:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TbEWpo/3ryxSxkaqX8Sw49oVqpkjsBlO/9ID/CljCNU=;
-        b=WXnYMwM2Sqo4FDLOcQl6FZrIkB0lCKN4woxrEze9DMlhJNVnto2+teQC8WjZ4wRvsH
-         XEdpdaq3YlZUxnOBZ8lb7x/d9f/gLu1Gmi5kT0//vIQJCd0r38Wbf6nE4/9kV4klmJHI
-         I21thWHqLNWGmQZJVER//Ncl7ZUCzdhQ9ou7eJHQ/gaHJ1U5juiyQpguYUvggY+BmH51
-         2EGhexXFJdjj+yWF+ITbwmRjLk/nvYfFMY+zENZgbAuK8Chy9wvGW3lal4L6hZW20mLS
-         GKLlF8xQWARyUct3TljCtqIDzfMZtyJ0oBe+Objd5n7cpU129J+8C905jnw0Sjqud5Vz
-         VCIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=TbEWpo/3ryxSxkaqX8Sw49oVqpkjsBlO/9ID/CljCNU=;
-        b=e5+lSXqd44x825JM5zn20Ab/lIfSILmYc7jn7VCVMOT4Zw8GLb7+gKVDxhlqf9SMEO
-         f1U8FEThypyNjFBBX37ZuoI6PUg3BqlcGQmWS6SLumFH69kqE2tpm1bsU89oA548GziS
-         PKhCe7gkfBGBW4pMmZqDUqVvxg8LtFVYRRMvrr5Hj60owrAjvwxHkTl4PUIcIMZ81Dj8
-         DkXRp9ez2MXkt5bB4YftSKcF4nPUpXTfOJVY4trv09y7STrAxjQS96v/HVW2/Q7X9eUf
-         sbb7WrSEYcPK08jJHfpqPLI6/DFDPUNiMB1nzJY7VsNKWhea48ICcJbRRLeocvx/LWOj
-         /zUQ==
-X-Gm-Message-State: APjAAAV1KYrldextnBfOIhlt5kUk+6xeCnr7Luxj/I9qUBOG6MUAGOfQ
-        WWm4khs4ncAJwXaxygi07E+RG/4k
-X-Google-Smtp-Source: APXvYqxDzX7/Z2EFe4Fzv8bI0hYyqyRSqbI2a8ahonHr5a4U0LWKOFEpFbLAwh/4RBBMs1zmiG7wFA==
-X-Received: by 2002:a62:7993:: with SMTP id u141mr4429633pfc.252.1552588701769;
-        Thu, 14 Mar 2019 11:38:21 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e131sm34168300pfc.62.2019.03.14.11.38.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Mar 2019 11:38:20 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?q?Christian=20Gr=C3=B6nke?= <C.Groenke@infodas.de>
-Subject: [PATCH] hwmon: (pmbus) Add IEEE 754 half precision support to PMBus core
-Date:   Thu, 14 Mar 2019 11:38:19 -0700
-Message-Id: <1552588699-1199-1-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
+        id S1728676AbfCOKZD convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 Mar 2019 06:25:03 -0400
+Received: from mail.infodas.de ([87.190.49.227]:37586 "EHLO mail.infodas.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727938AbfCOKZC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 Mar 2019 06:25:02 -0400
+X-Greylist: delayed 320 seconds by postgrey-1.27 at vger.kernel.org; Fri, 15 Mar 2019 06:25:01 EDT
+Received: from veco001.infodas.de ([192.168.119.2]:54072)
+        by mail.infodas.de with esmtps (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.82_1-5b7a7c0-XX)
+        (envelope-from <C.Groenke@infodas.de>)
+        id 1h4jw6-0002un-1o; Fri, 15 Mar 2019 11:19:34 +0100
+Received: from mailsrv.infodas.de (192.168.100.13) by veco001.infodas.de with Infodas vecoMail 3.5.100.00565
+        id 52645172024297; Fri, 15 Mar 2019 11:19:32 +0100
+Received: from AS001EX.ifd.infodas.de (192.168.100.13) by
+ AS001EX.ifd.infodas.de (192.168.100.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1034.26; Fri, 15 Mar 2019 11:19:33 +0100
+Received: from AS001EX.ifd.infodas.de ([fe80::1009:82f4:6b93:afe0]) by
+ AS001EX.ifd.infodas.de ([fe80::1009:82f4:6b93:afe0%12]) with mapi id
+ 15.01.1034.033; Fri, 15 Mar 2019 11:19:33 +0100
+X-CTCH-RefID: str=0001.0A0C0202.5C8B7C36.009A,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+From:   =?iso-8859-1?Q?Gr=F6nke=2C_Christian?= <C.Groenke@infodas.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: AW: PMBus driver for FSP/3Y Power device with non-standard VOUT
+ values (LINEAR11 vs LINEAR16)
+Thread-Topic: PMBus driver for FSP/3Y Power device with non-standard VOUT
+ values (LINEAR11 vs LINEAR16)
+Thread-Index: AdTZlFnCHh83NT7jQ5qCS2EYnwBUxQAE3J+AAAMyQPD///ozgP//329wgADVuID//x1OIIABxjYA//7Mh0A=
+Date:   Fri, 15 Mar 2019 10:19:33 +0000
+Message-ID: <c1b60322acda43caa9e334841a83778a@infodas.de>
+References: <0e0877aa3c644765b226654bfd7874bf@infodas.de>
+ <20190313151941.GA7122@roeck-us.net>
+ <90ca63aeec904168b50b2f8c3f04dd73@infodas.de>
+ <20190313163027.GB15451@roeck-us.net>
+ <7c2e3520f1d24e51b7002c8d0138f00a@infodas.de>
+ <20190314031849.GA19793@roeck-us.net>
+ <25260e7b0f3d43588253791046440a64@infodas.de>
+ <20190314165308.GA14159@roeck-us.net>
+In-Reply-To: <20190314165308.GA14159@roeck-us.net>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.242.2.3]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PMBus v1.3.1 adds IEEE 754 half precision as additional data format.
-Add support for it.
+Hello Guenter,
 
-Cc: Christian GrÃ¶nke <C.Groenke@infodas.de>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/pmbus.h      |   2 +-
- drivers/hwmon/pmbus/pmbus_core.c | 142 +++++++++++++++++++++++++++++++++++++--
- 2 files changed, 139 insertions(+), 5 deletions(-)
+> -----Ursprüngliche Nachricht-----
+> Von: Guenter Roeck <groeck7@gmail.com> Im Auftrag von Guenter Roeck
+> Gesendet: Donnerstag, 14. März 2019 17:53
+> An: Grönke, Christian <C.Groenke@infodas.de>
+> Cc: linux-hwmon@vger.kernel.org
+> Betreff: Re: PMBus driver for FSP/3Y Power device with non-standard VOUT
+> values (LINEAR11 vs LINEAR16)
+> 
+> Hi Christian,
+> On Thu, Mar 14, 2019 at 04:08:32PM +0000, Grönke, Christian wrote:
+> >
+> > The framework code seemed to work fine. I used your code for the
+> conversion:
+> >     linear11 -> 'scaled integer' -> ieee754 It provided a way to test
+> > the code and was easy for me as my tries to do some other bit magic
+> > weren't successful. That means I partly tested the code from
+> > pmbus_data2reg_ieee754 as my read_word function uses this for the
+> > conversion. Of course not the module local function...
+> >
+> 
+> Wondering ... I would have thought that it should be possible to
+> implement a simplified linear11 <--> ieee754 conversion, without
+> converting to a scaled integer first. Have you tried that ?
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 1d24397d36ec..6477eb433790 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -374,7 +374,7 @@ enum pmbus_sensor_classes {
- 
- #define PMBUS_PAGE_VIRTUAL	BIT(31)
- 
--enum pmbus_data_format { linear = 0, direct, vid };
-+enum pmbus_data_format { linear = 0, ieee754, direct, vid };
- enum vrm_version { vr11 = 0, vr12, vr13 };
- 
- struct pmbus_driver_info {
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 2e2b5851139c..e1be5ebed57f 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -619,6 +619,66 @@ static struct pmbus_data *pmbus_update_device(struct device *dev)
- }
- 
- /*
-+ * Convert ieee754 sensor values to milli- or micro-units
-+ * depending on sensor type.
-+ *
-+ * ieee754 data format:
-+ *	bit 15:		sign
-+ *	bit 10..14:	exponent
-+ *	bit 0..9:	mantissa
-+ * exponent=0:
-+ *	v=(âˆ’1)^signbit * 2^(âˆ’14) * 0.significantbits
-+ * exponent=1..30:
-+ *	v=(âˆ’1)^signbit * 2^(exponent - 15) * 1.significantbits
-+ * exponent=31:
-+ *	v=NaN
-+ *
-+ * Add the number mantissa bits into the calculations for simplicity.
-+ * To do that, add '10' to the exponent. By doing that, we can just add
-+ * 0x400 to normal values and get the expected result.
-+ */
-+static long pmbus_reg2data_ieee754(struct pmbus_data *data,
-+				   struct pmbus_sensor *sensor)
-+{
-+	int exponent;
-+	bool sign;
-+	long val;
-+
-+	/* only support half precision for now */
-+	sign = sensor->data & 0x8000;
-+	exponent = (sensor->data >> 10) & 0x1f;
-+	val = sensor->data & 0x3ff;
-+
-+	if (exponent == 0) {			/* subnormal */
-+		exponent = -(14 + 10);
-+	} else if (exponent ==  0x1f) {		/* NaN, convert to min/max */
-+		exponent = 0;
-+		val = 65504;
-+	} else {
-+		exponent -= (15 + 10);		/* normal */
-+		val |= 0x400;
-+	}
-+
-+	/* scale result to milli-units for all sensors except fans */
-+	if (sensor->class != PSC_FAN)
-+		val = val * 1000L;
-+
-+	/* scale result to micro-units for power sensors */
-+	if (sensor->class == PSC_POWER)
-+		val = val * 1000L;
-+
-+	if (exponent >= 0)
-+		val <<= exponent;
-+	else
-+		val >>= -exponent;
-+
-+	if (sign)
-+		val = -val;
-+
-+	return val;
-+}
-+
-+/*
-  * Convert linear sensor values to milli- or micro-units
-  * depending on sensor type.
-  */
-@@ -740,6 +800,9 @@ static long pmbus_reg2data(struct pmbus_data *data, struct pmbus_sensor *sensor)
- 	case vid:
- 		val = pmbus_reg2data_vid(data, sensor);
- 		break;
-+	case ieee754:
-+		val = pmbus_reg2data_ieee754(data, sensor);
-+		break;
- 	case linear:
- 	default:
- 		val = pmbus_reg2data_linear(data, sensor);
-@@ -748,8 +811,72 @@ static long pmbus_reg2data(struct pmbus_data *data, struct pmbus_sensor *sensor)
- 	return val;
- }
- 
--#define MAX_MANTISSA	(1023 * 1000)
--#define MIN_MANTISSA	(511 * 1000)
-+#define MAX_IEEE_MANTISSA	(0x7ff * 1000)
-+#define MIN_IEEE_MANTISSA	(0x400 * 1000)
-+
-+static u16 pmbus_data2reg_ieee754(struct pmbus_data *data,
-+				  struct pmbus_sensor *sensor, long val)
-+{
-+	u16 exponent = (15 + 10);
-+	long mantissa;
-+	u16 sign = 0;
-+
-+	/* simple case */
-+	if (val == 0)
-+		return 0;
-+
-+	if (val < 0) {
-+		sign = 0x8000;
-+		val = -val;
-+	}
-+
-+	/* Power is in uW. Convert to mW before converting. */
-+	if (sensor->class == PSC_POWER)
-+		val = DIV_ROUND_CLOSEST(val, 1000L);
-+
-+	/*
-+	 * For simplicity, convert fan data to milli-units
-+	 * before calculating the exponent.
-+	 */
-+	if (sensor->class == PSC_FAN)
-+		val = val * 1000;
-+
-+	/* Reduce large mantissa until it fits into 10 bit */
-+	while (val > MAX_IEEE_MANTISSA && exponent < 30) {
-+		exponent++;
-+		val >>= 1;
-+	}
-+	/*
-+	 * Increase small mantissa to generate valid 'normal'
-+	 * number
-+	 */
-+	while (val < MIN_IEEE_MANTISSA && exponent > 1) {
-+		exponent--;
-+		val <<= 1;
-+	}
-+
-+	/* Convert mantissa from milli-units to units */
-+	mantissa = DIV_ROUND_CLOSEST(val, 1000);
-+
-+	/*
-+	 * Ensure that the resulting number is within range.
-+	 * Valid range is 0x400..0x7ff, where bit 10 reflects
-+	 * the implied high bit in normalized ieee754 numbers.
-+	 * Set the range to 0x400..0x7ff to reflect this.
-+	 * The upper bit is then removed by the mask against
-+	 * 0x3ff in the final assignment.
-+	 */
-+	if (mantissa > 0x7ff)
-+		mantissa = 0x7ff;
-+	else if (mantissa < 0x400)
-+		mantissa = 0x400;
-+
-+	/* Convert to sign, 5 bit exponent, 10 bit mantissa */
-+	return sign | (mantissa & 0x3ff) | ((exponent << 10) & 0x7c00);
-+}
-+
-+#define MAX_LIN_MANTISSA	(1023 * 1000)
-+#define MIN_LIN_MANTISSA	(511 * 1000)
- 
- static u16 pmbus_data2reg_linear(struct pmbus_data *data,
- 				 struct pmbus_sensor *sensor, long val)
-@@ -795,12 +922,12 @@ static u16 pmbus_data2reg_linear(struct pmbus_data *data,
- 		val = val * 1000;
- 
- 	/* Reduce large mantissa until it fits into 10 bit */
--	while (val >= MAX_MANTISSA && exponent < 15) {
-+	while (val >= MAX_LIN_MANTISSA && exponent < 15) {
- 		exponent++;
- 		val >>= 1;
- 	}
- 	/* Increase small mantissa to improve precision */
--	while (val < MIN_MANTISSA && exponent > -15) {
-+	while (val < MIN_LIN_MANTISSA && exponent > -15) {
- 		exponent--;
- 		val <<= 1;
- 	}
-@@ -878,6 +1005,9 @@ static u16 pmbus_data2reg(struct pmbus_data *data,
- 	case vid:
- 		regval = pmbus_data2reg_vid(data, sensor, val);
- 		break;
-+	case ieee754:
-+		regval = pmbus_data2reg_ieee754(data, sensor, val);
-+		break;
- 	case linear:
- 	default:
- 		regval = pmbus_data2reg_linear(data, sensor, val);
-@@ -1967,6 +2097,10 @@ static int pmbus_identify_common(struct i2c_client *client,
- 			if (data->info->format[PSC_VOLTAGE_OUT] != direct)
- 				return -ENODEV;
- 			break;
-+		case 3:	/* ieee 754 half precision */
-+			if (data->info->format[PSC_VOLTAGE_OUT] != ieee754)
-+				return -ENODEV;
-+			break;
- 		default:
- 			return -ENODEV;
- 		}
--- 
-2.7.4
+There might be a more efficient and elegant way. I toyed around with
+the conversion for a moment but didn't figure out a working way 
+quickly.
+Right now I need to integrate the driver and get it working in the
+System so that the depended application could can be worked on.
+I might revisit the current conversion code after that and try to
+find a "better" way.
 
+Kind regards
+Christian
