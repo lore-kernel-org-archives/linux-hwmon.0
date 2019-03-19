@@ -1,183 +1,122 @@
-Return-Path: <SRS0=f3EG=RV=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Q+NP=RW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7748C43381
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Mar 2019 16:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFDEFC43381
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Mar 2019 13:39:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1C4520863
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Mar 2019 16:11:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B746B2133D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Mar 2019 13:39:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=vincit.fi header.i=@vincit.fi header.b="E6ZOpBaR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbfCRQLy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Mar 2019 12:11:54 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:50549 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726663AbfCRQLy (ORCPT
+        id S1727241AbfCSNjE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 Mar 2019 09:39:04 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38667 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726661AbfCSNjE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Mar 2019 12:11:54 -0400
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 18 Mar 2019 18:10:30 +0200
-Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id x2IGAULp017069;
-        Mon, 18 Mar 2019 18:10:30 +0200
-From:   Vadim Pasternak <vadimp@mellanox.com>
-To:     linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, Vadim Pasternak <vadimp@mellanox.com>
-Subject: [PATCH v2 hwmon-next] hwmon: (mlxreg-fan) Add support for fan capability registers
-Date:   Mon, 18 Mar 2019 16:10:28 +0000
-Message-Id: <20190318161028.29868-1-vadimp@mellanox.com>
-X-Mailer: git-send-email 2.11.0
+        Tue, 19 Mar 2019 09:39:04 -0400
+Received: by mail-lj1-f193.google.com with SMTP id x13so17336422ljj.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 Mar 2019 06:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vincit.fi; s=ticniv;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jk6t3o2y7da8jlh9j7mvpw39KiCT7yHhoqG11zdXaMY=;
+        b=E6ZOpBaRcBJZe7sVzJvozwF8XXoBOl91Rvg3ou/7+xuSzbjfOF5EEUM4NAsFUHB4pZ
+         X1+nIECASgSB3Vm3Sl9lbuOsGSzf3PAMv3E3KIZ7JJnXvtav34i8Bl9YhW9OOapYyvOd
+         LaKVcOufAv+BvYllDISpMtzCO0nmIbcB/q9Bc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jk6t3o2y7da8jlh9j7mvpw39KiCT7yHhoqG11zdXaMY=;
+        b=uFjD0qBMTpzkmLU2KOWR8/Y4D4B7Zea5sd9mYQU2drWNG7UK/V0IKWkAgGqFT092vQ
+         Dib68IEgN1Vl8tioVD51zhkaXzC01T/2sT3d0GKomtu8HHc8eYpYfeix+aZjUC5uzMds
+         c7V8WssfVQYJXmRh1HKXOxxJG375QB9CV9peV4EB1DtAStG1dgwwfM4n0DSl08m2vFHR
+         V99wB8NECbqs8m5C18HlnNcLgxdqTyfwWTVzSLULbZblyrk4h/hS6F6U8c7I+dCXsud3
+         TCEVVj79BUF001K4AaAUuzOyOe24ft7fv5ajjBD2Q3yls6yV04Dig1mO/3jkDCeaiVsF
+         zxMA==
+X-Gm-Message-State: APjAAAXJTc2v43fJKpHQIjf4UMXIu2quaK6r9hksxGAsybM3EygaQwEN
+        0zBgJxmt3X0ZOzU1whXVRF73vmGqgl4=
+X-Google-Smtp-Source: APXvYqykFGiWboJ+HkVQjsrHAPZ94/jt5ewghy+XooZ8Zz5Zfut+VOC1Mn03td+mcTES/5W1CHeGvg==
+X-Received: by 2002:a2e:85d2:: with SMTP id h18mr7904001ljj.128.1553002742172;
+        Tue, 19 Mar 2019 06:39:02 -0700 (PDT)
+Received: from samu-ThinkPad-T480s (gw.vincit.cloud. [195.60.252.249])
+        by smtp.gmail.com with ESMTPSA id l14sm1504375lfk.92.2019.03.19.06.39.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Mar 2019 06:39:01 -0700 (PDT)
+Date:   Tue, 19 Mar 2019 15:38:59 +0200
+From:   Samu Nuutamo <samu.nuutamo@vincit.fi>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org,
+        Support Opensource <support.opensource@diasemi.com>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH] hwmon: (da9052) Synchronize access with mfd
+Message-ID: <20190319133859.GA24119@samu-ThinkPad-T480s>
+References: <20190318142953.GA23692@samu-ThinkPad-T480s>
+ <aea933dc-6109-12d9-a2c2-e367dd4e99d0@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aea933dc-6109-12d9-a2c2-e367dd4e99d0@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for fan capability registers in order to distinct between
-the systems which have minor fan configuration differences. This
-reduces the amount of code used to describe such systems.
-The capability registers provides system specific information about the
-number of physically connected tachometers and system specific fan
-speed scale parameter.
-For example one system can be equipped with twelve fan tachometers,
-while the other with for example, eight or six. Or one system should
-use default fan speed divider value, while the other has a scale
-parameter defined in hardware, which should be used for divider
-setting.
-Reading this information from the capability registers allows to use the
-same fan structure for the systems with the such differences.
+On Mon, Mar 18, 2019 at 07:51:55AM -0700, Guenter Roeck wrote:
+> On 3/18/19 7:29 AM, Samu Nuutamo wrote:
+> > When tsi-as-adc is configured it is possible for in7[0123]_input read to
+> 
+> in{70,71,72,73}_input ?
+> 
 
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
----
-v1->v2:
- Comments pointed out by Guenter:
- - Make the defines names shorter to fit into 80 symbols.
- - Simplify mlxreg_fan_connect_verify().
- - Make more clear comment in mlxreg_fan_speed_divider_get().
----
- drivers/hwmon/mlxreg-fan.c | 73 ++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 68 insertions(+), 5 deletions(-)
+Yes, and by that I meant the files inside /sys/class/hwmon/hwmon0. The 
+race can be triggered by reading both tsi and adc values (in70-73, 
+in4-6) concurrently, while verifying that the values are as expected. 
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index db8c6de0b6a0..44d4b1af1550 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -27,7 +27,9 @@
- #define MLXREG_FAN_SPEED_MAX			(MLXREG_FAN_MAX_STATE * 2)
- #define MLXREG_FAN_SPEED_MIN_LEVEL		2	/* 20 percent */
- #define MLXREG_FAN_TACHO_SAMPLES_PER_PULSE_DEF	44
--#define MLXREG_FAN_TACHO_DIVIDER_DEF		1132
-+#define MLXREG_FAN_TACHO_DIV_MIN		283
-+#define MLXREG_FAN_TACHO_DIV_DEF		(MLXREG_FAN_TACHO_DIV_MIN * 4)
-+#define MLXREG_FAN_TACHO_DIV_SCALE_MAX	64
- /*
-  * FAN datasheet defines the formula for RPM calculations as RPM = 15/t-high.
-  * The logic in a programmable device measures the time t-high by sampling the
-@@ -360,15 +362,57 @@ static const struct thermal_cooling_device_ops mlxreg_fan_cooling_ops = {
- 	.set_cur_state	= mlxreg_fan_set_cur_state,
- };
- 
-+static int mlxreg_fan_connect_verify(struct mlxreg_fan *fan,
-+				     struct mlxreg_core_data *data)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_read(fan->regmap, data->capability, &regval);
-+	if (err) {
-+		dev_err(fan->dev, "Failed to query capability register 0x%08x\n",
-+			data->capability);
-+		return err;
-+	}
-+
-+	return !!(regval & data->bit);
-+}
-+
-+static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
-+					struct mlxreg_core_data *data)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_read(fan->regmap, data->capability, &regval);
-+	if (err) {
-+		dev_err(fan->dev, "Failed to query capability register 0x%08x\n",
-+			data->capability);
-+		return err;
-+	}
-+
-+	/*
-+	 * Set divider value according to the capability register, in case it
-+	 * contains valid value. Otherwise use default value. The purpose of
-+	 * this validation is to protect against the old hardware, in which
-+	 * this register can return zero.
-+	 */
-+	if (regval > 0 && regval <= MLXREG_FAN_TACHO_DIV_SCALE_MAX)
-+		fan->divider = regval * MLXREG_FAN_TACHO_DIV_MIN;
-+
-+	return 0;
-+}
-+
- static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 			     struct mlxreg_core_platform_data *pdata)
- {
- 	struct mlxreg_core_data *data = pdata->data;
- 	bool configured = false;
- 	int tacho_num = 0, i;
-+	int err;
- 
- 	fan->samples = MLXREG_FAN_TACHO_SAMPLES_PER_PULSE_DEF;
--	fan->divider = MLXREG_FAN_TACHO_DIVIDER_DEF;
-+	fan->divider = MLXREG_FAN_TACHO_DIV_DEF;
- 	for (i = 0; i < pdata->counter; i++, data++) {
- 		if (strnstr(data->label, "tacho", sizeof(data->label))) {
- 			if (tacho_num == MLXREG_FAN_MAX_TACHO) {
-@@ -376,6 +420,17 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 					data->label);
- 				return -EINVAL;
- 			}
-+
-+			if (data->capability) {
-+				err = mlxreg_fan_connect_verify(fan, data);
-+				if (err < 0)
-+					return err;
-+				else if (!err) {
-+					tacho_num++;
-+					continue;
-+				}
-+			}
-+
- 			fan->tacho[tacho_num].reg = data->reg;
- 			fan->tacho[tacho_num].mask = data->mask;
- 			fan->tacho[tacho_num++].connected = true;
-@@ -394,13 +449,21 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 				return -EINVAL;
- 			}
- 			/* Validate that conf parameters are not zeros. */
--			if (!data->mask || !data->bit) {
-+			if (!data->mask && !data->bit && !data->capability) {
- 				dev_err(fan->dev, "invalid conf entry params: %s\n",
- 					data->label);
- 				return -EINVAL;
- 			}
--			fan->samples = data->mask;
--			fan->divider = data->bit;
-+			if (data->capability) {
-+				err = mlxreg_fan_speed_divider_get(fan, data);
-+				if (err)
-+					return err;
-+			} else {
-+				if (data->mask)
-+					fan->samples = data->mask;
-+				if (data->bit)
-+					fan->divider = data->bit;
-+			}
- 			configured = true;
- 		} else {
- 			dev_err(fan->dev, "invalid label: %s\n", data->label);
--- 
-2.11.0
+Using a simple test script that read the values continuously I got 
+incorrect readings once every few minutes.
 
+
+> > return an incorrect value if a concurrent read to in[456]_input is
+> > performed. This is likely caused by a concurrent manipulation of the mux
+> > channel without proper locking as hwmon and mfd use different locks for
+> > synchronization.
+> > 
+> > Switch hwmon to use the same lock as mfd when accessing the TSI channel.
+> > 
+> > Fixes: 4f16cab19a3d5 ("hwmon: da9052: Add support for TSI channel")
+> > Signed-off-by: Samu Nuutamo <samu.nuutamo@vincit.fi>
+> > ---
+> >   drivers/hwmon/da9052-hwmon.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
+> > index 8ec5bf4ce392..af136a638065 100644
+> > --- a/drivers/hwmon/da9052-hwmon.c
+> > +++ b/drivers/hwmon/da9052-hwmon.c
+> > @@ -249,9 +249,9 @@ static ssize_t da9052_tsi_show(struct device *dev,
+> >   	int channel = to_sensor_dev_attr(devattr)->index;
+> >   	int ret;
+> > -	mutex_lock(&hwmon->hwmon_lock);
+> > +	mutex_lock(&hwmon->da9052->auxadc_lock);
+> 
+> This is, at best, a kludge.
+> 
+> The hwmon driver doesn't own struct da9052 and should not really access any of its
+> structure members. The problem suggests that __da9052_read_tsi() should have
+> been implemented in the mfd core, similar to da9052_adc_manual_read().
+> 
+
+Not sure if I have resources to do a proper fix at this point.
+
+- Samu
