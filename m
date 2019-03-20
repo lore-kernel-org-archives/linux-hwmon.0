@@ -1,118 +1,85 @@
-Return-Path: <SRS0=Q+NP=RW=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=9YG5=RX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A38B1C43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Mar 2019 21:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A98FC43381
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Mar 2019 06:15:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75719213F2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 Mar 2019 21:02:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4858E20857
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Mar 2019 06:15:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="bpaUmZJT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727193AbfCSVCK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 Mar 2019 17:02:10 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42228 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726740AbfCSVCI (ORCPT
+        id S1726023AbfCTGPn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Mar 2019 02:15:43 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:34662 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfCTGPn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 Mar 2019 17:02:08 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2JKx7BO036574
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 Mar 2019 17:02:07 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2rb5qvek14-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 Mar 2019 17:02:07 -0400
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Tue, 19 Mar 2019 21:02:08 -0000
-Received: from b03cxnp08025.gho.boulder.ibm.com (9.17.130.17)
-        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 19 Mar 2019 21:02:05 -0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x2JL1xPV26345610
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Mar 2019 21:02:00 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDB3BC6055;
-        Tue, 19 Mar 2019 21:01:59 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85D84C6057;
-        Tue, 19 Mar 2019 21:01:59 +0000 (GMT)
-Received: from talon7.ibm.com (unknown [9.41.179.222])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Mar 2019 21:01:59 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: occ: Fix power sensor indexing
-Date:   Tue, 19 Mar 2019 16:01:58 -0500
-X-Mailer: git-send-email 1.8.3.1
-X-TM-AS-GCONF: 00
-x-cbid: 19031921-0036-0000-0000-00000A9B5EB1
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00010787; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000281; SDB=6.01176766; UDB=6.00615534; IPR=6.00957453;
- MB=3.00026060; MTD=3.00000008; XFM=3.00000015; UTC=2019-03-19 21:02:07
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19031921-0037-0000-0000-00004B1661F9
-Message-Id: <1553029318-31703-1-git-send-email-eajames@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-19_10:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=924 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1903190147
+        Wed, 20 Mar 2019 02:15:43 -0400
+Received: by mail-qk1-f194.google.com with SMTP id n6so13409554qkf.1;
+        Tue, 19 Mar 2019 23:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EWKNpWqJj2bgyX/RvDs5r8eBtX/6dyDOyXm4vIm3YNM=;
+        b=bpaUmZJTdTY0sH72rJNDoT3sn6E2xuowcmtl4PoH1iFA7OFZgJX1jZ2NAQeUr8/UUE
+         MGTnu8R1svqbX97nQAr/uzyEwk78ryGFnUR0P4jbsMmcLQsWSVuxdrNbJX+95HTu9lGW
+         ECuuB/gAmGPmkuXFvO7vRoCp7uX6phb09quUs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EWKNpWqJj2bgyX/RvDs5r8eBtX/6dyDOyXm4vIm3YNM=;
+        b=UQ4M9p7uHcw1ihRarf7cPCYuDrETaPY/9TqDcNbomPPvMTJ7WXorMZ7HVZk1yLkUn3
+         nJdWfjNHY4CKKSN2/G+3U2r5f9kENStVBBrCQVYa1HZUpQ7O7Kb4A9Y+3N8wj/b+m+mL
+         c3sRR41OkrtRl6AkoscJl9XYRbdkAYuq1gSZ86AoTHmwEClD3lnNKdwKVNcNwvjYLDxI
+         QUgxdaEjZtyJ7LBTK2olC52r/E+0I9MeUPanYWUpRYos0i8r/9TKfbsiZrVOGk6JHl6m
+         fG/reh0yf5iMVNVkGYQevJANAQ7nz3fcx1fu9aqs9IFzk0HiJ761FhifNsHQZeugh6lq
+         s0pg==
+X-Gm-Message-State: APjAAAVN8Zr+6rT6MiQ+bg8k7CskqTsHfH+roTWARh0+bECYmmN2Fnw4
+        LJC31BxWrcxHRw64psB7u5rSeiYaNpfAUOiTVgNxjQ==
+X-Google-Smtp-Source: APXvYqy2vtQ+qxNTcKNaWXaMzTXI2iES2XZA6BJUZqbaTYTXnL0p1065VNg9YTLQc7DcL9U5P2ej9z+NBtRbbKgho80=
+X-Received: by 2002:a37:4b0c:: with SMTP id y12mr5170838qka.127.1553062542555;
+ Tue, 19 Mar 2019 23:15:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <1553029318-31703-1-git-send-email-eajames@linux.ibm.com>
+In-Reply-To: <1553029318-31703-1-git-send-email-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 20 Mar 2019 06:15:30 +0000
+Message-ID: <CACPK8XfyaQaum1fdOFrH=Uymq7VS7EvDYQJwxhsASSu_-9MBCQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: occ: Fix power sensor indexing
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In the case of power sensor version 0xA0, the sensor indexing overlapped
-with the "caps" power sensors, resulting in probe failure and kernel
-warnings. Fix this by specifying the next index for each power sensor
-version.
+On Tue, 19 Mar 2019 at 21:04, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> In the case of power sensor version 0xA0, the sensor indexing overlapped
+> with the "caps" power sensors, resulting in probe failure and kernel
+> warnings. Fix this by specifying the next index for each power sensor
+> version.
+>
+> Fixes: 54076cb ("hwmon (occ): Add sensor attributes and register ...")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Fixes: 54076cb ("hwmon (occ): Add sensor attributes and register ...")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/occ/common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+You forgot to cc stable:
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index 391118c..c888f4a 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -889,6 +889,8 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 				s++;
- 			}
- 		}
-+
-+		s = (sensors->power.num_sensors * 4) + 1;
- 	} else {
- 		for (i = 0; i < sensors->power.num_sensors; ++i) {
- 			s = i + 1;
-@@ -917,11 +919,11 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 						     show_power, NULL, 3, i);
- 			attr++;
- 		}
--	}
- 
--	if (sensors->caps.num_sensors >= 1) {
- 		s = sensors->power.num_sensors + 1;
-+	}
- 
-+	if (sensors->caps.num_sensors >= 1) {
- 		snprintf(attr->name, sizeof(attr->name), "power%d_label", s);
- 		attr->sensor = OCC_INIT_ATTR(attr->name, 0444, show_caps, NULL,
- 					     0, 0);
--- 
-1.8.3.1
+cc: stable@vger.kernel.org # 4.21
 
+Tested-by: Joel Stanley <joel@jms.id.au>
+
+Cheers,
+
+Joel
