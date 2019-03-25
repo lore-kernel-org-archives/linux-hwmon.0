@@ -1,283 +1,96 @@
-Return-Path: <SRS0=BIfI=R2=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=S2uc=R4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E137CC4360F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Mar 2019 15:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D0AC43381
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Mar 2019 08:21:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AED18218A2
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Mar 2019 15:03:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4875D20879
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Mar 2019 08:21:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aaZz3GwA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s9Dmioff"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbfCWPDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Mar 2019 11:03:40 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40105 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbfCWPDk (ORCPT
+        id S1729920AbfCYIV4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Mar 2019 04:21:56 -0400
+Received: from mail-it1-f181.google.com ([209.85.166.181]:40326 "EHLO
+        mail-it1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729914AbfCYIVz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Mar 2019 11:03:40 -0400
-Received: by mail-pg1-f194.google.com with SMTP id u9so3471115pgo.7;
-        Sat, 23 Mar 2019 08:03:39 -0700 (PDT)
+        Mon, 25 Mar 2019 04:21:55 -0400
+Received: by mail-it1-f181.google.com with SMTP id y63so923246itb.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 25 Mar 2019 01:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y74O7cJJSSWu4auGgupzwHkycq7o8Xx2T8QJ9kIH7QI=;
-        b=aaZz3GwAWSHKHlYYWf/Eieb5ejXTd92NoKMXu1o/mWEYMyVN60+f1nXPdVXMk4+kYg
-         34iQXy3CvyVeDpOYRFPIG8AEC6ZoAPLUHGj55F1EKZWCqe0F/vaKNb4+jkP0tVD7vhy3
-         Do9DdjZaXga4FMREphYmESydkoVUKOsS6Lo5sWV2QK5W4MciaBqHi26V3TgUOPFsUOCN
-         Pnj+aBuC8+MhLsXiwfSAA+5G18+fmh8ThtJtms9sBc8Dx2KJMQfAuw8dwRQqxRW2EJGf
-         Tp0jYB/emvqNXz/OgX97NJy9eN8BHMPvBAGWT39R2ru4az0Y0zVMVPuoX5rQk0gz/kMW
-         GTNA==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vgGl87P/sqNer9f1dVkOnqtIHUfnC6TIVzAuAr/kn7Q=;
+        b=s9DmioffIU5p/geJY4T8PViCkiAcRWXMeozgecD7pqv/KpdjSH6H2TQRvqfihMdTq9
+         N/zcbZjc1Ml3gGEpiR9TZLkh4XpKyApjrvXQKeThaN32H0XTzWu4mLtCxfgOuSVNf6Uy
+         bvyEUx7hWz3XlrSd3ILWRkxmd5Gx5SmbZYgsh+Y1P0qFit6MO7aZNiA1TN5lW6Xz6NWx
+         ZZONRtsn/K2WIvCRvuJOeoWu5gclKy4B9trYCknCK//RQsHuq/w52hZShGJ5jHHq3Zfj
+         Dts0h3Fvrt2iUn4fAbS3V/annQEZBSL0wH2Go584sokVijivkdwzucdhZXcrTX3ZWpds
+         DB2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y74O7cJJSSWu4auGgupzwHkycq7o8Xx2T8QJ9kIH7QI=;
-        b=gpsK/FfZkdU9HI6Q/gVlNYxbcE3UMEX+5W+5bldvi8SqhP0TK1pa43ayrciO6RS5MD
-         OQ9adyyRTQWW5CGGsU7rhXqZ51LHgPl3ITxFpzh+D/wEuM+vkPp8nasoaECNzUdUyG5y
-         tw7BcVq7gk1NRvIFPsT1mb2inHbwO579kmdOL1rI5PjdxpwWiG0UHvDaRXh92t+B8Nn8
-         J1GjQK1hBmpjRnmqOsnge5bpgwpmSxbUF6Ie3i+O0/FvaiU+thR69HOK+Hp4KV8QKCFA
-         r9RVgInl4SQCLcVRkVLQOP1Ae/W321sEopXyiPup1ntP81igEjs0RJ7Q+fO/ZqubY74j
-         vDBg==
-X-Gm-Message-State: APjAAAWjVjxZ8nq8HsYnsQuUzrujyctN0JUfRf6w8vILhBF2DBkX8SOy
-        hT6dARhFFmeaI8qG5ar1rhKdAcE8
-X-Google-Smtp-Source: APXvYqwqqm9TvYC8AsBFQgw23ioOPpygOj8m2i9rj/O6uiDKjzIIOFImQX57iUzyhy+tRMIKu6n4sA==
-X-Received: by 2002:a65:6546:: with SMTP id a6mr14422644pgw.296.1553353418873;
-        Sat, 23 Mar 2019 08:03:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f125sm19788056pfc.91.2019.03.23.08.03.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 Mar 2019 08:03:37 -0700 (PDT)
-Subject: Re: [PATCH V3 3/3] hwmon: pwm-fan: Add RPM support via external
- interrupt
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1553243043-19486-1-git-send-email-stefan.wahren@i2se.com>
- <1553243043-19486-4-git-send-email-stefan.wahren@i2se.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <53485197-01e3-1f84-df93-a01164e5cded@roeck-us.net>
-Date:   Sat, 23 Mar 2019 08:03:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vgGl87P/sqNer9f1dVkOnqtIHUfnC6TIVzAuAr/kn7Q=;
+        b=E20ErF1MKn6cX1Z1DxIKezOBXng2RYRBFDHLyFRvLSB0vGKvyWisfdzNeSDAizBFVY
+         sZtkO1l1yV8L7wac2nvL/JZiu6nsdSYwczEm92HKN5ZfdlhRqalMwv/K/Jix1h5kPdsQ
+         PgwbX3PF9IskJyiHyaiw/86todlpo+mIMYQnYtOTJ7SCsTkpgqvxuhB8I/E2dOIOWaaX
+         yaKZoY+DZeXg1Pj5cDfgrZDkW01BLWkPsBVK/Mixc6hjnG6yPkC12Nw7d9w+CE6C1A0F
+         bdSwV/seV7wRwCgx2X6hCDhR0gDBlli1DH40XFAcOl65e1Kn3Xgubv5G83ELccYPMKtj
+         nWKA==
+X-Gm-Message-State: APjAAAVoN+9HMM0QrXc5oWaiD9gc0F0JMbSIXDIAU4380a//xNULBv4G
+        lcZC6u8PQhJKz2BXd9wGHcERZgeFqDU7L4VpUYcJTrurMOQ=
+X-Google-Smtp-Source: APXvYqzzbeAYWViUND68cLeOqc2zdTCFdcCubN+zmMXk10hdlxag+iYVYR3E7lt4GuGJD707Qq3rWbF94JSYNZvmxgk=
+X-Received: by 2002:a24:df87:: with SMTP id r129mr9952503itg.178.1553502114691;
+ Mon, 25 Mar 2019 01:21:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1553243043-19486-4-git-send-email-stefan.wahren@i2se.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Lei YU <mine260309@gmail.com>
+Date:   Mon, 25 Mar 2019 16:21:42 +0800
+Message-ID: <CAARXrtmNL+Px7vk4mA++yzO22nUWqmBnL3hn6oedB8d9516pvg@mail.gmail.com>
+Subject: Userspace matching of hwmon devices to hardware
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/22/19 1:24 AM, Stefan Wahren wrote:
-> This adds RPM support to the pwm-fan driver in order to use with
-> fancontrol/pwmconfig. This feature is intended for fans with a tachometer
-> output signal, which generate a defined number of pulses per revolution.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->   drivers/hwmon/pwm-fan.c | 100 +++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 99 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 167221c..c8fb6a3 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -18,6 +18,7 @@
->   
->   #include <linux/hwmon.h>
->   #include <linux/hwmon-sysfs.h>
-> +#include <linux/interrupt.h>
->   #include <linux/module.h>
->   #include <linux/mutex.h>
->   #include <linux/of.h>
-> @@ -26,6 +27,7 @@
->   #include <linux/regulator/consumer.h>
->   #include <linux/sysfs.h>
->   #include <linux/thermal.h>
-> +#include <linux/timer.h>
->   
->   #define MAX_PWM 255
->   
-> @@ -33,6 +35,14 @@ struct pwm_fan_ctx {
->   	struct mutex lock;
->   	struct pwm_device *pwm;
->   	struct regulator *reg_en;
-> +
-> +	int irq;
-> +	atomic_t pulses;
-> +	unsigned int rpm;
-> +	u32 pulses_per_revolution;
-> +	ktime_t sample_start;
-> +	struct timer_list rpm_timer;
-> +
->   	unsigned int pwm_value;
->   	unsigned int pwm_fan_state;
->   	unsigned int pwm_fan_max_state;
-> @@ -40,6 +50,32 @@ struct pwm_fan_ctx {
->   	struct thermal_cooling_device *cdev;
->   };
->   
-> +/* This handler assumes self resetting edge triggered interrupt. */
-> +static irqreturn_t pulse_handler(int irq, void *dev_id)
-> +{
-> +	struct pwm_fan_ctx *ctx = dev_id;
-> +
-> +	/* Avoid possible overflow */
-> +	if (atomic_read(&ctx->pulses) < 100000)
-> +		atomic_inc(&ctx->pulses);
-> +
+This email is to ask/discuss if there is a stable path/name (or whatever) for
+hwmon devices in the different versions of kernels.
 
-100000 * 60 * 1000 = 6,000,000,000, which is already above 32 bit,
-so you still get the overflow.
+In OpenBMC, the service phosphor-hwmon reads the sensors' value and expose to
+DBus, depending on a configure file that matches the device tree path.
 
-Any limit would have to be below (0xffffffff / (60 * sample_ms))
-for the maximum expected value of sample_ms.
+The service is started by udev rule, called with the DEVPATH and OF_FULLNAME,
+so it knows where to find the configure file depending on DEVPATH or
+OF_FULLNAME.
 
-You could select a working limit, such as 32768 (that is just as arbitrary
-as 100,000, but at least it works up to sample_ms above 2,000), or check
-for overflow when calculating rpm.
+E.g. on Romulus BMC, the w83773 sensor has OF_FULLNAME at
+   /ahb/apb/i2c@1e78a000/i2c-bus@440/w83773g@4c,
+and the service knows the config is matched from path
+   /etc/default/obmc/hwmon/ahb/apb/i2c@1e78a000/i2c-bus@440/w83773g@4c.conf
 
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void sample_timer(struct timer_list *t)
-> +{
-> +	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
-> +	int pulses, sample_ms;
-> +
-> +	pulses = atomic_read(&ctx->pulses);
-> +	atomic_sub(pulses, &ctx->pulses);
-> +	sample_ms = ktime_ms_delta(ktime_get(), ctx->sample_start);
-> +	ctx->rpm = pulses * 60 * sample_ms / 1000 / ctx->pulses_per_revolution;
-> +
-> +	ctx->sample_start = ktime_get();
-> +	mod_timer(&ctx->rpm_timer, jiffies + HZ);
-> +}
-> +
->   static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
->   {
->   	unsigned long period;
-> @@ -100,15 +136,49 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
->   	return sprintf(buf, "%u\n", ctx->pwm_value);
->   }
->   
-> +static ssize_t rpm_show(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%u\n", ctx->rpm);
-> +}
->   
->   static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
-> +static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
->   
->   static struct attribute *pwm_fan_attrs[] = {
->   	&sensor_dev_attr_pwm1.dev_attr.attr,
-> +	&sensor_dev_attr_fan1_input.dev_attr.attr,
->   	NULL,
->   };
->   
-> -ATTRIBUTE_GROUPS(pwm_fan);
-> +static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
-> +				     int n)
-> +{
-> +	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> +	struct device_attribute *devattr;
-> +
-> +	/* Hide fan_input in case no interrupt is available  */
-> +	devattr = container_of(a, struct device_attribute, attr);
-> +	if (devattr == &sensor_dev_attr_fan1_input.dev_attr) {
-> +		if (ctx->irq < 0)
-> +			return 0;
-> +	}
-> +
-> +	return a->mode;
-> +}
-> +
-> +static const struct attribute_group pwm_fan_group = {
-> +	.attrs = pwm_fan_attrs,
-> +	.is_visible = pwm_fan_attrs_visible,
-> +};
-> +
-> +static const struct attribute_group *pwm_fan_groups[] = {
-> +	&pwm_fan_group,
-> +	NULL,
-> +};
->   
->   /* thermal cooling device callbacks */
->   static int pwm_fan_get_max_state(struct thermal_cooling_device *cdev,
-> @@ -261,6 +331,32 @@ static int pwm_fan_probe(struct platform_device *pdev)
->   		goto err_reg_disable;
->   	}
->   
-> +	timer_setup(&ctx->rpm_timer, sample_timer, 0);
-> +
-> +	if (of_property_read_u32(pdev->dev.of_node, "pulses-per-revolution",
-> +				 &ctx->pulses_per_revolution)) {
-> +		ctx->pulses_per_revolution = 2;
-> +	}
-> +
-> +	if (!ctx->pulses_per_revolution) {
-> +		dev_err(&pdev->dev, "pulses-per-revolution can't be zero.\n");
-> +		ret = -EINVAL;
-> +		goto err_pwm_disable;
-> +	}
-> +
-> +	atomic_set(&ctx->pulses, 0);
+However, the DEVPATH or OF_FULLNAME is not stable in different kernels:
+* In 4.1x kernel, the path is as above.
+* In 5.0 kernel, "i2c@1e78a000" is changed to "bus@1e78a000" in the path.
 
-Already initialized with 0.
+This breaks the userspace's phosphor-hwmon.
+If we fix the issue by updating the configure files' path in userspace, it
+means the userspace only with the new 5.x kernel.
 
-> +	ctx->irq = platform_get_irq(pdev, 0);
-> +	if (ctx->irq >= 0) {
+So the question here is, it there a stable way for userspace to match a hwmon
+device?
 
-I have seen other patches recently, changing this check to > 0.
-I never know what a valid irq is, but it may be prudent to change this to > 0
-(and the check in is_visible to <= 0).
+Thanks!
 
-Either case, the function can return -EPROBE_DEFER, which should be handled
-and not be ignored.
-
-> +		ret = devm_request_irq(&pdev->dev, ctx->irq, pulse_handler, 0,
-> +				       pdev->name, ctx);
-> +		if (ret) {
-> +			dev_err(&pdev->dev, "Can't get interrupt working.\n");
-> +			goto err_pwm_disable;
-> +		}
-> +		ctx->sample_start = ktime_get();
-> +		mod_timer(&ctx->rpm_timer, jiffies + HZ);
-> +	}
-> +
->   	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
->   						       ctx, pwm_fan_groups);
->   	if (IS_ERR(hwmon)) {
-
-del_timer_sync() here ?
-
-> @@ -306,6 +402,8 @@ static int pwm_fan_remove(struct platform_device *pdev)
->   	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
->   
->   	thermal_cooling_device_unregister(ctx->cdev);
-> +	del_timer_sync(&ctx->rpm_timer);
-> +
->   	if (ctx->pwm_value)
->   		pwm_disable(ctx->pwm);
->   
-> 
-
+--
+BRs,
+Lei YU
