@@ -2,119 +2,657 @@ Return-Path: <SRS0=ZzD2=R7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83FD6C43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 11:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65F3BC43381
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 13:10:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B7302173C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 11:26:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 299B92173C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 13:10:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbfC1L0d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Mar 2019 07:26:33 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:49558 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725779AbfC1L0d (ORCPT
+        id S1726172AbfC1NKk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Mar 2019 09:10:40 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:41372 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726082AbfC1NKk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Mar 2019 07:26:33 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2SBK0wj006852;
-        Thu, 28 Mar 2019 06:25:35 -0500
+        Thu, 28 Mar 2019 09:10:40 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2SD8nCD032046;
+        Thu, 28 Mar 2019 08:09:48 -0500
 Authentication-Results: ppops.net;
         spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
 Received: from mail1.cirrus.com (mail1.cirrus.com [141.131.3.20])
-        by mx0b-001ae601.pphosted.com with ESMTP id 2rdh7k2570-1;
-        Thu, 28 Mar 2019 06:25:34 -0500
+        by mx0a-001ae601.pphosted.com with ESMTP id 2rdj70k267-1;
+        Thu, 28 Mar 2019 08:09:47 -0500
 Received: from EX17.ad.cirrus.com (unknown [172.20.9.81])
-        by mail1.cirrus.com (Postfix) with ESMTP id 6B621611C8AC;
-        Thu, 28 Mar 2019 06:25:34 -0500 (CDT)
+        by mail1.cirrus.com (Postfix) with ESMTP id 2E5EB611C8AD;
+        Thu, 28 Mar 2019 08:09:47 -0500 (CDT)
 Received: from imbe.wolfsonmicro.main (198.61.95.81) by EX17.ad.cirrus.com
  (172.20.9.81) with Microsoft SMTP Server id 14.3.408.0; Thu, 28 Mar 2019
- 11:25:33 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com
- [198.61.86.93])        by imbe.wolfsonmicro.main (8.14.4/8.14.4) with ESMTP id
- x2SBPVRo000710;        Thu, 28 Mar 2019 11:25:31 GMT
-Date:   Thu, 28 Mar 2019 11:25:31 +0000
+ 13:09:46 +0000
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by imbe.wolfsonmicro.main (8.14.4/8.14.4) with ESMTP id x2SD9b33022330; Thu,
+ 28 Mar 2019 13:09:38 GMT
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <corbet@lwn.net>,
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <linux-hwmon@vger.kernel.org>, <corbet@lwn.net>,
         <devicetree@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v3 2/2] hwmon: lochnagar: Add Lochnagar 2 hardware
- monitoring driver
-Message-ID: <20190328112531.GK46536@ediswmail.ad.cirrus.com>
-References: <20190327151328.2491-1-ckeepax@opensource.cirrus.com>
- <20190327151328.2491-2-ckeepax@opensource.cirrus.com>
- <20190327193115.GA6462@roeck-us.net>
+Subject: [PATCH v4 2/2] hwmon: lochnagar: Add Lochnagar 2 hardware monitoring driver
+Date:   Thu, 28 Mar 2019 13:09:37 +0000
+Message-ID: <20190328130937.3756-2-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190328130937.3756-1-ckeepax@opensource.cirrus.com>
+References: <20190328130937.3756-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190327193115.GA6462@roeck-us.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
  suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=993 adultscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1903280082
+ definitions=main-1903280092
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 27, 2019 at 12:31:15PM -0700, Guenter Roeck wrote:
-> On Wed, Mar 27, 2019 at 03:13:28PM +0000, Charles Keepax wrote:
-> > From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> > 
-> > Lochnagar is an evaluation and development board for Cirrus
-> > Logic Smart CODEC and Amp devices. It allows the connection of
-> > most Cirrus Logic devices on mini-cards, as well as allowing
-> > connection of various application processor systems to provide a
-> > full evaluation platform.
-> > 
-> > This driver adds support for the hardware monitoring features of
-> > the Lochnagar 2 to the hwmon API. Monitoring is provided for
-> > the board voltages, currents and temperature supported by the
-> > board controller chip.
-> > 
-> > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> 
-> Looks pretty good. Down to nitpicks....
-> 
-> > +struct lochnagar_hwmon {
-> > +	struct regmap *regmap;
-> > +
-> > +	long power_ms[ARRAY_SIZE(lochnagar_chan_names)];
-> 
-> Instead of storing the milli-seconds here, it might be better
-> to store the number of samples and convert back to ms is/when
-> asked for, ie when the sysfs file is read. That may result
-> in some rounding changes, but read_power() would no longer
-> have to execute the expensive DIV_ROUND_UP() for each call.
-> 
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-Yeah I can switch over, had been leaning towards the sysfs file
-reporting what was written into it, but happy to go the other
-way.
+Lochnagar is an evaluation and development board for Cirrus
+Logic Smart CODEC and Amp devices. It allows the connection of
+most Cirrus Logic devices on mini-cards, as well as allowing
+connection of various application processor systems to provide a
+full evaluation platform.
 
-> > +	static const unsigned int prec = 1000000;
-> 
-> Any reason for not using a #define ?
-> 
+This driver adds support for the hardware monitoring features of
+the Lochnagar 2 to the hwmon API. Monitoring is provided for
+the board voltages, currents and temperature supported by the
+board controller chip.
 
-Had been keeping it similar to the other measurements that
-defines the precision inline. Will switch them all over to a
-define.
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
 
-> > +	power = div_u64(power + (prec / 2), prec);
-> 
-> 	DIV_ROUND_CLOSEST_ULL ?
-> 
-
-Oops... sorry about that, always miss these helpers will update
-this one.
+Changes since v3:
+ - Add defines for the precision of each measurement
+ - Change to storing number of samples for averaging not time
+ - Use DIV_ROUND_CLOSEST_ULL
 
 Thanks,
 Charles
+
+ Documentation/hwmon/lochnagar   |  80 ++++++++
+ MAINTAINERS                     |   3 +
+ drivers/hwmon/Kconfig           |  10 +
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/lochnagar-hwmon.c | 412 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 506 insertions(+)
+ create mode 100644 Documentation/hwmon/lochnagar
+ create mode 100644 drivers/hwmon/lochnagar-hwmon.c
+
+diff --git a/Documentation/hwmon/lochnagar b/Documentation/hwmon/lochnagar
+new file mode 100644
+index 0000000000000..e9686fb3eb405
+--- /dev/null
++++ b/Documentation/hwmon/lochnagar
+@@ -0,0 +1,80 @@
++Kernel Driver Lochnagar
++========================
++
++Supported systems:
++  * Cirrus Logic : Lochnagar 2
++
++Author: Lucas A. Tanure Alves
++
++Description
++-----------
++
++Lochnagar 2 features built-in Current Monitor circuitry that allows for the
++measurement of both voltage and current on up to eight of the supply voltage
++rails provided to the minicards. The Current Monitor does not require any
++hardware modifications or external circuitry to operate.
++
++The current and voltage measurements are obtained through the standard register
++map interface to the Lochnagar board controller, and can therefore be monitored
++by software.
++
++Sysfs attributes
++----------------
++
++temp1_input             The Lochnagar board temperature (milliCelsius)
++in0_input               Measured voltage for DBVDD1 (milliVolts)
++in0_label               "DBVDD1"
++curr1_input             Measured current for DBVDD1 (milliAmps)
++curr1_label             "DBVDD1"
++power1_average          Measured average power for DBVDD1 (microWatts)
++power1_average_interval Power averaging time input valid from 1 to 1708mS
++power1_label            "DBVDD1"
++in1_input               Measured voltage for 1V8 DSP (milliVolts)
++in1_label               "1V8 DSP"
++curr2_input             Measured current for 1V8 DSP (milliAmps)
++curr2_label             "1V8 DSP"
++power2_average          Measured average power for 1V8 DSP (microWatts)
++power2_average_interval Power averaging time input valid from 1 to 1708mS
++power2_label            "1V8 DSP"
++in2_input               Measured voltage for 1V8 CDC (milliVolts)
++in2_label               "1V8 CDC"
++curr3_input             Measured current for 1V8 CDC (milliAmps)
++curr3_label             "1V8 CDC"
++power3_average          Measured average power for 1V8 CDC (microWatts)
++power3_average_interval Power averaging time input valid from 1 to 1708mS
++power3_label            "1V8 CDC"
++in3_input               Measured voltage for VDDCORE DSP (milliVolts)
++in3_label               "VDDCORE DSP"
++curr4_input             Measured current for VDDCORE DSP (milliAmps)
++curr4_label             "VDDCORE DSP"
++power4_average          Measured average power for VDDCORE DSP (microWatts)
++power4_average_interval Power averaging time input valid from 1 to 1708mS
++power4_label            "VDDCORE DSP"
++in4_input               Measured voltage for AVDD 1V8 (milliVolts)
++in4_label               "AVDD 1V8"
++curr5_input             Measured current for AVDD 1V8 (milliAmps)
++curr5_label             "AVDD 1V8"
++power5_average          Measured average power for AVDD 1V8 (microWatts)
++power5_average_interval Power averaging time input valid from 1 to 1708mS
++power5_label            "AVDD 1V8"
++curr6_input             Measured current for SYSVDD (milliAmps)
++curr6_label             "SYSVDD"
++power6_average          Measured average power for SYSVDD (microWatts)
++power6_average_interval Power averaging time input valid from 1 to 1708mS
++power6_label            "SYSVDD"
++in6_input               Measured voltage for VDDCORE CDC (milliVolts)
++in6_label               "VDDCORE CDC"
++curr7_input             Measured current for VDDCORE CDC (milliAmps)
++curr7_label             "VDDCORE CDC"
++power7_average          Measured average power for VDDCORE CDC (microWatts)
++power7_average_interval Power averaging time input valid from 1 to 1708mS
++power7_label            "VDDCORE CDC"
++in7_input               Measured voltage for MICVDD (milliVolts)
++in7_label               "MICVDD"
++curr8_input             Measured current for MICVDD (milliAmps)
++curr8_label             "MICVDD"
++power8_average          Measured average power for MICVDD (microWatts)
++power8_average_interval Power averaging time input valid from 1 to 1708mS
++power8_label            "MICVDD"
++
++Note: It is not possible to measure voltage on the SYSVDD rail.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e17ebf70b5480..4cd3c281d8b56 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3796,6 +3796,7 @@ M:	Richard Fitzgerald <rf@opensource.cirrus.com>
+ L:	patches@opensource.cirrus.com
+ S:	Supported
+ F:	drivers/clk/clk-lochnagar.c
++F:	drivers/hwmon/lochnagar-hwmon.c
+ F:	drivers/mfd/lochnagar-i2c.c
+ F:	drivers/pinctrl/cirrus/pinctrl-lochnagar.c
+ F:	drivers/regulator/lochnagar-regulator.c
+@@ -3804,8 +3805,10 @@ F:	include/dt-bindings/pinctrl/lochnagar.h
+ F:	include/linux/mfd/lochnagar*
+ F:	Documentation/devicetree/bindings/mfd/cirrus,lochnagar.txt
+ F:	Documentation/devicetree/bindings/clock/cirrus,lochnagar.txt
++F:	Documentation/devicetree/bindings/hwmon/cirrus,lochnagar.txt
+ F:	Documentation/devicetree/bindings/pinctrl/cirrus,lochnagar.txt
+ F:	Documentation/devicetree/bindings/regulator/cirrus,lochnagar.txt
++F:	Documentation/hwmon/lochnagar
+ 
+ CISCO FCOE HBA DRIVER
+ M:	Satish Kharat <satishkh@cisco.com>
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index d0f1dfe2bcbbd..dedd5febd3aa6 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -705,6 +705,16 @@ config SENSORS_LINEAGE
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called lineage-pem.
+ 
++config SENSORS_LOCHNAGAR
++	tristate "Lochnagar Hardware Monitor"
++	depends on MFD_LOCHNAGAR
++	help
++	  If you say yes here you get support for Lochnagar 2 temperature,
++	  voltage and current sensors abilities.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called lochnagar-hwmon.
++
+ config SENSORS_LTC2945
+ 	tristate "Linear Technology LTC2945"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index f5c7b442e69e5..8db472ea04f00 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -89,6 +89,7 @@ obj-$(CONFIG_SENSORS_JZ4740)	+= jz4740-hwmon.o
+ obj-$(CONFIG_SENSORS_K8TEMP)	+= k8temp.o
+ obj-$(CONFIG_SENSORS_K10TEMP)	+= k10temp.o
+ obj-$(CONFIG_SENSORS_LINEAGE)	+= lineage-pem.o
++obj-$(CONFIG_SENSORS_LOCHNAGAR)	+= lochnagar-hwmon.o
+ obj-$(CONFIG_SENSORS_LM63)	+= lm63.o
+ obj-$(CONFIG_SENSORS_LM70)	+= lm70.o
+ obj-$(CONFIG_SENSORS_LM73)	+= lm73.o
+diff --git a/drivers/hwmon/lochnagar-hwmon.c b/drivers/hwmon/lochnagar-hwmon.c
+new file mode 100644
+index 0000000000000..8b19adf2eeb07
+--- /dev/null
++++ b/drivers/hwmon/lochnagar-hwmon.c
+@@ -0,0 +1,412 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Lochnagar hardware monitoring features
++ *
++ * Copyright (c) 2016-2019 Cirrus Logic, Inc. and
++ *                         Cirrus Logic International Semiconductor Ltd.
++ *
++ * Author: Lucas Tanure <tanureal@opensource.cirrus.com>
++ */
++
++#include <linux/delay.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/math64.h>
++#include <linux/mfd/lochnagar.h>
++#include <linux/mfd/lochnagar2_regs.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define LN2_MAX_NSAMPLE 1023
++#define LN2_SAMPLE_US   1670
++
++#define LN2_CURR_UNITS  1000
++#define LN2_VOLT_UNITS  1000
++#define LN2_TEMP_UNITS  1000
++#define LN2_PWR_UNITS   1000000
++
++static const char * const lochnagar_chan_names[] = {
++	"DBVDD1",
++	"1V8 DSP",
++	"1V8 CDC",
++	"VDDCORE DSP",
++	"AVDD 1V8",
++	"SYSVDD",
++	"VDDCORE CDC",
++	"MICVDD",
++};
++
++struct lochnagar_hwmon {
++	struct regmap *regmap;
++
++	long power_nsamples[ARRAY_SIZE(lochnagar_chan_names)];
++
++	/* Lock to ensure only a single sensor is read at a time */
++	struct mutex sensor_lock;
++};
++
++enum lochnagar_measure_mode {
++	LN2_CURR = 0,
++	LN2_VOLT,
++	LN2_TEMP,
++};
++
++/**
++ * float_to_long - Convert ieee754 reading from hardware to an integer
++ *
++ * @data: Value read from the hardware
++ * @precision: Units to multiply up to eg. 1000 = milli, 1000000 = micro
++ *
++ * Return: Converted integer reading
++ *
++ * Depending on the measurement type the hardware returns an ieee754
++ * floating point value in either volts, amps or celsius. This function
++ * will convert that into an integer in a smaller unit such as micro-amps
++ * or milli-celsius. The hardware does not return NaN, so consideration of
++ * that is not required.
++ */
++static long float_to_long(u32 data, u32 precision)
++{
++	u64 man = data & 0x007FFFFF;
++	int exp = ((data & 0x7F800000) >> 23) - 127 - 23;
++	bool negative = data & 0x80000000;
++	long result;
++
++	man = (man + (1 << 23)) * precision;
++
++	if (fls64(man) + exp > (int)sizeof(long) * 8 - 1)
++		result = LONG_MAX;
++	else if (exp < 0)
++		result = (man + (1ull << (-exp - 1))) >> -exp;
++	else
++		result = man << exp;
++
++	return negative ? -result : result;
++}
++
++static int do_measurement(struct regmap *regmap, int chan,
++			  enum lochnagar_measure_mode mode, int nsamples)
++{
++	unsigned int val;
++	int ret;
++
++	chan = 1 << (chan + LOCHNAGAR2_IMON_MEASURED_CHANNELS_SHIFT);
++
++	ret = regmap_write(regmap, LOCHNAGAR2_IMON_CTRL1,
++			   LOCHNAGAR2_IMON_ENA_MASK | chan | mode);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_write(regmap, LOCHNAGAR2_IMON_CTRL2, nsamples);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_write(regmap, LOCHNAGAR2_IMON_CTRL3,
++			   LOCHNAGAR2_IMON_CONFIGURE_MASK);
++	if (ret < 0)
++		return ret;
++
++	ret =  regmap_read_poll_timeout(regmap, LOCHNAGAR2_IMON_CTRL3, val,
++					val & LOCHNAGAR2_IMON_DONE_MASK,
++					1000, 10000);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_write(regmap, LOCHNAGAR2_IMON_CTRL3,
++			   LOCHNAGAR2_IMON_MEASURE_MASK);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * Actual measurement time is ~1.67mS per sample, approximate this
++	 * with a 1.5mS per sample msleep and then poll for success up to
++	 * ~0.17mS * 1023 (LN2_MAX_NSAMPLES). Normally for smaller values
++	 * of nsamples the poll will complete on the first loop due to
++	 * other latency in the system.
++	 */
++	msleep((nsamples * 3) / 2);
++
++	ret =  regmap_read_poll_timeout(regmap, LOCHNAGAR2_IMON_CTRL3, val,
++					val & LOCHNAGAR2_IMON_DONE_MASK,
++					5000, 200000);
++	if (ret < 0)
++		return ret;
++
++	return regmap_write(regmap, LOCHNAGAR2_IMON_CTRL3, 0);
++}
++
++static int request_data(struct regmap *regmap, int chan, u32 *data)
++{
++	unsigned int val;
++	int ret;
++
++	ret = regmap_write(regmap, LOCHNAGAR2_IMON_CTRL4,
++			   LOCHNAGAR2_IMON_DATA_REQ_MASK |
++			   chan << LOCHNAGAR2_IMON_CH_SEL_SHIFT);
++	if (ret < 0)
++		return ret;
++
++	ret =  regmap_read_poll_timeout(regmap, LOCHNAGAR2_IMON_CTRL4, val,
++					val & LOCHNAGAR2_IMON_DATA_RDY_MASK,
++					1000, 10000);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_read(regmap, LOCHNAGAR2_IMON_DATA1, &val);
++	if (ret < 0)
++		return ret;
++
++	*data = val << 16;
++
++	ret = regmap_read(regmap, LOCHNAGAR2_IMON_DATA2, &val);
++	if (ret < 0)
++		return ret;
++
++	*data |= val;
++
++	return regmap_write(regmap, LOCHNAGAR2_IMON_CTRL4, 0);
++}
++
++static int read_sensor(struct device *dev, int chan,
++		       enum lochnagar_measure_mode mode, int nsamples,
++		       unsigned int precision, long *val)
++{
++	struct lochnagar_hwmon *priv = dev_get_drvdata(dev);
++	struct regmap *regmap = priv->regmap;
++	u32 data;
++	int ret;
++
++	mutex_lock(&priv->sensor_lock);
++
++	ret = do_measurement(regmap, chan, mode, nsamples);
++	if (ret < 0) {
++		dev_err(dev, "Failed to perform measurement: %d\n", ret);
++		goto error;
++	}
++
++	ret = request_data(regmap, chan, &data);
++	if (ret < 0) {
++		dev_err(dev, "Failed to read measurement: %d\n", ret);
++		goto error;
++	}
++
++	*val = float_to_long(data, precision);
++
++error:
++	mutex_unlock(&priv->sensor_lock);
++
++	return ret;
++}
++
++static int read_power(struct device *dev, int chan, long *val)
++{
++	struct lochnagar_hwmon *priv = dev_get_drvdata(dev);
++	int nsamples = priv->power_nsamples[chan];
++	u64 power;
++	int ret;
++
++	if (!strcmp("SYSVDD", lochnagar_chan_names[chan])) {
++		power = 5 * LN2_PWR_UNITS;
++	} else {
++		ret = read_sensor(dev, chan, LN2_VOLT, 1, LN2_PWR_UNITS, val);
++		if (ret < 0)
++			return ret;
++
++		power = abs(*val);
++	}
++
++	ret = read_sensor(dev, chan, LN2_CURR, nsamples, LN2_PWR_UNITS, val);
++	if (ret < 0)
++		return ret;
++
++	power *= abs(*val);
++	power = DIV_ROUND_CLOSEST_ULL(power, LN2_PWR_UNITS);
++
++	if (power > LONG_MAX)
++		*val = LONG_MAX;
++	else
++		*val = power;
++
++	return 0;
++}
++
++static umode_t lochnagar_is_visible(const void *drvdata,
++				    enum hwmon_sensor_types type,
++				    u32 attr, int chan)
++{
++	switch (type) {
++	case hwmon_in:
++		if (!strcmp("SYSVDD", lochnagar_chan_names[chan]))
++			return 0;
++		break;
++	case hwmon_power:
++		if (attr == hwmon_power_average_interval)
++			return 0644;
++		break;
++	default:
++		break;
++	}
++
++	return 0444;
++}
++
++static int lochnagar_read(struct device *dev, enum hwmon_sensor_types type,
++			  u32 attr, int chan, long *val)
++{
++	struct lochnagar_hwmon *priv = dev_get_drvdata(dev);
++	int interval;
++
++	switch (type) {
++	case hwmon_in:
++		return read_sensor(dev, chan, LN2_VOLT, 1, LN2_VOLT_UNITS, val);
++	case hwmon_curr:
++		return read_sensor(dev, chan, LN2_CURR, 1, LN2_CURR_UNITS, val);
++	case hwmon_temp:
++		return read_sensor(dev, chan, LN2_TEMP, 1, LN2_TEMP_UNITS, val);
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_average:
++			return read_power(dev, chan, val);
++		case hwmon_power_average_interval:
++			interval = priv->power_nsamples[chan] * LN2_SAMPLE_US;
++			*val = DIV_ROUND_CLOSEST(interval, 1000);
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int lochnagar_read_string(struct device *dev,
++				 enum hwmon_sensor_types type, u32 attr,
++				 int chan, const char **str)
++{
++	switch (type) {
++	case hwmon_in:
++	case hwmon_curr:
++	case hwmon_power:
++		*str = lochnagar_chan_names[chan];
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int lochnagar_write(struct device *dev, enum hwmon_sensor_types type,
++			   u32 attr, int chan, long val)
++{
++	struct lochnagar_hwmon *priv = dev_get_drvdata(dev);
++
++	if (type != hwmon_power || attr != hwmon_power_average_interval)
++		return -EOPNOTSUPP;
++
++	val = clamp_t(long, val, 1, (LN2_MAX_NSAMPLE * LN2_SAMPLE_US) / 1000);
++	val = DIV_ROUND_CLOSEST(val * 1000, LN2_SAMPLE_US);
++
++	priv->power_nsamples[chan] = val;
++
++	return 0;
++}
++
++static const struct hwmon_ops lochnagar_ops = {
++	.is_visible = lochnagar_is_visible,
++	.read = lochnagar_read,
++	.read_string = lochnagar_read_string,
++	.write = lochnagar_write,
++};
++
++static const struct hwmon_channel_info *lochnagar_info[] = {
++	HWMON_CHANNEL_INFO(temp,  HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(in,    HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL,
++				  HWMON_I_INPUT | HWMON_I_LABEL),
++	HWMON_CHANNEL_INFO(curr,  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL,
++				  HWMON_C_INPUT | HWMON_C_LABEL),
++	HWMON_CHANNEL_INFO(power, HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL,
++				  HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
++				  HWMON_P_LABEL),
++	NULL
++};
++
++static const struct hwmon_chip_info lochnagar_chip_info = {
++	.ops = &lochnagar_ops,
++	.info = lochnagar_info,
++};
++
++static const struct of_device_id lochnagar_of_match[] = {
++	{ .compatible = "cirrus,lochnagar2-hwmon" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, lochnagar_of_match);
++
++static int lochnagar_hwmon_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device *hwmon_dev;
++	struct lochnagar_hwmon *priv;
++	int i;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	mutex_init(&priv->sensor_lock);
++
++	priv->regmap = dev_get_regmap(dev->parent, NULL);
++	if (!priv->regmap) {
++		dev_err(dev, "No register map found\n");
++		return -EINVAL;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(priv->power_nsamples); i++)
++		priv->power_nsamples[i] = 96;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, "Lochnagar", priv,
++							 &lochnagar_chip_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static struct platform_driver lochnagar_hwmon_driver = {
++	.driver = {
++		.name = "lochnagar-hwmon",
++		.of_match_table = lochnagar_of_match,
++	},
++	.probe = lochnagar_hwmon_probe,
++};
++module_platform_driver(lochnagar_hwmon_driver);
++
++MODULE_AUTHOR("Lucas Tanure <tanureal@opensource.cirrus.com>");
++MODULE_DESCRIPTION("Lochnagar hardware monitoring features");
++MODULE_LICENSE("GPL");
+-- 
+2.11.0
+
