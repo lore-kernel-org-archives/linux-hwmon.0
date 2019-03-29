@@ -1,133 +1,100 @@
-Return-Path: <SRS0=ZzD2=R7=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=13Sa=SA=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69EACC43381
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 18:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29758C43381
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Mar 2019 09:23:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 374C020651
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Mar 2019 18:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553796122;
-	bh=yR35LbV0zjeTKLLONMeTl8OefYcShsXNBBCEyKYcrpQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=aVQ1ID1a3cvK5jh1jVldYG0SEwiM601OMg1aZf5kuHql0Xhg5yXbbVFCZAr+F4oim
-	 IOTq1oOAfeEmJ4J0AQfrysPUsOSquuaShRULruxZVHGvMzsBvZlAyi9k0575juYvtT
-	 9xA3/lFnuuimbCGwkvIXqkNyEQSw3C3T8HClYVQI=
+	by mail.kernel.org (Postfix) with ESMTP id F19E32082F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Mar 2019 09:23:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbfC1SCC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Mar 2019 14:02:02 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41224 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbfC1SCB (ORCPT
+        id S1726675AbfC2JXH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Mar 2019 05:23:07 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:57634 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726590AbfC2JXH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Mar 2019 14:02:01 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 64so19184384otb.8;
-        Thu, 28 Mar 2019 11:02:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vTgtxQ03sR8a8ohtGcqFORH34Fjsaap8ekjhbrBO66k=;
-        b=tF32dzcEMo20nsKrTR5yrPPtDw+PDfO/s52c73D/sC3BIQpD60hlSfNRioAeNwmD3p
-         xb/YTcpri37pFl4asYkxjXsYhck0FoizLLinG8AR3NvNSuaXfNwgr7PLsMktDs225baX
-         NT5hAM4OSvNkQQgXtTJPOa1i8RJvmCSHlpvvPqta3Ia3JuQmujyrB7oDJ+JWbayng+RG
-         KbFqT31cQKJtQ5edL4+mubbABDB1mNMR5Xvw4KFIzbXjJjEgbSaBJjk+Q9/1EGuVOiAX
-         ZqMIriRiGw/+LNe2maN3l22CL7pMG68GPGOSef5VpS5gW7dWx9QRgAiSIF22Du87LFOY
-         +WWw==
-X-Gm-Message-State: APjAAAU7A/2FxDDCX2g2n7B9l7mzK/8XQfyfavsmmxCUb5vqcAzir72b
-        pFNqaQ4mhGYa+AX1eeYG9gU5Q82dbg==
-X-Google-Smtp-Source: APXvYqwmrvh1/NS+Jr1BGz+50LT/tq6a9Wk7K2T+jbj6TS4F7ABkxJTwKzHf2vRqKleKRXMLkFqm9w==
-X-Received: by 2002:a9d:5b7:: with SMTP id 52mr25479706otd.279.1553796120629;
-        Thu, 28 Mar 2019 11:02:00 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p186sm1703598oif.34.2019.03.28.11.01.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 28 Mar 2019 11:01:59 -0700 (PDT)
-Date:   Thu, 28 Mar 2019 13:01:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 1/3] dt-bindings: hwmon: Add tachometer interrupt to
- pwm-fan
-Message-ID: <20190328180159.GA29107@bogus>
-References: <1553243043-19486-1-git-send-email-stefan.wahren@i2se.com>
- <1553243043-19486-2-git-send-email-stefan.wahren@i2se.com>
+        Fri, 29 Mar 2019 05:23:07 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2T9L6D4002691;
+        Fri, 29 Mar 2019 04:22:39 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail3.cirrus.com ([87.246.76.56])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2rdh7k4vvg-1;
+        Fri, 29 Mar 2019 04:22:39 -0500
+Received: from EX17.ad.cirrus.com (ex17.ad.cirrus.com [172.20.9.81])
+        by mail3.cirrus.com (Postfix) with ESMTP id D7B00611C8B8;
+        Fri, 29 Mar 2019 04:23:02 -0500 (CDT)
+Received: from imbe.wolfsonmicro.main (198.61.95.81) by EX17.ad.cirrus.com
+ (172.20.9.81) with Microsoft SMTP Server id 14.3.408.0; Fri, 29 Mar 2019
+ 09:22:38 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com
+ [198.61.86.93])        by imbe.wolfsonmicro.main (8.14.4/8.14.4) with ESMTP id
+ x2T9Maln014185;        Fri, 29 Mar 2019 09:22:36 GMT
+Date:   Fri, 29 Mar 2019 09:22:36 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Rob Herring <robh@kernel.org>, <lee.jones@linaro.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <corbet@lwn.net>,
+        <devicetree@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v4 1/2] hwmon: lochnagar: Add device tree binding document
+Message-ID: <20190329092236.GL46536@ediswmail.ad.cirrus.com>
+References: <20190328130937.3756-1-ckeepax@opensource.cirrus.com>
+ <20190328174615.GA6068@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1553243043-19486-2-git-send-email-stefan.wahren@i2se.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190328174615.GA6068@bogus>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1903290068
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 22, 2019 at 09:24:01AM +0100, Stefan Wahren wrote:
-> This adds the tachometer interrupt to the pwm-fan binding, which is
-> necessary for RPM support.
+On Thu, Mar 28, 2019 at 12:46:15PM -0500, Rob Herring wrote:
+> On Thu, Mar 28, 2019 at 01:09:36PM +0000, Charles Keepax wrote:
+> > Lochnagar is an evaluation and development board for Cirrus
+> > Logic Smart CODEC and Amp devices. It allows the connection of
+> > most Cirrus Logic devices on mini-cards, as well as allowing
+> > connection of various application processor systems to provide a
+> > full evaluation platform. This driver supports the board
+> > controller chip on the Lochnagar board.
+> > 
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> > +Required properties:
+> > +
+> > +  - compatible : One of the following strings:
+> > +                 "cirrus,lochnagar2-hwmon"
+> > +
+> > +Example:
+> > +
+> > +lochnagar-hwmon {
+> > +	compatible = "cirrus,lochnagar2-hwmon";
 > 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
->  .../devicetree/bindings/hwmon/pwm-fan.txt          | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
+> You don't have any resources in DT, the parent MFD driver can just 
+> instantiate this child device.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-> index 49ca5d8..722005f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-> @@ -7,7 +7,16 @@ Required properties:
->  			which correspond to thermal cooling states
->  
->  Optional properties:
-> -- fan-supply    : phandle to the regulator that provides power to the fan
-> +- fan-supply		: phandle to the regulator that provides power to the fan
-> +- interrupts		: This contains a single interrupt specifier which
-> +			  describes the tachometer output of the fan as an
-> +			  interrupt source. The output signal must generate a
-> +			  defined number of interrupts per fan revolution, which
-> +			  require that it must be self resetting edge interrupts.
-> +			  See interrupt-controller/interrupts.txt for the format.
-> +- pulses-per-revolution : define the tachometer pulses per fan revolution as
-> +			  an integer (default is 2 interrupts per revolution).
-> +			  The value must be greater than zero.
->  
->  Example:
->  	fan0: pwm-fan {
-> @@ -38,3 +47,14 @@ Example:
->  					};
->  			     };
->  		};
-> +
-> +Example 2:
-> +	fan0: pwm-fan {
-> +		fan0: pwm-fan {
 
-This line should go.
++ Lee Jones
 
-Otherwise,
+Lee, was very very keen for me to not mix mfd_add_devices and
+of_platform_populate in the MFD driver. As such we moved all the
+sub-drivers into DT. I agree it is a little odd that this exists
+only to bind in this driver but I think it is probably a bit late
+to change that. If we were going to have the MFD instantiating
+children directly a lot of the rest of the binding would have
+been done very differently.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-> +		compatible = "pwm-fan";
-> +		pwms = <&pwm 0 40000 0>;
-> +		fan-supply = <&reg_fan>;
-> +		interrupt-parent = <&gpio5>;
-> +		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
-> +		pulses-per-revolution = <2>;
-> +	};
-> -- 
-> 2.7.4
-> 
+Thanks,
+Charles
