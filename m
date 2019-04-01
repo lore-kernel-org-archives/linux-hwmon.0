@@ -6,59 +6,59 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3CCC43381
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D07C43381
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:19:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F3202133D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:19:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B36D42133D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:19:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rn2xmNLh"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cx+S7tHY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727074AbfDAQTu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 1 Apr 2019 12:19:50 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:34162 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726854AbfDAQTu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Apr 2019 12:19:50 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y6so4749318plt.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Apr 2019 09:19:49 -0700 (PDT)
+        id S1728255AbfDAQTv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 1 Apr 2019 12:19:51 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36609 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728019AbfDAQTv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Apr 2019 12:19:51 -0400
+Received: by mail-pl1-f194.google.com with SMTP id ck15so3532551plb.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 01 Apr 2019 09:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tNqFILptxHgjUs/akYL5N4I8yMmdv26I7ed6lh0XJW4=;
-        b=Rn2xmNLhFqJSePosflbOfKMCpVYkptHMt/LbMfUOrzvzBd6lO85II9Fm8rO4nRLiOk
-         TXVD48W0KZe0y4lgnnjoQumcv76W3NbbUq3ZHS3rV+ggCwTf+7X+rXNfNRC604xZLLYq
-         azu1VDKQwbLFu8banpq3Vm2JAWMY/bZh1ff2nRkSEBRIeBeSklKdLi+wC6k/LPrf5dCI
-         OTgiN/2ANTI4rp3vUDXwjHN3mE9NZWftkbk9UAGXoFmfBxllFx9FuMgCMq/oIOQ/sfpI
-         jC6Me4nHgZMpweo+he8kiJTCPCMX9ttXYOQgne8ouAfweeTuy+Fn8CaDx/r61ib6LcRF
-         yJ5g==
+        bh=o/YcELKZvVaAdUrzaD8aWVjc6f0q+Yfm9C0j/Wvg9F8=;
+        b=Cx+S7tHYYORs2vZ3hPX+8sU58ZeqXPN+HoqBe1hoPBJ7n9GajRLTqgb8KinSQkGZK4
+         Sf/GQomEMdSCJtGlZyB6sVICmRge1oiR/cQOrQJrI86IrlWJTbIv7/6C+vJK4RIgfoFy
+         5AO3UALp5dqfpySdCShAfGd8RNRWKVmqWTZx7GZm98FYay1vZBU8m6JtAhiM4v0qoHJ2
+         fC2x8h7cBNQQBdL/YM94KwcisTJ3KnfQieuxBCXle7KaTVj0JMFarC51q6zGKdVX46by
+         7aB0ZV5MWmIy/4m8on3/RwrA9I4td2j0wvOh/n9uvhxw63r5lR48zTnPlgmMprnQJru9
+         ApyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=tNqFILptxHgjUs/akYL5N4I8yMmdv26I7ed6lh0XJW4=;
-        b=XW3jWpqOaxk0fC1B8zjrxODn31xwyB9x37xcqDo64FIApQIMO4Jx89edaHjteAgPte
-         viqaN2idBkX52Nqd+ehWl+u7XtHCgUlDBFqdhPXEoIC3etJ8P5gkHr29nrv/pCBwz+3J
-         3ss0jIfeJEDh4tNYb2X6t8bIfGJB/iXFK8FJ2GCUbAaajpVDxemPVXFKbDthW6RYrkC+
-         Jic2RRXFjZRumiViKp9sqV3FfI8Uvsx/aqKQII5JoFHHRJEyNIH1+gfHQ9d1NuHIzVII
-         4kYvOB22AON9s7TxyvORbEDhCnzOdgXgpSrBzB93JGZ/YFJdyFzTZRacV9fF5hfBQH7+
-         7EYA==
-X-Gm-Message-State: APjAAAXiWTNwP9oCxyM0eM6HqgytjcRu03XEjQlPZdvnYaOpQ/0lAe7c
-        gLd2Pars5nvVYhRtD8QkfxaBD8lW
-X-Google-Smtp-Source: APXvYqyrfikJ/Eog9uyQ5H4fY8zIfBTJKEgazpRYShrOm9VCAfKQ6u2reUCWWqwngad29LOgz+fT+w==
-X-Received: by 2002:a17:902:e110:: with SMTP id cc16mr1603148plb.147.1554135589170;
-        Mon, 01 Apr 2019 09:19:49 -0700 (PDT)
+        bh=o/YcELKZvVaAdUrzaD8aWVjc6f0q+Yfm9C0j/Wvg9F8=;
+        b=c26maQiqHJZU+6fiRVLq76THHK00GrhRfMVHQBGX0dVL/WluoWVA7qVge9gmW038gU
+         DyxRdK8Sqn8KOF5YpDt9f2Z2EQhIhUf3x24teaE1x9IG4zRatiTeYlSKCpELxfHdU9tE
+         6Aj488QbeoyCSDja8XorkEM/eSrzi5beBGFZwvziHz01Iwy0VRWIU70JEnD2bIg6eoki
+         hg+VMosYYCZ0DeYpmfVCDxtQY3JSQZHkkFBssTzyjIPx2NrhZ0cpzydDix9NtMPWGl0W
+         MWe792b+IGPa5vI4Q9jU4XdmSR4b7GK3yGiiCj2865T8XkGHWS3zbVdbGpXpIY20w/MP
+         03EQ==
+X-Gm-Message-State: APjAAAWizr3UKEXm7dY1l2PAXs8OP5DcG9G8PXVA/Nx6RlwuMdgd2SPV
+        nmaAJbtCDHhJXKGgktEPK7A9IxT8
+X-Google-Smtp-Source: APXvYqwNfP7l28j6ep4LCW2ZZ98jzcasjrYgXdGfxiZxY/DzSznCVlLKqerrXICAu30D4NZ+eQ1JJw==
+X-Received: by 2002:a17:902:4681:: with SMTP id p1mr62771230pld.42.1554135590513;
+        Mon, 01 Apr 2019 09:19:50 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6sm13945264pgv.92.2019.04.01.09.19.48
+        by smtp.gmail.com with ESMTPSA id w3sm23789008pfn.179.2019.04.01.09.19.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Apr 2019 09:19:48 -0700 (PDT)
+        Mon, 01 Apr 2019 09:19:50 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 04/17] hwmon: (lm75) Use HWMON_CHANNEL_INFO macro
-Date:   Mon,  1 Apr 2019 09:19:24 -0700
-Message-Id: <1554135577-11889-5-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 05/17] hwmon: (lm90) Use HWMON_CHANNEL_INFO macro
+Date:   Mon,  1 Apr 2019 09:19:25 -0700
+Message-Id: <1554135577-11889-6-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1554135577-11889-1-git-send-email-linux@roeck-us.net>
 References: <1554135577-11889-1-git-send-email-linux@roeck-us.net>
@@ -120,53 +120,40 @@ Julia Lawall for providing the semantic patch.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm75.c | 32 ++++----------------------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+ drivers/hwmon/lm90.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 447af07450f1..3155a04c997e 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -194,35 +194,11 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
- 	return 0;
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 480d70a51778..0f9c22b21ffa 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1720,16 +1720,6 @@ static void lm90_regulator_disable(void *regulator)
+ 	regulator_disable(regulator);
  }
  
--/*-----------------------------------------------------------------------*/
--
--/* device probe and removal */
--
--/* chip configuration */
--
--static const u32 lm75_chip_config[] = {
--	HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL,
+-static const u32 lm90_chip_config[] = {
+-	HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL | HWMON_C_ALARMS,
 -	0
 -};
 -
--static const struct hwmon_channel_info lm75_chip = {
+-static const struct hwmon_channel_info lm90_chip_info = {
 -	.type = hwmon_chip,
--	.config = lm75_chip_config,
+-	.config = lm90_chip_config,
 -};
 -
--static const u32 lm75_temp_config[] = {
--	HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST,
--	0
--};
--
--static const struct hwmon_channel_info lm75_temp = {
--	.type = hwmon_temp,
--	.config = lm75_temp_config,
--};
--
- static const struct hwmon_channel_info *lm75_info[] = {
--	&lm75_chip,
--	&lm75_temp,
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
- 	NULL
- };
  
+ static const struct hwmon_ops lm90_ops = {
+ 	.is_visible = lm90_is_visible,
+@@ -1792,7 +1782,8 @@ static int lm90_probe(struct i2c_client *client,
+ 	data->chip.ops = &lm90_ops;
+ 	data->chip.info = data->info;
+ 
+-	data->info[0] = &lm90_chip_info;
++	data->info[0] = HWMON_CHANNEL_INFO(chip,
++		HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL | HWMON_C_ALARMS);
+ 	data->info[1] = &data->temp_info;
+ 
+ 	info = &data->temp_info;
 -- 
 2.7.4
 
