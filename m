@@ -6,59 +6,64 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73AC2C43381
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E68C43381
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:20:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D48D2133D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:20:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDBE32133D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Apr 2019 16:20:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GAoMW1le"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p2w2hlTj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbfDAQUC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 1 Apr 2019 12:20:02 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40129 "EHLO
+        id S1728640AbfDAQUD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 1 Apr 2019 12:20:03 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38561 "EHLO
         mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728038AbfDAQUB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Apr 2019 12:20:01 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c207so4818645pfc.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Apr 2019 09:20:01 -0700 (PDT)
+        with ESMTP id S1728007AbfDAQUD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Apr 2019 12:20:03 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 10so4821417pfo.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 01 Apr 2019 09:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xXohVNKqcgxXYY2TmsIOkDNeXzwT3t2//WuFOjq0Uxs=;
-        b=GAoMW1leodniFUILCfTpH/CbB4B+6WXn6VI1/+BVeX8Lkj28Hc38JImgIOyEfw+c4x
-         KDkh9qMFZa5xcbnBkx2rhddlbPg+AxsA0LCP40aalw/TsWsBiNeko2ZkENcliV3J3DNM
-         2xntdHVuOL0CmCKAlOuRTrzjGKPBrFZBMCW6zzu9XGJ6hgnQRMQHe6+T5duBkIrW0lo2
-         Sx4XscYMUL25yPP+sXp6HolpefkGLGHqfbCa3C1d7BKb9o6FuqEydyQsIcaf7nGIWblS
-         oA5vARrCbNy5P6h8nEdbGv1Dus1kHnAtmPNZ3Efpt8B/xiAF7lK+3XkDZoeFUcBaKiWh
-         wj1w==
+        bh=5PgGJ4ZR3na42kqz0YoBDR/EzAl1rkF8yMpTdSJNSL0=;
+        b=p2w2hlTjBZNncrMgZ2QcaT9ymKLl3bR+P2Um3D6+xSKzWRUt7zM5n9uT1gvvy1LNX/
+         Ce/V01xw0JQv6zSasgjllOFYoGJRr+oZ5sSpDBF9F3h+w9CgbqtfXmrptPvR/G9EsKdi
+         Jl7rB+/xorQ2tJSxcqmMX3c+CtNm0MVUOu3KKgl8fm28q0VVWd0nf8CVmNt8hUWMUsY9
+         R7yaBuCCbrZXCvpCmmMej5BzpIXi3GwAl6+0US9YGpRz5yc3UYDujrjg2FL7M3RxFdyx
+         Ur79SYYwfNtHdTlSzPUfsGvMQCPi2gbh0zsQBDEMr7DFrU2y6Bu0jur6gyd+oBfMuxnk
+         Yb4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=xXohVNKqcgxXYY2TmsIOkDNeXzwT3t2//WuFOjq0Uxs=;
-        b=DDxbWcZ029vQowiJm+mfRO8ckq/ve68gkHPVA8oT05v5vJgwxLaF8OP/rTx4mdrIKB
-         ix8SK1E0nalG8j+/MRcBKnm9P19BoQOs/3wdO+CTlQObxLezhcmdWaRnFUN6gF9322Ln
-         MvogygmpuR7rJRRTnCm0/dD2Oo8nsVllaqK50ytijb4c2ec6a5iAtDjjPelKiMirz2Ch
-         CNsSi1y627CMpFCVfEa3W4tzdsqHl+2+TNEDulj7EJLxSgGaPiBkbsckF4t0XrExXZZS
-         4qzzCi6TG8NdsfKjTTreStlgFA5xUPGsk96KYtrla3ak2udAgJgoigxHi/26zydkq2bE
-         76wA==
-X-Gm-Message-State: APjAAAXttXFOZxit7YP10r1mHWbzZfxQtJV9nWaFcP/h+PuZRedqxXCo
-        atr4Uu5zvI0IC+fsldso4LKU5FM6
-X-Google-Smtp-Source: APXvYqwETLBSaunGlKwE+xewO8OSiFhiXVxvL3ophbi5Y23x75gF0qLIzqkrLLIOzPKORej/1etSYQ==
-X-Received: by 2002:a63:5061:: with SMTP id q33mr34962573pgl.218.1554135601006;
-        Mon, 01 Apr 2019 09:20:01 -0700 (PDT)
+        bh=5PgGJ4ZR3na42kqz0YoBDR/EzAl1rkF8yMpTdSJNSL0=;
+        b=WGyWwNnnfsifwcuiKcPKgsBoX/ZKBH3OWAh3EVxKW5OE5vdtW6yssoFWyEdNacVV4n
+         eXtwDsniU0jq9GvuSvRGejRlAgh8ftCyXoQVt5loBu/zHO69zGaB4S26CgZNKs9ul/c2
+         9h4TFjpflKqw5PCi0pPa/74g/e+bwI83OKSPx4nBF8LNePrjjS+P9xywpj0M52lpyJZ8
+         ar6EMB0w8CdhW6wtUuN6ipdsCpu5vvqOINnzNvg7xAnMBzzqcaxh3bibhDXyDxezIsTF
+         uegcf80PX0lhz54bJg/LLasJSyMC9VuaMH2ERxrYUhaBORRk9WE9pcwtHl1JMKNPfRxQ
+         lsbw==
+X-Gm-Message-State: APjAAAVjhmMrGLET7FAUMdYYOinws9i792pU9IBqEaGkoCgbtL+nM2fq
+        hTq2b3ht7lMvkfRgq+u1AbFtACXP
+X-Google-Smtp-Source: APXvYqyMaeunuV7Vj7sziBohnCF6Vc58HfBzrR/VK02Wj68UwbwSI7hYPC4fhkukpXk8MjC4XDSgBA==
+X-Received: by 2002:aa7:928d:: with SMTP id j13mr64529514pfa.112.1554135602481;
+        Mon, 01 Apr 2019 09:20:02 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p6sm1580730pfd.122.2019.04.01.09.20.00
+        by smtp.gmail.com with ESMTPSA id q80sm9265070pfa.66.2019.04.01.09.20.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Apr 2019 09:20:00 -0700 (PDT)
+        Mon, 01 Apr 2019 09:20:01 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 12/17] hwmon: (mlxreg-fan) Use HWMON_CHANNEL_INFO macro
-Date:   Mon,  1 Apr 2019 09:19:32 -0700
-Message-Id: <1554135577-11889-13-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH 13/17] hwmon: (npcm750-pwm-fan) Use HWMON_CHANNEL_INFO macro
+Date:   Mon,  1 Apr 2019 09:19:33 -0700
+Message-Id: <1554135577-11889-14-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1554135577-11889-1-git-send-email-linux@roeck-us.net>
 References: <1554135577-11889-1-git-send-email-linux@roeck-us.net>
@@ -118,68 +123,95 @@ identifier t.elems;
 This patch does not introduce functional changes. Many thanks to
 Julia Lawall for providing the semantic patch.
 
+Cc: Avi Fishman <avifishman70@gmail.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Patrick Venture <venture@google.com>
+Cc: Nancy Yuen <yuenn@google.com>
+Cc: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/mlxreg-fan.c | 48 +++++++++++++++-------------------------------
- 1 file changed, 15 insertions(+), 33 deletions(-)
+ drivers/hwmon/npcm750-pwm-fan.c | 70 +++++++++++++++--------------------------
+ 1 file changed, 26 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 44d4b1af1550..f816d2ae1e58 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -229,40 +229,22 @@ mlxreg_fan_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
- 	return 0;
+diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
+index b3b907bdfb63..1dc0cd452498 100644
+--- a/drivers/hwmon/npcm750-pwm-fan.c
++++ b/drivers/hwmon/npcm750-pwm-fan.c
+@@ -629,51 +629,33 @@ static umode_t npcm7xx_is_visible(const void *data,
+ 	}
  }
  
--static const u32 mlxreg_fan_hwmon_fan_config[] = {
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	HWMON_F_INPUT | HWMON_F_FAULT,
--	0
--};
--
--static const struct hwmon_channel_info mlxreg_fan_hwmon_fan = {
--	.type = hwmon_fan,
--	.config = mlxreg_fan_hwmon_fan_config,
--};
--
--static const u32 mlxreg_fan_hwmon_pwm_config[] = {
+-static const u32 npcm7xx_pwm_config[] = {
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
+-	HWMON_PWM_INPUT,
 -	HWMON_PWM_INPUT,
 -	0
 -};
 -
--static const struct hwmon_channel_info mlxreg_fan_hwmon_pwm = {
+-static const struct hwmon_channel_info npcm7xx_pwm = {
 -	.type = hwmon_pwm,
--	.config = mlxreg_fan_hwmon_pwm_config,
+-	.config = npcm7xx_pwm_config,
 -};
 -
- static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] = {
--	&mlxreg_fan_hwmon_fan,
--	&mlxreg_fan_hwmon_pwm,
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT,
-+			   HWMON_F_INPUT | HWMON_F_FAULT),
+-static const u32 npcm7xx_fan_config[] = {
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	HWMON_F_INPUT,
+-	0
+-};
+-
+-static const struct hwmon_channel_info npcm7xx_fan = {
+-	.type = hwmon_fan,
+-	.config = npcm7xx_fan_config,
+-};
+-
+ static const struct hwmon_channel_info *npcm7xx_info[] = {
+-	&npcm7xx_pwm,
+-	&npcm7xx_fan,
 +	HWMON_CHANNEL_INFO(pwm,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
 +			   HWMON_PWM_INPUT),
++	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT,
++			   HWMON_F_INPUT),
  	NULL
  };
  
