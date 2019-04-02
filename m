@@ -2,108 +2,108 @@ Return-Path: <SRS0=IR8Q=SE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69800C10F00
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E17CCC4360F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:44:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 47A362084B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A996720693
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:44:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UaD1ffDJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbfDBOWo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:22:44 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:37335 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726903AbfDBOWo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:22:44 -0400
-Received: from stefan-Vostro-260.fritz.box ([109.104.50.84]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MMFdY-1hTPgS26Tu-00JHZt; Tue, 02 Apr 2019 16:22:10 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V4 1/3] dt-bindings: hwmon: Add tachometer interrupt to pwm-fan
-Date:   Tue,  2 Apr 2019 16:21:48 +0200
-Message-Id: <1554214910-29925-2-git-send-email-stefan.wahren@i2se.com>
+        id S1731382AbfDBOoA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:44:00 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41316 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730362AbfDBOn7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:43:59 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 188so6495731pfd.8;
+        Tue, 02 Apr 2019 07:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=V8Wxerb8QVMUr4ZXeNBhHGdpEoEGh1gCyzHLGU+/dXU=;
+        b=UaD1ffDJYnpHOW8iB9+5Es9z405COdYBBpKbD2UfnPnfEwsZQs/TDDZFb5rUPDc7pQ
+         vs6V6LuSags9BOmALuIv21iKL108HerVaX7o9GEr4i7Ofw0ALIdrzi51wpYl+CCmuvP1
+         dJd78S4mN/Qqzfiu5NPCqZ8p/7inpVEX2uGojopDKikvra6fU5zU9mZgQYZLIyCNWJf0
+         VGp11tLL0+q2aLXr8jXWthY0mfXLX7yDSKGBhcqdQszW2A8US3/ypCfoiI+9qYKRgjeH
+         u5EDdta8zeVGTFvnCJwebcfZHevUM5SweKvV8A4CMjWaQYsOmYKL0J4HQ+tVqzr7szP6
+         hJ0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=V8Wxerb8QVMUr4ZXeNBhHGdpEoEGh1gCyzHLGU+/dXU=;
+        b=NMTv8akPaFmup+OBhj6SYvF0ijXnVWGGlzW2wG+/N1faXpCmXvQsVveI7PfBHnZQaf
+         SRN7JlTOpfLd3K85Ye3Oup1JIzfgx6uWQ70Vv1UjroCnG9E834nmc3IpkeNYf/G5pICT
+         6vfF+9OI64b1aqp9G8ycrN1GVfWaa2QpiYcrWd3VzCnjMoszTDuW2L+p+Bcj4Y9DsFmc
+         eWL4ueHErTYISgUC0HXshN+xNcof9im3V1IMWCYYYxQ1PPzqlwbS+q7DhKuwWYgcOHtj
+         JICRL8l+PwiS7w94f7YK0S1y9yZ9EZ0WfFuHN6T+KSvlkiaB5stcpkly+XD3cj0M3MD7
+         USzg==
+X-Gm-Message-State: APjAAAUCOs6Aa5VL4L73UowVwes7vIE1BGFMdEF+2cecekC7knFVqHLS
+        pt/hLrwyvvRKiAUp4cANMnAsWN3z
+X-Google-Smtp-Source: APXvYqzTvj272Lm9Qe58pDb2GspngMFHKHvu0udFGpOpiENAxdclUyc2rSGDXwsMQ9hNRno7/arBcQ==
+X-Received: by 2002:a65:6205:: with SMTP id d5mr11610002pgv.61.1554216239132;
+        Tue, 02 Apr 2019 07:43:59 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 16sm21208768pfz.106.2019.04.02.07.43.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Apr 2019 07:43:57 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for hwmon-for-v5.1-rc4
+Date:   Tue,  2 Apr 2019 07:43:56 -0700
+Message-Id: <1554216236-7074-1-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
-References: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:6zcyaBGoBWJesMoCk1uiSDRQ0oB7TE0AM8FJneaL3zD4PE++w65
- mqjbT0yqZsUsOGfmXvDqPxw+wpJy7HI3oYfYr2EFlyOVY4N+zssP+RUvcnKIhXMH3hy5H1c
- TV8m5PtR3YbmtU+xLKjWVflD6/kykOrcIStENuRHlX6Yg4F4ECOkr/YL78uUsGTvY+69v7E
- cgb7WZFjoR7bUtfs2uORg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:l6nOhuu3VfY=:OWFjvLKg617JKUK1YEE8RJ
- Bx1LyHv0uTLgMc5niP9cvBy8kWt8J2lc45BrTBTe0PNATFrn0asVKadmSZ+0H/pxAXitXtaxu
- b3cU78lfMlYgnjjFcXjRjsJqrIJXKZSo2EMUf/oG0ZgkVQBpncANw6guSNkb50xesZD1Zvw26
- ktc10jb03cgZGTG1OCPUQgawI3YHYNPdmgDwiEoNRhbMYRzkWjAnvAq1jrobXU81j0vPhrzpV
- XmOomHSwfyF1jHvcysnnsMcSHG2cxqmfp+toZ9vxI9zjD6OI8nG5CoG5uZ227iuCz8dYm498D
- aQzc56JWHNZ+RpAFd04pNmDSeMVYme+xKJkQMBMtrNZc5C1ZumJ1VTTn6jjZu7zdqTP9XaR9I
- wc50rOHrc0GmXOmZmRQrhkqce6drk7HuFOsmGJ/nR+bHLafTvAujI7/l8y/9c3XoUG4Ddw9AY
- Vd3zEaUcxPYxUrPFRATp6C26xyr61HZgzgYuaD11nldHwcEJoM6KL48Bqqd4c8y2zNPDLciZb
- Ca+L5kJWK9Tk3/30jIft1ToPZxytZTzf8WYBwPQethQu8VTCBD/+AEBTmeja5xNJV9JCfPVhx
- 91p+1TnRUZbzRADfBm6jCEf7SWutsuzGTQuaMpcZnsMGDJ9qBeCLrm+2XnHzG4Wqnm6CoivBN
- TrARlIjyu/rfTURUUYofCt9stVIks+TDa9NeETy2/aqp3FNybQ3sjgqk7l/o22EoASwe2ENJj
- 6hHyy9HF16Hg3bdIzmBB1LT6EZgIpjY7TBJ8J5cRyS+G/EGDq7AlutylAzc=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This adds the tachometer interrupt to the pwm-fan binding, which is
-necessary for RPM support.
+Hi Linus,
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+Please pull hwmon fixes for Linux hwmon-for-v5.1-rc4 from signed tag:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-index 49ca5d8..6ced829b 100644
---- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-+++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-@@ -7,7 +7,16 @@ Required properties:
- 			which correspond to thermal cooling states
- 
- Optional properties:
--- fan-supply    : phandle to the regulator that provides power to the fan
-+- fan-supply		: phandle to the regulator that provides power to the fan
-+- interrupts		: This contains a single interrupt specifier which
-+			  describes the tachometer output of the fan as an
-+			  interrupt source. The output signal must generate a
-+			  defined number of interrupts per fan revolution, which
-+			  require that it must be self resetting edge interrupts.
-+			  See interrupt-controller/interrupts.txt for the format.
-+- pulses-per-revolution : define the tachometer pulses per fan revolution as
-+			  an integer (default is 2 interrupts per revolution).
-+			  The value must be greater than zero.
- 
- Example:
- 	fan0: pwm-fan {
-@@ -38,3 +47,13 @@ Example:
- 					};
- 			     };
- 		};
-+
-+Example 2:
-+	fan0: pwm-fan {
-+		compatible = "pwm-fan";
-+		pwms = <&pwm 0 40000 0>;
-+		fan-supply = <&reg_fan>;
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
-+		pulses-per-revolution = <2>;
-+	};
--- 
-2.7.4
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.1-rc4
 
+Thanks,
+Guenter
+------
+
+The following changes since commit 8c2ffd9174779014c3fe1f96d9dc3641d9175f00:
+
+  Linux 5.1-rc2 (2019-03-24 14:02:26 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.1-rc4
+
+for you to fetch changes up to d3b018f757560ab5c2bce0e7f46e0c1510d7afd4:
+
+  dt-bindings: hwmon: (adc128d818) Specify ti,mode property size (2019-03-29 09:52:00 -0700)
+
+----------------------------------------------------------------
+Couple of minor hwmon fixes
+
+----------------------------------------------------------------
+Axel Lin (1):
+      hwmon: (w83773g) Select REGMAP_I2C to fix build error
+
+Carlos Menin (1):
+      dt-bindings: hwmon: (adc128d818) Specify ti,mode property size
+
+Eddie James (1):
+      hwmon: (occ) Fix power sensor indexing
+
+Guenter Roeck (1):
+      hwmon: (ntc_thermistor) Fix temperature type reporting
+
+ Documentation/devicetree/bindings/hwmon/adc128d818.txt | 4 ++--
+ drivers/hwmon/Kconfig                                  | 1 +
+ drivers/hwmon/ntc_thermistor.c                         | 2 +-
+ drivers/hwmon/occ/common.c                             | 6 ++++--
+ 4 files changed, 8 insertions(+), 5 deletions(-)
