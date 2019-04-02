@@ -3,24 +3,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A638CC4360F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69800C10F00
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 817D82084B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47A362084B
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731484AbfDBOXE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:23:04 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:53911 "EHLO
+        id S1728678AbfDBOWo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:22:44 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:37335 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730527AbfDBOXE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:23:04 -0400
+        with ESMTP id S1726903AbfDBOWo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:22:44 -0400
 Received: from stefan-Vostro-260.fritz.box ([109.104.50.84]) by
  mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MUXd0-1hK1Uw3S8O-00QP7r; Tue, 02 Apr 2019 16:22:10 +0200
+ id 1MMFdY-1hTPgS26Tu-00JHZt; Tue, 02 Apr 2019 16:22:10 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
@@ -32,52 +32,78 @@ To:     Kamil Debski <kamil@wypas.org>,
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V4 2/3] Documentation: pwm-fan: Add description for RPM support
-Date:   Tue,  2 Apr 2019 16:21:49 +0200
-Message-Id: <1554214910-29925-3-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V4 1/3] dt-bindings: hwmon: Add tachometer interrupt to pwm-fan
+Date:   Tue,  2 Apr 2019 16:21:48 +0200
+Message-Id: <1554214910-29925-2-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
 References: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:sW79vU0wqdEQ18pGVxWJjoGC9YpoDTcqaW1ETqYXlKp3U1zGahB
- HxgNcz9aH5EDwV70pNcg7vFo+BAgpO2MJerJdAzUSV2k+OD3Pd5WkwYir0P/oumrS6cMOvm
- LQUD8hHpslqSfVVlbDgNznumPL8wCJitqor1Yj9OeZycotwEFbmmh2eJ+HSSWBnL4mNCRQU
- dDFmTHFZCiUzofUeHNZhg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jEJ+CZrIMRo=:Cj2whXIIO5n7sfq+ZiaUDb
- Qd9mg8G+3DQWmg9yfEeN7VpX23kqJ4uIBD4FGUMFY6q2+D8Kqe3zb3vgmGKTdWA+NI1SD+mFJ
- Kn/qrTRUBjaKfoG5rJPq6ykWVymTX6RRFWt25lMqy7fH3T6YuRroRbPYupSjpc95bcWOW2LP/
- aSKwyUAcEZvFBKVmlDD/q64Ikr9rHxofyp6kiQmo47BU1I9o58NnYe4piWkbuXB4NdgsMKEH5
- rgAuvfGjmc2TT8Ztj3+0qU/d2vVU574Pkuz0QKQLpWp1i0QnJpFHNYn0dhPINh4a64KASuQQh
- q7P9uEvvh/r79MsxVK7BnWH+AQLzHeZaNdrBS0rORsMDqOHZT5HNUycUjer4KnJI4S98+N8pg
- LwMnzVBo8hvpHXlyQiz5L+nTeqJzyv7u79XRpqQkxsnBfIxeiBhUlSJPxuDGdK2oEYh+S4Gr3
- 0zH8O78a4Ox+3/oZdxiXr3YyO1lOzFO9DOUL+qKO0iuo8Fn4IWCWiK3LGTxozZS6169Wj1Dws
- ubkBqVfgMEkC14s04haMUF8G9211efB/kW1R+sfxlDS2WKvHJ/8udAQ8dgDy8Md8XKUAao8Ia
- QI+ErzEC8OxJARaMb7nbyd+mwJXJzIqsQ9i2EEKek28l3FQfo/aFaOHJ2VJXSqO9byOPD+rqn
- EHP30stPibKFOH0lMm+UMER0638a8OLFh/DnS37eqBzzewL0AavGfnkTSWb8nDrqn+KGUvjSy
- SDXvF+T9ngXmx+pYsRpjCjtkAz+noW54ZxYg5Jifc/DBACPyyaN1DIMvylQ=
+X-Provags-ID: V03:K1:6zcyaBGoBWJesMoCk1uiSDRQ0oB7TE0AM8FJneaL3zD4PE++w65
+ mqjbT0yqZsUsOGfmXvDqPxw+wpJy7HI3oYfYr2EFlyOVY4N+zssP+RUvcnKIhXMH3hy5H1c
+ TV8m5PtR3YbmtU+xLKjWVflD6/kykOrcIStENuRHlX6Yg4F4ECOkr/YL78uUsGTvY+69v7E
+ cgb7WZFjoR7bUtfs2uORg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l6nOhuu3VfY=:OWFjvLKg617JKUK1YEE8RJ
+ Bx1LyHv0uTLgMc5niP9cvBy8kWt8J2lc45BrTBTe0PNATFrn0asVKadmSZ+0H/pxAXitXtaxu
+ b3cU78lfMlYgnjjFcXjRjsJqrIJXKZSo2EMUf/oG0ZgkVQBpncANw6guSNkb50xesZD1Zvw26
+ ktc10jb03cgZGTG1OCPUQgawI3YHYNPdmgDwiEoNRhbMYRzkWjAnvAq1jrobXU81j0vPhrzpV
+ XmOomHSwfyF1jHvcysnnsMcSHG2cxqmfp+toZ9vxI9zjD6OI8nG5CoG5uZ227iuCz8dYm498D
+ aQzc56JWHNZ+RpAFd04pNmDSeMVYme+xKJkQMBMtrNZc5C1ZumJ1VTTn6jjZu7zdqTP9XaR9I
+ wc50rOHrc0GmXOmZmRQrhkqce6drk7HuFOsmGJ/nR+bHLafTvAujI7/l8y/9c3XoUG4Ddw9AY
+ Vd3zEaUcxPYxUrPFRATp6C26xyr61HZgzgYuaD11nldHwcEJoM6KL48Bqqd4c8y2zNPDLciZb
+ Ca+L5kJWK9Tk3/30jIft1ToPZxytZTzf8WYBwPQethQu8VTCBD/+AEBTmeja5xNJV9JCfPVhx
+ 91p+1TnRUZbzRADfBm6jCEf7SWutsuzGTQuaMpcZnsMGDJ9qBeCLrm+2XnHzG4Wqnm6CoivBN
+ TrARlIjyu/rfTURUUYofCt9stVIks+TDa9NeETy2/aqp3FNybQ3sjgqk7l/o22EoASwe2ENJj
+ 6hHyy9HF16Hg3bdIzmBB1LT6EZgIpjY7TBJ8J5cRyS+G/EGDq7AlutylAzc=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This adds a short description for the new RPM support of the pwm-fan
-driver.
+This adds the tachometer interrupt to the pwm-fan binding, which is
+necessary for RPM support.
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/hwmon/pwm-fan | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/pwm-fan b/Documentation/hwmon/pwm-fan
-index 18529d2..82fe967 100644
---- a/Documentation/hwmon/pwm-fan
-+++ b/Documentation/hwmon/pwm-fan
-@@ -15,3 +15,6 @@ The driver implements a simple interface for driving a fan connected to
- a PWM output. It uses the generic PWM interface, thus it can be used with
- a range of SoCs. The driver exposes the fan to the user space through
- the hwmon's sysfs interface.
+diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+index 49ca5d8..6ced829b 100644
+--- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
++++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+@@ -7,7 +7,16 @@ Required properties:
+ 			which correspond to thermal cooling states
+ 
+ Optional properties:
+-- fan-supply    : phandle to the regulator that provides power to the fan
++- fan-supply		: phandle to the regulator that provides power to the fan
++- interrupts		: This contains a single interrupt specifier which
++			  describes the tachometer output of the fan as an
++			  interrupt source. The output signal must generate a
++			  defined number of interrupts per fan revolution, which
++			  require that it must be self resetting edge interrupts.
++			  See interrupt-controller/interrupts.txt for the format.
++- pulses-per-revolution : define the tachometer pulses per fan revolution as
++			  an integer (default is 2 interrupts per revolution).
++			  The value must be greater than zero.
+ 
+ Example:
+ 	fan0: pwm-fan {
+@@ -38,3 +47,13 @@ Example:
+ 					};
+ 			     };
+ 		};
 +
-+The fan rotation speed returned via the optional 'fan1_input' is extrapolated
-+from the sampled interrupts from the tachometer signal within 1 second.
++Example 2:
++	fan0: pwm-fan {
++		compatible = "pwm-fan";
++		pwms = <&pwm 0 40000 0>;
++		fan-supply = <&reg_fan>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		pulses-per-revolution = <2>;
++	};
 -- 
 2.7.4
 
