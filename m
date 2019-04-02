@@ -2,25 +2,25 @@ Return-Path: <SRS0=IR8Q=SE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFBBEC4360F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A638CC4360F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA3432084C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 817D82084B
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Apr 2019 14:23:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730552AbfDBOWr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:22:47 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:34443 "EHLO
+        id S1731484AbfDBOXE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:23:04 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:53911 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726903AbfDBOWr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:22:47 -0400
+        with ESMTP id S1730527AbfDBOXE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 10:23:04 -0400
 Received: from stefan-Vostro-260.fritz.box ([109.104.50.84]) by
  mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MHWvH-1h6bLP0mtV-00DZCU; Tue, 02 Apr 2019 16:22:10 +0200
+ id 1MUXd0-1hK1Uw3S8O-00QP7r; Tue, 02 Apr 2019 16:22:10 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
@@ -32,70 +32,52 @@ To:     Kamil Debski <kamil@wypas.org>,
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V4 0/3] hwmon: pwm-fan: Add RPM support
-Date:   Tue,  2 Apr 2019 16:21:47 +0200
-Message-Id: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V4 2/3] Documentation: pwm-fan: Add description for RPM support
+Date:   Tue,  2 Apr 2019 16:21:49 +0200
+Message-Id: <1554214910-29925-3-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
-X-Provags-ID: V03:K1:u9hpHqCTnUjnd+rhDJ9UACW2puSKMuZuktrfAA77OQYwq3oPND1
- rlPOCpWirycQjRUcb5a0LvuL00eUR+vzUbp3Ix9O6CkilKmJS+fL5XknKuzdO+4btrXueSg
- 3uF4A+W72+rOOqBPYM2mR+Mme55GF5El9iSt1xsfeI7u0L/VoL7iz/n4eNedemjUzc4YWmu
- A8bFu0PECp+ngOgntFQRw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:FKkrdHraerM=:D01GnnNVwY4eOS5y6OLXv6
- jGEXoJXpWYD/cbQor2Zyt39Y+3HvU1v7QPWEW4usdjFcSPozpxWy1soQR4c7aXrPiQI0zGuBP
- 9DsPfJHbObTnmZXYbmIjPM5o/ezApxRKTNpPhAHP2UJvb7QoPxWGevXxAMBXMNNcc1ygLjmG6
- AFEEBhJ+boAIkE91gkbj3XNkPqtxnvi7953emmkhPFOosaVXaMohaJwAYYc+gHwfX2EF9yr2b
- TBnYMw6YznJtT0ag66IKXSvxR37RfqJ/dlJPofcZ48Y8HiMozZ8Q3QsMpcgD+NYBmELZKiU3A
- XpiwhT8QmPcW38KHtzw2ERkCRg/jmGHQmQ0isOqeB4mlSVFfNrcOlD7m1EHH1zEfEbkAOU6zO
- 5ifhgAfMxwMmlHgtOa+ZY38GY2ND48c7KUMvmhF8XuHbxEkWTnUm5uct1MGoY/v5vEriit4xF
- JGB8ZRUZ+gLEb8gAt9PEf3yPwVGEs0KbyoA9Anq6Zslayi6Mw92xTa1NB9ZZt0pkq2PzHrxsK
- 8FZsYcBsDHzmzHNMjzJzdhoWAXbKJqiG+bhezTsL8By2LxXfkT+u4/3MWz9ZTFIVnnaRNV4Zc
- sAiB7zEVxoWUPD8NPD5oVozrMI4fJr9ExXn1UBrv/9qppT3jUJLLSJy28luSXEqLzFQDSHaWu
- HnLQjG7PaZXsTmZUMksMdG1JESSHH46VVIVWSR5WLIXSkDnlj1YY2Sw23sHGIdSXYu8F01ZSR
- 9mt2IfAdx75nhOC+uQVdjr+X8NGGfox03yuKAHAAxJmv6/flkFbuHE3h0rQ=
+In-Reply-To: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
+References: <1554214910-29925-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:sW79vU0wqdEQ18pGVxWJjoGC9YpoDTcqaW1ETqYXlKp3U1zGahB
+ HxgNcz9aH5EDwV70pNcg7vFo+BAgpO2MJerJdAzUSV2k+OD3Pd5WkwYir0P/oumrS6cMOvm
+ LQUD8hHpslqSfVVlbDgNznumPL8wCJitqor1Yj9OeZycotwEFbmmh2eJ+HSSWBnL4mNCRQU
+ dDFmTHFZCiUzofUeHNZhg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jEJ+CZrIMRo=:Cj2whXIIO5n7sfq+ZiaUDb
+ Qd9mg8G+3DQWmg9yfEeN7VpX23kqJ4uIBD4FGUMFY6q2+D8Kqe3zb3vgmGKTdWA+NI1SD+mFJ
+ Kn/qrTRUBjaKfoG5rJPq6ykWVymTX6RRFWt25lMqy7fH3T6YuRroRbPYupSjpc95bcWOW2LP/
+ aSKwyUAcEZvFBKVmlDD/q64Ikr9rHxofyp6kiQmo47BU1I9o58NnYe4piWkbuXB4NdgsMKEH5
+ rgAuvfGjmc2TT8Ztj3+0qU/d2vVU574Pkuz0QKQLpWp1i0QnJpFHNYn0dhPINh4a64KASuQQh
+ q7P9uEvvh/r79MsxVK7BnWH+AQLzHeZaNdrBS0rORsMDqOHZT5HNUycUjer4KnJI4S98+N8pg
+ LwMnzVBo8hvpHXlyQiz5L+nTeqJzyv7u79XRpqQkxsnBfIxeiBhUlSJPxuDGdK2oEYh+S4Gr3
+ 0zH8O78a4Ox+3/oZdxiXr3YyO1lOzFO9DOUL+qKO0iuo8Fn4IWCWiK3LGTxozZS6169Wj1Dws
+ ubkBqVfgMEkC14s04haMUF8G9211efB/kW1R+sfxlDS2WKvHJ/8udAQ8dgDy8Md8XKUAao8Ia
+ QI+ErzEC8OxJARaMb7nbyd+mwJXJzIqsQ9i2EEKek28l3FQfo/aFaOHJ2VJXSqO9byOPD+rqn
+ EHP30stPibKFOH0lMm+UMER0638a8OLFh/DnS37eqBzzewL0AavGfnkTSWb8nDrqn+KGUvjSy
+ SDXvF+T9ngXmx+pYsRpjCjtkAz+noW54ZxYg5Jifc/DBACPyyaN1DIMvylQ=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Contrary to the gpio-fan the pwm-fan driver isn't easy to setup
-with pwmconfig/fancontrol because of the missing hwmon sysfs entry
-for actual revolutions per minute. This series adds this feature.
+This adds a short description for the new RPM support of the pwm-fan
+driver.
 
-Changes in V4:
-- remove copy & paste artifact in dt-binding example
-- switch to u64 for rpm calculation
-- drop overflow handling and init atomic
-- handle 0 not as valid irq
-- reduce range of pulses_per_revolution
-- handle probe defer of platform_get_irq
-- delete timer properly in bail-out path
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ Documentation/hwmon/pwm-fan | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes in V3:
-- rename property interrupt-ratio to pulses-per-revolution
-  to avoid confusion with interrupt binding
-- handle error case pulses-per-revolution = 0
-- bail out properly in case we are unable to request the irq
-
-Changes in V2:
-- address Guenter's comments:
-  - improve description of interrupts
-  - use atomic_t to avoid races of the pulse counter
-  - measure sample time to make rpm more reliable under load
-  - make sysfs entry fan1_input conditional
-- add dt-property to define interrupts per fan revolution
-- example for fan with RPM support
-
-
-Stefan Wahren (3):
-  dt-bindings: hwmon: Add tachometer interrupt to pwm-fan
-  Documentation: pwm-fan: Add description for RPM support
-  hwmon: pwm-fan: Add RPM support via external interrupt
-
- .../devicetree/bindings/hwmon/pwm-fan.txt          |  21 +++-
- Documentation/hwmon/pwm-fan                        |   3 +
- drivers/hwmon/pwm-fan.c                            | 111 ++++++++++++++++++++-
- 3 files changed, 130 insertions(+), 5 deletions(-)
-
+diff --git a/Documentation/hwmon/pwm-fan b/Documentation/hwmon/pwm-fan
+index 18529d2..82fe967 100644
+--- a/Documentation/hwmon/pwm-fan
++++ b/Documentation/hwmon/pwm-fan
+@@ -15,3 +15,6 @@ The driver implements a simple interface for driving a fan connected to
+ a PWM output. It uses the generic PWM interface, thus it can be used with
+ a range of SoCs. The driver exposes the fan to the user space through
+ the hwmon's sysfs interface.
++
++The fan rotation speed returned via the optional 'fan1_input' is extrapolated
++from the sampled interrupts from the tachometer signal within 1 second.
 -- 
 2.7.4
 
