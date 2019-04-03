@@ -2,103 +2,142 @@ Return-Path: <SRS0=jSl0=SF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1463C4360F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Apr 2019 03:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB5E4C4360F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Apr 2019 04:28:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7747C2146E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Apr 2019 03:23:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82AB3206C0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Apr 2019 04:28:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H9Kf+5UF"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gp+FtYfG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfDCDXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Apr 2019 23:23:08 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35496 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbfDCDXI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Apr 2019 23:23:08 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t21so7412474pfe.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 Apr 2019 20:23:07 -0700 (PDT)
+        id S1726064AbfDCE2Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 3 Apr 2019 00:28:24 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44318 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbfDCE2X (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Apr 2019 00:28:23 -0400
+Received: by mail-pg1-f195.google.com with SMTP id i2so7629262pgj.11;
+        Tue, 02 Apr 2019 21:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=to:from:subject:openpgp:cc:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=Y5ge1ZjQf8SimZV+7qeZtcyWlnSgvmpT0soqRQJ55g4=;
-        b=H9Kf+5UFn7LA1NF/7etL+9NSFnYQkAIxBPttG0QJfr4QFDPaPVp+Zc5t5d6hSSugdh
-         2ezrPXXvy/U8xpsoACOU/agFIBolpSvHvvROlA7KlVrL3TErHHWCVZSYJhUj/xvaC5qV
-         rA9GxVtdAQJtgRWYAFLDi0dXKg035esTYEXINxRwYvdglxVozmbRX9bryJ/hG8dGI1aV
-         y+rH5QDkeQVp+5PHU5RepPFj4GOZdKLW4Cq9XGn4Yg54dwGsWWxA2wwvUkgiBlgKD8vp
-         hAr17OSMzycTf0tYExokvz8s5i4UMuA59o03FWL/fQ+nhFSolNHchVGob4IMINwEsVQI
-         yPiA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=okQiFa1LucnY9MvnxTQta/a/jKxZN0Lx4xzIHtSBdfk=;
+        b=gp+FtYfG89oTn0cjPZgm29E/rVv0nns0d/TVCFbygFk1U65bgu8hIFVOivuOQ6evJX
+         8j5XrJpkkcIfApXGTMqGPG9dLC3wK0DgE2rPVs+4jD6tvuc03KvfBAoaaI1RJBTZwsgk
+         21qoEKE96HpFMz0HxbMfPY/0c1KpAP83N7PXXh8QKVsa+8dgUg4LNukLi1QuQ1kt1Cuk
+         aUdEUs7LVrjdJ+GLFk0Nwcp/1avGs44YLG9X/aVCdM75Z58w/rAOpVimAkXPFDg8teFE
+         c3VzVoElVAwZWS7PvwbzdC5fcfUfFRgQzg+kUVrmt1Wb7clQpiKmu2+CxIFPN5ZBRf+x
+         O+og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:openpgp:cc:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=Y5ge1ZjQf8SimZV+7qeZtcyWlnSgvmpT0soqRQJ55g4=;
-        b=PsBeY4QEp7VFXsxDzypUZReFGem7aEPqKMYoOnrzl/tF6uS8jKgNMbjHrmkLkoU0E9
-         CUsNUds64g1fcE34A8IdChiNFP2yrxi/ubcO1H6xjb1GVVIXDYyjZ9P3/2KZnK0hqZe0
-         kQh4sbJexhy7FKnc1jYlShRBmHByy6CXjY/qhj+HCn+rOT3BcYIegrS8r5VpVgi0Gqd4
-         FinTqt0vuNJJ2ilpomm24NhvpQZGmAJxTRPRUHCisRhgl97bnewkzaNwII30uHupxWeo
-         /CQDZEAnNFXy5feVCxCBkR5Oh3FzkSlwXE7Y69ZIELKt01qPCL86jq5dAzg9qaEmhLaL
-         EwnQ==
-X-Gm-Message-State: APjAAAUTjiGKFBFpAYMx+LHCL8sEe8Z16yoKWwsPfsgJegEWBNrQGJRn
-        7AWeHZjXctPC+cUgELQxQPc=
-X-Google-Smtp-Source: APXvYqzEluOStjzEgaV8YApmSvefAXKFlZgW9r1ujFeJQY+7yATMkd+csZ4bvKuyhdOeDpS5d3V2MA==
-X-Received: by 2002:a62:204b:: with SMTP id g72mr67036332pfg.51.1554261787008;
-        Tue, 02 Apr 2019 20:23:07 -0700 (PDT)
-Received: from [10.230.28.107] ([192.19.223.250])
-        by smtp.gmail.com with ESMTPSA id n1sm16755597pgv.19.2019.04.02.20.23.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Apr 2019 20:23:06 -0700 (PDT)
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, linux-hwmon@vger.kernel.org
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Couple of questions on SCMI sensor protocol and Linux implementation
-Openpgp: preference=signencrypt
-Cc:     Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1902f151-7ddd-6b4b-4135-a2affe20c009@gmail.com>
-Date:   Tue, 2 Apr 2019 20:22:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=okQiFa1LucnY9MvnxTQta/a/jKxZN0Lx4xzIHtSBdfk=;
+        b=cTywPip9p250CEzeVnU0X6Gibrz21pAAvFwEmOpIXR3+88LA8WYzDFW0CnWCVkdwXU
+         uHIJWHbzfiKOX1d8Ub90BpQSlFwY8P/HQKwndJzLRjGVI4rGSzJ42zx86z1oUgbxEQzp
+         41i3b63ZveCvc77CDNGiVz4BBfiWhzyovmw4lAgAqswqXu1d7QsIkOh6M6ergiYw62PN
+         w25DpCCcGaAVl5miv1P91hO6ELTA3AVzr7ww6cLpOB1158TKLzMXgb8Uk57s+z7I2jbC
+         17/2JUKCsAvOmSef+Kz0IB+KkZXHhOM6jAIqOIYzb4Af1WZiZtaypa4sMrJb5rWJaaR0
+         5hrA==
+X-Gm-Message-State: APjAAAX2mAiCiagwBoxEyUtabD/e+fW570BAz/t4UekQ2y0slhSXPFhZ
+        5/oTasNEdAmM/Pfl8agNbss=
+X-Google-Smtp-Source: APXvYqy/VCfgtRfYQVJPgR6QYFvCt+pHfm0O4I3h7G9OHoh6fqdo7YLngUFBRN2mvE9bufudlCe+kA==
+X-Received: by 2002:a65:5685:: with SMTP id v5mr68870041pgs.365.1554265702855;
+        Tue, 02 Apr 2019 21:28:22 -0700 (PDT)
+Received: from squirtle.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
+        by smtp.gmail.com with ESMTPSA id r145sm7138450pgr.84.2019.04.02.21.28.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Apr 2019 21:28:21 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (iio_hwmon) Simplify attr.name generation in iio_hwmon_probe()
+Date:   Tue,  2 Apr 2019 21:28:11 -0700
+Message-Id: <20190403042812.26357-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Sudeep,
+Since every call to devm_kasprintf() in the switch statement is mostly
+the same, we can move all of the shared code outside and capture
+differencies with two helper variables. No functional change intended.
 
-There are a couple of things on which I would appreciate your feedback
-regarding the Linux SCMI sensor protocol:
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/hwmon/iio_hwmon.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-1) The Linux SCMI implementation has all the nuts and bolts to allow
-configuring trip points, but the hwmon subsystem through the use of
-hwmon_thermal_add_sensor() API does not actually make use of that
-capability. Would it be a big stretch to use the hwmon_ops::write
-function to get to support that feature? The other thing that puzzles me
-is that there does not appear to be provision in the SCMI sensor
-protocol to describe thermal zones, so I assume that people still have
-to provide supplemental data through Device Tree for
-devm_thermal_zone_of_sensor_register() to pick up the thermal zones
-definitions?
-
-2) Support for regulators through SCMI
-
-I work with a device where the regulators can only be controlled via a
-dedicated piece of HW which is accessible through SCMI from the Linux
-side. Do you think there is value in coming up with a scmi-regulator.c
-driver that makes use of the sensor protocol for discovering and
-reporting regulators or would that be something that belongs more to the
-power domain protocol?
-
-Thanks for reading me! Cheers
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index 5c3c08449de7..1770423f7a80 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -92,6 +92,9 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < st->num_channels; i++) {
++		const char *prefix;
++		int n;
++
+ 		a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
+ 		if (a == NULL)
+ 			return -ENOMEM;
+@@ -103,28 +106,28 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 
+ 		switch (type) {
+ 		case IIO_VOLTAGE:
+-			a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
+-							       "in%d_input",
+-							       in_i++);
++			n = in_i++;
++			prefix = "in";
+ 			break;
+ 		case IIO_TEMP:
+-			a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
+-							       "temp%d_input",
+-							       temp_i++);
++			n = temp_i++;
++			prefix = "temp";
+ 			break;
+ 		case IIO_CURRENT:
+-			a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
+-							       "curr%d_input",
+-							       curr_i++);
++			n = curr_i++;
++			prefix = "curr";
+ 			break;
+ 		case IIO_HUMIDITYRELATIVE:
+-			a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
+-							       "humidity%d_input",
+-							       humidity_i++);
++			n = humidity_i++;
++			prefix = "humidity";
+ 			break;
+ 		default:
+ 			return -EINVAL;
+ 		}
++
++		a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
++						       "%s%d_input",
++						       prefix, n);
+ 		if (a->dev_attr.attr.name == NULL)
+ 			return -ENOMEM;
+ 
 -- 
-Florian
+2.20.1
+
