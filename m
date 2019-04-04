@@ -6,60 +6,60 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54ACAC4360F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09658C10F0C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2614320643
+	by mail.kernel.org (Postfix) with ESMTP id D069720643
 	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l0v2/Hld"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlVh6rS7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729753AbfDDSeG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1729764AbfDDSeG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 4 Apr 2019 14:34:06 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45234 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729534AbfDDSeF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 14:34:05 -0400
-Received: by mail-pf1-f195.google.com with SMTP id e24so1765981pfi.12
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 11:34:05 -0700 (PDT)
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:44795 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729534AbfDDSeG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 14:34:06 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g12so1567679pll.11
+        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 11:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VoB3My0/0da2LMx6rKcVFPi1y+5TU3+4RIFjGqWCYzM=;
-        b=l0v2/HldvCHco6LWFbVFl6F3HVJtZvDqZ8zsG21bAZ4Otriokot1lR/2TyH3MCWku3
-         gad6NDNRGzu0JCJ4nwcOqCvVTP6BTuprkGZrFTsWzWGGwustKz/i4l9Hh5OH5QwCKnKp
-         19uIRQe/fKoKtXrj185zm74xc6Ke5s/00l9BnBs9f1oZOFL7VpV5MH+NQngjxsYjAdLp
-         Nayk/j7aqrW27uJjYfPQ0V6cRtnH2NlunIs7GAzsVCgox+Bf8l15TCKEwGmhfckMwL+Q
-         a1525ot3VpO1iYmbPEQ/7AFE/7Lm0Sko7kYUrnuH6c3oIGT14mVd/lBzIqhg+mFT0rM6
-         f1ew==
+        bh=iAPDuAeXrMc4nmtlSZnhC9UOBU1xCgt3/nXqBXEyvTI=;
+        b=KlVh6rS7h1n3MXMD/UdOcuDsMFE0ZRty4BuQmXvcxOLFgPq++yk/Tgl8LRWGZREDNz
+         aD4GwiHhaw42Al97l7u1bKWLObY/tIYI6khhjF0UfujMFkfTN6FEd9xcC1+qfhZLXtgs
+         3Gz3NEDph25UQd3A/S+PTBbTzQhKjDZQcJ5b/t7of4WaFAX/g1e0iADD61QioRjyiDvv
+         oaQHAl1kDzG43jxYJssUQuhMSz1ZBRnCo6uY0qFnnnUdfqD2grBumdWY5EVB8YzLbEln
+         xoyp/ADDnrO7zlRj82EtYgRRoKAKhbzzf/5G/1ASuLDQsr/HKl90w3OVGxwWnRPc8a5H
+         FXRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=VoB3My0/0da2LMx6rKcVFPi1y+5TU3+4RIFjGqWCYzM=;
-        b=mFzs/q7HK0oppHEXAa9wpToM/lz9wBgVxqY7e8+PvADszzeFuGXLvWhCu37jN04waK
-         RvCUnEnf0X+yyxG6u0dyoYrx4Hp6+WxyGcN8fGvGTMRgsDcDO6rVUKsGHCm++pvv5RYm
-         t3zN9Q4Y8b9EzOe1svAgREHDWaaskYM92SdVgrN5fcSuN2VQ+FQxJSfSnAQHbo0OryDz
-         4vpmxzrvgbeID5pcn23XRwVEuO3L6S4W1tVcLVYXx4k7uht330gVzu41fsbCsQxH4DoZ
-         m+hDY/q7xe/m7OwCQ2ka6XG+gRpVWMqUTxoe/gCTfAMbWs86mKyuqzFl6r6BpfQ6lUQe
-         0ZAg==
-X-Gm-Message-State: APjAAAVxpsm76V7ONgSfMThlzaRk3ZZqx9mSTnBwy3I4sJC8xwUw52fO
-        0RhR5CMmMvSdkBOpZUH9MpGQ8hJi
-X-Google-Smtp-Source: APXvYqwc0lDiJS/5mcgcZRm+6TTRiA5Zs4kexxGuqENBfBCpuA/FPGDnh9JKnHWWe/Xow5BypTT0hw==
-X-Received: by 2002:a63:ef07:: with SMTP id u7mr7646518pgh.0.1554402844328;
-        Thu, 04 Apr 2019 11:34:04 -0700 (PDT)
+        bh=iAPDuAeXrMc4nmtlSZnhC9UOBU1xCgt3/nXqBXEyvTI=;
+        b=MBLGE9s8N+KOfNvdDJVuevkvbT74deTM1le3/2wucFwDFcqtwour3VoEUoB5zjC9KC
+         8+LeFAY2wyaK+BoTzxbIKTXUQS8WscdbJJmkHwLjCIFC2ANA7s1b6q7V2IgCOZGCXS3c
+         zAXfhaZTkMLF+JWaZ4AtphQblFZCQvIAtFVTTjFlfMAE3wPhBe6afVutCW18Tzq9e1F1
+         j5LUcOTHlaBc26E3cYYLwNvNyQjWSFoa+wRVva7Go3vu14guXkromaxBjv9z4oLd+R60
+         Cqsfnhf801hvkf3fWBBC3+5X7Cja1eeho2Qan8KouSVo2mXOYUb6YlaGOGpiwsUMfjCo
+         v1YQ==
+X-Gm-Message-State: APjAAAVBbYFy7GJyORFXT1uhLDnlRU+n1lWgVkJF4wdKdkUyYt+EMt6a
+        fH57Ry46t6kxU7olSe50CPAwiGKS
+X-Google-Smtp-Source: APXvYqxLJiBYCLRLaDcF0CyKaOHa6B5/DC+hiqQMSmzhMTYKJmlUJJvA/enSFoNwEAjAMrgyh/N12w==
+X-Received: by 2002:a17:902:b717:: with SMTP id d23mr7736186pls.260.1554402845645;
+        Thu, 04 Apr 2019 11:34:05 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i31sm37490370pgi.36.2019.04.04.11.34.03
+        by smtp.gmail.com with ESMTPSA id b9sm14650285pfd.32.2019.04.04.11.34.04
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 11:34:03 -0700 (PDT)
+        Thu, 04 Apr 2019 11:34:05 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 3/4] hwmon: (smsc47b397) Use request_muxed_region for Super-IO accesses
-Date:   Thu,  4 Apr 2019 11:33:57 -0700
-Message-Id: <1554402838-19008-3-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 4/4] hwmon: (smsc47b397) Use request_muxed_region for Super-IO accesses
+Date:   Thu,  4 Apr 2019 11:33:58 -0700
+Message-Id: <1554402838-19008-4-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1554402838-19008-1-git-send-email-linux@roeck-us.net>
 References: <1554402838-19008-1-git-send-email-linux@roeck-us.net>
@@ -83,19 +83,20 @@ Reported-by: John Garry <john.garry@huawei.com>
 Cc: John Garry <john.garry@huawei.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/smsc47b397.c | 13 +++++++++++--
+ drivers/hwmon/smsc47m1.c | 13 +++++++++++--
  1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/smsc47b397.c b/drivers/hwmon/smsc47b397.c
-index c0775084dde0..60e193f2e970 100644
---- a/drivers/hwmon/smsc47b397.c
-+++ b/drivers/hwmon/smsc47b397.c
-@@ -72,14 +72,19 @@ static inline void superio_select(int ld)
- 	superio_outb(0x07, ld);
- }
+diff --git a/drivers/hwmon/smsc47m1.c b/drivers/hwmon/smsc47m1.c
+index c7b6a425e2c0..0736ca6a3aee 100644
+--- a/drivers/hwmon/smsc47m1.c
++++ b/drivers/hwmon/smsc47m1.c
+@@ -73,16 +73,21 @@ superio_inb(int reg)
+ /* logical device for fans is 0x0A */
+ #define superio_select() superio_outb(0x07, 0x0A)
  
--static inline void superio_enter(void)
-+static inline int superio_enter(void)
+-static inline void
++static inline int
+ superio_enter(void)
  {
 +	if (!request_muxed_region(REG, 2, DRVNAME))
 +		return -EBUSY;
@@ -104,16 +105,17 @@ index c0775084dde0..60e193f2e970 100644
 +	return 0;
  }
  
- static inline void superio_exit(void)
+ static inline void
+ superio_exit(void)
  {
  	outb(0xAA, REG);
 +	release_region(REG, 2);
  }
  
- #define SUPERIO_REG_DEVID	0x20
-@@ -300,8 +305,12 @@ static int __init smsc47b397_find(void)
- 	u8 id, rev;
- 	char *name;
+ #define SUPERIO_REG_ACT		0x30
+@@ -531,8 +536,12 @@ static int __init smsc47m1_find(struct smsc47m1_sio_data *sio_data)
+ {
+ 	u8 val;
  	unsigned short addr;
 +	int err;
 +
@@ -122,9 +124,9 @@ index c0775084dde0..60e193f2e970 100644
 +		return err;
  
 -	superio_enter();
- 	id = force_id ? force_id : superio_inb(SUPERIO_REG_DEVID);
+ 	val = force_id ? force_id : superio_inb(SUPERIO_REG_DEVID);
  
- 	switch (id) {
+ 	/*
 -- 
 2.7.4
 
