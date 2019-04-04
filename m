@@ -4,63 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A99C9C10F0E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8539C10F15
 	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 15:58:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 770BC2082E
+	by mail.kernel.org (Postfix) with ESMTP id A5C2F20855
 	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 15:58:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNW32fRn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvqkjK0e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728935AbfDDP6q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Apr 2019 11:58:46 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39739 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728901AbfDDP6p (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 11:58:45 -0400
-Received: by mail-pg1-f194.google.com with SMTP id k3so1454216pga.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 08:58:44 -0700 (PDT)
+        id S1726952AbfDDP6o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 Apr 2019 11:58:44 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40039 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728894AbfDDP6n (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 11:58:43 -0400
+Received: by mail-pl1-f196.google.com with SMTP id b3so1377218plr.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 08:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SjsIC/oIYB88FwEPy1E/ipQM+nFUvrNJNDi6Kxi4MWA=;
-        b=VNW32fRnXcdoXWytTGjJ30FqdjpDGihUNlSWqDakaaR3qrUvKykhoba9HuAAGq0Bu+
-         dYnIMZUKvirfpc2S9c4qpU0G4F/TerEbqG6ioWt7lFP98U57JmgWak0jooSyCbXTLcQw
-         xUihC14UE97SPIeMBtRdEUX1sv5aKXXEzYy0N+cJ/RwcNlidNMOaSPD1o1Kw3hmgfymL
-         rP/6pE+5qUS5AE2p+9a2NFM4ukHsDHB7DQE/TAG+MUC6O9rXoGuSEsWd7qQ1HCtl4bT7
-         3ygFTi2ooOZ3JD+k/hvb8oLtzXfRDCSG97YaqdvziIY1WM10wvhAm7jPrVxmAE31JVmm
-         6zlg==
+        bh=1B/T2cBzTJb+nb1rBcu1YhUZl22GDO+mFYvk7SjWatE=;
+        b=HvqkjK0eJpQAehFjuvQ5MkI1c1ugfTlerqrYt89UcRYVoNdvtdAMNn6qIryfMCCOYl
+         IjDONcvzvCCvcpCmUjjSCp7/2ykr4raaMzzD2yI4xSFN/tc9DKt7DCO5d6pIQq0sM3UT
+         b4y9cz9n3xOswDe63YLzxItR51gBmSVMo13NhddJc6s5PhE2vPJhnDr4gI9/j7W+BGMl
+         ExaPozTZNKcQMeAj3iY1bs/yKjKkm879OrdERlRXpfC2JSmSQR+j40rqlv29rH1+NJ2o
+         eFvlzGz3Bif5Rz3ZFG5AZrLq26Z0GFYEpucCoTk6xSqMAu9bfbQ++23uv1kDFsEHvMAV
+         +oLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=SjsIC/oIYB88FwEPy1E/ipQM+nFUvrNJNDi6Kxi4MWA=;
-        b=j1UbCfY8IJIWBRrKTh8S47DhMcCB9bZG7HO9wQsjZm4R7F8nyt4rkVn3cXGOQulCEy
-         vifyxKPQjjl1YJosLoWWsvhmdBNX0iPXCGyKO/QFfI3SsO/XyYy4LHISoX3LpyTJAOyM
-         RKHV4HN5mzt7L0Vgck7yuvOHMZfVrZfeyTH1RGTuAI388L4/yb/ZWbzr48xDFoub5Uve
-         WA88U7bHs9RemD3oy4ZHvRZasrhUfC48RLw6rs1hSMPakLXhHqFVc6cZVC/WijDtDOvd
-         2Px1PoP8txj3JfG5d/dVRcyUc6Cc5Omt88s4kZxC3KJTJMnDzTcUte6kX4nK5bhcg+1B
-         fTfg==
-X-Gm-Message-State: APjAAAVCJZXd41hDQi8GYFtl/xGRzc4NUsMhYhcVeMAfel2lSsJ9uKcp
-        d+uvW6oPLWg/NY25h4vvGn/7puCi
-X-Google-Smtp-Source: APXvYqwj/CuClw0OJ7jr/F88v1F3/2aVEXfc2eWGAqJwvCDSVUm5VLQJWE8tV4sPLJvhVm+W+WhEog==
-X-Received: by 2002:a63:e70c:: with SMTP id b12mr6348916pgi.399.1554393524106;
-        Thu, 04 Apr 2019 08:58:44 -0700 (PDT)
+        bh=1B/T2cBzTJb+nb1rBcu1YhUZl22GDO+mFYvk7SjWatE=;
+        b=d5ULmP5L+HlYG9c7ELGcBX3INQ1zUDtFABQdbj59PDNhQas0L3EAPg5HqJPztnjan1
+         ZxJlqitzY2WkvcclbfQapMgjrbSKwZT0xZCYv9O5ymilEsZOMrLRTDKDC0wG3NFl8GOY
+         yaeV+PBSBJ1GDC0x1ZWyYiYeKa0SDB4o3oMKIkBHr4yjaFXw5JHluR5BPJwHTBo9SL+S
+         iT8V4s3oyulCg2p0fb0i6EPRitWwPrsr8I9kvmsQyDNIIp4O4ffYtpcCOBwXOpwXo6nc
+         4BbPAhE6DJgnvht3cpcVhYr2ZtfL8XvnqsCuNOriPKFNL3z9Sdl5nRUHEzmVpBdpUSoE
+         GSag==
+X-Gm-Message-State: APjAAAWqvmNh11EciHOJMf6mBes+nxXWG5br0zr9WTKL7IUBuDYGI1jh
+        B9oJClpD/DZQY6PujSuHMjvxId2u
+X-Google-Smtp-Source: APXvYqwJ4WJTUnY7gY/ZHLfqVAVWT8SUWM9Gq5BUMtGbJ4q3/vte4XNNyTIFaGNHqFyZqJPL/Vc42w==
+X-Received: by 2002:a17:902:5ac4:: with SMTP id g4mr6854857plm.261.1554393522766;
+        Thu, 04 Apr 2019 08:58:42 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t190sm32436915pfb.33.2019.04.04.08.58.43
+        by smtp.gmail.com with ESMTPSA id v15sm27460601pff.105.2019.04.04.08.58.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 08:58:43 -0700 (PDT)
+        Thu, 04 Apr 2019 08:58:42 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 03/24] hwmon: (ltc4151) Fix build warning
-Date:   Thu,  4 Apr 2019 08:58:15 -0700
-Message-Id: <1554393516-30316-3-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 02/24] hwmon: (pmbus/ucd900) Fix build warning
+Date:   Thu,  4 Apr 2019 08:58:14 -0700
+Message-Id: <1554393516-30316-2-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1554393516-30316-1-git-send-email-linux@roeck-us.net>
 References: <1554393516-30316-1-git-send-email-linux@roeck-us.net>
@@ -74,29 +73,29 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 If CONFIG_OF is not enabled, the following build warning is observed.
 
-drivers/hwmon/ltc4151.c:211:34: warning:
-	‘ltc4151_match’ defined but not used
+drivers/hwmon/pmbus/ucd9000.c:154:34: warning:
+	‘ucd9000_of_match’ defined but not used
 
-Mark ltc4151_match as __maybe_unused to fix the problem.
+Mark ucd9000_of_match as __maybe_unused to fix the problem.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc4151.c | 2 +-
+ drivers/hwmon/pmbus/ucd9000.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ltc4151.c b/drivers/hwmon/ltc4151.c
-index 76c6fda76d95..2b5cd37e6dc3 100644
---- a/drivers/hwmon/ltc4151.c
-+++ b/drivers/hwmon/ltc4151.c
-@@ -208,7 +208,7 @@ static const struct i2c_device_id ltc4151_id[] = {
+diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+index ae93885fccd8..40a3e3d0e661 100644
+--- a/drivers/hwmon/pmbus/ucd9000.c
++++ b/drivers/hwmon/pmbus/ucd9000.c
+@@ -151,7 +151,7 @@ static const struct i2c_device_id ucd9000_id[] = {
  };
- MODULE_DEVICE_TABLE(i2c, ltc4151_id);
+ MODULE_DEVICE_TABLE(i2c, ucd9000_id);
  
--static const struct of_device_id ltc4151_match[] = {
-+static const struct of_device_id __maybe_unused ltc4151_match[] = {
- 	{ .compatible = "lltc,ltc4151" },
- 	{},
- };
+-static const struct of_device_id ucd9000_of_match[] = {
++static const struct of_device_id __maybe_unused ucd9000_of_match[] = {
+ 	{
+ 		.compatible = "ti,ucd9000",
+ 		.data = (void *)ucd9000
 -- 
 2.7.4
 
