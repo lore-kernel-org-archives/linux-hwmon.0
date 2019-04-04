@@ -6,60 +6,63 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEF0C4360F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E86C10F0C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3FCA20643
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 268A120643
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Apr 2019 18:34:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sh8NP/KM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sdNOcIQm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729640AbfDDSeC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Apr 2019 14:34:02 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36411 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729534AbfDDSeC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 14:34:02 -0400
-Received: by mail-pg1-f194.google.com with SMTP id 85so1652648pgc.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 11:34:02 -0700 (PDT)
+        id S1729729AbfDDSeE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 Apr 2019 14:34:04 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36846 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729534AbfDDSeD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Apr 2019 14:34:03 -0400
+Received: by mail-pl1-f193.google.com with SMTP id ck15so1586030plb.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 04 Apr 2019 11:34:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=Uq6bc3RBb9LXJDUrOFV2sIoBpnRZhaMESpCt2852Ye0=;
-        b=sh8NP/KMmTyWfs8gRmGBqO5K4PKkIKyWT8T813d+j/R6M5kX4OpI3ndDF348KIksDz
-         zNE2hwp0BRCPDAuVNZwTeCJLHMJu9iUfEyMmMWcHUr6nEQXiU34MvDu8kwqvKn2PZxXC
-         TIwNkHUjgn1p/ZEGfwAuJzj4S/0MXyFsoZsmOn5HftWBX8zFE0DX2Nx2zvErARm620s9
-         mjt7XH+oPtcIb3R75h/huUiJGGK8T2FicO1wzAGqJDndu0J3ay8P39GQXadAIGX9ZTHh
-         96wq9p6ImcmgSkmhQffSDcbx/vYPLIx+tHbkGf5H0LuJPW6p64VeSSLYffNYzY2yfyOl
-         hvew==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=geaygXebEawsdZr7nPXl2XcaN7cCY3bpFbApbwpxWnw=;
+        b=sdNOcIQmedADfxkSSovwycSBUlT4pjHleeZYfEi891aA/d9UYkGmRpr1Eka4Fo18qV
+         FuyJZUOc72YSRzqAqGY2gEQJnO4RPHDtmq2jJDKYD3e8B+DmCw7EIwj6rxxJuPvHYHV2
+         ZtUztixXzvWPYHif4mlya5g1l/Ua6fopkv6rmTYEohg8go9FYKVfkCcJpTGM8DkwVAbe
+         ht9AQs4XSyzk6VH9e/n4cJL/cObyNuzUhWO0XmuXZnQmICV6eSE/vZwX+UPU1rL+toOu
+         SAUfOaLWPg4RGYNWw0NNkooQBmOAEliTn4NTtV8aOoK2NeamEAFDecKzau56o7T8cxio
+         xLSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=Uq6bc3RBb9LXJDUrOFV2sIoBpnRZhaMESpCt2852Ye0=;
-        b=D6RcRNyqLdSRc6Nk7DWz2R4TYA86izXoDdmWFlUDXz4/87E30PjO082KYvqQFogZ4C
-         BGh+XzCq6PcR3UirleVZmG/xkftgncDF1CCdgApTGvmjp/avl2YE0xFYQ9qsoeZd2XbT
-         EX/k+tsqPrf58YBd9LthmiihboM59z0uDU61BLp5N9SyiDB+ymUB51xsNsWE1yhC78fQ
-         AS8jjLj5gy3IA0VPTHgogGcVKxNbnpYEvFb+xNnS13ExOzk4uegif2ERCUGWQhGhvVHd
-         Y2Wn628t6/dkgh2ExXnuIcq4ZWd1MFKJgS9EQ4X4qkAfoWXF81SyS2l/p95T9hQUIxQF
-         jykQ==
-X-Gm-Message-State: APjAAAVjlVqMOaqEk0xaHRNm3hnbmkw+PFkuJTTNSBTL+PWlvaLqYbiS
-        T4RB++9DIX35S4C9kMo2uL19g8sA
-X-Google-Smtp-Source: APXvYqypBIDzRIE/3VA2g3Jz3cCumUShIv6M2es6x+QrgC2aZo0zXoyi743mvn9TMk+2GVXMd0DvMg==
-X-Received: by 2002:aa7:9095:: with SMTP id i21mr7522999pfa.134.1554402841460;
-        Thu, 04 Apr 2019 11:34:01 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references;
+        bh=geaygXebEawsdZr7nPXl2XcaN7cCY3bpFbApbwpxWnw=;
+        b=MEyEQds+NOZOxO7+5RVyGskSNjURkWCKgHTY2C9zr9TT58Ex1s32Oal0MhfaYKCxx5
+         lF3ibQVffcqUKde+IODv46CPc/fXk6sRACSwW3qHuFKYxNFFtxHwnILrocej0dpsfqyY
+         f6bdv/KBOEJNO8gu9UMedVgrFtKlZndad7Wt/V8VcujlKHqXYe5SFxJ4HIYudxhWimwe
+         pIbjOJ33m5JLQQihY4Yg36lmDgBQvHj3XaIVr158bF1Oayuym5j7/xG7ChgMDLkP3spC
+         pQcSOxreeRINcGb1mbOu6rw7LMC2bVzcPlu1E9mTcsUI2cPp7yoqgoEKofZr8gE4zE2n
+         fnLw==
+X-Gm-Message-State: APjAAAWKcKM6P+yQRPDqRLAaQHMzfy2XgnVzx1tCNPGbtdkJ9Uc0pGIZ
+        S7D3x0dEEO/+rUsx7VjAFB+voExo
+X-Google-Smtp-Source: APXvYqxBR9sRI02Vv5GtsuZ0gLRcx1CHFazLaXlrqfpM1ghvFUrjQFDlJO4kRCu04qEOOFa4zGH39g==
+X-Received: by 2002:a17:902:d68d:: with SMTP id v13mr8087891ply.55.1554402842830;
+        Thu, 04 Apr 2019 11:34:02 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h184sm46610583pfc.78.2019.04.04.11.34.00
+        by smtp.gmail.com with ESMTPSA id i10sm29568613pfj.7.2019.04.04.11.34.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 11:34:00 -0700 (PDT)
+        Thu, 04 Apr 2019 11:34:02 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 1/4] hwmon: (f71805f) Use request_muxed_region for Super-IO accesses
-Date:   Thu,  4 Apr 2019 11:33:55 -0700
-Message-Id: <1554402838-19008-1-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 2/4] hwmon: (pc87427) Use request_muxed_region for Super-IO accesses
+Date:   Thu,  4 Apr 2019 11:33:56 -0700
+Message-Id: <1554402838-19008-2-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1554402838-19008-1-git-send-email-linux@roeck-us.net>
+References: <1554402838-19008-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -67,83 +70,61 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Super-IO accesses may fail on a system with no or unmapped LPC bus.
 
-Unable to handle kernel paging request at virtual address ffffffbffee0002e
-pgd = ffffffc1d68d4000
-[ffffffbffee0002e] *pgd=0000000000000000, *pud=0000000000000000
-Internal error: Oops: 94000046 [#1] PREEMPT SMP
-Modules linked in: f71805f(+) hwmon
-CPU: 3 PID: 1659 Comm: insmod Not tainted 4.5.0+ #88
-Hardware name: linux,dummy-virt (DT)
-task: ffffffc1f6665400 ti: ffffffc1d6418000 task.ti: ffffffc1d6418000
-PC is at f71805f_find+0x6c/0x358 [f71805f]
-
 Also, other drivers may attempt to access the LPC bus at the same time,
 resulting in undefined behavior.
 
 Use request_muxed_region() to ensure that IO access on the requested
-address space is supported, and to ensure that access by multiple
-drivers is synchronized.
+address space is supported, and to ensure that access by multiple drivers
+is synchronized.
 
-Fixes: e53004e20a58e ("hwmon: New f71805f driver")
+Fixes: ba224e2c4f0a7 ("hwmon: New PC87427 hardware monitoring driver")
 Reported-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 Reported-by: John Garry <john.garry@huawei.com>
 Cc: John Garry <john.garry@huawei.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/f71805f.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/hwmon/pc87427.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/f71805f.c b/drivers/hwmon/f71805f.c
-index 73c681162653..623736d2a7c1 100644
---- a/drivers/hwmon/f71805f.c
-+++ b/drivers/hwmon/f71805f.c
-@@ -96,17 +96,23 @@ superio_select(int base, int ld)
- 	outb(ld, base + 1);
- }
+diff --git a/drivers/hwmon/pc87427.c b/drivers/hwmon/pc87427.c
+index d1a3f2040c00..58eee8fa3e6d 100644
+--- a/drivers/hwmon/pc87427.c
++++ b/drivers/hwmon/pc87427.c
+@@ -106,6 +106,13 @@ static const char *logdev_str[2] = { DRVNAME " FMC", DRVNAME " HMC" };
+ #define LD_IN		1
+ #define LD_TEMP		1
  
--static inline void
-+static inline int
- superio_enter(int base)
- {
-+	if (!request_muxed_region(base, 2, DRVNAME))
++static inline int superio_enter(int sioaddr)
++{
++	if (!request_muxed_region(sioaddr, 2, DRVNAME))
 +		return -EBUSY;
-+
- 	outb(0x87, base);
- 	outb(0x87, base);
-+
 +	return 0;
- }
- 
- static inline void
- superio_exit(int base)
++}
++
+ static inline void superio_outb(int sioaddr, int reg, int val)
  {
- 	outb(0xaa, base);
-+	release_region(base, 2);
+ 	outb(reg, sioaddr);
+@@ -122,6 +129,7 @@ static inline void superio_exit(int sioaddr)
+ {
+ 	outb(0x02, sioaddr);
+ 	outb(0x02, sioaddr + 1);
++	release_region(sioaddr, 2);
  }
  
  /*
-@@ -1561,7 +1567,7 @@ static int __init f71805f_device_add(unsigned short address,
- static int __init f71805f_find(int sioaddr, unsigned short *address,
- 			       struct f71805f_sio_data *sio_data)
+@@ -1195,7 +1203,11 @@ static int __init pc87427_find(int sioaddr, struct pc87427_sio_data *sio_data)
  {
--	int err = -ENODEV;
-+	int err;
- 	u16 devid;
- 
- 	static const char * const names[] = {
-@@ -1569,8 +1575,11 @@ static int __init f71805f_find(int sioaddr, unsigned short *address,
- 		"F71872F/FG or F71806F/FG",
- 	};
- 
--	superio_enter(sioaddr);
+ 	u16 val;
+ 	u8 cfg, cfg_b;
+-	int i, err = 0;
++	int i, err;
++
 +	err = superio_enter(sioaddr);
 +	if (err)
 +		return err;
  
-+	err = -ENODEV;
- 	devid = superio_inw(sioaddr, SIO_REG_MANID);
- 	if (devid != SIO_FINTEK_ID)
- 		goto exit;
+ 	/* Identify device */
+ 	val = force_id ? force_id : superio_inb(sioaddr, SIOREG_DEVID);
 -- 
 2.7.4
 
