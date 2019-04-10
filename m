@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67FB0C10F11
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4C3C10F14
 	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:12:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35A25222C8
+	by mail.kernel.org (Postfix) with ESMTP id 61862222CB
 	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1554894737;
-	bh=EHP+IrkV7CieRmrefAsXb40F+osc2i6h5NMCaefrbTM=;
+	bh=YD/1NVVgUaBFfozagHbjIl+lQDc9k52Y2E+VTO1p7mg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2ExFBdkmWglGHbxQTqkGU4bPsVCRms5K2DiMPrbXhzsGdh0njcWWVy/RVmDacQL4D
-	 61kg9c7MUNKJdQDy1JG9Gr+reFqULgHE/RrjzFe9CWcTkfNhxIGqdUIh7Nk3BgYS84
-	 3FLHHY5fZvUFh/OpHC7E0BBL6iVbXzm1UyGkh+Q4=
+	b=YV1ICM+h400Y6VeC5xWSUqCt5BnLdZAei1ZFOzJe+lmZKL/Qg0i+0YVQqO7IvLbHg
+	 9V51xZJ1HcQ5DFUSFmsojf463D64nEHIUgz8I4gxdw7RXEgHFIxCelnyGNGLvR7iwX
+	 dB/OgQVgy2mav4ivtzXoOOoqB99NpI/U+pWfbr7A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731330AbfDJLMQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1731338AbfDJLMQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 10 Apr 2019 07:12:16 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44430 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:44432 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727178AbfDJLMQ (ORCPT
+        with ESMTP id S1729658AbfDJLMQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 10 Apr 2019 07:12:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -32,18 +32,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ifG45tSFXLTwXJb1h6jD264H1aDH2yrbOS4N926T3HM=; b=MEznhMUi68dAY2gC5NZWGvxOOH
-        +3X6ZbxOS4cXYlPgjk8OITTzmZUjk/GJy3fhzDNDj1ZN7b8C5FHL59SPtOV0p23fqtzGUanY0jAkv
-        uD0NxB2uBEhKvmkWraLb9cAQCa38ZlxB6Jn0zYN3xTTj7afWAQeoIzPGK1BQcION1jN+HiDZaiGZj
-        0r4lUw3lbMH9YxeRRrf6ZzmJEud7pS74vPtb0ZlT3eS6kxXxj0c6J11Znt3MdGCtiCsddr9MNkcJj
-        2O9ihzHikCyjVEshAJEvK8HCCsJA4FhsFDJQsc81BaTn4OrbkzSGsdoKG1KEdV6WI6erEJ6vjjRsA
-        ny7H/OZA==;
+        bh=sUBoYDDP2teggn5gBXVmINUIrUA2jEav/rR5Ebr7KCQ=; b=KAyfWPkF4Ad2ZPedkpaFTXC0Mm
+        H9jD6WFcY7D/Y0h60JLKVhTqt8nBZ9Kh54SqMekYp+26bQk9wOMIdCTzRPqIra0L8JJ24+miYHRUn
+        s3q/H4cHxP1N61LODT9bq/xZ40AY25glmMJt9lDsJNRJ0/3njAoLCfQqGbNbvm07SuEvYthksZzls
+        KYCzH9ueFhnug0EcFFyjCLLHpJ2vgxdfzKSgMmtjgoeCI9kPRsZ+jEJYUaZoALYnoF8cMpCAW9WqY
+        iayVgPQyIAIiPS3pfi3MwONN9asX+RchBsYYBvdXEEBc8YKavbLQG3r5WY0RDr3CYMnHYQx5E/AzI
+        LpPCp+0Q==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEB9L-0006mu-JK; Wed, 10 Apr 2019 11:12:15 +0000
+        id 1hEB9L-0006ms-Ix; Wed, 10 Apr 2019 11:12:15 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEB9J-0007SZ-A8; Wed, 10 Apr 2019 08:12:13 -0300
+        id 1hEB9J-0007SV-9L; Wed, 10 Apr 2019 08:12:13 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -51,9 +51,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 04/21] docs: hwmon: sch5627: convert to ReST format
-Date:   Wed, 10 Apr 2019 08:11:54 -0300
-Message-Id: <e3fb7e218af49e4e6132757d6610278f7409df8c.1554893882.git.mchehab+samsung@kernel.org>
+Subject: [PATCH 03/21] docs: hwmon: menf21bmc: convert to ReST format
+Date:   Wed, 10 Apr 2019 08:11:53 -0300
+Message-Id: <5e2209814ab1b0a9d7ee1942ddff906f7261f393.1554893882.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554893881.git.mchehab+samsung@kernel.org>
 References: <cover.1554893881.git.mchehab+samsung@kernel.org>
@@ -64,33 +64,44 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert sch5627 to ReST format, in order to allow it to
+Convert menf21bmc to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/sch5627 | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/hwmon/menf21bmc | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/hwmon/sch5627 b/Documentation/hwmon/sch5627
-index 0551d266c51c..187682e99114 100644
---- a/Documentation/hwmon/sch5627
-+++ b/Documentation/hwmon/sch5627
-@@ -2,9 +2,13 @@ Kernel driver sch5627
- =====================
+diff --git a/Documentation/hwmon/menf21bmc b/Documentation/hwmon/menf21bmc
+index 2a273a065c5e..1f0c6b2235ab 100644
+--- a/Documentation/hwmon/menf21bmc
++++ b/Documentation/hwmon/menf21bmc
+@@ -2,8 +2,11 @@ Kernel driver menf21bmc_hwmon
+ =============================
  
  Supported chips:
 +
-   * SMSC SCH5627
+ 	* MEN 14F021P00
 +
-     Prefix: 'sch5627'
+ 	  Prefix: 'menf21bmc_hwmon'
 +
-     Addresses scanned: none, address read from Super I/O config space
-+
-     Datasheet: Application Note available upon request
+ 	  Adresses scanned: -
  
- Author: Hans de Goede <hdegoede@redhat.com>
+ Author: Andreas Werner <andreas.werner@men.de>
+@@ -34,6 +37,7 @@ Sysfs entries
+ The following attributes are supported. All attributes are read only
+ The Limits are read once by the driver.
+ 
++=============== ==========================
+ in0_input	+3.3V input voltage
+ in1_input	+5.0V input voltage
+ in2_input	+12.0V input voltage
+@@ -48,3 +52,4 @@ in1_label	"MON_5V"
+ in2_label	"MON_12V"
+ in3_label	"5V_STANDBY"
+ in4_label	"VBAT"
++=============== ==========================
 -- 
 2.20.1
 
