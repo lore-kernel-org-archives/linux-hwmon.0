@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EB17C10F11
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C6EAC10F14
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 220C22075B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EAE42075B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554924297;
-	bh=t3CcOt2HDuc1gQ9AGA3HEhB+D7deMg2dE500Ev/kWPM=;
+	s=default; t=1554924298;
+	bh=Izt/5LqM2wzPDvqkGCJHu0S4ZZhIFDLEp9Bp5Fwmx+c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=akOBdDitFGcunwqRdKz5G9jMWUh+YQZtCe8S+7lGtETNqqQrAouQA2CjSLsMDbwLs
-	 o26qOfKVrzS0JkJpxPfkBi0Sb93wDF6p7majgRdDMZJchCo8Bauk1ltUsy/f/2meJu
-	 DfsSvg4C/XEbB6kZYd3/vvoURyV0WxrgCvOcKsCg=
+	b=FtvJ2jQk47iAtCsxpuzrj74jf6ujYA1l6uZijY7O1qxTE9HOUaruKUu3yO0PD3iwi
+	 oJ6UBRgioR0i4MdZpGe6DmgSzj4dJ71CogReNYnpaAoldQpfZs50Xh/pgyyRsps2he
+	 3HfI9CrjByI4TcRli+eNkStiwE78I80O9F7ReU3A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbfDJTXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1726637AbfDJTXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 10 Apr 2019 15:23:08 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:43996 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:44028 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbfDJTXH (ORCPT
+        with ESMTP id S1726256AbfDJTXH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 10 Apr 2019 15:23:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9LalUJPmuPDaMfLRWCl1lzBZDSX3p4v9Ob+a/oKrM1M=; b=BpdDsONmXWWkvhXKYTO47uuoYQ
-        XR873UQ5fCOItZKkS5WiMie6AiqMwWcZjKsvtFCT24Aq0ghKCxqY+usHVc5cqFz8lrTNnDUnfc2JA
-        Tb6MtmyQq9gaOxXzDI6mBzZMLs97pjBuUWjq/LT31gvADNRrkkHL5mPtP11qtxDyRDm5gbTei+Hs2
-        X3YU3cD6cJHe0tiLatt65NYZOXfMjkJq8DPbZNAjldLRycwqNlTCugHdA0iL44JjUPMVgu7VmEPgU
-        bhurev4i+yLpbDql01ju25XrdLbe+BJd5/gxRFiqtwYjAgO2tSdy/zu2PMI3Q5LcGSKACdOT83vwe
-        JJKD2EiA==;
+        bh=HBtp3BEM97J+VvxjcyTQ0Rh8cs8lWpfrxcjNLnrN9tA=; b=hn0QhnV4q3qU2hs3/8L/YvYfIp
+        BQqgmX1TrfZTcZ5HkclrR1Z3iPK7C2ebVb1We4iUVQ3lamLfY1QFOs2eCV3n22NmUKhtfIKng3c2Z
+        YnLHX+85KnjeW2f6RvAv+u5vRBrvnpY5I1vQY3iIcWqw8/mrRf7Bgu/U8lUEDCGcJKjE3anEy6ctB
+        fcl9MChhUsUcU+GTxzapWQGmHKOkhGtC0S3sYOMRWkUx4gQhD3sKKZJ7Ozp2Gij0x9m3yRzzJgZbd
+        GEWZIbEpRFc04iip1TXjGeEZIDJrl9cQN2LQnoXpUBETdp48nAPGCUKfFN9irlxLEpqy7cxMi7AUZ
+        CwfY6aMw==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEIoM-0003R6-Hk; Wed, 10 Apr 2019 19:23:06 +0000
+        id 1hEIoM-0003R3-Jz; Wed, 10 Apr 2019 19:23:06 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEIoJ-0000zO-3g; Wed, 10 Apr 2019 16:23:03 -0300
+        id 1hEIoJ-0000zG-20; Wed, 10 Apr 2019 16:23:03 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 15/21] docs: hwmon: wm831x, wm8350: convert to ReST format
-Date:   Wed, 10 Apr 2019 16:22:52 -0300
-Message-Id: <85bfe2f80c68d67cb910bbccde3ff663255fe019.1554923967.git.mchehab+samsung@kernel.org>
+Subject: [PATCH v2 13/21] docs: hwmon: ads1015: convert to ReST format
+Date:   Wed, 10 Apr 2019 16:22:50 -0300
+Message-Id: <a4c22d2c42ae9efa2ec456fcce01b56ab915b84c.1554923967.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554923967.git.mchehab+samsung@kernel.org>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
@@ -65,61 +65,124 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert wm831x and wm8350 to ReST format, in order to allow
-them to be parsed by Sphinx.
+Convert ads1015 to ReST format, in order to allow it to
+be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/wm831x |  9 ++++++---
- Documentation/hwmon/wm8350 | 10 +++++++---
- 2 files changed, 13 insertions(+), 6 deletions(-)
+ Documentation/hwmon/ads1015 | 72 ++++++++++++++++++++++---------------
+ 1 file changed, 43 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/hwmon/wm831x b/Documentation/hwmon/wm831x
-index 11446757c8c8..c56fb35a2fb3 100644
---- a/Documentation/hwmon/wm831x
-+++ b/Documentation/hwmon/wm831x
-@@ -3,11 +3,14 @@ Kernel driver wm831x-hwmon
- 
- Supported chips:
-   * Wolfson Microelectronics WM831x PMICs
-+
-     Prefix: 'wm831x'
-+
-     Datasheet:
--	http://www.wolfsonmicro.com/products/WM8310
--	http://www.wolfsonmicro.com/products/WM8311
--	http://www.wolfsonmicro.com/products/WM8312
-+
-+	- http://www.wolfsonmicro.com/products/WM8310
-+	- http://www.wolfsonmicro.com/products/WM8311
-+	- http://www.wolfsonmicro.com/products/WM8312
- 
- Authors: Mark Brown <broonie@opensource.wolfsonmicro.com>
- 
-diff --git a/Documentation/hwmon/wm8350 b/Documentation/hwmon/wm8350
-index 98f923bd2e92..cec044ca5900 100644
---- a/Documentation/hwmon/wm8350
-+++ b/Documentation/hwmon/wm8350
-@@ -2,12 +2,16 @@ Kernel driver wm8350-hwmon
- ==========================
+diff --git a/Documentation/hwmon/ads1015 b/Documentation/hwmon/ads1015
+index 02d2a459385f..e0951c4e57bb 100644
+--- a/Documentation/hwmon/ads1015
++++ b/Documentation/hwmon/ads1015
+@@ -2,17 +2,25 @@ Kernel driver ads1015
+ =====================
  
  Supported chips:
 +
-   * Wolfson Microelectronics WM835x PMICs
+   * Texas Instruments ADS1015
 +
-     Prefix: 'wm8350'
+     Prefix: 'ads1015'
+-    Datasheet: Publicly available at the Texas Instruments website :
+-               http://focus.ti.com/lit/ds/symlink/ads1015.pdf
 +
-     Datasheet:
--	http://www.wolfsonmicro.com/products/WM8350
--	http://www.wolfsonmicro.com/products/WM8351
--	http://www.wolfsonmicro.com/products/WM8352
++    Datasheet: Publicly available at the Texas Instruments website:
 +
-+	- http://www.wolfsonmicro.com/products/WM8350
-+	- http://www.wolfsonmicro.com/products/WM8351
-+	- http://www.wolfsonmicro.com/products/WM8352
++	       http://focus.ti.com/lit/ds/symlink/ads1015.pdf
++
+   * Texas Instruments ADS1115
++
+     Prefix: 'ads1115'
+-    Datasheet: Publicly available at the Texas Instruments website :
+-               http://focus.ti.com/lit/ds/symlink/ads1115.pdf
++
++    Datasheet: Publicly available at the Texas Instruments website:
++
++	       http://focus.ti.com/lit/ds/symlink/ads1115.pdf
  
- Authors: Mark Brown <broonie@opensource.wolfsonmicro.com>
+ Authors:
+-        Dirk Eibach, Guntermann & Drunck GmbH <eibach@gdsys.de>
++	Dirk Eibach, Guntermann & Drunck GmbH <eibach@gdsys.de>
  
+ Description
+ -----------
+@@ -24,14 +32,15 @@ This device is a 12/16-bit A-D converter with 4 inputs.
+ The inputs can be used single ended or in certain differential combinations.
+ 
+ The inputs can be made available by 8 sysfs input files in0_input - in7_input:
+-in0: Voltage over AIN0 and AIN1.
+-in1: Voltage over AIN0 and AIN3.
+-in2: Voltage over AIN1 and AIN3.
+-in3: Voltage over AIN2 and AIN3.
+-in4: Voltage over AIN0 and GND.
+-in5: Voltage over AIN1 and GND.
+-in6: Voltage over AIN2 and GND.
+-in7: Voltage over AIN3 and GND.
++
++  - in0: Voltage over AIN0 and AIN1.
++  - in1: Voltage over AIN0 and AIN3.
++  - in2: Voltage over AIN1 and AIN3.
++  - in3: Voltage over AIN2 and AIN3.
++  - in4: Voltage over AIN0 and GND.
++  - in5: Voltage over AIN1 and GND.
++  - in6: Voltage over AIN2 and GND.
++  - in7: Voltage over AIN3 and GND.
+ 
+ Which inputs are available can be configured using platform data or devicetree.
+ 
+@@ -42,29 +51,34 @@ Platform Data
+ 
+ In linux/platform_data/ads1015.h platform data is defined, channel_data contains
+ configuration data for the used input combinations:
++
+ - pga is the programmable gain amplifier (values are full scale)
+-  0: +/- 6.144 V
+-  1: +/- 4.096 V
+-  2: +/- 2.048 V
+-  3: +/- 1.024 V
+-  4: +/- 0.512 V
+-  5: +/- 0.256 V
++
++    - 0: +/- 6.144 V
++    - 1: +/- 4.096 V
++    - 2: +/- 2.048 V
++    - 3: +/- 1.024 V
++    - 4: +/- 0.512 V
++    - 5: +/- 0.256 V
++
+ - data_rate in samples per second
+-  0: 128
+-  1: 250
+-  2: 490
+-  3: 920
+-  4: 1600
+-  5: 2400
+-  6: 3300
+ 
+-Example:
+-struct ads1015_platform_data data = {
++    - 0: 128
++    - 1: 250
++    - 2: 490
++    - 3: 920
++    - 4: 1600
++    - 5: 2400
++    - 6: 3300
++
++Example::
++
++  struct ads1015_platform_data data = {
+ 	.channel_data = {
+ 		[2] = { .enabled = true, .pga = 1, .data_rate = 0 },
+ 		[4] = { .enabled = true, .pga = 4, .data_rate = 5 },
+ 	}
+-};
++  };
+ 
+ In this case only in2_input (FS +/- 4.096 V, 128 SPS) and in4_input
+ (FS +/- 0.512 V, 2400 SPS) would be created.
 -- 
 2.20.1
 
