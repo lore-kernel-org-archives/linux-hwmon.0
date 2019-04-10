@@ -4,27 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC52C282CE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB5FBC10F14
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20E8E20820
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E8AE20818
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554894858;
-	bh=PbNpDE18BK/FsJEn7WhyXWCt9ml8laALIZQkkqDaumc=;
+	s=default; t=1554894860;
+	bh=PIGnOx1py2pmi8e8pHsAM7v3kF4AwROY4Q/uvqLYRGU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YEX10Q2Scw5Ca1qMxp+q6LFE9GVsLf+1W8lQPtUvcn7s4HnVkYnSAQB//BhIvTFll
-	 gWxWgAZfSqSqmAnByy2P7GztFUKs7tkNx65JW9dW8POtiS8+LrKm4HesQh7LLT4SQ1
-	 IhCwTGX1hYG9NOvMoSMI3FEDL4ZZQOsra1Xmnmyg=
+	b=SGuQe1YFKC/qO8GoE0Xgx+TqZ6WJ2B0Ufr1/hV4i76sa63U7bWiaidBVA4G4lwZZB
+	 3DEncaDYRbIPE6LxaKyKMszmeUTucAaTGLTxut4HnHbcQjTJvDjoz8d/VqzVQ4outk
+	 slkBmvnluzJD6sIBMb7XNsjuXmO/M9BOdkrzlFQk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729650AbfDJLOH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 07:14:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44452 "EHLO
+        id S1731585AbfDJLOS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 07:14:18 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44440 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731076AbfDJLMQ (ORCPT
+        with ESMTP id S1731033AbfDJLMQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 10 Apr 2019 07:12:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +32,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aMyMq6+HpBeCrxOa6nGyZagjeADRq/dui+re74lmB8g=; b=RmCeCT1+75JYRO35+CDdWULnT3
-        Oeok7wFCc9H32oiARnXcYAoz2iGBkPzapWkHMeuiidNAdmyi4HiaGVxdEax5J3725HzWfhgmA32UP
-        eRyiP6DuglH+xP8o+ZtmmKXRMZIAoeOLo/yk3VFc1Pi2Z9BISoU/GVrRcGyaLNgvcOC81YnUfxDSx
-        p3+XSARBDJHmDj7xNiXZ4LXpl1qS4eTp06YdiXz3T7b0oo5fbA8tRAuIfqYHc9CcVzCmth5TeDLb5
-        Kh4M2m3kdEp4vGqZtRNm2bEu7ENpltUON/k0E6S/Kj0MpmrocgTIMFSTV5QZW8qdjSnWHfJOpwhhg
-        inTobMug==;
+        bh=V4fWJhTRh9FTk4RnmeC3LJa3Ksu3RP2SFAHfWzgQGMY=; b=MgEBuV62CoyMFt0uePQ5R2wQaF
+        YnI/Ke5I0Ocr4oOepTTyFyXfJ4UgkjfLBRM+L0NGYM4/LCIgmzwdqbikAbfDgXPpdRNqR3HJKDypD
+        UQ3HXHqhPvh8uoDC9CyjLgA26iawxPQZFEXqhe6EquFmbJOvFir4BQas7YYrttuzgzjFmrOZk/q3J
+        juPuJO8+R/AFC418AvCEsY9BsYHo5Gy9oSIQugvQJaCxxgGXidXvTa9WjuVrEJPlQIv+WTzI+KHkC
+        oFU3tfq2TaXdE50yqyBWZ5b2xQllNwigB9yx1xmCiLinMbVTCx6+y32Hudvgkv3hCCwF+lbNVfRES
+        x0WMXhIA==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEB9L-0006n4-Mi; Wed, 10 Apr 2019 11:12:15 +0000
+        id 1hEB9L-0006my-LW; Wed, 10 Apr 2019 11:12:15 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEB9J-0007TD-HT; Wed, 10 Apr 2019 08:12:13 -0300
+        id 1hEB9J-0007Sl-CZ; Wed, 10 Apr 2019 08:12:13 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -52,9 +51,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 13/21] docs: hwmon: ads1015: convert to ReST format
-Date:   Wed, 10 Apr 2019 08:12:03 -0300
-Message-Id: <035d94aab9cff675b38a69c2944780ff8a482337.1554893882.git.mchehab+samsung@kernel.org>
+Subject: [PATCH 07/21] docs: hwmon: fam15h_power: convert to ReST format
+Date:   Wed, 10 Apr 2019 08:11:57 -0300
+Message-Id: <875aa2ec1e825d2714a63fa3a6177c5c113a805f.1554893882.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554893881.git.mchehab+samsung@kernel.org>
 References: <cover.1554893881.git.mchehab+samsung@kernel.org>
@@ -65,125 +64,157 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert ads1015 to ReST format, in order to allow it to
+Convert fam15h_power to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/ads1015 | 72 ++++++++++++++++++++++---------------
- 1 file changed, 43 insertions(+), 29 deletions(-)
+ Documentation/hwmon/fam15h_power | 85 +++++++++++++++++++++-----------
+ 1 file changed, 57 insertions(+), 28 deletions(-)
 
-diff --git a/Documentation/hwmon/ads1015 b/Documentation/hwmon/ads1015
-index 02d2a459385f..e0951c4e57bb 100644
---- a/Documentation/hwmon/ads1015
-+++ b/Documentation/hwmon/ads1015
-@@ -2,17 +2,25 @@ Kernel driver ads1015
- =====================
+diff --git a/Documentation/hwmon/fam15h_power b/Documentation/hwmon/fam15h_power
+index fb594c281c46..fdde632c93a3 100644
+--- a/Documentation/hwmon/fam15h_power
++++ b/Documentation/hwmon/fam15h_power
+@@ -2,15 +2,20 @@ Kernel driver fam15h_power
+ ==========================
  
  Supported chips:
 +
-   * Texas Instruments ADS1015
+ * AMD Family 15h Processors
 +
-     Prefix: 'ads1015'
--    Datasheet: Publicly available at the Texas Instruments website :
--               http://focus.ti.com/lit/ds/symlink/ads1015.pdf
-+
-+    Datasheet: Publicly available at the Texas Instruments website:
-+
-+	       http://focus.ti.com/lit/ds/symlink/ads1015.pdf
-+
-   * Texas Instruments ADS1115
-+
-     Prefix: 'ads1115'
--    Datasheet: Publicly available at the Texas Instruments website :
--               http://focus.ti.com/lit/ds/symlink/ads1115.pdf
-+
-+    Datasheet: Publicly available at the Texas Instruments website:
-+
-+	       http://focus.ti.com/lit/ds/symlink/ads1115.pdf
+ * AMD Family 16h Processors
  
- Authors:
--        Dirk Eibach, Guntermann & Drunck GmbH <eibach@gdsys.de>
-+	Dirk Eibach, Guntermann & Drunck GmbH <eibach@gdsys.de>
- 
- Description
- -----------
-@@ -24,14 +32,15 @@ This device is a 12/16-bit A-D converter with 4 inputs.
- The inputs can be used single ended or in certain differential combinations.
- 
- The inputs can be made available by 8 sysfs input files in0_input - in7_input:
--in0: Voltage over AIN0 and AIN1.
--in1: Voltage over AIN0 and AIN3.
--in2: Voltage over AIN1 and AIN3.
--in3: Voltage over AIN2 and AIN3.
--in4: Voltage over AIN0 and GND.
--in5: Voltage over AIN1 and GND.
--in6: Voltage over AIN2 and GND.
--in7: Voltage over AIN3 and GND.
+   Prefix: 'fam15h_power'
 +
-+  - in0: Voltage over AIN0 and AIN1.
-+  - in1: Voltage over AIN0 and AIN3.
-+  - in2: Voltage over AIN1 and AIN3.
-+  - in3: Voltage over AIN2 and AIN3.
-+  - in4: Voltage over AIN0 and GND.
-+  - in5: Voltage over AIN1 and GND.
-+  - in6: Voltage over AIN2 and GND.
-+  - in7: Voltage over AIN3 and GND.
- 
- Which inputs are available can be configured using platform data or devicetree.
- 
-@@ -42,29 +51,34 @@ Platform Data
- 
- In linux/platform_data/ads1015.h platform data is defined, channel_data contains
- configuration data for the used input combinations:
+   Addresses scanned: PCI space
 +
- - pga is the programmable gain amplifier (values are full scale)
--  0: +/- 6.144 V
--  1: +/- 4.096 V
--  2: +/- 2.048 V
--  3: +/- 1.024 V
--  4: +/- 0.512 V
--  5: +/- 0.256 V
+   Datasheets:
+-  BIOS and Kernel Developer's Guide (BKDG) For AMD Family 15h Processors
+-  BIOS and Kernel Developer's Guide (BKDG) For AMD Family 16h Processors
+-  AMD64 Architecture Programmer's Manual Volume 2: System Programming
 +
-+    - 0: +/- 6.144 V
-+    - 1: +/- 4.096 V
-+    - 2: +/- 2.048 V
-+    - 3: +/- 1.024 V
-+    - 4: +/- 0.512 V
-+    - 5: +/- 0.256 V
-+
- - data_rate in samples per second
--  0: 128
--  1: 250
--  2: 490
--  3: 920
--  4: 1600
--  5: 2400
--  6: 3300
++  - BIOS and Kernel Developer's Guide (BKDG) For AMD Family 15h Processors
++  - BIOS and Kernel Developer's Guide (BKDG) For AMD Family 16h Processors
++  - AMD64 Architecture Programmer's Manual Volume 2: System Programming
  
--Example:
--struct ads1015_platform_data data = {
-+    - 0: 128
-+    - 1: 250
-+    - 2: 490
-+    - 3: 920
-+    - 4: 1600
-+    - 5: 2400
-+    - 6: 3300
-+
-+Example::
-+
-+  struct ads1015_platform_data data = {
- 	.channel_data = {
- 		[2] = { .enabled = true, .pga = 1, .data_rate = 0 },
- 		[4] = { .enabled = true, .pga = 4, .data_rate = 5 },
- 	}
--};
-+  };
+ Author: Andreas Herrmann <herrmann.der.user@googlemail.com>
  
- In this case only in2_input (FS +/- 4.096 V, 128 SPS) and in4_input
- (FS +/- 0.512 V, 2400 SPS) would be created.
+@@ -31,14 +36,19 @@ For AMD Family 15h and 16h processors the following power values can
+ be calculated using different processor northbridge function
+ registers:
+ 
+-* BasePwrWatts: Specifies in watts the maximum amount of power
+-  consumed by the processor for NB and logic external to the core.
+-* ProcessorPwrWatts: Specifies in watts the maximum amount of power
+-  the processor can support.
+-* CurrPwrWatts: Specifies in watts the current amount of power being
+-  consumed by the processor.
++* BasePwrWatts:
++    Specifies in watts the maximum amount of power
++    consumed by the processor for NB and logic external to the core.
++
++* ProcessorPwrWatts:
++    Specifies in watts the maximum amount of power
++    the processor can support.
++* CurrPwrWatts:
++    Specifies in watts the current amount of power being
++    consumed by the processor.
+ 
+ This driver provides ProcessorPwrWatts and CurrPwrWatts:
++
+ * power1_crit (ProcessorPwrWatts)
+ * power1_input (CurrPwrWatts)
+ 
+@@ -53,35 +63,53 @@ calculate the average power consumed by a processor during a
+ measurement interval Tm. The feature of accumulated power mechanism is
+ indicated by CPUID Fn8000_0007_EDX[12].
+ 
+-* Tsample: compute unit power accumulator sample period
+-* Tref: the PTSC counter period
+-* PTSC: performance timestamp counter
+-* N: the ratio of compute unit power accumulator sample period to the
+-  PTSC period
+-* Jmax: max compute unit accumulated power which is indicated by
+-  MaxCpuSwPwrAcc MSR C001007b
+-* Jx/Jy: compute unit accumulated power which is indicated by
+-  CpuSwPwrAcc MSR C001007a
+-* Tx/Ty: the value of performance timestamp counter which is indicated
+-  by CU_PTSC MSR C0010280
+-* PwrCPUave: CPU average power
++* Tsample:
++	compute unit power accumulator sample period
++
++* Tref:
++	the PTSC counter period
++
++* PTSC:
++	performance timestamp counter
++
++* N:
++	the ratio of compute unit power accumulator sample period to the
++	PTSC period
++
++* Jmax:
++	max compute unit accumulated power which is indicated by
++	MaxCpuSwPwrAcc MSR C001007b
++
++* Jx/Jy:
++	compute unit accumulated power which is indicated by
++	CpuSwPwrAcc MSR C001007a
++* Tx/Ty:
++	the value of performance timestamp counter which is indicated
++	by CU_PTSC MSR C0010280
++
++* PwrCPUave:
++	CPU average power
+ 
+ i. Determine the ratio of Tsample to Tref by executing CPUID Fn8000_0007.
++
+ 	N = value of CPUID Fn8000_0007_ECX[CpuPwrSampleTimeRatio[15:0]].
+ 
+ ii. Read the full range of the cumulative energy value from the new
+-MSR MaxCpuSwPwrAcc.
++    MSR MaxCpuSwPwrAcc.
++
+ 	Jmax = value returned.
++
+ iii. At time x, SW reads CpuSwPwrAcc MSR and samples the PTSC.
+-	Jx = value read from CpuSwPwrAcc and Tx = value read from
+-PTSC.
++
++	Jx = value read from CpuSwPwrAcc and Tx = value read from PTSC.
+ 
+ iv. At time y, SW reads CpuSwPwrAcc MSR and samples the PTSC.
+-	Jy = value read from CpuSwPwrAcc and Ty = value read from
+-PTSC.
++
++	Jy = value read from CpuSwPwrAcc and Ty = value read from PTSC.
+ 
+ v. Calculate the average power consumption for a compute unit over
+-time period (y-x). Unit of result is uWatt.
++   time period (y-x). Unit of result is uWatt::
++
+ 	if (Jy < Jx) // Rollover has occurred
+ 		Jdelta = (Jy + Jmax) - Jx
+ 	else
+@@ -90,13 +118,14 @@ time period (y-x). Unit of result is uWatt.
+ 
+ This driver provides PwrCPUave and interval(default is 10 millisecond
+ and maximum is 1 second):
++
+ * power1_average (PwrCPUave)
+ * power1_average_interval (Interval)
+ 
+ The power1_average_interval can be updated at /etc/sensors3.conf file
+ as below:
+ 
+-chip "fam15h_power-*"
++chip `fam15h_power-*`
+ 	set power1_average_interval 0.01
+ 
+ Then save it with "sensors -s".
 -- 
 2.20.1
 
