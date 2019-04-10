@@ -6,58 +6,54 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AEFAC282CE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 419B3C10F11
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 71BF32075B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07ED92075B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554924267;
-	bh=5koruip/Ak43EWbkNK8Tc259xE2UnUvWruIb/ebxyko=;
+	s=default; t=1554924281;
+	bh=tKkPzHX/Uihvot7AWIbU7M7ky7FtDC0nrHGnRjCOVyM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=D5DBPPETm1T6WyP7nIgM6NwAZ4mzcbPa8ukrb/XjM4WnB4bNVpG3ZzqKud03rnn4c
-	 GSsy2dUifRuVX+o4kgQvqzCkB1JjQQm+jb9XaomDc39dORR1fkAiaG1JM3h78AEz1I
-	 h7blKmCV5U8ZE0vDwEPAUi8QmUor95mymq37/Gu0=
+	b=R5txVzTuUMCUOPnG8IW6fCpHatIgYGrXk+JHuJJIeOgYfrYHyhh/CepVLGXeazaCd
+	 cxA/h4J5KkucvkhfczJXp8EyiTm093G6UulH22zOl3z1BdnL15pSqFSNmoDqyEoCdj
+	 I8TqikpYmLoStKhgEvmHXMIHIpm4kEldlHiEtIts=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbfDJTYO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 15:24:14 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44168 "EHLO
+        id S1726624AbfDJTY2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 15:24:28 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44132 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbfDJTXM (ORCPT
+        with ESMTP id S1726730AbfDJTXL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Apr 2019 15:23:12 -0400
+        Wed, 10 Apr 2019 15:23:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RmBdTZ6oZZ2ohazDbNmfaTnFHgD1lhGpRbyHozB19dY=; b=nOvrAq5S37WwJevtw+HTqm2/PA
-        nOkxq9zrPgVHoWXLUOa0F4Roo8DZMYkkbU8W9L/W8TQq0duQW9Bz6D7U0G+g8WlQi2e8GX3K4271+
-        W7ZSg12W0jSw+1SF7CLdcO6R9i5RKbZtp9Ogd1EVQrvI0Taf9EXeBUD+Tn+/hiXHcObPnrdc4L5XQ
-        MHbGvrMl2wvw1tDQxVK8RpMKFMew1NqSlrLuT1N9YkpkfSPz3YUt6MnjyuG4MI6m+8wYZN0oe/QBL
-        qRDEa0xetYFvgg/yYgNs7GcNX+96zsg1AeX8h2deinIciuvsaMZ8Yq9SX9a7tC4Xt8rVwdhiUbBff
-        AB7JNCvg==;
+        bh=/DoZqJ47XdGMH8UMjypS+5ERMfAgqAifsh9MIk2OSH4=; b=ssevDoi2+oUSF9PvaoM+/ux48B
+        o7qHRPrbzaUKNzfYncaggfZQKTVfXtu950loqa43U9zdMvjg7wXWMvGmSFcq1kdUT77VV6P+ljQI+
+        KXtYUJMGGi6tK7XuEu+ph4MTWlzhJTFrfPef3jdDBj5+RpLdRQTqExOTLRmLDpYTjEbgIU18Hqs4h
+        zME8QyE+tCbG/PPgCWA0NT4Ku3oiaL6IX34tMz+rPccIjOiZlU58FRRNWRl8yBY0MciA0GRbr0vh6
+        kcKKsfFWEH00ER+e84bzrsQF/Y7usESWaZ/ZaEZXMr5A/CpIIoe9gjJwoIffWxoYBeNeKcEySQpfH
+        Spk82tLQ==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEIoQ-0003RG-OI; Wed, 10 Apr 2019 19:23:10 +0000
+        id 1hEIoQ-0003RC-Mg; Wed, 10 Apr 2019 19:23:10 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEIoJ-0000z8-0K; Wed, 10 Apr 2019 16:23:03 -0300
+        id 1hEIoJ-0000zC-1B; Wed, 10 Apr 2019 16:23:03 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2 11/21] docs: hwmon: ibmpowernv: convert to ReST format
-Date:   Wed, 10 Apr 2019 16:22:48 -0300
-Message-Id: <2f6f8109dfe2f212dfc1b9be7447c9b17a720bf8.1554923967.git.mchehab+samsung@kernel.org>
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 12/21] docs: hwmon: asc7621: convert to ReST format
+Date:   Wed, 10 Apr 2019 16:22:49 -0300
+Message-Id: <916e894bbb62241635a0c8b8292e072e24526cd4.1554923967.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554923967.git.mchehab+samsung@kernel.org>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
@@ -68,39 +64,306 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert ibmpowernv to ReST format, in order to allow it to
+Convert asc7621 to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/ibmpowernv | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/hwmon/asc7621 | 146 ++++++++++++++++++++++--------------
+ 1 file changed, 88 insertions(+), 58 deletions(-)
 
-diff --git a/Documentation/hwmon/ibmpowernv b/Documentation/hwmon/ibmpowernv
-index 56468258711f..3f1feae3901c 100644
---- a/Documentation/hwmon/ibmpowernv
-+++ b/Documentation/hwmon/ibmpowernv
-@@ -2,6 +2,7 @@ Kernel Driver IBMPOWERNV
- ========================
+diff --git a/Documentation/hwmon/asc7621 b/Documentation/hwmon/asc7621
+index 7287be7e1f21..b5a9fad0f172 100644
+--- a/Documentation/hwmon/asc7621
++++ b/Documentation/hwmon/asc7621
+@@ -1,10 +1,15 @@
++=====================
+ Kernel driver asc7621
+-==================
++=====================
  
- Supported systems:
+ Supported chips:
 +
-   * Any recent IBM P servers based on POWERNV platform
+     Andigilog aSC7621 and aSC7621a
++
+     Prefix: 'asc7621'
++
+     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
++
+     Datasheet: http://www.fairview5.com/linux/asc7621/asc7621.pdf
  
- Author: Neelesh Gupta
-@@ -29,6 +30,7 @@ CONFIG_SENSORS_IBMPOWERNV. It can also be built as module 'ibmpowernv'.
- Sysfs attributes
- ----------------
+ Author:
+@@ -73,8 +78,10 @@ Finally, we have added a tach disable function that turns off the tach
+ measurement system for individual tachs in order to save power. That is
+ in register 75h.
  
-+======================= =======================================================
- fanX_input		Measured RPM value.
- fanX_min		Threshold RPM for alert generation.
- fanX_fault		0: No fail condition
-@@ -78,3 +80,4 @@ currX_enable		Enable/disable all current sensors belonging to the
- 			0: Disable
+---
++--------------------------------------------------------------------------
++
+ aSC7621 Product Description
++===========================
  
- energyX_input		Cumulative energy (microJoule)
-+======================= =======================================================
+ The aSC7621 has a two wire digital interface compatible with SMBus 2.0.
+ Using a 10-bit ADC, the aSC7621 measures the temperature of two remote diode
+@@ -102,6 +109,8 @@ System voltages of VCCP, 2.5V, 3.3V, 5.0V, and 12V motherboard power are
+ monitored efficiently with internal scaling resistors.
+ 
+ Features
++--------
++
+ - Supports PECI interface and monitors internal and remote thermal diodes
+ - 2-wire, SMBus 2.0 compliant, serial interface
+ - 10-bit ADC
+@@ -110,7 +119,7 @@ Features
+ - Noise filtering of temperature reading for fan speed control
+ - 0.25C digital temperature sensor resolution
+ - 3 PWM fan speed control outputs for 2-, 3- or 4-wire fans and up to 4 fan
+-	tachometer inputs
++  tachometer inputs
+ - Enhanced measured temperature to Temperature Zone assignment.
+ - Provides high and low PWM frequency ranges
+ - 3 GPIO pins for custom use
+@@ -123,17 +132,20 @@ Except where noted below, the sysfs entries created by this driver follow
+ the standards defined in "sysfs-interface".
+ 
+ temp1_source
++	=	===============================================
+ 	0 	(default) peci_legacy = 0, Remote 1 Temperature
+-			peci_legacy = 1, PECI Processor Temperature 0
++		peci_legacy = 1, PECI Processor Temperature 0
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+ 	3 	Internal Temperature
+ 	4 	PECI Processor Temperature 0
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+-	7  PECI Processor Temperature 3
++	7	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp2_source
++	=	===============================================
+ 	0 	(default) Internal Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+@@ -142,8 +154,10 @@ temp2_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp3_source
++	=	===============================================
+ 	0 	(default) Remote 2 Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+@@ -152,10 +166,12 @@ temp3_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp4_source
++	=	===============================================
+ 	0 	(default) peci_legacy = 0, PECI Processor Temperature 0
+-			peci_legacy = 1, Remote 1 Temperature
++		peci_legacy = 1, Remote 1 Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+ 	3 	Internal Temperature
+@@ -163,58 +179,65 @@ temp4_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+-temp[1-4]_smoothing_enable
+-temp[1-4]_smoothing_time
++temp[1-4]_smoothing_enable / temp[1-4]_smoothing_time
+ 	Smooths spikes in temp readings caused by noise.
+ 	Valid values in milliseconds are:
+-	35000
+-	17600
+-	11800
+-	 7000
+-	 4400
+-	 3000
+-	 1600
+-	  800
++
++	* 35000
++	* 17600
++	* 11800
++	*  7000
++	*  4400
++	*  3000
++	*  1600
++	*   800
+ 
+ temp[1-4]_crit
+ 	When the corresponding zone temperature reaches this value,
+ 	ALL pwm outputs will got to 100%.
+ 
+-temp[5-8]_input
+-temp[5-8]_enable
++temp[5-8]_input / temp[5-8]_enable
+ 	The aSC7621 can also read temperatures provided by the processor
+ 	via the PECI bus.  Usually these are "core" temps and are relative
+ 	to the point where the automatic thermal control circuit starts
+ 	throttling.  This means that these are usually negative numbers.
+ 
+ pwm[1-3]_enable
++	=============== ========================================================
+ 	0		Fan off.
+ 	1		Fan on manual control.
+ 	2		Fan on automatic control and will run at the minimum pwm
+-				if the temperature for the zone is below the minimum.
+-	3		Fan on automatic control but will be off if the temperature
+-				for the zone is below the minimum.
+-	4-254	Ignored.
++			if the temperature for the zone is below the minimum.
++	3		Fan on automatic control but will be off if the
++			temperature for the zone is below the minimum.
++	4-254		Ignored.
+ 	255		Fan on full.
++	=============== ========================================================
+ 
+ pwm[1-3]_auto_channels
+ 	Bitmap as described in sysctl-interface with the following
+ 	exceptions...
++
+ 	Only the following combination of zones (and their corresponding masks)
+ 	are valid:
+-	1
+-	2
+-	3
+-	2,3
+-	1,2,3
+-	4
+-	1,2,3,4
+ 
+-	Special values:
+-	0			Disabled.
+-	16		Fan on manual control.
+-	31		Fan on full.
++	* 1
++	* 2
++	* 3
++	* 2,3
++	* 1,2,3
++	* 4
++	* 1,2,3,4
++
++	* Special values:
++
++	  ==		======================
++	  0		Disabled.
++	  16		Fan on manual control.
++	  31		Fan on full.
++	  ==		======================
+ 
+ 
+ pwm[1-3]_invert
+@@ -226,22 +249,22 @@ pwm[1-3]_freq
+ 	PWM frequency in Hz
+ 	Valid values in Hz are:
+ 
+-	10
+-	15
+-	23
+-	30  (default)
+-	38
+-	47
+-	62
+-	94
+-	23000
+-	24000
+-	25000
+-	26000
+-	27000
+-	28000
+-	29000
+-	30000
++	* 10
++	* 15
++	* 23
++	* 30  (default)
++	* 38
++	* 47
++	* 62
++	* 94
++	* 23000
++	* 24000
++	* 25000
++	* 26000
++	* 27000
++	* 28000
++	* 29000
++	* 30000
+ 
+ 	Setting any other value will be ignored.
+ 
+@@ -251,17 +274,17 @@ peci_enable
+ peci_avg
+ 	Input filter average time.
+ 
+-	0 	0 Sec. (no Smoothing) (default)
+-	1 	0.25 Sec.
+-	2 	0.5 Sec.
+-	3 	1.0 Sec.
+-	4 	2.0 Sec.
+-	5 	4.0 Sec.
+-	6 	8.0 Sec.
+-	7 	0.0 Sec.
++	* 0 	0 Sec. (no Smoothing) (default)
++	* 1 	0.25 Sec.
++	* 2 	0.5 Sec.
++	* 3 	1.0 Sec.
++	* 4 	2.0 Sec.
++	* 5 	4.0 Sec.
++	* 6 	8.0 Sec.
++	* 7 	0.0 Sec.
+ 
+ peci_legacy
+-
++	=	============================================
+ 	0	Standard Mode (default)
+ 		Remote Diode 1 reading is associated with
+ 		Temperature Zone 1, PECI is associated with
+@@ -270,10 +293,12 @@ peci_legacy
+ 	1	Legacy Mode
+ 		PECI is associated with Temperature Zone 1,
+ 		Remote Diode 1 is associated with Zone 4
++	=	============================================
+ 
+ peci_diode
+ 	Diode filter
+ 
++	=	====================
+ 	0	0.25 Sec.
+ 	1 	1.1 Sec.
+ 	2 	2.4 Sec.  (default)
+@@ -282,15 +307,20 @@ peci_diode
+ 	5 	6.8 Sec.
+ 	6 	10.2 Sec.
+ 	7 	16.4 Sec.
++	=	====================
+ 
+ peci_4domain
+ 	Four domain enable
+ 
++	=	===============================================
+ 	0 	1 or 2 Domains for enabled processors (default)
+ 	1 	3 or 4 Domains for enabled processors
++	=	===============================================
+ 
+ peci_domain
+ 	Domain
+ 
++	=	==================================================
+ 	0 	Processor contains a single domain (0) 	 (default)
+ 	1 	Processor contains two domains (0,1)
++	=	==================================================
 -- 
 2.20.1
 
