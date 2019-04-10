@@ -2,180 +2,177 @@ Return-Path: <SRS0=HmyG=SM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 199DCC10F14
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 15:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C547C10F11
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 18:02:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D503420820
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 15:26:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="ez3t9X+x"
+	by mail.kernel.org (Postfix) with ESMTP id 38F3B206BA
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 18:02:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733175AbfDJP0F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 11:26:05 -0400
-Received: from mout.gmx.net ([212.227.17.20]:34883 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728727AbfDJP0A (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Apr 2019 11:26:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1554909874;
-        bh=xA/BnWtun4BOCtmmVM/Q6GGeuQ7oR+arBXiulO7kTmI=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ez3t9X+xkifsKQVPzXOndt53CZVRb6llbtR/jLqXGeQeeujVvDVgLjbDiVqUGtsr9
-         aV8glwwT2c63gZz/lZbkujrjXd5R/Ae6nFap9q5lCRd3zof+ILXenA9/UKNuFjpZxr
-         kr1/qAVR+1p+7zpWxob3lMS4iBhQxfElIyDN+9AE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([109.90.232.48]) by mail.gmx.com (mrgmx103
- [212.227.17.168]) with ESMTPSA (Nemesis) id 0LnPnu-1gfk561V8w-00hh9T; Wed, 10
- Apr 2019 17:24:34 +0200
-Date:   Wed, 10 Apr 2019 17:24:24 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dirk Eibach <eibach@gdsys.de>,
-        George Joseph <george.joseph@fairview5.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Juerg Haefliger <juergh@gmail.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        Huang Rui <ray.huang@amd.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Andreas Werner <andreas.werner@men.de>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Hulsman <m.hulsman@tudelft.nl>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH 21/21] docs: hwmon: Add an index file and rename docs to
- *.rst
-Message-ID: <20190410152424.GA11536@latitude>
-References: <cover.1554893881.git.mchehab+samsung@kernel.org>
- <5ac1fbc7f19192dcd30a184e62e3f7989a5437a4.1554893882.git.mchehab+samsung@kernel.org>
+        id S1730721AbfDJSCu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 14:02:50 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56614 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728749AbfDJSCu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Apr 2019 14:02:50 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3AHjDm1071953
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2019 14:02:48 -0400
+Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2rsjvwykp0-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2019 14:02:42 -0400
+Received: from localhost
+        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Wed, 10 Apr 2019 19:02:37 +0100
+Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
+        by e17.ny.us.ibm.com (146.89.104.204) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 10 Apr 2019 19:02:34 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3AI2XXJ23199928
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Apr 2019 18:02:33 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D2E7B206A;
+        Wed, 10 Apr 2019 18:02:33 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BCFDDB206B;
+        Wed, 10 Apr 2019 18:02:32 +0000 (GMT)
+Received: from [9.85.133.108] (unknown [9.85.133.108])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 10 Apr 2019 18:02:32 +0000 (GMT)
+Subject: Re: [PATCH v2 1/2] hwmon: (occ) Move common code to a separate module
+To:     Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>
+References: <20190410124726.2d7e9d38@endymion>
+From:   Eddie James <eajames@linux.ibm.com>
+Date:   Wed, 10 Apr 2019 13:02:32 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1yeeQ81UyVL57Vl7"
-Content-Disposition: inline
-In-Reply-To: <5ac1fbc7f19192dcd30a184e62e3f7989a5437a4.1554893882.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Provags-ID: V03:K1:TLAu39kAkvV+JyJofEtse/6D/K/biPwb9iYGF66/M1pJjOfHjSl
- 5Gvn9F/iX0LVkfahejNon6kcT3qms/6ipAdpwzk/bcp4CJrO2+ikn2UVt5DmS72xmQYbgAm
- Fwh59tkKvyzys0LmnxFnI4MCbOHN9hjVtoafK6B2JMU0kM0HkZOw/KRixn01devzi7mS8qk
- oGfwAeMn0j3k8kz+gF+Jg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:w13mbtVepiE=:pSML0XQUkNJ6CmMU23Mlte
- vu/Z26coQEsMKKGod1U9gjsHOUCIIuBPVyYm76i5FBcIA+08ebR4D07ovg6H93+0PbkZgWpnO
- Sjyqt/PTV8R5YcXFsGXvnu0urHmg57DNsRhiK1JEgoT62IfNuIf6oOFpFtccRZLyObbyf7Pfe
- D7aJHp3A4KnnSdDumrU/KzzElawLvXuihHVnnRxxTYn1kQPdmV2aL1PW6eSINuoBY+VohrO2r
- qiNtsAfDaCdnhZSx6qFX3E497osiokRZvFXzp2AEWIlFcpWE35KdIe9K6XHvuWhoH8zyiK2C5
- ETCP3SuguC/MNfY4u5R17eNQqbE+KTZp74MAseKET5MOE0mOxXUSW3+zevwdhH2on0ShlN99f
- 5Y4djz+vvvoisni+eYA3NalyurndKVm1ddPIvfmfjuvPIDmsEG2luv+oPBalKU+VvncWYw5mE
- kkyPU5W4VVbiUxH/BakxzEiUpDZk4aRqeG/wPg+4hNildye6YKy8tmMysLmS7xLBx5sJQqV2x
- WZ9xUGBRxVwPN2czGmgR/kcwkCznsD419G+NoFU7Xd/hAYh2Io33EI9jfdMk11tYZG+g5suQi
- TzUeOsta6Qe1zDIKFGEBZ7uZayKa8HvGRnKvrsEH/oYBZQzxGtsZlBML+CXbgolfzd8ZObkYO
- 8mF9BLzJU0sw+fIq6BYF0c/F/GrrntuN3E+7ZjgVIb+YyepwTKUOBFZcdbqoa+mUAuAggQ1qH
- zGTdArRP9sgaJvUwC3j7gLdGbVT3W9wn8EF/FCN1EpuW8pHPp7bD+7NfA7F4KhtoiGCGqbIxP
- ZjKXx+2ufjotOia15JO5KMby/niNkBzRa7vgN0vFkYsh9ch7U5Lt6Wmj8b5nLLTkD1WXfp3iQ
- ao3001jtjArPcKXrOi0D0tgVFN79gawVQRUxxEHbh02Kqq00hQXQV00sC/7jwc
+In-Reply-To: <20190410124726.2d7e9d38@endymion>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19041018-0040-0000-0000-000004DF1C68
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010903; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000284; SDB=6.01187163; UDB=6.00621822; IPR=6.00967927;
+ MB=3.00026379; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-10 18:02:35
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19041018-0041-0000-0000-000008EA2333
+Message-Id: <cc624b5c-f6c5-adb2-7709-f2fc5d851562@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-10_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904100119
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---1yeeQ81UyVL57Vl7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Wed, Apr 10, 2019 at 08:12:11AM -0300, Mauro Carvalho Chehab wrote:
-> Now that all files were converted to ReST format, rename them
-> and add an index.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+On 4/10/19 5:47 AM, Jean Delvare wrote:
+> Instead of duplicating the common code into the 2 (binary) drivers,
+> move the common code to a separate module. This is cleaner.
+>
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Eddie James <eajames@linux.ibm.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
 > ---
-[...]
-> diff --git a/Documentation/hwmon/submitting-patches b/Documentation/hwmon=
-/submitting-patches.rst
-> similarity index 99%
-> rename from Documentation/hwmon/submitting-patches
-> rename to Documentation/hwmon/submitting-patches.rst
-> index 12540b7d9b50..6120db7556aa 100644
-> --- a/Documentation/hwmon/submitting-patches
-> +++ b/Documentation/hwmon/submitting-patches.rst
+> Eddie, can you please give it a try and confirm it works?
 
-I'd additionally suggest:
 
-diff --git a/Documentation/hwmon/submitting-patches b/Documentation/hwmon/s=
-ubmitting-patches.rst
-index f88221b46153..0000a86be4b9 100644
---- a/Documentation/hwmon/submitting-patches
-+++ b/Documentation/hwmon/submitting-patches.rst
-@@ -38,7 +38,7 @@ increase the chances of your change being accepted.
- 2. Adding functionality to existing drivers
- -------------------------------------------
-=20
--* Make sure the documentation in Documentation/hwmon/<driver_name> is up to
-+* Make sure the documentation in Documentation/hwmon/<driver_name>.rst is =
-up to
-   date.
-=20
- * Make sure the information in Kconfig is up to date.
-@@ -60,7 +60,7 @@ increase the chances of your change being accepted.
-=20
- * Consider adding yourself to MAINTAINERS.
-=20
--* Document the driver in Documentation/hwmon/<driver_name>.
-+* Document the driver in Documentation/hwmon/<driver_name>.rst.
-=20
- * Add the driver to Kconfig and Makefile in alphabetical order.
-=20
+Yes, this works well.
 
-Thanks,
-Jonathan Neusch=C3=A4fer
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
 
---1yeeQ81UyVL57Vl7
-Content-Type: application/pgp-signature; name="signature.asc"
+Tested-by: Eddie James <eajames@linux.ibm.com>
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAlyuCqAACgkQCDBEmo7z
-X9ssgw//ZmPBGq00gnKgIkdptmktJsCCdbRKqAnKS97nKt6Ad54+llNhFidFR3ij
-Owq03OnpCXcu+3rc9qn/bOEv9QHjUmJ9aBysxuMCjbp5Wm69ItkylykWH6DPik8b
-BhloTUt0lnoweWJjZ4qtHyp5xuUlsQ2q6RbGR+BQwgvPA3y3FMuMYnvqi4BmuJs4
-B2DHhAUQnwgy+CMGBq62WTLZsWU6O4xAGnPRepoEIP4yf3ikOn5uiyYXeJt9sWmB
-7TyiXuM+noRFv5qyyiR695nBSlRZN0W690W2au5d8o1d1zp2tnuNTtljFGPv18S9
-gxxRiAzJRiXIGlg9cPZuyu/LD+4NbGwbRv8AfYYTcXyf1ZwLU6/y2VYRt9riJ/Ul
-1k5LFmFhHlxicwFJmobOor+AxJYtkb6fXCwJ2fSclBgP5tMYiKz3SjMlFxsiAczd
-x5uS/ABnXpJXEy3aOKlF3/GLI2ehMXegPLntmgUYGPHybPxTPgMf4ThsKLN0uovd
-f5ZeHCR5EtdFtJuECRIbvAeTs7MyawkdRzABA0dVUXmAxRzNxaU5tpFT8S9/AN1I
-wHTaekePAAReHn5G87/nu1RwsRWoLe8TyGkpy3IFCPmcYgGzZSF63tM2X0/eHuPi
-Q6PdjLqczbpT3X31fJdJ3q9BEWwy+zsHmKCHB81cYGY1F5fAYIY=
-=QA5J
------END PGP SIGNATURE-----
+>
+> Note: I kept the module names as they were before, hence the extra
+> "*-objs :=" statements. They could be removed if we rename the source
+> files, but that's better done in git directly. I don't mind either way
+> personally.
+>
+>   drivers/hwmon/occ/Kconfig  |    3 +--
+>   drivers/hwmon/occ/Makefile |    6 ++++--
+>   drivers/hwmon/occ/common.c |    7 +++++++
+>   drivers/hwmon/occ/sysfs.c  |    2 ++
+>   4 files changed, 14 insertions(+), 4 deletions(-)
+>
+> --- linux-5.0.orig/drivers/hwmon/occ/Kconfig	2019-04-10 11:30:05.579537638 +0200
+> +++ linux-5.0/drivers/hwmon/occ/Kconfig	2019-04-10 11:31:20.843383376 +0200
+> @@ -27,5 +27,4 @@ config SENSORS_OCC_P9_SBE
+>   	 called occ-p9-hwmon.
+>   
+>   config SENSORS_OCC
+> -	bool "POWER On-Chip Controller"
+> -	depends on SENSORS_OCC_P8_I2C || SENSORS_OCC_P9_SBE
+> +	tristate
+> --- linux-5.0.orig/drivers/hwmon/occ/Makefile	2019-03-04 00:21:29.000000000 +0100
+> +++ linux-5.0/drivers/hwmon/occ/Makefile	2019-04-10 11:33:23.631765535 +0200
+> @@ -1,5 +1,7 @@
+> -occ-p8-hwmon-objs := common.o sysfs.o p8_i2c.o
+> -occ-p9-hwmon-objs := common.o sysfs.o p9_sbe.o
+> +occ-hwmon-common-objs := common.o sysfs.o
+> +occ-p8-hwmon-objs := p8_i2c.o
+> +occ-p9-hwmon-objs := p9_sbe.o
+>   
+> +obj-$(CONFIG_SENSORS_OCC) += occ-hwmon-common.o
+>   obj-$(CONFIG_SENSORS_OCC_P8_I2C) += occ-p8-hwmon.o
+>   obj-$(CONFIG_SENSORS_OCC_P9_SBE) += occ-p9-hwmon.o
+> --- linux-5.0.orig/drivers/hwmon/occ/common.c	2019-03-04 00:21:29.000000000 +0100
+> +++ linux-5.0/drivers/hwmon/occ/common.c	2019-04-10 11:44:53.035573580 +0200
+> @@ -1,11 +1,13 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   
+>   #include <linux/device.h>
+> +#include <linux/export.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/jiffies.h>
+>   #include <linux/kernel.h>
+>   #include <linux/math64.h>
+> +#include <linux/module.h>
+>   #include <linux/mutex.h>
+>   #include <linux/sysfs.h>
+>   #include <asm/unaligned.h>
+> @@ -1096,3 +1098,8 @@ int occ_setup(struct occ *occ, const cha
+>   
+>   	return rc;
+>   }
+> +EXPORT_SYMBOL_GPL(occ_setup);
+> +
+> +MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
+> +MODULE_DESCRIPTION("Common OCC hwmon code");
+> +MODULE_LICENSE("GPL");
+> --- linux-5.0.orig/drivers/hwmon/occ/sysfs.c	2019-03-04 00:21:29.000000000 +0100
+> +++ linux-5.0/drivers/hwmon/occ/sysfs.c	2019-04-10 11:39:38.627003382 +0200
+> @@ -12,6 +12,7 @@
+>   
+>   #include <linux/bitops.h>
+>   #include <linux/device.h>
+> +#include <linux/export.h>
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/kernel.h>
+>   #include <linux/sysfs.h>
+> @@ -186,3 +187,4 @@ void occ_shutdown(struct occ *occ)
+>   {
+>   	sysfs_remove_group(&occ->bus_dev->kobj, &occ_sysfs);
+>   }
+> +EXPORT_SYMBOL_GPL(occ_shutdown);
+>
+>
 
---1yeeQ81UyVL57Vl7--
