@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A7EC10F11
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 534F9C10F14
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DD4B20818
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 172D820818
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 11:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554894875;
-	bh=t1tLMNhpDmnVUogcnR769TRTWOLd+uhiXrw/mXwLtk4=;
+	s=default; t=1554894876;
+	bh=vafN731gAsfL2AltzPZ7O7LqY3FUYKvNENGnnA0lnXw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YdwMXmYfmOS63unwkSUIrmyBccaGrG9IyV2HH4HSZXPgxK/nrKSRscgnfoCQUw+uZ
-	 in5uklDilW4jJyvj5ct0i+oWEj38J8SxguEbCmxp5VPSIjxlLshQFSmGIl06j/oBXL
-	 Dm9rKGHV4kqMsXUy6kiCmEZYxUsJgZiBPLCpR/P4=
+	b=BKtWYO1kdAJp0eRz/djVXDM4WFuTf3KYapIJr+C09gs6btMMKC3JEK+QzdaBoH64H
+	 KZhvGf/oANnDpUYhC6ZsmdRtIdmSm982zdax7TJ8NgBh0/z747V+34ER7KVvxAlr5I
+	 XCrmpTgGe6fpC/gkzbrv3ZLtfdrsI588zFbSQ1Zc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731586AbfDJLOT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 07:14:19 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44434 "EHLO
+        id S1727372AbfDJLOS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 07:14:18 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44456 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730822AbfDJLMQ (ORCPT
+        with ESMTP id S1731102AbfDJLMQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 10 Apr 2019 07:12:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -32,18 +32,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/B+lWmatDXzgWdtG0bzCa3wUSj6cMsUS9L/SsfIHpEM=; b=QoMwkrd/PRXaz2tAS/SDKCpggU
-        9SMxE0+I/0sVAUNmQtbEnfBP84pdhTNrihkpV8BkUM1OGj3gtmRsVVAV3/NlGeN5+9HqFj2KK9HXz
-        H9/4lstPVvRPFZf/dvpdUFd+vmLsjHeOAJLhhZnwRCxEz0D8asEyeffMcM6PGyi1oJOWwecsPxQ6S
-        1/KhwM6XOT6X04WXTlcPzHjPS2xhvj01mEDxSp7K2trmdIlmbWQYMTnEDV4EKP/IdQVMfBV9ugrL4
-        xJtLhWL3BepoG6AltRJTfYELcCMPnyTf8DFGuy34vFRcldDB7MMcxd1zdnx3SNnmfnlPoXgM8l0d3
-        zxXe+VQw==;
+        bh=GAmzM2cQXLWEJG/VCTUREx7sgoG/8T2f7s+Ihg8HuYc=; b=f3CaF3S/gfxq47JrrdftjVQryg
+        rHUwt5mvs91T7kBO0PJCa5t50YPpC1d8H8FIU8JT8MPF/ifN1I0eYY+ARihRu0+nUdpgmNtoTZ1PF
+        wDZ5KFDgvA2JLrnZnjbMei3wNgYiolPNVyzGO3SG3TsWT4iXMax5pxchQqv7PmgAInFlJERlW5k3P
+        Kz9EXss995H0uRpOQ5nIJPkVlfQB5zjFw/4TAxh401OHzMWQENznJkogGI7puOkiBzS2B+9Qk3orR
+        wa6yn6D6RFjW3HP645g55reKhu8SknqPBprMh9btxwuAf0Yinm3fbFitHDSC9wMT2v5ED+/c8mzTl
+        0WocNHeA==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEB9L-0006mv-KK; Wed, 10 Apr 2019 11:12:15 +0000
+        id 1hEB9L-0006mt-Ka; Wed, 10 Apr 2019 11:12:15 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEB9J-0007SN-7g; Wed, 10 Apr 2019 08:12:13 -0300
+        id 1hEB9J-0007Sd-Ay; Wed, 10 Apr 2019 08:12:13 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -51,9 +51,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 01/21] docs: hwmon: k10temp: convert to ReST format
-Date:   Wed, 10 Apr 2019 08:11:51 -0300
-Message-Id: <9ed53a4f160d7cd4f7c05fb919196ac15ecb6d63.1554893882.git.mchehab+samsung@kernel.org>
+Subject: [PATCH 05/21] docs: hwmon: emc2103: convert to ReST format
+Date:   Wed, 10 Apr 2019 08:11:55 -0300
+Message-Id: <b2b656a6d08c49aef83cd5aa06485596bbc93323.1554893882.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554893881.git.mchehab+samsung@kernel.org>
 References: <cover.1554893881.git.mchehab+samsung@kernel.org>
@@ -64,106 +64,38 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert k10temp to ReST format, in order to allow it to
+Convert emc2103 to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/k10temp | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ Documentation/hwmon/emc2103 | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/k10temp b/Documentation/hwmon/k10temp
-index 254d2f55345a..12a86ba17de9 100644
---- a/Documentation/hwmon/k10temp
-+++ b/Documentation/hwmon/k10temp
-@@ -2,42 +2,77 @@ Kernel driver k10temp
- =====================
+diff --git a/Documentation/hwmon/emc2103 b/Documentation/hwmon/emc2103
+index a12b2c127140..6a6ca6d1b34e 100644
+--- a/Documentation/hwmon/emc2103
++++ b/Documentation/hwmon/emc2103
+@@ -2,13 +2,17 @@ Kernel driver emc2103
+ ======================
  
  Supported chips:
 +
- * AMD Family 10h processors:
+   * SMSC EMC2103
 +
-   Socket F: Quad-Core/Six-Core/Embedded Opteron (but see below)
+     Addresses scanned: I2C 0x2e
 +
-   Socket AM2+: Quad-Core Opteron, Phenom (II) X3/X4, Athlon X2 (but see below)
+     Prefix: 'emc2103'
 +
-   Socket AM3: Quad-Core Opteron, Athlon/Phenom II X2/X3/X4, Sempron II
-+
-   Socket S1G3: Athlon II, Sempron, Turion II
-+
- * AMD Family 11h processors:
-+
-   Socket S1G2: Athlon (X2), Sempron (X2), Turion X2 (Ultra)
-+
- * AMD Family 12h processors: "Llano" (E2/A4/A6/A8-Series)
-+
- * AMD Family 14h processors: "Brazos" (C/E/G/Z-Series)
-+
- * AMD Family 15h processors: "Bulldozer" (FX-Series), "Trinity", "Kaveri", "Carrizo"
-+
- * AMD Family 16h processors: "Kabini", "Mullins"
+     Datasheet: Not public
  
-   Prefix: 'k10temp'
-+
-   Addresses scanned: PCI space
-+
-   Datasheets:
-+
-   BIOS and Kernel Developer's Guide (BKDG) For AMD Family 10h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/31116.pdf
-+
-   BIOS and Kernel Developer's Guide (BKDG) for AMD Family 11h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/41256.pdf
-+
-   BIOS and Kernel Developer's Guide (BKDG) for AMD Family 12h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/41131.pdf
-+
-   BIOS and Kernel Developer's Guide (BKDG) for AMD Family 14h Models 00h-0Fh Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/43170.pdf
-+
-   Revision Guide for AMD Family 10h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/41322.pdf
-+
-   Revision Guide for AMD Family 11h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/41788.pdf
-+
-   Revision Guide for AMD Family 12h Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/44739.pdf
-+
-   Revision Guide for AMD Family 14h Models 00h-0Fh Processors:
-+
-     http://support.amd.com/us/Processor_TechDocs/47534.pdf
-+
-   AMD Family 11h Processor Power and Thermal Data Sheet for Notebooks:
-+
-     http://support.amd.com/us/Processor_TechDocs/43373.pdf
-+
-   AMD Family 10h Server and Workstation Processor Power and Thermal Data Sheet:
-+
-     http://support.amd.com/us/Processor_TechDocs/43374.pdf
-+
-   AMD Family 10h Desktop Processor Power and Thermal Data Sheet:
-+
-     http://support.amd.com/us/Processor_TechDocs/43375.pdf
+ Authors:
+-        Steve Glendinning <steve.glendinning@smsc.com>
++	Steve Glendinning <steve.glendinning@smsc.com>
  
- Author: Clemens Ladisch <clemens@ladisch.de>
-@@ -60,7 +95,7 @@ are using an AM3 processor on an AM2+ mainboard, you can safely use the
- 
- There is one temperature measurement value, available as temp1_input in
- sysfs. It is measured in degrees Celsius with a resolution of 1/8th degree.
--Please note that it is defined as a relative value; to quote the AMD manual:
-+Please note that it is defined as a relative value; to quote the AMD manual::
- 
-   Tctl is the processor temperature control value, used by the platform to
-   control cooling systems. Tctl is a non-physical temperature on an
+ Description
+ -----------
 -- 
 2.20.1
 
