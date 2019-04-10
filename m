@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 419B3C10F11
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EA5C10F14
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07ED92075B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19C142075B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554924281;
-	bh=tKkPzHX/Uihvot7AWIbU7M7ky7FtDC0nrHGnRjCOVyM=;
+	s=default; t=1554924294;
+	bh=AEwvaBiPOfuIQaCIw89Fi5DrGWTyEddmDPGqxe9GTxA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=R5txVzTuUMCUOPnG8IW6fCpHatIgYGrXk+JHuJJIeOgYfrYHyhh/CepVLGXeazaCd
-	 cxA/h4J5KkucvkhfczJXp8EyiTm093G6UulH22zOl3z1BdnL15pSqFSNmoDqyEoCdj
-	 I8TqikpYmLoStKhgEvmHXMIHIpm4kEldlHiEtIts=
+	b=uWHuPT/IPeA8ax4ps/tze43xedofaQQBCU4XsXCFq8gYtZWApC/mIrlftMBsSz6xm
+	 GmjIT8QzhPbt9cxXS/CmSABnne6hsbhwT7yp2dTR3MKtNPye1oUuf+aLdwZCh/Pz5B
+	 vosfWjf9nOJNqBr97BPkDgN1ldpodZXwMle6bYZU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726624AbfDJTY2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 15:24:28 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44132 "EHLO
+        id S1726677AbfDJTXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 15:23:08 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:43992 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726730AbfDJTXL (ORCPT
+        with ESMTP id S1726096AbfDJTXH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Apr 2019 15:23:11 -0400
+        Wed, 10 Apr 2019 15:23:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/DoZqJ47XdGMH8UMjypS+5ERMfAgqAifsh9MIk2OSH4=; b=ssevDoi2+oUSF9PvaoM+/ux48B
-        o7qHRPrbzaUKNzfYncaggfZQKTVfXtu950loqa43U9zdMvjg7wXWMvGmSFcq1kdUT77VV6P+ljQI+
-        KXtYUJMGGi6tK7XuEu+ph4MTWlzhJTFrfPef3jdDBj5+RpLdRQTqExOTLRmLDpYTjEbgIU18Hqs4h
-        zME8QyE+tCbG/PPgCWA0NT4Ku3oiaL6IX34tMz+rPccIjOiZlU58FRRNWRl8yBY0MciA0GRbr0vh6
-        kcKKsfFWEH00ER+e84bzrsQF/Y7usESWaZ/ZaEZXMr5A/CpIIoe9gjJwoIffWxoYBeNeKcEySQpfH
-        Spk82tLQ==;
+        bh=6Qp3OTiveUtdQiehEFVG/K5c8ofOuDom/ezWCNRJrzE=; b=oGxWV77i7QDDLsj0jEmTTk+pV8
+        z2NhIPiDVswl5Sb6V5XBczg67MHItqCA9rwtMqAJecu3dzsx/CJXl6C4gYvkeTB9HsiWNHq8mUZ0u
+        yAYUeuCOhg5P4/vCErn+WA75+lMH1Bbe02HqbyngQ6054HjW3Yi4taYMtj8E1xDe6vnndG6lDv8GO
+        3ibcy/1DApal3TnDFTyfW2ZGUs5G93TGRkN7GuBYD43/4Dh46dPiM1JX6U/IZ6WNL/RM+/3HLCWaw
+        Io1HSIM6SWyVh7hDF0EWyowhim8SL+i8sse6WHL63SJ6qdq1cRz7zPCu1HA6pbeTuaWGLbmk7bufJ
+        i+TFwMvg==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEIoQ-0003RC-Mg; Wed, 10 Apr 2019 19:23:10 +0000
+        id 1hEIoM-0003RA-JZ; Wed, 10 Apr 2019 19:23:06 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEIoJ-0000zC-1B; Wed, 10 Apr 2019 16:23:03 -0300
+        id 1hEIoI-0000yo-S5; Wed, 10 Apr 2019 16:23:02 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -51,9 +51,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 12/21] docs: hwmon: asc7621: convert to ReST format
-Date:   Wed, 10 Apr 2019 16:22:49 -0300
-Message-Id: <916e894bbb62241635a0c8b8292e072e24526cd4.1554923967.git.mchehab+samsung@kernel.org>
+Subject: [PATCH v2 06/21] docs: hwmon: pc87360: convert to ReST format
+Date:   Wed, 10 Apr 2019 16:22:43 -0300
+Message-Id: <6398556a755a19cde69d4185d34b09c985c79bc0.1554923967.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554923967.git.mchehab+samsung@kernel.org>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
@@ -64,306 +64,104 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert asc7621 to ReST format, in order to allow it to
+Convert pc87360 to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/asc7621 | 146 ++++++++++++++++++++++--------------
- 1 file changed, 88 insertions(+), 58 deletions(-)
+ Documentation/hwmon/pc87360 | 38 +++++++++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/hwmon/asc7621 b/Documentation/hwmon/asc7621
-index 7287be7e1f21..b5a9fad0f172 100644
---- a/Documentation/hwmon/asc7621
-+++ b/Documentation/hwmon/asc7621
-@@ -1,10 +1,15 @@
-+=====================
- Kernel driver asc7621
--==================
-+=====================
+diff --git a/Documentation/hwmon/pc87360 b/Documentation/hwmon/pc87360
+index d5f5cf16ce59..4bad07bce54b 100644
+--- a/Documentation/hwmon/pc87360
++++ b/Documentation/hwmon/pc87360
+@@ -2,14 +2,19 @@ Kernel driver pc87360
+ =====================
  
  Supported chips:
 +
-     Andigilog aSC7621 and aSC7621a
+   * National Semiconductor PC87360, PC87363, PC87364, PC87365 and PC87366
 +
-     Prefix: 'asc7621'
+     Prefixes: 'pc87360', 'pc87363', 'pc87364', 'pc87365', 'pc87366'
 +
-     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
+     Addresses scanned: none, address read from Super I/O config space
 +
-     Datasheet: http://www.fairview5.com/linux/asc7621/asc7621.pdf
+     Datasheets: No longer available
  
- Author:
-@@ -73,8 +78,10 @@ Finally, we have added a tach disable function that turns off the tach
- measurement system for individual tachs in order to save power. That is
- in register 75h.
+ Authors: Jean Delvare <jdelvare@suse.de>
  
----
-+--------------------------------------------------------------------------
+ Thanks to Sandeep Mehta, Tonko de Rooy and Daniel Ceregatti for testing.
 +
- aSC7621 Product Description
-+===========================
+ Thanks to Rudolf Marek for helping me investigate conversion issues.
  
- The aSC7621 has a two wire digital interface compatible with SMBus 2.0.
- Using a 10-bit ADC, the aSC7621 measures the temperature of two remote diode
-@@ -102,6 +109,8 @@ System voltages of VCCP, 2.5V, 3.3V, 5.0V, and 12V motherboard power are
- monitored efficiently with internal scaling resistors.
  
- Features
-+--------
+@@ -17,11 +22,13 @@ Module Parameters
+ -----------------
+ 
+ * init int
+-  Chip initialization level:
+-   0: None
+-  *1: Forcibly enable internal voltage and temperature channels, except in9
+-   2: Forcibly enable all voltage and temperature channels, except in9
+-   3: Forcibly enable all voltage and temperature channels, including in9
++    Chip initialization level:
 +
- - Supports PECI interface and monitors internal and remote thermal diodes
- - 2-wire, SMBus 2.0 compliant, serial interface
- - 10-bit ADC
-@@ -110,7 +119,7 @@ Features
- - Noise filtering of temperature reading for fan speed control
- - 0.25C digital temperature sensor resolution
- - 3 PWM fan speed control outputs for 2-, 3- or 4-wire fans and up to 4 fan
--	tachometer inputs
-+  tachometer inputs
- - Enhanced measured temperature to Temperature Zone assignment.
- - Provides high and low PWM frequency ranges
- - 3 GPIO pins for custom use
-@@ -123,17 +132,20 @@ Except where noted below, the sysfs entries created by this driver follow
- the standards defined in "sysfs-interface".
++    - 0: None
++    - **1**: Forcibly enable internal voltage and temperature channels,
++      except in9
++    - 2: Forcibly enable all voltage and temperature channels, except in9
++    - 3: Forcibly enable all voltage and temperature channels, including in9
  
- temp1_source
-+	=	===============================================
- 	0 	(default) peci_legacy = 0, Remote 1 Temperature
--			peci_legacy = 1, PECI Processor Temperature 0
-+		peci_legacy = 1, PECI Processor Temperature 0
- 	1 	Remote 1 Temperature
- 	2 	Remote 2 Temperature
- 	3 	Internal Temperature
- 	4 	PECI Processor Temperature 0
- 	5 	PECI Processor Temperature 1
- 	6 	PECI Processor Temperature 2
--	7  PECI Processor Temperature 3
-+	7	PECI Processor Temperature 3
-+	=	===============================================
+ Note that this parameter has no effect for the PC87360, PC87363 and PC87364
+ chips.
+@@ -43,13 +50,15 @@ hardware monitoring chipsets, not only controlling and monitoring three fans,
+ but also monitoring eleven voltage inputs and two (PC87365) or up to four
+ (PC87366) temperatures.
  
- temp2_source
-+	=	===============================================
- 	0 	(default) Internal Temperature
- 	1 	Remote 1 Temperature
- 	2 	Remote 2 Temperature
-@@ -142,8 +154,10 @@ temp2_source
- 	5 	PECI Processor Temperature 1
- 	6 	PECI Processor Temperature 2
- 	7 	PECI Processor Temperature 3
-+	=	===============================================
- 
- temp3_source
-+	=	===============================================
- 	0 	(default) Remote 2 Temperature
- 	1 	Remote 1 Temperature
- 	2 	Remote 2 Temperature
-@@ -152,10 +166,12 @@ temp3_source
- 	5 	PECI Processor Temperature 1
- 	6 	PECI Processor Temperature 2
- 	7 	PECI Processor Temperature 3
-+	=	===============================================
- 
- temp4_source
-+	=	===============================================
- 	0 	(default) peci_legacy = 0, PECI Processor Temperature 0
--			peci_legacy = 1, Remote 1 Temperature
-+		peci_legacy = 1, Remote 1 Temperature
- 	1 	Remote 1 Temperature
- 	2 	Remote 2 Temperature
- 	3 	Internal Temperature
-@@ -163,58 +179,65 @@ temp4_source
- 	5 	PECI Processor Temperature 1
- 	6 	PECI Processor Temperature 2
- 	7 	PECI Processor Temperature 3
-+	=	===============================================
- 
--temp[1-4]_smoothing_enable
--temp[1-4]_smoothing_time
-+temp[1-4]_smoothing_enable / temp[1-4]_smoothing_time
- 	Smooths spikes in temp readings caused by noise.
- 	Valid values in milliseconds are:
--	35000
--	17600
--	11800
--	 7000
--	 4400
--	 3000
--	 1600
--	  800
-+
-+	* 35000
-+	* 17600
-+	* 11800
-+	*  7000
-+	*  4400
-+	*  3000
-+	*  1600
-+	*   800
- 
- temp[1-4]_crit
- 	When the corresponding zone temperature reaches this value,
- 	ALL pwm outputs will got to 100%.
- 
--temp[5-8]_input
--temp[5-8]_enable
-+temp[5-8]_input / temp[5-8]_enable
- 	The aSC7621 can also read temperatures provided by the processor
- 	via the PECI bus.  Usually these are "core" temps and are relative
- 	to the point where the automatic thermal control circuit starts
- 	throttling.  This means that these are usually negative numbers.
- 
- pwm[1-3]_enable
-+	=============== ========================================================
- 	0		Fan off.
- 	1		Fan on manual control.
- 	2		Fan on automatic control and will run at the minimum pwm
--				if the temperature for the zone is below the minimum.
--	3		Fan on automatic control but will be off if the temperature
--				for the zone is below the minimum.
--	4-254	Ignored.
-+			if the temperature for the zone is below the minimum.
-+	3		Fan on automatic control but will be off if the
-+			temperature for the zone is below the minimum.
-+	4-254		Ignored.
- 	255		Fan on full.
-+	=============== ========================================================
- 
- pwm[1-3]_auto_channels
- 	Bitmap as described in sysctl-interface with the following
- 	exceptions...
-+
- 	Only the following combination of zones (and their corresponding masks)
- 	are valid:
--	1
--	2
--	3
--	2,3
--	1,2,3
--	4
--	1,2,3,4
- 
--	Special values:
--	0			Disabled.
--	16		Fan on manual control.
--	31		Fan on full.
-+	* 1
-+	* 2
-+	* 3
-+	* 2,3
-+	* 1,2,3
-+	* 4
-+	* 1,2,3,4
-+
-+	* Special values:
-+
-+	  ==		======================
-+	  0		Disabled.
-+	  16		Fan on manual control.
-+	  31		Fan on full.
-+	  ==		======================
- 
- 
- pwm[1-3]_invert
-@@ -226,22 +249,22 @@ pwm[1-3]_freq
- 	PWM frequency in Hz
- 	Valid values in Hz are:
- 
--	10
--	15
--	23
--	30  (default)
--	38
--	47
--	62
--	94
--	23000
--	24000
--	25000
--	26000
--	27000
--	28000
--	29000
--	30000
-+	* 10
-+	* 15
-+	* 23
-+	* 30  (default)
-+	* 38
-+	* 47
-+	* 62
-+	* 94
-+	* 23000
-+	* 24000
-+	* 25000
-+	* 26000
-+	* 27000
-+	* 28000
-+	* 29000
-+	* 30000
- 
- 	Setting any other value will be ignored.
- 
-@@ -251,17 +274,17 @@ peci_enable
- peci_avg
- 	Input filter average time.
- 
--	0 	0 Sec. (no Smoothing) (default)
--	1 	0.25 Sec.
--	2 	0.5 Sec.
--	3 	1.0 Sec.
--	4 	2.0 Sec.
--	5 	4.0 Sec.
--	6 	8.0 Sec.
--	7 	0.0 Sec.
-+	* 0 	0 Sec. (no Smoothing) (default)
-+	* 1 	0.25 Sec.
-+	* 2 	0.5 Sec.
-+	* 3 	1.0 Sec.
-+	* 4 	2.0 Sec.
-+	* 5 	4.0 Sec.
-+	* 6 	8.0 Sec.
-+	* 7 	0.0 Sec.
- 
- peci_legacy
++  =========== ======= ======= ======= ======= =====
+   Chip        #vin    #fan    #pwm    #temp   devid
 -
-+	=	============================================
- 	0	Standard Mode (default)
- 		Remote Diode 1 reading is associated with
- 		Temperature Zone 1, PECI is associated with
-@@ -270,10 +293,12 @@ peci_legacy
- 	1	Legacy Mode
- 		PECI is associated with Temperature Zone 1,
- 		Remote Diode 1 is associated with Zone 4
-+	=	============================================
++  =========== ======= ======= ======= ======= =====
+   PC87360     -       2       2       -       0xE1
+   PC87363     -       2       2       -       0xE8
+   PC87364     -       3       3       -       0xE4
+   PC87365     11      3       3       2       0xE5
+   PC87366     11      3       3       3-4     0xE9
++  =========== ======= ======= ======= ======= =====
  
- peci_diode
- 	Diode filter
+ The driver assumes that no more than one chip is present, and one of the
+ standard Super I/O addresses is used (0x2E/0x2F or 0x4E/0x4F)
+@@ -68,18 +77,23 @@ have to care no more.
  
-+	=	====================
- 	0	0.25 Sec.
- 	1 	1.1 Sec.
- 	2 	2.4 Sec.  (default)
-@@ -282,15 +307,20 @@ peci_diode
- 	5 	6.8 Sec.
- 	6 	10.2 Sec.
- 	7 	16.4 Sec.
-+	=	====================
+ For reference, here are a few values about clock dividers:
  
- peci_4domain
- 	Four domain enable
+-                slowest         accuracy        highest
+-                measurable      around 3000     accurate
++    =========== =============== =============== ===========
++		slowest         accuracy        highest
++		measurable      around 3000     accurate
+     divider     speed (RPM)     RPM (RPM)       speed (RPM)
+-         1        1882              18           6928
+-         2         941              37           4898
+-         4         470              74           3464
+-         8         235             150           2449
++    =========== =============== =============== ===========
++	 1        1882              18           6928
++	 2         941              37           4898
++	 4         470              74           3464
++	 8         235             150           2449
++    =========== =============== =============== ===========
  
-+	=	===============================================
- 	0 	1 or 2 Domains for enabled processors (default)
- 	1 	3 or 4 Domains for enabled processors
-+	=	===============================================
+ For the curious, here is how the values above were computed:
++
+  * slowest measurable speed: clock/(255*divider)
+  * accuracy around 3000 RPM: 3000^2/clock
+  * highest accurate speed: sqrt(clock*100)
++
+ The clock speed for the PC87360 family is 480 kHz. I arbitrarily chose 100
+ RPM as the lowest acceptable accuracy.
  
- peci_domain
- 	Domain
- 
-+	=	==================================================
- 	0 	Processor contains a single domain (0) 	 (default)
- 	1 	Processor contains two domains (0,1)
-+	=	==================================================
 -- 
 2.20.1
 
