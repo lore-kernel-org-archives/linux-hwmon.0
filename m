@@ -4,80 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB41CC10F11
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 22:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B55C10F11
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 22:40:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F8AF20820
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 22:39:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0CEB20820
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 22:39:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="TDH1mgst"
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="Soc61aet"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbfDJWjW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 18:39:22 -0400
-Received: from mail-eopbgr60125.outbound.protection.outlook.com ([40.107.6.125]:54243
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S1726073AbfDJWj7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 18:39:59 -0400
+Received: from mail-eopbgr150095.outbound.protection.outlook.com ([40.107.15.95]:52030
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726073AbfDJWjW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Apr 2019 18:39:22 -0400
+        id S1725982AbfDJWj7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Apr 2019 18:39:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9LArME4rRF8zXYusQONb5/cv8ot3g/Pf98YZp5AVroI=;
- b=TDH1mgstLVUV9uH0YNTZhDwqY4v+gj82332bnEQLyJBJPATGqp7+Cd9Mw8ptD2mOW7lQEEa0PtWYuaMllTP3L4HE7RKV8y61s0pFG1qGqyiS+TN6BUgSNY1vf0qa/e/9ZppcnXKkJQ/iBb68Ld3OxA+gl3SFZ5mDqxHTiNUEn34=
+ bh=AxPrxjxbZ2/eqHy6tPwmNFjx6dwo1u43oHnZbFDwKj0=;
+ b=Soc61aetiNh3TNw2AhV47U4FNZ5vZsHbyg/qAbBF0VcI+FiKnlWmQ5kqGkwn1b2kWmMS0OCt7IHkgTfqS995E/GzGMz24x2vFVW/SoJ13sxlP3JGboD1DmRtFq/evrMAs9Zsgq0ndYu8hvZmWIOV3i73JKwt7pdFb/Hl/su4QDc=
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
  HE1PR07MB3081.eurprd07.prod.outlook.com (10.170.244.155) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1792.12; Wed, 10 Apr 2019 22:39:18 +0000
+ 15.20.1792.12; Wed, 10 Apr 2019 22:39:55 +0000
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6]) by HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6%7]) with mapi id 15.20.1792.007; Wed, 10 Apr 2019
- 22:39:18 +0000
+ 22:39:55 +0000
 From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
         <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>
 CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
-Thread-Topic: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
-Thread-Index: AQHU7+47oOY4p2ACFEixplJDKxZryw==
-Date:   Wed, 10 Apr 2019 22:39:17 +0000
-Message-ID: <e231af1feac9cbe8b72923a13587035220b76ad8.1554934898.git.krzysztof.adamski@nokia.com>
+Subject: [PATCH 3/3] pmbus: export coefficients via sysfs
+Thread-Topic: [PATCH 3/3] pmbus: export coefficients via sysfs
+Thread-Index: AQHU7+5Rz590hC5nZ0mo3TDwDq3s6A==
+Date:   Wed, 10 Apr 2019 22:39:55 +0000
+Message-ID: <8087920a011662114ca151d4e04186c121a9a737.1554934898.git.krzysztof.adamski@nokia.com>
 References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
 In-Reply-To: <cover.1554934898.git.krzysztof.adamski@nokia.com>
 Accept-Language: pl-PL, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0701CA0046.eurprd07.prod.outlook.com
- (2603:10a6:3:9e::14) To HE1PR07MB3337.eurprd07.prod.outlook.com
+x-clientproxiedby: HE1PR08CA0074.eurprd08.prod.outlook.com
+ (2603:10a6:7:2a::45) To HE1PR07MB3337.eurprd07.prod.outlook.com
  (2603:10a6:7:2d::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=krzysztof.adamski@nokia.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [131.228.2.28]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 313d69f8-7006-4c8c-e019-08d6be055db8
+x-ms-office365-filtering-correlation-id: 843adcb1-d0fc-4632-47f8-08d6be05744e
 x-ms-office365-filtering-ht: Tenant
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB3081;
 x-ms-traffictypediagnostic: HE1PR07MB3081:
-x-microsoft-antispam-prvs: <HE1PR07MB3081560ABB47BD61BF3385EBEF2E0@HE1PR07MB3081.eurprd07.prod.outlook.com>
+x-microsoft-antispam-prvs: <HE1PR07MB3081BD2ED7F621E9F4DCB939EF2E0@HE1PR07MB3081.eurprd07.prod.outlook.com>
 x-forefront-prvs: 00032065B2
 x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(376002)(396003)(39860400002)(346002)(189003)(199004)(25786009)(107886003)(4326008)(36756003)(6512007)(81156014)(8676002)(81166006)(7736002)(305945005)(14454004)(53936002)(446003)(105586002)(186003)(486006)(118296001)(2616005)(478600001)(52116002)(11346002)(14444005)(26005)(256004)(106356001)(76176011)(386003)(6506007)(476003)(6116002)(66066001)(6486002)(3846002)(6436002)(99286004)(97736004)(68736007)(5660300002)(71200400001)(71190400001)(316002)(86362001)(2906002)(8936002)(54906003)(110136005)(102836004);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB3081;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: nokia.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: BGDU+P1yErjk+bR4yuYQ5gbHDp1fMFIZ4ZnNigY1YJHJsPo+AearK7sYSz0KVyMWb6AmOrh73B9BBFjqOFC9V8RosnDe2ECjAVd778qJUvI2NmV41oNLJ99Ky8vmItuuG9/eAPnf4miq6EoIv9XWZaHLdf6br+CDgbxnyENaEZ9DCe2wpeVARo78p4ZGwU+prVOxP9dZKAqqG3gEOZjpiPRpDE9jz2u+bosnXYBVsZjYAoKXeeCOCzSKd1mBtTUq7ZuJzndSWgl9PNq3DWGomjutkRLLpOy39gsm+REzpcoROWUzBMnoPIvGKxTgmmT+qIv4XYNyiYwPoMAW/PWKzaiQ8IoBA8QTg0mRlWeM4a/6YflwIWVIoAZG3zrdfULZ1Cw2peL+jLMXtUYk8Z5IB217Ea+HctalgIdGnRdIlAI=
+x-microsoft-antispam-message-info: BU2WoAmnHej/C/XGz+dFEBzlMzOEfzpe1tmT4mKakmvQ+hBgsQfwK98opqSb9eDsxFYL18iUB2nnVoZ8WYsGyo9OheX9DdZFwx5P+JI8XiM5a716Pfa2NJoBGdAqYG4htNK88rWJnjSxMTBLCkY5nMoHZLFX/+hrKuTvKwimXBy3jRVaYCXS3tYGyupPi5TPevlJJPu9R4IEjAe06+uJJFwug/UH8d7mhGaSP917BYtto6fodE05W0BP5G89uGIlYAAs8pWx7TDX2eN/4JUt9IdjXzo/CJxlC2u3MvOI69JMWs6m3ThQWJ2rHwv+UsVZPutB7jFrNBklxa09BD21AGx3tDBiO1j7Ov/YhQ7yHt/UCOQbH4ZBpjkZFrhEC/1/NCEoBkCaeROUu44uBpVS+Q/DD5JCxwlTY01Jj1UHrbE=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3F7DD29B36856D41B78456587BE309E6@eurprd07.prod.outlook.com>
+Content-ID: <869CE9CB02EB2F4C9952D0F7EE3C3371@eurprd07.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 313d69f8-7006-4c8c-e019-08d6be055db8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Apr 2019 22:39:17.8566
+X-MS-Exchange-CrossTenant-Network-Message-Id: 843adcb1-d0fc-4632-47f8-08d6be05744e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Apr 2019 22:39:55.7306
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
@@ -88,97 +87,193 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Register custom sysfs attribute to be registered by pmbus allowing
-read/write access to the manufacturer specific SAMPLES_FOR_AVG register.
-This register allows setting the number of samples used in computing the
-average values (PMBUS_VIRT_READ_*_AVG). The number we write is an
-exponent of base 2 of the number of samples so for example writing 3
-will result in 8 samples average.
+In order to get best accuracy, in case of some devices it is required to
+tweak coefficient values. This is especially true for devices using
+some external shunt resistor or being operated in non-usual environment.
+Those values may be measured during device production and stored as
+calibration values in some place (like EEPROM or even a file).
+
+To support wide range of possible use cases, lets export those to
+user space via sysfs attributes so that it can implement its own
+policies about them. All those attributes are put into separate
+attribute_group struct so that we can set its name to group all of them
+in a "coefficients" subdirectory in sysfs.
 
 Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 ---
- drivers/hwmon/pmbus/lm25066.c | 45 +++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ drivers/hwmon/pmbus/pmbus_core.c | 100 ++++++++++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index 53db78753a0d..c78af0a7e5ff 100644
---- a/drivers/hwmon/pmbus/lm25066.c
-+++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -26,6 +26,7 @@
- #include <linux/err.h>
- #include <linux/slab.h>
- #include <linux/i2c.h>
-+#include <linux/log2.h>
- #include "pmbus.h"
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
+ore.c
+index 7a7dcdc8acc9..8cb61fc977db 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -57,6 +57,8 @@
 =20
- enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
-@@ -38,6 +39,7 @@ enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
- #define LM25066_READ_PIN_PEAK		0xd5
- #define LM25066_CLEAR_PIN_PEAK		0xd6
- #define LM25066_DEVICE_SETUP		0xd9
-+#define LM25066_SAMPLES_FOR_AVG		0xdb
- #define LM25066_READ_AVG_VIN		0xdc
- #define LM25066_READ_AVG_VOUT		0xdd
- #define LM25066_READ_AVG_IIN		0xde
-@@ -405,6 +407,47 @@ static int lm25066_write_word_data(struct i2c_client *=
-client, int page, int reg,
- 	return ret;
+ #define PMBUS_NAME_SIZE		24
+=20
++static const char * const coeff_name[] =3D {"m", "b", "R"};
++
+ struct pmbus_sensor {
+ 	struct pmbus_sensor *next;
+ 	char name[PMBUS_NAME_SIZE];	/* sysfs sensor name */
+@@ -98,11 +100,12 @@ struct pmbus_data {
+ 	int exponent[PMBUS_PAGES];
+ 				/* linear mode: exponent for output voltages */
+=20
+-	const struct pmbus_driver_info *info;
++	struct pmbus_driver_info *info;
+=20
+ 	int max_attributes;
+ 	int num_attributes;
+ 	struct attribute_group group;
++	struct attribute_group group_coeff;
+ 	const struct attribute_group **groups;
+ 	struct dentry *debugfs;		/* debugfs device directory */
+=20
+@@ -1901,6 +1904,88 @@ static int pmbus_add_fan_attributes(struct i2c_clien=
+t *client,
+ 	return 0;
  }
 =20
-+static ssize_t samples_for_avg_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
++static struct attribute *pmbus_init_coeff_attr(struct pmbus_data *data,
++					       const char *prefix,
++					       const char *coeff, int *target)
 +{
-+	struct i2c_client *client =3D to_i2c_client(dev->parent);
-+	int ret;
++	struct dev_ext_attribute *ext_attr;
++	char *name;
 +
-+	ret =3D pmbus_read_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG);
-+	if (ret < 0)
-+		return ret;
++	ext_attr =3D devm_kzalloc(data->dev, sizeof(ext_attr), GFP_KERNEL);
++	if (!ext_attr)
++		return NULL;
 +
-+	return sprintf(buf, "%d\n", 1 << ret);
++	name =3D devm_kasprintf(data->dev, GFP_KERNEL, "%s_%s", prefix, coeff);
++	if (!name)
++		return NULL;
++
++	pmbus_dev_attr_init(&ext_attr->attr, name, (S_IWUSR | S_IRUGO),
++			    device_show_int, device_store_int);
++	ext_attr->var =3D target;
++
++	return &ext_attr->attr.attr;
 +}
 +
-+static ssize_t samples_for_avg_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
++static int pmbus_add_coeff_attributes_class(struct pmbus_data *data,
++					    const char *prefix,
++					    enum pmbus_sensor_classes class,
++					    struct attribute **attrs)
 +{
-+	struct i2c_client *client =3D to_i2c_client(dev->parent);
-+	int ret, val;
++	int *coeff_val[] =3D {data->info->m, data->info->b, data->info->R};
++	struct attribute *ret;
++	int i, count =3D 0;
 +
-+	ret =3D kstrtoint(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret =3D pmbus_write_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG,
-+				    ilog2(val));
-+	if (ret < 0)
-+		return ret;
++	for (i =3D 0; i < ARRAY_SIZE(coeff_name); i++) {
++		ret =3D pmbus_init_coeff_attr(data, prefix, coeff_name[i],
++					    coeff_val[i]);
++		if (!ret)
++			return -ENOMEM;
++		attrs[count++] =3D ret;
++	}
 +
 +	return count;
 +}
 +
-+static DEVICE_ATTR_RW(samples_for_avg);
-+
-+static struct attribute *lm25056_attrs[] =3D {
-+	&dev_attr_samples_for_avg.attr,
-+	NULL,
++static const char * const classes_names[] =3D {
++	[PSC_VOLTAGE_IN] =3D "vin",
++	[PSC_VOLTAGE_OUT] =3D "vout",
++	[PSC_CURRENT_IN] =3D "iin",
++	[PSC_CURRENT_OUT] =3D "iout",
++	[PSC_POWER] =3D "p",
++	[PSC_TEMPERATURE] =3D "temp",
 +};
-+ATTRIBUTE_GROUPS(lm25056); // should we set a name of this group to put al=
-l
-+			   // those attributes in subdirectory? Like "custom" ?
 +
- static int lm25066_probe(struct i2c_client *client,
- 			  const struct i2c_device_id *id)
++static int pmbus_add_coeff_attributes(struct i2c_client *client,
++				      struct pmbus_data *data)
++{
++	struct attribute **attrs;
++	int i, n =3D 0, ret =3D 0;
++
++	attrs =3D kcalloc(ARRAY_SIZE(coeff_name) * (PSC_NUM_CLASSES + 1),
++			sizeof(void *), GFP_KERNEL);
++	if (!attrs)
++		return -ENOMEM;
++
++	for (i =3D 0; i < ARRAY_SIZE(classes_names); i++) {
++		if (classes_names[i] =3D=3D NULL)
++			continue;
++
++		ret =3D pmbus_add_coeff_attributes_class(data, classes_names[i],
++						       i, &attrs[n]);
++		if (ret < 0) {
++			kfree(attrs);
++			return ret;
++		}
++
++		n +=3D ret;
++	}
++
++	data->group_coeff.name =3D "coefficients";
++	data->group_coeff.attrs =3D  attrs;
++
++	return 0;
++}
++
+ static int pmbus_find_attributes(struct i2c_client *client,
+ 				 struct pmbus_data *data)
  {
-@@ -476,6 +519,8 @@ static int lm25066_probe(struct i2c_client *client,
- 		info->b[PSC_POWER] =3D coeff[PSC_POWER].b;
- 	}
+@@ -1932,6 +2017,11 @@ static int pmbus_find_attributes(struct i2c_client *=
+client,
 =20
-+	info->groups =3D lm25056_groups;
+ 	/* Fans */
+ 	ret =3D pmbus_add_fan_attributes(client, data);
++	if (ret)
++		return ret;
 +
- 	return pmbus_do_probe(client, id, info);
++	/* Coefficients */
++	ret =3D pmbus_add_coeff_attributes(client, data);
+ 	return ret;
  }
 =20
+@@ -2324,7 +2414,8 @@ int pmbus_do_probe(struct i2c_client *client, const s=
+truct i2c_device_id *id,
+ 		while (info->groups[groups_num])
+ 			groups_num++;
+=20
+-	data->groups =3D devm_kcalloc(dev, groups_num + 2, sizeof(void *),
++	/* Two default groups + ending NULL makes 3 groups minimum */
++	data->groups =3D devm_kcalloc(dev, groups_num + 3, sizeof(void *),
+ 				    GFP_KERNEL);
+ 	if (!data->groups)
+ 		return -ENOMEM;
+@@ -2356,7 +2447,8 @@ int pmbus_do_probe(struct i2c_client *client, const s=
+truct i2c_device_id *id,
+ 	}
+=20
+ 	data->groups[0] =3D &data->group;
+-	memcpy(data->groups + 1, info->groups, sizeof(void *) * groups_num);
++	data->groups[1] =3D &data->group_coeff;
++	memcpy(data->groups + 2, info->groups, sizeof(void *) * groups_num);
+ 	data->hwmon_dev =3D hwmon_device_register_with_groups(dev, client->name,
+ 							    data, data->groups);
+ 	if (IS_ERR(data->hwmon_dev)) {
+@@ -2379,6 +2471,7 @@ int pmbus_do_probe(struct i2c_client *client, const s=
+truct i2c_device_id *id,
+ 	hwmon_device_unregister(data->hwmon_dev);
+ out_kfree:
+ 	kfree(data->group.attrs);
++	kfree(data->group_coeff.attrs);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(pmbus_do_probe);
+@@ -2391,6 +2484,7 @@ int pmbus_do_remove(struct i2c_client *client)
+=20
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	kfree(data->group.attrs);
++	kfree(data->group_coeff.attrs);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(pmbus_do_remove);
 --=20
 2.20.1
 
