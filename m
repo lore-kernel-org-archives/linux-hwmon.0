@@ -4,26 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EA5C10F14
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50068C282E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 19C142075B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 181CE217D4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Apr 2019 19:24:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554924294;
-	bh=AEwvaBiPOfuIQaCIw89Fi5DrGWTyEddmDPGqxe9GTxA=;
+	s=default; t=1554924295;
+	bh=erVUsYbWvvAZ3gACxacWM7ll7hadAA8eMjpzOpHz6jg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uWHuPT/IPeA8ax4ps/tze43xedofaQQBCU4XsXCFq8gYtZWApC/mIrlftMBsSz6xm
-	 GmjIT8QzhPbt9cxXS/CmSABnne6hsbhwT7yp2dTR3MKtNPye1oUuf+aLdwZCh/Pz5B
-	 vosfWjf9nOJNqBr97BPkDgN1ldpodZXwMle6bYZU=
+	b=tXU4nT8lEmcv+9lOImug/pSFkVFw60AINF8iX6AnZehuoIfCf2qrAWiOrx9uqPHEZ
+	 YS4xWZFUuOZPNYLT14OX5a1ziCGPM0tuTSGT7WdJ+D/k3iNnKxIqIMVueupj6ucmwK
+	 e0UoEC1kXWuyNzEApdfCFfoJ9ZB3TYFYckREi4GU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfDJTXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1726672AbfDJTXI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 10 Apr 2019 15:23:08 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:43992 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:44020 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbfDJTXH (ORCPT
+        with ESMTP id S1726181AbfDJTXH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 10 Apr 2019 15:23:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -32,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6Qp3OTiveUtdQiehEFVG/K5c8ofOuDom/ezWCNRJrzE=; b=oGxWV77i7QDDLsj0jEmTTk+pV8
-        z2NhIPiDVswl5Sb6V5XBczg67MHItqCA9rwtMqAJecu3dzsx/CJXl6C4gYvkeTB9HsiWNHq8mUZ0u
-        yAYUeuCOhg5P4/vCErn+WA75+lMH1Bbe02HqbyngQ6054HjW3Yi4taYMtj8E1xDe6vnndG6lDv8GO
-        3ibcy/1DApal3TnDFTyfW2ZGUs5G93TGRkN7GuBYD43/4Dh46dPiM1JX6U/IZ6WNL/RM+/3HLCWaw
-        Io1HSIM6SWyVh7hDF0EWyowhim8SL+i8sse6WHL63SJ6qdq1cRz7zPCu1HA6pbeTuaWGLbmk7bufJ
-        i+TFwMvg==;
+        bh=et9eXCe5ZAfSQ5mBgtr6YkPzKHB/bcQ3N5gbJc1LICw=; b=KT9kmZWYV1w4j1dcwdzIVvdD3v
+        H+/nXgqqlVeXrgFkgyRviZMaOh8pmSkvIY7isG3K9YssAqInxOuegxvfGVPASD4mdRg52Kt6/PKG1
+        2sBjdwW1grXJddZU6PLNKN0MiwEcloJAnZ4K6St6EOymgllqfO/TvII82w/hxtIqyzwlk2+zGVtYe
+        MY7kL/pfzKsCQN3uPDDvU02QngzncXxjd6JyEeTbc6A7F2GS+CvmmckLG4qQnVBJ6sicoumk2aRH+
+        8tImzfqdPotRtVI0wJ9E4j1G3/pTX4lNBlldUOt8aOcGpjUdvcFH1ep/yrQyu1K4PHX2No8mXJ5c0
+        MtSM1DzA==;
 Received: from 177.41.129.23.dynamic.adsl.gvt.net.br ([177.41.129.23] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEIoM-0003RA-JZ; Wed, 10 Apr 2019 19:23:06 +0000
+        id 1hEIoM-0003R7-Id; Wed, 10 Apr 2019 19:23:06 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hEIoI-0000yo-S5; Wed, 10 Apr 2019 16:23:02 -0300
+        id 1hEIoI-0000yk-R4; Wed, 10 Apr 2019 16:23:02 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -51,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 06/21] docs: hwmon: pc87360: convert to ReST format
-Date:   Wed, 10 Apr 2019 16:22:43 -0300
-Message-Id: <6398556a755a19cde69d4185d34b09c985c79bc0.1554923967.git.mchehab+samsung@kernel.org>
+Subject: [PATCH v2 05/21] docs: hwmon: emc2103: convert to ReST format
+Date:   Wed, 10 Apr 2019 16:22:42 -0300
+Message-Id: <5a244cb70924d821a2a3b93dfd5ba3f78fea3ab7.1554923967.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1554923967.git.mchehab+samsung@kernel.org>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
@@ -64,104 +65,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert pc87360 to ReST format, in order to allow it to
+Convert emc2103 to ReST format, in order to allow it to
 be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/pc87360 | 38 +++++++++++++++++++++++++------------
- 1 file changed, 26 insertions(+), 12 deletions(-)
+ Documentation/hwmon/emc2103 | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/pc87360 b/Documentation/hwmon/pc87360
-index d5f5cf16ce59..4bad07bce54b 100644
---- a/Documentation/hwmon/pc87360
-+++ b/Documentation/hwmon/pc87360
-@@ -2,14 +2,19 @@ Kernel driver pc87360
- =====================
+diff --git a/Documentation/hwmon/emc2103 b/Documentation/hwmon/emc2103
+index a12b2c127140..6a6ca6d1b34e 100644
+--- a/Documentation/hwmon/emc2103
++++ b/Documentation/hwmon/emc2103
+@@ -2,13 +2,17 @@ Kernel driver emc2103
+ ======================
  
  Supported chips:
 +
-   * National Semiconductor PC87360, PC87363, PC87364, PC87365 and PC87366
+   * SMSC EMC2103
 +
-     Prefixes: 'pc87360', 'pc87363', 'pc87364', 'pc87365', 'pc87366'
+     Addresses scanned: I2C 0x2e
 +
-     Addresses scanned: none, address read from Super I/O config space
+     Prefix: 'emc2103'
 +
-     Datasheets: No longer available
+     Datasheet: Not public
  
- Authors: Jean Delvare <jdelvare@suse.de>
+ Authors:
+-        Steve Glendinning <steve.glendinning@smsc.com>
++	Steve Glendinning <steve.glendinning@smsc.com>
  
- Thanks to Sandeep Mehta, Tonko de Rooy and Daniel Ceregatti for testing.
-+
- Thanks to Rudolf Marek for helping me investigate conversion issues.
- 
- 
-@@ -17,11 +22,13 @@ Module Parameters
- -----------------
- 
- * init int
--  Chip initialization level:
--   0: None
--  *1: Forcibly enable internal voltage and temperature channels, except in9
--   2: Forcibly enable all voltage and temperature channels, except in9
--   3: Forcibly enable all voltage and temperature channels, including in9
-+    Chip initialization level:
-+
-+    - 0: None
-+    - **1**: Forcibly enable internal voltage and temperature channels,
-+      except in9
-+    - 2: Forcibly enable all voltage and temperature channels, except in9
-+    - 3: Forcibly enable all voltage and temperature channels, including in9
- 
- Note that this parameter has no effect for the PC87360, PC87363 and PC87364
- chips.
-@@ -43,13 +50,15 @@ hardware monitoring chipsets, not only controlling and monitoring three fans,
- but also monitoring eleven voltage inputs and two (PC87365) or up to four
- (PC87366) temperatures.
- 
-+  =========== ======= ======= ======= ======= =====
-   Chip        #vin    #fan    #pwm    #temp   devid
--
-+  =========== ======= ======= ======= ======= =====
-   PC87360     -       2       2       -       0xE1
-   PC87363     -       2       2       -       0xE8
-   PC87364     -       3       3       -       0xE4
-   PC87365     11      3       3       2       0xE5
-   PC87366     11      3       3       3-4     0xE9
-+  =========== ======= ======= ======= ======= =====
- 
- The driver assumes that no more than one chip is present, and one of the
- standard Super I/O addresses is used (0x2E/0x2F or 0x4E/0x4F)
-@@ -68,18 +77,23 @@ have to care no more.
- 
- For reference, here are a few values about clock dividers:
- 
--                slowest         accuracy        highest
--                measurable      around 3000     accurate
-+    =========== =============== =============== ===========
-+		slowest         accuracy        highest
-+		measurable      around 3000     accurate
-     divider     speed (RPM)     RPM (RPM)       speed (RPM)
--         1        1882              18           6928
--         2         941              37           4898
--         4         470              74           3464
--         8         235             150           2449
-+    =========== =============== =============== ===========
-+	 1        1882              18           6928
-+	 2         941              37           4898
-+	 4         470              74           3464
-+	 8         235             150           2449
-+    =========== =============== =============== ===========
- 
- For the curious, here is how the values above were computed:
-+
-  * slowest measurable speed: clock/(255*divider)
-  * accuracy around 3000 RPM: 3000^2/clock
-  * highest accurate speed: sqrt(clock*100)
-+
- The clock speed for the PC87360 family is 480 kHz. I arbitrarily chose 100
- RPM as the lowest acceptable accuracy.
- 
+ Description
+ -----------
 -- 
 2.20.1
 
