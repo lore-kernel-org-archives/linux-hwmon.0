@@ -2,132 +2,278 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B445C10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:19:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE79BC10F13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:31:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06B78206B7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:19:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BU1D98OA"
+	by mail.kernel.org (Postfix) with ESMTP id 8D0C2217F4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:31:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbfDKNTM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 09:19:12 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:32977 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726264AbfDKNTM (ORCPT
+        id S1726564AbfDKNbL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 09:31:11 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:45259 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726517AbfDKNbL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 09:19:12 -0400
-Received: by mail-pf1-f194.google.com with SMTP id h5so3471687pfo.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Apr 2019 06:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5D+35iHpWSajVWvKDitrlrDHfbsvpXs79kwfZvz/Njw=;
-        b=BU1D98OAN9Hb9F0dT1/O9L2fNYGL4cxmpRDC9qcBVFNvyip62/enScqzjOECMGAjI4
-         yB6P9jb5IsWqbJZQPZ42Zqu3W68kWNwG5uS7yrCoewqZpSW4R7AUJz7fVUJUUJx/AeVS
-         0CRV4FIF1KNuCTwYrUZjFF0H1SN6SturFt2wH+Y1ZIIXWoSX6yBQhi1SjiiPJ3k31hMV
-         aFU4OEi3IoAgSbKwaYVD4ft8IVGSUHWgTgk+5taXoiED7ja3sY4gDAeCv38nTWfSQWoI
-         QNjqq30F3Wha3mOcaHlg8h0sAtyzuJF+BOK0U7D/VmciN9f4wyPdeCBMJJfizIRhSPCi
-         4Qaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5D+35iHpWSajVWvKDitrlrDHfbsvpXs79kwfZvz/Njw=;
-        b=AOrnDdysKNpRxe+TfftLHYllKFXYSJmRMcFOz9EmI8L68ZdC+Pb/5cJZdYMpyTKC4g
-         k0I4Mj1d3zbLcgxlvtEYHSkJ58qvwly2m198DvzBnUiF8aHV92a/1nbKR0f2Kq+3QvgX
-         7XSIl6MmRyeugMf5g8k1rnxh7PLWnesmpCnS9rMmGlb4y4XD70LnunuawqouIcXbq45l
-         QJLt9D4yfK1X0xLE0Mzoc6/dzi+FIwbXfSgtATtZD2QZvmhjKBYl9Ub7jmHcmesHsr3m
-         0NjI3vVJHUoWUGYEC/HdFeO9eUmfrUlxBkmD1PR6fdl665rLIVl1ffwD2nrkVVjjJ7b5
-         jseA==
-X-Gm-Message-State: APjAAAXdM7vShZtaAgCgb3epTQ1aq506HEW65V/c9es3mtw/c7+QbQwU
-        1T4lUG63jqaml1lBhaOYJaSgCVSK
-X-Google-Smtp-Source: APXvYqxHfpVroKBXRM320QfhhkR586gkBCEMUXl2o2l37v23x+6UGRxmFs/4nxV6sJN91rW/3sq6MQ==
-X-Received: by 2002:a63:6503:: with SMTP id z3mr41645222pgb.113.1554988752026;
-        Thu, 11 Apr 2019 06:19:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p14sm38298784pfa.26.2019.04.11.06.19.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Apr 2019 06:19:11 -0700 (PDT)
-Subject: Re: [PATCH 1/3] pmbus: support for custom sysfs attributes
-To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
- <28f92a8e63ce4b0e1071e8fdb2315a057daee9c6.1554934898.git.krzysztof.adamski@nokia.com>
- <b3f0de78-e3bc-5c73-e732-9fa62c3404cf@roeck-us.net>
- <20190411075340.GB28466@localhost.localdomain>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c1bc8f07-3160-c411-e795-2aa864db1be6@roeck-us.net>
-Date:   Thu, 11 Apr 2019 06:19:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190411075340.GB28466@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Thu, 11 Apr 2019 09:31:11 -0400
+Received: from stefan-Vostro-260.fritz.box ([109.104.50.113]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MOzGc-1hXEgx1nRM-00PMLZ; Thu, 11 Apr 2019 15:30:35 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V5 3/3] hwmon: pwm-fan: Add RPM support via external interrupt
+Date:   Thu, 11 Apr 2019 15:30:11 +0200
+Message-Id: <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
+References: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
+X-Provags-ID: V03:K1:+NQLgQJ54t9ODRaPDK/OQHkYPntOime3xNIlQyZk0Ruqv8OxguL
+ JwzCwA5g09v7VO2h/kk48vhyJzxgKp5zmd6JEd9PNeQW6z6dUEZGLWNQV0nVYACgyWjLGki
+ RdEDsm0Z19pr21/tC0lw8fdpKbtuoFOsS8auQjT1oKLInOvpyFSyCKbJdPqtIx0FUw2gD58
+ G9EhuQyg/PyREcj6D8Chg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6p7NAjDJ4Bo=:5kUccsYN5PcLs98AoIX/Zo
+ c/mo54ZdxCDmpMm72B0k961nVCLafWybCbUWkQu7B8RdH7Ty04JMhPUKrs9sQYqzwSLhi7G2g
+ PcJfmeYcihrSffEaysDP/pDs+fG9xyWo31/WptITy2DrU7raTCERNlAh723IC0yX1DgBWE5Wi
+ AMiwGpMUKzysnIrdHUvQegBu1aNVuwE76KH+TuogSkZd/6lt22A9VPUUe38fcFxupaSpSaML6
+ 2BEuz1lNIC8ZO+hKhqQHF4WJPB+qXpdPDgmbuZrY4m4pqgOmuQSQ64K8xdQY+PrsdorSxZtSW
+ kHK1wR/4aXq41tvnjiuwXU/vaTC1kGUrt20+qv8QQRz9XSv+3ZN3/0jYd32QezObMegSmulWL
+ ZAFz6eQvnBxK5AjRMBazTFfODjKQSeiTMJIYgMnORf7bNSu5YiT81iU4jnWxux6sTkRF8H58A
+ uJRjwgSZ3ms2uf25p6wXjVKGQ288gF5uKlxAF6fJ1blZnkhGe4hUyH2wMXUxpK8zblC585Ssc
+ kW1HzFlKy2ju0zF1MlgqyMe4IX3B7pE5YP2wSZSR0EOGe9HsBarJZ8azJdQql6El9TYLfn6Sx
+ 9ybjhS5lAeJzJ9hZo4KDxhyGG3s0rxI5MLV3tu3Ra6LJxXFV8gwIVzN8TNHP3aeALgzO9ZokK
+ eBgHsAo0ycTadjZ2IsIIYqZgmsmhiGoV0wqGNpqjjxFVT2UgSmW5+zSLZi+iCxW+za9VVarqn
+ kRSTbUWcK87Ual47iXbjNyLM0oGkDSzKSAHJeKw09zCucIGMvZbXzgvilAo=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/11/19 12:53 AM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
-> On Wed, Apr 10, 2019 at 05:35:21PM -0700, Guenter Roeck wrote:
->> On 4/10/19 3:38 PM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
->>> This patch makes it possible to pass custom struct attribute_group array
->>> via the pmbus_driver_info struct so that those can be added to the
->>> attribute groups passed to hwmon_device_register_with_groups().
->>>
->>> This makes it possible to register custom sysfs attributes by PMBUS
->>> drivers similar to how you can do this with most other busses/classes.
->>>
->>> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->>> ---
->>>   drivers/hwmon/pmbus/pmbus.h      |  3 +++
->>>   drivers/hwmon/pmbus/pmbus_core.c | 13 ++++++++++++-
->>>   2 files changed, 15 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->>> index 1d24397d36ec..fb267ec11623 100644
->>> --- a/drivers/hwmon/pmbus/pmbus.h
->>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>> @@ -417,6 +417,9 @@ struct pmbus_driver_info {
->>>   	/* Regulator functionality, if supported by this chip driver. */
->>>   	int num_regulators;
->>>   	const struct regulator_desc *reg_desc;
->>> +
->>> +	/* custom attributes */
->>> +	const struct attribute_group **groups;
->>
->> I can understand the need and desire for one additional group. More than one
->> is highly questionable. Please explain why you think that more than one extra
->> attribute would ever be needed. It does add substantial complexity, so
->> there should be a good reason.
-> 
-> The only situation I could come up is if the driver would want to group
-> attributes in different directories by setting different name for each
-> of them. One other reason I choose to use this approach is that this
-> seems to be standard way for passing this information on other
-> layers/frameworks.  For example, this is the same "format" you would
-> pass this kind of data when creating a class, a bus, a driver or when
-> you use any of the *_register_with_groups().
-> 
-> This approach is simply more generic with (to my opinion) low cost of
-> implementation. But if we don't want to support that, I'm fine to change
-> this to single custom group.
-> 
+This adds RPM support to the pwm-fan driver in order to use with
+fancontrol/pwmconfig. This feature is intended for fans with a tachometer
+output signal, which generate a defined number of pulses per revolution.
 
-I think we can postpone this discussion for now, as we'll go with standard
-attributes to be implemented in the pmbus core.
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ drivers/hwmon/pwm-fan.c | 107 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 103 insertions(+), 4 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index e4c5197..8c4c5ee 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -18,6 +18,7 @@
+ 
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
++#include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+@@ -26,6 +27,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/sysfs.h>
+ #include <linux/thermal.h>
++#include <linux/timer.h>
+ 
+ #define MAX_PWM 255
+ 
+@@ -33,6 +35,14 @@ struct pwm_fan_ctx {
+ 	struct mutex lock;
+ 	struct pwm_device *pwm;
+ 	struct regulator *reg_en;
++
++	int irq;
++	atomic_t pulses;
++	unsigned int rpm;
++	u8 pulses_per_revolution;
++	ktime_t sample_start;
++	struct timer_list rpm_timer;
++
+ 	unsigned int pwm_value;
+ 	unsigned int pwm_fan_state;
+ 	unsigned int pwm_fan_max_state;
+@@ -40,6 +50,32 @@ struct pwm_fan_ctx {
+ 	struct thermal_cooling_device *cdev;
+ };
+ 
++/* This handler assumes self resetting edge triggered interrupt. */
++static irqreturn_t pulse_handler(int irq, void *dev_id)
++{
++	struct pwm_fan_ctx *ctx = dev_id;
++
++	atomic_inc(&ctx->pulses);
++
++	return IRQ_HANDLED;
++}
++
++static void sample_timer(struct timer_list *t)
++{
++	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
++	int pulses;
++	u64 tmp;
++
++	pulses = atomic_read(&ctx->pulses);
++	atomic_sub(pulses, &ctx->pulses);
++	tmp = (u64)pulses * ktime_ms_delta(ktime_get(), ctx->sample_start) * 60;
++	do_div(tmp, ctx->pulses_per_revolution * 1000);
++	ctx->rpm = tmp;
++
++	ctx->sample_start = ktime_get();
++	mod_timer(&ctx->rpm_timer, jiffies + HZ);
++}
++
+ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+ {
+ 	unsigned long period;
+@@ -100,15 +136,47 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
+ 	return sprintf(buf, "%u\n", ctx->pwm_value);
+ }
+ 
++static ssize_t rpm_show(struct device *dev,
++			struct device_attribute *attr, char *buf)
++{
++	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%u\n", ctx->rpm);
++}
+ 
+ static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
++static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+ 
+ static struct attribute *pwm_fan_attrs[] = {
+ 	&sensor_dev_attr_pwm1.dev_attr.attr,
++	&sensor_dev_attr_fan1_input.dev_attr.attr,
+ 	NULL,
+ };
+ 
+-ATTRIBUTE_GROUPS(pwm_fan);
++static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
++				     int n)
++{
++	struct device *dev = container_of(kobj, struct device, kobj);
++	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
++	struct device_attribute *devattr;
++
++	/* Hide fan_input in case no interrupt is available  */
++	devattr = container_of(a, struct device_attribute, attr);
++	if (n == 1 && ctx->irq <= 0)
++		return 0;
++
++	return a->mode;
++}
++
++static const struct attribute_group pwm_fan_group = {
++	.attrs = pwm_fan_attrs,
++	.is_visible = pwm_fan_attrs_visible,
++};
++
++static const struct attribute_group *pwm_fan_groups[] = {
++	&pwm_fan_group,
++	NULL,
++};
+ 
+ /* thermal cooling device callbacks */
+ static int pwm_fan_get_max_state(struct thermal_cooling_device *cdev,
+@@ -214,6 +282,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	struct device *hwmon;
+ 	int ret;
+ 	struct pwm_state state = { };
++	u32 ppr = 2;
+ 
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -233,6 +302,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, ctx);
+ 
++	ctx->irq = platform_get_irq(pdev, 0);
++	if (ctx->irq == -EPROBE_DEFER)
++		return ctx->irq;
++
+ 	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
+ 	if (IS_ERR(ctx->reg_en)) {
+ 		if (PTR_ERR(ctx->reg_en) != -ENODEV)
+@@ -261,17 +334,38 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		goto err_reg_disable;
+ 	}
+ 
++	timer_setup(&ctx->rpm_timer, sample_timer, 0);
++
++	of_property_read_u32(pdev->dev.of_node, "pulses-per-revolution", &ppr);
++	ctx->pulses_per_revolution = ppr;
++	if (!ctx->pulses_per_revolution) {
++		dev_err(&pdev->dev, "pulses-per-revolution can't be zero.\n");
++		ret = -EINVAL;
++		goto err_pwm_disable;
++	}
++
++	if (ctx->irq > 0) {
++		ret = devm_request_irq(&pdev->dev, ctx->irq, pulse_handler, 0,
++				       pdev->name, ctx);
++		if (ret) {
++			dev_err(&pdev->dev, "Can't get interrupt working.\n");
++			goto err_pwm_disable;
++		}
++		ctx->sample_start = ktime_get();
++		mod_timer(&ctx->rpm_timer, jiffies + HZ);
++	}
++
+ 	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
+ 						       ctx, pwm_fan_groups);
+ 	if (IS_ERR(hwmon)) {
+ 		dev_err(&pdev->dev, "Failed to register hwmon device\n");
+ 		ret = PTR_ERR(hwmon);
+-		goto err_pwm_disable;
++		goto err_del_timer;
+ 	}
+ 
+ 	ret = pwm_fan_of_get_cooling_data(&pdev->dev, ctx);
+ 	if (ret)
+-		goto err_pwm_disable;
++		goto err_del_timer;
+ 
+ 	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+ 	if (IS_ENABLED(CONFIG_THERMAL)) {
+@@ -282,7 +376,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"Failed to register pwm-fan as cooling device");
+ 			ret = PTR_ERR(cdev);
+-			goto err_pwm_disable;
++			goto err_del_timer;
+ 		}
+ 		ctx->cdev = cdev;
+ 		thermal_cdev_update(cdev);
+@@ -290,6 +384,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++err_del_timer:
++	del_timer_sync(&ctx->rpm_timer);
++
+ err_pwm_disable:
+ 	state.enabled = false;
+ 	pwm_apply_state(ctx->pwm, &state);
+@@ -306,6 +403,8 @@ static int pwm_fan_remove(struct platform_device *pdev)
+ 	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+ 
+ 	thermal_cooling_device_unregister(ctx->cdev);
++	del_timer_sync(&ctx->rpm_timer);
++
+ 	if (ctx->pwm_value)
+ 		pwm_disable(ctx->pwm);
+ 
+-- 
+2.7.4
+
