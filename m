@@ -6,195 +6,205 @@ X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 775D7C10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8AF9C10F13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:12:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 283EE2077C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:09:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE8FA2184E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:12:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="f+rTi/Rr"
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="Pn4aRw04"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbfDKOJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 10:09:38 -0400
-Received: from mail-eopbgr80122.outbound.protection.outlook.com ([40.107.8.122]:55949
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S1726073AbfDKOMh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 10:12:37 -0400
+Received: from mail-eopbgr20108.outbound.protection.outlook.com ([40.107.2.108]:55764
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726121AbfDKOJi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 10:09:38 -0400
+        id S1726014AbfDKOMh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Apr 2019 10:12:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HPK5f4Ka7Zuq3UaQ08mlIIIEXVk9TrXGfUzd1DGkadE=;
- b=f+rTi/RrKtehFcksB0Xv75RBsE3yhJWyqwNseDS7nIWbxJTkKWtTCkl5E+9j6GqRF5ZBFEgQc4SnFDvWB9F6P0RPD9P7g58quwb3gzNhmoCnnD9kZhTHuh6ktBFzoX8zSoi/C7oltE0knjB4pN9R2+vR70Le3Yr/fW0TqsEx4Dg=
+ bh=wW2M49B7cvrnyEYrbY0aBGQaCiE04SAbhc0ZKZ94AY0=;
+ b=Pn4aRw04zA3EH8yg4HesvNe3zMYQkGBa8sPLhlx7qgs9OAQM2rTsHZbjNvgTqEiOvxZqR0dp5XB/68Zb50W0ugPXntXEs4sr60+m3IVycl6Bl7SnwXEPcXQ/s61b0TdSBSIH+XJNlmM+FcjxUs05Z8FaNUe87Sccf9b17n7ydgQ=
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
- HE1PR07MB4250.eurprd07.prod.outlook.com (20.176.166.147) with Microsoft SMTP
+ HE1PR07MB3323.eurprd07.prod.outlook.com (10.170.247.10) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1792.8; Thu, 11 Apr 2019 14:09:32 +0000
+ 15.20.1792.7; Thu, 11 Apr 2019 14:12:31 +0000
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6]) by HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6%7]) with mapi id 15.20.1792.007; Thu, 11 Apr 2019
- 14:09:32 +0000
+ 14:12:31 +0000
 From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
         <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Jean Delvare <jdelvare@suse.com>,
+CC:     Nicolin Chen <nicoleotsuka@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH 3/3] pmbus: export coefficients via sysfs
-Thread-Topic: [PATCH 3/3] pmbus: export coefficients via sysfs
-Thread-Index: AQHU7+5G22q3YnKe6k+VdX70WdzCm6Y2G5EAgACbQICAAEE2gIAACGwA
-Date:   Thu, 11 Apr 2019 14:09:32 +0000
-Message-ID: <20190411140920.GA12692@localhost.localdomain>
+Subject: Re: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
+Thread-Topic: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
+Thread-Index: AQHU7+43DvuzCLvA3EepOLFPKcXfhqY2IpuAgAA6cICAAGA1gIAAMgGAgAASDIA=
+Date:   Thu, 11 Apr 2019 14:12:31 +0000
+Message-ID: <20190411141222.GB12692@localhost.localdomain>
 References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
- <8087920a011662114ca151d4e04186c121a9a737.1554934898.git.krzysztof.adamski@nokia.com>
- <6366cab6-8db2-9d22-a43b-7df0377f75fb@roeck-us.net>
- <20190411074547.GA28466@localhost.localdomain>
- <09ebb2f5-a34b-0733-aa14-cd963519d702@roeck-us.net>
-In-Reply-To: <09ebb2f5-a34b-0733-aa14-cd963519d702@roeck-us.net>
+ <e231af1feac9cbe8b72923a13587035220b76ad8.1554934898.git.krzysztof.adamski@nokia.com>
+ <13669c15-3373-da20-6d68-50842d91be18@roeck-us.net>
+ <20190411042429.GA19533@Asurada-Nvidia.nvidia.com>
+ <20190411080849.GC28466@localhost.localdomain>
+ <8bba4e42-b799-d0b0-0c58-61efce68a396@roeck-us.net>
+In-Reply-To: <8bba4e42-b799-d0b0-0c58-61efce68a396@roeck-us.net>
 Accept-Language: pl-PL, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR06CA0141.eurprd06.prod.outlook.com
- (2603:10a6:7:16::28) To HE1PR07MB3337.eurprd07.prod.outlook.com
+x-clientproxiedby: HE1PR05CA0214.eurprd05.prod.outlook.com
+ (2603:10a6:3:fa::14) To HE1PR07MB3337.eurprd07.prod.outlook.com
  (2603:10a6:7:2d::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=krzysztof.adamski@nokia.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [131.228.32.185]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a79ae01a-81f3-4e33-2147-08d6be87518a
+x-ms-office365-filtering-correlation-id: 92d96166-7310-4d17-d3c5-08d6be87bc96
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB4250;
-x-ms-traffictypediagnostic: HE1PR07MB4250:
-x-microsoft-antispam-prvs: <HE1PR07MB4250F2B73C7B32423313C052EF2F0@HE1PR07MB4250.eurprd07.prod.outlook.com>
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB3323;
+x-ms-traffictypediagnostic: HE1PR07MB3323:
+x-microsoft-antispam-prvs: <HE1PR07MB3323A89F317DC2FCC70CA055EF2F0@HE1PR07MB3323.eurprd07.prod.outlook.com>
 x-forefront-prvs: 00046D390F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(366004)(39860400002)(346002)(136003)(199004)(189003)(229853002)(81156014)(102836004)(81166006)(25786009)(14454004)(68736007)(8936002)(66066001)(256004)(61506002)(478600001)(14444005)(8676002)(33656002)(4326008)(93886005)(105586002)(386003)(6506007)(106356001)(6512007)(53936002)(446003)(107886003)(52116002)(6116002)(6486002)(97736004)(1076003)(6246003)(54906003)(11346002)(305945005)(86362001)(76176011)(3846002)(9686003)(316002)(7736002)(5660300002)(6436002)(26005)(71190400001)(71200400001)(486006)(2906002)(186003)(99286004)(6916009)(476003);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB4250;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(396003)(376002)(136003)(346002)(39860400002)(366004)(189003)(199004)(6916009)(3846002)(81156014)(6116002)(8676002)(1076003)(8936002)(9686003)(81166006)(6512007)(4326008)(71190400001)(54906003)(6486002)(61506002)(6436002)(476003)(229853002)(71200400001)(68736007)(2906002)(11346002)(446003)(486006)(316002)(5660300002)(66066001)(26005)(33656002)(93886005)(76176011)(86362001)(386003)(6506007)(107886003)(52116002)(305945005)(14454004)(105586002)(106356001)(25786009)(186003)(97736004)(99286004)(7736002)(256004)(102836004)(478600001)(6246003)(53936002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB3323;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: nokia.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: s48nIoA+T5kbr6irMhl4Y0KlDpaKVaho4b2389In6pOW1Hqk/LE+ZEGrJinEr3JdyaHm73bWtaNCgbqK9pKkikCib4Jp4LcnA6f+vBqctuxzFisiRipZC+MCQZ217JdAokMyb9MmfzLlqvJHi9vpdwj4TxZOXTT/ggtNsZrgDrdjlohtZqOtrrumTy9DX7QeUHsX4M6tLjWCvjBXPxGAf6sQGqyGS/7YceeLw1qqdSe6Bps+PVNx/8f5dkF8r8fCEYzG/xuyC65eMQHAum1EPBfkmGyMR4FQBJxMA2vOYXLgmfmp7hxqr9YGZYmc9yLLrCjnlaUW/ulXFpjn1rPHec/pi89Qxg7GI8x/S1/jKalvfPWc/Luue9+YuWNdIPSoYOLR0P82ce5SvMVO4Cmj88OdYtsjEPOu9ADWLodFwvE=
+x-microsoft-antispam-message-info: qsblEppLm2RmKNdwUQ3kJ8ekqAKRgDMyc1e1Eft8N/On0hTL1baHVGaAouqrbyzsFZyLZwChNWD7/5czgr0Z+OkkxGxPyZp8fhhy/02qyLTQaxFLbRcv14xta7Oijq12xF0e25nBy+vPEA0B214y84qdG0qW+hw/mK57NYLCAwyvFj41doaO1i46He120GVMUYAzovCYe/x59byLuJY1/u1NQYf2ahFSnBMXyO1eqPM/Nzz7b1f2BHlIYXN1FzyuwgqbfHhcpZw9SzzrrvOd0LdRjuadbsYuosLBdEKgVy7MTdyLlsbb/QFTZ8PDmF3xvyg2U2mgKyReTM7E7P0D/VfW/3OuVJxGmWusOwZ5svadO6PmPaOOHLUlBG2mwOgNwbAJnEFsuyABDJJMWm/y4VnKzo1G3vRcxnl3VpabpoY=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <35E1CD012E17BF4EB586620232D0A21B@eurprd07.prod.outlook.com>
+Content-ID: <B578AB0F9197E14FA971F4FA61697F45@eurprd07.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a79ae01a-81f3-4e33-2147-08d6be87518a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2019 14:09:32.2516
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92d96166-7310-4d17-d3c5-08d6be87bc96
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2019 14:12:31.6409
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB4250
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB3323
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 11, 2019 at 06:39:11AM -0700, Guenter Roeck wrote:
->On 4/11/19 12:45 AM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
->>On Wed, Apr 10, 2019 at 05:30:08PM -0700, Guenter Roeck wrote:
->>>On 4/10/19 3:39 PM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
->>>>In order to get best accuracy, in case of some devices it is required t=
-o
->>>>tweak coefficient values. This is especially true for devices using
->>>>some external shunt resistor or being operated in non-usual environment=
-.
->>>>Those values may be measured during device production and stored as
->>>>calibration values in some place (like EEPROM or even a file).
->>>>
->>>>To support wide range of possible use cases, lets export those to
->>>>user space via sysfs attributes so that it can implement its own
->>>>policies about them. All those attributes are put into separate
->>>>attribute_group struct so that we can set its name to group all of them
->>>>in a "coefficients" subdirectory in sysfs.
->>>>
+On Thu, Apr 11, 2019 at 06:07:47AM -0700, Guenter Roeck wrote:
+>On 4/11/19 1:09 AM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
+>>On Wed, Apr 10, 2019 at 09:24:29PM -0700, Nicolin Chen wrote:
+>>>On Wed, Apr 10, 2019 at 05:55:19PM -0700, Guenter Roeck wrote:
 >>>
->>>Coefficients are hardcoded into the chip, and the hwmon ABI reports raw
->>>values. Any correction should be done using sensors3.conf.
+>>>>>+static ssize_t samples_for_avg_show(struct device *dev,
+>>>>>+				    struct device_attribute *attr, char *buf)
+>>>>>+{
+>>>>>+	struct i2c_client *client =3D to_i2c_client(dev->parent);
+>>>>>+	int ret;
+>>>>>+
+>>>>>+	ret =3D pmbus_read_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG);
+>>>>>+	if (ret < 0)
+>>>>>+		return ret;
+>>>>>+
+>>>>>+	return sprintf(buf, "%d\n", 1 << ret);
+>>>>>+}
+>>>>>+
+>>>>>+static ssize_t samples_for_avg_store(struct device *dev,
+>>>>>+				     struct device_attribute *attr,
+>>>>>+				     const char *buf, size_t count)
+>>>>>+{
+>>>>>+	struct i2c_client *client =3D to_i2c_client(dev->parent);
+>>>>>+	int ret, val;
+>>>>>+
+>>>>>+	ret =3D kstrtoint(buf, 0, &val);
+>>>>>+	if (ret < 0)
+>>>>>+		return ret;
+>>>>>+
+>>>>>+	ret =3D pmbus_write_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG,
+>>>>>+				    ilog2(val));
+>>>>>+	if (ret < 0)
+>>>>>+		return ret;
+>>>>>+
+>>>>>+	return count;
+>>>>>+}
+>>>>>+
+>>>>>+static DEVICE_ATTR_RW(samples_for_avg);
+>>>>>+
+>>>>>+static struct attribute *lm25056_attrs[] =3D {
+>>>>>+	&dev_attr_samples_for_avg.attr,
+>>>>>+	NULL,
+>>>>>+};
+>>>>>+ATTRIBUTE_GROUPS(lm25056); // should we set a name of this group to p=
+ut all
+>>>>>+			   // those attributes in subdirectory? Like "custom" ?
+>>>>>+
+>>>>We don't add subdirectories for other chips, and we won't start it here=
+.
+>>>>
+>>>>I don't mind the attribute itself, but I do mind its name. We'll have
+>>>>to find something more generic, such as 'num_samples' or just 'samples'=
+.
+>>>>I am open to suggestions. We'll also have to decide if the attribute(s)
+>>>>should be limited to one per chip, or if there can be multiple attribut=
+es.
+>>>>For example, MAX34462 has separate values for iout_samples and adc_aver=
+age.
+>>>>Do we want samples, {curr,in,power,...}_samples, or both ? Or even
+>>>>currX_samples ?
+>>>
+>>>For my use case -- TI's INA chips, there is only one "samples"
+>>>configuration being used for all currX_inputs and inX_inputs.
+>>>So having a "samples" node would certainly fit better than an
+>>>in0_samples. So I vote for having both.
 >>
->>I'm not sure what you mean by the fact they are hardcoded into chip. I
->>am targeting a case where direct values are being converted to real
->>world values using coefficients by pmbus_reg2data_direct() function. My
->>understanding is that the reason why the devices does not report values
->>in real world units but requires using coefficients for calculation is to
->>ease the calibration. For example the LM5064[1] has a chapter called
->>"determining telemetry coefficients empirically with linear fit" which
->>describes how to calculate them, based on the sense resistor used. Some
->>drivers, like adm1275.c, have a custom way to indirectly influence the
->>coefficients values by using Devicetree ("shunt-resistor-micro-ohms")
->>but this is not really flexible nor general approach. In case of
->>adm1275, only "m" coefficient is adjusted this way. Depending on "m"
->>value, "R" might require adjustments as well and we also need "b" to
->>achieve best accuracy. Then, again, using Device Tree is not suitable
->>for per device calibration.
+>>The name is family specific. The data sheet calls this register exactly
+>>like that so I used this name. But I agree that we could standardise on
+>
+>Well, yes, but the whole point of an ABI is to make it chip independent.
+>
+>>some common name, even if the actual implementation will be
+>>device-specific.
 >>
->'
->Why not ? You'll have to explain that one. It is not as if coefficients
->would change on the fly. They are chip and/or board properties.
-
-But the coefficients will depend on the exact value of the shunt
-resistor. To get bet accuracy, the coefficients are calculated for each
-board unit. While all units of the same type share the devicetree
-(otherwise this devicetree would have to be generated by some firmware
-software first).
-
->
->>My argument here is that the kernel does not return raw value in this
->>case - it returns (supposedly) real-world values that are calculated
->>internally based of coefficients according to the formula specified by
->>pmbus specification. In my opinion it would make sense to provide it
->>with proper coeffs if defaults are not suitable. Otherwise reporting
->>"real-values" doesn't make much sense. In other words, our
->>implementation would currently report real-world values if your case
->>happens to match default coeffs for some shunt resistor and
->>environment specified in datasheet of the device.
+>>The LM5064 has one value for all readings, ADM1293 would have one
+>>setting for PIN and separate one for VIN/VAUX/IOUT.
 >>
+>>So maybe it makes sense to allow for some device specific naming (with
+>>prefixes) where it makes sense but default to "samples" in simple case
+>>of shared value? In this case, if there is specific value like
+>>"curr_samples", user knows exactly which readings are influenced but
+>>when using "samples" it needs to have device specific knowledge to
+>>understand this.
+>>
+>Let's go for "samples" and {in,curr,power,temp,...}_samples. "samples"
+>should be used if the attribute applies to all sensors.
 >
->This is why I dislike making exceptions. It always creates a bad precedenc=
-e.
->hwmon devices are supposed to report raw values, to be converted to real
->values using the configuration file.
+>>I'm just not sure what would be the best way to express situation for
+>>adm1293 for example - the PIN case is simple but what to do with
+>>"shared" settings - expose both curr_samples/in_samples and writing to
+>>one would change the other as well? Or just default to "samples" for
+>>this case and have separate "power_samples" just for PIN?
+>>
+>Both "samples" and "power_samples" at the same time would be confusing.
+>Common implementation in situations like this is to have both curr_samples
+>and in_samples, and changing one would also change the other (or only one
+>would be writable, but that is just an implementation detail).
 >
+>So what we need is virtual registers (PMBUS_VIRT_SAMPLES, PMBUS_VIRT_IN_SA=
+MPLES,
+>and so on), plus the necessary code in pmbus_core.c and the implementation
+>in the chip driver. We'll also need to document new ABI attributes (sample=
+s,
+>in_samples, temp_samples, ...).
 >
->We can discuss scaling and possible ABI enhancements, but it will have
->to be generic. b/m/r is not generic. You also don't make the case why
->those values would have to be runtime-adjustable.
+>Any takers ?
 >
+>Nicolin, I think with that you can move forward with the TI INA chip
+>implementation. I agree that 'samples' would be most appropriate for
+>this chip.
 
-b/m/r are coefficients mentioned by PMBUS specification and the change
-is PMBUS specific. My understanding is that all PMBUS devices report
-values in real-world units (either in linear or direct mode) and this is
-implemented this way in the code already.
-In fact, if the device would report raw values, we wouldn't need this
-patch as we would simply apply those coefficients in userspace. But if
-drivers report real values which require correct coefficients to work, I
-would expect to be able to tweak them.
-
->
->Note that there are several issues with the patch itself: There is no
->validation, the names are questionable ("p" ?), the scope is questionable
->(if an adjustment is needed, it would likely have to be per sensor, not
->per group), and the attributes are created unconditionally even if the
->chip does not report values in direct mode, just to name a few.
-
-I can fix all that, of course, but we have to discuss the the mentioned
-issues first. I agree with all those arguments except the scope one. As
-we currently only support specifying coefficients per class and this is
-exacly how I export them. Unless I misunderstood your comment, of
-course.
-
->However, that is all irrelevant: At this point I'll resist further chip
->specific changes in that area. If we move from reporting raw values
->towards reporting adjusted values, the solution will have to be generic
->and must not be chip specific.
-
-But this is not chip specific change, it is more like bus (PMBUS)
-specific. All pmbus devices reporting in direct mode have those
-coefficients, all of them use the same formula to calculate real values
-out of raw values as this is specified in the PMBUS specification.
-
-I agree this might not be useful for devices reporting in linear/vid
-mode so I could exclude them when exporting coefficients.
+I will try implementing this the way you suggested and resubmit this
+soon.
 
 Krzysztof
