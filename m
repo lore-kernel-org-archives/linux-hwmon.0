@@ -2,69 +2,110 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57BCEC10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 11:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B0FEC10F14
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:05:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 309622133D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 11:03:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54D8D2133D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 13:05:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbfDKLDk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 07:03:40 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44654 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726121AbfDKLDk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 07:03:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8DED0AC6B;
-        Thu, 11 Apr 2019 11:03:39 +0000 (UTC)
-Date:   Thu, 11 Apr 2019 13:03:38 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/2] hwmon: (occ) Move common code to a separate
- module
-Message-ID: <20190411130338.4eabeaf8@endymion>
-In-Reply-To: <cc624b5c-f6c5-adb2-7709-f2fc5d851562@linux.ibm.com>
-References: <20190410124726.2d7e9d38@endymion>
-        <cc624b5c-f6c5-adb2-7709-f2fc5d851562@linux.ibm.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+        id S1726517AbfDKNFm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 09:05:42 -0400
+Received: from foss.arm.com ([217.140.101.70]:42558 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726391AbfDKNFm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Apr 2019 09:05:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83C3B374;
+        Thu, 11 Apr 2019 06:05:41 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E94F3F557;
+        Thu, 11 Apr 2019 06:05:41 -0700 (PDT)
+Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
+        id A24BF680137; Thu, 11 Apr 2019 14:05:39 +0100 (BST)
+Date:   Thu, 11 Apr 2019 14:05:39 +0100
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 02/21] docs: hwmon: vexpress: convert to ReST format
+Message-ID: <20190411130539.GG15144@e110455-lin.cambridge.arm.com>
+References: <cover.1554923967.git.mchehab+samsung@kernel.org>
+ <2d732435f94520681fec52c12dae5d26b356c5f7.1554923967.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2d732435f94520681fec52c12dae5d26b356c5f7.1554923967.git.mchehab+samsung@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 10 Apr 2019 13:02:32 -0500, Eddie James wrote:
-> On 4/10/19 5:47 AM, Jean Delvare wrote:
-> > Instead of duplicating the common code into the 2 (binary) drivers,
-> > move the common code to a separate module. This is cleaner.
-> >
-> > Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> > Cc: Eddie James <eajames@linux.ibm.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> > Eddie, can you please give it a try and confirm it works?  
+On Wed, Apr 10, 2019 at 04:22:39PM -0300, Mauro Carvalho Chehab wrote:
+> Convert vexpress to ReST format, in order to allow it to
+> be parsed by Sphinx.
 > 
-> 
-> Yes, this works well.
-> 
-> Reviewed-by: Eddie James <eajames@linux.ibm.com>
-> 
-> Tested-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-Thanks. Can you please send a patch on top of that updating the help
-texts in Kconfig to explain that the drivers are for the BMC and not
-for the PowerPC host OS, as discussed before?
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 
-Thanks,
+Best regards,
+Liviu
+
+> ---
+>  Documentation/hwmon/vexpress | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/vexpress b/Documentation/hwmon/vexpress
+> index 557d6d5ad90d..8c861c8151ac 100644
+> --- a/Documentation/hwmon/vexpress
+> +++ b/Documentation/hwmon/vexpress
+> @@ -2,14 +2,21 @@ Kernel driver vexpress
+>  ======================
+>  
+>  Supported systems:
+> +
+>    * ARM Ltd. Versatile Express platform
+> +
+>      Prefix: 'vexpress'
+> +
+>      Datasheets:
+> +
+>        * "Hardware Description" sections of the Technical Reference Manuals
+> -        for the Versatile Express boards:
+> -        http://infocenter.arm.com/help/topic/com.arm.doc.subset.boards.express/index.html
+> +	for the Versatile Express boards:
+> +
+> +	- http://infocenter.arm.com/help/topic/com.arm.doc.subset.boards.express/index.html
+> +
+>        * Section "4.4.14. System Configuration registers" of the V2M-P1 TRM:
+> -        http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0447-/index.html
+> +
+> +	- http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0447-/index.html
+>  
+>  Author: Pawel Moll
+>  
+> -- 
+> 2.20.1
+> 
+
 -- 
-Jean Delvare
-SUSE L3 Support
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
