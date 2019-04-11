@@ -2,209 +2,306 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8AF9C10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6351AC10F13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 16:57:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE8FA2184E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 14:12:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E8292075B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 16:57:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="Pn4aRw04"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tvZH5YZ2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbfDKOMh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 10:12:37 -0400
-Received: from mail-eopbgr20108.outbound.protection.outlook.com ([40.107.2.108]:55764
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726014AbfDKOMh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 10:12:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wW2M49B7cvrnyEYrbY0aBGQaCiE04SAbhc0ZKZ94AY0=;
- b=Pn4aRw04zA3EH8yg4HesvNe3zMYQkGBa8sPLhlx7qgs9OAQM2rTsHZbjNvgTqEiOvxZqR0dp5XB/68Zb50W0ugPXntXEs4sr60+m3IVycl6Bl7SnwXEPcXQ/s61b0TdSBSIH+XJNlmM+FcjxUs05Z8FaNUe87Sccf9b17n7ydgQ=
-Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
- HE1PR07MB3323.eurprd07.prod.outlook.com (10.170.247.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1792.7; Thu, 11 Apr 2019 14:12:31 +0000
-Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
- ([fe80::cd23:d96f:5d94:cee6]) by HE1PR07MB3337.eurprd07.prod.outlook.com
- ([fe80::cd23:d96f:5d94:cee6%7]) with mapi id 15.20.1792.007; Thu, 11 Apr 2019
- 14:12:31 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Nicolin Chen <nicoleotsuka@gmail.com>,
+        id S1726585AbfDKQ5p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 12:57:45 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46405 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfDKQ5p (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Apr 2019 12:57:45 -0400
+Received: by mail-pg1-f195.google.com with SMTP id q1so3776323pgv.13;
+        Thu, 11 Apr 2019 09:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sLbpvr4pCQVgOBW6t/kzx0y8nm7WJU2CoD1sex4Tzok=;
+        b=tvZH5YZ2H1KwW923VEeyvzVLLy05LFJBGvH4MmtEOQuYwGtsnyy0nd3dMKGSQJoaqr
+         Ex6aY9TLfgUcXOnlansHwIRCPFiAonhPYSX1JX8nc9FBraRLSK/6QvP+bF4DBwliA1rh
+         KWnQTRVC/BnXAhoDBKZGnbOftJgMJxhfRJpVN4rNwoQgUbvhYywJcbyk/1hlwfvT+kQT
+         YWiR9sg9J8YCQFUtKvwzQuBJ7VTDh5ZS2AJ1jdqksEus6VdnIBgnBidt+Xu+ZcnPyNxm
+         MuMnaxAD5ca2ifmppFAZCtYd6ZPfF9Zh/b92EhfCzADabLgcLYgp/aQxwGDx/GI/+WER
+         ESaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sLbpvr4pCQVgOBW6t/kzx0y8nm7WJU2CoD1sex4Tzok=;
+        b=BbylQktQifbq5fI8yOBA1R0fgAWEFTafl09qZfQnnsfzmZbTBb2ww7P2XX0NnqK5uq
+         7TmpfU5WbnueQkXs7d0bhQEar9Dhe4+uYCW4BE5haoubcOPuy/hE5Q1HI/9Jc0PvLOy8
+         adIFztjLWJ6hNeG7N9H1/ttmHMP2TTVNWfWt9FQpesJPnWY2d0yCzJnH7FDeh5oT5UCw
+         wGuUsxyXlnyZXClPUMotOJLlZLQvkxQEI4HH0B9Kj+NzV3pmZAfOMpNBtAC7Hb9FlMre
+         YSczGwwo0iZZEynVGaYeEInEY3igKABvwEzeMExeyLh0RhokPMlKyOsG81TsQK6Cfovw
+         RdEA==
+X-Gm-Message-State: APjAAAW7JF9qnjI3r1A9jimUSod6Mq14tVGMsE+WaxQVJ19HzlVdWSZx
+        OsbP5Cz0VyiiyfFa8gWlp7o=
+X-Google-Smtp-Source: APXvYqzWDoCRdsCUXn7bWovki47potJFZuJKV+psvZ4VcFUGS8WlpSIvMsYoqWRmWBmSpmPO4Pk8+Q==
+X-Received: by 2002:a65:44cd:: with SMTP id g13mr41312048pgs.258.1555001864342;
+        Thu, 11 Apr 2019 09:57:44 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l74sm63151339pfi.174.2019.04.11.09.57.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Apr 2019 09:57:43 -0700 (PDT)
+Date:   Thu, 11 Apr 2019 09:57:42 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
-Thread-Topic: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
-Thread-Index: AQHU7+43DvuzCLvA3EepOLFPKcXfhqY2IpuAgAA6cICAAGA1gIAAMgGAgAASDIA=
-Date:   Thu, 11 Apr 2019 14:12:31 +0000
-Message-ID: <20190411141222.GB12692@localhost.localdomain>
-References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
- <e231af1feac9cbe8b72923a13587035220b76ad8.1554934898.git.krzysztof.adamski@nokia.com>
- <13669c15-3373-da20-6d68-50842d91be18@roeck-us.net>
- <20190411042429.GA19533@Asurada-Nvidia.nvidia.com>
- <20190411080849.GC28466@localhost.localdomain>
- <8bba4e42-b799-d0b0-0c58-61efce68a396@roeck-us.net>
-In-Reply-To: <8bba4e42-b799-d0b0-0c58-61efce68a396@roeck-us.net>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0214.eurprd05.prod.outlook.com
- (2603:10a6:3:fa::14) To HE1PR07MB3337.eurprd07.prod.outlook.com
- (2603:10a6:7:2d::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.32.185]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 92d96166-7310-4d17-d3c5-08d6be87bc96
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB3323;
-x-ms-traffictypediagnostic: HE1PR07MB3323:
-x-microsoft-antispam-prvs: <HE1PR07MB3323A89F317DC2FCC70CA055EF2F0@HE1PR07MB3323.eurprd07.prod.outlook.com>
-x-forefront-prvs: 00046D390F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(396003)(376002)(136003)(346002)(39860400002)(366004)(189003)(199004)(6916009)(3846002)(81156014)(6116002)(8676002)(1076003)(8936002)(9686003)(81166006)(6512007)(4326008)(71190400001)(54906003)(6486002)(61506002)(6436002)(476003)(229853002)(71200400001)(68736007)(2906002)(11346002)(446003)(486006)(316002)(5660300002)(66066001)(26005)(33656002)(93886005)(76176011)(86362001)(386003)(6506007)(107886003)(52116002)(305945005)(14454004)(105586002)(106356001)(25786009)(186003)(97736004)(99286004)(7736002)(256004)(102836004)(478600001)(6246003)(53936002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB3323;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: qsblEppLm2RmKNdwUQ3kJ8ekqAKRgDMyc1e1Eft8N/On0hTL1baHVGaAouqrbyzsFZyLZwChNWD7/5czgr0Z+OkkxGxPyZp8fhhy/02qyLTQaxFLbRcv14xta7Oijq12xF0e25nBy+vPEA0B214y84qdG0qW+hw/mK57NYLCAwyvFj41doaO1i46He120GVMUYAzovCYe/x59byLuJY1/u1NQYf2ahFSnBMXyO1eqPM/Nzz7b1f2BHlIYXN1FzyuwgqbfHhcpZw9SzzrrvOd0LdRjuadbsYuosLBdEKgVy7MTdyLlsbb/QFTZ8PDmF3xvyg2U2mgKyReTM7E7P0D/VfW/3OuVJxGmWusOwZ5svadO6PmPaOOHLUlBG2mwOgNwbAJnEFsuyABDJJMWm/y4VnKzo1G3vRcxnl3VpabpoY=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B578AB0F9197E14FA971F4FA61697F45@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 3/3] hwmon: pwm-fan: Add RPM support via external
+ interrupt
+Message-ID: <20190411165742.GA29395@roeck-us.net>
+References: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
+ <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92d96166-7310-4d17-d3c5-08d6be87bc96
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2019 14:12:31.6409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB3323
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 11, 2019 at 06:07:47AM -0700, Guenter Roeck wrote:
->On 4/11/19 1:09 AM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
->>On Wed, Apr 10, 2019 at 09:24:29PM -0700, Nicolin Chen wrote:
->>>On Wed, Apr 10, 2019 at 05:55:19PM -0700, Guenter Roeck wrote:
->>>
->>>>>+static ssize_t samples_for_avg_show(struct device *dev,
->>>>>+				    struct device_attribute *attr, char *buf)
->>>>>+{
->>>>>+	struct i2c_client *client =3D to_i2c_client(dev->parent);
->>>>>+	int ret;
->>>>>+
->>>>>+	ret =3D pmbus_read_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG);
->>>>>+	if (ret < 0)
->>>>>+		return ret;
->>>>>+
->>>>>+	return sprintf(buf, "%d\n", 1 << ret);
->>>>>+}
->>>>>+
->>>>>+static ssize_t samples_for_avg_store(struct device *dev,
->>>>>+				     struct device_attribute *attr,
->>>>>+				     const char *buf, size_t count)
->>>>>+{
->>>>>+	struct i2c_client *client =3D to_i2c_client(dev->parent);
->>>>>+	int ret, val;
->>>>>+
->>>>>+	ret =3D kstrtoint(buf, 0, &val);
->>>>>+	if (ret < 0)
->>>>>+		return ret;
->>>>>+
->>>>>+	ret =3D pmbus_write_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG,
->>>>>+				    ilog2(val));
->>>>>+	if (ret < 0)
->>>>>+		return ret;
->>>>>+
->>>>>+	return count;
->>>>>+}
->>>>>+
->>>>>+static DEVICE_ATTR_RW(samples_for_avg);
->>>>>+
->>>>>+static struct attribute *lm25056_attrs[] =3D {
->>>>>+	&dev_attr_samples_for_avg.attr,
->>>>>+	NULL,
->>>>>+};
->>>>>+ATTRIBUTE_GROUPS(lm25056); // should we set a name of this group to p=
-ut all
->>>>>+			   // those attributes in subdirectory? Like "custom" ?
->>>>>+
->>>>We don't add subdirectories for other chips, and we won't start it here=
-.
->>>>
->>>>I don't mind the attribute itself, but I do mind its name. We'll have
->>>>to find something more generic, such as 'num_samples' or just 'samples'=
-.
->>>>I am open to suggestions. We'll also have to decide if the attribute(s)
->>>>should be limited to one per chip, or if there can be multiple attribut=
-es.
->>>>For example, MAX34462 has separate values for iout_samples and adc_aver=
-age.
->>>>Do we want samples, {curr,in,power,...}_samples, or both ? Or even
->>>>currX_samples ?
->>>
->>>For my use case -- TI's INA chips, there is only one "samples"
->>>configuration being used for all currX_inputs and inX_inputs.
->>>So having a "samples" node would certainly fit better than an
->>>in0_samples. So I vote for having both.
->>
->>The name is family specific. The data sheet calls this register exactly
->>like that so I used this name. But I agree that we could standardise on
->
->Well, yes, but the whole point of an ABI is to make it chip independent.
->
->>some common name, even if the actual implementation will be
->>device-specific.
->>
->>The LM5064 has one value for all readings, ADM1293 would have one
->>setting for PIN and separate one for VIN/VAUX/IOUT.
->>
->>So maybe it makes sense to allow for some device specific naming (with
->>prefixes) where it makes sense but default to "samples" in simple case
->>of shared value? In this case, if there is specific value like
->>"curr_samples", user knows exactly which readings are influenced but
->>when using "samples" it needs to have device specific knowledge to
->>understand this.
->>
->Let's go for "samples" and {in,curr,power,temp,...}_samples. "samples"
->should be used if the attribute applies to all sensors.
->
->>I'm just not sure what would be the best way to express situation for
->>adm1293 for example - the PIN case is simple but what to do with
->>"shared" settings - expose both curr_samples/in_samples and writing to
->>one would change the other as well? Or just default to "samples" for
->>this case and have separate "power_samples" just for PIN?
->>
->Both "samples" and "power_samples" at the same time would be confusing.
->Common implementation in situations like this is to have both curr_samples
->and in_samples, and changing one would also change the other (or only one
->would be writable, but that is just an implementation detail).
->
->So what we need is virtual registers (PMBUS_VIRT_SAMPLES, PMBUS_VIRT_IN_SA=
-MPLES,
->and so on), plus the necessary code in pmbus_core.c and the implementation
->in the chip driver. We'll also need to document new ABI attributes (sample=
-s,
->in_samples, temp_samples, ...).
->
->Any takers ?
->
->Nicolin, I think with that you can move forward with the TI INA chip
->implementation. I agree that 'samples' would be most appropriate for
->this chip.
+On Thu, Apr 11, 2019 at 03:30:11PM +0200, Stefan Wahren wrote:
+> This adds RPM support to the pwm-fan driver in order to use with
+> fancontrol/pwmconfig. This feature is intended for fans with a tachometer
+> output signal, which generate a defined number of pulses per revolution.
+> 
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
+>  drivers/hwmon/pwm-fan.c | 107 ++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 103 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index e4c5197..8c4c5ee 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -18,6 +18,7 @@
+>  
+>  #include <linux/hwmon.h>
+>  #include <linux/hwmon-sysfs.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/of.h>
+> @@ -26,6 +27,7 @@
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/thermal.h>
+> +#include <linux/timer.h>
+>  
+>  #define MAX_PWM 255
+>  
+> @@ -33,6 +35,14 @@ struct pwm_fan_ctx {
+>  	struct mutex lock;
+>  	struct pwm_device *pwm;
+>  	struct regulator *reg_en;
+> +
+> +	int irq;
+> +	atomic_t pulses;
+> +	unsigned int rpm;
+> +	u8 pulses_per_revolution;
+> +	ktime_t sample_start;
+> +	struct timer_list rpm_timer;
+> +
+>  	unsigned int pwm_value;
+>  	unsigned int pwm_fan_state;
+>  	unsigned int pwm_fan_max_state;
+> @@ -40,6 +50,32 @@ struct pwm_fan_ctx {
+>  	struct thermal_cooling_device *cdev;
+>  };
+>  
+> +/* This handler assumes self resetting edge triggered interrupt. */
+> +static irqreturn_t pulse_handler(int irq, void *dev_id)
+> +{
+> +	struct pwm_fan_ctx *ctx = dev_id;
+> +
+> +	atomic_inc(&ctx->pulses);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void sample_timer(struct timer_list *t)
+> +{
+> +	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
+> +	int pulses;
+> +	u64 tmp;
+> +
+> +	pulses = atomic_read(&ctx->pulses);
+> +	atomic_sub(pulses, &ctx->pulses);
+> +	tmp = (u64)pulses * ktime_ms_delta(ktime_get(), ctx->sample_start) * 60;
+> +	do_div(tmp, ctx->pulses_per_revolution * 1000);
+> +	ctx->rpm = tmp;
+> +
+> +	ctx->sample_start = ktime_get();
+> +	mod_timer(&ctx->rpm_timer, jiffies + HZ);
+> +}
+> +
+>  static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+>  {
+>  	unsigned long period;
+> @@ -100,15 +136,47 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
+>  	return sprintf(buf, "%u\n", ctx->pwm_value);
+>  }
+>  
+> +static ssize_t rpm_show(struct device *dev,
+> +			struct device_attribute *attr, char *buf)
+> +{
+> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> +
+> +	return sprintf(buf, "%u\n", ctx->rpm);
+> +}
+>  
+>  static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+> +static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+>  
+>  static struct attribute *pwm_fan_attrs[] = {
+>  	&sensor_dev_attr_pwm1.dev_attr.attr,
+> +	&sensor_dev_attr_fan1_input.dev_attr.attr,
+>  	NULL,
+>  };
+>  
+> -ATTRIBUTE_GROUPS(pwm_fan);
+> +static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
+> +				     int n)
+> +{
+> +	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> +	struct device_attribute *devattr;
+> +
+> +	/* Hide fan_input in case no interrupt is available  */
+> +	devattr = container_of(a, struct device_attribute, attr);
 
-I will try implementing this the way you suggested and resubmit this
-soon.
+Field day for static analyzers - devattr is no longer used.
+No need to resend. I'll let the series rest for a couple of days
+and then apply to hwmon-next (after removing devattr) unless there are
+additional comments.
 
-Krzysztof
+> +	if (n == 1 && ctx->irq <= 0)
+> +		return 0;
+> +
+> +	return a->mode;
+> +}
+> +
+> +static const struct attribute_group pwm_fan_group = {
+> +	.attrs = pwm_fan_attrs,
+> +	.is_visible = pwm_fan_attrs_visible,
+> +};
+> +
+> +static const struct attribute_group *pwm_fan_groups[] = {
+> +	&pwm_fan_group,
+> +	NULL,
+> +};
+>  
+>  /* thermal cooling device callbacks */
+>  static int pwm_fan_get_max_state(struct thermal_cooling_device *cdev,
+> @@ -214,6 +282,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	struct device *hwmon;
+>  	int ret;
+>  	struct pwm_state state = { };
+> +	u32 ppr = 2;
+>  
+>  	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+>  	if (!ctx)
+> @@ -233,6 +302,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, ctx);
+>  
+> +	ctx->irq = platform_get_irq(pdev, 0);
+> +	if (ctx->irq == -EPROBE_DEFER)
+> +		return ctx->irq;
+> +
+>  	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
+>  	if (IS_ERR(ctx->reg_en)) {
+>  		if (PTR_ERR(ctx->reg_en) != -ENODEV)
+> @@ -261,17 +334,38 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  		goto err_reg_disable;
+>  	}
+>  
+> +	timer_setup(&ctx->rpm_timer, sample_timer, 0);
+> +
+> +	of_property_read_u32(pdev->dev.of_node, "pulses-per-revolution", &ppr);
+> +	ctx->pulses_per_revolution = ppr;
+> +	if (!ctx->pulses_per_revolution) {
+> +		dev_err(&pdev->dev, "pulses-per-revolution can't be zero.\n");
+> +		ret = -EINVAL;
+> +		goto err_pwm_disable;
+> +	}
+> +
+> +	if (ctx->irq > 0) {
+> +		ret = devm_request_irq(&pdev->dev, ctx->irq, pulse_handler, 0,
+> +				       pdev->name, ctx);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "Can't get interrupt working.\n");
+> +			goto err_pwm_disable;
+> +		}
+> +		ctx->sample_start = ktime_get();
+> +		mod_timer(&ctx->rpm_timer, jiffies + HZ);
+> +	}
+> +
+>  	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
+>  						       ctx, pwm_fan_groups);
+>  	if (IS_ERR(hwmon)) {
+>  		dev_err(&pdev->dev, "Failed to register hwmon device\n");
+>  		ret = PTR_ERR(hwmon);
+> -		goto err_pwm_disable;
+> +		goto err_del_timer;
+>  	}
+>  
+>  	ret = pwm_fan_of_get_cooling_data(&pdev->dev, ctx);
+>  	if (ret)
+> -		goto err_pwm_disable;
+> +		goto err_del_timer;
+>  
+>  	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+>  	if (IS_ENABLED(CONFIG_THERMAL)) {
+> @@ -282,7 +376,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  			dev_err(&pdev->dev,
+>  				"Failed to register pwm-fan as cooling device");
+>  			ret = PTR_ERR(cdev);
+> -			goto err_pwm_disable;
+> +			goto err_del_timer;
+>  		}
+>  		ctx->cdev = cdev;
+>  		thermal_cdev_update(cdev);
+> @@ -290,6 +384,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  
+>  	return 0;
+>  
+> +err_del_timer:
+> +	del_timer_sync(&ctx->rpm_timer);
+> +
+>  err_pwm_disable:
+>  	state.enabled = false;
+>  	pwm_apply_state(ctx->pwm, &state);
+> @@ -306,6 +403,8 @@ static int pwm_fan_remove(struct platform_device *pdev)
+>  	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+>  
+>  	thermal_cooling_device_unregister(ctx->cdev);
+> +	del_timer_sync(&ctx->rpm_timer);
+> +
+>  	if (ctx->pwm_value)
+>  		pwm_disable(ctx->pwm);
+>  
+> -- 
+> 2.7.4
+> 
