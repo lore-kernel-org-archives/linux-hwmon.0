@@ -2,138 +2,138 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BAEDC10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 07:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB5F0C10F14
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 07:53:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5656C217D4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 07:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B55E8217D4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 07:53:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="qy4FqqEI"
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="fwZha0NH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbfDKHqE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 03:46:04 -0400
-Received: from mail-eopbgr70124.outbound.protection.outlook.com ([40.107.7.124]:8958
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S1726139AbfDKHx6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 03:53:58 -0400
+Received: from mail-eopbgr40098.outbound.protection.outlook.com ([40.107.4.98]:7492
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726121AbfDKHqD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 03:46:03 -0400
+        id S1726121AbfDKHx5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Apr 2019 03:53:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cSQ2ChYVWCCWiLm2nymH3LF1B0SqVr6xNslLzAHnR7o=;
- b=qy4FqqEIDVlgQMhBTOv33gFs9xL/lWJoMsGmCkKbOSrHLTs5tsnFXvRw4rxrOxQkLRgaaoK95l4tQV03MlEjf6pCz9MGy1twn17N3diS+QV9TBruVG9ag1m2/FqHe1Jw8Ip0Spic/9NDHh5jD+jxcbVmfERXInamP6OVwQf9TSs=
+ bh=wpSeVaqPDrwCSJbrAJOQWCbUIJ+BOTDuMl0DumswCSo=;
+ b=fwZha0NHfBYh+RkMt+MZbmdOOplanlEwcicr9DQumdhSkFrBO+KxmQnZVMT8SIKFN0O3TQkIq4SfVhSXCyQgh5dmiWrG5IuH2R3RDyFDSVDyTsPwka18L3Ng2wXQQXBhqatFf7OOaFqeVa+L55YpF2tfn//9npNm3w5DgCAjqnQ=
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
- HE1PR07MB4394.eurprd07.prod.outlook.com (20.176.167.31) with Microsoft SMTP
+ HE1PR07MB3129.eurprd07.prod.outlook.com (10.170.245.15) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1792.12; Thu, 11 Apr 2019 07:46:00 +0000
+ 15.20.1792.11; Thu, 11 Apr 2019 07:53:53 +0000
 Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6]) by HE1PR07MB3337.eurprd07.prod.outlook.com
  ([fe80::cd23:d96f:5d94:cee6%7]) with mapi id 15.20.1792.007; Thu, 11 Apr 2019
- 07:46:00 +0000
+ 07:53:53 +0000
 From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
         <krzysztof.adamski@nokia.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 CC:     Jean Delvare <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH 3/3] pmbus: export coefficients via sysfs
-Thread-Topic: [PATCH 3/3] pmbus: export coefficients via sysfs
-Thread-Index: AQHU7+5G22q3YnKe6k+VdX70WdzCm6Y2G5EAgAB5ugA=
-Date:   Thu, 11 Apr 2019 07:45:59 +0000
-Message-ID: <20190411074547.GA28466@localhost.localdomain>
+Subject: Re: [PATCH 1/3] pmbus: support for custom sysfs attributes
+Thread-Topic: [PATCH 1/3] pmbus: support for custom sysfs attributes
+Thread-Index: AQHU7+4igeeyk2Je+U2mqjLXNW/gsKY2HQeAgAB6dwA=
+Date:   Thu, 11 Apr 2019 07:53:53 +0000
+Message-ID: <20190411075340.GB28466@localhost.localdomain>
 References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
- <8087920a011662114ca151d4e04186c121a9a737.1554934898.git.krzysztof.adamski@nokia.com>
- <6366cab6-8db2-9d22-a43b-7df0377f75fb@roeck-us.net>
-In-Reply-To: <6366cab6-8db2-9d22-a43b-7df0377f75fb@roeck-us.net>
+ <28f92a8e63ce4b0e1071e8fdb2315a057daee9c6.1554934898.git.krzysztof.adamski@nokia.com>
+ <b3f0de78-e3bc-5c73-e732-9fa62c3404cf@roeck-us.net>
+In-Reply-To: <b3f0de78-e3bc-5c73-e732-9fa62c3404cf@roeck-us.net>
 Accept-Language: pl-PL, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0902CA0034.eurprd09.prod.outlook.com
- (2603:10a6:7:15::23) To HE1PR07MB3337.eurprd07.prod.outlook.com
+x-clientproxiedby: HE1PR08CA0073.eurprd08.prod.outlook.com
+ (2603:10a6:7:2a::44) To HE1PR07MB3337.eurprd07.prod.outlook.com
  (2603:10a6:7:2d::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=krzysztof.adamski@nokia.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [131.228.32.185]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 29a16aef-ef56-4c41-f38e-08d6be51bd4e
+x-ms-office365-filtering-correlation-id: 29d278ab-e3e6-4e47-fe0f-08d6be52d7bb
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB4394;
-x-ms-traffictypediagnostic: HE1PR07MB4394:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <HE1PR07MB4394E2C93F1E4EC7BC88751AEF2F0@HE1PR07MB4394.eurprd07.prod.outlook.com>
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB3129;
+x-ms-traffictypediagnostic: HE1PR07MB3129:
+x-microsoft-antispam-prvs: <HE1PR07MB3129632EE026D5E1C5D0B06FEF2F0@HE1PR07MB3129.eurprd07.prod.outlook.com>
 x-forefront-prvs: 00046D390F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(39860400002)(346002)(376002)(136003)(199004)(189003)(105586002)(8936002)(26005)(478600001)(305945005)(81166006)(71190400001)(99286004)(14454004)(81156014)(106356001)(66066001)(476003)(4326008)(102836004)(54906003)(186003)(7736002)(11346002)(33656002)(6306002)(9686003)(6512007)(2906002)(5660300002)(71200400001)(486006)(86362001)(229853002)(107886003)(6916009)(53936002)(52116002)(25786009)(14444005)(6486002)(446003)(256004)(6246003)(316002)(966005)(1076003)(6116002)(3846002)(61506002)(6506007)(6436002)(97736004)(386003)(68736007)(8676002)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB4394;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(366004)(136003)(396003)(346002)(376002)(199004)(189003)(229853002)(6486002)(61506002)(2906002)(66066001)(86362001)(316002)(1076003)(81156014)(54906003)(14444005)(9686003)(8936002)(256004)(8676002)(68736007)(81166006)(26005)(476003)(7736002)(102836004)(486006)(186003)(52116002)(99286004)(305945005)(53936002)(6512007)(3846002)(6246003)(6916009)(107886003)(6116002)(4326008)(76176011)(5660300002)(33656002)(25786009)(478600001)(14454004)(6436002)(105586002)(386003)(71200400001)(106356001)(71190400001)(6506007)(97736004)(446003)(11346002);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB3129;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nokia.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: yNmsrdmlY/xW6qekSgrg1JA+BehjULdfwzIWcVaMTuPvOcwN6FunsyHHYMYW7OVKqmzT5y/puskQ9xL8gX6+Ho+vEgzM4EKnmMRXU+AUKngBMek6aW3UgDtTZy/u/79WuCkBhrCVLpMbCey80ww/b6vSoOny0NoZz+tyf8Pfw++s51UDvqXK6G4O7LiLOusGdpbrekgTzqy6+W58RLOnpzTxSKGXQZCm+Grp54K3fqkY0Q2HuInGhY0KFv5xuqqxAD3uqTU3EVaq31hg03vWlwDWWvDwXX04HWGOJU3KK5DFUOWfYr1kyCVS4lTtmWF3ng8exqaA+8hBm8o+kuj198O1X28yY+7TETlbcqZfZd4USKzX6+wyqZJ+z072MzRZphQvAOpfBSpt7pgjaQei3nMugcfYLZB3i5PKprht0KU=
+x-microsoft-antispam-message-info: TO9XqIt7l+iBs7cqPmvpVMzrqgGxnje7EIANhl38eAsZcwCzmC7N+Gz0UE9xlKMlZCRnUV+AnX7AnIGAVh9WODs5ryT6qnTGw3v2L5D/9Un5k0CNwLNxEsL1meEGyW3bIIFeykqyK1nctMIMeXEr9iUBxnXLu0nf8boIGa2b5SLqPQs1JYujLRTeLW0T0uPDYyWj1GS3TBdaTblcLxZNCCI8v7a/h28SchUEUJ0lbh3R60v4+khHB3X6vxBYgoAjxLeUjOpVrmNxv2fpm+2CxH9gg13qhbNtjoTZhglFKJLbgXr/g6T/0VjvMkdzq0MHqTqQ1Zl0Wq60KIK/rrXNKgJvQoKb07BVXYG9chNnDTAeCeJXu0/3+l9DI7HUlstI0fw/g6dHArcqcS2lXBwzl2dZQzGdeu6biogh8jgrlxk=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <309F80505689034FBA1B451E1963F120@eurprd07.prod.outlook.com>
+Content-ID: <07AD60F29C3AB3458E668C6808BFC6E1@eurprd07.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29a16aef-ef56-4c41-f38e-08d6be51bd4e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2019 07:45:59.9992
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29d278ab-e3e6-4e47-fe0f-08d6be52d7bb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2019 07:53:53.8263
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB4394
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB3129
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Apr 10, 2019 at 05:30:08PM -0700, Guenter Roeck wrote:
->On 4/10/19 3:39 PM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
->>In order to get best accuracy, in case of some devices it is required to
->>tweak coefficient values. This is especially true for devices using
->>some external shunt resistor or being operated in non-usual environment.
->>Those values may be measured during device production and stored as
->>calibration values in some place (like EEPROM or even a file).
+On Wed, Apr 10, 2019 at 05:35:21PM -0700, Guenter Roeck wrote:
+>On 4/10/19 3:38 PM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
+>>This patch makes it possible to pass custom struct attribute_group array
+>>via the pmbus_driver_info struct so that those can be added to the
+>>attribute groups passed to hwmon_device_register_with_groups().
 >>
->>To support wide range of possible use cases, lets export those to
->>user space via sysfs attributes so that it can implement its own
->>policies about them. All those attributes are put into separate
->>attribute_group struct so that we can set its name to group all of them
->>in a "coefficients" subdirectory in sysfs.
+>>This makes it possible to register custom sysfs attributes by PMBUS
+>>drivers similar to how you can do this with most other busses/classes.
 >>
+>>Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>>---
+>>  drivers/hwmon/pmbus/pmbus.h      |  3 +++
+>>  drivers/hwmon/pmbus/pmbus_core.c | 13 ++++++++++++-
+>>  2 files changed, 15 insertions(+), 1 deletion(-)
+>>
+>>diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+>>index 1d24397d36ec..fb267ec11623 100644
+>>--- a/drivers/hwmon/pmbus/pmbus.h
+>>+++ b/drivers/hwmon/pmbus/pmbus.h
+>>@@ -417,6 +417,9 @@ struct pmbus_driver_info {
+>>  	/* Regulator functionality, if supported by this chip driver. */
+>>  	int num_regulators;
+>>  	const struct regulator_desc *reg_desc;
+>>+
+>>+	/* custom attributes */
+>>+	const struct attribute_group **groups;
 >
->Coefficients are hardcoded into the chip, and the hwmon ABI reports raw
->values. Any correction should be done using sensors3.conf.
+>I can understand the need and desire for one additional group. More than o=
+ne
+>is highly questionable. Please explain why you think that more than one ex=
+tra
+>attribute would ever be needed. It does add substantial complexity, so
+>there should be a good reason.
 
-I'm not sure what you mean by the fact they are hardcoded into chip. I
-am targeting a case where direct values are being converted to real
-world values using coefficients by pmbus_reg2data_direct() function. My
-understanding is that the reason why the devices does not report values
-in real world units but requires using coefficients for calculation is to
-ease the calibration. For example the LM5064[1] has a chapter called
-"determining telemetry coefficients empirically with linear fit" which
-describes how to calculate them, based on the sense resistor used. Some
-drivers, like adm1275.c, have a custom way to indirectly influence the
-coefficients values by using Devicetree ("shunt-resistor-micro-ohms")
-but this is not really flexible nor general approach. In case of
-adm1275, only "m" coefficient is adjusted this way. Depending on "m"
-value, "R" might require adjustments as well and we also need "b" to
-achieve best accuracy. Then, again, using Device Tree is not suitable
-for per device calibration.
+The only situation I could come up is if the driver would want to group
+attributes in different directories by setting different name for each
+of them. One other reason I choose to use this approach is that this
+seems to be standard way for passing this information on other
+layers/frameworks.  For example, this is the same "format" you would
+pass this kind of data when creating a class, a bus, a driver or when
+you use any of the *_register_with_groups().
 
-My argument here is that the kernel does not return raw value in this
-case - it returns (supposedly) real-world values that are calculated
-internally based of coefficients according to the formula specified by
-pmbus specification. In my opinion it would make sense to provide it
-with proper coeffs if defaults are not suitable. Otherwise reporting
-"real-values" doesn't make much sense. In other words, our
-implementation would currently report real-world values if your case
-happens to match default coeffs for some shunt resistor and
-environment specified in datasheet of the device.
-
-[1]: http://www.ti.com/lit/ds/symlink/lm5064.pdf
+This approach is simply more generic with (to my opinion) low cost of
+implementation. But if we don't want to support that, I'm fine to change
+this to single custom group.
 
 Krzysztof
