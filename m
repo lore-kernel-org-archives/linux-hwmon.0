@@ -2,124 +2,188 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA8FC10F11
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 00:37:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB7AC10F11
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 00:55:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB58920818
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 00:37:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 202D72133D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 00:55:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="Qq2VnWH9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="zSIdIW41"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vP9E44F5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbfDKAh3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Apr 2019 20:37:29 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:32789 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725982AbfDKAh3 (ORCPT
+        id S1726014AbfDKAzW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Apr 2019 20:55:22 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40988 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbfDKAzW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Apr 2019 20:37:29 -0400
-X-Greylist: delayed 585 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Apr 2019 20:37:28 EDT
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EAED236FF;
-        Wed, 10 Apr 2019 20:27:42 -0400 (EDT)
-Received: from imap2 ([10.202.2.52])
-  by compute4.internal (MEProxy); Wed, 10 Apr 2019 20:27:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=y7TBfW/sgVfj1t2WjLCnmvZRvt4FY7U
-        Pg5XrNYBI2h4=; b=Qq2VnWH94NlmzXMxWGK00InBr8qiQ+O93oMoU0KimXH5OxV
-        YE/qgDt3JCPX1GEmU7AHYvAK6M1a/2xTPcMMLrvj3GgexJnIdtRqyS92wdmWiaFn
-        jnKa44icPo9yZ04TbBLDVi/8Ukls99ACPIwow4vvb4Z2SBnwFfz60V8oOZ/TmIe1
-        bCf7AKrFlGY7okJ1Q2lO0QmRI1dfozNjCZWoiBngRjKrBAbR7adyhKEFzsd2VaZN
-        ilAwGBXEBtCaTpuWOfgfw7Nxo0UG7jJdA4pUHHs2EWeDaBqu2MoxZkZT5UGSgVfY
-        xIGO+YXzp30XKFg8FTJtlSCgz04Hg/UA/7t+6Pw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=y7TBfW
-        /sgVfj1t2WjLCnmvZRvt4FY7UPg5XrNYBI2h4=; b=zSIdIW41EGBfuGbcuoJCVD
-        iskVMGbCWbe0Eaq7UywN0z3eg3XPJDqjXFvcVp8WU19sVirQo8U5EVnkcMfL2Of6
-        qZJg/2URnV7Zq6eGYofXuyV33+t9cLhoUD7qqH8P4LgGHq78IFCUQeYiXjfEhamQ
-        hWGmuxU4GrhM8U0jlWsQg6tURsnF2WaH+H/ACuHAalY3466k7MwZvNb6y+M16I7Y
-        +7E6/nsPM+2nNs47KPFw6L5hYilKCvkRCBbCt7FVbGTWXPmV+Cx+dEz3NZkS1wtl
-        wz+qvHKbQd3gZM7vgqbxPC/JVyf0k/x1TzafrSoBwtSMpIi0L+k4ABXoUvLYUkYA
-        ==
-X-ME-Sender: <xms:_YmuXAO1zA1j0dIfPgqHcjeF-Q3pnnncCSl-3Nnjin7qrxupa8QcwA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrudekgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedftehnughr
-    vgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgruhenucevlhhushhtvghr
-    ufhiiigvpedt
-X-ME-Proxy: <xmx:_YmuXALOPpPZVSUrnz1g-K5qsXoN4shnuNbbyihzuOflXKxPX4-1iA>
-    <xmx:_YmuXBZkWcIL4DTZHRkP2IyfiX5dZ5ebbVchkoPHNkvaAdmoDECzYg>
-    <xmx:_YmuXJm0ZqXi7nqcdAIztCh4AaTjkDM8Z4giO5ab1chwZKbKrrEn1Q>
-    <xmx:_omuXNUDPT8O9uSHa9WBQYaP_GSxFpXGnvTBOt03nOP8kz8tGmo_dw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8357A7C1B9; Wed, 10 Apr 2019 20:27:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.1.6-329-gf4aae99-fmstable-20190329v1
-Mime-Version: 1.0
-X-Me-Personality: 52947553
-Message-Id: <e2b1820f-070e-4d8d-81d2-6dd8f564a861@www.fastmail.com>
-In-Reply-To: <2088d3de719397153639c5afdce53b73fe75603a.1554923967.git.mchehab+samsung@kernel.org>
-References: <cover.1554923967.git.mchehab+samsung@kernel.org>
- <2088d3de719397153639c5afdce53b73fe75603a.1554923967.git.mchehab+samsung@kernel.org>
-Date:   Wed, 10 Apr 2019 20:27:41 -0400
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
-        "Linux Doc Mailing List" <linux-doc@vger.kernel.org>
-Cc:     "Mauro Carvalho Chehab" <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, "Jonathan Corbet" <corbet@lwn.net>,
-        "Jean Delvare" <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Joel Stanley" <joel@jms.id.au>, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: =?UTF-8?Q?Re:_[PATCH_v2_10/21]_docs:_hwmon:_aspeed-pwm-tacho:_convert_to?=
- =?UTF-8?Q?_ReST_format?=
-Content-Type: text/plain
+        Wed, 10 Apr 2019 20:55:22 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d1so2441882plj.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Apr 2019 17:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S3HRE/gTio22p4coBZKzzGZwCTyd5A+ghx8z2HFA4B8=;
+        b=vP9E44F5QdzR9bjXTfvPcGZxhVDXrbYRbc+pZjP21/wp86lzECfY2Mqsp5N6js3yGD
+         R2i3opbXi7HkAO72QHW2RkuekZJGG5VuvwCXLkLDA6coiKkCnWZM+bcJKkT79nECP1jF
+         hAMQiqRvSH7pF6HfKAN1QiiOKirpxCsEuvIvDvpRjYW6wO7t6jXibj7Xlw1cAlutqQhS
+         ERIP+Ig14nhG/DZJHiIFTXw1yHhE2ChLtpNqtkZYppCcbewg1Z/T9gp6wyCdwf98jRwx
+         ErTwVYL3TFex9AEnymmAL6ayiWBRTDbGNsUQeLUi4eiog6WVx04lzD2JVAkGTbSHsec6
+         AG7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S3HRE/gTio22p4coBZKzzGZwCTyd5A+ghx8z2HFA4B8=;
+        b=GhQIQvBVqfEDrwOmWDDnJ6aULQMB/0sJvYh9o/xdbOiEPjlSPqdTc28CpdP/mIMm/3
+         bsYtrnWuzI7EaHUTG6wo8pViAAPuiHPehJXUAod485APfV1SuP/wp1Ddc9AMULBGefYo
+         zDZmwyUD0U+5gBNf42LPMFe2ZnJ68ymToJ0d6F3HeOcq4ZkYbMZsPXX3/mmypRJG0XFC
+         RfXyJ32W81telQOwPNHFz8A5Qf9eyDvHX1DL1YgQRcRX8FH4V6aR3rXvlqmp3q3MuiwF
+         dWYzh7nTaAX/NM7HXGjK+ZaoBI9+HahIJeYqvdeLK1xzDwgzFk/Kq4nWCR1Et4iCxygh
+         D/jg==
+X-Gm-Message-State: APjAAAVdbHs0bzddcREdjIAWDv3CiBLNc6s5Cf4tX/KVm1X7a4UYOjJv
+        lh4cZ2E3jN1W97s2C77q0z4=
+X-Google-Smtp-Source: APXvYqxS4q5x/3BbCkefwEiB7IRMjNuJDiWi20LjmikL5fEEIsuymV5Ci2T0j4eDQsqr0eUgcodbNA==
+X-Received: by 2002:a17:902:7043:: with SMTP id h3mr47947151plt.228.1554944121265;
+        Wed, 10 Apr 2019 17:55:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p2sm45898549pfb.80.2019.04.10.17.55.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Apr 2019 17:55:20 -0700 (PDT)
+Subject: Re: [PATCH 2/3] lm25066: export sysfs attribute for SAMPLES_FOR_AVG
+To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>, Jean Delvare <jdelvare@suse.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+References: <cover.1554934898.git.krzysztof.adamski@nokia.com>
+ <e231af1feac9cbe8b72923a13587035220b76ad8.1554934898.git.krzysztof.adamski@nokia.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <13669c15-3373-da20-6d68-50842d91be18@roeck-us.net>
+Date:   Wed, 10 Apr 2019 17:55:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <e231af1feac9cbe8b72923a13587035220b76ad8.1554934898.git.krzysztof.adamski@nokia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-
-On Thu, 11 Apr 2019, at 04:54, Mauro Carvalho Chehab wrote:
-> Convert aspeed-pwm-tacho to ReST format, in order to allow it to
-> be parsed by Sphinx.
+On 4/10/19 3:39 PM, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
+> Register custom sysfs attribute to be registered by pmbus allowing
+> read/write access to the manufacturer specific SAMPLES_FOR_AVG register.
+> This register allows setting the number of samples used in computing the
+> average values (PMBUS_VIRT_READ_*_AVG). The number we write is an
+> exponent of base 2 of the number of samples so for example writing 3
+> will result in 8 samples average.
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-
-Acked-by: Andrew Jeffery <andrew@aj.id.au>
-
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 > ---
->  Documentation/hwmon/aspeed-pwm-tacho | 2 ++
->  1 file changed, 2 insertions(+)
+>   drivers/hwmon/pmbus/lm25066.c | 45 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 45 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/aspeed-pwm-tacho 
-> b/Documentation/hwmon/aspeed-pwm-tacho
-> index 7cfb34977460..6dcec845fbc7 100644
-> --- a/Documentation/hwmon/aspeed-pwm-tacho
-> +++ b/Documentation/hwmon/aspeed-pwm-tacho
-> @@ -15,8 +15,10 @@ controller supports up to 16 tachometer inputs.
->  
->  The driver provides the following sensor accesses in sysfs:
->  
-> +=============== ======= =====================================================
->  fanX_input	ro	provide current fan rotation value in RPM as reported
->  			by the fan to the device.
->  
->  pwmX		rw	get or set PWM fan control value. This is an integer
->  			value between 0(off) and 255(full speed).
-> +=============== ======= =====================================================
-> -- 
-> 2.20.1
+> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> index 53db78753a0d..c78af0a7e5ff 100644
+> --- a/drivers/hwmon/pmbus/lm25066.c
+> +++ b/drivers/hwmon/pmbus/lm25066.c
+> @@ -26,6 +26,7 @@
+>   #include <linux/err.h>
+>   #include <linux/slab.h>
+>   #include <linux/i2c.h>
+> +#include <linux/log2.h>
+>   #include "pmbus.h"
+>   
+>   enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+> @@ -38,6 +39,7 @@ enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+>   #define LM25066_READ_PIN_PEAK		0xd5
+>   #define LM25066_CLEAR_PIN_PEAK		0xd6
+>   #define LM25066_DEVICE_SETUP		0xd9
+> +#define LM25066_SAMPLES_FOR_AVG		0xdb
+>   #define LM25066_READ_AVG_VIN		0xdc
+>   #define LM25066_READ_AVG_VOUT		0xdd
+>   #define LM25066_READ_AVG_IIN		0xde
+> @@ -405,6 +407,47 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+>   	return ret;
+>   }
+>   
+> +static ssize_t samples_for_avg_show(struct device *dev,
+> +				    struct device_attribute *attr, char *buf)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	int ret;
+> +
+> +	ret = pmbus_read_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return sprintf(buf, "%d\n", 1 << ret);
+> +}
+> +
+> +static ssize_t samples_for_avg_store(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     const char *buf, size_t count)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	int ret, val;
+> +
+> +	ret = kstrtoint(buf, 0, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = pmbus_write_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG,
+> +				    ilog2(val));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_RW(samples_for_avg);
+> +
+> +static struct attribute *lm25056_attrs[] = {
+> +	&dev_attr_samples_for_avg.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(lm25056); // should we set a name of this group to put all
+> +			   // those attributes in subdirectory? Like "custom" ?
+> +
+We don't add subdirectories for other chips, and we won't start it here.
+
+I don't mind the attribute itself, but I do mind its name. We'll have
+to find something more generic, such as 'num_samples' or just 'samples'.
+I am open to suggestions. We'll also have to decide if the attribute(s)
+should be limited to one per chip, or if there can be multiple attributes.
+For example, MAX34462 has separate values for iout_samples and adc_average.
+Do we want samples, {curr,in,power,...}_samples, or both ? Or even
+currX_samples ?
+
+Either case, this is needed for more than one pmbus chip (and I know
+it is needed for some non-PMBus chips). I am inclined to add it as generic
+attribute into the pmbus core instead (and possibly add it to the ABI).
+
+Thanks,
+Guenter
+
+>   static int lm25066_probe(struct i2c_client *client,
+>   			  const struct i2c_device_id *id)
+>   {
+> @@ -476,6 +519,8 @@ static int lm25066_probe(struct i2c_client *client,
+>   		info->b[PSC_POWER] = coeff[PSC_POWER].b;
+>   	}
+>   
+> +	info->groups = lm25056_groups;
+> +
+>   	return pmbus_do_probe(client, id, info);
+>   }
+>   
 > 
->
+
