@@ -2,30 +2,48 @@ Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4839EC10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 18:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D74C10F13
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 20:44:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 220172083E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 18:43:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E18372146F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 20:44:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1555015460;
+	bh=hIR4lRUbvqlC/HBs5JbYz9dkM6hDrcx+BaiwK1FLnjs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=B812G8OBmXGibRCf4iLf8u5I9W/Rtg4RjqfqLfN1jyD/MeCyiv+oR3P2Bd0q7nZPH
+	 +/mwC3qtT2VW+THb/zGJdFrNDZqd0QSz0Rbk+dHs5dwDPS7ov4bILgqJG3EvyW5S2Y
+	 ozWr2rlk6yUhR2F/HreDedfqCYSZKpwZurPefShc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbfDKSn0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 14:43:26 -0400
-Received: from ms.lwn.net ([45.79.88.28]:38816 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726538AbfDKSn0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 14:43:26 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3D5D82D8;
-        Thu, 11 Apr 2019 18:43:25 +0000 (UTC)
-Date:   Thu, 11 Apr 2019 12:43:24 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        id S1726898AbfDKUoO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Apr 2019 16:44:14 -0400
+Received: from casper.infradead.org ([85.118.1.10]:37936 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726629AbfDKUoO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Apr 2019 16:44:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=e9Z/7e3/hRsGnS2IGdT3ZcpPF2Keute9G8FZSvjPYvw=; b=ml67nDSf8iAwnEALQB1I8vyqA8
+        TS0UFAHu4F1JxQDfKqgX4khtCfCdm/PNWWp8FlxfUL99uzN2HQOx+4IDNHFU5FGEv9O7sv8yzZEs3
+        do+3nQvj8OqYxn2AwfvufaI2prXL19tSuh1JOugN7O6qRW/E91lUjXRs5ksYawU06OU7ltn2UDkk9
+        4drePCv1T5mbCpYRxmqLazFVy6Xrdwfe5A6AaAtdHMTZ93NqEYt29XBKrVkePqBxaNZ5n/E3AiKWp
+        hvktN8LDszwkexr2gk7xY5cJcwmDrZckik1bgoUqT807DsY1VHtEE157AYGNBEBi7oBeGlOCFGBsT
+        +DZPLIaA==;
+Received: from 201.86.162.146.dynamic.adsl.gvt.net.br ([201.86.162.146] helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hEgYH-0001OQ-If; Thu, 11 Apr 2019 20:44:06 +0000
+Date:   Thu, 11 Apr 2019 17:43:57 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-kernel@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
@@ -41,42 +59,75 @@ Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Paul Mackerras <paulus@samba.org>,
         Sudeep Holla <sudeep.holla@arm.com>
 Subject: Re: [PATCH v2 00/21] Convert hwmon documentation to ReST
-Message-ID: <20190411124324.3ed62fad@lwn.net>
-In-Reply-To: <cover.1554923967.git.mchehab+samsung@kernel.org>
+Message-ID: <20190411174357.251904f5@coco.lan>
+In-Reply-To: <20190411124324.3ed62fad@lwn.net>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
-Organization: LWN.net
+        <20190411124324.3ed62fad@lwn.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 10 Apr 2019 16:22:37 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
+Em Thu, 11 Apr 2019 12:43:24 -0600
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-> This series converts the contents of Documentation/hwmon to ReST
-> format.
+> On Wed, 10 Apr 2019 16:22:37 -0300
+> Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
 > 
-> PS.: I opted to group the conversion files per groups of maintainer
-> set, as, if I were to generate one patch per file, it would give around
-> 160 patches.
+> > This series converts the contents of Documentation/hwmon to ReST
+> > format.
+> > 
+> > PS.: I opted to group the conversion files per groups of maintainer
+> > set, as, if I were to generate one patch per file, it would give around
+> > 160 patches.
+> > 
+> > I also added those patches to my development tree at:
+> > 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=hwmon
+> > 
+> > If you want to see the results, they're at:
+> > 	https://www.infradead.org/~mchehab/hwmon/  
 > 
-> I also added those patches to my development tree at:
-> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=hwmon
+> This set seems generally good and could probably be applied as-is.  But I
+> have to ask...is there a reason to not take the last step and actually
+> bring this stuff into the Sphinx doc tree?
 > 
-> If you want to see the results, they're at:
-> 	https://www.infradead.org/~mchehab/hwmon/
+> We seem to be mostly documenting sysfs files and such.  I am *guessing*
+> that perhaps the set should move to Documentation/admin-guide/hwmon?  Or
+> have I misunderstood the intended audience here?
 
-This set seems generally good and could probably be applied as-is.  But I
-have to ask...is there a reason to not take the last step and actually
-bring this stuff into the Sphinx doc tree?
+:-)
 
-We seem to be mostly documenting sysfs files and such.  I am *guessing*
-that perhaps the set should move to Documentation/admin-guide/hwmon?  Or
-have I misunderstood the intended audience here?
+Yeah, I'd say that 80% of the contents there are user-faced.
+
+Yet, the main issue with this (and other driver subsystems) is that there's
+a mix of userspace and Kernelspace stuff. One somewhat simple case is
+the abituguru: it has a "datasheet" file:
+
+	abituguru-datasheet
+
+This contains programming information for the corresponding drivers,
+while abituguru and abituguru3 contains mostly userspace
+stuff (still, it also contains the I2C address, with shouldn't mean
+anything for the user).
+
+However, if you take a look at w83781d, you'll see a mix of both
+userspace and driver developer info there... it has a chapter called
+"Data sheet updates", for example, with is probably meaningless for
+anyone but the hwmon driver developers.
+
+That's, btw, a pattern that happens a lot inside device driver
+documents on almost all subsystems I checked: driver-specific
+documentation is usually not split into user-facing/kernel-facing.
+
+While nobody does such split, IMHO, the best would be to keep the
+information outside Documentation/admin-guide. But hey! You're
+the Doc maintainer. If you prefer to move, I'm perfectly fine
+with that.
+
 
 Thanks,
-
-jon
+Mauro
