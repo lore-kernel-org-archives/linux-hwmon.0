@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD461C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 18:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC75C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 19:43:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 803DE218A3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 18:32:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEC2420818
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 19:43:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="phx+kNxD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JnnON0b/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbfDLSc7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Apr 2019 14:32:59 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:42743 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbfDLSc7 (ORCPT
+        id S1726833AbfDLTnx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 15:43:53 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:43223 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726843AbfDLTnx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Apr 2019 14:32:59 -0400
-Received: by mail-qk1-f202.google.com with SMTP id 77so8801034qkd.9
-        for <linux-hwmon@vger.kernel.org>; Fri, 12 Apr 2019 11:32:58 -0700 (PDT)
+        Fri, 12 Apr 2019 15:43:53 -0400
+Received: by mail-pf1-f201.google.com with SMTP id i14so7038958pfd.10
+        for <linux-hwmon@vger.kernel.org>; Fri, 12 Apr 2019 12:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=hY0dZJMsITx5VLv4H4CD8TxpMYMhQgREDET7ytRvr2I=;
-        b=phx+kNxDXNRDyhBho7kXIOWeweO2fGrJEcUT/hFGdSTxFdfhO+I0UYqD+6LG6jfySk
-         3qxh9qcQA5DNP5S8CUiml/8S1P3hRO2MHY6v9lWzkXuefmx1NSFXoU67vPg3mxB/iD2c
-         +CdRH6eCFygq7A+VTkUMcquE9zxTS3UAAlwiHDrm+luOzfO7ErTETT5VSlLN+bi1fmw3
-         8Rl75ffiljqaVsZ/RT/BU0rmrt0ZU1qGBmZuXN00wJaNO/aJg64aUAxIQ0SCfpa6hqOo
-         LMWAbebtYavTOalzvsEAXpXCcp0jduGqbAjEr5ipT4GKW7UOBYQGrvFeC7SJEYQknGkH
-         jwKA==
+        bh=gVLYpzHO0Xc04/JAvdtllXU9ASmQMnyXdENvGXJVSj4=;
+        b=JnnON0b/Hnqoitayuhv/pNt1i1Cqy2BrgNmlD8DZN3uB4EBYxwxdb7Hg6Kmjq9/QFq
+         zGmTbSvxLsIYBCrpOJw0AkzTTsXk6LxQfpXO48d0CJ/0+QRRrWWRTlTeunKjudwgbeNz
+         3iBt5o8+a/dkXDJGzo7VVtkEntPL6++OwEByLPaH+WSl9vitX8Q0rN2gJaF0FEK/DN0V
+         wdtvQ/MjmmWBNqfFkdzeKvunZNbpwi4E0D7bWTnMHtwKAsRhQUY7Z5CcSGZEzlju6HnY
+         gGq6C/1amkllij1FtkEIiSWSYJL7iFCUOSgPdJisvwU/FzJ8fthlDTRetj5josbH8nTl
+         RhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=hY0dZJMsITx5VLv4H4CD8TxpMYMhQgREDET7ytRvr2I=;
-        b=oEJf4ez3BGlI6xiCCg0hOy9rs3wWvjhPAhdmA7ATLhyLfPJiF/jzRZpcVAJ8SML9wD
-         ohyJTr8qVGDVS19Wr16uh3wD0ICKCrC5kdZ94RWE3oFwPhagYbW4jj71n2X+Q2UsHZ/z
-         LTEUzSghTOuXw6jUmmhZh/b8JVniyHCBDGA8CQdQQmcOZW9l4vlG3jcA+5XD7r13ti43
-         kWv1hL9hYutPA8oAPr5yPid568MkqVBivY+d+Piem8d+DRhX5dm444ZUM3En8YKhHDHN
-         TYkwop2ggtuJB/KS07JYJw0yzCs0oU0fK2g/k2pYVQru0TlTRtUus4iPsOEVTSLZWFdr
-         wR8g==
-X-Gm-Message-State: APjAAAVf9nJjfn9ZFFqtOniKKnq95p8N0/2GNpgzKQFzzKLwRcaCwBHj
-        eKbdD+rr/mG3QDORi/PzQQBGpGAfeHCc
-X-Google-Smtp-Source: APXvYqzX/DWZ3MrkDX7KyDEx7lOSnZVhj3wovQRlLAmZt0ftH1oVKlfmZzWNXOar39coVGerXprPdaRe/4Aa
-X-Received: by 2002:ac8:2851:: with SMTP id 17mr8013423qtr.14.1555093977750;
- Fri, 12 Apr 2019 11:32:57 -0700 (PDT)
-Date:   Fri, 12 Apr 2019 11:32:54 -0700
-Message-Id: <20190412183254.194700-1-venture@google.com>
+        bh=gVLYpzHO0Xc04/JAvdtllXU9ASmQMnyXdENvGXJVSj4=;
+        b=aE62I3kggsC4JLetlpluPnVndMjgyB8UO3IU8eYA3oRum+ZCNxRfbfI+bQ7hvXQe9H
+         lZ5IQFhhEomMkdvIpfTZ+SC+j1JQ77l7kVyJkFqVANoxLZ7LZRMHE3XV+5/kcRMdVfwB
+         IV4jJxuATQ1S6oPYsDZX7c8jeZeymq8pK7Nu1cQoLBXu+KYIUvc6obzTw4ZFIB8hkdhl
+         eCqnrH7SWwj6IYs5EXAA2hhVzGcFdw7NsCbzAq5A5v4J3cICdXXFFBSRyUcMR/7Jafi2
+         LsYqEOS+bG2ZWHDSfIvo33ngTTzhRCNbeNIEL7zF+jNs+r2X9C9Wo7ICWmMozGfjs9E5
+         dWYg==
+X-Gm-Message-State: APjAAAU9sl4GAP6X/Li9Ag+qDWceSa387qkRpd8Wb/oy9Jz+N6uFdUKQ
+        LuF0vSJRrzWARtmJbD0RUNmRJmHkbzcr
+X-Google-Smtp-Source: APXvYqy/HLMm19TYkxR99+/BcxYeDENW3oiTmk3bGB5VQKPJKwa7ZuStNBVw+AeGeiA4SAssU14XPBfMe4/N
+X-Received: by 2002:aa7:939c:: with SMTP id t28mr1519840pfe.144.1555098231861;
+ Fri, 12 Apr 2019 12:43:51 -0700 (PDT)
+Date:   Fri, 12 Apr 2019 12:43:48 -0700
+Message-Id: <20190412194348.225570-1-venture@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH] hwmon: (pmbus/ir38064): Add driver for Infineon IR38064
+Subject: [PATCH v2] hwmon: (pmbus/ir38064): Add driver for Infineon IR38064
  Voltage Regulator
 From:   Patrick Venture <venture@google.com>
 To:     venture@google.com, jdelvare@suse.com, linux@roeck-us.net,
@@ -72,6 +72,11 @@ Add the pmbus driver for the Infineon ir38064 voltage regulator.
 
 Signed-off-by: Maxim Sloyko <maxims@google.com>
 Signed-off-by: Patrick Venture <venture@google.com>
+---
+v2:
+ - Cleaned up weird tabbing behavior in doc.
+v1:
+ - Initial patchset.
 ---
  Documentation/hwmon/ir38064   | 64 +++++++++++++++++++++++++++++++++++
  drivers/hwmon/pmbus/Kconfig   |  9 +++++
@@ -123,24 +128,24 @@ index 0000000000000..618779a329da0
 +curr1_crit		Critical maximum current
 +curr1_crit_alarm	Current critical high alarm
 +curr1_max		Maximum current
-+curr1_max_alarm		Current high alarm
++curr1_max_alarm	Current high alarm
 +
 +in1_label		"vin"
 +in1_input		Measured input voltage
 +in1_crit		Critical maximum input voltage
 +in1_crit_alarm		Input voltage critical high alarm
-+in1_min			Minimum input voltage
++in1_min		Minimum input voltage
 +in1_min_alarm		Input voltage low alarm
 +
 +in2_label		"vout1"
 +in2_input		Measured output voltage
 +in2_lcrit		Critical minimum output voltage
-+in2_lcrit_alarm		Output voltage critical low alarm
++in2_lcrit_alarm	Output voltage critical low alarm
 +in2_crit		Critical maximum output voltage
 +in2_crit_alarm		Output voltage critical high alarm
-+in2_max			Maximum output voltage
++in2_max		Maximum output voltage
 +in2_max_alarm		Output voltage high alarm
-+in2_min			Minimum output voltage
++in2_min		Minimum output voltage
 +in2_min_alarm		Output voltage low alarm
 +
 +power1_label		"pout1"
@@ -150,7 +155,7 @@ index 0000000000000..618779a329da0
 +temp1_crit		Critical high temperature
 +temp1_crit_alarm	Chip temperature critical high alarm
 +temp1_max		Maximum temperature
-+temp1_max_alarm		Chip temperature high alarm
++temp1_max_alarm	Chip temperature high alarm
 diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
 index 629cb45f8557a..de87abab990e5 100644
 --- a/drivers/hwmon/pmbus/Kconfig
