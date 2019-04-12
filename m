@@ -3,28 +3,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D45AC10F0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 13:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C788C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 13:35:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4611A2171F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 13:16:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E6662084D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 13:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727267AbfDLNQi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Apr 2019 09:16:38 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:60385 "EHLO
+        id S1726777AbfDLNfu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 09:35:50 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:59727 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726843AbfDLNQg (ORCPT
+        with ESMTP id S1726765AbfDLNfu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Apr 2019 09:16:36 -0400
-Received: from [192.168.1.110] ([77.9.22.14]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MhDN4-1gblT52kvS-00eI4t; Fri, 12 Apr 2019 15:15:57 +0200
+        Fri, 12 Apr 2019 09:35:50 -0400
+Received: from [192.168.178.52] ([109.104.50.142]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N49Yn-1gomgM2Kht-0101vG; Fri, 12 Apr 2019 15:35:15 +0200
 Subject: Re: [PATCH V5 3/3] hwmon: pwm-fan: Add RPM support via external
  interrupt
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
         Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
@@ -36,50 +35,58 @@ Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
  <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <24771fbe-0c45-78b0-e96b-6ed31ccdcb7f@metux.net>
-Date:   Fri, 12 Apr 2019 15:15:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+ <24771fbe-0c45-78b0-e96b-6ed31ccdcb7f@metux.net>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Message-ID: <518757ac-b0d7-298c-c896-4bd7e3b2ac5b@i2se.com>
+Date:   Fri, 12 Apr 2019 15:35:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
+In-Reply-To: <24771fbe-0c45-78b0-e96b-6ed31ccdcb7f@metux.net>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:P1HauobrqeS7Nxy1zjrWPNWz2bBbR9RkUCoH4BP5/j5iRvktL6o
- WlozQICSoUUD+JW+Nw+weARs7Ye6ZKZS9DR52s3B1bRmlx5FeZ5qioYBfzJpRERLEafjxU9
- FHLUEUz/JEHu+HcHhtBvGoCvOXVkxgJditdbymnXHEuUQrswxaL9utPXOoHqfCAZqLcHpHN
- s8xH1Ah8wV2sswdvtG8Qg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pdel6vNP1mA=:lZgvkh+cmAQuHpCDUhmiOc
- Ls7n8sJuRHw1mPWp38vMQFT9MTtbXgss5ujytTFmju1b8uJuH1Ny6FrsvMSVIvyGMS6vkbe+a
- 9YifF91xGHQWsFR9gyDbH4JHwulAtlkb0uroPzLyHHoss7fkqrMo566cosLJLYUjKVL8Dtpkx
- JLBLdg8xvM//RpzzIkQdv4PsPbc8F1C1nVtusbf2avMaLvRyLlCg1UGWr0FKL8APqAZU5MAcM
- OYfpmYcOfTUAA40DPFyG++vfmZailhjxiJ+bhv4KSPZ15PzB+vVNp0jW6buu8opESzl1yUq5g
- jqxoGuf3uLRnkxc7fePaJnrC/pHia3HRrw6j8VpFsB1hKERVONsBsZqmF4fM/LnbeETkM3xW4
- 19aI0Ymrsz92X7XwrpXq+0DaZDBSISnhg/ki1s/gpYeJLzlyOaYV9Gi5pcA5MqVZjKukw7jwS
- +ZHmFzpHuCwyUkuBIvjxN20gRm/lyRN14vI3sHGVCw9TGTfDP0jUoOggWp1nYPrh7bImLugDN
- ljh7ix+FC1huXZB7lG8l0WFe+jCNfbxcDdgzDYPUN+5rwxpUyPnH+nS44AQbCdGWrGD4cMWpm
- i6u18+itSHijJDKZMncHVThgeXG31UDlan//quwlYJ5BMh1o3F7Z/IY+twst0s3uTe7/vz/V0
- zXh9Pm/ck5nGgymfsaiYLKTjLAZ6UXwz+sf6gANkhdm5Uu3kCS4qNykOrKbQvHnFtjSmZpVKS
- X4j87XPk2BUv8AaC6HgMPpTvDM51xLIWyYR9hbno3Qy2fK59P8XFMpY3bMA=
+Content-Language: en-US
+X-Provags-ID: V03:K1:wleykePClsDgbAjQmpOtAm3852cJHA61PeD5magwIfF5Ikf5mDI
+ RkgqqHHs865TBQXyNHaOcN/OLQOqFJjjxm9zv4pHKIlpae42W26a+uDxehArPpnynrXiEFX
+ 3J36f+5QRusVvhnGTMPN43hHNvLFMWhJZ+UfvabV7UHIf6rva7sGco9PuaHuraGqvli/9EA
+ Q4yDyFaIPA4pr3oHkpFFQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3QclmQOO6e0=:hcAMYwEiTkbpsuYd9gH0xU
+ mkFGd/v6/iFL2knNLngV/lCtRBQR0te7EGLZXxgHgjVkA5pc66ruVS/0MVU3QxM4v/o8yy1xT
+ waN779FjPf+A1egO0YJ8VGAn9ERAgw+bgGP1rx7mBV1Y/WgiXCp9pm1/rEgqgrp89eOayHFGl
+ ANgwPPQCnmSNU13MEEGWa0QOMP0euaJpY4ud6sftIipNRhSfN5GNmYBUMs7D+0pfuHrmpZ206
+ YOG0PzNLr2uw2wckKLfDspxBba9DVAIgqGY1jjV2xAkumMTB1lDIDlHOZJCtftw4FwMVPyhfR
+ PL8xbj6+7BQY8wb3XHoadvzqdAbhqIrzjbSgD2pDWWKfbQB9Fpgv2wTKug8kuZZk7m2UtNJqn
+ A07ZPtJCtr4mTTRCwMzBwl7DLNzlY6FEiCOGloTBRlfVcOuzZI68POI+2jM4sMTuLyeTc2kp9
+ o+4ruzkysfFoz0yoDE4LZk1O1KQdcqwY2RyIP0RtvhzvlI9RD04+FBJuMSepbtek+s+hcBL9q
+ iGA2wW2b5t8MgKVDTIUJDrbwSrLlt0a9QzssUG+RP+0JPdI7/luSrL7gTe9Hw7fiImMwkUadk
+ 8U6mpXrh07VJAfi3HD50G0rxBIJP4igJ+JQOujpjMYer3WyGuiVMsUPKxIKSXKgQBszt7+ftU
+ Wfp4jhuueHPhBieAohBgYCGdJLOE6lavnTGizYZUmdRQXT7B3ci7py8Uiusm0YuxPIJHbgBBC
+ OtQURch/iibm7/FircPD4eafE/9PeuwXVmG943/TSDjStv4V6a6SrV0zPVc=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11.04.19 15:30, Stefan Wahren wrote:
-> This adds RPM support to the pwm-fan driver in order to use with
-> fancontrol/pwmconfig. This feature is intended for fans with a tachometer
-> output signal, which generate a defined number of pulses per revolution.
+Hi Enrico,
 
-Wouldn't it be better to have a CONFIG_* flag for keeping the kernel
-image size smaller when this feature isn't needed ?
+On 12.04.19 15:15, Enrico Weigelt, metux IT consult wrote:
+> On 11.04.19 15:30, Stefan Wahren wrote:
+>> This adds RPM support to the pwm-fan driver in order to use with
+>> fancontrol/pwmconfig. This feature is intended for fans with a tachometer
+>> output signal, which generate a defined number of pulses per revolution.
+> Wouldn't it be better to have a CONFIG_* flag for keeping the kernel
+> image size smaller when this feature isn't needed ?
 
+i compared the kernel module size in linux-next for ARM without and with
+this patch:
+without patch: 12088 bytes
+with patch: 14292 bytes
 
---mtx
+I don't think it is worth the trouble.
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Stefan
+
+>
+>
+> --mtx
+>
