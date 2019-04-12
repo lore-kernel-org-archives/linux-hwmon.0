@@ -2,205 +2,119 @@ Return-Path: <SRS0=9bva=SO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46BA8C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 14:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A032FC10F0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 15:39:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 089442084D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 14:29:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F0CD2171F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 15:39:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UNn/sMRW"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDMVgiUG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727081AbfDLO3K (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Apr 2019 10:29:10 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37655 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbfDLO3J (ORCPT
+        id S1726890AbfDLPjB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 11:39:01 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40191 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726711AbfDLPjA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Apr 2019 10:29:09 -0400
-Received: by mail-pl1-f195.google.com with SMTP id w23so5226913ply.4;
-        Fri, 12 Apr 2019 07:29:09 -0700 (PDT)
+        Fri, 12 Apr 2019 11:39:00 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c207so5331662pfc.7
+        for <linux-hwmon@vger.kernel.org>; Fri, 12 Apr 2019 08:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vASg5JkI2W0DXNvLU0zD/DEqrNgshrSx1kIECTH27ws=;
-        b=UNn/sMRWO1iRzHVK73BK17JVxmNrwNvvklz3obwUfUxNmXav8kD0ePMAVNvTMu55na
-         Qlt2z1ayDwKQWlQ7LA4AqStY2KCVR5Iabj6MBBgR/PSzrjCswX886ACNRGxfbnfRo/7L
-         lD41/gnVqw0iFRN4DOkNfW2TR7nfawlpaze1sbv/hhwp/nv6qGZ6ku1TXxa6YehV5Kej
-         /RTNaiCJvN0PWthUG/92qEkV0nE6mrTrm6SV2CaO/7cYuEtuQTzazBlcGlOd3jKTkYCa
-         lOW5MG/gPfmwEQ9vYYEuPFOPsPgStULIExGvYXSBOObxg3YGeOTyZuU+A10GNZ7uHcAi
-         5OTA==
+        bh=LxKrOR4Es9TxGMnrWTC0p+WVoOobxxLBbf710MYpjWs=;
+        b=ZDMVgiUGOC8uGGWXYvBcdqjLvB8kMXNBHClEIhhD789AuGfxY6K0TemCucLglt63Za
+         pxvrM9drqZpgGf6CWT+ajik3jONaAVpfy5rqKNVwFB9OXpI63tC0eeoLLq+5w/RJW7G3
+         PVRlqpQThRxtFZSzX1p5/xfMbMKHnvV3eZUdeKbiOJ5D6kzyfLkNPuinTKd+qEWvUtxE
+         p3krbWnB9DNii4WQBmXPt8l7LFDu2v6/yYR6dR/NcMUJSjXV7JMYfTvN5tsEnMXmhdSO
+         si9JsG6D78X3+DprmVS2L8vse+1bYh2sNGq5u635IohY2088EaBGXj8uD8fMiivbo6KY
+         WYmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vASg5JkI2W0DXNvLU0zD/DEqrNgshrSx1kIECTH27ws=;
-        b=ZBFw0u7+lKkSgyvk2xLi2/mqcA1lYlDDXse2wx+MtGfcrczangsTstVyqYHGQCvEeG
-         /in94aLHIUzK4LKhzXeaytVrPxRFF9lSQ0dCc0syAiCOVURlAwygVisEl6+nMbKU4Ww7
-         xG9l9QZ5s4+Hf9AVD/7RU0DBFx62JzuAyfpSFf63la7fI3J2uo5TvfrSpE3zMiRjnXbX
-         M3sHl1jp9Ien20zImyr/qvA4lhXlw5751UYEEGoqsGY/MuYurXwdrpC4KWJ96T1LaJKF
-         2pCqGoLsdE3iAJCEpGEpzQDKdOtMAjTzqgpVJVi9KIDgoeXDJeByXYMrDv0pz5MguiF0
-         DbYQ==
-X-Gm-Message-State: APjAAAXYAPBvCK2nBOFZ5v/ZU9q9Sb74tk5c/u+Hok12RcZ0gU8luczB
-        fvMvY3lEJz+NpbtiNx9fb3/3hioJ
-X-Google-Smtp-Source: APXvYqzNju7gpPlzfagkh2aODJUl6KrPERaiO0okdDz3Gwdr2ak3mGnbQpZJVE8/+YjMEJ0A1w4zvg==
-X-Received: by 2002:a17:902:d83:: with SMTP id 3mr33457160plv.125.1555079348555;
-        Fri, 12 Apr 2019 07:29:08 -0700 (PDT)
+        bh=LxKrOR4Es9TxGMnrWTC0p+WVoOobxxLBbf710MYpjWs=;
+        b=PyFlwNcyYoibVI5uCv4+egwtM8f7qUomGpE4wlHRr6OYHx7ZF6F+tfRywOCXSyuvrM
+         0LjM3n9LU0GKXh9Leq7M1ZatZvsyN3YUpTtfOnLpaT/rHgYQMnviAsvgLPqRkfFhRATG
+         sYg1JtyrDU7mxcMo1f6NgoGfsSxxuypyRFBpoD+WLvLF0WNZGZb6wlZn14zdz+gT48BU
+         eYTQQKu2vqoocjHgCvR44QH0gHxwtp3xnvKRWbRwnQQI8c2qXjiCcP6cgW9dL48tAmgj
+         xZWF5dl18weOKFEMXyTFcmVCXxhSULMdAV5Q4ulrPGyGfXu8RS/noeyoNxEBnbTD3K15
+         AA/A==
+X-Gm-Message-State: APjAAAWYjgIzckfW3/SjOdiigKPF5vwRCmGYovKXJRnJgS+oAMnYEs55
+        HsJ7tfEKXZBj1YK7KBGeLRM4f8Y5
+X-Google-Smtp-Source: APXvYqwReZfLnbOdyX2HZk2Dyy02RlIKb138zy+i/jmGW+JIZx7LTALTmA5uFwZGHc0mcqy3igSsdQ==
+X-Received: by 2002:a63:8142:: with SMTP id t63mr51363339pgd.63.1555083539752;
+        Fri, 12 Apr 2019 08:38:59 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k14sm90412480pfb.125.2019.04.12.07.29.05
+        by smtp.gmail.com with ESMTPSA id c62sm7767608pfg.33.2019.04.12.08.38.57
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 12 Apr 2019 07:29:06 -0700 (PDT)
-Subject: Re: [PATCH V5 3/3] hwmon: pwm-fan: Add RPM support via external
- interrupt
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
- <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
- <20190411165742.GA29395@roeck-us.net>
- <019733e8-6b12-f5c1-e251-fd7eabe2891b@i2se.com>
- <77c56129-d3e7-1518-9d1d-a15a20540269@arm.com>
- <cfde0244-1faf-80cd-b49e-500654e5bad8@roeck-us.net>
- <19616839-f78f-a15f-c7b7-7ef9e7817140@arm.com>
+        Fri, 12 Apr 2019 08:38:58 -0700 (PDT)
+Subject: Re: Couple of questions on SCMI sensor protocol and Linux
+ implementation
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, linux-hwmon@vger.kernel.org
+References: <1902f151-7ddd-6b4b-4135-a2affe20c009@gmail.com>
+ <20190412135747.GC23351@e107155-lin>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c9616343-baa0-8bda-9190-720bc08eda88@roeck-us.net>
-Date:   Fri, 12 Apr 2019 07:29:04 -0700
+Message-ID: <0ceb650b-7968-3cb3-12a1-f8174ed7b13a@roeck-us.net>
+Date:   Fri, 12 Apr 2019 08:38:56 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <19616839-f78f-a15f-c7b7-7ef9e7817140@arm.com>
+In-Reply-To: <20190412135747.GC23351@e107155-lin>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/12/19 6:54 AM, Robin Murphy wrote:
-> On 12/04/2019 14:50, Guenter Roeck wrote:
->> On 4/12/19 4:50 AM, Robin Murphy wrote:
->>> On 12/04/2019 12:07, Stefan Wahren wrote:
->>>> On 11.04.19 18:57, Guenter Roeck wrote:
->>>>> On Thu, Apr 11, 2019 at 03:30:11PM +0200, Stefan Wahren wrote:
->>>>>> -ATTRIBUTE_GROUPS(pwm_fan);
->>>>>> +static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
->>>>>> +                     int n)
->>>>>> +{
->>>>>> +    struct device *dev = container_of(kobj, struct device, kobj);
->>>>>> +    struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
->>>>>> +    struct device_attribute *devattr;
->>>>>> +
->>>>>> +    /* Hide fan_input in case no interrupt is available  */
->>>>>> +    devattr = container_of(a, struct device_attribute, attr);
->>>>> Field day for static analyzers - devattr is no longer used.
->>>>> No need to resend. I'll let the series rest for a couple of days
->>>>> and then apply to hwmon-next (after removing devattr) unless there are
->>>>> additional comments.
->>>>>
->>>> Thank you
->>>
->>> FWIW you can have a
->>>
->>> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
->>>
->>> for the whole series. The only minor comment that springs to mind
->>> isn't actually specific to this patch, so is probably best made as
->>> the follow-up below.
->>>
->>> Robin.
->>>
+On 4/12/19 6:57 AM, Sudeep Holla wrote:
+> On Tue, Apr 02, 2019 at 08:22:58PM -0700, Florian Fainelli wrote:
+>> Hi Sudeep,
 >>
->> Any chance you can send the patch below as separate patch ? I track patches
->> using patchwork, and attachments don't show up there.
+>> There are a couple of things on which I would appreciate your feedback
+>> regarding the Linux SCMI sensor protocol:
+>>
+>> 1) The Linux SCMI implementation has all the nuts and bolts to allow
+>> configuring trip points, but the hwmon subsystem through the use of
+>> hwmon_thermal_add_sensor() API does not actually make use of that
+>> capability. Would it be a big stretch to use the hwmon_ops::write
+>> function to get to support that feature?
 > 
-> Sure, can do - would you like an explicit R-b on #1 and #2 here for patchwork to pick up as well?
-> That would simplify my life a bit, but I can add that part myself to the patches.
-I primarily like to have the patches in patchwork to make sure they don't get lost
-and that I can pick them up again later if needed.
+> As a concept, it sounds good. Though I am not sure if write API semantics
+> match with what we want here with trip point configuration.
+> 
+
+Last time I checked, the thermal subsystem concept of trip points was strictly
+dynamic. Exceeding a trip point (low or high) would result in a signal followed
+by the trip point being updated.
+
+In the hwmon subsystem, and in general with temperature sensors it supports,
+trip points (or limits) are static. Making such static trip points available
+to the thermal subsystem would, in many cases, have undesirable consequences:
+Exceeding a trip point often does not only generate a signal, it may also
+activate a pin which, in turn, could for example activate fans or, in extreme
+cases, shut down the system. It would also affect status reporting in the hwmon
+subsystem, where exceeding a trip point is reported with a sysfs attribute.
+
+In order to interconnect the thermal subsystem more closely with the hwmon
+subsystem, it would be necessary for the thermal subsystem to recognize a
+concept of static trip points.
+
+If scmi is to be used with the thermal subsystem and its concept of dynamic
+trip points, I would suggest to move the driver from hwmon to thermal. People
+can then use the thermal->hwmon bridge for (limited) temperature reporting
+through the hwmon subsystem.
 
 Thanks,
 Guenter
-
-> Robin.
-> 
->>
->> Thanks,
->> Guenter
->>
->>> ----->8-----
->>> From: Robin Murphy <robin.murphy@arm.com>
->>> Subject: [PATCH] hwmon: pwm-fan: Report probe errors consistently
->>>
->>> Printing the error code for a failure provides a head-start for
->>> debugging, since it's often sufficient to pinpoint the origin of the
->>> failure. We already do this for some probe-failure messages, so let's
->>> make the rest of them consistent.
->>>
->>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->>> ---
->>>   drivers/hwmon/pwm-fan.c | 13 ++++++++-----
->>>   1 file changed, 8 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
->>> index 8c4c5eefd4ca..556db4bef743 100644
->>> --- a/drivers/hwmon/pwm-fan.c
->>> +++ b/drivers/hwmon/pwm-fan.c
->>> @@ -330,7 +330,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->>>
->>>       ret = pwm_apply_state(ctx->pwm, &state);
->>>       if (ret) {
->>> -        dev_err(&pdev->dev, "Failed to configure PWM\n");
->>> +        dev_err(&pdev->dev, "Failed to configure PWM: %d\n", ret);
->>>           goto err_reg_disable;
->>>       }
->>>
->>> @@ -348,7 +348,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
->>>           ret = devm_request_irq(&pdev->dev, ctx->irq, pulse_handler, 0,
->>>                          pdev->name, ctx);
->>>           if (ret) {
->>> -            dev_err(&pdev->dev, "Can't get interrupt working.\n");
->>> +            dev_err(&pdev->dev,
->>> +                "Failed to request interrupt: %d\n", ret);
->>>               goto err_pwm_disable;
->>>           }
->>>           ctx->sample_start = ktime_get();
->>> @@ -358,8 +359,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
->>>       hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
->>>                                  ctx, pwm_fan_groups);
->>>       if (IS_ERR(hwmon)) {
->>> -        dev_err(&pdev->dev, "Failed to register hwmon device\n");
->>>           ret = PTR_ERR(hwmon);
->>> +        dev_err(&pdev->dev,
->>> +            "Failed to register hwmon device: %d\n", ret);
->>>           goto err_del_timer;
->>>       }
->>>
->>> @@ -373,9 +375,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
->>>                                 "pwm-fan", ctx,
->>>                                 &pwm_fan_cooling_ops);
->>>           if (IS_ERR(cdev)) {
->>> -            dev_err(&pdev->dev,
->>> -                "Failed to register pwm-fan as cooling device");
->>>               ret = PTR_ERR(cdev);
->>> +            dev_err(&pdev->dev,
->>> +                "Failed to register pwm-fan as cooling device: %d\n",
->>> +                ret);
->>>               goto err_del_timer;
->>>           }
->>>           ctx->cdev = cdev;
->>>
->>
-> 
-
