@@ -1,152 +1,90 @@
-Return-Path: <SRS0=Is7H=SN=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=9bva=SO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF1EC10F13
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 23:54:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6FC8C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 11:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7055220869
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Apr 2019 23:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555026874;
-	bh=iDk7VPNMjyytc6vtXDUph5TANBR9kngZfJ1wQSMo1RE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=zIcuQs2GK8xSkbhyyryAySQj69lSIlDN2axfvBJGcyS0j/lfNBb9vC8vjVw59WUQU
-	 OeIt8OVM1Cj8ktHglxxu7bxWmhdLjGr7QABe25lXdW4UhVNc8YzIfNFqYsY6AHCXqA
-	 6aOLQw3tnSTjY8ng0n2/gZ/cRvI1MSDcXCqlJ0Lk=
+	by mail.kernel.org (Postfix) with ESMTP id 9D9072083E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 11:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726862AbfDKXye (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Apr 2019 19:54:34 -0400
-Received: from casper.infradead.org ([85.118.1.10]:47202 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726778AbfDKXyd (ORCPT
+        id S1726327AbfDLLIQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 07:08:16 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:59483 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726244AbfDLLIQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Apr 2019 19:54:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5+tH/MOpUFSidIY9WhSFyEPUDHOXXaJKp7Fz0cd8hdM=; b=ePP6Db/DLudz1vlMEo/ff/KUH5
-        OqIIhxDmQ5npakBG0WwaLJRr/hxePnhmsXGFwPXcxVRFB2xCAa1wjqQFPEgJ8E4iFw+Z3OmsG3tVQ
-        FRti79d0KGc3O0/B1/F1j3HZk8C/gWPCHLOlyVvkbEJ3Wel9ntoME3ghT9JVauUcmnTu7Bo1SlJPP
-        8KF0sbpgUTXpRCaDIUl9dfzF1WMVTubdsMz0W9ACuGbff+7jKZ2hQHvRheIRgivLzVJtqUHfgghuD
-        K9eFeM+TdFLYi9bZ1i2IOC559xIxUykO5u/frgkzO6gFr0YH3TeZ7iQynn2f2tU5Rs3d7wyZlDJqO
-        82tOS35Q==;
-Received: from 201.86.162.146.dynamic.adsl.gvt.net.br ([201.86.162.146] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hEjWT-0006at-9F; Thu, 11 Apr 2019 23:54:25 +0000
-Date:   Thu, 11 Apr 2019 20:54:17 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        Fri, 12 Apr 2019 07:08:16 -0400
+Received: from [192.168.178.52] ([109.104.50.142]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MCKSA-1h6cYe1kA6-009ROX; Fri, 12 Apr 2019 13:07:42 +0200
+Subject: Re: [PATCH V5 3/3] hwmon: pwm-fan: Add RPM support via external
+ interrupt
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Joel Stanley <joel@jms.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2 00/21] Convert hwmon documentation to ReST
-Message-ID: <20190411205417.187f9565@coco.lan>
-In-Reply-To: <20190411210731.GA29378@roeck-us.net>
-References: <cover.1554923967.git.mchehab+samsung@kernel.org>
-        <20190411124324.3ed62fad@lwn.net>
-        <20190411174357.251904f5@coco.lan>
-        <20190411210731.GA29378@roeck-us.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1554989411-23666-1-git-send-email-stefan.wahren@i2se.com>
+ <1554989411-23666-4-git-send-email-stefan.wahren@i2se.com>
+ <20190411165742.GA29395@roeck-us.net>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Message-ID: <019733e8-6b12-f5c1-e251-fd7eabe2891b@i2se.com>
+Date:   Fri, 12 Apr 2019 13:07:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20190411165742.GA29395@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:o0QXvLSdqXxmNy4CXgonbNSrTq6A3Sb13dDV4/PC6Q0OiIpX7by
+ 0mupAL1ECnulfZgJWZxC0Rz93jdnKUcIzoSOSeghywiNIBXlcS6m+Qr7LOJvhfm6bsMUVuW
+ D+5a/euBkDlIxLx4K/fVPhqGhSsNZm7FRyWWcbv/8otk2ju2HBe41jju/sgdjBk5Z3DZP99
+ xd7NCA2j/cOlXJ3DtmdBA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0NyLlMniSkk=:dh39u8LoxPVa1laAJRMxKR
+ w96x4AE3MfuH8b71fee0PMjQ0h2q58ZrK05Qvtk0ywm2opcO8/99PCjMoNN4DjII+0iBIJP1L
+ ZVgHe2cTFQStAjcAfs/PsEiltn5BvCl4PpWsIb1lP+TyXW6M6b9t3x4iP8RAsdEXJQKbVJVlo
+ lO8MeXtlmLZtieW3QeVR2WmP4H9qKfVGBGuKwVTzvN2uFnrx6ZUZzJf36mXgSv3QxRv3/Ohs/
+ Zp7XlsS5vIOv7Q6b0xIAi5OcrxPSKRvQOEOlf5YXwXO0tw9F1r3zM0COWlr2yJdGB0t7j5YUe
+ OwIBbdq5HGkEg78VO5LD/vJ7LwM2W1Uk2vq2ORvoEqqQh8LC8eP4B8xDFJoGJ5MRzGk/IoQ2Y
+ m6UP/0fXYEkDqBaozj3G7rIz/r7/mXE2XW5d3sryAc7RhLktmspimKwfzRYIZoA7AFnK3Pd85
+ BSjNsh06uRgm4RngJqaFZyFIMWXbOd0kLIKSGs662Qog+1iRYeZU6Lwa4/wRgodJeekxDByZt
+ +iZjvCaVA4ZACsg6s8s0tD/5g3qgweFeo1d3BJ0d79YUfe4busXvrSjzDCbWHWu5GcRgdMBtq
+ 3qINp1pgHqPobg1YHy46XSfcZp4njWL3rJ4H89xz5nMqXI1wmXDyMeGq/pg5FIsYErwMZKhZd
+ FMXZkObL9+hKbyAJM5HGhVL5WE79EdxmnjkawnqTHxXeLg2hpUdD0e8QFPp2xCgd0V9ZIopIa
+ SBNuhTSRKjG0dyVRetMrZapJcXGt/GXzgUS+aKy6lk3GGoLLZq2RiZnZvFk=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Em Thu, 11 Apr 2019 14:07:31 -0700
-Guenter Roeck <linux@roeck-us.net> escreveu:
+On 11.04.19 18:57, Guenter Roeck wrote:
+> On Thu, Apr 11, 2019 at 03:30:11PM +0200, Stefan Wahren wrote:
+>>  
+>> -ATTRIBUTE_GROUPS(pwm_fan);
+>> +static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
+>> +				     int n)
+>> +{
+>> +	struct device *dev = container_of(kobj, struct device, kobj);
+>> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+>> +	struct device_attribute *devattr;
+>> +
+>> +	/* Hide fan_input in case no interrupt is available  */
+>> +	devattr = container_of(a, struct device_attribute, attr);
+> Field day for static analyzers - devattr is no longer used.
+> No need to resend. I'll let the series rest for a couple of days
+> and then apply to hwmon-next (after removing devattr) unless there are
+> additional comments.
+>
+Thank you
 
-> On Thu, Apr 11, 2019 at 05:43:57PM -0300, Mauro Carvalho Chehab wrote:
-> > Em Thu, 11 Apr 2019 12:43:24 -0600
-> > Jonathan Corbet <corbet@lwn.net> escreveu:
-> >   
-> > > On Wed, 10 Apr 2019 16:22:37 -0300
-> > > Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
-> > >   
-> > > > This series converts the contents of Documentation/hwmon to ReST
-> > > > format.
-> > > > 
-> > > > PS.: I opted to group the conversion files per groups of maintainer
-> > > > set, as, if I were to generate one patch per file, it would give around
-> > > > 160 patches.
-> > > > 
-> > > > I also added those patches to my development tree at:
-> > > > 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=hwmon
-> > > > 
-> > > > If you want to see the results, they're at:
-> > > > 	https://www.infradead.org/~mchehab/hwmon/    
-> > > 
-> > > This set seems generally good and could probably be applied as-is.  But I
-> > > have to ask...is there a reason to not take the last step and actually
-> > > bring this stuff into the Sphinx doc tree?
-> > > 
-> > > We seem to be mostly documenting sysfs files and such.  I am *guessing*
-> > > that perhaps the set should move to Documentation/admin-guide/hwmon?  Or
-> > > have I misunderstood the intended audience here?  
-> > 
-> > :-)
-> > 
-> > Yeah, I'd say that 80% of the contents there are user-faced.
-> > 
-> > Yet, the main issue with this (and other driver subsystems) is that there's
-> > a mix of userspace and Kernelspace stuff. One somewhat simple case is
-> > the abituguru: it has a "datasheet" file:
-> > 
-> > 	abituguru-datasheet
-> > 
-> > This contains programming information for the corresponding drivers,
-> > while abituguru and abituguru3 contains mostly userspace
-> > stuff (still, it also contains the I2C address, with shouldn't mean
-> > anything for the user).
-> > 
-> > However, if you take a look at w83781d, you'll see a mix of both
-> > userspace and driver developer info there... it has a chapter called
-> > "Data sheet updates", for example, with is probably meaningless for
-> > anyone but the hwmon driver developers.
-> > 
-> > That's, btw, a pattern that happens a lot inside device driver
-> > documents on almost all subsystems I checked: driver-specific
-> > documentation is usually not split into user-facing/kernel-facing.
-> > 
-> > While nobody does such split, IMHO, the best would be to keep the
-> > information outside Documentation/admin-guide. But hey! You're
-> > the Doc maintainer. If you prefer to move, I'm perfectly fine
-> > with that.
-> >   
-> 
-> Same here, but please don't move the files which are kernel facing only.
-> 
-> How do you want to handle this series ? Do you expect it to be pushed
-> through hwmon, or through Documentation, or do you plan to push yourself ?
-> 
-> If the series isn't pushed through hwmon, we'll likely have a couple of
-> conflicts against hwmon-next.
+Stefan
 
-Guenter,
-
-I won't be pushing it myself. IMO, it makes more sense to apply it at
-hwmon-next, except if it would cause some conflicts against docs-next.
-
-Regards,
-Mauro
