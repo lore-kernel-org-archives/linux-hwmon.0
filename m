@@ -2,258 +2,288 @@ Return-Path: <SRS0=9bva=SO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC75C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 19:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEC0C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 20:28:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DEC2420818
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 19:43:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 142302086D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Apr 2019 20:28:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JnnON0b/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ckMFprP0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbfDLTnx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Apr 2019 15:43:53 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:43223 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726843AbfDLTnx (ORCPT
+        id S1726907AbfDLU2x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 16:28:53 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40979 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726755AbfDLU2x (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Apr 2019 15:43:53 -0400
-Received: by mail-pf1-f201.google.com with SMTP id i14so7038958pfd.10
-        for <linux-hwmon@vger.kernel.org>; Fri, 12 Apr 2019 12:43:52 -0700 (PDT)
+        Fri, 12 Apr 2019 16:28:53 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f6so5714487pgs.8;
+        Fri, 12 Apr 2019 13:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=gVLYpzHO0Xc04/JAvdtllXU9ASmQMnyXdENvGXJVSj4=;
-        b=JnnON0b/Hnqoitayuhv/pNt1i1Cqy2BrgNmlD8DZN3uB4EBYxwxdb7Hg6Kmjq9/QFq
-         zGmTbSvxLsIYBCrpOJw0AkzTTsXk6LxQfpXO48d0CJ/0+QRRrWWRTlTeunKjudwgbeNz
-         3iBt5o8+a/dkXDJGzo7VVtkEntPL6++OwEByLPaH+WSl9vitX8Q0rN2gJaF0FEK/DN0V
-         wdtvQ/MjmmWBNqfFkdzeKvunZNbpwi4E0D7bWTnMHtwKAsRhQUY7Z5CcSGZEzlju6HnY
-         gGq6C/1amkllij1FtkEIiSWSYJL7iFCUOSgPdJisvwU/FzJ8fthlDTRetj5josbH8nTl
-         RhBg==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ysJRxplC7zT+Urv9QVMthSe4YLMx0IpmJmrZfx5l7OI=;
+        b=ckMFprP0fdyX/c+T44JCY+y6NixIksxOrnlc0m7go8MmKGKtzE6RwPyzQDOEsA00eJ
+         f58vOyInmR8V9i/I9ZETFCjhInMOwT8ioawiBmGs17oaoQHSGC6hTeenquLN2Lf+OLep
+         vv2mQDVAyCfvt+mNgdfqe50kkTJX6rVx4cIUBIhF16XrN2C/ZfLzrTu75hJpONAFkhR4
+         U22KufUAq0FtosMeUAv6ysT3pXlPfsoevufVTbEWVgvYgapPCwt8y2cpv+oAk4rN1Mby
+         oR+kTehvM3GBNJcS0il2qkHMmY+HLP/Ybildc2bQ2DYPpSxPB0cg+WqMeEkJFGPTD+YM
+         G3bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=gVLYpzHO0Xc04/JAvdtllXU9ASmQMnyXdENvGXJVSj4=;
-        b=aE62I3kggsC4JLetlpluPnVndMjgyB8UO3IU8eYA3oRum+ZCNxRfbfI+bQ7hvXQe9H
-         lZ5IQFhhEomMkdvIpfTZ+SC+j1JQ77l7kVyJkFqVANoxLZ7LZRMHE3XV+5/kcRMdVfwB
-         IV4jJxuATQ1S6oPYsDZX7c8jeZeymq8pK7Nu1cQoLBXu+KYIUvc6obzTw4ZFIB8hkdhl
-         eCqnrH7SWwj6IYs5EXAA2hhVzGcFdw7NsCbzAq5A5v4J3cICdXXFFBSRyUcMR/7Jafi2
-         LsYqEOS+bG2ZWHDSfIvo33ngTTzhRCNbeNIEL7zF+jNs+r2X9C9Wo7ICWmMozGfjs9E5
-         dWYg==
-X-Gm-Message-State: APjAAAU9sl4GAP6X/Li9Ag+qDWceSa387qkRpd8Wb/oy9Jz+N6uFdUKQ
-        LuF0vSJRrzWARtmJbD0RUNmRJmHkbzcr
-X-Google-Smtp-Source: APXvYqy/HLMm19TYkxR99+/BcxYeDENW3oiTmk3bGB5VQKPJKwa7ZuStNBVw+AeGeiA4SAssU14XPBfMe4/N
-X-Received: by 2002:aa7:939c:: with SMTP id t28mr1519840pfe.144.1555098231861;
- Fri, 12 Apr 2019 12:43:51 -0700 (PDT)
-Date:   Fri, 12 Apr 2019 12:43:48 -0700
-Message-Id: <20190412194348.225570-1-venture@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH v2] hwmon: (pmbus/ir38064): Add driver for Infineon IR38064
- Voltage Regulator
-From:   Patrick Venture <venture@google.com>
-To:     venture@google.com, jdelvare@suse.com, linux@roeck-us.net,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ysJRxplC7zT+Urv9QVMthSe4YLMx0IpmJmrZfx5l7OI=;
+        b=ph7DYmJHJ5PIRfiwNItBbRhycjMg2+HN2FbkH/yrQcPGuQZOLKhzXgRKyURa7Q6J3c
+         PyxG5Us++d38RIpWd+pFZ0sVPcwSv5v/sOBjNXrlaW8T2ZxleQ1+1YikziiHe2804p6i
+         hlsp6sA3DXD92AEFYHeTZOgLxNcUZ0fDO8RBI137EesoJyaQZBbnPlbAPjQnS16aTgHL
+         FSo1ZgaNty6BI5MovXuMktKgyC+gYW37/6tuhCb2Yw3Ip83tqyDVFOO5d98mi88A/yL5
+         tpkGfrh78b78C1ieVsPpVQLzttUzGeSwbzYQaeiUh7StpFDffjKS9le8ilHhyQnd386n
+         8ieA==
+X-Gm-Message-State: APjAAAV0P+uzK/Ibv9DvjfHeU/0BamXHSSS4i+9nYvEJNxs5T/juEL4m
+        /atLX+xhxR71XveZfDImGXsI82E6
+X-Google-Smtp-Source: APXvYqzFJHC3elfHB+5MakiaoezxPHhYAzvg/fiRc1hNNFx2eLMmYQIWLYlIwnQkInJQyh8h6vwepg==
+X-Received: by 2002:a65:44cd:: with SMTP id g13mr48266011pgs.258.1555100931985;
+        Fri, 12 Apr 2019 13:28:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c1sm19501119pgq.33.2019.04.12.13.28.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Apr 2019 13:28:51 -0700 (PDT)
+Subject: Re: [PATCH v2] hwmon: (pmbus/ir38064): Add driver for Infineon
+ IR38064 Voltage Regulator
+To:     Patrick Venture <venture@google.com>, jdelvare@suse.com,
         corbet@lwn.net
 Cc:     Maxim Sloyko <maxims@google.com>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20190412194348.225570-1-venture@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <57e7d1e5-b980-fc80-ae2f-8a0ab12a0dbd@roeck-us.net>
+Date:   Fri, 12 Apr 2019 13:28:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190412194348.225570-1-venture@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Maxim Sloyko <maxims@google.com>
+On 4/12/19 12:43 PM, Patrick Venture wrote:
+> From: Maxim Sloyko <maxims@google.com>
+> 
+> Add the pmbus driver for the Infineon ir38064 voltage regulator.
+> 
+> Signed-off-by: Maxim Sloyko <maxims@google.com>
+> Signed-off-by: Patrick Venture <venture@google.com>
+> ---
+> v2:
+>   - Cleaned up weird tabbing behavior in doc.
+> v1:
+>   - Initial patchset.
+> ---
+>   Documentation/hwmon/ir38064   | 64 +++++++++++++++++++++++++++++++++++
+>   drivers/hwmon/pmbus/Kconfig   |  9 +++++
+>   drivers/hwmon/pmbus/Makefile  |  1 +
+>   drivers/hwmon/pmbus/ir38064.c | 60 ++++++++++++++++++++++++++++++++
+>   4 files changed, 134 insertions(+)
+>   create mode 100644 Documentation/hwmon/ir38064
+>   create mode 100644 drivers/hwmon/pmbus/ir38064.c
+> 
+> diff --git a/Documentation/hwmon/ir38064 b/Documentation/hwmon/ir38064
+> new file mode 100644
+> index 0000000000000..618779a329da0
+> --- /dev/null
+> +++ b/Documentation/hwmon/ir38064
+> @@ -0,0 +1,64 @@
+> +Kernel driver ir38064
+> +=====================
+> +
+> +Supported chips:
+> +  * Infineon IR38064
+> +    Prefix: 'ir38064'
+> +    Addresses scanned: -
+> +    Datasheet: Publicly available at the Infineon webiste
+> +      https://www.infineon.com/dgdl/Infineon-IR38064MTRPBF-DS-v03_07-EN.pdf?fileId=5546d462584d1d4a0158db0d9efb67ca
+> +
+> +Datasheet is not publicly available.
+> +
+> +
+> +Authors:
+> +        Maxim Sloyko <maxims@google.com>
+> +        Patrick Venture <venture@google.com>
+> +
+> +Description
+> +-----------
+> +
+> +IR38064 is a Single-input Voltage, Synchronous Buck Regulator, DC-DC Converter.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not probe for PMBus devices. You will have to instantiate
+> +devices explicitly.
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +curr1_label		"iout1"
+> +curr1_input		Measured output current
+> +curr1_crit		Critical maximum current
+> +curr1_crit_alarm	Current critical high alarm
+> +curr1_max		Maximum current
+> +curr1_max_alarm	Current high alarm
+> +
+> +in1_label		"vin"
+> +in1_input		Measured input voltage
+> +in1_crit		Critical maximum input voltage
+> +in1_crit_alarm		Input voltage critical high alarm
+> +in1_min		Minimum input voltage
+> +in1_min_alarm		Input voltage low alarm
+> +
+> +in2_label		"vout1"
+> +in2_input		Measured output voltage
+> +in2_lcrit		Critical minimum output voltage
+> +in2_lcrit_alarm	Output voltage critical low alarm
+> +in2_crit		Critical maximum output voltage
+> +in2_crit_alarm		Output voltage critical high alarm
+> +in2_max		Maximum output voltage
+> +in2_max_alarm		Output voltage high alarm
+> +in2_min		Minimum output voltage
+> +in2_min_alarm		Output voltage low alarm
+> +
+> +power1_label		"pout1"
+> +power1_input		Measured output power
+> +
+> +temp1_input		Measured temperature
+> +temp1_crit		Critical high temperature
+> +temp1_crit_alarm	Chip temperature critical high alarm
+> +temp1_max		Maximum temperature
+> +temp1_max_alarm	Chip temperature high alarm
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 629cb45f8557a..de87abab990e5 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -54,6 +54,15 @@ config SENSORS_IR35221
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called ir35521.
+>   
+> +config SENSORS_IR38064
+> +	tristate "Infineon IR38064"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Infineon
+> +	  IR38064.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called ir38064.
+> +
+>   config SENSORS_LM25066
+>   	tristate "National Semiconductor LM25066 and compatibles"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index ea0e39518c216..7d1fa6b3c8c93 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+>   obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+>   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+>   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+> +obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+>   obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
+>   obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
+>   obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
+> diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
+> new file mode 100644
+> index 0000000000000..4b957ebb6fa71
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/ir38064.c
+> @@ -0,0 +1,60 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Infineon IR38064
+> + *
+> + * Copyright (c) 2017 Google Inc
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +static struct pmbus_driver_info ir38064_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
 
-Add the pmbus driver for the Infineon ir38064 voltage regulator.
+The datasheet says this is linear16 format with exponent=-8.
+Oddly enough, the datasheet also suggests that VOUT_MODE is
+not supported, which would normally report the exponent.
+I think it would be is better to implement a local read function
+and fake VOUT_MODE instead of declaring direct mode, but then
+I understand that it would make the code more complex. I'll
+leave it up to you, but if you want to keep it as-is,
+please explain in a comment that you are faking linear16
+mode with exponent -8.
 
-Signed-off-by: Maxim Sloyko <maxims@google.com>
-Signed-off-by: Patrick Venture <venture@google.com>
----
-v2:
- - Cleaned up weird tabbing behavior in doc.
-v1:
- - Initial patchset.
----
- Documentation/hwmon/ir38064   | 64 +++++++++++++++++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig   |  9 +++++
- drivers/hwmon/pmbus/Makefile  |  1 +
- drivers/hwmon/pmbus/ir38064.c | 60 ++++++++++++++++++++++++++++++++
- 4 files changed, 134 insertions(+)
- create mode 100644 Documentation/hwmon/ir38064
- create mode 100644 drivers/hwmon/pmbus/ir38064.c
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.m[PSC_VOLTAGE_OUT] = 256,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 0,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +	    | PMBUS_HAVE_POUT,
+> +};
+> +
 
-diff --git a/Documentation/hwmon/ir38064 b/Documentation/hwmon/ir38064
-new file mode 100644
-index 0000000000000..618779a329da0
---- /dev/null
-+++ b/Documentation/hwmon/ir38064
-@@ -0,0 +1,64 @@
-+Kernel driver ir38064
-+=====================
-+
-+Supported chips:
-+  * Infineon IR38064
-+    Prefix: 'ir38064'
-+    Addresses scanned: -
-+    Datasheet: Publicly available at the Infineon webiste
-+      https://www.infineon.com/dgdl/Infineon-IR38064MTRPBF-DS-v03_07-EN.pdf?fileId=5546d462584d1d4a0158db0d9efb67ca
-+
-+Datasheet is not publicly available.
-+
-+
-+Authors:
-+        Maxim Sloyko <maxims@google.com>
-+        Patrick Venture <venture@google.com>
-+
-+Description
-+-----------
-+
-+IR38064 is a Single-input Voltage, Synchronous Buck Regulator, DC-DC Converter.
-+
-+Usage Notes
-+-----------
-+
-+This driver does not probe for PMBus devices. You will have to instantiate
-+devices explicitly.
-+
-+Sysfs attributes
-+----------------
-+
-+curr1_label		"iout1"
-+curr1_input		Measured output current
-+curr1_crit		Critical maximum current
-+curr1_crit_alarm	Current critical high alarm
-+curr1_max		Maximum current
-+curr1_max_alarm	Current high alarm
-+
-+in1_label		"vin"
-+in1_input		Measured input voltage
-+in1_crit		Critical maximum input voltage
-+in1_crit_alarm		Input voltage critical high alarm
-+in1_min		Minimum input voltage
-+in1_min_alarm		Input voltage low alarm
-+
-+in2_label		"vout1"
-+in2_input		Measured output voltage
-+in2_lcrit		Critical minimum output voltage
-+in2_lcrit_alarm	Output voltage critical low alarm
-+in2_crit		Critical maximum output voltage
-+in2_crit_alarm		Output voltage critical high alarm
-+in2_max		Maximum output voltage
-+in2_max_alarm		Output voltage high alarm
-+in2_min		Minimum output voltage
-+in2_min_alarm		Output voltage low alarm
-+
-+power1_label		"pout1"
-+power1_input		Measured output power
-+
-+temp1_input		Measured temperature
-+temp1_crit		Critical high temperature
-+temp1_crit_alarm	Chip temperature critical high alarm
-+temp1_max		Maximum temperature
-+temp1_max_alarm	Chip temperature high alarm
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 629cb45f8557a..de87abab990e5 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -54,6 +54,15 @@ config SENSORS_IR35221
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ir35521.
- 
-+config SENSORS_IR38064
-+	tristate "Infineon IR38064"
-+	help
-+	  If you say yes here you get hardware monitoring support for Infineon
-+	  IR38064.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called ir38064.
-+
- config SENSORS_LM25066
- 	tristate "National Semiconductor LM25066 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index ea0e39518c216..7d1fa6b3c8c93 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
- obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
- obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
- obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-+obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
-new file mode 100644
-index 0000000000000..4b957ebb6fa71
---- /dev/null
-+++ b/drivers/hwmon/pmbus/ir38064.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon IR38064
-+ *
-+ * Copyright (c) 2017 Google Inc
-+ *
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include "pmbus.h"
-+
-+static struct pmbus_driver_info ir38064_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.m[PSC_VOLTAGE_OUT] = 256,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+	    | PMBUS_HAVE_POUT,
-+};
-+
-+static int ir38064_probe(struct i2c_client *client,
-+			 const struct i2c_device_id *id)
-+{
-+	return pmbus_do_probe(client, id, &ir38064_info);
-+}
-+
-+static const struct i2c_device_id ir38064_id[] = {
-+	{"ir38064", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, ir38064_id);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver ir38064_driver = {
-+	.driver = {
-+		   .name = "ir38064",
-+		   },
-+	.probe = ir38064_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = ir38064_id,
-+};
-+
-+module_i2c_driver(ir38064_driver);
-+
-+MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon IR38064");
-+MODULE_LICENSE("GPL");
--- 
-2.21.0.392.gf8f6787159e-goog
+Not mandatory, but the chip does support VOUT_PEAK, IOUT_PEAK,
+and TEMPERATURE_PEAK, just in case you are interested adding
+support for it.
+
+Thanks,
+Guenter
+
+> +static int ir38064_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+> +{
+> +	return pmbus_do_probe(client, id, &ir38064_info);
+> +}
+> +
+> +static const struct i2c_device_id ir38064_id[] = {
+> +	{"ir38064", 0},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, ir38064_id);
+> +
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver ir38064_driver = {
+> +	.driver = {
+> +		   .name = "ir38064",
+> +		   },
+> +	.probe = ir38064_probe,
+> +	.remove = pmbus_do_remove,
+> +	.id_table = ir38064_id,
+> +};
+> +
+> +module_i2c_driver(ir38064_driver);
+> +
+> +MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon IR38064");
+> +MODULE_LICENSE("GPL");
+> 
 
