@@ -2,48 +2,61 @@ Return-Path: <SRS0=yVNc=SP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9E0C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Apr 2019 00:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76321C10F14
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Apr 2019 00:52:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A55D3218AF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Apr 2019 00:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555115170;
-	bh=x7FSTyGfJlPdiXW5VI0btM70k1QO7NtP0ZRkWpiTWsU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=kLBUz78h3a1GRAkpi9U6pJsNLx8Fz/GVoQBOXGiq547XSQHrkeZp5zbT/IAWtAUbC
-	 abNnwUUD+FkF0xQK05hG6BUqFu2WhDl9q+9iVlxoDGmTTMT8ZmPooeoaNbnmtxSfAJ
-	 Toa9LQH5zNVcme9CStLGi0q/zoPjbviw0x5YiiCM=
+	by mail.kernel.org (Postfix) with ESMTP id 45D2120850
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Apr 2019 00:52:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WH1Zelfw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbfDMA0J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Apr 2019 20:26:09 -0400
-Received: from casper.infradead.org ([85.118.1.10]:50956 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbfDMA0J (ORCPT
+        id S1726912AbfDMAwG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 12 Apr 2019 20:52:06 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36928 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbfDMAwG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Apr 2019 20:26:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4mQ9cEOwWsjtS00QxTayhbQ57nO91ztak7S0dPl4OCA=; b=qRkeB63T/VDW/K1SrqBJjuulkZ
-        F2Qe/Gv89KZaClsUhOo3tq+ciBVgxFl7goed5PTgh7/VxqooIG6QUsNkhY9cLanR7iQaq4QfrTiHp
-        5Be7GLO/HidpS4mrLedilzPdUMO7TIj9M7xXVjM4CDQ4p9KuauMCL1NA4dMwQ7lse2cFYvUhXIoaL
-        TVa1Lm9NSPY6akwTxXYU6xnoAvW/ooQSkTpsWXdqVpTffYN0MkPBOwKzPGBF+KOF+ORMYiEs4Nqkx
-        pfDGXPdLIzuiJqkC1M9J8OagYHAoRlu+2Un1za6vV9JJ835F9YWj+yrBrwKO8RFJYD+PtHARV8jl9
-        EiF3RxtA==;
-Received: from 201.86.162.146.dynamic.adsl.gvt.net.br ([201.86.162.146] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hF6US-0002NC-62; Sat, 13 Apr 2019 00:25:52 +0000
-Date:   Fri, 12 Apr 2019 21:25:41 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Fri, 12 Apr 2019 20:52:06 -0400
+Received: by mail-pl1-f196.google.com with SMTP id w23so5893603ply.4;
+        Fri, 12 Apr 2019 17:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FAOFcqGmAyWqRgqK+hze86G4KUWhAcKaMXCl1prsD7U=;
+        b=WH1ZelfwVnWq8wfRpDlMD10uUdU4Yzwvl2MVee4roCocPTsQszssvpu7mYqNa7S26u
+         hqkFJQYJZLikHqgzZ7GxIYc25grjdbXDF92YLkUCGkFIy6fj+f8c/63ver9r867/734G
+         FgP+MqH/EjOOnF6DrHfr5w1JXmds0Rvo98YNl3tc67TRnEKqfgoshit9eXFZ+2eWfaCe
+         FtJg1pyFnhHK/T7VzvYSZjcWMtOrLxkRFTT2fj+VUa3EuPZC9WzzsexiAH1PB7UbjsfU
+         iGa42KAtl0SWUaxzxebYjUV5Tk/rzCAihMnzZAL+0hSTK3AssYuDL+VAR/DVBEsYAnkT
+         uxSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FAOFcqGmAyWqRgqK+hze86G4KUWhAcKaMXCl1prsD7U=;
+        b=RjyXnWV8OyzNJGJhueu8fJxHYomqLkiFdVCYOf/aK9J2jfzypqaGmWl9PuR0AtB9Cb
+         3xB91tULeXhFi82hmGbxYa5Jd0vTxtrk8EdFoDBwDUsaaxKfUU56beDZE1R2RQ1IhxfD
+         q4JOKhsFEJUbscGPZEsr5QMIb6KOi2yUfU5qM+vuZ0unQXXpjzanSBXTuJdWhkb53iUI
+         CJYz+VrZ65hhvaklnWMBBPR2zLg5zLP2X825mVzXn82XtvR6Z/Ek1xZE0fR5f1s4hvc3
+         EgRy06P/2ic5x3W7393r1cvc4eNC7iPe+NnuFgMcwgvugENv9xGNmiMnkE6itHJnlMi9
+         WGHQ==
+X-Gm-Message-State: APjAAAVlMoMKCBtLTAXPWiEbzKpbSmH1/1jppzgl94QUdxUxi+9AhYpj
+        RMGML5Ati3rXIJqbEqO0nlfVbUfY
+X-Google-Smtp-Source: APXvYqw/Lx/YxaORzJCKB74OjskQexdw6lmOnEtqKF2cGzIqRN9VZsE8gDodjoH8h/y4lpDS8vTpAw==
+X-Received: by 2002:a17:902:bf07:: with SMTP id bi7mr31595426plb.87.1555116725223;
+        Fri, 12 Apr 2019 17:52:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i24sm58250206pfo.85.2019.04.12.17.52.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Apr 2019 17:52:04 -0700 (PDT)
+Subject: Re: [PATCH v2 00/21] Convert hwmon documentation to ReST
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
@@ -58,69 +71,75 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Paul Mackerras <paulus@samba.org>,
         Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2 00/21] Convert hwmon documentation to ReST
-Message-ID: <20190412212541.0cde9452@coco.lan>
-In-Reply-To: <8514ff97-3167-3c89-3468-e247d14c5086@roeck-us.net>
 References: <cover.1554923967.git.mchehab+samsung@kernel.org>
-        <20190411124324.3ed62fad@lwn.net>
-        <20190411174357.251904f5@coco.lan>
-        <20190411210731.GA29378@roeck-us.net>
-        <20190412100451.6fe49de7@lwn.net>
-        <8514ff97-3167-3c89-3468-e247d14c5086@roeck-us.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20190411124324.3ed62fad@lwn.net> <20190411174357.251904f5@coco.lan>
+ <20190411210731.GA29378@roeck-us.net> <20190412100451.6fe49de7@lwn.net>
+ <8514ff97-3167-3c89-3468-e247d14c5086@roeck-us.net>
+ <20190412212541.0cde9452@coco.lan>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <f1b5ebcd-bd8c-817f-1394-fd2742c5d8b3@roeck-us.net>
+Date:   Fri, 12 Apr 2019 17:52:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20190412212541.0cde9452@coco.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Em Fri, 12 Apr 2019 09:12:52 -0700
-Guenter Roeck <linux@roeck-us.net> escreveu:
-
-> On 4/12/19 9:04 AM, Jonathan Corbet wrote:
-> > On Thu, 11 Apr 2019 14:07:31 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> >   
-> >>> While nobody does such split, IMHO, the best would be to keep the
-> >>> information outside Documentation/admin-guide. But hey! You're
-> >>> the Doc maintainer. If you prefer to move, I'm perfectly fine
-> >>> with that.
-> >>>      
-> >>
-> >> Same here, but please don't move the files which are kernel facing only.  
-> > 
-> > Well, let's step back and think about this.  Who is the audience for
-> > these documents?  That will tell us a lot about where they should really
-> > be.
-> >   
+On 4/12/19 5:25 PM, Mauro Carvalho Chehab wrote:
+> Em Fri, 12 Apr 2019 09:12:52 -0700
+> Guenter Roeck <linux@roeck-us.net> escreveu:
 > 
-> Most of them are for users, some of them are for driver developers. A few
-> are for both, though that is generally not the intention (and one may argue
-> that driver internal documentation should be moved into the respective
-> driver source).
+>> On 4/12/19 9:04 AM, Jonathan Corbet wrote:
+>>> On Thu, 11 Apr 2019 14:07:31 -0700
+>>> Guenter Roeck <linux@roeck-us.net> wrote:
+>>>    
+>>>>> While nobody does such split, IMHO, the best would be to keep the
+>>>>> information outside Documentation/admin-guide. But hey! You're
+>>>>> the Doc maintainer. If you prefer to move, I'm perfectly fine
+>>>>> with that.
+>>>>>       
+>>>>
+>>>> Same here, but please don't move the files which are kernel facing only.
+>>>
+>>> Well, let's step back and think about this.  Who is the audience for
+>>> these documents?  That will tell us a lot about where they should really
+>>> be.
+>>>    
+>>
+>> Most of them are for users, some of them are for driver developers. A few
+>> are for both, though that is generally not the intention (and one may argue
+>> that driver internal documentation should be moved into the respective
+>> driver source).
+> 
+> The big issue is really those files that contain both kernel internals
+> and userspace stuff.
+> 
+> This is a common pattern. I just finishing converting a lot more
+> documents to ReST and I found the same thing on almost all document
+> directories I touched.
+> 
+>>> What I would prefer to avoid is the status quo where *everything* is in
+>>> the top-level directory, and where documents are organized for the
+>>> convenience of their maintainers rather than of their readers.  But
+>>> sometimes I feel like I'm alone in that desire...:)
+>>>    
+>> I am fine with separating user pointing from kernel API/driver developer
+>> guides, and I agree that it would make a lot of sense. As I said, please
+>> just make sure that kernel facing files don't end up in the wrong directory.
+> 
+> I like the idea of splitting user faced documents from the rest, but
+> this is not an easy task. On several cases, there are just a couple
+> of paragraphs with things like sysfs entries in the middle of a big
+> file with Kernel internals.
+> 
 
-The big issue is really those files that contain both kernel internals
-and userspace stuff.
+Yes, I know. I don't think that cleanup is going to happen anytime soon.
 
-This is a common pattern. I just finishing converting a lot more
-documents to ReST and I found the same thing on almost all document
-directories I touched.
+Guenter
 
-> > What I would prefer to avoid is the status quo where *everything* is in
-> > the top-level directory, and where documents are organized for the
-> > convenience of their maintainers rather than of their readers.  But
-> > sometimes I feel like I'm alone in that desire...:)
-> >   
-> I am fine with separating user pointing from kernel API/driver developer
-> guides, and I agree that it would make a lot of sense. As I said, please
-> just make sure that kernel facing files don't end up in the wrong directory.
-
-I like the idea of splitting user faced documents from the rest, but
-this is not an easy task. On several cases, there are just a couple
-of paragraphs with things like sysfs entries in the middle of a big
-file with Kernel internals.
-
-Thanks,
-Mauro
