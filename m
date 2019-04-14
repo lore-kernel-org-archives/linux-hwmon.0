@@ -2,117 +2,132 @@ Return-Path: <SRS0=rYov=SQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4102C10F13
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Apr 2019 21:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 419D7C10F13
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Apr 2019 21:58:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E74420818
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Apr 2019 21:57:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0481620818
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Apr 2019 21:58:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FAfrlJRt"
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="cYy/FssY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbfDNV52 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 14 Apr 2019 17:57:28 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45281 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbfDNV51 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 14 Apr 2019 17:57:27 -0400
-Received: by mail-pl1-f196.google.com with SMTP id bf11so7558247plb.12
-        for <linux-hwmon@vger.kernel.org>; Sun, 14 Apr 2019 14:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=zqqYAEdy1XGI0J4t4krzg3qUCRE/LgmC97Nu+8eamxQ=;
-        b=FAfrlJRtFvKWCAeq49UjN+T95PYUScjprSX8YNM0CuclcDUiaDEFRcS2RGvsd4dPMn
-         gm3931bZvXVgJyjjeevON1KnE8RwJP+6BAygXnUmx6WBcPAXACukbZWFMvh8fNliduCR
-         UxGtl2JRQHakugK+5B2q7MSAxu2tbOnLr/rDzsm1WjRGBlm3VQPmJ+Y9s3rNNnnFH199
-         6gYHJ1NsCZ+UPA+gU12jYMA/aUauS0h7htdPoytxmPr1uN3wcE8VqOG966hJUMGbsp9+
-         izrellHJEjkjI2lZDX9/NiGLiFPNnUwr9ZuO6BDR0pmys8HznOlT/SIcX5aVsdjGqsDt
-         XwTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=zqqYAEdy1XGI0J4t4krzg3qUCRE/LgmC97Nu+8eamxQ=;
-        b=F09oeokvEihEBxuaatvRh0fAAr/JIesu01cXDKRQPG4e3nSUcFW/zqYTtPYAhuvBdd
-         Rnuzu1DaIIY85PiDf71X6Q80S6GgD4BEfYs8Q4leUmnWct0rIIzn+i4SZLoeQ+mzVnIA
-         nyX2Q9gGAwmNYbf2LXPpqRav+aAU8JSXYzACgaYMN4OZLiBIvA3naafrclUoA4Jzb0Py
-         AZDHw3iuWnjNyt6jITlgVz+/1pInqlplN7EE+eAkpeYAY4VVrJd6OLdSsKsb1VhJ216J
-         N8W1gGdZ3FgJqAL5aKdJzBEeUAZMALhItuClaIAbEHFt7nSrzFX/X4U2ECZSKuIwyCE1
-         wqkA==
-X-Gm-Message-State: APjAAAVHF7tM8k55+7lNhwPfpzdZfEvtLm2LQRhzXDUNt1W3gbhdsVj3
-        bdEvjPpE9f3ZsWbcKOKmy+GUkWgg
-X-Google-Smtp-Source: APXvYqz9j3Mf1c1n9g22o14KLHq2poUcVS2F4oW7Q9PMzWar4tYSTA+AtB+XfjWLOmkECJ+m6L30JA==
-X-Received: by 2002:a17:902:2862:: with SMTP id e89mr52675147plb.203.1555279046941;
-        Sun, 14 Apr 2019 14:57:26 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l184sm114484761pfc.98.2019.04.14.14.57.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Apr 2019 14:57:26 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Subject: [PATCH] hwmon: (pmbus_core) Replace S_<PERMS> with octal values
-Date:   Sun, 14 Apr 2019 14:57:24 -0700
-Message-Id: <1555279044-25139-1-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
+        id S1726233AbfDNV6F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Apr 2019 17:58:05 -0400
+Received: from mail-eopbgr30115.outbound.protection.outlook.com ([40.107.3.115]:56925
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725829AbfDNV6F (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 14 Apr 2019 17:58:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=odl8RsI8fJVdSYE3fASZ0QvkUAS1tnW2h7eu4bXbeSE=;
+ b=cYy/FssY7BJCMK8R0Tf0XNUdqxQo7aDKIPbflAndzYlUwmSGFb0CCivBEe/zqoEpi3K6bssmkRzGBpA9nJcnxUJJ70cAsrEKrWeTKeDLjZkZ6TJ+c7/GBj+6Ugf7KcyZ+zOb+lpZ8Dt/GCDKYljsEALSoMDyB1c0xgeWFKfvgOY=
+Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
+ HE1PR07MB4297.eurprd07.prod.outlook.com (20.176.166.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1813.8; Sun, 14 Apr 2019 21:58:02 +0000
+Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
+ ([fe80::cd23:d96f:5d94:cee6]) by HE1PR07MB3337.eurprd07.prod.outlook.com
+ ([fe80::cd23:d96f:5d94:cee6%7]) with mapi id 15.20.1813.009; Sun, 14 Apr 2019
+ 21:58:02 +0000
+From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+Subject: [PATCH v3 0/4] pmbus: extend configurability via sysfs
+Thread-Topic: [PATCH v3 0/4] pmbus: extend configurability via sysfs
+Thread-Index: AQHU8w0hu83uBtZGLEGiubZy09LFaw==
+Date:   Sun, 14 Apr 2019 21:58:02 +0000
+Message-ID: <cover.1555273192.git.krzysztof.adamski@nokia.com>
+Accept-Language: pl-PL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR02CA0109.eurprd02.prod.outlook.com
+ (2603:10a6:7:29::38) To HE1PR07MB3337.eurprd07.prod.outlook.com
+ (2603:10a6:7:2d::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=krzysztof.adamski@nokia.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [131.228.2.9]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fe9b9677-8619-436e-3431-08d6c12443ab
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB4297;
+x-ms-traffictypediagnostic: HE1PR07MB4297:
+x-microsoft-antispam-prvs: <HE1PR07MB42973DFFF4D477968FD73729EF2A0@HE1PR07MB4297.eurprd07.prod.outlook.com>
+x-forefront-prvs: 00073DB75F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(366004)(39860400002)(376002)(346002)(189003)(199004)(316002)(7736002)(2616005)(6506007)(386003)(102836004)(5660300002)(107886003)(6116002)(3846002)(476003)(71200400001)(66066001)(71190400001)(305945005)(99286004)(2906002)(486006)(52116002)(14444005)(86362001)(256004)(6512007)(4326008)(81166006)(6436002)(53936002)(105586002)(6486002)(81156014)(36756003)(26005)(97736004)(106356001)(110136005)(54906003)(186003)(8936002)(478600001)(25786009)(68736007)(8676002)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB4297;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: oJtJAJuCepEgIMA871ayCEm7TsiYfkKNoD/K0j/LfoXE1Lz07ULxdEC2cgo/N9MHBoJCgDHAlRJsl82B5fdTlM3VZf4fyAVDdKVzWlTqpyAcXM61M/KKlDh5VVNYrA5aSfE7Cte9CnxUzSteUpEjUejoZVPXJdNfDlRl4xy8yfL4+4hVS9z32/ZfG+Q/loOfkCIeaio580RX7F2eYVJVF32/+WK8to45VodTwZVflE88rfnuILI4TDa5UY0/aly+if5mSjFe+a2qWOIuMGvK3/ZboteAzyzsoU10Gwx//F6hUziHq4u6UCCc77qW0HjoRO4UaNkGggAfGFlpy5d0vIGyItMc2hyRk6V/67Rz37dCl/HCneN95PZDTxoNCaeQWvgC8+p9to6YpEgJ7cHdCqUEFFEKa2TcAeMXmATCmPw=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E460F94AC673A14E95D3A4084005CCDA@eurprd07.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe9b9677-8619-436e-3431-08d6c12443ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2019 21:58:02.0592
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB4297
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Replace S_<PERMS> with octal values.
+Hi,
 
-The conversion was done automatically with coccinelle. The semantic patches
-and the scripts used to generate this commit log are available at
-https://github.com/groeck/coccinelle-patches/hwmon/.
+This patch series extends pmbus core for two specific use cases we have:
+- First three patches allows lm25066 driver to set number of samples for
+  average values (by controlling manufacturer specific SAMPLES_FOR_AVG
+  register). It is useful to be able to set this register when using any
+  of the *_average registers, especially since the default value means
+  we are averaging 1 sample which isn't that useful.
+- Third patch exports m, b, R coefficients so that they can be adjusted
+  by user space. We can't use default coefficients values and in order
+  to achieve high accuracy, we calibrate them per unit so using
+  device-tree or similar concepts (which are generally shared by all
+  board of the same type) to store them is not an option too. Also,
+  using device-tree (the only was to influence coeffs now) might not be
+  possible on some architectures (like on x86, for example). Thus, we
+  export it so that the logic of loading proper coeffs can be
+  implemented in user space instead.
 
-This patch does not introduce functional changes. It was verified by
-compiling the old and new files and comparing text and data sizes.
+v3 changes:
+- split ABI docs with the actual implementation
+- better error handling in lm25066 implementation
+- numeric permissions
+- only add samples attributes for page 0
 
-Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/pmbus_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+v2 changes:
+- PMBUS_VIRT_* registers used instead of custom sysfs groups for
+  configuring samples for average
+- coeffs are only exported as sysfs attirbutes if the format used is
+  "direct"
+- fixed memory allocation issue in coeffs patch
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 2e2b5851139c..e2366428a9a9 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1073,7 +1073,7 @@ static int pmbus_add_boolean(struct pmbus_data *data,
- 		 name, seq, type);
- 	boolean->s1 = s1;
- 	boolean->s2 = s2;
--	pmbus_attr_init(a, boolean->name, S_IRUGO, pmbus_show_boolean, NULL,
-+	pmbus_attr_init(a, boolean->name, 0444, pmbus_show_boolean, NULL,
- 			(reg << 16) | mask);
- 
- 	return pmbus_add_attribute(data, &a->dev_attr.attr);
-@@ -1107,7 +1107,7 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
- 	sensor->update = update;
- 	sensor->convert = convert;
- 	pmbus_dev_attr_init(a, sensor->name,
--			    readonly ? S_IRUGO : S_IRUGO | S_IWUSR,
-+			    readonly ? 0444 : 0644,
- 			    pmbus_show_sensor, pmbus_set_sensor);
- 
- 	if (pmbus_add_attribute(data, &a->attr))
-@@ -1139,7 +1139,7 @@ static int pmbus_add_label(struct pmbus_data *data,
- 		snprintf(label->label, sizeof(label->label), "%s%d", lstring,
- 			 index);
- 
--	pmbus_dev_attr_init(a, label->name, S_IRUGO, pmbus_show_label, NULL);
-+	pmbus_dev_attr_init(a, label->name, 0444, pmbus_show_label, NULL);
- 	return pmbus_add_attribute(data, &a->attr);
- }
- 
--- 
-2.7.4
+Krzysztof Adamski (4):
+  pmbus: introduce PMBUS_VIRT_*_SAMPLES registers
+  hwmon: Document the samples attributes
+  lm25066: support SAMPLES_FOR_AVG register
+  pmbus_core: export coefficients via sysfs
+
+ Documentation/hwmon/sysfs-interface |  18 +++
+ drivers/hwmon/pmbus/lm25066.c       |  17 ++-
+ drivers/hwmon/pmbus/pmbus.h         |  15 ++
+ drivers/hwmon/pmbus/pmbus_core.c    | 214 +++++++++++++++++++++++++++-
+ 4 files changed, 261 insertions(+), 3 deletions(-)
+
+--=20
+2.20.1
 
