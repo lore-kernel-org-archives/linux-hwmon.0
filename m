@@ -6,77 +6,80 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1840C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 20:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F75EC10F12
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 20:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BCC22070D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 20:15:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29AC22070D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 20:16:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7pqDF0m"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLi99SnM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbfDOUPB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 16:15:01 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36349 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbfDOUPA (ORCPT
+        id S1728252AbfDOUQ1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 16:16:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38186 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728148AbfDOUQ1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 16:15:00 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 85so9127775pgc.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 13:15:00 -0700 (PDT)
+        Mon, 15 Apr 2019 16:16:27 -0400
+Received: by mail-pl1-f196.google.com with SMTP id f36so9122074plb.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 13:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=oRrj9N4zohRG7UO6MC/aB4tKIEr8628uiQzEcy6woUY=;
-        b=W7pqDF0mnwqexeb16o1Y77WlPVHsEPo18b+gFMNmOwxLtClmNQKWJnL8dehLSHS2ov
-         OTUBW5NzsprXpAASTklsD2a1gc8ZKotd0JRR6o49inhr8436CsapDyU6com+4frt8vi5
-         tuMLR1nsnQ88f1jOAaQ3yRUxOVgnvDNqWBWdwKdzrIPs9GKHEiTu3XAWOUpkX55iL+/J
-         NON7NgHWOfPJmVSWJ0a0EZzd47IPSnpi6wmdySX2wobrzMMN49mg2Dq6AdjQDSiS396C
-         +dE+KKMYaKqsR6HiLfS1lAg2N6Q8CaXovaIxNerhZ+k/ZcEtDwHc6ncA5MFG17xccGDB
-         tUZQ==
+        bh=0zg7iGo8A9Y0NOviiorOl0735LTDfVinLnakb9hXMt8=;
+        b=BLi99SnMPxPcdwQnIM4xKfynQJegNq9uWNltI1+C79wlSOjMFQMQuq7DK9FnyUi9Ck
+         f/FWBgpyaqi+xfuzCrefFS5Ta4QTj6nEPJYEZsixrqfArQdnoNL+0xfb+3uh4MMKDOqz
+         TYp9A8dYQ8wvBY41jKt1kM++YdaXv4FkY4qK7I3iLI8Eg8tBlmLIyKNhTy+PedkeUy72
+         fPwNcR3IRS8tQL7UCbp6CiHlzYw2g01rkpRUvgYTN6XgkOnmojCLx+4ZFXN03mtCjb/z
+         +G2H/j7PgZ5vobmVxnR8D/3/EjbFRihvVUNRW/tc4kAMLclqfxUggdSxsCeaSWwK++vg
+         UJQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oRrj9N4zohRG7UO6MC/aB4tKIEr8628uiQzEcy6woUY=;
-        b=p+DiY4Xxo2ZSRHVbhn7V2d1tkI4leQXsZzfU1Q5+ZmgVYUqoyUuGwejXqM8a4J4vn2
-         CvAmwL2zX8Ldn4JlbOcP0kAWjuTI/+kF8GSpJjHTXPhNb6aLDK6gSIk+xcZWSWLteJR7
-         Ca7++z3Q9LKZP0GWkiyCuYNxr1UOG86U0aryGhdLuwuNI1AznBOSHfw3EEXRqNFoo2bh
-         FRmfzFpJZj7QLenrTf/cHEO6OyaDZB4vqT21VOByB/HoZxivyf2nre9rmOXqclDHA6nC
-         npHXlUPnwTADL8tj+05P1DMIxgLYo3SCsRkj3KllRIaAzjNdfRcIF2kp1f8EPnAfp4JJ
-         JZmQ==
-X-Gm-Message-State: APjAAAUKuPIir5dt7MJmdJhWnOabhxhH84xO1tx8533NTh4JtLNXBA7i
-        i0DC3rs4vSZLK8CMd6fIQ5k=
-X-Google-Smtp-Source: APXvYqzS1vc6rE/534Tet+EkbpeWhYpxeiuPoRO6JcUawNG5VsZonpjhHGHH+tzNM3iT0TWJbOL7nQ==
-X-Received: by 2002:aa7:884b:: with SMTP id k11mr77766204pfo.49.1555359300168;
-        Mon, 15 Apr 2019 13:15:00 -0700 (PDT)
+        bh=0zg7iGo8A9Y0NOviiorOl0735LTDfVinLnakb9hXMt8=;
+        b=nW8VeDlW1cnhlJrGWhOs/zFwhLSiESvoGxLguR/6ZBTotfdjElgHuYDYvVBnMOLpie
+         FDFpG3kyUceI5pJ3/6CEWgUl5GU3d0EJJ47tCNNZUsWLC4FSviFehLhrkrI3jEf0bJ+Q
+         nlLkSuPfkAGb7+sePrGs13Xbd5FUP7zGL1acrU40er265eacMYbHIrK4Y0lAwNL1xjMT
+         xaPEndrt4J3y2L+4kLLUu9MB4AMBxO1/j3LgbNIOWyRShXDkIk3dxtJtU5Ce+qsOmxsL
+         OIl6ACW8pglHunc77g79IM6mHAJUwgnoEpxgd+vBQ2/okrW1gGoI0hRQcmZVGkTWy5ZM
+         l7+g==
+X-Gm-Message-State: APjAAAU1iYndJnXnDjla7kfbEQJApmO2GdynZx25oG9Z94hFuJGuvRc9
+        pGpQFLAesgXBajr3MhB3eAg=
+X-Google-Smtp-Source: APXvYqz/3ruJfg3/Kj4G1tkelJJhhZ31+2w7K+HitE6KQNPDosguYb9Zpi1mNznRlyjRC1BlfUGpAA==
+X-Received: by 2002:a17:902:59c5:: with SMTP id d5mr77532814plj.104.1555359386870;
+        Mon, 15 Apr 2019 13:16:26 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l19sm64206462pff.1.2019.04.15.13.14.59
+        by smtp.gmail.com with ESMTPSA id e7sm48746397pfc.132.2019.04.15.13.16.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 13:14:59 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 13:14:58 -0700
+        Mon, 15 Apr 2019 13:16:26 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 13:16:25 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
         <krzysztof.adamski@nokia.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH v3 2/4] hwmon: Document the samples attributes
-Message-ID: <20190415201458.GA25571@roeck-us.net>
+Subject: Re: [PATCH v3 3/4] lm25066: support SAMPLES_FOR_AVG register
+Message-ID: <20190415201625.GA25805@roeck-us.net>
 References: <cover.1555273192.git.krzysztof.adamski@nokia.com>
- <f7f4bebc95087fb491b6fb50dc8e9a0ffca2fd94.1555273192.git.krzysztof.adamski@nokia.com>
+ <81104f51d2c10aff1932de23a24d5bc133b52ab7.1555273192.git.krzysztof.adamski@nokia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f7f4bebc95087fb491b6fb50dc8e9a0ffca2fd94.1555273192.git.krzysztof.adamski@nokia.com>
+In-Reply-To: <81104f51d2c10aff1932de23a24d5bc133b52ab7.1555273192.git.krzysztof.adamski@nokia.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 14, 2019 at 09:58:40PM +0000, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
-> Document new ABI attributes: {in,power,curr,temp}_samples and samples.
+On Sun, Apr 14, 2019 at 09:59:19PM +0000, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
+> Manufacturer specific SAMPLES_FOR_AVG register allows setting the number
+> of samples used in computing the average values (PMBUS_VIRT_READ_*_AVG).
+> The number we write is an exponent of base 2 of the number of samples so
+> for example writing 3 will result in 8 samples average.
 > 
 > Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 
@@ -86,35 +89,68 @@ Thanks,
 Guenter
 
 > ---
->  Documentation/hwmon/sysfs-interface | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  drivers/hwmon/pmbus/lm25066.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/hwmon/sysfs-interface b/Documentation/hwmon/sysfs-interface
-> index 2b9e1005d88b..7b91706d01c8 100644
-> --- a/Documentation/hwmon/sysfs-interface
-> +++ b/Documentation/hwmon/sysfs-interface
-> @@ -756,6 +756,24 @@ intrusion[0-*]_beep
->  		1: enable
->  		RW
+> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> index 53db78753a0d..715d4ab57516 100644
+> --- a/drivers/hwmon/pmbus/lm25066.c
+> +++ b/drivers/hwmon/pmbus/lm25066.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+>  #include <linux/i2c.h>
+> +#include <linux/log2.h>
+>  #include "pmbus.h"
 >  
-> +********************************
-> +* Average sample configuration *
-> +********************************
-> +
-> +Devices allowing for reading {in,power,curr,temp}_average values may export
-> +attributes for controlling number of samples used to compute average.
-> +
-> +samples		Sets number of average samples for all types of measurements.
-> +		RW
-> +
-> +in_samples
-> +power_samples
-> +curr_samples
-> +temp_samples    Sets number of average samples for specific type of measurements.
-> +		Note that on some devices it won't be possible to set all of them
-> +		to different values so changing one might also change some others.
-> +		RW
-> +
+>  enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+> @@ -39,12 +40,15 @@ enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+>  #define LM25066_CLEAR_PIN_PEAK		0xd6
+>  #define LM25066_DEVICE_SETUP		0xd9
+>  #define LM25066_READ_AVG_VIN		0xdc
+> +#define LM25066_SAMPLES_FOR_AVG		0xdb
+>  #define LM25066_READ_AVG_VOUT		0xdd
+>  #define LM25066_READ_AVG_IIN		0xde
+>  #define LM25066_READ_AVG_PIN		0xdf
 >  
->  sysfs attribute writes interpretation
->  -------------------------------------
+>  #define LM25066_DEV_SETUP_CL		BIT(4)	/* Current limit */
+>  
+> +#define LM25066_SAMPLES_FOR_AVG_MAX	4096
+> +
+>  /* LM25056 only */
+>  
+>  #define LM25056_VAUX_OV_WARN_LIMIT	0xe3
+> @@ -284,6 +288,12 @@ static int lm25066_read_word_data(struct i2c_client *client, int page, int reg)
+>  	case PMBUS_VIRT_RESET_PIN_HISTORY:
+>  		ret = 0;
+>  		break;
+> +	case PMBUS_VIRT_SAMPLES:
+> +		ret = pmbus_read_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG);
+> +		if (ret < 0)
+> +			break;
+> +		ret = 1 << ret;
+> +		break;
+>  	default:
+>  		ret = -ENODATA;
+>  		break;
+> @@ -398,6 +408,11 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+>  	case PMBUS_VIRT_RESET_PIN_HISTORY:
+>  		ret = pmbus_write_byte(client, 0, LM25066_CLEAR_PIN_PEAK);
+>  		break;
+> +	case PMBUS_VIRT_SAMPLES:
+> +		word = clamp_val(word, 1, LM25066_SAMPLES_FOR_AVG_MAX);
+> +		ret = pmbus_write_byte_data(client, 0, LM25066_SAMPLES_FOR_AVG,
+> +					    ilog2(word));
+> +		break;
+>  	default:
+>  		ret = -ENODATA;
+>  		break;
+> @@ -438,7 +453,7 @@ static int lm25066_probe(struct i2c_client *client,
+>  
+>  	info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VMON
+>  	  | PMBUS_HAVE_PIN | PMBUS_HAVE_IIN | PMBUS_HAVE_STATUS_INPUT
+> -	  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> +	  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_SAMPLES;
+>  
+>  	if (data->id == lm25056) {
+>  		info->func[0] |= PMBUS_HAVE_STATUS_VMON;
