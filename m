@@ -2,92 +2,84 @@ Return-Path: <SRS0=uXUr=SR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36259C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 14:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E3E7C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 15:41:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 03DCA20825
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 14:17:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17BB82075B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 15:41:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UQNV1AfQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clAw7PEK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727364AbfDOORl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 10:17:41 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:43642 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727371AbfDOORl (ORCPT
+        id S1726298AbfDOPlz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 11:41:55 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:32937 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725972AbfDOPlz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 10:17:41 -0400
-Received: by mail-oi1-f201.google.com with SMTP id u10so8026923oie.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 07:17:41 -0700 (PDT)
+        Mon, 15 Apr 2019 11:41:55 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t16so8766746plo.0;
+        Mon, 15 Apr 2019 08:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tYUX4z3a9vnhDDPclH29VM7BoMseyyZGQ648ccgyB7k=;
-        b=UQNV1AfQmZWIcprEZbMd4jl6liPToQm1PvJERbLxkuCd743QR1Mf6SgZ/LVqZfXjWM
-         uzxJy1QOApMdpC+uDKuYcD4u+Qh6IX+7ejwOKy4u7Fxi8L5sJc5sXNcvpYA0InyhdmNL
-         BJAFwjq/2flyAzImqe1aQNIvbEpDgE5d/yTGuCZJzZvkYog879STkVJoCzEnlzoJDdFB
-         s9Ev4nDeIhaP1Q99z+2VgRoJ9KahdGJOJ06ZkTEPSu4otZyCWUHAYW/D2YMcKl6tuaO9
-         1/XtHgeTEJlRqffXjvyIwa+JEoySz4Re2mwjPwl8yGevp+ae7zbqiynHjnkQL+cQSzfk
-         9gew==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=03U2+gNC/tIGz//LfXqwAH1STf4MB9cTPsC4LtWU1hs=;
+        b=clAw7PEKP+T+IfxwlxZTrhucaaezcIpRoc0B707Xfji5JrW5EEbGpPDhuOVRi7dj2t
+         hfwzbD6RbHabaoqnTEUVUvSzwWZjj/K2++1ytJ06c/pNgrdRsU7S9W32ihW9JRzoON9o
+         LuIZFV6iTeqeDEzvuDw1xrhTpB8bXsdXHZOEJ1TLP5zoHSKRxOWpz/q1SHzJjblJaKX2
+         uyLRXErKJoYYOb9MJWRZs2H88B2GN8GmmGIRl1cV6L+PHCHu9S+IPYvilg80O6wsvXTz
+         jXWnhyz4ktOHfG6YXOwHGeUtMKGIP2WYGy0+tcAqIaEXILVSIu0Q4jPJjvxJVB2uEc8T
+         IhEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tYUX4z3a9vnhDDPclH29VM7BoMseyyZGQ648ccgyB7k=;
-        b=n724U4s2PRt4Wfsg6iEH2an10+wJrWdLuzbEPb7wMsWQeWGRb/gmHC+H8NqO8m9hfS
-         vJ1NsaEkl4L1tKCLUL+O7emB3Vm9kwagvcBtSdSsdaMiSKdBFB+D8Ky7jgW7QpcbAhjH
-         IjCaNhfnGukFwBcmXDolwMPej51j8SdMTmS9wUAa24oxME+ow+X4mCQ/rFKfFEjVnwCc
-         pWKpAQlGFp3mU3Bb++AlKrG84moiIcLrWusKYnGCWCriu9mL1PB/oEhBNP2SIb3ZgDMj
-         eWpTrm4iC5nptpYyYDhbmitq3gNVlwE79HNVVJ9r5KM0fuyBDo+uBG7k8PqjnnvmO4DE
-         FPAg==
-X-Gm-Message-State: APjAAAUZlhrHDH98DgxhI4iv/lMIgfmvZFXTpweGkvG1xcfz28HzqmmW
-        oRcLJ0B1sEJVU4+pGInGokvDl7RRrLP0
-X-Google-Smtp-Source: APXvYqx8ThQGTWHaDJHu9suGwS422jNrj9DDS6gUoloiBOLYoULr7RIAFFLaqMMcNnWR2GNWvAyZN9XYo9qX
-X-Received: by 2002:a9d:6a53:: with SMTP id h19mr5916188otn.33.1555337860451;
- Mon, 15 Apr 2019 07:17:40 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 07:17:28 -0700
-Message-Id: <20190415141728.133110-1-venture@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH] hwmon: (ir38064) delete incorrect line
-From:   Patrick Venture <venture@google.com>
-To:     venture@google.com, jdelvare@suse.com, linux@roeck-us.net,
-        corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=03U2+gNC/tIGz//LfXqwAH1STf4MB9cTPsC4LtWU1hs=;
+        b=ATf+0TuyJtFAqvCt+PqxbJuCDtqBt/5j/n4o81kwhc5dKQYWI/McWWw5KjojvCuHLg
+         UR0+7gTXyop5bunxgc4LfRAcmpc+zO2rmhlw6c7/EimNjvc7fBI1qU0hD8DGwM9+lBtE
+         MimBfsjCvyM6ww1iwVvZnssJEif757p1XKtk8d1s5uGDvA/abDHKhQaYW35EIfHJiAGP
+         5+0uwHJpqlGf1Ud7NNkwg3hrdYgR2ctFT9vhxRlXTJ3/ia7UhcHiaialG+JpQhvTBSlm
+         M9zkTGv8ifidFdpMR8YC+AQto2ttwjvz2pqWE4pu6IeB9FTon1UzA4yWXX6VDxHxgNMq
+         s07w==
+X-Gm-Message-State: APjAAAVeWSBAfe3pKIxjLWMZK+m35Kuc1q1UJwtjIaO3Z5JfJ4jlbx6d
+        EH6lQnfWeLHCTrjBSXFCEvdnLfjp
+X-Google-Smtp-Source: APXvYqz39iqJRTwlyGeSLEpp91C4BX6W6y9xH6hv9V9M6k16pwsRaq01nE2WBm3oZuE7fINZR4ZQdA==
+X-Received: by 2002:a17:902:b60d:: with SMTP id b13mr77026589pls.100.1555342914669;
+        Mon, 15 Apr 2019 08:41:54 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y191sm23409547pgd.78.2019.04.15.08.41.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Apr 2019 08:41:53 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 08:41:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Patrick Venture <venture@google.com>
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ir38064) delete incorrect line
+Message-ID: <20190415154151.GA7292@roeck-us.net>
+References: <20190415141728.133110-1-venture@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190415141728.133110-1-venture@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Delete line indicating the datasheet was not publicly available.  This
-line was originally present as a default during the write-up and was
-subsequently not removed once the datasheet was located.
+On Mon, Apr 15, 2019 at 07:17:28AM -0700, Patrick Venture wrote:
+> Delete line indicating the datasheet was not publicly available.  This
+> line was originally present as a default during the write-up and was
+> subsequently not removed once the datasheet was located.
+> 
+> Signed-off-by: Patrick Venture <venture@google.com>
 
-Signed-off-by: Patrick Venture <venture@google.com>
----
- Documentation/hwmon/ir38064 | 3 ---
- 1 file changed, 3 deletions(-)
+Applied.
 
-diff --git a/Documentation/hwmon/ir38064 b/Documentation/hwmon/ir38064
-index c3697d7aaaa44..9f218c39bfe6f 100644
---- a/Documentation/hwmon/ir38064
-+++ b/Documentation/hwmon/ir38064
-@@ -8,9 +8,6 @@ Supported chips:
-     Datasheet: Publicly available at the Infineon webiste
-       https://www.infineon.com/dgdl/Infineon-IR38064MTRPBF-DS-v03_07-EN.pdf?fileId=5546d462584d1d4a0158db0d9efb67ca
- 
--Datasheet is not publicly available.
--
--
- Authors:
-         Maxim Sloyko <maxims@google.com>
-         Patrick Venture <venture@google.com>
--- 
-2.21.0.392.gf8f6787159e-goog
-
+Thanks,
+Guenter
