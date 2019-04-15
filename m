@@ -2,30 +2,29 @@ Return-Path: <SRS0=uXUr=SR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 182C4C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 12:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12EF9C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 12:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DEBB120645
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 12:19:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9A582077C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 12:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfDOMTl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 08:19:41 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:33162 "EHLO
+        id S1726147AbfDOMVH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 08:21:07 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:33172 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726147AbfDOMTl (ORCPT
+        with ESMTP id S1726094AbfDOMVH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 08:19:41 -0400
-X-Greylist: delayed 381 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Apr 2019 08:19:40 EDT
+        Mon, 15 Apr 2019 08:21:07 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id x3FBgerw019419;
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id x3FBgejX019420;
         Mon, 15 Apr 2019 14:42:40 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id E698262FFF; Mon, 15 Apr 2019 15:12:36 +0300 (IDT)
+        id 588B263001; Mon, 15 Apr 2019 15:12:37 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     gregkh@linuxfoundation.org, arnd@arnd.de, robh+dt@kernel.org,
         mark.rutland@arm.com, yuenn@google.com, venture@google.com,
@@ -33,49 +32,62 @@ To:     gregkh@linuxfoundation.org, arnd@arnd.de, robh+dt@kernel.org,
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 0/2] misc: Add NPCM LPC BPC driver support 
-Date:   Mon, 15 Apr 2019 15:12:33 +0300
-Message-Id: <20190415121235.255028-1-tmaimon77@gmail.com>
+Subject: [PATCH v1 1/2] dt-binding: misc: Add common LPC snoop documentation
+Date:   Mon, 15 Apr 2019 15:12:34 +0300
+Message-Id: <20190415121235.255028-2-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20190415121235.255028-1-tmaimon77@gmail.com>
+References: <20190415121235.255028-1-tmaimon77@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch set adds BIOS Post code (BPC) support for the
-Nuvoton NPCM Baseboard Management Controller (BMC).
+Added device tree binding documentation for Nuvoton BMC
+NPCM BIOS Post Code (BPC) and Apeed AST2500 LPC snoop.
+The LPC snoop monitoring two configurable I/O addresses
+written by the host on Low Pin Count (LPC) bus.
 
-Nuvoton BMC NPCM BIOS Post Code (BPC) monitoring two
-configurable I/O addresses written by the host on the
-Low Pin Count (LPC) bus, the capture data stored in 128-word FIFO.
-
-NPCM BPC can support capture double words.
-
-I have created common lpc-snoop documentation for both 
-Nuvoton and Aspeed drivers as Andrew suggested.
-Andrew Jeffery: https://patchwork.kernel.org/patch/10506269/ 
-
-I prefer to add the lpc-dnoop documentation to misc folder instead 
-of creating new /devicetree/binding folder that named BMC
-as been done in the last lpc-snoop patchset because I am not sure
-is something that should be done for only 
-one module for now. 
-https://patchwork.kernel.org/patch/10506269/
-
-The NPCM7xx BPC driver tested on NPCM750 evaluation board.
-
-Tomer Maimon (2):
-  dt-binding: misc: Add common LPC snoop documentation
-  misc: npcm: add NPCM LPC BPC driver
-
- .../devicetree/bindings/misc/lpc-snoop.txt         |  27 ++
- drivers/misc/Kconfig                               |   8 +
- drivers/misc/Makefile                              |   1 +
- drivers/misc/npcm-lpc-bpc-snoop.c                  | 393 +++++++++++++++++++++
- 4 files changed, 429 insertions(+)
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ .../devicetree/bindings/misc/lpc-snoop.txt         | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/lpc-snoop.txt
- create mode 100644 drivers/misc/npcm-lpc-bpc-snoop.c
 
+diff --git a/Documentation/devicetree/bindings/misc/lpc-snoop.txt b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
+new file mode 100644
+index 000000000000..7deac244ef9d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
+@@ -0,0 +1,27 @@
++LPC snoop interface
++
++The LPC snoop (BIOS Post Code) interface can monitor
++two configurable I/O addresses written by the host on
++the Low Pin Count (LPC) bus.
++
++Nuvoton NPCM7xx LPC snoop supports capture double words,
++when using capture double word only I/O address 1 is monitored.
++
++Required properties for lpc-snoop node
++- compatible   : "nuvoton,npcm750-lpc-bpc-snoop" for Poleg NPCM7XX
++                 "aspeed,ast2500-lpc-snoop" for Aspeed AST2500.
++- reg          : specifies physical base address and size of the registers.
++- interrupts   : contain the LPC snoop interrupt with flags for falling edge.
++- snoop-ports  : contain monitor I/O addresses, at least one monitor I/O
++                 address required
++
++Optional property for NPCM7xx lpc-snoop node
++- nuvoton,lpc-en-dwcapture : enable capture double words support.
++
++Example:
++	lpc-snoop: lpc_snoop@f0007040 {
++		compatible = "nuvoton,npcm750-lpc-bpc-snoop";
++		reg = <0xf0007040 0x14>;
++		snoop-ports = <0x80>;
++		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
++	};
+\ No newline at end of file
 -- 
 2.14.1
 
