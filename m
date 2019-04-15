@@ -4,159 +4,417 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F485C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 21:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 179EDC10F12
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 21:58:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 656A4206B6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 21:49:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C54F8206BA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 21:58:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNfbmeNp"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jehMEA48"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbfDOVts (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 17:49:48 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39875 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726609AbfDOVtr (ORCPT
+        id S1727552AbfDOV6A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 17:58:00 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42951 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725804AbfDOV57 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 17:49:47 -0400
-Received: by mail-pl1-f195.google.com with SMTP id a96so9232129pla.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 14:49:47 -0700 (PDT)
+        Mon, 15 Apr 2019 17:57:59 -0400
+Received: by mail-pg1-f196.google.com with SMTP id p6so9233963pgh.9;
+        Mon, 15 Apr 2019 14:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=uGLJpoTvYi8iD5pZpLtDwg/5yimZoLkSdaHs/IEm1xk=;
-        b=CNfbmeNphovoTipDqH2hbGmqVSw2uD33k4j64UIUFZh7a/XFWDq8sfor5aMx8mAI7i
-         UphTFNikwoyEgRYtMuoMn4rpUG9vTWouiTAOo3DtEs+nG1IcKIN5G1p1IDz/6xZpM3c2
-         jYb+H6xDeV7hqFze6DOxZr9fMXYNRq6RZH0T3T2oio60xqq+vzRESMlzuQo24sCRBV5X
-         wzqhala14wB2A6TGJYJNa7EZ+JqSUo1EJy5FFLhmrrLFM1SkwFBunXPZVkvUK+b97rxo
-         OBCzT6Jy0XS0ZFfDE7x2oNWszP/o9BVDbg+NJ1y7KqK5fK4NuH7NifvRz0xZy1oX9xti
-         HIIQ==
+        bh=xLqjCO936mtUWza0Py8IvLm6ja1XQwRH521y7FtMork=;
+        b=jehMEA487ytbEwMBBEZq6X3mipIN2PUhD+X7R+B0/LS1LBRIIHS/sMl0zzrnfL6nfW
+         3JWTMOGhR7RvnjmuXp2KXUnJKo1ojYknuqREjz1jsXU4bLdG2fu1sIesMjkdgrzdqNWT
+         MSxOlOHLOWZ502RokgkA45VvNkgPT/JNDBkLID6G+YJkS7fpiASPlEb1BgonB4fGpWSb
+         rdfAIOAh25nVazmOhN6M5+ww2d2A0JhR3z8tU1nyn71++mYvP1tI9wpzIMaIAXcsOrCh
+         zGAxrSXoPmSV4yMxL33k7wh3JaQIcGqEk2gey/h4fdza5JG8gmHNX2w6cng88fKOZqIy
+         aeww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uGLJpoTvYi8iD5pZpLtDwg/5yimZoLkSdaHs/IEm1xk=;
-        b=EWD5Ak8c9EimoZF14NxiVudDFJYPEpWHT7wpZCscGBnrjR2pJXm4Ew772ADwd7gHtG
-         lPCEfTI7DnKb5/3RD6q8XLQegndPi6XCKAVMKgINhtOKL7ELlRzlu0cWdoaxMyirYnTG
-         fItHHArUICIo52icZMT6tE8iIzRLuLAm+iDKDqUnivTm6tm5MWTb0OkOT7mSKAZO9Iay
-         EE6cVpbBPvbIiY85ZM8736QRkrk1+cUGqvNk8jHQrSk/OkEnA1XbgTRr0eB87YC/2pC1
-         MwBRRdvjWhFZrDtWekZi7r0bgc0kYfj4Mz+n5W7z/a7QN0KVY/zJ6Yv+Bf8vzANTF6J9
-         MRCA==
-X-Gm-Message-State: APjAAAWWeVmTZf/rlAjsKFenItec1ifln4sBnI8w3kY3uZZ9+ytKKyB+
-        dzs2ovqnmITUpVI8kwKX31k=
-X-Google-Smtp-Source: APXvYqy0zo5FDQRBHX3z+xv0T89f1jAyU9ztpDLr+lG+zLbPIrGqtm1V5m13YnU6fA4w2a5crzXlkA==
-X-Received: by 2002:a17:902:2827:: with SMTP id e36mr67078982plb.45.1555364987115;
-        Mon, 15 Apr 2019 14:49:47 -0700 (PDT)
+        bh=xLqjCO936mtUWza0Py8IvLm6ja1XQwRH521y7FtMork=;
+        b=Z8vvLSR/WL5NOyaVha8p8ysKkD9FozeeD8fRdsD2y9Dw1u2XM2NXJEg8YHjRqL3o0u
+         FGt+EmNMKERdJgFpAEOgJNF/s4MO/X85asTXun6XRyJmOwWE5Uq2rst1SVq7Gm9u5tzi
+         QA8LkKjvjOp+8xrY9PifjAJWU+kiCjhcKG5iQ8krC8+9VZzKlrVCtXg7lA+zwJvGDci8
+         xUPq8ceKi2+q64dwA4k0QMhOvfGCHgVsx0f+WaQzQfZb58Ggjv/mSdl0ATUUzPsMqfXW
+         gdosI6rDad/92az7e+iVwdXohM7Zb9dt2xdqVcWW4+WXB9eWjWGyZSq0PQ1IIHstit4i
+         Vqlw==
+X-Gm-Message-State: APjAAAWO9/kTNhBm8xb+ngRrqi3+bWIPwTd1HIyM8JqcncF/55j72aT6
+        vBp7jiI7FOMKWAT1nR6tMVw1fSlz
+X-Google-Smtp-Source: APXvYqxBGikvNOcVB1UieKYaUjH2D/2Gaz9Apxm0y1Mk2gxcizbARMM1e31S8N9yIQ+/KgoseDcXGA==
+X-Received: by 2002:a65:4489:: with SMTP id l9mr71153155pgq.1.1555365478324;
+        Mon, 15 Apr 2019 14:57:58 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f1sm69862393pgl.35.2019.04.15.14.49.46
+        by smtp.gmail.com with ESMTPSA id s85sm72568460pfa.23.2019.04.15.14.57.56
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 14:49:46 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 14:49:45 -0700
+        Mon, 15 Apr 2019 14:57:57 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 14:57:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Patrick Venture <venture@google.com>
-Cc:     jdelvare@suse.com, krzysztof.adamski@nokia.com,
-        linux-hwmon@vger.kernel.org, alexander.sverdlin@nokia.com
-Subject: Re: [PATCH v5 1/2] pmbus: support for custom sysfs attributes
-Message-ID: <20190415214945.GA28302@roeck-us.net>
-References: <20190415214405.120110-1-venture@google.com>
+Cc:     jdelvare@suse.com, joel@jms.id.au, andrew@aj.id.au,
+        Maxim Sloyko <maxims@google.com>, kunyi@google.com,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Lippert <rlippert@google.com>
+Subject: Re: [PATCH v5 2/2] hwmon: (pmbus/isl68137): Add driver for Intersil
+ ISL68137 PWM Controller
+Message-ID: <20190415215750.GA28795@roeck-us.net>
+References: <20190415214414.120944-1-venture@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190415214405.120110-1-venture@google.com>
+In-Reply-To: <20190415214414.120944-1-venture@google.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 15, 2019 at 02:44:05PM -0700, Patrick Venture wrote:
-> From: krzysztof.adamski@nokia.com
+On Mon, Apr 15, 2019 at 02:44:14PM -0700, Patrick Venture wrote:
+> From: Maxim Sloyko <maxims@google.com>
 > 
-> This patch makes it possible to pass custom struct attribute_group array
-> via the pmbus_driver_info struct so that those can be added to the
-> attribute groups passed to hwmon_device_register_with_groups().
+> Intersil ISL68137 is a digital output 7-phase configurable PWM
+> controller with an AVSBus interface.
 > 
-> This makes it possible to register custom sysfs attributes by PMBUS
-> drivers similar to how you can do this with most other busses/classes.
-> 
-> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Signed-off-by: Maxim Sloyko <maxims@google.com>
+> Signed-off-by: Robert Lippert <rlippert@google.com>
+> Signed-off-by: Patrick Venture <venture@google.com>
 
-Applied to hwmon-next.
+For some reason I can not apply this patch - git reports that it is corrupt.
+Can you check what happened ? I can't figure it out.
 
+Another comment below - makes me wonder - was that a test ?
+
+Since we are getting close, I applied the other patch. No need to resend.
+
+Thanks,
 Guenter
 
 > ---
-> V5:
->  None
+> v5:
+>  Drop extra parens
+>  Drop extra parameter check
 > v4:
->  None
+>  Use kstrtobool
+>  Cleanup parens
+>  Use rc instead of temporary int
+>  Delete unnecessary coment
+>  Add remove to driver structure
 > v3:
->  - staged before v3 hwmon/pmbus/isl68137 driver
+>  Added missing driver documentation
+>  Cleaned up goto statements.
+>  Add missing error check on pmbus_read_word_data
+>  Transitioned to use SENSOR_DEVICE_ATTR_RW
+>  Renamed enabled attribute to enable
+>  Set up an attribute_group for the enable attribute and added to pmbus_info
+>  Removed the boilerplate driver remove method
+> v2:
+>  Fixed bad header ordering.
+> v1:
+>  Original new patchset with fixes from Rob Lippert.
 > ---
->  drivers/hwmon/pmbus/pmbus.h      |  3 +++
->  drivers/hwmon/pmbus/pmbus_core.c | 13 ++++++++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
+>  Documentation/hwmon/isl68137   |  72 ++++++++++++++
+>  drivers/hwmon/pmbus/Kconfig    |   9 ++
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/isl68137.c | 172 +++++++++++++++++++++++++++++++++
+>  4 files changed, 254 insertions(+)
+>  create mode 100644 Documentation/hwmon/isl68137
+>  create mode 100644 drivers/hwmon/pmbus/isl68137.c
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 1d24397d36ecd..fb267ec116235 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -417,6 +417,9 @@ struct pmbus_driver_info {
->  	/* Regulator functionality, if supported by this chip driver. */
->  	int num_regulators;
->  	const struct regulator_desc *reg_desc;
+> diff --git a/Documentation/hwmon/isl68137 b/Documentation/hwmon/isl68137
+> new file mode 100644
+> index 0000000000000..92e5c5fc5b777
+> --- /dev/null
+> +++ b/Documentation/hwmon/isl68137
+> @@ -0,0 +1,72 @@
+> +Kernel driver isl68137
+> +======================
 > +
-> +	/* custom attributes */
-> +	const struct attribute_group **groups;
->  };
->  
->  /* Regulator ops */
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index e2366428a9a91..d6170a802c0f7 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -103,7 +103,7 @@ struct pmbus_data {
->  	int max_attributes;
->  	int num_attributes;
->  	struct attribute_group group;
-> -	const struct attribute_group *groups[2];
-> +	const struct attribute_group **groups;
->  	struct dentry *debugfs;		/* debugfs device directory */
->  
->  	struct pmbus_sensor *sensors;
-> @@ -2305,6 +2305,7 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  	struct device *dev = &client->dev;
->  	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
->  	struct pmbus_data *data;
-> +	size_t groups_num = 0;
->  	int ret;
->  
->  	if (!info)
-> @@ -2319,6 +2320,15 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  	if (!data)
->  		return -ENOMEM;
->  
-> +	if (info->groups)
-> +		while (info->groups[groups_num])
-> +			groups_num++;
+> +Supported chips:
+> +  * Intersil ISL68137
+> +    Prefix: 'isl68137'
+> +    Addresses scanned: -
+> +    Datasheet: Publicly available at the Intersil website
+> +      https://www.intersil.com/content/dam/Intersil/documents/isl6/isl68137.pdf
 > +
-> +	data->groups = devm_kcalloc(dev, groups_num + 2, sizeof(void *),
-> +				    GFP_KERNEL);
-> +	if (!data->groups)
-> +		return -ENOMEM;
+> +Authors:
+> +        Maxim Sloyko <maxims@google.com>
+> +        Robert Lippert <rlippert@google.com>
+> +        Patrick Venture <venture@google.com>
 > +
->  	i2c_set_clientdata(client, data);
->  	mutex_init(&data->update_lock);
->  	data->dev = dev;
-> @@ -2346,6 +2356,7 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
->  	}
+> +Description
+> +-----------
+> +
+> +Intersil ISL68137 is a digital output 7-phase configurable PWM
+> +controller with an AVSBus interface.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not probe for PMBus devices. You will have to instantiate
+> +devices explicitly.
+> +
+> +The ISL68137 AVS operation mode must be enabled/disabled at runtime.
+> +
+> +Beyond the normal sysfs pmbus attributes, the driver exposes a control attribute.
+> +
+> +Additional Sysfs attributes
+> +---------------------------
+> +
+> +avs(0|1)_enable		Controls the AVS state of each rail.
+> +
+> +curr1_label		"iin"
+> +curr1_input		Measured input current
+> +curr1_crit		Critical maximum current
+> +curr1_crit_alarm	Current critical high alarm
+> +
+> +curr[2-3]_label		"iout[1-2]"
+> +curr[2-3]_input		Measured output current
+> +curr[2-3]_crit		Critical maximum current
+> +curr[2-3]_crit_alarm	Current critical high alarm
+> +
+> +in1_label		"vin"
+> +in1_input		Measured input voltage
+> +in1_lcrit		Critical minimum input voltage
+> +in1_lcrit_alarm		Input voltage critical low alarm
+> +in1_crit		Critical maximum input voltage
+> +in1_crit_alarm		Input voltage critical high alarm
+> +
+> +in[2-3]_label		"vout[1-2]"
+> +in[2-3]_input		Measured output voltage
+> +in[2-3]_lcrit		Critical minimum output voltage
+> +in[2-3]_lcrit_alarm	Output voltage critical low alarm
+> +in[2-3]_crit		Critical maximum output voltage
+> +in[2-3]_crit_alarm	Output voltage critical high alarm
+> +
+> +power1_label		"pin"
+> +power1_input		Measured input power
+> +power1_alarm		Input power high alarm
+> +
+> +power[2-3]_label	"pout[1-2]"
+> +power[2-3]_input	Measured output power
+> +
+> +temp[1-3]_input		Measured temperature
+> +temp[1-3]_crit		Critical high temperature
+> +temp[1-3]_crit_alarm	Chip temperature critical high alarm
+> +temp[1-3]_max		Maximum temperature
+> +temp[1-3]_max_alarm	Chip temperature high alarm
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index de87abab990e5..7edab7e30eaf9 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -63,6 +63,15 @@ config SENSORS_IR38064
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called ir38064.
 >  
->  	data->groups[0] = &data->group;
-> +	memcpy(data->groups + 1, info->groups, sizeof(void *) * groups_num);
->  	data->hwmon_dev = hwmon_device_register_with_groups(dev, client->name,
->  							    data, data->groups);
->  	if (IS_ERR(data->hwmon_dev)) {
+> +config SENSORS_ISL68137
+> +	tristate "Intersil ISL68137"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Intersil
+> +	  ISL68137.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called isl68137.
+> +
+>  config SENSORS_LM25066
+>  	tristate "National Semiconductor LM25066 and compatibles"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 7d1fa6b3c8c93..2219b93003167 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+>  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+>  obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+>  obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+> +obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
+>  obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
+>  obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
+>  obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
+> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+> new file mode 100644
+> index 0000000000000..4140c52d6f124
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/isl68137.c
+> @@ -0,0 +1,172 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Intersil ISL68137
+> + *
+> + * Copyright (c) 2017 Google Inc
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/string.h>
+> +#include <linux/sysfs.h>
+> +#include "pmbus.h"
+> +
+> +#define ISL68137_VOUT_AVS	0x30
+> +
+> +static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
+> +					     int page,
+> +					     char *buf)
+> +{
+> +	int val = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
+> +
+> +	return sprintf(buf, "%d\n",
+> +		       (val & ISL68137_VOUT_AVS) == ISL68137_VOUT_AVS ? 1 : 0);
+> +}
+> +
+> +static ssize_t isl68137_avs_enable_store_page(struct i2c_client *client,
+> +					      int page,
+> +					      const char *buf, size_t count)
+> +{
+> +	int rc, op_val;
+> +	bool result;
+> +
+> +	rc = kstrtobool(buf, &result);
+> +	if (!rc)
+> +		return -EINVAL;
+
+	if (rc)
+		return rc;
+
+> +
+> +	op_val = result ? ISL68137_VOUT_AVS : 0;
+> +
+> +	/*
+> +	 * Writes to VOUT setpoint over AVSBus will persist after the VRM is
+> +	 * switched to PMBus control. Switching back to AVSBus control
+> +	 * restores this persisted setpoint rather than re-initializing to
+> +	 * PMBus VOUT_COMMAND. Writing VOUT_COMMAND first over PMBus before
+> +	 * enabling AVS control is the workaround.
+> +	 */
+> +	if (op_val == ISL68137_VOUT_AVS) {
+> +		rc = pmbus_read_word_data(client, page, PMBUS_VOUT_COMMAND);
+> +		if (rc < 0)
+> +			return rc;
+> +
+> +		rc = pmbus_write_word_data(client, page, PMBUS_VOUT_COMMAND,
+> +					   rc);
+> +		if (rc < 0)
+> +			return rc;
+> +	}
+> +
+> +	rc = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
+> +				    ISL68137_VOUT_AVS, op_val);
+> +
+> +	return (rc < 0) ? rc : count;
+> +}
+> +
+> +static ssize_t isl68137_avs_enable_show(struct device *dev,
+> +					struct device_attribute *devattr,
+> +					char *buf)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> +
+> +	return isl68137_avs_enable_show_page(client, attr->index, buf);
+> +}
+> +
+> +static ssize_t isl68137_avs_enable_store(struct device *dev,
+> +				struct device_attribute *devattr,
+> +				const char *buf, size_t count)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> +
+> +	return isl68137_avs_enable_store_page(client, attr->index, buf, count);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR_RW(avs0_enable, isl68137_avs_enable, 0);
+> +static SENSOR_DEVICE_ATTR_RW(avs1_enable, isl68137_avs_enable, 1);
+> +
+> +static struct attribute *enable_attrs[] = {
+> +	&sensor_dev_attr_avs0_enable.dev_attr.attr,
+> +	&sensor_dev_attr_avs1_enable.dev_attr.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group enable_group = {
+> +	.attrs = enable_attrs,
+> +};
+> +
+> +static const struct attribute_group *attribute_groups[] = {
+> +	&enable_group,
+> +	NULL,
+> +};
+> +
+> +static struct pmbus_driver_info isl68137_info = {
+> +	.pages = 2,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_IN] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 1,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 3,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.m[PSC_CURRENT_IN] = 1,
+> +	.b[PSC_CURRENT_IN] = 0,
+> +	.R[PSC_CURRENT_IN] = 2,
+> +	.m[PSC_CURRENT_OUT] = 1,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = 1,
+> +	.m[PSC_POWER] = 1,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = 0,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN
+> +	    | PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+> +	    | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+> +	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+> +	.groups = attribute_groups,
+> +};
+> +
+> +static int isl68137_probe(struct i2c_client *client,
+> +			  const struct i2c_device_id *id)
+> +{
+> +	return pmbus_do_probe(client, id, &isl68137_info);
+> +}
+> +
+> +static const struct i2c_device_id isl68137_id[] = {
+> +	{"isl68137", 0},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, isl68137_id);
+> +
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver isl68137_driver = {
+> +	.driver = {
+> +		   .name = "isl68137",
+> +		   },
+> +	.probe = isl68137_probe,
+> +	.remove = pmbus_do_remove,
+> +	.id_table = isl68137_id,
+> +};
+> +
+> +module_i2c_driver(isl68137_driver);
+> +
+> +MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Intersil ISL68137");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.21.0.392.gf8f6787159e-goog
+> 
