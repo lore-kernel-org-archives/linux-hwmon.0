@@ -2,116 +2,136 @@ Return-Path: <SRS0=uXUr=SR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E020C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A5EC10F12
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:18:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA14D206BA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:00:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W5bb5X+k"
+	by mail.kernel.org (Postfix) with ESMTP id DE12320854
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:18:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbfDOWAQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 18:00:16 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40251 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725786AbfDOWAQ (ORCPT
+        id S1727214AbfDOWSG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 18:18:06 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43050 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725786AbfDOWSG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 18:00:16 -0400
-Received: by mail-pl1-f193.google.com with SMTP id b3so9241843plr.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 15:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GtNA2NXb9+aogYk7zHgOxEpkAOMOyja1Zb2HDuuFKZA=;
-        b=W5bb5X+kPGh+TgI75SNTr2da20tDdPXig6kOpQn0w5jLI4OtYjbb5nTNpCHr/X3GJ3
-         aWes0Ntrn4RbQyEjpOSKtlhq8Ca4MPBU4mKwTCa1TLUNKsXm6/OPZM8D0ifXqwaqY3Ya
-         53Wk9kCNjYPKT2ZPjnN2lPyB0741+GW/gl5CqUXSg5sMYx0wqQAKQrLJrkVYnsYzk47Y
-         GFNcTMrgw9YtAleiYafRDLorXDzTLScX863vSXM8V6dY/KiWt6OMLDT97sdKAyusxXXQ
-         Y6b+q/N1bZHLbrt+wgJVbzlIZv8BWxvQ1gqVrAL3NxR5K2YH9nANnPvjMFXy3sfUkqBN
-         Zv3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GtNA2NXb9+aogYk7zHgOxEpkAOMOyja1Zb2HDuuFKZA=;
-        b=Cnbs0DXwUNByr0i82a0ApwrDFHw9uGr0et6iOVFXia+Y+26rDYXvq2E93yKkfwPQqA
-         ATygzXxWmTyBWH5AkdxlfdopSs7ixcd5VsT3ZZKBZnHZtkgR/QgK2tbIc3WaRhnb8Zyc
-         uEcArMHVjzrWbvZgzIXuHiV/sgL1PsjKIdnJCaVX7wL0yyl+kPgef6NodmPqsCvEDDEa
-         e5wCEpZHpj3LPJXwdvNW2fuo/26v0U5zf3vm906tvtmepQ+ZaoXnZu9xXuxFlAirUeDD
-         /3bRfqzxj4pTSMewYt0g2yj7qiSo+TOrbKuXu6THOlzOb/JE6GfN3UaqbpITJJSifrPv
-         bcCw==
-X-Gm-Message-State: APjAAAV69/J0vKkJlyw2NNMNvFPIgsVEoesj5SFbxFacnNPDSaWG0hv5
-        c8iTWOD/vXdR4xAy6JftAw/DsAT5
-X-Google-Smtp-Source: APXvYqxVItP5EUXVM8ZK/zTn0JS61bNDo98aN7d9h84IKl6Hoai8UWfctUqgMhvHqyF1etCGzxOXsg==
-X-Received: by 2002:a17:902:7247:: with SMTP id c7mr78013354pll.255.1555365615524;
-        Mon, 15 Apr 2019 15:00:15 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s79sm119646015pfa.31.2019.04.15.15.00.14
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 15:00:14 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 15:00:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Subject: Re: [PATCH] hwmon: Add support for samples attributes
-Message-ID: <20190415220009.GB28795@roeck-us.net>
-References: <1555360032-31159-1-git-send-email-linux@roeck-us.net>
- <20190415214715.GA11156@Asurada-Nvidia.nvidia.com>
+        Mon, 15 Apr 2019 18:18:06 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3FMEZxj109609
+        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 18:18:05 -0400
+Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2rw121kfuq-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Mon, 15 Apr 2019 18:18:04 -0400
+Received: from localhost
+        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Mon, 15 Apr 2019 23:18:04 +0100
+Received: from b03cxnp07028.gho.boulder.ibm.com (9.17.130.15)
+        by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 15 Apr 2019 23:18:01 +0100
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3FMI0xv24772760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Apr 2019 22:18:00 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F99A6A04F;
+        Mon, 15 Apr 2019 22:18:00 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 560B26A04D;
+        Mon, 15 Apr 2019 22:17:59 +0000 (GMT)
+Received: from [9.80.192.157] (unknown [9.80.192.157])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 15 Apr 2019 22:17:59 +0000 (GMT)
+Subject: Re: [PATCH] hwmon (occ): Fix extended status bits
+To:     Guenter Roeck <linux@roeck-us.net>, Lei YU <mine260309@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+References: <1555324640-152061-1-git-send-email-mine260309@gmail.com>
+ <20190415202849.GA31243@roeck-us.net>
+From:   Eddie James <eajames@linux.ibm.com>
+Date:   Mon, 15 Apr 2019 17:17:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190415214715.GA11156@Asurada-Nvidia.nvidia.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190415202849.GA31243@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19041522-0016-0000-0000-000009A10C68
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010934; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000284; SDB=6.01189617; UDB=6.00623312; IPR=6.00970404;
+ MB=3.00026458; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-15 22:18:03
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19041522-0017-0000-0000-000042D3EB54
+Message-Id: <cce91645-22c7-3c9d-fd2a-5271625b3e4a@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-15_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904150151
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 15, 2019 at 02:47:16PM -0700, Nicolin Chen wrote:
-> Thanks for adding this.
-> 
-> On Mon, Apr 15, 2019 at 01:27:12PM -0700, Guenter Roeck wrote:
-> > Add support for the new samples attributes to the hwmon core.
-> > 
-> > Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> > Cc: Nicolin Chen <nicoleotsuka@gmail.com>
-> 
-> Acked-by: Nicolin Chen <nicoleotsuka@gmail.com>
-> 
-> Will redo my change and test through API later.
-> 
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/hwmon/hwmon.c |  5 +++++
-> >  include/linux/hwmon.h | 11 +++++++++++
-> >  2 files changed, 16 insertions(+)
-> 
-> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> > index 7a8cc06a0d61..7b18a6150a11 100644
-> > --- a/include/linux/hwmon.h
-> > +++ b/include/linux/hwmon.h
-> > @@ -40,6 +40,12 @@ enum hwmon_chip_attributes {
-> >  	hwmon_chip_register_tz,
-> >  	hwmon_chip_update_interval,
-> >  	hwmon_chip_alarms,
-> > +	hwmon_chip_samples,
-> > +	hwmon_chip_curr_samples,
-> > +	hwmon_chip_in_samples,
-> > +	hwmon_chip_power_samples,
-> > +	hwmon_chip_temp_samples,
-> > +
-> >  };
-> 
-> Why add a blank line at the end?
 
-No idea. I'll drop it. Thanks for having a look!
+On 4/15/19 3:28 PM, Guenter Roeck wrote:
+> On Mon, Apr 15, 2019 at 06:37:20PM +0800, Lei YU wrote:
+>> The occ's extended status is checked and shown as sysfs attributes. But
+>> the code was incorrectly checking the "status" bits.
+>> Fix it by checking the "ext_status" bits.
+>>
+>> Signed-off-by: Lei YU <mine260309@gmail.com>
+> Looks ok to me, but can I get a confirmation from someone at IBM ?
 
-Guenter
+
+Yes. Thanks Lei.
+
+
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
+
+
+>
+> Thanks,
+> Guenter
+>
+>> ---
+>>   drivers/hwmon/occ/sysfs.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
+>> index fe3d15e..a71ca94 100644
+>> --- a/drivers/hwmon/occ/sysfs.c
+>> +++ b/drivers/hwmon/occ/sysfs.c
+>> @@ -42,16 +42,16 @@ static ssize_t occ_sysfs_show(struct device *dev,
+>>   		val = !!(header->status & OCC_STAT_ACTIVE);
+>>   		break;
+>>   	case 2:
+>> -		val = !!(header->status & OCC_EXT_STAT_DVFS_OT);
+>> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+>>   		break;
+>>   	case 3:
+>> -		val = !!(header->status & OCC_EXT_STAT_DVFS_POWER);
+>> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+>>   		break;
+>>   	case 4:
+>> -		val = !!(header->status & OCC_EXT_STAT_MEM_THROTTLE);
+>> +		val = !!(header->ext_status & OCC_EXT_STAT_MEM_THROTTLE);
+>>   		break;
+>>   	case 5:
+>> -		val = !!(header->status & OCC_EXT_STAT_QUICK_DROP);
+>> +		val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+>>   		break;
+>>   	case 6:
+>>   		val = header->occ_state;
+
