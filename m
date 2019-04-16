@@ -1,91 +1,118 @@
-Return-Path: <SRS0=uXUr=SR=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=pQ84=SS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC815C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D671C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 00:20:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D07D20818
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Apr 2019 22:32:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F112B20830
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 00:20:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hqW8J2yM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmFjBUsY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbfDOWc6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 18:32:58 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46654 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbfDOWc5 (ORCPT
+        id S1727720AbfDPAUs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 20:20:48 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:46180 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726527AbfDPAUs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 18:32:57 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y6so9258095pll.13;
-        Mon, 15 Apr 2019 15:32:57 -0700 (PDT)
+        Mon, 15 Apr 2019 20:20:48 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 9so9418607pfj.13;
+        Mon, 15 Apr 2019 17:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=iB7ZNzzdil/xdj7cv7uy536/PxeJkN+z355Fttznfc8=;
-        b=hqW8J2yM0Kx/jsDxBUqtJTJk7t3Oy6/96GSn2B6/0nB8pEPCNm2Ajlx6S49As0MYRs
-         VlwusQ1islGYAjxpHG0MOfaasBTsdBpOtz3xQzwd8KL6OG+DXXtqk0IrSf4R/d9rqkQs
-         7/KEDaDf554PrKT8X4zoZNlr9005Zq/zVYE4gUad2CugMe85wEGgjR6Uql+lirsx+Th8
-         aeYFY+YojKgOIn4iZ4v3fj6nKWT26KmverYOhZbx7N+vWnMnQtLO0nxDhto9+xNXpjo6
-         uad06oLc86doZTZBoVJLcI91Ce5FNzRXEoeI46mje9tR/vf6WYPMi8OePwVt1pZ6SSxt
-         K9lg==
+        bh=hGSRLXLadQOLX55DxvAINLcJwPboKn8ZaKLD5g5ABfk=;
+        b=nmFjBUsYM9msfrovL5HTwoHxVo43G4+UeKNdS5QH+k7HD/YPb/O/dldlWjKACM5H1M
+         8HGkS5m3EtWouV7z0dNwq5kz9hMU8xOZp9cPb0Y8D9a1W8WkSwD3B3nPqdHR106jgylN
+         5PYesBxzHGUyuCjRtt97iZuzTuQ2xKE8/cxCWZS0j1VBz01OiapO5ojHtu9plN7gU6ks
+         I0mCzo/5jCFYqJwdR5pWq1ysg8oeC91qNTz39pw2zn3byf8kxygZ85zvvhICleM1KlHJ
+         SiF4EWpYKsAYjpUCNy0+TTnswBO3QLFkm4K3HS1zIsI52DN8RfNDegQQySRGZZ9OqZM3
+         9U2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iB7ZNzzdil/xdj7cv7uy536/PxeJkN+z355Fttznfc8=;
-        b=FWXrMxUbTyoK58N5BfEC3W8A70SklFDvRYBSwQ8yM5GG01DH6g8euT8vvDQqbis973
-         KxFjSrTNbAYfzCy8VxuUO6EK1QrRnvrYgp5kuWrzWVWvvTSBscFf+qPwsaFxHOlb1cG9
-         3nZ02mzyKo/beYcKLDGptFWj0/2R+t7GY/wmVSo/q9MbpCTmrnrNyI9grRDXqo9GvyRn
-         tnOBE26oGzkKdeRHYXyrFo294jU3nRD4o/u06KDcgLRDPUS1LtG5Hz1wl6u+94VcF3Wf
-         y2zr9TQpzW5Ofs3XV0DswEmHAY7PTxAcaQMIq3lCNkfsjApUX4jMC0CFTeMgzZGzaBTK
-         umkg==
-X-Gm-Message-State: APjAAAWjbHcRRXNh0pTz/P292Nq8q/TaMQYICmx+AJRi4pEjOUhaBYKF
-        pWO/18lNaACfWrKQDodmyvk=
-X-Google-Smtp-Source: APXvYqxaIRiXqujWKLNt3jlLxJLgIHrN+pSMYg/iICMtnL8vj1lv7w1HjyKh5bw49p590e2m9Guwag==
-X-Received: by 2002:a17:902:e183:: with SMTP id cd3mr62543540plb.233.1555367577116;
-        Mon, 15 Apr 2019 15:32:57 -0700 (PDT)
+        bh=hGSRLXLadQOLX55DxvAINLcJwPboKn8ZaKLD5g5ABfk=;
+        b=tYUf+bz1sbdDQLRV1Bq6Q/FzP6Nt7sWS/RmyXHpjrOrhi9sSGvXAnHQuWBzWWnZuu6
+         TpjwAf7uKWZ2oXjvIg5W/rDKTx6I02//nFCvbNqdqXrp5b674m1js8xs+BGjmbHAn6u/
+         HiwBiKBPzd2ffzTnyDH+v66DtF3BtKk1qtyRlZrSWL/5GC2tXMcsyTeVnAtA+17oMeLN
+         aZzUh8Bkz6EDX9TeMSEBvdr1/gvHkFSNVw27NxsEqnP1Qf0VzxejU3IcU0H4E243RIQM
+         HcrH1aVS59g1Y3i3ITgUhtVb2pfID2i7pjgbV4IQTUlPBqfhOwQS8HC2UpEFSB/xfI7P
+         RSAw==
+X-Gm-Message-State: APjAAAUsVPAr+XROrNOxnDsmW6YA3dfS/SIOIH+paBpXQbx0vUpnD1TW
+        n3EuQsOxSsnlYmzcOhG6mqA=
+X-Google-Smtp-Source: APXvYqz+Spzaqjsyrgcvief1vVTGeGZPlPzqd3ZotwlRs1OHaoj5oocNIkr3pm6AN0Dl/iZdG0p+dA==
+X-Received: by 2002:aa7:8208:: with SMTP id k8mr80107297pfi.69.1555374047590;
+        Mon, 15 Apr 2019 17:20:47 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a6sm70266531pfn.181.2019.04.15.15.32.55
+        by smtp.gmail.com with ESMTPSA id s19sm69505548pfe.74.2019.04.15.17.20.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 15:32:56 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 15:32:54 -0700
+        Mon, 15 Apr 2019 17:20:46 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 17:20:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Patrick Venture <venture@google.com>
-Cc:     jdelvare@suse.com, joel@jms.id.au, andrew@aj.id.au,
-        Maxim Sloyko <maxims@google.com>, kunyi@google.com,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Lippert <rlippert@google.com>
-Subject: Re: [PATCH v6] hwmon: (pmbus/isl68137): Add driver for Intersil
- ISL68137 PWM Controller
-Message-ID: <20190415223254.GA31193@roeck-us.net>
-References: <20190415222807.134104-1-venture@google.com>
+To:     Lei YU <mine260309@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: Re: [PATCH] hwmon (occ): Fix extended status bits
+Message-ID: <20190416002045.GA4442@roeck-us.net>
+References: <1555324640-152061-1-git-send-email-mine260309@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190415222807.134104-1-venture@google.com>
+In-Reply-To: <1555324640-152061-1-git-send-email-mine260309@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 15, 2019 at 03:28:07PM -0700, Patrick Venture wrote:
-> From: Maxim Sloyko <maxims@google.com>
+On Mon, Apr 15, 2019 at 06:37:20PM +0800, Lei YU wrote:
+> The occ's extended status is checked and shown as sysfs attributes. But
+> the code was incorrectly checking the "status" bits.
+> Fix it by checking the "ext_status" bits.
 > 
-> Intersil ISL68137 is a digital output 7-phase configurable PWM
-> controller with an AVSBus interface.
-> 
-> Signed-off-by: Maxim Sloyko <maxims@google.com>
-> Signed-off-by: Robert Lippert <rlippert@google.com>
-> Signed-off-by: Patrick Venture <venture@google.com>
+> Signed-off-by: Lei YU <mine260309@gmail.com>
+> Reviewed-by: Eddie James <eajames@linux.ibm.com>
 
-This time it worked. Applied to hwmon-next.
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/occ/sysfs.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
+> index fe3d15e..a71ca94 100644
+> --- a/drivers/hwmon/occ/sysfs.c
+> +++ b/drivers/hwmon/occ/sysfs.c
+> @@ -42,16 +42,16 @@ static ssize_t occ_sysfs_show(struct device *dev,
+>  		val = !!(header->status & OCC_STAT_ACTIVE);
+>  		break;
+>  	case 2:
+> -		val = !!(header->status & OCC_EXT_STAT_DVFS_OT);
+> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
+>  		break;
+>  	case 3:
+> -		val = !!(header->status & OCC_EXT_STAT_DVFS_POWER);
+> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
+>  		break;
+>  	case 4:
+> -		val = !!(header->status & OCC_EXT_STAT_MEM_THROTTLE);
+> +		val = !!(header->ext_status & OCC_EXT_STAT_MEM_THROTTLE);
+>  		break;
+>  	case 5:
+> -		val = !!(header->status & OCC_EXT_STAT_QUICK_DROP);
+> +		val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
+>  		break;
+>  	case 6:
+>  		val = header->occ_state;
