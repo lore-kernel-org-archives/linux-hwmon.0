@@ -4,87 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD98DC10F13
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB43C10F14
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83A202087C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:44:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA862204EC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:54:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729733AbfDPPoS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Apr 2019 11:44:18 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43698 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726645AbfDPPoS (ORCPT
+        id S1729896AbfDPPyv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Apr 2019 11:54:51 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54292 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729866AbfDPPyq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Apr 2019 11:44:18 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3GFdmvL119245
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:44:16 -0400
+        Tue, 16 Apr 2019 11:54:46 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3GFsVmI114203
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:54:45 -0400
 Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2rwgxx34nr-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2rwhyh89c2-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:44:16 -0400
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:54:45 -0400
 Received: from localhost
         by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Tue, 16 Apr 2019 16:44:15 +0100
-Received: from b03cxnp08025.gho.boulder.ibm.com (9.17.130.17)
+        Tue, 16 Apr 2019 16:54:44 +0100
+Received: from b03cxnp08028.gho.boulder.ibm.com (9.17.130.20)
         by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 16 Apr 2019 16:44:12 +0100
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3GFiBfD30081082
+        Tue, 16 Apr 2019 16:54:40 +0100
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3GFsdnj30015564
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Apr 2019 15:44:11 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3FB786E04C;
-        Tue, 16 Apr 2019 15:44:11 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B05346E04E;
-        Tue, 16 Apr 2019 15:44:10 +0000 (GMT)
+        Tue, 16 Apr 2019 15:54:40 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C30257805C;
+        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E66278060;
+        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.3.116.186])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Apr 2019 15:44:10 +0000 (GMT)
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
         andrew@aj.id.au, mine260309@gmail.com,
-        Eddie James <eajames@us.ibm.com>
-Subject: [PATCH 3/3] hwmon (occ): Add more details to Kconfig help text
-Date:   Tue, 16 Apr 2019 15:43:50 +0000
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v2 3/3] hwmon (occ): Add more details to Kconfig help text
+Date:   Tue, 16 Apr 2019 15:54:28 +0000
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1555429430-23118-1-git-send-email-eajames@linux.ibm.com>
-References: <1555429430-23118-1-git-send-email-eajames@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 19041615-0016-0000-0000-000009A15DE2
+x-cbid: 19041615-0016-0000-0000-000009A15EC7
 X-IBM-SpamModules-Scores: 
 X-IBM-SpamModules-Versions: BY=3.00010938; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000284; SDB=6.01189952; UDB=6.00623517; IPR=6.00970747;
- MB=3.00026468; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-16 15:44:14
+ PH=3.00000004; SC=3.00000284; SDB=6.01189956; UDB=6.00623519; IPR=6.00970749;
+ MB=3.00026468; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-16 15:54:43
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19041615-0017-0000-0000-000042D63D4A
-Message-Id: <1555429430-23118-3-git-send-email-eajames@linux.ibm.com>
+x-cbparentid: 19041615-0017-0000-0000-000042D642F1
+Message-Id: <1555430068-23439-1-git-send-email-eajames@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-16_06:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=965 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904160104
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904160106
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Eddie James <eajames@us.ibm.com>
-
 The help text needs to spell out how the driver runs on a BMC, as it
 previously seemed to indicate it ran on a POWER processor.
 
-Signed-off-by: Eddie James <eajames@us.ibm.com>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
+Changes since v1: fix Signed-off-by; git config got mixed up.
+
  drivers/hwmon/occ/Kconfig | 12 ++++++++----
  1 file changed, 8 insertions(+), 4 deletions(-)
 
