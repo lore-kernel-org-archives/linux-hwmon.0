@@ -2,117 +2,153 @@ Return-Path: <SRS0=pQ84=SS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D671C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 00:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA41C10F0E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 01:04:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F112B20830
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 00:20:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CA3620818
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 01:04:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmFjBUsY"
+	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="kvCi4rC4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="udv84xKi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfDPAUs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Apr 2019 20:20:48 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46180 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726527AbfDPAUs (ORCPT
+        id S1727214AbfDPBEy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Apr 2019 21:04:54 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:42055 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726527AbfDPBEy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Apr 2019 20:20:48 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 9so9418607pfj.13;
-        Mon, 15 Apr 2019 17:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hGSRLXLadQOLX55DxvAINLcJwPboKn8ZaKLD5g5ABfk=;
-        b=nmFjBUsYM9msfrovL5HTwoHxVo43G4+UeKNdS5QH+k7HD/YPb/O/dldlWjKACM5H1M
-         8HGkS5m3EtWouV7z0dNwq5kz9hMU8xOZp9cPb0Y8D9a1W8WkSwD3B3nPqdHR106jgylN
-         5PYesBxzHGUyuCjRtt97iZuzTuQ2xKE8/cxCWZS0j1VBz01OiapO5ojHtu9plN7gU6ks
-         I0mCzo/5jCFYqJwdR5pWq1ysg8oeC91qNTz39pw2zn3byf8kxygZ85zvvhICleM1KlHJ
-         SiF4EWpYKsAYjpUCNy0+TTnswBO3QLFkm4K3HS1zIsI52DN8RfNDegQQySRGZZ9OqZM3
-         9U2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hGSRLXLadQOLX55DxvAINLcJwPboKn8ZaKLD5g5ABfk=;
-        b=tYUf+bz1sbdDQLRV1Bq6Q/FzP6Nt7sWS/RmyXHpjrOrhi9sSGvXAnHQuWBzWWnZuu6
-         TpjwAf7uKWZ2oXjvIg5W/rDKTx6I02//nFCvbNqdqXrp5b674m1js8xs+BGjmbHAn6u/
-         HiwBiKBPzd2ffzTnyDH+v66DtF3BtKk1qtyRlZrSWL/5GC2tXMcsyTeVnAtA+17oMeLN
-         aZzUh8Bkz6EDX9TeMSEBvdr1/gvHkFSNVw27NxsEqnP1Qf0VzxejU3IcU0H4E243RIQM
-         HcrH1aVS59g1Y3i3ITgUhtVb2pfID2i7pjgbV4IQTUlPBqfhOwQS8HC2UpEFSB/xfI7P
-         RSAw==
-X-Gm-Message-State: APjAAAUsVPAr+XROrNOxnDsmW6YA3dfS/SIOIH+paBpXQbx0vUpnD1TW
-        n3EuQsOxSsnlYmzcOhG6mqA=
-X-Google-Smtp-Source: APXvYqz+Spzaqjsyrgcvief1vVTGeGZPlPzqd3ZotwlRs1OHaoj5oocNIkr3pm6AN0Dl/iZdG0p+dA==
-X-Received: by 2002:aa7:8208:: with SMTP id k8mr80107297pfi.69.1555374047590;
-        Mon, 15 Apr 2019 17:20:47 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s19sm69505548pfe.74.2019.04.15.17.20.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 17:20:46 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 17:20:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lei YU <mine260309@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Subject: Re: [PATCH] hwmon (occ): Fix extended status bits
-Message-ID: <20190416002045.GA4442@roeck-us.net>
-References: <1555324640-152061-1-git-send-email-mine260309@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1555324640-152061-1-git-send-email-mine260309@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Mon, 15 Apr 2019 21:04:54 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 84BE81303C;
+        Mon, 15 Apr 2019 21:04:50 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute4.internal (MEProxy); Mon, 15 Apr 2019 21:04:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=jodmyKZ4yhotSimlkvvA8TxyKuJ+LFH
+        q9t7n5EWIY0k=; b=kvCi4rC4t+aQxH6yaY7DpBsXfSgs8IgXR11u5uoC2ocAZnM
+        kZQuJyC2lIKjWgVRiLGM0xWfs96k9zYK0Os8fsbUNpPfc2yU71cBzOpPcN+8Mhdk
+        XVGMRudIpsaWDd7ci6QezYa+GiQcPVJbsRT7VhuifK5JDgXdb/0FA7jHk4NN5XiM
+        IaCVIvbaFgf8WKj4BstWFwHVdxuNH+QsI2E/lk55HGfVxV8t8Df/YAch1vFdgAue
+        djq155Bm5EU8wcnszKJhZ5Rc8bdu5DrKdN4JphqMQzoJF2lVsKOwpQ39MnZrTKYE
+        RjTW8N9eBSeXByF8jaePKWi4fiFeSGfSE2Yj5bQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=jodmyK
+        Z4yhotSimlkvvA8TxyKuJ+LFHq9t7n5EWIY0k=; b=udv84xKi5kx7WrzLSEzMvF
+        LXvfyqlafNN6OZ+9BGcpWu5SQCCmtkBmzf3lLb/4DScWa952Uxj/VzVk1DF1u/Iy
+        OzgUjEpRtpxrD4C8+NIh0oAgo1tf7yX7T9/oASIPY1sdtE4vmnMwkoRnnXTuG8ZO
+        AJM9O0Kl6bNGEjQNycS+PnCrxt/K+0FEr6VFzWdc3HxEU0AYrgT4Vsl7yp0WgyLx
+        j/KN2uAWjDj82/2OLFnO5jtO45Di1EbS8OZ0ZUg+qp1gyl23a+0VqzVYNoibU1LW
+        5CVnaXNkh/H2nnxEaNbMYWGhqvcowHv0HMF6Xcbd9ph4ajOheZYNZCLhRg9wRR5w
+        ==
+X-ME-Sender: <xms:MSq1XH2-An056Lh2O8Y5Kkqlu8AtAQM0xWrBdrCuF3BtpVeZzZ_86g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrfedtgdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedftehnughr
+    vgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgruhenucevlhhushhtvghr
+    ufhiiigvpedt
+X-ME-Proxy: <xmx:MSq1XKsKuidZNWpAzP1aoOI4AhDiGYwZOMaVKDvawA3ShbL-Ni_mXg>
+    <xmx:MSq1XADEAOvn_hChNpTjoHsg6_nYQ0sGxqD-bTw2hUf0xMdVoW6s6w>
+    <xmx:MSq1XG-CSMNziSoTQcwRVI6cJmglumhXjZEgg786_pUbvACcqwIDNg>
+    <xmx:Miq1XD7lBnHkxIHWg2MQr9i4iG2OX47X8BEh8di_nV8kbdw66RuRiA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3F2907C199; Mon, 15 Apr 2019 21:04:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.6-332-g22ddc6a-fmstable-20190412v1
+Mime-Version: 1.0
+X-Me-Personality: 52947553
+Message-Id: <93fd2cb2-b3cd-4b7f-b187-eec62ce49723@www.fastmail.com>
+In-Reply-To: <20190415121235.255028-2-tmaimon77@gmail.com>
+References: <20190415121235.255028-1-tmaimon77@gmail.com>
+ <20190415121235.255028-2-tmaimon77@gmail.com>
+Date:   Mon, 15 Apr 2019 21:04:48 -0400
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Tomer Maimon" <tmaimon77@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, arnd@arnd.de,
+        "Rob Herring" <robh+dt@kernel.org>, mark.rutland@arm.com,
+        "Nancy Yuen" <yuenn@google.com>,
+        "Patrick Venture" <venture@google.com>,
+        "Brendan Higgins" <brendanhiggins@google.com>,
+        "Avi Fishman" <avifishman70@gmail.com>,
+        "Joel Stanley" <joel@jms.id.au>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_[PATCH_v1_1/2]_dt-binding:_misc:_Add_common_LPC_snoop_docu?=
+ =?UTF-8?Q?mentation?=
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 15, 2019 at 06:37:20PM +0800, Lei YU wrote:
-> The occ's extended status is checked and shown as sysfs attributes. But
-> the code was incorrectly checking the "status" bits.
-> Fix it by checking the "ext_status" bits.
+
+
+On Mon, 15 Apr 2019, at 21:51, Tomer Maimon wrote:
+> Added device tree binding documentation for Nuvoton BMC
+> NPCM BIOS Post Code (BPC) and Apeed AST2500 LPC snoop.
+> The LPC snoop monitoring two configurable I/O addresses
+> written by the host on Low Pin Count (LPC) bus.
 > 
-> Signed-off-by: Lei YU <mine260309@gmail.com>
-> Reviewed-by: Eddie James <eajames@linux.ibm.com>
-
-Applied.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  drivers/hwmon/occ/sysfs.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  .../devicetree/bindings/misc/lpc-snoop.txt         | 27 ++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/lpc-snoop.txt
 > 
-> diff --git a/drivers/hwmon/occ/sysfs.c b/drivers/hwmon/occ/sysfs.c
-> index fe3d15e..a71ca94 100644
-> --- a/drivers/hwmon/occ/sysfs.c
-> +++ b/drivers/hwmon/occ/sysfs.c
-> @@ -42,16 +42,16 @@ static ssize_t occ_sysfs_show(struct device *dev,
->  		val = !!(header->status & OCC_STAT_ACTIVE);
->  		break;
->  	case 2:
-> -		val = !!(header->status & OCC_EXT_STAT_DVFS_OT);
-> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_OT);
->  		break;
->  	case 3:
-> -		val = !!(header->status & OCC_EXT_STAT_DVFS_POWER);
-> +		val = !!(header->ext_status & OCC_EXT_STAT_DVFS_POWER);
->  		break;
->  	case 4:
-> -		val = !!(header->status & OCC_EXT_STAT_MEM_THROTTLE);
-> +		val = !!(header->ext_status & OCC_EXT_STAT_MEM_THROTTLE);
->  		break;
->  	case 5:
-> -		val = !!(header->status & OCC_EXT_STAT_QUICK_DROP);
-> +		val = !!(header->ext_status & OCC_EXT_STAT_QUICK_DROP);
->  		break;
->  	case 6:
->  		val = header->occ_state;
+> diff --git a/Documentation/devicetree/bindings/misc/lpc-snoop.txt 
+> b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
+> new file mode 100644
+> index 000000000000..7deac244ef9d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
+> @@ -0,0 +1,27 @@
+> +LPC snoop interface
+> +
+> +The LPC snoop (BIOS Post Code) interface can monitor
+> +two configurable I/O addresses written by the host on
+> +the Low Pin Count (LPC) bus.
+
+Wrapping looks kind of odd and there's a missing newline at the
+end of the file, but for the content:
+
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+
+> +
+> +Nuvoton NPCM7xx LPC snoop supports capture double words,
+> +when using capture double word only I/O address 1 is monitored.
+> +
+> +Required properties for lpc-snoop node
+> +- compatible   : "nuvoton,npcm750-lpc-bpc-snoop" for Poleg NPCM7XX
+> +                 "aspeed,ast2500-lpc-snoop" for Aspeed AST2500.
+> +- reg          : specifies physical base address and size of the 
+> registers.
+> +- interrupts   : contain the LPC snoop interrupt with flags for 
+> falling edge.
+> +- snoop-ports  : contain monitor I/O addresses, at least one monitor 
+> I/O
+> +                 address required
+> +
+> +Optional property for NPCM7xx lpc-snoop node
+> +- nuvoton,lpc-en-dwcapture : enable capture double words support.
+> +
+> +Example:
+> +	lpc-snoop: lpc_snoop@f0007040 {
+> +		compatible = "nuvoton,npcm750-lpc-bpc-snoop";
+> +		reg = <0xf0007040 0x14>;
+> +		snoop-ports = <0x80>;
+> +		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +	};
+> \ No newline at end of file
+> -- 
+> 2.14.1
+> 
+>
