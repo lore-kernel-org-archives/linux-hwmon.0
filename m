@@ -3,119 +3,317 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB43C10F14
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 273BEC10F13
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 18:51:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA862204EC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 15:54:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF1B3206BA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 18:51:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbfDPPyv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Apr 2019 11:54:51 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54292 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729866AbfDPPyq (ORCPT
+        id S1728405AbfDPSvK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Apr 2019 14:51:10 -0400
+Received: from rcdn-iport-4.cisco.com ([173.37.86.75]:18672 "EHLO
+        rcdn-iport-4.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726860AbfDPSvK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Apr 2019 11:54:46 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3GFsVmI114203
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:54:45 -0400
-Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2rwhyh89c2-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 11:54:45 -0400
-Received: from localhost
-        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Tue, 16 Apr 2019 16:54:44 +0100
-Received: from b03cxnp08028.gho.boulder.ibm.com (9.17.130.20)
-        by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 16 Apr 2019 16:54:40 +0100
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3GFsdnj30015564
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Apr 2019 15:54:40 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C30257805C;
-        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E66278060;
-        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.3.116.186])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Apr 2019 15:54:39 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        andrew@aj.id.au, mine260309@gmail.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2 3/3] hwmon (occ): Add more details to Kconfig help text
-Date:   Tue, 16 Apr 2019 15:54:28 +0000
-X-Mailer: git-send-email 2.7.4
-X-TM-AS-GCONF: 00
-x-cbid: 19041615-0016-0000-0000-000009A15EC7
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00010938; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000284; SDB=6.01189956; UDB=6.00623519; IPR=6.00970749;
- MB=3.00026468; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-16 15:54:43
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19041615-0017-0000-0000-000042D642F1
-Message-Id: <1555430068-23439-1-git-send-email-eajames@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-16_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904160106
+        Tue, 16 Apr 2019 14:51:10 -0400
+X-Greylist: delayed 425 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Apr 2019 14:51:10 EDT
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0CDAAAKIrZc/51dJa1mHQEBBQEHBQG?=
+ =?us-ascii?q?BUwYBCwGCEIE5MyiyEIF7EIRthgkjNgcOAQMBAQoBAgECbSiFeFIpgRUTgyK?=
+ =?us-ascii?q?CCatWM4owFIEeAYZzhFYXgX+EYYQeG4VsA5F/gQuTLAmCCFOROidrlAugLoF?=
+ =?us-ascii?q?WAi+BVjMaCBsVgyeQbB8DMI4hglEBAQ?=
+X-IronPort-AV: E=Sophos;i="5.60,358,1549929600"; 
+   d="scan'208";a="548151376"
+Received: from rcdn-core-6.cisco.com ([173.37.93.157])
+  by rcdn-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 16 Apr 2019 18:44:04 +0000
+Received: from tusi.cisco.com (tusi.cisco.com [172.24.98.27])
+        by rcdn-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id x3GIi30W026006;
+        Tue, 16 Apr 2019 18:44:03 GMT
+From:   Ruslan Babayev <ruslan@babayev.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     xe-linux-external@cisco.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] hwmon: (pmbus) add support for output voltage registers
+Date:   Tue, 16 Apr 2019 11:36:16 -0700
+Message-Id: <20190416183620.39950-1-ruslan@babayev.com>
+X-Mailer: git-send-email 2.17.1
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 172.24.98.27, tusi.cisco.com
+X-Outbound-Node: rcdn-core-6.cisco.com
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The help text needs to spell out how the driver runs on a BMC, as it
-previously seemed to indicate it ran on a POWER processor.
+Registers VOUT_COMMAND, VOUT_MARGIN_HIGH and VOUT_MARGIN_LOW are
+described in PMBUS Spec Part II Rev 1.2. Exposing them in the PMBUS
+core allows the drivers to turn them on with a corresponding
+PMBUS_HAVE_VOUT_... flags.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Cc: xe-linux-external@cisco.com
+Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
 ---
-Changes since v1: fix Signed-off-by; git config got mixed up.
+ drivers/hwmon/pmbus/pmbus.h      |   7 ++
+ drivers/hwmon/pmbus/pmbus_core.c | 183 +++++++++++++++++++++++++++++++
+ 2 files changed, 190 insertions(+)
 
- drivers/hwmon/occ/Kconfig | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/occ/Kconfig b/drivers/hwmon/occ/Kconfig
-index 2a3869f..1658634 100644
---- a/drivers/hwmon/occ/Kconfig
-+++ b/drivers/hwmon/occ/Kconfig
-@@ -9,8 +9,10 @@ config SENSORS_OCC_P8_I2C
- 	select SENSORS_OCC
- 	help
- 	 This option enables support for monitoring sensors provided by the
--	 On-Chip Controller (OCC) on a POWER8 processor. Communications with
--	 the OCC are established through I2C bus.
-+	 On-Chip Controller (OCC) on a POWER8 processor. However, this driver
-+	 can only run on a baseboard management controller (BMC) connected to
-+	 the P8, not the POWER processor itself. Communications with the OCC are
-+	 established through I2C bus.
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index 1d24397d36ec..723648b3da36 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -223,6 +223,9 @@ enum pmbus_regs {
+  * OPERATION
+  */
+ #define PB_OPERATION_CONTROL_ON		BIT(7)
++#define PB_OPERATION_MARGIN_HIGH	BIT(5)
++#define PB_OPERATION_MARGIN_LOW		BIT(4)
++#define PB_OPERATION_ACT_ON_FAULT	BIT(3)
  
- 	 This driver can also be built as a module. If so, the module will be
- 	 called occ-p8-hwmon.
-@@ -22,8 +24,10 @@ config SENSORS_OCC_P9_SBE
- 	select SENSORS_OCC
- 	help
- 	 This option enables support for monitoring sensors provided by the
--	 On-Chip Controller (OCC) on a POWER9 processor. Communications with
--	 the OCC are established through SBE fifo on an FSI bus.
-+	 On-Chip Controller (OCC) on a POWER9 processor. However, this driver
-+	 can only run on a baseboard management controller (BMC) connected to
-+	 the P9, not the POWER processor itself. Communications with the OCC are
-+	 established through SBE fifo on an FSI bus.
+ /*
+  * CAPABILITY
+@@ -291,6 +294,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
+ /*
+  * STATUS_VOUT, STATUS_INPUT
+  */
++#define PB_VOLTAGE_MAX_WARNING		BIT(3)
+ #define PB_VOLTAGE_UV_FAULT		BIT(4)
+ #define PB_VOLTAGE_UV_WARNING		BIT(5)
+ #define PB_VOLTAGE_OV_WARNING		BIT(6)
+@@ -371,6 +375,9 @@ enum pmbus_sensor_classes {
+ #define PMBUS_HAVE_STATUS_VMON	BIT(19)
+ #define PMBUS_HAVE_PWM12	BIT(20)
+ #define PMBUS_HAVE_PWM34	BIT(21)
++#define PMBUS_HAVE_VOUT_COMMAND		BIT(22)
++#define PMBUS_HAVE_VOUT_MARGIN_HIGH	BIT(23)
++#define PMBUS_HAVE_VOUT_MARGIN_LOW	BIT(24)
  
- 	 This driver can also be built as a module. If so, the module will be
- 	 called occ-p9-hwmon.
+ #define PMBUS_PAGE_VIRTUAL	BIT(31)
+ 
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 2e2b5851139c..f35b239961e3 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -89,6 +89,14 @@ struct pmbus_label {
+ #define to_pmbus_label(_attr) \
+ 	container_of(_attr, struct pmbus_label, attribute)
+ 
++struct pmbus_operation {
++	char name[PMBUS_NAME_SIZE];	/* sysfs label name */
++	struct sensor_device_attribute attribute;
++	u8 page;
++};
++#define to_pmbus_operation(_attr) \
++	container_of(_attr, struct pmbus_operation, attribute)
++
+ struct pmbus_data {
+ 	struct device *dev;
+ 	struct device *hwmon_dev;
+@@ -1004,6 +1012,65 @@ static ssize_t pmbus_show_label(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%s\n", label->label);
+ }
+ 
++static ssize_t pmbus_show_operation(struct device *dev,
++				    struct device_attribute *devattr, char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct pmbus_operation *operation = to_pmbus_operation(attr);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	int ret;
++
++	ret = pmbus_read_byte_data(client, operation->page, PMBUS_OPERATION);
++	if (ret < 0)
++		return ret;
++
++	if (ret & PB_OPERATION_CONTROL_ON) {
++		if (ret & PB_OPERATION_MARGIN_HIGH)
++			return snprintf(buf, PAGE_SIZE, "high\n");
++		else if (ret & PB_OPERATION_MARGIN_LOW)
++			return snprintf(buf, PAGE_SIZE, "low\n");
++		else
++			return snprintf(buf, PAGE_SIZE, "on\n");
++	} else {
++			return snprintf(buf, PAGE_SIZE, "off\n");
++	}
++}
++
++static ssize_t pmbus_set_operation(struct device *dev,
++				   struct device_attribute *devattr,
++				   const char *buf, size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct pmbus_operation *operation = to_pmbus_operation(attr);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	int ret;
++	u8 val;
++
++	/*
++	 * sysfs_streq() doesn't need the \n's, but we add them so the strings
++	 * will be shared with pmbus_show_operation() above.
++	 */
++	if (sysfs_streq(buf, "on\n"))
++		val = PB_OPERATION_CONTROL_ON;
++	else if (sysfs_streq(buf, "off\n"))
++		val = 0;
++	else if (sysfs_streq(buf, "high\n"))
++		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
++		      PB_OPERATION_MARGIN_HIGH;
++	else if (sysfs_streq(buf, "low\n"))
++		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
++		      PB_OPERATION_MARGIN_LOW;
++	else
++		return -EINVAL;
++
++	ret = pmbus_write_byte_data(client, operation->page,
++				    PMBUS_OPERATION, val);
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
+ static int pmbus_add_attribute(struct pmbus_data *data, struct attribute *attr)
+ {
+ 	if (data->num_attributes >= data->max_attributes - 1) {
+@@ -1143,6 +1210,29 @@ static int pmbus_add_label(struct pmbus_data *data,
+ 	return pmbus_add_attribute(data, &a->attr);
+ }
+ 
++static int pmbus_add_operation(struct pmbus_data *data, const char *name,
++			       int seq, int page)
++{
++	struct pmbus_operation *operation;
++	struct sensor_device_attribute *a;
++
++	operation = devm_kzalloc(data->dev, sizeof(*operation), GFP_KERNEL);
++	if (!operation)
++		return -ENOMEM;
++
++	a = &operation->attribute;
++
++	snprintf(operation->name, sizeof(operation->name), "%s%d_operation",
++		 name, seq);
++
++	operation->page = page;
++
++	pmbus_attr_init(a, operation->name, S_IRUGO | S_IWUSR,
++			pmbus_show_operation, pmbus_set_operation, seq);
++
++	return pmbus_add_attribute(data, &a->dev_attr.attr);
++}
++
+ /*
+  * Search for attributes. Allocate sensors, booleans, and labels as needed.
+  */
+@@ -1901,6 +1991,93 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static const struct pmbus_limit_attr vout_cmd_limit_attrs[] = {
++	{
++		.reg = PMBUS_VOUT_MAX,
++		.attr = "max",
++		.alarm = "max_alarm",
++		.sbit = PB_VOLTAGE_MAX_WARNING,
++	}
++};
++
++static const struct pmbus_sensor_attr vout_attributes[] = {
++	{
++		.reg = PMBUS_VOUT_COMMAND,
++		.class = PSC_VOLTAGE_OUT,
++		.label = "command",
++		.paged = true,
++		.func = PMBUS_HAVE_VOUT_COMMAND,
++		.sfunc = PMBUS_HAVE_STATUS_VOUT,
++		.sbase = PB_STATUS_VOUT_BASE,
++		.gbit = PB_STATUS_VOUT_OV,
++		.limit = vout_cmd_limit_attrs,
++		.nlimit = ARRAY_SIZE(vout_cmd_limit_attrs),
++	}, {
++		.reg = PMBUS_VOUT_MARGIN_HIGH,
++		.class = PSC_VOLTAGE_OUT,
++		.label = "margin_high",
++		.paged = true,
++		.func = PMBUS_HAVE_VOUT_MARGIN_HIGH,
++	}, {
++		.reg = PMBUS_VOUT_MARGIN_LOW,
++		.class = PSC_VOLTAGE_OUT,
++		.label = "margin_low",
++		.paged = true,
++		.func = PMBUS_HAVE_VOUT_MARGIN_LOW,
++	}
++};
++
++static int pmbus_add_vout_attrs(struct i2c_client *client,
++				struct pmbus_data *data,
++				const char *name,
++				const struct pmbus_sensor_attr *attr,
++				int nattrs)
++{
++	const struct pmbus_driver_info *info = data->info;
++	struct pmbus_sensor *base;
++	int i, ret, index, page, pages;
++
++	index = 1;
++	for (page = 0; page < info->pages; page++) {
++		if (!pmbus_check_byte_register(client, page, PMBUS_OPERATION))
++			continue;
++		ret = pmbus_add_operation(data, name, index, page);
++		if (ret)
++			return ret;
++		index++;
++	}
++
++	for (i = 0; i < nattrs; i++) {
++		index = 1;
++		pages = attr->paged ? info->pages : 1;
++		for (page = 0; page < pages; page++) {
++			if (!(info->func[page] & attr->func))
++				continue;
++
++			if (!pmbus_check_word_register(client, page, attr->reg))
++				continue;
++
++			base = pmbus_add_sensor(data, name, attr->label, index,
++						page, attr->reg, attr->class,
++						true, false, true);
++			if (!base)
++				return -ENOMEM;
++
++			if (attr->sfunc) {
++				ret = pmbus_add_limit_attrs(client, data, info,
++							    name, index, page,
++							    base, attr);
++				if (ret < 0)
++					return ret;
++			}
++
++			index++;
++		}
++		attr++;
++	}
++	return 0;
++}
++
+ static int pmbus_find_attributes(struct i2c_client *client,
+ 				 struct pmbus_data *data)
+ {
+@@ -1912,6 +2089,12 @@ static int pmbus_find_attributes(struct i2c_client *client,
+ 	if (ret)
+ 		return ret;
+ 
++	/* Output Voltage sensors */
++	ret = pmbus_add_vout_attrs(client, data, "out", vout_attributes,
++				   ARRAY_SIZE(vout_attributes));
++	if (ret)
++		return ret;
++
+ 	/* Current sensors */
+ 	ret = pmbus_add_sensor_attrs(client, data, "curr", current_attributes,
+ 				     ARRAY_SIZE(current_attributes));
 -- 
-2.7.4
+2.17.1
 
