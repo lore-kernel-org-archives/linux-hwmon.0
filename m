@@ -2,138 +2,218 @@ Return-Path: <SRS0=hA7Y=ST=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A9C4C10F12
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 03:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B65D0C10F12
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:46:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09EA120835
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 03:49:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5Svs29E"
+	by mail.kernel.org (Postfix) with ESMTP id 798CE2183F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1555494397;
+	bh=HCyOMMD/wZmat4HP/wUJRCr1Bqu0m8pq5veAQiyfbTs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=GuHm4FqiTGMR4I64vAhWa4O4hLbEW8OAT99zeUJ3xmJgQ6MMk3xMTf3d4Z2HR+X0s
+	 wor6PV0JoWNW34PG1zc94aFZhBMmK4S9QWr/oBZ94BkgVGGpdWkO1jndlgqwqfvgHo
+	 BxFAeJEP70Y47DyvM1AC+6K3Qgv3XK9J3iJ1rLoo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729281AbfDQDte (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Apr 2019 23:49:34 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35159 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727219AbfDQDte (ORCPT
+        id S1731651AbfDQJqh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Apr 2019 05:46:37 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44468 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727013AbfDQJqg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Apr 2019 23:49:34 -0400
-Received: by mail-pl1-f196.google.com with SMTP id w24so11356653plp.2;
-        Tue, 16 Apr 2019 20:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9DHw/jF/PpaNCEANBTI+YbvaJ8TD0OFM8JDdklRcth0=;
-        b=i5Svs29EgAr2DT9P09QaoVU5+hOc0bgN5mwiBbanAN45k97dkdovK/BlS4fOKZC3Lr
-         lwf9mNnTuN85I1jny6pgpwEjB5IEWO5Kuj8Eos4vxVpkpO0Gzb3Z0FSH/Xq1HoiJufN8
-         A+Swa3wFGVw0QlSyztXIkU6kYy+tkAvR5If2u2s27jGst+A+D9Td3d73uoAmTRKY7pAY
-         LG1UFuWZInis7uxvtPYGuo64+eT0/prmK488l0MnP9Io6koZpzOGyRP3RA+e4TYymYGH
-         nesH8Daw9NImmUEtkD+FXXdyszoAcEe2fXkhrZvPJr/EJl4yoUAJI5zn/r7VXSm8urgX
-         TdDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9DHw/jF/PpaNCEANBTI+YbvaJ8TD0OFM8JDdklRcth0=;
-        b=iNBWSVq/AkJMEuP4DY2WJlTjsuEuYGFjak3qbiLbD9IaC8YnDiRTgSUGOPYAQ9H57i
-         IZ4v93zNs6BMbE4Q7kAodmje23m9rwJ8wau6Lgxbywhw+exyO00nzIX5YsmwozTbPbj9
-         2PwuKPnSzgX01p6uEWMmiUUasdC1QaU7gTum13WZWe+9puIFU940Bb6HnZ1lKRJCsvfz
-         jG53CUM42BkvxlE4KUrLLoz14iY7MiJGwB0Ba0nBiyCED/AigtmYuBfYz6TI9MsbIU4q
-         5SFy3vEoAlyq4oyySmuo/3FtYmcqbEe9HoCE3evdkTrLtpcOu8IKjDVZATuIPjDrCgv7
-         hM2A==
-X-Gm-Message-State: APjAAAUCga9VwlmWSKXBeWH/6A2iCaYpwc20FluFBHFiWOA55Dvd8uqI
-        EKBIGJYUI96AuzwVzbjxfCQ=
-X-Google-Smtp-Source: APXvYqyhKYuRN96dQStz/269gpggAMU/dgElpUC3S3KlvGPU1e8KeWXhFOkxAmLa26o5YbPxKOnMcw==
-X-Received: by 2002:a17:902:9341:: with SMTP id g1mr49225182plp.81.1555472973777;
-        Tue, 16 Apr 2019 20:49:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a17sm96997965pfj.123.2019.04.16.20.49.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2019 20:49:32 -0700 (PDT)
-Subject: Re: [PATCH v2 00/21] Convert hwmon documentation to ReST
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Wed, 17 Apr 2019 05:46:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=M6d3gsVlVPLCn/N3u8ByL4YNqFMBx3u0kXh2q28dX1Q=; b=sxSTFQrj+PkkcjQ7c6Z4DPRiCy
+        OKj+yThGIOeNlwWyizWCXpXho3olY1zX2lJUqzWMb5BD78bwrPBy6ayXZYmypRpnH6pbXS8o3p/Xx
+        8J1b08KsczB9VV9a0p3ewhbumDwYbB7ILZPLNMobyF4UA6M/AhpGqsrSXtkPJKlXi/mCiWgY0gJWr
+        FKVR0ZkiyJCOd43QF95XHWZIfGTJAjDsx+IOGX+yxUeefafj/G5EVkY3MeQIJ5tNS/+Y9tFaqXEtH
+        5AmjeallMSaFoIaZ9XdKBEeLJ5l2JPcTYLPkFro5OJz8JMTY1F4MJ8ybuABLKVizoeZBkxWe8Ak27
+        rfVkaAMw==;
+Received: from 177.132.233.55.dynamic.adsl.gvt.net.br ([177.132.233.55] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hGh9G-0000a7-HX; Wed, 17 Apr 2019 09:46:34 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hGh9C-0003uW-UZ; Wed, 17 Apr 2019 06:46:30 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Joel Stanley <joel@jms.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <cover.1554923967.git.mchehab+samsung@kernel.org>
- <20190411124324.3ed62fad@lwn.net> <20190411174357.251904f5@coco.lan>
- <20190411210731.GA29378@roeck-us.net> <20190412100451.6fe49de7@lwn.net>
- <f900adea-d231-c00d-847c-33e66e79ea30@roeck-us.net>
- <20190416141949.09b48789@lwn.net> <20190416203114.GB25517@roeck-us.net>
- <20190416225836.1d5953bc@coco.lan>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1d8a4410-4a8c-7b7a-141d-d2495cc66749@roeck-us.net>
-Date:   Tue, 16 Apr 2019 20:49:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v3 07/21] docs: hwmon: fam15h_power: convert to ReST format
+Date:   Wed, 17 Apr 2019 06:46:15 -0300
+Message-Id: <602e740d6286ae6b0909f75383a45136c91975a6.1555494108.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1555494108.git.mchehab+samsung@kernel.org>
+References: <cover.1555494108.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190416225836.1d5953bc@coco.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/16/19 6:58 PM, Mauro Carvalho Chehab wrote:
-> Em Tue, 16 Apr 2019 13:31:14 -0700
-> Guenter Roeck <linux@roeck-us.net> escreveu:
-> 
->> On Tue, Apr 16, 2019 at 02:19:49PM -0600, Jonathan Corbet wrote:
->>> On Fri, 12 Apr 2019 20:09:16 -0700
->>> Guenter Roeck <linux@roeck-us.net> wrote:
->>>    
->>>> The big real-world question is: Is the series good enough for you to accept,
->>>> or do you expect some level of user/kernel separation ?
->>>
->>> I guess it can go in; it's forward progress, even if it doesn't make the
->>> improvements I would like to see.
->>>
->>> The real question, I guess, is who should take it.  I've been seeing a
->>> fair amount of activity on hwmon, so I suspect that the potential for
->>> conflicts is real.  Perhaps things would go smoother if it went through
->>> your tree?
->>>    
->> We'll see a number of conflicts, yes. In terms of timing, this is probably
->> the worst release in the last few years to make such a change. I currently
->> have 9 patches queued in hwmon-next which touch Documentation/hwmon.
->> Of course the changes made in those are all not ReST compatible, and I have
->> no idea what to look out for to make it compatible. So this is going to be
->> fun (in a negative sense) either way.
->>
->> I don't really have a recommendation at this point; I think the best I could
->> do to take the patches which don't generate conflicts and leave the rest
->> alone. But that would also be bad, since the new index file would not match
->> reality. No idea, really, what the best or even a useful approach would be.
->>
->> Maybe automated changes like this (assuming they are indeed automated)
->> can be generated and pushed right after a commit window closes. Would
->> that by any chance be possible ?
-> 
-> No, those patches are hand-maid, but I can surely rebase it on the top of
-> your tree. Is your tree already merged at linux-next, or should I use some
-> other branch/tree for rebase?
-> 
+Convert fam15h_power to ReST format, in order to allow it to
+be parsed by Sphinx.
 
-linux-next merges hwmon-next. next-20190416 is missing one patch which touches
-Documentation/hwmon, but that should be easy to deal with.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/hwmon/fam15h_power | 85 +++++++++++++++++++++-----------
+ 1 file changed, 57 insertions(+), 28 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/fam15h_power b/Documentation/hwmon/fam15h_power
+index fb594c281c46..fdde632c93a3 100644
+--- a/Documentation/hwmon/fam15h_power
++++ b/Documentation/hwmon/fam15h_power
+@@ -2,15 +2,20 @@ Kernel driver fam15h_power
+ ==========================
+ 
+ Supported chips:
++
+ * AMD Family 15h Processors
++
+ * AMD Family 16h Processors
+ 
+   Prefix: 'fam15h_power'
++
+   Addresses scanned: PCI space
++
+   Datasheets:
+-  BIOS and Kernel Developer's Guide (BKDG) For AMD Family 15h Processors
+-  BIOS and Kernel Developer's Guide (BKDG) For AMD Family 16h Processors
+-  AMD64 Architecture Programmer's Manual Volume 2: System Programming
++
++  - BIOS and Kernel Developer's Guide (BKDG) For AMD Family 15h Processors
++  - BIOS and Kernel Developer's Guide (BKDG) For AMD Family 16h Processors
++  - AMD64 Architecture Programmer's Manual Volume 2: System Programming
+ 
+ Author: Andreas Herrmann <herrmann.der.user@googlemail.com>
+ 
+@@ -31,14 +36,19 @@ For AMD Family 15h and 16h processors the following power values can
+ be calculated using different processor northbridge function
+ registers:
+ 
+-* BasePwrWatts: Specifies in watts the maximum amount of power
+-  consumed by the processor for NB and logic external to the core.
+-* ProcessorPwrWatts: Specifies in watts the maximum amount of power
+-  the processor can support.
+-* CurrPwrWatts: Specifies in watts the current amount of power being
+-  consumed by the processor.
++* BasePwrWatts:
++    Specifies in watts the maximum amount of power
++    consumed by the processor for NB and logic external to the core.
++
++* ProcessorPwrWatts:
++    Specifies in watts the maximum amount of power
++    the processor can support.
++* CurrPwrWatts:
++    Specifies in watts the current amount of power being
++    consumed by the processor.
+ 
+ This driver provides ProcessorPwrWatts and CurrPwrWatts:
++
+ * power1_crit (ProcessorPwrWatts)
+ * power1_input (CurrPwrWatts)
+ 
+@@ -53,35 +63,53 @@ calculate the average power consumed by a processor during a
+ measurement interval Tm. The feature of accumulated power mechanism is
+ indicated by CPUID Fn8000_0007_EDX[12].
+ 
+-* Tsample: compute unit power accumulator sample period
+-* Tref: the PTSC counter period
+-* PTSC: performance timestamp counter
+-* N: the ratio of compute unit power accumulator sample period to the
+-  PTSC period
+-* Jmax: max compute unit accumulated power which is indicated by
+-  MaxCpuSwPwrAcc MSR C001007b
+-* Jx/Jy: compute unit accumulated power which is indicated by
+-  CpuSwPwrAcc MSR C001007a
+-* Tx/Ty: the value of performance timestamp counter which is indicated
+-  by CU_PTSC MSR C0010280
+-* PwrCPUave: CPU average power
++* Tsample:
++	compute unit power accumulator sample period
++
++* Tref:
++	the PTSC counter period
++
++* PTSC:
++	performance timestamp counter
++
++* N:
++	the ratio of compute unit power accumulator sample period to the
++	PTSC period
++
++* Jmax:
++	max compute unit accumulated power which is indicated by
++	MaxCpuSwPwrAcc MSR C001007b
++
++* Jx/Jy:
++	compute unit accumulated power which is indicated by
++	CpuSwPwrAcc MSR C001007a
++* Tx/Ty:
++	the value of performance timestamp counter which is indicated
++	by CU_PTSC MSR C0010280
++
++* PwrCPUave:
++	CPU average power
+ 
+ i. Determine the ratio of Tsample to Tref by executing CPUID Fn8000_0007.
++
+ 	N = value of CPUID Fn8000_0007_ECX[CpuPwrSampleTimeRatio[15:0]].
+ 
+ ii. Read the full range of the cumulative energy value from the new
+-MSR MaxCpuSwPwrAcc.
++    MSR MaxCpuSwPwrAcc.
++
+ 	Jmax = value returned.
++
+ iii. At time x, SW reads CpuSwPwrAcc MSR and samples the PTSC.
+-	Jx = value read from CpuSwPwrAcc and Tx = value read from
+-PTSC.
++
++	Jx = value read from CpuSwPwrAcc and Tx = value read from PTSC.
+ 
+ iv. At time y, SW reads CpuSwPwrAcc MSR and samples the PTSC.
+-	Jy = value read from CpuSwPwrAcc and Ty = value read from
+-PTSC.
++
++	Jy = value read from CpuSwPwrAcc and Ty = value read from PTSC.
+ 
+ v. Calculate the average power consumption for a compute unit over
+-time period (y-x). Unit of result is uWatt.
++   time period (y-x). Unit of result is uWatt::
++
+ 	if (Jy < Jx) // Rollover has occurred
+ 		Jdelta = (Jy + Jmax) - Jx
+ 	else
+@@ -90,13 +118,14 @@ time period (y-x). Unit of result is uWatt.
+ 
+ This driver provides PwrCPUave and interval(default is 10 millisecond
+ and maximum is 1 second):
++
+ * power1_average (PwrCPUave)
+ * power1_average_interval (Interval)
+ 
+ The power1_average_interval can be updated at /etc/sensors3.conf file
+ as below:
+ 
+-chip "fam15h_power-*"
++chip `fam15h_power-*`
+ 	set power1_average_interval 0.01
+ 
+ Then save it with "sensors -s".
+-- 
+2.20.1
+
