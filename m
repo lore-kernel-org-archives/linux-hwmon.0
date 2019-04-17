@@ -2,105 +2,116 @@ Return-Path: <SRS0=hA7Y=ST=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41566C10F12
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B48C10F12
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 10:24:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 081FD2173C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555494539;
-	bh=ImIrz8uOcrbyiT2MQ9I3Ny66PJUZOTDskAlnJVtUMro=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=E5/AvJS3YoQbabfdyj+umIkVEzd7nS/NzW9tBXAQZwxUi1BDTYDSnrWiK+ht3C8Cb
-	 bFoRfVEGJWqJAITd2mHe6xlnEBWQoOBCR/oJQDjiN22PZDkwP37pn8SQp/E8MAUDpm
-	 R0JWYujJme8bD7OMjL0P+3WZrO/n3tRd6ZdkWqpg=
+	by mail.kernel.org (Postfix) with ESMTP id 5D5902064A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 10:24:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731647AbfDQJsr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Apr 2019 05:48:47 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44518 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731639AbfDQJqg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Apr 2019 05:46:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YulanG3i2WrJpx0xcGHlq1inbqZIAFZQdFGyn1cb8Dg=; b=QWM2Vrn0rj0r4DHh58VbLoFul+
-        8cc0qm9YCEaWmY91K1kwhmCPKPztfuVhjNtU7X55SyaoQXUmDrLhVomyTOTNKm0u/cSzhAC+fFjxX
-        b3OG52eo13K6ScO8hWmBnsFAQi59xl9BGlsXjaCY9JR/XXTmcZeP3iyKPwxPDVS5FqbRIchoyt0nk
-        lbkxnPX/fBZD81PkVfBvea9+mEW7RUMz+XRrRdpgJ61Etu979r8dltSQQ5xywc2a6MiTDmet83BHU
-        K9sOFgWRMdA+XBcLaVc8K4mo+VU4aWhan/jnRv04ZZBAKA3twoiJzSwfImCsGJkXRLGvkkJk2PAli
-        ctKhcupg==;
-Received: from 177.132.233.55.dynamic.adsl.gvt.net.br ([177.132.233.55] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hGh9G-0000a4-JT; Wed, 17 Apr 2019 09:46:34 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hGh9C-0003uG-RG; Wed, 17 Apr 2019 06:46:30 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        id S1729039AbfDQKYU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Apr 2019 06:24:20 -0400
+Received: from foss.arm.com ([217.140.101.70]:42528 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726695AbfDQKYT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 17 Apr 2019 06:24:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CEBD374;
+        Wed, 17 Apr 2019 03:24:17 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0F763F68F;
+        Wed, 17 Apr 2019 03:24:16 -0700 (PDT)
+Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
+        id 43C536822DB; Wed, 17 Apr 2019 11:24:15 +0100 (BST)
+Date:   Wed, 17 Apr 2019 11:24:15 +0100
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 03/21] docs: hwmon: menf21bmc: convert to ReST format
-Date:   Wed, 17 Apr 2019 06:46:11 -0300
-Message-Id: <8d7f058a9a75ec8ab19013b56e526e340020f8fc.1555494108.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1555494108.git.mchehab+samsung@kernel.org>
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 02/21] docs: hwmon: vexpress: convert to ReST format
+Message-ID: <20190417102415.GU15144@e110455-lin.cambridge.arm.com>
 References: <cover.1555494108.git.mchehab+samsung@kernel.org>
+ <7f3e72d30c341b48d344110925a4f5fb3c92fe3c.1555494108.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <7f3e72d30c341b48d344110925a4f5fb3c92fe3c.1555494108.git.mchehab+samsung@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert menf21bmc to ReST format, in order to allow it to
-be parsed by Sphinx.
+On Wed, Apr 17, 2019 at 06:46:10AM -0300, Mauro Carvalho Chehab wrote:
+> Convert vexpress to ReST format, in order to allow it to
+> be parsed by Sphinx.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> ---
+>  Documentation/hwmon/vexpress | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/vexpress b/Documentation/hwmon/vexpress
+> index 557d6d5ad90d..8c861c8151ac 100644
+> --- a/Documentation/hwmon/vexpress
+> +++ b/Documentation/hwmon/vexpress
+> @@ -2,14 +2,21 @@ Kernel driver vexpress
+>  ======================
+>  
+>  Supported systems:
+> +
+>    * ARM Ltd. Versatile Express platform
+> +
+>      Prefix: 'vexpress'
+> +
+>      Datasheets:
+> +
+>        * "Hardware Description" sections of the Technical Reference Manuals
+> -        for the Versatile Express boards:
+> -        http://infocenter.arm.com/help/topic/com.arm.doc.subset.boards.express/index.html
+> +	for the Versatile Express boards:
+> +
+> +	- http://infocenter.arm.com/help/topic/com.arm.doc.subset.boards.express/index.html
+> +
+>        * Section "4.4.14. System Configuration registers" of the V2M-P1 TRM:
+> -        http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0447-/index.html
+> +
+> +	- http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0447-/index.html
+>  
+>  Author: Pawel Moll
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/hwmon/menf21bmc | 5 +++++
- 1 file changed, 5 insertions(+)
+I've acked this at v2 and I can't see any differences. Do you now want
+my Acks and prefer to get Pawel's?
 
-diff --git a/Documentation/hwmon/menf21bmc b/Documentation/hwmon/menf21bmc
-index 2a273a065c5e..1f0c6b2235ab 100644
---- a/Documentation/hwmon/menf21bmc
-+++ b/Documentation/hwmon/menf21bmc
-@@ -2,8 +2,11 @@ Kernel driver menf21bmc_hwmon
- =============================
- 
- Supported chips:
-+
- 	* MEN 14F021P00
-+
- 	  Prefix: 'menf21bmc_hwmon'
-+
- 	  Adresses scanned: -
- 
- Author: Andreas Werner <andreas.werner@men.de>
-@@ -34,6 +37,7 @@ Sysfs entries
- The following attributes are supported. All attributes are read only
- The Limits are read once by the driver.
- 
-+=============== ==========================
- in0_input	+3.3V input voltage
- in1_input	+5.0V input voltage
- in2_input	+12.0V input voltage
-@@ -48,3 +52,4 @@ in1_label	"MON_5V"
- in2_label	"MON_12V"
- in3_label	"5V_STANDBY"
- in4_label	"VBAT"
-+=============== ==========================
+Best regards,
+Liviu
+
+>  
+> -- 
+> 2.20.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 -- 
-2.20.1
-
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
