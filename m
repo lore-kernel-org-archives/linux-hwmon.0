@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4653BC282DC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46281C10F12
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:48:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0158A217D4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A9392173C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555494475;
-	bh=9c24dSyO9Q21DG4ptyac73kxHymTOwXbn68HtQlORTk=;
+	s=default; t=1555494487;
+	bh=tKkPzHX/Uihvot7AWIbU7M7ky7FtDC0nrHGnRjCOVyM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Cv421YXQAVi1ST82GBHVcmKCtjDhsKs/Cr+ZyuBKCDQx+Vr7/8Ss1TN+9P6QbeY8+
-	 /VYvZ2UheR6tzQEByZqmxJDaJOp3Jgs7Y/Gx2n9gq8Vdz4pENhCwEjRCFfZ97asrtU
-	 lBb2lbWta9ImZwzywJsGP6gs2T5xM0fx3fCAGvjU=
+	b=w03n4sFLdlozfXAL/gOY9KHmgy3m3f5MNFUWgILlEJd2i2YN6tSqoymRm4uh+mrOq
+	 pcWM1JnYGuiLX6DJLHb/AgNG8+x+6tGrp9T8nLbELAbXnZJOSyIpo5kxRHHw5E0J/N
+	 S05k2mTbM/CV+pbEE81aAFMzhqioFRbS0yz+xhmU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731842AbfDQJri (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Apr 2019 05:47:38 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44984 "EHLO
+        id S1731542AbfDQJr4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Apr 2019 05:47:56 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44942 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731707AbfDQJqj (ORCPT
+        with ESMTP id S1731703AbfDQJqj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 17 Apr 2019 05:46:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -33,18 +33,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Yr6flntSohMfDY8JmTkJqWByC2k/5EEKrm+kjxu+UOk=; b=CLyHBzlxpSpgBRQgDQMosY4cMT
-        E6Qm6CWKhuVcLZspob1t2E6iYktAS0rw38vbZISLlnTvQeo63r2L2dCYvrHJT1zJuOVpE9ZzM3zwQ
-        erc6QZCvGk+MQG308Cs6PfAp6Mxh0fDFxOHi7aj7bwcanKgdb6oQ1ttPyAMY0A+D8Ob06ylmd4Vwh
-        AUAiIIGyHSfLhC63m05UOz5JRQuqK7bqIV47PE8ydUfy+DOOxv7EWrxJlKro3Zro5Q3cZVFAQRhvc
-        FdediaVz36Sq3VAKco40bY6qNCiCrUOrRrOJENyNdIixNd+i0TsUcqS8DW2wR5zA1t7/EpfeCSMRf
-        8IPF4EPg==;
+        bh=/DoZqJ47XdGMH8UMjypS+5ERMfAgqAifsh9MIk2OSH4=; b=I0nJi0iLds2lEPiYoXNUo1ljS+
+        5A/G01cLdmgaNuOOMACnDDRVYR3bsyX40u82Keh+KV/uejFmvnAv16PHlpwAgI+OMpw716TBW+QA8
+        7m6J9Mb4nXYsWrQKULLiUsWaRql9yg/IlNPa6hbfLiJYmMBC2YQdPoPMbOZhTPfOwqTYZ5F3iTrle
+        BgSRiS8z+OyPPKzumO/RkxOhsctoUU8m0FW7NFxb+8i+Wk8BvVDq6QnvJu0vDVr1lQIOKqiLW43ox
+        X2Cn6StCVxu5ENEkZIEis564R3YCsMldFGxq5AdniaqZvw8HmtsNokp3aUwvqe8NAQf1QFnvPNxj6
+        X0F0fsgQ==;
 Received: from 177.132.233.55.dynamic.adsl.gvt.net.br ([177.132.233.55] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hGh9K-0000aL-Au; Wed, 17 Apr 2019 09:46:38 +0000
+        id 1hGh9K-0000aE-5p; Wed, 17 Apr 2019 09:46:38 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hGh9D-0003vP-77; Wed, 17 Apr 2019 06:46:31 -0300
+        id 1hGh9D-0003uz-2d; Wed, 17 Apr 2019 06:46:31 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -52,9 +52,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 17/21] docs: hwmon: k8temp, w83793: convert to ReST format
-Date:   Wed, 17 Apr 2019 06:46:25 -0300
-Message-Id: <84e5c302b2254138de560781b47ab50d835f78bf.1555494108.git.mchehab+samsung@kernel.org>
+Subject: [PATCH v3 12/21] docs: hwmon: asc7621: convert to ReST format
+Date:   Wed, 17 Apr 2019 06:46:20 -0300
+Message-Id: <25014c2dc28a758b01b14400e484b30a8f553e33.1555494108.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1555494108.git.mchehab+samsung@kernel.org>
 References: <cover.1555494108.git.mchehab+samsung@kernel.org>
@@ -65,233 +65,306 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert k8temp and w83793 to ReST format, in order to allow them
-to be parsed by Sphinx.
+Convert asc7621 to ReST format, in order to allow it to
+be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/k8temp |  17 +++--
- Documentation/hwmon/w83793 | 123 ++++++++++++++++++++-----------------
- 2 files changed, 77 insertions(+), 63 deletions(-)
+ Documentation/hwmon/asc7621 | 146 ++++++++++++++++++++++--------------
+ 1 file changed, 88 insertions(+), 58 deletions(-)
 
-diff --git a/Documentation/hwmon/k8temp b/Documentation/hwmon/k8temp
-index 716dc24c7237..72da12aa17e5 100644
---- a/Documentation/hwmon/k8temp
-+++ b/Documentation/hwmon/k8temp
-@@ -2,12 +2,17 @@ Kernel driver k8temp
- ====================
+diff --git a/Documentation/hwmon/asc7621 b/Documentation/hwmon/asc7621
+index 7287be7e1f21..b5a9fad0f172 100644
+--- a/Documentation/hwmon/asc7621
++++ b/Documentation/hwmon/asc7621
+@@ -1,10 +1,15 @@
++=====================
+ Kernel driver asc7621
+-==================
++=====================
  
  Supported chips:
 +
-   * AMD Athlon64/FX or Opteron CPUs
+     Andigilog aSC7621 and aSC7621a
 +
-     Prefix: 'k8temp'
+     Prefix: 'asc7621'
 +
-     Addresses scanned: PCI space
+     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
 +
-     Datasheet: http://support.amd.com/us/Processor_TechDocs/32559.pdf
+     Datasheet: http://www.fairview5.com/linux/asc7621/asc7621.pdf
  
- Author: Rudolf Marek
+ Author:
+@@ -73,8 +78,10 @@ Finally, we have added a tach disable function that turns off the tach
+ measurement system for individual tachs in order to save power. That is
+ in register 75h.
+ 
+---
++--------------------------------------------------------------------------
 +
- Contact: Rudolf Marek <r.marek@assembler.cz>
+ aSC7621 Product Description
++===========================
  
- Description
-@@ -27,10 +32,12 @@ implemented sensors.
+ The aSC7621 has a two wire digital interface compatible with SMBus 2.0.
+ Using a 10-bit ADC, the aSC7621 measures the temperature of two remote diode
+@@ -102,6 +109,8 @@ System voltages of VCCP, 2.5V, 3.3V, 5.0V, and 12V motherboard power are
+ monitored efficiently with internal scaling resistors.
  
- Mapping of /sys files is as follows:
- 
--temp1_input - temperature of Core 0 and "place" 0
--temp2_input - temperature of Core 0 and "place" 1
--temp3_input - temperature of Core 1 and "place" 0
--temp4_input - temperature of Core 1 and "place" 1
-+============= ===================================
-+temp1_input   temperature of Core 0 and "place" 0
-+temp2_input   temperature of Core 0 and "place" 1
-+temp3_input   temperature of Core 1 and "place" 0
-+temp4_input   temperature of Core 1 and "place" 1
-+============= ===================================
- 
- Temperatures are measured in degrees Celsius and measurement resolution is
- 1 degree C. It is expected that future CPU will have better resolution. The
-@@ -48,7 +55,7 @@ computed temperature called TControl, which must be lower than TControlMax.
- 
- The relationship is following:
- 
--temp1_input - TjOffset*2 < TControlMax,
-+	temp1_input - TjOffset*2 < TControlMax,
- 
- TjOffset is not yet exported by the driver, TControlMax is usually
- 70 degrees C. The rule of the thumb -> CPU temperature should not cross
-diff --git a/Documentation/hwmon/w83793 b/Documentation/hwmon/w83793
-index 6cc5f639b721..83bb40c48645 100644
---- a/Documentation/hwmon/w83793
-+++ b/Documentation/hwmon/w83793
-@@ -2,29 +2,34 @@ Kernel driver w83793
- ====================
- 
- Supported chips:
+ Features
++--------
 +
-   * Winbond W83793G/W83793R
+ - Supports PECI interface and monitors internal and remote thermal diodes
+ - 2-wire, SMBus 2.0 compliant, serial interface
+ - 10-bit ADC
+@@ -110,7 +119,7 @@ Features
+ - Noise filtering of temperature reading for fan speed control
+ - 0.25C digital temperature sensor resolution
+ - 3 PWM fan speed control outputs for 2-, 3- or 4-wire fans and up to 4 fan
+-	tachometer inputs
++  tachometer inputs
+ - Enhanced measured temperature to Temperature Zone assignment.
+ - Provides high and low PWM frequency ranges
+ - 3 GPIO pins for custom use
+@@ -123,17 +132,20 @@ Except where noted below, the sysfs entries created by this driver follow
+ the standards defined in "sysfs-interface".
+ 
+ temp1_source
++	=	===============================================
+ 	0 	(default) peci_legacy = 0, Remote 1 Temperature
+-			peci_legacy = 1, PECI Processor Temperature 0
++		peci_legacy = 1, PECI Processor Temperature 0
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+ 	3 	Internal Temperature
+ 	4 	PECI Processor Temperature 0
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+-	7  PECI Processor Temperature 3
++	7	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp2_source
++	=	===============================================
+ 	0 	(default) Internal Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+@@ -142,8 +154,10 @@ temp2_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp3_source
++	=	===============================================
+ 	0 	(default) Remote 2 Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+@@ -152,10 +166,12 @@ temp3_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+ temp4_source
++	=	===============================================
+ 	0 	(default) peci_legacy = 0, PECI Processor Temperature 0
+-			peci_legacy = 1, Remote 1 Temperature
++		peci_legacy = 1, Remote 1 Temperature
+ 	1 	Remote 1 Temperature
+ 	2 	Remote 2 Temperature
+ 	3 	Internal Temperature
+@@ -163,58 +179,65 @@ temp4_source
+ 	5 	PECI Processor Temperature 1
+ 	6 	PECI Processor Temperature 2
+ 	7 	PECI Processor Temperature 3
++	=	===============================================
+ 
+-temp[1-4]_smoothing_enable
+-temp[1-4]_smoothing_time
++temp[1-4]_smoothing_enable / temp[1-4]_smoothing_time
+ 	Smooths spikes in temp readings caused by noise.
+ 	Valid values in milliseconds are:
+-	35000
+-	17600
+-	11800
+-	 7000
+-	 4400
+-	 3000
+-	 1600
+-	  800
 +
-     Prefix: 'w83793'
++	* 35000
++	* 17600
++	* 11800
++	*  7000
++	*  4400
++	*  3000
++	*  1600
++	*   800
+ 
+ temp[1-4]_crit
+ 	When the corresponding zone temperature reaches this value,
+ 	ALL pwm outputs will got to 100%.
+ 
+-temp[5-8]_input
+-temp[5-8]_enable
++temp[5-8]_input / temp[5-8]_enable
+ 	The aSC7621 can also read temperatures provided by the processor
+ 	via the PECI bus.  Usually these are "core" temps and are relative
+ 	to the point where the automatic thermal control circuit starts
+ 	throttling.  This means that these are usually negative numbers.
+ 
+ pwm[1-3]_enable
++	=============== ========================================================
+ 	0		Fan off.
+ 	1		Fan on manual control.
+ 	2		Fan on automatic control and will run at the minimum pwm
+-				if the temperature for the zone is below the minimum.
+-	3		Fan on automatic control but will be off if the temperature
+-				for the zone is below the minimum.
+-	4-254	Ignored.
++			if the temperature for the zone is below the minimum.
++	3		Fan on automatic control but will be off if the
++			temperature for the zone is below the minimum.
++	4-254		Ignored.
+ 	255		Fan on full.
++	=============== ========================================================
+ 
+ pwm[1-3]_auto_channels
+ 	Bitmap as described in sysctl-interface with the following
+ 	exceptions...
 +
-     Addresses scanned: I2C 0x2c - 0x2f
+ 	Only the following combination of zones (and their corresponding masks)
+ 	are valid:
+-	1
+-	2
+-	3
+-	2,3
+-	1,2,3
+-	4
+-	1,2,3,4
+ 
+-	Special values:
+-	0			Disabled.
+-	16		Fan on manual control.
+-	31		Fan on full.
++	* 1
++	* 2
++	* 3
++	* 2,3
++	* 1,2,3
++	* 4
++	* 1,2,3,4
 +
-     Datasheet: Still not published
- 
- Authors:
--    Yuan Mu (Winbond Electronics)
--    Rudolf Marek <r.marek@assembler.cz>
-+    - Yuan Mu (Winbond Electronics)
-+    - Rudolf Marek <r.marek@assembler.cz>
- 
- 
- Module parameters
- -----------------
- 
- * reset int
--  (default 0)
--  This parameter is not recommended, it will lose motherboard specific
--  settings. Use 'reset=1' to reset the chip when loading this module.
-+    (default 0)
++	* Special values:
 +
-+    This parameter is not recommended, it will lose motherboard specific
-+    settings. Use 'reset=1' to reset the chip when loading this module.
- 
- * force_subclients=bus,caddr,saddr1,saddr2
--  This is used to force the i2c addresses for subclients of
--  a certain chip. Typical usage is `force_subclients=0,0x2f,0x4a,0x4b'
--  to force the subclients of chip 0x2f on bus 0 to i2c addresses
--  0x4a and 0x4b.
-+    This is used to force the i2c addresses for subclients of
-+    a certain chip. Typical usage is `force_subclients=0,0x2f,0x4a,0x4b`
-+    to force the subclients of chip 0x2f on bus 0 to i2c addresses
-+    0x4a and 0x4b.
++	  ==		======================
++	  0		Disabled.
++	  16		Fan on manual control.
++	  31		Fan on full.
++	  ==		======================
  
  
- Description
-@@ -33,70 +38,72 @@ Description
- This driver implements support for Winbond W83793G/W83793R chips.
+ pwm[1-3]_invert
+@@ -226,22 +249,22 @@ pwm[1-3]_freq
+ 	PWM frequency in Hz
+ 	Valid values in Hz are:
  
- * Exported features
--  This driver exports 10 voltage sensors, up to 12 fan tachometer inputs,
--  6 remote temperatures, up to 8 sets of PWM fan controls, SmartFan
--  (automatic fan speed control) on all temperature/PWM combinations, 2
--  sets of 6-pin CPU VID input.
-+    This driver exports 10 voltage sensors, up to 12 fan tachometer inputs,
-+    6 remote temperatures, up to 8 sets of PWM fan controls, SmartFan
-+    (automatic fan speed control) on all temperature/PWM combinations, 2
-+    sets of 6-pin CPU VID input.
+-	10
+-	15
+-	23
+-	30  (default)
+-	38
+-	47
+-	62
+-	94
+-	23000
+-	24000
+-	25000
+-	26000
+-	27000
+-	28000
+-	29000
+-	30000
++	* 10
++	* 15
++	* 23
++	* 30  (default)
++	* 38
++	* 47
++	* 62
++	* 94
++	* 23000
++	* 24000
++	* 25000
++	* 26000
++	* 27000
++	* 28000
++	* 29000
++	* 30000
  
- * Sensor resolutions
--  If your motherboard maker used the reference design, the resolution of
--  voltage0-2 is 2mV, resolution of voltage3/4/5 is 16mV, 8mV for voltage6,
--  24mV for voltage7/8. Temp1-4 have a 0.25 degree Celsius resolution,
--  temp5-6 have a 1 degree Celsiis resolution.
-+    If your motherboard maker used the reference design, the resolution of
-+    voltage0-2 is 2mV, resolution of voltage3/4/5 is 16mV, 8mV for voltage6,
-+    24mV for voltage7/8. Temp1-4 have a 0.25 degree Celsius resolution,
-+    temp5-6 have a 1 degree Celsiis resolution.
+ 	Setting any other value will be ignored.
  
- * Temperature sensor types
--  Temp1-4 have 2 possible types. It can be read from (and written to)
--  temp[1-4]_type.
--  - If the value is 3, it starts monitoring using a remote termal diode
--    (default).
--  - If the value is 6, it starts monitoring using the temperature sensor
--    in Intel CPU and get result by PECI.
--  Temp5-6 can be connected to external thermistors (value of
--  temp[5-6]_type is 4).
-+    Temp1-4 have 2 possible types. It can be read from (and written to)
-+    temp[1-4]_type.
-+
-+    - If the value is 3, it starts monitoring using a remote termal diode
-+      (default).
-+    - If the value is 6, it starts monitoring using the temperature sensor
-+      in Intel CPU and get result by PECI.
-+
-+    Temp5-6 can be connected to external thermistors (value of
-+    temp[5-6]_type is 4).
+@@ -251,17 +274,17 @@ peci_enable
+ peci_avg
+ 	Input filter average time.
  
- * Alarm mechanism
--  For voltage sensors, an alarm triggers if the measured value is below
--  the low voltage limit or over the high voltage limit.
--  For temperature sensors, an alarm triggers if the measured value goes
--  above the high temperature limit, and wears off only after the measured
--  value drops below the hysteresis value.
--  For fan sensors, an alarm triggers if the measured value is below the
--  low speed limit.
-+    For voltage sensors, an alarm triggers if the measured value is below
-+    the low voltage limit or over the high voltage limit.
-+    For temperature sensors, an alarm triggers if the measured value goes
-+    above the high temperature limit, and wears off only after the measured
-+    value drops below the hysteresis value.
-+    For fan sensors, an alarm triggers if the measured value is below the
-+    low speed limit.
+-	0 	0 Sec. (no Smoothing) (default)
+-	1 	0.25 Sec.
+-	2 	0.5 Sec.
+-	3 	1.0 Sec.
+-	4 	2.0 Sec.
+-	5 	4.0 Sec.
+-	6 	8.0 Sec.
+-	7 	0.0 Sec.
++	* 0 	0 Sec. (no Smoothing) (default)
++	* 1 	0.25 Sec.
++	* 2 	0.5 Sec.
++	* 3 	1.0 Sec.
++	* 4 	2.0 Sec.
++	* 5 	4.0 Sec.
++	* 6 	8.0 Sec.
++	* 7 	0.0 Sec.
  
- * SmartFan/PWM control
--  If you want to set a pwm fan to manual mode, you just need to make sure it
--  is not controlled by any temp channel, for example, you want to set fan1
--  to manual mode, you need to check the value of temp[1-6]_fan_map, make
--  sure bit 0 is cleared in the 6 values. And then set the pwm1 value to
--  control the fan.
-+    If you want to set a pwm fan to manual mode, you just need to make sure it
-+    is not controlled by any temp channel, for example, you want to set fan1
-+    to manual mode, you need to check the value of temp[1-6]_fan_map, make
-+    sure bit 0 is cleared in the 6 values. And then set the pwm1 value to
-+    control the fan.
+ peci_legacy
+-
++	=	============================================
+ 	0	Standard Mode (default)
+ 		Remote Diode 1 reading is associated with
+ 		Temperature Zone 1, PECI is associated with
+@@ -270,10 +293,12 @@ peci_legacy
+ 	1	Legacy Mode
+ 		PECI is associated with Temperature Zone 1,
+ 		Remote Diode 1 is associated with Zone 4
++	=	============================================
  
--  Each temperature channel can control all the 8 PWM outputs (by setting the
--  corresponding bit in tempX_fan_map), you can set the temperature channel
--  mode using temp[1-6]_pwm_enable, 2 is Thermal Cruise mode and 3
--  is the SmartFanII mode. Temperature channels will try to speed up or
--  slow down all controlled fans, this means one fan can receive different
--  PWM value requests from different temperature channels, but the chip
--  will always pick the safest (max) PWM value for each fan.
-+    Each temperature channel can control all the 8 PWM outputs (by setting the
-+    corresponding bit in tempX_fan_map), you can set the temperature channel
-+    mode using temp[1-6]_pwm_enable, 2 is Thermal Cruise mode and 3
-+    is the SmartFanII mode. Temperature channels will try to speed up or
-+    slow down all controlled fans, this means one fan can receive different
-+    PWM value requests from different temperature channels, but the chip
-+    will always pick the safest (max) PWM value for each fan.
+ peci_diode
+ 	Diode filter
  
--  In Thermal Cruise mode, the chip attempts to keep the temperature at a
--  predefined value, within a tolerance margin. So if tempX_input >
--  thermal_cruiseX + toleranceX, the chip will increase the PWM value,
--  if tempX_input < thermal_cruiseX - toleranceX, the chip will decrease
--  the PWM value. If the temperature is within the tolerance range, the PWM
--  value is left unchanged.
-+    In Thermal Cruise mode, the chip attempts to keep the temperature at a
-+    predefined value, within a tolerance margin. So if tempX_input >
-+    thermal_cruiseX + toleranceX, the chip will increase the PWM value,
-+    if tempX_input < thermal_cruiseX - toleranceX, the chip will decrease
-+    the PWM value. If the temperature is within the tolerance range, the PWM
-+    value is left unchanged.
++	=	====================
+ 	0	0.25 Sec.
+ 	1 	1.1 Sec.
+ 	2 	2.4 Sec.  (default)
+@@ -282,15 +307,20 @@ peci_diode
+ 	5 	6.8 Sec.
+ 	6 	10.2 Sec.
+ 	7 	16.4 Sec.
++	=	====================
  
--  SmartFanII works differently, you have to define up to 7 PWM, temperature
--  trip points, defining a PWM/temperature curve which the chip will follow.
--  While not fundamentally different from the Thermal Cruise mode, the
--  implementation is quite different, giving you a finer-grained control.
-+    SmartFanII works differently, you have to define up to 7 PWM, temperature
-+    trip points, defining a PWM/temperature curve which the chip will follow.
-+    While not fundamentally different from the Thermal Cruise mode, the
-+    implementation is quite different, giving you a finer-grained control.
+ peci_4domain
+ 	Four domain enable
  
- * Chassis
--  If the case open alarm triggers, it will stay in this state unless cleared
--  by writing 0 to the sysfs file "intrusion0_alarm".
-+    If the case open alarm triggers, it will stay in this state unless cleared
-+    by writing 0 to the sysfs file "intrusion0_alarm".
++	=	===============================================
+ 	0 	1 or 2 Domains for enabled processors (default)
+ 	1 	3 or 4 Domains for enabled processors
++	=	===============================================
  
- * VID and VRM
--  The VRM version is detected automatically, don't modify the it unless you
--  *do* know the cpu VRM version and it's not properly detected.
-+    The VRM version is detected automatically, don't modify the it unless you
-+    *do* know the cpu VRM version and it's not properly detected.
+ peci_domain
+ 	Domain
  
- 
- Notes
++	=	==================================================
+ 	0 	Processor contains a single domain (0) 	 (default)
+ 	1 	Processor contains two domains (0,1)
++	=	==================================================
 -- 
 2.20.1
 
