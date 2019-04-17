@@ -4,60 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1E54C282DA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF17BC10F12
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7ADBF21773
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD5552173C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 09:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555494458;
-	bh=IMrXUUd0zqI5pT8GyR2GojPicrCnn/6U+7Ttwqoww8Y=;
+	s=default; t=1555494474;
+	bh=t3CcOt2HDuc1gQ9AGA3HEhB+D7deMg2dE500Ev/kWPM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IBwYM8FaMMVarKsMT0L04H+DO8ZGVybQqX5LMRGQrYdrUSMPeHIOBaWdmWU8/imPA
-	 YIlU8t4Aymav1y002xAemYCkaGLYVp/EoRil4oon5CVL2s7W+r5L8/erb2Qhgn+yrY
-	 NXQVWQeQ4DtUXXuU3xuduYftJ6c7sISv1smDc8ug=
+	b=K6yRG+JkEg7aMZMjthsgRnBHGCdi5poT/JoQpXjenyXRn+0BBfKcLlzmyZHAbp4E/
+	 +DpC20cEEy7nMRW4rU+6VkUUfQAac4jUaxDNms+Amh4JVXs2C3tSzT9/C/guqJPQff
+	 z0UBgz83jUzE4OeTkThBraKT25Yltg2hlYgUa6uQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731818AbfDQJri (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1731845AbfDQJri (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 17 Apr 2019 05:47:38 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:45050 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:44982 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731710AbfDQJqk (ORCPT
+        with ESMTP id S1731633AbfDQJqj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Apr 2019 05:46:40 -0400
+        Wed, 17 Apr 2019 05:46:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pN8YptXx1xrUPVntgy7n3du+toVS3b1++92qgrif+/U=; b=KnxpLqp3IxArsqb/4nvOt9Ia29
-        8ATNATe7r1EcU82uLVQ1eFZgUR9IyPWFN59fS/xWtVeDGrPSMTu2W99ZPZDlb+Lq4nW/HNfunM4nN
-        zLv3PypiqzecThb5f4H5FrRScKGrUhSBRatVROcbri4t6b4H39muBYnq8U+R3ekXqM1hwKpZMDrqw
-        bNNUNwki+5Hs0oLp1VXAWigP3N6kHGNsq5q29HPLpYqhnQnmFdKMszaVHwd61hHUkDV0tz3+KB2Ug
-        4BB9zMYcpJwHbjxCB28nSJ1pdTSPykvKH+9oVegg7rcCWqi0eAasL7IcQEhiBoPMhcVCPMiYjyBz+
-        D5it8gIQ==;
+        bh=9LalUJPmuPDaMfLRWCl1lzBZDSX3p4v9Ob+a/oKrM1M=; b=kUr4Vp3hsaiwCMmYlm++/7B9Lr
+        29ZVXEQ2bn8jMe0gSw2Qnc3cDTf0nWkepLzMpW4vb9YHVNQyqm4bln9nAR7YKRTHZD5vD9Adey4y1
+        xPbAbX95rglQgbUuWCf0bEfZFn3jACUHRaigO7Yme5kgcLv2cnnxCqo33d/Gzatpr5nrw2C61mwHQ
+        ED5rLFHiQaV+aSb1NAlVo/VmAnNbjaCnyzTYYU/4HRpYHkOgEQKlJGT8z2ZwLNpI+yzdPfvEut48h
+        eSD3DSu32UCsHvKjJTkHcLI8kDhe39ih8SbcYEgMATeGudyv+SEbaWFquMht2UtLsMmia2fWu/ZF4
+        H7nJ2oIA==;
 Received: from 177.132.233.55.dynamic.adsl.gvt.net.br ([177.132.233.55] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hGh9K-0000aD-61; Wed, 17 Apr 2019 09:46:38 +0000
+        id 1hGh9K-0000aJ-9x; Wed, 17 Apr 2019 09:46:38 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hGh9D-0003ur-1n; Wed, 17 Apr 2019 06:46:31 -0300
+        id 1hGh9D-0003vF-59; Wed, 17 Apr 2019 06:46:31 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v3 11/21] docs: hwmon: ibmpowernv: convert to ReST format
-Date:   Wed, 17 Apr 2019 06:46:19 -0300
-Message-Id: <dd5d72218fbd86bb9eb8a8e8e66e647c00cac8ae.1555494108.git.mchehab+samsung@kernel.org>
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v3 15/21] docs: hwmon: wm831x, wm8350: convert to ReST format
+Date:   Wed, 17 Apr 2019 06:46:23 -0300
+Message-Id: <05f285eae86db4c6ea1d8c48f7cca1618de4a3f3.1555494108.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1555494108.git.mchehab+samsung@kernel.org>
 References: <cover.1555494108.git.mchehab+samsung@kernel.org>
@@ -68,93 +64,61 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert ibmpowernv to ReST format, in order to allow it to
-be parsed by Sphinx.
+Convert wm831x and wm8350 to ReST format, in order to allow
+them to be parsed by Sphinx.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/hwmon/ibmpowernv | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ Documentation/hwmon/wm831x |  9 ++++++---
+ Documentation/hwmon/wm8350 | 10 +++++++---
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/hwmon/ibmpowernv b/Documentation/hwmon/ibmpowernv
-index 56468258711f..5d642bc3dec0 100644
---- a/Documentation/hwmon/ibmpowernv
-+++ b/Documentation/hwmon/ibmpowernv
-@@ -2,6 +2,7 @@ Kernel Driver IBMPOWERNV
- ========================
+diff --git a/Documentation/hwmon/wm831x b/Documentation/hwmon/wm831x
+index 11446757c8c8..c56fb35a2fb3 100644
+--- a/Documentation/hwmon/wm831x
++++ b/Documentation/hwmon/wm831x
+@@ -3,11 +3,14 @@ Kernel driver wm831x-hwmon
  
- Supported systems:
+ Supported chips:
+   * Wolfson Microelectronics WM831x PMICs
 +
-   * Any recent IBM P servers based on POWERNV platform
- 
- Author: Neelesh Gupta
-@@ -29,10 +30,11 @@ CONFIG_SENSORS_IBMPOWERNV. It can also be built as module 'ibmpowernv'.
- Sysfs attributes
- ----------------
- 
-+======================= =======================================================
- fanX_input		Measured RPM value.
- fanX_min		Threshold RPM for alert generation.
--fanX_fault		0: No fail condition
--			1: Failing fan
-+fanX_fault		- 0: No fail condition
-+			- 1: Failing fan
- 
- tempX_input		Measured ambient temperature.
- tempX_max		Threshold ambient temperature for alert generation.
-@@ -42,20 +44,22 @@ tempX_enable		Enable/disable all temperature sensors belonging to the
- 			sub-group. In POWER9, this attribute corresponds to
- 			each OCC. Using this attribute each OCC can be asked to
- 			disable/enable all of its temperature sensors.
--			1: Enable
--			0: Disable
+     Prefix: 'wm831x'
 +
-+			- 1: Enable
-+			- 0: Disable
- 
- inX_input		Measured power supply voltage (millivolt)
--inX_fault		0: No fail condition.
--			1: Failing power supply.
-+inX_fault		- 0: No fail condition.
-+			- 1: Failing power supply.
- inX_highest		Historical maximum voltage
- inX_lowest		Historical minimum voltage
- inX_enable		Enable/disable all voltage sensors belonging to the
- 			sub-group. In POWER9, this attribute corresponds to
- 			each OCC. Using this attribute each OCC can be asked to
- 			disable/enable all of its voltage sensors.
--			1: Enable
--			0: Disable
+     Datasheet:
+-	http://www.wolfsonmicro.com/products/WM8310
+-	http://www.wolfsonmicro.com/products/WM8311
+-	http://www.wolfsonmicro.com/products/WM8312
 +
-+			- 1: Enable
-+			- 0: Disable
++	- http://www.wolfsonmicro.com/products/WM8310
++	- http://www.wolfsonmicro.com/products/WM8311
++	- http://www.wolfsonmicro.com/products/WM8312
  
- powerX_input		Power consumption (microWatt)
- powerX_input_highest	Historical maximum power
-@@ -64,8 +68,9 @@ powerX_enable		Enable/disable all power sensors belonging to the
- 			sub-group. In POWER9, this attribute corresponds to
- 			each OCC. Using this attribute each OCC can be asked to
- 			disable/enable all of its power sensors.
--			1: Enable
--			0: Disable
+ Authors: Mark Brown <broonie@opensource.wolfsonmicro.com>
+ 
+diff --git a/Documentation/hwmon/wm8350 b/Documentation/hwmon/wm8350
+index 98f923bd2e92..cec044ca5900 100644
+--- a/Documentation/hwmon/wm8350
++++ b/Documentation/hwmon/wm8350
+@@ -2,12 +2,16 @@ Kernel driver wm8350-hwmon
+ ==========================
+ 
+ Supported chips:
 +
-+			- 1: Enable
-+			- 0: Disable
- 
- currX_input		Measured current (milliampere)
- currX_highest		Historical maximum current
-@@ -74,7 +79,9 @@ currX_enable		Enable/disable all current sensors belonging to the
- 			sub-group. In POWER9, this attribute corresponds to
- 			each OCC. Using this attribute each OCC can be asked to
- 			disable/enable all of its current sensors.
--			1: Enable
--			0: Disable
+   * Wolfson Microelectronics WM835x PMICs
 +
-+			- 1: Enable
-+			- 0: Disable
+     Prefix: 'wm8350'
++
+     Datasheet:
+-	http://www.wolfsonmicro.com/products/WM8350
+-	http://www.wolfsonmicro.com/products/WM8351
+-	http://www.wolfsonmicro.com/products/WM8352
++
++	- http://www.wolfsonmicro.com/products/WM8350
++	- http://www.wolfsonmicro.com/products/WM8351
++	- http://www.wolfsonmicro.com/products/WM8352
  
- energyX_input		Cumulative energy (microJoule)
-+======================= =======================================================
+ Authors: Mark Brown <broonie@opensource.wolfsonmicro.com>
+ 
 -- 
 2.20.1
 
