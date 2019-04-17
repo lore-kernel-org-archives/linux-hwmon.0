@@ -1,249 +1,225 @@
-Return-Path: <SRS0=pQ84=SS=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=hA7Y=ST=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7A5C10F13
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 23:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB5AC10F14
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 01:57:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 001C720868
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Apr 2019 23:55:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 864E520872
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 01:57:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToRDYw92"
+	dkim=pass (1024-bit key) header.d=babayev.com header.i=@babayev.com header.b="H3+cj6AN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728373AbfDPXzz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Apr 2019 19:55:55 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40360 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728000AbfDPXzz (ORCPT
+        id S1728032AbfDQB5W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Apr 2019 21:57:22 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:50893 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728520AbfDQB5V (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Apr 2019 19:55:55 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c207so11179963pfc.7;
-        Tue, 16 Apr 2019 16:55:54 -0700 (PDT)
+        Tue, 16 Apr 2019 21:57:21 -0400
+Received: by mail-it1-f196.google.com with SMTP id q14so2055803itk.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Apr 2019 18:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=FafW789Qixf3yGtjX5GjHHsOmeQ6Y/2e1HgsZOq4wds=;
-        b=ToRDYw92LOiX7Y8fCJUIot+WXPgzF3Ff1CGpJBw2p7L9/msgPJta3k/UN2JQHUjfiz
-         hU0iorlPWybFbbsjwFdb49ztRxMLFbZnrhRkNG5MV8uAz+c2/hn7Xc2mmlxZM2Beonwn
-         m8MlNB1ZW8S/2sE5J8Xfy3nssXdhV/H/j/0erZv0SuX5oXXt3LSYi2XqnoV0qNIJZbLC
-         norupoHihTJTxgE8sO7VMRkLEuINrMKe/s7AnAoY2/ZMyfeKHcgZfkyj1RhaB+c0RgbV
-         k/D/rKN+86hq7fDt7YhgnH69jlKj1xGyOTMniJk4i+u2zm1NgtV3uu0aU46lpN8em0MX
-         S7pA==
+        d=babayev.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=pTf6CqltW0FIDdPp5liGh7R5dI59lPVUwc4DYfwKKZg=;
+        b=H3+cj6ANoCx06laCGRyS/AohAiYRZ/wkuCon3WsCF1yqT9AuBRb42KRQNmh95Pnz1Y
+         w4GF+GoxOnLp0kMbXkViSzNO/EhVmG0vj4iPnHvK+yYgZJf42GsJ0OWnB4pUXYPjEpnl
+         H3M/irTr5fxVKM6Ea2aHwH8WSvXVmdVnITjyo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FafW789Qixf3yGtjX5GjHHsOmeQ6Y/2e1HgsZOq4wds=;
-        b=tEoEr8RfPZyFPSBHtTAPy3KIpX2ny127xncQp/6qDvn+DyHNPFzr5oJ04pin58aX0D
-         XAQRrinLS7p2++qGPdHbKjfblkXtj8w8TLgBWnXeabacO6abcHc0WMoPaKZOPygvzK8j
-         P+8imE3on550fFQkVUhBiAd6Me84KUo5rBoFXGfsX1Z+kDACkp5w/t6g4FUUNtvBkD75
-         dHnngtwDjb6MsLTLLkYrJfNAzVzjW6zva0YYxaLmUHvO8ewFp2mMtLzzw9CttSnGbuNZ
-         tLB7l0N3FLzlN31pVnkn9wSo/vCN6NfbXEXkNC90Pnal65QE34EaalGMIptN5cq5Pr18
-         b37w==
-X-Gm-Message-State: APjAAAVdnyr4IKjtKgQ1+M0wMilX8ZfnKXXHgzRA9KI4Ec3+M8z4TaAp
-        axggzzvwgev/ajC46816PyggOg/XFB8=
-X-Google-Smtp-Source: APXvYqxxrzGmQVq/OZOqWFQanb9ZR9cWaXxyosNTSwRrBbwlIpcDPFs93OvIkATwposc3a3QOBnbKA==
-X-Received: by 2002:aa7:9888:: with SMTP id r8mr31861750pfl.116.1555458953955;
-        Tue, 16 Apr 2019 16:55:53 -0700 (PDT)
-Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id 71sm120384429pfs.36.2019.04.16.16.55.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2019 16:55:53 -0700 (PDT)
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-Subject: [PATCH] hwmon: (ina3221) Add voltage conversion time settings
-Date:   Tue, 16 Apr 2019 16:55:48 -0700
-Message-Id: <20190416235548.22733-1-nicoleotsuka@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=pTf6CqltW0FIDdPp5liGh7R5dI59lPVUwc4DYfwKKZg=;
+        b=ZeVeK4kNHASQ3REepQwDu5+JTjzJyyoNVIy8HNt/p/jninfecgQ0AFU5v12lWX2Heq
+         Elns/1XwBR93BuzRmbsJTrVeZXU+n5w5Z0oEqlBXrQHVWuOo/dd4cgjq0erw5wZmrWJG
+         QaxKMlo0PkXd5v2eaE4DoJMmYJy/0j1f9yk6+P8EyYQFCpx+1vvzUpvmE1DvJmSfozUy
+         dZrZsTpX77x3V9BeL+M9wzMh694MdggdPguSf/ZosgyqlKi1z8u3mubB4fl8o8vib+x6
+         /FGCrcpEV/nn8UfwHUiBe7z5+LhKs2YYLGxsCMRaf0A2TI2oWJkFcUx0d7qPmxXbIBDm
+         Tt0A==
+X-Gm-Message-State: APjAAAVFTHGWG2EvyBxAdsYrGyu+Pw8W5iPq+VD0J09T1LtzxEYYaecL
+        /px9FqGTzpu1kpo6KAkoNynjRw==
+X-Google-Smtp-Source: APXvYqw9l6C1XLaoXuY7DQ1TN8ru2hU0BBOGISOBpu2Xp0PcR6So5dbp+gnm7U6t7IOJCMXrPvr7RA==
+X-Received: by 2002:a24:4d06:: with SMTP id l6mr27872283itb.140.1555466240673;
+        Tue, 16 Apr 2019 18:57:20 -0700 (PDT)
+Received: from localhost (50-46-216-15.evrt.wa.frontiernet.net. [50.46.216.15])
+        by smtp.gmail.com with ESMTPSA id y16sm19983036ion.64.2019.04.16.18.57.18
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 16 Apr 2019 18:57:19 -0700 (PDT)
+References: <20190416183620.39950-1-ruslan@babayev.com> <20190416195255.GC8093@roeck-us.net>
+User-agent: mu4e 1.0; emacs 26.1
+From:   Ruslan Babayev <ruslan@babayev.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Ruslan Babayev <ruslan@babayev.com>, xe-linux-external@cisco.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] hwmon: (pmbus) add support for output voltage registers
+In-reply-to: <20190416195255.GC8093@roeck-us.net>
+Date:   Tue, 16 Apr 2019 18:57:18 -0700
+Message-ID: <8736mhe6m9.fsf@babayev.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The CONFIG register has two 3-bit fields for conversion time
-settings of Bus-voltage and Shunt-voltage, respectively. The
-conversion settings, along with averaging mode, allow users
-to optimize available timing requirement.
-
-This patch adds an 'update_interval' sysfs node through the
-hwmon_chip_info of hwmon core. It reflects a total hardware
-conversion time:
-    samples * channels * (Bus + Shunt conversion times)
-
-Though INA3221 supports different conversion time setups for
-Bus and Shunt voltages, this patch only adds the support of
-a unified setting for both conversion times, by dividing the
-conversion time into two equal values.
-
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
----
-
 Hi Guenter,
 
-I am not quite sure if this update_interval is the best way to
-implement the conversion time settings but I can't find another
-common approach. This implementation certainly has drawbacks:
- 1) It can't configure Bus and Shunt conversion times separately
-    (Not crucial for me at this point as I set them equally)
- 2) Users need to calculate for the settings of conversion time
- 3) The ABI defines update_interval in msec while the hardware
-    and datasheet does in usec, and that generates rounding diff
- 4) The update_interval value would be spontaneously modified
-    everytime number of samples or number of enabled channels
-    gets changed. This might confuses users who tries to have
-    a fixed update_interval other than really merely setting
-    conversion time.
+Thanks for taking the time to review these patches. Please see my
+comments inline.
 
-I see IIO subsystem have something like IIO_CHAN_INFO_INT_TIME
-for conversion time setting exclusively. Do we have something
-similar under hwmon?
+Guenter Roeck writes:
 
-Thanks
+> On Tue, Apr 16, 2019 at 11:36:16AM -0700, Ruslan Babayev wrote:
+>> +static ssize_t pmbus_show_operation(struct device *dev,
+>> +				    struct device_attribute *devattr, char *buf)
+>> +{
+>> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> +	struct pmbus_operation *operation = to_pmbus_operation(attr);
+>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+>> +	int ret;
+>> +
+>> +	ret = pmbus_read_byte_data(client, operation->page, PMBUS_OPERATION);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	if (ret & PB_OPERATION_CONTROL_ON) {
+>> +		if (ret & PB_OPERATION_MARGIN_HIGH)
+>> +			return snprintf(buf, PAGE_SIZE, "high\n");
+>> +		else if (ret & PB_OPERATION_MARGIN_LOW)
+>> +			return snprintf(buf, PAGE_SIZE, "low\n");
+>> +		else
+>> +			return snprintf(buf, PAGE_SIZE, "on\n");
+>> +	} else {
+>> +			return snprintf(buf, PAGE_SIZE, "off\n");
+>> +	}
+>> +}
+>> +
+>> +static ssize_t pmbus_set_operation(struct device *dev,
+>> +				   struct device_attribute *devattr,
+>> +				   const char *buf, size_t count)
+>> +{
+>> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>> +	struct pmbus_operation *operation = to_pmbus_operation(attr);
+>> +	struct i2c_client *client = to_i2c_client(dev->parent);
+>> +	int ret;
+>> +	u8 val;
+>> +
+>> +	/*
+>> +	 * sysfs_streq() doesn't need the \n's, but we add them so the strings
+>> +	 * will be shared with pmbus_show_operation() above.
+>> +	 */
+>
+> Saving a few bytes of data in the driver is not worth such limitations.
+> I would not want to have to deal with users sending "echo -n on" to the
+> driver and complain that it doesn't work.
+>
 
- Documentation/hwmon/ina3221 |  9 +++++
- drivers/hwmon/ina3221.c     | 65 ++++++++++++++++++++++++++++++++-----
- 2 files changed, 65 insertions(+), 9 deletions(-)
+Sending "echo -n on" works just fine. sysfs_streq ignores \n's as
+mentioned in the comment. This was actually shamelessly stolen from
+drivers/regulator/virtual.c set_mode().
 
-diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
-index ed3f22769d4b..3b05170112f0 100644
---- a/Documentation/hwmon/ina3221
-+++ b/Documentation/hwmon/ina3221
-@@ -38,3 +38,12 @@ in[456]_input           Shunt voltage(uV) for channels 1, 2, and 3 respectively
- samples                 Number of samples using in the averaging mode.
-                           Supports the list of number of samples:
-                           1, 4, 16, 64, 128, 256, 512, 1024
-+update_interval         Data conversion time in millisecond, following:
-+                          update_interval = C x S x (BC + SC)
-+                              C: number of enabled channels
-+                              S: number of samples
-+                             BC: bus-voltage conversion time in millisecond
-+                             SC: shunt-voltage conversion time in millisecond
-+                          Affects both Bus- and Shunt-voltage conversion time.
-+                          Note that setting update_interval to 0ms sets both BC
-+                          and SC to 140 us (minimum conversion time).
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 74d39d212931..af4ab8ddddce 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -144,19 +144,37 @@ static const int ina3221_avg_samples[] = {
- 	1, 4, 16, 64, 128, 256, 512, 1024,
- };
- 
--static inline int ina3221_wait_for_data(struct ina3221_data *ina)
-+/* Converting update_interval in msec to conversion time in usec */
-+static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
- {
--	u32 channels = hweight16(ina->reg_config & INA3221_CONFIG_CHs_EN_MASK);
--	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(ina->reg_config);
--	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(ina->reg_config);
--	u32 samples_idx = INA3221_CONFIG_AVG(ina->reg_config);
-+	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
-+	u32 samples_idx = INA3221_CONFIG_AVG(config);
-+	u32 samples = ina3221_avg_samples[samples_idx];
-+
-+	/* Bisect the result to Bus and Shunt conversion times */
-+	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
-+}
-+
-+/* Converting CONFIG register value to update_interval in usec */
-+static inline u32 ina3221_reg_to_interval_us(u16 config)
-+{
-+	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
-+	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(config);
-+	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(config);
-+	u32 samples_idx = INA3221_CONFIG_AVG(config);
- 	u32 samples = ina3221_avg_samples[samples_idx];
- 	u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
- 	u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
--	u32 wait, cvrf;
- 
- 	/* Calculate total conversion time */
--	wait = channels * (vbus_ct + vsh_ct) * samples;
-+	return channels * (vbus_ct + vsh_ct) * samples;
-+}
-+
-+static inline int ina3221_wait_for_data(struct ina3221_data *ina)
-+{
-+	u32 wait, cvrf;
-+
-+	wait = ina3221_reg_to_interval_us(ina->reg_config);
- 
- 	/* Polling the CVRF bit to make sure read data is ready */
- 	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
-@@ -197,6 +215,11 @@ static int ina3221_read_chip(struct device *dev, u32 attr, long *val)
- 		regval = INA3221_CONFIG_AVG(ina->reg_config);
- 		*val = ina3221_avg_samples[regval];
- 		return 0;
-+	case hwmon_chip_update_interval:
-+		/* Return in msec */
-+		*val = ina3221_reg_to_interval_us(ina->reg_config);
-+		*val = DIV_ROUND_CLOSEST(*val, 1000);
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -308,7 +331,7 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- static int ina3221_write_chip(struct device *dev, u32 attr, long val)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
--	int ret, idx;
-+	int ret, idx, tmp;
- 
- 	switch (attr) {
- 	case hwmon_chip_samples:
-@@ -321,6 +344,28 @@ static int ina3221_write_chip(struct device *dev, u32 attr, long val)
- 		if (ret)
- 			return ret;
- 
-+		/* Update reg_config accordingly */
-+		return regmap_read(ina->regmap, INA3221_CONFIG,
-+				   &ina->reg_config);
-+	case hwmon_chip_update_interval:
-+		tmp = ina3221_interval_ms_to_conv_time(ina->reg_config, val);
-+		idx = find_closest(tmp, ina3221_conv_time,
-+				   ARRAY_SIZE(ina3221_conv_time));
-+
-+		/* Update Bus-voltage conversion time */
-+		ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
-+					 INA3221_CONFIG_VBUS_CT_MASK,
-+					 idx << INA3221_CONFIG_VBUS_CT_SHIFT);
-+		if (ret)
-+			return ret;
-+
-+		/* Update Shunt-voltage conversion time */
-+		ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
-+					 INA3221_CONFIG_VSH_CT_MASK,
-+					 idx << INA3221_CONFIG_VSH_CT_SHIFT);
-+		if (ret)
-+			return ret;
-+
- 		/* Update reg_config accordingly */
- 		return regmap_read(ina->regmap, INA3221_CONFIG,
- 				   &ina->reg_config);
-@@ -482,6 +527,7 @@ static umode_t ina3221_is_visible(const void *drvdata,
- 	case hwmon_chip:
- 		switch (attr) {
- 		case hwmon_chip_samples:
-+		case hwmon_chip_update_interval:
- 			return 0644;
- 		default:
- 			return 0;
-@@ -527,7 +573,8 @@ static umode_t ina3221_is_visible(const void *drvdata,
- 
- static const struct hwmon_channel_info *ina3221_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
--			   HWMON_C_SAMPLES),
-+			   HWMON_C_SAMPLES,
-+			   HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(in,
- 			   /* 0: dummy, skipped in is_visible */
- 			   HWMON_I_INPUT,
--- 
-2.17.1
+>> +	if (sysfs_streq(buf, "on\n"))
+>> +		val = PB_OPERATION_CONTROL_ON;
+>> +	else if (sysfs_streq(buf, "off\n"))
+>> +		val = 0;
+>> +	else if (sysfs_streq(buf, "high\n"))
+>> +		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
+>> +		      PB_OPERATION_MARGIN_HIGH;
+>> +	else if (sysfs_streq(buf, "low\n"))
+>> +		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
+>> +		      PB_OPERATION_MARGIN_LOW;
+>> +	else
+>> +		return -EINVAL;
+>> +
+>> +	ret = pmbus_write_byte_data(client, operation->page,
+>> +				    PMBUS_OPERATION, val);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	return count;
+>> +}
+>> +
+> I am not convinced that it is a good idea to implement this as sysfs
+> attributes. It is notmally only used in manufacturing, and there the
+> registers can be acccessed directly.
+>
+> Either case, we can not implement this in the pmbus driver as generic code.
+> Operation commands are notoriously implemented with slight differences across
+> different devices. It would also probably be more appropriate to implement
+> as regulator, since it affects setting voltages, not limits.
+>
 
+The OPERATION command as well as VOUT_COMMAND and VOUT_MARGIN_{HIGH,LOW}
+are standard registers specified in PMBus Spec Part II, Rev 1.2 Section
+13. "Output Voltage Related Commands". The devices I have seen so far
+(the ones that support voltage margining) all seem to be compliant with
+the standard as far as the OPERATION register is concerned.
+
+Some devices like TPS40422 use manufacturer specific registers instead of
+VOUT_MARGIN_{HIGH,LOW}. Those can be handled by overriding
+{read,write}_word_data to make it look standard to pmbus_core (as I have
+done in the PATCH 4/4)
+
+>> +
+>> +static const struct pmbus_sensor_attr vout_attributes[] = {
+>> +	{
+>> +		.reg = PMBUS_VOUT_COMMAND,
+>> +		.class = PSC_VOLTAGE_OUT,
+>> +		.label = "command",
+>
+> Bad name for a label.
+
+Could you please suggest a better name?
+
+>>  static int pmbus_find_attributes(struct i2c_client *client,
+>>  				 struct pmbus_data *data)
+>>  {
+>> @@ -1912,6 +2089,12 @@ static int pmbus_find_attributes(struct i2c_client *client,
+>>  	if (ret)
+>>  		return ret;
+>>
+>> +	/* Output Voltage sensors */
+>> +	ret = pmbus_add_vout_attrs(client, data, "out", vout_attributes,
+>> +				   ARRAY_SIZE(vout_attributes));
+>> +	if (ret)
+>> +		return ret;
+>> +
+>
+> The sensors you are adding are not output voltage sensors. They are not
+> sensors in the first place, and should probably not be reported as sensor
+> values. And setting voltages as limits is really not appropriate.
+>
+
+I understand your concerns about exposing these registers as sysfs
+entries in hwmon. These devices _are_ voltage regulators, and these
+registers are not exactly "sensors", although a lot of the existing
+pmbus_core code can be reused by pretending they are. Like VOUT_MODE
+exponent handling, linear16 format etc.
+
+I have looked at the regulator framework and into extending the
+pmbus_regulator_ops to support voltage margining with standard PMBUS
+VOUT_MARGIN registers. My predicament is that regulator framework
+
+1) Does NOT have the concept of "margining".
+
+2) Is not expected to be used at ALL on ACPI based systems. With ACPI
+   kernel assumes power control is done with Power Resource Objects
+   (ACPI section 7.1).
+
+The latter is a bigger issue for us - our system is Intel based. It
+seems like sysfs attributes is our only option.
+
+How would you feel if these registers (namely OPERATION and
+VOUT_MARGIN_{HIGH,LOW}) were exposed only in the drivers without making
+any changes to pmbus_core.c? Would these drivers have a chance of
+getting upstreamed? I hate the idea of maintaining out-of-tree drivers.
+
+Best regards,
+Ruslan
