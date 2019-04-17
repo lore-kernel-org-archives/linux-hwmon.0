@@ -2,279 +2,268 @@ Return-Path: <SRS0=hA7Y=ST=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C5FC282DA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 14:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B7A4C282DA
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 16:18:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C137F206BA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 14:04:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3691820674
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Apr 2019 16:18:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cb56O+U8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b2akjeky"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731454AbfDQOEN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Apr 2019 10:04:13 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41241 "EHLO
+        id S1732831AbfDQQSV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Apr 2019 12:18:21 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34988 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729940AbfDQOEN (ORCPT
+        with ESMTP id S1732368AbfDQQSU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Apr 2019 10:04:13 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f6so12056819pgs.8;
-        Wed, 17 Apr 2019 07:04:12 -0700 (PDT)
+        Wed, 17 Apr 2019 12:18:20 -0400
+Received: by mail-pg1-f193.google.com with SMTP id g8so12244066pgf.2;
+        Wed, 17 Apr 2019 09:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XpgQAxW1cWrQxvk5Acp+qxKikIazVI82fhRdt1eYNcE=;
-        b=cb56O+U8hS9gRW/hQscsWhQXQplBfEel4scoAxPMApAicsuWQmwgV40hhFvaxbzNHH
-         1Z0JXoLof4i57CAJaOCKqaFhylqdIzBvCfH20tn3y/Lz6VceQSMKLzaDeEZqQKZCUSv0
-         a63GrRMs4Pfh1HC1K7k8zfO5MXLAyqZlQ/4+pPebJ2Zn6isbhFUfMbniz3CbPVG5qv01
-         hNwtOBIRVW2uksGQks1q1KzA3EgKC+rgBF4hTL5w6+7bYwzEtEdXKzNRUh7UUt66EKbu
-         4HYttCrDAE4u32NqNf6Csj+S8AOYPTdnT2O/DMSXrrBBIO5ghFLK3nlzzRjI54FZpwrE
-         E1bA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vBTqRH9YcvytkcSq8c0S3nqtN9HyITWuNrMSbFKLEpQ=;
+        b=b2akjekyybnq0IiRbWsm+el76oTrbsh/rWb9N685bIvhNefUYhx0d4aXyg4fMxLg+F
+         AyAfjpWati7Da8mzgXAUl7dP0XaxqpQhl2YDzUKsjbMoDaM7NKuW/sQSOYvMJXDGVdP+
+         5hBcLNc/PeZrD3KKqXfVw3v9N1qF5cgeoEr3wOETas74dQzGQalA4SKje+uVXnh6YQV6
+         TyIRknzg2uNdESNk7xI+4QZmwF1CKPqN277GNEywcsR++rFxvkW3agIc+M/xf9M4jhCG
+         1nq4GvwogheV1b/URWzCk+LZQ7Av6mhFwG2X9NuwLwaiFmAggNF+u7GG24DKTVyfx4at
+         AnMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:from:to:cc:references:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XpgQAxW1cWrQxvk5Acp+qxKikIazVI82fhRdt1eYNcE=;
-        b=plmAn2ilfzxlt8zPNPtCxBq4mCORYmn3hVjKDs3ROEnyjPhax9zeZjCK2K5dkzdtN4
-         AEYedQkUlk+sP/d5A1TynScXMyYC1vW8bfKd3f5eWYSNplZTkcvI3Hn0WTNZZA+FPjYY
-         LAOL8u5J4QCR/TcISCxtJP9icYZN3YwJlsX1RmGOIp9DzK2TS2YesuPdMt/XVTrWA28r
-         gzTpdsLaMS72BljszV5TZ/gEyaE4EGaAezF3jKn3m78ouKsEBjlCB9YIMqXH7SaJbTXM
-         YC9YQTEpo6iUQ5AGm3Mf+JW4AMBhwm1rkv45AwQ/2PvnCuW/CcLhGQzaqf+h4m90KI2+
-         Oypw==
-X-Gm-Message-State: APjAAAVTeJ0u6+T2F8RZ6IZ+Zls3M1EYTA1VgcG2PzzsokQ1V7f7Kidq
-        qk0zFsgGKXkyg/JAkA5ptWkDgKRr
-X-Google-Smtp-Source: APXvYqz+srM9aebPzOSs17jyO01ySrR/xSqoj77CEgENsBKz7nE5veFFcGIU6kUaE3tedPGhnLJMRg==
-X-Received: by 2002:a62:ee17:: with SMTP id e23mr89380709pfi.80.1555509851745;
-        Wed, 17 Apr 2019 07:04:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h10sm83622218pfj.79.2019.04.17.07.04.10
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vBTqRH9YcvytkcSq8c0S3nqtN9HyITWuNrMSbFKLEpQ=;
+        b=LU1S+FB7jPO6vQCWvsTQjwNR7MOhfsr7stEmWDsiI6MIKJ/UvIYLrQ9Jsi5zoVJwIQ
+         5gA/CP0zAq8ojQW113y7x1WPz+iBeCBfsaWD69gCmTUAe447bgLJMBO1HbGlKMQN/f+F
+         8Exhdl7cVFFUjhPMyPZ6qWxAcuMAyU4ERh5vd7xsob2CHAbvPw7G/7i5ACLyj8NzJiN5
+         zMOSAsWCRuqYNmzvb9oNSTNs2ihkuDsVhRN3ks7iM9dNSq/IVq82xE0CwQITuARVnmPU
+         a1KiMDdeEDtnYwtorjNF3PKpLOGyBBnUFDBG+SjMG8VK/AICLfTVl3qJ0nMiqU4wxH8N
+         V1qA==
+X-Gm-Message-State: APjAAAWUbCysbnBr1pLpMmmRWtRwSCFjR5S/Tt6x4F3/8RFlVT6E3XU7
+        tNgA0W203l2iopZ7FgQ3/aw=
+X-Google-Smtp-Source: APXvYqyaN1eN5p6XttZuxowwDacva5nL6VzFlwetB15EGaDXulUgRXeqG4BCuV/z3qDy/P82bZZEKA==
+X-Received: by 2002:a62:7648:: with SMTP id r69mr70319901pfc.114.1555517899740;
+        Wed, 17 Apr 2019 09:18:19 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e7sm57547735pfc.132.2019.04.17.09.18.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Apr 2019 07:04:11 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: (ina3221) Add voltage conversion time settings
+        Wed, 17 Apr 2019 09:18:18 -0700 (PDT)
+Date:   Wed, 17 Apr 2019 09:18:17 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-References: <20190416235548.22733-1-nicoleotsuka@gmail.com>
- <1ad27385-e62a-d4f0-2590-c50458119f12@roeck-us.net>
-Message-ID: <2a193494-a33e-dac0-456a-241d7b3e59ad@roeck-us.net>
-Date:   Wed, 17 Apr 2019 07:04:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+To:     Ruslan Babayev <ruslan@babayev.com>
+Cc:     xe-linux-external@cisco.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] hwmon: (pmbus) add support for output voltage
+ registers
+Message-ID: <20190417161817.GA13109@roeck-us.net>
+References: <20190416183620.39950-1-ruslan@babayev.com>
+ <20190416195255.GC8093@roeck-us.net>
+ <8736mhe6m9.fsf@babayev.com>
 MIME-Version: 1.0
-In-Reply-To: <1ad27385-e62a-d4f0-2590-c50458119f12@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8736mhe6m9.fsf@babayev.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/17/19 6:46 AM, Guenter Roeck wrote:
-> On 4/16/19 4:55 PM, Nicolin Chen wrote:
->> The CONFIG register has two 3-bit fields for conversion time
->> settings of Bus-voltage and Shunt-voltage, respectively. The
->> conversion settings, along with averaging mode, allow users
->> to optimize available timing requirement.
->>
->> This patch adds an 'update_interval' sysfs node through the
->> hwmon_chip_info of hwmon core. It reflects a total hardware
->> conversion time:
->>      samples * channels * (Bus + Shunt conversion times)
->>
->> Though INA3221 supports different conversion time setups for
->> Bus and Shunt voltages, this patch only adds the support of
->> a unified setting for both conversion times, by dividing the
->> conversion time into two equal values.
->>
->> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
->> ---
->>
->> Hi Guenter,
->>
->> I am not quite sure if this update_interval is the best way to
->> implement the conversion time settings but I can't find another
->> common approach. This implementation certainly has drawbacks:
->>   1) It can't configure Bus and Shunt conversion times separately
->>      (Not crucial for me at this point as I set them equally)
->>   2) Users need to calculate for the settings of conversion time
->>   3) The ABI defines update_interval in msec while the hardware
->>      and datasheet does in usec, and that generates rounding diff
->>   4) The update_interval value would be spontaneously modified
->>      everytime number of samples or number of enabled channels
->>      gets changed. This might confuses users who tries to have
->>      a fixed update_interval other than really merely setting
->>      conversion time.
->>
->> I see IIO subsystem have something like IIO_CHAN_INFO_INT_TIME
->> for conversion time setting exclusively. Do we have something
->> similar under hwmon?
->>
+On Tue, Apr 16, 2019 at 06:57:18PM -0700, Ruslan Babayev wrote:
+> Hi Guenter,
 > 
-> No. I think what you have should be good enough for now.
-> Please see comments below.
+> Thanks for taking the time to review these patches. Please see my
+> comments inline.
 > 
-> Thanks,
-> Guenter
+> Guenter Roeck writes:
 > 
->> Thanks
->>
->>   Documentation/hwmon/ina3221 |  9 +++++
->>   drivers/hwmon/ina3221.c     | 65 ++++++++++++++++++++++++++++++++-----
->>   2 files changed, 65 insertions(+), 9 deletions(-)
->>
->> diff --git a/Documentation/hwmon/ina3221 b/Documentation/hwmon/ina3221
->> index ed3f22769d4b..3b05170112f0 100644
->> --- a/Documentation/hwmon/ina3221
->> +++ b/Documentation/hwmon/ina3221
->> @@ -38,3 +38,12 @@ in[456]_input           Shunt voltage(uV) for channels 1, 2, and 3 respectively
->>   samples                 Number of samples using in the averaging mode.
->>                             Supports the list of number of samples:
->>                             1, 4, 16, 64, 128, 256, 512, 1024
->> +update_interval         Data conversion time in millisecond, following:
->> +                          update_interval = C x S x (BC + SC)
->> +                              C: number of enabled channels
->> +                              S: number of samples
->> +                             BC: bus-voltage conversion time in millisecond
->> +                             SC: shunt-voltage conversion time in millisecond
->> +                          Affects both Bus- and Shunt-voltage conversion time.
->> +                          Note that setting update_interval to 0ms sets both BC
->> +                          and SC to 140 us (minimum conversion time).
->> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
->> index 74d39d212931..af4ab8ddddce 100644
->> --- a/drivers/hwmon/ina3221.c
->> +++ b/drivers/hwmon/ina3221.c
->> @@ -144,19 +144,37 @@ static const int ina3221_avg_samples[] = {
->>       1, 4, 16, 64, 128, 256, 512, 1024,
->>   };
->> -static inline int ina3221_wait_for_data(struct ina3221_data *ina)
->> +/* Converting update_interval in msec to conversion time in usec */
->> +static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
->>   {
->> -    u32 channels = hweight16(ina->reg_config & INA3221_CONFIG_CHs_EN_MASK);
->> -    u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(ina->reg_config);
->> -    u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(ina->reg_config);
->> -    u32 samples_idx = INA3221_CONFIG_AVG(ina->reg_config);
->> +    u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
->> +    u32 samples_idx = INA3221_CONFIG_AVG(config);
->> +    u32 samples = ina3221_avg_samples[samples_idx];
->> +
->> +    /* Bisect the result to Bus and Shunt conversion times */
->> +    return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
->> +}
->> +
->> +/* Converting CONFIG register value to update_interval in usec */
->> +static inline u32 ina3221_reg_to_interval_us(u16 config)
->> +{
->> +    u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
->> +    u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(config);
->> +    u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(config);
->> +    u32 samples_idx = INA3221_CONFIG_AVG(config);
->>       u32 samples = ina3221_avg_samples[samples_idx];
->>       u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
->>       u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
->> -    u32 wait, cvrf;
->>       /* Calculate total conversion time */
->> -    wait = channels * (vbus_ct + vsh_ct) * samples;
->> +    return channels * (vbus_ct + vsh_ct) * samples;
->> +}
->> +
->> +static inline int ina3221_wait_for_data(struct ina3221_data *ina)
->> +{
->> +    u32 wait, cvrf;
->> +
->> +    wait = ina3221_reg_to_interval_us(ina->reg_config);
->>       /* Polling the CVRF bit to make sure read data is ready */
->>       return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
->> @@ -197,6 +215,11 @@ static int ina3221_read_chip(struct device *dev, u32 attr, long *val)
->>           regval = INA3221_CONFIG_AVG(ina->reg_config);
->>           *val = ina3221_avg_samples[regval];
->>           return 0;
->> +    case hwmon_chip_update_interval:
->> +        /* Return in msec */
->> +        *val = ina3221_reg_to_interval_us(ina->reg_config);
->> +        *val = DIV_ROUND_CLOSEST(*val, 1000);
->> +        return 0;
->>       default:
->>           return -EOPNOTSUPP;
->>       }
->> @@ -308,7 +331,7 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
->>   static int ina3221_write_chip(struct device *dev, u32 attr, long val)
->>   {
->>       struct ina3221_data *ina = dev_get_drvdata(dev);
->> -    int ret, idx;
->> +    int ret, idx, tmp;
->>       switch (attr) {
->>       case hwmon_chip_samples:
->> @@ -321,6 +344,28 @@ static int ina3221_write_chip(struct device *dev, u32 attr, long val)
->>           if (ret)
->>               return ret;
->> +        /* Update reg_config accordingly */
->> +        return regmap_read(ina->regmap, INA3221_CONFIG,
->> +                   &ina->reg_config);
->> +    case hwmon_chip_update_interval:
->> +        tmp = ina3221_interval_ms_to_conv_time(ina->reg_config, val);
->> +        idx = find_closest(tmp, ina3221_conv_time,
->> +                   ARRAY_SIZE(ina3221_conv_time));
->> +
->> +        /* Update Bus-voltage conversion time */
->> +        ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
->> +                     INA3221_CONFIG_VBUS_CT_MASK,
->> +                     idx << INA3221_CONFIG_VBUS_CT_SHIFT);
->> +        if (ret)
->> +            return ret;
->> +
->> +        /* Update Shunt-voltage conversion time */
->> +        ret = regmap_update_bits(ina->regmap, INA3221_CONFIG,
->> +                     INA3221_CONFIG_VSH_CT_MASK,
->> +                     idx << INA3221_CONFIG_VSH_CT_SHIFT);
->> +        if (ret)
->> +            return ret;
+> > On Tue, Apr 16, 2019 at 11:36:16AM -0700, Ruslan Babayev wrote:
+> >> +static ssize_t pmbus_show_operation(struct device *dev,
+> >> +				    struct device_attribute *devattr, char *buf)
+> >> +{
+> >> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> >> +	struct pmbus_operation *operation = to_pmbus_operation(attr);
+> >> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> >> +	int ret;
+> >> +
+> >> +	ret = pmbus_read_byte_data(client, operation->page, PMBUS_OPERATION);
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	if (ret & PB_OPERATION_CONTROL_ON) {
+> >> +		if (ret & PB_OPERATION_MARGIN_HIGH)
+> >> +			return snprintf(buf, PAGE_SIZE, "high\n");
+> >> +		else if (ret & PB_OPERATION_MARGIN_LOW)
+> >> +			return snprintf(buf, PAGE_SIZE, "low\n");
+> >> +		else
+> >> +			return snprintf(buf, PAGE_SIZE, "on\n");
+> >> +	} else {
+> >> +			return snprintf(buf, PAGE_SIZE, "off\n");
+> >> +	}
+> >> +}
+> >> +
+> >> +static ssize_t pmbus_set_operation(struct device *dev,
+> >> +				   struct device_attribute *devattr,
+> >> +				   const char *buf, size_t count)
+> >> +{
+> >> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+> >> +	struct pmbus_operation *operation = to_pmbus_operation(attr);
+> >> +	struct i2c_client *client = to_i2c_client(dev->parent);
+> >> +	int ret;
+> >> +	u8 val;
+> >> +
+> >> +	/*
+> >> +	 * sysfs_streq() doesn't need the \n's, but we add them so the strings
+> >> +	 * will be shared with pmbus_show_operation() above.
+> >> +	 */
+> >
+> > Saving a few bytes of data in the driver is not worth such limitations.
+> > I would not want to have to deal with users sending "echo -n on" to the
+> > driver and complain that it doesn't work.
+> >
 > 
-> It should be possible to update both conversion times with a single call,
-> since both calls touch only one register. Something like
-> 
->          ret = regmap_update_bits(ina->regmap, INA3221_CONFIG
->              INA3221_CONFIG_VBUS_CT_MASK | INA3221_CONFIG_VSH_CT_MASK,
->              (idx << INA3221_CONFIG_VBUS_CT_SHIFT) | (idx << INA3221_CONFIG_VSH_CT_SHIFT));
-> 
-> Granted, that is a bit long, but it saves an extra i2c write operation.
+> Sending "echo -n on" works just fine. sysfs_streq ignores \n's as
+> mentioned in the comment. This was actually shamelessly stolen from
+> drivers/regulator/virtual.c set_mode().
 > 
 
-Thinking about it ... does it even make sense to cache reg_config twice,
-or would it be better to just update the local copy and use regmap_write()
-to send it to the chip ?
+Still not a reason to do this.
 
+> >> +	if (sysfs_streq(buf, "on\n"))
+> >> +		val = PB_OPERATION_CONTROL_ON;
+> >> +	else if (sysfs_streq(buf, "off\n"))
+> >> +		val = 0;
+> >> +	else if (sysfs_streq(buf, "high\n"))
+> >> +		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
+> >> +		      PB_OPERATION_MARGIN_HIGH;
+> >> +	else if (sysfs_streq(buf, "low\n"))
+> >> +		val = PB_OPERATION_CONTROL_ON | PB_OPERATION_ACT_ON_FAULT |
+> >> +		      PB_OPERATION_MARGIN_LOW;
+> >> +	else
+> >> +		return -EINVAL;
+> >> +
+> >> +	ret = pmbus_write_byte_data(client, operation->page,
+> >> +				    PMBUS_OPERATION, val);
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	return count;
+> >> +}
+> >> +
+> > I am not convinced that it is a good idea to implement this as sysfs
+> > attributes. It is notmally only used in manufacturing, and there the
+> > registers can be acccessed directly.
+> >
+> > Either case, we can not implement this in the pmbus driver as generic code.
+> > Operation commands are notoriously implemented with slight differences across
+> > different devices. It would also probably be more appropriate to implement
+> > as regulator, since it affects setting voltages, not limits.
+> >
+> 
+> The OPERATION command as well as VOUT_COMMAND and VOUT_MARGIN_{HIGH,LOW}
+> are standard registers specified in PMBus Spec Part II, Rev 1.2 Section
+> 13. "Output Voltage Related Commands". The devices I have seen so far
+> (the ones that support voltage margining) all seem to be compliant with
+> the standard as far as the OPERATION register is concerned.
+> 
+> Some devices like TPS40422 use manufacturer specific registers instead of
+> VOUT_MARGIN_{HIGH,LOW}. Those can be handled by overriding
+> {read,write}_word_data to make it look standard to pmbus_core (as I have
+> done in the PATCH 4/4)
+> 
+The more I think about it, the more I am convinced that it is a bad idea to
+expose those values. It is not just about the hwmon subsystem, which again
+is for monitoring, not for setting or enabling voltages. Much worse is that
+your suggested code actually lets people _set_ arbitrary voltages. Write the
+wrong value, and your board goes up in smoke (or fire). This goes way beyond
+what the regulator subsystem permits, where voltages are (at least typically)
+only adjustable within given limits.
+
+On top of that, I would really argue that such attributes have no place
+in a shipping system, ie should not be visible to users. The expected use case
+for margin values is to be able to enable them during production tests.
+But that does not (or should not) happen in the field.
+
+Many if not most PMBus chips actually have such critical settings marked as
+read-only, sometimes even password protected. Any shipping system should have
+that protection enabled to prevent accidental writes into the chip registers.
+At one of a previous employers, such write protection was not enabled. This
+caused and i2cdump on the chip to reset it to manufacturing state, turning off
+power to itself and thus turning the board into a brick. That is really not
+something we would want to have exposed with sysfs attributes.
+
+> >> +
+> >> +static const struct pmbus_sensor_attr vout_attributes[] = {
+> >> +	{
+> >> +		.reg = PMBUS_VOUT_COMMAND,
+> >> +		.class = PSC_VOLTAGE_OUT,
+> >> +		.label = "command",
+> >
+> > Bad name for a label.
+> 
+> Could you please suggest a better name?
+> 
+"target" or "vout_target" maybe, for target voltage.
+
+> >>  static int pmbus_find_attributes(struct i2c_client *client,
+> >>  				 struct pmbus_data *data)
+> >>  {
+> >> @@ -1912,6 +2089,12 @@ static int pmbus_find_attributes(struct i2c_client *client,
+> >>  	if (ret)
+> >>  		return ret;
+> >>
+> >> +	/* Output Voltage sensors */
+> >> +	ret = pmbus_add_vout_attrs(client, data, "out", vout_attributes,
+> >> +				   ARRAY_SIZE(vout_attributes));
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >
+> > The sensors you are adding are not output voltage sensors. They are not
+> > sensors in the first place, and should probably not be reported as sensor
+> > values. And setting voltages as limits is really not appropriate.
+> >
+> 
+> I understand your concerns about exposing these registers as sysfs
+> entries in hwmon. These devices _are_ voltage regulators, and these
+> registers are not exactly "sensors", although a lot of the existing
+> pmbus_core code can be reused by pretending they are. Like VOUT_MODE
+> exponent handling, linear16 format etc.
+> 
+
+I understand, but code reusability isn't really a good argument here,
+much less for exposing the values as hwmon sysfs attributes.
+
+> I have looked at the regulator framework and into extending the
+> pmbus_regulator_ops to support voltage margining with standard PMBUS
+> VOUT_MARGIN registers. My predicament is that regulator framework
+> 
+> 1) Does NOT have the concept of "margining".
+> 
+> 2) Is not expected to be used at ALL on ACPI based systems. With ACPI
+>    kernel assumes power control is done with Power Resource Objects
+>    (ACPI section 7.1).
+> 
+> The latter is a bigger issue for us - our system is Intel based. It
+> seems like sysfs attributes is our only option.
+> 
+> How would you feel if these registers (namely OPERATION and
+> VOUT_MARGIN_{HIGH,LOW}) were exposed only in the drivers without making
+> any changes to pmbus_core.c? Would these drivers have a chance of
+> getting upstreamed? I hate the idea of maintaining out-of-tree drivers.
+> 
+Same thing. Again, I don't think the attributes should be exposed
+to userspace in the first place. Please have a look at your use case.
+The only use case I can imagine is manufacturing tests, and those can
+use i2cset -f directly (potentially in conjunction with the necessary
+commands to enable/disable write protection for the respective commands,
+if the chip supports it).
+
+Thanks,
 Guenter
-
->> +
->>           /* Update reg_config accordingly */
->>           return regmap_read(ina->regmap, INA3221_CONFIG,
->>                      &ina->reg_config);
->> @@ -482,6 +527,7 @@ static umode_t ina3221_is_visible(const void *drvdata,
->>       case hwmon_chip:
->>           switch (attr) {
->>           case hwmon_chip_samples:
->> +        case hwmon_chip_update_interval:
->>               return 0644;
->>           default:
->>               return 0;
->> @@ -527,7 +573,8 @@ static umode_t ina3221_is_visible(const void *drvdata,
->>   static const struct hwmon_channel_info *ina3221_info[] = {
->>       HWMON_CHANNEL_INFO(chip,
->> -               HWMON_C_SAMPLES),
->> +               HWMON_C_SAMPLES,
->> +               HWMON_C_UPDATE_INTERVAL),
->>       HWMON_CHANNEL_INFO(in,
->>                  /* 0: dummy, skipped in is_visible */
->>                  HWMON_I_INPUT,
->>
-> 
-> 
-
