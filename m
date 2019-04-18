@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CDC0C282E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEADCC10F0E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F23EE214DA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BED5A217F9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqjoxiyN"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isK713ot"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731317AbfDRT6e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Apr 2019 15:58:34 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45943 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390208AbfDRT6d (ORCPT
+        id S2390117AbfDRT6t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Apr 2019 15:58:49 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:39474 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390190AbfDRT6c (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Apr 2019 15:58:33 -0400
-Received: by mail-pf1-f193.google.com with SMTP id e24so1562236pfi.12;
-        Thu, 18 Apr 2019 12:58:32 -0700 (PDT)
+        Thu, 18 Apr 2019 15:58:32 -0400
+Received: by mail-pg1-f194.google.com with SMTP id l18so1530639pgj.6;
+        Thu, 18 Apr 2019 12:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=B+LNAKL2mwreepfAxVSDlLeu1nTRg9NDiYI0VC4TC00=;
-        b=rqjoxiyNXurY80FdMqb1XIcVY1Nud70uNtYmfruRMk2u2YXL4fTnC7SeQsHVDfnZIv
-         +2wwohnJUklymDYYzMcsp0nJDENdX0qkePVfhDHjPngp88FT+qHbXcQNgUVft7MUszgD
-         BhlRol4n1F82v74M5vehGKqa01BQy1u+S0ospxjCt+ZHr4NIBNpq0TCN28WsZ0j8lmVZ
-         tl+khSzxsQIk4LG5374Sd2h6C3YAhNHv2WooJRvYf/LZUUvPKDOLCg2TqmL2tNKrfKa0
-         pnRm/jqjXJ58kgtDS3oQacPwWYljpZN6GmieljHz1cnbDVJCd3DHWGIJFCYn+c66KCP0
-         nZOw==
+        bh=Dg22N7ij5CbFARw1/POY95wKTQwDv4ke41HQVemNXb0=;
+        b=isK713otpnbCLzfyYP0C/L3CQGDivEgxsaQsNLJKL0LOP5j2LZQ55TosA655bgf6PU
+         zPg89A27hwGa2tIdK9OwiKC05C1xC51XZEam1A4CWPhzydraLi0oy7R1yAYwVqzKYBLl
+         hLaQ+KR8diIcxJt/+4OLQvspgp0aOXuAFWIbBR8cjCWOSiOIz6iDE11+D06uATslKbDE
+         4WL8KelALI9n9BakzeTJDgKfyQ1NYPi8B9MpU6H4QiTjgMnOgWyQKLsXqAsbSrexWnek
+         BNeGnr1KHohFWbxYeXBtt2I3g+L4ATaKgedtzqkI1bRRVrLqpGmuLyqJmUfZJDKE2XsD
+         e9VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=B+LNAKL2mwreepfAxVSDlLeu1nTRg9NDiYI0VC4TC00=;
-        b=iAy64Bf9ieVj9tcwPAjy548f2B8IMEaeSnPUvZWq1Bk4A9hJw6Q2X6KaJEDs9LOGyC
-         mKL8IzGr0MbpVDedM+9vujp8plj5K+sIcMNAkmstUINxC07CDvhy0wNJ7cpAPYUSg1Uv
-         1fD2Hm8S0XYgTvEmI2oNHvwfHljSrrghYdw50FoWLd+7vRes7K16h6S6IcC0cMsLEpPv
-         XRr5vTJxLxTem4s6cVAgzzZEAkPjsGQWALHXTSrwTGRI0UiVB2E+oG7AzXcdTeerxTBX
-         JaTY2X0z8AzKSR/1lkapEceBBThTOggCfkrihCXRsz3omwIRIQQi92LBuBoh7pS+vLtX
-         Gwrg==
-X-Gm-Message-State: APjAAAXSuCJ/zPPgNCVw938Xd4lNUm5MCDLWCZzOkst5CyQW/I+A2yD4
-        pG8BcK7YxzL0RIBRb8XVkzsF1GoVS6w=
-X-Google-Smtp-Source: APXvYqyrcCmw+O4OFChgOEXhNjU0JwgPzu/CWUETVfyzN5U3Q8MjuDahbKsOjMdag3oLd5f74B99MA==
-X-Received: by 2002:a65:6144:: with SMTP id o4mr90124351pgv.247.1555617512356;
-        Thu, 18 Apr 2019 12:58:32 -0700 (PDT)
+        bh=Dg22N7ij5CbFARw1/POY95wKTQwDv4ke41HQVemNXb0=;
+        b=fiNB8GIVV0+iAFofKpzqgfNVLFSom3owfQQS4QcflJrXdjmTddzHWCW9BzbXesg5Ag
+         nu+CtKppYL1ev7TxZBy1Y+xy6aJYs3PbcC1DeZlaZtp38q79iL5DhOOCoJ087V9sXjuL
+         a5xbupuLvMoY5wHKK70udwllaoWPb3ncqCZ+oA2rezfDZYDLASeEENTNGncKiVnlr/JT
+         VRLqsradtyoVd14hjtsbb70fIET+p6ZyCXmODCK8Ozu5eudAU/9agcAxzbpUjR6Tp3Ga
+         rGwEw9tPYvNYXmiTQnlxfWL5QYKK3jU/ymzt/V53/jLtZ0/n6KSej/+QrIOLZegQBaD0
+         lvug==
+X-Gm-Message-State: APjAAAWCKt+tKPKvxn0mKHFnCcrxiHyUi7xRHRKA4/FwDNW4SZFYS5QW
+        9Ec9wuqNJk0Wh5B1rRNAnwbnKQ4BN+A=
+X-Google-Smtp-Source: APXvYqzdpywDRRWK/t1CrguxPsh3QuvMjM/1PBlC1eJQcZ9pAW6iwz4VRB6e4iZFShYWRIg6RJRx1w==
+X-Received: by 2002:aa7:9a89:: with SMTP id w9mr90410001pfi.213.1555617510960;
+        Thu, 18 Apr 2019 12:58:30 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s9sm4219784pfe.183.2019.04.18.12.58.31
+        by smtp.gmail.com with ESMTPSA id 128sm3058432pgb.47.2019.04.18.12.58.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Apr 2019 12:58:31 -0700 (PDT)
+        Thu, 18 Apr 2019 12:58:30 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
@@ -71,11 +70,10 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
         Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lukasz Majewski <l.majewski@samsung.com>
-Subject: [PATCH 6/6] hwmon: (pwm-fan) Use devm_thermal_of_cooling_device_register
-Date:   Thu, 18 Apr 2019 12:58:20 -0700
-Message-Id: <1555617500-10862-7-git-send-email-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5/6] hwmon: (npcm750-pwm-fan) Use devm_thermal_of_cooling_device_register
+Date:   Thu, 18 Apr 2019 12:58:19 -0700
+Message-Id: <1555617500-10862-6-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
 References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
@@ -85,171 +83,33 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Use devm_thermal_of_cooling_device_register() to register the cooling
-device. Also use devm_add_action_or_reset() to stop the fan on device
-removal, and to disable the pwm. Introduce a local 'dev' variable in
-the probe function to make the code easier to read.
+device. As a side effect, this fixes a driver bug:
+thermal_cooling_device_unregister() was not called on device removal.
 
-As a side effect, this fixes a bug seen if pwm_fan_of_get_cooling_data()
-returned an error. In that situation, the pwm was not disabled, and
-the fan was not stopped. Using devm functions also ensures that the
-pwm is disabled and that the fan is stopped only after the hwmon device
-has been unregistered.
-
-Cc: Lukasz Majewski <l.majewski@samsung.com>
+Fixes: f1fd4a4db777 ("hwmon: Add NPCM7xx PWM and Fan driver")
+Cc: Tomer Maimon <tmaimon77@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/pwm-fan.c | 73 ++++++++++++++++++++-----------------------------
- 1 file changed, 29 insertions(+), 44 deletions(-)
+ drivers/hwmon/npcm750-pwm-fan.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 167221c7628a..0243ba70107e 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -207,33 +207,44 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
- 	return 0;
- }
+diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
+index b3b907bdfb63..f24cc00caba9 100644
+--- a/drivers/hwmon/npcm750-pwm-fan.c
++++ b/drivers/hwmon/npcm750-pwm-fan.c
+@@ -864,10 +864,8 @@ static int npcm7xx_create_pwm_cooling(struct device *dev,
+ 	snprintf(cdev->name, THERMAL_NAME_LENGTH, "%pOFn%d", child,
+ 		 pwm_port);
  
-+static void pwm_fan_regulator_disable(void *data)
-+{
-+	regulator_disable(data);
-+}
-+
-+static void pwm_fan_pwm_disable(void *data)
-+{
-+	pwm_disable(data);
-+}
-+
- static int pwm_fan_probe(struct platform_device *pdev)
- {
- 	struct thermal_cooling_device *cdev;
-+	struct device *dev = &pdev->dev;
- 	struct pwm_fan_ctx *ctx;
- 	struct device *hwmon;
- 	int ret;
- 	struct pwm_state state = { };
+-	cdev->tcdev = thermal_of_cooling_device_register(child,
+-							 cdev->name,
+-							 cdev,
+-							 &npcm7xx_pwm_cool_ops);
++	cdev->tcdev = devm_thermal_of_cooling_device_register(dev, child,
++				cdev->name, cdev, &npcm7xx_pwm_cool_ops);
+ 	if (IS_ERR(cdev->tcdev))
+ 		return PTR_ERR(cdev->tcdev);
  
--	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
-+	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
- 		return -ENOMEM;
- 
- 	mutex_init(&ctx->lock);
- 
--	ctx->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
-+	ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
- 	if (IS_ERR(ctx->pwm)) {
- 		ret = PTR_ERR(ctx->pwm);
- 
- 		if (ret != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "Could not get PWM: %d\n", ret);
-+			dev_err(dev, "Could not get PWM: %d\n", ret);
- 
- 		return ret;
- 	}
- 
- 	platform_set_drvdata(pdev, ctx);
- 
--	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
-+	ctx->reg_en = devm_regulator_get_optional(dev, "fan");
- 	if (IS_ERR(ctx->reg_en)) {
- 		if (PTR_ERR(ctx->reg_en) != -ENODEV)
- 			return PTR_ERR(ctx->reg_en);
-@@ -242,10 +253,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	} else {
- 		ret = regulator_enable(ctx->reg_en);
- 		if (ret) {
--			dev_err(&pdev->dev,
--				"Failed to enable fan supply: %d\n", ret);
-+			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
- 			return ret;
- 		}
-+		devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
-+					 ctx->reg_en);
- 	}
- 
- 	ctx->pwm_value = MAX_PWM;
-@@ -257,62 +269,36 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	ret = pwm_apply_state(ctx->pwm, &state);
- 	if (ret) {
--		dev_err(&pdev->dev, "Failed to configure PWM\n");
--		goto err_reg_disable;
-+		dev_err(dev, "Failed to configure PWM\n");
-+		return ret;
- 	}
-+	devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx->pwm);
- 
--	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
-+	hwmon = devm_hwmon_device_register_with_groups(dev, "pwmfan",
- 						       ctx, pwm_fan_groups);
- 	if (IS_ERR(hwmon)) {
--		dev_err(&pdev->dev, "Failed to register hwmon device\n");
--		ret = PTR_ERR(hwmon);
--		goto err_pwm_disable;
-+		dev_err(dev, "Failed to register hwmon device\n");
-+		return PTR_ERR(hwmon);
- 	}
- 
--	ret = pwm_fan_of_get_cooling_data(&pdev->dev, ctx);
-+	ret = pwm_fan_of_get_cooling_data(dev, ctx);
- 	if (ret)
- 		return ret;
- 
- 	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
- 	if (IS_ENABLED(CONFIG_THERMAL)) {
--		cdev = thermal_of_cooling_device_register(pdev->dev.of_node,
--							  "pwm-fan", ctx,
--							  &pwm_fan_cooling_ops);
-+		cdev = devm_thermal_of_cooling_device_register(dev,
-+			dev->of_node, "pwm-fan", ctx, &pwm_fan_cooling_ops);
- 		if (IS_ERR(cdev)) {
--			dev_err(&pdev->dev,
-+			dev_err(dev,
- 				"Failed to register pwm-fan as cooling device");
--			ret = PTR_ERR(cdev);
--			goto err_pwm_disable;
-+			return PTR_ERR(cdev);
- 		}
- 		ctx->cdev = cdev;
- 		thermal_cdev_update(cdev);
- 	}
- 
- 	return 0;
--
--err_pwm_disable:
--	state.enabled = false;
--	pwm_apply_state(ctx->pwm, &state);
--
--err_reg_disable:
--	if (ctx->reg_en)
--		regulator_disable(ctx->reg_en);
--
--	return ret;
--}
--
--static int pwm_fan_remove(struct platform_device *pdev)
--{
--	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
--
--	thermal_cooling_device_unregister(ctx->cdev);
--	if (ctx->pwm_value)
--		pwm_disable(ctx->pwm);
--
--	if (ctx->reg_en)
--		regulator_disable(ctx->reg_en);
--
--	return 0;
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -380,7 +366,6 @@ MODULE_DEVICE_TABLE(of, of_pwm_fan_match);
- 
- static struct platform_driver pwm_fan_driver = {
- 	.probe		= pwm_fan_probe,
--	.remove		= pwm_fan_remove,
- 	.driver	= {
- 		.name		= "pwm-fan",
- 		.pm		= &pwm_fan_pm,
 -- 
 2.7.4
 
