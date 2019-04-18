@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15549C10F0E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 16:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B4FCC10F0E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 16:48:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C90862148D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 16:28:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 511BE21479
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 16:48:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cWg9ncZk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HwdDHYGE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388346AbfDRQ25 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Apr 2019 12:28:57 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:37152 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725888AbfDRQ25 (ORCPT
+        id S2387519AbfDRQsd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Apr 2019 12:48:33 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:34521 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389528AbfDRQsd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Apr 2019 12:28:57 -0400
-Received: by mail-qk1-f196.google.com with SMTP id c1so1503149qkk.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Apr 2019 09:28:56 -0700 (PDT)
+        Thu, 18 Apr 2019 12:48:33 -0400
+Received: by mail-qt1-f196.google.com with SMTP id k2so2904826qtm.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Apr 2019 09:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=ThBOgdyTXks5DuLbT4kkqQscnVJnU1x3gFAh1lNO90w=;
-        b=cWg9ncZkCEgwbml66V+pvd7/8kjhNaUis9FbyHBz/79In5lfPp28bIKpdoWhrTdeBz
-         HkS7pzmUqJz0+le7SVLFVKzUrQorBWTTcauq2fQWzKU7XdKCFEm1cW8dRsTdYjEKQW8n
-         Yyc9JFz1rdU8z+b5nkG3lErgvGR6vi+puI7+WPpvXFKLf4vV78aZB7AXg5pqbjjYiAhD
-         AKmI6JgsjgGcN4TtxKckXdNHtaFHFm2GLs4jcQB5MUpQTuuQiDcSBAhEcVviByKyBwS/
-         q64MG/Col9l+zXlCyO7vgyC6yzDOuR0RU4EhO/gCXydGiVn5H+c4YzMz+tvYeA6nHOsT
-         7RiA==
+        bh=bo4nNdl/vYvdHT6afJWnF3WUrPdVDD9454KbNUfurNg=;
+        b=HwdDHYGEjiDJtGopfEDwq/Qj7PUiMD1vVCUkn+eobZjdCuEhhRwCShHbRhxPXgD8XA
+         iENtmz/7wPKyLw7/CIaqYx3SmEUYolWfkrWBmZyPt6145zLH8Ns2nbmKr0wH0OqQ1R70
+         dEG7nnw8uNggvMxuDbvTGqux0/Uo4DZbG5a3fFOSHPaOETpdSx9a7LbTL4aZ4vyR+G8U
+         GuZpX/rTvh/h/TZ05eXLdpiBH69CwZ+Gv1rpzKYYODM2ZBtTg/eH/jH6Ijul9Gces3gN
+         G/w/nyIUteHh82h+Ghcvq4xGzdV1YKys27KrFTi4lFZdSRVywYxBuGJKX0Is+ghvFpYJ
+         xT4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ThBOgdyTXks5DuLbT4kkqQscnVJnU1x3gFAh1lNO90w=;
-        b=uiBp7r0Q03p7UHTyRLYRerIgmf7SVJ2XL0KuN5bbybslWrrqTwt44ndRtNfJvPNQyq
-         0KWERehzE2kvqD9YCdCpmvBS/JDPQh6ClprE1cYPT9FxYtRbiSHG3JXuONg02FTFU5Oz
-         9zv7cvPKEB2kjyZMLKIJGBJ3SOk8IVIAD0OsFG61pvcF0nKRcOGcYYaKZUc3TQkJCqQV
-         Cbt8Q9fIi0zCLR2D6a5SwRupbJ+P7YxVYnBs0DpgKEOlUBsUQDFY4j5FNo8p0DhhbPy/
-         o+NYk0ido9f7fhOaRKUXSVLKHU6rCP7LxbUn6VXi004aazUflH63c4ipUY4E8OGKhwiI
-         H2eg==
-X-Gm-Message-State: APjAAAVfXidK4OZd865IIxiq0FvawLKAnQRoyaRT04ppzTjyeNvIHeDm
-        KghmeljSBnJkPIExkkE9O/5+v+v1NlKSgw==
-X-Google-Smtp-Source: APXvYqzCPPnsnA6bmBKaOhNKPulWlL8zO6daXSDN7nzXf6ha9d72VyqLP+tt/J5GYHRF5WNUjMJg+Q==
-X-Received: by 2002:a37:f511:: with SMTP id l17mr74209851qkk.296.1555604935542;
-        Thu, 18 Apr 2019 09:28:55 -0700 (PDT)
+        bh=bo4nNdl/vYvdHT6afJWnF3WUrPdVDD9454KbNUfurNg=;
+        b=IGbSOmDik1QFjmaB0bnTgmcgfhF9Y7t9mQc0h1K2viv/8/DNc/5uASVmzKal2qrtlM
+         bTu7SIol6ham4dwD6VcWzVBJayqotQLPIplyclrWHwy3AFJFzFdLQ2nRQu3xwtszfJ9d
+         pPlEwf93Jd7QuPgrI6LtL2CTuQuv9u8xdnaAKD66yJxsMGSDmrxpFlSFD0x7th6Wr4fL
+         3dffHxYXsQHoJd49SO0Sz13AvphCpK5W72X8bwznt2xm3tJQCCG9ycI3LlvsB8KP17fA
+         dzTYJv1HUOSxgriP6KkLFEs613SCRheORVAjk/UirVZz6pS5Mr7HVB/WM0B0fmd4A5EO
+         Jwvw==
+X-Gm-Message-State: APjAAAVhxjUWI4AX+c/V4dDYrJ2MVKn725+8bxdY0DFkhIXprYU1zIE1
+        +JWVs5+GKMy4HEreyl+p06I9GJfoi/TXQg==
+X-Google-Smtp-Source: APXvYqyPxGIVHOhPvQP4CYI+hPeQDbfVA/46xkhg/c7JnHJQAZnLDPioxlFd85H5Z5y04o2K2vxThw==
+X-Received: by 2002:a0c:986d:: with SMTP id e42mr76765244qvd.51.1555606112029;
+        Thu, 18 Apr 2019 09:48:32 -0700 (PDT)
 Received: from jfddesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
-        by smtp.gmail.com with ESMTPSA id n184sm1186906qke.29.2019.04.18.09.28.54
+        by smtp.gmail.com with ESMTPSA id z23sm1005143qki.17.2019.04.18.09.48.31
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Apr 2019 09:28:54 -0700 (PDT)
+        Thu, 18 Apr 2019 09:48:31 -0700 (PDT)
 From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net,
         Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Subject: [PATCH] hwmon: max6650: add thermal cooling device capability
-Date:   Thu, 18 Apr 2019 12:28:34 -0400
-Message-Id: <20190418162834.14995-1-jeff.dagenais@gmail.com>
+Subject: [PATCH v2] hwmon: max6650: add thermal cooling device capability
+Date:   Thu, 18 Apr 2019 12:48:13 -0400
+Message-Id: <20190418164813.21053-1-jeff.dagenais@gmail.com>
 X-Mailer: git-send-email 2.11.0
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
@@ -75,11 +75,14 @@ value, thus avoiding periodic actual i2c traffic.
 
 Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 ---
+Changes in v2:
+	Removed left-over debug printk.
+
  drivers/hwmon/max6650.c | 91 ++++++++++++++++++++++++++++++++++++++++++++++++-
  1 file changed, 90 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 61135a2d0cff..1b8efbb8adbf 100644
+index 61135a2d0cff..f1cbbaaa1206 100644
 --- a/drivers/hwmon/max6650.c
 +++ b/drivers/hwmon/max6650.c
 @@ -40,6 +40,7 @@
@@ -116,7 +119,7 @@ index 61135a2d0cff..1b8efbb8adbf 100644
 +				 unsigned long *state)
 +{
 +	*state = 255;
-+	dev_notice(&cdev->device, "%s %lu\n", __func__, *state);
++
 +	return 0;
 +}
 +
