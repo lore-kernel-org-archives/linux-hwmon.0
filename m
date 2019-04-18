@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A664C10F14
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D08C282DD
 	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC3082183F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53E43217F9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 19:58:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CSc5OwYj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ptnitUg6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390191AbfDRT6b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S2390187AbfDRT6b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 18 Apr 2019 15:58:31 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43587 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390174AbfDRT63 (ORCPT
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33681 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731317AbfDRT6a (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Apr 2019 15:58:29 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c8so1570123pfd.10;
-        Thu, 18 Apr 2019 12:58:28 -0700 (PDT)
+        Thu, 18 Apr 2019 15:58:30 -0400
+Received: by mail-pg1-f193.google.com with SMTP id k19so1676375pgh.0;
+        Thu, 18 Apr 2019 12:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=o9fJRFSOZLju8sjZtfd/SYS114IRI/a2eHFNikMSeJ0=;
-        b=CSc5OwYjhlpzfCi/xFEhMOqpL44cDXcE/EKUkfp189qVXzK8LSvRQfHA1GS/gdQc6T
-         xj5RYFKVWMlWYal6BkaRgJ39Bin8s/MfkWGwqivLDjqzeV6YJkW99z68l/xA70+rxWiG
-         q5dbhhgqXk890XuNRQJMZ2gAGrboTwMi+eN4zp+jKLFJBv12/Q4qWLvr8fgqal+d/WGE
-         QWkcgNc5a9JyA5KqNFAaaQgw9Oli+9kcSA5C9jlSow4Jx7ntlxf6mldf3WY+rE8uMOC0
-         dqhku51RD46LVG/BswRt4t/GvmgK+Xaqo5XuqkB318zsHnvjjJLkRxtSJgjxs6cOg4r+
-         wwcw==
+        bh=iWQMJ2qTXasITQgDK7vc9YMGIL8w6QMaEOeMp9MVgzI=;
+        b=ptnitUg6IR26fWprpiE9SfWzcu4vKN3PFmzfsz+4CDYEGeIqed3/8Lo9tQysZUG4Lv
+         SGLNuz5reGyNFVfirM8CCbcaXLvTAcwDEgUNrIdldCkCvUMcqtz+SUzeeYsxEbAhrhe8
+         OZV4IdpJ/JrDKgyaiDznPuk+NqeEQ+jdLfRbHLUzkg+Mi1UVxsBjWuVyNwUATQGgOyAi
+         Ur8Ltu5Z/kfZiNlkj5lQHDvgInKi5nOQho3eNt1oc8wHMjoaJVJpgrlgv/bsrCPNbZ2p
+         uBvINGwHLyrn0+sEuBYiyqP1Yz3q4x1JO738O87cTk3RZL6XE3D7tVRwHfsrL5pwO/Mq
+         XG7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=o9fJRFSOZLju8sjZtfd/SYS114IRI/a2eHFNikMSeJ0=;
-        b=WEL9o+auIqp7gOSsx5TA0Sd3uXcoaDwUIRj7ftcqiebf3jKIiifeVUST82JdBWexlX
-         vQ/YQsrCSlXeI+2QD4ffxxGhkJMeXxWYL2wVL1VcqzKnJjEUkEHLGDsyzkrwJxC70z5K
-         NNWCLGMq8lxcRxnYo5PZB/ZGAl4uwmc734wCmJzljT5jEiRn7R5Za194ggBkrb2YNzg8
-         HqvNbSsgRF9vcQRTCGovqxuZgjyHEPnpuYx7pBJbjv4+BnDGTog6NxDipbg90EAqnfGy
-         GAhl7lWDS5hiIzCx39WHNTD5Z7eK4/1mOwp1vvC9Q/wfPOpmfYRrK/oPj7ucYsoGF6wp
-         97VA==
-X-Gm-Message-State: APjAAAX2968gcc3ae+qrGtZu1sRB+I3tUe2FuuXHTDKOZKfliVtg28/x
-        /MTHozbg1ueV/4EpdmQ0/omWLDETd38=
-X-Google-Smtp-Source: APXvYqzyhJqPMn9FBvqGzySGiBJ+Q7z53ajueAKrEkJzo4dOkvO+Mv621oLJ2FDa1foVZKDV8TJU/w==
-X-Received: by 2002:a65:4343:: with SMTP id k3mr7139829pgq.384.1555617508148;
-        Thu, 18 Apr 2019 12:58:28 -0700 (PDT)
+        bh=iWQMJ2qTXasITQgDK7vc9YMGIL8w6QMaEOeMp9MVgzI=;
+        b=mOa8j/gH6UtyteU43Dx8J9z9DIFiZrid+cUPuGmiTVCQdSOb1wVEEqBQievt+miDG0
+         Uu41SbPbvpPN6M6DhP3yVRWjBFgCQKIY3wScWJOJjP9uE2U3t/4s2y4yXzR/a2PMQIG3
+         i0m7GR6qozXn6hHgPAA8t/JavEqWIpzYQysm8PR7oRd/wVHeqfYKXSMkLcRK4ZPA+QrH
+         UyMbyNcanIrjSi1BIz7o5o4C1DkNZvdE2wg+AeGzzR3dJyv3NYd+UY/HyWQGyHv5Do01
+         nYvKLLOZkJUlcNBW7s42SUPwuS0h+n1mUKbAUSnISl2qFD85xh4VrM8VFeVjvWA8Tiaj
+         XcOg==
+X-Gm-Message-State: APjAAAUHqHCr8BnAtmHm3wwkvEH8vQZuW8Wd/X2gy9FVv6R9fAb64Qlb
+        l/JQzvc7D7J4mKAb8c6iDObPHVwVFFI=
+X-Google-Smtp-Source: APXvYqwapDl66OdPq4SqQZL/qnGUXMG1TzJPI+cBC4ddbm9BEsja+OuErjgE2UHtPRBNttg6+aDKSg==
+X-Received: by 2002:a63:fa46:: with SMTP id g6mr89147313pgk.382.1555617509572;
+        Thu, 18 Apr 2019 12:58:29 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p6sm3621380pfd.122.2019.04.18.12.58.27
+        by smtp.gmail.com with ESMTPSA id n21sm10519669pfb.42.2019.04.18.12.58.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Apr 2019 12:58:27 -0700 (PDT)
+        Thu, 18 Apr 2019 12:58:29 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
@@ -72,9 +72,9 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/6] hwmon: (gpio-fan) Use devm_thermal_of_cooling_device_register
-Date:   Thu, 18 Apr 2019 12:58:17 -0700
-Message-Id: <1555617500-10862-4-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 4/6] hwmon: (mlxreg-fan) Use devm_thermal_of_cooling_device_register
+Date:   Thu, 18 Apr 2019 12:58:18 -0700
+Message-Id: <1555617500-10862-5-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
 References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
@@ -84,83 +84,94 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Call devm_thermal_of_cooling_device_register() to register the cooling
-device. Also use devm_add_action_or_reset() to stop the fan on device
-removal. This fixes a race condition since the fan was stopped before
-the hwmon device was removed.
+device. Also introduce struct device *dev = &pdev->dev; to make the code
+easier to read.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/gpio-fan.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+ drivers/hwmon/mlxreg-fan.c | 31 ++++++++++---------------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index f1bf67aca9e8..3f6e5b4e3997 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -498,6 +498,11 @@ static const struct of_device_id of_gpio_fan_match[] = {
- };
- MODULE_DEVICE_TABLE(of, of_gpio_fan_match);
- 
-+static void gpio_fan_stop(void *data)
-+{
-+	set_fan_speed(data, 0);
-+}
-+
- static int gpio_fan_probe(struct platform_device *pdev)
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index db8c6de0b6a0..a14347ea0d77 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -420,42 +420,42 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+ static int mlxreg_fan_probe(struct platform_device *pdev)
  {
+ 	struct mlxreg_core_platform_data *pdata;
++	struct device *dev = &pdev->dev;
+ 	struct mlxreg_fan *fan;
+ 	struct device *hwm;
  	int err;
-@@ -532,6 +537,7 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 		err = fan_ctrl_init(fan_data);
- 		if (err)
- 			return err;
-+		devm_add_action_or_reset(dev, gpio_fan_stop, fan_data);
+ 
+-	pdata = dev_get_platdata(&pdev->dev);
++	pdata = dev_get_platdata(dev);
+ 	if (!pdata) {
+-		dev_err(&pdev->dev, "Failed to get platform data.\n");
++		dev_err(dev, "Failed to get platform data.\n");
+ 		return -EINVAL;
  	}
  
- 	/* Make this driver part of hwmon class. */
-@@ -543,32 +549,20 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 		return PTR_ERR(fan_data->hwmon_dev);
+-	fan = devm_kzalloc(&pdev->dev, sizeof(*fan), GFP_KERNEL);
++	fan = devm_kzalloc(dev, sizeof(*fan), GFP_KERNEL);
+ 	if (!fan)
+ 		return -ENOMEM;
  
- 	/* Optional cooling device register for Device tree platforms */
--	fan_data->cdev = thermal_of_cooling_device_register(np,
--							    "gpio-fan",
--							    fan_data,
--							    &gpio_fan_cool_ops);
-+	fan_data->cdev = devm_thermal_of_cooling_device_register(dev, np,
-+				"gpio-fan", fan_data, &gpio_fan_cool_ops);
+-	fan->dev = &pdev->dev;
++	fan->dev = dev;
+ 	fan->regmap = pdata->regmap;
+-	platform_set_drvdata(pdev, fan);
  
- 	dev_info(dev, "GPIO fan initialized\n");
+ 	err = mlxreg_fan_config(fan, pdata);
+ 	if (err)
+ 		return err;
  
+-	hwm = devm_hwmon_device_register_with_info(&pdev->dev, "mlxreg_fan",
++	hwm = devm_hwmon_device_register_with_info(dev, "mlxreg_fan",
+ 						   fan,
+ 						   &mlxreg_fan_hwmon_chip_info,
+ 						   NULL);
+ 	if (IS_ERR(hwm)) {
+-		dev_err(&pdev->dev, "Failed to register hwmon device\n");
++		dev_err(dev, "Failed to register hwmon device\n");
+ 		return PTR_ERR(hwm);
+ 	}
+ 
+ 	if (IS_REACHABLE(CONFIG_THERMAL)) {
+-		fan->cdev = thermal_cooling_device_register("mlxreg_fan", fan,
+-						&mlxreg_fan_cooling_ops);
++		fan->cdev = devm_thermal_of_cooling_device_register(dev,
++			NULL, "mlxreg_fan", fan, &mlxreg_fan_cooling_ops);
+ 		if (IS_ERR(fan->cdev)) {
+-			dev_err(&pdev->dev, "Failed to register cooling device\n");
++			dev_err(dev, "Failed to register cooling device\n");
+ 			return PTR_ERR(fan->cdev);
+ 		}
+ 	}
+@@ -463,22 +463,11 @@ static int mlxreg_fan_probe(struct platform_device *pdev)
  	return 0;
  }
  
--static int gpio_fan_remove(struct platform_device *pdev)
-+static void gpio_fan_shutdown(struct platform_device *pdev)
- {
- 	struct gpio_fan_data *fan_data = platform_get_drvdata(pdev);
- 
--	if (!IS_ERR(fan_data->cdev))
--		thermal_cooling_device_unregister(fan_data->cdev);
+-static int mlxreg_fan_remove(struct platform_device *pdev)
+-{
+-	struct mlxreg_fan *fan = platform_get_drvdata(pdev);
 -
- 	if (fan_data->gpios)
- 		set_fan_speed(fan_data, 0);
+-	if (IS_REACHABLE(CONFIG_THERMAL))
+-		thermal_cooling_device_unregister(fan->cdev);
 -
 -	return 0;
 -}
 -
--static void gpio_fan_shutdown(struct platform_device *pdev)
--{
--	gpio_fan_remove(pdev);
- }
+ static struct platform_driver mlxreg_fan_driver = {
+ 	.driver = {
+ 	    .name = "mlxreg-fan",
+ 	},
+ 	.probe = mlxreg_fan_probe,
+-	.remove = mlxreg_fan_remove,
+ };
  
- #ifdef CONFIG_PM_SLEEP
-@@ -602,7 +596,6 @@ static SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
- 
- static struct platform_driver gpio_fan_driver = {
- 	.probe		= gpio_fan_probe,
--	.remove		= gpio_fan_remove,
- 	.shutdown	= gpio_fan_shutdown,
- 	.driver	= {
- 		.name	= "gpio-fan",
+ module_platform_driver(mlxreg_fan_driver);
 -- 
 2.7.4
 
