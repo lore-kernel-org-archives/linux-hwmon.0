@@ -1,114 +1,251 @@
-Return-Path: <SRS0=8wir=SU=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Ylrj=SV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDCDC10F0E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 22:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96062C10F14
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Apr 2019 00:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC4DD205ED
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Apr 2019 22:02:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BF22214DA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Apr 2019 00:57:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ie6fJbev"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1Tkeg/9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbfDRWCO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Apr 2019 18:02:14 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44046 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbfDRWCO (ORCPT
+        id S1726453AbfDSA5k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Apr 2019 20:57:40 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:47056 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfDSA5j (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Apr 2019 18:02:14 -0400
-Received: by mail-pf1-f193.google.com with SMTP id y13so1687616pfm.11
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Apr 2019 15:02:13 -0700 (PDT)
+        Thu, 18 Apr 2019 20:57:39 -0400
+Received: by mail-qt1-f194.google.com with SMTP id z17so4126893qts.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Apr 2019 17:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=18k/Om8h1qagM+YGm2gJEYER3fXE8f/30rhXHPwMtxM=;
-        b=ie6fJbev3T7B43yHm3Zew814t16/tBXlRZO0NskZk3NGFJ5Eu/sZRNDQIJbxMXZv1V
-         +EjSFKDYO9gSzKrqquoshfcw4beNTXv4vmO9q32cOQ2nYhqmYlTfZHqxNihH3yUo2Skw
-         JfifitPCSfIvgKOxXzOUE35reoTH8MN7NH3L2Z4eDo4YsvENyjVlcXbyMOqHTJqottBf
-         UzjfRxB8i5nKa0SPWCRIU71A+DR0Vxq6jsuLV7mrlXUlrordB/V+gnC0ersGTLRvHYzU
-         lI6YtdAzNJByej6W+lja+Fok3QXbwsruYHxFUyTIMbIlPu2M2G7sHZ9yEGhLIlgOphDQ
-         tspQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=A7ADLanqBG+1FdBueiIwBG+hNKSR+YxlTJu1Z+4bN2Q=;
+        b=j1Tkeg/99O4yGZH8/EBz61EWf5IiXjFOmrapMPxTwtUIATN5z/+A+s1ORy3lPWMQ43
+         0KXhghxiOYVtFe5gXtXHW9wIKguHUp5iOupLLzKQVYnsZbDJ+JPG9J+2XnvqouN32hby
+         XM5P1GXO8xkQDSRzHh4DUyszEL4MMTlREVnPCvK6hai+YUlSI25ipl0IOeLykmcESFK4
+         1C0lVEB0oq9OB++cXflU9QkI8EXydBKWqWn/Imtt959oXi2ZXq60Xr0L0x6ffk8t2ClC
+         6AJquZOei7zgl+gmxXkOUa3dH2dUEkDFw8FnwtkNYwVW7FejmxcwxWIfHpwSeGl5gGlw
+         +l7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=18k/Om8h1qagM+YGm2gJEYER3fXE8f/30rhXHPwMtxM=;
-        b=lsjjduuSKC6zBOLLsgaEB5fWok3QcRtAWXZ784pfXShqkH/+OcNnf6TCIw/usYbGxV
-         KT45Ki7Y5NmFedO0ZB8pbf1FiEq7p5BBvFWR4L5h8aBIvtliaTpFxk5iBLkqbnQKZ33H
-         u0NcVkI75tT/wypbLcaSGHCiN011eznxodTB35Q1d8ngH20HQwcmKHde1DRM8YfsKfNA
-         fM9UYdg180RCIRcIAI4CP8PkkqCtLSLyDZhrwpGYvvmknhPuy9i0lMgIXArxQ5J43nAn
-         2ZGIayG4xg5AffscKiZamBZGdA0JXy5NZltv3HhqzbY8HKUFSCYsS9B+e7vdsgV34YdK
-         9psg==
-X-Gm-Message-State: APjAAAVQvWiynwX5PbEb4tWoM/I3/FjqnkbF4aYQ38m5rn/K0hJvki8g
-        ZgOvomCDqxyU3gvDHmoljNPvCJpU
-X-Google-Smtp-Source: APXvYqxhK2T1zWZFDEXF2tJehH4n3xlOkzGC3liVIyT+yPQVGzkEU84wRkDlQUklkptUumIje2YeNQ==
-X-Received: by 2002:a65:424d:: with SMTP id d13mr311599pgq.318.1555624933386;
-        Thu, 18 Apr 2019 15:02:13 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l184sm5663448pfc.98.2019.04.18.15.02.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=A7ADLanqBG+1FdBueiIwBG+hNKSR+YxlTJu1Z+4bN2Q=;
+        b=EEaBl9Y2XgrNbQpJXTMak3TC35/8IkTERkcW6fjJZQ275rNLQWTH5c5O1YzAiFeTrb
+         Y+MSDRl3q1IdRg5yaxIbmgyllciHQYrhzUdA3DExA8zERiAZMZeQv7sp4DtCNFg/WqYp
+         sTeLWc8Nztxoko5DhSf2THh45syMRlDO3e5IF4bo+l4gG903N9pwkJPnTkyZ4eM0TJCO
+         vyae0sv4CxFJkNS0kfcVNQFJ/jspJ9hkJfpUTzqZxYyZmAYu/n4akWzK2sBHtmuynf48
+         MiKuifDRnRi14YfPJnKTkSpU/EpwEuJJ+Po6Qe/aMCxml852JRG0xWBj2H5U4ZfMYyRg
+         0p6Q==
+X-Gm-Message-State: APjAAAXoYQYjwFRvILGRhsJUiyAjoWzozP+2mpxoavEZkiIN9acMq9H3
+        13oCBi5mTlt9I6mdcMU/dpjzQ2PhRPCamg==
+X-Google-Smtp-Source: APXvYqxmoFBHzjx9+sxlmge1IW8adFcj5viQ7mNMmpJonx5fsZvTIxWElK2shS5wqye+BTDxTz20MQ==
+X-Received: by 2002:ac8:2b83:: with SMTP id m3mr1018489qtm.305.1555635458368;
+        Thu, 18 Apr 2019 17:57:38 -0700 (PDT)
+Received: from jfddesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
+        by smtp.gmail.com with ESMTPSA id x13sm1606877qts.93.2019.04.18.17.57.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Apr 2019 15:02:11 -0700 (PDT)
-Date:   Thu, 18 Apr 2019 15:02:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com
-Subject: Re: [PATCH v2] hwmon: max6650: add thermal cooling device capability
-Message-ID: <20190418220210.GA17561@roeck-us.net>
-References: <20190418164813.21053-1-jeff.dagenais@gmail.com>
- <20190418173856.GB7804@roeck-us.net>
- <55B323D8-9715-46C3-9205-38344D6FADCD@gmail.com>
- <20190418180623.GA18588@roeck-us.net>
- <40DEF6F9-FA5B-4537-BD02-6763D7C885A1@gmail.com>
- <20190418201208.GA10459@roeck-us.net>
- <A7D38D52-8643-481D-AE6F-5F61DBE04108@gmail.com>
- <20190418205008.GA13496@roeck-us.net>
- <41DB8327-5AE7-4A57-990C-02A94FFEFF50@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41DB8327-5AE7-4A57-990C-02A94FFEFF50@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Thu, 18 Apr 2019 17:57:37 -0700 (PDT)
+From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+Subject: [PATCH v4] hwmon: max6650: add thermal cooling device capability
+Date:   Thu, 18 Apr 2019 20:57:22 -0400
+Message-Id: <20190419005722.14541-1-jeff.dagenais@gmail.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190418220210.GA17561@roeck-us.net>
+References: <20190418220210.GA17561@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 18, 2019 at 05:33:13PM -0400, Jean-Francois Dagenais wrote:
-> 
-> > On Apr 18, 2019, at 16:50, Guenter Roeck <linux@roeck-us.net> wrote:
-> > 
-> >> normally without any errors, yet the thermal-zone I defined, which is there to
-> >> prevent my system from burning out, would remain incomplete (without required
-> >> cooling device) and yet no errors came out of the kernel.
-> >> 
-> >> I just tested it and that's exactly what's happening! Yikes.
-> >> 
-> > You would still get a warning message. Better than failing to load
-> > the driver completely. On top of that, this used to work before.
-> > Plus, you said it only happens in severe situations, ie if the kernel
-> > is out of memory, and in thact case there would be a traceback.
-> > Sorry, I don't get your point.
-> 
-> Ok, I see. We're having the same discussion than on the v3 submission then.
-> 
-> If I change the dev_err to a dev_warn, but still return 0 on
-> thermal_of_cooling_device_register failure, you would apply the patch. It sounds
-> like a compromise.
-> 
-> Completely failing the probe call or partially succeed it results in the same
-> behaviour for thermal cooling use cases. But the dev_warn definitely becomes
-> important though.
-> 
-> I will v4 with that if you agree and leave the devm_ thermal register for
-> another day since I agree the series might be delayed too long (or
-> indefinitely).
-> 
-Ok.
+This allows max6650 devices to be referenced in dts as a cooling device.
 
-Guenter
+The pwm value seems duplicated in cooling_dev_state but since pwm goes
+through rounding logic into data->dac, it is modified and messes with
+the thermal zone state algorithms. It's also better to serve a cache
+value, thus avoiding periodic actual i2c traffic.
+
+Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+---
+Changes in v2:
+        - Removed left-over debug printk.
+Changes in v3:
+        - Add missing dependency in Kconfig
+Changes in v4:
+	- Remove useless comment "thermal cooling device callbacks"
+	- fix max6650_set_cur_state signature declaration style
+	- Only warn when thermal_of_cooling_device_register fails
+
+ drivers/hwmon/Kconfig   |  1 +
+ drivers/hwmon/max6650.c | 90 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 90 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index d0f1dfe2bcbb..46d69fcdd48b 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -898,6 +898,7 @@ config SENSORS_MAX6642
+ config SENSORS_MAX6650
+ 	tristate "Maxim MAX6650 sensor chip"
+ 	depends on I2C
++	depends on THERMAL || THERMAL=n
+ 	help
+ 	  If you say yes here you get support for the MAX6650 / MAX6651
+ 	  sensor chips.
+diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
+index 61135a2d0cff..137395ea5e95 100644
+--- a/drivers/hwmon/max6650.c
++++ b/drivers/hwmon/max6650.c
+@@ -40,6 +40,7 @@
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
+ #include <linux/of_device.h>
++#include <linux/thermal.h>
+ 
+ /*
+  * Insmod parameters
+@@ -113,6 +114,7 @@ module_param(clock, int, 0444);
+ struct max6650_data {
+ 	struct i2c_client *client;
+ 	const struct attribute_group *groups[3];
++	struct thermal_cooling_device *cooling_dev;
+ 	struct mutex update_lock;
+ 	int nr_fans;
+ 	char valid; /* zero until following fields are valid */
+@@ -125,6 +127,7 @@ struct max6650_data {
+ 	u8 count;
+ 	u8 dac;
+ 	u8 alarm;
++	unsigned long cooling_dev_state;
+ };
+ 
+ static const u8 tach_reg[] = {
+@@ -694,6 +697,63 @@ static int max6650_init_client(struct max6650_data *data,
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_THERMAL)
++
++static int max6650_get_max_state(struct thermal_cooling_device *cdev,
++				 unsigned long *state)
++{
++	*state = 255;
++
++	return 0;
++}
++
++static int max6650_get_cur_state(struct thermal_cooling_device *cdev,
++				 unsigned long *state)
++{
++	struct max6650_data *data = cdev->devdata;
++
++	*state = data->cooling_dev_state;
++
++	return 0;
++}
++
++static int max6650_set_cur_state(struct thermal_cooling_device *cdev,
++				 unsigned long state)
++{
++	struct max6650_data *data = cdev->devdata;
++	struct i2c_client *client = data->client;
++	int err;
++
++	state = clamp_val(state, 0, 255);
++
++	mutex_lock(&data->update_lock);
++
++	if (data->config & MAX6650_CFG_V12)
++		data->dac = 180 - (180 * state)/255;
++	else
++		data->dac = 76 - (76 * state)/255;
++
++	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
++
++	if (!err) {
++		max6650_set_operating_mode(data, state ?
++						   MAX6650_CFG_MODE_OPEN_LOOP :
++						   MAX6650_CFG_MODE_OFF);
++		data->cooling_dev_state = state;
++	}
++
++	mutex_unlock(&data->update_lock);
++
++	return err < 0 ? err : 0;
++}
++
++static const struct thermal_cooling_device_ops max6650_cooling_ops = {
++	.get_max_state = max6650_get_max_state,
++	.get_cur_state = max6650_get_cur_state,
++	.set_cur_state = max6650_set_cur_state,
++};
++#endif
++
+ static int max6650_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -709,6 +769,7 @@ static int max6650_probe(struct i2c_client *client,
+ 		return -ENOMEM;
+ 
+ 	data->client = client;
++	i2c_set_clientdata(client, data);
+ 	mutex_init(&data->update_lock);
+ 	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data : id->driver_data;
+ 
+@@ -727,7 +788,33 @@ static int max6650_probe(struct i2c_client *client,
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+ 							   client->name, data,
+ 							   data->groups);
+-	return PTR_ERR_OR_ZERO(hwmon_dev);
++	err = PTR_ERR_OR_ZERO(hwmon_dev);
++	if (err)
++		return err;
++
++#if IS_ENABLED(CONFIG_THERMAL)
++	data->cooling_dev =
++		thermal_of_cooling_device_register(client->dev.of_node,
++						   id->name, data,
++						   &max6650_cooling_ops);
++	if (IS_ERR(data->cooling_dev))
++		dev_warn(&client->dev,
++			 "thermal cooling device register failed: %d\n",
++			 PTR_ERR(data->cooling_dev));
++	else
++		thermal_cdev_update(data->cooling_dev);
++#endif
++	return 0;
++}
++
++static int max6650_remove(struct i2c_client *client)
++{
++	struct max6650_data *data = i2c_get_clientdata(client);
++
++	if (!IS_ERR(data->cooling_dev))
++		thermal_cooling_device_unregister(data->cooling_dev);
++
++	return 0;
+ }
+ 
+ static const struct i2c_device_id max6650_id[] = {
+@@ -743,6 +830,7 @@ static struct i2c_driver max6650_driver = {
+ 		.of_match_table = of_match_ptr(max6650_dt_match),
+ 	},
+ 	.probe		= max6650_probe,
++	.remove		= max6650_remove,
+ 	.id_table	= max6650_id,
+ };
+ 
+-- 
+2.11.0
+
