@@ -1,415 +1,89 @@
-Return-Path: <SRS0=Ylrj=SV=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=/An6=SW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24EC3C282E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Apr 2019 22:54:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 236F7C282E1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:44:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA787217F9
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Apr 2019 22:54:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555714489;
-	bh=89T0JcF7PSh9zPmWK0qOYgfN+PVKA9PmFKUpijXkcqw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jwRr3EQtk6m2GbcCC/Jw9/6SXcQyaQt96S07lmCLzOlNbYto87S+v9SNSXwGxrp/Q
-	 mClcq+MlGSZ3zpFUEJwEIjSX+A8WrHOZXnN1WOTHb9gzLs83FoexczsoM+5BkzCRuc
-	 e3kDW/eft9VLJGwg/dqlKbq+I2illQP1MMnKiwjc=
+	by mail.kernel.org (Postfix) with ESMTP id D30FA21736
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:44:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6tiBYnN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbfDSWyY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Apr 2019 18:54:24 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49702 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726834AbfDSWyX (ORCPT
+        id S1726077AbfDTCoY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Apr 2019 22:44:24 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:40169 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfDTCoY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Apr 2019 18:54:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gJ2PQQNaiu2hKSXn44Dr3ifW17YuOc71FwaAt+BwT5w=; b=r1KiZoXwmadwJQGyP5RsoRjbRi
-        vYHsH1JCxZ0bD5RYu36PNNCiM1MxW3jyVKAQ02GT1OsxIDT68YTy7HfIy+rxaWcn+Dnq94WPYiCig
-        5ZFsmeSt+Vutube4AVF6fNLwICqUYpLm8WYvCwWqTjKVIIq39cvTEtCaIOGuE+BA1c+DHLAlpkn3Z
-        KUzDHAT77Axx4vZepIz42tnEiYvkv8bhXmtpPSncF8I8jS49HjR76DaQ0Zu2drvSny4t4IgAcYeD4
-        OwJ4ayuKWjwvzYGVbVmjqOfwAcHl2XS9WUq1nS5pNnU1+YiwatcChZY/waBJgJroHvTaou120EVLt
-        fqXF4rEA==;
-Received: from 177.18.24.91.dynamic.adsl.gvt.net.br ([177.18.24.91] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hHQnJ-0002uF-Pj; Fri, 19 Apr 2019 10:30:57 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hHQnG-0000D9-1h; Fri, 19 Apr 2019 07:30:54 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 2/2] docs: hwmon: remove the extension from .rst files
-Date:   Fri, 19 Apr 2019 07:30:52 -0300
-Message-Id: <79280b1c2193d9de3ad45df4f024a64c2c1c85d7.1555669842.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <70d1286cf7ddb5c44abb7278faac4b7f135d8462.1555669842.git.mchehab+samsung@kernel.org>
-References: <70d1286cf7ddb5c44abb7278faac4b7f135d8462.1555669842.git.mchehab+samsung@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 19 Apr 2019 22:44:24 -0400
+Received: by mail-io1-f44.google.com with SMTP id i21so5121586iol.7
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Apr 2019 19:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Uj2SJ4WYFff73GX1rlxJ0qaFWQ6wjgD+NrHFkaX1d8U=;
+        b=T6tiBYnNd3r1174Jxxokah/fH0xpxiyonpuTuNjfjLXS15l+Jb4HZfS6BjsTfZk78t
+         e7E44YytZKs9Vs199ybAYj0o1SFTiLAQVE2UCZoJ+q5gtlOwbArr87RR0GLMsOTByaH9
+         g4welnpJjsctoR8P4CgBW08l2D0mBvl20S1Wr4SDGaBfx+f7mg/wa0qTT87iUFl/3rld
+         GqoY+424tY/4C9l/DPS1b9fDR6DHt/MI7Xr/N2NRlDiK86x/wJk1TYNcTPSAFHQItKe+
+         yt3z2cH0EQoKc9w5FjlMKYknFZzGFRX9gggm7Iq7Bn1CpsPl1oMMmTLBfJ65rpyqt/YM
+         G2Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Uj2SJ4WYFff73GX1rlxJ0qaFWQ6wjgD+NrHFkaX1d8U=;
+        b=Vqtu5CtSg706VGA6wwz1+kec/Xw2pOqrilzm9Ef+a5xW1O4QqQNEKKLq44+UG3nYR5
+         bfada4G13zbhZovCOKY83wWiC4iBJNWBrWW1eD4dIGtg27grS5uQ+HrhNRdDylwLRNrT
+         IYsCwJXfwATgud8uPRSnO4ayTx7YCyjnldB1pWNlJnkm5FnlFLTYJRLlrUDpnML5tb8r
+         pwuSYnH0V1BCStL8EAwZRX1HahlgiPG6NpnA6IUFdfzJb/Ee0bJ0L9ZGsziovLm0T1px
+         eDpyPEDc5iOw2wIgPF3S9Gc3A8gKXIg78+J3L8hy7+PhKCRJXj5EULpu0ytjpugYW2HN
+         kNZA==
+X-Gm-Message-State: APjAAAUcrHTpS2g7cy1oeFJC5E82/E64L76B3i//Nc24pniOHikiQZ9A
+        xg+HxyKJyWkAMF23SzDpU8kHPX7N3cA=
+X-Google-Smtp-Source: APXvYqyjTU2vt4fd6uKRzyxDsFB6axi0Pn9wcV9ZspsNhzldqfS7QPq4aatG+lXO7IYtet4DHWsoEw==
+X-Received: by 2002:a5d:88ca:: with SMTP id i10mr4794741iol.261.1555728263164;
+        Fri, 19 Apr 2019 19:44:23 -0700 (PDT)
+Received: from [10.0.0.19] ([135.0.225.35])
+        by smtp.gmail.com with ESMTPSA id h3sm2134454ioh.19.2019.04.19.19.44.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Apr 2019 19:44:22 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.2 \(3445.102.3\))
+Subject: Re: [PATCH v4] hwmon: max6650: add thermal cooling device capability
+From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+In-Reply-To: <20190419134010.GA18697@roeck-us.net>
+Date:   Fri, 19 Apr 2019 22:44:20 -0400
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <88FB7777-8789-422F-87BF-4C89D239AF6D@gmail.com>
+References: <20190419131520.GA2566@roeck-us.net>
+ <20190419134010.GA18697@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+X-Mailer: Apple Mail (2.3445.102.3)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On almost all places, we're including ReST files without the
-extension.
 
-Let's remove the extension here	as well, in order to use just
-one standard.
+> On Apr 19, 2019, at 09:40, Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> Can you send me a register dump for the chip (from i2cdump) ? 
 
-Suggested-by: Jani Nikula <jani.nikula@linux.intel.
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/hwmon/index.rst | 316 +++++++++++++++++-----------------
- 1 file changed, 158 insertions(+), 158 deletions(-)
+Here you go...
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 893804414510..bc74c43e3e2c 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -5,11 +5,11 @@ Linux Hardware Monitoring
- .. toctree::
-    :maxdepth: 1
- 
--   hwmon-kernel-api.rst
--   pmbus-core.rst
--   submitting-patches.rst
--   sysfs-interface.rst
--   userspace-tools.rst
-+   hwmon-kernel-api
-+   pmbus-core
-+   submitting-patches
-+   sysfs-interface
-+   userspace-tools
- 
- Hardware Monitoring Kernel Drivers
- ==================================
-@@ -17,159 +17,159 @@ Hardware Monitoring Kernel Drivers
- .. toctree::
-    :maxdepth: 1
- 
--   ab8500.rst
--   abituguru.rst
--   abituguru3.rst
--   abx500.rst
--   acpi_power_meter.rst
--   ad7314.rst
--   adc128d818.rst
--   adm1021.rst
--   adm1025.rst
--   adm1026.rst
--   adm1031.rst
--   adm1275.rst
--   adm9240.rst
--   ads1015.rst
--   ads7828.rst
--   adt7410.rst
--   adt7411.rst
--   adt7462.rst
--   adt7470.rst
--   adt7475.rst
--   amc6821.rst
--   asb100.rst
--   asc7621.rst
--   aspeed-pwm-tacho.rst
--   coretemp.rst
--   da9052.rst
--   da9055.rst
--   dme1737.rst
--   ds1621.rst
--   ds620.rst
--   emc1403.rst
--   emc2103.rst
--   emc6w201.rst
--   f71805f.rst
--   f71882fg.rst
--   fam15h_power.rst
--   ftsteutates.rst
--   g760a.rst
--   g762.rst
--   gl518sm.rst
--   hih6130.rst
--   ibmaem.rst
--   ibm-cffps.rst
--   ibmpowernv.rst
--   ina209.rst
--   ina2xx.rst
--   ina3221.rst
--   ir35221.rst
--   it87.rst
--   jc42.rst
--   k10temp.rst
--   k8temp.rst
--   lineage-pem.rst
--   lm25066.rst
--   lm63.rst
--   lm70.rst
--   lm73.rst
--   lm75.rst
--   lm77.rst
--   lm78.rst
--   lm80.rst
--   lm83.rst
--   lm85.rst
--   lm87.rst
--   lm90.rst
--   lm92.rst
--   lm93.rst
--   lm95234.rst
--   lm95245.rst
--   ltc2945.rst
--   ltc2978.rst
--   ltc2990.rst
--   ltc3815.rst
--   ltc4151.rst
--   ltc4215.rst
--   ltc4245.rst
--   ltc4260.rst
--   ltc4261.rst
--   max16064.rst
--   max16065.rst
--   max1619.rst
--   max1668.rst
--   max197.rst
--   max20751.rst
--   max31722.rst
--   max31785.rst
--   max31790.rst
--   max34440.rst
--   max6639.rst
--   max6642.rst
--   max6650.rst
--   max6697.rst
--   max8688.rst
--   mc13783-adc.rst
--   mcp3021.rst
--   menf21bmc.rst
--   mlxreg-fan.rst
--   nct6683.rst
--   nct6775.rst
--   nct7802.rst
--   nct7904.rst
--   npcm750-pwm-fan.rst
--   nsa320.rst
--   ntc_thermistor.rst
--   occ.rst
--   pc87360.rst
--   pc87427.rst
--   pcf8591.rst
--   pmbus.rst
--   powr1220.rst
--   pwm-fan.rst
--   raspberrypi-hwmon.rst
--   sch5627.rst
--   sch5636.rst
--   scpi-hwmon.rst
--   sht15.rst
--   sht21.rst
--   sht3x.rst
--   shtc1.rst
--   sis5595.rst
--   smm665.rst
--   smsc47b397.rst
--   smsc47m192.rst
--   smsc47m1.rst
--   tc654.rst
--   tc74.rst
--   thmc50.rst
--   tmp102.rst
--   tmp103.rst
--   tmp108.rst
--   tmp401.rst
--   tmp421.rst
--   tps40422.rst
--   twl4030-madc-hwmon.rst
--   ucd9000.rst
--   ucd9200.rst
--   vexpress.rst
--   via686a.rst
--   vt1211.rst
--   w83627ehf.rst
--   w83627hf.rst
--   w83773g.rst
--   w83781d.rst
--   w83791d.rst
--   w83792d.rst
--   w83793.rst
--   w83795.rst
--   w83l785ts.rst
--   w83l786ng.rst
--   wm831x.rst
--   wm8350.rst
--   xgene-hwmon.rst
--   zl6100.rst
-+   ab8500
-+   abituguru
-+   abituguru3
-+   abx500
-+   acpi_power_meter
-+   ad7314
-+   adc128d818
-+   adm1021
-+   adm1025
-+   adm1026
-+   adm1031
-+   adm1275
-+   adm9240
-+   ads1015
-+   ads7828
-+   adt7410
-+   adt7411
-+   adt7462
-+   adt7470
-+   adt7475
-+   amc6821
-+   asb100
-+   asc7621
-+   aspeed-pwm-tacho
-+   coretemp
-+   da9052
-+   da9055
-+   dme1737
-+   ds1621
-+   ds620
-+   emc1403
-+   emc2103
-+   emc6w201
-+   f71805f
-+   f71882fg
-+   fam15h_power
-+   ftsteutates
-+   g760a
-+   g762
-+   gl518sm
-+   hih6130
-+   ibmaem
-+   ibm-cffps
-+   ibmpowernv
-+   ina209
-+   ina2xx
-+   ina3221
-+   ir35221
-+   it87
-+   jc42
-+   k10temp
-+   k8temp
-+   lineage-pem
-+   lm25066
-+   lm63
-+   lm70
-+   lm73
-+   lm75
-+   lm77
-+   lm78
-+   lm80
-+   lm83
-+   lm85
-+   lm87
-+   lm90
-+   lm92
-+   lm93
-+   lm95234
-+   lm95245
-+   ltc2945
-+   ltc2978
-+   ltc2990
-+   ltc3815
-+   ltc4151
-+   ltc4215
-+   ltc4245
-+   ltc4260
-+   ltc4261
-+   max16064
-+   max16065
-+   max1619
-+   max1668
-+   max197
-+   max20751
-+   max31722
-+   max31785
-+   max31790
-+   max34440
-+   max6639
-+   max6642
-+   max6650
-+   max6697
-+   max8688
-+   mc13783-adc
-+   mcp3021
-+   menf21bmc
-+   mlxreg-fan
-+   nct6683
-+   nct6775
-+   nct7802
-+   nct7904
-+   npcm750-pwm-fan
-+   nsa320
-+   ntc_thermistor
-+   occ
-+   pc87360
-+   pc87427
-+   pcf8591
-+   pmbus
-+   powr1220
-+   pwm-fan
-+   raspberrypi-hwmon
-+   sch5627
-+   sch5636
-+   scpi-hwmon
-+   sht15
-+   sht21
-+   sht3x
-+   shtc1
-+   sis5595
-+   smm665
-+   smsc47b397
-+   smsc47m192
-+   smsc47m1
-+   tc654
-+   tc74
-+   thmc50
-+   tmp102
-+   tmp103
-+   tmp108
-+   tmp401
-+   tmp421
-+   tps40422
-+   twl4030-madc-hwmon
-+   ucd9000
-+   ucd9200
-+   vexpress
-+   via686a
-+   vt1211
-+   w83627ehf
-+   w83627hf
-+   w83773g
-+   w83781d
-+   w83791d
-+   w83792d
-+   w83793
-+   w83795
-+   w83l785ts
-+   w83l786ng
-+   wm831x
-+   wm8350
-+   xgene-hwmon
-+   zl6100
- 
- .. only::  subproject and html
- 
--- 
-2.20.1
+~# i2cdump -f -r 0x0-0x16 -y 0 0x1b b
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 00 00 12 12 ff ff ff ff 00 00 00 00 01 01 01 01    ..??........????
+10: 01 01 01 01 1f 1f 02                               ???????         
 
+Our board has the max6650 and doesn't have the tach line connected.
