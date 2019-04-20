@@ -2,254 +2,214 @@ Return-Path: <SRS0=/An6=SW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06ADFC282E1
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 03:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D57FC282DD
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 16:43:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9EA6208C0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 03:02:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06CD320675
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 16:43:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6rf/Osv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mj1ldbgd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbfDTDCv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Apr 2019 23:02:51 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37131 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfDTDCv (ORCPT
+        id S1728332AbfDTQnx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 20 Apr 2019 12:43:53 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:34256 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728271AbfDTQnx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Apr 2019 23:02:51 -0400
-Received: by mail-qt1-f193.google.com with SMTP id z16so7153234qtn.4
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Apr 2019 20:02:50 -0700 (PDT)
+        Sat, 20 Apr 2019 12:43:53 -0400
+Received: by mail-ed1-f67.google.com with SMTP id a6so6654190edv.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 20 Apr 2019 09:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+P63k3AYp3Mpk/iF6dwLcDM5tqkgeIfFXin2hy96sp4=;
-        b=V6rf/Osvtt6KRN6f02J+nxUEuAHPMpLpoMzDeSl5T2hSA07i5wURGZSKzJzhN/97eT
-         LQQHzDjhsNlh98t8xVjOEdWTpa/rIJcXQNOuEMthadjEp7QqgCT/da7A8p/wU64xf5pM
-         yDuLNq/duvOcmODpv8N9s2mG8dVPhcF4cksSVfiJlFkSg9Unjqxhvcr2azoICgxIXx5V
-         I7bEdWTiGf0AJKwbRKIEPX7cR8oMSBAZPyhOMhbV3VbawfginOuTCHWQSVjMQURKqUjt
-         328wLZrN80uFes1fnk+1QFwbMQtNl1z7Dl719ldpv9gyzfyxALyV+3jJ3xwfEs8/vAfi
-         qpIA==
+        h=to:from:subject:openpgp:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=brUF2b+wAOM6SXOaF3N8J1yeIQAMPiB8AzAHPKqzNlg=;
+        b=mj1ldbgdARfOfpNDlOdwimp7CrV4TPU1bAKEGt/s3Ta+0CinnpdTSgVUbrWC73FA4b
+         GBfgOuyXwEJcUtuVBSrWofi5WLLkD6t5uK1CIS304hKuKnS7l/MgRXT8LXYb6TTC8pAn
+         yif62ej47xUV7x4SSe1v5dopxHQlvi3Ww98X7HuKqkQ/dAuOEOFtTHfe2IY6/JQ2UUxL
+         opFoJsJeGXctH/QIIeFnTbga1DKheb5yvbvuXxNv8u7jiY/0hxQXwdW/I7uyaQDqquiX
+         NS2blmvJYm2K7/1V1YmRqD3a0HBjdCvQXOjwyy8DHbxwae4XxoORZrVfmvq8Id1HURxp
+         Q/Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=+P63k3AYp3Mpk/iF6dwLcDM5tqkgeIfFXin2hy96sp4=;
-        b=hIrNUnN36F4TApOVi2yV1ave8oiLV2/HorcL81dfidfm/ftabXzV1Eerh/qyYmv+e8
-         lo4s+TyW9BRmu8972NTzfUi2dlaBI26X+IiJAXx5LT5/Pq6EFmlxyvkZSVna1pbSimdC
-         //ZWsXfUdvumMfn5R0Bb6rgfmawBWDS/KRm8GDdLGWaU4xfpjTwyfn3/xkoGGc21VZOg
-         gc76qKu5O/6MCKW+13+GgiKr1uq2Yg5oYSuEctwP4BCYNRNzXBRV1oqmMEUgTBKFmqst
-         f5ZP6+g/asKw7etNY2ZyXUZyn9mrmwEw+WnV3O85cK6xsbDUj/Ll4jdBop1RJYQAj/EQ
-         bFtA==
-X-Gm-Message-State: APjAAAUjyFOxS+dz4kqZMC06mI6MH7ur4CbNOANEa3sKsnT1FOHExI0L
-        h0bSHGp05Dsvduus+quFsL11HM/pdh4=
-X-Google-Smtp-Source: APXvYqy2WJA7CDpxk/DxUMompcA4Cdw1SfRfpQ0F7vPvoXuah5Mseq1ZCjcWO6CNAjDfqcIuCcPzhA==
-X-Received: by 2002:ac8:fb0:: with SMTP id b45mr6166424qtk.293.1555729369467;
-        Fri, 19 Apr 2019 20:02:49 -0700 (PDT)
-Received: from jfddesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
-        by smtp.gmail.com with ESMTPSA id x5sm3145928qki.26.2019.04.19.20.02.48
+        h=x-gm-message-state:to:from:subject:openpgp:message-id:date
+         :user-agent:mime-version:content-language:content-transfer-encoding;
+        bh=brUF2b+wAOM6SXOaF3N8J1yeIQAMPiB8AzAHPKqzNlg=;
+        b=V60DsX2pDJHPWg9S4mxcFPURF9iqYYrgdqYIc8vbpOnTO5k7kxHej4zmQ+czC7dCla
+         Lw9vGNfF268MSNFJx2rDYASneeYWctSFT45jOZHMrSDa4PwAjE+FaOF0bOgm/LdxNRLJ
+         Ct9tAN371r67uWkZC7rSaGCXnX+qT1vlEFHjjsG+Mt8hQguF+ni8hcMMo0qtsW9rkzyr
+         9dlFERJQzuCavfm2Am/oDtYmoIR2BkUA9UmcNdl93JmOjRQnXkqsP0oc8XKZlRMt6Lek
+         Am/zG957XBwztEGRabS3jOBUHFtIAHfbzuiCTH5FoUS/ysiDA449hQREyElXpsUd8997
+         sqSA==
+X-Gm-Message-State: APjAAAV6saDlhyzlxnUjyfG0mwkH4eSj9hXv7RgAz4MOPx2uB9tFodAq
+        YExdJBrgriGyN4DqMvJBpRM=
+X-Google-Smtp-Source: APXvYqw4qpmGsw66lYfExFMGs8YUe8zJE9VWNgQPPpCcsETp6NF/65rKDX5wf8fyxlRjAAdps63wOQ==
+X-Received: by 2002:a05:6402:781:: with SMTP id d1mr6094521edy.286.1555778630956;
+        Sat, 20 Apr 2019 09:43:50 -0700 (PDT)
+Received: from [10.230.1.150] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id w6sm1393186ejq.73.2019.04.20.09.43.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Apr 2019 20:02:48 -0700 (PDT)
-From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net,
-        Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Subject: [PATCH v5] hwmon: max6650: add thermal cooling device capability
-Date:   Fri, 19 Apr 2019 23:02:33 -0400
-Message-Id: <20190420030233.4651-1-jeff.dagenais@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <201904192317.2UiQUP23%lkp@intel.com>
-References: <201904192317.2UiQUP23%lkp@intel.com>
+        Sat, 20 Apr 2019 09:43:50 -0700 (PDT)
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: SCMI sensor reads unit scaling
+Openpgp: preference=signencrypt
+Message-ID: <9207bc01-e0c6-ef73-6a24-6deda7b789c5@gmail.com>
+Date:   Sat, 20 Apr 2019 09:43:48 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This allows max6650 devices to be referenced in dts as a cooling device.
+Hi Sudeep, Guenter,
 
-The pwm value seems duplicated in cooling_dev_state but since pwm goes
-through rounding logic into data->dac, it is modified and messes with
-the thermal zone state algorithms. It's also better to serve a cache
-value, thus avoiding periodic actual i2c traffic.
+The current SCMI hwmon support does not seem to make use of the sensor
+scale/unit as defined in the sensor replies (or the update scale for
+that matter).
 
-Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+I came up with the patch below which gets the job done, but I am worried
+about possibly breaking people's SCMI deployments and sensors reading
+because they may have intentionally or not already decided to return a
+value which is scaled the way Linux's hwmon expect it, and may, or may
+not have populated a valid unit number in the sensor reply.
+
+Ideally we should probably do two conversions:
+
+- from within scmi_sensor_reading_get(), scale the value as indicated by
+the reply
+- from within scmi_hwmon_read(), take that scaled value and apply the
+necessary conversion expected by Linux's HWMON conventions (e.g.:
+reporting voltage as mV values)
+
+What do you think?
+
 ---
-Changes in v2:
-        - Removed left-over debug printk.
-Changes in v3:
-        - Add missing dependency in Kconfig
-Changes in v4:
-	- Remove useless comment "thermal cooling device callbacks"
-	- fix max6650_set_cur_state signature declaration style
-	- Only warn when thermal_of_cooling_device_register fails
-Changes in v5:
-	- Use switch to non-const client->name to prevent compiler warning
-	- fix incorrect length of printk format long int
+From: Florian Fainelli <f.fainelli@gmail.com>
+Subject: firmware: arm_scmi: Support sensor scaling
 
- drivers/hwmon/Kconfig   |  1 +
- drivers/hwmon/max6650.c | 91 ++++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 91 insertions(+), 1 deletion(-)
+The SCMI sensor management protocol includes the following provision:
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index d0f1dfe2bcbb..46d69fcdd48b 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -898,6 +898,7 @@ config SENSORS_MAX6642
- config SENSORS_MAX6650
- 	tristate "Maxim MAX6650 sensor chip"
- 	depends on I2C
-+	depends on THERMAL || THERMAL=n
- 	help
- 	  If you say yes here you get support for the MAX6650 / MAX6651
- 	  sensor chips.
-diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 61135a2d0cff..0607d54f8090 100644
---- a/drivers/hwmon/max6650.c
-+++ b/drivers/hwmon/max6650.c
-@@ -40,6 +40,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/of_device.h>
-+#include <linux/thermal.h>
- 
- /*
-  * Insmod parameters
-@@ -113,6 +114,7 @@ module_param(clock, int, 0444);
- struct max6650_data {
- 	struct i2c_client *client;
- 	const struct attribute_group *groups[3];
-+	struct thermal_cooling_device *cooling_dev;
- 	struct mutex update_lock;
- 	int nr_fans;
- 	char valid; /* zero until following fields are valid */
-@@ -125,6 +127,7 @@ struct max6650_data {
- 	u8 count;
- 	u8 dac;
- 	u8 alarm;
-+	unsigned long cooling_dev_state;
+The power-of-10 multiplier in two’s-complement format that is applied to
+the sensor unit specified by the SensorType field.
+
+Add support for scaling the value returned based on what is provided by
+the firmware. This requires us to be able to look up a sensor identifier
+to its backing scmi_sensor_info structure and apply the necessary scale.
+
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/firmware/arm_scmi/sensors.c | 37
+++++++++++++++++++++++++++++++++++++-
+ include/linux/scmi_protocol.h       |  1 +
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/arm_scmi/sensors.c
+b/drivers/firmware/arm_scmi/sensors.c
+index bbb469f..2eccc6a 100644
+--- a/drivers/firmware/arm_scmi/sensors.c
++++ b/drivers/firmware/arm_scmi/sensors.c
+@@ -33,7 +33,8 @@ struct scmi_msg_resp_sensor_description {
+ #define NUM_TRIP_POINTS(x)	(((x) >> 4) & 0xff)
+ 		__le32 attributes_high;
+ #define SENSOR_TYPE(x)		((x) & 0xff)
+-#define SENSOR_SCALE(x)		(((x) >> 11) & 0x3f)
++#define SENSOR_SCALE_MASK	0x3f
++#define SENSOR_SCALE(x)		(((x) >> 11) & SENSOR_SCALE_MASK)
+ #define SENSOR_UPDATE_SCALE(x)	(((x) >> 22) & 0x1f)
+ #define SENSOR_UPDATE_BASE(x)	(((x) >> 27) & 0x1f)
+ 		    u8 name[SCMI_MAX_STR_SIZE];
+@@ -72,6 +73,35 @@ struct sensors_info {
+ 	struct scmi_sensor_info *sensors;
  };
- 
- static const u8 tach_reg[] = {
-@@ -694,6 +697,63 @@ static int max6650_init_client(struct max6650_data *data,
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_THERMAL)
-+
-+static int max6650_get_max_state(struct thermal_cooling_device *cdev,
-+				 unsigned long *state)
+
++static
++struct scmi_sensor_info *scmi_sensor_info_from_id(struct sensors_info *si,
++						  u32 sensor_id)
 +{
-+	*state = 255;
++	struct scmi_sensor_info *s = NULL;
++	int i;
 +
-+	return 0;
-+}
-+
-+static int max6650_get_cur_state(struct thermal_cooling_device *cdev,
-+				 unsigned long *state)
-+{
-+	struct max6650_data *data = cdev->devdata;
-+
-+	*state = data->cooling_dev_state;
-+
-+	return 0;
-+}
-+
-+static int max6650_set_cur_state(struct thermal_cooling_device *cdev,
-+				 unsigned long state)
-+{
-+	struct max6650_data *data = cdev->devdata;
-+	struct i2c_client *client = data->client;
-+	int err;
-+
-+	state = clamp_val(state, 0, 255);
-+
-+	mutex_lock(&data->update_lock);
-+
-+	if (data->config & MAX6650_CFG_V12)
-+		data->dac = 180 - (180 * state)/255;
-+	else
-+		data->dac = 76 - (76 * state)/255;
-+
-+	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
-+
-+	if (!err) {
-+		max6650_set_operating_mode(data, state ?
-+						   MAX6650_CFG_MODE_OPEN_LOOP :
-+						   MAX6650_CFG_MODE_OFF);
-+		data->cooling_dev_state = state;
++	for (i = 0; i < si->num_sensors; i++) {
++		s = &si->sensors[i];
++		if (s->id == sensor_id)
++			return s;
 +	}
 +
-+	mutex_unlock(&data->update_lock);
-+
-+	return err < 0 ? err : 0;
++	return s;
 +}
 +
-+static const struct thermal_cooling_device_ops max6650_cooling_ops = {
-+	.get_max_state = max6650_get_max_state,
-+	.get_cur_state = max6650_get_cur_state,
-+	.set_cur_state = max6650_set_cur_state,
-+};
-+#endif
-+
- static int max6650_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -709,6 +769,7 @@ static int max6650_probe(struct i2c_client *client,
- 		return -ENOMEM;
- 
- 	data->client = client;
-+	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
- 	data->nr_fans = of_id ? (int)(uintptr_t)of_id->data : id->driver_data;
- 
-@@ -727,7 +788,34 @@ static int max6650_probe(struct i2c_client *client,
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
- 							   client->name, data,
- 							   data->groups);
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	err = PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (err)
-+		return err;
-+
-+
-+#if IS_ENABLED(CONFIG_THERMAL)
-+	data->cooling_dev =
-+		thermal_of_cooling_device_register(client->dev.of_node,
-+						   client->name, data,
-+						   &max6650_cooling_ops);
-+	if (IS_ERR(data->cooling_dev))
-+		dev_warn(&client->dev,
-+			 "thermal cooling device register failed: %ld\n",
-+			 PTR_ERR(data->cooling_dev));
-+	else
-+		thermal_cdev_update(data->cooling_dev);
-+#endif
-+	return 0;
-+}
-+
-+static int max6650_remove(struct i2c_client *client)
++static void inline scmi_scale_value(u8 scale, u64 *value)
 +{
-+	struct max6650_data *data = i2c_get_clientdata(client);
++	unsigned int i;
 +
-+	if (!IS_ERR(data->cooling_dev))
-+		thermal_cooling_device_unregister(data->cooling_dev);
++	if (scale & ((SENSOR_SCALE_MASK + 1) >> 1)) {
++		for (i = 0; i < (~scale) + 1; i++)
++			*value /= 10;
++	} else {
++		for (i = 0; i < scale; i++)
++			*value *= 10;
++	}
++}
 +
-+	return 0;
- }
- 
- static const struct i2c_device_id max6650_id[] = {
-@@ -743,6 +831,7 @@ static struct i2c_driver max6650_driver = {
- 		.of_match_table = of_match_ptr(max6650_dt_match),
- 	},
- 	.probe		= max6650_probe,
-+	.remove		= max6650_remove,
- 	.id_table	= max6650_id,
- };
- 
--- 
-2.11.0
+ static int scmi_sensor_attributes_get(const struct scmi_handle *handle,
+ 				      struct sensors_info *si)
+ {
+@@ -140,6 +170,7 @@ static int scmi_sensor_description_get(const struct
+scmi_handle *handle,
+ 			s = &si->sensors[desc_index + cnt];
+ 			s->id = le32_to_cpu(buf->desc[cnt].id);
+ 			s->type = SENSOR_TYPE(attrh);
++			s->scale = SENSOR_SCALE(attrh);
+ 			memcpy(s->name, buf->desc[cnt].name, SCMI_MAX_STR_SIZE);
+ 		}
 
+@@ -205,6 +236,8 @@ static int scmi_sensor_trip_point_set(const struct
+scmi_handle *handle,
+ static int scmi_sensor_reading_get(const struct scmi_handle *handle,
+ 				   u32 sensor_id, bool async, u64 *value)
+ {
++	struct sensors_info *si = handle->sensor_priv;
++	struct scmi_sensor_info *s = scmi_sensor_info_from_id(si, sensor_id);
+ 	int ret;
+ 	struct scmi_xfer *t;
+ 	struct scmi_msg_sensor_reading_get *sensor;
+@@ -225,6 +258,8 @@ static int scmi_sensor_reading_get(const struct
+scmi_handle *handle,
+
+ 		*value = le32_to_cpu(*pval);
+ 		*value |= (u64)le32_to_cpu(*(pval + 1)) << 32;
++		if (s && s->scale)
++			scmi_scale_value(s->scale, value);
+ 	}
+
+ 	scmi_one_xfer_put(handle, t);
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index b458c87..782b53e 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -140,6 +140,7 @@ struct scmi_power_ops {
+ struct scmi_sensor_info {
+ 	u32 id;
+ 	u8 type;
++	u8 scale;
+ 	char name[SCMI_MAX_STR_SIZE];
+ };
+
+-- 
+-- 
+Florian
