@@ -4,69 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 236F7C282E1
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:44:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD19C282E1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:56:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D30FA21736
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:44:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 896F721736
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Apr 2019 02:56:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6tiBYnN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVMgpORq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfDTCoY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Apr 2019 22:44:24 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:40169 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfDTCoY (ORCPT
+        id S1726077AbfDTC44 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Apr 2019 22:56:56 -0400
+Received: from mail-it1-f178.google.com ([209.85.166.178]:51294 "EHLO
+        mail-it1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfDTC4z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Apr 2019 22:44:24 -0400
-Received: by mail-io1-f44.google.com with SMTP id i21so5121586iol.7
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Apr 2019 19:44:23 -0700 (PDT)
+        Fri, 19 Apr 2019 22:56:55 -0400
+Received: by mail-it1-f178.google.com with SMTP id s3so10907214itk.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Apr 2019 19:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=Uj2SJ4WYFff73GX1rlxJ0qaFWQ6wjgD+NrHFkaX1d8U=;
-        b=T6tiBYnNd3r1174Jxxokah/fH0xpxiyonpuTuNjfjLXS15l+Jb4HZfS6BjsTfZk78t
-         e7E44YytZKs9Vs199ybAYj0o1SFTiLAQVE2UCZoJ+q5gtlOwbArr87RR0GLMsOTByaH9
-         g4welnpJjsctoR8P4CgBW08l2D0mBvl20S1Wr4SDGaBfx+f7mg/wa0qTT87iUFl/3rld
-         GqoY+424tY/4C9l/DPS1b9fDR6DHt/MI7Xr/N2NRlDiK86x/wJk1TYNcTPSAFHQItKe+
-         yt3z2cH0EQoKc9w5FjlMKYknFZzGFRX9gggm7Iq7Bn1CpsPl1oMMmTLBfJ65rpyqt/YM
-         G2Tw==
+        bh=9JuYx02nbceVovv2zRQczHs79flygZIpDI9YZZCWyuY=;
+        b=nVMgpORqyLN0ky1a0xv/XnIBi67i2xhHAdmjyLqe5li/L0xkWxoJy1yBkr+WmkbNqc
+         O2+6twNRg9x+GaNaFHn+Kxpfy2zY9qkzcrU4ArKs2Ohn03B3Ex5PT1XDEhIvfxBIN+sQ
+         aH6vf7wuEqHa+Rm2Jx2nQQU1et44TCFwPg41h3r8971jc93o7wpCi2U8IhoZO35SssZE
+         a7d6yPTPwmy9KuIejGR3sZ2jr3GfHu4BxqrpWZHJksW7G802jEU0gyycnCBdym/sTeAq
+         m8MTVqgDCKnHtD61D0QfH5GKeEPc8QB1iWdc4lrOWVcv1YYar95JYjOEUgldNS5e8uON
+         i12A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=Uj2SJ4WYFff73GX1rlxJ0qaFWQ6wjgD+NrHFkaX1d8U=;
-        b=Vqtu5CtSg706VGA6wwz1+kec/Xw2pOqrilzm9Ef+a5xW1O4QqQNEKKLq44+UG3nYR5
-         bfada4G13zbhZovCOKY83wWiC4iBJNWBrWW1eD4dIGtg27grS5uQ+HrhNRdDylwLRNrT
-         IYsCwJXfwATgud8uPRSnO4ayTx7YCyjnldB1pWNlJnkm5FnlFLTYJRLlrUDpnML5tb8r
-         pwuSYnH0V1BCStL8EAwZRX1HahlgiPG6NpnA6IUFdfzJb/Ee0bJ0L9ZGsziovLm0T1px
-         eDpyPEDc5iOw2wIgPF3S9Gc3A8gKXIg78+J3L8hy7+PhKCRJXj5EULpu0ytjpugYW2HN
-         kNZA==
-X-Gm-Message-State: APjAAAUcrHTpS2g7cy1oeFJC5E82/E64L76B3i//Nc24pniOHikiQZ9A
-        xg+HxyKJyWkAMF23SzDpU8kHPX7N3cA=
-X-Google-Smtp-Source: APXvYqyjTU2vt4fd6uKRzyxDsFB6axi0Pn9wcV9ZspsNhzldqfS7QPq4aatG+lXO7IYtet4DHWsoEw==
-X-Received: by 2002:a5d:88ca:: with SMTP id i10mr4794741iol.261.1555728263164;
-        Fri, 19 Apr 2019 19:44:23 -0700 (PDT)
+        bh=9JuYx02nbceVovv2zRQczHs79flygZIpDI9YZZCWyuY=;
+        b=B0MMl/SUYk2bpM+iJDxS/yf5GyIe7Qj0lENUeozelDpvaObhEMj9hFmBBGW1bZs8l9
+         lE9KquZTzWJV96fZT3K3JQ2ajQhyxb1naoNuYxppJrYAzu9ggtpW2UmUtwlJsYdTsGEi
+         40cFAA6NdowglMjmZb3sdsTB8RB/q1NjtczodARt1TJ1a5qHy5isYRYLSI0/IxKeoDBh
+         GrrYEjR3Qn3tNyUX+AgLPky97U/xerR3Qoe2E3LWropy1x1qqddEWKUNx8ZVQur5kJU/
+         z5BrFa+uqsvyNyH8AfR6s2FIC8vgpEGog24zfCs74GCCgSUYM3f9czjw38WspqdR72vQ
+         wLTw==
+X-Gm-Message-State: APjAAAUXdXCQSGzCNk7NyC9p/ceK3SqxCEt1CR/A2OsFcH6uzvs0ymrB
+        QO5FUyP3+9oWr8H2Wk93d3oYeb1gANg=
+X-Google-Smtp-Source: APXvYqwyrBYNgIQG4FZxuxJ1Z5ZT5rrQzLEHLyU1NW6H1LUmM1LVtsdlAaZWJ3tZgoikR+cjMqCQ5Q==
+X-Received: by 2002:a02:9f19:: with SMTP id z25mr5021752jal.2.1555729014979;
+        Fri, 19 Apr 2019 19:56:54 -0700 (PDT)
 Received: from [10.0.0.19] ([135.0.225.35])
-        by smtp.gmail.com with ESMTPSA id h3sm2134454ioh.19.2019.04.19.19.44.21
+        by smtp.gmail.com with ESMTPSA id t22sm1450443iob.16.2019.04.19.19.56.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Apr 2019 19:44:22 -0700 (PDT)
+        Fri, 19 Apr 2019 19:56:54 -0700 (PDT)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 12.2 \(3445.102.3\))
-Subject: Re: [PATCH v4] hwmon: max6650: add thermal cooling device capability
+Subject: Re: [hwmon:hwmon-next 119/119] drivers/hwmon/max6650.c:798:10:
+ warning: passing argument 2 of 'thermal_of_cooling_device_register' discards
+ 'const' qualifier from pointer target type
 From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-In-Reply-To: <20190419134010.GA18697@roeck-us.net>
-Date:   Fri, 19 Apr 2019 22:44:20 -0400
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com
-Content-Transfer-Encoding: 7bit
-Message-Id: <88FB7777-8789-422F-87BF-4C89D239AF6D@gmail.com>
-References: <20190419131520.GA2566@roeck-us.net>
- <20190419134010.GA18697@roeck-us.net>
+In-Reply-To: <201904192317.2UiQUP23%lkp@intel.com>
+Date:   Fri, 19 Apr 2019 22:56:52 -0400
+Cc:     linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <466A267B-CF4E-4CE4-AFF3-5844C9F1F83A@gmail.com>
+References: <201904192317.2UiQUP23%lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 X-Mailer: Apple Mail (2.3445.102.3)
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -75,15 +76,44 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-> On Apr 19, 2019, at 09:40, Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> Can you send me a register dump for the chip (from i2cdump) ? 
 
-Here you go...
+> On Apr 19, 2019, at 11:36, kbuild test robot <lkp@intel.com> wrote:
+>=20
+>>> drivers/hwmon/max6650.c:798:10: warning: passing argument 2 of =
+'thermal_of_cooling_device_register' discards 'const' qualifier from =
+pointer target type [-Wdiscarded-qualifiers]
+>             id->name, data,
+>             ^~
+>   In file included from drivers/hwmon/max6650.c:43:0:
+>   include/linux/thermal.h:448:1: note: expected 'char *' but argument =
+is of type 'const char *'
+>    thermal_of_cooling_device_register(struct device_node *np, char *, =
+void *,
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-~# i2cdump -f -r 0x0-0x16 -y 0 0x1b b
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 00 00 12 12 ff ff ff ff 00 00 00 00 01 01 01 01    ..??........????
-10: 01 01 01 01 1f 1f 02                               ???????         
+Hmmm... I forgot I was indeed using a patched version of =
+thermal_of_cooling_device_register (submitted already: =
+https://marc.info/?l=3Dlinux-pm&m=3D155560541430929&w=3D2)
 
-Our board has the max6650 and doesn't have the tach line connected.
+I will v5 using client->name instead, which is non-const char[].
+
+>   In file included from include/linux/i2c.h:30:0,
+>                    from drivers/hwmon/max6650.c:38:
+>>> drivers/hwmon/max6650.c:802:5: warning: format '%d' expects argument =
+of type 'int', but argument 3 has type 'long int' [-Wformat=3D]
+>        "thermal cooling device register failed: %d\n",
+>        ^
+>   include/linux/device.h:1400:22: note: in definition of macro =
+'dev_fmt'
+>    #define dev_fmt(fmt) fmt
+>                         ^~~
+>>> drivers/hwmon/max6650.c:801:3: note: in expansion of macro =
+'dev_warn'
+>      dev_warn(&client->dev,
+
+Been' compiling through yocto, which puts compiler outputs in log files. =
+Warnings don't fail compilation so bitbake doesn't print them. Excuses, =
+excuses... shame.
+
+V5!
+
