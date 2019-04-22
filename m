@@ -2,129 +2,102 @@ Return-Path: <SRS0=n6ZT=SY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18DF7C10F11
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Apr 2019 19:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B86C282CE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Apr 2019 22:28:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D37C820896
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Apr 2019 19:29:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DB8520643
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Apr 2019 22:28:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tjvV+PJG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LriKm8pB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbfDVT3b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Apr 2019 15:29:31 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38810 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbfDVT3b (ORCPT
+        id S1729519AbfDVW22 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Apr 2019 18:28:28 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34994 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727336AbfDVW22 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Apr 2019 15:29:31 -0400
-Received: by mail-pg1-f194.google.com with SMTP id j26so6293742pgl.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Apr 2019 12:29:30 -0700 (PDT)
+        Mon, 22 Apr 2019 18:28:28 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w24so6459168plp.2;
+        Mon, 22 Apr 2019 15:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=D3bDpw4fEtqb/bI7gw+bwBjymONUMY4BKq8vzaYg6Wk=;
-        b=tjvV+PJGM0Axas0R+AoG7OC7MrKsgJwX75xfhVmAhztyAEZdz4zGIVUpCmTkweFePq
-         UC6igVLsnBH65uK1VzsgpTav+hB2udFVpauGy+w9wNi98OxCgW4F8/fZt7Ng9MCaqreP
-         1aPuzgpGaJ7ta/gAunJvXQdqpfpOrkKnsIHPIL7n2SCmSdSU4ctvh+nJAUw9eUAChfdB
-         hWbfc4turEHlOrjEq4SJRNBI2lxa4my3jPnJfJhwrHtlPeR6G7jffVv+OondioTT2NOd
-         3Jae4fD6sGuAFAAfRRm7Eno/bcdecSz2y4R7m97sRirl4U1zhamrVQ8eQcKXrlyNiSfF
-         G8SA==
+        bh=l5AxmITSIPrmdVWT9ltbBGc4UrQcWGmU2dmUvvxRp1s=;
+        b=LriKm8pB8ehN531+Iv6xtcWLvEjrblTDmO+CNRFLemQ9eUdQzS7cbVSxRUdw3O/RxX
+         b/IWBHYX+17nTDB+Mg1MwZr/HL0uwTIVMMa9+Vv3fa5akNEFmkLSXyTU6UHITo3GBma4
+         u2fSTjzR26eyVBJntnA069sHYGqLYBuWAh6XH1yIdEOldQKOCcIjL9sqCzENERNq5lb/
+         a/VAal80oRXvv2NSAP99bEU7uvVi34dMNf8eDysNbuLp7AdoSvqN/SkbsoltbdVLJ8WJ
+         vU8fTOhFB+kT4G9MW6K/xCAQ89CAFXqBZPTW8LLiVv/iTNQonwKQCn06nFc/nFjNb8IU
+         OPuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=D3bDpw4fEtqb/bI7gw+bwBjymONUMY4BKq8vzaYg6Wk=;
-        b=mtKgmDxzFBY5xh7ghhhjw0k8Xs2C4MNj0N+aeEOQSUsDFBjUDy5rkLHfaxofYKtqjs
-         8O6oFbYVvKgTuYlpTJmYOsmat5EFRlJxqhKEUxW0ZsjjYzX0i7i0eR1xiK6RtVcrbWfx
-         PrkIfDzMeZTyzXWsDZRBQ2LdBQ+RLfAZIeJE2EnTYmdIIWWs3BQSo19pAzESwO/Cw930
-         2qQ/jS/UOy1CwvHr0kSeWHPqyY3dYz07q5apNBn4e2PuuHPYWERLkmkkQZthuYQB1/WD
-         MphBVsA0U89swx2oSJWnx8+q1f4cX4/BcKBrYrLa8LjXr0pw+6IF7pF/7Vjw26vfef26
-         w8Fw==
-X-Gm-Message-State: APjAAAUi2vhU1OdrJTYa0ir/s3MPStttsee9uQiJCNP9EK68Y7xm87Fc
-        PAIBoyViGMdqw9v42unZOyg=
-X-Google-Smtp-Source: APXvYqxO7f09O9zsUoDZ5m13qc/wBfEHebvExUWaNQ1PziXdlKQgC2pPB9emPG52bZCOn9ZGoDFgDg==
-X-Received: by 2002:a63:c605:: with SMTP id w5mr20078652pgg.355.1555961370610;
-        Mon, 22 Apr 2019 12:29:30 -0700 (PDT)
+        bh=l5AxmITSIPrmdVWT9ltbBGc4UrQcWGmU2dmUvvxRp1s=;
+        b=fAOija65uHZGrvyE/xXh1XIQBOtH5BA4LL9Uf0TOudwvdpQvTRAnuWmmFOy9nQQlmm
+         o2EXuhSgHUnnaVep+NF+Pu/ZAkthVUqtPU1ABFimS7bKE3yyow3/HpF/jngqCuNhJWE/
+         Y9zhSD1znoxCVvsKj2M4puEVC9BiZ+8g4NUSgAsWYGiojREliRW5a4qORKLS4FNeEB25
+         0P5t8r1Fj+sVSg52B3kBPV+xhy1uSAbTMbJMS2R1qFfbryVUDWW1v43Hdd7WFLolbuZA
+         x5LiszN/o357jhiMUWSAnZAXt5r6Uh/PzsTaRNptKcAAtcAVfH97FXJHbG472OE5nQ2+
+         xunw==
+X-Gm-Message-State: APjAAAVZ50Az2dpIkVXU4VNRB4Ilf64YKqCgRzsEx7OF696AbN15ky2X
+        wiYzYTxpSukl/akqIYYEDX4=
+X-Google-Smtp-Source: APXvYqzAk1lkaSPfLPtKoCiUGATWprtVGPXYcGaxLmKED5CVGWvN2Cj1kl60EKbIlBpwGK1hUuqbAA==
+X-Received: by 2002:a17:902:3324:: with SMTP id a33mr22770566plc.186.1555972106937;
+        Mon, 22 Apr 2019 15:28:26 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v9sm17538016pgf.73.2019.04.22.12.29.28
+        by smtp.gmail.com with ESMTPSA id w3sm25455837pfn.179.2019.04.22.15.28.25
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Apr 2019 12:29:29 -0700 (PDT)
-Date:   Mon, 22 Apr 2019 12:29:27 -0700
+        Mon, 22 Apr 2019 15:28:25 -0700 (PDT)
+Date:   Mon, 22 Apr 2019 15:28:24 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-hwmon@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: SCMI sensor reads unit scaling
-Message-ID: <20190422192927.GA5493@roeck-us.net>
-References: <9207bc01-e0c6-ef73-6a24-6deda7b789c5@gmail.com>
- <7d23066b-fd45-1784-3c2a-7e44eeae63bf@roeck-us.net>
- <2e6a6141-762f-7618-60b9-84fa1190813d@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH] docs: hwmon: convert three docs to ReST format
+Message-ID: <20190422222824.GA16756@roeck-us.net>
+References: <287cf72fc213656c1593f8bd42feb62f7a5f26e7.1555954774.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2e6a6141-762f-7618-60b9-84fa1190813d@gmail.com>
+In-Reply-To: <287cf72fc213656c1593f8bd42feb62f7a5f26e7.1555954774.git.mchehab+samsung@kernel.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 22, 2019 at 11:31:18AM -0700, Florian Fainelli wrote:
-> On 4/20/19 10:31 AM, Guenter Roeck wrote:
-> > On 4/20/19 9:43 AM, Florian Fainelli wrote:
-> >> Hi Sudeep, Guenter,
-> >>
-> >> The current SCMI hwmon support does not seem to make use of the sensor
-> >> scale/unit as defined in the sensor replies (or the update scale for
-> >> that matter).
-> >>
-> >> I came up with the patch below which gets the job done, but I am worried
-> >> about possibly breaking people's SCMI deployments and sensors reading
-> >> because they may have intentionally or not already decided to return a
-> >> value which is scaled the way Linux's hwmon expect it, and may, or may
-> >> not have populated a valid unit number in the sensor reply.
-> >>
-> >> Ideally we should probably do two conversions:
-> >>
-> >> - from within scmi_sensor_reading_get(), scale the value as indicated by
-> >> the reply
-> >> - from within scmi_hwmon_read(), take that scaled value and apply the
-> >> necessary conversion expected by Linux's HWMON conventions (e.g.:
-> >> reporting voltage as mV values)
-> >>
-> >> What do you think?
-> >>
-> > 
-> > Reported values have to follow HWMON conventions. If not, this is a bug
-> > and needs to get fixed. The argument about not changing the userspace ABI
-> > does not apply to bugs.
+On Mon, Apr 22, 2019 at 02:39:37PM -0300, Mauro Carvalho Chehab wrote:
+> Those three new drivers were missed on the initial conversion
+> to ReST format. So:
 > 
-> Upon re-reading the SCMI specification, what is not clear to me is
-> whether you have the liberty to:
+> - Rename them to .rst;
+> - Add them to the hwmon index.rst index;
+> - add some blank lines at the "Supported systems:" part, in
+>   order to allow Sphinx to properly identify new lines,
+>   suppressing warnings and avoid it to output some random
+>   lines in bold;
+> - When multiple authors are involved, change the authors
+>   part to a list, in order to avoid adding blank lines.
+> - adjust the table cells (one of the tables seemed to be
+>   assuming that tab is 4 positions instead of 8) and add
+>   the table markup.
+> - be sure that the section markups have the same number of
+>   characters as the section title.
 > 
-> - target the Linux HWMON sensor units as specified by
-> Documentation/hwmon/sysfs-interface by e.g.: putting a millidegree
-> Celsius value in the SCMI reply and an power of 10 multiplier value of 0
-> (which would be treated as not doing any scaling)
-> 
-> - must provide the raw value as provided by the sensor as well as
-> indicate the scale, e.g.: millidegree celsius and specifying a scale of -3
-> 
-> Sudeep can you clarify how you would approach making use (or not) of the
-> power of 10 multiplier as defined by the SCMI specification?
-> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-Not sure I understand. SCMI and hwmon sysfs ABI requirements are orthogonal.
-hwmon expects certain units (mostly milli, but micro for power). What the
-hardware reports is irrelevant. The SCMI driver needs to convert values
-reported by SCMI into values expected by the hwmon ABI. If it does not do
-that today, that is a bug which needs to be fixed.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
