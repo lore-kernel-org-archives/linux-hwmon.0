@@ -6,61 +6,61 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 709D5C282E1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19F60C282DD
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41D142077C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB04E2077C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMUpO7/4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D0ta/tqF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbfDWNda (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:33:30 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37366 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726655AbfDWNd3 (ORCPT
+        id S1727815AbfDWNdb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:33:31 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41318 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfDWNdb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:33:29 -0400
-Received: by mail-pg1-f196.google.com with SMTP id e6so7629729pgc.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:33:29 -0700 (PDT)
+        Tue, 23 Apr 2019 09:33:31 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 188so7502175pfd.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:33:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=c9QrzKrL/UB0/0inA34pNYc1HJpllaSc+gekWPocaSY=;
-        b=fMUpO7/41IWFNloFqTh1SBqDccpjf+UFTgVcuOmy973PKG70PkfUoTsC22gA3JO6/v
-         47AXYxsQraNsFEDmFNB7f/+JtzsLKHQO3ozdCw3m6iY6NGqukIHMhBLZR5RNhwrKnBxY
-         V1us8paNBV5KrGgZiN4+nkCDfbU5fouoQK0x99UffR+2jKsCoLUO6IGDwKSNBD35UHcl
-         Qemha/UDWMx0Bgvw0rQIa60nmFVDp+3mkE5dUXeQdRzEZb9cQ4PmYS3At+/8C9Ecc8LD
-         TpsrU8gRSJ0YpmvuQKsEBgYf/nctLmmp7deLzZVfU9DaZ6/LSuffZe6Lt8150uqi8xbs
-         IHsw==
+        bh=uVYTZjgdXMQ/MJbbt7RN8oRmdDqyxdXIQwT02b93xtk=;
+        b=D0ta/tqF602yPitvvyg9xzhTgJi6lbmGzR4hqxeeKB2X6ShKNEyomo0ttxBAuppKCe
+         nNVScYi68dDn5fZ7YeEHQzCZUifokZdaC61vPAZqs7S84WRJfpoextZTynvWVTXnRWkY
+         tYV37m2euMtCYIg7/Y2kr3V3ug6O3XOHy1FvZZdDpaaqFlZcI4RK0KxoqyxszJFb6yKI
+         s/3Wrp/IK99VLlA4c4tNH0n2mbcrw8Fkt2QTfH7Clb+0ZniY9O8+pC8A16mrpbimXzJz
+         ECLmd5IZwSEHCl/rmGrmk7QoR9hK858PkZUa6g2K0kmbK5nKEvnHSkbgmJsn1pOFlMF9
+         jvRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=c9QrzKrL/UB0/0inA34pNYc1HJpllaSc+gekWPocaSY=;
-        b=ZHXpE24SQscVc5FUHg/SfcaWux7hTKixDwLD3fyw8pRVL43rD8eWfwa9ELOFJfIkEu
-         u1kqMy5iexD44SbHBSTwYYuEGguYoypde0ukeCsbn9F/aGOOCvMU80eGqnqi7m447lxg
-         3FriEl2SUSlPpHZ6CxYP/glwa7hMLFSWAFUPHMJZOvXTisdK4INhohL3xwgCsfPKCWNo
-         78SmWhHvTcYOvCFaxZlsq+bovFYz8hkc44LSRzQDYIigCdpEygEX3T1n96wNjWe32S8E
-         YkceL8Is6dnz7H7JwrYvaiSGJDJxA87jMXyjWPMclivJn9Q/GA/r9J9xiVA61ErQ+HGy
-         csQw==
-X-Gm-Message-State: APjAAAUBvmmK2KOQ3Af8guwv6pG+tMIzTMC/OdwqwvUJa1ZK8fMD6naA
-        7Fnc8N9LQKR29+OGEI1za9Jjw0Yj
-X-Google-Smtp-Source: APXvYqw5O5IijseW9e77bmUAtCJz5BDAKzQOy9V4sSHc8nNotMRM5RdYC2w4oikdJnbTTH4rtDWSQg==
-X-Received: by 2002:a63:494f:: with SMTP id y15mr24624152pgk.56.1556026408830;
-        Tue, 23 Apr 2019 06:33:28 -0700 (PDT)
+        bh=uVYTZjgdXMQ/MJbbt7RN8oRmdDqyxdXIQwT02b93xtk=;
+        b=NegaoGDAk0CWd8UjX37pubyJOfisFK19bTTYCOf4t+F095mnVrv+WKI69mxpo+6ZRX
+         RqLTLXSv2nqn/VYXag2oEsiaCUcFyDlDzCyHNlsCXJ1nomkRyDiPOhUR8OAx+O/GPR47
+         hQdi05e6t+2Rvq156J33t3D1CvOPUqT3TFNQwhIaBF+El8e3ETKqCD3EK9fV8SZ4JkYS
+         CUSw3Iea0e4JMXmAU6cR4SYaVVRnAeiAcuMLtMAqhJmz1sbaUB/62r5AYmKBpkEZgiR8
+         QwWrVsT8XT6tGbcE3XU0J9kLdPHFIUsFDi2dLq2yUCoSrMWabpdPJoUAKyoUUsUojS8d
+         m9zw==
+X-Gm-Message-State: APjAAAVg9e5ZbTgxtGqj1HmJ0J94e7SGjJintCrXFqYWGj9/hROd0cWU
+        RJ5uGZIDqFNgCD9QoDJKo1srP1fF
+X-Google-Smtp-Source: APXvYqyyI/XMm3Rwq8MKHy4Mp2PCL9KTtU3JYxW/nJpoR03KW1CdCPF8tmPHweHB21i2aK8LxUzMQA==
+X-Received: by 2002:aa7:8282:: with SMTP id s2mr26675695pfm.7.1556026410450;
+        Tue, 23 Apr 2019 06:33:30 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j5sm20913038pfe.15.2019.04.23.06.33.27
+        by smtp.gmail.com with ESMTPSA id q10sm19591274pgh.93.2019.04.23.06.33.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Apr 2019 06:33:28 -0700 (PDT)
+        Tue, 23 Apr 2019 06:33:29 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Subject: [PATCH 08/11] hwmon: (max6650) Read non-volatile registers only once
-Date:   Tue, 23 Apr 2019 06:33:08 -0700
-Message-Id: <1556026391-15360-8-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 09/11] hwmon: (max6650) Improve error handling in max6650_update_device
+Date:   Tue, 23 Apr 2019 06:33:09 -0700
+Message-Id: <1556026391-15360-9-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556026391-15360-1-git-send-email-linux@roeck-us.net>
 References: <1556026391-15360-1-git-send-email-linux@roeck-us.net>
@@ -69,62 +69,90 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Only tachometer and alarm status registers are modified by the chip.
-All other registers only need to be read only once, and reading them
-repeatedly does not add any value.
+Pass errors from i2c_smbus_read_byte_data() back to the caller of
+max6650_update_device().
 
 Cc: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max6650.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ drivers/hwmon/max6650.c | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 301184172ab1..7c8b1b8ededc 100644
+index 7c8b1b8ededc..3c79949a741c 100644
 --- a/drivers/hwmon/max6650.c
 +++ b/drivers/hwmon/max6650.c
-@@ -176,17 +176,10 @@ static struct max6650_data *max6650_update_device(struct device *dev)
+@@ -171,14 +171,19 @@ static struct max6650_data *max6650_update_device(struct device *dev)
+ {
+ 	struct max6650_data *data = dev_get_drvdata(dev);
+ 	struct i2c_client *client = data->client;
++	int reg, err = 0;
+ 	int i;
+ 
  	mutex_lock(&data->update_lock);
  
  	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
--		data->speed = i2c_smbus_read_byte_data(client,
--						       MAX6650_REG_SPEED);
--		data->config = i2c_smbus_read_byte_data(client,
--							MAX6650_REG_CONFIG);
  		for (i = 0; i < data->nr_fans; i++) {
- 			data->tach[i] = i2c_smbus_read_byte_data(client,
- 								 tach_reg[i]);
+-			data->tach[i] = i2c_smbus_read_byte_data(client,
+-								 tach_reg[i]);
++			reg = i2c_smbus_read_byte_data(client, tach_reg[i]);
++			if (reg < 0) {
++				err = reg;
++				goto error;
++			}
++			data->tach[i] = reg;
  		}
--		data->count = i2c_smbus_read_byte_data(client,
--							MAX6650_REG_COUNT);
--		data->dac = i2c_smbus_read_byte_data(client, MAX6650_REG_DAC);
  
  		/*
- 		 * Alarms are cleared on read in case the condition that
-@@ -435,8 +428,22 @@ static int max6650_init_client(struct max6650_data *data,
- 		dev_err(dev, "Config write error, aborting.\n");
- 		return err;
- 	}
+@@ -186,15 +191,20 @@ static struct max6650_data *max6650_update_device(struct device *dev)
+ 		 * caused the alarm is removed. Keep the value latched here
+ 		 * for providing the register through different alarm files.
+ 		 */
+-		data->alarm |= i2c_smbus_read_byte_data(client,
+-							MAX6650_REG_ALARM);
 -
- 	data->config = reg;
++		reg = i2c_smbus_read_byte_data(client, MAX6650_REG_ALARM);
++		if (reg < 0) {
++			err = reg;
++			goto error;
++		}
++		data->alarm |= reg;
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
+ 	}
+ 
++error:
+ 	mutex_unlock(&data->update_lock);
+-
++	if (err)
++		data = ERR_PTR(err);
+ 	return data;
+ }
+ 
+@@ -303,8 +313,12 @@ static ssize_t alarm_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+ 	struct max6650_data *data = max6650_update_device(dev);
+-	bool alarm = data->alarm & attr->index;
++	bool alarm;
+ 
++	if (IS_ERR(data))
++		return PTR_ERR(data);
 +
-+	reg = i2c_smbus_read_byte_data(client, MAX6650_REG_SPEED);
-+	if (reg < 0) {
-+		dev_err(dev, "Failed to read speed register, aborting.\n");
-+		return reg;
-+	}
-+	data->speed = reg;
++	alarm = data->alarm & attr->index;
+ 	if (alarm) {
+ 		mutex_lock(&data->update_lock);
+ 		data->alarm &= ~attr->index;
+@@ -531,6 +545,9 @@ static int max6650_read(struct device *dev, enum hwmon_sensor_types type,
+ 	struct max6650_data *data = max6650_update_device(dev);
+ 	int mode;
+ 
++	if (IS_ERR(data))
++		return PTR_ERR(data);
 +
-+	reg = i2c_smbus_read_byte_data(client, MAX6650_REG_DAC);
-+	if (reg < 0) {
-+		dev_err(dev, "Failed to read DAC register, aborting.\n");
-+		return reg;
-+	}
-+	data->dac = reg;
-+
- 	reg = i2c_smbus_read_byte_data(client, MAX6650_REG_COUNT);
- 	if (reg < 0) {
- 		dev_err(dev, "Failed to read count register, aborting.\n");
+ 	switch (type) {
+ 	case hwmon_pwm:
+ 		switch (attr) {
 -- 
 2.7.4
 
