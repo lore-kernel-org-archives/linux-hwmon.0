@@ -2,115 +2,171 @@ Return-Path: <SRS0=5f14=SZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5FEDC10F14
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D79C10F14
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:52:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C8F420693
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:43:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7E41206BA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:52:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kqU6ARLZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="loaLlLyi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727225AbfDWNna (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:43:30 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37151 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726659AbfDWNna (ORCPT
+        id S1727716AbfDWNwK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:52:10 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45907 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727690AbfDWNwJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:43:30 -0400
-Received: by mail-pg1-f195.google.com with SMTP id e6so7643355pgc.4;
-        Tue, 23 Apr 2019 06:43:29 -0700 (PDT)
+        Tue, 23 Apr 2019 09:52:09 -0400
+Received: by mail-pg1-f196.google.com with SMTP id y3so7637829pgk.12;
+        Tue, 23 Apr 2019 06:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mA3mF+ycxeUdvUahPhxXN3FfcyNfELyy8iLDdoDE09E=;
-        b=kqU6ARLZVrNi50fCv25akrY3R3TDlpcSWaTOn+OaLTngZRAUjjZ68QTQRbzvxwMGF8
-         TKgq1xtbXDfBCdwZmJYdRH9/g8hSLVAOr3I7fPnZ8KsqB4moyNr2Ivq4z1NrX1sunvCI
-         zyeA5wAT3Qn3iTYQSTLeDVHR+Eu349E87JUMuyFb1tuLbDxb/lFn9w1A68Iz8SDOlqO6
-         /CO6E7cJcDJUWBNlNE9S9RtrxQm/O5a7Au17tjBXkSH5oPC8jP1kYT20wK+iNjYoNqq8
-         joyIrMhOOhheajV9TnyN4Umn6J7tFAPr7cwmWY7dAOB3db91zHeHXRNfuCXa0tQ682l2
-         lv8g==
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gbbEBOKapPJio4LlPk/W8tDU6nFQsIipcob0IALlUJ4=;
+        b=loaLlLyihUZva1yPtx+l6dEw4rDWSKC5hNGhAAWRqpSsiBA9zknCmGU9oS6X+N+8BB
+         joZ2bDV44+e5McIX+w5JpW6KLZC5yErEOmEWbuM11heOxt63iw/+hoqq8Uh4zDdSMGV1
+         uXXWYi0gd+BYm3xnDPbU6A8HKRbKrPcGXymghbtKVpOMldxT5EnhjZmJmiz+LBFPXBiu
+         j7u6wB0fBwhEM00+LDH3xTL2Hm18gUOv5DiKiNdFGWgUBWn5U5n8NGMVHs87ojBOIHUl
+         SKjdAoSlocFymB1iek9ydmabYObcz2m7DK1U+sJfugJmr0zruIFpmGDGCeN1ZeifDtLf
+         jMBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mA3mF+ycxeUdvUahPhxXN3FfcyNfELyy8iLDdoDE09E=;
-        b=IsPGLnfpJKIhLnF870QWef9+J26R98Sw42EcRaQ1mK21DRc2AahVPU89F1XrwTx+B+
-         irnCEwiASuGaAUt/9eo2+x7moycGrgjbfmeMEfBmFPRRUoK1o/bpF6a+N+BtKc6xPUYj
-         aFEioe9F/k7um+sMFSWToWfNdsuraZpocFTDxUjiXT8g3pT86beod90KQQZhtbbVYXDQ
-         OmbtWaLO+7FlqEVcONMBFGqhSlZgR0FHLL/ZNYOLV4CdZc0QzewsZcXMokPgWuuPqGhQ
-         jqcoScvkxHdLhR4jBsR3koKbBvLvb1vuzqFiq1Gt7lMLGQOotTx0nKLwRlG8L3u3v7WT
-         HpwQ==
-X-Gm-Message-State: APjAAAX1iv3ruOOR6JFjJjmh1A9VoYhon6f3E4KkPgsIk24/LjRnvpU1
-        KEfKrLmtadgvsGvQnqXwDF0=
-X-Google-Smtp-Source: APXvYqzKHUvKnbHvWOP3vc8MmOGQBIPY0daPQG/AigqGZaj9m4wYbajx1ahELIYHJMhcHPQ4NRUdRQ==
-X-Received: by 2002:a63:c64a:: with SMTP id x10mr24469513pgg.12.1556027009384;
-        Tue, 23 Apr 2019 06:43:29 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f27sm2867144pfk.111.2019.04.23.06.43.27
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gbbEBOKapPJio4LlPk/W8tDU6nFQsIipcob0IALlUJ4=;
+        b=d7gg1LUqKguSoV9D/wS3+oI/CaZxTzElw/V/dJZcYm1XEtnCP72Pz+K09XpFeUW0xL
+         55wTkc4vnQZnuaGfvETIo1CPFlF1j8s0LdoDUgUysdDVOoljJuU3LcFx/Yg1nRCH/CDu
+         W6ewnmuZW5D91Faj4mqYkflymQqkS+66Sumgp6SRvYHUPhTf44e9NNo9CUrpna/MIhPg
+         CDMGcjlprcQ+MFMiklJaaZhoDuqmdfbJMUVWIcDfamGSnHpREbFtaxE09g+cvGLxdu+d
+         0my+yD/9B73ZKSnmhAL4GjjQDpBQVw59+MJF9cv5cuMQIpVbnOV4ksL6M7iUNPgivvcf
+         1P3w==
+X-Gm-Message-State: APjAAAWnWatr4uuJloNbdwJv7TQAgAiv6QK1r4gP7Zf4553M7IvJZ4Lo
+        Z/ofwEf0UvzxNzDjZfcbJZ10qCTA
+X-Google-Smtp-Source: APXvYqym7xex5UEhU9S9xgwKUp6RZgjiMk836emlCNewpZBMq0DSYkdnjKLq5qiUsJUgqqGsxIUdqA==
+X-Received: by 2002:a63:330e:: with SMTP id z14mr24604367pgz.4.1556027528824;
+        Tue, 23 Apr 2019 06:52:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6sm4494380pgs.28.2019.04.23.06.52.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Apr 2019 06:43:28 -0700 (PDT)
-Date:   Tue, 23 Apr 2019 06:43:26 -0700
+        Tue, 23 Apr 2019 06:52:08 -0700 (PDT)
+Subject: Re: Fwd: [PATCH 1/2] hwmon: (lm75) Add support for TMP75B
+To:     Iker Perez del Palomar <iker.perez@codethink.co.uk>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+References: <2904a750-c6e9-719b-7523-0f45e0bc82cc@codethink.co.uk>
+ <2effcb0e-03c6-0f7e-b154-62cbc9ad415a@codethink.co.uk>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH next 07/25] hwmon: s3c: Use dev_get_drvdata()
-Message-ID: <20190423134326.GA19164@roeck-us.net>
-References: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
- <20190423075020.173734-8-wangkefeng.wang@huawei.com>
+Message-ID: <655fa0d3-1b76-96c7-4c04-9f258a3305bc@roeck-us.net>
+Date:   Tue, 23 Apr 2019 06:52:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190423075020.173734-8-wangkefeng.wang@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <2effcb0e-03c6-0f7e-b154-62cbc9ad415a@codethink.co.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 23, 2019 at 03:50:02PM +0800, Kefeng Wang wrote:
-> Using dev_get_drvdata directly.
+On 4/23/19 3:11 AM, Iker Perez del Palomar wrote:
+> The TMP75B has a different control register, supports 12-bit
+> resolution and the default conversion rate is 37 Hz.
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 
-Applied to hwmon-next.
-
-Thanks,
-Guenter
+This patch is corrupted. It replaces tabs with spaces, and there are line wraps.
 
 > ---
->  drivers/hwmon/s3c-hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   Documentation/hwmon/lm75 |  5 +++--
+>   drivers/hwmon/lm75.c     | 13 +++++++++++++
+>   2 files changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
-> index 0c4710d35d16..0d65aa5985e2 100644
-> --- a/drivers/hwmon/s3c-hwmon.c
-> +++ b/drivers/hwmon/s3c-hwmon.c
-> @@ -98,7 +98,7 @@ static int s3c_hwmon_read_ch(struct device *dev,
->  static ssize_t s3c_hwmon_show_raw(struct device *dev,
->  				  struct device_attribute *attr, char *buf)
->  {
-> -	struct s3c_hwmon *adc = platform_get_drvdata(to_platform_device(dev));
-> +	struct s3c_hwmon *adc = dev_get_drvdata(dev);
->  	struct sensor_device_attribute *sa = to_sensor_dev_attr(attr);
->  	int ret;
->  
-> @@ -164,7 +164,7 @@ static ssize_t s3c_hwmon_ch_show(struct device *dev,
->  				 char *buf)
->  {
->  	struct sensor_device_attribute *sen_attr = to_sensor_dev_attr(attr);
-> -	struct s3c_hwmon *hwmon = platform_get_drvdata(to_platform_device(dev));
-> +	struct s3c_hwmon *hwmon = dev_get_drvdata(dev);
->  	struct s3c_hwmon_pdata *pdata = dev_get_platdata(dev);
->  	struct s3c_hwmon_chcfg *cfg;
->  	int ret;
+> diff --git a/Documentation/hwmon/lm75 b/Documentation/hwmon/lm75
+> index 010583608f12..baf052935761 100644
+> --- a/Documentation/hwmon/lm75
+> +++ b/Documentation/hwmon/lm75
+> @@ -47,8 +47,8 @@ Supported chips:
+>       Addresses scanned: none
+>       Datasheet: Publicly available at the ST website
+>              https://www.st.com/resource/en/datasheet/stlm75.pdf
+> -  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75C, TMP175, TMP275
+> -    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75', 'tmp75c', 'tmp275'
+> +  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75B, TMP75C, TMP175, TMP275
+> +    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75', 'tmp75b', 'tmp75c', 'tmp275'
+>       Addresses scanned: none
+>       Datasheet: Publicly available at the Texas Instruments website
+>                  http://www.ti.com/product/tmp100
+> @@ -56,6 +56,7 @@ Supported chips:
+>                  http://www.ti.com/product/tmp105
+>                  http://www.ti.com/product/tmp112
+>                  http://www.ti.com/product/tmp75
+> +               http://www.ti.com/product/tmp75b
+>                  http://www.ti.com/product/tmp75c
+>                  http://www.ti.com/product/tmp175
+>                  http://www.ti.com/product/tmp275
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 62acb9f16ec5..1b5c32cbdc62 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -32,6 +32,7 @@
+>   #include "lm75.h"
+> 
+> 
+> +
+
+I don't mind if you'd remove one of the two empty lines above, but add yet another one ?
+Please don't.
+
+>   /*
+>    * This driver handles the LM75 and compatible digital temperature sensors.
+>    */
+> @@ -59,6 +60,7 @@ enum lm75_type {        /* keep sorted in alphabetical order */
+>       tmp175,
+>       tmp275,
+>       tmp75,
+> +    tmp75b,
+>       tmp75c,
+>   };
+> 
+> @@ -378,6 +380,12 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>           data->resolution = 12;
+>           data->sample_time = MSEC_PER_SEC / 2;
+>           break;
+> +    case tmp75b:
+> +        clr_mask |= 1 << 15;        /* not one-shot mode */
+> +        data->resolution = 12;
+> +        data->sample_time = MSEC_PER_SEC / 32;
+> +        break;
+> +
+>       case tmp75c:
+>           clr_mask |= 1 << 5;        /* not one-shot mode */
+>           data->resolution = 12;
+> @@ -438,6 +446,7 @@ static const struct i2c_device_id lm75_ids[] = {
+>       { "tmp175", tmp175, },
+>       { "tmp275", tmp275, },
+>       { "tmp75", tmp75, },
+> +    { "tmp75b", tmp75b,},
+>       { "tmp75c", tmp75c, },
+>       { /* LIST END */ }
+>   };
+> @@ -537,6 +546,10 @@ static const struct of_device_id lm75_of_match[] = {
+>           .data = (void *)tmp75
+>       },
+>       {
+> +        .compatible = "ti,tmp75b",
+> +        .data = (void *)tmp75b
+> +    },
+> +    {
+>           .compatible = "ti,tmp75c",
+>           .data = (void *)tmp75c
+>       },
+> 
+
