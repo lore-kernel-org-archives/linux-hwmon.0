@@ -2,100 +2,141 @@ Return-Path: <SRS0=5f14=SZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 027ABC10F14
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECC7CC10F14
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C2C212077C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:32:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD4972077C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qBcd7yuW"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uTKFzn9u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbfDWNc0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:32:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42502 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbfDWNc0 (ORCPT
+        id S1726801AbfDWNdR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:33:17 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40906 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfDWNdR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:32:26 -0400
-Received: by mail-pf1-f196.google.com with SMTP id w25so7500982pfi.9
-        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:32:25 -0700 (PDT)
+        Tue, 23 Apr 2019 09:33:17 -0400
+Received: by mail-pf1-f195.google.com with SMTP id c207so7500957pfc.7
+        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NP29rsumCvvUNRC6yuTafrpahsfDfq0Nj9O7+fKOrQg=;
-        b=qBcd7yuWaTGbj5/ZEqlkVXf5eZ4KHHW8rjBfdWBj+8czRkN4czcDFsvijuvP4TVvtc
-         Hrv5EBjPHMeVd0ozxvYS6JEClbXVQZqXuJ0+A68g2UmCkbbTbkLWIiIiznHdwcnmOiL+
-         P/OpNyaFjL4AVmt+0oWcE9/qRgC2PPkecCtPBhNTQUJ5v3kJpZs7HCrnTs/yU/FjQtcv
-         ZvrU7xSV2O30zOEJmuN6ZDMArCDB9wQsxn7OcBt4YlSG56Aa86NPr7OGGh+J/Iiy/2kE
-         9Yx8ulZiH3mX2u0uakaZxVQWcFanHTnmT1McmHL0aAd5J5HBWsBjREpDXNMny9YjhBrD
-         2tSw==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=B2UiuBzj5CPFoIEP3O7C/Y9iGXiGX1o/2iIF9COFt10=;
+        b=uTKFzn9uA4dmTiD696CBXeLdovLikwLnKshNnMETeiQ9nlDeT3FpLa5GczTuNTPa7k
+         KpUNBPT0YDDg1zJkX9Lno9+SJrTphRE+QxlR5Zg1jUBJ0OL6sdb1Ci0r1wexhRpyXMQ9
+         EdNFYWSJUSugdEDY/0Toi6w1u8YvBcDdsNQv6GFnh22T+B4tA58XfGs6qjjupfpkTvVn
+         xqMITin8aYrSD68kpP3J+w1++R97tvDRVKtXK0MX9jm5N3Z1fGOd9OwXPPGpu3MdB8TE
+         zMgTdEWJmRHaLuYMGADOjbToEsk8u+F9eZI55vW45Ii7NgPZJHkC9w2PbTyvqcIOFh8v
+         eCmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NP29rsumCvvUNRC6yuTafrpahsfDfq0Nj9O7+fKOrQg=;
-        b=NUglxSX+BxzpjtAuKrA8jKJHAIjJAcQCOOR+/DRU0ImsN5NGZ0LHCYCKtQ6OfsPOnq
-         B4imcmM3TDhAqlui0gQpf4RqQk6+hgiQGYpgFL49K3zEXlYcLvgfjtCNjeRW3FMQXnTG
-         SzW8BJ58GpsU3rVdzZOQiLWNuzleGHCiClCtJ4PvMAtziWTBwU06QqQ8gGVF7EyXLggA
-         F+QOtdxEwRrEFZbimnTR5awADSGVS/DFQ0ydyfMVXfCXqIJKGq7QUasUITMv/sOMsKb6
-         8qcc/HigFmgsRK5yezhpp8sjuoqhWs3hP9mpyY0FcaAyLqKpWcO/54McSaP1j+UfinUi
-         Nnhg==
-X-Gm-Message-State: APjAAAXX2QeTDneK06hbqHpMQHE1D4rYuv7COf8GYGTVd1rUpGVk7Blp
-        hUwLk+8+zNcdO2G4cKURVoU=
-X-Google-Smtp-Source: APXvYqxFk6fOFiGGu5rLyDz4jowDHR0le5nKz/DOVAV1z/5EPPFUmycX9kClf6h5I3JyGFAjEdedGA==
-X-Received: by 2002:a65:500d:: with SMTP id f13mr6774600pgo.250.1556026345544;
-        Tue, 23 Apr 2019 06:32:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j5sm20910031pfe.15.2019.04.23.06.32.24
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=B2UiuBzj5CPFoIEP3O7C/Y9iGXiGX1o/2iIF9COFt10=;
+        b=ZWZq6PWAACwuGC5hV/alyfaVSGOPg3rz+oRpuVS3IABzsF7i767KDcrFufXaH89TyL
+         l/92Qap1AByQhuBqeFEGZR13nkUQsFEI4O4jso0aTUzetR8/Mc1cQlJFs91onRe6N/Vn
+         teKYji7mslMrmMS3khWC4Y1Z2tVUA3cjd8uyPBXMH7cs2vy5aFB8Qj+KAbd6L1JJ1b8y
+         QvWg2z41lIbJ6UAWbHH8Jwr80bH/80drgjXEr2M+cXRdF2vO5Z0RiYehrlNc6ZMw1BdG
+         RfzoCU6COmRoEP5z8aKTxR2fVgsBcPeCMtd1mrcjdcZQfyFMHw3x2zKw6yE8aZI9/QYd
+         ECzA==
+X-Gm-Message-State: APjAAAWgGkURnsWDv+CkW4dogadGjrp24OG07aP3S/OHagQN0l6Vn9BU
+        hhd8DUtmiPXDmIPTxiLK6rCc1gbn
+X-Google-Smtp-Source: APXvYqyDFQGsAkk215oCLk03hRE0iTrBwq6Cc9EIW9lM8HLxzj+TctV5Tm6HAAF1UOa0xGuiA8x6cw==
+X-Received: by 2002:a63:7444:: with SMTP id e4mr25042798pgn.261.1556026396090;
+        Tue, 23 Apr 2019 06:33:16 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j19sm24633606pfr.155.2019.04.23.06.33.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Apr 2019 06:32:24 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: (max6650) Drop call to thermal_cdev_update
-To:     Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-References: <1556023014-6159-1-git-send-email-linux@roeck-us.net>
- <76F84515-0A8D-4792-A2E1-7144CDCD999A@gmail.com>
+        Tue, 23 Apr 2019 06:33:14 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7c09c260-ba96-9d4f-1e41-e639864c93cc@roeck-us.net>
-Date:   Tue, 23 Apr 2019 06:32:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <76F84515-0A8D-4792-A2E1-7144CDCD999A@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+Subject: [PATCH 01/11] hwmon: (max6650) Use devm_add_action to unregister thermal device
+Date:   Tue, 23 Apr 2019 06:33:01 -0700
+Message-Id: <1556026391-15360-1-git-send-email-linux@roeck-us.net>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/23/19 5:42 AM, Jean-Francois Dagenais wrote:
-> 
->> On Apr 23, 2019, at 08:36, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> The call to thermal_cdev_update() causes any fan connected to the chip
->> to stop immediately. If the thermal subsystem is not set up to actually
->> handle the chip as cooling device, the remains stopped until is is
->> restarted manually with a write to a sysfs attribute.
->>
->> There is evidence that thermal_cdev_update() should only be called from
->> thermal governors, not from thermal cooling device drivers. Drop the call.
->>
->> Cc: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Tested-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+Use devm_add_action to unregister the thermal cooling device.
+This lets us drop the remove function.
 
-Thanks a lot!
+At the same time, use 'dev' variable in probe function consistently.
 
-I thought about merging the two patches, but then concluded that your
-Tested-by: and the thoughts behind removing the call are valuable,
-and decided to keep the patches separate after all.
+Cc: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/max6650.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-Guenter
+diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
+index 939953240827..6cce199dab6a 100644
+--- a/drivers/hwmon/max6650.c
++++ b/drivers/hwmon/max6650.c
+@@ -752,6 +752,11 @@ static const struct thermal_cooling_device_ops max6650_cooling_ops = {
+ 	.get_cur_state = max6650_get_cur_state,
+ 	.set_cur_state = max6650_set_cur_state,
+ };
++
++static void max6650_thermal_unregister(void *data)
++{
++	thermal_cooling_device_unregister(data);
++}
+ #endif
+ 
+ static int max6650_probe(struct i2c_client *client,
+@@ -794,27 +799,20 @@ static int max6650_probe(struct i2c_client *client,
+ 
+ #if IS_ENABLED(CONFIG_THERMAL)
+ 	data->cooling_dev =
+-		thermal_of_cooling_device_register(client->dev.of_node,
++		thermal_of_cooling_device_register(dev->of_node,
+ 						   client->name, data,
+ 						   &max6650_cooling_ops);
+-	if (IS_ERR(data->cooling_dev))
+-		dev_warn(&client->dev,
+-			 "thermal cooling device register failed: %ld\n",
++	if (IS_ERR(data->cooling_dev)) {
++		dev_warn(dev, "thermal cooling device register failed: %ld\n",
+ 			 PTR_ERR(data->cooling_dev));
++	} else {
++		devm_add_action(dev, max6650_thermal_unregister,
++				data->cooling_dev);
++	}
+ #endif
+ 	return 0;
+ }
+ 
+-static int max6650_remove(struct i2c_client *client)
+-{
+-	struct max6650_data *data = i2c_get_clientdata(client);
+-
+-	if (!IS_ERR(data->cooling_dev))
+-		thermal_cooling_device_unregister(data->cooling_dev);
+-
+-	return 0;
+-}
+-
+ static const struct i2c_device_id max6650_id[] = {
+ 	{ "max6650", 1 },
+ 	{ "max6651", 4 },
+@@ -828,7 +826,6 @@ static struct i2c_driver max6650_driver = {
+ 		.of_match_table = of_match_ptr(max6650_dt_match),
+ 	},
+ 	.probe		= max6650_probe,
+-	.remove		= max6650_remove,
+ 	.id_table	= max6650_id,
+ };
+ 
+-- 
+2.7.4
+
