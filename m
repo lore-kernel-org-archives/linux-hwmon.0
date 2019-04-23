@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C63B0C10F14
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88376C10F14
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 91BB12077C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B7882077C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 13:33:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ncISTZJk"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQQQ/VhE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbfDWNdT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:33:19 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40712 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726655AbfDWNdT (ORCPT
+        id S1727656AbfDWNdV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:33:21 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45368 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfDWNdU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:33:19 -0400
-Received: by mail-pg1-f193.google.com with SMTP id d31so7627582pgl.7
-        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:33:18 -0700 (PDT)
+        Tue, 23 Apr 2019 09:33:20 -0400
+Received: by mail-pg1-f194.google.com with SMTP id y3so7613222pgk.12
+        for <linux-hwmon@vger.kernel.org>; Tue, 23 Apr 2019 06:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6QuEQC8Acwq8/ngaLvJIOqLJtRqH5NI3hqsDkpN460U=;
-        b=ncISTZJkfIwvinlfT6VScODaUlDMqbT4hWSAvtk4ynD0o+ioFz1abhI3WBPKqz97kZ
-         ZPGURM7I3WMpoho/DsaXtqAAQrf8Wns7GDxMCuVIijAa2fKBwZJ09sfVp7bl4iwFk1rs
-         6SChtPU4j9PC4nb7EVRoHSgcEe8QcjxYLFL86h0hzkhSM6e+SK+Z6eQzfa+JmOeu6/3c
-         V+UkBcCv53Hu/xAkncPRiCKyvSz5JKOIgw5M3iNXuUBPhnN/clslOVqZOKL6J9b8QniE
-         g6apDEA27gmr8wyGBsAyvZlbGuQX2+1qB7RAPHDiu+G8cgBRwqn2AZ75ssy4DIc45Onl
-         A0hw==
+        bh=n9qvVHdLoiJgCQaY7R3RnCVk3RBwDzs7n8e2FDJaOvU=;
+        b=XQQQ/VhEc0VOXakBO/OMR4tfQFVNtDy34DylzJn3vXYeAAyYAAXQdT391Xf0NuSrNp
+         WP50C9D7qmNQhPUxqU9FKUQi/ZEq3rCgkfTcdNWYEvAWaC+eNmQO7F4GOOrkqaZweEk8
+         h78mev2kfEJww0syWUNjwM7FSYhZ5raLtNKejpguBEFqe9kiwBK0G7Bprjzv7tuHV2Pb
+         LcqCPySGva02c/L2FXVsM4DeByT10EZ0PzLIj+Osb3EMxmLlBwKfr6+kVop08tc+I73o
+         9Adgg9YEzJaBIv70TEKHrJK30RrhiZIm9wNuO1UzOyn5+qJRzL1C0g/WG+XNMKkzF4Xm
+         WO4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=6QuEQC8Acwq8/ngaLvJIOqLJtRqH5NI3hqsDkpN460U=;
-        b=mQotPE7ebkUv/U7d/nPlcGCY7F9mg04C4yQ7bdPWMSHKRddsOdJQ+dfSSHwaQUsKVG
-         NxT8oWoavhD5/sb3kE3JLSHNTSgiicvhs2p6gD10Xf+Kzz3fjgbe/eG1zYcpZJGEzPfT
-         Y4O2YenGOFsRlOk0hy91DFn/Lfl3jR5EEMhpGd7hfFKu8YO/+Y0VBsQ2gfMwLz0adzsy
-         QnkNiN2twHvAdbi9BUYamOeukXrSWVlHUjSZ8foNBw/ZqE446Q/SxsVhhVAqO4cpsN2l
-         UDiCo1qIQnxM7J4oW3hUAqx4z616nWsIAqeU8lBW5MBs7WpKwHowOAlgc/moKGN4NJb+
-         /Rbg==
-X-Gm-Message-State: APjAAAX5V6HGKpS21vdqbsLo36nRukhfALhKsN5douoGFbcuKL7kSnoV
-        ozQebpEOIbV04ML/axIuxU09kwTE
-X-Google-Smtp-Source: APXvYqyP/q3mt1VZJeLp6Pqd2nFYAvNIHAznxKkIlKd6ETRaFhU2efZRDhpSb9rWAWKzMGjKHJXF0A==
-X-Received: by 2002:a63:7444:: with SMTP id e4mr25042992pgn.261.1556026398235;
-        Tue, 23 Apr 2019 06:33:18 -0700 (PDT)
+        bh=n9qvVHdLoiJgCQaY7R3RnCVk3RBwDzs7n8e2FDJaOvU=;
+        b=aEqdZ4udyhFX9QSb2OWOWdNkhA+2TzG6qSBpLHKDUw33QZRz/MEFPeTq1oFjGr4c8m
+         bmPIraVTDDP+BnJidvfGEc1rEP0gmvITtph9qfy2dW8A+7TiWM9/dWa56qh9IXXxX0fl
+         XirXO9fbDrMpF7xw3ioEKQZKdd7V11hlwvcEvK1nP1an7oiFfCrq23t0So5EHeHSwsVS
+         tfd5W/7/fZuSSNL/BevlmU4ba/rhiE4msPPLhHtQ60h8+UYaflsxbpS71+miTLX4bFfx
+         RN5GIEuJZeO8AimVBAZfDIbGeRcsd1x2lyU1fR6m+llYNJR8x/PNQsTqP+M5R/iVG8eb
+         mAtw==
+X-Gm-Message-State: APjAAAWLuXU4jXTWncmfVMJ4UADD5zSMLrJX2EZll7/eWfLvxqNijNbF
+        nP5TbcOnqK8/VrA7/uVKg+GrY9t3
+X-Google-Smtp-Source: APXvYqyA59NsGgh3xr3wZC6HW9Im87pZsiL+rlzQmdOM4z/YikGYHiU5fMZ0c8h2MwVFY0/1kDAhDQ==
+X-Received: by 2002:a63:c61:: with SMTP id 33mr25261243pgm.293.1556026399974;
+        Tue, 23 Apr 2019 06:33:19 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b14sm20724368pfi.92.2019.04.23.06.33.16
+        by smtp.gmail.com with ESMTPSA id f27sm2788230pfk.111.2019.04.23.06.33.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Apr 2019 06:33:17 -0700 (PDT)
+        Tue, 23 Apr 2019 06:33:19 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Subject: [PATCH 02/11] hwmon: (max6650) Introduce pwm_to_dac and dac_to_pwm
-Date:   Tue, 23 Apr 2019 06:33:02 -0700
-Message-Id: <1556026391-15360-2-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 03/11] hwmon: (max6650) Improve error handling in max6650_init_client
+Date:   Tue, 23 Apr 2019 06:33:03 -0700
+Message-Id: <1556026391-15360-3-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1556026391-15360-1-git-send-email-linux@roeck-us.net>
 References: <1556026391-15360-1-git-send-email-linux@roeck-us.net>
@@ -69,120 +70,114 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Consolidate conversion from pwm value to dac value and from dac value
-to pwm value into helper functions.
-
-While doing this, only update the cached dac value if writing it to
-the chip was successful after an update. Also, put macro argument of
-DIV_FROM_REG() into ().
+Do not overwrite errors reported from i2c functions, and don't ignore
+any errors.
 
 Cc: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max6650.c | 53 ++++++++++++++++++++++++-------------------------
- 1 file changed, 26 insertions(+), 27 deletions(-)
+ drivers/hwmon/max6650.c | 43 ++++++++++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
-index 6cce199dab6a..b6b8f8edc1b0 100644
+index b6b8f8edc1b0..ac05cc5627d7 100644
 --- a/drivers/hwmon/max6650.c
 +++ b/drivers/hwmon/max6650.c
-@@ -105,7 +105,8 @@ module_param(clock, int, 0444);
- #define FAN_RPM_MIN 240
- #define FAN_RPM_MAX 30000
- 
--#define DIV_FROM_REG(reg) (1 << (reg & 7))
-+#define DIV_FROM_REG(reg)	(1 << ((reg) & 7))
-+#define DAC_LIMIT(v12)		((v12) ? 180 : 76)
- 
- /*
-  * Client data (each client gets its own)
-@@ -150,6 +151,22 @@ static const struct of_device_id __maybe_unused max6650_dt_match[] = {
- };
- MODULE_DEVICE_TABLE(of, max6650_dt_match);
- 
-+static int dac_to_pwm(int dac, bool v12)
-+{
-+	/*
-+	 * Useful range for dac is 0-180 for 12V fans and 0-76 for 5V fans.
-+	 * Lower DAC values mean higher speeds.
-+	 */
-+	return clamp_val(255 - (255 * dac) / DAC_LIMIT(v12), 0, 255);
-+}
-+
-+static u8 pwm_to_dac(unsigned int pwm, bool v12)
-+{
-+	int limit = DAC_LIMIT(v12);
-+
-+	return limit - (limit * pwm) / 255;
-+}
-+
- static struct max6650_data *max6650_update_device(struct device *dev)
+@@ -618,8 +618,8 @@ static int max6650_init_client(struct max6650_data *data,
+ 			       struct i2c_client *client)
  {
- 	struct max6650_data *data = dev_get_drvdata(dev);
-@@ -357,22 +374,10 @@ static ssize_t fan1_target_store(struct device *dev,
- static ssize_t pwm1_show(struct device *dev, struct device_attribute *devattr,
- 			 char *buf)
- {
--	int pwm;
- 	struct max6650_data *data = max6650_update_device(dev);
+ 	struct device *dev = &client->dev;
+-	int config;
+-	int err = -EIO;
++	int reg;
++	int err;
+ 	u32 voltage;
+ 	u32 prescale;
+ 	u32 target_rpm;
+@@ -633,21 +633,20 @@ static int max6650_init_client(struct max6650_data *data,
+ 				 &prescale))
+ 		prescale = prescaler;
  
--	/*
--	 * Useful range for dac is 0-180 for 12V fans and 0-76 for 5V fans.
--	 * Lower DAC values mean higher speeds.
--	 */
--	if (data->config & MAX6650_CFG_V12)
--		pwm = 255 - (255 * (int)data->dac)/180;
--	else
--		pwm = 255 - (255 * (int)data->dac)/76;
+-	config = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
 -
--	if (pwm < 0)
--		pwm = 0;
--
--	return sprintf(buf, "%d\n", pwm);
-+	return sprintf(buf, "%d\n", dac_to_pwm(data->dac,
-+					       data->config & MAX6650_CFG_V12));
- }
+-	if (config < 0) {
+-		dev_err(dev, "Error reading config, aborting.\n");
+-		return err;
++	reg = i2c_smbus_read_byte_data(client, MAX6650_REG_CONFIG);
++	if (reg < 0) {
++		dev_err(dev, "Error reading config register, aborting.\n");
++		return reg;
+ 	}
  
- static ssize_t pwm1_store(struct device *dev,
-@@ -383,6 +388,7 @@ static ssize_t pwm1_store(struct device *dev,
- 	struct i2c_client *client = data->client;
- 	unsigned long pwm;
- 	int err;
-+	u8 dac;
+ 	switch (voltage) {
+ 	case 0:
+ 		break;
+ 	case 5:
+-		config &= ~MAX6650_CFG_V12;
++		reg &= ~MAX6650_CFG_V12;
+ 		break;
+ 	case 12:
+-		config |= MAX6650_CFG_V12;
++		reg |= MAX6650_CFG_V12;
+ 		break;
+ 	default:
+ 		dev_err(dev, "illegal value for fan_voltage (%d)\n", voltage);
+@@ -657,22 +656,22 @@ static int max6650_init_client(struct max6650_data *data,
+ 	case 0:
+ 		break;
+ 	case 1:
+-		config &= ~MAX6650_CFG_PRESCALER_MASK;
++		reg &= ~MAX6650_CFG_PRESCALER_MASK;
+ 		break;
+ 	case 2:
+-		config = (config & ~MAX6650_CFG_PRESCALER_MASK)
++		reg = (reg & ~MAX6650_CFG_PRESCALER_MASK)
+ 			 | MAX6650_CFG_PRESCALER_2;
+ 		break;
+ 	case  4:
+-		config = (config & ~MAX6650_CFG_PRESCALER_MASK)
++		reg = (reg & ~MAX6650_CFG_PRESCALER_MASK)
+ 			 | MAX6650_CFG_PRESCALER_4;
+ 		break;
+ 	case  8:
+-		config = (config & ~MAX6650_CFG_PRESCALER_MASK)
++		reg = (reg & ~MAX6650_CFG_PRESCALER_MASK)
+ 			 | MAX6650_CFG_PRESCALER_8;
+ 		break;
+ 	case 16:
+-		config = (config & ~MAX6650_CFG_PRESCALER_MASK)
++		reg = (reg & ~MAX6650_CFG_PRESCALER_MASK)
+ 			 | MAX6650_CFG_PRESCALER_16;
+ 		break;
+ 	default:
+@@ -680,16 +679,22 @@ static int max6650_init_client(struct max6650_data *data,
+ 	}
  
- 	err = kstrtoul(buf, 10, &pwm);
- 	if (err)
-@@ -391,13 +397,10 @@ static ssize_t pwm1_store(struct device *dev,
- 	pwm = clamp_val(pwm, 0, 255);
+ 	dev_info(dev, "Fan voltage: %dV, prescaler: %d.\n",
+-		 (config & MAX6650_CFG_V12) ? 12 : 5,
+-		 1 << (config & MAX6650_CFG_PRESCALER_MASK));
++		 (reg & MAX6650_CFG_V12) ? 12 : 5,
++		 1 << (reg & MAX6650_CFG_PRESCALER_MASK));
  
- 	mutex_lock(&data->update_lock);
--
--	if (data->config & MAX6650_CFG_V12)
--		data->dac = 180 - (180 * pwm)/255;
--	else
--		data->dac = 76 - (76 * pwm)/255;
--	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
--
-+	dac = pwm_to_dac(pwm, data->config & MAX6650_CFG_V12);
-+	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, dac);
-+	if (!err)
-+		data->dac = dac;
- 	mutex_unlock(&data->update_lock);
+-	if (i2c_smbus_write_byte_data(client, MAX6650_REG_CONFIG, config)) {
++	err = i2c_smbus_write_byte_data(client, MAX6650_REG_CONFIG, reg);
++	if (err) {
+ 		dev_err(dev, "Config write error, aborting.\n");
+ 		return err;
+ 	}
  
- 	return err < 0 ? err : count;
-@@ -728,11 +731,7 @@ static int max6650_set_cur_state(struct thermal_cooling_device *cdev,
+-	data->config = config;
+-	data->count = i2c_smbus_read_byte_data(client, MAX6650_REG_COUNT);
++	data->config = reg;
++	reg = i2c_smbus_read_byte_data(client, MAX6650_REG_COUNT);
++	if (reg < 0) {
++		dev_err(dev, "Failed to read count register, aborting.\n");
++		return reg;
++	}
++	data->count = reg;
  
- 	mutex_lock(&data->update_lock);
- 
--	if (data->config & MAX6650_CFG_V12)
--		data->dac = 180 - (180 * state)/255;
--	else
--		data->dac = 76 - (76 * state)/255;
--
-+	data->dac = pwm_to_dac(state, data->config & MAX6650_CFG_V12);
- 	err = i2c_smbus_write_byte_data(client, MAX6650_REG_DAC, data->dac);
- 
- 	if (!err) {
+ 	if (!of_property_read_u32(client->dev.of_node, "maxim,fan-target-rpm",
+ 				  &target_rpm)) {
 -- 
 2.7.4
 
