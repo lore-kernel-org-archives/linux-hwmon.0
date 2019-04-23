@@ -2,83 +2,144 @@ Return-Path: <SRS0=5f14=SZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91E20C282DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B02C10F14
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 10:11:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6986E20645
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BF062175B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Apr 2019 10:11:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbfDWHlj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Apr 2019 03:41:39 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7224 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726696AbfDWHkY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Apr 2019 03:40:24 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 690377113B4E5AA2585A;
-        Tue, 23 Apr 2019 15:40:17 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 23 Apr 2019 15:40:06 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>
-Subject: [PATCH next 07/25] hwmon: s3c: Use dev_get_drvdata()
-Date:   Tue, 23 Apr 2019 15:50:02 +0800
-Message-ID: <20190423075020.173734-8-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
-References: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
+        id S1727274AbfDWKLY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Apr 2019 06:11:24 -0400
+Received: from imap1.codethink.co.uk ([176.9.8.82]:37472 "EHLO
+        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725888AbfDWKLX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 23 Apr 2019 06:11:23 -0400
+Received: from [167.98.27.226] (helo=[10.35.4.32])
+        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
+        id 1hIsOS-0000V0-3j; Tue, 23 Apr 2019 11:11:16 +0100
+Subject: Fwd: [PATCH 1/2] hwmon: (lm75) Add support for TMP75B
+References: <2904a750-c6e9-719b-7523-0f45e0bc82cc@codethink.co.uk>
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com
+From:   Iker Perez del Palomar <iker.perez@codethink.co.uk>
+X-Forwarded-Message-Id: <2904a750-c6e9-719b-7523-0f45e0bc82cc@codethink.co.uk>
+Message-ID: <2effcb0e-03c6-0f7e-b154-62cbc9ad415a@codethink.co.uk>
+Date:   Tue, 23 Apr 2019 11:11:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+In-Reply-To: <2904a750-c6e9-719b-7523-0f45e0bc82cc@codethink.co.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Using dev_get_drvdata directly.
+The TMP75B has a different control register, supports 12-bit
+resolution and the default conversion rate is 37 Hz.
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 ---
- drivers/hwmon/s3c-hwmon.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  Documentation/hwmon/lm75 |  5 +++--
+  drivers/hwmon/lm75.c     | 13 +++++++++++++
+  2 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
-index 0c4710d35d16..0d65aa5985e2 100644
---- a/drivers/hwmon/s3c-hwmon.c
-+++ b/drivers/hwmon/s3c-hwmon.c
-@@ -98,7 +98,7 @@ static int s3c_hwmon_read_ch(struct device *dev,
- static ssize_t s3c_hwmon_show_raw(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
--	struct s3c_hwmon *adc = platform_get_drvdata(to_platform_device(dev));
-+	struct s3c_hwmon *adc = dev_get_drvdata(dev);
- 	struct sensor_device_attribute *sa = to_sensor_dev_attr(attr);
- 	int ret;
- 
-@@ -164,7 +164,7 @@ static ssize_t s3c_hwmon_ch_show(struct device *dev,
- 				 char *buf)
- {
- 	struct sensor_device_attribute *sen_attr = to_sensor_dev_attr(attr);
--	struct s3c_hwmon *hwmon = platform_get_drvdata(to_platform_device(dev));
-+	struct s3c_hwmon *hwmon = dev_get_drvdata(dev);
- 	struct s3c_hwmon_pdata *pdata = dev_get_platdata(dev);
- 	struct s3c_hwmon_chcfg *cfg;
- 	int ret;
+diff --git a/Documentation/hwmon/lm75 b/Documentation/hwmon/lm75
+index 010583608f12..baf052935761 100644
+--- a/Documentation/hwmon/lm75
++++ b/Documentation/hwmon/lm75
+@@ -47,8 +47,8 @@ Supported chips:
+      Addresses scanned: none
+      Datasheet: Publicly available at the ST website
+             https://www.st.com/resource/en/datasheet/stlm75.pdf
+-  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75C, 
+TMP175, TMP275
+-    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 
+'tmp75', 'tmp75c', 'tmp275'
++  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75B, 
+TMP75C, TMP175, TMP275
++    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 
+'tmp75', 'tmp75b', 'tmp75c', 'tmp275'
+      Addresses scanned: none
+      Datasheet: Publicly available at the Texas Instruments website
+                 http://www.ti.com/product/tmp100
+@@ -56,6 +56,7 @@ Supported chips:
+                 http://www.ti.com/product/tmp105
+                 http://www.ti.com/product/tmp112
+                 http://www.ti.com/product/tmp75
++               http://www.ti.com/product/tmp75b
+                 http://www.ti.com/product/tmp75c
+                 http://www.ti.com/product/tmp175
+                 http://www.ti.com/product/tmp275
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 62acb9f16ec5..1b5c32cbdc62 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -32,6 +32,7 @@
+  #include "lm75.h"
+
+
++
+  /*
+   * This driver handles the LM75 and compatible digital temperature 
+sensors.
+   */
+@@ -59,6 +60,7 @@ enum lm75_type {        /* keep sorted in alphabetical 
+order */
+      tmp175,
+      tmp275,
+      tmp75,
++    tmp75b,
+      tmp75c,
+  };
+
+@@ -378,6 +380,12 @@ lm75_probe(struct i2c_client *client, const struct 
+i2c_device_id *id)
+          data->resolution = 12;
+          data->sample_time = MSEC_PER_SEC / 2;
+          break;
++    case tmp75b:
++        clr_mask |= 1 << 15;        /* not one-shot mode */
++        data->resolution = 12;
++        data->sample_time = MSEC_PER_SEC / 32;
++        break;
++
+      case tmp75c:
+          clr_mask |= 1 << 5;        /* not one-shot mode */
+          data->resolution = 12;
+@@ -438,6 +446,7 @@ static const struct i2c_device_id lm75_ids[] = {
+      { "tmp175", tmp175, },
+      { "tmp275", tmp275, },
+      { "tmp75", tmp75, },
++    { "tmp75b", tmp75b,},
+      { "tmp75c", tmp75c, },
+      { /* LIST END */ }
+  };
+@@ -537,6 +546,10 @@ static const struct of_device_id lm75_of_match[] = {
+          .data = (void *)tmp75
+      },
+      {
++        .compatible = "ti,tmp75b",
++        .data = (void *)tmp75b
++    },
++    {
+          .compatible = "ti,tmp75c",
+          .data = (void *)tmp75c
+      },
+
 -- 
-2.20.1
+2.11.0
+
+-- 
+Iker Perez del Palomar, Software Engineer
+Codethink Ltd                             35 Dale St, Manchester M1 2HF
+http://www.codethink.co.uk/          Manchester, M1 2JW, United Kingdom
+We respect your privacy.   See https://www.codethink.co.uk/privacy.html
 
