@@ -2,173 +2,104 @@ Return-Path: <SRS0=kUOG=TA=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B1CC43219
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C52C43219
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:56:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3995820645
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:55:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D17E20645
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:56:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tq8bjf+s"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nG/dbRif"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbfD3QzO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Apr 2019 12:55:14 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33460 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbfD3QzO (ORCPT
+        id S1726061AbfD3Q4m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Apr 2019 12:56:42 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39542 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3Q4l (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Apr 2019 12:55:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id z28so2049460pfk.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2019 09:55:14 -0700 (PDT)
+        Tue, 30 Apr 2019 12:56:41 -0400
+Received: by mail-pf1-f194.google.com with SMTP id z26so3470429pfg.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2019 09:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Io0AIQG9+eqoJt7vbIjHlf2ENptY9TLYl30+II0/2/M=;
-        b=Tq8bjf+sef+nloY0+bJQIRm0JKUM53txCg/Ep4X0/4JNRQjJ+vZ09P5/CX46/Zzwkh
-         ZhwzDXFKOHN4ynHLCeoOCHzyF3mAhvWEV74dbZHkNR2lNKi9dogBz1Pwzyz7m1qPTjDF
-         ndf6jvK9mOYPaaqXHKh1IW2g2TTFMmwCA3hagTfrDo4qDMR/mnzp8IcoZxbLkIDtFkht
-         g4DFsz4CqjEGObe80nzeb5clLDT5SoZ0vTL8fmAWhWTZJgIdZvANDEl5M27Trg7+AUUu
-         DeZlInlwdd2E5phv2ergjsq8mlAIEiqEgp9fQ2Jiw79RQ8XkXDsq3SAHOFnaOcviVUT0
-         q7dw==
+        bh=Cqdrljg14kGOdFIxdlfrD5BcJVkhuueESPjt33hfOf4=;
+        b=nG/dbRifrymnVokNc4WmdMeVNN/nTDZlO3rVxkFiZi9ZRwV4m6ms+6vixTes/qyBdE
+         pXJuoY/dX8aFAw1jYR1KEg3BHpKs9J/Hag9osvv7arVbWgcLyzwWACpY7c+cKfUvd8rY
+         CSiBvNNreIRrau13pB9JZqfVYmodHbLAEmK66aiUwUfPbRQx5cL1i2QCERm+649NsvtW
+         +GOJXZr/cRuD2kbHGo97dZg6hBa3rtD8+g037vl8uPyeCoBCAroMDcf7cRChXssO5oL2
+         855HIuGRkYgoVJ67sVazNBwxfMxBcckrPvB3pEz3h86ew9kU9My1DrJk/V5F0EWAoD4q
+         qPOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Io0AIQG9+eqoJt7vbIjHlf2ENptY9TLYl30+II0/2/M=;
-        b=fT3kRijBawEN7oa8RioX1zYHOxkenalJ4dqjKYufobUT5Uz/YjSSvaK6+nMFFir74U
-         O2YG2lJpFW+7psuZik2ySdr2luCGj2ORwbXS33vSXEaF7iondSmXqO9TWnXxHKp2pCtf
-         9C+ZcmSgGA2dq7RSPj4t64DZAfIlNlqVAXj67wBtAsX+EECbXsflYp4ww+EtqvteO4E3
-         vsxIVZQe5qeiz/S3/PgQ5Sx45vLx2o8YrC6EnMlCGwKqLHOLipx7YTTdVNWurgv2PqRz
-         wHBW2KAx2QUnn+JylifgyIK4vBU0S9SBym8iJ5bRsQL1ndsJFcrDUL9L7I2AxqZVrrOR
-         KCDA==
-X-Gm-Message-State: APjAAAU9D0ORsdzO70fNnq7w1VJwurKbPfT5dVYXlISIihLhldB8bOV0
-        VhjmRQLoFsuigmMcBdNs3rsmn+Sg
-X-Google-Smtp-Source: APXvYqyDH3i6g2QUWxa7pKW8A5m/jZ7JTGS9agjj1Btdn/W2fUcYPyfdjr2ZFWy/TM8muU1ruco0BQ==
-X-Received: by 2002:a65:4247:: with SMTP id d7mr22922500pgq.114.1556643313818;
-        Tue, 30 Apr 2019 09:55:13 -0700 (PDT)
+        bh=Cqdrljg14kGOdFIxdlfrD5BcJVkhuueESPjt33hfOf4=;
+        b=YqAr7lfT0CTIJSa/uRzblhAe5dOV+eoyKITQddNf+Bi60gL1Jyh6eFnbZESbmLTV0Z
+         FbZL2fTwNbcv0lFkbbHGyd0PAmEdHfCTorTqkqjLomMJZ+tLD5Zoci1fE7NQMXiIAFEB
+         1yKt2DUf43RqpQvHqHKEvshzTreaMVPXJhiZtaDYpth6IstR0LvhNK4n5wfQeYw81JpZ
+         jGQyec8bIYkXkZXjSyG7W3DEsTA0KKZ90Jd1+KDPiolFOGrcxmE+M57COLM/kb+mJAdr
+         s9WIfndNwEfuZp+Ee/B9xa6A/tFQW+5RccDWCL6Ad9Fb+ceezXiJJB85P5GXWTGDJ+ZA
+         RGsw==
+X-Gm-Message-State: APjAAAVJb9ATSSxJWJauztDz2mPprqIjegH4tzhZaLA+XLF/3GHqDwUi
+        qf+8u6N6+vKA24X/HS3Uxm8NyrlC
+X-Google-Smtp-Source: APXvYqzPKYGOjZbAE2OExAZDpkqYeqxnPpssUD+JADwC0MzsUSSixl1ygPtS+GC1gm7rl7wXxB5JuQ==
+X-Received: by 2002:a62:1c86:: with SMTP id c128mr16123506pfc.43.1556643401300;
+        Tue, 30 Apr 2019 09:56:41 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i15sm49831781pfd.162.2019.04.30.09.55.11
+        by smtp.gmail.com with ESMTPSA id f71sm73615467pfc.109.2019.04.30.09.56.40
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 09:55:12 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 09:55:11 -0700
+        Tue, 30 Apr 2019 09:56:40 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 09:56:39 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Iker Perez <iker.perez@codethink.co.uk>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (lm75) Add support for TMP75B
-Message-ID: <20190430165511.GA2699@roeck-us.net>
+Subject: Re: [PATCH v3 0/2] Version Log
+Message-ID: <20190430165639.GB2699@roeck-us.net>
 References: <20190430144609.19500-1-iker.perez@codethink.co.uk>
- <20190430144609.19500-2-iker.perez@codethink.co.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190430144609.19500-2-iker.perez@codethink.co.uk>
+In-Reply-To: <20190430144609.19500-1-iker.perez@codethink.co.uk>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 03:46:08PM +0100, Iker Perez wrote:
+On Tue, Apr 30, 2019 at 03:46:07PM +0100, Iker Perez wrote:
 > From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 > 
-> The TMP75B has a different control register, supports 12-bit
-> resolution and the default conversion rate is 37 Hz.
+> Changes from V2:
+>   - Correct bad style:
+>     - Bad assigment, missing spaces before and
+>        after "=".
+>     - Divide in two lines longer than 80 characters.
+>   - Separate dt-bindings and driver-documentation into different
+>     commits.
 > 
-> Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> ---
->  Documentation/hwmon/lm75 |  7 +++++--
->  drivers/hwmon/lm75.c     | 11 +++++++++++
->  2 files changed, 16 insertions(+), 2 deletions(-)
+> Changes from V1:
+>   - Delete empty lines.
+>   - Restore replaced tabs by spaces.
 > 
-> diff --git a/Documentation/hwmon/lm75 b/Documentation/hwmon/lm75
-> index 010583608f12..0cff924cdbba 100644
-> --- a/Documentation/hwmon/lm75
-> +++ b/Documentation/hwmon/lm75
-> @@ -47,8 +47,10 @@ Supported chips:
->      Addresses scanned: none
->      Datasheet: Publicly available at the ST website
->  	       https://www.st.com/resource/en/datasheet/stlm75.pdf
-> -  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75C, TMP175, TMP275
-> -    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75', 'tmp75c', 'tmp275'
-> +  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75B, TMP75C,
-> +                      TMP175, TMP275
-> +    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75',
-> +              'tmp75b', 'tmp75c', 'tmp275'
->      Addresses scanned: none
->      Datasheet: Publicly available at the Texas Instruments website
->                 http://www.ti.com/product/tmp100
-> @@ -56,6 +58,7 @@ Supported chips:
->                 http://www.ti.com/product/tmp105
->                 http://www.ti.com/product/tmp112
->                 http://www.ti.com/product/tmp75
-> +               http://www.ti.com/product/tmp75b
->                 http://www.ti.com/product/tmp75c
->                 http://www.ti.com/product/tmp175
->                 http://www.ti.com/product/tmp275
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 447af07450f1..cdb1e7833976 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -59,6 +59,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->  	tmp175,
->  	tmp275,
->  	tmp75,
-> +	tmp75b,
->  	tmp75c,
->  };
->  
-> @@ -378,6 +379,11 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  		data->resolution = 12;
->  		data->sample_time = MSEC_PER_SEC / 2;
->  		break;
-> +	case tmp75b:
-> +		clr_mask |= 1 << 15;    /* not one-shot mode */
-> +		data->resolution = 12;
-> +		data->sample_time = MSEC_PER_SEC / 4;
 
-Looking into the datasheet, this isn't really correct,
-since the configuration register is not updated accordingly.
-The default, as mentioned in the description of this patch,
-is 37 ms, not 250 ms. There are multiple options:
-- Set the sample time to a fixed value, and update the
-  configuration register accordingly.
-- Read the sample time from the configuration register
-  and report it.
-- Add support for updating the sample time to the driver.
+FWIW, I would expect the change log in the patch(es).
+If you want to add a summary like here, its subject should
+describe what the patch series does. "Version log" does not
+describe the patch series.
 
-Either case, the reported value should match reality.
-
-Thanks,
-Guenter
-
-> +		break;
->  	case tmp75c:
->  		clr_mask |= 1 << 5;		/* not one-shot mode */
->  		data->resolution = 12;
-> @@ -438,6 +444,7 @@ static const struct i2c_device_id lm75_ids[] = {
->  	{ "tmp175", tmp175, },
->  	{ "tmp275", tmp275, },
->  	{ "tmp75", tmp75, },
-> +	{ "tmp75b", tmp75b, },
->  	{ "tmp75c", tmp75c, },
->  	{ /* LIST END */ }
->  };
-> @@ -537,6 +544,10 @@ static const struct of_device_id lm75_of_match[] = {
->  		.data = (void *)tmp75
->  	},
->  	{
-> +		.compatible = "ti,tmp75b",
-> +		.data = (void *)tmp75b
-> +	},
-> +	{
->  		.compatible = "ti,tmp75c",
->  		.data = (void *)tmp75c
->  	},
+> Iker Perez del Palomar Sustatxa (2):
+>   hwmon: (lm75) Add support for TMP75B
+>   dt-bindings: hwmon: Add tmp75b to lm75.txt
+> 
+>  Documentation/devicetree/bindings/hwmon/lm75.txt |  1 +
+>  Documentation/hwmon/lm75                         |  7 +++++--
+>  drivers/hwmon/lm75.c                             | 11 +++++++++++
+>  3 files changed, 17 insertions(+), 2 deletions(-)
+> 
 > -- 
 > 2.11.0
-> 
