@@ -1,132 +1,66 @@
-Return-Path: <SRS0=mVRL=S7=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=kUOG=TA=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DDA5C43219
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Apr 2019 22:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EAF0C43219
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 14:46:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 499132075E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Apr 2019 22:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556578730;
-	bh=qIldjRfe9+zWV+TLE5YzDQRQiJMq6ClRLjxNI8HxS0w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=yBr0dNajic5O5vkEqupk7+2Dt3pbxCk2KVxWrFEZUPTKIZu9o/jU3NhL2q2e1ALCJ
-	 Oqs7/8d/MTN+w/kOqAajsYIDid0Xmqf9TaNPpsRnnOWt0o91FghqkH5bzbabG/7Uvg
-	 nwyaYzRS1A6lZDBIB41gPg1nCNA1dDOgKEUdZpK0=
+	by mail.kernel.org (Postfix) with ESMTP id D8E0B2147A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 14:46:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729651AbfD2W6t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Apr 2019 18:58:49 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36779 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729628AbfD2W6t (ORCPT
+        id S1726229AbfD3OqT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Apr 2019 10:46:19 -0400
+Received: from imap1.codethink.co.uk ([176.9.8.82]:47782 "EHLO
+        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfD3OqT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Apr 2019 18:58:49 -0400
-Received: by mail-oi1-f193.google.com with SMTP id l203so9766219oia.3;
-        Mon, 29 Apr 2019 15:58:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ny4oOCNu4qgktzg8dYrHtC/j54FWv++KQps7rlvKcPg=;
-        b=XhEiVXbmmd7GKG0CJbKNvB8m8+WuXijJ047QJF0aAYeUljz0V2ErJeKXZkkNmisgsI
-         TDLa+V89EKF/OVe3MMPmMHzY8ti2MqJhc5jRidwMMovTYDaKfKr1pwJIiLbeBorMs7XS
-         g/UVdFDnKYZvssYmDn2i0RyxEKDbMGNNW72mryvdX8/TFW8RyRUvHzHGCUQN9IUbMx5w
-         1lhOqspsbjX2nR6su5n1kEUiSqevYXENvTXX7WFCSt9YXYwIjHwP4JNroojEmGoiqGHC
-         kqkBdUkchgi3iR9xhEC8FRJhQ5O333//2V79tbIGhT/6CDg0+2vGEjbqDLxy2qelqVXT
-         WNiw==
-X-Gm-Message-State: APjAAAXJHvfrRRdZkDdS8vnDiOzhEM432Kzz77dRt3suREHCxRtIuFVi
-        PpOE1R9q/86iR+Kx1tZ2Wg==
-X-Google-Smtp-Source: APXvYqwNnA5K9okx087TgpZXy5ng5WNqVJDOpJxMQgUk8bok5PwAPI0KZLXBkHxz/j6QV5CW/AgTEA==
-X-Received: by 2002:aca:d90a:: with SMTP id q10mr1108213oig.65.1556578728752;
-        Mon, 29 Apr 2019 15:58:48 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e133sm15117456oif.44.2019.04.29.15.58.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 15:58:47 -0700 (PDT)
-Date:   Mon, 29 Apr 2019 17:58:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arnd.de, mark.rutland@arm.com,
-        yuenn@google.com, venture@google.com, brendanhiggins@google.com,
-        avifishman70@gmail.com, joel@jms.id.au,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-binding: misc: Add common LPC snoop
- documentation
-Message-ID: <20190429225847.GA8905@bogus>
-References: <20190416111631.356803-1-tmaimon77@gmail.com>
- <20190416111631.356803-2-tmaimon77@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190416111631.356803-2-tmaimon77@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Tue, 30 Apr 2019 10:46:19 -0400
+Received: from 82-132-219-116.dab.02.net ([82.132.219.116] helo=ct-lt-765.unassigned)
+        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
+        id 1hLU1Q-0002ju-VQ; Tue, 30 Apr 2019 15:46:17 +0100
+Received: from ikerpalomar by ct-lt-765.unassigned with local (Exim 4.89)
+        (envelope-from <ikerpalomar@ct-lt-765.unassigned>)
+        id 1hLU1K-00055D-1g; Tue, 30 Apr 2019 15:46:10 +0100
+From:   Iker Perez <iker.perez@codethink.co.uk>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux@roeck-us.net,
+        Iker Perez del Palomar Sustatxa 
+        <iker.perez@codethink.co.uk>
+Subject: [PATCH v3 0/2] Version Log
+Date:   Tue, 30 Apr 2019 15:46:07 +0100
+Message-Id: <20190430144609.19500-1-iker.perez@codethink.co.uk>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 16, 2019 at 02:16:30PM +0300, Tomer Maimon wrote:
-> Added device tree binding documentation for Nuvoton BMC
-> NPCM BIOS Post Code (BPC) and Apeed AST2500 LPC snoop.
+From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 
-s/Apeed/Aspeed/
+Changes from V2:
+  - Correct bad style:
+    - Bad assigment, missing spaces before and
+       after "=".
+    - Divide in two lines longer than 80 characters.
+  - Separate dt-bindings and driver-documentation into different
+    commits.
 
-> The LPC snoop monitoring two configurable I/O addresses
-> written by the host on Low Pin Count (LPC) bus.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-> ---
->  .../devicetree/bindings/misc/lpc-snoop.txt         | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/lpc-snoop.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/lpc-snoop.txt b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
-> new file mode 100644
-> index 000000000000..c21cb8df4ffb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/lpc-snoop.txt
-> @@ -0,0 +1,27 @@
-> +LPC snoop interface
-> +
-> +The LPC snoop (BIOS Post Code) interface can monitor
-> +two configurable I/O addresses written by the host on
-> +the Low Pin Count (LPC) bus.
-> +
-> +Nuvoton NPCM7xx LPC snoop supports capture double words,
-> +when using capture double word only I/O address 1 is monitored.
-> +
-> +Required properties for lpc-snoop node
-> +- compatible   : "nuvoton,npcm750-lpc-bpc-snoop" for Poleg NPCM7XX
-> +                 "aspeed,ast2500-lpc-snoop" for Aspeed AST2500.
-> +- reg          : specifies physical base address and size of the registers.
-> +- interrupts   : contain the LPC snoop interrupt with flags for falling edge.
-> +- snoop-ports  : contain monitor I/O addresses, at least one monitor I/O
-> +                 address required
-> +
-> +Optional property for NPCM7xx lpc-snoop node
-> +- nuvoton,lpc-en-dwcapture : enable capture double words support.
-> +
-> +Example:
-> +	lpc-snoop: lpc_snoop@f0007040 {
+Changes from V1:
+  - Delete empty lines.
+  - Restore replaced tabs by spaces.
 
-lpc-snoop@...
+Iker Perez del Palomar Sustatxa (2):
+  hwmon: (lm75) Add support for TMP75B
+  dt-bindings: hwmon: Add tmp75b to lm75.txt
 
-With that,
+ Documentation/devicetree/bindings/hwmon/lm75.txt |  1 +
+ Documentation/hwmon/lm75                         |  7 +++++--
+ drivers/hwmon/lm75.c                             | 11 +++++++++++
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-> +		compatible = "nuvoton,npcm750-lpc-bpc-snoop";
-> +		reg = <0xf0007040 0x14>;
-> +		snoop-ports = <0x80>;
-> +		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +	};
-> -- 
-> 2.14.1
-> 
+-- 
+2.11.0
