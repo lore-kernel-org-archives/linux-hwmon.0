@@ -2,103 +2,154 @@ Return-Path: <SRS0=kUOG=TA=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1488C43219
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA2EC43219
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 20:56:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9B5842075E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 16:58:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WwAraLRp"
+	by mail.kernel.org (Postfix) with ESMTP id 3A40221744
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Apr 2019 20:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1556657817;
+	bh=+hmIA6J3xzhhj0EBuQ5cxZY43or4OX3LirZ2VLfbplg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:List-ID:
+	 From;
+	b=CwHMf3Skkp8xifB1ZjA79/WxmwVx3yTdX5UDcWO0ephedm7JV1QU378UflsgJWsgF
+	 W7hMGPVJeRklZxrWWRQNp2Nx8qJ2G5NihSeDdzCjmNagYBLH/nxReE31KEnl7hxYCo
+	 K8TLq9r0bHvY72EPxmR7oakko8fQ82UpVLe2euQM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbfD3Q6i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Apr 2019 12:58:38 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36696 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfD3Q6i (ORCPT
+        id S1726612AbfD3U4w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Apr 2019 16:56:52 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40238 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727341AbfD3U4a (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Apr 2019 12:58:38 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 85so7125572pgc.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Apr 2019 09:58:37 -0700 (PDT)
+        Tue, 30 Apr 2019 16:56:30 -0400
+Received: by mail-io1-f68.google.com with SMTP id m9so7076904iok.7;
+        Tue, 30 Apr 2019 13:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EhazD1ALEjdmt8Akep7caLGwCkVt40vY7TmZX7/IFkE=;
-        b=WwAraLRpPVOFKF0twWfdKDmitfJ5BU5B6DT0C7cHvNbTFl710D18swumtcE2gNvvIs
-         2GcAl0FykwoGhxzaBhRicClo91+zss4buLKBTXtGg0sadW3plqAcEeVZ6d9abHDstHMb
-         Nq5L1n2iFvNa9NVOFdO6p5qUvS5+C0p4rUW1kkV545Ez3HqSfV/VIiCU1SS7xvaFOn8O
-         2DuXpGS4uXJE/ivv0gP3f3Y8k92Vwc1K2k7CzESCZGt/tbYKmUG4QPwG3eRGxhMiYIzt
-         6NPENnk+Ut/8ejecm52NG2glhv3ZXYnYuvPNhGbIFpbFBKb1qwX2squKphDt08gbA5Rl
-         2mAA==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :reply-to:organization;
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=PL+yn0dZoCL4WNr3nSM/5DIUfF1uDT2OtRGMvozVcz98zDCwDrq4S+gJHuV1FhIruu
+         mL9gvttqtycTM+DXHWrMczzxpBiZftUdgHnPclipziEpebhWp7bF6d61SPghEagz1N71
+         9MtNmRtNpdpw+XN+oLj9uBRbfhJ0E0+S11KfcfzYQRwPb6DdPQ7KXr73OWRE9TojWPq1
+         UqRXN3q24UB1Zmc8gMGTTqfCXWXGsqtPUpACX9gGi88UbR4s43E9bVX1WwuE1NbWoS0l
+         DvjeZExKADawTmFD2SZqumI6DvD8eq2zNTqiF66GBiU94OC06r/M+7j2LahJ3nm173YH
+         4EVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EhazD1ALEjdmt8Akep7caLGwCkVt40vY7TmZX7/IFkE=;
-        b=c8obaK+VyG5PYdD9Ymtp1ZW4r6mvtnEyHYO28IpMKvCmdisDwKh8htUngrIwl5SUNQ
-         sohDSa/VWz3FfxG7+LyRJcJwhGSzGnLZjgfGHaZhSQqhQ1ZkCw0BA5JGzqvyXMN4ibtQ
-         zvCNX4HOSgBDxRxKvoo0QSdh+mXxsNIylcX8pf72WiHcFnhehFYeOGWdSPwOtlzVteGO
-         HCK2VQe05hxAjrkXZ+COZXOOHfJWQYZOWZdCfqOqFW1Rh765OSsSG0xsP6lSMrov4csV
-         iOmRXqD/x4DN9Hm87MEOcrCIdYtpILCTFWXcHqCnG3cUhhtzBT4iFV0b1qs3fBnPBtBi
-         NCRw==
-X-Gm-Message-State: APjAAAWJicRTfmOitxpVMI1gqEtTMD885jWsfogJDaBBMdYO6ezdSN+M
-        u6DiwMXiLVm71IxwrcQJ51QGyHg2
-X-Google-Smtp-Source: APXvYqzYSXVTadMqllbjlsoGEBFQijAcaILi0eGDAF72RYfG/bLBLOoUCKGj65xhb/YcFyY13+Zu+g==
-X-Received: by 2002:a62:6490:: with SMTP id y138mr73149242pfb.230.1556643517573;
-        Tue, 30 Apr 2019 09:58:37 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g24sm5075321pfi.126.2019.04.30.09.58.36
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:reply-to:organization;
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=qgRMXik8Tum7hWWxy9HNkotZaA9FlaZkGuJEzEiGc+PXHmrJJsh6csV5sa7pXWSmBh
+         GRE3JAfHZIJNi9d1tIFF1aIo6UejSKa3wxMOsb0/9SgfsJDiERfnLqIouAIG/ZLDnlMB
+         ar8MHq0vm8pRE5GOvm2+IaFu2u4adSJxQYcfjuJCs4B0Y4WRwWFh7bbU+aYLJ9eDfn5h
+         TO90CYQ7RM58dAqUALqmAiVHP5SZM9FII7IfhxX2WOPpE6GVKrURhT3438jHmtVEab4c
+         1/S1bDig1t4BdmdfeMeX+450EQdYqMPmEa41ycNZBAoq3/5AKjwOHopVIyJdAkGH/Qwf
+         CZgA==
+X-Gm-Message-State: APjAAAXKiOjvrBZDaGtdl4/sxM+nXNq0hQcr2bjH+jdftw9WnR/SHR9/
+        ORbQFIxcdch/wfvjJeOrrkl1U8X9
+X-Google-Smtp-Source: APXvYqxyFeIxzLvmQXsCqirfnkWmKTBSbtuPpFfbNwLy1JnBpUP8CLCuaFrKLeMcvDTfQuMRZMXhmg==
+X-Received: by 2002:a6b:6e0f:: with SMTP id d15mr233767ioh.116.1556657789718;
+        Tue, 30 Apr 2019 13:56:29 -0700 (PDT)
+Received: from nuc8.lan (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
+        by smtp.gmail.com with ESMTPSA id s7sm9799349ioo.17.2019.04.30.13.56.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 09:58:36 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 09:58:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Iker Perez <iker.perez@codethink.co.uk>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: Add tmp75b to lm75.txt
-Message-ID: <20190430165836.GA3186@roeck-us.net>
-References: <20190430144609.19500-1-iker.perez@codethink.co.uk>
- <20190430144609.19500-3-iker.perez@codethink.co.uk>
- <20190430165719.GC2699@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430165719.GC2699@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Tue, 30 Apr 2019 13:56:29 -0700 (PDT)
+From:   Len Brown <lenb@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 12/14] hwmon/coretemp: Support multi-die/package
+Date:   Tue, 30 Apr 2019 16:55:57 -0400
+Message-Id: <f18272b6a1470d7fe6c08def9a334cfc9503ee50.1553624867.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.18.0-rc0
+In-Reply-To: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
+References: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 09:57:19AM -0700, Guenter Roeck wrote:
-> On Tue, Apr 30, 2019 at 03:46:09PM +0100, Iker Perez wrote:
-> > From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> > 
-> There should be some description / rationale for the patch here.
-> 
-... and, if it is a separate patch because it touches devicetree
-documentation, you should copy the DT maining list and DT maintainers.
+From: Zhang Rui <rui.zhang@intel.com>
 
-> > Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> > ---
-> >  Documentation/devicetree/bindings/hwmon/lm75.txt | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> > index 12d8cf7cf592..586b5ed70be7 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/lm75.txt
-> > +++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
-> > @@ -25,6 +25,7 @@ Required properties:
-> >  		"ti,tmp175",
-> >  		"ti,tmp275",
-> >  		"ti,tmp75",
-> > +		"ti,tmp75b",
-> >  		"ti,tmp75c",
-> >  
-> >  - reg: I2C bus address of the device
-> > -- 
-> > 2.11.0
-> > 
+This patch introduces coretemp driver support
+for new dual-die/package systems.
+
+On the new dual-die/package systems, the package temperature MSRs becomes
+die-scope. Thus instead of one hwmon device per physical package, now
+there should be one hwmon device for each die on these systems.
+
+On the hardwares that do not have multi-die support,
+topology_logical_die_id() equals topology_physical_package_id(), thus the
+only difference is that physical package id is used as the coretemp
+platform device id, instead of logical package id on these systems.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+---
+ drivers/hwmon/coretemp.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 5d34f7271e67..57f348d43819 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -435,7 +435,7 @@ static int chk_ucode_version(unsigned int cpu)
+ 
+ static struct platform_device *coretemp_get_pdev(unsigned int cpu)
+ {
+-	int pkgid = topology_logical_package_id(cpu);
++	int pkgid = topology_logical_die_id(cpu);
+ 
+ 	if (pkgid >= 0 && pkgid < max_packages)
+ 		return pkg_devices[pkgid];
+@@ -579,7 +579,7 @@ static struct platform_driver coretemp_driver = {
+ 
+ static struct platform_device *coretemp_device_add(unsigned int cpu)
+ {
+-	int err, pkgid = topology_logical_package_id(cpu);
++	int err, pkgid = topology_logical_die_id(cpu);
+ 	struct platform_device *pdev;
+ 
+ 	if (pkgid < 0)
+@@ -703,7 +703,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 * the rest.
+ 	 */
+ 	if (cpumask_empty(&pd->cpumask)) {
+-		pkg_devices[topology_logical_package_id(cpu)] = NULL;
++		pkg_devices[topology_logical_die_id(cpu)] = NULL;
+ 		platform_device_unregister(pdev);
+ 		return 0;
+ 	}
+@@ -732,6 +732,7 @@ static enum cpuhp_state coretemp_hp_online;
+ static int __init coretemp_init(void)
+ {
+ 	int err;
++	struct cpuinfo_x86 *c = &cpu_data(0);
+ 
+ 	/*
+ 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+@@ -741,7 +742,7 @@ static int __init coretemp_init(void)
+ 	if (!x86_match_cpu(coretemp_ids))
+ 		return -ENODEV;
+ 
+-	max_packages = topology_max_packages();
++	max_packages = topology_max_packages() * c->x86_max_dies;
+ 	pkg_devices = kcalloc(max_packages, sizeof(struct platform_device *),
+ 			      GFP_KERNEL);
+ 	if (!pkg_devices)
+-- 
+2.18.0-rc0
+
