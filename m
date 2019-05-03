@@ -1,61 +1,63 @@
-Return-Path: <SRS0=4/GL=TB=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=/E4C=TD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C571C43219
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 May 2019 16:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66211C43219
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 May 2019 08:04:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1375B2064A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 May 2019 16:48:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 333D42087F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 May 2019 08:04:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DZAZlVyv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KOwMT0Cl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726452AbfEAQsq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 May 2019 12:48:46 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:34192 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbfEAQsq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 May 2019 12:48:46 -0400
-Received: by mail-pl1-f196.google.com with SMTP id ck18so4129847plb.1;
-        Wed, 01 May 2019 09:48:45 -0700 (PDT)
+        id S1726193AbfECIEo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 May 2019 04:04:44 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39049 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfECIEn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 May 2019 04:04:43 -0400
+Received: by mail-wr1-f65.google.com with SMTP id a9so6610929wrp.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 03 May 2019 01:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=a82ckZo73SGxA8ey3aK0omtfrwDTACIRQAmbz4zxBz8=;
-        b=DZAZlVyv2Zj8QW2ZVaA4F2WxBgm+TYZTAM4t/5EOeChgCJ7BD4Ft2Dzmnf3x6+ydz1
-         XakRftqblAOckP3MeN3ccDznp09ppAFe871YQDxI1Qj+FuNPuoY1ouHhz5kI+3ZQ3PV3
-         /L68VP9/OZfwUxqTI2ADGPFduqoKJR0cQ/ilRG4LirfK9AWJ1nlO4sVAtoc4jAZjVELX
-         dwxVevKkDwYvFLwv52/XqZAeyBzWSZ5CO4uvi+nyaZGWjFQjY/27kRLDK4iQOVPv1bS3
-         pYU7oLCM3TjBP/5voYoXBOCWgkWx+/gNSfwEsWL5ioDvofaSRT3AzcJ5BrlWCeZEJ+vp
-         9TMw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TpXqJQI7PVBHDytg+IGA8i8m1/XYj0MrND3X98mgWRU=;
+        b=KOwMT0Cl9efaAA08+DXGflf+klv1sSVEHKxtGUL+CBB2gxt07xyd+GyRUCCFVKzsBF
+         vKFUzaTq0/DOqlmb39mbYs9iH9RkOcgL/KAAeaSaMlUscaGj/bjbj+P1qApNVwESdscJ
+         g+1LJrqUlO8vcWihy8sZ39L1L6LS1ajt0o5fzIYYJaQhvca+WfuJGXFbdFR2rcym4b4t
+         zBYkf1Llb/Z3r2f2Mqm8DStMLgaZcHBFBYpuH2Uow5/FZOaBijtEgoGFhaFs2w3Lbcsf
+         fUx7d6Qd9AwY90DycZfziK6toE6kMAjg8Mx+cK1CNVyDwdMXuzYcxD1e3vRmAV6UcGSV
+         1pBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=a82ckZo73SGxA8ey3aK0omtfrwDTACIRQAmbz4zxBz8=;
-        b=eRcacc6vuWJ2IS6LXieJP2nV+JdPyK0DzVyTLlpNteUKuYtVLTDB0NNWxFxVMRyLjb
-         jkZpXMqpSxzbj/mmdgDewI9SRm1gkEWnpkRbVCAuVNixmsOJD70pwuK0LPi2FHOaaSmm
-         hFibVoZeRDX1/wyManUZduKYreqenLrLAx/hOuOoKAwJdqC+MnjYFlK3Xikj96r/q1p/
-         toFtIaV03CFd2ihqtn34U663ftD5jqWyHE2G3acj5LIQJTYHsElQFPf5CMjs9aVke1Zo
-         d/piFGUMZ2ufbdSBy3Nt++szGHwQwzqUvoPiyhi/KOEjj1piT95aSD9cmKqJyTOYfdjG
-         EEow==
-X-Gm-Message-State: APjAAAVOZsxdWBX/W9WK/VXby8JYo+/mV9bMdXGB6vtluQfByrpjuZj9
-        HWcbFDc5i4j7omHFxG3mH5nBogrN
-X-Google-Smtp-Source: APXvYqxW8qIcb4HhSImxk+i+ozqc55UYdRTl9MHwDSKvhigyPhTtplKP1yE1tqeQ0DpYt8I1Y+S+aA==
-X-Received: by 2002:a17:902:163:: with SMTP id 90mr79079707plb.34.1556729325186;
-        Wed, 01 May 2019 09:48:45 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r76sm62426017pfa.39.2019.05.01.09.48.44
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TpXqJQI7PVBHDytg+IGA8i8m1/XYj0MrND3X98mgWRU=;
+        b=jfin4e4zqI9BWRmlyXkClYk9Yx7cxBDWKi+PFq0q17LDorIB8ifsoM/2yq3ZAiZ3Ye
+         eZ0Br1NvO8EMNZjpfqPb0imx6LPGlx04VQwSJrXMgpnYMWJ795+CoQSw8m9DwcCXHfOH
+         WxXb4gOHQ6qK8SwcSxyycW0dL/K89lfd98nDv5NofnZEmvAa07aK0+oZIY3iMud9cmX2
+         OS1zh0gOS4S7+AioLiL7eL6qh6QqEjiMI5w5Tw65ioPo/KoL/rmYN2n7Mrd/Nk7LHpE3
+         y5XZg7FBVw5YvjWzCTQhHEJP5lYcqPMmAYpsyZRBplxx4LzV+heUyvAMmZtX/pR8Sxd3
+         x6OQ==
+X-Gm-Message-State: APjAAAWKjnSQMQq1CNPkB/AyqhmUp07hE29ArccnLvDNtApqHCTBC/Lr
+        L1R9fiGZ15FtZ613qIklOnMN4A==
+X-Google-Smtp-Source: APXvYqzRH5TpkdzGloadzIxAtQZsM2JgxqfDy9oibY2Qrd4ctA1Tpc85qqJ9ZfJamG8tTMt5Vi3YIQ==
+X-Received: by 2002:a5d:430f:: with SMTP id h15mr5756534wrq.132.1556870681778;
+        Fri, 03 May 2019 01:04:41 -0700 (PDT)
+Received: from [192.168.0.41] (223.235.129.77.rev.sfr.net. [77.129.235.223])
+        by smtp.googlemail.com with ESMTPSA id k1sm1159060wmi.48.2019.05.03.01.04.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 May 2019 09:48:44 -0700 (PDT)
-Date:   Wed, 1 May 2019 09:48:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 03 May 2019 01:04:41 -0700 (PDT)
+Subject: Re: [PATCH 1/6] thermal: Introduce
+ devm_thermal_of_cooling_device_register
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-pm@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
@@ -69,40 +71,54 @@ Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
         Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH 1/6] thermal: Introduce
- devm_thermal_of_cooling_device_register
-Message-ID: <20190501164843.GA16333@roeck-us.net>
+        Eduardo Valentin <edubezval@gmail.com>
 References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
  <1555617500-10862-2-git-send-email-linux@roeck-us.net>
+ <20190501164843.GA16333@roeck-us.net>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c8a26b7d-2775-e13f-21b7-dbc901ea3b0b@linaro.org>
+Date:   Fri, 3 May 2019 10:04:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1555617500-10862-2-git-send-email-linux@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190501164843.GA16333@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 18, 2019 at 12:58:15PM -0700, Guenter Roeck wrote:
-> thermal_of_cooling_device_register() and thermal_cooling_device_register()
-> are typically called from driver probe functions, and
-> thermal_cooling_device_unregister() is called from remove functions. This
-> makes both a perfect candidate for device managed functions.
+On 01/05/2019 18:48, Guenter Roeck wrote:
+> On Thu, Apr 18, 2019 at 12:58:15PM -0700, Guenter Roeck wrote:
+>> thermal_of_cooling_device_register() and thermal_cooling_device_register()
+>> are typically called from driver probe functions, and
+>> thermal_cooling_device_unregister() is called from remove functions. This
+>> makes both a perfect candidate for device managed functions.
+>>
+>> Introduce devm_thermal_of_cooling_device_register(). This function can
+>> also be used to replace thermal_cooling_device_register() by passing a NULL
+>> pointer as device node. The new function requires both struct device *
+>> and struct device_node * as parameters since the struct device_node *
+>> parameter is not always identical to dev->of_node.
+>>
+>> Don't introduce a device managed remove function since it is not needed
+>> at this point.
+>>
 > 
-> Introduce devm_thermal_of_cooling_device_register(). This function can
-> also be used to replace thermal_cooling_device_register() by passing a NULL
-> pointer as device node. The new function requires both struct device *
-> and struct device_node * as parameters since the struct device_node *
-> parameter is not always identical to dev->of_node.
-> 
-> Don't introduce a device managed remove function since it is not needed
-> at this point.
-> 
+> Any feedback / thoughts / comments ?
 
-Any feedback / thoughts / comments ?
+Hi Guenter,
 
-Thanks,
-Guenter
+I have comments about your patch but I need some time to double check in
+the current code how the 'of' and 'devm' are implemented.
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
