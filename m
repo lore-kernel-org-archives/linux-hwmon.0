@@ -2,139 +2,92 @@ Return-Path: <SRS0=0b8d=TG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE83C04A6B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 May 2019 21:27:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95899C04A6B
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 May 2019 22:41:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D3E62053B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 May 2019 21:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1557178072;
-	bh=NqTXcEY6xitd9OwpOepED0bcGkN51+bHAKkT3RC1mWA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:List-ID:
-	 From;
-	b=d95FEYjpg8GjJ/f8yZR2I5nXM5ISGyABJQ/JpcgwR2i2e3E8alM6rjvBgfKl16bEt
-	 IP7yqYEAQK0yR/3S7nNGLJ4GvtfptWLHM4IKJhSqqDWeKFoU9x78xBvr8pAIYPnDAe
-	 AZnN4sveehP2q60KWuDMFQvhtNJJW/WyqkbBwj4I=
+	by mail.kernel.org (Postfix) with ESMTP id 5AA792082F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 May 2019 22:41:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IYxXCXjT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbfEFV1r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 May 2019 17:27:47 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:34409 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726956AbfEFV0m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 May 2019 17:26:42 -0400
-Received: by mail-io1-f67.google.com with SMTP id g84so4445493ioa.1;
-        Mon, 06 May 2019 14:26:42 -0700 (PDT)
+        id S1726218AbfEFWlR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 May 2019 18:41:17 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44695 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbfEFWlQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 May 2019 18:41:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y13so7510104pfm.11;
+        Mon, 06 May 2019 15:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :reply-to:organization;
-        bh=rllXTOSI+l4dOxVedgJq5yZYXTiqRbCrivN8bEva+1o=;
-        b=XbAHGi+9ZzQTmKRVjGiRMM8+/MG7wQmGfl1AT3d83I3LOq+YByi/vjZO5G7stu1PbA
-         5Srl3aOE8jVsnuPUIpB8xIG3rHJ+m22o3KXiUx6h3Z6MU5ZG4YEBOVyU3X+zlx7M3pua
-         vZ+PXSItLRIWUvOrdXSq//nnufPmXSjzLYXjU9dcK/9ojo780LoplcEWBvWWLqnVG+20
-         ptzyHH/YK1A7o2iAKUB0RsV8Dff25+FuR+rMPtKorX4jjDTlTDgriJhn6dcdzWZzmnRC
-         n7Rx5ro96BgyYCrjvZ+72rQyKntQOZdozbUu7xBBHY70cX9eEUfXS4kXJqjACf3vvxfh
-         WFyg==
+        h=from:to:cc:subject:date:message-id;
+        bh=rpxbdKqagbkKW6bRErcLm1VGK57u1T3ItS0aEgPa12I=;
+        b=IYxXCXjTt3+Quzmpq5O1q0UAtIi8l4WbNguVshSC1FO6x1jFMWFnwjdoF0N646pXc7
+         afKTLrxIddOxOBDv2nfWrUYRIDm5z6vtRdWK/DGa9o0j/wwVt6koWyhJSzvk5eFU9nuI
+         FOFhwV/qNwbZzm86kIdXkpj88q5fEUAsOcVMmUa0adwZlGs82KYUCdr6Q3xuvfH91jf+
+         Tz5jT50v4lXaRXgq2Cv1UeXPZaQtjOrkHPtX2ztgDDshd3us3wB5qqi2Br3NxpIPYdZQ
+         U/2piYAL/XFsgC0Q4hNdPB7pJKfYfKOPQFMEyVHkR9WB5wYomgmcF45xB5cffoeQqVXi
+         ring==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:reply-to:organization;
-        bh=rllXTOSI+l4dOxVedgJq5yZYXTiqRbCrivN8bEva+1o=;
-        b=hqNBc1ow6w8um+N12wqQMzVqMqFXAqnGxvr1fiDxc4n5GDvKeYswHvHupg0a994OMI
-         s9uY2EB3hw3l9z7U88hm4sgsfkPDL29zJkdzVi4UX57QRdVSUs/iOvpvLBnq7Mgmr7gK
-         jnG8WcJL8d3Arz/I7Me1swWNQ74JNBoSDCBWc3pIGjfJlTurk6LdY+mENIh5phXS5tW/
-         YLWXw1MR8gHUMK/a3hxN+u3NpuKz1m28EW0MeoDGXIZWU7vb1segNaZe5oaqkykusZEZ
-         6cvTBTtDae4Lj1jT413db5xM9AZfNJOlmL5KDni+se1hr5QhCqWeGJAGaJU3KtwURBE8
-         q9Cg==
-X-Gm-Message-State: APjAAAVy9fd2LM2pbmhN4kcESlHa3UjyJ3oKav1pHdUpkRDiuje55uCS
-        83eg094kTAG+ZnwkkeOAFN0=
-X-Google-Smtp-Source: APXvYqx6mYHaqoZF3+81oCwrxQCD2jqxgtmOU5IIWRQ3TMRVtR+/J9jOIu+qYpNcf2VSTlIjYGMEBg==
-X-Received: by 2002:a05:6602:20cc:: with SMTP id 12mr3027644ioz.6.1557178001737;
-        Mon, 06 May 2019 14:26:41 -0700 (PDT)
-Received: from nuc8.lan (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
-        by smtp.gmail.com with ESMTPSA id v25sm4268009ioh.81.2019.05.06.14.26.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rpxbdKqagbkKW6bRErcLm1VGK57u1T3ItS0aEgPa12I=;
+        b=WJtGsvylYhJP5RPezaJJnZJustmTvkozZ3cmrJC8xD0gZyy63LNSspWLyZ8HWURGxI
+         2uTG8tJOqVqbORSMDFLfhu8686JfBRxQ2S/mfdTazuvehp9AE13bC/A/6ZOU/KqaODXn
+         4vfrHldMhDB3viNLpJJsgQj+rZNUq2WGlzj1rJIUiu6PgB+4UeMv1h3dWxAsWp7sQ4VT
+         XIV1ufbdn2VFOA0/JhIymzDZHN+gfFSUTIMAOG5hmpl2B+waK1Z+iQS8y+wgmkfjyv/4
+         eAtc94s3I/0Vg52Rej6Bze0xhL8JY5yh1j6q6N/EkV0X7/2fzguBLLGeEuqGdBS9tJrl
+         upVQ==
+X-Gm-Message-State: APjAAAVFOuMzgFD7VgqzG5kRA48YCOVSK6mjHx0JAWF2TVJlVmprPpcK
+        mKFhCb0wkEO3vbI8F5Ybwgn4YuHp
+X-Google-Smtp-Source: APXvYqyL9KgkGJ673pktlj24hvy16jhjBP24eNFCAaO7fqwyUMgtOgpvh732fHWCJyI8i0cSUME6WQ==
+X-Received: by 2002:a63:c203:: with SMTP id b3mr8974823pgd.398.1557182475712;
+        Mon, 06 May 2019 15:41:15 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
+        by smtp.gmail.com with ESMTPSA id s11sm19784153pga.36.2019.05.06.15.41.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 May 2019 14:26:41 -0700 (PDT)
-From:   Len Brown <lenb@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH 13/22] hwmon/coretemp: Support multi-die/package
-Date:   Mon,  6 May 2019 17:26:08 -0400
-Message-Id: <75731eb53db844af1559aa92f257cb9ca8c2a70a.1557177585.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.18.0-rc0
-In-Reply-To: <6f53f0e494d743c79e18f6e3a98085711e6ddd0c.1557177585.git.len.brown@intel.com>
-References: <6f53f0e494d743c79e18f6e3a98085711e6ddd0c.1557177585.git.len.brown@intel.com>
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
+        Mon, 06 May 2019 15:41:14 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
+Subject: [PATCH 0/2] hwmon: scmi: Scale values to target desired HWMON units
+Date:   Mon,  6 May 2019 15:41:07 -0700
+Message-Id: <20190506224109.9357-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Zhang Rui <rui.zhang@intel.com>
+Hi Sudeep, Guenter,
 
-Package temperature sensors are actually implemented in hardware per-die.
+This patch series adds support for scaling SCMI sensor values read from
+firmware. Sudeep, let me know if you think we should be treating scale
+== 0 as a special value to preserve some firmware compatibility (not
+that this would be desired).
 
-Update coretemp to be "die-aware", so it can expose mulitple sensors
-per package, instead of just one.  No change to single-die/package
-systems.
+Thanks!
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
----
- drivers/hwmon/coretemp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Florian Fainelli (2):
+  firmware: arm_scmi: Fetch and store sensor scale
+  hwmon: scmi: Scale values to target desired HWMON units
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 5d34f7271e67..c64ce32d3214 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -435,7 +435,7 @@ static int chk_ucode_version(unsigned int cpu)
- 
- static struct platform_device *coretemp_get_pdev(unsigned int cpu)
- {
--	int pkgid = topology_logical_package_id(cpu);
-+	int pkgid = topology_logical_die_id(cpu);
- 
- 	if (pkgid >= 0 && pkgid < max_packages)
- 		return pkg_devices[pkgid];
-@@ -579,7 +579,7 @@ static struct platform_driver coretemp_driver = {
- 
- static struct platform_device *coretemp_device_add(unsigned int cpu)
- {
--	int err, pkgid = topology_logical_package_id(cpu);
-+	int err, pkgid = topology_logical_die_id(cpu);
- 	struct platform_device *pdev;
- 
- 	if (pkgid < 0)
-@@ -703,7 +703,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 * the rest.
- 	 */
- 	if (cpumask_empty(&pd->cpumask)) {
--		pkg_devices[topology_logical_package_id(cpu)] = NULL;
-+		pkg_devices[topology_logical_die_id(cpu)] = NULL;
- 		platform_device_unregister(pdev);
- 		return 0;
- 	}
-@@ -741,7 +741,7 @@ static int __init coretemp_init(void)
- 	if (!x86_match_cpu(coretemp_ids))
- 		return -ENODEV;
- 
--	max_packages = topology_max_packages();
-+	max_packages = topology_max_packages() * topology_max_die_per_package();
- 	pkg_devices = kcalloc(max_packages, sizeof(struct platform_device *),
- 			      GFP_KERNEL);
- 	if (!pkg_devices)
+ drivers/firmware/arm_scmi/sensors.c |  7 +++-
+ drivers/hwmon/scmi-hwmon.c          | 55 ++++++++++++++++++++++++-----
+ include/linux/scmi_protocol.h       |  1 +
+ 3 files changed, 53 insertions(+), 10 deletions(-)
+
 -- 
-2.18.0-rc0
+2.17.1
 
