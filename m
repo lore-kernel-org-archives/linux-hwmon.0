@@ -2,99 +2,124 @@ Return-Path: <SRS0=D458=TH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0BCCC004C9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 19:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD24C004C9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 21:06:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C606E20825
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 19:38:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E564205C9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 21:06:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edCfTr60"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hd/bYwse"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbfEGTiP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 May 2019 15:38:15 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:32791 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbfEGTiP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 May 2019 15:38:15 -0400
-Received: by mail-pf1-f193.google.com with SMTP id z28so9187713pfk.0;
-        Tue, 07 May 2019 12:38:15 -0700 (PDT)
+        id S1728451AbfEGVG6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 May 2019 17:06:58 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33156 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbfEGVG5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 May 2019 17:06:57 -0400
+Received: by mail-pf1-f196.google.com with SMTP id z28so9298642pfk.0;
+        Tue, 07 May 2019 14:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=sC/+NY9vNRdIe9N8awakKaLNDu11yUQCUMakYQMWUBk=;
-        b=edCfTr60W9kD+WVkXBcM19S0e2usB7m+SrxnRi1Qi+/QHbw6c5vE75E4uK0zW9FJ3u
-         hscskKOYoBfaGOf2pGnIigDj8CjnnOK6VpfQUYFDz56BOlujpguZUhLVtnKhRujUde9q
-         onWgRfe3beZ+enpnR8U901oLW15LyzB4HDBMlf+4Cuo9e/ZRr7WMFSjIdNlJRPxxQ7XJ
-         y3JU6v3vuM5+vh2uJqGmAbybj3BkfZwbgFEFixMtcgq7K8MWlHgBm5N+HepbThduYXUN
-         iTWMPLIgg2+t28s5ghdrSLcTR/sPHGYMwkYJVbsDZUtUKs/Qzx4VJuNDfONTXNuYD5Rf
-         G6Ww==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=VL8uiSCPpzZNMmP+oEVAuQOFn8NTTTisNh1ggwInehw=;
+        b=hd/bYwseMXfh2hIOB9c0up4PVwZLYR4n6c+ckG//+BXsEDwauzmZywkj452nBvEUDt
+         sAiDFdvaMIJ1RFSq6Ts6UGBoViNk/9II0Yq0+34q03rC6fWIJ2LcUt4FNYDtMLd4p6Xi
+         gD3JeSihu3tqX3M4nl+YuCPfpbSEDGaEDr2VfjzyKCSZFUVAN1IOj3Q5JHx4ucy/V6MF
+         nDJ4pXd7Pr1CvPECi+wBzmq0f6e2kR0w8cY0Ztn+n4WwBsSpM4QEMxpV0dDs2g/QlysO
+         1r1V265aKrVbP6t/tlMivLjqUmI8SGQ3fMGawtfQMSNccF+8pthXpJZzv3ElDkKqXo86
+         91aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=sC/+NY9vNRdIe9N8awakKaLNDu11yUQCUMakYQMWUBk=;
-        b=MR3k5V9NBmebwx5DmX9XrhChts6EzTHZliYAxrX4TmAgFY5RC9zQezBlOW74Qm990W
-         64NSVoZwRuaVfILuSelbVZk+jdsDEuAN3q7tLDScFvjl0r8xWy7pcXSt4dFKeLHwk8Qw
-         nv0PUpEwcvTpG3w9lrZ9rH7R4VwAk4/kiK9+JErxutgWsI6Pc8FJYJ2Egeo98a5LqAUv
-         NIroHOBJgSjCJ9MTomI8cgqa2iG9fEiXtQ5ZceZGXqd1f2pSCrQjesKI0SWiBdOq7reI
-         vngJgAp1Qjp+NFoiuF8vMdEcMdMtis8845XKCR6rQ60ZtKVJSwfs38SmapE5RyYfSxlt
-         O4UA==
-X-Gm-Message-State: APjAAAWswBye4dpNuARk0Aj9twNDID3S2cexj0LMmAAorEWMXJeQnq/b
-        4WnAedNlI5OMk5SNdUAv+FfTqlJN
-X-Google-Smtp-Source: APXvYqxwRJZ7Dy7UxedXvqeozShpNdo8JgcXtCXvnqrOfuid/1+Qr8Kk+wFyhVz0N7aIPSx6FwcSjA==
-X-Received: by 2002:a63:2ac5:: with SMTP id q188mr32742805pgq.388.1557257894294;
-        Tue, 07 May 2019 12:38:14 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
-        by smtp.gmail.com with ESMTPSA id l21sm5964658pff.40.2019.05.07.12.38.12
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VL8uiSCPpzZNMmP+oEVAuQOFn8NTTTisNh1ggwInehw=;
+        b=njOAxN3jaEB78TLtXJKaK9RmrVK8q2f/LPwUL2Bz9XKdSigg/ZePefEe6JI4G74jA0
+         SGzApNGHssH6uH9P+qDJ/k5immq2nWte477zSxy+6zKuwHdm+QkVhAs6ODw0C9wUompQ
+         msGv3w1l0WBJHl+r2dk7ro8qgxw2YU24ahQw3IvF+pomPZ+yZb7kAzp7PZRgaOe9YZMj
+         h7poDGwh+o2lSnoVHC7h1oqMBslKKxQScou72Yl0xw7ewHvHaBZKIhiskzCSri6El8TJ
+         bX79ztvkw5JU28kWizIugG/bRZkMb6YXNVgcMkLrCPIICSOO5DT1hK4NVQs2KKwUvtTI
+         ifjg==
+X-Gm-Message-State: APjAAAXdgRqF7KhTmldw4pKu+iNUSK1Up40uwdhYXBPU5Em0Nz8rZFYn
+        0m2gaTxvaIFSb4r1TBhLH/0=
+X-Google-Smtp-Source: APXvYqx1ktV35C20uU5UuqbaQvu3JK7lhcdWdBSMcoeOiHXkOeEm0E+QpkPPBfwH3ZwQSt0JbhhpAw==
+X-Received: by 2002:a62:160b:: with SMTP id 11mr43708208pfw.88.1557263216768;
+        Tue, 07 May 2019 14:06:56 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k191sm27841147pfc.151.2019.05.07.14.06.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 12:38:13 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        Tue, 07 May 2019 14:06:55 -0700 (PDT)
+Date:   Tue, 7 May 2019 14:06:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         linux-arm-kernel@lists.infradead.org,
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING),
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
         bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH v2 0/3] hwmon: scmi: Scale values to target desired HWMON units
-Date:   Tue,  7 May 2019 12:35:01 -0700
-Message-Id: <20190507193504.28248-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH v2 1/3] kernel: Provide a __pow10() function
+Message-ID: <20190507210654.GA4951@roeck-us.net>
+References: <20190507193504.28248-1-f.fainelli@gmail.com>
+ <20190507193504.28248-2-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190507193504.28248-2-f.fainelli@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Sudeep, Guenter,
+On Tue, May 07, 2019 at 12:35:02PM -0700, Florian Fainelli wrote:
+> Provide a simple macro that can return the value of 10 raised to a
+> positive integer. We are going to use this in order to scale units from
+> firmware to HWMON.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  include/linux/kernel.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+> index 2d14e21c16c0..62fc8bd84bc9 100644
+> --- a/include/linux/kernel.h
+> +++ b/include/linux/kernel.h
+> @@ -294,6 +294,17 @@ static inline u32 reciprocal_scale(u32 val, u32 ep_ro)
+>  	return (u32)(((u64) val * ep_ro) >> 32);
+>  }
+>  
+> +/* Return in f the value of 10 raise to the power x */
+> +#define __pow10(x, f)(					\
+> +{							\
+> +	typeof(x) __x = abs(x);				\
+> +	f = 1;						\
+> +	while (__x--)					\
+> +		f *= 10;				\
+> +	f;						\
+> +}							\
+> +)
 
-This patch series adds support for scaling SCMI sensor values read from
-firmware. Sudeep, let me know if you think we should be treating scale
-== 0 as a special value to preserve some firmware compatibility (not
-that this would be desired).
+Kind of unusual. I would have expected to use this like
+	f = __pow10(x);
+ie without having to provide f as parameter. That would be much less
+confusing. I assume this is to make the result type independent, but
+I am not sure if that is worth the trouble.
 
-Changes in v2:
+Are there users outside the hwmon code ? If not, it might be simpler
+to keep it there for now.
 
-- added a helper function in kernel.h: __pow10()
-- made the scale in scmi_sensor_info an s8 type, added defines for
-  checking the sign bit and sign extending with a mask
-- simplify computations in hwmon driver
+Thanks,
+Guenter
 
-Florian Fainelli (3):
-  kernel: Provide a __pow10() function
-  firmware: arm_scmi: Fetch and store sensor scale
-  hwmon: scmi: Scale values to target desired HWMON units
-
- drivers/firmware/arm_scmi/sensors.c |  6 ++++++
- drivers/hwmon/scmi-hwmon.c          | 30 ++++++++++++++++++++++++++++-
- include/linux/kernel.h              | 11 +++++++++++
- include/linux/scmi_protocol.h       |  1 +
- 4 files changed, 47 insertions(+), 1 deletion(-)
-
--- 
-2.17.1
-
+> +
+>  #if defined(CONFIG_MMU) && \
+>  	(defined(CONFIG_PROVE_LOCKING) || defined(CONFIG_DEBUG_ATOMIC_SLEEP))
+>  #define might_fault() __might_fault(__FILE__, __LINE__)
+> -- 
+> 2.17.1
+> 
