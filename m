@@ -2,147 +2,139 @@ Return-Path: <SRS0=D458=TH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC5E3C004C9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 23:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0A53C004C9
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 23:21:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A010920989
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 23:10:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68AA120989
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 23:21:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6HCWjxd"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xbkzd+ah"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfEGXKT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 May 2019 19:10:19 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38407 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbfEGXKR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 May 2019 19:10:17 -0400
-Received: by mail-pg1-f195.google.com with SMTP id j26so9058169pgl.5;
-        Tue, 07 May 2019 16:10:16 -0700 (PDT)
+        id S1726276AbfEGXVH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 May 2019 19:21:07 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34577 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfEGXVG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 May 2019 19:21:06 -0400
+Received: by mail-pl1-f193.google.com with SMTP id ck18so8929218plb.1;
+        Tue, 07 May 2019 16:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=jKMO64xZ/NLNKAqyiQNdSxQ5RK52UXZdK9wfMghWcTw=;
-        b=S6HCWjxdMhJXtpwtM6/5wElmUx+WcK79V76XMFaSdug+PAu+yyFKLenuOkNhRbUxmS
-         v3peC+1jROrGVnrXIO+nS9/OSVcDeZ0XUNanPKar19SXIlUGdEois0Y36nWjHYo55e+t
-         Apt2ZkWGfyiHwqu8+2TeAWya9gA+W3IanulvL9jEBzQBrfuBZUuOnqV3OycdOW45RDgQ
-         ietXGqmx6LdjfDE8N760ppa9EixmyUX/Mebgb4XYQjyT0pWlFOH+1RYHxeZ4g0fODrjV
-         /CdGuaj/I+JvyJ8z51L4ubjESbAmmGTB6BZWI1e/dlj5qk6WT+YUJNX/csrzSFx0fbAb
-         7keg==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+gKSlDLnDf/+lOEDDP2Iyq5/Ag+VeBN4xDo4/a6mcWE=;
+        b=Xbkzd+ahKjnjPuFAeJ37rdP601/YT/yiEItlz9avQ/dyh/XWESKqPiRwDStmiiMvOB
+         yIbAu0kjJffnXj83mXIhvtoAvPuBeDL21aBao0UMDM6GwGxMg6pxXEai8S5jTy87lCOy
+         lTjsmDHTpCxdOAwy0O1gSpsX7pqajG+2dsaKCHBE60KaiGL0qGelg+ndUkbEW7gbuAdF
+         cRC3CyIckZrtNlcgBvirZER8mKrAb2eUPtIM6feMx6wHd5BbQMYf4YL0+m0X/t4+JccH
+         7Y4GE6iRpuhUkhoJpThYZPslQnXvaKYKfWxTT6rCbvQkXdzeqzpt5w2kdNRNMdkKfLK1
+         PFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=jKMO64xZ/NLNKAqyiQNdSxQ5RK52UXZdK9wfMghWcTw=;
-        b=EQ3HQERgeH6ToT89zscMxgaa2p9/HpXUDI6GHaij0EHa25lO5hEhPR0YdW9vaNOdNN
-         Q7jgvvUDbD7YywIWq4RPgCcZcpn/7l/KdwMi/Vryi+w31ofi/Ctt66rFQl7/EVWvSsxJ
-         qJG4NqJPFJ5K5Svt/SY6zBAWqLn1bHoM/spFgooM58lH3IBt3/FcOr9qutX+59PXtUky
-         3LQlpWnzeXaWVMoqN307jckziC+yUgl0CeYLQiD1Ry04ZKvnWvMek/1auMedTppGB+S4
-         4Y08Mns5njL2OKSJLR5B2Ahz82YSbPU2vVJvbMMCSx/71gTxCnHURCNFAfAeWQdewus/
-         M17A==
-X-Gm-Message-State: APjAAAVNEqQLYTwO5tanCTJP1RnUWGxQD2cxuMW/YsrH5B9lp6E0hNBN
-        Kn4czfxWDF2X99v0Znsohpf7PZoJ
-X-Google-Smtp-Source: APXvYqxwBYjE6jd3+l8NIjy4bYaiYCnr9KFnXMPOKo6jq8A3gHkYS7MaEekUk25FuV5XGUSfcQ+cjw==
-X-Received: by 2002:a63:e956:: with SMTP id q22mr43144036pgj.277.1557270616179;
-        Tue, 07 May 2019 16:10:16 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
-        by smtp.gmail.com with ESMTPSA id w12sm7154742pfj.41.2019.05.07.16.10.14
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+gKSlDLnDf/+lOEDDP2Iyq5/Ag+VeBN4xDo4/a6mcWE=;
+        b=jTzZPtR2/JBPYHUoWv8sp0DZM5ajA+rx4BtMjI/h2m+sTjTGZtXJQcsN2AtBXihYtR
+         ZT5GHS/oW+HrtFH0YLUgL0bGNzgcSBCoSg0JBGwfAu6TjRzAZ993X9GBdEINwEBkFM+N
+         LMKTgBC6a0nIQBDftNB0O1+VWKuBguXyuEBMq4L8fBmQz5GFtYfSNbXQ/fPxs6UL6PTb
+         z/CK43CMryjnP67882HBdogRj4nlehg87UM9C2RYRVt9rdV2r/cT80ccslGOdXahGOmp
+         IkH/18oezreC/9/3KeCg9hBndWttttMsxPECSgOJ078HqdlXqQZFOu474caBvIWMw61h
+         OJbw==
+X-Gm-Message-State: APjAAAUk9LIkXxO3uB5k+o+RwSpn5o/Mm45VbPFYIhtPBeuISoxXfemG
+        U11MCvTAHdPP9SYEClQkTnZahL2/
+X-Google-Smtp-Source: APXvYqz93rUWqPle/G8Op3EXe4WndFHGalqvrnzO565qJxS6Yp9F+7od8crkk6C0Mm0UtjfR6LV7rA==
+X-Received: by 2002:a17:902:b40b:: with SMTP id x11mr44424746plr.265.1557271265376;
+        Tue, 07 May 2019 16:21:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g128sm20055716pfb.131.2019.05.07.16.21.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 16:10:15 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        Tue, 07 May 2019 16:21:03 -0700 (PDT)
+Subject: Re: [PATCH v2 1/3] kernel: Provide a __pow10() function
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         linux-arm-kernel@lists.infradead.org,
-        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v3 2/2] hwmon: scmi: Scale values to target desired HWMON units
-Date:   Tue,  7 May 2019 16:09:17 -0700
-Message-Id: <20190507230917.21659-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190507230917.21659-1-f.fainelli@gmail.com>
-References: <20190507230917.21659-1-f.fainelli@gmail.com>
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20190507193504.28248-1-f.fainelli@gmail.com>
+ <20190507193504.28248-2-f.fainelli@gmail.com>
+ <20190507210654.GA4951@roeck-us.net>
+ <b3c4fdd3-0c91-9681-e471-a9ddbbd256c8@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <9c9d44ea-1cd2-0705-5d0f-b05af0682f90@roeck-us.net>
+Date:   Tue, 7 May 2019 16:21:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <b3c4fdd3-0c91-9681-e471-a9ddbbd256c8@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If the SCMI firmware implementation is reporting values in a scale that
-is different from the HWMON units, we need to scale up or down the value
-according to how far appart they are.
+On 5/7/19 2:49 PM, Florian Fainelli wrote:
+> On 5/7/19 2:06 PM, Guenter Roeck wrote:
+>> On Tue, May 07, 2019 at 12:35:02PM -0700, Florian Fainelli wrote:
+>>> Provide a simple macro that can return the value of 10 raised to a
+>>> positive integer. We are going to use this in order to scale units from
+>>> firmware to HWMON.
+>>>
+>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>> ---
+>>>   include/linux/kernel.h | 11 +++++++++++
+>>>   1 file changed, 11 insertions(+)
+>>>
+>>> diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+>>> index 2d14e21c16c0..62fc8bd84bc9 100644
+>>> --- a/include/linux/kernel.h
+>>> +++ b/include/linux/kernel.h
+>>> @@ -294,6 +294,17 @@ static inline u32 reciprocal_scale(u32 val, u32 ep_ro)
+>>>   	return (u32)(((u64) val * ep_ro) >> 32);
+>>>   }
+>>>   
+>>> +/* Return in f the value of 10 raise to the power x */
+>>> +#define __pow10(x, f)(					\
+>>> +{							\
+>>> +	typeof(x) __x = abs(x);				\
+>>> +	f = 1;						\
+>>> +	while (__x--)					\
+>>> +		f *= 10;				\
+>>> +	f;						\
+>>> +}							\
+>>> +)
+>>
+>> Kind of unusual. I would have expected to use this like
+>> 	f = __pow10(x);
+>> ie without having to provide f as parameter. That would be much less
+>> confusing. I assume this is to make the result type independent, but
+>> I am not sure if that is worth the trouble.
+> 
+> Correct, that was the intent here.
+> 
+>>
+>> Are there users outside the hwmon code ? If not, it might be simpler
+>> to keep it there for now.
+> 
+> There appears to be a few outside actually:
+> 
+> drivers/acpi/sbs.c::battery_scale
+> drivers/iio/common/hid-sensors/hid-sensor-attributes.c::pow_10
+> 
+> There could be others but those two came out as obvious candidates.
+> 
+> Would you be okay with a local pow10 function within scmi-hwmon.c and a
+> subsequent patch series providing a common function?
+> 
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/hwmon/scmi-hwmon.c | 43 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+I would prefer that, actually, to reduce dependencies.
 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index a80183a488c5..7820854e5954 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -18,6 +18,47 @@ struct scmi_sensors {
- 	const struct scmi_sensor_info **info[hwmon_max];
- };
- 
-+static inline u64 __pow10(u8 x)
-+{
-+	u64 r = 1;
-+
-+	if (unlikely(x > 18))
-+		return r;
-+
-+	while (x--)
-+		r *= 10;
-+
-+	return r;
-+}
-+
-+static u64 scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 value)
-+{
-+	s8 scale = sensor->scale;
-+	u64 f;
-+
-+	switch (sensor->type) {
-+	case TEMPERATURE_C:
-+	case VOLTAGE:
-+	case CURRENT:
-+		scale += 3;
-+		break;
-+	case POWER:
-+	case ENERGY:
-+		scale += 6;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	f = __pow10(abs(scale));
-+	if (scale > 0)
-+		value *= f;
-+	else
-+		value = div64_u64(value, f);
-+
-+        return value;
-+}
-+
- static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			   u32 attr, int channel, long *val)
- {
-@@ -30,7 +71,7 @@ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 	sensor = *(scmi_sensors->info[type] + channel);
- 	ret = h->sensor_ops->reading_get(h, sensor->id, false, &value);
- 	if (!ret)
--		*val = value;
-+		*val = scmi_hwmon_scale(sensor, value);
- 
- 	return ret;
- }
--- 
-2.17.1
-
+Thanks,
+Guenter
