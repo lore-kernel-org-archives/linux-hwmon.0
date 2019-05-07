@@ -2,468 +2,371 @@ Return-Path: <SRS0=D458=TH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADF35C004C9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 18:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5EE6C04AAD
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 19:36:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E7A5206A3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 18:36:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dapCrmrO"
+	by mail.kernel.org (Postfix) with ESMTP id C4E2520825
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 May 2019 19:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfEGSgZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 May 2019 14:36:25 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35624 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726321AbfEGSgZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 May 2019 14:36:25 -0400
-Received: by mail-pl1-f196.google.com with SMTP id w24so8612556plp.2;
-        Tue, 07 May 2019 11:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=X/8P0uSsoHB06zEoCFFSSAaStc5eSh8fKKDW+tM8xtQ=;
-        b=dapCrmrOWbjifNTgoyGNk4EesTgzyf3eOZ+x0FSmKsmielVLB/iLkf48hLGJYsCQR/
-         NLpYXy1Nteqz2iXArLs76BQhMQxmQI499boIIIj4FIrAx4wmLFR6sueYd57mGBHmyYd5
-         Ej3jh3N2pkmJ3El0AWIuZ+UMAd4hOzzVxNepTg4c7N+EcjDuSxXgaG7vH+dFnbvdcTWB
-         ljg/y1tlKMoGuQU5Php/uW8NLGdG0AGXfEPhbcXKZmJv5EptXRe3SeEMiwTf+kKS3i4p
-         6Lb14iXoWqgQ9+QbfhN1vUSYY9y6iNlLs4vEst1mFnBRgDTf1jXJJpZZyK4IwhLMraFS
-         7bcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X/8P0uSsoHB06zEoCFFSSAaStc5eSh8fKKDW+tM8xtQ=;
-        b=S/n10F1zIHTymitvK1LVDkG+IblX9p7XIFTfiPREoznNVz1bDNxxdzK6D6XC6oln0I
-         GlHWk1tG90+plbKIAHnWx71XZ5Hm4w/9G3gYmPw9zjhfPD9Vmwcde406HBGqalXRwFAK
-         wrpYEZG3QNnUKyqkXDibrIT1trJ+9XtJ/JXkt8oFBeUXP5PeQU1ojU+CEUQzJlanTPNs
-         rHJ9gwZFqGiUXxpZQW0BOij84SX8rQKBQbGedZ+CRRx/PlLz7KaN2LalAu0sIHO4zmhi
-         YGFP3GS4ShFqK8rVfOOlFNJvyZI+T7rkYWHokEojWlRmQjHyUdcOjjGO/rWUX5ZxL6aq
-         zKAA==
-X-Gm-Message-State: APjAAAUyLPGPVQkQvVD4VzFuB+LA3HMSz4cey1vmdWqnIB7jCxbHg8RB
-        zImoTIOs0hSdg2aFYCpaxAE=
-X-Google-Smtp-Source: APXvYqx0K3HvB0w0qhOwWinUp66H1gHGFX67aUgbgiQbKXtTJH4xUwVni65hEOEvDmUUTwhtXileeA==
-X-Received: by 2002:a17:902:9042:: with SMTP id w2mr41515008plz.91.1557254184583;
-        Tue, 07 May 2019 11:36:24 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y10sm20040468pfm.27.2019.05.07.11.36.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 11:36:23 -0700 (PDT)
-Date:   Tue, 7 May 2019 11:36:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alan Tull <atull@kernel.org>
-Cc:     Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, Luwei Kang <luwei.kang@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2 16/18] fpga: dfl: fme: add power management support
-Message-ID: <20190507183623.GC29510@roeck-us.net>
-References: <1556528151-17221-1-git-send-email-hao.wu@intel.com>
- <1556528151-17221-17-git-send-email-hao.wu@intel.com>
- <CANk1AXQoYW_a_Jz_X_RCQtJpLn++dv8vAn4Yz+w+eRcZhrELGQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANk1AXQoYW_a_Jz_X_RCQtJpLn++dv8vAn4Yz+w+eRcZhrELGQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726381AbfEGTgB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 May 2019 15:36:01 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57070 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726469AbfEGTgA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 May 2019 15:36:00 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x47JVge0138428
+        for <linux-hwmon@vger.kernel.org>; Tue, 7 May 2019 15:35:59 -0400
+Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sberam4ta-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 May 2019 15:35:58 -0400
+Received: from localhost
+        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Tue, 7 May 2019 20:35:58 +0100
+Received: from b03cxnp07029.gho.boulder.ibm.com (9.17.130.16)
+        by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 7 May 2019 20:35:56 +0100
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x47JZt9B50987226
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 May 2019 19:35:55 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33B3978064;
+        Tue,  7 May 2019 19:35:55 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B482078063;
+        Tue,  7 May 2019 19:35:54 +0000 (GMT)
+Received: from talon7.ibm.com (unknown [9.41.179.222])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  7 May 2019 19:35:54 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] hwmon (occ): Switch power average to between poll responses
+Date:   Tue,  7 May 2019 14:35:51 -0500
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+x-cbid: 19050719-0016-0000-0000-000009AE47F6
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011067; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000285; SDB=6.01200009; UDB=6.00629605; IPR=6.00980892;
+ MB=3.00026773; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-07 19:35:57
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050719-0017-0000-0000-0000431F33F3
+Message-Id: <1557257751-12995-1-git-send-email-eajames@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-07_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905070123
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 07, 2019 at 01:23:33PM -0500, Alan Tull wrote:
-> On Mon, Apr 29, 2019 at 4:13 AM Wu Hao <hao.wu@intel.com> wrote:
-> 
-> + hwmon folks
-> 
-> >
-> > This patch adds support for power management private feature under
-> > FPGA Management Engine (FME). This private feature driver registers
-> > a hwmon for power (power1_input), thresholds information, e.g.
-> > (power1_cap / crit) and also read-only sysfs interfaces for other
-> > power management information. For configuration, user could write
-> > threshold values via above power1_cap / crit sysfs interface
-> > under hwmon too.
-> >
-> > Signed-off-by: Luwei Kang <luwei.kang@intel.com>
-> > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > Signed-off-by: Wu Hao <hao.wu@intel.com>
-> > ---
-> > v2: create a dfl_fme_power hwmon to expose power sysfs interfaces.
-> >     move all sysfs interfaces under hwmon
-> >         consumed          --> hwmon power1_input
-> >         threshold1        --> hwmon power1_cap
-> >         threshold2        --> hwmon power1_crit
-> >         threshold1_status --> hwmon power1_cap_status
-> >         threshold2_status --> hwmon power1_crit_status
-> >         xeon_limit        --> hwmon power1_xeon_limit
-> >         fpga_limit        --> hwmon power1_fpga_limit
-> >         ltr               --> hwmon power1_ltr
+The average power reported in the hwmon OCC driver is not useful
+because the time it represents is too short. Instead, store the
+previous power accumulator reported by the OCC and average it with the
+latest accumulator to obtain an average between poll responses. This
+does operate under the assumption that the user polls regularly.
 
-Same response as before.
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/hwmon/occ/common.c | 133 ++++++++++++++++++++++++++++++++-------------
+ drivers/hwmon/occ/common.h |   7 +++
+ 2 files changed, 103 insertions(+), 37 deletions(-)
 
-Guenter
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index e6d3fb5..6ffcee7 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -118,6 +118,53 @@ struct extended_sensor {
+ 	u8 data[6];
+ } __packed;
+ 
++static void occ_update_prev_power_avgs(struct occ *occ)
++{
++	u8 i;
++	struct power_sensor_1 *ps1;
++	struct power_sensor_2 *ps2;
++	struct power_sensor_a0 *psa0;
++	struct occ_sensor *power = &occ->sensors.power;
++	struct occ_power_avg *prevs = occ->prev_power_avgs;
++
++	switch (power->version) {
++	case 1:
++		for (i = 0; i < power->num_sensors; ++i) {
++			ps1 = ((struct power_sensor_1 *)power->data) + i;
++
++			prevs[i].accumulator =
++				get_unaligned_be32(&ps1->accumulator);
++			prevs[i].update_tag =
++				get_unaligned_be32(&ps1->update_tag);
++		}
++		break;
++	case 2:
++		for (i = 0; i < power->num_sensors; ++i) {
++			ps2 = ((struct power_sensor_2 *)power->data) + i;
++
++			prevs[i].accumulator =
++				get_unaligned_be64(&ps2->accumulator);
++			prevs[i].update_tag =
++				get_unaligned_be32(&ps2->update_tag);
++		}
++		break;
++	case 0xA0:
++		for (i = 0; i < power->num_sensors; ++i) {
++			psa0 = ((struct power_sensor_a0 *)power->data) + i;
++
++			prevs[i].accumulator = psa0->system.accumulator;
++			prevs[i].update_tag = psa0->system.update_tag;
++			prevs[i + 1].accumulator = psa0->proc.accumulator;
++			prevs[i + 1].update_tag = psa0->proc.update_tag;
++			prevs[i + 2].accumulator = psa0->vdd.accumulator;
++			prevs[i + 2].update_tag = psa0->vdd.update_tag;
++			prevs[i + 3].accumulator = psa0->vdn.accumulator;
++			prevs[i + 3].update_tag = psa0->vdn.update_tag;
++		}
++		break;
++	}
++}
++
+ static int occ_poll(struct occ *occ)
+ {
+ 	int rc;
+@@ -135,6 +182,8 @@ static int occ_poll(struct occ *occ)
+ 	cmd[6] = checksum & 0xFF;	/* checksum lsb */
+ 	cmd[7] = 0;
+ 
++	occ_update_prev_power_avgs(occ);
++
+ 	/* mutex should already be locked if necessary */
+ 	rc = occ->send_cmd(occ, cmd);
+ 	if (rc) {
+@@ -208,6 +257,7 @@ int occ_update_response(struct occ *occ)
+ 	/* limit the maximum rate of polling the OCC */
+ 	if (time_after(jiffies, occ->last_update + OCC_UPDATE_FREQUENCY)) {
+ 		rc = occ_poll(occ);
++		occ->prev_update = occ->last_update;
+ 		occ->last_update = jiffies;
+ 	} else {
+ 		rc = occ->last_error;
+@@ -364,6 +414,14 @@ static ssize_t occ_show_freq_2(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
+ }
+ 
++static u64 occ_power_avg(struct occ *occ, u8 idx, u64 accum, u32 samples)
++{
++	struct occ_power_avg *avg = &occ->prev_power_avgs[idx];
++
++	return div_u64((accum - avg->accumulator) * 1000000ULL,
++		       samples - avg->update_tag);
++}
++
+ static ssize_t occ_show_power_1(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -385,13 +443,12 @@ static ssize_t occ_show_power_1(struct device *dev,
+ 		val = get_unaligned_be16(&power->sensor_id);
+ 		break;
+ 	case 1:
+-		val = get_unaligned_be32(&power->accumulator) /
+-			get_unaligned_be32(&power->update_tag);
+-		val *= 1000000ULL;
++		val = occ_power_avg(occ, sattr->index,
++				    get_unaligned_be32(&power->accumulator),
++				    get_unaligned_be32(&power->update_tag));
+ 		break;
+ 	case 2:
+-		val = (u64)get_unaligned_be32(&power->update_tag) *
+-			   occ->powr_sample_time_us;
++		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
+ 		break;
+ 	case 3:
+ 		val = get_unaligned_be16(&power->value) * 1000000ULL;
+@@ -403,12 +460,6 @@ static ssize_t occ_show_power_1(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE - 1, "%llu\n", val);
+ }
+ 
+-static u64 occ_get_powr_avg(u64 *accum, u32 *samples)
+-{
+-	return div64_u64(get_unaligned_be64(accum) * 1000000ULL,
+-			 get_unaligned_be32(samples));
+-}
+-
+ static ssize_t occ_show_power_2(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -431,12 +482,12 @@ static ssize_t occ_show_power_2(struct device *dev,
+ 				get_unaligned_be32(&power->sensor_id),
+ 				power->function_id, power->apss_channel);
+ 	case 1:
+-		val = occ_get_powr_avg(&power->accumulator,
+-				       &power->update_tag);
++		val = occ_power_avg(occ, sattr->index,
++				    get_unaligned_be64(&power->accumulator),
++				    get_unaligned_be32(&power->update_tag));
+ 		break;
+ 	case 2:
+-		val = (u64)get_unaligned_be32(&power->update_tag) *
+-			   occ->powr_sample_time_us;
++		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
+ 		break;
+ 	case 3:
+ 		val = get_unaligned_be16(&power->value) * 1000000ULL;
+@@ -452,6 +503,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
+ 				 struct device_attribute *attr, char *buf)
+ {
+ 	int rc;
++	u32 samples;
++	u64 accum;
+ 	u64 val = 0;
+ 	struct power_sensor_a0 *power;
+ 	struct occ *occ = dev_get_drvdata(dev);
+@@ -469,12 +522,15 @@ static ssize_t occ_show_power_a0(struct device *dev,
+ 		return snprintf(buf, PAGE_SIZE - 1, "%u_system\n",
+ 				get_unaligned_be32(&power->sensor_id));
+ 	case 1:
+-		val = occ_get_powr_avg(&power->system.accumulator,
+-				       &power->system.update_tag);
++		accum = get_unaligned_be64(&power->system.accumulator);
++		samples = get_unaligned_be32(&power->system.update_tag);
++		val = occ_power_avg(occ, sattr->index, accum, samples);
+ 		break;
+ 	case 2:
+-		val = (u64)get_unaligned_be32(&power->system.update_tag) *
+-			   occ->powr_sample_time_us;
++	case 6:
++	case 10:
++	case 14:
++		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
+ 		break;
+ 	case 3:
+ 		val = get_unaligned_be16(&power->system.value) * 1000000ULL;
+@@ -483,12 +539,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
+ 		return snprintf(buf, PAGE_SIZE - 1, "%u_proc\n",
+ 				get_unaligned_be32(&power->sensor_id));
+ 	case 5:
+-		val = occ_get_powr_avg(&power->proc.accumulator,
+-				       &power->proc.update_tag);
+-		break;
+-	case 6:
+-		val = (u64)get_unaligned_be32(&power->proc.update_tag) *
+-			   occ->powr_sample_time_us;
++		accum = get_unaligned_be64(&power->proc.accumulator);
++		samples = get_unaligned_be32(&power->proc.update_tag);
++		val = occ_power_avg(occ, sattr->index + 1, accum, samples);
+ 		break;
+ 	case 7:
+ 		val = get_unaligned_be16(&power->proc.value) * 1000000ULL;
+@@ -497,12 +550,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
+ 		return snprintf(buf, PAGE_SIZE - 1, "%u_vdd\n",
+ 				get_unaligned_be32(&power->sensor_id));
+ 	case 9:
+-		val = occ_get_powr_avg(&power->vdd.accumulator,
+-				       &power->vdd.update_tag);
+-		break;
+-	case 10:
+-		val = (u64)get_unaligned_be32(&power->vdd.update_tag) *
+-			   occ->powr_sample_time_us;
++		accum = get_unaligned_be64(&power->vdd.accumulator);
++		samples = get_unaligned_be32(&power->vdd.update_tag);
++		val = occ_power_avg(occ, sattr->index + 2, accum, samples);
+ 		break;
+ 	case 11:
+ 		val = get_unaligned_be16(&power->vdd.value) * 1000000ULL;
+@@ -511,12 +561,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
+ 		return snprintf(buf, PAGE_SIZE - 1, "%u_vdn\n",
+ 				get_unaligned_be32(&power->sensor_id));
+ 	case 13:
+-		val = occ_get_powr_avg(&power->vdn.accumulator,
+-				       &power->vdn.update_tag);
+-		break;
+-	case 14:
+-		val = (u64)get_unaligned_be32(&power->vdn.update_tag) *
+-			   occ->powr_sample_time_us;
++		accum = get_unaligned_be64(&power->vdn.accumulator);
++		samples = get_unaligned_be32(&power->vdn.update_tag);
++		val = occ_power_avg(occ, sattr->index + 3, accum, samples);
+ 		break;
+ 	case 15:
+ 		val = get_unaligned_be16(&power->vdn.value) * 1000000ULL;
+@@ -719,6 +766,7 @@ static ssize_t occ_show_extended(struct device *dev,
+ static int occ_setup_sensor_attrs(struct occ *occ)
+ {
+ 	unsigned int i, s, num_attrs = 0;
++	unsigned int power_avgs_size = 0;
+ 	struct device *dev = occ->bus_dev;
+ 	struct occ_sensors *sensors = &occ->sensors;
+ 	struct occ_attribute *attr;
+@@ -761,9 +809,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 		/* fall through */
+ 	case 1:
+ 		num_attrs += (sensors->power.num_sensors * 4);
++		power_avgs_size = sizeof(struct occ_power_avg) *
++			sensors->power.num_sensors;
+ 		break;
+ 	case 0xA0:
+ 		num_attrs += (sensors->power.num_sensors * 16);
++		power_avgs_size = sizeof(struct occ_power_avg) *
++			sensors->power.num_sensors * 4;
+ 		show_power = occ_show_power_a0;
+ 		break;
+ 	default:
+@@ -792,6 +844,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+ 		sensors->extended.num_sensors = 0;
+ 	}
+ 
++	if (power_avgs_size) {
++		occ->prev_power_avgs = devm_kzalloc(dev, power_avgs_size,
++						    GFP_KERNEL);
++		if (!occ->prev_power_avgs)
++			return -ENOMEM;
++	}
++
+ 	occ->attrs = devm_kzalloc(dev, sizeof(*occ->attrs) * num_attrs,
+ 				  GFP_KERNEL);
+ 	if (!occ->attrs)
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index c676e48..08970f8 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -87,17 +87,24 @@ struct occ_attribute {
+ 	struct sensor_device_attribute_2 sensor;
+ };
+ 
++struct occ_power_avg {
++	u64 accumulator;
++	u32 update_tag;
++};
++
+ struct occ {
+ 	struct device *bus_dev;
+ 
+ 	struct occ_response resp;
+ 	struct occ_sensors sensors;
++	struct occ_power_avg *prev_power_avgs;
+ 
+ 	int powr_sample_time_us;	/* average power sample time */
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+ 	int (*send_cmd)(struct occ *occ, u8 *cmd);
+ 
+ 	unsigned long last_update;
++	unsigned long prev_update;
+ 	struct mutex lock;		/* lock OCC access */
+ 
+ 	struct device *hwmon;
+-- 
+1.8.3.1
 
-> > ---
-> >  Documentation/ABI/testing/sysfs-platform-dfl-fme |  67 ++++++
-> >  drivers/fpga/dfl-fme-main.c                      | 247 +++++++++++++++++++++++
-> >  2 files changed, 314 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > index dfbd315..e2ba92d 100644
-> > --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
-> > @@ -52,6 +52,7 @@ Contact:      Wu Hao <hao.wu@intel.com>
-> >  Description:   Read-Only. Read this file to get the name of hwmon device, it
-> >                 supports values:
-> >                     'dfl_fme_thermal' - thermal hwmon device name
-> > +                   'dfl_fme_power'   - power hwmon device name
-> >
-> >  What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
-> >  Date:          April 2019
-> > @@ -108,3 +109,69 @@ Description:       Read-Only. Read this file to get the policy of hardware threshold1
-> >                 (see 'temp1_alarm'). It only supports two values (policies):
-> >                     0 - AP2 state (90% throttling)
-> >                     1 - AP1 state (50% throttling)
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-Only. It returns current FPGA power consumption in uW.
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_cap
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-Write. Read this file to get current hardware power
-> > +               threshold1 in uW. If power consumption rises at or above
-> > +               this threshold, hardware starts 50% throttling.
-> > +               Write this file to set current hardware power threshold1 in uW.
-> > +               As hardware only accepts values in Watts, so input value will
-> > +               be round down per Watts (< 1 watts part will be discarded).
-> > +               Write fails with -EINVAL if input parsing fails or input isn't
-> > +               in the valid range (0 - 127000000 uW).
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-Write. Read this file to get current hardware power
-> > +               threshold2 in uW. If power consumption rises at or above
-> > +               this threshold, hardware starts 90% throttling.
-> > +               Write this file to set current hardware power threshold2 in uW.
-> > +               As hardware only accepts values in Watts, so input value will
-> > +               be round down per Watts (< 1 watts part will be discarded).
-> > +               Write fails with -EINVAL if input parsing fails or input isn't
-> > +               in the valid range (0 - 127000000 uW).
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_cap_status
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-only. It returns 1 if power consumption is currently at or
-> > +               above hardware threshold1 (see 'power1_cap'), otherwise 0.
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit_status
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-only. It returns 1 if power consumption is currently at or
-> > +               above hardware threshold2 (see 'power1_crit'), otherwise 0.
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_xeon_limit
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-Only. It returns power limit for XEON in uW.
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_fpga_limit
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-Only. It returns power limit for FPGA in uW.
-> > +
-> > +What:          /sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_ltr
-> > +Date:          April 2019
-> > +KernelVersion: 5.2
-> > +Contact:       Wu Hao <hao.wu@intel.com>
-> > +Description:   Read-only. Read this file to get current Latency Tolerance
-> > +               Reporting (ltr) value. This ltr impacts the CPU low power
-> > +               state in integrated solution.
-> > diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-> > index b9a68b8..7005316 100644
-> > --- a/drivers/fpga/dfl-fme-main.c
-> > +++ b/drivers/fpga/dfl-fme-main.c
-> > @@ -425,6 +425,249 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
-> >         .uinit = fme_thermal_mgmt_uinit,
-> >  };
-> >
-> > +#define FME_PWR_STATUS         0x8
-> > +#define FME_LATENCY_TOLERANCE  BIT_ULL(18)
-> > +#define PWR_CONSUMED           GENMASK_ULL(17, 0)
-> > +
-> > +#define FME_PWR_THRESHOLD      0x10
-> > +#define PWR_THRESHOLD1         GENMASK_ULL(6, 0)       /* in Watts */
-> > +#define PWR_THRESHOLD2         GENMASK_ULL(14, 8)      /* in Watts */
-> > +#define PWR_THRESHOLD_MAX      0x7f                    /* in Watts */
-> > +#define PWR_THRESHOLD1_STATUS  BIT_ULL(16)
-> > +#define PWR_THRESHOLD2_STATUS  BIT_ULL(17)
-> > +
-> > +#define FME_PWR_XEON_LIMIT     0x18
-> > +#define XEON_PWR_LIMIT         GENMASK_ULL(14, 0)      /* in 0.1 Watts */
-> > +#define XEON_PWR_EN            BIT_ULL(15)
-> > +#define FME_PWR_FPGA_LIMIT     0x20
-> > +#define FPGA_PWR_LIMIT         GENMASK_ULL(14, 0)      /* in 0.1 Watts */
-> > +#define FPGA_PWR_EN            BIT_ULL(15)
-> > +
-> > +#define PWR_THRESHOLD_MAX_IN_UW (PWR_THRESHOLD_MAX * 1000000)
-> > +
-> > +static int power_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > +                           u32 attr, int channel, long *val)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u64 v;
-> > +
-> > +       switch (attr) {
-> > +       case hwmon_power_input:
-> > +               v = readq(feature->ioaddr + FME_PWR_STATUS);
-> > +               *val = (long)(FIELD_GET(PWR_CONSUMED, v) * 1000000);
-> > +               break;
-> > +       case hwmon_power_cap:
-> > +               v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               *val = (long)(FIELD_GET(PWR_THRESHOLD1, v) * 1000000);
-> > +               break;
-> > +       case hwmon_power_crit:
-> > +               v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               *val = (long)(FIELD_GET(PWR_THRESHOLD2, v) * 1000000);
-> > +               break;
-> > +       default:
-> > +               return -EOPNOTSUPP;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int power_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> > +                            u32 attr, int channel, long val)
-> > +{
-> > +       struct dfl_feature_platform_data *pdata = dev_get_platdata(dev->parent);
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       int ret = 0;
-> > +       u64 v;
-> > +
-> > +       if (val < 0 || val > PWR_THRESHOLD_MAX_IN_UW)
-> > +               return -EINVAL;
-> > +
-> > +       val = val / 1000000;
-> > +
-> > +       mutex_lock(&pdata->lock);
-> > +
-> > +       switch (attr) {
-> > +       case hwmon_power_cap:
-> > +               v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               v &= ~PWR_THRESHOLD1;
-> > +               v |= FIELD_PREP(PWR_THRESHOLD1, val);
-> > +               writeq(v, feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               break;
-> > +       case hwmon_power_crit:
-> > +               v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               v &= ~PWR_THRESHOLD2;
-> > +               v |= FIELD_PREP(PWR_THRESHOLD2, val);
-> > +               writeq(v, feature->ioaddr + FME_PWR_THRESHOLD);
-> > +               break;
-> > +       default:
-> > +               ret = -EOPNOTSUPP;
-> > +               break;
-> > +       }
-> > +
-> > +       mutex_unlock(&pdata->lock);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static umode_t power_hwmon_attrs_visible(const void *drvdata,
-> > +                                        enum hwmon_sensor_types type,
-> > +                                        u32 attr, int channel)
-> > +{
-> > +       switch (attr) {
-> > +       case hwmon_power_input:
-> > +               return 0444;
-> > +       case hwmon_power_cap:
-> > +       case hwmon_power_crit:
-> > +               return 0644;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static const u32 power_hwmon_config[] = {
-> > +       HWMON_P_INPUT | HWMON_P_CAP | HWMON_P_CRIT,
-> > +       0
-> > +};
-> > +
-> > +static const struct hwmon_channel_info hwmon_pwr_info = {
-> > +       .type = hwmon_power,
-> > +       .config = power_hwmon_config,
-> > +};
-> > +
-> > +static const struct hwmon_channel_info *power_hwmon_info[] = {
-> > +       &hwmon_pwr_info,
-> > +       NULL
-> > +};
-> > +
-> > +static const struct hwmon_ops power_hwmon_ops = {
-> > +       .is_visible = power_hwmon_attrs_visible,
-> > +       .read = power_hwmon_read,
-> > +       .write = power_hwmon_write,
-> > +};
-> > +
-> > +static const struct hwmon_chip_info power_hwmon_chip_info = {
-> > +       .ops = &power_hwmon_ops,
-> > +       .info = power_hwmon_info,
-> > +};
-> > +
-> > +static ssize_t power1_cap_status_show(struct device *dev,
-> > +                                     struct device_attribute *attr, char *buf)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u64 v;
-> > +
-> > +       v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +
-> > +       return scnprintf(buf, PAGE_SIZE, "%u\n",
-> > +                        (unsigned int)FIELD_GET(PWR_THRESHOLD1_STATUS, v));
-> > +}
-> > +
-> > +static ssize_t power1_crit_status_show(struct device *dev,
-> > +                                      struct device_attribute *attr, char *buf)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u64 v;
-> > +
-> > +       v = readq(feature->ioaddr + FME_PWR_THRESHOLD);
-> > +
-> > +       return scnprintf(buf, PAGE_SIZE, "%u\n",
-> > +                        (unsigned int)FIELD_GET(PWR_THRESHOLD2_STATUS, v));
-> > +}
-> > +
-> > +static ssize_t power1_xeon_limit_show(struct device *dev,
-> > +                                     struct device_attribute *attr, char *buf)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u16 xeon_limit = 0;
-> > +       u64 v;
-> > +
-> > +       v = readq(feature->ioaddr + FME_PWR_XEON_LIMIT);
-> > +
-> > +       if (FIELD_GET(XEON_PWR_EN, v))
-> > +               xeon_limit = FIELD_GET(XEON_PWR_LIMIT, v);
-> > +
-> > +       return scnprintf(buf, PAGE_SIZE, "%u\n", xeon_limit * 100000);
-> > +}
-> > +
-> > +static ssize_t power1_fpga_limit_show(struct device *dev,
-> > +                                     struct device_attribute *attr, char *buf)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u16 fpga_limit = 0;
-> > +       u64 v;
-> > +
-> > +       v = readq(feature->ioaddr + FME_PWR_FPGA_LIMIT);
-> > +
-> > +       if (FIELD_GET(FPGA_PWR_EN, v))
-> > +               fpga_limit = FIELD_GET(FPGA_PWR_LIMIT, v);
-> > +
-> > +       return scnprintf(buf, PAGE_SIZE, "%u\n", fpga_limit * 100000);
-> > +}
-> > +
-> > +static ssize_t power1_ltr_show(struct device *dev,
-> > +                              struct device_attribute *attr, char *buf)
-> > +{
-> > +       struct dfl_feature *feature = dev_get_drvdata(dev);
-> > +       u64 v;
-> > +
-> > +       v = readq(feature->ioaddr + FME_PWR_STATUS);
-> > +
-> > +       return scnprintf(buf, PAGE_SIZE, "%u\n",
-> > +                        (unsigned int)FIELD_GET(FME_LATENCY_TOLERANCE, v));
-> > +}
-> > +
-> > +static DEVICE_ATTR_RO(power1_cap_status);
-> > +static DEVICE_ATTR_RO(power1_crit_status);
-> > +static DEVICE_ATTR_RO(power1_xeon_limit);
-> > +static DEVICE_ATTR_RO(power1_fpga_limit);
-> > +static DEVICE_ATTR_RO(power1_ltr);
-> > +
-> > +static struct attribute *power_extra_attrs[] = {
-> > +       &dev_attr_power1_cap_status.attr,
-> > +       &dev_attr_power1_crit_status.attr,
-> > +       &dev_attr_power1_xeon_limit.attr,
-> > +       &dev_attr_power1_fpga_limit.attr,
-> > +       &dev_attr_power1_ltr.attr,
-> > +       NULL
-> > +};
-> > +
-> > +ATTRIBUTE_GROUPS(power_extra);
-> > +
-> > +static int fme_power_mgmt_init(struct platform_device *pdev,
-> > +                              struct dfl_feature *feature)
-> > +{
-> > +       struct device *hwmon;
-> > +
-> > +       dev_dbg(&pdev->dev, "FME Power Management Init.\n");
-> > +
-> > +       hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
-> > +                                                    "dfl_fme_power", feature,
-> > +                                                    &power_hwmon_chip_info,
-> > +                                                    power_extra_groups);
-> > +       if (IS_ERR(hwmon)) {
-> > +               dev_err(&pdev->dev, "Fail to register power hwmon\n");
-> > +               return PTR_ERR(hwmon);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void fme_power_mgmt_uinit(struct platform_device *pdev,
-> > +                                struct dfl_feature *feature)
-> > +{
-> > +       dev_dbg(&pdev->dev, "FME Power Management UInit.\n");
-> > +}
-> > +
-> > +static const struct dfl_feature_id fme_power_mgmt_id_table[] = {
-> > +       {.id = FME_FEATURE_ID_POWER_MGMT,},
-> > +       {0,}
-> > +};
-> > +
-> > +static const struct dfl_feature_ops fme_power_mgmt_ops = {
-> > +       .init = fme_power_mgmt_init,
-> > +       .uinit = fme_power_mgmt_uinit,
-> > +};
-> > +
-> >  static struct dfl_feature_driver fme_feature_drvs[] = {
-> >         {
-> >                 .id_table = fme_hdr_id_table,
-> > @@ -439,6 +682,10 @@ static void fme_thermal_mgmt_uinit(struct platform_device *pdev,
-> >                 .ops = &fme_thermal_mgmt_ops,
-> >         },
-> >         {
-> > +               .id_table = fme_power_mgmt_id_table,
-> > +               .ops = &fme_power_mgmt_ops,
-> > +       },
-> > +       {
-> >                 .ops = NULL,
-> >         },
-> >  };
-> > --
-> > 1.8.3.1
-> >
