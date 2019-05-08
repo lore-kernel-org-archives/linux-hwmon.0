@@ -2,56 +2,57 @@ Return-Path: <SRS0=hJC0=TI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 309DCC04A6B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 May 2019 18:46:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BD8EC04A6B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 May 2019 18:46:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF4F2206A3
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 May 2019 18:46:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2381206A3
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 May 2019 18:46:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ED6Jc0y/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WD6BDPB+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbfEHSqm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 May 2019 14:46:42 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38368 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725910AbfEHSqm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 May 2019 14:46:42 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 10so10945496pfo.5;
-        Wed, 08 May 2019 11:46:41 -0700 (PDT)
+        id S1728622AbfEHSqq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 May 2019 14:46:46 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38089 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725910AbfEHSqp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 May 2019 14:46:45 -0400
+Received: by mail-pg1-f194.google.com with SMTP id j26so10531157pgl.5;
+        Wed, 08 May 2019 11:46:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=EEIALcFEhNF+WL2qzyLPm5x2lHhfDb/Qp5qzDZrKchA=;
-        b=ED6Jc0y/rtA42Jk4s0/banDWfr2InZNBnE5IZQvmzqg0VUJkJntsNao4IhCL8FLN52
-         FADam1XGvUx+ZLYVxJAj1wHDGzwGiH1Uwmt41QuFL15kLXvwiQJUUaIVux0DWKnMd2Jf
-         9yaR/UHVIcNoO91XxgYAlxb0HluY3EGM+UTgCA1RY0q6gW1wbp0sjdmeEKpBCnHMaNZe
-         kkSL40A1B8HFK+v3B59224xhwe/2bhPbiTWscuexqMTdjKsjYg2cBo0wkqUELtQv2O/w
-         ql4ngjOjOJrp6/+QpDlinxa/RsN6fOKwOmSa+N+BpTNoMxM8ImyQ7bPhv4yKNjrnCwml
-         4dNQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=jjWr7A4I6wrCVekiaLqsGdBePGpwWiWT94AbX1NT9d4=;
+        b=WD6BDPB+Th+QkDF0v2sQr7Ri9+1azG8Iff04dhcNHbaVVINNdiNgS8sNad5OTKffzM
+         6TPLZBrSYL03RBhTKhxweI2IL4ueCy7c77Zu8ZCPEc3DNHXb0fTa7j3dhS4NLLb+trvg
+         fGc/uzL+zNC+nysK3IyXfM9vjuq5/nsQmHKO+Y8D6ydjRPDxyp/P5wWGw0nzwy/P62G+
+         12uTaajACxZzNR6CTiA0bYtYmXIVreEkJOBiDt/EK34lOGjRov65mEokFoPmZXqP8SkN
+         ewvBaYcYcdnMvqDKNCBOVpOg0PA+yaNFPRVt6I34H25ISzOpIpn+RsSSDAEeXp0a4WyZ
+         EnpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=EEIALcFEhNF+WL2qzyLPm5x2lHhfDb/Qp5qzDZrKchA=;
-        b=fHIxWaJb2O4wzlTHbdF+sMz03603up4k0wzaiakXbRKnV3jZCqsZEdyBXFEhaqvSe9
-         9PMCaBGEtaR9ulwC0FbM9Gu/0CLb6fLoljaJrez4ENDYDwju9gXRm68GvUXVW0ZWQkKF
-         lWV4v3GuoyYpJQfMsvpNtPr40oyOp91R19UXvQCbFka64I1o0Euq2ZN1K/LmGlXLINFe
-         DSZN+hCHGq5qcqz2jdC6vT/uaIijg3BqGPoZ2E4ScWmlyVRB/kp0tPza3kdYH3T6XQ1D
-         k+WOrfLI8N+wFAnbFSV/eUXxPg1R4tie8mTVM+6R5EqIdNCDh7q4M0CbzKvNGja1JI+j
-         ythg==
-X-Gm-Message-State: APjAAAUGnq3bCLzASVkr0CGS2nE1b3rIVoulwZByBdljUORMJYtTE2SA
-        K0GmQQ9i6F8J74wFB66VjdOwS7RU
-X-Google-Smtp-Source: APXvYqwdjxSZUPLBY7Xi7DbEBJHWjC57QwVVpV6zk5Y45uNkDlR4U6Vsbxb+TmsZfc3t/3Suf+vngw==
-X-Received: by 2002:a65:5248:: with SMTP id q8mr32321120pgp.92.1557341200675;
-        Wed, 08 May 2019 11:46:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=jjWr7A4I6wrCVekiaLqsGdBePGpwWiWT94AbX1NT9d4=;
+        b=tVQVV9tFYPrfNF8wrYe9fF9JTbLoJGG8/Fi2FspoRDHBm8xnG+J6xRjdTegyK8CXkm
+         LLwuWPCxE56wQA3E5IsOwRNHe6jsRmvx5BPaCtYvZpK0U3DXApUXniOZsmSbvl6Qy6Y6
+         xT/jdUeqCNXIlzDnH2jFvM/TmpNsJhBK7z6pQfKz9Gy0x0tFsg9JHqHQ0fkZKx5a41PY
+         fgJwHJJUBPceFbiwat3qc/JP6WxLEUi76sOgNsnKuLxcZRfu17lnZ22qiUhOwAgt8Lg1
+         sGJ3zQPssNg4Iy2K7bxxJhfNx432xbj80OYY+IilUWmjzo8uhO/MFknGs2bp2DynBMq6
+         1Rmw==
+X-Gm-Message-State: APjAAAVTx5Oi6bhcIchhua23ZbCnJd/86mUnjLrRlqoSROHASJ2KKy5v
+        LDyu/AbbV3UhA+aT5TzTGsZscSOR
+X-Google-Smtp-Source: APXvYqxhWMIbkdgMB2EMmuGoDM9bgUZBWyQ53tKLMhKoRzPYn3OPYVL9dzOq0o8hZd+6GeR/LUXbag==
+X-Received: by 2002:a63:317:: with SMTP id 23mr29515935pgd.414.1557341204061;
+        Wed, 08 May 2019 11:46:44 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
-        by smtp.gmail.com with ESMTPSA id o66sm23257953pfb.184.2019.05.08.11.46.38
+        by smtp.gmail.com with ESMTPSA id o66sm23257953pfb.184.2019.05.08.11.46.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 May 2019 11:46:39 -0700 (PDT)
+        Wed, 08 May 2019 11:46:43 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     bcm-kernel-feedback-list@broadcom.com,
@@ -61,60 +62,89 @@ Cc:     bcm-kernel-feedback-list@broadcom.com,
         Guenter Roeck <linux@roeck-us.net>,
         linux-arm-kernel@lists.infradead.org,
         linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
-Subject: [PATCH v5 0/2] hwmon: scmi: Scale values to target desired HWMON units
-Date:   Wed,  8 May 2019 11:46:33 -0700
-Message-Id: <20190508184635.5054-1-f.fainelli@gmail.com>
+Subject: [PATCH v5 2/2] hwmon: scmi: Scale values to target desired HWMON units
+Date:   Wed,  8 May 2019 11:46:35 -0700
+Message-Id: <20190508184635.5054-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190508184635.5054-1-f.fainelli@gmail.com>
+References: <20190508184635.5054-1-f.fainelli@gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Sudeep, Guenter,
+If the SCMI firmware implementation is reporting values in a scale that
+is different from the HWMON units, we need to scale up or down the value
+according to how far appart they are.
 
-This patch series adds support for scaling SCMI sensor values read from
-firmware. Sudeep, let me know if you think we should be treating scale
-== 0 as a special value to preserve some firmware compatibility (not
-that this would be desired).
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/hwmon/scmi-hwmon.c | 45 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-Changes in v5:
-- overflow check would not work, so check specifically for an absolute
-  scale being greater than 19 to avoid returning an incorrect power of
-  10 factor
-- fixed incorrect value argument passed to scmi_hwmon_scale().
-- Added Guenter's Reviewed-by tag on the first patch
-
-Changes in v4:
-- deal with overflow in the caller of __pow10() as suggested by Guenter
-  which makes us rework a bit how the value argument/return value are
-  passed
-- don't harcode the latest power of 10 factor to be 18, just rely on
-  overflowing the u64 value instead
-
-Changes in v3:
-
-- add a local __pow10 function to scmi-hwmon.c while a plan to provide
-  a generic function is figured out.
-- add check on power > 18 which would overflow a 64-bit unsigned integer
-- use div64_u64() to properly divide a 64-bit quantity with an unsigned
-  64-bit quantity
-
-Changes in v2:
-
-- added a helper function in kernel.h: __pow10()
-- made the scale in scmi_sensor_info an s8 type, added defines for
-  checking the sign bit and sign extending with a mask
-- simplify computations in hwmon driver
-
-Florian Fainelli (2):
-  firmware: arm_scmi: Fetch and store sensor scale
-  hwmon: scmi: Scale values to target desired HWMON units
-
- drivers/firmware/arm_scmi/sensors.c |  6 ++++
- drivers/hwmon/scmi-hwmon.c          | 45 +++++++++++++++++++++++++++++
- include/linux/scmi_protocol.h       |  1 +
- 3 files changed, 52 insertions(+)
-
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index a80183a488c5..2c7b87edf5aa 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -18,6 +18,47 @@ struct scmi_sensors {
+ 	const struct scmi_sensor_info **info[hwmon_max];
+ };
+ 
++static inline u64 __pow10(u8 x)
++{
++	u64 r = 1;
++
++	while (x--)
++		r *= 10;
++
++	return r;
++}
++
++static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
++{
++	s8 scale = sensor->scale;
++	u64 f;
++
++	switch (sensor->type) {
++	case TEMPERATURE_C:
++	case VOLTAGE:
++	case CURRENT:
++		scale += 3;
++		break;
++	case POWER:
++	case ENERGY:
++		scale += 6;
++		break;
++	default:
++		break;
++	}
++
++	if (abs(scale) > 19)
++		return -E2BIG;
++
++	f = __pow10(abs(scale));
++	if (scale > 0)
++		*value *= f;
++	else
++		*value = div64_u64(*value, f);
++
++        return 0;
++}
++
+ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 			   u32 attr, int channel, long *val)
+ {
+@@ -29,6 +70,10 @@ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 
+ 	sensor = *(scmi_sensors->info[type] + channel);
+ 	ret = h->sensor_ops->reading_get(h, sensor->id, false, &value);
++	if (ret)
++		return ret;
++
++	ret = scmi_hwmon_scale(sensor, &value);
+ 	if (!ret)
+ 		*val = value;
+ 
 -- 
 2.17.1
 
