@@ -1,407 +1,228 @@
-Return-Path: <SRS0=MAjI=TJ=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=mcaQ=TL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94AC7C04AB3
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 May 2019 15:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBE4C04AB1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 May 2019 19:04:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 59B21216C4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 May 2019 15:38:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C8E820881
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 May 2019 19:04:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MI8w5cGx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbfEIPit (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 May 2019 11:38:49 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60156 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726650AbfEIPis (ORCPT
+        id S1726033AbfEKTEX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 May 2019 15:04:23 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34781 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfEKTEX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 9 May 2019 11:38:48 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x49FcUUu086265
-        for <linux-hwmon@vger.kernel.org>; Thu, 9 May 2019 11:38:46 -0400
-Received: from e34.co.us.ibm.com (e34.co.us.ibm.com [32.97.110.152])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2scnjycw9d-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 May 2019 11:38:45 -0400
-Received: from localhost
-        by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-hwmon@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Thu, 9 May 2019 16:38:44 +0100
-Received: from b03cxnp08026.gho.boulder.ibm.com (9.17.130.18)
-        by e34.co.us.ibm.com (192.168.1.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 9 May 2019 16:38:40 +0100
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x49Fcdqm7668196
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 May 2019 15:38:40 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8F846A047;
-        Thu,  9 May 2019 15:38:39 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 651396A04D;
-        Thu,  9 May 2019 15:38:39 +0000 (GMT)
-Received: from [9.41.179.222] (unknown [9.41.179.222])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 May 2019 15:38:39 +0000 (GMT)
-Subject: Re: [PATCH] hwmon (occ): Switch power average to between poll
- responses
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com
-References: <1557257751-12995-1-git-send-email-eajames@linux.ibm.com>
- <20190508210336.GA29619@roeck-us.net>
-From:   Eddie James <eajames@linux.vnet.ibm.com>
-Date:   Thu, 9 May 2019 10:38:38 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Sat, 11 May 2019 15:04:23 -0400
+Received: by mail-pl1-f193.google.com with SMTP id w7so4394803plz.1;
+        Sat, 11 May 2019 12:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mGaRnqVCoyCZOIBZ9izPfSHfOocCoIwti//LG4qze0c=;
+        b=MI8w5cGx0btx5xiSYFrJJoCJwkyQlKKgVznkYSIQQyeEo51cg4O3QncAEZ2yQ7qAEk
+         ClKCFyKB1BtyCtfMJwqORCb+mHsBhx7bTBh5eO8Jp3JnAfuRr3yXyhzH2FdDTyChiPFY
+         PE2ibBHBRZGKjU7qWeRcDtASrk8YyzIvVIvPuVYmqf0YuDwlA0xS+6nOJ8q+ejqY5zDc
+         9ia25Yc+pKfzsShQKYxWWvitFtb498YlRPX0Hh1mT2kH4erY8pugknQ/Uh8aTUBOkGHQ
+         HKxxl0UPHcS5VYEdyxZmQD10jgPJWiCP2rgMNouweQ6cXUE/bgDzk0G/U3cbc4n20Xgp
+         savA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mGaRnqVCoyCZOIBZ9izPfSHfOocCoIwti//LG4qze0c=;
+        b=oYK29aTCgr3XJTqrLbtU4cnsnDgqMQKdp69GBmYPJcVUp9fLvOgTOg/WCLN7pzCLBH
+         zsU/iLUb985r2xFqqPFHN9HCcHxPxz5nY7zJdmV3GMTMEMXUbYMcHWQpgGXbZzVW8KgV
+         GbXxeMQAAzHJR7sfsXW+39KzzAiTeM1wg7wcU3Rom8xq2tOeQNTt93f11kKTjOTtCrJp
+         ZwzgjRK2EBgGSBuWwWCByFxYDCRq/HZub3JzVZI10BDoIZQI5lSbHstu1rx8lelh4HwE
+         avq4DPEHdMhk5YUUHz/4Q/+QOPSXRwpg+NaZGaF1hY78/mTxWEnhk03K59SH6fMTYgMx
+         tMpg==
+X-Gm-Message-State: APjAAAW6g5jso73lZXqCYBhVrAfawLN8GZt4pvJ32dM/GC3m4VIQcizH
+        Ee9i1d2D2FD4zbZDzNHhCzE=
+X-Google-Smtp-Source: APXvYqyt/eaU9d15W8IfOa5xOEidfRGbLhiHRr2EdYIRq+a25FXzjyRxhMHBQ2aiAInKd+bzRgMYIg==
+X-Received: by 2002:a17:902:20e2:: with SMTP id v31mr21870303plg.138.1557601462677;
+        Sat, 11 May 2019 12:04:22 -0700 (PDT)
+Received: from localhost.localdomain ([2607:fb90:4a55:a659:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id u38sm9494634pgn.73.2019.05.11.12.04.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 11 May 2019 12:04:22 -0700 (PDT)
+Date:   Sat, 11 May 2019 12:04:18 -0700
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-pm@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH 1/6] thermal: Introduce
+ devm_thermal_of_cooling_device_register
+Message-ID: <20190511190415.GA22816@localhost.localdomain>
+References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
+ <1555617500-10862-2-git-send-email-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20190508210336.GA29619@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19050915-0016-0000-0000-000009AFBFBF
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011077; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000285; SDB=6.01200880; UDB=6.00630131; IPR=6.00981771;
- MB=3.00026813; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-09 15:38:42
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050915-0017-0000-0000-00004325E169
-Message-Id: <97d20bd2-8060-41a9-f8ee-c33bf7e1079f@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-09_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905090090
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1555617500-10862-2-git-send-email-linux@roeck-us.net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello Guenter,
 
-On 5/8/19 4:03 PM, Guenter Roeck wrote:
-> On Tue, May 07, 2019 at 02:35:51PM -0500, Eddie James wrote:
->> The average power reported in the hwmon OCC driver is not useful
->> because the time it represents is too short. Instead, store the
->> previous power accumulator reported by the OCC and average it with the
->> latest accumulator to obtain an average between poll responses. This
->> does operate under the assumption that the user polls regularly.
->>
-> That looks really bad. Effectively it means that the number reported
-> as average power is more or less useless/random. On top of that, the code
-> gets so complicated that it is all but impossible to understand.
->
-> Does it really make sense to report an average that has effectively
-> no useful meaning (and is, for example, influenced just by reading it) ?
+On Thu, Apr 18, 2019 at 12:58:15PM -0700, Guenter Roeck wrote:
+> thermal_of_cooling_device_register() and thermal_cooling_device_register()
+> are typically called from driver probe functions, and
+> thermal_cooling_device_unregister() is called from remove functions. This
+> makes both a perfect candidate for device managed functions.
+> 
+> Introduce devm_thermal_of_cooling_device_register(). This function can
+> also be used to replace thermal_cooling_device_register() by passing a NULL
+> pointer as device node. The new function requires both struct device *
+> and struct device_node * as parameters since the struct device_node *
+> parameter is not always identical to dev->of_node.
+> 
+> Don't introduce a device managed remove function since it is not needed
+> at this point.
 
-
-Yea... that's a good point. Basically our userspace environment has no 
-good way to do this either, so I tried to shoe-horn this into the 
-driver, but this approach is indeed bad. I'll abandon this patch.
+I don't have any objection on adding this API. Only a minor thing below:
 
 
-Thanks!
+> 
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/thermal/thermal_core.c | 49 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        |  5 +++++
+>  2 files changed, 54 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 6590bb5cb688..e0b530603db6 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1046,6 +1046,55 @@ thermal_of_cooling_device_register(struct device_node *np,
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+>  
+> +static void thermal_cooling_device_release(struct device *dev, void *res)
+> +{
+> +	thermal_cooling_device_unregister(
+> +				*(struct thermal_cooling_device **)res);
+> +}
+> +
+> +/**
+> + * devm_thermal_of_cooling_device_register() - register an OF thermal cooling
+> + *					       device
+> + * @dev:	a valid struct device pointer of a sensor device.
+> + * @np:		a pointer to a device tree node.
+> + * @type:	the thermal cooling device type.
+> + * @devdata:	device private data.
+> + * @ops:	standard thermal cooling devices callbacks.
+> + *
+> + * This function will register a cooling device with device tree node reference.
+> + * This interface function adds a new thermal cooling device (fan/processor/...)
+> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> + * to all the thermal zone devices registered at the same time.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +devm_thermal_of_cooling_device_register(struct device *dev,
+> +				struct device_node *np,
+> +				char *type, void *devdata,
+> +				const struct thermal_cooling_device_ops *ops)
+> +{
+> +	struct thermal_cooling_device **ptr, *tcd;
+> +
+> +	ptr = devres_alloc(thermal_cooling_device_release, sizeof(*ptr),
+> +			   GFP_KERNEL);
+> +	if (!ptr)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	tcd = __thermal_cooling_device_register(np, type, devdata, ops);
+> +	if (IS_ERR(tcd)) {
+> +		devres_free(ptr);
+> +		return tcd;
+> +	}
+> +
+> +	*ptr = tcd;
+> +	devres_add(dev, ptr);
+> +
+> +	return tcd;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+> +
+>  static void __unbind(struct thermal_zone_device *tz, int mask,
+>  		     struct thermal_cooling_device *cdev)
+>  {
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 5f4705f46c2f..43cf4fdd71d4 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -447,6 +447,11 @@ struct thermal_cooling_device *thermal_cooling_device_register(char *, void *,
+>  struct thermal_cooling_device *
+>  thermal_of_cooling_device_register(struct device_node *np, char *, void *,
+>  				   const struct thermal_cooling_device_ops *);
+> +struct thermal_cooling_device *
+> +devm_thermal_of_cooling_device_register(struct device *dev,
+> +				struct device_node *np,
+> +				char *type, void *devdata,
+> +				const struct thermal_cooling_device_ops *ops);
 
-Eddie
+We need to stub this in case thermal is not selected.
+
+>  void thermal_cooling_device_unregister(struct thermal_cooling_device *);
+>  struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name);
+>  int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+
+Something like:
 
 
->
-> Guenter
->
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/hwmon/occ/common.c | 133 ++++++++++++++++++++++++++++++++-------------
->>   drivers/hwmon/occ/common.h |   7 +++
->>   2 files changed, 103 insertions(+), 37 deletions(-)
->>
->> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
->> index e6d3fb5..6ffcee7 100644
->> --- a/drivers/hwmon/occ/common.c
->> +++ b/drivers/hwmon/occ/common.c
->> @@ -118,6 +118,53 @@ struct extended_sensor {
->>   	u8 data[6];
->>   } __packed;
->>   
->> +static void occ_update_prev_power_avgs(struct occ *occ)
->> +{
->> +	u8 i;
->> +	struct power_sensor_1 *ps1;
->> +	struct power_sensor_2 *ps2;
->> +	struct power_sensor_a0 *psa0;
->> +	struct occ_sensor *power = &occ->sensors.power;
->> +	struct occ_power_avg *prevs = occ->prev_power_avgs;
->> +
->> +	switch (power->version) {
->> +	case 1:
->> +		for (i = 0; i < power->num_sensors; ++i) {
->> +			ps1 = ((struct power_sensor_1 *)power->data) + i;
->> +
->> +			prevs[i].accumulator =
->> +				get_unaligned_be32(&ps1->accumulator);
->> +			prevs[i].update_tag =
->> +				get_unaligned_be32(&ps1->update_tag);
->> +		}
->> +		break;
->> +	case 2:
->> +		for (i = 0; i < power->num_sensors; ++i) {
->> +			ps2 = ((struct power_sensor_2 *)power->data) + i;
->> +
->> +			prevs[i].accumulator =
->> +				get_unaligned_be64(&ps2->accumulator);
->> +			prevs[i].update_tag =
->> +				get_unaligned_be32(&ps2->update_tag);
->> +		}
->> +		break;
->> +	case 0xA0:
->> +		for (i = 0; i < power->num_sensors; ++i) {
->> +			psa0 = ((struct power_sensor_a0 *)power->data) + i;
->> +
->> +			prevs[i].accumulator = psa0->system.accumulator;
->> +			prevs[i].update_tag = psa0->system.update_tag;
->> +			prevs[i + 1].accumulator = psa0->proc.accumulator;
->> +			prevs[i + 1].update_tag = psa0->proc.update_tag;
->> +			prevs[i + 2].accumulator = psa0->vdd.accumulator;
->> +			prevs[i + 2].update_tag = psa0->vdd.update_tag;
->> +			prevs[i + 3].accumulator = psa0->vdn.accumulator;
->> +			prevs[i + 3].update_tag = psa0->vdn.update_tag;
->> +		}
->> +		break;
->> +	}
->> +}
->> +
->>   static int occ_poll(struct occ *occ)
->>   {
->>   	int rc;
->> @@ -135,6 +182,8 @@ static int occ_poll(struct occ *occ)
->>   	cmd[6] = checksum & 0xFF;	/* checksum lsb */
->>   	cmd[7] = 0;
->>   
->> +	occ_update_prev_power_avgs(occ);
->> +
->>   	/* mutex should already be locked if necessary */
->>   	rc = occ->send_cmd(occ, cmd);
->>   	if (rc) {
->> @@ -208,6 +257,7 @@ int occ_update_response(struct occ *occ)
->>   	/* limit the maximum rate of polling the OCC */
->>   	if (time_after(jiffies, occ->last_update + OCC_UPDATE_FREQUENCY)) {
->>   		rc = occ_poll(occ);
->> +		occ->prev_update = occ->last_update;
->>   		occ->last_update = jiffies;
->>   	} else {
->>   		rc = occ->last_error;
->> @@ -364,6 +414,14 @@ static ssize_t occ_show_freq_2(struct device *dev,
->>   	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
->>   }
->>   
->> +static u64 occ_power_avg(struct occ *occ, u8 idx, u64 accum, u32 samples)
->> +{
->> +	struct occ_power_avg *avg = &occ->prev_power_avgs[idx];
->> +
->> +	return div_u64((accum - avg->accumulator) * 1000000ULL,
->> +		       samples - avg->update_tag);
->> +}
->> +
->>   static ssize_t occ_show_power_1(struct device *dev,
->>   				struct device_attribute *attr, char *buf)
->>   {
->> @@ -385,13 +443,12 @@ static ssize_t occ_show_power_1(struct device *dev,
->>   		val = get_unaligned_be16(&power->sensor_id);
->>   		break;
->>   	case 1:
->> -		val = get_unaligned_be32(&power->accumulator) /
->> -			get_unaligned_be32(&power->update_tag);
->> -		val *= 1000000ULL;
->> +		val = occ_power_avg(occ, sattr->index,
->> +				    get_unaligned_be32(&power->accumulator),
->> +				    get_unaligned_be32(&power->update_tag));
->>   		break;
->>   	case 2:
->> -		val = (u64)get_unaligned_be32(&power->update_tag) *
->> -			   occ->powr_sample_time_us;
->> +		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
->>   		break;
->>   	case 3:
->>   		val = get_unaligned_be16(&power->value) * 1000000ULL;
->> @@ -403,12 +460,6 @@ static ssize_t occ_show_power_1(struct device *dev,
->>   	return snprintf(buf, PAGE_SIZE - 1, "%llu\n", val);
->>   }
->>   
->> -static u64 occ_get_powr_avg(u64 *accum, u32 *samples)
->> -{
->> -	return div64_u64(get_unaligned_be64(accum) * 1000000ULL,
->> -			 get_unaligned_be32(samples));
->> -}
->> -
->>   static ssize_t occ_show_power_2(struct device *dev,
->>   				struct device_attribute *attr, char *buf)
->>   {
->> @@ -431,12 +482,12 @@ static ssize_t occ_show_power_2(struct device *dev,
->>   				get_unaligned_be32(&power->sensor_id),
->>   				power->function_id, power->apss_channel);
->>   	case 1:
->> -		val = occ_get_powr_avg(&power->accumulator,
->> -				       &power->update_tag);
->> +		val = occ_power_avg(occ, sattr->index,
->> +				    get_unaligned_be64(&power->accumulator),
->> +				    get_unaligned_be32(&power->update_tag));
->>   		break;
->>   	case 2:
->> -		val = (u64)get_unaligned_be32(&power->update_tag) *
->> -			   occ->powr_sample_time_us;
->> +		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
->>   		break;
->>   	case 3:
->>   		val = get_unaligned_be16(&power->value) * 1000000ULL;
->> @@ -452,6 +503,8 @@ static ssize_t occ_show_power_a0(struct device *dev,
->>   				 struct device_attribute *attr, char *buf)
->>   {
->>   	int rc;
->> +	u32 samples;
->> +	u64 accum;
->>   	u64 val = 0;
->>   	struct power_sensor_a0 *power;
->>   	struct occ *occ = dev_get_drvdata(dev);
->> @@ -469,12 +522,15 @@ static ssize_t occ_show_power_a0(struct device *dev,
->>   		return snprintf(buf, PAGE_SIZE - 1, "%u_system\n",
->>   				get_unaligned_be32(&power->sensor_id));
->>   	case 1:
->> -		val = occ_get_powr_avg(&power->system.accumulator,
->> -				       &power->system.update_tag);
->> +		accum = get_unaligned_be64(&power->system.accumulator);
->> +		samples = get_unaligned_be32(&power->system.update_tag);
->> +		val = occ_power_avg(occ, sattr->index, accum, samples);
->>   		break;
->>   	case 2:
->> -		val = (u64)get_unaligned_be32(&power->system.update_tag) *
->> -			   occ->powr_sample_time_us;
->> +	case 6:
->> +	case 10:
->> +	case 14:
->> +		val = jiffies_to_usecs(occ->last_update - occ->prev_update);
->>   		break;
->>   	case 3:
->>   		val = get_unaligned_be16(&power->system.value) * 1000000ULL;
->> @@ -483,12 +539,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
->>   		return snprintf(buf, PAGE_SIZE - 1, "%u_proc\n",
->>   				get_unaligned_be32(&power->sensor_id));
->>   	case 5:
->> -		val = occ_get_powr_avg(&power->proc.accumulator,
->> -				       &power->proc.update_tag);
->> -		break;
->> -	case 6:
->> -		val = (u64)get_unaligned_be32(&power->proc.update_tag) *
->> -			   occ->powr_sample_time_us;
->> +		accum = get_unaligned_be64(&power->proc.accumulator);
->> +		samples = get_unaligned_be32(&power->proc.update_tag);
->> +		val = occ_power_avg(occ, sattr->index + 1, accum, samples);
->>   		break;
->>   	case 7:
->>   		val = get_unaligned_be16(&power->proc.value) * 1000000ULL;
->> @@ -497,12 +550,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
->>   		return snprintf(buf, PAGE_SIZE - 1, "%u_vdd\n",
->>   				get_unaligned_be32(&power->sensor_id));
->>   	case 9:
->> -		val = occ_get_powr_avg(&power->vdd.accumulator,
->> -				       &power->vdd.update_tag);
->> -		break;
->> -	case 10:
->> -		val = (u64)get_unaligned_be32(&power->vdd.update_tag) *
->> -			   occ->powr_sample_time_us;
->> +		accum = get_unaligned_be64(&power->vdd.accumulator);
->> +		samples = get_unaligned_be32(&power->vdd.update_tag);
->> +		val = occ_power_avg(occ, sattr->index + 2, accum, samples);
->>   		break;
->>   	case 11:
->>   		val = get_unaligned_be16(&power->vdd.value) * 1000000ULL;
->> @@ -511,12 +561,9 @@ static ssize_t occ_show_power_a0(struct device *dev,
->>   		return snprintf(buf, PAGE_SIZE - 1, "%u_vdn\n",
->>   				get_unaligned_be32(&power->sensor_id));
->>   	case 13:
->> -		val = occ_get_powr_avg(&power->vdn.accumulator,
->> -				       &power->vdn.update_tag);
->> -		break;
->> -	case 14:
->> -		val = (u64)get_unaligned_be32(&power->vdn.update_tag) *
->> -			   occ->powr_sample_time_us;
->> +		accum = get_unaligned_be64(&power->vdn.accumulator);
->> +		samples = get_unaligned_be32(&power->vdn.update_tag);
->> +		val = occ_power_avg(occ, sattr->index + 3, accum, samples);
->>   		break;
->>   	case 15:
->>   		val = get_unaligned_be16(&power->vdn.value) * 1000000ULL;
->> @@ -719,6 +766,7 @@ static ssize_t occ_show_extended(struct device *dev,
->>   static int occ_setup_sensor_attrs(struct occ *occ)
->>   {
->>   	unsigned int i, s, num_attrs = 0;
->> +	unsigned int power_avgs_size = 0;
->>   	struct device *dev = occ->bus_dev;
->>   	struct occ_sensors *sensors = &occ->sensors;
->>   	struct occ_attribute *attr;
->> @@ -761,9 +809,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->>   		/* fall through */
->>   	case 1:
->>   		num_attrs += (sensors->power.num_sensors * 4);
->> +		power_avgs_size = sizeof(struct occ_power_avg) *
->> +			sensors->power.num_sensors;
->>   		break;
->>   	case 0xA0:
->>   		num_attrs += (sensors->power.num_sensors * 16);
->> +		power_avgs_size = sizeof(struct occ_power_avg) *
->> +			sensors->power.num_sensors * 4;
->>   		show_power = occ_show_power_a0;
->>   		break;
->>   	default:
->> @@ -792,6 +844,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->>   		sensors->extended.num_sensors = 0;
->>   	}
->>   
->> +	if (power_avgs_size) {
->> +		occ->prev_power_avgs = devm_kzalloc(dev, power_avgs_size,
->> +						    GFP_KERNEL);
->> +		if (!occ->prev_power_avgs)
->> +			return -ENOMEM;
->> +	}
->> +
->>   	occ->attrs = devm_kzalloc(dev, sizeof(*occ->attrs) * num_attrs,
->>   				  GFP_KERNEL);
->>   	if (!occ->attrs)
->> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
->> index c676e48..08970f8 100644
->> --- a/drivers/hwmon/occ/common.h
->> +++ b/drivers/hwmon/occ/common.h
->> @@ -87,17 +87,24 @@ struct occ_attribute {
->>   	struct sensor_device_attribute_2 sensor;
->>   };
->>   
->> +struct occ_power_avg {
->> +	u64 accumulator;
->> +	u32 update_tag;
->> +};
->> +
->>   struct occ {
->>   	struct device *bus_dev;
->>   
->>   	struct occ_response resp;
->>   	struct occ_sensors sensors;
->> +	struct occ_power_avg *prev_power_avgs;
->>   
->>   	int powr_sample_time_us;	/* average power sample time */
->>   	u8 poll_cmd_data;		/* to perform OCC poll command */
->>   	int (*send_cmd)(struct occ *occ, u8 *cmd);
->>   
->>   	unsigned long last_update;
->> +	unsigned long prev_update;
->>   	struct mutex lock;		/* lock OCC access */
->>   
->>   	struct device *hwmon;
->> -- 
->> 1.8.3.1
->>
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 43cf4fd..9b1b365 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -508,6 +508,14 @@ static inline struct thermal_cooling_device *
+ thermal_of_cooling_device_register(struct device_node *np,
+        char *type, void *devdata, const struct thermal_cooling_device_ops *ops)
+ { return ERR_PTR(-ENODEV); }
++struct thermal_cooling_device *
++devm_thermal_of_cooling_device_register(struct device *dev,
++                               struct device_node *np,
++                               char *type, void *devdata,
++                               const struct thermal_cooling_device_ops *ops)
++{
++       return ERR_PTR(-ENODEV);
++}
+ static inline void thermal_cooling_device_unregister(
+        struct thermal_cooling_device *cdev)
+ { }
+~
+
+
+If you want I can amend this to your patch and apply it.
+
+Also, do you prefer me to collect only this patch and you would collect hwmon changes,
+or are you ok if I collect all the series?
 
