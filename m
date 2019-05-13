@@ -2,139 +2,157 @@ Return-Path: <SRS0=+Thf=TN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6BDC04AA7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 May 2019 18:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 170FFC04AB1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 May 2019 18:10:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DAFAE208CA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 May 2019 18:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1557770425;
-	bh=NqTXcEY6xitd9OwpOepED0bcGkN51+bHAKkT3RC1mWA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:List-ID:
-	 From;
-	b=1t4ApKSSgFllA/auugHA0Gwz9bc8CeC4kG4RheDw2QWU+gRThTIrkH127cTYasM90
-	 k3lLqRObDUxFzkMlfl8BlNT+DKbuhL6v6YPgm3aqfVY38BiIpCRCkOE8X/ZWxNK+l9
-	 57mSgkooLT7rVUcXV9a7tV86oNlVSqVQujCH/Ihg=
+	by mail.kernel.org (Postfix) with ESMTP id DB65621019
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 May 2019 18:10:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWYIBEEX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732049AbfEMR7b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 May 2019 13:59:31 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:36160 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732087AbfEMR7a (ORCPT
+        id S1726149AbfEMSKl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 May 2019 14:10:41 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39827 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfEMSKk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 May 2019 13:59:30 -0400
-Received: by mail-pf1-f194.google.com with SMTP id v80so7609526pfa.3;
-        Mon, 13 May 2019 10:59:30 -0700 (PDT)
+        Mon, 13 May 2019 14:10:40 -0400
+Received: by mail-wr1-f68.google.com with SMTP id w8so13907978wrl.6;
+        Mon, 13 May 2019 11:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :reply-to:organization;
-        bh=rllXTOSI+l4dOxVedgJq5yZYXTiqRbCrivN8bEva+1o=;
-        b=P2R9iMibtoLad0qOV2+DiBMkXyuXf3CQycA8i3D+rYFgcUOhvBff8tb07olonxdyZ7
-         EPR1qiixByolrP00F9/QiDJeC0WrCoatZhz0uX5PWOtnkLAKq5sm+ivdFIgUsw+jatCR
-         XRSDJf+lBn1fdNKKAQPov56whA7FcvWt7xElnBS6N1/CncQ8e1K/glLMn+ZylC2mUtk4
-         LgcQu8O6Ile1SXpVLkxP7vlYLTYeVVRO+5oJAWZ04qhEbW6tAHLQOpq4apneRVO/dlEj
-         Uci7hpCy8r5PEu5g2UDwpeEOrPqZRp3fbszFTMQ4oMFSD3Ywf7uNyie439oxeSILOOpI
-         nf6A==
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xjyfckHJXlC/6zqO/WdSPY75KVJYOZ3HNhKFYbdnIbo=;
+        b=BWYIBEEXjsHj1oidjl/F65UweVrtjxi2OX+8PffmndG44zVJPXE45BEzdIoSkGPwn2
+         uBeD4MwB6aBysQjYi63W8COfiBpI829rF8ixaTNFGo13w2bwi2JTkkFoO1OyhhaQF6zy
+         rCqA6a4wmE4gOAZ1+br3GgTWRO3SGbANremnTXDbea1qyisaGaUPscn2ZrXtYAD6oN1J
+         jNlyevDE0JNRprQHWfTuwD75kE7UfLesTtL1lZ70ldWozG+xGj25iGcgf8rz0qC+UYut
+         AZPP8/gH8G4ScYjqUTjzenH1XkFkXHFxBtVuaKDidrWLyERQu5SvuND1HZuidfUZDgDK
+         CB1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:reply-to:organization;
-        bh=rllXTOSI+l4dOxVedgJq5yZYXTiqRbCrivN8bEva+1o=;
-        b=edhZwnSzOB8/2GCCMnL/I6ANW4xHlkTZNanHXzjh0JahtcPccVSMh/wMP0TXYqaftF
-         70yDYDMoP8+68bkRfGwm04tjDTPPq/zjFazxkCQKBOIy6qPFzX8Qfhb8IbZMYZ+kAvcH
-         MDgUInfwwEBYvmLesQRqWetercs9vdNq/4epvqgCP2ajAIJ0W859Ig514Bofh7p2JOj1
-         ui5Jz3U+iF9vEgI1MiBlAcT/PlcAXipu+oxm/umRpFbK4IuY7jyi9K7GlPEOFWVWSAoh
-         0VMJotdzsUpsuYXoWIvhBh2ALHxo1+cfFG9Ef9zUx7r/lYy7wyAkdZi6A69UhvlNDUus
-         QTEA==
-X-Gm-Message-State: APjAAAWkMxZ6MkSdTwl6fEBcv4n5HkBxNZcdDbkw3BGXp2CSvNi555HJ
-        t/byPt2FmGwN1Zwc1QEGF+aleEK6
-X-Google-Smtp-Source: APXvYqw4isY2CZSWFLw0cWYvh2NWwmmEFT2LoyQOEgEsbI31Z+B5w7inOWYLYdrjGOymQR4vwByrKQ==
-X-Received: by 2002:aa7:8e04:: with SMTP id c4mr34899854pfr.48.1557770370110;
-        Mon, 13 May 2019 10:59:30 -0700 (PDT)
-Received: from localhost.localdomain ([96.79.124.202])
-        by smtp.gmail.com with ESMTPSA id s12sm9536266pfd.152.2019.05.13.10.59.28
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=xjyfckHJXlC/6zqO/WdSPY75KVJYOZ3HNhKFYbdnIbo=;
+        b=T1SHayco1Gz6YGxwKKt6T6+CFl86wpRVECosayw7/SqGrahS4bs1TvMWc4gJKSGjDT
+         k+/3OynkXHdidNx85XkL+q0K9u/chaY/Q/JikPvA2mk74QnDBsfhHmDy/Z6W1dNfljNe
+         N2gX+aQ0lzmXVrCH6M53lg7memy+wz2SUjDwMeCqjyaT3ELlTNsz9bveMi/7/xbGjrYn
+         NE/q11mHvajqD8/ht6UZk0tl8ip9442qh6InOFbT0gW0ZSxO9NGBJCd9gElrN3W4VBDi
+         F8p3d0nQAanL3ocRPkgsu2nslwiSVuIK+QF7+oT4Z/67yKU1ROETx3Bu6Czt8SIFMIqh
+         w13A==
+X-Gm-Message-State: APjAAAWPL3i0ogT+Xtq/h5wuQd/ELAYbXOGBqWqJgOyHmWv8QU2TXMH/
+        QhzZOGqdQvI4h+FC4OYm0JH7Vovs
+X-Google-Smtp-Source: APXvYqzLjTvTiyfRetVn0eAL1SDTX7ISj1f41/LkJh68h9dYPIERJgzDpIt/O7VRqbY9wW69AWYntg==
+X-Received: by 2002:adf:cf05:: with SMTP id o5mr2817449wrj.262.1557771037720;
+        Mon, 13 May 2019 11:10:37 -0700 (PDT)
+Received: from [10.67.49.52] ([192.19.223.250])
+        by smtp.googlemail.com with ESMTPSA id o81sm374215wmb.2.2019.05.13.11.10.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 10:59:29 -0700 (PDT)
-From:   Len Brown <lenb@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH 10/19] hwmon/coretemp: Support multi-die/package
-Date:   Mon, 13 May 2019 13:58:54 -0400
-Message-Id: <ec2868f35113a01ff72d9041e0b97fc6a1c7df84.1557769318.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.18.0-rc0
-In-Reply-To: <7b23d2d26d717b8e14ba137c94b70943f1ae4b5c.1557769318.git.len.brown@intel.com>
-References: <7b23d2d26d717b8e14ba137c94b70943f1ae4b5c.1557769318.git.len.brown@intel.com>
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
+        Mon, 13 May 2019 11:10:36 -0700 (PDT)
+Subject: Re: [PATCH v5 2/2] hwmon: scmi: Scale values to target desired HWMON
+ units
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
+References: <20190508184635.5054-1-f.fainelli@gmail.com>
+ <20190508184635.5054-3-f.fainelli@gmail.com>
+ <20190508211017.GA29998@roeck-us.net>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <1212a00f-76f8-8f21-d19a-a5681c3668a0@gmail.com>
+Date:   Mon, 13 May 2019 11:10:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190508211017.GA29998@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Zhang Rui <rui.zhang@intel.com>
+On 5/8/19 2:10 PM, Guenter Roeck wrote:
+> On Wed, May 08, 2019 at 11:46:35AM -0700, Florian Fainelli wrote:
+>> If the SCMI firmware implementation is reporting values in a scale that
+>> is different from the HWMON units, we need to scale up or down the value
+>> according to how far appart they are.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Question is which tree this series should go through. I am fine with arm.
 
-Package temperature sensors are actually implemented in hardware per-die.
-
-Update coretemp to be "die-aware", so it can expose mulitple sensors
-per package, instead of just one.  No change to single-die/package
-systems.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
----
- drivers/hwmon/coretemp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 5d34f7271e67..c64ce32d3214 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -435,7 +435,7 @@ static int chk_ucode_version(unsigned int cpu)
- 
- static struct platform_device *coretemp_get_pdev(unsigned int cpu)
- {
--	int pkgid = topology_logical_package_id(cpu);
-+	int pkgid = topology_logical_die_id(cpu);
- 
- 	if (pkgid >= 0 && pkgid < max_packages)
- 		return pkg_devices[pkgid];
-@@ -579,7 +579,7 @@ static struct platform_driver coretemp_driver = {
- 
- static struct platform_device *coretemp_device_add(unsigned int cpu)
- {
--	int err, pkgid = topology_logical_package_id(cpu);
-+	int err, pkgid = topology_logical_die_id(cpu);
- 	struct platform_device *pdev;
- 
- 	if (pkgid < 0)
-@@ -703,7 +703,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	 * the rest.
- 	 */
- 	if (cpumask_empty(&pd->cpumask)) {
--		pkg_devices[topology_logical_package_id(cpu)] = NULL;
-+		pkg_devices[topology_logical_die_id(cpu)] = NULL;
- 		platform_device_unregister(pdev);
- 		return 0;
- 	}
-@@ -741,7 +741,7 @@ static int __init coretemp_init(void)
- 	if (!x86_match_cpu(coretemp_ids))
- 		return -ENODEV;
- 
--	max_packages = topology_max_packages();
-+	max_packages = topology_max_packages() * topology_max_die_per_package();
- 	pkg_devices = kcalloc(max_packages, sizeof(struct platform_device *),
- 			      GFP_KERNEL);
- 	if (!pkg_devices)
+Fine with me as well, Sudeep are you picking up these patches or should
+they go through HWMON and Guenter?
 -- 
-2.18.0-rc0
-
+Florian
