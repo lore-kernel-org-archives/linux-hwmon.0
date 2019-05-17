@@ -1,102 +1,122 @@
-Return-Path: <SRS0=kBH9=TP=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=A3lF=TR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74BEFC04AB4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 May 2019 03:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12020C04AB4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 May 2019 23:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D077E2084F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 May 2019 03:15:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF9A02166E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 May 2019 23:13:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="ayDiQn3j"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Amt6e+kH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfEODPX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 May 2019 23:15:23 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54434 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbfEODPX (ORCPT
+        id S1727132AbfEQXNp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 May 2019 19:13:45 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:28776 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726757AbfEQXNp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 May 2019 23:15:23 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 746EB83640;
-        Wed, 15 May 2019 15:15:18 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1557890118;
-        bh=ZlRilQpyHzMvCdRuOmJ1KSODQnzCTTyuQ2gSBErg2sU=;
-        h=From:To:Cc:Subject:Date;
-        b=ayDiQn3jKBXiFRPHo1a7mQQPRNCfYKowYaDh024PiFxjgc/1KvD7DlfNztmSrJ1og
-         JTrb3dsF+lHyGM0xoVYtXM1cul7Ew02OD1zIeHopY+zhv8BHJPbhysT0APT0R+BAKa
-         +l+Td8Q/lwaYZo74E7nSTf2/zHl057lsc1NiFLuqul79ybT36g8wYAS6EAcDgM1qjA
-         fcIw0kaF71Ru5RG62Rf2GetQTa6u+2bI1BVWji7B6LZuZk1lAMptbBJOahBtEenRtC
-         ySzw6z6gsnifENa0JviPMMtbjxx9NhnzxrOgRiEt1zkDKuPh3s2ro8BFRQpezLbMSM
-         G+QO6IOv56A3g==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5cdb84420000>; Wed, 15 May 2019 15:15:16 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by smtp (Postfix) with ESMTP id EDB1B13EC46;
-        Wed, 15 May 2019 15:15:16 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 78FE01E1D5B; Wed, 15 May 2019 15:15:16 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] hwmon: (tc654) Update to use SPDX-License-Identifier
-Date:   Wed, 15 May 2019 15:15:08 +1200
-Message-Id: <20190515031508.30206-1-chris.packham@alliedtelesis.co.nz>
+        Fri, 17 May 2019 19:13:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1558134824; x=1589670824;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QSZH7MhgQ8SSN2c5tgT5vfhoIO9KJ/7q3qvVPDIomGI=;
+  b=Amt6e+kH6pK0zqLLpJ7EFizKb+Zn5fud+cWFcp9tlkRxzvxA3WYpf/XN
+   aBBOrGgeJ3ahwkDIB5F8PEQ5m2mkPEX75tJOoP8ATcYLAlUWWKqjJBheN
+   8SD4enVKsRNJsfuqNweQxxHsdE0prFHNITVkTuwjEZJgpis1/1Pv8qHqx
+   o=;
+X-IronPort-AV: E=Sophos;i="5.60,481,1549929600"; 
+   d="scan'208";a="800301467"
+Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com) ([10.47.22.34])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 17 May 2019 23:13:41 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-97fdccfd.us-east-1.amazon.com (8.14.7/8.14.7) with ESMTP id x4HNDXfM127436
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+        Fri, 17 May 2019 23:13:40 GMT
+Received: from EX13D05UWB004.ant.amazon.com (10.43.161.208) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 17 May 2019 23:13:40 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D05UWB004.ant.amazon.com (10.43.161.208) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 17 May 2019 23:13:39 +0000
+Received: from localhost (10.94.216.44) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Fri, 17 May 2019 23:13:39 +0000
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Eduardo Valentin <eduval@amazon.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] hwmon: core: add thermal sensors only if dev->of_node is present
+Date:   Fri, 17 May 2019 16:13:36 -0700
+Message-ID: <20190517231337.27859-2-eduval@amazon.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190517231337.27859-1-eduval@amazon.com>
+References: <20190517231337.27859-1-eduval@amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add the SPDX-License-Identifier to the top of the file and remove the
-old license boilerplate.
+Drivers may register to hwmon and request for also registering
+with the thermal subsystem (HWMON_C_REGISTER_TZ). However,
+some of these driver, e.g. marvell phy, may be probed from
+Device Tree or being dynamically allocated, and in the later
+case, it will not have a dev->of_node entry.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Registering with hwmon without the dev->of_node may result in
+different outcomes depending on the device tree, which may
+be a bit misleading. If the device tree blob has no 'thermal-zones'
+node, the *hwmon_device_register*() family functions are going
+to gracefully succeed, because of-thermal,
+*thermal_zone_of_sensor_register() return -ENODEV in this case,
+and the hwmon error path handles this error code as success to
+cover for the case where CONFIG_THERMAL_OF is not set.
+However, if the device tree blob has the 'thermal-zones'
+entry, the *hwmon_device_register*() will always fail on callers
+with no dev->of_node, propagating -EINVAL.
+
+If dev->of_node is not present, calling of-thermal does not
+make sense. For this reason, this patch checks first if the
+device has a of_node before going over the process of registering
+with the thermal subsystem of-thermal interface. And in this case,
+when a caller of *hwmon_device_register*() with HWMON_C_REGISTER_TZ
+and no dev->of_node will still register with hwmon, but not with
+the thermal subsystem. If all the hwmon part bits are in place,
+the registration will succeed.
+
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Eduardo Valentin <eduval@amazon.com>
 ---
+ drivers/hwmon/hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Notes:
-    I've gone with GPL-2.0+ because that matches the old text. As the aut=
-hor I
-    don't mind switching to GPL-2.0 if people want that.
-
- drivers/hwmon/tc654.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
-
-diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
-index 81dd229d7db4..8d0acbf8fbfc 100644
---- a/drivers/hwmon/tc654.c
-+++ b/drivers/hwmon/tc654.c
-@@ -1,17 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * tc654.c - Linux kernel modules for fan speed controller
-  *
-  * Copyright (C) 2016 Allied Telesis Labs NZ
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
-=20
- #include <linux/bitops.h>
---=20
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index fcdbac4a56e3..6b3559f58b67 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -619,7 +619,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	if (err)
+ 		goto free_hwmon;
+ 
+-	if (dev && chip && chip->ops->read &&
++	if (dev && dev->of_node && chip && chip->ops->read &&
+ 	    chip->info[0]->type == hwmon_chip &&
+ 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+ 		const struct hwmon_channel_info **info = chip->info;
+-- 
 2.21.0
 
