@@ -1,167 +1,479 @@
-Return-Path: <SRS0=GuGC=TS=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=y7dS=TU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6A01C04AAF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 May 2019 22:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 790C6C04AAC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 May 2019 15:21:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7046320873
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 May 2019 22:29:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2708213F2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 May 2019 15:21:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="vT5qyrri"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbfERW3U (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 May 2019 18:29:20 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:51899 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726407AbfERW3T (ORCPT
+        id S2388361AbfETPV2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 May 2019 11:21:28 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:60985 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733241AbfETPV1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 May 2019 18:29:19 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4560FR034Lz1rZcs;
-        Sun, 19 May 2019 00:29:14 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4560FQ6YfBz1qqkp;
-        Sun, 19 May 2019 00:29:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 9qdS3V011wkJ; Sun, 19 May 2019 00:29:13 +0200 (CEST)
-X-Auth-Info: 9IvKERCA4vNrBchWXz2I7o7nIfny102Fx+723pU+nds=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sun, 19 May 2019 00:29:13 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH V5] net: phy: tja11xx: Add TJA11xx PHY driver
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20190517235123.32261-1-marex@denx.de>
- <20190518141456.GK14298@lunn.ch>
- <b69b9b70-a299-2754-de9f-c7562b31fa16@denx.de>
- <20190518201251.GA30854@lunn.ch>
-Openpgp: preference=signencrypt
-Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
- mQINBFHmnxgBEACuQOC6Kaw/32MTeUJdFuDZ1FrbG76a0Ys/I02Kj9jXDmCCLvqq18Z4A1b0
- xbuMKGDy5WR77fqGV8zADUo6i1ATgCZeg+SRmQROF8r9K6n6digTznBySSLANhN3kXUMNRE1
- WEIBGCZJ5FF+Qq59AkAUTB8CiIzfEW98o7lUjeEume/78wR18+QW+2z6eYli2qNECceRINXT
- zS3oxRMr+ivqEUGKvMBC/WNLuvJoCGsfSQc2I+uGEU7MOdOCC6SsKdnPBGKYth5Ieb16bRS1
- b9M5BoEKTEzDCOWn92OxeHX6M2gLEMQobfM0RdIowMfWaUHdci2cLUTyL0T/P/gIpHMR2LhL
- 8sdbNZufgv73s9PDgxTWMzypXimMJ7VZmVh9I2nQd2xm8+uE1rghqb90aEMFCTwUlrz4Qhjh
- vmczd2ScuuOMLzHEaaoOrMGbaWIEFcJvQgyHzJgMPgnG64eDq6uGyBEXRc3bBzv7B765Hcg8
- SSNqoUstjuQQlGp3y3Yj16l+PyZ3Ucy2swFYLVPTc35xFBk/uGEIhGncoFpOX29rxt9M8r5G
- hm7395m0GmDy50H/HN61/S8EPvM3HUjqBvX1EqU+vJXfwozxkKpIwcjx7h3W+PPS9TUb7r5v
- vHCqnrWRd/m6KWbCJsv0rsIU66o2qKYX5cIHV6u6Y7Zm7BtHfwARAQABtBtNYXJlayBWYXN1
- dCA8bWFyZXhAZGVueC5kZT6JAjgEEwECACIFAlHmnxgCGwMGCwkIBwMCBhUIAgkKCwQWAgMB
- Ah4BAheAAAoJEOtsLUEh5B0XLk0QAINOYFYB3v4KjXSFHYBQLlDblqhXvVtjyQHMiJsY1BMO
- mMrANUJQtpY3UkYquFspe2GBiFQbfW+mDlwFlSNpzaJ68qGEK+57I/MufsZKV6Ze9j7QeClu
- orYH+zfIBI7sn0HkY/MWN/Z270gRv2xSxDBP/8SPdB53EkImLZUFOo4/5eyuQ4t8HLgol02u
- 2ncwXrnT036QC3SiNJDCJhwkpjvamPHghxr8hbIwkdOLZlYWfl0yzYzQohl8zBEwtBxl5cS4
- 1TcrgBXsanQUMVNBpl0s8nQLKuHJNPOAhBnKstAe54yY3iWswYayHqqgqIQldcDqttHhdTJW
- mb9hTSf5p6fnZqcsfi3PUFwj5PJSN3aAbF8w42FwRvIOWbksFIWXpxYI3mq2TmX4GtlKdlF8
- xT+Q+Cbk538IBV4OQ5BapuYHs1C1ff9gVC0rfrCEloyteHafHwOv3ZuEGPlH89Rl4EjRvJxX
- 8nE0sCiq6yUbpom8xRA5nFwA0bbTDwhH5RD/952bZraLpWcdJ6cWA2gefd2+2fy0268xyHmD
- m87B49BIaAsZ2kvEb/scCZ/CvPHjHLAjr+/GsdzOxwB68P41ZajujMDmbka00CyeAl88pgLX
- tTkPvAzuEDpRoJmg8zrQqrsmEKSdhFJhZ7d2MMKpCcVnInByXjM+1GEfSisTgWnluQINBFHm
- nxgBEAC8MpoO1s1AB0uRQGXlhYzkYvxkDGAe50/18ct2K6ORSv7HjCmZBjJX+2xTPSmML9ju
- 3P0KrlnRdT8qCh+ozijffLjm5X9Fk+6mGQ56UQzivuPNlgyC3epF3Z58VPVQcIfE2/pdAxtZ
- zKc4P5t2yo5qk635huo0NvNg5mRhvfZ7mZpZuBahkHguR0Heh/tnGCa2v5P6uFbGX8+6rAA8
- EKxl5Tclf27PFZwbIWL1buS9RwgzsHj2TFnnEFIcWdMHyGy2GT8JMgY0VwxKebzGJg2RqfOL
- PaPjnvnXHAIYEknQp0TUtUiNxm0PBa4IQ30XhrB9D5QYdcw/DVvCzb9qyIlaQKEqHZm1fGU4
- iCsH3jV+5D4Lrn5JfXc/+A1NsLUq/NFIYhphbX4fGjR2QdZJrDnGVcxSlwP7CeRuxGELrASz
- m4G4Q0mYz7HdAlzBJHi8Ej4yC9l7PPlnxdUcAwheLxGwzMCf5vxw1C6Zi8PvKu/sY7Bha9XJ
- plvuLBi7QrkD8mZEzt+xC9nWRt7hL47+UvyduFe4qDMTPrW20ROxCykC36gj53YhqqLblioX
- 2//vGLKj8x+LiLSTwjkLkrwOremhdTqr457511vOXyaZyOlWhFjN+4j9xwbbg1IWwMenRAb7
- Qwuipck6fN2o+PK9i6t6pWXrUDNI/VCMbimnuqPwAQARAQABiQIfBBgBAgAJBQJR5p8YAhsM
- AAoJEOtsLUEh5B0XMqAP/1HbrClefDZ/Lvvo89mgC56vWzEstmFo8EihqxVZvpkiCjJoCH53
- VCYeGl41p0y6K5gaLT28s9waVHBw+dhpwABba3neV/vyXv0wUtvkS3T0e4zruYFWw0lQoZi+
- 8rtXTsuWN5t3u8avXsrdqD0CteTJdgZ7yBV8bBvK2ekqFMS/cLC+MoYlmUFn6Tcxmv0x8QZY
- ux6ts9YpUvx8QxMJt9vfwt1WIUEFKR3JQdrZmbPGqWJ3s+u/C+v9stC5qf2eYafRjzy05lEn
- B06W5D5Uc+FGEhuzq4G0eRLgivMoC0Eqz7HuwGcRAJYQILQ3Vzd4oHKPoUAtvlKqUwDmHodT
- HPmN73JMsvO3jLrSdl4k6o3CdlS/DI0Eto4fD0Wqh6d5q11u1TOM7+/LehWrOOoGVqRc6FFT
- ofck6h6rN/Urwkr1nWQ3kgO1cd/gevqy8Tevo/qkPYIf71BlypcXhKqn6IPjkq4QLiDPRjHM
- tgPc2T/X/ETe5eCuhxMytIYbt1fK2pDXPoIKbbDK4uEmg9USXZ+pYrac4PFo1d+6D6vmTjRZ
- GRRITOVpKgBndfPyqofxeKNKGdNf9FS/x89RlnDWXsQHm+0pXguSRG9XdB16ZFNgeo8SeZVr
- qc9uLfhyQp/zB6qEnuX1TToug7PuDgcNZdjN3vgTXyno2TFMxp/LKHqg
-Message-ID: <1279c3ba-6901-1883-e1c5-0a05eec502b3@denx.de>
-Date:   Sat, 18 May 2019 22:46:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Mon, 20 May 2019 11:21:27 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190520152125euoutp02d9640473afe67f2a230e1a1c3e888eef~gbVWLR8Xh2373923739euoutp024
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 May 2019 15:21:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190520152125euoutp02d9640473afe67f2a230e1a1c3e888eef~gbVWLR8Xh2373923739euoutp024
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1558365685;
+        bh=J1X4EmSFet1xv1ATf3YAc3lureile2lYrE0P/YhGX7g=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=vT5qyrriYIaVfFr15o+DFZcMy7p6fK0s7j/PchFeCkNHLIEb25vY9f2h04WLuVSbd
+         PMYaLEOoUPHhPW8kvXCDvdEcMZgMvAZxZj5c757yVZFkMuEdpqS+d0ixA7dri1Rfii
+         uu5VbzAapGzcdeqtf40tVZpsahNPr/yMvF5yWNjQ=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190520152124eucas1p1971851798a6267dea61f3ce69999c31f~gbVVH26vB2063020630eucas1p1p;
+        Mon, 20 May 2019 15:21:24 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 11.25.04325.3F5C2EC5; Mon, 20
+        May 2019 16:21:23 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190520152123eucas1p1b4ea0e5743585885ba0dcbe5e6a8fd92~gbVUX8yHJ2147521475eucas1p1l;
+        Mon, 20 May 2019 15:21:23 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190520152123eusmtrp1f6885226016ac0595cef3d27081b1944~gbVUJsNF52462924629eusmtrp1i;
+        Mon, 20 May 2019 15:21:23 +0000 (GMT)
+X-AuditID: cbfec7f5-b75ff700000010e5-ae-5ce2c5f3d2f5
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 48.F9.04140.2F5C2EC5; Mon, 20
+        May 2019 16:21:22 +0100 (BST)
+Received: from [106.120.50.25] (unknown [106.120.50.25]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190520152122eusmtip2017c6ac5b995989fe3f57058f874c320~gbVTK5E6D0640106401eusmtip2M;
+        Mon, 20 May 2019 15:21:21 +0000 (GMT)
+Subject: Re: [PATCH 6/6] hwmon: (pwm-fan) Use
+ devm_thermal_of_cooling_device_register
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-pm@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <a2a41672-4345-15fa-5fc1-87ca6dc575a0@samsung.com>
+Date:   Mon, 20 May 2019 17:21:20 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190518201251.GA30854@lunn.ch>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <1555617500-10862-7-git-send-email-linux@roeck-us.net>
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf0yMcRz2vfe9995a175d6LMoc0OyiWJ8N9aYbO/6w/jDMmUcXtXUZXeV
+        QlNKtevHEqvr0C+WFsmdRFeR6JdU0o+FWuE2+mV0EUl0vYf+e57n+zx7Ps/2ZSlZLuPMBivD
+        eZVSESJnbOmKhh/ta8317wLW68e9iLGTJT+y00VEry0TE23NIEVyzS4kr6tHTFoz9pCf7b8o
+        ktOUJCaG97NS/M02iiSN3EOk03iFIea0p4iYCp6LyIdPnSLyLOEjTUxv0xlirI2TkKnyYURq
+        avU0SZwqYrYt5rqTjBIuV9dEc5W6fgmXb4jgrlUPibiOLw0U19dTzXB3r5/l2rUFiKucjJVw
+        6eUliCsr76Y5s8GV63oaJ9ltv99261E+JDiSV63zPmQblFr1gjlReCAqpfK2JBbpd2mQDQt4
+        I+T8NjAaZMvKcDGC3qokkUAmEGSfK6QFYkbQcyUL/Y0Uz0wg4eHGbCRFb42MIfiYEk9bXI7Y
+        Dy6MpMy5FuJBBBPPmsUWQuEqGtIe9DIWF4M9QTOmmcNS7A0Jjy2FLEvjlaBJXGqBi3AAFJqt
+        DgdozjHNOWzwDuh9GGaRKbwM4u9dpgTsBK9NeXP3AO5jYWC8jRGu9oGOhFtW7AjDjeUSAS+F
+        louptBCIR/C2rVQikFQEnee01s1b4Eljh9jSTGF3KDOuE+TtcLH4A2WRAdtD75iDcIQ9ZFZk
+        W2UpJCfKBPcq0DXe/lf7+MVLKgPJdfOW6ebN0c2bo/vfm4/oEuTER6hDA3n1BiV/0kOtCFVH
+        KAM9joSFGtDsr22Zafz6AD2cPlyHMIvkdtKgS+8CZGJFpDo6tA4BS8kXSje4DQTIpEcV0ad4
+        VdhBVUQIr65DS1ha7iQ9vWDQX4YDFeH8cZ4/wav+vopYG+dYdL5sk0PJVteYInrnqO/OkkrX
+        oWKtaHRBRbWz14zLwP1jm/uz3mj8fyUn+O1x+e62yXDA9bPjGd8jx0c2T+b7ZobXl0672fko
+        Te8bxq/GTHkv73ZLs4mqTX6VtS+mwmn6EXZppR0eRd0537xaOVyV2bfXzj1LHNe2cbj0y4r6
+        q2e/TQbLaXWQwnMNpVIr/gAknRpHsQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsVy+t/xe7qfjj6KMZjx0dpi12UOi5/T+5gs
+        Ns5Yz2oxY+8DZot5n2Ut5l+5xmpxdkKgxe/zf5ktZp5oZ7XY9Bgo1Lz6HLNF++utjBaXd81h
+        s/jce4TR4snCM0wWz99dZrI41fKCxeLJwz42i10HGtktfm15xWix98BGFou2X8vYHMQ8rrbv
+        YveYN+sEi8fOWXfZPRZsKvVYvOclk8fFj8eYPe5c28PmsXlJvcf5GQsZPXZ+b2D36NuyitFj
+        /ZarLB6fN8l5XDnSyB7AF6VnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
+        k5Kak1mWWqRvl6CX0bP7AlvBotiK7p3r2BsYN/p1MXJySAiYSKz494Wxi5GLQ0hgKaPE8/sn
+        mSASMhInpzWwQtjCEn+udbGB2EICrxklWnZogNjCAuESE193M4LYIgIPGCXObPcBGcQssJtF
+        4u+zYywQDdUSr2evBCtiEzCU6HoLMYhXwE6i5eAioBoODhYBVYmuNhmQsKhAjMSJqVvYIUoE
+        JU7OfAJWwingLHFjXz5ImFnATGLe5ofMELa8RPPW2VC2uMStJ/OZJjAKzULSPQtJyywkLbOQ
+        tCxgZFnFKJJaWpybnltspFecmFtcmpeul5yfu4kRmFa2Hfu5ZQdj17vgQ4wCHIxKPLwZUx7F
+        CLEmlhVX5h5ilOBgVhLhNVa/HyPEm5JYWZValB9fVJqTWnyI0RTotYnMUqLJ+cCUl1cSb2hq
+        aG5haWhubG5sZqEkztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgdH8sO+MQwGuimuXfczW//Hh
+        BQ+f6bn1M/dt2JZUNXllvvhv8UuPaorz6h9VJZw14g6JYNbSW/jt0tTvluJbrHjvljcxy77s
+        vbr962aR7ekpEvslv2p0nPvZnLkhy3pX8cYv/gytbMtm//y8cfGGu6YTu5O8y08HiRkHCweu
+        Nr+tYRa43byxjFOJpTgj0VCLuag4EQChB3cLQQMAAA==
+X-CMS-MailID: 20190520152123eucas1p1b4ea0e5743585885ba0dcbe5e6a8fd92
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190520152123eucas1p1b4ea0e5743585885ba0dcbe5e6a8fd92
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190520152123eucas1p1b4ea0e5743585885ba0dcbe5e6a8fd92
+References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
+        <1555617500-10862-7-git-send-email-linux@roeck-us.net>
+        <CGME20190520152123eucas1p1b4ea0e5743585885ba0dcbe5e6a8fd92@eucas1p1.samsung.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/18/19 10:12 PM, Andrew Lunn wrote:
-> On Sat, May 18, 2019 at 06:50:48PM +0200, Marek Vasut wrote:
->> On 5/18/19 4:14 PM, Andrew Lunn wrote:
->>> On Sat, May 18, 2019 at 01:51:23AM +0200, Marek Vasut wrote:
->>>> Add driver for the NXP TJA1100 and TJA1101 PHYs. These PHYs are special
->>>> BroadRReach 100BaseT1 PHYs used in automotive.
->>>
->>> Hi Marek
->>
->> Hello Andrew,
->>
->>>> +	}, {
->>>> +		PHY_ID_MATCH_MODEL(PHY_ID_TJA1101),
->>>> +		.name		= "NXP TJA1101",
->>>> +		.features       = PHY_BASIC_T1_FEATURES,
->>>
->>> One thing i would like to do before this patch goes in is define
->>> ETHTOOL_LINK_MODE_100baseT1_Full_BIT in ethtool.h, and use it here.
->>> We could not do it earlier because were ran out of bits. But with
->>> PHYLIB now using bitmaps, rather than u32, we can.
->>>
->>> Once net-next reopens i will submit a patch adding it.
->>
->> I can understand blocking patches from being applied if they have review
->> problems or need to be updated on some existing or even posted feature.
->> But blocking a patch because some future yet-to-be-developed patch is a
->> bit odd.
-> 
-> Hi Marek
-> 
-> What i'm trying to avoid is an ABI change. By using
-> PHY_BASIC_T1_FEATURES you are saying the device support 100BaseT. It
-> does not. It supports 100BaseT1. I want to add 100BaseT1 first, so
-> your PHY does not change from 100BaseT to 100BaseT1, which could be
-> considered an ABI change.
+Dear All,
 
-I would expect PHY_BASIC_T1_FEATURES , with T1 in the middle , would
-imply 100baseT1 , but maybe that's a misnomer .
+On 2019-04-18 21:58, Guenter Roeck wrote:
+> Use devm_thermal_of_cooling_device_register() to register the cooling
+> device. Also use devm_add_action_or_reset() to stop the fan on device
+> removal, and to disable the pwm. Introduce a local 'dev' variable in
+> the probe function to make the code easier to read.
+>
+> As a side effect, this fixes a bug seen if pwm_fan_of_get_cooling_data()
+> returned an error. In that situation, the pwm was not disabled, and
+> the fan was not stopped. Using devm functions also ensures that the
+> pwm is disabled and that the fan is stopped only after the hwmon device
+> has been unregistered.
+>
+> Cc: Lukasz Majewski <l.majewski@samsung.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-> I'm not suggesting blocking your patch for a long time. I'm already
-> 2/3 of the way doing the work. At the latest, i expect to have patches
-> submitted in the next few days. And then your driver can go in, using
-> this. So by end of next week, your driver can be in.
 
-But someone has to review your patches too, so that would add another
-few weeks.
+I've noticed the following lockdep warning after this commit during CPU 
+hotplug tests on TM2e board (ARM64 Exynos5433). It looks like a false 
+positive, but it would be nice to annotate it somehow in the code to 
+make lockdep happy:
 
->>> I also see in the data sheet we should be able to correct detect its
->>> features using register 15. So we should extend
->>> genphy_read_abilities().
->>
->> Which bits do you refer to ?
-> 
-> Register 15, bit 7. This indicates the PHY can do 100BaseT1. I want to
-> double check with the 802.3 standard, but i expect this is part of the
-> standard.
+--->8---
 
-The PHY does only 100BaseT1 .
+IRQ 8: no longer affine to CPU5
+CPU5: shutdown
+IRQ 9: no longer affine to CPU6
+CPU6: shutdown
 
+======================================================
+WARNING: possible circular locking dependency detected
+5.2.0-rc1+ #6093 Not tainted
+------------------------------------------------------
+cpuhp/7/43 is trying to acquire lock:
+00000000d1a60be3 (thermal_list_lock){+.+.}, at: 
+thermal_cooling_device_unregister+0x34/0x1c0
+
+but task is already holding lock:
+00000000a6a56c92 (&policy->rwsem){++++}, at: cpufreq_offline+0x68/0x228
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (&policy->rwsem){++++}:
+        down_write+0x48/0x98
+        cpufreq_cpu_acquire+0x20/0x58
+        cpufreq_update_policy+0x28/0xc0
+        cpufreq_set_cur_state+0x44/0x70
+        thermal_cdev_update+0x7c/0x240
+        step_wise_throttle+0x4c/0x88
+        handle_thermal_trip+0xc0/0x348
+        thermal_zone_device_update.part.7+0x6c/0x250
+        thermal_zone_device_update+0x28/0x38
+        exynos_tmu_work+0x28/0x70
+        process_one_work+0x298/0x6c0
+        worker_thread+0x48/0x430
+        kthread+0x100/0x130
+        ret_from_fork+0x10/0x18
+
+-> #2 (&cdev->lock){+.+.}:
+        __mutex_lock+0x90/0x890
+        mutex_lock_nested+0x1c/0x28
+        thermal_zone_bind_cooling_device+0x2cc/0x3e0
+        of_thermal_bind+0x9c/0xf8
+        __thermal_cooling_device_register+0x1a4/0x388
+        thermal_of_cooling_device_register+0xc/0x18
+        __cpufreq_cooling_register+0x360/0x410
+        of_cpufreq_cooling_register+0x84/0xf8
+        cpufreq_online+0x414/0x720
+        cpufreq_add_dev+0x78/0x88
+        subsys_interface_register+0xa4/0xf8
+        cpufreq_register_driver+0x140/0x1e0
+        dt_cpufreq_probe+0xb0/0x130
+        platform_drv_probe+0x50/0xa8
+        really_probe+0x1b0/0x2a0
+        driver_probe_device+0x58/0x100
+        __device_attach_driver+0x90/0xc0
+        bus_for_each_drv+0x70/0xc8
+        __device_attach+0xdc/0x140
+        device_initial_probe+0x10/0x18
+        bus_probe_device+0x94/0xa0
+        device_add+0x39c/0x5c8
+        platform_device_add+0x110/0x248
+        platform_device_register_full+0x134/0x178
+        cpufreq_dt_platdev_init+0x114/0x14c
+        do_one_initcall+0x84/0x430
+        kernel_init_freeable+0x440/0x534
+        kernel_init+0x10/0x108
+        ret_from_fork+0x10/0x18
+
+-> #1 (&tz->lock){+.+.}:
+        __mutex_lock+0x90/0x890
+        mutex_lock_nested+0x1c/0x28
+        thermal_zone_bind_cooling_device+0x2b8/0x3e0
+        of_thermal_bind+0x9c/0xf8
+        __thermal_cooling_device_register+0x1a4/0x388
+        thermal_of_cooling_device_register+0xc/0x18
+        __cpufreq_cooling_register+0x360/0x410
+        of_cpufreq_cooling_register+0x84/0xf8
+        cpufreq_online+0x414/0x720
+        cpufreq_add_dev+0x78/0x88
+        subsys_interface_register+0xa4/0xf8
+        cpufreq_register_driver+0x140/0x1e0
+        dt_cpufreq_probe+0xb0/0x130
+        platform_drv_probe+0x50/0xa8
+        really_probe+0x1b0/0x2a0
+        driver_probe_device+0x58/0x100
+        __device_attach_driver+0x90/0xc0
+        bus_for_each_drv+0x70/0xc8
+        __device_attach+0xdc/0x140
+        device_initial_probe+0x10/0x18
+        bus_probe_device+0x94/0xa0
+        device_add+0x39c/0x5c8
+        platform_device_add+0x110/0x248
+        platform_device_register_full+0x134/0x178
+        cpufreq_dt_platdev_init+0x114/0x14c
+        do_one_initcall+0x84/0x430
+        kernel_init_freeable+0x440/0x534
+        kernel_init+0x10/0x108
+        ret_from_fork+0x10/0x18
+
+-> #0 (thermal_list_lock){+.+.}:
+        lock_acquire+0xdc/0x260
+        __mutex_lock+0x90/0x890
+        mutex_lock_nested+0x1c/0x28
+        thermal_cooling_device_unregister+0x34/0x1c0
+        cpufreq_cooling_unregister+0x78/0xd0
+        cpufreq_offline+0x200/0x228
+        cpuhp_cpufreq_offline+0xc/0x18
+        cpuhp_invoke_callback+0xd0/0xcb0
+        cpuhp_thread_fun+0x1e8/0x258
+        smpboot_thread_fn+0x1b4/0x2d0
+        kthread+0x100/0x130
+        ret_from_fork+0x10/0x18
+
+other info that might help us debug this:
+
+Chain exists of:
+   thermal_list_lock --> &cdev->lock --> &policy->rwsem
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&policy->rwsem);
+                                lock(&cdev->lock);
+                                lock(&policy->rwsem);
+   lock(thermal_list_lock);
+
+  *** DEADLOCK ***
+
+3 locks held by cpuhp/7/43:
+  #0: 00000000ae30cc2b (cpu_hotplug_lock.rw_sem){++++}, at: 
+cpuhp_thread_fun+0x34/0x258
+  #1: 00000000a0e2460a (cpuhp_state-down){+.+.}, at: 
+cpuhp_thread_fun+0x178/0x258
+  #2: 00000000a6a56c92 (&policy->rwsem){++++}, at: 
+cpufreq_offline+0x68/0x228
+
+stack backtrace:
+CPU: 7 PID: 43 Comm: cpuhp/7 Not tainted 5.2.0-rc1+ #6093
+Hardware name: Samsung TM2E board (DT)
+Call trace:
+  dump_backtrace+0x0/0x158
+  show_stack+0x14/0x20
+  dump_stack+0xc8/0x114
+  print_circular_bug+0x1cc/0x2d8
+  __lock_acquire+0x18f4/0x20f8
+  lock_acquire+0xdc/0x260
+  __mutex_lock+0x90/0x890
+  mutex_lock_nested+0x1c/0x28
+  thermal_cooling_device_unregister+0x34/0x1c0
+  cpufreq_cooling_unregister+0x78/0xd0
+  cpufreq_offline+0x200/0x228
+  cpuhp_cpufreq_offline+0xc/0x18
+  cpuhp_invoke_callback+0xd0/0xcb0
+  cpuhp_thread_fun+0x1e8/0x258
+  smpboot_thread_fn+0x1b4/0x2d0
+  kthread+0x100/0x130
+  ret_from_fork+0x10/0x18
+IRQ 10: no longer affine to CPU7
+
+--->8---
+
+> ---
+>   drivers/hwmon/pwm-fan.c | 73 ++++++++++++++++++++-----------------------------
+>   1 file changed, 29 insertions(+), 44 deletions(-)
+>
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 167221c7628a..0243ba70107e 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -207,33 +207,44 @@ static int pwm_fan_of_get_cooling_data(struct device *dev,
+>   	return 0;
+>   }
+>   
+> +static void pwm_fan_regulator_disable(void *data)
+> +{
+> +	regulator_disable(data);
+> +}
+> +
+> +static void pwm_fan_pwm_disable(void *data)
+> +{
+> +	pwm_disable(data);
+> +}
+> +
+>   static int pwm_fan_probe(struct platform_device *pdev)
+>   {
+>   	struct thermal_cooling_device *cdev;
+> +	struct device *dev = &pdev->dev;
+>   	struct pwm_fan_ctx *ctx;
+>   	struct device *hwmon;
+>   	int ret;
+>   	struct pwm_state state = { };
+>   
+> -	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>   	if (!ctx)
+>   		return -ENOMEM;
+>   
+>   	mutex_init(&ctx->lock);
+>   
+> -	ctx->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
+> +	ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
+>   	if (IS_ERR(ctx->pwm)) {
+>   		ret = PTR_ERR(ctx->pwm);
+>   
+>   		if (ret != -EPROBE_DEFER)
+> -			dev_err(&pdev->dev, "Could not get PWM: %d\n", ret);
+> +			dev_err(dev, "Could not get PWM: %d\n", ret);
+>   
+>   		return ret;
+>   	}
+>   
+>   	platform_set_drvdata(pdev, ctx);
+>   
+> -	ctx->reg_en = devm_regulator_get_optional(&pdev->dev, "fan");
+> +	ctx->reg_en = devm_regulator_get_optional(dev, "fan");
+>   	if (IS_ERR(ctx->reg_en)) {
+>   		if (PTR_ERR(ctx->reg_en) != -ENODEV)
+>   			return PTR_ERR(ctx->reg_en);
+> @@ -242,10 +253,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   	} else {
+>   		ret = regulator_enable(ctx->reg_en);
+>   		if (ret) {
+> -			dev_err(&pdev->dev,
+> -				"Failed to enable fan supply: %d\n", ret);
+> +			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
+>   			return ret;
+>   		}
+> +		devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
+> +					 ctx->reg_en);
+>   	}
+>   
+>   	ctx->pwm_value = MAX_PWM;
+> @@ -257,62 +269,36 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   
+>   	ret = pwm_apply_state(ctx->pwm, &state);
+>   	if (ret) {
+> -		dev_err(&pdev->dev, "Failed to configure PWM\n");
+> -		goto err_reg_disable;
+> +		dev_err(dev, "Failed to configure PWM\n");
+> +		return ret;
+>   	}
+> +	devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx->pwm);
+>   
+> -	hwmon = devm_hwmon_device_register_with_groups(&pdev->dev, "pwmfan",
+> +	hwmon = devm_hwmon_device_register_with_groups(dev, "pwmfan",
+>   						       ctx, pwm_fan_groups);
+>   	if (IS_ERR(hwmon)) {
+> -		dev_err(&pdev->dev, "Failed to register hwmon device\n");
+> -		ret = PTR_ERR(hwmon);
+> -		goto err_pwm_disable;
+> +		dev_err(dev, "Failed to register hwmon device\n");
+> +		return PTR_ERR(hwmon);
+>   	}
+>   
+> -	ret = pwm_fan_of_get_cooling_data(&pdev->dev, ctx);
+> +	ret = pwm_fan_of_get_cooling_data(dev, ctx);
+>   	if (ret)
+>   		return ret;
+>   
+>   	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+>   	if (IS_ENABLED(CONFIG_THERMAL)) {
+> -		cdev = thermal_of_cooling_device_register(pdev->dev.of_node,
+> -							  "pwm-fan", ctx,
+> -							  &pwm_fan_cooling_ops);
+> +		cdev = devm_thermal_of_cooling_device_register(dev,
+> +			dev->of_node, "pwm-fan", ctx, &pwm_fan_cooling_ops);
+>   		if (IS_ERR(cdev)) {
+> -			dev_err(&pdev->dev,
+> +			dev_err(dev,
+>   				"Failed to register pwm-fan as cooling device");
+> -			ret = PTR_ERR(cdev);
+> -			goto err_pwm_disable;
+> +			return PTR_ERR(cdev);
+>   		}
+>   		ctx->cdev = cdev;
+>   		thermal_cdev_update(cdev);
+>   	}
+>   
+>   	return 0;
+> -
+> -err_pwm_disable:
+> -	state.enabled = false;
+> -	pwm_apply_state(ctx->pwm, &state);
+> -
+> -err_reg_disable:
+> -	if (ctx->reg_en)
+> -		regulator_disable(ctx->reg_en);
+> -
+> -	return ret;
+> -}
+> -
+> -static int pwm_fan_remove(struct platform_device *pdev)
+> -{
+> -	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
+> -
+> -	thermal_cooling_device_unregister(ctx->cdev);
+> -	if (ctx->pwm_value)
+> -		pwm_disable(ctx->pwm);
+> -
+> -	if (ctx->reg_en)
+> -		regulator_disable(ctx->reg_en);
+> -
+> -	return 0;
+>   }
+>   
+>   #ifdef CONFIG_PM_SLEEP
+> @@ -380,7 +366,6 @@ MODULE_DEVICE_TABLE(of, of_pwm_fan_match);
+>   
+>   static struct platform_driver pwm_fan_driver = {
+>   	.probe		= pwm_fan_probe,
+> -	.remove		= pwm_fan_remove,
+>   	.driver	= {
+>   		.name		= "pwm-fan",
+>   		.pm		= &pwm_fan_pm,
+
+Best regards
 -- 
-Best regards,
-Marek Vasut
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
