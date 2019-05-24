@@ -2,133 +2,240 @@ Return-Path: <SRS0=k8b7=TY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88831C072B5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 11:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 207E8C072B5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 12:49:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65E902168B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 11:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CACA220851
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 12:49:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="dL1kFzgM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391191AbfEXLlq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 May 2019 07:41:46 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:32847 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391124AbfEXLlp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 May 2019 07:41:45 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 459PbR3VYDz1rLl7;
-        Fri, 24 May 2019 13:41:39 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 459PbR2c6Vz1qql9;
-        Fri, 24 May 2019 13:41:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 1kzboJ2zfoOz; Fri, 24 May 2019 13:41:38 +0200 (CEST)
-X-Auth-Info: yx3UXn3lQuesaTfM3b8G4otNXag8KTXHrLsc8ru6ARY=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 24 May 2019 13:41:38 +0200 (CEST)
-Subject: Re: [PATCH V5] net: phy: tja11xx: Add TJA11xx PHY driver
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20190517235123.32261-1-marex@denx.de>
- <2c30c9c9-1223-ad91-2837-038e0ee5ae23@gmail.com>
- <CA+h21hq6OW2fX_m3rGvhuumhwCj7MM+VjVH_G4RO85hgGa4p7Q@mail.gmail.com>
-From:   Marek Vasut <marex@denx.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <e7539c77-72ea-5c7f-16e3-27840b040702@denx.de>
-Date:   Fri, 24 May 2019 13:41:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CA+h21hq6OW2fX_m3rGvhuumhwCj7MM+VjVH_G4RO85hgGa4p7Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+        id S2391031AbfEXMtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 May 2019 08:49:31 -0400
+Received: from mail-eopbgr60116.outbound.protection.outlook.com ([40.107.6.116]:38531
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390946AbfEXMtb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 May 2019 08:49:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7GHnpHUgZ8sy1MlP7Baa0UOp0J5ynHbnIhJtzq7Zu8o=;
+ b=dL1kFzgM6aH0AJ/1vH/8p5900NT2BdzlYNm2vPyyx/m4k6hKd+zwmPWg5d9z0rAnrmdw66v4UzI/9/GoFCfEcojAdIdJM3GoFCUMUOxG3uO83qItQTAJSNrygI9cp4kRa4zjPlhk9rjU9eMoZ4xEk+hQfsXcXDbBEKw7bK0mKfc=
+Received: from HE1PR07MB3337.eurprd07.prod.outlook.com (10.170.247.12) by
+ HE1PR07MB3065.eurprd07.prod.outlook.com (10.170.244.151) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.10; Fri, 24 May 2019 12:49:13 +0000
+Received: from HE1PR07MB3337.eurprd07.prod.outlook.com
+ ([fe80::d9d:d6d7:1e49:a316]) by HE1PR07MB3337.eurprd07.prod.outlook.com
+ ([fe80::d9d:d6d7:1e49:a316%3]) with mapi id 15.20.1943.007; Fri, 24 May 2019
+ 12:49:13 +0000
+From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+Subject: [PATCH] adm1275: support PMBUS_VIRT_*_SAMPLES
+Thread-Topic: [PATCH] adm1275: support PMBUS_VIRT_*_SAMPLES
+Thread-Index: AQHVEi8WZbhhz1TyCEmlx6WeByshdA==
+Date:   Fri, 24 May 2019 12:49:13 +0000
+Message-ID: <20190524124841.GA25728@localhost.localdomain>
+Accept-Language: pl-PL, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR05CA0386.eurprd05.prod.outlook.com
+ (2603:10a6:7:94::45) To HE1PR07MB3337.eurprd07.prod.outlook.com
+ (2603:10a6:7:2d::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=krzysztof.adamski@nokia.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [131.228.32.161]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eef1b52c-1ff8-4707-a999-08d6e0463925
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:HE1PR07MB3065;
+x-ms-traffictypediagnostic: HE1PR07MB3065:
+x-microsoft-antispam-prvs: <HE1PR07MB3065E340D80C188D55B820FDEF020@HE1PR07MB3065.eurprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 0047BC5ADE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39860400002)(136003)(346002)(396003)(376002)(199004)(189003)(1076003)(5660300002)(4326008)(316002)(9686003)(6486002)(66946007)(73956011)(66476007)(6436002)(186003)(6116002)(6512007)(66446008)(64756008)(3846002)(66556008)(53936002)(305945005)(7736002)(54906003)(110136005)(508600001)(386003)(99286004)(52116002)(68736007)(25786009)(81156014)(81166006)(8936002)(86362001)(8676002)(6506007)(107886003)(61506002)(66066001)(71200400001)(14444005)(102836004)(14454004)(33656002)(71190400001)(2906002)(476003)(486006)(256004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:HE1PR07MB3065;H:HE1PR07MB3337.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: AGq9m7/FNg+lH8EiEjNC34Gc/Seto4OQxS4cGIOW+MQ1N9tv0jYStH98AEaGECuBzkI7ztMdB9RZhP9eXg6q51EoHCf1FZPlSFwwKblPLZtqBStwJeqWioWWUlzFl4ApGqB0rANH2CcH6kqw/7s3gzbEc6GW7uspjxKNUr6Kh3k+wSBGzvlb69JpeTofOlrk55WBmf54YSC2JTuYXW1fFwNQcL9O4jRAQ6APKWOVdb93W1LsrFzf0fLU4W0ykqs9BJf7T6A6j1+oHLR2LXK4SpYI5aRzQRN8ONffLuh+0IS7oHdLwu1NFvIudkPMl0lHGeIcVU+4IaxfDyDVvBxMWLox5d+Y5ySX7txqMOQFhNDBsj116585Zip+hcvgq2iY8MKNGKGhl2N+Hj0QzyNexHm+AJyMKGl0peI+V3e+94M=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <611976EE7C5C6F4F8DA16AE6543EFBB1@eurprd07.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eef1b52c-1ff8-4707-a999-08d6e0463925
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2019 12:49:13.3804
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB3065
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/23/19 9:48 PM, Vladimir Oltean wrote:
-> On Thu, 23 May 2019 at 05:39, Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> +Vladimir,
->>
->> On 5/17/2019 4:51 PM, Marek Vasut wrote:
->>> Add driver for the NXP TJA1100 and TJA1101 PHYs. These PHYs are special
->>> BroadRReach 100BaseT1 PHYs used in automotive.
->>>
->>> Signed-off-by: Marek Vasut <marex@denx.de>
->>> Cc: Andrew Lunn <andrew@lunn.ch>
->>> Cc: Florian Fainelli <f.fainelli@gmail.com>
->>> Cc: Guenter Roeck <linux@roeck-us.net>
->>> Cc: Heiner Kallweit <hkallweit1@gmail.com>
->>> Cc: Jean Delvare <jdelvare@suse.com>
->>> Cc: linux-hwmon@vger.kernel.org
->>
->> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
->> --
->> Florian
-> 
-> My only feedback is: keep up the good work!
+The device supports setting the number of samples for averaging the
+measurements. There are two separate settings - PWR_AVG for averaging
+PIN and VI_AVG for averaging VIN/VAUX/IOUT, both being part of
+PMON_CONFIG register. The values are stored as exponent of base 2 of the
+actual number of samples that will be taken.
 
-Well, it seems this patch is flagged in patchwork as "changes requested"
-. I don't know what changes are requested though :-(
+Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+---
+ drivers/hwmon/pmbus/adm1275.c | 68 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 67 insertions(+), 1 deletion(-)
 
--- 
-Best regards,
-Marek Vasut
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index f569372c9204..4efe1a9df563 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -23,6 +23,8 @@
+ #include <linux/slab.h>
+ #include <linux/i2c.h>
+ #include <linux/bitops.h>
++#include <linux/bitfield.h>
++#include <linux/log2.h>
+ #include "pmbus.h"
+=20
+ enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294=
+ };
+@@ -78,6 +80,10 @@ enum chips { adm1075, adm1272, adm1275, adm1276, adm1278=
+, adm1293, adm1294 };
+ #define ADM1075_VAUX_OV_WARN		BIT(7)
+ #define ADM1075_VAUX_UV_WARN		BIT(6)
+=20
++#define ADM1275_PWR_AVG_MASK		GENMASK(13, 11)
++#define ADM1275_VI_AVG_MASK		GENMASK(10, 8)
++#define ADM1275_SAMPLES_AVG_MAX	128
++
+ struct adm1275_data {
+ 	int id;
+ 	bool have_oc_fault;
+@@ -90,6 +96,7 @@ struct adm1275_data {
+ 	bool have_pin_max;
+ 	bool have_temp_max;
+ 	struct pmbus_driver_info info;
++	struct mutex lock;
+ };
+=20
+ #define to_adm1275_data(x)  container_of(x, struct adm1275_data, info)
+@@ -164,6 +171,38 @@ static const struct coefficients adm1293_coefficients[=
+] =3D {
+ 	[18] =3D { 7658, 0, -3 },		/* power, 21V, irange200 */
+ };
+=20
++static inline int adm1275_read_pmon_config(struct i2c_client *client, u64 =
+mask)
++{
++	int ret;
++
++	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
++	if (ret < 0)
++		return ret;
++
++	return FIELD_GET(mask, ret);
++}
++
++static inline int adm1275_write_pmon_config(struct i2c_client *client, u64=
+ mask,
++					    u16 word)
++{
++	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
++	struct adm1275_data *data =3D to_adm1275_data(info);
++	int ret;
++
++	mutex_lock(&data->lock);
++	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
++	if (ret < 0) {
++		mutex_unlock(&data->lock);
++		return ret;
++	}
++
++	word =3D FIELD_PREP(mask, word) | (ret & ~mask);
++	ret =3D i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, word);
++	mutex_unlock(&data->lock);
++
++	return ret;
++}
++
+ static int adm1275_read_word_data(struct i2c_client *client, int page, int=
+ reg)
+ {
+ 	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
+@@ -242,6 +281,19 @@ static int adm1275_read_word_data(struct i2c_client *c=
+lient, int page, int reg)
+ 		if (!data->have_temp_max)
+ 			return -ENXIO;
+ 		break;
++	case PMBUS_VIRT_POWER_SAMPLES:
++		ret =3D adm1275_read_pmon_config(client, ADM1275_PWR_AVG_MASK);
++		if (ret < 0)
++			break;
++		ret =3D 1 << ret;
++		break;
++	case PMBUS_VIRT_IN_SAMPLES:
++	case PMBUS_VIRT_CURR_SAMPLES:
++		ret =3D adm1275_read_pmon_config(client, ADM1275_VI_AVG_MASK);
++		if (ret < 0)
++			break;
++		ret =3D 1 << ret;
++		break;
+ 	default:
+ 		ret =3D -ENODATA;
+ 		break;
+@@ -286,6 +338,17 @@ static int adm1275_write_word_data(struct i2c_client *=
+client, int page, int reg,
+ 	case PMBUS_VIRT_RESET_TEMP_HISTORY:
+ 		ret =3D pmbus_write_word_data(client, 0, ADM1278_PEAK_TEMP, 0);
+ 		break;
++	case PMBUS_VIRT_POWER_SAMPLES:
++		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
++		ret =3D adm1275_write_pmon_config(client, ADM1275_PWR_AVG_MASK,
++						ilog2(word));
++		break;
++	case PMBUS_VIRT_IN_SAMPLES:
++	case PMBUS_VIRT_CURR_SAMPLES:
++		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
++		ret =3D adm1275_write_pmon_config(client, ADM1275_VI_AVG_MASK,
++						ilog2(word));
++		break;
+ 	default:
+ 		ret =3D -ENODATA;
+ 		break;
+@@ -422,6 +485,8 @@ static int adm1275_probe(struct i2c_client *client,
+ 	if (!data)
+ 		return -ENOMEM;
+=20
++	mutex_init(&data->lock);
++
+ 	if (of_property_read_u32(client->dev.of_node,
+ 				 "shunt-resistor-micro-ohms", &shunt))
+ 		shunt =3D 1000; /* 1 mOhm if not set via DT */
+@@ -439,7 +504,8 @@ static int adm1275_probe(struct i2c_client *client,
+ 	info->format[PSC_CURRENT_OUT] =3D direct;
+ 	info->format[PSC_POWER] =3D direct;
+ 	info->format[PSC_TEMPERATURE] =3D direct;
+-	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT;
++	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
++			PMBUS_HAVE_SAMPLES;
+=20
+ 	info->read_word_data =3D adm1275_read_word_data;
+ 	info->read_byte_data =3D adm1275_read_byte_data;
+--=20
+2.20.1
+
