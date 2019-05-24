@@ -2,70 +2,94 @@ Return-Path: <SRS0=k8b7=TY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F5C0C072B5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 13:52:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7027FC072B5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 14:19:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 52386205ED
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 13:52:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="LYdi2xZ4"
+	by mail.kernel.org (Postfix) with ESMTP id 47B5820673
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 14:19:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403874AbfEXNwW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 May 2019 09:52:22 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:55990 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403843AbfEXNwW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 May 2019 09:52:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=mATfS2m6lRxg8VJalhdIKYJyfzYInbV/jwQ5TtoRz+s=; b=LYdi2xZ49FEgXJ/5j0FoVzPGZq
-        oB6hBS8/UbPX82Z3ymhdqVG3y+SA0KZW77TFaQVqp3YKu+JPEjEQqkoida+h0tQRVGxPne0AB0fiV
-        sgIofE4OY7f8i4itpoJdWFIihR8gTpeqBGrxG3obP4pKDRrxgZRoMkGKB9qjBcx2WeAE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hUAcD-0001GF-KK; Fri, 24 May 2019 15:52:09 +0200
-Date:   Fri, 24 May 2019 15:52:09 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
+        id S2403925AbfEXOT1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 May 2019 10:19:27 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:43968 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403917AbfEXOT1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 May 2019 10:19:27 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B02EA78;
+        Fri, 24 May 2019 07:19:27 -0700 (PDT)
+Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CB713F575;
+        Fri, 24 May 2019 07:19:24 -0700 (PDT)
+Date:   Fri, 24 May 2019 15:19:19 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, james.quinlan@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH V5] net: phy: tja11xx: Add TJA11xx PHY driver
-Message-ID: <20190524135209.GG2979@lunn.ch>
-References: <20190517235123.32261-1-marex@denx.de>
- <2c30c9c9-1223-ad91-2837-038e0ee5ae23@gmail.com>
- <CA+h21hq6OW2fX_m3rGvhuumhwCj7MM+VjVH_G4RO85hgGa4p7Q@mail.gmail.com>
- <e7539c77-72ea-5c7f-16e3-27840b040702@denx.de>
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH RFC] firmware: arm_scmi: Allow for better protocol
+ extensibility
+Message-ID: <20190524141918.GA4408@e107155-lin>
+References: <20190521200110.8309-1-f.fainelli@gmail.com>
+ <f9403e7e-1b87-dc46-dfc5-62227c659e7c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e7539c77-72ea-5c7f-16e3-27840b040702@denx.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <f9403e7e-1b87-dc46-dfc5-62227c659e7c@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> Well, it seems this patch is flagged in patchwork as "changes requested"
-> . I don't know what changes are requested though :-(
+On Thu, May 23, 2019 at 10:17:50AM -0700, Florian Fainelli wrote:
+> On 5/21/19 1:01 PM, Florian Fainelli wrote:
+> > The SCMI specific allows implementors to define their custom protocols
+> > in the 0x80-0xFF space. The current scmi_handle structure requires us to
+> > extend the structure with a set of operations and associated private
+> > data in a way that is not quite scaling well.
+> > 
+> > Create a 255 bytes structure that contains an opaque pointer to a set of
+> > operations and private data and create two helper functions to retrieve
+> > those based on the protocol identifier. Several options were considered,
+> > like using a linked list but since we could be performance sensitive in
+> > some paths, using an array was faster and simpler.
+> > 
+> > Convert all call sites to use either scmi_protocol_get_ops() or
+> > scmi_protocol_get_info().
+> > 
+> > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> On second thought, what I really need is private storage to the scmi_dev
+> (the consumer side), and not so much the protocol (provider) side.
+> Therefore using dev_{set,get}_drvadata() against scmi_device::dev should
+> be working just fine, and if we are concerned about another part of the
+> SCMI stack making use of that storage, we can always extend struct
+> scmi_device with a private cookie.
 
-Hi Marek
+Sorry, I haven't looked into the original patch in detail yet. But I
+always have rejected to add support for just infrastructure to add
+vendor specific protocols both internally @ARM and to some private
+emails I have received. I prefer to merge it with the first reference
+vendor specific protocol so that the users of this infrastructure gets
+a fair idea on how to use the same.
 
-The patch was submitted while net-next as closed. That is pretty much
-an automatic reject.
+I will look at the RFC next week.
 
-Please submit it again, and add on the review tags you have received.
-It should then get accepted.
-
-   Andrew
+--
+Regards,
+Sudeep
