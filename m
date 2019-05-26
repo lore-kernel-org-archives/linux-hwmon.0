@@ -1,59 +1,53 @@
-Return-Path: <SRS0=k8b7=TY=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=tV7w=T2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B561C072B5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 14:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50ABFC282E3
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 May 2019 20:39:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1EEB02081C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 May 2019 14:36:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="01B7wquO"
+	by mail.kernel.org (Postfix) with ESMTP id 2062A2075E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 May 2019 20:39:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404134AbfEXOgO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 May 2019 10:36:14 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:56140 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403997AbfEXOgO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 May 2019 10:36:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3fJgvTqEhmBwQWcm4Ec4SKbVrWb5SDjuLaLyk06Zp2Y=; b=01B7wquOI6uQQAIirCyjpSwXbz
-        nl6zSyrZOSxmzY/UUp4Q5FlKlIv5LTxypGJI/czt7WvtlUrQu1I8CdHNvaQMc+nOXoH+jO4ARLgAx
-        QICRH/VVE/OJU/kGX3+TLA0AC2gM45XBWUEj1eNRgvhXlpgjtoMmQZ02Ue32Ew36Iivk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hUBIk-0001fA-Rm; Fri, 24 May 2019 16:36:06 +0200
-Date:   Fri, 24 May 2019 16:36:06 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marek Vasut <marex@denx.de>
-Cc:     netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+        id S1725780AbfEZUjc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 May 2019 16:39:32 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:46106 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfEZUjc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 26 May 2019 16:39:32 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 9E3021424962E;
+        Sun, 26 May 2019 13:39:31 -0700 (PDT)
+Date:   Sun, 26 May 2019 13:39:31 -0700 (PDT)
+Message-Id: <20190526.133931.595609145149817265.davem@davemloft.net>
+To:     marex@denx.de
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
+        linux@roeck-us.net, hkallweit1@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH V6] net: phy: tja11xx: Add TJA11xx PHY driver
-Message-ID: <20190524143606.GN2979@lunn.ch>
-References: <20190524142228.4003-1-marex@denx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   David Miller <davem@davemloft.net>
 In-Reply-To: <20190524142228.4003-1-marex@denx.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20190524142228.4003-1-marex@denx.de>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 26 May 2019 13:39:31 -0700 (PDT)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 24, 2019 at 04:22:28PM +0200, Marek Vasut wrote:
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 24 May 2019 16:22:28 +0200
+
 > Add driver for the NXP TJA1100 and TJA1101 PHYs. These PHYs are special
 > BroadRReach 100BaseT1 PHYs used in automotive.
 > 
@@ -66,21 +60,4 @@ On Fri, May 24, 2019 at 04:22:28PM +0200, Marek Vasut wrote:
 > Cc: linux-hwmon@vger.kernel.org
 > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-> +static struct tja11xx_phy_stats tja11xx_hw_stats[] = {
-> +	{ "phy_symbol_error_count", 20, 0, GENMASK(15, 0) },
-> +	{ "phy_polarity_detect", 25, 6, BIT(6) },
-> +	{ "phy_open_detect", 25, 7, BIT(7) },
-> +	{ "phy_short_detect", 25, 8, BIT(8) },
-> +	{ "phy_rem_rcvr_count", 26, 0, GENMASK(7, 0) },
-> +	{ "phy_loc_rcvr_count", 26, 8, GENMASK(15, 8) },
-> +};
-
-I don't like phy_polarity_detect, phy_open_detect and phy_short_detect
-since they are not actually counters. But we don't have cable test
-support yet. That is coming soon, but it is hard to say when, if it
-will get merged this cycle. So lets keep them, but don't be too
-surprised if they get removed later.
-
-	Andrew
+Applied, thank you.
