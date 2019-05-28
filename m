@@ -2,117 +2,67 @@ Return-Path: <SRS0=6zdu=T4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C516AC04AB6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 20:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194FEC04AB6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 21:23:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 971B420B7C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 20:35:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D918121019
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 21:23:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kU/g9Xjv"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="S7qMwruy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbfE1UfP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 May 2019 16:35:15 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45197 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbfE1UfP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 May 2019 16:35:15 -0400
-Received: by mail-pl1-f193.google.com with SMTP id a5so137pls.12;
-        Tue, 28 May 2019 13:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aaxYwob8ojeK4vx5PzzDahXRFmqjdVXWsrOuEKNA0DQ=;
-        b=kU/g9XjvqkKf73URzdLKKwOdGl+647hKFs2XQqYIAzhwUcIj6TdexIvjLYJGOcPzIm
-         3fvFvcREeLeaGxX/FSST4+dEdPWYX2UvfC8zm8Ucc6lqmfQVH4P3pCpOoa/cocMd6/hs
-         7QJJykiV5Cp8W5hnXNnXhgXhX4dEiJZ3Wp70E3JcLZUzl87q8BEQJs/rMLDj1eXTUxXV
-         yoDbNl8ldiF6kb6wUtK+2OEteKpI3XFWEB+2MrvvbiuGdD+01R7rmZ989p0ACYgFZG0c
-         5c9YTobz4kWOgaba+Q7sHeW1BPSHAgmW2O2mrrJ57eIgamxmjI8hQEy+mAJXptlYT6o3
-         icAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aaxYwob8ojeK4vx5PzzDahXRFmqjdVXWsrOuEKNA0DQ=;
-        b=d7MzjVoZyqauBrA+eNUp3BWL11a6ptq3tvh+GxIATwmWxpZTmOVTprmNiNqFmh338p
-         HXIIxCN2LwroVstIltLKRF5t8gzBpL1zmD6b4jfdASGRO0LRAIN2ruKMUxGuJP3/eLTl
-         VYLzCqfVjE/M8yNxHMLOPLo71dSp+tcMGVwdjttpUhTwMiHHrKx/Ph8i17fKsBgM6ssy
-         oXI2LdmF8jc6mLa7N9UwWL7vqIfz50UmEVcgEAgLPIsCgrfx5Pcpepu/DvSeXVLeIpS6
-         g4dhaOybX6hCssjEEgQ6dFsgOTv9CtZLwqMr2d7Y8sA/j1KCuTOBVe/LytqkweBu7+K9
-         cCWA==
-X-Gm-Message-State: APjAAAXDfFddb0+XPUyWXgqWDCMzxRDMTptBdpDx4gC8mUxR5nT/Z4wV
-        Pg/X5T0tcybaIy4hXk3mK9UuHOrj
-X-Google-Smtp-Source: APXvYqwx3DhB771I8an+dHWcIOZ1aLaPjoLMcizU8AriPnovDNWtPBOxsd1ApMTyKTQ7HXpYNhYOVA==
-X-Received: by 2002:a17:902:e60a:: with SMTP id cm10mr126506971plb.316.1559075714609;
-        Tue, 28 May 2019 13:35:14 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g19sm12582193pgj.75.2019.05.28.13.35.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 13:35:13 -0700 (PDT)
-Date:   Tue, 28 May 2019 13:35:12 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (tc654) Update to use SPDX-License-Identifier
-Message-ID: <20190528203512.GA29505@roeck-us.net>
-References: <20190515031508.30206-1-chris.packham@alliedtelesis.co.nz>
+        id S1727301AbfE1VXO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 May 2019 17:23:14 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:36808 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726894AbfE1VXO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 May 2019 17:23:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hLzdQvSQZea2/OazsFQ3XOutPinlv9mR5JFfTttDKFM=; b=S7qMwruypPZ+a15XUIUzHYD/V3
+        2l0UptKcECUggtl4ddv9ibv0zp3sxu4I6FTLqyoUpGsmMv/rvNRVOE56Wq4cf+crl18kAeNxHfkyN
+        M+mqpsxLD6Z7oi+waV6sBLd7PvviLD2RhStYtlhLcwR4/vH0m5E5IAciJsbOh9SY4p4s=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hVjYa-00039p-JQ; Tue, 28 May 2019 23:22:52 +0200
+Date:   Tue, 28 May 2019 23:22:52 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+Message-ID: <20190528212252.GW18059@lunn.ch>
+References: <20190528192324.28862-1-marex@denx.de>
+ <96793717-a55c-7844-f7c0-cc357c774a19@gmail.com>
+ <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
+ <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
+ <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
+ <20190528195806.GV18059@lunn.ch>
+ <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190515031508.30206-1-chris.packham@alliedtelesis.co.nz>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, May 15, 2019 at 03:15:08PM +1200, Chris Packham wrote:
-> Add the SPDX-License-Identifier to the top of the file and remove the
-> old license boilerplate.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> The link detection on the TJA1100 (not TJA1101) seems unstable at best,
+> so I better use all the interrupt sources to nudge the PHY subsystem and
+> have it check the link change.
 
-Applied to hwmon-next.
+Then it sounds like you should just ignore interrupts and stay will
+polling for the TJA1100.
 
-Thanks,
-Guenter
-
-> ---
-> 
-> Notes:
->     I've gone with GPL-2.0+ because that matches the old text. As the author I
->     don't mind switching to GPL-2.0 if people want that.
-> 
->  drivers/hwmon/tc654.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/drivers/hwmon/tc654.c b/drivers/hwmon/tc654.c
-> index 81dd229d7db4..8d0acbf8fbfc 100644
-> --- a/drivers/hwmon/tc654.c
-> +++ b/drivers/hwmon/tc654.c
-> @@ -1,17 +1,8 @@
-> +// SPDX-License-Identifier: GPL-2.0+
->  /*
->   * tc654.c - Linux kernel modules for fan speed controller
->   *
->   * Copyright (C) 2016 Allied Telesis Labs NZ
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
-> - *
-> - * This program is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> - * GNU General Public License for more details.
->   */
->  
->  #include <linux/bitops.h>
+	Andrew
