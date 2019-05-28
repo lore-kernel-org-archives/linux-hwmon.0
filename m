@@ -4,131 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADE0C04AB6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE113C04AB6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:58:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0F9BF208CB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:48:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2B5420B1F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:58:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hqiaki/L"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="gPHL83CJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfE1Tsw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 May 2019 15:48:52 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33518 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbfE1Tsw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 May 2019 15:48:52 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g21so8788674plq.0;
-        Tue, 28 May 2019 12:48:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wF9HTKTSqjEWD9biAIqmvRFaHV98shxME6q1WLMW/+4=;
-        b=hqiaki/L18RAHsXejAjkskhmBYA+5hAWciscX1QM3DxD8eGqN05EcRZq703tNpJk7m
-         saZX2cundeLlnBd5nP1KrC5iZrd7XATBYsLrzOt4IdLad2Q2h+SdwiCDpSpgkUJMEyLc
-         rzk0xJycl6xfZXCwe7mjYFUYx9LRMLZE9aZFn3YpCVgdFZ1Lx3E0oegpH2rGSuKyc4oQ
-         t6VMjJmvC8pVtsvqwLdIQnmNSO/j3gk6UxbQZU/pmklB9sbc3CIfpFJgK+x32Qb58SdX
-         tbwzIc17oyyZWBwm1f4QcquvYf0xhWW7T5Z+lXCvCu1XJAc+F91NxpjclKpw1HxwBKFb
-         Pcvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wF9HTKTSqjEWD9biAIqmvRFaHV98shxME6q1WLMW/+4=;
-        b=HkbMhtAyenZOpRb1DzN8DA3j3Uz4kYZq/5rjEROPvyNmZzhunC5H5CY3u7bECjdWIS
-         /hv6cjfcf3ZXdc19+w2uu4EzATlOnrw9jqwcYVhEiKB+gujTeRY3FBt7+csm9x+AXEsN
-         xzaA3fy89oPbMW75LgjL395CLqyZ6u7A1up40WCkGOPXU8tl3wQm0VibfYmEpNPVl+9g
-         fE//lHp9wlWhBtiIsE+IHo6vH4pW896gzOhQD0hdlp81VaojtzYloTXWJ4l8z6L+ftS3
-         PesVmVHmZZgO/ZLlwLGKCGayqMg/iaaQc1SN4fCKD4nCi2CiLH/ib/3c8Vx88x7/BcvM
-         3bMw==
-X-Gm-Message-State: APjAAAVonSlOSko3Lo2C8GqEOk3uekKZTmyItrOEHNm4vV8s+PJJOYgC
-        s0VdfWd7WY84AqCl1tkTuFI=
-X-Google-Smtp-Source: APXvYqxBT35dsp3x051eqR+xZigGwx3StF4HGBIas7azqnb4lycmbzpKFUlp4YR9S3RTk/VPeRi70A==
-X-Received: by 2002:a17:902:8609:: with SMTP id f9mr76857704plo.252.1559072931874;
-        Tue, 28 May 2019 12:48:51 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h123sm16915268pfe.80.2019.05.28.12.48.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 12:48:50 -0700 (PDT)
-Date:   Tue, 28 May 2019 12:48:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        id S1726515AbfE1T6P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 May 2019 15:58:15 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:36628 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726452AbfE1T6P (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 May 2019 15:58:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=BWe5zGzKFERdpiJ1zILX3VirELrzcDLhsUJV15QK4s4=; b=gPHL83CJgIwzEfYZD+a+XBjko5
+        aMtLPgDcr6SSE7VJx+2Ej5DsNIM32nawNSfqHheLQiBvhh9IYSxo9Rg+aj/EPDn+1njT2/Y+CREg9
+        Kwp74QFQSaQUyYrc2Qg9hIIixXXfmxK7UzKkIBdoW/khSYO5eRhu4ruH2eV1N+gV4v4g=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hViEY-0002j0-Dq; Tue, 28 May 2019 21:58:06 +0200
+Date:   Tue, 28 May 2019 21:58:06 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     Marek Vasut <marex@denx.de>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] net: phy: tja11xx: Switch to HWMON_CHANNEL_INFO()
-Message-ID: <20190528194850.GF24853@roeck-us.net>
-References: <20190528181541.1946-1-marex@denx.de>
+Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+Message-ID: <20190528195806.GV18059@lunn.ch>
+References: <20190528192324.28862-1-marex@denx.de>
+ <96793717-a55c-7844-f7c0-cc357c774a19@gmail.com>
+ <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
+ <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
+ <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190528181541.1946-1-marex@denx.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 28, 2019 at 08:15:41PM +0200, Marek Vasut wrote:
-> The HWMON_CHANNEL_INFO macro simplifies the code, reduces the likelihood
-> of errors, and makes the code easier to read.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
+On Tue, May 28, 2019 at 09:46:47PM +0200, Marek Vasut wrote:
+> On 5/28/19 9:35 PM, Heiner Kallweit wrote:
+> > On 28.05.2019 21:31, Marek Vasut wrote:
+> >> On 5/28/19 9:28 PM, Heiner Kallweit wrote:
+> >>> On 28.05.2019 21:23, Marek Vasut wrote:
+> >>>> Add support for handling the TJA11xx PHY IRQ signal.
+> >>>>
+> >>>> Signed-off-by: Marek Vasut <marex@denx.de>
+> >>>> Cc: Andrew Lunn <andrew@lunn.ch>
+> >>>> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> >>>> Cc: Guenter Roeck <linux@roeck-us.net>
+> >>>> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> >>>> Cc: Jean Delvare <jdelvare@suse.com>
+> >>>> Cc: linux-hwmon@vger.kernel.org
+> >>>> ---
+> >>>> V2: - Define each bit of the MII_INTEN register and a mask
+> >>>>     - Drop IRQ acking from tja11xx_config_intr()
+> >>>> ---
+> >>>>  drivers/net/phy/nxp-tja11xx.c | 48 +++++++++++++++++++++++++++++++++++
+> >>>>  1 file changed, 48 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
+> >>>> index b705d0bd798b..b41af609607d 100644
+> >>>> --- a/drivers/net/phy/nxp-tja11xx.c
+> >>>> +++ b/drivers/net/phy/nxp-tja11xx.c
+ > >>>> @@ -40,6 +40,29 @@
+> >>>>  #define MII_INTSRC_TEMP_ERR		BIT(1)
+> >>>>  #define MII_INTSRC_UV_ERR		BIT(3)
+> >>>>  
+> >>>> +#define MII_INTEN			22
+> >>>> +#define MII_INTEN_PWON_EN		BIT(15)
+> >>>> +#define MII_INTEN_WAKEUP_EN		BIT(14)
+> >>>> +#define MII_INTEN_PHY_INIT_FAIL_EN	BIT(11)
+> >>>> +#define MII_INTEN_LINK_STATUS_FAIL_EN	BIT(10)
+> >>>> +#define MII_INTEN_LINK_STATUS_UP_EN	BIT(9)
+> >>>> +#define MII_INTEN_SYM_ERR_EN		BIT(8)
+> >>>> +#define MII_INTEN_TRAINING_FAILED_EN	BIT(7)
+> >>>> +#define MII_INTEN_SQI_WARNING_EN	BIT(6)
+> >>>> +#define MII_INTEN_CONTROL_ERR_EN	BIT(5)
+> >>>> +#define MII_INTEN_UV_ERR_EN		BIT(3)
+> >>>> +#define MII_INTEN_UV_RECOVERY_EN	BIT(2)
+> >>>> +#define MII_INTEN_TEMP_ERR_EN		BIT(1)
+> >>>> +#define MII_INTEN_SLEEP_ABORT_EN	BIT(0)
+> >>>> +#define MII_INTEN_MASK							\
+> >>>> +	(MII_INTEN_PWON_EN | MII_INTEN_WAKEUP_EN |			\
+> >>>> +	MII_INTEN_PHY_INIT_FAIL_EN | MII_INTEN_LINK_STATUS_FAIL_EN |	\
+> >>>> +	MII_INTEN_LINK_STATUS_UP_EN | MII_INTEN_SYM_ERR_EN |		\
+> >>>> +	MII_INTEN_TRAINING_FAILED_EN | MII_INTEN_SQI_WARNING_EN |	\
+> >>>> +	MII_INTEN_CONTROL_ERR_EN | MII_INTEN_UV_ERR_EN |		\
+> >>>> +	MII_INTEN_UV_RECOVERY_EN | MII_INTEN_TEMP_ERR_EN |		\
+> >>>> +	MII_INTEN_SLEEP_ABORT_EN)
+> >>>
+> >>> Why do you enable all these interrupt sources? As I said, phylib needs
+> >>> link change info only.
+> >>
+> >> Because I need them to reliably detect that the link state changed.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Hi Marek
 
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->  drivers/net/phy/nxp-tja11xx.c | 24 ++----------------------
->  1 file changed, 2 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
-> index 11b8701e78fd..b705d0bd798b 100644
-> --- a/drivers/net/phy/nxp-tja11xx.c
-> +++ b/drivers/net/phy/nxp-tja11xx.c
-> @@ -311,29 +311,9 @@ static umode_t tja11xx_hwmon_is_visible(const void *data,
->  	return 0;
->  }
->  
-> -static u32 tja11xx_hwmon_in_config[] = {
-> -	HWMON_I_LCRIT_ALARM,
-> -	0
-> -};
-> -
-> -static const struct hwmon_channel_info tja11xx_hwmon_in = {
-> -	.type		= hwmon_in,
-> -	.config		= tja11xx_hwmon_in_config,
-> -};
-> -
-> -static u32 tja11xx_hwmon_temp_config[] = {
-> -	HWMON_T_CRIT_ALARM,
-> -	0
-> -};
-> -
-> -static const struct hwmon_channel_info tja11xx_hwmon_temp = {
-> -	.type		= hwmon_temp,
-> -	.config		= tja11xx_hwmon_temp_config,
-> -};
-> -
->  static const struct hwmon_channel_info *tja11xx_hwmon_info[] = {
-> -	&tja11xx_hwmon_in,
-> -	&tja11xx_hwmon_temp,
-> +	HWMON_CHANNEL_INFO(in, HWMON_I_LCRIT_ALARM),
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_CRIT_ALARM),
->  	NULL
->  };
->  
-> -- 
-> 2.20.1
-> 
+That statement suggests you started with just bits 10 and 9 and it
+failed to detect some sort of link up/down event? What was missed?
+
+       Andrew
