@@ -2,170 +2,153 @@ Return-Path: <SRS0=6zdu=T4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D289C04AB6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 18:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10765C04AB6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:24:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6E92208CB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 18:29:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bcTNpSyg"
+	by mail.kernel.org (Postfix) with ESMTP id E2FF020717
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 19:24:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbfE1S3V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 May 2019 14:29:21 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:47004 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726569AbfE1S3V (ORCPT
+        id S1726994AbfE1TYC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 May 2019 15:24:02 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:34641 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726787AbfE1TYC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 May 2019 14:29:21 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r7so21305565wrr.13;
-        Tue, 28 May 2019 11:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8/KI1KE9vJDVwWIzxwQAdItZoUFzUqcama4dTdkeOyw=;
-        b=bcTNpSygNEs0fNzp/eABcU7RsnTiioHBYXh/JTk+tLpqz+IKX9SNZgovBcKl0hmtn7
-         uM8BLeTxAjZZW1KR8hPb2TpB3kjexalPYqosLG31WNaG91j1fvIHUjAcl/rGEzAqciF9
-         azYJQcENFfYycfghAmSzgt0HUBofMyDS18U2ZHClVauS3JktwmF45Z5rJ/fNYiRy/6b3
-         F56r/rC3Jnk9xEILHTjQZCNFDSQciQlfWR6GdMPH+nRIsn8n7wKmIOHlPcNOGBw6kBOY
-         tE7QZ4Fx55nipkv1qrkKxH8UUeLiltzuOlFGU2SZUGpjc8YpSGV244/bCmKd4vZl6APy
-         BWUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8/KI1KE9vJDVwWIzxwQAdItZoUFzUqcama4dTdkeOyw=;
-        b=JpB5pu4SjaIeGm4zt7dkf3cEQHwNFwewSTJRcXi5Taax36XrD1O23nfxB9leS3B5Nd
-         MrdIklCM2Pxfj7gEKq9C9/dYV5AGzzWoDnV+kg0DhpjAwoHCkETq2IHu1H+dS3bvL7ia
-         JklmlJitdAbUgQ9bTC0T/a6KIX2BdwXl6oqlrDyE4q8Eat/0eMVXNm1JE0ppEWatmlC+
-         k07+JYHhFEFGi59k/nTEiw+MpzdxWs1BG3mlfPNvRynfMprxKL9QLXtC0vvyVHSLO8u4
-         1Bk2S8KUoWfht4rzlfK2e4mw0NFXvDSzbf3khnXaCwpamct62YBep1cvbIX9mKgeS2PY
-         17Jw==
-X-Gm-Message-State: APjAAAWTGBhq8/1B4m4X1F3+01ASFkf2g/0JKFeip7k/9j5NM2604RaB
-        90dleDZ97E0M2iM+lWpna3f4ahnd
-X-Google-Smtp-Source: APXvYqx2AIjaQbAwpPFU5w7qSZltqNiaYo3dL08nZ1i485RNpBp9vhMQ5npGdI2XP2S0XPccIFKxWw==
-X-Received: by 2002:adf:ed44:: with SMTP id u4mr19340753wro.242.1559068159212;
-        Tue, 28 May 2019 11:29:19 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8bf3:bd00:fcc3:3d8b:511a:9137? (p200300EA8BF3BD00FCC33D8B511A9137.dip0.t-ipconnect.de. [2003:ea:8bf3:bd00:fcc3:3d8b:511a:9137])
-        by smtp.googlemail.com with ESMTPSA id t4sm2215938wmi.41.2019.05.28.11.29.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 11:29:18 -0700 (PDT)
-Subject: Re: [PATCH] net: phy: tja11xx: Add IRQ support to the driver
-To:     Marek Vasut <marex@denx.de>, netdev@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Tue, 28 May 2019 15:24:02 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 45D3g26qMPz1rZJ4;
+        Tue, 28 May 2019 21:23:58 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 45D3g26083z1qqkZ;
+        Tue, 28 May 2019 21:23:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id 8mZ_js3Y9rox; Tue, 28 May 2019 21:23:56 +0200 (CEST)
+X-Auth-Info: DlH0NurDGI8SzNeUy8ZE7mDMC4Enu71knP7qqY9Y3VI=
+Received: from kurokawa.lan (ip-86-49-110-70.net.upcbroadband.cz [86.49.110.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue, 28 May 2019 21:23:56 +0200 (CEST)
+From:   Marek Vasut <marex@denx.de>
+To:     netdev@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20190528181616.2019-1-marex@denx.de>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <1768acfc-ed20-68d3-12a0-1e5bfb7b31a3@gmail.com>
-Date:   Tue, 28 May 2019 20:29:11 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Subject: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+Date:   Tue, 28 May 2019 21:23:24 +0200
+Message-Id: <20190528192324.28862-1-marex@denx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190528181616.2019-1-marex@denx.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 28.05.2019 20:16, Marek Vasut wrote:
-> Add support for handling the TJA11xx PHY IRQ signal.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->  drivers/net/phy/nxp-tja11xx.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
-> index b705d0bd798b..0be9fe9a9604 100644
-> --- a/drivers/net/phy/nxp-tja11xx.c
-> +++ b/drivers/net/phy/nxp-tja11xx.c
-> @@ -40,6 +40,8 @@
->  #define MII_INTSRC_TEMP_ERR		BIT(1)
->  #define MII_INTSRC_UV_ERR		BIT(3)
->  
-> +#define MII_INTEN			22
-> +
->  #define MII_COMMSTAT			23
->  #define MII_COMMSTAT_LINK_UP		BIT(15)
->  
-> @@ -239,6 +241,30 @@ static int tja11xx_read_status(struct phy_device *phydev)
->  	return 0;
->  }
->  
-> +static int tja11xx_config_intr(struct phy_device *phydev)
-> +{
-> +	int ret;
-> +
-> +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-> +		ret = phy_write(phydev, MII_INTEN, 0xcfef);
+Add support for handling the TJA11xx PHY IRQ signal.
 
-As Florian commented already, such magic numbers are not nice.
-Better add a constant for each bit representing an interrupt
-source. Please note that phylib is interested in the link
-change event only. Therefore typically only one bit is set.
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+---
+V2: - Define each bit of the MII_INTEN register and a mask
+    - Drop IRQ acking from tja11xx_config_intr()
+---
+ drivers/net/phy/nxp-tja11xx.c | 48 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-> +	else
-> +		ret = phy_write(phydev, MII_INTEN, 0);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = phy_read(phydev, MII_INTSRC);
-> +
-
-This IRQ ACK can be removed. It's done by phylib, see
-phy_enable_interrupts().
-
-> +	return ret < 0 ? ret : 0;
-> +}
-> +
-> +static int tja11xx_ack_interrupt(struct phy_device *phydev)
-> +{
-> +	int ret = phy_read(phydev, MII_INTSRC);
-> +
-> +	return ret < 0 ? ret : 0;
-> +}
-> +
->  static int tja11xx_get_sset_count(struct phy_device *phydev)
->  {
->  	return ARRAY_SIZE(tja11xx_hw_stats);
-> @@ -366,6 +392,9 @@ static struct phy_driver tja11xx_driver[] = {
->  		.suspend	= genphy_suspend,
->  		.resume		= genphy_resume,
->  		.set_loopback   = genphy_loopback,
-> +		/* IRQ related */
-> +		.config_intr	= tja11xx_config_intr,
-> +		.ack_interrupt	= tja11xx_ack_interrupt,
->  		/* Statistics */
->  		.get_sset_count = tja11xx_get_sset_count,
->  		.get_strings	= tja11xx_get_strings,
-> @@ -381,6 +410,9 @@ static struct phy_driver tja11xx_driver[] = {
->  		.suspend	= genphy_suspend,
->  		.resume		= genphy_resume,
->  		.set_loopback   = genphy_loopback,
-> +		/* IRQ related */
-> +		.config_intr	= tja11xx_config_intr,
-> +		.ack_interrupt	= tja11xx_ack_interrupt,
->  		/* Statistics */
->  		.get_sset_count = tja11xx_get_sset_count,
->  		.get_strings	= tja11xx_get_strings,
-> 
+diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
+index b705d0bd798b..b41af609607d 100644
+--- a/drivers/net/phy/nxp-tja11xx.c
++++ b/drivers/net/phy/nxp-tja11xx.c
+@@ -40,6 +40,29 @@
+ #define MII_INTSRC_TEMP_ERR		BIT(1)
+ #define MII_INTSRC_UV_ERR		BIT(3)
+ 
++#define MII_INTEN			22
++#define MII_INTEN_PWON_EN		BIT(15)
++#define MII_INTEN_WAKEUP_EN		BIT(14)
++#define MII_INTEN_PHY_INIT_FAIL_EN	BIT(11)
++#define MII_INTEN_LINK_STATUS_FAIL_EN	BIT(10)
++#define MII_INTEN_LINK_STATUS_UP_EN	BIT(9)
++#define MII_INTEN_SYM_ERR_EN		BIT(8)
++#define MII_INTEN_TRAINING_FAILED_EN	BIT(7)
++#define MII_INTEN_SQI_WARNING_EN	BIT(6)
++#define MII_INTEN_CONTROL_ERR_EN	BIT(5)
++#define MII_INTEN_UV_ERR_EN		BIT(3)
++#define MII_INTEN_UV_RECOVERY_EN	BIT(2)
++#define MII_INTEN_TEMP_ERR_EN		BIT(1)
++#define MII_INTEN_SLEEP_ABORT_EN	BIT(0)
++#define MII_INTEN_MASK							\
++	(MII_INTEN_PWON_EN | MII_INTEN_WAKEUP_EN |			\
++	MII_INTEN_PHY_INIT_FAIL_EN | MII_INTEN_LINK_STATUS_FAIL_EN |	\
++	MII_INTEN_LINK_STATUS_UP_EN | MII_INTEN_SYM_ERR_EN |		\
++	MII_INTEN_TRAINING_FAILED_EN | MII_INTEN_SQI_WARNING_EN |	\
++	MII_INTEN_CONTROL_ERR_EN | MII_INTEN_UV_ERR_EN |		\
++	MII_INTEN_UV_RECOVERY_EN | MII_INTEN_TEMP_ERR_EN |		\
++	MII_INTEN_SLEEP_ABORT_EN)
++
+ #define MII_COMMSTAT			23
+ #define MII_COMMSTAT_LINK_UP		BIT(15)
+ 
+@@ -239,6 +262,25 @@ static int tja11xx_read_status(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++static int tja11xx_config_intr(struct phy_device *phydev)
++{
++	int ret;
++
++	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
++		ret = phy_write(phydev, MII_INTEN, MII_INTEN_MASK);
++	else
++		ret = phy_write(phydev, MII_INTEN, 0);
++
++	return ret < 0 ? ret : 0;
++}
++
++static int tja11xx_ack_interrupt(struct phy_device *phydev)
++{
++	int ret = phy_read(phydev, MII_INTSRC);
++
++	return ret < 0 ? ret : 0;
++}
++
+ static int tja11xx_get_sset_count(struct phy_device *phydev)
+ {
+ 	return ARRAY_SIZE(tja11xx_hw_stats);
+@@ -366,6 +408,9 @@ static struct phy_driver tja11xx_driver[] = {
+ 		.suspend	= genphy_suspend,
+ 		.resume		= genphy_resume,
+ 		.set_loopback   = genphy_loopback,
++		/* IRQ related */
++		.config_intr	= tja11xx_config_intr,
++		.ack_interrupt	= tja11xx_ack_interrupt,
+ 		/* Statistics */
+ 		.get_sset_count = tja11xx_get_sset_count,
+ 		.get_strings	= tja11xx_get_strings,
+@@ -381,6 +426,9 @@ static struct phy_driver tja11xx_driver[] = {
+ 		.suspend	= genphy_suspend,
+ 		.resume		= genphy_resume,
+ 		.set_loopback   = genphy_loopback,
++		/* IRQ related */
++		.config_intr	= tja11xx_config_intr,
++		.ack_interrupt	= tja11xx_ack_interrupt,
+ 		/* Statistics */
+ 		.get_sset_count = tja11xx_get_sset_count,
+ 		.get_strings	= tja11xx_get_strings,
+-- 
+2.20.1
 
