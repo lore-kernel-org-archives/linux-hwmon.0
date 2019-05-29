@@ -2,227 +2,246 @@ Return-Path: <SRS0=cyzt=T5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C74C28CC0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 14:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C08BC28CC1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 22:35:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1CD4D23A7A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 14:36:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A668242A8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 22:35:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="fwI24uiP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TIcEBMZd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfE2Og2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 May 2019 10:36:28 -0400
-Received: from mail-eopbgr20128.outbound.protection.outlook.com ([40.107.2.128]:44928
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726068AbfE2Og2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 May 2019 10:36:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BcNcxQ4nXyxtjoJZw57t0jQKOttWfV98fHf5rn5yrCM=;
- b=fwI24uiPPXA63TvD8QDQTVoITsSrjViLSgW43zGNMcRRhvKWqghzpT/qVOhNCxXW8kamd9sJnm3ji5Rqw4AmyMT7hObjggLctMExoYcfcOUAuZG32X5cB6oe2yrdW6RFnLs1BTiQPBEmtIygaL3BCrY+6SqGvP0CO2FqDVsdS58=
-Received: from DB6PR07MB3336.eurprd07.prod.outlook.com (10.170.223.150) by
- DB6PR07MB3109.eurprd07.prod.outlook.com (10.170.222.11) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.4; Wed, 29 May 2019 14:36:22 +0000
-Received: from DB6PR07MB3336.eurprd07.prod.outlook.com
- ([fe80::8c1c:dbc5:e07b:2cf9]) by DB6PR07MB3336.eurprd07.prod.outlook.com
- ([fe80::8c1c:dbc5:e07b:2cf9%6]) with mapi id 15.20.1943.016; Wed, 29 May 2019
- 14:36:22 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: [PATCH v2 2/2] adm1275: support PMBUS_VIRT_*_SAMPLES
-Thread-Topic: [PATCH v2 2/2] adm1275: support PMBUS_VIRT_*_SAMPLES
-Thread-Index: AQHVFiviZhJ1aWEEtkiJKdPgrhm6JQ==
-Date:   Wed, 29 May 2019 14:36:21 +0000
-Message-ID: <7524aaac106af01da2b52662b160535a211ebcd0.1559140351.git.krzysztof.adamski@nokia.com>
-References: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
-In-Reply-To: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0218.eurprd05.prod.outlook.com
- (2603:10a6:3:fa::18) To DB6PR07MB3336.eurprd07.prod.outlook.com
- (2603:10a6:6:1f::22)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.32.190]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2c7380eb-5b0e-4e83-70e0-08d6e44304ef
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB6PR07MB3109;
-x-ms-traffictypediagnostic: DB6PR07MB3109:
-x-microsoft-antispam-prvs: <DB6PR07MB3109BB15945C9141160DD534EF1F0@DB6PR07MB3109.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 0052308DC6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(366004)(136003)(346002)(39860400002)(189003)(199004)(7736002)(256004)(66066001)(14444005)(73956011)(386003)(6506007)(486006)(316002)(53936002)(25786009)(102836004)(107886003)(86362001)(99286004)(8676002)(26005)(81166006)(66476007)(68736007)(66556008)(64756008)(66446008)(81156014)(66946007)(4326008)(52116002)(8936002)(76176011)(186003)(305945005)(110136005)(54906003)(11346002)(5660300002)(446003)(6486002)(2906002)(2616005)(6116002)(476003)(6436002)(6512007)(71190400001)(71200400001)(3846002)(478600001)(36756003)(14454004)(118296001);DIR:OUT;SFP:1102;SCL:1;SRVR:DB6PR07MB3109;H:DB6PR07MB3336.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: uOLD2hdCAJDYXfu7yvi2DYJhCfnHFjERpPFNC7xh55Aaoc/flQGsFpe1vo/Mrg0ttLtswOG7uNIHKQjsEtbeJhOcSqFwiOWJNeMaQ/ygXlP/FMLIvfMlqH4Hz5wm78mPnP3PzCN/oyzIhSD4qpt/vELSS4R6QfpW+OdB5M6lZWrUraogX81XmGktjuhIye2FVGzdweNwfOn6A7r/VLt8q9iNvTjvbn+rdNEelu8Yf/d4aekHx0MReCRh0HExVES5HrqScG8hueV+1F64jBu52oQJWi23od8lHqJl3fqFa6brWeahIavUgWeAIJLvtEV4SIIjrygxySAozmH+EEK8lqGMz3bPOEs4INx2xwms18IXEhAgWJCnlm8kFhmdukzTLdYvpAvrefSrNwJNN7tT/dsgPnkEj4LbFyBzncKEaxU=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C83C230E34557A47BF8DFEB0526F188D@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726720AbfE2Wfa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 May 2019 18:35:30 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55318 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726018AbfE2Wfa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 29 May 2019 18:35:30 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4TMVcjW029423
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2019 15:35:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=22SNMUgGB2CXoUFYzuPVQZ60CnMhuhMebQ8GsCZJlx4=;
+ b=TIcEBMZduyEZ2+pyhqCpYJ66Oe/TmavFKgqpMRBjOUZa8UJ+VDBNQVGeq7OnE82rLA2W
+ tbNIpG7fAVXVz07oOrrnhR8jNLUq1eQJs7sAMPHXPDksMemWWoZxTkaNHKGuftWWUthy
+ 5tbIQyQM1WoWLw7BE39jyydQA0XV/zHd6E4= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ssn0x2xb1-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 May 2019 15:35:29 -0700
+Received: from mx-out.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 29 May 2019 15:35:25 -0700
+Received: by devvm4117.prn2.facebook.com (Postfix, from userid 167582)
+        id 1D93CE882C2F; Wed, 29 May 2019 15:35:25 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Vijay Khemka <vijaykhemka@fb.com>
+Smtp-Origin-Hostname: devvm4117.prn2.facebook.com
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <vijaykhemka@fb.com>, <joel@jms.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <sdasari@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH 1/2] hwmon: pmbus: Add Infineon PXE1610 VR driver
+Date:   Wed, 29 May 2019 15:35:08 -0700
+Message-ID: <20190529223511.4059120-1-vijaykhemka@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c7380eb-5b0e-4e83-70e0-08d6e44304ef
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 14:36:21.9644
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR07MB3109
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-29_12:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905290140
+X-FB-Internal: deliver
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The device supports setting the number of samples for averaging the
-measurements. There are two separate settings - PWR_AVG for averaging
-PIN and VI_AVG for averaging VIN/VAUX/IOUT, both being part of
-PMON_CONFIG register. The values are stored as exponent of base 2 of the
-actual number of samples that will be taken.
+Added pmbus driver for the new device Infineon pxe1610
+voltage regulator. It also supports similar family device
+PXE1110 and PXM1310.
 
-Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Signed-off-by: Vijay Khemka <vijaykhemka@fb.com>
 ---
+ drivers/hwmon/pmbus/Kconfig   |   9 +++
+ drivers/hwmon/pmbus/Makefile  |   1 +
+ drivers/hwmon/pmbus/pxe1610.c | 119 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 129 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/pxe1610.c
 
-Changes in v2:
-- Moved mutex lock to pmbus_set_samples (see patch 1/2)
-- Changed mask type passed as argument to adm1275_read_pmon_config and
-  adm1275_write_pmon_config to u16
-- Changed 1 << ret to BIT(ret)
-
- drivers/hwmon/pmbus/adm1275.c | 61 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index f569372c9204..0c3493fa53ea 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -23,6 +23,8 @@
- #include <linux/slab.h>
- #include <linux/i2c.h>
- #include <linux/bitops.h>
-+#include <linux/bitfield.h>
-+#include <linux/log2.h>
- #include "pmbus.h"
-=20
- enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1294=
- };
-@@ -78,6 +80,10 @@ enum chips { adm1075, adm1272, adm1275, adm1276, adm1278=
-, adm1293, adm1294 };
- #define ADM1075_VAUX_OV_WARN		BIT(7)
- #define ADM1075_VAUX_UV_WARN		BIT(6)
-=20
-+#define ADM1275_PWR_AVG_MASK		GENMASK(13, 11)
-+#define ADM1275_VI_AVG_MASK		GENMASK(10, 8)
-+#define ADM1275_SAMPLES_AVG_MAX	128
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 30751eb9550a..338ef9b5a395 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -154,6 +154,15 @@ config SENSORS_MAX8688
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called max8688.
+ 
++config SENSORS_PXE1610
++	tristate "Infineon PXE1610"
++	help
++	  If you say yes here you get hardware monitoring support for Infineon
++	  PXE1610.
 +
- struct adm1275_data {
- 	int id;
- 	bool have_oc_fault;
-@@ -164,6 +170,34 @@ static const struct coefficients adm1293_coefficients[=
-] =3D {
- 	[18] =3D { 7658, 0, -3 },		/* power, 21V, irange200 */
- };
-=20
-+static inline int adm1275_read_pmon_config(struct i2c_client *client, u16 =
-mask)
++	  This driver can also be built as a module. If so, the module will
++	  be called pxe1610.
++
+ config SENSORS_TPS40422
+ 	tristate "TI TPS40422"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 2219b9300316..b0fbd017a91a 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -18,6 +18,7 @@ obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
+ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
++obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+diff --git a/drivers/hwmon/pmbus/pxe1610.c b/drivers/hwmon/pmbus/pxe1610.c
+new file mode 100644
+index 000000000000..01e267944df5
+--- /dev/null
++++ b/drivers/hwmon/pmbus/pxe1610.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for Infineon PXE1610
++ *
++ * Copyright (c) 2019 Facebook Inc
++ *
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
++
++/*
++ * Identify chip parameters.
++ */
++static int pxe1610_identify(struct i2c_client *client,
++			  struct pmbus_driver_info *info)
 +{
-+	int ret;
++	if (pmbus_check_byte_register(client, 0, PMBUS_VOUT_MODE)) {
++		int vout_mode;
 +
-+	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
-+	if (ret < 0)
-+		return ret;
-+
-+	return FIELD_GET(mask, (u16)ret);
++		vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
++		switch (vout_mode & 0x1f) {
++		case 1:
++			info->vrm_version = vr12;
++		break;
++		case 2:
++			info->vrm_version = vr13;
++		break;
++		default:
++			return -ENODEV;
++		}
++	}
++	return 0;
 +}
 +
-+static inline int adm1275_write_pmon_config(struct i2c_client *client, u16=
- mask,
-+					    u16 word)
++static int pxe1610_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
 +{
-+	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
-+	struct adm1275_data *data =3D to_adm1275_data(info);
++	struct pmbus_driver_info *info;
++	u8 buf[I2C_SMBUS_BLOCK_MAX];
 +	int ret;
 +
-+	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
-+	if (ret < 0)
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_READ_BYTE_DATA
++				| I2C_FUNC_SMBUS_READ_WORD_DATA
++				| I2C_FUNC_SMBUS_READ_BLOCK_DATA))
++		return -ENODEV;
++
++	/* By default this device doesn't boot to page 0, so set page 0
++	 * to access all pmbus registers.
++	 */
++	i2c_smbus_write_byte_data(client, 0, 0);
++
++	/* Read Manufacturer id */
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read PMBUS_MFR_ID\n");
 +		return ret;
++	}
++	if (ret != 2 || strncmp(buf, "XP", strlen("XP"))) {
++		dev_err(&client->dev, "MFR_ID unrecognised\n");
++		return -ENODEV;
++	}
 +
-+	word =3D FIELD_PREP(mask, word) | (ret & ~mask);
-+	ret =3D i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, word);
++	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
++			    GFP_KERNEL);
++	if (!info)
++		return -ENOMEM;
 +
-+	return ret;
++	info->format[PSC_VOLTAGE_IN] = linear;
++	info->format[PSC_VOLTAGE_OUT] = vid;
++	info->format[PSC_CURRENT_IN] = linear;
++	info->format[PSC_CURRENT_OUT] = linear;
++	info->format[PSC_POWER] = linear;
++	info->format[PSC_TEMPERATURE] = linear;
++
++	info->func[0] = PMBUS_HAVE_VIN
++		| PMBUS_HAVE_VOUT | PMBUS_HAVE_IIN
++		| PMBUS_HAVE_IOUT | PMBUS_HAVE_PIN
++		| PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP
++		| PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT
++		| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP;
++	info->func[1] = info->func[0];
++	info->func[2] = info->func[0];
++
++	info->pages = id->driver_data;
++	info->identify = pxe1610_identify;
++
++	return pmbus_do_probe(client, id, info);
 +}
 +
- static int adm1275_read_word_data(struct i2c_client *client, int page, int=
- reg)
- {
- 	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
-@@ -242,6 +276,19 @@ static int adm1275_read_word_data(struct i2c_client *c=
-lient, int page, int reg)
- 		if (!data->have_temp_max)
- 			return -ENXIO;
- 		break;
-+	case PMBUS_VIRT_POWER_SAMPLES:
-+		ret =3D adm1275_read_pmon_config(client, ADM1275_PWR_AVG_MASK);
-+		if (ret < 0)
-+			break;
-+		ret =3D BIT(ret);
-+		break;
-+	case PMBUS_VIRT_IN_SAMPLES:
-+	case PMBUS_VIRT_CURR_SAMPLES:
-+		ret =3D adm1275_read_pmon_config(client, ADM1275_VI_AVG_MASK);
-+		if (ret < 0)
-+			break;
-+		ret =3D BIT(ret);
-+		break;
- 	default:
- 		ret =3D -ENODATA;
- 		break;
-@@ -286,6 +333,17 @@ static int adm1275_write_word_data(struct i2c_client *=
-client, int page, int reg,
- 	case PMBUS_VIRT_RESET_TEMP_HISTORY:
- 		ret =3D pmbus_write_word_data(client, 0, ADM1278_PEAK_TEMP, 0);
- 		break;
-+	case PMBUS_VIRT_POWER_SAMPLES:
-+		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
-+		ret =3D adm1275_write_pmon_config(client, ADM1275_PWR_AVG_MASK,
-+						ilog2(word));
-+		break;
-+	case PMBUS_VIRT_IN_SAMPLES:
-+	case PMBUS_VIRT_CURR_SAMPLES:
-+		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
-+		ret =3D adm1275_write_pmon_config(client, ADM1275_VI_AVG_MASK,
-+						ilog2(word));
-+		break;
- 	default:
- 		ret =3D -ENODATA;
- 		break;
-@@ -439,7 +497,8 @@ static int adm1275_probe(struct i2c_client *client,
- 	info->format[PSC_CURRENT_OUT] =3D direct;
- 	info->format[PSC_POWER] =3D direct;
- 	info->format[PSC_TEMPERATURE] =3D direct;
--	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT;
-+	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+			PMBUS_HAVE_SAMPLES;
-=20
- 	info->read_word_data =3D adm1275_read_word_data;
- 	info->read_byte_data =3D adm1275_read_byte_data;
---=20
-2.20.1
++static const struct i2c_device_id pxe1610_id[] = {
++	{"pxe1610", 3},
++	{"pxe1110", 3},
++	{"pxm1310", 3},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, pxe1610_id);
++
++/* This is the driver that will be inserted */
++static struct i2c_driver pxe1610_driver = {
++	.driver = {
++		   .name = "pxe1610",
++		   },
++	.probe = pxe1610_probe,
++	.remove = pmbus_do_remove,
++	.id_table = pxe1610_id,
++};
++
++module_i2c_driver(pxe1610_driver);
++
++MODULE_AUTHOR("Vijay Khemka <vijaykhemka@fb.com>");
++MODULE_DESCRIPTION("PMBus driver for Infineon PXE1610, PXE1110 and PXM1310");
++MODULE_LICENSE("GPL");
+-- 
+2.17.1
 
