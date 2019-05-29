@@ -2,136 +2,82 @@ Return-Path: <SRS0=cyzt=T5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B5AC28CC0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 23:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6315EC28CC0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 23:29:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75C6B24305
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 23:14:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31EC424366
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 23:29:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="QT+5lcc6"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0f26D+GP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbfE2XOv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 May 2019 19:14:51 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:50197 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726189AbfE2XOv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 May 2019 19:14:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559171690; x=1590707690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jg4D4al/bAP7eHh51drOSBVTrjBox73axyszTJCSwQM=;
-  b=QT+5lcc6dlSg4a/kQz/5EIwY9YwRWM6FQ2sCKJ37jfrcKFOh7ChxjHoA
-   YjGdSezN4mAwIA7xONUAIIDxtdu4kkT+ukMSfbojNy/mzZRyDCbMjGd5E
-   o6jA8lB9f/pMrfnkdPAA9c9xT/8QT/0H+Rxq+48dFM2ez2ERv/rnmSy7K
-   A=;
-X-IronPort-AV: E=Sophos;i="5.60,527,1549929600"; 
-   d="scan'208";a="802508188"
-Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-1a-67b371d8.us-east-1.amazon.com) ([10.47.22.34])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 29 May 2019 23:14:48 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1a-67b371d8.us-east-1.amazon.com (Postfix) with ESMTPS id 005DEA21D6;
-        Wed, 29 May 2019 23:14:46 +0000 (UTC)
-Received: from EX13D05UWB004.ant.amazon.com (10.43.161.208) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 29 May 2019 23:14:46 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D05UWB004.ant.amazon.com (10.43.161.208) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 29 May 2019 23:14:45 +0000
-Received: from localhost (10.107.66.154) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Wed, 29 May 2019 23:14:46 +0000
-Date:   Wed, 29 May 2019 16:14:45 -0700
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Eduardo Valentin <eduval@amazon.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: core: fix potential memory leak in
- *hwmon_device_register*
-Message-ID: <20190529231445.GC18339@u40b0340c692b58f6553c.ant.amazon.com>
-References: <20190517231337.27859-1-eduval@amazon.com>
- <20190517231337.27859-3-eduval@amazon.com>
- <20190528150640.GA5516@roeck-us.net>
+        id S1726461AbfE2X3o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 May 2019 19:29:44 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:40390 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726240AbfE2X3o (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 29 May 2019 19:29:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=DqShxMQEhEyHMa5nJ06AIiSuoDkR06vXPgvqd1K07ZQ=; b=0f26D+GPzttJBNim7aCAxOy0rN
+        zDAcOMnmZQJDAt13uQoVT4Fj3RuUR8PG2MJovUJoEywQbfKX3Bt9CAm8CZjjpw8dz/uaqmKZUeJBk
+        PJ7yhNkT0RqXugv7FoWqtyPSMQQ6t6HsUxwR/r2va9pq6EIbcKFGyneM9s4hTcnOgPJM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hW80g-0003II-9l; Thu, 30 May 2019 01:29:30 +0200
+Date:   Thu, 30 May 2019 01:29:30 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+Message-ID: <20190529232930.GF18059@lunn.ch>
+References: <20190528192324.28862-1-marex@denx.de>
+ <96793717-a55c-7844-f7c0-cc357c774a19@gmail.com>
+ <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
+ <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
+ <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
+ <20190528195806.GV18059@lunn.ch>
+ <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
+ <20190528212252.GW18059@lunn.ch>
+ <fe6c4f2f-812d-61b8-3ffb-7ed7dd89d151@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190528150640.GA5516@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <fe6c4f2f-812d-61b8-3ffb-7ed7dd89d151@denx.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 28, 2019 at 08:06:40AM -0700, Guenter Roeck wrote:
-> Hi Eduardo,
+On Tue, May 28, 2019 at 11:33:33PM +0200, Marek Vasut wrote:
+> On 5/28/19 11:22 PM, Andrew Lunn wrote:
+> >> The link detection on the TJA1100 (not TJA1101) seems unstable at best,
+> >> so I better use all the interrupt sources to nudge the PHY subsystem and
+> >> have it check the link change.
+> > 
+> > Then it sounds like you should just ignore interrupts and stay will
+> > polling for the TJA1100.
 > 
-> On Fri, May 17, 2019 at 04:13:37PM -0700, Eduardo Valentin wrote:
-> > When registering a hwmon device with HWMON_C_REGISTER_TZ flag
-> > in place, the hwmon subsystem will attempt to register the device
-> > also with the thermal subsystem. When the of-thermal registration
-> > fails, __hwmon_device_register jumps to ida_remove, leaving
-> > the locally allocated hwdev pointer and also the hdev registered.
-> > 
-> > This patch fixes both issues by jumping to a new label that
-> > will first unregister hdev and the fall into the kfree of hwdev
-> > to finally remove the idas and propagate the error code.
-> > 
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-hwmon@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > ---
-> >  drivers/hwmon/hwmon.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index 6b3559f58b67..6f1194952189 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -637,7 +637,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-> >  								hwdev, j);
-> >  					if (err) {
-> >  						device_unregister(hdev);
-> > -						goto ida_remove;
-> > +						goto device_unregister;
-> 
-> Good find, but device_unregister() is already called above.
-> You need to either remove that, or replace the goto to point to free_hwmon.
-> The new label would probably the cleaner solution since it follows the
-> coding style.
+> Polling for the link status change is slow(er) than the IRQ driven
+> operation, so I would much rather use the interrupts.
 
-Right, somehow I completely missed that unregister call. In any case, I will
-take the route of adding a new label and remove the unregister call above.
+I agree about the speed, but it seems like interrupts on this PHY are
+not so reliable. Polling always works. But unfortunately, you cannot
+have both interrupts and polling to fix up problems when interrupts
+fail. Your call, do you think interrupts really do work?
 
-> 
-> Thanks
-> Guenter
-> 
-> >  					}
-> >  				}
-> >  			}
-> > @@ -646,6 +646,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-> >  
-> >  	return hdev;
-> >  
-> > +device_unregister:
-> > +	device_unregister(hdev);
-> >  free_hwmon:
-> >  	kfree(hwdev);
-> >  ida_remove:
-> > -- 
-> > 2.21.0
-> > 
+If you say that tja1101 works as expected, then please just use the
+link up/down bits for it.
 
--- 
-All the best,
-Eduardo Valentin
+     Andrew
