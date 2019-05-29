@@ -1,123 +1,289 @@
-Return-Path: <SRS0=6zdu=T4=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=cyzt=T5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66473C04AB6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 21:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D98FC04AB3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 07:11:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4293A2075B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 May 2019 21:33:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B4CF21019
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 May 2019 07:11:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="rrC618nu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbfE1Vdl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 May 2019 17:33:41 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:52882 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbfE1Vdk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 May 2019 17:33:40 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 45D6Xb4MXCz1rTc0;
-        Tue, 28 May 2019 23:33:35 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 45D6Xb3XZhz1qqkb;
-        Tue, 28 May 2019 23:33:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id hylE-ZdcF7Tt; Tue, 28 May 2019 23:33:34 +0200 (CEST)
-X-Auth-Info: HhHBjJtjCVfI8QAoHl5jBoq2ZHmsxN4MSxSYh3+ZVDw=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Tue, 28 May 2019 23:33:34 +0200 (CEST)
-Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20190528192324.28862-1-marex@denx.de>
- <96793717-a55c-7844-f7c0-cc357c774a19@gmail.com>
- <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
- <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
- <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
- <20190528195806.GV18059@lunn.ch>
- <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
- <20190528212252.GW18059@lunn.ch>
-From:   Marek Vasut <marex@denx.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <fe6c4f2f-812d-61b8-3ffb-7ed7dd89d151@denx.de>
-Date:   Tue, 28 May 2019 23:33:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190528212252.GW18059@lunn.ch>
-Content-Type: text/plain; charset=utf-8
+        id S1726057AbfE2HLK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 May 2019 03:11:10 -0400
+Received: from mail-eopbgr60135.outbound.protection.outlook.com ([40.107.6.135]:50291
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725882AbfE2HLJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 29 May 2019 03:11:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gJnliBRO9I4mSK36ZQtZlhOpJEyIJVTc4d9GFu0z+5Y=;
+ b=rrC618nutsbjVNXZcA7iVlCTUR+HBHZqaoJIAPC80Kihfyq8A4ePM1wccS1aHzxlXr+0Y6cUAhQXzKWtA89hxKdVdA442pRVPjNK/L0sq0CAFmXut9AgCjCMI+A91GtEOXPHCVi+mgEhbsM9t2NpY3E9bptqpkWSfzZKqEfU3C0=
+Received: from DB6PR07MB3336.eurprd07.prod.outlook.com (10.170.223.150) by
+ DB6PR07MB4405.eurprd07.prod.outlook.com (10.168.20.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.13; Wed, 29 May 2019 07:11:04 +0000
+Received: from DB6PR07MB3336.eurprd07.prod.outlook.com
+ ([fe80::8c1c:dbc5:e07b:2cf9]) by DB6PR07MB3336.eurprd07.prod.outlook.com
+ ([fe80::8c1c:dbc5:e07b:2cf9%6]) with mapi id 15.20.1943.016; Wed, 29 May 2019
+ 07:11:04 +0000
+From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+Subject: Re: [PATCH] adm1275: support PMBUS_VIRT_*_SAMPLES
+Thread-Topic: [PATCH] adm1275: support PMBUS_VIRT_*_SAMPLES
+Thread-Index: AQHVEi8WZbhhz1TyCEmlx6WeByshdKaA99MAgAC+/YA=
+Date:   Wed, 29 May 2019 07:11:04 +0000
+Message-ID: <20190529071027.GA6524@localhost.localdomain>
+References: <20190524124841.GA25728@localhost.localdomain>
+ <20190528194652.GE24853@roeck-us.net>
+In-Reply-To: <20190528194652.GE24853@roeck-us.net>
+Accept-Language: pl-PL, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR02CA0093.eurprd02.prod.outlook.com
+ (2603:10a6:7:29::22) To DB6PR07MB3336.eurprd07.prod.outlook.com
+ (2603:10a6:6:1f::22)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=krzysztof.adamski@nokia.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [131.228.32.190]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 598c6991-a97e-402c-4efc-08d6e404cfee
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB6PR07MB4405;
+x-ms-traffictypediagnostic: DB6PR07MB4405:
+x-microsoft-antispam-prvs: <DB6PR07MB4405FDAE10D5AB2295AC10FBEF1F0@DB6PR07MB4405.eurprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0052308DC6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(136003)(366004)(39860400002)(396003)(199004)(189003)(61506002)(71200400001)(53936002)(305945005)(107886003)(71190400001)(99286004)(186003)(7736002)(9686003)(6246003)(6116002)(3846002)(68736007)(66066001)(6512007)(229853002)(6436002)(33656002)(86362001)(6486002)(25786009)(2906002)(54906003)(4326008)(26005)(1076003)(6506007)(386003)(5660300002)(66446008)(508600001)(73956011)(64756008)(76176011)(66946007)(102836004)(66476007)(66556008)(52116002)(6916009)(81156014)(81166006)(476003)(446003)(8676002)(11346002)(8936002)(14454004)(316002)(256004)(486006)(14444005);DIR:OUT;SFP:1102;SCL:1;SRVR:DB6PR07MB4405;H:DB6PR07MB3336.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: qdF9vy9e0RBhMf9nuhgmZgEO+FNaW/0/qVXYbqLpTpELpakp7RotnRZ9Qp3o8zl9t71Ei3wz+Bc5rIdbkzjdHDe7W9vC1KHfen9E6N5i+BZgrx8ks/INgMKQ+aULH1nmIflQC8o2Qai/Z6u+MXoIFxCQH8PXORDejdicP1VC79sPMMumpSuUFoGrwuQuSQM9thS1+wRa57VWrnaNjK1sJpn5bAHcfspNzf7MDJHxvl5mMqjQxCFECrEcGgeZpkTj+X4iZHiH6H2+V6I7lG9jUkgLm9nMAwYuSUNu4EZAkCu2S2WKTCdAymlpi49Yfhq1mS/L0NpoyIku4a0lTITgKhj+CIp9VzToRud4g1veVKbpFguDDPQN4lgBZaQsQIvdK+pn0zygminwfjWGqMaNMpoyN1MsUcJChQuaxOkh1rU=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2C8465224E3D544586C30C0BAC02A224@eurprd07.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 598c6991-a97e-402c-4efc-08d6e404cfee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 07:11:04.7202
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR07MB4405
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/28/19 11:22 PM, Andrew Lunn wrote:
->> The link detection on the TJA1100 (not TJA1101) seems unstable at best,
->> so I better use all the interrupt sources to nudge the PHY subsystem and
->> have it check the link change.
-> 
-> Then it sounds like you should just ignore interrupts and stay will
-> polling for the TJA1100.
+On Tue, May 28, 2019 at 12:46:52PM -0700, Guenter Roeck wrote:
+>On Fri, May 24, 2019 at 12:49:13PM +0000, Adamski, Krzysztof (Nokia - PL/W=
+roclaw) wrote:
+>> The device supports setting the number of samples for averaging the
+>> measurements. There are two separate settings - PWR_AVG for averaging
+>> PIN and VI_AVG for averaging VIN/VAUX/IOUT, both being part of
+>> PMON_CONFIG register. The values are stored as exponent of base 2 of the
+>> actual number of samples that will be taken.
+>>
+>> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>> ---
+>>  drivers/hwmon/pmbus/adm1275.c | 68 ++++++++++++++++++++++++++++++++++-
+>>  1 file changed, 67 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275=
+.c
+>> index f569372c9204..4efe1a9df563 100644
+>> --- a/drivers/hwmon/pmbus/adm1275.c
+>> +++ b/drivers/hwmon/pmbus/adm1275.c
+>> @@ -23,6 +23,8 @@
+>>  #include <linux/slab.h>
+>>  #include <linux/i2c.h>
+>>  #include <linux/bitops.h>
+>> +#include <linux/bitfield.h>
+>> +#include <linux/log2.h>
+>>  #include "pmbus.h"
+>>
+>>  enum chips { adm1075, adm1272, adm1275, adm1276, adm1278, adm1293, adm1=
+294 };
+>> @@ -78,6 +80,10 @@ enum chips { adm1075, adm1272, adm1275, adm1276, adm1=
+278, adm1293, adm1294 };
+>>  #define ADM1075_VAUX_OV_WARN		BIT(7)
+>>  #define ADM1075_VAUX_UV_WARN		BIT(6)
+>>
+>> +#define ADM1275_PWR_AVG_MASK		GENMASK(13, 11)
+>> +#define ADM1275_VI_AVG_MASK		GENMASK(10, 8)
+>> +#define ADM1275_SAMPLES_AVG_MAX	128
+>> +
+>>  struct adm1275_data {
+>>  	int id;
+>>  	bool have_oc_fault;
+>> @@ -90,6 +96,7 @@ struct adm1275_data {
+>>  	bool have_pin_max;
+>>  	bool have_temp_max;
+>>  	struct pmbus_driver_info info;
+>> +	struct mutex lock;
+>>  };
+>>
+>>  #define to_adm1275_data(x)  container_of(x, struct adm1275_data, info)
+>> @@ -164,6 +171,38 @@ static const struct coefficients adm1293_coefficien=
+ts[] =3D {
+>>  	[18] =3D { 7658, 0, -3 },		/* power, 21V, irange200 */
+>>  };
+>>
+>> +static inline int adm1275_read_pmon_config(struct i2c_client *client, u=
+64 mask)
+>
+>Why is the mask passed through as u64 ?
 
-Polling for the link status change is slow(er) than the IRQ driven
-operation, so I would much rather use the interrupts.
+Good point. I used u64 as this is the type used by bitfield machinery
+under the hood but I agree it doesn't make sense and is even confusing
+to have this in the function prototype as we are using this to mask 16
+bit word anyways. I will fix that in v2. I am gonna have to cast the ret
+to u16 when passing to FIELD_GET() to make sure the __BF_FIELD_CHECK is
+not complaining (since it is signed right now), though.
 
--- 
-Best regards,
-Marek Vasut
+>
+>> +{
+>> +	int ret;
+>> +
+>> +	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	return FIELD_GET(mask, ret);
+>> +}
+>> +
+>> +static inline int adm1275_write_pmon_config(struct i2c_client *client, =
+u64 mask,
+>> +					    u16 word)
+>> +{
+>> +	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client)=
+;
+>> +	struct adm1275_data *data =3D to_adm1275_data(info);
+>> +	int ret;
+>> +
+>> +	mutex_lock(&data->lock);
+>
+>Why is another lock on top of the lock provided by the pmbus core required=
+ ?
+>
+
+Good point, I was considering if I should instead add mutex_lock on
+update_lock in the pmbus_set_samples() function inside of pmbus_core.c
+instead (as this function is missing it) but figured that not all
+devices will need that (lm25066 didn't) so it might be a waste in most
+cases. But this may be cleaner approach indeed.
+
+Is this what you mean or there is some other lock I missed?
+
+>> +	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
+>> +	if (ret < 0) {
+>> +		mutex_unlock(&data->lock);
+>> +		return ret;
+>> +	}
+>> +
+>> +	word =3D FIELD_PREP(mask, word) | (ret & ~mask);
+>> +	ret =3D i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, word);
+>> +	mutex_unlock(&data->lock);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>  static int adm1275_read_word_data(struct i2c_client *client, int page, =
+int reg)
+>>  {
+>>  	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client)=
+;
+>> @@ -242,6 +281,19 @@ static int adm1275_read_word_data(struct i2c_client=
+ *client, int page, int reg)
+>>  		if (!data->have_temp_max)
+>>  			return -ENXIO;
+>>  		break;
+>> +	case PMBUS_VIRT_POWER_SAMPLES:
+>> +		ret =3D adm1275_read_pmon_config(client, ADM1275_PWR_AVG_MASK);
+>> +		if (ret < 0)
+>> +			break;
+>> +		ret =3D 1 << ret;
+>
+>		ret =3D BIT(ret);
+>
+
+I intentionally used the "raw" left shift to make it more obvious this
+is pow2 arithmetic operation and an direct inverse to the ilog2() used
+on write counterpart. This is also consistent with what I used in
+lm25066.c driver not long time ago.
+
+I don't have strong preference but this is my reasoning. So do you still
+think it is better to use BIT() macro instead?
+
+>> +		break;
+>> +	case PMBUS_VIRT_IN_SAMPLES:
+>> +	case PMBUS_VIRT_CURR_SAMPLES:
+>> +		ret =3D adm1275_read_pmon_config(client, ADM1275_VI_AVG_MASK);
+>> +		if (ret < 0)
+>> +			break;
+>> +		ret =3D 1 << ret;
+>
+>		ret =3D BIT(ret);
+>
+>> +		break;
+>>  	default:
+>>  		ret =3D -ENODATA;
+>>  		break;
+>> @@ -286,6 +338,17 @@ static int adm1275_write_word_data(struct i2c_clien=
+t *client, int page, int reg,
+>>  	case PMBUS_VIRT_RESET_TEMP_HISTORY:
+>>  		ret =3D pmbus_write_word_data(client, 0, ADM1278_PEAK_TEMP, 0);
+>>  		break;
+>> +	case PMBUS_VIRT_POWER_SAMPLES:
+>> +		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
+>> +		ret =3D adm1275_write_pmon_config(client, ADM1275_PWR_AVG_MASK,
+>> +						ilog2(word));
+>> +		break;
+>> +	case PMBUS_VIRT_IN_SAMPLES:
+>> +	case PMBUS_VIRT_CURR_SAMPLES:
+>> +		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
+>> +		ret =3D adm1275_write_pmon_config(client, ADM1275_VI_AVG_MASK,
+>> +						ilog2(word));
+>> +		break;
+>>  	default:
+>>  		ret =3D -ENODATA;
+>>  		break;
+>> @@ -422,6 +485,8 @@ static int adm1275_probe(struct i2c_client *client,
+>>  	if (!data)
+>>  		return -ENOMEM;
+>>
+>> +	mutex_init(&data->lock);
+>> +
+>>  	if (of_property_read_u32(client->dev.of_node,
+>>  				 "shunt-resistor-micro-ohms", &shunt))
+>>  		shunt =3D 1000; /* 1 mOhm if not set via DT */
+>> @@ -439,7 +504,8 @@ static int adm1275_probe(struct i2c_client *client,
+>>  	info->format[PSC_CURRENT_OUT] =3D direct;
+>>  	info->format[PSC_POWER] =3D direct;
+>>  	info->format[PSC_TEMPERATURE] =3D direct;
+>> -	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT;
+>> +	info->func[0] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>> +			PMBUS_HAVE_SAMPLES;
+>>
+>>  	info->read_word_data =3D adm1275_read_word_data;
+>>  	info->read_byte_data =3D adm1275_read_byte_data;
+>> --
+>> 2.20.1
+>>
