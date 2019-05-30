@@ -2,742 +2,528 @@ Return-Path: <SRS0=hSSu=T6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F452C28CC0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 May 2019 09:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35BB4C28CC2
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 May 2019 12:55:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4AE89253A8
-	for <linux-hwmon@archiver.kernel.org>; Thu, 30 May 2019 09:19:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF0DD25914
+	for <linux-hwmon@archiver.kernel.org>; Thu, 30 May 2019 12:55:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rx5hyfjk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbfE3JTA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 30 May 2019 05:19:00 -0400
-Received: from aclms3.advantech.com.tw ([125.252.70.86]:61732 "EHLO
-        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726549AbfE3JTA (ORCPT
+        id S1726626AbfE3MzN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 30 May 2019 08:55:13 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43114 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbfE3MzM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 30 May 2019 05:19:00 -0400
-Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Td816294164ac1401c8e60@ACLMS3.advantech.com.tw>;
- Thu, 30 May 2019 17:18:58 +0800
-From:   <Amy.Shih@advantech.com.tw>
-To:     <she90122@gmail.com>
-CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <jia.sui@advantech.com.cn>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] hwmon: (nct7904) Add extra sysfs support for fan, voltage and tempearture. Fix the incorrect value of tcpu_mask in nct7904_data struct.
-Date:   Thu, 30 May 2019 09:17:56 +0000
-Message-ID: <20190530091758.1331-1-Amy.Shih@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 May 2019 08:55:12 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c6so3909635pfa.10;
+        Thu, 30 May 2019 05:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FsYmLFyZ+cOvAquul4hkXB/72YOvPq1DCzrK7znbTxM=;
+        b=Rx5hyfjk+uWq/607WL1QsPm/vvl4zKShzgeUTcbOcCKZ3DjwIj2TVS+INRlEQE4esO
+         gEyhwXt1uahJSVRtDqNrlUeLZMg/cWuhw9yDz/6wYzgpAzL9T8IMLenTHpcySFLpGi57
+         g7648n5Uzh5Z47Ff6WBH63Fi/zjtNYAPJy9+cEdUeQ6YQVH8fZyYvXjeiI5maNENdk6R
+         9YvGQpddjtok3eAwtJ9M9KASkizcNp/N5+0ibxbH14wXANZAgH4OSATOozNbhITRKyCT
+         KDDm+GM2IBt1XV98amHipkbG5QpnNyrNxqI/N2XtAKiSChg6dUhVLkIg96tkSypx2Bnz
+         50jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FsYmLFyZ+cOvAquul4hkXB/72YOvPq1DCzrK7znbTxM=;
+        b=ifBStyJCq6tsVrqCfcwLZV8dONe+0uC36/psXUoQZRiLl61tz28yLI/w2nZYreh7Z+
+         nnLuSQU8SglqOWaE2RuwIssDMv1iYlRrH4UIjGGrSLYF54TtxNVntqappMXYV3UD3WR1
+         NNJr/CY3cWJRW58z5gNqq6ltMHj3t5MeqWXmaI2tOP8GD9xs6U58s8fBtYMpn2KzdmXS
+         WWP8vDCZf0B6JZLZGXygAwMpZbclX2UZEYvBaw6HMtOD5tYQ5OJ6023Cm7p5Pl4z18R4
+         D8dXmW1KXhS96koHBgu4qaRQ5BILQj9D8Yq6OVs3+vmPcINPXKTTrB79F+gMUtaEBIeN
+         soeA==
+X-Gm-Message-State: APjAAAVFSM771/vhxQ8XPtR3DDa+l5RtZqVvm9/xzekU7aI4SdkdqVss
+        ZmDObsGAj5WMz2TV2cdyZa8=
+X-Google-Smtp-Source: APXvYqzwJO3j5JAKhNPaqy6jHsYezXtKoQOmDkmAsxCk0eq3ACz4DHHN2Esn0qkwiNG8I/crT+GzbA==
+X-Received: by 2002:a63:360c:: with SMTP id d12mr3501641pga.285.1559220911754;
+        Thu, 30 May 2019 05:55:11 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e20sm1280245pfi.35.2019.05.30.05.55.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 30 May 2019 05:55:11 -0700 (PDT)
+Date:   Thu, 30 May 2019 05:55:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Serge Semin <Sergey.Semin@t-platforms.ru>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: Add ads1000/ads1100 voltage ADCs driver
+Message-ID: <20190530125510.GA26072@roeck-us.net>
+References: <20190514225810.12591-1-fancer.lancer@gmail.com>
+ <20190514225810.12591-3-fancer.lancer@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.82]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- taipei08.ADVANTECH.CORP (172.20.0.235)
-X-StopIT: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190514225810.12591-3-fancer.lancer@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "amy.shih" <amy.shih@advantech.com.tw>
+Hi,
 
-This patch do 3 jobs as described in below:
+On Wed, May 15, 2019 at 01:58:09AM +0300, Serge Semin wrote:
+> These are simple Texas Instruments ADC working over i2c-interface with
+> just one differential input and with configurable 12-16 bits resolution.
+> Sample rate is fixed to 128 for ads1000 and can vary from 8 to 128 for
+> ads1100. Vdd value reference value must be supplied so to properly
+> translate the sampled code to the real voltage. All of these configs are
+> implemented in the device drivers for hwmon subsystem. The next dts
+> properties should be specified to comply the device platform setup:
+>  - vdd-supply - voltage regulator connected to the Vdd pin of the device
+>  - ti,gain - programmable gain amplifier
+>  - ti,datarate - converter data rate
+>  - ti,voltage-divider - possible resistors-base external divider
+> See bindings documentation file for details.
+> 
+> Even though these devices seem more like ads1015 series, they
+> in fact pretty much different. First of all ads1000/ads1100 got less
+> capabilities: just one port, no configurations of digital comparator, no
+> input multi-channel multiplexer, smaller PGA and data-rate ranges.
+> In addition they haven't got internal voltage reference, but instead
+> are created to use Vdd pin voltage. Finally the output code value is
+> provided in different format. As a result it was much easier for
+> development and for future support to create a separate driver.
+> 
 
-1. NCT-7904D also supports reading of channel limitation registers
-and SMI status registers for fan, voltage and tempearture monitoring,
-add below sysfs nodes:
+This chicp doesn't have any real hardware monitoring characteristics
+(no limit registers). It seems to be better suited to be implemented
+as iio driver. If it is used as hardware monitor, the iio-hwmon bridge
+should work just fine.
 
--fan[1-*]_min
--fan[1-*]_alarm
--in[0-*]_min
--in[0-*]_max
--in[0-*]_alarm
--temp[1-*]_max
--temp[1-*]_max_hyst
--temp[1-*]_emergency
--temp[1-*]_emergency_hyst
--temp[1-*]_alarm
+Jonathan, what do you think ?
 
-2. Add the temp[1-*]_type sysfs to show type of tempearture sensor is
-thermal diode, thermistor, AMD SB-TSI or Intel PECI.
+Thanks,
+Guenter
 
-3. Detect the multi-function of voltage, thermal diode and thermistor
-from register VT_ADC_MD_REG to set value of tcpu_mask in nct7904_data
-struct, set temp[1-5]_input the input values TEMP_CH1~4 and LTD of
-temperature. Set temp[6~13]_input the input values of DTS temperature
-that correspond to sensors TCPU1~8.
-
-Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
----
- drivers/hwmon/nct7904.c | 527 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 474 insertions(+), 53 deletions(-)
-
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 04516789b070..a7592305f297 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -4,6 +4,9 @@
-  * Copyright (c) 2015 Kontron
-  * Author: Vadim V. Vlasov <vvlasov@dev.rtsoft.ru>
-  *
-+ * Copyright (c) 2019 Advantech
-+ * Author: Amy.Shih <amy.shih@advantech.com.tw>
-+ *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation; either version 2 of the License, or
-@@ -52,13 +55,38 @@
- #define DTS_T_CTRL1_REG		0x27
- #define VT_ADC_MD_REG		0x2E
- 
-+#define VSEN1_HV_LL_REG		0x02	/* Bank 1; 2 regs (HV/LV) per sensor */
-+#define VSEN1_LV_LL_REG		0x03	/* Bank 1; 2 regs (HV/LV) per sensor */
-+#define VSEN1_HV_HL_REG		0x00	/* Bank 1; 2 regs (HV/LV) per sensor */
-+#define VSEN1_LV_HL_REG		0x01	/* Bank 1; 2 regs (HV/LV) per sensor */
-+#define SMI_STS1_REG		0xC1	/* Bank 0; SMI Status Register */
-+#define SMI_STS5_REG		0xC5	/* Bank 0; SMI Status Register */
-+#define SMI_STS7_REG		0xC7	/* Bank 0; SMI Status Register */
-+#define SMI_STS8_REG		0xC8	/* Bank 0; SMI Status Register */
-+
- #define VSEN1_HV_REG		0x40	/* Bank 0; 2 regs (HV/LV) per sensor */
- #define TEMP_CH1_HV_REG		0x42	/* Bank 0; same as VSEN2_HV */
- #define LTD_HV_REG		0x62	/* Bank 0; 2 regs in VSEN range */
-+#define LTD_HV_HL_REG		0x44	/* Bank 1; 1 reg for LTD */
-+#define LTD_LV_HL_REG		0x45	/* Bank 1; 1 reg for LTD */
-+#define LTD_HV_LL_REG		0x46	/* Bank 1; 1 reg for LTD */
-+#define LTD_LV_LL_REG		0x47	/* Bank 1; 1 reg for LTD */
-+#define TEMP_CH1_CH_REG		0x05	/* Bank 1; 1 reg for LTD */
-+#define TEMP_CH1_W_REG		0x06	/* Bank 1; 1 reg for LTD */
-+#define TEMP_CH1_WH_REG		0x07	/* Bank 1; 1 reg for LTD */
-+#define TEMP_CH1_C_REG		0x04	/* Bank 1; 1 reg per sensor */
-+#define DTS_T_CPU1_C_REG	0x90	/* Bank 1; 1 reg per sensor */
-+#define DTS_T_CPU1_CH_REG	0x91	/* Bank 1; 1 reg per sensor */
-+#define DTS_T_CPU1_W_REG	0x92	/* Bank 1; 1 reg per sensor */
-+#define DTS_T_CPU1_WH_REG	0x93	/* Bank 1; 1 reg per sensor */
- #define FANIN1_HV_REG		0x80	/* Bank 0; 2 regs (HV/LV) per sensor */
-+#define FANIN1_HV_HL_REG	0x60	/* Bank 1; 2 regs (HV/LV) per sensor */
-+#define FANIN1_LV_HL_REG	0x61	/* Bank 1; 2 regs (HV/LV) per sensor */
- #define T_CPU1_HV_REG		0xA0	/* Bank 0; 2 regs (HV/LV) per sensor */
- 
- #define PRTS_REG		0x03	/* Bank 2 */
-+#define PFE_REG			0x00	/* Bank 2; PECI Function Enable */
-+#define TSI_CTRL_REG		0x50	/* Bank 2; TSI Control Register */
- #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
- #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
- 
-@@ -74,6 +102,9 @@ struct nct7904_data {
- 	u32 vsen_mask;
- 	u32 tcpu_mask;
- 	u8 fan_mode[FANCTL_MAX];
-+	u8 enable_dts;
-+	u8 has_dts;
-+	u8 temp_mode; /* 0: TR mode, 1: TD mode */
- };
- 
- /* Access functions */
-@@ -172,6 +203,25 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
- 			rpm = 1350000 / cnt;
- 		*val = rpm;
- 		return 0;
-+	case hwmon_fan_min:
-+		ret = nct7904_read_reg16(data, BANK_1,
-+					 FANIN1_HV_HL_REG + channel * 2);
-+		if (ret < 0)
-+			return ret;
-+		cnt = ((ret & 0xff00) >> 3) | (ret & 0x1f);
-+		if (cnt == 0x1fff)
-+			rpm = 0;
-+		else
-+			rpm = 1350000 / cnt;
-+		*val = rpm;
-+		return 0;
-+	case hwmon_fan_alarm:
-+		ret = nct7904_read_reg(data, BANK_0,
-+					 SMI_STS7_REG + (channel >> 3));
-+		if (ret < 0)
-+			return ret;
-+		*val = (ret >> (channel & 0x07)) & 1;
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -181,8 +231,18 @@ static umode_t nct7904_fan_is_visible(const void *_data, u32 attr, int channel)
- {
- 	const struct nct7904_data *data = _data;
- 
--	if (attr == hwmon_fan_input && data->fanin_mask & (1 << channel))
--		return 0444;
-+	switch (attr) {
-+	case hwmon_fan_input:
-+	case hwmon_fan_alarm:
-+		if (data->fanin_mask & (1 << channel))
-+			return 0444;
-+	case hwmon_fan_min:
-+		if (data->fanin_mask & (1 << channel))
-+			return 0644;
-+	default:
-+		break;
-+	}
-+
- 	return 0;
- }
- 
-@@ -213,6 +273,37 @@ static int nct7904_read_in(struct device *dev, u32 attr, int channel,
- 			volt *= 6; /* 0.006V scale */
- 		*val = volt;
- 		return 0;
-+	case hwmon_in_min:
-+		ret = nct7904_read_reg16(data, BANK_1,
-+					 VSEN1_HV_LL_REG + index * 4);
-+		if (ret < 0)
-+			return ret;
-+		volt = ((ret & 0xff00) >> 5) | (ret & 0x7);
-+		if (index < 14)
-+			volt *= 2; /* 0.002V scale */
-+		else
-+			volt *= 6; /* 0.006V scale */
-+		*val = volt;
-+		return 0;
-+	case hwmon_in_max:
-+		ret = nct7904_read_reg16(data, BANK_1,
-+					 VSEN1_HV_HL_REG + index * 4);
-+		if (ret < 0)
-+			return ret;
-+		volt = ((ret & 0xff00) >> 5) | (ret & 0x7);
-+		if (index < 14)
-+			volt *= 2; /* 0.002V scale */
-+		else
-+			volt *= 6; /* 0.006V scale */
-+		*val = volt;
-+		return 0;
-+	case hwmon_in_alarm:
-+		ret = nct7904_read_reg(data, BANK_0,
-+					 SMI_STS1_REG + (index >> 3));
-+		if (ret < 0)
-+			return ret;
-+		*val = (ret >> (index & 0x07)) & 1;
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -223,9 +314,18 @@ static umode_t nct7904_in_is_visible(const void *_data, u32 attr, int channel)
- 	const struct nct7904_data *data = _data;
- 	int index = nct7904_chan_to_index[channel];
- 
--	if (channel > 0 && attr == hwmon_in_input &&
--	    (data->vsen_mask & BIT(index)))
--		return 0444;
-+	switch (attr) {
-+	case hwmon_in_input:
-+	case hwmon_in_alarm:
-+		if (channel > 0 && (data->vsen_mask & BIT(index)))
-+			return 0444;
-+	case hwmon_in_min:
-+	case hwmon_in_max:
-+		if (channel > 0 && (data->vsen_mask & BIT(index)))
-+			return 0644;
-+	default:
-+		break;
-+	}
- 
- 	return 0;
- }
-@@ -235,36 +335,137 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
- {
- 	struct nct7904_data *data = dev_get_drvdata(dev);
- 	int ret, temp;
-+	unsigned int reg1, reg2, reg3;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
--		if (channel == 0)
-+		if (channel == 4)
- 			ret = nct7904_read_reg16(data, BANK_0, LTD_HV_REG);
-+		else if (channel < 5)
-+			ret = nct7904_read_reg16(data, BANK_0,
-+					TEMP_CH1_HV_REG + channel * 4);
- 		else
- 			ret = nct7904_read_reg16(data, BANK_0,
--					T_CPU1_HV_REG + (channel - 1) * 2);
-+					T_CPU1_HV_REG + ((channel - 5) * 2));
- 		if (ret < 0)
- 			return ret;
- 		temp = ((ret & 0xff00) >> 5) | (ret & 0x7);
- 		*val = sign_extend32(temp, 10) * 125;
- 		return 0;
-+	case hwmon_temp_alarm:
-+		if (channel < 5) {
-+			ret = nct7904_read_reg(data, BANK_0,
-+					SMI_STS1_REG);
-+			if (ret < 0)
-+				return ret;
-+			*val = (ret >> (channel & 0x07)) & 1;
-+		} else {
-+			if ((channel - 5) < 4) {
-+				ret = nct7904_read_reg(data, BANK_0,
-+					SMI_STS7_REG + ((channel - 5) >> 3));
-+				if (ret < 0)
-+					return ret;
-+				*val = (ret >> ((channel - 5) & 0x07)) & 1;
-+			} else {
-+				ret = nct7904_read_reg(data, BANK_0,
-+					SMI_STS8_REG + ((channel - 5) >> 3));
-+				if (ret < 0)
-+					return ret;
-+				*val = (ret >> (((channel - 5) & 0x07) - 4))
-+							& 1;
-+			}
-+		}
-+		return 0;
-+	case hwmon_temp_type:
-+		if (channel < 5) {
-+			if ((data->tcpu_mask >> channel) & 0x01) {
-+				if ((data->temp_mode >> channel) & 0x01)
-+					*val = 3; //TD
-+				else
-+					*val = 4; //TR
-+			} else {
-+				*val = 0;
-+			}
-+		} else {
-+			if (data->enable_dts == 0)
-+				*val = 0;
-+			if ((data->has_dts >> (channel - 5)) & 0x01) {
-+				if (data->enable_dts & 2)
-+					*val = 5; //TSI
-+				else
-+					*val = 6; //PECI
-+			} else {
-+				*val = 0;
-+			}
-+		}
-+		return 0;
-+	case hwmon_temp_max:
-+		reg1 = LTD_HV_HL_REG;
-+		reg2 = TEMP_CH1_C_REG;
-+		reg3 = DTS_T_CPU1_C_REG;
-+		break;
-+	case hwmon_temp_max_hyst:
-+		reg1 = LTD_LV_HL_REG;
-+		reg2 = TEMP_CH1_CH_REG;
-+		reg3 = DTS_T_CPU1_CH_REG;
-+		break;
-+	case hwmon_temp_emergency:
-+		reg1 = LTD_HV_LL_REG;
-+		reg2 = TEMP_CH1_W_REG;
-+		reg3 = DTS_T_CPU1_W_REG;
-+		break;
-+	case hwmon_temp_emergency_hyst:
-+		reg1 = LTD_LV_LL_REG;
-+		reg2 = TEMP_CH1_WH_REG;
-+		reg3 = DTS_T_CPU1_WH_REG;
-+		break;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-+
-+	if (channel == 4)
-+		ret = nct7904_read_reg(data, BANK_1, reg1);
-+	else if (channel < 5)
-+		ret = nct7904_read_reg(data, BANK_1,
-+			reg2 + channel * 8);
-+	else
-+		ret = nct7904_read_reg(data, BANK_1,
-+			reg3 + (channel - 5) * 4);
-+
-+	if (ret < 0)
-+		return ret;
-+	*val = ret * 1000;
-+	return 0;
- }
- 
- static umode_t nct7904_temp_is_visible(const void *_data, u32 attr, int channel)
- {
- 	const struct nct7904_data *data = _data;
- 
--	if (attr == hwmon_temp_input) {
--		if (channel == 0) {
--			if (data->vsen_mask & BIT(17))
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_alarm:
-+	case hwmon_temp_type:
-+		if (channel < 5) {
-+			if (data->tcpu_mask & BIT(channel))
- 				return 0444;
- 		} else {
--			if (data->tcpu_mask & BIT(channel - 1))
-+			if (data->has_dts & BIT(channel - 5))
- 				return 0444;
- 		}
-+	case hwmon_temp_max:
-+	case hwmon_temp_max_hyst:
-+	case hwmon_temp_emergency:
-+	case hwmon_temp_emergency_hyst:
-+		if (channel < 5) {
-+			if (data->tcpu_mask & BIT(channel))
-+				return 0644;
-+		} else {
-+			if (data->has_dts & BIT(channel - 5))
-+				return 0644;
-+		}
-+	default:
-+		break;
- 	}
- 
- 	return 0;
-@@ -295,6 +496,130 @@ static int nct7904_read_pwm(struct device *dev, u32 attr, int channel,
- 	}
- }
- 
-+static int nct7904_write_temp(struct device *dev, u32 attr, int channel,
-+			     long val)
-+{
-+	struct nct7904_data *data = dev_get_drvdata(dev);
-+	int ret, index;
-+	unsigned int reg1, reg2, reg3;
-+
-+	index = nct7904_chan_to_index[channel];
-+	val = clamp_val(val / 1000, -128, 127);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		reg1 = LTD_HV_HL_REG;
-+		reg2 = TEMP_CH1_C_REG;
-+		reg3 = DTS_T_CPU1_C_REG;
-+		break;
-+	case hwmon_temp_max_hyst:
-+		reg1 = LTD_LV_HL_REG;
-+		reg2 = TEMP_CH1_CH_REG;
-+		reg3 = DTS_T_CPU1_CH_REG;
-+		break;
-+	case hwmon_temp_emergency:
-+		reg1 = LTD_HV_LL_REG;
-+		reg2 = TEMP_CH1_W_REG;
-+		reg3 = DTS_T_CPU1_W_REG;
-+		break;
-+	case hwmon_temp_emergency_hyst:
-+		reg1 = LTD_LV_LL_REG;
-+		reg2 = TEMP_CH1_WH_REG;
-+		reg3 = DTS_T_CPU1_WH_REG;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	if (channel == 4)
-+		ret = nct7904_write_reg(data, BANK_1, reg1, val);
-+	else if (channel < 5)
-+		ret = nct7904_write_reg(data, BANK_1,
-+			reg2 + channel * 8, val);
-+	else
-+		ret = nct7904_write_reg(data, BANK_1,
-+			reg3 + (channel - 5) * 4, val);
-+
-+	return ret;
-+}
-+
-+static int nct7904_write_fan(struct device *dev, u32 attr, int channel,
-+			     long val)
-+{
-+	struct nct7904_data *data = dev_get_drvdata(dev);
-+	int ret;
-+	u8 tmp;
-+
-+	switch (attr) {
-+	case hwmon_fan_min:
-+		if (val <= 0)
-+			return 0x1fff;
-+
-+		val = clamp_val((1350000 + (val >> 1)) / val, 1, 0x1fff);
-+		tmp = (val >> 5) & 0xff;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 FANIN1_HV_HL_REG + channel * 2, tmp);
-+
-+		tmp = val & 0x1f;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 FANIN1_LV_HL_REG + channel * 2, tmp);
-+		return ret;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct7904_write_in(struct device *dev, u32 attr, int channel,
-+			     long val)
-+{
-+	struct nct7904_data *data = dev_get_drvdata(dev);
-+	int ret, index;
-+	u8 tmp;
-+
-+	index = nct7904_chan_to_index[channel];
-+
-+	if (index < 14)
-+		val = val/2; /* 0.002V scale */
-+	else
-+		val = val/6; /* 0.006V scale */
-+
-+	val = clamp_val(val, 0, 0x7ff); /* Bit 15 is sign bit */
-+
-+	switch (attr) {
-+	case hwmon_in_min:
-+		tmp = nct7904_read_reg(data, BANK_1,
-+					 VSEN1_LV_LL_REG + index * 4);
-+
-+		tmp &= ~0x7;
-+		tmp |= val & 0x7;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 VSEN1_LV_LL_REG + index * 4, tmp);
-+
-+		tmp = nct7904_read_reg(data, BANK_1,
-+					 VSEN1_HV_LL_REG + index * 4);
-+		tmp = (val >> 3) & 0xff;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 VSEN1_HV_LL_REG + index * 4, tmp);
-+		return ret;
-+	case hwmon_in_max:
-+		tmp = nct7904_read_reg(data, BANK_1,
-+					 VSEN1_LV_HL_REG + index * 4);
-+
-+		tmp &= ~0x7;
-+		tmp |= val & 0x7;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 VSEN1_LV_HL_REG + index * 4, tmp);
-+
-+		tmp = nct7904_read_reg(data, BANK_1,
-+					 VSEN1_HV_HL_REG + index * 4);
-+		tmp = (val >> 3) & 0xff;
-+		ret = nct7904_write_reg(data, BANK_1,
-+					 VSEN1_HV_HL_REG + index * 4, tmp);
-+		return ret;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static int nct7904_write_pwm(struct device *dev, u32 attr, int channel,
- 			     long val)
- {
-@@ -352,8 +677,14 @@ static int nct7904_write(struct device *dev, enum hwmon_sensor_types type,
- 			 u32 attr, int channel, long val)
- {
- 	switch (type) {
-+	case hwmon_in:
-+		return nct7904_write_in(dev, attr, channel, val);
-+	case hwmon_fan:
-+		return nct7904_write_fan(dev, attr, channel, val);
- 	case hwmon_pwm:
- 		return nct7904_write_pwm(dev, attr, channel, val);
-+	case hwmon_temp:
-+		return nct7904_write_temp(dev, attr, channel, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -402,51 +733,91 @@ static int nct7904_detect(struct i2c_client *client,
- 
- static const struct hwmon_channel_info *nct7904_info[] = {
- 	HWMON_CHANNEL_INFO(in,
--			   HWMON_I_INPUT, /* dummy, skipped in is_visible */
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT,
--			   HWMON_I_INPUT),
-+			   /* dummy, skipped in is_visible */
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM,
-+			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-+			   HWMON_I_ALARM),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT,
--			   HWMON_F_INPUT),
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
-+			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT,
--			   HWMON_T_INPUT),
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST,
-+			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
-+			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_EMERGENCY |
-+			   HWMON_T_EMERGENCY_HYST),
- 	NULL
- };
- 
-@@ -469,6 +840,7 @@ static int nct7904_probe(struct i2c_client *client,
- 	struct device *dev = &client->dev;
- 	int ret, i;
- 	u32 mask;
-+	u8 val, bit;
- 
- 	data = devm_kzalloc(dev, sizeof(struct nct7904_data), GFP_KERNEL);
- 	if (!data)
-@@ -502,10 +874,59 @@ static int nct7904_probe(struct i2c_client *client,
- 	data->vsen_mask = mask;
- 
- 	/* CPU_TEMP attributes */
--	ret = nct7904_read_reg16(data, BANK_0, DTS_T_CTRL0_REG);
--	if (ret < 0)
--		return ret;
--	data->tcpu_mask = ((ret >> 8) & 0xf) | ((ret & 0xf) << 4);
-+	ret = nct7904_read_reg(data, BANK_0, VT_ADC_CTRL0_REG);
-+
-+	if ((ret & 0x6) == 0x6)
-+		data->tcpu_mask |= 1; //TR1
-+	if ((ret & 0x18) == 0x18)
-+		data->tcpu_mask |= 2; //TR2
-+	if ((ret & 0x20) == 0x20)
-+		data->tcpu_mask |= 4; //TR3
-+	if ((ret & 0x80) == 0x80)
-+		data->tcpu_mask |= 8; //TR4
-+
-+	/* LTD */
-+	ret = nct7904_read_reg(data, BANK_0, VT_ADC_CTRL2_REG);
-+	if ((ret & 0x02) == 0x02)
-+		data->tcpu_mask |= 0x10;
-+
-+	/* Multi-Function detecting for Volt and TR/TD */
-+	ret = nct7904_read_reg(data, BANK_0, VT_ADC_MD_REG);
-+
-+	data->temp_mode = 0;
-+	for (i = 0; i < 4; i++) {
-+		val = (ret & (0x03 << i)) >> (i * 2);
-+		bit = (1 << i);
-+		if (val == 0)
-+			data->tcpu_mask &= ~bit;
-+		else if (val == 0x1 || val == 0x2)
-+			data->temp_mode |= bit;
-+	}
-+
-+	/* PECI */
-+	ret = nct7904_read_reg(data, BANK_2, PFE_REG);
-+	if (ret & 0x80) {
-+		data->enable_dts = 1; //Enable DTS & PECI
-+	} else {
-+		ret = nct7904_read_reg(data, BANK_2, TSI_CTRL_REG);
-+		if (ret & 0x80)
-+			data->enable_dts = 0x3; //Enable DTS & TSI
-+		else
-+			data->enable_dts = 0;
-+	}
-+
-+	/* Check DTS enable status */
-+	if (data->enable_dts == 0) {
-+		data->has_dts = 0;
-+	} else {
-+		data->has_dts =
-+			nct7904_read_reg(data, BANK_0, DTS_T_CTRL0_REG) & 0xF;
-+		if (data->enable_dts & 0x2) {
-+			data->has_dts |=
-+			(nct7904_read_reg(data, BANK_0, DTS_T_CTRL1_REG) & 0xF)
-+								<< 4;
-+		}
-+	}
- 
- 	for (i = 0; i < FANCTL_MAX; i++) {
- 		ret = nct7904_read_reg(data, BANK_3, FANCTL1_FMR_REG + i);
--- 
-2.17.1
-
+> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> ---
+>  MAINTAINERS                           |   8 +
+>  drivers/hwmon/Kconfig                 |  10 +
+>  drivers/hwmon/Makefile                |   1 +
+>  drivers/hwmon/ads1000.c               | 320 ++++++++++++++++++++++++++
+>  include/linux/platform_data/ads1000.h |  20 ++
+>  5 files changed, 359 insertions(+)
+>  create mode 100644 drivers/hwmon/ads1000.c
+>  create mode 100644 include/linux/platform_data/ads1000.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ce573aaa04df..5c3a8107ef1a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -517,6 +517,14 @@ W:	http://ez.analog.com/community/linux-device-drivers
+>  S:	Supported
+>  F:	drivers/video/backlight/adp8860_bl.c
+>  
+> +ADS1000 HARDWARE MONITOR DRIVER
+> +M:	Serge Semin <fancer.lancer@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/ads1000.rst
+> +F:	drivers/hwmon/ads1000.c
+> +F:	include/linux/platform_data/ads1000.h
+> +
+>  ADS1015 HARDWARE MONITOR DRIVER
+>  M:	Dirk Eibach <eibach@gdsys.de>
+>  L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 1915a18b537b..a1220cc48f2f 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1569,6 +1569,16 @@ config SENSORS_ADC128D818
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called adc128d818.
+>  
+> +config SENSORS_ADS1000
+> +	tristate "Texas Instruments ADS1000"
+> +	depends on I2C
+> +	help
+> +	  If you say yes here you get support for Texas Instruments
+> +	  ADS1000/ADS1100 12-16-bit single channel ADC device.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called ads1000.
+> +
+>  config SENSORS_ADS1015
+>  	tristate "Texas Instruments ADS1015"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 8db472ea04f0..2cd82f6c651e 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -35,6 +35,7 @@ obj-$(CONFIG_SENSORS_ADM1026)	+= adm1026.o
+>  obj-$(CONFIG_SENSORS_ADM1029)	+= adm1029.o
+>  obj-$(CONFIG_SENSORS_ADM1031)	+= adm1031.o
+>  obj-$(CONFIG_SENSORS_ADM9240)	+= adm9240.o
+> +obj-$(CONFIG_SENSORS_ADS1000)	+= ads1000.o
+>  obj-$(CONFIG_SENSORS_ADS1015)	+= ads1015.o
+>  obj-$(CONFIG_SENSORS_ADS7828)	+= ads7828.o
+>  obj-$(CONFIG_SENSORS_ADS7871)	+= ads7871.o
+> diff --git a/drivers/hwmon/ads1000.c b/drivers/hwmon/ads1000.c
+> new file mode 100644
+> index 000000000000..a88b738f56bd
+> --- /dev/null
+> +++ b/drivers/hwmon/ads1000.c
+> @@ -0,0 +1,320 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for ADS1000/ADS1100 12-16-bit ADC
+> + *
+> + * Copyright (C) 2019 T-platforms JSC (fancer.lancer@gmail.com)
+> + *
+> + * Based on the ads1015 driver by Dirk Eibach.
+> + *
+> + * Datasheet available at: http://focus.ti.com/lit/ds/symlink/ads1000.pdf
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/slab.h>
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/err.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_data/ads1000.h>
+> +
+> +/* Data rates scale table */
+> +static const unsigned int scale_table[4] = {
+> +	2048, 8192, 16384, 32768
+> +};
+> +
+> +/* Minimal data rates in samples per second */
+> +static const unsigned int data_rate_table[4] = {
+> +	100, 25, 12, 5
+> +};
+> +
+> +#define ADS1000_DEFAULT_PGA 0
+> +#define ADS1000_DEFAULT_DATA_RATE 0
+> +#define ADS1000_DEFAULT_R1_DIVIDER 0
+> +#define ADS1000_DEFAULT_R2_DIVIDER 0
+> +
+> +enum ads1000_chips {
+> +	ads1000,
+> +	ads1100,
+> +};
+> +
+> +struct ads1000 {
+> +	struct device *hwmon_dev;
+> +	struct mutex update_lock;
+> +	struct i2c_client *client;
+> +	struct ads1000_platform_data data;
+> +	enum ads1000_chips id;
+> +};
+> +
+> +static inline int ads1000_enable_vdd(struct ads1000 *priv)
+> +{
+> +	return regulator_enable(priv->data.vdd);
+> +}
+> +
+> +static inline int ads1000_get_vdd(struct ads1000 *priv)
+> +{
+> +	return regulator_get_voltage(priv->data.vdd);
+> +}
+> +
+> +static int ads1000_read_adc(struct ads1000 *priv)
+> +{
+> +	struct i2c_client *client = priv->client;
+> +	unsigned int delay_ms;
+> +	u8 data[3] = {0};
+> +	int res;
+> +
+> +	mutex_lock(&priv->update_lock);
+> +
+> +	delay_ms = DIV_ROUND_UP(1000, data_rate_table[priv->data.data_rate]);
+> +
+> +	/* setup and start single conversion */
+> +	data[2] |= (1 << 7) | (1 << 4);
+> +	data[2] |= priv->data.pga;
+> +	data[2] |= priv->data.data_rate << 2;
+> +
+> +	res = i2c_master_send(client, &data[2], 1);
+> +	if (res < 0)
+> +		goto err_unlock;
+> +
+> +	/* wait until conversion finished */
+> +	msleep(delay_ms);
+> +	res = i2c_master_recv(client, data, 3);
+> +	if (res < 0)
+> +		goto err_unlock;
+> +
+> +	if (data[2] & (1 << 7)) {
+> +		res = -EIO;
+> +		goto err_unlock;
+> +	}
+> +
+> +	res = ((u16)data[0] << 8) | data[1];
+> +
+> +err_unlock:
+> +	mutex_unlock(&priv->update_lock);
+> +
+> +	return res;
+> +}
+> +
+> +static int ads1000_reg_to_mv(struct ads1000 *priv, s16 reg)
+> +{
+> +	unsigned int *divider = priv->data.divider;
+> +	int voltage = ads1000_get_vdd(priv);
+> +	int gain = 1 << priv->data.pga;
+> +	int c = 0;
+> +
+> +	voltage = reg*DIV_ROUND_CLOSEST(voltage, 1000);
+> +	gain = gain*scale_table[priv->data.data_rate];
+> +	voltage = DIV_ROUND_CLOSEST(voltage, gain);
+> +
+> +	if (divider[0] && divider[1]) {
+> +		c = divider[0]*voltage;
+> +		c = DIV_ROUND_CLOSEST(c, (int)divider[1]);
+> +	}
+> +
+> +	return voltage + c;
+> +}
+> +
+> +static ssize_t show_in(struct device *dev, struct device_attribute *da,
+> +		       char *buf)
+> +{
+> +	struct ads1000 *priv = dev_get_drvdata(dev);
+> +	int res;
+> +
+> +	res = ads1000_read_adc(priv);
+> +	if (res < 0)
+> +		return res;
+> +
+> +	return sprintf(buf, "%d\n", ads1000_reg_to_mv(priv, res));
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(in0_input, 0444, show_in, NULL, 0);
+> +
+> +static struct attribute *ads1000_attrs[] = {
+> +	&sensor_dev_attr_in0_input.dev_attr.attr,
+> +	NULL
+> +};
+> +ATTRIBUTE_GROUPS(ads1000);
+> +
+> +static struct ads1000 *ads1000_create_priv(struct i2c_client *client,
+> +					   const struct i2c_device_id *id)
+> +{
+> +	struct ads1000 *priv;
+> +
+> +	priv = devm_kzalloc(&client->dev, sizeof(struct ads1000),
+> +			    GFP_KERNEL);
+> +	if (!priv)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	if (client->dev.of_node)
+> +		priv->id = (enum ads1000_chips)
+> +			of_device_get_match_data(&client->dev);
+> +	else
+> +		priv->id = id->driver_data;
+> +
+> +	i2c_set_clientdata(client, priv);
+> +	priv->client = client;
+> +	mutex_init(&priv->update_lock);
+> +
+> +	return priv;
+> +}
+> +
+> +#ifdef CONFIG_OF
+> +static int ads1000_get_config_of(struct ads1000 *priv)
+> +{
+> +	struct i2c_client *client = priv->client;
+> +	struct device_node *node = client->dev.of_node;
+> +	u32 divider[2];
+> +	u32 val;
+> +
+> +	if (!node)
+> +		return -EINVAL;
+> +
+> +	if (!of_property_read_u32(node, "ti,gain", &val))
+> +		priv->data.pga = val;
+> +
+> +	if (!of_property_read_u32(node, "ti,datarate", &val))
+> +		priv->data.data_rate = val;
+> +
+> +	if (!of_property_read_u32_array(node, "ti,voltage-divider",
+> +					divider, 2)) {
+> +		priv->data.divider[0] = divider[0];
+> +		priv->data.divider[1] = divider[1];
+> +	}
+> +
+> +	priv->data.vdd = devm_regulator_get(&client->dev, "vdd");
+> +	if (IS_ERR(priv->data.vdd))
+> +		return PTR_ERR(priv->data.vdd);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static int ads1000_get_config(struct ads1000 *priv)
+> +{
+> +	struct i2c_client *client = priv->client;
+> +	struct ads1000_platform_data *pdata = dev_get_platdata(&client->dev);
+> +
+> +	priv->data.pga = ADS1000_DEFAULT_PGA;
+> +	priv->data.data_rate = ADS1000_DEFAULT_DATA_RATE;
+> +	priv->data.divider[0] = ADS1000_DEFAULT_R1_DIVIDER;
+> +	priv->data.divider[1] = ADS1000_DEFAULT_R2_DIVIDER;
+> +
+> +	/* prefer platform data */
+> +	if (pdata) {
+> +		memcpy(&priv->data, pdata, sizeof(priv->data));
+> +	} else {
+> +#ifdef CONFIG_OF
+> +		int ret;
+> +
+> +		ret = ads1000_get_config_of(priv);
+> +		if (ret)
+> +			return ret;
+> +#endif
+> +	}
+> +
+> +	if (!priv->data.vdd) {
+> +		dev_err(&client->dev, "No VDD regulator\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (priv->data.pga > 4) {
+> +		dev_err(&client->dev, "Invalid gain, using default\n");
+> +		priv->data.pga = ADS1000_DEFAULT_PGA;
+> +	}
+> +
+> +	if (priv->data.data_rate > 4) {
+> +		dev_err(&client->dev, "Invalid datarate, using default\n");
+> +		priv->data.data_rate = ADS1000_DEFAULT_DATA_RATE;
+> +	}
+> +
+> +	if (priv->id == ads1000 && priv->data.data_rate != 0) {
+> +		dev_warn(&client->dev, "ADC data rate can be 128SPS only\n");
+> +		priv->data.data_rate = 0;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ads1000_set_config(struct ads1000 *priv)
+> +{
+> +	u8 data = 0;
+> +	int ret;
+> +
+> +	/* disable continuous conversion */
+> +	data |= (1 << 4);
+> +	data |= priv->data.pga;
+> +	data |= priv->data.data_rate << 2;
+> +
+> +	ret = i2c_master_send(priv->client, &data, 1);
+> +
+> +	return ret < 0 ? ret : 0;
+> +}
+> +
+> +static int ads1000_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+> +{
+> +	struct ads1000 *priv;
+> +	int ret;
+> +
+> +	priv = ads1000_create_priv(client, id);
+> +	if (IS_ERR(priv))
+> +		return PTR_ERR(priv);
+> +
+> +	ret = ads1000_get_config(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ads1000_enable_vdd(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ads1000_set_config(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
+> +				client->name, priv, ads1000_groups);
+> +	if (IS_ERR(priv->hwmon_dev))
+> +		return PTR_ERR(priv->hwmon_dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id ads1000_id[] = {
+> +	{ "ads1000",  ads1000},
+> +	{ "ads1100",  ads1100},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ads1000_id);
+> +
+> +static const struct of_device_id ads1000_of_match[] = {
+> +	{
+> +		.compatible = "ti,ads1000",
+> +		.data = (void *)ads1000
+> +	},
+> +	{
+> +		.compatible = "ti,ads1100",
+> +		.data = (void *)ads1100
+> +	},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ads1000_of_match);
+> +
+> +static struct i2c_driver ads1000_driver = {
+> +	.driver = {
+> +		.name = "ads1000",
+> +		.of_match_table = of_match_ptr(ads1000_of_match),
+> +	},
+> +	.probe = ads1000_probe,
+> +	.id_table = ads1000_id,
+> +};
+> +module_i2c_driver(ads1000_driver);
+> +
+> +MODULE_AUTHOR("Serge Semin <fancer.lancer@gmail.com>");
+> +MODULE_DESCRIPTION("ADS1000 driver");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/platform_data/ads1000.h b/include/linux/platform_data/ads1000.h
+> new file mode 100644
+> index 000000000000..979670483537
+> --- /dev/null
+> +++ b/include/linux/platform_data/ads1000.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Platform Data for ADS1000/ADS1100 12-16-bit ADC
+> + *
+> + * Copyright (C) 2019 T-platforms JSC (fancer.lancer@gmail.com)
+> + */
+> +
+> +#ifndef LINUX_ADS1000_H
+> +#define LINUX_ADS1000_H
+> +
+> +#include <linux/regulator/consumer.h>
+> +
+> +struct ads1000_platform_data {
+> +	unsigned int pga;
+> +	unsigned int data_rate;
+> +	struct regulator *vdd;
+> +	unsigned int divider[2];
+> +};
+> +
+> +#endif /* LINUX_ADS1000_H */
