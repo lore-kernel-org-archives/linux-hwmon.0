@@ -2,87 +2,100 @@ Return-Path: <SRS0=z+S4=T7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CACA1C28CC3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 15:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB943C04AB6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 15:15:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A507626B5E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 15:10:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BED9D26B6E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 15:15:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbfEaPKP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 31 May 2019 11:10:15 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:57807 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726418AbfEaPKP (ORCPT
+        id S1726687AbfEaPPi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 31 May 2019 11:15:38 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45804 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726418AbfEaPPi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 31 May 2019 11:10:15 -0400
-Received: from orion.localdomain ([77.7.63.28]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MHoZM-1hLEQr02bu-00ExVB; Fri, 31 May 2019 17:09:11 +0200
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
+        Fri, 31 May 2019 11:15:38 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VFDiIG046714
+        for <linux-hwmon@vger.kernel.org>; Fri, 31 May 2019 11:15:37 -0400
+Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2su6k6rfbw-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Fri, 31 May 2019 11:15:37 -0400
+Received: from localhost
+        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-hwmon@vger.kernel.org> from <jejb@linux.ibm.com>;
+        Fri, 31 May 2019 16:15:36 +0100
+Received: from b03cxnp07029.gho.boulder.ibm.com (9.17.130.16)
+        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 31 May 2019 16:15:31 +0100
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4VFFUN811665728
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 May 2019 15:15:30 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A89616A047;
+        Fri, 31 May 2019 15:15:30 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F36C56A051;
+        Fri, 31 May 2019 15:15:25 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.204.144])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 31 May 2019 15:15:25 +0000 (GMT)
+Subject: Re: clean some unneeded #ifdef MODULE
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, khalid@gonehiking.org, jejb@linux.ibm.com,
+        linux@roeck-us.net, khalid@gonehiking.org,
         martin.petersen@oracle.com, aacraid@microsemi.com,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 1/3] drivers: cpufreq: cpufreq-nforce2: remove unnecessary #ifdef MODULE
-Date:   Fri, 31 May 2019 17:09:02 +0200
-Message-Id: <1559315344-10384-2-git-send-email-info@metux.net>
-X-Mailer: git-send-email 1.9.1
+Date:   Fri, 31 May 2019 18:15:24 +0300
 In-Reply-To: <1559315344-10384-1-git-send-email-info@metux.net>
 References: <1559315344-10384-1-git-send-email-info@metux.net>
-X-Provags-ID: V03:K1:AJheLpqoCJKbh6Psp+1Aqo/PyA4RuHOgwjoUpGVJuTXuR6QfiD4
- gt34TkkfESTrbAeNrt1ni2kUVHZ6MDEnErBlyN638nhUJDyM18ZaBgONmUM7O3HgrhBrQm7
- ihsmaC7fHGMHq8L2Sgi74UuUcAi4N0QzjP+mBe1H3SVdjiNHb8oHOKrJetvWIJYvHgNktrD
- daZE8Tab/M1BWb2Man7uQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qHX4061IyVQ=:hCuUIvpC9QTPluiqGmqw/+
- uRykCwCRpIe0OdB5gTV9n2PrNOtMjomKVLyqVPITGGAMxWeNoiPpi1l8RkMY1BLRha0b1f8n+
- wZi/7zE7tTbAYAPLq9hGToxizzx3EpVQ6LoOIsafPMbkb6Ra0ZNmZjdX6oxPuXnLOOvNv/w5W
- MZNgf4bcYTSj/vSYVS5JmAoEthTBc2jv8vcHD3znGnHHcTHAAVeLDEOv9YCTFJHv4OvKaddVd
- Z5YtbsuREczNcvLqpHLmy673pK4tYKwLpI0FP7B7RtHHaaYEvrNg5vIXsAVZLfofco3E5DKh4
- IwQMvqSQut32S+EA//6IYrt1Yj0Sg7I8kevLUHiHtPGAPgyu7qyP6UU0juNh7ss3Y90rt9q6P
- YQhRAVpbSAhJ/uIMQZPxOpDrQXb2E8WYRTd4uNK2qwCdazVKjt2yhayA+3qKLN10pgYTKc9eh
- 9b9cSGvxbAB7XTro5aWU6AU3TE43vLpT+21epTkMWG1+0m7VEp/8pjnpE7XV5smlfjftbmJ7b
- z+vgz9tMZJELVXgw2jaNtU0bgw9ZnW10/0BH/+bgYI0bsWkEoCtCA3A/uQgMUYTNDZCkflqp0
- Cp7ZwJEvNdK001VE7Yun8GTLxQ2ZT/UxTWMpOo/z+nEjUbZMtA+KxjQjHz6s9TWDOgKtosuAn
- vzw3QG2zdh95eC9HAJ15vBNAQ+nt9uoFqOUCMut+qeks6+gB4M4DpdI8AUtlCn6T9+CV5nGSl
- 6Y82LiOO8CZ6DVsAnHKTAVz6xyMaJ9l3r5XjDw==
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19053115-0036-0000-0000-00000AC5467E
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011191; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01211268; UDB=6.00636449; IPR=6.00992305;
+ MB=3.00027133; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-31 15:15:34
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19053115-0037-0000-0000-00004C032C0B
+Message-Id: <1559315724.2878.7.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-31_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=943 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905310095
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
-so the extra check here is not necessary.
+On Fri, 2019-05-31 at 17:09 +0200, Enrico Weigelt, metux IT consult
+wrote:
+> Hi folks,
+> 
+> here're some patches that clean up uncessary cases of #ifdef MODULE.
+> These ifdef's just exlude MODULE_DEVICE_TABLE's when the kernel is
+> built w/o module support. As MODULE_DEVICE_TABLE() macro already
+> checks for that, these extra #ifdef's shouldn't be necessary.
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
----
- drivers/cpufreq/cpufreq-nforce2.c | 2 --
- 1 file changed, 2 deletions(-)
+Isn't the problem the #ifdefs are trying to solve a complaint about an
+unused variable in the non-module case? if so, is that fixed some other
+way?
 
-diff --git a/drivers/cpufreq/cpufreq-nforce2.c b/drivers/cpufreq/cpufreq-nforce2.c
-index 33c309a..b8a6c9e 100644
---- a/drivers/cpufreq/cpufreq-nforce2.c
-+++ b/drivers/cpufreq/cpufreq-nforce2.c
-@@ -374,13 +374,11 @@ static int nforce2_cpu_exit(struct cpufreq_policy *policy)
- 	.exit = nforce2_cpu_exit,
- };
- 
--#ifdef MODULE
- static const struct pci_device_id nforce2_ids[] = {
- 	{ PCI_VENDOR_ID_NVIDIA, PCI_DEVICE_ID_NVIDIA_NFORCE2 },
- 	{}
- };
- MODULE_DEVICE_TABLE(pci, nforce2_ids);
--#endif
- 
- /**
-  * nforce2_detect_chipset - detect the Southbridge which contains FSB PLL logic
--- 
-1.9.1
+James
 
