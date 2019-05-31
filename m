@@ -2,155 +2,190 @@ Return-Path: <SRS0=z+S4=T7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A883C04AB6
-	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 10:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCC9C04AB6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 10:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2EB4F2075B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 10:12:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="hAeTSCig"
+	by mail.kernel.org (Postfix) with ESMTP id CD6DB218C3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 31 May 2019 10:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbfEaKMj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 31 May 2019 06:12:39 -0400
-Received: from mail-eopbgr140137.outbound.protection.outlook.com ([40.107.14.137]:39399
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726002AbfEaKMi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 31 May 2019 06:12:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pqeTImFFf4i/bc1dGTvqHx46bQCjhNR+wAJfGNK5vM8=;
- b=hAeTSCig4/icri35goTlfxvJapiXdSdvmHuLJT4tCLcacjJNMRFzFtardWXv62iRBNiQCYavEQG+oPQbNbIFdEsTsvNSguM6Llj7yVPWi6P4+USD/BZF4aeY9uR5j0ZnMb3apGsfGcKndtFx1sDJ+EK8rcpf52tQwkwtT/XCe1M=
-Received: from DB6PR07MB3336.eurprd07.prod.outlook.com (10.170.223.150) by
- DB6PR07MB3206.eurprd07.prod.outlook.com (10.170.220.27) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.15; Fri, 31 May 2019 10:12:35 +0000
-Received: from DB6PR07MB3336.eurprd07.prod.outlook.com
- ([fe80::8c1c:dbc5:e07b:2cf9]) by DB6PR07MB3336.eurprd07.prod.outlook.com
- ([fe80::8c1c:dbc5:e07b:2cf9%6]) with mapi id 15.20.1943.016; Fri, 31 May 2019
- 10:12:35 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: pmbus: protect read-modify-write with lock
-Thread-Topic: [PATCH] hwmon: pmbus: protect read-modify-write with lock
-Thread-Index: AQHVFwwdZFrZN6Tas0+vUHeunvtgIKaFBHOA
-Date:   Fri, 31 May 2019 10:12:35 +0000
-Message-ID: <20190531091531.GA10821@localhost.localdomain>
-References: <20190530172120.GA22145@roeck-us.net>
-In-Reply-To: <20190530172120.GA22145@roeck-us.net>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0341.eurprd05.prod.outlook.com
- (2603:10a6:7:92::36) To DB6PR07MB3336.eurprd07.prod.outlook.com
- (2603:10a6:6:1f::22)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.32.190]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b250ead7-b3c4-4b83-0781-08d6e5b08056
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB6PR07MB3206;
-x-ms-traffictypediagnostic: DB6PR07MB3206:
-x-microsoft-antispam-prvs: <DB6PR07MB320665261FBBEE38E180F949EF190@DB6PR07MB3206.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 00540983E2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(346002)(39860400002)(376002)(136003)(189003)(199004)(1076003)(486006)(8676002)(316002)(9686003)(5660300002)(6512007)(81166006)(508600001)(33656002)(4326008)(52116002)(81156014)(66066001)(476003)(86362001)(11346002)(14454004)(61506002)(99286004)(305945005)(446003)(54906003)(7736002)(8936002)(6246003)(186003)(76176011)(73956011)(6436002)(66946007)(386003)(229853002)(6486002)(66556008)(6116002)(6916009)(26005)(64756008)(2906002)(14444005)(25786009)(71200400001)(6506007)(53936002)(68736007)(256004)(66476007)(102836004)(66446008)(71190400001)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:DB6PR07MB3206;H:DB6PR07MB3336.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: VUknB35yhhWsFzIcRTJftEpAv5tky6Jc5AVbzjAgjMOsyePVk9fVN7whMKoIHO90BuhgiPLiaoqdj8TNjB1CqvoGBPJO5vsxz6rHXBmobdFWygy3f1PPwSINRi+Y7d4ucw9SSfYw8ChqAixRrmRQ5DKuqs3jRLBsJDNy7OK+7bYWPL+P6m8pJdh2dZCf+lsIY3drV8S57AKO8NX8LKvE6EgTqGnJm1nPNJvJg50a9yRhpMxLJ+rAS78ytCferWRhOeNXlNPpvLxjSevCKgM0ij7xpB1EjLwQEikEjN2DEKOCuEVTFb6mugj2Isg9Tu7snbxmTIrjdb2wLhoJ3oA8AT9++md4rwrPaqbTFRUwh+YuWPIcYtIwnhAC6F9RIr5ujjC+mPhzknQjTUnC2C7xleHGwtd4Mm/mqkXjx5Ay4jI=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <624C1B792687DF42A750D67C4D778AD3@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726240AbfEaKVF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 31 May 2019 06:21:05 -0400
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:14526 "EHLO
+        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfEaKVF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 31 May 2019 06:21:05 -0400
+Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Td81b886de1ac1401c8e60@ACLMS3.advantech.com.tw>;
+ Fri, 31 May 2019 18:21:01 +0800
+From:   <Amy.Shih@advantech.com.tw>
+To:     <she90122@gmail.com>
+CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <jia.sui@advantech.com.cn>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hwmon: (nct7904) Fix the incorrect value of tcpu_mask in nct7904_data struct.
+Date:   Fri, 31 May 2019 10:20:47 +0000
+Message-ID: <20190531102048.28691-1-Amy.Shih@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b250ead7-b3c4-4b83-0781-08d6e5b08056
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2019 10:12:35.1799
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR07MB3206
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.82]
+X-ClientProxiedBy: taipei09.ADVANTECH.CORP (172.20.0.236) To
+ taipei08.ADVANTECH.CORP (172.20.0.235)
+X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, May 30, 2019 at 10:21:20AM -0700, Guenter Roeck wrote:
->Hi,
->
->On Thu, May 30, 2019 at 06:45:48AM +0000, Adamski, Krzysztof (Nokia - PL/W=
-roclaw) wrote:
->> The operation done in the pmbus_update_fan() function is a
->> read-modify-write operation but it lacks any kind of lock protection
->> which may cause problems if run more than once simultaneously. This
->> patch uses an existing update_lock mutex to fix this problem.
->>
->> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> ---
->>
->> I'm resending this patch to proper recipients this time. Sorry if the
->> previous submission confused anybody.
->>
->>  drivers/hwmon/pmbus/pmbus_core.c | 11 ++++++++---
->>  1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbu=
-s_core.c
->> index ef7ee90ee785..94adbede7912 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -268,6 +268,7 @@ int pmbus_update_fan(struct i2c_client *client, int =
-page, int id,
->>  	int rv;
->>  	u8 to;
->>
->> +	mutex_lock(&data->update_lock);
->>  	from =3D pmbus_read_byte_data(client, page,
->>  				    pmbus_fan_config_registers[id]);
->>  	if (from < 0)
->> @@ -278,11 +279,15 @@ int pmbus_update_fan(struct i2c_client *client, in=
-t page, int id,
->>  		rv =3D pmbus_write_byte_data(client, page,
->>  					   pmbus_fan_config_registers[id], to);
->>  		if (rv < 0)
->> -			return rv;
->> +			goto out;
->>  	}
->>
->> -	return _pmbus_write_word_data(client, page,
->> -				      pmbus_fan_command_registers[id], command);
->> +	rv =3D _pmbus_write_word_data(client, page,
->> +				    pmbus_fan_command_registers[id], command);
->> +
->> +out:
->> +	mutex_lock(&data->update_lock);
->
->Should be mutex_unlock(), meaning you have not tested this ;-).
->
->Either case, I think this is unnecessary. The function is (or should be)
->always called with the lock already taken (ie with pmbus_set_sensor()
->in the call path). If not, we would need a locked and an unlocked version
->of this function to avoid lock recursion.
+From: "amy.shih" <amy.shih@advantech.com.tw>
 
-You've got me :) I did not test that as I do not have a workflow using
-this. I just stumbled opon this when looking at the code related to my
-other patches. So it was more like a - "hey, shouldn't there be a lock
-here?". But I was wrong, thanks.
+Detect the multi-function of voltage, thermal diode and thermistor
+from register VT_ADC_MD_REG to set value of tcpu_mask in nct7904_data
+struct, set temp[1-5]_input the input values TEMP_CH1~4 and LTD of
+temperature. Set temp[6~13]_input the input values of DTS temperature
+that correspond to sensors TCPU1~8.
 
-Krzysztof
+Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+---
+ drivers/hwmon/nct7904.c | 72 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 63 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index 04516789b070..6a74df6841f0 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -4,6 +4,9 @@
+  * Copyright (c) 2015 Kontron
+  * Author: Vadim V. Vlasov <vvlasov@dev.rtsoft.ru>
+  *
++ * Copyright (c) 2019 Advantech
++ * Author: Amy.Shih <amy.shih@advantech.com.tw>
++ *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+@@ -59,6 +62,8 @@
+ #define T_CPU1_HV_REG		0xA0	/* Bank 0; 2 regs (HV/LV) per sensor */
+ 
+ #define PRTS_REG		0x03	/* Bank 2 */
++#define PFE_REG			0x00	/* Bank 2; PECI Function Enable */
++#define TSI_CTRL_REG		0x50	/* Bank 2; TSI Control Register */
+ #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
+ #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
+ 
+@@ -74,6 +79,8 @@ struct nct7904_data {
+ 	u32 vsen_mask;
+ 	u32 tcpu_mask;
+ 	u8 fan_mode[FANCTL_MAX];
++	u8 enable_dts;
++	u8 has_dts;
+ };
+ 
+ /* Access functions */
+@@ -238,11 +245,15 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+ 
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+-		if (channel == 0)
++		if (channel == 4)
+ 			ret = nct7904_read_reg16(data, BANK_0, LTD_HV_REG);
++		else if (channel < 5)
++			ret = nct7904_read_reg16(data, BANK_0,
++						 TEMP_CH1_HV_REG + channel * 4);
+ 		else
+ 			ret = nct7904_read_reg16(data, BANK_0,
+-					T_CPU1_HV_REG + (channel - 1) * 2);
++						 T_CPU1_HV_REG + (channel - 5)
++						 * 2);
+ 		if (ret < 0)
+ 			return ret;
+ 		temp = ((ret & 0xff00) >> 5) | (ret & 0x7);
+@@ -258,11 +269,11 @@ static umode_t nct7904_temp_is_visible(const void *_data, u32 attr, int channel)
+ 	const struct nct7904_data *data = _data;
+ 
+ 	if (attr == hwmon_temp_input) {
+-		if (channel == 0) {
+-			if (data->vsen_mask & BIT(17))
++		if (channel < 5) {
++			if (data->tcpu_mask & BIT(channel))
+ 				return 0444;
+ 		} else {
+-			if (data->tcpu_mask & BIT(channel - 1))
++			if (data->has_dts & BIT(channel - 5))
+ 				return 0444;
+ 		}
+ 	}
+@@ -469,6 +480,7 @@ static int nct7904_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	int ret, i;
+ 	u32 mask;
++	u8 val, bit;
+ 
+ 	data = devm_kzalloc(dev, sizeof(struct nct7904_data), GFP_KERNEL);
+ 	if (!data)
+@@ -502,10 +514,52 @@ static int nct7904_probe(struct i2c_client *client,
+ 	data->vsen_mask = mask;
+ 
+ 	/* CPU_TEMP attributes */
+-	ret = nct7904_read_reg16(data, BANK_0, DTS_T_CTRL0_REG);
+-	if (ret < 0)
+-		return ret;
+-	data->tcpu_mask = ((ret >> 8) & 0xf) | ((ret & 0xf) << 4);
++	ret = nct7904_read_reg(data, BANK_0, VT_ADC_CTRL0_REG);
++
++	if ((ret & 0x6) == 0x6)
++		data->tcpu_mask |= 1; /* TR1 */
++	if ((ret & 0x18) == 0x18)
++		data->tcpu_mask |= 2; /* TR2 */
++	if ((ret & 0x20) == 0x20)
++		data->tcpu_mask |= 4; /* TR3 */
++	if ((ret & 0x80) == 0x80)
++		data->tcpu_mask |= 8; /* TR4 */
++
++	/* LTD */
++	ret = nct7904_read_reg(data, BANK_0, VT_ADC_CTRL2_REG);
++	if ((ret & 0x02) == 0x02)
++		data->tcpu_mask |= 0x10;
++
++	/* Multi-Function detecting for Volt and TR/TD */
++	ret = nct7904_read_reg(data, BANK_0, VT_ADC_MD_REG);
++
++	for (i = 0; i < 4; i++) {
++		val = (ret & (0x03 << i)) >> (i * 2);
++		bit = (1 << i);
++		if (val == 0)
++			data->tcpu_mask &= ~bit;
++	}
++
++	/* PECI */
++	ret = nct7904_read_reg(data, BANK_2, PFE_REG);
++	if (ret & 0x80) {
++		data->enable_dts = 1; //Enable DTS & PECI
++	} else {
++		ret = nct7904_read_reg(data, BANK_2, TSI_CTRL_REG);
++		if (ret & 0x80)
++			data->enable_dts = 0x3; //Enable DTS & TSI
++	}
++
++	/* Check DTS enable status */
++	if (data->enable_dts) {
++		data->has_dts =
++			nct7904_read_reg(data, BANK_0, DTS_T_CTRL0_REG) & 0xF;
++		if (data->enable_dts & 0x2) {
++			data->has_dts |=
++			(nct7904_read_reg(data, BANK_0, DTS_T_CTRL1_REG) & 0xF)
++								<< 4;
++		}
++	}
+ 
+ 	for (i = 0; i < FANCTL_MAX; i++) {
+ 		ret = nct7904_read_reg(data, BANK_3, FANCTL1_FMR_REG + i);
+-- 
+2.17.1
 
