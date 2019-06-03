@@ -2,128 +2,154 @@ Return-Path: <SRS0=XoCa=UC=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0BC1C04AB5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Jun 2019 16:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D26FC04AB5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Jun 2019 16:53:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F77A24BAC
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Jun 2019 16:18:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUaTBxs2"
+	by mail.kernel.org (Postfix) with ESMTP id 5DB61251FA
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Jun 2019 16:53:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbfFCQSG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Jun 2019 12:18:06 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37786 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726722AbfFCQSG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Jun 2019 12:18:06 -0400
-Received: by mail-pl1-f195.google.com with SMTP id bh12so1097716plb.4;
-        Mon, 03 Jun 2019 09:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=p4sHeMSwuiO6XHZeDrH9mLgYjDqfs6hfLwvHwXhnh6Q=;
-        b=QUaTBxs2hk4MFyRB4Y9D/HBIuusX7H88wACTIFBVB4OMXVQ208dODgIKwWAdDBjzfr
-         mdr2i/4w0bbZWAWviw3/c+5aE6ApmJFp0KedwAbanFkdDPxDDuVLD6QqqVGpmlxRvhwk
-         5zYZ/cGNJjBxYORG/YRZThjBSfQ+POwHgmlUpifLmJ7SxyR5f2U9RTEzCi/CO8o2bXJM
-         pIlsmwcZHWfidKdTX7VyUpRc8H8BRiDlp8EpC9nvR21pUr5t45JXWgC4n/ETFxtCaWuc
-         mPY6A2rtL20IlOM543ULfCFQwQe3WEM5t9BU38B4RzEUxMLFPJs7f//aitDT14qdDElN
-         wFMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p4sHeMSwuiO6XHZeDrH9mLgYjDqfs6hfLwvHwXhnh6Q=;
-        b=lILSJ69HVJ0IcJlyVzTFHaPeVFTlf3AFfsoAsMqSXEC4Ur1RnuwWlWAlgo4r9ImGgy
-         7JAM6lYY3ycfBVvgO1bKh9XXgvbNz6Y441J8DF1E3Oy6Z+9NWOw2CXIpBv7w/mTYeHiK
-         Q82a1criKaRnM79PSGEn9DzEIYohZmnaN4aul80IuLSrKKGjGjqxJmNP5eeSEi3MaTW5
-         QItRHMFRcm3YbzLKK9vDRLqWe4nj7LIfNntc/924gW3/kkrKxLCacOfBjZg2olaIK3Dt
-         GOsXcmi+q1qtNmiMD0cqiiQ0NcqVrTWO648bxDeAC9Vr2Nq0RhIDblNUvTvQHM3IJz/S
-         vuFw==
-X-Gm-Message-State: APjAAAVzeCs4BmuHnqn2UKoRaQimrGC4xrrZRBV6QUYB2nC08/qj+Sem
-        cn/2VZW94kNIxjI0cE9/syw=
-X-Google-Smtp-Source: APXvYqzNkbi/w84kqvDZRwpwMcg/rqSTN6cdXAR0R4mIyZEAvW5LnyVvKq3tfJnau3koZq1L+U4OUA==
-X-Received: by 2002:a17:902:29e6:: with SMTP id h93mr29425315plb.297.1559578685438;
-        Mon, 03 Jun 2019 09:18:05 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a1sm286255pfo.153.2019.06.03.09.18.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 09:18:04 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 09:18:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Cc:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>, Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: pmbus: protect read-modify-write with lock
-Message-ID: <20190603161802.GA11107@roeck-us.net>
-References: <20190530064509.GA13789@localhost.localdomain>
- <5ecab585-7e74-ea9f-8d33-93ab024e1a14@nokia.com>
+        id S1727242AbfFCQxB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Jun 2019 12:53:01 -0400
+Received: from mailout.easymail.ca ([64.68.200.34]:49798 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbfFCQxB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Jun 2019 12:53:01 -0400
+X-Greylist: delayed 346 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jun 2019 12:52:59 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id EF47524BF4;
+        Mon,  3 Jun 2019 16:47:12 +0000 (UTC)
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo06-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IRw2Rh0RPLAH; Mon,  3 Jun 2019 16:47:12 +0000 (UTC)
+Received: from mail.gonehiking.org (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        by mailout.easymail.ca (Postfix) with ESMTPA id C5989241ED;
+        Mon,  3 Jun 2019 16:46:57 +0000 (UTC)
+Received: from [192.168.1.4] (rhapsody.internal [192.168.1.4])
+        by mail.gonehiking.org (Postfix) with ESMTP id DF56C9F2FA;
+        Mon,  3 Jun 2019 10:46:56 -0600 (MDT)
+Subject: Re: [PATCH 2/3] drivers: scsi: remove unnecessary #ifdef MODULE
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        aacraid@microsemi.com, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <1559397700-15585-1-git-send-email-info@metux.net>
+ <1559397700-15585-3-git-send-email-info@metux.net>
+From:   Khalid Aziz <khalid@gonehiking.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=khalid@gonehiking.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <ae7d15b0-f513-ab1f-6101-201099df7eef@gonehiking.org>
+Date:   Mon, 3 Jun 2019 10:46:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ecab585-7e74-ea9f-8d33-93ab024e1a14@nokia.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1559397700-15585-3-git-send-email-info@metux.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 01:11:45PM +0000, Sverdlin, Alexander (Nokia - DE/Ulm) wrote:
-> Hi!
+On 6/1/19 8:01 AM, Enrico Weigelt, metux IT consult wrote:
+> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
+> so the extra check here is not necessary.
 > 
-> On 30/05/2019 08:45, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
-> > The operation done in the pmbus_update_fan() function is a
-> > read-modify-write operation but it lacks any kind of lock protection
-> > which may cause problems if run more than once simultaneously. This
-> > patch uses an existing update_lock mutex to fix this problem.
-> > 
-> > Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> > ---
-> > 
-> > I'm resending this patch to proper recipients this time. Sorry if the
-> > previous submission confused anybody.
-> > 
-> >  drivers/hwmon/pmbus/pmbus_core.c | 11 ++++++++---
-> >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> > index ef7ee90ee785..94adbede7912 100644
-> > --- a/drivers/hwmon/pmbus/pmbus_core.c
-> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> > @@ -268,6 +268,7 @@ int pmbus_update_fan(struct i2c_client *client, int page, int id,
-> >  	int rv;
-> >  	u8 to;
-> >  
-> > +	mutex_lock(&data->update_lock);
-> >  	from = pmbus_read_byte_data(client, page,
-> >  				    pmbus_fan_config_registers[id]);
-> >  	if (from < 0)
-> > @@ -278,11 +279,15 @@ int pmbus_update_fan(struct i2c_client *client, int page, int id,
-> >  		rv = pmbus_write_byte_data(client, page,
-> >  					   pmbus_fan_config_registers[id], to);
-> >  		if (rv < 0)
-> > -			return rv;
-> > +			goto out;
-> >  	}
-> >  
-> > -	return _pmbus_write_word_data(client, page,
-> > -				      pmbus_fan_command_registers[id], command);
-> > +	rv = _pmbus_write_word_data(client, page,
-> > +				    pmbus_fan_command_registers[id], command);
-> > +
-> > +out:
-> > +	mutex_lock(&data->update_lock);
+> Signed-off-by: Enrico Weigelt <info@metux.net>
+> ---
+>  drivers/scsi/BusLogic.c | 2 --
+>  drivers/scsi/dpt_i2o.c  | 3 ---
+>  2 files changed, 5 deletions(-)
 > 
-> This has to be mutex_unlock()...
+> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+> index e41e51f..68cc68b 100644
+> --- a/drivers/scsi/BusLogic.c
+> +++ b/drivers/scsi/BusLogic.c
+> @@ -3893,7 +3893,6 @@ static void __exit blogic_exit(void)
+>  
+>  __setup("BusLogic=", blogic_setup);
+>  
+> -#ifdef MODULE
+>  /*static struct pci_device_id blogic_pci_tbl[] = {
+>  	{ PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_MULTIMASTER,
+>  	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
+> @@ -3909,7 +3908,6 @@ static void __exit blogic_exit(void)
+>  	{PCI_DEVICE(PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_FLASHPOINT)},
+>  	{0, },
+>  };
+> -#endif
+>  MODULE_DEVICE_TABLE(pci, blogic_pci_tbl);
+>  
+>  module_init(blogic_init);> diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
+> index abc74fd..9b28f9f 100644
+> --- a/drivers/scsi/dpt_i2o.c
+> +++ b/drivers/scsi/dpt_i2o.c
+> @@ -177,14 +177,11 @@ static u8 adpt_read_blink_led(adpt_hba* host)
+>   *============================================================================
+>   */
+>  
+> -#ifdef MODULE
+>  static struct pci_device_id dptids[] = {
+>  	{ PCI_DPT_VENDOR_ID, PCI_DPT_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
+>  	{ PCI_DPT_VENDOR_ID, PCI_DPT_RAPTOR_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
+>  	{ 0, }
+>  };
+> -#endif
+> -
+>  MODULE_DEVICE_TABLE(pci,dptids);
+>  
+>  static int adpt_detect(struct scsi_host_template* sht)
 > 
 
-Not only that - it is also recursive.
+As James pointed out, this will result in warning from compiler about
+unused variable. Please address that first.
 
-Guenter
+--
+Khalid
