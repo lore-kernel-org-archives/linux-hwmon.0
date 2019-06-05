@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3540C28CC5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:49:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AD54C28CC5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:50:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 95F202083E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:49:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE2462083E
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:50:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbfFETtq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jun 2019 15:49:46 -0400
-Received: from sed198n136.SEDSystems.ca ([198.169.180.136]:3040 "EHLO
+        id S1726527AbfFETuB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jun 2019 15:50:01 -0400
+Received: from sed198n136.SEDSystems.ca ([198.169.180.136]:17235 "EHLO
         sed198n136.sedsystems.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbfFETtq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 15:49:46 -0400
+        with ESMTP id S1726501AbfFETuB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 15:50:01 -0400
 Received: from barney.sedsystems.ca (barney [198.169.180.121])
-        by sed198n136.sedsystems.ca  with ESMTP id x55JnPZ4017969
+        by sed198n136.sedsystems.ca  with ESMTP id x55JnHMi012980
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jun 2019 13:49:25 -0600 (CST)
+        Wed, 5 Jun 2019 13:49:18 -0600 (CST)
 Received: from SED.RFC1918.192.168.sedsystems.ca (eng1n65.eng.sedsystems.ca [172.21.1.65])
-        by barney.sedsystems.ca (8.14.7/8.14.4) with ESMTP id x55JnFuT000988
+        by barney.sedsystems.ca (8.14.7/8.14.4) with ESMTP id x55JnFuS000988
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 5 Jun 2019 13:49:17 -0600
+        Wed, 5 Jun 2019 13:49:16 -0600
 From:   Robert Hancock <hancock@sedsystems.ca>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com,
         Robert Hancock <hancock@sedsystems.ca>
-Subject: [PATCH v2 2/2] hwmon: (pmbus) Add Infineon IRPS5401 driver
-Date:   Wed,  5 Jun 2019 13:49:01 -0600
-Message-Id: <1559764141-26105-3-git-send-email-hancock@sedsystems.ca>
+Subject: [PATCH v2 1/2] hwmon: (pmbus) Treat parameters as paged if on multiple pages
+Date:   Wed,  5 Jun 2019 13:49:00 -0600
+Message-Id: <1559764141-26105-2-git-send-email-hancock@sedsystems.ca>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1559764141-26105-1-git-send-email-hancock@sedsystems.ca>
 References: <1559764141-26105-1-git-send-email-hancock@sedsystems.ca>
@@ -42,125 +42,93 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add a driver to support the Infineon IRPS5401 PMIC. This chip has 5
-pages corresponding to 4 switching outputs and one linear (LDO) output.
-The switching and LDO outputs have slightly different supported
-parameters.
+Some chips have attributes which exist on more than one page but the
+attribute is not presently marked as paged. This causes the attributes
+to be generated with the same label, which makes it impossible for
+userspace to tell them apart.
+
+Marking all such attributes as paged would result in the page suffix
+being added regardless of whether they were present on more than one
+page or not, which might break existing setups. Therefore, we add a
+second check which treats the attribute as paged, even if not marked as
+such, if it is present on multiple pages.
 
 Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
 ---
- drivers/hwmon/pmbus/Kconfig    |  9 ++++++
- drivers/hwmon/pmbus/Makefile   |  1 +
- drivers/hwmon/pmbus/irps5401.c | 68 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 78 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/irps5401.c
+ drivers/hwmon/pmbus/pmbus_core.c | 33 +++++++++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 30751eb..8eb5bb4 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -64,6 +64,15 @@ config SENSORS_IR38064
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ir38064.
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ef7ee90..49dcb84 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1217,7 +1217,8 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+ 				      const struct pmbus_driver_info *info,
+ 				      const char *name,
+ 				      int index, int page,
+-				      const struct pmbus_sensor_attr *attr)
++				      const struct pmbus_sensor_attr *attr,
++				      bool paged)
+ {
+ 	struct pmbus_sensor *base;
+ 	bool upper = !!(attr->gbit & 0xff00);	/* need to check STATUS_WORD */
+@@ -1225,7 +1226,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
  
-+config SENSORS_IRPS5401
-+	tristate "Infineon IRPS5401"
-+	help
-+	  If you say yes here you get hardware monitoring support for the
-+	  Infineon IRPS5401 controller.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called irps5401.
-+
- config SENSORS_ISL68137
- 	tristate "Intersil ISL68137"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 2219b93..e4a7dd0 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
- obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
- obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
- obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
-+obj-$(CONFIG_SENSORS_IRPS5401)	+= irps5401.o
- obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
-diff --git a/drivers/hwmon/pmbus/irps5401.c b/drivers/hwmon/pmbus/irps5401.c
-new file mode 100644
-index 0000000..825e9fa
---- /dev/null
-+++ b/drivers/hwmon/pmbus/irps5401.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for the Infineon IRPS5401M PMIC.
-+ *
-+ * Copyright (c) 2019 SED Systems, a division of Calian Ltd.
-+ *
-+ * The device supports VOUT_PEAK, IOUT_PEAK, and TEMPERATURE_PEAK, however
-+ * this driver does not currently support them.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include "pmbus.h"
-+
-+#define IRPS5401_SW_FUNC (PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | \
-+			  PMBUS_HAVE_STATUS_INPUT | \
-+			  PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
-+			  PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
-+			  PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | \
-+			  PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP)
-+
-+#define IRPS5401_LDO_FUNC (PMBUS_HAVE_VIN | \
-+			   PMBUS_HAVE_STATUS_INPUT | \
-+			   PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
-+			   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
-+			   PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | \
-+			   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP)
-+
-+static struct pmbus_driver_info irps5401_info = {
-+	.pages = 5,
-+	.func[0] = IRPS5401_SW_FUNC,
-+	.func[1] = IRPS5401_SW_FUNC,
-+	.func[2] = IRPS5401_SW_FUNC,
-+	.func[3] = IRPS5401_SW_FUNC,
-+	.func[4] = IRPS5401_LDO_FUNC,
-+};
-+
-+static int irps5401_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
+ 	if (attr->label) {
+ 		ret = pmbus_add_label(data, name, index, attr->label,
+-				      attr->paged ? page + 1 : 0);
++				      paged ? page + 1 : 0);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -1258,6 +1259,29 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static bool pmbus_sensor_is_paged(const struct pmbus_driver_info *info,
++				  const struct pmbus_sensor_attr *attr)
 +{
-+	return pmbus_do_probe(client, id, &irps5401_info);
++	int p;
++
++	if (attr->paged)
++		return true;
++
++	/* Some attributes may be present on more than one page despite
++	 * not being marked with the paged attribute. If that is the case,
++	 * then treat the sensor as being paged and add the page suffix to the
++	 * attribute name.
++	 * We don't just add the paged attribute to all such attributes, in
++	 * order to maintain the un-suffixed labels in the case where the
++	 * attribute is only on page 0.
++	 */
++	for (p = 1; p < info->pages; p++) {
++		if (info->func[p] & attr->func)
++			return true;
++	}
++	return false;
 +}
 +
-+static const struct i2c_device_id irps5401_id[] = {
-+	{"irps5401", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, irps5401_id);
-+
-+static struct i2c_driver irps5401_driver = {
-+	.driver = {
-+		   .name = "irps5401",
-+		   },
-+	.probe = irps5401_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = irps5401_id,
-+};
-+
-+module_i2c_driver(irps5401_driver);
-+
-+MODULE_AUTHOR("Robert Hancock");
-+MODULE_DESCRIPTION("PMBus driver for Infineon IRPS5401");
-+MODULE_LICENSE("GPL");
-+
+ static int pmbus_add_sensor_attrs(struct i2c_client *client,
+ 				  struct pmbus_data *data,
+ 				  const char *name,
+@@ -1271,14 +1295,15 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
+ 	index = 1;
+ 	for (i = 0; i < nattrs; i++) {
+ 		int page, pages;
++		bool paged = pmbus_sensor_is_paged(info, attrs);
+ 
+-		pages = attrs->paged ? info->pages : 1;
++		pages = paged ? info->pages : 1;
+ 		for (page = 0; page < pages; page++) {
+ 			if (!(info->func[page] & attrs->func))
+ 				continue;
+ 			ret = pmbus_add_sensor_attrs_one(client, data, info,
+ 							 name, index, page,
+-							 attrs);
++							 attrs, paged);
+ 			if (ret)
+ 				return ret;
+ 			index++;
 -- 
 1.8.3.1
 
