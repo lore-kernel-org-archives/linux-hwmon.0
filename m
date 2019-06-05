@@ -7,84 +7,89 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2D36C28CC5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB82AC28CC5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:29:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A957C2075B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:25:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AAB3A2075B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:29:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGob1Ckt"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODm6ZU5s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbfFEUZN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jun 2019 16:25:13 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41048 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726464AbfFEUZN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 16:25:13 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 83so6201656pgg.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Jun 2019 13:25:12 -0700 (PDT)
+        id S1726501AbfFEU3V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jun 2019 16:29:21 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41429 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfFEU3V (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 16:29:21 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 83so6207757pgg.8;
+        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=0D3rPtrFenGq6bZ1zGdLFdAff9jspgFhqaiG/oH8SkM=;
-        b=FGob1Ckt2SjfiFW42BBpYXg18QBMLXL7vjtUOPZiUt6N0sFBzF+VOanMR1uHrXJrOy
-         0Cgiqvm+ebZHuo5qig6gZWaVFjIK7Lnee1tGAZiaHtPsv7Y3jh1Kvguawxc5ww2A22Id
-         ceV8sgITx4UHFnOVva1ci6xeiujsnplmj++idj8Sz9+/yYPkzhwbpgqfp165oGOtvSB8
-         BcKzKoBVGSIyScYsdJTL6ENmNXRLh/k7YwgC9GRPv/vsfwlURvbPyZTt9D2B/VPEyqEY
-         +2/A0FL4I8TYTpuDjSM5W4nMcnvcXadYv9GCS2oV1l06ttZ0ru6H/QfJvf/drJl1K9cF
-         LD+w==
+        bh=tsU7PRmGx4zvDabkVGTD+3FltQQMUc79t0+U+ftspnw=;
+        b=ODm6ZU5sz+MM5ETw8XEA48YgdGABlObgcXaKta8uTBcE/RZDVQszuQO2Jn5MTvFMGo
+         TfPsItoNWKzIiDzEMPJXXWrL5mCBz2HOA9kig9U7wdx+dQpwp98Obf3TAVrTsnPaiN7g
+         SfgY4ANoz4IBp4UUIbHuHETmSHk71NilQAbJo7JW13KPesBqqaITPB7+ljovj+KcDPjD
+         Y4X+gK2Pb/IK3qruO3XTx99g9G+Ah3xVp/olk6Do1C5TStsFVSBwyZXZVuGp7qDXARTM
+         tWdxS3XO1ZJx3Q5HWJbTcn20UWe+aCc7JyOEgx8VqUeH+ej7YNJf5IRcmW/WV6nJxdeZ
+         nHEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0D3rPtrFenGq6bZ1zGdLFdAff9jspgFhqaiG/oH8SkM=;
-        b=NkLHTNramPLzmI/7rARU0ctA6bqdz9bVLkTL661P9E1dyNCD+5wTswHi6yu+Hb/Gqq
-         p7DWkpDGa679/fePuTnfsdJFCdxaIRLJbCJwlHZU4ZW/QSZxLzfd6AduYmM4Xeh9fzDr
-         nuHrqmeEczCpGnEe2Vzb7J8UHGBAiqWk6qqwkc1rKEMjFUR+CVlN1dGM0QvQYNrEBqTA
-         K4rL/P/mwghKhtL6wjNdk6ZKcINUfQRAy3zU8UY0sSUI5HyE4jpbT0wDuiwlPLYuZnUO
-         tTpLI3rBJVHTbr9hTkl19di6xvwWLZ4LoZ/aGdlBXx7nO7k+DX07Bui4bSJ++IyCLhu2
-         CDMQ==
-X-Gm-Message-State: APjAAAV7BJ6FYqnLxOIFcpPKL2brGRA5RBpbCuq3D1ts9YFnFVsAJZ0b
-        Eb//Db+u79LZP2Cr3wo5psuyZ+Tc
-X-Google-Smtp-Source: APXvYqzar5695FkpTyncUkYOQJsZZd0lPTloO1BaUOowrSEAxntyUSFf9yLkHyecJYvqo6ZSxh+x6Q==
-X-Received: by 2002:a62:770e:: with SMTP id s14mr18800606pfc.150.1559766312458;
-        Wed, 05 Jun 2019 13:25:12 -0700 (PDT)
+        bh=tsU7PRmGx4zvDabkVGTD+3FltQQMUc79t0+U+ftspnw=;
+        b=kzhhmmzcrpGVun9izd5sTSfMgvLOkKmMTzBjZcosP7neBasMApR10a8JxYzocf8SFq
+         4vRATPF2IWeIJhqg6Dbp1zyf2ZEWfjKJSTWedoJXpTS9u+DMtXcv10mJVCK5rUY58mAv
+         MoyomXLHCVzWaWuyuyy+13NFMjWPQFhH9f4OyqzYrBBvbyc8ORssf9tgRIm1EZsVD0Rx
+         WxUId82cG9bu1KruwR+7AWt2w7Is5vTGqhuvP+IBpIn9cfDvNAsZtp0eTf8FLd7I5LAx
+         esPckMfrApk8kQ5yYAr0UC1AQssalj93bLwWzX0DULGC20RCkfQ2uEtaJFuARwn4JBM/
+         taEQ==
+X-Gm-Message-State: APjAAAXwgQ9/pRfH9ocajMGF0gzctaFW9WygGedPZnOuGj0MlmMPq86s
+        8kENGK5Nv3HyqKd5yG/IKEFzEdNC
+X-Google-Smtp-Source: APXvYqwlbeiCZvnPsWb/TW3E5NygNfC1uCWXlC93nb0M8t/h/xvoDiSQx0b44mckY0u2XbQYV0iB9g==
+X-Received: by 2002:aa7:8b49:: with SMTP id i9mr21261054pfd.74.1559766560648;
+        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w66sm21609867pfb.47.2019.06.05.13.25.10
+        by smtp.gmail.com with ESMTPSA id s1sm17357165pgp.94.2019.06.05.13.29.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 13:25:10 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 13:25:09 -0700
+        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 13:29:19 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH v2 1/2] pmbus: (core) mutex_lock write in
- pmbus_set_samples
-Message-ID: <20190605202509.GA27491@roeck-us.net>
-References: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
+To:     Eduardo Valentin <eduval@amazon.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 2/2] hwmon: core: fix potential memory leak in
+ *hwmon_device_register*
+Message-ID: <20190605202919.GA28892@roeck-us.net>
+References: <20190530025605.3698-1-eduval@amazon.com>
+ <20190530025605.3698-3-eduval@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
+In-Reply-To: <20190530025605.3698-3-eduval@amazon.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, May 29, 2019 at 02:33:52PM +0000, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
-> update_lock is a mutex intended to protect write operations. It was not
-> taken, however, when _pmbus_write_word_data is called from
-> pmbus_set_samples() function which may cause problems especially when
-> some PMBUS_VIRT_* operation is implemented as a read-modify-write cycle.
+On Wed, May 29, 2019 at 07:56:05PM -0700, Eduardo Valentin wrote:
+> When registering a hwmon device with HWMON_C_REGISTER_TZ flag
+> in place, the hwmon subsystem will attempt to register the device
+> also with the thermal subsystem. When the of-thermal registration
+> fails, __hwmon_device_register jumps to ida_remove, leaving
+> the locally allocated hwdev pointer.
 > 
-> This patch makes sure the lock is held during the operation.
+> This patch fixes the leak by jumping to a new label that
+> will first unregister hdev and then fall into the kfree of hwdev
+> to finally remove the idas and propagate the error code.
 > 
-> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
 
 Applied.
 
@@ -92,20 +97,35 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 2 ++
->  1 file changed, 2 insertions(+)
+> V1->V2: removed the device_unregister() before jumping
+> into the new label, as suggested in the first review round.
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index ef7ee90ee785..62cd213cc260 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -1946,7 +1946,9 @@ static ssize_t pmbus_set_samples(struct device *dev,
->  	if (kstrtol(buf, 0, &val) < 0)
->  		return -EINVAL;
+>  drivers/hwmon/hwmon.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 429784edd5ff..620f05fc412a 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -652,10 +652,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>  				if (info[i]->config[j] & HWMON_T_INPUT) {
+>  					err = hwmon_thermal_add_sensor(dev,
+>  								hwdev, j);
+> -					if (err) {
+> -						device_unregister(hdev);
+> -						goto ida_remove;
+> -					}
+> +					if (err)
+> +						goto device_unregister;
+>  				}
+>  			}
+>  		}
+> @@ -663,6 +661,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
 >  
-> +	mutex_lock(&data->update_lock);
->  	ret = _pmbus_write_word_data(client, reg->page, reg->attr->reg, val);
-> +	mutex_unlock(&data->update_lock);
+>  	return hdev;
 >  
->  	return ret ? : count;
->  }
+> +device_unregister:
+> +	device_unregister(hdev);
+>  free_hwmon:
+>  	kfree(hwdev);
+>  ida_remove:
