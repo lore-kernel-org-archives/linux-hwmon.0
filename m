@@ -2,133 +2,110 @@ Return-Path: <SRS0=Rv8n=UE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AD54C28CC5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2D36C28CC5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:25:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DE2462083E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 19:50:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A957C2075B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:25:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGob1Ckt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbfFETuB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jun 2019 15:50:01 -0400
-Received: from sed198n136.SEDSystems.ca ([198.169.180.136]:17235 "EHLO
-        sed198n136.sedsystems.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbfFETuB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 15:50:01 -0400
-Received: from barney.sedsystems.ca (barney [198.169.180.121])
-        by sed198n136.sedsystems.ca  with ESMTP id x55JnHMi012980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jun 2019 13:49:18 -0600 (CST)
-Received: from SED.RFC1918.192.168.sedsystems.ca (eng1n65.eng.sedsystems.ca [172.21.1.65])
-        by barney.sedsystems.ca (8.14.7/8.14.4) with ESMTP id x55JnFuS000988
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 5 Jun 2019 13:49:16 -0600
-From:   Robert Hancock <hancock@sedsystems.ca>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com,
-        Robert Hancock <hancock@sedsystems.ca>
-Subject: [PATCH v2 1/2] hwmon: (pmbus) Treat parameters as paged if on multiple pages
-Date:   Wed,  5 Jun 2019 13:49:00 -0600
-Message-Id: <1559764141-26105-2-git-send-email-hancock@sedsystems.ca>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1559764141-26105-1-git-send-email-hancock@sedsystems.ca>
-References: <1559764141-26105-1-git-send-email-hancock@sedsystems.ca>
-X-Scanned-By: MIMEDefang 2.64 on 198.169.180.136
+        id S1726527AbfFEUZN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jun 2019 16:25:13 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41048 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726464AbfFEUZN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 16:25:13 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 83so6201656pgg.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Jun 2019 13:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0D3rPtrFenGq6bZ1zGdLFdAff9jspgFhqaiG/oH8SkM=;
+        b=FGob1Ckt2SjfiFW42BBpYXg18QBMLXL7vjtUOPZiUt6N0sFBzF+VOanMR1uHrXJrOy
+         0Cgiqvm+ebZHuo5qig6gZWaVFjIK7Lnee1tGAZiaHtPsv7Y3jh1Kvguawxc5ww2A22Id
+         ceV8sgITx4UHFnOVva1ci6xeiujsnplmj++idj8Sz9+/yYPkzhwbpgqfp165oGOtvSB8
+         BcKzKoBVGSIyScYsdJTL6ENmNXRLh/k7YwgC9GRPv/vsfwlURvbPyZTt9D2B/VPEyqEY
+         +2/A0FL4I8TYTpuDjSM5W4nMcnvcXadYv9GCS2oV1l06ttZ0ru6H/QfJvf/drJl1K9cF
+         LD+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0D3rPtrFenGq6bZ1zGdLFdAff9jspgFhqaiG/oH8SkM=;
+        b=NkLHTNramPLzmI/7rARU0ctA6bqdz9bVLkTL661P9E1dyNCD+5wTswHi6yu+Hb/Gqq
+         p7DWkpDGa679/fePuTnfsdJFCdxaIRLJbCJwlHZU4ZW/QSZxLzfd6AduYmM4Xeh9fzDr
+         nuHrqmeEczCpGnEe2Vzb7J8UHGBAiqWk6qqwkc1rKEMjFUR+CVlN1dGM0QvQYNrEBqTA
+         K4rL/P/mwghKhtL6wjNdk6ZKcINUfQRAy3zU8UY0sSUI5HyE4jpbT0wDuiwlPLYuZnUO
+         tTpLI3rBJVHTbr9hTkl19di6xvwWLZ4LoZ/aGdlBXx7nO7k+DX07Bui4bSJ++IyCLhu2
+         CDMQ==
+X-Gm-Message-State: APjAAAV7BJ6FYqnLxOIFcpPKL2brGRA5RBpbCuq3D1ts9YFnFVsAJZ0b
+        Eb//Db+u79LZP2Cr3wo5psuyZ+Tc
+X-Google-Smtp-Source: APXvYqzar5695FkpTyncUkYOQJsZZd0lPTloO1BaUOowrSEAxntyUSFf9yLkHyecJYvqo6ZSxh+x6Q==
+X-Received: by 2002:a62:770e:: with SMTP id s14mr18800606pfc.150.1559766312458;
+        Wed, 05 Jun 2019 13:25:12 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w66sm21609867pfb.47.2019.06.05.13.25.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 13:25:10 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 13:25:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+Subject: Re: [PATCH v2 1/2] pmbus: (core) mutex_lock write in
+ pmbus_set_samples
+Message-ID: <20190605202509.GA27491@roeck-us.net>
+References: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25c0f33fa281e8fb9781b71bda9e2f570113df85.1559140351.git.krzysztof.adamski@nokia.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some chips have attributes which exist on more than one page but the
-attribute is not presently marked as paged. This causes the attributes
-to be generated with the same label, which makes it impossible for
-userspace to tell them apart.
+On Wed, May 29, 2019 at 02:33:52PM +0000, Adamski, Krzysztof (Nokia - PL/Wroclaw) wrote:
+> update_lock is a mutex intended to protect write operations. It was not
+> taken, however, when _pmbus_write_word_data is called from
+> pmbus_set_samples() function which may cause problems especially when
+> some PMBUS_VIRT_* operation is implemented as a read-modify-write cycle.
+> 
+> This patch makes sure the lock is held during the operation.
+> 
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-Marking all such attributes as paged would result in the page suffix
-being added regardless of whether they were present on more than one
-page or not, which might break existing setups. Therefore, we add a
-second check which treats the attribute as paged, even if not marked as
-such, if it is present on multiple pages.
+Applied.
 
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
----
- drivers/hwmon/pmbus/pmbus_core.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index ef7ee90..49dcb84 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1217,7 +1217,8 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
- 				      const struct pmbus_driver_info *info,
- 				      const char *name,
- 				      int index, int page,
--				      const struct pmbus_sensor_attr *attr)
-+				      const struct pmbus_sensor_attr *attr,
-+				      bool paged)
- {
- 	struct pmbus_sensor *base;
- 	bool upper = !!(attr->gbit & 0xff00);	/* need to check STATUS_WORD */
-@@ -1225,7 +1226,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
- 
- 	if (attr->label) {
- 		ret = pmbus_add_label(data, name, index, attr->label,
--				      attr->paged ? page + 1 : 0);
-+				      paged ? page + 1 : 0);
- 		if (ret)
- 			return ret;
- 	}
-@@ -1258,6 +1259,29 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
- 	return 0;
- }
- 
-+static bool pmbus_sensor_is_paged(const struct pmbus_driver_info *info,
-+				  const struct pmbus_sensor_attr *attr)
-+{
-+	int p;
-+
-+	if (attr->paged)
-+		return true;
-+
-+	/* Some attributes may be present on more than one page despite
-+	 * not being marked with the paged attribute. If that is the case,
-+	 * then treat the sensor as being paged and add the page suffix to the
-+	 * attribute name.
-+	 * We don't just add the paged attribute to all such attributes, in
-+	 * order to maintain the un-suffixed labels in the case where the
-+	 * attribute is only on page 0.
-+	 */
-+	for (p = 1; p < info->pages; p++) {
-+		if (info->func[p] & attr->func)
-+			return true;
-+	}
-+	return false;
-+}
-+
- static int pmbus_add_sensor_attrs(struct i2c_client *client,
- 				  struct pmbus_data *data,
- 				  const char *name,
-@@ -1271,14 +1295,15 @@ static int pmbus_add_sensor_attrs(struct i2c_client *client,
- 	index = 1;
- 	for (i = 0; i < nattrs; i++) {
- 		int page, pages;
-+		bool paged = pmbus_sensor_is_paged(info, attrs);
- 
--		pages = attrs->paged ? info->pages : 1;
-+		pages = paged ? info->pages : 1;
- 		for (page = 0; page < pages; page++) {
- 			if (!(info->func[page] & attrs->func))
- 				continue;
- 			ret = pmbus_add_sensor_attrs_one(client, data, info,
- 							 name, index, page,
--							 attrs);
-+							 attrs, paged);
- 			if (ret)
- 				return ret;
- 			index++;
--- 
-1.8.3.1
-
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index ef7ee90ee785..62cd213cc260 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -1946,7 +1946,9 @@ static ssize_t pmbus_set_samples(struct device *dev,
+>  	if (kstrtol(buf, 0, &val) < 0)
+>  		return -EINVAL;
+>  
+> +	mutex_lock(&data->update_lock);
+>  	ret = _pmbus_write_word_data(client, reg->page, reg->attr->reg, val);
+> +	mutex_unlock(&data->update_lock);
+>  
+>  	return ret ? : count;
+>  }
