@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB82AC28CC5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDC9C28CC5
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:38:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AAB3A2075B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:29:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E87F92067C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  5 Jun 2019 20:38:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODm6ZU5s"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2rPos/u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbfFEU3V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jun 2019 16:29:21 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41429 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFEU3V (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 16:29:21 -0400
-Received: by mail-pg1-f194.google.com with SMTP id 83so6207757pgg.8;
-        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
+        id S1726572AbfFEUik (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jun 2019 16:38:40 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45726 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbfFEUik (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 16:38:40 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w34so13021786pga.12;
+        Wed, 05 Jun 2019 13:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=tsU7PRmGx4zvDabkVGTD+3FltQQMUc79t0+U+ftspnw=;
-        b=ODm6ZU5sz+MM5ETw8XEA48YgdGABlObgcXaKta8uTBcE/RZDVQszuQO2Jn5MTvFMGo
-         TfPsItoNWKzIiDzEMPJXXWrL5mCBz2HOA9kig9U7wdx+dQpwp98Obf3TAVrTsnPaiN7g
-         SfgY4ANoz4IBp4UUIbHuHETmSHk71NilQAbJo7JW13KPesBqqaITPB7+ljovj+KcDPjD
-         Y4X+gK2Pb/IK3qruO3XTx99g9G+Ah3xVp/olk6Do1C5TStsFVSBwyZXZVuGp7qDXARTM
-         tWdxS3XO1ZJx3Q5HWJbTcn20UWe+aCc7JyOEgx8VqUeH+ej7YNJf5IRcmW/WV6nJxdeZ
-         nHEg==
+        bh=Kyi91WMR4AvwDRIy5DxgM0o6bNXmSrWa07y0x+D4CAE=;
+        b=H2rPos/u564e/RMxlV0kDV5IpWYrSjoJZs3LwzOA5spNEigtkKwhdm+sVNo+rle9on
+         iHahXa4VDiKz3mdzMYnqMj5rDggFiHfMUtBPEuqJmHKl3S4cWVl5An67zYqOeuuZhJbd
+         n548Nb8/qTkZKWXMqIRLgC015pk7VKJa4LnukLtgyNDR+UBRpSLsqDQ5ofuZkfyFoair
+         n+fs2oAiOYcv3+yh98+B3sVNiWC8lhqBB/q8R3yJEiJGsD5jY5u3Ywi/UeP7EkNgMwN5
+         QwfYU1xxIU8OaS8tNjtTckhKY1CO3+RpcbwwY4UAlSdJCxlCNEZZuDCPhVYYeI4zlP6N
+         +xpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tsU7PRmGx4zvDabkVGTD+3FltQQMUc79t0+U+ftspnw=;
-        b=kzhhmmzcrpGVun9izd5sTSfMgvLOkKmMTzBjZcosP7neBasMApR10a8JxYzocf8SFq
-         4vRATPF2IWeIJhqg6Dbp1zyf2ZEWfjKJSTWedoJXpTS9u+DMtXcv10mJVCK5rUY58mAv
-         MoyomXLHCVzWaWuyuyy+13NFMjWPQFhH9f4OyqzYrBBvbyc8ORssf9tgRIm1EZsVD0Rx
-         WxUId82cG9bu1KruwR+7AWt2w7Is5vTGqhuvP+IBpIn9cfDvNAsZtp0eTf8FLd7I5LAx
-         esPckMfrApk8kQ5yYAr0UC1AQssalj93bLwWzX0DULGC20RCkfQ2uEtaJFuARwn4JBM/
-         taEQ==
-X-Gm-Message-State: APjAAAXwgQ9/pRfH9ocajMGF0gzctaFW9WygGedPZnOuGj0MlmMPq86s
-        8kENGK5Nv3HyqKd5yG/IKEFzEdNC
-X-Google-Smtp-Source: APXvYqwlbeiCZvnPsWb/TW3E5NygNfC1uCWXlC93nb0M8t/h/xvoDiSQx0b44mckY0u2XbQYV0iB9g==
-X-Received: by 2002:aa7:8b49:: with SMTP id i9mr21261054pfd.74.1559766560648;
-        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
+        bh=Kyi91WMR4AvwDRIy5DxgM0o6bNXmSrWa07y0x+D4CAE=;
+        b=Ww5y2q1GIn6V0PHlFv6WVJfX4ixqpfJ4K5d5c6VGnzprUuph7wdUu77StcvkS0Ixer
+         VZMwWdHkg7RJ+bgH6Me42RBUUbl5OueNjBmk5t0r7ytSyI6k1kCGnt9N2F5Dw9CJ0oyA
+         FwvG36M9Nmk/EvIqNLjeaJ0N0ReEhH3b/wECZbOD/8q1VVVuY/wYxoZApviIqJ/F66jV
+         Ohcsr95Es2dmbBTmyRuOLRFyiz/xgUSE7dFuLlrtOhA41kn9rF+NHnG6k4jPZL88fBtg
+         PXYbWmqLv/+SfWWbgr6K5mtuxoYRauJGHE3YVB4XbEIRfZ+w1Q7cVGGWCtyNEBqdBvIH
+         /1ww==
+X-Gm-Message-State: APjAAAWVmUhOEPZCGH7T5IwbafE8uy2zF3vjLBshIy0ozVzxUXfGY67D
+        tZ0/fiq/INFtB0dbAr6tm8s=
+X-Google-Smtp-Source: APXvYqwgj03QmQKBLMhlLogbCOnzgbDTK8FMHjvQS6CX/TQmvvPXBAZAqJSqcV8zooVwaTW3ZMFPaA==
+X-Received: by 2002:a63:91c4:: with SMTP id l187mr771892pge.95.1559767119687;
+        Wed, 05 Jun 2019 13:38:39 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s1sm17357165pgp.94.2019.06.05.13.29.19
+        by smtp.gmail.com with ESMTPSA id n13sm20788638pff.59.2019.06.05.13.38.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 13:29:20 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 13:29:19 -0700
+        Wed, 05 Jun 2019 13:38:38 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 13:38:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eduardo Valentin <eduval@amazon.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCHv2 2/2] hwmon: core: fix potential memory leak in
  *hwmon_device_register*
-Message-ID: <20190605202919.GA28892@roeck-us.net>
+Message-ID: <20190605203837.GA30238@roeck-us.net>
 References: <20190530025605.3698-1-eduval@amazon.com>
  <20190530025605.3698-3-eduval@amazon.com>
 MIME-Version: 1.0
@@ -85,17 +85,20 @@ On Wed, May 29, 2019 at 07:56:05PM -0700, Eduardo Valentin wrote:
 > will first unregister hdev and then fall into the kfree of hwdev
 > to finally remove the idas and propagate the error code.
 > 
+
+Hah, actually this is wrong. hwdev is freed indirectly with the
+device_unregister() call. See commit 74e3512731bd ("hwmon: (core)
+Fix double-free in __hwmon_device_register()").
+
+It may make sense to add a respective comment to the code, though.
+
+Guenter
+
 > Cc: Jean Delvare <jdelvare@suse.com>
 > Cc: Guenter Roeck <linux@roeck-us.net>
 > Cc: linux-hwmon@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-
-Applied.
-
-Thanks,
-Guenter
-
 > ---
 > V1->V2: removed the device_unregister() before jumping
 > into the new label, as suggested in the first review round.
