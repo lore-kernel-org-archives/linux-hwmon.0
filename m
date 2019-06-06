@@ -2,130 +2,142 @@ Return-Path: <SRS0=soXM=UF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35645C04AB5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 13:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B7FC28EB4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0738220684
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 13:09:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7336020684
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vDshi1l7"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="aGtubtOB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfFFNJ5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Jun 2019 09:09:57 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33647 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfFFNJ5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jun 2019 09:09:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id x15so1506424pfq.0;
-        Thu, 06 Jun 2019 06:09:57 -0700 (PDT)
+        id S1729133AbfFFOgW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Jun 2019 10:36:22 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:27975 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728508AbfFFOgW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jun 2019 10:36:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=B4ic1BbBQecFrj1MGh2BMBg9JVQjeKWbUL+bnD0lSKE=;
-        b=vDshi1l7yqtgR6iUbKk1XeJSbh6Tj8W17eEmP48DEUTD3MoW/nEDkAtvoi2RyqRzcD
-         3rdUGAwdHSVc1lQ3/CjkJV45v/vJVqn8jAG4pjYXN/xCQWYsV1iMJUylJpCkXvwLePoY
-         G42350mxOQ1jFxD9/XRo6ObFmnwljOCtN6XC0w6pgl5V+eo1cYs6Bjhwl2OXMma7h0qT
-         Xtr3XMTmp8wy35ruc6Ah8OSsDkvapm9pzoNeD1snwq4Q4TWKNmVO+hRdZAbTl0ccFFN4
-         nzj3bOn+wqbSd/nWHMH5FaOam0HUliCC1065TJl3ymizwVXKzSiTJnjDCujcopzVwl8c
-         AJ3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=B4ic1BbBQecFrj1MGh2BMBg9JVQjeKWbUL+bnD0lSKE=;
-        b=n4EJQcJZu42xfEY/nV4T+QH/bjXqd0/2KRcALuCIBHFDnBmB+ik9TAkUD008uNiuHT
-         awQvoaoxPqQXfTwz9UCegTh4KlzANANFYp18VDURe6FZ0o7SOHTogZLVXaWCD4q9sZL5
-         h4gLd7BvU15l8JjoxX7adgo9Sa0uU+FYoLAJzVWZHlNwzpQykcq180+GHBHb6LkB8dM6
-         VaKrNGCEwmLyp6WT5qsg0tS6eHmjd8JZ5iai/SEwWkchWqUZ+8xMORm4+CCZ+MI6LWE3
-         UXwjS3ntNjSMR5hEoa/1ZVaqrdtFYkcWJ+1pGDwdnfOvh+hfN07P8psKoCDwh1b+SiDI
-         BIFQ==
-X-Gm-Message-State: APjAAAU9O9P7wJUxWlsly8e2qa+5xPo2aknc0iyVDgDDR2Y9FltVX7Xq
-        ijU+tqJyb/TYe4ZLAUrfN2M=
-X-Google-Smtp-Source: APXvYqxh27brZ/hWsLblzuGkhIK9bUXMf1VqsxhyNb8ZBO05seyPGw5FDdvc7XpVyQ9OzvD3tpeqYg==
-X-Received: by 2002:aa7:8f24:: with SMTP id y4mr10697096pfr.36.1559826596691;
-        Thu, 06 Jun 2019 06:09:56 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i3sm1996120pfa.175.2019.06.06.06.09.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 06:09:56 -0700 (PDT)
-Date:   Thu, 6 Jun 2019 06:09:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (smsc47m1) fix (suspicious) outside array
- bounds warnings
-Message-ID: <20190606130954.GA10669@roeck-us.net>
-References: <20190606085242.31347-1-yamada.masahiro@socionext.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1559831781; x=1591367781;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VLzEF5AzOpV6fnQ8fVRLQhxhBcwCON1BJjsm+1F9fTg=;
+  b=aGtubtOBSSfCd/Us9r1WMlpAy/LpeUgv1w8AaVCuKWEx4CgPct1tf4Yw
+   U9HFmiC0tTq7b+e/ihMQiNzx2LfoobZ2NZsOSN+8p/K/RnneuQ1an0HNQ
+   34D2UinKkwBxQdkrm4hZSLYpoJe8lSxuY2g8s5IjFPrfMvUjqLkZ5NbXI
+   g=;
+X-IronPort-AV: E=Sophos;i="5.60,559,1549929600"; 
+   d="scan'208";a="769272317"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-168cbb73.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 06 Jun 2019 14:36:19 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2c-168cbb73.us-west-2.amazon.com (Postfix) with ESMTPS id 804B7A07C3;
+        Thu,  6 Jun 2019 14:36:19 +0000 (UTC)
+Received: from EX13D05UWC003.ant.amazon.com (10.43.162.226) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 6 Jun 2019 14:36:19 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D05UWC003.ant.amazon.com (10.43.162.226) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 6 Jun 2019 14:36:19 +0000
+Received: from localhost (10.95.251.103) by mail-relay.amazon.com
+ (10.43.61.243) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Thu, 6 Jun 2019 14:36:17 +0000
+Date:   Thu, 6 Jun 2019 07:35:44 -0700
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Eduardo Valentin <eduval@amazon.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 2/2] hwmon: core: fix potential memory leak in
+ *hwmon_device_register*
+Message-ID: <20190606143509.GF1534@u40b0340c692b58f6553c.ant.amazon.com>
+References: <20190530025605.3698-1-eduval@amazon.com>
+ <20190530025605.3698-3-eduval@amazon.com>
+ <20190605203837.GA30238@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190606085242.31347-1-yamada.masahiro@socionext.com>
+In-Reply-To: <20190605203837.GA30238@roeck-us.net>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 05:52:42PM +0900, Masahiro Yamada wrote:
-> Kbuild test robot reports outside array bounds warnings.
+On Wed, Jun 05, 2019 at 01:38:38PM -0700, Guenter Roeck wrote:
+> On Wed, May 29, 2019 at 07:56:05PM -0700, Eduardo Valentin wrote:
+> > When registering a hwmon device with HWMON_C_REGISTER_TZ flag
+> > in place, the hwmon subsystem will attempt to register the device
+> > also with the thermal subsystem. When the of-thermal registration
+> > fails, __hwmon_device_register jumps to ida_remove, leaving
+> > the locally allocated hwdev pointer.
+> > 
+> > This patch fixes the leak by jumping to a new label that
+> > will first unregister hdev and then fall into the kfree of hwdev
+> > to finally remove the idas and propagate the error code.
+> > 
 > 
-> This is reproducible for ARCH=sh allmodconfig with the kernel.org
-> toolchains available at:
-> 
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/8.1.0/x86_64-gcc-8.1.0-nolibc-sh4-linux.tar.xz
-> 
->   CC [M]  drivers/hwmon/smsc47m1.o
-> drivers/hwmon/smsc47m1.c: In function 'fan_div_store':
-> drivers/hwmon/smsc47m1.c:370:49: warning: array subscript [0, 2] is outside array bounds of 'u8[3]' {aka 'unsigned char[3]'} [-Warray-bounds]
->   tmp = 192 - (old_div * (192 - data->fan_preload[nr])
->                                 ~~~~~~~~~~~~~~~~~^~~~
-> drivers/hwmon/smsc47m1.c:372:19: warning: array subscript [0, 2] is outside array bounds of 'u8[3]' {aka 'unsigned char[3]'} [-Warray-bounds]
->   data->fan_preload[nr] = clamp_val(tmp, 0, 191);
->   ~~~~~~~~~~~~~~~~~^~~~
-> drivers/hwmon/smsc47m1.c:373:53: warning: array subscript [0, 2] is outside array bounds of 'const u8[3]' {aka 'const unsigned char[3]'} [-Warray-bounds]
->   smsc47m1_write_value(data, SMSC47M1_REG_FAN_PRELOAD[nr],
->                              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-> 
-> Looking at the code, I believe these are false positives.
-> 
-> While it is ridiculous to patch our driver to make the insane
-> compiler happy, clarifying the unreachable path will be helpful
-> not only for compilers but also for humans.
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Hah, actually this is wrong. hwdev is freed indirectly with the
+> device_unregister() call. See commit 74e3512731bd ("hwmon: (core)
+> Fix double-free in __hwmon_device_register()").
 
-Applied.
+heh.. I see it now. Well, it is not a straight catch though. 
 
-Thanks,
-Guenter
+> 
+> It may make sense to add a respective comment to the code, though.
+> 
 
-> ---
+I agree. Or a simple comment saying "dont worry about freeing hwdev
+because hwmon_dev_release() takes care of it".
+
+Are you patching it ?
+
+> Guenter
 > 
-> Changes in v2:
->  - Use unreachable() instead of WARN_ON()
->  - Mention that the report seems suspicious
-> 
->  drivers/hwmon/smsc47m1.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/hwmon/smsc47m1.c b/drivers/hwmon/smsc47m1.c
-> index cc6aca6e436c..6d366c9cb906 100644
-> --- a/drivers/hwmon/smsc47m1.c
-> +++ b/drivers/hwmon/smsc47m1.c
-> @@ -351,6 +351,8 @@ static ssize_t fan_div_store(struct device *dev,
->  		tmp |= data->fan_div[2] << 4;
->  		smsc47m1_write_value(data, SMSC47M2_REG_FANDIV3, tmp);
->  		break;
-> +	default:
-> +		unreachable();
->  	}
->  
->  	/* Preserve fan min */
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: linux-hwmon@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> > ---
+> > V1->V2: removed the device_unregister() before jumping
+> > into the new label, as suggested in the first review round.
+> > 
+> >  drivers/hwmon/hwmon.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> > index 429784edd5ff..620f05fc412a 100644
+> > --- a/drivers/hwmon/hwmon.c
+> > +++ b/drivers/hwmon/hwmon.c
+> > @@ -652,10 +652,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> >  				if (info[i]->config[j] & HWMON_T_INPUT) {
+> >  					err = hwmon_thermal_add_sensor(dev,
+> >  								hwdev, j);
+> > -					if (err) {
+> > -						device_unregister(hdev);
+> > -						goto ida_remove;
+> > -					}
+> > +					if (err)
+> > +						goto device_unregister;
+> >  				}
+> >  			}
+> >  		}
+> > @@ -663,6 +661,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+> >  
+> >  	return hdev;
+> >  
+> > +device_unregister:
+> > +	device_unregister(hdev);
+> >  free_hwmon:
+> >  	kfree(hwdev);
+> >  ida_remove:
+
+-- 
+All the best,
+Eduardo Valentin
