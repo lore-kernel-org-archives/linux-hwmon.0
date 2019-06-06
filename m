@@ -2,28 +2,62 @@ Return-Path: <SRS0=soXM=UF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8017DC28CC5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 00:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58005C28D18
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 01:35:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B4AD20866
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 00:00:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30A232083E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 01:35:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="scdo9fwo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfFFAAc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 5 Jun 2019 20:00:32 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:44281 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfFFAAb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 20:00:31 -0400
-Received: from [192.168.1.110] ([77.2.1.21]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MKsaz-1hGBSH24Q1-00LEBz; Thu, 06 Jun 2019 01:59:20 +0200
+        id S1726593AbfFFBfc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 5 Jun 2019 21:35:32 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42455 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbfFFBfc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 5 Jun 2019 21:35:32 -0400
+Received: by mail-pg1-f196.google.com with SMTP id e6so342990pgd.9;
+        Wed, 05 Jun 2019 18:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/QxdqYoMgOzIx2YVy8fAWt2ho9RD+sHh6bkx2lXobUc=;
+        b=scdo9fwoyDWgCiLeWlCocSXX8chUMiPIhNZpPAKowgNRzG1R8Dy3x9SE1CgkbzhNZg
+         fmn2MgtKtuOpBhYiXDg9XQWSwYYUN3IKiZFis/6tPpYO5ZDsQRzwAgZSk5YZEGRgN/Q4
+         RIFqN8t5eeVdCbwTLNoq+Eo67lyVOaGWdGmjTtSsDNfg0do+c9V2dmJhKLAyj1+e068c
+         joRs4TFnzFp7+xJt8KNcjMKcJNWwonPRqapKoAUDJaxpD96pKaPCnDxhpuuASdDLIPLm
+         mbFyvZ1iABUiT+x15uEyJ8nFulDQwix1CtIo0CtzkHZ03rI7YKG9jQc5sw9WQfsqHmqw
+         NdhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/QxdqYoMgOzIx2YVy8fAWt2ho9RD+sHh6bkx2lXobUc=;
+        b=nGi7gvRP16LUBTrqB2KyAsJlreLHFXBYWdZ5SbUOhCOl/u9xH6zmYrSoa8ocOyPGrC
+         Sy198jvimRgLVpwuhr4loSmuS5E80ga3BmKtYwFQWf+VrmDrz908FuJlf50B/C4CZvqW
+         XWLMb1LppDVJ+56kLu00OAFIijWzkjefZ9SdOQDoeGunCnNul6A/8yrkOzWxNskYUztO
+         i1hBYNByz1O5iQNJqqwUd0bl8hZ3klBIdcHXL9bBMy5lM2kTdVkpV45HFyM21Qm5zNBq
+         peYuVPrcnTC6P4G/6QlUmKY9Hj8B5A+jcybVmtxM9rOk/VX2Ilnw36Cop43XmEcs9MCN
+         OP8A==
+X-Gm-Message-State: APjAAAVlcZPuD/9/LkxBct7tVnWCv4oGbkVSTtqEPBRyp4jMG5zuIsPZ
+        xBK7Lzjthp/fYbwchMoFqKFrBdjK
+X-Google-Smtp-Source: APXvYqzdoP302oG1MIvKL5EugKA3mai1ZTWLgs0PUz/RmS2qaC9g2Xw2XdozsJg1A7y5V6ZBxA3hVQ==
+X-Received: by 2002:a62:3287:: with SMTP id y129mr44663628pfy.101.1559784931144;
+        Wed, 05 Jun 2019 18:35:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a22sm188409pfn.173.2019.06.05.18.35.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 18:35:29 -0700 (PDT)
 Subject: Re: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef
  MODULE
-To:     Guenter Roeck <linux@roeck-us.net>,
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
         "Enrico Weigelt, metux IT consult" <info@metux.net>
 Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, jdelvare@suse.com, khalid@gonehiking.org,
@@ -33,81 +67,67 @@ Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
 References: <1559397700-15585-1-git-send-email-info@metux.net>
  <1559397700-15585-4-git-send-email-info@metux.net>
  <20190601224946.GA6483@roeck-us.net>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
-Date:   Wed, 5 Jun 2019 23:59:09 +0000
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+ <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <b830e977-88a6-7780-a048-08d8847fc325@roeck-us.net>
+Date:   Wed, 5 Jun 2019 18:35:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190601224946.GA6483@roeck-us.net>
+In-Reply-To: <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:x2JZ14/Ltf9P+H+gFTGOzpgzjvpnZO2Dx45nnYtkU8/Jf77rGF5
- O3+Evml9+YC7+rE8EkhBKebhEATL6ngqsMnh1Sp0TOjWfM/22qOo3Wpzp0pji7YNXrtiG8d
- F050pOBi1wpgxtpCw1OAOz7kwg/vQAaB0Ze5Io53TRh2CiA26PIRufOmn/FXxPFgukkQfwB
- wkIzmo+GjH1u0aacbTSKA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pTo8rphLc3E=:o5o9pSJ22RJDRX25qdJR9X
- QqIFaMylNMFdKHq1uOuPqDCleLZU+ekezImac9fowU/ipSKyqoKteG1DOQfSPM04IT+ieT+tm
- Oyx3a9zNHSeZmiwLxKVT7P3CfQjYJwiS+ADHAqREXQR90mBEHb4lawnx4XKrk5fhQoNL7fd0D
- D+iTCEKoHr7G2sftpCweEZGrBkw2aEZpopAg0b55VWuwTju8Y5bRzUxk2rLoYbnG+rVNabimQ
- TOgMqCsBuv0t/CwozsNIEhzvpcIPiOZZklBERj1ChMueBjlmisKn9LCDSqMxUN9LXUGgNoTrB
- Sw900UxWU6fswrLGAzWErlyiZCsJ/HFnx37a3CDCDxrN0IHUk2ko61VYvPTRX3hwwH+FHMVox
- uIpIKn/rUoQkC3eW2BMZpjQZJ7jRtHOX/gc65Dh6cokyeJusPESVhuz7vZCo33gsJ1m1Qlrg6
- /OfxoN34bwxYq4Wl4yLR679V6mR/RQAw/MD2q74kkAWOb2mzQuijKoFN1b0qe9Yvci+R1ts6T
- EuVfyjkHPRYwTKalbjYe5nMjUXY9usesuF6cGCpLbnnUdhZx/T1K6JzDjb+dDJrHegydxueR1
- bbf+FbGSH6RqGIWSwBfD2i9ZjfH4iW74/BOPhOqQBux+zf9B6YzsIwMnH+hvz6pyMS0QADVnk
- d6s1uYwVIYchlhKkiIB4RJOcxw+gpEY9f1Xwvij/CCnK/TKjppCJCvRysmz5D1DyJtWyyIh7k
- 6g1iMq6jd3n2+pIm3BdwY/zlgFOLwdauF0XHVwuvZIEWsqhzmNC6Q13lYpo=
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 01.06.19 22:49, Guenter Roeck wrote:
-> On Sat, Jun 01, 2019 at 04:01:40PM +0200, Enrico Weigelt, metux IT consult wrote:
->> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
->> so the extra check here is not necessary.
+On 6/5/19 4:59 PM, Enrico Weigelt, metux IT consult wrote:
+> On 01.06.19 22:49, Guenter Roeck wrote:
+>> On Sat, Jun 01, 2019 at 04:01:40PM +0200, Enrico Weigelt, metux IT consult wrote:
+>>> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
+>>> so the extra check here is not necessary.
+>>>
+>>> Signed-off-by: Enrico Weigelt <info@metux.net>
+>>> ---
+>>>   drivers/hwmon/i5k_amb.c | 2 --
+>>>   1 file changed, 2 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
+>>> index b09c39a..b674c2f 100644
+>>> --- a/drivers/hwmon/i5k_amb.c
+>>> +++ b/drivers/hwmon/i5k_amb.c
+>>> @@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
+>>>       { 0, 0 }
+>>>   };
+>>> -#ifdef MODULE
+>>>   static const struct pci_device_id i5k_amb_ids[] = {
+>>>       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
+>>>       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
+>>>       { 0, }
+>>>   };
+>>>   MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
+>>> -#endif
 >>
->> Signed-off-by: Enrico Weigelt <info@metux.net>
->> ---
->>   drivers/hwmon/i5k_amb.c | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
->> index b09c39a..b674c2f 100644
->> --- a/drivers/hwmon/i5k_amb.c
->> +++ b/drivers/hwmon/i5k_amb.c
->> @@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
->>   	{ 0, 0 }
->>   };
->>   
->> -#ifdef MODULE
->>   static const struct pci_device_id i5k_amb_ids[] = {
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
->>   	{ 0, }
->>   };
->>   MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
->> -#endif
->>   
+>> I'd rather know what this table is used for in the first place.
 > 
-> I'd rather know what this table is used for in the first place.
+> Seems it's really just used for the module loader, while actual probing
+> is using a different table. IMHO, the worst thing my patch could do is
+> introducing a warning on unused variable (IMHO shouldn't happen when
+> it's static const).
+> 
 
-Seems it's really just used for the module loader, while actual probing
-is using a different table. IMHO, the worst thing my patch could do is
-introducing a warning on unused variable (IMHO shouldn't happen when
-it's static const).
+You are wrong. You'll need __maybe_unused qualifiers for those variables
+to avoid the warning.
 
-I've just rewritten it to move everything into i5k_amb_ids ... just need
-to run build tests on it (unfortunately can't run-test, as I don't have
-that device).
+Guenter
 
+> I've just rewritten it to move everything into i5k_amb_ids ... just need
+> to run build tests on it (unfortunately can't run-test, as I don't have
+> that device).
+> 
+> 
+> --mtx
+> 
 
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
