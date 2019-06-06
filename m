@@ -2,142 +2,134 @@ Return-Path: <SRS0=soXM=UF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B7FC28EB4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52C63C04AB5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:53:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7336020684
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:36:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="aGtubtOB"
+	by mail.kernel.org (Postfix) with ESMTP id 328682083D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 Jun 2019 14:53:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbfFFOgW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 Jun 2019 10:36:22 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:27975 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728508AbfFFOgW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 Jun 2019 10:36:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559831781; x=1591367781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VLzEF5AzOpV6fnQ8fVRLQhxhBcwCON1BJjsm+1F9fTg=;
-  b=aGtubtOBSSfCd/Us9r1WMlpAy/LpeUgv1w8AaVCuKWEx4CgPct1tf4Yw
-   U9HFmiC0tTq7b+e/ihMQiNzx2LfoobZ2NZsOSN+8p/K/RnneuQ1an0HNQ
-   34D2UinKkwBxQdkrm4hZSLYpoJe8lSxuY2g8s5IjFPrfMvUjqLkZ5NbXI
-   g=;
-X-IronPort-AV: E=Sophos;i="5.60,559,1549929600"; 
-   d="scan'208";a="769272317"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-168cbb73.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 06 Jun 2019 14:36:19 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2c-168cbb73.us-west-2.amazon.com (Postfix) with ESMTPS id 804B7A07C3;
-        Thu,  6 Jun 2019 14:36:19 +0000 (UTC)
-Received: from EX13D05UWC003.ant.amazon.com (10.43.162.226) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 6 Jun 2019 14:36:19 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D05UWC003.ant.amazon.com (10.43.162.226) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 6 Jun 2019 14:36:19 +0000
-Received: from localhost (10.95.251.103) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Thu, 6 Jun 2019 14:36:17 +0000
-Date:   Thu, 6 Jun 2019 07:35:44 -0700
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Eduardo Valentin <eduval@amazon.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv2 2/2] hwmon: core: fix potential memory leak in
- *hwmon_device_register*
-Message-ID: <20190606143509.GF1534@u40b0340c692b58f6553c.ant.amazon.com>
-References: <20190530025605.3698-1-eduval@amazon.com>
- <20190530025605.3698-3-eduval@amazon.com>
- <20190605203837.GA30238@roeck-us.net>
+        id S1727603AbfFFOxV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 Jun 2019 10:53:21 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.13]:44869 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727559AbfFFOxU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 6 Jun 2019 10:53:20 -0400
+X-Greylist: delayed 1502 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Jun 2019 10:53:20 EDT
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id DA1371F8161
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 Jun 2019 09:07:04 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id Yt2mhwwY74FKpYt2mhGgxp; Thu, 06 Jun 2019 09:07:04 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.127.120] (port=40832 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hYt2i-004Dw7-8a; Thu, 06 Jun 2019 09:07:01 -0500
+Date:   Thu, 6 Jun 2019 09:06:59 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "amy.shih" <amy.shih@advantech.com.tw>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] hwmon: (nct7904) Avoid fall-through warnings
+Message-ID: <20190606140659.GA2970@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190605203837.GA30238@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.127.120
+X-Source-L: No
+X-Exim-ID: 1hYt2i-004Dw7-8a
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.127.120]:40832
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 01:38:38PM -0700, Guenter Roeck wrote:
-> On Wed, May 29, 2019 at 07:56:05PM -0700, Eduardo Valentin wrote:
-> > When registering a hwmon device with HWMON_C_REGISTER_TZ flag
-> > in place, the hwmon subsystem will attempt to register the device
-> > also with the thermal subsystem. When the of-thermal registration
-> > fails, __hwmon_device_register jumps to ida_remove, leaving
-> > the locally allocated hwdev pointer.
-> > 
-> > This patch fixes the leak by jumping to a new label that
-> > will first unregister hdev and then fall into the kfree of hwdev
-> > to finally remove the idas and propagate the error code.
-> > 
-> 
-> Hah, actually this is wrong. hwdev is freed indirectly with the
-> device_unregister() call. See commit 74e3512731bd ("hwmon: (core)
-> Fix double-free in __hwmon_device_register()").
+In preparation to enabling -Wimplicit-fallthrough, this patch silences
+the following warnings:
 
-heh.. I see it now. Well, it is not a straight catch though. 
+drivers/hwmon/nct7904.c: In function 'nct7904_in_is_visible':
+drivers/hwmon/nct7904.c:313:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (channel > 0 && (data->vsen_mask & BIT(index)))
+      ^
+drivers/hwmon/nct7904.c:315:2: note: here
+  case hwmon_in_min:
+  ^~~~
+drivers/hwmon/nct7904.c: In function 'nct7904_fan_is_visible':
+drivers/hwmon/nct7904.c:230:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (data->fanin_mask & (1 << channel))
+      ^
+drivers/hwmon/nct7904.c:232:2: note: here
+  case hwmon_fan_min:
+  ^~~~
+drivers/hwmon/nct7904.c: In function 'nct7904_temp_is_visible':
+drivers/hwmon/nct7904.c:443:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (channel < 5) {
+      ^
+drivers/hwmon/nct7904.c:450:2: note: here
+  case hwmon_temp_max:
+  ^~~~
 
-> 
-> It may make sense to add a respective comment to the code, though.
-> 
+Warning level 3 was used: -Wimplicit-fallthrough=3
 
-I agree. Or a simple comment saying "dont worry about freeing hwdev
-because hwmon_dev_release() takes care of it".
+This patch is part of the ongoing efforts to enable
+-Wimplicit-fallthrough.
 
-Are you patching it ?
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/hwmon/nct7904.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Guenter
-> 
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-hwmon@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > ---
-> > V1->V2: removed the device_unregister() before jumping
-> > into the new label, as suggested in the first review round.
-> > 
-> >  drivers/hwmon/hwmon.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index 429784edd5ff..620f05fc412a 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -652,10 +652,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-> >  				if (info[i]->config[j] & HWMON_T_INPUT) {
-> >  					err = hwmon_thermal_add_sensor(dev,
-> >  								hwdev, j);
-> > -					if (err) {
-> > -						device_unregister(hdev);
-> > -						goto ida_remove;
-> > -					}
-> > +					if (err)
-> > +						goto device_unregister;
-> >  				}
-> >  			}
-> >  		}
-> > @@ -663,6 +661,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
-> >  
-> >  	return hdev;
-> >  
-> > +device_unregister:
-> > +	device_unregister(hdev);
-> >  free_hwmon:
-> >  	kfree(hwdev);
-> >  ida_remove:
-
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index dd450dd29ac7..bf35dfd2d3a7 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -229,6 +229,7 @@ static umode_t nct7904_fan_is_visible(const void *_data, u32 attr, int channel)
+ 	case hwmon_fan_alarm:
+ 		if (data->fanin_mask & (1 << channel))
+ 			return 0444;
++		break;
+ 	case hwmon_fan_min:
+ 		if (data->fanin_mask & (1 << channel))
+ 			return 0644;
+@@ -312,6 +313,7 @@ static umode_t nct7904_in_is_visible(const void *_data, u32 attr, int channel)
+ 	case hwmon_in_alarm:
+ 		if (channel > 0 && (data->vsen_mask & BIT(index)))
+ 			return 0444;
++		break;
+ 	case hwmon_in_min:
+ 	case hwmon_in_max:
+ 		if (channel > 0 && (data->vsen_mask & BIT(index)))
+@@ -447,6 +449,7 @@ static umode_t nct7904_temp_is_visible(const void *_data, u32 attr, int channel)
+ 			if (data->has_dts & BIT(channel - 5))
+ 				return 0444;
+ 		}
++		break;
+ 	case hwmon_temp_max:
+ 	case hwmon_temp_max_hyst:
+ 	case hwmon_temp_emergency:
 -- 
-All the best,
-Eduardo Valentin
+2.21.0
+
