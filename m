@@ -7,59 +7,62 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4331FC2BCA1
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Jun 2019 20:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B75C468BD
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Jun 2019 20:30:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DA6F20868
+	by mail.kernel.org (Postfix) with ESMTP id EEEC820868
 	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Jun 2019 20:30:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XpenQCPm"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6q0CjEy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729920AbfFGUag (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Jun 2019 16:30:36 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38926 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729910AbfFGUag (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Jun 2019 16:30:36 -0400
-Received: by mail-pf1-f195.google.com with SMTP id j2so1806848pfe.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 07 Jun 2019 13:30:36 -0700 (PDT)
+        id S1730091AbfFGUah (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Jun 2019 16:30:37 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:45367 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729910AbfFGUah (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Jun 2019 16:30:37 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w34so1717417pga.12
+        for <linux-hwmon@vger.kernel.org>; Fri, 07 Jun 2019 13:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=WLz2SfaUwAfarUYtEyfVxJRKHQ4lZqI9TqjU9DSSTjE=;
-        b=XpenQCPm3nvWVeOsU+sRqmIE+yuk/Qmcxx8c7U+6s2bG2oByf7tw12xMjk/TWN0p7c
-         WJ9AM3s5dFA2rXzyCFyg1Or+dKU8px5XDc7Byen+FfiNE8hVLtdOOhy4CBGETXJmqi/a
-         Woile9y9wQcHOAAFxuSZQ/EC8aq8Zpe3pIybx6mp6mrbX1j5Nu6lYFIKFTBd4oa1WhQz
-         IcbS2BwO7IgKWf3Ono+NhEgKYWxCR0DS+be4LNrcA0Fv+gthTx4d+036PxdqSZqLEglU
-         4Jz30Y0m/J2lVncCQYbdSstaD14McXliK2m/8rf+a1Ai5I3+aMTyNorFg6pIQQQ61Qe9
-         oPdg==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=IawoHpcm2yDTDm6rV1CuFi4J7WuWEOEooBRwSH26MYg=;
+        b=W6q0CjEym4NgwkT6iPKAlJCEPwFzFnB/suUJR4oAXoFLw65SqnGx5tyDQLQXRsIuKI
+         PBW7kMpzgXGgm03y6MLHgMiaVvPvasml8lGjghxoxOKrbURhHYCKCEzbuST24xTv47qO
+         gv5/j91d3tJ/sF1SvKkceXerEy3vtdkd0uky5nDNRt1qcpdJA2vbexO8KjiUKXKQrC94
+         eQqVmAlmUTz1rwuA8ouRHrveYenUe+pykoljn7SBVMPB2ctCIizPj1CZ5E8QyxIsfGlB
+         kVEXQ9tj/mFmqQbCZLp0SCTfz+Qp+yMLsEzo4DNrIEh7jC1Q3EwGXoiWcY/GCkWKfwuZ
+         haSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=WLz2SfaUwAfarUYtEyfVxJRKHQ4lZqI9TqjU9DSSTjE=;
-        b=VBRs2dbzgJkgYFQa55d6/SOLtrzm04drOK+muHNKxTV341bDPGZ3/dv7ZpNZEvTAFx
-         23pl9UZaAEdir7GlgnEBH8yQ5+1uvz/4YxwKOBsqAXfc7ulASxPvdiTr29ra7XagDUTD
-         1YL/t6Q6GfxFGcSx1F0gmkByj6jkoR7z1kILTrfY9yq/YztoziNl2toi8F6pjOhRD7Bs
-         q+L9b3xFsgNUSF5Hzy+CO67OKMtpYBZsIPY83NMSdSBVYaLbqpqAYfLMWWkWs8kzPdEy
-         GboPBAQPDN0GaJL0RRdimQ6CFFiOmhD4/MKnwKO+/ti9owwxkHUlDI6+57y292eL8IOw
-         gjjg==
-X-Gm-Message-State: APjAAAXFPbZIFlPLf2bz6cdfh9yoab9xcH7BForUSxd3zN9qCUOwYK+d
-        Ks9T7OC6PK4WwbS6FiOkUu6daXpV
-X-Google-Smtp-Source: APXvYqytIbzAamLHPmOw1yVmNJLlz64EUHOYkN8DPL0eI2z275ntap3eHMFMwpnR7oE5GCt+A62Npg==
-X-Received: by 2002:a63:2c01:: with SMTP id s1mr4668020pgs.261.1559939435441;
-        Fri, 07 Jun 2019 13:30:35 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references;
+        bh=IawoHpcm2yDTDm6rV1CuFi4J7WuWEOEooBRwSH26MYg=;
+        b=DTwdH89qqE6z4zoRyalEhID3FfvrDK0RTjoP02TSij3vQTV2JUa6lXtFup7FkWWPJ4
+         TpDfVlysiD7tDpPl0ZiyxnOc+e0F+GdjylUGQFKvqAdPbcvYWq+z9nS5UJXrbBkyfq8v
+         2YqGcy0PFRoM+CarzJzAKPHW/krNC3WbzrWXtVrgHye7NLwzmA8qnoxAES41hEjISvDe
+         jkcnW6NYcVw6QoSb7VZmr0O1iwBJMMQA9Y+JrUTO4A6Uytvk8eeuzwh0tBTZTpiNrEgq
+         N8j13F1a+I9QqQBvPrXnhLeEmIba/mB27X1QTbFGas3MnV15mL+TG+bi5vxKS0/YXr0H
+         RG8A==
+X-Gm-Message-State: APjAAAWQspAdJk5GKZdwmdorH4CKaj6PrLj1CiwshzqIW3Fxz5tRg9EM
+        2N6jY6419twPyWZ4lBS+vDjqGOEo
+X-Google-Smtp-Source: APXvYqzOi64abK8A2eYhzzXetTF5/AUV1rteom+kJ6Cpv+7QprqpSLWB/ceUz8J4yZV/81hgyK9lLA==
+X-Received: by 2002:a17:90a:1b4c:: with SMTP id q70mr7581661pjq.69.1559939436867;
+        Fri, 07 Jun 2019 13:30:36 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k8sm2866550pfk.177.2019.06.07.13.30.34
+        by smtp.gmail.com with ESMTPSA id i4sm2724015pjd.31.2019.06.07.13.30.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jun 2019 13:30:34 -0700 (PDT)
+        Fri, 07 Jun 2019 13:30:36 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] hwmon: (gpio-fan) Check return value from devm_add_action_or_reset
-Date:   Fri,  7 Jun 2019 13:30:30 -0700
-Message-Id: <1559939431-18731-1-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 2/2] hwmon: (pwm-fan) Check return value from devm_add_action_or_reset
+Date:   Fri,  7 Jun 2019 13:30:31 -0700
+Message-Id: <1559939431-18731-2-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1559939431-18731-1-git-send-email-linux@roeck-us.net>
+References: <1559939431-18731-1-git-send-email-linux@roeck-us.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -68,27 +71,40 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 devm_add_action_or_reset() can fail due to a memory allocation failure.
 Check for it and return the error if that happens.
 
-Fixes: 9534784550ab ("hwmon: (gpio-fan) Use devm_thermal_of_cooling_device_register")
+Fixes: 37bcec5d9f71 ("hwmon: (pwm-fan) Use devm_thermal_of_cooling_device_register")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/gpio-fan.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hwmon/pwm-fan.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 84753680a4e8..54c27e683ee1 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -524,7 +524,9 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 		err = fan_ctrl_init(fan_data);
- 		if (err)
- 			return err;
--		devm_add_action_or_reset(dev, gpio_fan_stop, fan_data);
-+		err = devm_add_action_or_reset(dev, gpio_fan_stop, fan_data);
-+		if (err)
-+			return err;
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 08c9b9f1c16e..54c0ff00d67f 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -320,8 +320,10 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			dev_err(dev, "Failed to enable fan supply: %d\n", ret);
+ 			return ret;
+ 		}
+-		devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
+-					 ctx->reg_en);
++		ret = devm_add_action_or_reset(dev, pwm_fan_regulator_disable,
++					       ctx->reg_en);
++		if (ret)
++			return ret;
  	}
  
- 	/* Make this driver part of hwmon class. */
+ 	ctx->pwm_value = MAX_PWM;
+@@ -337,7 +339,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 	timer_setup(&ctx->rpm_timer, sample_timer, 0);
+-	devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx);
++	ret = devm_add_action_or_reset(dev, pwm_fan_pwm_disable, ctx);
++	if (ret)
++		return ret;
+ 
+ 	of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
+ 	ctx->pulses_per_revolution = ppr;
 -- 
 2.7.4
 
