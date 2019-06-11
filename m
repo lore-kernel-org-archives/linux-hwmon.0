@@ -2,116 +2,114 @@ Return-Path: <SRS0=/b0i=UK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03943C43218
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jun 2019 10:57:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D42DBC06508
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jun 2019 17:59:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C83B520673
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jun 2019 10:57:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tf0kGDzD"
+	by mail.kernel.org (Postfix) with ESMTP id A97BA2089E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 Jun 2019 17:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1560275942;
+	bh=MK9z6qc6477w3QjwaHDf+E3M5nkEx1R3Vk/Ui/ZFJBc=;
+	h=Date:From:To:Cc:Subject:List-ID:From;
+	b=I6cMPzeN/iZqd7uxNSjM4YcAfWA34FT6QCvZUZfTqZi6I8qlHNFoYikPkJhATQtKs
+	 F4E8Ns8LcStcgGDhZM6OgMpRuqsSDJt2OFQpyp5FcW971IRb6Pl20313tCs/J5ToZU
+	 oTK60dne/mDF9G6aZNI+3/d6WT1V22hOM7us8GnA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388492AbfFKK5x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Jun 2019 06:57:53 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36696 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388487AbfFKK5x (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Jun 2019 06:57:53 -0400
-Received: by mail-pg1-f196.google.com with SMTP id f21so754783pgi.3;
-        Tue, 11 Jun 2019 03:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NTaC/S77N+wYOnB6ltXnK1NPB8xaQz3FUn5xkbGkDUE=;
-        b=tf0kGDzD4d9DW6cYr4GzUHjL43Qv448VyaoCqkh6aLb1dLuPlH4LnWC4zV+v0FM6KJ
-         XHZliyo+ZVMcR5h7a0s3zm9GMZ3hjW7eaHZixQh7FKR27XHF5Es6EI4ivLc9Io5iy/nZ
-         fflJOg4/NasnBDELNjEZ8t3MqJ5YzXLWxe6mfYGDzU8sydoqPpLxjpJIGhWI+RiQllWp
-         B//IygIHK4TWFgVcH43juR0OYxM8ciCl+u4sIuDOzyn1V0fPzKLDeCAaTFDXUeyC+bXL
-         fFpycW/QoNtfF3I8FxiYQqwRY8VaNjniMcfudR9rkChWd0AareHQSGyxmbGmhAvAzzLg
-         mGfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NTaC/S77N+wYOnB6ltXnK1NPB8xaQz3FUn5xkbGkDUE=;
-        b=d0bh9r09ultCO+aVMGsrGoUZILC+Dn/z427HWg0DTvTBaN/rWk7kxrudEW0h4t8EJ6
-         XxfPENm04SVRBxSMV2xmHu6lbS2bAiJjIPKBPoDEr1gHeHWpx4tN0LUXiP/msxsTjQj4
-         3H94Ei8iacbFpSf4OjUoilkQR8SkoQJedlhtaQfQFmQnLQo7Ke8reKwF+zwokasOWC2N
-         SBHmRP5c377kJNxubEeiFZ/esS3fuXkJShQB1FMSvbBmtbFZCqIL7cgpk5GPAtyQIdJi
-         tbzp99kCDUZNwGE6iGzyZ5O9Rb0vreikE74kJmy6OeSfIhffEe4rNUvxDj/prd8RhOc7
-         EvAw==
-X-Gm-Message-State: APjAAAXu64PEbNEgt9/lmWG3bcXkBZV9bmh439aOOKaxTNiQrmd0K9R1
-        zXcLzo43mevUmbmPk58f99OXJx8D
-X-Google-Smtp-Source: APXvYqwd6hTQb8b5qIav5oS0XelM/MKJ+RUEzzPMdD8olaaGc1NwQCgINyg+qjDh1QzxWJFOWXJfpA==
-X-Received: by 2002:a17:90a:dd45:: with SMTP id u5mr5481580pjv.109.1560250672123;
-        Tue, 11 Jun 2019 03:57:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g8sm1772700pjs.23.2019.06.11.03.57.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 03:57:51 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: (ads7871) Switch to SPDX header
-To:     Lubomir Rintel <lkundrak@v3.sk>, Jean Delvare <jdelvare@suse.com>
-Cc:     Paul Thomas <pthomas8589@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190611071948.2978150-1-lkundrak@v3.sk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <c080938b-eb7e-c21f-52d1-a35a1150c82f@roeck-us.net>
-Date:   Tue, 11 Jun 2019 03:57:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2406791AbfFKR7C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Jun 2019 13:59:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406781AbfFKR7B (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 11 Jun 2019 13:59:01 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D40F2086D;
+        Tue, 11 Jun 2019 17:59:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560275940;
+        bh=MK9z6qc6477w3QjwaHDf+E3M5nkEx1R3Vk/Ui/ZFJBc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=zX2SpavHeYz6Xkr3kk/NPf9QskVWlUTyrRA22+8TtRPBvTTMHGF0frmsREIEaELZF
+         kKX+I1TnZV15Bg6wfCuxVLic3YJYh/O6QUljlAwatp9Tm0agp9KO7Rg3va7t1SS9es
+         6HrzD5/9lhlsEpA3MKpVDo7+6u15w9DjPeQOwk3A=
+Date:   Tue, 11 Jun 2019 19:58:58 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Luca Tettamanti <kronos.it@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: asus_atk0110: no need to check return value of
+ debugfs_create functions
+Message-ID: <20190611175858.GA10077@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20190611071948.2978150-1-lkundrak@v3.sk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/11/19 12:19 AM, Lubomir Rintel wrote:
-> The original license text had a typo ("publishhed") which would be
-> likely to confuse automated licensing auditing tools. Let's just switch
-> to SPDX instead of fixing the wording.
-> 
-If you have a look into the upstream kernel, you may notice that
-this has already been done. Same for the other patch.
+When calling debugfs functions, there is no need to ever check the
+return value.  The function can work or not, but the code logic should
+never do something different based on this.
 
-Guenter
+Cc: Luca Tettamanti <kronos.it@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/hwmon/asus_atk0110.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->   drivers/hwmon/ads7871.c | 10 +---------
->   1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-> index cd14c1501508..7ccc79f77f95 100644
-> --- a/drivers/hwmon/ads7871.c
-> +++ b/drivers/hwmon/ads7871.c
-> @@ -1,17 +1,9 @@
-> +// SPDX-License-Identifier: GPL-2.0+
->   /*
->    *  ads7871 - driver for TI ADS7871 A/D converter
->    *
->    *  Copyright (c) 2010 Paul Thomas <pthomas8589@gmail.com>
->    *
-> - *  This program is distributed in the hope that it will be useful,
-> - *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> - *  GNU General Public License for more details.
-> - *
-> - *  This program is free software; you can redistribute it and/or modify
-> - *  it under the terms of the GNU General Public License version 2 or
-> - *  later as publishhed by the Free Software Foundation.
-> - *
->    *	You need to have something like this in struct spi_board_info
->    *	{
->    *		.modalias	= "ads7871",
-> 
+diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
+index 22be78cc5a4c..b5f0abde916b 100644
+--- a/drivers/hwmon/asus_atk0110.c
++++ b/drivers/hwmon/asus_atk0110.c
+@@ -789,33 +789,16 @@ static const struct file_operations atk_debugfs_ggrp_fops = {
+ static void atk_debugfs_init(struct atk_data *data)
+ {
+ 	struct dentry *d;
+-	struct dentry *f;
+ 
+ 	data->debugfs.id = 0;
+ 
+ 	d = debugfs_create_dir("asus_atk0110", NULL);
+-	if (!d || IS_ERR(d))
+-		return;
+ 
+-	f = debugfs_create_x32("id", 0600, d, &data->debugfs.id);
+-	if (!f || IS_ERR(f))
+-		goto cleanup;
+-
+-	f = debugfs_create_file_unsafe("gitm", 0400, d, data,
+-				       &atk_debugfs_gitm);
+-	if (!f || IS_ERR(f))
+-		goto cleanup;
+-
+-	f = debugfs_create_file("ggrp", 0400, d, data,
+-				&atk_debugfs_ggrp_fops);
+-	if (!f || IS_ERR(f))
+-		goto cleanup;
++	debugfs_create_x32("id", 0600, d, &data->debugfs.id);
++	debugfs_create_file_unsafe("gitm", 0400, d, data, &atk_debugfs_gitm);
++	debugfs_create_file("ggrp", 0400, d, data, &atk_debugfs_ggrp_fops);
+ 
+ 	data->debugfs.root = d;
+-
+-	return;
+-cleanup:
+-	debugfs_remove_recursive(d);
+ }
+ 
+ static void atk_debugfs_cleanup(struct atk_data *data)
+-- 
+2.22.0
 
