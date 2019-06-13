@@ -2,298 +2,144 @@ Return-Path: <SRS0=HBTv=UM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A710C31E45
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jun 2019 15:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AE2AC31E49
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jun 2019 15:43:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DDD92206BB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jun 2019 15:37:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="LAmx8Ybo"
+	by mail.kernel.org (Postfix) with ESMTP id E2710206BB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Jun 2019 15:43:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbfFMPhN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Jun 2019 11:37:13 -0400
-Received: from mail-eopbgr40112.outbound.protection.outlook.com ([40.107.4.112]:5090
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726795AbfFMKMB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Jun 2019 06:12:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n751I0PEXXzKET3/aKBM0zIKinHfoRFwKsahm5j1ABQ=;
- b=LAmx8Ybo7lRpMR03Ac/U8IaVn+Yq4Fk1zBwZhk6M///uivaT4xvy6q152dF3CPbJ7K5cX1ZQV/5iV63V52SoG3nHDxdgmJZeZnVxQ7eeIsibFUpXp2oviyMjg89XUoLNlfe1Ufv5C38V5Y+W6QrtTH0vLbpTEHp5seXON3y2kk4=
-Received: from VI1PR0701MB2752.eurprd07.prod.outlook.com (10.173.81.136) by
- VI1PR0701MB2656.eurprd07.prod.outlook.com (10.173.82.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.8; Thu, 13 Jun 2019 10:11:56 +0000
-Received: from VI1PR0701MB2752.eurprd07.prod.outlook.com
- ([fe80::f477:e7f8:c964:4d06]) by VI1PR0701MB2752.eurprd07.prod.outlook.com
- ([fe80::f477:e7f8:c964:4d06%7]) with mapi id 15.20.1987.012; Thu, 13 Jun 2019
- 10:11:56 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH] hwmon: (pmbus/adm1275) Fix power sampling support
-Thread-Topic: [PATCH] hwmon: (pmbus/adm1275) Fix power sampling support
-Thread-Index: AQHVIS9Mngp9UFDC406PONYA3p5V+qaZXnYA
-Date:   Thu, 13 Jun 2019 10:11:56 +0000
-Message-ID: <20190613101150.GA13769@localhost.localdomain>
-References: <1560351504-14163-1-git-send-email-linux@roeck-us.net>
-In-Reply-To: <1560351504-14163-1-git-send-email-linux@roeck-us.net>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR06CA0161.eurprd06.prod.outlook.com
- (2603:10a6:7:16::48) To VI1PR0701MB2752.eurprd07.prod.outlook.com
- (2603:10a6:801:a::8)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.2.28]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0eb3c41e-482a-4a09-d334-08d6efe790a7
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0701MB2656;
-x-ms-traffictypediagnostic: VI1PR0701MB2656:
-x-microsoft-antispam-prvs: <VI1PR0701MB2656B24DC2A7CB946623C725EFEF0@VI1PR0701MB2656.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 0067A8BA2A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(346002)(366004)(376002)(39860400002)(189003)(199004)(5660300002)(53936002)(8936002)(8676002)(52116002)(25786009)(9686003)(71200400001)(71190400001)(86362001)(1076003)(6512007)(66476007)(68736007)(3846002)(6246003)(107886003)(99286004)(2906002)(33656002)(6116002)(6486002)(6436002)(4326008)(229853002)(64756008)(66446008)(14454004)(26005)(6916009)(305945005)(7736002)(11346002)(66946007)(6506007)(61506002)(66066001)(66556008)(54906003)(476003)(102836004)(478600001)(186003)(386003)(73956011)(256004)(14444005)(81166006)(486006)(446003)(81156014)(316002)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2656;H:VI1PR0701MB2752.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: nZEOrsx8IQoYP5xjP5YH0kpaZ8NEXrNAY8UtH1efHsyhI8BGKD0jALutJdom38OzMqFSBBqirm7blHvdx/XOKAqFOSLGRa/dNUCAPDxnPzVfILDEM1DrJD5VMsJFJWp1qrm+i+rho0jHRn1gQPz6jN2BSXILuJpmqqiuryuAiB3wlgNvGTbcSOYKjGU/qN9REWy6u1CJeWjqiySYuRKpHbWMP4iqm/80SLiSv1kVsKVHa+Gu4gb9rAFwoZ6ZAYJmD/CcETrpGnneguwOhXRstTYhXYEH5ynZVYkTbyLjh6L88Lh/peTVrbjQToLvajfIb3GpxWxD48TyODVoHsNHL4JmH5Y6gCVWlJmInRledy/TeNwcZfEg1t4Nak36LkgsJf2yDKPoguQ+ArMyni1urXgP9lfZfllcJC1jD8RB0RA=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <40C615FE84220A4EA224D9909FDE40DA@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727067AbfFMPnR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:43:17 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:42624 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726700AbfFMPm7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:42:59 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 45Pp0Z4QQJz1rZ0T;
+        Thu, 13 Jun 2019 17:42:54 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 45Pp0Z3cMHz1qqkR;
+        Thu, 13 Jun 2019 17:42:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id 9YOcWsdlzCy0; Thu, 13 Jun 2019 17:42:53 +0200 (CEST)
+X-Auth-Info: mkAhY639dHiUgP0pgd/tVI9bibCwrTnW/Vhhbw0AWfc=
+Received: from [IPv6:::1] (unknown [195.140.253.167])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 13 Jun 2019 17:42:53 +0200 (CEST)
+Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20190528192324.28862-1-marex@denx.de>
+ <96793717-a55c-7844-f7c0-cc357c774a19@gmail.com>
+ <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
+ <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
+ <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
+ <20190528195806.GV18059@lunn.ch>
+ <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
+ <20190528212252.GW18059@lunn.ch>
+ <fe6c4f2f-812d-61b8-3ffb-7ed7dd89d151@denx.de>
+ <20190529232930.GF18059@lunn.ch>
+ <19f9e596-5b51-8c76-396e-572d3e8da463@denx.de>
+From:   Marek Vasut <marex@denx.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f9bb1f48-b69d-09b2-5b48-e3f09ce9107e@denx.de>
+Date:   Thu, 13 Jun 2019 17:42:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0eb3c41e-482a-4a09-d334-08d6efe790a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 10:11:56.5557
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2656
+In-Reply-To: <19f9e596-5b51-8c76-396e-572d3e8da463@denx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 07:58:24AM -0700, Guenter Roeck wrote:
->Not every chip supported by this driver supports setting the number
->of samples for power averaging. Also, the power monitoring register
->is not always a 16-bit register, and the configuration bits used for
->voltage sampling are different depending on the register width.
->Some conditional code is needed to fix the problem.
->
->On top of all that, the compiler complains about problems with
->FIELD_GET and FIELD_PREP macros if the file is built with W=3D1.
->Avoid using those macros to silence the warning.
->
->Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->Cc: Alexander Sverdlin <alexander.sverdlin@nokia.com>
->Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->---
-> drivers/hwmon/pmbus/adm1275.c | 84 +++++++++++++++++++++++++++++++++-----=
------
-> 1 file changed, 66 insertions(+), 18 deletions(-)
->
->diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
->index a477ce0474bb..b23c2dd95893 100644
->--- a/drivers/hwmon/pmbus/adm1275.c
->+++ b/drivers/hwmon/pmbus/adm1275.c
->@@ -71,9 +71,17 @@ enum chips { adm1075, adm1272, adm1275, adm1276, adm127=
-8, adm1293, adm1294 };
-> #define ADM1075_VAUX_OV_WARN		BIT(7)
-> #define ADM1075_VAUX_UV_WARN		BIT(6)
->
->-#define ADM1275_PWR_AVG_MASK		GENMASK(13, 11)
->-#define ADM1275_VI_AVG_MASK		GENMASK(10, 8)
->-#define ADM1275_SAMPLES_AVG_MAX	128
->+#define ADM1275_VI_AVG_SHIFT		0
->+#define ADM1275_VI_AVG_MASK		GENMASK(ADM1275_VI_AVG_SHIFT + 2, \
->+						ADM1275_VI_AVG_SHIFT)
->+#define ADM1275_SAMPLES_AVG_MAX		128
->+
->+#define ADM1278_PRW_AVG_SHIFT		11
->+#define ADM1278_PWR_AVG_MASK		GENMASK(ADM1278_PRW_AVG_SHIFT + 2, \
->+						ADM1278_PRW_AVG_SHIFT)
+On 5/30/19 1:46 AM, Marek Vasut wrote:
+> On 5/30/19 1:29 AM, Andrew Lunn wrote:
+>> On Tue, May 28, 2019 at 11:33:33PM +0200, Marek Vasut wrote:
+>>> On 5/28/19 11:22 PM, Andrew Lunn wrote:
+>>>>> The link detection on the TJA1100 (not TJA1101) seems unstable at best,
+>>>>> so I better use all the interrupt sources to nudge the PHY subsystem and
+>>>>> have it check the link change.
+>>>>
+>>>> Then it sounds like you should just ignore interrupts and stay will
+>>>> polling for the TJA1100.
+>>>
+>>> Polling for the link status change is slow(er) than the IRQ driven
+>>> operation, so I would much rather use the interrupts.
+>>
+>> I agree about the speed, but it seems like interrupts on this PHY are
+>> not so reliable. Polling always works. But unfortunately, you cannot
+>> have both interrupts and polling to fix up problems when interrupts
+>> fail. Your call, do you think interrupts really do work?
+> 
+> It works fine for me this way. And mind you, it's only the TJA1100
+> that's flaky, the TJA1101 is better.
+> 
+>> If you say that tja1101 works as expected, then please just use the
+>> link up/down bits for it.
+> 
+> I still don't know which bits really trigger link status changes, so I'd
+> like to play it safe and just trigger on all of them.
 
-s/PRW/PWR/
+So what do we do here ?
 
->+#define ADM1278_VI_AVG_SHIFT		8
->+#define ADM1278_VI_AVG_MASK		GENMASK(ADM1278_VI_AVG_SHIFT + 2, \
->+						ADM1278_VI_AVG_SHIFT)
->
-> struct adm1275_data {
-> 	int id;
->@@ -86,6 +94,7 @@ struct adm1275_data {
-> 	bool have_pin_min;
-> 	bool have_pin_max;
-> 	bool have_temp_max;
->+	bool have_power_sampling;
-> 	struct pmbus_driver_info info;
-> };
->
->@@ -161,28 +170,60 @@ static const struct coefficients adm1293_coefficient=
-s[] =3D {
-> 	[18] =3D { 7658, 0, -3 },		/* power, 21V, irange200 */
-> };
->
->-static inline int adm1275_read_pmon_config(struct i2c_client *client, u16=
- mask)
->+static inline int adm1275_read_pmon_config(const struct adm1275_data *dat=
-a,
-
-This function does not have to be inline anymore. It had to be inline
-before because of FIELD_GET but this is not used anymore.
-
->+					   struct i2c_client *client,
->+					   bool is_power)
-> {
->-	int ret;
->-
->-	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
->+	int shift, ret;
->+	u16 mask;
->+
->+	/*
->+	 * The PMON configuration register is a 16-bit register only on chips
->+	 * supporting power average sampling. On other chips it is an 8-bit
->+	 * register.
->+	 */
->+	if (data->have_power_sampling) {
->+		ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
->+		mask =3D is_power ? ADM1278_PWR_AVG_MASK : ADM1278_VI_AVG_MASK;
->+		shift =3D is_power ? ADM1278_PRW_AVG_SHIFT : ADM1278_VI_AVG_SHIFT;
->+	} else {
->+		ret =3D i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
->+		mask =3D ADM1275_VI_AVG_MASK;
->+		shift =3D ADM1275_VI_AVG_SHIFT;
->+	}
-> 	if (ret < 0)
-> 		return ret;
->
->-	return FIELD_GET(mask, (u16)ret);
->+	return (ret & mask) >> shift;
-> }
->
->-static inline int adm1275_write_pmon_config(struct i2c_client *client, u1=
-6 mask,
->+static inline int adm1275_write_pmon_config(const struct adm1275_data *da=
-ta,
->+					    struct i2c_client *client,
->+					    bool is_power,
-> 					    u16 word)
-
-Same comment about inline here.
-
-> {
->-	int ret;
->-
->-	ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
->+	int shift, ret;
->+	u16 mask;
->+
->+	if (data->have_power_sampling) {
->+		ret =3D i2c_smbus_read_word_data(client, ADM1275_PMON_CONFIG);
->+		mask =3D is_power ? ADM1278_PWR_AVG_MASK : ADM1278_VI_AVG_MASK;
->+		shift =3D is_power ? ADM1278_PRW_AVG_SHIFT : ADM1278_VI_AVG_SHIFT;
->+	} else {
->+		ret =3D i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
->+		mask =3D ADM1275_VI_AVG_MASK;
->+		shift =3D ADM1275_VI_AVG_SHIFT;
->+	}
-> 	if (ret < 0)
-> 		return ret;
->
->-	word =3D FIELD_PREP(mask, word) | (ret & ~mask);
->-	ret =3D i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, word);
->+	word =3D (ret & ~mask) | ((word << shift) & mask);
->+	if (data->have_power_sampling)
->+		ret =3D i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG,
->+						word);
->+	else
->+		ret =3D i2c_smbus_write_byte_data(client, ADM1275_PMON_CONFIG,
->+						word);
->
-> 	return ret;
-> }
->@@ -266,14 +307,16 @@ static int adm1275_read_word_data(struct i2c_client =
-*client, int page, int reg)
-> 			return -ENXIO;
-> 		break;
-> 	case PMBUS_VIRT_POWER_SAMPLES:
->-		ret =3D adm1275_read_pmon_config(client, ADM1275_PWR_AVG_MASK);
->+		if (!data->have_power_sampling)
->+			return -ENXIO;
->+		ret =3D adm1275_read_pmon_config(data, client, true);
-> 		if (ret < 0)
-> 			break;
-> 		ret =3D BIT(ret);
-> 		break;
-> 	case PMBUS_VIRT_IN_SAMPLES:
-> 	case PMBUS_VIRT_CURR_SAMPLES:
->-		ret =3D adm1275_read_pmon_config(client, ADM1275_VI_AVG_MASK);
->+		ret =3D adm1275_read_pmon_config(data, client, false);
-> 		if (ret < 0)
-> 			break;
-> 		ret =3D BIT(ret);
->@@ -323,14 +366,16 @@ static int adm1275_write_word_data(struct i2c_client=
- *client, int page, int reg,
-> 		ret =3D pmbus_write_word_data(client, 0, ADM1278_PEAK_TEMP, 0);
-> 		break;
-> 	case PMBUS_VIRT_POWER_SAMPLES:
->+		if (!data->have_power_sampling)
->+			return -ENXIO;
-> 		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
->-		ret =3D adm1275_write_pmon_config(client, ADM1275_PWR_AVG_MASK,
->+		ret =3D adm1275_write_pmon_config(data, client, true,
-> 						ilog2(word));
-> 		break;
-> 	case PMBUS_VIRT_IN_SAMPLES:
-> 	case PMBUS_VIRT_CURR_SAMPLES:
-> 		word =3D clamp_val(word, 1, ADM1275_SAMPLES_AVG_MAX);
->-		ret =3D adm1275_write_pmon_config(client, ADM1275_VI_AVG_MASK,
->+		ret =3D adm1275_write_pmon_config(data, client, false,
-> 						ilog2(word));
-> 		break;
-> 	default:
->@@ -528,6 +573,7 @@ static int adm1275_probe(struct i2c_client *client,
-> 		data->have_vout =3D true;
-> 		data->have_pin_max =3D true;
-> 		data->have_temp_max =3D true;
->+		data->have_power_sampling =3D true;
->
-> 		coefficients =3D adm1272_coefficients;
-> 		vindex =3D (config & ADM1275_VRANGE) ? 1 : 0;
->@@ -613,6 +659,7 @@ static int adm1275_probe(struct i2c_client *client,
-> 		data->have_vout =3D true;
-> 		data->have_pin_max =3D true;
-> 		data->have_temp_max =3D true;
->+		data->have_power_sampling =3D true;
->
-> 		coefficients =3D adm1278_coefficients;
-> 		vindex =3D 0;
->@@ -648,6 +695,7 @@ static int adm1275_probe(struct i2c_client *client,
-> 		data->have_pin_min =3D true;
-> 		data->have_pin_max =3D true;
-> 		data->have_mfr_vaux_status =3D true;
->+		data->have_power_sampling =3D true;
->
-> 		coefficients =3D adm1293_coefficients;
->
->--=20
->2.7.4
->
+-- 
+Best regards,
+Marek Vasut
