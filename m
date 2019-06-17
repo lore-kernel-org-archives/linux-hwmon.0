@@ -2,110 +2,99 @@ Return-Path: <SRS0=iUk6=UQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED82AC31E5B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 17:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF3BC31E5B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 17:16:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1DE720652
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 17:04:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64BE32084D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 17:16:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWfxbcQK"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="gaCazfKZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfFQREZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jun 2019 13:04:25 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46180 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725863AbfFQREZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jun 2019 13:04:25 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v9so6135681pgr.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Jun 2019 10:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2/6t6RQMcfxN8ERz/VFSJQyHf7ozrJTKUk2r99LP3Zw=;
-        b=IWfxbcQKNkLCWRLR9ME/qClH9GPE9mkwpO8nBlhvyE0TO0NV34QHqq4iV65ljMwu2p
-         osGGfzfyb2yn/0oDKEbvMQAOAuISCBocdvugK0artZj/s7F7ptsbKbsTSWR3HCsgLkJO
-         QLfv3JCBxolPgAfI8n7VfS/lHVcybDeafevUKxkJCjmUcaEeoI4U7IdAh8hPnRn4JBEB
-         fqJZ/uemZOjxIGym+fLqG7gZwz9oSJC+5pYsOLjGgbz0Yyr1XY1h/cPKCiZMPIvxZyNA
-         V6mZ9Wuf+qqKbRaROtiuYbdFV7IBf6W8dP/vUgs+ih6KD+94pRLnBXhowLF7Yu7GdDLK
-         JgFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2/6t6RQMcfxN8ERz/VFSJQyHf7ozrJTKUk2r99LP3Zw=;
-        b=Dr0eaPgYRJEcJvrCCZx/k9zLH9iH5BEITDbRs6JXEFkyL1tuT5ZjIeKgTyFdr48HrE
-         KrBGKoFW+XJoTInjxQ/q+Z1Ljib2vEXdwqLToFRZQPY32mVRqFJmw4JPuqgQNZfLoX6/
-         fDcT/TBWc2P7mJ58cPzCdJHXjY45Kc7fcygHP+67fGVWjlSyamLiP8Ozsju+OYfW2f11
-         IaAxWjv4p5dsvf6OqoZ2w9QlMXqjnBLdeWJ+4WbmMwtxhD85TaWNkp4zgnrZ3R19jaUV
-         tlC4cwQ4z91zO5QIu4sOD9sOgFK5ddNIWuy/mA3+8+95Vfc5NVl2rIogr0mmbpkFngDD
-         kb6A==
-X-Gm-Message-State: APjAAAVBxp++8u87ussttm9hWoyQxnYLdfLxQ1fou4qyScna2Y2nWIoG
-        4somvMbXeV8HSh8cidG9Acw=
-X-Google-Smtp-Source: APXvYqyXj8tBgvxxxbnAbn7LpO6ojia8QvkqGr4husZp8r8PymWZ43YPE0bgN1p0kCHxOzri2EezNQ==
-X-Received: by 2002:a62:ed1a:: with SMTP id u26mr89309000pfh.229.1560791063879;
-        Mon, 17 Jun 2019 10:04:23 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26sm11650979pfr.71.2019.06.17.10.04.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 10:04:23 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 10:04:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     cschneider@radiodata.biz
-Cc:     linux-hwmon@vger.kernel.org,
-        Christian Schneider <christian@ch-sc.de>
-Subject: Re: [PATCH] Fix sysfs_notify and kobject_uevent in fan_alarm_notify
-Message-ID: <20190617170422.GA13276@roeck-us.net>
-References: <20190617093343.1366-1-cschneider@radiodata.biz>
+        id S1726723AbfFQRQZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jun 2019 13:16:25 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:33944 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbfFQRQZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 17 Jun 2019 13:16:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=aShAcX1ffuYf6Z5/DgVB3utR2HkNASrMTMIer3eKoF8=; b=gaCazfKZMl0BC6BUVPomKGyfAZ
+        s6TI55qr35Q6XghIVDlGxKCEOv/walOrXr1ZKZT1cYR3etwygW6HXcZCs88LWDjBiBBYFkv7ya7D1
+        4PtdlSTIZdCwToEy880BPrroh7PTWFuTP5mIZbogQzCF7wWEFbVOlJ122p2YrYl4wXSE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hcvEr-0002Ac-Fy; Mon, 17 Jun 2019 19:16:13 +0200
+Date:   Mon, 17 Jun 2019 19:16:13 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH V2] net: phy: tja11xx: Add IRQ support to the driver
+Message-ID: <20190617171613.GJ17551@lunn.ch>
+References: <4f33b529-6c3c-07ee-6177-2d332de514c6@denx.de>
+ <cc8db234-4534-674d-eece-5a797a530cdf@gmail.com>
+ <ca63964a-242c-bb46-bd4e-76a270dbedb3@denx.de>
+ <20190528195806.GV18059@lunn.ch>
+ <15906cc0-3d8f-7810-27ed-d64bdbcfa7e7@denx.de>
+ <20190528212252.GW18059@lunn.ch>
+ <fe6c4f2f-812d-61b8-3ffb-7ed7dd89d151@denx.de>
+ <20190529232930.GF18059@lunn.ch>
+ <19f9e596-5b51-8c76-396e-572d3e8da463@denx.de>
+ <f9bb1f48-b69d-09b2-5b48-e3f09ce9107e@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190617093343.1366-1-cschneider@radiodata.biz>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <f9bb1f48-b69d-09b2-5b48-e3f09ce9107e@denx.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 11:33:43AM +0200, cschneider@radiodata.biz wrote:
-> From: Christian Schneider <christian@ch-sc.de>
+On Thu, Jun 13, 2019 at 05:42:53PM +0200, Marek Vasut wrote:
+> On 5/30/19 1:46 AM, Marek Vasut wrote:
+> > On 5/30/19 1:29 AM, Andrew Lunn wrote:
+> >> On Tue, May 28, 2019 at 11:33:33PM +0200, Marek Vasut wrote:
+> >>> On 5/28/19 11:22 PM, Andrew Lunn wrote:
+> >>>>> The link detection on the TJA1100 (not TJA1101) seems unstable at best,
+> >>>>> so I better use all the interrupt sources to nudge the PHY subsystem and
+> >>>>> have it check the link change.
+> >>>>
+> >>>> Then it sounds like you should just ignore interrupts and stay will
+> >>>> polling for the TJA1100.
+> >>>
+> >>> Polling for the link status change is slow(er) than the IRQ driven
+> >>> operation, so I would much rather use the interrupts.
+> >>
+> >> I agree about the speed, but it seems like interrupts on this PHY are
+> >> not so reliable. Polling always works. But unfortunately, you cannot
+> >> have both interrupts and polling to fix up problems when interrupts
+> >> fail. Your call, do you think interrupts really do work?
+> > 
+> > It works fine for me this way. And mind you, it's only the TJA1100
+> > that's flaky, the TJA1101 is better.
+> > 
+> >> If you say that tja1101 works as expected, then please just use the
+> >> link up/down bits for it.
+> > 
+> > I still don't know which bits really trigger link status changes, so I'd
+> > like to play it safe and just trigger on all of them.
 > 
-> sysfs_notify and kobject_uevent are passed the wrong kobject.
-> that why notifications can't be received and uevents have the wrong path.
-> this patch fixes this.
-> 
-> Signed-off-by: Christian Schneider <cschneider@radiodata.biz>
+> So what do we do here ?
 
-Applied.
+Hi Marek
 
-In the future, please version your patches, add a change log,
-and reflect the subsystem and driver in the subject line.
+My personal preference would be to just enable what is needed. But
+I won't block a patch which enables everything.
 
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/gpio-fan.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> index 84753680a4e8..76377791ff0e 100644
-> --- a/drivers/hwmon/gpio-fan.c
-> +++ b/drivers/hwmon/gpio-fan.c
-> @@ -54,8 +54,8 @@ static void fan_alarm_notify(struct work_struct *ws)
->  	struct gpio_fan_data *fan_data =
->  		container_of(ws, struct gpio_fan_data, alarm_work);
->  
-> -	sysfs_notify(&fan_data->dev->kobj, NULL, "fan1_alarm");
-> -	kobject_uevent(&fan_data->dev->kobj, KOBJ_CHANGE);
-> +	sysfs_notify(&fan_data->hwmon_dev->kobj, NULL, "fan1_alarm");
-> +	kobject_uevent(&fan_data->hwmon_dev->kobj, KOBJ_CHANGE);
->  }
->  
->  static irqreturn_t fan_alarm_irq_handler(int irq, void *dev_id)
+  Andrew
