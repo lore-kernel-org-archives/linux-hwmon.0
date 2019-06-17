@@ -2,90 +2,118 @@ Return-Path: <SRS0=iUk6=UQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B3EC31E57
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 09:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47C10C31E57
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 12:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C4A372085A
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 09:36:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2253E20861
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 12:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbfFQJgs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jun 2019 05:36:48 -0400
-Received: from smtp.radiodata.biz ([116.203.112.52]:35875 "EHLO
-        smtp.radiodata.biz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725837AbfFQJgs (ORCPT
+        id S1726121AbfFQMiQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jun 2019 08:38:16 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:35919 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfFQMiQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jun 2019 05:36:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.radiodata.biz (Postfix) with ESMTP id D82833E8E7;
-        Mon, 17 Jun 2019 11:36:46 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at smtp.radiodata.biz
-Received: from smtp.radiodata.biz ([116.203.112.52])
-        by localhost (smtp.radiodata.biz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vK5WNLG6_lyY; Mon, 17 Jun 2019 11:36:38 +0200 (CEST)
-Received: from mail.radiodata.biz (p578044f8.dip0.t-ipconnect.de [87.128.68.248])
-        by smtp.radiodata.biz (Postfix) with ESMTPSA id 986173E8E6;
-        Mon, 17 Jun 2019 11:36:38 +0200 (CEST)
-Received: from [192.168.2.213] (raphael-WINPC.radiodata.xx [192.168.2.213])
-        by mail.radiodata.biz (Postfix) with ESMTPSA id 4F56E2023C;
-        Mon, 17 Jun 2019 11:36:38 +0200 (CEST)
-Subject: Re: [PATCHv2] hwmon, gpio-fan: fix that sysfs_notify in void
- fan_alarm_notify is not received in userspace
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-References: <e9dbbefb-7714-921b-c5d1-4064d8c43f74@radiodata.biz>
- <2680453b-9631-3cb9-06c4-326d63e93988@roeck-us.net>
- <178c4302-3333-b60f-afbd-ff73fbe943ca@radiodata.biz>
- <20190614145256.GA464@roeck-us.net>
- <e5390907-9112-4aca-e2e8-acf4097bf941@radiodata.biz>
- <aedff3d4-1cb7-0228-121e-9e49341f19ea@roeck-us.net>
-From:   Christian Schneider <cschneider@radiodata.biz>
-Message-ID: <9632a919-5775-4304-30e5-ab8e31fde4f4@radiodata.biz>
-Date:   Mon, 17 Jun 2019 11:36:36 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        Mon, 17 Jun 2019 08:38:16 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MxmBi-1iYXoH0lbi-00zDkM; Mon, 17 Jun 2019 14:37:51 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Jean-Francois Dagenais <jeff.dagenais@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (max6650) Fix unused variable warning
+Date:   Mon, 17 Jun 2019 14:34:30 +0200
+Message-Id: <20190617123746.769592-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-In-Reply-To: <aedff3d4-1cb7-0228-121e-9e49341f19ea@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:Xy0G7nWZ1HhgposubGBIrjh7xHfAXCOeUEsKRN+33mNSf+GOxBQ
+ LQoZlRmRXLntetmq3aPVZypOWkGAdNQLVjheLbVoyxagXm/gMi3m024uu6e5rxypfo0IRUu
+ muZHjzdTyTCQJWUjTdlcygCfLHQA7Y9sNJznEhdU1d4ZSISGIQF1vVuQoIeFlkIwUDu+I4r
+ M16Woaf4WZX3ajtxEA6IQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/m+Ii4DQw8k=:bOZsuOyOr8ovi8tCCSSyhg
+ TIW2NBWXS7CPVRgltVYsde29SNEk/8rMs7drSGlZoWD59qixqTTI+3mE2fbaeSBzn+jM1W88b
+ E0UuWGz47TR9bz3lstdTWnsRvndbJvOtqVFF9FPVKejqlN0lvW7+fCzeRuTAoc8F2ddM7ekhV
+ FsYQI7dTtPHbgpR7sfgTQfhR1nAs9aDGg99CFBm58zFXb9zysG+1kPvY3MrXQqoSIWHIrQTp/
+ frwBVMbZkcML53RD+3ozbz8gbGnNuf9cs+GWD/x+X6P+/3JadT7kRTSmUG+aHx8y3AWVzgbkr
+ /FyK+1VE8m/VRIPoq0PMWUGbWu7VhPsDdBpzdQFs0zh7iXmwVGLeWS+Eb+at+5XiE5hPXI3bb
+ qxx3EvqXyZMLWMWnpzN9ppeQTqPCaausmEwbEYlQXx2o29WzT7dZ/45GtQ148w2TFC2snjd09
+ W9EcjLSB2uf7sC3+edX5TJ8bGo7hGLd/IAqYoJ5b20yvJNCEmzaZnPkHC/iSHMBPy7C1wVXzh
+ 8YiI+Kf859AQNeleitruWrODjoB5brtNEoFegJ5tQFD7UxqNFnC8M0jpTVVn2c7+yh8J+DKwN
+ 5HAZhLhA0NyyjIK4nZp85Jt5nPaZPxpTT54yc0pXK3BidKVV8LERg41EBxqY3Zh1LdAiMV9Jl
+ 4a66hA8EEoWeyraewbyH3ytLFzX2USsEVZGNY1kmju1AR/UHzuOuAQ1aP2aUmFllRo9KywOOr
+ 9NS4Fq0Bw6kduit/8PX2AzDjk0xxs5rxomt65w==
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-sent again with git send-email.
-Sorry for hazzle...
+The newly added variable is only used in an #if block:
 
-Am 15.06.2019 um 14:17 schrieb Guenter Roeck:
-> On 6/14/19 8:35 AM, Christian Schneider wrote:
->> Alarms on gpio-fan can't be received from sysfs_notify, because the 
->> wrong kobject is passed.
->> This patch fixes this.
->>
->> Signed-off-by: Christian Schneider <cschneider@radiodata.biz>
->> ---
->> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
->> index 84753680a4e8..76377791ff0e 100644
->> --- a/drivers/hwmon/gpio-fan.c
->> +++ b/drivers/hwmon/gpio-fan.c
->> @@ -54,8 +54,8 @@ static void fan_alarm_notify(struct work_struct *ws)
->>          struct gpio_fan_data *fan_data =
->>                  container_of(ws, struct gpio_fan_data, alarm_work);
->>
->> -       sysfs_notify(&fan_data->dev->kobj, NULL, "fan1_alarm");
->> -       kobject_uevent(&fan_data->dev->kobj, KOBJ_CHANGE);
->> +       sysfs_notify(&fan_data->hwmon_dev->kobj, NULL, "fan1_alarm");
->> +       kobject_uevent(&fan_data->hwmon_dev->kobj, KOBJ_CHANGE);
->>   }
->>
->>   static irqreturn_t fan_alarm_irq_handler(int irq, void *dev_id)
->>
-> The patch is whitespace damaged (cut-and-paste, maybe ?) and does not 
-> apply.
-> Can you send it with git send-email, possibly ?
-> 
-> Thanks,
-> Guenter
+drivers/hwmon/max6650.c: In function 'max6650_probe':
+drivers/hwmon/max6650.c:766:33: error: unused variable 'cooling_dev' [-Werror=unused-variable]
+
+Change the #if to if() so the compiler can see what is actually
+going on.
+
+Fixes: a8463754a5a9 ("hwmon: (max6650) Use devm function to register thermal device")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/hwmon/max6650.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/hwmon/max6650.c b/drivers/hwmon/max6650.c
+index 5fdad4645cca..3d9d371c35b5 100644
+--- a/drivers/hwmon/max6650.c
++++ b/drivers/hwmon/max6650.c
+@@ -467,8 +467,6 @@ static int max6650_init_client(struct max6650_data *data,
+ 	return 0;
+ }
+ 
+-#if IS_ENABLED(CONFIG_THERMAL)
+-
+ static int max6650_get_max_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+@@ -517,7 +515,6 @@ static const struct thermal_cooling_device_ops max6650_cooling_ops = {
+ 	.get_cur_state = max6650_get_cur_state,
+ 	.set_cur_state = max6650_set_cur_state,
+ };
+-#endif
+ 
+ static int max6650_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *val)
+@@ -795,14 +792,16 @@ static int max6650_probe(struct i2c_client *client,
+ 	if (err)
+ 		return err;
+ 
+-#if IS_ENABLED(CONFIG_THERMAL)
+-	cooling_dev = devm_thermal_of_cooling_device_register(dev, dev->of_node,
+-				client->name, data, &max6650_cooling_ops);
+-	if (IS_ERR(cooling_dev)) {
+-		dev_warn(dev, "thermal cooling device register failed: %ld\n",
+-			 PTR_ERR(cooling_dev));
++	if (IS_ENABLED(CONFIG_THERMAL)) {
++		cooling_dev = devm_thermal_of_cooling_device_register(dev,
++						dev->of_node, client->name,
++						data, &max6650_cooling_ops);
++		if (IS_ERR(cooling_dev)) {
++			dev_warn(dev, "thermal cooling device register failed: %ld\n",
++				 PTR_ERR(cooling_dev));
++		}
+ 	}
+-#endif
++
+ 	return 0;
+ }
+ 
+-- 
+2.20.0
+
