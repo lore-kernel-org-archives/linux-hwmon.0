@@ -2,133 +2,75 @@ Return-Path: <SRS0=iUk6=UQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6589C31E44
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 08:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7C4AC31E57
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 09:34:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A433720652
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 08:23:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2B402084D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Jun 2019 09:34:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725983AbfFQIXW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Jun 2019 04:23:22 -0400
-Received: from aclms1.advantech.com.tw ([61.58.41.199]:53019 "EHLO
-        ACLMS1.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfFQIXW (ORCPT
+        id S1725884AbfFQJeV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Jun 2019 05:34:21 -0400
+Received: from smtp.radiodata.biz ([116.203.112.52]:40471 "EHLO
+        smtp.radiodata.biz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbfFQJeV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:23:22 -0400
-Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS1.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Td872a8c9b5ac14014b1070@ACLMS1.advantech.com.tw>;
- Mon, 17 Jun 2019 16:23:20 +0800
-From:   <Amy.Shih@advantech.com.tw>
-To:     <she90122@gmail.com>
-CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <jia.sui@advantech.com.cn>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [v2 9/9] hwmon: (nct7904) Fix wrong registers setting for temperature.
-Date:   Mon, 17 Jun 2019 08:22:55 +0000
-Message-ID: <9b03a23bbb5385658c21bf5129a5b1c9b5065237.1560756733.git.amy.shih@advantech.com.tw>
+        Mon, 17 Jun 2019 05:34:21 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.radiodata.biz (Postfix) with ESMTP id 4F74D3E8E7;
+        Mon, 17 Jun 2019 11:34:19 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at smtp.radiodata.biz
+Received: from smtp.radiodata.biz ([116.203.112.52])
+        by localhost (smtp.radiodata.biz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1OKYejc90pSi; Mon, 17 Jun 2019 11:34:10 +0200 (CEST)
+Received: from mail.radiodata.biz (p578044f8.dip0.t-ipconnect.de [87.128.68.248])
+        by smtp.radiodata.biz (Postfix) with ESMTPSA id C75B63E8E6;
+        Mon, 17 Jun 2019 11:34:10 +0200 (CEST)
+Received: from christian-VirtualBox.radiodata.xx (christian-VirtualBox.radiodata.xx [192.168.2.133])
+        by mail.radiodata.biz (Postfix) with ESMTPA id 7D0612023C;
+        Mon, 17 Jun 2019 11:34:10 +0200 (CEST)
+From:   cschneider@radiodata.biz
+To:     linux-hwmon@vger.kernel.org
+Cc:     Christian Schneider <christian@ch-sc.de>,
+        Christian Schneider <cschneider@radiodata.biz>
+Subject: [PATCH] Fix sysfs_notify and kobject_uevent in fan_alarm_notify
+Date:   Mon, 17 Jun 2019 11:33:43 +0200
+Message-Id: <20190617093343.1366-1-cschneider@radiodata.biz>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1560756733.git.amy.shih@advantech.com.tw>
-References: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1560756733.git.amy.shih@advantech.com.tw>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.58]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- taipei08.ADVANTECH.CORP (172.20.0.235)
-X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "amy.shih" <amy.shih@advantech.com.tw>
+From: Christian Schneider <christian@ch-sc.de>
 
-For "attributes temp[1-*]_max" and "temp[1-*]_max_hyst", should
-show the reading of "WARNING TEMPERATURE" and "WARNING TEMPERATURE
-HYSTERESIS" registers. For attribute "temp[1-*]_crit" and
-"temp[1-*]_crit_hyst", shuld show the reading of "CRITICAL TEMPERATURE"
-and "CRITICAL TEMPERATURE HYSTERESIS" registers in datasheet.
+sysfs_notify and kobject_uevent are passed the wrong kobject.
+that why notifications can't be received and uevents have the wrong path.
+this patch fixes this.
 
-Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+Signed-off-by: Christian Schneider <cschneider@radiodata.biz>
 ---
-Changes in v2:
-- Fix wrong registers setting for temperature.
+ drivers/hwmon/gpio-fan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/hwmon/nct7904.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index fc145c73a4e7..d842c10ba11f 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -399,23 +399,23 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
- 		return 0;
- 	case hwmon_temp_max:
- 		reg1 = LTD_HV_HL_REG;
--		reg2 = TEMP_CH1_C_REG;
--		reg3 = DTS_T_CPU1_C_REG;
-+		reg2 = TEMP_CH1_W_REG;
-+		reg3 = DTS_T_CPU1_W_REG;
- 		break;
- 	case hwmon_temp_max_hyst:
- 		reg1 = LTD_LV_HL_REG;
--		reg2 = TEMP_CH1_CH_REG;
--		reg3 = DTS_T_CPU1_CH_REG;
-+		reg2 = TEMP_CH1_WH_REG;
-+		reg3 = DTS_T_CPU1_WH_REG;
- 		break;
- 	case hwmon_temp_crit:
- 		reg1 = LTD_HV_LL_REG;
--		reg2 = TEMP_CH1_W_REG;
--		reg3 = DTS_T_CPU1_W_REG;
-+		reg2 = TEMP_CH1_C_REG;
-+		reg3 = DTS_T_CPU1_C_REG;
- 		break;
- 	case hwmon_temp_crit_hyst:
- 		reg1 = LTD_LV_LL_REG;
--		reg2 = TEMP_CH1_WH_REG;
--		reg3 = DTS_T_CPU1_WH_REG;
-+		reg2 = TEMP_CH1_CH_REG;
-+		reg3 = DTS_T_CPU1_CH_REG;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -508,23 +508,23 @@ static int nct7904_write_temp(struct device *dev, u32 attr, int channel,
- 	switch (attr) {
- 	case hwmon_temp_max:
- 		reg1 = LTD_HV_HL_REG;
--		reg2 = TEMP_CH1_C_REG;
--		reg3 = DTS_T_CPU1_C_REG;
-+		reg2 = TEMP_CH1_W_REG;
-+		reg3 = DTS_T_CPU1_W_REG;
- 		break;
- 	case hwmon_temp_max_hyst:
- 		reg1 = LTD_LV_HL_REG;
--		reg2 = TEMP_CH1_CH_REG;
--		reg3 = DTS_T_CPU1_CH_REG;
-+		reg2 = TEMP_CH1_WH_REG;
-+		reg3 = DTS_T_CPU1_WH_REG;
- 		break;
- 	case hwmon_temp_crit:
- 		reg1 = LTD_HV_LL_REG;
--		reg2 = TEMP_CH1_W_REG;
--		reg3 = DTS_T_CPU1_W_REG;
-+		reg2 = TEMP_CH1_C_REG;
-+		reg3 = DTS_T_CPU1_C_REG;
- 		break;
- 	case hwmon_temp_crit_hyst:
- 		reg1 = LTD_LV_LL_REG;
--		reg2 = TEMP_CH1_WH_REG;
--		reg3 = DTS_T_CPU1_WH_REG;
-+		reg2 = TEMP_CH1_CH_REG;
-+		reg3 = DTS_T_CPU1_CH_REG;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index 84753680a4e8..76377791ff0e 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -54,8 +54,8 @@ static void fan_alarm_notify(struct work_struct *ws)
+ 	struct gpio_fan_data *fan_data =
+ 		container_of(ws, struct gpio_fan_data, alarm_work);
+ 
+-	sysfs_notify(&fan_data->dev->kobj, NULL, "fan1_alarm");
+-	kobject_uevent(&fan_data->dev->kobj, KOBJ_CHANGE);
++	sysfs_notify(&fan_data->hwmon_dev->kobj, NULL, "fan1_alarm");
++	kobject_uevent(&fan_data->hwmon_dev->kobj, KOBJ_CHANGE);
+ }
+ 
+ static irqreturn_t fan_alarm_irq_handler(int irq, void *dev_id)
 -- 
 2.17.1
 
