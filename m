@@ -2,65 +2,94 @@ Return-Path: <SRS0=Sbn2=UU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF236C43613
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 11:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653ADC48BE0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 13:47:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4A6121530
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 11:59:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A4CE208C3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 13:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561124875;
+	bh=pNldUrqmJvya/Uwu9bDRmh68i2HgU65QwS4iKeIec5c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=oadsqleWeKiGFqZ6S6ZNkSgIDbh/QWmywYq36DNEwx1amVYNH3sGVBnvSOkHBeGIf
+	 ZFirWri60knF7/IIWB2SXhoDwdpbeC5wYrm16EoPMr4hPzvEm5GuuQ8e+oaA4oXAmG
+	 N1eBJqGVQkuyxKAZllbrpoKrajl3chmWgidCCbC8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfFUL7M (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Jun 2019 07:59:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49928 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726232AbfFUL7M (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Jun 2019 07:59:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2059CAE9A;
-        Fri, 21 Jun 2019 11:59:11 +0000 (UTC)
-Date:   Fri, 21 Jun 2019 13:59:09 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Convert remaining drivers to use SPDX identifier
-Message-ID: <20190621135909.2057f879@endymion>
-In-Reply-To: <1561036786-23190-1-git-send-email-linux@roeck-us.net>
-References: <1561036786-23190-1-git-send-email-linux@roeck-us.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+        id S1726209AbfFUNrn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Jun 2019 09:47:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52758 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726135AbfFUNrn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Jun 2019 09:47:43 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F07E2206B7;
+        Fri, 21 Jun 2019 13:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561124862;
+        bh=pNldUrqmJvya/Uwu9bDRmh68i2HgU65QwS4iKeIec5c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oCKJQsAxHNH+eZZtSWdAK01ZD+7IvrRz9N0tstd1wnfuSwvYFeU40smNuMdeKIVTq
+         DH83XTjHwc5jLQEnTUBzj5OGl7VYS4dga6Adwzlz0s+q2BAxCGZrUvQGe0EuRQJofj
+         ZmoAtS0rnjTz1nWMkoe70INYL2oQmlD9uyy3Fql8=
+Date:   Fri, 21 Jun 2019 15:47:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Julia Lawall <Julia.Lawall@lip6.fr>,
+        Gilles Muller <Gilles.Muller@lip6.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        cocci@systeme.lip6.fr
+Subject: Re: [PATCH v2 09/29] docs: driver-model: convert docs to ReST and
+ rename to *.rst
+Message-ID: <20190621134740.GA26549@kroah.com>
+References: <cover.1560890800.git.mchehab+samsung@kernel.org>
+ <0ac41c7d682452cdbd867c4ae7729b6b34d79c0b.1560890800.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ac41c7d682452cdbd867c4ae7729b6b34d79c0b.1560890800.git.mchehab+samsung@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 20 Jun 2019 06:19:46 -0700, Guenter Roeck wrote:
-> This gets rid of the unnecessary license boilerplate, and avoids
-> having to deal with individual patches one by one.
+On Tue, Jun 18, 2019 at 05:53:27PM -0300, Mauro Carvalho Chehab wrote:
+> Convert the various documents at the driver-model, preparing
+> them to be part of the driver-api book.
 > 
-> No functional changes intended.
+> The conversion is actually:
+>   - add blank lines and identation in order to identify paragraphs;
+>   - fix tables markups;
+>   - add some lists markups;
+>   - mark literal blocks;
+>   - adjust title markups.
 > 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/adm1029.c    | 10 ----------
->  drivers/hwmon/adt7411.c    |  5 +----
->  drivers/hwmon/adt7475.c    |  5 +----
->  drivers/hwmon/iio_hwmon.c  |  5 +----
->  drivers/hwmon/max197.c     |  5 +----
->  drivers/hwmon/scpi-hwmon.c | 10 +---------
->  6 files changed, 5 insertions(+), 35 deletions(-)
-> (...)
+> At its new index.rst, let's add a :orphan: while this is not linked to
+> the main index.rst file, in order to avoid build warnings.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com> # ice
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Now applied, thanks.
 
--- 
-Jean Delvare
-SUSE L3 Support
+greg k-h
