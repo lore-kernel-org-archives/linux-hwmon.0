@@ -1,131 +1,121 @@
-Return-Path: <SRS0=Sbn2=UU=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=fpSx=UX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8166C48BE3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 14:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FEEDC43613
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:00:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E9322166E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Jun 2019 14:05:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ufcGyQ8L"
+	by mail.kernel.org (Postfix) with ESMTP id 264C9212F5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561370444;
+	bh=lQIVZkQGmXcK1EaMH+3xunD5I8bRDu8RrN8phKF5kMY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=C9QylPTzRNx5IgG7cI+0JGWz++TTnRZjS6Dzxd0GJiwIJTrElh5swUj1KDuH6DUo7
+	 g58QmXFKniuBr7EHqiQxBCX6yxpEFlZ5xsUe+X9RSMfYWZlHvryXFeMJJJizB72091
+	 JSuHpJ1Kf7rFjZbHKVyzy4nR0OUbI0sXGo5frRPg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbfFUOFM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Jun 2019 10:05:12 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40014 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725975AbfFUOFL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Jun 2019 10:05:11 -0400
-Received: by mail-pg1-f193.google.com with SMTP id w10so3426164pgj.7
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Jun 2019 07:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WT+vQeHQE4yW/jUkm8vPerLm68RVDFB0MWsQRtmPLeU=;
-        b=ufcGyQ8LyndWi+RGn8xTeOFkagm1JwlS57FT2kU+fwDvnxnxLjEtZiKisTUQO/Uq7/
-         NGjQ4N9dtXmhiqttesy88kFXgGfgkrvWbNbIeZ/Qkl0pxiYJAPOFsXDKOaZVH4yPU2Dz
-         d4lsO0IMnksdgXMwTI+/UH023MEw+R5ScWfWSWEQwnm2bFzJet9D/4pbYFZ42FwCwG3/
-         JRAO4cAt5r5Q61MYDnhL3gZiCR324uR5+KEI+1GaOpCjSepwErUym6mUhXVFTnn8L2yw
-         NqUi8nIQKVhi9WpKLGtzs8kHA2V2GFENwli6rSllGAb9hl4X9GgV2b+NOl2XR3Ek8Sxc
-         s1Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WT+vQeHQE4yW/jUkm8vPerLm68RVDFB0MWsQRtmPLeU=;
-        b=ZcwXJIiwsBcx4UrlBFtyuatu2Lw8GmkKzbxlH6+7Sg3s9Y+ROQZmhfRKHXGYInrm1Q
-         LBdcuckuzFlj8KYm6skRyplX/K399PvPuR3OrjLN/lwRgOjcruTb044ADAeF/mkbPOJq
-         fj6HurujBjxICi4sxCzv6OuHhT88knVC5Sv3yEI2svJIsyqZV+I+rIp1gNSQIUfPgv4+
-         CitVhv0o1BlZqPn3l1hBlCiGFX1g15Ie4d7IxMNSzvDXhXCO4w/wHH1XFal9+QdOIJig
-         twaITzXRYj8r0Rpo13BIa/tsIyonjQGGu0bsFHXPkExBnWD2IOg209untJZW/Lfeq9K4
-         dOjw==
-X-Gm-Message-State: APjAAAV0RJVZTvlbVY9UdVIm/PdCxYUpKXBmgLshR1bolIWpVHRFJLhx
-        mPRpxNc8u5mDw3D/GTi3rNKOjZlN
-X-Google-Smtp-Source: APXvYqyfHmLVPvtUZTMmtT7CDISG/SNIre1frirMdKAKzf5vzYEHYATnvChRjsf8XJy2dSDL5fmbrA==
-X-Received: by 2002:a17:90a:f498:: with SMTP id bx24mr6979963pjb.91.1561125910665;
-        Fri, 21 Jun 2019 07:05:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d19sm2490694pjs.22.2019.06.21.07.05.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 21 Jun 2019 07:05:09 -0700 (PDT)
-Subject: Re: [PATCH] Fix sysfs_notify and kobject_uevent in fan_alarm_notify
-To:     Christian Schneider <cschneider@radiodata.biz>
-Cc:     linux-hwmon@vger.kernel.org,
-        Christian Schneider <christian@ch-sc.de>
-References: <20190617093343.1366-1-cschneider@radiodata.biz>
- <20190617170422.GA13276@roeck-us.net>
- <e64607f6-d2d3-44a9-4e4b-90e5ab2d74ab@radiodata.biz>
- <dfa89854-8784-6d7a-9abe-06914791de32@radiodata.biz>
- <20190619195354.GA29429@roeck-us.net>
- <c97f4c9c-a374-8a25-27ee-698689f525ce@radiodata.biz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1e7fafcf-3619-04ca-41f2-962c06636471@roeck-us.net>
-Date:   Fri, 21 Jun 2019 07:05:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727282AbfFXJ7W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jun 2019 05:59:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58352 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728673AbfFXJ7T (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jun 2019 05:59:19 -0400
+Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CB27F21655;
+        Mon, 24 Jun 2019 09:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561370358;
+        bh=lQIVZkQGmXcK1EaMH+3xunD5I8bRDu8RrN8phKF5kMY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wGec/v7ZQBWWeZW/RzMVGa+dZu6Ui4oygYNC0KjciBD8ag/FOSZ/AZubXskvpOFyc
+         Da7dbJVQJIxqY0lf8p9Aq5mM4/SLbcUCN8yQgxmBHAV+kulCzgTEnjYPZZ3JVmK2TD
+         A0/CaL+EAzJoTwLeqpNHYdAWvEtyyVQVLo+d5JHk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 36/51] hwmon: (core) add thermal sensors only if dev->of_node is present
+Date:   Mon, 24 Jun 2019 17:56:54 +0800
+Message-Id: <20190624092310.342420987@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190624092305.919204959@linuxfoundation.org>
+References: <20190624092305.919204959@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <c97f4c9c-a374-8a25-27ee-698689f525ce@radiodata.biz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/21/19 1:30 AM, Christian Schneider wrote:
-> Am 19.06.2019 um 20:53 schrieb Guenter Roeck:
->> On Wed, Jun 19, 2019 at 12:00:37PM +0200, Christian Schneider wrote:
->>> Ok, seems that moving that block, where fan_alarm_init is called down, isn't
->>> a problem on master.
->>> I need to use 4.9, cause we have an embedded device that needs patches, and
->>> they are only available for older kernels.
->>>
->>> In 4.9, fan_alarm_init() does fan_data->alarm = alarm;
->>> When fan_alarm_init() is called after
->>> devm_hwmon_device_register_with_groups(), then fan_data->alarm is not yet
->>> set, so the sysfs attribute is not created.
->>>
->>> when I move the fan_data->alarm = alarm; out of fan_alarm_init() before
->>> devm_hwmon_device_register_with_groups() and the fan_alarm_init() after,
->>> then it works, and doesn't have a race condition.
->>>
->>> On master, populating fan_data->alarm_gpio is done in
->>> gpio_fan_get_of_data(fan_data); as far as I understand, so moving the
->>> fan_alarm_init() block further down shouldn't be a problem.
->>>
->>> I don't know, how I can test this with master kernel. Unfortunately, the
->>> device, I'm using doesn't have a recent kernel. And on my normal (desktop)
->>> pc, I don't have a gpio fan.
->>> How should I proceed now?
->>>
->>
->> Essentially, we'll need two patches: One to move fan_alarm_init() after
->> devm_hwmon_device_register_with_groups(), and then the notification patch.
->> For the backport to v4.9, the first patch will have to be slightly modified:
->> The first part will a simple
->>     fan_data->alarm = pdata->alarm;
->> at the location where fan_alarm_init() is called now, the second part is to move
->> the call to fan_alarm_init() after devm_hwmon_device_register_with_groups().
->>
->> It is ok to test the result with your 4.9 based kernel; we'll just have to be
->> careful when reviewing the mainline patch.
->>
->> Thanks,
->> Guenter
-> 
-> Ok,
-> it seems like it is working as expected now on my 4.9 kernel. No race-condition and notification is received.
-> I will adopt the changes to mainline kernel, but not sure if I can make it today. Might be Monday, till I have the patch.
-> 
-No hurry.
+[ Upstream commit c41dd48e21fae3e55b3670ccf2eb562fc1f6a67d ]
 
-Thanks,
-Guenter
+Drivers may register to hwmon and request for also registering
+with the thermal subsystem (HWMON_C_REGISTER_TZ). However,
+some of these driver, e.g. marvell phy, may be probed from
+Device Tree or being dynamically allocated, and in the later
+case, it will not have a dev->of_node entry.
+
+Registering with hwmon without the dev->of_node may result in
+different outcomes depending on the device tree, which may
+be a bit misleading. If the device tree blob has no 'thermal-zones'
+node, the *hwmon_device_register*() family functions are going
+to gracefully succeed, because of-thermal,
+*thermal_zone_of_sensor_register() return -ENODEV in this case,
+and the hwmon error path handles this error code as success to
+cover for the case where CONFIG_THERMAL_OF is not set.
+However, if the device tree blob has the 'thermal-zones'
+entry, the *hwmon_device_register*() will always fail on callers
+with no dev->of_node, propagating -EINVAL.
+
+If dev->of_node is not present, calling of-thermal does not
+make sense. For this reason, this patch checks first if the
+device has a of_node before going over the process of registering
+with the thermal subsystem of-thermal interface. And in this case,
+when a caller of *hwmon_device_register*() with HWMON_C_REGISTER_TZ
+and no dev->of_node will still register with hwmon, but not with
+the thermal subsystem. If all the hwmon part bits are in place,
+the registration will succeed.
+
+Fixes: d560168b5d0f ("hwmon: (core) New hwmon registration API")
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index c9790e2c3440..7b53065e9882 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -608,7 +608,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	if (err)
+ 		goto free_hwmon;
+ 
+-	if (dev && chip && chip->ops->read &&
++	if (dev && dev->of_node && chip && chip->ops->read &&
+ 	    chip->info[0]->type == hwmon_chip &&
+ 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
+ 		const struct hwmon_channel_info **info = chip->info;
+-- 
+2.20.1
+
+
+
