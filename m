@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB00C48BE9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D8BC48BE9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C89FC208E4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:13:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C3BB20645
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561371189;
-	bh=HTLPW14FV82/Pk42KIxwqTEOtpQcj/hntKth0Q7kJOY=;
+	s=default; t=1561371503;
+	bh=ZWzPHxVYO6d7ILI+35xWNGfP9V6kWW0cbdaUNlzXlDU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=O+PRz60l63CRXOOSv88vkw7g5xKC5Gt3vszVs7wDapBX1R+L6C+wI4Y47/Ykyt3/c
-	 P9/9+cK1im0AF2TKjcF5HXcStwT6EKPfjQV7BzHXmoD1rjvrJ0VzUP3E5e1B+a/mHZ
-	 qcF8y74TpxhDYDC4NKFGN3CZjPPBUFH5N9BEFEOc=
+	b=s+DXly0ExX8PC+qGZkMmoR6crCxmdKIyAEbm+Dw7R2/+qPh1eFDJT5oDS/WdguFz7
+	 VVEjhJoINSbMZrtI6hcpumm1sPcnyZFSipoJTaCagf2k8PsmcRkQRD4OZSBJ2JWNS8
+	 7XgLVy57pgzWMnVoMcXpiY46m8QeH9ipMCYJIleo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729842AbfFXKFN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jun 2019 06:05:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37084 "EHLO mail.kernel.org"
+        id S1727525AbfFXKSS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Jun 2019 06:18:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729791AbfFXKFM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jun 2019 06:05:12 -0400
+        id S1729770AbfFXKQ1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Jun 2019 06:16:27 -0400
 Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33540205ED;
-        Mon, 24 Jun 2019 10:05:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF272208E3;
+        Mon, 24 Jun 2019 10:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561370711;
-        bh=HTLPW14FV82/Pk42KIxwqTEOtpQcj/hntKth0Q7kJOY=;
+        s=default; t=1561371387;
+        bh=ZWzPHxVYO6d7ILI+35xWNGfP9V6kWW0cbdaUNlzXlDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ySkq3WfM9MuU1Grv8u8HZHDV4AjlY39Lm20iFKDJHGjhlOtOM9eZChi/FBD67auWR
-         aDV60dPHIKQt8/2fc/fOlb3KNIrn1SjZje/mnc9Z3EpFFZeWEkt77tEVZoBHpde9iJ
-         XjXsaqDTdb1FqQwjad6dBRY/12v/F9mJLhyjacvI=
+        b=gjHDuDS5q969CBYr7xVYm6kH6H3AKJQC1ehb8wq3Gi2hejFNlppgwQWS1cuMeM9wM
+         DnDbXsOhCne9gVjLVxfg8veoSOPvBXWFZOAXhRuDo5UCtSOxMGx3hjCRl/D+aNivUh
+         U2qpDBJl5avr5SUIuXfIpk/t8jclDDHp77rf6KF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,12 +45,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 64/90] hwmon: (core) add thermal sensors only if dev->of_node is present
-Date:   Mon, 24 Jun 2019 17:56:54 +0800
-Message-Id: <20190624092318.284925383@linuxfoundation.org>
+Subject: [PATCH 5.1 085/121] hwmon: (core) add thermal sensors only if dev->of_node is present
+Date:   Mon, 24 Jun 2019 17:56:57 +0800
+Message-Id: <20190624092325.180202592@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190624092313.788773607@linuxfoundation.org>
-References: <20190624092313.788773607@linuxfoundation.org>
+In-Reply-To: <20190624092320.652599624@linuxfoundation.org>
+References: <20190624092320.652599624@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -102,10 +102,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index fcdbac4a56e3..6b3559f58b67 100644
+index c22dc1e07911..c38883f748a1 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -619,7 +619,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+@@ -633,7 +633,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
  	if (err)
  		goto free_hwmon;
  
