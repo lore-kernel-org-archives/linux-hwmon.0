@@ -1,121 +1,163 @@
-Return-Path: <SRS0=fpSx=UX=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=nZ17=UZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D8BC48BE9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9176BC48BD6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jun 2019 19:14:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1C3BB20645
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Jun 2019 10:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561371503;
-	bh=ZWzPHxVYO6d7ILI+35xWNGfP9V6kWW0cbdaUNlzXlDU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=s+DXly0ExX8PC+qGZkMmoR6crCxmdKIyAEbm+Dw7R2/+qPh1eFDJT5oDS/WdguFz7
-	 VVEjhJoINSbMZrtI6hcpumm1sPcnyZFSipoJTaCagf2k8PsmcRkQRD4OZSBJ2JWNS8
-	 7XgLVy57pgzWMnVoMcXpiY46m8QeH9ipMCYJIleo=
+	by mail.kernel.org (Postfix) with ESMTP id 6D093208E3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jun 2019 19:14:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727525AbfFXKSS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Jun 2019 06:18:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729770AbfFXKQ1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Jun 2019 06:16:27 -0400
-Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF272208E3;
-        Mon, 24 Jun 2019 10:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561371387;
-        bh=ZWzPHxVYO6d7ILI+35xWNGfP9V6kWW0cbdaUNlzXlDU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjHDuDS5q969CBYr7xVYm6kH6H3AKJQC1ehb8wq3Gi2hejFNlppgwQWS1cuMeM9wM
-         DnDbXsOhCne9gVjLVxfg8veoSOPvBXWFZOAXhRuDo5UCtSOxMGx3hjCRl/D+aNivUh
-         U2qpDBJl5avr5SUIuXfIpk/t8jclDDHp77rf6KF8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1726227AbfFZTOV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Jun 2019 15:14:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39248 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726223AbfFZTOU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 26 Jun 2019 15:14:20 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5QJ7Uep100280;
+        Wed, 26 Jun 2019 15:13:35 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tcdn92nan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jun 2019 15:13:35 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5QJ7Wi9100406;
+        Wed, 26 Jun 2019 15:13:35 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tcdn92na3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jun 2019 15:13:34 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x5QJ9RIb026146;
+        Wed, 26 Jun 2019 19:13:34 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma01dal.us.ibm.com with ESMTP id 2t9by7980a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jun 2019 19:13:34 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5QJDW0I43188514
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jun 2019 19:13:32 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5CF56A057;
+        Wed, 26 Jun 2019 19:13:32 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D4086A047;
+        Wed, 26 Jun 2019 19:13:32 +0000 (GMT)
+Received: from talon7.ibm.com (unknown [9.41.179.222])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jun 2019 19:13:32 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.1 085/121] hwmon: (core) add thermal sensors only if dev->of_node is present
-Date:   Mon, 24 Jun 2019 17:56:57 +0800
-Message-Id: <20190624092325.180202592@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190624092320.652599624@linuxfoundation.org>
-References: <20190624092320.652599624@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        mine260309@gmail.com, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] OCC: FSI and hwmon: Add sequence numbering
+Date:   Wed, 26 Jun 2019 14:13:15 -0500
+Message-Id: <1561576395-6429-1-git-send-email-eajames@linux.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906260222
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-[ Upstream commit c41dd48e21fae3e55b3670ccf2eb562fc1f6a67d ]
+Sequence numbering of the commands submitted to the OCC is required by
+the OCC interface specification. Add sequence numbering and check for
+the correct sequence number on the response.
 
-Drivers may register to hwmon and request for also registering
-with the thermal subsystem (HWMON_C_REGISTER_TZ). However,
-some of these driver, e.g. marvell phy, may be probed from
-Device Tree or being dynamically allocated, and in the later
-case, it will not have a dev->of_node entry.
-
-Registering with hwmon without the dev->of_node may result in
-different outcomes depending on the device tree, which may
-be a bit misleading. If the device tree blob has no 'thermal-zones'
-node, the *hwmon_device_register*() family functions are going
-to gracefully succeed, because of-thermal,
-*thermal_zone_of_sensor_register() return -ENODEV in this case,
-and the hwmon error path handles this error code as success to
-cover for the case where CONFIG_THERMAL_OF is not set.
-However, if the device tree blob has the 'thermal-zones'
-entry, the *hwmon_device_register*() will always fail on callers
-with no dev->of_node, propagating -EINVAL.
-
-If dev->of_node is not present, calling of-thermal does not
-make sense. For this reason, this patch checks first if the
-device has a of_node before going over the process of registering
-with the thermal subsystem of-thermal interface. And in this case,
-when a caller of *hwmon_device_register*() with HWMON_C_REGISTER_TZ
-and no dev->of_node will still register with hwmon, but not with
-the thermal subsystem. If all the hwmon part bits are in place,
-the registration will succeed.
-
-Fixes: d560168b5d0f ("hwmon: (core) New hwmon registration API")
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/hwmon/hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/fsi/fsi-occ.c      | 15 ++++++++++++---
+ drivers/hwmon/occ/common.c |  4 ++--
+ drivers/hwmon/occ/common.h |  1 +
+ 3 files changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index c22dc1e07911..c38883f748a1 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -633,7 +633,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 	if (err)
- 		goto free_hwmon;
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index a2301ce..7da9c81 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -412,6 +412,7 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 		msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
+ 	struct occ *occ = dev_get_drvdata(dev);
+ 	struct occ_response *resp = response;
++	u8 seq_no;
+ 	u16 resp_data_length;
+ 	unsigned long start;
+ 	int rc;
+@@ -426,6 +427,8 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
  
--	if (dev && chip && chip->ops->read &&
-+	if (dev && dev->of_node && chip && chip->ops->read &&
- 	    chip->info[0]->type == hwmon_chip &&
- 	    (chip->info[0]->config[0] & HWMON_C_REGISTER_TZ)) {
- 		const struct hwmon_channel_info **info = chip->info;
+ 	mutex_lock(&occ->occ_lock);
+ 
++	/* Extract the seq_no from the command (first byte) */
++	seq_no = *(const u8 *)request;
+ 	rc = occ_putsram(occ, OCC_SRAM_CMD_ADDR, request, req_len);
+ 	if (rc)
+ 		goto done;
+@@ -441,11 +444,17 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 		if (rc)
+ 			goto done;
+ 
+-		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
++		if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
++		    resp->seq_no != seq_no) {
+ 			rc = -ETIMEDOUT;
+ 
+-			if (time_after(jiffies, start + timeout))
+-				break;
++			if (time_after(jiffies, start + timeout)) {
++				dev_err(occ->dev, "resp timeout status=%02x "
++					"resp seq_no=%d our seq_no=%d\n",
++					resp->return_status, resp->seq_no,
++					seq_no);
++				goto done;
++			}
+ 
+ 			set_current_state(TASK_UNINTERRUPTIBLE);
+ 			schedule_timeout(wait_time);
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index d593517..a7d2b16 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -124,12 +124,12 @@ struct extended_sensor {
+ static int occ_poll(struct occ *occ)
+ {
+ 	int rc;
+-	u16 checksum = occ->poll_cmd_data + 1;
++	u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
+ 	u8 cmd[8];
+ 	struct occ_poll_response_header *header;
+ 
+ 	/* big endian */
+-	cmd[0] = 0;			/* sequence number */
++	cmd[0] = occ->seq_no++;		/* sequence number */
+ 	cmd[1] = 0;			/* cmd type */
+ 	cmd[2] = 0;			/* data length msb */
+ 	cmd[3] = 1;			/* data length lsb */
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index fc13f3c..67e6968 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -95,6 +95,7 @@ struct occ {
+ 	struct occ_sensors sensors;
+ 
+ 	int powr_sample_time_us;	/* average power sample time */
++	u8 seq_no;
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+ 	int (*send_cmd)(struct occ *occ, u8 *cmd);
+ 
 -- 
-2.20.1
-
-
+1.8.3.1
 
