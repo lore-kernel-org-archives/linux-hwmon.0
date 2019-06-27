@@ -1,172 +1,82 @@
-Return-Path: <SRS0=nZ17=UZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=4Fve=U2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+X-Spam-Status: No, score=-2.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA38C48BD3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jun 2019 19:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 764F1C48BD6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jun 2019 05:10:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8257A2085A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Jun 2019 19:40:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1+BBmAH"
+	by mail.kernel.org (Postfix) with ESMTP id 4D0AA218A5
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Jun 2019 05:10:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbfFZTkw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Jun 2019 15:40:52 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46024 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726104AbfFZTkw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Jun 2019 15:40:52 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z19so1670976pgl.12;
-        Wed, 26 Jun 2019 12:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yQV/ucNJOmS1ZAuf0ofCnIQPznZqg2rdsUBQ0lFLvlw=;
-        b=V1+BBmAHZXxAASzYHMT4TCKNzE1BVsAiEs7csx39/e2p24wz830GSKv/2qV4M1E/oR
-         GQsw+v6MyX/Dx0+BqL7fXiTZ5vNmnizEz1U1CIbypmHiJd1L9pjTaWYCgqyrIvXUN7JG
-         cZ4s8EuhmtBUHqi5BtHBXPxXT4Xc/gm5HePZkGQiMTOVEi/jfcOSw0J3vQC20KxPQ+R4
-         NOtkE6oH+HuQdCgmnFalxJzw09ghTtzW2uH/G12ZawW/7xgC4sDjpYMpYQ+NMS4yISgm
-         w0Rug3p6DasIp7e2EGnLiUfUKgUeVYQprQJRVpogHIEI6jnpx5IjBS+4q5H/W2VOCRdT
-         E9mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yQV/ucNJOmS1ZAuf0ofCnIQPznZqg2rdsUBQ0lFLvlw=;
-        b=LLLBlrG+OVm1j+otgkg5QbWuH80hbhngOI3rv+wwX6/0mdQHWR1zlZ0fYnSa8oPR2s
-         XWHc9kkygu5X1a1Au4moeRvqqSntN913ky1pXA/lcH+uWcBMv/LrOvreWN9VCbXOIuW1
-         lmvxDcAvbMF8sZukD/y5LURd8ugWP2nnPEDFoclHh45aZXf3+Vm2COIr6UF94N4sQhqg
-         m5wcUGyzKRkMtA0CknWmgFy7aVX0+f4iaRziHsYIKRJczWfSdrLFW9OIuqLhccDPIlcz
-         +Kc0stXDFao+gsaNj7hLnAX51mazUdAGx0JMk7gaLMdLDgJXQPrZcd6WIrKTOlezchU5
-         c9DA==
-X-Gm-Message-State: APjAAAXWuvGGypSAciXLMk23oizqF9h3nkCA7y1fxoEVicrXzZ1NiQWW
-        o5vLg7B6kGYaazfBb1hQYQE=
-X-Google-Smtp-Source: APXvYqxz/GIQh0t+zyp9mwXfexf0u3nLyharYhio5tE/0ds7Atx79wyUiKZ9RcmZ5PvSri4AD1SgSw==
-X-Received: by 2002:a65:50cb:: with SMTP id s11mr4529535pgp.371.1561578051319;
-        Wed, 26 Jun 2019 12:40:51 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s24sm15000pfh.133.2019.06.26.12.40.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Jun 2019 12:40:50 -0700 (PDT)
-Date:   Wed, 26 Jun 2019 12:40:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jdelvare@suse.com, mine260309@gmail.com
-Subject: Re: [PATCH] OCC: FSI and hwmon: Add sequence numbering
-Message-ID: <20190626194048.GA7374@roeck-us.net>
-References: <1561576395-6429-1-git-send-email-eajames@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1561576395-6429-1-git-send-email-eajames@linux.ibm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726762AbfF0FKf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Jun 2019 01:10:35 -0400
+Received: from mga11.intel.com ([192.55.52.93]:23286 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725385AbfF0FKf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 27 Jun 2019 01:10:35 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jun 2019 22:10:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,422,1557212400"; 
+   d="scan'208";a="313672744"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by orsmga004.jf.intel.com with ESMTP; 26 Jun 2019 22:10:32 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, atull@kernel.org,
+        gregkh@linuxfoundation.org, Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v4 0/3] add thermal/power management features for FPGA DFL drivers
+Date:   Thu, 27 Jun 2019 12:53:35 +0800
+Message-Id: <1561611218-5800-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 02:13:15PM -0500, Eddie James wrote:
-> Sequence numbering of the commands submitted to the OCC is required by
-> the OCC interface specification. Add sequence numbering and check for
-> the correct sequence number on the response.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+This patchset adds thermal and power management features for FPGA DFL
+drivers. Both patches are using hwmon as userspace interfaces.
 
-For hwmon:
+Main changes from v3:
+ - use HWMON_CHANNEL_INFO.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Main changes from v2:
+ - switch to standard hwmon APIs for thermal hwmon:
+     temp1_alarm        --> temp1_max
+     temp1_alarm_status --> temp1_max_alarm
+     temp1_crit_status  --> temp1_crit_alarm
+     temp1_alarm_policy --> temp1_max_policy
+ - switch to standard hwmon APIs for power hwmon:
+     power1_cap         --> power1_max
+     power1_cap_status  --> power1_max_alarm
+     power1_crit_status --> power1_crit_alarm
 
-I assume this will be pushed through drivers/fsi.
+Please note that this patchset is generated on top of this patchset.
+[PATCH v4 00/15] add new features for FPGA DFL drivers
+ - https://lkml.org/lkml/2019/6/27/29
 
-Guenter
+Wu Hao (2):
+  fpga: dfl: fme: add thermal management support
+  fpga: dfl: fme: add power management support
 
-> ---
->  drivers/fsi/fsi-occ.c      | 15 ++++++++++++---
->  drivers/hwmon/occ/common.c |  4 ++--
->  drivers/hwmon/occ/common.h |  1 +
->  3 files changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-> index a2301ce..7da9c81 100644
-> --- a/drivers/fsi/fsi-occ.c
-> +++ b/drivers/fsi/fsi-occ.c
-> @@ -412,6 +412,7 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->  		msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
->  	struct occ *occ = dev_get_drvdata(dev);
->  	struct occ_response *resp = response;
-> +	u8 seq_no;
->  	u16 resp_data_length;
->  	unsigned long start;
->  	int rc;
-> @@ -426,6 +427,8 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->  
->  	mutex_lock(&occ->occ_lock);
->  
-> +	/* Extract the seq_no from the command (first byte) */
-> +	seq_no = *(const u8 *)request;
->  	rc = occ_putsram(occ, OCC_SRAM_CMD_ADDR, request, req_len);
->  	if (rc)
->  		goto done;
-> @@ -441,11 +444,17 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
->  		if (rc)
->  			goto done;
->  
-> -		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
-> +		if (resp->return_status == OCC_RESP_CMD_IN_PRG ||
-> +		    resp->seq_no != seq_no) {
->  			rc = -ETIMEDOUT;
->  
-> -			if (time_after(jiffies, start + timeout))
-> -				break;
-> +			if (time_after(jiffies, start + timeout)) {
-> +				dev_err(occ->dev, "resp timeout status=%02x "
-> +					"resp seq_no=%d our seq_no=%d\n",
-> +					resp->return_status, resp->seq_no,
-> +					seq_no);
-> +				goto done;
-> +			}
->  
->  			set_current_state(TASK_UNINTERRUPTIBLE);
->  			schedule_timeout(wait_time);
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index d593517..a7d2b16 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -124,12 +124,12 @@ struct extended_sensor {
->  static int occ_poll(struct occ *occ)
->  {
->  	int rc;
-> -	u16 checksum = occ->poll_cmd_data + 1;
-> +	u16 checksum = occ->poll_cmd_data + occ->seq_no + 1;
->  	u8 cmd[8];
->  	struct occ_poll_response_header *header;
->  
->  	/* big endian */
-> -	cmd[0] = 0;			/* sequence number */
-> +	cmd[0] = occ->seq_no++;		/* sequence number */
->  	cmd[1] = 0;			/* cmd type */
->  	cmd[2] = 0;			/* data length msb */
->  	cmd[3] = 1;			/* data length lsb */
-> diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-> index fc13f3c..67e6968 100644
-> --- a/drivers/hwmon/occ/common.h
-> +++ b/drivers/hwmon/occ/common.h
-> @@ -95,6 +95,7 @@ struct occ {
->  	struct occ_sensors sensors;
->  
->  	int powr_sample_time_us;	/* average power sample time */
-> +	u8 seq_no;
->  	u8 poll_cmd_data;		/* to perform OCC poll command */
->  	int (*send_cmd)(struct occ *occ, u8 *cmd);
->  
-> -- 
-> 1.8.3.1
-> 
+Xu Yilun (1):
+  Documentation: fpga: dfl: add descriptions for thermal/power
+    management interfaces
+
+ Documentation/ABI/testing/sysfs-platform-dfl-fme | 131 ++++++++
+ Documentation/fpga/dfl.txt                       |  10 +
+ drivers/fpga/Kconfig                             |   2 +-
+ drivers/fpga/dfl-fme-main.c                      | 408 +++++++++++++++++++++++
+ 4 files changed, 550 insertions(+), 1 deletion(-)
+
+-- 
+1.8.3.1
+
