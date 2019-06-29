@@ -2,115 +2,263 @@ Return-Path: <SRS0=gx1Z=U4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 221C4C4646D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 10:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FCC9C4321A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 16:21:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0543F208E3
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 10:57:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E20322086D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 16:21:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVdreV5w"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbfF2K5x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Jun 2019 06:57:53 -0400
-Received: from sauhun.de ([88.99.104.3]:60668 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbfF2K5x (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Jun 2019 06:57:53 -0400
-Received: from localhost (p5486CA23.dip0.t-ipconnect.de [84.134.202.35])
-        by pokefinder.org (Postfix) with ESMTPSA id EB8862C047A;
-        Sat, 29 Jun 2019 12:57:49 +0200 (CEST)
-Date:   Sat, 29 Jun 2019 12:57:49 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andreas Werner <andreas.werner@men.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Michael Shych <michaelsh@mellanox.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 3/5] docs: i2c: convert to ReST and add to driver-api
- bookset
-Message-ID: <20190629105749.GA1685@kunai>
-References: <cover.1561756511.git.mchehab+samsung@kernel.org>
- <3997b54a2e73887b96ec665573f08ded78b71421.1561756511.git.mchehab+samsung@kernel.org>
+        id S1726907AbfF2QVd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 29 Jun 2019 12:21:33 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34409 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726837AbfF2QVd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 29 Jun 2019 12:21:33 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c85so4467856pfc.1;
+        Sat, 29 Jun 2019 09:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LbZ2phuXROZ/86K2Sro98iszCAD5tJwgsDnKh3rnAUg=;
+        b=fVdreV5wjTqsgQJSYI/81NwW3vYBQnyd0E2IBt1mi9qMxv0++DTFkSAYm1zNqPBepM
+         1MoOZ1lxzpzCASi8kYJKQsbIqh+H/X1wU4TmjNrXHjjnFZowS68MAWb4lS1mJ/Mdf92+
+         MDxF8Bj7YijuJAvoAQcJeoyXIGvGAClFPhIQVLiiRWLyDJzdocItL1siZs7OLwx4hNPL
+         VHDV4s/A28DXJgqsHWX7zgLkpSXI2efFtUNCJhV1qBwAe8693foI2Y8ykEW6y4yjLUVW
+         XhR4ozq0soEbIywN3CxmGQi0ucrJRjZrx/hc99MO3uCvpUhwV9Sqo3d+7QniyLNPc5zG
+         fKeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LbZ2phuXROZ/86K2Sro98iszCAD5tJwgsDnKh3rnAUg=;
+        b=g2Nu6m+ANqMVcqCOqkhM2behnD+5HwwpCzXOy7AxPNw8xJ6m+mjzelfz2gI8XN1kXD
+         watmYga9OT2YP52jfG9sWJSb4oXOLgzi3zWpBu8G5OSoupTJOX+DcQoS6Uyo0qhyWDyj
+         ZY8WXCKM82b3sfxX/I6HwHresEiWhnuNlrDRU9zPOFNw7gBYHtl/g0NQuL7zCEHgx6bR
+         fwOFXGOWk5UQrc2TV69m2wUppeH8B3S9kDrsmF8Q3jTPmKE7jGYiEbUG7ThR73CccEcC
+         3/X0Fsm1fgOmSUr180x5SjxE7HsTmRs75dEmxMOkneTzy2Fxd484qIxc7hcAjx7FicTC
+         SU+Q==
+X-Gm-Message-State: APjAAAWQUuyzrfkxBNlfjEJEWL78uCJJKEKC4Szw/WnKPUIRrDzPKFP8
+        n7UdpbeeZbDZKWsKAsBeydZjeA9t
+X-Google-Smtp-Source: APXvYqy/1ADvBzhuiL25JdWqZhn1BwupzQJoeV0syfPAf3iDMdPwiojMbX9TQlLYzkyvHs67bEcubA==
+X-Received: by 2002:a17:90a:228b:: with SMTP id s11mr19692916pjc.23.1561825292255;
+        Sat, 29 Jun 2019 09:21:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u97sm5244153pjb.26.2019.06.29.09.21.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 29 Jun 2019 09:21:30 -0700 (PDT)
+Subject: Re: [PATCH v4 3/3] fpga: dfl: fme: add power management support
+To:     Wu Hao <hao.wu@intel.com>
+Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com, atull@kernel.org,
+        gregkh@linuxfoundation.org, Luwei Kang <luwei.kang@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+References: <1561611218-5800-1-git-send-email-hao.wu@intel.com>
+ <1561611218-5800-4-git-send-email-hao.wu@intel.com>
+ <20190628175514.GB25890@roeck-us.net> <20190629003308.GA15139@hao-dev>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <7149d96b-da6d-8e03-997f-0611c1654058@roeck-us.net>
+Date:   Sat, 29 Jun 2019 09:21:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
-Content-Disposition: inline
-In-Reply-To: <3997b54a2e73887b96ec665573f08ded78b71421.1561756511.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190629003308.GA15139@hao-dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 6/28/19 5:33 PM, Wu Hao wrote:
+> On Fri, Jun 28, 2019 at 10:55:14AM -0700, Guenter Roeck wrote:
+>> On Thu, Jun 27, 2019 at 12:53:38PM +0800, Wu Hao wrote:
+>>> This patch adds support for power management private feature under
+>>> FPGA Management Engine (FME). This private feature driver registers
+>>> a hwmon for power (power1_input), thresholds information, e.g.
+>>> (power1_max / crit / max_alarm / crit_alarm) and also read-only sysfs
+>>> interfaces for other power management information. For configuration,
+>>> user could write threshold values via above power1_max / crit sysfs
+>>> interface under hwmon too.
+>>>
+>>> Signed-off-by: Luwei Kang <luwei.kang@intel.com>
+>>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+>>> Signed-off-by: Wu Hao <hao.wu@intel.com>
+>>> ---
+>>> v2: create a dfl_fme_power hwmon to expose power sysfs interfaces.
+>>>      move all sysfs interfaces under hwmon
+>>>          consumed          --> hwmon power1_input
+>>>          threshold1        --> hwmon power1_cap
+>>>          threshold2        --> hwmon power1_crit
+>>>          threshold1_status --> hwmon power1_cap_status
+>>>          threshold2_status --> hwmon power1_crit_status
+>>>          xeon_limit        --> hwmon power1_xeon_limit
+>>>          fpga_limit        --> hwmon power1_fpga_limit
+>>
+>> How do those limits differ from the other limits ?
+>> We do have powerX_cap and powerX_cap_max, and from the context
+>> it appears that you could possibly at least use power1_cap_max
+>> (and power1_cap instead of power1_max) instead of
+>> power1_fpga_limit.
+> 
+> Thanks a lot for the review and comments.
+> 
+> Actually xeon/fpga_limit are introduced for different purpose. It shows
+> the power limit of CPU and FPGA, that may be useful in some integrated
+> solution, e.g. CPU and FPGA shares power. We should never these
+> interfaces as throttling thresholds.
+> 
 
---wRRV7LY7NUeQGEoC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, your call. Just keep in mind that non-standard attributes won't show
+up with the sensors command, and won't be visible for libsensors.
 
-On Fri, Jun 28, 2019 at 06:23:14PM -0300, Mauro Carvalho Chehab wrote:
-> Convert each file at I2C subsystem, renaming them to .rst and
-> adding to the driver-api book.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+>>
+>>>          ltr               --> hwmon power1_ltr
+>>> v3: rename some hwmon sysfs interfaces to follow hwmon ABI.
+>>> 	power1_cap         --> power1_max
+>>> 	power1_cap_status  --> power1_max_alarm
+>>> 	power1_crit_status --> power1_crit_alarm
+>>
+>> power1_cap is standard ABI, and since the value is enforced by HW,
+>> it should be usable.
+> 
+> As you see, in thermal management, threshold1 and threshold2 are
+> mapped to temp1_max_alarm and temp1_crit_alarm. So we feel that if
+> it will be friendly to user that we keep using max_alarm and crit_alarm
+> in power management for threshold1 and threshold2 too.
+> 
+> Do you think if we can keep this, or it's better to switch back to
+> power1_cap?
+> 
 
-I glimpsed over it and it looks basically OK. I won't have time to
-actually review all of this. But I trust you and we can fix things
-later. So:
+Again, your call.
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de>
+> 
+>>
+>>>      update sysfs doc for above sysfs interface changes.
+>>>      replace scnprintf with sprintf in sysfs interface.
+>>> v4: use HWMON_CHANNEL_INFO.
+>>>      update date in sysfs doc.
+>>> ---
+>>>   Documentation/ABI/testing/sysfs-platform-dfl-fme |  67 +++++++
+>>>   drivers/fpga/dfl-fme-main.c                      | 221 +++++++++++++++++++++++
+>>>   2 files changed, 288 insertions(+)
+>>>
+>>> diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+>>> index 2cd17dc..a669548 100644
+>>> --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
+>>> +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+>>> @@ -127,6 +127,7 @@ Contact:	Wu Hao <hao.wu@intel.com>
+>>>   Description:	Read-Only. Read this file to get the name of hwmon device, it
+>>>   		supports values:
+>>>   		    'dfl_fme_thermal' - thermal hwmon device name
+>>> +		    'dfl_fme_power'   - power hwmon device name
+>>>   
+>>>   What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
+>>>   Date:		June 2019
+>>> @@ -183,3 +184,69 @@ Description:	Read-Only. Read this file to get the policy of hardware threshold1
+>>>   		(see 'temp1_max'). It only supports two values (policies):
+>>>   		    0 - AP2 state (90% throttling)
+>>>   		    1 - AP1 state (50% throttling)
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-Only. It returns current FPGA power consumption in uW.
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_max
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-Write. Read this file to get current hardware power
+>>> +		threshold1 in uW. If power consumption rises at or above
+>>> +		this threshold, hardware starts 50% throttling.
+>>> +		Write this file to set current hardware power threshold1 in uW.
+>>> +		As hardware only accepts values in Watts, so input value will
+>>> +		be round down per Watts (< 1 watts part will be discarded).
+>>> +		Write fails with -EINVAL if input parsing fails or input isn't
+>>> +		in the valid range (0 - 127000000 uW).
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-Write. Read this file to get current hardware power
+>>> +		threshold2 in uW. If power consumption rises at or above
+>>> +		this threshold, hardware starts 90% throttling.
+>>> +		Write this file to set current hardware power threshold2 in uW.
+>>> +		As hardware only accepts values in Watts, so input value will
+>>> +		be round down per Watts (< 1 watts part will be discarded).
+>>> +		Write fails with -EINVAL if input parsing fails or input isn't
+>>> +		in the valid range (0 - 127000000 uW).
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_max_alarm
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-only. It returns 1 if power consumption is currently at or
+>>> +		above hardware threshold1 (see 'power1_max'), otherwise 0.
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit_alarm
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-only. It returns 1 if power consumption is currently at or
+>>> +		above hardware threshold2 (see 'power1_crit'), otherwise 0.
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_xeon_limit
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-Only. It returns power limit for XEON in uW.
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_fpga_limit
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-Only. It returns power limit for FPGA in uW.
+>>> +
+>>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_ltr
+>>> +Date:		June 2019
+>>> +KernelVersion:	5.3
+>>> +Contact:	Wu Hao <hao.wu@intel.com>
+>>> +Description:	Read-only. Read this file to get current Latency Tolerance
+>>> +		Reporting (ltr) value. This ltr impacts the CPU low power
+>>> +		state in integrated solution.
+>>
+>> Does that attribute add any value without any kind of unit or an explanation
+>> of its meaning ? What is userspace supposed to do with that information ?
+>> Without context, it is just a meaningless number.
+> 
+> I should add more description here, will fix it in the next version.
+> 
+>>
+>> Also, it appears that the information is supposed to be passed to power
+>> management via the set_latency_tolerance() callback. If so, it would be
+>> reported there. Would it possibly make more sense to use that interface ?
+> 
+> If I remember correctly set_latency_tolerance is used to communicate a tolerance
+> to device, but actually this is a read-only value, to indicate latency tolerance
+> requirement for memory access from FPGA device, as you know FPGA could be
+> programmed for different workloads, and different workloads may have different
+> latency requirements, if workloads in FPGA don't have any need for immediate
+> memory access, then it would be safe for deeper sleep state of system memory.
+> 
 
-I assume this goes in via your or doc-tree?
+Hmm, you are correct. Yes, this attribute could definitely benefit from a more
+detailed explanation.
 
->  Next/merge.log                                |   6 +-
-
-This file doesn't exist upstream, though.
-
-
---wRRV7LY7NUeQGEoC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0XRCkACgkQFA3kzBSg
-KbaLuBAAhCf3TNn+xCMcOgGyyRchSfnkRlEbd1ptubc40pHEy7Qw7R8spyI7CKjK
-S8R50Cj2tH4i6DPbAjQeGi5ofxQZ1RABHJ9iW6nphOdpGtsmfpyabgu85Q40Atqp
-kvu0OAkfeei37NPiNhIbCS7kRfjUtKgihy5V9gkcqlil3VTsUwF1nCyFOGuCxnfO
-D01UaoItfPqPDOSrXRsRvDUGe4CR4jStuUd5SADKrvewvfky7ZpK36oMBfyRBwH9
-sCLErIk3Dvpf538qcBQFklQ/wipy/d2ubulNtrAYuTn1IBKMrV03126mhAj+LZru
-lOEuBxq/Xpq7P4WaQr/BuZHJtQnW9D8m4f1jlWMZsUFEdUzTl+oaAEiZkuFY8pvB
-XjNYuYcOdRnKOcD4IiRnZxyoKc/9tuInVjugogRrbafOfg1u45wF9uL+T6y051NC
-6+v4wBEm6IFaw2BMRa0rk92wFmEmejeRzIofSS/qxBJR1TAS9r1cvOb+yaJYaDSg
-1hH5B0qXKYK+g1fNeaiSD1dtRnEhNKw5mXGrj74R637xFE9tOO3hAoWUnb9M72b3
-N+9e//Ry4PhsL/bK/p2T0jHYL5dSX7UYPdYJLAnxvaDv8EdCZc5+VbhGXmYsUB5p
-+YA9xi1SfGk3kHnJm7JMKAO94RpOmAAiON8FhApNx/kzLO1FNlA=
-=5j5T
------END PGP SIGNATURE-----
-
---wRRV7LY7NUeQGEoC--
+Thanks,
+Guenter
