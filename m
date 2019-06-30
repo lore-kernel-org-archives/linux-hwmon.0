@@ -1,264 +1,193 @@
-Return-Path: <SRS0=gx1Z=U4=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=soNe=U5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FCC9C4321A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 16:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A4FEC5B57E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jun 2019 20:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E20322086D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 29 Jun 2019 16:21:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 257B2217D8
+	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jun 2019 20:39:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVdreV5w"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uUnZ4Myo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbfF2QVd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 29 Jun 2019 12:21:33 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34409 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726837AbfF2QVd (ORCPT
+        id S1727079AbfF3UjG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 30 Jun 2019 16:39:06 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44623 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726669AbfF3UjG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 29 Jun 2019 12:21:33 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c85so4467856pfc.1;
-        Sat, 29 Jun 2019 09:21:32 -0700 (PDT)
+        Sun, 30 Jun 2019 16:39:06 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t7so6166941plr.11
+        for <linux-hwmon@vger.kernel.org>; Sun, 30 Jun 2019 13:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LbZ2phuXROZ/86K2Sro98iszCAD5tJwgsDnKh3rnAUg=;
-        b=fVdreV5wjTqsgQJSYI/81NwW3vYBQnyd0E2IBt1mi9qMxv0++DTFkSAYm1zNqPBepM
-         1MoOZ1lxzpzCASi8kYJKQsbIqh+H/X1wU4TmjNrXHjjnFZowS68MAWb4lS1mJ/Mdf92+
-         MDxF8Bj7YijuJAvoAQcJeoyXIGvGAClFPhIQVLiiRWLyDJzdocItL1siZs7OLwx4hNPL
-         VHDV4s/A28DXJgqsHWX7zgLkpSXI2efFtUNCJhV1qBwAe8693foI2Y8ykEW6y4yjLUVW
-         XhR4ozq0soEbIywN3CxmGQi0ucrJRjZrx/hc99MO3uCvpUhwV9Sqo3d+7QniyLNPc5zG
-         fKeQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hR5kvArVqFy86BkKOkK83nxGyFp+j6Tx4A9iJI7YqY8=;
+        b=uUnZ4MyoFzbIEgbW8mMsVtxawEzbdMkrfrVgpxwzSMiRByL4js3xD1zwC/SHC5mtoz
+         Qiow5u+yG4k5ZxgDRZ+HUjF8jCtk/ZgMrSBnWc+mFG7gDT+KM8fpO/EWsiNHftYNLOPF
+         McOGiUyo2EfNMQq84HQhhb59MoRV8xsE5Gl97PcogZDH43FRZU8vkXY6CT1Cu+V6zuHp
+         aPvnyb89Xesu3jbCWQWiitRSjgrTX3TeRscfcL357fjTV4PCiZIqKjH0dybgSCK79BOA
+         HCrqe7cpLBTAbM3UEEoQqKvgifztpsBpscoj1DYF+x+NzLRWG7BqIjEsSp77b+X8mKXT
+         W3pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LbZ2phuXROZ/86K2Sro98iszCAD5tJwgsDnKh3rnAUg=;
-        b=g2Nu6m+ANqMVcqCOqkhM2behnD+5HwwpCzXOy7AxPNw8xJ6m+mjzelfz2gI8XN1kXD
-         watmYga9OT2YP52jfG9sWJSb4oXOLgzi3zWpBu8G5OSoupTJOX+DcQoS6Uyo0qhyWDyj
-         ZY8WXCKM82b3sfxX/I6HwHresEiWhnuNlrDRU9zPOFNw7gBYHtl/g0NQuL7zCEHgx6bR
-         fwOFXGOWk5UQrc2TV69m2wUppeH8B3S9kDrsmF8Q3jTPmKE7jGYiEbUG7ThR73CccEcC
-         3/X0Fsm1fgOmSUr180x5SjxE7HsTmRs75dEmxMOkneTzy2Fxd484qIxc7hcAjx7FicTC
-         SU+Q==
-X-Gm-Message-State: APjAAAWQUuyzrfkxBNlfjEJEWL78uCJJKEKC4Szw/WnKPUIRrDzPKFP8
-        n7UdpbeeZbDZKWsKAsBeydZjeA9t
-X-Google-Smtp-Source: APXvYqy/1ADvBzhuiL25JdWqZhn1BwupzQJoeV0syfPAf3iDMdPwiojMbX9TQlLYzkyvHs67bEcubA==
-X-Received: by 2002:a17:90a:228b:: with SMTP id s11mr19692916pjc.23.1561825292255;
-        Sat, 29 Jun 2019 09:21:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u97sm5244153pjb.26.2019.06.29.09.21.30
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hR5kvArVqFy86BkKOkK83nxGyFp+j6Tx4A9iJI7YqY8=;
+        b=rYPzFA9bcSNWBDJTOSGtj6+xNyJI8uzKGM2WKwk2hLZhtbI9PQWZjhCAjK0HLSA+vH
+         VeGL5HHe2WfPn9u8iPlEH+gwgB0LgPPgmB3JN3axO4Ejr61O961ud14s0lsQVr+MP5Nn
+         yp64DkhHmGbQ+IDMLNMhxtej074ykgiTtm4LqqRdygQuZoNKzqQL5tQiC5KNOc2yKYS3
+         uq32LEv8p50Ld6ettXbVXSjoq6pYHvU2Uko2YNTL0S73aSmfeM9XN2m8J8A0UYtB/zB5
+         qkvD3QKCtGBzHHjghtu9e/wjB4RcmTCos/fox/fwRCb5TMu+N7svZLfGHC9Zi7Y71/Ph
+         qc5Q==
+X-Gm-Message-State: APjAAAU8BlrQ+EenCkdRUIki4X0brqzU5vgyEp8udF6QM+INqAvVKJ8Z
+        SFQaJXT1iMM/kmm3Z5MSeb0=
+X-Google-Smtp-Source: APXvYqwlUeWx+WhtacXMi1uiOCtO761+XpzB0UvrNyREz0oIoJpz2Bo182hc2GE8Fa0Qr5hzrCgRaQ==
+X-Received: by 2002:a17:902:4201:: with SMTP id g1mr24854798pld.300.1561927145328;
+        Sun, 30 Jun 2019 13:39:05 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t32sm16752948pgk.29.2019.06.30.13.39.03
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 29 Jun 2019 09:21:30 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] fpga: dfl: fme: add power management support
-To:     Wu Hao <hao.wu@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com, atull@kernel.org,
-        gregkh@linuxfoundation.org, Luwei Kang <luwei.kang@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-References: <1561611218-5800-1-git-send-email-hao.wu@intel.com>
- <1561611218-5800-4-git-send-email-hao.wu@intel.com>
- <20190628175514.GB25890@roeck-us.net> <20190629003308.GA15139@hao-dev>
+        Sun, 30 Jun 2019 13:39:04 -0700 (PDT)
+Date:   Sun, 30 Jun 2019 13:39:03 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7149d96b-da6d-8e03-997f-0611c1654058@roeck-us.net>
-Date:   Sat, 29 Jun 2019 09:21:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+To:     Boyang Yu <byu@arista.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        deank@arista.com, ryant@arista.com
+Subject: Re: [PATCH v2] hwmon: (lm90) Fix max6658 sporadic wrong temperature
+ reading
+Message-ID: <20190630203903.GA24590@roeck-us.net>
+References: <20190628190636.5565-1-byu@arista.com>
 MIME-Version: 1.0
-In-Reply-To: <20190629003308.GA15139@hao-dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190628190636.5565-1-byu@arista.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/28/19 5:33 PM, Wu Hao wrote:
-> On Fri, Jun 28, 2019 at 10:55:14AM -0700, Guenter Roeck wrote:
->> On Thu, Jun 27, 2019 at 12:53:38PM +0800, Wu Hao wrote:
->>> This patch adds support for power management private feature under
->>> FPGA Management Engine (FME). This private feature driver registers
->>> a hwmon for power (power1_input), thresholds information, e.g.
->>> (power1_max / crit / max_alarm / crit_alarm) and also read-only sysfs
->>> interfaces for other power management information. For configuration,
->>> user could write threshold values via above power1_max / crit sysfs
->>> interface under hwmon too.
->>>
->>> Signed-off-by: Luwei Kang <luwei.kang@intel.com>
->>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
->>> Signed-off-by: Wu Hao <hao.wu@intel.com>
->>> ---
->>> v2: create a dfl_fme_power hwmon to expose power sysfs interfaces.
->>>      move all sysfs interfaces under hwmon
->>>          consumed          --> hwmon power1_input
->>>          threshold1        --> hwmon power1_cap
->>>          threshold2        --> hwmon power1_crit
->>>          threshold1_status --> hwmon power1_cap_status
->>>          threshold2_status --> hwmon power1_crit_status
->>>          xeon_limit        --> hwmon power1_xeon_limit
->>>          fpga_limit        --> hwmon power1_fpga_limit
->>
->> How do those limits differ from the other limits ?
->> We do have powerX_cap and powerX_cap_max, and from the context
->> it appears that you could possibly at least use power1_cap_max
->> (and power1_cap instead of power1_max) instead of
->> power1_fpga_limit.
+On Fri, Jun 28, 2019 at 07:06:36PM +0000, Boyang Yu wrote:
+> max6658 may report unrealistically high temperature during
+> the driver initialization, for which, its overtemp alarm pin
+> also gets asserted. For certain devices implementing overtemp
+> protection based on that pin, it may further trigger a reset to
+> the device. By reproducing the problem, the wrong reading is
+> found to be coincident with changing the conversion rate.
 > 
-> Thanks a lot for the review and comments.
+> To mitigate this issue, set the stop bit before changing the
+> conversion rate and unset it thereafter. After such change, the
+> wrong reading is not reproduced. Apply this change only to the
+> max6657 kind for now, controlled by flag LM90_PAUSE_ON_CONFIG.
 > 
-> Actually xeon/fpga_limit are introduced for different purpose. It shows
-> the power limit of CPU and FPGA, that may be useful in some integrated
-> solution, e.g. CPU and FPGA shares power. We should never these
-> interfaces as throttling thresholds.
-> 
+> Signed-off-by: Boyang Yu <byu@arista.com>
 
-Ok, your call. Just keep in mind that non-standard attributes won't show
-up with the sensors command, and won't be visible for libsensors.
-
->>
->>>          ltr               --> hwmon power1_ltr
->>> v3: rename some hwmon sysfs interfaces to follow hwmon ABI.
->>> 	power1_cap         --> power1_max
->>> 	power1_cap_status  --> power1_max_alarm
->>> 	power1_crit_status --> power1_crit_alarm
->>
->> power1_cap is standard ABI, and since the value is enforced by HW,
->> it should be usable.
-> 
-> As you see, in thermal management, threshold1 and threshold2 are
-> mapped to temp1_max_alarm and temp1_crit_alarm. So we feel that if
-> it will be friendly to user that we keep using max_alarm and crit_alarm
-> in power management for threshold1 and threshold2 too.
-> 
-> Do you think if we can keep this, or it's better to switch back to
-> power1_cap?
-> 
-
-Again, your call.
-
-> 
->>
->>>      update sysfs doc for above sysfs interface changes.
->>>      replace scnprintf with sprintf in sysfs interface.
->>> v4: use HWMON_CHANNEL_INFO.
->>>      update date in sysfs doc.
->>> ---
->>>   Documentation/ABI/testing/sysfs-platform-dfl-fme |  67 +++++++
->>>   drivers/fpga/dfl-fme-main.c                      | 221 +++++++++++++++++++++++
->>>   2 files changed, 288 insertions(+)
->>>
->>> diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
->>> index 2cd17dc..a669548 100644
->>> --- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
->>> +++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
->>> @@ -127,6 +127,7 @@ Contact:	Wu Hao <hao.wu@intel.com>
->>>   Description:	Read-Only. Read this file to get the name of hwmon device, it
->>>   		supports values:
->>>   		    'dfl_fme_thermal' - thermal hwmon device name
->>> +		    'dfl_fme_power'   - power hwmon device name
->>>   
->>>   What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
->>>   Date:		June 2019
->>> @@ -183,3 +184,69 @@ Description:	Read-Only. Read this file to get the policy of hardware threshold1
->>>   		(see 'temp1_max'). It only supports two values (policies):
->>>   		    0 - AP2 state (90% throttling)
->>>   		    1 - AP1 state (50% throttling)
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_input
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-Only. It returns current FPGA power consumption in uW.
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_max
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-Write. Read this file to get current hardware power
->>> +		threshold1 in uW. If power consumption rises at or above
->>> +		this threshold, hardware starts 50% throttling.
->>> +		Write this file to set current hardware power threshold1 in uW.
->>> +		As hardware only accepts values in Watts, so input value will
->>> +		be round down per Watts (< 1 watts part will be discarded).
->>> +		Write fails with -EINVAL if input parsing fails or input isn't
->>> +		in the valid range (0 - 127000000 uW).
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-Write. Read this file to get current hardware power
->>> +		threshold2 in uW. If power consumption rises at or above
->>> +		this threshold, hardware starts 90% throttling.
->>> +		Write this file to set current hardware power threshold2 in uW.
->>> +		As hardware only accepts values in Watts, so input value will
->>> +		be round down per Watts (< 1 watts part will be discarded).
->>> +		Write fails with -EINVAL if input parsing fails or input isn't
->>> +		in the valid range (0 - 127000000 uW).
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_max_alarm
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-only. It returns 1 if power consumption is currently at or
->>> +		above hardware threshold1 (see 'power1_max'), otherwise 0.
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_crit_alarm
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-only. It returns 1 if power consumption is currently at or
->>> +		above hardware threshold2 (see 'power1_crit'), otherwise 0.
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_xeon_limit
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-Only. It returns power limit for XEON in uW.
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_fpga_limit
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-Only. It returns power limit for FPGA in uW.
->>> +
->>> +What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/power1_ltr
->>> +Date:		June 2019
->>> +KernelVersion:	5.3
->>> +Contact:	Wu Hao <hao.wu@intel.com>
->>> +Description:	Read-only. Read this file to get current Latency Tolerance
->>> +		Reporting (ltr) value. This ltr impacts the CPU low power
->>> +		state in integrated solution.
->>
->> Does that attribute add any value without any kind of unit or an explanation
->> of its meaning ? What is userspace supposed to do with that information ?
->> Without context, it is just a meaningless number.
-> 
-> I should add more description here, will fix it in the next version.
-> 
->>
->> Also, it appears that the information is supposed to be passed to power
->> management via the set_latency_tolerance() callback. If so, it would be
->> reported there. Would it possibly make more sense to use that interface ?
-> 
-> If I remember correctly set_latency_tolerance is used to communicate a tolerance
-> to device, but actually this is a read-only value, to indicate latency tolerance
-> requirement for memory access from FPGA device, as you know FPGA could be
-> programmed for different workloads, and different workloads may have different
-> latency requirements, if workloads in FPGA don't have any need for immediate
-> memory access, then it would be safe for deeper sleep state of system memory.
-> 
-
-Hmm, you are correct. Yes, this attribute could definitely benefit from a more
-detailed explanation.
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/lm90.c | 42 ++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 38 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index e562a578f20e..bd00d8eac066 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -174,6 +174,7 @@ enum chips { lm90, adm1032, lm99, lm86, max6657, max6659, adt7461, max6680,
+>  #define LM90_HAVE_EMERGENCY_ALARM (1 << 5)/* emergency alarm		*/
+>  #define LM90_HAVE_TEMP3		(1 << 6) /* 3rd temperature sensor	*/
+>  #define LM90_HAVE_BROKEN_ALERT	(1 << 7) /* Broken alert		*/
+> +#define LM90_PAUSE_FOR_CONFIG	(1 << 8) /* Pause conversion for config	*/
+>  
+>  /* LM90 status */
+>  #define LM90_STATUS_LTHRM	(1 << 0) /* local THERM limit tripped */
+> @@ -367,6 +368,7 @@ static const struct lm90_params lm90_params[] = {
+>  		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+>  	},
+>  	[max6657] = {
+> +		.flags = LM90_PAUSE_FOR_CONFIG,
+>  		.alert_alarms = 0x7c,
+>  		.max_convrate = 8,
+>  		.reg_local_ext = MAX6657_REG_R_LOCAL_TEMPL,
+> @@ -567,6 +569,38 @@ static inline int lm90_select_remote_channel(struct i2c_client *client,
+>  	return 0;
+>  }
+>  
+> +static int lm90_write_convrate(struct i2c_client *client,
+> +			       struct lm90_data *data, int val)
+> +{
+> +	int err;
+> +	int config_orig, config_stop;
+> +
+> +	/* Save config and pause conversion */
+> +	if (data->flags & LM90_PAUSE_FOR_CONFIG) {
+> +		config_orig = lm90_read_reg(client, LM90_REG_R_CONFIG1);
+> +		if (config_orig < 0)
+> +			return config_orig;
+> +		config_stop = config_orig | 0x40;
+> +		if (config_orig != config_stop) {
+> +			err = i2c_smbus_write_byte_data(client,
+> +							LM90_REG_W_CONFIG1,
+> +							config_stop);
+> +			if (err < 0)
+> +				return err;
+> +		}
+> +	}
+> +
+> +	/* Set conv rate */
+> +	err = i2c_smbus_write_byte_data(client, LM90_REG_W_CONVRATE, val);
+> +
+> +	/* Revert change to config */
+> +	if (data->flags & LM90_PAUSE_FOR_CONFIG && config_orig != config_stop)
+> +		i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
+> +					  config_orig);
+> +
+> +	return err;
+> +}
+> +
+>  /*
+>   * Set conversion rate.
+>   * client->update_lock must be held when calling this function (unless we are
+> @@ -587,7 +621,7 @@ static int lm90_set_convrate(struct i2c_client *client, struct lm90_data *data,
+>  		if (interval >= update_interval * 3 / 4)
+>  			break;
+>  
+> -	err = i2c_smbus_write_byte_data(client, LM90_REG_W_CONVRATE, i);
+> +	err = lm90_write_convrate(client, data, i);
+>  	data->update_interval = DIV_ROUND_CLOSEST(update_interval, 64);
+>  	return err;
+>  }
+> @@ -1593,8 +1627,7 @@ static void lm90_restore_conf(void *_data)
+>  	struct i2c_client *client = data->client;
+>  
+>  	/* Restore initial configuration */
+> -	i2c_smbus_write_byte_data(client, LM90_REG_W_CONVRATE,
+> -				  data->convrate_orig);
+> +	lm90_write_convrate(client, data, data->convrate_orig);
+>  	i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
+>  				  data->config_orig);
+>  }
+> @@ -1611,12 +1644,13 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+>  	/*
+>  	 * Start the conversions.
+>  	 */
+> -	lm90_set_convrate(client, data, 500);	/* 500ms; 2Hz conversion rate */
+>  	config = lm90_read_reg(client, LM90_REG_R_CONFIG1);
+>  	if (config < 0)
+>  		return config;
+>  	data->config_orig = config;
+>  
+> +	lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
+> +
+>  	/* Check Temperature Range Select */
+>  	if (data->kind == adt7461 || data->kind == tmp451) {
+>  		if (config & 0x04)
