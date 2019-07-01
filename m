@@ -7,22 +7,21 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0702FC06508
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 03:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E243C5B578
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 05:32:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B055A208CA
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 03:13:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E946208C4
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 05:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727256AbfGADNH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 30 Jun 2019 23:13:07 -0400
-Received: from aclms3.advantech.com.tw ([125.252.70.86]:21750 "EHLO
+        id S1726036AbfGAFcu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 1 Jul 2019 01:32:50 -0400
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:40722 "EHLO
         ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbfGADNH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 30 Jun 2019 23:13:07 -0400
+        with ESMTP id S1725777AbfGAFcu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Jul 2019 01:32:50 -0400
 Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Td8b9a5c15eac1401c81238@ACLMS3.advantech.com.tw>;
- Mon, 1 Jul 2019 11:13:03 +0800
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Td8ba25b236ac1401c81238@ACLMS3.advantech.com.tw>;
+ Mon, 1 Jul 2019 13:32:48 +0800
 From:   <Amy.Shih@advantech.com.tw>
 To:     <she90122@gmail.com>
 CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
@@ -30,11 +29,11 @@ CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
         Guenter Roeck <linux@roeck-us.net>,
         <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: [v2 3/3] hwmon: (nct7904) Add extra sysfs support for fan, voltage and temperature.
-Date:   Mon, 1 Jul 2019 03:12:09 +0000
-Message-ID: <1c5f45e5df7ec0fe092fb3aa74727fb1536e5e5c.1561950110.git.amy.shih@advantech.com.tw>
+Date:   Mon, 1 Jul 2019 05:32:29 +0000
+Message-ID: <b5cd5f25dc92feb759062f96b820807014c401a5.1561959015.git.amy.shih@advantech.com.tw>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561950110.git.amy.shih@advantech.com.tw>
-References: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561950110.git.amy.shih@advantech.com.tw>
+In-Reply-To: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561959015.git.amy.shih@advantech.com.tw>
+References: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561959015.git.amy.shih@advantech.com.tw>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [172.17.10.28]
@@ -60,8 +59,8 @@ thermistor, AMD SB-TSI or Intel PECI, thus add below sysfs nodes:
 -in[1-*]_alarm
 -temp[1-*]_max
 -temp[1-*]_max_hyst
--temp[1-*]_emergency
--temp[1-*]_emergency_hyst
+-temp[1-*]_crit
+-temp[1-*]_crit_hyst
 -temp[1-*]_alarm
 -temp[1-*]_type
 
