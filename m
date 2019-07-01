@@ -1,304 +1,690 @@
-Return-Path: <SRS0=soNe=U5=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=MtXU=U6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CBC9C5B57F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jun 2019 22:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0702FC06508
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 03:13:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B3F3208C3
-	for <linux-hwmon@archiver.kernel.org>; Sun, 30 Jun 2019 22:56:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWqg5H+l"
+	by mail.kernel.org (Postfix) with ESMTP id B055A208CA
+	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Jul 2019 03:13:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbfF3W4m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 30 Jun 2019 18:56:42 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45822 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727167AbfF3W4m (ORCPT
+        id S1727256AbfGADNH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 30 Jun 2019 23:13:07 -0400
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:21750 "EHLO
+        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727135AbfGADNH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 30 Jun 2019 18:56:42 -0400
-Received: by mail-pg1-f195.google.com with SMTP id o13so547109pgp.12
-        for <linux-hwmon@vger.kernel.org>; Sun, 30 Jun 2019 15:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oL4bIjT1wTNrR/rfmEp2M4N0dmssgONvXZEAb0qR+dU=;
-        b=BWqg5H+lFkDII1/xPYRhoj4RgnohNnRG/mpX8pVM9n46DkkHmOz6IokCA6YwsG4TD+
-         IEOx5UmdlTt5izq3CuhsUjPaTQqii/QuzMQshjZPKpY8zfr5ADDh3GpQDk8QAqxMW7tB
-         Q8JqpV+LGPWnHDchy5AUmlHLZ+BBpvwKb8zU2ymKYG4LRh4UlWLToBSeB9o2ha8SVYAw
-         7YUo/r2nG+WTBEdL4J4BJaSU+m0DZUoPc8I1FyAqvyg2UzaGPSuccV1gEUsnsYv9p5eT
-         Qw/CS+9Wffj8pIdYf2NJMikmOAbbBLqmTvLwsjilEOfP/jl28hY55PhB+QgNtt+h4wDL
-         4AGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=oL4bIjT1wTNrR/rfmEp2M4N0dmssgONvXZEAb0qR+dU=;
-        b=lniRzVdhKj37DGCP7fFuEzV1QcDf3cQHbkLluOhJJwOXnIWlWJsh0OyJC6fKn1dtmX
-         A2myVbHRALsxnVLPdkmF43Ggd1j1nQipX0orLISmO1+PYafWM2651lH497lnHrxubppa
-         bGkH9q2+JuZ055c/qFglvJ/5HWltm00FhZqJTNmnjIGPGqO7Dc4XTnbnqs7bzVycXp8o
-         pwgo91+sQQblruh44TW2JRaPq4iDty1lClzoFjOTduM9bkHYqLCbmCJ4hYMKXT3bZ6oY
-         n/96/tYXxfYceYfAFrKBcU85AMEAkKIOrEM8MlsSyH/mwaZ0a/rdbn7SdCONPthEhaSy
-         tRBA==
-X-Gm-Message-State: APjAAAWGIswQKIVbxnnY2IcHfwqr1hRiuX5TK9IGVMMqiod0xaaTeJRg
-        ecUN4vlP7BfC5SDXfUeSEW5ffjOr
-X-Google-Smtp-Source: APXvYqz6k2sTA+52wQS6npR93u2P73TNogq5dwdIeQvb3MJPUixC2HheQBwKUkOkL2WrDqUU9w6SPA==
-X-Received: by 2002:a63:4803:: with SMTP id v3mr7283207pga.347.1561935400725;
-        Sun, 30 Jun 2019 15:56:40 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3sm9115766pfp.114.2019.06.30.15.56.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 30 Jun 2019 15:56:40 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, Boyang Yu <byu@arista.com>
-Subject: [PATCH 2/2] hwmon: (lm90) Introduce function to update configuration register
-Date:   Sun, 30 Jun 2019 15:56:35 -0700
-Message-Id: <1561935395-15093-2-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561935395-15093-1-git-send-email-linux@roeck-us.net>
-References: <1561935395-15093-1-git-send-email-linux@roeck-us.net>
+        Sun, 30 Jun 2019 23:13:07 -0400
+Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Td8b9a5c15eac1401c81238@ACLMS3.advantech.com.tw>;
+ Mon, 1 Jul 2019 11:13:03 +0800
+From:   <Amy.Shih@advantech.com.tw>
+To:     <she90122@gmail.com>
+CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <jia.sui@advantech.com.cn>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [v2 3/3] hwmon: (nct7904) Add extra sysfs support for fan, voltage and temperature.
+Date:   Mon, 1 Jul 2019 03:12:09 +0000
+Message-ID: <1c5f45e5df7ec0fe092fb3aa74727fb1536e5e5c.1561950110.git.amy.shih@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561950110.git.amy.shih@advantech.com.tw>
+References: <928e46508bbe1ebc0763c3d2403a5aebe95af552.1561950110.git.amy.shih@advantech.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.28]
+X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
+ taipei08.ADVANTECH.CORP (172.20.0.235)
+X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The code to update the configuration register is repeated several times.
-Move it into a separate function. At the same time, un-inline
-lm90_select_remote_channel() and leave it up to the compiler to decide
-what to do with it. Also remove the 'client' argument from
-lm90_select_remote_channel() and from lm90_write_convrate() and take
-it from struct lm90_data instead where needed.
+From: "amy.shih" <amy.shih@advantech.com.tw>
 
-This patch reduces code size by more than 800 bytes on x86_64.
+NCT-7904D also supports reading of channel limitation registers
+and SMI status registers for fan, voltage and temperature monitoring,
+and also supports reading of temperature sensor type which is thermal diode,
+thermistor, AMD SB-TSI or Intel PECI, thus add below sysfs nodes:
 
-Cc: Boyang Yu <byu@arista.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+-fan[1-*]_min
+-fan[1-*]_alarm
+-in[1-*]_min
+-in[1-*]_max
+-in[1-*]_alarm
+-temp[1-*]_max
+-temp[1-*]_max_hyst
+-temp[1-*]_emergency
+-temp[1-*]_emergency_hyst
+-temp[1-*]_alarm
+-temp[1-*]_type
+
+Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
 ---
- drivers/hwmon/lm90.c | 89 +++++++++++++++++++++++-----------------------------
- 1 file changed, 40 insertions(+), 49 deletions(-)
+Changes in v2:
+- Fix bad fallthrough in various switch statements.
+- Fix the wrong declared of tmp as u8 in nct7904_write_in, declared tmp to int.
+- Fix incorrect register setting of voltage.
+- Fix incorrect register bit mapping of temperature alarm.
+- Fix wrong return code 0x1fff in function nct7904_write_fan.
+- Delete wrong comment in function nct7904_write_in.
+- Fix wrong attribute names for temperature.
+- Fix wrong registers setting for temperature.
+---
+ drivers/hwmon/nct7904.c | 469 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 424 insertions(+), 45 deletions(-)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 7f35ea0044fd..9b3c9f390ef8 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -543,6 +543,21 @@ static int lm90_read16(struct i2c_client *client, u8 regh, u8 regl)
- 	return (newh << 8) | l;
- }
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index 710c30562fc1..d842c10ba11f 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -46,10 +46,33 @@
+ #define DTS_T_CTRL1_REG		0x27
+ #define VT_ADC_MD_REG		0x2E
  
-+static int lm90_update_confreg(struct lm90_data *data, u8 config)
-+{
-+	if (data->config != config) {
-+		int err;
++#define VSEN1_HV_LL_REG		0x02	/* Bank 1; 2 regs (HV/LV) per sensor */
++#define VSEN1_LV_LL_REG		0x03	/* Bank 1; 2 regs (HV/LV) per sensor */
++#define VSEN1_HV_HL_REG		0x00	/* Bank 1; 2 regs (HV/LV) per sensor */
++#define VSEN1_LV_HL_REG		0x01	/* Bank 1; 2 regs (HV/LV) per sensor */
++#define SMI_STS1_REG		0xC1	/* Bank 0; SMI Status Register */
++#define SMI_STS5_REG		0xC5	/* Bank 0; SMI Status Register */
++#define SMI_STS7_REG		0xC7	/* Bank 0; SMI Status Register */
++#define SMI_STS8_REG		0xC8	/* Bank 0; SMI Status Register */
 +
-+		err = i2c_smbus_write_byte_data(data->client,
-+						LM90_REG_W_CONFIG1,
-+						config);
-+		if (err)
-+			return err;
-+		data->config = config;
+ #define VSEN1_HV_REG		0x40	/* Bank 0; 2 regs (HV/LV) per sensor */
+ #define TEMP_CH1_HV_REG		0x42	/* Bank 0; same as VSEN2_HV */
+ #define LTD_HV_REG		0x62	/* Bank 0; 2 regs in VSEN range */
++#define LTD_HV_HL_REG		0x44	/* Bank 1; 1 reg for LTD */
++#define LTD_LV_HL_REG		0x45	/* Bank 1; 1 reg for LTD */
++#define LTD_HV_LL_REG		0x46	/* Bank 1; 1 reg for LTD */
++#define LTD_LV_LL_REG		0x47	/* Bank 1; 1 reg for LTD */
++#define TEMP_CH1_CH_REG		0x05	/* Bank 1; 1 reg for LTD */
++#define TEMP_CH1_W_REG		0x06	/* Bank 1; 1 reg for LTD */
++#define TEMP_CH1_WH_REG		0x07	/* Bank 1; 1 reg for LTD */
++#define TEMP_CH1_C_REG		0x04	/* Bank 1; 1 reg per sensor */
++#define DTS_T_CPU1_C_REG	0x90	/* Bank 1; 1 reg per sensor */
++#define DTS_T_CPU1_CH_REG	0x91	/* Bank 1; 1 reg per sensor */
++#define DTS_T_CPU1_W_REG	0x92	/* Bank 1; 1 reg per sensor */
++#define DTS_T_CPU1_WH_REG	0x93	/* Bank 1; 1 reg per sensor */
+ #define FANIN1_HV_REG		0x80	/* Bank 0; 2 regs (HV/LV) per sensor */
++#define FANIN1_HV_HL_REG	0x60	/* Bank 1; 2 regs (HV/LV) per sensor */
++#define FANIN1_LV_HL_REG	0x61	/* Bank 1; 2 regs (HV/LV) per sensor */
+ #define T_CPU1_HV_REG		0xA0	/* Bank 0; 2 regs (HV/LV) per sensor */
+ 
+ #define PRTS_REG		0x03	/* Bank 2 */
+@@ -58,6 +81,8 @@
+ #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
+ #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
+ 
++#define ENABLE_TSI	BIT(1)
++
+ static const unsigned short normal_i2c[] = {
+ 	0x2d, 0x2e, I2C_CLIENT_END
+ };
+@@ -72,6 +97,7 @@ struct nct7904_data {
+ 	u8 fan_mode[FANCTL_MAX];
+ 	u8 enable_dts;
+ 	u8 has_dts;
++	u8 temp_mode; /* 0: TR mode, 1: TD mode */
+ };
+ 
+ /* Access functions */
+@@ -170,6 +196,25 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
+ 			rpm = 1350000 / cnt;
+ 		*val = rpm;
+ 		return 0;
++	case hwmon_fan_min:
++		ret = nct7904_read_reg16(data, BANK_1,
++					 FANIN1_HV_HL_REG + channel * 2);
++		if (ret < 0)
++			return ret;
++		cnt = ((ret & 0xff00) >> 3) | (ret & 0x1f);
++		if (cnt == 0x1fff)
++			rpm = 0;
++		else
++			rpm = 1350000 / cnt;
++		*val = rpm;
++		return 0;
++	case hwmon_fan_alarm:
++		ret = nct7904_read_reg(data, BANK_0,
++				       SMI_STS7_REG + (channel >> 3));
++		if (ret < 0)
++			return ret;
++		*val = (ret >> (channel & 0x07)) & 1;
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -179,8 +224,20 @@ static umode_t nct7904_fan_is_visible(const void *_data, u32 attr, int channel)
+ {
+ 	const struct nct7904_data *data = _data;
+ 
+-	if (attr == hwmon_fan_input && data->fanin_mask & (1 << channel))
+-		return 0444;
++	switch (attr) {
++	case hwmon_fan_input:
++	case hwmon_fan_alarm:
++		if (data->fanin_mask & (1 << channel))
++			return 0444;
++		break;
++	case hwmon_fan_min:
++		if (data->fanin_mask & (1 << channel))
++			return 0644;
++		break;
++	default:
++		break;
 +	}
++
+ 	return 0;
+ }
+ 
+@@ -211,6 +268,37 @@ static int nct7904_read_in(struct device *dev, u32 attr, int channel,
+ 			volt *= 6; /* 0.006V scale */
+ 		*val = volt;
+ 		return 0;
++	case hwmon_in_min:
++		ret = nct7904_read_reg16(data, BANK_1,
++					 VSEN1_HV_LL_REG + index * 4);
++		if (ret < 0)
++			return ret;
++		volt = ((ret & 0xff00) >> 5) | (ret & 0x7);
++		if (index < 14)
++			volt *= 2; /* 0.002V scale */
++		else
++			volt *= 6; /* 0.006V scale */
++		*val = volt;
++		return 0;
++	case hwmon_in_max:
++		ret = nct7904_read_reg16(data, BANK_1,
++					 VSEN1_HV_HL_REG + index * 4);
++		if (ret < 0)
++			return ret;
++		volt = ((ret & 0xff00) >> 5) | (ret & 0x7);
++		if (index < 14)
++			volt *= 2; /* 0.002V scale */
++		else
++			volt *= 6; /* 0.006V scale */
++		*val = volt;
++		return 0;
++	case hwmon_in_alarm:
++		ret = nct7904_read_reg(data, BANK_0,
++				       SMI_STS1_REG + (index >> 3));
++		if (ret < 0)
++			return ret;
++		*val = (ret >> (index & 0x07)) & 1;
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -221,9 +309,20 @@ static umode_t nct7904_in_is_visible(const void *_data, u32 attr, int channel)
+ 	const struct nct7904_data *data = _data;
+ 	int index = nct7904_chan_to_index[channel];
+ 
+-	if (channel > 0 && attr == hwmon_in_input &&
+-	    (data->vsen_mask & BIT(index)))
+-		return 0444;
++	switch (attr) {
++	case hwmon_in_input:
++	case hwmon_in_alarm:
++		if (channel > 0 && (data->vsen_mask & BIT(index)))
++			return 0444;
++		break;
++	case hwmon_in_min:
++	case hwmon_in_max:
++		if (channel > 0 && (data->vsen_mask & BIT(index)))
++			return 0644;
++		break;
++	default:
++		break;
++	}
+ 
+ 	return 0;
+ }
+@@ -233,6 +332,7 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+ {
+ 	struct nct7904_data *data = dev_get_drvdata(dev);
+ 	int ret, temp;
++	unsigned int reg1, reg2, reg3;
+ 
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+@@ -250,16 +350,100 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+ 		temp = ((ret & 0xff00) >> 5) | (ret & 0x7);
+ 		*val = sign_extend32(temp, 10) * 125;
+ 		return 0;
++	case hwmon_temp_alarm:
++		if (channel < 5) {
++			ret = nct7904_read_reg(data, BANK_0,
++					       SMI_STS1_REG);
++			if (ret < 0)
++				return ret;
++			*val = (ret >> (((channel * 2) + 1) & 0x07)) & 1;
++		} else {
++			if ((channel - 5) < 4) {
++				ret = nct7904_read_reg(data, BANK_0,
++						       SMI_STS7_REG +
++						       ((channel - 5) >> 3));
++				if (ret < 0)
++					return ret;
++				*val = (ret >> ((channel - 5) & 0x07)) & 1;
++			} else {
++				ret = nct7904_read_reg(data, BANK_0,
++						       SMI_STS8_REG +
++						       ((channel - 5) >> 3));
++				if (ret < 0)
++					return ret;
++				*val = (ret >> (((channel - 5) & 0x07) - 4))
++							& 1;
++			}
++		}
++		return 0;
++	case hwmon_temp_type:
++		if (channel < 5) {
++			if ((data->tcpu_mask >> channel) & 0x01) {
++				if ((data->temp_mode >> channel) & 0x01)
++					*val = 3; /* TD */
++				else
++					*val = 4; /* TR */
++			} else {
++				*val = 0;
++			}
++		} else {
++			if ((data->has_dts >> (channel - 5)) & 0x01) {
++				if (data->enable_dts & ENABLE_TSI)
++					*val = 5; /* TSI */
++				else
++					*val = 6; /* PECI */
++			} else {
++				*val = 0;
++			}
++		}
++		return 0;
++	case hwmon_temp_max:
++		reg1 = LTD_HV_HL_REG;
++		reg2 = TEMP_CH1_W_REG;
++		reg3 = DTS_T_CPU1_W_REG;
++		break;
++	case hwmon_temp_max_hyst:
++		reg1 = LTD_LV_HL_REG;
++		reg2 = TEMP_CH1_WH_REG;
++		reg3 = DTS_T_CPU1_WH_REG;
++		break;
++	case hwmon_temp_crit:
++		reg1 = LTD_HV_LL_REG;
++		reg2 = TEMP_CH1_C_REG;
++		reg3 = DTS_T_CPU1_C_REG;
++		break;
++	case hwmon_temp_crit_hyst:
++		reg1 = LTD_LV_LL_REG;
++		reg2 = TEMP_CH1_CH_REG;
++		reg3 = DTS_T_CPU1_CH_REG;
++		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
++
++	if (channel == 4)
++		ret = nct7904_read_reg(data, BANK_1, reg1);
++	else if (channel < 5)
++		ret = nct7904_read_reg(data, BANK_1,
++				       reg2 + channel * 8);
++	else
++		ret = nct7904_read_reg(data, BANK_1,
++				       reg3 + (channel - 5) * 4);
++
++	if (ret < 0)
++		return ret;
++	*val = ret * 1000;
 +	return 0;
-+}
-+
- /*
-  * client->update_lock must be held when calling this function (unless we are
-  * in detection or initialization steps), and while a remote channel other
-@@ -551,53 +566,37 @@ static int lm90_read16(struct i2c_client *client, u8 regh, u8 regl)
-  * various registers have different meanings as a result of selecting a
-  * non-default remote channel.
-  */
--static inline int lm90_select_remote_channel(struct i2c_client *client,
--					     struct lm90_data *data,
--					     int channel)
-+static int lm90_select_remote_channel(struct lm90_data *data, int channel)
+ }
+ 
+ static umode_t nct7904_temp_is_visible(const void *_data, u32 attr, int channel)
  {
-+	int err = 0;
-+
- 	if (data->kind == max6696) {
- 		u8 config = data->config & ~0x08;
--		int err;
+ 	const struct nct7904_data *data = _data;
  
- 		if (channel)
- 			config |= 0x08;
--		if (data->config != config) {
--			err = i2c_smbus_write_byte_data(client,
--							LM90_REG_W_CONFIG1,
--							config);
--			if (err)
--				return err;
--			data->config = config;
--		}
-+		err = lm90_update_confreg(data, config);
- 	}
--	return 0;
-+	return err;
- }
- 
--static int lm90_write_convrate(struct i2c_client *client,
--			       struct lm90_data *data, int val)
-+static int lm90_write_convrate(struct lm90_data *data, int val)
- {
- 	u8 config = data->config;
- 	int err;
- 
- 	/* Save config and pause conversion */
- 	if (data->flags & LM90_PAUSE_FOR_CONFIG) {
--		config |= 0x40;
--		if (data->config != config) {
--			err = i2c_smbus_write_byte_data(client,
--							LM90_REG_W_CONFIG1,
--							config);
--			if (err < 0)
--				return err;
--		}
-+		err = lm90_update_confreg(data, config | 0x40);
-+		if (err < 0)
-+			return err;
- 	}
- 
- 	/* Set conv rate */
--	err = i2c_smbus_write_byte_data(client, LM90_REG_W_CONVRATE, val);
-+	err = i2c_smbus_write_byte_data(data->client, LM90_REG_W_CONVRATE, val);
- 
- 	/* Revert change to config */
--	if (data->config != config)
--		i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
--					  data->config);
-+	lm90_update_confreg(data, config);
- 
- 	return err;
- }
-@@ -622,7 +621,7 @@ static int lm90_set_convrate(struct i2c_client *client, struct lm90_data *data,
- 		if (interval >= update_interval * 3 / 4)
- 			break;
- 
--	err = lm90_write_convrate(client, data, i);
-+	err = lm90_write_convrate(data, i);
- 	data->update_interval = DIV_ROUND_CLOSEST(update_interval, 64);
- 	return err;
- }
-@@ -693,7 +692,7 @@ static int lm90_update_limits(struct device *dev)
- 	}
- 
- 	if (data->kind == max6696) {
--		val = lm90_select_remote_channel(client, data, 1);
-+		val = lm90_select_remote_channel(data, 1);
- 		if (val < 0)
- 			return val;
- 
-@@ -717,7 +716,7 @@ static int lm90_update_limits(struct device *dev)
- 			return val;
- 		data->temp11[REMOTE2_HIGH] = val << 8;
- 
--		lm90_select_remote_channel(client, data, 0);
-+		lm90_select_remote_channel(data, 0);
+-	if (attr == hwmon_temp_input) {
++	switch (attr) {
++	case hwmon_temp_input:
++	case hwmon_temp_alarm:
++	case hwmon_temp_type:
+ 		if (channel < 5) {
+ 			if (data->tcpu_mask & BIT(channel))
+ 				return 0444;
+@@ -267,6 +451,21 @@ static umode_t nct7904_temp_is_visible(const void *_data, u32 attr, int channel)
+ 			if (data->has_dts & BIT(channel - 5))
+ 				return 0444;
+ 		}
++		break;
++	case hwmon_temp_max:
++	case hwmon_temp_max_hyst:
++	case hwmon_temp_crit:
++	case hwmon_temp_crit_hyst:
++		if (channel < 5) {
++			if (data->tcpu_mask & BIT(channel))
++				return 0644;
++		} else {
++			if (data->has_dts & BIT(channel - 5))
++				return 0644;
++		}
++		break;
++	default:
++		break;
  	}
  
  	return 0;
-@@ -777,19 +776,19 @@ static int lm90_update_device(struct device *dev)
- 		data->alarms = val;	/* lower 8 bit of alarms */
- 
- 		if (data->kind == max6696) {
--			val = lm90_select_remote_channel(client, data, 1);
-+			val = lm90_select_remote_channel(data, 1);
- 			if (val < 0)
- 				return val;
- 
- 			val = lm90_read16(client, LM90_REG_R_REMOTE_TEMPH,
- 					  LM90_REG_R_REMOTE_TEMPL);
- 			if (val < 0) {
--				lm90_select_remote_channel(client, data, 0);
-+				lm90_select_remote_channel(data, 0);
- 				return val;
- 			}
- 			data->temp11[REMOTE2_TEMP] = val;
- 
--			lm90_select_remote_channel(client, data, 0);
-+			lm90_select_remote_channel(data, 0);
- 
- 			val = lm90_read_reg(client, MAX6696_REG_R_STATUS2);
- 			if (val < 0)
-@@ -805,10 +804,7 @@ static int lm90_update_device(struct device *dev)
- 		    !(data->alarms & data->alert_alarms)) {
- 			if (data->config & 0x80) {
- 				dev_dbg(&client->dev, "Re-enabling ALERT#\n");
--				data->config &= ~0x80;
--				i2c_smbus_write_byte_data(client,
--							  LM90_REG_W_CONFIG1,
--							  data->config);
-+				lm90_update_confreg(data, data->config & ~0x80);
- 			}
- 		}
- 
-@@ -1026,7 +1022,7 @@ static int lm90_set_temp11(struct lm90_data *data, int index, long val)
- 	else
- 		data->temp11[index] = temp_to_s8(val) << 8;
- 
--	lm90_select_remote_channel(client, data, index >= 3);
-+	lm90_select_remote_channel(data, index >= 3);
- 	err = i2c_smbus_write_byte_data(client, regp->high,
- 				  data->temp11[index] >> 8);
- 	if (err < 0)
-@@ -1035,7 +1031,7 @@ static int lm90_set_temp11(struct lm90_data *data, int index, long val)
- 		err = i2c_smbus_write_byte_data(client, regp->low,
- 						data->temp11[index] & 0xff);
- 
--	lm90_select_remote_channel(client, data, 0);
-+	lm90_select_remote_channel(data, 0);
- 	return err;
+@@ -297,6 +496,137 @@ static int nct7904_read_pwm(struct device *dev, u32 attr, int channel,
+ 	}
  }
  
-@@ -1084,9 +1080,9 @@ static int lm90_set_temp8(struct lm90_data *data, int index, long val)
- 	else
- 		data->temp8[index] = temp_to_s8(val);
++static int nct7904_write_temp(struct device *dev, u32 attr, int channel,
++			      long val)
++{
++	struct nct7904_data *data = dev_get_drvdata(dev);
++	int ret;
++	unsigned int reg1, reg2, reg3;
++
++	val = clamp_val(val / 1000, -128, 127);
++
++	switch (attr) {
++	case hwmon_temp_max:
++		reg1 = LTD_HV_HL_REG;
++		reg2 = TEMP_CH1_W_REG;
++		reg3 = DTS_T_CPU1_W_REG;
++		break;
++	case hwmon_temp_max_hyst:
++		reg1 = LTD_LV_HL_REG;
++		reg2 = TEMP_CH1_WH_REG;
++		reg3 = DTS_T_CPU1_WH_REG;
++		break;
++	case hwmon_temp_crit:
++		reg1 = LTD_HV_LL_REG;
++		reg2 = TEMP_CH1_C_REG;
++		reg3 = DTS_T_CPU1_C_REG;
++		break;
++	case hwmon_temp_crit_hyst:
++		reg1 = LTD_LV_LL_REG;
++		reg2 = TEMP_CH1_CH_REG;
++		reg3 = DTS_T_CPU1_CH_REG;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++	if (channel == 4)
++		ret = nct7904_write_reg(data, BANK_1, reg1, val);
++	else if (channel < 5)
++		ret = nct7904_write_reg(data, BANK_1,
++					reg2 + channel * 8, val);
++	else
++		ret = nct7904_write_reg(data, BANK_1,
++					reg3 + (channel - 5) * 4, val);
++
++	return ret;
++}
++
++static int nct7904_write_fan(struct device *dev, u32 attr, int channel,
++			     long val)
++{
++	struct nct7904_data *data = dev_get_drvdata(dev);
++	int ret;
++	u8 tmp;
++
++	switch (attr) {
++	case hwmon_fan_min:
++		if (val <= 0)
++			return 0;
++
++		val = clamp_val((1350000 + (val >> 1)) / val, 1, 0x1fff);
++		tmp = (val >> 5) & 0xff;
++		ret = nct7904_write_reg(data, BANK_1,
++					FANIN1_HV_HL_REG + channel * 2, tmp);
++		if (ret < 0)
++			return ret;
++		tmp = val & 0x1f;
++		ret = nct7904_write_reg(data, BANK_1,
++					FANIN1_LV_HL_REG + channel * 2, tmp);
++		return ret;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int nct7904_write_in(struct device *dev, u32 attr, int channel,
++			    long val)
++{
++	struct nct7904_data *data = dev_get_drvdata(dev);
++	int ret, index, tmp;
++
++	index = nct7904_chan_to_index[channel];
++
++	if (index < 14)
++		val = val / 2; /* 0.002V scale */
++	else
++		val = val / 6; /* 0.006V scale */
++
++	val = clamp_val(val, 0, 0x7ff);
++
++	switch (attr) {
++	case hwmon_in_min:
++		tmp = nct7904_read_reg(data, BANK_1,
++				       VSEN1_LV_LL_REG + index * 4);
++		if (tmp < 0)
++			return tmp;
++		tmp &= ~0x7;
++		tmp |= val & 0x7;
++		ret = nct7904_write_reg(data, BANK_1,
++					VSEN1_LV_LL_REG + index * 4, tmp);
++		if (ret < 0)
++			return ret;
++		tmp = nct7904_read_reg(data, BANK_1,
++				       VSEN1_HV_LL_REG + index * 4);
++		if (tmp < 0)
++			return tmp;
++		tmp = (val >> 3) & 0xff;
++		ret = nct7904_write_reg(data, BANK_1,
++					VSEN1_HV_LL_REG + index * 4, tmp);
++		return ret;
++	case hwmon_in_max:
++		tmp = nct7904_read_reg(data, BANK_1,
++				       VSEN1_LV_HL_REG + index * 4);
++		if (tmp < 0)
++			return tmp;
++		tmp &= ~0x7;
++		tmp |= val & 0x7;
++		ret = nct7904_write_reg(data, BANK_1,
++					VSEN1_LV_HL_REG + index * 4, tmp);
++		if (ret < 0)
++			return ret;
++		tmp = nct7904_read_reg(data, BANK_1,
++				       VSEN1_HV_HL_REG + index * 4);
++		if (tmp < 0)
++			return tmp;
++		tmp = (val >> 3) & 0xff;
++		ret = nct7904_write_reg(data, BANK_1,
++					VSEN1_HV_HL_REG + index * 4, tmp);
++		return ret;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static int nct7904_write_pwm(struct device *dev, u32 attr, int channel,
+ 			     long val)
+ {
+@@ -354,8 +684,14 @@ static int nct7904_write(struct device *dev, enum hwmon_sensor_types type,
+ 			 u32 attr, int channel, long val)
+ {
+ 	switch (type) {
++	case hwmon_in:
++		return nct7904_write_in(dev, attr, channel, val);
++	case hwmon_fan:
++		return nct7904_write_fan(dev, attr, channel, val);
+ 	case hwmon_pwm:
+ 		return nct7904_write_pwm(dev, attr, channel, val);
++	case hwmon_temp:
++		return nct7904_write_temp(dev, attr, channel, val);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -404,51 +740,91 @@ static int nct7904_detect(struct i2c_client *client,
  
--	lm90_select_remote_channel(client, data, index >= 6);
-+	lm90_select_remote_channel(data, index >= 6);
- 	err = i2c_smbus_write_byte_data(client, reg[index], data->temp8[index]);
--	lm90_select_remote_channel(client, data, 0);
-+	lm90_select_remote_channel(data, 0);
+ static const struct hwmon_channel_info *nct7904_info[] = {
+ 	HWMON_CHANNEL_INFO(in,
+-			   HWMON_I_INPUT, /* dummy, skipped in is_visible */
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT,
+-			   HWMON_I_INPUT),
++			   /* dummy, skipped in is_visible */
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM,
++			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
++			   HWMON_I_ALARM),
+ 	HWMON_CHANNEL_INFO(fan,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT,
+-			   HWMON_F_INPUT),
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM),
+ 	HWMON_CHANNEL_INFO(pwm,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+ 	HWMON_CHANNEL_INFO(temp,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT,
+-			   HWMON_T_INPUT),
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST),
+ 	NULL
+ };
  
- 	return err;
- }
-@@ -1625,7 +1621,7 @@ static void lm90_restore_conf(void *_data)
- 	struct i2c_client *client = data->client;
+@@ -530,11 +906,14 @@ static int nct7904_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		return ret;
  
- 	/* Restore initial configuration */
--	lm90_write_convrate(client, data, data->convrate_orig);
-+	lm90_write_convrate(data, data->convrate_orig);
- 	i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
- 				  data->config_orig);
- }
-@@ -1671,10 +1667,7 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
- 		config &= ~0x08;
++	data->temp_mode = 0;
+ 	for (i = 0; i < 4; i++) {
+ 		val = (ret & (0x03 << i)) >> (i * 2);
+ 		bit = (1 << i);
+ 		if (val == 0)
+ 			data->tcpu_mask &= ~bit;
++		else if (val == 0x1 || val == 0x2)
++			data->temp_mode |= bit;
+ 	}
  
- 	config &= 0xBF;	/* run */
--	if (config != data->config) {	/* Only write if changed */
--		i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1, config);
--		data->config = config;
--	}
-+	lm90_update_confreg(data, config);
- 
- 	return devm_add_action_or_reset(&client->dev, lm90_restore_conf, data);
- }
-@@ -1909,9 +1902,7 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
- 		if ((data->flags & LM90_HAVE_BROKEN_ALERT) &&
- 		    (alarms & data->alert_alarms)) {
- 			dev_dbg(&client->dev, "Disabling ALERT#\n");
--			data->config |= 0x80;
--			i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
--						  data->config);
-+			lm90_update_confreg(data, data->config | 0x80);
- 		}
- 	} else {
- 		dev_info(&client->dev, "Everything OK\n");
+ 	/* PECI */
+@@ -557,7 +936,7 @@ static int nct7904_probe(struct i2c_client *client,
+ 		if (ret < 0)
+ 			return ret;
+ 		data->has_dts = ret & 0xF;
+-		if (data->enable_dts & 0x2) {
++		if (data->enable_dts & ENABLE_TSI) {
+ 			ret = nct7904_read_reg(data, BANK_0, DTS_T_CTRL1_REG);
+ 			if (ret < 0)
+ 				return ret;
 -- 
-2.7.4
+2.17.1
 
