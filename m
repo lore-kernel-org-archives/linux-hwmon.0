@@ -2,116 +2,175 @@ Return-Path: <SRS0=fIHL=VG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FF9C73C46
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 15:11:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32A0BC73C53
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 18:23:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CC002166E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 15:11:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DD072087F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 18:23:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pujEg630"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbfGIPLW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jul 2019 11:11:22 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:33479 "EHLO
-        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726601AbfGIPLV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jul 2019 11:11:21 -0400
-Received: from [167.98.27.226] (helo=ct-lt-765.unassigned)
-        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1hkrm2-0006V6-VL; Tue, 09 Jul 2019 16:11:19 +0100
-Subject: Re: [PATCH v1 0/5] Help with lm75.c changes
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20190709095052.7964-1-iker.perez@codethink.co.uk>
- <48ef8bb0-b420-24a4-16a2-c8d6e5d30eee@roeck-us.net>
-From:   Iker Perez del Palomar <iker.perez@codethink.co.uk>
-Message-ID: <d786c56d-e518-d310-ea57-60a8fbefc787@codethink.co.uk>
-Date:   Tue, 9 Jul 2019 16:11:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <48ef8bb0-b420-24a4-16a2-c8d6e5d30eee@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+        id S1727757AbfGISXL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jul 2019 14:23:11 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43718 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727696AbfGISXL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jul 2019 14:23:11 -0400
+Received: by mail-pl1-f193.google.com with SMTP id cl9so10484863plb.10;
+        Tue, 09 Jul 2019 11:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=LCMLgHJ1KXlp99Gv2wkxAzbZDPVeSL8C2PTBny9wQ7g=;
+        b=pujEg6308qU0RMwp+4YjFwJaOlPrDWNNTdKt100PKX/zrDybn2fzbTR8Wwgj+9Sbyd
+         FRZeq5sWEoE2IvgiqW2Chy6WH+NwiaOUtYyb75bk1CSI7V9oo/Zv4YWbgAniYM8W/P98
+         DBC2DARiffAlT9NG1cjNNKft/7+f0tkHvYHD1ISY3haeZEsAnXKn+qN4fkw9J6QPFh3p
+         /0WDsSsHUxWLKQiKKk389rHhtclMXyPPHQ4XdvHXLqjJOqobrUEh6qlGJiSYGMbeGuW2
+         8jpHv2NHWbtMUcWb8cWP72ApS9QZZsfMW3frL2PkbBJRqA5uLeaYD27j3uG/SQM9pT8t
+         /pXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=LCMLgHJ1KXlp99Gv2wkxAzbZDPVeSL8C2PTBny9wQ7g=;
+        b=dDDBMeCx8pQwWO3E2clJHJ3u3rVzWjsMnKNkzZP2PzDhJRc8ZD1nE2BgluHi0anpbK
+         wvmEsDZn7DTRh7WdtTzoEGOaxlmeJSFuHDQZYrlgSNbRN5Y1BLtL0wkE/bvxQkRzXMOF
+         2Xakk+74dglH5Iyq/CQJXZ1VvpTvt9mTpFtH4AvS5OC7XrhRGweJpgHkWoM2hm0SBEgc
+         /XYHOlp6SzjI+nM5csurX3I8NFQnaNqGjkvqJIXDrXJHHyce/6rAK4RtQMFzI5Do8UlT
+         1mv7yCm1a3C2hOAl+C9o83h8s+B+Dc1QBv6udKdRx6G4jMnY3fG5Qs5ztzI0oxmW78RE
+         XpKA==
+X-Gm-Message-State: APjAAAXuETXtQEXOwKx7iVZAvbchvHEWDuCrcYGT3vv7nLWP4oCMw+mu
+        Lb/lpKoTwN03fFX+/AfNTyGJHjbn
+X-Google-Smtp-Source: APXvYqzS72n4+wpP4CGHtXqb0vKR0fQMrpbZKIus1+TruDS9xGrw1cfE/ybkj05w7VuXsKD/5dOYOA==
+X-Received: by 2002:a17:902:28:: with SMTP id 37mr31614085pla.188.1562696590472;
+        Tue, 09 Jul 2019 11:23:10 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m4sm18377689pgs.71.2019.07.09.11.23.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jul 2019 11:23:09 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for hwmon-for-v5.3
+Date:   Tue,  9 Jul 2019 11:23:08 -0700
+Message-Id: <1562696588-26554-1-git-send-email-linux@roeck-us.net>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Hi Linus,
 
+Please pull hwmon updates for Linux hwmon-for-v5.3 from signed tag:
 
-Thank you for offering to coach me!  You are right, I don't have
-experience of writing kernel drivers at all.  I would like to be
-coached by you.  I have a system with an tmp75b device to test with.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.3
 
-At the moment I haven't been given any project to work in. so I decided
-to work in this driver.  We were using this driver and I wanted
-to give a boost to it, while I learn more about the kernel drivers.
-However I am open to any suggestions you might have, although If I am
-given a new project I won't be able to work on this as much as now.
+Thanks,
+Guenter
+------
 
-Thanks for your feedback and for offering to coach me,
+The following changes since commit 4b972a01a7da614b4796475f933094751a295a2f:
 
-Iker
+  Linux 5.2-rc6 (2019-06-22 16:01:36 -0700)
 
-On 09/07/2019 14:43, Guenter Roeck wrote:
-> Hi,
-> 
-> On 7/9/19 2:50 AM, Iker Perez wrote:
->> From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
->> 
->> Hello,
->> 
->> I have been working in the lm75.c driver, trying to add a variable
->>  update_time to the tmp75b device.
->> 
->> I am not very confident about, if what I am doing and how I am 
->> doing it is the best way it could be done. For that reason, I 
->> decided to send my current changes, so maybe I could be helped and 
->> my code revised.
->> 
->> I decided to separate my all my changes in probably more than 
->> needed commits because I thought that it would b easier to 
->> understand at first place. After the feedback and my changes are 
->> ready to submit I will squash the ones that are related between 
->> them and the patch series will be much shorter.
->> 
->> Thanks in advance for your help,
->> 
-> 
-> Looking through your patch series, I can't help thinking that you 
-> don't have much experience writing kernel drivers. I am open to 
-> coaching you through this, but I have to ask: Do you have an actual 
-> use case ? This is not something we'll want to do as a coding 
-> exercise, since it will add a non-trivial amount of code to the 
-> kernel.
-> 
-> Thanks, Guenter
-> 
->> Regards,
->> 
->> Iker
->> 
->> Iker Perez del Palomar Sustatxa (5): hwmon: (lm75) Add kind field 
->> to struct lm75_data hwmon: (lm75) Include hwmon_chip in the 
->> permitted types to be writen hwmon: (lm75) Give write permission
->> to hwmon_chip_update_interval hwmon: (lm75) Create function from
->> code to write into registers First approach to sample time writing
->>  method
->> 
->> drivers/hwmon/lm75.c | 166 
->> +++++++++++++++++++++++++++++++++------------------ 1 file
->> changed, 108 insertions(+), 58 deletions(-)
->> 
-> 
-> 
+are available in the git repository at:
 
--- 
-Iker Perez del Palomar, Software Engineer
-Codethink Ltd                             35 Dale St, Manchester M1 2HF
-http://www.codethink.co.uk/          Manchester, M1 2JW, United Kingdom
-We respect your privacy.   See https://www.codethink.co.uk/privacy.html
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.3
+
+for you to fetch changes up to 9f7546570bcb20debfaa97bcf720fa0fcb8fc05a:
+
+  hwmon: (ina3221) Add of_node_put() before return (2019-07-08 18:11:32 -0700)
+
+----------------------------------------------------------------
+hwmon updates for v5.3
+
+New drivers for Infineon PXE1610 and IRPS5401
+Minor improvements, cleanup, and fixes in several drivers
+
+----------------------------------------------------------------
+Adamski, Krzysztof (Nokia - PL/Wroclaw) (1):
+      hwmon: (pmbus/adm1275) support PMBUS_VIRT_*_SAMPLES
+
+Alexander Soldatov (1):
+      hwmon: (occ) Add temp sensor value check
+
+Arnd Bergmann (1):
+      hwmon: (max6650) Fix unused variable warning
+
+Boyang Yu (1):
+      hwmon: (lm90) Fix max6658 sporadic wrong temperature reading
+
+Christian Schneider (2):
+      hwmon: (gpio-fan) move fan_alarm_init after devm_hwmon_device_register_with_groups
+      hwmon: (gpio-fan) fix sysfs notifications and udev events for gpio-fan alarms
+
+Greg Kroah-Hartman (1):
+      hwmon: (asus_atk0110) no need to check return value of debugfs_create functions
+
+Guenter Roeck (17):
+      hwmon: (gpio-fan) Check return value from devm_add_action_or_reset
+      hwmon: (pwm-fan) Check return value from devm_add_action_or_reset
+      hwmon: (core) Add comment describing how hwdev is freed in error path
+      hwmon: (max6650) Use devm function to register thermal device
+      hwmon: (max6650) Introduce pwm_to_dac and dac_to_pwm
+      hwmon: (max6650) Improve error handling in max6650_init_client
+      hwmon: (max6650) Declare valid as boolean
+      hwmon: (max6650) Cache alarm_en register
+      hwmon: (max6650) Simplify alarm handling
+      hwmon: (max6650) Convert to use devm_hwmon_device_register_with_info
+      hwmon: (max6650) Read non-volatile registers only once
+      hwmon: (max6650) Improve error handling in max6650_update_device
+      hwmon: (max6650) Fix minor formatting issues
+      hwmon: (pmbus/adm1275) Fix power sampling support
+      hwmon: Convert remaining drivers to use SPDX identifier
+      hwmon: (lm90) Cache configuration register value
+      hwmon: (lm90) Introduce function to update configuration register
+
+Masahiro Yamada (1):
+      hwmon: (smsc47m1) fix (suspicious) outside array bounds warnings
+
+Nishka Dasgupta (1):
+      hwmon: (ina3221) Add of_node_put() before return
+
+Robert Hancock (1):
+      hwmon: (pmbus) Add Infineon IRPS5401 driver
+
+Vijay Khemka (2):
+      hwmon: (pmbus) Add Infineon PXE1610 VR driver
+      hwmon: (pmbus) Document Infineon PXE1610 driver
+
+Wolfram Sang (1):
+      hwmon: (lm90) simplify getting the adapter of a client
+
+amy.shih (3):
+      hwmon: (nct7904) Fix the incorrect value of tcpu_mask in nct7904_data struct.
+      hwmon: (nct7904) Add error handling in probe function.
+      hwmon: (nct7904) Changes comments in probe function.
+
+ Documentation/hwmon/pxe1610    |  90 ++++++
+ drivers/hwmon/adm1029.c        |  10 -
+ drivers/hwmon/asus_atk0110.c   |  23 +-
+ drivers/hwmon/gpio-fan.c       |  22 +-
+ drivers/hwmon/hwmon.c          |   6 +
+ drivers/hwmon/ina3221.c        |   4 +-
+ drivers/hwmon/lm90.c           | 106 +++---
+ drivers/hwmon/max6650.c        | 710 +++++++++++++++++++++--------------------
+ drivers/hwmon/nct7904.c        |  81 ++++-
+ drivers/hwmon/occ/common.c     |   6 +
+ drivers/hwmon/pmbus/Kconfig    |  18 ++
+ drivers/hwmon/pmbus/Makefile   |   2 +
+ drivers/hwmon/pmbus/adm1275.c  | 105 +++++-
+ drivers/hwmon/pmbus/irps5401.c |  67 ++++
+ drivers/hwmon/pmbus/pxe1610.c  | 139 ++++++++
+ drivers/hwmon/pwm-fan.c        |  10 +-
+ drivers/hwmon/scpi-hwmon.c     |  10 +-
+ drivers/hwmon/smsc47m1.c       |   2 +
+ 18 files changed, 954 insertions(+), 457 deletions(-)
+ create mode 100644 Documentation/hwmon/pxe1610
+ create mode 100644 drivers/hwmon/pmbus/irps5401.c
+ create mode 100644 drivers/hwmon/pmbus/pxe1610.c
