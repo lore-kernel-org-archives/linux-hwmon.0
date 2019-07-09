@@ -4,69 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EA1C73C41
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 13:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE79C73C46
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 13:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B99EB2080C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 13:33:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5975520861
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jul 2019 13:39:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjPjvy+Y"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4GNzB4m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbfGINd4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jul 2019 09:33:56 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:39583 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbfGINd4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jul 2019 09:33:56 -0400
-Received: by mail-pl1-f196.google.com with SMTP id b7so10116187pls.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jul 2019 06:33:55 -0700 (PDT)
+        id S1726802AbfGINj7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jul 2019 09:39:59 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40890 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726568AbfGINj7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jul 2019 09:39:59 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so9465413pgj.7
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jul 2019 06:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zvty9xOK+oLoE46mYYAxFUDJ2Y2dPP9vSMOo0oDAysY=;
-        b=kjPjvy+YO0hlhpt7A8z2wvxyn6Gtn4BFvSBPL62K0eExaZeMaQfVgbe/TqkHv/eVeQ
-         G+GTljP6WWT+cssAFaUygD0Lk4+vN4ojWAcJmU6IbWi19N7rDCERseJDcjboWQCeRW5O
-         3XyPbTwFF9NvWB2pcrtVG0m/GG4/EMbIjxkmAnFbjjyRjoMG1HKgFfnohQzAJQAYVsED
-         zgXW32e9i8nbOpmWYPZefHrb8nj9sGwf+Unbs1YfkfG/ROFr1kwZltsiRIFNGDveavf0
-         +yv8h/16PK8DZlhFdpp7hC+zBHXhBxyK4lQeBNfwuwNSglgDO4FfiCr3vdJBrvSPStV2
-         9isg==
+        bh=/h4UtQW6Empdg7JX7AymPC9sAAtaNRNxCjw2GRkWVaw=;
+        b=A4GNzB4m6CNVhnZYl+vVI6HTM7Azp6NfEo+DydUr/dJtWH0j388NABKQuXbTqqGozc
+         6frsbhDX3Voi4jgIy73gamy/6qitlklniud6lXQqHeHWYYFsZ+e81bDh3XfiP7N3aOX0
+         M/6KflhkCbtbV+WMsMUO3k3JPuEWuIfcpo9N0ALWaMMBrKJwABcCZhZvcbImGF1kNwF7
+         1Vr7HMePPth2OS4tOGkVz0BJcnTqUkUONB87QOr17PAcIoVmeENSjjWPZEzP7EmQApx4
+         B6dOqCgaHyl8R+c+jtQxLeeqoizFMBOwQzqK8miOAL9xQmDHqosbGuDdDV7XtO77Lt+r
+         85uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zvty9xOK+oLoE46mYYAxFUDJ2Y2dPP9vSMOo0oDAysY=;
-        b=MbABFKvQ4qR4H6F2A/REgE5pRJnUaPJvSKq2k51R9Ybr2B9fJz/0gOkGZZngafossP
-         XDBFdueKy0SprM+U4A+KuypZw0XiW1KDcGeMj4Tsu05yWOub1kLc0HOC50k9m30hwl33
-         tHkCnoTEYZYWILLlPnT/UQr7byJAU+y203K4Fcr5/T/RqqCRQOSa6b6ymxXD6J/ErHVm
-         Uesfbwr9JJ0z/IQ1ESGjFV1KU6RNjnay95bofhKeubWCwTfAvV2K9dLYxnMgkPitCL3Q
-         1DEIwmk8JJAaioMjw3eJPwOE4OAYBtjQaq9HnP0bOesRGbuEgcr+MBvcJIYzdXNxQSVS
-         VMXg==
-X-Gm-Message-State: APjAAAXdAnVbmS98qRQlA0VYCXcARv55llNVAzqqrCjJuL4g8ZBRH9S/
-        YqgkB/SumaPU8U77YGmPGJSTYNha
-X-Google-Smtp-Source: APXvYqyeqp+cCYFCpsxJNo44F78EZSTVEK7x3ebCAylkqMAy8r/X4DcugPIzp0MbtDTypT5U43TNfQ==
-X-Received: by 2002:a17:902:1125:: with SMTP id d34mr32295682pla.40.1562679235407;
-        Tue, 09 Jul 2019 06:33:55 -0700 (PDT)
+        bh=/h4UtQW6Empdg7JX7AymPC9sAAtaNRNxCjw2GRkWVaw=;
+        b=LpV1FX9wIY/C3HKeTBF9/fEGJ5Ke83dL2AGlKoby0AWWC6sa6JIaIw4OiCguLYf8B+
+         fPlOqzQjHKGACVJT3PXvNgmkGAWMDSWBg/3E2VpbMckEFLAJPoMc8nJgTklaKyPEFMx3
+         BSv7C2XBqT18U3sOESvwKBTqqNHReCEHCCLiS+XYPNITNG2+ysGPf0MCyZKlFm+SKKo+
+         qk53AF5LSwKp8hlDuaxADxw+HIw8RA8bK/pKQGTD0qVZKLu26VqWVMpmIe46MCmyWLpn
+         Vx+UXYhwvXZBODsGk/OVeavmmEMO4/Bc220vD6LKBJhylIifhD/DBnbGdZe7yD9DGsRg
+         vkmw==
+X-Gm-Message-State: APjAAAUHp0/XKaS+11MX0O0iCQaZBuniC+4lcYHAD6ALK0MZ8vi04VdR
+        RhznHYw/2YE11FI8c9v1R7Jj6csz
+X-Google-Smtp-Source: APXvYqw4U+eLeKp1VbwRJs/Pt3mhKupkzZ2h2R8wUU0PoxtRo7mCMHNSUxGAsltUEV9rJcLDzzfEtA==
+X-Received: by 2002:a63:2004:: with SMTP id g4mr29397073pgg.97.1562679597806;
+        Tue, 09 Jul 2019 06:39:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d14sm38983690pfo.154.2019.07.09.06.33.54
+        by smtp.gmail.com with ESMTPSA id h26sm34003083pfq.64.2019.07.09.06.39.57
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jul 2019 06:33:54 -0700 (PDT)
-Subject: Re: [PATCH v1 5/5] First approach to sample time writing method
+        Tue, 09 Jul 2019 06:39:57 -0700 (PDT)
+Subject: Re: [PATCH v1 4/5] hwmon: (lm75) Create function from code to write
+ into registers
 To:     Iker Perez <iker.perez@codethink.co.uk>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 References: <20190709095052.7964-1-iker.perez@codethink.co.uk>
- <20190709095052.7964-6-iker.perez@codethink.co.uk>
+ <20190709095052.7964-5-iker.perez@codethink.co.uk>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <95484247-ff5e-8207-a682-ed641d5452b3@roeck-us.net>
-Date:   Tue, 9 Jul 2019 06:33:53 -0700
+Message-ID: <ccc9310a-e13d-c327-0467-d6f82674a4ac@roeck-us.net>
+Date:   Tue, 9 Jul 2019 06:39:56 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190709095052.7964-6-iker.perez@codethink.co.uk>
+In-Reply-To: <20190709095052.7964-5-iker.perez@codethink.co.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -78,93 +79,121 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 On 7/9/19 2:50 AM, Iker Perez wrote:
 > From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 > 
-> Switch between the possible update_time values and write into the
-> configuration register the selected value.
+> This function will be needed later to configure update_interval
 > 
 > Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 > ---
->   drivers/hwmon/lm75.c | 43 ++++++++++++++++++++++++++++++++++---------
->   1 file changed, 34 insertions(+), 9 deletions(-)
+>   drivers/hwmon/lm75.c | 63 ++++++++++++++++++++++++++++++----------------------
+>   1 file changed, 36 insertions(+), 27 deletions(-)
 > 
 > diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index 5ba7277dac69..9d48a85fd3e5 100644
+> index 1d4d060bd695..5ba7277dac69 100644
 > --- a/drivers/hwmon/lm75.c
 > +++ b/drivers/hwmon/lm75.c
-> @@ -156,21 +156,46 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+> @@ -78,6 +78,40 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
+>   	return ((temp >> (16 - resolution)) * 1000) >> (resolution - 8);
 >   }
 >   
->   static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
-> -		      u32 attr, int channel, long temp)
-> +		      u32 attr, int channel, long val)
->   {
->   	struct lm75_data *data = dev_get_drvdata(dev);
-> -	u8 resolution;
-> -	int reg;
-> +	u8 resolution, set_mask, clr_mask;
-> +	int reg, status;
+> +static void lm75_remove(void *data)
+> +{
+> +	struct lm75_data *lm75 = data;
+> +	struct i2c_client *client = lm75->client;
 > +
-> +	// This are provisional changes, to be improved in case this approach works
-> +	set_mask = 0;
-> +	clr_mask = LM75_SHUTDOWN;
->   
->   	switch (type) {
->   	case hwmon_chip:
->   		switch (attr) {
->   		case hwmon_chip_update_interval:
-> -			if (data->kind == tmp75b)
-> -				pr_info("Iker inside write\n");
-> +			if (data->kind == tmp75b) {
-> +				clr_mask |= 1 << 15 | 0x3 << 13;
-> +				switch (val) {
-> +				case (27):
-> +					set_mask |= 0x3 << 13;
-> +					data->sample_time = MSEC_PER_SEC / 37;
-> +						break;
-> +				case (55):
-> +					set_mask |= 0x2 << 13;
-> +					data->sample_time = MSEC_PER_SEC / 18;
-> +						break;
-> +				case (111):
-> +					set_mask |= 0x1 << 13;
-> +					data->sample_time = MSEC_PER_SEC / 9;
-> +						break;
-> +				case (250):
-> +					set_mask |= 0x0 << 13;
-> +					data->sample_time = MSEC_PER_SEC / 4;
-> +						break;
-> +				default:
-> +						return -EINVAL;
-> +				status = configure_reg(set_mask, clr_mask, data, client);
+> +	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
+> +}
+> +static int configure_reg(u8 set_mask, u8 clr_mask, struct lm75_data *data,
+> +		struct i2c_client *client)
+> +{
+> +	int status, err, new;
+> +	struct device *dev = &client->dev;
+> +
+> +	/* configure as specified */
+> +	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+> +	if (status < 0) {
+> +		dev_dbg(dev, "Can't read config? %d\n", status);
+> +		return status;
+> +	}
+> +	data->orig_conf = status;
 
-You'll probably want to provide all the necessary variants (supported update times
-as well as associated resolutions and set/clear masks) in the data structure,
-to make it easy to support multiple chips. Either case, it is unacceptable to
-only accept specific values: You can not expect the user to figure out individual
-supported values on a per-chip basis. Please use something like find_closest()
-to find the best match.
+Overwriting the "original" configuration each time the update time is changed
+is really a bad idea.
 
-> +				}
-> +			}
->   			else
->   				return -EINVAL;
-> -			break;
->   		default:
->   			return -EINVAL;
->   		}
-> @@ -195,11 +220,11 @@ static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
->   		else
->   			resolution = data->resolution;
+You'll want to cache the current configuration register value, and not
+re-read it each time the configuration is updated.
+
+
+> +	new = status & ~clr_mask;
+> +	new |= set_mask;
+> +	if (status != new)
+> +		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
+> +
+> +	err = devm_add_action_or_reset(dev, lm75_remove, data);
+> +	if (err)
+> +		return err;
+> +
+
+The function is a good idea, but you can't use devm_add_action_or_reset() here.
+That will have to remain in the probe function. Otherwise an action will be added
+each time the resolution/update time is changed.
+
+> +	dev_dbg(dev, "Config %02x\n", new);
+> +
+> +	return 0;
+> +}
+> +
+>   static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+>   		     u32 attr, int channel, long *val)
+>   {
+> @@ -238,14 +272,6 @@ static const struct regmap_config lm75_regmap_config = {
+>   	.use_single_write = true,
+>   };
 >   
-> -		temp = clamp_val(temp, LM75_TEMP_MIN, LM75_TEMP_MAX);
-> -		temp = DIV_ROUND_CLOSEST(temp  << (resolution - 8),
-> +		val = clamp_val(val, LM75_TEMP_MIN, LM75_TEMP_MAX);
-> +		val = DIV_ROUND_CLOSEST(val  << (resolution - 8),
->   					 1000) << (16 - resolution);
+> -static void lm75_remove(void *data)
+> -{
+> -	struct lm75_data *lm75 = data;
+> -	struct i2c_client *client = lm75->client;
+> -
+> -	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
+> -}
+> -
+>   static int
+>   lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>   {
+> @@ -253,9 +279,8 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>   	struct device *hwmon_dev;
+>   	struct lm75_data *data;
+>   	struct lm75_data device_data;
+> -	int status, err;
+> +	int status;
+>   	u8 set_mask, clr_mask;
+> -	int new;
 >   
-> -		return regmap_write(data->regmap, reg, temp);
-> +		return regmap_write(data->regmap, reg, val);
->   	default:
->   		return -EINVAL;
+>   	data = &device_data;
+>   	if (client->dev.of_node)
+> @@ -370,23 +395,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>   		break;
 >   	}
+>   
+> -	/* configure as specified */
+> -	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+> -	if (status < 0) {
+> -		dev_dbg(dev, "Can't read config? %d\n", status);
+> -		return status;
+> -	}
+> -	data->orig_conf = status;
+> -	new = status & ~clr_mask;
+> -	new |= set_mask;
+> -	if (status != new)
+> -		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
+> -
+> -	err = devm_add_action_or_reset(dev, lm75_remove, data);
+> -	if (err)
+> -		return err;
+> -
+> -	dev_dbg(dev, "Config %02x\n", new);
+> +	status = configure_reg(set_mask, clr_mask, data, client);
+>   
+>   	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+>   							 data, &lm75_chip_info,
 > 
 
