@@ -2,121 +2,223 @@ Return-Path: <SRS0=aQnN=VH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 924F1C73C7C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jul 2019 07:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62B51C73C7C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jul 2019 09:06:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6007E2064A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jul 2019 07:26:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D72F20693
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jul 2019 09:06:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBYkAkyc"
+	dkim=pass (1024-bit key) header.d=yadro.com header.i=@yadro.com header.b="oGObuqhY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbfGJH0S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Jul 2019 03:26:18 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41989 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbfGJH0S (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Jul 2019 03:26:18 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so657125pff.9;
-        Wed, 10 Jul 2019 00:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cdSf9Bk39d2jsEwtirbUFvZR6WuTUDxY23e5Q3Gyu54=;
-        b=KBYkAkycZiz8DZ1DdXQ09DtirV6eaCKk3fmVFyIBKxbjrT7BHk2fATKnvMqjuFKqtL
-         2VVWpAxLUOf2sFvSR1Ki+Vto7jYVcUKMF6E0/b9zXN1h6LCaQx5xuVlomf8/omMtm2et
-         J61gvJfNmZcJkmMt3N3ZhKRPU0TPtsG97ISH+wksw7N8TBZF4MOFBRuJ4ONbmbjlBl9S
-         IWZfsW+wyHljkFz3b4S9mOX+bA0Z5/byG4Ds6TrkkqZ2FZiJ6MkQHhyZLyZN4Q4riLMN
-         3XRZrOR5pnbAlhfcgRX7/z1bIYZR8JEbt7v3quprl6EpQwiiRneIx6UXRrL7tZSYOhwO
-         oWQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=cdSf9Bk39d2jsEwtirbUFvZR6WuTUDxY23e5Q3Gyu54=;
-        b=HhVGBsKUrHWhGdLJgz736QeIEdkx3HJC64L45FnOtJQI13VUhy86Qxeb+YdkPC1jkZ
-         WSjJdIT7qMUSl0+Kzl3cPoucBU+vT/UoVebyFlLgI2hexr1aHD7wegm13cFzqFIH/n+v
-         pt4urQogTviJrS+OlYaOyzP0iVg8qumJgQK+KX4Cnx3/KFILruHmtW0PIvQbEh3c4ChI
-         vj+4fF073ZmEw+6oI/o5nxcK0z0yrHi/w61LOrMioGP7XW5Gp7XQdZuFYuNY9Rr9qHUg
-         yoN6VxkXBoCeR0M+V7dCKs2mJa0HIjoMjG5R6PbMIcBEsOWWiRqmXYnpmdq0b5fZs6GB
-         tzhg==
-X-Gm-Message-State: APjAAAVIX32zucHmmR+7zZgeizk+DSc2lADambnQzx50qCj12/JknSrh
-        MHh1va+2QGs9SJl0/SkfEJMPnhvv
-X-Google-Smtp-Source: APXvYqyA6lkiug68fbXg2b3s/HCFJWhdOBMdkW5CUmBV9eiZBbo2xrJFzH3CGhvgc5LdiqbxL0WpEw==
-X-Received: by 2002:a63:da52:: with SMTP id l18mr35850153pgj.131.1562743577006;
-        Wed, 10 Jul 2019 00:26:17 -0700 (PDT)
-Received: from voyager.ozlabs.ibm.com ([36.255.48.244])
-        by smtp.gmail.com with ESMTPSA id o130sm2802358pfg.171.2019.07.10.00.26.13
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 00:26:15 -0700 (PDT)
-From:   Joel Stanley <joel@jms.id.au>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Alexander Amelkin <a.amelkin@yadro.com>,
-        Lei YU <mine260309@gmail.com>,
-        Alexander Soldatov <a.soldatov@yadro.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon (occ): Add temp sensor value check
-Date:   Wed, 10 Jul 2019 16:56:06 +0930
-Message-Id: <20190710072606.4849-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.20.1
+        id S1727516AbfGJJGA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Jul 2019 05:06:00 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:39082 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726580AbfGJJF7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Jul 2019 05:05:59 -0400
+X-Greylist: delayed 508 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 05:05:57 EDT
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 33068404CB;
+        Wed, 10 Jul 2019 08:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:in-reply-to:mime-version:user-agent
+        :date:date:message-id:organization:from:from:references:subject
+        :subject:received:received:received; s=mta-01; t=1562749046; x=
+        1564563447; bh=LhWEa2Id3LIYjkm9wZEFKYi5Dtn9EgTe/6BhUhNP2Sw=; b=o
+        GObuqhYQ7J4gMv+t5L6pTJyA3R5RIoCdh4eg0zOiIhFqSN3T0fQ15iQbHBOQHzK/
+        LJnWLJfmZyCRTJCSa4bS1Z5u6U6ElB5XXpUEk05pMkYD7RCIxPVdt0Q1doKv9In7
+        VdrmbtpP5l5ubk+x/NMlRvi7umNR6BGYy7WT8W02OM=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6E_ZYmdHbjt7; Wed, 10 Jul 2019 11:57:26 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 77BB341209;
+        Wed, 10 Jul 2019 11:57:26 +0300 (MSK)
+Received: from [172.17.14.197] (172.17.14.197) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 10
+ Jul 2019 11:57:25 +0300
+Subject: Re: [PATCH] hwmon (occ): Add temp sensor value check
+To:     Joel Stanley <joel@jms.id.au>
+CC:     Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Lei YU <mine260309@gmail.com>, <linux-kernel@vger.kernel.org>
+References: <20190710072606.4849-1-joel@jms.id.au>
+From:   Alexander Amelkin <a.amelkin@yadro.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=a.amelkin@yadro.com; prefer-encrypt=mutual; keydata=
+ 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
+ dTYsE5wSxM06T2l/MILupCNZ7A==
+Organization: YADRO
+Message-ID: <d8617f81-ed54-1d5f-de93-abf5410c4a78@yadro.com>
+Date:   Wed, 10 Jul 2019 11:57:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190710072606.4849-1-joel@jms.id.au>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature";
+        boundary="nrdfzVufGHCEucwqkkiYbemcIzvnNchnH"
+X-Originating-IP: [172.17.14.197]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Alexander Soldatov <a.soldatov@yadro.com>
+--nrdfzVufGHCEucwqkkiYbemcIzvnNchnH
+Content-Type: multipart/mixed; boundary="2dQYpAQWAa888nHozIP3eb5YJVbiYgjlr";
+ protected-headers="v1"
+From: Alexander Amelkin <a.amelkin@yadro.com>
+To: Joel Stanley <joel@jms.id.au>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ Eddie James <eajames@linux.ibm.com>, Lei YU <mine260309@gmail.com>,
+ linux-kernel@vger.kernel.org
+Message-ID: <d8617f81-ed54-1d5f-de93-abf5410c4a78@yadro.com>
+Subject: Re: [PATCH] hwmon (occ): Add temp sensor value check
+References: <20190710072606.4849-1-joel@jms.id.au>
+In-Reply-To: <20190710072606.4849-1-joel@jms.id.au>
 
-The occ driver supports two formats for the temp sensor value.
+--2dQYpAQWAa888nHozIP3eb5YJVbiYgjlr
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
 
-The OCC firmware for P8 supports only the first format, for which
-no range checking or error processing is performed in the driver.
-Inspecting the OCC sources for P8 reveals that OCC may send
-a special value 0xFFFF to indicate that a sensor read timeout
-has occurred, see
+Thanks, Joel!
 
-https://github.com/open-power/occ/blob/master_p8/src/occ/cmdh/cmdh_fsp_cmds.c#L395
+JFYI, Alexander Soldatov has left the YADRO team some time ago, so his e-=
+mail @yadro.com isn't valid anymore.
 
-That situation wasn't handled in the driver. This patch adds invalid
-temp value check for the sensor data format 1 and handles it the same
-way as it is done for the format 2, where EREMOTEIO is reported for
-this case.
+Should anyone have any questions regarding this patch, feel free to email=
+ me.
 
-Fixes: 54076cb3b5ff ("hwmon (occ): Add sensor attributes and register hwmon device")
-Signed-off-by: Alexander Soldatov <a.soldatov@yadro.com>
-Signed-off-by: Alexander Amelkin <a.amelkin@yadro.com>
-Reviewed-by: Alexander Amelkin <a.amelkin@yadro.com>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- drivers/hwmon/occ/common.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+With best regards,
+Alexander Amelkin,
+Leading BMC Software Engineer, YADRO
+https://yadro.com
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index cccf91742c1a..a7d2b16dd702 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -241,6 +241,12 @@ static ssize_t occ_show_temp_1(struct device *dev,
- 		val = get_unaligned_be16(&temp->sensor_id);
- 		break;
- 	case 1:
-+		/*
-+		 * If a sensor reading has expired and couldn't be refreshed,
-+		 * OCC returns 0xFFFF for that sensor.
-+		 */
-+		if (temp->value == 0xFFFF)
-+			return -EREMOTEIO;
- 		val = get_unaligned_be16(&temp->value) * 1000;
- 		break;
- 	default:
--- 
-2.20.1
+10.07.2019 10:26, Joel Stanley wrote:
+> From: Alexander Soldatov <a.soldatov@yadro.com>
+>
+> The occ driver supports two formats for the temp sensor value.
+>
+> The OCC firmware for P8 supports only the first format, for which
+> no range checking or error processing is performed in the driver.
+> Inspecting the OCC sources for P8 reveals that OCC may send
+> a special value 0xFFFF to indicate that a sensor read timeout
+> has occurred, see
+>
+> https://github.com/open-power/occ/blob/master_p8/src/occ/cmdh/cmdh_fsp_=
+cmds.c#L395
+>
+> That situation wasn't handled in the driver. This patch adds invalid
+> temp value check for the sensor data format 1 and handles it the same
+> way as it is done for the format 2, where EREMOTEIO is reported for
+> this case.
+>
+> Fixes: 54076cb3b5ff ("hwmon (occ): Add sensor attributes and register h=
+wmon device")
+> Signed-off-by: Alexander Soldatov <a.soldatov@yadro.com>
+> Signed-off-by: Alexander Amelkin <a.amelkin@yadro.com>
+> Reviewed-by: Alexander Amelkin <a.amelkin@yadro.com>
+> Reviewed-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  drivers/hwmon/occ/common.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index cccf91742c1a..a7d2b16dd702 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -241,6 +241,12 @@ static ssize_t occ_show_temp_1(struct device *dev,=
 
+>  		val =3D get_unaligned_be16(&temp->sensor_id);
+>  		break;
+>  	case 1:
+> +		/*
+> +		 * If a sensor reading has expired and couldn't be refreshed,
+> +		 * OCC returns 0xFFFF for that sensor.
+> +		 */
+> +		if (temp->value =3D=3D 0xFFFF)
+> +			return -EREMOTEIO;
+>  		val =3D get_unaligned_be16(&temp->value) * 1000;
+>  		break;
+>  	default:
+
+
+--2dQYpAQWAa888nHozIP3eb5YJVbiYgjlr--
+
+--nrdfzVufGHCEucwqkkiYbemcIzvnNchnH
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJdJah1AAoJEOiTWHtbdBeN25oQALdidpJJ0OPk2zG00XUGJssP
+nVfissnr3GF0AsBTtIMuLqziS75dPq1OY/uW36+EOKdazXOMH0rkD3llhd1i9Wl3
+8CJ04XpOE+eNRcGe77SBcxEwyh0+71A9KiIm3lG2tRb0k8O29Adx9//gJ+rGziwg
+Z+Qb9uYttU7jTp7ojqRyoRs71w7b4zstE0AmQTg5tyqEt0hbtUBgnD/sNpsxIvMk
++PxJ7o6LaP++AOZR5XBLFtanXgjIxKKdmeGc3RayyWh0IYd5KuERaqFBqICKhPXE
+kmntiIcs99vFzu6lwVp3Y6qxcYEWl5aohIlWEycip7MtTeaUk1v5rRqTFeGVN1SQ
+hdo0cfboSzT2s/sDg5ky8Qq0+ycANdRaoMYWoZoo7kldWBKGg2YsGAT89WQOXrZb
+Ce8LaMJOqxS6EKWXTt3gaIlwAR3vSrVJrK++h20dePfYoXfPE0cS/BvHL71DzG4O
+5XlkIw5G1MTAn0cAkC48vcSw+9fZRNGXXNQY0avVlfstG+b3fVLQO5WRNhiChLJw
+Ex/L8W2RH7TvTMlycxOtjzKjhjJ/1O5moe1f3MG29D1ywVY/OsgILkLZkZx3AVLZ
+XBOmmD79lVyWouDq9n30ahVvy+k2CYap8q4vbe9D/ykujjI453USC+XwR8DW8i/n
+ZxnvnTJCkp69jYRbQlad
+=lmWr
+-----END PGP SIGNATURE-----
+
+--nrdfzVufGHCEucwqkkiYbemcIzvnNchnH--
