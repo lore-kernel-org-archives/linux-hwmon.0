@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 524EBC7618F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jul 2019 18:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76DDBC76196
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jul 2019 18:28:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 28AE721019
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jul 2019 18:28:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5331E21019
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jul 2019 18:28:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S52cDcAR"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cm+JfZ59"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbfGRS2f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Jul 2019 14:28:35 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38345 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbfGRS2f (ORCPT
+        id S1726040AbfGRS2h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Jul 2019 14:28:37 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46775 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727812AbfGRS2g (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Jul 2019 14:28:35 -0400
-Received: by mail-lj1-f195.google.com with SMTP id r9so28316751ljg.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2019 11:28:34 -0700 (PDT)
+        Thu, 18 Jul 2019 14:28:36 -0400
+Received: by mail-lf1-f67.google.com with SMTP id z15so15629954lfh.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2019 11:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sQWEvKqyWlAQlwCGU7Y0X8IGhxn8UG+iZGC6JNACHsA=;
-        b=S52cDcARt1FeKsaeci0ws2L30T25mJ0Vsy5tlmzLyj7bagFY60d/2PF3IfOAOsCvBK
-         Exd3aG6xu7HCpewAelL4sVQJ+IHaVhBPjRfJw4XYhoLbcTieX2wqQhs8krPt2mJBXbXV
-         qoUyb8odsGsvXQOxisQbjAwYZ39ungAMl+nN6w7DZ5LzJXiXFkSJx5cuUMFY4Gmdo2t7
-         zMdkiz0zXUzBQyraxTwvfjfqOlOwCsNcPXj0pfzXfYEaeJLRA+oxbKnuCTc7Ci7xaj96
-         et6QAqXD6QYJyVP9UA/GQdZLo47tB8w5hc1YGSI50q7Nfx7ol1UGbmW1xXEFairg2rFx
-         m/iA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=05QMYDXsNNMXVj9piYwyqDmkTCB/luaTlabh0+gD7+k=;
+        b=Cm+JfZ59xsoyrHzG8Cd1badNddeuZVT2B31YojfDDBd/SGLz7ucmew8Ilgc6tOyAcA
+         MdTlLp2rr6E+gwbB5Ued/yG8Os1vLwaSa8q1OhSt5GL0kcqdP71VCw4IDakSO1syO5UC
+         Qk2VFRCFazbxS+ZX4zorvvvSfwKSjOSnkWrRYuZHecy85LeCUwxhcwb+SvKgt4S1CqQA
+         oPG0mArWgqP+/Qf5oiPBV2rrbUEBMu/I9GN+iZIHpWRklKRFBgAJAyW8cWLLmF0y1Rke
+         dVBS4OuL1K1/XAGmGDHfwloOsabWw8QRmyUh0sj9sdiK2TufXu1hzreV1pZZd3HcNfqE
+         Ntzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sQWEvKqyWlAQlwCGU7Y0X8IGhxn8UG+iZGC6JNACHsA=;
-        b=b+U/vjA7Kb48LN7i1Y3s8BoNR3AM1yLK0D8qAEbdyM/Z5bpHpOk+IucGTXyADPsMRg
-         oyxUkXSB4BjWOjrBsHpKfMXrltpTS33BsBCiLnLRnRn7xy7sAYo0QrETSHfyM/HK6OHQ
-         FKzF8ZRlO+fA6P/Q8kz/IZ0RvzPYfzIewOtzY6ImdWTG5qeo5V7eE+pTLrgB02d3KFSq
-         NlmoGhIbzu73TaVmn7zMx4uvahEPTaWhEW+cnRHJaedbuHz5/WH4qM1N5BzIhtLRQY8N
-         swNO0btb99NtzLy9ZGYOCgF79Lm6pPQfyHbAiA005z0CvqucaIisy2UhZydwYNrpa4U8
-         zBFQ==
-X-Gm-Message-State: APjAAAWWtsAJVElyUC+C7XYc73gwpU6lxelXYB4H9yIP3TbFgBlSNAkH
-        20JkMpi5g+E9CY+F2gWWGqE=
-X-Google-Smtp-Source: APXvYqzznHgITeUvKoK1yg6vU0C8hoqj9uN1f8hVFFF1yeHtxs2XF9Ki7KaB3p4qg4DLS0vss13NfQ==
-X-Received: by 2002:a2e:9116:: with SMTP id m22mr24505682ljg.216.1563474513907;
-        Thu, 18 Jul 2019 11:28:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=05QMYDXsNNMXVj9piYwyqDmkTCB/luaTlabh0+gD7+k=;
+        b=hfIb8L84SkyF5V0i5jmhsE0F8UBuEiUzoI1uHwQvIjYrmiUSx8MDdHew/yc/PIg1Yh
+         Q6hlvTXaIzr6ygqhtK4Mo7ZsU7Ormnal33eEOtfABhPyTMB9SYWmyImbNAL4y64uHRmU
+         o7aADXo1FUaLLFG1zfrQFYY17R/hCsn5PB8poO7vEDoOzFEkM3SNY1L+zKLHcw7T1RoK
+         HpjU5FK/RmB1+I1QAb/wn+Hs+JN/2qBptRdZOlY4WuykEK5zJpcmRtAgShJvk6/W5SXh
+         0IFLwDsuh3ULRwKiM4W6GMvNgMY5caz59aHsk7msJoUPi/lZbAjK00aZbVrC2l66ur3u
+         LnSA==
+X-Gm-Message-State: APjAAAX4/ZtWC3IP+c6hMG4T19MiAAjSq6S1yuchT0MF/J6jAqyQ+YUs
+        UjGLQ01qgH7xU/SWDxQMoXU=
+X-Google-Smtp-Source: APXvYqzgBqiEUq4nfiNh+8a7LtNeAKO30RgGhGXFcE+zKDjpNMEHjF7U4B6qNRO5oge7fs+laMO+Ng==
+X-Received: by 2002:ac2:568e:: with SMTP id 14mr22260605lfr.189.1563474514992;
+        Thu, 18 Jul 2019 11:28:34 -0700 (PDT)
 Received: from cathaou.pp.htv.fi (62-78-152-105.bb.dnainternet.fi. [62.78.152.105])
-        by smtp.gmail.com with ESMTPSA id m10sm4059213lfd.32.2019.07.18.11.28.32
+        by smtp.gmail.com with ESMTPSA id m10sm4059213lfd.32.2019.07.18.11.28.33
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 11:28:33 -0700 (PDT)
+        Thu, 18 Jul 2019 11:28:34 -0700 (PDT)
 From:   Marcel Bocu <marcel.p.bocu@gmail.com>
 Cc:     Marcel Bocu <marcel.p.bocu@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,10 +65,12 @@ Cc:     Marcel Bocu <marcel.p.bocu@gmail.com>,
         Clemens Ladisch <clemens@ladisch.de>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 1/2] x86/amd_nb: Add PCI device IDs for family 17h, model 71h
-Date:   Thu, 18 Jul 2019 21:26:16 +0300
-Message-Id: <20190718182617.6964-1-marcel.p.bocu@gmail.com>
+Subject: [PATCH 2/2] hwmon/k10temp: Add support for AMD family 17h, model 71h CPUs
+Date:   Thu, 18 Jul 2019 21:26:17 +0300
+Message-Id: <20190718182617.6964-2-marcel.p.bocu@gmail.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190718182617.6964-1-marcel.p.bocu@gmail.com>
+References: <20190718182617.6964-1-marcel.p.bocu@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -77,13 +79,14 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The AMD Ryzen gen 3 processors came with a different PCI IDs for the
-function 3 & 4 which are used to access the SMN interface. The root
-PCI address however remained at the same address as the model 30h.
+It would seem like model 71h is behaving in the same way as model 30h,
+so let's just add the new F3 PCI ID to the list of compatible devices.
 
-Adding the F3/F4 PCI IDs respectively to the misc and link ids appear
-to be sufficient for k10temp, so let's add them and follow up on the
-patch if other functions need more tweaking.
+Unlike previous Ryzen/Threadripper, Ryzen gen 3 processors do not need
+temperature offsets anymore. This has been reported in the press and
+verified on my Ryzen 3700X by checking that the idle temperature
+reported by k10temp is matching the temperature reported by the
+firmware.
 
 Signed-off-by: Marcel Bocu <marcel.p.bocu@gmail.com>
 Tested-by: Marcel Bocu <marcel.p.bocu@gmail.com>
@@ -99,50 +102,21 @@ Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 ---
- arch/x86/kernel/amd_nb.c | 3 +++
- include/linux/pci_ids.h  | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/hwmon/k10temp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index d63e63b7d1d9..297dc50da3bd 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -21,6 +21,7 @@
- #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
-+#define PCI_DEVICE_ID_AMD_17H_M71H_DF_F4 0x1444
- 
- /* Protect the PCI config register pairs used for SMN and DF indirect access. */
- static DEFINE_MUTEX(smn_mutex);
-@@ -50,6 +51,7 @@ const struct pci_device_id amd_nb_misc_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M71H_DF_F3) },
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index c77e89239dcd..a9c1108b377e 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -349,6 +349,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M71H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
  	{}
  };
- EXPORT_SYMBOL_GPL(amd_nb_misc_ids);
-@@ -63,6 +65,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M71H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
- 	{}
- };
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index c842735a4f45..5f99cfac9c06 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -548,6 +548,7 @@
- #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
-+#define PCI_DEVICE_ID_AMD_17H_M71H_DF_F3 0x1443
- #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
- #define PCI_DEVICE_ID_AMD_LANCE		0x2000
- #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
 -- 
 2.22.0
 
