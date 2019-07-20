@@ -2,374 +2,187 @@ Return-Path: <SRS0=HEYb=VR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A88F2C76196
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 14:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34BF4C76186
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 21:12:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75D812085A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 14:24:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED0EF2082A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 21:12:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZTqzSQA"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q9Y62yCX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbfGTOX7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 20 Jul 2019 10:23:59 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39762 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728513AbfGTOX7 (ORCPT
+        id S1725891AbfGTVMM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 20 Jul 2019 17:12:12 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34074 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbfGTVMM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 20 Jul 2019 10:23:59 -0400
-Received: by mail-pl1-f195.google.com with SMTP id b7so17034170pls.6;
-        Sat, 20 Jul 2019 07:23:59 -0700 (PDT)
+        Sat, 20 Jul 2019 17:12:12 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n9so9686930pgc.1;
+        Sat, 20 Jul 2019 14:12:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2WY7gIiE4mOMpygdUF32NBGOQWOHXGXeU7Fsa2C5D6w=;
-        b=SZTqzSQAn6Iy1lRwE1x7yyH32lIyqYNZO+t7ZbjRiYEi2FdGf0vp3GBn3m8+2vTENQ
-         DoEORWiJ43ck/Dp9QsqDHcoZGqrrs82F6oBiZXXVWKsaM6Jo36b6dVGAq6/NpU1NSAe3
-         IUI1EcE8w2rjVhkwlEln0a5z+pkymBObNXMR9ktaj+KJAUvjSqAmUdHwzu6dEWGH7BvF
-         QrtjBrfGwYVw8zKI4GxoPnn7eWBMw+wdhGVdXYxUXp+Lv6oBetWRFZNjPgrVHZQDBSMX
-         8eSjQP73KlkPnFI+iafe18quWzxeMGagNNss6Te4NW4PCp9FZzEtkZBAacxpA/2Sfjc2
-         W07Q==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cXlW4t/Cp5gjzf56TxwnsSbtxly4H0blFeXMvCWkAuM=;
+        b=q9Y62yCXq8z2QRQSmiJzcQ8bkTVfyhNk0aC1rUsYnjN3pabxBSsTWDnqK6TtxHJKO9
+         jS0lfmDFpLELWRKjBICRZhrpe+l/hazGRg4l4vX9V0G0wlds/Xh1RVUyVum0Qb+rdQdv
+         FIM+W3fdkPfiLHOgkTnIT9NMnEIEqpsYz0yyfYZZwU3Japngu41RlvPB8KdqDP/I5NLT
+         iKqx+kwwHfPFrw42ArLmi5HH9siktwP2Ge/MrQNSLAsfZqmRQt070O+N5QBMATw/gGWw
+         N3hQUBKR7RId7ybBu2knnHUwY11Xnk92Q3uzVdAl9kUuBzvic6DoZp3UWnmOIkU0N/nx
+         dQ9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2WY7gIiE4mOMpygdUF32NBGOQWOHXGXeU7Fsa2C5D6w=;
-        b=rmGFCCjuuk2Eo4yGyN5aDfbS2gFTeMchiLFPgS7a9S5p0Wrd7WKVWB3o6+x3e9I1Ph
-         8k/miJH4/Gw6MN8slaQhD1O8S6I1I8gjImwbBvchU2D2Os4UskeUI4asfSaT9jwB9aIF
-         bqiY70Qu6tejHMumBEytDrID1CLqJAw9uKxHYrlmY4iCffnYMTMykh2CWyxJFKxzfgB9
-         djuW0o/7fjdT3QmthLLi63hhEa/p4ImnE4ySojEB9iLzFj/s57EUZb+0THW31Ali+2dn
-         6srFo9/rhSgQrCvw/fdZPSiXGMxy3ASp0nPZqK2XqtDZw8r9aUT71Zp2qNwz4yiFd3y4
-         Fq/w==
-X-Gm-Message-State: APjAAAWyNBGevClLN11t4YvDKAJj+WasN7UdpMaD2GAp2oi/gqUz4hPX
-        CIeI9SsBdxhbQc0NAPprWAwKCvWB
-X-Google-Smtp-Source: APXvYqx7waD5QNp+5QIAsd+uWZsV1dUYM1XdIYYaofP0XGmm9yl9n4KZhYg7bfBpTaoU4cUxpscoVQ==
-X-Received: by 2002:a17:902:112c:: with SMTP id d41mr53467623pla.33.1563632638711;
-        Sat, 20 Jul 2019 07:23:58 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k5sm26440753pjl.32.2019.07.20.07.23.57
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cXlW4t/Cp5gjzf56TxwnsSbtxly4H0blFeXMvCWkAuM=;
+        b=SbE0bxdeQi1v9nZhQCJo+WCHw9vHLD5Mi5GdrGGXiJru7Wg6x5dSrJJ0LaDsAynqFH
+         FFhy7n7bJ2AdeMB7gotCABr2pSzsNvLRLIPluVWNLKjCsclr72QuTvaB3FkPZhLgzDpk
+         fJymmy6+Y+DeivJq+o9qq5Z0098ad06zyw/Sca06T9BeeYhbqghNprrxoyV5HAkX25do
+         sxpSEKaTr9hL4Ibxo6uFLpJ+FdJog+ul2dka75jUSLdB/W837oBSsgsB9/FPflcitylV
+         30k/AGpSY8wYFygrUdV8s1W2YDqqz9SximKgpoC9HQ2AEojqfq53UeyoD92kR3yyv3Cp
+         B6Hw==
+X-Gm-Message-State: APjAAAVeNcSX+ZntntJptLHMfOMJRy3xLJaaEInOLeeD4HoYruyWNQya
+        ii5IZrutG9mjKs8UxkU1NN/Nqbei
+X-Google-Smtp-Source: APXvYqxekYBq3pnGrcyNNJ2vferO0UHU66bxRSIjJpLDq52eafY88xM9L3jIPHGeWukIkcRIil037g==
+X-Received: by 2002:a65:5188:: with SMTP id h8mr29495651pgq.294.1563657131128;
+        Sat, 20 Jul 2019 14:12:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i9sm33624540pgo.46.2019.07.20.14.12.09
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 20 Jul 2019 07:23:58 -0700 (PDT)
-Date:   Sat, 20 Jul 2019 07:23:57 -0700
+        Sat, 20 Jul 2019 14:12:10 -0700 (PDT)
+Subject: Re: [PATCH 1/2] hwmon: (k8temp) update to use new hwmon registration
+ API
+To:     Robert Karszniewicz <avoidr@firemail.cc>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <BVOE1YNHJDU6.38N6DGWH9KX7H@HP>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Grant McEwan <grant.mcewan@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adt7475) Convert to use
- hwmon_device_register_with_groups()
-Message-ID: <20190720142357.GA30793@roeck-us.net>
-References: <20190719014130.1090-1-grant.mcewan@alliedtelesis.co.nz>
+Message-ID: <325bcd3e-7795-1b34-587f-38364dd477f4@roeck-us.net>
+Date:   Sat, 20 Jul 2019 14:12:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190719014130.1090-1-grant.mcewan@alliedtelesis.co.nz>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <BVOE1YNHJDU6.38N6DGWH9KX7H@HP>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 01:41:30PM +1200, Grant McEwan wrote:
-> hwmon_device_register() is a deprecated function and produces a warning.
+On 7/20/19 2:05 PM, Robert Karszniewicz wrote:
+> Hello Guenter.
 > 
-> Converting the driver to use the hwmon_device_register_with_groups()
-> instead.
+> Thank you for your feedback! I am working on a version 2.
 > 
-> Signed-off-by: Grant McEwan <grant.mcewan@alliedtelesis.co.nz>
-> ---
->  drivers/hwmon/adt7475.c | 104 +++++++++++++++++++---------------------
->  1 file changed, 48 insertions(+), 56 deletions(-)
+> On Sat Jul 20, 2019 at 7:08 AM Guenter Roeck wrote:
+>>> +static umode_t
+>>> +k8temp_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+>>> +		  u32 attr, int channel)
+>>> +{
+>>> +	if (type != hwmon_temp)
+>>> +		return 0;
+>>
+>> Not really needed since only temperature sensors are registered in the first place.
+>>
+>>> +
+>>> +	if (attr != hwmon_temp_input)
+>>> +		return 0;
+>>> +
+>>
+>> The idea here is to only create sensors if they actually exist, so I would expect
+>> something like the following here.
 > 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index c3c6031a7285..4e838555102f 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -188,6 +188,7 @@ MODULE_DEVICE_TABLE(of, adt7475_of_match);
->  
->  struct adt7475_data {
->  	struct device *hwmon_dev;
-> +	struct i2c_client *client;
->  	struct mutex lock;
->  
->  	unsigned long measure_updated;
-> @@ -212,6 +213,7 @@ struct adt7475_data {
->  
->  	u8 vid;
->  	u8 vrm;
-> +	const struct attribute_group *groups[8];
+> I realised that in the probe() function I deleted all the code which
+> conditionally creates the sysfs files. Is that how it's supposed to be
+> done and that's exactly what is_visible() is for, or is the proper way
+> to still create the sysfs files conditionally, too?
+> 
 
-There are a total of 8 groups, and the list of groups needs to be
-terminated with a NULL pointer, so there have to be 9 entries in
-this array.
+Yes, that is what the function is for. sysfs files are created in the core,
+based on the result from the call to the is_visible function. If the function
+returns 0, the respective sysfs file won't be created.
 
->  };
->  
->  static struct i2c_driver adt7475_driver;
-> @@ -346,8 +348,8 @@ static ssize_t voltage_store(struct device *dev,
->  {
->  
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	unsigned char reg;
->  	long val;
->  
-> @@ -440,8 +442,8 @@ static ssize_t temp_store(struct device *dev, struct device_attribute *attr,
->  			  const char *buf, size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	unsigned char reg = 0;
->  	u8 out;
->  	int temp;
-> @@ -542,8 +544,7 @@ static ssize_t temp_st_show(struct device *dev, struct device_attribute *attr,
->  			    char *buf)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
->  	long val;
->  
->  	switch (sattr->index) {
-> @@ -570,8 +571,8 @@ static ssize_t temp_st_store(struct device *dev,
->  			     size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	unsigned char reg;
->  	int shift, idx;
->  	ulong val;
-> @@ -647,8 +648,8 @@ static ssize_t point2_show(struct device *dev, struct device_attribute *attr,
->  static ssize_t point2_store(struct device *dev, struct device_attribute *attr,
->  			    const char *buf, size_t count)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
->  	int temp;
->  	long val;
-> @@ -710,8 +711,8 @@ static ssize_t tach_store(struct device *dev, struct device_attribute *attr,
->  {
->  
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	unsigned long val;
->  
->  	if (kstrtoul(buf, 10, &val))
-> @@ -769,8 +770,8 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
->  {
->  
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	unsigned char reg = 0;
->  	long val;
->  
-> @@ -818,8 +819,8 @@ static ssize_t stall_disable_show(struct device *dev,
->  				  struct device_attribute *attr, char *buf)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +
->  	u8 mask = BIT(5 + sattr->index);
->  
->  	return sprintf(buf, "%d\n", !!(data->enh_acoustics[0] & mask));
-> @@ -830,8 +831,8 @@ static ssize_t stall_disable_store(struct device *dev,
->  				   const char *buf, size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	long val;
->  	u8 mask = BIT(5 + sattr->index);
->  
-> @@ -914,8 +915,8 @@ static ssize_t pwmchan_store(struct device *dev,
->  			     size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	int r;
->  	long val;
->  
-> @@ -938,8 +939,8 @@ static ssize_t pwmctrl_store(struct device *dev,
->  			     size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	int r;
->  	long val;
->  
-> @@ -982,8 +983,8 @@ static ssize_t pwmfreq_store(struct device *dev,
->  			     size_t count)
->  {
->  	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	int out;
->  	long val;
->  
-> @@ -1022,8 +1023,8 @@ static ssize_t pwm_use_point2_pwm_at_crit_store(struct device *dev,
->  					struct device_attribute *devattr,
->  					const char *buf, size_t count)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	long val;
->  
->  	if (kstrtol(buf, 10, &val))
-> @@ -1305,6 +1306,9 @@ static const struct attribute_group in4_attr_group = { .attrs = in4_attrs };
->  static const struct attribute_group in5_attr_group = { .attrs = in5_attrs };
->  static const struct attribute_group vid_attr_group = { .attrs = vid_attrs };
->  
-> +/* Number of possible attribute groups to add into sysfs */
-> +#define ATTR_GROUP_COUNT 8
-> +
+Thanks,
+Guenter
 
-Not used anywhere.
+>> 	struct k8temp_data *data = drvdata;
+>>
+>> 	if (attr != hwmon_temp_input)
+>> 		return 0;
+>>
+>> 	if ((channel & 1) && !(data->sensorsp & SEL_PLACE))
+>> 		return 0;
+>>
+>> 	if ((channel & 2) && !(data->sensorsp & SEL_CORE))
+>> 		return 0;
+>>
+>>> +	return 0444;
+>>> +}
+> 
+>>> +	if (data->swap_core_select)
+>>> +		core = core ? 0 : 1;
+>>
+>> 		core = 1 - core;
+>>
+>> would accomplish the same without conditional.
+> 
+> How do you like
+> 	core ^= 1;
+> ?
+> 
+>>>    static int k8temp_probe(struct pci_dev *pdev,
+>>>    				  const struct pci_device_id *id)
+>>>    {
+>>> -	int err;
+>>>    	u8 scfg;
+>>>    	u32 temp;
+>>>    	u8 model, stepping;
+>>>    	struct k8temp_data *data;
+>>> +	struct device *hwmon_dev;
+>>>    
+>>>    	data = devm_kzalloc(&pdev->dev, sizeof(struct k8temp_data), GFP_KERNEL);
+>>>    	if (!data)
+>>> @@ -233,84 +274,23 @@ static int k8temp_probe(struct pci_dev *pdev,
+>>>    
+>>>    	data->name = "k8temp";
+>>>    	mutex_init(&data->update_lock);
+>>> -	pci_set_drvdata(pdev, data);
+>>> -
+>>> -	/* Register sysfs hooks */
+>>> -	err = device_create_file(&pdev->dev,
+>>> -			   &sensor_dev_attr_temp1_input.dev_attr);
+>>> -	if (err)
+>>> -		goto exit_remove;
+>>> -
+>>> -	/* sensor can be changed and reports something */
+>>> -	if (data->sensorsp & SEL_PLACE) {
+>>> -		err = device_create_file(&pdev->dev,
+>>> -				   &sensor_dev_attr_temp2_input.dev_attr);
+>>> -		if (err)
+>>> -			goto exit_remove;
+>>> -	}
+>>> -
+>>> -	/* core can be changed and reports something */
+>>> -	if (data->sensorsp & SEL_CORE) {
+>>> -		err = device_create_file(&pdev->dev,
+>>> -				   &sensor_dev_attr_temp3_input.dev_attr);
+>>> -		if (err)
+>>> -			goto exit_remove;
+>>> -		if (data->sensorsp & SEL_PLACE) {
+>>> -			err = device_create_file(&pdev->dev,
+>>> -					   &sensor_dev_attr_temp4_input.
+>>> -					   dev_attr);
+>>> -			if (err)
+>>> -				goto exit_remove;
+>>> -		}
+>>> -	}
+> 
 
->  static int adt7475_detect(struct i2c_client *client,
->  			  struct i2c_board_info *info)
->  {
-> @@ -1489,7 +1493,7 @@ static int adt7475_probe(struct i2c_client *client,
->  	};
->  
->  	struct adt7475_data *data;
-> -	int i, ret = 0, revision;
-> +	int i, ret = 0, revision, group_num = 0;
->  	u8 config2, config3;
->  
->  	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-> @@ -1497,6 +1501,7 @@ static int adt7475_probe(struct i2c_client *client,
->  		return -ENOMEM;
->  
->  	mutex_init(&data->lock);
-> +	data->client = client;
->  	i2c_set_clientdata(client, data);
->  
->  	if (client->dev.of_node)
-> @@ -1590,49 +1595,37 @@ static int adt7475_probe(struct i2c_client *client,
->  		break;
->  	}
->  
-> -	ret = sysfs_create_group(&client->dev.kobj, &adt7475_attr_group);
-> -	if (ret)
-> -		return ret;
-> +	data->groups[group_num++] = &adt7475_attr_group;
->  
->  	/* Features that can be disabled individually */
->  	if (data->has_fan4) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &fan4_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &fan4_attr_group;
->  	}
->  	if (data->has_pwm2) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &pwm2_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &pwm2_attr_group;
->  	}
->  	if (data->has_voltage & (1 << 0)) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &in0_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &in0_attr_group;
->  	}
->  	if (data->has_voltage & (1 << 3)) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &in3_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &in3_attr_group;
->  	}
->  	if (data->has_voltage & (1 << 4)) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &in4_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &in4_attr_group;
->  	}
->  	if (data->has_voltage & (1 << 5)) {
-> -		ret = sysfs_create_group(&client->dev.kobj, &in5_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num++] = &in5_attr_group;
->  	}
->  	if (data->has_vid) {
->  		data->vrm = vid_which_vrm();
-> -		ret = sysfs_create_group(&client->dev.kobj, &vid_attr_group);
-> -		if (ret)
-> -			goto eremove;
-> +		data->groups[group_num] = &vid_attr_group;
->  	}
->  
-> -	data->hwmon_dev = hwmon_device_register(&client->dev);
-> +	/* register device with all the acquired attributes */
-> +	data->hwmon_dev = hwmon_device_register_with_groups(&client->dev,
-> +							    client->name, data,
-> +							    data->groups);
-> +
-
-You could call devm_hwmon_device_register_with_groups() here, drop the
-remove function, and drop hwmon_dev from struct adt7475_data.
-
-Also, adt7475_remove_files() is no longer necessary. With the new API,
-attribute files are owned by the hwmon subsystem.
-
->  	if (IS_ERR(data->hwmon_dev)) {
->  		ret = PTR_ERR(data->hwmon_dev);
->  		goto eremove;
-> @@ -1757,8 +1750,8 @@ static void adt7475_read_pwm(struct i2c_client *client, int index)
->  
->  static int adt7475_update_measure(struct device *dev)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
-> +	struct i2c_client *client = data->client;
->  	u16 ext;
->  	int i;
->  	int ret;
-> @@ -1854,8 +1847,7 @@ static int adt7475_update_measure(struct device *dev)
->  
->  static struct adt7475_data *adt7475_update_device(struct device *dev)
->  {
-> -	struct i2c_client *client = to_i2c_client(dev);
-> -	struct adt7475_data *data = i2c_get_clientdata(client);
-> +	struct adt7475_data *data = dev_get_drvdata(dev);
->  	int ret;
->  
->  	mutex_lock(&data->lock);
