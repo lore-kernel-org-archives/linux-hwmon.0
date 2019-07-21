@@ -2,46 +2,52 @@ Return-Path: <SRS0=g1Qx=VS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=DATE_IN_PAST_06_12,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68B58C76195
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 10:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1132CC76188
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 12:01:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2F07208E4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 10:34:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B81A0208E4
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 12:01:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=firemail.cc header.i=@firemail.cc header.b="vqT6INZu"
+	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="gQeWk6v/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfGUKeO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 21 Jul 2019 06:34:14 -0400
-Received: from mx1.cock.li ([185.10.68.5]:39117 "EHLO cock.li"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726020AbfGUKeO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Jul 2019 06:34:14 -0400
-From:   Robert Karszniewicz <avoidr@firemail.cc>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=firemail.cc; s=mail;
-        t=1563667064; bh=uezqzlmF1TflZxVAEHnTtpcUNbI9EQ2sRz89fTQhRs4=;
+        id S1726326AbfGUMBW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 21 Jul 2019 08:01:22 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:58596 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726188AbfGUMBW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 21 Jul 2019 08:01:22 -0400
+Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (verified OK))
+        by mx1.riseup.net (Postfix) with ESMTPS id 0704B1A01A1;
+        Sun, 21 Jul 2019 05:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1563710481; bh=oYfqaG5kCbwQ4lNahO9Cuz5lsUfgJtRUrINKgRZJmLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vqT6INZuk6znA+3NEm6Ud7GqKWNmU9m/FTTg9JmUtKXjHo3ga3+l2cAepQA6sZzNk
-         2H0t6kO253lv8OxAn0S9f6zQnKP3uear7o6alUMDVKKXupudM65n1VfkVIO6cTdHXt
-         n9cNBl9WvAxNPDPgSbNVtV6mLnBpmtbMJthc8S3pg05LmCFq6wwGAfyoOgUqvVeRYj
-         pB3UfIGNMDVF8wIPZsk54D4sYqKfiaB8+ZM3IX0FieHrbQI6cJGIQzzhOkYXg1rgx6
-         R9IDCjRjZq1t+nSFf+SJ2j1fvBD4YEo/+kimEjxdAf8U4TzrLotBnvFs3/2DJSsMAI
-         9/2VCtMI+vHGA==
+        b=gQeWk6v/oAlSACmVq4jSl22kB4AsKWtSMiXT5+BBzjAy8rn4/fVU8K/dgjmAJQQCK
+         lNjuEUret4g8is4daJZq9+8FKOvGGiYLxciPngnmZXKa9Y309Zl5MGw15/cBo/+vyp
+         YjvHF+gXKCS8HlF/PACpYgBag3MHMXeN0ESdLZQo=
+X-Riseup-User-ID: 5FEE40AC0E4FBCB656EB0E2E4601A1F9F8089BC780F4B4A6C6AC41C913D77F4F
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by capuchin.riseup.net (Postfix) with ESMTPSA id 66439120783;
+        Sun, 21 Jul 2019 05:01:18 -0700 (PDT)
+From:   Robert Karszniewicz <avoidr@riseup.net>
 To:     Rudolf Marek <r.marek@assembler.cz>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Karszniewicz <avoidr@firemail.cc>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] hwmon: (k8temp) update to use new hwmon registration API
-Date:   Sun, 21 Jul 2019 01:56:21 +0200
-Message-Id: <20190720235621.29322-1-avoidr@firemail.cc>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <020f87268cd1a41fec68d1789e015552cfbb9da1.1563522498.git.avoidr@firemail.cc>
-References: <020f87268cd1a41fec68d1789e015552cfbb9da1.1563522498.git.avoidr@firemail.cc>
+Cc:     Robert Karszniewicz <avoidr@riseup.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Karszniewicz <avoidr@firemail.cc>
+Subject: [PATCH v3 1/1] hwmon: (k8temp) update to use new hwmon registration API
+Date:   Sun, 21 Jul 2019 14:00:51 +0200
+Message-Id: <20190721120051.28064-1-avoidr@riseup.net>
+In-Reply-To: <1d0f98fb-a0a6-38b7-98f6-ec4c365587b0@roeck-us.net>
+References: <1d0f98fb-a0a6-38b7-98f6-ec4c365587b0@roeck-us.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -58,10 +64,21 @@ Removes:
 Also reduces binary size:
    text    data     bss     dec     hex filename
    4139    1448       0    5587    15d3 drivers/hwmon/k8temp.ko.bak
-   3077    1220       0    4297    10c9 drivers/hwmon/k8temp.ko
+   3103    1220       0    4323    10e3 drivers/hwmon/k8temp.ko
 
 Signed-off-by: Robert Karszniewicz <avoidr@firemail.cc>
+Signed-off-by: Robert Karszniewicz <avoidr@riseup.net>
 ---
+Changes from v2:
+- if (data->swap_core_select)
+-     core ^= 1;
++ core ^= data->swap_core_select;
+
+However, that produces slightly more .text than v2, and is a tad too
+"tricky", I personally find.
+
+- Changed email service due to problems with the previous one.
+
 Changes from v1:
 - correct is_visible() and remove unnecessary checks
 - k8temp_read(): remove unnecessary checks and replace the switch
@@ -70,11 +87,11 @@ Changes from v1:
 - use PTR_ERR_OR_ZERO()
 - remove k8temp_update_device() and more k8temp_data fields
 
- drivers/hwmon/k8temp.c | 234 ++++++++++++-----------------------------
- 1 file changed, 70 insertions(+), 164 deletions(-)
+ drivers/hwmon/k8temp.c | 233 ++++++++++++-----------------------------
+ 1 file changed, 69 insertions(+), 164 deletions(-)
 
 diff --git a/drivers/hwmon/k8temp.c b/drivers/hwmon/k8temp.c
-index 4994c90c8929..0bedb3abee74 100644
+index 4994c90c8929..f73bd4eceb28 100644
 --- a/drivers/hwmon/k8temp.c
 +++ b/drivers/hwmon/k8temp.c
 @@ -10,10 +10,8 @@
@@ -197,7 +214,7 @@ index 4994c90c8929..0bedb3abee74 100644
  MODULE_DEVICE_TABLE(pci, k8temp_ids);
  
  static int is_rev_g_desktop(u8 model)
-@@ -159,14 +67,77 @@ static int is_rev_g_desktop(u8 model)
+@@ -159,14 +67,76 @@ static int is_rev_g_desktop(u8 model)
  	return 1;
  }
  
@@ -229,8 +246,7 @@ index 4994c90c8929..0bedb3abee74 100644
 +	core = (channel >> 1) & 1;
 +	place = channel & 1;
 +
-+	if (data->swap_core_select)
-+		core ^= 1;
++	core ^= data->swap_core_select;
 +
 +	mutex_lock(&data->update_lock);
 +	pci_read_config_byte(pdev, REG_TEMP, &tmp);
@@ -276,7 +292,7 @@ index 4994c90c8929..0bedb3abee74 100644
  
  	data = devm_kzalloc(&pdev->dev, sizeof(struct k8temp_data), GFP_KERNEL);
  	if (!data)
-@@ -231,86 +202,21 @@ static int k8temp_probe(struct pci_dev *pdev,
+@@ -231,86 +201,21 @@ static int k8temp_probe(struct pci_dev *pdev,
  			data->sensorsp &= ~SEL_CORE;
  	}
  
