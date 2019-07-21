@@ -1,104 +1,75 @@
-Return-Path: <SRS0=HEYb=VR=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=g1Qx=VS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD835C76186
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 22:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6962BC76188
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 10:16:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 710052082E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 20 Jul 2019 22:46:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BQkILhKA"
+	by mail.kernel.org (Postfix) with ESMTP id 389A92083B
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 10:16:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725891AbfGTWqv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 20 Jul 2019 18:46:51 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39994 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfGTWqv (ORCPT
+        id S1726062AbfGUKQP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 21 Jul 2019 06:16:15 -0400
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:37400 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfGUKQP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 20 Jul 2019 18:46:51 -0400
-Received: by mail-pf1-f196.google.com with SMTP id p184so15656871pfp.7;
-        Sat, 20 Jul 2019 15:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8jcJmcHEGEEYqidoI3J8M7I3oaGy7AiHVl+ctm6XmvE=;
-        b=BQkILhKAbudKrFIGtrR8LQOCVFmLrPvFpZ0n8JeCW+eUBMuteZFF8qzv+75IddR6sl
-         tKxxS2m0qsHneAeZsgHEjUpDGDeZk1MaSXLHo3LKbuqrfRJ2NZCGMjK/p2Sy9oUG2RBt
-         aHAgvtDdwqoS7ehePed2xiSE1cwVsHcKrk4BNlduNKsnQcYkMIJygurnKg/hs148QZQL
-         LAdRRVlVSwj433ztmMwSaWh7hjYVxQ2YSUsRGpay7tyf/heGTiWdrtvR9ydA+CicucxN
-         /FfJgr861speGSfR0bjqaekrXFpiHeNhGVVWkodZOvDYf+FAHsOUF2kiOWnVmt6wY1Xs
-         lFyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8jcJmcHEGEEYqidoI3J8M7I3oaGy7AiHVl+ctm6XmvE=;
-        b=tqTmyXoqjV8uOuWFi2wf2wbxm8L5XjhugO34oqM0DlTyJuzPoPAp/4eYkUuzM7Ws/4
-         mYkignS7RwKKJfGkAigmTfsyvX1Efuo+KW7kOCvVpgiVtVMCMwxSh97Btv6Dhg4nxJdG
-         h49sxTBxBUaadl9YTKTxC/Z0d/UzSyixkSbJPJCLa5/2MikTlfFWv/QvJ15afc7SnSuv
-         8CsZLqtJ04D4OTcNtKzb214zh5Wtl36veFxxGhkCBbLouNXfTbR7OP+7mmjIHFIh7hSi
-         CY1mKAff8pUU1tx0glIopPQYpTQoRYVzKNrU+lfxFApF2GNvZoKpBmGTXkMwUlEsiCag
-         m9EA==
-X-Gm-Message-State: APjAAAUEdp+Kzed1mlZauGb1eWc26SwoMgkQXu72e48lUOekDUiCOZ2n
-        e0pSKyLbir0wSMH2BNOUfBkvs1UD
-X-Google-Smtp-Source: APXvYqycVLfr676C6OsN4jsi06svVpHl6nVrJbc+4q8Y8svmMsGHA3fL80AWxKEChmLcLYR60UaFoA==
-X-Received: by 2002:a17:90a:8985:: with SMTP id v5mr66103885pjn.136.1563662810452;
-        Sat, 20 Jul 2019 15:46:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i3sm37408448pfo.138.2019.07.20.15.46.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 20 Jul 2019 15:46:49 -0700 (PDT)
-Subject: Re: [PATCH 1/2] hwmon: (k8temp) update to use new hwmon registration
- API
-To:     Robert Karszniewicz <avoidr@firemail.cc>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <BVOE7U9MRMZY.38N6DGWH9KX7H@HP>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1d0f98fb-a0a6-38b7-98f6-ec4c365587b0@roeck-us.net>
-Date:   Sat, 20 Jul 2019 15:46:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Sun, 21 Jul 2019 06:16:15 -0400
+Received: from localhost.localdomain ([92.140.204.221])
+        by mwinf5d33 with ME
+        id fNGB2000F4n7eLC03NGByz; Sun, 21 Jul 2019 12:16:13 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 21 Jul 2019 12:16:13 +0200
+X-ME-IP: 92.140.204.221
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     linux@roeck-us.net, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] hwmon: (pmbus/max31785) Remove a useless #define
+Date:   Sun, 21 Jul 2019 12:15:53 +0200
+Message-Id: <20190721101553.20911-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <BVOE7U9MRMZY.38N6DGWH9KX7H@HP>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/20/19 2:13 PM, Robert Karszniewicz wrote:
+There is a typo in MAX37185_NUM_FAN_PAGES. To be consistent, it should be
+MAX31785_NUM_FAN_PAGES (1 and 7 switched).
 
-[ ... ]
+At line 24, we already have:
+   #define MAX31785_NR_FAN_PAGES		6
+and MAX37185_NUM_FAN_PAGES seems to be unused.
 
->>> +	if (data->swap_core_select)
->>> +		core = core ? 0 : 1;
->>
->> 		core = 1 - core;
->>
->> would accomplish the same without conditional.
-> 
-> How do you like
-> 	core ^= 1;
-> ?
-> 
+It is likely that it is only a typo and/or a left-over.
+So, axe it.
 
-I didn't notice that before.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/hwmon/pmbus/max31785.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Your call. Everything is fine as long as it doesn't involve a conditional.
-Hmm ... having said that, how about the following ?
+diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
+index 69d9029ea410..254b0f98c755 100644
+--- a/drivers/hwmon/pmbus/max31785.c
++++ b/drivers/hwmon/pmbus/max31785.c
+@@ -244,8 +244,6 @@ static int max31785_write_word_data(struct i2c_client *client, int page,
+ #define MAX31785_VOUT_FUNCS \
+ 	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT)
+ 
+-#define MAX37185_NUM_FAN_PAGES 6
+-
+ static const struct pmbus_driver_info max31785_info = {
+ 	.pages = MAX31785_NR_PAGES,
+ 
+-- 
+2.20.1
 
-	core ^= data->swap_core_select;
-
-Thanks,
-Guenter
