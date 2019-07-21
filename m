@@ -3,91 +3,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABA32C76191
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 20:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68849C76191
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 22:56:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 57388208E4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 20:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C28C2083B
+	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jul 2019 22:56:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="hj0GFN8F"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="succyzJz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726022AbfGUUhe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 21 Jul 2019 16:37:34 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:44720 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbfGUUhd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Jul 2019 16:37:33 -0400
-Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (verified OK))
-        by mx1.riseup.net (Postfix) with ESMTPS id 199BE1A02E0;
-        Sun, 21 Jul 2019 13:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1563741453; bh=W3XfJWnWhH14ISZ95oKKFD712umDCzjhU++DOEBCHzA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hj0GFN8FsAUqAo3PwwCaBAjWHhhFpIgsntH2NHLbEod5PP/HqqEQ+AeuG/PU6WLZW
-         DM0Y6DWOxztV40IGjPTxhZGP3ziIdy4xufsEqU2qTyiXcCaYEM947vF29Sh5WjYnms
-         X+BLVvoy4Id5pd/n7Q0Y2ihEEFWtScXWik9sXP10=
-X-Riseup-User-ID: 060C099BE3A56F342C111FDE49890A5BFED934EC9FB32B0CFFFDC8448FE3247C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by capuchin.riseup.net (Postfix) with ESMTPSA id 143EC120328;
-        Sun, 21 Jul 2019 13:37:32 -0700 (PDT)
+        id S1726314AbfGUW4A (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 21 Jul 2019 18:56:00 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:52692 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbfGUW4A (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 21 Jul 2019 18:56:00 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2A9E7891A9;
+        Mon, 22 Jul 2019 10:55:58 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1563749758;
+        bh=ovlcuYNvidxvSKD/QxmtBakA4LY0nVMfXfU5c2EM+yo=;
+        h=From:To:Cc:Subject:Date;
+        b=succyzJzYfb47De4gPCdy4X3CDUGLLT6MXc3ehvZNeD4dlv2e2CtFA9Ox5i4Hlses
+         EvAhOId4Fe8ilz3o5Ml7YEAW1YiCmcEn7P1NO2BkDEeXMgQLQXzQ3CzcIFSSa1vrVS
+         /Tezq1kFD+YElE7sQZNWqBXAjknxYa0ZWqJzKm5gKLIUOf8mqgaXL1SVEh09V/I42w
+         AZGzbyY+9vjET/d3EcDJlZmhzMM+MldT2Y/3UXtqju+z9KU6fiedT1v73NNm3PXZ4L
+         puReB9h1RAYUt+giZIJqvOY7dgfztkUk12Gc3wPpCPfi2383tGV92liGLBdzSujwVx
+         b+r8Zaip4IdEg==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5d34ed7e0000>; Mon, 22 Jul 2019 10:55:58 +1200
+Received: from grantmc-dl.ws.atlnz.lc (grantmc-dl.ws.atlnz.lc [10.33.24.16])
+        by smtp (Postfix) with ESMTP id EAD0713EECE;
+        Mon, 22 Jul 2019 10:55:59 +1200 (NZST)
+Received: by grantmc-dl.ws.atlnz.lc (Postfix, from userid 1772)
+        id E48F0100E0A; Mon, 22 Jul 2019 10:55:57 +1200 (NZST)
+From:   Grant McEwan <grant.mcewan@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Grant McEwan <grant.mcewan@alliedtelesis.co.nz>
+Subject: [PATCH v2 0/1] hwmon: (adt7475) Convert to use hwmon_device_register_with_groups()
+Date:   Mon, 22 Jul 2019 10:55:29 +1200
+Message-Id: <20190721225530.28799-1-grant.mcewan@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Date:   Sun, 21 Jul 2019 13:37:31 -0700
-From:   avoidr@riseup.net
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rudolf Marek <r.marek@assembler.cz>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Robert Karszniewicz <avoidr@firemail.cc>,
-        linux-hwmon-owner@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] hwmon: (k8temp) update to use new hwmon
- registration API
-In-Reply-To: <20190721151408.GA13373@roeck-us.net>
-References: <1d0f98fb-a0a6-38b7-98f6-ec4c365587b0@roeck-us.net>
- <20190721120051.28064-1-avoidr@riseup.net>
- <20190721151408.GA13373@roeck-us.net>
-Message-ID: <16e03db49372a5f240b241f985f8685c@riseup.net>
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2019-07-21 17:14, Guenter Roeck wrote:
-> On Sun, Jul 21, 2019 at 02:00:51PM +0200, Robert Karszniewicz wrote:
->> Removes:
->> - hwmon_dev from k8temp_data struct, as that is now passed
->>   to callbacks, anyway.
->> - other k8temp_data struct fields, too.
->> - k8temp_update_device()
->>
->> Also reduces binary size:
->>    text    data     bss     dec     hex filename
->>    4139    1448       0    5587    15d3 drivers/hwmon/k8temp.ko.bak
->>    3103    1220       0    4323    10e3 drivers/hwmon/k8temp.ko
->>
->> Signed-off-by: Robert Karszniewicz <avoidr@firemail.cc>
->> Signed-off-by: Robert Karszniewicz <avoidr@riseup.net>
-> 
-> Applied.
+V2:=20
+Addressing maintainer feedback,
+- Increased attribute array from 8 to 9, to accommodate NULL terminator.
+- Removed #define ATTR_GROUP_COUNT.
+- Replaced hwmon_device_register_with_groups() with=20
+  devm_hwmon_device_register_with_groups() api.
+- Removed the adt7475_remove_files() as no longer necessary with new API.
+- Replaced goto eremove calls, with simple returns.
+- Removed .remove function.=20
 
-Thank you! It's been a joy!
+Grant McEwan (1):
+  hwmon: (adt7475) Convert to use hwmon_device_register_with_groups()
 
->> ---
->> Changes from v2:
->> - if (data->swap_core_select)
->> -     core ^= 1;
->> + core ^= data->swap_core_select;
->>
->> However, that produces slightly more .text than v2, and is a tad too
->> "tricky", I personally find.
->>
-> Interesting - for me it produces ~30 bytes less code (with gcc 7.4.0).
+ drivers/hwmon/adt7475.c | 146 ++++++++++++++--------------------------
+ 1 file changed, 50 insertions(+), 96 deletions(-)
 
-Strange. I just verified to make sure and I do get ~30 bytes /more/ code
-(with gcc 9.1.0).
+--=20
+2.22.0
+
