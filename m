@@ -2,180 +2,104 @@ Return-Path: <SRS0=+gze=VT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9EE5C76188
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jul 2019 11:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C764EC76188
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jul 2019 14:50:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E47D20821
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jul 2019 11:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563793689;
-	bh=2z6i24+qb4j3b1P0viAqke4gZ6or3I0xXoMViGiT5xI=;
-	h=From:Cc:Subject:Date:In-Reply-To:References:To:List-ID:From;
-	b=zH+K+vLBohzg8eYTn0fFeX/TXrWXfbqJ0Iejj64HplqH5RAdvNFqYLdoAvHjDrSKn
-	 qUDIsFmlyrjRs4F7rT2TEBrM7BpAdpPi6w1oV+Ln5vseuW2Q2T7n8JJQjg5Je+Mgi1
-	 4g2na7ZuBQlBL1PaVoSKx8clZrMCEnZotaYxHk2w=
+	by mail.kernel.org (Postfix) with ESMTP id 9104D2190D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jul 2019 14:50:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HYeMZAb2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729841AbfGVLIJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Jul 2019 07:08:09 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:35668 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729844AbfGVLIB (ORCPT
+        id S1726272AbfGVOur (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Jul 2019 10:50:47 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50536 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbfGVOur (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Jul 2019 07:08:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3U1QrPfNvOtuuSLliYgGDMKrpJg0LMXUyN+mmcUPwa4=; b=SKYIEmIgcDHU6ufAzDpyezw2+k
-        VdIaVrMSUeyLNTEw7OCPqoy2B5K7/twVfSHAH6SvzIsERQUWg+wpn9Na7Cv5OP6yeSiMUx+5/RN4G
-        4RcuJiJxVP/asPMO7k4A4n52zAXH+dFXeWz/4U1aJqVU+Hf0l78DQpA1pQlRYZYjLQcx+emOts3pu
-        gwfHS3SDlDE6BiSatgRLduioUtMxFG0jlF6aFBFnYh7QvICGIMbUZe6BXymepAmLqUe2oIcl6ef4n
-        yywwbdziSSr5py8ADV4mCL1z1nSMEg8PKpbErEGaZkd8cvr4ioyiR1kM8gHfmklLuoa5NLT7GnEkF
-        HRzo3KhQ==;
-Received: from 177.157.124.3.dynamic.adsl.gvt.net.br ([177.157.124.3] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hpWAh-000257-EF; Mon, 22 Jul 2019 11:07:59 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hpWAa-00041q-FI; Mon, 22 Jul 2019 08:07:52 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 18/22] docs: hwmon: pxe1610: convert to ReST format and add to the index
-Date:   Mon, 22 Jul 2019 08:07:45 -0300
-Message-Id: <657bf022625e0888d3becf10c78d162eeb864608.1563792334.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1563792333.git.mchehab+samsung@kernel.org>
-References: <cover.1563792333.git.mchehab+samsung@kernel.org>
+        Mon, 22 Jul 2019 10:50:47 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v15so35528034wml.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 22 Jul 2019 07:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=GDPmYrOV5FMLd7aC8+ljVluT3u69z15AjzVP5b88Ys8=;
+        b=HYeMZAb2odk9o3/HFpMw3Z2j/CLefiJA5dVMvYdlNvl+ABR2wk21crjqGlQ/8Y54Sy
+         M3HfSVWQpDDJi9JN1T3bF09LTxyESLoA69aKX6ak5fFcjsWpNSGHMymqUmgn0U9hS3FT
+         AoEfmRSDHKyacQUIBCO+sooTLr6qTjt64fQbkOjL2jxx4CiihG1eHy3NFA9PdANXqKy4
+         JyH85dv1CXGCi7WWtZGIQ6GOzgWRRkOfEfZe99nyGnVgiggi12Rkd7C3D8rFBgdFPTMf
+         pn+AF5libviAFxObfQ44rPgeCByEa3JGT2XBSkSNNxfAyogxL+3ZALcf/iNsacc0PrYr
+         vaCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=GDPmYrOV5FMLd7aC8+ljVluT3u69z15AjzVP5b88Ys8=;
+        b=IgPBTcMj5rzcLWz+6h0nWJuFHB0F8eLv4zO0HnRiEwR7WiYb5bx76+AOwbHRm2IzSi
+         bHeD72ZJk7ZlaRyLKUqzglHiOE6FEwQHJ6Uw8uWwH494rF4/tKw6biGRvFVSyBnoiBPU
+         H68934X2DDnNFbMUvDa8bFdQwNEoBbwceqxJeBrucWuLE3HCgN1GxW0Ixny33uIWhyQT
+         qmfe85836R0+cj+sTIWbmKbnV+Po9za+7qD3k0hbw53VDxMM04Gze7CEoGPYlobbJ06a
+         y9dUElqqlIrVpu9TC5LzcU5ciuzgM9OsepZ0r+edXheYph6dYErj8rCCtEixn2gxH+VY
+         Wx9A==
+X-Gm-Message-State: APjAAAXbuvLePE/kmQgeNRsePZwAqvK83fMPd1fR8WSMJTYKiXghZ6VO
+        VnIolRtEKEthp9iYtbYvv3QUh8/5GVlXkhxKWzM=
+X-Google-Smtp-Source: APXvYqwjBn3GQ4koabNKTcwi15FSQqGUBZ0gBJ7l0p7elN4M5WjSKYdu+7wWt7rWvhgwI0q+6BYkkMEJGeCgpM8+zz4=
+X-Received: by 2002:a1c:5602:: with SMTP id k2mr60172827wmb.173.1563807045065;
+ Mon, 22 Jul 2019 07:50:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+From:   Shenran Wang <shenran268@gmail.com>
+Date:   Mon, 22 Jul 2019 17:50:34 +0300
+Message-ID: <CAGfeh__oPvTo4dskOoW8kmhhgM3_vDjoP7eXdYPbmA7e==cZzg@mail.gmail.com>
+Subject: [PATCH] drivers/hwmon/acpi_power_meter.c: Change log level
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This document was recently introduced. Convert it to ReST
-just like the other hwmon documents, adding it to the hwmon index.
+From ce991220c17873821bd1e2bd011686201b3daaff Mon Sep 17 00:00:00 2001
+From: Wang Shenran <shenran268@gmail.com>
+Date: Mon, 22 Jul 2019 14:38:10 +0300
+Subject: [PATCH] drivers/hwmon/acpi_power_meter.c: Change log level
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+At boot time, the acpi_power_meter driver logs the following error level
+message: "Ignoring unsafe software power cap". Having read about it from
+a few sources, it seems that the error message can be quite misleading.
+
+While the message can imply that Linux is ignoring the fact that the
+system is operating in potentially dangerous conditions, the truth is
+the driver found an ACPI_PMC object that supports software power
+capping. The driver simply decides not to use it, perhaps because it
+doesn't support the object.
+
+The best solution is probably changing the log level from error to warning.
+All sources I have found, regarding the error, have downplayed its
+significance. There is not much of a reason for it to be on error level,
+while causing potential confusions or misinterpretations.
+
+Signed-off-by: Wang Shenran <shenran268@gmail.com>
 ---
- Documentation/hwmon/index.rst                |  1 +
- Documentation/hwmon/{pxe1610 => pxe1610.rst} | 33 +++++++++++++++-----
- 2 files changed, 26 insertions(+), 8 deletions(-)
- rename Documentation/hwmon/{pxe1610 => pxe1610.rst} (82%)
+ drivers/hwmon/acpi_power_meter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index ee090e51653a..4d5f5fec43a3 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -130,6 +130,7 @@ Hardware Monitoring Kernel Drivers
-    pcf8591
-    pmbus
-    powr1220
-+   pxe1610
-    pwm-fan
-    raspberrypi-hwmon
-    sch5627
-diff --git a/Documentation/hwmon/pxe1610 b/Documentation/hwmon/pxe1610.rst
-similarity index 82%
-rename from Documentation/hwmon/pxe1610
-rename to Documentation/hwmon/pxe1610.rst
-index 211cedeefb44..4f2388840d06 100644
---- a/Documentation/hwmon/pxe1610
-+++ b/Documentation/hwmon/pxe1610.rst
-@@ -2,19 +2,29 @@ Kernel driver pxe1610
- =====================
- 
- Supported chips:
-+
-   * Infineon PXE1610
-+
-     Prefix: 'pxe1610'
-+
-     Addresses scanned: -
-+
-     Datasheet: Datasheet is not publicly available.
- 
-   * Infineon PXE1110
-+
-     Prefix: 'pxe1110'
-+
-     Addresses scanned: -
-+
-     Datasheet: Datasheet is not publicly available.
- 
-   * Infineon PXM1310
-+
-     Prefix: 'pxm1310'
-+
-     Addresses scanned: -
-+
-     Datasheet: Datasheet is not publicly available.
- 
- Author: Vijay Khemka <vijaykhemka@fb.com>
-@@ -25,14 +35,19 @@ Description
- 
- PXE1610/PXE1110 are Multi-rail/Multiphase Digital Controllers
- and compliant to
--	-- Intel VR13 DC-DC converter specifications.
--	-- Intel SVID protocol.
-+
-+	- Intel VR13 DC-DC converter specifications.
-+	- Intel SVID protocol.
-+
- Used for Vcore power regulation for Intel VR13 based microprocessors
--	-- Servers, Workstations, and High-end desktops
-+
-+	- Servers, Workstations, and High-end desktops
- 
- PXM1310 is a Multi-rail Controller and it is compliant to
--	-- Intel VR13 DC-DC converter specifications.
--	-- Intel SVID protocol.
-+
-+	- Intel VR13 DC-DC converter specifications.
-+	- Intel SVID protocol.
-+
- Used for DDR3/DDR4 Memory power regulation for Intel VR13 and
- IMVP8 based systems
- 
-@@ -44,10 +59,10 @@ This driver does not probe for PMBus devices. You will have
- to instantiate devices explicitly.
- 
- Example: the following commands will load the driver for an PXE1610
--at address 0x70 on I2C bus #4:
-+at address 0x70 on I2C bus #4::
- 
--# modprobe pxe1610
--# echo pxe1610 0x70 > /sys/bus/i2c/devices/i2c-4/new_device
-+    # modprobe pxe1610
-+    # echo pxe1610 0x70 > /sys/bus/i2c/devices/i2c-4/new_device
- 
- It can also be instantiated by declaring in device tree
- 
-@@ -55,6 +70,7 @@ It can also be instantiated by declaring in device tree
- Sysfs attributes
- ----------------
- 
-+======================  ====================================
- curr1_label		"iin"
- curr1_input		Measured input current
- curr1_alarm		Current high alarm
-@@ -88,3 +104,4 @@ temp[1-3]_crit		Critical high temperature
- temp[1-3]_crit_alarm	Chip temperature critical high alarm
- temp[1-3]_max		Maximum temperature
- temp[1-3]_max_alarm	Chip temperature high alarm
-+======================  ====================================
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 6ba1a08253f0..ee0363e5be43 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -681,7 +681,7 @@ static int setup_attrs(struct
+acpi_power_meter_resource *resource)
+
+        if (resource->caps.flags & POWER_METER_CAN_CAP) {
+                if (!can_cap_in_hardware()) {
+-                       dev_err(&resource->acpi_dev->dev,
++                       dev_warn(&resource->acpi_dev->dev,
+                                "Ignoring unsafe software power cap!\n");
+                        goto skip_unsafe_cap;
+                }
 -- 
-2.21.0
-
+2.20.1
