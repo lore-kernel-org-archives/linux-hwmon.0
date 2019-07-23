@@ -2,171 +2,138 @@ Return-Path: <SRS0=cQ/s=VU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F06DC7618F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jul 2019 00:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F50C76190
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jul 2019 01:56:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 28B6421955
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jul 2019 00:34:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52F9F22296
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jul 2019 01:56:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="p0541Pby";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="jBPndC30"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DL1hJknP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729813AbfGWAeZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Jul 2019 20:34:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42162 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726770AbfGWAeZ (ORCPT
+        id S1732079AbfGWB4R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Jul 2019 21:56:17 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35704 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730759AbfGWB4R (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Jul 2019 20:34:25 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6N0ElE2016652;
-        Mon, 22 Jul 2019 17:33:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=4Tszt1wueN+u4x7Vd41pROxqw2h3Ubjgu5PvqSIcAb0=;
- b=p0541Pby89M8yVdZREy2dpsoG8mN9vm8Eyx/OkKuiRkCGexEultPSsVU7Y3tyxFWW4RP
- hao8LX7YhKp/OlKaZGc0ZnW12wM5HVYW7XksgVNUdOngLD2cSRe4NEBH1t3ai6ZGf/Rh
- NM/KQE1w68DoRPMN0KHUWPckKTXK0K2OwkY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2twg6a9sdv-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 22 Jul 2019 17:33:49 -0700
-Received: from ash-exhub202.TheFacebook.com (2620:10d:c0a8:83::6) by
- ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 22 Jul 2019 17:33:41 -0700
-Received: from NAM01-BY2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Mon, 22 Jul 2019 17:33:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UfGB9EurNZJIBvWAlTkxLF6gzvo3DaokbqnBbTTqq75noVQPpcG+YPsNvxOjy5AHcffLeLGPdKEmtOqYp2smWAc1f4NboaYFfPV3MgHP0wDmzFQBa5jNf49nP5N9fMO+PUbP+Ih6LwfEjAuNZJ2nJPSIC92PxdK/Lbk4cGHfppKz0HtY59QWQfFsaMY3rbTAXmz6gHMBPbKM5lzfCV+W8ZzyOQitj/Csu1fPO4KXWjLXzyTlnbayPcADx5RImqFdJ90sLCCWNPytkA2+zrHJvoMtYqIGnf1DvxXT2IMxhKTD82BpX7U8lPsKxzPC2ibz8BnRcLR8keIZXtP6yIZjNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Tszt1wueN+u4x7Vd41pROxqw2h3Ubjgu5PvqSIcAb0=;
- b=iaS5ZOzL+Ns4MQMpqVOXmEyVOjtjFo+WLH4gSUvGH2p2rYET4woR/aHQIw4y2SojF5bwHYSMSRshQCCLYWp8EkyLPeijwZOCTOqkia6Kvmm9QeCYWv75gXpm50d2PJfhsg8O5kreyUxPomlqAFvnPh/HXjo6laznFl8JGu9mKyPRO96TzjiutX32PaclPapZSIal0Q/zx8f+kOMyAzTGP2kcIza7fbFBs66d7+e4PSohEMaWiY2ij8LpoyWBmheMFUU4Ul+FtjwDC1ipu8dN06oym5lqRUdpqnVcHBJs+K5IGnVS1+6J3tVOt4yUwGmUXpA8wUdOk5qSKg9JoAxQ3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=fb.com;dmarc=pass action=none header.from=fb.com;dkim=pass
- header.d=fb.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Tszt1wueN+u4x7Vd41pROxqw2h3Ubjgu5PvqSIcAb0=;
- b=jBPndC30afjdvhMHi37Ls9Kt3U+mMzS5qRHa/M2AJ17iyP2vJW+YRRY6ZKJ7wO6O14DVXQuju/1UE6qZRcyMqQ/cqWV48HaGHPeV5RyEItYI3OEZAX78JwZ6o0N+1sgbtZSppUHx+eRSxdh69VGoFdg+RrHbVm2mU9Jy6gPQw3g=
-Received: from CY4PR15MB1269.namprd15.prod.outlook.com (10.172.177.11) by
- CY4PR15MB1447.namprd15.prod.outlook.com (10.172.155.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2073.14; Tue, 23 Jul 2019 00:33:40 +0000
-Received: from CY4PR15MB1269.namprd15.prod.outlook.com
- ([fe80::fce3:df83:1cbf:e65e]) by CY4PR15MB1269.namprd15.prod.outlook.com
- ([fe80::fce3:df83:1cbf:e65e%12]) with mapi id 15.20.2094.013; Tue, 23 Jul
- 2019 00:33:40 +0000
-From:   Vijay Khemka <vijaykhemka@fb.com>
-To:     Andrew Jeffery <andrew@aj.id.au>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
+        Mon, 22 Jul 2019 21:56:17 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w24so19939268plp.2;
+        Mon, 22 Jul 2019 18:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zdeVjAmSrferDd7T8hxsXdL0gr4l2xZ9zqxhMuU3IN4=;
+        b=DL1hJknP7dOl9CjvZmvtrrFSLoqcpqlmYiN2kZoCeny4znXR65bo8ivkfAHSiRM8Io
+         ciV5lejw6TLu5OncuR3jGwZHKmjXVnQpbP2HlGNCp5/18DPVq0rEGMRIk7NYUXKy9SQz
+         AE359Z3Ib+/HgL9RChLa4wN7g0Vmm3Ubqrjglfe5yCw7/Y4pGBbi5JwE9SQD6McdFs/Y
+         hdWQVG5eWZWRRNYC/wR0Z8IrBVFFuB8XzTj1CdTuQ/Wq0aynAWQ8W2wPHvlMahAq6O74
+         ESiKZsWT+vZH5vvL2fcLwpdekXs87EFTsfQkYJmbOPZc2f1wPEgwIucBUAyT7rABq7sx
+         WjEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zdeVjAmSrferDd7T8hxsXdL0gr4l2xZ9zqxhMuU3IN4=;
+        b=YfPZeZG24pGtObB/mZN5zZkf/uojQL6csCexQ/LaAAteX5GDu3f0iVDvRHjUTHzEaV
+         W6HxZ/6e/lrb7S0kI9NslUlgwVFuWcf6Z5SEL0MzqwojyuGJrvyLx+qzhvfXQ8f6Aa1l
+         PLT6UIAALf0MJsCi10fJ1kU/4sSFibnYvtNu5eXggq91XUbpEdtPuAgYNMJyUowoU5RY
+         EKymcM6D9W668VDJcYbaikmmdpWvQkhS9nONOg5YdFAWoNVOWjhO4XpB9ADzKg3bzhzY
+         7PyPyKeI8f/eL7ePxwmmNhx7L2BPp/IB6f5zuq5qmeVwoLIVT8RONbrVB8Ha4xdF/KEK
+         Uk2w==
+X-Gm-Message-State: APjAAAUAZe4/tHRZXuQFjEuhX0jWbSq4L7lS1Tfu/Dy+5r8N5Zgu00Kq
+        SLconY4po7Tm9VMDs3jmWPw=
+X-Google-Smtp-Source: APXvYqzKhsXfltpbJVJRV5E8B+0BKmnIOshdtuCdiVOvUrS5QqQf/Dmwvk82qizj9HvksQeH3+gOmg==
+X-Received: by 2002:a17:902:44f:: with SMTP id 73mr78998934ple.192.1563846976747;
+        Mon, 22 Jul 2019 18:56:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s11sm12752287pgc.78.2019.07.22.18.56.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 18:56:15 -0700 (PDT)
+Subject: Re: [PATCH] dt-bindings: hwmon: Add binding for pxe1610
+To:     Vijay Khemka <vijaykhemka@fb.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-CC:     "openbmc @ lists . ozlabs . org" <openbmc@lists.ozlabs.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "openbmc @ lists . ozlabs . org" <openbmc@lists.ozlabs.org>,
         Sai Dasari <sdasari@fb.com>
-Subject: Re: [PATCH 1/2] ARM: dts: aspeed: tiogapass: Add VR devices
-Thread-Topic: [PATCH 1/2] ARM: dts: aspeed: tiogapass: Add VR devices
-Thread-Index: AQHVQMVnpxBga6eEj0K8KvUFIYW0cKbXVMQA//+Q44A=
-Date:   Tue, 23 Jul 2019 00:33:40 +0000
-Message-ID: <69DFAF50-E181-4C7A-910A-C45E6E151F8E@fb.com>
 References: <20190722192451.1947348-1-vijaykhemka@fb.com>
- <802c5419-08ec-4a0e-8a50-ad4a1bbf7f3a@www.fastmail.com>
-In-Reply-To: <802c5419-08ec-4a0e-8a50-ad4a1bbf7f3a@www.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [2620:10d:c090:200::3:693e]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d2ea710e-27c5-4f8d-9bf6-08d70f0568b5
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR15MB1447;
-x-ms-traffictypediagnostic: CY4PR15MB1447:
-x-microsoft-antispam-prvs: <CY4PR15MB14472FE1516475D228CEC036DDC70@CY4PR15MB1447.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1091;
-x-forefront-prvs: 0107098B6C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(39860400002)(136003)(376002)(366004)(189003)(199004)(476003)(2201001)(6486002)(316002)(110136005)(81166006)(6506007)(5660300002)(186003)(46003)(86362001)(7736002)(81156014)(2906002)(54906003)(446003)(11346002)(8936002)(25786009)(71190400001)(2616005)(71200400001)(36756003)(8676002)(256004)(6436002)(14454004)(99286004)(305945005)(229853002)(102836004)(53936002)(2501003)(66556008)(6116002)(486006)(66946007)(6512007)(66446008)(66476007)(478600001)(7416002)(33656002)(64756008)(76116006)(76176011)(4326008)(6246003)(68736007)(91956017)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR15MB1447;H:CY4PR15MB1269.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: enj2984x9Rqw3JFvh3qO+/iVdfR7XIwqUS0AywnFi0oFIm7Wqqs+wNGXn21C1PDAVmNLrShwXjM7yKn2uuglI7fu2lDEdOQaxyzKvWgRGmEG5dwL3hnpxPD/JLCcuGeZP03pU7cSJfdaNds08Wd4fZJyoNj/FVIUBl9lKlcEBMVDdLBfeGuyOSKTGhd0N1F2I0F8iVNtTa2yO89XOsuJ9c4mHdRRZn1Lj8/7QZK4g8lrDmCE4jyx3Ym8U++tXd0nbLphBDfmASTo/DvquutmLaWEDLzJWHG0R/eKJuuVJiVEOxZACTzcplhuK9xzHXMEXFN8+zYC0gvG0Mrdjy466EilfQYWU/7hsI0FMzwP7YHSWndAQNzMnxoAYhqF0IhDlDfky0kE5ZI6gLcu2cf1EmVrA3uLhMJEQZ8+UsiOGA8=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <515ADAC7575AC24CABAC6D61534CEFDB@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <20190722192451.1947348-2-vijaykhemka@fb.com>
+ <20190722200622.GA20435@roeck-us.net>
+ <6E2B35D8-B538-4C96-B289-27A87ECD74DB@fb.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <d3137d6b-8bf8-4da6-9da7-a42b8bc68fbd@roeck-us.net>
+Date:   Mon, 22 Jul 2019 18:56:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2ea710e-27c5-4f8d-9bf6-08d70f0568b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2019 00:33:40.1030
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vijaykhemka@fb.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR15MB1447
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-22_16:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907230000
-X-FB-Internal: deliver
+In-Reply-To: <6E2B35D8-B538-4C96-B289-27A87ECD74DB@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQoNCu+7v09uIDcvMjIvMTksIDU6MTIgUE0sICJBbmRyZXcgSmVmZmVyeSIgPGFuZHJld0Bhai5p
-ZC5hdT4gd3JvdGU6DQoNCiAgICBIaSBWaWpheSwNCiAgICANCiAgICBBIGZldyBuaXRwaWNrcy4N
-CiAgICANCiAgICBPbiBUdWUsIDIzIEp1bCAyMDE5LCBhdCAwNToxMCwgVmlqYXkgS2hlbWthIHdy
-b3RlOg0KICAgID4gQWRkZXMNCiAgICANCiAgICBUeXBvOiBBZGRzDQpBY2sNCiAgICANCiAgICA+
-IFZvbHRhZ2UNCiAgICANCiAgICBVbm5lY2Vzc2FyeSBjYXBpdGFsaXNhdGlvbi4NCkFjaw0KICAg
-IA0KICAgID4gcmVndWxhdG9ycyBJbmZpbmVvbiBweGUxNjEwIGRldmljZXMgdG8gRmFjZWJvb2sN
-CiAgICA+IHRpb2dhcGFzcyBwbGF0Zm9ybS4NCiAgICA+IA0KICAgID4gU2lnbmVkLW9mZi1ieTog
-VmlqYXkgS2hlbWthIDx2aWpheWtoZW1rYUBmYi5jb20+DQogICAgPiAtLS0NCiAgICA+ICAuLi4v
-ZHRzL2FzcGVlZC1ibWMtZmFjZWJvb2stdGlvZ2FwYXNzLmR0cyAgICAgfCAzNiArKysrKysrKysr
-KysrKysrKysrDQogICAgPiAgMSBmaWxlIGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKykNCiAgICA+
-IA0KICAgID4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtZmFjZWJv
-b2stdGlvZ2FwYXNzLmR0cyANCiAgICA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJtYy1m
-YWNlYm9vay10aW9nYXBhc3MuZHRzDQogICAgPiBpbmRleCBjNDUyMWVkYTc4N2MuLmI3NzgzODMz
-YTU4YyAxMDA2NDQNCiAgICA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtZmFj
-ZWJvb2stdGlvZ2FwYXNzLmR0cw0KICAgID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVk
-LWJtYy1mYWNlYm9vay10aW9nYXBhc3MuZHRzDQogICAgPiBAQCAtMTQ0LDYgKzE0NCw0MiBAQA0K
-ICAgID4gICZpMmM1IHsNCiAgICA+ICAJc3RhdHVzID0gIm9rYXkiOw0KICAgID4gIAkvLyBDUFUg
-Vm9sdGFnZSByZWd1bGF0b3JzDQogICAgPiArCXZyQDQ4IHsNCiAgICANCiAgICBUaGUgcmVjb21t
-ZW5kZWQgZ2VuZXJpYyBuYW1lIGlzICdyZWd1bGF0b3InLCBzbyBlLmcuIHJlZ3VsYXRvckA0OA0K
-QWNrOiBTdWJtaXR0ZWQgdjIgZm9yIHRoaXMgcGF0Y2guDQogICAgDQogICAgPiArCQljb21wYXRp
-YmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4NDg+Ow0KICAgID4g
-Kwl9Ow0KICAgID4gKwl2ckA0YSB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmluZW9uLHB4
-ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4NGE+Ow0KICAgID4gKwl9Ow0KICAgID4gKwl2ckA1
-MCB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAgID4gKwkJ
-cmVnID0gPDB4NTA+Ow0KICAgID4gKwl9Ow0KICAgID4gKwl2ckA1MiB7DQogICAgPiArCQljb21w
-YXRpYmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4NTI+Ow0KICAg
-ID4gKwl9Ow0KICAgID4gKwl2ckA1OCB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmluZW9u
-LHB4ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4NTg+Ow0KICAgID4gKwl9Ow0KICAgID4gKwl2
-ckA1YSB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAgID4g
-KwkJcmVnID0gPDB4NWE+Ow0KICAgID4gKwl9Ow0KICAgID4gKwl2ckA2OCB7DQogICAgPiArCQlj
-b21wYXRpYmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4Njg+Ow0K
-ICAgID4gKwl9Ow0KICAgID4gKwl2ckA3MCB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmlu
-ZW9uLHB4ZTE2MTAiOw0KICAgID4gKwkJcmVnID0gPDB4NzA+Ow0KICAgID4gKwl9Ow0KICAgID4g
-Kwl2ckA3MiB7DQogICAgPiArCQljb21wYXRpYmxlID0gImluZmluZW9uLHB4ZTE2MTAiOw0KICAg
-ID4gKwkJcmVnID0gPDB4NzI+Ow0KICAgID4gKwl9Ow0KICAgID4gIH07DQogICAgPiAgDQogICAg
-PiAgJmkyYzYgew0KICAgID4gLS0gDQogICAgPiAyLjE3LjENCiAgICA+IA0KICAgID4NCiAgICAN
-Cg0K
+On 7/22/19 5:12 PM, Vijay Khemka wrote:
+> 
+> 
+> ﻿On 7/22/19, 1:06 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
+> 
+>      On Mon, Jul 22, 2019 at 12:24:48PM -0700, Vijay Khemka wrote:
+>      > Added new DT binding document for Infineon PXE1610 devices.
+>      >
+>      > Signed-off-by: Vijay Khemka <vijaykhemka@fb.com>
+>      > ---
+>      >  .../devicetree/bindings/hwmon/pxe1610.txt         | 15 +++++++++++++++
+>      >  1 file changed, 15 insertions(+)
+>      >  create mode 100644 Documentation/devicetree/bindings/hwmon/pxe1610.txt
+>      >
+>      > diff --git a/Documentation/devicetree/bindings/hwmon/pxe1610.txt b/Documentation/devicetree/bindings/hwmon/pxe1610.txt
+>      > new file mode 100644
+>      > index 000000000000..635daf4955db
+>      > --- /dev/null
+>      > +++ b/Documentation/devicetree/bindings/hwmon/pxe1610.txt
+>      > @@ -0,0 +1,15 @@
+>      > +pxe1610 properties
+>      > +
+>      > +Required properties:
+>      > +- compatible: Must be one of the following:
+>      > +	- "infineon,pxe1610" for pxe1610
+>      > +	- "infineon,pxe1110" for pxe1610
+>      > +	- "infineon,pxm1310" for pxm1310
+>      > +- reg: I2C address
+>      > +
+>      > +Example:
+>      > +
+>      > +vr@48 {
+>      > +	compatible = "infineon,pxe1610";
+>      > +	reg = <0x48>;
+>      > +};
+>      
+>      Wouldn't it be better to add this to
+>      ./Documentation/devicetree/bindings/trivial-devices.txt ?
+> Sure, I didn't know about this file. I will add and send another patch. It is
+> Documentation/devicetree/bindings/trivial-devices.yaml. How do I abandon
+> this patch or just leave it.
+>      
+
+When you send v2, just add the device to the trivial-devices file instead
+and describe the differences to v1 (ie this patch).
+
+Guenter
+
