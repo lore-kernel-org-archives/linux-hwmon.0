@@ -2,138 +2,81 @@ Return-Path: <SRS0=2746=VX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3108C76194
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 00:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4529C7618B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 09:22:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A7F9D22C7C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 00:10:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="EjeAwp0Z"
+	by mail.kernel.org (Postfix) with ESMTP id 808C42171F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 09:22:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfGZAKK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Jul 2019 20:10:10 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:37318 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbfGZAKK (ORCPT
+        id S1726026AbfGZJWD convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 Jul 2019 05:22:03 -0400
+Received: from skedge03.snt-world.com ([91.208.41.68]:45316 "EHLO
+        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfGZJWC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Jul 2019 20:10:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564099806; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gFaFrhEeyihyNbT3NtUBxEN4a+tGXeK6Vj+6otZDbtA=;
-        b=EjeAwp0Z/Iz3JRj9xNi/OYWvP2qoXOXLR2kbAZQ7FDIMPuZOSiF0qc+SgEr+9qWUDz7njx
-        9fSJSmwLBKrpzZNSM2vLDDU9dSKZqz4/qtlXGm6qm9sWN7tSWyprI05k88rU07mM/u+DSu
-        bZeGz0/dkH6Ou3QGiuwrGDsK3pWy2rI=
-Date:   Thu, 25 Jul 2019 20:09:41 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 02/11] MIPS: qi_lb60: Migrate to devicetree
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, od@zcrc.me,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1564099781.1699.0@crapouillou.net>
-In-Reply-To: <20190725234735.h7qmtt26qpkjw3n6@pburton-laptop>
-References: <20190725220215.460-1-paul@crapouillou.net>
-        <20190725220215.460-3-paul@crapouillou.net>
-        <20190725234735.h7qmtt26qpkjw3n6@pburton-laptop>
+        Fri, 26 Jul 2019 05:22:02 -0400
+X-Greylist: delayed 338 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Jul 2019 05:22:02 EDT
+Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge03.snt-world.com (Postfix) with ESMTPS id 4D79367A867;
+        Fri, 26 Jul 2019 11:16:22 +0200 (CEST)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
+ (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 26 Jul
+ 2019 11:16:21 +0200
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Fri, 26 Jul 2019 11:16:21 +0200
+From:   Gilles Buloz <Gilles.Buloz@kontron.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: nct7802.c bug : in4_input index is not 17 but 16
+Thread-Topic: nct7802.c bug : in4_input index is not 17 but 16
+Thread-Index: AQHVQ5LKiHtysIdnlkSqPbIDEqh97Q==
+Date:   Fri, 26 Jul 2019 09:16:21 +0000
+Message-ID: <5D3AC4E5.9050401@kontron.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux i686; rv:24.0) Gecko/20100101
+ Thunderbird/24.1.1
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <E096B804D68BAF449F29CBA0FD64E2AB@snt-world.com>
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: 4D79367A867.A9C17
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: gilles.buloz@kontron.com
+X-SnT-MailScanner-To: linux-hwmon@vger.kernel.org, linux@roeck-us.net
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi,
 
+Bug description :
+The "in4" related entries in structure nct7802_in_attrs start at index 16, not 17 (the comment is wrong here)
+Also nct7802_in_is_visible() should use 16 instead of 17 for the same reason (two occurences)
 
-Le jeu. 25 juil. 2019 =E0 19:47, Paul Burton <paul.burton@mips.com> a=20
-=E9crit :
-> Hi Paul,
->=20
-> On Thu, Jul 25, 2019 at 06:02:06PM -0400, Paul Cercueil wrote:
->>  Move all the platform data to devicetree.
->=20
-> Nice! :)
->=20
->>  The only bit dropped is the PWM beeper, which requires the PWM=20
->> driver
->>  to be updated. I figured it's okay to remove it here since it's=20
->> really
->>  a non-critical device, and it'll be re-introduced soon enough.
->=20
-> OK, I can see that being a price worth paying. Though it's possible to
-> include the binding at least for that in this series I'd be even
-> happier. Actually I see we already have
->=20
->   Documentation/devicetree/bindings/pwm/ingenic,jz47xx-pwm.txt
->=20
-> in mainline - what needs to change with it?
+Impact of this bug :
+- when RTD3_MD=11 (VSEN3 present), everything is as expected (no bug)
+- but if we have RTD3_MD!=11 (no VSEN3), we unexpectedly have a in4_input file under /sys and the command "sensors" displays the 
+in4_input. But as expected, we have no in4_min, in4_max, in4_alarm, in4_beep.
 
-The PWM driver will be updated to use the TCU clocks and the regmap=20
-provided
-by the TCU driver. The PWM node will be a sub-node of the TCU one.
+Best regards
 
-Additionally, there is this[1] ongoing discussion about PWM which makes
-me uneasy about how to write the binding. So I'd rather not rush it,
-because once the devicetree is written, it's ABI.
-
-[1]: https://lkml.org/lkml/2019/5/22/607
-
-
->>  +	spi {
->>  +		compatible =3D "spi-gpio";
->>  +		#address-cells =3D <1>;
->>  +		#size-cells =3D <0>;
->>  +
->>  +		sck-gpios =3D <&gpc 23 GPIO_ACTIVE_HIGH>;
->>  +		mosi-gpios =3D <&gpc 22 GPIO_ACTIVE_HIGH>;
->>  +		cs-gpios =3D <&gpc 21 GPIO_ACTIVE_LOW>;
->>  +		num-chipselects =3D <1>;
->>  +
->>  +		spi@0 {
->>  +			compatible =3D "ili8960";
->=20
-> Should this be "ilitek,ili8960"?
->=20
-> Is there a binding & driver for this submitted somewhere? If not then=20
-> do
-> we need this at all? It doesn't look like the existing platform data
-> would actually lead to a driver being loaded so I'm wondering if we=20
-> can
-> just drop this until such a driver (or at least a documented DT=20
-> binding)
-> exists.
-
-I can drop it. There is no driver for it, and I'm not even sure the LB60
-has a ILI8960 in the first place.
-
-
-> Thanks,
->     Paul
-
-=
-
+Gilles BULOZ
+Senior software(/hardware) engineer | R&D
+Kontron Modular Computers S.A.S.
