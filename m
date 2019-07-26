@@ -2,67 +2,88 @@ Return-Path: <SRS0=2746=VX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0344C7618F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 18:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D07C76191
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 18:45:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD81122BEF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 18:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564165521;
-	bh=b/XK1avinO8iWGgjOm5rDg/V6CpYBEJTsRga8ZNstOE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=ijvopOsogOjvhXUfObKqGEc/uGfvNSOsII/XDk19YbYmDTJRWvDxJYJKSKuwsDocP
-	 Frt54vC1G2uxhf+zeSZOekfT+hJFuv0Xi8owpvfZmaIfg1zwJU3GK1xntmHFUWjy7D
-	 zE/+g4BFvCLv5tBI/D8lttSGVGbnfOc66/yssERU=
+	by mail.kernel.org (Postfix) with ESMTP id 1B06E22CC0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 18:45:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727136AbfGZSZV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 Jul 2019 14:25:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56240 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726681AbfGZSZV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Jul 2019 14:25:21 -0400
-Subject: Re: [GIT PULL] hwmon fixes for v5.3-rc2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564165520;
-        bh=b/XK1avinO8iWGgjOm5rDg/V6CpYBEJTsRga8ZNstOE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=2YyVAch3banE+QIY7oHqFPzytm4sHNJ5AI09dbjFnLf+w0LXy1oyJ/QTQPczWVe2Q
-         jtYvMAXHte4E7lsddBtyaEZQ6t4p4Ai3fLscM62iDLQLoYfvHWvYzeAGVhGSruHGHB
-         PwW45ioqZTfC/5rQc5DVdBl4v1bmurmOFva8KerI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1564076444-24557-1-git-send-email-linux@roeck-us.net>
-References: <1564076444-24557-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1564076444-24557-1-git-send-email-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.3-rc2
-X-PR-Tracked-Commit-Id: 223b2b5030f370f219c23c2c4678b419a72434d9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6108cd475ca8323fa9d9b584c44a5229a9a26aa5
-Message-Id: <156416552020.19332.135687563371650641.pr-tracker-bot@kernel.org>
-Date:   Fri, 26 Jul 2019 18:25:20 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S2388151AbfGZSpb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 Jul 2019 14:45:31 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:43974 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387440AbfGZSpb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 26 Jul 2019 14:45:31 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id 05C2720117;
+        Fri, 26 Jul 2019 20:45:23 +0200 (CEST)
+Date:   Fri, 26 Jul 2019 20:45:22 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Artur Rojek <contact@artur-rojek.eu>,
+        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, od@zcrc.me,
+        linux-mtd@lists.infradead.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH 05/11] video/fbdev: Drop JZ4740 driver
+Message-ID: <20190726184522.GB14981@ravnborg.org>
+References: <20190725220215.460-1-paul@crapouillou.net>
+ <20190725220215.460-6-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190725220215.460-6-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=dqr19Wo4 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=ER_8r6IbAAAA:8
+        a=p6pI0oa4AAAA:8 a=7gkXJVJtAAAA:8 a=_OfsqKrkMx9ODVYiAzcA:9
+        a=CjuIK1q_8ugA:10 a=9LHmKk7ezEChjTCyhBa9:22 a=9cw2y2bKwytFd151gpuR:22
+        a=E9Po1WZjFZOl8hwRPBS3:22
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Thu, 25 Jul 2019 10:40:44 -0700:
+Hi Paul.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.3-rc2
+On Thu, Jul 25, 2019 at 06:02:09PM -0400, Paul Cercueil wrote:
+> The JZ4740 fbdev driver has been replaced with the ingenic-drm driver.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
+> ---
+>  drivers/video/fbdev/Kconfig     |   9 -
+>  drivers/video/fbdev/Makefile    |   1 -
+>  drivers/video/fbdev/jz4740_fb.c | 690 --------------------------------
+>  3 files changed, 700 deletions(-)
+>  delete mode 100644 drivers/video/fbdev/jz4740_fb.c
+Nice work of you and others involved.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6108cd475ca8323fa9d9b584c44a5229a9a26aa5
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+	Sam
