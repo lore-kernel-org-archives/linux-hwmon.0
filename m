@@ -2,81 +2,113 @@ Return-Path: <SRS0=2746=VX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4529C7618B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 09:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC6EFC7618B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 11:34:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 808C42171F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 09:22:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD12D22BE8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Jul 2019 11:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1564140841;
+	bh=5Gf3w/MVbMZMYK8bIC4gRWxvIqP0knReDLN6eNPEqKM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=jA1FVNNkLNJf6Roe+O0wkmJ5y37OTCoM2+N5R6shGwF3tE3a5B9XJgExWamCgka0V
+	 XBCPKnmu4KrI70kX8qRPG8jCwTIgaRssvSQQzDsDiInPp5yw0ZctCUxS/rhSljVx41
+	 Umh4YcWcsec6Ut+UTLOz61bEOddIEVmPtGCEWn2M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbfGZJWD convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 Jul 2019 05:22:03 -0400
-Received: from skedge03.snt-world.com ([91.208.41.68]:45316 "EHLO
-        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbfGZJWC (ORCPT
+        id S1725953AbfGZLeB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 26 Jul 2019 07:34:01 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:56194 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725903AbfGZLeB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Jul 2019 05:22:02 -0400
-X-Greylist: delayed 338 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Jul 2019 05:22:02 EDT
-Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by skedge03.snt-world.com (Postfix) with ESMTPS id 4D79367A867;
-        Fri, 26 Jul 2019 11:16:22 +0200 (CEST)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
- (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 26 Jul
- 2019 11:16:21 +0200
-Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
- sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
- 15.01.1713.004; Fri, 26 Jul 2019 11:16:21 +0200
-From:   Gilles Buloz <Gilles.Buloz@kontron.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: nct7802.c bug : in4_input index is not 17 but 16
-Thread-Topic: nct7802.c bug : in4_input index is not 17 but 16
-Thread-Index: AQHVQ5LKiHtysIdnlkSqPbIDEqh97Q==
-Date:   Fri, 26 Jul 2019 09:16:21 +0000
-Message-ID: <5D3AC4E5.9050401@kontron.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux i686; rv:24.0) Gecko/20100101
- Thunderbird/24.1.1
-x-originating-ip: [172.25.9.193]
-x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <E096B804D68BAF449F29CBA0FD64E2AB@snt-world.com>
-Content-Transfer-Encoding: 8BIT
+        Fri, 26 Jul 2019 07:34:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=5Gf3w/MVbMZMYK8bIC4gRWxvIqP0knReDLN6eNPEqKM=; b=xDuN5S0H1Z90uPzdw6R64amMy
+        gnMBiADJuFYD7QblFkqSVwB6tn/WF7BGvvo30k/J0aPMmA1HEiUnpoQWAzka7PaHDQ4Joyhpn28yE
+        EF2CUDXHQO0sCka8C6a7kNpPIaO1hAAThEsGBgsnR0u9wX9Txm8yC32A/rlHacR2+gL5o=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hqyTc-0001Mp-Sb; Fri, 26 Jul 2019 11:33:32 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 2EC622742B63; Fri, 26 Jul 2019 12:33:32 +0100 (BST)
+Date:   Fri, 26 Jul 2019 12:33:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, od@zcrc.me,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Subject: Re: [PATCH 04/11] ASoC: jz4740: Drop lb60 board code
+Message-ID: <20190726113332.GD4902@sirena.org.uk>
+References: <20190725220215.460-1-paul@crapouillou.net>
+ <20190725220215.460-5-paul@crapouillou.net>
 MIME-Version: 1.0
-X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: 4D79367A867.A9C17
-X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
-X-SnT-MailScanner-SpamCheck: 
-X-SnT-MailScanner-From: gilles.buloz@kontron.com
-X-SnT-MailScanner-To: linux-hwmon@vger.kernel.org, linux@roeck-us.net
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="P+33d92oIH25kiaB"
+Content-Disposition: inline
+In-Reply-To: <20190725220215.460-5-paul@crapouillou.net>
+X-Cookie: List at least two alternate dates.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
 
-Bug description :
-The "in4" related entries in structure nct7802_in_attrs start at index 16, not 17 (the comment is wrong here)
-Also nct7802_in_is_visible() should use 16 instead of 17 for the same reason (two occurences)
+--P+33d92oIH25kiaB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Impact of this bug :
-- when RTD3_MD=11 (VSEN3 present), everything is as expected (no bug)
-- but if we have RTD3_MD!=11 (no VSEN3), we unexpectedly have a in4_input file under /sys and the command "sensors" displays the 
-in4_input. But as expected, we have no in4_min, in4_max, in4_alarm, in4_beep.
+On Thu, Jul 25, 2019 at 06:02:08PM -0400, Paul Cercueil wrote:
+> The board now uses the simple-audio-card driver.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
 
-Best regards
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Gilles BULOZ
-Senior software(/hardware) engineer | R&D
-Kontron Modular Computers S.A.S.
+--P+33d92oIH25kiaB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl065QsACgkQJNaLcl1U
+h9AE2wf7BtVnDND6hd0UergsxXl5U3RJXvpiGgm/0yVLxuFEWPiM0EFqLGMWqoxE
+3l20EeSRpPmuyPH/GyBi4VYbtfk/QkickfZgmRTnK53CZURHGm15Dr9Prj6WJ5Vp
+H8QHogCOvGkoZGZh0E7Upp1Ofw05EC/ZStES9Ptw0TRNRENeP6SIRNDZJSBp7A5/
+TpEw+fvcu9R2andSKgKYEsZJhppM9oSRB6H4XRNM1Zxu6FTNfkmMG0ycTRjwJPvz
+ZXt6d0bq7TrYHkNajY1Wk1JwfM/wPlcW3xATpeBcp6RgazsL+i2T3fe2J541EGzJ
+KSs0o9NZufIfr1QaVv4L9HrMAsSE0A==
+=jJYl
+-----END PGP SIGNATURE-----
+
+--P+33d92oIH25kiaB--
