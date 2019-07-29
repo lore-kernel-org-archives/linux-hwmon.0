@@ -2,40 +2,44 @@ Return-Path: <SRS0=ZZSL=V2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1636C7618E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 17:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC7AC433FF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 18:08:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A36F4206E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 17:05:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="tGIbEOve"
+	by mail.kernel.org (Postfix) with ESMTP id D021B206DD
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 18:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728407AbfG2RFw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Jul 2019 13:05:52 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:39114 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728100AbfG2RFv (ORCPT
+        id S1729125AbfG2SIm convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Jul 2019 14:08:42 -0400
+Received: from lithops.sigma-star.at ([195.201.40.130]:42270 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727482AbfG2SIm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Jul 2019 13:05:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564419948; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6ct5sfA9aKEmr8hMlVPpfoX1PCyM/MxIecN3pTsFsbo=;
-        b=tGIbEOveRSTKHoZcpg/izsWRXZB3sJbHvlT52bDMqqruC35KNldtJ6Z1UumMknOBTmqxkS
-        L0QxFFWQrtfalRctJpTe/AFwPD5hYLu/miXPRxLnpxQZvMuW30gWEtzMHrKJVpyhyW4MrF
-        oruZx2tu/qGuw0Xp6xod1DxlnpMTbLU=
-Date:   Mon, 29 Jul 2019 13:05:21 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Mon, 29 Jul 2019 14:08:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id E832A60632C0;
+        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ehX5VuQgnl7G; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 70E276083139;
+        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XjNoOe8nauWF; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id D590B608311C;
+        Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
+Date:   Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,7 +49,6 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Lee Jones <lee.jones@linaro.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
         Sebastian Reichel <sre@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -54,61 +57,39 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         alsa-devel <alsa-devel@alsa-project.org>,
         linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
         DRI mailing list <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, od@zcrc.me,
-        linux-mtd@lists.infradead.org, dmaengine@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1564419921.1759.1@crapouillou.net>
-In-Reply-To: <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com>
-References: <20190725220215.460-1-paul@crapouillou.net>
-        <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com>
+        linux-kernel <linux-kernel@vger.kernel.org>, od@zcrc.me,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        dmaengine@vger.kernel.org, Artur Rojek <contact@artur-rojek.eu>
+Message-ID: <339409106.53616.1564423717793.JavaMail.zimbra@nod.at>
+In-Reply-To: <1564419921.1759.1@crapouillou.net>
+References: <20190725220215.460-1-paul@crapouillou.net> <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com> <1564419921.1759.1@crapouillou.net>
+Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF60 (Linux)/8.8.12_GA_3809)
+Thread-Topic: JZ4740 SoC cleanup
+Thread-Index: pyW9XJwx/g8VXIVrZC/ODWU++joHAw==
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Richard,
+----- Ursprüngliche Mail -----
+>> Was this series tested with the Ben Nanonote device?
+>> I have one of these and from time to time I upgrade the kernel on it.
+> 
+> Yes! Artur (Cc'd) tested it.
+> 
+> You can test it yourself, after merging this patchset with:
+> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/slave-dma.git
+> branch next,
+> git://git.freedesktop.org/git/drm-misc branch drm-misc-next.
+> 
+> These will be in 5.4-rc1.
 
+Awesome! Thanks a lot for cleaning this up.
 
-Le lun. 29 juil. 2019 =E0 7:23, Richard Weinberger=20
-<richard.weinberger@gmail.com> a =E9crit :
-> On Fri, Jul 26, 2019 at 12:02 AM Paul Cercueil <paul@crapouillou.net>=20
-> wrote:
->>=20
->>  Hi,
->>=20
->>  This patchset converts the Qi LB60 MIPS board to devicetree and=20
->> makes it
->>  use all the shiny new drivers that have been developed or updated
->>  recently.
->>=20
->>  All the crappy old drivers and custom code can be dropped since they
->>  have been replaced by better alternatives.
->>=20
->>  Some of these alternatives are not yet in 5.3-rc1 but have already=20
->> been
->>  accepted by their respective maintainer for inclusion in 5.4-rc1.
->>=20
->>  To upstream this patchset, I think that as soon as MIPS maintainers
->>  agree to take patches 01-03/11 and 11/11, the other patches can go
->>  through their respective maintainer's tree.
->=20
-> Was this series tested with the Ben Nanonote device?
-> I have one of these and from time to time I upgrade the kernel on it.
-
-Yes! Artur (Cc'd) tested it.
-
-You can test it yourself, after merging this patchset with:
-https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/slave-dma.git=20
-branch next,
-git://git.freedesktop.org/git/drm-misc branch drm-misc-next.
-
-These will be in 5.4-rc1.
-
-Cheers,
--Paul
-
-=
-
+Thanks,
+//richard
