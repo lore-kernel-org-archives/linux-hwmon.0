@@ -1,46 +1,50 @@
-Return-Path: <SRS0=/2mU=VY=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=ZZSL=V2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 248CBC7618F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 27 Jul 2019 03:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC74C76192
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 06:45:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4BC521721
-	for <linux-hwmon@archiver.kernel.org>; Sat, 27 Jul 2019 03:20:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="ORUDr6Cu"
+	by mail.kernel.org (Postfix) with ESMTP id 191722087B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jul 2019 06:45:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1564382720;
+	bh=OObfax840R6bh9rjFceVGkLchDJCG652v03RGds9gFA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=E5HGwJqYOcRweJTNMyEaWtdooMHb4e98wH97Y8bxRjNt+YFMqxmknPdpzmE6FoP7K
+	 rPsRuNSObHULJx2h8XeVL5K0x6HPq5fDZWg1hIYB8jvRkr/4Z68wHgWhyoJ50cTh4Z
+	 D93iYpXz0wlPripdsn1zzF1ZH98o4ay5EXS1EjpY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbfG0DUS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 26 Jul 2019 23:20:18 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:46860 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbfG0DUS (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 26 Jul 2019 23:20:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564197613; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KYjAC67ZYcDwtcnIBpp0BzLOMVIg3F/G58/tAsJimxs=;
-        b=ORUDr6CuY7vpgmdik7Ldm16UXWRFBr6Ee4ABQbj6tTfLvxBPwmhKA6bLpfcQxX+exzomjP
-        TDrZy1fzdFeQCmOXR6cIQOjxRV8Q06DX/kYE2jocswD/4JlyOxJP5kSuaV94FjAfM/JVnu
-        CJlyiJfb7/kikgxqr4FsYUPCYzzFns0=
-Date:   Fri, 26 Jul 2019 23:19:45 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
-To:     Sam Ravnborg <sam@ravnborg.org>
+        id S1726768AbfG2GpP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Jul 2019 02:45:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725934AbfG2GpP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Jul 2019 02:45:15 -0400
+Received: from localhost (unknown [122.178.221.187])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95086206BA;
+        Mon, 29 Jul 2019 06:45:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564382714;
+        bh=OObfax840R6bh9rjFceVGkLchDJCG652v03RGds9gFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LSbox5NdaQ3BOobR6anCjjqjcwe7a/gzulM+4ZQtjQyz1Il7lgEOjtDVlq5tfUGm/
+         fyMsz+iLv2edW7yTgjYigFt2ghcb7VqdnJtaNFRZkBflZooGnqSJ125aw/9/GzR4Zq
+         E/aKBut0usnFTitcTVppLrBXrAomIQENZkc/MA7s=
+Date:   Mon, 29 Jul 2019 12:14:02 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Lee Jones <lee.jones@linaro.org>,
@@ -49,95 +53,36 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Sebastian Reichel <sre@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, od@zcrc.me,
-        linux-mtd@lists.infradead.org, dmaengine@vger.kernel.org
-Message-Id: <1564197585.6472.0@crapouillou.net>
-In-Reply-To: <20190726184649.GC14981@ravnborg.org>
+        Mark Brown <broonie@kernel.org>, od@zcrc.me,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Subject: Re: [PATCH 06/11] dma: Drop JZ4740 driver
+Message-ID: <20190729064402.GG12733@vkoul-mobl.Dlink>
 References: <20190725220215.460-1-paul@crapouillou.net>
-        <20190726184649.GC14981@ravnborg.org>
+ <20190725220215.460-7-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190725220215.460-7-paul@crapouillou.net>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 25-07-19, 18:02, Paul Cercueil wrote:
+> The newer and better JZ4780 driver is now used to provide DMA
+> functionality on the JZ4740.
 
+Please change subjetc to dmaengine: xxx
 
-Le ven. 26 juil. 2019 =E0 14:46, Sam Ravnborg <sam@ravnborg.org> a=20
-=E9crit :
-> Hi Paul.
->=20
-> On Thu, Jul 25, 2019 at 06:02:04PM -0400, Paul Cercueil wrote:
->>  Hi,
->>=20
->>  This patchset converts the Qi LB60 MIPS board to devicetree and=20
->> makes it
->>  use all the shiny new drivers that have been developed or updated
->>  recently.
->>=20
->>  All the crappy old drivers and custom code can be dropped since they
->>  have been replaced by better alternatives.
->=20
-> The overall diffstat is missing.
-> Just for curiosity it would be nice to see what was dropped with this
-> patch.
->=20
-> 	Sam
+After that
 
-Diffstat:
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
- arch/mips/boot/dts/ingenic/jz4740.dtsi         |  84 ++++++++++++
- arch/mips/boot/dts/ingenic/qi_lb60.dts         | 295=20
-++++++++++++++++++++++++++++++++++++++++-
- arch/mips/configs/qi_lb60_defconfig            |  44 +++---
- arch/mips/include/asm/mach-jz4740/gpio.h       |  15 ---
- arch/mips/include/asm/mach-jz4740/jz4740_fb.h  |  58 --------
- arch/mips/include/asm/mach-jz4740/jz4740_mmc.h |  12 --
- arch/mips/include/asm/mach-jz4740/platform.h   |  26 ----
- arch/mips/jz4740/Makefile                      |   7 +-
- arch/mips/jz4740/board-qi_lb60.c               | 491=20
--------------------------------------------------------------------
- arch/mips/jz4740/platform.c                    | 250=20
------------------------------------
- arch/mips/jz4740/prom.c                        |   5 -
- arch/mips/jz4740/setup.c                       |   3 +-
- drivers/dma/Kconfig                            |   6 -
- drivers/dma/Makefile                           |   1 -
- drivers/dma/dma-jz4740.c                       | 623=20
----------------------------------------------------------------------------=
-----------
- drivers/hwmon/Kconfig                          |  10 --
- drivers/hwmon/Makefile                         |   1 -
- drivers/hwmon/jz4740-hwmon.c                   | 135=20
--------------------
- drivers/mfd/Kconfig                            |   9 --
- drivers/mfd/Makefile                           |   1 -
- drivers/mfd/jz4740-adc.c                       | 324=20
----------------------------------------------
- drivers/mtd/nand/raw/ingenic/Kconfig           |   7 -
- drivers/mtd/nand/raw/ingenic/Makefile          |   1 -
- drivers/mtd/nand/raw/ingenic/jz4740_nand.c     | 536=20
---------------------------------------------------------------------------
- drivers/power/supply/Kconfig                   |  11 --
- drivers/power/supply/Makefile                  |   1 -
- drivers/power/supply/jz4740-battery.c          | 421=20
-----------------------------------------------------------
- drivers/video/fbdev/Kconfig                    |   9 --
- drivers/video/fbdev/Makefile                   |   1 -
- drivers/video/fbdev/jz4740_fb.c                | 690=20
----------------------------------------------------------------------------=
---------------------
- sound/soc/jz4740/Kconfig                       |  25 +---
- sound/soc/jz4740/Makefile                      |   5 -
- sound/soc/jz4740/qi_lb60.c                     | 106 ---------------
- 33 files changed, 404 insertions(+), 3809 deletions(-)
-
-
-=
-
+-- 
+~Vinod
