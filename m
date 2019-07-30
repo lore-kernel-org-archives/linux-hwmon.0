@@ -2,138 +2,156 @@ Return-Path: <SRS0=hDS8=V3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2372C31E40
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Jul 2019 17:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F29C8C0650F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Jul 2019 18:20:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B20AD20C01
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Jul 2019 17:44:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAB7220C01
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Jul 2019 18:20:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=wavecomp.com header.i=@wavecomp.com header.b="i7SNH2Bm"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NUZDgnrn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728907AbfG3Rnq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Jul 2019 13:43:46 -0400
-Received: from mail-eopbgr680132.outbound.protection.outlook.com ([40.107.68.132]:37763
-        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726432AbfG3Rnp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Jul 2019 13:43:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NHKJ6MBBxAKF2whOmS5Bk+w3OAIwjjgysjlr6J1nJOVUseyb4tG85iGdf/0/Xq1fderjhEdjjcRgEgfKWY48KVrA593Y2nr3Ib0OQkkgwEloRIl3ukjGFRGgFxFNlAdfRLrLgES94xso8iDtqmJMCpeabckHya7EblYqjWwcGefS1oH/01ODc2Hh97AJDsMTeHGKOJ0A2zREuIVjc5t5AO4n/qxV9loso+thEoDcqoYQnL8KVmP8ihT+F49H4gQiqGnW7ipQtR/v9r9Gqbg4TczjBwEi+VopmlvhvO0JmkNol3ik4t7d4zToNGgAkVGArLjEaaoz8DqcqohU9vvnVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeuDWkU/r6uI1NbxsCKBz6y/i7szA6zYECYktHMV9VE=;
- b=LGSDOMsaddMIttFo5j3EHF8MTIyydjwGuFL7Cv3fCBXZEd4pxlYK+MgVtVJZGnn4radjSC7ZjSiW3uQTDXkPi92TebjCuBBz/Ohs+Lpw5+WZSXBulLhUpWvDm7WE75zXXlwUFL3Xfr/kZZmFJBZQuWa5XOQXDnSn4fV7pn2/ZOoliy/9C5VqCI5TVMVn8+ObIJEWP1X2ITijYN64152DTAhAG2JYDheIhVUOp4ln98vYnAci9+jWXZ02TT9XLl07u/TDY95atyRJv/w6Kuujsbxi/+K3Ua1qu8tCcDpyKggYZEx+pdK71kzeT7J6Srg26uM5ZqIbocDrS0oaHlqjzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeuDWkU/r6uI1NbxsCKBz6y/i7szA6zYECYktHMV9VE=;
- b=i7SNH2BmvkwNKet+lwUtURmZlSwqXCIdAZHVCKHrdDhRPt+/xdKsdYyPW7r1VTcH1DPJCc0V2O6BlkUaULPeyE1OnsieiS8jzeKE6eFBC2r2HbQVMDrAb7S0HyuZJTuD5t1gVQze/a92AUjC+qyt7XpERloQWlvSnusZCNgSgjI=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1088.namprd22.prod.outlook.com (10.174.169.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.15; Tue, 30 Jul 2019 17:43:39 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::105a:1595:b6ef:cbdf]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::105a:1595:b6ef:cbdf%4]) with mapi id 15.20.2115.005; Tue, 30 Jul 2019
- 17:43:39 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S2387888AbfG3SQP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Jul 2019 14:16:15 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45333 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387870AbfG3SQO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 30 Jul 2019 14:16:14 -0400
+Received: by mail-pf1-f193.google.com with SMTP id r1so30253365pfq.12
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jul 2019 11:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qJlVBcFw6cgQmE2TcJCLwuGNy4X0qqoZ4PXxrXo9yOs=;
+        b=NUZDgnrnyDsEg+yvm339bqt4rMbfBLxY/tz2XFFLV3q1UxiT+G/pmXejX0awBm9gRQ
+         YA4PnbOkaRVFki/qNwU54yjzc6A3SL6iIIHXUkYLwnr+x25aow3eHDRXXF7IJPnMwNae
+         7tc8162WwXeDjKZAehgf5qPfDRSrUdgEGlJx0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qJlVBcFw6cgQmE2TcJCLwuGNy4X0qqoZ4PXxrXo9yOs=;
+        b=AQ9UYPo5umpruZDcsSutB5eSeMSK9erNr5tUTxcPaxL0gAfdAzP/C+TroxWXz/SOfj
+         R60CLtcN5DvSOtbnA5MeVghPULWxoroyRESHTgKarR9nkPhusbSjp8OVK/U2O9Np6XlH
+         U+KO0jzzRnwU+oCYSjGmsDrrMqQcKn4vS99wzLb7nCkZp9HWkKKu03QOyGmNOs2M/abf
+         B+PcpeYQfc5Uco392zaLS532sgVHb4luNokHxniU/YdQD7YJAfPsTznpB+VYrRojcqZm
+         OT98rZE+1anQ9md1dF8OtS9qoFQnucyI7aT8UJvImNQgECVjioyCllb9wsqOHJ9vWEVn
+         d3Wg==
+X-Gm-Message-State: APjAAAWwscNVcVUHZQ1wfkgRED3bwJm4VdPwZxhmQEzDBJcU70pP/zqi
+        332d+E+gW1zV0p1fDSlUwwOyuvqbTsI=
+X-Google-Smtp-Source: APXvYqwxMVIkSlnyMuemYnqyVg6VCF6ylAjcO36mqfgO0GWe5e7cRnDDEAeUwhteeNYBMdgj63U28Q==
+X-Received: by 2002:a17:90a:bc42:: with SMTP id t2mr117788662pjv.121.1564510573785;
+        Tue, 30 Jul 2019 11:16:13 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.12
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:13 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, "od@zcrc.me" <od@zcrc.me>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 01/11] MIPS: DTS: jz4740: Add missing nodes
-Thread-Topic: [PATCH 01/11] MIPS: DTS: jz4740: Add missing nodes
-Thread-Index: AQHVRv5SC/UNRQ0j0kSBIM7bj9GbPQ==
-Date:   Tue, 30 Jul 2019 17:43:39 +0000
-Message-ID: <MWHPR2201MB127769D32FAA4944F9A791CDC1DC0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190725220215.460-2-paul@crapouillou.net>
-In-Reply-To: <20190725220215.460-2-paul@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR06CA0037.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::14) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5ced0446-cc98-4527-5f3b-08d71515748d
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1088;
-x-ms-traffictypediagnostic: MWHPR2201MB1088:
-x-microsoft-antispam-prvs: <MWHPR2201MB1088E78D70BEA742AA3314F8C1DC0@MWHPR2201MB1088.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0114FF88F6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(39850400004)(346002)(376002)(396003)(189003)(199004)(7736002)(6436002)(52536014)(386003)(486006)(74316002)(6116002)(446003)(9686003)(11346002)(305945005)(5660300002)(55016002)(99286004)(66446008)(66946007)(53936002)(64756008)(66556008)(66476007)(4326008)(6246003)(25786009)(3846002)(71200400001)(66066001)(71190400001)(7416002)(8676002)(6916009)(76176011)(81156014)(52116002)(54906003)(186003)(44832011)(229853002)(476003)(4744005)(8936002)(81166006)(68736007)(102836004)(7696005)(2906002)(6506007)(256004)(33656002)(316002)(478600001)(42882007)(26005)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1088;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: M1ii7ytiPwEAhGxpkKFJMpHe2XzBeS7zQo8zdz0nU6lzNoPhTDPxi99uwN3zo6hj9Pf9bP6HmkFKqesN5qbGRkV62/cGIFXHZ4SMNRoknnIqBQpe/pVjzrWctk6h9ekEnNE52Ds9pOpaWUdLKtBEIxJcfHC/oednXE1SCLWfWbz9JEx20vINHkZxV6hZv4VEO1MtUWO3ZaVMpBydPQ5xY/118hYTVWBZNpZKiLitJ/Vqnoo/9aTIeLwkbT6Zf/h6qhINuXuVCBCLW9F2S5sZ8F+ZjwH4x49PPJ2FCQCRrwTg1v6WcWVx6jo4FwMVqksuvb2vWFBTKFvlVqiCkPpi8P8i/psIIiSVSUhaA8/yojZJhULM7BCQTS2saQsvSi3tPPo6GY9lGiVe4NPTjpQYrKaYJceIgyb4ahQghUs3/Z4=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        linux-hwmon@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 17/57] hwmon: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:17 -0700
+Message-Id: <20190730181557.90391-18-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ced0446-cc98-4527-5f3b-08d71515748d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2019 17:43:39.3095
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1088
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-Paul Cercueil wrote:
-> Add nodes for the MMC, AIC, ADC, CODEC, MUSB, LCD, memory,
-> and BCH controllers.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Tested-by: Artur Rojek <contact@artur-rojek.eu>
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
 
-Applied to mips-next.
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
 
-Thanks,
-    Paul
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+While we're here, remove braces on if statements that only have one
+statement (manually).
+
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Please apply directly to subsystem trees
+
+ drivers/hwmon/jz4740-hwmon.c    | 5 +----
+ drivers/hwmon/npcm750-pwm-fan.c | 4 +---
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/hwmon/jz4740-hwmon.c b/drivers/hwmon/jz4740-hwmon.c
+index bec5befd1d8b..47bed41b55a1 100644
+--- a/drivers/hwmon/jz4740-hwmon.c
++++ b/drivers/hwmon/jz4740-hwmon.c
+@@ -93,11 +93,8 @@ static int jz4740_hwmon_probe(struct platform_device *pdev)
+ 	hwmon->cell = mfd_get_cell(pdev);
+ 
+ 	hwmon->irq = platform_get_irq(pdev, 0);
+-	if (hwmon->irq < 0) {
+-		dev_err(&pdev->dev, "Failed to get platform irq: %d\n",
+-			hwmon->irq);
++	if (hwmon->irq < 0)
+ 		return hwmon->irq;
+-	}
+ 
+ 	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hwmon->base))
+diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
+index 09aaefa6fdb8..11a28609da3c 100644
+--- a/drivers/hwmon/npcm750-pwm-fan.c
++++ b/drivers/hwmon/npcm750-pwm-fan.c
+@@ -967,10 +967,8 @@ static int npcm7xx_pwm_fan_probe(struct platform_device *pdev)
+ 		spin_lock_init(&data->fan_lock[i]);
+ 
+ 		data->fan_irq[i] = platform_get_irq(pdev, i);
+-		if (data->fan_irq[i] < 0) {
+-			dev_err(dev, "get IRQ fan%d failed\n", i);
++		if (data->fan_irq[i] < 0)
+ 			return data->fan_irq[i];
+-		}
+ 
+ 		sprintf(name, "NPCM7XX-FAN-MD%d", i);
+ 		ret = devm_request_irq(dev, data->fan_irq[i], npcm7xx_fan_isr,
+-- 
+Sent by a computer through tubes
+
