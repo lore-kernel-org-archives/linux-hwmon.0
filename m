@@ -2,444 +2,103 @@ Return-Path: <SRS0=YQyO=WD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE2D1C433FF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Aug 2019 13:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD092C433FF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Aug 2019 21:58:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC4B521E6E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Aug 2019 13:54:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8D3B214C6
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Aug 2019 21:58:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ruQatIm0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+iTI8A4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387802AbfHGNyC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Aug 2019 09:54:02 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33406 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729743AbfHGNyC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Aug 2019 09:54:02 -0400
-Received: by mail-pl1-f195.google.com with SMTP id c14so40855449plo.0;
-        Wed, 07 Aug 2019 06:54:01 -0700 (PDT)
+        id S1730045AbfHGV6j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Aug 2019 17:58:39 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45210 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729982AbfHGV6j (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Aug 2019 17:58:39 -0400
+Received: by mail-pg1-f194.google.com with SMTP id o13so42856949pgp.12;
+        Wed, 07 Aug 2019 14:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GCFIgMhhIBb816o8JYam+niQpT+/Nq9zbb11cr3xj3s=;
-        b=ruQatIm034ezo1oCgAPxbwXp5V07alI5xx+RUAltngtCTXuyvNViUU5TLaw/zQY7EL
-         yvDj3/Jz4jjdkRbcCwyjMGqF7soJX8ilShZTI3ggarki2eeiWdcgOG/1/5ui/KnPgV7f
-         SDM1WvcnPRa8SKjYJ5f9rfUpsctuK6J7oetbFXYyjhEZn5CvfuAwk8JpC+DZ9BpiVEDi
-         aO0E0ttoRQSTtkcNWXeripVeQR2fKP+zya3J5YmKHkjq0grv8XexrsG0+B/K74dcnGSP
-         WWGMq+JBt+bKkGrhrzJHP/pwCucjIC+tiw9OZ3KQa404ShRn/ZdXC3K5ddIIQkvBIel9
-         DOiw==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=uIeRwaRIiqOqi4dTrdidnKMKO6PgxCzxKDJrRVdKeuM=;
+        b=K+iTI8A4/vw5vwjYLchA92CdhPvkoYtq0ubnVX4cw4ann8i8mcEXeicaqDLHGiFq3H
+         //HgH7Ig4hb2JHjuMUW1wXCZfk1gbHg1n3K02Dr0KePTKB5wZRhzw5yTfkKU8R/xfqNi
+         zAofO3ymOeUXwtRRjxF0vbIxB5Zk4WQOP9pxYiWHsM3RFgADPge+w/99YYf41p1jXMan
+         eYvcGq2yMYwetf6v2Gmfgv/DeMx2gqxDlcjDSUQRMvMi9TPdGaPbEHxzi9Vs+MFLp6m1
+         l2QE2c4Fr5ALLvwJjE6MAsxYjmhvvavZ43E2dnSRNwD6HYNbOa+Dj90O+R+LmSmMQ8Pf
+         JnpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GCFIgMhhIBb816o8JYam+niQpT+/Nq9zbb11cr3xj3s=;
-        b=QqlvWoyovZIc50LPvVBCHPmaYue8HsYt5gSNMb0jVQCH44GAa8Vy5DiV8mkm6p4KRq
-         bdj0mtbMVlbl8gVm81AR3Fj+cjeQ6ExCEdI0Baz3oFZmyKk2i3700Om1fvDL3D8HvLZp
-         MHDXhdrINVeh40BTGktCp84GZuWWpafrd0+hjdQOecq2wKbMei842VmMoix/2pLwUf3D
-         gAHDbXUF6RxAEhIcR2SuX1XmSeNiNVXxql2DLgl2jkf1ae139Ffqmw9bT5mKeN6xB5N4
-         SH+f3rWFN8kqosJCJl5VmG+5jx2f0QwQE7q1bPX8LbZJMtvb0Dbw7thyu6QHbhYKS6OQ
-         FhMw==
-X-Gm-Message-State: APjAAAXqiqvQ0K1/nzHru27vC7Tf4ZnzDZTtovs/1+pqpBFHq94AGRa0
-        QhbaaNa1dW+M4nro2pCwY6Dl2B9g
-X-Google-Smtp-Source: APXvYqwkO9oJCiXmCJNEo+iannWgdWAO/FJ3KP6LezpKhku8dNNoLd6+3SunHt4iSk0tnM3jiw8/Ug==
-X-Received: by 2002:a63:3147:: with SMTP id x68mr8064987pgx.212.1565186041122;
-        Wed, 07 Aug 2019 06:54:01 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=uIeRwaRIiqOqi4dTrdidnKMKO6PgxCzxKDJrRVdKeuM=;
+        b=da4UhCuls59VOoWUUU4AwHUaGsr+7dhCE80VFY4y2c74JKGpY5H8sOHSAIWMLV8NDC
+         h6DlEY7WjvhJS2EBYlFn5MMlMCFBtCkPRbdTp9kaqLlhxY1DUuakWWuT55Ji9rsZwU6z
+         FwKiMqRrbfFNulk66POg0D+BNYDOdqdXmJPgd+pcMskg4u4yn6xENkwNUiD5ozfKqXrJ
+         B8No3/ByhXf0hdXCpPAWvqoWuY88kzXWaoFQ9ZuPYJ/1EHbNSUnE4uhuINf3XfiVPPRE
+         jwC6S3802aGIlpfcid5sBJ+gfv/lIHqZl20azhDabt9CYS+CW+nnltaghRi6nmT7GfTT
+         78jg==
+X-Gm-Message-State: APjAAAWs9ZgI2yWqL4AU9x7igyuj3NjYc84yfJrIiPTod53wI+dGczCd
+        tb/6CWtDajoawR2GO6eiydX0ePGT
+X-Google-Smtp-Source: APXvYqzxxy3akodFeVrbjOVv/thI20P8HvBuyhwYaMoDkKyd/v1+YtUgorzhevyiYsfIGusZKlrNAA==
+X-Received: by 2002:a63:4c5a:: with SMTP id m26mr9467336pgl.270.1565215118345;
+        Wed, 07 Aug 2019 14:58:38 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z13sm92285059pfa.94.2019.08.07.06.54.00
+        by smtp.gmail.com with ESMTPSA id o14sm181941539pfh.153.2019.08.07.14.58.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Aug 2019 06:54:00 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 06:53:59 -0700
+        Wed, 07 Aug 2019 14:58:37 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Iker Perez <iker.perez@codethink.co.uk>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] hwmon: (lm75) Create structure to save all the
- configuration parameters.
-Message-ID: <20190807135359.GB11447@roeck-us.net>
-References: <20190806091107.13322-1-iker.perez@codethink.co.uk>
- <20190806091107.13322-2-iker.perez@codethink.co.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190806091107.13322-2-iker.perez@codethink.co.uk>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.3-rc4
+Date:   Wed,  7 Aug 2019 14:58:35 -0700
+Message-Id: <1565215115-11064-1-git-send-email-linux@roeck-us.net>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 10:11:04AM +0100, Iker Perez wrote:
-> From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> 
-> * Add to lm75_data kind field to store the kind of device the driver is
->   working with.
-> * Add an structure to store the configuration parameters of all the
->   supported devices.
-> * Delete resolution_limits from lm75_data and include them in the structure
->   described above.
-> * Add a pointer to the configuration parameters structure to be used as a
->   reference to obtain the parameters.
-> * Delete switch-case approach to get the device configuration parameters.
-> * The structure is cleaner and easier to maintain.
-> 
-> Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> ---
->  drivers/hwmon/lm75.c | 275 +++++++++++++++++++++++++++++++--------------------
->  1 file changed, 169 insertions(+), 106 deletions(-)
-> 
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index a2d3f2ce3e1d..1c012301b6ca 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -18,7 +18,6 @@
->  #include <linux/regmap.h>
->  #include "lm75.h"
->  
-> -
->  /*
->   * This driver handles the LM75 and compatible digital temperature sensors.
->   */
-> @@ -51,6 +50,25 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->  	tmp75c,
->  };
->  
-> +/**
-> + * struct lm75_params - lm75 configuration parameters.
-> + * @set_mask:		Bits to set in cofiguration register when configuring
-> + *			the chip.
-> + * @clr_mask:		Bits to clear in configuration register when configuring
-> + *			the chip.
-> + * @resolution:		Number of bits to represent the temperatue value.
-> + * @resolution_limits:	Resolution range.
+Hi Linus,
 
-I had to look this up to remember. Turns out this isn't the resolution range.
-Please replace the description with something like:
+Please pull hwmon fixes for Linux v5.3-rc4 from signed tag:
 
-				Limit register resolution.
-				Optional. Should be set if the resolution of
-				limit registers does not match the resolution
-				of the temperature register.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.3-rc4
 
-> + * default_sample_time:	Sample time to be set by default.
-> + */
-> +
-> +struct lm75_params {
-> +	u8		set_mask;
-> +	u8		clr_mask;
-> +	u8		default_resolution;
-> +	u8		resolution_limits;
-> +	unsigned int	default_sample_time;
-> +};
-> +
->  /* Addresses scanned */
->  static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
->  					0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
-> @@ -63,15 +81,147 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
->  
->  /* Each client has this additional data */
->  struct lm75_data {
-> -	struct i2c_client	*client;
-> -	struct regmap		*regmap;
-> -	u8			orig_conf;
-> -	u8			resolution;	/* In bits, between 9 and 16 */
-> -	u8			resolution_limits;
-> -	unsigned int		sample_time;	/* In ms */
-> +	struct i2c_client		*client;
-> +	struct regmap			*regmap;
-> +	u8				orig_conf;
-> +	u8				current_conf;
-> +	u8				resolution;	/* In bits, 9 to 16 */
-> +	unsigned int			sample_time;	/* In ms */
-> +	enum lm75_type			kind;
-> +	const struct lm75_params	*params;
->  };
->  
->  /*-----------------------------------------------------------------------*/
-> +/* The structure below stores the configuration values of the supported devices.
-> + * In case of being supported multiple configurations, the default one must
-> + * always be the first element of the array
-> + */
-> +static const struct lm75_params device_params[] = {
-> +	[adt75] = {
-> +		.clr_mask = 1 << 5,	/* not one-shot mode */
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 8,
-> +	},
-> +	[ds1775] = {
-> +		.clr_mask = 3 << 5,
-> +		.set_mask = 2 << 5,	/* 11-bit mode */
-> +		.default_resolution = 11,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[ds75] = {
-> +		.clr_mask = 3 << 5,
-> +		.set_mask = 2 << 5,	/* 11-bit mode */
-> +		.default_resolution = 11,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[stds75] = {
-> +		.clr_mask = 3 << 5,
-> +		.set_mask = 2 << 5,	/* 11-bit mode */
-> +		.default_resolution = 11,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[stlm75] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 5,
-> +	},
-> +	[ds7505] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +	},
-> +	[g751] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[lm75] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[lm75a] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[lm75b] = {
-> +		.default_resolution = 11,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +	},
-> +	[max6625] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +	},
-> +	[max6626] = {
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +		.resolution_limits = 9,
-> +	},
-> +	[max31725] = {
-> +		.default_resolution = 16,
-> +		.default_sample_time = MSEC_PER_SEC / 8,
-> +	},
-> +	[tcn75] = {
-> +		.default_resolution = 9,
-> +		.default_sample_time = MSEC_PER_SEC / 8,
-> +	},
-> +	[mcp980x] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode */
-> +		.default_resolution = 12,
-> +		.resolution_limits = 9,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[tmp100] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode */
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[tmp101] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode */
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC,
-> +	},
-> +	[tmp112] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* no one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +	},
-> +	[tmp105] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[tmp175] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[tmp275] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[tmp75] = {
-> +		.set_mask = 3 << 5,	/* 12-bit mode */
-> +		.clr_mask = 1 << 7,	/* not one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 2,
-> +	},
-> +	[tmp75b] = { /* not one-shot mode, Conversion rate 37Hz */
-> +		.clr_mask = 1 << 7 | 3 << 5,
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 37,
-> +	},
-> +	[tmp75c] = {
-> +		.clr_mask = 1 << 5,	/*not one-shot mode*/
-> +		.default_resolution = 12,
-> +		.default_sample_time = MSEC_PER_SEC / 4,
-> +	}
-> +};
->  
->  static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
->  {
-> @@ -146,8 +296,8 @@ static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
->  	 * Resolution of limit registers is assumed to be the same as the
->  	 * temperature input register resolution unless given explicitly.
->  	 */
-> -	if (data->resolution_limits)
-> -		resolution = data->resolution_limits;
-> +	if (data->params->resolution_limits)
-> +		resolution = data->params->resolution_limits;
->  	else
->  		resolution = data->resolution;
->  
-> @@ -239,7 +389,6 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	struct device *hwmon_dev;
->  	struct lm75_data *data;
->  	int status, err;
-> -	u8 set_mask, clr_mask;
->  	int new;
->  	enum lm75_type kind;
->  
-> @@ -257,6 +406,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  		return -ENOMEM;
->  
->  	data->client = client;
-> +	data->kind = kind;
->  
->  	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
->  	if (IS_ERR(data->regmap))
-> @@ -265,109 +415,22 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	/* Set to LM75 resolution (9 bits, 1/2 degree C) and range.
->  	 * Then tweak to be more precise when appropriate.
->  	 */
-> -	set_mask = 0;
-> -	clr_mask = LM75_SHUTDOWN;		/* continuous conversions */
-> -
-> -	switch (kind) {
-> -	case adt75:
-> -		clr_mask |= 1 << 5;		/* not one-shot mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 8;
-> -		break;
-> -	case ds1775:
-> -	case ds75:
-> -	case stds75:
-> -		clr_mask |= 3 << 5;
-> -		set_mask |= 2 << 5;		/* 11-bit mode */
-> -		data->resolution = 11;
-> -		data->sample_time = MSEC_PER_SEC;
-> -		break;
-> -	case stlm75:
-> -		data->resolution = 9;
-> -		data->sample_time = MSEC_PER_SEC / 5;
-> -		break;
-> -	case ds7505:
-> -		set_mask |= 3 << 5;		/* 12-bit mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	case g751:
-> -	case lm75:
-> -	case lm75a:
-> -		data->resolution = 9;
-> -		data->sample_time = MSEC_PER_SEC / 2;
-> -		break;
-> -	case lm75b:
-> -		data->resolution = 11;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	case max6625:
-> -		data->resolution = 9;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	case max6626:
-> -		data->resolution = 12;
-> -		data->resolution_limits = 9;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	case max31725:
-> -		data->resolution = 16;
-> -		data->sample_time = MSEC_PER_SEC / 8;
-> -		break;
-> -	case tcn75:
-> -		data->resolution = 9;
-> -		data->sample_time = MSEC_PER_SEC / 8;
-> -		break;
-> -	case pct2075:
-> -		data->resolution = 11;
-> -		data->sample_time = MSEC_PER_SEC / 10;
-> -		break;
-> -	case mcp980x:
-> -		data->resolution_limits = 9;
-> -		/* fall through */
-> -	case tmp100:
-> -	case tmp101:
-> -		set_mask |= 3 << 5;		/* 12-bit mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC;
-> -		clr_mask |= 1 << 7;		/* not one-shot mode */
-> -		break;
-> -	case tmp112:
-> -		set_mask |= 3 << 5;		/* 12-bit mode */
-> -		clr_mask |= 1 << 7;		/* not one-shot mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	case tmp105:
-> -	case tmp175:
-> -	case tmp275:
-> -	case tmp75:
-> -		set_mask |= 3 << 5;		/* 12-bit mode */
-> -		clr_mask |= 1 << 7;		/* not one-shot mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 2;
-> -		break;
-> -	case tmp75b:  /* not one-shot mode, Conversion rate 37Hz */
-> -		clr_mask |= 1 << 7 | 0x3 << 5;
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 37;
-> -		break;
-> -	case tmp75c:
-> -		clr_mask |= 1 << 5;		/* not one-shot mode */
-> -		data->resolution = 12;
-> -		data->sample_time = MSEC_PER_SEC / 4;
-> -		break;
-> -	}
->  
-> -	/* configure as specified */
-> +	data->params = &device_params[data->kind];
-> +
-> +	/* Save default sample time and resolution*/
-> +	data->sample_time = data->params->default_sample_time;
-> +	data->resolution = data->params->default_resolution;
-> +
-> +	/* Cache original configuration */
->  	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
->  	if (status < 0) {
->  		dev_dbg(dev, "Can't read config? %d\n", status);
->  		return status;
->  	}
->  	data->orig_conf = status;
-> -	new = status & ~clr_mask;
-> -	new |= set_mask;
-> +	new = status & ~(data->params->clr_mask | LM75_SHUTDOWN);
-> +	new |= data->params->set_mask;
->  	if (status != new)
->  		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
->  
-> -- 
-> 2.11.0
-> 
+Thanks,
+Guenter
+------
+
+The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
+
+  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.3-rc4
+
+for you to fetch changes up to a95a4f3f2702b55a89393bf0f1b2b3d79e0f7da2:
+
+  hwmon: (lm75) Fixup tmp75b clr_mask (2019-08-07 14:50:49 -0700)
+
+----------------------------------------------------------------
+Fixes to lm75 and nct7802 drivers
+
+In lm75 driver, fix TMP75B chip description to ensure correct
+initialization. In nct7802 driver, fix in4 presence detection.
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (nct7802) Fix wrong detection of in4 presence
+
+Iker Perez del Palomar Sustatxa (1):
+      hwmon: (lm75) Fixup tmp75b clr_mask
+
+ drivers/hwmon/lm75.c    | 2 +-
+ drivers/hwmon/nct7802.c | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
