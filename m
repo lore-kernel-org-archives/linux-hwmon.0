@@ -2,104 +2,140 @@ Return-Path: <SRS0=ExcQ=WE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D55F6C433FF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 14:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C74ECC0650F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 15:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A33EB21743
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 14:14:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFWgh9U2"
+	by mail.kernel.org (Postfix) with ESMTP id 9E0092184E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 15:36:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389995AbfHHOOe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Aug 2019 10:14:34 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43349 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbfHHOOe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Aug 2019 10:14:34 -0400
-Received: by mail-pg1-f195.google.com with SMTP id r26so8186390pgl.10;
-        Thu, 08 Aug 2019 07:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7bnDPBl+prFE1mH1lAMjS/D8A3vOzqkNRoD/m+13IiI=;
-        b=AFWgh9U2xiINWQ1s29QRXcbV9I6jV3Div9wTDGBSkKlOP7V3bExxa+r+BLcWuLVrBT
-         B/brPXTlMeVvF3dePNRoThq6vNYGVlFh5MTg9PQ0n4g8ZUiOsb7Vn2vpVcSxLlPLRUUX
-         QtU/08J8GVgYzliMekr0fUoe02copdN9BbwTN6XeAFCf0dTpMeoWoCTnuI80dBtFzzfl
-         aRGi6gniuRNsio+UGLyK1DCqPA8qfRJ9qIXAt8J4vEoXYOgxwgjyTSPvKzgTtQArWVYP
-         TDa7Q7Je3q/KaMEsiklbQgfTCMcIGeIVr/onIn72NhqeMZMpK+CXOVoRRS+RwMvcCJpX
-         z+MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7bnDPBl+prFE1mH1lAMjS/D8A3vOzqkNRoD/m+13IiI=;
-        b=eTZC04aOtndZp7/UfypDOcA3FCV8CEm5bxRbOm2pRIchdh4UlZaOmC8/zKoQjCaG+7
-         sxOKmgVUmiDsjaN+bAVg9g/k5uNgvO93Tyvxf1BVBpZAy4WiCwFUVdhZ4pvutRirFel/
-         bHRC7ZP+pctMgjBItu00i8cSeSIH1sw1eyeyRyPFtx76jijuCPiNjSgt7ly4X13Iq2ii
-         DtAAUIGEiQVBPn9/HdNDsYWK1+MZq198vsTt+kEc7YPwRC/Br+MlQVBkjt8js0uiXIP1
-         U0TlgFdiOWb7S+LpIu+gKYYv4nIWobARIiz54eL6MYmt28m0CKYyOFf0iwP8n+l8dcDg
-         CBxA==
-X-Gm-Message-State: APjAAAWXivzeSK1OSD8pczHDC3aqfj6zVx3n2gEqF2GukpvHw7WbVNga
-        ncnYIZDAmKT9oU9S2DV9dg+jVw/LjMk=
-X-Google-Smtp-Source: APXvYqx2bD2kwHG4h2zschyViAYzSluA10+0wNRsPdwPQd73aarj6+VbjDVmpHKK/EiG8sUw/mX2Kw==
-X-Received: by 2002:a17:90a:ad89:: with SMTP id s9mr4350952pjq.41.1565273673634;
-        Thu, 08 Aug 2019 07:14:33 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s6sm138228551pfs.122.2019.08.08.07.14.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 08 Aug 2019 07:14:33 -0700 (PDT)
-Date:   Thu, 8 Aug 2019 07:14:32 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Iker Perez <iker.perez@codethink.co.uk>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Add support for variable sample time in lm75
- driver
-Message-ID: <20190808141432.GA10923@roeck-us.net>
-References: <20190808080246.8371-1-iker.perez@codethink.co.uk>
+        id S1733237AbfHHPgI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Aug 2019 11:36:08 -0400
+Received: from sauhun.de ([88.99.104.3]:56446 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733143AbfHHPgI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 8 Aug 2019 11:36:08 -0400
+Received: from localhost (p5486CA1C.dip0.t-ipconnect.de [84.134.202.28])
+        by pokefinder.org (Postfix) with ESMTPSA id A10753E60C6;
+        Thu,  8 Aug 2019 17:36:05 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marc Hulsman <m.hulsman@tudelft.nl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFT 1/3] hwmon: w83791d: convert to use devm_i2c_new_dummy_device
+Date:   Thu,  8 Aug 2019 17:35:56 +0200
+Message-Id: <20190808153558.2362-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190808153558.2362-1-wsa+renesas@sang-engineering.com>
+References: <20190808153558.2362-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808080246.8371-1-iker.perez@codethink.co.uk>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 09:02:42AM +0100, Iker Perez wrote:
-> From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-> 
-> Hello,
-> 
-> The objective of following patch series is to add support to lm75 driver
-> to be able to configure the sample time of it's supported devices,
-> particularly the tmp75b.
-> 
-> The applied changes involve:
-> 	* Replace the current switch-case method for configuration
-> 	  parameters selection to a structure storing them. This method
-> 	  allows easier management of the parameters.
-> 	* Split the writing of configuration registers into a separate
-> 	  function. This method saves code in later patches.
-> 	* Include new fields in lm75_params to add support for multiple
-> 	  sample times.
-> 	* Split the lm75_write functionality into separate, simpler,
-> 	  functions.
-> 	* Add support for configuring the devices via their sysfs nodes.
-> 
-> The patch series was based on linux-next's master branch.
-> 
-> Thank you Guenter Roeck, Michael Drake, Thomas Preston and Tom Eccles for
-> your time, help and feedback.
-> 
+And simplify the error handling.
 
-Series applied to hwmon-next.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwmon/w83791d.c | 32 +++++++++-----------------------
+ 1 file changed, 9 insertions(+), 23 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
+index 050ad4201691..aad8d4da5802 100644
+--- a/drivers/hwmon/w83791d.c
++++ b/drivers/hwmon/w83791d.c
+@@ -1260,7 +1260,7 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	struct w83791d_data *data = i2c_get_clientdata(client);
+ 	int address = client->addr;
+-	int i, id, err;
++	int i, id;
+ 	u8 val;
+ 
+ 	id = i2c_adapter_id(adapter);
+@@ -1272,8 +1272,7 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+ 					"invalid subclient "
+ 					"address %d; must be 0x48-0x4f\n",
+ 					force_subclients[i]);
+-				err = -ENODEV;
+-				goto error_sc_0;
++				return -ENODEV;
+ 			}
+ 		}
+ 		w83791d_write(client, W83791D_REG_I2C_SUBADDR,
+@@ -1283,29 +1282,22 @@ static int w83791d_detect_subclients(struct i2c_client *client)
+ 
+ 	val = w83791d_read(client, W83791D_REG_I2C_SUBADDR);
+ 	if (!(val & 0x08))
+-		data->lm75[0] = i2c_new_dummy(adapter, 0x48 + (val & 0x7));
++		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
++							  0x48 + (val & 0x7));
+ 	if (!(val & 0x80)) {
+-		if ((data->lm75[0] != NULL) &&
++		if (!IS_ERR(data->lm75[0]) &&
+ 				((val & 0x7) == ((val >> 4) & 0x7))) {
+ 			dev_err(&client->dev,
+ 				"duplicate addresses 0x%x, "
+ 				"use force_subclient\n",
+ 				data->lm75[0]->addr);
+-			err = -ENODEV;
+-			goto error_sc_1;
++			return -ENODEV;
+ 		}
+-		data->lm75[1] = i2c_new_dummy(adapter,
+-					      0x48 + ((val >> 4) & 0x7));
++		data->lm75[1] = devm_i2c_new_dummy_device(&client->dev, adapter,
++							  0x48 + ((val >> 4) & 0x7));
+ 	}
+ 
+ 	return 0;
+-
+-/* Undo inits in case of errors */
+-
+-error_sc_1:
+-	i2c_unregister_device(data->lm75[0]);
+-error_sc_0:
+-	return err;
+ }
+ 
+ 
+@@ -1394,7 +1386,7 @@ static int w83791d_probe(struct i2c_client *client,
+ 	/* Register sysfs hooks */
+ 	err = sysfs_create_group(&client->dev.kobj, &w83791d_group);
+ 	if (err)
+-		goto error3;
++		return err;
+ 
+ 	/* Check if pins of fan/pwm 4-5 are in use as GPIO */
+ 	has_fanpwm45 = w83791d_read(client, W83791D_REG_GPIO) & 0x10;
+@@ -1419,9 +1411,6 @@ static int w83791d_probe(struct i2c_client *client,
+ 		sysfs_remove_group(&client->dev.kobj, &w83791d_group_fanpwm45);
+ error4:
+ 	sysfs_remove_group(&client->dev.kobj, &w83791d_group);
+-error3:
+-	i2c_unregister_device(data->lm75[0]);
+-	i2c_unregister_device(data->lm75[1]);
+ 	return err;
+ }
+ 
+@@ -1432,9 +1421,6 @@ static int w83791d_remove(struct i2c_client *client)
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 	sysfs_remove_group(&client->dev.kobj, &w83791d_group);
+ 
+-	i2c_unregister_device(data->lm75[0]);
+-	i2c_unregister_device(data->lm75[1]);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
+
