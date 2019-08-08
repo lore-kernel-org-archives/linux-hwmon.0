@@ -2,37 +2,39 @@ Return-Path: <SRS0=ExcQ=WE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFEE3C41514
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85B9EC0650F
 	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 08:02:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 86752218BE
+	by mail.kernel.org (Postfix) with ESMTP id 64CD5218B8
 	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 08:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731866AbfHHIC5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1731736AbfHHIC5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Thu, 8 Aug 2019 04:02:57 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:43393 "EHLO
+Received: from imap1.codethink.co.uk ([176.9.8.82]:43395 "EHLO
         imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731852AbfHHIC4 (ORCPT
+        with ESMTP id S1731861AbfHHIC4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Aug 2019 04:02:56 -0400
 Received: from [167.98.27.226] (helo=ct-lt-765.unassigned)
         by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1hvdNp-0008KB-VZ; Thu, 08 Aug 2019 09:02:50 +0100
+        id 1hvdNq-0008KF-0C; Thu, 08 Aug 2019 09:02:50 +0100
 Received: from ikerpalomar by ct-lt-765.unassigned with local (Exim 4.89)
         (envelope-from <ikerpalomar@ct-lt-765.unassigned>)
-        id 1hvdNp-0002Bi-26; Thu, 08 Aug 2019 09:02:49 +0100
+        id 1hvdNp-0002Bo-4a; Thu, 08 Aug 2019 09:02:49 +0100
 From:   Iker Perez <iker.perez@codethink.co.uk>
 To:     linux-hwmon@vger.kernel.org, linux@roeck-us.net
 Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
         Iker Perez del Palomar Sustatxa 
         <iker.perez@codethink.co.uk>
-Subject: [PATCH v2 0/4] Add support for variable sample time in lm75 driver
-Date:   Thu,  8 Aug 2019 09:02:42 +0100
-Message-Id: <20190808080246.8371-1-iker.perez@codethink.co.uk>
+Subject: [PATCH v2 3/4] hwmon: (lm75) Add new fields into lm75_params_
+Date:   Thu,  8 Aug 2019 09:02:45 +0100
+Message-Id: <20190808080246.8371-4-iker.perez@codethink.co.uk>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190808080246.8371-1-iker.perez@codethink.co.uk>
+References: <20190808080246.8371-1-iker.perez@codethink.co.uk>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -40,43 +42,87 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
 
-Hello,
+The new fields are included to prepare the driver for next patch. The
+fields are:
 
-The objective of following patch series is to add support to lm75 driver
-to be able to configure the sample time of it's supported devices,
-particularly the tmp75b.
+* *resolutions: Stores all the supported resolutions by the device.
+* num_sample_times: Stores the number of possible sample times.
+* *sample_times: Stores all the possible sample times to be set.
+* sample_set_masks: The set_masks for the possible sample times
+* sample_clr_mask: Clear mask to set the default sample time.
 
-The applied changes involve:
-	* Replace the current switch-case method for configuration
-	  parameters selection to a structure storing them. This method
-	  allows easier management of the parameters.
-	* Split the writing of configuration registers into a separate
-	  function. This method saves code in later patches.
-	* Include new fields in lm75_params to add support for multiple
-	  sample times.
-	* Split the lm75_write functionality into separate, simpler,
-	  functions.
-	* Add support for configuring the devices via their sysfs nodes.
+Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
+---
 
-The patch series was based on linux-next's master branch.
+Changes since v1:
+- In the lm75_params structure documentation there have been the next changes:
+        - @num_sample_times description has been extended.
+        - @sample_times description has been extended.
+        - @sample_set_masks description has been extended.
+        - @resolutions description has been included.
 
-Thank you Guenter Roeck, Michael Drake, Thomas Preston and Tom Eccles for
-your time, help and feedback.
+ drivers/hwmon/lm75.c | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
-Regards,
-
-Iker Perez del Palomar Sustatxa
-
-Iker Perez del Palomar Sustatxa (4):
-  hwmon: (lm75) Create structure to save all the configuration
-    parameters.
-  hwmon: (lm75) Create function from code to write into registers
-  hwmon: (lm75) Add new fields into lm75_params_
-  hwmon: (lm75) Modularize lm75_write and make hwmon_chip writable
-
- drivers/hwmon/lm75.c | 390 ++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 274 insertions(+), 116 deletions(-)
-
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index a32d7952d799..ed72455bcfa3 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -61,15 +61,34 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+  * @resolution_limits:	Limit register resolution. Optional. Should be set if
+  *			the resolution of limit registers does not match the
+  *			resolution of the temperature register.
++ * @resolutions		List of resolutions associated with sample times.
++ *			Optional. Should be set if num_sample_times is larger
++ *			than 1, and if the resolution changes with sample times.
++ *			If set, number of entries must match num_sample_times.
+  * default_sample_time:	Sample time to be set by default.
++ * @num_sample_times:	Number of possible sample times to be set. Optional.
++ *			Should be set if the number of sample times is larger
++ *			than one.
++ * @sample_times:	All the possible sample times to be set. Mandatory if
++ *			num_sample_times is larger than 1. If set, number of
++ *			entries must match num_sample_times.
++ * @sample_set_masks:	All the set_masks for the possible sample times.
++ *			Mandatory if num_sample_times is larger than 1.
++ *			If set, number of entries must match num_sample_times.
++ * @sample_clr_mask:	Clear mask to set the default sample time.
+  */
+ 
+ struct lm75_params {
+-	u8		set_mask;
+-	u8		clr_mask;
+-	u8		default_resolution;
+-	u8		resolution_limits;
+-	unsigned int	default_sample_time;
++	u8			set_mask;
++	u8			clr_mask;
++	u8			default_resolution;
++	u8			resolution_limits;
++	const u8		*resolutions;
++	unsigned int		default_sample_time;
++	u8			num_sample_times;
++	const unsigned int	*sample_times;
++	const u8		*sample_set_masks;
++	u8			sample_clr_mask;
+ };
+ 
+ /* Addresses scanned */
+@@ -221,7 +240,14 @@ static const struct lm75_params device_params[] = {
+ 	[tmp75b] = { /* not one-shot mode, Conversion rate 37Hz */
+ 		.clr_mask = 1 << 7 | 3 << 5,
+ 		.default_resolution = 12,
++		.sample_set_masks = (u8 []){ 0 << 5, 1 << 5, 2 << 5,
++			3 << 5 },
++		.sample_clr_mask = 3 << 5,
+ 		.default_sample_time = MSEC_PER_SEC / 37,
++		.sample_times = (unsigned int []){ MSEC_PER_SEC / 37,
++			MSEC_PER_SEC / 18,
++			MSEC_PER_SEC / 9, MSEC_PER_SEC / 4 },
++		.num_sample_times = 4,
+ 	},
+ 	[tmp75c] = {
+ 		.clr_mask = 1 << 5,	/*not one-shot mode*/
 -- 
 2.11.0
 
