@@ -2,414 +2,136 @@ Return-Path: <SRS0=ExcQ=WE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ABB8C0650F
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 08:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30737C0650F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 13:30:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D8456218C5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 08:03:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01FAF2086A
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Aug 2019 13:30:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iGN+VVdm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731633AbfHHIDW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Aug 2019 04:03:22 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:43433 "EHLO
-        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731281AbfHHIDW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Aug 2019 04:03:22 -0400
-Received: from [167.98.27.226] (helo=ct-lt-765.unassigned)
-        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1hvdNp-0008KC-Uf; Thu, 08 Aug 2019 09:02:50 +0100
-Received: from ikerpalomar by ct-lt-765.unassigned with local (Exim 4.89)
-        (envelope-from <ikerpalomar@ct-lt-765.unassigned>)
-        id 1hvdNp-0002Bk-3F; Thu, 08 Aug 2019 09:02:49 +0100
-From:   Iker Perez <iker.perez@codethink.co.uk>
-To:     linux-hwmon@vger.kernel.org, linux@roeck-us.net
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Iker Perez del Palomar Sustatxa 
-        <iker.perez@codethink.co.uk>
-Subject: [PATCH v2 1/4] hwmon: (lm75) Create structure to save all the configuration parameters.
-Date:   Thu,  8 Aug 2019 09:02:43 +0100
-Message-Id: <20190808080246.8371-2-iker.perez@codethink.co.uk>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190808080246.8371-1-iker.perez@codethink.co.uk>
-References: <20190808080246.8371-1-iker.perez@codethink.co.uk>
+        id S1733109AbfHHN37 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Aug 2019 09:29:59 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40650 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732882AbfHHN37 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Aug 2019 09:29:59 -0400
+Received: by mail-pf1-f193.google.com with SMTP id p184so44114158pfp.7;
+        Thu, 08 Aug 2019 06:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eAHc4PXH4W80rIzb0P4YR5zSPB3pQZ2IAYO2JR2Za1c=;
+        b=iGN+VVdmYfA4zte+LhxYoLoG8ril+vwki+24TO4FpCqXv0hWmOkcpKxYojxt1VW5TV
+         44TyDOQfqVurgs8GpEIpQ85sV/lVRSgYzwGyKyOOmWk0qivuGIua5HWxz1S6mIc0sajC
+         G0eeFEwNXsfLgJzOEtdQKTlmmMYH0t6v0M9iFbfFVVs4+YU1W6AxOLakX/NdA+Gy4W0B
+         a2v61xtBD8UWsux0K3oJeieS3NnwDV7vJpz1P0auuYNO2Uhb7HKfAejCTW1Qs44hLxeU
+         1MaCexhRxK2V/e5MKU8c5VUz091wqWrSzvYBE5h/wwSDJGkYLlYw+TwceqRJP2SsLi7u
+         /BIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eAHc4PXH4W80rIzb0P4YR5zSPB3pQZ2IAYO2JR2Za1c=;
+        b=XV5SsLAzLpQ8t0ZGr/MZ1fAPPVs/6l/WsbeUfuVuxMj3cmnNp4d/p5/PyMxGyNPBVP
+         Z977mQTYzf/wturoauO+6UL1MY+m74PhTVF2+UoK1rcbBK/OWP3cufYjcohhT6u6x7iV
+         EL/AlyQnqYJjZ0yxxaveaxsiY657ns3jgBNT8xoDkLRavcHsAG4+FUcHZIDjixhK2GUg
+         Ug7pRKwDXbp4nuNCh0KXjt3pa2FJQyJ3enUb5EWSTUV+L+XZNPp8d7SogDxMEY69Mwgc
+         z24WwD2EQ8bvMxXXhW0Hp5lVHRjX+CyC2ja1S5tFNpexwGoA/3c1R02P+1whGeAeYZvJ
+         mQjA==
+X-Gm-Message-State: APjAAAXnagGm3xOHySu6HD2nPPRE3p+DwRDMuZTMvfAuIa7KS/w888wL
+        a1g0/NysrHmU31SLJM8pXqZtRcO8/kY=
+X-Google-Smtp-Source: APXvYqzsY6UsECuf4DosK1dwgKNHz/fB378Lz71BI9XL/gfpkQKAQ1yCdaEuA5+HtdgpHjIldJ4jxg==
+X-Received: by 2002:a63:ee08:: with SMTP id e8mr13016625pgi.70.1565270998661;
+        Thu, 08 Aug 2019 06:29:58 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o24sm175272521pfp.135.2019.08.08.06.29.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 08 Aug 2019 06:29:57 -0700 (PDT)
+Date:   Thu, 8 Aug 2019 06:29:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        kbuild test robot <lkp@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH][next] hwmon: pmbus: ucd9000: remove unneeded include
+Message-ID: <20190808132956.GA30151@roeck-us.net>
+References: <20190808080144.6183-1-brgl@bgdev.pl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190808080144.6183-1-brgl@bgdev.pl>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
+On Thu, Aug 08, 2019 at 10:01:44AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> Build bot reports the following build issue after commit 9091373ab7ea
+> ("gpio: remove less important #ifdef around declarations):
+> 
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:19:0:
+> >> include/linux/gpio/driver.h:576:1: error: redefinition of 'gpiochip_add_pin_range'
+>     gpiochip_add_pin_range(struct gpio_chip *chip, const char *pinctl_name,
+>     ^~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:18:0:
+>    include/linux/gpio.h:245:1: note: previous definition of 'gpiochip_add_pin_range' was here
+>     gpiochip_add_pin_range(struct gpio_chip *chip, const char *pinctl_name,
+>     ^~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:19:0:
+> >> include/linux/gpio/driver.h:583:1: error: redefinition of 'gpiochip_add_pingroup_range'
+>     gpiochip_add_pingroup_range(struct gpio_chip *chip,
+>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:18:0:
+>    include/linux/gpio.h:254:1: note: previous definition of 'gpiochip_add_pingroup_range' was here
+>     gpiochip_add_pingroup_range(struct gpio_chip *chip,
+>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:19:0:
+> >> include/linux/gpio/driver.h:591:1: error: redefinition of 'gpiochip_remove_pin_ranges'
+>     gpiochip_remove_pin_ranges(struct gpio_chip *chip)
+>     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/hwmon/pmbus/ucd9000.c:18:0:
+>    include/linux/gpio.h:263:1: note: previous definition of 'gpiochip_remove_pin_ranges' was here
+>     gpiochip_remove_pin_ranges(struct gpio_chip *chip)
+> 
+> This is caused by conflicting defines from linux/gpio.h and
+> linux/gpio/driver.h. Drivers should not include both the legacy and
+> the new API headers. This driver doesn't even use linux/gpio.h so
+> remove it.
+> 
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-* Add to lm75_data kind field to store the kind of device the driver is
-  working with.
-* Add an structure to store the configuration parameters of all the
-  supported devices.
-* Delete resolution_limits from lm75_data and include them in the structure
-  described above.
-* Add a pointer to the configuration parameters structure to be used as a
-  reference to obtain the parameters.
-* Delete switch-case approach to get the device configuration parameters.
-* The structure is cleaner and easier to maintain.
+Applied.
 
-Signed-off-by: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
----
+Thanks,
+Guenter
 
-Changes since v1:
-- In the lm75_params structure documentation there have been the next changes:
-        - @resolution has been corrected to @default_resolution.
-        - @resolution_limits description has been corrected.
-- pct2075 device's parameters has been included in device_params structure.
-
- drivers/hwmon/lm75.c | 282 ++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 176 insertions(+), 106 deletions(-)
-
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index a2d3f2ce3e1d..65a1131bfa7e 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -18,7 +18,6 @@
- #include <linux/regmap.h>
- #include "lm75.h"
- 
--
- /*
-  * This driver handles the LM75 and compatible digital temperature sensors.
-  */
-@@ -51,6 +50,28 @@ enum lm75_type {		/* keep sorted in alphabetical order */
- 	tmp75c,
- };
- 
-+/**
-+ * struct lm75_params - lm75 configuration parameters.
-+ * @set_mask:		Bits to set in configuration register when configuring
-+ *			the chip.
-+ * @clr_mask:		Bits to clear in configuration register when configuring
-+ *			the chip.
-+ * @default_resolution:	Default number of bits to represent the temperature
-+ *			value.
-+ * @resolution_limits:	Limit register resolution. Optional. Should be set if
-+ *			the resolution of limit registers does not match the
-+ *			resolution of the temperature register.
-+ * default_sample_time:	Sample time to be set by default.
-+ */
-+
-+struct lm75_params {
-+	u8		set_mask;
-+	u8		clr_mask;
-+	u8		default_resolution;
-+	u8		resolution_limits;
-+	unsigned int	default_sample_time;
-+};
-+
- /* Addresses scanned */
- static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- 					0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
-@@ -63,15 +84,151 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- 
- /* Each client has this additional data */
- struct lm75_data {
--	struct i2c_client	*client;
--	struct regmap		*regmap;
--	u8			orig_conf;
--	u8			resolution;	/* In bits, between 9 and 16 */
--	u8			resolution_limits;
--	unsigned int		sample_time;	/* In ms */
-+	struct i2c_client		*client;
-+	struct regmap			*regmap;
-+	u8				orig_conf;
-+	u8				current_conf;
-+	u8				resolution;	/* In bits, 9 to 16 */
-+	unsigned int			sample_time;	/* In ms */
-+	enum lm75_type			kind;
-+	const struct lm75_params	*params;
- };
- 
- /*-----------------------------------------------------------------------*/
-+/* The structure below stores the configuration values of the supported devices.
-+ * In case of being supported multiple configurations, the default one must
-+ * always be the first element of the array
-+ */
-+static const struct lm75_params device_params[] = {
-+	[adt75] = {
-+		.clr_mask = 1 << 5,	/* not one-shot mode */
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 8,
-+	},
-+	[ds1775] = {
-+		.clr_mask = 3 << 5,
-+		.set_mask = 2 << 5,	/* 11-bit mode */
-+		.default_resolution = 11,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[ds75] = {
-+		.clr_mask = 3 << 5,
-+		.set_mask = 2 << 5,	/* 11-bit mode */
-+		.default_resolution = 11,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[stds75] = {
-+		.clr_mask = 3 << 5,
-+		.set_mask = 2 << 5,	/* 11-bit mode */
-+		.default_resolution = 11,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[stlm75] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 5,
-+	},
-+	[ds7505] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+	},
-+	[g751] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[lm75] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[lm75a] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[lm75b] = {
-+		.default_resolution = 11,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+	},
-+	[max6625] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+	},
-+	[max6626] = {
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+		.resolution_limits = 9,
-+	},
-+	[max31725] = {
-+		.default_resolution = 16,
-+		.default_sample_time = MSEC_PER_SEC / 8,
-+	},
-+	[tcn75] = {
-+		.default_resolution = 9,
-+		.default_sample_time = MSEC_PER_SEC / 8,
-+	},
-+	[pct2075] = {
-+		.default_resolution = 11,
-+		.default_sample_time = MSEC_PER_SEC / 10,
-+	},
-+	[mcp980x] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode */
-+		.default_resolution = 12,
-+		.resolution_limits = 9,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[tmp100] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode */
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[tmp101] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode */
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC,
-+	},
-+	[tmp112] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* no one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+	},
-+	[tmp105] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[tmp175] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[tmp275] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[tmp75] = {
-+		.set_mask = 3 << 5,	/* 12-bit mode */
-+		.clr_mask = 1 << 7,	/* not one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 2,
-+	},
-+	[tmp75b] = { /* not one-shot mode, Conversion rate 37Hz */
-+		.clr_mask = 1 << 7 | 3 << 5,
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 37,
-+	},
-+	[tmp75c] = {
-+		.clr_mask = 1 << 5,	/*not one-shot mode*/
-+		.default_resolution = 12,
-+		.default_sample_time = MSEC_PER_SEC / 4,
-+	}
-+};
- 
- static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
- {
-@@ -146,8 +303,8 @@ static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
- 	 * Resolution of limit registers is assumed to be the same as the
- 	 * temperature input register resolution unless given explicitly.
- 	 */
--	if (data->resolution_limits)
--		resolution = data->resolution_limits;
-+	if (data->params->resolution_limits)
-+		resolution = data->params->resolution_limits;
- 	else
- 		resolution = data->resolution;
- 
-@@ -239,7 +396,6 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	struct device *hwmon_dev;
- 	struct lm75_data *data;
- 	int status, err;
--	u8 set_mask, clr_mask;
- 	int new;
- 	enum lm75_type kind;
- 
-@@ -257,6 +413,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 		return -ENOMEM;
- 
- 	data->client = client;
-+	data->kind = kind;
- 
- 	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
- 	if (IS_ERR(data->regmap))
-@@ -265,109 +422,22 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	/* Set to LM75 resolution (9 bits, 1/2 degree C) and range.
- 	 * Then tweak to be more precise when appropriate.
- 	 */
--	set_mask = 0;
--	clr_mask = LM75_SHUTDOWN;		/* continuous conversions */
--
--	switch (kind) {
--	case adt75:
--		clr_mask |= 1 << 5;		/* not one-shot mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 8;
--		break;
--	case ds1775:
--	case ds75:
--	case stds75:
--		clr_mask |= 3 << 5;
--		set_mask |= 2 << 5;		/* 11-bit mode */
--		data->resolution = 11;
--		data->sample_time = MSEC_PER_SEC;
--		break;
--	case stlm75:
--		data->resolution = 9;
--		data->sample_time = MSEC_PER_SEC / 5;
--		break;
--	case ds7505:
--		set_mask |= 3 << 5;		/* 12-bit mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	case g751:
--	case lm75:
--	case lm75a:
--		data->resolution = 9;
--		data->sample_time = MSEC_PER_SEC / 2;
--		break;
--	case lm75b:
--		data->resolution = 11;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	case max6625:
--		data->resolution = 9;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	case max6626:
--		data->resolution = 12;
--		data->resolution_limits = 9;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	case max31725:
--		data->resolution = 16;
--		data->sample_time = MSEC_PER_SEC / 8;
--		break;
--	case tcn75:
--		data->resolution = 9;
--		data->sample_time = MSEC_PER_SEC / 8;
--		break;
--	case pct2075:
--		data->resolution = 11;
--		data->sample_time = MSEC_PER_SEC / 10;
--		break;
--	case mcp980x:
--		data->resolution_limits = 9;
--		/* fall through */
--	case tmp100:
--	case tmp101:
--		set_mask |= 3 << 5;		/* 12-bit mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC;
--		clr_mask |= 1 << 7;		/* not one-shot mode */
--		break;
--	case tmp112:
--		set_mask |= 3 << 5;		/* 12-bit mode */
--		clr_mask |= 1 << 7;		/* not one-shot mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	case tmp105:
--	case tmp175:
--	case tmp275:
--	case tmp75:
--		set_mask |= 3 << 5;		/* 12-bit mode */
--		clr_mask |= 1 << 7;		/* not one-shot mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 2;
--		break;
--	case tmp75b:  /* not one-shot mode, Conversion rate 37Hz */
--		clr_mask |= 1 << 7 | 0x3 << 5;
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 37;
--		break;
--	case tmp75c:
--		clr_mask |= 1 << 5;		/* not one-shot mode */
--		data->resolution = 12;
--		data->sample_time = MSEC_PER_SEC / 4;
--		break;
--	}
- 
--	/* configure as specified */
-+	data->params = &device_params[data->kind];
-+
-+	/* Save default sample time and resolution*/
-+	data->sample_time = data->params->default_sample_time;
-+	data->resolution = data->params->default_resolution;
-+
-+	/* Cache original configuration */
- 	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
- 	if (status < 0) {
- 		dev_dbg(dev, "Can't read config? %d\n", status);
- 		return status;
- 	}
- 	data->orig_conf = status;
--	new = status & ~clr_mask;
--	new |= set_mask;
-+	new = status & ~(data->params->clr_mask | LM75_SHUTDOWN);
-+	new |= data->params->set_mask;
- 	if (status != new)
- 		i2c_smbus_write_byte_data(client, LM75_REG_CONF, new);
- 
--- 
-2.11.0
-
+> ---
+>  drivers/hwmon/pmbus/ucd9000.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> index c846759bc1c0..a9229c6b0e84 100644
+> --- a/drivers/hwmon/pmbus/ucd9000.c
+> +++ b/drivers/hwmon/pmbus/ucd9000.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/i2c.h>
+>  #include <linux/pmbus.h>
+> -#include <linux/gpio.h>
+>  #include <linux/gpio/driver.h>
+>  #include "pmbus.h"
+>  
