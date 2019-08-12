@@ -2,116 +2,175 @@ Return-Path: <SRS0=cFvP=WI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22044C433FF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Aug 2019 08:16:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C6D2C31E40
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Aug 2019 13:29:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8DE1208C2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Aug 2019 08:16:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36C6920651
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Aug 2019 13:29:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u4QlkRbM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="pzLtY8G2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbfHLIQp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Aug 2019 04:16:45 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41813 "EHLO
+        id S1728813AbfHLN3v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Aug 2019 09:29:51 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35914 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfHLIQp (ORCPT
+        with ESMTP id S1728812AbfHLN3s (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Aug 2019 04:16:45 -0400
-Received: by mail-wr1-f68.google.com with SMTP id j16so1509165wrr.8
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Aug 2019 01:16:43 -0700 (PDT)
+        Mon, 12 Aug 2019 09:29:48 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r3so10829283wrt.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Aug 2019 06:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
-        b=u4QlkRbMDiHfGrjdu436aHZusopdsD94AaT6zXTM3eaZ4y6BosUM0tlaA56X51nN9c
-         umI3PH27REA1YdEm/bDm3OE2UI9MGULdMLuGUTvnDBKUBlM+u5BgwEJXKd1SByIuWkrY
-         2kv99VeKU+V5QXG9oieP77x7yQgoExIDYXx4vPH8vlEru6HzZ6/p32cpzzObsHy5W3az
-         O2VbXSjzdwyFpNJYin4w9mGvGx4NIQqGMocgiLaaq7HHG8qkJjXvIxiD9mAgo53+VJlh
-         LCcGJbAa2s5qZg9/JZfFsSRo/t/+spxSIJYxDJW7Gfq3OorZb4uOTIjODwyWsHDkDNXd
-         LmBw==
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=JzKOQ5mHteEnLA3+yRVnS5bSf+ysPwr2I6LlVQ1trvk=;
+        b=pzLtY8G2u2/YII4gwwFRhcLQv7ubDho6IeAvFlIPIiH33bEq1k+YrhsW5qreW0lcGu
+         L8H/7jxTlCtE75v4uGJMXzTyAYnqsKESIRyU1jB0U7ym/F7mmhSp5BVEuO/DH8YSeROJ
+         Dc09BPlQNUtirekVi4fIOejsDxaRLtS8mZE7wCpdo5j3Bo8oxBepPRqFCJW1Binat5hE
+         5za6BeXQ+pd9wwO9PzFuAdc4BM9RVXMes78v2npvz+0UN+xMG2P5u5pIjbSGtzGJG8DL
+         m/RTpwiDSM7MSXoIHZ6J/00igHnxLlvu3FGtWKTFAAgwcJCUqLpY4j0wDuevn0vIjLvh
+         0csg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
-        b=rQhcG7qmkWcbV1vBaAikLrQ2H+tIFgY7d5OwPmCWlKLtEcNLU02zvSRJ/QlQv5zwsB
-         cVO+PsprX+ZfTzszJDsLX6HcfiGdo1xwH2c46XuH/NYpnhAJofzSv6IW6L6am93H2raO
-         MG9kki2RFNoZaEwz+OtdwX56sBxMq8yUN86qkQ5Z0yULhaoAmIF4ScRKdX+26xyuEkxN
-         roYIFMvozcPLK6/Ncu9haeKiHyaLN0rCQ+6ugHvJfilWOrLhQ+Tg9NxLo/SgttxB5Qxt
-         zlhNbFUQYva2u429LHb6/HFDfEo2kaS9Rg1LNb02y0RuXx+DYHHTqtpAkvT4IlbKo46h
-         cFyg==
-X-Gm-Message-State: APjAAAU7b2uKK8/qvwUgL2yhfIY86frTBgNNy83MvOgxveKCRNoofooe
-        GYBJfpKAbqjaE4cZBHzg/bNgrg==
-X-Google-Smtp-Source: APXvYqyD6fPKryZQTpN9zsdwGV7yS5BKNQZ8tOEeMIPGi0uW8Qmgi+HgiANiv0VmQSgyzgbueGKdzg==
-X-Received: by 2002:adf:ec0d:: with SMTP id x13mr40515082wrn.240.1565597802765;
-        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id g15sm16420028wrp.29.2019.08.12.01.16.41
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=JzKOQ5mHteEnLA3+yRVnS5bSf+ysPwr2I6LlVQ1trvk=;
+        b=p6Rl4rW/AZKVdThiqrQLdDh4IH4WRof4grAfgea1wRpr/tA/fB8j6gwD7SNc8KwcfH
+         zCTAQXwoZK1Y5su+QrtybLtzgImOhOZ5SZiePMHHmg1WdPKP+l8YFHZkxQUPrpJdQSh9
+         CtMyKVjOxLsmU3ePjLKT6WID4JTMJz/zUcfmU1BTbYhrDrGlJeYE2FvXPCZYtl5pkFm/
+         WG/qFgvhpJJMy1scvJKJmmJ9oHMThSLj7cw+j5nRWbihzGR2llMHylphHLwT6YAMvQfi
+         yuS2b8+eHND0JQhWEfMB75oMk4QmubiE5RZLoMK84XAg85E+VwH/RqFBxsixUMie1o0/
+         5Y2w==
+X-Gm-Message-State: APjAAAXJVZeOCZlikMOf7e+AkhSJKXr8/6pBVW9n1MrsSJFMdUfhK1Y4
+        5Hh0E2Wf36eq6luCdl2f7K07BA==
+X-Google-Smtp-Source: APXvYqwaEf6WuwVVerQyI89ctyrQfAdB2zFMlbGgzZgdebonBeQNWlY4URBWmb2S8aG6AGspzUC0+Q==
+X-Received: by 2002:a05:6000:148:: with SMTP id r8mr13154631wrx.312.1565616586205;
+        Mon, 12 Aug 2019 06:29:46 -0700 (PDT)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id r4sm70346111wrq.82.2019.08.12.06.29.45
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 09:16:40 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, od@zcrc.me,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: Re: [PATCH 10/11] mfd: Drop obsolete JZ4740 driver
-Message-ID: <20190812081640.GA26727@dell>
-References: <20190725220215.460-1-paul@crapouillou.net>
- <20190725220215.460-11-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190725220215.460-11-paul@crapouillou.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Mon, 12 Aug 2019 06:29:45 -0700 (PDT)
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [RFC PATCH] hwmon: (iio_hwmon) Enable power exporting from IIO
+Date:   Mon, 12 Aug 2019 15:29:41 +0200
+Message-Id: <71aec0191e0e5f32cc760f95844d8ee215b48c7f.1565616579.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 25 Jul 2019, Paul Cercueil wrote:
+There is no reason why power channel shouldn't be exported as is done for
+voltage, current, temperature and humidity.
 
-> It has been replaced with the ingenic-iio driver for the ADC.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Tested-by: Artur Rojek <contact@artur-rojek.eu>
-> ---
->  drivers/mfd/Kconfig      |   9 --
->  drivers/mfd/Makefile     |   1 -
->  drivers/mfd/jz4740-adc.c | 324 ---------------------------------------
->  3 files changed, 334 deletions(-)
->  delete mode 100644 drivers/mfd/jz4740-adc.c
+Power channel is available on iio ina226 driver.
 
-Applied, thanks.
+Tested on Xilinx ZCU102 board.
 
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+---
+
+But I don't think values are properly converted. Voltage1 is fine but the
+rest is IMHO wrong. But this patch should enable power channel to be shown
+which looks good.
+
+root@zynqmp-debian:~# iio_info -a && sensors -u
+Library version: 0.16 (git tag: v0.16)
+Compiled with backends: local xml ip usb serial
+Using auto-detected IIO context at URI "local:"
+IIO context created with local backend.
+Backend version: 0.16 (git tag: v0.16)
+Backend description string: Linux zynqmp-debian 5.3.0-rc4-00004-ga7ca33daed22-dirty #41 SMP PREEMPT Mon Aug 12 15:06:58 CEST 2019 aarch64
+IIO context has 1 attributes:
+	local,kernel: 5.3.0-rc4-00004-ga7ca33daed22-dirty
+IIO context has 1 devices:
+	iio:device0: ina226 (buffer capable)
+		9 channels found:
+			voltage0:  (input, index: 0, format: le:U16/16>>0)
+			3 channel-specific attributes found:
+				attr  0: integration_time value: 0.001100
+				attr  1: raw value: 70
+				attr  2: scale value: 0.002500000
+			voltage1:  (input, index: 1, format: le:U16/16>>0)
+			3 channel-specific attributes found:
+				attr  0: integration_time value: 0.001100
+				attr  1: raw value: 958
+				attr  2: scale value: 1.250000000
+			power2:  (input, index: 2, format: le:U16/16>>0)
+			2 channel-specific attributes found:
+				attr  0: raw value: 3
+				attr  1: scale value: 0.006250000
+			current3:  (input, index: 3, format: le:U16/16>>0)
+			2 channel-specific attributes found:
+				attr  0: raw value: 70
+				attr  1: scale value: 0.000250000
+			timestamp:  (input, index: 4, format: le:S64/64>>0)
+			allow:  (input)
+			1 channel-specific attributes found:
+				attr  0: async_readout value: 0
+			oversampling:  (input)
+			1 channel-specific attributes found:
+				attr  0: ratio value: 4
+			sampling:  (input)
+			1 channel-specific attributes found:
+				attr  0: frequency value: 114
+			shunt:  (input)
+			1 channel-specific attributes found:
+				attr  0: resistor value: 10.000000000
+		2 device-specific attributes found:
+				attr  0: current_timestamp_clock value: realtime
+
+				attr  1: integration_time_available value: 0.000140 0.000204 0.000332 0.000588 0.001100 0.002116 0.004156 0.008244
+		2 buffer-specific attributes found:
+				attr  0: data_available value: 0
+				attr  1: watermark value: 1
+		1 debug attributes found:
+				debug attr  0: direct_reg_access value: 0x4327
+ina226_fourth-isa-0000
+Adapter: ISA adapter
+in1:
+  in1_input: 0.000
+in2:
+  in2_input: 1.198
+power1:
+  power1_input: 0.000
+curr1:
+  curr1_input: 0.000
+---
+ drivers/hwmon/iio_hwmon.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index f1c2d5faedf0..aedb95fa24e3 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -59,7 +59,7 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 	struct iio_hwmon_state *st;
+ 	struct sensor_device_attribute *a;
+ 	int ret, i;
+-	int in_i = 1, temp_i = 1, curr_i = 1, humidity_i = 1;
++	int in_i = 1, temp_i = 1, curr_i = 1, humidity_i = 1, power_i = 1;
+ 	enum iio_chan_type type;
+ 	struct iio_channel *channels;
+ 	struct device *hwmon_dev;
+@@ -114,6 +114,10 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 			n = curr_i++;
+ 			prefix = "curr";
+ 			break;
++		case IIO_POWER:
++			n = power_i++;
++			prefix = "power";
++			break;
+ 		case IIO_HUMIDITYRELATIVE:
+ 			n = humidity_i++;
+ 			prefix = "humidity";
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.17.1
+
