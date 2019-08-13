@@ -2,139 +2,138 @@ Return-Path: <SRS0=bPS5=WJ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 421D6C32750
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 10:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F767C32750
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 13:25:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1959B20679
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 10:30:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F2DE20578
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 13:25:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ECIOfaMx"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n/PBxuPv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbfHMKa1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Aug 2019 06:30:27 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52575 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727059AbfHMKa1 (ORCPT
+        id S1728890AbfHMNZA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Aug 2019 09:25:00 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:46058 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728134AbfHMNZA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Aug 2019 06:30:27 -0400
-Received: by mail-wm1-f65.google.com with SMTP id o4so876566wmh.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2019 03:30:26 -0700 (PDT)
+        Tue, 13 Aug 2019 09:25:00 -0400
+Received: by mail-pf1-f195.google.com with SMTP id w26so6344082pfq.12;
+        Tue, 13 Aug 2019 06:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=FpaQRzjjHieM2ZwGQ/GdoyebOrmSoenQLDvTG9Qi6yI=;
-        b=ECIOfaMx8Etdcuaur37ndWisVmkutpI1rFJEIHjhiDwicrUiGrpbpAh/VAWiR4/mk6
-         Jys94C59P6dLWKu5BQICoe2FRE77l28OSivWG+JTNpgd8WKtGSQfWBBZVZAd/6GBPYIR
-         N7QAM4bNCEBuL4EZ341aigqm61rNC6SklbSxux6Dl/RDvx5m6NoOoWU5WkAo1sULWlGP
-         rmInauOV0CaASOC/reQNrVHz2DmC5lwG4koVfD/zwf/6tujmdf9hlG0GpGX3wZHW5mgA
-         uLPW4z83TGAcn7qk9nhCXCd2q3i2VQmGjIrY9gblReoQWkp3QwSKnXXrrq/4ZMdLTfKj
-         FjRA==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=icok7aUr9NjweCwQOu8d7MJikZLhsx5ZtDw4IRqdFmk=;
+        b=n/PBxuPvRSj5AVujeC45Mob83CCsceHP3yjY1iNaBLJwlMFst4E2GqrYsM0PROsXZ5
+         wJ6mj+XWYBBsKBfXXxUbI0CQius4QTLEl3YCwm9D4GZligWL4yceNNdWsGPaEb2CxGvU
+         GA1F88P4BCZGrkAwk1aKBTn+pAOlVhMhTPeH8lH3A0Qf4LUzh1cdkUsVPDBQ63nY8l8e
+         UnzHJFeYj8OHFQi3+99VI+vxI1WYPjyQjmWcbagGHNEPGjUg7qpcladCGgMFCpfung24
+         qaYRgDe2lhzQP1Nsgk4A2WhzgVkwXNrXaiLFKzpJQASpU1P14/Gf0OcpVfr9HZppWt12
+         Mwag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=FpaQRzjjHieM2ZwGQ/GdoyebOrmSoenQLDvTG9Qi6yI=;
-        b=Q7TovTcKwCcXGmN4prg40LDqAxm4kciAA0SWEvuJ8UNRfyTTWuw1fWI1tmnmh5L2zD
-         b4PhVaXVxQRniKc+Kp1JwM+Ww9WVCupA6KWe4Agg4fUXUXmsMUqx/8dyN9Po5cAyHO+H
-         V2WBr+BueQmwoP6gLonXQP92+kuKS1Skmb/zgEvIe8D9Mjt1XA7mP0V6NjjMEasztXBl
-         dxMd/sfHrmuL9Bw1S7bAmwuEKuBkYuw3ByEJ/oOiS7yiUPkI/i23Ri0cTni6gn7AUgJg
-         F6xi1529HxCbq1IM1XvIK3rmA8PaH8o2J9OnBKtJrppTZT8iZngupxe2N8O0K5L3TI4+
-         xB3w==
-X-Gm-Message-State: APjAAAWH2uXj3XVUwALnQ7JPvBxN/Vu5ZNF5V8SUbI2NJ8HGhuG8+fYi
-        Lg0fQ6UaTrIjBsD9+sDvRYEI3Q==
-X-Google-Smtp-Source: APXvYqyN4qrmzO2fFtNWQoBH44tqgLmmkrAsTcojaeG2fQxm4ZfxnFrHwjr1JBuy4GY1YNPhUuoqgg==
-X-Received: by 2002:a1c:790b:: with SMTP id l11mr2384506wme.3.1565692225238;
-        Tue, 13 Aug 2019 03:30:25 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id a11sm10103044wrx.59.2019.08.13.03.30.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Aug 2019 03:30:24 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 11:30:22 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, od@zcrc.me,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: Re: [PATCH 10/11] mfd: Drop obsolete JZ4740 driver
-Message-ID: <20190813103022.GB26727@dell>
-References: <20190725220215.460-1-paul@crapouillou.net>
- <20190725220215.460-11-paul@crapouillou.net>
- <20190812081640.GA26727@dell>
- <4b48e597-951e-45fd-dfb2-4a1292a8b067@amsat.org>
- <1565690508.1856.0@crapouillou.net>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=icok7aUr9NjweCwQOu8d7MJikZLhsx5ZtDw4IRqdFmk=;
+        b=rTl2rCgZ9jT64V+qJgaaOV0AG4xoiNeehVr9JZNuhliK8DtNJEtyCLfCzGIBWMYdRp
+         F1h7YO35yB9wJxOwNLITbdqQ9Q1VuGZUdn08BtGtTXSiVhfleOMN1x06bV4WUEaN70nC
+         lvwFJTkDKEB5haxp6M7H92sBRgQht5qsNGy1s2xAHcuE8gGphxFUjJM7M3vTLIUo+KgI
+         s9TeP31OLemWFzdF3ru8FxG/6IF4XYH3+mtupj9a6aYimb4b5GoX1sesiQrym4VU6m1a
+         FC5u4a+2nbDLRfT2eGN4eKUt0OXh+2aAtqpoaa+LoIf0Yq32FmK4Y9QIr3BN9oZOdJAC
+         izgQ==
+X-Gm-Message-State: APjAAAVgBG6ykGi6qGcml7Xt6WLx3NHYukT+9HvuzU53W+lPmwfWUhlW
+        lgUcHOXPzl9sSHO6AkBdHx/3APQj
+X-Google-Smtp-Source: APXvYqytu7jljMXl7piQTtFyuq5M5HqC4HT4b0x+oerpWvA/dJtA2SMtGmXVK6JxQNJW6ot9uaCZ6Q==
+X-Received: by 2002:a65:68c8:: with SMTP id k8mr34088677pgt.192.1565702699770;
+        Tue, 13 Aug 2019 06:24:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p65sm110032557pfp.58.2019.08.13.06.24.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 06:24:58 -0700 (PDT)
+Subject: Re: [PATCH v2 3/4] hwmon/ltc2990: Add platform_data support
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+References: <20190812235237.21797-1-max@enpas.org>
+ <20190812235237.21797-3-max@enpas.org> <20190813080237.GA29986@roeck-us.net>
+ <6912362a-1f58-a9d6-f86b-d16930aa359c@enpas.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <275c42b3-9a91-a73a-0696-3c5a0a344509@roeck-us.net>
+Date:   Tue, 13 Aug 2019 06:24:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1565690508.1856.0@crapouillou.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <6912362a-1f58-a9d6-f86b-d16930aa359c@enpas.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 13 Aug 2019, Paul Cercueil wrote:
-
-> Hi Philippe,
+On 8/13/19 3:10 AM, Max Staudt wrote:
+> On 08/13/2019 10:02 AM, Guenter Roeck wrote:
+>> On Tue, Aug 13, 2019 at 01:52:36AM +0200, Max Staudt wrote:
+>>> This allows code using i2c_new_device() to specify a measurement mode.
+>>>
+>>> Signed-off-by: Max Staudt <max@enpas.org>
+>>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>>> ---
+>>>   drivers/hwmon/ltc2990.c               |  9 +++++++++
+>>>   include/linux/platform_data/ltc2990.h | 11 +++++++++++
+>>>   2 files changed, 20 insertions(+)
+>>>   create mode 100644 include/linux/platform_data/ltc2990.h
+>>>
+>>> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+>>> index f9431ad43..f19b9c50c 100644
+>>> --- a/drivers/hwmon/ltc2990.c
+>>> +++ b/drivers/hwmon/ltc2990.c
+>>> @@ -14,6 +14,7 @@
+>>>   #include <linux/kernel.h>
+>>>   #include <linux/module.h>
+>>>   #include <linux/of.h>
+>>> +#include <linux/platform_data/ltc2990.h>
+>>>   
+>>>   #define LTC2990_STATUS	0x00
+>>>   #define LTC2990_CONTROL	0x01
+>>> @@ -206,6 +207,7 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>>   	int ret;
+>>>   	struct device *hwmon_dev;
+>>>   	struct ltc2990_data *data;
+>>> +	struct ltc2990_platform_data *pdata = dev_get_platdata(&i2c->dev);
+>>>   	struct device_node *of_node = i2c->dev.of_node;
+>>>   
+>>>   	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA |
+>>> @@ -227,6 +229,13 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>>   		if (data->mode[0] & ~LTC2990_MODE0_MASK ||
+>>>   		    data->mode[1] & ~LTC2990_MODE1_MASK)
+>>>   			return -EINVAL;
+>>> +	} else if (pdata) {
+>>> +		data->mode[0] = pdata->meas_mode[0];
+>>> +		data->mode[1] = pdata->meas_mode[1];
+>>> +
+>>> +		if (data->mode[0] & ~LTC2990_MODE0_MASK ||
+>>> +		    data->mode[1] & ~LTC2990_MODE1_MASK)
+>>> +			return -EINVAL;
+>>
+>> I would prefer if the driver was modified to accept device
+>> properties, and if those were set using the appropriate
+>> fwnode function. Any reason for not doing that ?
 > 
+> The driver does have DT support implemented right above my new platform_data code, and DT takes precedence. However, I can't set DT data programatically when instantiating the client using i2c_new_device() - hence the platform_data support.
 > 
-> Le mar. 13 août 2019 à 10:44, Philippe =?iso-8859-1?q?Mathieu-Daud=E9?=
-> <f4bug@amsat.org> a écrit :
-> > Hi Lee,
-> > 
-> > On 8/12/19 10:16 AM, Lee Jones wrote:
-> > >  On Thu, 25 Jul 2019, Paul Cercueil wrote:
-> > > 
-> > > >  It has been replaced with the ingenic-iio driver for the ADC.
-> > > > 
-> > > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > > >  Tested-by: Artur Rojek <contact@artur-rojek.eu>
-> > > >  ---
-> > > >   drivers/mfd/Kconfig      |   9 --
-> > > >   drivers/mfd/Makefile     |   1 -
-> > > >   drivers/mfd/jz4740-adc.c | 324
-> > > > ---------------------------------------
-> > > >   3 files changed, 334 deletions(-)
-> > > >   delete mode 100644 drivers/mfd/jz4740-adc.c
-> > > 
-> > >  Applied, thanks.
-> > 
-> > It seems the replacement is done in "MIPS: qi_lb60: Migrate to
-> > devicetree" which is not yet merged.
-> 
-> It's merged in the MIPS tree, though, so it'll blend together just
-> fine in linux-next.
 
-Wonderful.  Thanks Paul.
+Sorry, I don't understand. Why exactly can't you replace of_property_read_u32_array()
+with device_property_read_u32_array() and use fwnode_create_software_node()
+in the calling code to set the properties ?
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Guenter
