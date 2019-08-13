@@ -2,141 +2,102 @@ Return-Path: <SRS0=bPS5=WJ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E404C32750
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 13:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E369C32750
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 18:18:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B2F820663
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 13:32:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 595932067D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 18:18:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="WTj/ir7E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728769AbfHMNcq convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Aug 2019 09:32:46 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43557 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728095AbfHMNcq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Aug 2019 09:32:46 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e12so28153236otp.10;
-        Tue, 13 Aug 2019 06:32:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=blr8hsC4CXt5RNI7OKh20qzgOazZxlZ6gz4Viaw7hE8=;
-        b=gMr9413Mr9yWh+2KgM0ENm2pyeUZKi5dv3iogP35LfeuRUmV0TksGtP+Rsz5yS4cHE
-         p+OrhTYtNlpkudxdmFVeGVTATMT9x2dprxMhRluvvMip7tQPYGWRfckBqdEh+vRFRcLA
-         aQj64LS3eMed5e++Y6+TjEHJYm5USpjckP9PLFH4MIEjd98lkxfSPlC2l6mOEWD7MD4h
-         KAFa2lNomOsMvRhEeOmg5EJp0+5tx/pbfD63Y1pASX06wTvQ6qZZ29HrQS+Putx/Om3a
-         spnfFmKfHroRgauP3Moz2t4ePdhbsaskvFT9t/lCUPrD/lYz+dbuiXQwq6bWaLkR3mtJ
-         8WoQ==
-X-Gm-Message-State: APjAAAVDTdBBfwsoz9YlYkmrYnjwbry8SzTkmAPh3JXJS8UcmE2JklMv
-        SzPamhsvHS1puPkQqASGNwrYJMCOJ8zzfR6qmdqiUjyf
-X-Google-Smtp-Source: APXvYqzTRJDeIg0uN8q7lkpd/rdMToHfZRcHOugp+hBk6YJ0KdGcT/SckeR77TGSk+J/QXvFEhleLVWaw8dfFVql0Tw=
-X-Received: by 2002:a05:6808:3c5:: with SMTP id o5mr1532758oie.102.1565703164877;
- Tue, 13 Aug 2019 06:32:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190812235237.21797-1-max@enpas.org> <20190812235237.21797-3-max@enpas.org>
- <20190813080237.GA29986@roeck-us.net> <CAMuHMdXHbjfrdusGB3qvcu1a=W65Ef1-NrvcCv1h9E9uicknLg@mail.gmail.com>
- <1aff162f-f548-954c-b9d4-c6207a6c5875@roeck-us.net>
-In-Reply-To: <1aff162f-f548-954c-b9d4-c6207a6c5875@roeck-us.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Aug 2019 15:32:33 +0200
-Message-ID: <CAMuHMdVf0VnVkvSnuneBnjQNoexWPS-Un70-F3hc2ev4mkF8TQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon/ltc2990: Add platform_data support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Max Staudt <max@enpas.org>, Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        id S1728559AbfHMSSr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Aug 2019 14:18:47 -0400
+Received: from mout.gmx.net ([212.227.17.20]:59139 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727491AbfHMSSq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 13 Aug 2019 14:18:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1565720284;
+        bh=Vq2Rwn6ZpDvdbJzC++Agdo9RfM34OqXBHgokRaHCjmc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=WTj/ir7EWEPBhjOfci3nIob7y7Q1LoWiIMlCuv24p4jOapHe13C8kQP1MU3RQP9xU
+         vVQ+vqLusWjOoEXRPfVS9EXx7wyyJTTjfgTSEPwe9oZdokO58Uz1A2VYizXKlaN7Dg
+         x2cv1Dd1xOY0LA4dMH2gYzdZ2M9ztOBzoOuXZECc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
+ (mrgmx102 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 0MSY2q-1hpnKh3mBI-00Ragk; Tue, 13 Aug 2019 20:18:04 +0200
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH 1/3] nvmem: mxs-ocotp: update MODULE_AUTHOR() email address
+Date:   Tue, 13 Aug 2019 20:17:27 +0200
+Message-Id: <1565720249-6549-1-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:ggoDPxD3GY7PepSw+ctdpLrl9Y0S1aRCjm4mFCxJFfmatdyhLMv
+ gQKCUttMR8MgugL3SYZ2iq96h7Lf+bYGIB4yBaRwN5Vk8ECnW/3ra/jpu88CzXnkGskboOV
+ tt1BYCRwY4h5TfJGVwZObZWKs/kHuVwwLogYL8GQRhwOnNMB7WBC2c04E8ZGgxUXDpSBYJE
+ inPKHKeIaVdlIIdO493Hw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FquO+c5eQAc=:oWHph4cQRWLnygCC2s+DAJ
+ KzLKi4uLouuuF8GVsW+JuZf+JT8qOhhX+M8HHg4ISWTwTggQ/88i4v1z1L8rOqtpjr8FzQbqn
+ tVzN8dsDs0Qs0INEuJB9JoAjZZgABQJ/8GoLzf4fkrHSHchjM8tZscYGdedU5Hcz82pMq2x3B
+ LhnwImhLhZauw1zbCReTPhleCxPzUvHj7Slg4Jy8Hr03QA5s0W/YdOuU8xtVe5Y0EHxC7LsT7
+ Dn22kRzsngfOIV3iP93/WslGLrF57bApI+gdn9AlsKkaWWG8mMuD3Lu7HGumX1ld5zTgWhJc1
+ Ml/bU6gCCn3RaAz3tWW8UGL1qjNHfJRpLVA3Ig3vVsdQX2UKQFQK2jTWL80Qo+3JNq8HWAbDA
+ Ow9zEBqHmFVMn3k4x6DRCwL+kDFl+CZQKTjJ1Q085MPNb2Qrvu0/3u2MZEEADTdQpDIdmkT3I
+ eemDTG7WQOEaqgSxTJXGrrez3WVBTQzA/lbFulhiyM9uygyRxNx0L75EydKZB/qSwqjZKaS5z
+ JgSgoHIiUZeFPADSUKUNpoyhSHcZsJc6lIGRqbH4HfO7/SZzPc4d6KhPBdWgZtizGC+IQL3NO
+ yViNAEzK0E3o05spkTh6ShkHhlyXt1gGNePwvNo1Ie42g7VzJ0GmVaLpesQJJjYlRi013xGH/
+ uZ7PVe6J0JTGLL5yq8EyOkhn8A1dJxm13EUijNTtX8LT5lYCJ9yQaTcnE6OpkKQO4DzPDzqpC
+ QakBF27rkY1YIq0r1xBTS12aspTRWi2q7ac/0QZHYZypPKXU8Oyr5jAMDJw/o7rL4NrP3/3qR
+ vxaU+UMgImqd69i65UMH+jNhNXgsXWVGBV2J7HpEXN/oOI0kg8NeWCLWiX/UXFmRtLRQX43Ax
+ Vxz6RqcJvqQ6JtmBQycSd5/iplhipnsShUUbvTn0wM5ImSI8qSJ+83ksDxUw5p+cyQJbq8YQ1
+ SvG1+vMhd2hlk/LujgOnultEYTWu2V7UlrcdGYBOAsKmFC0C1SKDoIKV+FoKtcaNHsdSFoy3E
+ 2wqSi6pmgWoKFmF/UqpSLXe6ZbE0XaOweQ0V0CHPz+RRziCNhCeEzkxPjHBB5O4vt9v+TXJaA
+ AJZAdQDsOtgICLm8SCTzJimj0pkZVXbbQL077tNPeQ8zAomIyHyv0bs1tOY7lqrEahzfNvBSP
+ EAa1T7vDowUaDmVZ+SJ49fZkOmfm+aagWgAslo6bf+tAFP+g==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Günter,
+The email address listed in MODULE_AUTHOR() will be disabled in the
+near future. Replace it with my private one.
 
-On Tue, Aug 13, 2019 at 3:27 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 8/13/19 1:27 AM, Geert Uytterhoeven wrote:
-> > On Tue, Aug 13, 2019 at 10:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> On Tue, Aug 13, 2019 at 01:52:36AM +0200, Max Staudt wrote:
-> >>> This allows code using i2c_new_device() to specify a measurement mode.
-> >>>
-> >>> Signed-off-by: Max Staudt <max@enpas.org>
-> >>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> >>> ---
-> >>>   drivers/hwmon/ltc2990.c               |  9 +++++++++
-> >>>   include/linux/platform_data/ltc2990.h | 11 +++++++++++
-> >>>   2 files changed, 20 insertions(+)
-> >>>   create mode 100644 include/linux/platform_data/ltc2990.h
-> >>>
-> >>> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
-> >>> index f9431ad43..f19b9c50c 100644
-> >>> --- a/drivers/hwmon/ltc2990.c
-> >>> +++ b/drivers/hwmon/ltc2990.c
-> >>> @@ -14,6 +14,7 @@
-> >>>   #include <linux/kernel.h>
-> >>>   #include <linux/module.h>
-> >>>   #include <linux/of.h>
-> >>> +#include <linux/platform_data/ltc2990.h>
-> >>>
-> >>>   #define LTC2990_STATUS       0x00
-> >>>   #define LTC2990_CONTROL      0x01
-> >>> @@ -206,6 +207,7 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
-> >>>        int ret;
-> >>>        struct device *hwmon_dev;
-> >>>        struct ltc2990_data *data;
-> >>> +     struct ltc2990_platform_data *pdata = dev_get_platdata(&i2c->dev);
-> >>>        struct device_node *of_node = i2c->dev.of_node;
-> >>>
-> >>>        if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA |
-> >>> @@ -227,6 +229,13 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
-> >>>                if (data->mode[0] & ~LTC2990_MODE0_MASK ||
-> >>>                    data->mode[1] & ~LTC2990_MODE1_MASK)
-> >>>                        return -EINVAL;
-> >>> +     } else if (pdata) {
-> >>> +             data->mode[0] = pdata->meas_mode[0];
-> >>> +             data->mode[1] = pdata->meas_mode[1];
-> >>> +
-> >>> +             if (data->mode[0] & ~LTC2990_MODE0_MASK ||
-> >>> +                 data->mode[1] & ~LTC2990_MODE1_MASK)
-> >>> +                     return -EINVAL;
-> >>
-> >> I would prefer if the driver was modified to accept device
-> >> properties, and if those were set using the appropriate
-> >> fwnode function. Any reason for not doing that ?
-> >
-> > That was my first thought as well, but isn't that limited to DT and ACPI
-> > properties (for now)?
->
-> tcpm and, for example, the wcove driver don't seem to have a problem using
-> it, I don't see acpi involved there. Also, the code resides in the core driver
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ drivers/nvmem/mxs-ocotp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cool, just discovered that, following your other fwnode_create_software_node()
-pointer...
+diff --git a/drivers/nvmem/mxs-ocotp.c b/drivers/nvmem/mxs-ocotp.c
+index c34d9fe..8e4898d 100644
+=2D-- a/drivers/nvmem/mxs-ocotp.c
++++ b/drivers/nvmem/mxs-ocotp.c
+@@ -200,6 +200,6 @@ static struct platform_driver mxs_ocotp_driver =3D {
+ };
 
-> code and is always enabled unless I am missing something. What am I missing ?
+ module_platform_driver(mxs_ocotp_driver);
+-MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
++MODULE_AUTHOR("Stefan Wahren <wahrenst@gmx.net");
+ MODULE_DESCRIPTION("driver for OCOTP in i.MX23/i.MX28");
+ MODULE_LICENSE("GPL v2");
+=2D-
+2.7.4
 
-You're missing that I'm not up-to-date w.r.t. the latest fwnode properties
-development ;-)
-
-Thanks a lot!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
