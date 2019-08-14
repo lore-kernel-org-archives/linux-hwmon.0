@@ -1,134 +1,116 @@
-Return-Path: <SRS0=bPS5=WJ=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=rYz2=WK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BEAFC433FF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 18:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6096AC32757
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 13:39:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6ABA2067D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Aug 2019 18:19:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3886B2083B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 13:39:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="Sb0U0MtZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iBwFtKvZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbfHMSTF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Aug 2019 14:19:05 -0400
-Received: from mout.gmx.net ([212.227.17.20]:42053 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728346AbfHMSTF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Aug 2019 14:19:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1565720285;
-        bh=YHgFWABQCK3bkmWuvNIeLgrrCAVC2vvx0YHFsJqPSD0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Sb0U0MtZNl45R7+uO3PXfMLtAXwvIHJZgtOfiWqpZrgqg1GhQAWCYtLvaQUUXdIbe
-         23ZWBoOIr1Zgiw9fdJUZB1gI0Wfj9TXh8rzAZ9pm1dphvebFOhZ3xBGSU5959y1iFE
-         gAgj4upoBLJ5y7zEKxnQ9pR9av5po19pb7/3vGwg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
- (mrgmx102 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0MhNk6-1haxsV0bqc-00MeTk; Tue, 13 Aug 2019 20:18:05 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S1728314AbfHNNjP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Aug 2019 09:39:15 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33099 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726821AbfHNNjP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:39:15 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g2so53603739pfq.0;
+        Wed, 14 Aug 2019 06:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pEriqsQ7CQvEEvoCUgLilgpVMRHXmKM4NZ9ssbqI1u8=;
+        b=iBwFtKvZ9Q7SNkpgJ55uaD8NoFW3yFTFslHTK7AC5RzcwI/2HQh/2HUnK7lN0X4Gp1
+         I/fZ6a5699/WPbci9Yvf5/XDJu0eKE3A279hAovvbsfrRzXCDmqPSLt1iikVfehqSmxA
+         F6APPLlwkqj731BP1W08E/b8aa92nOl8xsT/OlBKcuAojZhvxtpyzs7RsG3aRm2joXnc
+         bUOVazG0hF7MQYW7zuQVadNGixMzjUYmhPcR/IvO7xprlLGEviJzCBU0sHBcrO5GwlhQ
+         VLRIDqeKl2OcDXRY27iIKJNRW7vWTgLaqnPUT63TkYDlpXxN3lf3xP9BRAcNiiMPo00J
+         TXPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pEriqsQ7CQvEEvoCUgLilgpVMRHXmKM4NZ9ssbqI1u8=;
+        b=bsSBrJXGCeU02vC/F5JJWIqluzKzcRnz5qUVUqM7hU+I3W0pln2HfvHED7tjF3X4pq
+         C29fiFwRbcOP0QGIThERsxNXzY5YeJf/WJxymywTRGjC9pe6HnLah0pQqslMnWrYENo0
+         H5b+fe0J0FAVvBCPtqxUoB8BaeYaG+xEDJndstOq2s0UY6plF+1Zchv7PYXOfMrrh7sL
+         Jwd6P9+ZZ53FqyFZE2VlmUjHsGMv0eDJLU22ZYmB5mxkpFeiJzuupbKQreC0UBmh6Qlm
+         3M83FPOJYC0M34P/FZCt7w+gTOXfCa51iBLShNTJE2wS1QxLtTn0S8TYx0TPd2RRhikU
+         dyEA==
+X-Gm-Message-State: APjAAAW5qH/rC10jJBipecj9UN9aElmpCZ7S+OLGbm479EzQ1HXxjoUg
+        QSE++6m7+RwnGioUjA6qJg4=
+X-Google-Smtp-Source: APXvYqwd4cYb6Hn+fTUOTqBOuQ3rOnxuBdLj5GdN/aMaxEctRsLNddhbrvjtpfPjobi5nALjn1Jecw==
+X-Received: by 2002:a17:90a:d792:: with SMTP id z18mr7252334pju.36.1565789954050;
+        Wed, 14 Aug 2019 06:39:14 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f20sm144273462pgg.56.2019.08.14.06.39.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Aug 2019 06:39:13 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 06:39:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stefan Wahren <wahrenst@gmx.net>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         "David S. Miller" <davem@davemloft.net>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 3/3] net: qca: update MODULE_AUTHOR() email address
-Date:   Tue, 13 Aug 2019 20:17:29 +0200
-Message-Id: <1565720249-6549-3-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565720249-6549-1-git-send-email-wahrenst@gmx.net>
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 2/3] hwmon: raspberrypi: update MODULE_AUTHOR() email
+ address
+Message-ID: <20190814133912.GA3222@roeck-us.net>
 References: <1565720249-6549-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:gySsGcmGz6lTucmKNnrxFzlSQrOGje1q3Uyp7P5YbpBq1u6e/1o
- kShlic99s4juHLf8AsHCxC++Mq6PTYzCMksl+b8R69puQmd444hYPuSizsdF2DmaT3r7NRg
- /4KTn5uNQ86bLUGJvqQ4d8XP0kDl8NCyoeQVZ7yARYRmxWbFAb719tB3kgQmcELdteWioLE
- 05T7Z1Kr1cIsjEfYEr8gA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HaPTu5B3zB8=:f6BLAuxCPvvqWE4ttkCXac
- Iy7SgqOMIfn16nyB3QGvdzAku1+q946nMVn6+Y+wwdnq3Wl1YXJHsv36MW0G0yePmGw3ahHGf
- Oozm9RpuEOBP+avDd0bnzo73fLBwBSm9M8DJT54WAL7BQNdBq1W9aaPf6/Ws2NJ+fGV6p8seh
- lUgnx9fTN2PKbGNwKk/7QiZiVhpecy9VoyHAxhn2sOFfvEuq0oi13ZhWNS0R17dCPFlOI+z2Y
- l4dkw4Sal5TCIi9OG1w973BjjKtWVClttvB1r3ljFvepoyN5DXuJiHGul/BVi+p8FusLpeyB2
- QlpeW5lQymkIGfMRpR/YQIDnOxfQrYJ4RU4LXtV1tLIaFyg9gIiucNeZ7uEe1W3bXFC2G7rD6
- o8AzHFx6vUNEaCDU/RW2Ub+2m/g3rEkrOWmZoi0gwBm0+GBy2ZYjQJRQZ4wSoNUvcWzgzqdv4
- moNb8qo+uVOx2YiOjMrV7rxQ8JRvtK1kYmM1rA0wa4EsBPGIT/ClOevE9M14UlQt5H5Gc90/q
- T1cn1YsYb9QFs/ldQ0vEI5scpg06l85IBalBLskuzv2JCxlcR+OzH0oyFSqRKHnrQYbxfM7ro
- J5GMwekeZu8bmb++nH3mZL7xvW+1VIp/KI9Zy3HRzQgpBkaT6IgvE/7gYOi54gk0Q9vJxTvdz
- UxNTviZ2i99RvNDVdutPaFsk4hh672n5r2XdYjvRpB+D6ABV3XdcMdAQKgkBJp/5AVAmPx24+
- E77VoYSWnnrmi30iVuqCUHq18/0BbYyAVVWiFou/UDPnCdQXjY8UgtoWs7tiREkd9CeFharDo
- X7WIB4vYEGnOEUE8phhngWZMGEWgX8qn7Iq6XKgMZpOPmqThpXM/23aNL9bXB3MUE070PueC4
- sUjSM1995pCNQi5qQweB20KFk6nF9c7z2DnEtWW/1EGxCPb/1P+0I3fxFsL2COqattBqHOTkS
- cs8We3ClQGTPkqlf+0Shrg2MSX8goTal36/6SVS9bm3ZdW6b+PXy4qdLMWqUwRD1EM20XFZZU
- fl5wpBTy43RmuoyJTjLxASZGPKXgN+eAu98KUeEIIB7w/6dBoY2/aWUEsGY0QKJGvGusiBTIu
- elVbxPvWdq3bSfXBv37mUzG8C4Unms/NgOK4Q2TFVLrVXmzxGqmCMsRylFMlMcPfTVZdi+FKO
- qbnt26QqI1CKSIpb/2A0gcEzg/gMEwPgFXHk46JmMgCH8LSQ==
-Content-Transfer-Encoding: quoted-printable
+ <1565720249-6549-2-git-send-email-wahrenst@gmx.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1565720249-6549-2-git-send-email-wahrenst@gmx.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-I2SE has been acquired by in-tech. So the email address listed in
-MODULE_AUTHOR() will be disabled in the near future. I only have access
-to QCA7000 boards at in-tech, so use my new company address.
+On Tue, Aug 13, 2019 at 08:17:28PM +0200, Stefan Wahren wrote:
+> The email address listed in MODULE_AUTHOR() will be disabled in the
+> near future. Replace it with my private one.
+> 
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/net/ethernet/qualcomm/qca_7k_common.c | 2 +-
- drivers/net/ethernet/qualcomm/qca_spi.c       | 2 +-
- drivers/net/ethernet/qualcomm/qca_uart.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Applied to hwmon-next.
 
-diff --git a/drivers/net/ethernet/qualcomm/qca_7k_common.c b/drivers/net/e=
-thernet/qualcomm/qca_7k_common.c
-index 6b511f0..87d023d 100644
-=2D-- a/drivers/net/ethernet/qualcomm/qca_7k_common.c
-+++ b/drivers/net/ethernet/qualcomm/qca_7k_common.c
-@@ -162,5 +162,5 @@ EXPORT_SYMBOL_GPL(qcafrm_fsm_decode);
+Thanks,
+Guenter
 
- MODULE_DESCRIPTION("Qualcomm Atheros QCA7000 common");
- MODULE_AUTHOR("Qualcomm Atheros Communications");
--MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
-+MODULE_AUTHOR("Stefan Wahren <stefan.wahren@in-tech.com>");
- MODULE_LICENSE("Dual BSD/GPL");
-diff --git a/drivers/net/ethernet/qualcomm/qca_spi.c b/drivers/net/etherne=
-t/qualcomm/qca_spi.c
-index b28360b..d9d3554 100644
-=2D-- a/drivers/net/ethernet/qualcomm/qca_spi.c
-+++ b/drivers/net/ethernet/qualcomm/qca_spi.c
-@@ -1034,6 +1034,6 @@ module_spi_driver(qca_spi_driver);
-
- MODULE_DESCRIPTION("Qualcomm Atheros QCA7000 SPI Driver");
- MODULE_AUTHOR("Qualcomm Atheros Communications");
--MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
-+MODULE_AUTHOR("Stefan Wahren <stefan.wahren@in-tech.com>");
- MODULE_LICENSE("Dual BSD/GPL");
- MODULE_VERSION(QCASPI_DRV_VERSION);
-diff --git a/drivers/net/ethernet/qualcomm/qca_uart.c b/drivers/net/ethern=
-et/qualcomm/qca_uart.c
-index 5906168..ab4da8e 100644
-=2D-- a/drivers/net/ethernet/qualcomm/qca_uart.c
-+++ b/drivers/net/ethernet/qualcomm/qca_uart.c
-@@ -418,6 +418,6 @@ module_serdev_device_driver(qca_uart_driver);
-
- MODULE_DESCRIPTION("Qualcomm Atheros QCA7000 UART Driver");
- MODULE_AUTHOR("Qualcomm Atheros Communications");
--MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
-+MODULE_AUTHOR("Stefan Wahren <stefan.wahren@in-tech.com>");
- MODULE_LICENSE("Dual BSD/GPL");
- MODULE_VERSION(QCAUART_DRV_VERSION);
-=2D-
-2.7.4
-
+> ---
+>  drivers/hwmon/raspberrypi-hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --
+> 2.7.4
+> 
+> diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+> index efe4bb1..d3a64a3 100644
+> --- a/drivers/hwmon/raspberrypi-hwmon.c
+> +++ b/drivers/hwmon/raspberrypi-hwmon.c
+> @@ -146,7 +146,7 @@ static struct platform_driver rpi_hwmon_driver = {
+>  };
+>  module_platform_driver(rpi_hwmon_driver);
+> 
+> -MODULE_AUTHOR("Stefan Wahren <stefan.wahren@i2se.com>");
+> +MODULE_AUTHOR("Stefan Wahren <wahrenst@gmx.net>");
+>  MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_ALIAS("platform:raspberrypi-hwmon");
