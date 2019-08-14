@@ -2,920 +2,159 @@ Return-Path: <SRS0=rYz2=WK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AD8C32753
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 20:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C79C9C433FF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 22:33:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 14CB120651
-	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 20:53:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A53152064A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 14 Aug 2019 22:33:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729742AbfHNUxx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 14 Aug 2019 16:53:53 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:35795 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728277AbfHNUxx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 14 Aug 2019 16:53:53 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MelWf-1iWVfO0Obl-00amXq; Wed, 14 Aug 2019 22:52:55 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Anatolij Gustschin <agust@denx.de>,
+        id S1728936AbfHNWdp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 14 Aug 2019 18:33:45 -0400
+Received: from enpas.org ([46.38.239.100]:59260 "EHLO mail.enpas.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728597AbfHNWdp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 14 Aug 2019 18:33:45 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id E5DFD10016E;
+        Wed, 14 Aug 2019 22:33:40 +0000 (UTC)
+Subject: Re: [PATCH v2 1/4] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 06/18] compat_ioctl: move WDIOC handling into wdt drivers
-Date:   Wed, 14 Aug 2019 22:49:18 +0200
-Message-Id: <20190814205245.121691-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190814204259.120942-1-arnd@arndb.de>
-References: <20190814204259.120942-1-arnd@arndb.de>
+        Guenter Roeck <linux@roeck-us.net>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+References: <20190812235237.21797-1-max@enpas.org>
+ <20190814194714.GB9756@kunai>
+From:   Max Staudt <max@enpas.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
+ 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
+ urZIw0nz8zec+73Bv/qF4GHHftLYfA==
+Message-ID: <f33ef44e-61e8-0392-7f5c-5a0bd7b42fff@enpas.org>
+Date:   Thu, 15 Aug 2019 00:33:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:a6kAScvsv50hT1NELen7zAYH9qygDTRzq1l9QB7DcbqRWok0RWQ
- ue90k8BQu/iaOBvJiZpGQ4f8Qcii148hcNCyHmrKkDg1K/LvLxg9qh4ubKNoDcivd00xmKV
- 68EjYkfBau/0VehiF7Lf2PMrPnWQgzusdxqX1nghtietn4gso6kKEotTpUqEQJkQsPJm/h3
- sIym8X71cQ6aQ3pXHLs/w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xe708eNlWTM=:5mcJGKR0M21Xu7L9P8i4ws
- EqevnUp0rVDZRF/GEUDIeyCThi9e33Zn10+WtS5tDrNc0PpLqO1C2N4AsYj0s5ZYU+V5NmIBN
- 6231Y+/z+rlUnwMY3vYo0oQMy5gEwDaKMV2aWktbzbBkYx444oc/4jgvIhAZcPzITvReBVUz0
- PldJ4dE3xSQ8rcPUirJtrZxTeoTpe29COSnWvhlkwT8BT6rWaZd9Jq3NfhyRi7DCML738eroU
- M1cvYp+Cr6nnguHul8kp/d/9PRI/I4zVbDDDHlfXuUhEbidREePuupFw8uiDQm+EKkUOSdIgD
- 4C4MCp3JanFScoKYiXS+8/hf9ARjtNrkgPaxPctPqxQtlsGDbYplXf5AN8LX5b1u4HRBOUPIR
- Db4aS0v76bZoqRDMh9iSDMaUCCZpnABVVnykRabcUcRdi9sonR855xiiJYftDTWeLjj2+Sgqm
- 6z6JuCvPIXV//TOhZAxbLiRZPwKJqYD3eCM+8+AUGw7B6YWOgUi1M3cBoMNlzvWM/uc0Qwwdz
- afoTxofedf+SBSeBfYvI6KgJFngAm8FZ8HvKXjE9SpTI8IU6102qSK9Twd8vfX9ozRxohxj4G
- 26qS9w7frot2eCo876CnMAnBZtgIZUA0GUa7xQonNSsMABq16q27v/Z6b9cvmmF5mGHWGG8Xo
- cHRRE53XhfTZXY/kGKp79geBvghUtOCKomrlWp/OIv939aPMk0mM35Jrp0jkjg1XDOKpnMqBG
- mNYrKrxMKnNxKqwsIYHEIoa0Uoh2LfvQeQnjvw==
+In-Reply-To: <20190814194714.GB9756@kunai>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-All watchdog drivers implement the same set of ioctl commands, and
-fortunately all of them are compatible between 32-bit and 64-bit
-architectures.
+Hi Wolfram,
 
-Modern drivers always go through drivers/watchdog/wdt.c as an abstraction
-layer, but older ones implement their own file_operations on a character
-device for this.
+Thanks for your input!
+Replies below.
 
-Move the handling from fs/compat_ioctl.c into the individual drivers.
 
-Note that most of the legacy drivers will never be used on 64-bit
-hardware, because they are for an old 32-bit SoC implementation, but
-doing them all at once is safer than trying to guess which ones do
-or do not need the compat_ioctl handling.
+On 08/14/2019 09:47 PM, Wolfram Sang wrote:
+>> +static int clock = 0x1c;
+>> +module_param(clock, int, 0444);
+> 
+> 'clock' determines the bus speed?
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/powerpc/platforms/52xx/mpc52xx_gpt.c |  1 +
- arch/um/drivers/harddog_kern.c            |  1 +
- drivers/char/ipmi/ipmi_watchdog.c         |  1 +
- drivers/hwmon/fschmd.c                    |  1 +
- drivers/rtc/rtc-ds1374.c                  |  1 +
- drivers/watchdog/acquirewdt.c             |  1 +
- drivers/watchdog/advantechwdt.c           |  1 +
- drivers/watchdog/alim1535_wdt.c           |  1 +
- drivers/watchdog/alim7101_wdt.c           |  1 +
- drivers/watchdog/ar7_wdt.c                |  1 +
- drivers/watchdog/at91rm9200_wdt.c         |  1 +
- drivers/watchdog/ath79_wdt.c              |  1 +
- drivers/watchdog/bcm63xx_wdt.c            |  1 +
- drivers/watchdog/cpu5wdt.c                |  1 +
- drivers/watchdog/eurotechwdt.c            |  1 +
- drivers/watchdog/f71808e_wdt.c            |  1 +
- drivers/watchdog/gef_wdt.c                |  1 +
- drivers/watchdog/geodewdt.c               |  1 +
- drivers/watchdog/ib700wdt.c               |  1 +
- drivers/watchdog/ibmasr.c                 |  1 +
- drivers/watchdog/indydog.c                |  1 +
- drivers/watchdog/intel_scu_watchdog.c     |  1 +
- drivers/watchdog/iop_wdt.c                |  1 +
- drivers/watchdog/it8712f_wdt.c            |  1 +
- drivers/watchdog/ixp4xx_wdt.c             |  1 +
- drivers/watchdog/ks8695_wdt.c             |  1 +
- drivers/watchdog/m54xx_wdt.c              |  1 +
- drivers/watchdog/machzwd.c                |  1 +
- drivers/watchdog/mixcomwd.c               |  1 +
- drivers/watchdog/mtx-1_wdt.c              |  1 +
- drivers/watchdog/mv64x60_wdt.c            |  1 +
- drivers/watchdog/nuc900_wdt.c             |  1 +
- drivers/watchdog/nv_tco.c                 |  1 +
- drivers/watchdog/pc87413_wdt.c            |  1 +
- drivers/watchdog/pcwd.c                   |  1 +
- drivers/watchdog/pcwd_pci.c               |  1 +
- drivers/watchdog/pcwd_usb.c               |  1 +
- drivers/watchdog/pika_wdt.c               |  1 +
- drivers/watchdog/pnx833x_wdt.c            |  1 +
- drivers/watchdog/rc32434_wdt.c            |  1 +
- drivers/watchdog/rdc321x_wdt.c            |  1 +
- drivers/watchdog/riowd.c                  |  1 +
- drivers/watchdog/sa1100_wdt.c             |  1 +
- drivers/watchdog/sb_wdog.c                |  1 +
- drivers/watchdog/sbc60xxwdt.c             |  1 +
- drivers/watchdog/sbc7240_wdt.c            |  1 +
- drivers/watchdog/sbc_epx_c3.c             |  1 +
- drivers/watchdog/sbc_fitpc2_wdt.c         |  1 +
- drivers/watchdog/sc1200wdt.c              |  1 +
- drivers/watchdog/sc520_wdt.c              |  1 +
- drivers/watchdog/sch311x_wdt.c            |  1 +
- drivers/watchdog/scx200_wdt.c             |  1 +
- drivers/watchdog/smsc37b787_wdt.c         |  1 +
- drivers/watchdog/w83877f_wdt.c            |  1 +
- drivers/watchdog/w83977f_wdt.c            |  1 +
- drivers/watchdog/wafer5823wdt.c           |  1 +
- drivers/watchdog/watchdog_dev.c           |  1 +
- drivers/watchdog/wdrtas.c                 |  1 +
- drivers/watchdog/wdt.c                    |  1 +
- drivers/watchdog/wdt285.c                 |  1 +
- drivers/watchdog/wdt977.c                 |  1 +
- drivers/watchdog/wdt_pci.c                |  1 +
- fs/compat_ioctl.c                         | 11 -----------
- 63 files changed, 62 insertions(+), 11 deletions(-)
+Yes, but it also determines the frequency of the oscillator driving the PCF8584. It doesn't usually need to be touched, the current setting drives at the maximum I2C bus speed, with the maximum oscillator (12 MHz).
+I kept it in because i2c-elektor also exposes it in the same way, and it seems useful.
 
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-index ba12dc14a3d1..8c0d324f657e 100644
---- a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-+++ b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-@@ -650,6 +650,7 @@ static const struct file_operations mpc52xx_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= mpc52xx_wdt_write,
- 	.unlocked_ioctl = mpc52xx_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= mpc52xx_wdt_open,
- 	.release	= mpc52xx_wdt_release,
- };
-diff --git a/arch/um/drivers/harddog_kern.c b/arch/um/drivers/harddog_kern.c
-index 000cb69ba0bc..e6d4f43deba8 100644
---- a/arch/um/drivers/harddog_kern.c
-+++ b/arch/um/drivers/harddog_kern.c
-@@ -165,6 +165,7 @@ static const struct file_operations harddog_fops = {
- 	.owner		= THIS_MODULE,
- 	.write		= harddog_write,
- 	.unlocked_ioctl	= harddog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= harddog_open,
- 	.release	= harddog_release,
- 	.llseek		= no_llseek,
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 74c6d1f34132..55986e10a124 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -893,6 +893,7 @@ static const struct file_operations ipmi_wdog_fops = {
- 	.poll    = ipmi_poll,
- 	.write   = ipmi_write,
- 	.unlocked_ioctl = ipmi_unlocked_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open    = ipmi_open,
- 	.release = ipmi_close,
- 	.fasync  = ipmi_fasync,
-diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
-index fa0c2f1fb443..4136643d8e0c 100644
---- a/drivers/hwmon/fschmd.c
-+++ b/drivers/hwmon/fschmd.c
-@@ -954,6 +954,7 @@ static const struct file_operations watchdog_fops = {
- 	.release = watchdog_release,
- 	.write = watchdog_write,
- 	.unlocked_ioctl = watchdog_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- };
- 
- 
-diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
-index 225a8df1d4e9..7e73be9898ac 100644
---- a/drivers/rtc/rtc-ds1374.c
-+++ b/drivers/rtc/rtc-ds1374.c
-@@ -586,6 +586,7 @@ static const struct file_operations ds1374_wdt_fops = {
- 	.owner			= THIS_MODULE,
- 	.read			= ds1374_wdt_read,
- 	.unlocked_ioctl		= ds1374_wdt_unlocked_ioctl,
-+	.compat_ioctl		= compat_ptr_ioctl,
- 	.write			= ds1374_wdt_write,
- 	.open                   = ds1374_wdt_open,
- 	.release                = ds1374_wdt_release,
-diff --git a/drivers/watchdog/acquirewdt.c b/drivers/watchdog/acquirewdt.c
-index 848db958411e..bc6f333565d3 100644
---- a/drivers/watchdog/acquirewdt.c
-+++ b/drivers/watchdog/acquirewdt.c
-@@ -221,6 +221,7 @@ static const struct file_operations acq_fops = {
- 	.llseek		= no_llseek,
- 	.write		= acq_write,
- 	.unlocked_ioctl	= acq_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= acq_open,
- 	.release	= acq_close,
- };
-diff --git a/drivers/watchdog/advantechwdt.c b/drivers/watchdog/advantechwdt.c
-index 0d02bb275b3d..0e4c18a2aa42 100644
---- a/drivers/watchdog/advantechwdt.c
-+++ b/drivers/watchdog/advantechwdt.c
-@@ -220,6 +220,7 @@ static const struct file_operations advwdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= advwdt_write,
- 	.unlocked_ioctl	= advwdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= advwdt_open,
- 	.release	= advwdt_close,
- };
-diff --git a/drivers/watchdog/alim1535_wdt.c b/drivers/watchdog/alim1535_wdt.c
-index c157dd3d92a3..42338c7d4540 100644
---- a/drivers/watchdog/alim1535_wdt.c
-+++ b/drivers/watchdog/alim1535_wdt.c
-@@ -362,6 +362,7 @@ static const struct file_operations ali_fops = {
- 	.llseek		=	no_llseek,
- 	.write		=	ali_write,
- 	.unlocked_ioctl =	ali_ioctl,
-+	.compat_ioctl	= 	compat_ptr_ioctl,
- 	.open		=	ali_open,
- 	.release	=	ali_release,
- };
-diff --git a/drivers/watchdog/alim7101_wdt.c b/drivers/watchdog/alim7101_wdt.c
-index c8e3ab056767..5af0358f4390 100644
---- a/drivers/watchdog/alim7101_wdt.c
-+++ b/drivers/watchdog/alim7101_wdt.c
-@@ -294,6 +294,7 @@ static const struct file_operations wdt_fops = {
- 	.open		=	fop_open,
- 	.release	=	fop_close,
- 	.unlocked_ioctl	=	fop_ioctl,
-+	.compat_ioctl	= 	compat_ptr_ioctl,
- };
- 
- static struct miscdevice wdt_miscdev = {
-diff --git a/drivers/watchdog/ar7_wdt.c b/drivers/watchdog/ar7_wdt.c
-index 668a1c704f28..c087027ffd5d 100644
---- a/drivers/watchdog/ar7_wdt.c
-+++ b/drivers/watchdog/ar7_wdt.c
-@@ -250,6 +250,7 @@ static const struct file_operations ar7_wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.write		= ar7_wdt_write,
- 	.unlocked_ioctl	= ar7_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= ar7_wdt_open,
- 	.release	= ar7_wdt_release,
- 	.llseek		= no_llseek,
-diff --git a/drivers/watchdog/at91rm9200_wdt.c b/drivers/watchdog/at91rm9200_wdt.c
-index 907a4545dee6..6d751eb8191d 100644
---- a/drivers/watchdog/at91rm9200_wdt.c
-+++ b/drivers/watchdog/at91rm9200_wdt.c
-@@ -213,6 +213,7 @@ static const struct file_operations at91wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= at91_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= at91_wdt_open,
- 	.release	= at91_wdt_close,
- 	.write		= at91_wdt_write,
-diff --git a/drivers/watchdog/ath79_wdt.c b/drivers/watchdog/ath79_wdt.c
-index 2e09981fe978..9ca8e5117dd8 100644
---- a/drivers/watchdog/ath79_wdt.c
-+++ b/drivers/watchdog/ath79_wdt.c
-@@ -234,6 +234,7 @@ static const struct file_operations ath79_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= ath79_wdt_write,
- 	.unlocked_ioctl	= ath79_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= ath79_wdt_open,
- 	.release	= ath79_wdt_release,
- };
-diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
-index e2af37c9a266..8a043b52aa2f 100644
---- a/drivers/watchdog/bcm63xx_wdt.c
-+++ b/drivers/watchdog/bcm63xx_wdt.c
-@@ -221,6 +221,7 @@ static const struct file_operations bcm63xx_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= bcm63xx_wdt_write,
- 	.unlocked_ioctl	= bcm63xx_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= bcm63xx_wdt_open,
- 	.release	= bcm63xx_wdt_release,
- };
-diff --git a/drivers/watchdog/cpu5wdt.c b/drivers/watchdog/cpu5wdt.c
-index d6d53014cb68..9867a3a936df 100644
---- a/drivers/watchdog/cpu5wdt.c
-+++ b/drivers/watchdog/cpu5wdt.c
-@@ -187,6 +187,7 @@ static const struct file_operations cpu5wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= cpu5wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= cpu5wdt_open,
- 	.write		= cpu5wdt_write,
- 	.release	= cpu5wdt_release,
-diff --git a/drivers/watchdog/eurotechwdt.c b/drivers/watchdog/eurotechwdt.c
-index 3a83a48abcae..f5ffa7be066e 100644
---- a/drivers/watchdog/eurotechwdt.c
-+++ b/drivers/watchdog/eurotechwdt.c
-@@ -371,6 +371,7 @@ static const struct file_operations eurwdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= eurwdt_write,
- 	.unlocked_ioctl	= eurwdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= eurwdt_open,
- 	.release	= eurwdt_release,
- };
-diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
-index ff5cf1b48a4d..a30ac5b120c9 100644
---- a/drivers/watchdog/f71808e_wdt.c
-+++ b/drivers/watchdog/f71808e_wdt.c
-@@ -657,6 +657,7 @@ static const struct file_operations watchdog_fops = {
- 	.release	= watchdog_release,
- 	.write		= watchdog_write,
- 	.unlocked_ioctl	= watchdog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
- static struct miscdevice watchdog_miscdev = {
-diff --git a/drivers/watchdog/gef_wdt.c b/drivers/watchdog/gef_wdt.c
-index 7d5f56994f09..f6541d1b65e3 100644
---- a/drivers/watchdog/gef_wdt.c
-+++ b/drivers/watchdog/gef_wdt.c
-@@ -248,6 +248,7 @@ static const struct file_operations gef_wdt_fops = {
- 	.llseek = no_llseek,
- 	.write = gef_wdt_write,
- 	.unlocked_ioctl = gef_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open = gef_wdt_open,
- 	.release = gef_wdt_release,
- };
-diff --git a/drivers/watchdog/geodewdt.c b/drivers/watchdog/geodewdt.c
-index 8d105d98908e..9914a4283cb2 100644
---- a/drivers/watchdog/geodewdt.c
-+++ b/drivers/watchdog/geodewdt.c
-@@ -201,6 +201,7 @@ static const struct file_operations geodewdt_fops = {
- 	.llseek         = no_llseek,
- 	.write          = geodewdt_write,
- 	.unlocked_ioctl = geodewdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open           = geodewdt_open,
- 	.release        = geodewdt_release,
- };
-diff --git a/drivers/watchdog/ib700wdt.c b/drivers/watchdog/ib700wdt.c
-index 92fd7f33bc4d..2b65ea9451d1 100644
---- a/drivers/watchdog/ib700wdt.c
-+++ b/drivers/watchdog/ib700wdt.c
-@@ -259,6 +259,7 @@ static const struct file_operations ibwdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= ibwdt_write,
- 	.unlocked_ioctl	= ibwdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= ibwdt_open,
- 	.release	= ibwdt_close,
- };
-diff --git a/drivers/watchdog/ibmasr.c b/drivers/watchdog/ibmasr.c
-index 897f7eda9e6a..4a22fe152086 100644
---- a/drivers/watchdog/ibmasr.c
-+++ b/drivers/watchdog/ibmasr.c
-@@ -344,6 +344,7 @@ static const struct file_operations asr_fops = {
- 	.llseek =		no_llseek,
- 	.write =		asr_write,
- 	.unlocked_ioctl =	asr_ioctl,
-+	.compat_ioctl =		compat_ptr_ioctl,
- 	.open =			asr_open,
- 	.release =		asr_release,
- };
-diff --git a/drivers/watchdog/indydog.c b/drivers/watchdog/indydog.c
-index 550358528084..9857bb74a723 100644
---- a/drivers/watchdog/indydog.c
-+++ b/drivers/watchdog/indydog.c
-@@ -152,6 +152,7 @@ static const struct file_operations indydog_fops = {
- 	.llseek		= no_llseek,
- 	.write		= indydog_write,
- 	.unlocked_ioctl	= indydog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= indydog_open,
- 	.release	= indydog_release,
- };
-diff --git a/drivers/watchdog/intel_scu_watchdog.c b/drivers/watchdog/intel_scu_watchdog.c
-index 1c85103b750b..6ad5bf3451ec 100644
---- a/drivers/watchdog/intel_scu_watchdog.c
-+++ b/drivers/watchdog/intel_scu_watchdog.c
-@@ -412,6 +412,7 @@ static const struct file_operations intel_scu_fops = {
- 	.llseek         = no_llseek,
- 	.write          = intel_scu_write,
- 	.unlocked_ioctl = intel_scu_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open           = intel_scu_open,
- 	.release        = intel_scu_release,
- };
-diff --git a/drivers/watchdog/iop_wdt.c b/drivers/watchdog/iop_wdt.c
-index a9ccdb9a9159..6bf68d4750de 100644
---- a/drivers/watchdog/iop_wdt.c
-+++ b/drivers/watchdog/iop_wdt.c
-@@ -202,6 +202,7 @@ static const struct file_operations iop_wdt_fops = {
- 	.llseek = no_llseek,
- 	.write = iop_wdt_write,
- 	.unlocked_ioctl = iop_wdt_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- 	.open = iop_wdt_open,
- 	.release = iop_wdt_release,
- };
-diff --git a/drivers/watchdog/it8712f_wdt.c b/drivers/watchdog/it8712f_wdt.c
-index 2fe1a3c499ed..2fed40d14007 100644
---- a/drivers/watchdog/it8712f_wdt.c
-+++ b/drivers/watchdog/it8712f_wdt.c
-@@ -345,6 +345,7 @@ static const struct file_operations it8712f_wdt_fops = {
- 	.llseek = no_llseek,
- 	.write = it8712f_wdt_write,
- 	.unlocked_ioctl = it8712f_wdt_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- 	.open = it8712f_wdt_open,
- 	.release = it8712f_wdt_release,
- };
-diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
-index 9067998759e3..09886616fd21 100644
---- a/drivers/watchdog/ixp4xx_wdt.c
-+++ b/drivers/watchdog/ixp4xx_wdt.c
-@@ -163,6 +163,7 @@ static const struct file_operations ixp4xx_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= ixp4xx_wdt_write,
- 	.unlocked_ioctl	= ixp4xx_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= ixp4xx_wdt_open,
- 	.release	= ixp4xx_wdt_release,
- };
-diff --git a/drivers/watchdog/ks8695_wdt.c b/drivers/watchdog/ks8695_wdt.c
-index 1550ce3c5702..6f375f302135 100644
---- a/drivers/watchdog/ks8695_wdt.c
-+++ b/drivers/watchdog/ks8695_wdt.c
-@@ -221,6 +221,7 @@ static const struct file_operations ks8695wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= ks8695_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= ks8695_wdt_open,
- 	.release	= ks8695_wdt_close,
- 	.write		= ks8695_wdt_write,
-diff --git a/drivers/watchdog/m54xx_wdt.c b/drivers/watchdog/m54xx_wdt.c
-index 752d03620f0a..22f335e1e164 100644
---- a/drivers/watchdog/m54xx_wdt.c
-+++ b/drivers/watchdog/m54xx_wdt.c
-@@ -183,6 +183,7 @@ static const struct file_operations m54xx_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= m54xx_wdt_write,
- 	.unlocked_ioctl	= m54xx_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= m54xx_wdt_open,
- 	.release	= m54xx_wdt_release,
- };
-diff --git a/drivers/watchdog/machzwd.c b/drivers/watchdog/machzwd.c
-index cef2baf59dda..80ff94688487 100644
---- a/drivers/watchdog/machzwd.c
-+++ b/drivers/watchdog/machzwd.c
-@@ -361,6 +361,7 @@ static const struct file_operations zf_fops = {
- 	.llseek		= no_llseek,
- 	.write		= zf_write,
- 	.unlocked_ioctl = zf_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= zf_open,
- 	.release	= zf_close,
- };
-diff --git a/drivers/watchdog/mixcomwd.c b/drivers/watchdog/mixcomwd.c
-index a86faa5000f1..d387bad377c4 100644
---- a/drivers/watchdog/mixcomwd.c
-+++ b/drivers/watchdog/mixcomwd.c
-@@ -227,6 +227,7 @@ static const struct file_operations mixcomwd_fops = {
- 	.llseek		= no_llseek,
- 	.write		= mixcomwd_write,
- 	.unlocked_ioctl	= mixcomwd_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= mixcomwd_open,
- 	.release	= mixcomwd_release,
- };
-diff --git a/drivers/watchdog/mtx-1_wdt.c b/drivers/watchdog/mtx-1_wdt.c
-index 25a92857b217..8aa1cb4a295f 100644
---- a/drivers/watchdog/mtx-1_wdt.c
-+++ b/drivers/watchdog/mtx-1_wdt.c
-@@ -181,6 +181,7 @@ static const struct file_operations mtx1_wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= mtx1_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= mtx1_wdt_open,
- 	.write		= mtx1_wdt_write,
- 	.release	= mtx1_wdt_release,
-diff --git a/drivers/watchdog/mv64x60_wdt.c b/drivers/watchdog/mv64x60_wdt.c
-index 74bf7144a970..0bc72dd69b70 100644
---- a/drivers/watchdog/mv64x60_wdt.c
-+++ b/drivers/watchdog/mv64x60_wdt.c
-@@ -241,6 +241,7 @@ static const struct file_operations mv64x60_wdt_fops = {
- 	.llseek = no_llseek,
- 	.write = mv64x60_wdt_write,
- 	.unlocked_ioctl = mv64x60_wdt_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- 	.open = mv64x60_wdt_open,
- 	.release = mv64x60_wdt_release,
- };
-diff --git a/drivers/watchdog/nuc900_wdt.c b/drivers/watchdog/nuc900_wdt.c
-index db124cebe838..bfe3e4e5d159 100644
---- a/drivers/watchdog/nuc900_wdt.c
-+++ b/drivers/watchdog/nuc900_wdt.c
-@@ -225,6 +225,7 @@ static const struct file_operations nuc900wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= nuc900_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= nuc900_wdt_open,
- 	.release	= nuc900_wdt_close,
- 	.write		= nuc900_wdt_write,
-diff --git a/drivers/watchdog/nv_tco.c b/drivers/watchdog/nv_tco.c
-index 5f0082e300bd..d7a560e348d5 100644
---- a/drivers/watchdog/nv_tco.c
-+++ b/drivers/watchdog/nv_tco.c
-@@ -267,6 +267,7 @@ static const struct file_operations nv_tco_fops = {
- 	.llseek =		no_llseek,
- 	.write =		nv_tco_write,
- 	.unlocked_ioctl =	nv_tco_ioctl,
-+	.compat_ioctl =		compat_ptr_ioctl,
- 	.open =			nv_tco_open,
- 	.release =		nv_tco_release,
- };
-diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-index 2af1a8b3f973..73fbfc99083b 100644
---- a/drivers/watchdog/pc87413_wdt.c
-+++ b/drivers/watchdog/pc87413_wdt.c
-@@ -473,6 +473,7 @@ static const struct file_operations pc87413_fops = {
- 	.llseek		= no_llseek,
- 	.write		= pc87413_write,
- 	.unlocked_ioctl	= pc87413_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= pc87413_open,
- 	.release	= pc87413_release,
- };
-diff --git a/drivers/watchdog/pcwd.c b/drivers/watchdog/pcwd.c
-index c3c93e00b320..7a0587fdc52c 100644
---- a/drivers/watchdog/pcwd.c
-+++ b/drivers/watchdog/pcwd.c
-@@ -752,6 +752,7 @@ static const struct file_operations pcwd_fops = {
- 	.llseek		= no_llseek,
- 	.write		= pcwd_write,
- 	.unlocked_ioctl	= pcwd_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= pcwd_open,
- 	.release	= pcwd_close,
- };
-diff --git a/drivers/watchdog/pcwd_pci.c b/drivers/watchdog/pcwd_pci.c
-index e30c1f762045..81508a42a90c 100644
---- a/drivers/watchdog/pcwd_pci.c
-+++ b/drivers/watchdog/pcwd_pci.c
-@@ -646,6 +646,7 @@ static const struct file_operations pcipcwd_fops = {
- 	.llseek =	no_llseek,
- 	.write =	pcipcwd_write,
- 	.unlocked_ioctl = pcipcwd_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- 	.open =		pcipcwd_open,
- 	.release =	pcipcwd_release,
- };
-diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-index 6727f8ab2d18..2f44af1831d0 100644
---- a/drivers/watchdog/pcwd_usb.c
-+++ b/drivers/watchdog/pcwd_usb.c
-@@ -550,6 +550,7 @@ static const struct file_operations usb_pcwd_fops = {
- 	.llseek =	no_llseek,
- 	.write =	usb_pcwd_write,
- 	.unlocked_ioctl = usb_pcwd_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- 	.open =		usb_pcwd_open,
- 	.release =	usb_pcwd_release,
- };
-diff --git a/drivers/watchdog/pika_wdt.c b/drivers/watchdog/pika_wdt.c
-index 205c3c68fca1..a98abd0d3146 100644
---- a/drivers/watchdog/pika_wdt.c
-+++ b/drivers/watchdog/pika_wdt.c
-@@ -214,6 +214,7 @@ static const struct file_operations pikawdt_fops = {
- 	.release	= pikawdt_release,
- 	.write		= pikawdt_write,
- 	.unlocked_ioctl	= pikawdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
- static struct miscdevice pikawdt_miscdev = {
-diff --git a/drivers/watchdog/pnx833x_wdt.c b/drivers/watchdog/pnx833x_wdt.c
-index aa53babf2bab..4097d076aab8 100644
---- a/drivers/watchdog/pnx833x_wdt.c
-+++ b/drivers/watchdog/pnx833x_wdt.c
-@@ -215,6 +215,7 @@ static const struct file_operations pnx833x_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= pnx833x_wdt_write,
- 	.unlocked_ioctl	= pnx833x_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= pnx833x_wdt_open,
- 	.release	= pnx833x_wdt_release,
- };
-diff --git a/drivers/watchdog/rc32434_wdt.c b/drivers/watchdog/rc32434_wdt.c
-index a8a4b3a41a90..1dfede0abf18 100644
---- a/drivers/watchdog/rc32434_wdt.c
-+++ b/drivers/watchdog/rc32434_wdt.c
-@@ -245,6 +245,7 @@ static const struct file_operations rc32434_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= rc32434_wdt_write,
- 	.unlocked_ioctl	= rc32434_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= rc32434_wdt_open,
- 	.release	= rc32434_wdt_release,
- };
-diff --git a/drivers/watchdog/rdc321x_wdt.c b/drivers/watchdog/rdc321x_wdt.c
-index 2e608ae6cbc7..57187efeb86f 100644
---- a/drivers/watchdog/rdc321x_wdt.c
-+++ b/drivers/watchdog/rdc321x_wdt.c
-@@ -199,6 +199,7 @@ static const struct file_operations rdc321x_wdt_fops = {
- 	.owner		= THIS_MODULE,
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl	= rdc321x_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= rdc321x_wdt_open,
- 	.write		= rdc321x_wdt_write,
- 	.release	= rdc321x_wdt_release,
-diff --git a/drivers/watchdog/riowd.c b/drivers/watchdog/riowd.c
-index b35f7be20c00..dc3c06a92f93 100644
---- a/drivers/watchdog/riowd.c
-+++ b/drivers/watchdog/riowd.c
-@@ -163,6 +163,7 @@ static const struct file_operations riowd_fops = {
- 	.owner =		THIS_MODULE,
- 	.llseek =		no_llseek,
- 	.unlocked_ioctl =	riowd_ioctl,
-+	.compat_ioctl	=	compat_ptr_ioctl,
- 	.open =			riowd_open,
- 	.write =		riowd_write,
- 	.release =		riowd_release,
-diff --git a/drivers/watchdog/sa1100_wdt.c b/drivers/watchdog/sa1100_wdt.c
-index cbd8c957182f..9b93be00109f 100644
---- a/drivers/watchdog/sa1100_wdt.c
-+++ b/drivers/watchdog/sa1100_wdt.c
-@@ -141,6 +141,7 @@ static const struct file_operations sa1100dog_fops = {
- 	.llseek		= no_llseek,
- 	.write		= sa1100dog_write,
- 	.unlocked_ioctl	= sa1100dog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= sa1100dog_open,
- 	.release	= sa1100dog_release,
- };
-diff --git a/drivers/watchdog/sb_wdog.c b/drivers/watchdog/sb_wdog.c
-index 202fc8d8ca5f..da2dad00d473 100644
---- a/drivers/watchdog/sb_wdog.c
-+++ b/drivers/watchdog/sb_wdog.c
-@@ -237,6 +237,7 @@ static const struct file_operations sbwdog_fops = {
- 	.llseek		= no_llseek,
- 	.write		= sbwdog_write,
- 	.unlocked_ioctl	= sbwdog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= sbwdog_open,
- 	.release	= sbwdog_release,
- };
-diff --git a/drivers/watchdog/sbc60xxwdt.c b/drivers/watchdog/sbc60xxwdt.c
-index c3151642694c..f2cbe6d880a8 100644
---- a/drivers/watchdog/sbc60xxwdt.c
-+++ b/drivers/watchdog/sbc60xxwdt.c
-@@ -280,6 +280,7 @@ static const struct file_operations wdt_fops = {
- 	.open		= fop_open,
- 	.release	= fop_close,
- 	.unlocked_ioctl	= fop_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
- static struct miscdevice wdt_miscdev = {
-diff --git a/drivers/watchdog/sbc7240_wdt.c b/drivers/watchdog/sbc7240_wdt.c
-index 12cdee7d5069..0bf583b76e6b 100644
---- a/drivers/watchdog/sbc7240_wdt.c
-+++ b/drivers/watchdog/sbc7240_wdt.c
-@@ -211,6 +211,7 @@ static const struct file_operations wdt_fops = {
- 	.open = fop_open,
- 	.release = fop_close,
- 	.unlocked_ioctl = fop_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
- };
- 
- static struct miscdevice wdt_miscdev = {
-diff --git a/drivers/watchdog/sbc_epx_c3.c b/drivers/watchdog/sbc_epx_c3.c
-index 86828c28843f..5e3a9ddb952e 100644
---- a/drivers/watchdog/sbc_epx_c3.c
-+++ b/drivers/watchdog/sbc_epx_c3.c
-@@ -156,6 +156,7 @@ static const struct file_operations epx_c3_fops = {
- 	.llseek		= no_llseek,
- 	.write		= epx_c3_write,
- 	.unlocked_ioctl	= epx_c3_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= epx_c3_open,
- 	.release	= epx_c3_release,
- };
-diff --git a/drivers/watchdog/sbc_fitpc2_wdt.c b/drivers/watchdog/sbc_fitpc2_wdt.c
-index 3822a60a8d2b..1b20b33879c4 100644
---- a/drivers/watchdog/sbc_fitpc2_wdt.c
-+++ b/drivers/watchdog/sbc_fitpc2_wdt.c
-@@ -186,6 +186,7 @@ static const struct file_operations fitpc2_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= fitpc2_wdt_write,
- 	.unlocked_ioctl	= fitpc2_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= fitpc2_wdt_open,
- 	.release	= fitpc2_wdt_release,
- };
-diff --git a/drivers/watchdog/sc1200wdt.c b/drivers/watchdog/sc1200wdt.c
-index 960385a766b3..9673eb12dacd 100644
---- a/drivers/watchdog/sc1200wdt.c
-+++ b/drivers/watchdog/sc1200wdt.c
-@@ -307,6 +307,7 @@ static const struct file_operations sc1200wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= sc1200wdt_write,
- 	.unlocked_ioctl = sc1200wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= sc1200wdt_open,
- 	.release	= sc1200wdt_release,
- };
-diff --git a/drivers/watchdog/sc520_wdt.c b/drivers/watchdog/sc520_wdt.c
-index a612128c5f80..fbe79bcc9297 100644
---- a/drivers/watchdog/sc520_wdt.c
-+++ b/drivers/watchdog/sc520_wdt.c
-@@ -336,6 +336,7 @@ static const struct file_operations wdt_fops = {
- 	.open		= fop_open,
- 	.release	= fop_close,
- 	.unlocked_ioctl	= fop_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
- static struct miscdevice wdt_miscdev = {
-diff --git a/drivers/watchdog/sch311x_wdt.c b/drivers/watchdog/sch311x_wdt.c
-index 3612f1df381b..83949a385f62 100644
---- a/drivers/watchdog/sch311x_wdt.c
-+++ b/drivers/watchdog/sch311x_wdt.c
-@@ -337,6 +337,7 @@ static const struct file_operations sch311x_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= sch311x_wdt_write,
- 	.unlocked_ioctl	= sch311x_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= sch311x_wdt_open,
- 	.release	= sch311x_wdt_close,
- };
-diff --git a/drivers/watchdog/scx200_wdt.c b/drivers/watchdog/scx200_wdt.c
-index 46268309ee9b..c94098acb78f 100644
---- a/drivers/watchdog/scx200_wdt.c
-+++ b/drivers/watchdog/scx200_wdt.c
-@@ -201,6 +201,7 @@ static const struct file_operations scx200_wdt_fops = {
- 	.llseek = no_llseek,
- 	.write = scx200_wdt_write,
- 	.unlocked_ioctl = scx200_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open = scx200_wdt_open,
- 	.release = scx200_wdt_release,
- };
-diff --git a/drivers/watchdog/smsc37b787_wdt.c b/drivers/watchdog/smsc37b787_wdt.c
-index f5713030d0f7..43de56acd767 100644
---- a/drivers/watchdog/smsc37b787_wdt.c
-+++ b/drivers/watchdog/smsc37b787_wdt.c
-@@ -505,6 +505,7 @@ static const struct file_operations wb_smsc_wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wb_smsc_wdt_write,
- 	.unlocked_ioctl	= wb_smsc_wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wb_smsc_wdt_open,
- 	.release	= wb_smsc_wdt_release,
- };
-diff --git a/drivers/watchdog/w83877f_wdt.c b/drivers/watchdog/w83877f_wdt.c
-index 6eb5185d6ea6..6b3b667e6f23 100644
---- a/drivers/watchdog/w83877f_wdt.c
-+++ b/drivers/watchdog/w83877f_wdt.c
-@@ -304,6 +304,7 @@ static const struct file_operations wdt_fops = {
- 	.open		= fop_open,
- 	.release	= fop_close,
- 	.unlocked_ioctl	= fop_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- };
- 
- static struct miscdevice wdt_miscdev = {
-diff --git a/drivers/watchdog/w83977f_wdt.c b/drivers/watchdog/w83977f_wdt.c
-index 16e9cbe72acc..5212e68c6b01 100644
---- a/drivers/watchdog/w83977f_wdt.c
-+++ b/drivers/watchdog/w83977f_wdt.c
-@@ -446,6 +446,7 @@ static const struct file_operations wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wdt_write,
- 	.unlocked_ioctl	= wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wdt_open,
- 	.release	= wdt_release,
- };
-diff --git a/drivers/watchdog/wafer5823wdt.c b/drivers/watchdog/wafer5823wdt.c
-index 6d2071a0590d..a6925847f76f 100644
---- a/drivers/watchdog/wafer5823wdt.c
-+++ b/drivers/watchdog/wafer5823wdt.c
-@@ -230,6 +230,7 @@ static const struct file_operations wafwdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wafwdt_write,
- 	.unlocked_ioctl	= wafwdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wafwdt_open,
- 	.release	= wafwdt_close,
- };
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index dbd2ad4c9294..3858094ca6ba 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -933,6 +933,7 @@ static const struct file_operations watchdog_fops = {
- 	.owner		= THIS_MODULE,
- 	.write		= watchdog_write,
- 	.unlocked_ioctl	= watchdog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= watchdog_open,
- 	.release	= watchdog_release,
- };
-diff --git a/drivers/watchdog/wdrtas.c b/drivers/watchdog/wdrtas.c
-index 6ad7edb4a712..184a06a74f83 100644
---- a/drivers/watchdog/wdrtas.c
-+++ b/drivers/watchdog/wdrtas.c
-@@ -472,6 +472,7 @@ static const struct file_operations wdrtas_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wdrtas_write,
- 	.unlocked_ioctl	= wdrtas_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wdrtas_open,
- 	.release	= wdrtas_close,
- };
-diff --git a/drivers/watchdog/wdt.c b/drivers/watchdog/wdt.c
-index 7d278b37e083..f9054cb0f8e2 100644
---- a/drivers/watchdog/wdt.c
-+++ b/drivers/watchdog/wdt.c
-@@ -523,6 +523,7 @@ static const struct file_operations wdt_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wdt_write,
- 	.unlocked_ioctl	= wdt_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wdt_open,
- 	.release	= wdt_release,
- };
-diff --git a/drivers/watchdog/wdt285.c b/drivers/watchdog/wdt285.c
-index 4eacfb1ce1ac..4ec0580da76d 100644
---- a/drivers/watchdog/wdt285.c
-+++ b/drivers/watchdog/wdt285.c
-@@ -181,6 +181,7 @@ static const struct file_operations watchdog_fops = {
- 	.llseek		= no_llseek,
- 	.write		= watchdog_write,
- 	.unlocked_ioctl	= watchdog_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= watchdog_open,
- 	.release	= watchdog_release,
- };
-diff --git a/drivers/watchdog/wdt977.c b/drivers/watchdog/wdt977.c
-index 5c52c73e1839..066a4fb4d75b 100644
---- a/drivers/watchdog/wdt977.c
-+++ b/drivers/watchdog/wdt977.c
-@@ -422,6 +422,7 @@ static const struct file_operations wdt977_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wdt977_write,
- 	.unlocked_ioctl	= wdt977_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wdt977_open,
- 	.release	= wdt977_release,
- };
-diff --git a/drivers/watchdog/wdt_pci.c b/drivers/watchdog/wdt_pci.c
-index 66303ab95685..e528024faa41 100644
---- a/drivers/watchdog/wdt_pci.c
-+++ b/drivers/watchdog/wdt_pci.c
-@@ -566,6 +566,7 @@ static const struct file_operations wdtpci_fops = {
- 	.llseek		= no_llseek,
- 	.write		= wdtpci_write,
- 	.unlocked_ioctl	= wdtpci_ioctl,
-+	.compat_ioctl	= compat_ptr_ioctl,
- 	.open		= wdtpci_open,
- 	.release	= wdtpci_release,
- };
-diff --git a/fs/compat_ioctl.c b/fs/compat_ioctl.c
-index b20228c19ccd..10ba2d9e20bc 100644
---- a/fs/compat_ioctl.c
-+++ b/fs/compat_ioctl.c
-@@ -412,17 +412,6 @@ COMPATIBLE_IOCTL(PPPIOCDISCONN)
- COMPATIBLE_IOCTL(PPPIOCATTCHAN)
- COMPATIBLE_IOCTL(PPPIOCGCHAN)
- COMPATIBLE_IOCTL(PPPIOCGL2TPSTATS)
--/* Watchdog */
--COMPATIBLE_IOCTL(WDIOC_GETSUPPORT)
--COMPATIBLE_IOCTL(WDIOC_GETSTATUS)
--COMPATIBLE_IOCTL(WDIOC_GETBOOTSTATUS)
--COMPATIBLE_IOCTL(WDIOC_GETTEMP)
--COMPATIBLE_IOCTL(WDIOC_SETOPTIONS)
--COMPATIBLE_IOCTL(WDIOC_KEEPALIVE)
--COMPATIBLE_IOCTL(WDIOC_SETTIMEOUT)
--COMPATIBLE_IOCTL(WDIOC_GETTIMEOUT)
--COMPATIBLE_IOCTL(WDIOC_SETPRETIMEOUT)
--COMPATIBLE_IOCTL(WDIOC_GETPRETIMEOUT)
- };
- 
- /*
--- 
-2.20.0
 
+>> +	i2c->adapter.class = I2C_CLASS_DEPRECATED;
+> 
+> This is only needed for drivers which used to have a class and decided
+> to drop it. You can leave it empty.
+
+Thanks, I'll drop it.
+
+
+>> +	algo_data->data = (void *)i2c;
+> 
+> You don't need the cast, do you?
+
+True. Dropped, thanks.
+
+
+>> +MODULE_LICENSE("GPL");
+> 
+> Your SPDX header says GPL 2.0 only.
+
+Thanks! I'll change it to "GPL v2", but unfortunately there is no option for "only" in include/linux/module.h.
+
+
+Cheers
+
+Max
