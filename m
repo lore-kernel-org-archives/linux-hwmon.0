@@ -2,115 +2,90 @@ Return-Path: <SRS0=BMgm=WL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0A26C3A59B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 18:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D3EC3A589
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 18:33:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 887352084D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 18:10:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32B662063F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 18:33:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="refM5sSM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRnoxNhW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731134AbfHOSKN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Aug 2019 14:10:13 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44804 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729366AbfHOSKM (ORCPT
+        id S1730379AbfHOSdD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Aug 2019 14:33:03 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44455 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728579AbfHOSdC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Aug 2019 14:10:12 -0400
-Received: by mail-pg1-f196.google.com with SMTP id i18so1616416pgl.11;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
+        Thu, 15 Aug 2019 14:33:02 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i18so1643063pgl.11;
+        Thu, 15 Aug 2019 11:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=refM5sSMD7XaWN2cBYtXuBqQL++UFaQwWAlfDTzJPByqFlruWjmG6Yh089jW7TdpbD
-         NrxNm0s2FZstcIYgXU/1OVsLWK+FGl/oYQP7+rTaMZkVBgGR23anbQo8oXgra9wTo9FE
-         j2SPBqMOEPNcKZuxqfPe/Pg1VNQm0EO34QutZQTrQlKL2cYjCOVrLe8Oxo+zJZteOQlu
-         B8hMLNBQEAo1UHIr3ABYn9iPuYxpRN+b0Z+J5xpbw/J0aCqSamjWusXlwPIWC+3YINI7
-         nT835bJJdCLvSjcjCqTDzc+ntlidStA5Dl6+CgzdON8g1MYQ6qhhFDs0HvmQv88M+BJb
-         dCaw==
+        bh=rvhgIfiAcLo5VhLT6MFATYs/CalMc2TfDSCJaauWHBA=;
+        b=GRnoxNhWMIdhH+FFenKnBtccjesFa4axTMx0cpMDVJ/ugA+mkjeGSXVLwxisgztXSP
+         3XymaANLePnVMDHtd08GB6EAJGYxsi7mylG201dlD+7/CfL/80/ZnC88zTxmjYalRHqN
+         OT1u7e/+MBakkyc4gohkdmseHcDCJAP6J0aZluNfQ4Z33+w5pJA5SaAHADktvLf/19Tt
+         04GwObaWjxbBbKX71bi0OLZfkxq5X1ux57/sULCT3c50yRJhuOgi6UW5DXxAJ5EddKIG
+         a7X8oB9XO0jQvM6+HMAf5T6rEfoEB0n76xW0FVjfYR65MoLet0n+xwr8YXEeweP9qBdr
+         BbYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=TAK2zbsMzphSzYHz0H+jiKefk9nQKLojQnv4w2oyYEe9IVnsv354JFR9RuqHQ0oMi4
-         VQTQa57wU3hGBoM/IEoFWeBxu4mAr8acyuAqgMG/NBMEEw2c3zDpBm020QPkxixO0aVH
-         mLP5/NMFXxSsEMBzEJVX2zGlrizflC6RWasibeQJHy2UrJ+GoGd+TwZn0XC7QaSkYowt
-         hydSrYVAui5rOYlArGaUrnv+3gENtC5Etf3+v2aQWrWPmUXLZg4rFYLKnCnkka/vhW8+
-         JY/kY3kxJPN/dQ5UIcMKejxj60WjTpazOn8A/n49jEPjZy7aRzF9ysJpT+Em3lrLOlvA
-         NR6w==
-X-Gm-Message-State: APjAAAV6j9qQDjQtnH/jr9u1i4Nfj209bB1zZ38L3bQDW6zGIsDifbnJ
-        EqZeVTw88JRFV32515soid0=
-X-Google-Smtp-Source: APXvYqxIDdyy6by/HwcLogs24nzI99cv+AM8Nkc5yJYlPuae0cwXsF1pvVTorAHFvjBOwQbrOwQiZw==
-X-Received: by 2002:a62:38d7:: with SMTP id f206mr6797850pfa.102.1565892612133;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
+        bh=rvhgIfiAcLo5VhLT6MFATYs/CalMc2TfDSCJaauWHBA=;
+        b=qcRq7vTT8vILByX+5htfvxQT/EN4zXjEChxERwbB11tiIM5/eHhIUVdIfsu3f3Xyqz
+         cR6n/VOGChO7Kg3GoL7ciWWdgf+flvVqPT5dKgTyVz2uuxb1VEHLWmM3/QS8IUTGjj8E
+         MtH2k+zKLa6mctOEgdP6k/GLLKASIGAdLDIzNcAME86G2FAsAMkpg5bnSbP0CdhxNuVZ
+         LtMSSj+svx1xkFj8fCOniqt4DcXVBXKFjPn0HsyPkgGFiQth24bFqo7P4Zs01WaKei0/
+         DmrhhGzNNlaBFSTS0tlWMGhDntbk2e84jI0neVYf1VMk/h9phI2ewvww1pHfuVF/msJQ
+         5Qnw==
+X-Gm-Message-State: APjAAAUWN7HI6ng7PCSNXI8CDfhyJQQVrwe43TAzBpOveQy09REiHSx6
+        J/qqxu6yBQeqp2T0J0Kv5qg=
+X-Google-Smtp-Source: APXvYqwaTvG+dXpud8t+SGDZs0MUgLf73XKT6y5QDWsZN7z+RrSon07LwGoYiLQmIW26Y7Zz8ZiV/g==
+X-Received: by 2002:a17:90a:feb:: with SMTP id 98mr3282646pjz.55.1565893982140;
+        Thu, 15 Aug 2019 11:33:02 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n98sm1927437pjc.26.2019.08.15.11.10.11
+        by smtp.gmail.com with ESMTPSA id 136sm3867841pfz.123.2019.08.15.11.33.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 11:10:11 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 11:10:10 -0700
+        Thu, 15 Aug 2019 11:33:01 -0700 (PDT)
+Date:   Thu, 15 Aug 2019 11:33:00 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 06/18] compat_ioctl: move WDIOC handling into wdt
- drivers
-Message-ID: <20190815181010.GA28580@roeck-us.net>
-References: <20190814204259.120942-1-arnd@arndb.de>
- <20190814205245.121691-1-arnd@arndb.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+Subject: Re: [PATCH v3 2/3] hwmon/ltc2990: Generalise DT to fwnode support
+Message-ID: <20190815183300.GA18227@roeck-us.net>
+References: <20190815125802.16500-1-max@enpas.org>
+ <20190815125802.16500-2-max@enpas.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190814205245.121691-1-arnd@arndb.de>
+In-Reply-To: <20190815125802.16500-2-max@enpas.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 10:49:18PM +0200, Arnd Bergmann wrote:
-> All watchdog drivers implement the same set of ioctl commands, and
-> fortunately all of them are compatible between 32-bit and 64-bit
-> architectures.
+On Thu, Aug 15, 2019 at 02:58:01PM +0200, Max Staudt wrote:
+> ltc2990 will now use device_property_read_u32_array() instead of
+> of_property_read_u32_array() - allowing the use of software nodes
+> via fwnode_create_software_node().
 > 
-> Modern drivers always go through drivers/watchdog/wdt.c as an abstraction
-> layer, but older ones implement their own file_operations on a character
-> device for this.
+> This allows code using i2c_new_device() to specify a default
+> measurement mode for the LTC2990.
 > 
-> Move the handling from fs/compat_ioctl.c into the individual drivers.
-> 
-> Note that most of the legacy drivers will never be used on 64-bit
-> hardware, because they are for an old 32-bit SoC implementation, but
-> doing them all at once is safer than trying to guess which ones do
-> or do not need the compat_ioctl handling.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Max Staudt <max@enpas.org>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Applied to hwmon-next.
 
-This patch doesn't seem to have a useful base (or at least git says so).
-It does not apply to mainline nor to my own watchdog-next branch.
-I assume you plan to apply the entire series together. Please not
-that there will be conflicts against watchdog-next when you do so.
-
+Thanks,
 Guenter
