@@ -2,33 +2,34 @@ Return-Path: <SRS0=BMgm=WL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62561C3A589
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 21:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C3CC3A589
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 22:19:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2FBFF20644
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 21:34:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 804332089E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Aug 2019 22:19:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732686AbfHOVeH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Aug 2019 17:34:07 -0400
-Received: from enpas.org ([46.38.239.100]:60962 "EHLO mail.enpas.org"
+        id S1732627AbfHOWTr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Aug 2019 18:19:47 -0400
+Received: from enpas.org ([46.38.239.100]:32778 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730517AbfHOVeH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Aug 2019 17:34:07 -0400
+        id S1727119AbfHOWTq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Aug 2019 18:19:46 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 9B84910011E;
-        Thu, 15 Aug 2019 21:34:03 +0000 (UTC)
+        by mail.enpas.org (Postfix) with ESMTPSA id B562610011E;
+        Thu, 15 Aug 2019 22:19:42 +0000 (UTC)
 Subject: Re: [PATCH v3 2/3] hwmon/ltc2990: Generalise DT to fwnode support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
-        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
+        glaubitz@physik.fu-berlin.de
 References: <20190815125802.16500-1-max@enpas.org>
- <20190815125802.16500-2-max@enpas.org> <20190815183300.GA18227@roeck-us.net>
+ <20190815125802.16500-2-max@enpas.org>
 From:   Max Staudt <max@enpas.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
@@ -102,12 +103,12 @@ Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
  qowubYXvP+RW4E9h6/NwGzS3Sbw7dRC6HK7xeSjmnzgrbbdF3TbHa5WHGZ3MLFQqbMuSn1Gn
  a0dBnIpkQG5yGknQjCL7SGEun1siNzluV19nLu66YRJsZ1HE9RgbMhTe2Ca8bWH1985ra4GV
  urZIw0nz8zec+73Bv/qF4GHHftLYfA==
-Message-ID: <a0f06836-52b1-0302-8044-272df63b339f@enpas.org>
-Date:   Thu, 15 Aug 2019 23:34:01 +0200
+Message-ID: <6920f2da-3139-6fc8-b02c-3678cc17912e@enpas.org>
+Date:   Fri, 16 Aug 2019 00:19:42 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20190815183300.GA18227@roeck-us.net>
+In-Reply-To: <20190815125802.16500-2-max@enpas.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -116,22 +117,20 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 08/15/2019 08:33 PM, Guenter Roeck wrote:
-> On Thu, Aug 15, 2019 at 02:58:01PM +0200, Max Staudt wrote:
->> ltc2990 will now use device_property_read_u32_array() instead of
->> of_property_read_u32_array() - allowing the use of software nodes
->> via fwnode_create_software_node().
->>
->> This allows code using i2c_new_device() to specify a default
->> measurement mode for the LTC2990.
->>
->> Signed-off-by: Max Staudt <max@enpas.org>
-> 
-> Applied to hwmon-next.
+On 08/15/2019 02:58 PM, Max Staudt wrote:
+> -	if (of_node) {
+> -		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
+> -						 data->mode, 2);
+> +	if (i2c->dev.of_node || i2c->dev.fwnode) {
 
-Hi Guenter,
+One more idea, would it be better here to do the following?
 
-Thank you for reviewing and taking this patch, as well as teaching me about swnode.
+	if (device_property_present(i2c->dev, "lltc,meas-mode")) {
+		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
+						 data->mode, 2);
+	}
 
+I'm happy to prepare a patch if you wish to have this in - just let me know whether it should be on top of the last one, or instead of it.
 
+Thanks,
 Max
