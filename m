@@ -2,109 +2,177 @@ Return-Path: <SRS0=O8JL=WM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA38FC3A59C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Aug 2019 13:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81626C3A59C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Aug 2019 13:43:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D21C20578
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Aug 2019 13:24:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqAUctF9"
+	by mail.kernel.org (Postfix) with ESMTP id 6109A2064A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Aug 2019 13:43:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbfHPNYV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Aug 2019 09:24:21 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40653 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727226AbfHPNYV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Aug 2019 09:24:21 -0400
-Received: by mail-pl1-f193.google.com with SMTP id a93so2463503pla.7;
-        Fri, 16 Aug 2019 06:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tC49zy0gLeREUmV7Q3rlhH7zDHvWELxtBRJYJGrHB+M=;
-        b=rqAUctF9pMEPICkmbGSGtkwoxRzQic6V3Ticu6ptNAxbt4itrEumYnQmAOX1xpNc6D
-         I1gz5uNAPTRfAeNbiHSL87+B3Cy8LhXIrVWNX8MiDJitPS5q2PlMJrAYr3EGunrBv+9Z
-         D00EWI9gbRnoGkfYLxUgIXA/wT82w4g5i3qtMuobms2dpoqmfuvnlNDry+kFGFmM+zmQ
-         opCl4cq0UH4rrGgL5TTKVZ250UmvLohfRsMYfR4QDPYajkC2+bTp5sjZr64N06ZszPPI
-         9mAaAGWqqlCWNCdZTp8AE3qNykByCieOmknw9MAa0CFRxb1Q8Q+IppHcVv1HtI18kzTO
-         EjCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tC49zy0gLeREUmV7Q3rlhH7zDHvWELxtBRJYJGrHB+M=;
-        b=fTnvdClWgAg0KSicPkUVH5CvW6rMgsQbXVdQOLqW0B4t88xv5YhzZPO5jWbkW6Wstd
-         3t2ZOGpPuinwqXOa2Hv0neQFaTdpHc71Z2qFpHuZJFXxhGYm4nqKShUNor7KR73dsO4v
-         dywv6Jjqu+Oze0B5u6zUoAAxwDtVmlm8ar+pOJcKZ0J1HY0sRGMeRca/TANurf+uUp3l
-         laFM6Fk8QfKOA8EYMGWFum1q5lGPyd+p7hnCvcR3h5hRB+t+VGWB+VyL/C7LtOG4Fo+o
-         sMX5Z/dt1SCejBk6JBHN4AkmjYzOFQoOwVOnaczTu2fsjclMBpGxA/fPO8B0XEKOG01K
-         So4g==
-X-Gm-Message-State: APjAAAUqGMSUOTqFiCJcuJH0iBB889p9IkETgBHuZG//6I6/iilJS+/W
-        pJppzfB0UTl7F+b1Np3SIaQ=
-X-Google-Smtp-Source: APXvYqwQBV+QnykPaP/kje1lDxW5OwAU0xoAQ4dfpjAW/dKqQ6u+lVWw+RnnehpTX0d3stBnjvviMA==
-X-Received: by 2002:a17:902:a70c:: with SMTP id w12mr9437627plq.288.1565961860252;
-        Fri, 16 Aug 2019 06:24:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z4sm5388315pgp.80.2019.08.16.06.24.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Aug 2019 06:24:19 -0700 (PDT)
-Subject: Re: [PATCH] hwmon/ltc2990: Generalise DT to fwnode support
-To:     Max Staudt <max@enpas.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        id S1727431AbfHPNnC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Aug 2019 09:43:02 -0400
+Received: from enpas.org ([46.38.239.100]:33716 "EHLO mail.enpas.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727382AbfHPNnB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Aug 2019 09:43:01 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 458E31006F0;
+        Fri, 16 Aug 2019 13:42:58 +0000 (UTC)
+From:   Max Staudt <max@enpas.org>
+To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Linux/m68k <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <5b9b4383-c1e9-91a6-8ab6-8f831b362dca@enpas.org>
- <20190816090731.12809-1-max@enpas.org>
- <CAMuHMdUE_3UEzOv3pmryMwuMRF7RC9-xTG8sXUbpR=r5fKUjrg@mail.gmail.com>
- <79f1e829-8fd4-6690-e429-f5b3d1a7c0bd@enpas.org>
- <CAMuHMdVBviJgxnzLbJJO8ap+=SiiN+wGOsRg4kvnV6eGpnAxKg@mail.gmail.com>
- <a44f4444-3ca5-2f63-68a5-14dc7561ce5e@enpas.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <330d6d9d-cb5e-80d3-a58d-42a8d598c7eb@roeck-us.net>
-Date:   Fri, 16 Aug 2019 06:24:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <a44f4444-3ca5-2f63-68a5-14dc7561ce5e@enpas.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
+        glaubitz@physik.fu-berlin.de, Max Staudt <max@enpas.org>
+Subject: [PATCH v4 3/3] i2c/busses/i2c-icy: Add LTC2990 present on 2019 board revision
+Date:   Fri, 16 Aug 2019 15:43:30 +0200
+Message-Id: <20190816134330.7727-3-max@enpas.org>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190816134330.7727-1-max@enpas.org>
+References: <20190816134330.7727-1-max@enpas.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/16/19 5:43 AM, Max Staudt wrote:
-> On 08/16/2019 02:36 PM, Geert Uytterhoeven wrote:
->> Hi Max,
->>
->> On Fri, Aug 16, 2019 at 2:25 PM Max Staudt <max@enpas.org> wrote:
->>> On 08/16/2019 01:07 PM, Geert Uytterhoeven wrote:
->>>> One minor nit: as the driver no longer uses any of_*() symbols, you can replace
->>>> #include <linux/of.h> by #include <linux/property.h>.
->>>
->>> I should have thought of that, sorry.
->>>
->>> Another patch, or will you do it?
->>
->> As the patch won't go through my tree, I cannot, but the hwmon maintainer
->> might do.
-> 
-> As I'll be fixing one of the I2C patches, I'll send an updated hwmon patch with it.
-> 
+Since the 2019 a1k.org community re-print of these PCBs sports an
+LTC2990 hwmon chip as an example use case, let this driver autoprobe
+for that as well. If it is present, modprobing ltc2990 is sufficient.
 
-Ok, I'll wait for that patch.
+The property_entry enables the three additional inputs available on
+this particular board:
 
-Guenter
+  in1 will be the voltage of the 5V rail, divided by 2.
+  in2 will be the voltage of the 12V rail, divided by 4.
+  temp3 will be measured using a PCB loop next the chip.
+
+v4: Style
+    Added other possible addresses for LTC2990.
+
+v3: Merged with initial LTC2990 support on ICY.
+    Moved defaults from platform_data to swnode.
+    Added note to Kconfig.
+
+Signed-off-by: Max Staudt <max@enpas.org>
+---
+ drivers/i2c/busses/Kconfig   |  3 +++
+ drivers/i2c/busses/i2c-icy.c | 58 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
+
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 9e57e1101..a311d07f3 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1311,6 +1311,9 @@ config I2C_ICY
+ 	  This support is also available as a module.  If so, the module
+ 	  will be called i2c-icy.
+ 
++	  If you have a 2019 edition board with an LTC2990 sensor at address
++	  0x4c, loading the module 'ltc2990' is sufficient to enable it.
++
+ config I2C_MLXCPLD
+ 	tristate "Mellanox I2C driver"
+ 	depends on X86_64
+diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
+index edac515da..c30431653 100644
+--- a/drivers/i2c/busses/i2c-icy.c
++++ b/drivers/i2c/busses/i2c-icy.c
+@@ -54,6 +54,8 @@ struct icy_i2c {
+ 
+ 	void __iomem *reg_s0;
+ 	void __iomem *reg_s1;
++	struct fwnode_handle *ltc2990_fwnode;
++	struct i2c_client *ltc2990_client;
+ };
+ 
+ 
+@@ -100,11 +102,35 @@ static void icy_pcf_waitforpin(void *data)
+ /*
+  * Main i2c-icy part
+  */
++static unsigned short const icy_ltc2990_addresses[] = {
++	0x4c, 0x4d, 0x4e, 0x4f, I2C_CLIENT_END
++};
++
++/*
++ * Additional sensors exposed once this property is applied:
++ *
++ * in1 will be the voltage of the 5V rail, divided by 2.
++ * in2 will be the voltage of the 12V rail, divided by 4.
++ * temp3 will be measured using a PCB loop next the chip.
++ */
++static const u32 icy_ltc2990_meas_mode[] = {0, 3};
++
++static const struct property_entry icy_ltc2990_props[] = {
++	PROPERTY_ENTRY_U32_ARRAY("lltc,meas-mode", icy_ltc2990_meas_mode),
++	{ }
++};
++
++
+ static int icy_probe(struct zorro_dev *z,
+ 			 const struct zorro_device_id *ent)
+ {
+ 	struct icy_i2c *i2c;
+ 	struct i2c_algo_pcf_data *algo_data;
++	struct fwnode_handle *new_fwnode;
++	struct i2c_board_info ltc2990_info = {
++		.type		= "ltc2990",
++		.addr		= 0x4c,
++	};
+ 
+ 
+ 	i2c = devm_kzalloc(&z->dev, sizeof(*i2c), GFP_KERNEL);
+@@ -147,6 +173,35 @@ static int icy_probe(struct zorro_dev *z,
+ 	dev_info(&z->dev, "ICY I2C controller at %pa, IRQ not implemented\n",
+ 		 &z->resource.start);
+ 
++	/*
++	 * The 2019 a1k.org PCBs have an LTC2990 at 0x4c, so start
++	 * it automatically once ltc2990 is modprobed.
++	 *
++	 * in0 is the voltage of the internal 5V power supply.
++	 * temp1 is the temperature inside the chip.
++	 *
++	 * See property_entry above for in1, in2, temp3.
++	 */
++	new_fwnode = fwnode_create_software_node(icy_ltc2990_props, NULL);
++	if (IS_ERR(new_fwnode)) {
++		dev_info(&z->dev, "Failed to create fwnode for LTC2990, error: %ld\n",
++			 PTR_ERR(new_fwnode));
++	} else {
++		/*
++		 * Store the fwnode so we can destroy it on .remove().
++		 * Only store it on success, as fwnode_remove_software_node()
++		 * is NULL safe, but not PTR_ERR safe.
++		 */
++		i2c->ltc2990_fwnode = new_fwnode;
++		ltc2990_info.fwnode = new_fwnode;
++
++		i2c->ltc2990_client =
++			i2c_new_probed_device(&i2c->adapter,
++					      &ltc2990_info,
++					      icy_ltc2990_addresses,
++					      NULL);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -154,6 +209,9 @@ static void icy_remove(struct zorro_dev *z)
+ {
+ 	struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
+ 
++	i2c_unregister_device(i2c->ltc2990_client);
++	fwnode_remove_software_node(i2c->ltc2990_fwnode);
++
+ 	i2c_del_adapter(&i2c->adapter);
+ }
+ 
+-- 
+2.11.0
 
