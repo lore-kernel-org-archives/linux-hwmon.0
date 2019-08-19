@@ -1,101 +1,117 @@
-Return-Path: <SRS0=nMJH=WO=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=TBTU=WP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 668AAC3A589
-	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Aug 2019 09:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F870C3A589
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 02:20:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2E69B2173B
-	for <linux-hwmon@archiver.kernel.org>; Sun, 18 Aug 2019 09:08:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5433520B7C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 02:20:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VnCEES/U"
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="ZfSBy0mA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbfHRJI5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 18 Aug 2019 05:08:57 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:39891 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbfHRJI5 (ORCPT
+        id S1726139AbfHSCUX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 18 Aug 2019 22:20:23 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:43034 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbfHSCUX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 18 Aug 2019 05:08:57 -0400
-Received: by mail-wm1-f67.google.com with SMTP id i63so481958wmg.4
-        for <linux-hwmon@vger.kernel.org>; Sun, 18 Aug 2019 02:08:56 -0700 (PDT)
+        Sun, 18 Aug 2019 22:20:23 -0400
+Received: by mail-qt1-f194.google.com with SMTP id b11so330375qtp.10;
+        Sun, 18 Aug 2019 19:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MXsOHISmCpUILyy9WHiVYPcKhs15OcsHvOVCutfJVTQ=;
-        b=VnCEES/UltGfTFiTg/85Nqzwi5/ac6wr6TakwWpR7pOAZlH9NoN4dI+SNQbrTNye8+
-         ArfSICQSVhQyfo4G9syzmU00C8Hzn3dUwkMMDfGVws4EIQ9zr8dOp+X4LukKiXZ7VmIC
-         zkCyy6Ev4yGgywH69ioOaqXxOm6xPvV++me6ZhKHs1QgOJLY/yZXl2jmnC8D29sYRLHE
-         +xhAWaS66VDRWtmazSF3gUeFaQbfC6etJ2lvgmeCxo4zelZjtIr4YLN7c2oAkVfFRrdm
-         rcvS7tr74BBsCyDHTylY/ZLZi3wxoAiTuq9hNnxjIYU4HcX0z1vwatZ7a9PZRBbpdSfg
-         ktkA==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b7rnR1qd4xgOUxyyaF6IjQnLml5tXyZWdkBe61/XKs8=;
+        b=ZfSBy0mAR7LEIy8hyM1zGqml5g+qdngvkT5lgRQzobe8DZoZiyvOsHbDb4niMhGwPk
+         DmVDkeIFtlyTEv8OZw8KneGVipNN4tY1Fkb6KDwQqloV43aVD3rLLppOikxeAWHkeGnh
+         3Fk+Bj8lsj8Oq4jL9OGuEGGy8Sg1gF8Ch/qdg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MXsOHISmCpUILyy9WHiVYPcKhs15OcsHvOVCutfJVTQ=;
-        b=i7I0VxFQcY/lmP3MehxiiQ7mxg19ZcB598loYygsRa/Xlbj+U8xs11KtSVQTwrVQkC
-         K49v95eXSiJASQ1rq4rFSjiY9RESLUEXGjhjJdxaUZLvMQLa/nqHZThz5qSbOHT974Ge
-         CT1VYc/vduuyDYv4nNUg9gQAtTDf3OPtSdGKlnLLeUYusVAtleEO0pGf3vlJtLKtNmO9
-         EdpnRy2peAAoe3FHh8y5bRjkAvAfth5pRLSss8Z0Imx/UVQVOFVZ7y9Hya4bUO53bDL2
-         SLNcdk1mR0OSrCwYTldyFAvNbM0GoLjdvGeRuFUZOxgMd6JrGC5CrXQe2zSeRnHVUkJ3
-         axOw==
-X-Gm-Message-State: APjAAAWfRfdc0tD28chSB1SgnkBKeyI1asoX97Qgl9RnlzlNYRVEba9X
-        2QHsZI0BlICt99KvQ5xyEPCQ3A==
-X-Google-Smtp-Source: APXvYqyHX+LW9YR2h2Sapt+smYzR6FMkFbhNfzF9MEfgizCxuJ1WxMrjeaOYDF1/XkV6nlK+MuPFTQ==
-X-Received: by 2002:a1c:2314:: with SMTP id j20mr14813865wmj.152.1566119334824;
-        Sun, 18 Aug 2019 02:08:54 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id p7sm8422702wmh.38.2019.08.18.02.08.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 18 Aug 2019 02:08:54 -0700 (PDT)
-Subject: Re: [PATCH 1/3] nvmem: mxs-ocotp: update MODULE_AUTHOR() email
- address
-To:     Stefan Wahren <wahrenst@gmx.net>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <1565720249-6549-1-git-send-email-wahrenst@gmx.net>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <5883944e-efef-ed3d-fdfb-19d9964762f9@linaro.org>
-Date:   Sun, 18 Aug 2019 10:08:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b7rnR1qd4xgOUxyyaF6IjQnLml5tXyZWdkBe61/XKs8=;
+        b=Mf7zme+XL7L1gTK5TmZayWp3GLCZtFugxDhujDV1tFjgVyy3HKFan47Fvlcq0+Wcmt
+         nIuYBPSy8CxK9SuFepJWnyhGan4MWrMad+Z3dM+ujAcXSEqM1u3pgC/8AkG3LNgFZnUV
+         +pK5/tbB1gC/VCuuBMkbcAAp5P7cEG0/2ZIVzJIp5t/jqEYDLBK6tR7DDpzA/s77p+2L
+         YTBGbHXB8+ia1DAN3onLqPDhH6rep7arICuZeKN5IkisPG/0mOE6bVtjZ7N9zs0u5vTE
+         gcmDtpTf1qn2S9CjYyNsScjmZt8hQsYL0L2/xduhUGgVnJ3YuFIHz1GXf2H4Sb9oioDV
+         eFpA==
+X-Gm-Message-State: APjAAAUePrc7jtHLZcIcxAbZ/W+3ud8Z/BdCaSRbvNlzuOmxeO776TFV
+        a8l71thCiXSpN85BNiPi0/35oQoT6KUZ6/gopNsSpmpE
+X-Google-Smtp-Source: APXvYqzlVVWIt46DHe3BSDVNFq99MZ4mEWM467ZlIV1gDI6a+EYmDAWabohjbwWZMa5JgJ25PPU/sJa8NkSQbWUN5so=
+X-Received: by 2002:ac8:46cc:: with SMTP id h12mr19146680qto.234.1566181222265;
+ Sun, 18 Aug 2019 19:20:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1565720249-6549-1-git-send-email-wahrenst@gmx.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190816101944.3586-1-wangzqbj@inspur.com>
+In-Reply-To: <20190816101944.3586-1-wangzqbj@inspur.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 19 Aug 2019 02:20:10 +0000
+Message-ID: <CACPK8XegTePdmykMzZHnW=g6hyEGr7jiW3TP8AvdzSwZGr=2gA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] hwmon: pmbus: Add Inspur Power System power supply driver
+To:     John Wang <wangzqbj@inspur.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        duanzhijia01@inspur.com, Lei YU <mine260309@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Fri, 16 Aug 2019 at 10:19, John Wang <wangzqbj@inspur.com> wrote:
+>
+> Add the driver to monitor Inspur Power System power supplies
+> with hwmon over pmbus.
+>
+> This driver adds sysfs attributes for additional power supply data,
+> including vendor, model, part_number, serial number,
+> firmware revision, hardware revision, and psu mode(active/standby).
+>
+> Signed-off-by: John Wang <wangzqbj@inspur.com>
 
+> +static const struct i2c_device_id ipsps_id[] = {
+> +       { "inspur_ipsps1", 0 },
 
-On 13/08/2019 19:17, Stefan Wahren wrote:
-> The email address listed in MODULE_AUTHOR() will be disabled in the
-> near future. Replace it with my private one.
-> 
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> =2D--
->   drivers/nvmem/mxs-ocotp.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Convention would be to use "ipsps" here, instead of "vendor_device"?
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ipsps_id);
+> +
+> +static const struct of_device_id ipsps_of_match[] = {
+> +       { .compatible = "inspur,ipsps1" },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, ipsps_of_match);
 
-Applied thanks.
+Do we need the of match table? I thought the match on the device name
+from the i2c table would be enough. I will defer to Guenter here
+though.
 
---srini
+Assuming the device tables are okay:
+
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+Cheers,
+
+Joel
+
+> +
+> +static struct i2c_driver ipsps_driver = {
+> +       .driver = {
+> +               .name = "inspur-ipsps",
+> +               .of_match_table = ipsps_of_match,
+> +       },
+> +       .probe = ipsps_probe,
+> +       .remove = pmbus_do_remove,
+> +       .id_table = ipsps_id,
+> +};
