@@ -2,178 +2,92 @@ Return-Path: <SRS0=TBTU=WP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 701E8C3A5A0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 12:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0D23C3A5A0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 21:00:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4CE1620851
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 12:16:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B50F922CEC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Aug 2019 21:00:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbfHSMQd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Aug 2019 08:16:33 -0400
-Received: from enpas.org ([46.38.239.100]:37802 "EHLO mail.enpas.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727039AbfHSMQc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Aug 2019 08:16:32 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id C40E5100705;
-        Mon, 19 Aug 2019 12:16:28 +0000 (UTC)
-From:   Max Staudt <max@enpas.org>
-To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        id S1728287AbfHSVAI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Aug 2019 17:00:08 -0400
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:40221 "EHLO
+        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727769AbfHSVAI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 19 Aug 2019 17:00:08 -0400
+Received: by mail-yw1-f66.google.com with SMTP id z64so1378945ywe.7;
+        Mon, 19 Aug 2019 14:00:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qvztveGCP8rAVOCE3TihtUu+wJQiIJmbl19Afmtoalk=;
+        b=IGOn9j5Q+EOSySGrJfPW5GUAA964uMzTzOIFs/eR5NnC3Scz7O+4CGJgXF48zvvVqE
+         G/tkbFjQX0PcNnjsqGZ0SJAR6C2cD7pW7iAGeGh8ydRjVybGs3kvPIOA6CGqJlX2n6sL
+         N/1zet0hGuyYuP21EygKJaCrjVdajqnrpRnEIAaD29r+7mynGUItc9pI+ZbYvB8DbVRF
+         mofj+spVyV6co80tm8UNWRkhIIFRA2IRar1ajOH1A597Phk3339I+MKgPahr9oi9TTui
+         w99YoD8iyq+wyrtIPPpzexS+5UcZULmqM/hCzDhX7O3xMCUT4FR+kdKnya6uN75/G4up
+         GX7w==
+X-Gm-Message-State: APjAAAUM1xX2lgAd1eUcL9ZL3LKnJIL1V4JmlSocMJ5+lhG8jx/E1u1d
+        rHRP3LDjSWNjz8QO0qBEDAoDyEjOgMuCFA==
+X-Google-Smtp-Source: APXvYqxJyHyzcdoCsBl4lVsAmwLRPbSxcrT4RLy8JeizYa54yMDsl5Z3M6+3dhSh7g/LAvkzx9q74A==
+X-Received: by 2002:a81:918c:: with SMTP id i134mr8802953ywg.65.1566248407313;
+        Mon, 19 Aug 2019 14:00:07 -0700 (PDT)
+Received: from localhost.localdomain (24-158-240-219.dhcp.smyr.ga.charter.com. [24.158.240.219])
+        by smtp.gmail.com with ESMTPSA id l71sm1564543ywl.39.2019.08.19.14.00.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 19 Aug 2019 14:00:06 -0700 (PDT)
+From:   Wenwen Wang <wenwen@cs.uga.edu>
+To:     Wenwen Wang <wenwen@cs.uga.edu>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
-        glaubitz@physik.fu-berlin.de, Max Staudt <max@enpas.org>
-Subject: [PATCH v5 3/3] i2c/busses/i2c-icy: Add LTC2990 present on 2019 board revision
-Date:   Mon, 19 Aug 2019 14:16:18 +0200
-Message-Id: <20190819121618.16557-3-max@enpas.org>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190819121618.16557-1-max@enpas.org>
-References: <20190819121618.16557-1-max@enpas.org>
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org (open list:CORETEMP HARDWARE MONITORING
+        DRIVER), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] hwmon/coretemp: Fix a memory leak bug
+Date:   Mon, 19 Aug 2019 16:00:02 -0500
+Message-Id: <1566248402-6538-1-git-send-email-wenwen@cs.uga.edu>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Since the 2019 a1k.org community re-print of these PCBs sports an
-LTC2990 hwmon chip as an example use case, let this driver autoprobe
-for that as well. If it is present, modprobing ltc2990 is sufficient.
+In coretemp_init(), 'zone_devices' is allocated through kcalloc(). However,
+it is not deallocated in the following execution if
+platform_driver_register() fails, leading to a memory leak. To fix this
+issue, introduce the 'outzone' label to free 'zone_devices' before
+returning the error.
 
-The property_entry enables the three additional inputs available on
-this particular board:
-
-  in1 will be the voltage of the 5V rail, divided by 2.
-  in2 will be the voltage of the 12V rail, divided by 4.
-  temp3 will be measured using a PCB loop next the chip.
-
-v5: Style
-
-v4: Style
-    Added other possible addresses for LTC2990.
-
-v3: Merged with initial LTC2990 support on ICY.
-    Moved defaults from platform_data to swnode.
-    Added note to Kconfig.
-
-Signed-off-by: Max Staudt <max@enpas.org>
+Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
 ---
- drivers/i2c/busses/Kconfig   |  3 +++
- drivers/i2c/busses/i2c-icy.c | 57 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+)
+ drivers/hwmon/coretemp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 9e57e1101..a311d07f3 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1311,6 +1311,9 @@ config I2C_ICY
- 	  This support is also available as a module.  If so, the module
- 	  will be called i2c-icy.
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index fe6618e..d855c78 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -736,7 +736,7 @@ static int __init coretemp_init(void)
  
-+	  If you have a 2019 edition board with an LTC2990 sensor at address
-+	  0x4c, loading the module 'ltc2990' is sufficient to enable it.
-+
- config I2C_MLXCPLD
- 	tristate "Mellanox I2C driver"
- 	depends on X86_64
-diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
-index 20c0fbacf..6dd303dc1 100644
---- a/drivers/i2c/busses/i2c-icy.c
-+++ b/drivers/i2c/busses/i2c-icy.c
-@@ -53,6 +53,8 @@ struct icy_i2c {
+ 	err = platform_driver_register(&coretemp_driver);
+ 	if (err)
+-		return err;
++		goto outzone;
  
- 	void __iomem *reg_s0;
- 	void __iomem *reg_s1;
-+	struct fwnode_handle *ltc2990_fwnode;
-+	struct i2c_client *ltc2990_client;
- };
+ 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
+ 				coretemp_cpu_online, coretemp_cpu_offline);
+@@ -747,6 +747,7 @@ static int __init coretemp_init(void)
  
- /*
-@@ -95,11 +97,34 @@ static void icy_pcf_waitforpin(void *data)
- /*
-  * Main i2c-icy part
-  */
-+static unsigned short const icy_ltc2990_addresses[] = {
-+	0x4c, 0x4d, 0x4e, 0x4f, I2C_CLIENT_END
-+};
-+
-+/*
-+ * Additional sensors exposed once this property is applied:
-+ *
-+ * in1 will be the voltage of the 5V rail, divided by 2.
-+ * in2 will be the voltage of the 12V rail, divided by 4.
-+ * temp3 will be measured using a PCB loop next the chip.
-+ */
-+static const u32 icy_ltc2990_meas_mode[] = {0, 3};
-+
-+static const struct property_entry icy_ltc2990_props[] = {
-+	PROPERTY_ENTRY_U32_ARRAY("lltc,meas-mode", icy_ltc2990_meas_mode),
-+	{ }
-+};
-+
- static int icy_probe(struct zorro_dev *z,
- 		     const struct zorro_device_id *ent)
- {
- 	struct icy_i2c *i2c;
- 	struct i2c_algo_pcf_data *algo_data;
-+	struct fwnode_handle *new_fwnode;
-+	struct i2c_board_info ltc2990_info = {
-+		.type		= "ltc2990",
-+		.addr		= 0x4c,
-+	};
- 
- 	i2c = devm_kzalloc(&z->dev, sizeof(*i2c), GFP_KERNEL);
- 	if (!i2c)
-@@ -141,6 +166,35 @@ static int icy_probe(struct zorro_dev *z,
- 	dev_info(&z->dev, "ICY I2C controller at %pa, IRQ not implemented\n",
- 		 &z->resource.start);
- 
-+	/*
-+	 * The 2019 a1k.org PCBs have an LTC2990 at 0x4c, so start
-+	 * it automatically once ltc2990 is modprobed.
-+	 *
-+	 * in0 is the voltage of the internal 5V power supply.
-+	 * temp1 is the temperature inside the chip.
-+	 *
-+	 * See property_entry above for in1, in2, temp3.
-+	 */
-+	new_fwnode = fwnode_create_software_node(icy_ltc2990_props, NULL);
-+	if (IS_ERR(new_fwnode)) {
-+		dev_info(&z->dev, "Failed to create fwnode for LTC2990, error: %ld\n",
-+			 PTR_ERR(new_fwnode));
-+	} else {
-+		/*
-+		 * Store the fwnode so we can destroy it on .remove().
-+		 * Only store it on success, as fwnode_remove_software_node()
-+		 * is NULL safe, but not PTR_ERR safe.
-+		 */
-+		i2c->ltc2990_fwnode = new_fwnode;
-+		ltc2990_info.fwnode = new_fwnode;
-+
-+		i2c->ltc2990_client =
-+			i2c_new_probed_device(&i2c->adapter,
-+					      &ltc2990_info,
-+					      icy_ltc2990_addresses,
-+					      NULL);
-+	}
-+
- 	return 0;
+ outdrv:
+ 	platform_driver_unregister(&coretemp_driver);
++outzone:
+ 	kfree(zone_devices);
+ 	return err;
  }
- 
-@@ -148,6 +202,9 @@ static void icy_remove(struct zorro_dev *z)
- {
- 	struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
- 
-+	i2c_unregister_device(i2c->ltc2990_client);
-+	fwnode_remove_software_node(i2c->ltc2990_fwnode);
-+
- 	i2c_del_adapter(&i2c->adapter);
- }
- 
 -- 
-2.11.0
+2.7.4
 
