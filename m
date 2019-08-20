@@ -4,114 +4,130 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32F93C3A589
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 854E5C3A589
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F1D8422DA9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:05:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C270206DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:07:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9qsgChs"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HIXbVJYA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbfHTPFQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Aug 2019 11:05:16 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40377 "EHLO
+        id S1728682AbfHTPHi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Aug 2019 11:07:38 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41343 "EHLO
         mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbfHTPFQ (ORCPT
+        with ESMTP id S1726879AbfHTPHi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:05:16 -0400
-Received: by mail-pf1-f196.google.com with SMTP id w16so3555217pfn.7;
-        Tue, 20 Aug 2019 08:05:16 -0700 (PDT)
+        Tue, 20 Aug 2019 11:07:38 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 196so3553394pfz.8;
+        Tue, 20 Aug 2019 08:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=g2uXNLCxA+dXRwhpGdL3x6UO13at0QdpKzA7SxMXRAU=;
-        b=V9qsgChsHcfRalvftwAD++xaW2CQo0MTo9l3AnGv8SOHGJTlLvWynRgXe6yNnJe90R
-         u+z3JXRdxx6ZhRO+3+920gOUuiTL7yz67eaxmBx9YcTssDHPTfC7dsTtsLpG8FNs+OT5
-         yHPfK1Bs9hcJAvjpuv3f1n/XIOB+caZpJOBUwtvAh3wdB8XzU0X/3xF+nUEKZOdfkgn7
-         /j62Dqv4zlI7e7moaCo+HX7v6EGP/CJbfPWqd/2R9xjQIp1jjpwh4wIPbwkGh1zqz2Vw
-         z/P6kG2wJjPlafs2sXceJeQNpKBtzzp1kdryqHzRHzYxB2+i/WXmlMK0JOTQOgLMHGSJ
-         DM7g==
+        bh=DkiWz4/oUykcz3CetsHvj+ZTvSgZaShwRg/roqjAoG4=;
+        b=HIXbVJYAVa5CP6gWHuzx0/dC7fVXrTw9zU2MSb9Uljz0aYDrQkF8YZJkyQTfoxoJoO
+         xqh2J+CXJbD0MsoWMpdj/lzFwUkvfVJi5jDbhk3Vc9S/caL5/v1OR2L8HjXNeALPawek
+         JEZFFPYwgMFfQvnIOk26blf2uCN9jYLeoFjB2rjcSYPJczyWdG10RE8noegOBQTMAWwX
+         W6zvFiu+A7iqcdyPDQtFfLm04AGKIyikl+ofJWNCpZ5f4D6HoTqB109VtO0jrzvpJYiF
+         R3HMMfJr0C3Iqo62FrfwawgGcv92LvnnrSvYS/4edJZFSQSGu+ODPpd2dhtSP5E6DjvB
+         z6tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=g2uXNLCxA+dXRwhpGdL3x6UO13at0QdpKzA7SxMXRAU=;
-        b=e+7gl3oUh1Y86kvnlrdeHn4npGBQPH72w5O1yumHnhs6czkORDGPWzfgbVUM5VRhLG
-         0/6swr1uPt+7+bU72H1UN2yNYVo+X4ogxmWVArDU/7NHZXaftAny5BlejJ4S6Z+u2fk1
-         flJ2kh6sb7Hksc1pmPagaIfPK4aNJ89Yh0XjtVh7tpsBQWjtJUPdE9Zjx6+2q3jv24h7
-         9V8wiC3Oc9E/1B2PSa2F8Ag1VmhliNE/lHsf9zHpmR+2pJF1HwMaDeotVUWXw8FiTrKV
-         izZvfea+MUl9W9jw6Omhs5LqTXhNHUooGSaXIyBd6QtkCDyNaNSWVMjo2ofL77IFPR67
-         MNqQ==
-X-Gm-Message-State: APjAAAUkMAb9FyCWVUMj7Co+kk5CjdqY5V/eryXH+YY2sBFWMogzSgzj
-        ey52+mXenzbDdiPE6m4zpmg=
-X-Google-Smtp-Source: APXvYqxADL9JKZUyaWsi4ECBYxpmpVty/F2zQ+4L4AoFilq+5Lc7ndsImxTBb3E5MpTyJ4w579QOrA==
-X-Received: by 2002:a63:9249:: with SMTP id s9mr24396327pgn.356.1566313515641;
-        Tue, 20 Aug 2019 08:05:15 -0700 (PDT)
+        bh=DkiWz4/oUykcz3CetsHvj+ZTvSgZaShwRg/roqjAoG4=;
+        b=O6SpVI7Gk7ejOZhag0Y8EJaXi/FoARYkRukd1bPbSmSGtUWN5OD0ULG6X6nqSFP+re
+         35+pL1NsAdULn4ZhKXYcSeaQwRrGguKFfUEG7M4eWIpaN49wxyOHJYvNz1ma6jPr2LQO
+         QwBoK/cS9P0ALgW+RCbkVADNK68/aONsfSuB/PdljmUKnmgWCD+yeDfBUo9HIdSVZrlV
+         VoXbCjq4tJ0SZav/tR5uM0APiHZrlOCCPt5az5sp6Wv4MF1C2jYmKhLLZBupp43At02r
+         483BJLC8Ga/1oG04OsF9lyvx2aEBcckZJDmuBuW/om0N5pZAkzIQTi4RUe2l54LfyikS
+         mtiA==
+X-Gm-Message-State: APjAAAW3u+FPdew4c7wnjYpK2AOM95Y61DhjCYM3LRvzD9jW2/BWClxi
+        7NxQCm0VQpi69NJyhcLwdjU=
+X-Google-Smtp-Source: APXvYqx2VWYq4vASDoVbLStGzwIfVULSF3O6sguAYmaT68iESPnwHBaAPOSOJ/5iDyDdCQRwrnQSYw==
+X-Received: by 2002:a65:5cca:: with SMTP id b10mr25855788pgt.365.1566313656771;
+        Tue, 20 Aug 2019 08:07:36 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l123sm29448261pfl.9.2019.08.20.08.05.14
+        by smtp.gmail.com with ESMTPSA id k5sm16575860pgo.45.2019.08.20.08.07.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Aug 2019 08:05:15 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 08:05:13 -0700
+        Tue, 20 Aug 2019 08:07:36 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 08:07:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wenwen Wang <wenwen@cs.uga.edu>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "open list:CORETEMP HARDWARE MONITORING DRIVER" 
-        <linux-hwmon@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hwmon/coretemp: Fix a memory leak bug
-Message-ID: <20190820150513.GA12013@roeck-us.net>
-References: <1566248402-6538-1-git-send-email-wenwen@cs.uga.edu>
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+Subject: Re: [PATCH v5 2/3] hwmon/ltc2990: Generalise DT to fwnode support
+Message-ID: <20190820150735.GA12198@roeck-us.net>
+References: <20190819121618.16557-1-max@enpas.org>
+ <20190819121618.16557-2-max@enpas.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566248402-6538-1-git-send-email-wenwen@cs.uga.edu>
+In-Reply-To: <20190819121618.16557-2-max@enpas.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 04:00:02PM -0500, Wenwen Wang wrote:
-> In coretemp_init(), 'zone_devices' is allocated through kcalloc(). However,
-> it is not deallocated in the following execution if
-> platform_driver_register() fails, leading to a memory leak. To fix this
-> issue, introduce the 'outzone' label to free 'zone_devices' before
-> returning the error.
+On Mon, Aug 19, 2019 at 02:16:17PM +0200, Max Staudt wrote:
+> ltc2990 will now use device_property_read_u32_array() instead of
+> of_property_read_u32_array() - allowing the use of software nodes
+> via fwnode_create_software_node().
 > 
-> Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+> This allows code using i2c_new_device() to specify a default
+> measurement mode for the LTC2990 via fwnode_create_software_node().
+> 
+> Signed-off-by: Max Staudt <max@enpas.org>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/coretemp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/hwmon/ltc2990.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index fe6618e..d855c78 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -736,7 +736,7 @@ static int __init coretemp_init(void)
+> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+> index f9431ad43..53ff50517 100644
+> --- a/drivers/hwmon/ltc2990.c
+> +++ b/drivers/hwmon/ltc2990.c
+> @@ -13,7 +13,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/of.h>
+> +#include <linux/property.h>
 >  
->  	err = platform_driver_register(&coretemp_driver);
->  	if (err)
-> -		return err;
-> +		goto outzone;
+>  #define LTC2990_STATUS	0x00
+>  #define LTC2990_CONTROL	0x01
+> @@ -206,7 +206,6 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>  	int ret;
+>  	struct device *hwmon_dev;
+>  	struct ltc2990_data *data;
+> -	struct device_node *of_node = i2c->dev.of_node;
 >  
->  	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
->  				coretemp_cpu_online, coretemp_cpu_offline);
-> @@ -747,6 +747,7 @@ static int __init coretemp_init(void)
+>  	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA |
+>  				     I2C_FUNC_SMBUS_WORD_DATA))
+> @@ -218,9 +217,10 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
 >  
->  outdrv:
->  	platform_driver_unregister(&coretemp_driver);
-> +outzone:
->  	kfree(zone_devices);
->  	return err;
->  }
+>  	data->i2c = i2c;
+>  
+> -	if (of_node) {
+> -		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
+> -						 data->mode, 2);
+> +	if (dev_fwnode(&i2c->dev)) {
+> +		ret = device_property_read_u32_array(&i2c->dev,
+> +						     "lltc,meas-mode",
+> +						     data->mode, 2);
+>  		if (ret < 0)
+>  			return ret;
+>  
