@@ -2,102 +2,101 @@ Return-Path: <SRS0=7hQu=WQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A6DC3A589
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3B93C3A589
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:12:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A74B922DA9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:11:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8A1322DCC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:12:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="Cs1pibJ1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="UlFn4EbM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729992AbfHTOLt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Aug 2019 10:11:49 -0400
-Received: from mail-wm1-f43.google.com ([209.85.128.43]:34014 "EHLO
-        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729762AbfHTOLs (ORCPT
+        id S1730305AbfHTOLz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Aug 2019 10:11:55 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35500 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730194AbfHTOLy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Aug 2019 10:11:48 -0400
-Received: by mail-wm1-f43.google.com with SMTP id e8so2508885wme.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Aug 2019 07:11:47 -0700 (PDT)
+        Tue, 20 Aug 2019 10:11:54 -0400
+Received: by mail-wm1-f67.google.com with SMTP id l2so2808375wmg.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Aug 2019 07:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=LEqTLls42sbmI5VwKOm6X28Wqd3lNc1FuJ61+Mb/tX8=;
-        b=Cs1pibJ1ZhNLrgABwvSomaLtVuOtZqECaToplmBgiSFFOyALHob2jmunT0LDP2rTLr
-         8xjyBUqopE2eXJdn2ardKgcbFEUxhOAELFlaikQyhvbAgG0ucDYMGZ4iADMDMSqDU+0O
-         3DrLOOguTT2aASkXqOvQzBmF3+MB8NoGMcF7sXLyiTh1vmNTV1OoUqjhx7oDQFt4yavz
-         1jAjzjETMvmWHa8jVtdHXC4xHalXdqlJQA6HMI/uasX0tSY9v7Vv1XeXCA6Iq/FR837h
-         oWZxhnY6V6D1G2GuQJr03LBCC0QDFpnpnYnoN5VfYqEAX02jmT6Ql+PoQjWi1c0x652o
-         74Ng==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :in-reply-to:references;
+        bh=3A3veAm3Lpp8I1KUBVdHNM6t1y4gslFCu/nH33gQzj0=;
+        b=UlFn4EbMZAEbKFED6p6zZZVirxz5HsF1OJcSpQzIPznev4XNwDnsO1YHKvTkKPcJjB
+         3Ot35pW+7Hx6vbjXtLW6iLwRbjAHWbP+UcL3NfR0Vu/YAtXP3ELGvHb8/Vlcabio7nkf
+         A9HTYmV3seHnrCTYdOhhrJcZXhU14qiDN2lAyQJ/0P+Vab9OcyJdra63NyeUudUjdTtW
+         QLCAGVc5LB3PFzKuYyQmiJlaW0U0bZhY3MLwfPVPPesGkhjJBudkidVOh69hERvRZVfU
+         Gf9mB086LUk6W1geanUZYyKuUBpilDfDen4K+fe0FtRb3bWFLlUktGHDf4XJiKPPHk8f
+         Mv2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=LEqTLls42sbmI5VwKOm6X28Wqd3lNc1FuJ61+Mb/tX8=;
-        b=OjDzcL31MJ7rmIKud8VLcIbqQ2Awn52Kusab3KZLdzBSt05I7rBjva+A4l5fRT71/v
-         5P0mdaoFyDnKbwCfgv48ewc9jj7PUxygV02fjSie/Lxm91otbJVk7Q5NDIipnckZRV5z
-         97ne2G5191IE0eKT440mgcIcB1uEMGYmFtpx0tQXvecFSqFmiY08IVuy34mYPiPH+5jj
-         Uf2Dti9H8skB+idXUyVz4uxhgqQa8rETCMgt+iPvyUJX6hGLHSkyxftLK282VzaayUyo
-         HrOUzfHaTH56pQlbo7NL6nESXXTAWaiTLloX6RCrO3ekxuzrf1QNwlYQhUJ2t0Ew5vOM
-         VHTg==
-X-Gm-Message-State: APjAAAWgi10wmmBvmYO2MRMQS5Yh5A2QmnefzxK18n84yCnuAwBDkyUr
-        Dx62l9fO8x7viogIJkblIkyXhg==
-X-Google-Smtp-Source: APXvYqzNR58TVo7qQuCIjcdZQJaHL73fv9fbkxk4iC3wqq9XgsSdtNr1AIlJV9iaBdhgSN99G8bkHg==
-X-Received: by 2002:a1c:cfc6:: with SMTP id f189mr240811wmg.18.1566310306618;
-        Tue, 20 Aug 2019 07:11:46 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:in-reply-to:references;
+        bh=3A3veAm3Lpp8I1KUBVdHNM6t1y4gslFCu/nH33gQzj0=;
+        b=MF8Eds10c+kx0Z6WlEQhrVmAoX/3L2Gbpp5L1nmxqq5yJqU2L9l469E00zh0qcxe3O
+         U0M/dgdnP/Rt+Gqpdk2LdPkY81l8Dut5K+1HhCpupaa/d0Gxne84IfAEIpnf0AwKvqGs
+         Gdhn8Q3ZZAih+CPac2NhnoGWmV9rPfdaKRy0NMshL1RyxF4ncVRQus3NXS6A2aujeq0k
+         o5XXsHz/dYy5vKWPIz753ZUXnYgC33zlwX9tBWnx7bfLjobJ7guwjaSFtz1FW9ngtara
+         eHg4gPo4Vv4AQycg6z6cskYs2t3A57MiTjK+TM/2vSy0PKdZegEERkdxmOkKJ3zw8zi+
+         bDzA==
+X-Gm-Message-State: APjAAAVPu4ymYJsaeJHIP3/im9XBJFwL8hwFrWh/WEv9Ure8q9E6aVuz
+        nf2HQ50o/5G86TDPuA7ecHmoKQ==
+X-Google-Smtp-Source: APXvYqxjghaCyCbikfVIF7P9kVbfPe71/TZPk84eJm5nxA4vZdhH9MGYRrqrXJuh7H9rsOBBIiEuuw==
+X-Received: by 2002:a1c:d185:: with SMTP id i127mr207839wmg.63.1566310312089;
+        Tue, 20 Aug 2019 07:11:52 -0700 (PDT)
 Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id r123sm185142wme.7.2019.08.20.07.11.45
+        by smtp.gmail.com with ESMTPSA id f13sm10145717wrr.5.2019.08.20.07.11.51
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 20 Aug 2019 07:11:45 -0700 (PDT)
+        Tue, 20 Aug 2019 07:11:51 -0700 (PDT)
 From:   Michal Simek <michal.simek@xilinx.com>
 To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
         michal.simek@xilinx.com, linux@roeck-us.net
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Colin Ian King <colin.king@canonical.com>,
-        linux-iio@vger.kernel.org,
-        =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
         Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Hartmut Knaack <knaack.h@gmx.de>
-Subject: [PATCH 0/4] iio: adc: ina2xx: Improve device identification
-Date:   Tue, 20 Aug 2019 16:11:37 +0200
-Message-Id: <cover.1566310292.git.michal.simek@xilinx.com>
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH 3/4] dt-bindings: Add optional label property for ina2xx
+Date:   Tue, 20 Aug 2019 16:11:40 +0200
+Message-Id: <3c56deb8cc1842d2915b203e622be1eb442414de.1566310292.git.michal.simek@xilinx.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1566310292.git.michal.simek@xilinx.com>
+References: <cover.1566310292.git.michal.simek@xilinx.com>
+In-Reply-To: <cover.1566310292.git.michal.simek@xilinx.com>
+References: <cover.1566310292.git.michal.simek@xilinx.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Using optional "label" property is adding an option to user to use better
+name for device identification.
 
-the purpose of this series is to improve ina226 identification. On systems
-like Xilinx ZynqMP zcu102 (check dt in the tree) you can find out almost 20
-ina226 chips and it is impossible to find out based on simple ina226 which
-chip is repsonsible for what.
-The series is adding two ways how to improve device identification.
-Please let me know what you think I am happy to do changes in it.
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+---
 
-Thanks,
-Michal
+ Documentation/devicetree/bindings/hwmon/ina2xx.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Michal Simek (4):
-  iio: adc: ina2xx: Define *device_node only once
-  iio: adc: ina2xx: Setup better name then simple ina2xx
-  dt-bindings: Add optional label property for ina2xx
-  iio: adc: ina2xx: Use label proper for device identification
-
- .../devicetree/bindings/hwmon/ina2xx.txt          |  2 ++
- drivers/iio/adc/ina2xx-adc.c                      | 15 +++++++++++----
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/hwmon/ina2xx.txt b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+index 02af0d94e921..d15bf7e46fd7 100644
+--- a/Documentation/devicetree/bindings/hwmon/ina2xx.txt
++++ b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
+@@ -14,6 +14,8 @@ Optional properties:
+ 
+ - shunt-resistor
+ 	Shunt resistor value in micro-Ohm
++- label
++	Symbolic name for a power monitor
+ 
+ Example:
+ 
 -- 
 2.17.1
 
