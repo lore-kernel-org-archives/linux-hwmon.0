@@ -2,101 +2,116 @@ Return-Path: <SRS0=7hQu=WQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3B93C3A589
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:12:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32F93C3A589
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:05:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8A1322DCC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 14:12:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1D8422DA9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Aug 2019 15:05:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=monstr-eu.20150623.gappssmtp.com header.i=@monstr-eu.20150623.gappssmtp.com header.b="UlFn4EbM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9qsgChs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730305AbfHTOLz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Aug 2019 10:11:55 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35500 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730194AbfHTOLy (ORCPT
+        id S1728159AbfHTPFQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Aug 2019 11:05:16 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40377 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726742AbfHTPFQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Aug 2019 10:11:54 -0400
-Received: by mail-wm1-f67.google.com with SMTP id l2so2808375wmg.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Aug 2019 07:11:52 -0700 (PDT)
+        Tue, 20 Aug 2019 11:05:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w16so3555217pfn.7;
+        Tue, 20 Aug 2019 08:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=3A3veAm3Lpp8I1KUBVdHNM6t1y4gslFCu/nH33gQzj0=;
-        b=UlFn4EbMZAEbKFED6p6zZZVirxz5HsF1OJcSpQzIPznev4XNwDnsO1YHKvTkKPcJjB
-         3Ot35pW+7Hx6vbjXtLW6iLwRbjAHWbP+UcL3NfR0Vu/YAtXP3ELGvHb8/Vlcabio7nkf
-         A9HTYmV3seHnrCTYdOhhrJcZXhU14qiDN2lAyQJ/0P+Vab9OcyJdra63NyeUudUjdTtW
-         QLCAGVc5LB3PFzKuYyQmiJlaW0U0bZhY3MLwfPVPPesGkhjJBudkidVOh69hERvRZVfU
-         Gf9mB086LUk6W1geanUZYyKuUBpilDfDen4K+fe0FtRb3bWFLlUktGHDf4XJiKPPHk8f
-         Mv2Q==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=g2uXNLCxA+dXRwhpGdL3x6UO13at0QdpKzA7SxMXRAU=;
+        b=V9qsgChsHcfRalvftwAD++xaW2CQo0MTo9l3AnGv8SOHGJTlLvWynRgXe6yNnJe90R
+         u+z3JXRdxx6ZhRO+3+920gOUuiTL7yz67eaxmBx9YcTssDHPTfC7dsTtsLpG8FNs+OT5
+         yHPfK1Bs9hcJAvjpuv3f1n/XIOB+caZpJOBUwtvAh3wdB8XzU0X/3xF+nUEKZOdfkgn7
+         /j62Dqv4zlI7e7moaCo+HX7v6EGP/CJbfPWqd/2R9xjQIp1jjpwh4wIPbwkGh1zqz2Vw
+         z/P6kG2wJjPlafs2sXceJeQNpKBtzzp1kdryqHzRHzYxB2+i/WXmlMK0JOTQOgLMHGSJ
+         DM7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:in-reply-to:references;
-        bh=3A3veAm3Lpp8I1KUBVdHNM6t1y4gslFCu/nH33gQzj0=;
-        b=MF8Eds10c+kx0Z6WlEQhrVmAoX/3L2Gbpp5L1nmxqq5yJqU2L9l469E00zh0qcxe3O
-         U0M/dgdnP/Rt+Gqpdk2LdPkY81l8Dut5K+1HhCpupaa/d0Gxne84IfAEIpnf0AwKvqGs
-         Gdhn8Q3ZZAih+CPac2NhnoGWmV9rPfdaKRy0NMshL1RyxF4ncVRQus3NXS6A2aujeq0k
-         o5XXsHz/dYy5vKWPIz753ZUXnYgC33zlwX9tBWnx7bfLjobJ7guwjaSFtz1FW9ngtara
-         eHg4gPo4Vv4AQycg6z6cskYs2t3A57MiTjK+TM/2vSy0PKdZegEERkdxmOkKJ3zw8zi+
-         bDzA==
-X-Gm-Message-State: APjAAAVPu4ymYJsaeJHIP3/im9XBJFwL8hwFrWh/WEv9Ure8q9E6aVuz
-        nf2HQ50o/5G86TDPuA7ecHmoKQ==
-X-Google-Smtp-Source: APXvYqxjghaCyCbikfVIF7P9kVbfPe71/TZPk84eJm5nxA4vZdhH9MGYRrqrXJuh7H9rsOBBIiEuuw==
-X-Received: by 2002:a1c:d185:: with SMTP id i127mr207839wmg.63.1566310312089;
-        Tue, 20 Aug 2019 07:11:52 -0700 (PDT)
-Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id f13sm10145717wrr.5.2019.08.20.07.11.51
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 20 Aug 2019 07:11:51 -0700 (PDT)
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=g2uXNLCxA+dXRwhpGdL3x6UO13at0QdpKzA7SxMXRAU=;
+        b=e+7gl3oUh1Y86kvnlrdeHn4npGBQPH72w5O1yumHnhs6czkORDGPWzfgbVUM5VRhLG
+         0/6swr1uPt+7+bU72H1UN2yNYVo+X4ogxmWVArDU/7NHZXaftAny5BlejJ4S6Z+u2fk1
+         flJ2kh6sb7Hksc1pmPagaIfPK4aNJ89Yh0XjtVh7tpsBQWjtJUPdE9Zjx6+2q3jv24h7
+         9V8wiC3Oc9E/1B2PSa2F8Ag1VmhliNE/lHsf9zHpmR+2pJF1HwMaDeotVUWXw8FiTrKV
+         izZvfea+MUl9W9jw6Omhs5LqTXhNHUooGSaXIyBd6QtkCDyNaNSWVMjo2ofL77IFPR67
+         MNqQ==
+X-Gm-Message-State: APjAAAUkMAb9FyCWVUMj7Co+kk5CjdqY5V/eryXH+YY2sBFWMogzSgzj
+        ey52+mXenzbDdiPE6m4zpmg=
+X-Google-Smtp-Source: APXvYqxADL9JKZUyaWsi4ECBYxpmpVty/F2zQ+4L4AoFilq+5Lc7ndsImxTBb3E5MpTyJ4w579QOrA==
+X-Received: by 2002:a63:9249:: with SMTP id s9mr24396327pgn.356.1566313515641;
+        Tue, 20 Aug 2019 08:05:15 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l123sm29448261pfl.9.2019.08.20.08.05.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Aug 2019 08:05:15 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 08:05:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wenwen Wang <wenwen@cs.uga.edu>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 3/4] dt-bindings: Add optional label property for ina2xx
-Date:   Tue, 20 Aug 2019 16:11:40 +0200
-Message-Id: <3c56deb8cc1842d2915b203e622be1eb442414de.1566310292.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1566310292.git.michal.simek@xilinx.com>
-References: <cover.1566310292.git.michal.simek@xilinx.com>
-In-Reply-To: <cover.1566310292.git.michal.simek@xilinx.com>
-References: <cover.1566310292.git.michal.simek@xilinx.com>
+        "open list:CORETEMP HARDWARE MONITORING DRIVER" 
+        <linux-hwmon@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon/coretemp: Fix a memory leak bug
+Message-ID: <20190820150513.GA12013@roeck-us.net>
+References: <1566248402-6538-1-git-send-email-wenwen@cs.uga.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1566248402-6538-1-git-send-email-wenwen@cs.uga.edu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Using optional "label" property is adding an option to user to use better
-name for device identification.
+On Mon, Aug 19, 2019 at 04:00:02PM -0500, Wenwen Wang wrote:
+> In coretemp_init(), 'zone_devices' is allocated through kcalloc(). However,
+> it is not deallocated in the following execution if
+> platform_driver_register() fails, leading to a memory leak. To fix this
+> issue, introduce the 'outzone' label to free 'zone_devices' before
+> returning the error.
+> 
+> Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
 
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+Applied.
 
- Documentation/devicetree/bindings/hwmon/ina2xx.txt | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks,
+Guenter
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ina2xx.txt b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
-index 02af0d94e921..d15bf7e46fd7 100644
---- a/Documentation/devicetree/bindings/hwmon/ina2xx.txt
-+++ b/Documentation/devicetree/bindings/hwmon/ina2xx.txt
-@@ -14,6 +14,8 @@ Optional properties:
- 
- - shunt-resistor
- 	Shunt resistor value in micro-Ohm
-+- label
-+	Symbolic name for a power monitor
- 
- Example:
- 
--- 
-2.17.1
-
+> ---
+>  drivers/hwmon/coretemp.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index fe6618e..d855c78 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -736,7 +736,7 @@ static int __init coretemp_init(void)
+>  
+>  	err = platform_driver_register(&coretemp_driver);
+>  	if (err)
+> -		return err;
+> +		goto outzone;
+>  
+>  	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hwmon/coretemp:online",
+>  				coretemp_cpu_online, coretemp_cpu_offline);
+> @@ -747,6 +747,7 @@ static int __init coretemp_init(void)
+>  
+>  outdrv:
+>  	platform_driver_unregister(&coretemp_driver);
+> +outzone:
+>  	kfree(zone_devices);
+>  	return err;
+>  }
