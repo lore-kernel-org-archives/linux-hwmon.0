@@ -2,126 +2,84 @@ Return-Path: <SRS0=7x6H=WX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9182C3A5A3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Aug 2019 03:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCF7CC3A5A3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Aug 2019 17:06:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3C372070B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Aug 2019 03:51:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZ/bEeo+"
+	by mail.kernel.org (Postfix) with ESMTP id 953C22173E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Aug 2019 17:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1566925602;
+	bh=XDl+jytqvrkWytxS69BL/h7ZUxAKzdidu8F7R/CsLzI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=lHvlwweTlVyEHFN9IECNisd6cBEPJVLea0nrk+zi56GWqF2C2c99Tgb9rU6aK0XRN
+	 vFU74qiV8VyrS/MtsFW0mUU7UFP7x82YpeZa6JpPvBbM8tXhV0ZgVJY/x2cHYLqlTF
+	 Z8QYFmQ2EKv8T8CEOYesWK5uvOn/99lRisVKpbIo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728832AbfH0Dvq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Aug 2019 23:51:46 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42664 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728345AbfH0Dvp (ORCPT
+        id S1727401AbfH0RGm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Aug 2019 13:06:42 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:43750 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfH0RGm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Aug 2019 23:51:45 -0400
-Received: by mail-pf1-f194.google.com with SMTP id i30so13170660pfk.9;
-        Mon, 26 Aug 2019 20:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uzw991Nd9jKGjk5uiYDdWpoGos7yXqXk1ZGkmJpLpEc=;
-        b=VZ/bEeo+JL0jEB5ajc2gQ8c0lAQWsCg5gV7chmk0uvbopRZahtryHkP6pu2LfI1kJv
-         isK0BI2HdUHIqMK6fshtaQ4+Q5Diip+Gv7/lohTtwkpwUYur99cozGU9M99bb6kzRTtk
-         eb/ha+mOsD+n5ONGq3fpWc9B52f/i062cvudEoXmRt4ydGKk5hoaVq6xsZGahoQLSgsp
-         lOD1fArESLDxXiUeAxaUa0wKKRwSN/6Xy2YCRM2ctTXQlcfUbdjrvfs3PRKEdR1vjrSJ
-         bXM3pW4AEg+oJaIAW4NVWyv1PJvTNWS0OSbtUHS+8K3rRLTmDo2dKiIWQfmsVSY4qskw
-         WFlA==
+        Tue, 27 Aug 2019 13:06:42 -0400
+Received: by mail-ot1-f68.google.com with SMTP id e12so19362390otp.10;
+        Tue, 27 Aug 2019 10:06:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uzw991Nd9jKGjk5uiYDdWpoGos7yXqXk1ZGkmJpLpEc=;
-        b=fzahIZBGOXY2OEikMXCTm41LtfYNRU/+czXZgVrBfF6wQ2l7hM0q5Oi9mMJZw7+Xa/
-         15F2JzDZxIMU/tDQzA68uFqf+SUYmxjIyF6a0CBOpFB8nOukPdfaUujq9rdakem3wQXm
-         7/b5rEjp+YIo3yaWNlFqT5PZRKd6CJUyDYhuuUViL5bclK6OFOG0BmNQM6aFIZ/81eW9
-         XpnjUnQDlJa/kvStidpk1b1Fdv2OvOuwUc5qRMtor+8paAW6xb79WznW+RLaYnVorqbv
-         MEbr5ZZ8OWG2HM4xTfk7XCuusfDy+ZtqF6mL6ZMUhkkL5X/Ch6sBysok7AbqL6Bo9kqQ
-         smsw==
-X-Gm-Message-State: APjAAAXQl1aiXpJECYsx64O9pfXsbx7nQ0Wx/VJpD0NLMYW+mh3HxONs
-        JVWUM9gGlyKm6JFcglQ+2CdC23dL
-X-Google-Smtp-Source: APXvYqwMSCQaA5x5qIUZLvllnP98gD/Ag8iZwbgHtzXNc4bCbFCMJoYX8ghjfU7J1gfOnZZ2LLNOsQ==
-X-Received: by 2002:a65:6406:: with SMTP id a6mr17840286pgv.393.1566877904887;
-        Mon, 26 Aug 2019 20:51:44 -0700 (PDT)
-Received: from server.roeck-us.net (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
-        by smtp.gmail.com with ESMTPSA id y16sm13799827pfn.173.2019.08.26.20.51.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Aug 2019 20:51:43 -0700 (PDT)
-Subject: Re: [PATCH 1/2] hwmon: Add Synaptics AS370 PVT sensor driver
-To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190826174942.2b28ff05@xhacker.debian>
- <20190826175029.433632f6@xhacker.debian>
- <35b05950-4a72-9e00-50ab-ecd0a7e759a4@roeck-us.net>
- <20190827105110.0be8d669@xhacker.debian>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e0bfae1c-07f5-f907-0003-2c2f959e8099@roeck-us.net>
-Date:   Mon, 26 Aug 2019 20:51:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yb7OsvRoJ3pUmTC3nieNUsZv+jJ8H0pkWBr1pJcDLEI=;
+        b=FbL2f6kM4yQz/YOJdliRSmInIJILVXDzeP0QxTAF/vVbMcSRXRM8k4SM9L3LO9GSOs
+         g1WemaktECumnCgj6SWYf8lhQbE3/TnN74T4Tx9vmJd+1stGCGgzvIP+p0WhdnRSQAMd
+         dn9ModkP85S9L8mBjriGaMPHsi9p0I6ELL6p2E2edyzPLWM9/uejOrKxDUKuHxqDFJZi
+         C9Xn8LwEcSfvo5QT8V3NqL8F/x323MsW2IIpsI74n2HMPcSJPl6R1UK7vr0EttgvZz1x
+         U2bTofH/b77lPXk+Li1I2B3uJTPBaiJLMyejPfEkz4QthDxK8tjFpLmp3VYwPBGd4JwX
+         BKrA==
+X-Gm-Message-State: APjAAAUJp6x7E+mF7bI9BBRzk92jgQx8pGvSjnqYkBlgBf2F4YO7lNoj
+        5GvotJl0fGa26WVIQXaHXQ==
+X-Google-Smtp-Source: APXvYqxN/blzNEpxMuatrg1y1bReIJVGv0mbRaK1UFr6lrK0MNRwnxCRcbDArmesumhflYNdAmNv1g==
+X-Received: by 2002:a9d:5551:: with SMTP id h17mr21256881oti.194.1566925601070;
+        Tue, 27 Aug 2019 10:06:41 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m10sm5525773otq.0.2019.08.27.10.06.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 10:06:40 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 12:06:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 3/4] dt-bindings: Add optional label property for ina2xx
+Message-ID: <20190827170639.GA18927@bogus>
+References: <cover.1566310292.git.michal.simek@xilinx.com>
+ <3c56deb8cc1842d2915b203e622be1eb442414de.1566310292.git.michal.simek@xilinx.com>
 MIME-Version: 1.0
-In-Reply-To: <20190827105110.0be8d669@xhacker.debian>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c56deb8cc1842d2915b203e622be1eb442414de.1566310292.git.michal.simek@xilinx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/26/19 8:02 PM, Jisheng Zhang wrote:
-> Hi Guenter,
+On Tue, 20 Aug 2019 16:11:40 +0200, Michal Simek wrote:
+> Using optional "label" property is adding an option to user to use better
+> name for device identification.
 > 
-> On Mon, 26 Aug 2019 06:44:34 -0700 Guenter Roeck wrote:
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> ---
 > 
->>
->>
->> On 8/26/19 3:01 AM, Jisheng Zhang wrote:
->>> Add a new driver for Synaptics AS370 PVT sensors. Currently, only
->>> temperature is supported.
->>>
->>> Signed-off-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
->>> ---
->>>    drivers/hwmon/Kconfig       |  10 +++
->>>    drivers/hwmon/Makefile      |   1 +
->>>    drivers/hwmon/as370-hwmon.c | 158 ++++++++++++++++++++++++++++++++++++
->>>    3 files changed, 169 insertions(+)
->>>    create mode 100644 drivers/hwmon/as370-hwmon.c
->>>
->>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>> index 650dd71f9724..d31610933faa 100644
->>> --- a/drivers/hwmon/Kconfig
->>> +++ b/drivers/hwmon/Kconfig
->>> @@ -246,6 +246,16 @@ config SENSORS_ADT7475
->>>          This driver can also be built as a module. If so, the module
->>>          will be called adt7475.
->>>
->>> +config SENSORS_AS370
->>> +     tristate "Synaptics AS370 SoC hardware monitoring driver"
->>
->> I think this needs "depends on HAS_IOMEM".
-> 
-> HWMON depends on HAS_IOMEM, so the dependency has been required
-> by the common HWMON, we don't need it here.
+>  Documentation/devicetree/bindings/hwmon/ina2xx.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
-This is so wrong :-(. As if I2C or SPI based sensor chips would
-require iomem. Oh well, no one complained in 12+ years, so I guess
-we are "fine", at least for the time being.
-
-Thanks for noticing.
-
-Guenter
+Reviewed-by: Rob Herring <robh@kernel.org>
