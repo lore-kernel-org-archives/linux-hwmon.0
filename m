@@ -2,105 +2,104 @@ Return-Path: <SRS0=ITnn=WY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C845C3A5A6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Aug 2019 08:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 179AFC3A5A1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Aug 2019 08:57:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 51C30214DA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Aug 2019 08:34:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFQAKSEK"
+	by mail.kernel.org (Postfix) with ESMTP id CFF1D23777
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Aug 2019 08:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1566982648;
+	bh=/Bf0Zy+Qaa+eHgdxE3GzvH5JYjYkpXI4095O93WH0mQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=UUtieqHXyF+TZX4H0/RbrzC0vifwK+FQk0iEF40qJACL2VR7IR4a8Ww5k0n+jY+p7
+	 LaMQT8gZ8mzwcp7cL7zY9QTp3aaqwTfJquAGIXjBk4CYih70R8IXdKJtv3YJ4Tm0Az
+	 E2WTpaxDIc/asps9aA9NpVxJ5g0ysVwW6MUu+0kw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbfH1IeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Aug 2019 04:34:18 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53461 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726292AbfH1IeR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Aug 2019 04:34:17 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 10so1792441wmp.3;
-        Wed, 28 Aug 2019 01:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=smxwejZdMZZUqvmIMjajMjCkxwj4EEjkJYnSTausqgs=;
-        b=OFQAKSEK4jCaLeKz2+A+WaOVuJXZRU4LiD+DNMU9wktMO/RQ8YhQUgT92iBjNEbOlj
-         jvyN+jyYdxzUFOlEV8lpiP47ELYLUQ8LTnS7C1Tvze0OLzsFQsruKHd6NS5ZEvjh7UuL
-         sU1v2/ZRb8OhgRJMVcedfO8hl6vMj37tzKx4C0SyBzEPppHpC8hSHvOzXuzgLRzPqjdq
-         2zb73wn6j5qZo0cH10zr4EWyxjeghH2MOh/9oei0Y6nx3JiR0xySS6wjpYWhPmN7/eIy
-         xi/fmxJ30F4Cz5ZINZzaBLlUzEPi8Y9s/gLWM0ZrFGZlaZBKb3toTi3lpYjX8ERPYekO
-         RfNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=smxwejZdMZZUqvmIMjajMjCkxwj4EEjkJYnSTausqgs=;
-        b=LAzVN3e4rk0rAYmIARySmULo/91J+5MUfK1kS+wy9IIKOZ1ioC6dh6v2x5E/qnkiBT
-         bcBJ4lDnsG1UmQBWYULRSEWBN2ydwGbUm89EnR6XwMCA2A8z/hR06Pi7PAefIHFHthzl
-         JtR4pbPHeW2zEH+hW85DQqZoYGtHGRva7bSz6F41ICY7nxwi7vI2ETyvz9nzH4nd8Usb
-         OwjO0Xf8gY8/KdJeA3EmUOVuOgWe8UenfaWD99CC2pdwy5XPIv3bP1JMRhVmyItem3wF
-         Hc4lcYxx2zZsVFv7wthrySjXYrduTRS4eE7sUMGtT4U8ioUWhqC6AFZ8ZYeTkbbsi4cr
-         Na8Q==
-X-Gm-Message-State: APjAAAXNXQhbFUJLAeOnag7MjU5pxALwy3MFksRRw/QAclFvXK7n7xH6
-        SPXKR0FZBY+u51lep50Prr8=
-X-Google-Smtp-Source: APXvYqwNSQvlzLzWVWRovL5DhGpmH6zUc3Ntsm8YzG8OJJBh4M/ghmHUD+hy84ZiI2Rud5avettFmw==
-X-Received: by 2002:a7b:c753:: with SMTP id w19mr3231534wmk.91.1566981255985;
-        Wed, 28 Aug 2019 01:34:15 -0700 (PDT)
-Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id r5sm1211055wmh.35.2019.08.28.01.34.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 01:34:15 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        id S1726339AbfH1I52 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Aug 2019 04:57:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59102 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726259AbfH1I52 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 28 Aug 2019 04:57:28 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D64F023697;
+        Wed, 28 Aug 2019 08:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566982647;
+        bh=/Bf0Zy+Qaa+eHgdxE3GzvH5JYjYkpXI4095O93WH0mQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ajGDOja+xlAXGh5cCNT54C60GVrgWCe/Z9yMOd39uk5oZW26xvQ+Q08ahzOtf10js
+         FP5UjgqEXkL/ZaPiwaDkSXrjXEnxFUZKQxvIF69SSwMg1t0ZFcnZbFfOBQcSbXTZKK
+         lwz3+hHvRXPJByTCcYW2kTtz8TsNYmyrKLK/Z91g=
+Date:   Wed, 28 Aug 2019 10:57:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Stephen Boyd <swboyd@chromium.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: pwm-fan: Use platform_get_irq_optional()
-Date:   Wed, 28 Aug 2019 10:34:11 +0200
-Message-Id: <20190828083411.2496-2-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190828083411.2496-1-thierry.reding@gmail.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] driver core: platform: Introduce
+ platform_get_irq_optional()
+Message-ID: <20190828085724.GA31055@kroah.com>
 References: <20190828083411.2496-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190828083411.2496-1-thierry.reding@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Wed, Aug 28, 2019 at 10:34:10AM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> In some cases the interrupt line of a device is optional. Introduce a
+> new platform_get_irq_optional() that works much like platform_get_irq()
+> but does not output an error on failure to find the interrupt.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/base/platform.c         | 22 ++++++++++++++++++++++
+>  include/linux/platform_device.h |  1 +
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index 8ad701068c11..0dda6ade50fd 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -192,6 +192,28 @@ int platform_get_irq(struct platform_device *dev, unsigned int num)
+>  }
+>  EXPORT_SYMBOL_GPL(platform_get_irq);
+>  
+> +/**
+> + * platform_get_irq_optional - get an optional IRQ for a device
+> + * @dev: platform device
+> + * @num: IRQ number index
+> + *
+> + * Gets an IRQ for a platform device. Device drivers should check the return
+> + * value for errors so as to not pass a negative integer value to the
+> + * request_irq() APIs. This is the same as platform_get_irq(), except that it
+> + * does not print an error message if an IRQ can not be obtained.
 
-The PWM fan interrupt is optional, so we don't want an error message in
-the kernel log if it wasn't specified.
+Kind of funny that the work people did to put error messages in a
+central place needs to be worked around at times :)
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/hwmon/pwm-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Anyway, I have no objection to this, but it looks like it has to go in
+through my tree.  I can take the hwmon patch as well through my tree if
+the hwmon maintainer(s) say it is ok to do so.
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 54c0ff00d67f..42ffd2e5182d 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -304,7 +304,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, ctx);
- 
--	ctx->irq = platform_get_irq(pdev, 0);
-+	ctx->irq = platform_get_irq_optional(pdev, 0);
- 	if (ctx->irq == -EPROBE_DEFER)
- 		return ctx->irq;
- 
--- 
-2.22.0
+thanks,
 
+greg k-h
