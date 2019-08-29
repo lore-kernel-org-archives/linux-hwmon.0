@@ -2,168 +2,106 @@ Return-Path: <SRS0=JHlu=WZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D214C3A59F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Aug 2019 10:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE39CC3A59F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Aug 2019 19:00:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F78223403
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Aug 2019 10:10:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567073432;
-	bh=lxep6NKFXEm61hWlaCADl7aH4C7g4KhxHM4ZioALn2c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=XQiPhUVX8J5FYHSqvglZCcNeJgczOZZXgtgVxvdiWuKObMfZrPzuuvPmX5S5C9gZ4
-	 +KfRRKYc6oDJc1b1DSx0egFb1rHz1+zmQXQJpVeLHvQeEinvjTtBgNbMvErU3Kju2I
-	 Swg87FZnvQwFAQFLic0pm8CdA8uuphpHmFuWwWbY=
+	by mail.kernel.org (Postfix) with ESMTP id AD4F02166E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Aug 2019 19:00:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfH2KKc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Aug 2019 06:10:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50002 "EHLO mail.kernel.org"
+        id S1728132AbfH2TAR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Aug 2019 15:00:17 -0400
+Received: from sauhun.de ([88.99.104.3]:42290 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726330AbfH2KKb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Aug 2019 06:10:31 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCF252339E;
-        Thu, 29 Aug 2019 10:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567073430;
-        bh=lxep6NKFXEm61hWlaCADl7aH4C7g4KhxHM4ZioALn2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FHqr8XLjynHZME8z2KfP2D7/bk2oW7pcMr8B8eEMmhbJegLXaifOuxW6j5oMVmNqa
-         v/R8GU/EDshcQ3gCMPwVveQKBVihViWq/YIqeuEgtHNOzMq8xVdN8Oa5j7MuusFgwg
-         fGkuLu/BrmWxe9Xa/iDQzW/W4niydVo6qd8YIQtI=
-Date:   Thu, 29 Aug 2019 12:10:28 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S1727798AbfH2TAR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 29 Aug 2019 15:00:17 -0400
+Received: from localhost (p54B33070.dip0.t-ipconnect.de [84.179.48.112])
+        by pokefinder.org (Postfix) with ESMTPSA id 37F742C001C;
+        Thu, 29 Aug 2019 21:00:15 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 21:00:14 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] driver core: platform: Introduce
- platform_get_irq_optional()
-Message-ID: <20190829101028.GA20197@kroah.com>
-References: <20190828083411.2496-1-thierry.reding@gmail.com>
- <20190829074408.GA17754@ulmo>
+        Guenter Roeck <linux@roeck-us.net>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+Subject: Re: [PATCH] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+Message-ID: <20190829190014.GG3740@ninjato>
+References: <3F017C0B-44D6-4E63-A908-DDAA5586D67C@enpas.org>
+ <20190820092739.7213-1-max@enpas.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Cp3Cp8fzgozWLBWL"
 Content-Disposition: inline
-In-Reply-To: <20190829074408.GA17754@ulmo>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190820092739.7213-1-max@enpas.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 09:44:08AM +0200, Thierry Reding wrote:
-> On Wed, Aug 28, 2019 at 10:34:10AM +0200, Thierry Reding wrote:
-> > From: Thierry Reding <treding@nvidia.com>
-> > 
-> > In some cases the interrupt line of a device is optional. Introduce a
-> > new platform_get_irq_optional() that works much like platform_get_irq()
-> > but does not output an error on failure to find the interrupt.
-> > 
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > ---
-> >  drivers/base/platform.c         | 22 ++++++++++++++++++++++
-> >  include/linux/platform_device.h |  1 +
-> >  2 files changed, 23 insertions(+)
-> > 
-> > diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> > index 8ad701068c11..0dda6ade50fd 100644
-> > --- a/drivers/base/platform.c
-> > +++ b/drivers/base/platform.c
-> > @@ -192,6 +192,28 @@ int platform_get_irq(struct platform_device *dev, unsigned int num)
-> >  }
-> >  EXPORT_SYMBOL_GPL(platform_get_irq);
-> >  
-> > +/**
-> > + * platform_get_irq_optional - get an optional IRQ for a device
-> > + * @dev: platform device
-> > + * @num: IRQ number index
-> > + *
-> > + * Gets an IRQ for a platform device. Device drivers should check the return
-> > + * value for errors so as to not pass a negative integer value to the
-> > + * request_irq() APIs. This is the same as platform_get_irq(), except that it
-> > + * does not print an error message if an IRQ can not be obtained.
-> > + *
-> > + * Example:
-> > + *		int irq = platform_get_irq_optional(pdev, 0);
-> > + *		if (irq < 0)
-> > + *			return irq;
-> > + *
-> > + * Return: IRQ number on success, negative error number on failure.
-> > + */
-> > +int platform_get_irq_optional(struct platform_device *dev, unsigned int num)
-> > +{
-> > +	return __platform_get_irq(dev, num);
-> > +}
-> 
-> Oh my... this is embarrassing, but the kbuild test robot reported that
-> the second patch here fails to build because I forgot to export this
-> symbol. I've attached a patch that fixes it.
-> 
-> Thierry
-> 
-> > +
-> >  /**
-> >   * platform_irq_count - Count the number of IRQs a platform device uses
-> >   * @dev: platform device
-> > diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> > index 37e15a935a42..35bc4355a9df 100644
-> > --- a/include/linux/platform_device.h
-> > +++ b/include/linux/platform_device.h
-> > @@ -58,6 +58,7 @@ extern void __iomem *
-> >  devm_platform_ioremap_resource(struct platform_device *pdev,
-> >  			       unsigned int index);
-> >  extern int platform_get_irq(struct platform_device *, unsigned int);
-> > +extern int platform_get_irq_optional(struct platform_device *, unsigned int);
-> >  extern int platform_irq_count(struct platform_device *);
-> >  extern struct resource *platform_get_resource_byname(struct platform_device *,
-> >  						     unsigned int,
-> > -- 
-> > 2.22.0
-> > 
 
-> From 0f7695c4d3f30b2946c97160b717de03c3deb73f Mon Sep 17 00:00:00 2001
-> From: Thierry Reding <treding@nvidia.com>
-> Date: Thu, 29 Aug 2019 09:29:32 +0200
-> Subject: [PATCH] driver core: platform: Export platform_get_irq_optional()
-> 
-> This function can be used by modules, so it needs to be exported.
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/base/platform.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index 014dc07b0056..b6c6c7d97d5b 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -194,6 +194,7 @@ int platform_get_irq_optional(struct platform_device *dev, unsigned int num)
->  {
->  	return __platform_get_irq(dev, num);
->  }
-> +EXPORT_SYMBOL_GPL(platform_get_irq_optional);
->  
->  /**
->   * platform_irq_count - Count the number of IRQs a platform device uses
-> -- 
-> 2.22.0
-> 
+--Cp3Cp8fzgozWLBWL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Now merged, thanks.
+On Tue, Aug 20, 2019 at 11:27:39AM +0200, Max Staudt wrote:
+> This is the i2c-icy driver for the ICY board for Amiga computers.
+> It connects a PCF8584 I2C controller to the Zorro bus, providing I2C
+> connectivity. The original documentation can be found on Aminet:
+>=20
+> https://aminet.net/package/docs/hard/icy
+>=20
+> IRQ support is currently not implemented, as i2c-algo-pcf is built for
+> the ISA bus and a straight implementation of the same stack locks up a
+> Zorro machine.
+>=20
+> v5: usleep_range() instead of udelay()
+>     Style
+>=20
+> v3: Fixed %pa format string
+>     Dropped adapter class.
+>     Clarified licence.
+>     Removed clock parameter.
+>=20
+> v2: Matched function names to callbacks from i2c-algo-pcf
+>     Used z_readb()/z_writeb()
+>     Removed BROKEN_ON_SMP in Kconfig
+>     Moved LTC2990 to a separate commit
 
-greg k-h
+Thanks for the changelog; it should go below the '---' line, however.
+
+>=20
+> Signed-off-by: Max Staudt <max@enpas.org>
+
+Fixed a freshly introduced checkpatch warning for you.
+
+But most importantly, applied to for-next, thanks!
 
 
+--Cp3Cp8fzgozWLBWL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1oIL4ACgkQFA3kzBSg
+KbaIlQ/+KKet9VcY+M8pjIHgWGbP2wcEex6N0ARbClkez48OAeie4CbCpz0PGQHj
+0GaJZXsnat80+rQzajZqGCue5iktKEJL6YuN9j7PdSfGZk2zgIGLm742yMDzBWXT
+iKgggKkn+jh1QZoHbXZzBY8gs0EEphunYPsFjDgxXn9Oj5rkt8lAy7U26pwOiCCW
+9RQ3byci5bFpp0dE45BgsDAvH74lDzztYJ1c/xjL48M/cdGCUASFlDDxoT+8A9/R
+YtzRaYl1+LtsKK7APGXigvAnUNXR3iMZeHHhcecBzraWyU9ZLHIMLqEOlOGXcqG0
+SNzB+DQVsS6bqtgf2rbaVDU+N1sT+xADNsyyrr1AzmYHFy4YjLQJTkfw6yqMKa1y
+vyvZBAG7DpmyZYn5Guug068u+7VkX3Vdq7wZ5W5IlbML7mQNqN/cTg9UrFuTH2gj
+Up5tagvkjn01tSUidd1+EAkmQzJRTzT3hUabe7d5kG0fbJrws0BRcK6K3d/nIyJs
+kUAx+Pq5SKCGaCCP4XGVeJddMmFoqrfZbN/5vgab+225yNq832vpGu+RanGn5L6h
+d+l778bj57TO4DvAQ3XgfVnPbaYtlO0B6XPLlh0bR6AK+TLGlvNpLFZPDjGmWBSB
+796nA/Wy5PwTWkTxSmLZ8u5H+WT3OuFQG4yM4Na7Trpv8iiU2lM=
+=WJlR
+-----END PGP SIGNATURE-----
+
+--Cp3Cp8fzgozWLBWL--
