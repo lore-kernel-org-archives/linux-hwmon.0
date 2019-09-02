@@ -2,145 +2,76 @@ Return-Path: <SRS0=ox16=W5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	T_DATE_IN_FUTURE_Q_PLUS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25EE9C3A59E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 10:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79AEDC3A59E
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 13:39:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 04CB3217D7
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 10:06:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 534772190F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 13:39:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567431586;
+	bh=LCwIUYnAkxe0+0wMleZ1kptUKUnHgefVLXTf7PGYcQQ=;
+	h=Date:From:Subject:References:In-Reply-To:Cc:Cc:To:List-ID:From;
+	b=QNdqkasFneA27Y9SQogh1nV5AD51roSptMxS0zd7uoiMP0OuBdf3Zb6guQgFSoh5v
+	 4ur36KSmoshilftOct9y4EZjuS8ALwgEx3LX8kusY7mNec7G/CIWMiNgKhS0R9Yxog
+	 dJlc5+T3xdEYl/0aqdl9Jq+Jw/pEW810EPXPvRio=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731095AbfIBKGV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Sep 2019 06:06:21 -0400
-Received: from aclms1.advantech.com.tw ([61.58.41.199]:19842 "EHLO
-        ACLMS1.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729854AbfIBKGU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Sep 2019 06:06:20 -0400
-Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS1.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Td9ff90b8f0ac14014b177c@ACLMS1.advantech.com.tw>;
- Mon, 2 Sep 2019 18:06:17 +0800
-From:   <Amy.Shih@advantech.com.tw>
-To:     <she90122@gmail.com>
-CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <bichan.lu@advantech.com.tw>, <jia.sui@advantech.com.cn>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [v6,1/1] hwmon: (nct7904) Fix incorrect temperature limitation register setting of LTD.
-Date:   Mon, 18 Jun 2085 15:57:19 +0000
-Message-ID: <20850618155720.24857-1-Amy.Shih@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.63]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- taipei08.ADVANTECH.CORP (172.20.0.235)
-X-StopIT: No
+        id S1731247AbfIBNjN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Sep 2019 09:39:13 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35571 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731239AbfIBNjM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Sep 2019 09:39:12 -0400
+Received: by mail-wm1-f67.google.com with SMTP id n10so3981882wmj.0;
+        Mon, 02 Sep 2019 06:39:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:subject:references
+         :in-reply-to:cc:cc:to;
+        bh=Ljep6bH+jK/y7KzX9TmuYtR3XGnID6enl5X5Nz5+kmY=;
+        b=GVzAvmAbOjGGF4G+c5qGrPM0uyOCiSoDdORURgDzXmMRl+Yo8hXORWc1tLuwx3zp2v
+         dp7MMCU9iE0gqCXpakDGA6rDtoM1nRVv8dqf9zyB0PLTZTaX0Ygl2iviQQVv6MtCYyx8
+         CpvCSjZwuV6jF0gW6oQkW4+SOHPUKEiuYlDKBNecAI8kY/1jTiXzmefmTRHfBpJvN5lE
+         4VWePX/IWAHAXFxcMA8AIdHBeyZXVbQoUXJTw2fZQ4ekrpD8QITSh3zZpVoiqXHldehz
+         wly3Ep4klV28tGfAW5eoryeMVZ4KXSsYhoUOu3FS5kBhIyCFPiQIya5AdXom4v/JHh1a
+         WR6A==
+X-Gm-Message-State: APjAAAX93R8k+igXzciCbQGJpGBZcZxjDwrK/EjJDe8nTIvKWKq8o/h3
+        2F8lBq0Gak0QucoDu9iP5NzbtdF9pQ==
+X-Google-Smtp-Source: APXvYqxpPvpnT9a93gVp+b7ar8pc3AEKNSZ5yS0Q62pduvGJgd3oF79YWeSiKcS4TSsXPrd6GYW4Nw==
+X-Received: by 2002:a7b:c091:: with SMTP id r17mr33360948wmh.74.1567431549560;
+        Mon, 02 Sep 2019 06:39:09 -0700 (PDT)
+Received: from localhost ([212.187.182.166])
+        by smtp.gmail.com with ESMTPSA id m18sm5952612wrg.97.2019.09.02.06.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2019 06:39:08 -0700 (PDT)
+Message-ID: <5d6d1b7c.1c69fb81.7f479.9ca6@mx.google.com>
+Date:   Mon, 02 Sep 2019 14:39:08 +0100
+From:   Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Document ibm,cffps2 compatible string
+References: <1567192263-15065-1-git-send-email-eajames@linux.ibm.com> <1567192263-15065-2-git-send-email-eajames@linux.ibm.com>
+In-Reply-To: <1567192263-15065-2-git-send-email-eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux@roeck-us.net, andrew@aj.id.au,
+        joel@jms.id.au, mark.rutland@arm.com, robh+dt@kernel.org,
+        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
+To:     Eddie James <eajames@linux.ibm.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "amy.shih" <amy.shih@advantech.com.tw>
+On Fri, 30 Aug 2019 14:11:01 -0500, Eddie James wrote:
+> Document the compatible string for version 2 of the IBM CFFPS PSU.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
 
-According to kernel hwmon sysfs-interface documentation, temperature
-critical max value, typically greater than corresponding temp_max values.
-Thus, reads the LTD_HV_HL (LTD HIGH VALUE HIGH LIMITATION) and LTD_LV_HL
-(LTD LOW VALUE HIGH LIMITATION) for case hwmon_temp_crit and
-hwmon_temp_crit_hyst. Reads the LTD_HV_LL (HIGH VALUE LOW LIMITATION)
-and LTD_LV_LL (LOW VALUE LOW LIMITATION) for case hwmon_temp_max
-and hwmon_temp_max_hyst.
-
-Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
----
-
-Changes in v6:
-- Fix incorrect temperature limitation register setting of LTD.
-Changes in v5:
-- Squashed subsequent fixes of three patches into one patch.
-Changes in v4:
-- Fix the incorrect return value of case hwmon_fan_min in function "nct7904_write_fan".
-- Fix the confused calculation of case hwmon_fan_min in function
-Changes in v3:
-- Squashed subsequent fixes of patches into one patch.
-
--- Fix bad fallthrough in various switch statements.
--- Fix the wrong declared of tmp as u8 in nct7904_write_in, declared tmp to int.
--- Fix incorrect register setting of voltage.
--- Fix incorrect register bit mapping of temperature alarm.
--- Fix wrong return code 0x1fff in function nct7904_write_fan.
--- Delete wrong comment in function nct7904_write_in.
--- Fix wrong attribute names for temperature.
--- Fix wrong registers setting for temperature.
-
-Changes in v2:
-- Fix bad fallthrough in various switch statements.
-- Fix the wrong declared of tmp as u8 in nct7904_write_in, declared tmp to int.
----
- drivers/hwmon/nct7904.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 76372f20d71a..ce688ab4fce2 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -398,22 +398,22 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
- 		}
- 		return 0;
- 	case hwmon_temp_max:
--		reg1 = LTD_HV_HL_REG;
-+		reg1 = LTD_HV_LL_REG;
- 		reg2 = TEMP_CH1_W_REG;
- 		reg3 = DTS_T_CPU1_W_REG;
- 		break;
- 	case hwmon_temp_max_hyst:
--		reg1 = LTD_LV_HL_REG;
-+		reg1 = LTD_LV_LL_REG;
- 		reg2 = TEMP_CH1_WH_REG;
- 		reg3 = DTS_T_CPU1_WH_REG;
- 		break;
- 	case hwmon_temp_crit:
--		reg1 = LTD_HV_LL_REG;
-+		reg1 = LTD_HV_HL_REG;
- 		reg2 = TEMP_CH1_C_REG;
- 		reg3 = DTS_T_CPU1_C_REG;
- 		break;
- 	case hwmon_temp_crit_hyst:
--		reg1 = LTD_LV_LL_REG;
-+		reg1 = LTD_LV_HL_REG;
- 		reg2 = TEMP_CH1_CH_REG;
- 		reg3 = DTS_T_CPU1_CH_REG;
- 		break;
-@@ -507,22 +507,22 @@ static int nct7904_write_temp(struct device *dev, u32 attr, int channel,
- 
- 	switch (attr) {
- 	case hwmon_temp_max:
--		reg1 = LTD_HV_HL_REG;
-+		reg1 = LTD_HV_LL_REG;
- 		reg2 = TEMP_CH1_W_REG;
- 		reg3 = DTS_T_CPU1_W_REG;
- 		break;
- 	case hwmon_temp_max_hyst:
--		reg1 = LTD_LV_HL_REG;
-+		reg1 = LTD_LV_LL_REG;
- 		reg2 = TEMP_CH1_WH_REG;
- 		reg3 = DTS_T_CPU1_WH_REG;
- 		break;
- 	case hwmon_temp_crit:
--		reg1 = LTD_HV_LL_REG;
-+		reg1 = LTD_HV_HL_REG;
- 		reg2 = TEMP_CH1_C_REG;
- 		reg3 = DTS_T_CPU1_C_REG;
- 		break;
- 	case hwmon_temp_crit_hyst:
--		reg1 = LTD_LV_LL_REG;
-+		reg1 = LTD_LV_HL_REG;
- 		reg2 = TEMP_CH1_CH_REG;
- 		reg3 = DTS_T_CPU1_CH_REG;
- 		break;
--- 
-2.17.1
+Reviewed-by: Rob Herring <robh@kernel.org>
 
