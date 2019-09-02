@@ -2,76 +2,85 @@ Return-Path: <SRS0=ox16=W5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79AEDC3A59E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 13:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A109C3A59E
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 14:29:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 534772190F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 13:39:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2244B21670
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 14:29:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567431586;
-	bh=LCwIUYnAkxe0+0wMleZ1kptUKUnHgefVLXTf7PGYcQQ=;
-	h=Date:From:Subject:References:In-Reply-To:Cc:Cc:To:List-ID:From;
-	b=QNdqkasFneA27Y9SQogh1nV5AD51roSptMxS0zd7uoiMP0OuBdf3Zb6guQgFSoh5v
-	 4ur36KSmoshilftOct9y4EZjuS8ALwgEx3LX8kusY7mNec7G/CIWMiNgKhS0R9Yxog
-	 dJlc5+T3xdEYl/0aqdl9Jq+Jw/pEW810EPXPvRio=
+	s=default; t=1567434562;
+	bh=qS7UPgrmprA04ZntrRGMNyglYbePTv9KWY3MKBDZSLc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=kNFlxRSF3L2hf3hWMZhZsh4QqbV0Osr5rbkMjWszFGkAa/PlAdN17oxXDKKDdQ3yn
+	 h8u2zSFgO2g+8uklNqAZfCB48ItAGHzn1kUOcFITf++ClhmdVfGHM0XCL1o6yyAEMw
+	 ylUENjEsjs4YeDIWfDCxHWysrtqnKBQhrQrBlk3M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731247AbfIBNjN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Sep 2019 09:39:13 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35571 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731239AbfIBNjM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Sep 2019 09:39:12 -0400
-Received: by mail-wm1-f67.google.com with SMTP id n10so3981882wmj.0;
-        Mon, 02 Sep 2019 06:39:10 -0700 (PDT)
+        id S1726449AbfIBO3S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Sep 2019 10:29:18 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44281 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726382AbfIBO3R (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Sep 2019 10:29:17 -0400
+Received: by mail-wr1-f68.google.com with SMTP id 30so3296995wrk.11;
+        Mon, 02 Sep 2019 07:29:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:subject:references
-         :in-reply-to:cc:cc:to;
-        bh=Ljep6bH+jK/y7KzX9TmuYtR3XGnID6enl5X5Nz5+kmY=;
-        b=GVzAvmAbOjGGF4G+c5qGrPM0uyOCiSoDdORURgDzXmMRl+Yo8hXORWc1tLuwx3zp2v
-         dp7MMCU9iE0gqCXpakDGA6rDtoM1nRVv8dqf9zyB0PLTZTaX0Ygl2iviQQVv6MtCYyx8
-         CpvCSjZwuV6jF0gW6oQkW4+SOHPUKEiuYlDKBNecAI8kY/1jTiXzmefmTRHfBpJvN5lE
-         4VWePX/IWAHAXFxcMA8AIdHBeyZXVbQoUXJTw2fZQ4ekrpD8QITSh3zZpVoiqXHldehz
-         wly3Ep4klV28tGfAW5eoryeMVZ4KXSsYhoUOu3FS5kBhIyCFPiQIya5AdXom4v/JHh1a
-         WR6A==
-X-Gm-Message-State: APjAAAX93R8k+igXzciCbQGJpGBZcZxjDwrK/EjJDe8nTIvKWKq8o/h3
-        2F8lBq0Gak0QucoDu9iP5NzbtdF9pQ==
-X-Google-Smtp-Source: APXvYqxpPvpnT9a93gVp+b7ar8pc3AEKNSZ5yS0Q62pduvGJgd3oF79YWeSiKcS4TSsXPrd6GYW4Nw==
-X-Received: by 2002:a7b:c091:: with SMTP id r17mr33360948wmh.74.1567431549560;
-        Mon, 02 Sep 2019 06:39:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DjYd27e5rUrA0mFadxSqkNYgMFL3Biunt8BWTcHyQek=;
+        b=OaFlLxenZ+Vm2UjyPrGkK2ueFEVZYdL1wGIbk7VZVXSCfDPxeYg9TZen5SnweM6wRt
+         iXS84cDlFO5vEcT+hhREU5d75GWq3T1z8oKphnNF4addQVpEKEPZjRyObMLtfgBwiber
+         3aWDD2p52JNnjF9X1pdlmvJlyCnuB63YwIyrVcmTGePi+0eBkbMqHbjZSGOjk4EYYyz6
+         cajBMEFBCZu1i2LqfL/SgZo01Mete/Povew8wTJu6UvSgI8E3lFwkDbG246Vng6gdLvV
+         FevINGF20oFX40X209LK8Vo8yXNyqDVcsin1Hlq1cfvzCUbjnZUVEyB1/++O2tYJDcXf
+         S1Bw==
+X-Gm-Message-State: APjAAAUfmhYvagRz07m6pIHcmxHlPXR/Yt8IMkEEwpOlLP1V5pwwOs2K
+        I+eQWAY/p8DQtgzi7MTkvA==
+X-Google-Smtp-Source: APXvYqzW/GN1ey91R5BmJA5pnLC5WiMXFYRMPae9O7nnw0okaF9xqO9oDPIM4raCO3nV0T/6K8Ptrw==
+X-Received: by 2002:adf:bc84:: with SMTP id g4mr36664702wrh.135.1567434555598;
+        Mon, 02 Sep 2019 07:29:15 -0700 (PDT)
 Received: from localhost ([212.187.182.166])
-        by smtp.gmail.com with ESMTPSA id m18sm5952612wrg.97.2019.09.02.06.39.08
+        by smtp.gmail.com with ESMTPSA id f13sm13885177wrq.3.2019.09.02.07.29.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2019 06:39:08 -0700 (PDT)
-Message-ID: <5d6d1b7c.1c69fb81.7f479.9ca6@mx.google.com>
-Date:   Mon, 02 Sep 2019 14:39:08 +0100
+        Mon, 02 Sep 2019 07:29:14 -0700 (PDT)
+Date:   Mon, 2 Sep 2019 15:29:14 +0100
 From:   Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Document ibm,cffps2 compatible string
-References: <1567192263-15065-1-git-send-email-eajames@linux.ibm.com> <1567192263-15065-2-git-send-email-eajames@linux.ibm.com>
-In-Reply-To: <1567192263-15065-2-git-send-email-eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net, andrew@aj.id.au,
-        joel@jms.id.au, mark.rutland@arm.com, robh+dt@kernel.org,
-        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
-To:     Eddie James <eajames@linux.ibm.com>
+To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] hwmon: (as370-hwmon) Add DT bindings for
+ Synaptics  AS370 PVT
+Message-ID: <20190902142914.GA3170@bogus>
+References: <20190827113214.13773d45@xhacker.debian>
+ <20190827113337.384457f6@xhacker.debian>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190827113337.384457f6@xhacker.debian>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 30 Aug 2019 14:11:01 -0500, Eddie James wrote:
-> Document the compatible string for version 2 of the IBM CFFPS PSU.
+On Tue, 27 Aug 2019 03:44:57 +0000, Jisheng Zhang wrote:
+> Add device tree bindings for Synaptics AS370 PVT sensors.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 > ---
->  Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/hwmon/as370.txt | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/as370.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
-
