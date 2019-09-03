@@ -1,182 +1,87 @@
-Return-Path: <SRS0=ox16=W5=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=jxcE=W6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A4BC3A59E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 16:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E8AC3A5A5
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 04:47:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6C9E2173E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Sep 2019 16:09:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oMKUbQQD"
+	by mail.kernel.org (Postfix) with ESMTP id ED3CE22D6D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 04:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbfIBQJu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Sep 2019 12:09:50 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43769 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725970AbfIBQJu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Sep 2019 12:09:50 -0400
-Received: by mail-pf1-f195.google.com with SMTP id v12so9195854pfn.10;
-        Mon, 02 Sep 2019 09:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zShaFAP74aJga8P+EWAaD/eJPjKlvpwUgjAlhsNU3q0=;
-        b=oMKUbQQDtpbqxTYcYhm+L0DV65dinVK3bO9v4Po7a/d+WRNahr4T0JkTc4Guvk8jnF
-         7rR6chiOv0NVOFrA4bPyqwhFKdbdItjK/V/hKaaIFx58xwLwoASfdl75JyQ7LywlbgqR
-         WszVm/mRPLEteW3h5VYFP9zpOhLsigSA/GOuxWzFHUI/UvElM1chJncbi4hSxOujBtXi
-         X8O+BnSlYfPDScqWt4G8zSW951+uUr7o49WNl0zt9IDkegsAg4rBqYqyE6erCPY72TyN
-         kaUzJF//+xwxvHRll2emJSOvUnKFN9dPe/7WMsggNQv0D/K5UyyiUQctyJlXqVyDr1ch
-         8Mjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zShaFAP74aJga8P+EWAaD/eJPjKlvpwUgjAlhsNU3q0=;
-        b=TgUF0RTXCSo2iKm/lCh0bpZAx86PyVbQGr7388CBBjQVgALnxqdV2YBG09paySO5o3
-         f1+t5EqCyRD2YqJSJ/Cb3NtdP/QrL3MCQWQrA9dlScvlAgFTYHffVPf8rGqQVheFHRlP
-         bhClh1d8MYAmWcmZf2L7A/IB1/B1zwcL/SPV+2MKKvB4rAOQZYDcqJC3v+1TuDF/74oy
-         eVNdvdZIINcHIK3x3OhA2u0jgvUvLO51e4vR4x28gUS4jlDVekdvLeBN2WJ2sKhKFcc6
-         vxe16k0ZlIJjeGglWplt68zF167oH8Rk8ARaVywyGGkj/YOJU77KhphpN4yRojjOmHLd
-         OQaA==
-X-Gm-Message-State: APjAAAXMSYEMk7vHLN7yUxOopKPN0auh3WjHgNDKN41ISxwBwQA4agwm
-        NI7mO6T2F63JWjV2H5N+zM4=
-X-Google-Smtp-Source: APXvYqz6Ye4Kedth37Js8pmu13MSfUKPp+rA9tdeUPxTCiYzZ/5vyqIUzexfHSL3uIiBnVkBoEPfRg==
-X-Received: by 2002:a65:6259:: with SMTP id q25mr26388143pgv.145.1567440589640;
-        Mon, 02 Sep 2019 09:09:49 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y128sm13823679pgy.41.2019.09.02.09.09.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Sep 2019 09:09:49 -0700 (PDT)
-Date:   Mon, 2 Sep 2019 09:09:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Amy.Shih@advantech.com.tw
-Cc:     she90122@gmail.com, oakley.ding@advantech.com.tw,
-        bichan.lu@advantech.com.tw, jia.sui@advantech.com.cn,
+        id S1725839AbfICEry (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Sep 2019 00:47:54 -0400
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:35132
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725440AbfICEry (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 3 Sep 2019 00:47:54 -0400
+X-IronPort-AV: E=Sophos;i="5.64,461,1559512800"; 
+   d="scan'208";a="318029627"
+Received: from abo-12-105-68.mrs.modulonet.fr (HELO hadrien) ([85.68.105.12])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 06:47:52 +0200
+Date:   Tue, 3 Sep 2019 06:47:52 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@lip6.fr>
+X-X-Sender: jll@hadrien
+To:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v6,1/1] hwmon: (nct7904) Fix incorrect temperature limitation
- register setting of LTD.
-Message-ID: <20190902160948.GA16583@roeck-us.net>
-References: <20850618155720.24857-1-Amy.Shih@advantech.com.tw>
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        kbuild-all@01.org
+Subject: [PATCH] hwmon: fix devm_platform_ioremap_resource.cocci warnings
+Message-ID: <alpine.DEB.2.21.1909030646180.3228@hadrien>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20850618155720.24857-1-Amy.Shih@advantech.com.tw>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 18, 2085 at 03:57:19PM +0000, Amy.Shih@advantech.com.tw wrote:
-> From: "amy.shih" <amy.shih@advantech.com.tw>
-> 
-> According to kernel hwmon sysfs-interface documentation, temperature
-> critical max value, typically greater than corresponding temp_max values.
-> Thus, reads the LTD_HV_HL (LTD HIGH VALUE HIGH LIMITATION) and LTD_LV_HL
-> (LTD LOW VALUE HIGH LIMITATION) for case hwmon_temp_crit and
-> hwmon_temp_crit_hyst. Reads the LTD_HV_LL (HIGH VALUE LOW LIMITATION)
-> and LTD_LV_LL (LOW VALUE LOW LIMITATION) for case hwmon_temp_max
-> and hwmon_temp_max_hyst.
-> 
-> Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
-> ---
-> 
-> Changes in v6:
-> - Fix incorrect temperature limitation register setting of LTD.
+From: kbuild test robot <lkp@intel.com>
 
-This is a separate (follow-up) patch; v6 is inappropriate here.
-Nevertheless, applied on top of the previous patch to hwmon-next.
+ Use devm_platform_ioremap_resource helper which wraps
+ platform_get_resource() and devm_ioremap_resource() together.
 
-Thanks,
-Guenter
+Generated by: scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
 
-> Changes in v5:
-> - Squashed subsequent fixes of three patches into one patch.
-> Changes in v4:
-> - Fix the incorrect return value of case hwmon_fan_min in function "nct7904_write_fan".
-> - Fix the confused calculation of case hwmon_fan_min in function
-> Changes in v3:
-> - Squashed subsequent fixes of patches into one patch.
-> 
-> -- Fix bad fallthrough in various switch statements.
-> -- Fix the wrong declared of tmp as u8 in nct7904_write_in, declared tmp to int.
-> -- Fix incorrect register setting of voltage.
-> -- Fix incorrect register bit mapping of temperature alarm.
-> -- Fix wrong return code 0x1fff in function nct7904_write_fan.
-> -- Delete wrong comment in function nct7904_write_in.
-> -- Fix wrong attribute names for temperature.
-> -- Fix wrong registers setting for temperature.
-> 
-> Changes in v2:
-> - Fix bad fallthrough in various switch statements.
-> - Fix the wrong declared of tmp as u8 in nct7904_write_in, declared tmp to int.
-> ---
->  drivers/hwmon/nct7904.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-> index 76372f20d71a..ce688ab4fce2 100644
-> --- a/drivers/hwmon/nct7904.c
-> +++ b/drivers/hwmon/nct7904.c
-> @@ -398,22 +398,22 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
->  		}
->  		return 0;
->  	case hwmon_temp_max:
-> -		reg1 = LTD_HV_HL_REG;
-> +		reg1 = LTD_HV_LL_REG;
->  		reg2 = TEMP_CH1_W_REG;
->  		reg3 = DTS_T_CPU1_W_REG;
->  		break;
->  	case hwmon_temp_max_hyst:
-> -		reg1 = LTD_LV_HL_REG;
-> +		reg1 = LTD_LV_LL_REG;
->  		reg2 = TEMP_CH1_WH_REG;
->  		reg3 = DTS_T_CPU1_WH_REG;
->  		break;
->  	case hwmon_temp_crit:
-> -		reg1 = LTD_HV_LL_REG;
-> +		reg1 = LTD_HV_HL_REG;
->  		reg2 = TEMP_CH1_C_REG;
->  		reg3 = DTS_T_CPU1_C_REG;
->  		break;
->  	case hwmon_temp_crit_hyst:
-> -		reg1 = LTD_LV_LL_REG;
-> +		reg1 = LTD_LV_HL_REG;
->  		reg2 = TEMP_CH1_CH_REG;
->  		reg3 = DTS_T_CPU1_CH_REG;
->  		break;
-> @@ -507,22 +507,22 @@ static int nct7904_write_temp(struct device *dev, u32 attr, int channel,
->  
->  	switch (attr) {
->  	case hwmon_temp_max:
-> -		reg1 = LTD_HV_HL_REG;
-> +		reg1 = LTD_HV_LL_REG;
->  		reg2 = TEMP_CH1_W_REG;
->  		reg3 = DTS_T_CPU1_W_REG;
->  		break;
->  	case hwmon_temp_max_hyst:
-> -		reg1 = LTD_LV_HL_REG;
-> +		reg1 = LTD_LV_LL_REG;
->  		reg2 = TEMP_CH1_WH_REG;
->  		reg3 = DTS_T_CPU1_WH_REG;
->  		break;
->  	case hwmon_temp_crit:
-> -		reg1 = LTD_HV_LL_REG;
-> +		reg1 = LTD_HV_HL_REG;
->  		reg2 = TEMP_CH1_C_REG;
->  		reg3 = DTS_T_CPU1_C_REG;
->  		break;
->  	case hwmon_temp_crit_hyst:
-> -		reg1 = LTD_LV_LL_REG;
-> +		reg1 = LTD_LV_HL_REG;
->  		reg2 = TEMP_CH1_CH_REG;
->  		reg3 = DTS_T_CPU1_CH_REG;
->  		break;
+Fixes: 658e687b4218 ("hwmon: Add Synaptics AS370 PVT sensor driver")
+CC: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Signed-off-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@lip6.fr>
+---
+
+tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   9c551fac9ea9629cdc6deb205292c2bbe7b38917
+commit: 658e687b4218b42d03a5b0b79a292c9c48f1ddaf [32/34] hwmon: Add Synaptics AS370 PVT sensor driver
+:::::: branch date: 7 hours ago
+:::::: commit date: 7 hours ago
+
+Please take the patch only if it's a positive warning. Thanks!
+
+ as370-hwmon.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+--- a/drivers/hwmon/as370-hwmon.c
++++ b/drivers/hwmon/as370-hwmon.c
+@@ -103,7 +103,6 @@ static const struct hwmon_chip_info as37
+
+ static int as370_hwmon_probe(struct platform_device *pdev)
+ {
+-	struct resource *res;
+ 	struct device *hwmon_dev;
+ 	struct as370_hwmon *hwmon;
+ 	struct device *dev = &pdev->dev;
+@@ -112,8 +111,7 @@ static int as370_hwmon_probe(struct plat
+ 	if (!hwmon)
+ 		return -ENOMEM;
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	hwmon->base = devm_ioremap_resource(&pdev->dev, res);
++	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hwmon->base))
+ 		return PTR_ERR(hwmon->base);
+
