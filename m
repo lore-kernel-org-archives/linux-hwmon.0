@@ -2,125 +2,65 @@ Return-Path: <SRS0=jxcE=W6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98868C3A5A2
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D8EAC3A5A2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 18:13:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F0D02341F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:05:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q5WaH2n/"
+	by mail.kernel.org (Postfix) with ESMTP id 3F48222CED
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 18:13:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729313AbfICOFS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Sep 2019 10:05:18 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41262 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfICOFR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Sep 2019 10:05:17 -0400
-Received: by mail-pl1-f195.google.com with SMTP id m9so7940207pls.8;
-        Tue, 03 Sep 2019 07:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qtPPg5GqUhEobWxZd2+sHLIYtebNTUnoITCh7ZrUMVw=;
-        b=q5WaH2n/KEV7bv90Rzgt4ZxK6vTg4R3z/QjtWRq9YmtVxEgl1bSDYsI28rRpFhMOUY
-         ty/MkrHMs3Kku2/prOEGnwtMlVDOTWJjwi3ewVOTcqKlbqqXH0aypsVkvih1oE3S1fFj
-         RpLFBXtbECANC3dQXCrOz/r6ge05qOha7+DmmvPi5DIWzHcMYs5LO4ckS0gh+g2Qy90l
-         VYhilCAsod2I736k+txNQ6cNwkVAxsjpWIgkkcsJJlBO8kfno25x83vLlZFI9vYervJ0
-         UJC8UrE412R9A2CbrWWuYZUVJeEkKkQsc3QaqB9bpuAmHpbpsWKSu/lOOdHgaXi4gANY
-         v+jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qtPPg5GqUhEobWxZd2+sHLIYtebNTUnoITCh7ZrUMVw=;
-        b=KhgYQIAWFRS6B/D2QQ43DB/7UWosq/3aCqw3avaZP+C5E4lExp9hheN+ewnzhymvdZ
-         CqG3gyDOMKZl5hbRMt1z9vYq2yf+9nv5sx26CXbe55TTysbT+PRxeH6LplOY5dTZN982
-         +kn1x5k+GjbdFge/Mob+t61wK2t0rkLjSklSjUPXUnfyGtpC7Suq1RcUntr9PZr7Xphf
-         sXaldWOUfT5odc0COHNr+w2fqFzNZOvFollAWO6IhU5z43Y7jIiwmigvvpfqfGuz74uS
-         TbKUtvTkqqYAqJsJfn9Hjr9QUhu3uh8uCswlzwTL/2EXjzLeKKE6g3RcCxFct49mbjW9
-         1+Dg==
-X-Gm-Message-State: APjAAAUzDpo/b5DWdbltltyCqo4NunDqLaMLR701LscaWFTTKvuZO8LQ
-        cSzeWuVUrLp0qKf4p82dUb0=
-X-Google-Smtp-Source: APXvYqzkqnsdir2zt5OJPtTipf1rSsjwGymZG1cnM9kXXpM+tj3z1yhdNDaMT7pwxwBSXTpc9VEM+A==
-X-Received: by 2002:a17:902:9041:: with SMTP id w1mr36170722plz.83.1567519517159;
-        Tue, 03 Sep 2019 07:05:17 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q186sm6777816pfb.47.2019.09.03.07.05.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 07:05:16 -0700 (PDT)
-Date:   Tue, 3 Sep 2019 07:05:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Julia Lawall <julia.lawall@lip6.fr>
-Cc:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kbuild-all@01.org
-Subject: Re: [PATCH] hwmon: fix devm_platform_ioremap_resource.cocci warnings
-Message-ID: <20190903140515.GA16775@roeck-us.net>
-References: <alpine.DEB.2.21.1909030646180.3228@hadrien>
+        id S1729854AbfICSNB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Sep 2019 14:13:01 -0400
+Received: from sauhun.de ([88.99.104.3]:56818 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728065AbfICSNB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 3 Sep 2019 14:13:01 -0400
+Received: from localhost (p54B3348D.dip0.t-ipconnect.de [84.179.52.141])
+        by pokefinder.org (Postfix) with ESMTPSA id EB2612C4F2F;
+        Tue,  3 Sep 2019 20:12:59 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/3] hwmon: convert remaining drivers to i2c_new_dummy_device()
+Date:   Tue,  3 Sep 2019 20:12:53 +0200
+Message-Id: <20190903181256.13450-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1909030646180.3228@hadrien>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 06:47:52AM +0200, Julia Lawall wrote:
-> From: kbuild test robot <lkp@intel.com>
-> 
->  Use devm_platform_ioremap_resource helper which wraps
->  platform_get_resource() and devm_ioremap_resource() together.
-> 
-> Generated by: scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
-> 
-> Fixes: 658e687b4218 ("hwmon: Add Synaptics AS370 PVT sensor driver")
-> CC: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-> Signed-off-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Julia Lawall <julia.lawall@lip6.fr>
-> Reviewed-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+This series is part of a tree-wide movement to replace the I2C API call
+'i2c_new_dummy' which returns NULL with its new counterpart returning an
+ERRPTR.
 
-Applied to hwmon-next.
+This series fixes the remaining hwmon drivers which could not be
+converted by my cocci script. So, I did it manually, yet all drivers
+still follow the same pattern. Build tested by me and by buildbot. No
+tests on HW have been performed, so testing is appreciated.
 
-Thanks,
-Guenter
+The branch is based on v5.3-rc2. A branch (with some more stuff included) can
+be found here:
 
-> ---
-> 
-> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-> head:   9c551fac9ea9629cdc6deb205292c2bbe7b38917
-> commit: 658e687b4218b42d03a5b0b79a292c9c48f1ddaf [32/34] hwmon: Add Synaptics AS370 PVT sensor driver
-> :::::: branch date: 7 hours ago
-> :::::: commit date: 7 hours ago
-> 
-> Please take the patch only if it's a positive warning. Thanks!
-> 
->  as370-hwmon.c |    4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> --- a/drivers/hwmon/as370-hwmon.c
-> +++ b/drivers/hwmon/as370-hwmon.c
-> @@ -103,7 +103,6 @@ static const struct hwmon_chip_info as37
-> 
->  static int as370_hwmon_probe(struct platform_device *pdev)
->  {
-> -	struct resource *res;
->  	struct device *hwmon_dev;
->  	struct as370_hwmon *hwmon;
->  	struct device *dev = &pdev->dev;
-> @@ -112,8 +111,7 @@ static int as370_hwmon_probe(struct plat
->  	if (!hwmon)
->  		return -ENOMEM;
-> 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	hwmon->base = devm_ioremap_resource(&pdev->dev, res);
-> +	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(hwmon->base))
->  		return PTR_ERR(hwmon->base);
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i2c/new_dummy
+
+
+Wolfram Sang (3):
+  hwmon: w83791d: convert to use devm_i2c_new_dummy_device
+  hwmon: w83792d: convert to use devm_i2c_new_dummy_device
+  hwmon: w83793d: convert to use devm_i2c_new_dummy_device
+
+ drivers/hwmon/w83791d.c | 32 +++++++++-----------------------
+ drivers/hwmon/w83792d.c | 32 +++++++++-----------------------
+ drivers/hwmon/w83793.c  | 30 ++++++++----------------------
+ 3 files changed, 26 insertions(+), 68 deletions(-)
+
+-- 
+2.20.1
+
