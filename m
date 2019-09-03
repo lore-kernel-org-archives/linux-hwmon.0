@@ -2,127 +2,125 @@ Return-Path: <SRS0=jxcE=W6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28561C3A5A7
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98868C3A5A2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:05:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 013482341F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F0D02341F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:05:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XM0NVVId"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q5WaH2n/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729137AbfICODQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Sep 2019 10:03:16 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:35690 "EHLO
+        id S1729313AbfICOFS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Sep 2019 10:05:18 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41262 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbfICODQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Sep 2019 10:03:16 -0400
-Received: by mail-pl1-f195.google.com with SMTP id gn20so7933579plb.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Sep 2019 07:03:16 -0700 (PDT)
+        with ESMTP id S1725782AbfICOFR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Sep 2019 10:05:17 -0400
+Received: by mail-pl1-f195.google.com with SMTP id m9so7940207pls.8;
+        Tue, 03 Sep 2019 07:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lpZLE/DpkVnus3lIpDgoILHMRUCogKYwMdezVU0Vw9M=;
-        b=XM0NVVIdBcg9bLKk4i+L4+7RkwtB8JYSyqarBScyNVZsyOiiKpGOcAlraGuplhMX0j
-         JoEz8bUpnt4Hhd1wGNYClUK7A/tGiK7W/GMtSMpPzGIPTMpSbGQb5D64ZtyhIhza46Bh
-         98EpyTUxIVnObClM6ZRTqe+fRrkLmZ3Q2sLTYF91v9ExDgxbGXxIIQhiHyqapvl9OGcB
-         u3dLmdghUeuGwUTscKvQXmoaxAhmMALchLt/53CBJM6mAXT830UAGNm1SeET4KQClUsd
-         0DwvePR+7B6WnPnq83p6cRFFV5UjzZOxORqaYwLnFPtBYE0/cZL/44SEJR4kbbNJBY7y
-         DT6Q==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qtPPg5GqUhEobWxZd2+sHLIYtebNTUnoITCh7ZrUMVw=;
+        b=q5WaH2n/KEV7bv90Rzgt4ZxK6vTg4R3z/QjtWRq9YmtVxEgl1bSDYsI28rRpFhMOUY
+         ty/MkrHMs3Kku2/prOEGnwtMlVDOTWJjwi3ewVOTcqKlbqqXH0aypsVkvih1oE3S1fFj
+         RpLFBXtbECANC3dQXCrOz/r6ge05qOha7+DmmvPi5DIWzHcMYs5LO4ckS0gh+g2Qy90l
+         VYhilCAsod2I736k+txNQ6cNwkVAxsjpWIgkkcsJJlBO8kfno25x83vLlZFI9vYervJ0
+         UJC8UrE412R9A2CbrWWuYZUVJeEkKkQsc3QaqB9bpuAmHpbpsWKSu/lOOdHgaXi4gANY
+         v+jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=lpZLE/DpkVnus3lIpDgoILHMRUCogKYwMdezVU0Vw9M=;
-        b=UaeoOKBF5Mz+YvwveKA90EImMiVjVzVfE+59Pf8jHpVhV+etN1ILSbA+qvIc9AyWLp
-         lIx5cgNbuk2KVthcIJYFrKf0tPUi5al5SoOeB06rU7h2P8e9BGc2Ku7QsF3ml10ga8l7
-         klua/IzV5I3Ivifb87AENHWYBUggjHIdngB8ORu03s0unSf8D8Hb6X2cNyFOGQ2JQTaI
-         5GWopei6HO6/kGmF++bOWfdndoY62J/dsndFPaWJF04boUYyZNNQM/GbpJGG77ukJJZC
-         qMZwrSmcbL/9rmpUhBl7rcDQXnBqV6tIDejdp4A9kxm5+g0umv5mB8XSj9z13GEB5tPj
-         wHNA==
-X-Gm-Message-State: APjAAAXhETSHQ0UPPn/ayyj+D9wnr157j68Jl1Kjvr18i676hS6ADnzn
-        OLs9CKh8Rr8FH31vWug87jJS6CcZ
-X-Google-Smtp-Source: APXvYqwTmKQr2KSG1E3zHK4BgfXgiZovTszQFSCbrQbTfGbYg92yV2cy7XL4WQcXxMIDNbZGT29F5A==
-X-Received: by 2002:a17:902:7c91:: with SMTP id y17mr17124146pll.46.1567519395811;
-        Tue, 03 Sep 2019 07:03:15 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qtPPg5GqUhEobWxZd2+sHLIYtebNTUnoITCh7ZrUMVw=;
+        b=KhgYQIAWFRS6B/D2QQ43DB/7UWosq/3aCqw3avaZP+C5E4lExp9hheN+ewnzhymvdZ
+         CqG3gyDOMKZl5hbRMt1z9vYq2yf+9nv5sx26CXbe55TTysbT+PRxeH6LplOY5dTZN982
+         +kn1x5k+GjbdFge/Mob+t61wK2t0rkLjSklSjUPXUnfyGtpC7Suq1RcUntr9PZr7Xphf
+         sXaldWOUfT5odc0COHNr+w2fqFzNZOvFollAWO6IhU5z43Y7jIiwmigvvpfqfGuz74uS
+         TbKUtvTkqqYAqJsJfn9Hjr9QUhu3uh8uCswlzwTL/2EXjzLeKKE6g3RcCxFct49mbjW9
+         1+Dg==
+X-Gm-Message-State: APjAAAUzDpo/b5DWdbltltyCqo4NunDqLaMLR701LscaWFTTKvuZO8LQ
+        cSzeWuVUrLp0qKf4p82dUb0=
+X-Google-Smtp-Source: APXvYqzkqnsdir2zt5OJPtTipf1rSsjwGymZG1cnM9kXXpM+tj3z1yhdNDaMT7pwxwBSXTpc9VEM+A==
+X-Received: by 2002:a17:902:9041:: with SMTP id w1mr36170722plz.83.1567519517159;
+        Tue, 03 Sep 2019 07:05:17 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j1sm16508730pgl.12.2019.09.03.07.03.15
+        by smtp.gmail.com with ESMTPSA id q186sm6777816pfb.47.2019.09.03.07.05.16
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 07:03:15 -0700 (PDT)
+        Tue, 03 Sep 2019 07:05:16 -0700 (PDT)
+Date:   Tue, 3 Sep 2019 07:05:15 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Iker Perez del Palomar <iker.perez@codethink.co.uk>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4/4] hwmon: (lm75) Add support for writing sampling period on PCT2075
-Date:   Tue,  3 Sep 2019 07:03:09 -0700
-Message-Id: <1567519389-16561-4-git-send-email-linux@roeck-us.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1567519389-16561-1-git-send-email-linux@roeck-us.net>
-References: <1567519389-16561-1-git-send-email-linux@roeck-us.net>
+To:     Julia Lawall <julia.lawall@lip6.fr>
+Cc:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kbuild-all@01.org
+Subject: Re: [PATCH] hwmon: fix devm_platform_ioremap_resource.cocci warnings
+Message-ID: <20190903140515.GA16775@roeck-us.net>
+References: <alpine.DEB.2.21.1909030646180.3228@hadrien>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1909030646180.3228@hadrien>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-For PCT7027, the sampling period is configured using a dedicated
-register.
+On Tue, Sep 03, 2019 at 06:47:52AM +0200, Julia Lawall wrote:
+> From: kbuild test robot <lkp@intel.com>
+> 
+>  Use devm_platform_ioremap_resource helper which wraps
+>  platform_get_resource() and devm_ioremap_resource() together.
+> 
+> Generated by: scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
+> 
+> Fixes: 658e687b4218 ("hwmon: Add Synaptics AS370 PVT sensor driver")
+> CC: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+> Signed-off-by: kbuild test robot <lkp@intel.com>
+> Signed-off-by: Julia Lawall <julia.lawall@lip6.fr>
+> Reviewed-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/lm75.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Applied to hwmon-next.
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index ce0f6c671b8f..d45e5cc4adf5 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -95,6 +95,7 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- #define LM75_REG_CONF		0x01
- #define LM75_REG_HYST		0x02
- #define LM75_REG_MAX		0x03
-+#define PCT2075_REG_IDLE	0x04
- 
- /* Each client has this additional data */
- struct lm75_data {
-@@ -199,6 +200,11 @@ static const struct lm75_params device_params[] = {
- 	[pct2075] = {
- 		.default_resolution = 11,
- 		.default_sample_time = MSEC_PER_SEC / 10,
-+		.num_sample_times = 31,
-+		.sample_times = (unsigned int []){ 100, 200, 300, 400, 500, 600,
-+		700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700,
-+		1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700,
-+		2800, 2900, 3000, 3100 },
- 	},
- 	[mcp980x] = {
- 		.set_mask = 3 << 5,	/* 12-bit mode */
-@@ -422,6 +428,13 @@ static int lm75_update_interval(struct device *dev, long val)
- 			return err;
- 		data->sample_time = data->params->sample_times[index];
- 		break;
-+	case pct2075:
-+		err = i2c_smbus_write_byte_data(data->client, PCT2075_REG_IDLE,
-+						index + 1);
-+		if (err)
-+			return err;
-+		data->sample_time = data->params->sample_times[index];
-+		break;
- 	}
- 	return 0;
- }
-@@ -512,7 +525,7 @@ static bool lm75_is_volatile_reg(struct device *dev, unsigned int reg)
- static const struct regmap_config lm75_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
--	.max_register = LM75_REG_MAX,
-+	.max_register = PCT2075_REG_IDLE,
- 	.writeable_reg = lm75_is_writeable_reg,
- 	.volatile_reg = lm75_is_volatile_reg,
- 	.val_format_endian = REGMAP_ENDIAN_BIG,
--- 
-2.7.4
+Thanks,
+Guenter
 
+> ---
+> 
+> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> head:   9c551fac9ea9629cdc6deb205292c2bbe7b38917
+> commit: 658e687b4218b42d03a5b0b79a292c9c48f1ddaf [32/34] hwmon: Add Synaptics AS370 PVT sensor driver
+> :::::: branch date: 7 hours ago
+> :::::: commit date: 7 hours ago
+> 
+> Please take the patch only if it's a positive warning. Thanks!
+> 
+>  as370-hwmon.c |    4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> --- a/drivers/hwmon/as370-hwmon.c
+> +++ b/drivers/hwmon/as370-hwmon.c
+> @@ -103,7 +103,6 @@ static const struct hwmon_chip_info as37
+> 
+>  static int as370_hwmon_probe(struct platform_device *pdev)
+>  {
+> -	struct resource *res;
+>  	struct device *hwmon_dev;
+>  	struct as370_hwmon *hwmon;
+>  	struct device *dev = &pdev->dev;
+> @@ -112,8 +111,7 @@ static int as370_hwmon_probe(struct plat
+>  	if (!hwmon)
+>  		return -ENOMEM;
+> 
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	hwmon->base = devm_ioremap_resource(&pdev->dev, res);
+> +	hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(hwmon->base))
+>  		return PTR_ERR(hwmon->base);
