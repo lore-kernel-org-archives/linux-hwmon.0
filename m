@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26AFCC3A5A5
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2801CC3A5A2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3C4620870
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3D1920870
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Sep 2019 14:03:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tk/B50Gw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5DAemor"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725782AbfICODN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Sep 2019 10:03:13 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43032 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729113AbfICODN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Sep 2019 10:03:13 -0400
-Received: by mail-pl1-f193.google.com with SMTP id 4so7927401pld.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Sep 2019 07:03:13 -0700 (PDT)
+        id S1729117AbfICODP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Sep 2019 10:03:15 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35261 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729113AbfICODP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Sep 2019 10:03:15 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 205so8393309pfw.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 03 Sep 2019 07:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OTt2H0rWEepZWJ5NJvH+YQ+TpMzB2d+id5Jx+TVKStE=;
-        b=Tk/B50Gw29TuWEboKHm0AFXvia/BEhqOLoIh2P5fQtYClGSZUiAFHAaVTCfZXTpO1f
-         Abg0m5LBCDtew0i+XMHn9IHFBHyOe1pEJZSyu+Yp26dQXsLq9FmKV3qCJLnqh7f7wItj
-         U1Cy3YWxNcxjKP0lh8TCAT5661gyQn/iJk0258zQnswSzAgwsNX/qNFMRIPTitiL2r8K
-         JOKkw5kj34/5A5kU/4rq9A9JlWSbfT7BKylKjO1+Q+ETKTj/7D4XIrODGchDIB8QCaaD
-         Muk1gtSWUoqzg6qht25KUqRxG5+NOKSfJKBa7lH1x/xg7yLOpCW/r41N1WNeC1JHQA6g
-         NbSg==
+        bh=3dSfSHVGieE7IvASZ3V/n6QYdtNVeR4Co4wZeStVBu8=;
+        b=Q5DAemor5r6nk9bbIFFZaVb+i+i+zy9FPHxQQcbz8FWkdHzVa+ON/ddIaEpoXYpPaa
+         kl5HQa1wKNgJzKpe6Qw+JJZpRItPN3z+bivlNLL3XTWmKQ8/btVfo2e1fOZyVUBgyQMA
+         3w2r1nn54E0ALlqjM6hhMwzqvYcxj5s+XTbdPQ7PNEIzT2+i7cnsLBjrVaPnEMHhlyCF
+         h9vIyDyvpmeRhjJxr3sOgWalWLfohYTV/DxG+t247cwrMjz7RwLvEv2EZ/mwR2kDKWzd
+         sP3sEqHEd8E2J0y6hWfMMKxNq9iPUK7aCptb70JCe2z7uzP2yljoAx10gTSLlWh4gLpy
+         ciGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=OTt2H0rWEepZWJ5NJvH+YQ+TpMzB2d+id5Jx+TVKStE=;
-        b=WvO8StctN0kCI963bYEJu3PuEuvxOZRdL+Yc1qMF7MAB+EOUINrULlcdHMkchpx4E0
-         pFfY3zIwL0GlYXR6bXY94M4QdIuYmC+66wLMTEjtnCxo1Yd2IRoQ2J8TZMYYNlkIM11W
-         UTGgVAwCWUFj3Fvz7oqbfDOWqGGpveXWPvQBPeg6XTQ/xHY9osdDsB0o1tpOeDH5jZDm
-         fFdFwk1EhF26/GVmqkfj3NRVYXl1mrIg5SZKsmrXRbm3xB+k4RTZ+aanDdul4+/XUzBx
-         +01v2V/kiRVjyYUcMMSkKhwvSzQtjJ0aM54NoLMavDoY9s25W85TceO/q0KlSKVBm8jD
-         JcnQ==
-X-Gm-Message-State: APjAAAUsZTu7Mo4ag5D86Aqf66snhpMqDz1TsRljIGZJFNN0hKKERWI+
-        RCSki7dbH9Yy21V+gEEyfho2jgyS
-X-Google-Smtp-Source: APXvYqyeVbgGk1G4F6BzLu6eXIvnwZb4hLNkEwo6mJEYIdJ0GaY6O833eyB36ro+OGLvHdd1zAqjcA==
-X-Received: by 2002:a17:902:7b97:: with SMTP id w23mr35536808pll.283.1567519392659;
-        Tue, 03 Sep 2019 07:03:12 -0700 (PDT)
+        bh=3dSfSHVGieE7IvASZ3V/n6QYdtNVeR4Co4wZeStVBu8=;
+        b=npEyziCB17DvygKFB6xWXcQMObb0+lbydDFX85QFx9WCqueDDbGwVZNkca1f+IgnVE
+         KJD7f2vPQI8OIMOW1XWn8uPkzkoGMyz9e9q3Q3n0e3okBBA6nRGgJCg/cPuGdbFnyWid
+         lBebZfFRW2RnRByWeMbWa3P61Wo4kLP3UoUxOVITbK6mFNz+UrxGapXB5yZPd+9C3rSO
+         lQQ6TARjs3Vl5mgjIuOskzr+Tiay3J/icfB4xAqJqTr+N+0tXKjIxHjH0wcvfz4YXlyS
+         GODMhDmvaZhK4RHoaXFcYd75GDK2qej08U79+CJ6yAV7GuxJg97jhdkdZcYbhkJCo659
+         c6mw==
+X-Gm-Message-State: APjAAAXxNu7QRivbRdksNUxs/SJsQ3GyDFqrFM5g5E5GErkErBZ+/aSG
+        bqAAAF07wmrzTtdj64MGUo7KtpwP
+X-Google-Smtp-Source: APXvYqxoC7tmV6O7tCU3GYqQH5Ek8YX3stcKcJfELCUqGgcQE3R32YjF82xJ6DNffTNOWRGSXuY0Lg==
+X-Received: by 2002:a65:62d7:: with SMTP id m23mr30387539pgv.358.1567519394325;
+        Tue, 03 Sep 2019 07:03:14 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s5sm19724379pfm.97.2019.09.03.07.03.12
+        by smtp.gmail.com with ESMTPSA id q71sm5819742pjb.26.2019.09.03.07.03.13
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 07:03:12 -0700 (PDT)
+        Tue, 03 Sep 2019 07:03:13 -0700 (PDT)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Iker Perez del Palomar <iker.perez@codethink.co.uk>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/4] hwmon: (lm75) Move updating the sample interval to its own function
-Date:   Tue,  3 Sep 2019 07:03:07 -0700
-Message-Id: <1567519389-16561-2-git-send-email-linux@roeck-us.net>
+Subject: [PATCH 3/4] hwmon: (lm75) Add support for writing conversion time for TMP112
+Date:   Tue,  3 Sep 2019 07:03:08 -0700
+Message-Id: <1567519389-16561-3-git-send-email-linux@roeck-us.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1567519389-16561-1-git-send-email-linux@roeck-us.net>
 References: <1567519389-16561-1-git-send-email-linux@roeck-us.net>
@@ -68,66 +68,82 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-We'll need per-chip handling for updating the sample interval.
-To prepare for it, separate the code implementing it into its own
-function.
+TMP112 uses an uncommon method to write the conversion time: its
+configuration register is 16 bit wide, and the conversion time is
+configured in its second byte.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm75.c | 33 +++++++++++++++++++--------------
- 1 file changed, 19 insertions(+), 14 deletions(-)
+ drivers/hwmon/lm75.c | 35 ++++++++++++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 6474b8f21981..644da2620a26 100644
+index 644da2620a26..ce0f6c671b8f 100644
 --- a/drivers/hwmon/lm75.c
 +++ b/drivers/hwmon/lm75.c
-@@ -388,27 +388,32 @@ static int lm75_write_temp(struct device *dev, u32 attr, long temp)
- 	return regmap_write(data->regmap, reg, (u16)temp);
- }
- 
--static int lm75_write_chip(struct device *dev, u32 attr, long val)
-+static int lm75_update_interval(struct device *dev, long val)
+@@ -242,6 +242,8 @@ static const struct lm75_params device_params[] = {
+ 		.clr_mask = 1 << 7,	/* no one-shot mode*/
+ 		.default_resolution = 12,
+ 		.default_sample_time = MSEC_PER_SEC / 4,
++		.num_sample_times = 4,
++		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
+ 	},
+ 	[tmp175] = {
+ 		.set_mask = 3 << 5,	/* 12-bit mode */
+@@ -391,21 +393,36 @@ static int lm75_write_temp(struct device *dev, u32 attr, long temp)
+ static int lm75_update_interval(struct device *dev, long val)
  {
  	struct lm75_data *data = dev_get_drvdata(dev);
++	unsigned int reg;
  	u8 index;
  	s32 err;
  
--	switch (attr) {
--	case hwmon_chip_update_interval:
--		index = find_closest(val, data->params->sample_times,
--				     (int)data->params->num_sample_times);
-+	index = find_closest(val, data->params->sample_times,
-+			     (int)data->params->num_sample_times);
+ 	index = find_closest(val, data->params->sample_times,
+ 			     (int)data->params->num_sample_times);
  
--		err = lm75_write_config(data,
--					lm75_sample_set_masks[index],
--					LM75_SAMPLE_CLEAR_MASK);
--		if (err)
--			return err;
--		data->sample_time = data->params->sample_times[index];
-+	err = lm75_write_config(data, lm75_sample_set_masks[index],
-+				LM75_SAMPLE_CLEAR_MASK);
-+	if (err)
-+		return err;
+-	err = lm75_write_config(data, lm75_sample_set_masks[index],
+-				LM75_SAMPLE_CLEAR_MASK);
+-	if (err)
+-		return err;
+-
+-	data->sample_time = data->params->sample_times[index];
+-	if (data->params->resolutions)
+-		data->resolution = data->params->resolutions[index];
++	switch (data->kind) {
++	default:
++		err = lm75_write_config(data, lm75_sample_set_masks[index],
++					LM75_SAMPLE_CLEAR_MASK);
++		if (err)
++			return err;
  
--		if (data->params->resolutions)
--			data->resolution = data->params->resolutions[index];
--		break;
-+	data->sample_time = data->params->sample_times[index];
-+	if (data->params->resolutions)
-+		data->resolution = data->params->resolutions[index];
-+
-+	return 0;
-+}
-+
-+static int lm75_write_chip(struct device *dev, u32 attr, long val)
-+{
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		return lm75_update_interval(dev, val);
- 	default:
- 		return -EINVAL;
- 	}
++		data->sample_time = data->params->sample_times[index];
++		if (data->params->resolutions)
++			data->resolution = data->params->resolutions[index];
++		break;
++	case tmp112:
++		err = regmap_read(data->regmap, LM75_REG_CONF, &reg);
++		if (err < 0)
++			return err;
++		reg &= ~0x00c0;
++		reg |= (3 - index) << 6;
++		err = regmap_write(data->regmap, LM75_REG_CONF, reg);
++		if (err < 0)
++			return err;
++		data->sample_time = data->params->sample_times[index];
++		break;
++	}
+ 	return 0;
+ }
+ 
+@@ -489,7 +506,7 @@ static bool lm75_is_writeable_reg(struct device *dev, unsigned int reg)
+ 
+ static bool lm75_is_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	return reg == LM75_REG_TEMP;
++	return reg == LM75_REG_TEMP || reg == LM75_REG_CONF;
+ }
+ 
+ static const struct regmap_config lm75_regmap_config = {
 -- 
 2.7.4
 
