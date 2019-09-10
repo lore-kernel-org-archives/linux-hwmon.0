@@ -2,115 +2,90 @@ Return-Path: <SRS0=z2fx=XF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4221C49ED9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 18:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17CA2C49ED7
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 19:12:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8573521479
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 18:43:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9pFoCt2"
+	by mail.kernel.org (Postfix) with ESMTP id E8A552168B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 19:12:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbfIJSnz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Sep 2019 14:43:55 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:44392 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbfIJSnz (ORCPT
+        id S1725797AbfIJTMI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Sep 2019 15:12:08 -0400
+Received: from sender4-op-o14.zoho.com ([136.143.188.14]:17417 "EHLO
+        sender4-op-o14.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725263AbfIJTMI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Sep 2019 14:43:55 -0400
-Received: by mail-pg1-f194.google.com with SMTP id i18so10161248pgl.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2019 11:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ysmT91H+Vz3rOxXKhOMXoJWqBk0oocjaiY3BTPXIal0=;
-        b=I9pFoCt2nP4h8HJD62B7TqOWZud/kxwRsSh5HzzoqFxLtGChJ6gGCMo0AYPpaggBva
-         ES1HXHZGP4vKL0Ia6DXyxwQE5kScy0906fsIzSIIF8pMLT+NHTFaeofIOQpT4+cMsQn2
-         jljT88VmLx51ZC5ZeZwAM9ROaGLZtKN3WGcyp4qo9+R5S/M5tRJNb/Qi4SdU6jlKHBQM
-         3CQSs310uy0jXcaRQ1SBcNeAYS+6J///JGaWWUpkuflpom8cSpuBQPwC/TeaVZW/qWG+
-         Id0Lk6AzT9fHvWUmRt4zu3pxwuEngdLWE6corM4g4KBQbi6nV7YwUf3mOhTpgaA9RSTQ
-         yLxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ysmT91H+Vz3rOxXKhOMXoJWqBk0oocjaiY3BTPXIal0=;
-        b=dL+6W3pnIsIBujmWNSE1oBvZoF2bqapc+6AEGfqxHAtGSaYFKhW9QcpR8oCIM9Ws3f
-         7QGnQpBIqUBBcowz/hqGgY2Bc9FeaMTRIN50QVhZNNqe65OAPOf5p2kPDysGvn2GBrBR
-         PDR2M6OqLP7RgLWuidDLz4CyQ/5s9qy43dVC6xCd49O2YLQb+sjWmwryedAtqAdDgbCa
-         7cHYVlqKQzZbwlXGqzvnET6ZWuoN4w414cxCeTo3CmcQpa+k+qEjiB8NZ7tQIH13PZET
-         hZ01bqpFDq4TnpHxVpp9NSquwC1ylYe6xHBIfzLrX1JgMtnFCQVCcndJhNEq9p64RABt
-         FRpg==
-X-Gm-Message-State: APjAAAXt9h4Vm85NnvzKrCGsiUS4tPKdz4MmO/FXKYWe3rxOpF0rC5st
-        ex3LrS90J3jLUua7QrfATq5wINyj
-X-Google-Smtp-Source: APXvYqziBI4Oohs1CtTiIStfeTnszg7OXoDSCJrU4M7OkgQMw9dzRIEMOr79XPU/TVc2+uMXTz9z5g==
-X-Received: by 2002:a63:2f44:: with SMTP id v65mr4903594pgv.380.1568141034308;
-        Tue, 10 Sep 2019 11:43:54 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j126sm7289269pfb.186.2019.09.10.11.43.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Sep 2019 11:43:53 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 11:43:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dan Robertson <dan@dlrobertson.com>
+        Tue, 10 Sep 2019 15:12:08 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1568142707; cv=none; 
+        d=zoho.com; s=zohoarc; 
+        b=HrXsz7EXTnAX3ys8KSWoPaCe4IrMiqt/SLTwjwYNcu6kRrM7CSAv48IVDk3FU8yxfp9EhjybNDDRv6549RIITvPlhoBiyPydC0msEG6zgPb5oIEQwkTBoudaYh+gTs3XVx0OUbPIVAVC0+QBMpH8NLV+qVdIh+7V6/IEtDT4j28=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
+        t=1568142707; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To:ARC-Authentication-Results; 
+        bh=2KixVFz3zUH3aRk89aBsxoD9j3vrNyhgobZ/pSZ76YI=; 
+        b=cATRhGn9VLW0Wakh8YnTMTECkkBxHYlR5bCzHSr35/kbIBHkvuL/2ZxxduBc4Wg4ByGk4JKCllHFR+v2EvlrgCpiTK003jn5Dy4w+jKKxDbOYCRDtzSXvduY7w1MaTYBOPFO5tSdZPAOJcLZHuhyKYOV2FTcW6Y4wlH3ct1cPy0=
+ARC-Authentication-Results: i=1; mx.zoho.com;
+        dkim=pass  header.i=dlrobertson.com;
+        spf=pass  smtp.mailfrom=dan@dlrobertson.com;
+        dmarc=pass header.from=<dan@dlrobertson.com> header.from=<dan@dlrobertson.com>
+Received: from nessie (pool-100-15-144-194.washdc.fios.verizon.net [100.15.144.194]) by mx.zohomail.com
+        with SMTPS id 156814270601350.123367764763316; Tue, 10 Sep 2019 12:11:46 -0700 (PDT)
+Date:   Tue, 10 Sep 2019 18:57:54 +0000
+From:   Dan Robertson <dan@dlrobertson.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
 Subject: Re: [PATCH 2/2] hwmon: (shtc1) fix shtc1 and shtw1 id mask
-Message-ID: <20190910184352.GA29644@roeck-us.net>
+Message-ID: <20190910185754.GA28430@nessie>
 References: <20190905010130.15019-2-dan@dlrobertson.com>
  <20190905014554.21658-1-dan@dlrobertson.com>
  <20190905014554.21658-3-dan@dlrobertson.com>
+ <20190910184352.GA29644@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
 Content-Disposition: inline
-In-Reply-To: <20190905014554.21658-3-dan@dlrobertson.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190910184352.GA29644@roeck-us.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 01:45:54AM +0000, Dan Robertson wrote:
-> Fix an error in the bitmaskfor the shtc1 and shtw1 bitmask used to
-> retrieve the chip ID from the ID register. See section 5.7 of the shtw1
-> or shtc1 datasheet for details.
-> 
-> Fixes: 1a539d372edd9832444e7a3daa710c444c014dc9 ("hwmon: add support for Sensirion SHTC1 sensor")
-> Signed-off-by: Dan Robertson <dan@dlrobertson.com>
 
-Applied after reordering and adjusting. The fix should come first,
-followed by adding support for the new chip.
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
-Guenter
+Awesome. Thanks for the feedback!
 
-> ---
->  drivers/hwmon/shtc1.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
-> index 3e9a859a2b58..c628313a20d4 100644
-> --- a/drivers/hwmon/shtc1.c
-> +++ b/drivers/hwmon/shtc1.c
-> @@ -27,14 +27,14 @@ static const unsigned char shtc1_cmd_measure_nonblocking_lpm[] = { 0x60, 0x9c };
->  static const unsigned char shtc1_cmd_read_id_reg[]             = { 0xef, 0xc8 };
->  
->  /* constants for reading the ID register
-> - * SHTC1: 0x0007 with mask 0x001f
-> - * SHTW1: 0x0007 with mask 0x001f
-> + * SHTC1: 0x0007 with mask 0x003f
-> + * SHTW1: 0x0007 with mask 0x003f
->   * SHTC3: 0x0807 with mask 0x083f
->   */
->  #define SHTC3_ID      0x0807
->  #define SHTC3_ID_MASK 0x083f
->  #define SHTC1_ID      0x0007
-> -#define SHTC1_ID_MASK 0x001f
-> +#define SHTC1_ID_MASK 0x003f
->  
->  /* delays for non-blocking i2c commands, both in us */
->  #define SHTC1_NONBLOCKING_WAIT_TIME_HPM  14400
+Cheers,
+
+Dan
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEF5dO2RaKc5C+SCJ9RcSmUsR+QqUFAl138jIACgkQRcSmUsR+
+QqUvhRAAm0LWduTAAeuk0nNC+FYLCaJaODbCn2/6GgIs6hlYlCEnNk6CtXPvqn+Y
+0vs9xZ2BFskp72Dwlnorg2oyQI35LYuZ+Yfgyih4f0UlId9FNgLoY2FFSovAcMVV
+iRC8TqlNyN8wFOywSx02ABG88TDoSVxGkHPrfgfd1q2N5o2YoLuMCHAqho634Ip6
+m657KyzBqndSfLdGJdNDzvcPnz5o+c5dn5FI/NydtvZCindvQBAd/DzRJ4Ca1cWx
+xg4zpjmIbJ3VQDr10bEAyIICoK0oqnQMgM89Mn2rPMfypgMoju67y3Xd8KleyQnv
+va3ZHEwtA6UgtsVY9WVNwPqIjBZdkeOGoFRgLLO/K3YuQy8Rwqz7FkKEJi1IHmIp
+rXNEAivX3rPqsLr7c9GhN2B09CE5bWvoDMkpnEqHejlAsGRalKH5kVbYR440LKWd
+GWsXnELUnCHlygZobVjvM/utHgkLcgXaYmxBB4r69YQuIn9UYYVb9XlPaebyeBFi
+MiGOmdap73aN/FvORe2VjkHxpKS8te0lGP0KLYOkVX2oRoVA+iLP1ng9xzfQtqtn
+KDDJWAF+QKI9aMJowuMocSqYgbBALXloZSalBe1/CCIdUYJUJv46esI5D7vLSGfB
+v9Hsikhz7zYPBMipTTSsJ+BoSuSEu0G5L8kzIg40T7hDIuBR/pA=
+=sbpi
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
+
