@@ -2,82 +2,96 @@ Return-Path: <SRS0=z2fx=XF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F7F5C4740A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E966C3A5A2
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F50E208E4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21BE221924
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393311AbfIJGJq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Sep 2019 02:09:46 -0400
+        id S2393242AbfIJGJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Sep 2019 02:09:38 -0400
 Received: from mga02.intel.com ([134.134.136.20]:9595 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730334AbfIJGJj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Sep 2019 02:09:39 -0400
+        id S1730334AbfIJGJh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Sep 2019 02:09:37 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 23:09:10 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 23:09:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,487,1559545200"; 
-   d="scan'208";a="175206844"
+   d="scan'208";a="175206824"
 Received: from hao-dev.bj.intel.com ([10.238.157.65])
-  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2019 23:09:07 -0700
+  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2019 23:09:04 -0700
 From:   Wu Hao <hao.wu@intel.com>
 To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linux-api@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux@roeck-us.net, jdelvare@suse.com, gregkh@linuxfoundation.org,
-        Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>
-Subject: [PATCH v6 1/3] Documentation: fpga: dfl: add descriptions for thermal/power management interfaces
-Date:   Tue, 10 Sep 2019 13:50:38 +0800
-Message-Id: <1568094640-4920-2-git-send-email-hao.wu@intel.com>
+        Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v6 0/3] add thermal/power management features for FPGA DFL drivers
+Date:   Tue, 10 Sep 2019 13:50:37 +0800
+Message-Id: <1568094640-4920-1-git-send-email-hao.wu@intel.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1568094640-4920-1-git-send-email-hao.wu@intel.com>
-References: <1568094640-4920-1-git-send-email-hao.wu@intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Xu Yilun <yilun.xu@intel.com>
+Hi Mortiz and all,
 
-This patch add introductions to thermal/power interfaces. They are
-implemented as hwmon sysfs interfaces by thermal/power private
-feature drivers.
+This patchset adds thermal and power management features for FPGA DFL
+drivers. Both patches are using hwmon as userspace interfaces.
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Wu Hao <hao.wu@intel.com>
----
- Documentation/fpga/dfl.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+As previous dfl patches have been merged, so I resubmit this one after
+rebase and clean up, as dependency is resolved now.
+(This patchset is generated against char-misc-next).
 
-diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-index 6fa483f..094fc8a 100644
---- a/Documentation/fpga/dfl.rst
-+++ b/Documentation/fpga/dfl.rst
-@@ -108,6 +108,16 @@ More functions are exposed through sysfs
-      error reporting sysfs interfaces allow user to read errors detected by the
-      hardware, and clear the logged errors.
- 
-+ Power management (dfl_fme_power hwmon)
-+     power management hwmon sysfs interfaces allow user to read power management
-+     information (power consumption, thresholds, threshold status, limits, etc.)
-+     and configure power thresholds for different throttling levels.
-+
-+ Thermal management (dfl_fme_thermal hwmon)
-+     thermal management hwmon sysfs interfaces allow user to read thermal
-+     management information (current temperature, thresholds, threshold status,
-+     etc.).
-+
- 
- FIU - PORT
- ==========
+Please help with review to see if any comments, thank you very much!
+
+Main changes from v5:
+ - rebase and clean up (remove empty uinit function) per changes in recent
+   merged dfl patches.
+ - update date in sysfs doc.
+
+Main changes from v4:
+ - rebase due to Documentation format change (dfl.txt -> rst).
+ - clamp threshold inputs for sysfs interfaces. (patch#3)
+ - update sysfs doc to add more description for ltr sysfs interfaces.
+   (patch#3)
+
+Main changes from v3:
+ - use HWMON_CHANNEL_INFO.
+
+Main changes from v2:
+ - switch to standard hwmon APIs for thermal hwmon:
+     temp1_alarm        --> temp1_max
+     temp1_alarm_status --> temp1_max_alarm
+     temp1_crit_status  --> temp1_crit_alarm
+     temp1_alarm_policy --> temp1_max_policy
+ - switch to standard hwmon APIs for power hwmon:
+     power1_cap         --> power1_max
+     power1_cap_status  --> power1_max_alarm
+     power1_crit_status --> power1_crit_alarm
+
+Wu Hao (2):
+  fpga: dfl: fme: add thermal management support
+  fpga: dfl: fme: add power management support
+
+Xu Yilun (1):
+  Documentation: fpga: dfl: add descriptions for thermal/power
+    management interfaces
+
+ Documentation/ABI/testing/sysfs-platform-dfl-fme | 134 ++++++++
+ Documentation/fpga/dfl.rst                       |  10 +
+ drivers/fpga/Kconfig                             |   2 +-
+ drivers/fpga/dfl-fme-main.c                      | 385 +++++++++++++++++++++++
+ 4 files changed, 530 insertions(+), 1 deletion(-)
+
 -- 
 1.8.3.1
 
