@@ -1,131 +1,382 @@
-Return-Path: <SRS0=MxL9=XB=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=z2fx=XF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C96CC43331
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Sep 2019 23:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F42FC3A5A2
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4473214E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Sep 2019 23:27:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=knightsucfedu39751.onmicrosoft.com header.i=@knightsucfedu39751.onmicrosoft.com header.b="Juxdn6Yy"
+	by mail.kernel.org (Postfix) with ESMTP id 4AEAA2089F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Sep 2019 06:09:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404579AbfIFX1T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Sep 2019 19:27:19 -0400
-Received: from mail-eopbgr740078.outbound.protection.outlook.com ([40.107.74.78]:19136
-        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732440AbfIFX1T (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 6 Sep 2019 19:27:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZyYcjH4d/vLqn5St7JgxWJ0QVR7klNSPJ9dBQP46LkBiwsaQzn6si1srLhJYyWJ0wtqAaxWwRAAxKkVvwrwCFqIZxZhphCBm3/T6nA4CEGs5fXzz8Adj32crlYQuPMGKbon8kZDmgyGKROSAqf8VwZknKWrcJYmyZdMYmCagS1VsvQCwoBC6V0GCyIGaM1Mts+YXpj8pNxvC2QWYMs8NZAk19XP9BUfN1Ima8Hoc+VqQcsrywdPGVUGXeHna4nHCmMq5bKE0oqtTHUH0XXv+pGZ9iKOwZmo1UPrOL7+Zn3rlrlmP8sDU56ad0R6WF4Jk4nPniq1k2THPQidEYPmPXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y8KrBt28LgTfVXFfuKWX2kYU9q6qpQvUA0j1E0zYtCo=;
- b=Qv/4xY4T+1AepJ8bUpQfipQZHVzjDPPp6wvqoqTHG5/Jvt/9Pi3uJGBT58gI8WFhbFJFLmgzb9Sq24nhZiy9qsMMhmFPEOn7hmTtVw8OBBOGXOcfbRVovJxL0CUEYGOChJuKptPX3M/FeixAnP7la5/IpCT3LconwLsp4/hU+vMi7319y9sNRyFWdL0gyUjZfNGtocv4e6S0v9p4E3/aWar9M4nz51vBeMFcUP9KvztFc03SBr/wXppPZ6NS6Z7RKdtlmmGAm6bo/qbKU67obL+rICfC66pzi0ZHcppMi6u0NGGXJaKZFybGP6B+nqRuLI/uNdq17c2kqN2RqsoPiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
- header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=knightsucfedu39751.onmicrosoft.com;
- s=selector2-knightsucfedu39751-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y8KrBt28LgTfVXFfuKWX2kYU9q6qpQvUA0j1E0zYtCo=;
- b=Juxdn6YyleQYKtcRJ7174tsSFa6JZQ6gC9icNE3cGb1P/NrC60tQWdsVjmLPYWGJIMW6ntJ9iS4D6jy8O2962W2ccnr4cMm0UfgRzEmthVLd5gtvYvS9k8YNBe8WgVd+RvfxiV2dfMibexF9FDHxpGKaVEQM4KqYjypwDbkGJas=
-Received: from BN7PR07MB5186.namprd07.prod.outlook.com (20.176.176.155) by
- BN7PR07MB5299.namprd07.prod.outlook.com (20.176.178.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.22; Fri, 6 Sep 2019 23:27:16 +0000
-Received: from BN7PR07MB5186.namprd07.prod.outlook.com
- ([fe80::682e:801a:5227:668f]) by BN7PR07MB5186.namprd07.prod.outlook.com
- ([fe80::682e:801a:5227:668f%7]) with mapi id 15.20.2220.022; Fri, 6 Sep 2019
- 23:27:16 +0000
-From:   Isaac Vaughn <isaac.vaughn@Knights.ucf.edu>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Isaac Vaughn <isaac.vaughn@Knights.ucf.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        "trivial@kernel.org" <trivial@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] Add PCI device IDs for family 17h, model 70h
-Thread-Topic: [PATCH] Add PCI device IDs for family 17h, model 70h
-Thread-Index: AQHVZFZcluMS+DwUu0Crbwpgo6jw56ceXdYAgABADgCAAAIBAP//zKoAgABPnwCAAJBZgA==
-Date:   Fri, 6 Sep 2019 23:27:16 +0000
-Message-ID: <20190906192709.77c70f893dae5c519164a7f3@knights.ucf.edu>
-References: <20190904215308.GA12374@zn.tnic>
-        <BN7PR07MB5186E542BB3AD734262AA345CEBB0@BN7PR07MB5186.namprd07.prod.outlook.com>
-        <20190905070917.GA19246@zn.tnic>
-        <BN7PR07MB51864F8287CAD4847BF17A83CEBB0@BN7PR07MB5186.namprd07.prod.outlook.com>
-        <20190905135408.GE19246@zn.tnic>
-        <20190905215650.f8b5d22b625ddcff7d093883@knights.ucf.edu>
-        <20190906091250.GB19008@zn.tnic>        <20190906130206.GB7255@roeck-us.net>
-        <6B3FCC26-7A2F-438F-B442-EA665DDD0569@alien8.de>
-        <B08C8E54-43FA-4E29-8D7D-5F9C4AF20CCF@Knights.ucf.edu>
-        <20190906145030.GD19008@zn.tnic>
-In-Reply-To: <20190906145030.GD19008@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BN7PR02CA0026.namprd02.prod.outlook.com
- (2603:10b6:408:20::39) To BN7PR07MB5186.namprd07.prod.outlook.com
- (2603:10b6:408:2a::27)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=isaac.vaughn@Knights.ucf.edu; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-unknown-linux-gnu)
-x-originating-ip: [132.170.61.99]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cb5dc603-a7cc-42bd-7ea0-08d73321c0ec
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600166)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BN7PR07MB5299;
-x-ms-traffictypediagnostic: BN7PR07MB5299:|BN7PR07MB5299:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN7PR07MB5299B105D8B5D1AC1CA9656ACEBA0@BN7PR07MB5299.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0152EBA40F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(39860400002)(376002)(136003)(366004)(199004)(189003)(229853002)(476003)(25786009)(446003)(11346002)(26005)(50226002)(2616005)(256004)(4744005)(6246003)(75432002)(66066001)(66946007)(52116002)(186003)(44832011)(14454004)(99286004)(66476007)(2906002)(76176011)(102836004)(5660300002)(66556008)(6506007)(386003)(486006)(66446008)(478600001)(64756008)(1076003)(6436002)(305945005)(6116002)(3846002)(86362001)(4326008)(6486002)(7736002)(71200400001)(71190400001)(53936002)(8676002)(316002)(786003)(81156014)(8936002)(81166006)(54906003)(6512007)(88552002)(6916009);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR07MB5299;H:BN7PR07MB5186.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
-received-spf: None (protection.outlook.com: Knights.ucf.edu does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ae/DZOgSab+VGYTB9KqvMW1SO5nhyRx9hk3qTtZajlI8cGzxve9UDrYyl/AwR9G6R346qIQk3iNttCEAac9Dung1g/Sb0rFjXxFnzlh5xWxZnJLcqz372kH4rb1NPG9bujwAOXT8bOkf7EkUI8vnBYQfTU8cktJ92SP9iNWq+pIVL4S8pliyHYRHbvm6YRSZoislVrxzp3+4gNujREeGjue+s+lYk5frqEnQpfZPpz+PQIMREU3UxA9M6eZKZxZpSEsgTqm/H+ZUp1qGKetw4aeNizJEuGQuYlALPv8uHE6ZX1x2b73geWSVoPq7I65p63DUgbxRd1x9z43IiYfJAnVyNXCPNWpR/5gRkqt5ki+3Pj/l5xgmgnly6B2YaS8c/g4acrIX+Q1U1Jic4Y44hABlzseAJW9EgN6T656U7NY=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <611DF315E0E3C742B6825BC5A5D0ED21@namprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: knights.ucf.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb5dc603-a7cc-42bd-7ea0-08d73321c0ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2019 23:27:16.2924
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5b16e182-78b3-412c-9196-68342689eeb7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f4nALROk05jZQJcrBxitf2qKNWhALsuPQ+AtCP3/sS8eJ9PigBr9X+x+bcoPwcNmJ3Je2YSk7plkh1XJNenv1yzSbJbc7+ODp5+hQ3wuMCY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR07MB5299
+        id S2393269AbfIJGJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Sep 2019 02:09:38 -0400
+Received: from mga02.intel.com ([134.134.136.20]:9595 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393258AbfIJGJi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Sep 2019 02:09:38 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 23:09:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,487,1559545200"; 
+   d="scan'208";a="175206857"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2019 23:09:11 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com, gregkh@linuxfoundation.org,
+        Wu Hao <hao.wu@intel.com>, Luwei Kang <luwei.kang@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v6 2/3] fpga: dfl: fme: add thermal management support
+Date:   Tue, 10 Sep 2019 13:50:39 +0800
+Message-Id: <1568094640-4920-3-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1568094640-4920-1-git-send-email-hao.wu@intel.com>
+References: <1568094640-4920-1-git-send-email-hao.wu@intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> > They seem to have already covered the changes to hwmon and amd_nb, so
-> > the difference is probably the changes to amd64_edac.
->=20
-> Yeah, then you can send me only those changes against edac-for-next.
-> The driver won't load on Zen2 before the amd_nb.c changes have landed
-> upstream but that's fine - it's not like it did load before.
->=20
-> Thx.
+This patch adds support to thermal management private feature for DFL
+FPGA Management Engine (FME). This private feature driver registers
+a hwmon for thermal/temperature monitoring (hwmon temp1_input).
+If hardware automatic throttling is supported by this hardware, then
+driver also exposes sysfs interfaces under hwmon for thresholds
+(temp1_max/ crit/ emergency), threshold alarms (temp1_max_alarm/
+temp1_crit_alarm) and throttling policy (temp1_max_policy).
 
-I made the changes against the git repo you linked and sent the patch.
-The updated module didn't do anything when tested, but that seems to be
-the expected behavior with the current amd_nb.
+Signed-off-by: Luwei Kang <luwei.kang@intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Wu Hao <hao.wu@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Moritz Fischer <mdf@kernel.org>
+---
+v2: create a dfl_fme_thermal hwmon to expose thermal information.
+    move all sysfs interfaces under hwmon
+	tempareture       --> hwmon temp1_input
+	threshold1        --> hwmon temp1_alarm
+	threshold2        --> hwmon temp1_crit
+	trip_threshold    --> hwmon temp1_emergency
+	threshold1_status --> hwmon temp1_alarm_status
+	threshold2_status --> hwmon temp1_crit_status
+	threshold1_policy --> hwmon temp1_alarm_policy
+v3: rename some hwmon sysfs interfaces to follow hwmon ABI.
+	temp1_alarm        --> temp1_max
+	temp1_alarm_status --> temp1_max_alarm
+	temp1_crit_status  --> temp1_crit_alarm
+	temp1_alarm_policy --> temp1_max_policy
+    update sysfs doc for above sysfs interface changes.
+    replace scnprintf with sprintf in sysfs interface.
+v4: use HWMON_CHANNEL_INFO.
+    rebase, and update date in sysfs doc.
+v5: no change.
+v6: rebased, and clean up (remove empty uinit function).
+    update date in sysfs doc.
+---
+ Documentation/ABI/testing/sysfs-platform-dfl-fme |  64 ++++++++
+ drivers/fpga/Kconfig                             |   2 +-
+ drivers/fpga/dfl-fme-main.c                      | 178 +++++++++++++++++++++++
+ 3 files changed, 243 insertions(+), 1 deletion(-)
 
-Thanks,
-Isaac Vaughn
+diff --git a/Documentation/ABI/testing/sysfs-platform-dfl-fme b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+index 72634d3..c84b3c1 100644
+--- a/Documentation/ABI/testing/sysfs-platform-dfl-fme
++++ b/Documentation/ABI/testing/sysfs-platform-dfl-fme
+@@ -106,3 +106,67 @@ KernelVersion:  5.4
+ Contact:	Wu Hao <hao.wu@intel.com>
+ Description:	Read-only. Read this file to get the second error detected by
+ 		hardware.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/name
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. Read this file to get the name of hwmon device, it
++		supports values:
++		    'dfl_fme_thermal' - thermal hwmon device name
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_input
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. It returns FPGA device temperature in millidegrees
++		Celsius.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_max
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. It returns hardware threshold1 temperature in
++		millidegrees Celsius. If temperature rises at or above this
++		threshold, hardware starts 50% or 90% throttling (see
++		'temp1_max_policy').
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_crit
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. It returns hardware threshold2 temperature in
++		millidegrees Celsius. If temperature rises at or above this
++		threshold, hardware starts 100% throttling.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_emergency
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. It returns hardware trip threshold temperature in
++		millidegrees Celsius. If temperature rises at or above this
++		threshold, a fatal event will be triggered to board management
++		controller (BMC) to shutdown FPGA.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_max_alarm
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. It returns 1 if temperature is currently at or above
++		hardware threshold1 (see 'temp1_max'), otherwise 0.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_crit_alarm
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-only. It returns 1 if temperature is currently at or above
++		hardware threshold2 (see 'temp1_crit'), otherwise 0.
++
++What:		/sys/bus/platform/devices/dfl-fme.0/hwmon/hwmonX/temp1_max_policy
++Date:		September 2019
++KernelVersion:	5.4
++Contact:	Wu Hao <hao.wu@intel.com>
++Description:	Read-Only. Read this file to get the policy of hardware threshold1
++		(see 'temp1_max'). It only supports two values (policies):
++		    0 - AP2 state (90% throttling)
++		    1 - AP1 state (50% throttling)
+diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+index 73c779e..72380e1 100644
+--- a/drivers/fpga/Kconfig
++++ b/drivers/fpga/Kconfig
+@@ -156,7 +156,7 @@ config FPGA_DFL
+ 
+ config FPGA_DFL_FME
+ 	tristate "FPGA DFL FME Driver"
+-	depends on FPGA_DFL
++	depends on FPGA_DFL && HWMON
+ 	help
+ 	  The FPGA Management Engine (FME) is a feature device implemented
+ 	  under Device Feature List (DFL) framework. Select this option to
+diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+index 4d78e18..752d71c 100644
+--- a/drivers/fpga/dfl-fme-main.c
++++ b/drivers/fpga/dfl-fme-main.c
+@@ -14,6 +14,8 @@
+  *   Henry Mitchel <henry.mitchel@intel.com>
+  */
+ 
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/uaccess.h>
+@@ -181,6 +183,178 @@ static long fme_hdr_ioctl(struct platform_device *pdev,
+ 	.ioctl = fme_hdr_ioctl,
+ };
+ 
++#define FME_THERM_THRESHOLD	0x8
++#define TEMP_THRESHOLD1		GENMASK_ULL(6, 0)
++#define TEMP_THRESHOLD1_EN	BIT_ULL(7)
++#define TEMP_THRESHOLD2		GENMASK_ULL(14, 8)
++#define TEMP_THRESHOLD2_EN	BIT_ULL(15)
++#define TRIP_THRESHOLD		GENMASK_ULL(30, 24)
++#define TEMP_THRESHOLD1_STATUS	BIT_ULL(32)		/* threshold1 reached */
++#define TEMP_THRESHOLD2_STATUS	BIT_ULL(33)		/* threshold2 reached */
++/* threshold1 policy: 0 - AP2 (90% throttle) / 1 - AP1 (50% throttle) */
++#define TEMP_THRESHOLD1_POLICY	BIT_ULL(44)
++
++#define FME_THERM_RDSENSOR_FMT1	0x10
++#define FPGA_TEMPERATURE	GENMASK_ULL(6, 0)
++
++#define FME_THERM_CAP		0x20
++#define THERM_NO_THROTTLE	BIT_ULL(0)
++
++#define MD_PRE_DEG
++
++static bool fme_thermal_throttle_support(void __iomem *base)
++{
++	u64 v = readq(base + FME_THERM_CAP);
++
++	return FIELD_GET(THERM_NO_THROTTLE, v) ? false : true;
++}
++
++static umode_t thermal_hwmon_attrs_visible(const void *drvdata,
++					   enum hwmon_sensor_types type,
++					   u32 attr, int channel)
++{
++	const struct dfl_feature *feature = drvdata;
++
++	/* temperature is always supported, and check hardware cap for others */
++	if (attr == hwmon_temp_input)
++		return 0444;
++
++	return fme_thermal_throttle_support(feature->ioaddr) ? 0444 : 0;
++}
++
++static int thermal_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			      u32 attr, int channel, long *val)
++{
++	struct dfl_feature *feature = dev_get_drvdata(dev);
++	u64 v;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		v = readq(feature->ioaddr + FME_THERM_RDSENSOR_FMT1);
++		*val = (long)(FIELD_GET(FPGA_TEMPERATURE, v) * 1000);
++		break;
++	case hwmon_temp_max:
++		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++		*val = (long)(FIELD_GET(TEMP_THRESHOLD1, v) * 1000);
++		break;
++	case hwmon_temp_crit:
++		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++		*val = (long)(FIELD_GET(TEMP_THRESHOLD2, v) * 1000);
++		break;
++	case hwmon_temp_emergency:
++		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++		*val = (long)(FIELD_GET(TRIP_THRESHOLD, v) * 1000);
++		break;
++	case hwmon_temp_max_alarm:
++		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++		*val = (long)FIELD_GET(TEMP_THRESHOLD1_STATUS, v);
++		break;
++	case hwmon_temp_crit_alarm:
++		v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++		*val = (long)FIELD_GET(TEMP_THRESHOLD2_STATUS, v);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static const struct hwmon_ops thermal_hwmon_ops = {
++	.is_visible = thermal_hwmon_attrs_visible,
++	.read = thermal_hwmon_read,
++};
++
++static const struct hwmon_channel_info *thermal_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_EMERGENCY |
++				 HWMON_T_MAX   | HWMON_T_MAX_ALARM |
++				 HWMON_T_CRIT  | HWMON_T_CRIT_ALARM),
++	NULL
++};
++
++static const struct hwmon_chip_info thermal_hwmon_chip_info = {
++	.ops = &thermal_hwmon_ops,
++	.info = thermal_hwmon_info,
++};
++
++static ssize_t temp1_max_policy_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct dfl_feature *feature = dev_get_drvdata(dev);
++	u64 v;
++
++	v = readq(feature->ioaddr + FME_THERM_THRESHOLD);
++
++	return sprintf(buf, "%u\n",
++		       (unsigned int)FIELD_GET(TEMP_THRESHOLD1_POLICY, v));
++}
++
++static DEVICE_ATTR_RO(temp1_max_policy);
++
++static struct attribute *thermal_extra_attrs[] = {
++	&dev_attr_temp1_max_policy.attr,
++	NULL,
++};
++
++static umode_t thermal_extra_attrs_visible(struct kobject *kobj,
++					   struct attribute *attr, int index)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct dfl_feature *feature = dev_get_drvdata(dev);
++
++	return fme_thermal_throttle_support(feature->ioaddr) ? attr->mode : 0;
++}
++
++static const struct attribute_group thermal_extra_group = {
++	.attrs		= thermal_extra_attrs,
++	.is_visible	= thermal_extra_attrs_visible,
++};
++__ATTRIBUTE_GROUPS(thermal_extra);
++
++static int fme_thermal_mgmt_init(struct platform_device *pdev,
++				 struct dfl_feature *feature)
++{
++	struct device *hwmon;
++
++	/*
++	 * create hwmon to allow userspace monitoring temperature and other
++	 * threshold information.
++	 *
++	 * temp1_input      -> FPGA device temperature
++	 * temp1_max        -> hardware threshold 1 -> 50% or 90% throttling
++	 * temp1_crit       -> hardware threshold 2 -> 100% throttling
++	 * temp1_emergency  -> hardware trip_threshold to shutdown FPGA
++	 * temp1_max_alarm  -> hardware threshold 1 alarm
++	 * temp1_crit_alarm -> hardware threshold 2 alarm
++	 *
++	 * create device specific sysfs interfaces, e.g. read temp1_max_policy
++	 * to understand the actual hardware throttling action (50% vs 90%).
++	 *
++	 * If hardware doesn't support automatic throttling per thresholds,
++	 * then all above sysfs interfaces are not visible except temp1_input
++	 * for temperature.
++	 */
++	hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
++						     "dfl_fme_thermal", feature,
++						     &thermal_hwmon_chip_info,
++						     thermal_extra_groups);
++	if (IS_ERR(hwmon)) {
++		dev_err(&pdev->dev, "Fail to register thermal hwmon\n");
++		return PTR_ERR(hwmon);
++	}
++
++	return 0;
++}
++
++static const struct dfl_feature_id fme_thermal_mgmt_id_table[] = {
++	{.id = FME_FEATURE_ID_THERMAL_MGMT,},
++	{0,}
++};
++
++static const struct dfl_feature_ops fme_thermal_mgmt_ops = {
++	.init = fme_thermal_mgmt_init,
++};
++
+ static struct dfl_feature_driver fme_feature_drvs[] = {
+ 	{
+ 		.id_table = fme_hdr_id_table,
+@@ -195,6 +369,10 @@ static long fme_hdr_ioctl(struct platform_device *pdev,
+ 		.ops = &fme_global_err_ops,
+ 	},
+ 	{
++		.id_table = fme_thermal_mgmt_id_table,
++		.ops = &fme_thermal_mgmt_ops,
++	},
++	{
+ 		.ops = NULL,
+ 	},
+ };
+-- 
+1.8.3.1
+
