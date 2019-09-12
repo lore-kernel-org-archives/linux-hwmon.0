@@ -2,86 +2,96 @@ Return-Path: <SRS0=SwvS=XH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DATE_IN_FUTURE_06_12,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 930D5C49ED6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Sep 2019 00:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4114C49ED6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Sep 2019 03:43:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 576452089F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Sep 2019 00:28:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HESC4gcs"
+	by mail.kernel.org (Postfix) with ESMTP id 7CEE9214D8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Sep 2019 03:43:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728053AbfILA2j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Sep 2019 20:28:39 -0400
-Received: from mail-pl1-f179.google.com ([209.85.214.179]:38006 "EHLO
-        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726699AbfILA2j (ORCPT
+        id S1729356AbfILDnf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Sep 2019 23:43:35 -0400
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:60492 "EHLO
+        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbfILDnf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Sep 2019 20:28:39 -0400
-Received: by mail-pl1-f179.google.com with SMTP id p9so6205200plk.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Sep 2019 17:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=/6Y+U3fxXd4apgshZtNQSnUgorxas4MClHVEvLgzTs0=;
-        b=HESC4gcs/4JEo5i8oUUZrzYQGzy56TbaraiQQ/Vj348YMCkKMQni4+ZpWIwuVo1ZW5
-         WTtC16r7pmQlnPvb0FdosfAbpporK8kKmvQpXRo4vyphP7+RTkdxJLd9Tm5JZpsqoO2B
-         q4xLl9DGq90Prp2aH2480LOeTfMKENYvwLFehpaoJ5na3yNL0RMn2F7Xbtf89g6ggE91
-         sJKu+jfeyg9+ec5h2ygjMevEp1rct69ncq5ADe+p5ORmV0zTQG90+uL6S3CLJpRD4wi5
-         X0JDSGVMGHREcFa3I5UhdsHYP9tivvotifTKv3a3NnGyEkbQndlOB1u6VRX6qtpl8WNv
-         C/Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=/6Y+U3fxXd4apgshZtNQSnUgorxas4MClHVEvLgzTs0=;
-        b=uD0i4Du/qQSbrL38hdDhV//mcTRxsfq9sDA0MdIYZd0O0/fSbe5D9sr5K/zJgNqSKt
-         UaT5rWGRdROAd0sDWqvmQPeHoekxpKmJXZwZYsnQPaI2fqTAuSDvyAWjSmCumd1F5GWn
-         cIHwAQ4muEc4K1jHML9o/ceeYXAAQWcOBcZBiSSPRI9FB94LSCfGnIa6j7RDX3UHGT8b
-         hYzqEVj8TGdYe3jawWRTe/MV8Qt/I6ysBYYL/DsD5j3dcWeJyMJcdyMDBV1bm6k8RYUi
-         l5SBXd70AZpKp3YYMmBZndgeHtZ/cO82B93pIvSz3oOZ2VgQQy2pwvTyqCXTgayT02NM
-         6AZQ==
-X-Gm-Message-State: APjAAAXrBfaUDeTqteBiqw4YhIErFq9S7vk3NHzYMPZ8CWf6A7cvzjLD
-        IlTJJ2ingNBo8L+hzX4htv01vy+Q
-X-Google-Smtp-Source: APXvYqyyCC4eEZM5GAu1XP0SzKjqMeOo75lhuMDBKvlb1TyWd8Ms+B+aF562hkOkQOjXj9uJqgOc5A==
-X-Received: by 2002:a17:902:9d90:: with SMTP id c16mr28720250plq.12.1568248118511;
-        Wed, 11 Sep 2019 17:28:38 -0700 (PDT)
-Received: from Asurada-Nvidia.nvidia.com (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id c35sm20457533pgl.72.2019.09.11.17.28.37
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Sep 2019 17:28:38 -0700 (PDT)
-Date:   Wed, 11 Sep 2019 17:28:14 -0700
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org
-Subject: ABI for these two registers?
-Message-ID: <20190912002813.GA12433@Asurada-Nvidia.nvidia.com>
+        Wed, 11 Sep 2019 23:43:35 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Sep 2019 23:43:32 EDT
+Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Tda31a8ab12ac1401c8187c@ACLMS3.advantech.com.tw>;
+ Thu, 12 Sep 2019 11:33:27 +0800
+From:   <Amy.Shih@advantech.com.tw>
+To:     <she90122@gmail.com>
+CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <bichan.lu@advantech.com.tw>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [v1,1/1] hwmon: (nct7904) Fix incorrect SMI status register setting of LTD temperature and fan.
+Date:   Thu, 12 Sep 2019 11:33:00 +0000
+Message-ID: <20190912113300.4714-1-Amy.Shih@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.114]
+X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
+ taipei08.ADVANTECH.CORP (172.20.0.235)
+X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Guenter,
+From: "amy.shih" <amy.shih@advantech.com.tw>
 
-Datasheet: http://www.ti.com/lit/ds/symlink/ina3221.pdf
-(At page 32, chapter 8.6.2.14 and 8.6.2.15)
+According to datasheet, the SMI status register setting of LTD
+temperature is SMI_STS3, and the SMI status register setting
+of fan is SMI_STS5 and SMI_STS6.
 
-I have two registers that I need to expose to user space:
-	Shunt-Voltage-Sum and Shunt-Voltage-Limit registers
+Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+---
+ drivers/hwmon/nct7904.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Right now in[123]_input of INA3221 are for voltage channels
-while in[456]_input are for Shunt voltage channels.
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index ce688ab4fce2..95b447cfa24c 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -51,6 +51,7 @@
+ #define VSEN1_HV_HL_REG		0x00	/* Bank 1; 2 regs (HV/LV) per sensor */
+ #define VSEN1_LV_HL_REG		0x01	/* Bank 1; 2 regs (HV/LV) per sensor */
+ #define SMI_STS1_REG		0xC1	/* Bank 0; SMI Status Register */
++#define SMI_STS3_REG		0xC3	/* Bank 0; SMI Status Register */
+ #define SMI_STS5_REG		0xC5	/* Bank 0; SMI Status Register */
+ #define SMI_STS7_REG		0xC7	/* Bank 0; SMI Status Register */
+ #define SMI_STS8_REG		0xC8	/* Bank 0; SMI Status Register */
+@@ -210,7 +211,7 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
+ 		return 0;
+ 	case hwmon_fan_alarm:
+ 		ret = nct7904_read_reg(data, BANK_0,
+-				       SMI_STS7_REG + (channel >> 3));
++				       SMI_STS5_REG + (channel >> 3));
+ 		if (ret < 0)
+ 			return ret;
+ 		*val = (ret >> (channel & 0x07)) & 1;
+@@ -351,7 +352,13 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+ 		*val = sign_extend32(temp, 10) * 125;
+ 		return 0;
+ 	case hwmon_temp_alarm:
+-		if (channel < 5) {
++		if (channel == 4) {
++			ret = nct7904_read_reg(data, BANK_0,
++					       SMI_STS3_REG);
++			if (ret < 0)
++				return ret;
++			*val = (ret >> 1) & 1;
++		} else if (channel < 4) {
+ 			ret = nct7904_read_reg(data, BANK_0,
+ 					       SMI_STS1_REG);
+ 			if (ret < 0)
+-- 
+2.17.1
 
-So can I just use in7_input and in7_crit for them?
-
-Thanks
-Nicolin
