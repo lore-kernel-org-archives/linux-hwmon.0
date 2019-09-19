@@ -2,108 +2,144 @@ Return-Path: <SRS0=d12o=XO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC4CC4CEC4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 03:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3B3EC3A5A6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 09:25:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E2C0218AF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 03:02:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 783FE21924
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 09:25:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H8g1ZVvx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727968AbfISDCn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Sep 2019 23:02:43 -0400
-Received: from aclms3.advantech.com.tw ([125.252.70.86]:46280 "EHLO
-        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727165AbfISDCn (ORCPT
+        id S2388569AbfISJZY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Sep 2019 05:25:24 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24676 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387637AbfISJZY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Sep 2019 23:02:43 -0400
-Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Tda5598ff72ac1401c8e70@ACLMS3.advantech.com.tw>;
- Thu, 19 Sep 2019 11:02:40 +0800
-From:   <Amy.Shih@advantech.com.tw>
-To:     <she90122@gmail.com>
-CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <bichan.lu@advantech.com.tw>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [v1,1/1] hwmon: (nct7904) Add array fan_alarm and vsen_alarm to store the alarms in nct7904_data struct.
-Date:   Thu, 19 Sep 2019 11:02:05 +0800
-Message-ID: <20190919030205.11440-1-Amy.Shih@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
+        Thu, 19 Sep 2019 05:25:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1568885122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fMRCNlG4fHQ6srApEX1ynJpzQyPhLql6/7HXNniPNy0=;
+        b=H8g1ZVvxHlqGPMfRqURju/sWVE4Kk9/Vp8ah0ZBI3nRmCRyQZ67lleO7qEwemE+px8GhMa
+        oG4b3lt11mUPTmjjVpndLLxt0721wNvxVabGJoR+BxKE9/eezx6rgBh6Y/W1kTcj47SoWO
+        Uu9D9Q4JelQzVVMc0QZXEYrA3mvwWmU=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-44-TSTLjj5nNkqQEsoq1tzpfw-1; Thu, 19 Sep 2019 05:25:21 -0400
+Received: by mail-pf1-f198.google.com with SMTP id w16so1853282pfj.9
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Sep 2019 02:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=XLesU40Hdgd7PzoKuluSVn23wOzzqt01Vg23PoBHteo=;
+        b=RMVspH9Qo+haeMZWtjwBNsPq4uc0PFcSNOe6kT3UWu/wPWvQSVmnT87OdkBsCOy6s7
+         gOhPCJOEbVXhxAd0ylfYvh0Qs6di4ExRXqNCSjNhLUxogSeA7pmljmdbftiRtLCyL8mI
+         8m2NkksHuwAJ17KPUKBh6UYLmvmFdFsRQJLI21KPH87VmquJ7nGD6rBhCdfiPH40qBJR
+         82C0QGZbK1+LX7STd1Pokd8UMwNOJ+gkg4ntGnGluUWyv82KHNDQxrYYowZlEcaQDLQf
+         A0suWOCI5VT4WObX/nnmwa1RsEXTfR4MOU0O38iwaixE/jI6YJUHwKvLSL3jc9BdFCrw
+         RiIA==
+X-Gm-Message-State: APjAAAXtd/ckxGG+Wc8t22sFrnieJBZerLAcu/MFR5kkZuvafup1CJyu
+        hSRgGF1reWg08AcKJn2H1bCUimd/bHqG05L8vcnSM/7fo575q1WtLB28YtX0eRoI1pseEpIjyGo
+        DwpSJcnN+ms8l+v0HhfO9z9sw+VKImk4tXcEGpTs=
+X-Received: by 2002:a17:902:d201:: with SMTP id t1mr8608986ply.337.1568885119762;
+        Thu, 19 Sep 2019 02:25:19 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwxebg/eFmvg9TSWxTkXz2wakbtt36/63ziH8aDxfeXIpvSWlwa/HdF+TsW6Vtom1fFad2V2zw7pONDoTjCDXY=
+X-Received: by 2002:a17:902:d201:: with SMTP id t1mr8608970ply.337.1568885119507;
+ Thu, 19 Sep 2019 02:25:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.114]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- taipei08.ADVANTECH.CORP (172.20.0.235)
-X-StopIT: No
+From:   Lukas Zapletal <lzap@redhat.com>
+Date:   Thu, 19 Sep 2019 11:25:03 +0200
+Message-ID: <CAP80Qm2ORJ4cXukhH8oXeGv-C9LrADa1XyDuyq5LKeV_YaYxqA@mail.gmail.com>
+Subject: [PATCH] k10temp: update documentation
+To:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-MC-Unique: TSTLjj5nNkqQEsoq1tzpfw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "amy.shih" <amy.shih@advantech.com.tw>
+It's been a while since the k10temp documentation has been updated.
+There are new CPU families supported as well as Tdie temp was added.
+This patch adds all missing families which I was able to find from git
+history and provides more info about Tctl vs Tdie exported temps.
 
-SMI# interrupt for fan and voltage is Two-Times Interrupt Mode.
-Fan or voltage exceeds high limit or going below low limit,
-it will causes an interrupt if the previous interrupt has been
-reset by reading all the interrupt Status Register. Thus, add the
-array fan_alarm and vsen_alarm to store the alarms for all of the
-fan and voltage sensors.
-
-Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+Signed-off-by: Lukas Zapletal <lzap+git@redhat.com>
 ---
- drivers/hwmon/nct7904.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ Documentation/hwmon/k10temp.rst | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index f62dd1882451..b26419dbe840 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -99,6 +99,8 @@ struct nct7904_data {
- 	u8 enable_dts;
- 	u8 has_dts;
- 	u8 temp_mode; /* 0: TR mode, 1: TD mode */
-+	u8 fan_alarm[2];
-+	u8 vsen_alarm[3];
- };
- 
- /* Access functions */
-@@ -214,7 +216,15 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
- 				       SMI_STS5_REG + (channel >> 3));
- 		if (ret < 0)
- 			return ret;
--		*val = (ret >> (channel & 0x07)) & 1;
-+		if (!data->fan_alarm[channel >> 3])
-+			data->fan_alarm[channel >> 3] = ret & 0xff;
-+		else
-+			/* If there is new alarm showing up */
-+			data->fan_alarm[channel >> 3] |= (ret & 0xff);
-+		*val = (data->fan_alarm[channel >> 3] >> (channel & 0x07)) & 1;
-+		/* Needs to clean the alarm if alarm existing */
-+		if (*val)
-+			data->fan_alarm[channel >> 3] ^= 1 << (channel & 0x07);
- 		return 0;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -298,7 +308,15 @@ static int nct7904_read_in(struct device *dev, u32 attr, int channel,
- 				       SMI_STS1_REG + (index >> 3));
- 		if (ret < 0)
- 			return ret;
--		*val = (ret >> (index & 0x07)) & 1;
-+		if (!data->vsen_alarm[index >> 3])
-+			data->vsen_alarm[index >> 3] = ret & 0xff;
-+		else
-+			/* If there is new alarm showing up */
-+			data->vsen_alarm[index >> 3] |= (ret & 0xff);
-+		*val = (data->vsen_alarm[index >> 3] >> (index & 0x07)) & 1;
-+		/* Needs to clean the alarm if alarm existing */
-+		if (*val)
-+			data->vsen_alarm[index >> 3] ^= 1 << (index & 0x07);
- 		return 0;
- 	default:
- 		return -EOPNOTSUPP;
--- 
-2.17.1
+diff --git a/Documentation/hwmon/k10temp.rst b/Documentation/hwmon/k10temp.=
+rst
+index 12a86ba17de9..bb2d0a02dc45 100644
+--- a/Documentation/hwmon/k10temp.rst
++++ b/Documentation/hwmon/k10temp.rst
+@@ -1,7 +1,7 @@
+ Kernel driver k10temp
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+-Supported chips:
++Although the driver is named k10temp, it supports wide range of AMD CPUs:
+
+ * AMD Family 10h processors:
+
+@@ -21,10 +21,16 @@ Supported chips:
+
+ * AMD Family 14h processors: "Brazos" (C/E/G/Z-Series)
+
+-* AMD Family 15h processors: "Bulldozer" (FX-Series), "Trinity",
+"Kaveri", "Carrizo"
++* AMD Family 15h processors: "Bulldozer" (FX-Series), "Trinity",
+"Kaveri", "Carrizo", "Stoney Ridge", "Bristol Ridge"
+
+ * AMD Family 16h processors: "Kabini", "Mullins"
+
++* AMD Family 17h processors: "Zen", "Zen 2"
++
++* AMD Family 18h processors: "Hygon Dhyana"
++
++* AMD Family 19h processors: "Zen 3"
++
+   Prefix: 'k10temp'
+
+   Addresses scanned: PCI space
+@@ -110,3 +116,12 @@ The maximum value for Tctl is available in the
+file temp1_max.
+ If the BIOS has enabled hardware temperature control, the threshold at
+ which the processor will throttle itself to avoid damage is available in
+ temp1_crit and temp1_crit_hyst.
++
++On some AMD CPUs, there is a difference between the die temperature (Tdie)=
+ and
++the reported temperature (Tctl). Tdie is the real measured temperature, an=
+d
++Tctl is used for fan control. While Tctl is always available as temp1_inpu=
+t,
++the driver exports Tdie temperature as temp2_input for those CPUs which su=
+pport
++it.
++
++Models from 17h family report relative temperature, the driver aims to
++compensate and report the real temperature.
+--=20
+2.21.0
+
+
+--=20
+Later,
+  Lukas @lzap Zapletal
 
