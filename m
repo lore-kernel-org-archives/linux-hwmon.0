@@ -1,126 +1,109 @@
-Return-Path: <SRS0=lU84=XN=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=d12o=XO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA51BC4CEC9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Sep 2019 13:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC4CC4CEC4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 03:02:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BEB57208C0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Sep 2019 13:40:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6m4J1Zb"
+	by mail.kernel.org (Postfix) with ESMTP id 9E2C0218AF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Sep 2019 03:02:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbfIRNk7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Sep 2019 09:40:59 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37017 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726853AbfIRNk7 (ORCPT
+        id S1727968AbfISDCn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Sep 2019 23:02:43 -0400
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:46280 "EHLO
+        ACLMS3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727165AbfISDCn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Sep 2019 09:40:59 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y5so4511929pfo.4;
-        Wed, 18 Sep 2019 06:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ljkWDHXlIkSy7NckWtNI1aeaRwQExF2XsDwU+t0+zEw=;
-        b=d6m4J1ZbQIhGPIwQcfje4nR1f6w8yt1CI3u+GQsXd/WQ1L2b7HiGOo+ApFiyEKkMUz
-         fJGlZWaoFe9UtwkqSU0vmw1VkNdRcxb+CXVmCSbqWhkZbSrFcUynODzmo7gVZEpyZoy0
-         9Y+INFsUmKqAIi1Qk6xO2WbrJmDt/LlLPQiy1U9Wx2KKJm5acHGrieZc6e3Yx4dfgZbF
-         jxE6Md+B18XEdp4C9MnCAbAMFBA3x9lJ23xbEJkT8ElPTbHCe0XhiOQtRH1FRGUQtCvZ
-         wXxS2muJjV9/MUPbkdhYAkEQKyy19DWNyQjMB7w3zwp9IrK3jCq32poQVV3sS3ziHy+5
-         R3vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ljkWDHXlIkSy7NckWtNI1aeaRwQExF2XsDwU+t0+zEw=;
-        b=N4OFk9GgwARP0x4NFfktzBRG32DcKpYZQ8hJV7Q44jeYWau6VBd+3AAnPwQsCdsE7n
-         HZJExhj9u69MvHU+gYH+D/yTfYvS4BtN3lNM/mUC6SNI9ar9oJ1uNPL5sPPzEpAiCY8p
-         WB72uuyjNse4jXODuG1JEsiQxWAXVkFa7L0LyMxcZy6dXKZu5k/85+CaROqe6WCC3rNi
-         NpeEDti4cA4CP+jcU0+8sSRE0VptLqzmW1XDL3nj2Yp2QrLdXnQirCpW6B9H37wllz1Z
-         SPjwcRe1ldFmQ6kWdhgSxF2OR4G45HX4+9enOEjSG1ka+7+pjIzDUEGihbZXmDbVWQY2
-         ng6A==
-X-Gm-Message-State: APjAAAW5ctEZmsZj5P/FYADF8E75G8qZNCX/kugpeeS4hkpxc2LlRISu
-        shgBGzpAMv9mKxVPL3sckAo=
-X-Google-Smtp-Source: APXvYqwGmHrbLJCm4e7l/PHYfffMMtNA0UN+h8KyCp/tNWvDUeqDrbJ96Xivomf1/vTNRC4C9tCfzw==
-X-Received: by 2002:a62:64c9:: with SMTP id y192mr4444109pfb.6.1568814058533;
-        Wed, 18 Sep 2019 06:40:58 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i1sm12644118pfg.2.2019.09.18.06.40.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 18 Sep 2019 06:40:57 -0700 (PDT)
-Date:   Wed, 18 Sep 2019 06:40:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Amy.Shih@advantech.com.tw
-Cc:     she90122@gmail.com, oakley.ding@advantech.com.tw,
-        bichan.lu@advantech.com.tw, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v3,1/1] hwmon: (nct7904) Fix the incorrect value of vsen_mask
- in nct7904_data struct.
-Message-ID: <20190918134056.GA21721@roeck-us.net>
-References: <20190918084801.9859-1-Amy.Shih@advantech.com.tw>
+        Wed, 18 Sep 2019 23:02:43 -0400
+Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS3.advantech.com.tw
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Tda5598ff72ac1401c8e70@ACLMS3.advantech.com.tw>;
+ Thu, 19 Sep 2019 11:02:40 +0800
+From:   <Amy.Shih@advantech.com.tw>
+To:     <she90122@gmail.com>
+CC:     <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <bichan.lu@advantech.com.tw>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [v1,1/1] hwmon: (nct7904) Add array fan_alarm and vsen_alarm to store the alarms in nct7904_data struct.
+Date:   Thu, 19 Sep 2019 11:02:05 +0800
+Message-ID: <20190919030205.11440-1-Amy.Shih@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190918084801.9859-1-Amy.Shih@advantech.com.tw>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.114]
+X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
+ taipei08.ADVANTECH.CORP (172.20.0.235)
+X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 04:48:00PM +0800, Amy.Shih@advantech.com.tw wrote:
-> From: "amy.shih" <amy.shih@advantech.com.tw>
-> 
-> Voltage sensors overlap with external temperature sensors. Detect
-> the multi-function of voltage, thermal diode and thermistor from
-> register VT_ADC_MD_REG to set value of vsen_mask in nct7904_data
-> struct.
-> 
-> Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+From: "amy.shih" <amy.shih@advantech.com.tw>
 
-Applied.
+SMI# interrupt for fan and voltage is Two-Times Interrupt Mode.
+Fan or voltage exceeds high limit or going below low limit,
+it will causes an interrupt if the previous interrupt has been
+reset by reading all the interrupt Status Register. Thus, add the
+array fan_alarm and vsen_alarm to store the alarms for all of the
+fan and voltage sensors.
 
-Thanks,
-Guenter
+Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
+---
+ drivers/hwmon/nct7904.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-> ---
-> Changes in v3:
-> - Simplified the bit map.
-> - Modified the if statement.
-> Changes in v2:
-> - Moved the if statement to outside.
-> 
->  drivers/hwmon/nct7904.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-> index 95b447cfa24c..f62dd1882451 100644
-> --- a/drivers/hwmon/nct7904.c
-> +++ b/drivers/hwmon/nct7904.c
-> @@ -915,12 +915,15 @@ static int nct7904_probe(struct i2c_client *client,
->  
->  	data->temp_mode = 0;
->  	for (i = 0; i < 4; i++) {
-> -		val = (ret & (0x03 << i)) >> (i * 2);
-> +		val = (ret >> (i * 2)) & 0x03;
->  		bit = (1 << i);
-> -		if (val == 0)
-> +		if (val == 0) {
->  			data->tcpu_mask &= ~bit;
-> -		else if (val == 0x1 || val == 0x2)
-> -			data->temp_mode |= bit;
-> +		} else {
-> +			if (val == 0x1 || val == 0x2)
-> +				data->temp_mode |= bit;
-> +			data->vsen_mask &= ~(0x06 << (i * 2));
-> +		}
->  	}
->  
->  	/* PECI */
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index f62dd1882451..b26419dbe840 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -99,6 +99,8 @@ struct nct7904_data {
+ 	u8 enable_dts;
+ 	u8 has_dts;
+ 	u8 temp_mode; /* 0: TR mode, 1: TD mode */
++	u8 fan_alarm[2];
++	u8 vsen_alarm[3];
+ };
+ 
+ /* Access functions */
+@@ -214,7 +216,15 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
+ 				       SMI_STS5_REG + (channel >> 3));
+ 		if (ret < 0)
+ 			return ret;
+-		*val = (ret >> (channel & 0x07)) & 1;
++		if (!data->fan_alarm[channel >> 3])
++			data->fan_alarm[channel >> 3] = ret & 0xff;
++		else
++			/* If there is new alarm showing up */
++			data->fan_alarm[channel >> 3] |= (ret & 0xff);
++		*val = (data->fan_alarm[channel >> 3] >> (channel & 0x07)) & 1;
++		/* Needs to clean the alarm if alarm existing */
++		if (*val)
++			data->fan_alarm[channel >> 3] ^= 1 << (channel & 0x07);
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -298,7 +308,15 @@ static int nct7904_read_in(struct device *dev, u32 attr, int channel,
+ 				       SMI_STS1_REG + (index >> 3));
+ 		if (ret < 0)
+ 			return ret;
+-		*val = (ret >> (index & 0x07)) & 1;
++		if (!data->vsen_alarm[index >> 3])
++			data->vsen_alarm[index >> 3] = ret & 0xff;
++		else
++			/* If there is new alarm showing up */
++			data->vsen_alarm[index >> 3] |= (ret & 0xff);
++		*val = (data->vsen_alarm[index >> 3] >> (index & 0x07)) & 1;
++		/* Needs to clean the alarm if alarm existing */
++		if (*val)
++			data->vsen_alarm[index >> 3] ^= 1 << (index & 0x07);
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+-- 
+2.17.1
+
