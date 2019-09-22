@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED9BCC4740C
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Sep 2019 19:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6F9DC3A5A6
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Sep 2019 19:23:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE56820882
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Sep 2019 19:15:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF3C120869
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Sep 2019 19:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179714;
-	bh=R9wNMyVXTP8zyEL2EWjtB6HQTLw6rR1ooe2e0CV8Rao=;
+	s=default; t=1569180208;
+	bh=MoJuAFD5H01r8aUKRg6WQ0qWyaX5xkkJmQOMh7mNsM0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UORT6+G/WE9nBoo82uDGOKPL4QeQSSbcFKAa+vADMa8Xh1BSpcIBuZ+EnsoAf2Pyb
-	 6IS4fF6fJX2YQeVksgCLXZzxeQ0E4ytZPt7aAuBMuygXiqh7UPkphGdw/mjlsj80vL
-	 izBtqjVNUQ8XtiHnH8u+sphvL6E3WkGjR2ZctyUM=
+	b=iyRuP6nCyXNlEdNHB587XcHSWlFw584ue2/v2tQBDZUlhC0Xp2bDdbS2tMOgTq8Xd
+	 SKsVrsy0DeBJ42qJHbMcP+DsVJnF07oLGo3MENSWCTRLopIC9ox702Zm0jvyRxJYUN
+	 qOKfc2rMPLjpwRuY6eGxC2bdtik9r7CBiV5FbgdU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730642AbfIVTPJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:15:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58836 "EHLO mail.kernel.org"
+        id S1727402AbfIVTX1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:23:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53230 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394618AbfIVS4j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:56:39 -0400
+        id S2394250AbfIVSxY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:53:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 765CE21D7E;
-        Sun, 22 Sep 2019 18:56:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 54A3421D79;
+        Sun, 22 Sep 2019 18:53:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178599;
-        bh=R9wNMyVXTP8zyEL2EWjtB6HQTLw6rR1ooe2e0CV8Rao=;
+        s=default; t=1569178404;
+        bh=MoJuAFD5H01r8aUKRg6WQ0qWyaX5xkkJmQOMh7mNsM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r2L2K+uVS7HdZof9ZE3LzzjbnPvD3r5TiR7qSHG+GhHGrk1VmQ5DBPdH3bPDb65pa
-         wXnLkMtfyrs2XzLtyhu8YNxtTQO52MlPLhtyhW3doYaGFXVBBlPWpPmRWEt5QyL2NF
-         A2PSBs9HS4gDlrHTsQWzDTCr8bjiZM1amaz5/ru4=
+        b=YbFJzlpi7/T6NrKnfpnINiqjr5DdLVXVZzBXVYOXnpY2ZfwphdUGyhpTfBxX7QXdW
+         DnpYndhySGvVdyZlpOTIx5DE2Gl3cHrDKSXfs5g+9WALNHGzoSX5F2AJhhuTBJZ2Uc
+         DsE/DndQxKggBun7O1oQN2IN5GBUlY487VRtvbkM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wang Shenran <shenran268@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 103/128] hwmon: (acpi_power_meter) Change log level for 'unsafe software power cap'
-Date:   Sun, 22 Sep 2019 14:53:53 -0400
-Message-Id: <20190922185418.2158-103-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 146/185] hwmon: (acpi_power_meter) Change log level for 'unsafe software power cap'
+Date:   Sun, 22 Sep 2019 14:48:44 -0400
+Message-Id: <20190922184924.32534-146-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
-References: <20190922185418.2158-1-sashal@kernel.org>
+In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
+References: <20190922184924.32534-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 34e45b97629ed..2f2fb19669580 100644
+index 6ba1a08253f0a..4cf25458f0b95 100644
 --- a/drivers/hwmon/acpi_power_meter.c
 +++ b/drivers/hwmon/acpi_power_meter.c
-@@ -694,8 +694,8 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
+@@ -681,8 +681,8 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
  
  	if (resource->caps.flags & POWER_METER_CAN_CAP) {
  		if (!can_cap_in_hardware()) {
