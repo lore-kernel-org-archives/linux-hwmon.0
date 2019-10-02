@@ -2,143 +2,232 @@ Return-Path: <SRS0=dESa=X3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 131D3C35280
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Oct 2019 13:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E7CC352AA
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Oct 2019 14:19:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9CA121783
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Oct 2019 13:43:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SfMmz+ye"
+	by mail.kernel.org (Postfix) with ESMTP id 00F17222C0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Oct 2019 14:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570025974;
+	bh=8GcmlDMDZWAKLDxx4ABFSzP4dQvqF3eFBKWBAB6jmKw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=ws6kdHK/pW4dz1PD5dDnxnO+1Nunnf/lQvbZLt3o41pmMWa8/+/Ai+iI21TriDsKL
+	 /MQHXl6liz+2vJDz2dP7HMOtj9UaSPMobkuvOrIejDrmeBlTCNzosAv/GnUg0heZzf
+	 FcuOyfCQDzx3PBR8w1d+0doQj+n0K/cN8Cyq0fbQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfJBNn3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Oct 2019 09:43:29 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36565 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfJBNn3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Oct 2019 09:43:29 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 23so3337822pgk.3;
-        Wed, 02 Oct 2019 06:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=M5CvC+h5yCnkY1BjUVLMtr/c8i3cN60VqIKOIpHtvR0=;
-        b=SfMmz+yepUgjUJaZKZzn6gbu3Z5O9wNPukhpzN1stfdz6II8TX823NUGrXE8Zj5Iew
-         xIBaBIIEH88OXjC4qkFTB196KxFxsjGgpkWGsPg+7VfO2nGWRfwXGOa3XOIBhl0uoI4m
-         SlptoPG9K5jx4UshfZNSvQKRNGE0xvF64uTzj6ypgi86le2gJfq9O57tJ2Mkw6kIYRE/
-         YRirAwlPLhfSb7YVPZ8fQU+RBr/SjbKt6fio88cAtIh4Q3BK0gCTDjsDK5OF6mkbgbMp
-         4Y7oFenstdJWRx90Agw1AnXu8m4ohqOCCj+e2jGVt01wSloLlxcUa20NvZll70xZt2oC
-         JHbQ==
+        id S1728285AbfJBOTd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Oct 2019 10:19:33 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42905 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728230AbfJBOTc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Oct 2019 10:19:32 -0400
+Received: by mail-qk1-f196.google.com with SMTP id f16so15120463qkl.9;
+        Wed, 02 Oct 2019 07:19:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=M5CvC+h5yCnkY1BjUVLMtr/c8i3cN60VqIKOIpHtvR0=;
-        b=EA9Gcav2ENzWAi1jXJL41FDwf1i3JXISg92l6DK/vuL9YAAe7V9HdGIe+hLTxqSMhB
-         I+bZni1IHawq4NS7yiwkVSAxldxIFW7+w9S1k3CL9d1L5zuvEzBXQKAZaX9cYeko8pPz
-         SLjtbsamM3/LLoFinrEfmdPjCQ5NrQHnf18ue7DicUvAH2zpyK8SOFNmOgvZYbGF/Bzh
-         6+yuVdtHVDSs9yhsEU8uVbd0O35ZVDvmBZiOdP75pZI15ZfigH+KXteVyHNAhXJHWexD
-         1NUiywAXDA6XyvLMVkS9QMUM8zG+S7opaUcyBvoJqWyQ+ul5aDjAIWF2XAccT5oj3Mg6
-         0NFg==
-X-Gm-Message-State: APjAAAVcd4WrLm6KBkytq/rxy/QoA10jTNBY5Zg0hMHK9h28q0/TudD9
-        J28JxSUedcjUc1C0oAKkhGI=
-X-Google-Smtp-Source: APXvYqyBzSF286Q4c2p0CJNW+7hZ36KWzPniD4/7nOlUmTS6twkinQLBRBfgggDW7uT38NPPcd6/5g==
-X-Received: by 2002:a63:d05:: with SMTP id c5mr3784421pgl.182.1570023808617;
-        Wed, 02 Oct 2019 06:43:28 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z29sm27937773pff.23.2019.10.02.06.43.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 02 Oct 2019 06:43:28 -0700 (PDT)
-Date:   Wed, 2 Oct 2019 06:43:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Amy.Shih@advantech.com.tw
-Cc:     she90122@gmail.com, oakley.ding@advantech.com.tw,
-        bichan.lu@advantech.com.tw, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v1,1/1] hwmon: (nct7904) Add array fan_alarm and vsen_alarm to
- store the alarms in nct7904_data struct.
-Message-ID: <20191002134327.GA9272@roeck-us.net>
-References: <20190919030205.11440-1-Amy.Shih@advantech.com.tw>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VeC18fTiDpCiD1aerTctLQt8HXgMuu1i7GcCOOIhItk=;
+        b=fxqxp3JP+8z1bqxsQrNjBgdPYMmdYCjy+lUY7YncNKsxb0gCwRkQI0hOHz5hl/B32T
+         TgPJ3u4ugmnjhTvEgt7f2HPXnP1HLAJ/h8yQ6TR+91U8eSissxysW5Xcdx9E0ue1jrXC
+         YQv5n+ZIrHDzgRSvMWJrgmjZHyNB9nsojUrnBYfRRTnhfJIuKbzgANrRko+sLgoQGvtw
+         BGxpHIt3SGVeiYf8rlS00F8fO3qDkqOXGYI8AC0bIB99HEYLYuJwITsyMa0eyZkAcL/S
+         9DTpJmlakTtvOA5XUhQj9ohDztaJMxoxOxXIDOTJLCpondsgrSMolaBnW4kSqeCYUQh4
+         whqg==
+X-Gm-Message-State: APjAAAWCJMXZbUibhdCsqy9OjmbchAdh3QLKWkl/3dVnWF7c4afnWnC/
+        CUVyH0+ELIUoNcbXA1cuqqnepBs+SA==
+X-Google-Smtp-Source: APXvYqxqx5bD5dNV83sTgSiMC7/tuoceP3pYCZ3E9rSZEdOBCkruX4sGwCdWY01UR+WhZB8WoI7dCA==
+X-Received: by 2002:a37:84c3:: with SMTP id g186mr3791944qkd.71.1570025971328;
+        Wed, 02 Oct 2019 07:19:31 -0700 (PDT)
+Received: from localhost ([132.205.230.8])
+        by smtp.gmail.com with ESMTPSA id 29sm9359711qkp.86.2019.10.02.07.19.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2019 07:19:30 -0700 (PDT)
+Date:   Wed, 02 Oct 2019 09:19:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 3/3] dt-bindings: iio: Add ltc2947 documentation
+Message-ID: <20191002002331.GA17502@bogus>
+References: <20190924124945.491326-1-nuno.sa@analog.com>
+ <20190924124945.491326-4-nuno.sa@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190919030205.11440-1-Amy.Shih@advantech.com.tw>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190924124945.491326-4-nuno.sa@analog.com>
+X-Mutt-References: <20190924124945.491326-4-nuno.sa@analog.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 11:02:05AM +0800, Amy.Shih@advantech.com.tw wrote:
-> From: "amy.shih" <amy.shih@advantech.com.tw>
+On Tue, Sep 24, 2019 at 02:49:45PM +0200, Nuno Sá wrote:
+> Document the LTC2947 device devicetree bindings.
 > 
-> SMI# interrupt for fan and voltage is Two-Times Interrupt Mode.
-> Fan or voltage exceeds high limit or going below low limit,
-> it will causes an interrupt if the previous interrupt has been
-> reset by reading all the interrupt Status Register. Thus, add the
-> array fan_alarm and vsen_alarm to store the alarms for all of the
-> fan and voltage sensors.
-> 
-> Signed-off-by: amy.shih <amy.shih@advantech.com.tw>
-
-Applied.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 > ---
->  drivers/hwmon/nct7904.c | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+>  .../bindings/hwmon/adi,ltc2947.yaml           | 101 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
 > 
-> diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-> index f62dd1882451..b26419dbe840 100644
-> --- a/drivers/hwmon/nct7904.c
-> +++ b/drivers/hwmon/nct7904.c
-> @@ -99,6 +99,8 @@ struct nct7904_data {
->  	u8 enable_dts;
->  	u8 has_dts;
->  	u8 temp_mode; /* 0: TR mode, 1: TD mode */
-> +	u8 fan_alarm[2];
-> +	u8 vsen_alarm[3];
->  };
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
+> new file mode 100644
+> index 000000000000..2ea0187421d4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
+> @@ -0,0 +1,101 @@
+
+Missing license. Please make new bindings (GPL-2.0-only OR BSD-2-Clause)
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bindings/hwmon/adi,ltc2947.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices LTC2947 high precision power and energy monitor
+> +
+> +maintainers:
+> +  - Nuno Sá <nuno.sa@analog.com>
+> +
+> +description: |
+> +  Analog Devices LTC2947 high precision power and energy monitor over SPI or I2C.
+> +
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/LTC2947.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ltc2947
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      The LTC2947 uses either a trimmed internal oscillator or an external clock
+> +      as the time base for determining the integration period to represent time,
+> +      charge and energy. When an external clock is used, this property must be
+> +      set accordingly.
+> +    maxItems: 1
+> +
+> +  adi,accumulator-ctl-pol:
+> +    description:
+> +      This property controls the polarity of current that is accumulated to
+> +      calculate charge and energy so that, they can be only accumulated for
+> +      positive current for example. Since there are two sets of registers for
+> +      the accumulated values, this entry can also have two items which sets
+> +      energy1/charge1 and energy2/charger2 respectively. Check table 12 of the
+> +      datasheet for more information on the supported options.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32-array
+> +      - enum: [0, 1, 2, 3]
+> +      - minItems: 2
+> +      - maxItems: 2
+> +    default: [0, 0]
+
+This should be:
+
+allOf:
+  - $ref: ...
+items:
+  enum: [0, 1, 2, 3]
+  default: 0
+minItems: 2
+maxItems: 2
+
+> +
+> +  adi,accumulation-deadband-microamp:
+> +    description:
+> +      This property controls the Accumulation Dead band which allows to set the
+> +      level of current below which no accumulation takes place.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - maximum: 255
+
+maximum should be at same indent as allOf. Or default should be at the 
+same level as maximum (under a single '-' list entry).
+
+> +    default: 0
+> +
+> +  adi,gpio-out-pol:
+> +    description:
+> +      This property controls the GPIO polarity. Setting it to one makes the GPIO
+> +      active high, setting it to zero makets it active low. When this property
+> +      is present, the GPIO is automatically configured as output and set to
+> +      control a fan as a function of measured temperature.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - enum: [0, 1]
+> +    default: 0
+
+Same here.
+
+> +
+> +  adi,gpio-in-accum:
+> +    description:
+> +      When set, this property sets the GPIO as input. It is then used to control
+> +      the accumulation of charge, energy and time. This function can be
+> +      enabled/configured separately for each of the two sets of accumulation
+> +      registers. Check table 13 of the datasheet for more information on the
+> +      supported options. This property cannot be used together with
+> +      adi,gpio-out-pol.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32-array
+> +      - enum: [0, 1, 2]
+> +      - minItems: 2
+> +      - maxItems: 2
+> +    default: [0, 0]
+
+Similar here.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +
+> +examples:
+> +  - |
+> +    spi0 {
+
+Just 'spi'
+
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +
+> +           ltc2947_spi: ltc2947@0 {
+> +                   compatible = "adi,ltc2947";
+> +                   reg = <0>;
+> +                   /* accumulation takes place always for energ1/charge1. */
+> +                   /* accumulation only on positive current for energy2/charge2. */
+> +                   adi,accumulator-ctl-pol = <0 1>;
+> +           };
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 889f38c1c930..820bdde2044b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9505,6 +9505,7 @@ F:	drivers/hwmon/ltc2947-core.c
+>  F:	drivers/hwmon/ltc2947-spi.c
+>  F:	drivers/hwmon/ltc2947-i2c.c
+>  F:	drivers/hwmon/ltc2947.h
+> +F:	Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
 >  
->  /* Access functions */
-> @@ -214,7 +216,15 @@ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
->  				       SMI_STS5_REG + (channel >> 3));
->  		if (ret < 0)
->  			return ret;
-> -		*val = (ret >> (channel & 0x07)) & 1;
-> +		if (!data->fan_alarm[channel >> 3])
-> +			data->fan_alarm[channel >> 3] = ret & 0xff;
-> +		else
-> +			/* If there is new alarm showing up */
-> +			data->fan_alarm[channel >> 3] |= (ret & 0xff);
-> +		*val = (data->fan_alarm[channel >> 3] >> (channel & 0x07)) & 1;
-> +		/* Needs to clean the alarm if alarm existing */
-> +		if (*val)
-> +			data->fan_alarm[channel >> 3] ^= 1 << (channel & 0x07);
->  		return 0;
->  	default:
->  		return -EOPNOTSUPP;
-> @@ -298,7 +308,15 @@ static int nct7904_read_in(struct device *dev, u32 attr, int channel,
->  				       SMI_STS1_REG + (index >> 3));
->  		if (ret < 0)
->  			return ret;
-> -		*val = (ret >> (index & 0x07)) & 1;
-> +		if (!data->vsen_alarm[index >> 3])
-> +			data->vsen_alarm[index >> 3] = ret & 0xff;
-> +		else
-> +			/* If there is new alarm showing up */
-> +			data->vsen_alarm[index >> 3] |= (ret & 0xff);
-> +		*val = (data->vsen_alarm[index >> 3] >> (index & 0x07)) & 1;
-> +		/* Needs to clean the alarm if alarm existing */
-> +		if (*val)
-> +			data->vsen_alarm[index >> 3] ^= 1 << (index & 0x07);
->  		return 0;
->  	default:
->  		return -EOPNOTSUPP;
+>  LTC4306 I2C MULTIPLEXER DRIVER
+>  M:	Michael Hennerich <michael.hennerich@analog.com>
+> -- 
+> 2.23.0
+> 
+
