@@ -2,151 +2,271 @@ Return-Path: <SRS0=ibG4=X4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F8B0C10F14
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 05:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC898ECE589
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 07:53:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D48B121D81
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 05:03:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A498321D81
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 07:53:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Em9mI2dW"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="0ljP/Xqk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727273AbfJCFDQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Oct 2019 01:03:16 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:46534 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726816AbfJCFDQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Oct 2019 01:03:16 -0400
-Received: by mail-pf1-f179.google.com with SMTP id q5so882300pfg.13
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Oct 2019 22:03:14 -0700 (PDT)
+        id S1727446AbfJCHxY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Oct 2019 03:53:24 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:40714 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728033AbfJCHxV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Oct 2019 03:53:21 -0400
+Received: by mail-oi1-f193.google.com with SMTP id k9so1735552oib.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A8kIKCzF5V61SxVRMNO8emQlkiU+nqSddsQSj8CrItY=;
-        b=Em9mI2dWCBh+kwLrq97UTsc0ukSXt/jw+/0gWXklaCD5amEJ3L1rEq8I9NrHQLGSJe
-         MNrmfpeB2JWIgto/wx2X3fHofsxo1QnnlTWcExIVvbDkTafzGLPQOZRratKb2QnXZDCl
-         m9/sUvSxuIDgBiVnirrb11i7n/gXHiPhiRRStk/BJ5qMTKDysgao+0sMobKWKperSw1X
-         VwKqxoxz4KWzoQBHZLrrmqt3av2iKtDgaTGQElJyVQ5pZ98LwRNCsKPc8qu5TqSWrcXf
-         dNO1/Ul3sIFWjcV3RobkQtNRG3xRybzR/HO9p8gAssyRBTUNktJIrKni7+DUMc5BhSmU
-         QFfg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
+        b=0ljP/Xqkv8mT++dxL9IDYrrnXlEv9lrJP90Bahq1OBLUXK3btgYh5wyHlZssI3YurN
+         pFDAkt12ppGUrER632fCfdihcSkLnFygz07D3eEGii2r2Puunq5JCKwhf/olqSyQJkhe
+         y4sxSAWaYpjr9f5Wrxp90qzT0eir6UjXXj2LeikUk8mVJIBX5nJR3znXBIO9CoTmsRr6
+         LkMnSa//LbiPkRtmhxr1iEvteUzvh1LjMwn00n5k+Q+R5FcGfpoYjlNwxgcL0FpK8Y1W
+         tjUDW9f2sxUGKn5ZjbjT1ogyxC+SzYQbv5HTFeCum1+SvlQU5DzEXntInmz46VsYXXrg
+         dQMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A8kIKCzF5V61SxVRMNO8emQlkiU+nqSddsQSj8CrItY=;
-        b=CvRz4/2pDY7RQYtIK3iR04kZH6qWwwxeRZ7zKsEW80eg0oR5RWlTgWHiuVSWLO4EyJ
-         Jx+QVYiLbcc9Q7cxhTOgxXj1CVVI7IHbAFl84oySnawCTYWNN+deCu76di19xFYsrP2H
-         9eqGhJGtZdM7EJCH5ZMD6FOntAGO/oRsc1lFNRjMmqPiq26Z44rz4tkOJTkmvR+zTbp1
-         qs4pUtwXO7s+dJYM8JNVbOgEv9WeDS9yaRujeUx35nZEOpXcIm5KdaSoD9o5up8buKnE
-         1Lgi39hzuDtG1/ZAWoxwru8QTEQaqitrHVJF5a10o90slL6wXHnx+73AN5F8Fxi7+lwe
-         oB7Q==
-X-Gm-Message-State: APjAAAWXSYrX7TEX2wDC5QZlyRaSkCiDoRhkMc6zY2unZ6k/khEeISLr
-        94h0Vdmy64lE+bPOr18A0NzJNuYg
-X-Google-Smtp-Source: APXvYqzoavEgDPT0GjMsr0y/rGPknUzHcsvf5NBsTxB2rTTcGGivkRRQDLN7TtznCXOMAr0q7RIzeQ==
-X-Received: by 2002:a63:6c81:: with SMTP id h123mr7656154pgc.132.1570078993668;
-        Wed, 02 Oct 2019 22:03:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d5sm816949pjw.31.2019.10.02.22.03.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 22:03:12 -0700 (PDT)
-Subject: Re: ABI for these two registers?
-To:     Nicolin Chen <nicoleotsuka@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <20190912002813.GA12433@Asurada-Nvidia.nvidia.com>
- <20190912183218.GA5065@roeck-us.net>
- <20190912210957.GA21945@Asurada-Nvidia.nvidia.com>
- <20190912220947.GA8072@roeck-us.net>
- <20190912224528.GA24937@Asurada-Nvidia.nvidia.com>
- <20190913001237.GA31111@Asurada-Nvidia.nvidia.com>
- <20191001221735.GA27958@Asurada-Nvidia.nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a863488c-29fa-394c-3e3a-2761d18a0052@roeck-us.net>
-Date:   Wed, 2 Oct 2019 22:03:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
+        b=s+Kp0QarFsRZjpQRnl/trm/x0Dp3SJlgolY4iJ8QM3iUFXA+LK/ieZzlPpfNdABZTv
+         iJw5B1+5mcRG8zMaI9auQrkjd336JG80F8ITFEVJ5slaJ6zJihbeBuwh92MjpoiXIoSX
+         18CvqV4Ya5TaZG8r0tGprGyNCRiTXb4f8dYD4O5cKgBMpM7Io4GIygx95xUvymfZ1T3Q
+         lFBpSWzpBEuObwtPsJe1i3pFI7GfIvyJLJeUFMdirxnwoNKV4sZ80U3jD/tWmUFYg6Ma
+         VczZHkJipqt/wYqmgCfqN5Z9z2pK9vCl7mWNa1IcJEOVyHCgknOSNfWMaizj3XgIleEw
+         otmQ==
+X-Gm-Message-State: APjAAAXZ1SO2kHNnDrott1CXtWVFUeo+Qd3xzfSA9WHddVsWyFX+R4gC
+        uiFZUu2AlyQlDsEK6hMbGlBKk0KT0mSevV7EkgT/FA==
+X-Google-Smtp-Source: APXvYqz7m7kCXZYIv7j5R46VZcpbdhhoa42pgCHxxwP/titPUyQPDIy7EJgb+avLl4yWojBI9F0QLe5D/MGpfKQJ+94=
+X-Received: by 2002:a54:4f8a:: with SMTP id g10mr1832202oiy.147.1570089199061;
+ Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191001221735.GA27958@Asurada-Nvidia.nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+In-Reply-To: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 3 Oct 2019 09:53:08 +0200
+Message-ID: <CAMpxmJUYZ-6p_uD=ktO+mDMZ3VooRkjLBwDVDieT1gvo3474uw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] docs: fix some broken references
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Steve French <sfrench@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/1/19 3:17 PM, Nicolin Chen wrote:
-> Hello Guenter,
-> 
-> It's been nearly three weeks. Would it be possible for you to
-> provide some advice on my latest questions? I'd like to write
-> code and submit changes once ABI is confirmed...
-> 
+wt., 24 wrz 2019 o 15:01 Mauro Carvalho Chehab
+<mchehab+samsung@kernel.org> napisa=C5=82(a):
+>
+> There are a number of documentation files that got moved or
+> renamed. update their references.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
+>  Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
+>  Documentation/driver-api/gpio/driver.rst                  | 2 +-
+>  Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
+>  Documentation/mips/ingenic-tcu.rst                        | 2 +-
+>  Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
+>  MAINTAINERS                                               | 2 +-
+>  drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
+>  drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
+>  fs/cifs/cifsfs.c                                          | 2 +-
+>  10 files changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/cpu/cpu-topology.txt b/Doc=
+umentation/devicetree/bindings/cpu/cpu-topology.txt
+> index 99918189403c..9bd530a35d14 100644
+> --- a/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+> +++ b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+> @@ -549,5 +549,5 @@ Example 3: HiFive Unleashed (RISC-V 64 bit, 4 core sy=
+stem)
+>  [2] Devicetree NUMA binding description
+>      Documentation/devicetree/bindings/numa.txt
+>  [3] RISC-V Linux kernel documentation
+> -    Documentation/devicetree/bindings/riscv/cpus.txt
+> +    Documentation/devicetree/bindings/riscv/cpus.yaml
+>  [4] https://www.devicetree.org/specifications/
+> diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Do=
+cumentation/devicetree/bindings/timer/ingenic,tcu.txt
+> index 5a4b9ddd9470..7f6fe20503f5 100644
+> --- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+> +++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+> @@ -2,7 +2,7 @@ Ingenic JZ47xx SoCs Timer/Counter Unit devicetree binding=
+s
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  For a description of the TCU hardware and drivers, have a look at
+> -Documentation/mips/ingenic-tcu.txt.
+> +Documentation/mips/ingenic-tcu.rst.
+>
+>  Required properties:
+>
+> diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/dri=
+ver-api/gpio/driver.rst
+> index 3fdb32422f8a..9076cc76d5bf 100644
+> --- a/Documentation/driver-api/gpio/driver.rst
+> +++ b/Documentation/driver-api/gpio/driver.rst
+> @@ -493,7 +493,7 @@ available but we try to move away from this:
+>    gpiochip. It will pass the struct gpio_chip* for the chip to all IRQ
+>    callbacks, so the callbacks need to embed the gpio_chip in its state
+>    container and obtain a pointer to the container using container_of().
+> -  (See Documentation/driver-model/design-patterns.txt)
+> +  (See Documentation/driver-api/driver-model/design-patterns.rst)
+>
+>  - gpiochip_irqchip_add_nested(): adds a nested cascaded irqchip to a gpi=
+ochip,
+>    as discussed above regarding different types of cascaded irqchips. The
+> diff --git a/Documentation/hwmon/inspur-ipsps1.rst b/Documentation/hwmon/=
+inspur-ipsps1.rst
+> index 2b871ae3448f..ed32a65c30e1 100644
+> --- a/Documentation/hwmon/inspur-ipsps1.rst
+> +++ b/Documentation/hwmon/inspur-ipsps1.rst
+> @@ -17,7 +17,7 @@ Usage Notes
+>  -----------
+>
+>  This driver does not auto-detect devices. You will have to instantiate t=
+he
+> -devices explicitly. Please see Documentation/i2c/instantiating-devices f=
+or
+> +devices explicitly. Please see Documentation/i2c/instantiating-devices.r=
+st for
+>  details.
+>
+>  Sysfs entries
+> diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/inge=
+nic-tcu.rst
+> index c4ef4c45aade..c5a646b14450 100644
+> --- a/Documentation/mips/ingenic-tcu.rst
+> +++ b/Documentation/mips/ingenic-tcu.rst
+> @@ -68,4 +68,4 @@ and frameworks can be controlled from the same register=
+s, all of these
+>  drivers access their registers through the same regmap.
+>
+>  For more information regarding the devicetree bindings of the TCU driver=
+s,
+> -have a look at Documentation/devicetree/bindings/mfd/ingenic,tcu.txt.
+> +have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
+> diff --git a/Documentation/networking/device_drivers/mellanox/mlx5.rst b/=
+Documentation/networking/device_drivers/mellanox/mlx5.rst
+> index d071c6b49e1f..a74422058351 100644
+> --- a/Documentation/networking/device_drivers/mellanox/mlx5.rst
+> +++ b/Documentation/networking/device_drivers/mellanox/mlx5.rst
+> @@ -258,7 +258,7 @@ mlx5 tracepoints
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  mlx5 driver provides internal trace points for tracking and debugging us=
+ing
+> -kernel tracepoints interfaces (refer to Documentation/trace/ftrase.rst).
+> +kernel tracepoints interfaces (refer to Documentation/trace/ftrace.rst).
+>
+>  For the list of support mlx5 events check /sys/kernel/debug/tracing/even=
+ts/mlx5/
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 54f1286087e9..65b7d9a0a44a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3680,7 +3680,7 @@ M:        Oleksij Rempel <o.rempel@pengutronix.de>
+>  R:     Pengutronix Kernel Team <kernel@pengutronix.de>
+>  L:     linux-can@vger.kernel.org
+>  S:     Maintained
+> -F:     Documentation/networking/j1939.txt
+> +F:     Documentation/networking/j1939.rst
+>  F:     net/can/j1939/
+>  F:     include/uapi/linux/can/j1939.h
+>
+> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ether=
+net/faraday/ftgmac100.c
+> index 9b7af94a40bb..8abe5e90d268 100644
+> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+> @@ -1835,7 +1835,7 @@ static int ftgmac100_probe(struct platform_device *=
+pdev)
+>                 }
+>
+>                 /* Indicate that we support PAUSE frames (see comment in
+> -                * Documentation/networking/phy.txt)
+> +                * Documentation/networking/phy.rst)
+>                  */
+>                 phy_support_asym_pause(phy);
+>
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_if.h b/drivers/net=
+/ethernet/pensando/ionic/ionic_if.h
+> index 5bfdda19f64d..80028f781c83 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_if.h
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_if.h
+> @@ -596,8 +596,8 @@ enum ionic_txq_desc_opcode {
+>   *                      the @encap is set, the device will
+>   *                      offload the outer header checksums using
+>   *                      LCO (local checksum offload) (see
+> - *                      Documentation/networking/checksum-
+> - *                      offloads.txt for more info).
+> + *                      Documentation/networking/checksum-offloads.rst
+> + *                      for more info).
+>   *
+>   *                   IONIC_TXQ_DESC_OPCODE_CSUM_HW:
+>   *
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index 2e9c7f493f99..811f510578cb 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -1529,7 +1529,7 @@ init_cifs(void)
+>         /*
+>          * Consider in future setting limit!=3D0 maybe to min(num_of_core=
+s - 1, 3)
+>          * so that we don't launch too many worker threads but
+> -        * Documentation/workqueue.txt recommends setting it to 0
+> +        * Documentation/core-api/workqueue.rst recommends setting it to =
+0
+>          */
+>
+>         /* WQ_UNBOUND allows decrypt tasks to run on any CPU */
+> --
+> 2.21.0
+>
 
-Non-standard attribute discussions always require a lot of time,
-since I have to re-read the chip documentation and try to understand
-the reasoning why the attributes are needed. On top of that,
-asking me "what should I do" instead of suggesting possible
-solutions for me to choose from takes even more time, which
-unfortunately I don't have right now. I'll try to get to it,
-but, sorry, I can not promise you a time right now.
+For GPIO:
 
-Guenter
-
-> Thank you!
-> 
-> On Thu, Sep 12, 2019 at 05:12:38PM -0700, Nicolin Chen wrote:
-> 
->>>>>>> Datasheet: http://www.ti.com/lit/ds/symlink/ina3221.pdf
->>>>>>> (At page 32, chapter 8.6.2.14 and 8.6.2.15)
->>>>>>>
->>>>>>> I have two registers that I need to expose to user space:
->>>>>>> 	Shunt-Voltage-Sum and Shunt-Voltage-Limit registers
->>>>>>>
->>>>>>> Right now in[123]_input of INA3221 are for voltage channels
->>>>>>> while in[456]_input are for Shunt voltage channels.
->>>>>>>
->>>>>>> So can I just use in7_input and in7_crit for them?
->>>>>>>
->>>>>> Doesn't Shunt-Voltage-Limit apply to in[456]_input ?
->>>>>> If so, the limit should be attached to those.
->>>>>
->>>>> The initial patch of ina3221 driver applied Shunt-Voltage-Limits,
->>>>> being named as "Critical Alert Limit Registers" in the datasheet,
->>>>> to curr[123]_crit, corresponding to curr[123] and in[456]_input.
->>>>>
->>>>> And this Shunt-Voltage-Limit-Sum is more related to the reading
->>>>> from Shunt-Voltage-Sum, which we just agreed it to be in7_input.
->>>>>
->>>> You didn't say Shunt-Voltage-Limit-Sum earlier. You said
->>>
->>> Ah....right...it's my fault. Sorry.
->>>
->>>> Shunt-Voltage-Limit. I would agree that Shunt-Voltage-Limit-Sum is
->>>> associated with Shunt-Voltage-Sum, but, again, that is not what you
->>>> said earlier. Confused :-(
->>>
->>> So, those two should be in7_input and in7_crit?
->>
->> And a couple of more questions upon it:
->>
->> 1) There are 3 control bits for the summation of this
->>     shunt-voltage-sum register to enable corresponding
->>     input channels. But in7_enable only allows users to
->>     en/disable all three channels at the same time. So
->>     how should I attach three enable bits using ABI?
->>     Or should I create a device-specific sysfs node?
->>
->> 2) We have a requirement of providing current-sum and
->>     current-limit-sum nodes, for use cases where those
->>     enabled channels use same value shunt resistors.
->>     It's similar to provide curr[1-3]_crit by dividing
->>     shunt[123]_resistor from in[456]_input. So could I
->>     deploy curr4_input and curr4_crit nodes for this
->>     requirement?
-> 
-
+Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
