@@ -2,132 +2,210 @@ Return-Path: <SRS0=ibG4=X4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAD72C4360C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 01:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60DC2C10F14
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 03:39:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA44F21A4C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 01:17:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 388F8222C5
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 03:39:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IVAGDgYf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cA5J+YJx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726002AbfJCBRq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Oct 2019 21:17:46 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46065 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfJCBRp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Oct 2019 21:17:45 -0400
-Received: by mail-pg1-f194.google.com with SMTP id q7so657625pgi.12;
-        Wed, 02 Oct 2019 18:17:45 -0700 (PDT)
+        id S1728600AbfJCDj3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Oct 2019 23:39:29 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43670 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728540AbfJCDj3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Oct 2019 23:39:29 -0400
+Received: by mail-pg1-f195.google.com with SMTP id v27so844663pgk.10;
+        Wed, 02 Oct 2019 20:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tSZmlKH2BrNCoI7JYxGwdsP9mWHj0/GO7SJu9GifiBw=;
-        b=IVAGDgYfR67IlFKtxR5jzwaTBrgZcj4TrbfjF3+hY6QxVbuXrnwaNCyTI8f7n3MX+J
-         FAKjW2MNbaCVXm+ItAGpRLoNTnHqsqyEBkr+RIcOBCr/oVlejxRYgj6SaqV5euxDXBey
-         6IbBvanUtoL/IsMO/86JS3FnRM0JkYY6U4wD886S0wYvWsI+lVDrrFR2FJJeVMTtyT8P
-         9uHrYzeZELX2tU3f0ZoGYl6RixvFAlUCXqhcdb+oM4EJfUm0IZexQL882APGqWMuZRk/
-         NzwGPhIKGeVQEtDB2D7MrGanh+442dOLHmMNKLqS/iEPCMgPzpmILB7INbBOzhEK6vJi
-         0K8w==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=E74AgWlIWK4quOmyTjQa6z3KmOpT3mcnqQYrU2yNDoM=;
+        b=cA5J+YJxCc5P1Qwx8TAT0OMpJZ1QI7l916cMcwZ3bpY5tsB0TqgNvhqH6QB3v36E7q
+         F7gcp/tCyEHN0yjzafN5RBmsCPebwS9Udgas1Q9R++AXTg4tae854+YreVaB3aPBtg9M
+         BYxuc8h++Ee+jkOpd0LzNAH5XvjQ/vHFaStt3T/YBaFT8axOmbhp+fGgPomIH2ZWUUCV
+         JffVnDhgO4GIJJdkE0ESzf7/XjLQDmIGLfVm7VSpDQ5SpRgW45lvacGbzSWHu7tEMKn8
+         A70CEAJrX8JjXGoQN79SJJOr9/WiGL+VohsVRXSFTgvsWLcDoo11zw7/cTAhLKEXrwE3
+         FqyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tSZmlKH2BrNCoI7JYxGwdsP9mWHj0/GO7SJu9GifiBw=;
-        b=aQBOm8Co/ts91BGv1pqdcuW/AKKN3x8E/Fsa1fPmHOj3jmPgBt6j197d4Xoh13V/y5
-         CIymbkttxdziN/C2nKujaLVn3Nma8GLvUlnGzPKOoRa8BJxdrWQyOqbFemFvMF3seoIZ
-         Sv7xZ0gz9EQMf7U4FoNI16bNZyvkFuuJddYYPiHIAzNwWwIkBy7kdlmJxnh19ry/q1cb
-         rg8ecMphaclVCgZfQQTdAZHxj3eXq5T3xTxKxHXHPtUIpxMr+uOsF/YxtuAhddhhlYKF
-         c5TAtm0UV2CExWm54SNwcXAAVDGydfmr5o4L6ikgfeio1WXTg7m75HxFI2PGVKMFaaO6
-         BNpA==
-X-Gm-Message-State: APjAAAWjtbRndKDSvfhY+Cy0gAtD02drN+JX4Ye2aTmpx0/Q9bLrqcin
-        iIGsCMWAD6RjKbRbFa/W7BqrT020
-X-Google-Smtp-Source: APXvYqwV9iAFUu0o3YMQ4v6zYNZassQaGttK3V+fHWMVMXXgoJ4dBGVmBgmZFv+B4H96JTtHtM/TXw==
-X-Received: by 2002:a17:90a:1502:: with SMTP id l2mr7565357pja.140.1570065464619;
-        Wed, 02 Oct 2019 18:17:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d20sm709584pfq.88.2019.10.02.18.17.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 18:17:42 -0700 (PDT)
-Subject: Re: [PATCH v2] hwmon: (applesmc) fix UB and udelay overflow
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     clang-built-linux <clang-built-linux@googlegroups.com>,
-        jdelvare@suse.com,
-        =?UTF-8?Q?Tomasz_Pawe=c5=82_Gajc?= <tpgxyz@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <CAKwvOd=GVdHhsdHOMpuhEKkWMssW37keqX5c59+6fiEgLs+Q1g@mail.gmail.com>
- <20190924174728.201464-1-ndesaulniers@google.com>
- <a2e08779-e0ba-2711-9e0d-444d812c0182@roeck-us.net>
- <CAKwvOdnG6tTHHx5aL8oA3ta_mW24aZ37JX+=HQ9YphearL4DOg@mail.gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E74AgWlIWK4quOmyTjQa6z3KmOpT3mcnqQYrU2yNDoM=;
+        b=VyWRiyUYh/FYEz+9nwfjItw8OuXKeUYEGtYyA/dc37DVlsWmW+8ILqHxPrKFeBXVaR
+         2W0YiU2F/uPjsCpq/EC9VJjUbbgqVPVsRV61ATmfZvCT+Z5Qd50xw5uyFedyMsKnF4zb
+         TN+li+/7MD3WEkh3Yg43duETNzxh/WhR6EfVXmN3qytk7/dpCRz6rOTA8XXUn6ojmpWL
+         bt8EdA/MYGW/FRl1Gp46Ey4s6ouanplsaqpcnc9/4A0nNQQTTlb/3xD0CDl4+qCoOuBF
+         BOy2vfYUpXuA/5FcDYyeJSJbScYUapf8BHycpafFzNDlwUxUAxXks/UDNja8uFwvEzMV
+         XcqQ==
+X-Gm-Message-State: APjAAAVjrcD5/Ko3iXm61US5IoO1S0Z1r4YO80QIirHtopMAhcW3XK8X
+        an1/fIsx29cqNZe1wVoViek=
+X-Google-Smtp-Source: APXvYqx3eGIVOiVRaXeGXTDBXfPTQoXIba8mM9xJUrE+Ncp6eYYLqxwRTC3DcqMo85oRTGHOgSCEOQ==
+X-Received: by 2002:a62:14c2:: with SMTP id 185mr8371105pfu.47.1570073968536;
+        Wed, 02 Oct 2019 20:39:28 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w6sm936399pfj.17.2019.10.02.20.39.26
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 02 Oct 2019 20:39:27 -0700 (PDT)
+Date:   Wed, 2 Oct 2019 20:39:26 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bde955d5-bfd4-3e0c-ac45-b999ad1cc96b@roeck-us.net>
-Date:   Wed, 2 Oct 2019 18:17:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Nicolas Boichat <nicolas@boichat.ch>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: applesmc: switch to using input device polling
+ mode
+Message-ID: <20191003033926.GA1301@roeck-us.net>
+References: <20191002214345.GA108728@dtor-ws>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdnG6tTHHx5aL8oA3ta_mW24aZ37JX+=HQ9YphearL4DOg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002214345.GA108728@dtor-ws>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/2/19 2:43 PM, Nick Desaulniers wrote:
-> On Mon, Sep 30, 2019 at 5:01 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Again, I fail to understand why waiting for a multiple of 20 seconds
->> under any circumstances would make any sense. Maybe the idea was
->> to divide us by 1000 before entering the second loop ?
+On Wed, Oct 02, 2019 at 02:43:45PM -0700, Dmitry Torokhov wrote:
+> Now that instances of input_dev support polling mode natively,
+> we no longer need to create input_polled_dev instance.
 > 
-> Yes, that's very clearly a mistake of mine.
-> 
->>
->> Looking into the code, there is no need to use udelay() in the first
->> place. It should be possible to replace the longer waits with
->> usleep_range(). Something like
->>
->>                  if (us < some_low_value)        // eg. 0x80
->>                          delay(us)
-> 
-> Did you mean udelay here?
-> 
-Yes
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
->>                  else
->>                          usleep_range(us, us * 2);
->>
->> should do, and at the same time prevent the system from turning
->> into a space heater.
-> 
-> The issue would persist with the above if udelay remains in a loop
-> that gets fully unrolled.  That's while I "peel" the loop into two
-> loops over different ranges with different bodies.
-> 
+Applied to hwmon-next.
 
-Sorry, you lost me. If calls to udelay() with even small delay
-parameters for some compiler-related reason no longer work, trying
-to fix the problem with some odd driver code is most definitely not
-a real solution.
-
-> I think I should iterate in the first loop until the number of `us` is
-> greater than 1000 (us per ms)(which is less of a magical constant and
-> doesn't expose internal implementation details of udelay), then start
-> the second loop (dividing us by 1000).  What do you think, Guenter?
-> 
-
-We should have no second loop, period.
-
-Again, a hot delay loop of 128 ms (actually, more like 245 ms,
-adding all delays together) is clearly wrong. Those udelay() calls
-in the driver should really be replaced with usleep_range().
+I don't know what 0-day is complaining about; the code builds
+fine for me with the supposedly failing configuration. We'll
+see if we get into trouble when the patch shows up in -next.
 
 Guenter
+
+> ---
+>  drivers/hwmon/Kconfig    |  1 -
+>  drivers/hwmon/applesmc.c | 38 ++++++++++++++++++--------------------
+>  2 files changed, 18 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 650dd71f9724..c5adca9cd465 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -299,7 +299,6 @@ config SENSORS_APPLESMC
+>  	depends on INPUT && X86
+>  	select NEW_LEDS
+>  	select LEDS_CLASS
+> -	select INPUT_POLLDEV
+>  	help
+>  	  This driver provides support for the Apple System Management
+>  	  Controller, which provides an accelerometer (Apple Sudden Motion
+> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+> index 183ff3d25129..ec93b8d673f5 100644
+> --- a/drivers/hwmon/applesmc.c
+> +++ b/drivers/hwmon/applesmc.c
+> @@ -19,7 +19,7 @@
+>  
+>  #include <linux/delay.h>
+>  #include <linux/platform_device.h>
+> -#include <linux/input-polldev.h>
+> +#include <linux/input.h>
+>  #include <linux/kernel.h>
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+> @@ -140,7 +140,7 @@ static s16 rest_y;
+>  static u8 backlight_state[2];
+>  
+>  static struct device *hwmon_dev;
+> -static struct input_polled_dev *applesmc_idev;
+> +static struct input_dev *applesmc_idev;
+>  
+>  /*
+>   * Last index written to key_at_index sysfs file, and value to use for all other
+> @@ -681,9 +681,8 @@ static void applesmc_calibrate(void)
+>  	rest_x = -rest_x;
+>  }
+>  
+> -static void applesmc_idev_poll(struct input_polled_dev *dev)
+> +static void applesmc_idev_poll(struct input_dev *idev)
+>  {
+> -	struct input_dev *idev = dev->input;
+>  	s16 x, y;
+>  
+>  	if (applesmc_read_s16(MOTION_SENSOR_X_KEY, &x))
+> @@ -1134,7 +1133,6 @@ static int applesmc_create_nodes(struct applesmc_node_group *groups, int num)
+>  /* Create accelerometer resources */
+>  static int applesmc_create_accelerometer(void)
+>  {
+> -	struct input_dev *idev;
+>  	int ret;
+>  
+>  	if (!smcreg.has_accelerometer)
+> @@ -1144,37 +1142,38 @@ static int applesmc_create_accelerometer(void)
+>  	if (ret)
+>  		goto out;
+>  
+> -	applesmc_idev = input_allocate_polled_device();
+> +	applesmc_idev = input_allocate_device();
+>  	if (!applesmc_idev) {
+>  		ret = -ENOMEM;
+>  		goto out_sysfs;
+>  	}
+>  
+> -	applesmc_idev->poll = applesmc_idev_poll;
+> -	applesmc_idev->poll_interval = APPLESMC_POLL_INTERVAL;
+> -
+>  	/* initial calibrate for the input device */
+>  	applesmc_calibrate();
+>  
+>  	/* initialize the input device */
+> -	idev = applesmc_idev->input;
+> -	idev->name = "applesmc";
+> -	idev->id.bustype = BUS_HOST;
+> -	idev->dev.parent = &pdev->dev;
+> -	idev->evbit[0] = BIT_MASK(EV_ABS);
+> -	input_set_abs_params(idev, ABS_X,
+> +	applesmc_idev->name = "applesmc";
+> +	applesmc_idev->id.bustype = BUS_HOST;
+> +	applesmc_idev->dev.parent = &pdev->dev;
+> +	input_set_abs_params(applesmc_idev, ABS_X,
+>  			-256, 256, APPLESMC_INPUT_FUZZ, APPLESMC_INPUT_FLAT);
+> -	input_set_abs_params(idev, ABS_Y,
+> +	input_set_abs_params(applesmc_idev, ABS_Y,
+>  			-256, 256, APPLESMC_INPUT_FUZZ, APPLESMC_INPUT_FLAT);
+>  
+> -	ret = input_register_polled_device(applesmc_idev);
+> +	ret = input_setup_polling(applesmc_idev, applesmc_idev_poll);
+> +	if (ret)
+> +		goto out_idev;
+> +
+> +	input_set_poll_interval(applesmc_idev, APPLESMC_POLL_INTERVAL);
+> +
+> +	ret = input_register_device(applesmc_idev);
+>  	if (ret)
+>  		goto out_idev;
+>  
+>  	return 0;
+>  
+>  out_idev:
+> -	input_free_polled_device(applesmc_idev);
+> +	input_free_device(applesmc_idev);
+>  
+>  out_sysfs:
+>  	applesmc_destroy_nodes(accelerometer_group);
+> @@ -1189,8 +1188,7 @@ static void applesmc_release_accelerometer(void)
+>  {
+>  	if (!smcreg.has_accelerometer)
+>  		return;
+> -	input_unregister_polled_device(applesmc_idev);
+> -	input_free_polled_device(applesmc_idev);
+> +	input_unregister_device(applesmc_idev);
+>  	applesmc_destroy_nodes(accelerometer_group);
+>  }
+>  
