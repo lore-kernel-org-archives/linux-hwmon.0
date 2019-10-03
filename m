@@ -2,271 +2,130 @@ Return-Path: <SRS0=ibG4=X4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC898ECE589
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 07:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C0BECE58B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 16:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A498321D81
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 07:53:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="0ljP/Xqk"
+	by mail.kernel.org (Postfix) with ESMTP id CC94721A4C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 16:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570120307;
+	bh=ZaoPHwtLHsvaA+ZAcx1/9Bq15BWjd0+3loZmP5V6Kmo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=0BCG39zUAPegikDBmEIBlIEUVY41U2QLLtQe4FBYyMjAoqnQMduw5jkVrTLdlmEal
+	 IHT0UmreMjKAOfaa7R3UsKVd928MVPZUmiSNr2ZS4yH3AX6bRwO3jSO1mqgdTo5+zu
+	 K1fleuGllxY0NYf3bc+MOq1mnXmHyRK9HaVDlfDQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbfJCHxY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Oct 2019 03:53:24 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40714 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728033AbfJCHxV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Oct 2019 03:53:21 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k9so1735552oib.7
-        for <linux-hwmon@vger.kernel.org>; Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
-        b=0ljP/Xqkv8mT++dxL9IDYrrnXlEv9lrJP90Bahq1OBLUXK3btgYh5wyHlZssI3YurN
-         pFDAkt12ppGUrER632fCfdihcSkLnFygz07D3eEGii2r2Puunq5JCKwhf/olqSyQJkhe
-         y4sxSAWaYpjr9f5Wrxp90qzT0eir6UjXXj2LeikUk8mVJIBX5nJR3znXBIO9CoTmsRr6
-         LkMnSa//LbiPkRtmhxr1iEvteUzvh1LjMwn00n5k+Q+R5FcGfpoYjlNwxgcL0FpK8Y1W
-         tjUDW9f2sxUGKn5ZjbjT1ogyxC+SzYQbv5HTFeCum1+SvlQU5DzEXntInmz46VsYXXrg
-         dQMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
-        b=s+Kp0QarFsRZjpQRnl/trm/x0Dp3SJlgolY4iJ8QM3iUFXA+LK/ieZzlPpfNdABZTv
-         iJw5B1+5mcRG8zMaI9auQrkjd336JG80F8ITFEVJ5slaJ6zJihbeBuwh92MjpoiXIoSX
-         18CvqV4Ya5TaZG8r0tGprGyNCRiTXb4f8dYD4O5cKgBMpM7Io4GIygx95xUvymfZ1T3Q
-         lFBpSWzpBEuObwtPsJe1i3pFI7GfIvyJLJeUFMdirxnwoNKV4sZ80U3jD/tWmUFYg6Ma
-         VczZHkJipqt/wYqmgCfqN5Z9z2pK9vCl7mWNa1IcJEOVyHCgknOSNfWMaizj3XgIleEw
-         otmQ==
-X-Gm-Message-State: APjAAAXZ1SO2kHNnDrott1CXtWVFUeo+Qd3xzfSA9WHddVsWyFX+R4gC
-        uiFZUu2AlyQlDsEK6hMbGlBKk0KT0mSevV7EkgT/FA==
-X-Google-Smtp-Source: APXvYqz7m7kCXZYIv7j5R46VZcpbdhhoa42pgCHxxwP/titPUyQPDIy7EJgb+avLl4yWojBI9F0QLe5D/MGpfKQJ+94=
-X-Received: by 2002:a54:4f8a:: with SMTP id g10mr1832202oiy.147.1570089199061;
- Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
-In-Reply-To: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 3 Oct 2019 09:53:08 +0200
-Message-ID: <CAMpxmJUYZ-6p_uD=ktO+mDMZ3VooRkjLBwDVDieT1gvo3474uw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] docs: fix some broken references
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S2391345AbfJCQbq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Oct 2019 12:31:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391344AbfJCQbo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 3 Oct 2019 12:31:44 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8FDB2054F;
+        Thu,  3 Oct 2019 16:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570120303;
+        bh=ZaoPHwtLHsvaA+ZAcx1/9Bq15BWjd0+3loZmP5V6Kmo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ooo2kDsLj58KJQELkg3e//65zb2XncDxGNOmpxqxJynuobcOmrn8goYnd0MGOLHOw
+         EhdIFaQnBNt5rqJUAy+Ua/wPq6ulyWkrpKhrH0+6nJLfSC1xf4GsFwZMbZmDKmlvU9
+         EdAZKEnwhT3elAVNwG3GHhzvy+3ebgPu6QLTxJxM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Vicki Pfau <vi@endrift.com>,
+        Marcel Bocu <marcel.p.bocu@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        "Woods, Brian" <Brian.Woods@amd.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Steve French <sfrench@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-hwmon@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.2 173/313] hwmon: (k10temp) Add support for AMD family 17h, model 70h CPUs
+Date:   Thu,  3 Oct 2019 17:52:31 +0200
+Message-Id: <20191003154550.029036243@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191003154533.590915454@linuxfoundation.org>
+References: <20191003154533.590915454@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-wt., 24 wrz 2019 o 15:01 Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> napisa=C5=82(a):
->
-> There are a number of documentation files that got moved or
-> renamed. update their references.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> ---
->  Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
->  Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
->  Documentation/driver-api/gpio/driver.rst                  | 2 +-
->  Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
->  Documentation/mips/ingenic-tcu.rst                        | 2 +-
->  Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
->  MAINTAINERS                                               | 2 +-
->  drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
->  drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
->  fs/cifs/cifsfs.c                                          | 2 +-
->  10 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/cpu/cpu-topology.txt b/Doc=
-umentation/devicetree/bindings/cpu/cpu-topology.txt
-> index 99918189403c..9bd530a35d14 100644
-> --- a/Documentation/devicetree/bindings/cpu/cpu-topology.txt
-> +++ b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
-> @@ -549,5 +549,5 @@ Example 3: HiFive Unleashed (RISC-V 64 bit, 4 core sy=
-stem)
->  [2] Devicetree NUMA binding description
->      Documentation/devicetree/bindings/numa.txt
->  [3] RISC-V Linux kernel documentation
-> -    Documentation/devicetree/bindings/riscv/cpus.txt
-> +    Documentation/devicetree/bindings/riscv/cpus.yaml
->  [4] https://www.devicetree.org/specifications/
-> diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Do=
-cumentation/devicetree/bindings/timer/ingenic,tcu.txt
-> index 5a4b9ddd9470..7f6fe20503f5 100644
-> --- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-> +++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-> @@ -2,7 +2,7 @@ Ingenic JZ47xx SoCs Timer/Counter Unit devicetree binding=
-s
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  For a description of the TCU hardware and drivers, have a look at
-> -Documentation/mips/ingenic-tcu.txt.
-> +Documentation/mips/ingenic-tcu.rst.
->
->  Required properties:
->
-> diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/dri=
-ver-api/gpio/driver.rst
-> index 3fdb32422f8a..9076cc76d5bf 100644
-> --- a/Documentation/driver-api/gpio/driver.rst
-> +++ b/Documentation/driver-api/gpio/driver.rst
-> @@ -493,7 +493,7 @@ available but we try to move away from this:
->    gpiochip. It will pass the struct gpio_chip* for the chip to all IRQ
->    callbacks, so the callbacks need to embed the gpio_chip in its state
->    container and obtain a pointer to the container using container_of().
-> -  (See Documentation/driver-model/design-patterns.txt)
-> +  (See Documentation/driver-api/driver-model/design-patterns.rst)
->
->  - gpiochip_irqchip_add_nested(): adds a nested cascaded irqchip to a gpi=
-ochip,
->    as discussed above regarding different types of cascaded irqchips. The
-> diff --git a/Documentation/hwmon/inspur-ipsps1.rst b/Documentation/hwmon/=
-inspur-ipsps1.rst
-> index 2b871ae3448f..ed32a65c30e1 100644
-> --- a/Documentation/hwmon/inspur-ipsps1.rst
-> +++ b/Documentation/hwmon/inspur-ipsps1.rst
-> @@ -17,7 +17,7 @@ Usage Notes
->  -----------
->
->  This driver does not auto-detect devices. You will have to instantiate t=
-he
-> -devices explicitly. Please see Documentation/i2c/instantiating-devices f=
-or
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.r=
-st for
->  details.
->
->  Sysfs entries
-> diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/inge=
-nic-tcu.rst
-> index c4ef4c45aade..c5a646b14450 100644
-> --- a/Documentation/mips/ingenic-tcu.rst
-> +++ b/Documentation/mips/ingenic-tcu.rst
-> @@ -68,4 +68,4 @@ and frameworks can be controlled from the same register=
-s, all of these
->  drivers access their registers through the same regmap.
->
->  For more information regarding the devicetree bindings of the TCU driver=
-s,
-> -have a look at Documentation/devicetree/bindings/mfd/ingenic,tcu.txt.
-> +have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
-> diff --git a/Documentation/networking/device_drivers/mellanox/mlx5.rst b/=
-Documentation/networking/device_drivers/mellanox/mlx5.rst
-> index d071c6b49e1f..a74422058351 100644
-> --- a/Documentation/networking/device_drivers/mellanox/mlx5.rst
-> +++ b/Documentation/networking/device_drivers/mellanox/mlx5.rst
-> @@ -258,7 +258,7 @@ mlx5 tracepoints
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  mlx5 driver provides internal trace points for tracking and debugging us=
-ing
-> -kernel tracepoints interfaces (refer to Documentation/trace/ftrase.rst).
-> +kernel tracepoints interfaces (refer to Documentation/trace/ftrace.rst).
->
->  For the list of support mlx5 events check /sys/kernel/debug/tracing/even=
-ts/mlx5/
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 54f1286087e9..65b7d9a0a44a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3680,7 +3680,7 @@ M:        Oleksij Rempel <o.rempel@pengutronix.de>
->  R:     Pengutronix Kernel Team <kernel@pengutronix.de>
->  L:     linux-can@vger.kernel.org
->  S:     Maintained
-> -F:     Documentation/networking/j1939.txt
-> +F:     Documentation/networking/j1939.rst
->  F:     net/can/j1939/
->  F:     include/uapi/linux/can/j1939.h
->
-> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ether=
-net/faraday/ftgmac100.c
-> index 9b7af94a40bb..8abe5e90d268 100644
-> --- a/drivers/net/ethernet/faraday/ftgmac100.c
-> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
-> @@ -1835,7 +1835,7 @@ static int ftgmac100_probe(struct platform_device *=
-pdev)
->                 }
->
->                 /* Indicate that we support PAUSE frames (see comment in
-> -                * Documentation/networking/phy.txt)
-> +                * Documentation/networking/phy.rst)
->                  */
->                 phy_support_asym_pause(phy);
->
-> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_if.h b/drivers/net=
-/ethernet/pensando/ionic/ionic_if.h
-> index 5bfdda19f64d..80028f781c83 100644
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_if.h
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_if.h
-> @@ -596,8 +596,8 @@ enum ionic_txq_desc_opcode {
->   *                      the @encap is set, the device will
->   *                      offload the outer header checksums using
->   *                      LCO (local checksum offload) (see
-> - *                      Documentation/networking/checksum-
-> - *                      offloads.txt for more info).
-> + *                      Documentation/networking/checksum-offloads.rst
-> + *                      for more info).
->   *
->   *                   IONIC_TXQ_DESC_OPCODE_CSUM_HW:
->   *
-> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-> index 2e9c7f493f99..811f510578cb 100644
-> --- a/fs/cifs/cifsfs.c
-> +++ b/fs/cifs/cifsfs.c
-> @@ -1529,7 +1529,7 @@ init_cifs(void)
->         /*
->          * Consider in future setting limit!=3D0 maybe to min(num_of_core=
-s - 1, 3)
->          * so that we don't launch too many worker threads but
-> -        * Documentation/workqueue.txt recommends setting it to 0
-> +        * Documentation/core-api/workqueue.rst recommends setting it to =
-0
->          */
->
->         /* WQ_UNBOUND allows decrypt tasks to run on any CPU */
-> --
-> 2.21.0
->
+From: Marcel Bocu <marcel.p.bocu@gmail.com>
 
-For GPIO:
+[ Upstream commit 12163cfbfc0f804cc7d27bc20e8d266ce7459260 ]
 
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+It would seem like model 70h is behaving in the same way as model 30h,
+so let's just add the new F3 PCI ID to the list of compatible devices.
+
+Unlike previous Ryzen/Threadripper, Ryzen gen 3 processors do not need
+temperature offsets anymore. This has been reported in the press and
+verified on my Ryzen 3700X by checking that the idle temperature
+reported by k10temp is matching the temperature reported by the
+firmware.
+
+Vicki Pfau sent an identical patch after I checked that no-one had
+written this patch. I would have been happy about dropping my patch but
+unlike for his patch series, I had already Cc:ed the x86 people and
+they already reviewed the changes. Since Vicki has not answered to
+any email after his initial series, let's assume she is on vacation
+and let's avoid duplication of reviews from the maintainers and merge
+my series. To acknowledge Vicki's anteriority, I added her S-o-b to
+the patch.
+
+v2, suggested by Guenter Roeck and Brian Woods:
+  - rename from 71h to 70h
+
+Signed-off-by: Vicki Pfau <vi@endrift.com>
+Signed-off-by: Marcel Bocu <marcel.p.bocu@gmail.com>
+Tested-by: Marcel Bocu <marcel.p.bocu@gmail.com>
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: "Woods, Brian" <Brian.Woods@amd.com>
+Cc: Clemens Ladisch <clemens@ladisch.de>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Link: https://lore.kernel.org/r/20190722174653.2391-1-marcel.p.bocu@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/k10temp.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index c77e89239dcd9..5c1dddde193c3 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -349,6 +349,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{}
+ };
+-- 
+2.20.1
+
+
+
