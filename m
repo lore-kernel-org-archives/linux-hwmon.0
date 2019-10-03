@@ -2,163 +2,153 @@ Return-Path: <SRS0=ibG4=X4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD9AC32792
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 17:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A63EC10F14
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 18:33:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3F1320673
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 17:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570122693;
-	bh=llSn4ydV9YXYEK8DA21d6QG0PtBC/cL9om0VFCk4OtM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Dj4s1+4T/0F3Yv1jsS9jfWDHkFSm67mLMMGKx38jXAljcySNu2u2FROTlzAzeB6W/
-	 JII84hJYqkCgEVsxQx/7QUen+AZBhI8S4uiGwB7aFuNNkaHRwba2rWoJPnzNcqUfJe
-	 6D7BkD5QxRzex+4OnChbuierO9fXYYbsJFTrhD9Y=
+	by mail.kernel.org (Postfix) with ESMTP id 19B0D20865
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Oct 2019 18:33:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="FWPocFi1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392216AbfJCRL3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Oct 2019 13:11:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403861AbfJCQbd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:31:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE248207FF;
-        Thu,  3 Oct 2019 16:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570120292;
-        bh=llSn4ydV9YXYEK8DA21d6QG0PtBC/cL9om0VFCk4OtM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jfU7Iy1xjP8zJmLSj4J1CuFHA+09RGyYahfe76eboPEikbWvHE9xN7j6ohM37hUId
-         3r++YCsXtyqNWtJB2FHwimXXBZ8m+spoCDVCxiexuiyUjJAMM3//JIyGYYwfKChfiC
-         Fd3jwQPb7peIpJSBEjFUL2lLaYNBiM7UwGqbPaqU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vicki Pfau <vi@endrift.com>,
-        Marcel Bocu <marcel.p.bocu@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Brian Woods <brian.woods@amd.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        "Woods, Brian" <Brian.Woods@amd.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.2 169/313] x86/amd_nb: Add PCI device IDs for family 17h, model 70h
-Date:   Thu,  3 Oct 2019 17:52:27 +0200
-Message-Id: <20191003154549.620139024@linuxfoundation.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191003154533.590915454@linuxfoundation.org>
-References: <20191003154533.590915454@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1730389AbfJCSdD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Oct 2019 14:33:03 -0400
+Received: from mx0b-002ab301.pphosted.com ([148.163.154.99]:23304 "EHLO
+        mx0b-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729993AbfJCSdD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 3 Oct 2019 14:33:03 -0400
+Received: from pps.filterd (m0118793.ppops.net [127.0.0.1])
+        by mx0b-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x93IFaTq021975
+        for <linux-hwmon@vger.kernel.org>; Thu, 3 Oct 2019 14:33:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pps-02182019;
+ bh=4m2g38uW6CApmjGfB+g/9jRasuTwINZx6iXkUhDfVyY=;
+ b=FWPocFi1uPfT1FRNuQiIw7hio8V6a0zeBM5HpCcszWDWLQ2vWRKEQGAcyoZzgHG3+XEh
+ IllP6eq3ygivUx0o8PqzlpRVUQjQ4UC/WF1g1Jsl6463miHrtxAPnPXLmmWocpOXdIi3
+ +VAG1ZiEHE0U6mpUj1BiTfojrV+oYd9JOycMZLPPKqxZnAIn+joTQ8g7rrGZpR6lokzk
+ gzBrvbOkPEAiREc/HD7aRDUDzkvNQwxJTXKfhgKzj2zUoJIHjSTX2x5RKUmg+7lzwg3y
+ 1YgmNUVLBi3CsdsGPKmA1p0D9V5w9MivvaXTLfi20015N5GpXreXAi/E+tU3Y3Fju0g1 bw== 
+Received: from nam04-bn3-obe.outbound.protection.outlook.com (mail-bn3nam04lp2050.outbound.protection.outlook.com [104.47.46.50])
+        by mx0b-002ab301.pphosted.com with ESMTP id 2vce5527f9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-hwmon@vger.kernel.org>; Thu, 03 Oct 2019 14:33:01 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I9Mcpeq5ZvnvL38AmkOP5vi0PEai/hxRObZWcwtJS4Jqb3Hh0AofXuM2OuKqFsAt9jilX5koUDItKZltMBoYkAIcJk5ZKLGpKErIGFhzDAn6XzjjstpLJZQG0dQmGjCfhtwJdHBMnLGFYqBY9WAjPxpNx6zICpmY+AWEM5GiX28NkvOxm/FMDcAYF46FJPsryMFDBR21YloN1ReQRSAnJYfeL9VztnsKTndhUKLIvdILQ4GjLrcrqBJZVb/TsFIgpTTXJc0s8SggajNE92ZpQct7/wMZVypjbod/Kh4uLIV7KTiAra/6rQIqod2gWYBfj6tWlb3HAgXN+uITZi0lBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4m2g38uW6CApmjGfB+g/9jRasuTwINZx6iXkUhDfVyY=;
+ b=b8Fb5V9HTtVGEOfwbaJbXKe9ZBCXpoOvKNKVuYYv3L6vTPS9icvMGWDSi9VFJHGQxXOoX2pMXu3JGTX4Ahk/eV3BGOPN6JcixLuOTgwyBn/+A4ddUsr0sNIjXREDdEU5QDKUC0u+Ql53XMy/ganxIaTLJLgS61TzglZPNdxFnEhWfuf1W2L7IK7vRi64RujkkDf+fNIp5MaeNx9sUARqjSbQFbyFgtFQdoyX0VnfGAS1dlafM29XTtEsq3biMJZX0zTvuUGGZy3l+IvhuCVbjJrc/8mjO9f8ZozFI9vBrfhwVvVyZtxye6IVSshY7ZCzs/C4lIaK35vSXIEcJ+xK2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=distech-controls.com; dmarc=pass action=none
+ header.from=distech-controls.com; dkim=pass header.d=distech-controls.com;
+ arc=none
+Received: from BL0PR01MB4835.prod.exchangelabs.com (20.177.147.211) by
+ BL0PR01MB4116.prod.exchangelabs.com (10.167.172.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.20; Thu, 3 Oct 2019 18:32:45 +0000
+Received: from BL0PR01MB4835.prod.exchangelabs.com
+ ([fe80::35e9:e131:c84f:e0a5]) by BL0PR01MB4835.prod.exchangelabs.com
+ ([fe80::35e9:e131:c84f:e0a5%3]) with mapi id 15.20.2305.023; Thu, 3 Oct 2019
+ 18:32:45 +0000
+From:   "Tremblay, Eric" <etremblay@distech-controls.com>
+To:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: [PATCH v3 0/2] hwmon: Add driver for Texas Instruments TMP512/513
+ sensor chips
+Thread-Topic: [PATCH v3 0/2] hwmon: Add driver for Texas Instruments
+ TMP512/513 sensor chips
+Thread-Index: AdV6F0hjy4+RpFt6R++XpWeNAWFJwg==
+Date:   Thu, 3 Oct 2019 18:32:45 +0000
+Message-ID: <BL0PR01MB48359D174C7CE498D7367B42959F0@BL0PR01MB4835.prod.exchangelabs.com>
+Accept-Language: en-CA, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mib-plugin: true
+x-originating-ip: [207.253.3.19]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d4c2f9e8-18fa-4254-cd79-08d74830157a
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: BL0PR01MB4116:
+x-microsoft-antispam-prvs: <BL0PR01MB4116BB5AD7B40219A8E6CD02959F0@BL0PR01MB4116.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1728;
+x-forefront-prvs: 01792087B6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(376002)(39860400002)(366004)(346002)(189003)(199004)(8936002)(2351001)(316002)(81156014)(8676002)(81166006)(14454004)(25786009)(102836004)(7696005)(478600001)(186003)(71190400001)(71200400001)(14444005)(305945005)(33656002)(76116006)(7736002)(66946007)(66556008)(64756008)(66446008)(74316002)(66476007)(476003)(256004)(486006)(6916009)(66066001)(5640700003)(6506007)(55016002)(6116002)(3846002)(6436002)(2501003)(5660300002)(52536014)(2906002)(9686003)(86362001)(99286004)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR01MB4116;H:BL0PR01MB4835.prod.exchangelabs.com;FPR:;SPF:None;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: distech-controls.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: E6DiuNzQtgoo7qEqDy+G8Whsn3MxxYTEeYXVE/0j4um1G2xPp+/ch+VNy6EjCrX6TUWLMzWZ91nyM8hiviGrwzgcuGQEPgtvcz0q1ow5b+MvSvn2vKo4hR8atPJWPeLEDXeVkjf8OZdmvzY84hUIx5aH/jqUzeJmEc8qQKA+YsbUDq09cwGrYoU09kz7fTvJXYcqUOZCnyNb1iZGspjDku7uI6z429eGI5jZT7Ux9/iOQnWf+OzIvXQLN9BPtQjK1eLKGqitIHv8Q5Lor/xEilNFH+y5wtyzdP+djT1N+SoJkFb1hJvi2mT8FAlr2pGATLcrD/JV8Qn29d8nwM8iQatPUFlSJloToJKVXLzapuDqny+P6DWfazS7wkIAmPSQB/kU/docCkwYL5NIz+0BR/EeNwwqTB4tqRUPYWB+iiU=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: distech-controls.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4c2f9e8-18fa-4254-cd79-08d74830157a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2019 18:32:45.1014
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: caadbe96-024e-4f67-82ec-fb28ff53d16d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BIJhB5ScRzr0ZAAWldxeRYtfcSjYpwrz83ooa45O/ag3/ZNgoPOSwqhB4/sAmb3lQj9VZ73YLqTl/2SRPjJ0nA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB4116
+X-Proofpoint-Processed: True
+X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 spamscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910030152
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Marcel Bocu <marcel.p.bocu@gmail.com>
+Version three of the driver for Texas Instruments TMP512/513 sensors.
 
-[ Upstream commit af4e1c5eca95bed1192d8dc45c8ed63aea2209e8 ]
+Thanks again for the review, I think we are getting close. I'm not in an ea=
+sy
+position for now to test the driver without device tree. I can put the requ=
+ired
+effort to
 
-The AMD Ryzen gen 3 processors came with a different PCI IDs for the
-function 3 & 4 which are used to access the SMN interface. The root
-PCI address however remained at the same address as the model 30h.
+Main changes from version 2:
+	- Remove the neccessity to provide a shunt-resistor value
+	- Remove max-expected-current-ma configuration and always
+	  use max possible current for calibration
+	- Make sure calculation during calibration can't overflow
+	- Add value clamping for DT value and runtime parameters
+	- Support non DT system
+	- Move hysteresis from DT to standard attribute
 
-Adding the F3/F4 PCI IDs respectively to the misc and link ids appear
-to be sufficient for k10temp, so let's add them and follow up on the
-patch if other functions need more tweaking.
+Main changes from version 1:
+	- Use the with_info API instead of sysfs attributes.
+	- Remove non-standard attributes and raw value.
+	- Move settings that were non-standard attributes to
+	  device tree, update documentation as well.
+	- Fix coding style issues
 
-Vicki Pfau sent an identical patch after I checked that no-one had
-written this patch. I would have been happy about dropping my patch but
-unlike for his patch series, I had already Cc:ed the x86 people and
-they already reviewed the changes. Since Vicki has not answered to
-any email after his initial series, let's assume she is on vacation
-and let's avoid duplication of reviews from the maintainers and merge
-my series. To acknowledge Vicki's anteriority, I added her S-o-b to
-the patch.
+Eric Tremblay (2):
+  Add driver for Texas Instruments TMP512/513 sensor chips.
+  Add DT bindings for TMP513 driver
 
-v2, suggested by Guenter Roeck and Brian Woods:
- - rename from 71h to 70h
+ .../devicetree/bindings/hwmon/tmp513.txt      |  33 +
+ Documentation/hwmon/tmp513.rst                | 102 ++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tmp513.c                        | 901 ++++++++++++++++++
+ include/linux/platform_data/tmp513.h          |  28 +
+ 7 files changed, 1082 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/tmp513.txt
+ create mode 100644 Documentation/hwmon/tmp513.rst
+ create mode 100644 drivers/hwmon/tmp513.c
+ create mode 100644 include/linux/platform_data/tmp513.h
 
-Signed-off-by: Vicki Pfau <vi@endrift.com>
-Signed-off-by: Marcel Bocu <marcel.p.bocu@gmail.com>
-Tested-by: Marcel Bocu <marcel.p.bocu@gmail.com>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Brian Woods <brian.woods@amd.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# pci_ids.h
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
-Cc: "Woods, Brian" <Brian.Woods@amd.com>
-Cc: Clemens Ladisch <clemens@ladisch.de>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Link: https://lore.kernel.org/r/20190722174510.2179-1-marcel.p.bocu@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/kernel/amd_nb.c | 3 +++
- include/linux/pci_ids.h  | 1 +
- 2 files changed, 4 insertions(+)
-
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 002aedc693933..8c26b696d8930 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -21,6 +21,7 @@
- #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
-+#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
- 
- /* Protect the PCI config register pairs used for SMN and DF indirect access. */
- static DEFINE_MUTEX(smn_mutex);
-@@ -50,6 +51,7 @@ const struct pci_device_id amd_nb_misc_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
- 	{}
- };
- EXPORT_SYMBOL_GPL(amd_nb_misc_ids);
-@@ -63,6 +65,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
- 	{}
- };
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 70e86148cb1e9..862556761bbf4 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -548,6 +548,7 @@
- #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
-+#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
- #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
- #define PCI_DEVICE_ID_AMD_LANCE		0x2000
- #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
--- 
-2.20.1
-
-
+--=20
+2.17.1
 
