@@ -2,191 +2,180 @@ Return-Path: <SRS0=Xc2u=X5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83D03ECE58B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Oct 2019 15:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D882BC47404
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Oct 2019 21:43:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C3812084D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Oct 2019 15:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570202599;
-	bh=fpWPXT8ggD/e+pn1BYIuXjDg5w4o0wtetCOExwO2jKI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=sqgfN2bvRjnJCK5btJaHUhjqZypBj2NM0jL428Jzgqkgdwjy6OxnyJhSFx9gnSI2e
-	 +JMW3TJqgetskmcs3pYkhKXZ0KD54gEiB8bnUQ+e5aIsf6RfwLAVspTzhKsHEH9iTg
-	 HtS2qtkesA1q2AVBdnbKlOlAsuNBCjHZvhq7sh5E=
+	by mail.kernel.org (Postfix) with ESMTP id A4A31222BE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Oct 2019 21:43:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MJ9Cw0wp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389539AbfJDPXS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Oct 2019 11:23:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389591AbfJDPXR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 4 Oct 2019 11:23:17 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1227B2133F;
-        Fri,  4 Oct 2019 15:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570202596;
-        bh=fpWPXT8ggD/e+pn1BYIuXjDg5w4o0wtetCOExwO2jKI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1HC8jaPP2G0MWAWxaAFL2+tq5ciAJ4x5mOg5CSEB8t19cEmbXeVfBzU87NzEzJYzU
-         /Z91Kt7mxYJejs3+VaDuSOptlGlIevhRK1zWaCkW9zPUgRvyhZzxjiGmh7mKcoePT9
-         drAO1mvoLrPQRMzwDU31x5pbXSxRgdfEwW1SGYRw=
-Received: by mail-qt1-f176.google.com with SMTP id 3so9098238qta.1;
-        Fri, 04 Oct 2019 08:23:16 -0700 (PDT)
-X-Gm-Message-State: APjAAAXSUdn19LnA+gvVYyJGm+dif/8LIaeRGUIF1pyZCbB5VdZYaHdB
-        S+/lz17ghZtQt6pvBApR4swTmCuGFozzIjf8gg==
-X-Google-Smtp-Source: APXvYqyMEEXcNS7O6u6Diqt8pCgl45a2tKKmM4tc+3EtuFfs+n4HBWeELngFdSwx5uOrLCiy+N5MR6jFrVyyPKoQlLc=
-X-Received: by 2002:ac8:6982:: with SMTP id o2mr16440439qtq.143.1570202595162;
- Fri, 04 Oct 2019 08:23:15 -0700 (PDT)
+        id S1730618AbfJDVnj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Oct 2019 17:43:39 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39807 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730325AbfJDVnj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Oct 2019 17:43:39 -0400
+Received: by mail-pg1-f196.google.com with SMTP id e1so4484283pgj.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Oct 2019 14:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
+        b=MJ9Cw0wp0Mh+XkAZ37PArMbq3cXXTtMOK8MgPDNXCkP0yXajJDHPB5xaYgU0YftimM
+         IZ9Xr5C2yJosZi22FLfNZvyhDcgs9mFbobfjnE1WeFcBQ21xU74RMtcoRM+q4pMigeCm
+         sJyAZ9okOsrTu89hmigncAMqTy1HVXQqwb/PM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
+        b=BVRAlhcCBxdZEycowR3pUwIpOIq4S2/sOAC9L3s+/Uboi9VbZA37egzcSl1tTl8JaB
+         5m9Vg0M6/20tysfoGY3vZ20kM942PzKLHPbH612IWMTGJelZtLeRsmLTRmBmu5U0FHRx
+         roEM4tahMj2b0Qk8Ccw/lfpwpZkLJPkAe9K4hlV7/wpmlicnVg+XeoOGRN/cU1L6MLoF
+         FnA6wseXvAsARcnSvPxzaL+y/w7gvm+4VHO8AaO0njk/sHtI5TWsY7CD6qTQLLm2YngY
+         8uaJgISe0pfYdq+tzxsRyOscTjo+P80anwXaOnoncaoB3LMwsGY1YvdQxZZk4ZVfTU5v
+         iMtg==
+X-Gm-Message-State: APjAAAU64EhAL7OznMGNW3db8KxCMq5tUsF4M11UavRyoblApzFja4oX
+        r4nW6sF6NKt9N82OLXTUgnWgqQ==
+X-Google-Smtp-Source: APXvYqy1SG4O+l1PxmR4D+2nW3K5VMykMwaSO5DOFDZyCRsqYuEK129X6z1/RcOxIP4TfZnnBe0BMw==
+X-Received: by 2002:a17:90a:e017:: with SMTP id u23mr4003152pjy.55.1570225416541;
+        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id a11sm10446799pfg.94.2019.10.04.14.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        alsa-devel@alsa-project.org, Andrew Lunn <andrew@lunn.ch>,
+        Arnd Bergmann <arnd@arndb.de>, Dan Murphy <dmurphy@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jean Delvare <jdelvare@suse.com>, Jiri Slaby <jslaby@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Riku Voipio <riku.voipio@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH 00/10] Stop NULLifying match pointer in of_match_device()
+Date:   Fri,  4 Oct 2019 14:43:24 -0700
+Message-Id: <20191004214334.149976-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
 MIME-Version: 1.0
-References: <20190924124945.491326-1-nuno.sa@analog.com> <20190924124945.491326-4-nuno.sa@analog.com>
- <20191002002331.GA17502@bogus> <a85b33d3cd24b4225e4be3a25221f9c56cdcca5c.camel@analog.com>
- <CAL_JsqJPFfUmOOQ-f_ibbTXdzgYxYMf2+7HCq2eBn_MkfRsdbQ@mail.gmail.com> <eec33c7156674770ca2f3033baed76c0e05a8587.camel@analog.com>
-In-Reply-To: <eec33c7156674770ca2f3033baed76c0e05a8587.camel@analog.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 4 Oct 2019 10:23:03 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK6oC1VFb4ni9pn9a=sfxWK9pAmBBgajpZwad5udFkPoA@mail.gmail.com>
-Message-ID: <CAL_JsqK6oC1VFb4ni9pn9a=sfxWK9pAmBBgajpZwad5udFkPoA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dt-bindings: iio: Add ltc2947 documentation
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 9:59 AM Sa, Nuno <Nuno.Sa@analog.com> wrote:
->
-> Hi Rob,
->
-> Just wanted to clarify something which I don't know if is something I'm
-> doing wrong or if it is some issue.
->
-> On Wed, 2019-10-02 at 14:06 -0500, Rob Herring wrote:
-> >
-> > On Wed, Oct 2, 2019 at 10:09 AM Sa, Nuno <Nuno.Sa@analog.com> wrote:
-> > > On Wed, 2019-10-02 at 09:19 -0500, Rob Herring wrote:
-> > > > On Tue, Sep 24, 2019 at 02:49:45PM +0200, Nuno S=C3=A1 wrote:
-> > > > > Document the LTC2947 device devicetree bindings.
-> > > > >
-> > > > > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > > > > ---
-> > > > >  .../bindings/hwmon/adi,ltc2947.yaml           | 101
-> > > > > ++++++++++++++++++
-> > > > >  MAINTAINERS                                   |   1 +
-> > > > >  2 files changed, 102 insertions(+)
-> > > > >  create mode 100644
-> > > > > Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
-> > > > >
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
-> > > > > b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..2ea0187421d4
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
-> > > > > @@ -0,0 +1,101 @@
-> > > >
-> > > > Missing license. Please make new bindings (GPL-2.0-only OR BSD-2-
-> > > > Clause)
-> > >
-> > > ack.
-> > >
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id:
-> > > > > http://devicetree.org/schemas/bindings/hwmon/adi,ltc2947.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Analog Devices LTC2947 high precision power and energy
-> > > > > monitor
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Nuno S=C3=A1 <nuno.sa@analog.com>
-> > > > > +
-> > > > > +description: |
-> > > > > +  Analog Devices LTC2947 high precision power and energy
-> > > > > monitor
-> > > > > over SPI or I2C.
-> > > > > +
-> > > > > +
-> > > > > https://www.analog.com/media/en/technical-documentation/data-shee=
-ts/LTC2947.pdf
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    enum:
-> > > > > +      - adi,ltc2947
-> > > > > +
-> > > > > +  reg:
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  clocks:
-> > > > > +    description:
-> > > > > +      The LTC2947 uses either a trimmed internal oscillator or
-> > > > > an
-> > > > > external clock
-> > > > > +      as the time base for determining the integration period
-> > > > > to
-> > > > > represent time,
-> > > > > +      charge and energy. When an external clock is used, this
-> > > > > property must be
-> > > > > +      set accordingly.
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  adi,accumulator-ctl-pol:
-> > > > > +    description:
-> > > > > +      This property controls the polarity of current that is
-> > > > > accumulated to
-> > > > > +      calculate charge and energy so that, they can be only
-> > > > > accumulated for
-> > > > > +      positive current for example. Since there are two sets
-> > > > > of
-> > > > > registers for
-> > > > > +      the accumulated values, this entry can also have two
-> > > > > items
-> > > > > which sets
-> > > > > +      energy1/charge1 and energy2/charger2 respectively. Check
-> > > > > table 12 of the
-> > > > > +      datasheet for more information on the supported options.
-> > > > > +    allOf:
-> > > > > +      - $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > > > +      - enum: [0, 1, 2, 3]
-> > > > > +      - minItems: 2
-> > > > > +      - maxItems: 2
-> > > > > +    default: [0, 0]
-> > > >
-> > > > This should be:
-> > > >
-> > > > allOf:
-> > > >   - $ref: ...
-> > > > items:
-> > > >   enum: [0, 1, 2, 3]
-> > > >   default: 0
-> > > > minItems: 2
-> > > > maxItems: 2
->
-> When trying the above I get:
->
-> "ltc2947@0: adi,accumulator-ctl-pol:0: [0, 1] is not valid under any of
-> the given schemas"
+of_match_device() uses of_match_ptr() to make the match table argument
+NULL via the pre-processor when CONFIG_OF=n. This makes life harder for
+compilers who think that match tables are never used and warn about
+unused variables when CONFIG_OF=n. This series changes various callers
+to use of_device_get_match_data() instead, which doesn't have this
+problem, and removes the of_match_ptr() usage from of_match_device() so
+that the compiler can stop complaining about unused variables. It will
+do dead code elimination instead and remove the match table if it isn't
+actually used.
 
-Is dtschema up to date with the latest. I think I fixed this case
-recently, though with the wonderful json-schema errors it is hard to
-tell.
+Huge Cc list!
 
-Rob
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: <alsa-devel@alsa-project.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Dan Murphy <dmurphy@ti.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Jacopo Mondi <jacopo@jmondi.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Jason Cooper <jason@lakedaemon.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: <linux-hwmon@vger.kernel.org>
+Cc: <linux-leds@vger.kernel.org>
+Cc: <linux-media@vger.kernel.org>
+Cc: <linux-omap@vger.kernel.org>
+Cc: <linux-renesas-soc@vger.kernel.org>
+Cc: <linux-rtc@vger.kernel.org>
+Cc: <linux-serial@vger.kernel.org>
+Cc: <linux-spi@vger.kernel.org>
+Cc: <linux-usb@vger.kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Richard Leitner <richard.leitner@skidata.com>
+Cc: Riku Voipio <riku.voipio@iki.fi>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.com>
+
+Stephen Boyd (10):
+  leds: pca953x: Use of_device_get_match_data()
+  media: renesas-ceu: Use of_device_get_match_data()
+  rtc: armada38x: Use of_device_get_match_data()
+  drivers: net: davinci_mdio: Use of_device_get_match_data()
+  serial: stm32: Use of_device_get_match_data()
+  usb: usb251xb: Use of_device_get_match_data()
+  ASoC: jz4740: Use of_device_get_match_data()
+  spi: gpio: Look for a device node instead of match
+  hwmon: (lm70) Avoid undefined reference to match table
+  of/device: Don't NULLify match table in of_match_device() with
+    CONFIG_OF=n
+
+ drivers/hwmon/lm70.c                   |  2 +-
+ drivers/leds/leds-pca9532.c            | 14 +----
+ drivers/media/platform/renesas-ceu.c   |  2 +-
+ drivers/net/ethernet/ti/davinci_mdio.c | 12 ++---
+ drivers/rtc/rtc-armada38x.c            | 10 ++--
+ drivers/spi/spi-gpio.c                 |  5 +-
+ drivers/tty/serial/stm32-usart.c       | 71 ++++++++++++--------------
+ drivers/tty/serial/stm32-usart.h       |  2 +-
+ drivers/usb/misc/usb251xb.c            | 12 ++---
+ include/linux/of_device.h              |  4 +-
+ sound/soc/jz4740/jz4740-i2s.c          |  5 +-
+ 11 files changed, 55 insertions(+), 84 deletions(-)
+
+
+base-commit: 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c
+-- 
+Sent by a computer through tubes
