@@ -2,129 +2,218 @@ Return-Path: <SRS0=qHdd=YC=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1FD1C47404
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Oct 2019 07:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B414C47404
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Oct 2019 10:28:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC66C206C0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Oct 2019 07:10:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C664220659
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Oct 2019 10:28:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="U0DCSFEN"
+	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="j7NcAu73"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbfJIHK6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Oct 2019 03:10:58 -0400
-Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:20862 "EHLO
-        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725440AbfJIHK6 (ORCPT
+        id S1728200AbfJIK2R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Oct 2019 06:28:17 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:33904 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727035AbfJIK2R (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 9 Oct 2019 03:10:58 -0400
-Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
-        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9973ERv004851;
-        Wed, 9 Oct 2019 03:10:32 -0400
-Received: from nam03-co1-obe.outbound.protection.outlook.com (mail-co1nam03lp2059.outbound.protection.outlook.com [104.47.40.59])
-        by mx0b-00128a01.pphosted.com with ESMTP id 2vemxax0rr-1
+        Wed, 9 Oct 2019 06:28:17 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x99AN1Js010197;
+        Wed, 9 Oct 2019 06:27:50 -0400
+Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2052.outbound.protection.outlook.com [104.47.38.52])
+        by mx0a-00128a01.pphosted.com with ESMTP id 2ven19wex2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Oct 2019 03:10:31 -0400
+        Wed, 09 Oct 2019 06:27:49 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GAyWHRIW88njW8c3WDSQ2b1XPJ1s5sGo/MA0e3NEjW2BdDylYo7EqopOkWCYSNRN6FE1kQKk/w1YjcbLOMjrVuojvkVJE/pjKpePR/pVm1wn3JfQ6s9r7OLx/IEw3fPTRR1JY0Qf0q/eNM+WcsBNKiITYFrYOcH8gvO+15n1Wczf5z5bssXAmaEzbag158bJe+kqTMl03saPOBeomNopjWAa+y3FdLOiFYXfR3u2SgHUhVxSZc8R0rTGS+dZRQDsvmQ9or565BbB4/ivNm6sE71hfLQ+sEw7hiDKRbF737fXmvt7zZbgxQCg720gpMl3fjolJUOT3QtyK6zea1cvCA==
+ b=hQfU5AeOObfLoM9wKjoPKApzHGNA5cbn06kdeOKmPWSWLtJScWMdj7GL5IaXBQ0CSX1nBS3WSbLB423TaDNcabrI5CqeOP4whtvbLfwMo75FCzPKv1Ip2+DRCmYiPYYTm4mh0w17rTI09IKVo9qTTLD1hA9D9CcguzIwUnTNIcPdbvOs+wP+TzTv1Kv3gtS2G2XcCPWh4n0XcbR8Mjxqgy/Io/HWoTNDKzEmgXI7x30Ag4XmgwIQ1dGqz9He98/PewoUEjY52UEudSFStEPiKc/b4qKBEPmL6NVemUef53dGcdWSKNXqURctsD4dFQhWBEsWc+oaeHwD2uqB+LpRZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F+EfPina4Xr5RSW96rtp0KDZTHf2uR88dhjiCp3+SLM=;
- b=kK0JD95M6KysPBSdjMswhc3WYlAxACEdyVkR0HPp4ZzbbA0kO345eawELpLjg/eBeFzHT2S/ij+zChh5XuJeOEr//ZVEGHg9YFVeg7ohblvWZBXyBaRM4qvZ2aOjYOLp7rkU23LjiDxevjpQdcBwsBAPChKSqRtpWV+Gr3JyhDffvyJb/fWSsxteW1GtrL6hzzxi05b5joBDgyczGNpG0Y+zZzFMtlPU8E0OjXBELwV2DVkHSHOZP+Co0E+iTui6OWeN1wLe0Z8WQld1Gz6AKZnpRzCYVn+PCOk4VIzBq8t2MyVBWB4983LwGfJMcCBo27zWa5v3ZDgeW2M3uo9Ycg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
+ bh=M4ApoNaQYSmKdwMP5XS1AMVARH/uiAnSDl6cNMUU2II=;
+ b=UTADDXuO9LIofMHo0awoVOAxM+h9JRO5jRhDriT8po8hr8LP5IekrOwBsDqv2Mkm0r5+S36U5563c0ZeekVD/bQFa6BBwyOxEYaEuVDI3hLe4E4e8xOfmeumOf8KL4cTPL+glTi/ErWJFpF0X16LribHzGF8B/AMz4vIwGhHmrkLaCEVgM/WqZq+lYMmq2mBhAperDkhZ3zHHyRXTulyxjJzSrTVXTsMT/K7iowpQFnZsdawDNnqeTF2Tw0Ua5ao9cOYojnFfjnuGcvRnLREJne0M1Vq7h74m18/udAFbELKdZYcaLYlXYcwh+R3ZrFTC6hRDvh9l1POEMzZ9f14UQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.55) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F+EfPina4Xr5RSW96rtp0KDZTHf2uR88dhjiCp3+SLM=;
- b=U0DCSFENgO3agBeOWxMxecolWNU20kKedqhJ/N0jAgVmczLpRCWPhM7LZMxSNC7dHfLmUk/l5CeWHWs36Lch2+m2fKi3A7nDfKYyWgqz7ggWMjbz8XyDZGcrUCmk4HgmGYksXf1JV4hud/oPDJlK+sMMq5r1nghPJWwgK+Hkhc8=
-Received: from MN2PR03MB5117.namprd03.prod.outlook.com (52.132.171.137) by
- MN2PR03MB5295.namprd03.prod.outlook.com (10.186.146.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16; Wed, 9 Oct 2019 07:10:30 +0000
-Received: from MN2PR03MB5117.namprd03.prod.outlook.com
- ([fe80::8c20:8f3b:b536:dca5]) by MN2PR03MB5117.namprd03.prod.outlook.com
- ([fe80::8c20:8f3b:b536:dca5%7]) with mapi id 15.20.2327.025; Wed, 9 Oct 2019
- 07:10:30 +0000
-From:   "Sa, Nuno" <Nuno.Sa@analog.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/3] hwmon: Support ADI Fan Control IP
-Thread-Topic: [PATCH 2/3] hwmon: Support ADI Fan Control IP
-Thread-Index: AQHVdFa03kFb3oEkSUeluAbSCPFerqdNzcGAgAMshQCAAEYwgIAAuD8A
-Date:   Wed, 9 Oct 2019 07:10:29 +0000
-Message-ID: <1d064ffa4eb0698121eca4862ee4d25e2140e333.camel@analog.com>
-References: <20190926103925.194973-1-nuno.sa@analog.com>
-         <20190926103925.194973-3-nuno.sa@analog.com>
-         <20191006153209.GA30372@roeck-us.net>
-         <1125a1f831a76b27ccc050a0db4499e5c4abd76c.camel@analog.com>
-         <20191008201129.GA14652@roeck-us.net>
-In-Reply-To: <20191008201129.GA14652@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [137.71.226.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8a691197-5f9c-42f0-9b94-08d74c87c4b9
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: MN2PR03MB5295:
-x-microsoft-antispam-prvs: <MN2PR03MB52955E5CAE30DE2B35DF30DD99950@MN2PR03MB5295.namprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3383;
-x-forefront-prvs: 018577E36E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(376002)(346002)(39860400002)(136003)(199004)(189003)(478600001)(66066001)(99286004)(71200400001)(8676002)(71190400001)(66946007)(66446008)(64756008)(5640700003)(54906003)(2906002)(81166006)(1730700003)(81156014)(316002)(26005)(6486002)(6506007)(6436002)(5660300002)(8936002)(256004)(91956017)(76116006)(2501003)(6512007)(66476007)(66556008)(186003)(102836004)(76176011)(4744005)(25786009)(86362001)(6916009)(118296001)(4326008)(229853002)(2616005)(6116002)(6246003)(3846002)(14454004)(486006)(446003)(305945005)(7736002)(11346002)(2351001)(36756003)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR03MB5295;H:MN2PR03MB5117.namprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: analog.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u/6M4XdrZWTm0vbqqBflwPkirpYaIu0f84ruZlQNuTWOiVBTbF0bCjqL8fv4taR86Zu2ALTHPNN7pod4KWVI4rXaIXD4aamYvCveWTnkaKHFjCoXt3EvHWy1SUNbwS2rTflgt6VlU0pxHPDDlkjvOcvLktGHYYxQO2koicwGl8LhGJ1rtZlw2Z9IKjN7eNpP3wB3H4UmDVs+2rrAiM7PciTXbGsD/NfeUApsOlRsT1OGr+1naNoh/V7QKTog5lLhn1SRM8jxgqEDZl/QuyatxFzVjThn802zOCOrmnhBwVs20rUq51D3Jo3FYMr8K5jV+X6/eWIU/C5cRb0xRgEbyb6ZsZu1hDJ1TCSn6DLBl4vVmDhQJVFo7cnFMjPXgmTQQrKV0TcF8GvghfYleFnKJuYo1OIa6FHz44o2YEt/pN8=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <638A2623C2F57C429791D8E55E70280B@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ bh=M4ApoNaQYSmKdwMP5XS1AMVARH/uiAnSDl6cNMUU2II=;
+ b=j7NcAu73gAhrKDmOkzT6uI8L1gw9CD/Ff9IhAuTFcSFLrUrG13g+mMzX0ou5Z08QiZccgj/IIB0BRJBzNdjVQZGVC9TyyBMHplTOK753EmkmOU+pSj61YEjQPKt9+yI88z1lNlJkNwBp79YPgFYydIb4t40L5iboBMKDACuxmY4=
+Received: from CY4PR03CA0105.namprd03.prod.outlook.com (2603:10b6:910:4d::46)
+ by DM6PR03MB5306.namprd03.prod.outlook.com (2603:10b6:5:243::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.16; Wed, 9 Oct
+ 2019 10:27:47 +0000
+Received: from BL2NAM02FT009.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e46::205) by CY4PR03CA0105.outlook.office365.com
+ (2603:10b6:910:4d::46) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.16 via Frontend
+ Transport; Wed, 9 Oct 2019 10:27:47 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ BL2NAM02FT009.mail.protection.outlook.com (10.152.77.68) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2347.16
+ via Frontend Transport; Wed, 9 Oct 2019 10:27:46 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x99ARewX003254
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Wed, 9 Oct 2019 03:27:40 -0700
+Received: from nsa.sphairon.box (10.44.3.90) by NWD2HUBCAS7.ad.analog.com
+ (10.64.69.107) with Microsoft SMTP Server (TLS) id 14.3.408.0; Wed, 9 Oct
+ 2019 06:27:46 -0400
+From:   =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH v2 2/2] dt-bindings: hwmon: Add AXI FAN Control documentation
+Date:   Wed, 9 Oct 2019 12:28:06 +0200
+Message-ID: <20191009102806.262241-2-nuno.sa@analog.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191009102806.262241-1-nuno.sa@analog.com>
+References: <20191009102806.262241-1-nuno.sa@analog.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.44.3.90]
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(136003)(346002)(376002)(396003)(199004)(189003)(4326008)(2616005)(966005)(53416004)(6666004)(356004)(6116002)(86362001)(126002)(305945005)(11346002)(7636002)(7736002)(446003)(36756003)(476003)(426003)(336012)(3846002)(486006)(50466002)(54906003)(316002)(110136005)(2906002)(2870700001)(478600001)(47776003)(45776006)(246002)(70586007)(106002)(8676002)(23676004)(186003)(1076003)(6306002)(5820100001)(76176011)(16526019)(50226002)(70206006)(26005)(5660300002)(14444005)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR03MB5306;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ff53a16-7e1a-40d5-bb64-08d74ca35414
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5306:
+X-MS-Exchange-PUrlCount: 4
+X-Microsoft-Antispam-PRVS: <DM6PR03MB53069968D367039C4DA8E68F99950@DM6PR03MB5306.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-Forefront-PRVS: 018577E36E
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Jb9vmWZGWrRZZbt9GREOygq2WDSp3y8ZyQjZaAXgGFt7TOGyXgE3M1DFcTevrhjsvXN88UTMnh/Y/jSc8ljO/8QxG0UgxVfcYV3+kHIyL6F4q0VQRXMqwgR8thKJd588/rRShM9uw6Kqf5JjdAXb4pgrgfFt5+JPvTZGVDuM1b6GqvRqxZi6e4vFyLvBN1x2/2VOUy85LG6WzqTM3NX8ubbSQITrwvJvmxrw1HbvuZAxh5hzMJ6F/kqotPQcUH3mk2++3JCGJZusTOmzCOF6Q8LleNPVY24O/YpN0/91Jqxdf2u74IvlUGdD5tSEUNyQzsXTKGeq/yle7Mg8mAcT6+9pDtwXYJmYmlWISLn7/SpAnNjIQYyU+GiiNiGUxiqQqve1N4AIjTlpL/kz3caq2BrM+uJFwQj/i86WCDgALx86JjogqKnnHFncVA7PR1H/FKnY2G7a4tqs37sa98lblw==
 X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a691197-5f9c-42f0-9b94-08d74c87c4b9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2019 07:10:29.9266
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2019 10:27:46.9791
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tkkqd90mkG63bq08tXwJNOWFw5sQe2t7otdYoLHaQajupNQtxdz+jhwIVBzzxXQyyBcwryF50bMh3biY+cEuCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5295
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ff53a16-7e1a-40d5-bb64-08d74ca35414
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5306
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-09_03:2019-10-08,2019-10-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- bulkscore=0 phishscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=916 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910090066
+ definitions=2019-10-09_05:2019-10-08,2019-10-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910090098
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-T24gVHVlLCAyMDE5LTEwLTA4IGF0IDEzOjExIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiANCj4gT24gVHVlLCBPY3QgMDgsIDIwMTkgYXQgMDM6NTk6NDlQTSArMDAwMCwgU2EsIE51bm8g
-d3JvdGU6DQo+IFsgLi4uIF0NCj4gPiA+ID4gKw0KPiA+ID4gPiArCWN0bC0+aXJxID0gcGxhdGZv
-cm1fZ2V0X2lycShwZGV2LCAwKTsNCj4gPiA+ID4gKwlpZiAoY3RsLT5pcnEgPCAwKSB7DQo+ID4g
-PiANCj4gPiA+IFRoaXMgY2FuIHJldHVybiAtRVBST0JFX0RFRkVSLiBPbiB0b3Agb2YgdGhhdCwg
-aXQgYWxyZWFkeQ0KPiA+ID4gZ2VuZXJhdGVzDQo+ID4gPiBhbiBlcnJvcg0KPiA+ID4gbWVzc2Fn
-ZSwgbWVhbmluZyBhbm90aGVyIG9uZSBoZXJlIGlzIHVubmVjZXNzYXJ5Lg0KPiA+IA0KPiA+IFdo
-eSByZXR1cm5pbmcgLUVQUk9CRV9ERUZFUj8gcGxhdGZvcm1fZ2V0X2lycSgpIGFscmVhZHkgc2Vl
-bXMgdG8NCj4gPiBoYW5kbGUNCj4gPiBFUFJPQkVfREVGRVIuLi4NCj4gPiANCj4gLi4uIHdoaWNo
-IGlzIGV4YWN0bHkgd2h5IEkgYW0gc2F5aW5nIHRoYXQgeW91IGRvbid0IG5lZWQgYW5vdGhlcg0K
-PiBlcnJvcg0KPiBtZXNzYWdlLCBhbmQgdGhhdCBhbiB1bmNvbmRpdGlvbmFsIGVycm9yIG1lc3Nh
-Z2UgaXMgYSBiYWQgaWRlYS4NCj4gDQoNCkFoaGgsIHNvcnJ5LiBJIGNvbXBsZXRlbHkgbWlzdW5k
-ZXJzdG9vZCB5b3UgOigNCg0KTnVubyBTw6ENCg0KPiBHdWVudGVyDQoNCg==
+Document the AXI FAN Control IP core devicetree bindings.
+
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+Changes in v2:
+ * Set the correct license for new bindings;
+ * Fix wrong compatible in the example;
+ * Wrap long line;
+ * Update adi,pulses-per-revolution with accepted values.
+
+ .../bindings/hwmon/adi,axi-fan-control.yaml   | 62 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 63 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+new file mode 100644
+index 000000000000..dc82b9748c9d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2019 Analog Devices Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/bindings/hwmon/adi,axi-fan-control.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices AXI FAN Control Device Tree Bindings
++
++maintainers:
++  - Nuno Sá <nuno.sa@analog.com>
++
++description: |+
++  Bindings for the Analog Devices AXI FAN Control driver. Spefications of the
++  core can be found in:
++
++  https://wiki.analog.com/resources/fpga/docs/axi_fan_control
++
++properties:
++  compatible:
++    enum:
++        - adi,axi-fan-control-1.00.a
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  adi,pulses-per-revolution:
++    description:
++      Value specifying the number of pulses per revolution of the controlled
++      FAN.
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [1, 2, 4]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++  - adi,pulses-per-revolution
++
++examples:
++  - |
++    fpga_axi: fpga-axi@0 {
++            #address-cells = <0x2>;
++            #size-cells = <0x1>;
++
++            axi_fan_control: axi-fan-control@80000000 {
++                    compatible = "adi,axi-fan-control-1.00.a";
++                    reg = <0x0 0x80000000 0x10000>;
++                    clocks = <&clk 71>;
++                    interrupts = <0 110 0>;
++                    adi,pulses-per-revolution = <2>;
++            };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index caa80ae1925e..74ddcb3e1fd9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2879,6 +2879,7 @@ W:	http://ez.analog.com/community/linux-device-drivers
+ L:	linux-hwmon@vger.kernel.org
+ S:	Supported
+ F:	drivers/hwmon/axi-fan-control.c
++F:	Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+ 
+ AXXIA I2C CONTROLLER
+ M:	Krzysztof Adamski <krzysztof.adamski@nokia.com>
+-- 
+2.23.0
+
