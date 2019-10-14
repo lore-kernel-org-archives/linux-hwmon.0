@@ -1,68 +1,97 @@
-Return-Path: <SRS0=jcbH=YG=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=VsDM=YH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDCB5C4360C
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Oct 2019 16:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A59C4CECE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Oct 2019 06:01:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B08482082F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Oct 2019 16:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570983307;
-	bh=ReCxrvQyss4Gu9D5Mk/fDAQW+YiAAggUYRtgud9uPG8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=QUheMvNZD4nAU84j4kZsduiPYNwwc/AE/EIoxIFqa5bYabe8+aow7W2j81VZb7IIV
-	 NGuri+RzKSLszdzI+orGo3yp5MxR1l9uKpXdxPSucofFbYKcXyxOwhbhzKx3sA9PMW
-	 gzLz2WENdUWEB7hIblktGtxzFMUAGs9G8qAj2W1o=
+	by mail.kernel.org (Postfix) with ESMTP id EAB6720650
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Oct 2019 06:01:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726085AbfJMQPG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 13 Oct 2019 12:15:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59704 "EHLO mail.kernel.org"
+        id S1729769AbfJNGBB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Oct 2019 02:01:01 -0400
+Received: from mga17.intel.com ([192.55.52.151]:8288 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728590AbfJMQPG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 13 Oct 2019 12:15:06 -0400
-Subject: Re: [GIT PULL] hwmon fixes for v5.4-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570983306;
-        bh=ReCxrvQyss4Gu9D5Mk/fDAQW+YiAAggUYRtgud9uPG8=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=wJDDAPEmsF9vIoC0Z+SAyqG9krGU9uo8wkMkFdT0bRkZcj4GxkpR8/AyCiGB+V4kA
-         jXaoZBJjfVPxB0JDzGKV7fxJMFR23rG97Jeid3EULAF6iQbGUjqrPsNlWLwRw3ZEEw
-         QrAF9kmsItsZeJaF3iKugFoQiDYN9+IzhgcV2WzU=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20191012220007.1384-1-linux@roeck-us.net>
-References: <20191012220007.1384-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20191012220007.1384-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.4-rc3
-X-PR-Tracked-Commit-Id: 11c943a1a635d2c7141b5b6667ebb521ab4ecd58
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2581efa9a47d3c9c349c6d6a2756a16bf69d3f4f
-Message-Id: <157098330598.26372.5257048621246308530.pr-tracker-bot@kernel.org>
-Date:   Sun, 13 Oct 2019 16:15:05 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1725936AbfJNGBB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 14 Oct 2019 02:01:01 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Oct 2019 23:01:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,294,1566889200"; 
+   d="scan'208";a="396381114"
+Received: from hao-dev.bj.intel.com ([10.238.157.65])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Oct 2019 23:00:59 -0700
+From:   Wu Hao <hao.wu@intel.com>
+To:     mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com, gregkh@linuxfoundation.org,
+        Wu Hao <hao.wu@intel.com>
+Subject: [PATCH v7 0/3] add thermal/power management features for FPGA DFL drivers
+Date:   Mon, 14 Oct 2019 13:42:00 +0800
+Message-Id: <1571031723-12101-1-git-send-email-hao.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sat, 12 Oct 2019 15:00:07 -0700:
+Hi Moritz and all,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.4-rc3
+This patchset adds thermal and power management features for FPGA DFL
+drivers. Both patches are using hwmon as userspace interfaces.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2581efa9a47d3c9c349c6d6a2756a16bf69d3f4f
+This patchset is created on top of 5.4-rc3, please help with review to see
+if any comments, thank you very much!
 
-Thank you!
+Main changes from v6:
+ - update kernel version and date in sysfs doc.
+
+Main changes from v5:
+ - rebase and clean up (remove empty uinit function) per changes in recent
+   merged dfl patches.
+ - update date in sysfs doc.
+
+Main changes from v4:
+ - rebase due to Documentation format change (dfl.txt -> rst).
+ - clamp threshold inputs for sysfs interfaces. (patch#3)
+ - update sysfs doc to add more description for ltr sysfs interfaces.
+   (patch#3)
+
+Main changes from v3:
+ - use HWMON_CHANNEL_INFO.
+
+Main changes from v2:
+ - switch to standard hwmon APIs for thermal hwmon:
+     temp1_alarm        --> temp1_max
+     temp1_alarm_status --> temp1_max_alarm
+     temp1_crit_status  --> temp1_crit_alarm
+     temp1_alarm_policy --> temp1_max_policy
+ - switch to standard hwmon APIs for power hwmon:
+     power1_cap         --> power1_max
+     power1_cap_status  --> power1_max_alarm
+     power1_crit_status --> power1_crit_alarm
+
+Wu Hao (2):
+  fpga: dfl: fme: add thermal management support
+  fpga: dfl: fme: add power management support
+
+Xu Yilun (1):
+  Documentation: fpga: dfl: add descriptions for thermal/power
+    management interfaces
+
+ Documentation/ABI/testing/sysfs-platform-dfl-fme | 132 ++++++++
+ Documentation/fpga/dfl.rst                       |  10 +
+ drivers/fpga/Kconfig                             |   2 +-
+ drivers/fpga/dfl-fme-main.c                      | 385 +++++++++++++++++++++++
+ 4 files changed, 528 insertions(+), 1 deletion(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+1.8.3.1
+
