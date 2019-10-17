@@ -2,108 +2,104 @@ Return-Path: <SRS0=sviu=YK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB2F8FA372A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A404DFA372A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:41:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DD612089C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:39:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 768242089C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:41:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hxy0x9pW"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zy0xVF3g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436565AbfJQNjE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Oct 2019 09:39:04 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37213 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388054AbfJQNjD (ORCPT
+        id S2436621AbfJQNlI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Oct 2019 09:41:08 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:44719 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436617AbfJQNlH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Oct 2019 09:39:03 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y5so1690028pfo.4;
-        Thu, 17 Oct 2019 06:39:03 -0700 (PDT)
+        Thu, 17 Oct 2019 09:41:07 -0400
+Received: by mail-pl1-f195.google.com with SMTP id q15so1143661pll.11;
+        Thu, 17 Oct 2019 06:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=j+SsM7b+serKOV0a1OL5fJKTRYrA8B2EbLYPvjwJqF0=;
-        b=Hxy0x9pWWQ9v1MYv0iktCe2UUJRjGUPJVPsf+fMy9I3MWgi5wa82Oc7+Aa2zGV9gmk
-         3y/dWcoYWmZR20eZ5nu4jVd/WtIQhkRStD2+lfUgZmTns6YfJmckhMGLaLwB2jVkdcC2
-         lViALbi67Xl3Ufl1frKuMSPH6BmSsSv4k3Fnnb5HvloAMxJ0xW+aeqnSN39k9c0smky9
-         lRrNNdg2E85cm5fDr37uq1KRYBU03cvg4av+it7dkIA+AeidNwqd49w3sHZn4tRt0h1a
-         yfJDEBYmHNjCrK/sffnnd4BkDDvQFWq6DmjdfTxa/F5sqoviHaC7/yuRSWCdJC6/FWoZ
-         emPg==
+        bh=TL3Bg7r1MXFPw1qs6Uz1yY89VM2LxUEc4gTHtQnByTU=;
+        b=Zy0xVF3gW175CXK55XKrdH/JLGDt7X4DOFuNpbYIGPoM14uKARAnqw7WcnM8zChdKb
+         pbzT13T67DsiJMFD8fgtHQ+/frSFrC+UkMZW4iPyvvaq5sUKJ7UmEHRwJH26u54fHRCK
+         gaRy6kNkw4M0jkSIbEYXiSOOx6wMx3Lw+lso7kMfXPgKd1iTKBTK8F2s8g9Dsltqpezj
+         n/+7TK0janpFmElAtHDN8Y1DLiLud+0DWAlLN8KsMGNTbrz/gUueF5kRvLknPkadhuFH
+         +0Su+pFYBqDdpfqgLPtkeH2LvTO74p3Gkpk4w4okqdvDKWSZC4dbUEZuHR22tWaUvDLW
+         Baqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=j+SsM7b+serKOV0a1OL5fJKTRYrA8B2EbLYPvjwJqF0=;
-        b=Q8Cad6UqmwrSUQ9GAbK7A+36zIVZdVCnmVGkd+tZ29kgvOVU4iIW2X4Ju020STwoCm
-         su0+3S7VLxKU6Sbjq9+Peced6ZSak74RDAAMaQ7gUginpLxCt4N/BjCk0k6oVbu0w+wt
-         ykIc07QRUTMIyhSgoX7hbiCJqyg9Nuqs0hjg0xhwmi4kISi+KN27gUYz9gxn7BC2AZ3W
-         vAUVeBapoPufBycRq9vi4+V201Ho7he1miiMgA1DtnwQs8lKtr7z1BUvp/9zMeXeyP9z
-         W8Zte6nH67brLmHQvrguEknxLaxBvclOG0cUuTkzSqoH+iKpcTFucV1KcIcpimLDkuUK
-         FL3g==
-X-Gm-Message-State: APjAAAVt/mAyk7JaHO/LKLfYje09pOtogv5zBfZv820YxAozG4nQPLnR
-        +S3LxMYmyo+i+mWbCbQs0nt8DJsq
-X-Google-Smtp-Source: APXvYqwivP6Moq2Hf1CSOnfBIzu4CkKMzsFVoLpK9HwneTAmWn06dYrwWR97qS3wohSUnruLSo2xlw==
-X-Received: by 2002:a17:90a:9416:: with SMTP id r22mr4519604pjo.20.1571319543083;
-        Thu, 17 Oct 2019 06:39:03 -0700 (PDT)
+        bh=TL3Bg7r1MXFPw1qs6Uz1yY89VM2LxUEc4gTHtQnByTU=;
+        b=fvpDt/DM+Cc/6hd6uycFP5jPqo/JMDoJgOAJe5FEt6x/plgYLG+0f5iifbrTT6KTZP
+         h2b31N+AU7eZU6X1Vlf+XDl5MhmX7BPzRDfV+0Sg22hdBfaUoW6PSDCbHjLzP34ByiYC
+         JhWszThwxnzJWIRKrQ4VwcuxS140UG3uTSTN6EduoHvvnWKFygz9IJXKW5k3MkAjkgn3
+         /HVeq4OfxZTJKgjA/D2pu3oQ8zFIdpetEiTqK4VklhQgEwUbbfyVPW8M6gRTCVvewvCL
+         bYf/ygt7dEqoYxK1R0vhPkt26Oinq6FmRxmIx0Wmv7ToQfiE8fDh3SQ+k4zrQQ/tJIT1
+         pdqA==
+X-Gm-Message-State: APjAAAUlbV0kv5VTHSkwyvXDG0JyIt/72DgntMTFO8yLFrTU7BDDtgqc
+        Ua6wEcKnSQ6gjutQ1vTpTug=
+X-Google-Smtp-Source: APXvYqwGQCGTWsGO+MsP8uWNdB9De0wiZ/ITWfcDFpRvFh1F4msaJNgw+5RJInI+8eM5QXmtXdgMpg==
+X-Received: by 2002:a17:902:ab82:: with SMTP id f2mr4192546plr.39.1571319667155;
+        Thu, 17 Oct 2019 06:41:07 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x23sm2962192pfq.140.2019.10.17.06.39.02
+        by smtp.gmail.com with ESMTPSA id p189sm2717695pfp.163.2019.10.17.06.41.06
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 17 Oct 2019 06:39:02 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 06:39:01 -0700
+        Thu, 17 Oct 2019 06:41:06 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 06:41:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Rudolf Marek <r.marek@assembler.cz>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: w83793d: remove redundant assignment to variable
- res
-Message-ID: <20191017133901.GA31691@roeck-us.net>
-References: <20191011170215.11539-1-colin.king@canonical.com>
+To:     Kyle Roeschley <kyle.roeschley@ni.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (tmp421) Allow reading at 2Hz instead of 0.5Hz
+Message-ID: <20191017134105.GA6766@roeck-us.net>
+References: <20191014140310.7438-1-kyle.roeschley@ni.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191011170215.11539-1-colin.king@canonical.com>
+In-Reply-To: <20191014140310.7438-1-kyle.roeschley@ni.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 06:02:15PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Mon, Oct 14, 2019 at 09:03:10AM -0500, Kyle Roeschley wrote:
+> Our driver configures the device to read at 2Hz, but then only allows the
+> user to read cached temp values at up to 0.5Hz. Let's allow users to read
+> as quickly as we do.
 > 
-> The variable res is being initialized with a value that
-> is never read and is being re-assigned a little later on. The
-> assignment is redundant and hence can be removed.
-> 
-> Addresses-Coverity: ("Unused value")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Signed-off-by: Kyle Roeschley <kyle.roeschley@ni.com>
 
-Applied. Note that I removed the above Addreddes-Coverity tag as
-it doesn't really make much sense.
+Applied.
 
+Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/w83793.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/tmp421.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-> index 9df48b70c70c..a0307e6761b8 100644
-> --- a/drivers/hwmon/w83793.c
-> +++ b/drivers/hwmon/w83793.c
-> @@ -2096,7 +2096,7 @@ static struct w83793_data *w83793_update_device(struct device *dev)
->  static u8 w83793_read_value(struct i2c_client *client, u16 reg)
->  {
->  	struct w83793_data *data = i2c_get_clientdata(client);
-> -	u8 res = 0xff;
-> +	u8 res;
->  	u8 new_bank = reg >> 8;
+> diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+> index a94e35cff3e5..83a4fab151d2 100644
+> --- a/drivers/hwmon/tmp421.c
+> +++ b/drivers/hwmon/tmp421.c
+> @@ -127,7 +127,8 @@ static struct tmp421_data *tmp421_update_device(struct device *dev)
 >  
->  	new_bank |= data->bank & 0xfc;
+>  	mutex_lock(&data->update_lock);
+>  
+> -	if (time_after(jiffies, data->last_updated + 2 * HZ) || !data->valid) {
+> +	if (time_after(jiffies, data->last_updated + (HZ / 2)) ||
+> +	    !data->valid) {
+>  		data->config = i2c_smbus_read_byte_data(client,
+>  			TMP421_CONFIG_REG_1);
+>  
