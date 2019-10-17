@@ -2,129 +2,108 @@ Return-Path: <SRS0=sviu=YK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D948ECE599
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 02:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A10ECE58E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:35:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D50132053B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 02:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571279718;
-	bh=WEQi3xqYKsiBa7+9EaRvYX5iGkUaUogniECZB1KQPA8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=ruGpvTS7A2usI7H8VZoIHa7NRKdJYiMgGhtWmILADBPdCaRsNojNldwg/EoOTsNkj
-	 7yBqRQHXqKZgk/qR3UQ/lr0Yk1zI1YaKtIqlFStVIPeG753BBc8C4nHjQLy33SEepR
-	 SwyQYelsxCb+eLYsHo/0vGrHcS5fkYNGAEUtynes=
+	by mail.kernel.org (Postfix) with ESMTP id B86672089C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Oct 2019 13:35:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PC7bB0Eu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407206AbfJQCfS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Oct 2019 22:35:18 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38244 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392062AbfJQCfS (ORCPT
+        id S2389333AbfJQNfw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Oct 2019 09:35:52 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32787 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729175AbfJQNfw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Oct 2019 22:35:18 -0400
-Received: by mail-pl1-f196.google.com with SMTP id w8so364759plq.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Oct 2019 19:35:17 -0700 (PDT)
+        Thu, 17 Oct 2019 09:35:52 -0400
+Received: by mail-pl1-f193.google.com with SMTP id d22so1162841pls.0;
+        Thu, 17 Oct 2019 06:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HRZw0egH7e60E3YrLTW6KLeAvZRaV263GSPwsEpHnaQ=;
+        b=PC7bB0Eu73Z6Uvaxmb6KnYDuSNuM2AN8soCupCW1kBQRAoQuiQ3XMxS58psBUAuNcV
+         /3X00l4GDcqb/gR/pCOa0q9X/ZGHZAe/Q0S0tZR+TXiK3dDaRBKGdMUf5VnO5JuU1vwG
+         9rNQMpsGcI0qA1EA1ytT15vLmbxNi7atUOOXveqw7NP4tPT/LEVreKz/CM/hS8kLubul
+         hvBcWSjmDUCZhG0+lH+oyM7yrZYkbzUBI8/Vv08a+PBpamEuHCyqwE4ulz4V7P4Q9735
+         HVvzenPVYP6Ox+XOfQfDgtG9yBq/ZeJBecofyVlHcYf8FG+TXoP2NgZ+hTnlUd9tIVCK
+         P3Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=43Gf/yYAFtrG7sahRKNPNsaeIiTcM4HYV2zVSsTuMgM=;
-        b=goxQKjeiGXH6WUSYfArSJ59S01qy+TD/E5c1UaU+ZXSxqsOtq4ztg9iVgRUUSti/xJ
-         W7uE2hd5jQ2SFA4y5F0YQH7Hgbs7z5ES63Il1ghwED50DJZY4xQmsTr4Nlh2LrdoNihP
-         86xhcZPYXxoCRHmoqqBHwLWHv8CW7OV96KfSS4Z6hQQOz+aVeuhQgur7qjWh3/kdVmdn
-         Qz8BBhu0z3QaGNvI7EQONDHRPLpcnXcvbhUrge76CfCXzHwcPdY4SHZHe/f6Tj9NhEUE
-         HNZIWBlaajBgzwZr9315yhX/5No3ulfbWOvr9u5NDEjajckmdOAnvnrQ+D45oMhjWXWL
-         wglQ==
-X-Gm-Message-State: APjAAAXhBiEey+xHXihCbveba89/ldcUaNV9ROYtPenXBraGUr0Fgr21
-        4+V1kCaYzEgt2+kA+WJRzfLc1w==
-X-Google-Smtp-Source: APXvYqxCTrUaZ2Kzs6nPSDuu9xgpUljXDq1m15jGwEzGZUZcbW3oIL9sEqdR7CTQCU6NCtDaZLsMIg==
-X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr1437108plr.277.1571279716458;
-        Wed, 16 Oct 2019 19:35:16 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:424:6361:2bd9:c43a:bc72])
-        by smtp.gmail.com with ESMTPSA id f62sm442225pfg.74.2019.10.16.19.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2019 19:35:15 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 19:35:14 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Wu Hao <hao.wu@intel.com>
-Cc:     mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v7 0/3] add thermal/power management features for FPGA
- DFL drivers
-Message-ID: <20191017023514.GA31676@archbox>
-References: <1571031723-12101-1-git-send-email-hao.wu@intel.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HRZw0egH7e60E3YrLTW6KLeAvZRaV263GSPwsEpHnaQ=;
+        b=CqMZYDD8kxVnOslTgzIQbK9m5zmXZDTZ/ma5OmBTRKcTMOvjBCW9EB71o9UrVWmubN
+         XYG8U1Xy7wsmuGcYc+iiBRdxkWnS5uHp9iXUGhiT5R1pvXnzImnIQKpPsPHcrNQTEVaX
+         1n3cbsinCV/lNNlk49dtxUwzIWs5BHTxDhCMEYAeNMIeIqleCX/oJyJdpnCoDW0C7jn1
+         xT9/YFUEx4kY5snAiC7OjnowBKTspSe0HYda7WeFVHG/VDs8f50Mhob3JoV+w9VJp/bz
+         bjsc+4IP14p0P7+N+GCpGmK8zM5dQWaKFAD5xLU6s4VOxyMTbKFs9FzZrHMf7u0kRRYi
+         5CbA==
+X-Gm-Message-State: APjAAAUgEnrZn0VQnT+bIpgNsf/UPPJToZfUEChA7aUiESfokmURsx+6
+        DnS+GdJMfnn8JPa8lyt/en4=
+X-Google-Smtp-Source: APXvYqzKxMWca29yudpmBf6GNcF/KRjzO/VPH35/hY7SFgA8oom/+W+0wulxVNjq5ZegK536zz9QrQ==
+X-Received: by 2002:a17:902:44d:: with SMTP id 71mr4092886ple.195.1571319351587;
+        Thu, 17 Oct 2019 06:35:51 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p24sm5582476pgc.72.2019.10.17.06.35.50
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 17 Oct 2019 06:35:51 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 06:35:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, jdelvare@suse.com,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Document ibm,cffps compatible
+ string
+Message-ID: <20191017133549.GA23352@roeck-us.net>
+References: <1570648262-25383-1-git-send-email-eajames@linux.ibm.com>
+ <1570648262-25383-2-git-send-email-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1571031723-12101-1-git-send-email-hao.wu@intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <1570648262-25383-2-git-send-email-eajames@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 01:42:00PM +0800, Wu Hao wrote:
-> Hi Moritz and all,
+On Wed, Oct 09, 2019 at 02:11:01PM -0500, Eddie James wrote:
+> Document this string that indicates that any version of the power supply
+> may be connected. In this case, the driver must detect the version
+> automatically.
 > 
-> This patchset adds thermal and power management features for FPGA DFL
-> drivers. Both patches are using hwmon as userspace interfaces.
-> 
-> This patchset is created on top of 5.4-rc3, please help with review to see
-> if any comments, thank you very much!
-> 
-> Main changes from v6:
->  - update kernel version and date in sysfs doc.
-> 
-> Main changes from v5:
->  - rebase and clean up (remove empty uinit function) per changes in recent
->    merged dfl patches.
->  - update date in sysfs doc.
-> 
-> Main changes from v4:
->  - rebase due to Documentation format change (dfl.txt -> rst).
->  - clamp threshold inputs for sysfs interfaces. (patch#3)
->  - update sysfs doc to add more description for ltr sysfs interfaces.
->    (patch#3)
-> 
-> Main changes from v3:
->  - use HWMON_CHANNEL_INFO.
-> 
-> Main changes from v2:
->  - switch to standard hwmon APIs for thermal hwmon:
->      temp1_alarm        --> temp1_max
->      temp1_alarm_status --> temp1_max_alarm
->      temp1_crit_status  --> temp1_crit_alarm
->      temp1_alarm_policy --> temp1_max_policy
->  - switch to standard hwmon APIs for power hwmon:
->      power1_cap         --> power1_max
->      power1_cap_status  --> power1_max_alarm
->      power1_crit_status --> power1_crit_alarm
-> 
-> Wu Hao (2):
->   fpga: dfl: fme: add thermal management support
->   fpga: dfl: fme: add power management support
-> 
-> Xu Yilun (1):
->   Documentation: fpga: dfl: add descriptions for thermal/power
->     management interfaces
-> 
->  Documentation/ABI/testing/sysfs-platform-dfl-fme | 132 ++++++++
->  Documentation/fpga/dfl.rst                       |  10 +
->  drivers/fpga/Kconfig                             |   2 +-
->  drivers/fpga/dfl-fme-main.c                      | 385 +++++++++++++++++++++++
->  4 files changed, 528 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 1.8.3.1
-> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Series applied.
+Applied.
 
 Thanks,
-Moritz
+Guenter
+
+> ---
+>  Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt b/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
+> index 1036f65..d9a2719 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
+> @@ -5,6 +5,9 @@ Required properties:
+>   - compatible				: Must be one of the following:
+>  						"ibm,cffps1"
+>  						"ibm,cffps2"
+> +						or "ibm,cffps" if the system
+> +						must support any version of the
+> +						power supply
+>   - reg = < I2C bus address >;		: Address of the power supply on the
+>  					  I2C bus.
+>  
