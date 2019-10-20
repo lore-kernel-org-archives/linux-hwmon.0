@@ -4,1061 +4,643 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9598CA9EA0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Oct 2019 16:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22022CA9EAD
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Oct 2019 16:12:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B3C7218BA
-	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Oct 2019 16:07:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2FAB21D80
+	for <linux-hwmon@archiver.kernel.org>; Sun, 20 Oct 2019 16:12:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TeYw3UI2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CfmBZJZA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbfJTQH6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 20 Oct 2019 12:07:58 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42714 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbfJTQH6 (ORCPT
+        id S1726485AbfJTQMg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 20 Oct 2019 12:12:36 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43725 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbfJTQMg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 20 Oct 2019 12:07:58 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f14so6117706pgi.9
-        for <linux-hwmon@vger.kernel.org>; Sun, 20 Oct 2019 09:07:55 -0700 (PDT)
+        Sun, 20 Oct 2019 12:12:36 -0400
+Received: by mail-pg1-f194.google.com with SMTP id l24so1203572pgh.10;
+        Sun, 20 Oct 2019 09:12:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OkvRX0y78W+CJNfHKwJcyu3qGnXbZajxRJAw0k/tGGQ=;
-        b=TeYw3UI2MHOYeikV5sW72y/qOkvhLl47Lw7Cpyxp/xJqa5StcNVArOw7qxo5HlkK/y
-         XPXEgRnWVXlne7yqOju9z4pJeDw3bYWAkm9v6bzoNgKha0ofXrG13tPFlPFbETS2jmUF
-         q+VYZWKYlRxLAFobeYrxzD3YwW7nBgQy7Pj+NIuC2sFtAJoschqj670yRYb2pJqkjO2+
-         RV451B1Pm9l21fOZbAkcLzorhxc/l2N9XqJppcVPIi6NfR9ElXbG56BkBKFdvQ9vlrgf
-         aOc4Cor0j3NQ8MWE+hLp2aGT04K32Gdhh0JR+GnA85+GMaIBclIbLDcXEBLpDRQNsQmb
-         oesw==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=N2vUzMWvxctopwaIty53Xn6Eu6Vntr0uF6mbiVGNHCs=;
+        b=CfmBZJZAnLmLvpis9JBQpxauv5ejHQOJDlvAmIW2XPYZD2V5d8mj+dALtDj/cwpwQ5
+         jonEaf5pvszX9zqxnRRZIizPXuXPliFQMFVkyAKWz9vFABJDa8ANd5K2SMfExh2Urpuq
+         ifP7zaEBNdLGyihye9t7KhksNjwo5ORAtfYfqpWn+sXCJ8PlVj6bCs+H8AJXXn7/fpsO
+         qp3y14LMuLoBqg315TiG9LlTXnTOrapIRy2DrkQbVBWFPHif0KEpSQ8hU0JWA8NVIrW+
+         aqTkrtIWGWqla03EfCEGc8TW3R4L+qQMgnhKyxdMANBKJKhtknf0f06/BYDanCzC5Psd
+         2L5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OkvRX0y78W+CJNfHKwJcyu3qGnXbZajxRJAw0k/tGGQ=;
-        b=U7JbRnlSvxqUoCc2LTJF7CSdgXyCLuSGX5TCtc8rw5sQsBp3fE3NAzGaODIfAdA4zv
-         sVdfLb0Vzb0L+wnMsGlu60me0nUy7BWDhb8J4ur2nfYUQlQje89QZQ5f0K89Z541AwEo
-         3Nio4vRa6iSgCIFKWqGOZenifSCqS6Q76OOlPY/CWluc/wPrrtvj+l6GKWseO/oSnBaN
-         p+YmvGXeVPk7t1YxFZZVkIv+j3k9ELqrrwaVWGKG/7pvNBDsZ9LwR12LOL2Xd1XLxk9Z
-         eggt8312Kb+PUmFryW5s7EPtKeuJwrtM5qhlCuDsyIfc9xOV1EgTsslWqoBxk48vBAFb
-         eM0g==
-X-Gm-Message-State: APjAAAX1fDuI8MEXgrTla9V8MGL3oF0ujqrL+8bqWQnrWye1iEbwT5pN
-        rBUUeHn/7Sjcu+cyaLV7W0l2YEHD
-X-Google-Smtp-Source: APXvYqyMXJwnjnlgm+xn6IUDFIelpPS2EwSi9Kyn2ZVYfnHxQwLBFHHcOJKkJ7dhKL6upMEPjqh01g==
-X-Received: by 2002:a62:3203:: with SMTP id y3mr17482614pfy.221.1571587675230;
-        Sun, 20 Oct 2019 09:07:55 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=N2vUzMWvxctopwaIty53Xn6Eu6Vntr0uF6mbiVGNHCs=;
+        b=NL0Nb5XcYPY65s/aLg+JaVNkfeK4QBJBwWlKc6vbUBcLw6tEAHMP6u83yk/6c5+vjj
+         tFFCn4RW0RZbcltM6psIW10JvfIhat5jw4z3vY3zbt4bt2tmZdJGEWB0RPhmBP+5h0Pp
+         WRdLfsqWJaO334160dGDH1FfaPX/s3c6JYOYeQqY24ByhnmOnzFIEM0baqTqI3aNqiCw
+         p14XmDwqg3yjWT1OXbVaQYmTSgBKls/7sqNSr+jy1ovWkq6hkJHU5g31nqLv/V9pxLJl
+         IELLD8Qcznvuc6+WixFuaKrykcQqhqvtOrs4DGUpHm9vJfovDzUT2JIeps4LBdPc70ZJ
+         K0eQ==
+X-Gm-Message-State: APjAAAWTJW6tdHkF7TE9I+4Kzr52c7ey+d4+m3+wqW9SxNyUr7SVfT2Y
+        7K8zV7AlIkkHzWbdoarjntU1lpBe
+X-Google-Smtp-Source: APXvYqzqsmI5UBrTGsN2AX4iQgWVO4TqFySQTAAaBhzMH75l5DFJXMjbjmPgvOpeEW2IAOTzbSE2Xw==
+X-Received: by 2002:a17:90a:ba8d:: with SMTP id t13mr23376041pjr.129.1571587953015;
+        Sun, 20 Oct 2019 09:12:33 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 37sm10909857pgv.32.2019.10.20.09.07.54
+        by smtp.gmail.com with ESMTPSA id 6sm11599846pgl.40.2019.10.20.09.12.32
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 20 Oct 2019 09:07:54 -0700 (PDT)
-Date:   Sun, 20 Oct 2019 09:07:53 -0700
+        Sun, 20 Oct 2019 09:12:32 -0700 (PDT)
+Date:   Sun, 20 Oct 2019 09:12:31 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Tremblay, Eric" <etremblay@distech-controls.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] hwmon: Add driver for Texas Instruments
- TMP512/513 sensor chips
-Message-ID: <20191020160753.GA26733@roeck-us.net>
-References: <BL0PR01MB48356AEBFDF834887F090A46959B0@BL0PR01MB4835.prod.exchangelabs.com>
+To:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2 1/2] hwmon: Support ADI Fan Control IP
+Message-ID: <20191020161231.GA27783@roeck-us.net>
+References: <20191009102806.262241-1-nuno.sa@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <BL0PR01MB48356AEBFDF834887F090A46959B0@BL0PR01MB4835.prod.exchangelabs.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191009102806.262241-1-nuno.sa@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 08:46:22PM +0000, Tremblay, Eric wrote:
-> hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
+On Wed, Oct 09, 2019 at 12:28:05PM +0200, Nuno Sá wrote:
+> The purpose of this IP Core is to control the fan used for the cooling of a
+> Xilinx Zynq Ultrascale+ MPSoC without the need of any external temperature
+> sensors. To achieve this, the IP core uses the PL SYSMONE4 primitive to
+> obtain the PL temperature and, based on those readings, it then outputs
+> a PWM signal to control the fan rotation accordingly.
 > 
-> TI's TMP512/513 are I2C/SMBus system monitor chips. These chips
-> monitor the supply voltage, supply current, power consumption
-> and provide one local and up to three (TMP513) remote temperature sensors.
-> 
-> It has been tested using a TI TMP513 development kit (TMP513EVM)
-> 
-> Signed-off-by: Eric Tremblay <etremblay@distech-controls.com>
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
->  Documentation/hwmon/tmp513.rst | 102 +++++
->  MAINTAINERS                    |   7 +
->  drivers/hwmon/Kconfig          |  10 +
->  drivers/hwmon/Makefile         |   1 +
->  drivers/hwmon/tmp513.c         | 795 +++++++++++++++++++++++++++++++++
->  5 files changed, 915 insertions(+)
->  create mode 100644 Documentation/hwmon/tmp513.rst
->  create mode 100644 drivers/hwmon/tmp513.c
+> Changes in v2:
+>  * define AXI_PCORE macros in the driver source for now;
+>  * include linux/bits.h;
+>  * axi_fan_control_io{read/write} renamed with shorter names;
+>  * Make sure tach is != 0 when getting the fan rpm;
+>  * Read only once the clk rate;
+>  * Remove unneeded struct clk;
+>  * Fixed typo in millidegrees;
+>  * Use devm_platform_ioremap_resource();
+>  * Remove unneeded error logs;
+>  * Check valid values for pulses per revolution;
+>  * Clear the fault attribute after reading it;
+>  * Notify userspace if HW changed the PWM;
+>  * Add comments on how the core works in other to better understand the IRQ handling.
 > 
-> diff --git a/Documentation/hwmon/tmp513.rst b/Documentation/hwmon/tmp513.rst
-> new file mode 100644
-> index 000000000000..b3837748ca7e
-> --- /dev/null
-> +++ b/Documentation/hwmon/tmp513.rst
-> @@ -0,0 +1,102 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +Kernel driver tmp513
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * Texas Instruments TMP512
-> +
-> +    Prefix: 'tmp512'
-> +
-> +    Datasheet: http://www.ti.com/lit/ds/symlink/tmp512.pdf
-> +
-> +  * Texas Instruments TMP513
-> +
-> +    Prefix: 'tmp513'
-> +
-> +    Datasheet: http://www.ti.com/lit/ds/symlink/tmp513.pdf
-> +
-> +Authors:
-> +
-> +	Eric Tremblay <etremblay@distech-controls.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Texas Instruments TMP512, and TMP513
-> +temperature and power supply sensor chips. These chips implement one
-> +local and up to three (TMP513) temperature sensors. The chips also implement
-> +power supply monitoring such as shunt voltage, shunt current, bus voltage
-> +and power consumption.
-> +
-> +The temperatures are measured in degrees Celsius with a range of
-> +-40 to + 125 degrees with a resolution of 0.0625 degree C.
-> +
-> +For hysteresis value, only the first channel is writable. Writing to it
-> +will affect all other values since each channels are sharing the same
-> +hysteresis value. The hysteresis is in degrees Celsius with a range of
-> +0 to 127.5 degrees with a resolution of 0.5 degree.
-> +
-> +The driver exports the temperature values via the following sysfs files:
-> +
-> +**temp[1-4]_input**
-> +
-> +**temp[1-4]_crit**
-> +
-> +**temp[1-4]_crit_alarm**
-> +
-> +**temp[1-4]_crit_hyst**
-> +
-> +The shunt voltage is measured in micro volts. There are four configurable
-> +range: 320mV, 160mV, 80mV and 40mV all of them with a resolution of 10 uV.
-> +The range depends on the pga gain specified in the device tree
-> +with "pga-gain" (default to 8). The range will be equal to pga gain
-> +multiply by 40mV.
-> +
-> +The driver exports the shunt voltage values via the following sysFs files:
-> +
-> +**in0_input**
-> +
-> +**in0_lcrit**
-> +
-> +**in0_lcrit_alarm**
-> +
-> +**in0_crit**
-> +
-> +**in0_crit_alarm**
-> +
-> +The bus voltage is measured in milli volts. There are two configuable
-> +range: 32V and 16V both with a resolution of 4mV. It can be configured in the
-> +device tree with "bus-voltage-range" (default to 32V);
-> +
-> +The driver exports the bus voltage values via the following sysFs files:
-> +
-> +**in0_input**
-> +
-> +**in0_lcrit**
-> +
-> +**in0_lcrit_alarm**
-> +
-> +**in0_crit**
-> +
-> +**in0_crit_alarm**
-> +
-> +The power and the currents range and resolution depends on the calibration
-> +register value. Those values are calculate by the hardware using those
-> +formula:
-> +
-> +Current = (ShuntVoltage * CalibrationRegister) / 4096
-> +Power   = (Current * BusVoltage) / 5000
-> +
-> +The driver exports the current and power values via the following sysFs files:
-> +
-> +**curr0_input**
-> +
-> +**power1_input**
-> +
-> +**power1_crit**
-> +
-> +**power1_crit_alarm**
-> +
-> +The calibration process follow the procedure of the datasheet (without overflow)
-> +and depend on the shunt resistor value and the pga_gain value.
+>  MAINTAINERS                     |   7 +
+>  drivers/hwmon/Kconfig           |   9 +
+>  drivers/hwmon/Makefile          |   1 +
+>  drivers/hwmon/axi-fan-control.c | 473 ++++++++++++++++++++++++++++++++
+>  4 files changed, 490 insertions(+)
+>  create mode 100644 drivers/hwmon/axi-fan-control.c
+> 
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 55199ef7fa74..64b36fa3a436 100644
+> index 296de2b51c83..caa80ae1925e 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -16373,6 +16373,13 @@ S:	Maintained
->  F:	Documentation/hwmon/tmp401.rst
->  F:	drivers/hwmon/tmp401.c
+> @@ -2873,6 +2873,13 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/sound/axentia,*
+>  F:	sound/soc/atmel/tse850-pcm5142.c
 >  
-> +TMP513 HARDWARE MONITOR DRIVER
-> +M:	Eric Tremblay <etremblay@distech-controls.com>
+> +AXI-FAN-CONTROL HARDWARE MONITOR DRIVER
+> +M:	Nuno Sá <nuno.sa@analog.com>
+> +W:	http://ez.analog.com/community/linux-device-drivers
 > +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/tmp513.rst
-> +F:	drivers/hwmon/tmp513.c
+> +S:	Supported
+> +F:	drivers/hwmon/axi-fan-control.c
 > +
->  TMPFS (SHMEM FILESYSTEM)
->  M:	Hugh Dickins <hughd@google.com>
->  L:	linux-mm@kvack.org
+>  AXXIA I2C CONTROLLER
+>  M:	Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>  L:	linux-i2c@vger.kernel.org
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 13a6b4afb4b3..926e3c98dbdf 100644
+> index 7b6c4025b827..ca53bb33b965 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -1709,6 +1709,16 @@ config SENSORS_TMP421
+> @@ -269,6 +269,15 @@ config SENSORS_ASC7621
 >  	  This driver can also be built as a module. If so, the module
->  	  will be called tmp421.
+>  	  will be called asc7621.
 >  
-> +config SENSORS_TMP513
-> +	tristate "Texas Instruments TMP513 and compatibles"
-> +	depends on I2C
+> +config SENSORS_AXI_FAN_CONTROL
+> +	tristate "Analog Devices FAN Control HDL Core driver"
 > +	help
-> +	  If you say yes here you get support for Texas Instruments TMP512,
-> +	  and TMP513 temperature and power supply sensor chips.
+> +	  If you say yes here you get support for the Analog Devices
+> +	  AXI HDL FAN monitoring core.
 > +
 > +	  This driver can also be built as a module. If so, the module
-> +	  will be called tmp513.
+> +	  will be called axi-fan-control
 > +
->  config SENSORS_VEXPRESS
->  	tristate "Versatile Express"
->  	depends on VEXPRESS_CONFIG
+>  config SENSORS_K8TEMP
+>  	tristate "AMD Athlon64/FX or Opteron temperature sensor"
+>  	depends on X86 && PCI
 > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 40c036ea45e6..762642291914 100644
+> index 40c036ea45e6..dcb4b64e1f4d 100644
 > --- a/drivers/hwmon/Makefile
 > +++ b/drivers/hwmon/Makefile
-> @@ -166,6 +166,7 @@ obj-$(CONFIG_SENSORS_TMP103)	+= tmp103.o
->  obj-$(CONFIG_SENSORS_TMP108)	+= tmp108.o
->  obj-$(CONFIG_SENSORS_TMP401)	+= tmp401.o
->  obj-$(CONFIG_SENSORS_TMP421)	+= tmp421.o
-> +obj-$(CONFIG_SENSORS_TMP513)	+= tmp513.o
->  obj-$(CONFIG_SENSORS_VEXPRESS)	+= vexpress-hwmon.o
->  obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
->  obj-$(CONFIG_SENSORS_VIA686A)	+= via686a.o
-> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+> @@ -51,6 +51,7 @@ obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
+>  obj-$(CONFIG_SENSORS_ASC7621)	+= asc7621.o
+>  obj-$(CONFIG_SENSORS_ASPEED)	+= aspeed-pwm-tacho.o
+>  obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
+> +obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+>  obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+>  obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
+>  obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
+> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
 > new file mode 100644
-> index 000000000000..2b086cc6d7c2
+> index 000000000000..6c1bd3269c8c
 > --- /dev/null
-> +++ b/drivers/hwmon/tmp513.c
-> @@ -0,0 +1,795 @@
+> +++ b/drivers/hwmon/axi-fan-control.c
+> @@ -0,0 +1,473 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Driver for Texas Instruments TMP512, TMP513 power monitor chips
+> + * Fan Control HDL CORE driver
 > + *
-> + * TMP513:
-> + * Thermal/Power Management with Triple Remote and
-> + * Local Temperature Sensor and Current Shunt Monitor
-> + * Datasheet: http://www.ti.com/lit/gpn/tmp513
-> + *
-> + * TMP512:
-> + * Thermal/Power Management with Dual Remote
-> + *	and Local Temperature Sensor and Current Shunt Monitor
-> + * Datasheet: http://www.ti.com/lit/gpn/tmp512
-> + *
-> + * Copyright (C) 2019 Eric Tremblay <etremblay@distech-controls.com>
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; version 2 of the License.
+> + * Copyright 2019 Analog Devices Inc.
 > + */
-> +
-> +#include <linux/err.h>
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/fpga/adi-axi-common.h>
 > +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
 > +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +#include <linux/util_macros.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
 > +
-> +// Common register definition
-> +#define TMP51X_SHUNT_CONFIG		0x00
-> +#define TMP51X_TEMP_CONFIG		0x01
-> +#define TMP51X_STATUS			0x02
-> +#define TMP51X_SMBUS_ALERT		0x03
-> +#define TMP51X_SHUNT_VOLTAGE_RESULT	0x04
-> +#define TMP51X_BUS_VOLTAGE_RESULT	0x05
-> +#define TMP51X_POWER_RESULT		0x06
-> +#define TMP51X_SHUNT_CURRENT_RESULT	0x07
-> +#define TMP51X_LOCAL_TEMP_RESULT	0x08
-> +#define TMP51X_REMOTE_TEMP_RESULT_1	0x09
-> +#define TMP51X_REMOTE_TEMP_RESULT_2	0x0A
-> +#define TMP51X_SHUNT_VOLTAGE_H_LIMIT	0x0C
-> +#define TMP51X_SHUNT_VOLTAGE_L_LIMIT	0x0D
-> +#define TMP51X_BUS_VOLTAGE_H_LIMIT	0x0E
-> +#define TMP51X_BUS_VOLTAGE_L_LIMIT	0x0F
-> +#define TMP51X_POWER_LIMIT		0x10
-> +#define TMP51X_LOCAL_TEMP_LIMIT	0x11
-> +#define TMP51X_REMOTE_TEMP_LIMIT_1	0x12
-> +#define TMP51X_REMOTE_TEMP_LIMIT_2	0x13
-> +#define TMP51X_SHUNT_CALIBRATION	0x15
-> +#define TMP51X_N_FACTOR_AND_HYST_1	0x16
-> +#define TMP51X_N_FACTOR_2		0x17
-> +#define TMP51X_MAN_ID_REG		0xFE
-> +#define TMP51X_DEVICE_ID_REG		0xFF
+> +#define ADI_AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
+> +#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
+> +#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
 > +
-> +// TMP513 specific register definition
-> +#define TMP513_REMOTE_TEMP_RESULT_3	0x0B
-> +#define TMP513_REMOTE_TEMP_LIMIT_3	0x14
-> +#define TMP513_N_FACTOR_3		0x18
+> +/* register map */
+> +#define ADI_REG_RSTN		0x0080
+> +#define ADI_REG_PWM_WIDTH	0x0084
+> +#define ADI_REG_TACH_PERIOD	0x0088
+> +#define ADI_REG_TACH_TOLERANCE	0x008c
+> +#define ADI_REG_PWM_PERIOD	0x00c0
+> +#define ADI_REG_TACH_MEASUR	0x00c4
+> +#define ADI_REG_TEMPERATURE	0x00c8
 > +
-> +// Common attrs, and NULL
-> +#define TMP51X_MANUFACTURER_ID		0x55FF
+> +#define ADI_REG_IRQ_MASK	0x0040
+> +#define ADI_REG_IRQ_PENDING	0x0044
+> +#define ADI_REG_IRQ_SRC		0x0048
 > +
-> +#define TMP512_DEVICE_ID		0x22FF
-> +#define TMP513_DEVICE_ID		0x23FF
+> +/* IRQ sources */
+> +#define ADI_IRQ_SRC_PWM_CHANGED		BIT(0)
+> +#define ADI_IRQ_SRC_TACH_ERR		BIT(1)
+> +#define ADI_IRQ_SRC_TEMP_INCREASE	BIT(2)
+> +#define ADI_IRQ_SRC_NEW_MEASUR		BIT(3)
+> +#define ADI_IRQ_SRC_MASK		GENMASK(3, 0)
+> +#define ADI_IRQ_MASK_OUT_ALL		0xFFFFFFFFU
 > +
-> +// Default config
-> +#define TMP51X_SHUNT_CONFIG_DEFAULT	0x399F
-> +#define TMP51X_SHUNT_VALUE_DEFAULT	1000
-> +#define TMP51X_VBUS_MAX_DEFAULT		32
-> +#define TMP51X_PGA_DEFAULT		8
-> +#define TMP51X_MAX_REGISTER_ADDR	0xFF
+> +#define SYSFS_PWM_MAX			255
 > +
-> +#define TMP512_TEMP_CONFIG_DEFAULT	0xBF80
-> +#define TMP513_TEMP_CONFIG_DEFAULT	0xFF80
-> +
-> +// Mask and shift
-> +#define CURRENT_SENSE_VOLTAGE_320_MASK	0x1800
-> +#define CURRENT_SENSE_VOLTAGE_160_MASK	0x1000
-> +#define CURRENT_SENSE_VOLTAGE_80_MASK	0x0800
-> +#define CURRENT_SENSE_VOLTAGE_40_MASK	0
-> +
-> +#define TMP51X_BUS_VOLTAGE_MASK		0x2000
-> +#define TMP51X_PGA_MASK			0x1800
-> +#define TMP51X_NFACTOR_MASK		0xFF00
-> +#define TMP51X_HYST_MASK		0x00FF
-> +
-> +#define TMP51X_BUS_VOLTAGE_SHIFT	3
-> +#define TMP51X_TEMP_SHIFT		3
-> +
-> +// Alarms
-> +#define TMP51X_SHUNT_VOLTAGE_H_LIMIT_POS	15
-> +#define TMP51X_SHUNT_VOLTAGE_L_LIMIT_POS	14
-> +#define TMP51X_BUS_VOLTAGE_H_LIMIT_POS		13
-> +#define TMP51X_BUS_VOLTAGE_L_LIMIT_POS		12
-> +#define TMP51X_POWER_LIMIT_POS			11
-> +#define TMP51X_LOCAL_TEMP_LIMIT_POS		10
-> +#define TMP51X_REMOTE_TEMP_LIMIT_1_POS		9
-> +#define TMP51X_REMOTE_TEMP_LIMIT_2_POS		8
-> +#define TMP513_REMOTE_TEMP_LIMIT_3_POS		7
-> +
-> +// Max and Min value
-> +#define MAX_BUS_VOLTAGE_32_LIMIT	32764
-> +#define MAX_BUS_VOLTAGE_16_LIMIT	16382
-> +
-> +// Max possible value is -256 to +256 but datasheet indicated -40 to 125.
-> +#define MAX_TEMP_LIMIT			125000
-> +#define MIN_TEMP_LIMIT			-40000
-> +
-> +#define MAX_NFACTOR			127
-> +#define MIN_NFACTOR			-128
-> +#define MAX_TEMP_HYST			127500
-> +
-> +static const u8 TMP51X_TEMP_INPUT[4] = {
-> +	TMP51X_LOCAL_TEMP_RESULT,
-> +	TMP51X_REMOTE_TEMP_RESULT_1,
-> +	TMP51X_REMOTE_TEMP_RESULT_2,
-> +	TMP513_REMOTE_TEMP_RESULT_3
+> +struct axi_fan_control_data {
+> +	void __iomem *base;
+> +	struct device *hdev;
+> +	unsigned long clk_rate;
+> +	int irq;
+> +	/* pulses per revolution */
+> +	u32 ppr;
+> +	bool hw_pwm_req;
+> +	bool update_tacho_params;
+> +	u8 fan_fault;
 > +};
 > +
-> +static const u8 TMP51X_TEMP_CRIT[4] = {
-> +	TMP51X_LOCAL_TEMP_LIMIT,
-> +	TMP51X_REMOTE_TEMP_LIMIT_1,
-> +	TMP51X_REMOTE_TEMP_LIMIT_2,
-> +	TMP513_REMOTE_TEMP_LIMIT_3
-> +};
-> +
-> +static const u8 TMP51X_TEMP_CRIT_ALARM[4] = {
-> +	TMP51X_LOCAL_TEMP_LIMIT_POS,
-> +	TMP51X_REMOTE_TEMP_LIMIT_1_POS,
-> +	TMP51X_REMOTE_TEMP_LIMIT_2_POS,
-> +	TMP513_REMOTE_TEMP_LIMIT_3_POS
-> +};
-> +
-> +static const u8 TMP51X_TEMP_CRIT_HYST[4] = {
-> +	TMP51X_N_FACTOR_AND_HYST_1,
-> +	TMP51X_N_FACTOR_AND_HYST_1,
-> +	TMP51X_N_FACTOR_AND_HYST_1,
-> +	TMP51X_N_FACTOR_AND_HYST_1
-> +};
-> +
-> +static const u8 TMP51X_IN_INPUT[2] = {
-> +	TMP51X_SHUNT_VOLTAGE_RESULT,
-> +	TMP51X_BUS_VOLTAGE_RESULT
-> +};
-> +
-> +static const u8 TMP51X_IN_CRIT[2] = {
-> +	TMP51X_SHUNT_VOLTAGE_H_LIMIT,
-> +	TMP51X_BUS_VOLTAGE_H_LIMIT
-> +};
-> +
-> +static const u8 TMP51X_IN_LCRIT[2] = {
-> +	TMP51X_SHUNT_VOLTAGE_L_LIMIT,
-> +	TMP51X_BUS_VOLTAGE_L_LIMIT
-> +};
-> +
-> +static const u8 TMP51X_IN_CRIT_ALARM[2] = {
-> +	TMP51X_SHUNT_VOLTAGE_H_LIMIT_POS,
-> +	TMP51X_BUS_VOLTAGE_H_LIMIT_POS
-> +};
-> +
-> +static const u8 TMP51X_IN_LCRIT_ALARM[2] = {
-> +	TMP51X_SHUNT_VOLTAGE_L_LIMIT_POS,
-> +	TMP51X_BUS_VOLTAGE_L_LIMIT_POS
-> +};
-> +
-> +static const u8 TMP51X_CURR_INPUT[1] = {
-> +	TMP51X_SHUNT_CURRENT_RESULT
-> +};
-> +
-> +static const u8 TMP51X_POWER_INPUT[1] = {
-> +	TMP51X_POWER_RESULT
-> +};
-> +
-> +static const u8 TMP51X_POWER_CRIT[1] = {
-> +	TMP51X_POWER_LIMIT
-> +};
-> +
-> +static const u8 TMP51X_POWER_CRIT_ALARM[1] = {
-> +	TMP51X_POWER_LIMIT_POS
-> +};
-> +
-> +
-
-Unnecessary double empty line
-
-> +static struct regmap_config tmp51x_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.max_register = TMP51X_MAX_REGISTER_ADDR,
-> +};
-> +
-> +enum tmp51x_ids {
-> +	tmp512, tmp513
-> +};
-> +
-> +struct tmp51x_data {
-> +	u16 shunt_config;
-> +	u16 pga_gain;
-> +	u16 vbus_max;
-> +
-> +	u16 temp_config;
-> +	u8 nfactor[3];
-> +
-> +	u32 shunt_uohms;
-> +
-> +	u32 curr_lsb;
-> +	u32 pwr_lsb;
-> +
-> +	enum tmp51x_ids id;
-> +	struct regmap *regmap;
-> +	struct mutex config_lock;
-> +};
-> +
-> +// Set the shift based on the gain 8=4, 4=3, 2=2, 1=1
-> +static inline u8 tmp51x_get_pga_shift(struct tmp51x_data *data)
+> +static inline void axi_iowrite(const u32 val, const u32 reg,
+> +			       const struct axi_fan_control_data *ctl)
 > +{
-> +	return 5 - ffs(data->pga_gain);
+> +	iowrite32(val, ctl->base + reg);
 > +}
 > +
-> +static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
-> +			    unsigned int regval, long *val)
+> +static inline u32 axi_ioread(const u32 reg,
+> +			     const struct axi_fan_control_data *ctl)
 > +{
-> +	switch (reg) {
-> +	case TMP51X_STATUS:
-> +		*val = (regval >> pos) & 1;
-> +		break;
-> +	case TMP51X_SHUNT_VOLTAGE_RESULT:
-> +	case TMP51X_SHUNT_VOLTAGE_H_LIMIT:
-> +	case TMP51X_SHUNT_VOLTAGE_L_LIMIT:
-> +		/*
-> +		 * 2's compliment number shifted by one to four depending
-> +		 * on the pga gain setting.
-> +		 * 1lsb = 10uV
-> +		 */
-> +		*val = sign_extend32(regval, 17 - tmp51x_get_pga_shift(data));
-> +		*val = DIV_ROUND_CLOSEST(*val, 100);
-> +		break;
-> +	case TMP51X_BUS_VOLTAGE_RESULT:
-> +	case TMP51X_BUS_VOLTAGE_H_LIMIT:
-> +	case TMP51X_BUS_VOLTAGE_L_LIMIT:
-> +		// 1lsb = 4mV
-> +		*val = (regval >> TMP51X_BUS_VOLTAGE_SHIFT) * 4;
-> +		break;
-> +	case TMP51X_POWER_RESULT:
-> +	case TMP51X_POWER_LIMIT:
-> +		// Power = (current * BusVoltage) / 5000
-> +		*val = regval * data->pwr_lsb;
-> +		break;
-> +	case TMP51X_SHUNT_CURRENT_RESULT:
-> +		// Current = (ShuntVoltage * CalibrationRegister) / 4096
-> +		*val = sign_extend32(regval, 16) * data->curr_lsb;
-> +		break;
-> +	case TMP51X_LOCAL_TEMP_RESULT:
-> +	case TMP51X_REMOTE_TEMP_RESULT_1:
-> +	case TMP51X_REMOTE_TEMP_RESULT_2:
-> +	case TMP513_REMOTE_TEMP_RESULT_3:
-> +	case TMP51X_LOCAL_TEMP_LIMIT:
-> +	case TMP51X_REMOTE_TEMP_LIMIT_1:
-> +	case TMP51X_REMOTE_TEMP_LIMIT_2:
-> +	case TMP513_REMOTE_TEMP_LIMIT_3:
-> +		// 1lsb = 0.0625 degrees centigrade
-> +		*val = sign_extend32(regval, 16) >> TMP51X_TEMP_SHIFT;
-> +		*val = DIV_ROUND_CLOSEST(*val * 625, 10);
-> +		break;
-> +	case TMP51X_N_FACTOR_AND_HYST_1:
-> +		// 1lsb = 0.5 degrees centigrade
-> +		*val = (regval & TMP51X_HYST_MASK) * 500;
-> +		break;
-> +	default:
-> +		// Programmer goofed
-> +		WARN_ON_ONCE(1);
-> +		*val = 0;
-> +		return -EOPNOTSUPP;
-> +	}
+> +	return ioread32(ctl->base + reg);
+> +}
+> +
+> +static long axi_fan_control_get_pwm_duty(const struct axi_fan_control_data *ctl)
+> +{
+> +	u32 pwm_width = axi_ioread(ADI_REG_PWM_WIDTH, ctl);
+> +	u32 pwm_period = axi_ioread(ADI_REG_PWM_PERIOD, ctl);
+> +	/*
+> +	 * PWM_PERIOD is a RO register set by the core. It should never be 0.
+> +	 * For now we are trusting the HW...
+> +	 */
+> +	return DIV_ROUND_CLOSEST(pwm_width * SYSFS_PWM_MAX, pwm_period);
+> +}
+> +
+> +static int axi_fan_control_set_pwm_duty(const long val,
+> +					struct axi_fan_control_data *ctl)
+> +{
+> +	u32 pwm_period = axi_ioread(ADI_REG_PWM_PERIOD, ctl);
+> +	u32 new_width;
+> +	long __val = clamp_val(val, 0, SYSFS_PWM_MAX);
+> +
+> +	new_width = DIV_ROUND_CLOSEST(__val * pwm_period, SYSFS_PWM_MAX);
+> +
+> +	axi_iowrite(new_width, ADI_REG_PWM_WIDTH, ctl);
 > +
 > +	return 0;
 > +}
 > +
-> +static int tmp51x_set_value(struct tmp51x_data *data, u8 reg, long val)
+> +static long axi_fan_control_get_fan_rpm(const struct axi_fan_control_data *ctl)
 > +{
-> +	int regval, ret, max_val;
-> +	u32 mask = 0;
+> +	const u32 tach = axi_ioread(ADI_REG_TACH_MEASUR, ctl);
 > +
-> +	mutex_lock(&data->config_lock);
+> +	if (tach == 0)
+> +		/* should we return error, EAGAIN maybe? */
+> +		return 0;
+> +	/*
+> +	 * The tacho period should be:
+> +	 *      TACH = 60/(ppr * rpm), where rpm is revolutions per second
+> +	 *      and ppr is pulses per revolution.
+> +	 * Given the tacho period, we can multiply it by the input clock
+> +	 * so that we know how many clocks we need to have this period.
+> +	 * From this, we can derive the RPM value.
+> +	 */
+> +	return DIV_ROUND_CLOSEST(60 * ctl->clk_rate, ctl->ppr * tach);
+> +}
 > +
-This mutex is unnecessary. There is only a single register write,
-done with regmap, and regmap has its own access protection.
-
-> +	switch (reg) {
-> +	case TMP51X_SHUNT_VOLTAGE_H_LIMIT:
-> +	case TMP51X_SHUNT_VOLTAGE_L_LIMIT:
-> +		// 1lsb = 10uV
-> +		val *= 100;
-> +		max_val = U16_MAX >> tmp51x_get_pga_shift(data);
-> +		regval = clamp_val(val, -max_val, max_val);
-> +		break;
-> +	case TMP51X_BUS_VOLTAGE_H_LIMIT:
-> +	case TMP51X_BUS_VOLTAGE_L_LIMIT:
-> +		// 1lsb = 4mV
-> +		max_val = (data->vbus_max == 32) ?
-> +			MAX_BUS_VOLTAGE_32_LIMIT : MAX_BUS_VOLTAGE_16_LIMIT;
+> +static int axi_fan_control_read_temp(struct device *dev, u32 attr, long *val)
+> +{
+> +	struct axi_fan_control_data *ctl = dev_get_drvdata(dev);
+> +	long raw_temp;
 > +
-> +		val = clamp_val(DIV_ROUND_CLOSEST(val, 4), 0, max_val);
-> +		regval = val << TMP51X_BUS_VOLTAGE_SHIFT;
-> +		break;
-> +	case TMP51X_POWER_LIMIT:
-> +		regval = clamp_val(DIV_ROUND_CLOSEST(val, data->pwr_lsb), 0,
-> +				   U16_MAX);
-> +		break;
-> +	case TMP51X_LOCAL_TEMP_LIMIT:
-> +	case TMP51X_REMOTE_TEMP_LIMIT_1:
-> +	case TMP51X_REMOTE_TEMP_LIMIT_2:
-> +	case TMP513_REMOTE_TEMP_LIMIT_3:
-> +		// 1lsb = 0.0625 degrees centigrade
-> +		val = clamp_val(val, MIN_TEMP_LIMIT, MAX_TEMP_LIMIT);
-> +		regval = DIV_ROUND_CLOSEST(val * 10, 625) << TMP51X_TEMP_SHIFT;
-> +		break;
-> +	case TMP51X_N_FACTOR_AND_HYST_1:
-> +		// 1lsb = 0.5 degrees centigrade
-> +		val = clamp_val(val, 0, MAX_TEMP_HYST);
-> +		regval = DIV_ROUND_CLOSEST(val, 500);
-> +		mask = TMP51X_HYST_MASK;
-> +		break;
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		raw_temp = axi_ioread(ADI_REG_TEMPERATURE, ctl);
+> +		/*
+> +		 * The formula for the temperature is:
+> +		 *      T = (ADC * 501.3743 / 2^bits) - 273.6777
+> +		 * It's multiplied by 1000 to have millidegrees as
+> +		 * specified by the hwmon sysfs interface.
+> +		 */
+> +		*val = ((raw_temp * 501374) >> 16) - 273677;
+> +		return 0;
 > +	default:
-> +		// Programmer goofed
-> +		WARN_ON_ONCE(1);
-> +		mutex_unlock(&data->config_lock);
-> +		return -EOPNOTSUPP;
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_read_fan(struct device *dev, u32 attr, long *val)
+> +{
+> +	struct axi_fan_control_data *ctl = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_fault:
+> +		*val = ctl->fan_fault;
+> +		/* clear it now */
+> +		ctl->fan_fault = 0;
+> +		return 0;
+> +	case hwmon_fan_input:
+> +		*val = axi_fan_control_get_fan_rpm(ctl);
+> +		return 0;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_read_pwm(struct device *dev, u32 attr, long *val)
+> +{
+> +	struct axi_fan_control_data *ctl = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		*val = axi_fan_control_get_pwm_duty(ctl);
+> +		return 0;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_write_pwm(struct device *dev, u32 attr, long val)
+> +{
+> +	struct axi_fan_control_data *ctl = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		return axi_fan_control_set_pwm_duty(val, ctl);
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_read_labels(struct device *dev,
+> +				       enum hwmon_sensor_types type,
+> +				       u32 attr, int channel, const char **str)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		*str = "FAN";
+> +		return 0;
+> +	case hwmon_temp:
+> +		*str = "SYSMON4";
+> +		return 0;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_read(struct device *dev,
+> +				enum hwmon_sensor_types type,
+> +				u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return axi_fan_control_read_fan(dev, attr, val);
+> +	case hwmon_pwm:
+> +		return axi_fan_control_read_pwm(dev, attr, val);
+> +	case hwmon_temp:
+> +		return axi_fan_control_read_temp(dev, attr, val);
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static int axi_fan_control_write(struct device *dev,
+> +				 enum hwmon_sensor_types type,
+> +				 u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return axi_fan_control_write_pwm(dev, attr, val);
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t axi_fan_control_fan_is_visible(const u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +	case hwmon_fan_fault:
+> +	case hwmon_fan_label:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t axi_fan_control_pwm_is_visible(const u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		return 0644;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t axi_fan_control_temp_is_visible(const u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +	case hwmon_temp_label:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t axi_fan_control_is_visible(const void *data,
+> +					  enum hwmon_sensor_types type,
+> +					  u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return axi_fan_control_fan_is_visible(attr);
+> +	case hwmon_pwm:
+> +		return axi_fan_control_pwm_is_visible(attr);
+> +	case hwmon_temp:
+> +		return axi_fan_control_temp_is_visible(attr);
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +/*
+> + * This core has two main ways of changing the PWM duty cycle. It is done,
+> + * either by a request from userspace (writing on pwm1_input) or by the
+> + * core itself. When the change is done by the core, it will use predefined
+> + * parameters to evaluate the tach signal and, on that case we cannot set them.
+> + * On the other hand, when the request is done by the user, with some arbitrary
+> + * value that the core does not now about, we have to provide the tach
+> + * parameters so that, the core can evaluate the signal. On the IRQ handler we
+> + * distinguish this by using the ADI_IRQ_SRC_TEMP_INCREASE interrupt. This tell
+> + * us that the CORE requested a new duty cycle. After this, there is 5s delay
+> + * on which the core waits for the fan rotation speed to stabilize. After this
+> + * we get ADI_IRQ_SRC_PWM_CHANGED irq where we will decide if we need to set
+> + * the tach parameters or not on the next tach measurement cycle (corresponding
+> + * already to the ney duty cycle) based on the %ctl->hw_pwm_req flag.
+> + */
+> +static irqreturn_t axi_fan_control_irq_handler(int irq, void *data)
+> +{
+> +	struct axi_fan_control_data *ctl = (struct axi_fan_control_data *)data;
+> +	u32 irq_pending = axi_ioread(ADI_REG_IRQ_PENDING, ctl);
+> +	u32 clear_mask;
+> +
+> +	if (irq_pending & ADI_IRQ_SRC_NEW_MEASUR) {
+> +		if (ctl->update_tacho_params) {
+> +			u32 new_tach = axi_ioread(ADI_REG_TACH_MEASUR, ctl);
+> +
+> +			/* get 25% tolerance */
+> +			u32 tach_tol = DIV_ROUND_CLOSEST(new_tach * 25, 100);
+> +			/* set new tacho parameters */
+> +			axi_iowrite(new_tach, ADI_REG_TACH_PERIOD, ctl);
+> +			axi_iowrite(tach_tol, ADI_REG_TACH_TOLERANCE, ctl);
+> +			ctl->update_tacho_params = false;
+> +		}
 > +	}
 > +
-> +	if (mask == 0)
-> +		ret = regmap_write(data->regmap, reg, regval);
-> +	else
-> +		ret = regmap_update_bits(data->regmap, reg, mask, regval);
+> +	if (irq_pending & ADI_IRQ_SRC_PWM_CHANGED) {
+> +		/*
+> +		 * if the pwm changes on behalf of software,
+> +		 * we need to provide new tacho parameters to the core.
+> +		 * Wait for the next measurement for that...
+> +		 */
+> +		if (!ctl->hw_pwm_req) {
+> +			ctl->update_tacho_params = true;
+> +		} else {
+> +			ctl->hw_pwm_req = false;
+> +			sysfs_notify(&ctl->hdev->kobj, NULL, "pwm1");
+> +		}
+> +	}
 > +
-> +	mutex_unlock(&data->config_lock);
+> +	if (irq_pending & ADI_IRQ_SRC_TEMP_INCREASE)
+> +		/* hardware requested a new pwm */
+> +		ctl->hw_pwm_req = true;
+> +
+> +	if (irq_pending & ADI_IRQ_SRC_TACH_ERR)
+> +		ctl->fan_fault = 1;
+> +
+> +	/* clear all interrupts */
+> +	clear_mask = irq_pending & ADI_IRQ_SRC_MASK;
+> +	axi_iowrite(clear_mask, ADI_REG_IRQ_PENDING, ctl);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int axi_fan_control_init(struct axi_fan_control_data *ctl,
+> +				const struct device_node *np)
+> +{
+> +	int ret;
+> +
+> +	/* get fan pulses per revolution */
+> +	ret = of_property_read_u32(np, "adi,pulses-per-revolution", &ctl->ppr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* 1, 2 and 4 are the typical and accepted values */
+> +	if (ctl->ppr != 1 && ctl->ppr != 2 && ctl->ppr != 4)
+> +		return -EINVAL;
+> +	/*
+> +	 * Enable all IRQs
+> +	 */
+> +	axi_iowrite(ADI_IRQ_MASK_OUT_ALL &
+> +		    ~(ADI_IRQ_SRC_NEW_MEASUR | ADI_IRQ_SRC_TACH_ERR |
+> +		      ADI_IRQ_SRC_PWM_CHANGED | ADI_IRQ_SRC_TEMP_INCREASE),
+> +		    ADI_REG_IRQ_MASK, ctl);
+> +
+> +	/* bring the device out of reset */
+> +	axi_iowrite(0x01, ADI_REG_RSTN, ctl);
 > +
 > +	return ret;
 > +}
 > +
-> +static int tmp51x_read(struct device *dev, enum hwmon_sensor_types type,
-> +		       u32 attr, int channel, long *val)
-> +{
-> +	struct tmp51x_data *data = dev_get_drvdata(dev);
-> +	int ret;
-> +	u32 regval;
-> +	u8 pos = 0, reg = 0;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			reg = TMP51X_TEMP_INPUT[channel];
-> +			break;
-> +		case hwmon_temp_crit_alarm:
-> +			reg = TMP51X_STATUS;
-> +			pos = TMP51X_TEMP_CRIT_ALARM[channel];
-> +			break;
-> +		case hwmon_temp_crit:
-> +			reg = TMP51X_TEMP_CRIT[channel];
-> +			break;
-> +		case hwmon_temp_crit_hyst:
-> +			reg = TMP51X_TEMP_CRIT_HYST[channel];
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			reg = TMP51X_IN_INPUT[channel];
-> +			break;
-> +		case hwmon_in_lcrit_alarm:
-> +			reg = TMP51X_STATUS;
-> +			pos = TMP51X_IN_LCRIT_ALARM[channel];
-> +			break;
-> +		case hwmon_in_crit_alarm:
-> +			reg = TMP51X_STATUS;
-> +			pos = TMP51X_IN_CRIT_ALARM[channel];
-> +			break;
-> +		case hwmon_in_lcrit:
-> +			reg = TMP51X_IN_LCRIT[channel];
-> +			break;
-> +		case hwmon_in_crit:
-> +			reg = TMP51X_IN_CRIT[channel];
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			reg = TMP51X_CURR_INPUT[channel];
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_input:
-> +			reg = TMP51X_POWER_INPUT[channel];
-> +			break;
-> +		case hwmon_power_crit_alarm:
-> +			reg = TMP51X_STATUS;
-> +			pos = TMP51X_POWER_CRIT_ALARM[channel];
-> +			break;
-> +		case hwmon_power_crit:
-> +			reg = TMP51X_POWER_CRIT[channel];
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (reg == 0)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = regmap_read(data->regmap, reg, &regval);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return tmp51x_get_value(data, reg, pos, regval, val);
-> +}
-> +
-> +static int tmp51x_write(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long val)
-> +{
-> +	u8 reg = 0;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_crit:
-> +			reg = TMP51X_TEMP_CRIT[channel];
-> +			break;
-> +		case hwmon_temp_crit_hyst:
-> +			reg = TMP51X_TEMP_CRIT_HYST[channel];
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_lcrit:
-> +			reg = TMP51X_IN_LCRIT[channel];
-> +			break;
-> +		case hwmon_in_crit:
-> +			reg = TMP51X_IN_CRIT[channel];
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_crit:
-> +			reg = TMP51X_POWER_CRIT[channel];
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (reg == 0)
-> +		return -EOPNOTSUPP;
-> +
-> +	return tmp51x_set_value(dev_get_drvdata(dev), reg, val);
-> +}
-> +
-> +static umode_t tmp51x_is_visible(const void *_data,
-> +				 enum hwmon_sensor_types type, u32 attr,
-> +				 int channel)
-> +{
-> +	const struct tmp51x_data *data = _data;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (data->id == tmp512 && channel == 4)
-> +			return 0;
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_crit_alarm:
-> +			return 0444;
-> +		case hwmon_temp_crit:
-> +			return 0644;
-> +		case hwmon_temp_crit_hyst:
-> +			if (channel == 0)
-> +				return 0644;
-> +			return 0444;
-> +		}
-> +		break;
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +		case hwmon_in_lcrit_alarm:
-> +		case hwmon_in_crit_alarm:
-> +			return 0444;
-> +		case hwmon_in_lcrit:
-> +		case hwmon_in_crit:
-> +			return 0644;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			return 0444;
-> +		}
-> +		break;
-> +	case hwmon_power:
-> +		switch (attr) {
-> +		case hwmon_power_input:
-> +		case hwmon_power_crit_alarm:
-> +			return 0444;
-> +		case hwmon_power_crit:
-> +			return 0644;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *tmp51x_info[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> +			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> +			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> +			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> +			   HWMON_T_CRIT_HYST),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LCRIT | HWMON_I_LCRIT_ALARM |
-> +			   HWMON_I_CRIT | HWMON_I_CRIT_ALARM,
-> +			   HWMON_I_INPUT | HWMON_I_LCRIT | HWMON_I_LCRIT_ALARM |
-> +			   HWMON_I_CRIT | HWMON_I_CRIT_ALARM),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT),
-> +	HWMON_CHANNEL_INFO(power,
-> +			   HWMON_P_INPUT | HWMON_P_CRIT | HWMON_P_CRIT_ALARM),
+> +static const struct hwmon_channel_info *axi_fan_control_info[] = {
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
 > +	NULL
 > +};
 > +
-> +static const struct hwmon_ops tmp51x_hwmon_ops = {
-> +	.is_visible = tmp51x_is_visible,
-> +	.read = tmp51x_read,
-> +	.write = tmp51x_write,
+> +static const struct hwmon_ops axi_fan_control_hwmon_ops = {
+> +	.is_visible = axi_fan_control_is_visible,
+> +	.read = axi_fan_control_read,
+> +	.write = axi_fan_control_write,
+> +	.read_string = axi_fan_control_read_labels,
 > +};
 > +
-> +static const struct hwmon_chip_info tmp51x_chip_info = {
-> +	.ops = &tmp51x_hwmon_ops,
-> +	.info = tmp51x_info,
+> +static const struct hwmon_chip_info axi_chip_info = {
+> +	.ops = &axi_fan_control_hwmon_ops,
+> +	.info = axi_fan_control_info,
 > +};
 > +
-> +/*
-> + * Calibrate the tmp51x following the datasheet method
-> + */
-> +static int tmp51x_calibrate(struct tmp51x_data *data)
-> +{
-> +	int vshunt_max = data->pga_gain * 40;
-> +	u64 max_curr_ma;
-> +	u32 div;
+> +static const u32 version_1_0_0 = ADI_AXI_PCORE_VER(1, 0, 'a');
 > +
-> +	/*
-> +	 * If shunt_uohms is equal to 0, the calibration should be set to 0.
-> +	 * The consequence will be that the current and power measurement engine
-> +	 * of the sensor will not work. Temperature and voltage sensing will
-> +	 * continue to work.
-> +	 */
-> +	if (data->shunt_uohms == 0)
-> +		return regmap_write(data->regmap, TMP51X_SHUNT_CALIBRATION, 0);
-> +
-> +	max_curr_ma = DIV_ROUND_CLOSEST_ULL(vshunt_max * 1000 * 1000,
-> +					    data->shunt_uohms);
-> +
-> +	/*
-> +	 * Calculate the minimal bit resolution for the current and the power.
-> +	 * Those values will be used during register interpretation.
-> +	 */
-> +	data->curr_lsb = DIV_ROUND_CLOSEST_ULL(max_curr_ma * 1000, 32767);
-> +	data->pwr_lsb = 20 * data->curr_lsb;
-> +
-> +	div = DIV_ROUND_CLOSEST_ULL(data->curr_lsb * data->shunt_uohms,
-> +				    1000 * 1000);
-> +
-> +	return regmap_write(data->regmap, TMP51X_SHUNT_CALIBRATION,
-> +			    DIV_ROUND_CLOSEST(40960, div));
-> +}
-> +
-> +/*
-> + * Initialize the configuration and calibration registers.
-> + */
-> +static int tmp51x_init(struct tmp51x_data *data)
-> +{
-> +	unsigned int regval;
-> +	int ret = regmap_write(data->regmap, TMP51X_SHUNT_CONFIG,
-> +			       data->shunt_config);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = regmap_write(data->regmap, TMP51X_TEMP_CONFIG, data->temp_config);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// nFactor configuration
-> +	ret = regmap_update_bits(data->regmap, TMP51X_N_FACTOR_AND_HYST_1,
-> +				 TMP51X_NFACTOR_MASK, data->nfactor[0] << 8);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = regmap_write(data->regmap, TMP51X_N_FACTOR_2,
-> +			   data->nfactor[1] << 8);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (data->id == tmp513) {
-> +		ret = regmap_write(data->regmap, TMP513_N_FACTOR_3,
-> +				   data->nfactor[2] << 8);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	ret = tmp51x_calibrate(data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Read the status register before using as the datasheet propose
-> +	return regmap_read(data->regmap, TMP51X_STATUS, &regval);
-> +}
-> +
-> +static const struct i2c_device_id tmp51x_id[] = {
-> +	{ "tmp512", tmp512 },
-> +	{ "tmp513", tmp513 },
-> +	{ }
+> +static const struct of_device_id axi_fan_control_of_match[] = {
+> +	{ .compatible = "adi,axi-fan-control-1.00.a",
+> +		.data = (void *)&version_1_0_0},
+> +	{},
 > +};
-> +MODULE_DEVICE_TABLE(i2c, tmp51x_id);
+> +MODULE_DEVICE_TABLE(of, axi_fan_control_of_match);
 > +
-> +static const struct of_device_id tmp51x_of_match[] = {
-> +	{
-> +		.compatible = "ti,tmp512",
-> +		.data = (void *)tmp512
-> +	},
-> +	{
-> +		.compatible = "ti,tmp513",
-> +		.data = (void *)tmp513
-> +	},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, tmp51x_of_match);
-> +
-> +static int tmp51x_vbus_max_to_reg(struct device *dev, struct tmp51x_data *data)
+> +static int axi_fan_control_probe(struct platform_device *pdev)
 > +{
-> +	if (data->vbus_max == 32) {
-> +		data->shunt_config |= TMP51X_BUS_VOLTAGE_MASK;
-> +	} else if (data->vbus_max == 16) {
-> +		data->shunt_config &= ~TMP51X_BUS_VOLTAGE_MASK;
-> +	} else {
-> +		dev_err(dev, "bus-voltage-range is invalid: %u\n",
-> +			data->vbus_max);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int tmp51x_pga_gain_to_reg(struct device *dev, struct tmp51x_data *data)
-> +{
-> +	if (data->pga_gain == 8) {
-> +		data->shunt_config |= CURRENT_SENSE_VOLTAGE_320_MASK;
-> +	} else if (data->pga_gain == 4) {
-> +		data->shunt_config |= CURRENT_SENSE_VOLTAGE_160_MASK;
-> +	} else if (data->pga_gain == 2) {
-> +		data->shunt_config |= CURRENT_SENSE_VOLTAGE_80_MASK;
-> +	} else if (data->pga_gain == 1) {
-> +		data->shunt_config |= CURRENT_SENSE_VOLTAGE_40_MASK;
-> +	} else {
-> +		dev_err(dev, "pga-gain is invalid: %u\n", data->pga_gain);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int tmp51x_read_properties(struct device *dev, struct tmp51x_data *data)
-> +{
-> +	int ret;
-> +	u8 nfactor[3];
-> +	u32 val;
-> +
-> +	ret = device_property_read_u32(dev, "shunt-resistor-uohm", &val);
-> +	data->shunt_uohms = (ret >= 0) ? val : TMP51X_SHUNT_VALUE_DEFAULT;
-> +
-> +	ret = device_property_read_u32(dev, "bus-voltage-range", &val);
-> +	data->vbus_max = (ret >= 0) ? val : TMP51X_VBUS_MAX_DEFAULT;
-> +	ret = tmp51x_vbus_max_to_reg(dev, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = device_property_read_u32(dev, "pga-gain", &val);
-> +	data->pga_gain = (ret >= 0) ? val : TMP51X_PGA_DEFAULT;
-> +	ret = tmp51x_pga_gain_to_reg(dev, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = device_property_read_u8_array(dev, "nfactor", nfactor,
-> +		(data->id == tmp513) ? 3 : 2);
-
-Multi-line alignment
-
-> +	if (ret >= 0)
-> +		memcpy(data->nfactor, nfactor, (data->id == tmp513) ? 3 : 2);
-> +
-> +	// Check if shunt value is compatible with pga-gain
-> +	if (data->shunt_uohms > data->pga_gain * 40 * 1000 * 1000) {
-> +		dev_err(dev,
-> +			"shunt-resistor-uohm: %u is too big for pga_gain: %u\n",
-> +			data->shunt_uohms, data->pga_gain);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void tmp51x_use_default(struct tmp51x_data *data)
-> +{
-> +	data->vbus_max = TMP51X_VBUS_MAX_DEFAULT;
-> +	data->pga_gain = TMP51X_PGA_DEFAULT;
-> +	data->shunt_uohms = TMP51X_SHUNT_VALUE_DEFAULT;
-> +}
-> +
-> +static int tmp51x_configure(struct device *dev, struct tmp51x_data *data)
-> +{
-> +	data->shunt_config = TMP51X_SHUNT_CONFIG_DEFAULT;
-> +	data->temp_config = (data->id == tmp513) ?
-> +			TMP513_TEMP_CONFIG_DEFAULT : TMP512_TEMP_CONFIG_DEFAULT;
-> +
-> +	if (dev->of_node)
-> +		return tmp51x_read_properties(dev, data);
-> +
-> +	tmp51x_use_default(data);
-> +	return 0;
-> +}
-> +
-> +static int tmp51x_probe(struct i2c_client *client,
-> +			const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct tmp51x_data *data;
-> +	struct device *hwmon_dev;
+> +	struct axi_fan_control_data *ctl;
+> +	struct clk *clk;
+> +	const struct of_device_id *id;
+> +	const char *name = "axi_fan_control";
+> +	struct resource *res;
+> +	u32 version;
 > +	int ret;
 > +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
+> +	id = of_match_node(axi_fan_control_of_match, pdev->dev.of_node);
+> +	if (!id)
+> +		return -EINVAL;
+> +
+> +	ctl = devm_kzalloc(&pdev->dev, sizeof(*ctl), GFP_KERNEL);
+> +	if (!ctl)
 > +		return -ENOMEM;
 > +
-> +	if (client->dev.of_node)
-> +		data->id = (enum tmp51x_ids)device_get_match_data(&client->dev);
-> +	else
-> +		data->id = id->driver_data;
-> +	mutex_init(&data->config_lock);
+> +	ctl->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(ctl->base))
+> +		return PTR_ERR(ctl->base);
 > +
-> +	ret = tmp51x_configure(dev, data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "error configuring the device: %d\n", ret);
-> +		return ret;
+> +	clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(clk)) {
+> +		dev_err(&pdev->dev, "clk_get failed with %ld\n", PTR_ERR(clk));
+> +		return PTR_ERR(clk);
 > +	}
 > +
-> +	data->regmap = devm_regmap_init_i2c(client, &tmp51x_regmap_config);
-> +	if (IS_ERR(data->regmap)) {
-> +		dev_err(dev, "failed to allocate register map\n");
-> +		return PTR_ERR(data->regmap);
-> +	}
+> +	ctl->clk_rate = clk_get_rate(clk);
+> +	if (!ctl->clk_rate)
+> +		return -EINVAL;
 > +
-> +	ret = tmp51x_init(data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "error configuring the device: %d\n", ret);
+> +	dev_dbg(&pdev->dev, "Re-mapped from 0x%08llX to %p\n",
+> +		(unsigned long long)res->start, ctl->base);
+> +
+> +	version = axi_ioread(ADI_AXI_REG_VERSION, ctl);
+> +	if (ADI_AXI_PCORE_VER_MAJOR(version) !=
+> +	    ADI_AXI_PCORE_VER_MAJOR((*(u32 *)id->data))) {
+> +		dev_err(&pdev->dev, "Major version mismatch. Expected %d.%.2d.%c, Reported %d.%.2d.%c\n",
+> +			ADI_AXI_PCORE_VER_MAJOR((*(u32 *)id->data)),
+> +			ADI_AXI_PCORE_VER_MINOR((*(u32 *)id->data)),
+> +			ADI_AXI_PCORE_VER_PATCH((*(u32 *)id->data)),
+> +			ADI_AXI_PCORE_VER_MAJOR(version),
+> +			ADI_AXI_PCORE_VER_MINOR(version),
+> +			ADI_AXI_PCORE_VER_PATCH(version));
 > +		return -ENODEV;
 > +	}
 > +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-> +							 data,
-> +							 &tmp51x_chip_info,
+> +	ctl->irq = platform_get_irq(pdev, 0);
+> +	if (ctl->irq < 0)
+> +		return ctl->irq;
+> +
+> +	ret = devm_request_threaded_irq(&pdev->dev, ctl->irq, NULL,
+> +					axi_fan_control_irq_handler,
+> +					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+> +					pdev->driver_override, ctl);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to request an irq, %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = axi_fan_control_init(ctl, pdev->dev.of_node);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to initialize device\n");
+> +		return ret;
+> +	}
+> +
+> +	ctl->hdev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +							 name,
+> +							 ctl,
+> +							 &axi_chip_info,
 > +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return PTR_ERR(hwmon_dev);
 > +
-> +	dev_dbg(dev, "power monitor %s\n", id->name);
-> +
-> +	return 0;
+> +	return PTR_ERR_OR_ZERO(ctl->hdev);
 > +}
 > +
-> +static struct i2c_driver tmp51x_driver = {
+> +static struct platform_driver axi_fan_control_driver = {
 > +	.driver = {
-> +		.name	= "tmp51x",
-> +		.of_match_table = of_match_ptr(tmp51x_of_match),
+> +		.name = "axi_fan_control_driver",
+> +		.of_match_table = axi_fan_control_of_match,
 > +	},
-> +	.probe		= tmp51x_probe,
-> +	.id_table	= tmp51x_id,
+> +	.probe = axi_fan_control_probe,
 > +};
+> +module_platform_driver(axi_fan_control_driver);
 > +
-> +module_i2c_driver(tmp51x_driver);
-> +
-> +MODULE_AUTHOR("Eric Tremblay <etremblay@distechcontrols.com>");
-> +MODULE_DESCRIPTION("tmp51x driver");
+> +MODULE_AUTHOR("Nuno Sa <nuno.sa@analog.com>");
+> +MODULE_DESCRIPTION("Analog Devices Fan Control HDL CORE driver");
 > +MODULE_LICENSE("GPL");
