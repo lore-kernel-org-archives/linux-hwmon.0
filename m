@@ -2,471 +2,150 @@ Return-Path: <SRS0=/pPu=YP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49BC7CA9EA0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Oct 2019 11:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A86CCA9EA0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Oct 2019 13:33:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 17926207FC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Oct 2019 11:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571744345;
-	bh=w/GkOhmpY1fplQqM2FEPna9QIWy0ihEsSIaCqe0TZt0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=NSlHFHFk4Ash+D55ZWxKMocLfQFccb3UB3SZxvYf38620kxn/SQKyiW363sfqPYE4
-	 FyWVSQl/KqbMq4xmNu/bqBXstzh6HmcspV/D/FjLkCUnQ8Iec9nZk7rnfcRo7bohpW
-	 FxmC2Bxx+ctsG7Zsd5k42Y5M6dJBccf7hCDuP3Lo=
+	by mail.kernel.org (Postfix) with ESMTP id 0D52E21783
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Oct 2019 13:33:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="IU3sQgf0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388753AbfJVLjE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Oct 2019 07:39:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33550 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387871AbfJVLjE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Oct 2019 07:39:04 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 96A4B21906;
-        Tue, 22 Oct 2019 11:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571744342;
-        bh=w/GkOhmpY1fplQqM2FEPna9QIWy0ihEsSIaCqe0TZt0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t2drMTbl5c/xfBbxu4SlsNm9VbiSGQq39MrFbbC3H70pat6WFeV2N5xlvUoH06i5p
-         RnRtxKmfHvxSkjnNelhmdBl3jnGG1H4B6nLHKXIoI9xDwV1aDUhy9zxE9vxu/zKfvv
-         MmRT+zRzfKIBhtLpzOTq3bRjvIIUuiO42Oft/h7w=
-Date:   Tue, 22 Oct 2019 12:23:46 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     lee.jones@linaro.org, dmitry.torokhov@gmail.com, jdelvare@suse.com,
-        linux@roeck-us.net, thierry.reding@gmail.com,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-pwm@vger.kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH 7/8] iio: proximity: Add support for Azoteq IQS622
- proximity sensor
-Message-ID: <20191022122341.32f0883f@archlinux>
-In-Reply-To: <1571631083-4962-8-git-send-email-jeff@labundy.com>
-References: <1571631083-4962-1-git-send-email-jeff@labundy.com>
-        <1571631083-4962-8-git-send-email-jeff@labundy.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1732065AbfJVNdt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Oct 2019 09:33:49 -0400
+Received: from mx0b-002ab301.pphosted.com ([148.163.154.99]:36856 "EHLO
+        mx0b-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731981AbfJVNdt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 22 Oct 2019 09:33:49 -0400
+Received: from pps.filterd (m0118796.ppops.net [127.0.0.1])
+        by mx0b-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9MDU3wY025204;
+        Tue, 22 Oct 2019 09:33:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
+ cc : subject : date : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pps-02182019;
+ bh=OHfWqRNrM4KLke+JV4p0Bl6H4azXA0yTUEHl7an7BN0=;
+ b=IU3sQgf0ZDRjhjwQHY61aIn9HHfiBPVeoJFMPnHwUYTxuShr2n0P9BhcUFOYToDni6gO
+ IrrRzZSyrSPxlw9hdQQOpUq9EWCgnb4IHNH1tESwJPToRAb6+cmfdBLKyEMwH//vu0iF
+ jr42t3D48Y3EArxoIvnMQgT+K3LT+3JXJltGTHBL+BZ1pzrWhbVafmUmnhvJ5oN305WX
+ DA5hVEIMKp5uA94+vRuqVJ5Dvysr84iCyXMAarGBdzkyrKXpW+4u9ogwakFp5ZGrCWHY
+ GxYk9k8kW9xN5aGZDlDGhxNxZiSC1cdLn1W3EmZNkkHheVTdn3GZVKYYyJq3aqevDIQF QQ== 
+Received: from nam03-co1-obe.outbound.protection.outlook.com (mail-co1nam03lp2050.outbound.protection.outlook.com [104.47.40.50])
+        by mx0b-002ab301.pphosted.com with ESMTP id 2vsk6prrgx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 22 Oct 2019 09:33:19 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J922cr9DGykLm5LdLeg3EwGeNzdn0AjZsjEFiwZtpo6L7bJ4F9KBwPySjJIorgImJczhzqj5eFVFPoPHNDq0zV33JlQYGrp9JZpE+71fuFVSEFtzrJjE7/LuSyJWEGV8cUMPxDVHn6grb4LLSNPuRcPBHbycY6mi/M/mu4y80dkt4rKwOxzVro1qHCeEK2hukgIN7J9kxcTzkd6kAHxsJsSvKfUXVSQdH7GhWG9fqUBkVrL1AhHxpNkAQBPY8CU1Jh7EDYU+jSoGtie90Llti2MrkM/1dc42cPYRnBskFFnPEWyVB9YWWxNg0vhZA7N6HDRrMIJla+e4S6H271T1zA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OHfWqRNrM4KLke+JV4p0Bl6H4azXA0yTUEHl7an7BN0=;
+ b=SC7M5sibd7jNP6cqTKS/3dqcLE1588CEbw30YpwEY4/TorpbcPUzJnSZc80wyUTgsyuGVpg+s5U0MaOY/FqgrXTa0kZ9aH+8UkQcnNP0K3Bmlg8AaEQQDZaWlI5Kv9asq1lKN5S3fLAUXtDF0NrrmU1FURto4QEfHfY8NBssM6xLYI5hdWc42hV7fEt3b7qnqnv0KlODDjHPKYPqMJsaqyUipNRoVpwESnNAUWyvKHLY+JFvaaX5Glk5AZzJe8OHYISWi444DSJJVyLKMeZ8VdToWHr9y3zI3t2Q5zNBM9hBb+XfVPR43h7OBF1r00IFh4S7WsP0cFFoEkRO/j2znw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=distech-controls.com; dmarc=pass action=none
+ header.from=distech-controls.com; dkim=pass header.d=distech-controls.com;
+ arc=none
+Received: from BL0PR01MB4835.prod.exchangelabs.com (20.177.147.211) by
+ BL0PR01MB4484.prod.exchangelabs.com (20.177.241.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2367.24; Tue, 22 Oct 2019 13:33:17 +0000
+Received: from BL0PR01MB4835.prod.exchangelabs.com
+ ([fe80::5c78:d9d4:3906:a553]) by BL0PR01MB4835.prod.exchangelabs.com
+ ([fe80::5c78:d9d4:3906:a553%2]) with mapi id 15.20.2347.029; Tue, 22 Oct 2019
+ 13:33:17 +0000
+From:   "Tremblay, Eric" <etremblay@distech-controls.com>
+To:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v5 0/2] hwmon: Add driver for Texas Instruments TMP512/513
+ sensor chips
+Thread-Topic: [PATCH v5 0/2] hwmon: Add driver for Texas Instruments
+ TMP512/513 sensor chips
+Thread-Index: AdWI3C769AAu1seTT8uKbML+UcyFaQ==
+Date:   Tue, 22 Oct 2019 13:33:16 +0000
+Message-ID: <BL0PR01MB48352E51CE1F532A92A9142695680@BL0PR01MB4835.prod.exchangelabs.com>
+Accept-Language: en-CA, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mib-plugin: true
+x-originating-ip: [207.253.3.19]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2f442894-f806-44b4-e9be-08d756f46577
+x-ms-traffictypediagnostic: BL0PR01MB4484:
+x-microsoft-antispam-prvs: <BL0PR01MB4484B902B845133CF506C0C695680@BL0PR01MB4484.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 01986AE76B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(136003)(39860400002)(366004)(376002)(189003)(199004)(476003)(14454004)(2201001)(86362001)(33656002)(478600001)(81156014)(8936002)(81166006)(8676002)(66476007)(66556008)(66446008)(66946007)(76116006)(2501003)(66066001)(486006)(64756008)(186003)(25786009)(5660300002)(52536014)(256004)(14444005)(26005)(102836004)(6506007)(71190400001)(305945005)(7736002)(6116002)(4326008)(3846002)(74316002)(6436002)(9686003)(55016002)(2906002)(99286004)(54906003)(71200400001)(316002)(110136005)(7696005);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR01MB4484;H:BL0PR01MB4835.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: distech-controls.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8OPqR8OP2iQZdCQXkOi3uUfQs96/dVp7ew423HXGVXiVZnJt+OyNJFCc1hQK3BV5YIwBWsCBA5jE5mnyVp+3AcXdwbrjRdVyxJceEnghEilIM3+J65gXt9uT7XSgCLlKQC16B1dYlKRfFMutMyQ4spdXTG05lAF0nhZtMTXQzwlbpefVrIjBw/StyBO5Ba9TPQ2iU5sbFcPPkvn80CHwe1sVJs8lPFXXFDNztj9VO0dNsGlEimRbCe7RncTupEJDNZhUsXy5PuRN3liGGf2V6e4I59oe5SKjsPA/npUW12w2mGUMsgy53GpwxXeWFKUhek2C9XRoi9CCXuReGx6R5/wRHWV8IOdTrtTZE8xFex9R6tp4o6+rph69LwZEYFrjD+0kAmWWEOOLlJBFwfgB5Ht5GxUvi/NsrpyJaMaFPgN5AdnIh6tMFeSU0ZeVqm3r
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: distech-controls.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f442894-f806-44b4-e9be-08d756f46577
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2019 13:33:16.8342
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: caadbe96-024e-4f67-82ec-fb28ff53d16d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /dc2k4c+WE7QLmp2RCiY5EUXqMcPG2NZ+LXbZt1qRLftUlCInEJPH1zk4n+j954KyV8RUZygeaH0mpMoZXfOQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB4484
+X-Proofpoint-Processed: True
+X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910220125
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 20 Oct 2019 23:11:22 -0500
-Jeff LaBundy <jeff@labundy.com> wrote:
-
-> This patch adds support for the Azoteq IQS622 proximity sensor,
-> capable of reporting a unitless measurement of a target's prox-
-> imity to the sensor.
-> 
-> Signed-off-by: Jeff LaBundy <jeff@labundy.com>
-A few trivial bits inline + that question on the dt binding and
-whether it is something we ought to be deciding at device build
-time or whether there are devices where it should be configurable.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/proximity/Kconfig       |  10 ++
->  drivers/iio/proximity/Makefile      |   1 +
->  drivers/iio/proximity/iqs622-prox.c | 334 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 345 insertions(+)
->  create mode 100644 drivers/iio/proximity/iqs622-prox.c
-> 
-> diff --git a/drivers/iio/proximity/Kconfig b/drivers/iio/proximity/Kconfig
-> index d536014..2366fd7 100644
-> --- a/drivers/iio/proximity/Kconfig
-> +++ b/drivers/iio/proximity/Kconfig
-> @@ -21,6 +21,16 @@ endmenu
->  
->  menu "Proximity and distance sensors"
->  
-> +config IQS622_PROX
-> +	tristate "Azoteq IQS622 proximity sensor"
-> +	depends on MFD_IQS62X
-> +	help
-> +	  Say Y here if you want to build support for the Azoteq IQS622
-> +	  proximity sensor.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called iqs622-prox.
-> +
->  config ISL29501
->  	tristate "Intersil ISL29501 Time Of Flight sensor"
->  	depends on I2C
-> diff --git a/drivers/iio/proximity/Makefile b/drivers/iio/proximity/Makefile
-> index 0bb5f9d..802ba9d 100644
-> --- a/drivers/iio/proximity/Makefile
-> +++ b/drivers/iio/proximity/Makefile
-> @@ -5,6 +5,7 @@
->  
->  # When adding new entries keep the list in alphabetical order
->  obj-$(CONFIG_AS3935)		+= as3935.o
-> +obj-$(CONFIG_IQS622_PROX)	+= iqs622-prox.o
->  obj-$(CONFIG_ISL29501)		+= isl29501.o
->  obj-$(CONFIG_LIDAR_LITE_V2)	+= pulsedlight-lidar-lite-v2.o
->  obj-$(CONFIG_MB1232)		+= mb1232.o
-> diff --git a/drivers/iio/proximity/iqs622-prox.c b/drivers/iio/proximity/iqs622-prox.c
-> new file mode 100644
-> index 0000000..a805fb21
-> --- /dev/null
-> +++ b/drivers/iio/proximity/iqs622-prox.c
-> @@ -0,0 +1,334 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Azoteq IQS622 Proximity Sensor
-> + *
-> + * Copyright (C) 2019
-> + * Author: Jeff LaBundy <jeff@labundy.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/iio/events.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/iqs62x.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/notifier.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +
-> +#define IQS622_IR_FLAGS				0x16
-> +#define IQS622_IR_FLAGS_TOUCH			BIT(1)
-> +#define IQS622_IR_FLAGS_PROX			BIT(0)
-> +
-> +#define IQS622_IR_UI_OUT			0x17
-> +
-> +#define IQS622_IR_THRESH_PROX			0x91
-> +#define IQS622_IR_THRESH_PROX_MAX		255
-> +#define IQS622_IR_THRESH_PROX_SHIFT		0
-> +
-> +#define IQS622_IR_THRESH_TOUCH			0x92
-> +#define IQS622_IR_THRESH_TOUCH_MAX		1020
-> +#define IQS622_IR_THRESH_TOUCH_SHIFT		2
-> +
-> +struct iqs622_prox_private {
-> +	struct iqs62x_core *iqs62x;
-> +	struct notifier_block notifier;
-> +	struct mutex lock;
-> +	bool thresh_prox;
-> +	bool event_en;
-> +	u8 thresh;
-> +	u8 flags;
-> +};
-> +
-> +static int iqs622_prox_init(struct iqs622_prox_private *iqs622_prox)
-> +{
-> +	struct iqs62x_core *iqs62x = iqs622_prox->iqs62x;
-> +	unsigned int val;
-> +	int error;
-> +
-> +	mutex_lock(&iqs622_prox->lock);
-> +
-> +	error = regmap_write(iqs62x->map,
-> +			     iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX :
-> +							IQS622_IR_THRESH_TOUCH,
-> +			     iqs622_prox->thresh);
-> +	if (error)
-> +		goto err_mutex;
-> +
-> +	error = regmap_read(iqs62x->map, IQS622_IR_FLAGS, &val);
-> +	if (error)
-> +		goto err_mutex;
-> +	iqs622_prox->flags = val;
-> +
-> +	error = regmap_update_bits(iqs62x->map, IQS620_GLBL_EVENT_MASK,
-> +				   iqs62x->dev_desc->ir_mask,
-> +				   iqs622_prox->event_en ? 0 : 0xFF);
-> +
-> +err_mutex:
-> +	mutex_unlock(&iqs622_prox->lock);
-> +
-> +	return error;
-> +}
-> +
-> +static int iqs622_prox_notifier(struct notifier_block *notifier,
-> +				unsigned long event_flags, void *context)
-> +{
-> +	struct iqs62x_event_data *event_data = context;
-> +	struct iqs622_prox_private *iqs622_prox;
-> +	struct iio_dev *indio_dev;
-> +	enum iio_event_direction dir;
-> +	int error;
-> +	u8 flags_mask;
-> +
-> +	iqs622_prox = container_of(notifier, struct iqs622_prox_private,
-> +				   notifier);
-> +	indio_dev = iio_priv_to_dev(iqs622_prox);
-> +
-> +	if (event_flags & BIT(IQS62X_EVENT_SYS_RESET)) {
-> +		error = iqs622_prox_init(iqs622_prox);
-> +		if (error) {
-> +			dev_err(indio_dev->dev.parent,
-> +				"Failed to re-initialize device: %d\n", error);
-> +			return NOTIFY_BAD;
-> +		}
-> +
-> +		return NOTIFY_OK;
-> +	}
-> +
-> +	flags_mask = iqs622_prox->thresh_prox ? IQS622_IR_FLAGS_PROX :
-> +						IQS622_IR_FLAGS_TOUCH;
-> +
-> +	if (!((event_data->ir_flags ^ iqs622_prox->flags) & flags_mask))
-> +		return NOTIFY_DONE;
-> +
-> +	iqs622_prox->flags = event_data->ir_flags;
-> +
-> +	if (!iqs622_prox->event_en)
-> +		return NOTIFY_OK;
-> +
-> +	dir = iqs622_prox->flags & flags_mask ? IIO_EV_DIR_RISING :
-> +						IIO_EV_DIR_FALLING;
-> +
-> +	iio_push_event(indio_dev,
-> +		       IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 0,
-> +					    IIO_EV_TYPE_THRESH, dir),
-> +		       iio_get_time_ns(indio_dev));
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static void iqs622_prox_notifier_unregister(void *context)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = context;
-> +	struct iio_dev *indio_dev = iio_priv_to_dev(iqs622_prox);
-> +	int error;
-> +
-> +	error = blocking_notifier_chain_unregister(&iqs622_prox->iqs62x->nh,
-> +						   &iqs622_prox->notifier);
-> +	if (error)
-> +		dev_err(indio_dev->dev.parent,
-> +			"Failed to unregister notifier: %d\n", error);
-> +}
-> +
-> +static int iqs622_prox_read_raw(struct iio_dev *indio_dev,
-> +				struct iio_chan_spec const *chan,
-> +				int *val, int *val2, long mask)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = iio_priv(indio_dev);
-> +	struct iqs62x_core *iqs62x = iqs622_prox->iqs62x;
-> +	int error;
-> +	__le16 val_buf;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		error = regmap_raw_read(iqs62x->map, IQS622_IR_UI_OUT,
-> +					&val_buf, sizeof(val_buf));
-> +		if (error)
-> +			return error;
-> +
-> +		*val = le16_to_cpu(val_buf);
-> +		return IIO_VAL_INT;
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int iqs622_prox_read_event_config(struct iio_dev *indio_dev,
-> +					 const struct iio_chan_spec *chan,
-> +					 enum iio_event_type type,
-> +					 enum iio_event_direction dir)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = iio_priv(indio_dev);
-> +
-> +	return iqs622_prox->event_en;
-> +}
-> +
-> +static int iqs622_prox_write_event_config(struct iio_dev *indio_dev,
-> +					  const struct iio_chan_spec *chan,
-> +					  enum iio_event_type type,
-> +					  enum iio_event_direction dir,
-> +					  int state)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = iio_priv(indio_dev);
-> +	struct iqs62x_core *iqs62x = iqs622_prox->iqs62x;
-> +	int error;
-> +
-> +	mutex_lock(&iqs622_prox->lock);
-> +
-> +	error = regmap_update_bits(iqs62x->map, IQS620_GLBL_EVENT_MASK,
-> +				   iqs62x->dev_desc->ir_mask, state ? 0 : 0xFF);
-> +	if (!error)
-> +		iqs622_prox->event_en = state;
-> +
-> +	mutex_unlock(&iqs622_prox->lock);
-> +
-> +	return error;
-> +}
-> +
-> +static int iqs622_prox_read_event_value(struct iio_dev *indio_dev,
-> +					const struct iio_chan_spec *chan,
-> +					enum iio_event_type type,
-> +					enum iio_event_direction dir,
-> +					enum iio_event_info info,
-> +					int *val, int *val2)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = iio_priv(indio_dev);
-> +
-> +	*val = iqs622_prox->thresh;
-> +	*val <<= (iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX_SHIFT :
-> +					     IQS622_IR_THRESH_TOUCH_SHIFT);
-> +
-> +	return IIO_VAL_INT;
-> +}
-> +
-> +static int iqs622_prox_write_event_value(struct iio_dev *indio_dev,
-> +					 const struct iio_chan_spec *chan,
-> +					 enum iio_event_type type,
-> +					 enum iio_event_direction dir,
-> +					 enum iio_event_info info,
-> +					 int val, int val2)
-> +{
-> +	struct iqs622_prox_private *iqs622_prox = iio_priv(indio_dev);
-> +	struct iqs62x_core *iqs62x = iqs622_prox->iqs62x;
-> +	int error = -EINVAL;
-> +
-> +	mutex_lock(&iqs622_prox->lock);
-
-The ternary operators in here are bit messy, perhaps better to just
-have an if else block and some local variables?
-
-> +
-> +	if (val > (iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX_MAX :
-> +					      IQS622_IR_THRESH_TOUCH_MAX))
-> +		goto err_mutex;
-> +	val >>= (iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX_SHIFT :
-> +					    IQS622_IR_THRESH_TOUCH_SHIFT);
-> +
-> +	error = regmap_write(iqs62x->map,
-> +			     iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX :
-> +							IQS622_IR_THRESH_TOUCH,
-> +			     val);
-> +	if (!error)
-> +		iqs622_prox->thresh = val;
-> +
-> +err_mutex:
-> +	mutex_unlock(&iqs622_prox->lock);
-> +
-> +	return error;
-> +}
-> +
-> +static const struct iio_info iqs622_prox_info = {
-> +	.read_raw = &iqs622_prox_read_raw,
-> +	.read_event_config = iqs622_prox_read_event_config,
-> +	.write_event_config = iqs622_prox_write_event_config,
-> +	.read_event_value = iqs622_prox_read_event_value,
-> +	.write_event_value = iqs622_prox_write_event_value,
-> +};
-> +
-> +static const struct iio_event_spec iqs622_prox_events[] = {
-> +	{
-> +		.type = IIO_EV_TYPE_THRESH,
-> +		.dir = IIO_EV_DIR_EITHER,
-> +		.mask_separate = BIT(IIO_EV_INFO_ENABLE) |
-> +				 BIT(IIO_EV_INFO_VALUE),
-> +	},
-> +};
-> +
-> +static const struct iio_chan_spec iqs622_prox_channels[] = {
-> +	{
-> +		.type = IIO_PROXIMITY,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-> +		.event_spec = iqs622_prox_events,
-> +		.num_event_specs = ARRAY_SIZE(iqs622_prox_events),
-> +	},
-> +};
-> +
-> +static int iqs622_prox_probe(struct platform_device *pdev)
-> +{
-> +	struct iqs62x_core *iqs62x = dev_get_drvdata(pdev->dev.parent);
-> +	struct iqs622_prox_private *iqs622_prox;
-> +	struct iio_dev *indio_dev;
-> +	unsigned int val;
-> +	int error;
-> +
-> +	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*iqs622_prox));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->dev.parent = &pdev->dev;
-> +	indio_dev->channels = iqs622_prox_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(iqs622_prox_channels);
-> +	indio_dev->name = iqs62x->dev_desc->dev_name;
-> +	indio_dev->info = &iqs622_prox_info;
-> +
-> +	iqs622_prox = iio_priv(indio_dev);
-> +	iqs622_prox->iqs62x = iqs62x;
-> +
-> +	iqs622_prox->thresh_prox = device_property_read_bool(&pdev->dev,
-> +							     "azoteq,use-prox");
-
-Outstanding question on this in the binding patch.
-
-> +
-> +	error = regmap_read(iqs62x->map,
-> +			    iqs622_prox->thresh_prox ? IQS622_IR_THRESH_PROX :
-> +						       IQS622_IR_THRESH_TOUCH,
-> +			    &val);
-> +	if (error)
-> +		return error;
-> +	iqs622_prox->thresh = val;
-> +
-> +	mutex_init(&iqs622_prox->lock);
-> +
-> +	error = iqs622_prox_init(iqs622_prox);
-> +	if (error)
-> +		return error;
-> +
-> +	iqs622_prox->notifier.notifier_call = iqs622_prox_notifier;
-> +	error = blocking_notifier_chain_register(&iqs622_prox->iqs62x->nh,
-> +						 &iqs622_prox->notifier);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "Failed to register notifier: %d\n", error);
-> +		return error;
-> +	}
-> +
-> +	error = devm_add_action_or_reset(&pdev->dev,
-> +					 iqs622_prox_notifier_unregister,
-> +					 iqs622_prox);
-> +	if (error) {
-
-As in previous, feels a little verbose.
-
-> +		dev_err(&pdev->dev, "Failed to add action: %d\n", error);
-> +		return error;
-> +	}
-> +
-> +	return devm_iio_device_register(&pdev->dev, indio_dev);
-> +}
-> +
-> +static struct platform_driver iqs622_prox_platform_driver = {
-> +	.driver = {
-> +		.name	= IQS622_DRV_NAME_PROX,
-> +	},
-> +	.probe		= iqs622_prox_probe,
-> +};
-> +module_platform_driver(iqs622_prox_platform_driver);
-> +
-> +MODULE_AUTHOR("Jeff LaBundy <jeff@labundy.com>");
-> +MODULE_DESCRIPTION("Azoteq IQS622 Proximity Sensor");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:" IQS622_DRV_NAME_PROX);
-
+VmVyc2lvbiBmaXZlIG9mIHRoZSBkcml2ZXIgZm9yIFRleGFzIEluc3RydW1lbnRzIFRNUDUxMi81
+MTMgc2Vuc29ycy4NCg0KVGhhbmtzIGFnYWluIGZvciB0aGUgcmV2aWV3Lg0KDQpNYWluIGNoYW5n
+ZXMgZnJvbSB2ZXJzaW9uIDQ6DQoJLSBSZW1vdmUgY29uZmlnX2xvY2sgbXV0ZXgNCgktIFJld3Jp
+dGUgZHQtYmluZGluZ3MgaW4geWFtbA0KDQpNYWluIGNoYW5nZXMgZnJvbSB2ZXJzaW9uIDM6DQoJ
+LSBSZW1vdmUgdG1wNTF4X2NvbmZpZyBzdHJ1Y3R1cmUsIHRoZXJlIHdhcyBubyB1c2VmdWwgc3Rh
+dGljDQoJICBmaWVsZCBpbiB0aGUgc3RydWN0dXJlLiBUaGUgZGF0YSB3YXMgbW92ZWQgdG8gdG1w
+NTF4X2RhdGENCgkgIHN0cnVjdHVyZS4NCgktIFJlbW92ZSBwbGF0Zm9ybSBkYXRhDQoJLSB1c2Ug
+ZGV2aWNlXyBBUEkgaW5zdGVhZCBvZiBvZl9kZXZpY2UgQVBJDQoJLSBVc2UgYXJyYXkgZm9yIG4t
+RmFjdG9yIHZhbHVlcy4NCgktIFNldCBzaHVudCBkZWZhdWx0IHZhbHVlIHRvIDEwMDAgdU9obXMN
+Cg0KTWFpbiBjaGFuZ2VzIGZyb20gdmVyc2lvbiAyOg0KCS0gUmVtb3ZlIHRoZSBuZWNjZXNzaXR5
+IHRvIHByb3ZpZGUgYSBzaHVudC1yZXNpc3RvciB2YWx1ZQ0KCS0gUmVtb3ZlIG1heC1leHBlY3Rl
+ZC1jdXJyZW50LW1hIGNvbmZpZ3VyYXRpb24gYW5kIGFsd2F5cw0KCSAgdXNlIG1heCBwb3NzaWJs
+ZSBjdXJyZW50IGZvciBjYWxpYnJhdGlvbg0KCS0gTWFrZSBzdXJlIGNhbGN1bGF0aW9uIGR1cmlu
+ZyBjYWxpYnJhdGlvbiBjYW4ndCBvdmVyZmxvdw0KCS0gQWRkIHZhbHVlIGNsYW1waW5nIGZvciBE
+VCB2YWx1ZSBhbmQgcnVudGltZSBwYXJhbWV0ZXJzDQoJLSBTdXBwb3J0IG5vbiBEVCBzeXN0ZW0N
+CgktIE1vdmUgaHlzdGVyZXNpcyBmcm9tIERUIHRvIHN0YW5kYXJkIGF0dHJpYnV0ZQ0KDQpNYWlu
+IGNoYW5nZXMgZnJvbSB2ZXJzaW9uIDE6DQoJLSBVc2UgdGhlIHdpdGhfaW5mbyBBUEkgaW5zdGVh
+ZCBvZiBzeXNmcyBhdHRyaWJ1dGVzLg0KCS0gUmVtb3ZlIG5vbi1zdGFuZGFyZCBhdHRyaWJ1dGVz
+IGFuZCByYXcgdmFsdWUuDQoJLSBNb3ZlIHNldHRpbmdzIHRoYXQgd2VyZSBub24tc3RhbmRhcmQg
+YXR0cmlidXRlcyB0bw0KCSAgZGV2aWNlIHRyZWUsIHVwZGF0ZSBkb2N1bWVudGF0aW9uIGFzIHdl
+bGwuDQoJLSBGaXggY29kaW5nIHN0eWxlIGlzc3Vlcw0KDQpFcmljIFRyZW1ibGF5ICgyKToNCiAg
+ZHQtYmluZGluZ3M6IGh3bW9uOiBBZGQgVE1QNTEyLzUxMw0KICBod21vbjogQWRkIGRyaXZlciBm
+b3IgVGV4YXMgSW5zdHJ1bWVudHMgVE1QNTEyLzUxMyBzZW5zb3IgY2hpcHMuDQoNCiAuLi4vZGV2
+aWNldHJlZS9iaW5kaW5ncy9od21vbi90aSx0bXA1MTMueWFtbCAgfCAgOTAgKysNCiBEb2N1bWVu
+dGF0aW9uL2h3bW9uL3RtcDUxMy5yc3QgICAgICAgICAgICAgICAgfCAxMDIgKysrDQogTUFJTlRB
+SU5FUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA3ICsNCiBkcml2ZXJz
+L2h3bW9uL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTAgKw0KIGRyaXZlcnMv
+aHdtb24vTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArDQogZHJpdmVycy9o
+d21vbi90bXA1MTMuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgNzg2ICsrKysrKysrKysrKysr
+KysrKw0KIDYgZmlsZXMgY2hhbmdlZCwgOTk2IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL3RpLHRtcDUxMy55
+YW1sDQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vaHdtb24vdG1wNTEzLnJzdA0K
+IGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2h3bW9uL3RtcDUxMy5jDQoNCi0tIA0KMi4xNy4x
+DQoNCg==
