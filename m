@@ -2,115 +2,122 @@ Return-Path: <SRS0=/jpl=YQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE44CA9EBB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Oct 2019 13:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F750CA9EB9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Oct 2019 23:08:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6DD8921A4A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Oct 2019 13:40:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D55B621872
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Oct 2019 23:08:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bp4Q67s7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405937AbfJWNjy convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Oct 2019 09:39:54 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:43825 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392089AbfJWNjy (ORCPT
+        id S1733196AbfJWXI6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Oct 2019 19:08:58 -0400
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:34392 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728773AbfJWXI5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Oct 2019 09:39:54 -0400
-Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1Mf0Nm-1hmXPR1EIE-00gboz; Wed, 23 Oct 2019 15:39:51 +0200
-Received: by mail-qt1-f177.google.com with SMTP id o49so24470171qta.7;
-        Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAU6rjuILI+dBSQWkepJeZcFXjrhStzYWyvwa71wsCNVgYufVnZt
-        iHt9MtJEPLOwsEVZaopkvY4n9SDmIlf2VoWvAbc=
-X-Google-Smtp-Source: APXvYqyt7m8OnGbGOfKvN6UapNf8Y0PixnD+b/5MFVO15QeK4AzpoE5xCHBxjuJT4OWklHgs4L5FWsrmt4sucJ53v+g=
-X-Received: by 2002:ac8:18eb:: with SMTP id o40mr9289234qtk.304.1571837989082;
- Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
+        Wed, 23 Oct 2019 19:08:57 -0400
+Received: by mail-pl1-f173.google.com with SMTP id k7so10860142pll.1;
+        Wed, 23 Oct 2019 16:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QxDr+e6+5QdQzyCN6NaD0cQCCfsuFPgUpkpn762LbCY=;
+        b=Bp4Q67s74UcB2h4To3GUb4bxX5cdnjSsAdYj4JFcXpIT1HEAI87HRAsD2nB29jxrd2
+         vIkwH16XY+uUPjU0fDSqzMZey8SAbAR/mCS/GzV5eibEJDilwceCXlB6++2GcFcYu5iX
+         diVQmUb2lI3ZOndtT1fSZdxndVXsW44qUid4v7X/Sspsy5uN4qpOH89t2Ir+tvILvHbV
+         rloY1MH0q048K378e5hXc6g9CQYeltPBJ0r7U4OXYkQ6m/Hrlrc1JYYDjIj+NHJtAm9Y
+         5s0GYTiTKYfoqH9usNTvxwujFyEdJb81yaF3Q/9Saj15wEQZ8JWpeEew77wRKdbKlgW5
+         V3kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QxDr+e6+5QdQzyCN6NaD0cQCCfsuFPgUpkpn762LbCY=;
+        b=tI4Ozhm2I3IqKJ87z4EiFcIy/DCSVUk+QWApQ3/kquDz9TMeKMGb5V/bkOfTWc9KAq
+         do6VEAdZh/H7tYlBwZSbpAFI1aWil5F30KvW9851a7tM3WduaZRLv7JN6c7ddGX6CXIJ
+         qQwa0JqUXf3K4ZB60/XrGfJ612e4jBX5v3BDLk6+7Vo2Pqj86ZocIKJqwXd56q+mvcsy
+         ORDwy1dk4b9KHnmuILvXM/BVYdYNbimpxiBoF9vhPYYmztmszh5TpKiH0uQT4WqvMENy
+         tsVk7uZJYaPaZ1q0Uyl6+rY4vU1K9HkXMrAU652aFbnCY/nMDLOkkOqlsMdNzNKl1juU
+         uUNg==
+X-Gm-Message-State: APjAAAXQlDUTrvwJ8iF18YpFD/cB8hcvm884h75ieMiq95CXH5eYd6pU
+        deqbwRXyMZNzCJYfxfzXxQg=
+X-Google-Smtp-Source: APXvYqyUSrOsqTEVS/KFil0C4ircSVPx3Y670+4lzr4ms8Rlx8BKye/k/4pDNTv6EatZDUf/FITCUQ==
+X-Received: by 2002:a17:902:fe88:: with SMTP id x8mr8185982plm.266.1571872136538;
+        Wed, 23 Oct 2019 16:08:56 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id b18sm24620716pfi.157.2019.10.23.16.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2019 16:08:55 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 16:08:52 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jeff LaBundy <jeff@labundy.com>
+Cc:     lee.jones@linaro.org, jdelvare@suse.com, linux@roeck-us.net,
+        thierry.reding@gmail.com, jic23@kernel.org,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        linux-pwm@vger.kernel.org, knaack.h@gmx.de, lars@metafoo.de,
+        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Subject: Re: [PATCH 3/8] input: keyboard: Add support for Azoteq
+ IQS620A/621/622/624/625
+Message-ID: <20191023230852.GB35946@dtor-ws>
+References: <1571631083-4962-1-git-send-email-jeff@labundy.com>
+ <1571631083-4962-4-git-send-email-jeff@labundy.com>
+ <20191023002254.GW35946@dtor-ws>
+ <20191023012913.GA3233@labundy.com>
 MIME-Version: 1.0
-References: <20191010202802.1132272-1-arnd@arndb.de> <20191023131049.GG11048@pi3>
-In-Reply-To: <20191023131049.GG11048@pi3>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Oct 2019 15:39:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
-Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-leds@vger.kernel.org,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Lihua Yao <ylhuajnu@outlook.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-serial@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Lihua Yao <ylhuajnu@163.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:NLof35stNYTGVLCCiBOj5shE8fEwjZaac7cdAu2nrrmym/kOcjv
- Qnfa/3i0a5qyJkyMXctYodBV7VP0bHQaFrXIBjwV/gpmENyzPTQE7+sVihuV4liYROCT33b
- 9WO8+gy5V2fG2DuQgIo6thaPwkDMewwBExepC4yasYMIPkDiS0zr+8kJODaOpU4HPFc7gMV
- MPShUYeuOvxdtdljHgfJg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DaQc5ZGaJsY=:F603/POvpKLPXWa0X1lFEH
- aQjxfOCxGD/pIMHmKlHcbcFD80Nc+ewErQWmvj+Qgp6xaAE5MxfbNNNrin9LMgRKve0v8GrHu
- BPPYcLBIJd/tRGzy7EoHKzi1xCTWBRKPuZW+NRo5Q3c4o6tNWGjXzPGUI9xyOYPIzGuB4sxow
- ECbUMNeq+vtLAQSVxvpHOttzchCbbhPJcjfvA+bQAYJp52FgAuxb7i+4FvHbE4PKIBUfZrfn7
- RTWpJntJNT2FyPouWE44kX34NjZBTj4rpIcCKzq/vJGEBiexW1JIi5IKVdXZvOH5f6ayOyfG4
- N5aMRdit65bReN0guN1SsKJ7uFbD0kzxYt0bE1Mf25djeRlbjBl6eNdESrSyRRUYp5EHOfQ/A
- Sa10vMW4Ena5av/pF9Ivtanmnx43oe8gg/n1e283kgsPXqMvxru3WC5Nzl6w8FtOo8cSrKeIA
- 4cwYy4vh4ukZW7IvGkXi8VTyHR5QO0uX/EIi41POGGpNZfuz2RZFE3OQuaZ2ZAWDyKIDIkMiS
- w6MOzO71LwFlzMud8Juwt083ioitXDvT/9TIYbAIAmfnUtb8NIa87LZjq9LnymQfMT/771jDX
- Pv0pU2J8yDYscI2Ar/9iY65bLYD1odSzwo1yupcBRkEYBk2LtDP2ofqM/FtIHQxHEgUCSL8BF
- +DQWO4nbj5c/D8V8Rcbk6xIsj3dpX/eZmDwcjBHzixCuvxTtC6bkTqxwxXemSc09w9sXO96BH
- 8wrLVBqppvA4u9/3mwzDk1TPdUl264mBZECZMuP2bwYmiOyo6CZ+bMP0dYsot7zDsLQZk6JM2
- zgDILD/0tZiVRCT1r1eA1ueLWwCTN+MFNjGnfX1TAxma6wIGEoHuP9Uzto3sTth328X/tkiaT
- tiL3D4xHp9lUaPHnTz2w==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023012913.GA3233@labundy.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 3:11 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
-> > The contents are available for testing in
-> >
-> > git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
->
-> When sending v2, can you Cc:
->
-> Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-> Lihua Yao <ylhuajnu@outlook.com>
-> (or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
-> Sergio Prado <sergio.prado@e-labworks.com>
-> Sylwester Nawrocki <s.nawrocki@samsung.com>
->
-> These are folks which to my knowledge had working S3C and S5P boards
-> so maybe they could provide testing.
+On Tue, Oct 22, 2019 at 08:29:13PM -0500, Jeff LaBundy wrote:
+> Hi Dmitry,
+> 
+> Thank you for your prompt review.
+> 
+> On Tue, Oct 22, 2019 at 05:22:54PM -0700, Dmitry Torokhov wrote:
+> > Hi Jeff,
+> > 
+> > On Sun, Oct 20, 2019 at 11:11:18PM -0500, Jeff LaBundy wrote:
+> > > +	/*
+> > > +	 * Each frame contains at most one wheel event (up or down), in which
+> > > +	 * case a full keystroke is emulated.
+> > > +	 */
+> > > +	if (event_flags & BIT(IQS62X_EVENT_WHEEL_UP)) {
+> > > +		input_report_key(iqs62x_keys->input,
+> > > +				 iqs62x_keys->keycode[IQS62X_EVENT_WHEEL_UP],
+> > > +				 0);
+> > > +		input_sync(iqs62x_keys->input);
+> > > +	} else if (event_flags & BIT(IQS62X_EVENT_WHEEL_DN)) {
+> > > +		input_report_key(iqs62x_keys->input,
+> > > +				 iqs62x_keys->keycode[IQS62X_EVENT_WHEEL_DN],
+> > > +				 0);
+> > 
+> > Not '1'?
+> > 
+> 
+> We pick up the '1' in the first of the two for loops above so long as the wheel
+> moved "enough." In this case (and this case only), a subsequent '0' is sent to
+> emulate a full press/release cycle (2 * {EV_KEY + EV_SYN}) for wheel "ticks."
+> 
+> I will update the comment to say "...in which case a complementary release cycle
+> is emulated." If I have misunderstood your concern, please let me know.
 
-Ok, will do. I've uploaded the modified version based on your comments to
-the above URL for now.
+Ah, sorry, no, I misread the code.
 
-I'll probably give it a little more time before resending, but they
-could already
-start testing that version.
+Thanks.
 
-Thanks a lot for the review!
-
-      Arnd
+-- 
+Dmitry
