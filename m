@@ -2,125 +2,100 @@ Return-Path: <SRS0=4wDZ=YV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADE48CA9EC0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 13:05:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3AE8CA9EC0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 23:49:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8A60421734
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 13:05:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0F7720578
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 23:49:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DBl3frT0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729312AbfJ1NFg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Oct 2019 09:05:36 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5201 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726816AbfJ1NFg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Oct 2019 09:05:36 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 045BF4DEF3DE6ABFDDF8;
-        Mon, 28 Oct 2019 21:05:28 +0800 (CST)
-Received: from localhost (10.202.226.61) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Mon, 28 Oct 2019
- 21:05:23 +0800
-Date:   Mon, 28 Oct 2019 13:05:15 +0000
-From:   Jonathan Cameron <jonathan.cameron@huawei.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC:     Jakub Ladman <ladmanj@volny.cz>, Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH][RESEND] New driver for TLV493D-A1B6 I2C chip, input and
- hwmon class device.
-Message-ID: <20191028130515.00003bb0@huawei.com>
-In-Reply-To: <20191018205637.GS35946@dtor-ws>
-References: <966f09b8-0936-6d90-2ec8-bcb1b94c81aa@volny.cz>
-        <20191018205637.GS35946@dtor-ws>
-Organization: Huawei
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.61]
-X-CFilter-Loop: Reflected
+        id S1726175AbfJ1XtX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Oct 2019 19:49:23 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43867 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfJ1XtX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 28 Oct 2019 19:49:23 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l24so8112903pgh.10;
+        Mon, 28 Oct 2019 16:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=GidVpWtOgdh1MdJmqQ31diCsiIYL+x3ynRwwdRDWZ4I=;
+        b=DBl3frT0ObPftCDPLVdvCNA6f+eWU7L8xYXrNAINA/2539RvUUfmqQgUJedEVcVouy
+         v4C0+sPLaigYvhInXnMK5IqiQAJcP6Jrpq2ag33xGAQUA84BnWJEJrI8xLXKBjyRGtZ3
+         KQyzVzFOZPbbs3BCay/FkH5LJD2QzhlNlfYq3CF6azGtnD0IdnvEo2042Pyy6hk2BcDq
+         vsT5trLoKW94gdvLJyyw9NzIMyLPEOn1t9qI1fIEs0BKWiNnZGAAux4D5C/Lel+wPc8j
+         Mo8haqFdd9N2v3zYPSs52W5SD8ba/N27C/MsVQIXS+wytfC7KIxXVXitzBIweesQD91B
+         emqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=GidVpWtOgdh1MdJmqQ31diCsiIYL+x3ynRwwdRDWZ4I=;
+        b=MLk0FC+VBpsXPOlL0ct9L2ZgUNxgf8ajN9Fmxk1PtTh4VWKVtEIC5ONrCdkuAJjmmX
+         Xoq2JIp20hRfRgkQMRsc6SLZ266Z6eX2abOhV/l5vGHO/IO7CNr1oxXVgn8qloCunkDh
+         oRE/fYXHWCBy5x8QDVjMH5n53z2n8ujSDT4vbo+K8+UgJFpNuUd4bFKlOmta8Ok7+RRE
+         8k9xgXPiNYfWEkdwdMJnFfhgaosqSstSiycZ4r/6olXv6m/Fqs7fouSmn+rK24iU6Zkr
+         xHxPB8WLjbh1q55dNLOVTEBbWdSYSpSUmkPX5YfOW4UU+wPA51Z/3rVvZeGqi6Jqy+J4
+         4K/w==
+X-Gm-Message-State: APjAAAWhsiIF2gWdokiJyYUgTvXzE68XcUCtuC8gMypL/GfXcnUu9TP9
+        gNADJXZXjwW0EfEE+Mq8MH4=
+X-Google-Smtp-Source: APXvYqynSqN7vgOSHKrN2zdo25WkKaEcjhBS0gaz95C8JDomUkLpk8/7aZyMrw8hSpL3sL/vv6+XiA==
+X-Received: by 2002:a17:90a:5aa3:: with SMTP id n32mr2384540pji.97.1572306562137;
+        Mon, 28 Oct 2019 16:49:22 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:200::2:c0c7])
+        by smtp.gmail.com with ESMTPSA id d4sm597119pjs.9.2019.10.28.16.49.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2019 16:49:21 -0700 (PDT)
+From:   rentao.bupt@gmail.com
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH 0/3] hwmon: (pmbus) add driver for BEL PFE1100 and PFE3000
+Date:   Mon, 28 Oct 2019 16:49:01 -0700
+Message-Id: <20191028234904.12441-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 18 Oct 2019 13:56:37 -0700
-Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+From: Tao Ren <rentao.bupt@gmail.com>
 
-> Hi Jakub,
-> 
-> On Fri, Oct 18, 2019 at 10:10:19PM +0200, Jakub Ladman wrote:
-> > Dear maintainers.
-> > 
-> > As a linux-patch newbie i made some mistakes in my first attempt to send
-> > this patch.
-> > This patch contains a new driver for i2c connected chip, Infineon
-> > TLV493D-A1B6.
-> > The chip is 3D hall-effect sensor with thermometer.
-> > 
-> > This particular driver senses magnetic field rotation in X/Y plane with 1
-> > degree resolution and +/- 1 degree error.
-> > 
-> > Input device is created for the angle sensing part.
-> > Hwmon device is created for the thermometer part.
-> > 
-> > Input device axis must be configured by device-tree. There are also optional
-> > parameters regarding absolute/relative mode switching, minimum step in
-> > relative mode, filtering and thermometer calibration.
-> > 
-> > We are using that device as high reliability rotary encoder.  
-> 
-> I wonder if IIO subsystem that support s magnetometers and temperature
-> sensors would not be a better hone for this.
-> 
-> CC-ing Jonathan.
-> 
-Hi Jakub, Dmitry,
+The patch series adds "bel-pfe" pmbus driver which supports hardware
+monitoring for BEL PFE1100 and PFE3000 power supplies.
 
-Sorry for slow reply, was on vacation.
+There are total 3 patches:
+  - patch #1 adds the initial version of bel-pfe driver which supports
+    BEL PFE1100 power supply.
+  - patch #2 adds BEL PFE3000 support into bel-pfe driver.
+  - patch #3 adds documentation for PFE1100 and PFE3000 chips.
 
-Anyhow, from a quick glance at the datasheet this looks like a fairly standard
-magnetometer, be it one designed for use with an associated magnet, rather than
-intended for use to measure the earths magnetic field (compass type chips).
+The driver has been tested on Facebook Wedge40 BMC (with PFE1100) and
+Facebook CMM BMC (with PFE3000).
 
-These devices only become an 'input device' once the relative positioning relative
-to the magnet is known.  We should probably figure out a way to represent that
-in DT etc for devices where it is known.  Whether we then do a bridge to input
-using that info in kernel or pass it all up to userspace to deal with is a
-separate issue, that position information needs to be described first.  My suspicion
-is that it would be hard to handle the maths in kernel, but I've not tried
-working it out!
+Tao Ren (3):
+  hwmon: (pmbus) add BEL PFE1100 power supply driver
+  hwmon: (pmbus) add BEL PFE3000 power supply driver
+  docs: hwmon: Document bel-pfe pmbus driver
 
-So this would fit in IIO, even if the eventual 'use case' is classic input
-(I'm guessing a rotary dial).
+ Documentation/hwmon/bel-pfe.rst | 112 +++++++++++++++++++++++++++
+ drivers/hwmon/pmbus/Kconfig     |   9 +++
+ drivers/hwmon/pmbus/Makefile    |   1 +
+ drivers/hwmon/pmbus/bel-pfe.c   | 131 ++++++++++++++++++++++++++++++++
+ 4 files changed, 253 insertions(+)
+ create mode 100644 Documentation/hwmon/bel-pfe.rst
+ create mode 100644 drivers/hwmon/pmbus/bel-pfe.c
 
-We have a driver for a part with similar support undergoing revisions at the
-moment:
-
-https://www.azoteq.com/images/stories/pdf/iqs624_datasheet.pdf
-
-There might be other hall effect devices like this in IIO, I can't recall but
-I certainly have one in my todo pile.
-
-+CC linux-iio
-
-Thanks,
-
-Jonathan
-
-
-> Also, your mailer mangled your patch pretty badly, please consider using
-> git send-email next time.
-
-
-> 
-> Thanks.
-> 
-
+-- 
+2.17.1
 
