@@ -2,120 +2,174 @@ Return-Path: <SRS0=fVv9=YW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0641CA9EAE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 14:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62797CA9EAE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 15:05:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C18392087F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 14:03:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EC2820856
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 15:05:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xgr0d/3K"
+	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="tJg5UNEj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388696AbfJ2ODA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Oct 2019 10:03:00 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40259 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728306AbfJ2ODA (ORCPT
+        id S2389686AbfJ2PFB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Oct 2019 11:05:01 -0400
+Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:2857 "EHLO
+        mx0a-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389387AbfJ2PFB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Oct 2019 10:03:00 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r4so3986783pfl.7;
-        Tue, 29 Oct 2019 07:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KN9MskQmflVnB4L2PhN33bbW9nU67D9GmEhihR64Dow=;
-        b=Xgr0d/3KsmBYi0Vds45njbcN6sFqyATIR6A0Rp79dYlw9LqMyF8XJo5gS4UO2pGj8B
-         cAVPkjM29SI/pGVsUrhsfm4h4LHuwhHwHFhFj4wARDJe3ePM2kD61b/c79s9Wpp3osBY
-         epByIFRhKkZjIEq7YYTI1DsgVffhouIXEj6ZjIDWbZRoj3dBNK6vbVtTCWMF9lv2kFRI
-         r5wIHKOHD8ewiV0n8zQYHvOPu1w+5A0YDKyZgRcizuFQWacBf8WWjR4UDqNIxeQkfgFG
-         Rqg9qZlSVH4mSucMdHPlpubVb1ZSUHQKSBD/lT224rtUgrkksZK35JhCYXznykvSgXT4
-         ERfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KN9MskQmflVnB4L2PhN33bbW9nU67D9GmEhihR64Dow=;
-        b=pqfNrGNxoSKT22kFGUajQt9qEheqyBFzzc26egHS/iMfXljCrzpPCfCv/MYLzh+WQl
-         grkosTtEal0EdmSa582AYwwz78ULhc9VyheJtWYTTs7QwGtWUKSdH4RD7ZB1XQfjlI3b
-         H34HdAslTiPSXZXV5b2FZF9DgOVj6rgHPJuDBgmPv15c+tMAF57Dmkc4n9MRVy6+JXcm
-         +CNwq5YxGPlYmdiCm0/S+rcICHXyL8kYYrD6uopRwJUvuP6S9Jla38QPsujat7PSq1B+
-         0yGE4WMAgKdzI5WOmF5NZR0zd5jRY3eKaSkQ3Rtl+g4fsrjAOY9Swv5QvZdohNijt5tE
-         tcyg==
-X-Gm-Message-State: APjAAAX8H9C8EVDXkdLf3rBTdvL3qlRsl8fZkoxDvdh/XzDlnnOQwr3J
-        QIFc43qEAqT32sgYSYCdkCPYr0aa
-X-Google-Smtp-Source: APXvYqyOln2o9Ja2+yx0sK6SUz5OpkWA83Kv7lxXaoEByvKo5+Ca5UEnvQF4KFSOORIdHDvPSGRZtA==
-X-Received: by 2002:a63:1b07:: with SMTP id b7mr27500421pgb.166.1572357779088;
-        Tue, 29 Oct 2019 07:02:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z16sm6293023pge.55.2019.10.29.07.02.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Oct 2019 07:02:56 -0700 (PDT)
-Subject: Re: [PATCH] lm75: add lm75b detection
-To:     Jean Delvare <jdelvare@suse.de>, Rain Wang <Rain_Wang@Jabil.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20191026081049.GA16839@rainw-fedora28-jabil.corp.JABIL.ORG>
- <7a2ddf42-8bbe-59e0-dae8-85b184ea0da0@roeck-us.net>
- <20191028104618.5f21af38@endymion>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <82a0b331-daa0-af9a-a7d0-0f1b3246ea49@roeck-us.net>
-Date:   Tue, 29 Oct 2019 07:02:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191028104618.5f21af38@endymion>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 29 Oct 2019 11:05:01 -0400
+Received: from pps.filterd (m0118789.ppops.net [127.0.0.1])
+        by mx0a-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9TEjSA8026000;
+        Tue, 29 Oct 2019 11:04:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
+ cc : subject : date : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pps-02182019;
+ bh=3zG4fVZSjDwWnP5OdW+qb6CpsyaL9dShru2QfhyHN5w=;
+ b=tJg5UNEjYr/o+E140mGb1dpEXZKaKK3wGTMwUuSAafS06Tosh2WZ21MkOpt9epSBBNEh
+ sYppmbGaY3imdMavc9zej/rhcXmMoJImMcS0mEjTOHwhMWQsLDh7M4akAIH/u1bw8Jbg
+ fyn5qzsKLLALkDQqUw3cKQbguXxD/GK+H9gHsYXoAvZfK75x3eFUmFz6IjiZ0ovhZawz
+ pHqrJPtBhmuE19lmBSNeb5tGO8fEmnW070E6rkRNCYg2j70gDQjcZCsi0tP/TfOpalJ8
+ 2uQIqCAAPHHXriIe1XeQnnmk1ikhFPG/IAHUW8m2lHmxro8bmqM+KhsUre4SIjXoLLoA PQ== 
+Received: from nam01-sn1-obe.outbound.protection.outlook.com (mail-sn1nam01lp2055.outbound.protection.outlook.com [104.47.32.55])
+        by mx0a-002ab301.pphosted.com with ESMTP id 2vx3vu12p3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 29 Oct 2019 11:04:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YrITuMJDtUyjRgYJOzDh2/RPFz9QZ+BzXatdz0gTfpjA5xlJEKinxHrsDIumGz+rG5fkDp6Sn5uTSXleBJefxywIHlo9tDlq7THvtj7Qc2vz2EotSKwA6+gVDKsTOvPjFiqeFSJA0+UmEGXuKouObhpeFptXWV6pVvm8Zli+xN7NHQ+yc4Ckq6N94pkKcdJPs0cGxU0WXe+Duiw1xyFj+7atwnJVAOx21SX1iHgVzFyJHn1nb6U5qVLA7kI8a6FdRQqCsVOqL2V9h4tS7KCR8jizLMurJNj9IuBDpgHcAIAtSdXd/pRrAzBmjQmK5vBifQbCEmIpQ0Rpn6ir+HximQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3zG4fVZSjDwWnP5OdW+qb6CpsyaL9dShru2QfhyHN5w=;
+ b=VeNfAyk0oFDQ2tkXZLIJh4mc2641rszsxYptEdVCozmV6oNR2JZDEG1lmHkTPSgfPQPJs+fDYgeQewM+Oj1Fv2k/0dHdwopKhaHbvH73ruK55hgaVsCD6R69a12a59mBufNTdn7rjXBKuOBiKW7GuyBQUlmXF2Dkwis/OiQs5Wygxnmk3fNEXj/sI8RYgW2FzPq4MIk8HF3bwWNAqyEb0lm5h1/RzEEaRxsZrgCJL8gbzthZUgzev83L2jy9DWEcYaRQSt+0iVRsiojgNgVvkfb8xzkSh9K71cRwG66J8wClp0Te2RMIiIebdiF6EDnHtbHW80YK4ZTq5pzLifmZAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=distech-controls.com; dmarc=pass action=none
+ header.from=distech-controls.com; dkim=pass header.d=distech-controls.com;
+ arc=none
+Received: from DM6PR01MB4844.prod.exchangelabs.com (20.177.219.29) by
+ DM6PR01MB3883.prod.exchangelabs.com (20.176.72.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.20; Tue, 29 Oct 2019 15:04:23 +0000
+Received: from DM6PR01MB4844.prod.exchangelabs.com
+ ([fe80::a05a:a956:3538:51a8]) by DM6PR01MB4844.prod.exchangelabs.com
+ ([fe80::a05a:a956:3538:51a8%6]) with mapi id 15.20.2387.025; Tue, 29 Oct 2019
+ 15:04:23 +0000
+From:   "Tremblay, Eric" <etremblay@distech-controls.com>
+To:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v6 0/2] hwmon: Add driver for Texas Instruments TMP512/513
+ sensor chips
+Thread-Topic: [PATCH v6 0/2] hwmon: Add driver for Texas Instruments
+ TMP512/513 sensor chips
+Thread-Index: AdWOaZVTjHP79FTQQ9m5o2b29+XQjA==
+Date:   Tue, 29 Oct 2019 15:04:23 +0000
+Message-ID: <DM6PR01MB4844FAE9F161D08EDB128BE295610@DM6PR01MB4844.prod.exchangelabs.com>
+Accept-Language: en-CA, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mib-plugin: true
+x-originating-ip: [207.253.3.19]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 50b887b2-3996-45b8-c21a-08d75c8148e0
+x-ms-traffictypediagnostic: DM6PR01MB3883:
+x-microsoft-antispam-prvs: <DM6PR01MB38834FE4719209EB4056A56095610@DM6PR01MB3883.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0205EDCD76
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(376002)(396003)(346002)(136003)(199004)(189003)(14454004)(478600001)(71190400001)(74316002)(2201001)(66066001)(76116006)(64756008)(66556008)(6116002)(3846002)(54906003)(52536014)(86362001)(5660300002)(7696005)(71200400001)(66446008)(305945005)(81156014)(81166006)(7736002)(33656002)(8676002)(25786009)(8936002)(2501003)(186003)(256004)(2906002)(66476007)(4326008)(6506007)(102836004)(476003)(486006)(26005)(316002)(110136005)(6436002)(9686003)(14444005)(55016002)(66946007)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR01MB3883;H:DM6PR01MB4844.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: distech-controls.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VS04IGu5B+73mu9lLgOm1iaFSFT69gmovUePrM/hn53RhCJ+evwel08LY0a7Vvv5UiIDIpp5GItQwLZngP87vSdeScgQBMzQOGiBK1EVMmNJJw+33jSRIMVjMzgEuLxCKorbR/s0Hhg4yZYtT3v6THslMpRgHElAzdNOjd/lo9CuwHBCZJ+Xb0H5FaYs1TKTHltg9sJD4wHlt7cstXNQyXDOVfWau1UXxeso/1+OPieLDvm2vq27HdgR92VaPLnFrV9i4JvvQEawSJsdGBKdNBkPpCJJ7ql4AMqzd5n4iegJkqR9CUyniX/4R/tSW1hwbcTNBMh75r/XG+U+FEdiTaJ0tuXKtQW41jCXTyK/ieZ+2XfRIBMUEfHGeS6zvKR69bt+mxPFVds9g6Qs/aERIiy6LgRsH5vRIPvCAXtOzxiZsIWQqcLPq6HqGUkfr2Oa
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: distech-controls.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50b887b2-3996-45b8-c21a-08d75c8148e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2019 15:04:23.8361
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: caadbe96-024e-4f67-82ec-fb28ff53d16d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D+evjGk0+WRVfWBulCis/Kl8zJRGCfZ2UpiRggAgwboRAHto2SiTVM6uoX+BHaT4WYQw4DlgFIErgqGgcJshjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB3883
+X-Proofpoint-Processed: True
+X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 mlxlogscore=999
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0 spamscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910290141
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/28/19 2:46 AM, Jean Delvare wrote:
-> On Sun, 27 Oct 2019 16:03:39 -0700, Guenter Roeck wrote:
->> On 10/26/19 1:10 AM, Rain Wang wrote:
->>> The National Semiconductor LM75B is very similar as the
->>> LM75A, but it has no ID byte register 7, and unused registers
->>> return 0xff rather than the last read value like LM75A.
-> 
-> Please send hwmon-related patches to the linux-hwmon list.
-> 
->>> Signed-off-by: Rain Wang <rain_wang@jabil.com>
->>
->> I am quite hesitant to touch the detect function for this chip.
->> Each addition increases the risk for false positives. What is the
->> use case ?
-> 
-> I'm positively certain I don't want this. Ideally there should be no
-> detection at all for device without ID registers. The only reason there
-> are some occurrences of that is because there were no way to explicitly
-> instantiate I2C devices back then, and we have left the detection in
-> place to avoid perceived regressions. But today there are plenty of
-> ways to explicitly instantiate your I2C devices so there are no excuses
-> for more crappy detect functions. Ideally we would even get rid of
-> existing ones at some point in the future.
-> 
-> This patch is bad anyway as it only changes the device name without
-> implementing proper support for the LM75B.
-> 
-FWIW, I don't think there is anything to implement; I don't see any
-differences in functionality.
+Version six of the driver for Texas Instruments TMP512/513 sensors.
 
-I am much more concerned about weakening the already weak detection even further:
-As written, each chip with register 0x07 != 0xa1 will be identified as LM75B.
-Even if that was strengthened to actually check if the register value is 0xff,
-we have no idea what other vendors might implement in those registers. it would
-most certainly mis-identify LM75C as LM75B. Not that it really matters if
-the chip _is_ a LM75C, but who knows if other chips fit that identification
-pattern.
+Except for the renaming of the shunt-resistor-micro-ohms property,
+the changes are only in the binding documentation.
 
-Overall, my suggestion is to add a small startup script to affected systems
-to instantiate the chip directly, and avoid weakening the detect function.
+Thanks
 
-Guenter
+Main changes from version 5:
+	- Use shunt-resistor-micro-ohms standard property
+	- Fix alignment between 'enum' and 'default' in dt-bindings
+
+Main changes from version 4:
+	- Remove config_lock mutex
+	- Rewrite dt-bindings in yaml
+
+Main changes from version 3:
+	- Remove tmp51x_config structure, there was no useful static
+	  field in the structure. The data was moved to tmp51x_data
+	  structure.
+	- Remove platform data
+	- use device_ API instead of of_device API
+	- Use array for n-Factor values.
+	- Set shunt default value to 1000 uOhms
+
+Main changes from version 2:
+	- Remove the neccessity to provide a shunt-resistor value
+	- Remove max-expected-current-ma configuration and always
+	  use max possible current for calibration
+	- Make sure calculation during calibration can't overflow
+	- Add value clamping for DT value and runtime parameters
+	- Support non DT system
+	- Move hysteresis from DT to standard attribute
+
+Main changes from version 1:
+	- Use the with_info API instead of sysfs attributes.
+	- Remove non-standard attributes and raw value.
+	- Move settings that were non-standard attributes to
+	  device tree, update documentation as well.
+	- Fix coding style issues
+
+Eric Tremblay (2):
+  dt-bindings: hwmon: Add TMP512/513
+  hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
+
+ .../devicetree/bindings/hwmon/ti,tmp513.yaml  |  88 ++
+ Documentation/hwmon/tmp513.rst                | 102 +++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tmp513.c                        | 785 ++++++++++++++++++
+ 6 files changed, 993 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+ create mode 100644 Documentation/hwmon/tmp513.rst
+ create mode 100644 drivers/hwmon/tmp513.c
+
+--=20
+2.17.1
+
