@@ -1,185 +1,109 @@
-Return-Path: <SRS0=4wDZ=YV=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=fVv9=YW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BF5CA9EC2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 23:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06D2CA9EC0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 01:47:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7A9821924
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Oct 2019 23:49:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD4BB21835
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Oct 2019 01:47:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sQNTSRDs"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXx8A7MF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbfJ1XtZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Oct 2019 19:49:25 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34231 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728059AbfJ1XtZ (ORCPT
+        id S1726362AbfJ2BrQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Oct 2019 21:47:16 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34092 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbfJ2BrQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Oct 2019 19:49:25 -0400
-Received: by mail-pg1-f194.google.com with SMTP id e4so3836543pgs.1;
-        Mon, 28 Oct 2019 16:49:24 -0700 (PDT)
+        Mon, 28 Oct 2019 21:47:16 -0400
+Received: by mail-pg1-f195.google.com with SMTP id e4so4044616pgs.1;
+        Mon, 28 Oct 2019 18:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sDVKctYQFPQQhndxFna9vtm7wSyOf2hUQLavep1crp4=;
-        b=sQNTSRDsXZpa47r1mRwPnfJ/BlGNsD34hfuusH+Yr0xkBhZh0VRjQhIWl8hJwtheyG
-         Gx1X7Uv+3Q4vgAC32/wwAmh52D564MMfAICCAk1FvUZpfTZqiAAnv0ylDhw1gj8ulPft
-         psaa6COHOGy5HZyH2124EqIjdehs+b29LIKRVpEQ5bJOSjp1pjRGD/5g5T+1mYpWMX7T
-         6vMJsw3qV7TaIXVCOuAbGSwo6bq+WvxFchucWVNTrkfMIP2H7o39DHEkrE7OaHHc2FpQ
-         PkBCUBuyu2JyItPrmV2qUfwm0lWb36Llj+N2RPomWix5gpE2qdlfuvIk5RfgJd4JCRbs
-         7vnA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=H6F8R3JCUcijrcISpIqaMmNlxSaXg/x1o4VoaEKW7pk=;
+        b=FXx8A7MF3sJ3zC6HOzUkYCd4JgIvMFGOij89BPl1oBNkhVhIQy8MBcYE6kIaP4o18T
+         1FnhC0liEmZ+aWibVa5X2qPGXABYY7JTRVZ7rSGM/YVIpBzTcjg0/T+CTeE+2QzRMmlu
+         K9HLqCA/REDocLdmaCrprjQwaLZIsWwE/7u7e47G4X5LqPVLJD1bfTmX0wesfRwCIU4B
+         fWiRyNEzP5CDzabefSWJraYujLkh8X/RLOKReSlysYLGEq6r8vUMQaqQmA16G+lJMuxA
+         af7qJpEXrfT6WS+GD+o5FOFo/v/Ced8Z6tjSy5UNozc+irkcvN/A2nJA9d3k45ipIck6
+         AfrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=sDVKctYQFPQQhndxFna9vtm7wSyOf2hUQLavep1crp4=;
-        b=E8031P5DTBqt6lJN705mJ3WEUp1XqgFa19tgWAihIO8FhNfPwhxq9whdETuBUHxE+f
-         jnJetqGkcw7EyX6mCaTinK6VCHvFJSCCmo/wKQneKcKDIXZWeumA2IeMi89r1nw0jfpt
-         ybQ5bcKN4De/n49XwFUCmNRU+PQ4eF1L02y178IuKb+V71CdfIbnpBBwgXD6tbWK9kwy
-         Vc+X+LG0SCg84f0byqyGd5BCu7qtJaNl6LufQNQhvxVBKA6lTUO9EH90diHzMK0o1fBg
-         JJPkhNhJ2Vd35meileW5e0vRRWv3zQOYZJH0UmVodM4Z17euPRONb21N7EOHyfvkl0Bc
-         GDBw==
-X-Gm-Message-State: APjAAAWAcfZ/Qu1YVjJSSH9+dTO5e/8xu73zUJ/BeIHfXuAzK8FIFYBC
-        iBMLwYAAtjfvWwQQzayRK6m6GiXv4qk=
-X-Google-Smtp-Source: APXvYqwy/8Fn5H0ZgY1iNeuIidNJTniA7Oj3ADDkqWaznlUkhLyG/mH7kmTYIfVVrbAwiBkj7bPLwg==
-X-Received: by 2002:a17:90a:d149:: with SMTP id t9mr2403813pjw.108.1572306564400;
-        Mon, 28 Oct 2019 16:49:24 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:200::2:c0c7])
-        by smtp.gmail.com with ESMTPSA id d4sm597119pjs.9.2019.10.28.16.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 16:49:23 -0700 (PDT)
-From:   rentao.bupt@gmail.com
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, taoren@fb.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH 2/3] hwmon: (pmbus) add BEL PFE3000 power supply driver
-Date:   Mon, 28 Oct 2019 16:49:03 -0700
-Message-Id: <20191028234904.12441-3-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191028234904.12441-1-rentao.bupt@gmail.com>
-References: <20191028234904.12441-1-rentao.bupt@gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H6F8R3JCUcijrcISpIqaMmNlxSaXg/x1o4VoaEKW7pk=;
+        b=Uz/iIrmOoj7aln5BUM3TDHfjgugWBgT2xjamtsvrkyFEemNJeD8tATz4+g1X1NioFj
+         qkitgAKUAfXz9GsTB7r4Tl9kd1msRyszuAOGTtIvRVyyuS64UAkl4+EM4mSWOoq8zKV0
+         SKe+cc0wNWTE1a3Qy0fg6D9oCaVtRByLE7AXSN42pJkLjAOluTDitj/WCRaqFFzY5aVj
+         ERj5anlrLBYj4x14pXr9BkcV+1ARhmUeyQ1j3q5QbzQnMbKVRfjhi7rqxKmUrm/NwJBb
+         /QFeghthu6GIn2J9y/FK81YfNedWEQWEEzYtxWX7Ol+5LmttDIC40UUHINsLgHPZZwWU
+         2FxA==
+X-Gm-Message-State: APjAAAWkTzdzW7fYUtvwqCyk2ECk26XXP8pHS09ZNePOwz6+yB0bM16y
+        H0rjs6YMNiWWJ0MBO2gzj5w=
+X-Google-Smtp-Source: APXvYqzWXN7iBuH3BLVP3Cl3cNjR0RXYx1DS5rGdd+gD6dwpidBa7wGsQ7kcjOzpWsCvJIettD1qXw==
+X-Received: by 2002:a17:90b:157:: with SMTP id em23mr2978709pjb.22.1572313635249;
+        Mon, 28 Oct 2019 18:47:15 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f7sm12356156pfa.150.2019.10.28.18.47.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 28 Oct 2019 18:47:14 -0700 (PDT)
+Date:   Mon, 28 Oct 2019 18:47:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina3221) Fix read timeout issue
+Message-ID: <20191029014712.GA22268@roeck-us.net>
+References: <20191022005922.30239-1-nicoleotsuka@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191022005922.30239-1-nicoleotsuka@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+On Mon, Oct 21, 2019 at 05:59:22PM -0700, Nicolin Chen wrote:
+> After introducing "samples" to the calculation of wait time, the
+> driver might timeout at the regmap_field_read_poll_timeout call,
+> because the wait time could be longer than the 100000 usec limit
+> due to a large "samples" number.
+> 
+> So this patch sets the timeout limit to 2 times of the wait time
+> in order to fix this issue.
+> 
+> Fixes: 5c090abf945b ("hwmon: (ina3221) Add averaging mode support")
+> Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
 
-Add the driver to support BEL PFE3000 which is 3000 Wat AC to DC power
-supply. The chip has 8 pages.
+Applied.
 
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
----
- drivers/hwmon/pmbus/bel-pfe.c | 65 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 64 insertions(+), 1 deletion(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
-index 117f9af21bf3..7b6c90b056c9 100644
---- a/drivers/hwmon/pmbus/bel-pfe.c
-+++ b/drivers/hwmon/pmbus/bel-pfe.c
-@@ -10,9 +10,21 @@
- #include <linux/init.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
-+#include <linux/pmbus.h>
-+
- #include "pmbus.h"
- 
--enum chips {pfe1100};
-+enum chips {pfe1100, pfe3000};
-+
-+/*
-+ * Disable status check for pfe3000 devices, because some devices report
-+ * communication error (invalid command) for VOUT_MODE command (0x20)
-+ * although correct VOUT_MODE (0x16) is returned: it leads to incorrect
-+ * exponent in linear mode.
-+ */
-+static struct pmbus_platform_data pfe3000_plat_data = {
-+	.flags = PMBUS_SKIP_STATUS_CHECK,
-+};
- 
- static struct pmbus_driver_info pfe_driver_info[] = {
- 	[pfe1100] = {
-@@ -34,6 +46,45 @@ static struct pmbus_driver_info pfe_driver_info[] = {
- 			   PMBUS_HAVE_STATUS_TEMP |
- 			   PMBUS_HAVE_FAN12,
- 	},
-+
-+	[pfe3000] = {
-+		.pages = 8,
-+		.format[PSC_VOLTAGE_IN] = linear,
-+		.format[PSC_VOLTAGE_OUT] = linear,
-+		.format[PSC_CURRENT_IN] = linear,
-+		.format[PSC_CURRENT_OUT] = linear,
-+		.format[PSC_POWER] = linear,
-+		.format[PSC_TEMPERATURE] = linear,
-+		.format[PSC_FAN] = linear,
-+
-+		/* Page 0: V1. */
-+		.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+			   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+			   PMBUS_HAVE_POUT | PMBUS_HAVE_FAN12 |
-+			   PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
-+			   PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-+			   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
-+			   PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_TEMP |
-+			   PMBUS_HAVE_VCAP,
-+
-+		/* Page 1: Vsb. */
-+		.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+			   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+			   PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-+			   PMBUS_HAVE_POUT,
-+
-+		/*
-+		 * Page 2: V1 Ishare.
-+		 * Page 4: V1 Cathode.
-+		 * Page 5: Vsb Cathode.
-+		 * Page 6: V1 Sense.
-+		 * Page 3 and 7 are reserved.
-+		 */
-+		.func[2] = PMBUS_HAVE_VOUT,
-+		.func[4] = PMBUS_HAVE_VOUT,
-+		.func[5] = PMBUS_HAVE_VOUT,
-+		.func[6] = PMBUS_HAVE_VOUT,
-+	},
- };
- 
- static int pfe_pmbus_probe(struct i2c_client *client,
-@@ -42,11 +93,23 @@ static int pfe_pmbus_probe(struct i2c_client *client,
- 	int model;
- 
- 	model = (int)id->driver_data;
-+
-+	/*
-+	 * PFE3000-12-069RA devices may not stay in page 0 during device
-+	 * probe which leads to probe failure (read status word failed).
-+	 * So let's set the device to page 0 at the beginning.
-+	 */
-+	if (model == pfe3000) {
-+		client->dev.platform_data = &pfe3000_plat_data;
-+		i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-+	}
-+
- 	return pmbus_do_probe(client, id, &pfe_driver_info[model]);
- }
- 
- static const struct i2c_device_id pfe_device_id[] = {
- 	{"pfe1100", pfe1100},
-+	{"pfe3000", pfe3000},
- 	{}
- };
- 
--- 
-2.17.1
-
+> ---
+>  drivers/hwmon/ina3221.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index ef37479991be..f335d0cb0c77 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -213,7 +213,7 @@ static inline int ina3221_wait_for_data(struct ina3221_data *ina)
+>  
+>  	/* Polling the CVRF bit to make sure read data is ready */
+>  	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
+> -					      cvrf, cvrf, wait, 100000);
+> +					      cvrf, cvrf, wait, wait * 2);
+>  }
+>  
+>  static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
