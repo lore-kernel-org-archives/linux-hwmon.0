@@ -2,110 +2,88 @@ Return-Path: <SRS0=ti+p=YY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF1EC47E49
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Oct 2019 18:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D73CA9ECB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Oct 2019 23:42:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1603120873
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Oct 2019 18:42:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D8Qe+GkS"
+	by mail.kernel.org (Postfix) with ESMTP id 95E4820862
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Oct 2019 23:42:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729239AbfJaSmV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Oct 2019 14:42:21 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37358 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729266AbfJaSmV (ORCPT
+        id S1727529AbfJaXmx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Oct 2019 19:42:53 -0400
+Received: from cyberdimension.org ([80.67.179.20]:40436 "EHLO
+        gnutoo.cyberdimension.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726540AbfJaXmx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Oct 2019 14:42:21 -0400
-Received: by mail-pl1-f194.google.com with SMTP id p13so3081347pll.4;
-        Thu, 31 Oct 2019 11:42:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mOGUK5o3jF1p1Y2eIo51S/GjvyM21GlwSNR8PmNMiXg=;
-        b=D8Qe+GkSEbF2UB9zOoTJWhjptWn1t131cSjAdJUZz3AWWUmB+ldbx8F4TVpr4W2eeJ
-         3qg51Bq9dLt4pMg0LP12DX4fm/rrQYuzDsKjUGe2HKkLdsxgXe0mpzjbDVdiq3F1d6+p
-         dA0T1xjazLrxLpKZaNsOpCzhqHzARInzRY3cYxkECjdPrmCCnkc+F629Yd6MqK6u8xT7
-         x1aUrlOPl1Ek3N3AmeglBq745U1VvC7tDapMcijOlMpTchBKBU5BKyHbbgcui4ZxKoj4
-         rTNcG4rm9PAcEM6rPpo408uIztWOGckiKOfI09SmmArWhudXLnEph9gP4i136EFlAh83
-         LEAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mOGUK5o3jF1p1Y2eIo51S/GjvyM21GlwSNR8PmNMiXg=;
-        b=YoIVqpnai0NHuMW8IQZUSbN9GIwGFx+SQd/tV3TT1kblxflddkHIEEV8NQRggPps0P
-         4wScIEBjEhMrAcrkf4Dk7CRuhrYafZZgZ/kWTVRzNjyL68dpnRRl0zBXLWvFwE2EGPjY
-         l6iBILpbVd6knql2ap29zjNbXvq9ckjTxUdzqoePprVDxF9rXiDutiFgU4WccpfN0iJm
-         Y3pI8zI8jFUJkCNOPEpz6W6R+rbLFUb551HgFRvM6IJm30OKyMVfIDT/+tVDR2s4O9p7
-         pEw5K/KhR8TwU1Fqo4wWzT6PVCxIQE013ZE9pTuontPtf1RWIX1f/YDwJu1P8u09chPH
-         551A==
-X-Gm-Message-State: APjAAAWqJVYuR4QJbDiri6LOI/F2pxgYgdb5GlnEwIJHmF0viEfcghBx
-        7EZ390980AveBrCqBd44+gCAzOjz
-X-Google-Smtp-Source: APXvYqyME+Sr4dcNOEyJBsn6UMyFA0KQ9xeaxpAN3OCNXOwcpprTSYjBoKHAdoUZqydVO8s2oHdweA==
-X-Received: by 2002:a17:902:8305:: with SMTP id bd5mr7943187plb.184.1572547338232;
-        Thu, 31 Oct 2019 11:42:18 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id r11sm7567137pjp.14.2019.10.31.11.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2019 11:42:17 -0700 (PDT)
-Date:   Thu, 31 Oct 2019 11:42:14 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jeff LaBundy <jeff@labundy.com>, jdelvare@suse.com,
-        linux@roeck-us.net, thierry.reding@gmail.com, jic23@kernel.org,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-pwm@vger.kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH 2/8] mfd: Add support for Azoteq IQS620A/621/622/624/625
-Message-ID: <20191031184214.GL57214@dtor-ws>
-References: <1571631083-4962-1-git-send-email-jeff@labundy.com>
- <1571631083-4962-3-git-send-email-jeff@labundy.com>
- <20191031134410.GB5700@dell>
+        Thu, 31 Oct 2019 19:42:53 -0400
+Received: from gnutoo.cyberdimension.org (localhost [127.0.0.1])
+        by cyberdimension.org (OpenSMTPD) with ESMTP id 85d5a83e;
+        Thu, 31 Oct 2019 23:41:56 +0000 (UTC)
+Received: from primarylaptop.localdomain (localhost.localdomain [IPv6:::1])
+        by gnutoo.cyberdimension.org (OpenSMTPD) with ESMTP id 8620cd77;
+        Thu, 31 Oct 2019 23:41:56 +0000 (UTC)
+Date:   Fri, 1 Nov 2019 00:43:14 +0100
+From:   Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "amy.shih" <amy.shih@advantech.com.tw>, linux-hwmon@vger.kernel.org
+Subject: Re: git fsck broken due to "hwmon: (nct7904) Fix incorrect
+ temperature limitation register setting of LTD."
+Message-ID: <20191101004314.60bbfcb1@primarylaptop.localdomain>
+In-Reply-To: <aa0c664e-b0cb-36b1-e16f-7d4b11487184@roeck-us.net>
+References: <20191031103846.59a96454@primarylaptop.localdomain>
+        <aa0c664e-b0cb-36b1-e16f-7d4b11487184@roeck-us.net>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191031134410.GB5700@dell>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/fwNhzTfxxPglnhQLo.S.qcY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 31, 2019 at 01:44:10PM +0000, Lee Jones wrote:
-> On Sun, 20 Oct 2019, Jeff LaBundy wrote:
-> > + * Author: Jeff LaBundy <jeff@labundy.com>
-> > + *
-> > + * These devices rely on application-specific register settings and calibration
-> > + * data developed in and exported from a suite of GUIs offered by the vendor. A
-> > + * separate tool converts the GUIs' ASCII-based output into a standard firmware
-> > + * file parsed by the driver.
-> 
-> This troubles me somewhat. So here we take a C header file which is
-> the output of a vendor supplied configuration tool, convert it to a
-> bespoke file format using a Python script authored by yourself, which
-> we masquerade as Linux firmware in order to set-up the hardware.
-> 
-> Is that correct?
-> 
-> What is preventing a very naughty person from providing their own
-> register map (firmware) in order to read/write unsuitable registers
-> from kernel context for their own gains; simply by swapping out a file
-> contained in userspace?
+--Sig_/fwNhzTfxxPglnhQLo.S.qcY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-How is it different from, let's say, Intel WiFi firmware that you load
-into the kernel and then into the card every time you boot up your
-laptop?
+On Thu, 31 Oct 2019 06:16:10 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Thanks.
+> Sorry for the trouble. Unfortunately I didn't catch it before it was
+> pushed. I don't think it can be fixed; my understanding is that the
+> git tree can not be modified.
+>=20
+> What is your git version ? I don't see the problem with git version
+> 2.17.1.
+This may be because you may not have fsckobjects set to true.
 
--- 
-Dmitry
+I've git 2.23.0 with:
+- transfer.fsckobjects =3D true=20
+- fetch.fsckobjects =3D true
+
+Denis.
+
+--Sig_/fwNhzTfxxPglnhQLo.S.qcY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEeC+d2+Nrp/PU3kkGX138wUF34mMFAl27cZIACgkQX138wUF3
+4mM3rhAAne3kvZ4D9K+pLdj3/eMKvdjCamYVj3JnfZxJQKCaN1lF2vHm0tg1fBQ+
+q66iQ3+i1ETRRKynfdi4IxRgOjVi3KYGi3LtFvmgSrEOcsUVJ4y9OYRyEjnpchu3
+YymHhgGGGypFGLMX/wWScHAjGZCM2iOabygrU9VIkO7Y7S00GuVpQxl7YTgylhUP
+v/gI4JfGkAh5yQDNRODC56ph4/qQjjna3vCRoix7T1cB/sK0o1zPxxbXhqqF90Y7
+FjiyVLdspg3y8pBHtfXF5JegasSVS91NqDUBirsPmaLHVDOXJ0dSr0jIXlodH2nb
+WGNNGSFR+sKuqSSrSMNOEY8nlPa8w4yF6O92+Xz7cb/XBpiL7WbibieUzWpYVEM2
+S+GS8RdowZVZMCJrT3nz6Wkw9LdePLCMCbYHxFD+Ut5NTLw/4ItsPUtg68mpI2Uw
+kq6RqrxHdpSla2tIo9xQFV+YqUnS3GmI6jOgPA6VOCMhia3vbDjg2apO2/Uga5i8
+m0mvLEpDu7TUziZ4HWzeiz/FLnw8ZP9k1yOPsGaihKISnNWLGZ4WVp86BgbRxMSD
+6MaaFGMUChYLCkluD2qJv2xw94lY+2FFgFtvQIvHn4JqOXt7wk2jbSPwTPn6OdVB
+PcqrRsFi36EDH6a/CLeQlkQN+ZL5fis0si5+DAFW+aDt+bUz400=
+=cNDC
+-----END PGP SIGNATURE-----
+
+--Sig_/fwNhzTfxxPglnhQLo.S.qcY--
