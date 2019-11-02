@@ -4,197 +4,212 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C517CA9EC7
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Nov 2019 15:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C62BBCA9EC7
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Nov 2019 15:31:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5FB9221726
-	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Nov 2019 15:30:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A19420663
+	for <linux-hwmon@archiver.kernel.org>; Sat,  2 Nov 2019 15:31:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h/bYtkNv"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljIIfMR9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbfKBPaK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 2 Nov 2019 11:30:10 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40299 "EHLO
+        id S1726450AbfKBPbS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 2 Nov 2019 11:31:18 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43627 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726440AbfKBPaK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Nov 2019 11:30:10 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 15so8322425pgt.7;
-        Sat, 02 Nov 2019 08:30:08 -0700 (PDT)
+        with ESMTP id S1726440AbfKBPbS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 2 Nov 2019 11:31:18 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l24so8308362pgh.10;
+        Sat, 02 Nov 2019 08:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WtEi0obkqA+hOpVZZmPJeUDuP8bZ60Q2HPO76+/ywVM=;
-        b=h/bYtkNvK8uXqY6YoPo3nsgiH0Dnh5jmcvkkzyQKaGSvALwUmSVXpxwTpLvx/yipEe
-         mcplOG4RilvyKV/aeYMQLq0lQQ6MmhQu+crKAbvS029uuHQ0mdW8ZPEoaxHh9aTqO93c
-         7PnC/Ejz/SoIHxAUhORpx4rjUcA1qPRx5I4kRsK9MHTr3SN6okoYiSwbPILrTotMSlAv
-         6/B2tqMJY9Sj6h/63ZegU7yMQy/aMfPH8t5hg0p8H5Dnn16E1lJkkwRGExrOuAJ0I/fk
-         r8Ap3wwDUMeOc1/FiZPNNV7NQtqS4YU8IrdydzQ83FUjoIE8qNjPYsQ/ig3ODUhJHOGq
-         FntA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6SMiS6mgXXdUrJczi5rxbHURmOIbfDYKt9jnZjMxdUM=;
+        b=ljIIfMR9UU1LQGDy+T0m4/GOZpNG+pfMu1Z466VWG+4CGbgpsK1cIn1oKgpqamJ7hA
+         Sb+GqdxMDT1TiHbcIOs7LFeFwWEmg1Xvbe5EsESRa8AykJ8+QFr6mi1OrUGg9FZuQlGB
+         w0EZQNBd+r3yyxWvBDXuJUlkMBoKqfioosy4w93MmigoAwG00fRYB9/MrMV51cyGX5FV
+         qlK/zyfTQHmu7fPtzwTOwwEiUV50nXfBXLFYDKyJgj8CdsEyjTA9y4fY+RHjSyJz8kzE
+         4lbdv3hBoDM0nkr/k4RwfKRHd5UVrbRA1ytAAp4BIvtSLSG24UMaaXQU3klhJ57OuWCP
+         2ErQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WtEi0obkqA+hOpVZZmPJeUDuP8bZ60Q2HPO76+/ywVM=;
-        b=Ak000uX33QLsHJkiUXqGpPPGEU8wI5CSwyunC8u3BL6uh5sOXSGhr0rb5WgJDEyfpT
-         6EgnQA62G2m1Dp7uwpOzAzc40u8Ko5iSaTa2cRgyhggH4RHClalJSDiCk0EdczE0Q/Ty
-         LCbKYRDbB0QvsAtLEPnR9RPKykLfqZO6q34eVsMZcB2vEMxYYypt+BXtndBZhvPs7QQU
-         Vj/Ymx9wpssMigGi4nOJMldVwrQ2dyLh4ECMHpa3zR+bePHMQl5j6FBO0dmU/Z0iwfUb
-         FHjXQG572BSmr6Z4rePVEbf3LzR2B3EF6JDVmLJnTVuk6bZm/W6pp+bCm/93CdFTPYpK
-         PWtw==
-X-Gm-Message-State: APjAAAVYZsKgkGeVgNNKe6L1CSVhVnLqzRmi3VrHYWNtLMh7Q9+72lUl
-        ojWSLXstG7vcogQZmSXnMn4AqR1E
-X-Google-Smtp-Source: APXvYqyh0X6GxkFdYz3p2ytoUR/9WSztyuB/fJohGxmi7p5m2J9MXjahus5+3o9BA0IZBgjP2wU2Sg==
-X-Received: by 2002:a17:90a:2326:: with SMTP id f35mr23633482pje.134.1572708608092;
-        Sat, 02 Nov 2019 08:30:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e59sm9843979pjk.28.2019.11.02.08.30.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 02 Nov 2019 08:30:07 -0700 (PDT)
-Subject: Re: [PATCH v6 1/2] hwmon: Add driver for Texas Instruments TMP512/513
- sensor chips
-To:     "Tremblay, Eric" <etremblay@distech-controls.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <DM6PR01MB4844A7A2E7DCA9168D44F34195610@DM6PR01MB4844.prod.exchangelabs.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6SMiS6mgXXdUrJczi5rxbHURmOIbfDYKt9jnZjMxdUM=;
+        b=siJ1rdE2t85WLQqpDke461v3G3N8BM6Zi5vrlOZ3sFTenb2pyTnx/xaUe9FqAqHhxB
+         jSZVHIzLff7galvls69lqdGVVeDcsdzEPiDfrVcwbUJQWDs4fKuJ35fkuMUSbmv4It+c
+         Tu+jerSWOY+iIEmK2KyL5XNk8IqMnZL+AbidESasBmM4RJ8VrasjJK1odDs9bTqLgqW8
+         81jnXct3l6EfyWFSKbS71qlcGo6aEMQbYYnDAr8APxwRqp7dyB12p/lVQXCXyTyJbJpB
+         Wp3AmAKdGtdOu1AXRhCfqOppOw5LYaTM54qT+fZa9ysDqFlj3GEPjqqMCHXiNE31TxTx
+         2KRQ==
+X-Gm-Message-State: APjAAAXORcIEhNlTP/R3PzGDTdmrx7dHN/3QxWxpJY/9v+V3en+wmViH
+        emHG+FWed+QQDZVsBSCqdiA=
+X-Google-Smtp-Source: APXvYqzzUiL8O/6XsZumWEGTrVbVXgZ9kPtXzC3z+zvYJ4g4uGthum08g9EKlHQCIKkYCILeDTZiYw==
+X-Received: by 2002:a62:ce85:: with SMTP id y127mr18172312pfg.24.1572708676949;
+        Sat, 02 Nov 2019 08:31:16 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k24sm9753324pgl.6.2019.11.02.08.31.16
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 02 Nov 2019 08:31:16 -0700 (PDT)
+Date:   Sat, 2 Nov 2019 08:31:15 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <32a41dac-9648-0d7f-afd9-79af0c3eed65@roeck-us.net>
-Date:   Sat, 2 Nov 2019 08:30:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+To:     rentao.bupt@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Subject: Re: [PATCH v2 2/2] docs: hwmon: Document bel-pfe pmbus driver
+Message-ID: <20191102153115.GA5205@roeck-us.net>
+References: <20191029182054.32279-1-rentao.bupt@gmail.com>
+ <20191029182054.32279-3-rentao.bupt@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <DM6PR01MB4844A7A2E7DCA9168D44F34195610@DM6PR01MB4844.prod.exchangelabs.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191029182054.32279-3-rentao.bupt@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/29/19 8:04 AM, Tremblay, Eric wrote:
-> dt-bindings: hwmon: Add TMP512/513
+On Tue, Oct 29, 2019 at 11:20:54AM -0700, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
 > 
-> Add dt-binding for TMP512/513 sensor chips
+> Add documentation for bel-pfe pmbus driver which supports BEL PFE1100 and
+> PFE3000 power supplies.
 > 
-> Signed-off-by: Eric Tremblay <etremblay@distech-controls.com>
-I do get the following warnings:
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
 
-Documentation/hwmon/tmp513.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
-Documentation/hwmon/tmp513.rst: WARNING: document isn't included in any toctree
+Applied after adding bel-pfe to index.rst.
 
-The .rst file needs to be added to Documentation/hwmon/index.rst. No idea what
-the first problem is.
-
+Thanks,
 Guenter
 
 > ---
->   .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 88 +++++++++++++++++++
->   1 file changed, 88 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+>  No change in v2.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+>  Documentation/hwmon/bel-pfe.rst | 112 ++++++++++++++++++++++++++++++++
+>  1 file changed, 112 insertions(+)
+>  create mode 100644 Documentation/hwmon/bel-pfe.rst
+> 
+> diff --git a/Documentation/hwmon/bel-pfe.rst b/Documentation/hwmon/bel-pfe.rst
 > new file mode 100644
-> index 000000000000..e5f3c72ff548
+> index 000000000000..4b4a7d67854c
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2018 Linaro Ltd.
-> +%YAML 1.2
-> +---
+> +++ b/Documentation/hwmon/bel-pfe.rst
+> @@ -0,0 +1,112 @@
+> +Kernel driver bel-pfe
+> +======================
 > +
-> +$id: http://devicetree.org/schemas/hwmon/ti,tmp513.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +Supported chips:
 > +
-> +title: TMP513/512 system monitor sensor
+> +  * BEL PFE1100
 > +
-> +maintainers:
-> +  - Eric Tremblay <etremblay@distech-controls.com>
+> +    Prefixes: 'pfe1100'
 > +
-> +description: |
-> +  The TMP512 (dual-channel) and TMP513 (triple-channel) are system monitors that include
-> +  remote sensors, a local temperature sensor, and a high-side current shunt monitor.
-> +  These system monitors have the capability of measuring remote temperatures,
-> +  on-chip temperatures, and system voltage/power/current consumption.
+> +    Addresses scanned: -
 > +
-> +  Datasheets:
-> +  http://www.ti.com/lit/gpn/tmp513
-> +  http://www.ti.com/lit/gpn/tmp512
+> +    Datasheet: https://www.belfuse.com/resources/datasheets/powersolutions/ds-bps-pfe1100-12-054xa.pdf
+> +
+> +  * BEL PFE3000
+> +
+> +    Prefixes: 'pfe3000'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.belfuse.com/resources/datasheets/powersolutions/ds-bps-pfe3000-series.pdf
+> +
+> +Author: Tao Ren <rentao.bupt@gmail.com>
 > +
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tmp512
-> +      - ti,tmp513
+> +Description
+> +-----------
 > +
-> +  reg:
-> +    maxItems: 1
+> +This driver supports hardware monitoring for below power supply devices
+> +which support PMBus Protocol:
 > +
-> +  shunt-resistor-micro-ohms:
-> +    description: |
-> +      If 0, the calibration process will be skiped and the current and power
-> +      measurement engine will not work. Temperature and voltage measurement
-> +      will continue to work.
-> +      The shunt value also need to respect : rshunt <= pga-gain * 40 * 1000 * 1000.
-> +      If not, it's not possible to compute a valid calibration value.
-> +    default: 1000
+> +  * BEL PFE1100
 > +
-> +  ti,pga-gain:
-> +    description: |
-> +      The gain value for the PGA function. This is 8, 4, 2 or 1.
-> +      The PGA gain affect the shunt voltage range.
-> +      The range will be equal to: pga-gain * 40mV
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8]
-> +    default: 8
+> +    1100 Watt AC to DC power-factor-corrected (PFC) power supply.
+> +    PMBus Communication Manual is not publicly available.
 > +
-> +  ti,bus-voltage-range-volt:
-> +    description: |
-> +      This is the operating range of the bus voltage
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [16, 32]
-> +    default: 32
+> +  * BEL PFE3000
 > +
-> +  ti,nfactor:
-> +    description: |
-> +      Array of three(TMP513) or two(TMP512) n-Factor value for each remote
-> +      temperature channel.
-> +      See datasheet Table 11 for n-Factor range list and value interpretation.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/uint8-array
-> +      - minItems: 2
-> +        maxItems: 3
-> +        items:
-> +          default: 0
+> +    3000 Watt AC/DC power-factor-corrected (PFC) and DC-DC power supply.
+> +    PMBus Communication Manual is not publicly available.
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
 > +
-> +examples:
-> +  - |
-> +    i2c {
-> +        tmp513@5c {
-> +            compatible = "ti,tmp513";
-> +            reg = <0x5C>;
-> +            shunt-resistor-micro-ohms = <330000>;
-> +            ti,bus-voltage-range-volts = <32>;
-> +            ti,pga-gain = <8>;
-> +            ti,nfactor = [01 F3 00];
-> +        };
-> +    };
-> 
-
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not auto-detect devices. You will have to instantiate the
+> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+> +details.
+> +
+> +Example: the following will load the driver for an PFE3000 at address 0x20
+> +on I2C bus #1::
+> +
+> +	$ modprobe bel-pfe
+> +	$ echo pfe3000 0x20 > /sys/bus/i2c/devices/i2c-1/new_device
+> +
+> +
+> +Platform data support
+> +---------------------
+> +
+> +The driver supports standard PMBus driver platform data.
+> +
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +======================= =======================================================
+> +curr1_label		"iin"
+> +curr1_input		Measured input current
+> +curr1_max               Input current max value
+> +curr1_max_alarm         Input current max alarm
+> +
+> +curr[2-3]_label		"iout[1-2]"
+> +curr[2-3]_input		Measured output current
+> +curr[2-3]_max           Output current max value
+> +curr[2-3]_max_alarm     Output current max alarm
+> +
+> +fan[1-2]_input          Fan 1 and 2 speed in RPM
+> +fan1_target             Set fan speed reference for both fans
+> +
+> +in1_label		"vin"
+> +in1_input		Measured input voltage
+> +in1_crit		Input voltage critical max value
+> +in1_crit_alarm		Input voltage critical max alarm
+> +in1_lcrit               Input voltage critical min value
+> +in1_lcrit_alarm         Input voltage critical min alarm
+> +in1_max                 Input voltage max value
+> +in1_max_alarm           Input voltage max alarm
+> +
+> +in2_label               "vcap"
+> +in2_input               Hold up capacitor voltage
+> +
+> +in[3-8]_label		"vout[1-3,5-7]"
+> +in[3-8]_input		Measured output voltage
+> +in[3-4]_alarm           vout[1-2] output voltage alarm
+> +
+> +power[1-2]_label	"pin[1-2]"
+> +power[1-2]_input        Measured input power
+> +power[1-2]_alarm	Input power high alarm
+> +
+> +power[3-4]_label	"pout[1-2]"
+> +power[3-4]_input	Measured output power
+> +
+> +temp[1-3]_input		Measured temperature
+> +temp[1-3]_alarm         Temperature alarm
+> +======================= =======================================================
+> +
+> +.. note::
+> +
+> +    - curr3, fan2, vout[2-7], vcap, pin2, pout2 and temp3 attributes only
+> +      exist for PFE3000.
