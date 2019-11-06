@@ -1,199 +1,84 @@
-Return-Path: <SRS0=5TON=Y4=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=cATO=Y6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C265BCA9EC9
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Nov 2019 21:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58C92C5DF63
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Nov 2019 20:02:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 923D720848
-	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Nov 2019 21:45:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572903936;
-	bh=n1+r0MfkZBi9FsyNFE3/zaoEdvV85ZlEwWRDkStDTVg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=P92R8JtDDXL49TZbl+fFHPcFdBzlSDO2kFYSwz6HaqoRp3ScVIjxjmERHdfre6VDI
-	 U9zYcixMRBz2J/ZcJ6+Hs1OQYgFCBaju6eCPQBJyL5LyxnTeDV6qo1l/jndYHCJg95
-	 Q74ouAy2SD+tAks8BIZ3ysLImH8rIZOCAH7u30CM=
+	by mail.kernel.org (Postfix) with ESMTP id 33A5D217F4
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 Nov 2019 20:02:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbfKDVpg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 4 Nov 2019 16:45:36 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46877 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728634AbfKDVpg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 4 Nov 2019 16:45:36 -0500
-Received: by mail-oi1-f196.google.com with SMTP id b19so6309698oib.13;
-        Mon, 04 Nov 2019 13:45:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=k3kVTa8vuar985g0sliaKOlVYTBSRVAYg3es2b2zUE0=;
-        b=d9pNPH3a6h+suMfuQrAnLlOcwGaK4GASooQjdrguzAy4YjbZw+3zEDGDhe0hYgH9xb
-         902v0VB241F1CkL2Wq5yb83rs8O4SV7N25gziYq5x7XY+N7n42rfmLCwGS1acjfyr4Z0
-         GPJ3yMYP02M+qIvlE84zZUgWYIT8HrcIr3qla1GHvtLGue1VXrY7tDM4hkSSQ7jbZdh3
-         WzRg4m226SpPhC1a9oAQCNetSDyyAX/n0+PSnVG+Hs5s18cejtD4RamyGA/lozIy4MP1
-         KOeDR2/pmCJlZU6xxLSfCZjdcHicSpwmPbjFMUlBay8jdI2erP3y2i4VBdylVvx6zxhq
-         SQJQ==
-X-Gm-Message-State: APjAAAUYTr3OPwqyFGQYiSBbXi4WWhqo6vZ9QRXFNpwHm8agaHXvEdjQ
-        UzlrHt5ORAnDZk4B6z/oIRHiW9c=
-X-Google-Smtp-Source: APXvYqzcMSy4NfS/jdB6V7MhIEClzjRYDLfoJB6r2eHL1uzQtWKE5CiY5mwirVDJJAN/atsq5v5TyQ==
-X-Received: by 2002:aca:f141:: with SMTP id p62mr968251oih.3.1572903934856;
-        Mon, 04 Nov 2019 13:45:34 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id c7sm5370133otr.32.2019.11.04.13.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 13:45:34 -0800 (PST)
-Date:   Mon, 4 Nov 2019 15:45:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Tremblay, Eric" <etremblay@distech-controls.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v6 1/2] hwmon: Add driver for Texas Instruments
- TMP512/513 sensor chips
-Message-ID: <20191104214533.GA9343@bogus>
-References: <DM6PR01MB4844A7A2E7DCA9168D44F34195610@DM6PR01MB4844.prod.exchangelabs.com>
+        id S1727477AbfKFUCr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 Nov 2019 15:02:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38460 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726934AbfKFUCq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 6 Nov 2019 15:02:46 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id xA6Jx9tw058144;
+        Wed, 6 Nov 2019 15:01:12 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2w41x4xbms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Nov 2019 15:01:12 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xA6K0exJ023270;
+        Wed, 6 Nov 2019 20:01:11 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma05wdc.us.ibm.com with ESMTP id 2w41ujhe8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Nov 2019 20:01:11 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xA6K1Bq038470070
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Nov 2019 20:01:11 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14C7528075;
+        Wed,  6 Nov 2019 20:01:11 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A7BF28067;
+        Wed,  6 Nov 2019 20:01:10 +0000 (GMT)
+Received: from wisp4.ibm.com (unknown [9.163.22.179])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Nov 2019 20:01:10 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH 0/2] hwmon: (pmbus/ibm-cffps) Fixes for the LED subsystem
+Date:   Wed,  6 Nov 2019 14:01:04 -0600
+Message-Id: <20191106200106.29519-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR01MB4844A7A2E7DCA9168D44F34195610@DM6PR01MB4844.prod.exchangelabs.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-06_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=403 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1910280000 definitions=main-1911060196
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 03:04:31PM +0000, Tremblay, Eric wrote:
-> dt-bindings: hwmon: Add TMP512/513
+This series fixes a "scheduling while atomic" bug in the CFFPS driver and some
+incorrect behavior with the LED blink functionality.
 
-Did you mean for this to be the subject. Otherwise you've got the same 
-subject for both patches.
+Eddie James (2):
+  hwmon: (pmbus/ibm-cffps) Switch LEDs to blocking brightness call
+  hwmon: (pmbus/ibm-cffps) Fix LED blink behavior
 
-> 
-> Add dt-binding for TMP512/513 sensor chips
-> 
-> Signed-off-by: Eric Tremblay <etremblay@distech-controls.com>
-> ---
->  .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> new file mode 100644
-> index 000000000000..e5f3c72ff548
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2018 Linaro Ltd.
+ drivers/hwmon/pmbus/ibm-cffps.c | 37 ++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 12 deletions(-)
 
-Really? 
+-- 
+2.23.0
 
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/ti,tmp513.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TMP513/512 system monitor sensor
-> +
-> +maintainers:
-> +  - Eric Tremblay <etremblay@distech-controls.com>
-> +
-> +description: |
-> +  The TMP512 (dual-channel) and TMP513 (triple-channel) are system monitors that include
-> +  remote sensors, a local temperature sensor, and a high-side current shunt monitor.
-> +  These system monitors have the capability of measuring remote temperatures,
-> +  on-chip temperatures, and system voltage/power/current consumption.
-
-Wrap lines at <80 chars.
-
-> +
-> +  Datasheets:
-> +  http://www.ti.com/lit/gpn/tmp513
-> +  http://www.ti.com/lit/gpn/tmp512
-> +
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tmp512
-> +      - ti,tmp513
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description: |
-> +      If 0, the calibration process will be skiped and the current and power
-> +      measurement engine will not work. Temperature and voltage measurement
-> +      will continue to work.
-> +      The shunt value also need to respect : rshunt <= pga-gain * 40 * 1000 * 1000.
-> +      If not, it's not possible to compute a valid calibration value.
-> +    default: 1000
-> +
-> +  ti,pga-gain:
-> +    description: |
-> +      The gain value for the PGA function. This is 8, 4, 2 or 1.
-> +      The PGA gain affect the shunt voltage range.
-> +      The range will be equal to: pga-gain * 40mV
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8]
-> +    default: 8
-> +
-> +  ti,bus-voltage-range-volt:
-> +    description: |
-> +      This is the operating range of the bus voltage
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [16, 32]
-> +    default: 32
-
-If this is in volts then it needs '-volt' defined in property-units.txt 
-or just use microvolt. My preference is the latter as you have enough 
-range.
-
-Also, 'voltage' is kind of redundant if with the units.
-
-> +
-> +  ti,nfactor:
-> +    description: |
-> +      Array of three(TMP513) or two(TMP512) n-Factor value for each remote
-> +      temperature channel.
-> +      See datasheet Table 11 for n-Factor range list and value interpretation.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/uint8-array
-> +      - minItems: 2
-> +        maxItems: 3
-> +        items:
-> +          default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        tmp513@5c {
-> +            compatible = "ti,tmp513";
-> +            reg = <0x5C>;
-> +            shunt-resistor-micro-ohms = <330000>;
-> +            ti,bus-voltage-range-volts = <32>;
-> +            ti,pga-gain = <8>;
-> +            ti,nfactor = [01 F3 00];
-> +        };
-> +    };
-> -- 
-> 2.17.1
-> 
