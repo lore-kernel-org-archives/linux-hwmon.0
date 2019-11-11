@@ -2,197 +2,128 @@ Return-Path: <SRS0=0ZqG=ZD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A0FC43331
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Nov 2019 17:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6249FC43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Nov 2019 20:35:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43DDE214DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Nov 2019 17:35:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35ED6206A3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Nov 2019 20:35:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdEctRSh"
+	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="K72rj1A2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfKKRfL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 Nov 2019 12:35:11 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43891 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbfKKRfK (ORCPT
+        id S1727093AbfKKUf2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Nov 2019 15:35:28 -0500
+Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:7066 "EHLO
+        mx0a-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726877AbfKKUf2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 Nov 2019 12:35:10 -0500
-Received: by mail-pl1-f196.google.com with SMTP id a18so8057256plm.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 Nov 2019 09:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Eo2i+iMeMaAm046EL5ip69xym4vsibb65zfJmkDz5pk=;
-        b=bdEctRShAzxa/jV0BuGcfQDkptImnrUbIM2Z4I/ZyXjh9/TCNML+ov2jtilDJcHBq5
-         rL/8vidc5cZSYznwuGtbShMyeIBh/7gonA1E+0M5XgcqGblJXTWBvQaqOtjX9StQJIqV
-         mXo/Cn1fxh06JCTWbOub8kcrQN6ibuPrhtIUQUo79HjT/d3riQt3+9fm13uiSqyylQAi
-         +DA6rraX2ruGpd02XRrQGU7asutg9h1WnAbssYQKvXy+gIPhFAfZ78fOW8BeCWGwm/U/
-         8vlzp+3NPuaQfJbGemb0mU0wldwoC6fIjfmJHTSfA2RgWn6RlW9F6/D/jZvmXWrEimMV
-         I67g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=Eo2i+iMeMaAm046EL5ip69xym4vsibb65zfJmkDz5pk=;
-        b=Wpuo8E/FbW/E/5n8mJHQAbMsbPZViayzg7iaWZ9ujQzbK1w8ZbM5FYAzoWzGw+iGp2
-         tIGp/0NBUhq9uX6jDQ666QtMO7o7Am20e57ZEg5VVvMiq97Ahs+nL26JTuId2sB/a0mq
-         I1e8RuLNYMuDKQqEQBKy9kkgV9fGyURvVzymvgsFx3cJFAHdaR2pw9ib/egftoMOIa/I
-         hKzpFX5W8KwWMP5mjVUHTBNAYT6GZm2OnICbM8DSyzOzcCj923ycodRAKIeLuOv6UnC+
-         eEmB9DpQlmDYtnYS9xK2U7Vxw1v3lAlGcFRLUhyMX3CsktXs0cZJWLpBZbJIP5K47K48
-         +qgQ==
-X-Gm-Message-State: APjAAAX+GPx6es0khUi45iCDCcn/rlNsjhNBH56khMb61OMh9gVZo5tv
-        TykBUEPCcSUAAS+u7eQdifbKszok
-X-Google-Smtp-Source: APXvYqzYYlnft3p/Q8XhFnDvCTl5UP0JI7nX1zsbvaEnNTqVBxON0dI3HZgyRaVTZo7oP53S6IwyVQ==
-X-Received: by 2002:a17:902:ac90:: with SMTP id h16mr27749316plr.147.1573493708116;
-        Mon, 11 Nov 2019 09:35:08 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k20sm17766123pgn.40.2019.11.11.09.35.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 11 Nov 2019 09:35:06 -0800 (PST)
-Date:   Mon, 11 Nov 2019 09:35:05 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] nvme: hwmon: provide temperature min and max values for
- each sensor
-Message-ID: <20191111173505.GB5826@roeck-us.net>
-References: <1573395466-19526-1-git-send-email-akinobu.mita@gmail.com>
- <d3c0c9a7-00b9-0465-16e1-6fd7ba97dfd0@roeck-us.net>
- <CAC5umyiju2Q2fdfVaFyX+Q=sMKr5Gsc_GDVYmSa0vB+w8acvAw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC5umyiju2Q2fdfVaFyX+Q=sMKr5Gsc_GDVYmSa0vB+w8acvAw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Mon, 11 Nov 2019 15:35:28 -0500
+Received: from pps.filterd (m0118789.ppops.net [127.0.0.1])
+        by mx0a-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xABKUaTW013939;
+        Mon, 11 Nov 2019 15:33:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
+ cc : subject : date : message-id; s=pps-02182019;
+ bh=RSuQv3B5X8eZRcFRHj0snrAJMk64z50YXs+reroRNu4=;
+ b=K72rj1A24Jjva5x+N9gqzBDVGjN9Fepbhz3YD5TvywfCdvk3HOre/fQmcf4RMkVVa+sE
+ qxKXGQK1U0FWPKZKT/3C5OrDUR24Al61khrhsVwBVRz9QUsIXD8eOY8iWaPURFWsd753
+ MSR4sGC9YX3Yt3ERpBckC/LW79sWaBdXw0wcIqeW7Z20r9/7sIFozpZbzqFUOK07cyq7
+ +UZ097YXCpBKZW/4I2MEO+usYNPXjEVWq6wsH2+yMYLVHelgDH+Wg47/638A2qHDFdWZ
+ drW8zWxg3MJyYpWHoyLmfNfvpKmvX/3zTcNBwKGIw5Erqtnh+UNqbyBz5R0eeId/HCSd lQ== 
+Received: from pp-smtp-02.acuitylightinggroup.com ([170.76.205.10])
+        by mx0a-002ab301.pphosted.com with ESMTP id 2w5q5c2h02-1;
+        Mon, 11 Nov 2019 15:33:40 -0500
+Received: from pps.filterd (pp-smtp-02.acuitylightinggroup.com [127.0.0.1])
+        by pp-smtp-02.acuitylightinggroup.com (8.16.0.27/8.16.0.27) with SMTP id xABKWj6j021872;
+        Mon, 11 Nov 2019 15:33:40 -0500
+Received: from inf-dsk-207.acuitylightinggroup.com (inf-dsk-207.acuitylightinggroup.com [10.59.79.18])
+        by pp-smtp-02.acuitylightinggroup.com with ESMTP id 2w5rqdr7yt-1;
+        Mon, 11 Nov 2019 15:33:40 -0500
+From:   etremblay@distech-controls.com
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        corbet@lwn.net
+Subject: [PATCH v7 0/2] hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
+Date:   Mon, 11 Nov 2019 15:34:43 -0500
+Message-Id: <20191111203445.27130-1-etremblay@distech-controls.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-11_06:,,
+ signatures=0
+X-Proofpoint-Processed: True
+X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 suspectscore=0
+ bulkscore=0 phishscore=0 mlxscore=0 malwarescore=0 clxscore=1015
+ spamscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1911110179
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 12:56:21AM +0900, Akinobu Mita wrote:
-> 2019年11月11日(月) 1:30 Guenter Roeck <linux@roeck-us.net>:
-> >
-> 
-[ ... ]
+From: Eric Tremblay <etremblay@distech-controls.com>
 
-> > > Example output from the "sensors" command:
-> > >
-> > > nvme-pci-0100
-> > > Adapter: PCI adapter
-> > > Composite:    +53.0 C  (low  = -273.0 C, high = +70.0 C)
-> > >                         (crit = +80.0 C)
-> > > Sensor 1:     +56.0 C  (low  = -273.0 C, high = +65262.0 C)
-> > > Sensor 2:     +51.0 C  (low  = -273.0 C, high = +65262.0 C)
-> > > Sensor 5:     +73.0 C  (low  = -273.0 C, high = +65262.0 C)
-> > >
-> >
-> > Have you tried writing the limits ? On my Intel NVME drive (SSDPEKKW512G7), writing
-> > any minimum limit on the Composite temperature sensor results in a temperature
-> > warning, and that warning is sticky until I reset the controller.
-> > I don't see that problem on Samsung SSD 970 EVO 500GB; I have not yet tried others.
-> 
-> I have Crucial CT500P1SSD8 and WDC WDS512G1X0C-00ENX0, and I have no
-> problem with these devices.
-> 
-> > root@jupiter:/sys/class/hwmon/hwmon0# sensors nvme-pci-0100
-> > nvme-pci-0100
-> > Adapter: PCI adapter
-> > Composite:    +30.0°C  (low  = -273.0°C, high = +70.0°C)
-> >                         (crit = +80.0°C)
-> >
-> > root@jupiter:/sys/class/hwmon/hwmon0# echo 0 > temp1_min
-> > root@jupiter:/sys/class/hwmon/hwmon0# sensors nvme-pci-0100
-> > nvme-pci-0100
-> > Adapter: PCI adapter
-> > Composite:    +30.0°C  (low  =  +0.0°C, high = +70.0°C)  ALARM
-> >                         (crit = +80.0°C)
-> >
-> > It doesn't seem to matter which temperature I write; writing -273000 has
-> > the same result.
-> >
-> > [This is actually why I didn't use the features commands; not that I had observed
-> >   the problem, but I was concerned that problems like this would show up.]
-> 
-> Maybe we should introduce a new quirk so that we can avoid changing
-> temperature threshold for such devices.  Could you tell SSDPEKKW512G7's
-> vendor and device ID?  Quick googling answers it's 8086:f1a5, but I want
-> to make sure.
+Version seven of the driver for Texas Instruments TMP512/513 sensors.
 
-Yes, that is correct.
+Thanks for the review
 
-01:00.0 Non-Volatile memory controller [0108]: Intel Corporation Device [8086:f1a5] (rev 03)
+Main changes from version 6:
+	- Add tmp513 to index.rst
+	- Use microvolt instead of volt for bus voltage range
+	- Fix current value interpretation
+	- Wrap dt-bindings lines to 80 characters
 
-I'll see if I can test this tonight on my other NVMEs. I also dug up an old
-NVMe drive from Toshiba; I'll see if I can connect and test it as well.
+Main changes from version 5:
+	- Use shunt-resistor-micro-ohms standard property
+	- Fix alignment between 'enum' and 'default' in dt-bindings
 
-[ ... ]
+Main changes from version 4:
+	- Remove config_lock mutex
+	- Rewrite dt-bindings in yaml
 
-> > >        */
-> > >       switch (attr) {
-> > >       case hwmon_temp_max:
-> > > -             *val = (data->ctrl->wctemp - 273) * 1000;
-> > > +             err = nvme_get_temp_thresh(data->ctrl, channel, false, val);
-> > > +             if (err)
-> > > +                     *val = (data->ctrl->wctemp - 273) * 1000;
-> >
-> > This would report WCTEMP for all sensors on errors, including errors seen while
-> > the controller is resetting. I think it should be something like
-> >
-> >                 int err = 0;
-> >                 ...
-> >
-> >                 if (!channel)
-> >                         *val = (data->ctrl->wctemp - 273) * 1000;
-> >                 else
-> >                         err = nvme_get_temp_thresh(data->ctrl, channel, false, val);
-> >                 return err;
-> >
-> > assuming we keep using ctrl->wctemp (see below). If changing the upper Composite
-> > temperature sensor limit changes wctemp, and we don't update it, we should not
-> > use it at all after registration and just report the error.
-> >
-> > >               return 0;
-> > > +     case hwmon_temp_min:
-> > > +             return nvme_get_temp_thresh(data->ctrl, channel, true, val);
-> > >       case hwmon_temp_crit:
-> > >               *val = (data->ctrl->cctemp - 273) * 1000;
-> > >               return 0;
-> > > @@ -73,6 +117,23 @@ static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > >       return err;
-> > >   }
-> > >
-> > > +static int nvme_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> > > +                         u32 attr, int channel, long val)
-> > > +{
-> > > +     struct nvme_hwmon_data *data = dev_get_drvdata(dev);
-> > > +
-> > > +     switch (attr) {
-> > > +     case hwmon_temp_max:
-> > > +             return nvme_set_temp_thresh(data->ctrl, channel, false, val);
-> >
-> > Does this change WCTEMP if written on channel 0 ? If so, we would have to update
-> > the cached value of ctrl->wctemp (or never use it after registration).
-> 
-> At least for the devices I have, setting the over temperature threshold
-> doesn't change the WCTEMP.
-> I have checked with  'nvme id-ctrl /dev/nvme0 | grep ctemp'.
-> 
+Main changes from version 3:
+	- Remove tmp51x_config structure, there was no useful static
+	  field in the structure. The data was moved to tmp51x_data
+	  structure.
+	- Remove platform data
+	- use device_ API instead of of_device API
+	- Use array for n-Factor values.
+	- Set shunt default value to 1000 uOhms
 
-Interesting. I just tested this, and the result is the same with Samsung
-SSD 970 EVO. With that in mind, maybe we should really not use wctemp
-at all after initialization, as I had suggested above. What do you think ?
+Main changes from version 2:
+	- Remove the neccessity to provide a shunt-resistor value
+	- Remove max-expected-current-ma configuration and always
+	  use max possible current for calibration
+	- Make sure calculation during calibration can't overflow
+	- Add value clamping for DT value and runtime parameters
+	- Support non DT system
+	- Move hysteresis from DT to standard attribute
 
-Thanks,
-Guenter
+Main changes from version 1:
+	- Use the with_info API instead of sysfs attributes.
+	- Remove non-standard attributes and raw value.
+	- Move settings that were non-standard attributes to
+	  device tree, update documentation as well.
+	- Fix coding style issues
+
+Eric Tremblay (2):
+  dt-bindings: hwmon: Add TMP512/513
+  hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
+
+ .../devicetree/bindings/hwmon/ti,tmp513.yaml  |  89 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/tmp513.rst                | 104 +++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tmp513.c                        | 789 ++++++++++++++++++
+ 7 files changed, 1001 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+ create mode 100644 Documentation/hwmon/tmp513.rst
+ create mode 100644 drivers/hwmon/tmp513.c
+
+-- 
+2.17.1
+
