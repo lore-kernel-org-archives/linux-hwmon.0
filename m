@@ -2,54 +2,57 @@ Return-Path: <SRS0=vS6D=ZE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E7BFC43331
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 22:30:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CC6C43331
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 22:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4260E20674
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 22:30:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43B6721925
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 22:30:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="G/zaCkV2"
+	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="mkAenltE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbfKLWan (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Nov 2019 17:30:43 -0500
-Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:55918 "EHLO
+        id S1726988AbfKLWao (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Nov 2019 17:30:44 -0500
+Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:12242 "EHLO
         mx0a-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726970AbfKLWam (ORCPT
+        by vger.kernel.org with ESMTP id S1727058AbfKLWao (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Nov 2019 17:30:42 -0500
+        Tue, 12 Nov 2019 17:30:44 -0500
 Received: from pps.filterd (m0118789.ppops.net [127.0.0.1])
-        by mx0a-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xACMP4ZC012601;
-        Tue, 12 Nov 2019 17:28:56 -0500
+        by mx0a-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xACMPcEj012875;
+        Tue, 12 Nov 2019 17:28:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
- cc : subject : date : message-id; s=pps-02182019;
- bh=eEQTrTMMbS5NoNM6CgW5d8TOeshnHJx90PFARo1pLGU=;
- b=G/zaCkV2Vvd6QDri3bED4yD9Pfh2Pqfw1kxIpIbn7YstyZDKZk+xuhjtM/E08O2aF3bO
- xYZJEBfe3ghe6RotZ0oin4SCIQgH+HY9qVtZTkrx2TqiSGTJb7ylTYg1A/NRIgQoyHQh
- sF7xKjyirIbwH2kN/a43xrRUCTrMfiLZqBoVK2TE/t09pXTejy/1k+a2u0hded17zAIv
- m2KROyMS19U9fsbMtnW/hJWqFIZQaGc1p2PvhJ7yb8jVt2EfyHyWTANINrxrJOLrtAp+
- FbQKspsm4zpnF9TKd28kguZzLoo8vddvaK+9PgrKji5DsvwAYV245ciWYxW3NSlv7YLm 3A== 
+ cc : subject : date : message-id : in-reply-to : references;
+ s=pps-02182019; bh=/SWeVGogwmOlhROp+ImoSsXOiMdKLGqT8KghQ96hpi0=;
+ b=mkAenltEtICqWwXn/pebMJQPnu+4UNdhX3dbtf0TVCEZYLNerEL3Nuvfg2QMnADf4DPP
+ nc4PPXnM7Oiqr8/RTy7ztAH1uQzUrY8VZsYxXGvDs5bFcLLzt91ZGaSpvmcaTcqKuyAb
+ xIjXDNqQvqnur1j3jt/Art9ZwOVUbRGJmClrMcWCLQjD6F9fUw7W3va7j1PmBfnFaPH8
+ JQK/zz77LkposEjhEdgW/q5MjpJinWUtVD5qwOhujzB9zxVj4PTAzmyZ+uwpkRGljLlU
+ UqVdZgdCiU1+baX8GU63nl363fKTDXZahwU8Wc5zmGcBOm67NaXPvTHYOp+ZHWH7AYEs Tg== 
 Received: from pp-smtp-01.acuitylightinggroup.com ([192.234.69.190])
-        by mx0a-002ab301.pphosted.com with ESMTP id 2w5q5c3wav-1;
-        Tue, 12 Nov 2019 17:28:56 -0500
+        by mx0a-002ab301.pphosted.com with ESMTP id 2w5q5c3waw-1;
+        Tue, 12 Nov 2019 17:28:57 -0500
 Received: from pps.filterd (pp-smtp-01.acuitylightinggroup.com [127.0.0.1])
-        by pp-smtp-01.acuitylightinggroup.com (8.16.0.27/8.16.0.27) with SMTP id xACMQm8M020048;
+        by pp-smtp-01.acuitylightinggroup.com (8.16.0.27/8.16.0.27) with SMTP id xACMQm8N020048;
         Tue, 12 Nov 2019 17:28:56 -0500
 Received: from inf-dsk-207.acuitylightinggroup.com (inf-dsk-207.acuitylightinggroup.com [10.59.79.18])
-        by pp-smtp-01.acuitylightinggroup.com with ESMTP id 2w5uadrkkm-1;
+        by pp-smtp-01.acuitylightinggroup.com with ESMTP id 2w5uadrkkm-2;
         Tue, 12 Nov 2019 17:28:56 -0500
 From:   Eric Tremblay <etremblay@distech-controls.com>
 To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-doc@vger.kernel.org
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         corbet@lwn.net
-Subject: [PATCH v8 0/2] hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
-Date:   Tue, 12 Nov 2019 17:29:59 -0500
-Message-Id: <20191112223001.20844-1-etremblay@distech-controls.com>
+Subject: [PATCH v8 1/2] dt-bindings: hwmon: Add TMP512/513
+Date:   Tue, 12 Nov 2019 17:30:00 -0500
+Message-Id: <20191112223001.20844-2-etremblay@distech-controls.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191112223001.20844-1-etremblay@distech-controls.com>
+References: <20191112223001.20844-1-etremblay@distech-controls.com>
 X-Proofpoint-Processed: True
 X-Proofpoint-Spam-Reason: safe
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -57,73 +60,113 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Version eight of the driver for Texas Instruments TMP512/513 sensors.
+Document the TMP513/512 device devicetree bindings
 
-Thanks for the review
-
-Main changes from version 7:
-	- Report the shunt value as current instead of voltage
-	- Refactor the way we get the right chip register
-	- Adjust visibility of current and power depending on
-	  shunt resistor value
-	- Fix example in bindings
-	- Use uint32-array instead of uint8-array for nFactor values
-
-Main changes from version 6:
-	- Add tmp513 to index.rst
-	- Use microvolt instead of volt for bus voltage range
-	- Fix current value interpretation
-	- Wrap dt-bindings lines to 80 characters
-
-Main changes from version 5:
-	- Use shunt-resistor-micro-ohms standard property
-	- Fix alignment between 'enum' and 'default' in dt-bindings
-
-Main changes from version 4:
-	- Remove config_lock mutex
-	- Rewrite dt-bindings in yaml
-
-Main changes from version 3:
-	- Remove tmp51x_config structure, there was no useful static
-	  field in the structure. The data was moved to tmp51x_data
-	  structure.
-	- Remove platform data
-	- use device_ API instead of of_device API
-	- Use array for n-Factor values.
-	- Set shunt default value to 1000 uOhms
-
-Main changes from version 2:
-	- Remove the neccessity to provide a shunt-resistor value
-	- Remove max-expected-current-ma configuration and always
-	  use max possible current for calibration
-	- Make sure calculation during calibration can't overflow
-	- Add value clamping for DT value and runtime parameters
-	- Support non DT system
-	- Move hysteresis from DT to standard attribute
-
-Main changes from version 1:
-	- Use the with_info API instead of sysfs attributes.
-	- Remove non-standard attributes and raw value.
-	- Move settings that were non-standard attributes to
-	  device tree, update documentation as well.
-	- Fix coding style issues
-
-Eric Tremblay (2):
-  dt-bindings: hwmon: Add TMP512/513
-  hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.
-
- .../devicetree/bindings/hwmon/ti,tmp513.yaml  |  93 +++
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/tmp513.rst                | 103 +++
- MAINTAINERS                                   |   7 +
- drivers/hwmon/Kconfig                         |  10 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/tmp513.c                        | 772 ++++++++++++++++++
- 7 files changed, 987 insertions(+)
+Signed-off-by: Eric Tremblay <etremblay@distech-controls.com>
+---
+ .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
- create mode 100644 Documentation/hwmon/tmp513.rst
- create mode 100644 drivers/hwmon/tmp513.c
 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+new file mode 100644
+index 000000000000..168235ad5d81
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+@@ -0,0 +1,93 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/ti,tmp513.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TMP513/512 system monitor sensor
++
++maintainers:
++  - Eric Tremblay <etremblay@distech-controls.com>
++
++description: |
++  The TMP512 (dual-channel) and TMP513 (triple-channel) are system monitors
++  that include remote sensors, a local temperature sensor, and a high-side
++  current shunt monitor. These system monitors have the capability of measuring
++  remote temperatures, on-chip temperatures, and system voltage/power/current
++  consumption.
++
++  Datasheets:
++  http://www.ti.com/lit/gpn/tmp513
++  http://www.ti.com/lit/gpn/tmp512
++
++
++properties:
++  compatible:
++    enum:
++      - ti,tmp512
++      - ti,tmp513
++
++  reg:
++    maxItems: 1
++
++  shunt-resistor-micro-ohms:
++    description: |
++      If 0, the calibration process will be skiped and the current and power
++      measurement engine will not work. Temperature and voltage measurement
++      will continue to work. The shunt value also need to respect:
++      rshunt <= pga-gain * 40 * 1000 * 1000.
++      If not, it's not possible to compute a valid calibration value.
++    default: 1000
++
++  ti,pga-gain:
++    description: |
++      The gain value for the PGA function. This is 8, 4, 2 or 1.
++      The PGA gain affect the shunt voltage range.
++      The range will be equal to: pga-gain * 40mV
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [1, 2, 4, 8]
++    default: 8
++
++  ti,bus-range-microvolt:
++    description: |
++      This is the operating range of the bus voltage in microvolt
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [16000000, 32000000]
++    default: 32000000
++
++  ti,nfactor:
++    description: |
++      Array of three(TMP513) or two(TMP512) n-Factor value for each remote
++      temperature channel.
++      See datasheet Table 11 for n-Factor range list and value interpretation.
++    allOf:
++      - $ref: /schemas/types.yaml#definitions/uint32-array
++      - minItems: 2
++        maxItems: 3
++        items:
++          default: 0x00
++          minimum: 0x00
++          maximum: 0xFF
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    i2c {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          tmp513@5c {
++              compatible = "ti,tmp513";
++              reg = <0x5C>;
++              shunt-resistor-micro-ohms = <330000>;
++              ti,bus-range-microvolt = <32000000>;
++              ti,pga-gain = <8>;
++              ti,nfactor = <0x1 0xF3 0x00>;
++          };
++    };
 -- 
 2.17.1
 
