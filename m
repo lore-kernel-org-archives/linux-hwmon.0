@@ -2,325 +2,109 @@ Return-Path: <SRS0=vS6D=ZE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED070C43331
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 15:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05492C43331
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 15:04:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD44121A49
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 15:03:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C461E21925
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Nov 2019 15:04:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=distech-controls.com header.i=@distech-controls.com header.b="RO+ORDMQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JP9v4Gze"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbfKLPDJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Nov 2019 10:03:09 -0500
-Received: from mx0a-002ab301.pphosted.com ([148.163.150.161]:49146 "EHLO
-        mx0a-002ab301.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726981AbfKLPDJ (ORCPT
+        id S1726983AbfKLPEm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Nov 2019 10:04:42 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43109 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726799AbfKLPEm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Nov 2019 10:03:09 -0500
-Received: from pps.filterd (m0118790.ppops.net [127.0.0.1])
-        by mx0a-002ab301.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xACEjSKI019901;
-        Tue, 12 Nov 2019 10:01:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=distech-controls.com; h=from : to :
- cc : subject : date : message-id : references : in-reply-to : content-type
- : content-transfer-encoding : mime-version; s=pps-02182019;
- bh=MpmYh0mghqTbnm0vF83qL1K1KYBDcXpHQwM0k+CBEAY=;
- b=RO+ORDMQYTn2sUQJZauD3n1iB38ok3VyCGyvfmdn6n7kJT4YEdqkTAWnL5/EsVnxWjLo
- +SZ4+Rbek0jgpKQ+60exKKs5jZzC3LmElGi0k5FeDf57CwagaxErQg7A2oyO+ns01H93
- UygFr9DrrmFMs0NhPRZJdN79HWKZXx+NVHPAgD5iZFuyu/sacpgjGByA+ZLvz16a7sNK
- lYfvPeFXRsi2jOUPXL00G9rNwISevgyG3s7yHvFKVyeUm3pOm6DisIs73l1lIWDc+PgA
- 49YHlPJ7hOMnLfx4UtJ0ddKhHTAuMMHFgwc/yY51DZUCSrEgLxlxkGfuitqnR6uemFK9 uA== 
-Received: from nam05-co1-obe.outbound.protection.outlook.com (mail-co1nam05lp2050.outbound.protection.outlook.com [104.47.48.50])
-        by mx0a-002ab301.pphosted.com with ESMTP id 2w7cv49052-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Nov 2019 10:01:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G6LdZDFVy3Ttbr6OYWX88Cn8dqoGLsxdqvmyeod5G5k/lJt5ZcC4J0Et7MYFo1M3RxMm1RCpyY+lCcVaxtE/bhF9WFbPI8iVxpsCXpRthE2uMbsSPvx+Yi2ldzATgHZel6hONXR38lfetzXyzWaAbhld9efn5zf8Itpvl68sQE8g2QzDomAMX1hkz5SbSpcvzC27mOYh7Z8UF417ZWeW5vKHAv7ayu4OKxPqTg1gOtrsuQhy/hwQw3NJOZOQFn+0T0wZuDPHxSJlrrVCR0F1IUyV6/Jn/QhjyUJmCCfvQguoIjW+r0ixSgeW9jWJ1pKZAm21z+l/c6cXoj1EOu8sAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MpmYh0mghqTbnm0vF83qL1K1KYBDcXpHQwM0k+CBEAY=;
- b=ak+zwrWRmVvYGhUUV4p11ItwKkt4SGir1+ywM41BZ6BP3UOEzwgVqb7stTsFgm4LakuQZEYp9fzzkczV7HMtM7pXBFsgv3UCcVe0TpAH4ZGEZ1e6OphrTFeCQpWmd188Pjuge5lwgS2nPWP3hKWgKRr4FD+3xlj5a5EJBGNxycRheKMTNBYOt4ZFNicsQsS3ilYtK+ItI3kcrTiPjSkyVDY7TvGje8QIOFe0i3DwIar9oEqq6lOPtxWIIKTaS64QsoMNSSpz3cq5UajZpwTNyiwHB8D75ZPczM8o5VQ32aMEYCgq1Spm/Uk/nbpQkyAZa20s3BFJJdGL4x/vPeBMuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=distech-controls.com; dmarc=pass action=none
- header.from=distech-controls.com; dkim=pass header.d=distech-controls.com;
- arc=none
-Received: from BL0PR01MB4835.prod.exchangelabs.com (20.177.147.211) by
- BL0PR01MB4083.prod.exchangelabs.com (10.167.179.86) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Tue, 12 Nov 2019 15:01:11 +0000
-Received: from BL0PR01MB4835.prod.exchangelabs.com
- ([fe80::b00e:eb7:d585:5086]) by BL0PR01MB4835.prod.exchangelabs.com
- ([fe80::b00e:eb7:d585:5086%6]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
- 15:01:11 +0000
-From:   "Tremblay, Eric" <etremblay@distech-controls.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v7 1/2] dt-bindings: hwmon: Add TMP512/513
-Thread-Topic: [PATCH v7 1/2] dt-bindings: hwmon: Add TMP512/513
-Thread-Index: AQHVmM+QVZuvH6alYkaCtrsGmFXw6KeGuHGAgADoaYA=
-Date:   Tue, 12 Nov 2019 15:01:11 +0000
-Message-ID: <BL0PR01MB4835CDB5E9693A06F10012EF95770@BL0PR01MB4835.prod.exchangelabs.com>
-References: <20191111203445.27130-1-etremblay@distech-controls.com>
- <20191111203445.27130-2-etremblay@distech-controls.com>
- <20191112010345.GA19664@bogus>
-In-Reply-To: <20191112010345.GA19664@bogus>
-Accept-Language: en-CA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mib-plugin: true
-x-originating-ip: [207.253.3.19]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5aa6a1c0-cfa5-44ef-a296-08d7678127d7
-x-ms-traffictypediagnostic: BL0PR01MB4083:
-x-ms-exchange-purlcount: 3
-x-microsoft-antispam-prvs: <BL0PR01MB408350B45BD85641135F991095770@BL0PR01MB4083.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1388;
-x-forefront-prvs: 021975AE46
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(396003)(39860400002)(366004)(376002)(346002)(199004)(189003)(4326008)(6436002)(54906003)(9686003)(186003)(6916009)(53546011)(6246003)(102836004)(6506007)(478600001)(99286004)(446003)(7736002)(966005)(229853002)(26005)(11346002)(476003)(486006)(305945005)(74316002)(316002)(76176011)(55016002)(25786009)(86362001)(6306002)(14454004)(66946007)(256004)(33656002)(52536014)(7696005)(8936002)(76116006)(2906002)(66556008)(6116002)(5660300002)(14444005)(66066001)(3846002)(71190400001)(71200400001)(8676002)(81166006)(81156014)(66446008)(64756008)(66476007);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR01MB4083;H:BL0PR01MB4835.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:3;
-received-spf: None (protection.outlook.com: distech-controls.com does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 07nLd2y2+9CPi6wi5AO7PYkrc+UI2/P1qorBRZDZ+XxxQ/Wpo7y1SfJCuw80J/Fo63ONoJlnGg/nBK/+ZhJrX/xol0cfpfv+OYXgSA54PL4wjmw4IOl+vzAUFtrjbcBPEkN/7OnzEWio2w0akEZLeLgP10GAYVbenqd0CR27Ai7Rp7b1LQ5mGJl/CmMmzN6BCMoxXdR+tOx3KOIruWDfmD8eJBMdwA30nRwA+uxi8l7a8FEhqpwNsoIRp5f9QSRwykTQHwo9pEV5fxOBOz9HwvEYjH4mpWZqYXnceZ5N44ty4avIKtv9Oz+7UQiFfxPWxKrscg0rt75U5UJ/GFu4yzSDqaHiBZdJcymwcb9NdJKtfKolSNKYQfJFY9I+hD5J+iraTEzD+2Hf70Zwr986RXKV6JpNKEShcIUVMN1tnwxxYdRPH8col4eHRRSndQmE1ZeNYqRg9HezIix4Brpf6KK4zy7NLJO4SJ79BlgpPXk=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 12 Nov 2019 10:04:42 -0500
+Received: by mail-pl1-f193.google.com with SMTP id a18so9494260plm.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Nov 2019 07:04:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tCoEPoQn/IVtnGjFo4U/Qk8LODjSGOJgasNa0i9XMFQ=;
+        b=JP9v4GzeWOTBAOJDS73oZmUmLetL/nwxLIf0eel8gIHMHeDAIr9rWpeXuiH/4biPvg
+         bCARep6kj8T5it7Nu/f1kJH3MAWf8LCrotngUsvWXNaPF4RTU5bE31XM2q69LSO56TbE
+         ymE45oXmQGthVBCtfgcV9hAMfCaidN3E63vpf03Dg/E6/yOtcntMrSvNLEtt0M8irGz2
+         BlKPDc55SUUMnaFbBmipLGEJUebzDExF7BRj3g+aZNjU2jKrVwRKV4xVDrPCF0LBfV+a
+         FVcsRBk/jAGeFL13xwaupLO2NjgHnh1Km0ST2KQLQ0+BP3UADyjeY0Tk+QbxegZbA5Px
+         6snA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tCoEPoQn/IVtnGjFo4U/Qk8LODjSGOJgasNa0i9XMFQ=;
+        b=Q5qicmBoRhneYhDi9eC57AJmLINo23wgo46x7iKiA10hVlYUIzvJP8lfomBY62Ncqc
+         sKMzyin0jCvz8AlXA7eoXPLwUUEk7DzUtmTP2WlHy/dgN4lVrsWE8aqjszE9ED2SSQZ9
+         9vsNIF9C3Lc0ScrPipi0bDjgTU2DxLpSdWNtxcrM2VoVV9AHOlWDfcZABvkA6QhUvHwz
+         gzwH1kM2SOwMfq/c8TmTdLMcmcgPm1WzPi4LL2R+zdqXVPTy2e6UEOFDvWWOfDc2pFbf
+         GM35Vd+01Je9GljC5PN5DBw26/jHS98/F96uGMSjmU/o15QdtK/WFAi2sADMooSaQQLu
+         1Rzg==
+X-Gm-Message-State: APjAAAXRSKq5B1Bd04XR3b17gd3eeDstql51YuFm1855pXVVgUEGP+nx
+        sAfEm8q3j3Jf9G/gIlJ3dE4=
+X-Google-Smtp-Source: APXvYqwWqlJZzlUJsC/KoWSFOpjTy3lx7BNBIPaPn+ViHSqLgmL2jF2n26mVnPCA6vxQUZHUbAtwAg==
+X-Received: by 2002:a17:902:24b:: with SMTP id 69mr29945761plc.203.1573571081569;
+        Tue, 12 Nov 2019 07:04:41 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u8sm7913821pga.47.2019.11.12.07.04.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 Nov 2019 07:04:40 -0800 (PST)
+Subject: Re: [PATCH] nvme: hwmon: provide temperature min and max values for
+ each sensor
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Jean Delvare <jdelvare@suse.com>
+References: <1573395466-19526-1-git-send-email-akinobu.mita@gmail.com>
+ <d3c0c9a7-00b9-0465-16e1-6fd7ba97dfd0@roeck-us.net>
+ <CAC5umyiju2Q2fdfVaFyX+Q=sMKr5Gsc_GDVYmSa0vB+w8acvAw@mail.gmail.com>
+ <20191111173505.GB5826@roeck-us.net>
+ <CAC5umyjviR1J5HojE6WBhYQCzu=CFPPoNxXY=T9KRw2yTpO=VQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e2699eee-8ca2-fcf4-d6b2-624cbddd4c6d@roeck-us.net>
+Date:   Tue, 12 Nov 2019 07:04:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: distech-controls.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5aa6a1c0-cfa5-44ef-a296-08d7678127d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 15:01:11.1860
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: caadbe96-024e-4f67-82ec-fb28ff53d16d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FRJAabqyUd8WeUYgkx4HAeqLEwy5Vt35AYSTTmPv/moWKYPwSxJg4qOmKbBd/CCFgSef4JW2qza2ht+SFRBiNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB4083
-X-Proofpoint-Processed: True
-X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 adultscore=0 phishscore=0
- impostorscore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911120132
+In-Reply-To: <CAC5umyjviR1J5HojE6WBhYQCzu=CFPPoNxXY=T9KRw2yTpO=VQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> From: Rob Herring <robh@kernel.org>
-> Sent: Monday, November 11, 2019 8:04 PM
-> To: Tremblay, Eric <etremblay@distech-controls.com>
-> Cc: linux@roeck-us.net; linux-hwmon@vger.kernel.org; devicetree@vger.kern=
-el.org; linux-doc@vger.kernel.org;
-> jdelvare@suse.com; mark.rutland@arm.com; corbet@lwn.net
-> Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: Add TMP512/513
->=20
-> On Mon, Nov 11, 2019 at 03:34:44PM -0500, etremblay@distech-controls.com =
-wrote:
-> > From: Eric Tremblay <etremblay@distech-controls.com>
-> >
-> > Document the TMP513/512 device devicetree bindings
-> >
-> > Signed-off-by: Eric Tremblay <etremblay@distech-controls.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 89
-> > +++++++++++++++++++
-> >  1 file changed, 89 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> > b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> > new file mode 100644
-> > index 000000000000..de4ed3645e0f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
-> > @@ -0,0 +1,89 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) %YAML 1.2
-> > +---
-> > +
-> > +$id:
-> > +https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__devicetree.org_s=
-c
-> > +hemas_hwmon_ti-2Ctmp513.yaml-23&d=3DDwIBAg&c=3DtvvHx3uC0XdtgG-ImPDjfM0=
-Qna
-> > +kIsmmGcwejQDVxD-g&r=3Dy34zLl9_AvBy5NSrvskG6SFbiKoCzI99WW2xhKlsVV4&m=3D=
-sqT
-> > +mLsfhqAI5ubkZyE2FvNS0zZ42lJ4Xsiyf12MKPbI&s=3Dcqxgi-ff4mlqg1dH-w0rmoWT9=
-T
-> > +G9UEzI4jP4boAzSTQ&e=3D
-> > +$schema:
-> > +https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__devicetree.org_m=
-e
-> > +ta-2Dschemas_core.yaml-23&d=3DDwIBAg&c=3DtvvHx3uC0XdtgG-ImPDjfM0QnakIs=
-mmG
-> > +cwejQDVxD-g&r=3Dy34zLl9_AvBy5NSrvskG6SFbiKoCzI99WW2xhKlsVV4&m=3DsqTmLs=
-fhq
-> > +AI5ubkZyE2FvNS0zZ42lJ4Xsiyf12MKPbI&s=3DMFdE05g19en41dOAGudb8oQzrSKdBS_=
-5
-> > +uhKXoz3xbfM&e=3D
-> > +
-> > +title: TMP513/512 system monitor sensor
-> > +
-> > +maintainers:
-> > +  - Eric Tremblay <etremblay@distech-controls.com>
-> > +
-> > +description: |
-> > +  This driver implements support for Texas Instruments TMP512, and TMP=
-513.
-> > +  The TMP512 (dual-channel) and TMP513 (triple-channel) are system
-> > +monitors
-> > +  that include remote sensors, a local temperature sensor, and a
-> > +high-side
-> > +  current shunt monitor. These system monitors have the capability of
-> > +measuring
-> > +  remote temperatures, on-chip temperatures, and system
-> > +voltage/power/current
-> > +  consumption.
-> > +
-> > +  Datasheets:
-> > +
-> > + https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__www.ti.com_lit_=
-g
-> > + pn_tmp513&d=3DDwIBAg&c=3DtvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&=
-r=3Dy
-> > + 34zLl9_AvBy5NSrvskG6SFbiKoCzI99WW2xhKlsVV4&m=3DsqTmLsfhqAI5ubkZyE2FvN=
-S
-> > + 0zZ42lJ4Xsiyf12MKPbI&s=3DaRuMhzI-UQfQORXhmK3OaA7UZ_6segIbgQ4k5SoKF0E&=
-e
-> > + =3D
-> > + https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__www.ti.com_lit_=
-g
-> > + pn_tmp512&d=3DDwIBAg&c=3DtvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&=
-r=3Dy
-> > + 34zLl9_AvBy5NSrvskG6SFbiKoCzI99WW2xhKlsVV4&m=3DsqTmLsfhqAI5ubkZyE2FvN=
-S
-> > + 0zZ42lJ4Xsiyf12MKPbI&s=3DmMNKG3dkkscHl5e73jC-ESFBdu05NhcCuJ-Pfpwls7E&=
-e
-> > + =3D
-> > +
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - ti,tmp512
-> > +      - ti,tmp513
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  shunt-resistor-micro-ohms:
-> > +    description: |
-> > +      If 0, the calibration process will be skiped and the current and=
- power
-> > +      measurement engine will not work. Temperature and voltage measur=
-ement
-> > +      will continue to work. The shunt value also need to respect:
-> > +      rshunt <=3D pga-gain * 40 * 1000 * 1000.
-> > +      If not, it's not possible to compute a valid calibration value.
-> > +    default: 1000
-> > +
-> > +  ti,pga-gain:
-> > +    description: |
-> > +      The gain value for the PGA function. This is 8, 4, 2 or 1.
-> > +      The PGA gain affect the shunt voltage range.
-> > +      The range will be equal to: pga-gain * 40mV
-> > +    allOf:
-> > +      - $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [1, 2, 4, 8]
-> > +    default: 8
-> > +
-> > +  ti,bus-range-microvolt:
-> > +    description: |
-> > +      This is the operating range of the bus voltage in microvolt
-> > +    allOf:
-> > +      - $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [16000000, 32000000]
-> > +    default: 32000000
-> > +
-> > +  ti,nfactor:
-> > +    description: |
-> > +      Array of three(TMP513) or two(TMP512) n-Factor value for each re=
-mote
-> > +      temperature channel.
-> > +      See datasheet Table 11 for n-Factor range list and value interpr=
-etation.
-> > +    allOf:
-> > +      - $ref: /schemas/types.yaml#definitions/uint8-array
-> > +      - minItems: 2
-> > +        maxItems: 3
-> > +        items:
-> > +          default: 0
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
->=20
-> 'make dt_binding_check' fails. You need #address-cells and #size-cells in=
- here:
->=20
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dts:20.17-30: W=
-arning (reg_format): /example-
-> 0/i2c/tmp513@5c:reg: property has invalid length (4 bytes) (#address-cell=
-s =3D=3D 2, #size-cells =3D=3D 1)
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dt.yaml: Warnin=
-g (pci_device_bus_num): Failed prerequisite
-> 'reg_format'
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dts:17.5-26.11:=
- Warning (i2c_bus_bridge): /example-0/i2c: incorrect
-> #address-cells for I2C bus
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dts:17.5-26.11:=
- Warning (i2c_bus_bridge): /example-0/i2c: incorrect
-> #size-cells for I2C bus
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dt.yaml: Warnin=
-g (i2c_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dt.yaml: Warnin=
-g (i2c_bus_reg): Failed prerequisite 'i2c_bus_bridge'
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dt.yaml: Warnin=
-g (spi_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dts:18.23-25.15=
-:
-> Warning (avoid_default_addr_size): /example-0/i2c/tmp513@5c: Relying on d=
-efault #address-cells value
-> Documentation/devicetree/bindings/hwmon/ti,tmp513.example.dts:18.23-25.15=
-: Warning (avoid_default_addr_size): /example-
-> 0/i2c/tmp513@5c: Relying on default #size-cells value
+On 11/12/19 6:40 AM, Akinobu Mita wrote:
+[ ... ]
+>> I'll see if I can test this tonight on my other NVMEs. I also dug up an old
+>> NVMe drive from Toshiba; I'll see if I can connect and test it as well.
+> 
+> That's nice.
+> 
+It works on all devices I have, including the Toshiba, with the exception
+of the Intel. Interestingly, the Toshiba NVMe reports:
 
-Sorry I was confused a little by the documentation. I did not saw that I co=
-uld run `make dt_binding_check' on a single file.
+nvme-pci-0600
+Adapter: PCI adapter
+Composite:    +56.0°C  (low  = -20.0°C, high = +85.0°C)
+                        (crit = +82.0°C)
+Sensor 1:     +56.0°C  (low  = -20.0°C, high = +85.0°C)
 
-I ran it on my tree and it gives me a warning on another file. I wrongly as=
-sume that it ran all over the tree.
+ie the critical temperature is lower than the high temperature. Go figure.
 
-I`ll fix those issue.
+The Toshiba model is
+	THNSN5256GPU7 NVMe TOSHIBA 256GB
 
-Thanks
->=20
-> > +        tmp513@5c {
-> > +            compatible =3D "ti,tmp513";
-> > +            reg =3D <0x5C>;
-> > +            shunt-resistor-micro-ohms =3D <330000>;
-> > +            ti,bus-range-microvolt =3D <32000000>;
-> > +            ti,pga-gain =3D <8>;
-> > +            ti,nfactor =3D [01 F3 00];
-> > +        };
-> > +    };
-> > --
-> > 2.17.1
-> >
+The Intel NVMe has the latest firmware version installed, so this isn't
+a problem that was ever fixed.
+
+Guenter
