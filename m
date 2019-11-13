@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F373C43331
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Nov 2019 01:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39349C17441
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Nov 2019 02:03:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F2FDF2247C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Nov 2019 01:55:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0933B222CD
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Nov 2019 02:03:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573610149;
-	bh=Hk1LfhPBk8mf4j0A6gLA3Gxbg20jEn3kThQ4rBD+a2E=;
+	s=default; t=1573610605;
+	bh=laoqNmJBfeOHo+/xTivya8pe9YZR3Jiai/QAOQi7MCY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1PcOOn71k37rnPvNThmHzFGyR6ZuqUT5JgMR7+5Ygqibne4P81YeHcT1eVxFs5Q0o
-	 F+stcH9HyFpZACmjpNa89JT+RqOK1rBmseJsUw/jR9eBeqMXKTcXGtexC1AXx2Hp+J
-	 4wwoQhEw4zvxPAPQUbQxtka3XFglsJYmG+hat1sQ=
+	b=HZwQzPmihUXUXpoqOkyrYE1ouM4QpEYIzCvS6B8JNmkfo7Ab5XWnSL747os5kScNN
+	 6gmMW+J6+2LYN6NAsuQp1y5q/BD3c6D1OwD64zRcPQ7NIJmJU+keg3RUkWH3agWzPx
+	 BwBkSjnt6VJpSsXbwVDYf2agPYO8/ClwJQJJ0jWE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729248AbfKMBzr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Nov 2019 20:55:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47566 "EHLO mail.kernel.org"
+        id S1728025AbfKMCDR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Nov 2019 21:03:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59710 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729244AbfKMBzq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:55:46 -0500
+        id S1731074AbfKMCCs (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Nov 2019 21:02:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8257522469;
-        Wed, 13 Nov 2019 01:55:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 746BD222CA;
+        Wed, 13 Nov 2019 02:02:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610146;
-        bh=Hk1LfhPBk8mf4j0A6gLA3Gxbg20jEn3kThQ4rBD+a2E=;
+        s=default; t=1573610568;
+        bh=laoqNmJBfeOHo+/xTivya8pe9YZR3Jiai/QAOQi7MCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Khmou61yh0tFUK8KFT1/bc4QXZAD1izlob7H8/8jZdPHNndd/ZNdz2pJfsqdkaRoK
-         fMTla7MxzfVvWhnKS//UvgTPq8uSohLGzWlJkt5w1R7wiGMOaMIAf7xWCB4b31HLaf
-         2hzOWvZVqmNf935fNildLJwGgXFrFpY8qgX/EaYY=
+        b=G5V/oAr+pOk2kfyTBD11dGJafpJ8ugxZmAXt7/lvVkIP75ndji8ZuAXrPoDf7Lcko
+         oML9g9QSaWTVp5ngsR0rTsScGPb6NbJB4wPPK3eh2izaYBUMKaj/AYiDoatCIlhazu
+         H6DXB7LXETpMtrr7qd+kU5QcOlzhnWkPTXqO7ndY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kun Yi <kunyi@google.com>, Guenter Roeck <linux@roeck-us.net>,
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 192/209] hwmon: (npcm-750-pwm-fan) Change initial pwm target to 255
-Date:   Tue, 12 Nov 2019 20:50:08 -0500
-Message-Id: <20191113015025.9685-192-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 45/48] hwmon: (pwm-fan) Silence error on probe deferral
+Date:   Tue, 12 Nov 2019 21:01:28 -0500
+Message-Id: <20191113020131.13356-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
-References: <20191113015025.9685-1-sashal@kernel.org>
+In-Reply-To: <20191113020131.13356-1-sashal@kernel.org>
+References: <20191113020131.13356-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,34 +58,39 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Kun Yi <kunyi@google.com>
+From: Thierry Reding <treding@nvidia.com>
 
-[ Upstream commit f21c8e753b1dcb8f9e5b096db1f7f4e6fdfa7258 ]
+[ Upstream commit 9f67f7583e77fe5dc57aab3a6159c2642544eaad ]
 
-Change initial PWM target to 255 to prevent overheating, for example
-when BMC hangs in userspace or when userspace fan control application is
-not implemented yet.
+Probe deferrals aren't actual errors, so silence the error message in
+case the PWM cannot yet be acquired.
 
-Signed-off-by: Kun Yi <kunyi@google.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/npcm750-pwm-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/pwm-fan.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-index b998f9fbed41e..979b579bc118f 100644
---- a/drivers/hwmon/npcm750-pwm-fan.c
-+++ b/drivers/hwmon/npcm750-pwm-fan.c
-@@ -52,7 +52,7 @@
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 3e23003f78b01..993c61e95d30c 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -227,8 +227,12 @@ static int pwm_fan_probe(struct platform_device *pdev)
  
- /* Define the Counter Register, value = 100 for match 100% */
- #define NPCM7XX_PWM_COUNTER_DEFAULT_NUM		255
--#define NPCM7XX_PWM_CMR_DEFAULT_NUM		127
-+#define NPCM7XX_PWM_CMR_DEFAULT_NUM		255
- #define NPCM7XX_PWM_CMR_MAX			255
+ 	ctx->pwm = devm_of_pwm_get(&pdev->dev, pdev->dev.of_node, NULL);
+ 	if (IS_ERR(ctx->pwm)) {
+-		dev_err(&pdev->dev, "Could not get PWM\n");
+-		return PTR_ERR(ctx->pwm);
++		ret = PTR_ERR(ctx->pwm);
++
++		if (ret != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Could not get PWM: %d\n", ret);
++
++		return ret;
+ 	}
  
- /* default all PWM channels PRESCALE2 = 1 */
+ 	platform_set_drvdata(pdev, ctx);
 -- 
 2.20.1
 
