@@ -2,198 +2,201 @@ Return-Path: <SRS0=o4ty=ZG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19349C432C3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Nov 2019 19:14:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1ABFC432C3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Nov 2019 21:22:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E0E882071F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Nov 2019 19:14:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KnibOcAE"
+	by mail.kernel.org (Postfix) with ESMTP id BE54620715
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Nov 2019 21:22:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbfKNTOn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Nov 2019 14:14:43 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38726 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbfKNTOn (ORCPT
+        id S1726613AbfKNVWM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Nov 2019 16:22:12 -0500
+Received: from pietrobattiston.it ([92.243.7.39]:57368 "EHLO
+        jauntuale.pietrobattiston.it" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726592AbfKNVWM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Nov 2019 14:14:43 -0500
-Received: by mail-pl1-f193.google.com with SMTP id w8so3066278plq.5
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 Nov 2019 11:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=eEgMwv4stYpP/dtbh27yGsGdSdg4kPUVFwkU2s2SmcI=;
-        b=KnibOcAELnyreaUyZfu9T1C9xnp2J1iyoVIYgNWPG3CLCVSbZa7E/MAMt/2Tz7b7Yn
-         xgOpwnWKVcWQloaaoTXlJSm1XxIQhu6v5dctuwdxNRPiqeBc32d9EWP77LhQcOd097uU
-         0v2EeQeCV5996gmoKk4tW+5FSDiqJPdUmLFYkOK+gdULVj7UFWvR7rwp920D9GS5JCud
-         EBeajhvChHcJRwaHTeTReuJ1BUKTTEMv6dp0t8ALsm/KK8dluDOtL5HoDxXVSlJDh512
-         YIvEEdCOGiT386GCg6NUkfJXNJTzZIL4vSVCeJZ57eeeGLXfmJAQq1TetbynTP3ixpiN
-         CQsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=eEgMwv4stYpP/dtbh27yGsGdSdg4kPUVFwkU2s2SmcI=;
-        b=KTMJRLicPVsOm86mvATEzRW8qBSO5uy1h0gdO05W8vyurLERa/hKTNAzarxAn3Tg3z
-         /oVJzZyUtYULhx4y10g3A6468dF8WPXSOlnKvD9dksJg3a9BwZGoNfER7HfzRmnjwu5S
-         Zdr0yZNCWMlRLQW/rUhFbhVpYI1m27aFLElq2dwR+CSRiPaQEkcMzxdl8xUviOKplkF0
-         qkHVw8V2UBmK5j3+AQmuK0XDtm4h4Y7pK/JpcUnZjpHVbTz2/VSPbo4DDQXDJPVkX076
-         Vc8YbBaL2IGLrEG3OjDeEsiGe2/w95lmxboNPKsCVk4+MAqC6ltMTiCNTitReCgCDh07
-         T8GQ==
-X-Gm-Message-State: APjAAAXcotUNFZHnIS6gJHMW1aBCb+kbiUNCfiAAzTxPFM84ur9sBJAu
-        hKBqbuxnMov+rFDNczKohg4=
-X-Google-Smtp-Source: APXvYqxEwalysafupc/hxFAIWDdIp3t9KjjysJERhvel2CwWU6Z1VmwPIoL2g0i21O0jO8EIbjZoCg==
-X-Received: by 2002:a17:902:b218:: with SMTP id t24mr11247613plr.267.1573758882326;
-        Thu, 14 Nov 2019 11:14:42 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v14sm5375539pja.22.2019.11.14.11.14.41
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 Nov 2019 11:14:41 -0800 (PST)
-Date:   Thu, 14 Nov 2019 11:14:40 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2 2/2] nvme: hwmon: add quirk to avoid changing
- temperature threshold
-Message-ID: <20191114191440.GB11288@roeck-us.net>
-References: <1573746001-20979-1-git-send-email-akinobu.mita@gmail.com>
- <1573746001-20979-3-git-send-email-akinobu.mita@gmail.com>
+        Thu, 14 Nov 2019 16:22:12 -0500
+X-Greylist: delayed 459 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 Nov 2019 16:22:09 EST
+Received: from amalgama (94.105.105.79.dyn.edpnet.net [94.105.105.79])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: giovanni)
+        by jauntuale.pietrobattiston.it (Postfix) with ESMTPSA id DF12EE1E18;
+        Thu, 14 Nov 2019 22:14:27 +0100 (CET)
+Received: by amalgama (Postfix, from userid 1000)
+        id 7025C3C01EF; Thu, 14 Nov 2019 22:14:27 +0100 (CET)
+From:   Giovanni Mascellani <gio@debian.org>
+To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Giovanni Mascellani <gio@debian.org>
+Subject: [PATCH] hwmon: (dell-smm-hwmon) Disable BIOS fan control on SET_FAN
+Date:   Thu, 14 Nov 2019 22:14:08 +0100
+Message-Id: <20191114211408.22123-1-gio@debian.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1573746001-20979-3-git-send-email-akinobu.mita@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 12:40:01AM +0900, Akinobu Mita wrote:
-> This adds a new quirk NVME_QUIRK_NO_TEMP_THRESH_CHANGE to avoid changing
-> the value of the temperature threshold feature for specific devices that
-> show undesirable behavior.
-> 
-> Guenter reported:
-> 
-> "On my Intel NVME drive (SSDPEKKW512G7), writing any minimum limit on the
-> Composite temperature sensor results in a temperature warning, and that
-> warning is sticky until I reset the controller.
-> 
-> It doesn't seem to matter which temperature I write; writing -273000 has
-> the same result."
-> 
-> The Intel NVMe has the latest firmware version installed, so this isn't
-> a problem that was ever fixed.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Cc: Keith Busch <kbusch@kernel.org>
-> Cc: Jens Axboe <axboe@fb.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Sagi Grimberg <sagi@grimberg.me>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+On some Dell laptops the BIOS directly controls fan speed, ignoring
+SET_FAN commands. Also, the BIOS controller often happens to be buggy,
+failing to increase fan speed when the CPU is under heavy load and
+setting fan at full speed even when the CPU is idle and relatively
+cool.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Disable BIOS fan control on such laptops as soon as a SET_FAN command
+is issued, and re-enable it at module unloading, so that a userspace
+controller like i8kmon can take control of the fan.
 
-Tested on:
-	INTEL SSDPEKKW512G7
+There is a missing feature: interaction with PM; I think that when
+suspending on RAM the fans should be stopped (this BIOS doesn't always
+do this automatically, neither when fan control is enabled nor when it
+is disabled); when recovering from hibernation to disk, also, the
+command to disable BIOS fan control should be issued again, because
+the computer will have had a power cycle in the meantime.
 
-Specifically verified that min/max attributes are indeed read-only
-on this drive.
+I don't know how to implement these two actions; can someone suggest a
+way? Also, I would be happy to know from more experienced people if
+these actions are sensible.
 
-nvme-pci-0100
-Adapter: PCI adapter
-Composite:    +32.9°C  (low  = -273.1°C, high = +69.8°C)
-                       (crit = +79.8°C)
+Signed-off-by: Giovanni Mascellani <gio@debian.org>
+---
+ drivers/hwmon/dell-smm-hwmon.c | 64 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-groeck@jupiter:/sys/class/hwmon/hwmon0$ ls -l
-total 0
-lrwxrwxrwx 1 root root    0 Nov 14 10:59 device -> ../../../0000:01:00.0
--r--r--r-- 1 root root 4096 Nov 14 10:59 name
-drwxr-xr-x 2 root root    0 Nov 14 10:59 power
-lrwxrwxrwx 1 root root    0 Nov 14 10:59 subsystem -> ../../../../../../class/hwmon
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_alarm
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_crit
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_input
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_label
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_max
--r--r--r-- 1 root root 4096 Nov 14 10:59 temp1_min
--rw-r--r-- 1 root root 4096 Nov 14 10:59 uevent
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 4212d022d253..6d72e207076f 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -32,6 +32,12 @@
+ 
+ #include <linux/i8k.h>
+ 
++/*
++ * The code for enabling and disabling BIOS fan control were found by
++ * trial and error with the program at
++ *  https://github.com/clopez/dellfan.
++ */
++
+ #define I8K_SMM_FN_STATUS	0x0025
+ #define I8K_SMM_POWER_STATUS	0x0069
+ #define I8K_SMM_SET_FAN		0x01a3
+@@ -43,6 +49,8 @@
+ #define I8K_SMM_GET_TEMP_TYPE	0x11a3
+ #define I8K_SMM_GET_DELL_SIG1	0xfea3
+ #define I8K_SMM_GET_DELL_SIG2	0xffa3
++#define I8K_SMM_DISABLE_BIOS	0x30a3
++#define I8K_SMM_ENABLE_BIOS	0x31a3
+ 
+ #define I8K_FAN_MULT		30
+ #define I8K_FAN_MAX_RPM		30000
+@@ -68,6 +76,8 @@ static uint i8k_pwm_mult;
+ static uint i8k_fan_max = I8K_FAN_HIGH;
+ static bool disallow_fan_type_call;
+ static bool disallow_fan_support;
++static bool disable_bios;
++static bool bios_disabled;
+ 
+ #define I8K_HWMON_HAVE_TEMP1	(1 << 0)
+ #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
+@@ -419,6 +429,26 @@ static int i8k_get_power_status(void)
+ 	return (regs.eax & 0xff) == I8K_POWER_AC ? I8K_AC : I8K_BATTERY;
+ }
+ 
++/*
++ * Disable BIOS fan control.
++ */
++static int i8k_disable_bios(void)
++{
++	struct smm_regs regs = { .eax = I8K_SMM_DISABLE_BIOS, .ebx = 0 };
++
++	return i8k_smm(&regs) ? : regs.eax & 0xff;
++}
++
++/*
++ * Enable BIOS fan control.
++ */
++static int i8k_enable_bios(void)
++{
++	struct smm_regs regs = { .eax = I8K_SMM_ENABLE_BIOS, .ebx = 0 };
++
++	return i8k_smm(&regs) ? : regs.eax & 0xff;
++}
++
+ /*
+  * Procfs interface
+  */
+@@ -488,6 +518,13 @@ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
+ 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+ 			return -EFAULT;
+ 
++                if (disable_bios && !bios_disabled) {
++			val = i8k_disable_bios();
++			if (val < 0)
++				return val;
++			bios_disabled = true;
++                }
++
+ 		val = i8k_set_fan(val, speed);
+ 		break;
+ 
+@@ -1135,6 +1172,22 @@ static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
+ 	{ }
+ };
+ 
++/*
++ * On some machines the BIOS disregards all SET_FAN commands unless it
++ * is explicitly disabled.
++ * See bug: https://bugzilla.kernel.org/show_bug.cgi?id=200949
++ */
++static struct dmi_system_id i8k_disable_bios_dmi_table[] __initdata = {
++	{
++		.ident = "Dell Precision 5530",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 5530"),
++		},
++	},
++	{ }
++};
++
+ /*
+  * Probe for the presence of a supported laptop.
+  */
+@@ -1169,6 +1222,11 @@ static int __init i8k_probe(void)
+ 			disallow_fan_type_call = true;
+ 	}
+ 
++	if (dmi_check_system(i8k_disable_bios_dmi_table)) {
++		pr_warn("broken Dell BIOS detected, will disable BIOS fan control\n");
++		disable_bios = true;
++	}
++
+ 	strlcpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
+ 		sizeof(bios_version));
+ 	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
+@@ -1241,6 +1299,12 @@ static void __exit i8k_exit(void)
+ {
+ 	hwmon_device_unregister(i8k_hwmon_dev);
+ 	i8k_exit_procfs();
++
++	if (bios_disabled) {
++		pr_warn("re-enabling BIOS fan control\n");
++		if (i8k_enable_bios())
++			pr_warn("could not re-enable BIOS fan control\n");
++	}
+ }
+ 
+ module_init(i8k_init);
+-- 
+2.24.0
 
-groeck@jupiter:/sys/class/hwmon/hwmon0$ sudo nvme list
-Node             SN                   Model                                    Namespace Usage                      Format           FW Rev  
----------------- -------------------- ---------------------------------------- --------- -------------------------- ---------------- --------
-/dev/nvme0n1     BTPY65250EQN512F     INTEL SSDPEKKW512G7                      1         512.11  GB / 512.11  GB    512   B +  0 B    PSF121C
-
-> ---
->  drivers/nvme/host/nvme-hwmon.c | 6 +++++-
->  drivers/nvme/host/nvme.h       | 5 +++++
->  drivers/nvme/host/pci.c        | 3 ++-
->  3 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/nvme/host/nvme-hwmon.c b/drivers/nvme/host/nvme-hwmon.c
-> index 97a84b4..a5af21f 100644
-> --- a/drivers/nvme/host/nvme-hwmon.c
-> +++ b/drivers/nvme/host/nvme-hwmon.c
-> @@ -170,8 +170,12 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
->  	case hwmon_temp_max:
->  	case hwmon_temp_min:
->  		if ((!channel && data->ctrl->wctemp) ||
-> -		    (channel && data->log.temp_sensor[channel - 1]))
-> +		    (channel && data->log.temp_sensor[channel - 1])) {
-> +			if (data->ctrl->quirks &
-> +			    NVME_QUIRK_NO_TEMP_THRESH_CHANGE)
-> +				return 0444;
->  			return 0644;
-> +		}
->  		break;
->  	case hwmon_temp_alarm:
->  		if (!channel)
-> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-> index 000a3d9..19e5e87 100644
-> --- a/drivers/nvme/host/nvme.h
-> +++ b/drivers/nvme/host/nvme.h
-> @@ -115,6 +115,11 @@ enum nvme_quirks {
->  	 * Prevent tag overlap between queues
->  	 */
->  	NVME_QUIRK_SHARED_TAGS                  = (1 << 13),
-> +
-> +	/*
-> +	 * Don't change the value of the temperature threshold feature
-> +	 */
-> +	NVME_QUIRK_NO_TEMP_THRESH_CHANGE	= (1 << 14),
->  };
->  
->  /*
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index 931d4a9..2c0206b 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -3529,7 +3529,8 @@ static const struct pci_device_id nvme_id_table[] = {
->  				NVME_QUIRK_DEALLOCATE_ZEROES, },
->  	{ PCI_VDEVICE(INTEL, 0xf1a5),	/* Intel 600P/P3100 */
->  		.driver_data = NVME_QUIRK_NO_DEEPEST_PS |
-> -				NVME_QUIRK_MEDIUM_PRIO_SQ },
-> +				NVME_QUIRK_MEDIUM_PRIO_SQ |
-> +				NVME_QUIRK_NO_TEMP_THRESH_CHANGE },
->  	{ PCI_VDEVICE(INTEL, 0xf1a6),	/* Intel 760p/Pro 7600p */
->  		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN, },
->  	{ PCI_VDEVICE(INTEL, 0x5845),	/* Qemu emulated controller */
-> -- 
-> 2.7.4
-> 
