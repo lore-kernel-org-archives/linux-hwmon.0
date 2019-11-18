@@ -2,199 +2,330 @@ Return-Path: <SRS0=oVpM=ZK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B69C432C3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Nov 2019 17:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD810C432C0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Nov 2019 17:32:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C48D2192B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Nov 2019 17:12:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97DD52192B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Nov 2019 17:32:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nWX+jjii"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfKRRL7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 18 Nov 2019 12:11:59 -0500
-Received: from pietrobattiston.it ([92.243.7.39]:50842 "EHLO
-        jauntuale.pietrobattiston.it" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726370AbfKRRL7 (ORCPT
+        id S1726461AbfKRRcg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Nov 2019 12:32:36 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55651 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbfKRRcg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 18 Nov 2019 12:11:59 -0500
-Received: from amalgama (pno-math-19.ulb.ac.be [164.15.133.19])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: giovanni)
-        by jauntuale.pietrobattiston.it (Postfix) with ESMTPSA id 16B0BE0546;
-        Mon, 18 Nov 2019 18:11:57 +0100 (CET)
-Received: by amalgama (Postfix, from userid 1000)
-        id CD1053C0244; Mon, 18 Nov 2019 18:11:56 +0100 (CET)
-From:   Giovanni Mascellani <gio@debian.org>
-To:     Jean Delvare <jdelvare@suse.com>,
+        Mon, 18 Nov 2019 12:32:36 -0500
+Received: by mail-wm1-f68.google.com with SMTP id b11so126543wmb.5;
+        Mon, 18 Nov 2019 09:32:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9cUOn4dXQObR7q+VBOZahx/ugZjKHh2rWdB8yZdQGkI=;
+        b=nWX+jjiizY/XT+BAk1ctVJ1fdnxY5KQ50xN1jo+PQ4iae9XeYK6gM/spIaPzc8Nb07
+         bFNlxbj9VyzaEzfZDXWrzQ5D1a7BGV7PpqQFB73jOORcMYP0fCJL15e+iglW39/+nzcL
+         /5bjXHEzM85mreMl5DUfCf1Y23HhN9SSyWz+GC42DDKvERWzjSMk3q3P89ggVsVv4edx
+         eKYGwWmeno1SWhK5ZXdmoA9EiI3foSzDdy0Vp+sBW0yYOFNqcVtMc6WFWTxbocF6HY4l
+         qY5Yo4HuGPOdnwmCeuTYq16iYHk58zz6G+QY7pcDjtj32fotR8vMo1jgy026iNNOwVAF
+         cEIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9cUOn4dXQObR7q+VBOZahx/ugZjKHh2rWdB8yZdQGkI=;
+        b=umyAdOB/uWtoNn/voqCCz3SMlxVNRKpW0KQFzqr2C8kx7Sxw+TNcb5v8J74EZS28JN
+         8mrUWiXcxDEz8b5U7p9Wmm45VIpSIPdc05WqHNJTkOyvgmiqfXcE6abA9aYBwUxo651g
+         64cC96srTRsPPV4dYY9dW9IlDyXKIhpBQZLfLRQfGfgvGcJyYvewngpd/PT+DTv8P8JA
+         qciQkGtuzU1IZaDzizaJp6PGDpt+KwYF6CwVPsDkgaruRoUueGHEVDrsq6Bdm+9ZCFVr
+         6ZwfyVa3t58SkQqy1gLNF5KwsLHmmZh34KZKtFeRSFG97TPAhUetFRq2zX5sxuDyjK9N
+         l2kQ==
+X-Gm-Message-State: APjAAAWP9is6dYNlwhzoqb+bdpA38T38cqaTDnY5yFzpWkhBnkZWGqkz
+        ioy8SUCtr5ncerplUzxiIoA=
+X-Google-Smtp-Source: APXvYqxBASmSBziAl7PKRwEoLyPls2LH9/l314Fd8pkEnVKPTAzBofCwPdmeJNVo3SBbmPo3YIht9A==
+X-Received: by 2002:a1c:5fc4:: with SMTP id t187mr201252wmb.142.1574098351306;
+        Mon, 18 Nov 2019 09:32:31 -0800 (PST)
+Received: from pali ([2a02:2b88:2:1::5cc6:2f])
+        by smtp.gmail.com with ESMTPSA id n1sm24456636wrr.24.2019.11.18.09.32.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 18 Nov 2019 09:32:29 -0800 (PST)
+Date:   Mon, 18 Nov 2019 18:32:28 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
+To:     Giovanni Mascellani <gio@debian.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Giovanni Mascellani <gio@debian.org>
-Subject: [PATCH v4 2/2] dell-smm-hwmon: Add documentation
-Date:   Mon, 18 Nov 2019 18:11:48 +0100
-Message-Id: <20191118171148.76373-2-gio@debian.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191118171148.76373-1-gio@debian.org>
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dell-smm-hwmon: Add support for disabling
+ automatic BIOS fan control
+Message-ID: <20191118173228.gn2y5ssp7v3fcctn@pali>
 References: <20191118171148.76373-1-gio@debian.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="dntxtsgj3xed2gg4"
+Content-Disposition: inline
+In-Reply-To: <20191118171148.76373-1-gio@debian.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Part of the documentation is taken from the README of the userspace
-utils (https://github.com/vitorafsr/i8kutils). The license is GPL-2+
-and the author Massimo Dal Zotto is already credited as author of
-the module. Therefore there should be no copyright problem.
 
-I also added a paragraph with specific information on the experimental
-support for automatic BIOS fan control.
+--dntxtsgj3xed2gg4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Giovanni Mascellani <gio@debian.org>
----
- Documentation/hwmon/dell-smm-hwmon.rst | 112 +++++++++++++++++++++++++
- Documentation/hwmon/index.rst          |   1 +
- 2 files changed, 113 insertions(+)
- create mode 100644 Documentation/hwmon/dell-smm-hwmon.rst
+On Monday 18 November 2019 18:11:47 Giovanni Mascellani wrote:
+> This patch exports standard hwmon pwmX_enable sysfs attribute for
+> enabling or disabling automatic fan control by BIOS. Standard value
+> "1" is for disabling automatic BIOS fan control and value "2" for
+> enabling.
+>=20
+> By default BIOS auto mode is enabled by laptop firmware.
+>=20
+> When BIOS auto mode is enabled, custom fan speed value (set via hwmon
+> pwmX sysfs attribute) is overwritten by SMM in few seconds and
+> therefore any custom settings are without effect. So this is reason
+> why implementing option for disabling BIOS auto mode is needed.
+>=20
+> So finally this patch allows kernel to set and control fan speed on
+> laptops, but it can be dangerous (like setting speed of other fans).
+>=20
+> The SMM commands to enable or disable automatic fan control are not
+> documented and are not the same on all Dell laptops. Therefore a
+> whitelist is used to send the correct codes only on laptopts for which
+> they are known.
+>=20
+> This patch was originally developed by Pali Roh=C3=A1r; later Giovanni
+> Mascellani implemented the whitelist.
+>=20
+> Signed-off-by: Giovanni Mascellani <gio@debian.org>
+> Co-Developer-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-new file mode 100644
-index 000000000000..f80d30d8a02a
---- /dev/null
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -0,0 +1,112 @@
-+Kernel driver dell-smm-hwmon
-+============================
-+
-+Description
-+-----------
-+
-+On many Dell laptops the System Management Mode (SMM) BIOS can be
-+queried for the status of fans and temperature sensors. The userspace
-+suite `i8kutils`__ can be used to read the sensors and automatically
-+adjust fan speed.
-+
-+ __ https://github.com/vitorafsr/i8kutils
-+
-+``/proc`` interface
-+-------------------
-+
-+The information provided by the kernel driver can be accessed by
-+simply reading the ``/proc/i8k`` file. For example::
-+
-+    $ cat /proc/i8k
-+    1.0 A17 2J59L02 52 2 1 8040 6420 1 2
-+
-+The fields read from ``/proc/i8k`` are::
-+
-+    1.0 A17 2J59L02 52 2 1 8040 6420 1 2
-+    |   |   |       |  | | |    |    | |
-+    |   |   |       |  | | |    |    | +------- 10. buttons status
-+    |   |   |       |  | | |    |    +--------- 9.  AC status
-+    |   |   |       |  | | |    +-------------- 8.  right fan rpm
-+    |   |   |       |  | | +------------------- 7.  left fan rpm
-+    |   |   |       |  | +--------------------- 6.  right fan status
-+    |   |   |       |  +----------------------- 5.  left fan status
-+    |   |   |       +-------------------------- 4.  CPU temperature (Celsius)
-+    |   |   +---------------------------------- 3.  Dell service tag (later known as 'serial number')
-+    |   +-------------------------------------- 2.  BIOS version
-+    +------------------------------------------ 1.  /proc/i8k format version
-+
-+A negative value, for example -22, indicates that the BIOS doesn't
-+return the corresponding information. This is normal on some
-+models/BIOSes.
-+
-+For performance reasons the ``/proc/i8k`` doesn't report by default
-+the AC status since this SMM call takes a long time to execute and is
-+not really needed.  If you want to see the ac status in ``/proc/i8k``
-+you must explictitly enable this option by passing the
-+``power_status=1`` parameter to insmod. If AC status is not
-+available -1 is printed instead.
-+
-+The driver provides also an ioctl interface which can be used to
-+obtain the same information and to control the fan status. The ioctl
-+interface can be accessed from C programs or from shell using the
-+i8kctl utility. See the source file of ``i8kutils`` for more
-+information on how to use the ioctl interface.
-+
-+``sysfs`` interface
-+-------------------
-+
-+Temperature sensors and fans can also be queried and set via the
-+standard ``hwmon`` interface on ``sysfs``.
-+
-+Disabling automatic BIOS fan control
-+------------------------------------
-+
-+On some laptops, the BIOS automatically sets fan speed every few
-+seconds. Therefore the fan speed set via ``/proc/i8k`` or via the
-+``sysfs`` interface is quickly overwritten.
-+
-+There is experimental support for disabling automatic BIOS fan
-+control, at least on laptops where the corresponding SMM command is
-+known, by writing the value ``1`` in the attribute ``pwm1_enable``
-+(writing ``2`` enables automatic BIOS control again). Even if you have
-+more than one fan, all of them are set to either enabled or disabled
-+automatic fan control at the same time and, notwithstanding the name,
-+``pwm1_enable`` sets automatic control for all fans.
-+
-+If ``pwm1_enable`` is not available, then it means that SMM codes for
-+enabling and disabling automatic BIOS fan control are not known for
-+your laptop. You can experiment with the code in `this repository`__
-+to probe the BIOS on your machine and discover the appropriate codes.
-+
-+ __ https://github.com/clopez/dellfan/
-+
-+Module parameters
-+-----------------
-+
-+* force:bool
-+                   Force loading without checking for supported
-+                   models. (default: 0)
-+
-+* ignore_dmi:bool
-+                   Continue probing hardware even if DMI data does not
-+                   match. (default: 0)
-+
-+* restricted:bool
-+                   Allow fan control only to processes with the
-+                   ``CAP_SYS_ADMIN`` capability set or processes run
-+                   as root. In this case normal users will be able to
-+                   read temperature and fan status but not to control
-+                   the fan.  If your notebook is shared with other
-+                   users and you don't trust them you may want to use
-+                   this option. (default: 1)
-+
-+* power_status:bool
-+                   Report AC status in ``/proc/i8k``. (default: 0)
-+
-+* fan_mult:uint
-+                   Factor to multiply fan speed with. (default:
-+                   autodetect)
-+
-+* fan_max:uint
-+                   Maximum configurable fan speed. (default:
-+                   autodetect)
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 230ad59b462b..092435ad6bb8 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -44,6 +44,7 @@ Hardware Monitoring Kernel Drivers
-    coretemp
-    da9052
-    da9055
-+   dell-smm-hwmon
-    dme1737
-    ds1621
-    ds620
--- 
-2.24.0
+This patch is fine for me now. I'm not sure if Co-Developer-by: tag is
+supported, but you can add:
 
+Signed-off-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
+
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 114 ++++++++++++++++++++++++++++++---
+>  1 file changed, 104 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmo=
+n.c
+> index 4212d022d253..25d160b36a57 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -68,6 +68,8 @@ static uint i8k_pwm_mult;
+>  static uint i8k_fan_max =3D I8K_FAN_HIGH;
+>  static bool disallow_fan_type_call;
+>  static bool disallow_fan_support;
+> +static unsigned int manual_fan;
+> +static unsigned int auto_fan;
+> =20
+>  #define I8K_HWMON_HAVE_TEMP1	(1 << 0)
+>  #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
+> @@ -300,6 +302,20 @@ static int i8k_get_fan_nominal_speed(int fan, int sp=
+eed)
+>  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * i8k_fan_mult;
+>  }
+> =20
+> +/*
+> + * Enable or disable automatic BIOS fan control support
+> + */
+> +static int i8k_enable_fan_auto_mode(bool enable)
+> +{
+> +	struct smm_regs regs =3D { };
+> +
+> +	if (disallow_fan_support)
+> +		return -EINVAL;
+> +
+> +	regs.eax =3D enable ? auto_fan : manual_fan;
+> +	return i8k_smm(&regs);
+> +}
+> +
+>  /*
+>   * Set the fan speed (off, low, high). Returns the new fan status.
+>   */
+> @@ -726,6 +742,35 @@ static ssize_t i8k_hwmon_pwm_store(struct device *de=
+v,
+>  	return err < 0 ? -EIO : count;
+>  }
+> =20
+> +static ssize_t i8k_hwmon_pwm_enable_store(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  const char *buf, size_t count)
+> +{
+> +	int err;
+> +	bool enable;
+> +	unsigned long val;
+> +
+> +	if (!auto_fan)
+> +		return -ENODEV;
+> +
+> +	err =3D kstrtoul(buf, 10, &val);
+> +	if (err)
+> +		return err;
+> +
+> +	if (val =3D=3D 1)
+> +		enable =3D false;
+> +	else if (val =3D=3D 2)
+> +		enable =3D true;
+> +	else
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&i8k_mutex);
+> +	err =3D i8k_enable_fan_auto_mode(enable);
+> +	mutex_unlock(&i8k_mutex);
+> +
+> +	return err ? err : count;
+> +}
+> +
+>  static SENSOR_DEVICE_ATTR_RO(temp1_input, i8k_hwmon_temp, 0);
+>  static SENSOR_DEVICE_ATTR_RO(temp1_label, i8k_hwmon_temp_label, 0);
+>  static SENSOR_DEVICE_ATTR_RO(temp2_input, i8k_hwmon_temp, 1);
+> @@ -749,6 +794,7 @@ static SENSOR_DEVICE_ATTR_RO(temp10_label, i8k_hwmon_=
+temp_label, 9);
+>  static SENSOR_DEVICE_ATTR_RO(fan1_input, i8k_hwmon_fan, 0);
+>  static SENSOR_DEVICE_ATTR_RO(fan1_label, i8k_hwmon_fan_label, 0);
+>  static SENSOR_DEVICE_ATTR_RW(pwm1, i8k_hwmon_pwm, 0);
+> +static SENSOR_DEVICE_ATTR_WO(pwm1_enable, i8k_hwmon_pwm_enable, 0);
+>  static SENSOR_DEVICE_ATTR_RO(fan2_input, i8k_hwmon_fan, 1);
+>  static SENSOR_DEVICE_ATTR_RO(fan2_label, i8k_hwmon_fan_label, 1);
+>  static SENSOR_DEVICE_ATTR_RW(pwm2, i8k_hwmon_pwm, 1);
+> @@ -780,12 +826,13 @@ static struct attribute *i8k_attrs[] =3D {
+>  	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 20 */
+>  	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 21 */
+>  	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 22 */
+> -	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 23 */
+> -	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 24 */
+> -	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 25 */
+> -	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 26 */
+> -	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 27 */
+> -	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 28 */
+> +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,	/* 23 */
+> +	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 24 */
+> +	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 25 */
+> +	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 26 */
+> +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 27 */
+> +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 28 */
+> +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 29 */
+>  	NULL
+>  };
+> =20
+> @@ -828,16 +875,19 @@ static umode_t i8k_is_visible(struct kobject *kobj,=
+ struct attribute *attr,
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP10))
+>  		return 0;
+> =20
+> -	if (index >=3D 20 && index <=3D 22 &&
+> +	if (index >=3D 20 && index <=3D 23 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
+>  		return 0;
+> -	if (index >=3D 23 && index <=3D 25 &&
+> +	if (index >=3D 24 && index <=3D 26 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
+>  		return 0;
+> -	if (index >=3D 26 && index <=3D 28 &&
+> +	if (index >=3D 27 && index <=3D 29 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
+>  		return 0;
+> =20
+> +	if (index =3D=3D 23 && !auto_fan)
+> +		return 0;
+> +
+>  	return attr->mode;
+>  }
+> =20
+> @@ -1135,12 +1185,48 @@ static struct dmi_system_id i8k_blacklist_fan_sup=
+port_dmi_table[] __initdata =3D {
+>  	{ }
+>  };
+> =20
+> +struct i8k_fan_control_data {
+> +	unsigned int manual_fan;
+> +	unsigned int auto_fan;
+> +};
+> +
+> +enum i8k_fan_controls {
+> +	I8K_FAN_34A3_35A3,
+> +};
+> +
+> +static const struct i8k_fan_control_data i8k_fan_control_data[] =3D {
+> +	[I8K_FAN_34A3_35A3] =3D {
+> +		.manual_fan =3D 0x34a3,
+> +		.auto_fan =3D 0x35a3,
+> +	},
+> +};
+> +
+> +static struct dmi_system_id i8k_whitelist_fan_control[] __initdata =3D {
+> +	{
+> +		.ident =3D "Dell Precision 5530",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 5530"),
+> +		},
+> +		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> +	},
+> +	{
+> +		.ident =3D "Dell Latitude E6440",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E6440"),
+> +		},
+> +		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> +	},
+> +	{ }
+> +};
+> +
+>  /*
+>   * Probe for the presence of a supported laptop.
+>   */
+>  static int __init i8k_probe(void)
+>  {
+> -	const struct dmi_system_id *id;
+> +	const struct dmi_system_id *id, *fan_control;
+>  	int fan, ret;
+> =20
+>  	/*
+> @@ -1200,6 +1286,14 @@ static int __init i8k_probe(void)
+>  	i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
+>  	i8k_pwm_mult =3D DIV_ROUND_UP(255, i8k_fan_max);
+> =20
+> +	fan_control =3D dmi_first_match(i8k_whitelist_fan_control);
+> +	if (fan_control && fan_control->driver_data) {
+> +		const struct i8k_fan_control_data *fan_control_data =3D fan_control->d=
+river_data;
+> +		manual_fan =3D fan_control_data->manual_fan;
+> +		auto_fan =3D fan_control_data->auto_fan;
+> +		pr_info("enabling support for setting automatic/manual fan control\n");
+> +	}
+> +
+>  	if (!fan_mult) {
+>  		/*
+>  		 * Autodetect fan multiplier based on nominal rpm
+
+--=20
+Pali Roh=C3=A1r
+pali.rohar@gmail.com
+
+--dntxtsgj3xed2gg4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQS4VrIQdKium2krgIWL8Mk9A+RDUgUCXdLVkwAKCRCL8Mk9A+RD
+UptqAKCDV9GLxi+nzSzmFuka+tuytD4U1gCcDHwaFLNCmeHqC17JGAhujp0PRBE=
+=B9yk
+-----END PGP SIGNATURE-----
+
+--dntxtsgj3xed2gg4--
