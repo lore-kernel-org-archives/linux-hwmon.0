@@ -6,131 +6,127 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 674F7C432C3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 17:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB93C432C0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 18:47:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 17F3220895
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 17:26:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0C712071C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 18:47:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="gNNWqQL8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rJztbXnT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbfKTR0i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Nov 2019 12:26:38 -0500
-Received: from mx.treblig.org ([46.43.15.161]:58792 "EHLO mx.treblig.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727639AbfKTR0i (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Nov 2019 12:26:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=yJKXb46c+XwMbwXhPzJSPyVUWZP7YRyCdct3oan2xkc=; b=gNNWqQL89nZRa4M3aw5mk09n1N
-        2QdcZrWTms8LWPOijxYx3I1Y/QdMxT/QJckBkP5yLrwIQBGhTtPtnJylUK4RC+fTJj27IlAne7s09
-        c19cCh798JK0nNpg0QIalYi3EKQS1wrWbcfNBHdE03C52NA6Hx2UCaT7RIdSvoegLHqQZzuza1heR
-        RM+bf+EB6bg75yR99jzcmKH8JW50gkPcjfjBa6PoCO43CxJqUXxUxIUaB/YwcEFUzigH5scsszcCi
-        vri8m4737JnNGBrweKZb0nZV8OEXa6rRK479N0zjzsVLDSRMP1P8MZjgdObXRkfn1qFsLfeQqJLrS
-        TIL8EtYQ==;
-Received: from dg by mx.treblig.org with local (Exim 4.92)
-        (envelope-from <dg@treblig.org>)
-        id 1iXTk8-0002yR-2M; Wed, 20 Nov 2019 17:26:16 +0000
-Date:   Wed, 20 Nov 2019 17:26:16 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Guenter Roeck <linux@roeck-us.net>
+        id S1726333AbfKTSrq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Nov 2019 13:47:46 -0500
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:35789 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbfKTSrq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 20 Nov 2019 13:47:46 -0500
+Received: by mail-pj1-f54.google.com with SMTP id s8so222142pji.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 Nov 2019 10:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IVoSLOwHqXkTVb2ERYz4sGonCfaJuuxeGU51vsVPyGI=;
+        b=rJztbXnTK54fATMh8gvkw4YnK3cvdvzpqtauTExlP/dyNO3WH6eiRJl1EmeG4xCI7l
+         xiASv4CW98zVAxUWHEa/OXRuSdn0APIeZ57af9Dn/HlYupy13rgqLLuxHyhU/ZFVB8Gb
+         x/eVrSiujUS0JQRn0CyJFImwk4oL4QqQR0CDuIQHPs7XhQhMRG3OIKrIrzblfnJlBcOX
+         SAD401jw/I5mNgI8icot5GOSnYR6gRfMeRh1kTv0MN0R4rkrKDzatq4XrKy99pl+eDfD
+         7p1o04OcfV6+/WCxTsD5m/+rLipiNsklvk1sS1kiYa/cIXYjjmlKKKHzr187zRebyXaZ
+         Er7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IVoSLOwHqXkTVb2ERYz4sGonCfaJuuxeGU51vsVPyGI=;
+        b=UqioAT2P7XRRpFUfvZ+S5Q7OQMWzJ1S7y/QkUxh5exakloDR/q/cCd82D6WWzkpUoK
+         H9L4K1uSbVKBg7MPEF4trIHFmdS7raGpWzQ5VL3qd6ZqeidNhRA5hZs+sm1lz/w3SGAi
+         j70SilQ/8/I+s63ZsMlnHGQwH/8waOw+43Ew7qEY0/WZ0wMGj9f063g4g3AVfX/1lK+n
+         srvDO5vBvBujpt3VQnYdFP1FQGHhHpSx9I+D/38nmhCMY2ETLITKB7qtV6jB8TNZTX7N
+         Z/1YxKE9WN/n6m9pr3c551fj8o8ASrx+bj/22pBI14rFleCSlmu1NKOru6gQ+IQzrb39
+         qNjw==
+X-Gm-Message-State: APjAAAWhMH6/1dopsO/by077DQm5XiAHCLgoo+86iEJjT7XEQ8XaGwb8
+        hmNu7gtP0Z1mWZVvElDP/ng=
+X-Google-Smtp-Source: APXvYqx7Us2yEDpVtGoRJQq//MWmKhyTV6/Vz8xGiiac1EIwtoCcQBNBIXeQpasoC0/JlldBaE+a/A==
+X-Received: by 2002:a17:902:b693:: with SMTP id c19mr4434670pls.89.1574275665197;
+        Wed, 20 Nov 2019 10:47:45 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x186sm83133pfx.105.2019.11.20.10.47.43
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Nov 2019 10:47:44 -0800 (PST)
+Date:   Wed, 20 Nov 2019 10:47:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Dr. David Alan Gilbert" <linux@treblig.org>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
 Subject: Re: WIP: [PATCH] hwmon: (w83627ehf) convert to with_info interface
-Message-ID: <20191120172616.GA22683@gallifrey>
+Message-ID: <20191120184743.GA12192@roeck-us.net>
 References: <20191119181822.GC26171@gallifrey>
  <20191119212108.GA16985@roeck-us.net>
+ <20191120172616.GA22683@gallifrey>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191119212108.GA16985@roeck-us.net>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/4.19.0-5-amd64 (x86_64)
-X-Uptime: 17:22:12 up 80 days, 17:42,  1 user,  load average: 0.00, 0.02, 0.00
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191120172616.GA22683@gallifrey>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-* Guenter Roeck (linux@roeck-us.net) wrote:
-> On Tue, Nov 19, 2019 at 06:18:22PM +0000, Dr. David Alan Gilbert wrote:
-> > 
-> > Hi Jean, Guenter,
-> >   I'm part way through converting w83627ehf to use the devm_hwmon_device_register_with_info
-> > interface and had some questions I'd appreciate the answer to.  My WIP
-> > code is attached below.
-> > 
-> >   a) In the existing driver, all the pseudo files are showing up as:
-> >      /sys/devices/platform/w83627ehf.656/blah_input
-> >      with the rework:
-> >      /sys/devices/platform/w83627ehf.656/hwmon/hwmon1/
-> > 
-> >      my reading is that the reworked one is correct?
-> >      Although I guess the change is a pain for people with paths
-> >      in tools.
-> > 
+On Wed, Nov 20, 2019 at 05:26:16PM +0000, Dr. David Alan Gilbert wrote:
+> * Guenter Roeck (linux@roeck-us.net) wrote:
+> > On Tue, Nov 19, 2019 at 06:18:22PM +0000, Dr. David Alan Gilbert wrote:
+> > > 
+> > > Hi Jean, Guenter,
+> > >   I'm part way through converting w83627ehf to use the devm_hwmon_device_register_with_info
+> > > interface and had some questions I'd appreciate the answer to.  My WIP
+> > > code is attached below.
+> > > 
+> > >   a) In the existing driver, all the pseudo files are showing up as:
+> > >      /sys/devices/platform/w83627ehf.656/blah_input
+> > >      with the rework:
+> > >      /sys/devices/platform/w83627ehf.656/hwmon/hwmon1/
+> > > 
+> > >      my reading is that the reworked one is correct?
+> > >      Although I guess the change is a pain for people with paths
+> > >      in tools.
+> > > 
+> 
+> Thanks for the reply.
+> 
+> > No one should have absolute path names like the above in their tools.
+> > So far none of the driver conversions caused trouble, so hopefully
+> > we should be fine.
+> 
+> OK, great.
+> 
+> > >   b) The device has an intrusion0_alarm & intrusion1_alarm
+> > >      that seems pretty common looking in drivers/hwmon - some other
+> > >      devices have a intrustion%d_beep.  Does it make sense to add
+> > >      a new hwmon_intrusion type to hwmon_sensor_types  ?
+> > > 
+> > Yes, we should add hwmon_intrusion to hwmon_sensor_types, with _alarm
+> > and _beep as supported attributes.
+> 
+> OK, will do.
+> 
+> > >   c) The device has a bunch more pwm variants:
+> > >      pwm2_max_output, pwm2_start_output, pwm2_step_output, pwm2_stop_output,
+> > >      pwm2_stop_time, pwm2_target, pwm2_tolerance
+> > > 
+> > >      for each/some of it's outputs.   What's the right thing to
+> > >      do there? Add them all to hwmon_pwm_attr_templates ?
+> > >      (Unfortunately it looks like everyone has fun with their own
+> > >       pwm settings).
+> > > 
+> > We'll have to keep sysfs files for those for the time being,
+> > unless there are some which are officially listed in
+> > Documentation/hwmon/sysfs-interface.rst.
+> 
+> OK, that's a bit messy; so just keep the existing sysfs code - do
+> I need to tweak that to match the new directory path?
+> Would another way be to use @extra_groups on the with_info call?
+> 
+Yes, that is what you are supposed to do.
 
-Thanks for the reply.
-
-> No one should have absolute path names like the above in their tools.
-> So far none of the driver conversions caused trouble, so hopefully
-> we should be fine.
-
-OK, great.
-
-> >   b) The device has an intrusion0_alarm & intrusion1_alarm
-> >      that seems pretty common looking in drivers/hwmon - some other
-> >      devices have a intrustion%d_beep.  Does it make sense to add
-> >      a new hwmon_intrusion type to hwmon_sensor_types  ?
-> > 
-> Yes, we should add hwmon_intrusion to hwmon_sensor_types, with _alarm
-> and _beep as supported attributes.
-
-OK, will do.
-
-> >   c) The device has a bunch more pwm variants:
-> >      pwm2_max_output, pwm2_start_output, pwm2_step_output, pwm2_stop_output,
-> >      pwm2_stop_time, pwm2_target, pwm2_tolerance
-> > 
-> >      for each/some of it's outputs.   What's the right thing to
-> >      do there? Add them all to hwmon_pwm_attr_templates ?
-> >      (Unfortunately it looks like everyone has fun with their own
-> >       pwm settings).
-> > 
-> We'll have to keep sysfs files for those for the time being,
-> unless there are some which are officially listed in
-> Documentation/hwmon/sysfs-interface.rst.
-
-OK, that's a bit messy; so just keep the existing sysfs code - do
-I need to tweak that to match the new directory path?
-Would another way be to use @extra_groups on the with_info call?
-
-> > For reference, I seem to have a w83667hg on an ASRock P55M Pro.
-> > 
-> > The current status is that 'reading' seems to work (from what I can tell
-> > but not looked at the PWM), and I've not converted the writers yet.
-> > 
-> Good start. I would suggest to run your patch through checkpatch.
-> It will tell you, for example, that S_IRUGO et al ran out of favor,
-> and that you are supposed to use octals instead.
-
-Yeh I've already done that and used it to get rid of most of my space/tab
-screwups;  I'll fix the remains up before I post the final version.
-
-I should nail the rest of this either this weekend or next.
-
-Thanks again for your comments,
-
-Dave
-
-> Thanks,
-> Guenter
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Guenter
