@@ -2,98 +2,135 @@ Return-Path: <SRS0=7wWQ=ZM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7965C432C3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 13:42:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 674F7C432C3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 17:26:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C074922532
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 13:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574257321;
-	bh=s0ELTg1bHdr8W5pRC7ta+v8vIihQy7QuM3LKuIglQPI=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=IS6g0GIpyrOAaJvyhlFsMS6Q1EczB836usP2+zRdzqWsq6t+L7FHgoBo6Ko+hqoTJ
-	 O1iPAO6Ftz6vrrSHpLgTBIOGmu0taoKN3HK9/+WmDyQpU6hkMP4tbEgPH7ubvYl6Vn
-	 vIE3wwasWGusEsVGEE/cZM5dqKNmzi0vQfBpNzYM=
+	by mail.kernel.org (Postfix) with ESMTP id 17F3220895
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 Nov 2019 17:26:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="gNNWqQL8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731323AbfKTNl7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 Nov 2019 08:41:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
+        id S1728425AbfKTR0i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 Nov 2019 12:26:38 -0500
+Received: from mx.treblig.org ([46.43.15.161]:58792 "EHLO mx.treblig.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730129AbfKTNl5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 Nov 2019 08:41:57 -0500
-Received: from localhost.localdomain (unknown [118.189.143.39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B52D82251E;
-        Wed, 20 Nov 2019 13:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574257317;
-        bh=s0ELTg1bHdr8W5pRC7ta+v8vIihQy7QuM3LKuIglQPI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TFQuk4Zpjou+M4hhvxNdfl3PQD01W5I0ATs/HPwPtndCDooFFWDpfJRVT3L8XuOC8
-         lNSq576DcKPgLw5t6/fkhWEa8l8tKXrS+9QefeW7oucCaXgzxtNq2nLBxtB/28gXMd
-         HLYqJ2M+uEF8MQbvVWEnfz92hJkK9r4KjexZp6VA=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: Fix Kconfig indentation
-Date:   Wed, 20 Nov 2019 21:41:53 +0800
-Message-Id: <20191120134153.15418-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1727639AbfKTR0i (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 20 Nov 2019 12:26:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=yJKXb46c+XwMbwXhPzJSPyVUWZP7YRyCdct3oan2xkc=; b=gNNWqQL89nZRa4M3aw5mk09n1N
+        2QdcZrWTms8LWPOijxYx3I1Y/QdMxT/QJckBkP5yLrwIQBGhTtPtnJylUK4RC+fTJj27IlAne7s09
+        c19cCh798JK0nNpg0QIalYi3EKQS1wrWbcfNBHdE03C52NA6Hx2UCaT7RIdSvoegLHqQZzuza1heR
+        RM+bf+EB6bg75yR99jzcmKH8JW50gkPcjfjBa6PoCO43CxJqUXxUxIUaB/YwcEFUzigH5scsszcCi
+        vri8m4737JnNGBrweKZb0nZV8OEXa6rRK479N0zjzsVLDSRMP1P8MZjgdObXRkfn1qFsLfeQqJLrS
+        TIL8EtYQ==;
+Received: from dg by mx.treblig.org with local (Exim 4.92)
+        (envelope-from <dg@treblig.org>)
+        id 1iXTk8-0002yR-2M; Wed, 20 Nov 2019 17:26:16 +0000
+Date:   Wed, 20 Nov 2019 17:26:16 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: WIP: [PATCH] hwmon: (w83627ehf) convert to with_info interface
+Message-ID: <20191120172616.GA22683@gallifrey>
+References: <20191119181822.GC26171@gallifrey>
+ <20191119212108.GA16985@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191119212108.GA16985@roeck-us.net>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/4.19.0-5-amd64 (x86_64)
+X-Uptime: 17:22:12 up 80 days, 17:42,  1 user,  load average: 0.00, 0.02, 0.00
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-	$ sed -e 's/^        /\t/' -i */Kconfig
+* Guenter Roeck (linux@roeck-us.net) wrote:
+> On Tue, Nov 19, 2019 at 06:18:22PM +0000, Dr. David Alan Gilbert wrote:
+> > 
+> > Hi Jean, Guenter,
+> >   I'm part way through converting w83627ehf to use the devm_hwmon_device_register_with_info
+> > interface and had some questions I'd appreciate the answer to.  My WIP
+> > code is attached below.
+> > 
+> >   a) In the existing driver, all the pseudo files are showing up as:
+> >      /sys/devices/platform/w83627ehf.656/blah_input
+> >      with the rework:
+> >      /sys/devices/platform/w83627ehf.656/hwmon/hwmon1/
+> > 
+> >      my reading is that the reworked one is correct?
+> >      Although I guess the change is a pain for people with paths
+> >      in tools.
+> > 
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/hwmon/Kconfig | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Thanks for the reply.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2b73d5fc7966..1dc4f1226496 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -495,10 +495,10 @@ config SENSORS_F75375S
- 	  will be called f75375s.
- 
- config SENSORS_MC13783_ADC
--        tristate "Freescale MC13783/MC13892 ADC"
--        depends on MFD_MC13XXX
--        help
--          Support for the A/D converter on MC13783 and MC13892 PMIC.
-+	tristate "Freescale MC13783/MC13892 ADC"
-+	depends on MFD_MC13XXX
-+	help
-+	  Support for the A/D converter on MC13783 and MC13892 PMIC.
- 
- config SENSORS_FSCHMD
- 	tristate "Fujitsu Siemens Computers sensor chips"
-@@ -1314,10 +1314,10 @@ config SENSORS_NPCM7XX
- 	imply THERMAL
- 	help
- 	  This driver provides support for Nuvoton NPCM750/730/715/705 PWM
--          and Fan controllers.
-+	  and Fan controllers.
- 
--          This driver can also be built as a module. If so, the module
--          will be called npcm750-pwm-fan.
-+	  This driver can also be built as a module. If so, the module
-+	  will be called npcm750-pwm-fan.
- 
- config SENSORS_NSA320
- 	tristate "ZyXEL NSA320 and compatible fan speed and temperature sensors"
+> No one should have absolute path names like the above in their tools.
+> So far none of the driver conversions caused trouble, so hopefully
+> we should be fine.
+
+OK, great.
+
+> >   b) The device has an intrusion0_alarm & intrusion1_alarm
+> >      that seems pretty common looking in drivers/hwmon - some other
+> >      devices have a intrustion%d_beep.  Does it make sense to add
+> >      a new hwmon_intrusion type to hwmon_sensor_types  ?
+> > 
+> Yes, we should add hwmon_intrusion to hwmon_sensor_types, with _alarm
+> and _beep as supported attributes.
+
+OK, will do.
+
+> >   c) The device has a bunch more pwm variants:
+> >      pwm2_max_output, pwm2_start_output, pwm2_step_output, pwm2_stop_output,
+> >      pwm2_stop_time, pwm2_target, pwm2_tolerance
+> > 
+> >      for each/some of it's outputs.   What's the right thing to
+> >      do there? Add them all to hwmon_pwm_attr_templates ?
+> >      (Unfortunately it looks like everyone has fun with their own
+> >       pwm settings).
+> > 
+> We'll have to keep sysfs files for those for the time being,
+> unless there are some which are officially listed in
+> Documentation/hwmon/sysfs-interface.rst.
+
+OK, that's a bit messy; so just keep the existing sysfs code - do
+I need to tweak that to match the new directory path?
+Would another way be to use @extra_groups on the with_info call?
+
+> > For reference, I seem to have a w83667hg on an ASRock P55M Pro.
+> > 
+> > The current status is that 'reading' seems to work (from what I can tell
+> > but not looked at the PWM), and I've not converted the writers yet.
+> > 
+> Good start. I would suggest to run your patch through checkpatch.
+> It will tell you, for example, that S_IRUGO et al ran out of favor,
+> and that you are supposed to use octals instead.
+
+Yeh I've already done that and used it to get rid of most of my space/tab
+screwups;  I'll fix the remains up before I post the final version.
+
+I should nail the rest of this either this weekend or next.
+
+Thanks again for your comments,
+
+Dave
+
+> Thanks,
+> Guenter
 -- 
-2.17.1
-
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
