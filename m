@@ -2,87 +2,98 @@ Return-Path: <SRS0=izF8=ZN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ACC3C432C0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Nov 2019 13:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A55C432C0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Nov 2019 14:27:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3672A2071B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Nov 2019 13:48:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFB702071B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 21 Nov 2019 14:27:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6kBPygH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7lfnjf3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfKUNsf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 21 Nov 2019 08:48:35 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:32930 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfKUNse (ORCPT
+        id S1726396AbfKUO1P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 21 Nov 2019 09:27:15 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41145 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfKUO1P (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 21 Nov 2019 08:48:34 -0500
-Received: by mail-lj1-f196.google.com with SMTP id t5so3334542ljk.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2019 05:48:33 -0800 (PST)
+        Thu, 21 Nov 2019 09:27:15 -0500
+Received: by mail-pf1-f195.google.com with SMTP id p26so1759442pfq.8
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2019 06:27:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pELjRh/9lf7cSb2H7LPcD8lsqZa9gpNha5+OJjyl5g4=;
-        b=f6kBPygHYzvNsRAMWpmcl1aixibT3WjV8ewyKkXI8IwpKYwTEkC7dJjiU0aBn+FTn4
-         nL8mnw5dymhCiWUiYrf+35+y0STQqw/o2iNHFuUkOViXj0GubHd3hKgdVJBO1qBUp4ih
-         az/G7w+1b8hnWwnGl6q4Leh0N/mBqMWyFr/iohM0yittXPTEmKdah3K1pbMauEMLDiHf
-         e5A/pv4WbL7WTiw5+cPO+yzoAGGsPcEkwOfjdWO1rweS5FBsxr104256O5sLIPnv52y3
-         EKBytfcV+oeE3m+xI2QIQBiNO7uYHCnXtusaaSSqedbU7/TmPUw0d0BYstue/EuUJChz
-         S1QA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=osHOEhIAzUalQfcLz+T/IXlsbkR4DZxvl7PGoFTWfTM=;
+        b=X7lfnjf3Z6gAi5W+pyAj+/qngcnpUlusOCdfbO+UioiYwdGqH/fOPvr05eZciAn7u/
+         RK+OT3AYaFJ9w9LORR5b6hXZCea8jVXUj+PnxZHQaiRGX8heRYzv7ukwzjfoovxj6Taf
+         WVEYGntM0t5h4WnFK7Kb8I4vuR2QSPgm+kEHjpjv8oFJ/IYF0wu7AsSqEsgarGH14L7b
+         SqryOOh03/ob5JnYFl+ZyBfZ73jtHLwkgF+IExCKIqo2/Bw/b7WyCKu56n2YbPG5Wvyc
+         hRHslIrstjcaRcCOMsALgZ827eE2MByo753pGQ6DJ8idOFUmA/inXv4aqzVIJkYpcleR
+         t65w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pELjRh/9lf7cSb2H7LPcD8lsqZa9gpNha5+OJjyl5g4=;
-        b=NW4oxzyLbVMpprphWG734tBG+60ayLFMZgX/1vH64tjFlj2kI+wyb/7+fMWs3HzxG3
-         VtL0WPccJnGqzBj0/S8k63T6JmeSzKrGdV/xq3275Ry1icVIDZghGReUA2w9j+r1ymXb
-         gzncWZ/BwW62bUFO6vCBM3qj2/DT/cQt/9czhtLefrgKr11esiSihs3x0VVJ4qtvtUu/
-         EbdsA/XZ717H0QCRzsst7PI24Fy4JUN4BIbzzdr0odCx1sCDPc7vdoN1fmEdosFAQy3I
-         La6i8fYVnw9YXzo4AjpZQbVEEnmtp5YnnbvlLSXR6joU2ZQyh2x2OzzQ73qSEvzQMouH
-         6qMQ==
-X-Gm-Message-State: APjAAAWDA1n1gUmKThjS1gkkOTzVLoa+N23DLcWP7IP3Q5TjKKtKWlkS
-        usENfGYc9ij2dV5ytotGolQ5IvS0jni2j2g9Er8=
-X-Google-Smtp-Source: APXvYqyQS8UeZg8nndelWFtmtH4vVyX9P1sGmFVsPIYM5oYDv8i8LnOFsqMLXKiRiLzbSvkvvfKY5EY1uTY2+8y+F+o=
-X-Received: by 2002:a2e:864f:: with SMTP id i15mr7383454ljj.29.1574344113019;
- Thu, 21 Nov 2019 05:48:33 -0800 (PST)
-MIME-Version: 1.0
-References: <1573746001-20979-1-git-send-email-akinobu.mita@gmail.com>
- <1573746001-20979-2-git-send-email-akinobu.mita@gmail.com> <20191120184827.GA12322@lst.de>
-In-Reply-To: <20191120184827.GA12322@lst.de>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Thu, 21 Nov 2019 22:48:21 +0900
-Message-ID: <CAC5umyh8kbQTPh22CX6uEcR1jNEHxa+5HCjGDahnZ_i1k=cEPg@mail.gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=osHOEhIAzUalQfcLz+T/IXlsbkR4DZxvl7PGoFTWfTM=;
+        b=S5gSUtHcxLmtDDg48eDCQgPYOdkF3Urg7hYkjQY4T1MgKyJRFqh35KY0VQ6C3xVZJh
+         +fVGBMeT3OIGrP/gUTqrLUoyhTsRRo1p0EHDX+HZD6/93zJPFW1N8GWBBdExB7GBhuZO
+         gz/+QGgbXuG0zyU63RGteXqINIfkLmuU1WioUoWum7QCH9ihsrvn1fwA6GO0JsZDrHSZ
+         xAQjIFpm9ypcu1stjNkcj3mjkYwZB4Aja/6vDNBrl2cHPyuiawpLUtZ/zxe2GffksxEP
+         oV2IydOIGSsBRGxFxyt0mFBbvih0byH/DLi7hAggy5K8/2fUJooQIXrJZm4xDsne+59w
+         84Pg==
+X-Gm-Message-State: APjAAAVHN9cqGpqob84T3i+lrCdTxr8vMCVFPvy/R/Fs+7gyEOpRlY2S
+        T6Lku4+z93rZ9z8gr4NUwNI=
+X-Google-Smtp-Source: APXvYqwwYD2FM1U2oGIp2GJepOd1T0RZsjezlrlDT4Pw//lZpxEaql2fGcOE+GE45bjDPMNV4A5dGw==
+X-Received: by 2002:a65:5548:: with SMTP id t8mr2257631pgr.304.1574346434577;
+        Thu, 21 Nov 2019 06:27:14 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s66sm3795149pfb.38.2019.11.21.06.27.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 21 Nov 2019 06:27:13 -0800 (PST)
+Date:   Thu, 21 Nov 2019 06:27:12 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-nvme@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Jean Delvare <jdelvare@suse.com>
 Subject: Re: [PATCH v2 1/2] nvme: hwmon: provide temperature min and max
  values for each sensor
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <20191121142712.GC13249@roeck-us.net>
+References: <1573746001-20979-1-git-send-email-akinobu.mita@gmail.com>
+ <1573746001-20979-2-git-send-email-akinobu.mita@gmail.com>
+ <20191120184827.GA12322@lst.de>
+ <CAC5umyh8kbQTPh22CX6uEcR1jNEHxa+5HCjGDahnZ_i1k=cEPg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAC5umyh8kbQTPh22CX6uEcR1jNEHxa+5HCjGDahnZ_i1k=cEPg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-2019=E5=B9=B411=E6=9C=8821=E6=97=A5(=E6=9C=A8) 3:48 Christoph Hellwig <hch@=
-lst.de>:
->
-> On Fri, Nov 15, 2019 at 12:40:00AM +0900, Akinobu Mita wrote:
-> > +/* These macros should be moved to linux/temperature.h */
-> > +#define MILLICELSIUS_TO_KELVIN(t) DIV_ROUND_CLOSEST((t) + 273150, 1000=
-)
-> > +#define KELVIN_TO_MILLICELSIUS(t) ((t) * 1000L - 273150)
->
-> Didn't we want to move this to a generic header?
+On Thu, Nov 21, 2019 at 10:48:21PM +0900, Akinobu Mita wrote:
+> 2019年11月21日(木) 3:48 Christoph Hellwig <hch@lst.de>:
+> >
+> > On Fri, Nov 15, 2019 at 12:40:00AM +0900, Akinobu Mita wrote:
+> > > +/* These macros should be moved to linux/temperature.h */
+> > > +#define MILLICELSIUS_TO_KELVIN(t) DIV_ROUND_CLOSEST((t) + 273150, 1000)
+> > > +#define KELVIN_TO_MILLICELSIUS(t) ((t) * 1000L - 273150)
+> >
+> > Didn't we want to move this to a generic header?
+> 
+> Yes.  I start preparing for <linux/temperature.h>.
+> Once the change is accepted, I'll move the macros to the header.
 
-Yes.  I start preparing for <linux/temperature.h>.
-Once the change is accepted, I'll move the macros to the header.
+I agree, it is better to keep that change separate.
+
+Guenter
