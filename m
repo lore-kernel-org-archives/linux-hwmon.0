@@ -1,269 +1,303 @@
-Return-Path: <SRS0=jE+A=ZO=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=HghT=ZP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE0ADC432C0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Nov 2019 22:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9868C432C0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Nov 2019 04:09:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA4612071F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 22 Nov 2019 22:28:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71B612071C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Nov 2019 04:09:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csyKcR0G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfKVW20 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 22 Nov 2019 17:28:26 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64536 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726089AbfKVW20 (ORCPT
+        id S1726638AbfKWEJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 22 Nov 2019 23:09:38 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46612 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbfKWEJh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 22 Nov 2019 17:28:26 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAMMMX43084687;
-        Fri, 22 Nov 2019 17:26:39 -0500
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2wdkdgapbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Nov 2019 17:26:39 -0500
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xAMMKnSK020739;
-        Fri, 22 Nov 2019 22:26:39 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02wdc.us.ibm.com with ESMTP id 2wa8r7b6dx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Nov 2019 22:26:39 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAMMQcIa48300330
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Nov 2019 22:26:38 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B9CF112064;
-        Fri, 22 Nov 2019 22:26:38 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0753E112063;
-        Fri, 22 Nov 2019 22:26:38 +0000 (GMT)
-Received: from wrightj-ThinkPad-W520.rchland.ibm.com (unknown [9.10.101.53])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 22 Nov 2019 22:26:37 +0000 (GMT)
-From:   Jim Wright <wrightj@linux.vnet.ibm.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Wright <jlwright@us.ibm.com>
-Subject: [PATCH 2/2] hwmon: Add support for UCD90320 Power Sequencer
-Date:   Fri, 22 Nov 2019 16:25:42 -0600
-Message-Id: <20191122222542.29661-3-wrightj@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191122222542.29661-1-wrightj@linux.vnet.ibm.com>
-References: <20191122222542.29661-1-wrightj@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-22_05:2019-11-21,2019-11-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- adultscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 impostorscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1911220177
+        Fri, 22 Nov 2019 23:09:37 -0500
+Received: by mail-oi1-f196.google.com with SMTP id n14so8384840oie.13;
+        Fri, 22 Nov 2019 20:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=/StAbOzu7TbVfpwEDDPv1iyC2lDLFD40/T8YtuapqgM=;
+        b=csyKcR0G6duYbAFeSfsl0TObsmUCbg7yjnrstyyH4dQlTmJ35FInruSwHWJOBcab3T
+         sZu0EMdMqS+h4N3EEoqb2lpglYcllBFIu192QF/Ec3hV2ArLj/nFWFSgItM/7eC2NU1u
+         NfE2FQDgCbzo9dM4dg9CeQiHBliIPCQJnwMvLtkL1tB2vP1W4DMGxK1ims31tcOgAfIS
+         5xGf/hfl99aue72wpqGIuUu0RK/AM53bWHr5gT6SthTLTAZ4KFuuLL29xNZpMzspM6hV
+         5xI2741CrL0spL146gleHSvMejh7Bi41vSLwDLobP9osr0s3csri/zvKCCh6ZiW85LZH
+         4otg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=/StAbOzu7TbVfpwEDDPv1iyC2lDLFD40/T8YtuapqgM=;
+        b=d3mAghPy7TOM5tGxTSUrrEz63MJNakRdcyyeXcrtOrUR9aXtFeXvfGbLxeumBb/+O5
+         YTieQU4WgtOSLrgHTkVo/ZZKmd2X3nHllKY38TS6oXdyKOhagJiMcUHifzgz7BSAaLhc
+         mI+kqRxpz/ms15Mauat/JWhtBTuOEmYI9zdrB3QArQ657G3/1g3itC9XLcQDqPNs+sMH
+         obzxpkGa7o0XcDkjrUw3dv1wUJYP8yjCampZ2RWcTmxPYIa66PwUx+TR1Ol0jnYDC2ZP
+         9h3GsY5JtC4d+bVIgP1R9liQS0XFV7hWu+Qwh4tDEEufNUoCfdgLb2Fr43T4irjrMnO9
+         jrpg==
+X-Gm-Message-State: APjAAAXYSUUzAj+yKxyLKkjI3dyrxpCLud5umJ30/tfrp71/OSJ18sEY
+        yXqcTfdzDsR2tDBQkie2D8w=
+X-Google-Smtp-Source: APXvYqztg7h+ZdNBjZ+JwfJq+MHBkRf07w6eOrZ7gcY8qzAAQtM+4cY4xM2ObWJx3rVUhJo87tpGWg==
+X-Received: by 2002:aca:ec45:: with SMTP id k66mr232432oih.179.1574482176302;
+        Fri, 22 Nov 2019 20:09:36 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e93sm2957367otb.60.2019.11.22.20.09.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 22 Nov 2019 20:09:35 -0800 (PST)
+Date:   Fri, 22 Nov 2019 20:09:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Giovanni Mascellani <gio@debian.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] dell-smm-hwmon: Add support for disabling
+ automatic BIOS fan control
+Message-ID: <20191123040933.GA13255@roeck-us.net>
+References: <20191122101519.1246458-1-gio@debian.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191122101519.1246458-1-gio@debian.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Jim Wright <jlwright@us.ibm.com>
+On Fri, Nov 22, 2019 at 11:15:18AM +0100, Giovanni Mascellani wrote:
+> This patch exports standard hwmon pwmX_enable sysfs attribute for
+> enabling or disabling automatic fan control by BIOS. Standard value
+> "1" is for disabling automatic BIOS fan control and value "2" for
+> enabling.
+> 
+> By default BIOS auto mode is enabled by laptop firmware.
+> 
+> When BIOS auto mode is enabled, custom fan speed value (set via hwmon
+> pwmX sysfs attribute) is overwritten by SMM in few seconds and
+> therefore any custom settings are without effect. So this is reason
+> why implementing option for disabling BIOS auto mode is needed.
+> 
+> So finally this patch allows kernel to set and control fan speed on
+> laptops, but it can be dangerous (like setting speed of other fans).
+> 
+> The SMM commands to enable or disable automatic fan control are not
+> documented and are not the same on all Dell laptops. Therefore a
+> whitelist is used to send the correct codes only on laptopts for which
+> they are known.
+> 
+> This patch was originally developed by Pali Rohár; later Giovanni
+> Mascellani implemented the whitelist.
+> 
+> Signed-off-by: Giovanni Mascellani <gio@debian.org>
+> Co-Developed-by: Pali Rohár <pali.rohar@gmail.com>
+> Signed-off-by: Pali Rohár <pali.rohar@gmail.com>
 
-Add support for the UCD90320 chip and its expanded set of GPIO pins.
+Applied, after fixing checkpatch warnings.
 
-Signed-off-by: Jim Wright <jlwright@us.ibm.com>
----
- Documentation/hwmon/ucd9000.rst | 12 ++++++++--
- drivers/hwmon/pmbus/Kconfig     |  6 ++---
- drivers/hwmon/pmbus/ucd9000.c   | 39 +++++++++++++++++++++++----------
- 3 files changed, 40 insertions(+), 17 deletions(-)
+Guenter
 
-diff --git a/Documentation/hwmon/ucd9000.rst b/Documentation/hwmon/ucd9000.rst
-index 746f21fcb48c..704f0cbd95d3 100644
---- a/Documentation/hwmon/ucd9000.rst
-+++ b/Documentation/hwmon/ucd9000.rst
-@@ -3,9 +3,10 @@ Kernel driver ucd9000
- 
- Supported chips:
- 
--  * TI UCD90120, UCD90124, UCD90160, UCD9090, and UCD90910
-+  * TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, and UCD90910
- 
--    Prefixes: 'ucd90120', 'ucd90124', 'ucd90160', 'ucd9090', 'ucd90910'
-+    Prefixes: 'ucd90120', 'ucd90124', 'ucd90160', 'ucd90320', 'ucd9090',
-+              'ucd90910'
- 
-     Addresses scanned: -
- 
-@@ -14,6 +15,7 @@ Supported chips:
- 	- http://focus.ti.com/lit/ds/symlink/ucd90120.pdf
- 	- http://focus.ti.com/lit/ds/symlink/ucd90124.pdf
- 	- http://focus.ti.com/lit/ds/symlink/ucd90160.pdf
-+	- http://focus.ti.com/lit/ds/symlink/ucd90320.pdf
- 	- http://focus.ti.com/lit/ds/symlink/ucd9090.pdf
- 	- http://focus.ti.com/lit/ds/symlink/ucd90910.pdf
- 
-@@ -45,6 +47,12 @@ power-on reset signals, external interrupts, cascading, or other system
- functions. Twelve of these pins offer PWM functionality. Using these pins, the
- UCD90160 offers support for margining, and general-purpose PWM functions.
- 
-+The UCD90320 is a 32-rail PMBus/I2C addressable power-supply sequencer and
-+monitor. The 24 integrated ADC channels (AMONx) monitor the power supply
-+voltage, current, and temperature. Of the 84 GPIO pins, 8 can be used as
-+digital monitors (DMONx), 32 to enable the power supply (ENx), 24 for margining
-+(MARx), 16 for logical GPO, and 32 GPIs for cascading, and system function.
-+
- The UCD9090 is a 10-rail PMBus/I2C addressable power-supply sequencer and
- monitor. The device integrates a 12-bit ADC for monitoring up to 10 power-supply
- voltage inputs. Twenty-three GPIO pins can be used for power supply enables,
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index d62d69bb7e49..61062632b22b 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -200,11 +200,11 @@ config SENSORS_TPS53679
- 	  be called tps53679.
- 
- config SENSORS_UCD9000
--	tristate "TI UCD90120, UCD90124, UCD90160, UCD9090, UCD90910"
-+	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
- 	help
- 	  If you say yes here you get hardware monitoring support for TI
--	  UCD90120, UCD90124, UCD90160, UCD9090, UCD90910, Sequencer and System
--	  Health Controllers.
-+	  UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910, Sequencer
-+	  and System Health Controllers.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ucd9000.
-diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-index a9229c6b0e84..23ea3415f166 100644
---- a/drivers/hwmon/pmbus/ucd9000.c
-+++ b/drivers/hwmon/pmbus/ucd9000.c
-@@ -18,7 +18,8 @@
- #include <linux/gpio/driver.h>
- #include "pmbus.h"
- 
--enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd9090, ucd90910 };
-+enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd90320, ucd9090,
-+	     ucd90910 };
- 
- #define UCD9000_MONITOR_CONFIG		0xd5
- #define UCD9000_NUM_PAGES		0xd6
-@@ -38,7 +39,7 @@ enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd9090, ucd90910 };
- #define UCD9000_GPIO_OUTPUT		1
- 
- #define UCD9000_MON_TYPE(x)	(((x) >> 5) & 0x07)
--#define UCD9000_MON_PAGE(x)	((x) & 0x0f)
-+#define UCD9000_MON_PAGE(x)	((x) & 0x1f)
- 
- #define UCD9000_MON_VOLTAGE	1
- #define UCD9000_MON_TEMPERATURE	2
-@@ -50,10 +51,12 @@ enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd9090, ucd90910 };
- #define UCD9000_GPIO_NAME_LEN	16
- #define UCD9090_NUM_GPIOS	23
- #define UCD901XX_NUM_GPIOS	26
-+#define UCD90320_NUM_GPIOS	84
- #define UCD90910_NUM_GPIOS	26
- 
- #define UCD9000_DEBUGFS_NAME_LEN	24
- #define UCD9000_GPI_COUNT		8
-+#define UCD90320_GPI_COUNT		32
- 
- struct ucd9000_data {
- 	u8 fan_data[UCD9000_NUM_FAN][I2C_SMBUS_BLOCK_MAX];
-@@ -131,6 +134,7 @@ static const struct i2c_device_id ucd9000_id[] = {
- 	{"ucd90120", ucd90120},
- 	{"ucd90124", ucd90124},
- 	{"ucd90160", ucd90160},
-+	{"ucd90320", ucd90320},
- 	{"ucd9090", ucd9090},
- 	{"ucd90910", ucd90910},
- 	{}
-@@ -154,6 +158,10 @@ static const struct of_device_id __maybe_unused ucd9000_of_match[] = {
- 		.compatible = "ti,ucd90160",
- 		.data = (void *)ucd90160
- 	},
-+	{
-+		.compatible = "ti,ucd90320",
-+		.data = (void *)ucd90320
-+	},
- 	{
- 		.compatible = "ti,ucd9090",
- 		.data = (void *)ucd9090
-@@ -322,6 +330,9 @@ static void ucd9000_probe_gpio(struct i2c_client *client,
- 	case ucd90160:
- 		data->gpio.ngpio = UCD901XX_NUM_GPIOS;
- 		break;
-+	case ucd90320:
-+		data->gpio.ngpio = UCD90320_NUM_GPIOS;
-+		break;
- 	case ucd90910:
- 		data->gpio.ngpio = UCD90910_NUM_GPIOS;
- 		break;
-@@ -372,17 +383,18 @@ static int ucd9000_debugfs_show_mfr_status_bit(void *data, u64 *val)
- 	struct ucd9000_debugfs_entry *entry = data;
- 	struct i2c_client *client = entry->client;
- 	u8 buffer[I2C_SMBUS_BLOCK_MAX];
--	int ret;
-+	int ret, i;
- 
- 	ret = ucd9000_get_mfr_status(client, buffer);
- 	if (ret < 0)
- 		return ret;
- 
- 	/*
--	 * Attribute only created for devices with gpi fault bits at bits
--	 * 16-23, which is the second byte of the response.
-+	 * GPI fault bits are in sets of 8, two bytes from end of response.
- 	 */
--	*val = !!(buffer[1] & BIT(entry->index));
-+	i = ret - 3 - entry->index / 8;
-+	if (i >= 0)
-+		*val = !!(buffer[i] & BIT(entry->index % 8));
- 
- 	return 0;
- }
-@@ -422,7 +434,7 @@ static int ucd9000_init_debugfs(struct i2c_client *client,
- {
- 	struct dentry *debugfs;
- 	struct ucd9000_debugfs_entry *entries;
--	int i;
-+	int i, gpi_count;
- 	char name[UCD9000_DEBUGFS_NAME_LEN];
- 
- 	debugfs = pmbus_get_debugfs_dir(client);
-@@ -435,18 +447,21 @@ static int ucd9000_init_debugfs(struct i2c_client *client,
- 
- 	/*
- 	 * Of the chips this driver supports, only the UCD9090, UCD90160,
--	 * and UCD90910 report GPI faults in their MFR_STATUS register, so only
--	 * create the GPI fault debugfs attributes for those chips.
-+	 * UCD90320, and UCD90910 report GPI faults in their MFR_STATUS
-+	 * register, so only create the GPI fault debugfs attributes for those
-+	 * chips.
- 	 */
- 	if (mid->driver_data == ucd9090 || mid->driver_data == ucd90160 ||
--	    mid->driver_data == ucd90910) {
-+	    mid->driver_data == ucd90320 || mid->driver_data == ucd90910) {
-+		gpi_count = mid->driver_data == ucd90320 ? UCD90320_GPI_COUNT
-+							 : UCD9000_GPI_COUNT;
- 		entries = devm_kcalloc(&client->dev,
--				       UCD9000_GPI_COUNT, sizeof(*entries),
-+				       gpi_count, sizeof(*entries),
- 				       GFP_KERNEL);
- 		if (!entries)
- 			return -ENOMEM;
- 
--		for (i = 0; i < UCD9000_GPI_COUNT; i++) {
-+		for (i = 0; i < gpi_count; i++) {
- 			entries[i].client = client;
- 			entries[i].index = i;
- 			scnprintf(name, UCD9000_DEBUGFS_NAME_LEN,
--- 
-2.17.1
-
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 114 ++++++++++++++++++++++++++++++---
+>  1 file changed, 104 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 4212d022d253..25d160b36a57 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -68,6 +68,8 @@ static uint i8k_pwm_mult;
+>  static uint i8k_fan_max = I8K_FAN_HIGH;
+>  static bool disallow_fan_type_call;
+>  static bool disallow_fan_support;
+> +static unsigned int manual_fan;
+> +static unsigned int auto_fan;
+>  
+>  #define I8K_HWMON_HAVE_TEMP1	(1 << 0)
+>  #define I8K_HWMON_HAVE_TEMP2	(1 << 1)
+> @@ -300,6 +302,20 @@ static int i8k_get_fan_nominal_speed(int fan, int speed)
+>  	return i8k_smm(&regs) ? : (regs.eax & 0xffff) * i8k_fan_mult;
+>  }
+>  
+> +/*
+> + * Enable or disable automatic BIOS fan control support
+> + */
+> +static int i8k_enable_fan_auto_mode(bool enable)
+> +{
+> +	struct smm_regs regs = { };
+> +
+> +	if (disallow_fan_support)
+> +		return -EINVAL;
+> +
+> +	regs.eax = enable ? auto_fan : manual_fan;
+> +	return i8k_smm(&regs);
+> +}
+> +
+>  /*
+>   * Set the fan speed (off, low, high). Returns the new fan status.
+>   */
+> @@ -726,6 +742,35 @@ static ssize_t i8k_hwmon_pwm_store(struct device *dev,
+>  	return err < 0 ? -EIO : count;
+>  }
+>  
+> +static ssize_t i8k_hwmon_pwm_enable_store(struct device *dev,
+> +					  struct device_attribute *attr,
+> +					  const char *buf, size_t count)
+> +{
+> +	int err;
+> +	bool enable;
+> +	unsigned long val;
+> +
+> +	if (!auto_fan)
+> +		return -ENODEV;
+> +
+> +	err = kstrtoul(buf, 10, &val);
+> +	if (err)
+> +		return err;
+> +
+> +	if (val == 1)
+> +		enable = false;
+> +	else if (val == 2)
+> +		enable = true;
+> +	else
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&i8k_mutex);
+> +	err = i8k_enable_fan_auto_mode(enable);
+> +	mutex_unlock(&i8k_mutex);
+> +
+> +	return err ? err : count;
+> +}
+> +
+>  static SENSOR_DEVICE_ATTR_RO(temp1_input, i8k_hwmon_temp, 0);
+>  static SENSOR_DEVICE_ATTR_RO(temp1_label, i8k_hwmon_temp_label, 0);
+>  static SENSOR_DEVICE_ATTR_RO(temp2_input, i8k_hwmon_temp, 1);
+> @@ -749,6 +794,7 @@ static SENSOR_DEVICE_ATTR_RO(temp10_label, i8k_hwmon_temp_label, 9);
+>  static SENSOR_DEVICE_ATTR_RO(fan1_input, i8k_hwmon_fan, 0);
+>  static SENSOR_DEVICE_ATTR_RO(fan1_label, i8k_hwmon_fan_label, 0);
+>  static SENSOR_DEVICE_ATTR_RW(pwm1, i8k_hwmon_pwm, 0);
+> +static SENSOR_DEVICE_ATTR_WO(pwm1_enable, i8k_hwmon_pwm_enable, 0);
+>  static SENSOR_DEVICE_ATTR_RO(fan2_input, i8k_hwmon_fan, 1);
+>  static SENSOR_DEVICE_ATTR_RO(fan2_label, i8k_hwmon_fan_label, 1);
+>  static SENSOR_DEVICE_ATTR_RW(pwm2, i8k_hwmon_pwm, 1);
+> @@ -780,12 +826,13 @@ static struct attribute *i8k_attrs[] = {
+>  	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 20 */
+>  	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 21 */
+>  	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 22 */
+> -	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 23 */
+> -	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 24 */
+> -	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 25 */
+> -	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 26 */
+> -	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 27 */
+> -	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 28 */
+> +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,	/* 23 */
+> +	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 24 */
+> +	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 25 */
+> +	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 26 */
+> +	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 27 */
+> +	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 28 */
+> +	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 29 */
+>  	NULL
+>  };
+>  
+> @@ -828,16 +875,19 @@ static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *attr,
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP10))
+>  		return 0;
+>  
+> -	if (index >= 20 && index <= 22 &&
+> +	if (index >= 20 && index <= 23 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
+>  		return 0;
+> -	if (index >= 23 && index <= 25 &&
+> +	if (index >= 24 && index <= 26 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
+>  		return 0;
+> -	if (index >= 26 && index <= 28 &&
+> +	if (index >= 27 && index <= 29 &&
+>  	    !(i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
+>  		return 0;
+>  
+> +	if (index == 23 && !auto_fan)
+> +		return 0;
+> +
+>  	return attr->mode;
+>  }
+>  
+> @@ -1135,12 +1185,48 @@ static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
+>  	{ }
+>  };
+>  
+> +struct i8k_fan_control_data {
+> +	unsigned int manual_fan;
+> +	unsigned int auto_fan;
+> +};
+> +
+> +enum i8k_fan_controls {
+> +	I8K_FAN_34A3_35A3,
+> +};
+> +
+> +static const struct i8k_fan_control_data i8k_fan_control_data[] = {
+> +	[I8K_FAN_34A3_35A3] = {
+> +		.manual_fan = 0x34a3,
+> +		.auto_fan = 0x35a3,
+> +	},
+> +};
+> +
+> +static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
+> +	{
+> +		.ident = "Dell Precision 5530",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Precision 5530"),
+> +		},
+> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> +	},
+> +	{
+> +		.ident = "Dell Latitude E6440",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E6440"),
+> +		},
+> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> +	},
+> +	{ }
+> +};
+> +
+>  /*
+>   * Probe for the presence of a supported laptop.
+>   */
+>  static int __init i8k_probe(void)
+>  {
+> -	const struct dmi_system_id *id;
+> +	const struct dmi_system_id *id, *fan_control;
+>  	int fan, ret;
+>  
+>  	/*
+> @@ -1200,6 +1286,14 @@ static int __init i8k_probe(void)
+>  	i8k_fan_max = fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
+>  	i8k_pwm_mult = DIV_ROUND_UP(255, i8k_fan_max);
+>  
+> +	fan_control = dmi_first_match(i8k_whitelist_fan_control);
+> +	if (fan_control && fan_control->driver_data) {
+> +		const struct i8k_fan_control_data *fan_control_data = fan_control->driver_data;
+> +		manual_fan = fan_control_data->manual_fan;
+> +		auto_fan = fan_control_data->auto_fan;
+> +		pr_info("enabling support for setting automatic/manual fan control\n");
+> +	}
+> +
+>  	if (!fan_mult) {
+>  		/*
+>  		 * Autodetect fan multiplier based on nominal rpm
