@@ -2,98 +2,134 @@ Return-Path: <SRS0=GWx2=ZQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4F7C432C0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 20:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A10FEC432C0
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 20:39:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A9CDE207FD
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 20:00:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 554ED2068F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 20:39:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IQryhIVQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Fj5nv1H6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfKXUAn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Nov 2019 15:00:43 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36346 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbfKXUAn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Nov 2019 15:00:43 -0500
-Received: by mail-pl1-f195.google.com with SMTP id d7so5468060pls.3;
-        Sun, 24 Nov 2019 12:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WAkvtA+FujiuAlWNHJbFKlI8RrNl2D/+TL63UgwL7cI=;
-        b=IQryhIVQL9nlTHi2qcxXLlvK01ioMZtLaMI5FtOHpmMl98yr5F2P2TWlqJSCf2puLv
-         HTMA0XWVT0WNmlJT4oWQ98Ou4H0FEMaYqXSkahRVD1RT0O82g7n3gry64q8JyHIGB2C2
-         fI2l8booR3+DTWhfSLbhPrge4nIHD2VVUrNi1sQKQrJjvMFg8k4xUY6uf+0PUgxpMmYu
-         3agkNHi1TL2WVO+CnO8sQGVdsKh6pFkvUGpRtgyALeaRJ/jMP+cw220OdmO4+Yxc71k3
-         Hefrtemkkfh1obEKv3TO8n22Gl9AM156hEmu2axAp2yHwuMSbITT6AH7d3PvyDIlRS4F
-         tj3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WAkvtA+FujiuAlWNHJbFKlI8RrNl2D/+TL63UgwL7cI=;
-        b=OgoVyfkL7vqaFhVg28CC2jSCaVZf1Y/TPCTxnX+w1IBsW8QnsdpczlAIaUkfFImRw2
-         qOb9pBzVTaXHvCIz6bl+VmnYaiSRmX+cJbSmzU6tYV/8B4Z4nbZEBREnfb0FNJ/vJabR
-         GTIMW38+zsnJr8DuILB09R/IF5iw0afAPWxQlL5S+LCqzEWADIRYbqEIkxvCYPM+sf4G
-         KKSp2vEucocP2kQxHq5KPokNu4CAqfoTma4mRn7jkN5sXBIP4imT89AR50dsJRdZtpA4
-         hTSddeKrW06qQx51gAK36m4f6XGygOaIX+Zan8bCQRJfqIiH9fozwdX1VMp73fucYCJr
-         hRnw==
-X-Gm-Message-State: APjAAAUnt9dPaI/CpTzO8CikAHtzcIK47GE4HSGnpAzxZ/pVuhFWeDq3
-        isY6HkaVRG+fudyqgrnCQ15RTNqzoq7rOgd14Bw=
-X-Google-Smtp-Source: APXvYqyeHqs18DrwoOZOMY+pvM9NcPjCohZteEBqokEPOIb2+8bN1DfF4b7bh4S7SnvP2Sp/XvVA8o0VXMPTvfCWANE=
-X-Received: by 2002:a17:902:9889:: with SMTP id s9mr25590236plp.18.1574625642136;
- Sun, 24 Nov 2019 12:00:42 -0800 (PST)
+        id S1726907AbfKXUjR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Nov 2019 15:39:17 -0500
+Received: from mx.treblig.org ([46.43.15.161]:40780 "EHLO mx.treblig.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726875AbfKXUjQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 24 Nov 2019 15:39:16 -0500
+X-Greylist: delayed 1094 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Nov 2019 15:39:15 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UKLzk9+aMkg25pVRQrTUINUs/64+b9TFPz/CKbdrwpw=; b=Fj5nv1H6gmI82htM8KYzvx+mu2
+        skdw2C4PzjCAw5I4AsO4CUAndZW9O2UQ+13XxH7O7i5FXq6QXrZa/D9wLVjA3MK8A432sfpws0+tC
+        Xc0YS86d1Nc7tb3BshljVbPBeCO+QvQctgdkpYG7mKqajj5ZcTCZWTzC4WogEkfg4Jl8oYDTorezS
+        i/bmzCjtc5BiAHM+tpNOFwmmjWrMLoe5I6r4+pUiEKDghHIGwaWdqVETAzhsKNaORdgbfyf/cneA7
+        vqDA3ZBwwC1vrimMSU7P+eqavjv+7RiYJVvvqM1gmf/ywrZ4s/GW9YJIM1d/znrpkSpKIsF0NBsfT
+        fbqfh8YQ==;
+Received: from localhost ([127.0.0.1] helo=major.home.treblig.org)
+        by mx.treblig.org with esmtp (Exim 4.92)
+        (envelope-from <linux@treblig.org>)
+        id 1iYyNB-0000js-NE; Sun, 24 Nov 2019 20:20:45 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Cc:     "Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH 1/2] hwmon: Add intrusion templates
+Date:   Sun, 24 Nov 2019 20:20:29 +0000
+Message-Id: <20191124202030.45360-2-linux@treblig.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191124202030.45360-1-linux@treblig.org>
+References: <20191124202030.45360-1-linux@treblig.org>
 MIME-Version: 1.0
-References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com> <1574604530-9024-9-git-send-email-akinobu.mita@gmail.com>
-In-Reply-To: <1574604530-9024-9-git-send-email-akinobu.mita@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 24 Nov 2019 22:00:31 +0200
-Message-ID: <CAHp75Vc6e8xq==QGtEX0MGLoV8QCGQf+vP0x-SauNHyjveZrnQ@mail.gmail.com>
-Subject: Re: [PATCH 8/8] thermal: remove kelvin to/from Celsius conversion
- helpers from <linux/thermal.h>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
->
-> This removes the kelvin to/from Celsius conversion helpers in
-> <linux/thermal.h> which were switched to <linux/temperature.h> helpers.
->
+Add templates for intrusion%d_alarm and intrusion%d_beep.
+Note, these start at 0.
 
-> DECI_KELVIN_TO_MILLICELSIUS_WITH_OFFSET() is only used by ACPI thermal
-> zone driver and the usage is specific to the driver.  So this macro
-> is moved to the ACPI thermal driver rather than generic header.
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+---
+ drivers/hwmon/hwmon.c | 9 ++++++++-
+ include/linux/hwmon.h | 8 ++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-I didn't get this point. If we split all helpers, let's do it for all,
-and not spreading macro per driver.
-
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 1f3b30b085b9..95a1ae178213 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -171,7 +171,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
+ 
+ static int hwmon_attr_base(enum hwmon_sensor_types type)
+ {
+-	if (type == hwmon_in)
++	if (type == hwmon_in || type == hwmon_intrusion)
+ 		return 0;
+ 	return 1;
+ }
+@@ -458,6 +458,11 @@ static const char * const hwmon_pwm_attr_templates[] = {
+ 	[hwmon_pwm_freq] = "pwm%d_freq",
+ };
+ 
++static const char * const hwmon_intrusion_attr_templates[] = {
++	[hwmon_intrusion_alarm] = "intrusion%d_alarm",
++	[hwmon_intrusion_beep]  = "intrusion%d_beep",
++};
++
+ static const char * const *__templates[] = {
+ 	[hwmon_chip] = hwmon_chip_attrs,
+ 	[hwmon_temp] = hwmon_temp_attr_templates,
+@@ -468,6 +473,7 @@ static const char * const *__templates[] = {
+ 	[hwmon_humidity] = hwmon_humidity_attr_templates,
+ 	[hwmon_fan] = hwmon_fan_attr_templates,
+ 	[hwmon_pwm] = hwmon_pwm_attr_templates,
++	[hwmon_intrusion] = hwmon_intrusion_attr_templates,
+ };
+ 
+ static const int __templates_size[] = {
+@@ -480,6 +486,7 @@ static const int __templates_size[] = {
+ 	[hwmon_humidity] = ARRAY_SIZE(hwmon_humidity_attr_templates),
+ 	[hwmon_fan] = ARRAY_SIZE(hwmon_fan_attr_templates),
+ 	[hwmon_pwm] = ARRAY_SIZE(hwmon_pwm_attr_templates),
++	[hwmon_intrusion] = ARRAY_SIZE(hwmon_intrusion_attr_templates),
+ };
+ 
+ static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 72579168189d..dcda9589cdaf 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -27,6 +27,7 @@ enum hwmon_sensor_types {
+ 	hwmon_humidity,
+ 	hwmon_fan,
+ 	hwmon_pwm,
++	hwmon_intrusion,
+ 	hwmon_max,
+ };
+ 
+@@ -306,6 +307,13 @@ enum hwmon_pwm_attributes {
+ #define HWMON_PWM_MODE			BIT(hwmon_pwm_mode)
+ #define HWMON_PWM_FREQ			BIT(hwmon_pwm_freq)
+ 
++enum hwmon_intrusion_attributes {
++	hwmon_intrusion_alarm,
++	hwmon_intrusion_beep,
++};
++#define HWMON_INTRUSION_ALARM		BIT(hwmon_intrusion_alarm)
++#define HWMON_INTRUSION_BEEP		BIT(hwmon_intrusion_beep)
++
+ /**
+  * struct hwmon_ops - hwmon device operations
+  * @is_visible: Callback to return attribute visibility. Mandatory.
 -- 
-With Best Regards,
-Andy Shevchenko
+2.23.0
+
