@@ -2,66 +2,69 @@ Return-Path: <SRS0=GWx2=ZQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D78AC432C0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 15:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6170C432C0
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 19:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3DD432075E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 15:17:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B23EC207FD
+	for <linux-hwmon@archiver.kernel.org>; Sun, 24 Nov 2019 19:54:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jpx1440Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9k+kyqV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727006AbfKXPRu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 24 Nov 2019 10:17:50 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34414 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726948AbfKXPRu (ORCPT
+        id S1726937AbfKXTyi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 24 Nov 2019 14:54:38 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36942 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbfKXTyi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 24 Nov 2019 10:17:50 -0500
-Received: by mail-oi1-f195.google.com with SMTP id l202so10883253oig.1;
-        Sun, 24 Nov 2019 07:17:49 -0800 (PST)
+        Sun, 24 Nov 2019 14:54:38 -0500
+Received: by mail-pg1-f196.google.com with SMTP id b10so5969681pgd.4;
+        Sun, 24 Nov 2019 11:54:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5C9fcZplZbhqVRMPmr2V23XeMRp4oEU3og0P7QEerd4=;
-        b=Jpx1440YYqzexRpdjA3SiAXYclFcRW+1AfgPguF0jIkyAvx6JHX8y+wllMlbcSgDco
-         eK2aFQg70ozNQNHxITEOvlqPDYLnndXq9eeXtS4Oi1Z8oBPuAZMLjB4TEa+V3ptHcNG6
-         e0hCF5JuyilIJRpYC8aMsh4Lf5ExTN3ISK1ulc9fzIgZ7F/HQITN2iDR6i933R4h6llG
-         7oMm6hcdle9fL/RUJhFwLps0dU5tvK4Nh9N5kFbRk1wOnr2ebRLzeTyVJugqrWcGYdVY
-         Vkx3FdnZaoBHvR4vkWkyksMbdAHh+QJApDTek7WBJxQHySdHoVoXT37KH6PJSmMgAosL
-         jqNA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xgxN+slUElCQpDuU8fsY3BZMJxer4zKWxWFoQzMGtA4=;
+        b=N9k+kyqVqvVAuU5pmVcD05y0P7ep7fkeAyzpfnA8hS2146dGHNMBjSFR9uiJV8PHu0
+         9aJTs33ZWmukHbhGxkM9JoSH+maOgpdQdyDSpGppnHZX79oYQ1DMEBvvya80yKdDrCRn
+         UAhC+xeK8nbxYIHlDlIctzaYwHAhcTTcuw140chiI8mR8MQJetOiFzuSlX+qXYuNjuPC
+         ALXFb25TaINXA4BSo6hqgC/27e33SJxaQdfegL7mzSgjFC+vMNyCowgMcV3yJvVEhnK/
+         XomI1mA4ZMdgY4R282CGbCovH0hL0rqqQ49vvktIoDg5pRbcoXH8+heiUYIo3ezzqGn8
+         h4QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5C9fcZplZbhqVRMPmr2V23XeMRp4oEU3og0P7QEerd4=;
-        b=NHOtDzD9m3Yvlf1mbg8XkWJ60DWU3j81MWYXs1LdDil3E4RB0YXX5WapBJLpo3F07n
-         P4KFVjlZUGDv7hzJUsW8SPzcH55/fHnZlp9j8tQ5i/HC1Kpv3g4dyUYP1J0nL9pL3qt5
-         0xjK8CFXVH4whjIJ608Y+k0GklPuIo+rRFbQ+uoz82hABVuuyXT9SN4Lyp6NkvQSFWkr
-         Ta9lEHyfNw9ha83txkUMBnzQXvaYbfv/G8vJHQjf/0ObabaKtJOos2AKxg7XwM+M8cuQ
-         5oc1oeX0jtwJjdK9Z5gIB1BH1o/CrrNKAaHv3zRkjz4AKHX7ADUFEGA/ZBzOGJ5Bdw/F
-         l0MA==
-X-Gm-Message-State: APjAAAVGV89M1f2I3NV71rNGcbM6ftsUJDGbNTMNovHYrSs6wtTFAE7a
-        ofnSiLtr1xSoVCJBZFUbtxIB5NVN
-X-Google-Smtp-Source: APXvYqyo788a2sh7C+EcGrnmfMQbs2nuTW/CVkvqD52t1x6QsdY3JKPC2qKdW9qWYn5up2z8JtTfBw==
-X-Received: by 2002:aca:d78a:: with SMTP id o132mr20032815oig.79.1574608669287;
-        Sun, 24 Nov 2019 07:17:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v7sm1548686oie.51.2019.11.24.07.17.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Nov 2019 07:17:48 -0800 (PST)
-Subject: Re: [PATCH 2/8] ACPI: thermal: switch to use <linux/temperature.h>
- helpers
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sujith Thomas <sujith.thomas@intel.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xgxN+slUElCQpDuU8fsY3BZMJxer4zKWxWFoQzMGtA4=;
+        b=IhwXRKubOganLFxgcRgjm6iIMRqHslwtRSlBMIdKPCphg8ZBt83RYS7tySIfi99QkL
+         KXW6z+79ICJyEV0hllHhe/4PFPISJh1K9Ccboy/NYO7MaCLV+HubkDdK1J+cTExCcJfo
+         YsyhEtPJIEP9MxgSHtYyeQP9wbIc4t93O+heiTWUycUrFoIlmX0G2h2hvCoRz6BGYfRL
+         knpW/IhjUrRGBNKCNyRoRknnGPhg/YJ4J2DpcoFJUqkD/krJGrEmevK8ggW8aP+qxuC2
+         DauNkxCeeikw801tve/WEEc6fFPFUH8b9U+322Bn3uXM8fCcUwuK0NzV/eqr/ZEHs58M
+         I3xg==
+X-Gm-Message-State: APjAAAWusOhB2ONbj02EtfKuklYtSDk2kCpm+LEhKmusvflmXtFATqm4
+        A04VjrhfHe1KZ1rY2Vp0BzWCuwLPFyA9kAM4Szs=
+X-Google-Smtp-Source: APXvYqynJhSAT+cBLFOG35mXdSu5donpoINx1X4oii7KCRStNIR2N5Cf8Hh5JzERBkyy6grUixES2mbAfr5mZU7d3zM=
+X-Received: by 2002:a62:168f:: with SMTP id 137mr31383941pfw.151.1574625277865;
+ Sun, 24 Nov 2019 11:54:37 -0800 (PST)
+MIME-Version: 1.0
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com> <1574604530-9024-4-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <1574604530-9024-4-git-send-email-akinobu.mita@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 24 Nov 2019 21:54:26 +0200
+Message-ID: <CAHp75VdkhFJZ71FS+DhrKTDPEW7Z-6imRSePm8EhgGF2sgTThg@mail.gmail.com>
+Subject: Re: [PATCH 3/8] platform/x86: asus-wmi: switch to use
+ <linux/temperature.h> helpers
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
         Darren Hart <dvhart@infradead.org>,
         Andy Shevchenko <andy@infradead.org>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -69,38 +72,25 @@ Cc:     Sujith Thomas <sujith.thomas@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
         Sagi Grimberg <sagi@grimberg.me>
-References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
- <1574604530-9024-3-git-send-email-akinobu.mita@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <00fff683-d0e2-67ae-83e3-c472fdbe9e1d@roeck-us.net>
-Date:   Sun, 24 Nov 2019 07:17:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <1574604530-9024-3-git-send-email-akinobu.mita@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/24/19 6:08 AM, Akinobu Mita wrote:
-> This switches the ACPI thermal zone driver to use celsius_to_deci_kelvin()
-> and deci_kelvin_to_celsius() in <linux/temperature.h> instead of helpers
-> in <linux/thermal.h>.
-> 
-> This is preparation for centralizing the kelvin to/from Celsius conversion
-> helpers in <linux/temprature.h>.
-> 
-s/temprature/temperature/
-
-Looks like this applies to all patches.
-
+On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
+>
+> The asus-wmi driver doesn't implement the thermal device functionality
+> directly, so including <linux/thermal.h> just for DECI_KELVIN_TO_CELSIUS()
+> is a bit odd.
+>
+> This switches the asus-wmi driver to use deci_kelvin_to_millicelsius() in
+> <linux/temperature.h>.
+>
 > Cc: Sujith Thomas <sujith.thomas@intel.com>
 > Cc: Darren Hart <dvhart@infradead.org>
 > Cc: Andy Shevchenko <andy@infradead.org>
@@ -116,64 +106,46 @@ Looks like this applies to all patches.
 > Cc: Sagi Grimberg <sagi@grimberg.me>
 > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 > ---
->   drivers/acpi/thermal.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-> index d831a61..bd9b6eb 100644
-> --- a/drivers/acpi/thermal.c
-> +++ b/drivers/acpi/thermal.c
-> @@ -297,7 +297,9 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   			if (crt == -1) {
->   				tz->trips.critical.flags.valid = 0;
->   			} else if (crt > 0) {
-> -				unsigned long crt_k = CELSIUS_TO_DECI_KELVIN(crt);
-> +				unsigned long crt_k =
-> +					celsius_to_deci_kelvin(crt);
-> +
+>  drivers/platform/x86/asus-wmi.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 821b08e..6a1a2f9 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -33,7 +33,7 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/platform_data/x86/asus-wmi.h>
+>  #include <linux/platform_device.h>
+> -#include <linux/thermal.h>
+> +#include <linux/temperature.h>
+>  #include <linux/acpi.h>
+>  #include <linux/dmi.h>
+>
+> @@ -1512,9 +1512,8 @@ static ssize_t asus_hwmon_temp1(struct device *dev,
+>         if (err < 0)
+>                 return err;
+>
+> -       value = DECI_KELVIN_TO_CELSIUS((value & 0xFFFF)) * 1000;
+> -
+> -       return sprintf(buf, "%d\n", value);
 
->   				/*
->   				 * Allow override critical threshold
->   				 */
-> @@ -333,7 +335,7 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   		if (psv == -1) {
->   			status = AE_SUPPORT;
->   		} else if (psv > 0) {
-> -			tmp = CELSIUS_TO_DECI_KELVIN(psv);
-> +			tmp = celsius_to_deci_kelvin(psv);
->   			status = AE_OK;
->   		} else {
->   			status = acpi_evaluate_integer(tz->device->handle,
-> @@ -413,7 +415,7 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   					break;
->   				if (i == 1)
->   					tz->trips.active[0].temperature =
-> -						CELSIUS_TO_DECI_KELVIN(act);
-> +						celsius_to_deci_kelvin(act);
->   				else
->   					/*
->   					 * Don't allow override higher than
-> @@ -421,9 +423,9 @@ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
->   					 */
->   					tz->trips.active[i - 1].temperature =
->   						(tz->trips.active[i - 2].temperature <
-> -						CELSIUS_TO_DECI_KELVIN(act) ?
-> +						celsius_to_deci_kelvin(act) ?
->   						tz->trips.active[i - 2].temperature :
-> -						CELSIUS_TO_DECI_KELVIN(act));
-> +						celsius_to_deci_kelvin(act));
->   				break;
->   			} else {
->   				tz->trips.active[i].temperature = tmp;
-> @@ -1087,7 +1089,8 @@ static int acpi_thermal_add(struct acpi_device *device)
->   	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
->   
->   	pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
-> -		acpi_device_bid(device), DECI_KELVIN_TO_CELSIUS(tz->temperature));
-> +		acpi_device_bid(device),
-> +		deci_kelvin_to_celsius(tz->temperature));
->   	goto end;
->   
->   free_memory:
-> 
+> +       return sprintf(buf, "%ld\n",
+> +                      deci_kelvin_to_millicelsius(value & 0xFFFF));
 
+Leave it in one line.
+
+With above,
+Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+>  }
+>
+>  /* Fan1 */
+> --
+> 2.7.4
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
