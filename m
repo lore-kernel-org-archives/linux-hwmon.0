@@ -2,117 +2,122 @@ Return-Path: <SRS0=YpYn=ZR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46AF5C432C0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 18:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA965C432C0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 19:05:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2573A20748
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 18:06:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A32F02075C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 19:05:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SJO2LxWf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbfKYSGN convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Nov 2019 13:06:13 -0500
-Received: from skedge04.snt-world.com ([91.208.41.69]:50618 "EHLO
-        skedge04.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727761AbfKYSGN (ORCPT
+        id S1725882AbfKYTFN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Nov 2019 14:05:13 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:41409 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfKYTFN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Nov 2019 13:06:13 -0500
-Received: from sntmail12r.snt-is.com (unknown [10.203.32.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by skedge04.snt-world.com (Postfix) with ESMTPS id EBDCE67A863;
-        Mon, 25 Nov 2019 19:06:11 +0100 (CET)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail12r.snt-is.com
- (10.203.32.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 25 Nov
- 2019 19:06:11 +0100
-Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
- sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
- 15.01.1713.004; Mon, 25 Nov 2019 19:06:11 +0100
-From:   Gilles Buloz <Gilles.Buloz@kontron.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: hwmon: (nct7802) buggy VSEN1/2/3 alarm
-Thread-Topic: hwmon: (nct7802) buggy VSEN1/2/3 alarm
-Thread-Index: AQHVo5IpgkKRfgHMQkil/fmfzLEhKaeb4hMAgAAlS4CAAA46AIAACIgA
-Date:   Mon, 25 Nov 2019 18:06:11 +0000
-Message-ID: <5DDC1812.9080009@kontron.com>
-References: <5DDBD386.4070408@kontron.com>
- <6cde95e5-0ab3-016f-b67d-73db8c16ff71@roeck-us.net>
- <5DDC04FB.1030705@kontron.com> <20191125173538.GA21072@roeck-us.net>
-In-Reply-To: <20191125173538.GA21072@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux i686; rv:24.0) Gecko/20100101
- Thunderbird/24.1.1
-x-originating-ip: [172.25.9.193]
-x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <0DD25B06C4B80A4BB27BB52A48AA5249@snt-world.com>
-Content-Transfer-Encoding: 8BIT
+        Mon, 25 Nov 2019 14:05:13 -0500
+Received: by mail-pj1-f65.google.com with SMTP id gc1so7014692pjb.8;
+        Mon, 25 Nov 2019 11:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=P19DovHn3w/+n6hilY5zf6aVHKgMGVjkSijfGR+10vI=;
+        b=SJO2LxWfQL/RpUPwjCS4HFD6Zi0CFuImYwngKnX2+isiSOQFMhpKZ9dY7m7ErmqtG4
+         u8Ew0Quvr1Acigrzp5DqDA33h/fhbBej0bLLtoOm5gDL6ZBBDzASZkK57S4r97WCAUXv
+         1kdCIwBr+MtYS4zQmwDjV39T7kR7KNCkvSsrsqnGn/RZtQGEgxclKTjXLcVc0+QlBA8/
+         f2OJbsWGWbWcMTTgc86WqTPtoGq/x3aRQUZUATAjf061M9A4fWfzPoEwYDbAmVPYwZZh
+         hdK+LgsacNAMnrFVgGKN0l0g8z5n1Wqe46FZrR+84JSKZupFL3Pm9iu8TlcA8gX7ZayR
+         lA4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=P19DovHn3w/+n6hilY5zf6aVHKgMGVjkSijfGR+10vI=;
+        b=MR47lk1i4lW65AGRT2ggZAn+1T/pdIFruBF3ujWigXHgnsRpqCaxwEj4dK2bednCt4
+         vUCIUsUr6LP10F44lzhHh7MeVMftlJdv32NiNPihMzYF1d/Z4lOpKnO06Y8SL7DyHuST
+         Di4N8VlHfJiTOsJJOb2NSLB+hH5zkTpWZyZ94KmvYt9pMFkEXu9NLNlspK4e7xDBECvf
+         19cVVV0kdpilyS1DwOYL8KzFdZVZI0MEX+m8fYc/Lq/QNfsOTgFwFDdwLYof05DXoOtz
+         5BUdPkZ8xc50uYMgK8LrXtP/JnleWd2oBZ3GX+lWx4gjP0b0n39D/q/4OF3HXgkvI0sI
+         5D3w==
+X-Gm-Message-State: APjAAAUfQYB2k/hin0I8UB/Xv5Jpy/4lW5M0mWJNjpSmgT14B9EparY6
+        IRHXV2/ZaIBEKKLqgHIgn1/s6ALNdYf7uju9lew=
+X-Google-Smtp-Source: APXvYqzb9QDOJ3vCeMWuto+UJ4Y/4ebOOkTH+Cb5IJCRGIdMR80O9owbytFNwFLnJBA3iU/X2miKDbF+Jt3xD0q+HaQ=
+X-Received: by 2002:a17:902:bb84:: with SMTP id m4mr29810736pls.255.1574708710742;
+ Mon, 25 Nov 2019 11:05:10 -0800 (PST)
 MIME-Version: 1.0
-X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: EBDCE67A863.AF444
-X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
-X-SnT-MailScanner-SpamCheck: 
-X-SnT-MailScanner-From: gilles.buloz@kontron.com
-X-SnT-MailScanner-To: linux-hwmon@vger.kernel.org, linux@roeck-us.net
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+ <1574604530-9024-2-git-send-email-akinobu.mita@gmail.com> <CAHp75VfGt59F5YbEjctvOm00g+Pws+1jYgVbNLnUE3kq3SZi-A@mail.gmail.com>
+ <CAC5umyjzDODZf8ECWDmR6SAY-TNkdJ+a0GZRgOFcPCAMok2Ddg@mail.gmail.com>
+In-Reply-To: <CAC5umyjzDODZf8ECWDmR6SAY-TNkdJ+a0GZRgOFcPCAMok2Ddg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Nov 2019 21:05:00 +0200
+Message-ID: <CAHp75VdXUKLrnPEnga7An7BnCoGac=XxgWESWyV-ShmK_xiD4g@mail.gmail.com>
+Subject: Re: [PATCH 1/8] add header file for kelvin to/from Celsius conversion helpers
+To:     Akinobu Mita <akinobu.mita@gmail.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Le 25/11/2019 18:35, Guenter Roeck a écrit :
-> On Mon, Nov 25, 2019 at 04:44:44PM +0000, Gilles Buloz wrote:
->> Le 25/11/2019 15:31, Guenter Roeck a écrit :
->>> On 11/25/19 5:13 AM, Gilles Buloz wrote:
->>>> Hi Guenter,
->>>>
->>>> According to the NCT7802Y datasheet, the REG_VOLTAGE_LIMIT_LSB definition is wrong and leads to wrong threshold registers used. It
->>>> should be :
->>>> static const u8 REG_VOLTAGE_LIMIT_LSB[2][5] = {
->>>>            { 0x46, 0x00, 0x40, 0x42, 0x44 },
->>>>            { 0x45, 0x00, 0x3f, 0x41, 0x43 },
->>>> };
->>>> With this definition, the right bit is set in "Voltage SMI Status Register @0x1e" for each threshold reached (using i2cget to check)
->>>>
->>> Good catch. Care to send a patch ?
->> As a fix for this is only useful with a fix for the problem below, maybe a single patch for both would be better.
-> Not really. Those are two separate issues. The reported and selected
-> limits are wrong, period. This will require two patches.
-OK
->>>> But I'm unable to get any "ALARM" reported by the command "sensors" for VSEN1/2/3 = in2,in3,in4 because status for in0 is read
->>>> before (unless I set "ignore in0" in sensors file). The problem is that status bits in "Voltage SMI Status Register @0x1e" are
->>>> cleared when reading, and a read is done for each inX processed, so only the first inX has a chance to get its alarm bit set.
->>>> For this problem I don't see how to fix this easily; just to let you know ...
->>>>
->>> One possible fix would be to cache each alarm register and to clear the cache
->>> either after reading it (bitwise) or after a timeout. The latter is probably
->>> better to avoid stale information.
->> As we have status registers cleared at byte level and we want them to be cleared at bit level when each bit is read, I think a cache
->> would be better. I suggest this :
->> - have a cached value for each status register, by default at 0x00
->> - when reading a register to get a bit, "OR" its byte value with its cached value, then use its cached value for processing.
->> - then clear the bit that has been processed from the cached value.
->>
-> Both methods I suggested would have to involve a cache. The question is
-> when to clear the cache - either clear a bit after reporting it, or
-> clear it after a timeout.
+On Mon, Nov 25, 2019 at 4:30 PM Akinobu Mita <akinobu.mita@gmail.com> wrote=
+:
+> 2019=E5=B9=B411=E6=9C=8824=E6=97=A5(=E6=97=A5) 23:57 Andy Shevchenko <and=
+y.shevchenko@gmail.com>:
+> > On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> w=
+rote:
+
+> > >  include/linux/thermal.h     |  1 +
+
+> > > --- a/include/linux/thermal.h
+> > > +++ b/include/linux/thermal.h
+> > > @@ -14,6 +14,7 @@
+> > >  #include <linux/idr.h>
+> > >  #include <linux/device.h>
+> > >  #include <linux/sysfs.h>
+> > > +#include <linux/temperature.h>
+> > >  #include <linux/workqueue.h>
+> > >  #include <uapi/linux/thermal.h>
+> >
+> > I don't see any users of it. Why did you include?
 >
->> I think a timeout would not be obvious to set : at least the time for sensors to read all info (including when terminal is a serial
->> line and output is slower) and to deal with possible latencies, but not too long...
-> The timeout would be determined by the chip's conversion rate (register 0x26),
-As I understand, the status must be kept in cache between the first read of status register @1E for in0 (clearing all status bits), 
-and the last read for in4. This duration depends on the "sensors" execution time and I'can see any link with the conversion rate here.
-> or, for simplicity, just be set to one second. I don't immediately see why
-> that would be difficult to implement. Not that it matters much, really;
-> I would accept patches with and without timeout.
+> The rest of this patch series starts using it.
 >
-> Guenter
-> .
+> I decided to include <linux/temperature.h> from <linux/thermal.h> because
+> the existing <linux/thermal.h> provides the conversion helpers.
 >
+> However, not all of the thermal drivers require these conversion helpers,
+> so we can change to include <linux/temperature.h> from each thermal drive=
+r
+> instead of including it from <linux/thermal.h>.
+>
+> Which way do you prefer?
+
+I think users should include new header explicitly.
+
+--=20
+With Best Regards,
+Andy Shevchenko
