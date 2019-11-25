@@ -2,99 +2,147 @@ Return-Path: <SRS0=YpYn=ZR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBEDBC43215
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 14:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB14EC432C0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 14:32:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B5C05207FD
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 14:31:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0E3520740
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Nov 2019 14:32:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qusZwGrs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kH6P1Kq2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728145AbfKYObS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Nov 2019 09:31:18 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:42910 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728026AbfKYObS (ORCPT
+        id S1728036AbfKYOcJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Nov 2019 09:32:09 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:38762 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728026AbfKYOcJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Nov 2019 09:31:18 -0500
-Received: by mail-ot1-f46.google.com with SMTP id 66so6608975otd.9
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 Nov 2019 06:31:17 -0800 (PST)
+        Mon, 25 Nov 2019 09:32:09 -0500
+Received: by mail-lf1-f65.google.com with SMTP id q28so11198143lfa.5;
+        Mon, 25 Nov 2019 06:32:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W+3mZWARTBctKj9tFxM+Ge3X5ycUdMgGyRNL9+gh5D8=;
-        b=qusZwGrspJwPU24MrSdxK5H0xOuZ6izBklFYhnCvdJlQlrGZGhbDzFfMLxMra4svgl
-         hRWQvlghllRNIeEo5edsb5Wd8Q1JaCzO0oYUjBMgse7+hnyXqNr1zn+fiaCZOVAsUHoO
-         8FX/vFwMv6BvDHgaHFZNxo9hdZ7i/t4L7bX/41Ul2kADQdvwrwnmtkRKnBhgG/lbB6fb
-         Opj+EttSt6kBanGVfq7+ujwHWO6PBJ4+xPzhFWSOHxUQUex0nwrLKJjjtUilsu2jqY+H
-         sKNOGIUwTS1xiUxWnFeRIKRGrcJVSMmH8RlGwwDia9UUg4aTAj/LWIcZcYb3fe8Wg9sz
-         /lAw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oGTTnKM0xwW7nj0x0MrfZUkr7TGce1cyBxrsce9fTz0=;
+        b=kH6P1Kq2tBKFD4TQmcJWpSKJ6Hagdx11zVsv7mKgsiJXkYyHhoViKTtr3sadCGlZeL
+         ehG6P1sCdCzZo3us3xttS17NdAC8JuBBBu2/iHQHjk8KzF1TRPEoa9TufBvSCutEj6SK
+         DTxiSmYqOGBeDhSdnKY5GbiaPiWFTYTvf2gAf/wwtRybSNHMzyBBw40snnTXoxI4sRMI
+         vzaeJsp/QYlJSyBYc4SrInm75e+vgf6lqgniLQF9GS50M7g9kv3GU6xrf0oHtXtlAHcb
+         O1ZQEL9IRYyXdMr5mW0EVkKldcYv1mblryWchjlQGlCXJhYrUhbajFSRdHW0YGcxIxAf
+         JO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W+3mZWARTBctKj9tFxM+Ge3X5ycUdMgGyRNL9+gh5D8=;
-        b=U/geasfqZ0WSUL9G3+T2dHFpd4zTs/l+IVW9ZZTO3YdCy/lmSVBWWQsd42rig4Y9zh
-         aIheQWybuue7f2iPviJEY2bFo8shFQMpiF5glvauMiCp34ZcvWuKD01Arlp/XCvmHM7C
-         f8d4utIUnzJBeI35RZfdSAJ3L7SP3qw/rSil1VZ/Sww4cmQkNNk3aeRDOvdUUNtRXzIK
-         bHvHmBr89pk9HFGPHI/Wt/X9eZryZBoKCGT1YDSInQwtiB4C88x4pcXzfXuMnPHokeTs
-         +kSu6iX3mOsTU/W9gZ72fFnTH6T8zpoNUBHY/NNy4uuXX50IJveyZsJPScDcpXC4tNDC
-         49JA==
-X-Gm-Message-State: APjAAAUtx+NsNnVOax2OtqCp+6RJZX/JLt9EeHFi8ydAj5ADku8STNrI
-        DwdNk/CfTM7st6Wk60sLx+6Azjxl
-X-Google-Smtp-Source: APXvYqzSk7wJLT1ffiAmYD/04REhbrus9qxi0scyjCG4U8rRI8raveHkei749zwLtb68gFqp1UMMqQ==
-X-Received: by 2002:a9d:66d9:: with SMTP id t25mr21647000otm.30.1574692276899;
-        Mon, 25 Nov 2019 06:31:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y23sm2567799oih.17.2019.11.25.06.31.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 25 Nov 2019 06:31:16 -0800 (PST)
-Subject: Re: hwmon: (nct7802) buggy VSEN1/2/3 alarm
-To:     Gilles Buloz <Gilles.Buloz@kontron.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <5DDBD386.4070408@kontron.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <6cde95e5-0ab3-016f-b67d-73db8c16ff71@roeck-us.net>
-Date:   Mon, 25 Nov 2019 06:31:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oGTTnKM0xwW7nj0x0MrfZUkr7TGce1cyBxrsce9fTz0=;
+        b=TAKvXm2f8ClRCu3oINqkmY5SN4o7bZXxe+oma3oHX+CWHyywJuOThmtold3I6mcRC3
+         OYhpy3orKQQf4jTlBJEigon1srR7j8UK3pGTHKK8yBqCh4u8yB1kdjGQuJyhfkNSj2da
+         FQZ3ProgQzfopJC0hMQWjhriYQ2wPOp2tzTWO4C3swxbgyX5L1oTyiSfdqOLPgXfF7nI
+         NGlTgpV8/rWKmuIQKyByNOFQ6WutR1i+ERF2jr4Ps0F0xSbYN6T6HdxEr01Faol2/hkR
+         scjS4WVZ5zV+i8BS2YIYIBTQ18cNwMohL96BT+JqmR0j0f/Kh4iBABpmThvvS33hRtkR
+         UJgA==
+X-Gm-Message-State: APjAAAU9TNlSYbnhudW76ry/XoDIUGHLoFBTc16p1+W+SqB+DaL86ki6
+        kP/kp8IpUuMpJK7BkaZYOqjlZ24k4g05Rxzf8IU=
+X-Google-Smtp-Source: APXvYqxEZzHQPIyjGRJIRceOVV99/gHLbc042Znh/KAbP8bMgC3AKDkjIZgHKxBU2iKFp3ecyEUrHxfT37I88etCPEI=
+X-Received: by 2002:ac2:41d8:: with SMTP id d24mr6024078lfi.98.1574692327003;
+ Mon, 25 Nov 2019 06:32:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <5DDBD386.4070408@kontron.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1574604530-9024-1-git-send-email-akinobu.mita@gmail.com>
+ <1574604530-9024-4-git-send-email-akinobu.mita@gmail.com> <CAHp75VdkhFJZ71FS+DhrKTDPEW7Z-6imRSePm8EhgGF2sgTThg@mail.gmail.com>
+In-Reply-To: <CAHp75VdkhFJZ71FS+DhrKTDPEW7Z-6imRSePm8EhgGF2sgTThg@mail.gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Mon, 25 Nov 2019 23:31:55 +0900
+Message-ID: <CAC5umygDcYNd396K=CO7wpfDbESo4Sc39oWjkqu_-hmYbb2R1Q@mail.gmail.com>
+Subject: Re: [PATCH 3/8] platform/x86: asus-wmi: switch to use
+ <linux/temperature.h> helpers
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/25/19 5:13 AM, Gilles Buloz wrote:
-> Hi Guenter,
-> 
-> According to the NCT7802Y datasheet, the REG_VOLTAGE_LIMIT_LSB definition is wrong and leads to wrong threshold registers used. It
-> should be :
-> static const u8 REG_VOLTAGE_LIMIT_LSB[2][5] = {
->           { 0x46, 0x00, 0x40, 0x42, 0x44 },
->           { 0x45, 0x00, 0x3f, 0x41, 0x43 },
-> };
-> With this definition, the right bit is set in "Voltage SMI Status Register @0x1e" for each threshold reached (using i2cget to check)
-> 
+2019=E5=B9=B411=E6=9C=8825=E6=97=A5(=E6=9C=88) 4:54 Andy Shevchenko <andy.s=
+hevchenko@gmail.com>:
+>
+> On Sun, Nov 24, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wro=
+te:
+> >
+> > The asus-wmi driver doesn't implement the thermal device functionality
+> > directly, so including <linux/thermal.h> just for DECI_KELVIN_TO_CELSIU=
+S()
+> > is a bit odd.
+> >
+> > This switches the asus-wmi driver to use deci_kelvin_to_millicelsius() =
+in
+> > <linux/temperature.h>.
+> >
+> > Cc: Sujith Thomas <sujith.thomas@intel.com>
+> > Cc: Darren Hart <dvhart@infradead.org>
+> > Cc: Andy Shevchenko <andy@infradead.org>
+> > Cc: Zhang Rui <rui.zhang@intel.com>
+> > Cc: Eduardo Valentin <edubezval@gmail.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Keith Busch <kbusch@kernel.org>
+> > Cc: Jens Axboe <axboe@fb.com>
+> > Cc: Christoph Hellwig <hch@lst.de>
+> > Cc: Sagi Grimberg <sagi@grimberg.me>
+> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> > ---
+> >  drivers/platform/x86/asus-wmi.c | 7 +++----
+> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asu=
+s-wmi.c
+> > index 821b08e..6a1a2f9 100644
+> > --- a/drivers/platform/x86/asus-wmi.c
+> > +++ b/drivers/platform/x86/asus-wmi.c
+> > @@ -33,7 +33,7 @@
+> >  #include <linux/seq_file.h>
+> >  #include <linux/platform_data/x86/asus-wmi.h>
+> >  #include <linux/platform_device.h>
+> > -#include <linux/thermal.h>
+> > +#include <linux/temperature.h>
+> >  #include <linux/acpi.h>
+> >  #include <linux/dmi.h>
+> >
+> > @@ -1512,9 +1512,8 @@ static ssize_t asus_hwmon_temp1(struct device *de=
+v,
+> >         if (err < 0)
+> >                 return err;
+> >
+> > -       value =3D DECI_KELVIN_TO_CELSIUS((value & 0xFFFF)) * 1000;
+> > -
+> > -       return sprintf(buf, "%d\n", value);
+>
+> > +       return sprintf(buf, "%ld\n",
+> > +                      deci_kelvin_to_millicelsius(value & 0xFFFF));
+>
+> Leave it in one line.
 
-Good catch. Care to send a patch ?
-
-> But I'm unable to get any "ALARM" reported by the command "sensors" for VSEN1/2/3 = in2,in3,in4 because status for in0 is read
-> before (unless I set "ignore in0" in sensors file). The problem is that status bits in "Voltage SMI Status Register @0x1e" are
-> cleared when reading, and a read is done for each inX processed, so only the first inX has a chance to get its alarm bit set.
-> For this problem I don't see how to fix this easily; just to let you know ...
-> 
-One possible fix would be to cache each alarm register and to clear the cache
-either after reading it (bitwise) or after a timeout. The latter is probably
-better to avoid stale information.
-
-Guenter
+It causes this line over 80 characters.  Or do you prefer to save the
+conversion result in 'value' temporarily as before?
