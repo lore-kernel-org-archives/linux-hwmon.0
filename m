@@ -2,84 +2,78 @@ Return-Path: <SRS0=8Ik9=ZU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 946D4C432C0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Nov 2019 15:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F3D2C432C3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Nov 2019 15:22:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F91021787
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Nov 2019 15:14:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 733E22168B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Nov 2019 15:22:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U7H/vMgH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WIWl2X8W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbfK1POH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Nov 2019 10:14:07 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38236 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbfK1POG (ORCPT
+        id S1726436AbfK1PWo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Nov 2019 10:22:44 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:44903 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbfK1PWn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Nov 2019 10:14:06 -0500
-Received: by mail-ot1-f65.google.com with SMTP id z25so22470945oti.5;
-        Thu, 28 Nov 2019 07:14:05 -0800 (PST)
+        Thu, 28 Nov 2019 10:22:43 -0500
+Received: by mail-ot1-f49.google.com with SMTP id c19so22466047otr.11
+        for <linux-hwmon@vger.kernel.org>; Thu, 28 Nov 2019 07:22:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HtuUzrcYCx4FDKvEYRGNCE7CBoyzQfGcKVK/4Fc5Xdo=;
-        b=U7H/vMgHKUQfGCWIqsAc2hDHGYhdMRtA9d/x76Mk5bgXtAUHQYEQezz4KCmwjzRW3Q
-         +hsmclBS9eH14K21262FlXFPBytrKVmtqE6z5p3Mhr0hBRSz6Z0pzVEFti39PLc/XAxR
-         zhD+DjtkdgHLUyMGBNkFnUDJXEDRhysdooejFjchqAbk1nkr7MKaHCVY0WU/efzuvrsy
-         f7sb0aw+V9v5w/zyksxHwYqHPfyNJvAnODn4HLzBofYH0/kjvpWUixCFUvHR0Kn2JOBg
-         AJvdKW3wjpEhw10cyE8N83V/fU3TEDHS51QKDX7k+/MRSvBF6VZIQ9wkkGDnU6m7vv3p
-         18+A==
+        bh=8DiqKC4tY+G7VyNwEV4g0DqGxW0K/7MS1A050haqRec=;
+        b=WIWl2X8W0c10fx8FZ1FCMScDiqI92fT9jJ90WTTifD/mM/JAX0SyiXp5KT0CEnv5Qf
+         O5lrFG2dlIaIiUhofjab1hr961fmkFi5DfO5QGFlTT6Fhl6yOe5wVU9jwDc6+etNpm01
+         wv7chcdWmT3ZDnN+LcX8VaV3D1GJYjn55e5Om4aRFa6xhx26lfGOBGVLvgjrc0XR/42X
+         DOJZiMTAopGimnZ1attjmogay85EwXgoX5MH9xTRuBfS2LBlWtrphIrQsmHAG9yXvwUV
+         tY5aib9EBi3o+C/NbrnlCwnlC6aDDmVMdEE/U1p5tHtJ1R1ru+IhwY7AuB2QbPABoS00
+         fNsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=HtuUzrcYCx4FDKvEYRGNCE7CBoyzQfGcKVK/4Fc5Xdo=;
-        b=uXDEK99CBKoKMznmkMemSpWODYPBfqA9C7TAj3uo13oa0cnETkMP4GeNbPK7z8vv0P
-         0viMPthldYPnFxEKHUKgYpqFDWjGUMyztXcynZfqCRFuQulhrKsSz23PQXY38iAQO5Or
-         TcnSSk2ZPap0X8wyyOCERj86/S6ZrFPrHB2RfvxmNwtGIOohMQT6Oq8/tj38pdsP6PDF
-         S5OyT+BBDTqzUjysyj8S7ExeWg24tupUvGbUYSZax8asraIMo9KLMNMFft8brNUxjupk
-         yzioJC087Z3g6x0thcaVmFCC/HRdzPB9DrrvUnXHeQadv6x/GA6CdT5JWPVWelKwz8pS
-         9q0w==
-X-Gm-Message-State: APjAAAX0BuTn6Oaiz0LdBoQ15nT8dgLS0BlPlbDY9VPrC5xDe4ZlUEAQ
-        BAmikxcFCZ2VUqVi2r9RsPg=
-X-Google-Smtp-Source: APXvYqwID9RssdR2nPQiWYVEbA9lQFH3JA3ZSSEgHgyZrAY109cux/TszBuuQeKLk9wPhsrCNT+FyQ==
-X-Received: by 2002:a05:6830:46:: with SMTP id d6mr8123426otp.7.1574954045573;
-        Thu, 28 Nov 2019 07:14:05 -0800 (PST)
+        bh=8DiqKC4tY+G7VyNwEV4g0DqGxW0K/7MS1A050haqRec=;
+        b=tO8veXHkSX5/WgHEOMsYnRT6ui7JNWUlurSSJvmRxBCfF7yPaCFLvznWBJ6DIF8htr
+         IPyN7v37rT1Tqd4EYRRsY0TxsuUZMfchXZhR1TwD2tBGpHXqSeRttbAxewnqcdMXIKDj
+         Vz+prQ3o3KIrgS0a50v3MNDHi+JNVPlBSzwP7P22teUnum+K/bJOEr0Qe2XyrFUUzYBe
+         Vg1kppgAJDWMJmqpQGOm5FPa4P6tdNEa3lsKBnULR2xcRzH6tvjiGUtRvHQiGr7zVV68
+         ZygkR715ioOn44K1bHPggfMl8WAY2b1NDYGNrZYFlZm8TvD8OXWpgj+zzXNSgI+yI4p+
+         Y1qQ==
+X-Gm-Message-State: APjAAAW+N9zE1so5+F9dqzw16yHkA98QpOVPJEC6UUd4Mu/Oxbk8lvYU
+        sQKiyoOjGFNzYdRwrV9Fd5Dycf0U
+X-Google-Smtp-Source: APXvYqylYe5HkQu9qJYp3plB885kTcDeZgVEvx1Vs/zkJ+yDkfqX5SR09C5XIRjHmt0Mj51LfGVEoA==
+X-Received: by 2002:a05:6830:110a:: with SMTP id w10mr242911otq.300.1574954562620;
+        Thu, 28 Nov 2019 07:22:42 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l73sm2613001oib.0.2019.11.28.07.14.03
+        by smtp.gmail.com with ESMTPSA id y23sm6186550oih.17.2019.11.28.07.22.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Nov 2019 07:14:04 -0800 (PST)
-Subject: Re: [PATCH v2 7/8] nvme: hwmon: switch to use <linux/temperature.h>
- helpers
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sujith Thomas <sujith.thomas@intel.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-References: <1574952879-7200-1-git-send-email-akinobu.mita@gmail.com>
- <1574952879-7200-8-git-send-email-akinobu.mita@gmail.com>
+        Thu, 28 Nov 2019 07:22:41 -0800 (PST)
+Subject: Re: hwmon: (nct7802) buggy VSEN1/2/3 alarm
+To:     Gilles Buloz <Gilles.Buloz@kontron.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <5DDBD386.4070408@kontron.com>
+ <6cde95e5-0ab3-016f-b67d-73db8c16ff71@roeck-us.net>
+ <5DDC04FB.1030705@kontron.com> <20191125173538.GA21072@roeck-us.net>
+ <5DDC1812.9080009@kontron.com> <5DDCF86F.7010703@kontron.com>
+ <fc7c1f0b-abaf-0281-7b1b-726f08abcb16@roeck-us.net>
+ <5DDD5732.5050503@kontron.com> <20191126182049.GA24175@roeck-us.net>
+ <5DDE8B04.4080800@kontron.com>
+ <e69d0a21-ff80-4e51-9e48-bf5913720829@roeck-us.net>
+ <5DDFA5DE.5080102@kontron.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <479c99fe-51c6-910f-4471-4883de4cfd21@roeck-us.net>
-Date:   Thu, 28 Nov 2019 07:14:02 -0800
+Message-ID: <d191c93b-b78d-a2ab-317e-e7eb7a923f8b@roeck-us.net>
+Date:   Thu, 28 Nov 2019 07:22:40 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1574952879-7200-8-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <5DDFA5DE.5080102@kontron.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -88,89 +82,17 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/28/19 6:54 AM, Akinobu Mita wrote:
-> This switches the nvme driver to use kelvin_to_millicelsius() and
-> millicelsius_to_kelvin() in <linux/temperature.h>.
-> 
-> Cc: Sujith Thomas <sujith.thomas@intel.com>
-> Cc: Darren Hart <dvhart@infradead.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amit.kucheria@verdurent.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Keith Busch <kbusch@kernel.org>
-> Cc: Jens Axboe <axboe@fb.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Sagi Grimberg <sagi@grimberg.me>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> * v2
-> - add Reviewed-by tag
-> 
->   drivers/nvme/host/hwmon.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
-> index a5af21f..14720c1 100644
-> --- a/drivers/nvme/host/hwmon.c
-> +++ b/drivers/nvme/host/hwmon.c
-> @@ -5,14 +5,11 @@
->    */
->   
->   #include <linux/hwmon.h>
-> +#include <linux/temperature.h>
->   #include <asm/unaligned.h>
->   
->   #include "nvme.h"
->   
-> -/* These macros should be moved to linux/temperature.h */
-> -#define MILLICELSIUS_TO_KELVIN(t) DIV_ROUND_CLOSEST((t) + 273150, 1000)
-> -#define KELVIN_TO_MILLICELSIUS(t) ((t) * 1000L - 273150)
-> -
->   struct nvme_hwmon_data {
->   	struct nvme_ctrl *ctrl;
->   	struct nvme_smart_log log;
-> @@ -35,7 +32,7 @@ static int nvme_get_temp_thresh(struct nvme_ctrl *ctrl, int sensor, bool under,
->   		return -EIO;
->   	if (ret < 0)
->   		return ret;
-> -	*temp = KELVIN_TO_MILLICELSIUS(status & NVME_TEMP_THRESH_MASK);
-> +	*temp = kelvin_to_millicelsius(status & NVME_TEMP_THRESH_MASK);
->   
->   	return 0;
->   }
-> @@ -46,7 +43,7 @@ static int nvme_set_temp_thresh(struct nvme_ctrl *ctrl, int sensor, bool under,
->   	unsigned int threshold = sensor << NVME_TEMP_THRESH_SELECT_SHIFT;
->   	int ret;
->   
-> -	temp = MILLICELSIUS_TO_KELVIN(temp);
-> +	temp = millicelsius_to_kelvin(temp);
->   	threshold |= clamp_val(temp, 0, NVME_TEMP_THRESH_MASK);
->   
->   	if (under)
-> @@ -88,7 +85,7 @@ static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->   	case hwmon_temp_min:
->   		return nvme_get_temp_thresh(data->ctrl, channel, true, val);
->   	case hwmon_temp_crit:
-> -		*val = KELVIN_TO_MILLICELSIUS(data->ctrl->cctemp);
-> +		*val = kelvin_to_millicelsius(data->ctrl->cctemp);
->   		return 0;
->   	default:
->   		break;
-> @@ -105,7 +102,7 @@ static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->   			temp = get_unaligned_le16(log->temperature);
->   		else
->   			temp = le16_to_cpu(log->temp_sensor[channel - 1]);
-> -		*val = KELVIN_TO_MILLICELSIUS(temp);
-> +		*val = kelvin_to_millicelsius(temp);
->   		break;
->   	case hwmon_temp_alarm:
->   		*val = !!(log->critical_warning & NVME_SMART_CRIT_TEMPERATURE);
+On 11/28/19 2:47 AM, Gilles Buloz wrote:
+> Please find the inlined patches according to your feedback. I've also fixed some typos and added a mutex_lock/unlock in in_alarm_show().
+> See also my replies to your questions in the previous mail below
 > 
 
+Please don't send final patches inline, nor as reply to previous e-mails.
+Doing this violates Documentation/process/submitting-patches.rst.
+Besides, I use patchwork for my workflow, patchwork gets confused by it,
+and the patches don't show up there.
+
+On top of that, the patches are whitespace damaged (tabs replaced with spaces)
+and would not apply, even if I tried.
+
+Guenter
