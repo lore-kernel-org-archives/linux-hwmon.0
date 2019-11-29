@@ -7,326 +7,152 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E2DC432C3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 18:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE4CFC432C3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 18:39:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B3882158A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 18:16:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CE152158A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 18:39:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qVqCrB/N"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTlvz765"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbfK2SQq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 Nov 2019 13:16:46 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42782 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbfK2SQp (ORCPT
+        id S1727030AbfK2Sjf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Nov 2019 13:39:35 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34649 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbfK2Sjf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 Nov 2019 13:16:45 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 66so19436088otd.9;
-        Fri, 29 Nov 2019 10:16:44 -0800 (PST)
+        Fri, 29 Nov 2019 13:39:35 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w11so25636468ote.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Nov 2019 10:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=l4xdyO3pbcjV7VFnEpdpI0eB5xd2aaOViAmddhCr718=;
-        b=qVqCrB/NvIAkVnXmiZv6toj/plOAU3xcgXsaNRck03Neip+Xo+z3vb1VtvIiJYpYl4
-         /H9cf1zpYUVGfLhxbcpJ+O3le/fnWQJOhLuWA13Oyp4+L7Tm1ZXTspg1QGH63wCnwwQH
-         6zXvNmQdUr2Jr3CIYoJ9nUUIRFGNcqklGkUrSa2Iz5WfU64k3RxglXCenQlyduE7oRXD
-         BXg3yoF8rLY/H+pRCtSc+EuDLwPp5/pPXahkDDtRYBCqrPSnEZxzf/9OMZaMekAwnRit
-         ia5qeSlHdw/WSN0/M4As5Bs+/tDd99Bv2HVBtCRA4Kt4GQDlvl0eJtzfzDfqUe/jFsun
-         2fPg==
+        bh=YNKLnMxHAfhNyGbQSiklsbSPWI5eDpFicD2ZopFbWjE=;
+        b=OTlvz765EQbGJMniKdxQBQN3pLsG5afp0JREdRTVcyXfqZc2NL+P6/PuO6VFsKz2At
+         w/lE1ZNLsm7iUrbLb0oKhlmcZr9BEp+txi0CrMj9mHjrH5LXTrTJnFmnTowrSdSoPLJF
+         il3Ldo2q/USSxHwq9/Tt/bLz+3+dNwRejgqf+5+I/gvvJsMVOOqTu6Xu2BmTsxSrv7BT
+         bzJQbfA8NcF4iZvrRZVFyJ0vwwBV3Q1RHJljNUqcdpiabEkYTn+1NH7Y8nExu+24hLGU
+         bHLD0b4gJ2uIeR6VfFpio/LTCEgBL5vae3ItfKCPT2Gg+qB1qxKmfiSZ8zA5KVTr+zpt
+         OLcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=l4xdyO3pbcjV7VFnEpdpI0eB5xd2aaOViAmddhCr718=;
-        b=OLcALX7KatnWMLmzEXdrV+t/auC0uLMTaPCRDg9yjG+c41cJpERie8Ucj38tZkUNzT
-         JMX7W/8UNpjYNEmvYziRwkJIFRbiQWyIdcawDxwG3OvJvpKRo/s0ETESZhCJZPD3CUf5
-         pphH88lnV8T2mGq+Uv1kcFf8v9AFRzCJpp8CQZgO9/DCtIAOvn8QUb4C1ba70ALaLMul
-         Keaf05046ufxqf2y6FC6oynkqGY9M0v6qy9bVWjcW9HkHlqQ9fmE1cyP35hoZEAI8Oz6
-         ARxFmaL/c8wrsCZi4UU95KSYxCIBVMcvdMtBFEfjy6rJAcWh6wh4Pbko0SSt4k+fK/4x
-         x2LQ==
-X-Gm-Message-State: APjAAAUEYGq5QeHtNjdUFwCgV7Jc+ciiEuJM8uq8JBJGf4wjQetwZOt/
-        oy+2bicUUXcSiAX+McGjNmg=
-X-Google-Smtp-Source: APXvYqxbgJui5nzV2IrxEm8sjBHlPUE1XdAYEN6NBbbf2zSzqSOOoWfLftMFiVNUKkRG0lKRqkS9bg==
-X-Received: by 2002:a9d:7f12:: with SMTP id j18mr2628854otq.17.1575051404246;
-        Fri, 29 Nov 2019 10:16:44 -0800 (PST)
+        bh=YNKLnMxHAfhNyGbQSiklsbSPWI5eDpFicD2ZopFbWjE=;
+        b=LzTGZPloFauarIEWMG0t+hSyUEciqR7p9oKv541fRQXLWWtSWbs5gTjArtQckjJpyd
+         IOrbcQeT6cP+2Zub6VtgkTT5fMs8eHFh8ztX53AWa5q1+TsMlMWc547p/NoeSZJ+Deo/
+         9Gb24FmlviRhlUpPes1vj9le7RI8NZetbo7ZNjwMOKRaasTtPwTECrYFu5XQg8EHkPVb
+         dDf9s75PwKTFroGdXcRAo/jfTN9Vjuv+aR7ezAKGVQyftQ4zFVBzngkoSNuXXDdpUlj2
+         MVcCgR+UG9eTA6Q4D+4D6tExn2Ak9CGJHGgmS6pEl60elLWwZkgfF4SEOHnvf1PMxDJ5
+         2oBA==
+X-Gm-Message-State: APjAAAXwuZU/vb97IHaxrmj9HqholWAS76mmLp7kyAfPASscqZInLfr5
+        7zkjtjIgpoFvCozb764Z4mQ=
+X-Google-Smtp-Source: APXvYqxSlcTmSGNklwEz8lkOr8XcnHX+zjBh/PlCnqJ0JT1nzAqGZr3gta5wlsqGY+NeG3S9oJtbBg==
+X-Received: by 2002:a9d:5d1a:: with SMTP id b26mr12231346oti.139.1575052774281;
+        Fri, 29 Nov 2019 10:39:34 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l73sm3959987oib.0.2019.11.29.10.16.42
+        by smtp.gmail.com with ESMTPSA id j2sm7543609otn.20.2019.11.29.10.39.33
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 Nov 2019 10:16:43 -0800 (PST)
-Date:   Fri, 29 Nov 2019 10:16:42 -0800
+        Fri, 29 Nov 2019 10:39:33 -0800 (PST)
+Date:   Fri, 29 Nov 2019 10:39:32 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ben Pai <Ben_Pai@wistron.com>
-Cc:     robh+dt@kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, corbet@lwn.net, wangat@tw.ibm.com,
-        Andy_YF_Wang@wistron.com, Claire_Ku@wistron.com
-Subject: Re: [ v1] hwmon: (pmbus) Add Wistron power supply pmbus driver
-Message-ID: <20191129181642.GA4062@roeck-us.net>
-References: <20191129060230.14522-1-Ben_Pai@wistron.com>
+To:     "Dr. David Alan Gilbert" <linux@treblig.org>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: Add intrusion templates
+Message-ID: <20191129183932.GA7110@roeck-us.net>
+References: <20191124202030.45360-1-linux@treblig.org>
+ <20191124202030.45360-2-linux@treblig.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191129060230.14522-1-Ben_Pai@wistron.com>
+In-Reply-To: <20191124202030.45360-2-linux@treblig.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 29, 2019 at 02:02:30PM +0800, Ben Pai wrote:
-> Add the driver to monitor Wisreon power supplies with hwmon over pmbus.
-
-Wistron ?
-
+On Sun, Nov 24, 2019 at 08:20:29PM +0000, Dr. David Alan Gilbert wrote:
+> Add templates for intrusion%d_alarm and intrusion%d_beep.
+> Note, these start at 0.
 > 
-> Signed-off-by: Ben Pai <Ben_Pai@wistron.com>
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/hwmon/pmbus/Kconfig       |   9 ++
->  drivers/hwmon/pmbus/Makefile      |   1 +
->  drivers/hwmon/pmbus/wistron-wps.c | 180 ++++++++++++++++++++++++++++++
->  3 files changed, 190 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/wistron-wps.c
+>  drivers/hwmon/hwmon.c | 9 ++++++++-
+>  include/linux/hwmon.h | 8 ++++++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index d62d69bb7e49..ebb7024e58ab 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -219,6 +219,15 @@ config SENSORS_UCD9200
->  	  This driver can also be built as a module. If so, the module will
->  	  be called ucd9200.
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 1f3b30b085b9..95a1ae178213 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -171,7 +171,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
 >  
-> +config SENSORS_WISTRON_WPS
-> +	tristate "Wistron Power Supply"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for the Wistron
-> +	  power supply.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called wistron-wps.
-> +
->  config SENSORS_ZL6100
->  	tristate "Intersil ZL6100 and compatibles"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 03bacfcfd660..cad38f99e8c5 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -25,4 +25,5 @@ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
-> +obj-$(CONFIG_SENSORS_WISTRON_WPS) += wistron-wps.o
->  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> diff --git a/drivers/hwmon/pmbus/wistron-wps.c b/drivers/hwmon/pmbus/wistron-wps.c
-> new file mode 100644
-> index 000000000000..764496aa9d4f
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/wistron-wps.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright 2019 Wistron Corp.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/debugfs.h>
-> +#include <linux/device.h>
-> +#include <linux/fs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/leds.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pmbus.h>
-> +
-> +#include "pmbus.h"
-> +
-> +#define WPS_ID_CMD				0x99
-> +#define WPS_PN_CMD				0x9A
-> +#define WPS_FW_CMD				0x9B
-> +#define WPS_DATE_CMD				0x9D
-> +#define WPS_SN_CMD				0x9E
-> +
-> +enum {
-> +	WPS_DEBUGFS_ID,
-> +	WPS_DEBUGFS_PN,
-> +	WPS_DEBUGFS_SN,
-> +	WPS_DEBUGFS_FW,
-> +	WPS_DEBUGFS_DATE,
-> +	WPS_DEBUGFS_NUM_ENTRIES
+>  static int hwmon_attr_base(enum hwmon_sensor_types type)
+>  {
+> -	if (type == hwmon_in)
+> +	if (type == hwmon_in || type == hwmon_intrusion)
+>  		return 0;
+>  	return 1;
+>  }
+> @@ -458,6 +458,11 @@ static const char * const hwmon_pwm_attr_templates[] = {
+>  	[hwmon_pwm_freq] = "pwm%d_freq",
+>  };
+>  
+> +static const char * const hwmon_intrusion_attr_templates[] = {
+> +	[hwmon_intrusion_alarm] = "intrusion%d_alarm",
+> +	[hwmon_intrusion_beep]  = "intrusion%d_beep",
 > +};
 > +
-> +struct wistron_wps {
-> +
-> +	struct i2c_client *client;
-> +
-> +	int debugfs_entries[WPS_DEBUGFS_NUM_ENTRIES];
-> +
+>  static const char * const *__templates[] = {
+>  	[hwmon_chip] = hwmon_chip_attrs,
+>  	[hwmon_temp] = hwmon_temp_attr_templates,
+> @@ -468,6 +473,7 @@ static const char * const *__templates[] = {
+>  	[hwmon_humidity] = hwmon_humidity_attr_templates,
+>  	[hwmon_fan] = hwmon_fan_attr_templates,
+>  	[hwmon_pwm] = hwmon_pwm_attr_templates,
+> +	[hwmon_intrusion] = hwmon_intrusion_attr_templates,
+>  };
+>  
+>  static const int __templates_size[] = {
+> @@ -480,6 +486,7 @@ static const int __templates_size[] = {
+>  	[hwmon_humidity] = ARRAY_SIZE(hwmon_humidity_attr_templates),
+>  	[hwmon_fan] = ARRAY_SIZE(hwmon_fan_attr_templates),
+>  	[hwmon_pwm] = ARRAY_SIZE(hwmon_pwm_attr_templates),
+> +	[hwmon_intrusion] = ARRAY_SIZE(hwmon_intrusion_attr_templates),
+>  };
+>  
+>  static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index 72579168189d..dcda9589cdaf 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -27,6 +27,7 @@ enum hwmon_sensor_types {
+>  	hwmon_humidity,
+>  	hwmon_fan,
+>  	hwmon_pwm,
+> +	hwmon_intrusion,
+>  	hwmon_max,
+>  };
+>  
+> @@ -306,6 +307,13 @@ enum hwmon_pwm_attributes {
+>  #define HWMON_PWM_MODE			BIT(hwmon_pwm_mode)
+>  #define HWMON_PWM_FREQ			BIT(hwmon_pwm_freq)
+>  
+> +enum hwmon_intrusion_attributes {
+> +	hwmon_intrusion_alarm,
+> +	hwmon_intrusion_beep,
 > +};
+> +#define HWMON_INTRUSION_ALARM		BIT(hwmon_intrusion_alarm)
+> +#define HWMON_INTRUSION_BEEP		BIT(hwmon_intrusion_beep)
 > +
-> +#define to_psu(x, y) container_of((x), struct wistron_wps, debugfs_entries[(y)])
-
-container_of() doesn't really need the extra ().
-
-> +
-> +static ssize_t wistron_wps_debugfs_op(struct file *file, char __user *buf,
-> +				    size_t count, loff_t *ppos)
-
-Please align continuation lines with '('.
-
-> +{
-> +	u8 cmd;
-> +	int rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct wistron_wps *psu = to_psu(idxp, idx);
-> +	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
-> +
-> +	switch (idx) {
-> +	case WPS_DEBUGFS_ID:
-> +		cmd = WPS_ID_CMD;
-> +		break;
-> +	case WPS_DEBUGFS_PN:
-> +		cmd = WPS_PN_CMD;
-> +		break;
-> +	case WPS_DEBUGFS_SN:
-> +		cmd = WPS_SN_CMD;
-> +		break;
-> +	case WPS_DEBUGFS_FW:
-> +		cmd = WPS_FW_CMD;
-> +		break;
-> +	case WPS_DEBUGFS_DATE:
-> +		cmd = WPS_DATE_CMD;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +done:
-> +	data[rc] = '\n';
-
-The block command can return up to 32 bytes. If it does, the above code
-writes beyond the end of the buffer.
-
-> +	rc += 2;
-
-Why += 2 ? This will report the trailing '\0' to userspace (and require
-an even larger buffer). Is that intentional ?
-
-> +
-> +	return simple_read_from_buffer(buf, count, ppos, data, rc);
-> +}
-> +
-> +static const struct file_operations wistron_wps_fops = {
-> +	.llseek = noop_llseek,
-> +	.read = wistron_wps_debugfs_op,
-> +	.open = simple_open,
-> +};
-> +
-> +static struct pmbus_driver_info wistron_wps_info = {
-> +	.pages = 1,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +		PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | PMBUS_HAVE_FAN12 |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
-> +		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_STATUS_FAN12,
-> +};
-> +
-> +static struct pmbus_platform_data wistron_wps_pdata = {
-> +	.flags = PMBUS_SKIP_STATUS_CHECK,
-
-This should be explained if it is indeed needed.
-
-> +};
-> +
-> +static int wistron_wps_probe(struct i2c_client *client,
-> +			   const struct i2c_device_id *id)
-
-Please match ( in continuation lines.
-
-> +{
-> +	int i, rc;
-> +	struct dentry *debugfs;
-> +	struct dentry *wistron_wps_dir;
-> +	struct wistron_wps *psu;
-> +
-> +	client->dev.platform_data = &wistron_wps_pdata;
-> +	rc = pmbus_do_probe(client, id, &wistron_wps_info);
-> +	if (rc)
-> +		return rc;
-> +
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return 0;
-> +
-> +	psu->client = client;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +	if (!debugfs)
-> +		return 0;
-> +
-> +	wistron_wps_dir = debugfs_create_dir(client->name, debugfs);
-> +	if (!wistron_wps_dir)
-> +		return 0;
-> +
-> +	for (i = 0; i < WPS_DEBUGFS_NUM_ENTRIES; ++i)
-> +		psu->debugfs_entries[i] = i;
-> +
-> +	debugfs_create_file("fru", 0444, wistron_wps_dir,
-> +			    &psu->debugfs_entries[WPS_DEBUGFS_ID],
-> +			    &wistron_wps_fops);
-> +	debugfs_create_file("part_number", 0444, wistron_wps_dir,
-> +			    &psu->debugfs_entries[WPS_DEBUGFS_PN],
-> +			    &wistron_wps_fops);
-> +	debugfs_create_file("serial_number", 0444, wistron_wps_dir,
-> +			    &psu->debugfs_entries[WPS_DEBUGFS_SN],
-> +			    &wistron_wps_fops);
-> +	debugfs_create_file("fw_version", 0444, wistron_wps_dir,
-> +			    &psu->debugfs_entries[WPS_DEBUGFS_FW],
-> +			    &wistron_wps_fops);
-> +	debugfs_create_file("mfr_date", 0444, wistron_wps_dir,
-> +			    &psu->debugfs_entries[WPS_DEBUGFS_DATE],
-> +			    &wistron_wps_fops);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct i2c_device_id wistron_wps_id[] = {
-> +	{ "wistron_wps", 1 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, wistron_wps_id);
-> +
-> +static const struct of_device_id wistron_wps_of_match[] = {
-> +	{ .compatible = "wistron,wps" },
-
-This will need to be documented. It is also probably not the best name
-for a devicetree property (what is "wps" ?), but that will be up to
-a DT maintainer to decide.
-
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, wistron_wps_of_match);
-> +
-> +static struct i2c_driver wistron_wps_driver = {
-> +	.driver = {
-> +		.name = "wistron-wps",
-> +		.of_match_table = wistron_wps_of_match,
-> +	},
-> +	.probe = wistron_wps_probe,
-> +	.remove = pmbus_do_remove,
-> +	.id_table = wistron_wps_id,
-> +};
-> +
-> +module_i2c_driver(wistron_wps_driver);
-> +
-> +MODULE_AUTHOR("Ben Pai");
-> +MODULE_DESCRIPTION("PMBus driver for Wistron power supplies");
-> +MODULE_LICENSE("GPL");
+>  /**
+>   * struct hwmon_ops - hwmon device operations
+>   * @is_visible: Callback to return attribute visibility. Mandatory.
