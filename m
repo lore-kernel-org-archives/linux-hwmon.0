@@ -1,138 +1,149 @@
-Return-Path: <SRS0=iXYJ=2H=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=sw0Y=ZV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25402C2D0BF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Dec 2019 15:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 937E7C432C0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 17:54:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EB2B52467E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Dec 2019 15:47:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 59AD12158A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 Nov 2019 17:54:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rqk/w/lO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bWgRql//"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727631AbfLQPrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Dec 2019 10:47:08 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38565 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726191AbfLQPrH (ORCPT
+        id S1726970AbfK2RyO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 Nov 2019 12:54:14 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45356 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726909AbfK2RyN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Dec 2019 10:47:07 -0500
-Received: by mail-pl1-f193.google.com with SMTP id f20so4516041plj.5;
-        Tue, 17 Dec 2019 07:47:07 -0800 (PST)
+        Fri, 29 Nov 2019 12:54:13 -0500
+Received: by mail-ot1-f66.google.com with SMTP id r24so25464823otk.12
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 Nov 2019 09:54:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vOtwYzlf5BFOGPS2i3uFK7gceSiUI5q9A1BDB60vRjo=;
-        b=Rqk/w/lOd9uHLGdW1G/qZzQfTemaMfGD4hQOOtBGTgUWHKhRZNu3P9rjW1IsUJgzdt
-         G5aOMQVpp3oilAUveyqVWlgwEydUiDkWMRCZoCWgmBll1Dmck30d/HVzJO2rI0su7TyQ
-         f1hr5Gtnt8TaHLZkHpF+JmIo6TJu/UJ9B92NvHn1YrBXLZJdhV0uRBvXZfttZKC1Uukp
-         fgpUUI5HnfVo/cvULo2C8aWxZAUrDHMtZHUg1JyRIbJqYrQM7Cl1bXMNmACW4IVloUEv
-         EJJTd1XpWzKBqxSjnWUiZS7dSrXeR97UHEVbcgQZS1cYNIsSDIMyF5tX+5CQZFZUmjQw
-         h9bA==
+        h=sender:resent-from:resent-date:resent-message-id:resent-to
+         :envelope-to:delivery-date:from:to:cc:subject:thread-topic
+         :thread-index:date:message-id:accept-language:content-language
+         :user-agent:content-id:content-transfer-encoding:mime-version;
+        bh=o6jTf7K2b5VYgoB7BgVTe2gW1u286BnuUXjcCIVkAc4=;
+        b=bWgRql//G79usmj8d1eYsp2BviNWVCh72Kzo9KvxAmfTd8k5BExOaHiz3vwbedwJCD
+         yYENMzYZSCLTxGyQUcBpbcc7FJDRuSU3Re7opH5sgALkN/fs66KGpBL6K6VuFze2H8GA
+         +sxh9ULMzDvKZODwEM4+JD1krKprlDnZDw+EB8QdJ/Xbu4Fplyie1+JAlRi0DvPbrLfl
+         DwRUak6/dkGDm+wAELfxfqPPpAPgntoWGeKQKOGnTfZOYoy/GBgSjSOWjQl23n7kK0wR
+         IU+oa68Wu2CvBlFcGwfAKxcB3VkI0ZoAJe7HQ9/aYZ3H6P3qeOy4WyVd9c1hzw0CO3Yx
+         hwtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vOtwYzlf5BFOGPS2i3uFK7gceSiUI5q9A1BDB60vRjo=;
-        b=P0M3jdupyS4eBy9G5K1XJurJpb0SuzVKShz3KXovVgysgNhQbKKDD8T6GI8e4xTgjj
-         tTx94q5oIDqvgTGeB8ZamTZKYkwK+Cxq3jqCGnqcdKOSPHE58rdkRDrH4Oyy72eZJSSo
-         gMwAc65J8w/bHMRjmkSThBUKcdFcVF5H/WHPgWAiSemc0OKDh6shIgyicSyw1jk5GcYE
-         2t87ewV+ZppWLs/7BVv6Z4WWSHLNh+dy+6lK+mvReiCUHKEmE1mqZLzsp6mqZAvUX6+f
-         A6bAn7uMA2RoZq0CIJiGqqs+98c3NRhGQ2cuJ9eu4J7dnoiXXRJNSUkVGiUY15wiRhIY
-         gizw==
-X-Gm-Message-State: APjAAAXlg8mfrXSzsf5Oyq/PuUZsdLdVWA8b+M1luda1HxPDQeVhj4oO
-        2PtfSWbkbblSo9LGoBwadhE=
-X-Google-Smtp-Source: APXvYqwAMrF5r62qmk0u1vRjUs5ls5a3I5G16sxctobohr3j5fkV44s5Ng4U89e82VuPRn7IcUEXhQ==
-X-Received: by 2002:a17:90a:a010:: with SMTP id q16mr6994619pjp.115.1576597626942;
-        Tue, 17 Dec 2019 07:47:06 -0800 (PST)
+        h=x-gm-message-state:sender:resent-from:resent-date:resent-message-id
+         :resent-to:envelope-to:delivery-date:from:to:cc:subject:thread-topic
+         :thread-index:date:message-id:accept-language:content-language
+         :user-agent:content-id:content-transfer-encoding:mime-version;
+        bh=o6jTf7K2b5VYgoB7BgVTe2gW1u286BnuUXjcCIVkAc4=;
+        b=LclDPK/GM9CUJ9Vsr+jlCjKjHtFRniq9Ctc7lw8aR9JioJhXnRNZKYqlnM5r9nm100
+         qJ0u81SFxhg00s1X47UUomYYJCOBgwzT7WwQ1WY1Mg2kYyhdJRlVBnQsRkRBtv6nf3pT
+         NFmOw202W/GyK85EkhEXe3I3KDBWfqZgD17QDWRC6cUxI94u6t16Z9X8Oh7xarospJPn
+         DnDPLoxgJTA5FOtRuZ/yw1qfolDRt9sp122MuOCBXXhpgDmMub8gUUnoYjGbXkKydrvZ
+         tlCnSrd3XOHcLIxiBlt+ISwo8onRb2qH6yEBMJZU31luhbfc2t2AcufxBVhez+8TEjrL
+         OutA==
+X-Gm-Message-State: APjAAAXoGw3byVgG527CgJTIrZ76dgWpC1sbdlZGE4dlowRq8Uz0QoNd
+        FRfeX+j62LWKxAFiqMGKaOEPSuRu
+X-Google-Smtp-Source: APXvYqx51M9Fjto8TewI5s1a0vVb2ch6uv4xEtoTGO/PtxIWaLJjMmS+j2ffrwQEMw9wNLldBUX+zw==
+X-Received: by 2002:a9d:5543:: with SMTP id h3mr12086326oti.33.1575050052540;
+        Fri, 29 Nov 2019 09:54:12 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u1sm26067232pfn.133.2019.12.17.07.47.05
+        by smtp.gmail.com with ESMTPSA id l3sm2770621oie.6.2019.11.29.09.54.11
+        for <linux-hwmon@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 Dec 2019 07:47:06 -0800 (PST)
-Date:   Tue, 17 Dec 2019 07:47:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-Subject: Re: [PATCH 0/1] Summary: hwmon driver for temperature sensors on
- SATA drives
-Message-ID: <20191217154704.GA32673@roeck-us.net>
-References: <20191209052119.32072-1-linux@roeck-us.net>
- <yq15zinmrmj.fsf@oracle.com>
- <67b75394-801d-ce91-55f2-f0c0db9cfffc@roeck-us.net>
- <yq1y2vbhe6i.fsf@oracle.com>
- <83d528fc-42b7-aa3f-5dd9-a000268da38e@roeck-us.net>
- <BYAPR04MB5816CA0C1CAFC21F7955F79FE7500@BYAPR04MB5816.namprd04.prod.outlook.com>
+        Fri, 29 Nov 2019 09:54:11 -0800 (PST)
+Received: from bh-25.webhostbox.net
+        by bh-25.webhostbox.net with LMTP
+        id 4Eq/ECP14F0x5wkAh82d6A
+        (envelope-from <gilles.buloz@kontron.com>)
+        for <linux@roeck-us.net>; Fri, 29 Nov 2019 10:38:27 +0000
+Envelope-to: linux@roeck-us.net
+Delivery-date: Fri, 29 Nov 2019 10:38:27 +0000
+Received: from skedge04.snt-world.com ([91.208.41.69]:33624)
+        by bh-25.webhostbox.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92)
+        (envelope-from <gilles.buloz@kontron.com>)
+        id 1iadfH-00380F-KF
+        for linux@roeck-us.net; Fri, 29 Nov 2019 10:38:27 +0000
+Received: from sntmail10s.snt-is.com (unknown [10.203.32.183])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge04.snt-world.com (Postfix) with ESMTPS id 1FD4567A075
+        for <linux@roeck-us.net>; Fri, 29 Nov 2019 11:38:03 +0100 (CET)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail10s.snt-is.com
+ (10.203.32.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 29 Nov
+ 2019 11:38:02 +0100
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Fri, 29 Nov 2019 11:38:02 +0100
+From:   Gilles Buloz <Gilles.Buloz@kontron.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     Gilles Buloz <Gilles.Buloz@kontron.com>
+Subject: [PATCH 1/2] hwmon: (nct7802) Fix voltage limits to wrong registers
+Thread-Topic: [PATCH 1/2] hwmon: (nct7802) Fix voltage limits to wrong
+ registers
+Thread-Index: AQHVpqETZxldW7Z9bkSlKT2rifv8pA==
+Date:   Fri, 29 Nov 2019 10:38:02 +0000
+Message-ID: <5de0f509.rc0oEvPOMjbfPW1w%gilles.buloz@kontron.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Heirloom mailx 12.4 7/29/08
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <14C586CF40B25D478169C2903432E6AB@snt-world.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR04MB5816CA0C1CAFC21F7955F79FE7500@BYAPR04MB5816.namprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: 1FD4567A075.AB5FF
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: gilles.buloz@kontron.com
+X-SnT-MailScanner-To: linux@roeck-us.net
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 05:50:17AM +0000, Damien Le Moal wrote:
-> On 2019/12/17 12:57, Guenter Roeck wrote:
-> > On 12/16/19 6:35 PM, Martin K. Petersen wrote:
-> >>
-> >> Guenter,
-> >>
-> >>> If and when drives are detected which report bad information, such
-> >>> drives can be added to a blacklist without impact on the core SCSI or
-> >>> ATA code. Until that happens, not loading the driver solves the
-> >>> problem on any affected system.
-> >>
-> >> My only concern with that is that we'll have blacklisting several
-> >> places. We already have ATA and SCSI blacklists. If we now add a third
-> >> place, that's going to be a maintenance nightmare.
-> >>
-> >> More on that below.
-> >>
-> >>>> My concerns are wrt. identifying whether SMART data is available for
-> >>>> USB/UAS. I am not too worried about ATA and "real" SCSI (ignoring RAID
-> >>>> controllers that hide the real drives in various ways).
-> >>
-> >> OK, so I spent my weekend tinkering with 15+ years of accumulated USB
-> >> devices. And my conclusion is that no, we can't in any sensible manner,
-> >> support USB storage monitoring in the kernel. There is no heuristic that
-> >> I can find that identifies that "this is a hard drive or an SSD and
-> >> attempting one of the various SMART methods may be safe". As opposed to
-> >> "this is a USB key that's likely to lock up if you try". And that's
-> >> ignoring the drives with USB-ATA bridges that I managed to wedge in my
-> >> attempt at sending down commands.
-> >>
-> >> Even smartmontools is failing to work on a huge part of my vintage
-> >> collection.  Thanks to a wide variety of bridges with random, custom
-> >> interfaces.
-> >>
-> >> So my stance on all this is that I'm fine with your general approach for
-> >> ATA. I will post a patch adding the required bits for SCSI. And if a
-> >> device does not implement either of the two standard methods, people
-> >> should use smartmontools.
-> >>
-> >> Wrt. name, since I've added SCSI support, satatemp is a bit of a
-> >> misnomer. drivetemp, maybe? No particular preference.
-> >>
-> > Agreed, if we extend this to SCSI, satatemp is less than perfect.
-> > drivetemp ? disktemp ? I am open to suggestions, with maybe a small
-> > personal preference for disktemp out of those two.
-> 
-> "disk" tend to imply HDD, excluding SSDs. So my vote goes to
-> "drivetemp", or even the more generic, "devtemp".
-> 
-"devtemp" would apply to all devices with temperature sensors, which
-would be a bit too generic. I'll take that as a vote for "drivetemp".
+From: Gilles Buloz <gilles.buloz@kontron.com>
+Date: Wed, 27 Nov 2019 18:09:34 +0100
+Subject: [PATCH 1/2] hwmon: (nct7802) Fix voltage limits to wrong registers
 
-Guenter
+in0 thresholds are written to the in2 thresholds registers
+in2 thresholds to in3 thresholds
+in3 thresholds to in4 thresholds
+in4 thresholds to in0 thresholds
+
+Signed-off-by: Gilles Buloz <gilles.buloz@kontron.com>
+---
+ drivers/hwmon/nct7802.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index f3dd2a17bd42..7915c2f2c85d 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -23,8 +23,8 @@
+ static const u8 REG_VOLTAGE[5] =3D { 0x09, 0x0a, 0x0c, 0x0d, 0x0e };
+=20
+ static const u8 REG_VOLTAGE_LIMIT_LSB[2][5] =3D {
+-	{ 0x40, 0x00, 0x42, 0x44, 0x46 },
+-	{ 0x3f, 0x00, 0x41, 0x43, 0x45 },
++	{ 0x46, 0x00, 0x40, 0x42, 0x44 },
++	{ 0x45, 0x00, 0x3f, 0x41, 0x43 },
+ };
+=20
+ static const u8 REG_VOLTAGE_LIMIT_MSB[5] =3D { 0x48, 0x00, 0x47, 0x47, 0x4=
+8 };
+--=20
+2.17.1
