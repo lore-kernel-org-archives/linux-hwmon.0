@@ -2,200 +2,446 @@ Return-Path: <SRS0=RP+1=ZZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0207FC432C0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Dec 2019 00:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1981C432C0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Dec 2019 13:57:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B332A206E1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Dec 2019 00:40:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82CE620803
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Dec 2019 13:57:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZbo7gGt"
+	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="WKoNeUpw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbfLCAkL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Dec 2019 19:40:11 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:38531 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbfLCAkL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Dec 2019 19:40:11 -0500
-Received: by mail-qk1-f195.google.com with SMTP id b8so1710989qkk.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Dec 2019 16:40:10 -0800 (PST)
+        id S1727109AbfLCN5D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Dec 2019 08:57:03 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:40024 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727048AbfLCN5B (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 3 Dec 2019 08:57:01 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB3DhMY0010244;
+        Tue, 3 Dec 2019 08:56:22 -0500
+Received: from nam01-sn1-obe.outbound.protection.outlook.com (mail-sn1nam01lp2057.outbound.protection.outlook.com [104.47.32.57])
+        by mx0a-00128a01.pphosted.com with ESMTP id 2wkk57rqpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Dec 2019 08:56:22 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=de90u0fAoDkB5FX+6gjfMLnnrWlLU6A3zoOLPRxkDiU2Spbr5/8ewTACpaCPWuYDY00uEpUsxiclZSY2Xs7Bv35eunZVoa/oe8eM3tVQ7HRHyWtNWW5fYwQ2Zq17SQm5ZuuwM/eia1kgJtswbK8/tdI/4IACt98vUEJAF5i0G0dQ/qq6SpAF7vZ2WbFTIn1ZwuvTsJCfZy1ODpjTTnt2B++Tv/+dqK3upJcuByxKXlteuZbOqk9UYZvkaEysTlRMg8yR4AcHVhMbax2d6J1ZMzvWqrIiltm1lxyknGPoHHfgXcCkphvo4lUKPe9RgUqmrgmk9vei2iYY6Kh09wWQ9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e2UtDOveWQFw6bQ3W/b5xhV2eK6Y/SC8e4LWsdEW7e4=;
+ b=ZJ+z7Ww3QJCRmiPLe723hkQXNMt/lRhrEfR1lbMgmULb5O7oXy9QDqLCzRSRYo87pCsfSjbT7i3gs7OxtRVlxDE8s93BOL3CS1eCtMnpGZ8RhUjxYRR1CnBhgWy67/kSsS1MtiYgcQd5gqMXLpManjFKKOPhVTb4/OJPPA9YfdfEoZnsw4ENynk1kJNuTQxMMydlDQ6ZYsiGb/3tFI2nCTVrrSCh4Io9VLQc4M0B44eP1fTsoFhX6fPd4CKcA4emMqvB+UK8g+jZpydJqyaKnl7Q4z6NE4/xtk/Kvzpd4wyCQP1O2fy7ItxH+X5Y/7O/dfF2KRPjfWx2BLjynH5z+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.55) smtp.rcpttodomain=suse.com smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+UE5p44nuZtdN1TXTMUwNlyyY0KBBIxXVo+Ksvk6Wos=;
-        b=SZbo7gGthNBqFR4YKvVpCXUF2JTJNPtc5W7KVfyQDsC90PurVFxH/wptg6jioQsrZY
-         yZXowoxz7PPwZmWVsVzZOzSzKSfAL96+qpBIUV236ULFRJlDdkJ5/UXZ+tlmM+0xdJtb
-         c7FhCaG7VaXnR0UURg6EwW6/7pSFuPPqbeyc0BW7Py639uvNzWGSW1zmTD4eR6oAbHrb
-         YMsl8/1DpVQjhcZpJDBRRG/DMKBYxYjfzoZr8ehMq0oS5bhbPQ+1ECeMWRSDVNbVO02D
-         5lVCSZ2SQTE7txWFW+63NYPUfBIFruZjf8JLIJde5x8+aWM+UuIr8HYlADzuDrBapUYm
-         Q7kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+UE5p44nuZtdN1TXTMUwNlyyY0KBBIxXVo+Ksvk6Wos=;
-        b=HyBLSLpgKrxxaJ/rHUXbrLbhBCJZNYlQLqki+8EzEPooLtUPHux/klUOiyrfpr6irJ
-         RBHI3dyiAIKuFhj6JssfGvFRmagBZdFKDfenQjIQWNVJSXL03hFY1PZ+WN4ppdsRj8eX
-         qk5sqK6g3hhm38MTsPRSs3wlf9F79Hk/JYe0D66U0AlK948YdfogKtW3G67H/H/jQiyY
-         Tvl3MLDLUvhE0m6S1trAi4RXVz+5DERJxrSErREqoMHMLdYoZsFRYJs0+wS57e6LeTuG
-         0R1j5XZ5e13seZ2dVgy+gGk4Z48oL1u68nmRixxl+KVwIhIAQ9rFZ2QIjx75YRCAMnVe
-         SC4g==
-X-Gm-Message-State: APjAAAWJUAEg7WoRAbB9n6WnbIOTBPOYatVx40Oupn19NOJ7+EzPJBwl
-        1O2FC5KsVuycS9o8jE4bMVKKk8xByMocTUE90Xn1Uw==
-X-Google-Smtp-Source: APXvYqymdV3qJGNFzwo5Pban5D7TqPBVv03jP7hxZ2vMUPLNb9szE206cbFt04R3RahHVafqdPK90ymIv2Skhgt8OO4=
-X-Received: by 2002:a37:7cc7:: with SMTP id x190mr2290768qkc.10.1575333609325;
- Mon, 02 Dec 2019 16:40:09 -0800 (PST)
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e2UtDOveWQFw6bQ3W/b5xhV2eK6Y/SC8e4LWsdEW7e4=;
+ b=WKoNeUpwNFytuSWPiql9QB+A5xgNbtjIxrfyz5NRclOswR3RNZM7ua2p3W/pixlwNUmqsen0juyopsTGAajyGOFUaeLcnmvl22GcUGsa5FsiQ9XaacwnS7bQLs0Gvucg5im9WlY3+SH0J1zepg8j5Q7ofSXyYXWV9PRXkmTLDhk=
+Received: from BN6PR03CA0004.namprd03.prod.outlook.com (2603:10b6:404:23::14)
+ by DM6PR03MB3641.namprd03.prod.outlook.com (2603:10b6:5:b6::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2495.20; Tue, 3 Dec
+ 2019 13:56:19 +0000
+Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::206) by BN6PR03CA0004.outlook.office365.com
+ (2603:10b6:404:23::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2495.18 via Frontend
+ Transport; Tue, 3 Dec 2019 13:56:19 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
+ via Frontend Transport; Tue, 3 Dec 2019 13:56:19 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id xB3DuIgU007851
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Tue, 3 Dec 2019 05:56:18 -0800
+Received: from ben-Latitude-E6540.ad.analog.com (10.48.65.231) by
+ NWD2HUBCAS7.ad.analog.com (10.64.69.107) with Microsoft SMTP Server id
+ 14.3.408.0; Tue, 3 Dec 2019 08:56:18 -0500
+From:   Beniamin Bia <beniamin.bia@analog.com>
+To:     <linux-hwmon@vger.kernel.org>
+CC:     <Michael.Hennerich@analog.com>, <linux-kernel@vger.kernel.org>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <mark.rutland@arm.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <devicetree@vger.kernel.org>, <biabeniamin@outlook.com>,
+        Beniamin Bia <beniamin.bia@analog.com>
+Subject: [PATCH 1/3] hwmon: adm1177: Add ADM1177 Hot Swap Controller and Digital Power Monitor driver
+Date:   Tue, 3 Dec 2019 15:57:09 +0200
+Message-ID: <20191203135711.13972-1-beniamin.bia@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <CALUKdZ_-pjXPouBYxdm_LriN04Jp-vR5+7SBMkCK1reV2Lq_LA@mail.gmail.com>
- <4e6fda8d-761a-741a-d4af-5dc8ea5fe072@roeck-us.net> <CALUKdZ9pDpMNeKY4wb21gxF7Dqdp=9CJLTEmeRNtDP1N1Pw_9A@mail.gmail.com>
- <e4b5b93e-65ee-dd23-93a6-1737ede87ef4@roeck-us.net> <CALUKdZ9CZWf6KVyPMhsQGLvVN_Ec8JRmVddf=aZw0JOv-5bixQ@mail.gmail.com>
- <20191202175224.GC29323@roeck-us.net> <CALUKdZ8GeTiSDieFnCeK_wTr52FoUcfZUYkco7wBL-2rO+Fe1g@mail.gmail.com>
- <20191202230953.GA9421@roeck-us.net>
-In-Reply-To: <20191202230953.GA9421@roeck-us.net>
-From:   Corey Ashford <yeroca@gmail.com>
-Date:   Mon, 2 Dec 2019 16:39:58 -0800
-Message-ID: <CALUKdZ_fU8r6AjKU-RTLS9a+iXDsYZrp6yYN+texpo12JeFt6w@mail.gmail.com>
-Subject: Re: [RFC] hwmon: add support for IT8686E to it87.c
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(396003)(346002)(136003)(39860400002)(189003)(199004)(2616005)(26005)(8936002)(356004)(6666004)(6306002)(50226002)(8676002)(4326008)(2906002)(2351001)(51416003)(50466002)(107886003)(44832011)(305945005)(106002)(48376002)(14444005)(7636002)(426003)(1076003)(36756003)(86362001)(246002)(7696005)(316002)(54906003)(16586007)(5660300002)(336012)(966005)(478600001)(186003)(70586007)(6916009)(70206006);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR03MB3641;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d3ecbff-b5b0-43eb-beb1-08d777f892d3
+X-MS-TrafficTypeDiagnostic: DM6PR03MB3641:
+X-Microsoft-Antispam-PRVS: <DM6PR03MB3641C2E7425351CEDA013A70F0420@DM6PR03MB3641.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:983;
+X-Forefront-PRVS: 02408926C4
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s0ywSHKuS4DfT+YjHfcdgCylUo1XCbKJa5vE3aCCq6ihKRGR6LaD5J0gL8J978TM+JyKFQ4j6MfiEy14tBPrg8XGw6JyI4qhND+gvQKx8scKCgG1EjAmMhc7wV8tr+FEDU6YL9pyTAA+1PS9LVP9sqG3T+n7MhlPAFMKmAeLFERXUXNAhL1ASxN25E7am0eOckvP4dOjvgvcfULwKE8ef4eKeOmFZ5xbM/5Z7dCCn9EmEtB8HsIWP3cPWKIq65gKP+iNNcWTpOyAgXMJyQTnUi1tGlzlBtFgnJNp09PzLc7Ht5iM+MRg7tDI8qrztCBIZeF0pZl27cQusDsu9D2kMIMqXusCBwRyahXE2avvNoMMCMa+XsxXO62Y1WPYRBYpCoVy4fetQuIkRuUSbJIUcFwd/mXEyDkB5o6dAbZIUuulxn+/TR92FI+eE6AeR/f7GP1wK1+vpBKUi45O7nbBi6wfP0Fa+LcTU+OoDx0frhE=
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2019 13:56:19.4008
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d3ecbff-b5b0-43eb-beb1-08d777f892d3
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB3641
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-03_03:2019-12-02,2019-12-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912030108
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 2, 2019 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Dec 02, 2019 at 02:33:27PM -0800, Corey Ashford wrote:
-> > On Mon, Dec 2, 2019 at 9:52 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > On Mon, Dec 02, 2019 at 09:07:10AM -0800, Corey Ashford wrote:
-> > > > On Mon, Dec 2, 2019 at 6:32 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > >
-> > > > > On 11/29/19 8:48 PM, Corey Ashford wrote:
-> > > > > > On Fri, Nov 29, 2019 at 8:17 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > >>
-> > > > > >> On 11/29/19 6:11 PM, Corey Ashford wrote:
-> > > > > >>> Hello folks.  I am running a newly-built system that uses an IT8686E
-> > > > > >>> chip.  Currently, the latest kernel from kernel.org doesn't have code
-> > > > > >>> in drivers/hwmon/it87.c to support it, however, I found some source on
-> > > > > >>> the net which has added support for quite a few more variants of that
-> > > > > >>> brand of Super I/O chip:
-> > > > > >>> https://github.com/xdarklight/hwmon-it87/blob/master/it87.c
-> > > > > >>> I tried it out by building the module and "insmod"ing it into my
-> > > > > >>> running system, and it appears to work fine.
-> > > > > >>>
-> > > > > >>> It seems the original developer had a difficult time pushing the
-> > > > > >>> changes upstream, so he abandoned the project.
-> > > > > >>>
-> > > > > >>
-> > > > > >> I abandoned the project (and dropped the driver from my github page)
-> > > > > >> because people started _demanding_ that I push the driver from github
-> > > > > >> upstream, without offering any assistance whatsoever.
-> > > > > >>
-> > > > > >>> My thought was that I could add support for just the IT8686E chip as a
-> > > > > >>> single patch, and since I can test it locally I would have a better
-> > > > > >>> chance of getting the patch accepted.  The changes to the source at
-> > > > > >>> the above git tree have quite a number of changes that aren't really
-> > > > > >>> necessary for supporting the IT8686E chip, so I think the patch could
-> > > > > >>> be pretty small, but will still credit the original author.
-> > > > > >>>
-> > > > > >>
-> > > > > >> IT8686 is a multi-page chip, meaning you'll need the entire protection
-> > > > > >> against multi-page accesses by the EC in the system. It also supports
-> > > > > >> the new temperature map. I don't think it is that simple.
-> > > > > >>
-> > > > > >> Guenter
-> > > > > >
-> > > > > > Thanks for the quick reply!
-> > > > > >
-> > > > > > When you said they didn't offer any assistance, do you mean assistance
-> > > > > > with testing?  If so, how about if the support is trimmed out for the
-> > > > > > newly-added chips that have no available test system volunteers, and
-> > > > > > then slowly add those back as people make test systems and testing
-> > > > > > time available.  Should I presume that you have access to one or more
-> > > > > > systems with the added ITnnnn chips?  I volunteer my system for
-> > > > > > testing the IT8686E support.
-> > > > > >
-> > > > >
-> > > > > Testing and, more importantly, detailed code review. No one but me has
-> > > > > seriously (if at all) scrutinized that code for years. Just picking it
-> > > > > into mainline and hope that it won't cause trouble is, by itself, troublesome.
-> > > > >
-> > > > > On top of that, the multi-page access problems are well known by board vendors
-> > > > > using this chip as well as by the chip vendor. Yet, neither board vendors nor
-> > > > > ITE talk with kernel developers. The workarounds I implemented are based on
-> > > > > information I got from one of the Windows tools developers, and are not
-> > > > > validated by any board vendor nor by ITE. Every board vendor I tried to contact
-> > > > > tells me that they don't support Linux, and I never got any reply from ITE.
-> > > > > I do know that the code causes problems on early Gigabyte board using the 8686
-> > > > > and similar multi-page chips. Just accessing the chip from Linux may cause trouble
-> > > > > because the built-in EC tries to access it as well in parallel (I suspect this
-> > > > > causes the board to reset because that access is turned off for a while by
-> > > > > the driver). This is all fine for an out-of-tree driver, but it would be
-> > > > > unacceptable in the upstream kernel.
-> > > > >
-> > > > > In summary, you'll not only need to port the code, you'll also need to establish
-> > > > > contact to ITE and/or to board vendors to ensure that the code works as intended
-> > > > > with the EC on the affected boards.
-> > > > >
-> > > > > Guenter
-> > > >
-> > > > Ah, thank you for your detailed explanation.  How you did as much as
-> > > > you did is beyond me.  ITE's web site seems to lack any usable
-> > > > information, and doesn't even list the IT8686 as one of their chips.
-> > > > Other "supported" chips don't appear to have any documentation easily
-> > > > available, other than a very generic-y description of the chip.  Quite
-> > > > an uphill battle for marginal gain.
-> > > >
-> > > Exactly. The only real recommendation I have at this time is for anyone
-> > > running Linux to stay away from boards with ITE chips.
-> > >
-> > > > Is it possible there's a way to access the sensors by using the EC as
-> > > > a proxy, rather than trying to gain direct and exclusive access to the
-> > > > sensors?  Just a thought.  I have no idea of the architecture of these
-> > > > things.  Your mention of EC was the first I had heard of it :/
-> > > >
-> > >
-> > > Not that I know of, sorry. The EC is actually running inside the Super-IO
-> > > chip(s). I have no idea if and how it is accessible from Linux. Either case,
-> > > that would be even worse, since EC programming is board vendor specific.
-> > >
-> > > Guenter
-> >
-> > Just for my clarification, it seems that what you're implying is that
-> > the embedded EC still uses the SMbus to access those paged registers,
-> > and so needs to use the same mechanism that an external device would
-> > use.  If that's true, ugh.  If it has its own private access to the
-> > entire register set in one "address space", it could bypass the paging
-> > mechanism.
-> >
->
-> There are typically two Super-IO chips on those boards. For example,
-> Gigabyte B450 AORUS M has an IT8792 and an IT8686. The EC on one chip
-> accesses the other chip through the I2C interface. Or at least that is
-> what I think is happening... hard to be sure without board/chip vendor
-> support.
->
-> Some of the recent chips solve the problem by memory mapping the entire
-> register space (unpaged) into memory. This way the Linux driver (and the
-> Windows driver) can access chip registers directly without having
-> to select a page. That isn't supported on the 8686, unfortunately.
+ADM1177 is a Hot Swap Controller and Digital Power Monitor with
+Soft Start Pin.
 
-Ah, that makes sense now.  So I guess what's worse is that now you
-have a combination of two chips, which are not necessarily always
-paired with each other (e.g. IT8792->IT8686 vs. IT8795 [made up
-#]->IT8686). I give up :)
+Datasheet:
+Link: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1177.pdf
 
-At least the out-of-tree driver source has been working nicely for my
-machine for a couple of weeks, with no observed glitches, resets, etc.
-I'm happy.
+Signed-off-by: Beniamin Bia <beniamin.bia@analog.com>
+---
+ drivers/hwmon/Kconfig   |  10 ++
+ drivers/hwmon/Makefile  |   1 +
+ drivers/hwmon/adm1177.c | 274 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 285 insertions(+)
+ create mode 100644 drivers/hwmon/adm1177.c
 
-Thanks for the discussion of this little backwater area of the kernel :)
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5308c59d7001..3db8f5752675 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -164,6 +164,16 @@ config SENSORS_ADM1031
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called adm1031.
+ 
++config SENSORS_ADM1177
++	tristate "Analog Devices ADM1177 and compatibles"
++	depends on I2C
++	help
++	  If you say yes here you get support for Analog Devices ADM1177
++	  sensor chips.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called adm1177.
++
+ config SENSORS_ADM9240
+ 	tristate "Analog Devices ADM9240 and compatibles"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 40c036ea45e6..27d04eab1be4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_ADM1025)	+= adm1025.o
+ obj-$(CONFIG_SENSORS_ADM1026)	+= adm1026.o
+ obj-$(CONFIG_SENSORS_ADM1029)	+= adm1029.o
+ obj-$(CONFIG_SENSORS_ADM1031)	+= adm1031.o
++obj-$(CONFIG_SENSORS_ADM1177)	+= adm1177.o
+ obj-$(CONFIG_SENSORS_ADM9240)	+= adm9240.o
+ obj-$(CONFIG_SENSORS_ADS7828)	+= ads7828.o
+ obj-$(CONFIG_SENSORS_ADS7871)	+= ads7871.o
+diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+new file mode 100644
+index 000000000000..08950cecc9f9
+--- /dev/null
++++ b/drivers/hwmon/adm1177.c
+@@ -0,0 +1,274 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ADM1177 Hot Swap Controller and Digital Power Monitor with Soft Start Pin
++ *
++ * Copyright 2015-2019 Analog Devices Inc.
++ */
++
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/init.h>
++#include <linux/i2c.h>
++#include <linux/hwmon.h>
++#include <linux/regulator/consumer.h>
++
++/*  Command Byte Operations */
++#define ADM1177_CMD_V_CONT	BIT(0)
++#define ADM1177_CMD_V_ONCE	BIT(1)
++#define ADM1177_CMD_I_CONT	BIT(2)
++#define ADM1177_CMD_I_ONCE	BIT(3)
++#define ADM1177_CMD_VRANGE	BIT(4)
++#define ADM1177_CMD_STATUS_RD	BIT(6)
++
++/* Extended Register */
++#define ADM1177_REG_ALERT_EN	1
++#define ADM1177_REG_ALERT_TH	2
++#define ADM1177_REG_CONTROL	3
++
++/* ADM1177_REG_ALERT_EN */
++#define ADM1177_EN_ADC_OC1	BIT(0)
++#define ADM1177_EN_ADC_OC4	BIT(1)
++#define ADM1177_EN_HS_ALERT	BIT(2)
++#define ADM1177_EN_OFF_ALERT	BIT(3)
++#define ADM1177_CLEAR		BIT(4)
++
++/* ADM1177_REG_CONTROL */
++#define ADM1177_SWOFF		BIT(0)
++
++#define ADM1177_BITS		12
++
++/**
++ * struct adm1177_state - driver instance specific data
++ * @client		pointer to i2c client
++ * @reg			regulator info for the the power supply of the device
++ * @command		internal control register
++ * @r_sense_uohm	current sense resistor value
++ * @alert_threshold_ua	current limit for shutdown
++ * @vrange_high		internal voltage divider
++ */
++struct adm1177_state {
++	struct i2c_client	*client;
++	struct regulator	*reg;
++	u8			command;
++	u32			r_sense_uohm;
++	u32			alert_threshold_ua;
++	bool			vrange_high;
++};
++
++static int adm1177_read_raw(struct adm1177_state *st, u8 num, u8 *data)
++{
++	struct i2c_client *client = st->client;
++
++	return i2c_master_recv(client, data, num);
++}
++
++static int adm1177_write_cmd(struct adm1177_state *st, u8 cmd)
++{
++	st->command = cmd;
++	return i2c_smbus_write_byte(st->client, cmd);
++}
++
++static int adm1177_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct adm1177_state *st = dev_get_drvdata(dev);
++	u8 data[3];
++	long dummy;
++	int ret;
++
++	switch (type) {
++	case hwmon_curr:
++		ret = adm1177_read_raw(st, 3, data);
++		if (ret < 0)
++			return ret;
++		dummy = (data[1] << 4) | (data[2] & 0xF);
++		/*
++		 * convert in milliamperes
++		 * ((105.84mV / 4096) x raw) / senseResistor(ohm)
++		 */
++		*val = div_u64((105840000ull * dummy), 4096 * st->r_sense_uohm);
++		return 0;
++	case hwmon_in:
++		ret = adm1177_read_raw(st, 3, data);
++		if (ret < 0)
++			return ret;
++		dummy = (data[0] << 4) | (data[2] >> 4);
++		/*
++		 * convert in millivolts based on resistor devision
++		 * (V_fullscale / 4096) * raw
++		 */
++		if (st->command & ADM1177_CMD_VRANGE)
++			*val = 6650;
++		else
++			*val = 26350;
++
++		*val = ((*val * dummy) / 4096);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static umode_t adm1177_is_visible(const void *data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	const struct adm1177_state *st = data;
++
++	switch (type) {
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			return 0444;
++		}
++		break;
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			if (st->r_sense_uohm)
++				return 0444;
++			return 0;
++		}
++		break;
++	default:
++		break;
++	}
++	return 0;
++}
++
++static const u32 adm1177_curr_config[] = {
++	HWMON_C_INPUT,
++	0
++};
++
++static const struct hwmon_channel_info adm1177_curr = {
++	.type = hwmon_curr,
++	.config = adm1177_curr_config,
++};
++
++static const u32 adm1177_in_config[] = {
++	HWMON_I_INPUT,
++	0
++};
++
++static const struct hwmon_channel_info adm1177_in = {
++	.type = hwmon_in,
++	.config = adm1177_in_config,
++};
++
++static const struct hwmon_channel_info *adm1177_info[] = {
++	&adm1177_curr,
++	&adm1177_in,
++	NULL
++};
++
++static const struct hwmon_ops adm1177_hwmon_ops = {
++	.is_visible = adm1177_is_visible,
++	.read = adm1177_read,
++};
++
++static const struct hwmon_chip_info adm1177_chip_info = {
++	.ops = &adm1177_hwmon_ops,
++	.info = adm1177_info,
++};
++
++static void adm1177_remove(void *data)
++{
++	struct adm1177_state *st = data;
++
++	regulator_disable(st->reg);
++}
++
++static int adm1177_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct device *hwmon_dev;
++	struct adm1177_state *st;
++	int ret;
++
++	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
++	if (!st)
++		return -ENOMEM;
++
++	st->client = client;
++
++	st->reg = devm_regulator_get_optional(&client->dev, "vref");
++	if (IS_ERR(st->reg)) {
++		if (PTR_ERR(st->reg) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++
++		st->reg = NULL;
++	} else {
++		ret = regulator_enable(st->reg);
++		if (ret)
++			return ret;
++		ret = devm_add_action_or_reset(&client->dev, adm1177_remove,
++					       st);
++		if (ret)
++			return ret;
++	}
++
++	if (device_property_read_u32(dev, "adi,r-sense-micro-ohms",
++				     &st->r_sense_uohm))
++		st->r_sense_uohm = 1;
++	if (device_property_read_u32(dev, "adi,shutdown-threshold-microamp",
++				     &st->alert_threshold_ua))
++		st->alert_threshold_ua = 0;
++	st->vrange_high = device_property_read_bool(dev,
++						    "adi,vrange-high-enable");
++	if (st->alert_threshold_ua) {
++		u64 val;
++
++		val = (0xFFUL * st->alert_threshold_ua * st->r_sense_uohm);
++		val = div_u64(val, 105840000U);
++		if (val > 0xFF) {
++			dev_warn(&client->dev,
++				 "Requested shutdown current %d uA above limit\n",
++				 st->alert_threshold_ua);
++
++			val = 0xFF;
++		}
++		i2c_smbus_write_byte_data(st->client, ADM1177_REG_ALERT_TH,
++					  val);
++	}
++
++	ret = adm1177_write_cmd(st, ADM1177_CMD_V_CONT |
++				    ADM1177_CMD_I_CONT |
++				    (st->vrange_high ? 0 : ADM1177_CMD_VRANGE));
++	if (ret)
++		return ret;
++
++	hwmon_dev =
++		devm_hwmon_device_register_with_info(dev, client->name, st,
++						     &adm1177_chip_info, NULL);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id adm1177_id[] = {
++	{"adm1177", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, adm1177_id);
++
++static const struct of_device_id adm1177_dt_ids[] = {
++	{ .compatible = "adi,adm1177" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, adm1177_dt_ids);
++
++static struct i2c_driver adm1177_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = "adm1177",
++		.of_match_table = adm1177_dt_ids,
++	},
++	.probe = adm1177_probe,
++	.id_table = adm1177_id,
++};
++module_i2c_driver(adm1177_driver);
++
++MODULE_AUTHOR("Beniamin Bia <beniamin.bia@analog.com>");
++MODULE_AUTHOR("Michael Hennerich <michael.hennerich@analog.com>");
++MODULE_DESCRIPTION("Analog Devices ADM1177 ADC driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
 
-- Corey
