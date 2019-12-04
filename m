@@ -2,108 +2,121 @@ Return-Path: <SRS0=oUCW=Z2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B78C43603
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 22:59:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 856B1C43603
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 23:33:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 44EC7206DB
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 22:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575500344;
-	bh=Ysf1J+BSQwUnFJHhUpB/ZT36dXA4hNeM8yJmqNkFhDc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=rMFJH/X7wYHa4ZFzQFKFGYp75dBqu+Ie5cKhIavcBm54mELMsBYduRMAwIcGK5PDB
-	 87EXLdFB6zPsBWiuJYC9EsnD4w0nfB64ma+0/j+lkNLUDYVdwSUpFei2XUZJ9Dj1Ry
-	 kZrcfItptJyGt66SMzKDf7Br9kzRMrNT8tZWwlQA=
+	by mail.kernel.org (Postfix) with ESMTP id 62CDC2073C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 23:33:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbfLDW7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 Dec 2019 17:59:04 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40747 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728011AbfLDW7D (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Dec 2019 17:59:03 -0500
-Received: by mail-oi1-f196.google.com with SMTP id 6so889315oix.7;
-        Wed, 04 Dec 2019 14:59:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hqWdSoHcQzyTJkL7Mf3rYI2CqKq7GxVmoPtx9Wj/NUQ=;
-        b=HeeqcbTXIDcg1+EgDquum9Gbc+rK+sg/vwkSEMV7s6Jgb7mrLTGYzIzlP9ba2GjAKd
-         qc1HCRGBW17kPOVYcKC1Iru94DEnxak5qGbiU4ciNkWWg8vQGPCubtRstceKUc7BoNil
-         PVbwEgTGGtfOBdA++mpW4YJTyAH2Rt8RO2rDBqXC2W1GZ+o3B/ATDrWq+NEYbtWsUlVt
-         WBwQgvJ/zzxVp0xwfofvv/+ypqBcdC73t4bJ8MzFOMnwYjpLwtVjeQ1UYJ6V7yTFXHfH
-         wMQRjXRAz50+aEPBSPBzF/2yQH9ouK49D3Updpm2egJxwDwY+LX/f8EctHqbo9jw1aCI
-         9VJw==
-X-Gm-Message-State: APjAAAWXoSnc+ioG/xqExlZotU+sIBG0F+7FLrofM80o4SKYrP/BgDiO
-        s03CFzvqBckJTiuUU6JRnQ==
-X-Google-Smtp-Source: APXvYqzIMPoCRlaPXBAfjx/AI4iavLfiFcz3CpUIlhsCYXfOEc8f3duMXCd6ObvZG8FDt5/AHwWi0w==
-X-Received: by 2002:a05:6808:f:: with SMTP id u15mr4639374oic.164.1575500342713;
-        Wed, 04 Dec 2019 14:59:02 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f11sm2842044oij.8.2019.12.04.14.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 14:59:02 -0800 (PST)
-Date:   Wed, 4 Dec 2019 16:59:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jim Wright <wrightj@linux.vnet.ibm.com>
+        id S1728071AbfLDXdV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Dec 2019 18:33:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38948 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727989AbfLDXdV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 4 Dec 2019 18:33:21 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB4NVv6Y097765;
+        Wed, 4 Dec 2019 18:32:53 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2wpp7q8fsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Dec 2019 18:32:53 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB4NULjT021977;
+        Wed, 4 Dec 2019 23:32:52 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma05wdc.us.ibm.com with ESMTP id 2wkg27hn2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Dec 2019 23:32:52 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB4NWpFm34275634
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Dec 2019 23:32:51 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 483FD124052;
+        Wed,  4 Dec 2019 23:32:51 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C72D6124053;
+        Wed,  4 Dec 2019 23:32:50 +0000 (GMT)
+Received: from [9.10.101.151] (unknown [9.10.101.151])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  4 Dec 2019 23:32:50 +0000 (GMT)
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon/pmbus: Add UCD90320 power
+ sequencer
+To:     Rob Herring <robh@kernel.org>
 Cc:     jdelvare@suse.com, linux@roeck-us.net, mark.rutland@arm.com,
         corbet@lwn.net, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jim Wright <jlwright@us.ibm.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon/pmbus: Add UCD90320 power
- sequencer
-Message-ID: <20191204225901.GA20804@bogus>
 References: <20191122222542.29661-1-wrightj@linux.vnet.ibm.com>
  <20191122222542.29661-2-wrightj@linux.vnet.ibm.com>
+ <20191204225901.GA20804@bogus>
+From:   Jim Wright <wrightj@linux.vnet.ibm.com>
+Message-ID: <30187513-85f1-7336-32eb-fc0b19d6b093@linux.vnet.ibm.com>
+Date:   Wed, 4 Dec 2019 17:32:49 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191122222542.29661-2-wrightj@linux.vnet.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191204225901.GA20804@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-04_03:2019-12-04,2019-12-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912040195
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 04:25:41PM -0600, Jim Wright wrote:
-> From: Jim Wright <jlwright@us.ibm.com>
-> 
-> Document the UCD90320 device tree binding.
-> 
-> Signed-off-by: Jim Wright <jlwright@us.ibm.com>
-> ---
->  .../devicetree/bindings/hwmon/pmbus/ucd90320.txt    | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
+Hi Rob,
 
-Can you make this a schema. See 
-Documentation/devicetree/writing-schema.rst.
-
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
-> new file mode 100644
-> index 000000000000..e1c1057c6292
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
-> @@ -0,0 +1,13 @@
-> +UCD90320 power sequencer
-> +-------------------------
-> +
-> +Requires node properties:
-> +- compatible : "ti,ucd90320"
-> +- reg : the I2C address of the device. This is 0x11, 0x13, 0x17, 0x31, 0x33,
-> +        0x37, 0x71, 0x73, or 0x77.
-> +
-> +Example:
-> +	ucd90320@11 {
-> +		compatible = "ti,ucd90320";
-> +		reg = <0x11>;
-> +	};
-> -- 
-> 2.17.1
-> 
+On 12/4/2019 4:59 PM, Rob Herring wrote:
+> On Fri, Nov 22, 2019 at 04:25:41PM -0600, Jim Wright wrote:
+>> From: Jim Wright <jlwright@us.ibm.com>
+>>
+>> Document the UCD90320 device tree binding.
+>>
+>> Signed-off-by: Jim Wright <jlwright@us.ibm.com>
+>> ---
+>>   .../devicetree/bindings/hwmon/pmbus/ucd90320.txt    | 13 +++++++++++++
+>>   1 file changed, 13 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
+> Can you make this a schema. See
+> Documentation/devicetree/writing-schema.rst.
+Ok, will do and submit patch set revision.
+Thanks for the review,
+Jim Wright
+>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
+>> new file mode 100644
+>> index 000000000000..e1c1057c6292
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
+>> @@ -0,0 +1,13 @@
+>> +UCD90320 power sequencer
+>> +-------------------------
+>> +
+>> +Requires node properties:
+>> +- compatible : "ti,ucd90320"
+>> +- reg : the I2C address of the device. This is 0x11, 0x13, 0x17, 0x31, 0x33,
+>> +        0x37, 0x71, 0x73, or 0x77.
+>> +
+>> +Example:
+>> +	ucd90320@11 {
+>> +		compatible = "ti,ucd90320";
+>> +		reg = <0x11>;
+>> +	};
+>> -- 
+>> 2.17.1
+>>
