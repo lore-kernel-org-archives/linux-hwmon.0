@@ -1,122 +1,98 @@
-Return-Path: <SRS0=oUCW=Z2=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=K4C7=Z3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 856B1C43603
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 23:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F521C43603
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Dec 2019 22:54:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62CDC2073C
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Dec 2019 23:33:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E416B20706
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Dec 2019 22:54:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Pv0tEj3L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbfLDXdV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 Dec 2019 18:33:21 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38948 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727989AbfLDXdV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 4 Dec 2019 18:33:21 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB4NVv6Y097765;
-        Wed, 4 Dec 2019 18:32:53 -0500
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2wpp7q8fsn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Dec 2019 18:32:53 -0500
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xB4NULjT021977;
-        Wed, 4 Dec 2019 23:32:52 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma05wdc.us.ibm.com with ESMTP id 2wkg27hn2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Dec 2019 23:32:52 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xB4NWpFm34275634
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Dec 2019 23:32:51 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 483FD124052;
-        Wed,  4 Dec 2019 23:32:51 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C72D6124053;
-        Wed,  4 Dec 2019 23:32:50 +0000 (GMT)
-Received: from [9.10.101.151] (unknown [9.10.101.151])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Dec 2019 23:32:50 +0000 (GMT)
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon/pmbus: Add UCD90320 power
- sequencer
-To:     Rob Herring <robh@kernel.org>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, mark.rutland@arm.com,
-        corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Wright <jlwright@us.ibm.com>
-References: <20191122222542.29661-1-wrightj@linux.vnet.ibm.com>
- <20191122222542.29661-2-wrightj@linux.vnet.ibm.com>
- <20191204225901.GA20804@bogus>
-From:   Jim Wright <wrightj@linux.vnet.ibm.com>
-Message-ID: <30187513-85f1-7336-32eb-fc0b19d6b093@linux.vnet.ibm.com>
-Date:   Wed, 4 Dec 2019 17:32:49 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1725988AbfLEWyg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Dec 2019 17:54:36 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:37789 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbfLEWyg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Dec 2019 17:54:36 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EEEBA891AC;
+        Fri,  6 Dec 2019 11:54:33 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1575586473;
+        bh=qYgExmNdCtwcDRSQc66QwJiOOORpb2mDrAtzNfPON4A=;
+        h=From:To:Cc:Subject:Date;
+        b=Pv0tEj3LeqkBz1P2Cd8eeBjVBIAeTTvCqn+1pL8nR2OxR3Xxk7LoKZuviVf1jCmnA
+         gU9U9nd2Dw9EKQwzvb0r/GbW2YSi7WjZjD3cQrOAGGE3JJ2y5ae9Ho+wg71zh8bs/2
+         4EDmJBnA4aFoK4v6ZzYg1WtEux1tl5BZYuV8WcJY8OkDesXqqQT4r4SP9qsND9+VEm
+         Bu+7pBzMixuMX8lSGZxVSqXSQliMAKTWAvj4S9mbngbTg2meTlvfTrVl4g0aB6AziU
+         H+P6VyK5SWZqyg/bgIpkV/NxCYa8+7pXRbCFg25xnPtXi/ZCNDgxKZaNFkRpdb/YuT
+         86XWUJzqJBDfA==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5de98aa50000>; Fri, 06 Dec 2019 11:54:33 +1300
+Received: from luukp-dl.ws.atlnz.lc (luukp-dl.ws.atlnz.lc [10.33.25.31])
+        by smtp (Postfix) with ESMTP id 1BD2413EED2;
+        Fri,  6 Dec 2019 11:54:29 +1300 (NZDT)
+Received: by luukp-dl.ws.atlnz.lc (Postfix, from userid 1137)
+        id 3910426187A; Fri,  6 Dec 2019 11:54:30 +1300 (NZDT)
+From:   Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
+Subject: [PATCH] hwmon: (adt7475) Make volt2reg return same reg as reg2volt input
+Date:   Fri,  6 Dec 2019 11:54:30 +1300
+Message-Id: <20191205225430.14959-1-luuk.paulussen@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <20191204225901.GA20804@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-04_03:2019-12-04,2019-12-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
- priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1912040195
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+reg2volt returns the voltage that matches a given register value.
+Converting this back the other way with volt2reg didn't return the same
+register value because it used truncation instead of rounding.
 
-On 12/4/2019 4:59 PM, Rob Herring wrote:
-> On Fri, Nov 22, 2019 at 04:25:41PM -0600, Jim Wright wrote:
->> From: Jim Wright <jlwright@us.ibm.com>
->>
->> Document the UCD90320 device tree binding.
->>
->> Signed-off-by: Jim Wright <jlwright@us.ibm.com>
->> ---
->>   .../devicetree/bindings/hwmon/pmbus/ucd90320.txt    | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
-> Can you make this a schema. See
-> Documentation/devicetree/writing-schema.rst.
-Ok, will do and submit patch set revision.
-Thanks for the review,
-Jim Wright
->
->> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
->> new file mode 100644
->> index 000000000000..e1c1057c6292
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ucd90320.txt
->> @@ -0,0 +1,13 @@
->> +UCD90320 power sequencer
->> +-------------------------
->> +
->> +Requires node properties:
->> +- compatible : "ti,ucd90320"
->> +- reg : the I2C address of the device. This is 0x11, 0x13, 0x17, 0x31, 0x33,
->> +        0x37, 0x71, 0x73, or 0x77.
->> +
->> +Example:
->> +	ucd90320@11 {
->> +		compatible = "ti,ucd90320";
->> +		reg = <0x11>;
->> +	};
->> -- 
->> 2.17.1
->>
+This meant that values read from sysfs could not be written back to sysfs
+to set back the same register value.
+
+With this change, volt2reg will return the same value for every voltage
+previously returned by reg2volt (for the set of possible input values)
+
+Signed-off-by: Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
+---
+ drivers/hwmon/adt7475.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 6c64d50c9aae..5eed7dd2f16d 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -294,9 +294,10 @@ static inline u16 volt2reg(int channel, long volt, u=
+8 bypass_attn)
+ 	long reg;
+=20
+ 	if (bypass_attn & (1 << channel))
+-		reg =3D (volt * 1024) / 2250;
++		reg =3D DIV_ROUND_CLOSEST((volt * 1024), 2250);
+ 	else
+-		reg =3D (volt * r[1] * 1024) / ((r[0] + r[1]) * 2250);
++		reg =3D DIV_ROUND_CLOSEST((volt * r[1] * 1024),
++					((r[0] + r[1]) * 2250));
+ 	return clamp_val(reg, 0, 1023) & (0xff << 2);
+ }
+=20
+--=20
+2.24.0
+
