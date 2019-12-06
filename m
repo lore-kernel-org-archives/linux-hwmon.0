@@ -2,116 +2,99 @@ Return-Path: <SRS0=RzZM=Z4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 876F7C43603
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89601C2BBE2
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:39:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 56A1A20706
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:37:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EE9020706
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:39:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PFDgxgxf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8swaD0/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbfLFOhG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Dec 2019 09:37:06 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36885 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbfLFOhG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Dec 2019 09:37:06 -0500
-Received: by mail-pl1-f195.google.com with SMTP id bb5so2805261plb.4;
-        Fri, 06 Dec 2019 06:37:06 -0800 (PST)
+        id S1726411AbfLFOjp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Dec 2019 09:39:45 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44742 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726259AbfLFOjp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Dec 2019 09:39:45 -0500
+Received: by mail-pf1-f193.google.com with SMTP id d199so3432962pfd.11;
+        Fri, 06 Dec 2019 06:39:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MmAJYe9y7hqJDFUyCzbIg+/OBoZV4/dfN8ALgALbljo=;
-        b=PFDgxgxfa1SQfvN602ZGkhQGP+RUlpRbKFPdeHwt1yx2/1QK8DF9XuSXfmlbmGFH3O
-         qdnjDNdPuTVtV3jDzel/MzOUc0ADPf/EZrQDJVSCc+FlKKP/WO1hJawk+sYjb+tp5mq3
-         fkpyaBZY6P5YQ4/RXNM0BN9xMn63GrqAgPsU5CBo1mUlwVt+pUF1uyQyMQDPe+/seJPo
-         QqE3SwtEf+cZtfGvCVduV/gvw6mE20+J5bTBs1M2BoDfN/RO4vv+OupEtubpY3j7LoYx
-         xziCwRNHPRfT1QxlUOcEOftAzCunpp47VZilf2huVZBnJNvoJBPpRLq808H7MXSuQq1M
-         3iQA==
+        h=sender:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=irYNqKPLHshq/aQvOEy9WqNzGmfWQrAlrNW/wTAkb1U=;
+        b=I8swaD0/efsTUzN0rwN5fqcT2d0qBUB+9t5phKehvb58plhMdhclYqff6QDdCqAknw
+         Co/U+RxCxpNkCZ+3u9MkhvYFF+xdatN2uIRygf8GFvra9yrIm+k//cKsYRdL4TFYPgLb
+         CmBXbvT9AzX2TPTlo8aVpCWJlC6iMPQL6KCKnbXWFCT6rbhtUVlkOTfeDM7ap/0Y0t10
+         ZmdChr0BqNX1XD78SQy2wBkwH7e9ZRs9sf2oLZD/ROPwOrv9ms5VwiMWIkYLsC/Mrh3P
+         eWRfEMtFmLV1QTxSlp9RT5QKqBDOvquXAFZGAvW/tFEWOsPUxx2qsMbsHmOP2PrlN+FW
+         YTQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MmAJYe9y7hqJDFUyCzbIg+/OBoZV4/dfN8ALgALbljo=;
-        b=fVAeNcPmYHjQGV4JpR4jJW8RVWXZzY/SAkW6CgGU/hRnHbR/rtYM89L/TG5bv/jKjS
-         7qgR8DUPo5ZdWdxSt3KUDyq7/HRrfeFZBspAYVQgtoeE3UlHdNy//Wj8cBNFqXMmyUn7
-         lgBHw30++IU6QaPE3K6m/kWabAFz6rfdjRXljKcBenchw1i2QlTrGHreQGOFzCajCzH2
-         pbEvlL0MsE9SAJTC34i2fzPwXnWzyR6+h96qoz6ebWTtYf+jscDBpCK5Q3EvCDysc1p0
-         HPwWYUwA+jrTxkHNxjaSXR/XQLhVNsbPnRK/LxIvviCD27Lz+h5UdNCxQQrSKa/xH2Lu
-         PB9w==
-X-Gm-Message-State: APjAAAUobGja8EqZTflDleX4zUBW6IKOoi7pfOx+57gYp2PUxv8McRR4
-        GCKzbCwZD54r8XrkvZMCg80=
-X-Google-Smtp-Source: APXvYqxJGdkN7RNKsZLyt14TxInds+wbC8VNpPQfJGJOSwV7v/peQJDCs7D08nXCIJ/B4vPMqxaFrA==
-X-Received: by 2002:a17:90a:a44:: with SMTP id o62mr15799733pjo.80.1575643025840;
-        Fri, 06 Dec 2019 06:37:05 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 186sm16865700pfe.141.2019.12.06.06.37.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Dec 2019 06:37:05 -0800 (PST)
-Date:   Fri, 6 Dec 2019 06:37:03 -0800
+        h=x-gm-message-state:sender:subject:to:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=irYNqKPLHshq/aQvOEy9WqNzGmfWQrAlrNW/wTAkb1U=;
+        b=QKHHzg66JDzx5A1mivFi25+05XcRzMRzc5AYrdnO7S37G2Vjp9tS7Vw9JCmj5UIB/q
+         CN4RnBiWEpEbKcVwAKX4eVH7GFPd3Feg0rPXTD88D4SE+sSyfEMfyDve+uF5PPor09oE
+         F/WV+6I5yPM0V0UwIUghT+OjcUvHPPeL+vFfHO4ykhZXU0gf3BWXMkwtVTsBNXA5pd1A
+         0qusB10S/tbL4RLAZwT73zeS8ZFBvQe+WS/p5hi1T8agR9D/9c2Hkd8vzD1t/Qv3hhcL
+         bt50RDnI7oRDliTUHXIFwyVpUeHVbE2ArozZERrFv2JJJVOOllyHPcEbGlqpsCWS5GsR
+         9baQ==
+X-Gm-Message-State: APjAAAU5uQ3PaIv5hx3gfdLH65p0LurDoTdIQcVOQVfC5woXmSkWaUog
+        hSfqe7a+nZrgyO9dl71l58JC+xry
+X-Google-Smtp-Source: APXvYqzCiYipDLDiHc06A/YWriJlXA+sFvNuqJij2Yu0x2xReX9LY6An4j/v1bgWMkItMfwztVwhdw==
+X-Received: by 2002:a63:c207:: with SMTP id b7mr3853777pgd.422.1575643183855;
+        Fri, 06 Dec 2019 06:39:43 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e11sm15791532pgh.54.2019.12.06.06.39.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Dec 2019 06:39:43 -0800 (PST)
+Subject: Re: [PATCH v2 0/2] hwmon: Add UCD90320 power sequencer chip
+To:     Jim Wright <wrightj@linux.vnet.ibm.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191205232411.21492-1-wrightj@linux.vnet.ibm.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (adt7475) Make volt2reg return same reg as
- reg2volt input
-Message-ID: <20191206143703.GA2291@roeck-us.net>
-References: <20191205225755.GC2532@roeck-us.net>
- <20191205231659.1301-1-luuk.paulussen@alliedtelesis.co.nz>
+Message-ID: <955b4485-aaa4-a255-752e-5ae336e9130f@roeck-us.net>
+Date:   Fri, 6 Dec 2019 06:39:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191205231659.1301-1-luuk.paulussen@alliedtelesis.co.nz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191205232411.21492-1-wrightj@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Dec 06, 2019 at 12:16:59PM +1300, Luuk Paulussen wrote:
-> reg2volt returns the voltage that matches a given register value.
-> Converting this back the other way with volt2reg didn't return the same
-> register value because it used truncation instead of rounding.
+On 12/5/19 3:24 PM, Jim Wright wrote:
+> Add support for TI UCD90320 power sequencer chip.
 > 
-> This meant that values read from sysfs could not be written back to sysfs
-> to set back the same register value.
+> Changes since v1:
+> - Device tree bindings text file replaced with YAML schema.
+> - Device driver files are unchanged.
 > 
-> With this change, volt2reg will return the same value for every voltage
-> previously returned by reg2volt (for the set of possible input values)
+> Jim Wright (2):
+>    dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
+>    hwmon: Add support for UCD90320 Power Sequencer
 > 
-> Signed-off-by: Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
-
-Applied.
+>   .../bindings/hwmon/pmbus/ti,ucd90320.yaml     | 45 +++++++++++++++++++
+>   Documentation/hwmon/ucd9000.rst               | 12 ++++-
+>   drivers/hwmon/pmbus/Kconfig                   |  6 +--
+>   drivers/hwmon/pmbus/ucd9000.c                 | 39 +++++++++++-----
+>   4 files changed, 85 insertions(+), 17 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ucd90320.yaml
+> 
+Series applied to hwmon-next.
 
 Thanks,
 Guenter
 
-> ---
->  changes in v2:
->  - remove unnecessary braces.
->  drivers/hwmon/adt7475.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6c64d50c9aae..01c2eeb02aa9 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -294,9 +294,10 @@ static inline u16 volt2reg(int channel, long volt, u8 bypass_attn)
->  	long reg;
->  
->  	if (bypass_attn & (1 << channel))
-> -		reg = (volt * 1024) / 2250;
-> +		reg = DIV_ROUND_CLOSEST(volt * 1024, 2250);
->  	else
-> -		reg = (volt * r[1] * 1024) / ((r[0] + r[1]) * 2250);
-> +		reg = DIV_ROUND_CLOSEST(volt * r[1] * 1024,
-> +					(r[0] + r[1]) * 2250);
->  	return clamp_val(reg, 0, 1023) & (0xff << 2);
->  }
->  
