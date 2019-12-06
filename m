@@ -2,83 +2,116 @@ Return-Path: <SRS0=RzZM=Z4=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CDBC43603
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 01:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 876F7C43603
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:37:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E4BA2077B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 01:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575594454;
-	bh=HwUu5g36bag1v0XboNCCUQ5GK4sKKKlMNxJY7I9JECc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=X1tN8qIcGvR8mypYb7olXMbUaWengD1e0Ga4+/RIi70i7LqT4G+vw1MC7wHbQpsoa
-	 ak1JoBuN+xc8D/ybkf0Q2hf6x9E4Y/sA6CK2F5flD1QPqqw1ifJVxnNWkTZC6e3lSg
-	 XRJLfEvEilbtLqaMUw5GSSxn5xssP96KRv4NOIZY=
+	by mail.kernel.org (Postfix) with ESMTP id 56A1A20706
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Dec 2019 14:37:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PFDgxgxf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbfLFBHe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Dec 2019 20:07:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35338 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725959AbfLFBHe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 5 Dec 2019 20:07:34 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 637B42464E;
-        Fri,  6 Dec 2019 01:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575594453;
-        bh=HwUu5g36bag1v0XboNCCUQ5GK4sKKKlMNxJY7I9JECc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FskL08BAl+2bxG6lq95wSu0/exiTKmXfUsfbc1MxUTAnRUBys6dfp8gzxEj3C9pRH
-         KL5X7p1z1TPhAooudGgG2cduAWzxXu5atr8eJmCkniV4zMw6ye72VV/wnsfd5VW23A
-         p8BwmSdW+IE4C++9iJqyQhNHmOVsus65R5MrI1vA=
-Received: by mail-qt1-f181.google.com with SMTP id k11so5518415qtm.3;
-        Thu, 05 Dec 2019 17:07:33 -0800 (PST)
-X-Gm-Message-State: APjAAAUMvgECDkQo1puc7kAJWxjaj6QLT3DAPvzVfMG7mZ9tHdM0MJBZ
-        9GehepqUVS1v3i9PnEOdnApGkspmFrIijmFg+w==
-X-Google-Smtp-Source: APXvYqxz5YznfBQRQCXWy1g/IVPDLnFCTW2XZwhHVCjGfjltAnp0vF3SAPsx60BaTeJpVY3mKBA0PlnSAHQ/YO0m1xY=
-X-Received: by 2002:ac8:7357:: with SMTP id q23mr10742556qtp.110.1575594452529;
- Thu, 05 Dec 2019 17:07:32 -0800 (PST)
+        id S1726214AbfLFOhG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Dec 2019 09:37:06 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36885 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfLFOhG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Dec 2019 09:37:06 -0500
+Received: by mail-pl1-f195.google.com with SMTP id bb5so2805261plb.4;
+        Fri, 06 Dec 2019 06:37:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MmAJYe9y7hqJDFUyCzbIg+/OBoZV4/dfN8ALgALbljo=;
+        b=PFDgxgxfa1SQfvN602ZGkhQGP+RUlpRbKFPdeHwt1yx2/1QK8DF9XuSXfmlbmGFH3O
+         qdnjDNdPuTVtV3jDzel/MzOUc0ADPf/EZrQDJVSCc+FlKKP/WO1hJawk+sYjb+tp5mq3
+         fkpyaBZY6P5YQ4/RXNM0BN9xMn63GrqAgPsU5CBo1mUlwVt+pUF1uyQyMQDPe+/seJPo
+         QqE3SwtEf+cZtfGvCVduV/gvw6mE20+J5bTBs1M2BoDfN/RO4vv+OupEtubpY3j7LoYx
+         xziCwRNHPRfT1QxlUOcEOftAzCunpp47VZilf2huVZBnJNvoJBPpRLq808H7MXSuQq1M
+         3iQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MmAJYe9y7hqJDFUyCzbIg+/OBoZV4/dfN8ALgALbljo=;
+        b=fVAeNcPmYHjQGV4JpR4jJW8RVWXZzY/SAkW6CgGU/hRnHbR/rtYM89L/TG5bv/jKjS
+         7qgR8DUPo5ZdWdxSt3KUDyq7/HRrfeFZBspAYVQgtoeE3UlHdNy//Wj8cBNFqXMmyUn7
+         lgBHw30++IU6QaPE3K6m/kWabAFz6rfdjRXljKcBenchw1i2QlTrGHreQGOFzCajCzH2
+         pbEvlL0MsE9SAJTC34i2fzPwXnWzyR6+h96qoz6ebWTtYf+jscDBpCK5Q3EvCDysc1p0
+         HPwWYUwA+jrTxkHNxjaSXR/XQLhVNsbPnRK/LxIvviCD27Lz+h5UdNCxQQrSKa/xH2Lu
+         PB9w==
+X-Gm-Message-State: APjAAAUobGja8EqZTflDleX4zUBW6IKOoi7pfOx+57gYp2PUxv8McRR4
+        GCKzbCwZD54r8XrkvZMCg80=
+X-Google-Smtp-Source: APXvYqxJGdkN7RNKsZLyt14TxInds+wbC8VNpPQfJGJOSwV7v/peQJDCs7D08nXCIJ/B4vPMqxaFrA==
+X-Received: by 2002:a17:90a:a44:: with SMTP id o62mr15799733pjo.80.1575643025840;
+        Fri, 06 Dec 2019 06:37:05 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 186sm16865700pfe.141.2019.12.06.06.37.04
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 06 Dec 2019 06:37:05 -0800 (PST)
+Date:   Fri, 6 Dec 2019 06:37:03 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (adt7475) Make volt2reg return same reg as
+ reg2volt input
+Message-ID: <20191206143703.GA2291@roeck-us.net>
+References: <20191205225755.GC2532@roeck-us.net>
+ <20191205231659.1301-1-luuk.paulussen@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20191205232411.21492-1-wrightj@linux.vnet.ibm.com> <20191205232411.21492-2-wrightj@linux.vnet.ibm.com>
-In-Reply-To: <20191205232411.21492-2-wrightj@linux.vnet.ibm.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 5 Dec 2019 19:07:20 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+3uOdOnFYAmwX+B-Bp=97poef27CTD39my8o_vm8B4zg@mail.gmail.com>
-Message-ID: <CAL_Jsq+3uOdOnFYAmwX+B-Bp=97poef27CTD39my8o_vm8B4zg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
-To:     Jim Wright <wrightj@linux.vnet.ibm.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191205231659.1301-1-luuk.paulussen@alliedtelesis.co.nz>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 5, 2019 at 5:25 PM Jim Wright <wrightj@linux.vnet.ibm.com> wrote:
->
-> Document the UCD90320 device tree binding.
->
-> Signed-off-by: Jim Wright <wrightj@linux.vnet.ibm.com>
->
-> ---
-> Changes since v1:
-> - Replace .txt file version with YAML schema.
-> ---
->  .../bindings/hwmon/pmbus/ti,ucd90320.yaml     | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ucd90320.yaml
+On Fri, Dec 06, 2019 at 12:16:59PM +1300, Luuk Paulussen wrote:
+> reg2volt returns the voltage that matches a given register value.
+> Converting this back the other way with volt2reg didn't return the same
+> register value because it used truncation instead of rounding.
+> 
+> This meant that values read from sysfs could not be written back to sysfs
+> to set back the same register value.
+> 
+> With this change, volt2reg will return the same value for every voltage
+> previously returned by reg2volt (for the set of possible input values)
+> 
+> Signed-off-by: Luuk Paulussen <luuk.paulussen@alliedtelesis.co.nz>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+>  changes in v2:
+>  - remove unnecessary braces.
+>  drivers/hwmon/adt7475.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6c64d50c9aae..01c2eeb02aa9 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -294,9 +294,10 @@ static inline u16 volt2reg(int channel, long volt, u8 bypass_attn)
+>  	long reg;
+>  
+>  	if (bypass_attn & (1 << channel))
+> -		reg = (volt * 1024) / 2250;
+> +		reg = DIV_ROUND_CLOSEST(volt * 1024, 2250);
+>  	else
+> -		reg = (volt * r[1] * 1024) / ((r[0] + r[1]) * 2250);
+> +		reg = DIV_ROUND_CLOSEST(volt * r[1] * 1024,
+> +					(r[0] + r[1]) * 2250);
+>  	return clamp_val(reg, 0, 1023) & (0xff << 2);
+>  }
+>  
