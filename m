@@ -2,236 +2,93 @@ Return-Path: <SRS0=6LgM=Z5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C82C2D0BE
-	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Dec 2019 15:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4304C43603
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Dec 2019 16:49:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DA7624673
-	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Dec 2019 15:57:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72C3F24670
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Dec 2019 16:49:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kfxCaGz3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Kh8ibXyt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbfLGP5n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Dec 2019 10:57:43 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37973 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbfLGP5n (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Dec 2019 10:57:43 -0500
-Received: by mail-lf1-f68.google.com with SMTP id r14so7540375lfm.5;
-        Sat, 07 Dec 2019 07:57:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Je89gn9Q33N1bQFYrGaEqfD0jxx0/nSksznx2FYdLRo=;
-        b=kfxCaGz3BFFjxhySlBbB1rX7RnA+phJJ7Rlwo401EHiOvqjh8Rrl9zgB6A/5jITfiw
-         JIDFTET279F+3PbIOotOjoFTaAcpj/Zsdq3YhKa0NcfVWjCQn4Wudd6BzkMHwMrua6MX
-         RDMDHP0cp/QKJjtmKZWzfNU8DNYOqavLfHnp7VRL4Sh4wzxUjWmAAGOkapb1AQmzSF8u
-         fO8hWbT117wrhI5jFPTTV1oMunDO6PTjFB2YhnlXd56A9YKeS89TT5twl6onaf531CuO
-         F1GwfKiq4i3Slxfy7ZxUfxCAqdMgp8BpMWyreOA8DLFznEJnhJR6afmfmJ974Av40PSM
-         aYAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Je89gn9Q33N1bQFYrGaEqfD0jxx0/nSksznx2FYdLRo=;
-        b=dv/KpUTm4jboGKCMzZCePl/O90jyz8a3rVaHRwag1ArzV04cwRyGn3exArSw0i4MUA
-         b1Lro8ZNUGQCF6Ul8P4pCEu0K0gKLq0DlQIuBup4/YsXSdtKGufWRwkkwqGYv0lxz4Xy
-         S7xwZHzHOmZobVlMVzfOlNUloorrJaE5lepbgusVhp7CEQTDM9YWnGDjmRSMAgnJrXMG
-         pTl5QB7Fyn0Yyjht3iP3Tf3f2EpoHbISH8LJPQUY/iiZHSBYdC0jqkFYBirH47FKIUdZ
-         ddSxDS3bV777Wsj2gSS6jIWzJrMYB0B7hOPRrswVuBBOu042CUgy7VjOwHFE5hfNz9SX
-         eIYg==
-X-Gm-Message-State: APjAAAVaIuEcVlQmetkrv/8tR0MW6qP/hcLa8v8O+iTQHCBDTaYae9pW
-        Ufabs9/BFMkenZ5QzvzG12prMYdsfNJv09Cs6CU=
-X-Google-Smtp-Source: APXvYqxsWOaKlGm5uRNPyXWJqzOcQQ+4DK7/As8ZTt5LTrrPFjXpZV9Yojk2f9aZg/lfYutTMjnq2W8ffejEbamHl3A=
-X-Received: by 2002:a05:6512:75:: with SMTP id i21mr10706021lfo.98.1575734260036;
- Sat, 07 Dec 2019 07:57:40 -0800 (PST)
+        id S1726420AbfLGQtm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Dec 2019 11:49:42 -0500
+Received: from mx.treblig.org ([46.43.15.161]:41090 "EHLO mx.treblig.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726414AbfLGQtm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 7 Dec 2019 11:49:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=VJ7xGuaP9rLGJiILYURt19PwQgdRW6ZAVwJJhvdND/c=; b=Kh8ibXytjzpXM/hh4bihB/wFux
+        JQVsEDvXh3p21wxdck+zhDClGFbQ50SIqhRHkvMPhWfAQQhRlsczbWtHy2kxQFJFiVeHc42E12GcY
+        VSDpmIMTBTZZLorUOXRF3efokx2zTqytcAvN9lW5c+6gE3QzLNVutrZIwC/UiDfOoAN/6FlCoNMwh
+        DlzaKRUdAb4ALmmc6PUY3403RPvwEY2O9tV3uGC8P5T6BaVcyYZWzj1qF/yYm3nfPMKkK3Jb7A+0T
+        HmCxewYEVERCsYRmu4mOOtSaHQTHlipCEFETUg8+crFuF74LjwGmhXy0ST8Jt7ovkc41Gop5UPZPe
+        jq7TpiIg==;
+Received: from dg by mx.treblig.org with local (Exim 4.92)
+        (envelope-from <dg@treblig.org>)
+        id 1iddGy-0007Sn-3V; Sat, 07 Dec 2019 16:49:36 +0000
+Date:   Sat, 7 Dec 2019 16:49:36 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (w83627ehf) convert to with_info interface
+Message-ID: <20191207164936.GA25521@gallifrey>
+References: <20191124202030.45360-1-linux@treblig.org>
+ <20191124202030.45360-3-linux@treblig.org>
+ <20191207135127.GA24852@roeck-us.net>
 MIME-Version: 1.0
-References: <1574952879-7200-1-git-send-email-akinobu.mita@gmail.com>
- <1574952879-7200-2-git-send-email-akinobu.mita@gmail.com> <5f85f65c-78b6-0b63-f975-a216f9823985@linaro.org>
-In-Reply-To: <5f85f65c-78b6-0b63-f975-a216f9823985@linaro.org>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Sun, 8 Dec 2019 00:57:28 +0900
-Message-ID: <CAC5umyg3J98ntrezxskdKTgdP-WsL9VjtzHpXxyxGxTZxcaQ8A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] add header file for kelvin to/from Celsius
- conversion helpers
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191207135127.GA24852@roeck-us.net>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/4.19.0-5-amd64 (x86_64)
+X-Uptime: 16:42:53 up 97 days, 17:03,  1 user,  load average: 0.00, 0.00, 0.00
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-2019=E5=B9=B412=E6=9C=887=E6=97=A5(=E5=9C=9F) 1:49 Daniel Lezcano <daniel.l=
-ezcano@linaro.org>:
->
-> On 28/11/2019 15:54, Akinobu Mita wrote:
-> > There are several helper macros to convert kelvin to/from Celsius in
-> > <linux/thermal.h> for thermal drivers.  These are useful for any other
-> > drivers or subsystems, but it's odd to include <linux/thermal.h> just f=
-or
-> > the helpers.
-> >
-> > This adds a new <linux/temperature.h> that provides the equivalent inli=
-ne
-> > functions for any drivers or subsystems.  It is intended to replace the
-> > helpers in <linux/thermal.h>.
-> >
-> > Cc: Sujith Thomas <sujith.thomas@intel.com>
-> > Cc: Darren Hart <dvhart@infradead.org>
-> > Cc: Andy Shevchenko <andy@infradead.org>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Amit Kucheria <amit.kucheria@verdurent.com>
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Keith Busch <kbusch@kernel.org>
-> > Cc: Jens Axboe <axboe@fb.com>
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Sagi Grimberg <sagi@grimberg.me>
-> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> > ---
-> > * v2
-> > - add deci_kelvin_to_millicelsius_with_offset() in linux/temperature.h
-> > - stop including linux/temperature.h from linux/thermal.h
-> >
-> >  include/linux/temperature.h | 51 +++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  1 file changed, 51 insertions(+)
-> >  create mode 100644 include/linux/temperature.h
-> >
-> > diff --git a/include/linux/temperature.h b/include/linux/temperature.h
-> > new file mode 100644
-> > index 0000000..679e70a
-> > --- /dev/null
-> > +++ b/include/linux/temperature.h
-> > @@ -0,0 +1,51 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef _LINUX_TEMPERATURE_H
-> > +#define _LINUX_TEMPERATURE_H
->
-> It sounds strange to create a temperature file just for a few conversion
-> functions. Why not create an units.h file, so some more conversions
-> could be added later (not necessarily related to temperature) ?
+* Guenter Roeck (linux@roeck-us.net) wrote:
+> On Sun, Nov 24, 2019 at 08:20:30PM +0000, Dr. David Alan Gilbert wrote:
+> > Convert the old hwmon_device_register code to
+> > devm_hwmon_device_register_with_info.
+> > 
+> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> 
+> Looks good. I am sure I am missing something, given the size of the patch,
 
-Fine with me.
+Thanks! I couldn't see an obvious way to split it and keep it working
+bisectably.
 
-> > +#include <linux/kernel.h>
-> > +
-> > +#define ABSOLUTE_ZERO_MILLICELSIUS -273150
-> > +
-> > +static inline long kelvin_to_millicelsius(long t)
->
-> Why 'long' ?
+> but I am going to apply this to hwmon-next.
 
-There's no specific reason, but the existing DECI_KELVIN_TO_CELSIUS() in
-linux/thermal.h converts to 'long'.
+Great.
 
-Do you prefer changing 'long' to 'int'?
+> Side note: At some point we should drop support for nct6775 and nct6776
+> from this driver.
 
-> > +{
-> > +     return t * 1000 + ABSOLUTE_ZERO_MILLICELSIUS;
-> > +}
-> > +
-> > +static inline long millicelsius_to_kelvin(long t)
-> > +{
-> > +     return DIV_ROUND_CLOSEST(t - ABSOLUTE_ZERO_MILLICELSIUS, 1000);
->
-> Please don't duplicate these operations, just do the conversion to the
-> right unit and then call a single function.
->
-> Replace the constant by macros like what we find in time64.h.
->
-> eg.
-> #define MILLICELSIUS_PER_CELCIUS 1000
+Hehe it would have probably easier to do that first!  Oh well,
+I've added it to a TODO, that means nothing about if/when I'll actually
+get around to it!
 
-How about this?
+Thanks again,
 
-#define ABSOLUTE_ZERO_MILLICELSIUS -273150
+Dave
 
-static inline long milli_kelvin_to_millicelsius(long t)
-{
-        return t + ABSOLUTE_ZERO_MILLICELSIUS;
-}
 
-static inline long millicelsius_to_milli_kelvin(long t)
-{
-        return t - ABSOLUTE_ZERO_MILLICELSIUS;
-}
-
-#define MILLIDEGREE_PER_DEGREE 1000
-#define MILLIDEGREE_PER_DECIDEGREE 100
-
-static inline long kelvin_to_millicelsius(long t)
-{
-        return milli_kelvin_to_millicelsius(t * MILLIDEGREE_PER_DEGREE);
-}
-
-static inline long millicelsius_to_kelvin(long t)
-{
-        t =3D millicelsius_to_milli_kelvin(t);
-
-        return DIV_ROUND_CLOSEST(t, MILLIDEGREE_PER_DEGREE);
-}
-
-static inline long deci_kelvin_to_celsius(long t)
-{
-        t =3D milli_kelvin_to_millicelsius(t * MILLIDEGREE_PER_DECIDEGREE);
-
-        return DIV_ROUND_CLOSEST(t, MILLIDEGREE_PER_DEGREE);
-}
-
-static inline long celsius_to_deci_kelvin(long t)
-{
-        t =3D millicelsius_to_milli_kelvin(t * MILLIDEGREE_PER_DEGREE);
-
-        return DIV_ROUND_CLOSEST(t, MILLIDEGREE_PER_DECIDEGREE);
-}
-
-/**
- * deci_kelvin_to_millicelsius_with_offset - convert Kelvin to Celsius
- * @t: temperature value in decidegrees Kelvin
- * @offset: difference between Kelvin and Celsius in millidegrees
- *
- * Return: temperature value in millidegrees Celsius
- */
-static inline long deci_kelvin_to_millicelsius_with_offset(long t, long off=
-set)
-{
-        return t * MILLIDEGREE_PER_DECIDEGREE - offset;
-}
-
-static inline long deci_kelvin_to_millicelsius(long t)
-{
-        return milli_kelvin_to_millicelsius(t * MILLIDEGREE_PER_DECIDEGREE)=
-;
-}
-
-static inline long millicelsius_to_deci_kelvin(long t)
-{
-        t =3D millicelsius_to_milli_kelvin(t);
-
-        return DIV_ROUND_CLOSEST(t, MILLIDEGREE_PER_DECIDEGREE);
-}
-
-> So you can really do the cleanup in all the drivers, like removing:
-
-OK.  I'll try as much as possible.
+> Thanks,
+> Guenter
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
