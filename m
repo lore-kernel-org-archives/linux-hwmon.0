@@ -1,440 +1,705 @@
-Return-Path: <SRS0=K5dT=Z6=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=xWqN=Z7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1F82C43603
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Dec 2019 22:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1162C43603
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 05:21:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C2642054F
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Dec 2019 22:57:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75BC3206D3
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 05:21:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYqoi651"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMMjvRTv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfLHW5G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 8 Dec 2019 17:57:06 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35166 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbfLHW5G (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 8 Dec 2019 17:57:06 -0500
-Received: by mail-pl1-f193.google.com with SMTP id s10so4982795plp.2;
-        Sun, 08 Dec 2019 14:57:05 -0800 (PST)
+        id S1726826AbfLIFV1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Dec 2019 00:21:27 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42941 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725819AbfLIFV0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Dec 2019 00:21:26 -0500
+Received: by mail-pg1-f195.google.com with SMTP id i5so6496584pgj.9;
+        Sun, 08 Dec 2019 21:21:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=7FH57UyCjRv3EGR8pcDZv8hlyVyJOdyf47Tfk6wa4ao=;
-        b=hYqoi6515DZlyo6CajLAhCTntvAeXla8/rVjKcAr1DR+4/Yj0SqlCgra1U3jjjmkbQ
-         p2ubPdSckEqU02Sm59ywcmEYoIFdINWrEiYRrNePwf9nqX5LCdBaHjyrQ+/i74n+FEtT
-         2+CqWxPNHfaBkwgE5FrxNsIG4hk07hfsf8Hf+mnAc6MGi8SMlco9MbL1PQSnMMdLxle/
-         x3jg7pOQ03uNaVX5JJvmzDUS7ChSDo44QG5PUShy3sZaRRHvwwz8etKOfnxLTh+cYlz1
-         u25yP6ro66WU0Muqgfz3H+LSG7V18hrCRIqwr3CbWuLSIt0zJnA+O1smPKHJkn7fF7Qy
-         lLJw==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vEaQCWXIRNyproE8aNosawyeAXOBo4v1itKRt/6yGls=;
+        b=NMMjvRTviD1JCFPU66A6+1Jjbz15liEdyfbiHj6M2j+pV4V6qf5zAI5wnmPSipFvJc
+         vpyikxbkgv6g+1JGYz7deoQLhmNZRVKxR0Qec75GFimSWT4XrtW3J7lFnM28QBO+METd
+         H2d+9I63O11B8Pe9qA8Llar473pIpgRXQnuAw+g2FIua2IfRNwiOKQtG2OBWt08O8Usu
+         PM18GBN20DYHMKwwqk0gLyoPoOW1gu/M3rcH6BAcSvy0DyBmo8vbGWBM0N2EUSimngvE
+         8slw0hqcopJRad3/YfzJQeNYk7W78e4VaFz4Dgxq8iubJCiKcblld4lLYiRsPii+wsSZ
+         g/ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=7FH57UyCjRv3EGR8pcDZv8hlyVyJOdyf47Tfk6wa4ao=;
-        b=HgP9AAMm79PbZd2DUOzFp2bLdeJaKPOURZFmvW58Jo8NhcvzrDnEnuOSkFr1Z+Q5UK
-         zubH/ysEdD8wom6ct8k/7RraXnNKASUCj3DuTWJNGYQX8v4q4CnbKQ0JdNWXDLF4Y2NL
-         V+9b/GlyKqUcyhke1AQpu8bnYq/B1qZq6lUNdLxqyW9iLWoVPD6cQKWsxOgnuRlYf56A
-         4/9tXsddFlCLTlGxqu2RVQTD4gKpvuULUuRSpRcuoxfQPG8l95iyRkrxefLP2zIx4GVF
-         Ae48AuprcgXvf4WPwKEhAiAzDqTgfE79VxoQ8HBluVBJwnfnGysEyi8RNv5yva6hT6AR
-         tWoQ==
-X-Gm-Message-State: APjAAAUlXyixCYfSgNit3hu0DxW1XCsdrW9QUc7vwo/Qjs52T9A+Gotx
-        /GOqVNu5YI/Ex1BSl38mp9Sv6sFV
-X-Google-Smtp-Source: APXvYqxhRjBgnoXI1CtJCQIlhL3T3qHIQcndLdxfiGrIK/kvqQc4Iw+Zne2qeZaYHMD5r6OlTxCs4w==
-X-Received: by 2002:a17:90a:d152:: with SMTP id t18mr28156050pjw.126.1575845824479;
-        Sun, 08 Dec 2019 14:57:04 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=vEaQCWXIRNyproE8aNosawyeAXOBo4v1itKRt/6yGls=;
+        b=mpytWGDi6hEREX8wK/TFWLVpjBmXwRnbik8ISXg2koy/+0mwiXR+2k+ulB7JweBt7d
+         WIhGZyFCHNzriImbm4ZXrWWb6hvboKEeOm4F4bH2BtS/Z8BQRx1S6Sn+YqbkYpS1/ey2
+         HNg+fhqotCH4ThmNMZN7UEDqtRkHYjXnoGRyLDqK89OazQ5t5I7g5RSCIidQ13Rx6o68
+         g2WZVFud74uHD0M7f03uqfWrP5ergx+IKtV+ysIM+8wWa2gRY2vRkVzgCdkNfAO7IGmz
+         R1PazVjHTg1XhWIw9+KVgxYKKIXyrI9p9akDpnytL0950dEwBrI8oiQjzuLMRFV87zWD
+         W+Bw==
+X-Gm-Message-State: APjAAAUc+sLqI0DP/XJ50P2fXz1F0Lgx7qzboVPBU0BQ7ClVX8cYv/nS
+        LYe7eOBWf3JFSI3UpW6F0qWLOfA3
+X-Google-Smtp-Source: APXvYqzaW58dK4+ixFCpho0phGe4Fub230+UZVqmEzWPUV/hMqVBgYEhkwZSQNBN0KJzyPkZ5p8y/g==
+X-Received: by 2002:a62:b60c:: with SMTP id j12mr27995613pff.8.1575868884263;
+        Sun, 08 Dec 2019 21:21:24 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v7sm9882040pjs.2.2019.12.08.14.57.03
+        by smtp.gmail.com with ESMTPSA id k60sm11192624pjh.22.2019.12.08.21.21.23
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 08 Dec 2019 14:57:03 -0800 (PST)
+        Sun, 08 Dec 2019 21:21:23 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, peterlundgren@google.com,
-        kunyi@google.com, devjitg@google.com,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: Driver for MAX31730
-Date:   Sun,  8 Dec 2019 14:57:01 -0800
-Message-Id: <20191208225701.1993-1-linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-ide@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Chris Healy <cphealy@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 1/1] hwmon: Driver for temperature sensors on SATA drives
+Date:   Sun,  8 Dec 2019 21:21:19 -0800
+Message-Id: <20191209052119.32072-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191209052119.32072-1-linux@roeck-us.net>
+References: <20191209052119.32072-1-linux@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-MAX31730 is a 3-Channel Remote Temperature Sensor.
+Reading the hard drive temperature has been supported for years
+by userspace tools such as smarttools or hddtemp. The downside of
+such tools is that they need to run with super-user privilege, that
+the temperatures are not reported by standard tools such as 'sensors'
+or 'libsensors', and that drive temperatures are not available for use
+in the kernel's thermal subsystem.
 
+This driver solves this problem by adding support for reading the
+temperature of SATA drives from the kernel using the hwmon API and
+by adding a temperature zone for each drive.
+
+With this driver, the hard disk temperature can be read using the
+unprivileged 'sensors' application:
+
+$ sensors satatemp-scsi-1-0
+satatemp-scsi-1-0
+Adapter: SCSI adapter
+temp1:        +23.0°C
+
+or directly from sysfs:
+
+$ grep . /sys/class/hwmon/hwmon9/{name,temp1_input}
+/sys/class/hwmon/hwmon9/name:satatemp
+/sys/class/hwmon/hwmon9/temp1_input:23000
+
+If the drive supports SCT transport and reports temperature limits,
+those are reported as well.
+
+satatemp-scsi-0-0
+Adapter: SCSI adapter
+temp1:        +27.0°C  (low  =  +0.0°C, high = +60.0°C)
+                       (crit low = -41.0°C, crit = +85.0°C)
+                       (lowest = +23.0°C, highest = +34.0°C)
+
+Cc: Chris Healy <cphealy@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-This patch needs to be applied on top of
-	https://patchwork.kernel.org/patch/11277603/
-
  Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max31730.rst |  44 ++++
- drivers/hwmon/Kconfig            |  12 +-
+ Documentation/hwmon/satatemp.rst |  48 +++
+ drivers/hwmon/Kconfig            |  10 +
  drivers/hwmon/Makefile           |   1 +
- drivers/hwmon/max31730.c         | 440 +++++++++++++++++++++++++++++++
- 5 files changed, 497 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/hwmon/max31730.rst
- create mode 100644 drivers/hwmon/max31730.c
+ drivers/hwmon/satatemp.c         | 575 +++++++++++++++++++++++++++++++
+ 5 files changed, 635 insertions(+)
+ create mode 100644 Documentation/hwmon/satatemp.rst
+ create mode 100644 drivers/hwmon/satatemp.c
 
 diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 43cc605741ea..b91da3acccb9 100644
+index 230ad59b462b..ecf1832dd013 100644
 --- a/Documentation/hwmon/index.rst
 +++ b/Documentation/hwmon/index.rst
-@@ -108,6 +108,7 @@ Hardware Monitoring Kernel Drivers
-    max197
-    max20751
-    max31722
-+   max31730
-    max31785
-    max31790
-    max34440
-diff --git a/Documentation/hwmon/max31730.rst b/Documentation/hwmon/max31730.rst
+@@ -133,6 +133,7 @@ Hardware Monitoring Kernel Drivers
+    pxe1610
+    pwm-fan
+    raspberrypi-hwmon
++   satatemp
+    sch5627
+    sch5636
+    scpi-hwmon
+diff --git a/Documentation/hwmon/satatemp.rst b/Documentation/hwmon/satatemp.rst
 new file mode 100644
-index 000000000000..def0de19dbd2
+index 000000000000..59b105f3c79a
 --- /dev/null
-+++ b/Documentation/hwmon/max31730.rst
-@@ -0,0 +1,44 @@
-+Kernel driver max31790
++++ b/Documentation/hwmon/satatemp.rst
+@@ -0,0 +1,48 @@
++Kernel driver satatemp
 +======================
 +
-+Supported chips:
 +
-+  * Maxim MAX31730
++References
++----------
 +
-+    Prefix: 'max31730'
++ANS T13/1699-D
++Information technology - AT Attachment 8 - ATA/ATAPI Command Set (ATA8-ACS)
 +
-+    Addresses scanned: 0x1c, 0x1d, 0x1e, 0x1f, 0x4c, 0x4d, 0x4e, 0x4f
++ANS Project T10/BSR INCITS 513
++Information technology - SCSI Primary Commands - 4 (SPC-4)
 +
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX31730.pdf
-+
-+Author: Guenter Roeck <linux@roeck-us.net>
++ANS Project INCITS 557
++Information technology - SCSI / ATA Translation - 5 (SAT-5)
 +
 +
 +Description
 +-----------
 +
-+This driver implements support for Maxim MAX31730.
-+
-+The MAX31730 temperature sensor monitors its own temperature and the
-+temperatures of three external diode-connected transistors. The operating
-+supply voltage is from 3.0V to 3.6V. Resistance cancellation compensates
-+for high series resistance in circuit-board traces and the external thermal
-+diode, while beta compensation corrects for temperature-measurement
-+errors due to low-beta sensing transistors.
++This driver supports reporting the temperature of SATA drives.
++If supported, it uses the SCT Command Transport feature to read
++the current drive temperature and, if available, temperature limits
++as well as historic minimum and maximum temperatures. If SCT Command
++Transport is not supported, the driver uses SMART attributes to read
++the drive temperature.
 +
 +
 +Sysfs entries
 +-------------
 +
-+=================== == =======================================================
-+temp[1-4]_enable    RW Temperature enable/disable
-+                       Set to 0 to enable channel, 0 to disable
-+temp[1-4]_input     RO Temperature input
-+temp[2-4]_fault     RO Fault indicator for remote channels
-+temp[1-4]_max       RW Maximum temperature
-+temp[1-4]_max_alarm RW Maximum temperature alarm
-+temp[1-4]_min       RW Minimum temperature. Common for all channels.
-+                       Only temp1_min is writeable.
-+temp[1-4]_min_alarm RO Minimum temperature alarm
-+temp[2-4]_offset    RW Temperature offset for remote channels
-+=================== == =======================================================
++Only the temp1_input attribute is always available. Other attributes are
++available only if reported by the drive. All temperatures are reported in
++milli-degrees Celsius.
++
++=======================	=====================================================
++temp1_input		Current drive temperature
++temp1_lcrit		Minimum temperature limit. Operating the device below
++			this temperature may cause physical damage to the
++			device.
++temp1_min		Minimum recommended continuous operating limit
++temp1_max		Maximum recommended continuous operating temperature
++temp1_crit		Maximum temperature limit. Operating the device above
++			this temperature may cause physical damage to the
++			device.
++temp1_lowest		Minimum temperature seen this power cycle
++temp1_highest		Maximum temperature seen this power cycle
++=======================	=====================================================
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 23dfe848979a..54e1b9cbc0b9 100644
+index 13a6b4afb4b3..4c63eb7ba96a 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -889,7 +889,7 @@ config SENSORS_MAX197
- 	  will be called max197.
- 
- config SENSORS_MAX31722
--tristate "MAX31722 temperature sensor"
-+	tristate "MAX31722 temperature sensor"
- 	depends on SPI
- 	help
- 	  Support for the Maxim Integrated MAX31722/MAX31723 digital
-@@ -898,6 +898,16 @@ tristate "MAX31722 temperature sensor"
+@@ -1346,6 +1346,16 @@ config SENSORS_RASPBERRYPI_HWMON
  	  This driver can also be built as a module. If so, the module
- 	  will be called max31722.
+ 	  will be called raspberrypi-hwmon.
  
-+config SENSORS_MAX31730
-+	tristate "MAX31730 temperature sensor"
-+	depends on I2C
++config SENSORS_SATATEMP
++	tristate "SATA hard disk drives with temperature sensors"
++	depends on SCSI && ATA
 +	help
-+	  Support for the Maxim Integrated MAX31730 3-Channel Remote
-+	  Temperature Sensor.
++	  If you say yes you get support for the temperature sensor on
++	  SATA hard disk drives.
 +
 +	  This driver can also be built as a module. If so, the module
-+	  will be called max31730.
++	  will be called smarttemp.
 +
- config SENSORS_MAX6621
- 	tristate "Maxim MAX6621 sensor chip"
- 	depends on I2C
+ config SENSORS_SHT15
+ 	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
+ 	depends on GPIOLIB || COMPILE_TEST
 diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 6db5db9cdc29..226a1182967a 100644
+index 40c036ea45e6..fe55b8f76af9 100644
 --- a/drivers/hwmon/Makefile
 +++ b/drivers/hwmon/Makefile
-@@ -123,6 +123,7 @@ obj-$(CONFIG_SENSORS_MAX1619)	+= max1619.o
- obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
- obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
- obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
-+obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
- obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
- obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
- obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
-diff --git a/drivers/hwmon/max31730.c b/drivers/hwmon/max31730.c
+@@ -148,6 +148,7 @@ obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
+ obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+ obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
+ obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
++obj-$(CONFIG_SENSORS_SATATEMP)	+= satatemp.o
+ obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
+ obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
+ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
+diff --git a/drivers/hwmon/satatemp.c b/drivers/hwmon/satatemp.c
 new file mode 100644
-index 000000000000..eb22a34dc36b
+index 000000000000..4a6bdcc86988
 --- /dev/null
-+++ b/drivers/hwmon/max31730.c
-@@ -0,0 +1,440 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/drivers/hwmon/satatemp.c
+@@ -0,0 +1,575 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Driver for MAX31730 3-Channel Remote Temperature Sensor
++ * Hwmon client for SATA hard disk drives with temperature sensors
++ * Copyright (C) 2019 Zodiac Inflight Innovations
 + *
-+ * Copyright (c) 2019 Guenter Roeck <linux@roeck-us.net>
++ * With input from:
++ *    Hwmon client for S.M.A.R.T. hard disk drives with temperature sensors.
++ *    (C) 2018 Linus Walleij
++ *
++ *    hwmon: Driver for SCSI/ATA temperature sensors
++ *    by Constantin Baranov <const@mimas.ru>, submitted September 2009
++ *
++ * The primary means to read hard drive temperatures and temperature limits
++ * is the SCT Command Transport feature set as specified in ATA8-ACS.
++ * It can be used to read the current drive temperature, temperature limits,
++ * and historic minimum and maximum temperatures. The SCT Command Transport
++ * feature set is documented in "AT Attachment 8 - ATA/ATAPI Command Set
++ * (ATA8-ACS)".
++ *
++ * If the SCT Command Transport feature set is not available, drive temperatures
++ * may be readable through SMART attributes. Since SMART attributes are not well
++ * defined, this method is only used as fallback mechanism.
++ *
++ * There are three SMART attributes which may report drive temperatures.
++ * Those are defined as follows (from
++ * http://www.cropel.com/library/smart-attribute-list.aspx).
++ *
++ * 190	Temperature	Temperature, monitored by a sensor somewhere inside
++ *			the drive. Raw value typicaly holds the actual
++ *			temperature (hexadecimal) in its rightmost two digits.
++ *
++ * 194	Temperature	Temperature, monitored by a sensor somewhere inside
++ *			the drive. Raw value typicaly holds the actual
++ *			temperature (hexadecimal) in its rightmost two digits.
++ *
++ * 231	Temperature	Temperature, monitored by a sensor somewhere inside
++ *			the drive. Raw value typicaly holds the actual
++ *			temperature (hexadecimal) in its rightmost two digits.
++ *
++ * Wikipedia defines attributes a bit differently.
++ *
++ * 190	Temperature	Value is equal to (100-temp. °C), allowing manufacturer
++ *	Difference or	to set a minimum threshold which corresponds to a
++ *	Airflow		maximum temperature. This also follows the convention of
++ *	Temperature	100 being a best-case value and lower values being
++ *			undesirable. However, some older drives may instead
++ *			report raw Temperature (identical to 0xC2) or
++ *			Temperature minus 50 here.
++ * 194	Temperature or	Indicates the device temperature, if the appropriate
++ *	Temperature	sensor is fitted. Lowest byte of the raw value contains
++ *	Celsius		the exact temperature value (Celsius degrees).
++ * 231	Life Left	Indicates the approximate SSD life left, in terms of
++ *	(SSDs) or	program/erase cycles or available reserved blocks.
++ *	Temperature	A normalized value of 100 represents a new drive, with
++ *			a threshold value at 10 indicating a need for
++ *			replacement. A value of 0 may mean that the drive is
++ *			operating in read-only mode to allow data recovery.
++ *			Previously (pre-2010) occasionally used for Drive
++ *			Temperature (more typically reported at 0xC2).
++ *
++ * Common denominator is that the first raw byte reports the temperature
++ * in degrees C on almost all drives. Some drives may report a fractional
++ * temperature in the second raw byte.
++ *
++ * Known exceptions (from libatasmart):
++ * - SAMSUNG SV0412H and SAMSUNG SV1204H) report the temperature in 10th
++ *   degrees C in the first two raw bytes.
++ * - A few Maxtor drives report an unknown or bad value in attribute 194.
++ * - Certain Apple SSD drives report an unknown value in attribute 190.
++ *   Only certain firmware versions are affected.
++ *
++ * Those exceptions affect older ATA drives and are currently ignored.
++ * Also, the second raw byte (possibly reporting the fractional temperature)
++ * is currently ignored.
++ *
++ * Many drives also report temperature limits in additional SMART data raw
++ * bytes. The format of those is not well defined and varies widely.
++ * The driver does not currently attempt to report those limits.
++ *
++ * According to data in smartmontools, attribute 231 is rarely used to report
++ * drive temperatures. At the same time, several drives report SSD life left
++ * in attribute 231, but do not support temperature sensors. For this reason,
++ * attribute 231 is currently ignored.
++ *
++ * Following above definitions, temperatures are reported as follows.
++ *   If SCT Command Transport is supported, it is used to read the
++ *   temperature and, if available, temperature limits.
++ * - Otherwise, if SMART attribute 194 is supported, it is used to read
++ *   the temperature.
++ * - Otherwise, if SMART attribute 190 is supported, it is used to read
++ *   the temperature.
 + */
 +
++#include <linux/ata.h>
 +#include <linux/bits.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
++#include <linux/device.h>
 +#include <linux/hwmon.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
 +#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of.h>
-+#include <linux/slab.h>
++#include <linux/mutex.h>
++#include <scsi/scsi_cmnd.h>
++#include <scsi/scsi_device.h>
++#include <scsi/scsi_driver.h>
++#include <scsi/scsi_proto.h>
 +
-+/* Addresses scanned */
-+static const unsigned short normal_i2c[] = { 0x1c, 0x1d, 0x1e, 0x1f, 0x4c,
-+					     0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
-+
-+/* The MAX31730 registers */
-+#define MAX31730_REG_TEMP		0x00
-+#define MAX31730_REG_CONF		0x13
-+#define  MAX31730_STOP			BIT(7)
-+#define  MAX31730_EXTRANGE		BIT(1)
-+#define MAX31730_REG_TEMP_OFFSET	0x16
-+#define  MAX31730_TEMP_OFFSET_BASELINE	0x77
-+#define MAX31730_REG_OFFSET_ENABLE	0x17
-+#define MAX31730_REG_TEMP_MAX		0x20
-+#define MAX31730_REG_TEMP_MIN		0x30
-+#define MAX31730_REG_STATUS_HIGH	0x32
-+#define MAX31730_REG_STATUS_LOW		0x33
-+#define MAX31730_REG_CHANNEL_ENABLE	0x35
-+#define MAX31730_REG_TEMP_FAULT		0x36
-+
-+#define MAX31730_REG_MFG_ID		0x50
-+#define  MAX31730_MFG_ID		0x4d
-+#define MAX31730_REG_MFG_REV		0x51
-+#define  MAX31730_MFG_REV		0x01
-+
-+#define MAX31730_TEMP_MIN		(-128000)
-+#define MAX31730_TEMP_MAX		127937
-+
-+/* Each client has this additional data */
-+struct max31730_data {
-+	struct i2c_client	*client;
-+	u8			orig_conf;
-+	u8			current_conf;
-+	u8			offset_enable;
-+	u8			channel_enable;
++struct satatemp_data {
++	struct list_head list;		/* list of instantiated devices */
++	struct mutex lock;		/* protect data buffer accesses */
++	struct scsi_device *sdev;	/* SCSI device */
++	struct device *dev;		/* instantiating device */
++	struct device *hwdev;		/* hardware monitoring device */
++	u8 smartdata[ATA_SECT_SIZE];	/* local buffer */
++	int (*get_temp)(struct satatemp_data *st, u32 attr, long *val);
++	bool have_temp_lowest;		/* lowest temp in SCT status */
++	bool have_temp_highest;		/* highest temp in SCT status */
++	bool have_temp_min;		/* have min temp */
++	bool have_temp_max;		/* have max temp */
++	bool have_temp_lcrit;		/* have lower critical limit */
++	bool have_temp_crit;		/* have critical limit */
++	int temp_min;			/* min temp */
++	int temp_max;			/* max temp */
++	int temp_lcrit;			/* lower critical limit */
++	int temp_crit;			/* critical limit */
 +};
 +
-+/*-----------------------------------------------------------------------*/
++static LIST_HEAD(satatemp_devlist);
 +
-+static inline long max31730_reg_to_mc(s16 temp)
++#define ATA_MAX_SMART_ATTRS	30
++#define SMART_TEMP_PROP_190	190
++#define SMART_TEMP_PROP_194	194
++
++#define SCT_STATUS_REQ_ADDR	0xe0
++#define  SCT_STATUS_VERSION_LOW		0	/* log byte offsets */
++#define  SCT_STATUS_VERSION_HIGH	1
++#define  SCT_STATUS_TEMP		200
++#define  SCT_STATUS_TEMP_LOWEST		201
++#define  SCT_STATUS_TEMP_HIGHEST	202
++#define SCT_READ_LOG_ADDR	0xe1
++#define  SMART_READ_LOG			0xd5
++#define  SMART_WRITE_LOG		0xd6
++
++#define INVALID_TEMP		0x80
++
++#define temp_is_valid(temp)	((temp) != INVALID_TEMP)
++#define temp_from_sct(temp)	(((s8)(temp)) * 1000)
++
++static inline bool ata_id_smart_supported(u16 *id)
 +{
-+	return DIV_ROUND_CLOSEST((temp >> 4) * 1000, 16);
++	return id[ATA_ID_COMMAND_SET_1] & BIT(0);
 +}
 +
-+static int max31730_write_config(struct max31730_data *data, u8 set_mask,
-+				 u8 clr_mask)
++static inline bool ata_id_smart_enabled(u16 *id)
 +{
-+	u8 value;
++	return id[ATA_ID_CFS_ENABLE_1] & BIT(0);
++}
 +
-+	clr_mask |= MAX31730_EXTRANGE;
-+	value = data->current_conf & ~clr_mask;
-+	value |= set_mask;
++static int satatemp_scsi_command(struct satatemp_data *st,
++				 u8 ata_command, u8 feature,
++				 u8 lba_low, u8 lba_mid, u8 lba_high)
++{
++	static u8 scsi_cmd[MAX_COMMAND_SIZE];
++	int data_dir;
 +
-+	if (data->current_conf != value) {
-+		s32 err;
-+
-+		err = i2c_smbus_write_byte_data(data->client, MAX31730_REG_CONF,
-+						value);
-+		if (err)
-+			return err;
-+		data->current_conf = value;
++	memset(scsi_cmd, 0, sizeof(scsi_cmd));
++	scsi_cmd[0] = ATA_16;
++	if (ata_command == ATA_CMD_SMART && feature == SMART_WRITE_LOG) {
++		scsi_cmd[1] = (5 << 1);	/* PIO Data-out */
++		/*
++		 * No off.line or cc, write to dev, block count in sector count
++		 * field.
++		 */
++		scsi_cmd[2] = 0x06;
++		data_dir = DMA_TO_DEVICE;
++	} else {
++		scsi_cmd[1] = (4 << 1);	/* PIO Data-in */
++		/*
++		 * No off.line or cc, read from dev, block count in sector count
++		 * field.
++		 */
++		scsi_cmd[2] = 0x0e;
++		data_dir = DMA_FROM_DEVICE;
 +	}
-+	return 0;
++	scsi_cmd[4] = feature;
++	scsi_cmd[6] = 1;	/* 1 sector */
++	scsi_cmd[8] = lba_low;
++	scsi_cmd[10] = lba_mid;
++	scsi_cmd[12] = lba_high;
++	scsi_cmd[14] = ata_command;
++
++	return scsi_execute_req(st->sdev, scsi_cmd, data_dir,
++				st->smartdata, ATA_SECT_SIZE, NULL, HZ, 5,
++				NULL);
 +}
 +
-+static int max31730_set_enable(struct i2c_client *client, int reg,
-+			       u8 *confdata, int channel, bool enable)
++static int satatemp_ata_command(struct satatemp_data *st, u8 feature, u8 select)
 +{
-+	u8 regval = *confdata;
++	return satatemp_scsi_command(st, ATA_CMD_SMART, feature, select,
++				     ATA_SMART_LBAM_PASS, ATA_SMART_LBAH_PASS);
++}
++
++static int satatemp_get_smarttemp(struct satatemp_data *st, u32 attr,
++				  long *temp)
++{
++	u8 *buf = st->smartdata;
++	bool have_temp = false;
++	u8 temp_raw;
++	u8 csum;
++	int err;
++	int i;
++
++	err = satatemp_ata_command(st, ATA_SMART_READ_VALUES, 0);
++	if (err)
++		return err;
++
++	/* Checksum the read value table */
++	csum = 0;
++	for (i = 0; i < ATA_SECT_SIZE; i++)
++		csum += buf[i];
++	if (csum) {
++		dev_dbg(&st->sdev->sdev_gendev,
++			"checksum error reading SMART values\n");
++		return -EIO;
++	}
++
++	for (i = 0; i < ATA_MAX_SMART_ATTRS; i++) {
++		u8 *attr = buf + i * 12;
++		int id = attr[2];
++
++		if (!id)
++			continue;
++
++		if (id == SMART_TEMP_PROP_190) {
++			temp_raw = attr[7];
++			have_temp = true;
++		}
++		if (id == SMART_TEMP_PROP_194) {
++			temp_raw = attr[7];
++			have_temp = true;
++			break;
++		}
++	}
++
++	if (have_temp) {
++		*temp = temp_raw * 1000;
++		return 0;
++	}
++
++	return -ENXIO;
++}
++
++static int satatemp_get_scttemp(struct satatemp_data *st, u32 attr, long *val)
++{
++	u8 *buf = st->smartdata;
 +	int err;
 +
-+	if (enable)
-+		regval |= BIT(channel);
-+	else
-+		regval &= ~BIT(channel);
-+
-+	if (regval != *confdata) {
-+		err = i2c_smbus_write_byte_data(client, reg, regval);
-+		if (err)
-+			return err;
-+		*confdata = regval;
++	err = satatemp_ata_command(st, SMART_READ_LOG, SCT_STATUS_REQ_ADDR);
++	if (err)
++		return err;
++	switch (attr) {
++	case hwmon_temp_input:
++		*val = temp_from_sct(buf[SCT_STATUS_TEMP]);
++		break;
++	case hwmon_temp_lowest:
++		*val = temp_from_sct(buf[SCT_STATUS_TEMP_LOWEST]);
++		break;
++	case hwmon_temp_highest:
++		*val = temp_from_sct(buf[SCT_STATUS_TEMP_HIGHEST]);
++		break;
++	default:
++		err = -EINVAL;
++		break;
 +	}
-+	return 0;
++	return err;
 +}
 +
-+static int max31730_set_offset_enable(struct max31730_data *data, int channel,
-+				      bool enable)
++static int satatemp_identify(struct satatemp_data *st)
 +{
-+	return max31730_set_enable(data->client, MAX31730_REG_OFFSET_ENABLE,
-+				   &data->offset_enable, channel, enable);
++	struct scsi_device *sdev = st->sdev;
++	u8 *buf = st->smartdata;
++	bool is_ata, is_sata;
++	bool have_sct_data_table;
++	bool have_sct_temp;
++	bool have_smart;
++	bool have_sct;
++	u16 *ata_id;
++	u16 version;
++	long temp;
++	u8 *vpd;
++	int err;
++
++	/* bail out immediately if there is no inquiry data */
++	if (!sdev->inquiry || sdev->inquiry_len < 16)
++		return -ENODEV;
++
++	/*
++	 * Inquiry data sanity checks (per SAT-5):
++	 * - peripheral qualifier must be 0
++	 * - peripheral device type must be 0x0 (Direct access block device)
++	 * - SCSI Vendor ID is "ATA     "
++	 */
++	if (sdev->inquiry[0] ||
++	    strncmp(&sdev->inquiry[8], "ATA     ", 8))
++		return -ENODEV;
++
++	vpd = kzalloc(1024, GFP_KERNEL);
++	if (!vpd)
++		return -ENOMEM;
++
++	err = scsi_get_vpd_page(sdev, 0x89, vpd, 1024);
++	if (err) {
++		kfree(vpd);
++		return err;
++	}
++
++	/*
++	 * More sanity checks.
++	 * For VPD offsets and values see ANS Project INCITS 557,
++	 * "Information technology - SCSI / ATA Translation - 5 (SAT-5)".
++	 */
++	if (vpd[1] != 0x89 || vpd[2] != 0x02 || vpd[3] != 0x38 ||
++	    vpd[36] != 0x34 || vpd[56] != ATA_CMD_ID_ATA) {
++		kfree(vpd);
++		return -ENODEV;
++	}
++	ata_id = (u16 *)&vpd[60];
++	is_ata = ata_id_is_ata(ata_id);
++	is_sata = ata_id_is_sata(ata_id);
++	have_sct = ata_id_sct_supported(ata_id);
++	have_sct_data_table = ata_id_sct_data_tables(ata_id);
++	have_smart = ata_id_smart_supported(ata_id) &&
++				ata_id_smart_enabled(ata_id);
++
++	kfree(vpd);
++
++	/* bail out if this is not a SATA device */
++	if (!is_ata || !is_sata)
++		return -ENODEV;
++	if (!have_sct)
++		goto skip_sct;
++
++	err = satatemp_ata_command(st, SMART_READ_LOG, SCT_STATUS_REQ_ADDR);
++	if (err)
++		goto skip_sct;
++
++	version = (buf[SCT_STATUS_VERSION_HIGH] << 8) |
++		  buf[SCT_STATUS_VERSION_LOW];
++	if (version != 2 && version != 3)
++		goto skip_sct;
++
++	have_sct_temp = temp_is_valid(buf[SCT_STATUS_TEMP]);
++	if (!have_sct_temp)
++		goto skip_sct;
++
++	st->have_temp_lowest = temp_is_valid(buf[SCT_STATUS_TEMP_LOWEST]);
++	st->have_temp_highest = temp_is_valid(buf[SCT_STATUS_TEMP_HIGHEST]);
++
++	if (!have_sct_data_table)
++		goto skip_sct;
++
++	/* Request and read temperature history table */
++	memset(buf, '\0', sizeof(st->smartdata));
++	buf[0] = 5;	/* data table command */
++	buf[2] = 1;	/* read table */
++	buf[4] = 2;	/* temperature history table */
++
++	err = satatemp_ata_command(st, SMART_WRITE_LOG, SCT_STATUS_REQ_ADDR);
++	if (err)
++		goto skip_sct_data;
++
++	err = satatemp_ata_command(st, SMART_READ_LOG, SCT_READ_LOG_ADDR);
++	if (err)
++		goto skip_sct_data;
++
++	/*
++	 * Temperature limits per AT Attachment 8 -
++	 * ATA/ATAPI Command Set (ATA8-ACS)
++	 */
++	st->have_temp_max = temp_is_valid(buf[6]);
++	st->have_temp_crit = temp_is_valid(buf[7]);
++	st->have_temp_min = temp_is_valid(buf[8]);
++	st->have_temp_lcrit = temp_is_valid(buf[9]);
++
++	st->temp_max = temp_from_sct(buf[6]);
++	st->temp_crit = temp_from_sct(buf[7]);
++	st->temp_min = temp_from_sct(buf[8]);
++	st->temp_lcrit = temp_from_sct(buf[9]);
++
++skip_sct_data:
++	if (have_sct_temp) {
++		st->get_temp = satatemp_get_scttemp;
++		return 0;
++	}
++skip_sct:
++	if (!have_smart)
++		return -ENODEV;
++	st->get_temp = satatemp_get_smarttemp;
++	return satatemp_get_smarttemp(st, hwmon_temp_input, &temp);
 +}
 +
-+static int max31730_set_channel_enable(struct max31730_data *data, int channel,
-+				       bool enable)
-+{
-+	return max31730_set_enable(data->client, MAX31730_REG_CHANNEL_ENABLE,
-+				   &data->channel_enable, channel, enable);
-+}
-+
-+static int max31730_read(struct device *dev, enum hwmon_sensor_types type,
++static int satatemp_read(struct device *dev, enum hwmon_sensor_types type,
 +			 u32 attr, int channel, long *val)
 +{
-+	struct max31730_data *data = dev_get_drvdata(dev);
-+	int regval, reg, offset;
++	struct satatemp_data *st = dev_get_drvdata(dev);
++	int err = 0;
 +
 +	if (type != hwmon_temp)
 +		return -EINVAL;
 +
 +	switch (attr) {
 +	case hwmon_temp_input:
-+		if (!(data->channel_enable & BIT(channel)))
-+			return -ENODATA;
-+		reg = MAX31730_REG_TEMP + (channel * 2);
++	case hwmon_temp_lowest:
++	case hwmon_temp_highest:
++		mutex_lock(&st->lock);
++		err = st->get_temp(st, attr, val);
++		mutex_unlock(&st->lock);
 +		break;
-+	case hwmon_temp_max:
-+		reg = MAX31730_REG_TEMP_MAX + (channel * 2);
-+		break;
-+	case hwmon_temp_min:
-+		reg = MAX31730_REG_TEMP_MIN;
-+		break;
-+	case hwmon_temp_enable:
-+		*val = !!(data->channel_enable & BIT(channel));
-+		return 0;
-+	case hwmon_temp_offset:
-+		if (!channel)
-+			return -EINVAL;
-+		if (!(data->offset_enable & BIT(channel))) {
-+			*val = 0;
-+			return 0;
-+		}
-+		offset = i2c_smbus_read_byte_data(data->client,
-+						  MAX31730_REG_TEMP_OFFSET);
-+		if (offset < 0)
-+			return offset;
-+		*val = (offset - MAX31730_TEMP_OFFSET_BASELINE) * 125;
-+		return 0;
-+	case hwmon_temp_fault:
-+		regval = i2c_smbus_read_byte_data(data->client,
-+						  MAX31730_REG_TEMP_FAULT);
-+		if (regval < 0)
-+			return regval;
-+		*val = !!(regval & BIT(channel));
-+		return 0;
-+	case hwmon_temp_min_alarm:
-+		regval = i2c_smbus_read_byte_data(data->client,
-+						  MAX31730_REG_STATUS_LOW);
-+		if (regval < 0)
-+			return regval;
-+		*val = !!(regval & BIT(channel));
-+		return 0;
-+	case hwmon_temp_max_alarm:
-+		regval = i2c_smbus_read_byte_data(data->client,
-+						  MAX31730_REG_STATUS_HIGH);
-+		if (regval < 0)
-+			return regval;
-+		*val = !!(regval & BIT(channel));
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+	regval = i2c_smbus_read_word_swapped(data->client, reg);
-+	if (regval < 0)
-+		return regval;
-+
-+	*val = max31730_reg_to_mc(regval);
-+
-+	return 0;
-+}
-+
-+static int max31730_write(struct device *dev, enum hwmon_sensor_types type,
-+			  u32 attr, int channel, long val)
-+{
-+	struct max31730_data *data = dev_get_drvdata(dev);
-+	int reg, err;
-+
-+	if (type != hwmon_temp)
-+		return -EINVAL;
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		reg = MAX31730_REG_TEMP_MAX + channel * 2;
++	case hwmon_temp_lcrit:
++		*val = st->temp_lcrit;
 +		break;
 +	case hwmon_temp_min:
-+		reg = MAX31730_REG_TEMP_MIN;
++		*val = st->temp_min;
 +		break;
-+	case hwmon_temp_enable:
-+		if (val != 0 && val != 1)
-+			return -EINVAL;
-+		return max31730_set_channel_enable(data, channel, val);
-+	case hwmon_temp_offset:
-+		val = clamp_val(val, -14875, 17000) + 14875;
-+		val = DIV_ROUND_CLOSEST(val, 125);
-+		err = max31730_set_offset_enable(data, channel,
-+					val != MAX31730_TEMP_OFFSET_BASELINE);
-+		if (err)
-+			return err;
-+		return i2c_smbus_write_byte_data(data->client,
-+						 MAX31730_REG_TEMP_OFFSET, val);
++	case hwmon_temp_max:
++		*val = st->temp_max;
++		break;
++	case hwmon_temp_crit:
++		*val = st->temp_crit;
++		break;
 +	default:
-+		return -EINVAL;
++		err = -EINVAL;
++		break;
 +	}
-+
-+	val = clamp_val(val, MAX31730_TEMP_MIN, MAX31730_TEMP_MAX);
-+	val = DIV_ROUND_CLOSEST(val << 4, 1000) << 4;
-+
-+	return i2c_smbus_write_word_swapped(data->client, reg, (u16)val);
++	return err;
 +}
 +
-+static umode_t max31730_is_visible(const void *data,
++static umode_t satatemp_is_visible(const void *data,
 +				   enum hwmon_sensor_types type,
 +				   u32 attr, int channel)
 +{
++	const struct satatemp_data *st = data;
++
 +	switch (type) {
 +	case hwmon_temp:
 +		switch (attr) {
 +		case hwmon_temp_input:
-+		case hwmon_temp_min_alarm:
-+		case hwmon_temp_max_alarm:
-+		case hwmon_temp_fault:
 +			return 0444;
++		case hwmon_temp_lowest:
++			if (st->have_temp_lowest)
++				return 0444;
++			break;
++		case hwmon_temp_highest:
++			if (st->have_temp_highest)
++				return 0444;
++			break;
 +		case hwmon_temp_min:
-+			return channel ? 0444 : 0644;
-+		case hwmon_temp_offset:
-+		case hwmon_temp_enable:
++			if (st->have_temp_min)
++				return 0444;
++			break;
 +		case hwmon_temp_max:
-+			return 0644;
++			if (st->have_temp_max)
++				return 0444;
++			break;
++		case hwmon_temp_lcrit:
++			if (st->have_temp_lcrit)
++				return 0444;
++			break;
++		case hwmon_temp_crit:
++			if (st->have_temp_crit)
++				return 0444;
++			break;
++		default:
++			break;
 +		}
 +		break;
 +	default:
@@ -443,195 +708,99 @@ index 000000000000..eb22a34dc36b
 +	return 0;
 +}
 +
-+static const struct hwmon_channel_info *max31730_info[] = {
++static const struct hwmon_channel_info *satatemp_info[] = {
 +	HWMON_CHANNEL_INFO(chip,
 +			   HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-+			   HWMON_T_ENABLE |
-+			   HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM,
-+			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-+			   HWMON_T_OFFSET | HWMON_T_ENABLE |
-+			   HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM |
-+			   HWMON_T_FAULT,
-+			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-+			   HWMON_T_OFFSET | HWMON_T_ENABLE |
-+			   HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM |
-+			   HWMON_T_FAULT,
-+			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-+			   HWMON_T_OFFSET | HWMON_T_ENABLE |
-+			   HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM |
-+			   HWMON_T_FAULT
-+			   ),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT |
++			   HWMON_T_LOWEST | HWMON_T_HIGHEST |
++			   HWMON_T_MIN | HWMON_T_MAX |
++			   HWMON_T_LCRIT | HWMON_T_CRIT),
 +	NULL
 +};
 +
-+static const struct hwmon_ops max31730_hwmon_ops = {
-+	.is_visible = max31730_is_visible,
-+	.read = max31730_read,
-+	.write = max31730_write,
++static const struct hwmon_ops satatemp_ops = {
++	.is_visible = satatemp_is_visible,
++	.read = satatemp_read,
 +};
 +
-+static const struct hwmon_chip_info max31730_chip_info = {
-+	.ops = &max31730_hwmon_ops,
-+	.info = max31730_info,
++static const struct hwmon_chip_info satatemp_chip_info = {
++	.ops = &satatemp_ops,
++	.info = satatemp_info,
 +};
 +
-+static void max31730_remove(void *data)
++/*
++ * The device argument points to sdev->sdev_dev. Its parent is
++ * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
++ */
++static int satatemp_add(struct device *dev, struct class_interface *intf)
 +{
-+	struct max31730_data *max31730 = data;
-+	struct i2c_client *client = max31730->client;
++	struct scsi_device *sdev = to_scsi_device(dev->parent);
++	struct satatemp_data *st;
++	int err;
 +
-+	i2c_smbus_write_byte_data(client, MAX31730_REG_CONF,
-+				  max31730->orig_conf);
-+}
-+
-+static int
-+max31730_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+{
-+	struct device *dev = &client->dev;
-+	struct device *hwmon_dev;
-+	struct max31730_data *data;
-+	int status, err;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
-+		return -EIO;
-+
-+	data = devm_kzalloc(dev, sizeof(struct max31730_data), GFP_KERNEL);
-+	if (!data)
++	st = kzalloc(sizeof(*st), GFP_KERNEL);
++	if (!st)
 +		return -ENOMEM;
 +
-+	data->client = client;
++	st->sdev = sdev;
++	st->dev = dev;
++	mutex_init(&st->lock);
 +
-+	/* Cache original configuration and enable status */
-+	status = i2c_smbus_read_byte_data(client, MAX31730_REG_CHANNEL_ENABLE);
-+	if (status < 0)
-+		return status;
-+	data->channel_enable = status;
-+
-+	status = i2c_smbus_read_byte_data(client, MAX31730_REG_OFFSET_ENABLE);
-+	if (status < 0)
-+		return status;
-+	data->offset_enable = status;
-+
-+	status = i2c_smbus_read_byte_data(client, MAX31730_REG_CONF);
-+	if (status < 0)
-+		return status;
-+	data->orig_conf = status;
-+	data->current_conf = status;
-+
-+	err = max31730_write_config(data,
-+				    data->channel_enable ? 0 : MAX31730_STOP,
-+				    data->channel_enable ? MAX31730_STOP : 0);
-+	if (err)
-+		return err;
-+
-+	dev_set_drvdata(dev, data);
-+
-+	err = devm_add_action_or_reset(dev, max31730_remove, data);
-+	if (err)
-+		return err;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-+							 data,
-+							 &max31730_chip_info,
-+							 NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct i2c_device_id max31730_ids[] = {
-+	{ "max31730", 0, },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max31730_ids);
-+
-+static const struct of_device_id __maybe_unused max31730_of_match[] = {
-+	{
-+		.compatible = "maxim,max31730",
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, max31730_of_match);
-+
-+static bool max31730_check_reg_temp(struct i2c_client *client,
-+				    int reg)
-+{
-+	int regval;
-+
-+	regval = i2c_smbus_read_byte_data(client, reg + 1);
-+	return regval < 0 || (regval & 0x0f);
-+}
-+
-+/* Return 0 if detection is successful, -ENODEV otherwise */
-+static int max31730_detect(struct i2c_client *client,
-+			   struct i2c_board_info *info)
-+{
-+	struct i2c_adapter *adapter = client->adapter;
-+	int regval;
-+	int i;
-+
-+	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
-+				     I2C_FUNC_SMBUS_WORD_DATA))
-+		return -ENODEV;
-+
-+	regval = i2c_smbus_read_byte_data(client, MAX31730_REG_MFG_ID);
-+	if (regval != MAX31730_MFG_ID)
-+		return -ENODEV;
-+	regval = i2c_smbus_read_byte_data(client, MAX31730_REG_MFG_REV);
-+	if (regval != MAX31730_MFG_REV)
-+		return -ENODEV;
-+
-+	/* lower 4 bit of temperature and limit registers must be 0 */
-+	if (max31730_check_reg_temp(client, MAX31730_REG_TEMP_MIN))
-+		return -ENODEV;
-+
-+	for (i = 0; i < 4; i++) {
-+		if (max31730_check_reg_temp(client, MAX31730_REG_TEMP + i * 2))
-+			return -ENODEV;
-+		if (max31730_check_reg_temp(client,
-+					    MAX31730_REG_TEMP_MAX + i * 2))
-+			return -ENODEV;
++	if (satatemp_identify(st)) {
++		err = -ENODEV;
++		goto abort;
 +	}
 +
-+	strlcpy(info->type, "max31730", I2C_NAME_SIZE);
++	st->hwdev = hwmon_device_register_with_info(dev->parent, "satatemp",
++						    st, &satatemp_chip_info,
++						    NULL);
++	if (IS_ERR(st->hwdev)) {
++		err = PTR_ERR(st->hwdev);
++		goto abort;
++	}
 +
++	list_add(&st->list, &satatemp_devlist);
 +	return 0;
++
++abort:
++	kfree(st);
++	return err;
 +}
 +
-+static int __maybe_unused max31730_suspend(struct device *dev)
++static void satatemp_remove(struct device *dev, struct class_interface *intf)
 +{
-+	struct max31730_data *data = dev_get_drvdata(dev);
++	struct satatemp_data *st, *tmp;
 +
-+	return max31730_write_config(data, MAX31730_STOP, 0);
++	list_for_each_entry_safe(st, tmp, &satatemp_devlist, list) {
++		if (st->dev == dev) {
++			list_del(&st->list);
++			hwmon_device_unregister(st->hwdev);
++			kfree(st);
++			break;
++		}
++	}
 +}
 +
-+static int __maybe_unused max31730_resume(struct device *dev)
-+{
-+	struct max31730_data *data = dev_get_drvdata(dev);
-+
-+	return max31730_write_config(data, 0, MAX31730_STOP);
-+}
-+
-+static SIMPLE_DEV_PM_OPS(max31730_pm_ops, max31730_suspend, max31730_resume);
-+
-+static struct i2c_driver max31730_driver = {
-+	.class		= I2C_CLASS_HWMON,
-+	.driver = {
-+		.name	= "max31730",
-+		.of_match_table = of_match_ptr(max31730_of_match),
-+		.pm	= &max31730_pm_ops,
-+	},
-+	.probe		= max31730_probe,
-+	.id_table	= max31730_ids,
-+	.detect		= max31730_detect,
-+	.address_list	= normal_i2c,
++static struct class_interface satatemp_interface = {
++	.add_dev = satatemp_add,
++	.remove_dev = satatemp_remove,
 +};
 +
-+module_i2c_driver(max31730_driver);
++static int __init satatemp_init(void)
++{
++	return scsi_register_interface(&satatemp_interface);
++}
 +
-+MODULE_AUTHOR("Guenter Roeck <linux@roeck-us.net>");
-+MODULE_DESCRIPTION("MAX31730 driver");
++static void __exit satatemp_exit(void)
++{
++	scsi_unregister_interface(&satatemp_interface);
++}
++
++module_init(satatemp_init);
++module_exit(satatemp_exit);
++
++MODULE_AUTHOR("Guenter Roeck <linus@roeck-us.net>");
++MODULE_DESCRIPTION("ATA temperature monitor");
 +MODULE_LICENSE("GPL");
 -- 
 2.17.1
