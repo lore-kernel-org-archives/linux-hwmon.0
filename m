@@ -2,128 +2,150 @@ Return-Path: <SRS0=xWqN=Z7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A134C43603
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 06:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B749C00454
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 17:08:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D76822071E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 06:00:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KuvapgAF"
+	by mail.kernel.org (Postfix) with ESMTP id 4C6F620828
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Dec 2019 17:08:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbfLIGAe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Dec 2019 01:00:34 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39640 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbfLIGAe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Dec 2019 01:00:34 -0500
-Received: by mail-pl1-f194.google.com with SMTP id o9so5321536plk.6;
-        Sun, 08 Dec 2019 22:00:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nhb5iYSKarpzYLBlnwTSbrMg2sj4+ZyMpkyTdMyfngA=;
-        b=KuvapgAFtrWic560Lj82rvz2Y68f8uUuOoJqyquWJGcFKs4rW0HDc6Wz7l/s3VT3tQ
-         Ig4sY6x26kFVEsosgohf5d4njPDHmLerGHLdJrCvRRO8/ziqkggrI5XZxOXahiBW38Zj
-         rvv65YuqvzNvPl/nVot8+8PtO/11UL3ArGalFLY4oFAnD/jbWGQESUxhGmFrW1kCFK/L
-         TMGh5sHS8V/NKC3dcbiY4+mn4uINqxsH4aM7vUc/fxm2bUUvGWKFDPocnz1H3fdgVC71
-         QrVSz1+1uVv6KVDfLf/4gpg0yvGhK3EG72k/egpBXRfAcERNWKU+spbtHsR04V9YJn8r
-         OOmA==
+        id S1726619AbfLIRIR convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Dec 2019 12:08:17 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42250 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726522AbfLIRIQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Dec 2019 12:08:16 -0500
+Received: by mail-pg1-f195.google.com with SMTP id s64so709651pgb.9;
+        Mon, 09 Dec 2019 09:08:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nhb5iYSKarpzYLBlnwTSbrMg2sj4+ZyMpkyTdMyfngA=;
-        b=XSyVVRfZBdfj2AQLvahCdUf7jhbWNAg3qnSBj//dxSr03U1CFap0IIbBWhwuTwsgnE
-         c5nMNcwd7XqR3fCAC7WyTFTgUasOwKZ/ylwTZ2esz1v7HGcYpo3bdl1fFF8i4UNHwZVx
-         7lmeX6xObJN+Ra/QTMaACuzdRkBKPGQOXKJJjFuELiNXunhg+WF0uJ6GStmc3/VfWPiU
-         GtQRDr5whq+VBNarMQ3nhWEpC4YrxM6xuplTH+pT0KvWYQXZu0DNNU/1rC4FkSz4RkgK
-         3IeUCiuEe262VJhNhHXFITKUztpkFXOFRSQLV/FdEgUfVTv4jgwbCvPkrX6t70b4GTTx
-         YUFg==
-X-Gm-Message-State: APjAAAWQU+zmOSEW/iuRn7YL7EWgs41mtKTj/s9S3pEfUofNn4pyQqMa
-        4yTUuQ63+GgGOFzsqRbwarU=
-X-Google-Smtp-Source: APXvYqwZaJmwlO80tNnx2ffsisZwtZsQB/t/XqrR/oUKqfUW4e6AsIWaHBQmae/9M1fzSWQykM7boA==
-X-Received: by 2002:a17:902:8309:: with SMTP id bd9mr27125627plb.113.1575871233472;
-        Sun, 08 Dec 2019 22:00:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z10sm2324777pfa.184.2019.12.08.22.00.31
+        bh=pPjzbV+XoAtiNq1c5fnVV7Us4zipQoGWT7Qul1cJyng=;
+        b=ffaJjSqJSiRVtvv352eTQohYdXE+ft52Bfkez4Tjv8dNz5/VsuxocjJwBBZsMDnwp6
+         FffcmkHM4+TGDNtyE5MwkNi0KZ9Q5qeLhrAzbi4dKS0ZBUMrUQkJbANFoz++ikq7J18G
+         t69eSJsqtWvM9rtR/Auviw14ClMgUNgrdl3KQ5U3DAV5qgjnhFBZf2ZTKFk8im97Trj0
+         Szc3ztW4nxbzhXROF4ibtGSqUcjjlZoBIPEy29mfWBISUYlRa9XLFp+CevQua6xw4jvL
+         1N2b0BueTTVBpe82Yoms+UVtJCklOEsGdB+7Hn68AQLvId/iQzFwl2n75Kn4p+gTFbpk
+         0MAQ==
+X-Gm-Message-State: APjAAAXpZ8ENbsXXspHEb/tkWgVGjmotOD2GtvNPGaHYHUUZ+aYSKThK
+        EE07nzXskbWPyjRHmu7z5jQ=
+X-Google-Smtp-Source: APXvYqxLZEJRTdaKTvd+1D3aFVyOayeVhezMkQ+DuhC85xm2Fqahw6g5npYOtg5jcKeoWnsdtMVLpA==
+X-Received: by 2002:a65:6914:: with SMTP id s20mr19419027pgq.44.1575911295347;
+        Mon, 09 Dec 2019 09:08:15 -0800 (PST)
+Received: from [172.31.133.107] ([216.9.110.1])
+        by smtp.gmail.com with ESMTPSA id g191sm43969pfb.19.2019.12.09.09.08.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Dec 2019 22:00:32 -0800 (PST)
+        Mon, 09 Dec 2019 09:08:14 -0800 (PST)
 Subject: Re: [PATCH 1/1] hwmon: Driver for temperature sensors on SATA drives
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-hwmon@vger.kernel.org
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
         linux-ide@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>
 References: <20191209052119.32072-1-linux@roeck-us.net>
  <20191209052119.32072-2-linux@roeck-us.net>
- <dc914b45-961c-a1d1-bc25-f6922004f6f4@infradead.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <2b77af4c-7a49-2f50-e209-2fe27bc0ed48@roeck-us.net>
-Date:   Sun, 8 Dec 2019 22:00:30 -0800
+From:   Bart Van Assche <bvanassche@acm.org>
+X-Pep-Version: 2.0
+Message-ID: <c87ca545-d8f1-bf1e-2474-b98a6eb60422@acm.org>
+Date:   Mon, 9 Dec 2019 09:08:13 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <dc914b45-961c-a1d1-bc25-f6922004f6f4@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20191209052119.32072-2-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/8/19 9:28 PM, Randy Dunlap wrote:
-> Hi,
-> 
-> On 12/8/19 9:21 PM, Guenter Roeck wrote:
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 13a6b4afb4b3..4c63eb7ba96a 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1346,6 +1346,16 @@ config SENSORS_RASPBERRYPI_HWMON
->>   	  This driver can also be built as a module. If so, the module
->>   	  will be called raspberrypi-hwmon.
->>   
->> +config SENSORS_SATATEMP
->> +	tristate "SATA hard disk drives with temperature sensors"
->> +	depends on SCSI && ATA
->> +	help
->> +	  If you say yes you get support for the temperature sensor on
->> +	  SATA hard disk drives.
->> +
->> +	  This driver can also be built as a module. If so, the module
->> +	  will be called smarttemp.
-> 
-> Makefile seems to say satatemp.
-> 
+On 12/8/19 9:21 PM, Guenter Roeck wrote:
+> +static int satatemp_scsi_command(struct satatemp_data *st,
+> +				 u8 ata_command, u8 feature,
+> +				 u8 lba_low, u8 lba_mid, u8 lba_high)
+> +{
+> +	static u8 scsi_cmd[MAX_COMMAND_SIZE];
+> +	int data_dir;
 
-Oops. Thanks for the note. Will fix.
+Declaring scsi_cmd[] static makes an otherwise thread-safe function
+thread-unsafe. Has it been considered to allocate scsi_cmd[] on the stack?
 
-Guenter
+> +	/*
+> +	 * Inquiry data sanity checks (per SAT-5):
+> +	 * - peripheral qualifier must be 0
+> +	 * - peripheral device type must be 0x0 (Direct access block device)
+> +	 * - SCSI Vendor ID is "ATA     "
+> +	 */
+> +	if (sdev->inquiry[0] ||
+> +	    strncmp(&sdev->inquiry[8], "ATA     ", 8))
+> +		return -ENODEV;
 
->> +
->>   config SENSORS_SHT15
->>   	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
->>   	depends on GPIOLIB || COMPILE_TEST
->> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->> index 40c036ea45e6..fe55b8f76af9 100644
->> --- a/drivers/hwmon/Makefile
->> +++ b/drivers/hwmon/Makefile
->> @@ -148,6 +148,7 @@ obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
->>   obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->>   obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
->>   obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
->> +obj-$(CONFIG_SENSORS_SATATEMP)	+= satatemp.o
->>   obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
->>   obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
->>   obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
-> 
-> 
+It's possible that we will need a quirk mechanism to disable temperature
+monitoring for certain ATA devices. Has it been considered to make
+scsi_add_lun() set a flag that indicates whether or not temperatures
+should be monitored and to check that flag from inside this function?
+I'm asking this because an identical strncmp() check exists in
+scsi_add_lun().
+
+> +static int satatemp_read(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long *val)
+> +{
+> +	struct satatemp_data *st = dev_get_drvdata(dev);
+
+Which device does 'dev' represent? What guarantees that the drvdata
+won't be used for another purpose, e.g. by the SCSI core?
+
+> +/*
+> + * The device argument points to sdev->sdev_dev. Its parent is
+> + * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
+> + */
+> +static int satatemp_add(struct device *dev, struct class_interface *intf)
+> +{
+> +	struct scsi_device *sdev = to_scsi_device(dev->parent);
+> +	struct satatemp_data *st;
+> +	int err;
+> +
+> +	st = kzalloc(sizeof(*st), GFP_KERNEL);
+> +	if (!st)
+> +		return -ENOMEM;
+> +
+> +	st->sdev = sdev;
+> +	st->dev = dev;
+> +	mutex_init(&st->lock);
+> +
+> +	if (satatemp_identify(st)) {
+> +		err = -ENODEV;
+> +		goto abort;
+> +	}
+> +
+> +	st->hwdev = hwmon_device_register_with_info(dev->parent, "satatemp",
+> +						    st, &satatemp_chip_info,
+> +						    NULL);
+> +	if (IS_ERR(st->hwdev)) {
+> +		err = PTR_ERR(st->hwdev);
+> +		goto abort;
+> +	}
+> +
+> +	list_add(&st->list, &satatemp_devlist);
+> +	return 0;
+> +
+> +abort:
+> +	kfree(st);
+> +	return err;
+> +}
+
+How much does synchronously submitting SCSI commands from inside the
+device probing call back slow down SCSI device discovery? What is the
+impact of this code on systems with a large number of ATA devices?
+
+Thanks,
+
+Bart.
 
