@@ -2,222 +2,276 @@ Return-Path: <SRS0=nqTs=2B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0646EC43603
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 05:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C48DC43603
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 11:40:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFA962077B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 05:57:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EDD32073D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 11:40:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oMpWaVYh"
+	dkim=pass (1024-bit key) header.d=potuz.net header.i=@potuz.net header.b="bdEMTWbp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726357AbfLKF52 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Dec 2019 00:57:28 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:33679 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfLKF52 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Dec 2019 00:57:28 -0500
-Received: by mail-pj1-f67.google.com with SMTP id r67so8492596pjb.0;
-        Tue, 10 Dec 2019 21:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=V1z4CnyL3vaFU5di2fW8JaESd5vrN6gXo8REKlU0IHE=;
-        b=oMpWaVYhbS6/S2DwY4jMKB/K77Bxlv7L5muzU6qOD17UaI96otfmXj30fJMHI9F1AM
-         bGkhaW7Cza6EclGAR4CQhRASPCpegLrjD/lTTCBiq840f6Gi3ryj3b9UxyGv/897Vnqm
-         8BD/4EpT4zWqX+fT5lDJTXqn/mOyxWOI1VjZno2O75V7qk9rFyhE6bdxWaszpj0Iwd1v
-         cZZ2LmlirJfqSRrHUe39tqhJi713+oK/2WxOHsdwWEmqPo8Dxiwb3n0tuYFrcq0OwJjw
-         BHV3Kkhs6zM8PMcurIOjDdMsFX8dtwHhUA7j7BRBAxVn6hi5APZHpMCRO6miTbNWUGIP
-         ajxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=V1z4CnyL3vaFU5di2fW8JaESd5vrN6gXo8REKlU0IHE=;
-        b=rZ0eAP4O5hJ2ELb02/Xjet1vO+tz1yD/hSXwMoT2nAxe+0xfew9zIMwTVL58NhVDdF
-         jtITtMCMfvC8A1DQX2RV2H8cyRNvjHAIbAbFPIFYa+xKUev5saZAp7+QsSJJm9KlnV01
-         1F9kERuBhJjqTixeOrs9L7kffYot+/bP+YFwqtxPd8EdADLe2jPNS+y4K/DA2HOi2aG+
-         2v0eoZMM9nA/nKtG2Iid0CUkReLM4kn1Uzoi8prZ0m0hU7zNoMYIRkOFnWUhxIyQDbf7
-         vC03Z6D7HdJ+UiSVfrJhPshJG7cLYE8GZncJ/xczWm/TPbLVg7Ujla0hFkHK2UK0aRdX
-         hLzg==
-X-Gm-Message-State: APjAAAVIgqVxHSlgFfO/q2/FkgaEB34B/Nujt3htd62DT0I3obJ0GryL
-        qQFam7J327JLqhY7jJcwvj0DhmSN
-X-Google-Smtp-Source: APXvYqy0xa3OZvG6JsEDVhji1MGlsG5ZsNmSjOva8TPWeHXDmIGQKnHq3z+biQHL71vKoS3YHBEYFg==
-X-Received: by 2002:a17:902:a404:: with SMTP id p4mr1463174plq.266.1576043846703;
-        Tue, 10 Dec 2019 21:57:26 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7sm912914pjk.22.2019.12.10.21.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2019 21:57:25 -0800 (PST)
-Subject: Re: [PATCH 0/1] Summary: hwmon driver for temperature sensors on SATA
- drives
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org
-References: <20191209052119.32072-1-linux@roeck-us.net>
- <yq15zinmrmj.fsf@oracle.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <67b75394-801d-ce91-55f2-f0c0db9cfffc@roeck-us.net>
-Date:   Tue, 10 Dec 2019 21:57:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1727888AbfLKLk2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Dec 2019 06:40:28 -0500
+Received: from mail.potuz.net ([201.17.25.234]:38890 "EHLO mail.potuz.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727365AbfLKLk1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Dec 2019 06:40:27 -0500
+X-Greylist: delayed 331 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 06:40:26 EST
+Received: from vertex (unknown [147.65.4.161])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.potuz.net (Postfix) with ESMTPSA id 70B772C0311
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Dec 2019 08:34:52 -0300 (-03)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=potuz.net; s=whiskey;
+        t=1576064092; bh=P3FzzPnUNNdSGJ08h3UCVw3abd2p5ksPoQERk5i6hDo=;
+        h=Date:From:To:Subject:References:In-Reply-To;
+        b=bdEMTWbpY8XcpQG4jwDMBd7AxI8iHPJ22Im1BDZf3+Z03E8N16Vedp5snZBTyiRqo
+         y9352kVIZ1BijfaetZ8iIQMg0oxZOi9sooT0el6YAwNaPjd3SlwQrzKdZ+O83aHjIT
+         jqxsQad2xZc/td2tFIXp83NycaO/dqS+9Mn+w07I=
+Date:   Wed, 11 Dec 2019 08:34:46 -0300
+From:   Reimundo Heluani <heluani@potuz.net>
+To:     linux-hwmon@vger.kernel.org
+Subject: Re: [RFC] hwmon: add support for IT8686E to it87.c
+Message-ID: <20191211113446.GA1084863@vertex>
+References: <CALUKdZ_-pjXPouBYxdm_LriN04Jp-vR5+7SBMkCK1reV2Lq_LA@mail.gmail.com>
+ <4e6fda8d-761a-741a-d4af-5dc8ea5fe072@roeck-us.net>
+ <CALUKdZ9pDpMNeKY4wb21gxF7Dqdp=9CJLTEmeRNtDP1N1Pw_9A@mail.gmail.com>
+ <e4b5b93e-65ee-dd23-93a6-1737ede87ef4@roeck-us.net>
+ <CALUKdZ9CZWf6KVyPMhsQGLvVN_Ec8JRmVddf=aZw0JOv-5bixQ@mail.gmail.com>
+ <20191202175224.GC29323@roeck-us.net>
+ <CALUKdZ8GeTiSDieFnCeK_wTr52FoUcfZUYkco7wBL-2rO+Fe1g@mail.gmail.com>
+ <20191202230953.GA9421@roeck-us.net>
+ <CALUKdZ_fU8r6AjKU-RTLS9a+iXDsYZrp6yYN+texpo12JeFt6w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <yq15zinmrmj.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Disposition: inline
+In-Reply-To: <CALUKdZ_fU8r6AjKU-RTLS9a+iXDsYZrp6yYN+texpo12JeFt6w@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Martin,
 
-On 12/10/19 8:08 PM, Martin K. Petersen wrote:
-> 
-> Hi Guenter,
-> 
->> The most recent attempt was [1] by Linus Walleij. It went through a total
->> of seven iterations. At the end, it was rejected for a number of reasons;
->> see the provided link for details. This implementation resides in the
->> SCSI core. It originally resided in libata but was moved to SCSI per
->> maintainer request, where it was ultimately rejected.
-> 
-> While I am sure I come across as a curmudgeon, regressions is a major
-> concern for me. That, and making sure we pick the right architecture. I
-> thought we were making good progress in that department when Linus
-> abandoned the effort.
-> 
+--xHFwDpU9dbj6ez1V
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If anything, I am surprised that he did not give up earlier. Personally
-I did not see a path to success after v7 of the patch set was rejected.
+On Dec 02, Corey Ashford wrote:
+>On Mon, Dec 2, 2019 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On Mon, Dec 02, 2019 at 02:33:27PM -0800, Corey Ashford wrote:
+>> > On Mon, Dec 2, 2019 at 9:52 AM Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+>> > >
+>> > > On Mon, Dec 02, 2019 at 09:07:10AM -0800, Corey Ashford wrote:
+>> > > > On Mon, Dec 2, 2019 at 6:32 AM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>> > > > >
+>> > > > > On 11/29/19 8:48 PM, Corey Ashford wrote:
+>> > > > > > On Fri, Nov 29, 2019 at 8:17 PM Guenter Roeck <linux@roeck-us.=
+net> wrote:
+>> > > > > >>
+>> > > > > >> On 11/29/19 6:11 PM, Corey Ashford wrote:
+>> > > > > >>> Hello folks.  I am running a newly-built system that uses an=
+ IT8686E
+>> > > > > >>> chip.  Currently, the latest kernel from kernel.org doesn't =
+have code
+>> > > > > >>> in drivers/hwmon/it87.c to support it, however, I found some=
+ source on
+>> > > > > >>> the net which has added support for quite a few more variant=
+s of that
+>> > > > > >>> brand of Super I/O chip:
+>> > > > > >>> https://github.com/xdarklight/hwmon-it87/blob/master/it87.c
+>> > > > > >>> I tried it out by building the module and "insmod"ing it int=
+o my
+>> > > > > >>> running system, and it appears to work fine.
+>> > > > > >>>
+>> > > > > >>> It seems the original developer had a difficult time pushing=
+ the
+>> > > > > >>> changes upstream, so he abandoned the project.
+>> > > > > >>>
+>> > > > > >>
+>> > > > > >> I abandoned the project (and dropped the driver from my githu=
+b page)
+>> > > > > >> because people started _demanding_ that I push the driver fro=
+m github
+>> > > > > >> upstream, without offering any assistance whatsoever.
+>> > > > > >>
+>> > > > > >>> My thought was that I could add support for just the IT8686E=
+ chip as a
+>> > > > > >>> single patch, and since I can test it locally I would have a=
+ better
+>> > > > > >>> chance of getting the patch accepted.  The changes to the so=
+urce at
+>> > > > > >>> the above git tree have quite a number of changes that aren'=
+t really
+>> > > > > >>> necessary for supporting the IT8686E chip, so I think the pa=
+tch could
+>> > > > > >>> be pretty small, but will still credit the original author.
+>> > > > > >>>
+>> > > > > >>
+>> > > > > >> IT8686 is a multi-page chip, meaning you'll need the entire p=
+rotection
+>> > > > > >> against multi-page accesses by the EC in the system. It also =
+supports
+>> > > > > >> the new temperature map. I don't think it is that simple.
+>> > > > > >>
+>> > > > > >> Guenter
+>> > > > > >
+>> > > > > > Thanks for the quick reply!
+>> > > > > >
+>> > > > > > When you said they didn't offer any assistance, do you mean as=
+sistance
+>> > > > > > with testing?  If so, how about if the support is trimmed out =
+for the
+>> > > > > > newly-added chips that have no available test system volunteer=
+s, and
+>> > > > > > then slowly add those back as people make test systems and tes=
+ting
+>> > > > > > time available.  Should I presume that you have access to one =
+or more
+>> > > > > > systems with the added ITnnnn chips?  I volunteer my system for
+>> > > > > > testing the IT8686E support.
+>> > > > > >
+>> > > > >
+>> > > > > Testing and, more importantly, detailed code review. No one but =
+me has
+>> > > > > seriously (if at all) scrutinized that code for years. Just pick=
+ing it
+>> > > > > into mainline and hope that it won't cause trouble is, by itself=
+, troublesome.
+>> > > > >
+>> > > > > On top of that, the multi-page access problems are well known by=
+ board vendors
+>> > > > > using this chip as well as by the chip vendor. Yet, neither boar=
+d vendors nor
+>> > > > > ITE talk with kernel developers. The workarounds I implemented a=
+re based on
+>> > > > > information I got from one of the Windows tools developers, and =
+are not
+>> > > > > validated by any board vendor nor by ITE. Every board vendor I t=
+ried to contact
+>> > > > > tells me that they don't support Linux, and I never got any repl=
+y from ITE.
+>> > > > > I do know that the code causes problems on early Gigabyte board =
+using the 8686
+>> > > > > and similar multi-page chips. Just accessing the chip from Linux=
+ may cause trouble
+>> > > > > because the built-in EC tries to access it as well in parallel (=
+I suspect this
+>> > > > > causes the board to reset because that access is turned off for =
+a while by
+>> > > > > the driver). This is all fine for an out-of-tree driver, but it =
+would be
+>> > > > > unacceptable in the upstream kernel.
+>> > > > >
+>> > > > > In summary, you'll not only need to port the code, you'll also n=
+eed to establish
+>> > > > > contact to ITE and/or to board vendors to ensure that the code w=
+orks as intended
+>> > > > > with the EC on the affected boards.
+>> > > > >
+>> > > > > Guenter
+>> > > >
+>> > > > Ah, thank you for your detailed explanation.  How you did as much =
+as
+>> > > > you did is beyond me.  ITE's web site seems to lack any usable
+>> > > > information, and doesn't even list the IT8686 as one of their chip=
+s.
+>> > > > Other "supported" chips don't appear to have any documentation eas=
+ily
+>> > > > available, other than a very generic-y description of the chip.  Q=
+uite
+>> > > > an uphill battle for marginal gain.
+>> > > >
+>> > > Exactly. The only real recommendation I have at this time is for any=
+one
+>> > > running Linux to stay away from boards with ITE chips.
+>> > >
+>> > > > Is it possible there's a way to access the sensors by using the EC=
+ as
+>> > > > a proxy, rather than trying to gain direct and exclusive access to=
+ the
+>> > > > sensors?  Just a thought.  I have no idea of the architecture of t=
+hese
+>> > > > things.  Your mention of EC was the first I had heard of it :/
+>> > > >
+>> > >
+>> > > Not that I know of, sorry. The EC is actually running inside the Sup=
+er-IO
+>> > > chip(s). I have no idea if and how it is accessible from Linux. Eith=
+er case,
+>> > > that would be even worse, since EC programming is board vendor speci=
+fic.
+>> > >
+>> > > Guenter
+>> >
+>> > Just for my clarification, it seems that what you're implying is that
+>> > the embedded EC still uses the SMbus to access those paged registers,
+>> > and so needs to use the same mechanism that an external device would
+>> > use.  If that's true, ugh.  If it has its own private access to the
+>> > entire register set in one "address space", it could bypass the paging
+>> > mechanism.
+>> >
+>>
+>> There are typically two Super-IO chips on those boards. For example,
+>> Gigabyte B450 AORUS M has an IT8792 and an IT8686. The EC on one chip
+>> accesses the other chip through the I2C interface. Or at least that is
+>> what I think is happening... hard to be sure without board/chip vendor
+>> support.
+>>
+I just got a new system with precisely that board B450 and after running se=
+nsors-detect I was lead to this thread. Is it safe to try your out-of-tree =
+module on this board of will it simply not work? I can provide extensive te=
+sting for what it's worth.=20
 
-I also no longer believe that temperature monitoring of SATA drives
-should be implemented within the ATA or SCSI subsystem. I came to the
-conclusion that it is much better suited as separate hardware monitoring
-driver. As separate driver, its instantiation is in full control of
-the user. If it causes trouble (or, as mentioned separately, if it adds
-too much instantiation time, or if it is considered to be too large),
-it can simply be disabled in a given system by blacklisting it (or,
-rather, by not explicitly loading it in the first place). With that,
-there is no real compatibility concern. If and when drives are detected
-which report bad information, such drives can be added to a blacklist
-without impact on the core SCSI or ATA code. Until that happens, not
-loading the driver solves the problem on any affected system.
+R.=20
 
->> The feedback on this approach suggests to use the SCSI Temperature log
->> page [0x0d] as means to access drive temperature information. It is
->> unknown if this is implemented in any real SCSI drive.
-> 
-> Almost every SCSI drive has it.
-> 
-Good to hear.
+>>
+>> Some of the recent chips solve the problem by memory mapping the entire
+>> register space (unpaged) into memory. This way the Linux driver (and the
+>> Windows driver) can access chip registers directly without having
+>> to select a page. That isn't supported on the 8686, unfortunately.
+>
+>Ah, that makes sense now.  So I guess what's worse is that now you
+>have a combination of two chips, which are not necessarily always
+>paired with each other (e.g. IT8792->IT8686 vs. IT8795 [made up
+>#]->IT8686). I give up :)
+>
+>At least the out-of-tree driver source has been working nicely for my
+>machine for a couple of weeks, with no observed glitches, resets, etc.
+>I'm happy.
+>
+>Thanks for the discussion of this little backwater area of the kernel :)
+>
+>- Corey
 
->> The feedback also suggests to obtain temperature from ATA drives,
->> convert it into the SCSI temperature log page in libata-scsi, and to
->> use that information in a hardware monitoring driver. The format and
->> method to do this is documented in [3]. This is not currently
->> implemented in the Linux kernel.
-> 
-> Correct, but I have no qualms over exporting the SCSI temperature log
-> page. The devices that export that page are generally well-behaved.
-> 
-Also good to hear. However, for my part, I have no means to test such
-code since I don't have any SCSI drives.
+--xHFwDpU9dbj6ez1V
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> My concerns are wrt. identifying whether SMART data is available for
-> USB/UAS. I am not too worried about ATA and "real" SCSI (ignoring RAID
-> controllers that hide the real drives in various ways).
-> 
+-----BEGIN PGP SIGNATURE-----
 
-The one USB/UAS connected SATA drive I have (a WD passport) reports
-itself as "WD      ", not as "ATA     ". I would expect other drives
-to do the same. That drive reports (via smartctl) that it supports
-both SCT and SMART data. It doesn't report temperatures through SCT,
-but it does report the drive temperature with SMART attribute 194.
-I did not attempt to add support for this and similar drives since
-I don't know if I can reliably detect it. The potential benefit
-compared to the risk seemed too low (we would be getting into
-possible regression space) for me to try. Such code (effectively
-it boils down to relaxing SATA drive detection) can always be added
-at a later time.
+iQIzBAABCAAdFiEE2Gqs1UGJjuNslA8FqoL39HIpaJkFAl3w1FYACgkQqoL39HIp
+aJkDDg/+IQGvcAVDpMetY4kIq5TPNgy/O4lh4/l8Loa+IcIU4dXHHsWap1ykBQbj
+id5bN0M9+oeb+YwRPCyxm+HfveicrcwgE53LqhADkTTKxUP8F+Lgyc+hyMNkSenk
+/uCD6mycXTwhn8hpmH8pZa3zeG/dQRHghnxtR8Vc5vRlRMp+oUGEWSm7dGYnbfm8
+0DA2RuXg8oOgvyjpBa92mwrmgxC7nQOEuAsTNtpPLcEC2qsVP4iU82qRZ0iilVQY
+yszBaO0Q3nfU/fk8RAIyugRn6I5VclKlu2PLODQmPUO2A1J4O+B73NUddqaj1JGn
+2UaYb93lDoP4KtvM17NEpRGjY0BycMPjr6Xao9KHM/mF1LmYIYhWO1qx0MyfMERK
+J0/KdR48ZGUnfeWmYbpld8McTmMGjwDukuuCEiefo05WdM1ttIcTO7qyi9kisO1U
+kTJTLZYs3b+141B2PuB/MoAWvLc757rq97lwHLVpJ/B53Qn0pVtdwmzSCqI4om8M
+zwcrdl7A0QzQQmibpmPQjSCsDXKUF0XgiW5gaoG/BYHEegaTiEAnmBTcG04fwVOU
+O0I1qEme0ieqlNata67O/vxRmMC49AfbsLEOLIRxlDzzmL80Pyoh75/voKE+B5ZT
+G3DeAIjSUXU6XPlncLvMJpDR9c8eccIY0CWRN9yUeTn8w7bRPYw=
+=A+bk
+-----END PGP SIGNATURE-----
 
-> I am not sure why the SCSI temperature log page parsing would be
-> complex. I will have to go check smartmontools to see what that is all
-
-Not as much the parsing, but detection if the information is there.
-
-> about. The spec is as simple as can be.
-> 
-
-Possibly. I personally also find it quite vague. It is definitely not
-something I would want to try to implement without ability to see how
-the data actually looks like as reported by a real drive, and without
-ability to test the code.
-
-> Anyway. I think the overall approach wrt. SCT and falling back to
-> well-known SMART fields is reasonably sane and fine for libata. But I
-> don't understand the pushback wrt. using the SCSI temperature log page
-> as a conduit. I think it would be fine if this worked out of the box for
-
-This is not a pushback per se. It is simply a matter of ability (or lack
-of it) to test any such code.
-
-Regarding "conduit", I assume you mean converting SATA/SCT information
-into SCST temperature pages and reporting temperature purely based
-on those. I personally think that this would be the wrong approach:
-It would effectively require code in the ATA core which is not really
-needed there. This would bloat the ATA code with no real advantage.
-In my opinion, available temperature information should be interpreted
-where it is needed, and only there, not in several places. I see that
-as much less risky and error prone than spreading the code to multiple
-places.
-
-> both SCSI and ATA drives.
-> 
-The elegance of my approach is that adding support for reading temperatures
-from SCSI drives (or, for that matter, USB/UAS drives) would be
-straightforward. All one would need to do is to implement the necessary
-detection code as well as a function to actually read the information
-from the drive. This can be done at any time, and, again, it should be
-done by someone with the ability to test the code.
-
-> The elephant in the room remains USB. And coming up with a way we can
-> reliably detect whether it is safe to start poking at the device to
-> discover if SMART is provided. If we eventually want to pursue USB,  > think your heuristic stuff needs to be a library that can be leveraged
-> by both libata and USB. But that doesn't have to be part of the initial
-> effort.
-> 
-> And finally, my concerns wrt. reacting to bad sensors remain. Not too
-> familiar with hwmon, but I would still like any actions based on
-> reported temperatures to be under user control and not the kernel.
-> 
-All sensors can report bad information, and quite often they do.
-This is actually quite normal in any given system. That doesn't mean
-that the available (connected) sensors should be ignored.
-
-Also, when it comes to actions, the one subsystem performing any actions
-in the kernel based on temperature sensor information is the thermal
-subsystem, and that is on purpose implemented in the kernel.
-The hardware monitoring subsystem, on its own, is purely passive
-and only reports sensor information; it does not act on it. Any action
-will either be done by userspace (eg with fancontrol) or by the thermal
-subsystem.
-
-Overall, I understand the desire to also support temperature reporting
-for SCSI and USB/UAS drives. As hardware monitoring maintainer, I'd
-be happy to accept patches implementing that support. However, I don't
-see this as immediately necessary, and I would want to have some
-reassurance that such code is well tested and doesn't cause any
-regressions (especially since concerns about possible regressions were
-mentioned several times in the context of the previous submissions).
-
-Thanks,
-Guenter
+--xHFwDpU9dbj6ez1V--
