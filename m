@@ -2,34 +2,39 @@ Return-Path: <SRS0=nqTs=2B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF78C2D0CB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 19:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D9EFC3F68F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 20:28:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2371F24653
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 19:47:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D1B82077B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 20:28:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728821AbfLKTqn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Dec 2019 14:46:43 -0500
-Received: from mga06.intel.com ([134.134.136.31]:17648 "EHLO mga06.intel.com"
+        id S1726522AbfLKU23 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Dec 2019 15:28:29 -0500
+Received: from mga11.intel.com ([192.55.52.93]:60169 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726986AbfLKTqm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Dec 2019 14:46:42 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1726242AbfLKU23 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Dec 2019 15:28:29 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 11:46:41 -0800
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 12:28:29 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,303,1571727600"; 
-   d="scan'208";a="216033863"
-Received: from yoojae-mobl1.amr.corp.intel.com (HELO ubuntu.jf.intel.com) ([10.7.153.143])
-  by orsmga003.jf.intel.com with ESMTP; 11 Dec 2019 11:46:40 -0800
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+   d="scan'208";a="245423821"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Dec 2019 12:28:20 -0800
+Received: from andy by smile with local (Exim 4.93-RC7)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1if8ao-0005om-8s; Wed, 11 Dec 2019 22:28:18 +0200
+Date:   Wed, 11 Dec 2019 22:28:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lee Jones <lee.jones@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
@@ -61,483 +66,98 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Juergen Gross <jgross@suse.com>,
         Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v11 09/14] peci: npcm: add NPCM PECI driver
-Date:   Wed, 11 Dec 2019 11:46:19 -0800
-Message-Id: <20191211194624.2872-10-jae.hyun.yoo@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
+        openbmc@lists.ozlabs.org, Robin Murphy <robin.murphy@arm.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v11 06/14] peci: Add Aspeed PECI adapter driver
+Message-ID: <20191211202818.GD32742@smile.fi.intel.com>
 References: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
+ <20191211194624.2872-7-jae.hyun.yoo@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191211194624.2872-7-jae.hyun.yoo@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tomer Maimon <tmaimon77@gmail.com>
+On Wed, Dec 11, 2019 at 11:46:16AM -0800, Jae Hyun Yoo wrote:
+> This commit adds Aspeed PECI adapter driver for Aspeed
+> AST24xx/25xx/26xx SoCs.
 
-Add support for the Nuvoton NPCM BMC hardware to the Platform
-Environment Control Interface (PECI) subsystem.
+...
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
----
-Changes since v10:
-- Newly added in v11Split out peci-dev module from peci-core module.
+> +#define   ASPEED_PECI_CMD_IDLE_MASK		(ASPEED_PECI_CMD_STS_MASK | \
+> +						 ASPEED_PECI_CMD_PIN_MON)
 
- drivers/peci/busses/Kconfig     |  13 +
- drivers/peci/busses/Makefile    |   1 +
- drivers/peci/busses/peci-npcm.c | 407 ++++++++++++++++++++++++++++++++
- 3 files changed, 421 insertions(+)
- create mode 100644 drivers/peci/busses/peci-npcm.c
+Better looking when the value completely occupies second line without touching
+the first.
 
-diff --git a/drivers/peci/busses/Kconfig b/drivers/peci/busses/Kconfig
-index 2b2540221b36..bfacafb7a7ba 100644
---- a/drivers/peci/busses/Kconfig
-+++ b/drivers/peci/busses/Kconfig
-@@ -16,4 +16,17 @@ config PECI_ASPEED
- 	  This support is also available as a module. If so, the module
- 	  will be called peci-aspeed.
- 
-+config PECI_NPCM
-+	tristate "Nuvoton NPCM PECI support"
-+	select REGMAP_MMIO
-+	depends on OF
-+	depends on ARCH_NPCM || COMPILE_TEST
-+	depends on PECI
-+	help
-+	  Say Y here if you want support for the Platform Environment Control
-+	  Interface (PECI) bus adapter driver on the Nuvoton NPCM SoCs.
-+
-+	  This support is also available as a module. If so, the module
-+	  will be called peci-npcm.
-+
- endmenu
-diff --git a/drivers/peci/busses/Makefile b/drivers/peci/busses/Makefile
-index 69e31dfaca19..aa8ce3ae5947 100644
---- a/drivers/peci/busses/Makefile
-+++ b/drivers/peci/busses/Makefile
-@@ -4,3 +4,4 @@
- #
- 
- obj-$(CONFIG_PECI_ASPEED)	+= peci-aspeed.o
-+obj-$(CONFIG_PECI_NPCM)		+= peci-npcm.o
-diff --git a/drivers/peci/busses/peci-npcm.c b/drivers/peci/busses/peci-npcm.c
-new file mode 100644
-index 000000000000..36d061e6e53d
---- /dev/null
-+++ b/drivers/peci/busses/peci-npcm.c
-@@ -0,0 +1,407 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Nuvoton Technology corporation.
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/peci.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/reset.h>
-+
-+/* NPCM7xx GCR module */
-+#define NPCM7XX_INTCR3_OFFSET		0x9C
-+#define NPCM7XX_INTCR3_PECIVSEL		BIT(19)
-+
-+/* NPCM PECI Registers */
-+#define NPCM_PECI_CTL_STS	0x00
-+#define NPCM_PECI_RD_LENGTH	0x04
-+#define NPCM_PECI_ADDR		0x08
-+#define NPCM_PECI_CMD		0x0C
-+#define NPCM_PECI_CTL2		0x10
-+#define NPCM_PECI_WR_LENGTH	0x1C
-+#define NPCM_PECI_PDDR		0x2C
-+#define NPCM_PECI_DAT_INOUT(n)	(0x100 + ((n) * 4))
-+
-+#define NPCM_PECI_MAX_REG	0x200
-+
-+/* NPCM_PECI_CTL_STS - 0x00 : Control Register */
-+#define NPCM_PECI_CTRL_DONE_INT_EN	BIT(6)
-+#define NPCM_PECI_CTRL_ABRT_ERR		BIT(4)
-+#define NPCM_PECI_CTRL_CRC_ERR		BIT(3)
-+#define NPCM_PECI_CTRL_DONE		BIT(1)
-+#define NPCM_PECI_CTRL_START_BUSY	BIT(0)
-+
-+/* NPCM_PECI_RD_LENGTH - 0x04 : Command Register */
-+#define NPCM_PECI_RD_LEN_MASK		GENMASK(6, 0)
-+
-+/* NPCM_PECI_CMD - 0x10 : Command Register */
-+#define NPCM_PECI_CTL2_MASK		GENMASK(7, 6)
-+
-+/* NPCM_PECI_WR_LENGTH - 0x1C : Command Register */
-+#define NPCM_PECI_WR_LEN_MASK		GENMASK(6, 0)
-+
-+/* NPCM_PECI_PDDR - 0x2C : Command Register */
-+#define NPCM_PECI_PDDR_MASK		GENMASK(4, 0)
-+
-+#define NPCM_PECI_INT_MASK	(NPCM_PECI_CTRL_ABRT_ERR | \
-+				NPCM_PECI_CTRL_CRC_ERR | \
-+				NPCM_PECI_CTRL_DONE)
-+
-+#define NPCM_PECI_IDLE_CHECK_TIMEOUT_USEC	50000
-+#define NPCM_PECI_IDLE_CHECK_INTERVAL_USEC	10000
-+#define NPCM_PECI_CMD_TIMEOUT_MS_DEFAULT	1000
-+#define NPCM_PECI_CMD_TIMEOUT_MS_MAX		60000
-+#define NPCM_PECI_HOST_NEG_BIT_RATE_MAX		31
-+#define NPCM_PECI_HOST_NEG_BIT_RATE_MIN		7
-+#define NPCM_PECI_HOST_NEG_BIT_RATE_DEFAULT	15
-+#define NPCM_PECI_PULL_DOWN_DEFAULT		0
-+#define NPCM_PECI_PULL_DOWN_MAX			2
-+
-+struct npcm_peci {
-+	u32			cmd_timeout_ms;
-+	u32			host_bit_rate;
-+	struct completion	xfer_complete;
-+	struct regmap		*gcr_regmap;
-+	struct peci_adapter	*adapter;
-+	struct regmap		*regmap;
-+	u32			status;
-+	spinlock_t		lock; /* to sync completion status handling */
-+	struct device		*dev;
-+	struct clk		*clk;
-+	int			irq;
-+};
-+
-+static int npcm_peci_xfer_native(struct npcm_peci *priv,
-+				 struct peci_xfer_msg *msg)
-+{
-+	long err, timeout = msecs_to_jiffies(priv->cmd_timeout_ms);
-+	unsigned long flags;
-+	unsigned int msg_rd;
-+	u32 cmd_sts;
-+	int i, rc;
-+
-+	/* Check command sts and bus idle state */
-+	rc = regmap_read_poll_timeout(priv->regmap, NPCM_PECI_CTL_STS, cmd_sts,
-+				      !(cmd_sts & NPCM_PECI_CTRL_START_BUSY),
-+				      NPCM_PECI_IDLE_CHECK_INTERVAL_USEC,
-+				      NPCM_PECI_IDLE_CHECK_TIMEOUT_USEC);
-+	if (rc)
-+		return rc; /* -ETIMEDOUT */
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+	reinit_completion(&priv->xfer_complete);
-+
-+	regmap_write(priv->regmap, NPCM_PECI_ADDR, msg->addr);
-+	regmap_write(priv->regmap, NPCM_PECI_RD_LENGTH,
-+		     NPCM_PECI_WR_LEN_MASK & msg->rx_len);
-+	regmap_write(priv->regmap, NPCM_PECI_WR_LENGTH,
-+		     NPCM_PECI_WR_LEN_MASK & msg->tx_len);
-+
-+	if (msg->tx_len) {
-+		regmap_write(priv->regmap, NPCM_PECI_CMD, msg->tx_buf[0]);
-+
-+		for (i = 0; i < (msg->tx_len - 1); i++)
-+			regmap_write(priv->regmap, NPCM_PECI_DAT_INOUT(i),
-+				     msg->tx_buf[i + 1]);
-+	}
-+
-+	priv->status = 0;
-+	regmap_update_bits(priv->regmap, NPCM_PECI_CTL_STS,
-+			   NPCM_PECI_CTRL_START_BUSY,
-+			   NPCM_PECI_CTRL_START_BUSY);
-+
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	err = wait_for_completion_interruptible_timeout(&priv->xfer_complete,
-+							timeout);
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+
-+	regmap_write(priv->regmap, NPCM_PECI_CMD, 0);
-+
-+	if (err <= 0 || priv->status  != NPCM_PECI_CTRL_DONE) {
-+		if (err < 0) { /* -ERESTARTSYS */
-+			rc = (int)err;
-+			goto err_irqrestore;
-+		} else if (err == 0) {
-+			dev_dbg(priv->dev, "Timeout waiting for a response!\n");
-+			rc = -ETIMEDOUT;
-+			goto err_irqrestore;
-+		}
-+
-+		dev_dbg(priv->dev, "No valid response!\n");
-+		rc = -EIO;
-+		goto err_irqrestore;
-+	}
-+
-+	for (i = 0; i < msg->rx_len; i++) {
-+		regmap_read(priv->regmap, NPCM_PECI_DAT_INOUT(i), &msg_rd);
-+		msg->rx_buf[i] = (u8)msg_rd;
-+	}
-+
-+err_irqrestore:
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+	return rc;
-+}
-+
-+static irqreturn_t npcm_peci_irq_handler(int irq, void *arg)
-+{
-+	struct npcm_peci *priv = arg;
-+	u32 status_ack = 0;
-+	u32 status;
-+
-+	spin_lock(&priv->lock);
-+	regmap_read(priv->regmap, NPCM_PECI_CTL_STS, &status);
-+	priv->status |= (status & NPCM_PECI_INT_MASK);
-+
-+	if (status & NPCM_PECI_CTRL_CRC_ERR) {
-+		dev_dbg(priv->dev, "PECI_INT_W_FCS_BAD\n");
-+		status_ack |= NPCM_PECI_CTRL_CRC_ERR;
-+	}
-+
-+	if (status & NPCM_PECI_CTRL_ABRT_ERR) {
-+		dev_dbg(priv->dev, "NPCM_PECI_CTRL_ABRT_ERR\n");
-+		status_ack |= NPCM_PECI_CTRL_ABRT_ERR;
-+	}
-+
-+	/*
-+	 * All commands should be ended up with a NPCM_PECI_CTRL_DONE
-+	 * bit set even in an error case.
-+	 */
-+	if (status & NPCM_PECI_CTRL_DONE) {
-+		dev_dbg(priv->dev, "NPCM_PECI_CTRL_DONE\n");
-+		status_ack |= NPCM_PECI_CTRL_DONE;
-+		complete(&priv->xfer_complete);
-+	}
-+
-+	regmap_write_bits(priv->regmap, NPCM_PECI_CTL_STS,
-+			  NPCM_PECI_INT_MASK, status_ack);
-+
-+	spin_unlock(&priv->lock);
-+	return IRQ_HANDLED;
-+}
-+
-+static int npcm_peci_init_ctrl(struct npcm_peci *priv)
-+{
-+	u32 cmd_sts, host_neg_bit_rate = 0, pull_down = 0;
-+	int ret;
-+
-+	priv->clk = devm_clk_get(priv->dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		dev_err(priv->dev, "Failed to get clk source.\n");
-+		return PTR_ERR(priv->clk);
-+	}
-+
-+	ret = clk_prepare_enable(priv->clk);
-+	if (ret) {
-+		dev_err(priv->dev, "Failed to enable clock.\n");
-+		return ret;
-+	}
-+
-+	ret = of_property_read_u32(priv->dev->of_node, "cmd-timeout-ms",
-+				   &priv->cmd_timeout_ms);
-+	if (ret || priv->cmd_timeout_ms > NPCM_PECI_CMD_TIMEOUT_MS_MAX ||
-+	    priv->cmd_timeout_ms == 0) {
-+		if (ret)
-+			dev_warn(priv->dev,
-+				 "cmd-timeout-ms not found, use default : %u\n",
-+				 NPCM_PECI_CMD_TIMEOUT_MS_DEFAULT);
-+		else
-+			dev_warn(priv->dev,
-+				 "Invalid cmd-timeout-ms : %u. Use default : %u\n",
-+				 priv->cmd_timeout_ms,
-+				 NPCM_PECI_CMD_TIMEOUT_MS_DEFAULT);
-+
-+		priv->cmd_timeout_ms = NPCM_PECI_CMD_TIMEOUT_MS_DEFAULT;
-+	}
-+
-+	if (of_device_is_compatible(priv->dev->of_node,
-+				    "nuvoton,npcm750-peci")) {
-+		priv->gcr_regmap = syscon_regmap_lookup_by_compatible
-+			("nuvoton,npcm750-gcr");
-+		if (!IS_ERR(priv->gcr_regmap)) {
-+			bool volt = of_property_read_bool(priv->dev->of_node,
-+							  "high-volt-range");
-+			if (volt)
-+				regmap_update_bits(priv->gcr_regmap,
-+						   NPCM7XX_INTCR3_OFFSET,
-+						   NPCM7XX_INTCR3_PECIVSEL,
-+						   NPCM7XX_INTCR3_PECIVSEL);
-+			else
-+				regmap_update_bits(priv->gcr_regmap,
-+						   NPCM7XX_INTCR3_OFFSET,
-+						   NPCM7XX_INTCR3_PECIVSEL, 0);
-+		}
-+	}
-+
-+	ret = of_property_read_u32(priv->dev->of_node, "pull-down",
-+				   &pull_down);
-+	if (ret || pull_down > NPCM_PECI_PULL_DOWN_MAX) {
-+		if (ret)
-+			dev_warn(priv->dev,
-+				 "pull-down not found, use default : %u\n",
-+				 NPCM_PECI_PULL_DOWN_DEFAULT);
-+		else
-+			dev_warn(priv->dev,
-+				 "Invalid pull-down : %u. Use default : %u\n",
-+				 pull_down,
-+				 NPCM_PECI_PULL_DOWN_DEFAULT);
-+		pull_down = NPCM_PECI_PULL_DOWN_DEFAULT;
-+	}
-+
-+	regmap_update_bits(priv->regmap, NPCM_PECI_CTL2, NPCM_PECI_CTL2_MASK,
-+			   pull_down << 6);
-+
-+	ret = of_property_read_u32(priv->dev->of_node, "host-neg-bit-rate",
-+				   &host_neg_bit_rate);
-+	if (ret || host_neg_bit_rate > NPCM_PECI_HOST_NEG_BIT_RATE_MAX ||
-+	    host_neg_bit_rate < NPCM_PECI_HOST_NEG_BIT_RATE_MIN) {
-+		if (ret)
-+			dev_warn(priv->dev,
-+				 "host-neg-bit-rate not found, use default : %u\n",
-+				 NPCM_PECI_HOST_NEG_BIT_RATE_DEFAULT);
-+		else
-+			dev_warn(priv->dev,
-+				 "Invalid host-neg-bit-rate : %u. Use default : %u\n",
-+				 host_neg_bit_rate,
-+				 NPCM_PECI_HOST_NEG_BIT_RATE_DEFAULT);
-+		host_neg_bit_rate = NPCM_PECI_HOST_NEG_BIT_RATE_DEFAULT;
-+	}
-+
-+	regmap_update_bits(priv->regmap, NPCM_PECI_PDDR, NPCM_PECI_PDDR_MASK,
-+			   host_neg_bit_rate);
-+
-+	priv->host_bit_rate = clk_get_rate(priv->clk) /
-+		(4 * (host_neg_bit_rate + 1));
-+
-+	ret = regmap_read_poll_timeout(priv->regmap, NPCM_PECI_CTL_STS, cmd_sts,
-+				       !(cmd_sts & NPCM_PECI_CTRL_START_BUSY),
-+				       NPCM_PECI_IDLE_CHECK_INTERVAL_USEC,
-+				       NPCM_PECI_IDLE_CHECK_TIMEOUT_USEC);
-+	if (ret)
-+		return ret; /* -ETIMEDOUT */
-+
-+	/* PECI interrupt enable */
-+	regmap_update_bits(priv->regmap, NPCM_PECI_CTL_STS,
-+			   NPCM_PECI_CTRL_DONE_INT_EN,
-+			   NPCM_PECI_CTRL_DONE_INT_EN);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config npcm_peci_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = NPCM_PECI_MAX_REG,
-+	.fast_io = true,
-+};
-+
-+static int npcm_peci_xfer(struct peci_adapter *adapter,
-+			  struct peci_xfer_msg *msg)
-+{
-+	struct npcm_peci *priv = peci_get_adapdata(adapter);
-+
-+	return npcm_peci_xfer_native(priv, msg);
-+}
-+
-+static int npcm_peci_probe(struct platform_device *pdev)
-+{
-+	struct peci_adapter *adapter;
-+	struct npcm_peci *priv;
-+	void __iomem *base;
-+	int ret;
-+
-+	adapter = peci_alloc_adapter(&pdev->dev, sizeof(*priv));
-+	if (!adapter)
-+		return -ENOMEM;
-+
-+	priv = peci_get_adapdata(adapter);
-+	priv->adapter = adapter;
-+	priv->dev = &pdev->dev;
-+	dev_set_drvdata(&pdev->dev, priv);
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base)) {
-+		ret = PTR_ERR(base);
-+		goto err_put_adapter_dev;
-+	}
-+
-+	priv->regmap = devm_regmap_init_mmio(&pdev->dev, base,
-+					     &npcm_peci_regmap_config);
-+	if (IS_ERR(priv->regmap)) {
-+		ret = PTR_ERR(priv->regmap);
-+		goto err_put_adapter_dev;
-+	}
-+
-+	priv->irq = platform_get_irq(pdev, 0);
-+	if (!priv->irq) {
-+		ret = -ENODEV;
-+		goto err_put_adapter_dev;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, priv->irq, npcm_peci_irq_handler,
-+			       0, "peci-npcm-irq", priv);
-+	if (ret)
-+		goto err_put_adapter_dev;
-+
-+	init_completion(&priv->xfer_complete);
-+	spin_lock_init(&priv->lock);
-+
-+	priv->adapter->owner = THIS_MODULE;
-+	priv->adapter->dev.of_node = of_node_get(dev_of_node(priv->dev));
-+	strlcpy(priv->adapter->name, pdev->name, sizeof(priv->adapter->name));
-+	priv->adapter->xfer = npcm_peci_xfer;
-+
-+	ret = npcm_peci_init_ctrl(priv);
-+	if (ret)
-+		goto err_put_adapter_dev;
-+
-+	ret = peci_add_adapter(priv->adapter);
-+	if (ret)
-+		goto err_put_adapter_dev;
-+
-+	dev_info(&pdev->dev, "peci bus %d registered, host negotiation bit rate %dHz",
-+		 priv->adapter->nr, priv->host_bit_rate);
-+
-+	return 0;
-+
-+err_put_adapter_dev:
-+	put_device(&adapter->dev);
-+	return ret;
-+}
-+
-+static int npcm_peci_remove(struct platform_device *pdev)
-+{
-+	struct npcm_peci *priv = dev_get_drvdata(&pdev->dev);
-+
-+	clk_disable_unprepare(priv->clk);
-+	peci_del_adapter(priv->adapter);
-+	of_node_put(priv->adapter->dev.of_node);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id npcm_peci_of_table[] = {
-+	{ .compatible = "nuvoton,npcm750-peci", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, npcm_peci_of_table);
-+
-+static struct platform_driver npcm_peci_driver = {
-+	.probe  = npcm_peci_probe,
-+	.remove = npcm_peci_remove,
-+	.driver = {
-+		.name           = KBUILD_MODNAME,
-+		.of_match_table = of_match_ptr(npcm_peci_of_table),
-+	},
-+};
-+module_platform_driver(npcm_peci_driver);
-+
-+MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-+MODULE_DESCRIPTION("NPCM Platform Environment Control Interface (PECI) driver");
-+MODULE_LICENSE("GPL v2");
+...
+
+> +static int aspeed_peci_check_idle(struct aspeed_peci *priv)
+> +{
+> +	ulong timeout = jiffies + usecs_to_jiffies(ASPEED_PECI_IDLE_CHECK_TIMEOUT_USEC);
+> +	u32 cmd_sts;
+
+Like in the previous patch this one has hard to read timeout loops with inefficient code.
+
+> +	for (;;) {
+> +		cmd_sts = readl(priv->base + ASPEED_PECI_CMD);
+> +		if (!(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK))
+> +			break;
+
+> +		if (time_after(jiffies, timeout)) {
+
+This is actually main exit condition (vs. infinite loop).
+
+> +			cmd_sts = readl(priv->base + ASPEED_PECI_CMD);
+
+This make no sense. If you would like to have one more iteration, just spell it
+explicitly.
+
+> +			break;
+> +		}
+
+> +		usleep_range((ASPEED_PECI_IDLE_CHECK_INTERVAL_USEC >> 2) + 1,
+> +			     ASPEED_PECI_IDLE_CHECK_INTERVAL_USEC);
+> +	}
+> +
+
+> +	return !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK) ? 0 : -ETIMEDOUT;
+
+Ditto.
+
+> +}
+
+Now look at the other variant:
+
+	do {
+		...do something...
+		if (success)
+			return 0;
+		usleep(...);
+	} while (time_before(...));
+
+	return -ETIMEDOUT;
+
+* Easy
+* less LOCs
+* guaranteed always to be at least one iteration
+* has explicitly spelled exit condition
+
+BUT!
+
+In this very case you may do even better if you read iopoll.h, i.e
+readl_poll_timeout() has this functionality embedded in the macro.
+
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
