@@ -1,204 +1,140 @@
-Return-Path: <SRS0=XRVb=2A=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=nqTs=2B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FAKE_REPLY_C,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9FD8C43603
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Dec 2019 23:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA53C43603
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 04:09:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AAA7F206D9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Dec 2019 23:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576020333;
-	bh=ZFu4Hwm9TXqLd33Z1de6lnSizTJgOLyN8HGrecf9HLY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:List-ID:From;
-	b=qFePHDbpv84Pus8zlc/nSldRQBEdbhhrqDsA03CpbTfnbJEc+4K0KudZTugpZO9NL
-	 QylhZYUmfu8hwG/yGJPGH4Lt09SbwvQ0EbNAs6dGzsbshzc4AJd40dAlps9T1dygrE
-	 gdJupqNHd6ndapb4B84HM3E2bHpX2/mq5xFyZDp4=
+	by mail.kernel.org (Postfix) with ESMTP id BF9E520718
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 04:09:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="I2EwFONY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbfLJXZd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Dec 2019 18:25:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726930AbfLJXZd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Dec 2019 18:25:33 -0500
-Received: from localhost (mobile-166-170-223-177.mycingular.net [166.170.223.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEC0B20663;
-        Tue, 10 Dec 2019 23:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576020332;
-        bh=ZFu4Hwm9TXqLd33Z1de6lnSizTJgOLyN8HGrecf9HLY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=X4udzvXQ7snjmIabgtXdmw+W789EOtzVGrt2DaBfrBK0qaF4Wr94f9MMFJh+3xzvx
-         +qQ8ecyou8iYR2vXOI5MxMI+Ryr8L3bTtQ83PA7j8M6JolUcxsGbNtz120G2bswz+g
-         meHCfapKZI2D3fn5ZQLjpvlegaqmwITN38H8if4A=
-Date:   Tue, 10 Dec 2019 17:25:29 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
+        id S1726717AbfLKEJB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Dec 2019 23:09:01 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:53182 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbfLKEJB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Dec 2019 23:09:01 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBB442Pp179945;
+        Wed, 11 Dec 2019 04:08:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=NsytSED1IdKLk5zj6xtHrR0U2YjxCSjKc6zTpdZVg4Q=;
+ b=I2EwFONYap60CNgUAo3T/+I6fxoUgXpkeedOuHbGWnRe5I51yYyxDxB8z3fhUhTIdVGq
+ ZPQ20I86VGh4Ks5AIiQkfmCZSiUm2M+rVhq8A5eMzeo92Hc5GvFOWSxTQKjS1masJky8
+ BF1Khtt7o1kq+eQH6iBB/6ZxQBxkmaKv+727ppF+maxHdFucRZRQCN2u/5bou3oCcpJg
+ ioYfSZgw5GArinBEWHxPE3bCgu/+01fPXDzZra81hUuj2utqRw1m2IA4Uu5IXTpDfOV1
+ x7GuNkXCLQ1HudrnJb0A0U7kyq/qwGyE6TVil26Fp7vvoMABI6Ogw9yBwiCuLiRgrghy sQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2wrw4n6x8t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Dec 2019 04:08:36 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBB4462h010025;
+        Wed, 11 Dec 2019 04:08:36 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2wte9b9sm1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Dec 2019 04:08:36 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xBB48YKM022438;
+        Wed, 11 Dec 2019 04:08:35 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 10 Dec 2019 20:08:07 -0800
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org, tim@buttersideup.com,
-        james.morse@arm.com, rrichter@marvell.com, jdelvare@suse.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 6/6] (v3) drivers: hwmon: i5k_amb: simplify probing /
- device identification
-Message-ID: <20191210232529.GA171629@google.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org
+Subject: Re: [PATCH 0/1] Summary: hwmon driver for temperature sensors on SATA drives
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191209052119.32072-1-linux@roeck-us.net>
+Date:   Tue, 10 Dec 2019 23:08:04 -0500
+In-Reply-To: <20191209052119.32072-1-linux@roeck-us.net> (Guenter Roeck's
+        message of "Sun, 8 Dec 2019 21:21:18 -0800")
+Message-ID: <yq15zinmrmj.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bee7ba11-6b4a-1cc7-ee8c-ddf17cb8daca@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9467 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912110034
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9467 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912110034
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 28, 2019 at 06:21:31AM -0800, Guenter Roeck wrote:
-> On 11/28/19 4:54 AM, Enrico Weigelt, metux IT consult wrote:
-> > Simpilify the probing by putting all chip-specific data directly
-> > into the pci match table, removing the redundant chipset_ids table.
-> > 
-> > Changes v3:
-> >      * use pci_get_device_by_id() introduces by a previous patch
-> >        of this queue
-> > 
-> > Changes v2:
-> >      * use PCI_DEVICE_DATA() macro in the pci match table
-> >      * directly pass the pci device id to i5k_channel_probe(),
-> >        instead of computing it internally by extra offset parameter
-> > 
-> > Submitted: 2019-06-06
-> > Signed-off-by: Enrico Weigelt <info@metux.net>
-> 
-> I don't immediately see how this is better. I am not even sure if it
-> is correct.
 
-I don't mind this, but:
+Hi Guenter,
 
-  1) I don't maintain this file, so my opinion doesn't count much.
+> The most recent attempt was [1] by Linus Walleij. It went through a total
+> of seven iterations. At the end, it was rejected for a number of reasons;
+> see the provided link for details. This implementation resides in the
+> SCSI core. It originally resided in libata but was moved to SCSI per
+> maintainer request, where it was ultimately rejected.
 
-  2) I despise the pci_get_device() interfaces because they're
-  inefficient, not hotplug-safe, they circumvent the device model
-  claim mechanism, and it's hard to do the reference counting
-  correctly.
+While I am sure I come across as a curmudgeon, regressions is a major
+concern for me. That, and making sure we pick the right architecture. I
+thought we were making good progress in that department when Linus
+abandoned the effort.
 
-  3) There are several things going on in this patch and it would be
-  easier to read if you could split them into separate patches:
+> The feedback on this approach suggests to use the SCSI Temperature log
+> page [0x0d] as means to access drive temperature information. It is
+> unknown if this is implemented in any real SCSI drive.
 
-    - Removing the redundancy between chipset_ids[] and i5k_amb_ids[].
-      This seems like a nice change.
+Almost every SCSI drive has it.
 
-    - The "chipset_ids[i].fbd0 + 1" thing was weird and the new
-      ".driver_data + 1" is still weird.  Those are PCI device IDs,
-      and addition is not a valid operation on those IDs.  IMHO both
-      PCI_DEVICE_ID_INTEL_5000_FBD0 and PCI_DEVICE_ID_INTEL_5000_FBD1
-      should be listed explicitly in the driver instead of trying to
-      compute PCI_DEVICE_ID_INTEL_5000_FBD1.
+> The feedback also suggests to obtain temperature from ATA drives,
+> convert it into the SCSI temperature log page in libata-scsi, and to
+> use that information in a hardware monitoring driver. The format and
+> method to do this is documented in [3]. This is not currently
+> implemented in the Linux kernel.
 
-    - Replacing the hard-coding of PCI_VENDOR_ID_INTEL with the vendor
-      ID from i5k_amb_ids[] seems worthwhile and should be its own
-      separate patch (if possible).
+Correct, but I have no qualms over exporting the SCSI temperature log
+page. The devices that export that page are generally well-behaved.
 
-    - Changing to use pci_get_device_by_id().  This should be trivial
-      to verify, like the other patches.
+My concerns are wrt. identifying whether SMART data is available for
+USB/UAS. I am not too worried about ATA and "real" SCSI (ignoring RAID
+controllers that hide the real drives in various ways).
 
-> > ---
-> >   drivers/hwmon/i5k_amb.c | 38 +++++++++++++++-----------------------
-> >   1 file changed, 15 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
-> > index b09c39abd3a8..cb85607d104f 100644
-> > --- a/drivers/hwmon/i5k_amb.c
-> > +++ b/drivers/hwmon/i5k_amb.c
-> > @@ -414,16 +414,14 @@ static int i5k_amb_add(void)
-> >   }
-> >   static int i5k_find_amb_registers(struct i5k_amb_data *data,
-> > -					    unsigned long devid)
-> > +				  const struct pci_device_id *devid)
-> >   {
-> >   	struct pci_dev *pcidev;
-> >   	u32 val32;
-> >   	int res = -ENODEV;
-> >   	/* Find AMB register memory space */
-> > -	pcidev = pci_get_device(PCI_VENDOR_ID_INTEL,
-> > -				devid,
-> > -				NULL);
-> > +	pcidev = pci_get_device_by_id(devid);
-> >   	if (!pcidev)
-> >   		return -ENODEV;
-> > @@ -447,14 +445,15 @@ static int i5k_find_amb_registers(struct i5k_amb_data *data,
-> >   	return res;
-> >   }
-> > -static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
-> > +static int i5k_channel_probe(u16 *amb_present, unsigned int vendor,
-> > +			     unsigned int device)
-> >   {
-> >   	struct pci_dev *pcidev;
-> >   	u16 val16;
-> >   	int res = -ENODEV;
-> >   	/* Copy the DIMM presence map for these two channels */
-> > -	pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, dev_id, NULL);
-> > +	pcidev = pci_get_device(vendor, device, NULL);
-> >   	if (!pcidev)
-> >   		return -ENODEV;
-> > @@ -473,23 +472,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
-> >   	return res;
-> >   }
-> > -static struct {
-> > -	unsigned long err;
-> > -	unsigned long fbd0;
-> > -} chipset_ids[]  = {
-> > -	{ PCI_DEVICE_ID_INTEL_5000_ERR, PCI_DEVICE_ID_INTEL_5000_FBD0 },
-> > -	{ PCI_DEVICE_ID_INTEL_5400_ERR, PCI_DEVICE_ID_INTEL_5400_FBD0 },
-> > -	{ 0, 0 }
-> > -};
-> > -
-> > -#ifdef MODULE
-> >   static const struct pci_device_id i5k_amb_ids[] = {
-> > -	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
-> > -	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
-> > +	{ PCI_DEVICE_DATA(INTEL, 5000_ERR, PCI_DEVICE_ID_INTEL_5000_FBD0) },
-> > +	{ PCI_DEVICE_DATA(INTEL, 5400_ERR, PCI_DEVICE_ID_INTEL_5400_FBD0) },
-> >   	{ 0, }
-> >   };
-> >   MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
-> > -#endif
-> >   static int i5k_amb_probe(struct platform_device *pdev)
-> >   {
-> > @@ -504,22 +492,26 @@ static int i5k_amb_probe(struct platform_device *pdev)
-> >   	/* Figure out where the AMB registers live */
-> >   	i = 0;
-> >   	do {
-> > -		res = i5k_find_amb_registers(data, chipset_ids[i].err);
-> > +		res = i5k_find_amb_registers(data, &i5k_amb_ids[i]);
-> >   		if (res == 0)
-> >   			break;
-> >   		i++;
-> > -	} while (chipset_ids[i].err);
-> > +	} while (i5k_amb_ids[i].device);
-> >   	if (res)
-> >   		goto err;
-> >   	/* Copy the DIMM presence map for the first two channels */
-> > -	res = i5k_channel_probe(&data->amb_present[0], chipset_ids[i].fbd0);
-> > +	res = i5k_channel_probe(&data->amb_present[0],
-> > +				i5k_amb_ids[i].vendor,
-> > +				i5k_amb_ids[i].driver_data);
-> >   	if (res)
-> >   		goto err;
-> >   	/* Copy the DIMM presence map for the optional second two channels */
-> > -	i5k_channel_probe(&data->amb_present[2], chipset_ids[i].fbd0 + 1);
-> > +	i5k_channel_probe(&data->amb_present[2],
-> > +			  i5k_amb_ids[i].vendor,
-> > +			  i5k_amb_ids[i].driver_data+1);
-> >   	/* Set up resource regions */
-> >   	reso = request_mem_region(data->amb_base, data->amb_len, DRVNAME);
-> > 
-> 
+I am not sure why the SCSI temperature log page parsing would be
+complex. I will have to go check smartmontools to see what that is all
+about. The spec is as simple as can be.
+
+Anyway. I think the overall approach wrt. SCT and falling back to
+well-known SMART fields is reasonably sane and fine for libata. But I
+don't understand the pushback wrt. using the SCSI temperature log page
+as a conduit. I think it would be fine if this worked out of the box for
+both SCSI and ATA drives.
+
+The elephant in the room remains USB. And coming up with a way we can
+reliably detect whether it is safe to start poking at the device to
+discover if SMART is provided. If we eventually want to pursue USB, I
+think your heuristic stuff needs to be a library that can be leveraged
+by both libata and USB. But that doesn't have to be part of the initial
+effort.
+
+And finally, my concerns wrt. reacting to bad sensors remain. Not too
+familiar with hwmon, but I would still like any actions based on
+reported temperatures to be under user control and not the kernel.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
