@@ -2,143 +2,120 @@ Return-Path: <SRS0=nqTs=2B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC4AC2D0C7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 14:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE5FC00454
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 15:31:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2841A2173E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 14:40:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 304FF2467F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Dec 2019 15:31:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyG5UBz1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5C0uyFc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730180AbfLKOjp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Dec 2019 09:39:45 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46248 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729654AbfLKOjn (ORCPT
+        id S2387921AbfLKPay (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Dec 2019 10:30:54 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:46182 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387867AbfLKP3X (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Dec 2019 09:39:43 -0500
-Received: by mail-pl1-f193.google.com with SMTP id k20so1484478pll.13;
-        Wed, 11 Dec 2019 06:39:43 -0800 (PST)
+        Wed, 11 Dec 2019 10:29:23 -0500
+Received: by mail-pj1-f67.google.com with SMTP id z21so9041500pjq.13;
+        Wed, 11 Dec 2019 07:29:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IcdhyyyraLVUQAQ3HHOSQ6YNvDlkdwwrUN22Ki1UdWw=;
-        b=RyG5UBz1cZHPGUqtMFB5YXFkkEdKKMiMwMxa8vnkNtXJSn70Zzja6yk3iTI/el/Ji7
-         7mdXDBMNf7s4VWETE4BQOzat3pRp4cFbQRhjZmJDg1kzg1dpKHj7axOgJOv1it0xkTtv
-         64qDc3ri9DQ3B9rGjNLH/xQ8bXwKOeK2yQtzcOL6fP1uiZBFCyaE/HbYfL64wN2sj/FP
-         PXfUm8e3jVXPvOw7YquFCs42UtzcocoIDPdohQ/cW8UE9pEGu+OHFwa8hg2C+DL9l5p0
-         qGq7WkaPaYNYdqhKGd+Ea8oh+Bst+ULZgi+wmIadHtyeeZnEDTEaNlXWHo4VcdmjIp+3
-         ZtzQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pfDhDYFuoXDrqHRE8i/08ZQEyfFGj50C9cMmD8Jy2MA=;
+        b=j5C0uyFcwXKjxMT2bhJ14CbB+fZCEQxShkK6p3Cf93qQ6BpSTKh005B5VD2g3OiyqF
+         /wNRFMf+eDpSe4TXNqE6yRjbz6RybfTWfb6JvF2sgW3j1ebFqzHfH+knhZW5LWMcLU9Q
+         PPkMZlifZ3WANqTGfezf8poByuNPftyfj2T8ipV3B9YeSB8ICKW5MsA6kddHfyed3zGU
+         vic5lX9Flai49PViVVxoFnEQJ1pk/ccakyFpoYFqPpU1m9xHZDAyiQ7nU9kNfJZthfG6
+         7ElzzegodjoKVuaP+P5wut6UEuDXichyFzp4GyPgvDzsqKx4ZybnxVzEt/Nh+yrpsJgq
+         kRqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IcdhyyyraLVUQAQ3HHOSQ6YNvDlkdwwrUN22Ki1UdWw=;
-        b=nDKmJyxZYaJzue73y3YCBpUlVNZuvu4fIcWFJ7zdnnC0OeudT9EolMxUA65VfwDzPn
-         DvVlxeSAT9xX13e52zPgoxFF8R+zrGhVf1gX3VawSSXUz9faIw5wEP223tqburaiMf8x
-         F8NHB4893NU0jB05XQh9VbnGvGyxKw2G3aL1Dzcd6NSRyubzceSciKcltlcuPlCv1oiR
-         wejQh+lAzjj91oTdL/E7mDwHEdJPUu+YQu1lLyaYOON5Ye9rN4TFEv7Xfbp2dFkuDqd8
-         XRuLFSJozh0m9t5zI2UBpNptQPqitZMjwZaaF7B3TqdLL9LSJzBvBncCA9IN69OniEaM
-         U6HA==
-X-Gm-Message-State: APjAAAX9dRVCfOltzL7NZLksvf+63UgPgLkk56gJw0ilVthCQPF/3vCA
-        jd3MQDSl2AG+PHBL4n+dQnU=
-X-Google-Smtp-Source: APXvYqxp6M46sXtPZT2HvGlWuv1Os2BTC76wIST3HLZF+6k8rsAvHXrRSJFlwIPCfdqDACr2l48xrw==
-X-Received: by 2002:a17:902:968b:: with SMTP id n11mr3347664plp.120.1576075182587;
-        Wed, 11 Dec 2019 06:39:42 -0800 (PST)
-Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id q11sm3444239pff.111.2019.12.11.06.39.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 11 Dec 2019 06:39:41 -0800 (PST)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>
-Subject: [PATCH v3 10/12] wireless: iwlwifi: use <linux/units.h> helpers
-Date:   Wed, 11 Dec 2019 23:38:17 +0900
-Message-Id: <1576075099-3441-11-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576075099-3441-1-git-send-email-akinobu.mita@gmail.com>
-References: <1576075099-3441-1-git-send-email-akinobu.mita@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pfDhDYFuoXDrqHRE8i/08ZQEyfFGj50C9cMmD8Jy2MA=;
+        b=oAp9Da0cQAxIH33xtPRmHHU7hXcNi2uBWg1Og5bnOhBOKc+hnHLVtlcYxFnwXbX6zF
+         GEAaDkOqYoCsnjDS7bBWqirQhwVzj3p5jhoz5pUi3vNFcmz6OmMvfPehP1gwtNkj/FpT
+         3z3ypD6JonJ5HP91wt3V+mi5Gijz7NOU3juy/RKKTpDlY2pn7/Po+PHgd0kGvbEAGgXe
+         mIA42Asn90P5z94ZdBFE/amZfAWQw9qJf/c+w5LheJuK4rW2BZ+nyJjdkdZV1XmA+VBP
+         Wl6qpuDs65zuO7ZGQ45BENZByisPuxDaop07kTF9tryPX0BH4JedGPDxS5qhAqjTERnc
+         FSBQ==
+X-Gm-Message-State: APjAAAWG8fEtXNby/te4Lw1NUEZdGAC01iU/5E+FSAUQshH+DOm7Ksp/
+        6G6y8LdeLPeY7Putejvd+94YB7/nGUFqXoZE64E=
+X-Google-Smtp-Source: APXvYqwlR/tF5FA23iHp/eaMoUPuaCaCPBgDqm77FVGRFefN3YELGs3EmpG2NGeQvAJUc/yD31OEVyNePT/dpDkApsU=
+X-Received: by 2002:a17:90a:b10b:: with SMTP id z11mr4272497pjq.132.1576078162498;
+ Wed, 11 Dec 2019 07:29:22 -0800 (PST)
+MIME-Version: 1.0
+References: <1576075099-3441-1-git-send-email-akinobu.mita@gmail.com> <1576075099-3441-3-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <1576075099-3441-3-git-send-email-akinobu.mita@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 11 Dec 2019 17:29:12 +0200
+Message-ID: <CAHp75Vfq4KqNAGY4ivveR7D0Z1fA1EOFT+oL9+f+Ak2jikCTVg@mail.gmail.com>
+Subject: Re: [PATCH v3 02/12] ACPI: thermal: switch to use <linux/units.h> helpers
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This switches the iwlwifi driver to use celsius_to_kelvin() and
-kelvin_to_celsius() in <linux/units.h>.
+On Wed, Dec 11, 2019 at 4:39 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
+>
+> This switches the ACPI thermal zone driver to use celsius_to_deci_kelvin(),
+> deci_kelvin_to_celsius(), and deci_kelvin_to_millicelsius_with_offset() in
+> <linux/units.h> instead of helpers in <linux/thermal.h>.
+>
+> This is preparation for centralizing the kelvin to/from Celsius conversion
+> helpers in <linux/units.h>.
 
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Cc: Luca Coelho <luciano.coelho@intel.com>
-Cc: Intel Linux Wireless <linuxwifi@intel.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
-* New patch from v3
+>  #include <linux/reboot.h>
+>  #include <linux/device.h>
+>  #include <linux/thermal.h>
 
- drivers/net/wireless/intel/iwlwifi/dvm/dev.h     | 5 -----
- drivers/net/wireless/intel/iwlwifi/dvm/devices.c | 6 ++++--
- 2 files changed, 4 insertions(+), 7 deletions(-)
+> +#include <linux/units.h>
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-index be5ef4c..8d83800 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/dev.h
-@@ -237,11 +237,6 @@ struct iwl_sensitivity_ranges {
- 	u16 nrg_th_cca;
- };
- 
--
--#define KELVIN_TO_CELSIUS(x) ((x)-273)
--#define CELSIUS_TO_KELVIN(x) ((x)+273)
--
--
- /******************************************************************************
-  *
-  * Functions implemented in core module which are forward declared here
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/devices.c b/drivers/net/wireless/intel/iwlwifi/dvm/devices.c
-index dc3f197..d42bc46 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/devices.c
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/devices.c
-@@ -10,6 +10,8 @@
-  *
-  *****************************************************************************/
- 
-+#include <linux/units.h>
-+
- /*
-  * DVM device-specific data & functions
-  */
-@@ -345,7 +347,7 @@ static s32 iwl_temp_calib_to_offset(struct iwl_priv *priv)
- static void iwl5150_set_ct_threshold(struct iwl_priv *priv)
- {
- 	const s32 volt2temp_coef = IWL_5150_VOLTAGE_TO_TEMPERATURE_COEFF;
--	s32 threshold = (s32)CELSIUS_TO_KELVIN(CT_KILL_THRESHOLD_LEGACY) -
-+	s32 threshold = (s32)celsius_to_kelvin(CT_KILL_THRESHOLD_LEGACY) -
- 			iwl_temp_calib_to_offset(priv);
- 
- 	priv->hw_params.ct_kill_threshold = threshold * volt2temp_coef;
-@@ -381,7 +383,7 @@ static void iwl5150_temperature(struct iwl_priv *priv)
- 	vt = le32_to_cpu(priv->statistics.common.temperature);
- 	vt = vt / IWL_5150_VOLTAGE_TO_TEMPERATURE_COEFF + offset;
- 	/* now vt hold the temperature in Kelvin */
--	priv->temperature = KELVIN_TO_CELSIUS(vt);
-+	priv->temperature = kelvin_to_celsius(vt);
- 	iwl_tt_handler(priv);
- }
- 
+Can we try to keep *some* order, i.e. put this after acpi.h below?
+
+>  #include <linux/acpi.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/uaccess.h>
+
+>                         } else if (crt > 0) {
+> -                               unsigned long crt_k = CELSIUS_TO_DECI_KELVIN(crt);
+> +                               unsigned long crt_k =
+> +                                       celsius_to_deci_kelvin(crt);
+
+It used to be one line, why do two?
+
+>         pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
+> -               acpi_device_bid(device), DECI_KELVIN_TO_CELSIUS(tz->temperature));
+> +               acpi_device_bid(device),
+> +               deci_kelvin_to_celsius(tz->temperature));
+
+Ditto.
+
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
