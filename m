@@ -2,120 +2,160 @@ Return-Path: <SRS0=GaDF=2C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19592C43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 18:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD0B6C3F68F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 22:33:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECD7F206C3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 18:51:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8095622527
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 22:33:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gpQRyl32"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730658AbfLLSvx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Dec 2019 13:51:53 -0500
-Received: from mga18.intel.com ([134.134.136.126]:37490 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730546AbfLLSvw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Dec 2019 13:51:52 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 10:51:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,306,1571727600"; 
-   d="scan'208";a="364064186"
-Received: from yoojae-mobl1.amr.corp.intel.com (HELO [10.7.153.147]) ([10.7.153.147])
-  by orsmga004.jf.intel.com with ESMTP; 12 Dec 2019 10:51:51 -0800
-Subject: Re: [PATCH v11 06/14] peci: Add Aspeed PECI adapter driver
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
-        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
-        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        David Kershner <david.kershner@unisys.com>,
-        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Robin Murphy <robin.murphy@arm.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
- <20191211194624.2872-7-jae.hyun.yoo@linux.intel.com>
- <20191211202818.GD32742@smile.fi.intel.com>
- <e05cdec0-1120-7e2d-bac0-e4a1ba1ceb3d@linux.intel.com>
- <20191212084758.GE32742@smile.fi.intel.com>
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <bce54a12-a58b-a4a5-4e75-103499747ca6@linux.intel.com>
-Date:   Thu, 12 Dec 2019 10:51:51 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730799AbfLLWdf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Dec 2019 17:33:35 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:38873 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731002AbfLLWde (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 12 Dec 2019 17:33:34 -0500
+Received: by mail-lf1-f66.google.com with SMTP id r14so480371lfm.5
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 Dec 2019 14:33:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uNFsQyJIBMP610s+itpyeXuJ5AUNsir6dpBt7MH9KCs=;
+        b=gpQRyl32JgLNoYvplD3NJnHKCMfmAtJwwP/Uje32i2vycfQId3lC7NGwJ02bPHxkPl
+         416/v8p3WKzukSO9ASd6S83IL+etsV7SDfX6Ei4AfcyKmGzdpQkTC6K6780v/HUGj3RR
+         iLUfie1VoKjVKeIGJT87YTn0GXTHkKQi7NqNy/9KSjErrhDPtSknZgkYNBhXB0T/pE2d
+         y0moZcvaKx6gmRQ4SegnrlCg+6OhLNIwi27yH3HnFB8LmmmZPhmcqxjFh1dxsy+5pV7P
+         i2pAe++sZ0c+QzV1r+3l8WmQ8Y9hGv/sFjnVAC/HxIM+9lEQVAmXNGxNi5Vh7wSJ4bDW
+         WWFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uNFsQyJIBMP610s+itpyeXuJ5AUNsir6dpBt7MH9KCs=;
+        b=HblBHsf7510K8zO+reO3IHFy72WVmZSBAu4cC5D+sVaNQ+845c7FXxV1f17v0lU1jV
+         +/7UKT1KfySJWAYJlC59414EJ5RNuQyZYVnE5JmblWYqfnBP9/FapdMNAkMhphInk9C4
+         FdIqeDiqUIfNgk9e9Aq02ydV8d/9oGBoON/cU9F02DHmfZHHIjxfn+fR6FUhXTAspiBe
+         efJ6kGHKXt+LQogE5F2EoAQtk5M5mk2V07ylL4Ax9YlwG9l0DBZ36oMk1ihmUxYKwIym
+         0k4YrxIaGh0lsevX8SgmETw8GYrjMAZ6KFx4eXYsdvZlF0K1XWJMCC7EyFaXD1mr/gXC
+         MQ7g==
+X-Gm-Message-State: APjAAAWZzIr/0M7yTjHKe5638+WUQdEmZtdDzYoSXNIXj3DCr0WYzZkb
+        8o2ifcFIdH1TGnm93yrSNP/ud++NzhqrAyQfju576g==
+X-Google-Smtp-Source: APXvYqxBNleWcBiVw8vm+KLiN9cqlOqFb4vt8UFlmyhiMj4gyQ/eihgXoJiUMkAfFT3r7gvQyvk8XyGDODnEWS6zG6M=
+X-Received: by 2002:ac2:55a8:: with SMTP id y8mr6997366lfg.117.1576190012878;
+ Thu, 12 Dec 2019 14:33:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191212084758.GE32742@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191209052119.32072-1-linux@roeck-us.net> <20191209052119.32072-2-linux@roeck-us.net>
+In-Reply-To: <20191209052119.32072-2-linux@roeck-us.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 12 Dec 2019 23:33:21 +0100
+Message-ID: <CACRpkdYjidQHB0=S_brDxH3k+qJ2mfXCTF9A3SVZkPvBaVg6JQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] hwmon: Driver for temperature sensors on SATA drives
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Chris Healy <cphealy@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Andy,
+Hi Guenther,
 
-On 12/12/2019 12:47 AM, Andy Shevchenko wrote:
-> On Wed, Dec 11, 2019 at 04:50:04PM -0800, Jae Hyun Yoo wrote:
->> On 12/11/2019 12:28 PM, Andy Shevchenko wrote:
->>> On Wed, Dec 11, 2019 at 11:46:16AM -0800, Jae Hyun Yoo wrote:
-> 
->>> Like in the previous patch...
-> 
-> (1)
-> 
->> I see. I'll simplify this function like below:
->>
->> #include <linux/iopoll.h>
->>
->> static inline int aspeed_peci_check_idle(struct aspeed_peci *priv)
->> {
->> 	u32 cmd_sts;
->>
->> 	return readl_poll_timeout(priv->base + ASPEED_PECI_CMD,
->> 				  cmd_sts,
->> 				  !(cmd_sts & ASPEED_PECI_CMD_IDLE_MASK),
->> 				  ASPEED_PECI_IDLE_CHECK_INTERVAL_USEC,
->> 				  ASPEED_PECI_IDLE_CHECK_TIMEOUT_USEC);
->> }
-> 
-> Good for *this* case, but please fix all the rest accordingly.
+needless to say I am a big fan of this patch, so:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Sure. Will do that.
+It's a nice addition with the SCT command, I never
+figured that part out. Also nice how you register the
+scsi class interface I never saw that before, it makes it
+a very neat plug-in.
 
-Thanks,
+The comments are more discussion points on how to
+(maybe) take it further after this.
 
-Jae
+On Mon, Dec 9, 2019 at 6:21 AM Guenter Roeck <linux@roeck-us.net> wrote:
+
+> If the drive supports SCT transport and reports temperature limits,
+> those are reported as well.
+
+If I understand the patch correctly it will prefer to use
+SCT transport to read the temperature, and only fall back
+to the SMART attributes if this is not working, so I guess the
+commit message should state the heuristics used here.
+
+> +++ b/Documentation/hwmon/satatemp.rst
+
+Excellent doc.
+
+> + * If the SCT Command Transport feature set is not available, drive temperatures
+> + * may be readable through SMART attributes. Since SMART attributes are not well
+> + * defined, this method is only used as fallback mechanism.
+
+So this maybe cut/paste to commit message as well so people understand
+the commit fully.
+
+> +       for (i = 0; i < ATA_MAX_SMART_ATTRS; i++) {
+> +               u8 *attr = buf + i * 12;
+> +               int id = attr[2];
+> +
+> +               if (!id)
+> +                       continue;
+> +
+> +               if (id == SMART_TEMP_PROP_190) {
+> +                       temp_raw = attr[7];
+> +                       have_temp = true;
+> +               }
+> +               if (id == SMART_TEMP_PROP_194) {
+> +                       temp_raw = attr[7];
+> +                       have_temp = true;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (have_temp) {
+> +               *temp = temp_raw * 1000;
+> +               return 0;
+> +       }
+
+This looks like it will work fine, I had some heuristics to determine
+the vendor-specific max/min temperatures in property 194 in my
+patch, but I can certainly add that back in later.
+
+> +static const struct hwmon_channel_info *satatemp_info[] = {
+> +       HWMON_CHANNEL_INFO(chip,
+> +                          HWMON_C_REGISTER_TZ),
+
+I suppose this means I will also have a temperature zone as
+I want :D
+
+When I read the comments from the previous thread I got the
+impression the SCSI people wanted me to use something like
+the SCT transport and the hook in the SMART thing in the
+libata back-end specifically for [S]ATA in response to the
+SCT read log command.
+
+In  drivers/ata/libata-scsi.c I suppose.
+
+I guess one thing doesn't exclude the other though.
+
+We can attempt to move the code for [S]ATA over to libata
+at some point and respond to the SCT read log command
+from within the library in that case.
+
+I don't understand if that means the SCT read log also works
+on some SCSI drives, or if it is just a slot-in thing for
+ATA translation that has no meaning on SCSI drives.
+But that can be resolved by people who want to use this
+for SCSI drives and not by us.
+
+Yours,
+Linus Walleij
