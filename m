@@ -2,154 +2,354 @@ Return-Path: <SRS0=GaDF=2C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A72C8C43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 23:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9029FC2D0CA
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 23:55:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 768A2214AF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 23:22:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="owIJkdWZ"
+	by mail.kernel.org (Postfix) with ESMTP id 69B852173E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Dec 2019 23:55:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730896AbfLLXWT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Dec 2019 18:22:19 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:57820 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730965AbfLLXWT (ORCPT
+        id S1731496AbfLLXzE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Dec 2019 18:55:04 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36668 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731442AbfLLXzD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Dec 2019 18:22:19 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBCNJ09m104641;
-        Thu, 12 Dec 2019 23:21:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=gL2RVRF5gBvNEMpviEan8qRutQzV9WYQZ6sHqExKWQQ=;
- b=owIJkdWZzawlLdlC4lX52lWskCIAPJTexKl1L09ghjDSYGPxzDys+YG4DCE7W+N3jh6M
- ih0atxUd1KmFDdYYVmqHsoSDSKzUlfkAs5y+Wh4YnG0Xz3mv6pJ+AZUqjz8CmRqs0WpD
- sM+JzUUhx/pzELbcFRsuUrZFB2ym79lCCpuC7+DZFb1mtepd0BmPy0QUr2Yi0UgoUU6Z
- 6NFBSsxGF+/aGEEa/Iaoj2VLakJM0G4A0AU9stxR21kPJk0l2Der2domtwnjpsRlbvz7
- BW5BP/hh/xl8nJOXXGzvwqD6laRuzbK16f7xhISWItnF+4Dx1IEfgptvyfSE7AxaoEMM nQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2wrw4njxat-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Dec 2019 23:21:54 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBCNJgtf175278;
-        Thu, 12 Dec 2019 23:21:54 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 2wumsa5jqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Dec 2019 23:21:53 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xBCNLqoa015393;
-        Thu, 12 Dec 2019 23:21:52 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 12 Dec 2019 15:21:52 -0800
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>
-Subject: Re: [PATCH 1/1] hwmon: Driver for temperature sensors on SATA drives
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191209052119.32072-1-linux@roeck-us.net>
-        <20191209052119.32072-2-linux@roeck-us.net>
-        <CACRpkdYjidQHB0=S_brDxH3k+qJ2mfXCTF9A3SVZkPvBaVg6JQ@mail.gmail.com>
-Date:   Thu, 12 Dec 2019 18:21:49 -0500
-In-Reply-To: <CACRpkdYjidQHB0=S_brDxH3k+qJ2mfXCTF9A3SVZkPvBaVg6JQ@mail.gmail.com>
-        (Linus Walleij's message of "Thu, 12 Dec 2019 23:33:21 +0100")
-Message-ID: <yq1wob1jfjm.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        Thu, 12 Dec 2019 18:55:03 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBCNqbO4001118;
+        Thu, 12 Dec 2019 18:54:39 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2wusvh9w1c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Dec 2019 18:54:39 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xBCNo2aO032426;
+        Thu, 12 Dec 2019 23:54:43 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 2wr3q72ap8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Dec 2019 23:54:43 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBCNsbQv22216990
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Dec 2019 23:54:37 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72D6BAE05F;
+        Thu, 12 Dec 2019 23:54:37 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DC82AE063;
+        Thu, 12 Dec 2019 23:54:36 +0000 (GMT)
+Received: from [9.163.51.183] (unknown [9.163.51.183])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Dec 2019 23:54:36 +0000 (GMT)
+Subject: Re: [ v2] hwmon: (pmbus) Add Wistron power supply pmbus driver
+To:     Ben Pai <Ben_Pai@wistron.com>, linux@roeck-us.net
+Cc:     robh+dt@kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, corbet@lwn.net, wangat@tw.ibm.com,
+        Andy_YF_Wang@wistron.com, Claire_Ku@wistron.com
+References: <20191208134438.12925-1-Ben_Pai@wistron.com>
+From:   Eddie James <eajames@linux.ibm.com>
+Message-ID: <97651ec9-e467-dbd9-dcb8-b3efe1387fef@linux.ibm.com>
+Date:   Thu, 12 Dec 2019 17:54:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1912120179
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1912120179
+In-Reply-To: <20191208134438.12925-1-Ben_Pai@wistron.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-12_08:2019-12-12,2019-12-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ clxscore=1011 suspectscore=0 adultscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912120184
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-Linus,
+On 12/8/19 7:44 AM, Ben Pai wrote:
+> Add the driver to monitor Wisreon power supplies with hwmon over pmbus.
 
-> It's a nice addition with the SCT command, I never figured that part
-> out. Also nice how you register the scsi class interface I never saw
-> that before, it makes it a very neat plug-in.
 
-Yep, I agree that the patch looks pretty good in general. There are just
-a few wrinkles in the detection heuristics I would like to tweak. More
-on that later.
+Hi Ben.
 
-Yesterday I added support for the SCSI temperature log page and am
-working through some kinks wrt. making this work for USB as well.
 
-> When I read the comments from the previous thread I got the impression
-> the SCSI people wanted me to use something like the SCT transport and
-> the hook in the SMART thing in the libata back-end specifically for
-> [S]ATA in response to the SCT read log command.
+This driver looks very similar to the IBM CFFPS driver. If you think 
+they are similar enough, you may want to simply add a new version to 
+that driver that supports your PSU.
 
-Our recommendation was for libata-scsi.c to export the SCSI temperature
-log page, just like we do for all the other ATA parameters.
 
-However, in tinkering with this the last couple of days, I find myself
-torn on the subject. For two reasons. First of all, there is no 1:1
-sensor mapping unless you implement the slightly more complex
-environmental log page. Which isn't a big deal, except out of the
-hundred or so SCSI devices I have here there isn't a single one that
-supports it it. So in practice this interface would probably only exist
-for the purpose of the libata SATL.
+Thanks,
 
-The other reason the libata approach is slightly less attractive is that
-we need all the same SMART parsing for USB as well. So while it is
-cleaner to hide everything ATA in libata, the reality of USB-ATA bridges
-gets in the way. That is why I previously suggested having a libsmart or
-similar with those common bits.
+Eddie
 
-Anyway, based on what I've worked on today, I'm not sure that libata is
-necessarily the way to go. Sorry about giving bad advice! We've
-successfully implemented translations for everything else in libata over
-the years without too much trouble. And it's not really that the
-translation is bad. It's more the need to support it for USB as well
-that makes things clunky.
 
-> I don't understand if that means the SCT read log also works
-> on some SCSI drives, or if it is just a slot-in thing for
-> ATA translation that has no meaning on SCSI drives.
-
-It's an ATA command.
-
-One concern I have is wrt. to sensor naming. Maybe my /usr/bin/sensors
-command is too old. But it's pretty hopeless to get sensor readings for
-100 drives without being able to tell which sensor is for which
-device. Haven't looked into that yet. The links exist in
-/sys/class/hwmon that would allow vendor/model/serial to be queried.
-
-Oh, and another issue. While technically legal according to the spec, I
-am not sure it's a good idea to export a sensor per scsi_device. I have
-moved things to scsi_target instead to avoid having bazillions of
-sensors show up. Multi-actuator drives are already shipping.
-
-If I recall correctly, though, I seem to recall that you had some sort
-of multi-LUN external disk box that warranted you working on this in the
-first place. Is that correct? Can you refresh my memory?
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+>
+> Signed-off-by: Ben Pai <Ben_Pai@wistron.com>
+> ---
+>   .../devicetree/bindings/hwmon/wistron-wps.txt |  30 +++
+>   drivers/hwmon/pmbus/Kconfig                   |   9 +
+>   drivers/hwmon/pmbus/Makefile                  |   1 +
+>   drivers/hwmon/pmbus/wistron-wps.c             | 176 ++++++++++++++++++
+>   4 files changed, 216 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/wistron-wps.txt
+>   create mode 100644 drivers/hwmon/pmbus/wistron-wps.c
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/wistron-wps.txt b/Documentation/devicetree/bindings/hwmon/wistron-wps.txt
+> new file mode 100644
+> index 000000000000..aacb2e66736e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/wistron-wps.txt
+> @@ -0,0 +1,30 @@
+> +ver ibm-cffps
+> +=======================
+> +
+> +Supported chips:
+> +
+> +  * Wistron Common Form Factor power supply(wps).
+> +
+> +Author: Ben Pai <Ben_Pai@wistron.com>
+> +
+> +Description
+> +-----------
+> +
+> +Our company name is Wistron, so this driver is written to supports
+> +Wistron Common Form Factor power supplies(wps). This driver
+> +is a client to the core PMBus driver. Read information from psu,
+> +and create debug-files and write information to them via driver.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not auto-detect devices. You will have to instantiate the
+> +devices explicitly. Please see Documentation/i2c/instantiating-devices for
+> +details.
+> +
+> +Information of the data read
+> +---------------------
+> +FRU : name of psu manufacturer.
+> +PN : part_number of psu.
+> +SN : serial_number of psu.
+> +mfr_date : Date of psu's manufacture.
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index d62d69bb7e49..ebb7024e58ab 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -219,6 +219,15 @@ config SENSORS_UCD9200
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called ucd9200.
+>   
+> +config SENSORS_WISTRON_WPS
+> +	tristate "Wistron Power Supply"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for the Wistron
+> +	  power supply.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called wistron-wps.
+> +
+>   config SENSORS_ZL6100
+>   	tristate "Intersil ZL6100 and compatibles"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 03bacfcfd660..cad38f99e8c5 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -25,4 +25,5 @@ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>   obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+>   obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+>   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+> +obj-$(CONFIG_SENSORS_WISTRON_WPS) += wistron-wps.o
+>   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
+> diff --git a/drivers/hwmon/pmbus/wistron-wps.c b/drivers/hwmon/pmbus/wistron-wps.c
+> new file mode 100644
+> index 000000000000..4e2649e7b3f2
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/wistron-wps.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright 2019 Wistron Corp.
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/device.h>
+> +#include <linux/fs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +
+> +#include "pmbus.h"
+> +
+> +#define WPS_FRU_CMD	   0x99
+> +#define WPS_PN_CMD         0x9A
+> +#define WPS_FW_CMD	   0x9B
+> +#define WPS_DATE_CMD       0x9D
+> +#define WPS_SN_CMD	   0x9E
+> +
+> +enum {
+> +	WPS_DEBUGFS_FRU,
+> +	WPS_DEBUGFS_PN,
+> +	WPS_DEBUGFS_SN,
+> +	WPS_DEBUGFS_FW,
+> +	WPS_DEBUGFS_DATE,
+> +	WPS_DEBUGFS_NUM_ENTRIES
+> +};
+> +
+> +struct wistron_wps {
+> +	struct i2c_client *client;
+> +	int debugfs_entries[WPS_DEBUGFS_NUM_ENTRIES];
+> +};
+> +
+> +#define to_psu(x, y) container_of(x, struct wistron_wps, debugfs_entries[y])
+> +
+> +static ssize_t wistron_wps_debugfs_op(struct file *file, char __user *buf,
+> +				      size_t count, loff_t *ppos)
+> +{
+> +	u8 cmd;
+> +	int rc;
+> +	int *idxp = file->private_data;
+> +	int idx = *idxp;
+> +	struct wistron_wps *psu = to_psu(idxp, idx);
+> +	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
+> +
+> +	pmbus_set_page(psu->client, 0);
+> +	switch (idx) {
+> +	case WPS_DEBUGFS_FRU:
+> +		cmd = WPS_FRU_CMD;
+> +		break;
+> +	case WPS_DEBUGFS_PN:
+> +		cmd = WPS_PN_CMD;
+> +		break;
+> +	case WPS_DEBUGFS_SN:
+> +		cmd = WPS_SN_CMD;
+> +		break;
+> +	case WPS_DEBUGFS_FW:
+> +		cmd = WPS_FW_CMD;
+> +		break;
+> +	case WPS_DEBUGFS_DATE:
+> +		cmd = WPS_DATE_CMD;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +done:
+> +	data[rc] = '\n';
+> +	rc += 2;
+> +
+> +	return simple_read_from_buffer(buf, count, ppos, data, rc);
+> +}
+> +
+> +static const struct file_operations wistron_wps_fops = {
+> +
+> +	.llseek = noop_llseek,
+> +	.read = wistron_wps_debugfs_op,
+> +	.open = simple_open,
+> +};
+> +
+> +static struct pmbus_driver_info wistron_wps_info = {
+> +	.pages = 1,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> +		PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | PMBUS_HAVE_FAN12 |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
+> +		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP |
+> +		PMBUS_HAVE_STATUS_FAN12,
+> +};
+> +
+> +static struct pmbus_platform_data wistron_wps_pdata = {
+> +	.flags = PMBUS_SKIP_STATUS_CHECK,
+> +};
+> +
+> +static int wistron_wps_probe(struct i2c_client *client,
+> +			     const struct i2c_device_id *id)
+> +{
+> +	int i, rc;
+> +	struct dentry *debugfs;
+> +	struct dentry *wistron_wps_dir;
+> +	struct wistron_wps *psu;
+> +
+> +	client->dev.platform_data = &wistron_wps_pdata;
+> +	rc = pmbus_do_probe(client, id, &wistron_wps_info);
+> +	if (rc)
+> +		return rc;
+> +
+> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
+> +	if (!psu)
+> +		return 0;
+> +
+> +	psu->client = client;
+> +
+> +	debugfs = pmbus_get_debugfs_dir(client);
+> +	if (!debugfs)
+> +		return 0;
+> +
+> +	wistron_wps_dir = debugfs_create_dir(client->name, debugfs);
+> +	if (!wistron_wps_dir)
+> +		return 0;
+> +
+> +	for (i = 0; i < WPS_DEBUGFS_NUM_ENTRIES; ++i)
+> +		psu->debugfs_entries[i] = i;
+> +
+> +	debugfs_create_file("fru", 0444, wistron_wps_dir,
+> +			    &psu->debugfs_entries[WPS_DEBUGFS_FRU],
+> +			    &wistron_wps_fops);
+> +	debugfs_create_file("part_number", 0444, wistron_wps_dir,
+> +			    &psu->debugfs_entries[WPS_DEBUGFS_PN],
+> +			    &wistron_wps_fops);
+> +	debugfs_create_file("serial_number", 0444, wistron_wps_dir,
+> +			    &psu->debugfs_entries[WPS_DEBUGFS_SN],
+> +			    &wistron_wps_fops);
+> +	debugfs_create_file("fw_version", 0444, wistron_wps_dir,
+> +			    &psu->debugfs_entries[WPS_DEBUGFS_FW],
+> +			    &wistron_wps_fops);
+> +	debugfs_create_file("mfr_date", 0444, wistron_wps_dir,
+> +			    &psu->debugfs_entries[WPS_DEBUGFS_DATE],
+> +			    &wistron_wps_fops);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id wistron_wps_id[] = {
+> +	{ "wistron_wps", 1 },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, wistron_wps_id);
+> +
+> +static const struct of_device_id wistron_wps_of_match[] = {
+> +	{ .compatible = "wistron, wps" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, wistron_wps_of_match);
+> +
+> +static struct i2c_driver wistron_wps_driver = {
+> +	.driver = {
+> +		.name = "wistron-wps",
+> +		.of_match_table = wistron_wps_of_match,
+> +	},
+> +	.probe = wistron_wps_probe,
+> +	.remove = pmbus_do_remove,
+> +	.id_table = wistron_wps_id,
+> +};
+> +
+> +module_i2c_driver(wistron_wps_driver);
+> +
+> +MODULE_AUTHOR("Ben Pai");
+> +MODULE_DESCRIPTION("PMBus driver for Wistron power supplies");
+> +MODULE_LICENSE("GPL");
