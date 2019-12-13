@@ -2,192 +2,100 @@ Return-Path: <SRS0=7DvS=2D=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D03C43603
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00D17C43603
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 02:28:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5F7A2173E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:59:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C84A621655
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 02:28:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuRypg7W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731758AbfLMB7C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Dec 2019 20:59:02 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:43578 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727778AbfLMB7C (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Dec 2019 20:59:02 -0500
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 851E678041BB411D4832;
-        Fri, 13 Dec 2019 09:58:59 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Fri, 13 Dec 2019 09:58:54 +0800
-From:   Chen Zhou <chenzhou10@huawei.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenzhou10@huawei.com>
-Subject: [-next] hwmon: (w83627ehf) make sensor_dev_attr_##_name variables static
-Date:   Fri, 13 Dec 2019 09:56:05 +0800
-Message-ID: <20191213015605.172472-1-chenzhou10@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1731536AbfLMC22 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Dec 2019 21:28:28 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36783 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731330AbfLMC22 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 12 Dec 2019 21:28:28 -0500
+Received: by mail-pf1-f194.google.com with SMTP id x184so628881pfb.3;
+        Thu, 12 Dec 2019 18:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kcY4vW7yllqEshMKzrDhyN2EOIzeLlx+C0/DdxIqz2w=;
+        b=OuRypg7WPbgsbzXqMNFwelCuj1bgzo/QYm9qvCyeHDeSG+f2clYfeKpY+H4Ng0F9ku
+         DVKXQ9WarAqA8E5RjIbWlCdPuRqvJ1TRi8ecCQ86R0hUr32kyJI236y5DEPQKmJhfOA8
+         NY1Fv44SmqlJbQcQPG5aF3rr3iGunPN9ljFYq9oXNd8RR8QpEMcFi3YoOrd2pg15M2R+
+         61v8gcdZ48p7e2O5olllSIFvWrA0EncrFIf0XWCdL98RbnCNNIJZ/hPCqYpg0elTNT1e
+         36EcEnW6NpP+8Iq9NaeBvFE7LfyAkaM8Wjmm692FA6YwbVdFYYbqSXfo/6j5GskFsAVb
+         EOag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kcY4vW7yllqEshMKzrDhyN2EOIzeLlx+C0/DdxIqz2w=;
+        b=r7h93iyYJ2CrLJefIA2eliiL7udZJeVGIhrfdIMDMkkokRbzamEMV1rCS81OnsHV7x
+         OQwALzuTtd2YdSKdF5cyWCwqy0mRGnRGE8ioFBr8Akuo3YyLsOlk1rmOMJrnUe0LjCZp
+         2+UWVfZTQ0Is9UsfcY+JFmTT84Ova7oWCpEt5U/jZ3V3CzWhD4wQSinGtIipvwTACgAE
+         tTji+mtH7ZMPQQFBeo1qcyroOOBrQlZCVPnuerDWCGnk0yx7Fbo5n9J7J8unWSKLMhEy
+         rxH896bam7qJ6uX5sYPn2bq578oLwS7AJLUVO9UvRMZR1FNvoMm++G9nRN05EpgGq6Gt
+         VJsg==
+X-Gm-Message-State: APjAAAUFrcJDbQSWPwNzV/WuWA0ZFwBzuROMaETHgez/85/kgsXtrDm3
+        Kxr/WIrAWyyrCxAwn08stTU=
+X-Google-Smtp-Source: APXvYqzL2g49YHLkzIDoFitpt9kzMoNUgeHsq4W26sk3QJBKz8DCP6Bguzk0Xv1mN9qlWR9Gaq/sdA==
+X-Received: by 2002:a63:496:: with SMTP id 144mr14700508pge.207.1576204107508;
+        Thu, 12 Dec 2019 18:28:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e10sm9014809pfm.3.2019.12.12.18.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Dec 2019 18:28:26 -0800 (PST)
+Subject: Re: [ v2] hwmon: (pmbus) Add Wistron power supply pmbus driver
+To:     Eddie James <eajames@linux.ibm.com>, Ben Pai <Ben_Pai@wistron.com>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, corbet@lwn.net, wangat@tw.ibm.com,
+        Andy_YF_Wang@wistron.com, Claire_Ku@wistron.com
+References: <20191208134438.12925-1-Ben_Pai@wistron.com>
+ <97651ec9-e467-dbd9-dcb8-b3efe1387fef@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c5d72bfe-0ebc-5d9a-ebad-092ff802cc5c@roeck-us.net>
+Date:   Thu, 12 Dec 2019 18:28:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+In-Reply-To: <97651ec9-e467-dbd9-dcb8-b3efe1387fef@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix sparse warning:
+On 12/12/19 3:54 PM, Eddie James wrote:
+> 
+> On 12/8/19 7:44 AM, Ben Pai wrote:
+>> Add the driver to monitor Wisreon power supplies with hwmon over pmbus.
+> 
+> 
+> Hi Ben.
+> 
+> 
+> This driver looks very similar to the IBM CFFPS driver. If you think they are similar enough, you may want to simply add a new version to that driver that supports your PSU.
+> 
 
-drivers/hwmon/w83627ehf.c:1202:1: warning: symbol 'sensor_dev_attr_pwm1_target' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1204:1: warning: symbol 'sensor_dev_attr_pwm2_target' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1206:1: warning: symbol 'sensor_dev_attr_pwm3_target' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1208:1: warning: symbol 'sensor_dev_attr_pwm4_target' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1211:1: warning: symbol 'sensor_dev_attr_pwm1_tolerance' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1213:1: warning: symbol 'sensor_dev_attr_pwm2_tolerance' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1215:1: warning: symbol 'sensor_dev_attr_pwm3_tolerance' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1217:1: warning: symbol 'sensor_dev_attr_pwm4_tolerance' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1294:1: warning: symbol 'sensor_dev_attr_pwm4_stop_time' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1296:1: warning: symbol 'sensor_dev_attr_pwm4_start_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1298:1: warning: symbol 'sensor_dev_attr_pwm4_stop_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1300:1: warning: symbol 'sensor_dev_attr_pwm4_max_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1302:1: warning: symbol 'sensor_dev_attr_pwm4_step_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1305:1: warning: symbol 'sensor_dev_attr_pwm3_stop_time' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1307:1: warning: symbol 'sensor_dev_attr_pwm3_start_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1309:1: warning: symbol 'sensor_dev_attr_pwm3_stop_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1312:1: warning: symbol 'sensor_dev_attr_pwm1_stop_time' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1314:1: warning: symbol 'sensor_dev_attr_pwm2_stop_time' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1316:1: warning: symbol 'sensor_dev_attr_pwm1_start_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1318:1: warning: symbol 'sensor_dev_attr_pwm2_start_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1320:1: warning: symbol 'sensor_dev_attr_pwm1_stop_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1322:1: warning: symbol 'sensor_dev_attr_pwm2_stop_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1330:1: warning: symbol 'sensor_dev_attr_pwm1_max_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1332:1: warning: symbol 'sensor_dev_attr_pwm1_step_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1334:1: warning: symbol 'sensor_dev_attr_pwm2_max_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1336:1: warning: symbol 'sensor_dev_attr_pwm2_step_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1338:1: warning: symbol 'sensor_dev_attr_pwm3_max_output' was not declared. Should it be static?
-drivers/hwmon/w83627ehf.c:1340:1: warning: symbol 'sensor_dev_attr_pwm3_step_output' was not declared. Should it be static?
+It would be nice to have datasheets for those power supplies.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
----
- drivers/hwmon/w83627ehf.c | 56 +++++++++++++++++++++++------------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+Eddie - is it possible that the IBM power supply supports the WRITE_PROTECT
+command and has a write protect bit set ? If yes, I just submitted a patch
+for the PMBus core to address the situation; see
+https://patchwork.kernel.org/patch/11289717/
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 207cc74..0a13f6b 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1199,22 +1199,22 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
- 	return count;
- }
- 
--SENSOR_DEVICE_ATTR(pwm1_target, 0644, show_target_temp,
-+static SENSOR_DEVICE_ATTR(pwm1_target, 0644, show_target_temp,
- 	    store_target_temp, 0);
--SENSOR_DEVICE_ATTR(pwm2_target, 0644, show_target_temp,
-+static SENSOR_DEVICE_ATTR(pwm2_target, 0644, show_target_temp,
- 	    store_target_temp, 1);
--SENSOR_DEVICE_ATTR(pwm3_target, 0644, show_target_temp,
-+static SENSOR_DEVICE_ATTR(pwm3_target, 0644, show_target_temp,
- 	    store_target_temp, 2);
--SENSOR_DEVICE_ATTR(pwm4_target, 0644, show_target_temp,
-+static SENSOR_DEVICE_ATTR(pwm4_target, 0644, show_target_temp,
- 	    store_target_temp, 3);
- 
--SENSOR_DEVICE_ATTR(pwm1_tolerance, 0644, show_tolerance,
-+static SENSOR_DEVICE_ATTR(pwm1_tolerance, 0644, show_tolerance,
- 	    store_tolerance, 0);
--SENSOR_DEVICE_ATTR(pwm2_tolerance, 0644, show_tolerance,
-+static SENSOR_DEVICE_ATTR(pwm2_tolerance, 0644, show_tolerance,
- 	    store_tolerance, 1);
--SENSOR_DEVICE_ATTR(pwm3_tolerance, 0644, show_tolerance,
-+static SENSOR_DEVICE_ATTR(pwm3_tolerance, 0644, show_tolerance,
- 	    store_tolerance, 2);
--SENSOR_DEVICE_ATTR(pwm4_tolerance, 0644, show_tolerance,
-+static SENSOR_DEVICE_ATTR(pwm4_tolerance, 0644, show_tolerance,
- 	    store_tolerance, 3);
- 
- /* Smart Fan registers */
-@@ -1291,35 +1291,35 @@ store_##reg(struct device *dev, struct device_attribute *attr, \
- 
- fan_time_functions(fan_stop_time, FAN_STOP_TIME)
- 
--SENSOR_DEVICE_ATTR(pwm4_stop_time, 0644, show_fan_stop_time,
-+static SENSOR_DEVICE_ATTR(pwm4_stop_time, 0644, show_fan_stop_time,
- 	    store_fan_stop_time, 3);
--SENSOR_DEVICE_ATTR(pwm4_start_output, 0644, show_fan_start_output,
-+static SENSOR_DEVICE_ATTR(pwm4_start_output, 0644, show_fan_start_output,
- 	    store_fan_start_output, 3);
--SENSOR_DEVICE_ATTR(pwm4_stop_output, 0644, show_fan_stop_output,
-+static SENSOR_DEVICE_ATTR(pwm4_stop_output, 0644, show_fan_stop_output,
- 	    store_fan_stop_output, 3);
--SENSOR_DEVICE_ATTR(pwm4_max_output, 0644, show_fan_max_output,
-+static SENSOR_DEVICE_ATTR(pwm4_max_output, 0644, show_fan_max_output,
- 	    store_fan_max_output, 3);
--SENSOR_DEVICE_ATTR(pwm4_step_output, 0644, show_fan_step_output,
-+static SENSOR_DEVICE_ATTR(pwm4_step_output, 0644, show_fan_step_output,
- 	    store_fan_step_output, 3);
- 
--SENSOR_DEVICE_ATTR(pwm3_stop_time, 0644, show_fan_stop_time,
-+static SENSOR_DEVICE_ATTR(pwm3_stop_time, 0644, show_fan_stop_time,
- 	    store_fan_stop_time, 2);
--SENSOR_DEVICE_ATTR(pwm3_start_output, 0644, show_fan_start_output,
-+static SENSOR_DEVICE_ATTR(pwm3_start_output, 0644, show_fan_start_output,
- 	    store_fan_start_output, 2);
--SENSOR_DEVICE_ATTR(pwm3_stop_output, 0644, show_fan_stop_output,
-+static SENSOR_DEVICE_ATTR(pwm3_stop_output, 0644, show_fan_stop_output,
- 		    store_fan_stop_output, 2);
- 
--SENSOR_DEVICE_ATTR(pwm1_stop_time, 0644, show_fan_stop_time,
-+static SENSOR_DEVICE_ATTR(pwm1_stop_time, 0644, show_fan_stop_time,
- 	    store_fan_stop_time, 0);
--SENSOR_DEVICE_ATTR(pwm2_stop_time, 0644, show_fan_stop_time,
-+static SENSOR_DEVICE_ATTR(pwm2_stop_time, 0644, show_fan_stop_time,
- 	    store_fan_stop_time, 1);
--SENSOR_DEVICE_ATTR(pwm1_start_output, 0644, show_fan_start_output,
-+static SENSOR_DEVICE_ATTR(pwm1_start_output, 0644, show_fan_start_output,
- 	    store_fan_start_output, 0);
--SENSOR_DEVICE_ATTR(pwm2_start_output, 0644, show_fan_start_output,
-+static SENSOR_DEVICE_ATTR(pwm2_start_output, 0644, show_fan_start_output,
- 	    store_fan_start_output, 1);
--SENSOR_DEVICE_ATTR(pwm1_stop_output, 0644, show_fan_stop_output,
-+static SENSOR_DEVICE_ATTR(pwm1_stop_output, 0644, show_fan_stop_output,
- 	    store_fan_stop_output, 0);
--SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
-+static SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
- 	    store_fan_stop_output, 1);
- 
- 
-@@ -1327,17 +1327,17 @@ SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
-  * pwm1 and pwm3 don't support max and step settings on all chips.
-  * Need to check support while generating/removing attribute files.
-  */
--SENSOR_DEVICE_ATTR(pwm1_max_output, 0644, show_fan_max_output,
-+static SENSOR_DEVICE_ATTR(pwm1_max_output, 0644, show_fan_max_output,
- 	    store_fan_max_output, 0);
--SENSOR_DEVICE_ATTR(pwm1_step_output, 0644, show_fan_step_output,
-+static SENSOR_DEVICE_ATTR(pwm1_step_output, 0644, show_fan_step_output,
- 	    store_fan_step_output, 0);
--SENSOR_DEVICE_ATTR(pwm2_max_output, 0644, show_fan_max_output,
-+static SENSOR_DEVICE_ATTR(pwm2_max_output, 0644, show_fan_max_output,
- 	    store_fan_max_output, 1);
--SENSOR_DEVICE_ATTR(pwm2_step_output, 0644, show_fan_step_output,
-+static SENSOR_DEVICE_ATTR(pwm2_step_output, 0644, show_fan_step_output,
- 	    store_fan_step_output, 1);
--SENSOR_DEVICE_ATTR(pwm3_max_output, 0644, show_fan_max_output,
-+static SENSOR_DEVICE_ATTR(pwm3_max_output, 0644, show_fan_max_output,
- 	    store_fan_max_output, 2);
--SENSOR_DEVICE_ATTR(pwm3_step_output, 0644, show_fan_step_output,
-+static SENSOR_DEVICE_ATTR(pwm3_step_output, 0644, show_fan_step_output,
- 	    store_fan_step_output, 2);
- 
- static ssize_t
--- 
-2.7.4
-
+Thanks,
+Guenter
