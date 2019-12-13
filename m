@@ -2,171 +2,192 @@ Return-Path: <SRS0=7DvS=2D=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B3B0C2D0C8
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D03C43603
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:59:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1BDB22527
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:49:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bnnFw7oG"
+	by mail.kernel.org (Postfix) with ESMTP id A5F7A2173E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 01:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731666AbfLMBt4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Dec 2019 20:49:56 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:39353 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731568AbfLMBtz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Dec 2019 20:49:55 -0500
-Received: by mail-pj1-f65.google.com with SMTP id v93so484171pjb.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Dec 2019 17:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=/wtstk43nLo2U9tOljAumOLWBRYpMwRIk5X4SbZV9fE=;
-        b=bnnFw7oG5y0LtcIH+FC0T1FifGjHgqWpLIiLsxEHT+vL+f0fuuoqApv9nnfKr1eiC/
-         Bcj/a1JErWaoSnVf/kdU7X1AtYAFhhGs/S6Bs0ljSzm63X0jDd+Pa2IE+fBv3B6pVGmf
-         p9Uug03KpJyix+ML0l2TJh7mINgc2f90sJsBRYRX1Dtz7/eWlITDCNM3YHjottgknYzh
-         fZ5cccMLHSRQW5Fkbrcjp3Upx3nfFkxLf7FU30lktqGgFW85uqgnafRgd5zK2j+4Wo18
-         xepuiuS4uPs+HaokiWooiVXDwJh/AafrWE2NJhpsSgAIcJWaBzs++xJM0MkXrvKgBYN4
-         9S3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=/wtstk43nLo2U9tOljAumOLWBRYpMwRIk5X4SbZV9fE=;
-        b=SMUjFzLYxc4svPWnNOpubcpzA38e/VWMFehgD8Od+W+m4Bxc2tHKvA3uh2njtLaYZN
-         Q+uOSatue93JkD1Mz46blpgw58zZkZbo68Eavv9muxgf6Lck5tMG9m3z4jMtRYzgoF03
-         VKs4IXbJ8kHNfq1TT+rv+2fJd9vhnRrG1vSRJYxPT7j8/IFQQywobQgpDkYSHfDopfvt
-         KPFVSxZ7AShFeCHm0Xvw//tNwISGUXGGW2cuWp0X8OvJbdB9xQK03tffmsJajbisaiIa
-         ZqSMvTNzhH73lU85hKAtQCscskufBjRQGnIRgy6GGR7kqvlbJdIAShFilZRYt0hVoxt7
-         aalw==
-X-Gm-Message-State: APjAAAWiSV12FHiWyIz0Y9/blakfU1kc5JhMzHeMFJ6J4DMwaca5kdub
-        fkTAmHJwVZMqar8aYGJwwVxT69Bu
-X-Google-Smtp-Source: APXvYqxRj0iWhdWhfQqJKU6UXyv49bS+zgD3i95cVshQ53fY2lMga9ayLajWZuQSxMNlHkyFeKLuqA==
-X-Received: by 2002:a17:902:7c84:: with SMTP id y4mr12629891pll.297.1576201794373;
-        Thu, 12 Dec 2019 17:49:54 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f7sm9047446pfk.183.2019.12.12.17.49.52
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 12 Dec 2019 17:49:53 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (pmbus) Detect if chip is write protected
-Date:   Thu, 12 Dec 2019 17:49:49 -0800
-Message-Id: <20191213014949.24904-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1731758AbfLMB7C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Dec 2019 20:59:02 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:43578 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727778AbfLMB7C (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 12 Dec 2019 20:59:02 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 851E678041BB411D4832;
+        Fri, 13 Dec 2019 09:58:59 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 13 Dec 2019 09:58:54 +0800
+From:   Chen Zhou <chenzhou10@huawei.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chenzhou10@huawei.com>
+Subject: [-next] hwmon: (w83627ehf) make sensor_dev_attr_##_name variables static
+Date:   Fri, 13 Dec 2019 09:56:05 +0800
+Message-ID: <20191213015605.172472-1-chenzhou10@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If a chip is write protected, we can not change any limits, and we can
-not clear status flags. This may be the reason why clearing status flags
-is reported to not work for some chips. Detect the condition in the pmbus
-core. If the chip is write protected, set limit attributes as read-only,
-and set the flag indicating that the status flag should be ignored.
+Fix sparse warning:
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+drivers/hwmon/w83627ehf.c:1202:1: warning: symbol 'sensor_dev_attr_pwm1_target' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1204:1: warning: symbol 'sensor_dev_attr_pwm2_target' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1206:1: warning: symbol 'sensor_dev_attr_pwm3_target' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1208:1: warning: symbol 'sensor_dev_attr_pwm4_target' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1211:1: warning: symbol 'sensor_dev_attr_pwm1_tolerance' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1213:1: warning: symbol 'sensor_dev_attr_pwm2_tolerance' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1215:1: warning: symbol 'sensor_dev_attr_pwm3_tolerance' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1217:1: warning: symbol 'sensor_dev_attr_pwm4_tolerance' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1294:1: warning: symbol 'sensor_dev_attr_pwm4_stop_time' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1296:1: warning: symbol 'sensor_dev_attr_pwm4_start_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1298:1: warning: symbol 'sensor_dev_attr_pwm4_stop_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1300:1: warning: symbol 'sensor_dev_attr_pwm4_max_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1302:1: warning: symbol 'sensor_dev_attr_pwm4_step_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1305:1: warning: symbol 'sensor_dev_attr_pwm3_stop_time' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1307:1: warning: symbol 'sensor_dev_attr_pwm3_start_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1309:1: warning: symbol 'sensor_dev_attr_pwm3_stop_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1312:1: warning: symbol 'sensor_dev_attr_pwm1_stop_time' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1314:1: warning: symbol 'sensor_dev_attr_pwm2_stop_time' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1316:1: warning: symbol 'sensor_dev_attr_pwm1_start_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1318:1: warning: symbol 'sensor_dev_attr_pwm2_start_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1320:1: warning: symbol 'sensor_dev_attr_pwm1_stop_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1322:1: warning: symbol 'sensor_dev_attr_pwm2_stop_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1330:1: warning: symbol 'sensor_dev_attr_pwm1_max_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1332:1: warning: symbol 'sensor_dev_attr_pwm1_step_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1334:1: warning: symbol 'sensor_dev_attr_pwm2_max_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1336:1: warning: symbol 'sensor_dev_attr_pwm2_step_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1338:1: warning: symbol 'sensor_dev_attr_pwm3_max_output' was not declared. Should it be static?
+drivers/hwmon/w83627ehf.c:1340:1: warning: symbol 'sensor_dev_attr_pwm3_step_output' was not declared. Should it be static?
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
 ---
- drivers/hwmon/pmbus/pmbus.h      | 11 +++++++++++
- drivers/hwmon/pmbus/pmbus_core.c | 12 ++++++++++++
- include/linux/pmbus.h            | 11 ++++++++++-
- 3 files changed, 33 insertions(+), 1 deletion(-)
+ drivers/hwmon/w83627ehf.c | 56 +++++++++++++++++++++++------------------------
+ 1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index d198af3a92b6..90d6c9e23d5f 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -22,6 +22,8 @@ enum pmbus_regs {
- 	PMBUS_CLEAR_FAULTS		= 0x03,
- 	PMBUS_PHASE			= 0x04,
+diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
+index 207cc74..0a13f6b 100644
+--- a/drivers/hwmon/w83627ehf.c
++++ b/drivers/hwmon/w83627ehf.c
+@@ -1199,22 +1199,22 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
+ 	return count;
+ }
  
-+	PMBUS_WRITE_PROTECT		= 0x10,
-+
- 	PMBUS_CAPABILITY		= 0x19,
- 	PMBUS_QUERY			= 0x1A,
+-SENSOR_DEVICE_ATTR(pwm1_target, 0644, show_target_temp,
++static SENSOR_DEVICE_ATTR(pwm1_target, 0644, show_target_temp,
+ 	    store_target_temp, 0);
+-SENSOR_DEVICE_ATTR(pwm2_target, 0644, show_target_temp,
++static SENSOR_DEVICE_ATTR(pwm2_target, 0644, show_target_temp,
+ 	    store_target_temp, 1);
+-SENSOR_DEVICE_ATTR(pwm3_target, 0644, show_target_temp,
++static SENSOR_DEVICE_ATTR(pwm3_target, 0644, show_target_temp,
+ 	    store_target_temp, 2);
+-SENSOR_DEVICE_ATTR(pwm4_target, 0644, show_target_temp,
++static SENSOR_DEVICE_ATTR(pwm4_target, 0644, show_target_temp,
+ 	    store_target_temp, 3);
  
-@@ -225,6 +227,15 @@ enum pmbus_regs {
+-SENSOR_DEVICE_ATTR(pwm1_tolerance, 0644, show_tolerance,
++static SENSOR_DEVICE_ATTR(pwm1_tolerance, 0644, show_tolerance,
+ 	    store_tolerance, 0);
+-SENSOR_DEVICE_ATTR(pwm2_tolerance, 0644, show_tolerance,
++static SENSOR_DEVICE_ATTR(pwm2_tolerance, 0644, show_tolerance,
+ 	    store_tolerance, 1);
+-SENSOR_DEVICE_ATTR(pwm3_tolerance, 0644, show_tolerance,
++static SENSOR_DEVICE_ATTR(pwm3_tolerance, 0644, show_tolerance,
+ 	    store_tolerance, 2);
+-SENSOR_DEVICE_ATTR(pwm4_tolerance, 0644, show_tolerance,
++static SENSOR_DEVICE_ATTR(pwm4_tolerance, 0644, show_tolerance,
+ 	    store_tolerance, 3);
+ 
+ /* Smart Fan registers */
+@@ -1291,35 +1291,35 @@ store_##reg(struct device *dev, struct device_attribute *attr, \
+ 
+ fan_time_functions(fan_stop_time, FAN_STOP_TIME)
+ 
+-SENSOR_DEVICE_ATTR(pwm4_stop_time, 0644, show_fan_stop_time,
++static SENSOR_DEVICE_ATTR(pwm4_stop_time, 0644, show_fan_stop_time,
+ 	    store_fan_stop_time, 3);
+-SENSOR_DEVICE_ATTR(pwm4_start_output, 0644, show_fan_start_output,
++static SENSOR_DEVICE_ATTR(pwm4_start_output, 0644, show_fan_start_output,
+ 	    store_fan_start_output, 3);
+-SENSOR_DEVICE_ATTR(pwm4_stop_output, 0644, show_fan_stop_output,
++static SENSOR_DEVICE_ATTR(pwm4_stop_output, 0644, show_fan_stop_output,
+ 	    store_fan_stop_output, 3);
+-SENSOR_DEVICE_ATTR(pwm4_max_output, 0644, show_fan_max_output,
++static SENSOR_DEVICE_ATTR(pwm4_max_output, 0644, show_fan_max_output,
+ 	    store_fan_max_output, 3);
+-SENSOR_DEVICE_ATTR(pwm4_step_output, 0644, show_fan_step_output,
++static SENSOR_DEVICE_ATTR(pwm4_step_output, 0644, show_fan_step_output,
+ 	    store_fan_step_output, 3);
+ 
+-SENSOR_DEVICE_ATTR(pwm3_stop_time, 0644, show_fan_stop_time,
++static SENSOR_DEVICE_ATTR(pwm3_stop_time, 0644, show_fan_stop_time,
+ 	    store_fan_stop_time, 2);
+-SENSOR_DEVICE_ATTR(pwm3_start_output, 0644, show_fan_start_output,
++static SENSOR_DEVICE_ATTR(pwm3_start_output, 0644, show_fan_start_output,
+ 	    store_fan_start_output, 2);
+-SENSOR_DEVICE_ATTR(pwm3_stop_output, 0644, show_fan_stop_output,
++static SENSOR_DEVICE_ATTR(pwm3_stop_output, 0644, show_fan_stop_output,
+ 		    store_fan_stop_output, 2);
+ 
+-SENSOR_DEVICE_ATTR(pwm1_stop_time, 0644, show_fan_stop_time,
++static SENSOR_DEVICE_ATTR(pwm1_stop_time, 0644, show_fan_stop_time,
+ 	    store_fan_stop_time, 0);
+-SENSOR_DEVICE_ATTR(pwm2_stop_time, 0644, show_fan_stop_time,
++static SENSOR_DEVICE_ATTR(pwm2_stop_time, 0644, show_fan_stop_time,
+ 	    store_fan_stop_time, 1);
+-SENSOR_DEVICE_ATTR(pwm1_start_output, 0644, show_fan_start_output,
++static SENSOR_DEVICE_ATTR(pwm1_start_output, 0644, show_fan_start_output,
+ 	    store_fan_start_output, 0);
+-SENSOR_DEVICE_ATTR(pwm2_start_output, 0644, show_fan_start_output,
++static SENSOR_DEVICE_ATTR(pwm2_start_output, 0644, show_fan_start_output,
+ 	    store_fan_start_output, 1);
+-SENSOR_DEVICE_ATTR(pwm1_stop_output, 0644, show_fan_stop_output,
++static SENSOR_DEVICE_ATTR(pwm1_stop_output, 0644, show_fan_stop_output,
+ 	    store_fan_stop_output, 0);
+-SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
++static SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
+ 	    store_fan_stop_output, 1);
+ 
+ 
+@@ -1327,17 +1327,17 @@ SENSOR_DEVICE_ATTR(pwm2_stop_output, 0644, show_fan_stop_output,
+  * pwm1 and pwm3 don't support max and step settings on all chips.
+  * Need to check support while generating/removing attribute files.
   */
- #define PB_OPERATION_CONTROL_ON		BIT(7)
+-SENSOR_DEVICE_ATTR(pwm1_max_output, 0644, show_fan_max_output,
++static SENSOR_DEVICE_ATTR(pwm1_max_output, 0644, show_fan_max_output,
+ 	    store_fan_max_output, 0);
+-SENSOR_DEVICE_ATTR(pwm1_step_output, 0644, show_fan_step_output,
++static SENSOR_DEVICE_ATTR(pwm1_step_output, 0644, show_fan_step_output,
+ 	    store_fan_step_output, 0);
+-SENSOR_DEVICE_ATTR(pwm2_max_output, 0644, show_fan_max_output,
++static SENSOR_DEVICE_ATTR(pwm2_max_output, 0644, show_fan_max_output,
+ 	    store_fan_max_output, 1);
+-SENSOR_DEVICE_ATTR(pwm2_step_output, 0644, show_fan_step_output,
++static SENSOR_DEVICE_ATTR(pwm2_step_output, 0644, show_fan_step_output,
+ 	    store_fan_step_output, 1);
+-SENSOR_DEVICE_ATTR(pwm3_max_output, 0644, show_fan_max_output,
++static SENSOR_DEVICE_ATTR(pwm3_max_output, 0644, show_fan_max_output,
+ 	    store_fan_max_output, 2);
+-SENSOR_DEVICE_ATTR(pwm3_step_output, 0644, show_fan_step_output,
++static SENSOR_DEVICE_ATTR(pwm3_step_output, 0644, show_fan_step_output,
+ 	    store_fan_step_output, 2);
  
-+/*
-+ * WRITE_PROTECT
-+ */
-+#define PB_WP_ALL	BIT(7)	/* all but WRITE_PROTECT */
-+#define PB_WP_OP	BIT(6)	/* all but WP, OPERATION, PAGE */
-+#define PB_WP_VOUT	BIT(5)	/* all but WP, OPERATION, PAGE, VOUT, ON_OFF */
-+
-+#define PB_WP_ANY	(PB_WP_ALL | PB_WP_OP | PB_WP_VOUT)
-+
- /*
-  * CAPABILITY
-  */
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 8470097907bc..2c196eddbb8d 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1088,6 +1088,9 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
- 		snprintf(sensor->name, sizeof(sensor->name), "%s%d",
- 			 name, seq);
- 
-+	if (data->flags & PMBUS_WRITE_PROTECTED)
-+		readonly = true;
-+
- 	sensor->page = page;
- 	sensor->reg = reg;
- 	sensor->class = class;
-@@ -2141,6 +2144,15 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
- 		client->flags |= I2C_CLIENT_PEC;
- 
-+	/*
-+	 * Check if the chip is write protected. If it is, we can not clear
-+	 * faults, and we should not try it. Also, in that case, writes into
-+	 * limit registers need to be disabled.
-+	 */
-+	ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
-+	if (ret > 0 && (ret & PB_WP_ANY))
-+		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
-+
- 	if (data->info->pages)
- 		pmbus_clear_faults(client);
- 	else
-diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-index 08468fca5ea2..1ea5bae708a1 100644
---- a/include/linux/pmbus.h
-+++ b/include/linux/pmbus.h
-@@ -8,6 +8,8 @@
- #ifndef _PMBUS_H_
- #define _PMBUS_H_
- 
-+#include <linux/bits.h>
-+
- /* flags */
- 
- /*
-@@ -23,7 +25,14 @@
-  * communication errors for no explicable reason. For such chips, checking
-  * the status register must be disabled.
-  */
--#define PMBUS_SKIP_STATUS_CHECK	(1 << 0)
-+#define PMBUS_SKIP_STATUS_CHECK	BIT(0)
-+
-+/*
-+ * PMBUS_WRITE_PROTECTED
-+ * Set if the chip is write protected and write protection is not determined
-+ * by the standard WRITE_PROTECT command.
-+ */
-+#define PMBUS_WRITE_PROTECTED	BIT(1)
- 
- struct pmbus_platform_data {
- 	u32 flags;		/* Device specific flags */
+ static ssize_t
 -- 
-2.17.1
+2.7.4
 
