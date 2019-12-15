@@ -1,129 +1,188 @@
-Return-Path: <SRS0=7DvS=2D=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=OCRH=2F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A25DFC3F68F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 21:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60943C2D0CB
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Dec 2019 05:16:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4CC12214AF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Dec 2019 21:39:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CDFD21D7E
+	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Dec 2019 05:16:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lNLTTwPD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fFllsnGv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfLMVj6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 Dec 2019 16:39:58 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:34754 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbfLMVj5 (ORCPT
+        id S1726019AbfLOFQn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 15 Dec 2019 00:16:43 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46924 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbfLOFQn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Dec 2019 16:39:57 -0500
-Received: by mail-pj1-f67.google.com with SMTP id j11so282540pjs.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Dec 2019 13:39:57 -0800 (PST)
+        Sun, 15 Dec 2019 00:16:43 -0500
+Received: by mail-pl1-f195.google.com with SMTP id k20so2998607pll.13;
+        Sat, 14 Dec 2019 21:16:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=1MjWxv41IygsSrA+vrDsYPyCG7xe5ORyZSNjbnCMR6w=;
-        b=lNLTTwPD8js9d6WRmJ0kp9VzQ02adV+7Bqhqorj2P9NBmmVig01WK0a+q7IJDjBVma
-         7DuKY+gr/uwnm5LFKGtKnEFTEU6Q4OEQor0fGcVZL8s/r1boKT97B3fspW1qNNw9shs7
-         YPlePGZ+B8mQ0tqYcr7+seHW2FK+QNUm/xWEu357QWLlr8oP5h5/5Br61m50K515f/fP
-         TMqG5Ry4SmR07PTFaQl8ig7hbf/HNGbbYJ1GbTsOXJgfTpxHMOLo+BpZI+U72QCFenh7
-         YpFCj+0IAVmRjvSIeDOW1oCMjWfAW8E6UYGC6f8gs7mohs0j05Ckv2iL4JtK+vV4Hzsk
-         oMJQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=NG3H+s+fBBFZ6iq8D5+2rLQ1nI3ABlA+Ut9Zp7bqJfw=;
+        b=fFllsnGvsEGyNBVt6BCMjcLIs9kK0YQmUxliyDazXC+jL/P/+h+E031C6MADa+BhaZ
+         cPem5VxZc6Xui6mUJ2J+heoRkSdY1Tfr4MTSmtCZRK7GATNQ0SnZEGtE2dQAh3bA4em0
+         6FjpBSRHNHHvvdNJCh9P7mhoscWbr4ZnvdhXZiCIBrUz+5bROc5rWPW9jbji03z6+1ks
+         viwiAT2A0DY9a2/6FuRKgBll3PiZPA5uJtFLf90tssSpQVc1s44SgFV29BuOuz4zVmqH
+         jtOCBkhp0T3zV3WUWq53EDbiDfNfQIqx3f4LqSjJN9Hl19b+cLzQxq/47p/UJDq6jxKM
+         h5ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=1MjWxv41IygsSrA+vrDsYPyCG7xe5ORyZSNjbnCMR6w=;
-        b=pWKPlb4A3+UilyeofxQwz1Q1v0pNfVw4RJs1zi1VKJNmA2W12GPm8tj1Vi3UGkOhkc
-         sphJBWygHr65GMnJyjr9S8dBbVGooCfxyQ3H6IWifKCE54MIfAiXdV1O4BRjop48FlSF
-         1sC6g8iBIYpd8Ei8N0zpAeUbW3xben1YheZFdP2b8/N+1Tg3eLsLWm0wv5gpYWpY6hLO
-         GocoYjP/AqvGPFzF9as2zlQIuMUQ/LQFU+qjfxlXf2bs6skq7VgSkj3RH7gXz9BJnC6s
-         PDZp4lxSEpOiFiH/0YJpOM6PqFhAK0zKNsvD3HbZjB1zE+rwxFOsxEy1Se35sSCjdlyK
-         /t6A==
-X-Gm-Message-State: APjAAAVWZl8nKMaKxP/26r6htMeQ5XNLfBoMdbouE1z0NVnP25bJBLkJ
-        gReM/0yDP/WC3OXrmpN2B8DwKkjL
-X-Google-Smtp-Source: APXvYqwEF+z79R0wNsIxnFa7FqeENienB70h3CrWmIEUynl+CFauYbpIt34qz9sfXIRv7tU6pVhWsQ==
-X-Received: by 2002:a17:90a:bc05:: with SMTP id w5mr1808164pjr.64.1576273196973;
-        Fri, 13 Dec 2019 13:39:56 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v29sm11632094pgl.88.2019.12.13.13.39.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 13 Dec 2019 13:39:56 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (pmbus) Add MAX20796 to devices supported by generic pmbus driver
-Date:   Fri, 13 Dec 2019 13:39:53 -0800
-Message-Id: <20191213213953.20644-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=NG3H+s+fBBFZ6iq8D5+2rLQ1nI3ABlA+Ut9Zp7bqJfw=;
+        b=oxmrvZgoVArVicxBmMW+CC8EWikzuYJPgRDxubjXxESJT1lQW639QWhXCr8aNPn6Ol
+         DTYLrEi1w24nZlo7PowUsb/g9Xg68k7SVidCv63oFqIGGLE0gPPMLvr3kJ/ZcSVMdNFP
+         sJ0D2bih3ppDAoCsDkreQeZiAry4mcxGdgD+/cvyCPg/SrxW80YaOM4h1ky+6BeSW1Yz
+         qwtgnK6nLk4cB6X3J3B5VbjUlX954CSeYaEWsNcsEclOTSHKWxFkICQOChrg8wEHdSnh
+         9C4YkZ2nvO8O86n20G4YM7jZfdcGAaTjrE8ZUrurgjPu/MIYyaEoW4KBOX1jD3WkZfxk
+         BCEQ==
+X-Gm-Message-State: APjAAAXMc3hx7J7PWp3vsGTqVnBJ3Za74pm8bxKxt1mpf5iH49H/zVjw
+        5ADcsUQkowMQB/IWqbtyGm8=
+X-Google-Smtp-Source: APXvYqxgtJdFVOCE8Ms0U4eceOkCGxZyfix7v1NLBAjvEFeByQtDfmu1KxfD+5ueGYi8ZtB7bBjehg==
+X-Received: by 2002:a17:902:7896:: with SMTP id q22mr9010139pll.219.1576387002224;
+        Sat, 14 Dec 2019 21:16:42 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
+        by smtp.gmail.com with ESMTPSA id u10sm16596528pgg.41.2019.12.14.21.16.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sat, 14 Dec 2019 21:16:41 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-nvme@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Subject: [PATCH v4 00/12] add header file for kelvin to/from Celsius conversion helpers
+Date:   Sun, 15 Dec 2019 14:16:03 +0900
+Message-Id: <1576386975-7941-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-MAX20796 is a dual-phase scalable integrated voltage regulator with
-PMBus interface.
+There are several helper macros to convert kelvin to/from Celsius in
+<linux/thermal.h> for thermal drivers.  These are useful for any other
+drivers or subsystems, but it's odd to include <linux/thermal.h> just for
+the helpers.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/pmbus.rst | 10 ++++++++++
- drivers/hwmon/pmbus/Kconfig   |  4 ++--
- drivers/hwmon/pmbus/pmbus.c   |  1 +
- 3 files changed, 13 insertions(+), 2 deletions(-)
+This adds a new <linux/units.h> that provides the equivalent inline
+functions for any drivers or subsystems, and switches all the users of
+conversion helpers in <linux/thermal.h> to use <linux/units.h>
+helpers.
 
-diff --git a/Documentation/hwmon/pmbus.rst b/Documentation/hwmon/pmbus.rst
-index abfb9dd4857d..f787984e88a9 100644
---- a/Documentation/hwmon/pmbus.rst
-+++ b/Documentation/hwmon/pmbus.rst
-@@ -63,6 +63,16 @@ Supported chips:
- 
- 	http://www.ti.com/lit/gpn/tps544c25
- 
-+  * Maxim MAX20796
-+
-+    Prefix: 'max20796'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+	Not published
-+
-   * Generic PMBus devices
- 
-     Prefix: 'pmbus'
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 48ae5a5419c5..76fe5488d5fb 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -20,8 +20,8 @@ config SENSORS_PMBUS
- 	help
- 	  If you say yes here you get hardware monitoring support for generic
- 	  PMBus devices, including but not limited to ADP4000, BMR453, BMR454,
--	  MDT040, NCP4200, NCP4208, PDT003, PDT006, PDT012, TPS40400, TPS544B20,
--	  TPS544B25, TPS544C20, TPS544C25, and UDT020.
-+	  MAX20796, MDT040, NCP4200, NCP4208, PDT003, PDT006, PDT012, TPS40400,
-+	  TPS544B20, TPS544B25, TPS544C20, TPS544C25, and UDT020.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called pmbus.
-diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-index c0bc43d01018..879aac6ed092 100644
---- a/drivers/hwmon/pmbus/pmbus.c
-+++ b/drivers/hwmon/pmbus/pmbus.c
-@@ -210,6 +210,7 @@ static const struct i2c_device_id pmbus_id[] = {
- 	{"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
-+	{"max20796", (kernel_ulong_t)&pmbus_info_one},
- 	{"mdt040", (kernel_ulong_t)&pmbus_info_one},
- 	{"ncp4200", (kernel_ulong_t)&pmbus_info_one},
- 	{"ncp4208", (kernel_ulong_t)&pmbus_info_one},
+* v4
+- add Reviewed-by and Acked-by tags
+- change include order
+- keep the line over 80 characters because this change doesn't make it longer
+- remove "wireless: " in the title
+
+* v3
+- rename new header name from <linux/temperature.h> to <linux/units.h>
+- add milli_kelvin_to_millicelsius() and millicelsius_to_milli_kelvin() and
+  use them for implementing other helpers
+- add MILLIDEGREE_PER_DEGREE and MILLIDEGREE_PER_DECIDEGREE and replace
+  the hardcoded constants
+- add kelvin_to_celsius() and celsius_to_kelvin() in <linux/units.h>
+- add Reviewed-by tags
+- switch iwlegacy driver to use <linux/units.h> helpers
+- switch iwlwifi driver to use <linux/units.h> helpers
+- remove unused TO_MCELSIUS macro in armada thermal driver
+- switch qcom-vadc-common module to use <linux/units.h> helpers
+
+* v2
+- add deci_kelvin_to_millicelsius_with_offset() in linux/temperature.h
+- stop including linux/temperature.h from linux/thermal.h
+- include <linux/temperature.h> explicitly from thermal drivers
+- fix s/temprature/temperature/ typo in commit log
+- use deci_kelvin_to_millicelsius_with_offset() in ACPI thermal zone driver
+- don't mix up another fix (format string for cellsius value)
+- add Acked-by and Reviewed-by tags
+
+Akinobu Mita (12):
+  add helpers for kelvin to/from Celsius conversion
+  ACPI: thermal: switch to use <linux/units.h> helpers
+  platform/x86: asus-wmi: switch to use <linux/units.h> helpers
+  platform/x86: intel_menlow: switch to use <linux/units.h> helpers
+  thermal: int340x: switch to use <linux/units.h> helpers
+  thermal: intel_pch: switch to use <linux/units.h> helpers
+  nvme: hwmon: switch to use <linux/units.h> helpers
+  thermal: remove kelvin to/from Celsius conversion helpers from
+    <linux/thermal.h>
+  iwlegacy: use <linux/units.h> helpers
+  iwlwifi: use <linux/units.h> helpers
+  thermal: armada: remove unused TO_MCELSIUS macro
+  iio: adc: qcom-vadc-common: use <linux/units.h> helpers
+
+ drivers/acpi/thermal.c                             | 34 ++++-----
+ drivers/iio/adc/qcom-vadc-common.c                 |  6 +-
+ drivers/iio/adc/qcom-vadc-common.h                 |  1 -
+ drivers/net/wireless/intel/iwlegacy/4965-mac.c     |  3 +-
+ drivers/net/wireless/intel/iwlegacy/4965.c         | 11 +--
+ drivers/net/wireless/intel/iwlegacy/common.h       |  3 -
+ drivers/net/wireless/intel/iwlwifi/dvm/dev.h       |  5 --
+ drivers/net/wireless/intel/iwlwifi/dvm/devices.c   |  6 +-
+ drivers/nvme/host/hwmon.c                          | 13 ++--
+ drivers/platform/x86/asus-wmi.c                    |  7 +-
+ drivers/platform/x86/intel_menlow.c                |  9 ++-
+ drivers/thermal/armada_thermal.c                   |  2 -
+ .../intel/int340x_thermal/int340x_thermal_zone.c   |  7 +-
+ drivers/thermal/intel/intel_pch_thermal.c          |  3 +-
+ include/linux/thermal.h                            | 11 ---
+ include/linux/units.h                              | 84 ++++++++++++++++++++++
+ 16 files changed, 137 insertions(+), 68 deletions(-)
+ create mode 100644 include/linux/units.h
+
+Cc: Sujith Thomas <sujith.thomas@intel.com>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Andy Shevchenko <andy@infradead.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amit.kucheria@verdurent.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Keith Busch <kbusch@kernel.org>
+Cc: Jens Axboe <axboe@fb.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Stanislaw Gruszka <sgruszka@redhat.com>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Cc: Luca Coelho <luciano.coelho@intel.com>
+Cc: Intel Linux Wireless <linuxwifi@intel.com>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Hartmut Knaack <knaack.h@gmx.de>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Peter Meerwald-Stadler <pmeerw@pmeerw.net>
 -- 
-2.17.1
+2.7.4
 
