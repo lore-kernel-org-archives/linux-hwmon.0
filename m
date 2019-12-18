@@ -2,351 +2,334 @@ Return-Path: <SRS0=ADoj=2I=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE51C43603
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 02:45:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E682C3F68F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 02:52:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C647221775
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 02:45:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="th0T7UAz"
+	by mail.kernel.org (Postfix) with ESMTP id D4CEA24676
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 02:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576637564;
+	bh=9C7BNsreRQCNSApsgEQJowtyuXu50jB1BOPCD19Ht5I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Py1i7Nlw47qktyJY6sCVOOyVD31ddgL7G+dMDx5IXrt2BoYuuHqvb+PjB0hV5QjpQ
+	 kx/5YSQbrt4C6my7oH6Y4lptH46fymoK4NF3J6anm+KwzYT3RdPaYBT6JQjLOIG+pT
+	 cdCK4AUYeEuvpazdHsAlQJCnbB/22/ny/y98Y0Ks=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbfLRCpI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Dec 2019 21:45:08 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:55161 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726683AbfLRCpI (ORCPT
+        id S1726510AbfLRCwo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Dec 2019 21:52:44 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46478 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfLRCwn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Dec 2019 21:45:08 -0500
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B58D7891AA;
-        Wed, 18 Dec 2019 15:45:05 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1576637105;
-        bh=faOsqBAUEPT8CjaDaKs7LA0D7i3HgLI9rNUXSoFJ+ko=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=th0T7UAzzTudRg+Uo35UyAwkG2Y4fVkCenHlzwBElybSpiRFyaBG615f0ZIO1mWSN
-         VGfhQ6uGTKI1LAaxlI83l9R6wreaCxKOqVuvTcYFrkvEIanf7C38TjkrA/xdFbMtoY
-         jOVL/vPa8PwEPUf4JUoMmDtxoV7lP0qFhQUBmjbbd7G/imVaf9CtNxbagf0nTpxD0X
-         aEXMlYEYwMTRFnng8z1ynSQttTn1ETWxY8mKOFYb15bSXFHaq3Ua3H1gUV54TS0Fng
-         aAwSBIK3nf59zOmJa5bawSexEgr6J+hvZSgic4zchqqf5gh2OYTIv2zCaVJq/avcAF
-         JXgtHrImSI3ng==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5df992ac0000>; Wed, 18 Dec 2019 15:45:05 +1300
-Received: from logans-dl.ws.atlnz.lc (logans-dl.ws.atlnz.lc [10.33.25.49])
-        by smtp (Postfix) with ESMTP id EFF5613EEA8;
-        Wed, 18 Dec 2019 15:44:59 +1300 (NZDT)
-Received: by logans-dl.ws.atlnz.lc (Postfix, from userid 1820)
-        id 622D3C03C3; Wed, 18 Dec 2019 15:45:00 +1300 (NZDT)
-From:   Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org,
-        Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-Subject: [PATCH 1/1] hwmon: (adt7475) Added attenuator bypass support
-Date:   Wed, 18 Dec 2019 15:42:38 +1300
-Message-Id: <20191218024238.19836-2-logan.shaw@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191218024238.19836-1-logan.shaw@alliedtelesis.co.nz>
-References: <20191218024238.19836-1-logan.shaw@alliedtelesis.co.nz>
+        Tue, 17 Dec 2019 21:52:43 -0500
+Received: by mail-ot1-f68.google.com with SMTP id c22so465975otj.13;
+        Tue, 17 Dec 2019 18:52:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sakYv7BHYRv9Zt+Z2j2doXtLovgAGwFnnV7hzjdze40=;
+        b=o84Bj0ZeeCWTaDn21/crzhUl0x72NBThXOI5GCBD5fPdASikssivnyPW2OcY+N5BAN
+         7Zf1QJgbf3ahUj5DTHIECLjcBuzdvLEWtpAJRrGJRd9nBPOmHpJyusYRAMB64xSVByJA
+         9BaolKCDqg+4vDwqUuk60AGgACsufrFa7PJhrZtXNzBBq3SkfhZhLILxI/w8xY8EAYwI
+         oaNVdCvbZ6INsA/Fo2AZZxhVJsyoC3oFCfAw0WK+T/ZevprZOwDLFvTW2pnFyLZaSlYt
+         nHOEdNQMOokvt1+mnY5fuqWANzu8cOAo9LW/BJiN+x10GBDeI6jCmbrLNs2f/djursNF
+         bUcg==
+X-Gm-Message-State: APjAAAWHAAVx1rnCdy+zLnavy7w9Q03apy4wQMV00rpSm3H725K5G0HX
+        RsDazognxbOM/JPw3jnoIw==
+X-Google-Smtp-Source: APXvYqxfxhhIzHwdJZry8Ru7K7JGWxVQ5hecBIvtj7j8AmbBTKCq3Uq+fMuOL/X20DJuaPkTBziq6w==
+X-Received: by 2002:a9d:6c06:: with SMTP id f6mr19195otq.318.1576637561893;
+        Tue, 17 Dec 2019 18:52:41 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s83sm327757oif.33.2019.12.17.18.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 18:52:41 -0800 (PST)
+Date:   Tue, 17 Dec 2019 20:52:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
+        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
+        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
+        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        David Kershner <david.kershner@unisys.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        Johan Hovold <johan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v11 01/14] dt-bindings: Add PECI subsystem document
+Message-ID: <20191218025240.GA6601@bogus>
+References: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
+ <20191211194624.2872-2-jae.hyun.yoo@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191211194624.2872-2-jae.hyun.yoo@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Added support for reading and writing the individual and global voltage
-attenuator bypasses. Added loading DTS properties to bypass attenuators o=
-n
-device probe.
+On Wed, Dec 11, 2019 at 11:46:11AM -0800, Jae Hyun Yoo wrote:
+> This commit adds PECI subsystem document.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> ---
+> Changes since v10:
+> - Changed documents format to DT schema format so I dropped all review tags.
+>   Please review it again.
+> 
+>  .../devicetree/bindings/peci/peci-bus.yaml    | 129 ++++++++++++++++++
+>  .../devicetree/bindings/peci/peci-client.yaml |  54 ++++++++
+>  2 files changed, 183 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-bus.yaml
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-client.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/peci/peci-bus.yaml b/Documentation/devicetree/bindings/peci/peci-bus.yaml
+> new file mode 100644
+> index 000000000000..b085e67089cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/peci/peci-bus.yaml
+> @@ -0,0 +1,129 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
----
----
- drivers/hwmon/adt7475.c | 163 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 162 insertions(+), 1 deletion(-)
+Dual license new bindings please:
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 6c64d50c9aae..92a4be9e33eb 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon-vid.h>
- #include <linux/err.h>
- #include <linux/jiffies.h>
-+#include <linux/of.h>
- #include <linux/util_macros.h>
-=20
- /* Indexes for the sysfs hooks */
-@@ -39,6 +40,7 @@
-=20
- #define ALARM		9
- #define FAULT		10
-+#define ATTENUATE	11
-=20
- /* 7475 Common Registers */
-=20
-@@ -126,9 +128,11 @@
- #define ADT7475_TACH_COUNT	4
- #define ADT7475_PWM_COUNT	3
-=20
--/* Macro to read the registers */
-+/* Macros to read and write registers */
-=20
- #define adt7475_read(reg) i2c_smbus_read_byte_data(client, (reg))
-+#define adt7475_write(reg, data) i2c_smbus_write_byte_data(client, (reg)=
-, \
-+								(data))
-=20
- /* Macros to easily index the registers */
-=20
-@@ -534,6 +538,82 @@ static ssize_t temp_store(struct device *dev, struct=
- device_attribute *attr,
- 	return count;
- }
-=20
-+/**
-+ * Gets the attenuator bit index for a sattr_index.
-+ *
-+ * If there is no attenuator bit index for a given sattr_index then retu=
-rns
-+ * a negative error code.
-+ */
-+static int config4_attenuate_index(char sattr_index)
-+{
-+	int index =3D -EBADR;
-+
-+	switch (sattr_index) {
-+	case 0:
-+		index =3D 4;
-+		break;
-+	case 1:
-+		index =3D 5;
-+		break;
-+	case 3:
-+		index =3D 6;
-+		break;
-+	case 4:
-+		index =3D 7;
-+		break;
-+	}
-+
-+	return index;
-+}
-+
-+/**
-+ * Gets the bypass attenuator bit for a voltage input and stores it in t=
-he char
-+ * array buf.
-+ */
-+static ssize_t bypass_attenuator_show(struct device *dev,
-+				      struct device_attribute *attr, char *buf)
-+{
-+	struct adt7475_data *data =3D adt7475_update_device(dev);
-+	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
-+	u8 attn_bypassed =3D !!(data->config4 &
-+				(1 << config4_attenuate_index(sattr->index)));
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	return sprintf(buf, "%d\n", attn_bypassed);
-+}
-+
-+/**
-+ * Sets the bypass attenuator bit for a given voltage input.
-+ */
-+static ssize_t bypass_attenuator_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
-+	struct i2c_client *client =3D to_i2c_client(dev);
-+	struct adt7475_data *data =3D i2c_get_clientdata(client);
-+	long val;
-+
-+	if (kstrtol(buf, 2, &val))
-+		return -EINVAL;
-+
-+	mutex_lock(&data->lock);
-+	data->config4 =3D adt7475_read(REG_CONFIG4);
-+	if (data->config4 < 0)
-+		return data->config4;
-+
-+	if (val =3D=3D 0)
-+		data->config4 &=3D ~(1 << config4_attenuate_index(sattr->index));
-+	else
-+		data->config4 |=3D (1 << config4_attenuate_index(sattr->index));
-+
-+	adt7475_write(REG_CONFIG4, data->config4);
-+	mutex_unlock(&data->lock);
-+
-+	return count;
-+}
-+
- /* Assuming CONFIG6[SLOW] is 0 */
- static const int ad7475_st_map[] =3D {
- 	37500, 18800, 12500, 7500, 4700, 3100, 1600, 800,
-@@ -1080,10 +1160,14 @@ static SENSOR_DEVICE_ATTR_2_RO(in0_input, voltage=
-, INPUT, 0);
- static SENSOR_DEVICE_ATTR_2_RW(in0_max, voltage, MAX, 0);
- static SENSOR_DEVICE_ATTR_2_RW(in0_min, voltage, MIN, 0);
- static SENSOR_DEVICE_ATTR_2_RO(in0_alarm, voltage, ALARM, 0);
-+static SENSOR_DEVICE_ATTR_2_RW(in0_attenuator_bypass, bypass_attenuator,
-+				ATTENUATE, 0);
- static SENSOR_DEVICE_ATTR_2_RO(in1_input, voltage, INPUT, 1);
- static SENSOR_DEVICE_ATTR_2_RW(in1_max, voltage, MAX, 1);
- static SENSOR_DEVICE_ATTR_2_RW(in1_min, voltage, MIN, 1);
- static SENSOR_DEVICE_ATTR_2_RO(in1_alarm, voltage, ALARM, 1);
-+static SENSOR_DEVICE_ATTR_2_RW(in1_attenuator_bypass, bypass_attenuator,
-+				ATTENUATE, 1);
- static SENSOR_DEVICE_ATTR_2_RO(in2_input, voltage, INPUT, 2);
- static SENSOR_DEVICE_ATTR_2_RW(in2_max, voltage, MAX, 2);
- static SENSOR_DEVICE_ATTR_2_RW(in2_min, voltage, MIN, 2);
-@@ -1092,10 +1176,14 @@ static SENSOR_DEVICE_ATTR_2_RO(in3_input, voltage=
-, INPUT, 3);
- static SENSOR_DEVICE_ATTR_2_RW(in3_max, voltage, MAX, 3);
- static SENSOR_DEVICE_ATTR_2_RW(in3_min, voltage, MIN, 3);
- static SENSOR_DEVICE_ATTR_2_RO(in3_alarm, voltage, ALARM, 3);
-+static SENSOR_DEVICE_ATTR_2_RW(in3_attenuator_bypass, bypass_attenuator,
-+				ATTENUATE, 3);
- static SENSOR_DEVICE_ATTR_2_RO(in4_input, voltage, INPUT, 4);
- static SENSOR_DEVICE_ATTR_2_RW(in4_max, voltage, MAX, 4);
- static SENSOR_DEVICE_ATTR_2_RW(in4_min, voltage, MIN, 4);
- static SENSOR_DEVICE_ATTR_2_RO(in4_alarm, voltage, ALARM, 8);
-+static SENSOR_DEVICE_ATTR_2_RW(in4_attenuator_bypass, bypass_attenuator,
-+				ATTENUATE, 4);
- static SENSOR_DEVICE_ATTR_2_RO(in5_input, voltage, INPUT, 5);
- static SENSOR_DEVICE_ATTR_2_RW(in5_max, voltage, MAX, 5);
- static SENSOR_DEVICE_ATTR_2_RW(in5_min, voltage, MIN, 5);
-@@ -1177,6 +1265,7 @@ static struct attribute *adt7475_attrs[] =3D {
- 	&sensor_dev_attr_in1_max.dev_attr.attr,
- 	&sensor_dev_attr_in1_min.dev_attr.attr,
- 	&sensor_dev_attr_in1_alarm.dev_attr.attr,
-+	&sensor_dev_attr_in1_attenuator_bypass.dev_attr.attr,
- 	&sensor_dev_attr_in2_input.dev_attr.attr,
- 	&sensor_dev_attr_in2_max.dev_attr.attr,
- 	&sensor_dev_attr_in2_min.dev_attr.attr,
-@@ -1263,6 +1352,7 @@ static struct attribute *in0_attrs[] =3D {
- 	&sensor_dev_attr_in0_max.dev_attr.attr,
- 	&sensor_dev_attr_in0_min.dev_attr.attr,
- 	&sensor_dev_attr_in0_alarm.dev_attr.attr,
-+	&sensor_dev_attr_in0_attenuator_bypass.dev_attr.attr,
- 	NULL
- };
-=20
-@@ -1271,6 +1361,7 @@ static struct attribute *in3_attrs[] =3D {
- 	&sensor_dev_attr_in3_max.dev_attr.attr,
- 	&sensor_dev_attr_in3_min.dev_attr.attr,
- 	&sensor_dev_attr_in3_alarm.dev_attr.attr,
-+	&sensor_dev_attr_in3_attenuator_bypass.dev_attr.attr,
- 	NULL
- };
-=20
-@@ -1279,6 +1370,7 @@ static struct attribute *in4_attrs[] =3D {
- 	&sensor_dev_attr_in4_max.dev_attr.attr,
- 	&sensor_dev_attr_in4_min.dev_attr.attr,
- 	&sensor_dev_attr_in4_alarm.dev_attr.attr,
-+	&sensor_dev_attr_in4_attenuator_bypass.dev_attr.attr,
- 	NULL
- };
-=20
-@@ -1457,6 +1549,69 @@ static int adt7475_update_limits(struct i2c_client=
- *client)
- 	return 0;
- }
-=20
-+/**
-+ * Reads individual voltage input bypass attenuator properties from the =
-DTS,
-+ * and if the property is present the corresponding bit is set in the
-+ * register.
-+ *
-+ * Properties must be in the form of "bypass-attenuator-inx", where x is=
- an
-+ * integer from the set {0, 1, 3, 4} (can not bypass in2 attenuator).
-+ *
-+ * Returns a negative error code if there was an error writing to the re=
-gister.
-+ */
-+static int load_individual_bypass_attenuators(const struct i2c_client *c=
-lient,
-+					      u8 *config4)
-+{
-+	char buf[32];
-+	int attenuate_index, input_index;
-+	u8 config4_copy =3D *config4;
-+
-+	for (input_index =3D 0; input_index < 5; input_index++) {
-+		attenuate_index =3D config4_attenuate_index(input_index);
-+		if (attenuate_index < 0)
-+			continue;
-+
-+		sprintf(buf, "bypass-attenuator-in%d", input_index);
-+		if (of_get_property(client->dev.of_node, buf, NULL))
-+			config4_copy |=3D (1 << attenuate_index);
-+	}
-+
-+	if (adt7475_write(REG_CONFIG4, config4_copy) < 0)
-+		// Failed to update register
-+		return -EREMOTEIO;
-+
-+	*config4 =3D config4_copy;
-+
-+	return 0;
-+}
-+
-+/**
-+ * Sets the bypass all attenuators bit, if the "bypass-attenuator-all"
-+ * property exists in the DTS.
-+ *
-+ * Returns a negative error code if there was an error writing to the
-+ * register.
-+ */
-+static int load_all_bypass_attenuator(const struct i2c_client *client,
-+				      u8 *config2)
-+{
-+	u8 config2_copy =3D *config2;
-+
-+	if (!of_get_property(client->dev.of_node,
-+			     "bypass-attenuator-all", NULL))
-+		return 0;
-+
-+	config2_copy |=3D (1 << 5);
-+
-+	if (adt7475_write(REG_CONFIG2, config2_copy) < 0)
-+		// failed to write to register
-+		return -EREMOTEIO;
-+
-+	*config2 =3D config2_copy;
-+
-+	return 0;
-+}
-+
- static int adt7475_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -1545,7 +1700,13 @@ static int adt7475_probe(struct i2c_client *client=
-,
- 	}
-=20
- 	/* Voltage attenuators can be bypassed, globally or individually */
-+	if (load_individual_bypass_attenuators(client, &(data->config4)) < 0)
-+		dev_warn(&client->dev,
-+			 "Error setting bypass attenuator bits\n");
-+
- 	config2 =3D adt7475_read(REG_CONFIG2);
-+	if (load_all_bypass_attenuator(client, &config2) < 0)
-+		dev_warn(&client->dev, "Error setting bypass all attenuator\n");
- 	if (config2 & CONFIG2_ATTN) {
- 		data->bypass_attn =3D (0x3 << 3) | 0x3;
- 	} else {
---=20
-2.23.0
+(GPL-2.0-only OR BSD-2-Clause)
 
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/peci/peci-bus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic Device Tree Bindings for PECI bus
+> +
+> +maintainers:
+> +  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> +
+> +description: |
+> +  PECI (Platform Environment Control Interface) is a one-wire bus interface that
+> +  provides a communication channel from Intel processors and chipset components
+> +  to external monitoring or control devices. PECI is designed to support the
+> +  following sideband functions:
+> +
+> +  * Processor and DRAM thermal management
+> +    - Processor fan speed control is managed by comparing Digital Thermal
+> +      Sensor (DTS) thermal readings acquired via PECI against the
+> +      processor-specific fan speed control reference point, or TCONTROL. Both
+> +      TCONTROL and DTS thermal readings are accessible via the processor PECI
+> +      client. These variables are referenced to a common temperature, the TCC
+> +      activation point, and are both defined as negative offsets from that
+> +      reference.
+> +    - PECI based access to the processor package configuration space provides
+> +      a means for Baseboard Management Controllers (BMC) or other platform
+> +      management devices to actively manage the processor and memory power
+> +      and thermal features.
+> +
+> +  * Platform Manageability
+> +    - Platform manageability functions including thermal, power, and error
+> +      monitoring. Note that platform 'power' management includes monitoring
+> +      and control for both the processor and DRAM subsystem to assist with
+> +      data center power limiting.
+> +    - PECI allows read access to certain error registers in the processor MSR
+> +      space and status monitoring registers in the PCI configuration space
+> +      within the processor and downstream devices.
+> +    - PECI permits writes to certain registers in the processor PCI
+> +      configuration space.
+> +
+> +  * Processor Interface Tuning and Diagnostics
+> +    - Processor interface tuning and diagnostics capabilities
+> +      (Intel Interconnect BIST). The processors Intel Interconnect Built In
+> +      Self Test (Intel IBIST) allows for infield diagnostic capabilities in
+> +      the Intel UPI and memory controller interfaces. PECI provides a port to
+> +      execute these diagnostics via its PCI Configuration read and write
+> +      capabilities.
+> +
+> +  * Failure Analysis
+> +    - Output the state of the processor after a failure for analysis via
+> +      Crashdump.
+> +
+> +  PECI uses a single wire for self-clocking and data transfer. The bus
+> +  requires no additional control lines. The physical layer is a self-clocked
+> +  one-wire bus that begins each bit with a driven, rising edge from an idle
+> +  level near zero volts. The duration of the signal driven high depends on
+> +  whether the bit value is a logic '0' or logic '1'. PECI also includes
+> +  variable data transfer rate established with every message. In this way, it
+> +  is highly flexible even though underlying logic is simple.
+> +
+> +  The interface design was optimized for interfacing between an Intel
+> +  processor and chipset components in both single processor and multiple
+> +  processor environments. The single wire interface provides low board
+> +  routing overhead for the multiple load connections in the congested routing
+> +  area near the processor and chipset components. Bus speed, error checking,
+> +  and low protocol overhead provides adequate link bandwidth and reliability
+> +  to transfer critical device operating conditions and configuration
+> +  information.
+> +
+> +  PECI subsystem provides single or multiple bus nodes support so each bus can
+> +  have one adapter node and multiple device specific client nodes that can be
+> +  attached to the PECI bus so each processor client's features can be supported
+> +  by the client node through an adapter connection in the bus.
+> +
+> +properties:
+> +  compatible:
+> +    const: simple-bus
+
+This is wrong. We already have a schema for this.
+
+What's needed is a peci-bus schema that defines the bus node structure 
+and then schemas for the specific controllers and child devices. See 
+i2c-controller.yaml for an example.
+
+> +
+> +  "#address-cells":
+> +    # Required to define bus device control resource address.
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    # Required to define bus device control resource address.
+> +    const: 1
+> +
+> +  ranges: true
+> +
+> +required:
+> +  - compatible
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +    peci: bus@1e78b000 {
+> +        compatible = "simple-bus";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges = <0x0 0x1e78b000 0x200>;
+> +
+> +        peci0: peci-bus@0 {
+> +            compatible = "aspeed,ast2600-peci";
+> +            reg = <0x0 0x100>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+> +            resets = <&syscon ASPEED_RESET_PECI>;
+> +            clock-frequency = <24000000>;
+> +        };
+> +
+> +        // Just an example. ast2600 doesn't have a second PECI module actually.
+> +        peci1: peci-bus@100 {
+> +            compatible = "aspeed,ast2600-peci";
+> +            reg = <0x100 0x100>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+> +            resets = <&syscon ASPEED_RESET_PECI>;
+> +            clock-frequency = <24000000>;
+> +        };
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/peci/peci-client.yaml b/Documentation/devicetree/bindings/peci/peci-client.yaml
+> new file mode 100644
+> index 000000000000..fc7c4110e929
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/peci/peci-client.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/peci/peci-client.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic Device Tree Bindings for PECI clients
+> +
+> +maintainers:
+> +  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - intel,peci-client
+> +
+> +  reg:
+> +    description: |
+> +      Address of a client CPU. According to the PECI specification, client
+> +      addresses start from 0x30.
+
+0x30 being the min should be a constraint in the bus schema.
+
+> +    maxItems: 1
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +    peci: bus@1e78b000 {
+> +        compatible = "simple-bus";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges = <0x0 0x1e78b000 0x60>;
+> +
+> +        peci0: peci-bus@0 {
+> +            compatible = "aspeed,ast2600-peci";
+> +            reg = <0x0 0x100>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+> +            resets = <&syscon ASPEED_RESET_PECI>;
+> +            clock-frequency = <24000000>;
+> +
+> +            peci-client@30 {
+> +                compatible = "intel,peci-client";
+> +                reg = <0x30>;
+> +            };
+> +
+> +            peci-client@31 {
+> +                compatible = "intel,peci-client";
+> +                reg = <0x31>;
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.17.1
+> 
