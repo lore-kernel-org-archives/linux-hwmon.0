@@ -2,111 +2,232 @@ Return-Path: <SRS0=ADoj=2I=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB16C43603
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F2ADC3F68F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:30:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 48A7C21582
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:25:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhutN0a4"
+	by mail.kernel.org (Postfix) with ESMTP id 4EB582467E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:30:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbfLRXZk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Dec 2019 18:25:40 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41521 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726546AbfLRXZj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Dec 2019 18:25:39 -0500
-Received: by mail-pl1-f195.google.com with SMTP id bd4so1664694plb.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2019 15:25:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=by+2zXZ9D0W2jbyPiMVzRQOrsmDpsL5Q7Ho+sFmiPek=;
-        b=AhutN0a4brrp6iuyeIpVg2vjU5mtasqLj8PhMQf4eu1mCAeLgTZQb+GicY60k/F3Nj
-         MMIRv3jiRTma5gazG+/o3KZCqO9UAlfIJyaDT9PGl7Me8FK3hWpOmui8vaophSgppOpX
-         Cd2MXdqQHUr9pUAyvp2keow4FDHHANk3MWoWQJCaa8WeSpPT7pat0ngxxi56k+R7HsKG
-         /+yWMnchI1/kzNQV/ACBAHbTR+uWvw4FtPnG4VdQiHy1LOX2Ldlh7NF1M00ngWRBzCxl
-         QR/xeM75/eK6aQ+tEzu2UzTTAxzMFegKpbGyDb0DIyMw1kwjfFmYzoaht7MivI5BITQE
-         mfzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=by+2zXZ9D0W2jbyPiMVzRQOrsmDpsL5Q7Ho+sFmiPek=;
-        b=Dlx+SUP0+t4X3h7wn12V/836tn5XXKbzFg75PkBKy+2tsFA3Dq7+4dvpL4kpR1a7JC
-         Bo0oFKYOZNu9lahK79gbE2mAuzapL5h094n6loxL2gFlDgkf8pJMoxDLUCgoLy+zOeX1
-         1PePNIZXbB2jGTCS8EL1CMO+xyvY+oQOALNTtsBncSm+GiYHrElmONJbTh7MCHycKI8s
-         PgumoMtJoGOTgu3lFb3kxFT5mOASUGB1bLLC8FYxXsXAjauoT1cmyuAym//ZyetqJWpL
-         bWtt2bxKPYuVD6s0XTNPs30w8oJODGUThVXCd4xCGnChSof/1vuCCEa/mk4Za0EJMPx8
-         U76Q==
-X-Gm-Message-State: APjAAAXUUutAJZ7AmuMen7f8joWs51DF1TfHjGMQu9ZUeu1y+wmvklhV
-        FNcTI3OrArkZGXjMfFwD3xU=
-X-Google-Smtp-Source: APXvYqyX0CGco/HI1LWR6ui2Vm6Gb7u4oet0T5xHEEascC6uVitMFiN8IeZhPavB1T5mqv1c8MJ0dQ==
-X-Received: by 2002:a17:90a:3d0d:: with SMTP id h13mr5879697pjc.1.1576711539149;
-        Wed, 18 Dec 2019 15:25:39 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f127sm4960763pfa.112.2019.12.18.15.25.37
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 18 Dec 2019 15:25:38 -0800 (PST)
-Date:   Wed, 18 Dec 2019 15:25:37 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Logan Shaw <Logan.Shaw@alliedtelesis.co.nz>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 1/1] hwmon: (adt7475) Added attenuator bypass support
-Message-ID: <20191218232537.GA24464@roeck-us.net>
-References: <20191218024238.19836-1-logan.shaw@alliedtelesis.co.nz>
- <20191218024238.19836-2-logan.shaw@alliedtelesis.co.nz>
- <5f444fb6-4acc-031d-45bb-93e5384d9a40@roeck-us.net>
- <ea991d7654aae9af95c6aa8e2da1b87486f90215.camel@alliedtelesis.co.nz>
+        id S1726571AbfLRXaC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Dec 2019 18:30:02 -0500
+Received: from mga09.intel.com ([134.134.136.24]:32550 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbfLRXaC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 18 Dec 2019 18:30:02 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 15:30:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
+   d="scan'208";a="365890260"
+Received: from yoojae-mobl1.amr.corp.intel.com (HELO [10.7.153.143]) ([10.7.153.143])
+  by orsmga004.jf.intel.com with ESMTP; 18 Dec 2019 15:30:01 -0800
+Subject: Re: [PATCH v11 07/14] dt-bindings: peci: add NPCM PECI documentation
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
+        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
+        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
+        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        David Kershner <david.kershner@unisys.com>,
+        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        Johan Hovold <johan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+References: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
+ <20191211194624.2872-8-jae.hyun.yoo@linux.intel.com>
+ <20191218144206.GA26118@bogus>
+From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Message-ID: <a86e253a-5ef6-f448-0c0b-15be0467a9ef@linux.intel.com>
+Date:   Wed, 18 Dec 2019 15:30:00 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea991d7654aae9af95c6aa8e2da1b87486f90215.camel@alliedtelesis.co.nz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191218144206.GA26118@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 04:30:39AM +0000, Logan Shaw wrote:
-[...]
-> > 
-> > The datasheet for ADC7475 does not say anything about the ability to
-> > control
-> > attenuators other than for vcc in configuration register 4. Bit 4, 6,
-> > and 7
-> > are listed as unused/reserved, suggesting that those bits - if at all
-> > - are
-> > only defined for other chips. Nothing in this patch suggests what
-> > those chips
-> > are. Attenuation bits need to be validated against the chip type.
-> 
-> You are right, I missed including important details. The ADT7476 and
-> ADT7490 datasheets specify "Bits [7:4] of Configuration Register 4
-> (0x7D) can be used to bypass individual voltage channel attenuators".
-> 
-> My thought process was it would be up to the person configuring the
-> devicetree to only add the attributes where appropiate (for example,
-> not for a ADT7475 chip). I can see this is dangerious. Instead would it
-> be acceptable to add a check to the load_individual_bypass_attenuators
-> and load_all_bypass_attenuator functions that verifies the device
-> supports setting the appropiate bits and if not return 0 immediately?
-> 
+Hi Rob,
 
-Devicetree properties are acceptable, but not writing bits which
-are not supported (reserved) for a given chip. How to implement this
-is up to you.
+On 12/18/2019 6:42 AM, Rob Herring wrote:
+> On Wed, Dec 11, 2019 at 11:46:17AM -0800, Jae Hyun Yoo wrote:
+>> From: Tomer Maimon <tmaimon77@gmail.com>
+>>
+>> Added device tree binding documentation for Nuvoton BMC
+>> NPCM Platform Environment Control Interface(PECI).
+>>
+>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+>> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+>> ---
+>> Changes since v10:
+>> - Newly added in v11.
+>>
+>>   .../devicetree/bindings/peci/peci-npcm.yaml   | 102 ++++++++++++++++++
+>>   1 file changed, 102 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/peci/peci-npcm.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/peci/peci-npcm.yaml b/Documentation/devicetree/bindings/peci/peci-npcm.yaml
+>> new file mode 100644
+>> index 000000000000..bcd5626e68e7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/peci/peci-npcm.yaml
+>> @@ -0,0 +1,102 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/peci/peci-npcm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Nuvoton NPCM PECI Bus Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Tomer Maimon <tmaimon77@gmail.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: nuvoton,npcm750-peci # for the NPCM7XX BMC.
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  "#address-cells":
+>> +    # Required to define a client address.
+>> +    const: 1
+>> +
+>> +  "#size-cells":
+>> +    # Required to define a client address.
+>> +    const: 0
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    # PECI reference clock.
+>> +    maxItems: 1
+>> +
+>> +  cmd-timeout-ms:
+>> +    # Command timeout in units of ms.
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> You can drop this as standard units already have a type.
 
-Based on your feedback, and my personal opinion, I won't accept
-new (non-standard) sysfs attributes. Note that I also won't accept
-C++ style comments in this driver.
+I'm assuming you pointed the timeout-ms as one of standard
+units, right? I'll drop this ref.
 
-Guenter
+>> +      - minimum: 1
+>> +        maximum: 60000
+>> +        default: 1000
+>> +
+>> +  pull-down:
+>> +    description: |
+>> +      Defines the PECI I/O internal pull down operation.
+>> +        0: pull down always enable
+>> +        1: pull down only during transactions.
+>> +        2: pull down always disable.
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +      - minimum: 0
+>> +        maximum: 2
+>> +        default: 0
+>> +
+>> +  host-neg-bit-rate:
+>> +    description: |
+>> +      Define host negotiation bit rate divider.
+>> +      the host negotiation bit rate calculate with formula:
+>> +      clock frequency[Hz] / [4 x {host-neg-bit-rate + 1}]
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +      - minimum: 7
+>> +        maximum: 31
+>> +        default: 15
+>> +
+>> +  high-volt-range:
+>> +    description: |
+>> +      Adapts PECI I/O interface to voltage range.
+>> +        0: PECI I/O interface voltage range of 0.8-1.06V (default)
+>> +        1: PECI I/O interface voltage range of 0.95-1.26V
+>> +    type: boolean
+> 
+> These last 4 properties are vendor specific or PECI common. For the
+> former, needs a vendor prefix. For the latter, needs to be moved to
+> common location.
+
+These are Nuvoton vendor specifics. I'll add prefix for them and will
+check Aspeed bindings too.
+
+Thanks a lot for your review!
+
+-Jae
+
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - interrupts
+>> +  - clocks
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
+>> +    peci: bus@100000 {
+>> +        compatible = "simple-bus";
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +        ranges = <0x0 0x100000 0x200>;
+>> +
+>> +        peci0: peci-bus@0 {
+>> +            compatible = "nuvoton,npcm750-peci";
+>> +            reg = <0x0 0x200>;
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +            interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> +            clocks = <&clk NPCM7XX_CLK_APB3>;
+>> +            cmd-timeout-ms = <1000>;
+>> +            pull-down = <0>;
+>> +            host-neg-bit-rate = <15>;
+>> +        };
+>> +    };
+>> +...
+>> -- 
+>> 2.17.1
+>>
+> 
