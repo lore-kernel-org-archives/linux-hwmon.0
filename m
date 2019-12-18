@@ -2,271 +2,111 @@ Return-Path: <SRS0=ADoj=2I=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2265CC43603
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB16C43603
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:25:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E732B21D7D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:22:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48A7C21582
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Dec 2019 23:25:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhutN0a4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbfLRXWD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Dec 2019 18:22:03 -0500
-Received: from mga12.intel.com ([192.55.52.136]:51739 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726569AbfLRXWD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Dec 2019 18:22:03 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 15:22:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
-   d="scan'208";a="365889145"
-Received: from yoojae-mobl1.amr.corp.intel.com (HELO [10.7.153.143]) ([10.7.153.143])
-  by orsmga004.jf.intel.com with ESMTP; 18 Dec 2019 15:21:56 -0800
-Subject: Re: [PATCH v11 04/14] dt-bindings: Add bindings document of Aspeed
- PECI adapter
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Wu Hao <hao.wu@intel.com>,
-        Tomohiro Kusumi <kusumi.tomohiro@gmail.com>,
-        "Bryant G . Ly" <bryantly@linux.vnet.ibm.com>,
-        Frederic Barrat <fbarrat@linux.vnet.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        David Kershner <david.kershner@unisys.com>,
-        Uwe Kleine-Konig <u.kleine-koenig@pengutronix.de>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        Johan Hovold <johan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>,
-        Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jason M Biils <jason.m.bills@linux.intel.com>,
-        Milton Miller II <miltonm@us.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20191211194624.2872-1-jae.hyun.yoo@linux.intel.com>
- <20191211194624.2872-5-jae.hyun.yoo@linux.intel.com>
- <20191218025702.GA18998@bogus>
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <c203251d-125a-0d41-927d-0ce237622f71@linux.intel.com>
-Date:   Wed, 18 Dec 2019 15:21:56 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726559AbfLRXZk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Dec 2019 18:25:40 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41521 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726546AbfLRXZj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 18 Dec 2019 18:25:39 -0500
+Received: by mail-pl1-f195.google.com with SMTP id bd4so1664694plb.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2019 15:25:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=by+2zXZ9D0W2jbyPiMVzRQOrsmDpsL5Q7Ho+sFmiPek=;
+        b=AhutN0a4brrp6iuyeIpVg2vjU5mtasqLj8PhMQf4eu1mCAeLgTZQb+GicY60k/F3Nj
+         MMIRv3jiRTma5gazG+/o3KZCqO9UAlfIJyaDT9PGl7Me8FK3hWpOmui8vaophSgppOpX
+         Cd2MXdqQHUr9pUAyvp2keow4FDHHANk3MWoWQJCaa8WeSpPT7pat0ngxxi56k+R7HsKG
+         /+yWMnchI1/kzNQV/ACBAHbTR+uWvw4FtPnG4VdQiHy1LOX2Ldlh7NF1M00ngWRBzCxl
+         QR/xeM75/eK6aQ+tEzu2UzTTAxzMFegKpbGyDb0DIyMw1kwjfFmYzoaht7MivI5BITQE
+         mfzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=by+2zXZ9D0W2jbyPiMVzRQOrsmDpsL5Q7Ho+sFmiPek=;
+        b=Dlx+SUP0+t4X3h7wn12V/836tn5XXKbzFg75PkBKy+2tsFA3Dq7+4dvpL4kpR1a7JC
+         Bo0oFKYOZNu9lahK79gbE2mAuzapL5h094n6loxL2gFlDgkf8pJMoxDLUCgoLy+zOeX1
+         1PePNIZXbB2jGTCS8EL1CMO+xyvY+oQOALNTtsBncSm+GiYHrElmONJbTh7MCHycKI8s
+         PgumoMtJoGOTgu3lFb3kxFT5mOASUGB1bLLC8FYxXsXAjauoT1cmyuAym//ZyetqJWpL
+         bWtt2bxKPYuVD6s0XTNPs30w8oJODGUThVXCd4xCGnChSof/1vuCCEa/mk4Za0EJMPx8
+         U76Q==
+X-Gm-Message-State: APjAAAXUUutAJZ7AmuMen7f8joWs51DF1TfHjGMQu9ZUeu1y+wmvklhV
+        FNcTI3OrArkZGXjMfFwD3xU=
+X-Google-Smtp-Source: APXvYqyX0CGco/HI1LWR6ui2Vm6Gb7u4oet0T5xHEEascC6uVitMFiN8IeZhPavB1T5mqv1c8MJ0dQ==
+X-Received: by 2002:a17:90a:3d0d:: with SMTP id h13mr5879697pjc.1.1576711539149;
+        Wed, 18 Dec 2019 15:25:39 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f127sm4960763pfa.112.2019.12.18.15.25.37
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 18 Dec 2019 15:25:38 -0800 (PST)
+Date:   Wed, 18 Dec 2019 15:25:37 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Logan Shaw <Logan.Shaw@alliedtelesis.co.nz>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH 1/1] hwmon: (adt7475) Added attenuator bypass support
+Message-ID: <20191218232537.GA24464@roeck-us.net>
+References: <20191218024238.19836-1-logan.shaw@alliedtelesis.co.nz>
+ <20191218024238.19836-2-logan.shaw@alliedtelesis.co.nz>
+ <5f444fb6-4acc-031d-45bb-93e5384d9a40@roeck-us.net>
+ <ea991d7654aae9af95c6aa8e2da1b87486f90215.camel@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <20191218025702.GA18998@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea991d7654aae9af95c6aa8e2da1b87486f90215.camel@alliedtelesis.co.nz>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
-
-On 12/17/2019 6:57 PM, Rob Herring wrote:
-> On Wed, Dec 11, 2019 at 11:46:14AM -0800, Jae Hyun Yoo wrote:
->> This commit adds bindings document of Aspeed PECI adapter for ASPEED
->> AST24xx/25xx/26xx SoCs.
->>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Joel Stanley <joel@jms.id.au>
->> Cc: Andrew Jeffery <andrew@aj.id.au>
->> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Jason M Biils <jason.m.bills@linux.intel.com>
->> Cc: Milton Miller II <miltonm@us.ibm.com>
->> Cc: Pavel Machek <pavel@ucw.cz>
->> Cc: Robin Murphy <robin.murphy@arm.com>
->> Cc: Ryan Chen <ryan_chen@aspeedtech.com>
->> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->> ---
->> Changes since v10:
->> - Changed documents format to DT schema format so I dropped all review tags.
->>    Please review it again.
->>
->>   .../devicetree/bindings/peci/peci-aspeed.yaml | 124 ++++++++++++++++++
->>   1 file changed, 124 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.yaml b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
->> new file mode 100644
->> index 000000000000..0f5c2993fe9b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
->> @@ -0,0 +1,124 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/peci/peci-aspeed.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Aspeed PECI Bus Device Tree Bindings
->> +
->> +maintainers:
->> +  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - aspeed,ast2400-peci
->> +      - aspeed,ast2500-peci
->> +      - aspeed,ast2600-peci
->> +
->> +  reg:
->> +    maxItems: 1
->> +
+On Wed, Dec 18, 2019 at 04:30:39AM +0000, Logan Shaw wrote:
+[...]
+> > 
+> > The datasheet for ADC7475 does not say anything about the ability to
+> > control
+> > attenuators other than for vcc in configuration register 4. Bit 4, 6,
+> > and 7
+> > are listed as unused/reserved, suggesting that those bits - if at all
+> > - are
+> > only defined for other chips. Nothing in this patch suggests what
+> > those chips
+> > are. Attenuation bits need to be validated against the chip type.
 > 
->> +  "#address-cells":
->> +    # Required to define a client address.
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    # Required to define a client address.
->> +    const: 0
+> You are right, I missed including important details. The ADT7476 and
+> ADT7490 datasheets specify "Bits [7:4] of Configuration Register 4
+> (0x7D) can be used to bypass individual voltage channel attenuators".
 > 
-> These 2 can be defined by the bus schema.
-
-I see. I'll add these to peci-bus schema.
-
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    description: |
+> My thought process was it would be up to the person configuring the
+> devicetree to only add the attributes where appropiate (for example,
+> not for a ADT7475 chip). I can see this is dangerious. Instead would it
+> be acceptable to add a check to the load_individual_bypass_attenuators
+> and load_all_bypass_attenuator functions that verifies the device
+> supports setting the appropiate bits and if not return 0 immediately?
 > 
-> You can drop the '|' if there's no formatting to preserve.
 
-Will check this for all bindings in this patch set.
+Devicetree properties are acceptable, but not writing bits which
+are not supported (reserved) for a given chip. How to implement this
+is up to you.
 
->> +      Clock source for PECI controller. Should reference the external
->> +      oscillator clock.
->> +    maxItems: 1
->> +
->> +  resets:
->> +    maxItems: 1
->> +
->> +  clock-frequency:
->> +    # Operation frequency of PECI controller in units of Hz.
->> +    minimum: 187500
->> +    maximum: 24000000
->> +
->> +  msg-timing:
->> +    description: |
->> +      Message timing negotiation period. This value will determine the period
->> +      of message timing negotiation to be issued by PECI controller. The unit
->> +      of the programmed value is four times of PECI clock period.
->> +    allOf:
->> +      - $ref: /schemas/types.yaml#/definitions/uint32
->> +      - minimum: 0
->> +        maximum: 255
->> +        default: 1
->> +
->> +  addr-timing:
->> +    description: |
->> +      Address timing negotiation period. This value will determine the period
->> +      of address timing negotiation to be issued by PECI controller. The unit
->> +      of the programmed value is four times of PECI clock period.
->> +    allOf:
->> +      - $ref: /schemas/types.yaml#/definitions/uint32
->> +      - minimum: 0
->> +        maximum: 255
->> +        default: 1
->> +
->> +  rd-sampling-point:
->> +    description: |
->> +      Read sampling point selection. The whole period of a bit time will be
->> +      divided into 16 time frames. This value will determine the time frame
->> +      in which the controller will sample PECI signal for data read back.
->> +      Usually in the middle of a bit time is the best.
->> +    allOf:
->> +      - $ref: /schemas/types.yaml#/definitions/uint32
->> +      - minimum: 0
->> +        maximum: 15
->> +        default: 8
->> +
->> +  cmd-timeout-ms:
->> +    # Command timeout in units of ms.
->> +    allOf:
->> +      - $ref: /schemas/types.yaml#/definitions/uint32
->> +      - minimum: 1
->> +        maximum: 60000
->> +        default: 1000
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - interrupts
->> +  - clocks
->> +  - resets
->> +  - clock-frequency
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/clock/ast2600-clock.h>
->> +    peci: bus@1e78b000 {
->> +        compatible = "simple-bus";
->> +        #address-cells = <1>;
->> +        #size-cells = <1>;
->> +        ranges = <0x0 0x1e78b000 0x60>;
-> 
-> You can drop this node in the examples.
+Based on your feedback, and my personal opinion, I won't accept
+new (non-standard) sysfs attributes. Note that I also won't accept
+C++ style comments in this driver.
 
-I see. Will drop the parent node in this example.
-
-Thanks a lot for your review!
-
--Jae
-
->> +
->> +        peci0: peci-bus@0 {
->> +            compatible = "aspeed,ast2600-peci";
->> +            reg = <0x0 0x100>;
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +            interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
->> +            clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
->> +            resets = <&syscon ASPEED_RESET_PECI>;
->> +            clock-frequency = <24000000>;
->> +            msg-timing = <1>;
->> +            addr-timing = <1>;
->> +            rd-sampling-point = <8>;
->> +            cmd-timeout-ms = <1000>;
->> +        };
->> +    };
->> +...
->> -- 
->> 2.17.1
->>
-> 
+Guenter
