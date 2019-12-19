@@ -2,72 +2,77 @@ Return-Path: <SRS0=pEIx=2J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23420C43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8054EC43603
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 07:37:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E5A022072B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:53:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5697A2146E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 07:37:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ajb5T/ks"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RppPDfWt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbfLSDxx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Dec 2019 22:53:53 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34554 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbfLSDxx (ORCPT
+        id S1726722AbfLSHhv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Dec 2019 02:37:51 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:50584 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbfLSHhv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Dec 2019 22:53:53 -0500
-Received: by mail-pg1-f195.google.com with SMTP id r11so2406352pgf.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2019 19:53:52 -0800 (PST)
+        Thu, 19 Dec 2019 02:37:51 -0500
+Received: by mail-pj1-f67.google.com with SMTP id r67so2098204pjb.0;
+        Wed, 18 Dec 2019 23:37:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Fk0nPzAUeuLgNCRVt1AoKukAcF0h7NmaTn9F9bQK2do=;
-        b=Ajb5T/ksbciKzWoUDDHJ8F/ezUxXRJGm9o7BI+kkVW4kd7LHNoNuXkxR4StKM62sZ2
-         RNsaB7NzdovijDFjd3AVb+SLtZM4Aob/9tD+DvSjHlqsT3UgnZ2DJDJze7NjjfaG732d
-         36nijwC7DbrjS0N6A69bORiax645kNXZyslvvED0gRk9+4AsqkVv7UrK+QF646hfYGR7
-         BuhFJPl5wqOFGlPY+GVoF2lHpdnS8aV2ADPxY4Lsrwxpfae+uETV1OcdfHRXdF3XD3ME
-         0H3ve5WkEa+tbBAIhYfoxjb+sdPXzPtfJuWNW5ks/gnl+Jmb9L7a1ITEXXpibjRJjLJb
-         LSXg==
+        bh=0nx8L7SUVUpwZ2hHI379dkMfkYdwVJx/h+xm8bvbJTk=;
+        b=RppPDfWtAF2/78ZaqvoheL1TQLs+e51ZH1gVEgdKQIpkiez/5Q8Wr/YF9Ffs87OlWh
+         +0QTXE9zrmiP10IM+/vBzP1urUkk0hgLRFQp3+Nnaj6QroNO2EMUYcRJfuq4sGLNZwBM
+         flUyjTnsuqI5WEoOsW33M3wGm0x3jYpNr1RfUZTcP97rDyfpOvjJ6CorymapkR/GJp+p
+         Qd4cAYqeyMiW0sGir5FaaYfgSRomJ6wCCkenp1i7P+l6zTQ0E6RkMe6PpZjE8pdZW845
+         Q8aq5GwowoxjemsBR0ZbmGJYQrj5mhD5jIXnD25lPeoU38JYt+BipmcK6VEylZouupzG
+         sv9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Fk0nPzAUeuLgNCRVt1AoKukAcF0h7NmaTn9F9bQK2do=;
-        b=tuXr+wEFAhB3dn1+a4kf03txc4GMLQlWfgqsDqld5GQ3pxwwysgk712ItMQNPe4VHD
-         0rf6g/e+nUvNkl32hTebCh4Aa1aa8XC0RYeIPmHi6NHeXNyrafzKTJRCb8RERDKIqgKi
-         YxFiZctHIyQ3eCf9bcTaXBrLUhYkRamecJMeO2YV2RK2UWBg1D+vYM7ztoUaC+mBfG5b
-         hB5NpKZS7KSy1/kPgNUpldlB+YLED+hgNe4tPN/mc9zkpp05GZukWngmXnt0HYqIQCQX
-         b9Ek1dFgy8xWySACGV2wH4pqcX0RNZG5168UUy4bwe/jo8PYN1783r1PUVIw/5+aPPbR
-         xJPQ==
-X-Gm-Message-State: APjAAAUoXMdpODR6ks5RIys7nAYveW6CEsG44U9oRSktswRwmv/n2EgH
-        nyDqIHBFHK9W+mMIsFn1dhzuebLj
-X-Google-Smtp-Source: APXvYqyzr/qGy+mZvCCNQj2ETqEgPvEZWeymrW3y2sIpWyM6MNKbBHxBORHOBCLUXuDuak6742+frA==
-X-Received: by 2002:a63:1e47:: with SMTP id p7mr6677660pgm.339.1576727631880;
-        Wed, 18 Dec 2019 19:53:51 -0800 (PST)
+        bh=0nx8L7SUVUpwZ2hHI379dkMfkYdwVJx/h+xm8bvbJTk=;
+        b=Em1vPcc7BTxmQU8woXy20JfdqqScdU2Ob8EgiU/BFrrCqUjxDlzPg/NOusa+DV9xi1
+         dhqhFk4UB0BzIyGh64WKf6wwB3I90Ww98K7DWIIDBba74Y4NJO/Zl45NC9hGN/v6XM0m
+         sZPqp6v3SMAXc2SYxfYR8kaFZRsszMI1ALWZYT4WxTgObWu+pu17yl+N8f6RuaOMpu6e
+         ZwVmrLNSCktytUhgr81L0cE/KHn8sKVy3fYczYzYBgnaYlrGXhOxe+4i7AOQXt89bhfK
+         di63812aaReZgGcFxzSYL3/pUVDytV8EUl6xgdZeXNGNPqdevYWJT0HwAmmd1lSA7fUF
+         n8AA==
+X-Gm-Message-State: APjAAAU2EaRF6Q0kMhomLCdO8hhqFCZ30v5GAsHg1FGHbRFykuCpAL1k
+        qEkO7gRiCjPaaWFkklk8lnO3GKTH
+X-Google-Smtp-Source: APXvYqy6Zi45dKUBsN0A3zZlJRUeD/RU79k4wl44YxSfuWyLsO/jzk8oOCtvuT8Isz69mo20xLT4ZA==
+X-Received: by 2002:a17:90a:94c1:: with SMTP id j1mr8181360pjw.2.1576741070618;
+        Wed, 18 Dec 2019 23:37:50 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12sm4568786pjq.10.2019.12.18.19.53.49
+        by smtp.gmail.com with ESMTPSA id i22sm4714674pfd.19.2019.12.18.23.37.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Dec 2019 19:53:50 -0800 (PST)
-Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Added attenuator bypass support
-To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>, jdelvare@suse.com
-Cc:     joshua.scott@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org
-References: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
- <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+        Wed, 18 Dec 2019 23:37:48 -0800 (PST)
+Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Chris Healy <cphealy@gmail.com>
+References: <20191215174509.1847-1-linux@roeck-us.net>
+ <20191215174509.1847-2-linux@roeck-us.net> <yq1r211dvck.fsf@oracle.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e88b029b-dbb3-e423-5c37-0917d7716b66@roeck-us.net>
-Date:   Wed, 18 Dec 2019 19:53:49 -0800
+Message-ID: <f2b90347-66db-16f9-44b1-b6c7df319331@roeck-us.net>
+Date:   Wed, 18 Dec 2019 23:37:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+In-Reply-To: <yq1r211dvck.fsf@oracle.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,67 +81,51 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/18/19 7:32 PM, Logan Shaw wrote:
-> Added a new file documenting the adt7475 devicetree and added the five
-> new properties to it.
+Hi Martin,
+
+On 12/18/19 4:15 PM, Martin K. Petersen wrote:
 > 
-> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-> ---
-> ---
->   .../devicetree/bindings/hwmon/adt7475.txt     | 35 +++++++++++++++++++
->   1 file changed, 35 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.txt
+> Guenter,
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.txt b/Documentation/devicetree/bindings/hwmon/adt7475.txt
-> new file mode 100644
-> index 000000000000..388dd718a246
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.txt
-> @@ -0,0 +1,35 @@
-> +*ADT7475 hwmon sensor.
-> +
-> +Required properties:
-> +- compatible: One of
-> +	"adi,adt7473"
-> +	"adi,adt7475"
-> +	"adi,adt7476"
-> +	"adi,adt7490"
-> +
-> +- reg: I2C address
-> +
-> +optional properties:
-> +
-> +- bypass-attenuator-all: Configures bypassing all voltage input attenuators.
-> +	This is only supported on the ADT7476 and ADT7490, this property does
-> +	nothing on other chips.
+>> This driver solves this problem by adding support for reading the
+>> temperature of SATA drives from the kernel using the hwmon API and
+>> by adding a temperature zone for each drive.
+> 
+> My working tree is available here:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git/log/?h=5.6/drivetemp
+> 
 
-Both adt7473 and adt7475 do support configuring an attenuator on VCCP
+I had a quick look at the patch. Looks good overall. I think you should be able
+to use the buffer allocated in struct drivetemp_data (named smartdata). Maybe
+rename it to something more generic. If it needs to be dma-aligned, maybe we
+can use kzalloc() to allocate it. Only reason I didn't use it for vpd was because
+that needed 1024 bytes.
 
-> +		property present: Bit set to bypass all voltage input attenuators.
-> +		property absent: Registers left unchanged.
-> +
-> +- bypass-attenuator-inx: Configures bypassing individual voltage input
-> +	attenuators, where x is an integer from the set {0, 1, 3, 4}. This
-> +	is only supported on the ADT7476 and ADT7490, this property does nothing
-> +	on other chips.
-> +		property present: Bit set to bypass specific voltage input attenuator
-> +			for voltage input x.
-> +		property absent: Registers left unchanged.
-> +
-This is interesting. It essentially means "retain configuration from ROM
-Monitor", but leaves no means to _disable_ the bypass.
+> A few notes:
+> 
+>   - Before applying your patch I did s/satatemp/drivetemp/
+> 
+>   - I get a crash in the driver core during probe if the drivetemp module
+>     is loaded prior to loading ahci or a SCSI HBA driver. This crash is
+>     unrelated to my changes. Haven't had time to debug.
+> 
+Definitely something we'll need to look into. Do you have a traceback ?
 
-> +Example:
-> +
-> +hwmon@2e {
-> +	compatible = "adi,adt7475";
-> +	reg = <0x2e>;
-> +	bypass-attenuator-all;
-> +	bypass-attenuator-in1;
+Thanks,
+Guenter
 
-What would be the purpose of specifying both all and in1 ?
-
-> +};
-> \ No newline at end of file
+>   - I tweaked your ATA detection heuristics and now use the cached VPD
+>     page 0x89 instead of fetching one from the device.
+> 
+>   - I also added support for reading the temperature log page on SCSI
+>     drives.
+> 
+>   - Tested with a mixed bag of about 40 SCSI and SATA drives attached.
+> 
+>   - I still think sensor naming needs work. How and where are the
+>     "drivetemp-scsi-8-140" names generated?
+> 
+> I'll tinker some more but thought I'd share what I have for now.
 > 
 
