@@ -7,75 +7,75 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B3BCC43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 11:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3DA3C43603
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 11:40:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2D7E2082E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 11:38:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 927FB24679
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 11:40:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="QPl2xLBn"
+	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="BHKfFzFG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfLSLit (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Dec 2019 06:38:49 -0500
-Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:38360 "EHLO
+        id S1726770AbfLSLkq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Dec 2019 06:40:46 -0500
+Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:65146 "EHLO
         mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726656AbfLSLis (ORCPT
+        by vger.kernel.org with ESMTP id S1726668AbfLSLkp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Dec 2019 06:38:48 -0500
-Received: from pps.filterd (m0167090.ppops.net [127.0.0.1])
-        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJBZVWb026362;
-        Thu, 19 Dec 2019 06:38:19 -0500
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2052.outbound.protection.outlook.com [104.47.38.52])
-        by mx0b-00128a01.pphosted.com with ESMTP id 2wvw8cv739-1
+        Thu, 19 Dec 2019 06:40:45 -0500
+Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJBZI3w008614;
+        Thu, 19 Dec 2019 06:40:18 -0500
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
+        by mx0b-00128a01.pphosted.com with ESMTP id 2wxf1mytv1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 06:38:19 -0500
+        Thu, 19 Dec 2019 06:40:17 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dxqtnNetUhAFBANtRJt4gYizQhfAYRCLkeloq2ZdcALFonRkdSawT71Rfvn+pKrN9SPx6gfouxUQpbN5ZfQ0GtjZgoZPYtMk62M/ZIfoCPXMKv2m+V+XjaD+XGmMftVvZfA37NBMZ5nr5GzM1KciOyQh0fv0nFDcUsFOC7QI2M3KzciV4IFv64LuZX50TnlUx2Hn4YXfXcViwGBJ7hqK7tmEnqUHRZERyrqoTAD80Q6skR28P6NW75bUgcyWd33PTLRfJ3lupahkgXVQbr+KeWOuqGS+BUMolT6X2El2X5S8BMTpVIkIje0vfUoDJMVpIRjmMl7SaslljGdoFhSa+Q==
+ b=dJZ9qkR1VN0T9Z990V1rTGK4UQynXj37L3VTSePjTCRfdWfsYY9BL2HyQzR2dklHpZnalpQ2n/X/BZnQsDEwS5BgvRWEjs9GFZwsa2D1vwaVpT7vNOYeSPSXhcMpq3xIUjiNqXvLNdRtJsO0VyfR8z1MtdiCwbzx9ERlTU/k/O7YuQWSKsSYRHJVJ588Z/jCuf+X5uBC5HOGOq8+c+YWX6dG6nhyeyuWK52rNukzYOS7RckN132E9VCo5E7XvlBehryObgXR87YJ2/deWamdo5Ph+uN5IUjOL8unAv2ll1GZwj6haxoB/sOBByZEHTn4quNRE/YPA+o5FpYtHohb5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9+od65jC1/e3bV5O0uD0IKYmFuJnq0eQjXCFrNFVaa8=;
- b=kPPxBnr8Hyn4arImzVmkHgWbSEJyfDeB6gBbSzXp8DUrlQDWN9a0GHM9dAlQ5/ASwG1wkYdu58vBi5OqhN1J5lIV1uomL/UX98IgulQX+ET3kfUSSC3GvHKZaOEIC3KLIruaw+GunHZG8NHo0OTzgJlOUDxCAcTJOfntSTZe2pgUwcjoSO+netXsxlJQeFSHXvI/qGFhJCANSGP3ubLbUYy4ZY7E1bafKUYG6yVGSLmYxjVMFZXPJOV7MR1JHsRSLhdF09pO35O5HGlMdxe2l0p/sIg0gqGnChQzxmD0NRVm1Cmn312bWUvPWtjl8O65ezkhSX+UAgBDd615fhxm3Q==
+ bh=gHIkn0VOd2cwcu70sl5V/+S64bboosDYfvHOEOhc9Q0=;
+ b=bvRqB9wXLFuE5Wru3amR6Us1qooUf3tz4oFY5dZj2Ba1EijJWeJqTWsXwgT75nODBzBg4rFRaAjZzaXuup8Aqpna+aMeT4quhMNfz5l9N8Jrl0NUkg/UWrGFmviljBzoQjnpZ3EkBa8EFoQFVHXdMrNb+rDe/2n3G+d7YWMtjn59gPLmgDwEDDi1neO0XzfVdVtXUM1JAEMdVv8SnYV2fJHumD7YGcjJ7ZwcS6Tocfk5/Xib8Gz2bCStM/q8CAeoRS6OGeZmGrvbyUwSFLfgi9NGcEpt+vjwQfkyWV1OKRt9DAntiUx2D55+3qnabZ4n2cxnSrBMZdNewlStcp5V+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 137.71.25.55) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
+ 137.71.25.57) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
  dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
  not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9+od65jC1/e3bV5O0uD0IKYmFuJnq0eQjXCFrNFVaa8=;
- b=QPl2xLBnGHE0s9qbGkcKnEcT0urYyzHJaCs01ZuWoA5gG7iUwjd5bOcxERUY/qCUZ9EHkkhsjT90/IZeSCORodU//GuTb2Vz/M41Yuu8WIfcguaNNdCBB48nm5KwdDnUoJCo7tT8FeAi3tu++SRDp6ENxRcdU8CMZ+rpzdazY38=
-Received: from SN6PR05CA0020.namprd05.prod.outlook.com (2603:10b6:805:de::33)
- by DM6PR03MB5322.namprd03.prod.outlook.com (2603:10b6:5:247::17) with
+ bh=gHIkn0VOd2cwcu70sl5V/+S64bboosDYfvHOEOhc9Q0=;
+ b=BHKfFzFG3rCoeU6z3AT1o6DnRGCfgouO0b57IBuIlNrTKpzP74wHxc6Ff1WSKmQepR/gFSk+S0CTLBffSAgVpCgDF45/4icbwwWTLEeedAhwBfXICOH37/TsrSdult/oiIcwHLskk80USwvTF+snhpSzNeCSeUu8ed6AnnE/sXk=
+Received: from CY4PR13CA0009.namprd13.prod.outlook.com (2603:10b6:903:32::19)
+ by DM6PR03MB4395.namprd03.prod.outlook.com (2603:10b6:5:108::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2559.14; Thu, 19 Dec
- 2019 11:38:17 +0000
-Received: from SN1NAM02FT008.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:de:cafe::57) by SN6PR05CA0020.outlook.office365.com
- (2603:10b6:805:de::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2559.10 via Frontend
- Transport; Thu, 19 Dec 2019 11:38:17 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.16; Thu, 19 Dec
+ 2019 11:40:16 +0000
+Received: from CY1NAM02FT025.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:32:cafe::97) by CY4PR13CA0009.outlook.office365.com
+ (2603:10b6:903:32::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2559.11 via Frontend
+ Transport; Thu, 19 Dec 2019 11:40:16 +0000
 Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- SN1NAM02FT008.mail.protection.outlook.com (10.152.72.119) with Microsoft SMTP
+ 137.71.25.57 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
+Received: from nwd2mta2.analog.com (137.71.25.57) by
+ CY1NAM02FT025.mail.protection.outlook.com (10.152.75.148) with Microsoft SMTP
  Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2559.14
- via Frontend Transport; Thu, 19 Dec 2019 11:38:16 +0000
-Received: from ASHBMBX8.ad.analog.com (ashbmbx8.ad.analog.com [10.64.17.5])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id xBJBcFre031657
+ via Frontend Transport; Thu, 19 Dec 2019 11:40:15 +0000
+Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id xBJBeDq8013799
         (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
-        Thu, 19 Dec 2019 03:38:15 -0800
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 19 Dec 2019 03:40:14 -0800
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Thu, 19 Dec
- 2019 06:38:14 -0500
-Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Thu, 19 Dec 2019 03:38:13 -0800
-Received: from ben-Latitude-E6540.ad.analog.com ([10.48.65.231])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id xBJBc9tc003930;
-        Thu, 19 Dec 2019 06:38:09 -0500
+ 2019 03:40:11 -0800
+Received: from zeus.spd.analog.com (10.64.82.11) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Thu, 19 Dec 2019 06:40:11 -0500
+Received: from ben-Latitude-E6540.ad.analog.com ([10.48.65.203])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id xBJBe813004004;
+        Thu, 19 Dec 2019 06:40:08 -0500
 From:   Beniamin Bia <beniamin.bia@analog.com>
 To:     <linux-hwmon@vger.kernel.org>
 CC:     <Michael.Hennerich@analog.com>, <linux-kernel@vger.kernel.org>,
@@ -84,38 +84,38 @@ CC:     <Michael.Hennerich@analog.com>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <biabeniamin@outlook.com>,
         Beniamin Bia <beniamin.bia@analog.com>
 Subject: [PATCH v2 1/3] hwmon: adm1177: Add ADM1177 Hot Swap Controller and Digital Power Monitor driver
-Date:   Thu, 19 Dec 2019 13:39:24 +0200
-Message-ID: <20191219113926.21749-1-beniamin.bia@analog.com>
+Date:   Thu, 19 Dec 2019 13:41:25 +0200
+Message-ID: <20191219114127.21905-1-beniamin.bia@analog.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-ADIRoutedOnPrem: True
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(346002)(376002)(136003)(396003)(199004)(189003)(316002)(70206006)(2616005)(966005)(107886003)(8676002)(70586007)(426003)(8936002)(2906002)(336012)(356004)(246002)(26005)(7636002)(7696005)(1076003)(478600001)(5660300002)(6916009)(54906003)(4326008)(6666004)(186003)(86362001)(44832011)(36756003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR03MB5322;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(136003)(376002)(346002)(396003)(39860400002)(189003)(199004)(1076003)(107886003)(246002)(8676002)(426003)(2906002)(54906003)(336012)(5660300002)(966005)(356004)(86362001)(26005)(7696005)(70206006)(6666004)(4326008)(7636002)(36756003)(70586007)(44832011)(186003)(478600001)(8936002)(6916009)(2616005)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR03MB4395;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;MX:1;A:1;
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ecbf0566-f526-46a5-e70e-08d78477f091
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5322:
-X-Microsoft-Antispam-PRVS: <DM6PR03MB53227054B221A7D52A3C83ACF0520@DM6PR03MB5322.namprd03.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9d860c9b-41dd-46cf-9cd9-08d784783789
+X-MS-TrafficTypeDiagnostic: DM6PR03MB4395:
+X-Microsoft-Antispam-PRVS: <DM6PR03MB439588678C0B82648656E9BAF0520@DM6PR03MB4395.namprd03.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-Forefront-PRVS: 0256C18696
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wPte6Iv6OmYeOXVFU6OYM2kEJg6qaQUzFGDg+IvC2qcP3u21wYG9QjBVEWjz+JAta5tR5h6DX59po8/IIn4k8nrBotvGV+QRXmVP+5Us7/L8fzPF4W0jqvjNEkb9haCNZGQNCQGb4YiX6gcbNfYefBf7D3m7Gkk9pDGB2Ujoo2mrZzz1wWxulndDLuTOZ5gXWlacRsZRgbEwPWm69JbxnORa6qwgy/pSCVif84RcEniNPQzcJ9KfCg76aKKPTRa2+xt8Ikow/ZbPT7XocrH0pDQXDk+B1SIdBtFFJKNQGBOBHLvSwgHV5AOCg0ogADtLJEEoIG/UaHrdzQcizLkTniUcuwGmkTbrcZY/A2RxdsXFEsBgNbiet+IINp1yhItiHLClCCoDHdLJroX8WzlSg/lgAGBnIi26g7OZTHUnjfw645kOJNItOxaj1iyk6pUFIL6SVLXjH2KSLpMhQ3L83Rphde1/QEil7Bf07r7c5Uw=
+X-Microsoft-Antispam-Message-Info: a1u+MgUI6ah9RWlT+pa9Bb8uRVrTof/jwykPgWKraXkLtJbXU2RT7cN2y2dAJXhvLFjp/xKgpDNLRcX1jJRqE9Gsw2A+goPmr7an2AqYUhucYHQOSD5os5jeco5s4ZONCSZU1pAIRC1DOOEzsV3bJLACvV1qY5ny//PDp6SRSBo1JkAftUDu3v5J1fDYQG2CC9pBjJt+qVfMHYmIumHtoIx9xy9k2H4yN1EhoBLaiLz/TBm6Onnluebzcu+LSTo31CUN34vVRPAfK2teL347Va0NRQMDp37x4W9g5xu20KJDTPTk8hYEtTnzEArwozbIYysC4xATMeD4LBylktY0eGSgWZmZQ6EhGd5GluoH/3cdJdwrKQVQDu01qe1wdsZIzl9W15Ek/5KLv4JkH8Y8erCup7qrT1wfF//6RFiF06DY9ZSRMgU13jAs/PbTilyZO3Bh9wMPnDwX6ey5/OsDAb4TvSUgFXpll/cNEVzUquQ=
 X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2019 11:38:16.7131
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2019 11:40:15.5849
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecbf0566-f526-46a5-e70e-08d78477f091
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d860c9b-41dd-46cf-9cd9-08d784783789
 X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5322
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB4395
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-19_01:2019-12-17,2019-12-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 mlxscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912190100
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
@@ -130,6 +130,16 @@ Link: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM117
 
 Signed-off-by: Beniamin Bia <beniamin.bia@analog.com>
 ---
+Changes in v2:
+-includes in alphabetical order 
+-unsed defines removed 
+-control variable from device_state structure removed 
+-unnecessary variable removed from read_raw function  
+-shutdown thresshold as sysfs property 
+-channel definitions with HWMON_CHANNEL_INFO 
+-hwmon documentation added
+-removed unnecessary paranthesis  
+
  Documentation/hwmon/adm1177.rst |  36 ++++
  drivers/hwmon/Kconfig           |  10 ++
  drivers/hwmon/Makefile          |   1 +
