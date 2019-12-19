@@ -2,123 +2,121 @@ Return-Path: <SRS0=pEIx=2J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89222C43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 00:33:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 206C0C2D0D2
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:32:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F925218AC
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 00:33:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAE8B24650
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:32:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sD+yWKkJ"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0IHvTuoV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbfLSAdA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Dec 2019 19:33:00 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39845 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbfLSAdA (ORCPT
+        id S1726795AbfLSDcT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Dec 2019 22:32:19 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:57241 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726813AbfLSDcT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Dec 2019 19:33:00 -0500
-Received: by mail-pf1-f194.google.com with SMTP id q10so2154673pfs.6;
-        Wed, 18 Dec 2019 16:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=p0q8QxoTzBEMo9IJAgQ5mnM7oqp1lTPhY1a2DTeSNu0=;
-        b=sD+yWKkJaSLMn9+NH4JWR4Z0jpYCBDVtGUkIH10gaoa7OL7HVyppH63hIoT2oQe6pJ
-         lIHzlt8Uf1qSKtfuyFCSE+pO8KK9a+g+niJedeIWeNOMyx+8NxpLrbLGzQJURTtZ3a+T
-         bH6kLI3J0wDK6BjzTP2mvy6Ia6SKtpNYZZEoUREttZ3yXKf1JleHpjQ/PMQZEiZp4/zX
-         rB6ugqXcbdfFyDE3810WjOcxmZ+iNF7niJXmrCilZGtWYc9+pkAqXvj0DsjwnPeOix93
-         v4RXWOG52PjLGIjYf9SiW0Z1/Ai2Bt/EST23feB8ihwNkeK7QbmceuuheRWsJNKvRFcM
-         LsSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p0q8QxoTzBEMo9IJAgQ5mnM7oqp1lTPhY1a2DTeSNu0=;
-        b=N49HwNz4dIsCn8yVG1hteSc5hZal1geekdn7/mUyFDSlWe4+bg4Y1ovKgyScu+QkH0
-         A7rFaVU7B3yzcDWMvZI32d10o53ff7N5LBzGREHLnnpG1IhXACaMUNzVx2izoGILG/3W
-         eTu5OQudbgRrNllVVWNSfKPBLeSbdoDoFb32YLDHL8PtQq1GbLcAqbBGyxkIW4GfvDmC
-         fOhMMTZSQ00DxFkzNo1zO1PxgJZI/PGyfVR7WNWGuPrZriUyTekGZaumivdBo+t2TLt3
-         PGByk9bdUd2Esx4VRKe0xSaVtwdYVTdPT+XAJEe08GcBHhdAuquz9bujX2i/EDRJubk8
-         1Fmg==
-X-Gm-Message-State: APjAAAW2vEe2VRBhFmDz2GBE7OBEq7c/BNTIuRF2L6I2kOhVa+pzIupJ
-        8MNIS6zLGKUrzoPqvfpwFVaXICNn
-X-Google-Smtp-Source: APXvYqypzKHQBv3aT4OD6iC5R4Mscfj9bYi5rG9iGuw5KdGufEgvY8n/CeRjJtyduSIT1Ue24HnQDw==
-X-Received: by 2002:a63:4d5e:: with SMTP id n30mr6072905pgl.275.1576715579176;
-        Wed, 18 Dec 2019 16:32:59 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g10sm4524960pgh.35.2019.12.18.16.32.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 18 Dec 2019 16:32:58 -0800 (PST)
-Date:   Wed, 18 Dec 2019 16:32:57 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>
-Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
-Message-ID: <20191219003256.GA28144@roeck-us.net>
-References: <20191215174509.1847-1-linux@roeck-us.net>
- <20191215174509.1847-2-linux@roeck-us.net>
- <yq1r211dvck.fsf@oracle.com>
+        Wed, 18 Dec 2019 22:32:19 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5CB39891AA;
+        Thu, 19 Dec 2019 16:32:18 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1576726338;
+        bh=QGGuWEOejvib1KsFRFTsduKYUrHgNswonePH3+UT11o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=0IHvTuoVrB772z+i4BADQf2BQ85AQAyJ4wtE2MCsHos+5pWyhPKOQ2H6UWKcpieur
+         +jWW28xstDrPCXqka44WRVRxDis6D90WqUl0DJ1pzxker3QI86xnu9KU8uWUNn2842
+         ahU0qrECGTot4rC7MysIm4L40ddPvsb0niyqrx3dxA9R8QGCfGUEY2TsLiHRUxC49T
+         f58arASHqefut8ka/QElL97zFvRa/9LTB9+61Fw8M6of0d8Ke9UX4Doi4GENq8Xz7Z
+         BhDg0IL1m6fr0XQJuVADOlOh18GIJ445etIol/29FPODpN1e+OEaIPxIDWnwddkWZA
+         vC1SSiAT2F9TQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5dfaef410001>; Thu, 19 Dec 2019 16:32:17 +1300
+Received: from logans-dl.ws.atlnz.lc (logans-dl.ws.atlnz.lc [10.33.25.49])
+        by smtp (Postfix) with ESMTP id D8CA613EEAF;
+        Thu, 19 Dec 2019 16:32:16 +1300 (NZDT)
+Received: by logans-dl.ws.atlnz.lc (Postfix, from userid 1820)
+        id 30F2EC03C3; Thu, 19 Dec 2019 16:32:18 +1300 (NZDT)
+From:   Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     logan.shaw@alliedtelesis.co.nz, joshua.scott@alliedtelesis.co.nz,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 2/2] hwmon: (adt7475) Added attenuator bypass support
+Date:   Thu, 19 Dec 2019 16:32:13 +1300
+Message-Id: <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
+References: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1r211dvck.fsf@oracle.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 07:15:07PM -0500, Martin K. Petersen wrote:
-> 
-> Guenter,
-> 
-> > This driver solves this problem by adding support for reading the
-> > temperature of SATA drives from the kernel using the hwmon API and
-> > by adding a temperature zone for each drive.
-> 
-> My working tree is available here:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git/log/?h=5.6/drivetemp
-> 
-> A few notes:
-> 
->  - Before applying your patch I did s/satatemp/drivetemp/
-> 
->  - I get a crash in the driver core during probe if the drivetemp module
->    is loaded prior to loading ahci or a SCSI HBA driver. This crash is
->    unrelated to my changes. Haven't had time to debug.
-> 
->  - I tweaked your ATA detection heuristics and now use the cached VPD
->    page 0x89 instead of fetching one from the device.
-> 
->  - I also added support for reading the temperature log page on SCSI
->    drives.
-> 
->  - Tested with a mixed bag of about 40 SCSI and SATA drives attached.
-> 
->  - I still think sensor naming needs work. How and where are the
->    "drivetemp-scsi-8-140" names generated?
-> 
-Quick one: In libsensors, outside the kernel. The naming is generic,
-along the line of <driver name>-<bus name>-<bus index>-<slot>.
+Added a new file documenting the adt7475 devicetree and added the five
+new properties to it.
 
-> I'll tinker some more but thought I'd share what I have for now.
-> 
-Thanks for sharing. I'll be out on vacation until January 1. I'll look
-at the code after I am back.
+Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+---
+---
+ .../devicetree/bindings/hwmon/adt7475.txt     | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.txt
 
-Guenter
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.txt b/Docume=
+ntation/devicetree/bindings/hwmon/adt7475.txt
+new file mode 100644
+index 000000000000..388dd718a246
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.txt
+@@ -0,0 +1,35 @@
++*ADT7475 hwmon sensor.
++
++Required properties:
++- compatible: One of
++	"adi,adt7473"
++	"adi,adt7475"
++	"adi,adt7476"
++	"adi,adt7490"
++
++- reg: I2C address
++
++optional properties:
++
++- bypass-attenuator-all: Configures bypassing all voltage input attenuat=
+ors.
++	This is only supported on the ADT7476 and ADT7490, this property does
++	nothing on other chips.
++		property present: Bit set to bypass all voltage input attenuators.
++		property absent: Registers left unchanged.
++
++- bypass-attenuator-inx: Configures bypassing individual voltage input
++	attenuators, where x is an integer from the set {0, 1, 3, 4}. This
++	is only supported on the ADT7476 and ADT7490, this property does nothin=
+g
++	on other chips.
++		property present: Bit set to bypass specific voltage input attenuator
++			for voltage input x.
++		property absent: Registers left unchanged.
++
++Example:
++
++hwmon@2e {
++	compatible =3D "adi,adt7475";
++	reg =3D <0x2e>;
++	bypass-attenuator-all;
++	bypass-attenuator-in1;
++};
+\ No newline at end of file
+--=20
+2.23.0
 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
