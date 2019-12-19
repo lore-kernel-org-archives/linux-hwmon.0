@@ -2,185 +2,141 @@ Return-Path: <SRS0=pEIx=2J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A72CC3F68F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23420C43603
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:53:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2208620684
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:32:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5A022072B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 03:53:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="P+Wg+Sxj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ajb5T/ks"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726813AbfLSDcU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Dec 2019 22:32:20 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:57235 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726771AbfLSDcU (ORCPT
+        id S1726794AbfLSDxx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Dec 2019 22:53:53 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34554 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726762AbfLSDxx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Dec 2019 22:32:20 -0500
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AEA4A891A9;
-        Thu, 19 Dec 2019 16:32:17 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1576726337;
-        bh=L/lznGEkZvrKK9QhU4VOrmOAm9GaSsI8P16EfgiyvQk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=P+Wg+SxjomqdSgx9ts6amJMtVR5QkkM1L7/U/nUgqYWi1Mj+1tNoEMpMroeocXRRJ
-         jO2WKWHROn/I/6uHBWq6XIsP8ECQDOAzm2mqjtN08UjvpzItnU2xnmYL4RzkMfi76n
-         UuyNMrOecUfjypMdzsNpDCGyQTF55WTY84uyQ8yyxv5Uxa1upwazHdcf7OfugSb4kk
-         Twe09iWSOCnx8cRiIARr/jJMZA7YQyMxXRgWPRMvUMnnnx+7GfUsx5d70N3M01ttZo
-         k14Hco+FzPiw9htVUdjN/sucRvxNHgJefC8aIv6r57cAi3Hx0khja1uBntCWP6VAzo
-         aL76TVr7ek6Fg==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5dfaef410000>; Thu, 19 Dec 2019 16:32:17 +1300
-Received: from logans-dl.ws.atlnz.lc (logans-dl.ws.atlnz.lc [10.33.25.49])
-        by smtp (Postfix) with ESMTP id 30FA513EEAF;
-        Thu, 19 Dec 2019 16:32:16 +1300 (NZDT)
-Received: by logans-dl.ws.atlnz.lc (Postfix, from userid 1820)
-        id 7D147C03C3; Thu, 19 Dec 2019 16:32:17 +1300 (NZDT)
-From:   Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     logan.shaw@alliedtelesis.co.nz, joshua.scott@alliedtelesis.co.nz,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 1/2] hwmon: (adt7475) Added attenuator bypass support
-Date:   Thu, 19 Dec 2019 16:32:12 +1300
-Message-Id: <20191219033213.30364-2-logan.shaw@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
+        Wed, 18 Dec 2019 22:53:53 -0500
+Received: by mail-pg1-f195.google.com with SMTP id r11so2406352pgf.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2019 19:53:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Fk0nPzAUeuLgNCRVt1AoKukAcF0h7NmaTn9F9bQK2do=;
+        b=Ajb5T/ksbciKzWoUDDHJ8F/ezUxXRJGm9o7BI+kkVW4kd7LHNoNuXkxR4StKM62sZ2
+         RNsaB7NzdovijDFjd3AVb+SLtZM4Aob/9tD+DvSjHlqsT3UgnZ2DJDJze7NjjfaG732d
+         36nijwC7DbrjS0N6A69bORiax645kNXZyslvvED0gRk9+4AsqkVv7UrK+QF646hfYGR7
+         BuhFJPl5wqOFGlPY+GVoF2lHpdnS8aV2ADPxY4Lsrwxpfae+uETV1OcdfHRXdF3XD3ME
+         0H3ve5WkEa+tbBAIhYfoxjb+sdPXzPtfJuWNW5ks/gnl+Jmb9L7a1ITEXXpibjRJjLJb
+         LSXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Fk0nPzAUeuLgNCRVt1AoKukAcF0h7NmaTn9F9bQK2do=;
+        b=tuXr+wEFAhB3dn1+a4kf03txc4GMLQlWfgqsDqld5GQ3pxwwysgk712ItMQNPe4VHD
+         0rf6g/e+nUvNkl32hTebCh4Aa1aa8XC0RYeIPmHi6NHeXNyrafzKTJRCb8RERDKIqgKi
+         YxFiZctHIyQ3eCf9bcTaXBrLUhYkRamecJMeO2YV2RK2UWBg1D+vYM7ztoUaC+mBfG5b
+         hB5NpKZS7KSy1/kPgNUpldlB+YLED+hgNe4tPN/mc9zkpp05GZukWngmXnt0HYqIQCQX
+         b9Ek1dFgy8xWySACGV2wH4pqcX0RNZG5168UUy4bwe/jo8PYN1783r1PUVIw/5+aPPbR
+         xJPQ==
+X-Gm-Message-State: APjAAAUoXMdpODR6ks5RIys7nAYveW6CEsG44U9oRSktswRwmv/n2EgH
+        nyDqIHBFHK9W+mMIsFn1dhzuebLj
+X-Google-Smtp-Source: APXvYqyzr/qGy+mZvCCNQj2ETqEgPvEZWeymrW3y2sIpWyM6MNKbBHxBORHOBCLUXuDuak6742+frA==
+X-Received: by 2002:a63:1e47:: with SMTP id p7mr6677660pgm.339.1576727631880;
+        Wed, 18 Dec 2019 19:53:51 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q12sm4568786pjq.10.2019.12.18.19.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Dec 2019 19:53:50 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Added attenuator bypass support
+To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>, jdelvare@suse.com
+Cc:     joshua.scott@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org
 References: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
+ <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e88b029b-dbb3-e423-5c37-0917d7716b66@roeck-us.net>
+Date:   Wed, 18 Dec 2019 19:53:49 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+In-Reply-To: <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Added support for reading DTS properties to set attenuators on
-device probe. Only bypasses attenuators on the ADT7476 and ADT7490
-(other chips do not support this).
+On 12/18/19 7:32 PM, Logan Shaw wrote:
+> Added a new file documenting the adt7475 devicetree and added the five
+> new properties to it.
+> 
+> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> ---
+> ---
+>   .../devicetree/bindings/hwmon/adt7475.txt     | 35 +++++++++++++++++++
+>   1 file changed, 35 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.txt b/Documentation/devicetree/bindings/hwmon/adt7475.txt
+> new file mode 100644
+> index 000000000000..388dd718a246
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.txt
+> @@ -0,0 +1,35 @@
+> +*ADT7475 hwmon sensor.
+> +
+> +Required properties:
+> +- compatible: One of
+> +	"adi,adt7473"
+> +	"adi,adt7475"
+> +	"adi,adt7476"
+> +	"adi,adt7490"
+> +
+> +- reg: I2C address
+> +
+> +optional properties:
+> +
+> +- bypass-attenuator-all: Configures bypassing all voltage input attenuators.
+> +	This is only supported on the ADT7476 and ADT7490, this property does
+> +	nothing on other chips.
 
-Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
----
----
- drivers/hwmon/adt7475.c | 73 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+Both adt7473 and adt7475 do support configuring an attenuator on VCCP
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 6c64d50c9aae..1e6ca1bc28ce 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon-vid.h>
- #include <linux/err.h>
- #include <linux/jiffies.h>
-+#include <linux/of.h>
- #include <linux/util_macros.h>
-=20
- /* Indexes for the sysfs hooks */
-@@ -1457,6 +1458,68 @@ static int adt7475_update_limits(struct i2c_client=
- *client)
- 	return 0;
- }
-=20
-+/**
-+ * Reads individual voltage input bypass attenuator properties from the =
-DTS,
-+ * and if the property is present the corresponding bit is set in the
-+ * register. Only the ADT7476 and ADT7490 support bypassing individual
-+ * attenuators.
-+ *
-+ * Properties must be in the form of "bypass-attenuator-inx", where x is=
- an
-+ * integer from the set {0, 1, 3, 4} (can not bypass in2 attenuator).
-+ *
-+ * Returns a negative error code if there was an error writing to the re=
-gister.
-+ */
-+static int load_individual_bypass_attenuators(const struct i2c_client *c=
-lient,
-+					      u8 *config4)
-+{
-+	u8 config4_copy =3D *config4;
-+
-+	if (of_get_property(client->dev.of_node, "bypass-attenuator-in0", NULL)=
-)
-+		config4_copy |=3D (1 << 4);
-+
-+	if (of_get_property(client->dev.of_node, "bypass-attenuator-in1", NULL)=
-)
-+		config4_copy |=3D (1 << 5);
-+
-+	if (of_get_property(client->dev.of_node, "bypass-attenuator-in3", NULL)=
-)
-+		config4_copy |=3D (1 << 6);
-+
-+	if (of_get_property(client->dev.of_node, "bypass-attenuator-in4", NULL)=
-)
-+		config4_copy |=3D (1 << 7);
-+
-+	if (i2c_smbus_write_byte_data(client, REG_CONFIG4, config4_copy) < 0)
-+		return -EREMOTEIO;
-+
-+	*config4 =3D config4_copy;
-+
-+	return 0;
-+}
-+
-+/**
-+ * Sets the bypass all attenuators bit, if the "bypass-attenuator-all"
-+ * property exists in the DTS.
-+ *
-+ * Returns a negative error code if there was an error writing to the
-+ * register.
-+ */
-+static int load_all_bypass_attenuator(const struct i2c_client *client,
-+				      u8 *config2)
-+{
-+	u8 config2_copy =3D *config2;
-+
-+	if (!of_get_property(client->dev.of_node,
-+			     "bypass-attenuator-all", NULL))
-+		return 0;
-+
-+	config2_copy |=3D (1 << 5);
-+
-+	if (i2c_smbus_write_byte_data(client, REG_CONFIG2, config2_copy) < 0)
-+		return -EREMOTEIO;
-+
-+	*config2 =3D config2_copy;
-+
-+	return 0;
-+}
-+
- static int adt7475_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -1545,7 +1608,17 @@ static int adt7475_probe(struct i2c_client *client=
-,
- 	}
-=20
- 	/* Voltage attenuators can be bypassed, globally or individually */
-+	if (chip =3D=3D adt7476 || chip =3D=3D adt7490)
-+		if (load_individual_bypass_attenuators(client,
-+							&(data->config4)) < 0)
-+			dev_warn(&client->dev,
-+				 "Error setting bypass attenuator bits\n");
-+
- 	config2 =3D adt7475_read(REG_CONFIG2);
-+	if (chip =3D=3D adt7476 || chip =3D=3D adt7490)
-+		if (load_all_bypass_attenuator(client, &config2) < 0)
-+			dev_warn(&client->dev, "Error setting bypass all attenuator\n");
-+
- 	if (config2 & CONFIG2_ATTN) {
- 		data->bypass_attn =3D (0x3 << 3) | 0x3;
- 	} else {
---=20
-2.23.0
+> +		property present: Bit set to bypass all voltage input attenuators.
+> +		property absent: Registers left unchanged.
+> +
+> +- bypass-attenuator-inx: Configures bypassing individual voltage input
+> +	attenuators, where x is an integer from the set {0, 1, 3, 4}. This
+> +	is only supported on the ADT7476 and ADT7490, this property does nothing
+> +	on other chips.
+> +		property present: Bit set to bypass specific voltage input attenuator
+> +			for voltage input x.
+> +		property absent: Registers left unchanged.
+> +
+This is interesting. It essentially means "retain configuration from ROM
+Monitor", but leaves no means to _disable_ the bypass.
+
+> +Example:
+> +
+> +hwmon@2e {
+> +	compatible = "adi,adt7475";
+> +	reg = <0x2e>;
+> +	bypass-attenuator-all;
+> +	bypass-attenuator-in1;
+
+What would be the purpose of specifying both all and in1 ?
+
+> +};
+> \ No newline at end of file
+> 
 
