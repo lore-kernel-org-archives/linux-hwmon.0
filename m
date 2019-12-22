@@ -1,119 +1,94 @@
-Return-Path: <SRS0=pEIx=2J=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=7+HN=2M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD7CFC43603
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 20:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA7E8C2D0C0
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:10:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A50682465E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Dec 2019 20:50:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CD4A20665
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:10:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JuRT9Fop"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbfLSUuz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Dec 2019 15:50:55 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727422AbfLSUuz (ORCPT
+        id S1726539AbfLVOKx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 Dec 2019 09:10:53 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:39705 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbfLVOKx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Dec 2019 15:50:55 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJKleqQ026074;
-        Thu, 19 Dec 2019 15:50:29 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2x0g299500-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 15:50:29 -0500
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id xBJKliKj026433;
-        Thu, 19 Dec 2019 15:50:28 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2x0g2994yh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 15:50:28 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id xBJKo1DO016922;
-        Thu, 19 Dec 2019 20:50:27 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03wdc.us.ibm.com with ESMTP id 2wvqc71km5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 20:50:27 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBJKoQW560424642
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Dec 2019 20:50:26 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A62A0C605A;
-        Thu, 19 Dec 2019 20:50:26 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C102C6059;
-        Thu, 19 Dec 2019 20:50:26 +0000 (GMT)
-Received: from talon7.ibm.com (unknown [9.41.103.158])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Dec 2019 20:50:26 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        jdelvare@suse.com, bjwyman@gmail.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 3/3] hwmon: (pmbus/ibm-cffps) Fix the LED behavior when turned off
-Date:   Thu, 19 Dec 2019 14:50:07 -0600
-Message-Id: <1576788607-13567-4-git-send-email-eajames@linux.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1576788607-13567-1-git-send-email-eajames@linux.ibm.com>
-References: <1576788607-13567-1-git-send-email-eajames@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-19_06:2019-12-17,2019-12-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
- mlxlogscore=904 suspectscore=1 lowpriorityscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912190154
+        Sun, 22 Dec 2019 09:10:53 -0500
+Received: by mail-pj1-f66.google.com with SMTP id t101so6304947pjb.4;
+        Sun, 22 Dec 2019 06:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=814BTk/L0iDRXw/rhLXQMNOV1fosSV7rD9UHif3vpVY=;
+        b=JuRT9FopP2EEsJFprskl8hSX3GWW2Un0HHelK6DBp9o8hiLwpxC7bwoc94k12Lmdso
+         b+kz3j1RfVI6FuPpBn+5gayCndU9ncisa6HRajcHdjNJaksdmqvF0qayAfxYyl2WGLrb
+         q02hPaqn+wg34kmvjrNYBvtvzeQVHGy6l+4EbcuGEAtE19OgkdP5LOGQReoCG2gBKz9h
+         dHqdVzxf6N09eUKpbMFd8+Cgk7Z5PwASxiLtZlDqvQIXIigCAYX5yUWTugU9MUZRTWAm
+         k0BUeSkOOxPZL4H74Sv7z6Q4X+UH3witBkHgAh8rZJKd0SKN9LJJceoiRCW6Ou+O+rdj
+         /qBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=814BTk/L0iDRXw/rhLXQMNOV1fosSV7rD9UHif3vpVY=;
+        b=CdMiZBqFUImleeVlmfvfSj2lLVlQWPv6q3Gp2C8Vk2lvBMnPj1BvmbSwM4+oizC7Nw
+         KmtGX0E2EyV1A2LEuFdH7/4ft5ILD6j3bePmf0ARuGCUCDyytw61NHeWovIr5MyDMm05
+         eBfiZ0Ap+m5IeSdpeCzzqz/K+7zJVEjVmh9BzM8a8D1/na5Bj4prYFt8G25i0CteYaQV
+         LretpcIUGYjBaA68Sr5USEvfkFBaNz6B/eOwmLMO1zRvN2z/yMNOWo5y/6DEuUc1hRtK
+         mXqF+pdBf+NTknLqePj7pU5oKJhgx70RyhTyAHWAZ1Lwo4W1PL9ZsEh2OwrzdWpSNpsU
+         ylBA==
+X-Gm-Message-State: APjAAAU9ARzelI5A+q2dwU7AtUNOYSdNcfHVSTv9h7jApECvsXrH54Wu
+        kmJ84hiM+jnpqlZjWtSnQVbaeSrMMy8=
+X-Google-Smtp-Source: APXvYqx9IgirQ91Y6HfU8ZfcWDOeIcYiq7FgqmvZOrqmwHqKuGk2qVXZWLC6Bq9NQP34wgYMdILrEA==
+X-Received: by 2002:a17:90a:b30b:: with SMTP id d11mr27707591pjr.22.1577023852076;
+        Sun, 22 Dec 2019 06:10:52 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
+        by smtp.gmail.com with ESMTPSA id x33sm18320073pga.86.2019.12.22.06.10.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 22 Dec 2019 06:10:50 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/2] hwmon: (pwm-fan) add option to stop fan on shutdown
+Date:   Sun, 22 Dec 2019 23:10:21 +0900
+Message-Id: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The driver should remain in control of the LED on the PSU, even while
-off, not the PSU firmware as previously indicated.
+The pwm-fan driver leaves the fun running when shutting down the system.
+(On the other hand the gpio-fan driver stops it.)
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/pmbus/ibm-cffps.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+This adds an optional property "disable-state-shutdown" in case someone
+wants to stop the fun running when shutting down the system.
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index b37faf1..1c91ee1 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -47,13 +47,9 @@
- #define CFFPS_MFR_VAUX_FAULT			BIT(6)
- #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
- 
--/*
-- * LED off state actually relinquishes LED control to PSU firmware, so it can
-- * turn on the LED for faults.
-- */
--#define CFFPS_LED_OFF				0
- #define CFFPS_LED_BLINK				BIT(0)
- #define CFFPS_LED_ON				BIT(1)
-+#define CFFPS_LED_OFF				BIT(2)
- #define CFFPS_BLINK_RATE_MS			250
- 
- enum {
-@@ -436,6 +432,9 @@ static void ibm_cffps_create_led_class(struct ibm_cffps *psu)
- 	rc = devm_led_classdev_register(dev, &psu->led);
- 	if (rc)
- 		dev_warn(dev, "failed to register led class: %d\n", rc);
-+	else
-+		i2c_smbus_write_byte_data(client, CFFPS_SYS_CONFIG_CMD,
-+					  CFFPS_LED_OFF);
- }
- 
- static struct pmbus_driver_info ibm_cffps_info[] = {
+Akinobu Mita (2):
+  hwmon: (pwm-fan) add option to stop fan on shutdown
+  dt-bindings: hwmon: (pwm-fan) add disable-state-shutdown property
+
+ .../devicetree/bindings/hwmon/pwm-fan.txt          |  2 ++
+ drivers/hwmon/pwm-fan.c                            | 24 ++++++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Kamil Debski <kamil@wypas.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 -- 
-1.8.3.1
+2.7.4
 
