@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1965DC2D0C0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51891C2D0D5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:11:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E48E520665
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:10:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 290A420665
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:11:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxhiRDaJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tkSXv1GG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbfLVOK4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Dec 2019 09:10:56 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45445 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726564AbfLVOK4 (ORCPT
+        id S1726664AbfLVOLA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 Dec 2019 09:11:00 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44504 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725971AbfLVOK7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Dec 2019 09:10:56 -0500
-Received: by mail-pf1-f195.google.com with SMTP id 2so7837598pfg.12;
-        Sun, 22 Dec 2019 06:10:56 -0800 (PST)
+        Sun, 22 Dec 2019 09:10:59 -0500
+Received: by mail-pl1-f194.google.com with SMTP id az3so6130245plb.11;
+        Sun, 22 Dec 2019 06:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=y2NgiqlWrB0g1nYThxREdvdN0lYU2uUNLMalSkDDff8=;
-        b=fxhiRDaJnFZagib3CeNKGtfPJXOjuu8y7mIxT8xt2DaPo6QZX13U144wA2Ot02mzta
-         mjv+29sTjUQf3vVS4St6SXHNZh+RoQwL8GZlG9n3CuHeHhY2MJlvxH29wN9npcXgBScl
-         A/i8RXBYpJ46iLd8xT/NnLhtzhvA2sD2LL8ShHWlSNthfAAGoB+Pwen4GRoUsNpGJAZ3
-         NYS/9O52cE7QHiY/yg/RfIlpuJQULU12OrwuEW9VqKq5dRrdsSMqm4Op8UBcZXRDXZq5
-         h4KbWg5p+fGlbX5wyUWo1QvUQKF8DI6rUA+Hpw69V4xVqzjfgYn4p0l3edkJOUaWxF35
-         xZgw==
+        bh=XihcnFBU6FZmO4PC7ivBARUp1VA4JLYIXN/CcgXN5JI=;
+        b=tkSXv1GGC/QBRTxkn6ijWvKywnmM9gAe6Q/6rBHjuJv75QYveU9Qgc6BXOVV1dX2PU
+         QbRWicGO7xssOOwJWnrK2Oc2UgMzLFicli04pKLPVBTU7bMqV0BetRRe31nC4O9FvAAy
+         QUxyCmhhsqWvZCzmLGwlR5ETwA8Z+r9NFImcnSNamLxtoAgNjpxR7AduFmzRP7m9t2Yu
+         v2uSPpzgAvQY4TVNkifuqo46JUYHTxMsvTj9OcmsGfGeUyuLhrJwi/b0wMnEoSYD4b83
+         yFqQBY6POoOoPjva4znLqqyD4opH5hTg9p4LOGLcvyRNoO2hUgNetozQBf+0reutyjc5
+         zWvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=y2NgiqlWrB0g1nYThxREdvdN0lYU2uUNLMalSkDDff8=;
-        b=osGm1RjeoiS9DNg7ApdQcgKgFtaX6485Xyr2VtUTSZKsXdSvxC+D/c617LxZO4p3IJ
-         +VNEztyjOkQj/DBjuiP3snOG+RWXp3ByVWnT09b8s8Q0+cSf0tAmlQlLpfeACP976TU7
-         enT9v4osM0pWupK86JIbHdvLf9yqJKnEchuXjd/HBtSiPIotsjnd7MxR9dWT4iyzjzz/
-         8o1Y8t/4aQ7Zip5yI6Ud7avO93vd9no98vuYIGVXLcL43CSkFO+1c+P02mxdijJyjuBp
-         jZjbX21Gtbdk1UDnhl8Iwnu8mBeGNftG71xTzh0BQSUSjPVBEY7VEKo57sMNNUMXtpJu
-         ESxw==
-X-Gm-Message-State: APjAAAWGocCcrvZMiFYGiZzsjLzZvKsC54ipiO2cW4ZO5OpAqB/CHIwP
-        t7oiGuety6DNiTI8FyhCJQomRb8P9Us=
-X-Google-Smtp-Source: APXvYqz19xRqv00GKGiTWaxyYCkFcRGVDz67nDMNvrCZxMzhuk+LP0W777jysfBEOiMp76TRkFPSGQ==
-X-Received: by 2002:a65:66da:: with SMTP id c26mr26319588pgw.354.1577023855335;
-        Sun, 22 Dec 2019 06:10:55 -0800 (PST)
+        bh=XihcnFBU6FZmO4PC7ivBARUp1VA4JLYIXN/CcgXN5JI=;
+        b=YFNTr0KF0RtDspkpoJbT5tx+oCIX/2t9j9MKPV8utCmGdz0vMh7m0l+n2gO2qqJqkb
+         YZZPb3cQrkXW2ntSBicYj9Pm0taiowYNBNdlQl3ozUrXEycmxIrldLIVwAuccyWzm9tt
+         ynXPCewGtURh4Ty/U97Uc6SO/zWG4rH0XsY6B9KL5pmiLZdwQX6IHghAssPkVn6/gcCt
+         xWO306yRBlGenFfbKY464ZCLutBkeOnjhoY3/u6dUifq9Nb8ZEZjc3sgB7LTSpPaSiar
+         Ih7nIWi5ftVUxF0R9EzhX8fnxDjtkLUPxMuBlct0bEgkq0CLixy2E0WJwGM0Wu3+f/Eu
+         rDGA==
+X-Gm-Message-State: APjAAAVJ77Fn7ksHGtH1Sbtzn+lAqBU+AtN8UvO9GfjVzsCrxvbvU6Bo
+        h2zUU/KxcyszIFwLq9R0V2MSeH8DqV8=
+X-Google-Smtp-Source: APXvYqzQNqicTdivACoxIrkqokJ4mHcUmIQDmZ3DW8/eB+xfBg3IBsjQL8MZeFkYhYcfMCsmL0g6uA==
+X-Received: by 2002:a17:902:d70d:: with SMTP id w13mr8834137ply.113.1577023858854;
+        Sun, 22 Dec 2019 06:10:58 -0800 (PST)
 Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id x33sm18320073pga.86.2019.12.22.06.10.52
+        by smtp.gmail.com with ESMTPSA id x33sm18320073pga.86.2019.12.22.06.10.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 22 Dec 2019 06:10:54 -0800 (PST)
+        Sun, 22 Dec 2019 06:10:58 -0800 (PST)
 From:   Akinobu Mita <akinobu.mita@gmail.com>
 To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
@@ -63,9 +63,9 @@ Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
         Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] hwmon: (pwm-fan) add option to stop fan on shutdown
-Date:   Sun, 22 Dec 2019 23:10:22 +0900
-Message-Id: <1577023823-9615-2-git-send-email-akinobu.mita@gmail.com>
+Subject: [PATCH 2/2] dt-bindings: hwmon: (pwm-fan) add disable-state-shutdown property
+Date:   Sun, 22 Dec 2019 23:10:23 +0900
+Message-Id: <1577023823-9615-3-git-send-email-akinobu.mita@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
 References: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
@@ -74,11 +74,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pwm-fan driver leaves the fun running when shutting down the system.
-(On the other hand the gpio-fan driver stops it.)
-
-This adds an optional property "disable-state-shutdown" in case someone
-wants to stop the fun running when shutting down the system.
+Document new disable-state-shutdown property that is introduced in case
+someone wants to stop the fun running when shutting down the system.
 
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
@@ -87,72 +84,22 @@ Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 ---
- drivers/hwmon/pwm-fan.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 42ffd2e..8775d37 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -33,6 +33,7 @@ struct pwm_fan_ctx {
- 	u8 pulses_per_revolution;
- 	ktime_t sample_start;
- 	struct timer_list rpm_timer;
-+	bool disable_state_shutdown;
+diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+index 41b7676..1e25787 100644
+--- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
++++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
+@@ -18,6 +18,8 @@ Optional properties:
+ 			  an integer (default is 2 interrupts per revolution).
+ 			  The value must be greater than zero.
  
- 	unsigned int pwm_value;
- 	unsigned int pwm_fan_state;
-@@ -292,6 +293,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	mutex_init(&ctx->lock);
- 
-+	ctx->disable_state_shutdown =
-+		of_property_read_bool(dev->of_node, "disable-state-shutdown");
++- disable-state-shutdown: Disable the state of the PWM on shutdown.
 +
- 	ctx->pwm = devm_of_pwm_get(dev, dev->of_node, NULL);
- 	if (IS_ERR(ctx->pwm)) {
- 		ret = PTR_ERR(ctx->pwm);
-@@ -390,8 +394,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
--static int pwm_fan_suspend(struct device *dev)
-+static int pwm_fan_disable(struct device *dev)
- {
- 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
- 	struct pwm_args args;
-@@ -418,6 +421,22 @@ static int pwm_fan_suspend(struct device *dev)
- 	return 0;
- }
- 
-+static void pwm_fan_shutdown(struct platform_device *pdev)
-+{
-+	struct pwm_fan_ctx *ctx = platform_get_drvdata(pdev);
-+
-+	if (!ctx->disable_state_shutdown)
-+		return;
-+
-+	pwm_fan_disable(&pdev->dev);
-+}
-+
-+#ifdef CONFIG_PM_SLEEP
-+static int pwm_fan_suspend(struct device *dev)
-+{
-+	return pwm_fan_disable(dev);
-+}
-+
- static int pwm_fan_resume(struct device *dev)
- {
- 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-@@ -455,6 +474,7 @@ MODULE_DEVICE_TABLE(of, of_pwm_fan_match);
- 
- static struct platform_driver pwm_fan_driver = {
- 	.probe		= pwm_fan_probe,
-+	.shutdown	= pwm_fan_shutdown,
- 	.driver	= {
- 		.name		= "pwm-fan",
- 		.pm		= &pwm_fan_pm,
+ Example:
+ 	fan0: pwm-fan {
+ 		compatible = "pwm-fan";
 -- 
 2.7.4
 
