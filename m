@@ -1,105 +1,111 @@
-Return-Path: <SRS0=7+HN=2M=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=GPZv=2N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51891C2D0D5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EB0EC2D0D0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Dec 2019 13:07:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 290A420665
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Dec 2019 14:11:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 245E020409
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Dec 2019 13:07:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tkSXv1GG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N7FN0ncL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbfLVOLA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Dec 2019 09:11:00 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:44504 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfLVOK7 (ORCPT
+        id S1726777AbfLWNHy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Dec 2019 08:07:54 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:34613 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbfLWNHy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Dec 2019 09:10:59 -0500
-Received: by mail-pl1-f194.google.com with SMTP id az3so6130245plb.11;
-        Sun, 22 Dec 2019 06:10:59 -0800 (PST)
+        Mon, 23 Dec 2019 08:07:54 -0500
+Received: by mail-lf1-f65.google.com with SMTP id l18so4409015lfc.1;
+        Mon, 23 Dec 2019 05:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XihcnFBU6FZmO4PC7ivBARUp1VA4JLYIXN/CcgXN5JI=;
-        b=tkSXv1GGC/QBRTxkn6ijWvKywnmM9gAe6Q/6rBHjuJv75QYveU9Qgc6BXOVV1dX2PU
-         QbRWicGO7xssOOwJWnrK2Oc2UgMzLFicli04pKLPVBTU7bMqV0BetRRe31nC4O9FvAAy
-         QUxyCmhhsqWvZCzmLGwlR5ETwA8Z+r9NFImcnSNamLxtoAgNjpxR7AduFmzRP7m9t2Yu
-         v2uSPpzgAvQY4TVNkifuqo46JUYHTxMsvTj9OcmsGfGeUyuLhrJwi/b0wMnEoSYD4b83
-         yFqQBY6POoOoPjva4znLqqyD4opH5hTg9p4LOGLcvyRNoO2hUgNetozQBf+0reutyjc5
-         zWvw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5eJH2So2Y3KqY/K1ixMNRpaPpKx0b38bhcNlkypecC0=;
+        b=N7FN0ncLXb065P3FN14ZDLucMWMpNKGbWPL84vdRLA17Kc3XtT8pnSKLjbseUPj918
+         b9yDdgKBeG55jltDFLk9cDzyCHWPNVXrw4qoKL0NK/RoO24MAp8q04nFdEJcZpgaT5BF
+         Q15J2JBVrmMrQx4zFr9FLZw/VeElcbpyV3hIkGOi1aH3of4W5V7Pz5pv99zVfEeU/F0K
+         SoqCCo4ejdPWZ5XPiDBHIxGsbm8jsgy1f4YZ0a2rDR8r1ttquMOBRfzWSCRjKNS9W/oB
+         PELHjv9r8rJchpunfS3Od1m02nbafGGlA5trUX/4PLKhVRONJM6uv5xUiPD//ox37mFL
+         dK4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=XihcnFBU6FZmO4PC7ivBARUp1VA4JLYIXN/CcgXN5JI=;
-        b=YFNTr0KF0RtDspkpoJbT5tx+oCIX/2t9j9MKPV8utCmGdz0vMh7m0l+n2gO2qqJqkb
-         YZZPb3cQrkXW2ntSBicYj9Pm0taiowYNBNdlQl3ozUrXEycmxIrldLIVwAuccyWzm9tt
-         ynXPCewGtURh4Ty/U97Uc6SO/zWG4rH0XsY6B9KL5pmiLZdwQX6IHghAssPkVn6/gcCt
-         xWO306yRBlGenFfbKY464ZCLutBkeOnjhoY3/u6dUifq9Nb8ZEZjc3sgB7LTSpPaSiar
-         Ih7nIWi5ftVUxF0R9EzhX8fnxDjtkLUPxMuBlct0bEgkq0CLixy2E0WJwGM0Wu3+f/Eu
-         rDGA==
-X-Gm-Message-State: APjAAAVJ77Fn7ksHGtH1Sbtzn+lAqBU+AtN8UvO9GfjVzsCrxvbvU6Bo
-        h2zUU/KxcyszIFwLq9R0V2MSeH8DqV8=
-X-Google-Smtp-Source: APXvYqzQNqicTdivACoxIrkqokJ4mHcUmIQDmZ3DW8/eB+xfBg3IBsjQL8MZeFkYhYcfMCsmL0g6uA==
-X-Received: by 2002:a17:902:d70d:: with SMTP id w13mr8834137ply.113.1577023858854;
-        Sun, 22 Dec 2019 06:10:58 -0800 (PST)
-Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id x33sm18320073pga.86.2019.12.22.06.10.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 22 Dec 2019 06:10:58 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5eJH2So2Y3KqY/K1ixMNRpaPpKx0b38bhcNlkypecC0=;
+        b=PWdt69KWzpEnD7AY/7sODWcRHrQjmvZQqUo9v3BCfB6qr7YNZvk+29EOm3Ua821tJ+
+         BE+CG8YXe1VVGx4DVPZli06E/rRWBmmnwsaAxsQZ1q5xtOeYGMTKVfQ1tmsa9NQRTy87
+         vQuEIQCuS1XP+lSHNQ7L43sgNayRHsqrRkOTgPbeaznDsnfADIDpq45myeI49hpL5F2f
+         yjvW73cZ63P8XXcYS/SeFSjXVyIoU363G60MdJ7Yt0EHX0ejCpAjW3cM5tYpHyUhvXsC
+         3wah0m5ZeFz/yKZxJ+QknTvg/tCMwJ5qBnPmvwEkElYfYYy5XBaJBZzCW11U4TjLykvl
+         FtFA==
+X-Gm-Message-State: APjAAAVvB1MMveyg0c/S7qajWwsCOm8QX/dEnxbxul/mgvRJvqaX4ssi
+        8/Ov7Gy+lrdjfOVWPfsLNz4FAomiyjRseJKc2Wo=
+X-Google-Smtp-Source: APXvYqx35NtG2msl9BoMH2SPDevhyYA9MZsbmqBAxBohTRg/NXhM9CHIaYC1N0ZR9f0Dh28z9OhNSEDQtt4irLWQGH0=
+X-Received: by 2002:ac2:4a89:: with SMTP id l9mr16617018lfp.121.1577106471345;
+ Mon, 23 Dec 2019 05:07:51 -0800 (PST)
+MIME-Version: 1.0
+References: <1576386975-7941-1-git-send-email-akinobu.mita@gmail.com>
+In-Reply-To: <1576386975-7941-1-git-send-email-akinobu.mita@gmail.com>
 From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/2] dt-bindings: hwmon: (pwm-fan) add disable-state-shutdown property
-Date:   Sun, 22 Dec 2019 23:10:23 +0900
-Message-Id: <1577023823-9615-3-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
-References: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
+Date:   Mon, 23 Dec 2019 22:07:39 +0900
+Message-ID: <CAC5umygqpmb0s8zHC+TFEFffQmsU4N1hUs_XWGDLtqkJEccfBw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/12] add header file for kelvin to/from Celsius
+ conversion helpers
+To:     Linux NVMe Mailinglist <linux-nvme@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sujith Thomas <sujith.thomas@intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document new disable-state-shutdown property that is introduced in case
-someone wants to stop the fun running when shutting down the system.
+Andrew,
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Kamil Debski <kamil@wypas.org>
-Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- Documentation/devicetree/bindings/hwmon/pwm-fan.txt | 2 ++
- 1 file changed, 2 insertions(+)
+Could you take a look at this series, and consider including into -mm tree?
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-index 41b7676..1e25787 100644
---- a/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-+++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.txt
-@@ -18,6 +18,8 @@ Optional properties:
- 			  an integer (default is 2 interrupts per revolution).
- 			  The value must be greater than zero.
- 
-+- disable-state-shutdown: Disable the state of the PWM on shutdown.
-+
- Example:
- 	fan0: pwm-fan {
- 		compatible = "pwm-fan";
--- 
-2.7.4
-
+2019=E5=B9=B412=E6=9C=8815=E6=97=A5(=E6=97=A5) 14:16 Akinobu Mita <akinobu.=
+mita@gmail.com>:
+>
+> There are several helper macros to convert kelvin to/from Celsius in
+> <linux/thermal.h> for thermal drivers.  These are useful for any other
+> drivers or subsystems, but it's odd to include <linux/thermal.h> just for
+> the helpers.
+>
+> This adds a new <linux/units.h> that provides the equivalent inline
+> functions for any drivers or subsystems, and switches all the users of
+> conversion helpers in <linux/thermal.h> to use <linux/units.h>
+> helpers.
