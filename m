@@ -2,263 +2,220 @@ Return-Path: <SRS0=XbaA=23=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB677C33C8C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 15:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82596C33C8C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 16:57:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ABC83207FD
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 15:33:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4185A20848
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 16:57:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="q2Omkmmk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbgAFPdH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jan 2020 10:33:07 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46098 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726437AbgAFPdH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 6 Jan 2020 10:33:07 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 006FN0bD025474;
-        Mon, 6 Jan 2020 10:32:45 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xb8wwxtf3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jan 2020 10:32:44 -0500
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 006FPuWc033266;
-        Mon, 6 Jan 2020 10:32:44 -0500
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xb8wwxtex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jan 2020 10:32:44 -0500
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 006FUxQ5022027;
-        Mon, 6 Jan 2020 15:32:50 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma01wdc.us.ibm.com with ESMTP id 2xajb635m5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jan 2020 15:32:49 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 006FWgwn46399814
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Jan 2020 15:32:43 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2B89BE051;
-        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E249BE04F;
-        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
-Received: from [9.163.15.26] (unknown [9.163.15.26])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
-Subject: Re: [PATCH 1/3] hwmon: (pmbus/ibm-cffps) Add new manufacturer debugfs
- entries
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, bjwyman@gmail.com
-References: <1576788607-13567-1-git-send-email-eajames@linux.ibm.com>
- <1576788607-13567-2-git-send-email-eajames@linux.ibm.com>
- <20200104162608.GA8155@roeck-us.net>
-From:   Eddie James <eajames@linux.ibm.com>
-Message-ID: <26c91d06-0e6f-84e9-87f5-6df5778176ba@linux.ibm.com>
-Date:   Mon, 6 Jan 2020 09:32:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20200104162608.GA8155@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1726526AbgAFQ5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jan 2020 11:57:42 -0500
+Received: from mail-eopbgr80074.outbound.protection.outlook.com ([40.107.8.74]:47150
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726448AbgAFQ5l (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Jan 2020 11:57:41 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cGQFmwGdKntjFK+tFplwrwZhbHuQH/g7tYgw5PWF3D9iguX+Yz1vNBZ+Rjsi34uxs3AtzPXA+Dkl7DxoHhjLN0vcktGQMCLyQACTvWcTk9H8BBTvm+PT1h28YYs9URxF2RuHPp9Le4kdSwL5ZVhS14T9wiFD3OcMUcM15HY2DYAzCXC9SB4n7dKLRihff+7HQj4Io8KKqfvNjiSBx8dL9E3uF28bn7E0IzwBMadc4GSo37Pc5qocKZzGQXyrt5SB3wNUKDdVh/yqIWvfOiy7PL8LY4236VvuDZ3V1ufxAbVXaQdAcPiWeTYoIg8nAKVCdMZmbw/TWT6w/dfe2kS3XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EAqZZZKr7tv8HNHTus7bWNaNqdWxsdKEpnLQ2s9hn/E=;
+ b=C2jsQaEGFWBs2ucQ1coWd+2yn1tDhTWlXv55wXAYtqVVvCxI1JH7xpuHghUzmSnwVqW0gNTEBVDOep/hfJp2aMIq4mW5glpSxwxyS4LqzFZ+AyBuDypY4/k6ZDZYCS+7TvdWKr5YU0w1rzjVmSR4FRazz2l5yD0ijwXxJHLtMaGWECTxdKtLC47Cf/b0EnCzE6nTZ7Vktf8q25ONTSseeF0W4D4XwqrwZwSDulLnMXcNXhtHTwcWvxHdHK3/hrwK90JGQ8uEvn0PYg5n6j6mjb97tJCtB/ScCS33/RU8kOfY4co2AAikVi8RPnS5FTtu5RMz4h6I5NjWbBK9FsRGEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EAqZZZKr7tv8HNHTus7bWNaNqdWxsdKEpnLQ2s9hn/E=;
+ b=q2OmkmmkJRndRP7uNOXq/oWByhHis3WZZuZZtdXFpe4IMll1us+mVj6SLzRHx7RpxhosYaVF6L7AI4zI3/Pt8NCn/1Md21SztpGMqsMUlVP49pP2IUR3NtsJ27/3eU+QiWpMzlaGVt32/uDMJsmYzHbt0MC/ryvVvCpG7MDTSsw=
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com (20.177.196.210) by
+ AM6PR05MB4104.eurprd05.prod.outlook.com (52.135.162.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2602.11; Mon, 6 Jan 2020 16:57:32 +0000
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::44ac:7bce:8f7c:3e6d]) by AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::44ac:7bce:8f7c:3e6d%3]) with mapi id 15.20.2602.015; Mon, 6 Jan 2020
+ 16:57:32 +0000
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "vijaykhemka@fb.com" <vijaykhemka@fb.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
+ device list supported by driver
+Thread-Topic: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
+ device list supported by driver
+Thread-Index: AQHVw7ccUo77+1Sy70mxGafA8mf8l6fcO+2AgAAG1qCAACN3gIAA8BkwgABkGgCAAA3mcA==
+Date:   Mon, 6 Jan 2020 16:57:32 +0000
+Message-ID: <AM6PR05MB52242EA6A029D4C5F011A21BA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+References: <20200105105833.30196-1-vadimp@mellanox.com>
+ <20200105105833.30196-6-vadimp@mellanox.com>
+ <567ebd26-529e-6b2a-2f07-cfaf0f2217a9@roeck-us.net>
+ <AM6PR05MB5224F444CBAC5A0503AFBB83A23D0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <a30e4f98-65a4-f93c-371e-7691aace41f7@roeck-us.net>
+ <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
+In-Reply-To: <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-06_04:2020-01-06,2020-01-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- phishscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 bulkscore=0 mlxscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001060139
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=vadimp@mellanox.com; 
+x-originating-ip: [193.47.165.251]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: f14eb557-bc95-4e10-022d-08d792c985c0
+x-ms-traffictypediagnostic: AM6PR05MB4104:
+x-microsoft-antispam-prvs: <AM6PR05MB4104BE5CC1A918C8A80656AFA23C0@AM6PR05MB4104.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0274272F87
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(189003)(199004)(13464003)(66476007)(4326008)(76116006)(5660300002)(66946007)(66556008)(64756008)(33656002)(478600001)(110136005)(54906003)(66446008)(316002)(26005)(52536014)(6506007)(53546011)(7696005)(9686003)(186003)(2906002)(55016002)(8676002)(8936002)(86362001)(81166006)(81156014)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB4104;H:AM6PR05MB5224.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p67YzZQhOctm2KW8nYj3OxO9BiZgd5vwjToZoLKwPRv0MP9gnmrsyBJjTK0IxMOX5ud69wbAMj5938BoW6GU24mMI/fWR/oVt3qK08ax7Gh6d7qHdH4P8tWr+beE+k3C6/QMMtEomq06v2ZB1ADbUZUvAmowVRLeSilA6TPRFjsYA3DZBhe5QJYfrKhEZlgNJbLF93us7x2NhxP7KGsthGg+UIUhPyWF/6uMUOVGczRrkldjLH2dWpgoqmMNjNJJ9DOF0wGm6wLRuHvIwNK7scAfcoMmMALw0/7Ps7yjtnf0kVqmRIkU1aItG1iMmEaAlf2Nl2p24yX34CcHzOTA1RTuXDSZT/xyEih6LkbdyvK68mMLcS3ucKOrLEej/+4D/N6Pf90hzn6YQXINJ9kTmtqYMNr8nHJWvb2ywOarEaZonaA4uW1YlRR4Wrr1brvZC5LttHyArBuEgF2va4Wq/XeBMwoSrXRCzNhXcIUp3/Fg6mfghTweO96K/8+1SF5l
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f14eb557-bc95-4e10-022d-08d792c985c0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2020 16:57:32.4840
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: y4zVt9Gdsk+HyI146YRIg+kxafS6Y4WDT7XKDCE1Y4s7NZ2iSlXZlkt0atmN6afmFtW9hq4YB8YxzDQBWPtJjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB4104
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-
-On 1/4/20 10:26 AM, Guenter Roeck wrote:
-> On Thu, Dec 19, 2019 at 02:50:05PM -0600, Eddie James wrote:
->> Add support for a number of manufacturer-specific registers in the
->> debugfs entries, as well as support to read and write the
->> PMBUS_ON_OFF_CONFIG register through debugfs.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> I assume you know what you are doing, letting the user write anything
-> into on_off_config. Applied to -next.
-
-
-Thanks for merging the series! Yep, that's the requirement I was given...
-
-
-Cheers,
-
-Eddie
-
-
->
-> Guenter
->
->> ---
->>   drivers/hwmon/pmbus/ibm-cffps.c | 74 ++++++++++++++++++++++++++++++++++++++---
->>   1 file changed, 70 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
->> index d359b76..a564be9 100644
->> --- a/drivers/hwmon/pmbus/ibm-cffps.c
->> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
->> @@ -20,7 +20,9 @@
->>   
->>   #define CFFPS_FRU_CMD				0x9A
->>   #define CFFPS_PN_CMD				0x9B
->> +#define CFFPS_HEADER_CMD			0x9C
->>   #define CFFPS_SN_CMD				0x9E
->> +#define CFFPS_MAX_POWER_OUT_CMD			0xA7
->>   #define CFFPS_CCIN_CMD				0xBD
->>   #define CFFPS_FW_CMD				0xFA
->>   #define CFFPS1_FW_NUM_BYTES			4
->> @@ -57,9 +59,12 @@ enum {
->>   	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
->>   	CFFPS_DEBUGFS_FRU,
->>   	CFFPS_DEBUGFS_PN,
->> +	CFFPS_DEBUGFS_HEADER,
->>   	CFFPS_DEBUGFS_SN,
->> +	CFFPS_DEBUGFS_MAX_POWER_OUT,
->>   	CFFPS_DEBUGFS_CCIN,
->>   	CFFPS_DEBUGFS_FW,
->> +	CFFPS_DEBUGFS_ON_OFF_CONFIG,
->>   	CFFPS_DEBUGFS_NUM_ENTRIES
->>   };
->>   
->> @@ -136,15 +141,15 @@ static ssize_t ibm_cffps_read_input_history(struct ibm_cffps *psu,
->>   				       psu->input_history.byte_count);
->>   }
->>   
->> -static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
->> -				    size_t count, loff_t *ppos)
->> +static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
->> +				      size_t count, loff_t *ppos)
->>   {
->>   	u8 cmd;
->>   	int i, rc;
->>   	int *idxp = file->private_data;
->>   	int idx = *idxp;
->>   	struct ibm_cffps *psu = to_psu(idxp, idx);
->> -	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
->> +	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
->>   
->>   	pmbus_set_page(psu->client, 0);
->>   
->> @@ -157,9 +162,20 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
->>   	case CFFPS_DEBUGFS_PN:
->>   		cmd = CFFPS_PN_CMD;
->>   		break;
->> +	case CFFPS_DEBUGFS_HEADER:
->> +		cmd = CFFPS_HEADER_CMD;
->> +		break;
->>   	case CFFPS_DEBUGFS_SN:
->>   		cmd = CFFPS_SN_CMD;
->>   		break;
->> +	case CFFPS_DEBUGFS_MAX_POWER_OUT:
->> +		rc = i2c_smbus_read_word_swapped(psu->client,
->> +						 CFFPS_MAX_POWER_OUT_CMD);
->> +		if (rc < 0)
->> +			return rc;
->> +
->> +		rc = snprintf(data, I2C_SMBUS_BLOCK_MAX, "%d", rc);
->> +		goto done;
->>   	case CFFPS_DEBUGFS_CCIN:
->>   		rc = i2c_smbus_read_word_swapped(psu->client, CFFPS_CCIN_CMD);
->>   		if (rc < 0)
->> @@ -199,6 +215,14 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
->>   			return -EOPNOTSUPP;
->>   		}
->>   		goto done;
->> +	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
->> +		rc = i2c_smbus_read_byte_data(psu->client,
->> +					      PMBUS_ON_OFF_CONFIG);
->> +		if (rc < 0)
->> +			return rc;
->> +
->> +		rc = snprintf(data, 3, "%02x", rc);
->> +		goto done;
->>   	default:
->>   		return -EINVAL;
->>   	}
->> @@ -214,9 +238,42 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
->>   	return simple_read_from_buffer(buf, count, ppos, data, rc);
->>   }
->>   
->> +static ssize_t ibm_cffps_debugfs_write(struct file *file,
->> +				       const char __user *buf, size_t count,
->> +				       loff_t *ppos)
->> +{
->> +	u8 data;
->> +	ssize_t rc;
->> +	int *idxp = file->private_data;
->> +	int idx = *idxp;
->> +	struct ibm_cffps *psu = to_psu(idxp, idx);
->> +
->> +	switch (idx) {
->> +	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
->> +		pmbus_set_page(psu->client, 0);
->> +
->> +		rc = simple_write_to_buffer(&data, 1, ppos, buf, count);
->> +		if (rc < 0)
->> +			return rc;
->> +
->> +		rc = i2c_smbus_write_byte_data(psu->client,
->> +					       PMBUS_ON_OFF_CONFIG, data);
->> +		if (rc)
->> +			return rc;
->> +
->> +		rc = 1;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	return rc;
->> +}
->> +
->>   static const struct file_operations ibm_cffps_fops = {
->>   	.llseek = noop_llseek,
->> -	.read = ibm_cffps_debugfs_op,
->> +	.read = ibm_cffps_debugfs_read,
->> +	.write = ibm_cffps_debugfs_write,
->>   	.open = simple_open,
->>   };
->>   
->> @@ -486,15 +543,24 @@ static int ibm_cffps_probe(struct i2c_client *client,
->>   	debugfs_create_file("part_number", 0444, ibm_cffps_dir,
->>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_PN],
->>   			    &ibm_cffps_fops);
->> +	debugfs_create_file("header", 0444, ibm_cffps_dir,
->> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_HEADER],
->> +			    &ibm_cffps_fops);
->>   	debugfs_create_file("serial_number", 0444, ibm_cffps_dir,
->>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_SN],
->>   			    &ibm_cffps_fops);
->> +	debugfs_create_file("max_power_out", 0444, ibm_cffps_dir,
->> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_MAX_POWER_OUT],
->> +			    &ibm_cffps_fops);
->>   	debugfs_create_file("ccin", 0444, ibm_cffps_dir,
->>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_CCIN],
->>   			    &ibm_cffps_fops);
->>   	debugfs_create_file("fw_version", 0444, ibm_cffps_dir,
->>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_FW],
->>   			    &ibm_cffps_fops);
->> +	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
->> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
->> +			    &ibm_cffps_fops);
->>   
->>   	return 0;
->>   }
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8
+Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IE1v
+bmRheSwgSmFudWFyeSAwNiwgMjAyMCA0OjUzIFBNDQo+IFRvOiBWYWRpbSBQYXN0ZXJuYWsgPHZh
+ZGltcEBtZWxsYW5veC5jb20+OyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+IHZpamF5a2hlbWthQGZi
+LmNvbQ0KPiBDYzogbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIu
+a2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1JGQyBQQVRDSCBod21vbi1uZXh0IHYxIDUvNV0g
+aHdtb246IChwbWJ1cy90cHM1MzY3OSkgRXh0ZW5kDQo+IGRldmljZSBsaXN0IHN1cHBvcnRlZCBi
+eSBkcml2ZXINCj4gDQo+IE9uIDEvNi8yMCA0OjE2IEFNLCBWYWRpbSBQYXN0ZXJuYWsgd3JvdGU6
+DQo+ID4NCj4gPg0KPiA+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+PiBGcm9tOiBH
+dWVudGVyIFJvZWNrIDxncm9lY2s3QGdtYWlsLmNvbT4gT24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9l
+Y2sNCj4gPj4gU2VudDogU3VuZGF5LCBKYW51YXJ5IDA1LCAyMDIwIDg6MzUgUE0NCj4gPj4gVG86
+IFZhZGltIFBhc3Rlcm5hayA8dmFkaW1wQG1lbGxhbm94LmNvbT47IHJvYmgrZHRAa2VybmVsLm9y
+ZzsNCj4gPj4gdmlqYXlraGVta2FAZmIuY29tDQo+ID4+IENjOiBsaW51eC1od21vbkB2Z2VyLmtl
+cm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnDQo+ID4+IFN1YmplY3Q6IFJlOiBb
+UkZDIFBBVENIIGh3bW9uLW5leHQgdjEgNS81XSBod21vbjogKHBtYnVzL3RwczUzNjc5KQ0KPiA+
+PiBFeHRlbmQgZGV2aWNlIGxpc3Qgc3VwcG9ydGVkIGJ5IGRyaXZlcg0KPiA+Pg0KPiA+PiBPbiAx
+LzUvMjAgODo0NCBBTSwgVmFkaW0gUGFzdGVybmFrIHdyb3RlOg0KPiA+Pj4NCj4gPj4+DQo+ID4+
+Pj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4+PiBGcm9tOiBHdWVudGVyIFJvZWNr
+IDxncm9lY2s3QGdtYWlsLmNvbT4gT24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9lY2sNCj4gPj4+PiBT
+ZW50OiBTdW5kYXksIEphbnVhcnkgMDUsIDIwMjAgNjowNCBQTQ0KPiA+Pj4+IFRvOiBWYWRpbSBQ
+YXN0ZXJuYWsgPHZhZGltcEBtZWxsYW5veC5jb20+OyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+ID4+
+Pj4gdmlqYXlraGVta2FAZmIuY29tDQo+ID4+Pj4gQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2VybmVs
+Lm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+PiBTdWJqZWN0OiBSZTogW1JG
+QyBQQVRDSCBod21vbi1uZXh0IHYxIDUvNV0gaHdtb246IChwbWJ1cy90cHM1MzY3OSkNCj4gPj4+
+PiBFeHRlbmQgZGV2aWNlIGxpc3Qgc3VwcG9ydGVkIGJ5IGRyaXZlcg0KPiA+Pj4+DQo+ID4+Pj4g
+T24gMS81LzIwIDI6NTggQU0sIFZhZGltIFBhc3Rlcm5hayB3cm90ZToNCj4gPj4+Pj4gRXh0ZW5k
+cyBkcml2ZXIgd2l0aCBzdXBwb3J0IG9mIHRoZSBhZGRpdGlvbmFsIGRldmljZXM6DQo+ID4+Pj4+
+IFRleGFzIEluc3RydW1lbnRzIER1YWwgY2hhbm5lbCBEQ0FQKyBtdWx0aXBoYXNlIGNvbnRyb2xs
+ZXJzOg0KPiA+Pj4+PiBUUFM1MzY4OCwgU04xOTA2MDE2Lg0KPiA+Pj4+PiBJbmZpbmVvbiBNdWx0
+aS1waGFzZSBEaWdpdGFsIFZSIENvbnRyb2xsZXIgU2llcnJhIGRldmljZXMNCj4gPj4+Pj4gWERQ
+RTEyMjg2QywgWERQRTEyMjg0QywgWERQRTEyMjgzQywgWERQRTEyMjU0QyBhbmQgWERQRTEyMjUw
+Qy4NCj4gPj4+Pj4NCj4gPj4+Pj4gRXh0ZW5kIEtjb25maWcgd2l0aCBhZGRlZCBkZXZpY2VzLg0K
+PiA+Pj4+Pg0KPiA+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBWYWRpbSBQYXN0ZXJuYWsgPHZhZGltcEBt
+ZWxsYW5veC5jb20+DQo+ID4+Pj4+IC0tLQ0KPiA+Pj4+PiAgICAgZHJpdmVycy9od21vbi9wbWJ1
+cy9LY29uZmlnICAgIHwgIDUgKysrLS0NCj4gPj4+Pj4gICAgIGRyaXZlcnMvaHdtb24vcG1idXMv
+dHBzNTM2NzkuYyB8IDE0ICsrKysrKysrKysrKysrDQo+ID4+Pj4+ICAgICAyIGZpbGVzIGNoYW5n
+ZWQsIDE3IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4+Pj4+DQo+ID4+Pj4+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcNCj4gPj4+Pj4gYi9kcml2ZXJz
+L2h3bW9uL3BtYnVzL0tjb25maWcgaW5kZXggNTk4NTk5Nzk1NzFkLi45ZTNkMTk3ZDUzMjINCj4g
+Pj4+Pj4gMTAwNjQ0DQo+ID4+Pj4+IC0tLSBhL2RyaXZlcnMvaHdtb24vcG1idXMvS2NvbmZpZw0K
+PiA+Pj4+PiArKysgYi9kcml2ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcNCj4gPj4+Pj4gQEAgLTIw
+MCwxMCArMjAwLDExIEBAIGNvbmZpZyBTRU5TT1JTX1RQUzQwNDIyDQo+ID4+Pj4+ICAgICAJICBi
+ZSBjYWxsZWQgdHBzNDA0MjIuDQo+ID4+Pj4+DQo+ID4+Pj4+ICAgICBjb25maWcgU0VOU09SU19U
+UFM1MzY3OQ0KPiA+Pj4+PiAtCXRyaXN0YXRlICJUSSBUUFM1MzY3OSINCj4gPj4+Pj4gKwl0cmlz
+dGF0ZSAiVEkgVFBTNTM2NzksIFRQUzUzNjg4LCBTTjE5MDYwMTYsIEluZmluZW9uIFhEUEUxMjJ4
+eHgNCj4gPj4+PiBmYW1pbHkiDQo+ID4+Pj4+ICAgICAJaGVscA0KPiA+Pj4+PiAgICAgCSAgSWYg
+eW91IHNheSB5ZXMgaGVyZSB5b3UgZ2V0IGhhcmR3YXJlIG1vbml0b3Jpbmcgc3VwcG9ydCBmb3Ig
+VEkNCj4gPj4+Pj4gLQkgIFRQUzUzNjc5Lg0KPiA+Pj4+PiArCSAgVFBTNTM2NzksIFBTNTM2ODgs
+IFNOMTkwNjAxNiBhbmQgSW5maW5lb24gWERQRTEyMjg2QywNCj4gPj4+PiBYRFBFMTIyODRDLA0K
+PiA+Pj4+DQo+ID4+Pj4gVFBTNTM2ODguIEZvciB0aGUgb3RoZXJzLCBmb3Igc29tZSBJIGNhbid0
+IGV2ZW4gZGV0ZXJtaW5lIGlmIHRoZXkNCj4gPj4+PiBleGlzdCBpbiB0aGUgZmlyc3QgcGxhY2Ug
+KGVnIFNOMTkwNjAxNiwgWFBERTEyMjUwQykgb3IgaG93IHRoZXkNCj4gPj4+PiB3b3VsZCBkaWZm
+ZXIgZnJvbSBvdGhlciB2YXJpYW50cyAoZWcgWFBERTEyMjg0QyB2cy4gWFBERTEyMjg0QSkuDQo+
+ID4+Pj4gQW5kIHdoeSB3b3VsZCB0aGV5IGFsbCB1c2UgdGhlIHNhbWUgYml0IG1hcCBpbiB0aGUg
+Vk9VVF9NT0RFDQo+ID4+Pj4gcmVnaXN0ZXIsIHRoZSBzYW1lIG51bWJlciBvZiBQTUJ1cyBwYWdl
+cyAocGhhc2VzKSwgYW5kIHRoZSBzYW1lDQo+ID4+Pj4gYXR0cmlidXRlcw0KPiA+PiBpbiBlYWNo
+IHBhZ2UgPw0KPiA+Pj4NCj4gPj4+IEhpIEd1ZW50ZXIsDQo+ID4+Pg0KPiA+Pj4gVGhhbmsgeW91
+IGZvciByZXBseS4NCj4gPj4+DQo+ID4+PiBPbiBvdXIgbmV3IHN5c3RlbSB3ZSBoYXZlIGRldmlj
+ZSBYUERFMTIyODRDIGVxdWlwcGVkLg0KPiA+Pj4gSSB0ZXN0ZWQgdGhpcyBkZXZpY2UuDQo+ID4+
+Pg0KPiA+PiBTb3VuZHMgZ29vZCwgYnV0IGRpZCB5b3UgYWxzbyBtYWtlIHN1cmUgdGhhdCBhbGwg
+Y2hpcHMgaGF2ZSB0aGUgc2FtZQ0KPiA+PiBudW1iZXIgb2YgcGFnZXMgKHBoYXNlcyksIHRoZSBz
+YW1lIHNldCBvZiBjb21tYW5kcyBhcyB0aGUgVEkgY2hpcCwNCj4gPj4gYW5kIHN1cHBvcnQgdGhl
+IHNhbWUgYml0IHNldHRpbmdzIGluIFZPVVRfTU9ERSA/IEl0IHNlZW1zIGEgYml0DQo+ID4+IHVu
+bGlrZWx5IHRoYXQgVEkncyByZWdpc3RlciBkZWZpbml0aW9ucyB3b3VsZCBtYWtlIGl0IGludG8g
+YW4gSW5maW5lb24gY2hpcC4NCj4gPj4NCj4gPj4gQWxzbywgd2hhdCBhYm91dCB0aGUgU04xOTA2
+MDE2ID8gSSBkb24ndCBmaW5kIHRoYXQgYW55d2hlcmUsIGV4Y2VwdA0KPiA+PiBpbiBvbmUgcGxh
+Y2Ugd2hlcmUgaXQgaXMgbGlzdGVkIGFzIE1DVSBmcm9tIFRJLg0KPiA+DQo+ID4gSSdsbCBkcm9w
+IFNOMTkwNjAxNi4NCj4gPiBEYXRhc2hlZXQgaGFzIGEgdGl0bGUgRHVhbCBjaGFubmVsIERDQVAr
+IG11bHRpcGhhc2UgY29udHJvbGxlcnM6DQo+ID4gVFBTNTM2ODgsIFNOMTkwNjAxNi4NCj4gPiBC
+dXQgbWF5YmUgaXQncyBzb21lIGN1c3RvbSBkZXZpY2UgKGFueXdheSBJJ2xsIHRyeSB0byBjaGVj
+ayBpdCB3aXRoIFRJKS4NCj4gPg0KPiANCj4gT3IgbWF5YmUgU04xOTA2MDE2IG1lYW5zIHNvbWV0
+aGluZyBlbHNlLiBVbmxlc3Mgd2UgaGF2ZSBleHBsaWNpdA0KPiBjb25maXJtYXRpb24gdGhhdCB0
+aGUgY2hpcCBleGlzdHMgKG9yIHdpbGwgZXhpc3QpIHdlIHNob3VsZCBub3QgYWRkIGl0IHRvIHRo
+ZSBsaXN0Lg0KPiANCj4gPj4NCj4gPj4+IEluZmluZW9uIGRhdGFzaGVldCByZWZlcnMgYWxsIHRo
+ZXNlIGRldmljZSBhcyBYRFBFMTIyeHhDIGZhbWlseSBhbmQNCj4gPj4+IGl0IGRvZXNuJ3Qgc3Bl
+Y2lmeSBhbnkgZGlmZmVyZW5jZXMgaW4gcmVnaXN0ZXIgbWFwIGJldHdlZW4gdGhlc2UgZGV2aWNl
+cy4NCj4gPj4NCj4gPj4gVGhhdCBpcyBhIGJpdCB2YWd1ZSwgZXNwZWNpYWxseSB3aGVuIGl0IGlu
+Y2x1ZGVzIGRldmljZXMgd2hpY2ggcmV0dXJuDQo+ID4+IHplcm8gcmVzdWx0cyB3aXRoIEdvb2ds
+ZSBzZWFyY2hlcy4NCj4gPj4NCj4gPj4gIkEiIHZzLiAiQyIgbWF5IGRpc3Rpbmd1aXNoIGF1dG9t
+b3RpdmUgdnMuIGNvbW1lcmNpYWw7IHRoZSAiQSIgZGV2aWNlDQo+ID4+IGlzIGxpc3RlZCB1bmRl
+ciBhdXRvbW90aXZlLiBJZiB0aGUgY29tbWFuZCBzZXQgaXMgdGhlIHNhbWUsIEkgZG9uJ3QNCj4g
+Pj4gcmVhbGx5IHdhbnQgdGhlICJjIiBpbiB0aGUgaWQuDQo+ID4NCj4gPiBHb3QgZmVlZGJhY2sg
+ZnJvbSBJbmZpbmVvbiBndXlzLg0KPiA+IE5vIG5lZWQgJ0MnIGF0IHRoZSBlbmQsIGFzIHlvdSB3
+cm90ZS4NCj4gPiBBbGwgWERQRTEyMjUwLCBYRFBFMTIyNTQsIFhEUEUxMjI4MywgWERQRTEyMjg0
+LCBYRFBFMTIyODYgYXJlIHRyZWF0ZWQNCj4gPiBpbiB0aGUgc2FtZSB3YXk6DQo+ID4gc2FtZSBw
+YWdlcywgc2FtZSBWT1VUX01PREUsIFZPVVRfUkVBRCwgZXRjZXRlcmEuDQo+ID4NCj4gDQo+IEFu
+ZCBzYW1lIGFzIFRJLCBpbmNsdWRpbmcgVk9VVF9NT0RFID8gQWxzbywgZGlkIHRoZXkgY29uZmly
+bSB0aGF0IHRoZQ0KPiB1bnB1Ymxpc2hlZCBjaGlwcyBkbyBvciB3aWxsIGFjdHVhbGx5IGV4aXN0
+ID8NCg0KSGkgR3VudGhlciwNCg0KQWNjb3JkaW5nIHRvIHRoZSBpbnB1dCBJIGdvdCBmcm9tIElu
+ZmluZW9uIGd1eXMsIHRoZXNlIGRldmljZSBhcmUgYWxyZWFkeQ0KYXZhaWxhYmxlIGZvciB0aGUg
+Y3VzdG9tZXJzLCBsaWtlIFhQREUxMjI4NCwgd2hpY2ggaXMgZXF1aXBwZWQgb24gbmV3DQpNZWxs
+YW5veCA0MDBHeDMyIEV0aGVybmV0IHN5c3RlbSwgb24gd2hpY2ggd2UgYXJlIHdvcmtpbmcgbm93
+Lg0KDQpCdXQgSSdsbCByZS1jaGVjayBpZiBhbGwgdGhlc2UgZGV2aWNlcyBhcmUgYXZhaWxhYmxl
+IHRvZGF5IHRvIGJlIG9uIHRoZSBzYWZlDQpTaWRlLg0KDQpSZWdhcmRpbmcgVk9VVCBtb2RlczoN
+ClRQUzUzNjc5IHVzZXMgbW9kZXMgLSAweDAxLCAweDAyLCAweDA0LCAweDA1LCAweDA3DQpUUFM1
+MzY4OCB1c2VzIG1vZGVzIC0gMHgwNCwgMHgwNw0KWERQRTEyMnh4eCB1c2VzIG1vZGVzIC0gMHgw
+MSwgMHgwMiwgMHgwMyBhbmQgYWRkaXRpb25hbGx5IDB4MTAsIHdoaWNoIGlzDQpmb3IgNi4yNW1W
+IFZJRCB0YWJsZSAoQU1EIGFwcGxpY2F0aW9uKS4NCg0KSSBkaWRuJ3QgYWRkIHN1cHBvcnQgZm9y
+IG1vZGUgMHgxMCBpbiB0aGUgcGF0Y2guDQoNClRoZSBWSUQgdGFibGUgZm9yIHRoZSBBTUQgYXBw
+bGljYXRpb24gaXMgZGlmZmVyZW50IGZyb20gdGhlDQpJbnRlbCBWSUQgdGFibGVzLg0KDQpBIHZh
+bHVlIG9mIDB4MCBjb3JyZXNwb25kcyB0byB0aGUgaGlnaGVzdCBvdXRwdXQgdm9sdGFnZSBvZiAx
+LjU1Vi4NClRoZSB2b2x0YWdlIGlzIHJlZHVjZWQgaW4gNi4yNW1WIHN0ZXBzIGRvd24gdG8gdGhl
+IHZhbHVlIDB4ZDgsDQp3aGljaCBjb3JyZXNwb25kcyB0byAwLjJWLg0KDQpUaGUgZm9ybXVsYSBm
+b3IgdGhlIGNhbGN1bGF0aW9uIG9mIHRoZSBvdXRwdXQgdm9sdGFnZSB3b3VsZCBiZToNCg0KCWNh
+c2UgRE9O4oCZVF9OT1dfSE9XX1RPX0NBTExfSVQ6DQoJCWlmICh2YWwgPj0gMHgwMCAmJiB2YWwg
+PD0gMHhkOCkNCiAgICAgICAgICAgICAgCQkJcnYgPSAxNTUwIOKAkyAodmFsICo2LjI1KTsNCg0K
+SSBkb3VibGVkIGNoZWNrIGl0Lg0KDQpEbyB5b3UgdGhpbmsgaXQgc2hvdWxkIGFkZGVkIGFzIHdl
+bGw/DQoNClRoYW5rcywNClZhZGltLg0KDQo+IA0KPiBTb3JyeSwgdG8gYmUgcGVyc2lzdGVudCwg
+YnV0IGdpdmUgbXkgdGhhbmtzIHRvIEluZmluZW9uLg0KPiANCj4gPj4NCj4gPj4+IFRvbW9ycm93
+IHdlJ2xsIGhhdmUgZ3V5cyBmcm9tIEluZmluZW9uIGluIG91ciBsYWIgYW5kIEknbGwgdmVyaWZ5
+IGlmDQo+ID4+PiB0aGVyZSBpcyBhbnkgZGlmZmVyZW5jZS4NCj4gPj4NCj4gPj4gVGVsbCB0aGVt
+IHRoYXQgaXQgaXNuJ3QgcmVhbGx5IGhlbHBmdWwgdG8ga2VlcCB0aGVpciBkYXRhc2hlZXRzIHVu
+ZGVyIHdyYXAuDQo+ID4+IFVuZm9ydHVuYXRlbHksIFRJIHN0YXJ0ZWQgZG9pbmcgdGhlIHNhbWUs
+IHdoaWNoIGlzbid0IGhlbHBmdWwgZWl0aGVyLg0KPiA+DQo+ID4gVG9sZCB0aGVtIGFib3V0IGRh
+dGFzaGVldHMgYXZhaWxhYmlsaXR5IC0gZ290IDopDQo+ID4NCj4gDQo+IFN1cnByaXNlLg0KPiAN
+Cj4gVGhhbmtzLA0KPiBHdWVudGVyDQo=
