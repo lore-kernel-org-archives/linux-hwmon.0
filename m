@@ -2,209 +2,263 @@ Return-Path: <SRS0=XbaA=23=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E14DC33C9E
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 14:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB677C33C8C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 15:33:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 53B162075A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 14:52:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltTOTzWh"
+	by mail.kernel.org (Postfix) with ESMTP id ABC83207FD
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jan 2020 15:33:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgAFOwh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jan 2020 09:52:37 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39713 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgAFOwh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jan 2020 09:52:37 -0500
-Received: by mail-pl1-f193.google.com with SMTP id g6so19000907plp.6;
-        Mon, 06 Jan 2020 06:52:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J5hhaE5FX3cF52VITZ7S/uv3Q2jj8Ag28WL04w1zpWA=;
-        b=ltTOTzWhSg4Va0gQ6P/71cmwDov+D7T2URRhsJ58MJvUxvpnk4KvJneGrdoBIKZ1eF
-         UN3HhxlJgSxb1B41mlucONmY7Ix+U+G2yUDlILvTSzMBGOww8uNn8wvkDtLCtJ5mznU4
-         VqLdvpKpjdwWeL7mG1kGX9YkQ71ag4AiwCIIWJkpxD2xQDN4W9wX5ywa1tA5UmH/OvQ0
-         TuhgRhxhB9l3J52l0ipDZlnSi25UnN5VJghJI1cAKxDBhu72iOLSmYEjBnQAl6tn0ens
-         lLd5zdWIjC4CNnrOyRmHPn0KECun7KD/+sGjn6+SDbwTYFJLK7QqpHiHqmHrVQGczxvN
-         XTUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J5hhaE5FX3cF52VITZ7S/uv3Q2jj8Ag28WL04w1zpWA=;
-        b=MKdth0o3UJtgF8HIAf+P/n/mQPleAZT/qOkB02foCRiujGjAuMDztBgSKOSgNfIFfN
-         SILzXs4GrUvuulXleWDj/UTEDW6z+teCL2FcoHLLVXFb4NmwtBPNqvUNnAp0womW1gOJ
-         C1sPNDvLtyLIeyDY0I/jUrTZeqDdyMueUVntcvDK+5J0DT0F57rfCCuz+KliVq6FX2Rz
-         varoUdI3phlXN5fCUc0TpKsonWsqun83alI8hrS5yS9o9qzO6whWTl+Z+lRv0hNVbVgW
-         fVRLlivEtucua4nyeire0CyCa8/IgyCvs3+eRwKEXH2wxY1CM1+f73If3n35xZe7qkwH
-         dudA==
-X-Gm-Message-State: APjAAAXbDidjT3LRF+BW+sL148Yv7Km1ryI6iQd2Ko3j8LeCbPgpSQKC
-        K7ONU9rSlCDj4gjYEdRdj5/LjUFK
-X-Google-Smtp-Source: APXvYqzfc+QSzFbUyi83aF7VeK3fETNnl4dz1UELxX26HJYYdl2SMD3CcuC57eLYB1Z4NZaUneVu6Q==
-X-Received: by 2002:a17:90a:ec0f:: with SMTP id l15mr41817780pjy.39.1578322356445;
-        Mon, 06 Jan 2020 06:52:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z4sm78245782pfn.42.2020.01.06.06.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2020 06:52:35 -0800 (PST)
-Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
- device list supported by driver
-To:     Vadim Pasternak <vadimp@mellanox.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "vijaykhemka@fb.com" <vijaykhemka@fb.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20200105105833.30196-1-vadimp@mellanox.com>
- <20200105105833.30196-6-vadimp@mellanox.com>
- <567ebd26-529e-6b2a-2f07-cfaf0f2217a9@roeck-us.net>
- <AM6PR05MB5224F444CBAC5A0503AFBB83A23D0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <a30e4f98-65a4-f93c-371e-7691aace41f7@roeck-us.net>
- <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
-Date:   Mon, 6 Jan 2020 06:52:34 -0800
+        id S1726296AbgAFPdH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jan 2020 10:33:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46098 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726437AbgAFPdH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Jan 2020 10:33:07 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 006FN0bD025474;
+        Mon, 6 Jan 2020 10:32:45 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xb8wwxtf3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jan 2020 10:32:44 -0500
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 006FPuWc033266;
+        Mon, 6 Jan 2020 10:32:44 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xb8wwxtex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jan 2020 10:32:44 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 006FUxQ5022027;
+        Mon, 6 Jan 2020 15:32:50 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01wdc.us.ibm.com with ESMTP id 2xajb635m5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jan 2020 15:32:49 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 006FWgwn46399814
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jan 2020 15:32:43 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2B89BE051;
+        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E249BE04F;
+        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
+Received: from [9.163.15.26] (unknown [9.163.15.26])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jan 2020 15:32:42 +0000 (GMT)
+Subject: Re: [PATCH 1/3] hwmon: (pmbus/ibm-cffps) Add new manufacturer debugfs
+ entries
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, bjwyman@gmail.com
+References: <1576788607-13567-1-git-send-email-eajames@linux.ibm.com>
+ <1576788607-13567-2-git-send-email-eajames@linux.ibm.com>
+ <20200104162608.GA8155@roeck-us.net>
+From:   Eddie James <eajames@linux.ibm.com>
+Message-ID: <26c91d06-0e6f-84e9-87f5-6df5778176ba@linux.ibm.com>
+Date:   Mon, 6 Jan 2020 09:32:42 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+In-Reply-To: <20200104162608.GA8155@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2020-01-06_04:2020-01-06,2020-01-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001060139
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/6/20 4:16 AM, Vadim Pasternak wrote:
-> 
-> 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Sunday, January 05, 2020 8:35 PM
->> To: Vadim Pasternak <vadimp@mellanox.com>; robh+dt@kernel.org;
->> vijaykhemka@fb.com
->> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
->> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
->> device list supported by driver
->>
->> On 1/5/20 8:44 AM, Vadim Pasternak wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->>>> Sent: Sunday, January 05, 2020 6:04 PM
->>>> To: Vadim Pasternak <vadimp@mellanox.com>; robh+dt@kernel.org;
->>>> vijaykhemka@fb.com
->>>> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
->>>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679)
->>>> Extend device list supported by driver
->>>>
->>>> On 1/5/20 2:58 AM, Vadim Pasternak wrote:
->>>>> Extends driver with support of the additional devices:
->>>>> Texas Instruments Dual channel DCAP+ multiphase controllers:
->>>>> TPS53688, SN1906016.
->>>>> Infineon Multi-phase Digital VR Controller Sierra devices
->>>>> XDPE12286C, XDPE12284C, XDPE12283C, XDPE12254C and XDPE12250C.
->>>>>
->>>>> Extend Kconfig with added devices.
->>>>>
->>>>> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
->>>>> ---
->>>>>     drivers/hwmon/pmbus/Kconfig    |  5 +++--
->>>>>     drivers/hwmon/pmbus/tps53679.c | 14 ++++++++++++++
->>>>>     2 files changed, 17 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/hwmon/pmbus/Kconfig
->>>>> b/drivers/hwmon/pmbus/Kconfig index 59859979571d..9e3d197d5322
->>>>> 100644
->>>>> --- a/drivers/hwmon/pmbus/Kconfig
->>>>> +++ b/drivers/hwmon/pmbus/Kconfig
->>>>> @@ -200,10 +200,11 @@ config SENSORS_TPS40422
->>>>>     	  be called tps40422.
->>>>>
->>>>>     config SENSORS_TPS53679
->>>>> -	tristate "TI TPS53679"
->>>>> +	tristate "TI TPS53679, TPS53688, SN1906016, Infineon XDPE122xxx
->>>> family"
->>>>>     	help
->>>>>     	  If you say yes here you get hardware monitoring support for TI
->>>>> -	  TPS53679.
->>>>> +	  TPS53679, PS53688, SN1906016 and Infineon XDPE12286C,
->>>> XDPE12284C,
->>>>
->>>> TPS53688. For the others, for some I can't even determine if they
->>>> exist in the first place (eg SN1906016, XPDE12250C) or how they would
->>>> differ from other variants (eg XPDE12284C vs. XPDE12284A).
->>>> And why would they all use the same bit map in the VOUT_MODE
->>>> register, the same number of PMBus pages (phases), and the same attributes
->> in each page ?
->>>
->>> Hi Guenter,
->>>
->>> Thank you for reply.
->>>
->>> On our new system we have device XPDE12284C equipped.
->>> I tested this device.
->>>
->> Sounds good, but did you also make sure that all chips have the same number of
->> pages (phases), the same set of commands as the TI chip, and support the same
->> bit settings in VOUT_MODE ? It seems a bit unlikely that TI's register definitions
->> would make it into an Infineon chip.
->>
->> Also, what about the SN1906016 ? I don't find that anywhere, except in one
->> place where it is listed as MCU from TI.
-> 
-> I'll drop SN1906016.
-> Datasheet has a title Dual channel DCAP+ multiphase controllers:
-> TPS53688, SN1906016.
-> But maybe it's some custom device (anyway I'll try to check it with TI).
-> 
 
-Or maybe SN1906016 means something else. Unless we have explicit confirmation
-that the chip exists (or will exist) we should not add it to the list.
-
+On 1/4/20 10:26 AM, Guenter Roeck wrote:
+> On Thu, Dec 19, 2019 at 02:50:05PM -0600, Eddie James wrote:
+>> Add support for a number of manufacturer-specific registers in the
+>> debugfs entries, as well as support to read and write the
+>> PMBUS_ON_OFF_CONFIG register through debugfs.
 >>
->>> Infineon datasheet refers all these device as XDPE122xxC family and it
->>> doesn't specify any differences in register map between these devices.
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> I assume you know what you are doing, letting the user write anything
+> into on_off_config. Applied to -next.
+
+
+Thanks for merging the series! Yep, that's the requirement I was given...
+
+
+Cheers,
+
+Eddie
+
+
+>
+> Guenter
+>
+>> ---
+>>   drivers/hwmon/pmbus/ibm-cffps.c | 74 ++++++++++++++++++++++++++++++++++++++---
+>>   1 file changed, 70 insertions(+), 4 deletions(-)
 >>
->> That is a bit vague, especially when it includes devices which return zero results
->> with Google searches.
->>
->> "A" vs. "C" may distinguish automotive vs. commercial; the "A" device is listed
->> under automotive. If the command set is the same, I don't really want the "c" in
->> the id.
-> 
-> Got feedback from Infineon guys.
-> No need 'C' at the end, as you wrote.
-> All XDPE12250, XDPE12254, XDPE12283, XDPE12284, XDPE12286 are
-> treated in the same way:
-> same pages, same VOUT_MODE, VOUT_READ, etcetera.
-> 
-
-And same as TI, including VOUT_MODE ? Also, did they confirm that the unpublished
-chips do or will actually exist ?
-
-Sorry, to be persistent, but give my thanks to Infineon.
-
->>
->>> Tomorrow we'll have guys from Infineon in our lab and I'll verify if
->>> there is any difference.
->>
->> Tell them that it isn't really helpful to keep their datasheets under wrap.
->> Unfortunately, TI started doing the same, which isn't helpful either.
-> 
-> Told them about datasheets availability - got :)
-> 
-
-Surprise.
-
-Thanks,
-Guenter
+>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+>> index d359b76..a564be9 100644
+>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+>> @@ -20,7 +20,9 @@
+>>   
+>>   #define CFFPS_FRU_CMD				0x9A
+>>   #define CFFPS_PN_CMD				0x9B
+>> +#define CFFPS_HEADER_CMD			0x9C
+>>   #define CFFPS_SN_CMD				0x9E
+>> +#define CFFPS_MAX_POWER_OUT_CMD			0xA7
+>>   #define CFFPS_CCIN_CMD				0xBD
+>>   #define CFFPS_FW_CMD				0xFA
+>>   #define CFFPS1_FW_NUM_BYTES			4
+>> @@ -57,9 +59,12 @@ enum {
+>>   	CFFPS_DEBUGFS_INPUT_HISTORY = 0,
+>>   	CFFPS_DEBUGFS_FRU,
+>>   	CFFPS_DEBUGFS_PN,
+>> +	CFFPS_DEBUGFS_HEADER,
+>>   	CFFPS_DEBUGFS_SN,
+>> +	CFFPS_DEBUGFS_MAX_POWER_OUT,
+>>   	CFFPS_DEBUGFS_CCIN,
+>>   	CFFPS_DEBUGFS_FW,
+>> +	CFFPS_DEBUGFS_ON_OFF_CONFIG,
+>>   	CFFPS_DEBUGFS_NUM_ENTRIES
+>>   };
+>>   
+>> @@ -136,15 +141,15 @@ static ssize_t ibm_cffps_read_input_history(struct ibm_cffps *psu,
+>>   				       psu->input_history.byte_count);
+>>   }
+>>   
+>> -static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
+>> -				    size_t count, loff_t *ppos)
+>> +static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>> +				      size_t count, loff_t *ppos)
+>>   {
+>>   	u8 cmd;
+>>   	int i, rc;
+>>   	int *idxp = file->private_data;
+>>   	int idx = *idxp;
+>>   	struct ibm_cffps *psu = to_psu(idxp, idx);
+>> -	char data[I2C_SMBUS_BLOCK_MAX] = { 0 };
+>> +	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
+>>   
+>>   	pmbus_set_page(psu->client, 0);
+>>   
+>> @@ -157,9 +162,20 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
+>>   	case CFFPS_DEBUGFS_PN:
+>>   		cmd = CFFPS_PN_CMD;
+>>   		break;
+>> +	case CFFPS_DEBUGFS_HEADER:
+>> +		cmd = CFFPS_HEADER_CMD;
+>> +		break;
+>>   	case CFFPS_DEBUGFS_SN:
+>>   		cmd = CFFPS_SN_CMD;
+>>   		break;
+>> +	case CFFPS_DEBUGFS_MAX_POWER_OUT:
+>> +		rc = i2c_smbus_read_word_swapped(psu->client,
+>> +						 CFFPS_MAX_POWER_OUT_CMD);
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		rc = snprintf(data, I2C_SMBUS_BLOCK_MAX, "%d", rc);
+>> +		goto done;
+>>   	case CFFPS_DEBUGFS_CCIN:
+>>   		rc = i2c_smbus_read_word_swapped(psu->client, CFFPS_CCIN_CMD);
+>>   		if (rc < 0)
+>> @@ -199,6 +215,14 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
+>>   			return -EOPNOTSUPP;
+>>   		}
+>>   		goto done;
+>> +	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
+>> +		rc = i2c_smbus_read_byte_data(psu->client,
+>> +					      PMBUS_ON_OFF_CONFIG);
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		rc = snprintf(data, 3, "%02x", rc);
+>> +		goto done;
+>>   	default:
+>>   		return -EINVAL;
+>>   	}
+>> @@ -214,9 +238,42 @@ static ssize_t ibm_cffps_debugfs_op(struct file *file, char __user *buf,
+>>   	return simple_read_from_buffer(buf, count, ppos, data, rc);
+>>   }
+>>   
+>> +static ssize_t ibm_cffps_debugfs_write(struct file *file,
+>> +				       const char __user *buf, size_t count,
+>> +				       loff_t *ppos)
+>> +{
+>> +	u8 data;
+>> +	ssize_t rc;
+>> +	int *idxp = file->private_data;
+>> +	int idx = *idxp;
+>> +	struct ibm_cffps *psu = to_psu(idxp, idx);
+>> +
+>> +	switch (idx) {
+>> +	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
+>> +		pmbus_set_page(psu->client, 0);
+>> +
+>> +		rc = simple_write_to_buffer(&data, 1, ppos, buf, count);
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		rc = i2c_smbus_write_byte_data(psu->client,
+>> +					       PMBUS_ON_OFF_CONFIG, data);
+>> +		if (rc)
+>> +			return rc;
+>> +
+>> +		rc = 1;
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return rc;
+>> +}
+>> +
+>>   static const struct file_operations ibm_cffps_fops = {
+>>   	.llseek = noop_llseek,
+>> -	.read = ibm_cffps_debugfs_op,
+>> +	.read = ibm_cffps_debugfs_read,
+>> +	.write = ibm_cffps_debugfs_write,
+>>   	.open = simple_open,
+>>   };
+>>   
+>> @@ -486,15 +543,24 @@ static int ibm_cffps_probe(struct i2c_client *client,
+>>   	debugfs_create_file("part_number", 0444, ibm_cffps_dir,
+>>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_PN],
+>>   			    &ibm_cffps_fops);
+>> +	debugfs_create_file("header", 0444, ibm_cffps_dir,
+>> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_HEADER],
+>> +			    &ibm_cffps_fops);
+>>   	debugfs_create_file("serial_number", 0444, ibm_cffps_dir,
+>>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_SN],
+>>   			    &ibm_cffps_fops);
+>> +	debugfs_create_file("max_power_out", 0444, ibm_cffps_dir,
+>> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_MAX_POWER_OUT],
+>> +			    &ibm_cffps_fops);
+>>   	debugfs_create_file("ccin", 0444, ibm_cffps_dir,
+>>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_CCIN],
+>>   			    &ibm_cffps_fops);
+>>   	debugfs_create_file("fw_version", 0444, ibm_cffps_dir,
+>>   			    &psu->debugfs_entries[CFFPS_DEBUGFS_FW],
+>>   			    &ibm_cffps_fops);
+>> +	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+>> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+>> +			    &ibm_cffps_fops);
+>>   
+>>   	return 0;
+>>   }
