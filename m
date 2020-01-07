@@ -2,305 +2,514 @@ Return-Path: <SRS0=assb=24=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D952C33C99
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 06:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A581C33C99
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 10:58:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4267D206DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 06:06:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F7922081E
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 10:58:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="IB8Ktbsh"
+	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="4eWD44ZC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725781AbgAGGGq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jan 2020 01:06:46 -0500
-Received: from mail-eopbgr60046.outbound.protection.outlook.com ([40.107.6.46]:58478
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725267AbgAGGGq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Jan 2020 01:06:46 -0500
+        id S1727177AbgAGK6k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jan 2020 05:58:40 -0500
+Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:52018 "EHLO
+        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726690AbgAGK6j (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 Jan 2020 05:58:39 -0500
+Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 007AstFm020566;
+        Tue, 7 Jan 2020 05:58:08 -0500
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
+        by mx0b-00128a01.pphosted.com with ESMTP id 2xawstxa56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jan 2020 05:58:07 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nC5jhWfu5vSLR9YFOM3flPVX3+AjSF28RrGnD1edyJjMa33s+kaDIAkfalUopDZb/45BdtMlBBPlAEyeGKNKVMSPBRnun0iphgskh90CqFz+UTIiP20QxBAj866IEQApsFTP6NLQmKKjVBeTcPAOuALpo4tOf3jgwvRThUM2CjhQmeQwdLiz8OVorC2Lus29imUWpSlEHzfMhIhsKuv36D6SJoM9nKRZRrno72mKpGS8Mn/fVS1TQIRsofjgiVeajKDQg9GFBayk7e/8A4WwgIPLJge+9pGNPtg002B/ABPQ1ow7YkMLDOk+I/qxC2+t67sVTrm8OUaKvc2TWajNjQ==
+ b=dJX4762I7DnMMY5l99Gyz9T0X2oRRdqdQBndt2un7PRHjDXL9DqBVb/68bF2Jc6tl9trTU7jEmVnWoECv9mEd3IVLmLudmIUQpo1/lZuUPPTwvZq7UBOXDJNIpmIZliS41jAG25uwrll3zlpxxx2hQwx36TduShG4OKsfss+seql3jnv2GJUOiEE4MjZtRF42gfMWYHtIA/hB/8mqDibI3Yso33v+KI3uRUDqVkepJBA664veKC9HCSkgn/wZT8tXG9N3F0ot92HNqehGeX5a3TegfGCozYeo09lGG/5aeQhA7rKmGJhdTJdGr3XPy9GQ6KoucRalzCrMLxrSQn83g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fv/7/KULXRi3dWs7GUerYs96eDs9GEL9sBu5nngLZMg=;
- b=GzlvWPIIGR6TUz/L0jxalf9a4MSaO6pRFYvrctmhPegZrjxrzST2B5vyQCSOTGwCyMw+q5QHDOhCtfYWrn2FXK+Rj2a601aM9AFAp6coUG3ig4Iqf5tlTbhlviJhUyaat0nt0Nb+92asFiTm2JmF7HmfP6Y2qq9MeCoUQBYWHQpSs8WV7XxmtM35mmxf2zwYiiwcS78uJzPRj2vl4I+IJbz4hElf8FtkxSb+VnZGBbITxQ2jbbNpGc5l2eDiNHP6MuBRVHstsOh0Fb3TAwf5ylglvWRwaOL0wWmqsvPGkU9Nos1mOnm8YrqzehCsEDP96xfGWiwxQwRbzYy8y0XJGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
+ bh=hoJc5S0ImvwRRV4T56GGXklgJdZJYg6RbrFISwMvYaU=;
+ b=d3bvSJ+y+XE1M5EUwmqIMZeSdDVz/TIH8P66BCzZ61ChIbTt/LkKQbUBQ04z8hja77GSP0++qUX0pGRf8q1v7GRmtrWARt1cgoEb6gNRgsY05rFSRSwagJ/M8WbnZMUgwfrsimpURupq4t0Uua6nY0FXgiAj5SV3x6z/K6RxhuHAzDotrpQATSMMjkeToKuu3iQ0uYcNRkVZoRCVigQ/3jwt0UcguP7COqhbMq3kqNbMkUxrRE6YaKXB3ya2QKuZMxS46QnJTDY9K8G0WYyy4WlB3qAEmwcSzO7PZ9PgMAUhBXXL0IB/x5Z+3Vwu3intqe5JhAeynQrXOVBy6zkIUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.57) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fv/7/KULXRi3dWs7GUerYs96eDs9GEL9sBu5nngLZMg=;
- b=IB8Ktbshwa2SJM45NtsA3SKL4pBwmRsdn2rnWSZX9I2EG1qH9SxVjmPb60ABWJ7tZN2D5D8WkgngCXHj6JiT9Ino7KXB7leHKwereT9Q2J3MX45F6OO6EBgPbz8qRSd560WZ/xcZKT1NlyCfh8OAozIjrn/rucUr8DGjMhia4BQ=
-Received: from AM6PR05MB5224.eurprd05.prod.outlook.com (20.177.196.210) by
- AM6PR05MB5094.eurprd05.prod.outlook.com (20.177.34.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2602.15; Tue, 7 Jan 2020 06:06:26 +0000
-Received: from AM6PR05MB5224.eurprd05.prod.outlook.com
- ([fe80::44ac:7bce:8f7c:3e6d]) by AM6PR05MB5224.eurprd05.prod.outlook.com
- ([fe80::44ac:7bce:8f7c:3e6d%3]) with mapi id 15.20.2602.015; Tue, 7 Jan 2020
- 06:06:26 +0000
-From:   Vadim Pasternak <vadimp@mellanox.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "vijaykhemka@fb.com" <vijaykhemka@fb.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
- device list supported by driver
-Thread-Topic: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
- device list supported by driver
-Thread-Index: AQHVw7ccUo77+1Sy70mxGafA8mf8l6fcO+2AgAAG1qCAACN3gIAA8BkwgABkGgCAAA3mcIAAWQ8AgAAMj0CAAD4/AIAARClQ
-Date:   Tue, 7 Jan 2020 06:06:26 +0000
-Message-ID: <AM6PR05MB5224ED5368BD037051F5BF92A23F0@AM6PR05MB5224.eurprd05.prod.outlook.com>
-References: <20200105105833.30196-1-vadimp@mellanox.com>
- <20200105105833.30196-6-vadimp@mellanox.com>
- <567ebd26-529e-6b2a-2f07-cfaf0f2217a9@roeck-us.net>
- <AM6PR05MB5224F444CBAC5A0503AFBB83A23D0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <a30e4f98-65a4-f93c-371e-7691aace41f7@roeck-us.net>
- <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
- <AM6PR05MB52242EA6A029D4C5F011A21BA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <20200106210104.GA9219@roeck-us.net>
- <AM6PR05MB52247DB7AB2677F5F36BAAE9A23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <a76015b5-74e3-5f84-dfce-f5cce34c302a@roeck-us.net>
-In-Reply-To: <a76015b5-74e3-5f84-dfce-f5cce34c302a@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=vadimp@mellanox.com; 
-x-originating-ip: [193.47.165.251]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d38cf35e-95ab-41b9-830e-08d79337bb06
-x-ms-traffictypediagnostic: AM6PR05MB5094:
-x-microsoft-antispam-prvs: <AM6PR05MB5094798D756B517EEE908634A23F0@AM6PR05MB5094.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 027578BB13
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(39860400002)(136003)(366004)(376002)(13464003)(199004)(189003)(54906003)(478600001)(33656002)(53546011)(66556008)(76116006)(6916009)(66446008)(64756008)(66476007)(6506007)(66946007)(2906002)(26005)(8676002)(81166006)(186003)(81156014)(8936002)(30864003)(71200400001)(55016002)(7696005)(52536014)(86362001)(9686003)(5660300002)(4326008)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB5094;H:AM6PR05MB5224.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7qdETBRc5XU7dXbJwh/2BUVPRqllSySmKN1/h0j/GPhEYYG46FwYGnWuQMkg+9XV16Q8kJSsmKIcE6r3hW/9IOUYJSDlMCFU0hX6NIpu1KGXoyN395/tY5X2p8srX6i6hC94R0iN8eWAIwnoXKm2q4m29gCmlHfP0OjbbrW+ENntzd+pN/Sw3liIZxx4ZDc1/EEExBffWb7TVc7ZyZabRWP5l2j8zGVRN+Hg9LalRnT08t8gPxpnSDMjztEcZy5xRcBpqdUzXKb0F1yH61+YtrniTFPRiwQcewWay4PPdTjzr5QFGhuw+de97puk4699b0LTRP0IkPD6d0ocB/mB0bjboY0jixWNuXFsfcCr04EtlFXcmGB1kEiMddNn87J8ngQSi7YT1u8OUIZR8ZmQ122+0Xn2PcNP13WAK05gy8fc59j6RN9uUsvW2lVA9BmB33/weu+ebTgk7mt+E9J+wS/RH02lxUiKK++7qBGujlqoD8QtMmfRWayKIgSDAC5d
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ bh=hoJc5S0ImvwRRV4T56GGXklgJdZJYg6RbrFISwMvYaU=;
+ b=4eWD44ZCIXywoLVWwcrKof37UJsVg5zAQ+xoZUlNSwFhF8lK4KBt5KYddbkm5ATCPe9x1NLp/04qBuPUoDIgTGDjUtyyvPSpIKMMqHE/etlTMUCQeA2Mr6FuxmzXroTl/untapwMExj6MILrf0rIBVqe5K9ks2HCYBHJw3PflXw=
+Received: from BN3PR03CA0061.namprd03.prod.outlook.com
+ (2a01:111:e400:7a4d::21) by MWHPR03MB2670.namprd03.prod.outlook.com
+ (2603:10b6:300:46::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.15; Tue, 7 Jan
+ 2020 10:58:05 +0000
+Received: from CY1NAM02FT062.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::206) by BN3PR03CA0061.outlook.office365.com
+ (2a01:111:e400:7a4d::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12 via Frontend
+ Transport; Tue, 7 Jan 2020 10:58:05 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.57 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
+Received: from nwd2mta2.analog.com (137.71.25.57) by
+ CY1NAM02FT062.mail.protection.outlook.com (10.152.75.60) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2602.11
+ via Frontend Transport; Tue, 7 Jan 2020 10:58:04 +0000
+Received: from ASHBMBX8.ad.analog.com (ashbmbx8.ad.analog.com [10.64.17.5])
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id 007Aw3LQ011470
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+        Tue, 7 Jan 2020 02:58:03 -0800
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Tue, 7 Jan 2020
+ 05:58:01 -0500
+Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Tue, 7 Jan 2020 02:58:01 -0800
+Received: from ben-Latitude-E6540.ad.analog.com ([10.48.65.231])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 007Avvmm002960;
+        Tue, 7 Jan 2020 05:57:57 -0500
+From:   Beniamin Bia <beniamin.bia@analog.com>
+To:     <linux-hwmon@vger.kernel.org>
+CC:     <Michael.Hennerich@analog.com>, <linux-kernel@vger.kernel.org>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <mark.rutland@arm.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <devicetree@vger.kernel.org>, <biabeniamin@outlook.com>,
+        Beniamin Bia <beniamin.bia@analog.com>
+Subject: [PATCH v3 1/3] hwmon: adm1177: Add ADM1177 Hot Swap Controller and Digital Power Monitor driver
+Date:   Tue, 7 Jan 2020 12:59:27 +0200
+Message-ID: <20200107105929.18938-1-beniamin.bia@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d38cf35e-95ab-41b9-830e-08d79337bb06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2020 06:06:26.1028
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(346002)(376002)(396003)(136003)(189003)(199004)(4326008)(186003)(8936002)(478600001)(7636002)(8676002)(6916009)(6666004)(356004)(1076003)(246002)(26005)(336012)(426003)(107886003)(5660300002)(2616005)(36756003)(7696005)(966005)(2906002)(44832011)(70206006)(316002)(54906003)(70586007)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR03MB2670;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 226b8ace-9139-4a1d-5cc1-08d793607872
+X-MS-TrafficTypeDiagnostic: MWHPR03MB2670:
+X-Microsoft-Antispam-PRVS: <MWHPR03MB26702403BBC0B71E6AFA2F9FF03F0@MWHPR03MB2670.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 027578BB13
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H7HYwfMuMnOUBxf8FGuqFoCASw5EOl0hvu8zlmasR300lYz/c2bCLG+KqjRgDcT9+GR2tq/28WM3uhK4vrcG8WVbRhr/g1919GeZUGGMamCTlxs87YBBIus/9xx1I/KZMXP0xVeIhYGYrI5zj2hadsG9Js2dBV4SdUCWE81EzzS6Nrq5dLHmmHhobeBq2PQkddYSj+MCCBSvwqwyj4sHR1BOwhYsKJeYUxMhPZT9EFZUKN+E+r4IIhJFrZVGvZVaDMENVy8+0Qmqe+pIv5HuwvUbIQGXRaKlL5RZFscQQSc7j3l2TRYvUq/f94U6+vi48qzwoAcBP2oFrzrG9qfYWY5pS2+WF4cWKUsUbdsQmDVsKAb6zBT7cQbQMhWYRKoVXcNfVKbWn4ZnrCs/ruNM9FBXDAsvW8FixHJlC6sNCRk15UKmdfOzQD7ToPFnhyoqj7Y4pdkFZBVg7BT9dnbQwuSpEdqIetxlB3+93qY/POfkK826e1P2xtIkNsrHFGQzBxbTvNTQLyr05Nf9LQXr6Q==
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2020 10:58:04.0406
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HelGQLKTTx1ugvRYsfEObJMqzHOONUDO+aausK4+/xE+CumUiy8wCzmR/KxeLjq2+fDn8wTN5OMdZQvGADh8KQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5094
+X-MS-Exchange-CrossTenant-Network-Message-Id: 226b8ace-9139-4a1d-5cc1-08d793607872
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR03MB2670
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2020-01-07_02:2020-01-06,2020-01-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001070089
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8
-Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IFR1
-ZXNkYXksIEphbnVhcnkgMDcsIDIwMjAgMzoyOSBBTQ0KPiBUbzogVmFkaW0gUGFzdGVybmFrIDx2
-YWRpbXBAbWVsbGFub3guY29tPg0KPiBDYzogcm9iaCtkdEBrZXJuZWwub3JnOyB2aWpheWtoZW1r
-YUBmYi5jb207IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtSRkMgUEFUQ0ggaHdtb24tbmV4dCB2MSA1LzVd
-IGh3bW9uOiAocG1idXMvdHBzNTM2NzkpIEV4dGVuZA0KPiBkZXZpY2UgbGlzdCBzdXBwb3J0ZWQg
-YnkgZHJpdmVyDQo+IA0KPiBPbiAxLzYvMjAgMjoyOSBQTSwgVmFkaW0gUGFzdGVybmFrIHdyb3Rl
-Og0KPiA+DQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJvbTog
-R3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJv
-ZWNrDQo+ID4+IFNlbnQ6IE1vbmRheSwgSmFudWFyeSAwNiwgMjAyMCAxMTowMSBQTQ0KPiA+PiBU
-bzogVmFkaW0gUGFzdGVybmFrIDx2YWRpbXBAbWVsbGFub3guY29tPg0KPiA+PiBDYzogcm9iaCtk
-dEBrZXJuZWwub3JnOyB2aWpheWtoZW1rYUBmYi5jb207DQo+ID4+IGxpbnV4LWh3bW9uQHZnZXIu
-a2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4gU3ViamVjdDogUmU6
-IFtSRkMgUEFUQ0ggaHdtb24tbmV4dCB2MSA1LzVdIGh3bW9uOiAocG1idXMvdHBzNTM2NzkpDQo+
-ID4+IEV4dGVuZCBkZXZpY2UgbGlzdCBzdXBwb3J0ZWQgYnkgZHJpdmVyDQo+ID4+DQo+ID4+IE9u
-IE1vbiwgSmFuIDA2LCAyMDIwIGF0IDA0OjU3OjMyUE0gKzAwMDAsIFZhZGltIFBhc3Rlcm5hayB3
-cm90ZToNCj4gPj4+DQo+ID4+Pg0KPiA+Pj4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+
-ID4+Pj4gRnJvbTogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBP
-ZiBHdWVudGVyIFJvZWNrDQo+ID4+Pj4gU2VudDogTW9uZGF5LCBKYW51YXJ5IDA2LCAyMDIwIDQ6
-NTMgUE0NCj4gPj4+PiBUbzogVmFkaW0gUGFzdGVybmFrIDx2YWRpbXBAbWVsbGFub3guY29tPjsg
-cm9iaCtkdEBrZXJuZWwub3JnOw0KPiA+Pj4+IHZpamF5a2hlbWthQGZiLmNvbQ0KPiA+Pj4+IENj
-OiBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3Jn
-DQo+ID4+Pj4gU3ViamVjdDogUmU6IFtSRkMgUEFUQ0ggaHdtb24tbmV4dCB2MSA1LzVdIGh3bW9u
-OiAocG1idXMvdHBzNTM2NzkpDQo+ID4+Pj4gRXh0ZW5kIGRldmljZSBsaXN0IHN1cHBvcnRlZCBi
-eSBkcml2ZXINCj4gPj4+Pg0KPiA+Pj4+IE9uIDEvNi8yMCA0OjE2IEFNLCBWYWRpbSBQYXN0ZXJu
-YWsgd3JvdGU6DQo+ID4+Pj4+DQo+ID4+Pj4+DQo+ID4+Pj4+PiAtLS0tLU9yaWdpbmFsIE1lc3Nh
-Z2UtLS0tLQ0KPiA+Pj4+Pj4gRnJvbTogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+
-IE9uIEJlaGFsZiBPZiBHdWVudGVyDQo+ID4+Pj4+PiBSb2Vjaw0KPiA+Pj4+Pj4gU2VudDogU3Vu
-ZGF5LCBKYW51YXJ5IDA1LCAyMDIwIDg6MzUgUE0NCj4gPj4+Pj4+IFRvOiBWYWRpbSBQYXN0ZXJu
-YWsgPHZhZGltcEBtZWxsYW5veC5jb20+OyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+ID4+Pj4+PiB2
-aWpheWtoZW1rYUBmYi5jb20NCj4gPj4+Pj4+IENjOiBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5v
-cmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnDQo+ID4+Pj4+PiBTdWJqZWN0OiBSZTogW1JG
-QyBQQVRDSCBod21vbi1uZXh0IHYxIDUvNV0gaHdtb246DQo+ID4+Pj4+PiAocG1idXMvdHBzNTM2
-NzkpIEV4dGVuZCBkZXZpY2UgbGlzdCBzdXBwb3J0ZWQgYnkgZHJpdmVyDQo+ID4+Pj4+Pg0KPiA+
-Pj4+Pj4gT24gMS81LzIwIDg6NDQgQU0sIFZhZGltIFBhc3Rlcm5hayB3cm90ZToNCj4gPj4+Pj4+
-Pg0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+
-Pj4+Pj4+IEZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2VjazdAZ21haWwuY29tPiBPbiBCZWhhbGYg
-T2YgR3VlbnRlcg0KPiA+Pj4+Pj4+PiBSb2Vjaw0KPiA+Pj4+Pj4+PiBTZW50OiBTdW5kYXksIEph
-bnVhcnkgMDUsIDIwMjAgNjowNCBQTQ0KPiA+Pj4+Pj4+PiBUbzogVmFkaW0gUGFzdGVybmFrIDx2
-YWRpbXBAbWVsbGFub3guY29tPjsgcm9iaCtkdEBrZXJuZWwub3JnOw0KPiA+Pj4+Pj4+PiB2aWph
-eWtoZW1rYUBmYi5jb20NCj4gPj4+Pj4+Pj4gQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9y
-ZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcNCj4gPj4+Pj4+Pj4gU3ViamVjdDogUmU6IFtS
-RkMgUEFUQ0ggaHdtb24tbmV4dCB2MSA1LzVdIGh3bW9uOg0KPiA+Pj4+Pj4+PiAocG1idXMvdHBz
-NTM2NzkpIEV4dGVuZCBkZXZpY2UgbGlzdCBzdXBwb3J0ZWQgYnkgZHJpdmVyDQo+ID4+Pj4+Pj4+
-DQo+ID4+Pj4+Pj4+IE9uIDEvNS8yMCAyOjU4IEFNLCBWYWRpbSBQYXN0ZXJuYWsgd3JvdGU6DQo+
-ID4+Pj4+Pj4+PiBFeHRlbmRzIGRyaXZlciB3aXRoIHN1cHBvcnQgb2YgdGhlIGFkZGl0aW9uYWwg
-ZGV2aWNlczoNCj4gPj4+Pj4+Pj4+IFRleGFzIEluc3RydW1lbnRzIER1YWwgY2hhbm5lbCBEQ0FQ
-KyBtdWx0aXBoYXNlIGNvbnRyb2xsZXJzOg0KPiA+Pj4+Pj4+Pj4gVFBTNTM2ODgsIFNOMTkwNjAx
-Ni4NCj4gPj4+Pj4+Pj4+IEluZmluZW9uIE11bHRpLXBoYXNlIERpZ2l0YWwgVlIgQ29udHJvbGxl
-ciBTaWVycmEgZGV2aWNlcw0KPiA+Pj4+Pj4+Pj4gWERQRTEyMjg2QywgWERQRTEyMjg0QywgWERQ
-RTEyMjgzQywgWERQRTEyMjU0QyBhbmQNCj4gPj4gWERQRTEyMjUwQy4NCj4gPj4+Pj4+Pj4+DQo+
-ID4+Pj4+Pj4+PiBFeHRlbmQgS2NvbmZpZyB3aXRoIGFkZGVkIGRldmljZXMuDQo+ID4+Pj4+Pj4+
-Pg0KPiA+Pj4+Pj4+Pj4gU2lnbmVkLW9mZi1ieTogVmFkaW0gUGFzdGVybmFrIDx2YWRpbXBAbWVs
-bGFub3guY29tPg0KPiA+Pj4+Pj4+Pj4gLS0tDQo+ID4+Pj4+Pj4+PiAgICAgIGRyaXZlcnMvaHdt
-b24vcG1idXMvS2NvbmZpZyAgICB8ICA1ICsrKy0tDQo+ID4+Pj4+Pj4+PiAgICAgIGRyaXZlcnMv
-aHdtb24vcG1idXMvdHBzNTM2NzkuYyB8IDE0ICsrKysrKysrKysrKysrDQo+ID4+Pj4+Pj4+PiAg
-ICAgIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4g
-Pj4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9wbWJ1cy9L
-Y29uZmlnDQo+ID4+Pj4+Pj4+PiBiL2RyaXZlcnMvaHdtb24vcG1idXMvS2NvbmZpZyBpbmRleA0K
-PiA+PiA1OTg1OTk3OTU3MWQuLjllM2QxOTdkNTMyMg0KPiA+Pj4+Pj4+Pj4gMTAwNjQ0DQo+ID4+
-Pj4+Pj4+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcNCj4gPj4+Pj4+Pj4+ICsr
-KyBiL2RyaXZlcnMvaHdtb24vcG1idXMvS2NvbmZpZw0KPiA+Pj4+Pj4+Pj4gQEAgLTIwMCwxMCAr
-MjAwLDExIEBAIGNvbmZpZyBTRU5TT1JTX1RQUzQwNDIyDQo+ID4+Pj4+Pj4+PiAgICAgIAkgIGJl
-IGNhbGxlZCB0cHM0MDQyMi4NCj4gPj4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+PiAgICAgIGNvbmZpZyBT
-RU5TT1JTX1RQUzUzNjc5DQo+ID4+Pj4+Pj4+PiAtCXRyaXN0YXRlICJUSSBUUFM1MzY3OSINCj4g
-Pj4+Pj4+Pj4+ICsJdHJpc3RhdGUgIlRJIFRQUzUzNjc5LCBUUFM1MzY4OCwgU04xOTA2MDE2LCBJ
-bmZpbmVvbg0KPiA+Pj4+Pj4+Pj4gK1hEUEUxMjJ4eHgNCj4gPj4+Pj4+Pj4gZmFtaWx5Ig0KPiA+
-Pj4+Pj4+Pj4gICAgICAJaGVscA0KPiA+Pj4+Pj4+Pj4gICAgICAJICBJZiB5b3Ugc2F5IHllcyBo
-ZXJlIHlvdSBnZXQgaGFyZHdhcmUgbW9uaXRvcmluZyBzdXBwb3J0IGZvciBUSQ0KPiA+Pj4+Pj4+
-Pj4gLQkgIFRQUzUzNjc5Lg0KPiA+Pj4+Pj4+Pj4gKwkgIFRQUzUzNjc5LCBQUzUzNjg4LCBTTjE5
-MDYwMTYgYW5kIEluZmluZW9uIFhEUEUxMjI4NkMsDQo+ID4+Pj4+Pj4+IFhEUEUxMjI4NEMsDQo+
-ID4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+IFRQUzUzNjg4LiBGb3IgdGhlIG90aGVycywgZm9yIHNvbWUg
-SSBjYW4ndCBldmVuIGRldGVybWluZSBpZg0KPiA+Pj4+Pj4+PiB0aGV5IGV4aXN0IGluIHRoZSBm
-aXJzdCBwbGFjZSAoZWcgU04xOTA2MDE2LCBYUERFMTIyNTBDKSBvciBob3cNCj4gPj4+Pj4+Pj4g
-dGhleSB3b3VsZCBkaWZmZXIgZnJvbSBvdGhlciB2YXJpYW50cyAoZWcgWFBERTEyMjg0QyB2cy4N
-Cj4gPj4gWFBERTEyMjg0QSkuDQo+ID4+Pj4+Pj4+IEFuZCB3aHkgd291bGQgdGhleSBhbGwgdXNl
-IHRoZSBzYW1lIGJpdCBtYXAgaW4gdGhlIFZPVVRfTU9ERQ0KPiA+Pj4+Pj4+PiByZWdpc3Rlciwg
-dGhlIHNhbWUgbnVtYmVyIG9mIFBNQnVzIHBhZ2VzIChwaGFzZXMpLCBhbmQgdGhlIHNhbWUNCj4g
-Pj4+Pj4+Pj4gYXR0cmlidXRlcw0KPiA+Pj4+Pj4gaW4gZWFjaCBwYWdlID8NCj4gPj4+Pj4+Pg0K
-PiA+Pj4+Pj4+IEhpIEd1ZW50ZXIsDQo+ID4+Pj4+Pj4NCj4gPj4+Pj4+PiBUaGFuayB5b3UgZm9y
-IHJlcGx5Lg0KPiA+Pj4+Pj4+DQo+ID4+Pj4+Pj4gT24gb3VyIG5ldyBzeXN0ZW0gd2UgaGF2ZSBk
-ZXZpY2UgWFBERTEyMjg0QyBlcXVpcHBlZC4NCj4gPj4+Pj4+PiBJIHRlc3RlZCB0aGlzIGRldmlj
-ZS4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4gU291bmRzIGdvb2QsIGJ1dCBkaWQgeW91IGFsc28gbWFr
-ZSBzdXJlIHRoYXQgYWxsIGNoaXBzIGhhdmUgdGhlDQo+ID4+Pj4+PiBzYW1lIG51bWJlciBvZiBw
-YWdlcyAocGhhc2VzKSwgdGhlIHNhbWUgc2V0IG9mIGNvbW1hbmRzIGFzIHRoZSBUSQ0KPiA+Pj4+
-Pj4gY2hpcCwgYW5kIHN1cHBvcnQgdGhlIHNhbWUgYml0IHNldHRpbmdzIGluIFZPVVRfTU9ERSA/
-IEl0IHNlZW1zIGENCj4gPj4+Pj4+IGJpdCB1bmxpa2VseSB0aGF0IFRJJ3MgcmVnaXN0ZXIgZGVm
-aW5pdGlvbnMgd291bGQgbWFrZSBpdCBpbnRvIGFuDQo+ID4+Pj4+PiBJbmZpbmVvbg0KPiA+PiBj
-aGlwLg0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IEFsc28sIHdoYXQgYWJvdXQgdGhlIFNOMTkwNjAxNiA/
-IEkgZG9uJ3QgZmluZCB0aGF0IGFueXdoZXJlLA0KPiA+Pj4+Pj4gZXhjZXB0IGluIG9uZSBwbGFj
-ZSB3aGVyZSBpdCBpcyBsaXN0ZWQgYXMgTUNVIGZyb20gVEkuDQo+ID4+Pj4+DQo+ID4+Pj4+IEkn
-bGwgZHJvcCBTTjE5MDYwMTYuDQo+ID4+Pj4+IERhdGFzaGVldCBoYXMgYSB0aXRsZSBEdWFsIGNo
-YW5uZWwgRENBUCsgbXVsdGlwaGFzZSBjb250cm9sbGVyczoNCj4gPj4+Pj4gVFBTNTM2ODgsIFNO
-MTkwNjAxNi4NCj4gPj4+Pj4gQnV0IG1heWJlIGl0J3Mgc29tZSBjdXN0b20gZGV2aWNlIChhbnl3
-YXkgSSdsbCB0cnkgdG8gY2hlY2sgaXQgd2l0aCBUSSkuDQo+ID4+Pj4+DQo+ID4+Pj4NCj4gPj4+
-PiBPciBtYXliZSBTTjE5MDYwMTYgbWVhbnMgc29tZXRoaW5nIGVsc2UuIFVubGVzcyB3ZSBoYXZl
-IGV4cGxpY2l0DQo+ID4+Pj4gY29uZmlybWF0aW9uIHRoYXQgdGhlIGNoaXAgZXhpc3RzIChvciB3
-aWxsIGV4aXN0KSB3ZSBzaG91bGQgbm90IGFkZA0KPiA+Pj4+IGl0IHRvIHRoZQ0KPiA+PiBsaXN0
-Lg0KPiA+Pj4+DQo+ID4+Pj4+Pg0KPiA+Pj4+Pj4+IEluZmluZW9uIGRhdGFzaGVldCByZWZlcnMg
-YWxsIHRoZXNlIGRldmljZSBhcyBYRFBFMTIyeHhDIGZhbWlseQ0KPiA+Pj4+Pj4+IGFuZCBpdCBk
-b2Vzbid0IHNwZWNpZnkgYW55IGRpZmZlcmVuY2VzIGluIHJlZ2lzdGVyIG1hcCBiZXR3ZWVuDQo+
-ID4+Pj4+Pj4gdGhlc2UNCj4gPj4gZGV2aWNlcy4NCj4gPj4+Pj4+DQo+ID4+Pj4+PiBUaGF0IGlz
-IGEgYml0IHZhZ3VlLCBlc3BlY2lhbGx5IHdoZW4gaXQgaW5jbHVkZXMgZGV2aWNlcyB3aGljaA0K
-PiA+Pj4+Pj4gcmV0dXJuIHplcm8gcmVzdWx0cyB3aXRoIEdvb2dsZSBzZWFyY2hlcy4NCj4gPj4+
-Pj4+DQo+ID4+Pj4+PiAiQSIgdnMuICJDIiBtYXkgZGlzdGluZ3Vpc2ggYXV0b21vdGl2ZSB2cy4g
-Y29tbWVyY2lhbDsgdGhlICJBIg0KPiA+Pj4+Pj4gZGV2aWNlIGlzIGxpc3RlZCB1bmRlciBhdXRv
-bW90aXZlLiBJZiB0aGUgY29tbWFuZCBzZXQgaXMgdGhlDQo+ID4+Pj4+PiBzYW1lLCBJIGRvbid0
-IHJlYWxseSB3YW50IHRoZSAiYyIgaW4gdGhlIGlkLg0KPiA+Pj4+Pg0KPiA+Pj4+PiBHb3QgZmVl
-ZGJhY2sgZnJvbSBJbmZpbmVvbiBndXlzLg0KPiA+Pj4+PiBObyBuZWVkICdDJyBhdCB0aGUgZW5k
-LCBhcyB5b3Ugd3JvdGUuDQo+ID4+Pj4+IEFsbCBYRFBFMTIyNTAsIFhEUEUxMjI1NCwgWERQRTEy
-MjgzLCBYRFBFMTIyODQsIFhEUEUxMjI4NiBhcmUNCj4gPj4+Pj4gdHJlYXRlZCBpbiB0aGUgc2Ft
-ZSB3YXk6DQo+ID4+Pj4+IHNhbWUgcGFnZXMsIHNhbWUgVk9VVF9NT0RFLCBWT1VUX1JFQUQsIGV0
-Y2V0ZXJhLg0KPiA+Pj4+Pg0KPiA+Pj4+DQo+ID4+Pj4gQW5kIHNhbWUgYXMgVEksIGluY2x1ZGlu
-ZyBWT1VUX01PREUgPyBBbHNvLCBkaWQgdGhleSBjb25maXJtIHRoYXQNCj4gPj4+PiB0aGUgdW5w
-dWJsaXNoZWQgY2hpcHMgZG8gb3Igd2lsbCBhY3R1YWxseSBleGlzdCA/DQo+ID4+Pg0KPiA+Pj4g
-SGkgR3VudGhlciwNCj4gPj4+DQo+ID4+PiBBY2NvcmRpbmcgdG8gdGhlIGlucHV0IEkgZ290IGZy
-b20gSW5maW5lb24gZ3V5cywgdGhlc2UgZGV2aWNlIGFyZQ0KPiA+Pj4gYWxyZWFkeSBhdmFpbGFi
-bGUgZm9yIHRoZSBjdXN0b21lcnMsIGxpa2UgWFBERTEyMjg0LCB3aGljaCBpcw0KPiA+Pj4gZXF1
-aXBwZWQgb24gbmV3IE1lbGxhbm94IDQwMEd4MzIgRXRoZXJuZXQgc3lzdGVtLCBvbiB3aGljaCB3
-ZSBhcmUNCj4gd29ya2luZyBub3cuDQo+ID4+Pg0KPiA+Pj4gQnV0IEknbGwgcmUtY2hlY2sgaWYg
-YWxsIHRoZXNlIGRldmljZXMgYXJlIGF2YWlsYWJsZSB0b2RheSB0byBiZSBvbg0KPiA+Pj4gdGhl
-IHNhZmUgU2lkZS4NCj4gPj4+DQo+ID4+PiBSZWdhcmRpbmcgVk9VVCBtb2RlczoNCj4gPj4+IFRQ
-UzUzNjc5IHVzZXMgbW9kZXMgLSAweDAxLCAweDAyLCAweDA0LCAweDA1LCAweDA3DQo+ID4+PiBU
-UFM1MzY4OCB1c2VzIG1vZGVzIC0gMHgwNCwgMHgwNw0KPiA+Pj4gWERQRTEyMnh4eCB1c2VzIG1v
-ZGVzIC0gMHgwMSwgMHgwMiwgMHgwMyBhbmQgYWRkaXRpb25hbGx5IDB4MTAsDQo+ID4+PiB3aGlj
-aCBpcyBmb3IgNi4yNW1WIFZJRCB0YWJsZSAoQU1EIGFwcGxpY2F0aW9uKS4NCj4gPj4+DQo+ID4+
-DQo+ID4+IFRoZSBwcm9ibGVtIGlzIHRoYXQgUE1CdXMgZG9lcyBub3QgZGVmaW5lIFZJRCBtb2Rl
-IHZhbHVlcy4gSWYgaXQgZGlkLA0KPiA+PiB3ZSBjb3VsZCBhZGQgdnJtIHZlcnNpb24gZGV0ZWN0
-aW9uIGRldGVjdGlvbiB0byB0aGUgcG1idXMgY29yZS4gMHgwMQ0KPiA+PiBmb3INCj4gPj4gVFBT
-NTM2NzkgX21heV8gYmUgdGhlIHNhbWUgYXMgMHgwMSBmb3IgWERQRTEyMnh4eCwgb3IgbWF5YmUg
-bm90Lg0KPiA+PiBUaGVyZSBpcyBubyB3YXkgdG8gYmUgc3VyZSB3aXRob3V0IGRhdGFzaGVldHMu
-DQo+ID4+DQo+ID4+PiBJIGRpZG4ndCBhZGQgc3VwcG9ydCBmb3IgbW9kZSAweDEwIGluIHRoZSBw
-YXRjaC4NCj4gPj4+DQo+ID4+PiBUaGUgVklEIHRhYmxlIGZvciB0aGUgQU1EIGFwcGxpY2F0aW9u
-IGlzIGRpZmZlcmVudCBmcm9tIHRoZSBJbnRlbA0KPiA+Pj4gVklEIHRhYmxlcy4NCj4gPj4+DQo+
-ID4+PiBBIHZhbHVlIG9mIDB4MCBjb3JyZXNwb25kcyB0byB0aGUgaGlnaGVzdCBvdXRwdXQgdm9s
-dGFnZSBvZiAxLjU1Vi4NCj4gPj4+IFRoZSB2b2x0YWdlIGlzIHJlZHVjZWQgaW4gNi4yNW1WIHN0
-ZXBzIGRvd24gdG8gdGhlIHZhbHVlIDB4ZDgsIHdoaWNoDQo+ID4+PiBjb3JyZXNwb25kcyB0byAw
-LjJWLg0KPiA+Pj4NCj4gPj4+IFRoZSBmb3JtdWxhIGZvciB0aGUgY2FsY3VsYXRpb24gb2YgdGhl
-IG91dHB1dCB2b2x0YWdlIHdvdWxkIGJlOg0KPiA+Pj4NCj4gPj4+IAljYXNlIERPTuKAmVRfTk9X
-X0hPV19UT19DQUxMX0lUOg0KPiA+Pg0KPiA+PiBEb2Vzbid0IHRoZSBkYXRhc2hlZXQgaGF2ZSBz
-b21ldGhpbmcgdG8gc2F5ID8NCj4gPg0KPiA+IEl0IGp1c3Qgc3BlY2lmaWVzIFZJRCB0YWJsZSBm
-b3JtYXQgYXMNCj4gPiAwID0gMTBtViBWSUQgdGFibGUNCj4gPiAxID0gNW12IFZJRCB0YWJsZQ0K
-PiA+IDIgPSA2LjI1bXYgVklEIHRhYmxlDQo+ID4gMyA9IDEwbVYgVklEIHRhYmxlICgyMDBtViBv
-ZmZzZXQpDQo+ID4gY2FsY3VsYXRpb24gYXM6DQo+ID4gUmFuZ2U6IDAgPSBPZmYsIDEgKDI1MG1W
-KSB0byAyNTUgKDE1MjBtVik7IHZpZF90YWJsZT0wICgxMG1WKQ0KPiA+IFJhbmdlOiAwID0gT2Zm
-LCAxICg1MDBtVikgdG8gMjU1ICgzMDQwbVYpOyB2aWRfdGFibGU9MSAoNW1WKQ0KPiA+IFJhbmdl
-OiAwID0gT2ZmLCAxICgyMDBtVikgdG8gMjU1ICgyNzQwbVYpOyB2aWRfdGFibGU9MyAoMTBtVikN
-Cj4gPiBSYW5nZTogMCA9ICgxNTUwbVYpIHRvIDI0NyAoNi4yNW1WKTsgMjQ4fjI1NSA9IE9mZjsg
-dmlkX3RhYmxlPTINCj4gPiAoNi4yNW1WKQ0KPiA+DQo+ID4gQW5kIFZPVVRfTU9ERVs0OjBdIGFz
-Og0KPiA+IDAwMDAxID0gNW1WIFZJRCB0YWJsZSAoVlIxMikNCj4gPiAwMDAxMCA9IDEwbVYgVklE
-IHRhYmxlIChWUjEyLjUgb3IgVlIxMykNCj4gPiAwMDAxMSA9IDEwbVYgVklEIHRhYmxlIChJTVZQ
-OSkNCj4gPiAxMDAwMCA9IDYuMjVtViBWSUQgdGFibGUgKEFNRCBhcHBsaWNhdGlvbikgb3RoZXJz
-ID0gaWxsZWdhbCBzZXR0aW5nIC0NCj4gPiBQTUJ1cyB3cml0ZSBpcyBhY2tlZCwgYnV0IG5vIHdy
-aXRlIG9jY3Vycw0KPiA+DQo+ID4+DQo+ID4+PiAJCWlmICh2YWwgPj0gMHgwMCAmJiB2YWwgPD0g
-MHhkOCkNCj4gPj4+ICAgICAgICAgICAgICAgIAkJCXJ2ID0gMTU1MCDigJMgKHZhbCAqNi4yNSk7
-DQo+ID4+Pg0KPiA+Pj4gSSBkb3VibGVkIGNoZWNrIGl0Lg0KPiA+Pj4NCj4gPj4+IERvIHlvdSB0
-aGluayBpdCBzaG91bGQgYWRkZWQgYXMgd2VsbD8NCj4gPj4+DQo+ID4+IEkgYW0gcXVpdGUgbmV1
-dHJhbCBvbiB0aGF0LiBJIGFtIG11Y2ggbW9yZSBjb25jZXJuZWQgd2l0aCB0aGUNCj4gPj4gYXNz
-dW1wdGlvbiB0aGF0IHRoZSBtb2RlIHZhbHVlcyBoYXZlIHRoZSBzYW1lIG1lYW5pbmcgZm9yIGNo
-aXBzIGZyb20NCj4gPj4gZGlmZmVyZW50IHZlbmRvcnMuIEluIHRoaXMgY2FzZSwgd2hhdCBkbyB3
-ZSBkbyBpZiBUSSBzdGFydHMgc2hpcHBpbmcNCj4gPj4gYSBjaGlwIGluIHRoZSBUUFM1M3h4eCBz
-ZXJpZXMgd2hpY2ggdXNlcyBtb2RlIDB4MTAgZm9yIHNvbWV0aGluZyBlbHNlID8NCj4gPj4NCj4g
-Pj4gT3ZlcmFsbCBJJ2QgcmF0aGVyIHBsYXkgc2FmZSBhbmQgYWRkIGEgc2VwYXJhdGUgZHJpdmVy
-IGZvciB0aGUgSW5maW5lb24gY2hpcHMuDQo+ID4NCj4gPiBJIHNlZS4NCj4gPg0KPiA+IFdlIGFj
-dHVhbGx5IHdhbmVkIHRvIGhhdmUgYWJpbGl0eSBvZiB0cmFuc3BhcmVudCByZXBsYWNlbWVudCBv
-ZiBUSSBhbmQNCj4gPiBJbmZpbmVvbiBkZXZpY2VzIHdpdGhpbiB0aGUgc2FtZSB0eXBlIG9mIHN5
-c3RlbS4NCj4gPg0KPiANCj4gVGhhdCBzaG91bGQgbm90IGJlIGEgcHJvYmxlbSBhcyBsb25nIGFz
-IHlvdSBpbnN0YW50aWF0ZSB0aGVtIGRpZmZlcmVudGx5Lg0KPiBBZnRlciBhbGwsIHRoZSByZWxl
-dmFudCBpbmZvcm1hdGlvbiBfc2hvdWxkXyBiZSBhdmFpbGFibGUgaW4gQUNQSSB0YWJsZXMuDQo+
-IE90aGVyd2lzZSB5b3UnZCBoYXZlIHRvIGNsYWltIHRoYXQgYSBjaGlwIGlzLCBzYXksIHRwczUz
-Njg4LCB3aGlsZSBpdCBpcyByZWFsbHkgYW4NCj4gSW5maW5lb24gY2hpcC4gQW5kIHRoYXQgaXMg
-bmV2ZXIgYSBnb29kIGlkZWEuDQo+IA0KPiA+IE1heWJlIGl0J3MgcG9zc2libGUgdG8gaGF2ZSAw
-eDAxLCAweDAyLCAweDAzLCAweDA0LCAweDA1LCAweDA3IGFzIGENCj4gPiBiYXNpYyBzZXQgYW5k
-IHN1cHBvcnQgZm9yIGV4YW1wbGUgMHgxMCBhY2NvcmRpbmcgdG8gc3BlY2lmaWMgZGV2aWNlIGlk
-Pw0KPiA+DQo+IA0KPiBVbmZvcnR1bmF0ZWx5IG5vdCwgYmVjYXVzZSB0aGVyZSBpcyBubyBzdGFu
-ZGFyZCBkZWZpbmluZyB0aG9zZS4gVEkgbWlnaHQgYXQNCj4gc29tZSBwb2ludCBkZWNpZGUgdG8g
-c2VsbCBhIG5ldyBjaGlwIHdoZXJlIDB4MDMgbWVhbnMgc29tZXRoaW5nIGNvbXBsZXRlbHkNCj4g
-ZGlmZmVyZW50LiBPbiB0b3Agb2YgdGhhdCwgSSBhbHJlYWR5IGtub3cgdGhhdCBhdCBsZWFzdCBz
-b21lIG9mIHRoZSBUSSBjaGlwcyBvZiB0aGlzDQo+IHNlcmllcyBoYXZlIG1vcmUgdGhhbiB0d28g
-cGFnZXMuIFVuZm9ydHVuYXRlbHksIHRoZSBpbmZvcm1hdGlvbiBJIGhhdmUgaXMgdmFndWUNCj4g
-KG5vIGRhdGFzaGVldCBhZ2FpbikuIFRoYXQgaXMgYW5vdGhlciByZWFzb24gZm9yIGF2b2lkaW5n
-IHBvbGx1dGlvbiBvZiB0aGUgdHBzDQo+IGRyaXZlciB3aXRoIG5vbi1USSBjaGlwIHN1cHBvcnQu
-DQoNCk9LLg0KU28sIEkgdGhpbmsgdG8gbW9kaWZ5IHRoZSBwYXRjaCBhcyBmb2xsb3dpbmc6DQoN
-CkFkZCBzcGVyYXRlIGRyaXZlciAgeGRwZTEyMnh4IHdpdGggc3VwcG9ydCB0aGlzIEluZmluZW9u
-IGZhbWlseSAoYWZ0ZXIgZmluYWwNCmNoZWNraW5nIHdpdGggSW5maW5lb24sIHdoaWNoIG9mIHRo
-ZSBhcmUgYXZhaWxhYmxlKS4NCkl0IHdpbGwgc3VwcG9ydCAweDAxLCAweDAyLCAweDAzLCAweDEw
-Lg0KDQpBZGQgdHBzNTM2ODggdG8gdHBzNTM2NzkgZHJpdmVyLg0KDQpBZGQgdHdvIG5ldyB2cmYg
-dmVyc2lvbnMgaW12cDksIGFtZDYyNW12IChJIG9ubHkgZG9uJ3Qga25vdyB3aGF0IGlzIHRoZQ0K
-YmVzdCBuYW1pbmcgZm9yIHRoZXNlIG5ldyBtb2RlcykuDQoNCkFuZCB0aGVzZSBuZXcgbW9kZXMg
-d2lsbCBiZSBoYW5kbGVkIGFzOg0KCWNhc2UgaW12cDk6DQoJCWlmICh2YWwgPj0gMHgwMSkNCgkJ
-CXJ2ID0gMjAwICsgKHZhbCAtIDEpICogMTA7DQoJCWJyZWFrOw0KCWNhc2UgYW1kNjI1bXY6DQoJ
-CWlmICh2YWwgPj0gMHgwICYmIHZhbCA8PSAweGQ4KQ0KCQkJcnYgPSBESVZfUk9VTkRfQ0xPU0VT
-VCgxNTUwMDAgLSB2YWwgKiA2MjUsIDEwMCk7DQoJCWJyZWFrOw0KDQpXaGF0IGl0IGJlIGZpbmU/
-DQoNCklmIHllcywgSSdsbCBtYWtlIHYxIHBhdGNoIHZlcnNpb24uDQoNClRoYW5rcywNClZhZGlt
-Lg0KDQo+IA0KPiBUaGFua3MsDQo+IEd1ZW50ZXINCg==
+ADM1177 is a Hot Swap Controller and Digital Power Monitor with
+Soft Start Pin.
+
+Datasheet:
+Link: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1177.pdf
+
+Signed-off-by: Beniamin Bia <beniamin.bia@analog.com>
+---
+Changes in v3:
+-alert_threshold_ua clamped to maximum
+
+ Documentation/hwmon/adm1177.rst |  36 ++++
+ drivers/hwmon/Kconfig           |  10 ++
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/adm1177.c         | 288 ++++++++++++++++++++++++++++++++
+ 4 files changed, 335 insertions(+)
+ create mode 100644 Documentation/hwmon/adm1177.rst
+ create mode 100644 drivers/hwmon/adm1177.c
+
+diff --git a/Documentation/hwmon/adm1177.rst b/Documentation/hwmon/adm1177.rst
+new file mode 100644
+index 000000000000..c81e0b4abd28
+--- /dev/null
++++ b/Documentation/hwmon/adm1177.rst
+@@ -0,0 +1,36 @@
++Kernel driver adm1177
++=====================
++
++Supported chips:
++  * Analog Devices ADM1177
++    Prefix: 'adm1177'
++    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1177.pdf
++
++Author: Beniamin Bia <beniamin.bia@analog.com>
++
++
++Description
++-----------
++
++This driver supports hardware monitoring for Analog Devices ADM1177
++Hot-Swap Controller and Digital Power Monitors with Soft Start Pin.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices for
++details.
++
++
++Sysfs entries
++-------------
++
++The following attributes are supported. Current maxim attribute
++is read-write, all other attributes are read-only.
++
++in0_input		Measured voltage in microvolts.
++
++curr1_input		Measured current in microamperes.
++curr1_max_alarm		Overcurrent alarm in microamperes.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 5308c59d7001..3db8f5752675 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -164,6 +164,16 @@ config SENSORS_ADM1031
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called adm1031.
+ 
++config SENSORS_ADM1177
++	tristate "Analog Devices ADM1177 and compatibles"
++	depends on I2C
++	help
++	  If you say yes here you get support for Analog Devices ADM1177
++	  sensor chips.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called adm1177.
++
+ config SENSORS_ADM9240
+ 	tristate "Analog Devices ADM9240 and compatibles"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 40c036ea45e6..27d04eab1be4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_ADM1025)	+= adm1025.o
+ obj-$(CONFIG_SENSORS_ADM1026)	+= adm1026.o
+ obj-$(CONFIG_SENSORS_ADM1029)	+= adm1029.o
+ obj-$(CONFIG_SENSORS_ADM1031)	+= adm1031.o
++obj-$(CONFIG_SENSORS_ADM1177)	+= adm1177.o
+ obj-$(CONFIG_SENSORS_ADM9240)	+= adm9240.o
+ obj-$(CONFIG_SENSORS_ADS7828)	+= ads7828.o
+ obj-$(CONFIG_SENSORS_ADS7871)	+= ads7871.o
+diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+new file mode 100644
+index 000000000000..1f2ff7a29306
+--- /dev/null
++++ b/drivers/hwmon/adm1177.c
+@@ -0,0 +1,288 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ADM1177 Hot Swap Controller and Digital Power Monitor with Soft Start Pin
++ *
++ * Copyright 2015-2019 Analog Devices Inc.
++ */
++
++#include <linux/bits.h>
++#include <linux/device.h>
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/regulator/consumer.h>
++
++/*  Command Byte Operations */
++#define ADM1177_CMD_V_CONT	BIT(0)
++#define ADM1177_CMD_I_CONT	BIT(2)
++#define ADM1177_CMD_VRANGE	BIT(4)
++
++/* Extended Register */
++#define ADM1177_REG_ALERT_TH	2
++
++#define ADM1177_BITS		12
++
++/**
++ * struct adm1177_state - driver instance specific data
++ * @client		pointer to i2c client
++ * @reg			regulator info for the the power supply of the device
++ * @r_sense_uohm	current sense resistor value
++ * @alert_threshold_ua	current limit for shutdown
++ * @vrange_high		internal voltage divider
++ */
++struct adm1177_state {
++	struct i2c_client	*client;
++	struct regulator	*reg;
++	u32			r_sense_uohm;
++	u32			alert_threshold_ua;
++	bool			vrange_high;
++};
++
++static int adm1177_read_raw(struct adm1177_state *st, u8 num, u8 *data)
++{
++	return i2c_master_recv(st->client, data, num);
++}
++
++static int adm1177_write_cmd(struct adm1177_state *st, u8 cmd)
++{
++	return i2c_smbus_write_byte(st->client, cmd);
++}
++
++static int adm1177_write_alert_thr(struct adm1177_state *st,
++				   u32 alert_threshold_ua)
++{
++	u64 val;
++	int ret;
++
++	val = 0xFFULL * alert_threshold_ua * st->r_sense_uohm;
++	val = div_u64(val, 105840000U);
++	val = div_u64(val, 1000U);
++	if (val > 0xFF)
++		val = 0xFF;
++
++	ret = i2c_smbus_write_byte_data(st->client, ADM1177_REG_ALERT_TH,
++					val);
++	if (!ret)
++		return ret;
++
++	st->alert_threshold_ua = alert_threshold_ua;
++	return 0;
++}
++
++static int adm1177_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct adm1177_state *st = dev_get_drvdata(dev);
++	u8 data[3];
++	long dummy;
++	int ret;
++
++	switch (type) {
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			ret = adm1177_read_raw(st, 3, data);
++			if (ret < 0)
++				return ret;
++			dummy = (data[1] << 4) | (data[2] & 0xF);
++			/*
++			 * convert to milliamperes
++			 * ((105.84mV / 4096) x raw) / senseResistor(ohm)
++			 */
++			*val = div_u64((105840000ull * dummy),
++				       4096 * st->r_sense_uohm);
++			return 0;
++		case hwmon_curr_max_alarm:
++			*val = st->alert_threshold_ua;
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	case hwmon_in:
++		ret = adm1177_read_raw(st, 3, data);
++		if (ret < 0)
++			return ret;
++		dummy = (data[0] << 4) | (data[2] >> 4);
++		/*
++		 * convert to millivolts based on resistor devision
++		 * (V_fullscale / 4096) * raw
++		 */
++		if (st->vrange_high)
++			dummy *= 26350;
++		else
++			dummy *= 6650;
++
++		*val = DIV_ROUND_CLOSEST(dummy, 4096);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int adm1177_write(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long val)
++{
++	struct adm1177_state *st = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_max_alarm:
++			adm1177_write_alert_thr(st, val);
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static umode_t adm1177_is_visible(const void *data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	const struct adm1177_state *st = data;
++
++	switch (type) {
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			return 0444;
++		}
++		break;
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			if (st->r_sense_uohm)
++				return 0444;
++			return 0;
++		case hwmon_curr_max_alarm:
++			if (st->r_sense_uohm)
++				return 0644;
++			return 0;
++		}
++		break;
++	default:
++		break;
++	}
++	return 0;
++}
++
++static const struct hwmon_channel_info *adm1177_info[] = {
++	HWMON_CHANNEL_INFO(curr,
++			   HWMON_C_INPUT | HWMON_C_MAX_ALARM),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops adm1177_hwmon_ops = {
++	.is_visible = adm1177_is_visible,
++	.read = adm1177_read,
++	.write = adm1177_write,
++};
++
++static const struct hwmon_chip_info adm1177_chip_info = {
++	.ops = &adm1177_hwmon_ops,
++	.info = adm1177_info,
++};
++
++static void adm1177_remove(void *data)
++{
++	struct adm1177_state *st = data;
++
++	regulator_disable(st->reg);
++}
++
++static int adm1177_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct device *hwmon_dev;
++	struct adm1177_state *st;
++	u32 alert_threshold_ua;
++	int ret;
++
++	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
++	if (!st)
++		return -ENOMEM;
++
++	st->client = client;
++
++	st->reg = devm_regulator_get_optional(&client->dev, "vref");
++	if (IS_ERR(st->reg)) {
++		if (PTR_ERR(st->reg) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++
++		st->reg = NULL;
++	} else {
++		ret = regulator_enable(st->reg);
++		if (ret)
++			return ret;
++		ret = devm_add_action_or_reset(&client->dev, adm1177_remove,
++					       st);
++		if (ret)
++			return ret;
++	}
++
++	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
++				     &st->r_sense_uohm))
++		st->r_sense_uohm = 0;
++	if (device_property_read_u32(dev, "adi,shutdown-threshold-microamp",
++				     &alert_threshold_ua)) {
++		if (st->r_sense_uohm)
++			/*
++			 * set maximum default value from datasheet based on
++			 * shunt-resistor
++			 */
++			alert_threshold_ua = div_u64(105840000000,
++						     st->r_sense_uohm);
++		else
++			alert_threshold_ua = 0;
++	}
++	st->vrange_high = device_property_read_bool(dev,
++						    "adi,vrange-high-enable");
++	if (alert_threshold_ua && st->r_sense_uohm)
++		adm1177_write_alert_thr(st, alert_threshold_ua);
++
++	ret = adm1177_write_cmd(st, ADM1177_CMD_V_CONT |
++				    ADM1177_CMD_I_CONT |
++				    (st->vrange_high ? 0 : ADM1177_CMD_VRANGE));
++	if (ret)
++		return ret;
++
++	hwmon_dev =
++		devm_hwmon_device_register_with_info(dev, client->name, st,
++						     &adm1177_chip_info, NULL);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id adm1177_id[] = {
++	{"adm1177", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, adm1177_id);
++
++static const struct of_device_id adm1177_dt_ids[] = {
++	{ .compatible = "adi,adm1177" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, adm1177_dt_ids);
++
++static struct i2c_driver adm1177_driver = {
++	.class = I2C_CLASS_HWMON,
++	.driver = {
++		.name = "adm1177",
++		.of_match_table = adm1177_dt_ids,
++	},
++	.probe = adm1177_probe,
++	.id_table = adm1177_id,
++};
++module_i2c_driver(adm1177_driver);
++
++MODULE_AUTHOR("Beniamin Bia <beniamin.bia@analog.com>");
++MODULE_AUTHOR("Michael Hennerich <michael.hennerich@analog.com>");
++MODULE_DESCRIPTION("Analog Devices ADM1177 ADC driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
+
