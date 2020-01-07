@@ -2,157 +2,381 @@ Return-Path: <SRS0=assb=24=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 126E8C33C9B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 10:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9AFCC33C8C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 12:14:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF90F20678
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 10:58:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86492206F0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 12:14:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="CrkbLA0d"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JUsdeE0q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbgAGK6o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jan 2020 05:58:44 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:64552 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726690AbgAGK6n (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Jan 2020 05:58:43 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 007AwELc026248;
-        Tue, 7 Jan 2020 05:58:14 -0500
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by mx0a-00128a01.pphosted.com with ESMTP id 2xaneaeu6u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jan 2020 05:58:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E7TOPn1X4PoLoFyRW7vatooBJViixJIaXG+qvV0bSBIvUgHCekzKAjRShjYJQU+XDEAIftt5Kes8Y0zvWgPIwC5zMNVO+7sxx2ZkLkWjwhQ0JShpmUFeVPV2UEfxOxU4ee6VypXBTxVvd9Rz1reqMX/a5Pc9XXbsw+rOHUBlEtUHKxOJl4e9K81ta9SCL+9t37VrVOTYSeTODVEwjyBCqRUMwYR5gCWyMVmiWrqNOXr1d9dl8KhLlyK/WvxL+z6/piOfKPMqZuN2Y2avxRlUrWrXZGglGhCjfI+njiUH5aW2cWhlCmr/inZH0IbKv0RjE44uGFRU7VkKwtnydMvwrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/8ar9U71tuRi7WXQ5hK95iq1Hzf9qNmjZUzQE4BOjjM=;
- b=NSI0xwFTuLIbYPAC3jypAULjPtxUbWmGR6Lou1VwzB9KcputtotoInFArT3YqtiFknSUlESnAp4DPDBUvZSrvkd5oeBQijM/sETpoIYQlJGFOaHMz3fL60es+BpViqScjw2uunXJ1guaLfwz/SZp5AVBtNanK0ZhwHVoC2l0ty/obJqf0YiJzHviFZRgxwqBuGQ6LRZ91hdo/lMYz+0PNLkrC0Q5Cg489cAGMc6ZaJMAWK6LpfhXu+9wUAdHvHn3hwdPYlDi01FeMkQu1rn8mac2+wLjyklSqMW2QSWFD9crx7g6P6HNcK7TxUXvcWztNAfOENM+dqagnW0ME4gy4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 137.71.25.55) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=analog.com;
- dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
- not signed); arc=none
+        id S1727834AbgAGMOZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jan 2020 07:14:25 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44100 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727658AbgAGMOZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jan 2020 07:14:25 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 195so27662044pfw.11;
+        Tue, 07 Jan 2020 04:14:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/8ar9U71tuRi7WXQ5hK95iq1Hzf9qNmjZUzQE4BOjjM=;
- b=CrkbLA0dNuZM97NOGsAYxWiZqAALwr1H9Rmafn2N2Uq5Sl4raDzSzdJi17gcBhSdBE6k2rIs9zJ0Y52ai7X03WaEqTbOmd/SSaptu7VEzRpfjylDB3vRwUjDZJWnyg0BJ3nJ4SJPoC8mOST9QmMANGRFWn5DfqDxvk2r2SrMi28=
-Received: from MWHPR03CA0019.namprd03.prod.outlook.com (2603:10b6:300:117::29)
- by CO2PR03MB2344.namprd03.prod.outlook.com (2603:10b6:100:1::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12; Tue, 7 Jan
- 2020 10:58:12 +0000
-Received: from CY1NAM02FT043.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::204) by MWHPR03CA0019.outlook.office365.com
- (2603:10b6:300:117::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12 via Frontend
- Transport; Tue, 7 Jan 2020 10:58:12 +0000
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- CY1NAM02FT043.mail.protection.outlook.com (10.152.74.182) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2602.11
- via Frontend Transport; Tue, 7 Jan 2020 10:58:12 +0000
-Received: from ASHBMBX9.ad.analog.com (ashbmbx9.ad.analog.com [10.64.17.10])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id 007Aw0Nc030987
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
-        Tue, 7 Jan 2020 02:58:00 -0800
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Tue, 7 Jan 2020
- 05:58:10 -0500
-Received: from zeus.spd.analog.com (10.64.82.11) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Tue, 7 Jan 2020 05:58:10 -0500
-Received: from ben-Latitude-E6540.ad.analog.com ([10.48.65.231])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 007Avvmo002960;
-        Tue, 7 Jan 2020 05:58:07 -0500
-From:   Beniamin Bia <beniamin.bia@analog.com>
-To:     <linux-hwmon@vger.kernel.org>
-CC:     <Michael.Hennerich@analog.com>, <linux-kernel@vger.kernel.org>,
-        <jdelvare@suse.com>, <linux@roeck-us.net>, <mark.rutland@arm.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <devicetree@vger.kernel.org>, <biabeniamin@outlook.com>,
-        Beniamin Bia <beniamin.bia@analog.com>
-Subject: [PATCH v3 3/3] MAINTAINERS: add entry for ADM1177 driver
-Date:   Tue, 7 Jan 2020 12:59:29 +0200
-Message-ID: <20200107105929.18938-3-beniamin.bia@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200107105929.18938-1-beniamin.bia@analog.com>
-References: <20200107105929.18938-1-beniamin.bia@analog.com>
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bufx3/9OA6WNhqetg944j6vXQrQkZnu7KFyQKaw2j+8=;
+        b=JUsdeE0q0EU+xvfkohP7DWmbjbsClBJK8elMEtZFFCnlwiJzO3ilgfQkIiMASfl+Zs
+         Q5sbevzCMs9L7SLYrMQ7GqxFNoXeM21dKxuZgRCVur0+JqCylD5m2oTfGVQq8K4X3vy5
+         x8uoOl5IN90tTZ4dj9ZYohG60tifB4hfV7CHW/K5fctqJSuGZD/rXxeo6lBWi2631jPf
+         sgggw02pUbGrnhTMzaVfPlWl1U+SDQerWg+V919S7LBeEJCJCP92flgotCMn49kN3ZiY
+         IFCTktQAVf+KIzkRnvnp5IBX/IB0/fJxMlfuwLZHj8IIPK1Jo33QjBTdSuWRUFG7kJCj
+         V7RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bufx3/9OA6WNhqetg944j6vXQrQkZnu7KFyQKaw2j+8=;
+        b=If81Bvu7S0zbSXS/bs077PNog+oOKw5OJR57VzwybRnHFk6SWGcKZSED0t7uwOeyGX
+         rxEcDv/SN8hHiIEa91RHRiXFiIgbq0VwTpyXOKdYJrtw1xD1xMJlOz4uN4VGEwjNMUub
+         WGLF0vfx/SMRQll3FF2OG+xfcDPVVkXeIzRNdYrCB2c0Z+0ACPqkLKzUb9iaEXSUeXZL
+         ExjDAdx8qWQXpsMabzz7uLEuDZMzlAwqdz3KBPFuwq/+lxGvkJgj0qqy4kDO20w/8jq9
+         717obNmnb2ddNzIKZOMSk5sW6VskvI45BNy2Lr654NZ2giojs7jMVugN5ojgam873DEW
+         H1JQ==
+X-Gm-Message-State: APjAAAV2L0NRPO6Tvsm4oJlw/A3r/otZxz9g4V2OQT40SPihiVGO46Eh
+        KI2cniX5bYtSx6YE6kXxhvvA4mea
+X-Google-Smtp-Source: APXvYqw8TO6NMMTSCtxH4HXbV6xIlrCpAAz5C7m82dTloCdfFXQmdMPDOxvaZtihVaVPC3ESg/8dkQ==
+X-Received: by 2002:aa7:9484:: with SMTP id z4mr112011239pfk.88.1578399263694;
+        Tue, 07 Jan 2020 04:14:23 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c1sm48774495pfo.44.2020.01.07.04.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jan 2020 04:14:22 -0800 (PST)
+Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
+ device list supported by driver
+To:     Vadim Pasternak <vadimp@mellanox.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "vijaykhemka@fb.com" <vijaykhemka@fb.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20200105105833.30196-1-vadimp@mellanox.com>
+ <20200105105833.30196-6-vadimp@mellanox.com>
+ <567ebd26-529e-6b2a-2f07-cfaf0f2217a9@roeck-us.net>
+ <AM6PR05MB5224F444CBAC5A0503AFBB83A23D0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <a30e4f98-65a4-f93c-371e-7691aace41f7@roeck-us.net>
+ <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
+ <AM6PR05MB52242EA6A029D4C5F011A21BA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <20200106210104.GA9219@roeck-us.net>
+ <AM6PR05MB52247DB7AB2677F5F36BAAE9A23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <a76015b5-74e3-5f84-dfce-f5cce34c302a@roeck-us.net>
+ <AM6PR05MB5224ED5368BD037051F5BF92A23F0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <5be3c6c4-81e8-7731-2b6e-39b7ad6531d5@roeck-us.net>
+Date:   Tue, 7 Jan 2020 04:14:20 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(39860400002)(346002)(136003)(396003)(189003)(199004)(44832011)(54906003)(36756003)(2906002)(356004)(6666004)(246002)(86362001)(1076003)(6916009)(7636002)(316002)(26005)(186003)(7696005)(8676002)(2616005)(5660300002)(70206006)(70586007)(426003)(966005)(107886003)(4326008)(336012)(8936002)(4744005)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:CO2PR03MB2344;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9aeff0ac-8efb-45d1-45f9-08d793607d39
-X-MS-TrafficTypeDiagnostic: CO2PR03MB2344:
-X-Microsoft-Antispam-PRVS: <CO2PR03MB2344F9B0C6891EC82ABBEB53F03F0@CO2PR03MB2344.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
-X-Forefront-PRVS: 027578BB13
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tPbzDqd/xtQpyYyOHAuYryr7y16HRTyuQsLgoy3ox/DC/Ku64J1Qgwyjd7QSOUrQWKM/JD+8Cljmv9eC2XD0kVm19WZychJV9tBc2TD0ei1BmFQhaqN0zZfpLs23kRSeuOztKM63Zi+zPoTXTGr44aLWSGI473I0tgoaqswn/+PNaC/m9Jt5OiMNC7nqboBMtcq6HqXcvkV1t08yK8CRRHPVxZnejN2asezKVpEVEYyycdgGK0nSxM2SZA5iPVCxPOUcs0vha11S/1KbvojMt6qWDAy1xc7qkdDTJOQt39lXORZrwb7q6XiCwhch1ua/BrEM/N4CAoJkiJ+2I9hZDYYYZ6n9Z4nNh00Dfn97wG3TwMmrYkoM4PLH1GWsGeE8/SyGdGJz8k+tcvJoP1Tqcz9E0s6ZKum5GiahkijLZTRreWjQr57sbSvo4qiqhz7m88Rw9a2zHNf94RlzMTqKQlzND+NjbsacG/L2B8FJfoKNguyh+yWTvdVoKWzxcHefaIBmqwTaW8r9rFiY8l68GA==
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2020 10:58:12.1872
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9aeff0ac-8efb-45d1-45f9-08d793607d39
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO2PR03MB2344
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-07_02:2020-01-06,2020-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 phishscore=0 suspectscore=1 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001070088
+In-Reply-To: <AM6PR05MB5224ED5368BD037051F5BF92A23F0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add Beniamin Bia and Michael Hennerich as a maintainer for ADM1177 ADC.
+On 1/6/20 10:06 PM, Vadim Pasternak wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>> Sent: Tuesday, January 07, 2020 3:29 AM
+>> To: Vadim Pasternak <vadimp@mellanox.com>
+>> Cc: robh+dt@kernel.org; vijaykhemka@fb.com; linux-hwmon@vger.kernel.org;
+>> devicetree@vger.kernel.org
+>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
+>> device list supported by driver
+>>
+>> On 1/6/20 2:29 PM, Vadim Pasternak wrote:
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>>>> Sent: Monday, January 06, 2020 11:01 PM
+>>>> To: Vadim Pasternak <vadimp@mellanox.com>
+>>>> Cc: robh+dt@kernel.org; vijaykhemka@fb.com;
+>>>> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
+>>>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679)
+>>>> Extend device list supported by driver
+>>>>
+>>>> On Mon, Jan 06, 2020 at 04:57:32PM +0000, Vadim Pasternak wrote:
+>>>>>
+>>>>>
+>>>>>> -----Original Message-----
+>>>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>>>>>> Sent: Monday, January 06, 2020 4:53 PM
+>>>>>> To: Vadim Pasternak <vadimp@mellanox.com>; robh+dt@kernel.org;
+>>>>>> vijaykhemka@fb.com
+>>>>>> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
+>>>>>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679)
+>>>>>> Extend device list supported by driver
+>>>>>>
+>>>>>> On 1/6/20 4:16 AM, Vadim Pasternak wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>> -----Original Message-----
+>>>>>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
+>>>>>>>> Roeck
+>>>>>>>> Sent: Sunday, January 05, 2020 8:35 PM
+>>>>>>>> To: Vadim Pasternak <vadimp@mellanox.com>; robh+dt@kernel.org;
+>>>>>>>> vijaykhemka@fb.com
+>>>>>>>> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
+>>>>>>>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon:
+>>>>>>>> (pmbus/tps53679) Extend device list supported by driver
+>>>>>>>>
+>>>>>>>> On 1/5/20 8:44 AM, Vadim Pasternak wrote:
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> -----Original Message-----
+>>>>>>>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
+>>>>>>>>>> Roeck
+>>>>>>>>>> Sent: Sunday, January 05, 2020 6:04 PM
+>>>>>>>>>> To: Vadim Pasternak <vadimp@mellanox.com>; robh+dt@kernel.org;
+>>>>>>>>>> vijaykhemka@fb.com
+>>>>>>>>>> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
+>>>>>>>>>> Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon:
+>>>>>>>>>> (pmbus/tps53679) Extend device list supported by driver
+>>>>>>>>>>
+>>>>>>>>>> On 1/5/20 2:58 AM, Vadim Pasternak wrote:
+>>>>>>>>>>> Extends driver with support of the additional devices:
+>>>>>>>>>>> Texas Instruments Dual channel DCAP+ multiphase controllers:
+>>>>>>>>>>> TPS53688, SN1906016.
+>>>>>>>>>>> Infineon Multi-phase Digital VR Controller Sierra devices
+>>>>>>>>>>> XDPE12286C, XDPE12284C, XDPE12283C, XDPE12254C and
+>>>> XDPE12250C.
+>>>>>>>>>>>
+>>>>>>>>>>> Extend Kconfig with added devices.
+>>>>>>>>>>>
+>>>>>>>>>>> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+>>>>>>>>>>> ---
+>>>>>>>>>>>       drivers/hwmon/pmbus/Kconfig    |  5 +++--
+>>>>>>>>>>>       drivers/hwmon/pmbus/tps53679.c | 14 ++++++++++++++
+>>>>>>>>>>>       2 files changed, 17 insertions(+), 2 deletions(-)
+>>>>>>>>>>>
+>>>>>>>>>>> diff --git a/drivers/hwmon/pmbus/Kconfig
+>>>>>>>>>>> b/drivers/hwmon/pmbus/Kconfig index
+>>>> 59859979571d..9e3d197d5322
+>>>>>>>>>>> 100644
+>>>>>>>>>>> --- a/drivers/hwmon/pmbus/Kconfig
+>>>>>>>>>>> +++ b/drivers/hwmon/pmbus/Kconfig
+>>>>>>>>>>> @@ -200,10 +200,11 @@ config SENSORS_TPS40422
+>>>>>>>>>>>       	  be called tps40422.
+>>>>>>>>>>>
+>>>>>>>>>>>       config SENSORS_TPS53679
+>>>>>>>>>>> -	tristate "TI TPS53679"
+>>>>>>>>>>> +	tristate "TI TPS53679, TPS53688, SN1906016, Infineon
+>>>>>>>>>>> +XDPE122xxx
+>>>>>>>>>> family"
+>>>>>>>>>>>       	help
+>>>>>>>>>>>       	  If you say yes here you get hardware monitoring support for TI
+>>>>>>>>>>> -	  TPS53679.
+>>>>>>>>>>> +	  TPS53679, PS53688, SN1906016 and Infineon XDPE12286C,
+>>>>>>>>>> XDPE12284C,
+>>>>>>>>>>
+>>>>>>>>>> TPS53688. For the others, for some I can't even determine if
+>>>>>>>>>> they exist in the first place (eg SN1906016, XPDE12250C) or how
+>>>>>>>>>> they would differ from other variants (eg XPDE12284C vs.
+>>>> XPDE12284A).
+>>>>>>>>>> And why would they all use the same bit map in the VOUT_MODE
+>>>>>>>>>> register, the same number of PMBus pages (phases), and the same
+>>>>>>>>>> attributes
+>>>>>>>> in each page ?
+>>>>>>>>>
+>>>>>>>>> Hi Guenter,
+>>>>>>>>>
+>>>>>>>>> Thank you for reply.
+>>>>>>>>>
+>>>>>>>>> On our new system we have device XPDE12284C equipped.
+>>>>>>>>> I tested this device.
+>>>>>>>>>
+>>>>>>>> Sounds good, but did you also make sure that all chips have the
+>>>>>>>> same number of pages (phases), the same set of commands as the TI
+>>>>>>>> chip, and support the same bit settings in VOUT_MODE ? It seems a
+>>>>>>>> bit unlikely that TI's register definitions would make it into an
+>>>>>>>> Infineon
+>>>> chip.
+>>>>>>>>
+>>>>>>>> Also, what about the SN1906016 ? I don't find that anywhere,
+>>>>>>>> except in one place where it is listed as MCU from TI.
+>>>>>>>
+>>>>>>> I'll drop SN1906016.
+>>>>>>> Datasheet has a title Dual channel DCAP+ multiphase controllers:
+>>>>>>> TPS53688, SN1906016.
+>>>>>>> But maybe it's some custom device (anyway I'll try to check it with TI).
+>>>>>>>
+>>>>>>
+>>>>>> Or maybe SN1906016 means something else. Unless we have explicit
+>>>>>> confirmation that the chip exists (or will exist) we should not add
+>>>>>> it to the
+>>>> list.
+>>>>>>
+>>>>>>>>
+>>>>>>>>> Infineon datasheet refers all these device as XDPE122xxC family
+>>>>>>>>> and it doesn't specify any differences in register map between
+>>>>>>>>> these
+>>>> devices.
+>>>>>>>>
+>>>>>>>> That is a bit vague, especially when it includes devices which
+>>>>>>>> return zero results with Google searches.
+>>>>>>>>
+>>>>>>>> "A" vs. "C" may distinguish automotive vs. commercial; the "A"
+>>>>>>>> device is listed under automotive. If the command set is the
+>>>>>>>> same, I don't really want the "c" in the id.
+>>>>>>>
+>>>>>>> Got feedback from Infineon guys.
+>>>>>>> No need 'C' at the end, as you wrote.
+>>>>>>> All XDPE12250, XDPE12254, XDPE12283, XDPE12284, XDPE12286 are
+>>>>>>> treated in the same way:
+>>>>>>> same pages, same VOUT_MODE, VOUT_READ, etcetera.
+>>>>>>>
+>>>>>>
+>>>>>> And same as TI, including VOUT_MODE ? Also, did they confirm that
+>>>>>> the unpublished chips do or will actually exist ?
+>>>>>
+>>>>> Hi Gunther,
+>>>>>
+>>>>> According to the input I got from Infineon guys, these device are
+>>>>> already available for the customers, like XPDE12284, which is
+>>>>> equipped on new Mellanox 400Gx32 Ethernet system, on which we are
+>> working now.
+>>>>>
+>>>>> But I'll re-check if all these devices are available today to be on
+>>>>> the safe Side.
+>>>>>
+>>>>> Regarding VOUT modes:
+>>>>> TPS53679 uses modes - 0x01, 0x02, 0x04, 0x05, 0x07
+>>>>> TPS53688 uses modes - 0x04, 0x07
+>>>>> XDPE122xxx uses modes - 0x01, 0x02, 0x03 and additionally 0x10,
+>>>>> which is for 6.25mV VID table (AMD application).
+>>>>>
+>>>>
+>>>> The problem is that PMBus does not define VID mode values. If it did,
+>>>> we could add vrm version detection detection to the pmbus core. 0x01
+>>>> for
+>>>> TPS53679 _may_ be the same as 0x01 for XDPE122xxx, or maybe not.
+>>>> There is no way to be sure without datasheets.
+>>>>
+>>>>> I didn't add support for mode 0x10 in the patch.
+>>>>>
+>>>>> The VID table for the AMD application is different from the Intel
+>>>>> VID tables.
+>>>>>
+>>>>> A value of 0x0 corresponds to the highest output voltage of 1.55V.
+>>>>> The voltage is reduced in 6.25mV steps down to the value 0xd8, which
+>>>>> corresponds to 0.2V.
+>>>>>
+>>>>> The formula for the calculation of the output voltage would be:
+>>>>>
+>>>>> 	case DON’T_NOW_HOW_TO_CALL_IT:
+>>>>
+>>>> Doesn't the datasheet have something to say ?
+>>>
+>>> It just specifies VID table format as
+>>> 0 = 10mV VID table
+>>> 1 = 5mv VID table
+>>> 2 = 6.25mv VID table
+>>> 3 = 10mV VID table (200mV offset)
+>>> calculation as:
+>>> Range: 0 = Off, 1 (250mV) to 255 (1520mV); vid_table=0 (10mV)
+>>> Range: 0 = Off, 1 (500mV) to 255 (3040mV); vid_table=1 (5mV)
+>>> Range: 0 = Off, 1 (200mV) to 255 (2740mV); vid_table=3 (10mV)
+>>> Range: 0 = (1550mV) to 247 (6.25mV); 248~255 = Off; vid_table=2
+>>> (6.25mV)
+>>>
+>>> And VOUT_MODE[4:0] as:
+>>> 00001 = 5mV VID table (VR12)
+>>> 00010 = 10mV VID table (VR12.5 or VR13)
+>>> 00011 = 10mV VID table (IMVP9)
+>>> 10000 = 6.25mV VID table (AMD application) others = illegal setting -
+>>> PMBus write is acked, but no write occurs
+>>>
+>>>>
+>>>>> 		if (val >= 0x00 && val <= 0xd8)
+>>>>>                 			rv = 1550 – (val *6.25);
+>>>>>
+>>>>> I doubled check it.
+>>>>>
+>>>>> Do you think it should added as well?
+>>>>>
+>>>> I am quite neutral on that. I am much more concerned with the
+>>>> assumption that the mode values have the same meaning for chips from
+>>>> different vendors. In this case, what do we do if TI starts shipping
+>>>> a chip in the TPS53xxx series which uses mode 0x10 for something else ?
+>>>>
+>>>> Overall I'd rather play safe and add a separate driver for the Infineon chips.
+>>>
+>>> I see.
+>>>
+>>> We actually waned to have ability of transparent replacement of TI and
+>>> Infineon devices within the same type of system.
+>>>
+>>
+>> That should not be a problem as long as you instantiate them differently.
+>> After all, the relevant information _should_ be available in ACPI tables.
+>> Otherwise you'd have to claim that a chip is, say, tps53688, while it is really an
+>> Infineon chip. And that is never a good idea.
+>>
+>>> Maybe it's possible to have 0x01, 0x02, 0x03, 0x04, 0x05, 0x07 as a
+>>> basic set and support for example 0x10 according to specific device id?
+>>>
+>>
+>> Unfortunately not, because there is no standard defining those. TI might at
+>> some point decide to sell a new chip where 0x03 means something completely
+>> different. On top of that, I already know that at least some of the TI chips of this
+>> series have more than two pages. Unfortunately, the information I have is vague
+>> (no datasheet again). That is another reason for avoiding pollution of the tps
+>> driver with non-TI chip support.
+> 
+> OK.
+> So, I think to modify the patch as following:
+> 
+> Add sperate driver  xdpe122xx with support this Infineon family (after final
+> checking with Infineon, which of the are available).
+> It will support 0x01, 0x02, 0x03, 0x10.
+> 
+> Add tps53688 to tps53679 driver.
+> 
+> Add two new vrf versions imvp9, amd625mv (I only don't know what is the
+> best naming for these new modes).
+> 
+> And these new modes will be handled as:
+> 	case imvp9:
+> 		if (val >= 0x01)
+> 			rv = 200 + (val - 1) * 10;
+> 		break;
+> 	case amd625mv:
+> 		if (val >= 0x0 && val <= 0xd8)
+> 			rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
+> 		break;
+> 
+> What it be fine?
+> 
 
-Signed-off-by: Beniamin Bia <beniamin.bia@analog.com>
----
-Changes in v3:
--nothing changed
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Yes, sounds good.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3ef731fc753b..bc19b624fcd5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -978,6 +978,15 @@ W:	http://ez.analog.com/community/linux-device-drivers
- F:	drivers/iio/imu/adis16460.c
- F:	Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml
- 
-+ANALOG DEVICES INC ADM1177 DRIVER
-+M:	Beniamin Bia <beniamin.bia@analog.com>
-+M:	Michael Hennerich <Michael.Hennerich@analog.com>
-+L:	linux-hwmon@vger.kernel.org
-+W:	http://ez.analog.com/community/linux-device-drivers
-+S:	Supported
-+F:	drivers/hwmon/adm1177.c
-+F:	Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml
-+
- ANALOG DEVICES INC ADP5061 DRIVER
- M:	Stefan Popa <stefan.popa@analog.com>
- L:	linux-pm@vger.kernel.org
--- 
-2.17.1
+Thanks,
+Guenter
+
+> If yes, I'll make v1 patch version.
+> 
+> Thanks,
+> Vadim.
+> 
+>>
+>> Thanks,
+>> Guenter
 
