@@ -2,111 +2,124 @@ Return-Path: <SRS0=assb=24=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25559C33CA1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 13:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE086C33C9E
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 13:33:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F09442087F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 13:00:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B410B2146E
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 13:33:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USaN/sz2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DS7ikEDs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgAGNAn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jan 2020 08:00:43 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41572 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727722AbgAGNAm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jan 2020 08:00:42 -0500
-Received: by mail-pg1-f194.google.com with SMTP id x8so28474583pgk.8;
-        Tue, 07 Jan 2020 05:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lvbtfIt25K3V9bkjoOOm4QAQQ2RLXWTWl1KKBEvQFkY=;
-        b=USaN/sz2xKuxGlMgjZHB/wUWQ/8RghB5BDQntO5KHxNVHiYUNlXljkZOc+xBwlotWi
-         iR0vr+2KKITG8AilRUMRJvatthQT/2UFg7eTxjT+LRAErQVgfryuIsKryfhO5LuNbdx/
-         wSUFMCEdFIi99eFmxcmYny8U12L3h2jEPieIrMDf2rLBo7G0Nb2Y2jTw5rWt9QlWT4BT
-         W/zAB5JN0aalf1nmGYQukNVY1UsCh6sT/VjlGjg0/ixeKb71W/s7Hxwy8RKU9Dx/b2Yo
-         bE9f/bqLta8M7ohdj39m1HB4K2lvkAzwuPFkw+WH09pDEATD0mwOWflkmzVF2tsG6tUT
-         9ZjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lvbtfIt25K3V9bkjoOOm4QAQQ2RLXWTWl1KKBEvQFkY=;
-        b=GaZCja/Vdy6t7deyL9MlQH2w/9DdE52ZazACF0FreDMe0pgrLmiQvYN4ucoiz5Vo3u
-         gF2hplvmOlAn8fzD/XXYgP4ZSwaZ306WZHesIQ6IRSMPU+23E8oMktBk/+A1jrnZBjNJ
-         BCEnfexur18gxdWRgAafnzpAhTCWdSdgq47yGfU59SH4hJyIWCiVc7Px/HFGHPL5UDVv
-         KK6nJH2mJewyHnsLKvZIfnfjQ0lfuFBYrhhBtkIYfLZ2Gow8dEmuak9mHXXhNb59PoPO
-         rbE1yH917RSAzGcHooLMztDbB4kTKnNKsug2m9Gqf4CEHB0+WjHeSoyyNQi4hl+UiFn9
-         wj/A==
-X-Gm-Message-State: APjAAAVO40ydyDahA7IrUZE4sTApXjpcCNGn8k7KrnZRzj7KdtPzNesd
-        7QpzVojUtpyoEODtykzZWRs=
-X-Google-Smtp-Source: APXvYqz9WKLmVN/nRjjHtNkoSm6v+LC6l/HWdccIHNtmRotZJu3YefPowp/baIagDwVd/ryHNTbl6w==
-X-Received: by 2002:a62:ac03:: with SMTP id v3mr113535234pfe.17.1578402041672;
-        Tue, 07 Jan 2020 05:00:41 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j10sm28590800pjb.14.2020.01.07.05.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jan 2020 05:00:40 -0800 (PST)
-Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>
-References: <20191215174509.1847-1-linux@roeck-us.net>
- <20191215174509.1847-2-linux@roeck-us.net> <yq1r211dvck.fsf@oracle.com>
- <20191219003256.GA28144@roeck-us.net> <yq17e233o0o.fsf@oracle.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d42990af-78e4-e6c4-37ae-8043d27e565a@roeck-us.net>
-Date:   Tue, 7 Jan 2020 05:00:39 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727658AbgAGNdB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jan 2020 08:33:01 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:34556 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727944AbgAGNdB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jan 2020 08:33:01 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007DTTU2111084;
+        Tue, 7 Jan 2020 13:32:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=no+V2rSjh3AierNQkc5xh/z+BptwOtKrn3uofiFT/9A=;
+ b=DS7ikEDs8rMb3JUT/e7UBEV9FFFvyQTc2M5BE27qIGDRIvXmxGbHiMGDKwLr/5iNN/WT
+ deBVfyvYTmdPGIJQR02NhXrFOmDUplwWmPTLtMv2g3tz1eluNgzrzFYXxTeuVJSTEzdL
+ 1av6hQio/hLndPzzGm0pj2YGznl68LpKHU5pFjCtuMHys82X1vpCYPHl+xh7Un9ic30T
+ xh2qfaknUjtQE8LL3gglyR+zbVOd74xfLSvgangA0SLIyVAc9/UsWT9dHr+mdXfM7rut
+ gDi8d/D9PLfqFko7Zjcg4GRz0taicGoERGlxmKZcje0O78NOEX0lTtzL7vHT4hqRG/BS ew== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2xajnpwf6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Jan 2020 13:32:47 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007DSYnr177423;
+        Tue, 7 Jan 2020 13:32:46 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2xcjvd5xa1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Jan 2020 13:32:46 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 007DWjD8030883;
+        Tue, 7 Jan 2020 13:32:45 GMT
+Received: from kili.mountain (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 07 Jan 2020 05:32:44 -0800
+Date:   Tue, 7 Jan 2020 16:32:35 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     eajames@linux.ibm.com
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (pmbus/ibm-cffps) Add new manufacturer debugfs
+ entries
+Message-ID: <20200107133235.ug54ssy5bqpg3qp3@kili.mountain>
 MIME-Version: 1.0
-In-Reply-To: <yq17e233o0o.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=833
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001070113
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=894 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001070113
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/6/20 8:10 PM, Martin K. Petersen wrote:
-> 
-> Hi Guenter!
-> 
->>>   - I still think sensor naming needs work. How and where are the
->>>     "drivetemp-scsi-8-140" names generated?
->>>
->> Quick one: In libsensors, outside the kernel. The naming is generic,
->> along the line of <driver name>-<bus name>-<bus index>-<slot>.
-> 
-> I understand that there are sensors that may not have an obvious
-> associated topology and therefore necessitate coming up with a suitable
-> naming or enumeration scheme. But in this case we already have a
-> well-defined SCSI device name. Any particular reason you don't shift the
-> chip.addr back and print the H:C:T:L format that you used as input?
-> 
-> However arcane H:C:T:L may seem, I think that predictable naming would
-> make things a lot easier for users that need to identify which device
-> matches which sensor...
-> 
+Hello Eddie James,
 
-Not sure I understand. Do you mean to add "H:C:T:L" to "drivetemp" ?
-That would make it something like "drivetemp:H:C:T:L-scsi-8-140".
-Not sure if that is really useful, and it would at least be partially
-redundant.
+The patch bb3c0a27ed1d: "hwmon: (pmbus/ibm-cffps) Add new
+manufacturer debugfs entries" from Dec 19, 2019, leads to the
+following static checker warning:
 
-"scsi-8-140" is created by libsensors, so any change in that would
-have to be made there, not in the kernel driver.
+	drivers/hwmon/pmbus/ibm-cffps.c:257 ibm_cffps_debugfs_write()
+	error: uninitialized symbol 'data'.
 
-Guenter
+drivers/hwmon/pmbus/ibm-cffps.c
+   238  static ssize_t ibm_cffps_debugfs_write(struct file *file,
+   239                                         const char __user *buf, size_t count,
+   240                                         loff_t *ppos)
+   241  {
+   242          u8 data;
+   243          ssize_t rc;
+   244          int *idxp = file->private_data;
+   245          int idx = *idxp;
+   246          struct ibm_cffps *psu = to_psu(idxp, idx);
+   247  
+   248          switch (idx) {
+   249          case CFFPS_DEBUGFS_ON_OFF_CONFIG:
+   250                  pmbus_set_page(psu->client, 0);
+   251  
+   252                  rc = simple_write_to_buffer(&data, 1, ppos, buf, count);
+                                                    ^^^^^^^^^^^^^^
+If "ppos >= 1" then "data" isn't initialized but "rc" is zero.
+
+   253                  if (rc < 0)
+   254                          return rc;
+   255  
+   256                  rc = i2c_smbus_write_byte_data(psu->client,
+   257                                                 PMBUS_ON_OFF_CONFIG, data);
+   258                  if (rc)
+   259                          return rc;
+   260  
+   261                  rc = 1;
+   262                  break;
+   263          default:
+   264                  return -EINVAL;
+   265          }
+   266  
+   267          return rc;
+   268  }
+
+regards,
+dan carpenter
