@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61BC7C282DD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88432C33CA2
 	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 14:11:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 312D32072A
+	by mail.kernel.org (Postfix) with ESMTP id 5EAB020643
 	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 14:11:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728768AbgAHOLv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jan 2020 09:11:51 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:50788 "EHLO
+        id S1728761AbgAHOLw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jan 2020 09:11:52 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:50807 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728761AbgAHOLv (ORCPT
+        with ESMTP id S1728766AbgAHOLv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jan 2020 09:11:51 -0500
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 8 Jan 2020 16:11:46 +0200
+        with ESMTPS (AES256-SHA encrypted); 8 Jan 2020 16:11:48 +0200
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 008EBgZI030061;
-        Wed, 8 Jan 2020 16:11:45 +0200
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 008EBgZK030061;
+        Wed, 8 Jan 2020 16:11:48 +0200
 From:   Vadim Pasternak <vadimp@mellanox.com>
 To:     linux@roeck-us.net, robh+dt@kernel.org, vijaykhemka@fb.com
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         Vadim Pasternak <vadimp@mellanox.com>
-Subject: [RFC PATCH hwmon-next v1 3/5] hwmon: (pmbus/tps53679) Extend device list supported by driver
-Date:   Wed,  8 Jan 2020 14:11:38 +0000
-Message-Id: <20200108141140.2175-4-vadimp@mellanox.com>
+Subject: [RFC PATCH hwmon-next v1 5/5] dt-bindings: Add TI and Infineon VR Controllers as trivial devices
+Date:   Wed,  8 Jan 2020 14:11:40 +0000
+Message-Id: <20200108141140.2175-6-vadimp@mellanox.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20200108141140.2175-1-vadimp@mellanox.com>
 References: <20200108141140.2175-1-vadimp@mellanox.com>
@@ -39,54 +39,48 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Extends driver with support of the additional devices:
-Texas Instruments Dual channel DCAP+ multiphase controllers: TPS53688.
-
-Extend Kconfig with added device.
+Add Texas Instruments Dual channel DCAP+ multiphase controllers:
+TPS53679, TPS53688, and Infineon Multi-phase Digital VR controllers
+XDPE12286, XDPE12284, XDPE12283, XDPE12254, XDPE12250 as trivial
+devices.
 
 Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 ---
- drivers/hwmon/pmbus/Kconfig    | 4 ++--
- drivers/hwmon/pmbus/tps53679.c | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/trivial-devices.yaml | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 59859979571d..0dd30b07bf18 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -200,10 +200,10 @@ config SENSORS_TPS40422
- 	  be called tps40422.
- 
- config SENSORS_TPS53679
--	tristate "TI TPS53679"
-+	tristate "TI TPS53679, TPS53688"
- 	help
- 	  If you say yes here you get hardware monitoring support for TI
--	  TPS53679.
-+	  TPS53679, TPS53688
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tps53679.
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index 163e8c6aaa8e..9c22e9013dd7 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -85,6 +85,7 @@ static int tps53679_probe(struct i2c_client *client,
- 
- static const struct i2c_device_id tps53679_id[] = {
- 	{"tps53679", 0},
-+	{"tps53688", 0},
- 	{}
- };
- 
-@@ -92,6 +93,7 @@ MODULE_DEVICE_TABLE(i2c, tps53679_id);
- 
- static const struct of_device_id __maybe_unused tps53679_of_match[] = {
- 	{.compatible = "ti,tps53679"},
-+	{.compatible = "ti,tps53688"},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, tps53679_of_match);
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 765fd1c170df..815400b63bc2 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -104,6 +104,16 @@ properties:
+           - infineon,slb9645tt
+             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+           - infineon,tlv493d-a1b6
++            # Infineon Multi-phase Digital VR Controller xdpe12250
++          - infineon,xdpe12250
++            # Infineon Multi-phase Digital VR Controller xdpe12254
++          - infineon,xdpe12254
++            # Infineon Multi-phase Digital VR Controller xdpe12283
++          - infineon,xdpe12283
++            # Infineon Multi-phase Digital VR Controller xdpe12284
++          - infineon,xdpe12284
++            # Infineon Multi-phase Digital VR Controller xdpe12286
++          - infineon,xdpe12286
+             # Inspur Power System power supply unit version 1
+           - inspur,ipsps1
+             # Intersil ISL29028 Ambient Light and Proximity Sensor
+@@ -354,6 +364,10 @@ properties:
+           - ti,tmp103
+             # Digital Temperature Sensor
+           - ti,tmp275
++            # TI Dual channel DCAP+ multiphase controller TPS53679
++          - ti,tps53679
++            # TI Dual channel DCAP+ multiphase controller TPS53688
++          - ti,tps53688
+             # Winbond/Nuvoton H/W Monitor
+           - winbond,w83793
+             # i2c trusted platform module (TPM)
 -- 
 2.11.0
 
