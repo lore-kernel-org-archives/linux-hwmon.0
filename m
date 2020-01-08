@@ -1,95 +1,110 @@
-Return-Path: <SRS0=assb=24=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=XJeT=25=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A30C33C8C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 15:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 408EEC33C99
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 01:12:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A143D2081E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jan 2020 15:41:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1771E2075A
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 01:12:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Y7pVuVho"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbgAGPlR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jan 2020 10:41:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21248 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727559AbgAGPlR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Jan 2020 10:41:17 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 007Fcsdd111382;
-        Tue, 7 Jan 2020 10:40:49 -0500
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xb8p0e0cb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jan 2020 10:40:49 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 007FcMw0019021;
-        Tue, 7 Jan 2020 15:40:48 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 2xajb7bdku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jan 2020 15:40:48 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 007FelIi7340376
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jan 2020 15:40:47 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C0906A057;
-        Tue,  7 Jan 2020 15:40:47 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CADF46A051;
-        Tue,  7 Jan 2020 15:40:46 +0000 (GMT)
-Received: from talon7.ibm.com (unknown [9.41.103.158])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jan 2020 15:40:46 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net, dan.carpenter@oracle.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Prevent writing on_off_config with bad data
-Date:   Tue,  7 Jan 2020 09:40:40 -0600
-Message-Id: <1578411640-16929-1-git-send-email-eajames@linux.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-07_05:2020-01-07,2020-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0 spamscore=0
- priorityscore=1501 suspectscore=1 bulkscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001070130
+        id S1725996AbgAHBMk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jan 2020 20:12:40 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:44054 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgAHBMj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jan 2020 20:12:39 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00819CZL120969;
+        Wed, 8 Jan 2020 01:12:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=3ydrE+T/CSID+gARHjnF6wd1bt90Yw9xO2VGOIXAOBQ=;
+ b=Y7pVuVhowbYc0FayjzkOX8nnmUIQLHS0mEO1OMmW+zr81/HQMzywLj2upnP+DBa18nAZ
+ NPIK41ZHR0JMgYbycFkryGBv3GapPJfdiYs66lr1PMWSoj/srJzyKnifU1W3g02aB40X
+ 42YnLMl72IxH5/tk5vlwI9WRVJsuNF4f8BGsrCIu2gvkqDlJoA3LDCpKwxF1l0WhZCgz
+ m3wl2ITtxNihtCAKExT1qq7ud8Oaen3TnNNdyzzyiixqvst5pIfxZQ2b8vSC6OnzNPhp
+ l/BQ4fMTbuChkjMDgeTLmJQ6LbN2Qxlg2sCCCoOoSplsllh/JXYEeLAQB2vPTVZn0ViI jA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2xaj4u12w2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jan 2020 01:12:11 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 008199Z9128871;
+        Wed, 8 Jan 2020 01:12:11 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2xcpcrg2p0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jan 2020 01:12:10 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0081C9j3002068;
+        Wed, 8 Jan 2020 01:12:09 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 07 Jan 2020 17:12:09 -0800
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Chris Healy <cphealy@gmail.com>
+Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191215174509.1847-1-linux@roeck-us.net>
+        <20191215174509.1847-2-linux@roeck-us.net>
+        <yq1r211dvck.fsf@oracle.com>
+        <b22a519c-8f26-e731-345f-9deca1b2150e@roeck-us.net>
+Date:   Tue, 07 Jan 2020 20:12:06 -0500
+In-Reply-To: <b22a519c-8f26-e731-345f-9deca1b2150e@roeck-us.net> (Guenter
+        Roeck's message of "Wed, 1 Jan 2020 09:46:23 -0800")
+Message-ID: <yq1sgkq21ll.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9493 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=894
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001080009
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9493 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=955 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001080009
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-If the user write parameters resulted in no bytes being written to the
-temporary buffer, then ON_OFF_CONFIG will be written with uninitialized
-data. Prevent this by bailing out in this case.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/pmbus/ibm-cffps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Guenter,
 
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index 1c91ee1f9926..3795fe55b84f 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -250,7 +250,7 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
- 		pmbus_set_page(psu->client, 0);
- 
- 		rc = simple_write_to_buffer(&data, 1, ppos, buf, count);
--		if (rc < 0)
-+		if (rc <= 0)
- 			return rc;
- 
- 		rc = i2c_smbus_write_byte_data(psu->client,
+> Any idea how I might be able to reproduce this ? So far I have been
+> unsuccessful.
+>
+> Building drivetemp into the kernel, with ahci and everything SCSI
+> built as module, doesn't trigger the crash for me. This is with the
+> drivetemp patch (v3) as well as commit d188b0675b ("scsi: core: Add
+> sysfs attributes for VPD pages 0h and 89h") applied on top of v5.4.7.
+
+This is with 5.5-rc1. I'll try another kernel.
+
+My repro is:
+
+# modprobe drivetemp
+# modprobe <any SCSI driver, including ahci>
+
 -- 
-2.24.0
-
+Martin K. Petersen	Oracle Linux Engineering
