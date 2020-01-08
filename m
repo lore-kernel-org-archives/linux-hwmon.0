@@ -2,90 +2,112 @@ Return-Path: <SRS0=XJeT=25=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4CBEC00523
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 03:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1DBCC00523
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 10:18:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BF4A2070A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 03:49:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3BB520692
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 10:18:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbgAHDtc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jan 2020 22:49:32 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:47738 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726142AbgAHDtc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Jan 2020 22:49:32 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2F056623AA071B0ADDD8;
-        Wed,  8 Jan 2020 11:49:29 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 8 Jan 2020 11:49:19 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        "Dr . David Alan Gilbert" <linux@treblig.org>,
+        id S1727538AbgAHKSO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jan 2020 05:18:14 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:50347 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726368AbgAHKSO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jan 2020 05:18:14 -0500
+Received: from [192.168.1.155] ([95.114.105.36]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MWAWq-1jDvbf2ieg-00XfCY; Wed, 08 Jan 2020 11:17:21 +0100
+Subject: Re: [PATCH 6/6] (v3) drivers: hwmon: i5k_amb: simplify probing /
+ device identification
+To:     Bjorn Helgaas <helgaas@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>
-CC:     YueHaibing <yuehaibing@huawei.com>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] hwmon: (w83627ehf) Remove set but not used variable 'fan4min'
-Date:   Wed, 8 Jan 2020 03:45:14 +0000
-Message-ID: <20200108034514.50130-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.20.1
+Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org, tim@buttersideup.com,
+        james.morse@arm.com, rrichter@marvell.com, jdelvare@suse.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org
+References: <20191210232529.GA171629@google.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <07148b8e-5b87-66ad-e52b-be2b8b22e712@metux.net>
+Date:   Wed, 8 Jan 2020 11:16:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20191210232529.GA171629@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: tl
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:TAwu3cp8xgdnoC+QVXxTZuo1d6L730Y/hIlnNlnChNeKzUKMs/t
+ vNr9OrZqijZoHde4YF3t7ezNikPhOGlTm3R3WPK2sFjTW0Ghd5q8U73Bqf/Cf638mqBacxr
+ rxW5gCPbhzuRN5HCty8OClMKTVVag/UlQVZYL0GJ2GBhW/C9h/k8rH8iNTxaRPLMZo+G2+T
+ SFaY74zTgfT3qK8buR+QQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UX0qjWzvj1w=:MNJwBZoBg0zHdAbLIu7jZ1
+ NQ6YqkA9o0GZJBWd8Ad4X7sj60ITE703Y9e7n05lpKaAE5k4kxh/DB85CtkI7X1e4k8xYOZju
+ qK7RFrKDmrWjMa7E0xlTfWdlhUMF80E7Ft/CnN2WDqFZB82yOlvrFHdDEW3AVYU0FQVAVvOu+
+ YmGlw72B3Pym8MYoAVDb71/m3UmCh3k9BDSmEAjNRLbRDCF2VVgSjzJ1oEeH9x+WoP421kWi5
+ Yibzza7ZuNPPOXysDmnaFlJ+GxbCHrX7w8VWIbYFTw3vaN575729znMCT2FoTnPZhukzP1dh/
+ fYYEgmMZtopETatbu1oflvhY/l55FbEBlrPy0u4Wzl91jtzfmJvgE5bmDrELARWK6dxISKLko
+ rptrWYwfFHMjKBsQ9ruUZGnliXn1/wOeqNvtxFkQ5qxNSGilOnQxwnWpNCB729Y8lm1ofBN3U
+ 14o+bKqmdkWaauabumrjuFSSKvU7c/SUXKWHBtZOokt4B1jhLIu1Pr1xtT6BfE9DITZEKEvNL
+ iObWk/IDco3bI5QmqGf7qRYlCBeLsoGR03KQRp4nuIgelCd7prjiVFVB0DJ8tRsfBa60fl9eV
+ jT11ZBjzj/yBOIOnx5stFSioHSAQ1CvygDOgp+DpWJ79kX/VOOV4wXTUYts9aGe2YUTA6ypVT
+ /6J1nf5LJtaUhKFBTCxakheBb4RQryHo9BA0eHR/n1345Ne0yrVogVyoksPgsmFAQhJpc45OK
+ jfW41Y6in+LRLl0JH8xDJqmpy/HOOzN664Cm9yV7fKSDPnfiHAhRW50ZmtyT86rLVy8E3zfbZ
+ WlLquMtpmnga8pIzXT7MyITSbdmrIdww1ALX9SRXPNcMu/QxOueQBuTGUOMb2+PsngyEZbdzs
+ qBetrh5ZIRf5o9ia/XdQ==
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fixes gcc '-Wunused-but-set-variable' warning:
+On 11.12.19 00:25, Bjorn Helgaas wrote:
 
-drivers/hwmon/w83627ehf.c: In function 'w83627ehf_check_fan_inputs':
-drivers/hwmon/w83627ehf.c:1296:24: warning:
- variable 'fan4min' set but not used [-Wunused-but-set-variable]
+Hi,
 
-commit 62000264cfa8 ("hwmon: (w83627ehf) remove nct6775 and nct6776 support")
-left behind this unused variable.
+>   2) I despise the pci_get_device() interfaces because they're
+>   inefficient, not hotplug-safe, they circumvent the device model
+>   claim mechanism, and it's hard to do the reference counting
+>   correctly.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Agreed, but for that we'd have to edac and hwmo driver together into
+one (or maybe a MFD). That would be a major rewrite, and I don't have
+the necessary HW to test it.
+
+>   3) There are several things going on in this patch and it would be
+>   easier to read if you could split them into separate patches:
+> 
+>     - Removing the redundancy between chipset_ids[] and i5k_amb_ids[].
+>       This seems like a nice change.
+> 
+>     - The "chipset_ids[i].fbd0 + 1" thing was weird and the new
+>       ".driver_data + 1" is still weird.  Those are PCI device IDs,
+>       and addition is not a valid operation on those IDs.  IMHO both
+>       PCI_DEVICE_ID_INTEL_5000_FBD0 and PCI_DEVICE_ID_INTEL_5000_FBD1
+>       should be listed explicitly in the driver instead of trying to
+>       compute PCI_DEVICE_ID_INTEL_5000_FBD1.
+
+Ok, good point.
+
+>     - Replacing the hard-coding of PCI_VENDOR_ID_INTEL with the vendor
+>       ID from i5k_amb_ids[] seems worthwhile and should be its own
+>       separate patch (if possible).
+> 
+>     - Changing to use pci_get_device_by_id().  This should be trivial
+>       to verify, like the other patches.
+
+Ok, I'll try to split it up more clearly, once I've got some more spare
+time.
+
+
+--mtx
+
 ---
- drivers/hwmon/w83627ehf.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 5a7239eb1c15..7ffadc2da57b 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1293,7 +1293,7 @@ static void
- w83627ehf_check_fan_inputs(const struct w83627ehf_sio_data *sio_data,
- 			   struct w83627ehf_data *data)
- {
--	int fan3pin, fan4pin, fan4min, fan5pin, regval;
-+	int fan3pin, fan4pin, fan5pin, regval;
- 
- 	/* The W83627UHG is simple, only two fan inputs, no config */
- 	if (sio_data->kind == w83627uhg) {
-@@ -1307,12 +1307,10 @@ w83627ehf_check_fan_inputs(const struct w83627ehf_sio_data *sio_data,
- 		fan3pin = 1;
- 		fan4pin = superio_inb(sio_data->sioreg, 0x27) & 0x40;
- 		fan5pin = superio_inb(sio_data->sioreg, 0x27) & 0x20;
--		fan4min = fan4pin;
- 	} else {
- 		fan3pin = 1;
- 		fan4pin = !(superio_inb(sio_data->sioreg, 0x29) & 0x06);
- 		fan5pin = !(superio_inb(sio_data->sioreg, 0x24) & 0x02);
--		fan4min = fan4pin;
- 	}
- 
- 	data->has_fan = data->has_fan_min = 0x03; /* fan1 and fan2 */
-
-
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
