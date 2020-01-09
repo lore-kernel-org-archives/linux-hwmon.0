@@ -1,143 +1,194 @@
-Return-Path: <SRS0=XJeT=25=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=kMjT=26=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D45CFC282DD
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 16:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3856AC33C9E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jan 2020 03:07:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A43842070E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jan 2020 16:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3ED620705
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jan 2020 03:07:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iidq6aVw"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="L5ymDPah"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729328AbgAHQrv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jan 2020 11:47:51 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:37717 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727606AbgAHQrv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jan 2020 11:47:51 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m13so1328118pjb.2;
-        Wed, 08 Jan 2020 08:47:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=I/iJML5ATipLJpCzFxPDsc2+WpGDDa+OYyCfapgnpuk=;
-        b=Iidq6aVwz8nS3WShTOFkInEwzt6ganUQzttY4cRX8NLY3fbqRkJFWuKygnu6aQMgbr
-         AzqEEOlqEBAmguR6s1PgYfq5EoWuICf4Mjb4CtVmMfLM/QAqH1CVPGp4RmZnax3WgMWq
-         oqk/pPKaWC7HyrU79A/904ELMmoRdH6uPNxeh7HeKEtrZx6SFbYLA0+X2k6W+9DwSjVZ
-         /4/BvFD2zYCcA8UE+AzmHZVafUvZZ5QJYlK8lojIDd5TIMnGBZX1dCFIHURiaRBg2m7P
-         SOkpNGQWjtgpL8O6S4wm0S6HsUrHZmPMd9YI6NWl+jb2itqUcqiJC2E4aNPh1Z+iOLPt
-         e8fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=I/iJML5ATipLJpCzFxPDsc2+WpGDDa+OYyCfapgnpuk=;
-        b=GVfVOqnCYAdVGAn1hnLmx1sgEYQd1Ig95OzNHIi6koyKS4Olw/0o6Q6CmjZHbHDO7H
-         hsmTacr/4R672E0LAbG2AZvwhtzWKKPYU3lVhrjuZixExFr1ut9Bb/g4QVqCdG/ktcvZ
-         TM09YxXZxVhgLyzBFMwlsj1HFsCLPh0oLyP6A88bOZQztZXmYpt3Pn1OzJtaAblZczFN
-         +8qcyaVNsBiJD//plN/CMA8H9WgZwCOwDRl/6SrPI50C4SJ0g8/mYoqaervgQzROHQMY
-         G2AE/Q4dIQNDGJVI199xqfEwbm/KsA/LsZVrYqueZUd9iJtFEEDYm9omatFq2w0zAIKx
-         jk1A==
-X-Gm-Message-State: APjAAAVlCT4+oljdB8+hq6qzS6IQUrXhMelk0mIPmFIHoLYtbfCvxtCK
-        bnN7Q+cgOeOIOVVpRtTbZck=
-X-Google-Smtp-Source: APXvYqzzGkEEGsLXeTYKJAJ/+KdmWL93yCDNsIM2ps556QxDnnfkgD5wsj3MJEiMTtTQn+YNXO0p0g==
-X-Received: by 2002:a17:902:9b86:: with SMTP id y6mr5803846plp.253.1578502070224;
-        Wed, 08 Jan 2020 08:47:50 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z26sm3838266pgu.80.2020.01.08.08.47.48
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 08 Jan 2020 08:47:49 -0800 (PST)
-Date:   Wed, 8 Jan 2020 08:47:48 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@mellanox.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "vijaykhemka@fb.com" <vijaykhemka@fb.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Michael Shych <michaelsh@mellanox.com>
-Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
- device list supported by driver
-Message-ID: <20200108164748.GD28993@roeck-us.net>
-References: <a30e4f98-65a4-f93c-371e-7691aace41f7@roeck-us.net>
- <AM6PR05MB52245C747A0EB1691C3EBFBFA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
- <AM6PR05MB52242EA6A029D4C5F011A21BA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <20200106210104.GA9219@roeck-us.net>
- <AM6PR05MB52247DB7AB2677F5F36BAAE9A23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <a76015b5-74e3-5f84-dfce-f5cce34c302a@roeck-us.net>
- <AM6PR05MB5224ED5368BD037051F5BF92A23F0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <5be3c6c4-81e8-7731-2b6e-39b7ad6531d5@roeck-us.net>
- <AM6PR05MB5224C166E608C3BBD09E4606A23E0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+        id S1727524AbgAIDH3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jan 2020 22:07:29 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:44185 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726913AbgAIDH3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jan 2020 22:07:29 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AF512891AA
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2020 16:07:25 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1578539245;
+        bh=Q7NBBL83VukW24Uz9QdNnz56VMcpXJej44H6O3qNzRI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=L5ymDPahoUVy/HcGU20jg/BB4WxMsYN/jGZfWuYv8pWTdr6muFMabONdkqVZRSL0t
+         ya+gxC1O4qTTAnjGCtqmE2SrEsB0uix2xJkK9Z4LUvLmbPpatAK/w+eDlahs5cUiMs
+         CqHAtp2LKGr0SUZJ7UzZxMt5ZAviaPYSst2oOcgeqPBloQa6NSdzIvWlvRrplZZKc/
+         XKKox9uUsVNzfyVe/7QUOvaKzVUyezrXzHVJiGSbhJ/C63UGB8hmEsI7L7cUtg/VEB
+         xAoZ9GRL8Oo3cgU05mZvGitS0SF9PKYbnu9i6kcofZ070J4t4MYhK1uY7Z6o/Cc0PR
+         Wqy7m0FeO5myA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e1698ee0000>; Thu, 09 Jan 2020 16:07:26 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Jan 2020 16:07:22 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1473.005; Thu, 9 Jan 2020 16:07:22 +1300
+From:   Logan Shaw <Logan.Shaw@alliedtelesis.co.nz>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <JDelvare@suse.com>
+CC:     Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Added attenuator bypass support
+Thread-Topic: [PATCH v2 2/2] hwmon: (adt7475) Added attenuator bypass support
+Thread-Index: AQHVthzqestyVtwTz0S+q/NkKMJJp6e/+a+AgAyBvACAFUqaCQ==
+Date:   Thu, 9 Jan 2020 03:07:21 +0000
+Message-ID: <1578539241676.24817@alliedtelesis.co.nz>
+References: <20191219033213.30364-1-logan.shaw@alliedtelesis.co.nz>
+         <20191219033213.30364-3-logan.shaw@alliedtelesis.co.nz>
+         <e88b029b-dbb3-e423-5c37-0917d7716b66@roeck-us.net>,<804d10c6a459b9d7fa02d1e7ba08369c1c95ec87.camel@alliedtelesis.co.nz>
+In-Reply-To: <804d10c6a459b9d7fa02d1e7ba08369c1c95ec87.camel@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-NZ
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.10]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR05MB5224C166E608C3BBD09E4606A23E0@AM6PR05MB5224.eurprd05.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 02:10:50PM +0000, Vadim Pasternak wrote:
-> 
-> Hi Guenter,
-> 
-> We are looking for possibility to provide some kind of flexible driver to handle
-> different devices from different vendors, but which have common nature,
-> like support of two pages for telemetry with same set of functions and same
-> formats. (Actually driver could be flexible regarding the number of pages).
-> 
-> While the difference only in VID codes mapping.
-> 
-> The motivation for that is to give free hand to HW design to choose which
-> particular device to use on the same system type.
-> There are two main reasons for such requirement:
-> - Quality of device (we already had a serios problems with ucd9224 and
->   tps53679, caused system meltdown). In such case the intention is to move
->   to fallback devices in the next batches.
-> - Device availability in stock. Sometimes vendors can't supply in time the
->    necessary quantity.
-> 
-> Currently there are the devices from three vendor: TI tps536xx, Infineon
-> xdpe122 and MPS mp2975.
-> All have different mapping of VID codes.
-> 
-> It could be also few additional devices, which are supposed to be used as
-> fallback devices.
-> 
-> We have several very big customers ordering now huge quantity of our
-> systems, which are very conservative regarding image upgrade.
-> Means we can provide now support for tps536xx, xdpe122xx and mp2975
-> but in case new devices are coming soon, we will be able to support it in kernel
-> for their image after year or even more.
-> 
-> We can provide ACPI pmbus driver, which will read VID mapping from ACPI
-> DSDT table. This mapping table will contain the names of available modes
-> and specific vendor code for this mode. Like:
-> PMBVR11=1
-> PMBVR12=2
-> PMBVR13=5
-> PMBIMVP9=10
-> And driver will set info->vrm_version[i] according to this mapping.
-> 
-
-The DSDT would have to provide all properties, not just the VID modes.
-At the very least that would have to be the number of pages, data formats,
-vrm version, and the supported attributes per page. It should be possible
-to also add m/b/R information for each of the sensor classes, but I guess
-the actual implementation could be postponed until it is needed.
-
-This could all be done through the existing generic driver (pmbus.c);
-it would not really require a new driver. ACPI/DSDT could provide firmware
-properties, and pmbus.c could read those using device_property API
-functions (eg device_property_read_u32(dev, "vrm-mode")). Would that work
-for you ?
-
-Thanks,
-Guenter
+A gentle reminder that this patch exists, as it has (understandably) gone s=
+ilent over the holiday period. I would appreciate some feedback on my ideas=
+ before modifying the patch, so I know I am headed in the right direction.=
+=0A=
+=0A=
+On Wed, 2019-12-18 at 19:53 -0800, Guenter Roeck wrote:=0A=
+> On 12/18/19 7:32 PM, Logan Shaw wrote:=0A=
+> > Added a new file documenting the adt7475 devicetree and added the=0A=
+> > five=0A=
+> > new properties to it.=0A=
+> >=0A=
+> > Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>=0A=
+> > ---=0A=
+> > ---=0A=
+> >   .../devicetree/bindings/hwmon/adt7475.txt     | 35=0A=
+> > +++++++++++++++++++=0A=
+> >   1 file changed, 35 insertions(+)=0A=
+> >   create mode 100644=0A=
+> > Documentation/devicetree/bindings/hwmon/adt7475.txt=0A=
+> >=0A=
+> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.txt=0A=
+> > b/Documentation/devicetree/bindings/hwmon/adt7475.txt=0A=
+> > new file mode 100644=0A=
+> > index 000000000000..388dd718a246=0A=
+> > --- /dev/null=0A=
+> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.txt=0A=
+> > @@ -0,0 +1,35 @@=0A=
+> > +*ADT7475 hwmon sensor.=0A=
+> > +=0A=
+> > +Required properties:=0A=
+> > +- compatible: One of=0A=
+> > +   "adi,adt7473"=0A=
+> > +   "adi,adt7475"=0A=
+> > +   "adi,adt7476"=0A=
+> > +   "adi,adt7490"=0A=
+> > +=0A=
+> > +- reg: I2C address=0A=
+> > +=0A=
+> > +optional properties:=0A=
+> > +=0A=
+> > +- bypass-attenuator-all: Configures bypassing all voltage input=0A=
+> > attenuators.=0A=
+> > +   This is only supported on the ADT7476 and ADT7490, this=0A=
+> > property does=0A=
+> > +   nothing on other chips.=0A=
+>=0A=
+> Both adt7473 and adt7475 do support configuring an attenuator on VCCP=0A=
+>=0A=
+=0A=
+That is true, but as the function of register 0x73 bit 5 differs=0A=
+between the two set of hardware ({adt7473, adt7475} and {adt7476,=0A=
+adt7490}) a solution which allows bypassing VCCP on both gets more=0A=
+complicated which I was trying to avoid.=0A=
+=0A=
+Is it acceptable to split the function=0A=
+load_individual_bypass_attenuators into two, one for each set of=0A=
+chips, and call the appropriate function for the chip? That way adding=0A=
+"bypass-attenuator-in1" to any of the four adt chips DTS will result in=0A=
+the attenuator for VCCP being bypassed (albeit by setting different=0A=
+bits depending on the specific bit).=0A=
+=0A=
+> > +           property present: Bit set to bypass all voltage input=0A=
+> > attenuators.=0A=
+> > +           property absent: Registers left unchanged.=0A=
+> > +=0A=
+> > +- bypass-attenuator-inx: Configures bypassing individual voltage=0A=
+> > input=0A=
+> > +   attenuators, where x is an integer from the set {0, 1, 3, 4}.=0A=
+> > This=0A=
+> > +   is only supported on the ADT7476 and ADT7490, this property=0A=
+> > does nothing=0A=
+> > +   on other chips.=0A=
+> > +           property present: Bit set to bypass specific voltage=0A=
+> > input attenuator=0A=
+> > +                   for voltage input x.=0A=
+> > +           property absent: Registers left unchanged.=0A=
+> > +=0A=
+>=0A=
+> This is interesting. It essentially means "retain configuration from=0A=
+> ROM=0A=
+> Monitor", but leaves no means to _disable_ the bypass.=0A=
+>=0A=
+=0A=
+Only a power cycle (after removing the properties from the DTS) will=0A=
+set the affected bits back to 0. Removing the properties, but only=0A=
+softly restarting the system (no interrupted power supply to the adt=0A=
+chip), will not set the bits back to 0.=0A=
+=0A=
+I decided against setting the bits to 0 by default (if no property was=0A=
+present) as doing so might break compatibility with systems that expect=0A=
+the bits to remain unchanged.=0A=
+=0A=
+A compromise would be to change the "bypass-attenuator-inx" property to=0A=
+"bypass-attenuator-inx =3D <y>", where y =3D 1 bypasses the attenuator and=
+=0A=
+y =3D 0 does not. If the property is not present then the register is=0A=
+left unchanged. It would make sense to do the same to the "bypass-=0A=
+attenuator-all" property. Would these changes be acceptable?=0A=
+=0A=
+> > +Example:=0A=
+> > +=0A=
+> > +hwmon@2e {=0A=
+> > +   compatible =3D "adi,adt7475";=0A=
+> > +   reg =3D <0x2e>;=0A=
+> > +   bypass-attenuator-all;=0A=
+> > +   bypass-attenuator-in1;=0A=
+>=0A=
+> What would be the purpose of specifying both all and in1 ?=0A=
+=0A=
+There would be no practical purpose, it was to keep the example=0A=
+compact. Instead "bypass-attenuator-in1" could be removed and added to=0A=
+second device hwmon@2d. This would show off the syntax for each set of=0A=
+properties in a more practical way.=0A=
+=0A=
+>=0A=
+> > +};=0A=
+> > \ No newline at end of file=0A=
+> >=0A=
+>=0A=
+>=0A=
