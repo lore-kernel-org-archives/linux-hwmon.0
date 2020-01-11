@@ -1,112 +1,126 @@
-Return-Path: <SRS0=IC/C=27=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=z8gB=3A=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D05BBC33C99
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jan 2020 05:07:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D483C33CA4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jan 2020 03:44:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 86E462077B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jan 2020 05:07:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64CEA2077C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jan 2020 03:44:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QZAvK398"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RaPB4m0S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbgAJFHE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Jan 2020 00:07:04 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:36733 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgAJFHE (ORCPT
+        id S1728216AbgAKDom (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Jan 2020 22:44:42 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36952 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728195AbgAKDom (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Jan 2020 00:07:04 -0500
-Received: by mail-lj1-f196.google.com with SMTP id r19so771259ljg.3;
-        Thu, 09 Jan 2020 21:07:02 -0800 (PST)
+        Fri, 10 Jan 2020 22:44:42 -0500
+Received: by mail-pg1-f196.google.com with SMTP id q127so1924365pga.4;
+        Fri, 10 Jan 2020 19:44:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DR/csZpOtlFwPUHSslKZ8t2JxeV60nIvwDhXAUm3/D0=;
-        b=QZAvK398MN6OnXyXajGrojpY2ka0rixjwuNfnJymJA5MsddwzVX0a2DKuIaU3UBVcT
-         JSEgD+iP2fMVHC+e/MWwad3C1Cy2BY4OnZ4QE/C4gXeKQMUmKUddHprwv879Rv39GLan
-         YVcuCIAv2r04eNNHAhm0bjocC4H/Ogk3LLFBxSPPsXNFkWsCN8sEbEtaV680d371gkUI
-         Fzk8BlzIkrVDG78szO91R86LGvongnKnEq9rb1ASejLdtyuunOUTQEVYzl+lGm4jDPK1
-         qNKGYQv8YBucoZrXpqK2ZL8ZrZz/xiu7dOTMYIleXGB+y45oS5G7qtSJcjkeD5O7Zjg0
-         seZg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mBiYrLLn4CQqHqFn9pLt/flCLBliZAIE+lKCsoDN4Kk=;
+        b=RaPB4m0SJKvoQpEvysQzM+L7F2nP/u7HXPlDM40o9usWSCqxYWV1Ebsz7LI9r5SRdp
+         XhHnM4S1tV6sNC7R9BqHAgpHppDuQFExDUR2i/jxtgjVu8AognM/OezjEkjPoYRQUh+H
+         Dm53KYirKdUSi325d0Dy41lb1FNqiI4XSVX9NJ4wIIrCgFIYWsbiGvZbmkb9EulBSBpV
+         QDg0kc1VD1Wt15g7Do3nQZvqCcqZl4hOaadxPzdfZXwXtdyvp6xmUJGstwG9iSB9SUVv
+         NZT2yTXFSz9bgNK5DSaxLPLYZA87xTogxAPlrylkDahjrvqiyjhL7ykYwOXxqBORGkkf
+         t3Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DR/csZpOtlFwPUHSslKZ8t2JxeV60nIvwDhXAUm3/D0=;
-        b=Q0dflK6SADSn4wwjAOpmrW2Oe6w0zVmJt3mxzn3uWnhWcvigp16u/Uic9OC5oKYxWH
-         n3VbshP4N7n5zRhqDM5enguiVHpXSp8P/IJcGw4jqOL3QWUW4N2yRu6B4jeZMehBn8G1
-         5WiTty8vWnf6yiNuNeC0YDxf3YwKu0tDmOhcfqEXnZKhGOeYY7S+iuqMWiYVXFmASGzk
-         ETnnL7wlCKIFA+cqzYztBAZQhcvOKB/lZ7/pf8vCeInKXm96JckvYvw9Dgkb/zqxZh3w
-         8hg51r4Ti0mwIhgQiZHb8bvJKHAIjqFu9PKkeACFhWCUX5IpLPAdR1WqKG2uWAZK7Ym2
-         /Wtw==
-X-Gm-Message-State: APjAAAU7NagPSyBdrrVlfE0BkuLq+WhqXV+GFQI10BSC/kRWnY99QkYn
-        /MLsPgFf9QCJTdaHqVav95BU/0HAwikmLyJebpw=
-X-Google-Smtp-Source: APXvYqy8VXuT5WbOs+qRrXtcCTu2FXb1F4RB6SFVExvT9YXcXtl0TazRO+jKkMpAHn/mPQNVWK1SlhgxNra+mRRtMD0=
-X-Received: by 2002:a2e:556:: with SMTP id 83mr1204265ljf.127.1578632821868;
- Thu, 09 Jan 2020 21:07:01 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mBiYrLLn4CQqHqFn9pLt/flCLBliZAIE+lKCsoDN4Kk=;
+        b=cDU20rzbnS5WIwoA9jJr/NJIP8hnOXAC6O/pu1OMQos7TBj40qmBIS5HLuZqY3V3SY
+         76UTHJpbQ3eGW81TCsvkr1fzOsEeQklWNU6Rq5reLjgjZ0iO+kia16FvrQO4Htr9oX7W
+         Yv8zGqHETs1IdgTBmpMDj8ThukqFjHjbsJAg5hCUxyznMTU2YZqHNNFPohtGpLnKcUmE
+         ARaCLMoa/IP3clGoMnAZNo4XFed37OToDsfr1iWiwdsOXSpCDCh8k4QKSm3mdqDPaSTA
+         KHkFnL99u+ODmwlsh7dunebDO4JdBvMSQZF/120Srr47zf5IpHrsktFdfqohjiPObccq
+         KLHw==
+X-Gm-Message-State: APjAAAXojaEMwQ4jQluD5kBe9xPzMI8uMwVrTe+5BxP1/B02ClIe9EW2
+        eQVOQR5+bSdjPObt533ZI1hmWhJd
+X-Google-Smtp-Source: APXvYqwk/LkaPb8ZgkirwXfmn2pXUg1pTW5ovIJLQVhiUpDHLb6QBgHQxcSuIAXlICZ4Xkf0nlhAUg==
+X-Received: by 2002:a63:289:: with SMTP id 131mr8641290pgc.149.1578714281397;
+        Fri, 10 Jan 2020 19:44:41 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h11sm4280632pgv.38.2020.01.10.19.44.39
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 10 Jan 2020 19:44:40 -0800 (PST)
+Date:   Fri, 10 Jan 2020 19:44:39 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "Dr . David Alan Gilbert" <linux@treblig.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] hwmon: (w83627ehf) Remove set but not used
+ variable 'fan4min'
+Message-ID: <20200111034438.GA15669@roeck-us.net>
+References: <20200108034514.50130-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-References: <1577023823-9615-1-git-send-email-akinobu.mita@gmail.com>
- <1577023823-9615-2-git-send-email-akinobu.mita@gmail.com> <20200108161331.GA18546@bogus>
-In-Reply-To: <20200108161331.GA18546@bogus>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Fri, 10 Jan 2020 14:06:49 +0900
-Message-ID: <CAC5umygcuGTKw=8NO+yM4z=MpAiw62Eo6p0vky_soTRmn0Y1Wg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to stop fan on shutdown
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND..." <devicetree@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200108034514.50130-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-2020=E5=B9=B41=E6=9C=889=E6=97=A5(=E6=9C=A8) 1:13 Rob Herring <robh@kernel.=
-org>:
->
-> On Sun, Dec 22, 2019 at 11:10:22PM +0900, Akinobu Mita wrote:
-> > The pwm-fan driver leaves the fun running when shutting down the system=
-.
-> > (On the other hand the gpio-fan driver stops it.)
->
-> Seemms like we should have consistent behavior independent of what the
-> underlying implementation uses. Is there actually a case you'd want to
-> leave the fan on? It seems strange to disable in suspend and leave on in
-> shutdown.
+On Wed, Jan 08, 2020 at 03:45:14AM +0000, YueHaibing wrote:
+> Fixes gcc '-Wunused-but-set-variable' warning:
+> 
+> drivers/hwmon/w83627ehf.c: In function 'w83627ehf_check_fan_inputs':
+> drivers/hwmon/w83627ehf.c:1296:24: warning:
+>  variable 'fan4min' set but not used [-Wunused-but-set-variable]
+> 
+> commit 62000264cfa8 ("hwmon: (w83627ehf) remove nct6775 and nct6776 support")
+> left behind this unused variable.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-I agree.  I was trying to keep the current behavior unchanged, so I added
-"disable-state-shutdown" property.  But I can't think of any case we want
-to leave the fun on in shutdown.
+Applied.
 
-So it's better to change the shutdown behavior and remove the option
-completely or add "retain-state-shutdown" property instead.
-(The "retain-state-shutdown" property is inspired by gpio-leds)
+Thanks,
+Guenter
 
-> Wouldn't the shutdown state depend if the PWM off state is high or low?
-> IIRC, i.MX PWM has a quirk that the PWM disabled state is high. Doesn't
-
-It could be possible to affect the shutdown behavior for pwm-fan.
-There are three i.MX PWM drivers (pwm-imx1, pwm-imx27, and pwm-tpm).
-Do you remember which one actually have such limitation?
-
-Maybe it should be handled by the PWM controller/chip driver and PWM core.
-From the perspective of PWM user drivers for now, we have nothing to do
-other than setting duty cycle zero and then disable PWM for stopping the
-pwm-fan.
-
-> it also depend on what the PWM driver does in shutdown?
-
-I think so.  But as far as I can see, no PWM drivers implement shutdown
-callback.
+> ---
+>  drivers/hwmon/w83627ehf.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
+> index 5a7239eb1c15..7ffadc2da57b 100644
+> --- a/drivers/hwmon/w83627ehf.c
+> +++ b/drivers/hwmon/w83627ehf.c
+> @@ -1293,7 +1293,7 @@ static void
+>  w83627ehf_check_fan_inputs(const struct w83627ehf_sio_data *sio_data,
+>  			   struct w83627ehf_data *data)
+>  {
+> -	int fan3pin, fan4pin, fan4min, fan5pin, regval;
+> +	int fan3pin, fan4pin, fan5pin, regval;
+>  
+>  	/* The W83627UHG is simple, only two fan inputs, no config */
+>  	if (sio_data->kind == w83627uhg) {
+> @@ -1307,12 +1307,10 @@ w83627ehf_check_fan_inputs(const struct w83627ehf_sio_data *sio_data,
+>  		fan3pin = 1;
+>  		fan4pin = superio_inb(sio_data->sioreg, 0x27) & 0x40;
+>  		fan5pin = superio_inb(sio_data->sioreg, 0x27) & 0x20;
+> -		fan4min = fan4pin;
+>  	} else {
+>  		fan3pin = 1;
+>  		fan4pin = !(superio_inb(sio_data->sioreg, 0x29) & 0x06);
+>  		fan5pin = !(superio_inb(sio_data->sioreg, 0x24) & 0x02);
+> -		fan4min = fan4pin;
+>  	}
+>  
+>  	data->has_fan = data->has_fan_min = 0x03; /* fan1 and fan2 */
