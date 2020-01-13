@@ -2,82 +2,86 @@ Return-Path: <SRS0=Ro9r=3C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32518C33CAD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5599DC33CAF
 	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jan 2020 15:08:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0AF7121556
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jan 2020 15:08:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C78221744
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jan 2020 15:08:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728950AbgAMPIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1726943AbgAMPIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Mon, 13 Jan 2020 10:08:50 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:58633 "EHLO
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:58632 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726399AbgAMPIu (ORCPT
+        with ESMTP id S1728688AbgAMPIu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Mon, 13 Jan 2020 10:08:50 -0500
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 13 Jan 2020 17:08:43 +0200
+        with ESMTPS (AES256-SHA encrypted); 13 Jan 2020 17:08:48 +0200
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 00DF8hqZ006851;
-        Mon, 13 Jan 2020 17:08:43 +0200
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 00DF8hqb006851;
+        Mon, 13 Jan 2020 17:08:48 +0200
 From:   Vadim Pasternak <vadimp@mellanox.com>
 To:     linux@roeck-us.net, robh+dt@kernel.org, vijaykhemka@fb.com
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         Vadim Pasternak <vadimp@mellanox.com>
-Subject: [PATCH hwmon-next v1 0/6] hwmon: (pmbus) Add support for vid mode calculation per page bases
-Date:   Mon, 13 Jan 2020 15:08:35 +0000
-Message-Id: <20200113150841.17670-1-vadimp@mellanox.com>
+Subject: [PATCH hwmon-next v1 2/6] hwmon: (pmbus/core) Add support for Intel IMVP9 and AMD 6.25mV modes
+Date:   Mon, 13 Jan 2020 15:08:37 +0000
+Message-Id: <20200113150841.17670-3-vadimp@mellanox.com>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20200113150841.17670-1-vadimp@mellanox.com>
+References: <20200113150841.17670-1-vadimp@mellanox.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Currently "pmbus" infrastructure does not build for support reading
-"vout" in "vid" mode, for cases when device is configured with the
-different modes per page bases.
-However some devices could be configured in such way.
-The patchset includes:
-Patch#1 allows selection mode per pmbus page bases, by extending
-	"vrm_version" field to per page array and modify the drivers
-	using this field.
-Patch#2 introduces support for "vrm" Intel specification mode "IMVP9"
-	and AMD specification mode "6.25mV".
-Patch#3 extends "tps53679" driver with support of the additional
-	device TPS53688.
-Patch#4 introduces new driver for Infineon Multi-phase Digital VR
-	Controller Sierra controllers XDPE12254, XDPE12284.
-Patch#5 extends binding documentation for trivial devices.
-Patch#6 adds documentation.
+Extend "vrm_version" with the type for Intel IMVP9 and AMD 6.25mV VID
+modes.
+Add calculation for those types.
 
-Vadim Pasternak (6):
-  hwmon: (pmbus/core) Add support for vid mode detection per page bases
-  hwmon: (pmbus/core) Add support for Intel IMVP9 and AMD 6.25mV modes
-  hwmon: (pmbus/tps53679) Extend device list supported by driver
-  hwmon: (pmbus) Add support for Infineon Multi-phase xdpe122 family
-    controllers
-  dt-bindings: Add TI and Infineon VR Controllers as trivial devices
-  docs: hwmon: Include 'xdpe12284.rst' into docs
+Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+---
+ drivers/hwmon/pmbus/pmbus.h      | 2 +-
+ drivers/hwmon/pmbus/pmbus_core.c | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
- .../devicetree/bindings/trivial-devices.yaml       |   8 ++
- Documentation/hwmon/xdpe12284.rst                  | 101 ++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig                        |  13 ++-
- drivers/hwmon/pmbus/Makefile                       |   1 +
- drivers/hwmon/pmbus/max20751.c                     |   2 +-
- drivers/hwmon/pmbus/pmbus.c                        |   5 +-
- drivers/hwmon/pmbus/pmbus.h                        |   4 +-
- drivers/hwmon/pmbus/pmbus_core.c                   |  10 +-
- drivers/hwmon/pmbus/pxe1610.c                      |  44 ++++----
- drivers/hwmon/pmbus/tps53679.c                     |  46 ++++----
- drivers/hwmon/pmbus/xdpe12284.c                    | 116 +++++++++++++++++++++
- 11 files changed, 301 insertions(+), 49 deletions(-)
- create mode 100644 Documentation/hwmon/xdpe12284.rst
- create mode 100644 drivers/hwmon/pmbus/xdpe12284.c
-
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index 2bdebd0ea9c1..a7f90e18119c 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -377,7 +377,7 @@ enum pmbus_sensor_classes {
+ #define PMBUS_PAGE_VIRTUAL	BIT(31)
+ 
+ enum pmbus_data_format { linear = 0, direct, vid };
+-enum vrm_version { vr11 = 0, vr12, vr13 };
++enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
+ 
+ struct pmbus_driver_info {
+ 	int pages;		/* Total number of pages */
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 98226e84b351..811819e41a72 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -709,6 +709,14 @@ static long pmbus_reg2data_vid(struct pmbus_data *data,
+ 		if (val >= 0x01)
+ 			rv = 500 + (val - 1) * 10;
+ 		break;
++	case imvp9:
++		if (val >= 0x01)
++			rv = 200 + (val - 1) * 10;
++		break;
++	case amd625mv:
++		if (val >= 0x0 && val <= 0xd8)
++			rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
++		break;
+ 	}
+ 	return rv;
+ }
 -- 
 2.11.0
 
