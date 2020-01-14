@@ -7,193 +7,101 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A9A2C33CB1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0111AC33CB1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:12:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E18A524672
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:08:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5FD024672
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:12:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EyALs+fz"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dJlHb1/y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728558AbgANOIg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jan 2020 09:08:36 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36711 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbgANOIg (ORCPT
+        id S1728755AbgANOMn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jan 2020 09:12:43 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39538 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbgANOMn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jan 2020 09:08:36 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x184so6651109pfb.3;
-        Tue, 14 Jan 2020 06:08:36 -0800 (PST)
+        Tue, 14 Jan 2020 09:12:43 -0500
+Received: by mail-pf1-f196.google.com with SMTP id q10so6643277pfs.6;
+        Tue, 14 Jan 2020 06:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=ss3fXpszwhFSMMEOeRY8BC0FGonewknATivLpFC0dKA=;
-        b=EyALs+fzbsRIiCfGPl36ceRz4CXPRoQwXwLTA3ronMpxWpGf16DrxPQ8GPhepIi2vg
-         s5PWBUBN4bF1fcTeq2hVW1CS1qu2FxD20E7pUKXZ0idbGGJOYJkRm9YW8kud6/e3Dg8Y
-         qVpbMbr0moNtwgx0wkLKILyx/WhUhttjVONlBkmodhCLMbhedVvB0NocFMuhUkAkEutf
-         dzlkMX8aM2EGpNc0TZW5yywSIS4qXnloLIPnX4KeKSs07nahVcKkvshxcpUn4bLgCc5W
-         CnYMN02SEiADQATn6aTZHCVZZVtzgo49XhnICouVVn/h9UmLquNNUMZChIGsNFE136Rc
-         C1XQ==
+        bh=MRgBvCtjRNlYz6e9qjURgTK4XgDrJzyI0jj9xZ4LvTc=;
+        b=dJlHb1/yR4hekA5crCHMwlnpiKYsK17WvxA6GbktTtF7C3RsqqzancL5DoycJSejlq
+         APjYrPscu//sYsxdrdsq8PHBUkk6AbDYl5oZ8mPOCR58EyVNvrJcV4V0CC5ThpjGqx2S
+         bBHtQvE4McD41TiFYJ6Cd5b7rLaVTlw14fy+8zKsvH2z6HO3L6PupgL1aZ9LVRnszR6y
+         jfa0H1bIMvfttVztDDMjYAXuuOwgwGJdaGlJ+sQATK+4CLqoNiIbft1crP6Uhu6XyXJZ
+         m1TBtDDuhc4CqxmjvBASywC8tESrYa5Zeu705EkjEtoNlMkGA3dGweSu/uXk1slHX/p7
+         ioaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ss3fXpszwhFSMMEOeRY8BC0FGonewknATivLpFC0dKA=;
-        b=Vi0HVT0MJaEyvqR5m2rgV5VJHA5jTkcVpP+v065NPNLY3BdtJyDiaAsTmE5KU2JduJ
-         bjSwP3cVtEjExOWwHGyPZi8ONr4MV0v6ExYNmMHweu5mNJouFoxw51owrA3m2pfCDuIe
-         t3moIcOl0VrwRGo3JhdwjaMlFnpvVzmD/J6mx2SGFTz5XtiCXp7zxEvpJtOSluTlh8xN
-         bqtCJ8t6/voeFZ+E3mrbMRDFPf/tVRXhvq0iNpMgxG+sdGnJnG44hcqZ3qiRf4ShqXgw
-         7jAiTEhMVjW7JltJ5RW/Map7uWpsc/n0zHpefbgGwwZNFVzX1X2ALvcmoePtqApU2fHP
-         HA9g==
-X-Gm-Message-State: APjAAAWgzfVijmrbIoFiVO92e2CmicKz+pffIuLQxdf/DyFzO5+QiU3U
-        mH2uM0SByGRAcwAuhyLZYEo=
-X-Google-Smtp-Source: APXvYqzGqn6wM6quVswhTbDrDAA94Dqvd4nw6Di48Jmia3y8Dktekesp0n+CL0t3U1kzyLf2h/aHQg==
-X-Received: by 2002:a62:1c95:: with SMTP id c143mr24761321pfc.219.1579010915833;
-        Tue, 14 Jan 2020 06:08:35 -0800 (PST)
+        bh=MRgBvCtjRNlYz6e9qjURgTK4XgDrJzyI0jj9xZ4LvTc=;
+        b=nzdGLfztDOHK3LDXWBWCMpKzJHziYnsIijxPPvlCYOyHlWGeAORyQWC3lbPLjgNaKu
+         NN/Jcg7+JzRZFvaRSOx5s5J0p/nsqehB0WgCKA7ILQyNvrdlZQHFqNg/C/Q7YFXrdTRn
+         GuNU57jTsIx1uiisOO1aVp/YlV8LYadzLgajz7fgNPem5wx8B4oV3kMA5g5JWT0Cisw0
+         wC4UxI+00muSx/uyexcwzVuTDO1h8fSOfRd752he5PRpE5j3nMJWiW2/uTY6D6v9zoug
+         SEe8Jw5njoQEPH3OwaGIc0fMi30ifZIzDDR6bqK9uaGBaIGuX8ny22j1wVsJsidN6hTT
+         E4jA==
+X-Gm-Message-State: APjAAAV9W+tp1WeAUfLvql8iApsZeRvoLcqAYa5p+L1GGBaAJ3pOSxHk
+        s9BtBAqqtET28GnepKUcKmo=
+X-Google-Smtp-Source: APXvYqzZMBywXhuDjnf1dNp/5C/bgOFlEk20gy7PJ8mqOPsagytkZhMfyVlMFTrgG3LvCligS2EdNw==
+X-Received: by 2002:aa7:9629:: with SMTP id r9mr25712036pfg.51.1579011162152;
+        Tue, 14 Jan 2020 06:12:42 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u2sm17509223pgc.19.2020.01.14.06.08.34
+        by smtp.gmail.com with ESMTPSA id t63sm18550655pfb.70.2020.01.14.06.12.41
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jan 2020 06:08:35 -0800 (PST)
-Date:   Tue, 14 Jan 2020 06:08:34 -0800
+        Tue, 14 Jan 2020 06:12:41 -0800 (PST)
+Date:   Tue, 14 Jan 2020 06:12:40 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@mellanox.com>
-Cc:     robh+dt@kernel.org, vijaykhemka@fb.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH hwmon-next v1 6/6] docs: hwmon: Include 'xdpe12284.rst'
- into docs
-Message-ID: <20200114140834.GA3386@roeck-us.net>
-References: <20200113150841.17670-1-vadimp@mellanox.com>
- <20200113150841.17670-7-vadimp@mellanox.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Beniamin Bia <beniamin.bia@analog.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adm1177) Fix adm1177_write_alert_thr()
+Message-ID: <20200114141240.GA16302@roeck-us.net>
+References: <20200114055125.ro5slro6zewr56tx@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200113150841.17670-7-vadimp@mellanox.com>
+In-Reply-To: <20200114055125.ro5slro6zewr56tx@kili.mountain>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 03:08:41PM +0000, Vadim Pasternak wrote:
-> Add documentation for 'xdpe122' devices.
+On Tue, Jan 14, 2020 at 08:51:25AM +0300, Dan Carpenter wrote:
+> There is a reversed condition so the adm1177_write_alert_thr() function
+> doesn't update "st->alert_threshold_ua".
 > 
-> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+> Fixes: 829091f9c56c ("hwmon: (adm1177) Add ADM1177 Hot Swap Controller and Digital Power Monitor driver")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Applied to hwmon-next (and added to index.rst).
+The fix was folded into v4 of the series, so I took that.
 
-Thanks,
+Thanks for reporting!
+
 Guenter
 
 > ---
->  Documentation/hwmon/xdpe12284.rst | 101 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/hwmon/xdpe12284.rst
+>  drivers/hwmon/adm1177.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/hwmon/xdpe12284.rst b/Documentation/hwmon/xdpe12284.rst
-> new file mode 100644
-> index 000000000000..6b7ae98cc536
-> --- /dev/null
-> +++ b/Documentation/hwmon/xdpe12284.rst
-> @@ -0,0 +1,101 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver xdpe122
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Infineon XDPE12254
-> +
-> +    Prefix: 'xdpe12254'
-> +
-> +  * Infineon XDPE12284
-> +
-> +    Prefix: 'xdpe12284'
-> +
-> +Authors:
-> +
-> +	Vadim Pasternak <vadimp@mellanox.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Infineon Multi-phase XDPE122 family
-> +dual loop voltage regulators.
-> +The family includes XDPE12284 and XDPE12254 devices.
-> +The devices from this family complaint with:
-> +- Intel VR13 and VR13HC rev 1.3, IMVP8 rev 1.2 and IMPVP9 rev 1.3 DC-DC
-> +  converter specification.
-> +- Intel SVID rev 1.9. protocol.
-> +- PMBus rev 1.3 interface.
-> +
-> +Devices support linear format for reading input voltage, input and output current,
-> +input and output power and temperature.
-> +Device supports VID format for reading output voltage. The below modes are
-> +supported:
-> +- VR12.0 mode, 5-mV DAC - 0x01.
-> +- VR12.5 mode, 10-mV DAC - 0x02.
-> +- IMVP9 mode, 5-mV DAC - 0x03.
-> +- AMD mode 6.25mV - 0x10.
-> +
-> +Devices support two pages for telemetry.
-> +
-> +The driver provides for current: input, maximum and critical thresholds
-> +and maximum and critical alarms. Critical thresholds and critical alarm are
-> +supported only for current output.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "iin" and 3, 4 for "iout":
-> +
-> +**curr[3-4]_crit**
-> +
-> +**curr[3-4]_crit_alarm**
-> +
-> +**curr[1-4]_input**
-> +
-> +**curr[1-4]_label**
-> +
-> +**curr[1-4]_max**
-> +
-> +**curr[1-4]_max_alarm**
-> +
-> +The driver provides for voltage: input, critical and low critical thresholds
-> +and critical and low critical alarms.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "vin" and 3, 4 for "vout":
-> +
-> +**in[1-4]_crit**
-> +
-> +**in[1-4_crit_alarm**
-> +
-> +**in[1-4]_input**
-> +
-> +**in[1-4_label**
-> +
-> +**in[1-4]_lcrit**
-> +
-> +**in[1-41_lcrit_alarm**
-> +
-> +The driver provides for power: input and alarms. Power alarm is supported only
-> +for power input.
-> +The driver exports the following attributes for via the sysfs files, where
-> +indexes 1, 2 are for "pin" and 3, 4 for "pout":
-> +
-> +**power[1-2]_alarm**
-> +
-> +**power[1-4]_input**
-> +
-> +**power[1-4]_label**
-> +
-> +The driver provides for temperature: input, maximum and critical thresholds
-> +and maximum and critical alarms.
-> +The driver exports the following attributes for via the sysfs files:
-> +
-> +**temp[1-2]_crit**
-> +
-> +**temp[1-2]_crit_alarm**
-> +
-> +**temp[1-2]_input**
-> +
-> +**temp[1-2]_max**
-> +
-> +**temp[1-2]_max_alarm**
+> diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+> index 1f2ff7a29306..d314223a404a 100644
+> --- a/drivers/hwmon/adm1177.c
+> +++ b/drivers/hwmon/adm1177.c
+> @@ -63,7 +63,7 @@ static int adm1177_write_alert_thr(struct adm1177_state *st,
+>  
+>  	ret = i2c_smbus_write_byte_data(st->client, ADM1177_REG_ALERT_TH,
+>  					val);
+> -	if (!ret)
+> +	if (ret)
+>  		return ret;
+>  
+>  	st->alert_threshold_ua = alert_threshold_ua;
